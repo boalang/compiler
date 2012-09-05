@@ -294,14 +294,14 @@ public class SymbolTable {
 
 		for (final String s : Arrays.asList("max", "min"))
 			for (final SizzleScalar t : Arrays.asList(new SizzleInt(), new SizzleFloat()))
-				this.setFunction(s, new SizzleFunction("java.lang.Math." + s, new SizzleFloat(), new SizzleScalar[] { t, t }));
+				this.setFunction(s, new SizzleFunction("java.lang.Math." + s, t, new SizzleScalar[] { t, t }));
 
-		this.setFunction("max", new SizzleFunction(new SizzleFloat(), new SizzleScalar[] { new SizzleTime(), new SizzleTime() }, "(${0} > ${1} ? ${0} : ${1})"));
-		this.setFunction("min", new SizzleFunction(new SizzleFloat(), new SizzleScalar[] { new SizzleTime(), new SizzleTime() }, "(${0} < ${1} ? ${0} : ${1})"));
+		this.setFunction("max", new SizzleFunction(new SizzleTime(), new SizzleScalar[] { new SizzleTime(), new SizzleTime() }, "(${0} > ${1} ? ${0} : ${1})"));
+		this.setFunction("min", new SizzleFunction(new SizzleTime(), new SizzleScalar[] { new SizzleTime(), new SizzleTime() }, "(${0} < ${1} ? ${0} : ${1})"));
 
-		this.setFunction("max", new SizzleFunction(new SizzleFloat(), new SizzleScalar[] { new SizzleString(), new SizzleString() },
+		this.setFunction("max", new SizzleFunction(new SizzleString(), new SizzleScalar[] { new SizzleString(), new SizzleString() },
 				"(${0}.compareTo(${1}) > 0 ? ${0} : ${1})"));
-		this.setFunction("min", new SizzleFunction(new SizzleFloat(), new SizzleScalar[] { new SizzleString(), new SizzleString() },
+		this.setFunction("min", new SizzleFunction(new SizzleString(), new SizzleScalar[] { new SizzleString(), new SizzleString() },
 				"(${0}.compareTo(${1}) < 0 ? ${0} : ${1})"));
 
 		// expose whatever is left, assuming we are not aiming for strict
