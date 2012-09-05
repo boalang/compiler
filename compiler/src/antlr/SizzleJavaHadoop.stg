@@ -6,7 +6,7 @@ package sizzle;
 public class <name> extends sizzle.runtime.SizzleRunner {
 	/** {@inheritDoc} */
 	@Override
-	public org.apache.hadoop.mapreduce.Job job(org.apache.hadoop.conf.Configuration, org.apache.hadoop.fs.Path[] ins, org.apache.hadoop.fs.Path out, boolean robust) throws java.io.IOException {
+	public org.apache.hadoop.mapreduce.Job job(org.apache.hadoop.conf.Configuration configuration, org.apache.hadoop.fs.Path[] ins, org.apache.hadoop.fs.Path out, boolean robust) throws java.io.IOException {
 		org.apache.hadoop.mapreduce.Job job = super.job(configuration, ins, out, robust);
 
 		job.setInputFormatClass(<inputFormatClass>.class);
