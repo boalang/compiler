@@ -1,0 +1,7 @@
+package sizzle.types;
+
+message Person {
+	required string username = 1;
+	required string real_name = 2;
+	required string email = 3;
+}

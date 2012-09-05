@@ -1,0 +1,138 @@
+group SizzleJavaHadoop : SizzleJava;
+
+Program(name, inputFormatClass, keyClass, valueClass, staticDeclarations, staticStatements, statements, tables) ::= <<
+package sizzle;
+
+public class <name> extends sizzle.runtime.SizzleRunner {
+	/** {@inheritDoc} */
+	@Override
+	public org.apache.hadoop.mapreduce.Job job(org.apache.hadoop.conf.Configuration, org.apache.hadoop.fs.Path[] ins, org.apache.hadoop.fs.Path out, boolean robust) throws java.io.IOException {
+		org.apache.hadoop.mapreduce.Job job = super.job(configuration, ins, out, robust);
+
+		job.setInputFormatClass(<inputFormatClass>.class);
+		job.setJobName("<name>: " + out);
+		job.setJarByClass(<name>SizzleMapper.class);
+		
+		job.setMapperClass(<name>SizzleMapper.class);
+		job.setCombinerClass(<name>SizzleCombiner.class);
+		job.setReducerClass(<name>SizzleReducer.class);
+		
+		return job;
+	}
+	
+	public static void main(String[] args) throws java.io.IOException, InterruptedException, ClassNotFoundException {
+		<name> runner = new <name>();
+		
+		org.apache.commons.cli.CommandLine line = parseArgs(args, runner.getUsage());
+		args = line.getArgs();
+		if (args.length \< 2) {
+			System.err.println("Not enough arguments. Must give at least 1 input file and the output directory.");
+			printHelp(runner.getUsage());
+		}
+
+		final boolean robust = line.hasOption("robust");
+		int id = 0;
+		if (line.hasOption("job"))
+			id = Integer.parseInt(line.getOptionValue("job"));
+		
+		final org.apache.hadoop.fs.Path[] ins = new org.apache.hadoop.fs.Path[args.length - 1];
+		for (int i = 0; i \< ins.length; i++)
+			ins[i] = new org.apache.hadoop.fs.Path(args[i]);
+		
+		org.apache.hadoop.mapreduce.Job jb = runner.job(new org.apache.hadoop.conf.Configuration(), ins, new org.apache.hadoop.fs.Path(args[args.length - 1]), robust);
+
+		if (id > 0) {
+			jb.getConfiguration().setInt("boa.hadoop.jobid", id);
+			jb.getConfiguration().set("boa.hadoop.output", args[args.length - 1]);
+		}
+		jb.submit();
+		if (id > 0)
+			sizzle.io.SizzleOutputCommitter.setJobID(jb.getJobID().toString(), id);
+		System.err.println("Job ID: " + jb.getJobID().toString());
+
+		if (line.hasOption("block")) {
+			while (!jb.isComplete()) {
+				if (jb.setupProgress() \< 1)
+					System.err.println("SETUP: " + (jb.setupProgress() * 100) + "%");
+				else if (jb.mapProgress() \< 1)
+					System.err.println("MAP: " + (jb.mapProgress() * 100) + "%");
+				else
+					System.err.println("REDUCE: " + (jb.reduceProgress() * 100) + "%");
+				try {
+					Thread.sleep (1000);
+				} catch (Exception e) {}
+			}
+			System.err.println("JOB FINISHED: " + (jb.isSuccessful() ? "Success" : "Failed"));
+		}
+	}
+
+	public String getUsage() {
+		return "\<input1\> [.. \<inputN\>] \<outputDir\>";
+	}
+	
+	static class <name>SizzleMapper extends sizzle.runtime.SizzleMapper {
+		<staticDeclarations>
+		
+		<if(staticStatements)>
+		{
+			<staticStatements>
+		}
+		
+		<endif>
+		/** {@inheritDoc} */
+		@Override
+		protected void map(<keyClass> key, <valueClass> value, org.apache.hadoop.mapreduce.Mapper\<<keyClass>, <valueClass>, sizzle.io.EmitKey, sizzle.io.EmitValue\>.Context context) throws java.io.IOException {
+			try {
+				com.google.protobuf.CodedInputStream _inputStream = com.google.protobuf.CodedInputStream.newInstance(value.getBytes(), 0, value.getLength());
+				<statements:{<it><\n>}>
+			} catch (java.io.IOException e) {
+				throw e;
+			} catch (RuntimeException e) {
+				if (this.robust)
+					LOG.error(e.getClass().getName() + " caught", e);
+				else
+					throw e;
+			} catch (Exception e) {
+				if (this.robust)
+					LOG.error(e.getClass().getName() + " caught", e);
+				else
+					throw new RuntimeException(e.getClass().getName() + " caught", e);
+			}
+		}
+	}
+	
+	static class <name>SizzleCombiner extends sizzle.runtime.SizzleCombiner {
+		public <name>SizzleCombiner() {
+			super();
+			
+			<tables:{ <it><\n> }>
+		}
+	}
+	
+	static class <name>SizzleReducer extends sizzle.runtime.SizzleReducer {
+		public <name>SizzleReducer() {
+			super();
+
+
+			<tables:{ <it><\n> }>
+		}
+	}
+	
+	@Override
+	public org.apache.hadoop.mapreduce.Mapper getMapper() {
+		return new <name>SizzleMapper();
+	}
+	
+	@Override
+	public sizzle.runtime.SizzleCombiner getCombiner() {
+		return new <name>SizzleCombiner();
+	}
+	
+	@Override
+	public sizzle.runtime.SizzleReducer getReducer() {
+		return new <name>SizzleReducer();
+	}
+}
+>>
+
+EmitStatement(indices, id, expression, weight) ::= "context.write(new sizzle.io.EmitKey(<if(indices)><indices:{\"[\" + <it> + \"]\"}; separator=\" + \">, <endif><id>), new sizzle.io.EmitValue(<expression><if(weight)>, <weight><endif>));"

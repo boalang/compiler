@@ -1,0 +1,28 @@
+package sizzle.types;
+
+import "ast.proto";
+import "shared.proto";
+
+message CodeRepository {
+	required string url = 1;
+	enum RepositoryType {
+		UNKNOWN = 1;
+		SVN = 2;
+		CVS = 3;
+		GIT = 4;
+		HG = 5;
+		BZR = 6;
+	}
+	required RepositoryType repository_type = 2;
+	repeated Revision revisions = 3;
+}
+
+message Revision {
+	required int32 id = 1;
+	required Person author = 2;
+	required Person committer = 3;
+	required uint64 commit_date = 4;
+	required string log = 5;
+	repeated File files = 6;
+	repeated Library libraries = 7;
+}

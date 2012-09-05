@@ -1,0 +1,30 @@
+package sizzle.types;
+
+import "shared.proto";
+import "code.proto";
+import "bugs.proto";
+
+message Repository {
+	repeated Project projects = 1;
+}
+
+message Project {
+	required string name = 1;
+	required string project_url = 2;
+	required string homepage_url = 3;
+	required uint64 created_date = 4;
+	required string id = 5;
+	required string description = 6;
+	repeated string operating_systems = 7;
+	repeated string programming_languages = 8;
+	repeated string databases = 9;
+	repeated string licenses = 10;
+	repeated string interfaces = 11;
+	repeated string audiences = 12;
+	repeated string topics = 13;
+	required bool donations = 14;
+	repeated Person maintainers = 15;
+	repeated Person developers = 16;
+	repeated CodeRepository code_repositories = 17;
+	repeated BugRepository bug_repositories = 18;
+}

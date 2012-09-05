@@ -1,0 +1,5 @@
+counter: output mrcounter[name: string] of int;
+
+data: string = input;
+
+counter[data] << 1;

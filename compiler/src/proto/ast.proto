@@ -1,0 +1,58 @@
+package sizzle.types;
+
+message Library {
+	required string filename = 1;
+	required string name = 2;
+	required string version = 3;
+	repeated File files = 4;
+}
+
+message File {
+	required string name = 1;
+	required string content = 2;
+	enum FileType {
+		UNKNOWN = 1;
+		SOURCE = 2;
+		BINARY = 3;
+		TEXT = 4;
+		XML = 5;
+	}
+	required FileType file_type = 3;
+	required Package pkg = 4;
+}
+
+message Package {
+	required string name = 1;
+	repeated Type types = 2;
+}
+
+message Type {
+	required string name = 1;
+	repeated Annotation annotations = 2;
+	repeated Method methods = 3;
+	repeated Field fields = 4;
+	repeated string referenced_types = 5;
+}
+
+message Method {
+	required string name = 1;
+	repeated Annotation annotations = 2;
+	required string return_type = 3;
+	repeated string arg_types = 4;
+	repeated string arg_names = 5;
+	repeated string exceptions = 6;
+}
+
+message Field {
+	required string name = 1;
+	required string type_name = 2;
+}
+
+message Annotation {
+	required string type_name = 1;
+	required string content = 2;
+}
+
+message Comment {
+	required string content = 1;
+}

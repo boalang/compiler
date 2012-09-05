@@ -1,0 +1,123 @@
+<?xml version="1.0" ?>
+<project name="sizzle" default="package">
+	<property name="ant.build.javac.source" value="1.6" />
+	<property name="ant.build.javac.target" value="1.6" />
+
+	<property name="src.proto" location="src/proto" />
+
+	<path id="classpath">
+		<pathelement location="build/classes" />
+		<pathelement location="build/testclasses" />
+		<fileset dir="lib" includes="*.jar" />
+	</path>
+
+	<target name="init">
+		<mkdir dir="build/java/sizzle/parser" />
+		<mkdir dir="build/javacc" />
+		<mkdir dir="build/classes" />
+		<mkdir dir="build/testclasses" />
+		<mkdir dir="dist" />
+	</target>
+
+	<target name="translate-proto" depends="init">
+		<apply executable="protoc" parallel="true">
+			<arg value="--proto_path=${src.proto}" />
+			<arg value="--java_out=src/compiled-proto" />
+			<srcfile />
+			<fileset dir="${src.proto}" includes="*.proto" />
+		</apply>
+	</target>
+
+	<target name="tree" depends="init">
+		<java jar="lib/jtb132.jar" fork="true" dir="build/java/sizzle/parser">
+			<arg value="-o" />
+			<arg value="../../../javacc/sizzle.jj" />
+			<arg value="-p" />
+			<arg value="sizzle.parser" />
+			<arg value="../../../../src/jtb/sizzle.jtb" />
+		</java>
+	</target>
+
+	<target name="parser" depends="tree">
+		<javacc target="build/javacc/sizzle.jj" outputdirectory="build/java/sizzle/parser" javacchome="lib" static="true" />
+	</target>
+
+	<target name="compile-generated" depends="parser">
+		<javac includeantruntime="true" srcdir="build/java" destdir="build/classes" debug="on" debuglevel="lines,vars,source">
+			<classpath refid="classpath" />
+		</javac>
+		<javac includeantruntime="true" srcdir="src/compiled-proto" destdir="build/classes" debug="on" debuglevel="lines,vars,source">
+			<classpath refid="classpath" />
+		</javac>
+	</target>
+
+	<target name="compile" depends="compile-generated">
+		<javac includeantruntime="true" srcdir="src/java" destdir="build/classes" debug="on" debuglevel="lines,vars,source">
+			<classpath refid="classpath" />
+		</javac>
+	</target>
+
+	<target name="compile-tests" depends="compile">
+		<javac includeantruntime="true" srcdir="src/test" destdir="build/testclasses" debug="on" debuglevel="lines,vars,source">
+			<classpath refid="classpath" />
+		</javac>
+	</target>
+
+	<target name="test" depends="compile-tests">
+		<junit fork="yes" haltonfailure="yes">
+			<classpath refid="classpath" />
+			<batchtest>
+				<formatter type="plain" usefile="false" />
+				<fileset dir="build/testclasses" includes="**/Test*.class" />
+			</batchtest>
+		</junit>
+		<delete file="SecurityAuth.audit" />
+	</target>
+
+	<target name="doc" depends="init">
+		<javadoc destdir="build/classes" sourcepath="src/java" packagenames="sizzle.*">
+			<classpath refid="classpath" />
+		</javadoc>
+	</target>
+
+	<target name="package" depends="compile">
+		<jar destfile="dist/sizzle-runtime.jar">
+			<fileset dir="build/classes">
+				<patternset>
+					<include name="sizzle/" />
+					<exclude name="**/compiler/" />
+				</patternset>
+			</fileset>
+			<zipfileset excludes="META-INF/" src="lib/protobuf-java-2.4.1.jar" />
+		</jar>
+		<jar destfile="dist/sizzle-compiler.jar">
+			<manifest>
+				<attribute name="Main-Class" value="sizzle.compiler.SizzleCompiler" />
+			</manifest>
+			<fileset dir="build/classes">
+				<patternset>
+					<exclude name="**/io/" />
+					<exclude name="**/runtime/" />
+				</patternset>
+			</fileset>
+			<fileset dir="conf" />
+			<fileset dir="src/antlr" />
+			<zipfileset excludes="META-INF/" src="lib/commons-logging-1.1.1.jar" />
+			<zipfileset excludes="META-INF/" src="lib/commons-configuration-1.6.jar" />
+			<zipfileset excludes="META-INF/" src="lib/commons-lang-2.4.jar" />
+			<zipfileset excludes="META-INF/" src="lib/hadoop-core-1.0.3.jar" />
+			<zipfileset excludes="META-INF/" src="lib/hbase-0.94.1.jar" />
+			<zipfileset excludes="META-INF/" src="lib/log4j-1.2.15.jar" />
+			<zipfileset excludes="META-INF/" src="lib/commons-cli-1.2.jar" />
+			<zipfileset excludes="META-INF/" src="lib/scannotation-1.0.2.jar" />
+			<zipfileset excludes="META-INF/" src="lib/javassist-3.8.0.GA.jar" />
+			<zipfileset excludes="META-INF/" src="lib/antlr-3.2.jar" />
+			<zipfileset excludes="META-INF/" src="lib/protobuf-java-2.4.1.jar" />
+		</jar>
+	</target>
+
+	<target name="clean">
+		<delete dir="build" />
+		<delete dir="dist" />
+	</target>
+</project>
