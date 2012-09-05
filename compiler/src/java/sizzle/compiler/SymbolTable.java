@@ -328,7 +328,6 @@ public class SymbolTable {
 		// FIXME: support format strings and files
 		this.set("stdout", new SizzleTable(new SizzleString()));
 		this.set("stderr", new SizzleTable(new SizzleString()));
-		this.set("output", new SizzleTable(new SizzleBytes()));
 
 		this.importLibs(libs);
 	}

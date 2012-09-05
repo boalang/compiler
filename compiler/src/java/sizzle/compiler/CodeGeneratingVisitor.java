@@ -181,7 +181,6 @@ public class CodeGeneratingVisitor extends GJDepthFirst<String, SymbolTable> {
 		this.tables = new HashMap<String, TableDescription>();
 		this.tables.put("stdout", new TableDescription("stdout", new SizzleString()));
 		this.tables.put("stderr", new TableDescription("stderr", new SizzleString()));
-		this.tables.put("output", new TableDescription("output", new SizzleBytes()));
 
 		this.name = name;
 		this.stg = stg;
