@@ -2,6 +2,7 @@ package sizzle.functions;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -17,11 +18,11 @@ public class BoaIntrinsics {
 		"bug\\s+id(s)?\\s*=\\s*[0-9]+"
 	};
 
-	private static List<Pattern> fixingPatterns = new ArrayList<Pattern>();
+	private static List<Matcher> fixingMatchers = new ArrayList<Matcher>();
 
 	static {
 		for (String s : BoaIntrinsics.fixingRegex)
-			fixingPatterns.add(Pattern.compile(s));
+			fixingMatchers.add(Pattern.compile(s).matcher(""));
 	}
 
 	/**
@@ -32,8 +33,8 @@ public class BoaIntrinsics {
 	 */
 	@FunctionSpec(name = "isfixingrevision", returnType = "bool", formalParameters = { "string" })
 	public static boolean isfixingrevision(final String log) {
-		for (Pattern p : fixingPatterns)
-			if (p.matcher(log).matches())
+		for (Matcher m : fixingMatchers)
+			if (m.reset(log).matches())
 				return true;
 
 		return false;
