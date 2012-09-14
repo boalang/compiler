@@ -20,48 +20,42 @@ public class SizzleOutputCommitter extends FileOutputCommitter {
 	@Override
 	public void commitJob(JobContext context) throws java.io.IOException {
 		super.commitJob(context);
-		String out = getOutputFile(context);
-		updateStatus(false, context.getConfiguration().getInt("boa.hadoop.jobid", 0), out);
+		int jobId = context.getConfiguration().getInt("boa.hadoop.jobid", 0);
+		updateStatus(false, jobId);
+		storeOutput(context, jobId);
 	}
 
 	@Override
 	public void abortJob(JobContext context, JobStatus.State runState) throws java.io.IOException {
 		super.abortJob(context, runState);
-		updateStatus(true, context.getConfiguration().getInt("boa.hadoop.jobid", 0), "");
+		updateStatus(true, context.getConfiguration().getInt("boa.hadoop.jobid", 0));
 	}
 
 	static String url = "jdbc:mysql://boa-head:3306/drupal";
 	static String user = "drupal";
 	static String password = "";
 
-	private void updateStatus(boolean error, int jobId, String output) {
+	private void updateStatus(boolean error, int jobId) {
 		Connection con = null;
 		try {
 			con = DriverManager.getConnection(url, user, password);
 			PreparedStatement ps = null;
 			try {
-				ps = con.prepareStatement("UPDATE boa_jobs SET hadoop_end=CURRENT_TIMESTAMP(), hadoop_status=?, hadoop_result=? WHERE id=" + jobId);
-				if (error)
-					ps.setInt(1, -1);
-				else
-					ps.setInt(1, 2);
-				ps.setString(2, output);
+				ps = con.prepareStatement("UPDATE boa_jobs SET hadoop_end=CURRENT_TIMESTAMP(), hadoop_status=?, hadoop_result=\"\" WHERE id=" + jobId);
+				ps.setInt(1, error ? -1 : 2);
 				ps.executeUpdate();
 			} finally {
-				if (ps != null) ps.close();
+				try { if (ps != null) ps.close(); } catch (Exception e) { e.printStackTrace(); }
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				if (con != null) con.close();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			try { if (con != null) con.close(); } catch (Exception e) { e.printStackTrace(); }
 		}
 	}
 
-	private String getOutputFile(JobContext context) {
+	private void storeOutput(JobContext context, int jobId) {
+		Connection con = null;
 		FileSystem fileSystem = null;
 		FSDataInputStream in = null;
 		ByteArrayOutputStream out = null;
@@ -74,28 +68,50 @@ public class SizzleOutputCommitter extends FileOutputCommitter {
 			Path path = new Path(file);
 			if (!fileSystem.exists(path)) {
 				System.out.println("File " + file + " does not exists");
-				return "";
+				return;
 			}
 
 			in = fileSystem.open(path);
 			out = new ByteArrayOutputStream();
 
-			byte[] b = new byte[1024];
-			int numBytes = 0;
-			while ((numBytes = in.read(b)) > 0)
-				out.write(b, 0, numBytes);
-			return out.toString();
+			con = DriverManager.getConnection(url, user, password);
+			PreparedStatement ps = null;
+			try {
+				ps = con.prepareStatement("UPDATE boa_jobs SET hadoop_result=INSERT(hadoop_result, ?, ?, ?) WHERE id=" + jobId);
+
+				byte[] b = new byte[4096];
+				int numBytes = 0;
+				int pos = 1;
+
+				while ((numBytes = in.read(b)) > 0) {
+					out.write(b, 0, numBytes);
+					if (out.size() >= 4194304) {
+						ps.setInt(1, pos);
+						ps.setInt(2, out.size());
+						ps.setString(3, out.toString());
+						ps.executeUpdate();
+
+						pos += out.size();
+						out.reset();
+					}
+				}
+
+				if (out.size() > 0) {
+					ps.setInt(1, pos);
+					ps.setInt(2, out.size());
+					ps.setString(3, out.toString());
+					ps.executeUpdate();
+				}
+			} finally {
+				try { if (ps != null) ps.close(); } catch (Exception e) { e.printStackTrace(); }
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "";
 		} finally {
-			try {
-				if (in != null) in.close();
-				if (out != null) out.close();
-				if (fileSystem != null) fileSystem.close();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			try { if (con != null) con.close(); } catch (Exception e) { e.printStackTrace(); }
+			try { if (out != null) out.close(); } catch (Exception e) { e.printStackTrace(); }
+			try { if (in != null) in.close(); } catch (Exception e) { e.printStackTrace(); }
+			try { if (fileSystem != null) fileSystem.close(); } catch (Exception e) { e.printStackTrace(); }
 		}
 	}
 
@@ -109,16 +125,12 @@ public class SizzleOutputCommitter extends FileOutputCommitter {
 				ps.setString(1, id);
 				ps.executeUpdate();
 			} finally {
-				if (ps != null) ps.close();
+				try { if (ps != null) ps.close(); } catch (Exception e) { e.printStackTrace(); }
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				if (con != null) con.close();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			try { if (con != null) con.close(); } catch (Exception e) { e.printStackTrace(); }
 		}
 	}
 }
