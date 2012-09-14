@@ -13,7 +13,7 @@ message File {
 		SOURCE_CSHARP = 6;
 	}
 	required FileKind kind = 2;
-	required bool parsed = 3 [default=false];
+	optional bool parsed = 3 [default=false];
 	repeated Namespace namespaces = 4;
 	optional string content = 5;
 }

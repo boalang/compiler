@@ -106,7 +106,7 @@ public final class Ast {
     boolean hasKind();
     sizzle.types.Ast.File.FileKind getKind();
     
-    // required bool parsed = 3 [default = false];
+    // optional bool parsed = 3 [default = false];
     boolean hasParsed();
     boolean getParsed();
     
@@ -276,7 +276,7 @@ public final class Ast {
       return kind_;
     }
     
-    // required bool parsed = 3 [default = false];
+    // optional bool parsed = 3 [default = false];
     public static final int PARSED_FIELD_NUMBER = 3;
     private boolean parsed_;
     public boolean hasParsed() {
@@ -356,10 +356,6 @@ public final class Ast {
         return false;
       }
       if (!hasKind()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasParsed()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -689,10 +685,6 @@ public final class Ast {
           
           return false;
         }
-        if (!hasParsed()) {
-          
-          return false;
-        }
         for (int i = 0; i < getNamespacesCount(); i++) {
           if (!getNamespaces(i).isInitialized()) {
             
@@ -823,7 +815,7 @@ public final class Ast {
         return this;
       }
       
-      // required bool parsed = 3 [default = false];
+      // optional bool parsed = 3 [default = false];
       private boolean parsed_ ;
       public boolean hasParsed() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
@@ -14816,7 +14808,7 @@ public final class Ast {
     java.lang.String[] descriptorData = {
       "\n\tast.proto\022\014sizzle.types\"\360\001\n\004File\022\014\n\004na" +
       "me\030\001 \002(\t\022)\n\004kind\030\002 \002(\0162\033.sizzle.types.Fi" +
-      "le.FileKind\022\025\n\006parsed\030\003 \002(\010:\005false\022+\n\nna" +
+      "le.FileKind\022\025\n\006parsed\030\003 \001(\010:\005false\022+\n\nna" +
       "mespaces\030\004 \003(\0132\027.sizzle.types.Namespace\022" +
       "\017\n\007content\030\005 \001(\t\"Z\n\010FileKind\022\013\n\007UNKNOWN\020" +
       "\001\022\n\n\006BINARY\020\002\022\010\n\004TEXT\020\003\022\007\n\003XML\020\004\022\017\n\013SOUR" +
