@@ -13005,7 +13005,7 @@ public final class Ast {
     boolean hasKind();
     sizzle.types.Ast.Modifier.ModifierKind getKind();
     
-    // optional int32 visibility = 2;
+    // optional uint32 visibility = 2;
     boolean hasVisibility();
     int getVisibility();
     
@@ -13227,7 +13227,7 @@ public final class Ast {
       return kind_;
     }
     
-    // optional int32 visibility = 2;
+    // optional uint32 visibility = 2;
     public static final int VISIBILITY_FIELD_NUMBER = 2;
     private int visibility_;
     public boolean hasVisibility() {
@@ -13370,7 +13370,7 @@ public final class Ast {
         output.writeEnum(1, kind_.getNumber());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeInt32(2, visibility_);
+        output.writeUInt32(2, visibility_);
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeBytes(3, getAnnotationNameBytes());
@@ -13399,7 +13399,7 @@ public final class Ast {
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(2, visibility_);
+          .computeUInt32Size(2, visibility_);
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
@@ -13750,7 +13750,7 @@ public final class Ast {
             }
             case 16: {
               bitField0_ |= 0x00000002;
-              visibility_ = input.readInt32();
+              visibility_ = input.readUInt32();
               break;
             }
             case 26: {
@@ -13804,7 +13804,7 @@ public final class Ast {
         return this;
       }
       
-      // optional int32 visibility = 2;
+      // optional uint32 visibility = 2;
       private int visibility_ ;
       public boolean hasVisibility() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
@@ -14888,7 +14888,7 @@ public final class Ast {
       "GN_RSHIFT\020.\022\031\n\025ASSIGN_UNSIGNEDRSHIFT\020/\022\t",
       "\n\005OTHER\0200\"\363\002\n\010Modifier\0221\n\004kind\030\001 \002(\0162#.s" +
       "izzle.types.Modifier.ModifierKind\022\022\n\nvis" +
-      "ibility\030\002 \001(\005\022\027\n\017annotation_name\030\003 \001(\t\022\032" +
+      "ibility\030\002 \001(\r\022\027\n\017annotation_name\030\003 \001(\t\022\032" +
       "\n\022annotation_members\030\004 \003(\t\0223\n\021annotation" +
       "_values\030\005 \003(\0132\030.sizzle.types.Expression\022" +
       "\r\n\005other\030\006 \001(\t\"b\n\014ModifierKind\022\016\n\nVISIBI" +
