@@ -1,58 +1,207 @@
 package sizzle.types;
 
-message Library {
-	required string filename = 1;
-	required string name = 2;
-	required string version = 3;
-	repeated File files = 4;
-}
+option optimize_for = SPEED;
 
 message File {
 	required string name = 1;
-	required string content = 2;
-	enum FileType {
+	enum FileKind {
 		UNKNOWN = 1;
-		SOURCE = 2;
-		BINARY = 3;
-		TEXT = 4;
-		XML = 5;
+		BINARY = 2;
+		TEXT = 3;
+		XML = 4;
+		SOURCE_JAVA = 5;
+		SOURCE_CSHARP = 6;
 	}
-	required FileType file_type = 3;
-	required Package pkg = 4;
+	required FileKind kind = 2;
+	required bool parsed = 3 [default=false];
+	repeated Namespace namespaces = 4;
+	optional string content = 5;
 }
 
-message Package {
+message Namespace {
 	required string name = 1;
-	repeated Type types = 2;
+	repeated Modifier modifiers = 2;
+	repeated Declaration declarations = 3;
+	repeated Comment comments = 4;
+}
+
+enum TypeKind {
+	CLASS = 1;
+	INTERFACE = 2;
+	STRUCT = 3;
+	ENUM = 4;
+	ANNOTATION = 5;
+	DELEGATE = 6;
+	GENERIC = 7;
+	OTHER = 8;
+}
+
+message Declaration {
+	required string name = 1;
+	required TypeKind kind = 2;
+	repeated Modifier modifiers = 3;
+	repeated Type generic_parameters = 4;
+	repeated Type parents = 5;
+	repeated Method methods = 6;
+	repeated Variable fields = 7;
+	repeated Declaration nested_declarations = 8;
+	repeated Comment comments = 9;
 }
 
 message Type {
 	required string name = 1;
-	repeated Annotation annotations = 2;
-	repeated Method methods = 3;
-	repeated Field fields = 4;
-	repeated string referenced_types = 5;
+	required TypeKind kind = 2;
+	optional string id = 4;
 }
 
 message Method {
-	required string name = 1;
-	repeated Annotation annotations = 2;
-	required string return_type = 3;
-	repeated string arg_types = 4;
-	repeated string arg_names = 5;
-	repeated string exceptions = 6;
+	optional string name = 1;
+	repeated Modifier modifiers = 2;
+	required Type return_type = 3;
+	repeated Type generic_parameters = 4;
+	repeated Variable arguments = 5;
+	repeated Type exception_types = 6;
+	repeated Statement statements = 7;
+	repeated Comment comments = 8;
 }
 
-message Field {
+message Variable {
 	required string name = 1;
-	required string type_name = 2;
+	required Type variable_type = 2;
+	repeated Modifier modifiers = 3;
+	optional Expression initializer = 4;
+	repeated Comment comments = 5;
 }
 
-message Annotation {
-	required string type_name = 1;
-	required string content = 2;
+message Statement {
+	enum StatementKind {
+		BLOCK = 1;
+		VARDECL = 2;
+		TYPEDECL = 3;
+		EXPRESSION = 4;
+		SYNCHRONIZED = 5;
+		RETURN = 6;
+		FOR = 7;
+		DO = 8;
+		WHILE = 9;
+		IF = 10;
+		ASSERT = 11;
+		BREAK = 12;
+		CONTINUE = 13;
+		LABEL = 14;
+		SWITCH = 15;
+		CASE = 16;
+		TRY = 17;
+		THROW = 18;
+		CATCH = 19;
+		EMPTY = 20;
+		OTHER = 21;
+	}
+	required StatementKind kind = 1;
+	repeated Comment comments = 2;
+	repeated Statement statements = 3;
+	optional Expression condition = 4;
+	optional Expression initialization = 5;
+	optional Expression increment = 6;
+	optional Variable variable_declaration = 7;
+	optional Declaration type_declaration = 8;
+	optional Expression expression = 9;
+}
+
+message Expression {
+	enum ExpressionKind {
+		LITERAL = 1;
+		VARACCESS = 2;
+		VARDECL = 3;
+		METHODCALL = 4;
+		CAST = 5;
+		ARRAYINDEX = 6;
+		ARRAYINIT = 7;
+		TYPECOMPARE = 8;
+		NEW = 9;
+		NEWARRAY = 10;
+		OP_ADD = 11;
+		OP_SUB = 12;
+		OP_MULT = 13;
+		OP_DIV = 14;
+		OP_MOD = 15;
+		OP_INC = 16;
+		OP_DEC = 17;
+		BIT_LSHIFT = 18;
+		BIT_RSHIFT = 19;
+		BIT_UNSIGNEDRSHIFT = 20;
+		BIT_AND = 21;
+		BIT_OR = 22;
+		BIT_NOT = 23;
+		BIT_XOR = 24;
+		LOGICAL_NOT = 25;
+		LOGICAL_AND = 26;
+		LOGICAL_OR = 27;
+		LOGICAL_EQ = 28;
+		LOGICAL_NEQ = 29;
+		LT = 30;
+		GT = 31;
+		LTEQ = 32;
+		GTEQ = 33;
+		CONDITIONAL = 34;
+		NULLCOALESCE = 35;
+		ASSIGN = 36;
+		ASSIGN_ADD = 37;
+		ASSIGN_SUB = 38;
+		ASSIGN_MULT = 39;
+		ASSIGN_DIV = 40;
+		ASSIGN_MOD = 41;
+		ASSIGN_BITXOR = 42;
+		ASSIGN_BITAND = 43;
+		ASSIGN_BITOR = 44;
+		ASSIGN_LSHIFT = 45;
+		ASSIGN_RSHIFT = 46;
+		ASSIGN_UNSIGNEDRSHIFT = 47;
+		OTHER = 48;
+	}
+	required ExpressionKind kind = 1;
+	repeated Expression expressions = 2;
+	repeated Variable variable_decls = 3;
+	optional Type new_type = 4;
+	repeated Type generic_parameters = 5;
+	optional bool is_postfix = 6;
+	optional string literal = 7;
+	optional string variable = 8;
+	optional string method = 9;
+	repeated Expression method_args = 10;
+}
+
+message Modifier {
+	enum ModifierKind {
+		VISIBILITY = 1;
+		ANNOTATION = 2;
+		FINAL = 3;
+		STATIC = 4;
+		SYNCHRONIZED = 5;
+		OTHER = 6;
+	}
+	required ModifierKind kind = 1;
+	enum Visibility {
+		PUBLIC = 1;
+		PRIVATE = 2;
+		PROTECTED = 4;
+		NAMESPACE = 8;
+	}
+	optional int32 visibility = 2;
+	optional string annotation_name = 3;
+	repeated string annotation_members = 4;
+	repeated Expression annotation_values = 5;
+	optional string other = 6;
 }
 
 message Comment {
-	required string content = 1;
+	enum CommentKind {
+		LINE = 1;
+		BLOCK = 2;
+		DOC = 3;
+		SPEC = 4;
+	}
+	required CommentKind kind = 1;
+	required string value = 2;
+	required int32 start_line = 3;
 }

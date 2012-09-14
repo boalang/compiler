@@ -3443,7 +3443,7 @@ public final class Toplevel {
       "\024.sizzle.types.Person\0227\n\021code_repositori" +
       "es\030\021 \003(\0132\034.sizzle.types.CodeRepository\0225" +
       "\n\020bug_repositories\030\022 \003(\0132\033.sizzle.types." +
-      "BugRepository"
+      "BugRepositoryB\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

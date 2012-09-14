@@ -611,7 +611,7 @@ public final class Shared {
     java.lang.String[] descriptorData = {
       "\n\014shared.proto\022\014sizzle.types\"<\n\006Person\022\020" +
       "\n\010username\030\001 \002(\t\022\021\n\treal_name\030\002 \002(\t\022\r\n\005e" +
-      "mail\030\003 \002(\t"
+      "mail\030\003 \002(\tB\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

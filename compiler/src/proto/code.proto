@@ -3,9 +3,11 @@ package sizzle.types;
 import "ast.proto";
 import "shared.proto";
 
+option optimize_for = SPEED;
+
 message CodeRepository {
 	required string url = 1;
-	enum RepositoryType {
+	enum RepositoryKind {
 		UNKNOWN = 1;
 		SVN = 2;
 		CVS = 3;
@@ -13,7 +15,7 @@ message CodeRepository {
 		HG = 5;
 		BZR = 6;
 	}
-	required RepositoryType repository_type = 2;
+	required RepositoryKind kind = 2;
 	repeated Revision revisions = 3;
 }
 
@@ -24,5 +26,4 @@ message Revision {
 	required uint64 commit_date = 4;
 	required string log = 5;
 	repeated File files = 6;
-	repeated Library libraries = 7;
 }

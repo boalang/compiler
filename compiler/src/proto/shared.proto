@@ -1,5 +1,7 @@
 package sizzle.types;
 
+option optimize_for = SPEED;
+
 message Person {
 	required string username = 1;
 	required string real_name = 2;

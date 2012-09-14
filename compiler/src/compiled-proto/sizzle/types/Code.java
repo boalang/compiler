@@ -15,9 +15,9 @@ public final class Code {
     boolean hasUrl();
     String getUrl();
     
-    // required .sizzle.types.CodeRepository.RepositoryType repository_type = 2;
-    boolean hasRepositoryType();
-    sizzle.types.Code.CodeRepository.RepositoryType getRepositoryType();
+    // required .sizzle.types.CodeRepository.RepositoryKind kind = 2;
+    boolean hasKind();
+    sizzle.types.Code.CodeRepository.RepositoryKind getKind();
     
     // repeated .sizzle.types.Revision revisions = 3;
     java.util.List<sizzle.types.Code.Revision> 
@@ -57,7 +57,7 @@ public final class Code {
       return sizzle.types.Code.internal_static_sizzle_types_CodeRepository_fieldAccessorTable;
     }
     
-    public enum RepositoryType
+    public enum RepositoryKind
         implements com.google.protobuf.ProtocolMessageEnum {
       UNKNOWN(0, 1),
       SVN(1, 2),
@@ -77,7 +77,7 @@ public final class Code {
       
       public final int getNumber() { return value; }
       
-      public static RepositoryType valueOf(int value) {
+      public static RepositoryKind valueOf(int value) {
         switch (value) {
           case 1: return UNKNOWN;
           case 2: return SVN;
@@ -89,15 +89,15 @@ public final class Code {
         }
       }
       
-      public static com.google.protobuf.Internal.EnumLiteMap<RepositoryType>
+      public static com.google.protobuf.Internal.EnumLiteMap<RepositoryKind>
           internalGetValueMap() {
         return internalValueMap;
       }
-      private static com.google.protobuf.Internal.EnumLiteMap<RepositoryType>
+      private static com.google.protobuf.Internal.EnumLiteMap<RepositoryKind>
           internalValueMap =
-            new com.google.protobuf.Internal.EnumLiteMap<RepositoryType>() {
-              public RepositoryType findValueByNumber(int number) {
-                return RepositoryType.valueOf(number);
+            new com.google.protobuf.Internal.EnumLiteMap<RepositoryKind>() {
+              public RepositoryKind findValueByNumber(int number) {
+                return RepositoryKind.valueOf(number);
               }
             };
       
@@ -114,11 +114,11 @@ public final class Code {
         return sizzle.types.Code.CodeRepository.getDescriptor().getEnumTypes().get(0);
       }
       
-      private static final RepositoryType[] VALUES = {
+      private static final RepositoryKind[] VALUES = {
         UNKNOWN, SVN, CVS, GIT, HG, BZR, 
       };
       
-      public static RepositoryType valueOf(
+      public static RepositoryKind valueOf(
           com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
         if (desc.getType() != getDescriptor()) {
           throw new java.lang.IllegalArgumentException(
@@ -130,12 +130,12 @@ public final class Code {
       private final int index;
       private final int value;
       
-      private RepositoryType(int index, int value) {
+      private RepositoryKind(int index, int value) {
         this.index = index;
         this.value = value;
       }
       
-      // @@protoc_insertion_point(enum_scope:sizzle.types.CodeRepository.RepositoryType)
+      // @@protoc_insertion_point(enum_scope:sizzle.types.CodeRepository.RepositoryKind)
     }
     
     private int bitField0_;
@@ -171,14 +171,14 @@ public final class Code {
       }
     }
     
-    // required .sizzle.types.CodeRepository.RepositoryType repository_type = 2;
-    public static final int REPOSITORY_TYPE_FIELD_NUMBER = 2;
-    private sizzle.types.Code.CodeRepository.RepositoryType repositoryType_;
-    public boolean hasRepositoryType() {
+    // required .sizzle.types.CodeRepository.RepositoryKind kind = 2;
+    public static final int KIND_FIELD_NUMBER = 2;
+    private sizzle.types.Code.CodeRepository.RepositoryKind kind_;
+    public boolean hasKind() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
-    public sizzle.types.Code.CodeRepository.RepositoryType getRepositoryType() {
-      return repositoryType_;
+    public sizzle.types.Code.CodeRepository.RepositoryKind getKind() {
+      return kind_;
     }
     
     // repeated .sizzle.types.Revision revisions = 3;
@@ -204,7 +204,7 @@ public final class Code {
     
     private void initFields() {
       url_ = "";
-      repositoryType_ = sizzle.types.Code.CodeRepository.RepositoryType.UNKNOWN;
+      kind_ = sizzle.types.Code.CodeRepository.RepositoryKind.UNKNOWN;
       revisions_ = java.util.Collections.emptyList();
     }
     private byte memoizedIsInitialized = -1;
@@ -216,7 +216,7 @@ public final class Code {
         memoizedIsInitialized = 0;
         return false;
       }
-      if (!hasRepositoryType()) {
+      if (!hasKind()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -237,7 +237,7 @@ public final class Code {
         output.writeBytes(1, getUrlBytes());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeEnum(2, repositoryType_.getNumber());
+        output.writeEnum(2, kind_.getNumber());
       }
       for (int i = 0; i < revisions_.size(); i++) {
         output.writeMessage(3, revisions_.get(i));
@@ -257,7 +257,7 @@ public final class Code {
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(2, repositoryType_.getNumber());
+          .computeEnumSize(2, kind_.getNumber());
       }
       for (int i = 0; i < revisions_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
@@ -390,7 +390,7 @@ public final class Code {
         super.clear();
         url_ = "";
         bitField0_ = (bitField0_ & ~0x00000001);
-        repositoryType_ = sizzle.types.Code.CodeRepository.RepositoryType.UNKNOWN;
+        kind_ = sizzle.types.Code.CodeRepository.RepositoryKind.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00000002);
         if (revisionsBuilder_ == null) {
           revisions_ = java.util.Collections.emptyList();
@@ -443,7 +443,7 @@ public final class Code {
         if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
           to_bitField0_ |= 0x00000002;
         }
-        result.repositoryType_ = repositoryType_;
+        result.kind_ = kind_;
         if (revisionsBuilder_ == null) {
           if (((bitField0_ & 0x00000004) == 0x00000004)) {
             revisions_ = java.util.Collections.unmodifiableList(revisions_);
@@ -472,8 +472,8 @@ public final class Code {
         if (other.hasUrl()) {
           setUrl(other.getUrl());
         }
-        if (other.hasRepositoryType()) {
-          setRepositoryType(other.getRepositoryType());
+        if (other.hasKind()) {
+          setKind(other.getKind());
         }
         if (revisionsBuilder_ == null) {
           if (!other.revisions_.isEmpty()) {
@@ -510,7 +510,7 @@ public final class Code {
           
           return false;
         }
-        if (!hasRepositoryType()) {
+        if (!hasKind()) {
           
           return false;
         }
@@ -553,12 +553,12 @@ public final class Code {
             }
             case 16: {
               int rawValue = input.readEnum();
-              sizzle.types.Code.CodeRepository.RepositoryType value = sizzle.types.Code.CodeRepository.RepositoryType.valueOf(rawValue);
+              sizzle.types.Code.CodeRepository.RepositoryKind value = sizzle.types.Code.CodeRepository.RepositoryKind.valueOf(rawValue);
               if (value == null) {
                 unknownFields.mergeVarintField(2, rawValue);
               } else {
                 bitField0_ |= 0x00000002;
-                repositoryType_ = value;
+                kind_ = value;
               }
               break;
             }
@@ -610,26 +610,26 @@ public final class Code {
         onChanged();
       }
       
-      // required .sizzle.types.CodeRepository.RepositoryType repository_type = 2;
-      private sizzle.types.Code.CodeRepository.RepositoryType repositoryType_ = sizzle.types.Code.CodeRepository.RepositoryType.UNKNOWN;
-      public boolean hasRepositoryType() {
+      // required .sizzle.types.CodeRepository.RepositoryKind kind = 2;
+      private sizzle.types.Code.CodeRepository.RepositoryKind kind_ = sizzle.types.Code.CodeRepository.RepositoryKind.UNKNOWN;
+      public boolean hasKind() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
-      public sizzle.types.Code.CodeRepository.RepositoryType getRepositoryType() {
-        return repositoryType_;
+      public sizzle.types.Code.CodeRepository.RepositoryKind getKind() {
+        return kind_;
       }
-      public Builder setRepositoryType(sizzle.types.Code.CodeRepository.RepositoryType value) {
+      public Builder setKind(sizzle.types.Code.CodeRepository.RepositoryKind value) {
         if (value == null) {
           throw new NullPointerException();
         }
         bitField0_ |= 0x00000002;
-        repositoryType_ = value;
+        kind_ = value;
         onChanged();
         return this;
       }
-      public Builder clearRepositoryType() {
+      public Builder clearKind() {
         bitField0_ = (bitField0_ & ~0x00000002);
-        repositoryType_ = sizzle.types.Code.CodeRepository.RepositoryType.UNKNOWN;
+        kind_ = sizzle.types.Code.CodeRepository.RepositoryKind.UNKNOWN;
         onChanged();
         return this;
       }
@@ -865,16 +865,6 @@ public final class Code {
         getFilesOrBuilderList();
     sizzle.types.Ast.FileOrBuilder getFilesOrBuilder(
         int index);
-    
-    // repeated .sizzle.types.Library libraries = 7;
-    java.util.List<sizzle.types.Ast.Library> 
-        getLibrariesList();
-    sizzle.types.Ast.Library getLibraries(int index);
-    int getLibrariesCount();
-    java.util.List<? extends sizzle.types.Ast.LibraryOrBuilder> 
-        getLibrariesOrBuilderList();
-    sizzle.types.Ast.LibraryOrBuilder getLibrariesOrBuilder(
-        int index);
   }
   public static final class Revision extends
       com.google.protobuf.GeneratedMessage
@@ -1004,27 +994,6 @@ public final class Code {
       return files_.get(index);
     }
     
-    // repeated .sizzle.types.Library libraries = 7;
-    public static final int LIBRARIES_FIELD_NUMBER = 7;
-    private java.util.List<sizzle.types.Ast.Library> libraries_;
-    public java.util.List<sizzle.types.Ast.Library> getLibrariesList() {
-      return libraries_;
-    }
-    public java.util.List<? extends sizzle.types.Ast.LibraryOrBuilder> 
-        getLibrariesOrBuilderList() {
-      return libraries_;
-    }
-    public int getLibrariesCount() {
-      return libraries_.size();
-    }
-    public sizzle.types.Ast.Library getLibraries(int index) {
-      return libraries_.get(index);
-    }
-    public sizzle.types.Ast.LibraryOrBuilder getLibrariesOrBuilder(
-        int index) {
-      return libraries_.get(index);
-    }
-    
     private void initFields() {
       id_ = 0;
       author_ = sizzle.types.Shared.Person.getDefaultInstance();
@@ -1032,7 +1001,6 @@ public final class Code {
       commitDate_ = 0L;
       log_ = "";
       files_ = java.util.Collections.emptyList();
-      libraries_ = java.util.Collections.emptyList();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -1073,12 +1041,6 @@ public final class Code {
           return false;
         }
       }
-      for (int i = 0; i < getLibrariesCount(); i++) {
-        if (!getLibraries(i).isInitialized()) {
-          memoizedIsInitialized = 0;
-          return false;
-        }
-      }
       memoizedIsInitialized = 1;
       return true;
     }
@@ -1103,9 +1065,6 @@ public final class Code {
       }
       for (int i = 0; i < files_.size(); i++) {
         output.writeMessage(6, files_.get(i));
-      }
-      for (int i = 0; i < libraries_.size(); i++) {
-        output.writeMessage(7, libraries_.get(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -1139,10 +1098,6 @@ public final class Code {
       for (int i = 0; i < files_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(6, files_.get(i));
-      }
-      for (int i = 0; i < libraries_.size(); i++) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(7, libraries_.get(i));
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1263,7 +1218,6 @@ public final class Code {
           getAuthorFieldBuilder();
           getCommitterFieldBuilder();
           getFilesFieldBuilder();
-          getLibrariesFieldBuilder();
         }
       }
       private static Builder create() {
@@ -1295,12 +1249,6 @@ public final class Code {
           bitField0_ = (bitField0_ & ~0x00000020);
         } else {
           filesBuilder_.clear();
-        }
-        if (librariesBuilder_ == null) {
-          libraries_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000040);
-        } else {
-          librariesBuilder_.clear();
         }
         return this;
       }
@@ -1377,15 +1325,6 @@ public final class Code {
         } else {
           result.files_ = filesBuilder_.build();
         }
-        if (librariesBuilder_ == null) {
-          if (((bitField0_ & 0x00000040) == 0x00000040)) {
-            libraries_ = java.util.Collections.unmodifiableList(libraries_);
-            bitField0_ = (bitField0_ & ~0x00000040);
-          }
-          result.libraries_ = libraries_;
-        } else {
-          result.libraries_ = librariesBuilder_.build();
-        }
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -1443,32 +1382,6 @@ public final class Code {
             }
           }
         }
-        if (librariesBuilder_ == null) {
-          if (!other.libraries_.isEmpty()) {
-            if (libraries_.isEmpty()) {
-              libraries_ = other.libraries_;
-              bitField0_ = (bitField0_ & ~0x00000040);
-            } else {
-              ensureLibrariesIsMutable();
-              libraries_.addAll(other.libraries_);
-            }
-            onChanged();
-          }
-        } else {
-          if (!other.libraries_.isEmpty()) {
-            if (librariesBuilder_.isEmpty()) {
-              librariesBuilder_.dispose();
-              librariesBuilder_ = null;
-              libraries_ = other.libraries_;
-              bitField0_ = (bitField0_ & ~0x00000040);
-              librariesBuilder_ = 
-                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
-                   getLibrariesFieldBuilder() : null;
-            } else {
-              librariesBuilder_.addAllMessages(other.libraries_);
-            }
-          }
-        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -1504,12 +1417,6 @@ public final class Code {
         }
         for (int i = 0; i < getFilesCount(); i++) {
           if (!getFiles(i).isInitialized()) {
-            
-            return false;
-          }
-        }
-        for (int i = 0; i < getLibrariesCount(); i++) {
-          if (!getLibraries(i).isInitialized()) {
             
             return false;
           }
@@ -1577,12 +1484,6 @@ public final class Code {
               sizzle.types.Ast.File.Builder subBuilder = sizzle.types.Ast.File.newBuilder();
               input.readMessage(subBuilder, extensionRegistry);
               addFiles(subBuilder.buildPartial());
-              break;
-            }
-            case 58: {
-              sizzle.types.Ast.Library.Builder subBuilder = sizzle.types.Ast.Library.newBuilder();
-              input.readMessage(subBuilder, extensionRegistry);
-              addLibraries(subBuilder.buildPartial());
               break;
             }
           }
@@ -2035,192 +1936,6 @@ public final class Code {
         return filesBuilder_;
       }
       
-      // repeated .sizzle.types.Library libraries = 7;
-      private java.util.List<sizzle.types.Ast.Library> libraries_ =
-        java.util.Collections.emptyList();
-      private void ensureLibrariesIsMutable() {
-        if (!((bitField0_ & 0x00000040) == 0x00000040)) {
-          libraries_ = new java.util.ArrayList<sizzle.types.Ast.Library>(libraries_);
-          bitField0_ |= 0x00000040;
-         }
-      }
-      
-      private com.google.protobuf.RepeatedFieldBuilder<
-          sizzle.types.Ast.Library, sizzle.types.Ast.Library.Builder, sizzle.types.Ast.LibraryOrBuilder> librariesBuilder_;
-      
-      public java.util.List<sizzle.types.Ast.Library> getLibrariesList() {
-        if (librariesBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(libraries_);
-        } else {
-          return librariesBuilder_.getMessageList();
-        }
-      }
-      public int getLibrariesCount() {
-        if (librariesBuilder_ == null) {
-          return libraries_.size();
-        } else {
-          return librariesBuilder_.getCount();
-        }
-      }
-      public sizzle.types.Ast.Library getLibraries(int index) {
-        if (librariesBuilder_ == null) {
-          return libraries_.get(index);
-        } else {
-          return librariesBuilder_.getMessage(index);
-        }
-      }
-      public Builder setLibraries(
-          int index, sizzle.types.Ast.Library value) {
-        if (librariesBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureLibrariesIsMutable();
-          libraries_.set(index, value);
-          onChanged();
-        } else {
-          librariesBuilder_.setMessage(index, value);
-        }
-        return this;
-      }
-      public Builder setLibraries(
-          int index, sizzle.types.Ast.Library.Builder builderForValue) {
-        if (librariesBuilder_ == null) {
-          ensureLibrariesIsMutable();
-          libraries_.set(index, builderForValue.build());
-          onChanged();
-        } else {
-          librariesBuilder_.setMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      public Builder addLibraries(sizzle.types.Ast.Library value) {
-        if (librariesBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureLibrariesIsMutable();
-          libraries_.add(value);
-          onChanged();
-        } else {
-          librariesBuilder_.addMessage(value);
-        }
-        return this;
-      }
-      public Builder addLibraries(
-          int index, sizzle.types.Ast.Library value) {
-        if (librariesBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureLibrariesIsMutable();
-          libraries_.add(index, value);
-          onChanged();
-        } else {
-          librariesBuilder_.addMessage(index, value);
-        }
-        return this;
-      }
-      public Builder addLibraries(
-          sizzle.types.Ast.Library.Builder builderForValue) {
-        if (librariesBuilder_ == null) {
-          ensureLibrariesIsMutable();
-          libraries_.add(builderForValue.build());
-          onChanged();
-        } else {
-          librariesBuilder_.addMessage(builderForValue.build());
-        }
-        return this;
-      }
-      public Builder addLibraries(
-          int index, sizzle.types.Ast.Library.Builder builderForValue) {
-        if (librariesBuilder_ == null) {
-          ensureLibrariesIsMutable();
-          libraries_.add(index, builderForValue.build());
-          onChanged();
-        } else {
-          librariesBuilder_.addMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      public Builder addAllLibraries(
-          java.lang.Iterable<? extends sizzle.types.Ast.Library> values) {
-        if (librariesBuilder_ == null) {
-          ensureLibrariesIsMutable();
-          super.addAll(values, libraries_);
-          onChanged();
-        } else {
-          librariesBuilder_.addAllMessages(values);
-        }
-        return this;
-      }
-      public Builder clearLibraries() {
-        if (librariesBuilder_ == null) {
-          libraries_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000040);
-          onChanged();
-        } else {
-          librariesBuilder_.clear();
-        }
-        return this;
-      }
-      public Builder removeLibraries(int index) {
-        if (librariesBuilder_ == null) {
-          ensureLibrariesIsMutable();
-          libraries_.remove(index);
-          onChanged();
-        } else {
-          librariesBuilder_.remove(index);
-        }
-        return this;
-      }
-      public sizzle.types.Ast.Library.Builder getLibrariesBuilder(
-          int index) {
-        return getLibrariesFieldBuilder().getBuilder(index);
-      }
-      public sizzle.types.Ast.LibraryOrBuilder getLibrariesOrBuilder(
-          int index) {
-        if (librariesBuilder_ == null) {
-          return libraries_.get(index);  } else {
-          return librariesBuilder_.getMessageOrBuilder(index);
-        }
-      }
-      public java.util.List<? extends sizzle.types.Ast.LibraryOrBuilder> 
-           getLibrariesOrBuilderList() {
-        if (librariesBuilder_ != null) {
-          return librariesBuilder_.getMessageOrBuilderList();
-        } else {
-          return java.util.Collections.unmodifiableList(libraries_);
-        }
-      }
-      public sizzle.types.Ast.Library.Builder addLibrariesBuilder() {
-        return getLibrariesFieldBuilder().addBuilder(
-            sizzle.types.Ast.Library.getDefaultInstance());
-      }
-      public sizzle.types.Ast.Library.Builder addLibrariesBuilder(
-          int index) {
-        return getLibrariesFieldBuilder().addBuilder(
-            index, sizzle.types.Ast.Library.getDefaultInstance());
-      }
-      public java.util.List<sizzle.types.Ast.Library.Builder> 
-           getLibrariesBuilderList() {
-        return getLibrariesFieldBuilder().getBuilderList();
-      }
-      private com.google.protobuf.RepeatedFieldBuilder<
-          sizzle.types.Ast.Library, sizzle.types.Ast.Library.Builder, sizzle.types.Ast.LibraryOrBuilder> 
-          getLibrariesFieldBuilder() {
-        if (librariesBuilder_ == null) {
-          librariesBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              sizzle.types.Ast.Library, sizzle.types.Ast.Library.Builder, sizzle.types.Ast.LibraryOrBuilder>(
-                  libraries_,
-                  ((bitField0_ & 0x00000040) == 0x00000040),
-                  getParentForChildren(),
-                  isClean());
-          libraries_ = null;
-        }
-        return librariesBuilder_;
-      }
-      
       // @@protoc_insertion_point(builder_scope:sizzle.types.Revision)
     }
     
@@ -2252,18 +1967,16 @@ public final class Code {
   static {
     java.lang.String[] descriptorData = {
       "\n\ncode.proto\022\014sizzle.types\032\tast.proto\032\014s" +
-      "hared.proto\"\331\001\n\016CodeRepository\022\013\n\003url\030\001 " +
-      "\002(\t\022D\n\017repository_type\030\002 \002(\0162+.sizzle.ty" +
-      "pes.CodeRepository.RepositoryType\022)\n\trev" +
-      "isions\030\003 \003(\0132\026.sizzle.types.Revision\"I\n\016" +
-      "RepositoryType\022\013\n\007UNKNOWN\020\001\022\007\n\003SVN\020\002\022\007\n\003" +
-      "CVS\020\003\022\007\n\003GIT\020\004\022\006\n\002HG\020\005\022\007\n\003BZR\020\006\"\324\001\n\010Revi" +
-      "sion\022\n\n\002id\030\001 \002(\005\022$\n\006author\030\002 \002(\0132\024.sizzl" +
-      "e.types.Person\022\'\n\tcommitter\030\003 \002(\0132\024.sizz" +
-      "le.types.Person\022\023\n\013commit_date\030\004 \002(\004\022\013\n\003",
-      "log\030\005 \002(\t\022!\n\005files\030\006 \003(\0132\022.sizzle.types." +
-      "File\022(\n\tlibraries\030\007 \003(\0132\025.sizzle.types.L" +
-      "ibrary"
+      "hared.proto\"\316\001\n\016CodeRepository\022\013\n\003url\030\001 " +
+      "\002(\t\0229\n\004kind\030\002 \002(\0162+.sizzle.types.CodeRep" +
+      "ository.RepositoryKind\022)\n\trevisions\030\003 \003(" +
+      "\0132\026.sizzle.types.Revision\"I\n\016RepositoryK" +
+      "ind\022\013\n\007UNKNOWN\020\001\022\007\n\003SVN\020\002\022\007\n\003CVS\020\003\022\007\n\003GI" +
+      "T\020\004\022\006\n\002HG\020\005\022\007\n\003BZR\020\006\"\252\001\n\010Revision\022\n\n\002id\030" +
+      "\001 \002(\005\022$\n\006author\030\002 \002(\0132\024.sizzle.types.Per" +
+      "son\022\'\n\tcommitter\030\003 \002(\0132\024.sizzle.types.Pe" +
+      "rson\022\023\n\013commit_date\030\004 \002(\004\022\013\n\003log\030\005 \002(\t\022!",
+      "\n\005files\030\006 \003(\0132\022.sizzle.types.FileB\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -2275,7 +1988,7 @@ public final class Code {
           internal_static_sizzle_types_CodeRepository_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_sizzle_types_CodeRepository_descriptor,
-              new java.lang.String[] { "Url", "RepositoryType", "Revisions", },
+              new java.lang.String[] { "Url", "Kind", "Revisions", },
               sizzle.types.Code.CodeRepository.class,
               sizzle.types.Code.CodeRepository.Builder.class);
           internal_static_sizzle_types_Revision_descriptor =
@@ -2283,7 +1996,7 @@ public final class Code {
           internal_static_sizzle_types_Revision_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_sizzle_types_Revision_descriptor,
-              new java.lang.String[] { "Id", "Author", "Committer", "CommitDate", "Log", "Files", "Libraries", },
+              new java.lang.String[] { "Id", "Author", "Committer", "CommitDate", "Log", "Files", },
               sizzle.types.Code.Revision.class,
               sizzle.types.Code.Revision.Builder.class);
           return null;

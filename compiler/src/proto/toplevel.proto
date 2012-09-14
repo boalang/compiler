@@ -4,6 +4,8 @@ import "shared.proto";
 import "code.proto";
 import "bugs.proto";
 
+option optimize_for = SPEED;
+
 message Repository {
 	repeated Project projects = 1;
 }

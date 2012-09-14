@@ -2,6 +2,8 @@ package sizzle.types;
 
 import "shared.proto";
 
+option optimize_for = SPEED;
+
 message BugRepository {
 	required string url = 1;
 	repeated Bug bugs = 2;

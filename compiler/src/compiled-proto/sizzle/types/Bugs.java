@@ -1841,7 +1841,7 @@ public final class Bugs {
       ".BugStatus\022\020\n\010severity\030\010 \002(\t\"b\n\tBugStatu" +
       "s\022\013\n\007UNKNOWN\020\001\022\010\n\004OPEN\020\002\022\n\n\006CLOSED\020\003\022\014\n\010" +
       "RESOLVED\020\004\022\t\n\005FIXED\020\005\022\n\n\006REOPEN\020\006\022\r\n\tDUP",
-      "LICATE\020\007"
+      "LICATE\020\007B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
