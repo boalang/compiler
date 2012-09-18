@@ -6,10 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * A {@link SizzleProtoTuple}.
+ * A {@link RevisionProtoTuple}.
  * 
  * @author rdyer
- * 
  */
 public class RevisionProtoTuple extends SizzleProtoTuple {
 	private final static List<SizzleType> members = new ArrayList<SizzleType>();
@@ -33,13 +32,10 @@ public class RevisionProtoTuple extends SizzleProtoTuple {
 
 		names.put("files", 5);
 		members.add(new SizzleProtoList(new FileProtoTuple()));
-
-		names.put("libraries", 6);
-		members.add(new SizzleProtoList(new LibraryProtoTuple()));
 	}
 
 	/**
-	 * Construct a ProjectProtoTuple.
+	 * Construct a {@link RevisionProtoTuple}.
 	 */
 	public RevisionProtoTuple() {
 		super(members, names);

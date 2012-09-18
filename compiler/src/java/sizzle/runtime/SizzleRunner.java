@@ -3,7 +3,6 @@ package sizzle.runtime;
 import java.io.IOException;
 
 import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
@@ -25,6 +24,7 @@ import sizzle.io.SizzleOutputFormat;
 import sizzle.io.EmitKey;
 import sizzle.io.EmitValue;
 
+@SuppressWarnings("static-access")
 public abstract class SizzleRunner {
 	/**
 	 * Create a {@link Job} describing the work to be done by this Sizzle job.
@@ -98,7 +98,7 @@ public abstract class SizzleRunner {
 	}
 	public abstract String getUsage();
 
-	public abstract Mapper getMapper();
+	public abstract Mapper<?,?,?,?> getMapper();
 
 	public abstract SizzleCombiner getCombiner();
 

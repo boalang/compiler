@@ -35,8 +35,6 @@ import org.scannotation.ClasspathUrlFinder;
 import sizzle.parser.ParseException;
 import sizzle.parser.SizzleParser;
 import sizzle.parser.syntaxtree.Start;
-import sizzle.types.SizzleBytes;
-import sizzle.types.SizzleString;
 
 public class SizzleCompiler {
 	private static Logger LOG = Logger.getLogger(SizzleCompiler.class);

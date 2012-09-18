@@ -83,7 +83,6 @@ import sizzle.parser.syntaxtree.WhenStatement;
 import sizzle.parser.syntaxtree.WhileStatement;
 import sizzle.parser.visitor.GJDepthFirst;
 import sizzle.types.SizzleArray;
-import sizzle.types.SizzleBytes;
 import sizzle.types.SizzleFunction;
 import sizzle.types.SizzleMap;
 import sizzle.types.SizzleName;

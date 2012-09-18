@@ -2,8 +2,6 @@ package sizzle.types;
 
 import java.util.Arrays;
 
-import sizzle.compiler.TypeException;
-
 /**
  * A {@link SizzleType} that represents a function, its return value, and its
  * formal parameters.

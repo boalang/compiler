@@ -6,10 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * A {@link SizzleProtoTuple}.
+ * A {@link TypeProtoTuple}.
  * 
  * @author rdyer
- * 
  */
 public class TypeProtoTuple extends SizzleProtoTuple {
 	private final static List<SizzleType> members = new ArrayList<SizzleType>();
@@ -19,18 +18,15 @@ public class TypeProtoTuple extends SizzleProtoTuple {
 		names.put("name", 0);
 		members.add(new SizzleString());
 
-		names.put("annotations", 1);
-		members.add(new SizzleProtoList(new AnnotationProtoTuple()));
+		names.put("kind", 1);
+		members.add(new TypeKindProtoMap());
 
-		names.put("methods", 3);
-		members.add(new SizzleProtoList(new MethodProtoTuple()));
-
-		names.put("fields", 4);
-		members.add(new SizzleProtoList(new FieldProtoTuple()));
+		names.put("id", 3);
+		members.add(new SizzleString());
 	}
 
 	/**
-	 * Construct a ProjectProtoTuple.
+	 * Construct a {@link TypeProtoTuple}.
 	 */
 	public TypeProtoTuple() {
 		super(members, names);

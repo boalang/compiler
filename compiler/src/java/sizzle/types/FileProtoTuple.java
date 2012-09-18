@@ -6,10 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * A {@link SizzleProtoTuple}.
+ * A {@link FileProtoTuple}.
  * 
  * @author rdyer
- * 
  */
 public class FileProtoTuple extends SizzleProtoTuple {
 	private final static List<SizzleType> members = new ArrayList<SizzleType>();
@@ -19,18 +18,21 @@ public class FileProtoTuple extends SizzleProtoTuple {
 		names.put("name", 0);
 		members.add(new SizzleString());
 
-		names.put("content", 1);
+		names.put("kind", 1);
+		members.add(new FileKindProtoMap());
+
+		names.put("parsed", 2);
+		members.add(new SizzleBool());
+
+		names.put("namespaces", 3);
+		members.add(new SizzleProtoList(new NamespaceProtoTuple()));
+
+		names.put("content", 4);
 		members.add(new SizzleString());
-
-		names.put("file_type", 2);
-		members.add(new SizzleInt());
-
-		names.put("pkg", 3);
-		members.add(new PackageProtoTuple());
 	}
 
 	/**
-	 * Construct a ProjectProtoTuple.
+	 * Construct a {@link FileProtoTuple}.
 	 */
 	public FileProtoTuple() {
 		super(members, names);

@@ -6,10 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * A {@link SizzleProtoTuple}.
+ * A {@link MethodProtoTuple}.
  * 
  * @author rdyer
- * 
  */
 public class MethodProtoTuple extends SizzleProtoTuple {
 	private final static List<SizzleType> members = new ArrayList<SizzleType>();
@@ -19,24 +18,30 @@ public class MethodProtoTuple extends SizzleProtoTuple {
 		names.put("name", 0);
 		members.add(new SizzleString());
 
-		names.put("annotations", 1);
-		members.add(new SizzleProtoList(new AnnotationProtoTuple()));
+		names.put("modifiers", 1);
+		members.add(new SizzleProtoList(new ModifierProtoTuple()));
 
 		names.put("return_type", 2);
-		members.add(new SizzleString());
+		members.add(new TypeProtoTuple());
 
-		names.put("arg_types", 3);
-		members.add(new SizzleProtoList(new SizzleString()));
+		names.put("generic_parameters", 3);
+		members.add(new SizzleProtoList(new TypeProtoTuple()));
 
-		names.put("arg_names", 4);
-		members.add(new SizzleProtoList(new SizzleString()));
+		names.put("arguments", 4);
+		members.add(new SizzleProtoList(new VariableProtoTuple()));
 
-		names.put("exceptions", 5);
-		members.add(new SizzleProtoList(new SizzleString()));
+		names.put("exception_types", 5);
+		members.add(new SizzleProtoList(new TypeProtoTuple()));
+
+		names.put("statements", 6);
+		members.add(new SizzleProtoList(new StatementProtoTuple()));
+
+		names.put("comments", 7);
+		members.add(new SizzleProtoList(new CommentProtoTuple()));
 	}
 
 	/**
-	 * Construct a ProjectProtoTuple.
+	 * Construct a {@link MethodProtoTuple}.
 	 */
 	public MethodProtoTuple() {
 		super(members, names);

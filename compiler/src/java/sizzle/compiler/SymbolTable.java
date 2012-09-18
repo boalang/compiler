@@ -21,18 +21,25 @@ import sizzle.aggregators.AggregatorSpec;
 import sizzle.aggregators.IntSumAggregator;
 import sizzle.functions.FunctionSpec;
 import sizzle.parser.syntaxtree.Operand;
-import sizzle.types.AnnotationProtoTuple;
+import sizzle.types.CommentKindProtoMap;
+import sizzle.types.DeclarationProtoTuple;
+import sizzle.types.ExpressionKindProtoMap;
+import sizzle.types.ExpressionProtoTuple;
+import sizzle.types.ModifierKindProtoMap;
+import sizzle.types.ModifierProtoTuple;
 import sizzle.types.BugProtoTuple;
 import sizzle.types.BugRepositoryProtoTuple;
 import sizzle.types.BugStatusProtoMap;
 import sizzle.types.CodeRepositoryProtoTuple;
 import sizzle.types.CommentProtoTuple;
-import sizzle.types.FieldProtoTuple;
+import sizzle.types.NamespaceProtoTuple;
+import sizzle.types.StatementKindProtoMap;
+import sizzle.types.StatementProtoTuple;
+import sizzle.types.TypeKindProtoMap;
+import sizzle.types.VariableProtoTuple;
 import sizzle.types.FileProtoTuple;
-import sizzle.types.FileTypeProtoMap;
-import sizzle.types.LibraryProtoTuple;
+import sizzle.types.FileKindProtoMap;
 import sizzle.types.MethodProtoTuple;
-import sizzle.types.PackageProtoTuple;
 import sizzle.types.PersonProtoTuple;
 import sizzle.types.ProjectProtoTuple;
 import sizzle.types.RepositoryTypeProtoMap;
@@ -57,6 +64,7 @@ import sizzle.types.SizzleType;
 import sizzle.types.SizzleName;
 import sizzle.types.SizzleVarargs;
 import sizzle.types.TypeProtoTuple;
+import sizzle.types.VisibilityProtoMap;
 
 public class SymbolTable {
 	private static Logger LOG = Logger.getLogger(SymbolTable.class);
@@ -111,23 +119,31 @@ public class SymbolTable {
 		this.idmap.put("string", new SizzleString());
 		this.idmap.put("bytes", new SizzleBytes());
 
-		this.idmap.put("Annotation", new AnnotationProtoTuple());
 		this.idmap.put("Bug", new BugProtoTuple());
 		this.idmap.put("BugRepository", new BugRepositoryProtoTuple());
 		this.idmap.put("BugStatus", new BugStatusProtoMap());
 		this.idmap.put("CodeRepository", new CodeRepositoryProtoTuple());
+		this.idmap.put("CommentKind", new CommentKindProtoMap());
 		this.idmap.put("Comment", new CommentProtoTuple());
-		this.idmap.put("Field", new FieldProtoTuple());
+		this.idmap.put("Declaration", new DeclarationProtoTuple());
+		this.idmap.put("ExpressionKind", new ExpressionKindProtoMap());
+		this.idmap.put("Expression", new ExpressionProtoTuple());
 		this.idmap.put("File", new FileProtoTuple());
-		this.idmap.put("FileType", new FileTypeProtoMap());
-		this.idmap.put("Library", new LibraryProtoTuple());
+		this.idmap.put("FileKind", new FileKindProtoMap());
 		this.idmap.put("Method", new MethodProtoTuple());
-		this.idmap.put("Package", new PackageProtoTuple());
+		this.idmap.put("ModifierKind", new ModifierKindProtoMap());
+		this.idmap.put("Modifier", new ModifierProtoTuple());
+		this.idmap.put("Namespace", new NamespaceProtoTuple());
 		this.idmap.put("Person", new PersonProtoTuple());
 		this.idmap.put("Project", new ProjectProtoTuple());
 		this.idmap.put("RepositoryType", new RepositoryTypeProtoMap());
 		this.idmap.put("Revision", new RevisionProtoTuple());
+		this.idmap.put("StatementKind", new StatementKindProtoMap());
+		this.idmap.put("Statement", new StatementProtoTuple());
+		this.idmap.put("TypeKind", new TypeKindProtoMap());
 		this.idmap.put("Type", new TypeProtoTuple());
+		this.idmap.put("Variable", new VariableProtoTuple());
+		this.idmap.put("Visibility", new VisibilityProtoMap());
 
 		// does the same for arrays
 		// for (final String key : new HashSet<String>(this.idmap.keySet())) {
@@ -181,20 +197,22 @@ public class SymbolTable {
 
 		/* expose all the casting constructors to Sawzall */
 
-		this.setFunction(new AnnotationProtoTuple().toJavaType(), new SizzleFunction(new SizzleBytes(), new SizzleType[] { new SizzleBytes() }, new AnnotationProtoTuple().toJavaType() + ".parseFrom(${0})"));
 		this.setFunction(new BugProtoTuple().toJavaType(), new SizzleFunction(new SizzleBytes(), new SizzleType[] { new SizzleBytes() }, new BugProtoTuple().toJavaType() + ".parseFrom(${0})"));
 		this.setFunction(new BugRepositoryProtoTuple().toJavaType(), new SizzleFunction(new SizzleBytes(), new SizzleType[] { new SizzleBytes() }, new BugRepositoryProtoTuple().toJavaType() + ".parseFrom(${0})"));
 		this.setFunction(new CodeRepositoryProtoTuple().toJavaType(), new SizzleFunction(new SizzleBytes(), new SizzleType[] { new SizzleBytes() }, new CodeRepositoryProtoTuple().toJavaType() + ".parseFrom(${0})"));
 		this.setFunction(new CommentProtoTuple().toJavaType(), new SizzleFunction(new SizzleBytes(), new SizzleType[] { new SizzleBytes() }, new CommentProtoTuple().toJavaType() + ".parseFrom(${0})"));
-		this.setFunction(new FieldProtoTuple().toJavaType(), new SizzleFunction(new SizzleBytes(), new SizzleType[] { new SizzleBytes() }, new FieldProtoTuple().toJavaType() + ".parseFrom(${0})"));
+		this.setFunction(new DeclarationProtoTuple().toJavaType(), new SizzleFunction(new SizzleBytes(), new SizzleType[] { new SizzleBytes() }, new DeclarationProtoTuple().toJavaType() + ".parseFrom(${0})"));
+		this.setFunction(new ExpressionProtoTuple().toJavaType(), new SizzleFunction(new SizzleBytes(), new SizzleType[] { new SizzleBytes() }, new ExpressionProtoTuple().toJavaType() + ".parseFrom(${0})"));
 		this.setFunction(new FileProtoTuple().toJavaType(), new SizzleFunction(new SizzleBytes(), new SizzleType[] { new SizzleBytes() }, new FileProtoTuple().toJavaType() + ".parseFrom(${0})"));
-		this.setFunction(new LibraryProtoTuple().toJavaType(), new SizzleFunction(new SizzleBytes(), new SizzleType[] { new SizzleBytes() }, new LibraryProtoTuple().toJavaType() + ".parseFrom(${0})"));
 		this.setFunction(new MethodProtoTuple().toJavaType(), new SizzleFunction(new SizzleBytes(), new SizzleType[] { new SizzleBytes() }, new MethodProtoTuple().toJavaType() + ".parseFrom(${0})"));
-		this.setFunction(new PackageProtoTuple().toJavaType(), new SizzleFunction(new SizzleBytes(), new SizzleType[] { new SizzleBytes() }, new PackageProtoTuple().toJavaType() + ".parseFrom(${0})"));
+		this.setFunction(new ModifierProtoTuple().toJavaType(), new SizzleFunction(new SizzleBytes(), new SizzleType[] { new SizzleBytes() }, new ModifierProtoTuple().toJavaType() + ".parseFrom(${0})"));
+		this.setFunction(new NamespaceProtoTuple().toJavaType(), new SizzleFunction(new SizzleBytes(), new SizzleType[] { new SizzleBytes() }, new NamespaceProtoTuple().toJavaType() + ".parseFrom(${0})"));
 		this.setFunction(new PersonProtoTuple().toJavaType(), new SizzleFunction(new SizzleBytes(), new SizzleType[] { new SizzleBytes() }, new PersonProtoTuple().toJavaType() + ".parseFrom(${0})"));
 		this.setFunction(new ProjectProtoTuple().toString(), new SizzleFunction(new ProjectProtoTuple(), new SizzleType[] { new SizzleBytes() }, new ProjectProtoTuple().toJavaType() + ".parseFrom(${0})"));
 		this.setFunction(new RevisionProtoTuple().toJavaType(), new SizzleFunction(new SizzleBytes(), new SizzleType[] { new SizzleBytes() }, new RevisionProtoTuple().toJavaType() + ".parseFrom(${0})"));
+		this.setFunction(new StatementProtoTuple().toJavaType(), new SizzleFunction(new SizzleBytes(), new SizzleType[] { new SizzleBytes() }, new StatementProtoTuple().toJavaType() + ".parseFrom(${0})"));
 		this.setFunction(new TypeProtoTuple().toJavaType(), new SizzleFunction(new SizzleBytes(), new SizzleType[] { new SizzleBytes() }, new TypeProtoTuple().toJavaType() + ".parseFrom(${0})"));
+		this.setFunction(new VariableProtoTuple().toJavaType(), new SizzleFunction(new SizzleBytes(), new SizzleType[] { new SizzleBytes() }, new VariableProtoTuple().toJavaType() + ".parseFrom(${0})"));
 
 		// string to bool
 		this.setFunction("bool",
