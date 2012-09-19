@@ -16,7 +16,7 @@ public class ModifierProtoTuple extends SizzleProtoTuple {
 
 	static {
 		names.put("kind", 0);
-		members.add(new ModifierKindProtoMap());
+		members.add(new SizzleInt());
 
 		names.put("visibility", 1);
 		members.add(new SizzleInt());

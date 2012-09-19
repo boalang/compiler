@@ -19,7 +19,7 @@ public class FileProtoTuple extends SizzleProtoTuple {
 		members.add(new SizzleString());
 
 		names.put("kind", 1);
-		members.add(new FileKindProtoMap());
+		members.add(new SizzleInt());
 
 		names.put("parsed", 2);
 		members.add(new SizzleBool());

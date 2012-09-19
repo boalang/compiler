@@ -19,7 +19,7 @@ public class DeclarationProtoTuple extends SizzleProtoTuple {
 		members.add(new SizzleString());
 
 		names.put("kind", 1);
-		members.add(new TypeKindProtoMap());
+		members.add(new SizzleInt());
 
 		names.put("modifiers", 2);
 		members.add(new SizzleProtoList(new ModifierProtoTuple()));

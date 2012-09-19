@@ -19,7 +19,7 @@ public class TypeProtoTuple extends SizzleProtoTuple {
 		members.add(new SizzleString());
 
 		names.put("kind", 1);
-		members.add(new TypeKindProtoMap());
+		members.add(new SizzleInt());
 
 		names.put("id", 3);
 		members.add(new SizzleString());

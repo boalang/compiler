@@ -16,7 +16,7 @@ public class CommentProtoTuple extends SizzleProtoTuple {
 
 	static {
 		names.put("kind", 0);
-		members.add(new CommentKindProtoMap());
+		members.add(new SizzleInt());
 
 		names.put("value", 1);
 		members.add(new SizzleString());

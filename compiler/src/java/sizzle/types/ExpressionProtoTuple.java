@@ -16,7 +16,7 @@ public class ExpressionProtoTuple extends SizzleProtoTuple {
 
 	static {
 		names.put("kind", 0);
-		members.add(new ExpressionKindProtoMap());
+		members.add(new SizzleInt());
 
 		names.put("expressions", 1);
 		members.add(new SizzleProtoList(new ExpressionProtoTuple()));
