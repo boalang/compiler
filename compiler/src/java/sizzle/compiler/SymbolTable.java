@@ -3,7 +3,6 @@ package sizzle.compiler;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -69,17 +68,17 @@ import sizzle.types.VisibilityProtoMap;
 public class SymbolTable {
 	private static Logger LOG = Logger.getLogger(SymbolTable.class);
 
-	private final boolean strictCompatibility;
+	private static final boolean strictCompatibility = true;
 
 	private final ClassLoader loader;
 
 	private FunctionTrie functions;
-	private final HashMap<String, Class<?>> aggregators;
+	private HashMap<String, Class<?>> aggregators;
 
-	private final Map<Class<?>, SizzleType> protomap;
-	private final Map<String, SizzleType> idmap;
+	private static final Map<Class<?>, SizzleType> protomap;
+	private Map<String, SizzleType> idmap;
 
-	private Map<String, SizzleType> globals;
+	private static final Map<String, SizzleType> globals;
 	private Map<String, SizzleType> locals;
 
 	private String id;
@@ -87,24 +86,35 @@ public class SymbolTable {
 	private SizzleType operandType;
 	private boolean needsBoxing;
 
-	private SymbolTable() throws IOException {
-		this(new ArrayList<URL>());
+	static {
+		// this maps the Java types in protocol buffers into Sizzle types
+		protomap = new HashMap<Class<?>, SizzleType>();
+		protomap.put(int.class, new SizzleInt());
+		protomap.put(long.class, new SizzleInt());
+		protomap.put(float.class, new SizzleFloat());
+		protomap.put(double.class, new SizzleFloat());
+		protomap.put(boolean.class, new SizzleBool());
+		protomap.put(byte[].class, new SizzleBytes());
+		protomap.put(Object.class, new SizzleString());
+
+		// variables with a global scope
+		globals = new HashMap<String, SizzleType>();
+		globals.put("input", new SizzleBytes());
+		globals.put("true", new SizzleBool());
+		globals.put("false", new SizzleBool());
+		globals.put("PI", new SizzleFloat());
+		globals.put("Inf", new SizzleFloat());
+		globals.put("inf", new SizzleFloat());
+		globals.put("NaN", new SizzleFloat());
+		globals.put("nan", new SizzleFloat());
+	}
+
+	private SymbolTable() {
+		this.loader = Thread.currentThread().getContextClassLoader();
 	}
 
 	public SymbolTable(final List<URL> libs) throws IOException {
-		this.strictCompatibility = true;
-
 		this.loader = Thread.currentThread().getContextClassLoader();
-
-		// this maps the Java types in protocol buffers into Sizzle types
-		this.protomap = new HashMap<Class<?>, SizzleType>();
-		this.protomap.put(int.class, new SizzleInt());
-		this.protomap.put(long.class, new SizzleInt());
-		this.protomap.put(float.class, new SizzleFloat());
-		this.protomap.put(double.class, new SizzleFloat());
-		this.protomap.put(boolean.class, new SizzleBool());
-		this.protomap.put(byte[].class, new SizzleBytes());
-		this.protomap.put(Object.class, new SizzleString());
 
 		// this maps scalar Sizzle scalar types names to their classes
 		// TODO: do this via reflection
@@ -152,17 +162,6 @@ public class SymbolTable {
 		// this.idmap.put("array of " + key, new SizzleArray((SizzleScalar)
 		// value));
 		// }
-
-		// variables with a global scope
-		this.globals = new HashMap<String, SizzleType>();
-		this.globals.put("input", new SizzleBytes());
-		this.globals.put("true", new SizzleBool());
-		this.globals.put("false", new SizzleBool());
-		this.globals.put("PI", new SizzleFloat());
-		this.globals.put("Inf", new SizzleFloat());
-		this.globals.put("inf", new SizzleFloat());
-		this.globals.put("NaN", new SizzleFloat());
-		this.globals.put("nan", new SizzleFloat());
 
 		// variables with a local scope
 		this.locals = new HashMap<String, SizzleType>();
@@ -324,7 +323,7 @@ public class SymbolTable {
 
 		// expose whatever is left, assuming we are not aiming for strict
 		// compatibility
-		if (!this.strictCompatibility) {
+		if (!strictCompatibility) {
 			// random takes no argument
 
 			// these three have capitals in the name
@@ -351,14 +350,10 @@ public class SymbolTable {
 	}
 
 	public SymbolTable cloneNonLocals() throws IOException {
-		SymbolTable st;
-		try {
-			st = new SymbolTable();
-		} catch (final MalformedURLException e) {
-			throw new RuntimeException(e.getClass().getSimpleName() + " caught", e);
-		}
+		SymbolTable st = new SymbolTable();
 
-		st.globals = this.globals;
+		st.aggregators = this.aggregators;
+		st.idmap = this.idmap;
 		st.functions = this.functions;
 		st.locals = new HashMap<String, SizzleType>(this.locals);
 
@@ -377,21 +372,21 @@ public class SymbolTable {
 			this.setFunction(id, (SizzleFunction) type);
 
 		if (global)
-			this.globals.put(id, type);
+			globals.put(id, type);
 		else
 			this.locals.put(id, type);
 	}
 
 	public boolean contains(final String id) {
-		return this.globals.containsKey(id) || this.locals.containsKey(id);
+		return globals.containsKey(id) || this.locals.containsKey(id);
 	}
 
 	public SizzleType get(final String id) {
 		if (this.idmap.containsKey(id))
 			return new SizzleName(this.idmap.get(id));
 
-		if (this.globals.containsKey(id))
-			return this.globals.get(id);
+		if (globals.containsKey(id))
+			return globals.get(id);
 
 		if (this.locals.containsKey(id))
 			return this.locals.get(id);
@@ -526,9 +521,8 @@ public class SymbolTable {
 				SymbolTable.LOG.error("unable to import aggregator " + c + ": " + e.getClass().getSimpleName() + " for " + e.getMessage());
 			}
 
-		for (final String c : annotationIndex.get(FunctionSpec.class.getCanonicalName())) {
+		for (final String c : annotationIndex.get(FunctionSpec.class.getCanonicalName()))
 			this.importFunctions(c);
-		}
 	}
 
 	void importProto(final String name) {
@@ -555,7 +549,7 @@ public class SymbolTable {
 				final Class<?> type = field.getType();
 
 				names.put(member, i++);
-				members.add(this.protomap.get(type));
+				members.add(protomap.get(type));
 			}
 
 			this.idmap.put(c.getSimpleName(), new SizzleProtoTuple(members, names));
