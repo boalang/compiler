@@ -123,7 +123,7 @@ public class SizzleCompiler {
 		
 		final String filename = in.getName();
 
-		final String name = filename.substring(0, filename.lastIndexOf('.'));
+		final String name = camelCase(filename.substring(0, filename.lastIndexOf('.')));
 
 		// get the filename of the jar we will be writing
 		String out;
@@ -249,5 +249,27 @@ public class SizzleCompiler {
 		}
 
 		SizzleCompiler.delete(dir);
+	}
+
+	private static String camelCase(final String string) {
+		final StringBuilder camelized = new StringBuilder();
+
+		boolean lower = false;
+		for (final char c : string.toCharArray())
+			if (!Character.isDigit(c) && !Character.isLetter(c))
+				lower = false;
+			else if (Character.isDigit(c)) {
+				camelized.append(c);
+				lower = false;
+			} else if (Character.isLetter(c)) {
+				if (lower)
+					camelized.append(c);
+				else
+					camelized.append(Character.toUpperCase(c));
+
+				lower = true;
+			}
+
+		return camelized.toString();
 	}
 }
