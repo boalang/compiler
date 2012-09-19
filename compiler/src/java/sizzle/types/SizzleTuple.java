@@ -122,12 +122,16 @@ public class SizzleTuple extends SizzleScalar {
 		return "Object[]";
 	}
 
+	private int hash = 0;
+
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + (this.members == null ? 0 : this.members.hashCode());
-		return result;
+		if (hash == 0) {
+			final int prime = 31;
+			hash = super.hashCode();
+			hash = prime * hash + (this.members == null ? 0 : this.members.hashCode());
+		}
+		return hash;
 	}
 
 	@Override

@@ -108,13 +108,17 @@ public class SizzleArray extends SizzleType {
 		this.type = type;
 	}
 
+	private int hash = 0;
+
 	/** {@inheritDoc} */
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (this.type == null ? 0 : this.type.hashCode());
-		return result;
+		if (hash == 0) {
+			final int prime = 31;
+			hash = 1;
+			hash = prime * hash + (this.type == null ? 0 : this.type.hashCode());
+		}
+		return hash;
 	}
 
 	/** {@inheritDoc} */
