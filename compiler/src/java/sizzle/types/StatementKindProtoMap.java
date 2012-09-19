@@ -5,7 +5,7 @@ package sizzle.types;
  * 
  * @author rdyer
  */
-public class StatementKindProtoMap extends SizzleMap {
+public class StatementKindProtoMap extends SizzleProtoMap {
 	/**
 	 * Construct a {@link StatementKindProtoMap}.
 	 */

@@ -4,9 +4,8 @@ package sizzle.types;
  * A {@link BugStatusProtoMap}.
  * 
  * @author rdyer
- * 
  */
-public class BugStatusProtoMap extends SizzleMap {
+public class BugStatusProtoMap extends SizzleProtoMap {
 	/**
 	 * Construct a BugStatusProtoMap.
 	 */
