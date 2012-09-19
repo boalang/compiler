@@ -1016,29 +1016,25 @@ public class CodeGeneratingVisitor extends GJDepthFirst<String, SymbolTable> {
 	public String visit(final Function n, final SymbolTable argu) {
 		final StringTemplate st = this.stg.getInstanceOf("Function");
 
-		final SizzleType t;
+		SymbolTable funcArgu = null;
 		try {
-			t = this.typechecker.visit(n.f0, argu.cloneNonLocals());
+			funcArgu = argu.cloneNonLocals();
 		} catch (final IOException e) {
 			throw new RuntimeException(e.getClass().getSimpleName() + " caught", e);
 		}
+
+		final SizzleType t = this.typechecker.visit(n.f0, funcArgu);
+		this.typechecker.visit(n.f1, funcArgu);
 
 		if (!(t instanceof SizzleFunction))
 			throw new RuntimeException("type " + t + " no a function type");
 		final SizzleFunction funcType = ((SizzleFunction) t);
 
-		SymbolTable funcArgu = null;
-		try {
-			funcArgu = argu.cloneNonLocals();
-		} catch (Exception e) { }
-
 		SizzleType[] paramTypes = funcType.getFormalParameters();
 		List<String> params = new ArrayList<String>();
 
-		for (int i = 0; i < paramTypes.length; i++) {
+		for (int i = 0; i < paramTypes.length; i++)
 			params.add(paramTypes[i].toBoxedJavaType() + " ___" + ((SizzleName) paramTypes[i]).getId() + " = (" + paramTypes[i].toBoxedJavaType() + ")args[" + i + "];");
-			funcArgu.set(((SizzleName) paramTypes[i]).getId(), paramTypes[i]);
-		}
 
 		st.setAttribute("ret", funcType.getType().toBoxedJavaType());
 		st.setAttribute("parameters", params);

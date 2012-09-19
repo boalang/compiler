@@ -352,7 +352,7 @@ public class TypeCheckingVisitor extends GJDepthFirst<SizzleType, SymbolTable> {
 			if (paramList.present())
 				for (Node paramNodes : paramList.nodes) {
 					idents.add(((Identifier)((NodeSequence)paramNodes).elementAt(1)).f0.tokenImage);
-					types.add(((NodeSequence)paramNodes).elementAt(1).accept(this, argu));
+					types.add(((NodeSequence)paramNodes).elementAt(3).accept(this, argu));
 				}
 
 			params = new SizzleType[idents.size()];
