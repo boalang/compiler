@@ -106,10 +106,6 @@ public final class Ast {
     boolean hasKind();
     sizzle.types.Ast.File.FileKind getKind();
     
-    // optional bool parsed = 3 [default = false];
-    boolean hasParsed();
-    boolean getParsed();
-    
     // repeated .sizzle.types.Namespace namespaces = 4;
     java.util.List<sizzle.types.Ast.Namespace> 
         getNamespacesList();
@@ -158,16 +154,20 @@ public final class Ast {
       BINARY(1, 2),
       TEXT(2, 3),
       XML(3, 4),
-      SOURCE_JAVA(4, 5),
-      SOURCE_CSHARP(5, 6),
+      SOURCE_JAVA_ERROR(4, 5),
+      SOURCE_JAVA_JLS2(5, 6),
+      SOURCE_JAVA_JLS3(6, 7),
+      SOURCE_JAVA_JLS4(7, 8),
       ;
       
       public static final int UNKNOWN_VALUE = 1;
       public static final int BINARY_VALUE = 2;
       public static final int TEXT_VALUE = 3;
       public static final int XML_VALUE = 4;
-      public static final int SOURCE_JAVA_VALUE = 5;
-      public static final int SOURCE_CSHARP_VALUE = 6;
+      public static final int SOURCE_JAVA_ERROR_VALUE = 5;
+      public static final int SOURCE_JAVA_JLS2_VALUE = 6;
+      public static final int SOURCE_JAVA_JLS3_VALUE = 7;
+      public static final int SOURCE_JAVA_JLS4_VALUE = 8;
       
       
       public final int getNumber() { return value; }
@@ -178,8 +178,10 @@ public final class Ast {
           case 2: return BINARY;
           case 3: return TEXT;
           case 4: return XML;
-          case 5: return SOURCE_JAVA;
-          case 6: return SOURCE_CSHARP;
+          case 5: return SOURCE_JAVA_ERROR;
+          case 6: return SOURCE_JAVA_JLS2;
+          case 7: return SOURCE_JAVA_JLS3;
+          case 8: return SOURCE_JAVA_JLS4;
           default: return null;
         }
       }
@@ -210,7 +212,7 @@ public final class Ast {
       }
       
       private static final FileKind[] VALUES = {
-        UNKNOWN, BINARY, TEXT, XML, SOURCE_JAVA, SOURCE_CSHARP, 
+        UNKNOWN, BINARY, TEXT, XML, SOURCE_JAVA_ERROR, SOURCE_JAVA_JLS2, SOURCE_JAVA_JLS3, SOURCE_JAVA_JLS4, 
       };
       
       public static FileKind valueOf(
@@ -276,16 +278,6 @@ public final class Ast {
       return kind_;
     }
     
-    // optional bool parsed = 3 [default = false];
-    public static final int PARSED_FIELD_NUMBER = 3;
-    private boolean parsed_;
-    public boolean hasParsed() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
-    }
-    public boolean getParsed() {
-      return parsed_;
-    }
-    
     // repeated .sizzle.types.Namespace namespaces = 4;
     public static final int NAMESPACES_FIELD_NUMBER = 4;
     private java.util.List<sizzle.types.Ast.Namespace> namespaces_;
@@ -311,7 +303,7 @@ public final class Ast {
     public static final int CONTENT_FIELD_NUMBER = 5;
     private java.lang.Object content_;
     public boolean hasContent() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
+      return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     public String getContent() {
       java.lang.Object ref = content_;
@@ -342,7 +334,6 @@ public final class Ast {
     private void initFields() {
       name_ = "";
       kind_ = sizzle.types.Ast.File.FileKind.UNKNOWN;
-      parsed_ = false;
       namespaces_ = java.util.Collections.emptyList();
       content_ = "";
     }
@@ -378,13 +369,10 @@ public final class Ast {
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         output.writeEnum(2, kind_.getNumber());
       }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeBool(3, parsed_);
-      }
       for (int i = 0; i < namespaces_.size(); i++) {
         output.writeMessage(4, namespaces_.get(i));
       }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeBytes(5, getContentBytes());
       }
       getUnknownFields().writeTo(output);
@@ -404,15 +392,11 @@ public final class Ast {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(2, kind_.getNumber());
       }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(3, parsed_);
-      }
       for (int i = 0; i < namespaces_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(4, namespaces_.get(i));
       }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(5, getContentBytes());
       }
@@ -545,16 +529,14 @@ public final class Ast {
         bitField0_ = (bitField0_ & ~0x00000001);
         kind_ = sizzle.types.Ast.File.FileKind.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00000002);
-        parsed_ = false;
-        bitField0_ = (bitField0_ & ~0x00000004);
         if (namespacesBuilder_ == null) {
           namespaces_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000008);
+          bitField0_ = (bitField0_ & ~0x00000004);
         } else {
           namespacesBuilder_.clear();
         }
         content_ = "";
-        bitField0_ = (bitField0_ & ~0x00000010);
+        bitField0_ = (bitField0_ & ~0x00000008);
         return this;
       }
       
@@ -601,21 +583,17 @@ public final class Ast {
           to_bitField0_ |= 0x00000002;
         }
         result.kind_ = kind_;
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000004;
-        }
-        result.parsed_ = parsed_;
         if (namespacesBuilder_ == null) {
-          if (((bitField0_ & 0x00000008) == 0x00000008)) {
+          if (((bitField0_ & 0x00000004) == 0x00000004)) {
             namespaces_ = java.util.Collections.unmodifiableList(namespaces_);
-            bitField0_ = (bitField0_ & ~0x00000008);
+            bitField0_ = (bitField0_ & ~0x00000004);
           }
           result.namespaces_ = namespaces_;
         } else {
           result.namespaces_ = namespacesBuilder_.build();
         }
-        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
-          to_bitField0_ |= 0x00000008;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000004;
         }
         result.content_ = content_;
         result.bitField0_ = to_bitField0_;
@@ -640,14 +618,11 @@ public final class Ast {
         if (other.hasKind()) {
           setKind(other.getKind());
         }
-        if (other.hasParsed()) {
-          setParsed(other.getParsed());
-        }
         if (namespacesBuilder_ == null) {
           if (!other.namespaces_.isEmpty()) {
             if (namespaces_.isEmpty()) {
               namespaces_ = other.namespaces_;
-              bitField0_ = (bitField0_ & ~0x00000008);
+              bitField0_ = (bitField0_ & ~0x00000004);
             } else {
               ensureNamespacesIsMutable();
               namespaces_.addAll(other.namespaces_);
@@ -660,7 +635,7 @@ public final class Ast {
               namespacesBuilder_.dispose();
               namespacesBuilder_ = null;
               namespaces_ = other.namespaces_;
-              bitField0_ = (bitField0_ & ~0x00000008);
+              bitField0_ = (bitField0_ & ~0x00000004);
               namespacesBuilder_ = 
                 com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
                    getNamespacesFieldBuilder() : null;
@@ -733,11 +708,6 @@ public final class Ast {
               }
               break;
             }
-            case 24: {
-              bitField0_ |= 0x00000004;
-              parsed_ = input.readBool();
-              break;
-            }
             case 34: {
               sizzle.types.Ast.Namespace.Builder subBuilder = sizzle.types.Ast.Namespace.newBuilder();
               input.readMessage(subBuilder, extensionRegistry);
@@ -745,7 +715,7 @@ public final class Ast {
               break;
             }
             case 42: {
-              bitField0_ |= 0x00000010;
+              bitField0_ |= 0x00000008;
               content_ = input.readBytes();
               break;
             }
@@ -815,34 +785,13 @@ public final class Ast {
         return this;
       }
       
-      // optional bool parsed = 3 [default = false];
-      private boolean parsed_ ;
-      public boolean hasParsed() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
-      }
-      public boolean getParsed() {
-        return parsed_;
-      }
-      public Builder setParsed(boolean value) {
-        bitField0_ |= 0x00000004;
-        parsed_ = value;
-        onChanged();
-        return this;
-      }
-      public Builder clearParsed() {
-        bitField0_ = (bitField0_ & ~0x00000004);
-        parsed_ = false;
-        onChanged();
-        return this;
-      }
-      
       // repeated .sizzle.types.Namespace namespaces = 4;
       private java.util.List<sizzle.types.Ast.Namespace> namespaces_ =
         java.util.Collections.emptyList();
       private void ensureNamespacesIsMutable() {
-        if (!((bitField0_ & 0x00000008) == 0x00000008)) {
+        if (!((bitField0_ & 0x00000004) == 0x00000004)) {
           namespaces_ = new java.util.ArrayList<sizzle.types.Ast.Namespace>(namespaces_);
-          bitField0_ |= 0x00000008;
+          bitField0_ |= 0x00000004;
          }
       }
       
@@ -958,7 +907,7 @@ public final class Ast {
       public Builder clearNamespaces() {
         if (namespacesBuilder_ == null) {
           namespaces_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000008);
+          bitField0_ = (bitField0_ & ~0x00000004);
           onChanged();
         } else {
           namespacesBuilder_.clear();
@@ -1014,7 +963,7 @@ public final class Ast {
           namespacesBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
               sizzle.types.Ast.Namespace, sizzle.types.Ast.Namespace.Builder, sizzle.types.Ast.NamespaceOrBuilder>(
                   namespaces_,
-                  ((bitField0_ & 0x00000008) == 0x00000008),
+                  ((bitField0_ & 0x00000004) == 0x00000004),
                   getParentForChildren(),
                   isClean());
           namespaces_ = null;
@@ -1025,7 +974,7 @@ public final class Ast {
       // optional string content = 5;
       private java.lang.Object content_ = "";
       public boolean hasContent() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
+        return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       public String getContent() {
         java.lang.Object ref = content_;
@@ -1041,19 +990,19 @@ public final class Ast {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000010;
+  bitField0_ |= 0x00000008;
         content_ = value;
         onChanged();
         return this;
       }
       public Builder clearContent() {
-        bitField0_ = (bitField0_ & ~0x00000010);
+        bitField0_ = (bitField0_ & ~0x00000008);
         content_ = getDefaultInstance().getContent();
         onChanged();
         return this;
       }
       void setContent(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00000010;
+        bitField0_ |= 0x00000008;
         content_ = value;
         onChanged();
       }
@@ -8848,20 +8797,30 @@ public final class Ast {
     sizzle.types.Ast.StatementOrBuilder getStatementsOrBuilder(
         int index);
     
-    // optional .sizzle.types.Expression condition = 4;
+    // repeated .sizzle.types.Expression initializations = 4;
+    java.util.List<sizzle.types.Ast.Expression> 
+        getInitializationsList();
+    sizzle.types.Ast.Expression getInitializations(int index);
+    int getInitializationsCount();
+    java.util.List<? extends sizzle.types.Ast.ExpressionOrBuilder> 
+        getInitializationsOrBuilderList();
+    sizzle.types.Ast.ExpressionOrBuilder getInitializationsOrBuilder(
+        int index);
+    
+    // optional .sizzle.types.Expression condition = 5;
     boolean hasCondition();
     sizzle.types.Ast.Expression getCondition();
     sizzle.types.Ast.ExpressionOrBuilder getConditionOrBuilder();
     
-    // optional .sizzle.types.Expression initialization = 5;
-    boolean hasInitialization();
-    sizzle.types.Ast.Expression getInitialization();
-    sizzle.types.Ast.ExpressionOrBuilder getInitializationOrBuilder();
-    
-    // optional .sizzle.types.Expression increment = 6;
-    boolean hasIncrement();
-    sizzle.types.Ast.Expression getIncrement();
-    sizzle.types.Ast.ExpressionOrBuilder getIncrementOrBuilder();
+    // repeated .sizzle.types.Expression updates = 6;
+    java.util.List<sizzle.types.Ast.Expression> 
+        getUpdatesList();
+    sizzle.types.Ast.Expression getUpdates(int index);
+    int getUpdatesCount();
+    java.util.List<? extends sizzle.types.Ast.ExpressionOrBuilder> 
+        getUpdatesOrBuilderList();
+    sizzle.types.Ast.ExpressionOrBuilder getUpdatesOrBuilder(
+        int index);
     
     // optional .sizzle.types.Variable variable_declaration = 7;
     boolean hasVariableDeclaration();
@@ -9085,8 +9044,29 @@ public final class Ast {
       return statements_.get(index);
     }
     
-    // optional .sizzle.types.Expression condition = 4;
-    public static final int CONDITION_FIELD_NUMBER = 4;
+    // repeated .sizzle.types.Expression initializations = 4;
+    public static final int INITIALIZATIONS_FIELD_NUMBER = 4;
+    private java.util.List<sizzle.types.Ast.Expression> initializations_;
+    public java.util.List<sizzle.types.Ast.Expression> getInitializationsList() {
+      return initializations_;
+    }
+    public java.util.List<? extends sizzle.types.Ast.ExpressionOrBuilder> 
+        getInitializationsOrBuilderList() {
+      return initializations_;
+    }
+    public int getInitializationsCount() {
+      return initializations_.size();
+    }
+    public sizzle.types.Ast.Expression getInitializations(int index) {
+      return initializations_.get(index);
+    }
+    public sizzle.types.Ast.ExpressionOrBuilder getInitializationsOrBuilder(
+        int index) {
+      return initializations_.get(index);
+    }
+    
+    // optional .sizzle.types.Expression condition = 5;
+    public static final int CONDITION_FIELD_NUMBER = 5;
     private sizzle.types.Ast.Expression condition_;
     public boolean hasCondition() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
@@ -9098,37 +9078,32 @@ public final class Ast {
       return condition_;
     }
     
-    // optional .sizzle.types.Expression initialization = 5;
-    public static final int INITIALIZATION_FIELD_NUMBER = 5;
-    private sizzle.types.Ast.Expression initialization_;
-    public boolean hasInitialization() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
+    // repeated .sizzle.types.Expression updates = 6;
+    public static final int UPDATES_FIELD_NUMBER = 6;
+    private java.util.List<sizzle.types.Ast.Expression> updates_;
+    public java.util.List<sizzle.types.Ast.Expression> getUpdatesList() {
+      return updates_;
     }
-    public sizzle.types.Ast.Expression getInitialization() {
-      return initialization_;
+    public java.util.List<? extends sizzle.types.Ast.ExpressionOrBuilder> 
+        getUpdatesOrBuilderList() {
+      return updates_;
     }
-    public sizzle.types.Ast.ExpressionOrBuilder getInitializationOrBuilder() {
-      return initialization_;
+    public int getUpdatesCount() {
+      return updates_.size();
     }
-    
-    // optional .sizzle.types.Expression increment = 6;
-    public static final int INCREMENT_FIELD_NUMBER = 6;
-    private sizzle.types.Ast.Expression increment_;
-    public boolean hasIncrement() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
+    public sizzle.types.Ast.Expression getUpdates(int index) {
+      return updates_.get(index);
     }
-    public sizzle.types.Ast.Expression getIncrement() {
-      return increment_;
-    }
-    public sizzle.types.Ast.ExpressionOrBuilder getIncrementOrBuilder() {
-      return increment_;
+    public sizzle.types.Ast.ExpressionOrBuilder getUpdatesOrBuilder(
+        int index) {
+      return updates_.get(index);
     }
     
     // optional .sizzle.types.Variable variable_declaration = 7;
     public static final int VARIABLE_DECLARATION_FIELD_NUMBER = 7;
     private sizzle.types.Ast.Variable variableDeclaration_;
     public boolean hasVariableDeclaration() {
-      return ((bitField0_ & 0x00000010) == 0x00000010);
+      return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     public sizzle.types.Ast.Variable getVariableDeclaration() {
       return variableDeclaration_;
@@ -9141,7 +9116,7 @@ public final class Ast {
     public static final int TYPE_DECLARATION_FIELD_NUMBER = 8;
     private sizzle.types.Ast.Declaration typeDeclaration_;
     public boolean hasTypeDeclaration() {
-      return ((bitField0_ & 0x00000020) == 0x00000020);
+      return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     public sizzle.types.Ast.Declaration getTypeDeclaration() {
       return typeDeclaration_;
@@ -9154,7 +9129,7 @@ public final class Ast {
     public static final int EXPRESSION_FIELD_NUMBER = 9;
     private sizzle.types.Ast.Expression expression_;
     public boolean hasExpression() {
-      return ((bitField0_ & 0x00000040) == 0x00000040);
+      return ((bitField0_ & 0x00000010) == 0x00000010);
     }
     public sizzle.types.Ast.Expression getExpression() {
       return expression_;
@@ -9167,9 +9142,9 @@ public final class Ast {
       kind_ = sizzle.types.Ast.Statement.StatementKind.BLOCK;
       comments_ = java.util.Collections.emptyList();
       statements_ = java.util.Collections.emptyList();
+      initializations_ = java.util.Collections.emptyList();
       condition_ = sizzle.types.Ast.Expression.getDefaultInstance();
-      initialization_ = sizzle.types.Ast.Expression.getDefaultInstance();
-      increment_ = sizzle.types.Ast.Expression.getDefaultInstance();
+      updates_ = java.util.Collections.emptyList();
       variableDeclaration_ = sizzle.types.Ast.Variable.getDefaultInstance();
       typeDeclaration_ = sizzle.types.Ast.Declaration.getDefaultInstance();
       expression_ = sizzle.types.Ast.Expression.getDefaultInstance();
@@ -9195,20 +9170,20 @@ public final class Ast {
           return false;
         }
       }
+      for (int i = 0; i < getInitializationsCount(); i++) {
+        if (!getInitializations(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
       if (hasCondition()) {
         if (!getCondition().isInitialized()) {
           memoizedIsInitialized = 0;
           return false;
         }
       }
-      if (hasInitialization()) {
-        if (!getInitialization().isInitialized()) {
-          memoizedIsInitialized = 0;
-          return false;
-        }
-      }
-      if (hasIncrement()) {
-        if (!getIncrement().isInitialized()) {
+      for (int i = 0; i < getUpdatesCount(); i++) {
+        if (!getUpdates(i).isInitialized()) {
           memoizedIsInitialized = 0;
           return false;
         }
@@ -9247,22 +9222,22 @@ public final class Ast {
       for (int i = 0; i < statements_.size(); i++) {
         output.writeMessage(3, statements_.get(i));
       }
+      for (int i = 0; i < initializations_.size(); i++) {
+        output.writeMessage(4, initializations_.get(i));
+      }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeMessage(4, condition_);
+        output.writeMessage(5, condition_);
+      }
+      for (int i = 0; i < updates_.size(); i++) {
+        output.writeMessage(6, updates_.get(i));
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeMessage(5, initialization_);
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeMessage(6, increment_);
-      }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
         output.writeMessage(7, variableDeclaration_);
       }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
         output.writeMessage(8, typeDeclaration_);
       }
-      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
         output.writeMessage(9, expression_);
       }
       getUnknownFields().writeTo(output);
@@ -9286,27 +9261,27 @@ public final class Ast {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(3, statements_.get(i));
       }
+      for (int i = 0; i < initializations_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(4, initializations_.get(i));
+      }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(4, condition_);
+          .computeMessageSize(5, condition_);
+      }
+      for (int i = 0; i < updates_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(6, updates_.get(i));
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(5, initialization_);
+          .computeMessageSize(7, variableDeclaration_);
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(6, increment_);
-      }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(7, variableDeclaration_);
-      }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(8, typeDeclaration_);
       }
-      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(9, expression_);
       }
@@ -9428,9 +9403,9 @@ public final class Ast {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
           getCommentsFieldBuilder();
           getStatementsFieldBuilder();
+          getInitializationsFieldBuilder();
           getConditionFieldBuilder();
-          getInitializationFieldBuilder();
-          getIncrementFieldBuilder();
+          getUpdatesFieldBuilder();
           getVariableDeclarationFieldBuilder();
           getTypeDeclarationFieldBuilder();
           getExpressionFieldBuilder();
@@ -9456,24 +9431,24 @@ public final class Ast {
         } else {
           statementsBuilder_.clear();
         }
+        if (initializationsBuilder_ == null) {
+          initializations_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000008);
+        } else {
+          initializationsBuilder_.clear();
+        }
         if (conditionBuilder_ == null) {
           condition_ = sizzle.types.Ast.Expression.getDefaultInstance();
         } else {
           conditionBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000008);
-        if (initializationBuilder_ == null) {
-          initialization_ = sizzle.types.Ast.Expression.getDefaultInstance();
-        } else {
-          initializationBuilder_.clear();
-        }
         bitField0_ = (bitField0_ & ~0x00000010);
-        if (incrementBuilder_ == null) {
-          increment_ = sizzle.types.Ast.Expression.getDefaultInstance();
+        if (updatesBuilder_ == null) {
+          updates_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000020);
         } else {
-          incrementBuilder_.clear();
+          updatesBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000020);
         if (variableDeclarationBuilder_ == null) {
           variableDeclaration_ = sizzle.types.Ast.Variable.getDefaultInstance();
         } else {
@@ -9552,7 +9527,16 @@ public final class Ast {
         } else {
           result.statements_ = statementsBuilder_.build();
         }
-        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+        if (initializationsBuilder_ == null) {
+          if (((bitField0_ & 0x00000008) == 0x00000008)) {
+            initializations_ = java.util.Collections.unmodifiableList(initializations_);
+            bitField0_ = (bitField0_ & ~0x00000008);
+          }
+          result.initializations_ = initializations_;
+        } else {
+          result.initializations_ = initializationsBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
           to_bitField0_ |= 0x00000002;
         }
         if (conditionBuilder_ == null) {
@@ -9560,24 +9544,17 @@ public final class Ast {
         } else {
           result.condition_ = conditionBuilder_.build();
         }
-        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
-          to_bitField0_ |= 0x00000004;
-        }
-        if (initializationBuilder_ == null) {
-          result.initialization_ = initialization_;
+        if (updatesBuilder_ == null) {
+          if (((bitField0_ & 0x00000020) == 0x00000020)) {
+            updates_ = java.util.Collections.unmodifiableList(updates_);
+            bitField0_ = (bitField0_ & ~0x00000020);
+          }
+          result.updates_ = updates_;
         } else {
-          result.initialization_ = initializationBuilder_.build();
-        }
-        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
-          to_bitField0_ |= 0x00000008;
-        }
-        if (incrementBuilder_ == null) {
-          result.increment_ = increment_;
-        } else {
-          result.increment_ = incrementBuilder_.build();
+          result.updates_ = updatesBuilder_.build();
         }
         if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
-          to_bitField0_ |= 0x00000010;
+          to_bitField0_ |= 0x00000004;
         }
         if (variableDeclarationBuilder_ == null) {
           result.variableDeclaration_ = variableDeclaration_;
@@ -9585,7 +9562,7 @@ public final class Ast {
           result.variableDeclaration_ = variableDeclarationBuilder_.build();
         }
         if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
-          to_bitField0_ |= 0x00000020;
+          to_bitField0_ |= 0x00000008;
         }
         if (typeDeclarationBuilder_ == null) {
           result.typeDeclaration_ = typeDeclaration_;
@@ -9593,7 +9570,7 @@ public final class Ast {
           result.typeDeclaration_ = typeDeclarationBuilder_.build();
         }
         if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
-          to_bitField0_ |= 0x00000040;
+          to_bitField0_ |= 0x00000010;
         }
         if (expressionBuilder_ == null) {
           result.expression_ = expression_;
@@ -9671,14 +9648,60 @@ public final class Ast {
             }
           }
         }
+        if (initializationsBuilder_ == null) {
+          if (!other.initializations_.isEmpty()) {
+            if (initializations_.isEmpty()) {
+              initializations_ = other.initializations_;
+              bitField0_ = (bitField0_ & ~0x00000008);
+            } else {
+              ensureInitializationsIsMutable();
+              initializations_.addAll(other.initializations_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.initializations_.isEmpty()) {
+            if (initializationsBuilder_.isEmpty()) {
+              initializationsBuilder_.dispose();
+              initializationsBuilder_ = null;
+              initializations_ = other.initializations_;
+              bitField0_ = (bitField0_ & ~0x00000008);
+              initializationsBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getInitializationsFieldBuilder() : null;
+            } else {
+              initializationsBuilder_.addAllMessages(other.initializations_);
+            }
+          }
+        }
         if (other.hasCondition()) {
           mergeCondition(other.getCondition());
         }
-        if (other.hasInitialization()) {
-          mergeInitialization(other.getInitialization());
-        }
-        if (other.hasIncrement()) {
-          mergeIncrement(other.getIncrement());
+        if (updatesBuilder_ == null) {
+          if (!other.updates_.isEmpty()) {
+            if (updates_.isEmpty()) {
+              updates_ = other.updates_;
+              bitField0_ = (bitField0_ & ~0x00000020);
+            } else {
+              ensureUpdatesIsMutable();
+              updates_.addAll(other.updates_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.updates_.isEmpty()) {
+            if (updatesBuilder_.isEmpty()) {
+              updatesBuilder_.dispose();
+              updatesBuilder_ = null;
+              updates_ = other.updates_;
+              bitField0_ = (bitField0_ & ~0x00000020);
+              updatesBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getUpdatesFieldBuilder() : null;
+            } else {
+              updatesBuilder_.addAllMessages(other.updates_);
+            }
+          }
         }
         if (other.hasVariableDeclaration()) {
           mergeVariableDeclaration(other.getVariableDeclaration());
@@ -9710,20 +9733,20 @@ public final class Ast {
             return false;
           }
         }
+        for (int i = 0; i < getInitializationsCount(); i++) {
+          if (!getInitializations(i).isInitialized()) {
+            
+            return false;
+          }
+        }
         if (hasCondition()) {
           if (!getCondition().isInitialized()) {
             
             return false;
           }
         }
-        if (hasInitialization()) {
-          if (!getInitialization().isInitialized()) {
-            
-            return false;
-          }
-        }
-        if (hasIncrement()) {
-          if (!getIncrement().isInitialized()) {
+        for (int i = 0; i < getUpdatesCount(); i++) {
+          if (!getUpdates(i).isInitialized()) {
             
             return false;
           }
@@ -9797,6 +9820,12 @@ public final class Ast {
             }
             case 34: {
               sizzle.types.Ast.Expression.Builder subBuilder = sizzle.types.Ast.Expression.newBuilder();
+              input.readMessage(subBuilder, extensionRegistry);
+              addInitializations(subBuilder.buildPartial());
+              break;
+            }
+            case 42: {
+              sizzle.types.Ast.Expression.Builder subBuilder = sizzle.types.Ast.Expression.newBuilder();
               if (hasCondition()) {
                 subBuilder.mergeFrom(getCondition());
               }
@@ -9804,22 +9833,10 @@ public final class Ast {
               setCondition(subBuilder.buildPartial());
               break;
             }
-            case 42: {
-              sizzle.types.Ast.Expression.Builder subBuilder = sizzle.types.Ast.Expression.newBuilder();
-              if (hasInitialization()) {
-                subBuilder.mergeFrom(getInitialization());
-              }
-              input.readMessage(subBuilder, extensionRegistry);
-              setInitialization(subBuilder.buildPartial());
-              break;
-            }
             case 50: {
               sizzle.types.Ast.Expression.Builder subBuilder = sizzle.types.Ast.Expression.newBuilder();
-              if (hasIncrement()) {
-                subBuilder.mergeFrom(getIncrement());
-              }
               input.readMessage(subBuilder, extensionRegistry);
-              setIncrement(subBuilder.buildPartial());
+              addUpdates(subBuilder.buildPartial());
               break;
             }
             case 58: {
@@ -10251,12 +10268,198 @@ public final class Ast {
         return statementsBuilder_;
       }
       
-      // optional .sizzle.types.Expression condition = 4;
+      // repeated .sizzle.types.Expression initializations = 4;
+      private java.util.List<sizzle.types.Ast.Expression> initializations_ =
+        java.util.Collections.emptyList();
+      private void ensureInitializationsIsMutable() {
+        if (!((bitField0_ & 0x00000008) == 0x00000008)) {
+          initializations_ = new java.util.ArrayList<sizzle.types.Ast.Expression>(initializations_);
+          bitField0_ |= 0x00000008;
+         }
+      }
+      
+      private com.google.protobuf.RepeatedFieldBuilder<
+          sizzle.types.Ast.Expression, sizzle.types.Ast.Expression.Builder, sizzle.types.Ast.ExpressionOrBuilder> initializationsBuilder_;
+      
+      public java.util.List<sizzle.types.Ast.Expression> getInitializationsList() {
+        if (initializationsBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(initializations_);
+        } else {
+          return initializationsBuilder_.getMessageList();
+        }
+      }
+      public int getInitializationsCount() {
+        if (initializationsBuilder_ == null) {
+          return initializations_.size();
+        } else {
+          return initializationsBuilder_.getCount();
+        }
+      }
+      public sizzle.types.Ast.Expression getInitializations(int index) {
+        if (initializationsBuilder_ == null) {
+          return initializations_.get(index);
+        } else {
+          return initializationsBuilder_.getMessage(index);
+        }
+      }
+      public Builder setInitializations(
+          int index, sizzle.types.Ast.Expression value) {
+        if (initializationsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureInitializationsIsMutable();
+          initializations_.set(index, value);
+          onChanged();
+        } else {
+          initializationsBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      public Builder setInitializations(
+          int index, sizzle.types.Ast.Expression.Builder builderForValue) {
+        if (initializationsBuilder_ == null) {
+          ensureInitializationsIsMutable();
+          initializations_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          initializationsBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      public Builder addInitializations(sizzle.types.Ast.Expression value) {
+        if (initializationsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureInitializationsIsMutable();
+          initializations_.add(value);
+          onChanged();
+        } else {
+          initializationsBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      public Builder addInitializations(
+          int index, sizzle.types.Ast.Expression value) {
+        if (initializationsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureInitializationsIsMutable();
+          initializations_.add(index, value);
+          onChanged();
+        } else {
+          initializationsBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      public Builder addInitializations(
+          sizzle.types.Ast.Expression.Builder builderForValue) {
+        if (initializationsBuilder_ == null) {
+          ensureInitializationsIsMutable();
+          initializations_.add(builderForValue.build());
+          onChanged();
+        } else {
+          initializationsBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      public Builder addInitializations(
+          int index, sizzle.types.Ast.Expression.Builder builderForValue) {
+        if (initializationsBuilder_ == null) {
+          ensureInitializationsIsMutable();
+          initializations_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          initializationsBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      public Builder addAllInitializations(
+          java.lang.Iterable<? extends sizzle.types.Ast.Expression> values) {
+        if (initializationsBuilder_ == null) {
+          ensureInitializationsIsMutable();
+          super.addAll(values, initializations_);
+          onChanged();
+        } else {
+          initializationsBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      public Builder clearInitializations() {
+        if (initializationsBuilder_ == null) {
+          initializations_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000008);
+          onChanged();
+        } else {
+          initializationsBuilder_.clear();
+        }
+        return this;
+      }
+      public Builder removeInitializations(int index) {
+        if (initializationsBuilder_ == null) {
+          ensureInitializationsIsMutable();
+          initializations_.remove(index);
+          onChanged();
+        } else {
+          initializationsBuilder_.remove(index);
+        }
+        return this;
+      }
+      public sizzle.types.Ast.Expression.Builder getInitializationsBuilder(
+          int index) {
+        return getInitializationsFieldBuilder().getBuilder(index);
+      }
+      public sizzle.types.Ast.ExpressionOrBuilder getInitializationsOrBuilder(
+          int index) {
+        if (initializationsBuilder_ == null) {
+          return initializations_.get(index);  } else {
+          return initializationsBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      public java.util.List<? extends sizzle.types.Ast.ExpressionOrBuilder> 
+           getInitializationsOrBuilderList() {
+        if (initializationsBuilder_ != null) {
+          return initializationsBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(initializations_);
+        }
+      }
+      public sizzle.types.Ast.Expression.Builder addInitializationsBuilder() {
+        return getInitializationsFieldBuilder().addBuilder(
+            sizzle.types.Ast.Expression.getDefaultInstance());
+      }
+      public sizzle.types.Ast.Expression.Builder addInitializationsBuilder(
+          int index) {
+        return getInitializationsFieldBuilder().addBuilder(
+            index, sizzle.types.Ast.Expression.getDefaultInstance());
+      }
+      public java.util.List<sizzle.types.Ast.Expression.Builder> 
+           getInitializationsBuilderList() {
+        return getInitializationsFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          sizzle.types.Ast.Expression, sizzle.types.Ast.Expression.Builder, sizzle.types.Ast.ExpressionOrBuilder> 
+          getInitializationsFieldBuilder() {
+        if (initializationsBuilder_ == null) {
+          initializationsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              sizzle.types.Ast.Expression, sizzle.types.Ast.Expression.Builder, sizzle.types.Ast.ExpressionOrBuilder>(
+                  initializations_,
+                  ((bitField0_ & 0x00000008) == 0x00000008),
+                  getParentForChildren(),
+                  isClean());
+          initializations_ = null;
+        }
+        return initializationsBuilder_;
+      }
+      
+      // optional .sizzle.types.Expression condition = 5;
       private sizzle.types.Ast.Expression condition_ = sizzle.types.Ast.Expression.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           sizzle.types.Ast.Expression, sizzle.types.Ast.Expression.Builder, sizzle.types.Ast.ExpressionOrBuilder> conditionBuilder_;
       public boolean hasCondition() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
+        return ((bitField0_ & 0x00000010) == 0x00000010);
       }
       public sizzle.types.Ast.Expression getCondition() {
         if (conditionBuilder_ == null) {
@@ -10275,7 +10478,7 @@ public final class Ast {
         } else {
           conditionBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x00000008;
+        bitField0_ |= 0x00000010;
         return this;
       }
       public Builder setCondition(
@@ -10286,12 +10489,12 @@ public final class Ast {
         } else {
           conditionBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x00000008;
+        bitField0_ |= 0x00000010;
         return this;
       }
       public Builder mergeCondition(sizzle.types.Ast.Expression value) {
         if (conditionBuilder_ == null) {
-          if (((bitField0_ & 0x00000008) == 0x00000008) &&
+          if (((bitField0_ & 0x00000010) == 0x00000010) &&
               condition_ != sizzle.types.Ast.Expression.getDefaultInstance()) {
             condition_ =
               sizzle.types.Ast.Expression.newBuilder(condition_).mergeFrom(value).buildPartial();
@@ -10302,7 +10505,7 @@ public final class Ast {
         } else {
           conditionBuilder_.mergeFrom(value);
         }
-        bitField0_ |= 0x00000008;
+        bitField0_ |= 0x00000010;
         return this;
       }
       public Builder clearCondition() {
@@ -10312,11 +10515,11 @@ public final class Ast {
         } else {
           conditionBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000008);
+        bitField0_ = (bitField0_ & ~0x00000010);
         return this;
       }
       public sizzle.types.Ast.Expression.Builder getConditionBuilder() {
-        bitField0_ |= 0x00000008;
+        bitField0_ |= 0x00000010;
         onChanged();
         return getConditionFieldBuilder().getBuilder();
       }
@@ -10341,184 +10544,190 @@ public final class Ast {
         return conditionBuilder_;
       }
       
-      // optional .sizzle.types.Expression initialization = 5;
-      private sizzle.types.Ast.Expression initialization_ = sizzle.types.Ast.Expression.getDefaultInstance();
-      private com.google.protobuf.SingleFieldBuilder<
-          sizzle.types.Ast.Expression, sizzle.types.Ast.Expression.Builder, sizzle.types.Ast.ExpressionOrBuilder> initializationBuilder_;
-      public boolean hasInitialization() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
-      }
-      public sizzle.types.Ast.Expression getInitialization() {
-        if (initializationBuilder_ == null) {
-          return initialization_;
-        } else {
-          return initializationBuilder_.getMessage();
-        }
-      }
-      public Builder setInitialization(sizzle.types.Ast.Expression value) {
-        if (initializationBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          initialization_ = value;
-          onChanged();
-        } else {
-          initializationBuilder_.setMessage(value);
-        }
-        bitField0_ |= 0x00000010;
-        return this;
-      }
-      public Builder setInitialization(
-          sizzle.types.Ast.Expression.Builder builderForValue) {
-        if (initializationBuilder_ == null) {
-          initialization_ = builderForValue.build();
-          onChanged();
-        } else {
-          initializationBuilder_.setMessage(builderForValue.build());
-        }
-        bitField0_ |= 0x00000010;
-        return this;
-      }
-      public Builder mergeInitialization(sizzle.types.Ast.Expression value) {
-        if (initializationBuilder_ == null) {
-          if (((bitField0_ & 0x00000010) == 0x00000010) &&
-              initialization_ != sizzle.types.Ast.Expression.getDefaultInstance()) {
-            initialization_ =
-              sizzle.types.Ast.Expression.newBuilder(initialization_).mergeFrom(value).buildPartial();
-          } else {
-            initialization_ = value;
-          }
-          onChanged();
-        } else {
-          initializationBuilder_.mergeFrom(value);
-        }
-        bitField0_ |= 0x00000010;
-        return this;
-      }
-      public Builder clearInitialization() {
-        if (initializationBuilder_ == null) {
-          initialization_ = sizzle.types.Ast.Expression.getDefaultInstance();
-          onChanged();
-        } else {
-          initializationBuilder_.clear();
-        }
-        bitField0_ = (bitField0_ & ~0x00000010);
-        return this;
-      }
-      public sizzle.types.Ast.Expression.Builder getInitializationBuilder() {
-        bitField0_ |= 0x00000010;
-        onChanged();
-        return getInitializationFieldBuilder().getBuilder();
-      }
-      public sizzle.types.Ast.ExpressionOrBuilder getInitializationOrBuilder() {
-        if (initializationBuilder_ != null) {
-          return initializationBuilder_.getMessageOrBuilder();
-        } else {
-          return initialization_;
-        }
-      }
-      private com.google.protobuf.SingleFieldBuilder<
-          sizzle.types.Ast.Expression, sizzle.types.Ast.Expression.Builder, sizzle.types.Ast.ExpressionOrBuilder> 
-          getInitializationFieldBuilder() {
-        if (initializationBuilder_ == null) {
-          initializationBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-              sizzle.types.Ast.Expression, sizzle.types.Ast.Expression.Builder, sizzle.types.Ast.ExpressionOrBuilder>(
-                  initialization_,
-                  getParentForChildren(),
-                  isClean());
-          initialization_ = null;
-        }
-        return initializationBuilder_;
+      // repeated .sizzle.types.Expression updates = 6;
+      private java.util.List<sizzle.types.Ast.Expression> updates_ =
+        java.util.Collections.emptyList();
+      private void ensureUpdatesIsMutable() {
+        if (!((bitField0_ & 0x00000020) == 0x00000020)) {
+          updates_ = new java.util.ArrayList<sizzle.types.Ast.Expression>(updates_);
+          bitField0_ |= 0x00000020;
+         }
       }
       
-      // optional .sizzle.types.Expression increment = 6;
-      private sizzle.types.Ast.Expression increment_ = sizzle.types.Ast.Expression.getDefaultInstance();
-      private com.google.protobuf.SingleFieldBuilder<
-          sizzle.types.Ast.Expression, sizzle.types.Ast.Expression.Builder, sizzle.types.Ast.ExpressionOrBuilder> incrementBuilder_;
-      public boolean hasIncrement() {
-        return ((bitField0_ & 0x00000020) == 0x00000020);
-      }
-      public sizzle.types.Ast.Expression getIncrement() {
-        if (incrementBuilder_ == null) {
-          return increment_;
+      private com.google.protobuf.RepeatedFieldBuilder<
+          sizzle.types.Ast.Expression, sizzle.types.Ast.Expression.Builder, sizzle.types.Ast.ExpressionOrBuilder> updatesBuilder_;
+      
+      public java.util.List<sizzle.types.Ast.Expression> getUpdatesList() {
+        if (updatesBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(updates_);
         } else {
-          return incrementBuilder_.getMessage();
+          return updatesBuilder_.getMessageList();
         }
       }
-      public Builder setIncrement(sizzle.types.Ast.Expression value) {
-        if (incrementBuilder_ == null) {
+      public int getUpdatesCount() {
+        if (updatesBuilder_ == null) {
+          return updates_.size();
+        } else {
+          return updatesBuilder_.getCount();
+        }
+      }
+      public sizzle.types.Ast.Expression getUpdates(int index) {
+        if (updatesBuilder_ == null) {
+          return updates_.get(index);
+        } else {
+          return updatesBuilder_.getMessage(index);
+        }
+      }
+      public Builder setUpdates(
+          int index, sizzle.types.Ast.Expression value) {
+        if (updatesBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
           }
-          increment_ = value;
+          ensureUpdatesIsMutable();
+          updates_.set(index, value);
           onChanged();
         } else {
-          incrementBuilder_.setMessage(value);
+          updatesBuilder_.setMessage(index, value);
         }
-        bitField0_ |= 0x00000020;
         return this;
       }
-      public Builder setIncrement(
-          sizzle.types.Ast.Expression.Builder builderForValue) {
-        if (incrementBuilder_ == null) {
-          increment_ = builderForValue.build();
+      public Builder setUpdates(
+          int index, sizzle.types.Ast.Expression.Builder builderForValue) {
+        if (updatesBuilder_ == null) {
+          ensureUpdatesIsMutable();
+          updates_.set(index, builderForValue.build());
           onChanged();
         } else {
-          incrementBuilder_.setMessage(builderForValue.build());
+          updatesBuilder_.setMessage(index, builderForValue.build());
         }
-        bitField0_ |= 0x00000020;
         return this;
       }
-      public Builder mergeIncrement(sizzle.types.Ast.Expression value) {
-        if (incrementBuilder_ == null) {
-          if (((bitField0_ & 0x00000020) == 0x00000020) &&
-              increment_ != sizzle.types.Ast.Expression.getDefaultInstance()) {
-            increment_ =
-              sizzle.types.Ast.Expression.newBuilder(increment_).mergeFrom(value).buildPartial();
-          } else {
-            increment_ = value;
+      public Builder addUpdates(sizzle.types.Ast.Expression value) {
+        if (updatesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
           }
+          ensureUpdatesIsMutable();
+          updates_.add(value);
           onChanged();
         } else {
-          incrementBuilder_.mergeFrom(value);
+          updatesBuilder_.addMessage(value);
         }
-        bitField0_ |= 0x00000020;
         return this;
       }
-      public Builder clearIncrement() {
-        if (incrementBuilder_ == null) {
-          increment_ = sizzle.types.Ast.Expression.getDefaultInstance();
+      public Builder addUpdates(
+          int index, sizzle.types.Ast.Expression value) {
+        if (updatesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureUpdatesIsMutable();
+          updates_.add(index, value);
           onChanged();
         } else {
-          incrementBuilder_.clear();
+          updatesBuilder_.addMessage(index, value);
         }
-        bitField0_ = (bitField0_ & ~0x00000020);
         return this;
       }
-      public sizzle.types.Ast.Expression.Builder getIncrementBuilder() {
-        bitField0_ |= 0x00000020;
-        onChanged();
-        return getIncrementFieldBuilder().getBuilder();
-      }
-      public sizzle.types.Ast.ExpressionOrBuilder getIncrementOrBuilder() {
-        if (incrementBuilder_ != null) {
-          return incrementBuilder_.getMessageOrBuilder();
+      public Builder addUpdates(
+          sizzle.types.Ast.Expression.Builder builderForValue) {
+        if (updatesBuilder_ == null) {
+          ensureUpdatesIsMutable();
+          updates_.add(builderForValue.build());
+          onChanged();
         } else {
-          return increment_;
+          updatesBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      public Builder addUpdates(
+          int index, sizzle.types.Ast.Expression.Builder builderForValue) {
+        if (updatesBuilder_ == null) {
+          ensureUpdatesIsMutable();
+          updates_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          updatesBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      public Builder addAllUpdates(
+          java.lang.Iterable<? extends sizzle.types.Ast.Expression> values) {
+        if (updatesBuilder_ == null) {
+          ensureUpdatesIsMutable();
+          super.addAll(values, updates_);
+          onChanged();
+        } else {
+          updatesBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      public Builder clearUpdates() {
+        if (updatesBuilder_ == null) {
+          updates_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000020);
+          onChanged();
+        } else {
+          updatesBuilder_.clear();
+        }
+        return this;
+      }
+      public Builder removeUpdates(int index) {
+        if (updatesBuilder_ == null) {
+          ensureUpdatesIsMutable();
+          updates_.remove(index);
+          onChanged();
+        } else {
+          updatesBuilder_.remove(index);
+        }
+        return this;
+      }
+      public sizzle.types.Ast.Expression.Builder getUpdatesBuilder(
+          int index) {
+        return getUpdatesFieldBuilder().getBuilder(index);
+      }
+      public sizzle.types.Ast.ExpressionOrBuilder getUpdatesOrBuilder(
+          int index) {
+        if (updatesBuilder_ == null) {
+          return updates_.get(index);  } else {
+          return updatesBuilder_.getMessageOrBuilder(index);
         }
       }
-      private com.google.protobuf.SingleFieldBuilder<
+      public java.util.List<? extends sizzle.types.Ast.ExpressionOrBuilder> 
+           getUpdatesOrBuilderList() {
+        if (updatesBuilder_ != null) {
+          return updatesBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(updates_);
+        }
+      }
+      public sizzle.types.Ast.Expression.Builder addUpdatesBuilder() {
+        return getUpdatesFieldBuilder().addBuilder(
+            sizzle.types.Ast.Expression.getDefaultInstance());
+      }
+      public sizzle.types.Ast.Expression.Builder addUpdatesBuilder(
+          int index) {
+        return getUpdatesFieldBuilder().addBuilder(
+            index, sizzle.types.Ast.Expression.getDefaultInstance());
+      }
+      public java.util.List<sizzle.types.Ast.Expression.Builder> 
+           getUpdatesBuilderList() {
+        return getUpdatesFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
           sizzle.types.Ast.Expression, sizzle.types.Ast.Expression.Builder, sizzle.types.Ast.ExpressionOrBuilder> 
-          getIncrementFieldBuilder() {
-        if (incrementBuilder_ == null) {
-          incrementBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+          getUpdatesFieldBuilder() {
+        if (updatesBuilder_ == null) {
+          updatesBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
               sizzle.types.Ast.Expression, sizzle.types.Ast.Expression.Builder, sizzle.types.Ast.ExpressionOrBuilder>(
-                  increment_,
+                  updates_,
+                  ((bitField0_ & 0x00000020) == 0x00000020),
                   getParentForChildren(),
                   isClean());
-          increment_ = null;
+          updates_ = null;
         }
-        return incrementBuilder_;
+        return updatesBuilder_;
       }
       
       // optional .sizzle.types.Variable variable_declaration = 7;
@@ -14806,103 +15015,104 @@ public final class Ast {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\tast.proto\022\014sizzle.types\"\360\001\n\004File\022\014\n\004na" +
+      "\n\tast.proto\022\014sizzle.types\"\217\002\n\004File\022\014\n\004na" +
       "me\030\001 \002(\t\022)\n\004kind\030\002 \002(\0162\033.sizzle.types.Fi" +
-      "le.FileKind\022\025\n\006parsed\030\003 \001(\010:\005false\022+\n\nna" +
-      "mespaces\030\004 \003(\0132\027.sizzle.types.Namespace\022" +
-      "\017\n\007content\030\005 \001(\t\"Z\n\010FileKind\022\013\n\007UNKNOWN\020" +
-      "\001\022\n\n\006BINARY\020\002\022\010\n\004TEXT\020\003\022\007\n\003XML\020\004\022\017\n\013SOUR" +
-      "CE_JAVA\020\005\022\021\n\rSOURCE_CSHARP\020\006\"\236\001\n\tNamespa" +
-      "ce\022\014\n\004name\030\001 \002(\t\022)\n\tmodifiers\030\002 \003(\0132\026.si" +
-      "zzle.types.Modifier\022/\n\014declarations\030\003 \003(" +
-      "\0132\031.sizzle.types.Declaration\022\'\n\010comments",
-      "\030\004 \003(\0132\025.sizzle.types.Comment\"\361\002\n\013Declar" +
-      "ation\022\014\n\004name\030\001 \002(\t\022$\n\004kind\030\002 \002(\0162\026.sizz" +
-      "le.types.TypeKind\022)\n\tmodifiers\030\003 \003(\0132\026.s" +
-      "izzle.types.Modifier\022.\n\022generic_paramete" +
-      "rs\030\004 \003(\0132\022.sizzle.types.Type\022#\n\007parents\030" +
-      "\005 \003(\0132\022.sizzle.types.Type\022%\n\007methods\030\006 \003" +
-      "(\0132\024.sizzle.types.Method\022&\n\006fields\030\007 \003(\013" +
-      "2\026.sizzle.types.Variable\0226\n\023nested_decla" +
-      "rations\030\010 \003(\0132\031.sizzle.types.Declaration" +
-      "\022\'\n\010comments\030\t \003(\0132\025.sizzle.types.Commen",
-      "t\"F\n\004Type\022\014\n\004name\030\001 \002(\t\022$\n\004kind\030\002 \002(\0162\026." +
-      "sizzle.types.TypeKind\022\n\n\002id\030\004 \001(\t\"\310\002\n\006Me" +
-      "thod\022\014\n\004name\030\001 \001(\t\022)\n\tmodifiers\030\002 \003(\0132\026." +
-      "sizzle.types.Modifier\022\'\n\013return_type\030\003 \002" +
-      "(\0132\022.sizzle.types.Type\022.\n\022generic_parame" +
-      "ters\030\004 \003(\0132\022.sizzle.types.Type\022)\n\targume" +
-      "nts\030\005 \003(\0132\026.sizzle.types.Variable\022+\n\017exc" +
-      "eption_types\030\006 \003(\0132\022.sizzle.types.Type\022+" +
-      "\n\nstatements\030\007 \003(\0132\027.sizzle.types.Statem" +
-      "ent\022\'\n\010comments\030\010 \003(\0132\025.sizzle.types.Com",
-      "ment\"\306\001\n\010Variable\022\014\n\004name\030\001 \002(\t\022)\n\rvaria" +
-      "ble_type\030\002 \002(\0132\022.sizzle.types.Type\022)\n\tmo" +
-      "difiers\030\003 \003(\0132\026.sizzle.types.Modifier\022-\n" +
-      "\013initializer\030\004 \001(\0132\030.sizzle.types.Expres" +
-      "sion\022\'\n\010comments\030\005 \003(\0132\025.sizzle.types.Co" +
-      "mment\"\300\005\n\tStatement\0223\n\004kind\030\001 \002(\0162%.sizz" +
-      "le.types.Statement.StatementKind\022\'\n\010comm" +
-      "ents\030\002 \003(\0132\025.sizzle.types.Comment\022+\n\nsta" +
-      "tements\030\003 \003(\0132\027.sizzle.types.Statement\022+" +
-      "\n\tcondition\030\004 \001(\0132\030.sizzle.types.Express",
-      "ion\0220\n\016initialization\030\005 \001(\0132\030.sizzle.typ" +
-      "es.Expression\022+\n\tincrement\030\006 \001(\0132\030.sizzl" +
-      "e.types.Expression\0224\n\024variable_declarati" +
-      "on\030\007 \001(\0132\026.sizzle.types.Variable\0223\n\020type" +
-      "_declaration\030\010 \001(\0132\031.sizzle.types.Declar" +
-      "ation\022,\n\nexpression\030\t \001(\0132\030.sizzle.types" +
-      ".Expression\"\202\002\n\rStatementKind\022\t\n\005BLOCK\020\001" +
-      "\022\013\n\007VARDECL\020\002\022\014\n\010TYPEDECL\020\003\022\016\n\nEXPRESSIO" +
-      "N\020\004\022\020\n\014SYNCHRONIZED\020\005\022\n\n\006RETURN\020\006\022\007\n\003FOR" +
-      "\020\007\022\006\n\002DO\020\010\022\t\n\005WHILE\020\t\022\006\n\002IF\020\n\022\n\n\006ASSERT\020",
-      "\013\022\t\n\005BREAK\020\014\022\014\n\010CONTINUE\020\r\022\t\n\005LABEL\020\016\022\n\n" +
-      "\006SWITCH\020\017\022\010\n\004CASE\020\020\022\007\n\003TRY\020\021\022\t\n\005THROW\020\022\022" +
-      "\t\n\005CATCH\020\023\022\t\n\005EMPTY\020\024\022\t\n\005OTHER\020\025\"\306\010\n\nExp" +
-      "ression\0225\n\004kind\030\001 \002(\0162\'.sizzle.types.Exp" +
-      "ression.ExpressionKind\022-\n\013expressions\030\002 " +
-      "\003(\0132\030.sizzle.types.Expression\022.\n\016variabl" +
-      "e_decls\030\003 \003(\0132\026.sizzle.types.Variable\022$\n" +
-      "\010new_type\030\004 \001(\0132\022.sizzle.types.Type\022.\n\022g" +
-      "eneric_parameters\030\005 \003(\0132\022.sizzle.types.T" +
-      "ype\022\022\n\nis_postfix\030\006 \001(\010\022\017\n\007literal\030\007 \001(\t",
-      "\022\020\n\010variable\030\010 \001(\t\022\016\n\006method\030\t \001(\t\022-\n\013me" +
-      "thod_args\030\n \003(\0132\030.sizzle.types.Expressio" +
-      "n\"\325\005\n\016ExpressionKind\022\013\n\007LITERAL\020\001\022\r\n\tVAR" +
-      "ACCESS\020\002\022\013\n\007VARDECL\020\003\022\016\n\nMETHODCALL\020\004\022\010\n" +
-      "\004CAST\020\005\022\016\n\nARRAYINDEX\020\006\022\r\n\tARRAYINIT\020\007\022\017" +
-      "\n\013TYPECOMPARE\020\010\022\007\n\003NEW\020\t\022\014\n\010NEWARRAY\020\n\022\n" +
-      "\n\006OP_ADD\020\013\022\n\n\006OP_SUB\020\014\022\013\n\007OP_MULT\020\r\022\n\n\006O" +
-      "P_DIV\020\016\022\n\n\006OP_MOD\020\017\022\n\n\006OP_INC\020\020\022\n\n\006OP_DE" +
-      "C\020\021\022\016\n\nBIT_LSHIFT\020\022\022\016\n\nBIT_RSHIFT\020\023\022\026\n\022B" +
-      "IT_UNSIGNEDRSHIFT\020\024\022\013\n\007BIT_AND\020\025\022\n\n\006BIT_",
-      "OR\020\026\022\013\n\007BIT_NOT\020\027\022\013\n\007BIT_XOR\020\030\022\017\n\013LOGICA" +
-      "L_NOT\020\031\022\017\n\013LOGICAL_AND\020\032\022\016\n\nLOGICAL_OR\020\033" +
-      "\022\016\n\nLOGICAL_EQ\020\034\022\017\n\013LOGICAL_NEQ\020\035\022\006\n\002LT\020" +
-      "\036\022\006\n\002GT\020\037\022\010\n\004LTEQ\020 \022\010\n\004GTEQ\020!\022\017\n\013CONDITI" +
-      "ONAL\020\"\022\020\n\014NULLCOALESCE\020#\022\n\n\006ASSIGN\020$\022\016\n\n" +
-      "ASSIGN_ADD\020%\022\016\n\nASSIGN_SUB\020&\022\017\n\013ASSIGN_M" +
-      "ULT\020\'\022\016\n\nASSIGN_DIV\020(\022\016\n\nASSIGN_MOD\020)\022\021\n" +
-      "\rASSIGN_BITXOR\020*\022\021\n\rASSIGN_BITAND\020+\022\020\n\014A" +
-      "SSIGN_BITOR\020,\022\021\n\rASSIGN_LSHIFT\020-\022\021\n\rASSI" +
-      "GN_RSHIFT\020.\022\031\n\025ASSIGN_UNSIGNEDRSHIFT\020/\022\t",
-      "\n\005OTHER\0200\"\363\002\n\010Modifier\0221\n\004kind\030\001 \002(\0162#.s" +
-      "izzle.types.Modifier.ModifierKind\022\022\n\nvis" +
-      "ibility\030\002 \001(\r\022\027\n\017annotation_name\030\003 \001(\t\022\032" +
-      "\n\022annotation_members\030\004 \003(\t\0223\n\021annotation" +
-      "_values\030\005 \003(\0132\030.sizzle.types.Expression\022" +
-      "\r\n\005other\030\006 \001(\t\"b\n\014ModifierKind\022\016\n\nVISIBI" +
-      "LITY\020\001\022\016\n\nANNOTATION\020\002\022\t\n\005FINAL\020\003\022\n\n\006STA" +
-      "TIC\020\004\022\020\n\014SYNCHRONIZED\020\005\022\t\n\005OTHER\020\006\"C\n\nVi" +
-      "sibility\022\n\n\006PUBLIC\020\001\022\013\n\007PRIVATE\020\002\022\r\n\tPRO" +
-      "TECTED\020\004\022\r\n\tNAMESPACE\020\010\"\224\001\n\007Comment\022/\n\004k",
-      "ind\030\001 \002(\0162!.sizzle.types.Comment.Comment" +
-      "Kind\022\r\n\005value\030\002 \002(\t\022\022\n\nstart_line\030\003 \002(\005\"" +
-      "5\n\013CommentKind\022\010\n\004LINE\020\001\022\t\n\005BLOCK\020\002\022\007\n\003D" +
-      "OC\020\003\022\010\n\004SPEC\020\004*p\n\010TypeKind\022\t\n\005CLASS\020\001\022\r\n" +
-      "\tINTERFACE\020\002\022\n\n\006STRUCT\020\003\022\010\n\004ENUM\020\004\022\016\n\nAN" +
-      "NOTATION\020\005\022\014\n\010DELEGATE\020\006\022\013\n\007GENERIC\020\007\022\t\n" +
-      "\005OTHER\020\010B\002H\001"
+      "le.FileKind\022+\n\nnamespaces\030\004 \003(\0132\027.sizzle" +
+      ".types.Namespace\022\017\n\007content\030\005 \001(\t\"\217\001\n\010Fi" +
+      "leKind\022\013\n\007UNKNOWN\020\001\022\n\n\006BINARY\020\002\022\010\n\004TEXT\020" +
+      "\003\022\007\n\003XML\020\004\022\025\n\021SOURCE_JAVA_ERROR\020\005\022\024\n\020SOU" +
+      "RCE_JAVA_JLS2\020\006\022\024\n\020SOURCE_JAVA_JLS3\020\007\022\024\n" +
+      "\020SOURCE_JAVA_JLS4\020\010\"\236\001\n\tNamespace\022\014\n\004nam" +
+      "e\030\001 \002(\t\022)\n\tmodifiers\030\002 \003(\0132\026.sizzle.type" +
+      "s.Modifier\022/\n\014declarations\030\003 \003(\0132\031.sizzl",
+      "e.types.Declaration\022\'\n\010comments\030\004 \003(\0132\025." +
+      "sizzle.types.Comment\"\361\002\n\013Declaration\022\014\n\004" +
+      "name\030\001 \002(\t\022$\n\004kind\030\002 \002(\0162\026.sizzle.types." +
+      "TypeKind\022)\n\tmodifiers\030\003 \003(\0132\026.sizzle.typ" +
+      "es.Modifier\022.\n\022generic_parameters\030\004 \003(\0132" +
+      "\022.sizzle.types.Type\022#\n\007parents\030\005 \003(\0132\022.s" +
+      "izzle.types.Type\022%\n\007methods\030\006 \003(\0132\024.sizz" +
+      "le.types.Method\022&\n\006fields\030\007 \003(\0132\026.sizzle" +
+      ".types.Variable\0226\n\023nested_declarations\030\010" +
+      " \003(\0132\031.sizzle.types.Declaration\022\'\n\010comme",
+      "nts\030\t \003(\0132\025.sizzle.types.Comment\"F\n\004Type" +
+      "\022\014\n\004name\030\001 \002(\t\022$\n\004kind\030\002 \002(\0162\026.sizzle.ty" +
+      "pes.TypeKind\022\n\n\002id\030\004 \001(\t\"\310\002\n\006Method\022\014\n\004n" +
+      "ame\030\001 \001(\t\022)\n\tmodifiers\030\002 \003(\0132\026.sizzle.ty" +
+      "pes.Modifier\022\'\n\013return_type\030\003 \002(\0132\022.sizz" +
+      "le.types.Type\022.\n\022generic_parameters\030\004 \003(" +
+      "\0132\022.sizzle.types.Type\022)\n\targuments\030\005 \003(\013" +
+      "2\026.sizzle.types.Variable\022+\n\017exception_ty" +
+      "pes\030\006 \003(\0132\022.sizzle.types.Type\022+\n\nstateme" +
+      "nts\030\007 \003(\0132\027.sizzle.types.Statement\022\'\n\010co",
+      "mments\030\010 \003(\0132\025.sizzle.types.Comment\"\306\001\n\010" +
+      "Variable\022\014\n\004name\030\001 \002(\t\022)\n\rvariable_type\030" +
+      "\002 \002(\0132\022.sizzle.types.Type\022)\n\tmodifiers\030\003" +
+      " \003(\0132\026.sizzle.types.Modifier\022-\n\013initiali" +
+      "zer\030\004 \001(\0132\030.sizzle.types.Expression\022\'\n\010c" +
+      "omments\030\005 \003(\0132\025.sizzle.types.Comment\"\277\005\n" +
+      "\tStatement\0223\n\004kind\030\001 \002(\0162%.sizzle.types." +
+      "Statement.StatementKind\022\'\n\010comments\030\002 \003(" +
+      "\0132\025.sizzle.types.Comment\022+\n\nstatements\030\003" +
+      " \003(\0132\027.sizzle.types.Statement\0221\n\017initial",
+      "izations\030\004 \003(\0132\030.sizzle.types.Expression" +
+      "\022+\n\tcondition\030\005 \001(\0132\030.sizzle.types.Expre" +
+      "ssion\022)\n\007updates\030\006 \003(\0132\030.sizzle.types.Ex" +
+      "pression\0224\n\024variable_declaration\030\007 \001(\0132\026" +
+      ".sizzle.types.Variable\0223\n\020type_declarati" +
+      "on\030\010 \001(\0132\031.sizzle.types.Declaration\022,\n\ne" +
+      "xpression\030\t \001(\0132\030.sizzle.types.Expressio" +
+      "n\"\202\002\n\rStatementKind\022\t\n\005BLOCK\020\001\022\013\n\007VARDEC" +
+      "L\020\002\022\014\n\010TYPEDECL\020\003\022\016\n\nEXPRESSION\020\004\022\020\n\014SYN" +
+      "CHRONIZED\020\005\022\n\n\006RETURN\020\006\022\007\n\003FOR\020\007\022\006\n\002DO\020\010",
+      "\022\t\n\005WHILE\020\t\022\006\n\002IF\020\n\022\n\n\006ASSERT\020\013\022\t\n\005BREAK" +
+      "\020\014\022\014\n\010CONTINUE\020\r\022\t\n\005LABEL\020\016\022\n\n\006SWITCH\020\017\022" +
+      "\010\n\004CASE\020\020\022\007\n\003TRY\020\021\022\t\n\005THROW\020\022\022\t\n\005CATCH\020\023" +
+      "\022\t\n\005EMPTY\020\024\022\t\n\005OTHER\020\025\"\306\010\n\nExpression\0225\n" +
+      "\004kind\030\001 \002(\0162\'.sizzle.types.Expression.Ex" +
+      "pressionKind\022-\n\013expressions\030\002 \003(\0132\030.sizz" +
+      "le.types.Expression\022.\n\016variable_decls\030\003 " +
+      "\003(\0132\026.sizzle.types.Variable\022$\n\010new_type\030" +
+      "\004 \001(\0132\022.sizzle.types.Type\022.\n\022generic_par" +
+      "ameters\030\005 \003(\0132\022.sizzle.types.Type\022\022\n\nis_",
+      "postfix\030\006 \001(\010\022\017\n\007literal\030\007 \001(\t\022\020\n\010variab" +
+      "le\030\010 \001(\t\022\016\n\006method\030\t \001(\t\022-\n\013method_args\030" +
+      "\n \003(\0132\030.sizzle.types.Expression\"\325\005\n\016Expr" +
+      "essionKind\022\013\n\007LITERAL\020\001\022\r\n\tVARACCESS\020\002\022\013" +
+      "\n\007VARDECL\020\003\022\016\n\nMETHODCALL\020\004\022\010\n\004CAST\020\005\022\016\n" +
+      "\nARRAYINDEX\020\006\022\r\n\tARRAYINIT\020\007\022\017\n\013TYPECOMP" +
+      "ARE\020\010\022\007\n\003NEW\020\t\022\014\n\010NEWARRAY\020\n\022\n\n\006OP_ADD\020\013" +
+      "\022\n\n\006OP_SUB\020\014\022\013\n\007OP_MULT\020\r\022\n\n\006OP_DIV\020\016\022\n\n" +
+      "\006OP_MOD\020\017\022\n\n\006OP_INC\020\020\022\n\n\006OP_DEC\020\021\022\016\n\nBIT" +
+      "_LSHIFT\020\022\022\016\n\nBIT_RSHIFT\020\023\022\026\n\022BIT_UNSIGNE",
+      "DRSHIFT\020\024\022\013\n\007BIT_AND\020\025\022\n\n\006BIT_OR\020\026\022\013\n\007BI" +
+      "T_NOT\020\027\022\013\n\007BIT_XOR\020\030\022\017\n\013LOGICAL_NOT\020\031\022\017\n" +
+      "\013LOGICAL_AND\020\032\022\016\n\nLOGICAL_OR\020\033\022\016\n\nLOGICA" +
+      "L_EQ\020\034\022\017\n\013LOGICAL_NEQ\020\035\022\006\n\002LT\020\036\022\006\n\002GT\020\037\022" +
+      "\010\n\004LTEQ\020 \022\010\n\004GTEQ\020!\022\017\n\013CONDITIONAL\020\"\022\020\n\014" +
+      "NULLCOALESCE\020#\022\n\n\006ASSIGN\020$\022\016\n\nASSIGN_ADD" +
+      "\020%\022\016\n\nASSIGN_SUB\020&\022\017\n\013ASSIGN_MULT\020\'\022\016\n\nA" +
+      "SSIGN_DIV\020(\022\016\n\nASSIGN_MOD\020)\022\021\n\rASSIGN_BI" +
+      "TXOR\020*\022\021\n\rASSIGN_BITAND\020+\022\020\n\014ASSIGN_BITO" +
+      "R\020,\022\021\n\rASSIGN_LSHIFT\020-\022\021\n\rASSIGN_RSHIFT\020",
+      ".\022\031\n\025ASSIGN_UNSIGNEDRSHIFT\020/\022\t\n\005OTHER\0200\"" +
+      "\363\002\n\010Modifier\0221\n\004kind\030\001 \002(\0162#.sizzle.type" +
+      "s.Modifier.ModifierKind\022\022\n\nvisibility\030\002 " +
+      "\001(\r\022\027\n\017annotation_name\030\003 \001(\t\022\032\n\022annotati" +
+      "on_members\030\004 \003(\t\0223\n\021annotation_values\030\005 " +
+      "\003(\0132\030.sizzle.types.Expression\022\r\n\005other\030\006" +
+      " \001(\t\"b\n\014ModifierKind\022\016\n\nVISIBILITY\020\001\022\016\n\n" +
+      "ANNOTATION\020\002\022\t\n\005FINAL\020\003\022\n\n\006STATIC\020\004\022\020\n\014S" +
+      "YNCHRONIZED\020\005\022\t\n\005OTHER\020\006\"C\n\nVisibility\022\n" +
+      "\n\006PUBLIC\020\001\022\013\n\007PRIVATE\020\002\022\r\n\tPROTECTED\020\004\022\r",
+      "\n\tNAMESPACE\020\010\"\224\001\n\007Comment\022/\n\004kind\030\001 \002(\0162" +
+      "!.sizzle.types.Comment.CommentKind\022\r\n\005va" +
+      "lue\030\002 \002(\t\022\022\n\nstart_line\030\003 \002(\005\"5\n\013Comment" +
+      "Kind\022\010\n\004LINE\020\001\022\t\n\005BLOCK\020\002\022\007\n\003DOC\020\003\022\010\n\004SP" +
+      "EC\020\004*p\n\010TypeKind\022\t\n\005CLASS\020\001\022\r\n\tINTERFACE" +
+      "\020\002\022\n\n\006STRUCT\020\003\022\010\n\004ENUM\020\004\022\016\n\nANNOTATION\020\005" +
+      "\022\014\n\010DELEGATE\020\006\022\013\n\007GENERIC\020\007\022\t\n\005OTHER\020\010B\002" +
+      "H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -14914,7 +15124,7 @@ public final class Ast {
           internal_static_sizzle_types_File_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_sizzle_types_File_descriptor,
-              new java.lang.String[] { "Name", "Kind", "Parsed", "Namespaces", "Content", },
+              new java.lang.String[] { "Name", "Kind", "Namespaces", "Content", },
               sizzle.types.Ast.File.class,
               sizzle.types.Ast.File.Builder.class);
           internal_static_sizzle_types_Namespace_descriptor =
@@ -14962,7 +15172,7 @@ public final class Ast {
           internal_static_sizzle_types_Statement_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_sizzle_types_Statement_descriptor,
-              new java.lang.String[] { "Kind", "Comments", "Statements", "Condition", "Initialization", "Increment", "VariableDeclaration", "TypeDeclaration", "Expression", },
+              new java.lang.String[] { "Kind", "Comments", "Statements", "Initializations", "Condition", "Updates", "VariableDeclaration", "TypeDeclaration", "Expression", },
               sizzle.types.Ast.Statement.class,
               sizzle.types.Ast.Statement.Builder.class);
           internal_static_sizzle_types_Expression_descriptor =

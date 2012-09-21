@@ -3,17 +3,18 @@ package sizzle.types;
 option optimize_for = SPEED;
 
 message File {
-	required string name = 1;
 	enum FileKind {
 		UNKNOWN = 1;
 		BINARY = 2;
 		TEXT = 3;
 		XML = 4;
-		SOURCE_JAVA = 5;
-		SOURCE_CSHARP = 6;
+		SOURCE_JAVA_ERROR = 5;
+		SOURCE_JAVA_JLS2 = 6;
+		SOURCE_JAVA_JLS3 = 7;
+		SOURCE_JAVA_JLS4 = 8;
 	}
+	required string name = 1;
 	required FileKind kind = 2;
-	optional bool parsed = 3 [default=false];
 	repeated Namespace namespaces = 4;
 	optional string content = 5;
 }
@@ -100,9 +101,9 @@ message Statement {
 	required StatementKind kind = 1;
 	repeated Comment comments = 2;
 	repeated Statement statements = 3;
-	optional Expression condition = 4;
-	optional Expression initialization = 5;
-	optional Expression increment = 6;
+	repeated Expression initializations = 4;
+	optional Expression condition = 5;
+	repeated Expression updates = 6;
 	optional Variable variable_declaration = 7;
 	optional Declaration type_declaration = 8;
 	optional Expression expression = 9;
@@ -180,13 +181,13 @@ message Modifier {
 		SYNCHRONIZED = 5;
 		OTHER = 6;
 	}
-	required ModifierKind kind = 1;
 	enum Visibility {
 		PUBLIC = 1;
 		PRIVATE = 2;
 		PROTECTED = 4;
 		NAMESPACE = 8;
 	}
+	required ModifierKind kind = 1;
 	optional uint32 visibility = 2;
 	optional string annotation_name = 3;
 	repeated string annotation_members = 4;
