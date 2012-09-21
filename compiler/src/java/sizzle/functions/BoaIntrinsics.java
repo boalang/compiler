@@ -6,22 +6,21 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Boa domain-specific functions
+ * Boa domain-specific functions.
  * 
  * @author rdyer
- * 
  */
 public class BoaIntrinsics {
-	private static String[] fixingRegex = {
+	private final static String[] fixingRegex = {
 		"fix",
 		"(bug|issue)(s)?[\\s]+(#)?\\s*[0-9]+",
 		"bug\\s+id(s)?\\s*=\\s*[0-9]+"
 	};
 
-	private static List<Matcher> fixingMatchers = new ArrayList<Matcher>();
+	private final static List<Matcher> fixingMatchers = new ArrayList<Matcher>();
 
 	static {
-		for (String s : BoaIntrinsics.fixingRegex)
+		for (final String s : BoaIntrinsics.fixingRegex)
 			fixingMatchers.add(Pattern.compile(s).matcher(""));
 	}
 
@@ -33,7 +32,7 @@ public class BoaIntrinsics {
 	 */
 	@FunctionSpec(name = "isfixingrevision", returnType = "bool", formalParameters = { "string" })
 	public static boolean isfixingrevision(final String log) {
-		for (Matcher m : fixingMatchers)
+		for (final Matcher m : fixingMatchers)
 			if (m.reset(log).matches())
 				return true;
 
@@ -48,7 +47,7 @@ public class BoaIntrinsics {
 	 * @return true if the Revision contains at least 1 file with the specified extension
 	 */
 	@FunctionSpec(name = "hasfiletype", returnType = "bool", formalParameters = { "Revision", "string" })
-	public static boolean hasfile(final sizzle.types.Code.Revision rev, String ext) {
+	public static boolean hasfile(final sizzle.types.Code.Revision rev, final String ext) {
 		for (int i = 0; i < rev.getFilesCount(); i++)
 			if (rev.getFiles(i).getName().toLowerCase().endsWith("." + ext.toLowerCase()))
 				return true;
