@@ -323,7 +323,7 @@ public class IndexeeFindingVisitor extends GJDepthFirst<Set<String>, String> {
 
 		if (n.f1.present())
 			for (final Node node : n.f1.nodes)
-				indexees.addAll(node.accept(this, argu));
+				indexees.addAll(((NodeSequence)node).nodes.get(1).accept(this, argu));
 
 		return indexees;
 	}
