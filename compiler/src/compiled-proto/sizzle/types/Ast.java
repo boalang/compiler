@@ -12,22 +12,24 @@ public final class Ast {
       implements com.google.protobuf.ProtocolMessageEnum {
     CLASS(0, 1),
     INTERFACE(1, 2),
-    STRUCT(2, 3),
-    ENUM(3, 4),
-    ANNOTATION(4, 5),
-    DELEGATE(5, 6),
-    GENERIC(6, 7),
-    OTHER(7, 8),
+    ANONYMOUS(2, 3),
+    STRUCT(3, 4),
+    ENUM(4, 5),
+    ANNOTATION(5, 6),
+    DELEGATE(6, 7),
+    GENERIC(7, 8),
+    OTHER(8, 9),
     ;
     
     public static final int CLASS_VALUE = 1;
     public static final int INTERFACE_VALUE = 2;
-    public static final int STRUCT_VALUE = 3;
-    public static final int ENUM_VALUE = 4;
-    public static final int ANNOTATION_VALUE = 5;
-    public static final int DELEGATE_VALUE = 6;
-    public static final int GENERIC_VALUE = 7;
-    public static final int OTHER_VALUE = 8;
+    public static final int ANONYMOUS_VALUE = 3;
+    public static final int STRUCT_VALUE = 4;
+    public static final int ENUM_VALUE = 5;
+    public static final int ANNOTATION_VALUE = 6;
+    public static final int DELEGATE_VALUE = 7;
+    public static final int GENERIC_VALUE = 8;
+    public static final int OTHER_VALUE = 9;
     
     
     public final int getNumber() { return value; }
@@ -36,12 +38,13 @@ public final class Ast {
       switch (value) {
         case 1: return CLASS;
         case 2: return INTERFACE;
-        case 3: return STRUCT;
-        case 4: return ENUM;
-        case 5: return ANNOTATION;
-        case 6: return DELEGATE;
-        case 7: return GENERIC;
-        case 8: return OTHER;
+        case 3: return ANONYMOUS;
+        case 4: return STRUCT;
+        case 5: return ENUM;
+        case 6: return ANNOTATION;
+        case 7: return DELEGATE;
+        case 8: return GENERIC;
+        case 9: return OTHER;
         default: return null;
       }
     }
@@ -72,7 +75,7 @@ public final class Ast {
     }
     
     private static final TypeKind[] VALUES = {
-      CLASS, INTERFACE, STRUCT, ENUM, ANNOTATION, DELEGATE, GENERIC, OTHER, 
+      CLASS, INTERFACE, ANONYMOUS, STRUCT, ENUM, ANNOTATION, DELEGATE, GENERIC, OTHER, 
     };
     
     public static TypeKind valueOf(
@@ -8868,30 +8871,28 @@ public final class Ast {
     public enum StatementKind
         implements com.google.protobuf.ProtocolMessageEnum {
       BLOCK(0, 1),
-      VARDECL(1, 2),
-      TYPEDECL(2, 3),
-      EXPRESSION(3, 4),
-      SYNCHRONIZED(4, 5),
-      RETURN(5, 6),
-      FOR(6, 7),
-      DO(7, 8),
-      WHILE(8, 9),
-      IF(9, 10),
-      ASSERT(10, 11),
-      BREAK(11, 12),
-      CONTINUE(12, 13),
-      LABEL(13, 14),
-      SWITCH(14, 15),
-      CASE(15, 16),
-      TRY(16, 17),
-      THROW(17, 18),
-      CATCH(18, 19),
-      EMPTY(19, 20),
-      OTHER(20, 21),
+      TYPEDECL(1, 3),
+      EXPRESSION(2, 4),
+      SYNCHRONIZED(3, 5),
+      RETURN(4, 6),
+      FOR(5, 7),
+      DO(6, 8),
+      WHILE(7, 9),
+      IF(8, 10),
+      ASSERT(9, 11),
+      BREAK(10, 12),
+      CONTINUE(11, 13),
+      LABEL(12, 14),
+      SWITCH(13, 15),
+      CASE(14, 16),
+      TRY(15, 17),
+      THROW(16, 18),
+      CATCH(17, 19),
+      EMPTY(18, 20),
+      OTHER(19, 21),
       ;
       
       public static final int BLOCK_VALUE = 1;
-      public static final int VARDECL_VALUE = 2;
       public static final int TYPEDECL_VALUE = 3;
       public static final int EXPRESSION_VALUE = 4;
       public static final int SYNCHRONIZED_VALUE = 5;
@@ -8918,7 +8919,6 @@ public final class Ast {
       public static StatementKind valueOf(int value) {
         switch (value) {
           case 1: return BLOCK;
-          case 2: return VARDECL;
           case 3: return TYPEDECL;
           case 4: return EXPRESSION;
           case 5: return SYNCHRONIZED;
@@ -8968,7 +8968,7 @@ public final class Ast {
       }
       
       private static final StatementKind[] VALUES = {
-        BLOCK, VARDECL, TYPEDECL, EXPRESSION, SYNCHRONIZED, RETURN, FOR, DO, WHILE, IF, ASSERT, BREAK, CONTINUE, LABEL, SWITCH, CASE, TRY, THROW, CATCH, EMPTY, OTHER, 
+        BLOCK, TYPEDECL, EXPRESSION, SYNCHRONIZED, RETURN, FOR, DO, WHILE, IF, ASSERT, BREAK, CONTINUE, LABEL, SWITCH, CASE, TRY, THROW, CATCH, EMPTY, OTHER, 
       };
       
       public static StatementKind valueOf(
@@ -15050,7 +15050,7 @@ public final class Ast {
       "\002 \002(\0132\022.sizzle.types.Type\022)\n\tmodifiers\030\003" +
       " \003(\0132\026.sizzle.types.Modifier\022-\n\013initiali" +
       "zer\030\004 \001(\0132\030.sizzle.types.Expression\022\'\n\010c" +
-      "omments\030\005 \003(\0132\025.sizzle.types.Comment\"\277\005\n" +
+      "omments\030\005 \003(\0132\025.sizzle.types.Comment\"\262\005\n" +
       "\tStatement\0223\n\004kind\030\001 \002(\0162%.sizzle.types." +
       "Statement.StatementKind\022\'\n\010comments\030\002 \003(" +
       "\0132\025.sizzle.types.Comment\022+\n\nstatements\030\003" +
@@ -15062,57 +15062,57 @@ public final class Ast {
       ".sizzle.types.Variable\0223\n\020type_declarati" +
       "on\030\010 \001(\0132\031.sizzle.types.Declaration\022,\n\ne" +
       "xpression\030\t \001(\0132\030.sizzle.types.Expressio" +
-      "n\"\202\002\n\rStatementKind\022\t\n\005BLOCK\020\001\022\013\n\007VARDEC" +
-      "L\020\002\022\014\n\010TYPEDECL\020\003\022\016\n\nEXPRESSION\020\004\022\020\n\014SYN" +
-      "CHRONIZED\020\005\022\n\n\006RETURN\020\006\022\007\n\003FOR\020\007\022\006\n\002DO\020\010",
-      "\022\t\n\005WHILE\020\t\022\006\n\002IF\020\n\022\n\n\006ASSERT\020\013\022\t\n\005BREAK" +
-      "\020\014\022\014\n\010CONTINUE\020\r\022\t\n\005LABEL\020\016\022\n\n\006SWITCH\020\017\022" +
-      "\010\n\004CASE\020\020\022\007\n\003TRY\020\021\022\t\n\005THROW\020\022\022\t\n\005CATCH\020\023" +
-      "\022\t\n\005EMPTY\020\024\022\t\n\005OTHER\020\025\"\306\010\n\nExpression\0225\n" +
-      "\004kind\030\001 \002(\0162\'.sizzle.types.Expression.Ex" +
-      "pressionKind\022-\n\013expressions\030\002 \003(\0132\030.sizz" +
-      "le.types.Expression\022.\n\016variable_decls\030\003 " +
-      "\003(\0132\026.sizzle.types.Variable\022$\n\010new_type\030" +
-      "\004 \001(\0132\022.sizzle.types.Type\022.\n\022generic_par" +
-      "ameters\030\005 \003(\0132\022.sizzle.types.Type\022\022\n\nis_",
-      "postfix\030\006 \001(\010\022\017\n\007literal\030\007 \001(\t\022\020\n\010variab" +
-      "le\030\010 \001(\t\022\016\n\006method\030\t \001(\t\022-\n\013method_args\030" +
-      "\n \003(\0132\030.sizzle.types.Expression\"\325\005\n\016Expr" +
-      "essionKind\022\013\n\007LITERAL\020\001\022\r\n\tVARACCESS\020\002\022\013" +
-      "\n\007VARDECL\020\003\022\016\n\nMETHODCALL\020\004\022\010\n\004CAST\020\005\022\016\n" +
-      "\nARRAYINDEX\020\006\022\r\n\tARRAYINIT\020\007\022\017\n\013TYPECOMP" +
-      "ARE\020\010\022\007\n\003NEW\020\t\022\014\n\010NEWARRAY\020\n\022\n\n\006OP_ADD\020\013" +
-      "\022\n\n\006OP_SUB\020\014\022\013\n\007OP_MULT\020\r\022\n\n\006OP_DIV\020\016\022\n\n" +
-      "\006OP_MOD\020\017\022\n\n\006OP_INC\020\020\022\n\n\006OP_DEC\020\021\022\016\n\nBIT" +
-      "_LSHIFT\020\022\022\016\n\nBIT_RSHIFT\020\023\022\026\n\022BIT_UNSIGNE",
-      "DRSHIFT\020\024\022\013\n\007BIT_AND\020\025\022\n\n\006BIT_OR\020\026\022\013\n\007BI" +
-      "T_NOT\020\027\022\013\n\007BIT_XOR\020\030\022\017\n\013LOGICAL_NOT\020\031\022\017\n" +
-      "\013LOGICAL_AND\020\032\022\016\n\nLOGICAL_OR\020\033\022\016\n\nLOGICA" +
-      "L_EQ\020\034\022\017\n\013LOGICAL_NEQ\020\035\022\006\n\002LT\020\036\022\006\n\002GT\020\037\022" +
-      "\010\n\004LTEQ\020 \022\010\n\004GTEQ\020!\022\017\n\013CONDITIONAL\020\"\022\020\n\014" +
-      "NULLCOALESCE\020#\022\n\n\006ASSIGN\020$\022\016\n\nASSIGN_ADD" +
-      "\020%\022\016\n\nASSIGN_SUB\020&\022\017\n\013ASSIGN_MULT\020\'\022\016\n\nA" +
-      "SSIGN_DIV\020(\022\016\n\nASSIGN_MOD\020)\022\021\n\rASSIGN_BI" +
-      "TXOR\020*\022\021\n\rASSIGN_BITAND\020+\022\020\n\014ASSIGN_BITO" +
-      "R\020,\022\021\n\rASSIGN_LSHIFT\020-\022\021\n\rASSIGN_RSHIFT\020",
-      ".\022\031\n\025ASSIGN_UNSIGNEDRSHIFT\020/\022\t\n\005OTHER\0200\"" +
-      "\363\002\n\010Modifier\0221\n\004kind\030\001 \002(\0162#.sizzle.type" +
-      "s.Modifier.ModifierKind\022\022\n\nvisibility\030\002 " +
-      "\001(\r\022\027\n\017annotation_name\030\003 \001(\t\022\032\n\022annotati" +
-      "on_members\030\004 \003(\t\0223\n\021annotation_values\030\005 " +
-      "\003(\0132\030.sizzle.types.Expression\022\r\n\005other\030\006" +
-      " \001(\t\"b\n\014ModifierKind\022\016\n\nVISIBILITY\020\001\022\016\n\n" +
-      "ANNOTATION\020\002\022\t\n\005FINAL\020\003\022\n\n\006STATIC\020\004\022\020\n\014S" +
-      "YNCHRONIZED\020\005\022\t\n\005OTHER\020\006\"C\n\nVisibility\022\n" +
-      "\n\006PUBLIC\020\001\022\013\n\007PRIVATE\020\002\022\r\n\tPROTECTED\020\004\022\r",
-      "\n\tNAMESPACE\020\010\"\224\001\n\007Comment\022/\n\004kind\030\001 \002(\0162" +
-      "!.sizzle.types.Comment.CommentKind\022\r\n\005va" +
-      "lue\030\002 \002(\t\022\022\n\nstart_line\030\003 \002(\005\"5\n\013Comment" +
-      "Kind\022\010\n\004LINE\020\001\022\t\n\005BLOCK\020\002\022\007\n\003DOC\020\003\022\010\n\004SP" +
-      "EC\020\004*p\n\010TypeKind\022\t\n\005CLASS\020\001\022\r\n\tINTERFACE" +
-      "\020\002\022\n\n\006STRUCT\020\003\022\010\n\004ENUM\020\004\022\016\n\nANNOTATION\020\005" +
-      "\022\014\n\010DELEGATE\020\006\022\013\n\007GENERIC\020\007\022\t\n\005OTHER\020\010B\002" +
-      "H\001"
+      "n\"\365\001\n\rStatementKind\022\t\n\005BLOCK\020\001\022\014\n\010TYPEDE" +
+      "CL\020\003\022\016\n\nEXPRESSION\020\004\022\020\n\014SYNCHRONIZED\020\005\022\n" +
+      "\n\006RETURN\020\006\022\007\n\003FOR\020\007\022\006\n\002DO\020\010\022\t\n\005WHILE\020\t\022\006",
+      "\n\002IF\020\n\022\n\n\006ASSERT\020\013\022\t\n\005BREAK\020\014\022\014\n\010CONTINU" +
+      "E\020\r\022\t\n\005LABEL\020\016\022\n\n\006SWITCH\020\017\022\010\n\004CASE\020\020\022\007\n\003" +
+      "TRY\020\021\022\t\n\005THROW\020\022\022\t\n\005CATCH\020\023\022\t\n\005EMPTY\020\024\022\t" +
+      "\n\005OTHER\020\025\"\306\010\n\nExpression\0225\n\004kind\030\001 \002(\0162\'" +
+      ".sizzle.types.Expression.ExpressionKind\022" +
+      "-\n\013expressions\030\002 \003(\0132\030.sizzle.types.Expr" +
+      "ession\022.\n\016variable_decls\030\003 \003(\0132\026.sizzle." +
+      "types.Variable\022$\n\010new_type\030\004 \001(\0132\022.sizzl" +
+      "e.types.Type\022.\n\022generic_parameters\030\005 \003(\013" +
+      "2\022.sizzle.types.Type\022\022\n\nis_postfix\030\006 \001(\010",
+      "\022\017\n\007literal\030\007 \001(\t\022\020\n\010variable\030\010 \001(\t\022\016\n\006m" +
+      "ethod\030\t \001(\t\022-\n\013method_args\030\n \003(\0132\030.sizzl" +
+      "e.types.Expression\"\325\005\n\016ExpressionKind\022\013\n" +
+      "\007LITERAL\020\001\022\r\n\tVARACCESS\020\002\022\013\n\007VARDECL\020\003\022\016" +
+      "\n\nMETHODCALL\020\004\022\010\n\004CAST\020\005\022\016\n\nARRAYINDEX\020\006" +
+      "\022\r\n\tARRAYINIT\020\007\022\017\n\013TYPECOMPARE\020\010\022\007\n\003NEW\020" +
+      "\t\022\014\n\010NEWARRAY\020\n\022\n\n\006OP_ADD\020\013\022\n\n\006OP_SUB\020\014\022" +
+      "\013\n\007OP_MULT\020\r\022\n\n\006OP_DIV\020\016\022\n\n\006OP_MOD\020\017\022\n\n\006" +
+      "OP_INC\020\020\022\n\n\006OP_DEC\020\021\022\016\n\nBIT_LSHIFT\020\022\022\016\n\n" +
+      "BIT_RSHIFT\020\023\022\026\n\022BIT_UNSIGNEDRSHIFT\020\024\022\013\n\007",
+      "BIT_AND\020\025\022\n\n\006BIT_OR\020\026\022\013\n\007BIT_NOT\020\027\022\013\n\007BI" +
+      "T_XOR\020\030\022\017\n\013LOGICAL_NOT\020\031\022\017\n\013LOGICAL_AND\020" +
+      "\032\022\016\n\nLOGICAL_OR\020\033\022\016\n\nLOGICAL_EQ\020\034\022\017\n\013LOG" +
+      "ICAL_NEQ\020\035\022\006\n\002LT\020\036\022\006\n\002GT\020\037\022\010\n\004LTEQ\020 \022\010\n\004" +
+      "GTEQ\020!\022\017\n\013CONDITIONAL\020\"\022\020\n\014NULLCOALESCE\020" +
+      "#\022\n\n\006ASSIGN\020$\022\016\n\nASSIGN_ADD\020%\022\016\n\nASSIGN_" +
+      "SUB\020&\022\017\n\013ASSIGN_MULT\020\'\022\016\n\nASSIGN_DIV\020(\022\016" +
+      "\n\nASSIGN_MOD\020)\022\021\n\rASSIGN_BITXOR\020*\022\021\n\rASS" +
+      "IGN_BITAND\020+\022\020\n\014ASSIGN_BITOR\020,\022\021\n\rASSIGN" +
+      "_LSHIFT\020-\022\021\n\rASSIGN_RSHIFT\020.\022\031\n\025ASSIGN_U",
+      "NSIGNEDRSHIFT\020/\022\t\n\005OTHER\0200\"\363\002\n\010Modifier\022" +
+      "1\n\004kind\030\001 \002(\0162#.sizzle.types.Modifier.Mo" +
+      "difierKind\022\022\n\nvisibility\030\002 \001(\r\022\027\n\017annota" +
+      "tion_name\030\003 \001(\t\022\032\n\022annotation_members\030\004 " +
+      "\003(\t\0223\n\021annotation_values\030\005 \003(\0132\030.sizzle." +
+      "types.Expression\022\r\n\005other\030\006 \001(\t\"b\n\014Modif" +
+      "ierKind\022\016\n\nVISIBILITY\020\001\022\016\n\nANNOTATION\020\002\022" +
+      "\t\n\005FINAL\020\003\022\n\n\006STATIC\020\004\022\020\n\014SYNCHRONIZED\020\005" +
+      "\022\t\n\005OTHER\020\006\"C\n\nVisibility\022\n\n\006PUBLIC\020\001\022\013\n" +
+      "\007PRIVATE\020\002\022\r\n\tPROTECTED\020\004\022\r\n\tNAMESPACE\020\010",
+      "\"\224\001\n\007Comment\022/\n\004kind\030\001 \002(\0162!.sizzle.type" +
+      "s.Comment.CommentKind\022\r\n\005value\030\002 \002(\t\022\022\n\n" +
+      "start_line\030\003 \002(\005\"5\n\013CommentKind\022\010\n\004LINE\020" +
+      "\001\022\t\n\005BLOCK\020\002\022\007\n\003DOC\020\003\022\010\n\004SPEC\020\004*\177\n\010TypeK" +
+      "ind\022\t\n\005CLASS\020\001\022\r\n\tINTERFACE\020\002\022\r\n\tANONYMO" +
+      "US\020\003\022\n\n\006STRUCT\020\004\022\010\n\004ENUM\020\005\022\016\n\nANNOTATION" +
+      "\020\006\022\014\n\010DELEGATE\020\007\022\013\n\007GENERIC\020\010\022\t\n\005OTHER\020\t" +
+      "B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

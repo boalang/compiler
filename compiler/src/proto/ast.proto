@@ -29,12 +29,13 @@ message Namespace {
 enum TypeKind {
 	CLASS = 1;
 	INTERFACE = 2;
-	STRUCT = 3;
-	ENUM = 4;
-	ANNOTATION = 5;
-	DELEGATE = 6;
-	GENERIC = 7;
-	OTHER = 8;
+	ANONYMOUS = 3;
+	STRUCT = 4;
+	ENUM = 5;
+	ANNOTATION = 6;
+	DELEGATE = 7;
+	GENERIC = 8;
+	OTHER = 9;
 }
 
 message Declaration {
@@ -77,7 +78,6 @@ message Variable {
 message Statement {
 	enum StatementKind {
 		BLOCK = 1;
-		VARDECL = 2;
 		TYPEDECL = 3;
 		EXPRESSION = 4;
 		SYNCHRONIZED = 5;
