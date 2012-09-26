@@ -12,10 +12,11 @@ import sizzle.types.Ast.Modifier.Visibility;
  */
 public class BoaModifierIntrinsics {
 	/**
-	 * Returns if the Method has a SYNCHRONIZED modifier.
+	 * Returns a specific Annotation Modifier, if it exists otherwise returns null.
 	 * 
 	 * @param m the Method to check
-	 * @return true if m has a SYNCHRONIZED modifier
+	 * @param name the annotation to look for
+	 * @return the annotation Modifier or null
 	 */
 	@FunctionSpec(name = "get_annotation", returnType = "bool", formalParameters = { "Method", "string" })
 	public static Modifier getAnnotation(final Method m, final String name) {
@@ -95,10 +96,10 @@ public class BoaModifierIntrinsics {
 	}
 
 	/**
-	 * Returns if the Method has a SYNCHRONIZED modifier.
+	 * Returns if the Method has an Annotation.
 	 * 
 	 * @param m the Method to check
-	 * @return true if m has a SYNCHRONIZED modifier
+	 * @return true if m has an annotation
 	 */
 	@FunctionSpec(name = "has_annotation", returnType = "bool", formalParameters = { "Method" })
 	public static boolean hasAnnotation(final Method m) {
@@ -106,10 +107,11 @@ public class BoaModifierIntrinsics {
 	}
 
 	/**
-	 * Returns if the Method has a SYNCHRONIZED modifier.
+	 * Returns if the Method has an Annotation with the given name.
 	 * 
 	 * @param m the Method to check
-	 * @return true if m has a SYNCHRONIZED modifier
+	 * @param name the annotation name to look for
+	 * @return true if m has an annotation with the given name
 	 */
 	@FunctionSpec(name = "has_annotation", returnType = "bool", formalParameters = { "Method", "string" })
 	public static boolean hasAnnotation(final Method m, final String name) {
