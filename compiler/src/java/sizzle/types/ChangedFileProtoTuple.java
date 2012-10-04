@@ -6,11 +6,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * A {@link FileProtoTuple}.
+ * A {@link ChangedFileProtoTuple}.
  * 
  * @author rdyer
  */
-public class FileProtoTuple extends SizzleProtoTuple {
+public class ChangedFileProtoTuple extends SizzleProtoTuple {
 	private final static List<SizzleType> members = new ArrayList<SizzleType>();
 	private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
@@ -32,14 +32,14 @@ public class FileProtoTuple extends SizzleProtoTuple {
 	}
 
 	/**
-	 * Construct a {@link FileProtoTuple}.
+	 * Construct a {@link ChangedFileProtoTuple}.
 	 */
-	public FileProtoTuple() {
+	public ChangedFileProtoTuple() {
 		super(members, names);
 	}
 
 	@Override
 	public String toJavaType() {
-		return "sizzle.types.Ast.File";
+		return "sizzle.types.Diff.ChangedFile";
 	}
 }

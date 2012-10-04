@@ -856,14 +856,14 @@ public final class Code {
     boolean hasLog();
     String getLog();
     
-    // repeated .sizzle.types.File files = 6;
-    java.util.List<sizzle.types.Ast.File> 
+    // repeated .sizzle.types.ChangedFile files = 6;
+    java.util.List<sizzle.types.Diff.ChangedFile> 
         getFilesList();
-    sizzle.types.Ast.File getFiles(int index);
+    sizzle.types.Diff.ChangedFile getFiles(int index);
     int getFilesCount();
-    java.util.List<? extends sizzle.types.Ast.FileOrBuilder> 
+    java.util.List<? extends sizzle.types.Diff.ChangedFileOrBuilder> 
         getFilesOrBuilderList();
-    sizzle.types.Ast.FileOrBuilder getFilesOrBuilder(
+    sizzle.types.Diff.ChangedFileOrBuilder getFilesOrBuilder(
         int index);
   }
   public static final class Revision extends
@@ -973,23 +973,23 @@ public final class Code {
       }
     }
     
-    // repeated .sizzle.types.File files = 6;
+    // repeated .sizzle.types.ChangedFile files = 6;
     public static final int FILES_FIELD_NUMBER = 6;
-    private java.util.List<sizzle.types.Ast.File> files_;
-    public java.util.List<sizzle.types.Ast.File> getFilesList() {
+    private java.util.List<sizzle.types.Diff.ChangedFile> files_;
+    public java.util.List<sizzle.types.Diff.ChangedFile> getFilesList() {
       return files_;
     }
-    public java.util.List<? extends sizzle.types.Ast.FileOrBuilder> 
+    public java.util.List<? extends sizzle.types.Diff.ChangedFileOrBuilder> 
         getFilesOrBuilderList() {
       return files_;
     }
     public int getFilesCount() {
       return files_.size();
     }
-    public sizzle.types.Ast.File getFiles(int index) {
+    public sizzle.types.Diff.ChangedFile getFiles(int index) {
       return files_.get(index);
     }
-    public sizzle.types.Ast.FileOrBuilder getFilesOrBuilder(
+    public sizzle.types.Diff.ChangedFileOrBuilder getFilesOrBuilder(
         int index) {
       return files_.get(index);
     }
@@ -1481,7 +1481,7 @@ public final class Code {
               break;
             }
             case 50: {
-              sizzle.types.Ast.File.Builder subBuilder = sizzle.types.Ast.File.newBuilder();
+              sizzle.types.Diff.ChangedFile.Builder subBuilder = sizzle.types.Diff.ChangedFile.newBuilder();
               input.readMessage(subBuilder, extensionRegistry);
               addFiles(subBuilder.buildPartial());
               break;
@@ -1750,20 +1750,20 @@ public final class Code {
         onChanged();
       }
       
-      // repeated .sizzle.types.File files = 6;
-      private java.util.List<sizzle.types.Ast.File> files_ =
+      // repeated .sizzle.types.ChangedFile files = 6;
+      private java.util.List<sizzle.types.Diff.ChangedFile> files_ =
         java.util.Collections.emptyList();
       private void ensureFilesIsMutable() {
         if (!((bitField0_ & 0x00000020) == 0x00000020)) {
-          files_ = new java.util.ArrayList<sizzle.types.Ast.File>(files_);
+          files_ = new java.util.ArrayList<sizzle.types.Diff.ChangedFile>(files_);
           bitField0_ |= 0x00000020;
          }
       }
       
       private com.google.protobuf.RepeatedFieldBuilder<
-          sizzle.types.Ast.File, sizzle.types.Ast.File.Builder, sizzle.types.Ast.FileOrBuilder> filesBuilder_;
+          sizzle.types.Diff.ChangedFile, sizzle.types.Diff.ChangedFile.Builder, sizzle.types.Diff.ChangedFileOrBuilder> filesBuilder_;
       
-      public java.util.List<sizzle.types.Ast.File> getFilesList() {
+      public java.util.List<sizzle.types.Diff.ChangedFile> getFilesList() {
         if (filesBuilder_ == null) {
           return java.util.Collections.unmodifiableList(files_);
         } else {
@@ -1777,7 +1777,7 @@ public final class Code {
           return filesBuilder_.getCount();
         }
       }
-      public sizzle.types.Ast.File getFiles(int index) {
+      public sizzle.types.Diff.ChangedFile getFiles(int index) {
         if (filesBuilder_ == null) {
           return files_.get(index);
         } else {
@@ -1785,7 +1785,7 @@ public final class Code {
         }
       }
       public Builder setFiles(
-          int index, sizzle.types.Ast.File value) {
+          int index, sizzle.types.Diff.ChangedFile value) {
         if (filesBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -1799,7 +1799,7 @@ public final class Code {
         return this;
       }
       public Builder setFiles(
-          int index, sizzle.types.Ast.File.Builder builderForValue) {
+          int index, sizzle.types.Diff.ChangedFile.Builder builderForValue) {
         if (filesBuilder_ == null) {
           ensureFilesIsMutable();
           files_.set(index, builderForValue.build());
@@ -1809,7 +1809,7 @@ public final class Code {
         }
         return this;
       }
-      public Builder addFiles(sizzle.types.Ast.File value) {
+      public Builder addFiles(sizzle.types.Diff.ChangedFile value) {
         if (filesBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -1823,7 +1823,7 @@ public final class Code {
         return this;
       }
       public Builder addFiles(
-          int index, sizzle.types.Ast.File value) {
+          int index, sizzle.types.Diff.ChangedFile value) {
         if (filesBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -1837,7 +1837,7 @@ public final class Code {
         return this;
       }
       public Builder addFiles(
-          sizzle.types.Ast.File.Builder builderForValue) {
+          sizzle.types.Diff.ChangedFile.Builder builderForValue) {
         if (filesBuilder_ == null) {
           ensureFilesIsMutable();
           files_.add(builderForValue.build());
@@ -1848,7 +1848,7 @@ public final class Code {
         return this;
       }
       public Builder addFiles(
-          int index, sizzle.types.Ast.File.Builder builderForValue) {
+          int index, sizzle.types.Diff.ChangedFile.Builder builderForValue) {
         if (filesBuilder_ == null) {
           ensureFilesIsMutable();
           files_.add(index, builderForValue.build());
@@ -1859,7 +1859,7 @@ public final class Code {
         return this;
       }
       public Builder addAllFiles(
-          java.lang.Iterable<? extends sizzle.types.Ast.File> values) {
+          java.lang.Iterable<? extends sizzle.types.Diff.ChangedFile> values) {
         if (filesBuilder_ == null) {
           ensureFilesIsMutable();
           super.addAll(values, files_);
@@ -1889,18 +1889,18 @@ public final class Code {
         }
         return this;
       }
-      public sizzle.types.Ast.File.Builder getFilesBuilder(
+      public sizzle.types.Diff.ChangedFile.Builder getFilesBuilder(
           int index) {
         return getFilesFieldBuilder().getBuilder(index);
       }
-      public sizzle.types.Ast.FileOrBuilder getFilesOrBuilder(
+      public sizzle.types.Diff.ChangedFileOrBuilder getFilesOrBuilder(
           int index) {
         if (filesBuilder_ == null) {
           return files_.get(index);  } else {
           return filesBuilder_.getMessageOrBuilder(index);
         }
       }
-      public java.util.List<? extends sizzle.types.Ast.FileOrBuilder> 
+      public java.util.List<? extends sizzle.types.Diff.ChangedFileOrBuilder> 
            getFilesOrBuilderList() {
         if (filesBuilder_ != null) {
           return filesBuilder_.getMessageOrBuilderList();
@@ -1908,25 +1908,25 @@ public final class Code {
           return java.util.Collections.unmodifiableList(files_);
         }
       }
-      public sizzle.types.Ast.File.Builder addFilesBuilder() {
+      public sizzle.types.Diff.ChangedFile.Builder addFilesBuilder() {
         return getFilesFieldBuilder().addBuilder(
-            sizzle.types.Ast.File.getDefaultInstance());
+            sizzle.types.Diff.ChangedFile.getDefaultInstance());
       }
-      public sizzle.types.Ast.File.Builder addFilesBuilder(
+      public sizzle.types.Diff.ChangedFile.Builder addFilesBuilder(
           int index) {
         return getFilesFieldBuilder().addBuilder(
-            index, sizzle.types.Ast.File.getDefaultInstance());
+            index, sizzle.types.Diff.ChangedFile.getDefaultInstance());
       }
-      public java.util.List<sizzle.types.Ast.File.Builder> 
+      public java.util.List<sizzle.types.Diff.ChangedFile.Builder> 
            getFilesBuilderList() {
         return getFilesFieldBuilder().getBuilderList();
       }
       private com.google.protobuf.RepeatedFieldBuilder<
-          sizzle.types.Ast.File, sizzle.types.Ast.File.Builder, sizzle.types.Ast.FileOrBuilder> 
+          sizzle.types.Diff.ChangedFile, sizzle.types.Diff.ChangedFile.Builder, sizzle.types.Diff.ChangedFileOrBuilder> 
           getFilesFieldBuilder() {
         if (filesBuilder_ == null) {
           filesBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              sizzle.types.Ast.File, sizzle.types.Ast.File.Builder, sizzle.types.Ast.FileOrBuilder>(
+              sizzle.types.Diff.ChangedFile, sizzle.types.Diff.ChangedFile.Builder, sizzle.types.Diff.ChangedFileOrBuilder>(
                   files_,
                   ((bitField0_ & 0x00000020) == 0x00000020),
                   getParentForChildren(),
@@ -1966,17 +1966,18 @@ public final class Code {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\ncode.proto\022\014sizzle.types\032\tast.proto\032\014s" +
-      "hared.proto\"\316\001\n\016CodeRepository\022\013\n\003url\030\001 " +
-      "\002(\t\0229\n\004kind\030\002 \002(\0162+.sizzle.types.CodeRep" +
-      "ository.RepositoryKind\022)\n\trevisions\030\003 \003(" +
-      "\0132\026.sizzle.types.Revision\"I\n\016RepositoryK" +
-      "ind\022\013\n\007UNKNOWN\020\001\022\007\n\003SVN\020\002\022\007\n\003CVS\020\003\022\007\n\003GI" +
-      "T\020\004\022\006\n\002HG\020\005\022\007\n\003BZR\020\006\"\252\001\n\010Revision\022\n\n\002id\030" +
-      "\001 \002(\005\022$\n\006author\030\002 \002(\0132\024.sizzle.types.Per" +
-      "son\022\'\n\tcommitter\030\003 \002(\0132\024.sizzle.types.Pe" +
-      "rson\022\023\n\013commit_date\030\004 \002(\004\022\013\n\003log\030\005 \002(\t\022!",
-      "\n\005files\030\006 \003(\0132\022.sizzle.types.FileB\002H\001"
+      "\n\ncode.proto\022\014sizzle.types\032\ndiff.proto\032\014" +
+      "shared.proto\"\316\001\n\016CodeRepository\022\013\n\003url\030\001" +
+      " \002(\t\0229\n\004kind\030\002 \002(\0162+.sizzle.types.CodeRe" +
+      "pository.RepositoryKind\022)\n\trevisions\030\003 \003" +
+      "(\0132\026.sizzle.types.Revision\"I\n\016Repository" +
+      "Kind\022\013\n\007UNKNOWN\020\001\022\007\n\003SVN\020\002\022\007\n\003CVS\020\003\022\007\n\003G" +
+      "IT\020\004\022\006\n\002HG\020\005\022\007\n\003BZR\020\006\"\261\001\n\010Revision\022\n\n\002id" +
+      "\030\001 \002(\005\022$\n\006author\030\002 \002(\0132\024.sizzle.types.Pe" +
+      "rson\022\'\n\tcommitter\030\003 \002(\0132\024.sizzle.types.P" +
+      "erson\022\023\n\013commit_date\030\004 \002(\004\022\013\n\003log\030\005 \002(\t\022",
+      "(\n\005files\030\006 \003(\0132\031.sizzle.types.ChangedFil" +
+      "eB\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -2005,7 +2006,7 @@ public final class Code {
     com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
-          sizzle.types.Ast.getDescriptor(),
+          sizzle.types.Diff.getDescriptor(),
           sizzle.types.Shared.getDescriptor(),
         }, assigner);
   }

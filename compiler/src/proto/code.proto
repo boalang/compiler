@@ -1,6 +1,6 @@
 package sizzle.types;
 
-import "ast.proto";
+import "diff.proto";
 import "shared.proto";
 
 option optimize_for = SPEED;
@@ -25,5 +25,5 @@ message Revision {
 	required Person committer = 3;
 	required uint64 commit_date = 4;
 	required string log = 5;
-	repeated File files = 6;
+	repeated ChangedFile files = 6;
 }

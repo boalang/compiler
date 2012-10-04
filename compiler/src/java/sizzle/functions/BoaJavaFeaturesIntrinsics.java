@@ -3,8 +3,10 @@ package sizzle.functions;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import sizzle.types.Ast.Expression.ExpressionKind;
 import sizzle.types.Ast.*;
 import sizzle.types.Code.*;
+import sizzle.types.Diff.*;
 
 /**
  * Boa domain-specific functions for finding Java language features.
@@ -33,7 +35,7 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_enhanced_for", returnType = "int", formalParameters = { "File" })
-	public static int usesEnhancedFor(final File f) {
+	public static int usesEnhancedFor(final ChangedFile f) {
 		int count = 0;
 
 		for (int i = 0; i < f.getNamespacesCount(); i++)
@@ -150,7 +152,7 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_varargs", returnType = "int", formalParameters = { "File" })
-	public static int usesVarargs(final File f) {
+	public static int usesVarargs(final ChangedFile f) {
 		int count = 0;
 
 		for (int i = 0; i < f.getNamespacesCount(); i++)
@@ -221,7 +223,7 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_assert", returnType = "int", formalParameters = { "File" })
-	public static int usesAssert(final File f) {
+	public static int usesAssert(final ChangedFile f) {
 		int count = 0;
 
 		for (int i = 0; i < f.getNamespacesCount(); i++)
@@ -338,7 +340,7 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_enums", returnType = "int", formalParameters = { "File" })
-	public static int usesEnums(final File f) {
+	public static int usesEnums(final ChangedFile f) {
 		int count = 0;
 
 		for (int i = 0; i < f.getNamespacesCount(); i++)
@@ -455,7 +457,7 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_try_resources", returnType = "int", formalParameters = { "File" })
-	public static int usesTryResources(final File f) {
+	public static int usesTryResources(final ChangedFile f) {
 		int count = 0;
 
 		for (int i = 0; i < f.getNamespacesCount(); i++)
@@ -551,174 +553,949 @@ public class BoaJavaFeaturesIntrinsics {
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_generics", returnType = "int", formalParameters = { "CodeRepository" })
-	public static int usesGenerics(final CodeRepository r) {
+	@FunctionSpec(name = "uses_generics_define_type", returnType = "int", formalParameters = { "CodeRepository" })
+	public static int usesGenericsDefineType(final CodeRepository r) {
 		int count = 0;
 
 		for (int i = 0; i < r.getRevisionsCount(); i++)
-			count += usesGenerics(r.getRevisions(i));
+			count += usesGenericsDefineType(r.getRevisions(i));
 
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_generics", returnType = "int", formalParameters = { "Revision" })
-	public static int usesGenerics(final Revision r) {
+	@FunctionSpec(name = "uses_generics_define_type", returnType = "int", formalParameters = { "Revision" })
+	public static int usesGenericsDefineType(final Revision r) {
 		int count = 0;
 
 		for (int i = 0; i < r.getFilesCount(); i++)
-			count += usesGenerics(r.getFiles(i));
+			count += usesGenericsDefineType(r.getFiles(i));
 
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_generics", returnType = "int", formalParameters = { "File" })
-	public static int usesGenerics(final File f) {
+	@FunctionSpec(name = "uses_generics_define_type", returnType = "int", formalParameters = { "File" })
+	public static int usesGenericsDefineType(final ChangedFile f) {
 		int count = 0;
 
 		for (int i = 0; i < f.getNamespacesCount(); i++)
 			for (int j = 0; j < f.getNamespaces(i).getDeclarationsCount(); j++)
-				count += usesGenerics(f.getNamespaces(i).getDeclarations(j));
+				count += usesGenericsDefineType(f.getNamespaces(i).getDeclarations(j));
 
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_generics", returnType = "int", formalParameters = { "Declaration" })
-	public static int usesGenerics(final Declaration d) {
+	@FunctionSpec(name = "uses_generics_define_type", returnType = "int", formalParameters = { "Declaration" })
+	public static int usesGenericsDefineType(final Declaration d) {
 		int count = 0;
 
 		if (d.getGenericParametersCount() > 0)
 			count++;
 
-		for (int i = 0; i < d.getParentsCount(); i++)
-			count += usesGenerics(d.getParents(i));
-
 		for (int i = 0; i < d.getMethodsCount(); i++)
-			count += usesGenerics(d.getMethods(i));
+			count += usesGenericsDefineType(d.getMethods(i));
 
 		for (int i = 0; i < d.getFieldsCount(); i++)
-			count += usesGenerics(d.getFields(i));
+			count += usesGenericsDefineType(d.getFields(i));
 
 		for (int i = 0; i < d.getNestedDeclarationsCount(); i++)
-			count += usesGenerics(d.getNestedDeclarations(i));
+			count += usesGenericsDefineType(d.getNestedDeclarations(i));
 
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_generics", returnType = "int", formalParameters = { "Method" })
-	public static int usesGenerics(final Method m) {
+	@FunctionSpec(name = "uses_generics_define_type", returnType = "int", formalParameters = { "Method" })
+	public static int usesGenericsDefineType(final Method m) {
+		int count = 0;
+
+		for (int i = 0; i < m.getArgumentsCount(); i++)
+			count += usesGenericsDefineType(m.getArguments(i));
+
+		for (int i = 0; i < m.getStatementsCount(); i++)
+			count += usesGenericsDefineType(m.getStatements(i));
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_generics_define_type", returnType = "int", formalParameters = { "Variable" })
+	public static int usesGenericsDefineType(final Variable v) {
+		int count = 0;
+
+		if (v.hasInitializer())
+			count += usesGenericsDefineType(v.getInitializer());
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_generics_define_type", returnType = "int", formalParameters = { "Statement" })
+	public static int usesGenericsDefineType(final Statement s) {
+		int count = 0;
+
+		if (s.hasCondition())
+			count += usesGenericsDefineType(s.getCondition());
+
+		if (s.hasVariableDeclaration())
+			count += usesGenericsDefineType(s.getVariableDeclaration());
+
+		if (s.hasTypeDeclaration())
+			count += usesGenericsDefineType(s.getTypeDeclaration());
+
+		if (s.hasExpression())
+			count += usesGenericsDefineType(s.getExpression());
+
+		for (int i = 0; i < s.getStatementsCount(); i++)
+			count += usesGenericsDefineType(s.getStatements(i));
+
+		for (int i = 0; i < s.getInitializationsCount(); i++)
+			count += usesGenericsDefineType(s.getInitializations(i));
+
+		for (int i = 0; i < s.getUpdatesCount(); i++)
+			count += usesGenericsDefineType(s.getUpdates(i));
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_generics_define_type", returnType = "int", formalParameters = { "Expression" })
+	public static int usesGenericsDefineType(final Expression e) {
+		int count = 0;
+
+		for (int i = 0; i < e.getVariableDeclsCount(); i++)
+			count += usesGenericsDefineType(e.getVariableDecls(i));
+
+		for (int i = 0; i < e.getExpressionsCount(); i++)
+			count += usesGenericsDefineType(e.getExpressions(i));
+
+		for (int i = 0; i < e.getMethodArgsCount(); i++)
+			count += usesGenericsDefineType(e.getMethodArgs(i));
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_generics_define_method", returnType = "int", formalParameters = { "CodeRepository" })
+	public static int usesGenericsDefineMethod(final CodeRepository r) {
+		int count = 0;
+
+		for (int i = 0; i < r.getRevisionsCount(); i++)
+			count += usesGenericsDefineMethod(r.getRevisions(i));
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_generics_define_method", returnType = "int", formalParameters = { "Revision" })
+	public static int usesGenericsDefineMethod(final Revision r) {
+		int count = 0;
+
+		for (int i = 0; i < r.getFilesCount(); i++)
+			count += usesGenericsDefineMethod(r.getFiles(i));
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_generics_define_method", returnType = "int", formalParameters = { "File" })
+	public static int usesGenericsDefineMethod(final ChangedFile f) {
+		int count = 0;
+
+		for (int i = 0; i < f.getNamespacesCount(); i++)
+			for (int j = 0; j < f.getNamespaces(i).getDeclarationsCount(); j++)
+				count += usesGenericsDefineMethod(f.getNamespaces(i).getDeclarations(j));
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_generics_define_method", returnType = "int", formalParameters = { "Declaration" })
+	public static int usesGenericsDefineMethod(final Declaration d) {
+		int count = 0;
+
+		for (int i = 0; i < d.getMethodsCount(); i++)
+			count += usesGenericsDefineMethod(d.getMethods(i));
+
+		for (int i = 0; i < d.getFieldsCount(); i++)
+			count += usesGenericsDefineMethod(d.getFields(i));
+
+		for (int i = 0; i < d.getNestedDeclarationsCount(); i++)
+			count += usesGenericsDefineMethod(d.getNestedDeclarations(i));
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_generics_define_method", returnType = "int", formalParameters = { "Method" })
+	public static int usesGenericsDefineMethod(final Method m) {
 		int count = 0;
 
 		if (m.getGenericParametersCount() > 0)
 			count++;
 
-		count += usesGenerics(m.getReturnType());
-
-		for (int i = 0; i < m.getExceptionTypesCount(); i++)
-			count += usesGenerics(m.getExceptionTypes(i));
-
 		for (int i = 0; i < m.getArgumentsCount(); i++)
-			count += usesGenerics(m.getArguments(i));
+			count += usesGenericsDefineMethod(m.getArguments(i));
 
 		for (int i = 0; i < m.getStatementsCount(); i++)
-			count += usesGenerics(m.getStatements(i));
+			count += usesGenericsDefineMethod(m.getStatements(i));
 
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_generics", returnType = "int", formalParameters = { "Variable" })
-	public static int usesGenerics(final Variable v) {
+	@FunctionSpec(name = "uses_generics_define_method", returnType = "int", formalParameters = { "Variable" })
+	public static int usesGenericsDefineMethod(final Variable v) {
 		int count = 0;
 
-		count += usesGenerics(v.getVariableType());
-
 		if (v.hasInitializer())
-			count += usesGenerics(v.getInitializer());
+			count += usesGenericsDefineMethod(v.getInitializer());
 
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_generics", returnType = "int", formalParameters = { "Statement" })
-	public static int usesGenerics(final Statement s) {
+	@FunctionSpec(name = "uses_generics_define_method", returnType = "int", formalParameters = { "Statement" })
+	public static int usesGenericsDefineMethod(final Statement s) {
 		int count = 0;
 
 		if (s.hasCondition())
-			count += usesGenerics(s.getCondition());
+			count += usesGenericsDefineMethod(s.getCondition());
 
 		if (s.hasVariableDeclaration())
-			count += usesGenerics(s.getVariableDeclaration());
+			count += usesGenericsDefineMethod(s.getVariableDeclaration());
 
 		if (s.hasTypeDeclaration())
-			count += usesGenerics(s.getTypeDeclaration());
+			count += usesGenericsDefineMethod(s.getTypeDeclaration());
 
 		if (s.hasExpression())
-			count += usesGenerics(s.getExpression());
+			count += usesGenericsDefineMethod(s.getExpression());
 
 		for (int i = 0; i < s.getStatementsCount(); i++)
-			count += usesGenerics(s.getStatements(i));
+			count += usesGenericsDefineMethod(s.getStatements(i));
 
 		for (int i = 0; i < s.getInitializationsCount(); i++)
-			count += usesGenerics(s.getInitializations(i));
+			count += usesGenericsDefineMethod(s.getInitializations(i));
 
 		for (int i = 0; i < s.getUpdatesCount(); i++)
-			count += usesGenerics(s.getUpdates(i));
+			count += usesGenericsDefineMethod(s.getUpdates(i));
 
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_generics", returnType = "int", formalParameters = { "Expression" })
-	public static int usesGenerics(final Expression e) {
+	@FunctionSpec(name = "uses_generics_define_method", returnType = "int", formalParameters = { "Expression" })
+	public static int usesGenericsDefineMethod(final Expression e) {
 		int count = 0;
-
-		if (e.getGenericParametersCount() > 0)
-			count++;
-
-		if (e.hasNewType())
-			count += usesGenerics(e.getNewType());
 
 		for (int i = 0; i < e.getVariableDeclsCount(); i++)
-			count += usesGenerics(e.getVariableDecls(i));
+			count += usesGenericsDefineMethod(e.getVariableDecls(i));
 
 		for (int i = 0; i < e.getExpressionsCount(); i++)
-			count += usesGenerics(e.getExpressions(i));
+			count += usesGenericsDefineMethod(e.getExpressions(i));
 
 		for (int i = 0; i < e.getMethodArgsCount(); i++)
-			count += usesGenerics(e.getMethodArgs(i));
+			count += usesGenericsDefineMethod(e.getMethodArgs(i));
 
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_generics", returnType = "int", formalParameters = { "Type" })
-	public static int usesGenerics(final Type t) {
-		int count = 0;
-
-		if (t.getKind() == TypeKind.GENERIC || t.getName().contains("<"))
-			count++;
-
-		return count;
-	}
-
-	@FunctionSpec(name = "uses_annotations", returnType = "int", formalParameters = { "CodeRepository" })
-	public static int usesAnnotations(final CodeRepository r) {
+	@FunctionSpec(name = "uses_generics_define_field", returnType = "int", formalParameters = { "CodeRepository" })
+	public static int usesGenericsDefineField(final CodeRepository r) {
 		int count = 0;
 
 		for (int i = 0; i < r.getRevisionsCount(); i++)
-			count += usesAnnotations(r.getRevisions(i));
+			count += usesGenericsDefineField(r.getRevisions(i));
 
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_annotations", returnType = "int", formalParameters = { "Revision" })
-	public static int usesAnnotations(final Revision r) {
+	@FunctionSpec(name = "uses_generics_define_field", returnType = "int", formalParameters = { "Revision" })
+	public static int usesGenericsDefineField(final Revision r) {
 		int count = 0;
 
 		for (int i = 0; i < r.getFilesCount(); i++)
-			count += usesAnnotations(r.getFiles(i));
+			count += usesGenericsDefineField(r.getFiles(i));
 
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_annotations", returnType = "int", formalParameters = { "File" })
-	public static int usesAnnotations(final File f) {
+	@FunctionSpec(name = "uses_generics_define_field", returnType = "int", formalParameters = { "File" })
+	public static int usesGenericsDefineField(final ChangedFile f) {
+		int count = 0;
+
+		for (int i = 0; i < f.getNamespacesCount(); i++)
+			for (int j = 0; j < f.getNamespaces(i).getDeclarationsCount(); j++)
+				count += usesGenericsDefineField(f.getNamespaces(i).getDeclarations(j));
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_generics_define_field", returnType = "int", formalParameters = { "Declaration" })
+	public static int usesGenericsDefineField(final Declaration d) {
+		int count = 0;
+
+		for (int i = 0; i < d.getMethodsCount(); i++)
+			count += usesGenericsDefineField(d.getMethods(i));
+
+		for (int i = 0; i < d.getFieldsCount(); i++)
+			count += usesGenericsDefineField(d.getFields(i));
+
+		for (int i = 0; i < d.getNestedDeclarationsCount(); i++)
+			count += usesGenericsDefineField(d.getNestedDeclarations(i));
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_generics_define_field", returnType = "int", formalParameters = { "Method" })
+	public static int usesGenericsDefineField(final Method m) {
+		int count = 0;
+
+		for (int i = 0; i < m.getArgumentsCount(); i++)
+			count += usesGenericsDefineField(m.getArguments(i));
+
+		for (int i = 0; i < m.getStatementsCount(); i++)
+			count += usesGenericsDefineField(m.getStatements(i));
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_generics_define_field", returnType = "int", formalParameters = { "Variable" })
+	public static int usesGenericsDefineField(final Variable v) {
+		int count = 0;
+
+		count += usesGenericsDefineField(v.getVariableType());
+
+		if (v.hasInitializer())
+			count += usesGenericsDefineField(v.getInitializer());
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_generics_define_field", returnType = "int", formalParameters = { "Statement" })
+	public static int usesGenericsDefineField(final Statement s) {
+		int count = 0;
+
+		if (s.hasCondition())
+			count += usesGenericsDefineField(s.getCondition());
+
+		if (s.hasVariableDeclaration())
+			count += usesGenericsDefineField(s.getVariableDeclaration());
+
+		if (s.hasTypeDeclaration())
+			count += usesGenericsDefineField(s.getTypeDeclaration());
+
+		if (s.hasExpression())
+			count += usesGenericsDefineField(s.getExpression());
+
+		for (int i = 0; i < s.getStatementsCount(); i++)
+			count += usesGenericsDefineField(s.getStatements(i));
+
+		for (int i = 0; i < s.getInitializationsCount(); i++)
+			count += usesGenericsDefineField(s.getInitializations(i));
+
+		for (int i = 0; i < s.getUpdatesCount(); i++)
+			count += usesGenericsDefineField(s.getUpdates(i));
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_generics_define_field", returnType = "int", formalParameters = { "Expression" })
+	public static int usesGenericsDefineField(final Expression e) {
+		int count = 0;
+
+		for (int i = 0; i < e.getVariableDeclsCount(); i++)
+			count += usesGenericsDefineField(e.getVariableDecls(i));
+
+		for (int i = 0; i < e.getExpressionsCount(); i++)
+			count += usesGenericsDefineField(e.getExpressions(i));
+
+		for (int i = 0; i < e.getMethodArgsCount(); i++)
+			count += usesGenericsDefineField(e.getMethodArgs(i));
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_generics_define_field", returnType = "int", formalParameters = { "Type" })
+	public static int usesGenericsDefineField(final Type t) {
+		int count = 0;
+
+		if (t.getName().contains("<"))
+			count++;
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_generics_wildcard_super", returnType = "int", formalParameters = { "CodeRepository" })
+	public static int usesGenericsWildcardSuper(final CodeRepository r) {
+		int count = 0;
+
+		for (int i = 0; i < r.getRevisionsCount(); i++)
+			count += usesGenericsWildcardSuper(r.getRevisions(i));
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_generics_wildcard_super", returnType = "int", formalParameters = { "Revision" })
+	public static int usesGenericsWildcardSuper(final Revision r) {
+		int count = 0;
+
+		for (int i = 0; i < r.getFilesCount(); i++)
+			count += usesGenericsWildcardSuper(r.getFiles(i));
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_generics_wildcard_super", returnType = "int", formalParameters = { "File" })
+	public static int usesGenericsWildcardSuper(final ChangedFile f) {
+		int count = 0;
+
+		for (int i = 0; i < f.getNamespacesCount(); i++)
+			for (int j = 0; j < f.getNamespaces(i).getDeclarationsCount(); j++)
+				count += usesGenericsWildcardSuper(f.getNamespaces(i).getDeclarations(j));
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_generics_wildcard_super", returnType = "int", formalParameters = { "Declaration" })
+	public static int usesGenericsWildcardSuper(final Declaration d) {
+		int count = 0;
+
+		for (int i = 0; i < d.getGenericParametersCount(); i++)
+			count += usesGenericsWildcardSuper(d.getGenericParameters(i));
+
+		for (int i = 0; i < d.getParentsCount(); i++)
+			count += usesGenericsWildcardSuper(d.getParents(i));
+
+		for (int i = 0; i < d.getMethodsCount(); i++)
+			count += usesGenericsWildcardSuper(d.getMethods(i));
+
+		for (int i = 0; i < d.getFieldsCount(); i++)
+			count += usesGenericsWildcardSuper(d.getFields(i));
+
+		for (int i = 0; i < d.getNestedDeclarationsCount(); i++)
+			count += usesGenericsWildcardSuper(d.getNestedDeclarations(i));
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_generics_wildcard_super", returnType = "int", formalParameters = { "Method" })
+	public static int usesGenericsWildcardSuper(final Method m) {
+		int count = 0;
+
+		for (int i = 0; i < m.getGenericParametersCount(); i++)
+			count += usesGenericsWildcardSuper(m.getGenericParameters(i));
+
+		count += usesGenericsWildcardSuper(m.getReturnType());
+
+		for (int i = 0; i < m.getExceptionTypesCount(); i++)
+			count += usesGenericsWildcardSuper(m.getExceptionTypes(i));
+
+		for (int i = 0; i < m.getArgumentsCount(); i++)
+			count += usesGenericsWildcardSuper(m.getArguments(i));
+
+		for (int i = 0; i < m.getStatementsCount(); i++)
+			count += usesGenericsWildcardSuper(m.getStatements(i));
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_generics_wildcard_super", returnType = "int", formalParameters = { "Variable" })
+	public static int usesGenericsWildcardSuper(final Variable v) {
+		int count = 0;
+
+		count += usesGenericsWildcardSuper(v.getVariableType());
+
+		if (v.hasInitializer())
+			count += usesGenericsWildcardSuper(v.getInitializer());
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_generics_wildcard_super", returnType = "int", formalParameters = { "Statement" })
+	public static int usesGenericsWildcardSuper(final Statement s) {
+		int count = 0;
+
+		if (s.hasCondition())
+			count += usesGenericsWildcardSuper(s.getCondition());
+
+		if (s.hasVariableDeclaration())
+			count += usesGenericsWildcardSuper(s.getVariableDeclaration());
+
+		if (s.hasTypeDeclaration())
+			count += usesGenericsWildcardSuper(s.getTypeDeclaration());
+
+		if (s.hasExpression())
+			count += usesGenericsWildcardSuper(s.getExpression());
+
+		for (int i = 0; i < s.getStatementsCount(); i++)
+			count += usesGenericsWildcardSuper(s.getStatements(i));
+
+		for (int i = 0; i < s.getInitializationsCount(); i++)
+			count += usesGenericsWildcardSuper(s.getInitializations(i));
+
+		for (int i = 0; i < s.getUpdatesCount(); i++)
+			count += usesGenericsWildcardSuper(s.getUpdates(i));
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_generics_wildcard_super", returnType = "int", formalParameters = { "Expression" })
+	public static int usesGenericsWildcardSuper(final Expression e) {
+		int count = 0;
+
+		for (int i = 0; i < e.getGenericParametersCount(); i++)
+			count += usesGenericsWildcardSuper(e.getGenericParameters(i));
+
+		if (e.hasNewType())
+			count += usesGenericsWildcardSuper(e.getNewType());
+
+		for (int i = 0; i < e.getVariableDeclsCount(); i++)
+			count += usesGenericsWildcardSuper(e.getVariableDecls(i));
+
+		for (int i = 0; i < e.getExpressionsCount(); i++)
+			count += usesGenericsWildcardSuper(e.getExpressions(i));
+
+		for (int i = 0; i < e.getMethodArgsCount(); i++)
+			count += usesGenericsWildcardSuper(e.getMethodArgs(i));
+
+		return count;
+	}
+
+	private static Matcher wildcardSuperMatcher = Pattern.compile("<\\s*\\?\\s+super\\s+[^>]+>").matcher("");
+
+	@FunctionSpec(name = "uses_generics_wildcard_super", returnType = "int", formalParameters = { "Type" })
+	public static int usesGenericsWildcardSuper(final Type t) {
+		int count = 0;
+
+		if (wildcardSuperMatcher.reset(t.getName()).matches())
+			count++;
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_generics_wildcard_extends", returnType = "int", formalParameters = { "CodeRepository" })
+	public static int usesGenericsWildcardExtends(final CodeRepository r) {
+		int count = 0;
+
+		for (int i = 0; i < r.getRevisionsCount(); i++)
+			count += usesGenericsWildcardExtends(r.getRevisions(i));
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_generics_wildcard_extends", returnType = "int", formalParameters = { "Revision" })
+	public static int usesGenericsWildcardExtends(final Revision r) {
+		int count = 0;
+
+		for (int i = 0; i < r.getFilesCount(); i++)
+			count += usesGenericsWildcardExtends(r.getFiles(i));
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_generics_wildcard_extends", returnType = "int", formalParameters = { "File" })
+	public static int usesGenericsWildcardExtends(final ChangedFile f) {
+		int count = 0;
+
+		for (int i = 0; i < f.getNamespacesCount(); i++)
+			for (int j = 0; j < f.getNamespaces(i).getDeclarationsCount(); j++)
+				count += usesGenericsWildcardExtends(f.getNamespaces(i).getDeclarations(j));
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_generics_wildcard_extends", returnType = "int", formalParameters = { "Declaration" })
+	public static int usesGenericsWildcardExtends(final Declaration d) {
+		int count = 0;
+
+		for (int i = 0; i < d.getGenericParametersCount(); i++)
+			count += usesGenericsWildcardSuper(d.getGenericParameters(i));
+
+		for (int i = 0; i < d.getParentsCount(); i++)
+			count += usesGenericsWildcardExtends(d.getParents(i));
+
+		for (int i = 0; i < d.getMethodsCount(); i++)
+			count += usesGenericsWildcardExtends(d.getMethods(i));
+
+		for (int i = 0; i < d.getFieldsCount(); i++)
+			count += usesGenericsWildcardExtends(d.getFields(i));
+
+		for (int i = 0; i < d.getNestedDeclarationsCount(); i++)
+			count += usesGenericsWildcardExtends(d.getNestedDeclarations(i));
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_generics_wildcard_extends", returnType = "int", formalParameters = { "Method" })
+	public static int usesGenericsWildcardExtends(final Method m) {
+		int count = 0;
+
+		for (int i = 0; i < m.getGenericParametersCount(); i++)
+			count += usesGenericsWildcardSuper(m.getGenericParameters(i));
+
+		count += usesGenericsWildcardExtends(m.getReturnType());
+
+		for (int i = 0; i < m.getExceptionTypesCount(); i++)
+			count += usesGenericsWildcardExtends(m.getExceptionTypes(i));
+
+		for (int i = 0; i < m.getArgumentsCount(); i++)
+			count += usesGenericsWildcardExtends(m.getArguments(i));
+
+		for (int i = 0; i < m.getStatementsCount(); i++)
+			count += usesGenericsWildcardExtends(m.getStatements(i));
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_generics_wildcard_extends", returnType = "int", formalParameters = { "Variable" })
+	public static int usesGenericsWildcardExtends(final Variable v) {
+		int count = 0;
+
+		count += usesGenericsWildcardExtends(v.getVariableType());
+
+		if (v.hasInitializer())
+			count += usesGenericsWildcardExtends(v.getInitializer());
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_generics_wildcard_extends", returnType = "int", formalParameters = { "Statement" })
+	public static int usesGenericsWildcardExtends(final Statement s) {
+		int count = 0;
+
+		if (s.hasCondition())
+			count += usesGenericsWildcardExtends(s.getCondition());
+
+		if (s.hasVariableDeclaration())
+			count += usesGenericsWildcardExtends(s.getVariableDeclaration());
+
+		if (s.hasTypeDeclaration())
+			count += usesGenericsWildcardExtends(s.getTypeDeclaration());
+
+		if (s.hasExpression())
+			count += usesGenericsWildcardExtends(s.getExpression());
+
+		for (int i = 0; i < s.getStatementsCount(); i++)
+			count += usesGenericsWildcardExtends(s.getStatements(i));
+
+		for (int i = 0; i < s.getInitializationsCount(); i++)
+			count += usesGenericsWildcardExtends(s.getInitializations(i));
+
+		for (int i = 0; i < s.getUpdatesCount(); i++)
+			count += usesGenericsWildcardExtends(s.getUpdates(i));
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_generics_wildcard_extends", returnType = "int", formalParameters = { "Expression" })
+	public static int usesGenericsWildcardExtends(final Expression e) {
+		int count = 0;
+
+		for (int i = 0; i < e.getGenericParametersCount(); i++)
+			count += usesGenericsWildcardSuper(e.getGenericParameters(i));
+
+		if (e.hasNewType())
+			count += usesGenericsWildcardExtends(e.getNewType());
+
+		for (int i = 0; i < e.getVariableDeclsCount(); i++)
+			count += usesGenericsWildcardExtends(e.getVariableDecls(i));
+
+		for (int i = 0; i < e.getExpressionsCount(); i++)
+			count += usesGenericsWildcardExtends(e.getExpressions(i));
+
+		for (int i = 0; i < e.getMethodArgsCount(); i++)
+			count += usesGenericsWildcardExtends(e.getMethodArgs(i));
+
+		return count;
+	}
+
+	private static Matcher wildcardExtendsMatcher = Pattern.compile("<\\s*\\?\\s+extends\\s+[^>]+>").matcher("");
+
+	@FunctionSpec(name = "uses_generics_wildcard_extends", returnType = "int", formalParameters = { "Type" })
+	public static int usesGenericsWildcardExtends(final Type t) {
+		int count = 0;
+
+		if (wildcardExtendsMatcher.reset(t.getName()).matches())
+			count++;
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_generics_wildcard", returnType = "int", formalParameters = { "CodeRepository" })
+	public static int usesGenericsWildcard(final CodeRepository r) {
+		int count = 0;
+
+		for (int i = 0; i < r.getRevisionsCount(); i++)
+			count += usesGenericsWildcard(r.getRevisions(i));
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_generics_wildcard", returnType = "int", formalParameters = { "Revision" })
+	public static int usesGenericsWildcard(final Revision r) {
+		int count = 0;
+
+		for (int i = 0; i < r.getFilesCount(); i++)
+			count += usesGenericsWildcard(r.getFiles(i));
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_generics_wildcard", returnType = "int", formalParameters = { "File" })
+	public static int usesGenericsWildcard(final ChangedFile f) {
+		int count = 0;
+
+		for (int i = 0; i < f.getNamespacesCount(); i++)
+			for (int j = 0; j < f.getNamespaces(i).getDeclarationsCount(); j++)
+				count += usesGenericsWildcard(f.getNamespaces(i).getDeclarations(j));
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_generics_wildcard", returnType = "int", formalParameters = { "Declaration" })
+	public static int usesGenericsWildcard(final Declaration d) {
+		int count = 0;
+
+		for (int i = 0; i < d.getGenericParametersCount(); i++)
+			count += usesGenericsWildcardSuper(d.getGenericParameters(i));
+
+		for (int i = 0; i < d.getParentsCount(); i++)
+			count += usesGenericsWildcard(d.getParents(i));
+
+		for (int i = 0; i < d.getMethodsCount(); i++)
+			count += usesGenericsWildcard(d.getMethods(i));
+
+		for (int i = 0; i < d.getFieldsCount(); i++)
+			count += usesGenericsWildcard(d.getFields(i));
+
+		for (int i = 0; i < d.getNestedDeclarationsCount(); i++)
+			count += usesGenericsWildcard(d.getNestedDeclarations(i));
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_generics_wildcard", returnType = "int", formalParameters = { "Method" })
+	public static int usesGenericsWildcard(final Method m) {
+		int count = 0;
+
+		for (int i = 0; i < m.getGenericParametersCount(); i++)
+			count += usesGenericsWildcardSuper(m.getGenericParameters(i));
+
+		count += usesGenericsWildcard(m.getReturnType());
+
+		for (int i = 0; i < m.getExceptionTypesCount(); i++)
+			count += usesGenericsWildcard(m.getExceptionTypes(i));
+
+		for (int i = 0; i < m.getArgumentsCount(); i++)
+			count += usesGenericsWildcard(m.getArguments(i));
+
+		for (int i = 0; i < m.getStatementsCount(); i++)
+			count += usesGenericsWildcard(m.getStatements(i));
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_generics_wildcard", returnType = "int", formalParameters = { "Variable" })
+	public static int usesGenericsWildcard(final Variable v) {
+		int count = 0;
+
+		count += usesGenericsWildcard(v.getVariableType());
+
+		if (v.hasInitializer())
+			count += usesGenericsWildcard(v.getInitializer());
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_generics_wildcard", returnType = "int", formalParameters = { "Statement" })
+	public static int usesGenericsWildcard(final Statement s) {
+		int count = 0;
+
+		if (s.hasCondition())
+			count += usesGenericsWildcard(s.getCondition());
+
+		if (s.hasVariableDeclaration())
+			count += usesGenericsWildcard(s.getVariableDeclaration());
+
+		if (s.hasTypeDeclaration())
+			count += usesGenericsWildcard(s.getTypeDeclaration());
+
+		if (s.hasExpression())
+			count += usesGenericsWildcard(s.getExpression());
+
+		for (int i = 0; i < s.getStatementsCount(); i++)
+			count += usesGenericsWildcard(s.getStatements(i));
+
+		for (int i = 0; i < s.getInitializationsCount(); i++)
+			count += usesGenericsWildcard(s.getInitializations(i));
+
+		for (int i = 0; i < s.getUpdatesCount(); i++)
+			count += usesGenericsWildcard(s.getUpdates(i));
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_generics_wildcard", returnType = "int", formalParameters = { "Expression" })
+	public static int usesGenericsWildcard(final Expression e) {
+		int count = 0;
+
+		for (int i = 0; i < e.getGenericParametersCount(); i++)
+			count += usesGenericsWildcardSuper(e.getGenericParameters(i));
+
+		if (e.hasNewType())
+			count += usesGenericsWildcard(e.getNewType());
+
+		for (int i = 0; i < e.getVariableDeclsCount(); i++)
+			count += usesGenericsWildcard(e.getVariableDecls(i));
+
+		for (int i = 0; i < e.getExpressionsCount(); i++)
+			count += usesGenericsWildcard(e.getExpressions(i));
+
+		for (int i = 0; i < e.getMethodArgsCount(); i++)
+			count += usesGenericsWildcard(e.getMethodArgs(i));
+
+		return count;
+	}
+
+	private static Matcher wildcardMatcher = Pattern.compile("<\\s*\\?\\s*>").matcher("");
+
+	@FunctionSpec(name = "uses_generics_wildcard", returnType = "int", formalParameters = { "Type" })
+	public static int usesGenericsWildcard(final Type t) {
+		int count = 0;
+
+		if (wildcardMatcher.reset(t.getName()).matches())
+			count++;
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_annotations_define", returnType = "int", formalParameters = { "CodeRepository" })
+	public static int usesAnnotationsDefine(final CodeRepository r) {
+		int count = 0;
+
+		for (int i = 0; i < r.getRevisionsCount(); i++)
+			count += usesAnnotationsDefine(r.getRevisions(i));
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_annotations_define", returnType = "int", formalParameters = { "Revision" })
+	public static int usesAnnotationsDefine(final Revision r) {
+		int count = 0;
+
+		for (int i = 0; i < r.getFilesCount(); i++)
+			count += usesAnnotationsDefine(r.getFiles(i));
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_annotations_define", returnType = "int", formalParameters = { "File" })
+	public static int usesAnnotationsDefine(final ChangedFile f) {
+		int count = 0;
+
+		for (int i = 0; i < f.getNamespacesCount(); i++)
+			for (int j = 0; j < f.getNamespaces(i).getDeclarationsCount(); j++)
+				count += usesAnnotationsDefine(f.getNamespaces(i).getDeclarations(j));
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_annotations_define", returnType = "int", formalParameters = { "Declaration" })
+	public static int usesAnnotationsDefine(final Declaration d) {
+		int count = 0;
+
+		if (d.getKind() == TypeKind.ANNOTATION)
+			count++;
+
+		for (int i = 0; i < d.getMethodsCount(); i++)
+			count += usesAnnotationsDefine(d.getMethods(i));
+
+		for (int i = 0; i < d.getFieldsCount(); i++)
+			count += usesAnnotationsDefine(d.getFields(i));
+
+		for (int i = 0; i < d.getNestedDeclarationsCount(); i++)
+			count += usesAnnotationsDefine(d.getNestedDeclarations(i));
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_annotations_define", returnType = "int", formalParameters = { "Method" })
+	public static int usesAnnotationsDefine(final Method m) {
+		int count = 0;
+
+		for (int i = 0; i < m.getArgumentsCount(); i++)
+			count += usesAnnotationsDefine(m.getArguments(i));
+
+		for (int i = 0; i < m.getStatementsCount(); i++)
+			count += usesAnnotationsDefine(m.getStatements(i));
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_annotations_define", returnType = "int", formalParameters = { "Variable" })
+	public static int usesAnnotationsDefine(final Variable v) {
+		int count = 0;
+
+		if (v.hasInitializer())
+			count += usesAnnotationsDefine(v.getInitializer());
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_annotations_define", returnType = "int", formalParameters = { "Statement" })
+	public static int usesAnnotationsDefine(final Statement s) {
+		int count = 0;
+
+		if (s.hasCondition())
+			count += usesAnnotationsDefine(s.getCondition());
+
+		if (s.hasVariableDeclaration())
+			count += usesAnnotationsDefine(s.getVariableDeclaration());
+
+		if (s.hasTypeDeclaration())
+			count += usesAnnotationsDefine(s.getTypeDeclaration());
+
+		if (s.hasExpression())
+			count += usesAnnotationsDefine(s.getExpression());
+
+		for (int i = 0; i < s.getStatementsCount(); i++)
+			count += usesAnnotationsDefine(s.getStatements(i));
+
+		for (int i = 0; i < s.getInitializationsCount(); i++)
+			count += usesAnnotationsDefine(s.getInitializations(i));
+
+		for (int i = 0; i < s.getUpdatesCount(); i++)
+			count += usesAnnotationsDefine(s.getUpdates(i));
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_annotations_define", returnType = "int", formalParameters = { "Expression" })
+	public static int usesAnnotationsDefine(final Expression e) {
+		int count = 0;
+
+		for (int i = 0; i < e.getVariableDeclsCount(); i++)
+			count += usesAnnotationsDefine(e.getVariableDecls(i));
+
+		for (int i = 0; i < e.getExpressionsCount(); i++)
+			count += usesAnnotationsDefine(e.getExpressions(i));
+
+		for (int i = 0; i < e.getMethodArgsCount(); i++)
+			count += usesAnnotationsDefine(e.getMethodArgs(i));
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_annotations_uses", returnType = "int", formalParameters = { "CodeRepository" })
+	public static int usesAnnotationsUses(final CodeRepository r) {
+		int count = 0;
+
+		for (int i = 0; i < r.getRevisionsCount(); i++)
+			count += usesAnnotationsUses(r.getRevisions(i));
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_annotations_uses", returnType = "int", formalParameters = { "Revision" })
+	public static int usesAnnotationsUses(final Revision r) {
+		int count = 0;
+
+		for (int i = 0; i < r.getFilesCount(); i++)
+			count += usesAnnotationsUses(r.getFiles(i));
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_annotations_uses", returnType = "int", formalParameters = { "File" })
+	public static int usesAnnotationsUses(final ChangedFile f) {
 		int count = 0;
 
 		for (int i = 0; i < f.getNamespacesCount(); i++)
@@ -726,100 +1503,100 @@ public class BoaJavaFeaturesIntrinsics {
 				if (BoaModifierIntrinsics.hasAnnotation(f.getNamespaces(i)))
 					count++;
 
-				count += usesAnnotations(f.getNamespaces(i).getDeclarations(j));
+				count += usesAnnotationsUses(f.getNamespaces(i).getDeclarations(j));
 			}
 
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_annotations", returnType = "int", formalParameters = { "Declaration" })
-	public static int usesAnnotations(final Declaration d) {
+	@FunctionSpec(name = "uses_annotations_uses", returnType = "int", formalParameters = { "Declaration" })
+	public static int usesAnnotationsUses(final Declaration d) {
 		int count = 0;
 
 		if (BoaModifierIntrinsics.hasAnnotation(d))
 			count++;
 
 		for (int i = 0; i < d.getMethodsCount(); i++)
-			count += usesAnnotations(d.getMethods(i));
+			count += usesAnnotationsUses(d.getMethods(i));
 
 		for (int i = 0; i < d.getFieldsCount(); i++)
-			count += usesAnnotations(d.getFields(i));
+			count += usesAnnotationsUses(d.getFields(i));
 
 		for (int i = 0; i < d.getNestedDeclarationsCount(); i++)
-			count += usesAnnotations(d.getNestedDeclarations(i));
+			count += usesAnnotationsUses(d.getNestedDeclarations(i));
 
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_annotations", returnType = "int", formalParameters = { "Method" })
-	public static int usesAnnotations(final Method m) {
+	@FunctionSpec(name = "uses_annotations_uses", returnType = "int", formalParameters = { "Method" })
+	public static int usesAnnotationsUses(final Method m) {
 		int count = 0;
 
 		if (BoaModifierIntrinsics.hasAnnotation(m))
 			count++;
 
 		for (int i = 0; i < m.getArgumentsCount(); i++)
-			count += usesAnnotations(m.getArguments(i));
+			count += usesAnnotationsUses(m.getArguments(i));
 
 		for (int i = 0; i < m.getStatementsCount(); i++)
-			count += usesAnnotations(m.getStatements(i));
+			count += usesAnnotationsUses(m.getStatements(i));
 
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_annotations", returnType = "int", formalParameters = { "Variable" })
-	public static int usesAnnotations(final Variable v) {
+	@FunctionSpec(name = "uses_annotations_uses", returnType = "int", formalParameters = { "Variable" })
+	public static int usesAnnotationsUses(final Variable v) {
 		int count = 0;
 
 		if (BoaModifierIntrinsics.hasAnnotation(v))
 			count++;
 
 		if (v.hasInitializer())
-			count += usesAnnotations(v.getInitializer());
+			count += usesAnnotationsUses(v.getInitializer());
 
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_annotations", returnType = "int", formalParameters = { "Statement" })
-	public static int usesAnnotations(final Statement s) {
+	@FunctionSpec(name = "uses_annotations_uses", returnType = "int", formalParameters = { "Statement" })
+	public static int usesAnnotationsUses(final Statement s) {
 		int count = 0;
 
 		if (s.hasCondition())
-			count += usesAnnotations(s.getCondition());
+			count += usesAnnotationsUses(s.getCondition());
 
 		if (s.hasVariableDeclaration())
-			count += usesAnnotations(s.getVariableDeclaration());
+			count += usesAnnotationsUses(s.getVariableDeclaration());
 
 		if (s.hasTypeDeclaration())
-			count += usesAnnotations(s.getTypeDeclaration());
+			count += usesAnnotationsUses(s.getTypeDeclaration());
 
 		if (s.hasExpression())
-			count += usesAnnotations(s.getExpression());
+			count += usesAnnotationsUses(s.getExpression());
 
 		for (int i = 0; i < s.getStatementsCount(); i++)
-			count += usesAnnotations(s.getStatements(i));
+			count += usesAnnotationsUses(s.getStatements(i));
 
 		for (int i = 0; i < s.getInitializationsCount(); i++)
-			count += usesAnnotations(s.getInitializations(i));
+			count += usesAnnotationsUses(s.getInitializations(i));
 
 		for (int i = 0; i < s.getUpdatesCount(); i++)
-			count += usesAnnotations(s.getUpdates(i));
+			count += usesAnnotationsUses(s.getUpdates(i));
 
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_annotations", returnType = "int", formalParameters = { "Expression" })
-	public static int usesAnnotations(final Expression e) {
+	@FunctionSpec(name = "uses_annotations_uses", returnType = "int", formalParameters = { "Expression" })
+	public static int usesAnnotationsUses(final Expression e) {
 		int count = 0;
 
 		for (int i = 0; i < e.getVariableDeclsCount(); i++)
-			count += usesAnnotations(e.getVariableDecls(i));
+			count += usesAnnotationsUses(e.getVariableDecls(i));
 
 		for (int i = 0; i < e.getExpressionsCount(); i++)
-			count += usesAnnotations(e.getExpressions(i));
+			count += usesAnnotationsUses(e.getExpressions(i));
 
 		for (int i = 0; i < e.getMethodArgsCount(); i++)
-			count += usesAnnotations(e.getMethodArgs(i));
+			count += usesAnnotationsUses(e.getMethodArgs(i));
 
 		return count;
 	}
@@ -845,7 +1622,7 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_multi_catch", returnType = "int", formalParameters = { "File" })
-	public static int usesMultiCatch(final File f) {
+	public static int usesMultiCatch(final ChangedFile f) {
 		int count = 0;
 
 		for (int i = 0; i < f.getNamespacesCount(); i++)
@@ -962,7 +1739,7 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_binary_lit", returnType = "int", formalParameters = { "File" })
-	public static int usesBinaryLit(final File f) {
+	public static int usesBinaryLit(final ChangedFile f) {
 		int count = 0;
 
 		for (int i = 0; i < f.getNamespacesCount(); i++)
@@ -1084,7 +1861,7 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_underscore_lit", returnType = "int", formalParameters = { "File" })
-	public static int usesUnderscoreLit(final File f) {
+	public static int usesUnderscoreLit(final ChangedFile f) {
 		int count = 0;
 
 		for (int i = 0; i < f.getNamespacesCount(); i++)
@@ -1207,7 +1984,7 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_diamond", returnType = "int", formalParameters = { "File" })
-	public static int usesDiamond(final File f) {
+	public static int usesDiamond(final ChangedFile f) {
 		int count = 0;
 
 		for (int i = 0; i < f.getNamespacesCount(); i++)
@@ -1306,6 +2083,146 @@ public class BoaJavaFeaturesIntrinsics {
 
 		if (t.getName().contains("<>"))
 			count++;
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_safe_varargs", returnType = "int", formalParameters = { "CodeRepository" })
+	public static int usesSafeVarargs(final CodeRepository r) {
+		int count = 0;
+
+		for (int i = 0; i < r.getRevisionsCount(); i++)
+			count += usesSafeVarargs(r.getRevisions(i));
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_safe_varargs", returnType = "int", formalParameters = { "Revision" })
+	public static int usesSafeVarargs(final Revision r) {
+		int count = 0;
+
+		for (int i = 0; i < r.getFilesCount(); i++)
+			count += usesSafeVarargs(r.getFiles(i));
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_safe_varargs", returnType = "int", formalParameters = { "File" })
+	public static int usesSafeVarargs(final ChangedFile f) {
+		int count = 0;
+
+		for (int i = 0; i < f.getNamespacesCount(); i++)
+			for (int j = 0; j < f.getNamespaces(i).getDeclarationsCount(); j++)
+				count += usesSafeVarargs(f.getNamespaces(i).getDeclarations(j));
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_safe_varargs", returnType = "int", formalParameters = { "Declaration" })
+	public static int usesSafeVarargs(final Declaration d) {
+		int count = 0;
+
+		for (int i = 0; i < d.getMethodsCount(); i++)
+			count += usesSafeVarargs(d.getMethods(i));
+
+		for (int i = 0; i < d.getFieldsCount(); i++)
+			count += usesSafeVarargs(d.getFields(i));
+
+		for (int i = 0; i < d.getNestedDeclarationsCount(); i++)
+			count += usesSafeVarargs(d.getNestedDeclarations(i));
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_safe_varargs", returnType = "int", formalParameters = { "Method" })
+	public static int usesSafeVarargs(final Method m) {
+		int count = 0;
+
+		// @SafeVarargs
+		if (BoaModifierIntrinsics.hasAnnotation(m, "SafeVarargs"))
+			count++;
+
+		// @SuppressWarnings({"unchecked", "varargs"})
+		Modifier mod = BoaModifierIntrinsics.getAnnotation(m, "SuppressWarnings");
+		if (mod != null)
+			for (int i = 0; i < mod.getAnnotationMembersCount(); i++)
+				if (mod.getAnnotationMembers(i).equals("value")) {
+					Expression e = mod.getAnnotationValues(i);
+					if (e.getKind() == ExpressionKind.ARRAYINIT) {
+						boolean foundUnchecked = false, foundVarargs = false;
+						for (int j = 0; j < e.getExpressionsCount(); j++)
+							if (e.getExpressions(j).getKind() == ExpressionKind.LITERAL) {
+								if (e.getExpressions(j).getLiteral().equals("unchecked"))
+									foundUnchecked = true;
+								if (e.getExpressions(j).getLiteral().equals("varargs"))
+									foundVarargs = true;
+							}
+						// TODO verify this works
+						if (foundUnchecked && foundVarargs)
+							count++;
+					}
+					break;
+				}
+
+		for (int i = 0; i < m.getArgumentsCount(); i++)
+			count += usesSafeVarargs(m.getArguments(i));
+
+		for (int i = 0; i < m.getStatementsCount(); i++)
+			count += usesSafeVarargs(m.getStatements(i));
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_safe_varargs", returnType = "int", formalParameters = { "Variable" })
+	public static int usesSafeVarargs(final Variable v) {
+		int count = 0;
+
+		if (v.hasInitializer())
+			count += usesSafeVarargs(v.getInitializer());
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_safe_varargs", returnType = "int", formalParameters = { "Statement" })
+	public static int usesSafeVarargs(final Statement s) {
+		int count = 0;
+
+		if (s.hasCondition())
+			count += usesSafeVarargs(s.getCondition());
+
+		if (s.hasVariableDeclaration())
+			count += usesSafeVarargs(s.getVariableDeclaration());
+
+		if (s.hasTypeDeclaration())
+			count += usesSafeVarargs(s.getTypeDeclaration());
+
+		if (s.hasExpression())
+			count += usesSafeVarargs(s.getExpression());
+
+		for (int i = 0; i < s.getStatementsCount(); i++)
+			count += usesSafeVarargs(s.getStatements(i));
+
+		for (int i = 0; i < s.getInitializationsCount(); i++)
+			count += usesSafeVarargs(s.getInitializations(i));
+
+		for (int i = 0; i < s.getUpdatesCount(); i++)
+			count += usesSafeVarargs(s.getUpdates(i));
+
+		return count;
+	}
+
+	@FunctionSpec(name = "uses_safe_varargs", returnType = "int", formalParameters = { "Expression" })
+	public static int usesSafeVarargs(final Expression e) {
+		int count = 0;
+
+		for (int i = 0; i < e.getVariableDeclsCount(); i++)
+			count += usesSafeVarargs(e.getVariableDecls(i));
+
+		for (int i = 0; i < e.getExpressionsCount(); i++)
+			count += usesSafeVarargs(e.getExpressions(i));
+
+		for (int i = 0; i < e.getMethodArgsCount(); i++)
+			count += usesSafeVarargs(e.getMethodArgs(i));
 
 		return count;
 	}

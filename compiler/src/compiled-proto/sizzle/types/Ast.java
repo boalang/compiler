@@ -98,929 +98,6 @@ public final class Ast {
     // @@protoc_insertion_point(enum_scope:sizzle.types.TypeKind)
   }
   
-  public interface FileOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
-    
-    // required string name = 1;
-    boolean hasName();
-    String getName();
-    
-    // required .sizzle.types.File.FileKind kind = 2;
-    boolean hasKind();
-    sizzle.types.Ast.File.FileKind getKind();
-    
-    // repeated .sizzle.types.Namespace namespaces = 4;
-    java.util.List<sizzle.types.Ast.Namespace> 
-        getNamespacesList();
-    sizzle.types.Ast.Namespace getNamespaces(int index);
-    int getNamespacesCount();
-    java.util.List<? extends sizzle.types.Ast.NamespaceOrBuilder> 
-        getNamespacesOrBuilderList();
-    sizzle.types.Ast.NamespaceOrBuilder getNamespacesOrBuilder(
-        int index);
-    
-    // optional string content = 5;
-    boolean hasContent();
-    String getContent();
-  }
-  public static final class File extends
-      com.google.protobuf.GeneratedMessage
-      implements FileOrBuilder {
-    // Use File.newBuilder() to construct.
-    private File(Builder builder) {
-      super(builder);
-    }
-    private File(boolean noInit) {}
-    
-    private static final File defaultInstance;
-    public static File getDefaultInstance() {
-      return defaultInstance;
-    }
-    
-    public File getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-    
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return sizzle.types.Ast.internal_static_sizzle_types_File_descriptor;
-    }
-    
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return sizzle.types.Ast.internal_static_sizzle_types_File_fieldAccessorTable;
-    }
-    
-    public enum FileKind
-        implements com.google.protobuf.ProtocolMessageEnum {
-      UNKNOWN(0, 1),
-      BINARY(1, 2),
-      TEXT(2, 3),
-      XML(3, 4),
-      SOURCE_JAVA_ERROR(4, 5),
-      SOURCE_JAVA_JLS2(5, 6),
-      SOURCE_JAVA_JLS3(6, 7),
-      SOURCE_JAVA_JLS4(7, 8),
-      ;
-      
-      public static final int UNKNOWN_VALUE = 1;
-      public static final int BINARY_VALUE = 2;
-      public static final int TEXT_VALUE = 3;
-      public static final int XML_VALUE = 4;
-      public static final int SOURCE_JAVA_ERROR_VALUE = 5;
-      public static final int SOURCE_JAVA_JLS2_VALUE = 6;
-      public static final int SOURCE_JAVA_JLS3_VALUE = 7;
-      public static final int SOURCE_JAVA_JLS4_VALUE = 8;
-      
-      
-      public final int getNumber() { return value; }
-      
-      public static FileKind valueOf(int value) {
-        switch (value) {
-          case 1: return UNKNOWN;
-          case 2: return BINARY;
-          case 3: return TEXT;
-          case 4: return XML;
-          case 5: return SOURCE_JAVA_ERROR;
-          case 6: return SOURCE_JAVA_JLS2;
-          case 7: return SOURCE_JAVA_JLS3;
-          case 8: return SOURCE_JAVA_JLS4;
-          default: return null;
-        }
-      }
-      
-      public static com.google.protobuf.Internal.EnumLiteMap<FileKind>
-          internalGetValueMap() {
-        return internalValueMap;
-      }
-      private static com.google.protobuf.Internal.EnumLiteMap<FileKind>
-          internalValueMap =
-            new com.google.protobuf.Internal.EnumLiteMap<FileKind>() {
-              public FileKind findValueByNumber(int number) {
-                return FileKind.valueOf(number);
-              }
-            };
-      
-      public final com.google.protobuf.Descriptors.EnumValueDescriptor
-          getValueDescriptor() {
-        return getDescriptor().getValues().get(index);
-      }
-      public final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptorForType() {
-        return getDescriptor();
-      }
-      public static final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptor() {
-        return sizzle.types.Ast.File.getDescriptor().getEnumTypes().get(0);
-      }
-      
-      private static final FileKind[] VALUES = {
-        UNKNOWN, BINARY, TEXT, XML, SOURCE_JAVA_ERROR, SOURCE_JAVA_JLS2, SOURCE_JAVA_JLS3, SOURCE_JAVA_JLS4, 
-      };
-      
-      public static FileKind valueOf(
-          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
-        if (desc.getType() != getDescriptor()) {
-          throw new java.lang.IllegalArgumentException(
-            "EnumValueDescriptor is not for this type.");
-        }
-        return VALUES[desc.getIndex()];
-      }
-      
-      private final int index;
-      private final int value;
-      
-      private FileKind(int index, int value) {
-        this.index = index;
-        this.value = value;
-      }
-      
-      // @@protoc_insertion_point(enum_scope:sizzle.types.File.FileKind)
-    }
-    
-    private int bitField0_;
-    // required string name = 1;
-    public static final int NAME_FIELD_NUMBER = 1;
-    private java.lang.Object name_;
-    public boolean hasName() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    public String getName() {
-      java.lang.Object ref = name_;
-      if (ref instanceof String) {
-        return (String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
-          name_ = s;
-        }
-        return s;
-      }
-    }
-    private com.google.protobuf.ByteString getNameBytes() {
-      java.lang.Object ref = name_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
-        name_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-    
-    // required .sizzle.types.File.FileKind kind = 2;
-    public static final int KIND_FIELD_NUMBER = 2;
-    private sizzle.types.Ast.File.FileKind kind_;
-    public boolean hasKind() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    public sizzle.types.Ast.File.FileKind getKind() {
-      return kind_;
-    }
-    
-    // repeated .sizzle.types.Namespace namespaces = 4;
-    public static final int NAMESPACES_FIELD_NUMBER = 4;
-    private java.util.List<sizzle.types.Ast.Namespace> namespaces_;
-    public java.util.List<sizzle.types.Ast.Namespace> getNamespacesList() {
-      return namespaces_;
-    }
-    public java.util.List<? extends sizzle.types.Ast.NamespaceOrBuilder> 
-        getNamespacesOrBuilderList() {
-      return namespaces_;
-    }
-    public int getNamespacesCount() {
-      return namespaces_.size();
-    }
-    public sizzle.types.Ast.Namespace getNamespaces(int index) {
-      return namespaces_.get(index);
-    }
-    public sizzle.types.Ast.NamespaceOrBuilder getNamespacesOrBuilder(
-        int index) {
-      return namespaces_.get(index);
-    }
-    
-    // optional string content = 5;
-    public static final int CONTENT_FIELD_NUMBER = 5;
-    private java.lang.Object content_;
-    public boolean hasContent() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
-    }
-    public String getContent() {
-      java.lang.Object ref = content_;
-      if (ref instanceof String) {
-        return (String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
-          content_ = s;
-        }
-        return s;
-      }
-    }
-    private com.google.protobuf.ByteString getContentBytes() {
-      java.lang.Object ref = content_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
-        content_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-    
-    private void initFields() {
-      name_ = "";
-      kind_ = sizzle.types.Ast.File.FileKind.UNKNOWN;
-      namespaces_ = java.util.Collections.emptyList();
-      content_ = "";
-    }
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
-      
-      if (!hasName()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasKind()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      for (int i = 0; i < getNamespacesCount(); i++) {
-        if (!getNamespaces(i).isInitialized()) {
-          memoizedIsInitialized = 0;
-          return false;
-        }
-      }
-      memoizedIsInitialized = 1;
-      return true;
-    }
-    
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeBytes(1, getNameBytes());
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeEnum(2, kind_.getNumber());
-      }
-      for (int i = 0; i < namespaces_.size(); i++) {
-        output.writeMessage(4, namespaces_.get(i));
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeBytes(5, getContentBytes());
-      }
-      getUnknownFields().writeTo(output);
-    }
-    
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-    
-      size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(1, getNameBytes());
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(2, kind_.getNumber());
-      }
-      for (int i = 0; i < namespaces_.size(); i++) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(4, namespaces_.get(i));
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(5, getContentBytes());
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-    
-    private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
-    }
-    
-    public static sizzle.types.Ast.File parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
-    }
-    public static sizzle.types.Ast.File parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
-    }
-    public static sizzle.types.Ast.File parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
-    }
-    public static sizzle.types.Ast.File parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
-    }
-    public static sizzle.types.Ast.File parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
-    }
-    public static sizzle.types.Ast.File parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
-    }
-    public static sizzle.types.Ast.File parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
-    }
-    public static sizzle.types.Ast.File parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
-    }
-    public static sizzle.types.Ast.File parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
-    }
-    public static sizzle.types.Ast.File parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
-    }
-    
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(sizzle.types.Ast.File prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-    
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements sizzle.types.Ast.FileOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return sizzle.types.Ast.internal_static_sizzle_types_File_descriptor;
-      }
-      
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return sizzle.types.Ast.internal_static_sizzle_types_File_fieldAccessorTable;
-      }
-      
-      // Construct using sizzle.types.Ast.File.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-      
-      private Builder(BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-          getNamespacesFieldBuilder();
-        }
-      }
-      private static Builder create() {
-        return new Builder();
-      }
-      
-      public Builder clear() {
-        super.clear();
-        name_ = "";
-        bitField0_ = (bitField0_ & ~0x00000001);
-        kind_ = sizzle.types.Ast.File.FileKind.UNKNOWN;
-        bitField0_ = (bitField0_ & ~0x00000002);
-        if (namespacesBuilder_ == null) {
-          namespaces_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000004);
-        } else {
-          namespacesBuilder_.clear();
-        }
-        content_ = "";
-        bitField0_ = (bitField0_ & ~0x00000008);
-        return this;
-      }
-      
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-      
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return sizzle.types.Ast.File.getDescriptor();
-      }
-      
-      public sizzle.types.Ast.File getDefaultInstanceForType() {
-        return sizzle.types.Ast.File.getDefaultInstance();
-      }
-      
-      public sizzle.types.Ast.File build() {
-        sizzle.types.Ast.File result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-      
-      private sizzle.types.Ast.File buildParsed()
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        sizzle.types.Ast.File result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
-        }
-        return result;
-      }
-      
-      public sizzle.types.Ast.File buildPartial() {
-        sizzle.types.Ast.File result = new sizzle.types.Ast.File(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.name_ = name_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.kind_ = kind_;
-        if (namespacesBuilder_ == null) {
-          if (((bitField0_ & 0x00000004) == 0x00000004)) {
-            namespaces_ = java.util.Collections.unmodifiableList(namespaces_);
-            bitField0_ = (bitField0_ & ~0x00000004);
-          }
-          result.namespaces_ = namespaces_;
-        } else {
-          result.namespaces_ = namespacesBuilder_.build();
-        }
-        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
-          to_bitField0_ |= 0x00000004;
-        }
-        result.content_ = content_;
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
-      }
-      
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof sizzle.types.Ast.File) {
-          return mergeFrom((sizzle.types.Ast.File)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-      
-      public Builder mergeFrom(sizzle.types.Ast.File other) {
-        if (other == sizzle.types.Ast.File.getDefaultInstance()) return this;
-        if (other.hasName()) {
-          setName(other.getName());
-        }
-        if (other.hasKind()) {
-          setKind(other.getKind());
-        }
-        if (namespacesBuilder_ == null) {
-          if (!other.namespaces_.isEmpty()) {
-            if (namespaces_.isEmpty()) {
-              namespaces_ = other.namespaces_;
-              bitField0_ = (bitField0_ & ~0x00000004);
-            } else {
-              ensureNamespacesIsMutable();
-              namespaces_.addAll(other.namespaces_);
-            }
-            onChanged();
-          }
-        } else {
-          if (!other.namespaces_.isEmpty()) {
-            if (namespacesBuilder_.isEmpty()) {
-              namespacesBuilder_.dispose();
-              namespacesBuilder_ = null;
-              namespaces_ = other.namespaces_;
-              bitField0_ = (bitField0_ & ~0x00000004);
-              namespacesBuilder_ = 
-                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
-                   getNamespacesFieldBuilder() : null;
-            } else {
-              namespacesBuilder_.addAllMessages(other.namespaces_);
-            }
-          }
-        }
-        if (other.hasContent()) {
-          setContent(other.getContent());
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-      
-      public final boolean isInitialized() {
-        if (!hasName()) {
-          
-          return false;
-        }
-        if (!hasKind()) {
-          
-          return false;
-        }
-        for (int i = 0; i < getNamespacesCount(); i++) {
-          if (!getNamespaces(i).isInitialized()) {
-            
-            return false;
-          }
-        }
-        return true;
-      }
-      
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
-        while (true) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              this.setUnknownFields(unknownFields.build());
-              onChanged();
-              return this;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                onChanged();
-                return this;
-              }
-              break;
-            }
-            case 10: {
-              bitField0_ |= 0x00000001;
-              name_ = input.readBytes();
-              break;
-            }
-            case 16: {
-              int rawValue = input.readEnum();
-              sizzle.types.Ast.File.FileKind value = sizzle.types.Ast.File.FileKind.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(2, rawValue);
-              } else {
-                bitField0_ |= 0x00000002;
-                kind_ = value;
-              }
-              break;
-            }
-            case 34: {
-              sizzle.types.Ast.Namespace.Builder subBuilder = sizzle.types.Ast.Namespace.newBuilder();
-              input.readMessage(subBuilder, extensionRegistry);
-              addNamespaces(subBuilder.buildPartial());
-              break;
-            }
-            case 42: {
-              bitField0_ |= 0x00000008;
-              content_ = input.readBytes();
-              break;
-            }
-          }
-        }
-      }
-      
-      private int bitField0_;
-      
-      // required string name = 1;
-      private java.lang.Object name_ = "";
-      public boolean hasName() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
-      }
-      public String getName() {
-        java.lang.Object ref = name_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
-          name_ = s;
-          return s;
-        } else {
-          return (String) ref;
-        }
-      }
-      public Builder setName(String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
-        name_ = value;
-        onChanged();
-        return this;
-      }
-      public Builder clearName() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        name_ = getDefaultInstance().getName();
-        onChanged();
-        return this;
-      }
-      void setName(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00000001;
-        name_ = value;
-        onChanged();
-      }
-      
-      // required .sizzle.types.File.FileKind kind = 2;
-      private sizzle.types.Ast.File.FileKind kind_ = sizzle.types.Ast.File.FileKind.UNKNOWN;
-      public boolean hasKind() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      public sizzle.types.Ast.File.FileKind getKind() {
-        return kind_;
-      }
-      public Builder setKind(sizzle.types.Ast.File.FileKind value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        bitField0_ |= 0x00000002;
-        kind_ = value;
-        onChanged();
-        return this;
-      }
-      public Builder clearKind() {
-        bitField0_ = (bitField0_ & ~0x00000002);
-        kind_ = sizzle.types.Ast.File.FileKind.UNKNOWN;
-        onChanged();
-        return this;
-      }
-      
-      // repeated .sizzle.types.Namespace namespaces = 4;
-      private java.util.List<sizzle.types.Ast.Namespace> namespaces_ =
-        java.util.Collections.emptyList();
-      private void ensureNamespacesIsMutable() {
-        if (!((bitField0_ & 0x00000004) == 0x00000004)) {
-          namespaces_ = new java.util.ArrayList<sizzle.types.Ast.Namespace>(namespaces_);
-          bitField0_ |= 0x00000004;
-         }
-      }
-      
-      private com.google.protobuf.RepeatedFieldBuilder<
-          sizzle.types.Ast.Namespace, sizzle.types.Ast.Namespace.Builder, sizzle.types.Ast.NamespaceOrBuilder> namespacesBuilder_;
-      
-      public java.util.List<sizzle.types.Ast.Namespace> getNamespacesList() {
-        if (namespacesBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(namespaces_);
-        } else {
-          return namespacesBuilder_.getMessageList();
-        }
-      }
-      public int getNamespacesCount() {
-        if (namespacesBuilder_ == null) {
-          return namespaces_.size();
-        } else {
-          return namespacesBuilder_.getCount();
-        }
-      }
-      public sizzle.types.Ast.Namespace getNamespaces(int index) {
-        if (namespacesBuilder_ == null) {
-          return namespaces_.get(index);
-        } else {
-          return namespacesBuilder_.getMessage(index);
-        }
-      }
-      public Builder setNamespaces(
-          int index, sizzle.types.Ast.Namespace value) {
-        if (namespacesBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureNamespacesIsMutable();
-          namespaces_.set(index, value);
-          onChanged();
-        } else {
-          namespacesBuilder_.setMessage(index, value);
-        }
-        return this;
-      }
-      public Builder setNamespaces(
-          int index, sizzle.types.Ast.Namespace.Builder builderForValue) {
-        if (namespacesBuilder_ == null) {
-          ensureNamespacesIsMutable();
-          namespaces_.set(index, builderForValue.build());
-          onChanged();
-        } else {
-          namespacesBuilder_.setMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      public Builder addNamespaces(sizzle.types.Ast.Namespace value) {
-        if (namespacesBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureNamespacesIsMutable();
-          namespaces_.add(value);
-          onChanged();
-        } else {
-          namespacesBuilder_.addMessage(value);
-        }
-        return this;
-      }
-      public Builder addNamespaces(
-          int index, sizzle.types.Ast.Namespace value) {
-        if (namespacesBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureNamespacesIsMutable();
-          namespaces_.add(index, value);
-          onChanged();
-        } else {
-          namespacesBuilder_.addMessage(index, value);
-        }
-        return this;
-      }
-      public Builder addNamespaces(
-          sizzle.types.Ast.Namespace.Builder builderForValue) {
-        if (namespacesBuilder_ == null) {
-          ensureNamespacesIsMutable();
-          namespaces_.add(builderForValue.build());
-          onChanged();
-        } else {
-          namespacesBuilder_.addMessage(builderForValue.build());
-        }
-        return this;
-      }
-      public Builder addNamespaces(
-          int index, sizzle.types.Ast.Namespace.Builder builderForValue) {
-        if (namespacesBuilder_ == null) {
-          ensureNamespacesIsMutable();
-          namespaces_.add(index, builderForValue.build());
-          onChanged();
-        } else {
-          namespacesBuilder_.addMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      public Builder addAllNamespaces(
-          java.lang.Iterable<? extends sizzle.types.Ast.Namespace> values) {
-        if (namespacesBuilder_ == null) {
-          ensureNamespacesIsMutable();
-          super.addAll(values, namespaces_);
-          onChanged();
-        } else {
-          namespacesBuilder_.addAllMessages(values);
-        }
-        return this;
-      }
-      public Builder clearNamespaces() {
-        if (namespacesBuilder_ == null) {
-          namespaces_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000004);
-          onChanged();
-        } else {
-          namespacesBuilder_.clear();
-        }
-        return this;
-      }
-      public Builder removeNamespaces(int index) {
-        if (namespacesBuilder_ == null) {
-          ensureNamespacesIsMutable();
-          namespaces_.remove(index);
-          onChanged();
-        } else {
-          namespacesBuilder_.remove(index);
-        }
-        return this;
-      }
-      public sizzle.types.Ast.Namespace.Builder getNamespacesBuilder(
-          int index) {
-        return getNamespacesFieldBuilder().getBuilder(index);
-      }
-      public sizzle.types.Ast.NamespaceOrBuilder getNamespacesOrBuilder(
-          int index) {
-        if (namespacesBuilder_ == null) {
-          return namespaces_.get(index);  } else {
-          return namespacesBuilder_.getMessageOrBuilder(index);
-        }
-      }
-      public java.util.List<? extends sizzle.types.Ast.NamespaceOrBuilder> 
-           getNamespacesOrBuilderList() {
-        if (namespacesBuilder_ != null) {
-          return namespacesBuilder_.getMessageOrBuilderList();
-        } else {
-          return java.util.Collections.unmodifiableList(namespaces_);
-        }
-      }
-      public sizzle.types.Ast.Namespace.Builder addNamespacesBuilder() {
-        return getNamespacesFieldBuilder().addBuilder(
-            sizzle.types.Ast.Namespace.getDefaultInstance());
-      }
-      public sizzle.types.Ast.Namespace.Builder addNamespacesBuilder(
-          int index) {
-        return getNamespacesFieldBuilder().addBuilder(
-            index, sizzle.types.Ast.Namespace.getDefaultInstance());
-      }
-      public java.util.List<sizzle.types.Ast.Namespace.Builder> 
-           getNamespacesBuilderList() {
-        return getNamespacesFieldBuilder().getBuilderList();
-      }
-      private com.google.protobuf.RepeatedFieldBuilder<
-          sizzle.types.Ast.Namespace, sizzle.types.Ast.Namespace.Builder, sizzle.types.Ast.NamespaceOrBuilder> 
-          getNamespacesFieldBuilder() {
-        if (namespacesBuilder_ == null) {
-          namespacesBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              sizzle.types.Ast.Namespace, sizzle.types.Ast.Namespace.Builder, sizzle.types.Ast.NamespaceOrBuilder>(
-                  namespaces_,
-                  ((bitField0_ & 0x00000004) == 0x00000004),
-                  getParentForChildren(),
-                  isClean());
-          namespaces_ = null;
-        }
-        return namespacesBuilder_;
-      }
-      
-      // optional string content = 5;
-      private java.lang.Object content_ = "";
-      public boolean hasContent() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
-      }
-      public String getContent() {
-        java.lang.Object ref = content_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
-          content_ = s;
-          return s;
-        } else {
-          return (String) ref;
-        }
-      }
-      public Builder setContent(String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000008;
-        content_ = value;
-        onChanged();
-        return this;
-      }
-      public Builder clearContent() {
-        bitField0_ = (bitField0_ & ~0x00000008);
-        content_ = getDefaultInstance().getContent();
-        onChanged();
-        return this;
-      }
-      void setContent(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00000008;
-        content_ = value;
-        onChanged();
-      }
-      
-      // @@protoc_insertion_point(builder_scope:sizzle.types.File)
-    }
-    
-    static {
-      defaultInstance = new File(true);
-      defaultInstance.initFields();
-    }
-    
-    // @@protoc_insertion_point(class_scope:sizzle.types.File)
-  }
-  
   public interface NamespaceOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
     
@@ -1057,6 +134,11 @@ public final class Ast {
         getCommentsOrBuilderList();
     sizzle.types.Ast.CommentOrBuilder getCommentsOrBuilder(
         int index);
+    
+    // required .sizzle.types.PositionInfo position = 5;
+    boolean hasPosition();
+    sizzle.types.Ast.PositionInfo getPosition();
+    sizzle.types.Ast.PositionInfoOrBuilder getPositionOrBuilder();
   }
   public static final class Namespace extends
       com.google.protobuf.GeneratedMessage
@@ -1182,11 +264,25 @@ public final class Ast {
       return comments_.get(index);
     }
     
+    // required .sizzle.types.PositionInfo position = 5;
+    public static final int POSITION_FIELD_NUMBER = 5;
+    private sizzle.types.Ast.PositionInfo position_;
+    public boolean hasPosition() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    public sizzle.types.Ast.PositionInfo getPosition() {
+      return position_;
+    }
+    public sizzle.types.Ast.PositionInfoOrBuilder getPositionOrBuilder() {
+      return position_;
+    }
+    
     private void initFields() {
       name_ = "";
       modifiers_ = java.util.Collections.emptyList();
       declarations_ = java.util.Collections.emptyList();
       comments_ = java.util.Collections.emptyList();
+      position_ = sizzle.types.Ast.PositionInfo.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -1194,6 +290,10 @@ public final class Ast {
       if (isInitialized != -1) return isInitialized == 1;
       
       if (!hasName()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasPosition()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -1215,6 +315,10 @@ public final class Ast {
           return false;
         }
       }
+      if (!getPosition().isInitialized()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
       memoizedIsInitialized = 1;
       return true;
     }
@@ -1233,6 +337,9 @@ public final class Ast {
       }
       for (int i = 0; i < comments_.size(); i++) {
         output.writeMessage(4, comments_.get(i));
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeMessage(5, position_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -1258,6 +365,10 @@ public final class Ast {
       for (int i = 0; i < comments_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(4, comments_.get(i));
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(5, position_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1378,6 +489,7 @@ public final class Ast {
           getModifiersFieldBuilder();
           getDeclarationsFieldBuilder();
           getCommentsFieldBuilder();
+          getPositionFieldBuilder();
         }
       }
       private static Builder create() {
@@ -1406,6 +518,12 @@ public final class Ast {
         } else {
           commentsBuilder_.clear();
         }
+        if (positionBuilder_ == null) {
+          position_ = sizzle.types.Ast.PositionInfo.getDefaultInstance();
+        } else {
+          positionBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000010);
         return this;
       }
       
@@ -1474,6 +592,14 @@ public final class Ast {
           result.comments_ = comments_;
         } else {
           result.comments_ = commentsBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        if (positionBuilder_ == null) {
+          result.position_ = position_;
+        } else {
+          result.position_ = positionBuilder_.build();
         }
         result.bitField0_ = to_bitField0_;
         onBuilt();
@@ -1572,12 +698,19 @@ public final class Ast {
             }
           }
         }
+        if (other.hasPosition()) {
+          mergePosition(other.getPosition());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
       
       public final boolean isInitialized() {
         if (!hasName()) {
+          
+          return false;
+        }
+        if (!hasPosition()) {
           
           return false;
         }
@@ -1598,6 +731,10 @@ public final class Ast {
             
             return false;
           }
+        }
+        if (!getPosition().isInitialized()) {
+          
+          return false;
         }
         return true;
       }
@@ -1646,6 +783,15 @@ public final class Ast {
               sizzle.types.Ast.Comment.Builder subBuilder = sizzle.types.Ast.Comment.newBuilder();
               input.readMessage(subBuilder, extensionRegistry);
               addComments(subBuilder.buildPartial());
+              break;
+            }
+            case 42: {
+              sizzle.types.Ast.PositionInfo.Builder subBuilder = sizzle.types.Ast.PositionInfo.newBuilder();
+              if (hasPosition()) {
+                subBuilder.mergeFrom(getPosition());
+              }
+              input.readMessage(subBuilder, extensionRegistry);
+              setPosition(subBuilder.buildPartial());
               break;
             }
           }
@@ -2248,6 +1394,96 @@ public final class Ast {
         return commentsBuilder_;
       }
       
+      // required .sizzle.types.PositionInfo position = 5;
+      private sizzle.types.Ast.PositionInfo position_ = sizzle.types.Ast.PositionInfo.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          sizzle.types.Ast.PositionInfo, sizzle.types.Ast.PositionInfo.Builder, sizzle.types.Ast.PositionInfoOrBuilder> positionBuilder_;
+      public boolean hasPosition() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
+      }
+      public sizzle.types.Ast.PositionInfo getPosition() {
+        if (positionBuilder_ == null) {
+          return position_;
+        } else {
+          return positionBuilder_.getMessage();
+        }
+      }
+      public Builder setPosition(sizzle.types.Ast.PositionInfo value) {
+        if (positionBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          position_ = value;
+          onChanged();
+        } else {
+          positionBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000010;
+        return this;
+      }
+      public Builder setPosition(
+          sizzle.types.Ast.PositionInfo.Builder builderForValue) {
+        if (positionBuilder_ == null) {
+          position_ = builderForValue.build();
+          onChanged();
+        } else {
+          positionBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000010;
+        return this;
+      }
+      public Builder mergePosition(sizzle.types.Ast.PositionInfo value) {
+        if (positionBuilder_ == null) {
+          if (((bitField0_ & 0x00000010) == 0x00000010) &&
+              position_ != sizzle.types.Ast.PositionInfo.getDefaultInstance()) {
+            position_ =
+              sizzle.types.Ast.PositionInfo.newBuilder(position_).mergeFrom(value).buildPartial();
+          } else {
+            position_ = value;
+          }
+          onChanged();
+        } else {
+          positionBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000010;
+        return this;
+      }
+      public Builder clearPosition() {
+        if (positionBuilder_ == null) {
+          position_ = sizzle.types.Ast.PositionInfo.getDefaultInstance();
+          onChanged();
+        } else {
+          positionBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000010);
+        return this;
+      }
+      public sizzle.types.Ast.PositionInfo.Builder getPositionBuilder() {
+        bitField0_ |= 0x00000010;
+        onChanged();
+        return getPositionFieldBuilder().getBuilder();
+      }
+      public sizzle.types.Ast.PositionInfoOrBuilder getPositionOrBuilder() {
+        if (positionBuilder_ != null) {
+          return positionBuilder_.getMessageOrBuilder();
+        } else {
+          return position_;
+        }
+      }
+      private com.google.protobuf.SingleFieldBuilder<
+          sizzle.types.Ast.PositionInfo, sizzle.types.Ast.PositionInfo.Builder, sizzle.types.Ast.PositionInfoOrBuilder> 
+          getPositionFieldBuilder() {
+        if (positionBuilder_ == null) {
+          positionBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              sizzle.types.Ast.PositionInfo, sizzle.types.Ast.PositionInfo.Builder, sizzle.types.Ast.PositionInfoOrBuilder>(
+                  position_,
+                  getParentForChildren(),
+                  isClean());
+          position_ = null;
+        }
+        return positionBuilder_;
+      }
+      
       // @@protoc_insertion_point(builder_scope:sizzle.types.Namespace)
     }
     
@@ -2339,6 +1575,11 @@ public final class Ast {
         getCommentsOrBuilderList();
     sizzle.types.Ast.CommentOrBuilder getCommentsOrBuilder(
         int index);
+    
+    // required .sizzle.types.PositionInfo position = 10;
+    boolean hasPosition();
+    sizzle.types.Ast.PositionInfo getPosition();
+    sizzle.types.Ast.PositionInfoOrBuilder getPositionOrBuilder();
   }
   public static final class Declaration extends
       com.google.protobuf.GeneratedMessage
@@ -2558,6 +1799,19 @@ public final class Ast {
       return comments_.get(index);
     }
     
+    // required .sizzle.types.PositionInfo position = 10;
+    public static final int POSITION_FIELD_NUMBER = 10;
+    private sizzle.types.Ast.PositionInfo position_;
+    public boolean hasPosition() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    public sizzle.types.Ast.PositionInfo getPosition() {
+      return position_;
+    }
+    public sizzle.types.Ast.PositionInfoOrBuilder getPositionOrBuilder() {
+      return position_;
+    }
+    
     private void initFields() {
       name_ = "";
       kind_ = sizzle.types.Ast.TypeKind.CLASS;
@@ -2568,6 +1822,7 @@ public final class Ast {
       fields_ = java.util.Collections.emptyList();
       nestedDeclarations_ = java.util.Collections.emptyList();
       comments_ = java.util.Collections.emptyList();
+      position_ = sizzle.types.Ast.PositionInfo.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -2579,6 +1834,10 @@ public final class Ast {
         return false;
       }
       if (!hasKind()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasPosition()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -2624,6 +1883,10 @@ public final class Ast {
           return false;
         }
       }
+      if (!getPosition().isInitialized()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
       memoizedIsInitialized = 1;
       return true;
     }
@@ -2657,6 +1920,9 @@ public final class Ast {
       }
       for (int i = 0; i < comments_.size(); i++) {
         output.writeMessage(9, comments_.get(i));
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeMessage(10, position_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -2702,6 +1968,10 @@ public final class Ast {
       for (int i = 0; i < comments_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(9, comments_.get(i));
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(10, position_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -2826,6 +2096,7 @@ public final class Ast {
           getFieldsFieldBuilder();
           getNestedDeclarationsFieldBuilder();
           getCommentsFieldBuilder();
+          getPositionFieldBuilder();
         }
       }
       private static Builder create() {
@@ -2880,6 +2151,12 @@ public final class Ast {
         } else {
           commentsBuilder_.clear();
         }
+        if (positionBuilder_ == null) {
+          position_ = sizzle.types.Ast.PositionInfo.getDefaultInstance();
+        } else {
+          positionBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000200);
         return this;
       }
       
@@ -2988,6 +2265,14 @@ public final class Ast {
           result.comments_ = comments_;
         } else {
           result.comments_ = commentsBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        if (positionBuilder_ == null) {
+          result.position_ = position_;
+        } else {
+          result.position_ = positionBuilder_.build();
         }
         result.bitField0_ = to_bitField0_;
         onBuilt();
@@ -3193,6 +2478,9 @@ public final class Ast {
             }
           }
         }
+        if (other.hasPosition()) {
+          mergePosition(other.getPosition());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -3203,6 +2491,10 @@ public final class Ast {
           return false;
         }
         if (!hasKind()) {
+          
+          return false;
+        }
+        if (!hasPosition()) {
           
           return false;
         }
@@ -3247,6 +2539,10 @@ public final class Ast {
             
             return false;
           }
+        }
+        if (!getPosition().isInitialized()) {
+          
+          return false;
         }
         return true;
       }
@@ -3330,6 +2626,15 @@ public final class Ast {
               sizzle.types.Ast.Comment.Builder subBuilder = sizzle.types.Ast.Comment.newBuilder();
               input.readMessage(subBuilder, extensionRegistry);
               addComments(subBuilder.buildPartial());
+              break;
+            }
+            case 82: {
+              sizzle.types.Ast.PositionInfo.Builder subBuilder = sizzle.types.Ast.PositionInfo.newBuilder();
+              if (hasPosition()) {
+                subBuilder.mergeFrom(getPosition());
+              }
+              input.readMessage(subBuilder, extensionRegistry);
+              setPosition(subBuilder.buildPartial());
               break;
             }
           }
@@ -4700,6 +4005,96 @@ public final class Ast {
         return commentsBuilder_;
       }
       
+      // required .sizzle.types.PositionInfo position = 10;
+      private sizzle.types.Ast.PositionInfo position_ = sizzle.types.Ast.PositionInfo.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          sizzle.types.Ast.PositionInfo, sizzle.types.Ast.PositionInfo.Builder, sizzle.types.Ast.PositionInfoOrBuilder> positionBuilder_;
+      public boolean hasPosition() {
+        return ((bitField0_ & 0x00000200) == 0x00000200);
+      }
+      public sizzle.types.Ast.PositionInfo getPosition() {
+        if (positionBuilder_ == null) {
+          return position_;
+        } else {
+          return positionBuilder_.getMessage();
+        }
+      }
+      public Builder setPosition(sizzle.types.Ast.PositionInfo value) {
+        if (positionBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          position_ = value;
+          onChanged();
+        } else {
+          positionBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000200;
+        return this;
+      }
+      public Builder setPosition(
+          sizzle.types.Ast.PositionInfo.Builder builderForValue) {
+        if (positionBuilder_ == null) {
+          position_ = builderForValue.build();
+          onChanged();
+        } else {
+          positionBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000200;
+        return this;
+      }
+      public Builder mergePosition(sizzle.types.Ast.PositionInfo value) {
+        if (positionBuilder_ == null) {
+          if (((bitField0_ & 0x00000200) == 0x00000200) &&
+              position_ != sizzle.types.Ast.PositionInfo.getDefaultInstance()) {
+            position_ =
+              sizzle.types.Ast.PositionInfo.newBuilder(position_).mergeFrom(value).buildPartial();
+          } else {
+            position_ = value;
+          }
+          onChanged();
+        } else {
+          positionBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000200;
+        return this;
+      }
+      public Builder clearPosition() {
+        if (positionBuilder_ == null) {
+          position_ = sizzle.types.Ast.PositionInfo.getDefaultInstance();
+          onChanged();
+        } else {
+          positionBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000200);
+        return this;
+      }
+      public sizzle.types.Ast.PositionInfo.Builder getPositionBuilder() {
+        bitField0_ |= 0x00000200;
+        onChanged();
+        return getPositionFieldBuilder().getBuilder();
+      }
+      public sizzle.types.Ast.PositionInfoOrBuilder getPositionOrBuilder() {
+        if (positionBuilder_ != null) {
+          return positionBuilder_.getMessageOrBuilder();
+        } else {
+          return position_;
+        }
+      }
+      private com.google.protobuf.SingleFieldBuilder<
+          sizzle.types.Ast.PositionInfo, sizzle.types.Ast.PositionInfo.Builder, sizzle.types.Ast.PositionInfoOrBuilder> 
+          getPositionFieldBuilder() {
+        if (positionBuilder_ == null) {
+          positionBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              sizzle.types.Ast.PositionInfo, sizzle.types.Ast.PositionInfo.Builder, sizzle.types.Ast.PositionInfoOrBuilder>(
+                  position_,
+                  getParentForChildren(),
+                  isClean());
+          position_ = null;
+        }
+        return positionBuilder_;
+      }
+      
       // @@protoc_insertion_point(builder_scope:sizzle.types.Declaration)
     }
     
@@ -5333,6 +4728,11 @@ public final class Ast {
         getCommentsOrBuilderList();
     sizzle.types.Ast.CommentOrBuilder getCommentsOrBuilder(
         int index);
+    
+    // required .sizzle.types.PositionInfo position = 9;
+    boolean hasPosition();
+    sizzle.types.Ast.PositionInfo getPosition();
+    sizzle.types.Ast.PositionInfoOrBuilder getPositionOrBuilder();
   }
   public static final class Method extends
       com.google.protobuf.GeneratedMessage
@@ -5534,6 +4934,19 @@ public final class Ast {
       return comments_.get(index);
     }
     
+    // required .sizzle.types.PositionInfo position = 9;
+    public static final int POSITION_FIELD_NUMBER = 9;
+    private sizzle.types.Ast.PositionInfo position_;
+    public boolean hasPosition() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    public sizzle.types.Ast.PositionInfo getPosition() {
+      return position_;
+    }
+    public sizzle.types.Ast.PositionInfoOrBuilder getPositionOrBuilder() {
+      return position_;
+    }
+    
     private void initFields() {
       name_ = "";
       modifiers_ = java.util.Collections.emptyList();
@@ -5543,6 +4956,7 @@ public final class Ast {
       exceptionTypes_ = java.util.Collections.emptyList();
       statements_ = java.util.Collections.emptyList();
       comments_ = java.util.Collections.emptyList();
+      position_ = sizzle.types.Ast.PositionInfo.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -5550,6 +4964,10 @@ public final class Ast {
       if (isInitialized != -1) return isInitialized == 1;
       
       if (!hasReturnType()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasPosition()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -5593,6 +5011,10 @@ public final class Ast {
           return false;
         }
       }
+      if (!getPosition().isInitialized()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
       memoizedIsInitialized = 1;
       return true;
     }
@@ -5623,6 +5045,9 @@ public final class Ast {
       }
       for (int i = 0; i < comments_.size(); i++) {
         output.writeMessage(8, comments_.get(i));
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeMessage(9, position_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -5664,6 +5089,10 @@ public final class Ast {
       for (int i = 0; i < comments_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(8, comments_.get(i));
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(9, position_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -5788,6 +5217,7 @@ public final class Ast {
           getExceptionTypesFieldBuilder();
           getStatementsFieldBuilder();
           getCommentsFieldBuilder();
+          getPositionFieldBuilder();
         }
       }
       private static Builder create() {
@@ -5840,6 +5270,12 @@ public final class Ast {
         } else {
           commentsBuilder_.clear();
         }
+        if (positionBuilder_ == null) {
+          position_ = sizzle.types.Ast.PositionInfo.getDefaultInstance();
+        } else {
+          positionBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000100);
         return this;
       }
       
@@ -5943,6 +5379,14 @@ public final class Ast {
           result.comments_ = comments_;
         } else {
           result.comments_ = commentsBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        if (positionBuilder_ == null) {
+          result.position_ = position_;
+        } else {
+          result.position_ = positionBuilder_.build();
         }
         result.bitField0_ = to_bitField0_;
         onBuilt();
@@ -6122,12 +5566,19 @@ public final class Ast {
             }
           }
         }
+        if (other.hasPosition()) {
+          mergePosition(other.getPosition());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
       
       public final boolean isInitialized() {
         if (!hasReturnType()) {
+          
+          return false;
+        }
+        if (!hasPosition()) {
           
           return false;
         }
@@ -6170,6 +5621,10 @@ public final class Ast {
             
             return false;
           }
+        }
+        if (!getPosition().isInitialized()) {
+          
+          return false;
         }
         return true;
       }
@@ -6245,6 +5700,15 @@ public final class Ast {
               sizzle.types.Ast.Comment.Builder subBuilder = sizzle.types.Ast.Comment.newBuilder();
               input.readMessage(subBuilder, extensionRegistry);
               addComments(subBuilder.buildPartial());
+              break;
+            }
+            case 74: {
+              sizzle.types.Ast.PositionInfo.Builder subBuilder = sizzle.types.Ast.PositionInfo.newBuilder();
+              if (hasPosition()) {
+                subBuilder.mergeFrom(getPosition());
+              }
+              input.readMessage(subBuilder, extensionRegistry);
+              setPosition(subBuilder.buildPartial());
               break;
             }
           }
@@ -7495,6 +6959,96 @@ public final class Ast {
         return commentsBuilder_;
       }
       
+      // required .sizzle.types.PositionInfo position = 9;
+      private sizzle.types.Ast.PositionInfo position_ = sizzle.types.Ast.PositionInfo.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          sizzle.types.Ast.PositionInfo, sizzle.types.Ast.PositionInfo.Builder, sizzle.types.Ast.PositionInfoOrBuilder> positionBuilder_;
+      public boolean hasPosition() {
+        return ((bitField0_ & 0x00000100) == 0x00000100);
+      }
+      public sizzle.types.Ast.PositionInfo getPosition() {
+        if (positionBuilder_ == null) {
+          return position_;
+        } else {
+          return positionBuilder_.getMessage();
+        }
+      }
+      public Builder setPosition(sizzle.types.Ast.PositionInfo value) {
+        if (positionBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          position_ = value;
+          onChanged();
+        } else {
+          positionBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000100;
+        return this;
+      }
+      public Builder setPosition(
+          sizzle.types.Ast.PositionInfo.Builder builderForValue) {
+        if (positionBuilder_ == null) {
+          position_ = builderForValue.build();
+          onChanged();
+        } else {
+          positionBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000100;
+        return this;
+      }
+      public Builder mergePosition(sizzle.types.Ast.PositionInfo value) {
+        if (positionBuilder_ == null) {
+          if (((bitField0_ & 0x00000100) == 0x00000100) &&
+              position_ != sizzle.types.Ast.PositionInfo.getDefaultInstance()) {
+            position_ =
+              sizzle.types.Ast.PositionInfo.newBuilder(position_).mergeFrom(value).buildPartial();
+          } else {
+            position_ = value;
+          }
+          onChanged();
+        } else {
+          positionBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000100;
+        return this;
+      }
+      public Builder clearPosition() {
+        if (positionBuilder_ == null) {
+          position_ = sizzle.types.Ast.PositionInfo.getDefaultInstance();
+          onChanged();
+        } else {
+          positionBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000100);
+        return this;
+      }
+      public sizzle.types.Ast.PositionInfo.Builder getPositionBuilder() {
+        bitField0_ |= 0x00000100;
+        onChanged();
+        return getPositionFieldBuilder().getBuilder();
+      }
+      public sizzle.types.Ast.PositionInfoOrBuilder getPositionOrBuilder() {
+        if (positionBuilder_ != null) {
+          return positionBuilder_.getMessageOrBuilder();
+        } else {
+          return position_;
+        }
+      }
+      private com.google.protobuf.SingleFieldBuilder<
+          sizzle.types.Ast.PositionInfo, sizzle.types.Ast.PositionInfo.Builder, sizzle.types.Ast.PositionInfoOrBuilder> 
+          getPositionFieldBuilder() {
+        if (positionBuilder_ == null) {
+          positionBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              sizzle.types.Ast.PositionInfo, sizzle.types.Ast.PositionInfo.Builder, sizzle.types.Ast.PositionInfoOrBuilder>(
+                  position_,
+                  getParentForChildren(),
+                  isClean());
+          position_ = null;
+        }
+        return positionBuilder_;
+      }
+      
       // @@protoc_insertion_point(builder_scope:sizzle.types.Method)
     }
     
@@ -7542,6 +7096,11 @@ public final class Ast {
         getCommentsOrBuilderList();
     sizzle.types.Ast.CommentOrBuilder getCommentsOrBuilder(
         int index);
+    
+    // required .sizzle.types.PositionInfo position = 6;
+    boolean hasPosition();
+    sizzle.types.Ast.PositionInfo getPosition();
+    sizzle.types.Ast.PositionInfoOrBuilder getPositionOrBuilder();
   }
   public static final class Variable extends
       com.google.protobuf.GeneratedMessage
@@ -7672,12 +7231,26 @@ public final class Ast {
       return comments_.get(index);
     }
     
+    // required .sizzle.types.PositionInfo position = 6;
+    public static final int POSITION_FIELD_NUMBER = 6;
+    private sizzle.types.Ast.PositionInfo position_;
+    public boolean hasPosition() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    public sizzle.types.Ast.PositionInfo getPosition() {
+      return position_;
+    }
+    public sizzle.types.Ast.PositionInfoOrBuilder getPositionOrBuilder() {
+      return position_;
+    }
+    
     private void initFields() {
       name_ = "";
       variableType_ = sizzle.types.Ast.Type.getDefaultInstance();
       modifiers_ = java.util.Collections.emptyList();
       initializer_ = sizzle.types.Ast.Expression.getDefaultInstance();
       comments_ = java.util.Collections.emptyList();
+      position_ = sizzle.types.Ast.PositionInfo.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -7689,6 +7262,10 @@ public final class Ast {
         return false;
       }
       if (!hasVariableType()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasPosition()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -7714,6 +7291,10 @@ public final class Ast {
           return false;
         }
       }
+      if (!getPosition().isInitialized()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
       memoizedIsInitialized = 1;
       return true;
     }
@@ -7735,6 +7316,9 @@ public final class Ast {
       }
       for (int i = 0; i < comments_.size(); i++) {
         output.writeMessage(5, comments_.get(i));
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeMessage(6, position_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -7764,6 +7348,10 @@ public final class Ast {
       for (int i = 0; i < comments_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(5, comments_.get(i));
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(6, position_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -7885,6 +7473,7 @@ public final class Ast {
           getModifiersFieldBuilder();
           getInitializerFieldBuilder();
           getCommentsFieldBuilder();
+          getPositionFieldBuilder();
         }
       }
       private static Builder create() {
@@ -7919,6 +7508,12 @@ public final class Ast {
         } else {
           commentsBuilder_.clear();
         }
+        if (positionBuilder_ == null) {
+          position_ = sizzle.types.Ast.PositionInfo.getDefaultInstance();
+        } else {
+          positionBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000020);
         return this;
       }
       
@@ -7994,6 +7589,14 @@ public final class Ast {
           result.comments_ = comments_;
         } else {
           result.comments_ = commentsBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        if (positionBuilder_ == null) {
+          result.position_ = position_;
+        } else {
+          result.position_ = positionBuilder_.build();
         }
         result.bitField0_ = to_bitField0_;
         onBuilt();
@@ -8072,6 +7675,9 @@ public final class Ast {
             }
           }
         }
+        if (other.hasPosition()) {
+          mergePosition(other.getPosition());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -8082,6 +7688,10 @@ public final class Ast {
           return false;
         }
         if (!hasVariableType()) {
+          
+          return false;
+        }
+        if (!hasPosition()) {
           
           return false;
         }
@@ -8106,6 +7716,10 @@ public final class Ast {
             
             return false;
           }
+        }
+        if (!getPosition().isInitialized()) {
+          
+          return false;
         }
         return true;
       }
@@ -8166,6 +7780,15 @@ public final class Ast {
               sizzle.types.Ast.Comment.Builder subBuilder = sizzle.types.Ast.Comment.newBuilder();
               input.readMessage(subBuilder, extensionRegistry);
               addComments(subBuilder.buildPartial());
+              break;
+            }
+            case 50: {
+              sizzle.types.Ast.PositionInfo.Builder subBuilder = sizzle.types.Ast.PositionInfo.newBuilder();
+              if (hasPosition()) {
+                subBuilder.mergeFrom(getPosition());
+              }
+              input.readMessage(subBuilder, extensionRegistry);
+              setPosition(subBuilder.buildPartial());
               break;
             }
           }
@@ -8762,6 +8385,96 @@ public final class Ast {
         return commentsBuilder_;
       }
       
+      // required .sizzle.types.PositionInfo position = 6;
+      private sizzle.types.Ast.PositionInfo position_ = sizzle.types.Ast.PositionInfo.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          sizzle.types.Ast.PositionInfo, sizzle.types.Ast.PositionInfo.Builder, sizzle.types.Ast.PositionInfoOrBuilder> positionBuilder_;
+      public boolean hasPosition() {
+        return ((bitField0_ & 0x00000020) == 0x00000020);
+      }
+      public sizzle.types.Ast.PositionInfo getPosition() {
+        if (positionBuilder_ == null) {
+          return position_;
+        } else {
+          return positionBuilder_.getMessage();
+        }
+      }
+      public Builder setPosition(sizzle.types.Ast.PositionInfo value) {
+        if (positionBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          position_ = value;
+          onChanged();
+        } else {
+          positionBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000020;
+        return this;
+      }
+      public Builder setPosition(
+          sizzle.types.Ast.PositionInfo.Builder builderForValue) {
+        if (positionBuilder_ == null) {
+          position_ = builderForValue.build();
+          onChanged();
+        } else {
+          positionBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000020;
+        return this;
+      }
+      public Builder mergePosition(sizzle.types.Ast.PositionInfo value) {
+        if (positionBuilder_ == null) {
+          if (((bitField0_ & 0x00000020) == 0x00000020) &&
+              position_ != sizzle.types.Ast.PositionInfo.getDefaultInstance()) {
+            position_ =
+              sizzle.types.Ast.PositionInfo.newBuilder(position_).mergeFrom(value).buildPartial();
+          } else {
+            position_ = value;
+          }
+          onChanged();
+        } else {
+          positionBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000020;
+        return this;
+      }
+      public Builder clearPosition() {
+        if (positionBuilder_ == null) {
+          position_ = sizzle.types.Ast.PositionInfo.getDefaultInstance();
+          onChanged();
+        } else {
+          positionBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000020);
+        return this;
+      }
+      public sizzle.types.Ast.PositionInfo.Builder getPositionBuilder() {
+        bitField0_ |= 0x00000020;
+        onChanged();
+        return getPositionFieldBuilder().getBuilder();
+      }
+      public sizzle.types.Ast.PositionInfoOrBuilder getPositionOrBuilder() {
+        if (positionBuilder_ != null) {
+          return positionBuilder_.getMessageOrBuilder();
+        } else {
+          return position_;
+        }
+      }
+      private com.google.protobuf.SingleFieldBuilder<
+          sizzle.types.Ast.PositionInfo, sizzle.types.Ast.PositionInfo.Builder, sizzle.types.Ast.PositionInfoOrBuilder> 
+          getPositionFieldBuilder() {
+        if (positionBuilder_ == null) {
+          positionBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              sizzle.types.Ast.PositionInfo, sizzle.types.Ast.PositionInfo.Builder, sizzle.types.Ast.PositionInfoOrBuilder>(
+                  position_,
+                  getParentForChildren(),
+                  isClean());
+          position_ = null;
+        }
+        return positionBuilder_;
+      }
+      
       // @@protoc_insertion_point(builder_scope:sizzle.types.Variable)
     }
     
@@ -8839,6 +8552,11 @@ public final class Ast {
     boolean hasExpression();
     sizzle.types.Ast.Expression getExpression();
     sizzle.types.Ast.ExpressionOrBuilder getExpressionOrBuilder();
+    
+    // required .sizzle.types.PositionInfo position = 10;
+    boolean hasPosition();
+    sizzle.types.Ast.PositionInfo getPosition();
+    sizzle.types.Ast.PositionInfoOrBuilder getPositionOrBuilder();
   }
   public static final class Statement extends
       com.google.protobuf.GeneratedMessage
@@ -9138,6 +8856,19 @@ public final class Ast {
       return expression_;
     }
     
+    // required .sizzle.types.PositionInfo position = 10;
+    public static final int POSITION_FIELD_NUMBER = 10;
+    private sizzle.types.Ast.PositionInfo position_;
+    public boolean hasPosition() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    public sizzle.types.Ast.PositionInfo getPosition() {
+      return position_;
+    }
+    public sizzle.types.Ast.PositionInfoOrBuilder getPositionOrBuilder() {
+      return position_;
+    }
+    
     private void initFields() {
       kind_ = sizzle.types.Ast.Statement.StatementKind.BLOCK;
       comments_ = java.util.Collections.emptyList();
@@ -9148,6 +8879,7 @@ public final class Ast {
       variableDeclaration_ = sizzle.types.Ast.Variable.getDefaultInstance();
       typeDeclaration_ = sizzle.types.Ast.Declaration.getDefaultInstance();
       expression_ = sizzle.types.Ast.Expression.getDefaultInstance();
+      position_ = sizzle.types.Ast.PositionInfo.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -9155,6 +8887,10 @@ public final class Ast {
       if (isInitialized != -1) return isInitialized == 1;
       
       if (!hasKind()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasPosition()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -9206,6 +8942,10 @@ public final class Ast {
           return false;
         }
       }
+      if (!getPosition().isInitialized()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
       memoizedIsInitialized = 1;
       return true;
     }
@@ -9239,6 +8979,9 @@ public final class Ast {
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         output.writeMessage(9, expression_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        output.writeMessage(10, position_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -9284,6 +9027,10 @@ public final class Ast {
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(9, expression_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(10, position_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -9409,6 +9156,7 @@ public final class Ast {
           getVariableDeclarationFieldBuilder();
           getTypeDeclarationFieldBuilder();
           getExpressionFieldBuilder();
+          getPositionFieldBuilder();
         }
       }
       private static Builder create() {
@@ -9467,6 +9215,12 @@ public final class Ast {
           expressionBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000100);
+        if (positionBuilder_ == null) {
+          position_ = sizzle.types.Ast.PositionInfo.getDefaultInstance();
+        } else {
+          positionBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000200);
         return this;
       }
       
@@ -9576,6 +9330,14 @@ public final class Ast {
           result.expression_ = expression_;
         } else {
           result.expression_ = expressionBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
+          to_bitField0_ |= 0x00000020;
+        }
+        if (positionBuilder_ == null) {
+          result.position_ = position_;
+        } else {
+          result.position_ = positionBuilder_.build();
         }
         result.bitField0_ = to_bitField0_;
         onBuilt();
@@ -9712,12 +9474,19 @@ public final class Ast {
         if (other.hasExpression()) {
           mergeExpression(other.getExpression());
         }
+        if (other.hasPosition()) {
+          mergePosition(other.getPosition());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
       
       public final boolean isInitialized() {
         if (!hasKind()) {
+          
+          return false;
+        }
+        if (!hasPosition()) {
           
           return false;
         }
@@ -9768,6 +9537,10 @@ public final class Ast {
             
             return false;
           }
+        }
+        if (!getPosition().isInitialized()) {
+          
+          return false;
         }
         return true;
       }
@@ -9864,6 +9637,15 @@ public final class Ast {
               }
               input.readMessage(subBuilder, extensionRegistry);
               setExpression(subBuilder.buildPartial());
+              break;
+            }
+            case 82: {
+              sizzle.types.Ast.PositionInfo.Builder subBuilder = sizzle.types.Ast.PositionInfo.newBuilder();
+              if (hasPosition()) {
+                subBuilder.mergeFrom(getPosition());
+              }
+              input.readMessage(subBuilder, extensionRegistry);
+              setPosition(subBuilder.buildPartial());
               break;
             }
           }
@@ -11000,6 +10782,96 @@ public final class Ast {
         return expressionBuilder_;
       }
       
+      // required .sizzle.types.PositionInfo position = 10;
+      private sizzle.types.Ast.PositionInfo position_ = sizzle.types.Ast.PositionInfo.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          sizzle.types.Ast.PositionInfo, sizzle.types.Ast.PositionInfo.Builder, sizzle.types.Ast.PositionInfoOrBuilder> positionBuilder_;
+      public boolean hasPosition() {
+        return ((bitField0_ & 0x00000200) == 0x00000200);
+      }
+      public sizzle.types.Ast.PositionInfo getPosition() {
+        if (positionBuilder_ == null) {
+          return position_;
+        } else {
+          return positionBuilder_.getMessage();
+        }
+      }
+      public Builder setPosition(sizzle.types.Ast.PositionInfo value) {
+        if (positionBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          position_ = value;
+          onChanged();
+        } else {
+          positionBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000200;
+        return this;
+      }
+      public Builder setPosition(
+          sizzle.types.Ast.PositionInfo.Builder builderForValue) {
+        if (positionBuilder_ == null) {
+          position_ = builderForValue.build();
+          onChanged();
+        } else {
+          positionBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000200;
+        return this;
+      }
+      public Builder mergePosition(sizzle.types.Ast.PositionInfo value) {
+        if (positionBuilder_ == null) {
+          if (((bitField0_ & 0x00000200) == 0x00000200) &&
+              position_ != sizzle.types.Ast.PositionInfo.getDefaultInstance()) {
+            position_ =
+              sizzle.types.Ast.PositionInfo.newBuilder(position_).mergeFrom(value).buildPartial();
+          } else {
+            position_ = value;
+          }
+          onChanged();
+        } else {
+          positionBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000200;
+        return this;
+      }
+      public Builder clearPosition() {
+        if (positionBuilder_ == null) {
+          position_ = sizzle.types.Ast.PositionInfo.getDefaultInstance();
+          onChanged();
+        } else {
+          positionBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000200);
+        return this;
+      }
+      public sizzle.types.Ast.PositionInfo.Builder getPositionBuilder() {
+        bitField0_ |= 0x00000200;
+        onChanged();
+        return getPositionFieldBuilder().getBuilder();
+      }
+      public sizzle.types.Ast.PositionInfoOrBuilder getPositionOrBuilder() {
+        if (positionBuilder_ != null) {
+          return positionBuilder_.getMessageOrBuilder();
+        } else {
+          return position_;
+        }
+      }
+      private com.google.protobuf.SingleFieldBuilder<
+          sizzle.types.Ast.PositionInfo, sizzle.types.Ast.PositionInfo.Builder, sizzle.types.Ast.PositionInfoOrBuilder> 
+          getPositionFieldBuilder() {
+        if (positionBuilder_ == null) {
+          positionBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              sizzle.types.Ast.PositionInfo, sizzle.types.Ast.PositionInfo.Builder, sizzle.types.Ast.PositionInfoOrBuilder>(
+                  position_,
+                  getParentForChildren(),
+                  isClean());
+          position_ = null;
+        }
+        return positionBuilder_;
+      }
+      
       // @@protoc_insertion_point(builder_scope:sizzle.types.Statement)
     }
     
@@ -11078,6 +10950,16 @@ public final class Ast {
         getMethodArgsOrBuilderList();
     sizzle.types.Ast.ExpressionOrBuilder getMethodArgsOrBuilder(
         int index);
+    
+    // optional .sizzle.types.Declaration anon_declaration = 11;
+    boolean hasAnonDeclaration();
+    sizzle.types.Ast.Declaration getAnonDeclaration();
+    sizzle.types.Ast.DeclarationOrBuilder getAnonDeclarationOrBuilder();
+    
+    // required .sizzle.types.PositionInfo position = 12;
+    boolean hasPosition();
+    sizzle.types.Ast.PositionInfo getPosition();
+    sizzle.types.Ast.PositionInfoOrBuilder getPositionOrBuilder();
   }
   public static final class Expression extends
       com.google.protobuf.GeneratedMessage
@@ -11528,6 +11410,32 @@ public final class Ast {
       return methodArgs_.get(index);
     }
     
+    // optional .sizzle.types.Declaration anon_declaration = 11;
+    public static final int ANON_DECLARATION_FIELD_NUMBER = 11;
+    private sizzle.types.Ast.Declaration anonDeclaration_;
+    public boolean hasAnonDeclaration() {
+      return ((bitField0_ & 0x00000040) == 0x00000040);
+    }
+    public sizzle.types.Ast.Declaration getAnonDeclaration() {
+      return anonDeclaration_;
+    }
+    public sizzle.types.Ast.DeclarationOrBuilder getAnonDeclarationOrBuilder() {
+      return anonDeclaration_;
+    }
+    
+    // required .sizzle.types.PositionInfo position = 12;
+    public static final int POSITION_FIELD_NUMBER = 12;
+    private sizzle.types.Ast.PositionInfo position_;
+    public boolean hasPosition() {
+      return ((bitField0_ & 0x00000080) == 0x00000080);
+    }
+    public sizzle.types.Ast.PositionInfo getPosition() {
+      return position_;
+    }
+    public sizzle.types.Ast.PositionInfoOrBuilder getPositionOrBuilder() {
+      return position_;
+    }
+    
     private void initFields() {
       kind_ = sizzle.types.Ast.Expression.ExpressionKind.LITERAL;
       expressions_ = java.util.Collections.emptyList();
@@ -11539,6 +11447,8 @@ public final class Ast {
       variable_ = "";
       method_ = "";
       methodArgs_ = java.util.Collections.emptyList();
+      anonDeclaration_ = sizzle.types.Ast.Declaration.getDefaultInstance();
+      position_ = sizzle.types.Ast.PositionInfo.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -11546,6 +11456,10 @@ public final class Ast {
       if (isInitialized != -1) return isInitialized == 1;
       
       if (!hasKind()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasPosition()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -11578,6 +11492,16 @@ public final class Ast {
           memoizedIsInitialized = 0;
           return false;
         }
+      }
+      if (hasAnonDeclaration()) {
+        if (!getAnonDeclaration().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      if (!getPosition().isInitialized()) {
+        memoizedIsInitialized = 0;
+        return false;
       }
       memoizedIsInitialized = 1;
       return true;
@@ -11615,6 +11539,12 @@ public final class Ast {
       }
       for (int i = 0; i < methodArgs_.size(); i++) {
         output.writeMessage(10, methodArgs_.get(i));
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        output.writeMessage(11, anonDeclaration_);
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        output.writeMessage(12, position_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -11664,6 +11594,14 @@ public final class Ast {
       for (int i = 0; i < methodArgs_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(10, methodArgs_.get(i));
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(11, anonDeclaration_);
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(12, position_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -11786,6 +11724,8 @@ public final class Ast {
           getNewTypeFieldBuilder();
           getGenericParametersFieldBuilder();
           getMethodArgsFieldBuilder();
+          getAnonDeclarationFieldBuilder();
+          getPositionFieldBuilder();
         }
       }
       private static Builder create() {
@@ -11834,6 +11774,18 @@ public final class Ast {
         } else {
           methodArgsBuilder_.clear();
         }
+        if (anonDeclarationBuilder_ == null) {
+          anonDeclaration_ = sizzle.types.Ast.Declaration.getDefaultInstance();
+        } else {
+          anonDeclarationBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000400);
+        if (positionBuilder_ == null) {
+          position_ = sizzle.types.Ast.PositionInfo.getDefaultInstance();
+        } else {
+          positionBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000800);
         return this;
       }
       
@@ -11935,6 +11887,22 @@ public final class Ast {
           result.methodArgs_ = methodArgs_;
         } else {
           result.methodArgs_ = methodArgsBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
+          to_bitField0_ |= 0x00000040;
+        }
+        if (anonDeclarationBuilder_ == null) {
+          result.anonDeclaration_ = anonDeclaration_;
+        } else {
+          result.anonDeclaration_ = anonDeclarationBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000800) == 0x00000800)) {
+          to_bitField0_ |= 0x00000080;
+        }
+        if (positionBuilder_ == null) {
+          result.position_ = position_;
+        } else {
+          result.position_ = positionBuilder_.build();
         }
         result.bitField0_ = to_bitField0_;
         onBuilt();
@@ -12074,12 +12042,22 @@ public final class Ast {
             }
           }
         }
+        if (other.hasAnonDeclaration()) {
+          mergeAnonDeclaration(other.getAnonDeclaration());
+        }
+        if (other.hasPosition()) {
+          mergePosition(other.getPosition());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
       
       public final boolean isInitialized() {
         if (!hasKind()) {
+          
+          return false;
+        }
+        if (!hasPosition()) {
           
           return false;
         }
@@ -12112,6 +12090,16 @@ public final class Ast {
             
             return false;
           }
+        }
+        if (hasAnonDeclaration()) {
+          if (!getAnonDeclaration().isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (!getPosition().isInitialized()) {
+          
+          return false;
         }
         return true;
       }
@@ -12201,6 +12189,24 @@ public final class Ast {
               sizzle.types.Ast.Expression.Builder subBuilder = sizzle.types.Ast.Expression.newBuilder();
               input.readMessage(subBuilder, extensionRegistry);
               addMethodArgs(subBuilder.buildPartial());
+              break;
+            }
+            case 90: {
+              sizzle.types.Ast.Declaration.Builder subBuilder = sizzle.types.Ast.Declaration.newBuilder();
+              if (hasAnonDeclaration()) {
+                subBuilder.mergeFrom(getAnonDeclaration());
+              }
+              input.readMessage(subBuilder, extensionRegistry);
+              setAnonDeclaration(subBuilder.buildPartial());
+              break;
+            }
+            case 98: {
+              sizzle.types.Ast.PositionInfo.Builder subBuilder = sizzle.types.Ast.PositionInfo.newBuilder();
+              if (hasPosition()) {
+                subBuilder.mergeFrom(getPosition());
+              }
+              input.readMessage(subBuilder, extensionRegistry);
+              setPosition(subBuilder.buildPartial());
               break;
             }
           }
@@ -13196,6 +13202,186 @@ public final class Ast {
         return methodArgsBuilder_;
       }
       
+      // optional .sizzle.types.Declaration anon_declaration = 11;
+      private sizzle.types.Ast.Declaration anonDeclaration_ = sizzle.types.Ast.Declaration.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          sizzle.types.Ast.Declaration, sizzle.types.Ast.Declaration.Builder, sizzle.types.Ast.DeclarationOrBuilder> anonDeclarationBuilder_;
+      public boolean hasAnonDeclaration() {
+        return ((bitField0_ & 0x00000400) == 0x00000400);
+      }
+      public sizzle.types.Ast.Declaration getAnonDeclaration() {
+        if (anonDeclarationBuilder_ == null) {
+          return anonDeclaration_;
+        } else {
+          return anonDeclarationBuilder_.getMessage();
+        }
+      }
+      public Builder setAnonDeclaration(sizzle.types.Ast.Declaration value) {
+        if (anonDeclarationBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          anonDeclaration_ = value;
+          onChanged();
+        } else {
+          anonDeclarationBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000400;
+        return this;
+      }
+      public Builder setAnonDeclaration(
+          sizzle.types.Ast.Declaration.Builder builderForValue) {
+        if (anonDeclarationBuilder_ == null) {
+          anonDeclaration_ = builderForValue.build();
+          onChanged();
+        } else {
+          anonDeclarationBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000400;
+        return this;
+      }
+      public Builder mergeAnonDeclaration(sizzle.types.Ast.Declaration value) {
+        if (anonDeclarationBuilder_ == null) {
+          if (((bitField0_ & 0x00000400) == 0x00000400) &&
+              anonDeclaration_ != sizzle.types.Ast.Declaration.getDefaultInstance()) {
+            anonDeclaration_ =
+              sizzle.types.Ast.Declaration.newBuilder(anonDeclaration_).mergeFrom(value).buildPartial();
+          } else {
+            anonDeclaration_ = value;
+          }
+          onChanged();
+        } else {
+          anonDeclarationBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000400;
+        return this;
+      }
+      public Builder clearAnonDeclaration() {
+        if (anonDeclarationBuilder_ == null) {
+          anonDeclaration_ = sizzle.types.Ast.Declaration.getDefaultInstance();
+          onChanged();
+        } else {
+          anonDeclarationBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000400);
+        return this;
+      }
+      public sizzle.types.Ast.Declaration.Builder getAnonDeclarationBuilder() {
+        bitField0_ |= 0x00000400;
+        onChanged();
+        return getAnonDeclarationFieldBuilder().getBuilder();
+      }
+      public sizzle.types.Ast.DeclarationOrBuilder getAnonDeclarationOrBuilder() {
+        if (anonDeclarationBuilder_ != null) {
+          return anonDeclarationBuilder_.getMessageOrBuilder();
+        } else {
+          return anonDeclaration_;
+        }
+      }
+      private com.google.protobuf.SingleFieldBuilder<
+          sizzle.types.Ast.Declaration, sizzle.types.Ast.Declaration.Builder, sizzle.types.Ast.DeclarationOrBuilder> 
+          getAnonDeclarationFieldBuilder() {
+        if (anonDeclarationBuilder_ == null) {
+          anonDeclarationBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              sizzle.types.Ast.Declaration, sizzle.types.Ast.Declaration.Builder, sizzle.types.Ast.DeclarationOrBuilder>(
+                  anonDeclaration_,
+                  getParentForChildren(),
+                  isClean());
+          anonDeclaration_ = null;
+        }
+        return anonDeclarationBuilder_;
+      }
+      
+      // required .sizzle.types.PositionInfo position = 12;
+      private sizzle.types.Ast.PositionInfo position_ = sizzle.types.Ast.PositionInfo.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          sizzle.types.Ast.PositionInfo, sizzle.types.Ast.PositionInfo.Builder, sizzle.types.Ast.PositionInfoOrBuilder> positionBuilder_;
+      public boolean hasPosition() {
+        return ((bitField0_ & 0x00000800) == 0x00000800);
+      }
+      public sizzle.types.Ast.PositionInfo getPosition() {
+        if (positionBuilder_ == null) {
+          return position_;
+        } else {
+          return positionBuilder_.getMessage();
+        }
+      }
+      public Builder setPosition(sizzle.types.Ast.PositionInfo value) {
+        if (positionBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          position_ = value;
+          onChanged();
+        } else {
+          positionBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000800;
+        return this;
+      }
+      public Builder setPosition(
+          sizzle.types.Ast.PositionInfo.Builder builderForValue) {
+        if (positionBuilder_ == null) {
+          position_ = builderForValue.build();
+          onChanged();
+        } else {
+          positionBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000800;
+        return this;
+      }
+      public Builder mergePosition(sizzle.types.Ast.PositionInfo value) {
+        if (positionBuilder_ == null) {
+          if (((bitField0_ & 0x00000800) == 0x00000800) &&
+              position_ != sizzle.types.Ast.PositionInfo.getDefaultInstance()) {
+            position_ =
+              sizzle.types.Ast.PositionInfo.newBuilder(position_).mergeFrom(value).buildPartial();
+          } else {
+            position_ = value;
+          }
+          onChanged();
+        } else {
+          positionBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000800;
+        return this;
+      }
+      public Builder clearPosition() {
+        if (positionBuilder_ == null) {
+          position_ = sizzle.types.Ast.PositionInfo.getDefaultInstance();
+          onChanged();
+        } else {
+          positionBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000800);
+        return this;
+      }
+      public sizzle.types.Ast.PositionInfo.Builder getPositionBuilder() {
+        bitField0_ |= 0x00000800;
+        onChanged();
+        return getPositionFieldBuilder().getBuilder();
+      }
+      public sizzle.types.Ast.PositionInfoOrBuilder getPositionOrBuilder() {
+        if (positionBuilder_ != null) {
+          return positionBuilder_.getMessageOrBuilder();
+        } else {
+          return position_;
+        }
+      }
+      private com.google.protobuf.SingleFieldBuilder<
+          sizzle.types.Ast.PositionInfo, sizzle.types.Ast.PositionInfo.Builder, sizzle.types.Ast.PositionInfoOrBuilder> 
+          getPositionFieldBuilder() {
+        if (positionBuilder_ == null) {
+          positionBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              sizzle.types.Ast.PositionInfo, sizzle.types.Ast.PositionInfo.Builder, sizzle.types.Ast.PositionInfoOrBuilder>(
+                  position_,
+                  getParentForChildren(),
+                  isClean());
+          position_ = null;
+        }
+        return positionBuilder_;
+      }
+      
       // @@protoc_insertion_point(builder_scope:sizzle.types.Expression)
     }
     
@@ -13240,6 +13426,11 @@ public final class Ast {
     // optional string other = 6;
     boolean hasOther();
     String getOther();
+    
+    // required .sizzle.types.PositionInfo position = 7;
+    boolean hasPosition();
+    sizzle.types.Ast.PositionInfo getPosition();
+    sizzle.types.Ast.PositionInfoOrBuilder getPositionOrBuilder();
   }
   public static final class Modifier extends
       com.google.protobuf.GeneratedMessage
@@ -13545,6 +13736,19 @@ public final class Ast {
       }
     }
     
+    // required .sizzle.types.PositionInfo position = 7;
+    public static final int POSITION_FIELD_NUMBER = 7;
+    private sizzle.types.Ast.PositionInfo position_;
+    public boolean hasPosition() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    public sizzle.types.Ast.PositionInfo getPosition() {
+      return position_;
+    }
+    public sizzle.types.Ast.PositionInfoOrBuilder getPositionOrBuilder() {
+      return position_;
+    }
+    
     private void initFields() {
       kind_ = sizzle.types.Ast.Modifier.ModifierKind.VISIBILITY;
       visibility_ = 0;
@@ -13552,6 +13756,7 @@ public final class Ast {
       annotationMembers_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       annotationValues_ = java.util.Collections.emptyList();
       other_ = "";
+      position_ = sizzle.types.Ast.PositionInfo.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -13562,11 +13767,19 @@ public final class Ast {
         memoizedIsInitialized = 0;
         return false;
       }
+      if (!hasPosition()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
       for (int i = 0; i < getAnnotationValuesCount(); i++) {
         if (!getAnnotationValues(i).isInitialized()) {
           memoizedIsInitialized = 0;
           return false;
         }
+      }
+      if (!getPosition().isInitialized()) {
+        memoizedIsInitialized = 0;
+        return false;
       }
       memoizedIsInitialized = 1;
       return true;
@@ -13592,6 +13805,9 @@ public final class Ast {
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         output.writeBytes(6, getOtherBytes());
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeMessage(7, position_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -13630,6 +13846,10 @@ public final class Ast {
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(6, getOtherBytes());
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(7, position_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -13748,6 +13968,7 @@ public final class Ast {
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
           getAnnotationValuesFieldBuilder();
+          getPositionFieldBuilder();
         }
       }
       private static Builder create() {
@@ -13772,6 +13993,12 @@ public final class Ast {
         }
         other_ = "";
         bitField0_ = (bitField0_ & ~0x00000020);
+        if (positionBuilder_ == null) {
+          position_ = sizzle.types.Ast.PositionInfo.getDefaultInstance();
+        } else {
+          positionBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000040);
         return this;
       }
       
@@ -13841,6 +14068,14 @@ public final class Ast {
           to_bitField0_ |= 0x00000008;
         }
         result.other_ = other_;
+        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        if (positionBuilder_ == null) {
+          result.position_ = position_;
+        } else {
+          result.position_ = positionBuilder_.build();
+        }
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -13905,6 +14140,9 @@ public final class Ast {
         if (other.hasOther()) {
           setOther(other.getOther());
         }
+        if (other.hasPosition()) {
+          mergePosition(other.getPosition());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -13914,11 +14152,19 @@ public final class Ast {
           
           return false;
         }
+        if (!hasPosition()) {
+          
+          return false;
+        }
         for (int i = 0; i < getAnnotationValuesCount(); i++) {
           if (!getAnnotationValues(i).isInitialized()) {
             
             return false;
           }
+        }
+        if (!getPosition().isInitialized()) {
+          
+          return false;
         }
         return true;
       }
@@ -13981,6 +14227,15 @@ public final class Ast {
             case 50: {
               bitField0_ |= 0x00000020;
               other_ = input.readBytes();
+              break;
+            }
+            case 58: {
+              sizzle.types.Ast.PositionInfo.Builder subBuilder = sizzle.types.Ast.PositionInfo.newBuilder();
+              if (hasPosition()) {
+                subBuilder.mergeFrom(getPosition());
+              }
+              input.readMessage(subBuilder, extensionRegistry);
+              setPosition(subBuilder.buildPartial());
               break;
             }
           }
@@ -14348,6 +14603,96 @@ public final class Ast {
         onChanged();
       }
       
+      // required .sizzle.types.PositionInfo position = 7;
+      private sizzle.types.Ast.PositionInfo position_ = sizzle.types.Ast.PositionInfo.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          sizzle.types.Ast.PositionInfo, sizzle.types.Ast.PositionInfo.Builder, sizzle.types.Ast.PositionInfoOrBuilder> positionBuilder_;
+      public boolean hasPosition() {
+        return ((bitField0_ & 0x00000040) == 0x00000040);
+      }
+      public sizzle.types.Ast.PositionInfo getPosition() {
+        if (positionBuilder_ == null) {
+          return position_;
+        } else {
+          return positionBuilder_.getMessage();
+        }
+      }
+      public Builder setPosition(sizzle.types.Ast.PositionInfo value) {
+        if (positionBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          position_ = value;
+          onChanged();
+        } else {
+          positionBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000040;
+        return this;
+      }
+      public Builder setPosition(
+          sizzle.types.Ast.PositionInfo.Builder builderForValue) {
+        if (positionBuilder_ == null) {
+          position_ = builderForValue.build();
+          onChanged();
+        } else {
+          positionBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000040;
+        return this;
+      }
+      public Builder mergePosition(sizzle.types.Ast.PositionInfo value) {
+        if (positionBuilder_ == null) {
+          if (((bitField0_ & 0x00000040) == 0x00000040) &&
+              position_ != sizzle.types.Ast.PositionInfo.getDefaultInstance()) {
+            position_ =
+              sizzle.types.Ast.PositionInfo.newBuilder(position_).mergeFrom(value).buildPartial();
+          } else {
+            position_ = value;
+          }
+          onChanged();
+        } else {
+          positionBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000040;
+        return this;
+      }
+      public Builder clearPosition() {
+        if (positionBuilder_ == null) {
+          position_ = sizzle.types.Ast.PositionInfo.getDefaultInstance();
+          onChanged();
+        } else {
+          positionBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000040);
+        return this;
+      }
+      public sizzle.types.Ast.PositionInfo.Builder getPositionBuilder() {
+        bitField0_ |= 0x00000040;
+        onChanged();
+        return getPositionFieldBuilder().getBuilder();
+      }
+      public sizzle.types.Ast.PositionInfoOrBuilder getPositionOrBuilder() {
+        if (positionBuilder_ != null) {
+          return positionBuilder_.getMessageOrBuilder();
+        } else {
+          return position_;
+        }
+      }
+      private com.google.protobuf.SingleFieldBuilder<
+          sizzle.types.Ast.PositionInfo, sizzle.types.Ast.PositionInfo.Builder, sizzle.types.Ast.PositionInfoOrBuilder> 
+          getPositionFieldBuilder() {
+        if (positionBuilder_ == null) {
+          positionBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              sizzle.types.Ast.PositionInfo, sizzle.types.Ast.PositionInfo.Builder, sizzle.types.Ast.PositionInfoOrBuilder>(
+                  position_,
+                  getParentForChildren(),
+                  isClean());
+          position_ = null;
+        }
+        return positionBuilder_;
+      }
+      
       // @@protoc_insertion_point(builder_scope:sizzle.types.Modifier)
     }
     
@@ -14370,9 +14715,10 @@ public final class Ast {
     boolean hasValue();
     String getValue();
     
-    // required int32 start_line = 3;
-    boolean hasStartLine();
-    int getStartLine();
+    // required .sizzle.types.PositionInfo position = 3;
+    boolean hasPosition();
+    sizzle.types.Ast.PositionInfo getPosition();
+    sizzle.types.Ast.PositionInfoOrBuilder getPositionOrBuilder();
   }
   public static final class Comment extends
       com.google.protobuf.GeneratedMessage
@@ -14520,20 +14866,23 @@ public final class Ast {
       }
     }
     
-    // required int32 start_line = 3;
-    public static final int START_LINE_FIELD_NUMBER = 3;
-    private int startLine_;
-    public boolean hasStartLine() {
+    // required .sizzle.types.PositionInfo position = 3;
+    public static final int POSITION_FIELD_NUMBER = 3;
+    private sizzle.types.Ast.PositionInfo position_;
+    public boolean hasPosition() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
-    public int getStartLine() {
-      return startLine_;
+    public sizzle.types.Ast.PositionInfo getPosition() {
+      return position_;
+    }
+    public sizzle.types.Ast.PositionInfoOrBuilder getPositionOrBuilder() {
+      return position_;
     }
     
     private void initFields() {
       kind_ = sizzle.types.Ast.Comment.CommentKind.LINE;
       value_ = "";
-      startLine_ = 0;
+      position_ = sizzle.types.Ast.PositionInfo.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -14548,7 +14897,11 @@ public final class Ast {
         memoizedIsInitialized = 0;
         return false;
       }
-      if (!hasStartLine()) {
+      if (!hasPosition()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!getPosition().isInitialized()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -14566,7 +14919,7 @@ public final class Ast {
         output.writeBytes(2, getValueBytes());
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeInt32(3, startLine_);
+        output.writeMessage(3, position_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -14587,7 +14940,7 @@ public final class Ast {
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(3, startLine_);
+          .computeMessageSize(3, position_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -14705,6 +15058,7 @@ public final class Ast {
       }
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getPositionFieldBuilder();
         }
       }
       private static Builder create() {
@@ -14717,7 +15071,11 @@ public final class Ast {
         bitField0_ = (bitField0_ & ~0x00000001);
         value_ = "";
         bitField0_ = (bitField0_ & ~0x00000002);
-        startLine_ = 0;
+        if (positionBuilder_ == null) {
+          position_ = sizzle.types.Ast.PositionInfo.getDefaultInstance();
+        } else {
+          positionBuilder_.clear();
+        }
         bitField0_ = (bitField0_ & ~0x00000004);
         return this;
       }
@@ -14768,7 +15126,11 @@ public final class Ast {
         if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
           to_bitField0_ |= 0x00000004;
         }
-        result.startLine_ = startLine_;
+        if (positionBuilder_ == null) {
+          result.position_ = position_;
+        } else {
+          result.position_ = positionBuilder_.build();
+        }
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -14791,8 +15153,8 @@ public final class Ast {
         if (other.hasValue()) {
           setValue(other.getValue());
         }
-        if (other.hasStartLine()) {
-          setStartLine(other.getStartLine());
+        if (other.hasPosition()) {
+          mergePosition(other.getPosition());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -14807,7 +15169,11 @@ public final class Ast {
           
           return false;
         }
-        if (!hasStartLine()) {
+        if (!hasPosition()) {
+          
+          return false;
+        }
+        if (!getPosition().isInitialized()) {
           
           return false;
         }
@@ -14853,9 +15219,13 @@ public final class Ast {
               value_ = input.readBytes();
               break;
             }
-            case 24: {
-              bitField0_ |= 0x00000004;
-              startLine_ = input.readInt32();
+            case 26: {
+              sizzle.types.Ast.PositionInfo.Builder subBuilder = sizzle.types.Ast.PositionInfo.newBuilder();
+              if (hasPosition()) {
+                subBuilder.mergeFrom(getPosition());
+              }
+              input.readMessage(subBuilder, extensionRegistry);
+              setPosition(subBuilder.buildPartial());
               break;
             }
           }
@@ -14924,6 +15294,683 @@ public final class Ast {
         onChanged();
       }
       
+      // required .sizzle.types.PositionInfo position = 3;
+      private sizzle.types.Ast.PositionInfo position_ = sizzle.types.Ast.PositionInfo.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          sizzle.types.Ast.PositionInfo, sizzle.types.Ast.PositionInfo.Builder, sizzle.types.Ast.PositionInfoOrBuilder> positionBuilder_;
+      public boolean hasPosition() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      public sizzle.types.Ast.PositionInfo getPosition() {
+        if (positionBuilder_ == null) {
+          return position_;
+        } else {
+          return positionBuilder_.getMessage();
+        }
+      }
+      public Builder setPosition(sizzle.types.Ast.PositionInfo value) {
+        if (positionBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          position_ = value;
+          onChanged();
+        } else {
+          positionBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000004;
+        return this;
+      }
+      public Builder setPosition(
+          sizzle.types.Ast.PositionInfo.Builder builderForValue) {
+        if (positionBuilder_ == null) {
+          position_ = builderForValue.build();
+          onChanged();
+        } else {
+          positionBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000004;
+        return this;
+      }
+      public Builder mergePosition(sizzle.types.Ast.PositionInfo value) {
+        if (positionBuilder_ == null) {
+          if (((bitField0_ & 0x00000004) == 0x00000004) &&
+              position_ != sizzle.types.Ast.PositionInfo.getDefaultInstance()) {
+            position_ =
+              sizzle.types.Ast.PositionInfo.newBuilder(position_).mergeFrom(value).buildPartial();
+          } else {
+            position_ = value;
+          }
+          onChanged();
+        } else {
+          positionBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000004;
+        return this;
+      }
+      public Builder clearPosition() {
+        if (positionBuilder_ == null) {
+          position_ = sizzle.types.Ast.PositionInfo.getDefaultInstance();
+          onChanged();
+        } else {
+          positionBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000004);
+        return this;
+      }
+      public sizzle.types.Ast.PositionInfo.Builder getPositionBuilder() {
+        bitField0_ |= 0x00000004;
+        onChanged();
+        return getPositionFieldBuilder().getBuilder();
+      }
+      public sizzle.types.Ast.PositionInfoOrBuilder getPositionOrBuilder() {
+        if (positionBuilder_ != null) {
+          return positionBuilder_.getMessageOrBuilder();
+        } else {
+          return position_;
+        }
+      }
+      private com.google.protobuf.SingleFieldBuilder<
+          sizzle.types.Ast.PositionInfo, sizzle.types.Ast.PositionInfo.Builder, sizzle.types.Ast.PositionInfoOrBuilder> 
+          getPositionFieldBuilder() {
+        if (positionBuilder_ == null) {
+          positionBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              sizzle.types.Ast.PositionInfo, sizzle.types.Ast.PositionInfo.Builder, sizzle.types.Ast.PositionInfoOrBuilder>(
+                  position_,
+                  getParentForChildren(),
+                  isClean());
+          position_ = null;
+        }
+        return positionBuilder_;
+      }
+      
+      // @@protoc_insertion_point(builder_scope:sizzle.types.Comment)
+    }
+    
+    static {
+      defaultInstance = new Comment(true);
+      defaultInstance.initFields();
+    }
+    
+    // @@protoc_insertion_point(class_scope:sizzle.types.Comment)
+  }
+  
+  public interface PositionInfoOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+    
+    // required int32 start_pos = 1;
+    boolean hasStartPos();
+    int getStartPos();
+    
+    // required int32 length = 2;
+    boolean hasLength();
+    int getLength();
+    
+    // required int32 start_line = 3;
+    boolean hasStartLine();
+    int getStartLine();
+    
+    // required int32 start_col = 4;
+    boolean hasStartCol();
+    int getStartCol();
+    
+    // required int32 end_line = 5;
+    boolean hasEndLine();
+    int getEndLine();
+    
+    // required int32 end_col = 6;
+    boolean hasEndCol();
+    int getEndCol();
+  }
+  public static final class PositionInfo extends
+      com.google.protobuf.GeneratedMessage
+      implements PositionInfoOrBuilder {
+    // Use PositionInfo.newBuilder() to construct.
+    private PositionInfo(Builder builder) {
+      super(builder);
+    }
+    private PositionInfo(boolean noInit) {}
+    
+    private static final PositionInfo defaultInstance;
+    public static PositionInfo getDefaultInstance() {
+      return defaultInstance;
+    }
+    
+    public PositionInfo getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+    
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return sizzle.types.Ast.internal_static_sizzle_types_PositionInfo_descriptor;
+    }
+    
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return sizzle.types.Ast.internal_static_sizzle_types_PositionInfo_fieldAccessorTable;
+    }
+    
+    private int bitField0_;
+    // required int32 start_pos = 1;
+    public static final int START_POS_FIELD_NUMBER = 1;
+    private int startPos_;
+    public boolean hasStartPos() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    public int getStartPos() {
+      return startPos_;
+    }
+    
+    // required int32 length = 2;
+    public static final int LENGTH_FIELD_NUMBER = 2;
+    private int length_;
+    public boolean hasLength() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    public int getLength() {
+      return length_;
+    }
+    
+    // required int32 start_line = 3;
+    public static final int START_LINE_FIELD_NUMBER = 3;
+    private int startLine_;
+    public boolean hasStartLine() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    public int getStartLine() {
+      return startLine_;
+    }
+    
+    // required int32 start_col = 4;
+    public static final int START_COL_FIELD_NUMBER = 4;
+    private int startCol_;
+    public boolean hasStartCol() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    public int getStartCol() {
+      return startCol_;
+    }
+    
+    // required int32 end_line = 5;
+    public static final int END_LINE_FIELD_NUMBER = 5;
+    private int endLine_;
+    public boolean hasEndLine() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    public int getEndLine() {
+      return endLine_;
+    }
+    
+    // required int32 end_col = 6;
+    public static final int END_COL_FIELD_NUMBER = 6;
+    private int endCol_;
+    public boolean hasEndCol() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    public int getEndCol() {
+      return endCol_;
+    }
+    
+    private void initFields() {
+      startPos_ = 0;
+      length_ = 0;
+      startLine_ = 0;
+      startCol_ = 0;
+      endLine_ = 0;
+      endCol_ = 0;
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+      
+      if (!hasStartPos()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasLength()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasStartLine()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasStartCol()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasEndLine()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasEndCol()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+    
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeInt32(1, startPos_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeInt32(2, length_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeInt32(3, startLine_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeInt32(4, startCol_);
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeInt32(5, endLine_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        output.writeInt32(6, endCol_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+    
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+    
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(1, startPos_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(2, length_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(3, startLine_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(4, startCol_);
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(5, endLine_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(6, endCol_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+    
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+    
+    public static sizzle.types.Ast.PositionInfo parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static sizzle.types.Ast.PositionInfo parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static sizzle.types.Ast.PositionInfo parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data).buildParsed();
+    }
+    public static sizzle.types.Ast.PositionInfo parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return newBuilder().mergeFrom(data, extensionRegistry)
+               .buildParsed();
+    }
+    public static sizzle.types.Ast.PositionInfo parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static sizzle.types.Ast.PositionInfo parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    public static sizzle.types.Ast.PositionInfo parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static sizzle.types.Ast.PositionInfo parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      Builder builder = newBuilder();
+      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
+        return builder.buildParsed();
+      } else {
+        return null;
+      }
+    }
+    public static sizzle.types.Ast.PositionInfo parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input).buildParsed();
+    }
+    public static sizzle.types.Ast.PositionInfo parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return newBuilder().mergeFrom(input, extensionRegistry)
+               .buildParsed();
+    }
+    
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(sizzle.types.Ast.PositionInfo prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+    
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements sizzle.types.Ast.PositionInfoOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return sizzle.types.Ast.internal_static_sizzle_types_PositionInfo_descriptor;
+      }
+      
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return sizzle.types.Ast.internal_static_sizzle_types_PositionInfo_fieldAccessorTable;
+      }
+      
+      // Construct using sizzle.types.Ast.PositionInfo.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+      
+      private Builder(BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+      
+      public Builder clear() {
+        super.clear();
+        startPos_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        length_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        startLine_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000004);
+        startCol_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000008);
+        endLine_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000010);
+        endCol_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000020);
+        return this;
+      }
+      
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+      
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return sizzle.types.Ast.PositionInfo.getDescriptor();
+      }
+      
+      public sizzle.types.Ast.PositionInfo getDefaultInstanceForType() {
+        return sizzle.types.Ast.PositionInfo.getDefaultInstance();
+      }
+      
+      public sizzle.types.Ast.PositionInfo build() {
+        sizzle.types.Ast.PositionInfo result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+      
+      private sizzle.types.Ast.PositionInfo buildParsed()
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        sizzle.types.Ast.PositionInfo result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(
+            result).asInvalidProtocolBufferException();
+        }
+        return result;
+      }
+      
+      public sizzle.types.Ast.PositionInfo buildPartial() {
+        sizzle.types.Ast.PositionInfo result = new sizzle.types.Ast.PositionInfo(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.startPos_ = startPos_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.length_ = length_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.startLine_ = startLine_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.startCol_ = startCol_;
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        result.endLine_ = endLine_;
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+          to_bitField0_ |= 0x00000020;
+        }
+        result.endCol_ = endCol_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+      
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof sizzle.types.Ast.PositionInfo) {
+          return mergeFrom((sizzle.types.Ast.PositionInfo)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+      
+      public Builder mergeFrom(sizzle.types.Ast.PositionInfo other) {
+        if (other == sizzle.types.Ast.PositionInfo.getDefaultInstance()) return this;
+        if (other.hasStartPos()) {
+          setStartPos(other.getStartPos());
+        }
+        if (other.hasLength()) {
+          setLength(other.getLength());
+        }
+        if (other.hasStartLine()) {
+          setStartLine(other.getStartLine());
+        }
+        if (other.hasStartCol()) {
+          setStartCol(other.getStartCol());
+        }
+        if (other.hasEndLine()) {
+          setEndLine(other.getEndLine());
+        }
+        if (other.hasEndCol()) {
+          setEndCol(other.getEndCol());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+      
+      public final boolean isInitialized() {
+        if (!hasStartPos()) {
+          
+          return false;
+        }
+        if (!hasLength()) {
+          
+          return false;
+        }
+        if (!hasStartLine()) {
+          
+          return false;
+        }
+        if (!hasStartCol()) {
+          
+          return false;
+        }
+        if (!hasEndLine()) {
+          
+          return false;
+        }
+        if (!hasEndCol()) {
+          
+          return false;
+        }
+        return true;
+      }
+      
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder(
+            this.getUnknownFields());
+        while (true) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              this.setUnknownFields(unknownFields.build());
+              onChanged();
+              return this;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                this.setUnknownFields(unknownFields.build());
+                onChanged();
+                return this;
+              }
+              break;
+            }
+            case 8: {
+              bitField0_ |= 0x00000001;
+              startPos_ = input.readInt32();
+              break;
+            }
+            case 16: {
+              bitField0_ |= 0x00000002;
+              length_ = input.readInt32();
+              break;
+            }
+            case 24: {
+              bitField0_ |= 0x00000004;
+              startLine_ = input.readInt32();
+              break;
+            }
+            case 32: {
+              bitField0_ |= 0x00000008;
+              startCol_ = input.readInt32();
+              break;
+            }
+            case 40: {
+              bitField0_ |= 0x00000010;
+              endLine_ = input.readInt32();
+              break;
+            }
+            case 48: {
+              bitField0_ |= 0x00000020;
+              endCol_ = input.readInt32();
+              break;
+            }
+          }
+        }
+      }
+      
+      private int bitField0_;
+      
+      // required int32 start_pos = 1;
+      private int startPos_ ;
+      public boolean hasStartPos() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      public int getStartPos() {
+        return startPos_;
+      }
+      public Builder setStartPos(int value) {
+        bitField0_ |= 0x00000001;
+        startPos_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearStartPos() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        startPos_ = 0;
+        onChanged();
+        return this;
+      }
+      
+      // required int32 length = 2;
+      private int length_ ;
+      public boolean hasLength() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      public int getLength() {
+        return length_;
+      }
+      public Builder setLength(int value) {
+        bitField0_ |= 0x00000002;
+        length_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearLength() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        length_ = 0;
+        onChanged();
+        return this;
+      }
+      
       // required int32 start_line = 3;
       private int startLine_ ;
       public boolean hasStartLine() {
@@ -14945,22 +15992,80 @@ public final class Ast {
         return this;
       }
       
-      // @@protoc_insertion_point(builder_scope:sizzle.types.Comment)
+      // required int32 start_col = 4;
+      private int startCol_ ;
+      public boolean hasStartCol() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      public int getStartCol() {
+        return startCol_;
+      }
+      public Builder setStartCol(int value) {
+        bitField0_ |= 0x00000008;
+        startCol_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearStartCol() {
+        bitField0_ = (bitField0_ & ~0x00000008);
+        startCol_ = 0;
+        onChanged();
+        return this;
+      }
+      
+      // required int32 end_line = 5;
+      private int endLine_ ;
+      public boolean hasEndLine() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
+      }
+      public int getEndLine() {
+        return endLine_;
+      }
+      public Builder setEndLine(int value) {
+        bitField0_ |= 0x00000010;
+        endLine_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearEndLine() {
+        bitField0_ = (bitField0_ & ~0x00000010);
+        endLine_ = 0;
+        onChanged();
+        return this;
+      }
+      
+      // required int32 end_col = 6;
+      private int endCol_ ;
+      public boolean hasEndCol() {
+        return ((bitField0_ & 0x00000020) == 0x00000020);
+      }
+      public int getEndCol() {
+        return endCol_;
+      }
+      public Builder setEndCol(int value) {
+        bitField0_ |= 0x00000020;
+        endCol_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearEndCol() {
+        bitField0_ = (bitField0_ & ~0x00000020);
+        endCol_ = 0;
+        onChanged();
+        return this;
+      }
+      
+      // @@protoc_insertion_point(builder_scope:sizzle.types.PositionInfo)
     }
     
     static {
-      defaultInstance = new Comment(true);
+      defaultInstance = new PositionInfo(true);
       defaultInstance.initFields();
     }
     
-    // @@protoc_insertion_point(class_scope:sizzle.types.Comment)
+    // @@protoc_insertion_point(class_scope:sizzle.types.PositionInfo)
   }
   
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_sizzle_types_File_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_sizzle_types_File_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
     internal_static_sizzle_types_Namespace_descriptor;
   private static
@@ -15006,6 +16111,11 @@ public final class Ast {
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_sizzle_types_Comment_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_sizzle_types_PositionInfo_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_sizzle_types_PositionInfo_fieldAccessorTable;
   
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -15015,136 +16125,134 @@ public final class Ast {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\tast.proto\022\014sizzle.types\"\217\002\n\004File\022\014\n\004na" +
-      "me\030\001 \002(\t\022)\n\004kind\030\002 \002(\0162\033.sizzle.types.Fi" +
-      "le.FileKind\022+\n\nnamespaces\030\004 \003(\0132\027.sizzle" +
-      ".types.Namespace\022\017\n\007content\030\005 \001(\t\"\217\001\n\010Fi" +
-      "leKind\022\013\n\007UNKNOWN\020\001\022\n\n\006BINARY\020\002\022\010\n\004TEXT\020" +
-      "\003\022\007\n\003XML\020\004\022\025\n\021SOURCE_JAVA_ERROR\020\005\022\024\n\020SOU" +
-      "RCE_JAVA_JLS2\020\006\022\024\n\020SOURCE_JAVA_JLS3\020\007\022\024\n" +
-      "\020SOURCE_JAVA_JLS4\020\010\"\236\001\n\tNamespace\022\014\n\004nam" +
-      "e\030\001 \002(\t\022)\n\tmodifiers\030\002 \003(\0132\026.sizzle.type" +
-      "s.Modifier\022/\n\014declarations\030\003 \003(\0132\031.sizzl",
-      "e.types.Declaration\022\'\n\010comments\030\004 \003(\0132\025." +
-      "sizzle.types.Comment\"\361\002\n\013Declaration\022\014\n\004" +
-      "name\030\001 \002(\t\022$\n\004kind\030\002 \002(\0162\026.sizzle.types." +
-      "TypeKind\022)\n\tmodifiers\030\003 \003(\0132\026.sizzle.typ" +
-      "es.Modifier\022.\n\022generic_parameters\030\004 \003(\0132" +
-      "\022.sizzle.types.Type\022#\n\007parents\030\005 \003(\0132\022.s" +
-      "izzle.types.Type\022%\n\007methods\030\006 \003(\0132\024.sizz" +
-      "le.types.Method\022&\n\006fields\030\007 \003(\0132\026.sizzle" +
-      ".types.Variable\0226\n\023nested_declarations\030\010" +
-      " \003(\0132\031.sizzle.types.Declaration\022\'\n\010comme",
-      "nts\030\t \003(\0132\025.sizzle.types.Comment\"F\n\004Type" +
-      "\022\014\n\004name\030\001 \002(\t\022$\n\004kind\030\002 \002(\0162\026.sizzle.ty" +
-      "pes.TypeKind\022\n\n\002id\030\004 \001(\t\"\310\002\n\006Method\022\014\n\004n" +
-      "ame\030\001 \001(\t\022)\n\tmodifiers\030\002 \003(\0132\026.sizzle.ty" +
-      "pes.Modifier\022\'\n\013return_type\030\003 \002(\0132\022.sizz" +
-      "le.types.Type\022.\n\022generic_parameters\030\004 \003(" +
-      "\0132\022.sizzle.types.Type\022)\n\targuments\030\005 \003(\013" +
-      "2\026.sizzle.types.Variable\022+\n\017exception_ty" +
-      "pes\030\006 \003(\0132\022.sizzle.types.Type\022+\n\nstateme" +
-      "nts\030\007 \003(\0132\027.sizzle.types.Statement\022\'\n\010co",
-      "mments\030\010 \003(\0132\025.sizzle.types.Comment\"\306\001\n\010" +
-      "Variable\022\014\n\004name\030\001 \002(\t\022)\n\rvariable_type\030" +
-      "\002 \002(\0132\022.sizzle.types.Type\022)\n\tmodifiers\030\003" +
-      " \003(\0132\026.sizzle.types.Modifier\022-\n\013initiali" +
-      "zer\030\004 \001(\0132\030.sizzle.types.Expression\022\'\n\010c" +
-      "omments\030\005 \003(\0132\025.sizzle.types.Comment\"\262\005\n" +
-      "\tStatement\0223\n\004kind\030\001 \002(\0162%.sizzle.types." +
-      "Statement.StatementKind\022\'\n\010comments\030\002 \003(" +
-      "\0132\025.sizzle.types.Comment\022+\n\nstatements\030\003" +
-      " \003(\0132\027.sizzle.types.Statement\0221\n\017initial",
-      "izations\030\004 \003(\0132\030.sizzle.types.Expression" +
-      "\022+\n\tcondition\030\005 \001(\0132\030.sizzle.types.Expre" +
-      "ssion\022)\n\007updates\030\006 \003(\0132\030.sizzle.types.Ex" +
-      "pression\0224\n\024variable_declaration\030\007 \001(\0132\026" +
-      ".sizzle.types.Variable\0223\n\020type_declarati" +
-      "on\030\010 \001(\0132\031.sizzle.types.Declaration\022,\n\ne" +
-      "xpression\030\t \001(\0132\030.sizzle.types.Expressio" +
-      "n\"\365\001\n\rStatementKind\022\t\n\005BLOCK\020\001\022\014\n\010TYPEDE" +
-      "CL\020\003\022\016\n\nEXPRESSION\020\004\022\020\n\014SYNCHRONIZED\020\005\022\n" +
-      "\n\006RETURN\020\006\022\007\n\003FOR\020\007\022\006\n\002DO\020\010\022\t\n\005WHILE\020\t\022\006",
-      "\n\002IF\020\n\022\n\n\006ASSERT\020\013\022\t\n\005BREAK\020\014\022\014\n\010CONTINU" +
-      "E\020\r\022\t\n\005LABEL\020\016\022\n\n\006SWITCH\020\017\022\010\n\004CASE\020\020\022\007\n\003" +
-      "TRY\020\021\022\t\n\005THROW\020\022\022\t\n\005CATCH\020\023\022\t\n\005EMPTY\020\024\022\t" +
-      "\n\005OTHER\020\025\"\306\010\n\nExpression\0225\n\004kind\030\001 \002(\0162\'" +
-      ".sizzle.types.Expression.ExpressionKind\022" +
-      "-\n\013expressions\030\002 \003(\0132\030.sizzle.types.Expr" +
-      "ession\022.\n\016variable_decls\030\003 \003(\0132\026.sizzle." +
-      "types.Variable\022$\n\010new_type\030\004 \001(\0132\022.sizzl" +
-      "e.types.Type\022.\n\022generic_parameters\030\005 \003(\013" +
-      "2\022.sizzle.types.Type\022\022\n\nis_postfix\030\006 \001(\010",
-      "\022\017\n\007literal\030\007 \001(\t\022\020\n\010variable\030\010 \001(\t\022\016\n\006m" +
-      "ethod\030\t \001(\t\022-\n\013method_args\030\n \003(\0132\030.sizzl" +
-      "e.types.Expression\"\325\005\n\016ExpressionKind\022\013\n" +
-      "\007LITERAL\020\001\022\r\n\tVARACCESS\020\002\022\013\n\007VARDECL\020\003\022\016" +
-      "\n\nMETHODCALL\020\004\022\010\n\004CAST\020\005\022\016\n\nARRAYINDEX\020\006" +
-      "\022\r\n\tARRAYINIT\020\007\022\017\n\013TYPECOMPARE\020\010\022\007\n\003NEW\020" +
-      "\t\022\014\n\010NEWARRAY\020\n\022\n\n\006OP_ADD\020\013\022\n\n\006OP_SUB\020\014\022" +
-      "\013\n\007OP_MULT\020\r\022\n\n\006OP_DIV\020\016\022\n\n\006OP_MOD\020\017\022\n\n\006" +
-      "OP_INC\020\020\022\n\n\006OP_DEC\020\021\022\016\n\nBIT_LSHIFT\020\022\022\016\n\n" +
-      "BIT_RSHIFT\020\023\022\026\n\022BIT_UNSIGNEDRSHIFT\020\024\022\013\n\007",
-      "BIT_AND\020\025\022\n\n\006BIT_OR\020\026\022\013\n\007BIT_NOT\020\027\022\013\n\007BI" +
-      "T_XOR\020\030\022\017\n\013LOGICAL_NOT\020\031\022\017\n\013LOGICAL_AND\020" +
-      "\032\022\016\n\nLOGICAL_OR\020\033\022\016\n\nLOGICAL_EQ\020\034\022\017\n\013LOG" +
-      "ICAL_NEQ\020\035\022\006\n\002LT\020\036\022\006\n\002GT\020\037\022\010\n\004LTEQ\020 \022\010\n\004" +
-      "GTEQ\020!\022\017\n\013CONDITIONAL\020\"\022\020\n\014NULLCOALESCE\020" +
-      "#\022\n\n\006ASSIGN\020$\022\016\n\nASSIGN_ADD\020%\022\016\n\nASSIGN_" +
-      "SUB\020&\022\017\n\013ASSIGN_MULT\020\'\022\016\n\nASSIGN_DIV\020(\022\016" +
-      "\n\nASSIGN_MOD\020)\022\021\n\rASSIGN_BITXOR\020*\022\021\n\rASS" +
-      "IGN_BITAND\020+\022\020\n\014ASSIGN_BITOR\020,\022\021\n\rASSIGN" +
-      "_LSHIFT\020-\022\021\n\rASSIGN_RSHIFT\020.\022\031\n\025ASSIGN_U",
-      "NSIGNEDRSHIFT\020/\022\t\n\005OTHER\0200\"\363\002\n\010Modifier\022" +
-      "1\n\004kind\030\001 \002(\0162#.sizzle.types.Modifier.Mo" +
-      "difierKind\022\022\n\nvisibility\030\002 \001(\r\022\027\n\017annota" +
-      "tion_name\030\003 \001(\t\022\032\n\022annotation_members\030\004 " +
-      "\003(\t\0223\n\021annotation_values\030\005 \003(\0132\030.sizzle." +
-      "types.Expression\022\r\n\005other\030\006 \001(\t\"b\n\014Modif" +
-      "ierKind\022\016\n\nVISIBILITY\020\001\022\016\n\nANNOTATION\020\002\022" +
-      "\t\n\005FINAL\020\003\022\n\n\006STATIC\020\004\022\020\n\014SYNCHRONIZED\020\005" +
-      "\022\t\n\005OTHER\020\006\"C\n\nVisibility\022\n\n\006PUBLIC\020\001\022\013\n" +
-      "\007PRIVATE\020\002\022\r\n\tPROTECTED\020\004\022\r\n\tNAMESPACE\020\010",
-      "\"\224\001\n\007Comment\022/\n\004kind\030\001 \002(\0162!.sizzle.type" +
-      "s.Comment.CommentKind\022\r\n\005value\030\002 \002(\t\022\022\n\n" +
-      "start_line\030\003 \002(\005\"5\n\013CommentKind\022\010\n\004LINE\020" +
-      "\001\022\t\n\005BLOCK\020\002\022\007\n\003DOC\020\003\022\010\n\004SPEC\020\004*\177\n\010TypeK" +
-      "ind\022\t\n\005CLASS\020\001\022\r\n\tINTERFACE\020\002\022\r\n\tANONYMO" +
-      "US\020\003\022\n\n\006STRUCT\020\004\022\010\n\004ENUM\020\005\022\016\n\nANNOTATION" +
-      "\020\006\022\014\n\010DELEGATE\020\007\022\013\n\007GENERIC\020\010\022\t\n\005OTHER\020\t" +
-      "B\002H\001"
+      "\n\tast.proto\022\014sizzle.types\032\014shared.proto\"" +
+      "\314\001\n\tNamespace\022\014\n\004name\030\001 \002(\t\022)\n\tmodifiers" +
+      "\030\002 \003(\0132\026.sizzle.types.Modifier\022/\n\014declar" +
+      "ations\030\003 \003(\0132\031.sizzle.types.Declaration\022" +
+      "\'\n\010comments\030\004 \003(\0132\025.sizzle.types.Comment" +
+      "\022,\n\010position\030\005 \002(\0132\032.sizzle.types.Positi" +
+      "onInfo\"\237\003\n\013Declaration\022\014\n\004name\030\001 \002(\t\022$\n\004" +
+      "kind\030\002 \002(\0162\026.sizzle.types.TypeKind\022)\n\tmo" +
+      "difiers\030\003 \003(\0132\026.sizzle.types.Modifier\022.\n" +
+      "\022generic_parameters\030\004 \003(\0132\022.sizzle.types",
+      ".Type\022#\n\007parents\030\005 \003(\0132\022.sizzle.types.Ty" +
+      "pe\022%\n\007methods\030\006 \003(\0132\024.sizzle.types.Metho" +
+      "d\022&\n\006fields\030\007 \003(\0132\026.sizzle.types.Variabl" +
+      "e\0226\n\023nested_declarations\030\010 \003(\0132\031.sizzle." +
+      "types.Declaration\022\'\n\010comments\030\t \003(\0132\025.si" +
+      "zzle.types.Comment\022,\n\010position\030\n \002(\0132\032.s" +
+      "izzle.types.PositionInfo\"F\n\004Type\022\014\n\004name" +
+      "\030\001 \002(\t\022$\n\004kind\030\002 \002(\0162\026.sizzle.types.Type" +
+      "Kind\022\n\n\002id\030\004 \001(\t\"\366\002\n\006Method\022\014\n\004name\030\001 \001(" +
+      "\t\022)\n\tmodifiers\030\002 \003(\0132\026.sizzle.types.Modi",
+      "fier\022\'\n\013return_type\030\003 \002(\0132\022.sizzle.types" +
+      ".Type\022.\n\022generic_parameters\030\004 \003(\0132\022.sizz" +
+      "le.types.Type\022)\n\targuments\030\005 \003(\0132\026.sizzl" +
+      "e.types.Variable\022+\n\017exception_types\030\006 \003(" +
+      "\0132\022.sizzle.types.Type\022+\n\nstatements\030\007 \003(" +
+      "\0132\027.sizzle.types.Statement\022\'\n\010comments\030\010" +
+      " \003(\0132\025.sizzle.types.Comment\022,\n\010position\030" +
+      "\t \002(\0132\032.sizzle.types.PositionInfo\"\364\001\n\010Va" +
+      "riable\022\014\n\004name\030\001 \002(\t\022)\n\rvariable_type\030\002 " +
+      "\002(\0132\022.sizzle.types.Type\022)\n\tmodifiers\030\003 \003",
+      "(\0132\026.sizzle.types.Modifier\022-\n\013initialize" +
+      "r\030\004 \001(\0132\030.sizzle.types.Expression\022\'\n\010com" +
+      "ments\030\005 \003(\0132\025.sizzle.types.Comment\022,\n\010po" +
+      "sition\030\006 \002(\0132\032.sizzle.types.PositionInfo" +
+      "\"\340\005\n\tStatement\0223\n\004kind\030\001 \002(\0162%.sizzle.ty" +
+      "pes.Statement.StatementKind\022\'\n\010comments\030" +
+      "\002 \003(\0132\025.sizzle.types.Comment\022+\n\nstatemen" +
+      "ts\030\003 \003(\0132\027.sizzle.types.Statement\0221\n\017ini" +
+      "tializations\030\004 \003(\0132\030.sizzle.types.Expres" +
+      "sion\022+\n\tcondition\030\005 \001(\0132\030.sizzle.types.E",
+      "xpression\022)\n\007updates\030\006 \003(\0132\030.sizzle.type" +
+      "s.Expression\0224\n\024variable_declaration\030\007 \001" +
+      "(\0132\026.sizzle.types.Variable\0223\n\020type_decla" +
+      "ration\030\010 \001(\0132\031.sizzle.types.Declaration\022" +
+      ",\n\nexpression\030\t \001(\0132\030.sizzle.types.Expre" +
+      "ssion\022,\n\010position\030\n \002(\0132\032.sizzle.types.P" +
+      "ositionInfo\"\365\001\n\rStatementKind\022\t\n\005BLOCK\020\001" +
+      "\022\014\n\010TYPEDECL\020\003\022\016\n\nEXPRESSION\020\004\022\020\n\014SYNCHR" +
+      "ONIZED\020\005\022\n\n\006RETURN\020\006\022\007\n\003FOR\020\007\022\006\n\002DO\020\010\022\t\n" +
+      "\005WHILE\020\t\022\006\n\002IF\020\n\022\n\n\006ASSERT\020\013\022\t\n\005BREAK\020\014\022",
+      "\014\n\010CONTINUE\020\r\022\t\n\005LABEL\020\016\022\n\n\006SWITCH\020\017\022\010\n\004" +
+      "CASE\020\020\022\007\n\003TRY\020\021\022\t\n\005THROW\020\022\022\t\n\005CATCH\020\023\022\t\n" +
+      "\005EMPTY\020\024\022\t\n\005OTHER\020\025\"\251\t\n\nExpression\0225\n\004ki" +
+      "nd\030\001 \002(\0162\'.sizzle.types.Expression.Expre" +
+      "ssionKind\022-\n\013expressions\030\002 \003(\0132\030.sizzle." +
+      "types.Expression\022.\n\016variable_decls\030\003 \003(\013" +
+      "2\026.sizzle.types.Variable\022$\n\010new_type\030\004 \001" +
+      "(\0132\022.sizzle.types.Type\022.\n\022generic_parame" +
+      "ters\030\005 \003(\0132\022.sizzle.types.Type\022\022\n\nis_pos" +
+      "tfix\030\006 \001(\010\022\017\n\007literal\030\007 \001(\t\022\020\n\010variable\030",
+      "\010 \001(\t\022\016\n\006method\030\t \001(\t\022-\n\013method_args\030\n \003" +
+      "(\0132\030.sizzle.types.Expression\0223\n\020anon_dec" +
+      "laration\030\013 \001(\0132\031.sizzle.types.Declaratio" +
+      "n\022,\n\010position\030\014 \002(\0132\032.sizzle.types.Posit" +
+      "ionInfo\"\325\005\n\016ExpressionKind\022\013\n\007LITERAL\020\001\022" +
+      "\r\n\tVARACCESS\020\002\022\013\n\007VARDECL\020\003\022\016\n\nMETHODCAL" +
+      "L\020\004\022\010\n\004CAST\020\005\022\016\n\nARRAYINDEX\020\006\022\r\n\tARRAYIN" +
+      "IT\020\007\022\017\n\013TYPECOMPARE\020\010\022\007\n\003NEW\020\t\022\014\n\010NEWARR" +
+      "AY\020\n\022\n\n\006OP_ADD\020\013\022\n\n\006OP_SUB\020\014\022\013\n\007OP_MULT\020" +
+      "\r\022\n\n\006OP_DIV\020\016\022\n\n\006OP_MOD\020\017\022\n\n\006OP_INC\020\020\022\n\n",
+      "\006OP_DEC\020\021\022\016\n\nBIT_LSHIFT\020\022\022\016\n\nBIT_RSHIFT\020" +
+      "\023\022\026\n\022BIT_UNSIGNEDRSHIFT\020\024\022\013\n\007BIT_AND\020\025\022\n" +
+      "\n\006BIT_OR\020\026\022\013\n\007BIT_NOT\020\027\022\013\n\007BIT_XOR\020\030\022\017\n\013" +
+      "LOGICAL_NOT\020\031\022\017\n\013LOGICAL_AND\020\032\022\016\n\nLOGICA" +
+      "L_OR\020\033\022\016\n\nLOGICAL_EQ\020\034\022\017\n\013LOGICAL_NEQ\020\035\022" +
+      "\006\n\002LT\020\036\022\006\n\002GT\020\037\022\010\n\004LTEQ\020 \022\010\n\004GTEQ\020!\022\017\n\013C" +
+      "ONDITIONAL\020\"\022\020\n\014NULLCOALESCE\020#\022\n\n\006ASSIGN" +
+      "\020$\022\016\n\nASSIGN_ADD\020%\022\016\n\nASSIGN_SUB\020&\022\017\n\013AS" +
+      "SIGN_MULT\020\'\022\016\n\nASSIGN_DIV\020(\022\016\n\nASSIGN_MO" +
+      "D\020)\022\021\n\rASSIGN_BITXOR\020*\022\021\n\rASSIGN_BITAND\020",
+      "+\022\020\n\014ASSIGN_BITOR\020,\022\021\n\rASSIGN_LSHIFT\020-\022\021" +
+      "\n\rASSIGN_RSHIFT\020.\022\031\n\025ASSIGN_UNSIGNEDRSHI" +
+      "FT\020/\022\t\n\005OTHER\0200\"\241\003\n\010Modifier\0221\n\004kind\030\001 \002" +
+      "(\0162#.sizzle.types.Modifier.ModifierKind\022" +
+      "\022\n\nvisibility\030\002 \001(\r\022\027\n\017annotation_name\030\003" +
+      " \001(\t\022\032\n\022annotation_members\030\004 \003(\t\0223\n\021anno" +
+      "tation_values\030\005 \003(\0132\030.sizzle.types.Expre" +
+      "ssion\022\r\n\005other\030\006 \001(\t\022,\n\010position\030\007 \002(\0132\032" +
+      ".sizzle.types.PositionInfo\"b\n\014ModifierKi" +
+      "nd\022\016\n\nVISIBILITY\020\001\022\016\n\nANNOTATION\020\002\022\t\n\005FI",
+      "NAL\020\003\022\n\n\006STATIC\020\004\022\020\n\014SYNCHRONIZED\020\005\022\t\n\005O" +
+      "THER\020\006\"C\n\nVisibility\022\n\n\006PUBLIC\020\001\022\013\n\007PRIV" +
+      "ATE\020\002\022\r\n\tPROTECTED\020\004\022\r\n\tNAMESPACE\020\010\"\256\001\n\007" +
+      "Comment\022/\n\004kind\030\001 \002(\0162!.sizzle.types.Com" +
+      "ment.CommentKind\022\r\n\005value\030\002 \002(\t\022,\n\010posit" +
+      "ion\030\003 \002(\0132\032.sizzle.types.PositionInfo\"5\n" +
+      "\013CommentKind\022\010\n\004LINE\020\001\022\t\n\005BLOCK\020\002\022\007\n\003DOC" +
+      "\020\003\022\010\n\004SPEC\020\004\"{\n\014PositionInfo\022\021\n\tstart_po" +
+      "s\030\001 \002(\005\022\016\n\006length\030\002 \002(\005\022\022\n\nstart_line\030\003 " +
+      "\002(\005\022\021\n\tstart_col\030\004 \002(\005\022\020\n\010end_line\030\005 \002(\005",
+      "\022\017\n\007end_col\030\006 \002(\005*\177\n\010TypeKind\022\t\n\005CLASS\020\001" +
+      "\022\r\n\tINTERFACE\020\002\022\r\n\tANONYMOUS\020\003\022\n\n\006STRUCT" +
+      "\020\004\022\010\n\004ENUM\020\005\022\016\n\nANNOTATION\020\006\022\014\n\010DELEGATE" +
+      "\020\007\022\013\n\007GENERIC\020\010\022\t\n\005OTHER\020\tB\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
         public com.google.protobuf.ExtensionRegistry assignDescriptors(
             com.google.protobuf.Descriptors.FileDescriptor root) {
           descriptor = root;
-          internal_static_sizzle_types_File_descriptor =
-            getDescriptor().getMessageTypes().get(0);
-          internal_static_sizzle_types_File_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_sizzle_types_File_descriptor,
-              new java.lang.String[] { "Name", "Kind", "Namespaces", "Content", },
-              sizzle.types.Ast.File.class,
-              sizzle.types.Ast.File.Builder.class);
           internal_static_sizzle_types_Namespace_descriptor =
-            getDescriptor().getMessageTypes().get(1);
+            getDescriptor().getMessageTypes().get(0);
           internal_static_sizzle_types_Namespace_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_sizzle_types_Namespace_descriptor,
-              new java.lang.String[] { "Name", "Modifiers", "Declarations", "Comments", },
+              new java.lang.String[] { "Name", "Modifiers", "Declarations", "Comments", "Position", },
               sizzle.types.Ast.Namespace.class,
               sizzle.types.Ast.Namespace.Builder.class);
           internal_static_sizzle_types_Declaration_descriptor =
-            getDescriptor().getMessageTypes().get(2);
+            getDescriptor().getMessageTypes().get(1);
           internal_static_sizzle_types_Declaration_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_sizzle_types_Declaration_descriptor,
-              new java.lang.String[] { "Name", "Kind", "Modifiers", "GenericParameters", "Parents", "Methods", "Fields", "NestedDeclarations", "Comments", },
+              new java.lang.String[] { "Name", "Kind", "Modifiers", "GenericParameters", "Parents", "Methods", "Fields", "NestedDeclarations", "Comments", "Position", },
               sizzle.types.Ast.Declaration.class,
               sizzle.types.Ast.Declaration.Builder.class);
           internal_static_sizzle_types_Type_descriptor =
-            getDescriptor().getMessageTypes().get(3);
+            getDescriptor().getMessageTypes().get(2);
           internal_static_sizzle_types_Type_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_sizzle_types_Type_descriptor,
@@ -15152,59 +16260,68 @@ public final class Ast {
               sizzle.types.Ast.Type.class,
               sizzle.types.Ast.Type.Builder.class);
           internal_static_sizzle_types_Method_descriptor =
-            getDescriptor().getMessageTypes().get(4);
+            getDescriptor().getMessageTypes().get(3);
           internal_static_sizzle_types_Method_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_sizzle_types_Method_descriptor,
-              new java.lang.String[] { "Name", "Modifiers", "ReturnType", "GenericParameters", "Arguments", "ExceptionTypes", "Statements", "Comments", },
+              new java.lang.String[] { "Name", "Modifiers", "ReturnType", "GenericParameters", "Arguments", "ExceptionTypes", "Statements", "Comments", "Position", },
               sizzle.types.Ast.Method.class,
               sizzle.types.Ast.Method.Builder.class);
           internal_static_sizzle_types_Variable_descriptor =
-            getDescriptor().getMessageTypes().get(5);
+            getDescriptor().getMessageTypes().get(4);
           internal_static_sizzle_types_Variable_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_sizzle_types_Variable_descriptor,
-              new java.lang.String[] { "Name", "VariableType", "Modifiers", "Initializer", "Comments", },
+              new java.lang.String[] { "Name", "VariableType", "Modifiers", "Initializer", "Comments", "Position", },
               sizzle.types.Ast.Variable.class,
               sizzle.types.Ast.Variable.Builder.class);
           internal_static_sizzle_types_Statement_descriptor =
-            getDescriptor().getMessageTypes().get(6);
+            getDescriptor().getMessageTypes().get(5);
           internal_static_sizzle_types_Statement_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_sizzle_types_Statement_descriptor,
-              new java.lang.String[] { "Kind", "Comments", "Statements", "Initializations", "Condition", "Updates", "VariableDeclaration", "TypeDeclaration", "Expression", },
+              new java.lang.String[] { "Kind", "Comments", "Statements", "Initializations", "Condition", "Updates", "VariableDeclaration", "TypeDeclaration", "Expression", "Position", },
               sizzle.types.Ast.Statement.class,
               sizzle.types.Ast.Statement.Builder.class);
           internal_static_sizzle_types_Expression_descriptor =
-            getDescriptor().getMessageTypes().get(7);
+            getDescriptor().getMessageTypes().get(6);
           internal_static_sizzle_types_Expression_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_sizzle_types_Expression_descriptor,
-              new java.lang.String[] { "Kind", "Expressions", "VariableDecls", "NewType", "GenericParameters", "IsPostfix", "Literal", "Variable", "Method", "MethodArgs", },
+              new java.lang.String[] { "Kind", "Expressions", "VariableDecls", "NewType", "GenericParameters", "IsPostfix", "Literal", "Variable", "Method", "MethodArgs", "AnonDeclaration", "Position", },
               sizzle.types.Ast.Expression.class,
               sizzle.types.Ast.Expression.Builder.class);
           internal_static_sizzle_types_Modifier_descriptor =
-            getDescriptor().getMessageTypes().get(8);
+            getDescriptor().getMessageTypes().get(7);
           internal_static_sizzle_types_Modifier_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_sizzle_types_Modifier_descriptor,
-              new java.lang.String[] { "Kind", "Visibility", "AnnotationName", "AnnotationMembers", "AnnotationValues", "Other", },
+              new java.lang.String[] { "Kind", "Visibility", "AnnotationName", "AnnotationMembers", "AnnotationValues", "Other", "Position", },
               sizzle.types.Ast.Modifier.class,
               sizzle.types.Ast.Modifier.Builder.class);
           internal_static_sizzle_types_Comment_descriptor =
-            getDescriptor().getMessageTypes().get(9);
+            getDescriptor().getMessageTypes().get(8);
           internal_static_sizzle_types_Comment_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_sizzle_types_Comment_descriptor,
-              new java.lang.String[] { "Kind", "Value", "StartLine", },
+              new java.lang.String[] { "Kind", "Value", "Position", },
               sizzle.types.Ast.Comment.class,
               sizzle.types.Ast.Comment.Builder.class);
+          internal_static_sizzle_types_PositionInfo_descriptor =
+            getDescriptor().getMessageTypes().get(9);
+          internal_static_sizzle_types_PositionInfo_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_sizzle_types_PositionInfo_descriptor,
+              new java.lang.String[] { "StartPos", "Length", "StartLine", "StartCol", "EndLine", "EndCol", },
+              sizzle.types.Ast.PositionInfo.class,
+              sizzle.types.Ast.PositionInfo.Builder.class);
           return null;
         }
       };
     com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
+          sizzle.types.Shared.getDescriptor(),
         }, assigner);
   }
   

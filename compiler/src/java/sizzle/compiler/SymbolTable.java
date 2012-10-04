@@ -36,7 +36,7 @@ import sizzle.types.StatementKindProtoMap;
 import sizzle.types.StatementProtoTuple;
 import sizzle.types.TypeKindProtoMap;
 import sizzle.types.VariableProtoTuple;
-import sizzle.types.FileProtoTuple;
+import sizzle.types.ChangedFileProtoTuple;
 import sizzle.types.FileKindProtoMap;
 import sizzle.types.MethodProtoTuple;
 import sizzle.types.PersonProtoTuple;
@@ -138,7 +138,7 @@ public class SymbolTable {
 		this.idmap.put("Declaration", new DeclarationProtoTuple());
 		this.idmap.put("ExpressionKind", new ExpressionKindProtoMap());
 		this.idmap.put("Expression", new ExpressionProtoTuple());
-		this.idmap.put("File", new FileProtoTuple());
+		this.idmap.put("File", new ChangedFileProtoTuple());
 		this.idmap.put("FileKind", new FileKindProtoMap());
 		this.idmap.put("Method", new MethodProtoTuple());
 		this.idmap.put("ModifierKind", new ModifierKindProtoMap());
@@ -202,7 +202,7 @@ public class SymbolTable {
 		this.setFunction(new CommentProtoTuple().toJavaType(), new SizzleFunction(new SizzleBytes(), new SizzleType[] { new SizzleBytes() }, new CommentProtoTuple().toJavaType() + ".parseFrom(${0})"));
 		this.setFunction(new DeclarationProtoTuple().toJavaType(), new SizzleFunction(new SizzleBytes(), new SizzleType[] { new SizzleBytes() }, new DeclarationProtoTuple().toJavaType() + ".parseFrom(${0})"));
 		this.setFunction(new ExpressionProtoTuple().toJavaType(), new SizzleFunction(new SizzleBytes(), new SizzleType[] { new SizzleBytes() }, new ExpressionProtoTuple().toJavaType() + ".parseFrom(${0})"));
-		this.setFunction(new FileProtoTuple().toJavaType(), new SizzleFunction(new SizzleBytes(), new SizzleType[] { new SizzleBytes() }, new FileProtoTuple().toJavaType() + ".parseFrom(${0})"));
+		this.setFunction(new ChangedFileProtoTuple().toJavaType(), new SizzleFunction(new SizzleBytes(), new SizzleType[] { new SizzleBytes() }, new ChangedFileProtoTuple().toJavaType() + ".parseFrom(${0})"));
 		this.setFunction(new MethodProtoTuple().toJavaType(), new SizzleFunction(new SizzleBytes(), new SizzleType[] { new SizzleBytes() }, new MethodProtoTuple().toJavaType() + ".parseFrom(${0})"));
 		this.setFunction(new ModifierProtoTuple().toJavaType(), new SizzleFunction(new SizzleBytes(), new SizzleType[] { new SizzleBytes() }, new ModifierProtoTuple().toJavaType() + ".parseFrom(${0})"));
 		this.setFunction(new NamespaceProtoTuple().toJavaType(), new SizzleFunction(new SizzleBytes(), new SizzleType[] { new SizzleBytes() }, new NamespaceProtoTuple().toJavaType() + ".parseFrom(${0})"));

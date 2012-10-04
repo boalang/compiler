@@ -14,6 +14,6 @@ public class FileKindProtoMap extends SizzleProtoMap {
 
 	@Override
 	public String toJavaType() {
-		return "sizzle.types.Ast.File.FileKind";
+		return "sizzle.types.Diff.ChangedFile.FileKind";
 	}
 }

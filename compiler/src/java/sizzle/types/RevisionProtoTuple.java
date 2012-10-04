@@ -31,7 +31,7 @@ public class RevisionProtoTuple extends SizzleProtoTuple {
 		members.add(new SizzleString());
 
 		names.put("files", 5);
-		members.add(new SizzleProtoList(new FileProtoTuple()));
+		members.add(new SizzleProtoList(new ChangedFileProtoTuple()));
 	}
 
 	/**

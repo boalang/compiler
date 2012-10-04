@@ -8,6 +8,78 @@ public final class Shared {
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistry registry) {
   }
+  public enum ChangeKind
+      implements com.google.protobuf.ProtocolMessageEnum {
+    ADDED(0, 1),
+    DELETED(1, 2),
+    MODIFIED(2, 3),
+    ;
+    
+    public static final int ADDED_VALUE = 1;
+    public static final int DELETED_VALUE = 2;
+    public static final int MODIFIED_VALUE = 3;
+    
+    
+    public final int getNumber() { return value; }
+    
+    public static ChangeKind valueOf(int value) {
+      switch (value) {
+        case 1: return ADDED;
+        case 2: return DELETED;
+        case 3: return MODIFIED;
+        default: return null;
+      }
+    }
+    
+    public static com.google.protobuf.Internal.EnumLiteMap<ChangeKind>
+        internalGetValueMap() {
+      return internalValueMap;
+    }
+    private static com.google.protobuf.Internal.EnumLiteMap<ChangeKind>
+        internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<ChangeKind>() {
+            public ChangeKind findValueByNumber(int number) {
+              return ChangeKind.valueOf(number);
+            }
+          };
+    
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor
+        getValueDescriptor() {
+      return getDescriptor().getValues().get(index);
+    }
+    public final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptorForType() {
+      return getDescriptor();
+    }
+    public static final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptor() {
+      return sizzle.types.Shared.getDescriptor().getEnumTypes().get(0);
+    }
+    
+    private static final ChangeKind[] VALUES = {
+      ADDED, DELETED, MODIFIED, 
+    };
+    
+    public static ChangeKind valueOf(
+        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      if (desc.getType() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "EnumValueDescriptor is not for this type.");
+      }
+      return VALUES[desc.getIndex()];
+    }
+    
+    private final int index;
+    private final int value;
+    
+    private ChangeKind(int index, int value) {
+      this.index = index;
+      this.value = value;
+    }
+    
+    // @@protoc_insertion_point(enum_scope:sizzle.types.ChangeKind)
+  }
+  
   public interface PersonOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
     
@@ -611,7 +683,8 @@ public final class Shared {
     java.lang.String[] descriptorData = {
       "\n\014shared.proto\022\014sizzle.types\"<\n\006Person\022\020" +
       "\n\010username\030\001 \002(\t\022\021\n\treal_name\030\002 \002(\t\022\r\n\005e" +
-      "mail\030\003 \002(\tB\002H\001"
+      "mail\030\003 \002(\t*2\n\nChangeKind\022\t\n\005ADDED\020\001\022\013\n\007D" +
+      "ELETED\020\002\022\014\n\010MODIFIED\020\003B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
