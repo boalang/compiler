@@ -667,14 +667,14 @@ public final class Toplevel {
     sizzle.types.Code.CodeRepositoryOrBuilder getCodeRepositoriesOrBuilder(
         int index);
     
-    // repeated .sizzle.types.BugRepository bug_repositories = 18;
-    java.util.List<sizzle.types.Bugs.BugRepository> 
-        getBugRepositoriesList();
-    sizzle.types.Bugs.BugRepository getBugRepositories(int index);
-    int getBugRepositoriesCount();
-    java.util.List<? extends sizzle.types.Bugs.BugRepositoryOrBuilder> 
-        getBugRepositoriesOrBuilderList();
-    sizzle.types.Bugs.BugRepositoryOrBuilder getBugRepositoriesOrBuilder(
+    // repeated .sizzle.types.IssueRepository issue_repositories = 18;
+    java.util.List<sizzle.types.Issues.IssueRepository> 
+        getIssueRepositoriesList();
+    sizzle.types.Issues.IssueRepository getIssueRepositories(int index);
+    int getIssueRepositoriesCount();
+    java.util.List<? extends sizzle.types.Issues.IssueRepositoryOrBuilder> 
+        getIssueRepositoriesOrBuilderList();
+    sizzle.types.Issues.IssueRepositoryOrBuilder getIssueRepositoriesOrBuilder(
         int index);
   }
   public static final class Project extends
@@ -1047,25 +1047,25 @@ public final class Toplevel {
       return codeRepositories_.get(index);
     }
     
-    // repeated .sizzle.types.BugRepository bug_repositories = 18;
-    public static final int BUG_REPOSITORIES_FIELD_NUMBER = 18;
-    private java.util.List<sizzle.types.Bugs.BugRepository> bugRepositories_;
-    public java.util.List<sizzle.types.Bugs.BugRepository> getBugRepositoriesList() {
-      return bugRepositories_;
+    // repeated .sizzle.types.IssueRepository issue_repositories = 18;
+    public static final int ISSUE_REPOSITORIES_FIELD_NUMBER = 18;
+    private java.util.List<sizzle.types.Issues.IssueRepository> issueRepositories_;
+    public java.util.List<sizzle.types.Issues.IssueRepository> getIssueRepositoriesList() {
+      return issueRepositories_;
     }
-    public java.util.List<? extends sizzle.types.Bugs.BugRepositoryOrBuilder> 
-        getBugRepositoriesOrBuilderList() {
-      return bugRepositories_;
+    public java.util.List<? extends sizzle.types.Issues.IssueRepositoryOrBuilder> 
+        getIssueRepositoriesOrBuilderList() {
+      return issueRepositories_;
     }
-    public int getBugRepositoriesCount() {
-      return bugRepositories_.size();
+    public int getIssueRepositoriesCount() {
+      return issueRepositories_.size();
     }
-    public sizzle.types.Bugs.BugRepository getBugRepositories(int index) {
-      return bugRepositories_.get(index);
+    public sizzle.types.Issues.IssueRepository getIssueRepositories(int index) {
+      return issueRepositories_.get(index);
     }
-    public sizzle.types.Bugs.BugRepositoryOrBuilder getBugRepositoriesOrBuilder(
+    public sizzle.types.Issues.IssueRepositoryOrBuilder getIssueRepositoriesOrBuilder(
         int index) {
-      return bugRepositories_.get(index);
+      return issueRepositories_.get(index);
     }
     
     private void initFields() {
@@ -1086,7 +1086,7 @@ public final class Toplevel {
       maintainers_ = java.util.Collections.emptyList();
       developers_ = java.util.Collections.emptyList();
       codeRepositories_ = java.util.Collections.emptyList();
-      bugRepositories_ = java.util.Collections.emptyList();
+      issueRepositories_ = java.util.Collections.emptyList();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -1139,8 +1139,8 @@ public final class Toplevel {
           return false;
         }
       }
-      for (int i = 0; i < getBugRepositoriesCount(); i++) {
-        if (!getBugRepositories(i).isInitialized()) {
+      for (int i = 0; i < getIssueRepositoriesCount(); i++) {
+        if (!getIssueRepositories(i).isInitialized()) {
           memoizedIsInitialized = 0;
           return false;
         }
@@ -1203,8 +1203,8 @@ public final class Toplevel {
       for (int i = 0; i < codeRepositories_.size(); i++) {
         output.writeMessage(17, codeRepositories_.get(i));
       }
-      for (int i = 0; i < bugRepositories_.size(); i++) {
-        output.writeMessage(18, bugRepositories_.get(i));
+      for (int i = 0; i < issueRepositories_.size(); i++) {
+        output.writeMessage(18, issueRepositories_.get(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -1318,9 +1318,9 @@ public final class Toplevel {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(17, codeRepositories_.get(i));
       }
-      for (int i = 0; i < bugRepositories_.size(); i++) {
+      for (int i = 0; i < issueRepositories_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(18, bugRepositories_.get(i));
+          .computeMessageSize(18, issueRepositories_.get(i));
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1441,7 +1441,7 @@ public final class Toplevel {
           getMaintainersFieldBuilder();
           getDevelopersFieldBuilder();
           getCodeRepositoriesFieldBuilder();
-          getBugRepositoriesFieldBuilder();
+          getIssueRepositoriesFieldBuilder();
         }
       }
       private static Builder create() {
@@ -1496,11 +1496,11 @@ public final class Toplevel {
         } else {
           codeRepositoriesBuilder_.clear();
         }
-        if (bugRepositoriesBuilder_ == null) {
-          bugRepositories_ = java.util.Collections.emptyList();
+        if (issueRepositoriesBuilder_ == null) {
+          issueRepositories_ = java.util.Collections.emptyList();
           bitField0_ = (bitField0_ & ~0x00020000);
         } else {
-          bugRepositoriesBuilder_.clear();
+          issueRepositoriesBuilder_.clear();
         }
         return this;
       }
@@ -1637,14 +1637,14 @@ public final class Toplevel {
         } else {
           result.codeRepositories_ = codeRepositoriesBuilder_.build();
         }
-        if (bugRepositoriesBuilder_ == null) {
+        if (issueRepositoriesBuilder_ == null) {
           if (((bitField0_ & 0x00020000) == 0x00020000)) {
-            bugRepositories_ = java.util.Collections.unmodifiableList(bugRepositories_);
+            issueRepositories_ = java.util.Collections.unmodifiableList(issueRepositories_);
             bitField0_ = (bitField0_ & ~0x00020000);
           }
-          result.bugRepositories_ = bugRepositories_;
+          result.issueRepositories_ = issueRepositories_;
         } else {
-          result.bugRepositories_ = bugRepositoriesBuilder_.build();
+          result.issueRepositories_ = issueRepositoriesBuilder_.build();
         }
         result.bitField0_ = to_bitField0_;
         onBuilt();
@@ -1831,29 +1831,29 @@ public final class Toplevel {
             }
           }
         }
-        if (bugRepositoriesBuilder_ == null) {
-          if (!other.bugRepositories_.isEmpty()) {
-            if (bugRepositories_.isEmpty()) {
-              bugRepositories_ = other.bugRepositories_;
+        if (issueRepositoriesBuilder_ == null) {
+          if (!other.issueRepositories_.isEmpty()) {
+            if (issueRepositories_.isEmpty()) {
+              issueRepositories_ = other.issueRepositories_;
               bitField0_ = (bitField0_ & ~0x00020000);
             } else {
-              ensureBugRepositoriesIsMutable();
-              bugRepositories_.addAll(other.bugRepositories_);
+              ensureIssueRepositoriesIsMutable();
+              issueRepositories_.addAll(other.issueRepositories_);
             }
             onChanged();
           }
         } else {
-          if (!other.bugRepositories_.isEmpty()) {
-            if (bugRepositoriesBuilder_.isEmpty()) {
-              bugRepositoriesBuilder_.dispose();
-              bugRepositoriesBuilder_ = null;
-              bugRepositories_ = other.bugRepositories_;
+          if (!other.issueRepositories_.isEmpty()) {
+            if (issueRepositoriesBuilder_.isEmpty()) {
+              issueRepositoriesBuilder_.dispose();
+              issueRepositoriesBuilder_ = null;
+              issueRepositories_ = other.issueRepositories_;
               bitField0_ = (bitField0_ & ~0x00020000);
-              bugRepositoriesBuilder_ = 
+              issueRepositoriesBuilder_ = 
                 com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
-                   getBugRepositoriesFieldBuilder() : null;
+                   getIssueRepositoriesFieldBuilder() : null;
             } else {
-              bugRepositoriesBuilder_.addAllMessages(other.bugRepositories_);
+              issueRepositoriesBuilder_.addAllMessages(other.issueRepositories_);
             }
           }
         }
@@ -1908,8 +1908,8 @@ public final class Toplevel {
             return false;
           }
         }
-        for (int i = 0; i < getBugRepositoriesCount(); i++) {
-          if (!getBugRepositories(i).isInitialized()) {
+        for (int i = 0; i < getIssueRepositoriesCount(); i++) {
+          if (!getIssueRepositories(i).isInitialized()) {
             
             return false;
           }
@@ -2029,9 +2029,9 @@ public final class Toplevel {
               break;
             }
             case 146: {
-              sizzle.types.Bugs.BugRepository.Builder subBuilder = sizzle.types.Bugs.BugRepository.newBuilder();
+              sizzle.types.Issues.IssueRepository.Builder subBuilder = sizzle.types.Issues.IssueRepository.newBuilder();
               input.readMessage(subBuilder, extensionRegistry);
-              addBugRepositories(subBuilder.buildPartial());
+              addIssueRepositories(subBuilder.buildPartial());
               break;
             }
           }
@@ -3212,190 +3212,190 @@ public final class Toplevel {
         return codeRepositoriesBuilder_;
       }
       
-      // repeated .sizzle.types.BugRepository bug_repositories = 18;
-      private java.util.List<sizzle.types.Bugs.BugRepository> bugRepositories_ =
+      // repeated .sizzle.types.IssueRepository issue_repositories = 18;
+      private java.util.List<sizzle.types.Issues.IssueRepository> issueRepositories_ =
         java.util.Collections.emptyList();
-      private void ensureBugRepositoriesIsMutable() {
+      private void ensureIssueRepositoriesIsMutable() {
         if (!((bitField0_ & 0x00020000) == 0x00020000)) {
-          bugRepositories_ = new java.util.ArrayList<sizzle.types.Bugs.BugRepository>(bugRepositories_);
+          issueRepositories_ = new java.util.ArrayList<sizzle.types.Issues.IssueRepository>(issueRepositories_);
           bitField0_ |= 0x00020000;
          }
       }
       
       private com.google.protobuf.RepeatedFieldBuilder<
-          sizzle.types.Bugs.BugRepository, sizzle.types.Bugs.BugRepository.Builder, sizzle.types.Bugs.BugRepositoryOrBuilder> bugRepositoriesBuilder_;
+          sizzle.types.Issues.IssueRepository, sizzle.types.Issues.IssueRepository.Builder, sizzle.types.Issues.IssueRepositoryOrBuilder> issueRepositoriesBuilder_;
       
-      public java.util.List<sizzle.types.Bugs.BugRepository> getBugRepositoriesList() {
-        if (bugRepositoriesBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(bugRepositories_);
+      public java.util.List<sizzle.types.Issues.IssueRepository> getIssueRepositoriesList() {
+        if (issueRepositoriesBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(issueRepositories_);
         } else {
-          return bugRepositoriesBuilder_.getMessageList();
+          return issueRepositoriesBuilder_.getMessageList();
         }
       }
-      public int getBugRepositoriesCount() {
-        if (bugRepositoriesBuilder_ == null) {
-          return bugRepositories_.size();
+      public int getIssueRepositoriesCount() {
+        if (issueRepositoriesBuilder_ == null) {
+          return issueRepositories_.size();
         } else {
-          return bugRepositoriesBuilder_.getCount();
+          return issueRepositoriesBuilder_.getCount();
         }
       }
-      public sizzle.types.Bugs.BugRepository getBugRepositories(int index) {
-        if (bugRepositoriesBuilder_ == null) {
-          return bugRepositories_.get(index);
+      public sizzle.types.Issues.IssueRepository getIssueRepositories(int index) {
+        if (issueRepositoriesBuilder_ == null) {
+          return issueRepositories_.get(index);
         } else {
-          return bugRepositoriesBuilder_.getMessage(index);
+          return issueRepositoriesBuilder_.getMessage(index);
         }
       }
-      public Builder setBugRepositories(
-          int index, sizzle.types.Bugs.BugRepository value) {
-        if (bugRepositoriesBuilder_ == null) {
+      public Builder setIssueRepositories(
+          int index, sizzle.types.Issues.IssueRepository value) {
+        if (issueRepositoriesBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
           }
-          ensureBugRepositoriesIsMutable();
-          bugRepositories_.set(index, value);
+          ensureIssueRepositoriesIsMutable();
+          issueRepositories_.set(index, value);
           onChanged();
         } else {
-          bugRepositoriesBuilder_.setMessage(index, value);
+          issueRepositoriesBuilder_.setMessage(index, value);
         }
         return this;
       }
-      public Builder setBugRepositories(
-          int index, sizzle.types.Bugs.BugRepository.Builder builderForValue) {
-        if (bugRepositoriesBuilder_ == null) {
-          ensureBugRepositoriesIsMutable();
-          bugRepositories_.set(index, builderForValue.build());
+      public Builder setIssueRepositories(
+          int index, sizzle.types.Issues.IssueRepository.Builder builderForValue) {
+        if (issueRepositoriesBuilder_ == null) {
+          ensureIssueRepositoriesIsMutable();
+          issueRepositories_.set(index, builderForValue.build());
           onChanged();
         } else {
-          bugRepositoriesBuilder_.setMessage(index, builderForValue.build());
+          issueRepositoriesBuilder_.setMessage(index, builderForValue.build());
         }
         return this;
       }
-      public Builder addBugRepositories(sizzle.types.Bugs.BugRepository value) {
-        if (bugRepositoriesBuilder_ == null) {
+      public Builder addIssueRepositories(sizzle.types.Issues.IssueRepository value) {
+        if (issueRepositoriesBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
           }
-          ensureBugRepositoriesIsMutable();
-          bugRepositories_.add(value);
+          ensureIssueRepositoriesIsMutable();
+          issueRepositories_.add(value);
           onChanged();
         } else {
-          bugRepositoriesBuilder_.addMessage(value);
+          issueRepositoriesBuilder_.addMessage(value);
         }
         return this;
       }
-      public Builder addBugRepositories(
-          int index, sizzle.types.Bugs.BugRepository value) {
-        if (bugRepositoriesBuilder_ == null) {
+      public Builder addIssueRepositories(
+          int index, sizzle.types.Issues.IssueRepository value) {
+        if (issueRepositoriesBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
           }
-          ensureBugRepositoriesIsMutable();
-          bugRepositories_.add(index, value);
+          ensureIssueRepositoriesIsMutable();
+          issueRepositories_.add(index, value);
           onChanged();
         } else {
-          bugRepositoriesBuilder_.addMessage(index, value);
+          issueRepositoriesBuilder_.addMessage(index, value);
         }
         return this;
       }
-      public Builder addBugRepositories(
-          sizzle.types.Bugs.BugRepository.Builder builderForValue) {
-        if (bugRepositoriesBuilder_ == null) {
-          ensureBugRepositoriesIsMutable();
-          bugRepositories_.add(builderForValue.build());
+      public Builder addIssueRepositories(
+          sizzle.types.Issues.IssueRepository.Builder builderForValue) {
+        if (issueRepositoriesBuilder_ == null) {
+          ensureIssueRepositoriesIsMutable();
+          issueRepositories_.add(builderForValue.build());
           onChanged();
         } else {
-          bugRepositoriesBuilder_.addMessage(builderForValue.build());
+          issueRepositoriesBuilder_.addMessage(builderForValue.build());
         }
         return this;
       }
-      public Builder addBugRepositories(
-          int index, sizzle.types.Bugs.BugRepository.Builder builderForValue) {
-        if (bugRepositoriesBuilder_ == null) {
-          ensureBugRepositoriesIsMutable();
-          bugRepositories_.add(index, builderForValue.build());
+      public Builder addIssueRepositories(
+          int index, sizzle.types.Issues.IssueRepository.Builder builderForValue) {
+        if (issueRepositoriesBuilder_ == null) {
+          ensureIssueRepositoriesIsMutable();
+          issueRepositories_.add(index, builderForValue.build());
           onChanged();
         } else {
-          bugRepositoriesBuilder_.addMessage(index, builderForValue.build());
+          issueRepositoriesBuilder_.addMessage(index, builderForValue.build());
         }
         return this;
       }
-      public Builder addAllBugRepositories(
-          java.lang.Iterable<? extends sizzle.types.Bugs.BugRepository> values) {
-        if (bugRepositoriesBuilder_ == null) {
-          ensureBugRepositoriesIsMutable();
-          super.addAll(values, bugRepositories_);
+      public Builder addAllIssueRepositories(
+          java.lang.Iterable<? extends sizzle.types.Issues.IssueRepository> values) {
+        if (issueRepositoriesBuilder_ == null) {
+          ensureIssueRepositoriesIsMutable();
+          super.addAll(values, issueRepositories_);
           onChanged();
         } else {
-          bugRepositoriesBuilder_.addAllMessages(values);
+          issueRepositoriesBuilder_.addAllMessages(values);
         }
         return this;
       }
-      public Builder clearBugRepositories() {
-        if (bugRepositoriesBuilder_ == null) {
-          bugRepositories_ = java.util.Collections.emptyList();
+      public Builder clearIssueRepositories() {
+        if (issueRepositoriesBuilder_ == null) {
+          issueRepositories_ = java.util.Collections.emptyList();
           bitField0_ = (bitField0_ & ~0x00020000);
           onChanged();
         } else {
-          bugRepositoriesBuilder_.clear();
+          issueRepositoriesBuilder_.clear();
         }
         return this;
       }
-      public Builder removeBugRepositories(int index) {
-        if (bugRepositoriesBuilder_ == null) {
-          ensureBugRepositoriesIsMutable();
-          bugRepositories_.remove(index);
+      public Builder removeIssueRepositories(int index) {
+        if (issueRepositoriesBuilder_ == null) {
+          ensureIssueRepositoriesIsMutable();
+          issueRepositories_.remove(index);
           onChanged();
         } else {
-          bugRepositoriesBuilder_.remove(index);
+          issueRepositoriesBuilder_.remove(index);
         }
         return this;
       }
-      public sizzle.types.Bugs.BugRepository.Builder getBugRepositoriesBuilder(
+      public sizzle.types.Issues.IssueRepository.Builder getIssueRepositoriesBuilder(
           int index) {
-        return getBugRepositoriesFieldBuilder().getBuilder(index);
+        return getIssueRepositoriesFieldBuilder().getBuilder(index);
       }
-      public sizzle.types.Bugs.BugRepositoryOrBuilder getBugRepositoriesOrBuilder(
+      public sizzle.types.Issues.IssueRepositoryOrBuilder getIssueRepositoriesOrBuilder(
           int index) {
-        if (bugRepositoriesBuilder_ == null) {
-          return bugRepositories_.get(index);  } else {
-          return bugRepositoriesBuilder_.getMessageOrBuilder(index);
+        if (issueRepositoriesBuilder_ == null) {
+          return issueRepositories_.get(index);  } else {
+          return issueRepositoriesBuilder_.getMessageOrBuilder(index);
         }
       }
-      public java.util.List<? extends sizzle.types.Bugs.BugRepositoryOrBuilder> 
-           getBugRepositoriesOrBuilderList() {
-        if (bugRepositoriesBuilder_ != null) {
-          return bugRepositoriesBuilder_.getMessageOrBuilderList();
+      public java.util.List<? extends sizzle.types.Issues.IssueRepositoryOrBuilder> 
+           getIssueRepositoriesOrBuilderList() {
+        if (issueRepositoriesBuilder_ != null) {
+          return issueRepositoriesBuilder_.getMessageOrBuilderList();
         } else {
-          return java.util.Collections.unmodifiableList(bugRepositories_);
+          return java.util.Collections.unmodifiableList(issueRepositories_);
         }
       }
-      public sizzle.types.Bugs.BugRepository.Builder addBugRepositoriesBuilder() {
-        return getBugRepositoriesFieldBuilder().addBuilder(
-            sizzle.types.Bugs.BugRepository.getDefaultInstance());
+      public sizzle.types.Issues.IssueRepository.Builder addIssueRepositoriesBuilder() {
+        return getIssueRepositoriesFieldBuilder().addBuilder(
+            sizzle.types.Issues.IssueRepository.getDefaultInstance());
       }
-      public sizzle.types.Bugs.BugRepository.Builder addBugRepositoriesBuilder(
+      public sizzle.types.Issues.IssueRepository.Builder addIssueRepositoriesBuilder(
           int index) {
-        return getBugRepositoriesFieldBuilder().addBuilder(
-            index, sizzle.types.Bugs.BugRepository.getDefaultInstance());
+        return getIssueRepositoriesFieldBuilder().addBuilder(
+            index, sizzle.types.Issues.IssueRepository.getDefaultInstance());
       }
-      public java.util.List<sizzle.types.Bugs.BugRepository.Builder> 
-           getBugRepositoriesBuilderList() {
-        return getBugRepositoriesFieldBuilder().getBuilderList();
+      public java.util.List<sizzle.types.Issues.IssueRepository.Builder> 
+           getIssueRepositoriesBuilderList() {
+        return getIssueRepositoriesFieldBuilder().getBuilderList();
       }
       private com.google.protobuf.RepeatedFieldBuilder<
-          sizzle.types.Bugs.BugRepository, sizzle.types.Bugs.BugRepository.Builder, sizzle.types.Bugs.BugRepositoryOrBuilder> 
-          getBugRepositoriesFieldBuilder() {
-        if (bugRepositoriesBuilder_ == null) {
-          bugRepositoriesBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              sizzle.types.Bugs.BugRepository, sizzle.types.Bugs.BugRepository.Builder, sizzle.types.Bugs.BugRepositoryOrBuilder>(
-                  bugRepositories_,
+          sizzle.types.Issues.IssueRepository, sizzle.types.Issues.IssueRepository.Builder, sizzle.types.Issues.IssueRepositoryOrBuilder> 
+          getIssueRepositoriesFieldBuilder() {
+        if (issueRepositoriesBuilder_ == null) {
+          issueRepositoriesBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              sizzle.types.Issues.IssueRepository, sizzle.types.Issues.IssueRepository.Builder, sizzle.types.Issues.IssueRepositoryOrBuilder>(
+                  issueRepositories_,
                   ((bitField0_ & 0x00020000) == 0x00020000),
                   getParentForChildren(),
                   isClean());
-          bugRepositories_ = null;
+          issueRepositories_ = null;
         }
-        return bugRepositoriesBuilder_;
+        return issueRepositoriesBuilder_;
       }
       
       // @@protoc_insertion_point(builder_scope:sizzle.types.Project)
@@ -3429,21 +3429,21 @@ public final class Toplevel {
   static {
     java.lang.String[] descriptorData = {
       "\n\016toplevel.proto\022\014sizzle.types\032\014shared.p" +
-      "roto\032\ncode.proto\032\nbugs.proto\"5\n\nReposito" +
-      "ry\022\'\n\010projects\030\001 \003(\0132\025.sizzle.types.Proj" +
-      "ect\"\347\003\n\007Project\022\014\n\004name\030\001 \002(\t\022\023\n\013project" +
-      "_url\030\002 \002(\t\022\024\n\014homepage_url\030\003 \002(\t\022\024\n\014crea" +
-      "ted_date\030\004 \002(\004\022\n\n\002id\030\005 \002(\t\022\023\n\013descriptio" +
-      "n\030\006 \002(\t\022\031\n\021operating_systems\030\007 \003(\t\022\035\n\025pr" +
-      "ogramming_languages\030\010 \003(\t\022\021\n\tdatabases\030\t" +
-      " \003(\t\022\020\n\010licenses\030\n \003(\t\022\022\n\ninterfaces\030\013 \003" +
-      "(\t\022\021\n\taudiences\030\014 \003(\t\022\016\n\006topics\030\r \003(\t\022\021\n",
-      "\tdonations\030\016 \002(\010\022)\n\013maintainers\030\017 \003(\0132\024." +
-      "sizzle.types.Person\022(\n\ndevelopers\030\020 \003(\0132" +
-      "\024.sizzle.types.Person\0227\n\021code_repositori" +
-      "es\030\021 \003(\0132\034.sizzle.types.CodeRepository\0225" +
-      "\n\020bug_repositories\030\022 \003(\0132\033.sizzle.types." +
-      "BugRepositoryB\002H\001"
+      "roto\032\ncode.proto\032\014issues.proto\"5\n\nReposi" +
+      "tory\022\'\n\010projects\030\001 \003(\0132\025.sizzle.types.Pr" +
+      "oject\"\353\003\n\007Project\022\014\n\004name\030\001 \002(\t\022\023\n\013proje" +
+      "ct_url\030\002 \002(\t\022\024\n\014homepage_url\030\003 \002(\t\022\024\n\014cr" +
+      "eated_date\030\004 \002(\004\022\n\n\002id\030\005 \002(\t\022\023\n\013descript" +
+      "ion\030\006 \002(\t\022\031\n\021operating_systems\030\007 \003(\t\022\035\n\025" +
+      "programming_languages\030\010 \003(\t\022\021\n\tdatabases" +
+      "\030\t \003(\t\022\020\n\010licenses\030\n \003(\t\022\022\n\ninterfaces\030\013" +
+      " \003(\t\022\021\n\taudiences\030\014 \003(\t\022\016\n\006topics\030\r \003(\t\022",
+      "\021\n\tdonations\030\016 \002(\010\022)\n\013maintainers\030\017 \003(\0132" +
+      "\024.sizzle.types.Person\022(\n\ndevelopers\030\020 \003(" +
+      "\0132\024.sizzle.types.Person\0227\n\021code_reposito" +
+      "ries\030\021 \003(\0132\034.sizzle.types.CodeRepository" +
+      "\0229\n\022issue_repositories\030\022 \003(\0132\035.sizzle.ty" +
+      "pes.IssueRepositoryB\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -3463,7 +3463,7 @@ public final class Toplevel {
           internal_static_sizzle_types_Project_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_sizzle_types_Project_descriptor,
-              new java.lang.String[] { "Name", "ProjectUrl", "HomepageUrl", "CreatedDate", "Id", "Description", "OperatingSystems", "ProgrammingLanguages", "Databases", "Licenses", "Interfaces", "Audiences", "Topics", "Donations", "Maintainers", "Developers", "CodeRepositories", "BugRepositories", },
+              new java.lang.String[] { "Name", "ProjectUrl", "HomepageUrl", "CreatedDate", "Id", "Description", "OperatingSystems", "ProgrammingLanguages", "Databases", "Licenses", "Interfaces", "Audiences", "Topics", "Donations", "Maintainers", "Developers", "CodeRepositories", "IssueRepositories", },
               sizzle.types.Toplevel.Project.class,
               sizzle.types.Toplevel.Project.Builder.class);
           return null;
@@ -3474,7 +3474,7 @@ public final class Toplevel {
         new com.google.protobuf.Descriptors.FileDescriptor[] {
           sizzle.types.Shared.getDescriptor(),
           sizzle.types.Code.getDescriptor(),
-          sizzle.types.Bugs.getDescriptor(),
+          sizzle.types.Issues.getDescriptor(),
         }, assigner);
   }
   

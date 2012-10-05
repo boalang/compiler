@@ -2,7 +2,7 @@ package sizzle.types;
 
 import "shared.proto";
 import "code.proto";
-import "bugs.proto";
+import "issues.proto";
 
 option optimize_for = SPEED;
 
@@ -28,5 +28,5 @@ message Project {
 	repeated Person maintainers = 15;
 	repeated Person developers = 16;
 	repeated CodeRepository code_repositories = 17;
-	repeated BugRepository bug_repositories = 18;
+	repeated IssueRepository issue_repositories = 18;
 }
