@@ -23,10 +23,15 @@ public final class Diff {
     boolean hasName();
     String getName();
     
-    // repeated string namespaces = 4;
-    java.util.List<String> getNamespacesList();
+    // repeated .sizzle.types.Namespace namespaces = 4;
+    java.util.List<sizzle.types.Ast.Namespace> 
+        getNamespacesList();
+    sizzle.types.Ast.Namespace getNamespaces(int index);
     int getNamespacesCount();
-    String getNamespaces(int index);
+    java.util.List<? extends sizzle.types.Ast.NamespaceOrBuilder> 
+        getNamespacesOrBuilderList();
+    sizzle.types.Ast.NamespaceOrBuilder getNamespacesOrBuilder(
+        int index);
     
     // repeated .sizzle.types.ChangedNamespace changed_namespaces = 5;
     java.util.List<sizzle.types.Diff.ChangedNamespace> 
@@ -210,17 +215,24 @@ public final class Diff {
       }
     }
     
-    // repeated string namespaces = 4;
+    // repeated .sizzle.types.Namespace namespaces = 4;
     public static final int NAMESPACES_FIELD_NUMBER = 4;
-    private com.google.protobuf.LazyStringList namespaces_;
-    public java.util.List<String>
-        getNamespacesList() {
+    private java.util.List<sizzle.types.Ast.Namespace> namespaces_;
+    public java.util.List<sizzle.types.Ast.Namespace> getNamespacesList() {
+      return namespaces_;
+    }
+    public java.util.List<? extends sizzle.types.Ast.NamespaceOrBuilder> 
+        getNamespacesOrBuilderList() {
       return namespaces_;
     }
     public int getNamespacesCount() {
       return namespaces_.size();
     }
-    public String getNamespaces(int index) {
+    public sizzle.types.Ast.Namespace getNamespaces(int index) {
+      return namespaces_.get(index);
+    }
+    public sizzle.types.Ast.NamespaceOrBuilder getNamespacesOrBuilder(
+        int index) {
       return namespaces_.get(index);
     }
     
@@ -281,7 +293,7 @@ public final class Diff {
       change_ = sizzle.types.Shared.ChangeKind.ADDED;
       kind_ = sizzle.types.Diff.ChangedFile.FileKind.UNKNOWN;
       name_ = "";
-      namespaces_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      namespaces_ = java.util.Collections.emptyList();
       changedNamespaces_ = java.util.Collections.emptyList();
       content_ = "";
     }
@@ -301,6 +313,12 @@ public final class Diff {
       if (!hasName()) {
         memoizedIsInitialized = 0;
         return false;
+      }
+      for (int i = 0; i < getNamespacesCount(); i++) {
+        if (!getNamespaces(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
       }
       for (int i = 0; i < getChangedNamespacesCount(); i++) {
         if (!getChangedNamespaces(i).isInitialized()) {
@@ -325,7 +343,7 @@ public final class Diff {
         output.writeBytes(3, getNameBytes());
       }
       for (int i = 0; i < namespaces_.size(); i++) {
-        output.writeBytes(4, namespaces_.getByteString(i));
+        output.writeMessage(4, namespaces_.get(i));
       }
       for (int i = 0; i < changedNamespaces_.size(); i++) {
         output.writeMessage(5, changedNamespaces_.get(i));
@@ -354,14 +372,9 @@ public final class Diff {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(3, getNameBytes());
       }
-      {
-        int dataSize = 0;
-        for (int i = 0; i < namespaces_.size(); i++) {
-          dataSize += com.google.protobuf.CodedOutputStream
-            .computeBytesSizeNoTag(namespaces_.getByteString(i));
-        }
-        size += dataSize;
-        size += 1 * getNamespacesList().size();
+      for (int i = 0; i < namespaces_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(4, namespaces_.get(i));
       }
       for (int i = 0; i < changedNamespaces_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
@@ -487,6 +500,7 @@ public final class Diff {
       }
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getNamespacesFieldBuilder();
           getChangedNamespacesFieldBuilder();
         }
       }
@@ -502,8 +516,12 @@ public final class Diff {
         bitField0_ = (bitField0_ & ~0x00000002);
         name_ = "";
         bitField0_ = (bitField0_ & ~0x00000004);
-        namespaces_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000008);
+        if (namespacesBuilder_ == null) {
+          namespaces_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000008);
+        } else {
+          namespacesBuilder_.clear();
+        }
         if (changedNamespacesBuilder_ == null) {
           changedNamespaces_ = java.util.Collections.emptyList();
           bitField0_ = (bitField0_ & ~0x00000010);
@@ -562,12 +580,15 @@ public final class Diff {
           to_bitField0_ |= 0x00000004;
         }
         result.name_ = name_;
-        if (((bitField0_ & 0x00000008) == 0x00000008)) {
-          namespaces_ = new com.google.protobuf.UnmodifiableLazyStringList(
-              namespaces_);
-          bitField0_ = (bitField0_ & ~0x00000008);
+        if (namespacesBuilder_ == null) {
+          if (((bitField0_ & 0x00000008) == 0x00000008)) {
+            namespaces_ = java.util.Collections.unmodifiableList(namespaces_);
+            bitField0_ = (bitField0_ & ~0x00000008);
+          }
+          result.namespaces_ = namespaces_;
+        } else {
+          result.namespaces_ = namespacesBuilder_.build();
         }
-        result.namespaces_ = namespaces_;
         if (changedNamespacesBuilder_ == null) {
           if (((bitField0_ & 0x00000010) == 0x00000010)) {
             changedNamespaces_ = java.util.Collections.unmodifiableList(changedNamespaces_);
@@ -606,15 +627,31 @@ public final class Diff {
         if (other.hasName()) {
           setName(other.getName());
         }
-        if (!other.namespaces_.isEmpty()) {
-          if (namespaces_.isEmpty()) {
-            namespaces_ = other.namespaces_;
-            bitField0_ = (bitField0_ & ~0x00000008);
-          } else {
-            ensureNamespacesIsMutable();
-            namespaces_.addAll(other.namespaces_);
+        if (namespacesBuilder_ == null) {
+          if (!other.namespaces_.isEmpty()) {
+            if (namespaces_.isEmpty()) {
+              namespaces_ = other.namespaces_;
+              bitField0_ = (bitField0_ & ~0x00000008);
+            } else {
+              ensureNamespacesIsMutable();
+              namespaces_.addAll(other.namespaces_);
+            }
+            onChanged();
           }
-          onChanged();
+        } else {
+          if (!other.namespaces_.isEmpty()) {
+            if (namespacesBuilder_.isEmpty()) {
+              namespacesBuilder_.dispose();
+              namespacesBuilder_ = null;
+              namespaces_ = other.namespaces_;
+              bitField0_ = (bitField0_ & ~0x00000008);
+              namespacesBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getNamespacesFieldBuilder() : null;
+            } else {
+              namespacesBuilder_.addAllMessages(other.namespaces_);
+            }
+          }
         }
         if (changedNamespacesBuilder_ == null) {
           if (!other.changedNamespaces_.isEmpty()) {
@@ -661,6 +698,12 @@ public final class Diff {
         if (!hasName()) {
           
           return false;
+        }
+        for (int i = 0; i < getNamespacesCount(); i++) {
+          if (!getNamespaces(i).isInitialized()) {
+            
+            return false;
+          }
         }
         for (int i = 0; i < getChangedNamespacesCount(); i++) {
           if (!getChangedNamespaces(i).isInitialized()) {
@@ -722,8 +765,9 @@ public final class Diff {
               break;
             }
             case 34: {
-              ensureNamespacesIsMutable();
-              namespaces_.add(input.readBytes());
+              sizzle.types.Ast.Namespace.Builder subBuilder = sizzle.types.Ast.Namespace.newBuilder();
+              input.readMessage(subBuilder, extensionRegistry);
+              addNamespaces(subBuilder.buildPartial());
               break;
             }
             case 42: {
@@ -827,60 +871,190 @@ public final class Diff {
         onChanged();
       }
       
-      // repeated string namespaces = 4;
-      private com.google.protobuf.LazyStringList namespaces_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      // repeated .sizzle.types.Namespace namespaces = 4;
+      private java.util.List<sizzle.types.Ast.Namespace> namespaces_ =
+        java.util.Collections.emptyList();
       private void ensureNamespacesIsMutable() {
         if (!((bitField0_ & 0x00000008) == 0x00000008)) {
-          namespaces_ = new com.google.protobuf.LazyStringArrayList(namespaces_);
+          namespaces_ = new java.util.ArrayList<sizzle.types.Ast.Namespace>(namespaces_);
           bitField0_ |= 0x00000008;
          }
       }
-      public java.util.List<String>
-          getNamespacesList() {
-        return java.util.Collections.unmodifiableList(namespaces_);
+      
+      private com.google.protobuf.RepeatedFieldBuilder<
+          sizzle.types.Ast.Namespace, sizzle.types.Ast.Namespace.Builder, sizzle.types.Ast.NamespaceOrBuilder> namespacesBuilder_;
+      
+      public java.util.List<sizzle.types.Ast.Namespace> getNamespacesList() {
+        if (namespacesBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(namespaces_);
+        } else {
+          return namespacesBuilder_.getMessageList();
+        }
       }
       public int getNamespacesCount() {
-        return namespaces_.size();
+        if (namespacesBuilder_ == null) {
+          return namespaces_.size();
+        } else {
+          return namespacesBuilder_.getCount();
+        }
       }
-      public String getNamespaces(int index) {
-        return namespaces_.get(index);
+      public sizzle.types.Ast.Namespace getNamespaces(int index) {
+        if (namespacesBuilder_ == null) {
+          return namespaces_.get(index);
+        } else {
+          return namespacesBuilder_.getMessage(index);
+        }
       }
       public Builder setNamespaces(
-          int index, String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureNamespacesIsMutable();
-        namespaces_.set(index, value);
-        onChanged();
+          int index, sizzle.types.Ast.Namespace value) {
+        if (namespacesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureNamespacesIsMutable();
+          namespaces_.set(index, value);
+          onChanged();
+        } else {
+          namespacesBuilder_.setMessage(index, value);
+        }
         return this;
       }
-      public Builder addNamespaces(String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureNamespacesIsMutable();
-        namespaces_.add(value);
-        onChanged();
+      public Builder setNamespaces(
+          int index, sizzle.types.Ast.Namespace.Builder builderForValue) {
+        if (namespacesBuilder_ == null) {
+          ensureNamespacesIsMutable();
+          namespaces_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          namespacesBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      public Builder addNamespaces(sizzle.types.Ast.Namespace value) {
+        if (namespacesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureNamespacesIsMutable();
+          namespaces_.add(value);
+          onChanged();
+        } else {
+          namespacesBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      public Builder addNamespaces(
+          int index, sizzle.types.Ast.Namespace value) {
+        if (namespacesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureNamespacesIsMutable();
+          namespaces_.add(index, value);
+          onChanged();
+        } else {
+          namespacesBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      public Builder addNamespaces(
+          sizzle.types.Ast.Namespace.Builder builderForValue) {
+        if (namespacesBuilder_ == null) {
+          ensureNamespacesIsMutable();
+          namespaces_.add(builderForValue.build());
+          onChanged();
+        } else {
+          namespacesBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      public Builder addNamespaces(
+          int index, sizzle.types.Ast.Namespace.Builder builderForValue) {
+        if (namespacesBuilder_ == null) {
+          ensureNamespacesIsMutable();
+          namespaces_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          namespacesBuilder_.addMessage(index, builderForValue.build());
+        }
         return this;
       }
       public Builder addAllNamespaces(
-          java.lang.Iterable<String> values) {
-        ensureNamespacesIsMutable();
-        super.addAll(values, namespaces_);
-        onChanged();
+          java.lang.Iterable<? extends sizzle.types.Ast.Namespace> values) {
+        if (namespacesBuilder_ == null) {
+          ensureNamespacesIsMutable();
+          super.addAll(values, namespaces_);
+          onChanged();
+        } else {
+          namespacesBuilder_.addAllMessages(values);
+        }
         return this;
       }
       public Builder clearNamespaces() {
-        namespaces_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000008);
-        onChanged();
+        if (namespacesBuilder_ == null) {
+          namespaces_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000008);
+          onChanged();
+        } else {
+          namespacesBuilder_.clear();
+        }
         return this;
       }
-      void addNamespaces(com.google.protobuf.ByteString value) {
-        ensureNamespacesIsMutable();
-        namespaces_.add(value);
-        onChanged();
+      public Builder removeNamespaces(int index) {
+        if (namespacesBuilder_ == null) {
+          ensureNamespacesIsMutable();
+          namespaces_.remove(index);
+          onChanged();
+        } else {
+          namespacesBuilder_.remove(index);
+        }
+        return this;
+      }
+      public sizzle.types.Ast.Namespace.Builder getNamespacesBuilder(
+          int index) {
+        return getNamespacesFieldBuilder().getBuilder(index);
+      }
+      public sizzle.types.Ast.NamespaceOrBuilder getNamespacesOrBuilder(
+          int index) {
+        if (namespacesBuilder_ == null) {
+          return namespaces_.get(index);  } else {
+          return namespacesBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      public java.util.List<? extends sizzle.types.Ast.NamespaceOrBuilder> 
+           getNamespacesOrBuilderList() {
+        if (namespacesBuilder_ != null) {
+          return namespacesBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(namespaces_);
+        }
+      }
+      public sizzle.types.Ast.Namespace.Builder addNamespacesBuilder() {
+        return getNamespacesFieldBuilder().addBuilder(
+            sizzle.types.Ast.Namespace.getDefaultInstance());
+      }
+      public sizzle.types.Ast.Namespace.Builder addNamespacesBuilder(
+          int index) {
+        return getNamespacesFieldBuilder().addBuilder(
+            index, sizzle.types.Ast.Namespace.getDefaultInstance());
+      }
+      public java.util.List<sizzle.types.Ast.Namespace.Builder> 
+           getNamespacesBuilderList() {
+        return getNamespacesFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          sizzle.types.Ast.Namespace, sizzle.types.Ast.Namespace.Builder, sizzle.types.Ast.NamespaceOrBuilder> 
+          getNamespacesFieldBuilder() {
+        if (namespacesBuilder_ == null) {
+          namespacesBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              sizzle.types.Ast.Namespace, sizzle.types.Ast.Namespace.Builder, sizzle.types.Ast.NamespaceOrBuilder>(
+                  namespaces_,
+                  ((bitField0_ & 0x00000008) == 0x00000008),
+                  getParentForChildren(),
+                  isClean());
+          namespaces_ = null;
+        }
+        return namespacesBuilder_;
       }
       
       // repeated .sizzle.types.ChangedNamespace changed_namespaces = 5;
@@ -15307,91 +15481,92 @@ public final class Diff {
   static {
     java.lang.String[] descriptorData = {
       "\n\ndiff.proto\022\014sizzle.types\032\014shared.proto" +
-      "\032\tast.proto\"\352\002\n\013ChangedFile\022(\n\006change\030\001 " +
+      "\032\tast.proto\"\203\003\n\013ChangedFile\022(\n\006change\030\001 " +
       "\002(\0162\030.sizzle.types.ChangeKind\0220\n\004kind\030\002 " +
       "\002(\0162\".sizzle.types.ChangedFile.FileKind\022" +
-      "\014\n\004name\030\003 \002(\t\022\022\n\nnamespaces\030\004 \003(\t\022:\n\022cha" +
-      "nged_namespaces\030\005 \003(\0132\036.sizzle.types.Cha" +
-      "ngedNamespace\022\017\n\007content\030\006 \001(\t\"\217\001\n\010FileK" +
-      "ind\022\013\n\007UNKNOWN\020\001\022\n\n\006BINARY\020\002\022\010\n\004TEXT\020\003\022\007" +
-      "\n\003XML\020\004\022\025\n\021SOURCE_JAVA_ERROR\020\005\022\024\n\020SOURCE" +
-      "_JAVA_JLS2\020\006\022\024\n\020SOURCE_JAVA_JLS3\020\007\022\024\n\020SO",
-      "URCE_JAVA_JLS4\020\010\"\344\001\n\020ChangedNamespace\022(\n" +
-      "\006change\030\001 \002(\0162\030.sizzle.types.ChangeKind\022" +
-      "\014\n\004name\030\002 \001(\t\0220\n\tmodifiers\030\003 \003(\0132\035.sizzl" +
-      "e.types.ChangedModifier\0226\n\014declarations\030" +
-      "\004 \003(\0132 .sizzle.types.ChangedDeclaration\022" +
-      ".\n\010comments\030\005 \003(\0132\034.sizzle.types.Changed" +
-      "Comment\"\323\003\n\022ChangedDeclaration\022(\n\006change" +
-      "\030\001 \002(\0162\030.sizzle.types.ChangeKind\022$\n\004kind" +
-      "\030\002 \002(\0162\026.sizzle.types.TypeKind\022\014\n\004name\030\003" +
-      " \001(\t\0220\n\tmodifiers\030\004 \003(\0132\035.sizzle.types.C",
-      "hangedModifier\0225\n\022generic_parameters\030\005 \003" +
-      "(\0132\031.sizzle.types.ChangedType\022*\n\007parents" +
-      "\030\006 \003(\0132\031.sizzle.types.ChangedType\022,\n\007met" +
-      "hods\030\007 \003(\0132\033.sizzle.types.ChangedMethod\022" +
-      "-\n\006fields\030\010 \003(\0132\035.sizzle.types.ChangedVa" +
-      "riable\022=\n\023nested_declarations\030\t \003(\0132 .si" +
-      "zzle.types.ChangedDeclaration\022.\n\010comment" +
-      "s\030\n \003(\0132\034.sizzle.types.ChangedComment\"w\n" +
-      "\013ChangedType\022(\n\006change\030\001 \002(\0162\030.sizzle.ty" +
-      "pes.ChangeKind\022$\n\004kind\030\002 \001(\0162\026.sizzle.ty",
-      "pes.TypeKind\022\014\n\004name\030\003 \001(\t\022\n\n\002id\030\004 \001(\t\"\252" +
-      "\003\n\rChangedMethod\022(\n\006change\030\001 \002(\0162\030.sizzl" +
-      "e.types.ChangeKind\022\014\n\004name\030\002 \001(\t\0220\n\tmodi" +
-      "fiers\030\003 \003(\0132\035.sizzle.types.ChangedModifi" +
-      "er\022.\n\013return_type\030\004 \001(\0132\031.sizzle.types.C" +
-      "hangedType\0225\n\022generic_parameters\030\005 \003(\0132\031" +
-      ".sizzle.types.ChangedType\0220\n\targuments\030\006" +
-      " \003(\0132\035.sizzle.types.ChangedVariable\0222\n\017e" +
-      "xception_types\030\007 \003(\0132\031.sizzle.types.Chan" +
-      "gedType\0222\n\nstatements\030\010 \003(\0132\036.sizzle.typ",
-      "es.ChangedStatement\022.\n\010comments\030\t \003(\0132\034." +
-      "sizzle.types.ChangedComment\"\223\002\n\017ChangedV" +
-      "ariable\022(\n\006change\030\001 \002(\0162\030.sizzle.types.C" +
-      "hangeKind\022\014\n\004name\030\002 \001(\t\0220\n\rvariable_type" +
-      "\030\003 \001(\0132\031.sizzle.types.ChangedType\0220\n\tmod" +
-      "ifiers\030\004 \003(\0132\035.sizzle.types.ChangedModif" +
-      "ier\0224\n\013initializer\030\005 \001(\0132\037.sizzle.types." +
-      "ChangedExpression\022.\n\010comments\030\006 \003(\0132\034.si" +
-      "zzle.types.ChangedComment\"\243\004\n\020ChangedSta" +
-      "tement\022(\n\006change\030\001 \002(\0162\030.sizzle.types.Ch",
-      "angeKind\0223\n\004kind\030\002 \002(\0162%.sizzle.types.St" +
-      "atement.StatementKind\022.\n\010comments\030\003 \003(\0132" +
-      "\034.sizzle.types.ChangedComment\0222\n\nstateme" +
-      "nts\030\004 \003(\0132\036.sizzle.types.ChangedStatemen" +
-      "t\0228\n\017initializations\030\005 \003(\0132\037.sizzle.type" +
-      "s.ChangedExpression\0222\n\tcondition\030\006 \001(\0132\037" +
-      ".sizzle.types.ChangedExpression\0220\n\007updat" +
-      "es\030\007 \003(\0132\037.sizzle.types.ChangedExpressio" +
-      "n\022;\n\024variable_declaration\030\010 \001(\0132\035.sizzle" +
-      ".types.ChangedVariable\022:\n\020type_declarati",
-      "on\030\t \001(\0132 .sizzle.types.ChangedDeclarati" +
-      "on\0223\n\nexpression\030\n \001(\0132\037.sizzle.types.Ch" +
-      "angedExpression\"\376\003\n\021ChangedExpression\022(\n" +
-      "\006change\030\001 \002(\0162\030.sizzle.types.ChangeKind\022" +
-      "5\n\004kind\030\002 \002(\0162\'.sizzle.types.Expression." +
-      "ExpressionKind\0224\n\013expressions\030\003 \003(\0132\037.si" +
-      "zzle.types.ChangedExpression\0225\n\016variable" +
-      "_decls\030\004 \003(\0132\035.sizzle.types.ChangedVaria" +
-      "ble\022+\n\010new_type\030\005 \001(\0132\031.sizzle.types.Cha" +
-      "ngedType\0225\n\022generic_parameters\030\006 \003(\0132\031.s",
-      "izzle.types.ChangedType\022\022\n\nis_postfix\030\007 " +
-      "\001(\010\022\017\n\007literal\030\010 \001(\t\022\020\n\010variable\030\t \001(\t\022\016" +
-      "\n\006method\030\n \001(\t\0224\n\013method_args\030\013 \003(\0132\037.si" +
-      "zzle.types.ChangedExpression\022:\n\020anon_dec" +
-      "laration\030\014 \001(\0132 .sizzle.types.ChangedDec" +
-      "laration\"\202\002\n\017ChangedModifier\022(\n\006change\030\001" +
-      " \002(\0162\030.sizzle.types.ChangeKind\0221\n\004kind\030\002" +
-      " \002(\0162#.sizzle.types.Modifier.ModifierKin" +
-      "d\022\022\n\nvisibility\030\003 \001(\r\022\027\n\017annotation_name" +
-      "\030\004 \001(\t\022\032\n\022annotation_members\030\005 \003(\t\022:\n\021an",
-      "notation_values\030\006 \003(\0132\037.sizzle.types.Cha" +
-      "ngedExpression\022\r\n\005other\030\007 \001(\t\"\216\001\n\016Change" +
-      "dComment\022(\n\006change\030\001 \002(\0162\030.sizzle.types." +
-      "ChangeKind\022/\n\004kind\030\002 \002(\0162!.sizzle.types." +
-      "Comment.CommentKind\022\r\n\005value\030\003 \001(\t\022\022\n\nst" +
-      "art_line\030\004 \001(\005B\002H\001"
+      "\014\n\004name\030\003 \002(\t\022+\n\nnamespaces\030\004 \003(\0132\027.sizz" +
+      "le.types.Namespace\022:\n\022changed_namespaces" +
+      "\030\005 \003(\0132\036.sizzle.types.ChangedNamespace\022\017" +
+      "\n\007content\030\006 \001(\t\"\217\001\n\010FileKind\022\013\n\007UNKNOWN\020" +
+      "\001\022\n\n\006BINARY\020\002\022\010\n\004TEXT\020\003\022\007\n\003XML\020\004\022\025\n\021SOUR" +
+      "CE_JAVA_ERROR\020\005\022\024\n\020SOURCE_JAVA_JLS2\020\006\022\024\n",
+      "\020SOURCE_JAVA_JLS3\020\007\022\024\n\020SOURCE_JAVA_JLS4\020" +
+      "\010\"\344\001\n\020ChangedNamespace\022(\n\006change\030\001 \002(\0162\030" +
+      ".sizzle.types.ChangeKind\022\014\n\004name\030\002 \001(\t\0220" +
+      "\n\tmodifiers\030\003 \003(\0132\035.sizzle.types.Changed" +
+      "Modifier\0226\n\014declarations\030\004 \003(\0132 .sizzle." +
+      "types.ChangedDeclaration\022.\n\010comments\030\005 \003" +
+      "(\0132\034.sizzle.types.ChangedComment\"\323\003\n\022Cha" +
+      "ngedDeclaration\022(\n\006change\030\001 \002(\0162\030.sizzle" +
+      ".types.ChangeKind\022$\n\004kind\030\002 \002(\0162\026.sizzle" +
+      ".types.TypeKind\022\014\n\004name\030\003 \001(\t\0220\n\tmodifie",
+      "rs\030\004 \003(\0132\035.sizzle.types.ChangedModifier\022" +
+      "5\n\022generic_parameters\030\005 \003(\0132\031.sizzle.typ" +
+      "es.ChangedType\022*\n\007parents\030\006 \003(\0132\031.sizzle" +
+      ".types.ChangedType\022,\n\007methods\030\007 \003(\0132\033.si" +
+      "zzle.types.ChangedMethod\022-\n\006fields\030\010 \003(\013" +
+      "2\035.sizzle.types.ChangedVariable\022=\n\023neste" +
+      "d_declarations\030\t \003(\0132 .sizzle.types.Chan" +
+      "gedDeclaration\022.\n\010comments\030\n \003(\0132\034.sizzl" +
+      "e.types.ChangedComment\"w\n\013ChangedType\022(\n" +
+      "\006change\030\001 \002(\0162\030.sizzle.types.ChangeKind\022",
+      "$\n\004kind\030\002 \001(\0162\026.sizzle.types.TypeKind\022\014\n" +
+      "\004name\030\003 \001(\t\022\n\n\002id\030\004 \001(\t\"\252\003\n\rChangedMetho" +
+      "d\022(\n\006change\030\001 \002(\0162\030.sizzle.types.ChangeK" +
+      "ind\022\014\n\004name\030\002 \001(\t\0220\n\tmodifiers\030\003 \003(\0132\035.s" +
+      "izzle.types.ChangedModifier\022.\n\013return_ty" +
+      "pe\030\004 \001(\0132\031.sizzle.types.ChangedType\0225\n\022g" +
+      "eneric_parameters\030\005 \003(\0132\031.sizzle.types.C" +
+      "hangedType\0220\n\targuments\030\006 \003(\0132\035.sizzle.t" +
+      "ypes.ChangedVariable\0222\n\017exception_types\030" +
+      "\007 \003(\0132\031.sizzle.types.ChangedType\0222\n\nstat",
+      "ements\030\010 \003(\0132\036.sizzle.types.ChangedState" +
+      "ment\022.\n\010comments\030\t \003(\0132\034.sizzle.types.Ch" +
+      "angedComment\"\223\002\n\017ChangedVariable\022(\n\006chan" +
+      "ge\030\001 \002(\0162\030.sizzle.types.ChangeKind\022\014\n\004na" +
+      "me\030\002 \001(\t\0220\n\rvariable_type\030\003 \001(\0132\031.sizzle" +
+      ".types.ChangedType\0220\n\tmodifiers\030\004 \003(\0132\035." +
+      "sizzle.types.ChangedModifier\0224\n\013initiali" +
+      "zer\030\005 \001(\0132\037.sizzle.types.ChangedExpressi" +
+      "on\022.\n\010comments\030\006 \003(\0132\034.sizzle.types.Chan" +
+      "gedComment\"\243\004\n\020ChangedStatement\022(\n\006chang",
+      "e\030\001 \002(\0162\030.sizzle.types.ChangeKind\0223\n\004kin" +
+      "d\030\002 \002(\0162%.sizzle.types.Statement.Stateme" +
+      "ntKind\022.\n\010comments\030\003 \003(\0132\034.sizzle.types." +
+      "ChangedComment\0222\n\nstatements\030\004 \003(\0132\036.siz" +
+      "zle.types.ChangedStatement\0228\n\017initializa" +
+      "tions\030\005 \003(\0132\037.sizzle.types.ChangedExpres" +
+      "sion\0222\n\tcondition\030\006 \001(\0132\037.sizzle.types.C" +
+      "hangedExpression\0220\n\007updates\030\007 \003(\0132\037.sizz" +
+      "le.types.ChangedExpression\022;\n\024variable_d" +
+      "eclaration\030\010 \001(\0132\035.sizzle.types.ChangedV",
+      "ariable\022:\n\020type_declaration\030\t \001(\0132 .sizz" +
+      "le.types.ChangedDeclaration\0223\n\nexpressio" +
+      "n\030\n \001(\0132\037.sizzle.types.ChangedExpression" +
+      "\"\376\003\n\021ChangedExpression\022(\n\006change\030\001 \002(\0162\030" +
+      ".sizzle.types.ChangeKind\0225\n\004kind\030\002 \002(\0162\'" +
+      ".sizzle.types.Expression.ExpressionKind\022" +
+      "4\n\013expressions\030\003 \003(\0132\037.sizzle.types.Chan" +
+      "gedExpression\0225\n\016variable_decls\030\004 \003(\0132\035." +
+      "sizzle.types.ChangedVariable\022+\n\010new_type" +
+      "\030\005 \001(\0132\031.sizzle.types.ChangedType\0225\n\022gen",
+      "eric_parameters\030\006 \003(\0132\031.sizzle.types.Cha" +
+      "ngedType\022\022\n\nis_postfix\030\007 \001(\010\022\017\n\007literal\030" +
+      "\010 \001(\t\022\020\n\010variable\030\t \001(\t\022\016\n\006method\030\n \001(\t\022" +
+      "4\n\013method_args\030\013 \003(\0132\037.sizzle.types.Chan" +
+      "gedExpression\022:\n\020anon_declaration\030\014 \001(\0132" +
+      " .sizzle.types.ChangedDeclaration\"\202\002\n\017Ch" +
+      "angedModifier\022(\n\006change\030\001 \002(\0162\030.sizzle.t" +
+      "ypes.ChangeKind\0221\n\004kind\030\002 \002(\0162#.sizzle.t" +
+      "ypes.Modifier.ModifierKind\022\022\n\nvisibility" +
+      "\030\003 \001(\r\022\027\n\017annotation_name\030\004 \001(\t\022\032\n\022annot",
+      "ation_members\030\005 \003(\t\022:\n\021annotation_values" +
+      "\030\006 \003(\0132\037.sizzle.types.ChangedExpression\022" +
+      "\r\n\005other\030\007 \001(\t\"\216\001\n\016ChangedComment\022(\n\006cha" +
+      "nge\030\001 \002(\0162\030.sizzle.types.ChangeKind\022/\n\004k" +
+      "ind\030\002 \002(\0162!.sizzle.types.Comment.Comment" +
+      "Kind\022\r\n\005value\030\003 \001(\t\022\022\n\nstart_line\030\004 \001(\005B" +
+      "\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
