@@ -32,7 +32,7 @@ message Issue {
 	required int32 modified_date = 12;
 	optional int32 completed_date = 13;
 	repeated string keywords = 14;
-	required Person reporter = 15;
+	required Person author = 15;
 	required string description = 16;
 	optional Person assignee = 17;
 	optional string os = 18;
@@ -51,12 +51,13 @@ message AttachedFile {
 	required string filename = 1;
 	required string description = 2;
 	required string url = 3;
-	optional int32 date = 4;
+	required int32 date = 4;
+	required Person author = 5;
 }
 
 message IssueComment {
 	required string id = 1;
-	required int32 created_date = 2;
+	required int32 date = 2;
 	required Person author = 3;
 	required string description = 4;
 }
@@ -64,8 +65,8 @@ message IssueComment {
 message IssueChange {
 	required string id = 1;
 	required string what = 2;
-	required int32 when = 3;
-	required Person user = 4;
+	required int32 date = 3;
+	required Person author = 4;
 	required string old_value = 5;
 	required string new_value = 6;
 	optional string description = 7;

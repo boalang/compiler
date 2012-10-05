@@ -889,10 +889,10 @@ public final class Issues {
     int getKeywordsCount();
     String getKeywords(int index);
     
-    // required .sizzle.types.Person reporter = 15;
-    boolean hasReporter();
-    sizzle.types.Shared.Person getReporter();
-    sizzle.types.Shared.PersonOrBuilder getReporterOrBuilder();
+    // required .sizzle.types.Person author = 15;
+    boolean hasAuthor();
+    sizzle.types.Shared.Person getAuthor();
+    sizzle.types.Shared.PersonOrBuilder getAuthorOrBuilder();
     
     // required string description = 16;
     boolean hasDescription();
@@ -1336,17 +1336,17 @@ public final class Issues {
       return keywords_.get(index);
     }
     
-    // required .sizzle.types.Person reporter = 15;
-    public static final int REPORTER_FIELD_NUMBER = 15;
-    private sizzle.types.Shared.Person reporter_;
-    public boolean hasReporter() {
+    // required .sizzle.types.Person author = 15;
+    public static final int AUTHOR_FIELD_NUMBER = 15;
+    private sizzle.types.Shared.Person author_;
+    public boolean hasAuthor() {
       return ((bitField0_ & 0x00001000) == 0x00001000);
     }
-    public sizzle.types.Shared.Person getReporter() {
-      return reporter_;
+    public sizzle.types.Shared.Person getAuthor() {
+      return author_;
     }
-    public sizzle.types.Shared.PersonOrBuilder getReporterOrBuilder() {
-      return reporter_;
+    public sizzle.types.Shared.PersonOrBuilder getAuthorOrBuilder() {
+      return author_;
     }
     
     // required string description = 16;
@@ -1674,7 +1674,7 @@ public final class Issues {
       modifiedDate_ = 0;
       completedDate_ = 0;
       keywords_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      reporter_ = sizzle.types.Shared.Person.getDefaultInstance();
+      author_ = sizzle.types.Shared.Person.getDefaultInstance();
       description_ = "";
       assignee_ = sizzle.types.Shared.Person.getDefaultInstance();
       os_ = "";
@@ -1721,7 +1721,7 @@ public final class Issues {
         memoizedIsInitialized = 0;
         return false;
       }
-      if (!hasReporter()) {
+      if (!hasAuthor()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -1729,7 +1729,7 @@ public final class Issues {
         memoizedIsInitialized = 0;
         return false;
       }
-      if (!getReporter().isInitialized()) {
+      if (!getAuthor().isInitialized()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -1807,7 +1807,7 @@ public final class Issues {
         output.writeBytes(14, keywords_.getByteString(i));
       }
       if (((bitField0_ & 0x00001000) == 0x00001000)) {
-        output.writeMessage(15, reporter_);
+        output.writeMessage(15, author_);
       }
       if (((bitField0_ & 0x00002000) == 0x00002000)) {
         output.writeBytes(16, getDescriptionBytes());
@@ -1922,7 +1922,7 @@ public final class Issues {
       }
       if (((bitField0_ & 0x00001000) == 0x00001000)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(15, reporter_);
+          .computeMessageSize(15, author_);
       }
       if (((bitField0_ & 0x00002000) == 0x00002000)) {
         size += com.google.protobuf.CodedOutputStream
@@ -2088,7 +2088,7 @@ public final class Issues {
       }
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-          getReporterFieldBuilder();
+          getAuthorFieldBuilder();
           getAssigneeFieldBuilder();
           getFilesFieldBuilder();
           getCommentsFieldBuilder();
@@ -2129,10 +2129,10 @@ public final class Issues {
         bitField0_ = (bitField0_ & ~0x00001000);
         keywords_ = com.google.protobuf.LazyStringArrayList.EMPTY;
         bitField0_ = (bitField0_ & ~0x00002000);
-        if (reporterBuilder_ == null) {
-          reporter_ = sizzle.types.Shared.Person.getDefaultInstance();
+        if (authorBuilder_ == null) {
+          author_ = sizzle.types.Shared.Person.getDefaultInstance();
         } else {
-          reporterBuilder_.clear();
+          authorBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00004000);
         description_ = "";
@@ -2276,10 +2276,10 @@ public final class Issues {
         if (((from_bitField0_ & 0x00004000) == 0x00004000)) {
           to_bitField0_ |= 0x00001000;
         }
-        if (reporterBuilder_ == null) {
-          result.reporter_ = reporter_;
+        if (authorBuilder_ == null) {
+          result.author_ = author_;
         } else {
-          result.reporter_ = reporterBuilder_.build();
+          result.author_ = authorBuilder_.build();
         }
         if (((from_bitField0_ & 0x00008000) == 0x00008000)) {
           to_bitField0_ |= 0x00002000;
@@ -2420,8 +2420,8 @@ public final class Issues {
           }
           onChanged();
         }
-        if (other.hasReporter()) {
-          mergeReporter(other.getReporter());
+        if (other.hasAuthor()) {
+          mergeAuthor(other.getAuthor());
         }
         if (other.hasDescription()) {
           setDescription(other.getDescription());
@@ -2561,7 +2561,7 @@ public final class Issues {
           
           return false;
         }
-        if (!hasReporter()) {
+        if (!hasAuthor()) {
           
           return false;
         }
@@ -2569,7 +2569,7 @@ public final class Issues {
           
           return false;
         }
-        if (!getReporter().isInitialized()) {
+        if (!getAuthor().isInitialized()) {
           
           return false;
         }
@@ -2695,11 +2695,11 @@ public final class Issues {
             }
             case 122: {
               sizzle.types.Shared.Person.Builder subBuilder = sizzle.types.Shared.Person.newBuilder();
-              if (hasReporter()) {
-                subBuilder.mergeFrom(getReporter());
+              if (hasAuthor()) {
+                subBuilder.mergeFrom(getAuthor());
               }
               input.readMessage(subBuilder, extensionRegistry);
-              setReporter(subBuilder.buildPartial());
+              setAuthor(subBuilder.buildPartial());
               break;
             }
             case 130: {
@@ -3274,94 +3274,94 @@ public final class Issues {
         onChanged();
       }
       
-      // required .sizzle.types.Person reporter = 15;
-      private sizzle.types.Shared.Person reporter_ = sizzle.types.Shared.Person.getDefaultInstance();
+      // required .sizzle.types.Person author = 15;
+      private sizzle.types.Shared.Person author_ = sizzle.types.Shared.Person.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
-          sizzle.types.Shared.Person, sizzle.types.Shared.Person.Builder, sizzle.types.Shared.PersonOrBuilder> reporterBuilder_;
-      public boolean hasReporter() {
+          sizzle.types.Shared.Person, sizzle.types.Shared.Person.Builder, sizzle.types.Shared.PersonOrBuilder> authorBuilder_;
+      public boolean hasAuthor() {
         return ((bitField0_ & 0x00004000) == 0x00004000);
       }
-      public sizzle.types.Shared.Person getReporter() {
-        if (reporterBuilder_ == null) {
-          return reporter_;
+      public sizzle.types.Shared.Person getAuthor() {
+        if (authorBuilder_ == null) {
+          return author_;
         } else {
-          return reporterBuilder_.getMessage();
+          return authorBuilder_.getMessage();
         }
       }
-      public Builder setReporter(sizzle.types.Shared.Person value) {
-        if (reporterBuilder_ == null) {
+      public Builder setAuthor(sizzle.types.Shared.Person value) {
+        if (authorBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
           }
-          reporter_ = value;
+          author_ = value;
           onChanged();
         } else {
-          reporterBuilder_.setMessage(value);
+          authorBuilder_.setMessage(value);
         }
         bitField0_ |= 0x00004000;
         return this;
       }
-      public Builder setReporter(
+      public Builder setAuthor(
           sizzle.types.Shared.Person.Builder builderForValue) {
-        if (reporterBuilder_ == null) {
-          reporter_ = builderForValue.build();
+        if (authorBuilder_ == null) {
+          author_ = builderForValue.build();
           onChanged();
         } else {
-          reporterBuilder_.setMessage(builderForValue.build());
+          authorBuilder_.setMessage(builderForValue.build());
         }
         bitField0_ |= 0x00004000;
         return this;
       }
-      public Builder mergeReporter(sizzle.types.Shared.Person value) {
-        if (reporterBuilder_ == null) {
+      public Builder mergeAuthor(sizzle.types.Shared.Person value) {
+        if (authorBuilder_ == null) {
           if (((bitField0_ & 0x00004000) == 0x00004000) &&
-              reporter_ != sizzle.types.Shared.Person.getDefaultInstance()) {
-            reporter_ =
-              sizzle.types.Shared.Person.newBuilder(reporter_).mergeFrom(value).buildPartial();
+              author_ != sizzle.types.Shared.Person.getDefaultInstance()) {
+            author_ =
+              sizzle.types.Shared.Person.newBuilder(author_).mergeFrom(value).buildPartial();
           } else {
-            reporter_ = value;
+            author_ = value;
           }
           onChanged();
         } else {
-          reporterBuilder_.mergeFrom(value);
+          authorBuilder_.mergeFrom(value);
         }
         bitField0_ |= 0x00004000;
         return this;
       }
-      public Builder clearReporter() {
-        if (reporterBuilder_ == null) {
-          reporter_ = sizzle.types.Shared.Person.getDefaultInstance();
+      public Builder clearAuthor() {
+        if (authorBuilder_ == null) {
+          author_ = sizzle.types.Shared.Person.getDefaultInstance();
           onChanged();
         } else {
-          reporterBuilder_.clear();
+          authorBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00004000);
         return this;
       }
-      public sizzle.types.Shared.Person.Builder getReporterBuilder() {
+      public sizzle.types.Shared.Person.Builder getAuthorBuilder() {
         bitField0_ |= 0x00004000;
         onChanged();
-        return getReporterFieldBuilder().getBuilder();
+        return getAuthorFieldBuilder().getBuilder();
       }
-      public sizzle.types.Shared.PersonOrBuilder getReporterOrBuilder() {
-        if (reporterBuilder_ != null) {
-          return reporterBuilder_.getMessageOrBuilder();
+      public sizzle.types.Shared.PersonOrBuilder getAuthorOrBuilder() {
+        if (authorBuilder_ != null) {
+          return authorBuilder_.getMessageOrBuilder();
         } else {
-          return reporter_;
+          return author_;
         }
       }
       private com.google.protobuf.SingleFieldBuilder<
           sizzle.types.Shared.Person, sizzle.types.Shared.Person.Builder, sizzle.types.Shared.PersonOrBuilder> 
-          getReporterFieldBuilder() {
-        if (reporterBuilder_ == null) {
-          reporterBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+          getAuthorFieldBuilder() {
+        if (authorBuilder_ == null) {
+          authorBuilder_ = new com.google.protobuf.SingleFieldBuilder<
               sizzle.types.Shared.Person, sizzle.types.Shared.Person.Builder, sizzle.types.Shared.PersonOrBuilder>(
-                  reporter_,
+                  author_,
                   getParentForChildren(),
                   isClean());
-          reporter_ = null;
+          author_ = null;
         }
-        return reporterBuilder_;
+        return authorBuilder_;
       }
       
       // required string description = 16;
@@ -4311,9 +4311,14 @@ public final class Issues {
     boolean hasUrl();
     String getUrl();
     
-    // optional int32 date = 4;
+    // required int32 date = 4;
     boolean hasDate();
     int getDate();
+    
+    // required .sizzle.types.Person author = 5;
+    boolean hasAuthor();
+    sizzle.types.Shared.Person getAuthor();
+    sizzle.types.Shared.PersonOrBuilder getAuthorOrBuilder();
   }
   public static final class AttachedFile extends
       com.google.protobuf.GeneratedMessage
@@ -4440,7 +4445,7 @@ public final class Issues {
       }
     }
     
-    // optional int32 date = 4;
+    // required int32 date = 4;
     public static final int DATE_FIELD_NUMBER = 4;
     private int date_;
     public boolean hasDate() {
@@ -4450,11 +4455,25 @@ public final class Issues {
       return date_;
     }
     
+    // required .sizzle.types.Person author = 5;
+    public static final int AUTHOR_FIELD_NUMBER = 5;
+    private sizzle.types.Shared.Person author_;
+    public boolean hasAuthor() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    public sizzle.types.Shared.Person getAuthor() {
+      return author_;
+    }
+    public sizzle.types.Shared.PersonOrBuilder getAuthorOrBuilder() {
+      return author_;
+    }
+    
     private void initFields() {
       filename_ = "";
       description_ = "";
       url_ = "";
       date_ = 0;
+      author_ = sizzle.types.Shared.Person.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -4470,6 +4489,18 @@ public final class Issues {
         return false;
       }
       if (!hasUrl()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasDate()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasAuthor()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!getAuthor().isInitialized()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -4491,6 +4522,9 @@ public final class Issues {
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         output.writeInt32(4, date_);
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeMessage(5, author_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -4516,6 +4550,10 @@ public final class Issues {
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(4, date_);
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(5, author_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -4633,6 +4671,7 @@ public final class Issues {
       }
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getAuthorFieldBuilder();
         }
       }
       private static Builder create() {
@@ -4649,6 +4688,12 @@ public final class Issues {
         bitField0_ = (bitField0_ & ~0x00000004);
         date_ = 0;
         bitField0_ = (bitField0_ & ~0x00000008);
+        if (authorBuilder_ == null) {
+          author_ = sizzle.types.Shared.Person.getDefaultInstance();
+        } else {
+          authorBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000010);
         return this;
       }
       
@@ -4703,6 +4748,14 @@ public final class Issues {
           to_bitField0_ |= 0x00000008;
         }
         result.date_ = date_;
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        if (authorBuilder_ == null) {
+          result.author_ = author_;
+        } else {
+          result.author_ = authorBuilder_.build();
+        }
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -4731,6 +4784,9 @@ public final class Issues {
         if (other.hasDate()) {
           setDate(other.getDate());
         }
+        if (other.hasAuthor()) {
+          mergeAuthor(other.getAuthor());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -4745,6 +4801,18 @@ public final class Issues {
           return false;
         }
         if (!hasUrl()) {
+          
+          return false;
+        }
+        if (!hasDate()) {
+          
+          return false;
+        }
+        if (!hasAuthor()) {
+          
+          return false;
+        }
+        if (!getAuthor().isInitialized()) {
           
           return false;
         }
@@ -4792,6 +4860,15 @@ public final class Issues {
             case 32: {
               bitField0_ |= 0x00000008;
               date_ = input.readInt32();
+              break;
+            }
+            case 42: {
+              sizzle.types.Shared.Person.Builder subBuilder = sizzle.types.Shared.Person.newBuilder();
+              if (hasAuthor()) {
+                subBuilder.mergeFrom(getAuthor());
+              }
+              input.readMessage(subBuilder, extensionRegistry);
+              setAuthor(subBuilder.buildPartial());
               break;
             }
           }
@@ -4908,7 +4985,7 @@ public final class Issues {
         onChanged();
       }
       
-      // optional int32 date = 4;
+      // required int32 date = 4;
       private int date_ ;
       public boolean hasDate() {
         return ((bitField0_ & 0x00000008) == 0x00000008);
@@ -4929,6 +5006,96 @@ public final class Issues {
         return this;
       }
       
+      // required .sizzle.types.Person author = 5;
+      private sizzle.types.Shared.Person author_ = sizzle.types.Shared.Person.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          sizzle.types.Shared.Person, sizzle.types.Shared.Person.Builder, sizzle.types.Shared.PersonOrBuilder> authorBuilder_;
+      public boolean hasAuthor() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
+      }
+      public sizzle.types.Shared.Person getAuthor() {
+        if (authorBuilder_ == null) {
+          return author_;
+        } else {
+          return authorBuilder_.getMessage();
+        }
+      }
+      public Builder setAuthor(sizzle.types.Shared.Person value) {
+        if (authorBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          author_ = value;
+          onChanged();
+        } else {
+          authorBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000010;
+        return this;
+      }
+      public Builder setAuthor(
+          sizzle.types.Shared.Person.Builder builderForValue) {
+        if (authorBuilder_ == null) {
+          author_ = builderForValue.build();
+          onChanged();
+        } else {
+          authorBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000010;
+        return this;
+      }
+      public Builder mergeAuthor(sizzle.types.Shared.Person value) {
+        if (authorBuilder_ == null) {
+          if (((bitField0_ & 0x00000010) == 0x00000010) &&
+              author_ != sizzle.types.Shared.Person.getDefaultInstance()) {
+            author_ =
+              sizzle.types.Shared.Person.newBuilder(author_).mergeFrom(value).buildPartial();
+          } else {
+            author_ = value;
+          }
+          onChanged();
+        } else {
+          authorBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000010;
+        return this;
+      }
+      public Builder clearAuthor() {
+        if (authorBuilder_ == null) {
+          author_ = sizzle.types.Shared.Person.getDefaultInstance();
+          onChanged();
+        } else {
+          authorBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000010);
+        return this;
+      }
+      public sizzle.types.Shared.Person.Builder getAuthorBuilder() {
+        bitField0_ |= 0x00000010;
+        onChanged();
+        return getAuthorFieldBuilder().getBuilder();
+      }
+      public sizzle.types.Shared.PersonOrBuilder getAuthorOrBuilder() {
+        if (authorBuilder_ != null) {
+          return authorBuilder_.getMessageOrBuilder();
+        } else {
+          return author_;
+        }
+      }
+      private com.google.protobuf.SingleFieldBuilder<
+          sizzle.types.Shared.Person, sizzle.types.Shared.Person.Builder, sizzle.types.Shared.PersonOrBuilder> 
+          getAuthorFieldBuilder() {
+        if (authorBuilder_ == null) {
+          authorBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              sizzle.types.Shared.Person, sizzle.types.Shared.Person.Builder, sizzle.types.Shared.PersonOrBuilder>(
+                  author_,
+                  getParentForChildren(),
+                  isClean());
+          author_ = null;
+        }
+        return authorBuilder_;
+      }
+      
       // @@protoc_insertion_point(builder_scope:sizzle.types.AttachedFile)
     }
     
@@ -4947,9 +5114,9 @@ public final class Issues {
     boolean hasId();
     String getId();
     
-    // required int32 created_date = 2;
-    boolean hasCreatedDate();
-    int getCreatedDate();
+    // required int32 date = 2;
+    boolean hasDate();
+    int getDate();
     
     // required .sizzle.types.Person author = 3;
     boolean hasAuthor();
@@ -5021,14 +5188,14 @@ public final class Issues {
       }
     }
     
-    // required int32 created_date = 2;
-    public static final int CREATED_DATE_FIELD_NUMBER = 2;
-    private int createdDate_;
-    public boolean hasCreatedDate() {
+    // required int32 date = 2;
+    public static final int DATE_FIELD_NUMBER = 2;
+    private int date_;
+    public boolean hasDate() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
-    public int getCreatedDate() {
-      return createdDate_;
+    public int getDate() {
+      return date_;
     }
     
     // required .sizzle.types.Person author = 3;
@@ -5078,7 +5245,7 @@ public final class Issues {
     
     private void initFields() {
       id_ = "";
-      createdDate_ = 0;
+      date_ = 0;
       author_ = sizzle.types.Shared.Person.getDefaultInstance();
       description_ = "";
     }
@@ -5091,7 +5258,7 @@ public final class Issues {
         memoizedIsInitialized = 0;
         return false;
       }
-      if (!hasCreatedDate()) {
+      if (!hasDate()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -5118,7 +5285,7 @@ public final class Issues {
         output.writeBytes(1, getIdBytes());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeInt32(2, createdDate_);
+        output.writeInt32(2, date_);
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeMessage(3, author_);
@@ -5141,7 +5308,7 @@ public final class Issues {
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(2, createdDate_);
+          .computeInt32Size(2, date_);
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
@@ -5278,7 +5445,7 @@ public final class Issues {
         super.clear();
         id_ = "";
         bitField0_ = (bitField0_ & ~0x00000001);
-        createdDate_ = 0;
+        date_ = 0;
         bitField0_ = (bitField0_ & ~0x00000002);
         if (authorBuilder_ == null) {
           author_ = sizzle.types.Shared.Person.getDefaultInstance();
@@ -5333,7 +5500,7 @@ public final class Issues {
         if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
           to_bitField0_ |= 0x00000002;
         }
-        result.createdDate_ = createdDate_;
+        result.date_ = date_;
         if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
           to_bitField0_ |= 0x00000004;
         }
@@ -5365,8 +5532,8 @@ public final class Issues {
         if (other.hasId()) {
           setId(other.getId());
         }
-        if (other.hasCreatedDate()) {
-          setCreatedDate(other.getCreatedDate());
+        if (other.hasDate()) {
+          setDate(other.getDate());
         }
         if (other.hasAuthor()) {
           mergeAuthor(other.getAuthor());
@@ -5383,7 +5550,7 @@ public final class Issues {
           
           return false;
         }
-        if (!hasCreatedDate()) {
+        if (!hasDate()) {
           
           return false;
         }
@@ -5432,7 +5599,7 @@ public final class Issues {
             }
             case 16: {
               bitField0_ |= 0x00000002;
-              createdDate_ = input.readInt32();
+              date_ = input.readInt32();
               break;
             }
             case 26: {
@@ -5491,23 +5658,23 @@ public final class Issues {
         onChanged();
       }
       
-      // required int32 created_date = 2;
-      private int createdDate_ ;
-      public boolean hasCreatedDate() {
+      // required int32 date = 2;
+      private int date_ ;
+      public boolean hasDate() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
-      public int getCreatedDate() {
-        return createdDate_;
+      public int getDate() {
+        return date_;
       }
-      public Builder setCreatedDate(int value) {
+      public Builder setDate(int value) {
         bitField0_ |= 0x00000002;
-        createdDate_ = value;
+        date_ = value;
         onChanged();
         return this;
       }
-      public Builder clearCreatedDate() {
+      public Builder clearDate() {
         bitField0_ = (bitField0_ & ~0x00000002);
-        createdDate_ = 0;
+        date_ = 0;
         onChanged();
         return this;
       }
@@ -5660,14 +5827,14 @@ public final class Issues {
     boolean hasWhat();
     String getWhat();
     
-    // required int32 when = 3;
-    boolean hasWhen();
-    int getWhen();
+    // required int32 date = 3;
+    boolean hasDate();
+    int getDate();
     
-    // required .sizzle.types.Person user = 4;
-    boolean hasUser();
-    sizzle.types.Shared.Person getUser();
-    sizzle.types.Shared.PersonOrBuilder getUserOrBuilder();
+    // required .sizzle.types.Person author = 4;
+    boolean hasAuthor();
+    sizzle.types.Shared.Person getAuthor();
+    sizzle.types.Shared.PersonOrBuilder getAuthorOrBuilder();
     
     // required string old_value = 5;
     boolean hasOldValue();
@@ -5774,27 +5941,27 @@ public final class Issues {
       }
     }
     
-    // required int32 when = 3;
-    public static final int WHEN_FIELD_NUMBER = 3;
-    private int when_;
-    public boolean hasWhen() {
+    // required int32 date = 3;
+    public static final int DATE_FIELD_NUMBER = 3;
+    private int date_;
+    public boolean hasDate() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
-    public int getWhen() {
-      return when_;
+    public int getDate() {
+      return date_;
     }
     
-    // required .sizzle.types.Person user = 4;
-    public static final int USER_FIELD_NUMBER = 4;
-    private sizzle.types.Shared.Person user_;
-    public boolean hasUser() {
+    // required .sizzle.types.Person author = 4;
+    public static final int AUTHOR_FIELD_NUMBER = 4;
+    private sizzle.types.Shared.Person author_;
+    public boolean hasAuthor() {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
-    public sizzle.types.Shared.Person getUser() {
-      return user_;
+    public sizzle.types.Shared.Person getAuthor() {
+      return author_;
     }
-    public sizzle.types.Shared.PersonOrBuilder getUserOrBuilder() {
-      return user_;
+    public sizzle.types.Shared.PersonOrBuilder getAuthorOrBuilder() {
+      return author_;
     }
     
     // required string old_value = 5;
@@ -5896,8 +6063,8 @@ public final class Issues {
     private void initFields() {
       id_ = "";
       what_ = "";
-      when_ = 0;
-      user_ = sizzle.types.Shared.Person.getDefaultInstance();
+      date_ = 0;
+      author_ = sizzle.types.Shared.Person.getDefaultInstance();
       oldValue_ = "";
       newValue_ = "";
       description_ = "";
@@ -5915,11 +6082,11 @@ public final class Issues {
         memoizedIsInitialized = 0;
         return false;
       }
-      if (!hasWhen()) {
+      if (!hasDate()) {
         memoizedIsInitialized = 0;
         return false;
       }
-      if (!hasUser()) {
+      if (!hasAuthor()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -5931,7 +6098,7 @@ public final class Issues {
         memoizedIsInitialized = 0;
         return false;
       }
-      if (!getUser().isInitialized()) {
+      if (!getAuthor().isInitialized()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -5949,10 +6116,10 @@ public final class Issues {
         output.writeBytes(2, getWhatBytes());
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeInt32(3, when_);
+        output.writeInt32(3, date_);
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeMessage(4, user_);
+        output.writeMessage(4, author_);
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         output.writeBytes(5, getOldValueBytes());
@@ -5982,11 +6149,11 @@ public final class Issues {
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(3, when_);
+          .computeInt32Size(3, date_);
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(4, user_);
+          .computeMessageSize(4, author_);
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
@@ -6116,7 +6283,7 @@ public final class Issues {
       }
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-          getUserFieldBuilder();
+          getAuthorFieldBuilder();
         }
       }
       private static Builder create() {
@@ -6129,12 +6296,12 @@ public final class Issues {
         bitField0_ = (bitField0_ & ~0x00000001);
         what_ = "";
         bitField0_ = (bitField0_ & ~0x00000002);
-        when_ = 0;
+        date_ = 0;
         bitField0_ = (bitField0_ & ~0x00000004);
-        if (userBuilder_ == null) {
-          user_ = sizzle.types.Shared.Person.getDefaultInstance();
+        if (authorBuilder_ == null) {
+          author_ = sizzle.types.Shared.Person.getDefaultInstance();
         } else {
-          userBuilder_.clear();
+          authorBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000008);
         oldValue_ = "";
@@ -6192,14 +6359,14 @@ public final class Issues {
         if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
           to_bitField0_ |= 0x00000004;
         }
-        result.when_ = when_;
+        result.date_ = date_;
         if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
           to_bitField0_ |= 0x00000008;
         }
-        if (userBuilder_ == null) {
-          result.user_ = user_;
+        if (authorBuilder_ == null) {
+          result.author_ = author_;
         } else {
-          result.user_ = userBuilder_.build();
+          result.author_ = authorBuilder_.build();
         }
         if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
           to_bitField0_ |= 0x00000010;
@@ -6235,11 +6402,11 @@ public final class Issues {
         if (other.hasWhat()) {
           setWhat(other.getWhat());
         }
-        if (other.hasWhen()) {
-          setWhen(other.getWhen());
+        if (other.hasDate()) {
+          setDate(other.getDate());
         }
-        if (other.hasUser()) {
-          mergeUser(other.getUser());
+        if (other.hasAuthor()) {
+          mergeAuthor(other.getAuthor());
         }
         if (other.hasOldValue()) {
           setOldValue(other.getOldValue());
@@ -6263,11 +6430,11 @@ public final class Issues {
           
           return false;
         }
-        if (!hasWhen()) {
+        if (!hasDate()) {
           
           return false;
         }
-        if (!hasUser()) {
+        if (!hasAuthor()) {
           
           return false;
         }
@@ -6279,7 +6446,7 @@ public final class Issues {
           
           return false;
         }
-        if (!getUser().isInitialized()) {
+        if (!getAuthor().isInitialized()) {
           
           return false;
         }
@@ -6321,16 +6488,16 @@ public final class Issues {
             }
             case 24: {
               bitField0_ |= 0x00000004;
-              when_ = input.readInt32();
+              date_ = input.readInt32();
               break;
             }
             case 34: {
               sizzle.types.Shared.Person.Builder subBuilder = sizzle.types.Shared.Person.newBuilder();
-              if (hasUser()) {
-                subBuilder.mergeFrom(getUser());
+              if (hasAuthor()) {
+                subBuilder.mergeFrom(getAuthor());
               }
               input.readMessage(subBuilder, extensionRegistry);
-              setUser(subBuilder.buildPartial());
+              setAuthor(subBuilder.buildPartial());
               break;
             }
             case 42: {
@@ -6426,115 +6593,115 @@ public final class Issues {
         onChanged();
       }
       
-      // required int32 when = 3;
-      private int when_ ;
-      public boolean hasWhen() {
+      // required int32 date = 3;
+      private int date_ ;
+      public boolean hasDate() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
-      public int getWhen() {
-        return when_;
+      public int getDate() {
+        return date_;
       }
-      public Builder setWhen(int value) {
+      public Builder setDate(int value) {
         bitField0_ |= 0x00000004;
-        when_ = value;
+        date_ = value;
         onChanged();
         return this;
       }
-      public Builder clearWhen() {
+      public Builder clearDate() {
         bitField0_ = (bitField0_ & ~0x00000004);
-        when_ = 0;
+        date_ = 0;
         onChanged();
         return this;
       }
       
-      // required .sizzle.types.Person user = 4;
-      private sizzle.types.Shared.Person user_ = sizzle.types.Shared.Person.getDefaultInstance();
+      // required .sizzle.types.Person author = 4;
+      private sizzle.types.Shared.Person author_ = sizzle.types.Shared.Person.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
-          sizzle.types.Shared.Person, sizzle.types.Shared.Person.Builder, sizzle.types.Shared.PersonOrBuilder> userBuilder_;
-      public boolean hasUser() {
+          sizzle.types.Shared.Person, sizzle.types.Shared.Person.Builder, sizzle.types.Shared.PersonOrBuilder> authorBuilder_;
+      public boolean hasAuthor() {
         return ((bitField0_ & 0x00000008) == 0x00000008);
       }
-      public sizzle.types.Shared.Person getUser() {
-        if (userBuilder_ == null) {
-          return user_;
+      public sizzle.types.Shared.Person getAuthor() {
+        if (authorBuilder_ == null) {
+          return author_;
         } else {
-          return userBuilder_.getMessage();
+          return authorBuilder_.getMessage();
         }
       }
-      public Builder setUser(sizzle.types.Shared.Person value) {
-        if (userBuilder_ == null) {
+      public Builder setAuthor(sizzle.types.Shared.Person value) {
+        if (authorBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
           }
-          user_ = value;
+          author_ = value;
           onChanged();
         } else {
-          userBuilder_.setMessage(value);
+          authorBuilder_.setMessage(value);
         }
         bitField0_ |= 0x00000008;
         return this;
       }
-      public Builder setUser(
+      public Builder setAuthor(
           sizzle.types.Shared.Person.Builder builderForValue) {
-        if (userBuilder_ == null) {
-          user_ = builderForValue.build();
+        if (authorBuilder_ == null) {
+          author_ = builderForValue.build();
           onChanged();
         } else {
-          userBuilder_.setMessage(builderForValue.build());
+          authorBuilder_.setMessage(builderForValue.build());
         }
         bitField0_ |= 0x00000008;
         return this;
       }
-      public Builder mergeUser(sizzle.types.Shared.Person value) {
-        if (userBuilder_ == null) {
+      public Builder mergeAuthor(sizzle.types.Shared.Person value) {
+        if (authorBuilder_ == null) {
           if (((bitField0_ & 0x00000008) == 0x00000008) &&
-              user_ != sizzle.types.Shared.Person.getDefaultInstance()) {
-            user_ =
-              sizzle.types.Shared.Person.newBuilder(user_).mergeFrom(value).buildPartial();
+              author_ != sizzle.types.Shared.Person.getDefaultInstance()) {
+            author_ =
+              sizzle.types.Shared.Person.newBuilder(author_).mergeFrom(value).buildPartial();
           } else {
-            user_ = value;
+            author_ = value;
           }
           onChanged();
         } else {
-          userBuilder_.mergeFrom(value);
+          authorBuilder_.mergeFrom(value);
         }
         bitField0_ |= 0x00000008;
         return this;
       }
-      public Builder clearUser() {
-        if (userBuilder_ == null) {
-          user_ = sizzle.types.Shared.Person.getDefaultInstance();
+      public Builder clearAuthor() {
+        if (authorBuilder_ == null) {
+          author_ = sizzle.types.Shared.Person.getDefaultInstance();
           onChanged();
         } else {
-          userBuilder_.clear();
+          authorBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000008);
         return this;
       }
-      public sizzle.types.Shared.Person.Builder getUserBuilder() {
+      public sizzle.types.Shared.Person.Builder getAuthorBuilder() {
         bitField0_ |= 0x00000008;
         onChanged();
-        return getUserFieldBuilder().getBuilder();
+        return getAuthorFieldBuilder().getBuilder();
       }
-      public sizzle.types.Shared.PersonOrBuilder getUserOrBuilder() {
-        if (userBuilder_ != null) {
-          return userBuilder_.getMessageOrBuilder();
+      public sizzle.types.Shared.PersonOrBuilder getAuthorOrBuilder() {
+        if (authorBuilder_ != null) {
+          return authorBuilder_.getMessageOrBuilder();
         } else {
-          return user_;
+          return author_;
         }
       }
       private com.google.protobuf.SingleFieldBuilder<
           sizzle.types.Shared.Person, sizzle.types.Shared.Person.Builder, sizzle.types.Shared.PersonOrBuilder> 
-          getUserFieldBuilder() {
-        if (userBuilder_ == null) {
-          userBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+          getAuthorFieldBuilder() {
+        if (authorBuilder_ == null) {
+          authorBuilder_ = new com.google.protobuf.SingleFieldBuilder<
               sizzle.types.Shared.Person, sizzle.types.Shared.Person.Builder, sizzle.types.Shared.PersonOrBuilder>(
-                  user_,
+                  author_,
                   getParentForChildren(),
                   isClean());
-          user_ = null;
+          author_ = null;
         }
-        return userBuilder_;
+        return authorBuilder_;
       }
       
       // required string old_value = 5;
@@ -6696,31 +6863,32 @@ public final class Issues {
       ".IssueKind\022#\n\006issues\030\003 \003(\0132\023.sizzle.type" +
       "s.Issue\"J\n\tIssueKind\022\013\n\007UNKNOWN\020\001\022\010\n\004BUG" +
       "S\020\002\022\014\n\010FEATURES\020\003\022\013\n\007SUPPORT\020\004\022\013\n\007PATCHE" +
-      "S\020\005\"\367\004\n\005Issue\022\n\n\002id\030\001 \002(\t\022\016\n\006status\030\002 \002(" +
+      "S\020\005\"\365\004\n\005Issue\022\n\n\002id\030\001 \002(\t\022\016\n\006status\030\002 \002(" +
       "\t\022\021\n\tcomponent\030\003 \001(\t\022\020\n\010priority\030\004 \002(\t\022\022" +
       "\n\nresolution\030\005 \002(\t\022\025\n\rduplicated_by\030\006 \003(" +
       "\t\022\024\n\014duplicate_of\030\007 \001(\t\022\024\n\014subcomponent\030",
       "\010 \001(\t\022\017\n\007summary\030\t \002(\t\022\017\n\007version\030\n \001(\t\022" +
       "\024\n\014created_date\030\013 \002(\005\022\025\n\rmodified_date\030\014" +
       " \002(\005\022\026\n\016completed_date\030\r \001(\005\022\020\n\010keywords" +
-      "\030\016 \003(\t\022&\n\010reporter\030\017 \002(\0132\024.sizzle.types." +
-      "Person\022\023\n\013description\030\020 \002(\t\022&\n\010assignee\030" +
-      "\021 \001(\0132\024.sizzle.types.Person\022\n\n\002os\030\022 \001(\t\022" +
-      "\020\n\010platform\030\023 \001(\t\022\021\n\tmilestone\030\024 \001(\t\022\022\n\n" +
-      "depends_on\030\025 \001(\t\022\017\n\007blocked\030\026 \001(\t\022\014\n\004vot" +
-      "e\030\027 \001(\005\022\017\n\007secrecy\030\030 \001(\t\022)\n\005files\030\031 \003(\0132" +
-      "\032.sizzle.types.AttachedFile\022,\n\010comments\030",
-      "\032 \003(\0132\032.sizzle.types.IssueComment\022*\n\007cha" +
-      "nges\030\033 \003(\0132\031.sizzle.types.IssueChange\"P\n" +
-      "\014AttachedFile\022\020\n\010filename\030\001 \002(\t\022\023\n\013descr" +
-      "iption\030\002 \002(\t\022\013\n\003url\030\003 \002(\t\022\014\n\004date\030\004 \001(\005\"" +
-      "k\n\014IssueComment\022\n\n\002id\030\001 \002(\t\022\024\n\014created_d" +
-      "ate\030\002 \002(\005\022$\n\006author\030\003 \002(\0132\024.sizzle.types" +
-      ".Person\022\023\n\013description\030\004 \002(\t\"\224\001\n\013IssueCh" +
-      "ange\022\n\n\002id\030\001 \002(\t\022\014\n\004what\030\002 \002(\t\022\014\n\004when\030\003" +
-      " \002(\005\022\"\n\004user\030\004 \002(\0132\024.sizzle.types.Person" +
-      "\022\021\n\told_value\030\005 \002(\t\022\021\n\tnew_value\030\006 \002(\t\022\023",
-      "\n\013description\030\007 \001(\tB\002H\001"
+      "\030\016 \003(\t\022$\n\006author\030\017 \002(\0132\024.sizzle.types.Pe" +
+      "rson\022\023\n\013description\030\020 \002(\t\022&\n\010assignee\030\021 " +
+      "\001(\0132\024.sizzle.types.Person\022\n\n\002os\030\022 \001(\t\022\020\n" +
+      "\010platform\030\023 \001(\t\022\021\n\tmilestone\030\024 \001(\t\022\022\n\nde" +
+      "pends_on\030\025 \001(\t\022\017\n\007blocked\030\026 \001(\t\022\014\n\004vote\030" +
+      "\027 \001(\005\022\017\n\007secrecy\030\030 \001(\t\022)\n\005files\030\031 \003(\0132\032." +
+      "sizzle.types.AttachedFile\022,\n\010comments\030\032 ",
+      "\003(\0132\032.sizzle.types.IssueComment\022*\n\007chang" +
+      "es\030\033 \003(\0132\031.sizzle.types.IssueChange\"v\n\014A" +
+      "ttachedFile\022\020\n\010filename\030\001 \002(\t\022\023\n\013descrip" +
+      "tion\030\002 \002(\t\022\013\n\003url\030\003 \002(\t\022\014\n\004date\030\004 \002(\005\022$\n" +
+      "\006author\030\005 \002(\0132\024.sizzle.types.Person\"c\n\014I" +
+      "ssueComment\022\n\n\002id\030\001 \002(\t\022\014\n\004date\030\002 \002(\005\022$\n" +
+      "\006author\030\003 \002(\0132\024.sizzle.types.Person\022\023\n\013d" +
+      "escription\030\004 \002(\t\"\226\001\n\013IssueChange\022\n\n\002id\030\001" +
+      " \002(\t\022\014\n\004what\030\002 \002(\t\022\014\n\004date\030\003 \002(\005\022$\n\006auth" +
+      "or\030\004 \002(\0132\024.sizzle.types.Person\022\021\n\told_va",
+      "lue\030\005 \002(\t\022\021\n\tnew_value\030\006 \002(\t\022\023\n\013descript" +
+      "ion\030\007 \001(\tB\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -6740,7 +6908,7 @@ public final class Issues {
           internal_static_sizzle_types_Issue_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_sizzle_types_Issue_descriptor,
-              new java.lang.String[] { "Id", "Status", "Component", "Priority", "Resolution", "DuplicatedBy", "DuplicateOf", "Subcomponent", "Summary", "Version", "CreatedDate", "ModifiedDate", "CompletedDate", "Keywords", "Reporter", "Description", "Assignee", "Os", "Platform", "Milestone", "DependsOn", "Blocked", "Vote", "Secrecy", "Files", "Comments", "Changes", },
+              new java.lang.String[] { "Id", "Status", "Component", "Priority", "Resolution", "DuplicatedBy", "DuplicateOf", "Subcomponent", "Summary", "Version", "CreatedDate", "ModifiedDate", "CompletedDate", "Keywords", "Author", "Description", "Assignee", "Os", "Platform", "Milestone", "DependsOn", "Blocked", "Vote", "Secrecy", "Files", "Comments", "Changes", },
               sizzle.types.Issues.Issue.class,
               sizzle.types.Issues.Issue.Builder.class);
           internal_static_sizzle_types_AttachedFile_descriptor =
@@ -6748,7 +6916,7 @@ public final class Issues {
           internal_static_sizzle_types_AttachedFile_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_sizzle_types_AttachedFile_descriptor,
-              new java.lang.String[] { "Filename", "Description", "Url", "Date", },
+              new java.lang.String[] { "Filename", "Description", "Url", "Date", "Author", },
               sizzle.types.Issues.AttachedFile.class,
               sizzle.types.Issues.AttachedFile.Builder.class);
           internal_static_sizzle_types_IssueComment_descriptor =
@@ -6756,7 +6924,7 @@ public final class Issues {
           internal_static_sizzle_types_IssueComment_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_sizzle_types_IssueComment_descriptor,
-              new java.lang.String[] { "Id", "CreatedDate", "Author", "Description", },
+              new java.lang.String[] { "Id", "Date", "Author", "Description", },
               sizzle.types.Issues.IssueComment.class,
               sizzle.types.Issues.IssueComment.Builder.class);
           internal_static_sizzle_types_IssueChange_descriptor =
@@ -6764,7 +6932,7 @@ public final class Issues {
           internal_static_sizzle_types_IssueChange_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_sizzle_types_IssueChange_descriptor,
-              new java.lang.String[] { "Id", "What", "When", "User", "OldValue", "NewValue", "Description", },
+              new java.lang.String[] { "Id", "What", "Date", "Author", "OldValue", "NewValue", "Description", },
               sizzle.types.Issues.IssueChange.class,
               sizzle.types.Issues.IssueChange.Builder.class);
           return null;
