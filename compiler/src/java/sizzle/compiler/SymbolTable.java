@@ -132,13 +132,13 @@ public class SymbolTable {
 		this.idmap.put("Bug", new BugProtoTuple());
 		this.idmap.put("BugRepository", new BugRepositoryProtoTuple());
 		this.idmap.put("BugStatus", new BugStatusProtoMap());
+		this.idmap.put("ChangedFile", new ChangedFileProtoTuple());
 		this.idmap.put("CodeRepository", new CodeRepositoryProtoTuple());
 		this.idmap.put("CommentKind", new CommentKindProtoMap());
 		this.idmap.put("Comment", new CommentProtoTuple());
 		this.idmap.put("Declaration", new DeclarationProtoTuple());
 		this.idmap.put("ExpressionKind", new ExpressionKindProtoMap());
 		this.idmap.put("Expression", new ExpressionProtoTuple());
-		this.idmap.put("File", new ChangedFileProtoTuple());
 		this.idmap.put("FileKind", new FileKindProtoMap());
 		this.idmap.put("Method", new MethodProtoTuple());
 		this.idmap.put("ModifierKind", new ModifierKindProtoMap());
