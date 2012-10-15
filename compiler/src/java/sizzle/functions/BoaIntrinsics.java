@@ -12,9 +12,9 @@ import java.util.regex.Pattern;
  */
 public class BoaIntrinsics {
 	private final static String[] fixingRegex = {
-		"fix",
+		"\\s+(fix|fixes|fixing|fixed)\\s+",
 		"(bug|issue)(s)?[\\s]+(#)?\\s*[0-9]+",
-		"bug\\s+id(s)?\\s*=\\s*[0-9]+"
+		"(bug|issue)\\s+id(s)?\\s*=\\s*[0-9]+"
 	};
 
 	private final static List<Matcher> fixingMatchers = new ArrayList<Matcher>();
