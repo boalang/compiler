@@ -602,58 +602,50 @@ public class CodeGeneratingVisitor extends GJDepthFirst<String, SymbolTable> {
 			throw new RuntimeException(e.getClass().getSimpleName() + " caught", e);
 		}
 
-		for (final Node node : n.f2.nodes) {
-			switch (((NodeChoice)((NodeSequence)node).nodes.get(2)).which) {
-			case 0:
-				st.setAttribute("all", "true");
-				break;
-			case 1:
-				break;
-			case 2:
-				st.setAttribute("some", "true");
-				break;
-			default:
-				throw new RuntimeException("unexpected choice " +
-						((NodeChoice)((NodeSequence)node).nodes.get(2)).which + " is " +
-						((NodeChoice)((NodeSequence)node).nodes.get(2)).choice.getClass());
-			}
-
-			final SizzleType type = localArgu.getType(((Identifier)((Type) ((NodeSequence) node).nodes.get(3)).f0.choice).f0.tokenImage);
-
-			final Set<String> ids = this.namefinder.visit((IdentifierList)((NodeSequence) node).nodes.get(0));
-
-			for (final String id : ids) {
-				localArgu.set(id, type);
-				st.setAttribute("type", type.toJavaType());
-				st.setAttribute("index", id);
-			}
-
-			for (final String id : ids) {
-				this.indexeefinder.setSymbolTable(argu);
-				final Set<String> indexees = this.indexeefinder.visit(n.f3, id);
-			
-				if (indexees.size() > 0) {
-					final List<String> array = new ArrayList<String>(indexees);
-					String src = "";
-					for (int i = 0; i < array.size(); i++) {
-						String indexee = array.get(i);
-						// FIXME rdyer
-//						SizzleType indexeeType = this.typechecker.visit(indexee, argu.cloneNonLocals());
-//						String func = indexeeType instanceof SizzleArray) ? ".length()" : ".size()";
-						String func = ".size()";
-						if (src.length() > 0)
-							src = "min(" + indexee + func + ", " + src + ")";
-						else
-							src = indexee + func;
-					}
-
-					st.setAttribute("len", src);
-				}
-			}
+		switch (n.f0.f0.which) {
+		case 0: // each
+			break;
+		case 1: // all
+			st.setAttribute("all", "true");
+			break;
+		case 2: // some
+			st.setAttribute("some", "true");
+			break;
+		default:
+			throw new RuntimeException("unexpected choice " + n.f0.f0.which + " is " + n.f0.f0.choice.getClass());
 		}
 
-		st.setAttribute("expression", n.f3.accept(this, localArgu));
-		st.setAttribute("statement", n.f5.accept(this, localArgu));
+		final SizzleType type = this.typechecker.visit(n.f4, argu);
+
+		final String id = n.f2.f0.tokenImage;
+
+		localArgu.set(id, type);
+		st.setAttribute("type", type.toJavaType());
+		st.setAttribute("index", id);
+
+		this.indexeefinder.setSymbolTable(argu);
+		final Set<String> indexees = this.indexeefinder.visit(n.f6, id);
+	
+		if (indexees.size() > 0) {
+			final List<String> array = new ArrayList<String>(indexees);
+			String src = "";
+			for (int i = 0; i < array.size(); i++) {
+				String indexee = array.get(i);
+				// FIXME rdyer
+//				SizzleType indexeeType = this.typechecker.visit(indexee, argu.cloneNonLocals());
+//				String func = indexeeType instanceof SizzleArray) ? ".length()" : ".size()";
+				String func = ".size()";
+				if (src.length() > 0)
+					src = "min(" + indexee + func + ", " + src + ")";
+				else
+					src = indexee + func;
+			}
+
+			st.setAttribute("len", src);
+		}
+
+		st.setAttribute("expression", n.f6.accept(this, localArgu));
+		st.setAttribute("statement", n.f8.accept(this, localArgu));
 
 		return st.toString();
 	}

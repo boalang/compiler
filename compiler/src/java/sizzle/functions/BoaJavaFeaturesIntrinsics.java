@@ -34,7 +34,7 @@ public class BoaJavaFeaturesIntrinsics {
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_enhanced_for", returnType = "int", formalParameters = { "File" })
+	@FunctionSpec(name = "uses_enhanced_for", returnType = "int", formalParameters = { "ChangedFile" })
 	public static int usesEnhancedFor(final ChangedFile f) {
 		int count = 0;
 
@@ -151,7 +151,7 @@ public class BoaJavaFeaturesIntrinsics {
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_varargs", returnType = "int", formalParameters = { "File" })
+	@FunctionSpec(name = "uses_varargs", returnType = "int", formalParameters = { "ChangedFile" })
 	public static int usesVarargs(final ChangedFile f) {
 		int count = 0;
 
@@ -222,7 +222,7 @@ public class BoaJavaFeaturesIntrinsics {
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_assert", returnType = "int", formalParameters = { "File" })
+	@FunctionSpec(name = "uses_assert", returnType = "int", formalParameters = { "ChangedFile" })
 	public static int usesAssert(final ChangedFile f) {
 		int count = 0;
 
@@ -339,7 +339,7 @@ public class BoaJavaFeaturesIntrinsics {
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_enums", returnType = "int", formalParameters = { "File" })
+	@FunctionSpec(name = "uses_enums", returnType = "int", formalParameters = { "ChangedFile" })
 	public static int usesEnums(final ChangedFile f) {
 		int count = 0;
 
@@ -456,7 +456,7 @@ public class BoaJavaFeaturesIntrinsics {
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_try_resources", returnType = "int", formalParameters = { "File" })
+	@FunctionSpec(name = "uses_try_resources", returnType = "int", formalParameters = { "ChangedFile" })
 	public static int usesTryResources(final ChangedFile f) {
 		int count = 0;
 
@@ -573,7 +573,7 @@ public class BoaJavaFeaturesIntrinsics {
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_generics_define_type", returnType = "int", formalParameters = { "File" })
+	@FunctionSpec(name = "uses_generics_define_type", returnType = "int", formalParameters = { "ChangedFile" })
 	public static int usesGenericsDefineType(final ChangedFile f) {
 		int count = 0;
 
@@ -690,7 +690,7 @@ public class BoaJavaFeaturesIntrinsics {
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_generics_define_method", returnType = "int", formalParameters = { "File" })
+	@FunctionSpec(name = "uses_generics_define_method", returnType = "int", formalParameters = { "ChangedFile" })
 	public static int usesGenericsDefineMethod(final ChangedFile f) {
 		int count = 0;
 
@@ -807,7 +807,7 @@ public class BoaJavaFeaturesIntrinsics {
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_generics_define_field", returnType = "int", formalParameters = { "File" })
+	@FunctionSpec(name = "uses_generics_define_field", returnType = "int", formalParameters = { "ChangedFile" })
 	public static int usesGenericsDefineField(final ChangedFile f) {
 		int count = 0;
 
@@ -933,7 +933,7 @@ public class BoaJavaFeaturesIntrinsics {
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_generics_wildcard_super", returnType = "int", formalParameters = { "File" })
+	@FunctionSpec(name = "uses_generics_wildcard_super", returnType = "int", formalParameters = { "ChangedFile" })
 	public static int usesGenericsWildcardSuper(final ChangedFile f) {
 		int count = 0;
 
@@ -1081,7 +1081,7 @@ public class BoaJavaFeaturesIntrinsics {
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_generics_wildcard_extends", returnType = "int", formalParameters = { "File" })
+	@FunctionSpec(name = "uses_generics_wildcard_extends", returnType = "int", formalParameters = { "ChangedFile" })
 	public static int usesGenericsWildcardExtends(final ChangedFile f) {
 		int count = 0;
 
@@ -1229,7 +1229,7 @@ public class BoaJavaFeaturesIntrinsics {
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_generics_wildcard", returnType = "int", formalParameters = { "File" })
+	@FunctionSpec(name = "uses_generics_wildcard", returnType = "int", formalParameters = { "ChangedFile" })
 	public static int usesGenericsWildcard(final ChangedFile f) {
 		int count = 0;
 
@@ -1377,7 +1377,7 @@ public class BoaJavaFeaturesIntrinsics {
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_annotations_define", returnType = "int", formalParameters = { "File" })
+	@FunctionSpec(name = "uses_annotations_define", returnType = "int", formalParameters = { "ChangedFile" })
 	public static int usesAnnotationsDefine(final ChangedFile f) {
 		int count = 0;
 
@@ -1494,7 +1494,7 @@ public class BoaJavaFeaturesIntrinsics {
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_annotations_uses", returnType = "int", formalParameters = { "File" })
+	@FunctionSpec(name = "uses_annotations_uses", returnType = "int", formalParameters = { "ChangedFile" })
 	public static int usesAnnotationsUses(final ChangedFile f) {
 		int count = 0;
 
@@ -1621,7 +1621,7 @@ public class BoaJavaFeaturesIntrinsics {
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_multi_catch", returnType = "int", formalParameters = { "File" })
+	@FunctionSpec(name = "uses_multi_catch", returnType = "int", formalParameters = { "ChangedFile" })
 	public static int usesMultiCatch(final ChangedFile f) {
 		int count = 0;
 
@@ -1738,7 +1738,7 @@ public class BoaJavaFeaturesIntrinsics {
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_binary_lit", returnType = "int", formalParameters = { "File" })
+	@FunctionSpec(name = "uses_binary_lit", returnType = "int", formalParameters = { "ChangedFile" })
 	public static int usesBinaryLit(final ChangedFile f) {
 		int count = 0;
 
@@ -1860,7 +1860,7 @@ public class BoaJavaFeaturesIntrinsics {
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_underscore_lit", returnType = "int", formalParameters = { "File" })
+	@FunctionSpec(name = "uses_underscore_lit", returnType = "int", formalParameters = { "ChangedFile" })
 	public static int usesUnderscoreLit(final ChangedFile f) {
 		int count = 0;
 
@@ -1983,7 +1983,7 @@ public class BoaJavaFeaturesIntrinsics {
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_diamond", returnType = "int", formalParameters = { "File" })
+	@FunctionSpec(name = "uses_diamond", returnType = "int", formalParameters = { "ChangedFile" })
 	public static int usesDiamond(final ChangedFile f) {
 		int count = 0;
 
@@ -2107,7 +2107,7 @@ public class BoaJavaFeaturesIntrinsics {
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_safe_varargs", returnType = "int", formalParameters = { "File" })
+	@FunctionSpec(name = "uses_safe_varargs", returnType = "int", formalParameters = { "ChangedFile" })
 	public static int usesSafeVarargs(final ChangedFile f) {
 		int count = 0;
 

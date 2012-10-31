@@ -562,20 +562,10 @@ public class TypeCheckingVisitor extends GJDepthFirst<SizzleType, SymbolTable> {
 			throw new RuntimeException(e.getClass().getSimpleName() + " caught", e);
 		}
 
-		for (final Node node : n.f2.nodes) {
-			final SizzleType type = ((NodeSequence) node).nodes.get(3).accept(this, argu);
+		st.set(n.f2.f0.tokenImage, n.f4.accept(this, argu));
 
-			final IdentifierList identifierList = (IdentifierList) ((NodeSequence) node).nodes.get(0);
-
-			st.set(identifierList.f0.f0.tokenImage, type);
-
-			if (identifierList.f1.present())
-				for (final Node nod : identifierList.f1.nodes)
-					st.set(((Identifier) ((NodeSequence) nod).elementAt(1)).f0.tokenImage, type);
-		}
-
-		n.f3.accept(this, st);
-		n.f5.accept(this, st);
+		n.f6.accept(this, st);
+		n.f8.accept(this, st);
 
 		return null;
 	}

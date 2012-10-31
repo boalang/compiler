@@ -58,6 +58,9 @@ TOKEN :
 | < ALL : "all" >
 | < MAP : "map" >
 | < FOR : "for" >
+| < WHENEACH : "foreach" >
+| < WHENALL : "ifall" >
+| < WHENSOME : "exists" >
 | < NOT : "not" >
 | < TYPE : "type" >
 | < PROC : "proc" >
@@ -575,24 +578,23 @@ void SwitchStatement() :
   )* "}"
 }
 
-// WhenStatement = 'when' '(' {QuantifierDecl} Expression ')' Statement.
-// QuantifierDecl = var_name ':' quantifier Type ';'.
-// quantifier = 'all' | 'each' | 'some'.
+// WhenStatement = WhenKind '(' Parameter ';' Expression ')' Statement.
+// Parameter = identifier ':' Type.
 void WhenStatement() :
 {}
 {
-  "when" "("
-  (
-    LOOKAHEAD(IdentifierList() ":")
-    IdentifierList() ":"
-    (
-      "all"
-    | "each"
-    | "some"
-    )
-    Type() ";"
-  )*
-  Expression() ")" Statement()
+  WhenKind()
+  "(" Identifier() ":" Type() ";" Expression() ")"
+  Statement()
+}
+
+// WhenKind = ('foreach' | 'ifall' | 'exists').
+void WhenKind() :
+{}
+{
+  < WHENEACH >
+| < WHENALL >
+| < WHENSOME >
 }
 
 // nonstandard but necessary for a program in "Interpreting the Data"
