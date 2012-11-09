@@ -15,19 +15,15 @@ public class ChangedFileProtoTuple extends SizzleProtoTuple {
 	private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
 	static {
-		names.put("name", 0);
-		members.add(new SizzleString());
+		int counter = 0;
 
-		names.put("kind", 1);
+		names.put("change", counter++);
 		members.add(new SizzleInt());
 
-		names.put("parsed", 2);
-		members.add(new SizzleBool());
+		names.put("kind", counter++);
+		members.add(new SizzleInt());
 
-		names.put("namespaces", 3);
-		members.add(new SizzleProtoList(new NamespaceProtoTuple()));
-
-		names.put("content", 4);
+		names.put("name", counter++);
 		members.add(new SizzleString());
 	}
 

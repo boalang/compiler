@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import sizzle.types.Code.Revision;
+
 /**
  * Boa domain-specific functions.
  * 
@@ -47,7 +49,7 @@ public class BoaIntrinsics {
 	 * @return true if the Revision contains at least 1 file with the specified extension
 	 */
 	@FunctionSpec(name = "hasfiletype", returnType = "bool", formalParameters = { "Revision", "string" })
-	public static boolean hasfile(final sizzle.types.Code.Revision rev, final String ext) {
+	public static boolean hasfile(final Revision rev, final String ext) {
 		for (int i = 0; i < rev.getFilesCount(); i++)
 			if (rev.getFiles(i).getName().toLowerCase().endsWith("." + ext.toLowerCase()))
 				return true;

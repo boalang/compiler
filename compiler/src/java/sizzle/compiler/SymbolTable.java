@@ -20,6 +20,8 @@ import sizzle.aggregators.AggregatorSpec;
 import sizzle.aggregators.IntSumAggregator;
 import sizzle.functions.FunctionSpec;
 import sizzle.parser.syntaxtree.Operand;
+import sizzle.types.ASTRootProtoTuple;
+import sizzle.types.ChangeKindProtoMap;
 import sizzle.types.CommentKindProtoMap;
 import sizzle.types.DeclarationProtoTuple;
 import sizzle.types.ExpressionKindProtoMap;
@@ -129,10 +131,12 @@ public class SymbolTable {
 		this.idmap.put("string", new SizzleString());
 		this.idmap.put("bytes", new SizzleBytes());
 
+		this.idmap.put("ASTRoot", new ASTRootProtoTuple());
 		this.idmap.put("Bug", new BugProtoTuple());
 		this.idmap.put("BugRepository", new BugRepositoryProtoTuple());
 		this.idmap.put("BugStatus", new BugStatusProtoMap());
 		this.idmap.put("ChangedFile", new ChangedFileProtoTuple());
+		this.idmap.put("ChangeKind", new ChangeKindProtoMap());
 		this.idmap.put("CodeRepository", new CodeRepositoryProtoTuple());
 		this.idmap.put("CommentKind", new CommentKindProtoMap());
 		this.idmap.put("Comment", new CommentProtoTuple());
@@ -196,6 +200,7 @@ public class SymbolTable {
 
 		/* expose all the casting constructors to Sawzall */
 
+		this.setFunction(new ASTRootProtoTuple().toJavaType(), new SizzleFunction(new SizzleBytes(), new SizzleType[] { new SizzleBytes() }, new ASTRootProtoTuple().toJavaType() + ".parseFrom(${0})"));
 		this.setFunction(new BugProtoTuple().toJavaType(), new SizzleFunction(new SizzleBytes(), new SizzleType[] { new SizzleBytes() }, new BugProtoTuple().toJavaType() + ".parseFrom(${0})"));
 		this.setFunction(new BugRepositoryProtoTuple().toJavaType(), new SizzleFunction(new SizzleBytes(), new SizzleType[] { new SizzleBytes() }, new BugRepositoryProtoTuple().toJavaType() + ".parseFrom(${0})"));
 		this.setFunction(new CodeRepositoryProtoTuple().toJavaType(), new SizzleFunction(new SizzleBytes(), new SizzleType[] { new SizzleBytes() }, new CodeRepositoryProtoTuple().toJavaType() + ".parseFrom(${0})"));

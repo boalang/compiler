@@ -1,6 +1,5 @@
 package sizzle.io;
 
-import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.mapreduce.OutputCommitter;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputCommitter;
@@ -11,10 +10,8 @@ public class SizzleOutputFormat<K, V> extends TextOutputFormat<K, V> {
 
 	@Override
 	public synchronized OutputCommitter getOutputCommitter(TaskAttemptContext context) throws java.io.IOException {
-		if (committer == null) {
-			Path output = getOutputPath(context);
-			committer = new SizzleOutputCommitter(output, context);
-		}
+		if (committer == null)
+			committer = new SizzleOutputCommitter(getOutputPath(context), context);
 		return committer;
 	}
 }

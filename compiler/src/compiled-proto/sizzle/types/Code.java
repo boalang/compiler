@@ -865,6 +865,10 @@ public final class Code {
         getFilesOrBuilderList();
     sizzle.types.Diff.ChangedFileOrBuilder getFilesOrBuilder(
         int index);
+    
+    // required string key = 7;
+    boolean hasKey();
+    String getKey();
   }
   public static final class Revision extends
       com.google.protobuf.GeneratedMessage
@@ -994,6 +998,38 @@ public final class Code {
       return files_.get(index);
     }
     
+    // required string key = 7;
+    public static final int KEY_FIELD_NUMBER = 7;
+    private java.lang.Object key_;
+    public boolean hasKey() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    public String getKey() {
+      java.lang.Object ref = key_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          key_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getKeyBytes() {
+      java.lang.Object ref = key_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        key_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    
     private void initFields() {
       id_ = 0;
       author_ = sizzle.types.Shared.Person.getDefaultInstance();
@@ -1001,6 +1037,7 @@ public final class Code {
       commitDate_ = 0L;
       log_ = "";
       files_ = java.util.Collections.emptyList();
+      key_ = "";
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -1024,6 +1061,10 @@ public final class Code {
         return false;
       }
       if (!hasLog()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasKey()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -1066,6 +1107,9 @@ public final class Code {
       for (int i = 0; i < files_.size(); i++) {
         output.writeMessage(6, files_.get(i));
       }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        output.writeBytes(7, getKeyBytes());
+      }
       getUnknownFields().writeTo(output);
     }
     
@@ -1098,6 +1142,10 @@ public final class Code {
       for (int i = 0; i < files_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(6, files_.get(i));
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(7, getKeyBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1250,6 +1298,8 @@ public final class Code {
         } else {
           filesBuilder_.clear();
         }
+        key_ = "";
+        bitField0_ = (bitField0_ & ~0x00000040);
         return this;
       }
       
@@ -1325,6 +1375,10 @@ public final class Code {
         } else {
           result.files_ = filesBuilder_.build();
         }
+        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
+          to_bitField0_ |= 0x00000020;
+        }
+        result.key_ = key_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -1382,6 +1436,9 @@ public final class Code {
             }
           }
         }
+        if (other.hasKey()) {
+          setKey(other.getKey());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -1404,6 +1461,10 @@ public final class Code {
           return false;
         }
         if (!hasLog()) {
+          
+          return false;
+        }
+        if (!hasKey()) {
           
           return false;
         }
@@ -1484,6 +1545,11 @@ public final class Code {
               sizzle.types.Diff.ChangedFile.Builder subBuilder = sizzle.types.Diff.ChangedFile.newBuilder();
               input.readMessage(subBuilder, extensionRegistry);
               addFiles(subBuilder.buildPartial());
+              break;
+            }
+            case 58: {
+              bitField0_ |= 0x00000040;
+              key_ = input.readBytes();
               break;
             }
           }
@@ -1936,6 +2002,42 @@ public final class Code {
         return filesBuilder_;
       }
       
+      // required string key = 7;
+      private java.lang.Object key_ = "";
+      public boolean hasKey() {
+        return ((bitField0_ & 0x00000040) == 0x00000040);
+      }
+      public String getKey() {
+        java.lang.Object ref = key_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          key_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      public Builder setKey(String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000040;
+        key_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearKey() {
+        bitField0_ = (bitField0_ & ~0x00000040);
+        key_ = getDefaultInstance().getKey();
+        onChanged();
+        return this;
+      }
+      void setKey(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000040;
+        key_ = value;
+        onChanged();
+      }
+      
       // @@protoc_insertion_point(builder_scope:sizzle.types.Revision)
     }
     
@@ -1972,12 +2074,12 @@ public final class Code {
       "pository.RepositoryKind\022)\n\trevisions\030\003 \003" +
       "(\0132\026.sizzle.types.Revision\"I\n\016Repository" +
       "Kind\022\013\n\007UNKNOWN\020\001\022\007\n\003SVN\020\002\022\007\n\003CVS\020\003\022\007\n\003G" +
-      "IT\020\004\022\006\n\002HG\020\005\022\007\n\003BZR\020\006\"\261\001\n\010Revision\022\n\n\002id" +
+      "IT\020\004\022\006\n\002HG\020\005\022\007\n\003BZR\020\006\"\276\001\n\010Revision\022\n\n\002id" +
       "\030\001 \002(\005\022$\n\006author\030\002 \002(\0132\024.sizzle.types.Pe" +
       "rson\022\'\n\tcommitter\030\003 \002(\0132\024.sizzle.types.P" +
       "erson\022\023\n\013commit_date\030\004 \002(\004\022\013\n\003log\030\005 \002(\t\022",
       "(\n\005files\030\006 \003(\0132\031.sizzle.types.ChangedFil" +
-      "eB\002H\001"
+      "e\022\013\n\003key\030\007 \002(\tB\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -1997,7 +2099,7 @@ public final class Code {
           internal_static_sizzle_types_Revision_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_sizzle_types_Revision_descriptor,
-              new java.lang.String[] { "Id", "Author", "Committer", "CommitDate", "Log", "Files", },
+              new java.lang.String[] { "Id", "Author", "Committer", "CommitDate", "Log", "Files", "Key", },
               sizzle.types.Code.Revision.class,
               sizzle.types.Code.Revision.Builder.class);
           return null;

@@ -76,7 +76,6 @@ public class SizzleCompiler {
 		options.addOption("i", "in", true, "file to be compiled");
 		options.addOption("o", "out", true, "the name of the resulting jar");
 		options.addOption("n", "name", true, "the name of the job");
-		options.addOption("b", "hbase", false, "use HBase instead of SequenceFile as inputs");
 
 		CommandLine cl;
 		try {
@@ -161,8 +160,7 @@ public class SizzleCompiler {
 			
 			final StringTemplateGroup stg;
 			
-			final String generationType = cl.hasOption('b') ? "SizzleJavaHbase" : "SizzleJavaHadoop";
-			final BufferedReader s = new BufferedReader(new InputStreamReader(CodeGeneratingVisitor.class.getClassLoader().getResource(generationType + ".stg").openStream()));
+			final BufferedReader s = new BufferedReader(new InputStreamReader(CodeGeneratingVisitor.class.getClassLoader().getResource("SizzleJavaHbase.stg").openStream()));
 			try {
 				stg = new StringTemplateGroup(s);
 				stg.setSuperGroup(superStg);

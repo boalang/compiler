@@ -29,10 +29,6 @@ public abstract class SizzleRunner {
 	/**
 	 * Create a {@link Job} describing the work to be done by this Sizzle job.
 	 * 
-	 * @param ins
-	 *            An array of {@link Path} containing the locations of the input
-	 *            files
-	 * 
 	 * @param out
 	 *            A {@link Path} containing the location of the output file
 	 * 
@@ -43,7 +39,7 @@ public abstract class SizzleRunner {
 	 * @return A {@link Job} describing the work to be done by this Sizzle job
 	 * @throws IOException
 	 */
-	public Job job(final Configuration configuration, final Path[] ins, final Path out, final boolean robust) throws IOException {
+	public Job job(final Configuration configuration, final Path out, final boolean robust) throws IOException {
 		configuration.setBoolean("sizzle.runtime.robust", robust);
 
 		// map output compression
@@ -52,8 +48,6 @@ public abstract class SizzleRunner {
 
 		final Job job = new Job(configuration);
 
-		for (final Path in : ins)
-			FileInputFormat.addInputPath(job, in);
 		FileOutputFormat.setOutputPath(job, out);
 
 		job.setMapOutputKeyClass(EmitKey.class);

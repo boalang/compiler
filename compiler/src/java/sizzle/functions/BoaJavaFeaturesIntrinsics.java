@@ -6,7 +6,6 @@ import java.util.regex.Pattern;
 import sizzle.types.Ast.Expression.ExpressionKind;
 import sizzle.types.Ast.*;
 import sizzle.types.Code.*;
-import sizzle.types.Diff.*;
 
 /**
  * Boa domain-specific functions for finding Java language features.
@@ -28,14 +27,16 @@ public class BoaJavaFeaturesIntrinsics {
 	public static int usesEnhancedFor(final Revision r) {
 		int count = 0;
 
-		for (int i = 0; i < r.getFilesCount(); i++)
-			count += usesEnhancedFor(r.getFiles(i));
+		for (int i = 0; i < r.getFilesCount(); i++) {
+			final ASTRoot ast = BoaAstIntrinsics.getast(r, r.getFiles(i));
+			count += usesEnhancedFor(ast);
+		}
 
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_enhanced_for", returnType = "int", formalParameters = { "ChangedFile" })
-	public static int usesEnhancedFor(final ChangedFile f) {
+	@FunctionSpec(name = "uses_enhanced_for", returnType = "int", formalParameters = { "ASTRoot" })
+	public static int usesEnhancedFor(final ASTRoot f) {
 		int count = 0;
 
 		for (int i = 0; i < f.getNamespacesCount(); i++)
@@ -146,13 +147,13 @@ public class BoaJavaFeaturesIntrinsics {
 		int count = 0;
 
 		for (int i = 0; i < r.getFilesCount(); i++)
-			count += usesVarargs(r.getFiles(i));
+			count += usesVarargs(BoaAstIntrinsics.getast(r, r.getFiles(i)));
 
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_varargs", returnType = "int", formalParameters = { "ChangedFile" })
-	public static int usesVarargs(final ChangedFile f) {
+	@FunctionSpec(name = "uses_varargs", returnType = "int", formalParameters = { "ASTRoot" })
+	public static int usesVarargs(final ASTRoot f) {
 		int count = 0;
 
 		for (int i = 0; i < f.getNamespacesCount(); i++)
@@ -216,14 +217,16 @@ public class BoaJavaFeaturesIntrinsics {
 	public static int usesAssert(final Revision r) {
 		int count = 0;
 
-		for (int i = 0; i < r.getFilesCount(); i++)
-			count += usesAssert(r.getFiles(i));
+		for (int i = 0; i < r.getFilesCount(); i++) {
+			final ASTRoot ast = BoaAstIntrinsics.getast(r, r.getFiles(i));
+			count += usesAssert(ast);
+		}
 
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_assert", returnType = "int", formalParameters = { "ChangedFile" })
-	public static int usesAssert(final ChangedFile f) {
+	@FunctionSpec(name = "uses_assert", returnType = "int", formalParameters = { "ASTRoot" })
+	public static int usesAssert(final ASTRoot f) {
 		int count = 0;
 
 		for (int i = 0; i < f.getNamespacesCount(); i++)
@@ -333,14 +336,16 @@ public class BoaJavaFeaturesIntrinsics {
 	public static int usesEnums(final Revision r) {
 		int count = 0;
 
-		for (int i = 0; i < r.getFilesCount(); i++)
-			count += usesEnums(r.getFiles(i));
+		for (int i = 0; i < r.getFilesCount(); i++) {
+			final ASTRoot ast = BoaAstIntrinsics.getast(r, r.getFiles(i));
+			count += usesEnums(ast);
+		}
 
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_enums", returnType = "int", formalParameters = { "ChangedFile" })
-	public static int usesEnums(final ChangedFile f) {
+	@FunctionSpec(name = "uses_enums", returnType = "int", formalParameters = { "ASTRoot" })
+	public static int usesEnums(final ASTRoot f) {
 		int count = 0;
 
 		for (int i = 0; i < f.getNamespacesCount(); i++)
@@ -450,14 +455,16 @@ public class BoaJavaFeaturesIntrinsics {
 	public static int usesTryResources(final Revision r) {
 		int count = 0;
 
-		for (int i = 0; i < r.getFilesCount(); i++)
-			count += usesTryResources(r.getFiles(i));
+		for (int i = 0; i < r.getFilesCount(); i++) {
+			final ASTRoot ast = BoaAstIntrinsics.getast(r, r.getFiles(i));
+			count += usesTryResources(ast);
+		}
 
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_try_resources", returnType = "int", formalParameters = { "ChangedFile" })
-	public static int usesTryResources(final ChangedFile f) {
+	@FunctionSpec(name = "uses_try_resources", returnType = "int", formalParameters = { "ASTRoot" })
+	public static int usesTryResources(final ASTRoot f) {
 		int count = 0;
 
 		for (int i = 0; i < f.getNamespacesCount(); i++)
@@ -567,14 +574,16 @@ public class BoaJavaFeaturesIntrinsics {
 	public static int usesGenericsDefineType(final Revision r) {
 		int count = 0;
 
-		for (int i = 0; i < r.getFilesCount(); i++)
-			count += usesGenericsDefineType(r.getFiles(i));
+		for (int i = 0; i < r.getFilesCount(); i++) {
+			final ASTRoot ast = BoaAstIntrinsics.getast(r, r.getFiles(i));
+			count += usesGenericsDefineType(ast);
+		}
 
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_generics_define_type", returnType = "int", formalParameters = { "ChangedFile" })
-	public static int usesGenericsDefineType(final ChangedFile f) {
+	@FunctionSpec(name = "uses_generics_define_type", returnType = "int", formalParameters = { "ASTRoot" })
+	public static int usesGenericsDefineType(final ASTRoot f) {
 		int count = 0;
 
 		for (int i = 0; i < f.getNamespacesCount(); i++)
@@ -684,14 +693,16 @@ public class BoaJavaFeaturesIntrinsics {
 	public static int usesGenericsDefineMethod(final Revision r) {
 		int count = 0;
 
-		for (int i = 0; i < r.getFilesCount(); i++)
-			count += usesGenericsDefineMethod(r.getFiles(i));
+		for (int i = 0; i < r.getFilesCount(); i++) {
+			final ASTRoot ast = BoaAstIntrinsics.getast(r, r.getFiles(i));
+			count += usesGenericsDefineMethod(ast);
+		}
 
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_generics_define_method", returnType = "int", formalParameters = { "ChangedFile" })
-	public static int usesGenericsDefineMethod(final ChangedFile f) {
+	@FunctionSpec(name = "uses_generics_define_method", returnType = "int", formalParameters = { "ASTRoot" })
+	public static int usesGenericsDefineMethod(final ASTRoot f) {
 		int count = 0;
 
 		for (int i = 0; i < f.getNamespacesCount(); i++)
@@ -801,14 +812,16 @@ public class BoaJavaFeaturesIntrinsics {
 	public static int usesGenericsDefineField(final Revision r) {
 		int count = 0;
 
-		for (int i = 0; i < r.getFilesCount(); i++)
-			count += usesGenericsDefineField(r.getFiles(i));
+		for (int i = 0; i < r.getFilesCount(); i++) {
+			final ASTRoot ast = BoaAstIntrinsics.getast(r, r.getFiles(i));
+			count += usesGenericsDefineField(ast);
+		}
 
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_generics_define_field", returnType = "int", formalParameters = { "ChangedFile" })
-	public static int usesGenericsDefineField(final ChangedFile f) {
+	@FunctionSpec(name = "uses_generics_define_field", returnType = "int", formalParameters = { "ASTRoot" })
+	public static int usesGenericsDefineField(final ASTRoot f) {
 		int count = 0;
 
 		for (int i = 0; i < f.getNamespacesCount(); i++)
@@ -927,14 +940,16 @@ public class BoaJavaFeaturesIntrinsics {
 	public static int usesGenericsWildcardSuper(final Revision r) {
 		int count = 0;
 
-		for (int i = 0; i < r.getFilesCount(); i++)
-			count += usesGenericsWildcardSuper(r.getFiles(i));
+		for (int i = 0; i < r.getFilesCount(); i++) {
+			final ASTRoot ast = BoaAstIntrinsics.getast(r, r.getFiles(i));
+			count += usesGenericsWildcardSuper(ast);
+		}
 
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_generics_wildcard_super", returnType = "int", formalParameters = { "ChangedFile" })
-	public static int usesGenericsWildcardSuper(final ChangedFile f) {
+	@FunctionSpec(name = "uses_generics_wildcard_super", returnType = "int", formalParameters = { "ASTRoot" })
+	public static int usesGenericsWildcardSuper(final ASTRoot f) {
 		int count = 0;
 
 		for (int i = 0; i < f.getNamespacesCount(); i++)
@@ -1075,14 +1090,16 @@ public class BoaJavaFeaturesIntrinsics {
 	public static int usesGenericsWildcardExtends(final Revision r) {
 		int count = 0;
 
-		for (int i = 0; i < r.getFilesCount(); i++)
-			count += usesGenericsWildcardExtends(r.getFiles(i));
+		for (int i = 0; i < r.getFilesCount(); i++) {
+			final ASTRoot ast = BoaAstIntrinsics.getast(r, r.getFiles(i));
+			count += usesGenericsWildcardExtends(ast);
+		}
 
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_generics_wildcard_extends", returnType = "int", formalParameters = { "ChangedFile" })
-	public static int usesGenericsWildcardExtends(final ChangedFile f) {
+	@FunctionSpec(name = "uses_generics_wildcard_extends", returnType = "int", formalParameters = { "ASTRoot" })
+	public static int usesGenericsWildcardExtends(final ASTRoot f) {
 		int count = 0;
 
 		for (int i = 0; i < f.getNamespacesCount(); i++)
@@ -1223,14 +1240,16 @@ public class BoaJavaFeaturesIntrinsics {
 	public static int usesGenericsWildcard(final Revision r) {
 		int count = 0;
 
-		for (int i = 0; i < r.getFilesCount(); i++)
-			count += usesGenericsWildcard(r.getFiles(i));
+		for (int i = 0; i < r.getFilesCount(); i++) {
+			final ASTRoot ast = BoaAstIntrinsics.getast(r, r.getFiles(i));
+			count += usesGenericsWildcard(ast);
+		}
 
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_generics_wildcard", returnType = "int", formalParameters = { "ChangedFile" })
-	public static int usesGenericsWildcard(final ChangedFile f) {
+	@FunctionSpec(name = "uses_generics_wildcard", returnType = "int", formalParameters = { "ASTRoot" })
+	public static int usesGenericsWildcard(final ASTRoot f) {
 		int count = 0;
 
 		for (int i = 0; i < f.getNamespacesCount(); i++)
@@ -1371,14 +1390,16 @@ public class BoaJavaFeaturesIntrinsics {
 	public static int usesAnnotationsDefine(final Revision r) {
 		int count = 0;
 
-		for (int i = 0; i < r.getFilesCount(); i++)
-			count += usesAnnotationsDefine(r.getFiles(i));
+		for (int i = 0; i < r.getFilesCount(); i++) {
+			final ASTRoot ast = BoaAstIntrinsics.getast(r, r.getFiles(i));
+			count += usesAnnotationsDefine(ast);
+		}
 
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_annotations_define", returnType = "int", formalParameters = { "ChangedFile" })
-	public static int usesAnnotationsDefine(final ChangedFile f) {
+	@FunctionSpec(name = "uses_annotations_define", returnType = "int", formalParameters = { "ASTRoot" })
+	public static int usesAnnotationsDefine(final ASTRoot f) {
 		int count = 0;
 
 		for (int i = 0; i < f.getNamespacesCount(); i++)
@@ -1488,14 +1509,16 @@ public class BoaJavaFeaturesIntrinsics {
 	public static int usesAnnotationsUses(final Revision r) {
 		int count = 0;
 
-		for (int i = 0; i < r.getFilesCount(); i++)
-			count += usesAnnotationsUses(r.getFiles(i));
+		for (int i = 0; i < r.getFilesCount(); i++) {
+			final ASTRoot ast = BoaAstIntrinsics.getast(r, r.getFiles(i));
+			count += usesAnnotationsUses(ast);
+		}
 
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_annotations_uses", returnType = "int", formalParameters = { "ChangedFile" })
-	public static int usesAnnotationsUses(final ChangedFile f) {
+	@FunctionSpec(name = "uses_annotations_uses", returnType = "int", formalParameters = { "ASTRoot" })
+	public static int usesAnnotationsUses(final ASTRoot f) {
 		int count = 0;
 
 		for (int i = 0; i < f.getNamespacesCount(); i++)
@@ -1615,14 +1638,16 @@ public class BoaJavaFeaturesIntrinsics {
 	public static int usesMultiCatch(final Revision r) {
 		int count = 0;
 
-		for (int i = 0; i < r.getFilesCount(); i++)
-			count += usesMultiCatch(r.getFiles(i));
+		for (int i = 0; i < r.getFilesCount(); i++) {
+			final ASTRoot ast = BoaAstIntrinsics.getast(r, r.getFiles(i));
+			count += usesMultiCatch(ast);
+		}
 
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_multi_catch", returnType = "int", formalParameters = { "ChangedFile" })
-	public static int usesMultiCatch(final ChangedFile f) {
+	@FunctionSpec(name = "uses_multi_catch", returnType = "int", formalParameters = { "ASTRoot" })
+	public static int usesMultiCatch(final ASTRoot f) {
 		int count = 0;
 
 		for (int i = 0; i < f.getNamespacesCount(); i++)
@@ -1732,14 +1757,16 @@ public class BoaJavaFeaturesIntrinsics {
 	public static int usesBinaryLit(final Revision r) {
 		int count = 0;
 
-		for (int i = 0; i < r.getFilesCount(); i++)
-			count += usesBinaryLit(r.getFiles(i));
+		for (int i = 0; i < r.getFilesCount(); i++) {
+			final ASTRoot ast = BoaAstIntrinsics.getast(r, r.getFiles(i));
+			count += usesBinaryLit(ast);
+		}
 
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_binary_lit", returnType = "int", formalParameters = { "ChangedFile" })
-	public static int usesBinaryLit(final ChangedFile f) {
+	@FunctionSpec(name = "uses_binary_lit", returnType = "int", formalParameters = { "ASTRoot" })
+	public static int usesBinaryLit(final ASTRoot f) {
 		int count = 0;
 
 		for (int i = 0; i < f.getNamespacesCount(); i++)
@@ -1854,14 +1881,16 @@ public class BoaJavaFeaturesIntrinsics {
 	public static int usesUnderscoreLit(final Revision r) {
 		int count = 0;
 
-		for (int i = 0; i < r.getFilesCount(); i++)
-			count += usesUnderscoreLit(r.getFiles(i));
+		for (int i = 0; i < r.getFilesCount(); i++) {
+			final ASTRoot ast = BoaAstIntrinsics.getast(r, r.getFiles(i));
+			count += usesUnderscoreLit(ast);
+		}
 
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_underscore_lit", returnType = "int", formalParameters = { "ChangedFile" })
-	public static int usesUnderscoreLit(final ChangedFile f) {
+	@FunctionSpec(name = "uses_underscore_lit", returnType = "int", formalParameters = { "ASTRoot" })
+	public static int usesUnderscoreLit(final ASTRoot f) {
 		int count = 0;
 
 		for (int i = 0; i < f.getNamespacesCount(); i++)
@@ -1977,14 +2006,16 @@ public class BoaJavaFeaturesIntrinsics {
 	public static int usesDiamond(final Revision r) {
 		int count = 0;
 
-		for (int i = 0; i < r.getFilesCount(); i++)
-			count += usesDiamond(r.getFiles(i));
+		for (int i = 0; i < r.getFilesCount(); i++) {
+			final ASTRoot ast = BoaAstIntrinsics.getast(r, r.getFiles(i));
+			count += usesDiamond(ast);
+		}
 
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_diamond", returnType = "int", formalParameters = { "ChangedFile" })
-	public static int usesDiamond(final ChangedFile f) {
+	@FunctionSpec(name = "uses_diamond", returnType = "int", formalParameters = { "ASTRoot" })
+	public static int usesDiamond(final ASTRoot f) {
 		int count = 0;
 
 		for (int i = 0; i < f.getNamespacesCount(); i++)
@@ -2101,14 +2132,16 @@ public class BoaJavaFeaturesIntrinsics {
 	public static int usesSafeVarargs(final Revision r) {
 		int count = 0;
 
-		for (int i = 0; i < r.getFilesCount(); i++)
-			count += usesSafeVarargs(r.getFiles(i));
+		for (int i = 0; i < r.getFilesCount(); i++) {
+			final ASTRoot ast = BoaAstIntrinsics.getast(r, r.getFiles(i));
+			count += usesSafeVarargs(ast);
+		}
 
 		return count;
 	}
 
-	@FunctionSpec(name = "uses_safe_varargs", returnType = "int", formalParameters = { "ChangedFile" })
-	public static int usesSafeVarargs(final ChangedFile f) {
+	@FunctionSpec(name = "uses_safe_varargs", returnType = "int", formalParameters = { "ASTRoot" })
+	public static int usesSafeVarargs(final ASTRoot f) {
 		int count = 0;
 
 		for (int i = 0; i < f.getNamespacesCount(); i++)
