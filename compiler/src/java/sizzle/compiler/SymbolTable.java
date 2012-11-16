@@ -505,6 +505,7 @@ public class SymbolTable {
 		final AnnotationDB db = new AnnotationDB();
 		db.setScanMethodAnnotations(true);
 		db.setScanClassAnnotations(true);
+		db.setScanPackages(new String[] {"sizzle.aggregators", "sizzle.functions"});
 
 		// let's assume the entire runtime is in the same classpath entry as the
 		// int sum aggregator
