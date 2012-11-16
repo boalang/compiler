@@ -29,7 +29,7 @@ public class SizzleFileIntrinsics {
 	 * 
 	 * @throws IOException
 	 */
-	@FunctionSpec(name = "load", returnType = "bytes", formalParameters = { "string" })
+//	@FunctionSpec(name = "load", returnType = "bytes", formalParameters = { "string" })
 	public static byte[] load(final String file) throws IOException {
 		if (fs == null) {
 			try {
