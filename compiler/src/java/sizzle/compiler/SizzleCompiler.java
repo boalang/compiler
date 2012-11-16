@@ -148,8 +148,6 @@ public class SizzleCompiler {
 
 		final BufferedOutputStream o = new BufferedOutputStream(new FileOutputStream(dirfile.toString() + File.separatorChar + name + ".java"));
 		try {
-			final TypeCheckingVisitor typeChecker = new TypeCheckingVisitor();
-
 			final StringTemplateGroup superStg;
 			final BufferedReader t = new BufferedReader(new InputStreamReader(CodeGeneratingVisitor.class.getClassLoader().getResource("SizzleJava.stg").openStream()));
 			try {
@@ -168,10 +166,6 @@ public class SizzleCompiler {
 				s.close();
 			}
 
-			final CodeGeneratingVisitor codeGenerator = new CodeGeneratingVisitor(name, stg);
-
-			final SymbolTable st = new SymbolTable(libs);
-
 			final BufferedReader r = new BufferedReader(new FileReader(in));
 			
 			try {
@@ -179,8 +173,12 @@ public class SizzleCompiler {
 
 				final Start start = SizzleParser.Start();
 
+				final SymbolTable st = new SymbolTable(libs);
+
+				final TypeCheckingVisitor typeChecker = new TypeCheckingVisitor();
 				typeChecker.visit(start, st);
 
+				final CodeGeneratingVisitor codeGenerator = new CodeGeneratingVisitor(typeChecker, name, stg);
 				final String src = codeGenerator.visit(start, st);
 
 				o.write(src.getBytes());

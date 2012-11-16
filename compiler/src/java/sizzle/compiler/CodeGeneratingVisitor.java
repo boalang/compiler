@@ -170,8 +170,8 @@ public class CodeGeneratingVisitor extends GJDepthFirst<String, SymbolTable> {
 	private String skipIndex = "";
 	private boolean abortGeneration = false;
 
-	public CodeGeneratingVisitor(final String name, final StringTemplateGroup stg) throws IOException {
-		this.typechecker = new TypeCheckingVisitor();
+	public CodeGeneratingVisitor(final TypeCheckingVisitor typechecker, final String name, final StringTemplateGroup stg) throws IOException {
+		this.typechecker = typechecker;
 		this.namefinder = new NameFindingVisitor();
 		this.indexeefinder = new IndexeeFindingVisitor(this, namefinder);
 		this.staticdeclarator = new StaticDeclarationCodeGeneratingVisitor(this);
