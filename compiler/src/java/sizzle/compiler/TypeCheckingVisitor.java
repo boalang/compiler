@@ -399,9 +399,17 @@ public class TypeCheckingVisitor extends GJDepthFirst<SizzleType, SymbolTable> {
 	/** {@inheritDoc} */
 	@Override
 	public SizzleType visit(final Block n, final SymbolTable argu) {
+		SymbolTable st;
+
+		try {
+			st = argu.cloneNonLocals();
+		} catch (final IOException e) {
+			throw new RuntimeException(e.getClass().getSimpleName() + " caught", e);
+		}
+
 		if (n.f1.present())
 			for (final Node node : n.f1.nodes)
-				node.accept(this, argu);
+				node.accept(this, st);
 
 		return null;
 	}

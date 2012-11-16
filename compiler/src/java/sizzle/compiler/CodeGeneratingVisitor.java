@@ -454,11 +454,20 @@ public class CodeGeneratingVisitor extends GJDepthFirst<String, SymbolTable> {
 	public String visit(final Block n, final SymbolTable argu) {
 		final StringTemplate st = this.stg.getInstanceOf("Block");
 
+		SymbolTable symtab;
+		try {
+			symtab = argu.cloneNonLocals();
+		} catch (final IOException e) {
+			throw new RuntimeException(e.getClass().getSimpleName() + " caught", e);
+		}
+		
 		final List<String> statements = new ArrayList<String>();
 
 		if (n.f1.present())
-			for (final Node node : n.f1.nodes)
-				statements.add(node.accept(this, argu));
+			for (final Node node : n.f1.nodes) {
+				node.accept(typechecker, symtab);
+				statements.add(node.accept(this, symtab));
+			}
 
 		st.setAttribute("statements", statements);
 
