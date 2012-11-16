@@ -27,7 +27,7 @@ public class FunctionTrie {
 				if (o instanceof SizzleVarargs && ((SizzleVarargs) o).accepts((SizzleType) ids[0]))
 					return ((FunctionTrie) this.trie.get(o)).getFunction();
 
-				if (o instanceof SizzleType && ((SizzleType) o).accepts((SizzleType) ids[0])) {
+				if (o instanceof SizzleType && !(ids[0] instanceof String) && ((SizzleType) o).accepts((SizzleType) ids[0])) {
 					final SizzleFunction function = ((FunctionTrie) this.trie.get(o)).getFunction(Arrays.copyOfRange(ids, 1, ids.length));
 
 					if (function != null)
