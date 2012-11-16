@@ -90,7 +90,6 @@ public class <name> extends sizzle.runtime.SizzleRunner {
 		/** {@inheritDoc} */
 		@Override
 		protected void map(org.apache.hadoop.hbase.io.ImmutableBytesWritable row, org.apache.hadoop.hbase.client.Result columns, org.apache.hadoop.mapreduce.Mapper.Context context) throws java.io.IOException {
-			sizzle.functions.BoaAstIntrinsics.initialize(context);
 			try {
 				byte[] value = null;
 				for (org.apache.hadoop.hbase.KeyValue kv : columns.list())
@@ -110,9 +109,21 @@ public class <name> extends sizzle.runtime.SizzleRunner {
 					LOG.error(e.getClass().getName() + " caught", e);
 				else
 					throw new RuntimeException(e.getClass().getName() + " caught", e);
-			} finally {
-				sizzle.functions.BoaAstIntrinsics.close();
 			}
+		}
+
+		/** {@inheritDoc} */
+		@Override
+		protected void setup(org.apache.hadoop.mapreduce.Mapper.Context context) throws java.io.IOException, java.lang.InterruptedException {
+			sizzle.functions.BoaAstIntrinsics.initialize(context);
+			super.setup(context);
+		}
+
+		/** {@inheritDoc} */
+		@Override
+		protected void cleanup(org.apache.hadoop.mapreduce.Mapper.Context context) throws java.io.IOException, java.lang.InterruptedException {
+			sizzle.functions.BoaAstIntrinsics.close();
+			super.cleanup(context);
 		}
 	}
 	
