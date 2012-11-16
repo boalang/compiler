@@ -13,10 +13,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import org.scannotation.AnnotationDB;
-import org.scannotation.ClasspathUrlFinder;
 
 import sizzle.aggregators.AggregatorSpec;
-import sizzle.aggregators.IntSumAggregator;
 import sizzle.functions.FunctionSpec;
 import sizzle.parser.syntaxtree.Operand;
 import sizzle.types.ASTRootProtoTuple;
@@ -420,6 +418,9 @@ public class SymbolTable {
 
 		final AggregatorSpec annotation = clazz.getAnnotation(AggregatorSpec.class);
 
+		if (annotation == null)
+			return;
+
 		final String type = annotation.type();
 		if (type.equals("any"))
 			this.aggregators.put(annotation.name(), clazz);
@@ -458,6 +459,9 @@ public class SymbolTable {
 
 	private void importFunction(final Method m) {
 		final FunctionSpec annotation = m.getAnnotation(FunctionSpec.class);
+
+		if (annotation == null)
+			return;
 
 		final String[] formalParameters = annotation.formalParameters();
 		final SizzleType[] formalParameterTypes = new SizzleType[formalParameters.length];
@@ -499,26 +503,69 @@ public class SymbolTable {
 	}
 
 	private void importLibs(final List<URL> urls) throws IOException {
-		final AnnotationDB db = new AnnotationDB();
-		db.setScanMethodAnnotations(true);
-		db.setScanClassAnnotations(true);
-		db.setScanPackages(new String[] {"sizzle.aggregators", "sizzle.functions"});
+		// load built-in functions
+		String[] builtinFuncs = {
+			"sizzle.functions.BoaAstIntrinsics",
+			"sizzle.functions.BoaIntrinsics",
+			"sizzle.functions.BoaJavaFeaturesIntrinsics",
+			"sizzle.functions.BoaMetricIntrinsics",
+			"sizzle.functions.BoaModifierIntrinsics",
+			"sizzle.functions.SizzleCasts",
+			"sizzle.functions.SizzleEncodingIntrinsics",
+			"sizzle.functions.SizzleFileIntrinsics",
+			"sizzle.functions.SizzleMathIntrinsics",
+			"sizzle.functions.SizzleSortIntrinsics",
+			"sizzle.functions.SizzleSpecialIntrinsics",
+			"sizzle.functions.SizzleStringIntrinsics",
+			"sizzle.functions.SizzleTimeIntrinsics"
+		};
+		for (String s : builtinFuncs)
+			this.importFunctions(s);
 
-		// let's assume the entire runtime is in the same classpath entry as the
-		// int sum aggregator
-		db.scanArchives(ClasspathUrlFinder.findClassBase(IntSumAggregator.class));
+		// load built-in aggregators
+		String[] builtinAggs = {
+			"sizzle.aggregators.CollectionAggregator",
+			"sizzle.aggregators.DistinctAggregator",
+			"sizzle.aggregators.FloatHistogramAggregator",
+			"sizzle.aggregators.FloatMeanAggregator",
+			"sizzle.aggregators.FloatQuantileAggregator",
+			"sizzle.aggregators.FloatSumAggregator",
+			"sizzle.aggregators.IntHistogramAggregator",
+			"sizzle.aggregators.IntMeanAggregator",
+			"sizzle.aggregators.IntQuantileAggregator",
+			"sizzle.aggregators.IntSumAggregator",
+			"sizzle.aggregators.LogAggregator",
+			"sizzle.aggregators.MaximumAggregator",
+			"sizzle.aggregators.MinimumAggregator",
+			"sizzle.aggregators.MrcounterAggregator",
+			"sizzle.aggregators.SetAggregator",
+			"sizzle.aggregators.StderrAggregator",
+			"sizzle.aggregators.StdoutAggregator",
+			"sizzle.aggregators.TextAggregator",
+			"sizzle.aggregators.TopAggregator",
+			"sizzle.aggregators.UniqueAggregator"
+		};
+		for (String s : builtinAggs)
+			this.importAggregator(s);
 
 		// also check any libs passed into the compiler
-		for (final URL url : urls)
-			db.scanArchives(url);
+		if (urls.size() > 0) {
+			final AnnotationDB db = new AnnotationDB();
+			db.setScanMethodAnnotations(true);
+			db.setScanClassAnnotations(true);
+//			db.setScanPackages(new String[] {"sizzle.aggregators", "sizzle.functions"});
 
-		final Map<String, Set<String>> annotationIndex = db.getAnnotationIndex();
-
-		for (final String c : annotationIndex.get(AggregatorSpec.class.getCanonicalName()))
-			this.importAggregator(c);
-
-		for (final String c : annotationIndex.get(FunctionSpec.class.getCanonicalName()))
-			this.importFunctions(c);
+			for (final URL url : urls)
+				db.scanArchives(url);
+	
+			final Map<String, Set<String>> annotationIndex = db.getAnnotationIndex();
+	
+			for (final String s : annotationIndex.get(AggregatorSpec.class.getCanonicalName()))
+				this.importAggregator(s);
+	
+			for (final String s : annotationIndex.get(FunctionSpec.class.getCanonicalName()))
+				this.importFunctions(s);
+		}
 	}
 
 	void importProto(final String name) {
