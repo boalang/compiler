@@ -7,9 +7,11 @@ import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.util.Bytes;
+
 import org.apache.hadoop.mapreduce.Mapper.Context;
 
 import com.google.protobuf.CodedInputStream;
+import com.google.protobuf.InvalidProtocolBufferException;
 
 import sizzle.types.Ast.ASTRoot;
 import sizzle.types.Code.Revision;
@@ -29,33 +31,60 @@ public class BoaAstIntrinsics {
 
 	public static enum HBASE_COUNTER {
 		GETS,
+		GETS_EMPTY,
+		GETS_BADPROTOBUF,
+		GETS_SUCCEED,
 		GETS_FAILED
 	};
 
+	/**
+	 * Given a Revision and ChangedFile, return the AST for that file at that revision.
+	 * 
+	 * @param rev the Revision to get a snapshot of the AST from
+	 * @param f the ChangedFile to get a snapshot of the AST for
+	 * @return the AST, or an empty AST on any sort of error
+	 */
 	@SuppressWarnings("unchecked")
 	@FunctionSpec(name = "getast", returnType = "ASTRoot", formalParameters = { "Revision", "ChangedFile" })
 	public static ASTRoot getast(final Revision rev, final ChangedFile f) {
 		context.getCounter(HBASE_COUNTER.GETS).increment(1);
 		final ASTRoot.Builder b = ASTRoot.newBuilder();
 
-		try {
-			if (table == null)
-				table = new HTable(HBaseConfiguration.create(), context.getConfiguration().get("boa.hbase.table"));
+		final byte[] rowName = Bytes.toBytes(rev.getKey());
+		final Get get = new Get(rowName);
+		final byte[] colName = Bytes.toBytes(f.getName());
+		get.addColumn(family, colName);
 
-			System.out.println("getting ast: " + rev.getKey() + "!!" + f.getName());
-			final Get get = new Get(Bytes.toBytes(rev.getKey()));
-			get.addColumn(family, Bytes.toBytes(f.getName()));
+		// retry on errors
+		// sometimes HBase has connection problems which resolve fairly quick
+		for (int i = 0; i < 10; i++)
+			try {
+				if (table == null)
+					table = new HTable(HBaseConfiguration.create(), context.getConfiguration().get("boa.hbase.table"));
 
-			final Result result = table.get(get);
-			final byte[] val = result.value();
-			if (val == null) throw new IOException("null value found");
+				Result res = table.get(get);
+				if (!res.containsColumn(family, colName) || res.isEmpty())
+					throw new RuntimeException("row '" + rowName + "' cell '" + colName + "' not found");
+				final byte[] val = res.value();
+	
+				b.mergeFrom(CodedInputStream.newInstance(val, 0, val.length));
+				context.getCounter(HBASE_COUNTER.GETS_SUCCEED).increment(1);
+				return b.build();
+			} catch (final InvalidProtocolBufferException e) {
+				e.printStackTrace();
+				context.getCounter(HBASE_COUNTER.GETS_BADPROTOBUF).increment(1);
+				break;
+			} catch (final IOException e) {
+				close();
+				try { Thread.sleep(500); } catch (InterruptedException e1) { }
+			} catch (final RuntimeException e) {
+				e.printStackTrace();
+				context.getCounter(HBASE_COUNTER.GETS_EMPTY).increment(1);
+				break;
+			}
 
-			b.mergeFrom(CodedInputStream.newInstance(val, 0, val.length));
-		} catch (final IOException e) {
-			e.printStackTrace();
-			context.getCounter(HBASE_COUNTER.GETS_FAILED).increment(1);
-		}
-
+		System.err.println("error with ast: " + rev.getKey() + "!!" + f.getName());
+		context.getCounter(HBASE_COUNTER.GETS_FAILED).increment(1);
 		return b.build();
 	}
 
@@ -70,6 +99,8 @@ public class BoaAstIntrinsics {
 				table.close();
 			} catch (final IOException e) {
 				e.printStackTrace();
+			} finally {
+				table = null;
 			}
 	}
 }
