@@ -163,7 +163,10 @@ public class TypeCheckingVisitor extends GJDepthFirst<SizzleType, SymbolTable> {
 			final NodeChoice nodeChoice = (NodeChoice) n.f3.node;
 			switch (nodeChoice.which) {
 			case 0: // initializer
-				rhs = ((NodeSequence) nodeChoice.choice).elementAt(1).accept(this, argu);
+				Node elem = ((NodeSequence) nodeChoice.choice).elementAt(1);
+				rhs = elem.accept(this, argu);
+				if (rhs instanceof SizzleFunction && !(elem instanceof Function))
+					rhs = ((SizzleFunction)rhs).getType();
 				break;
 			default:
 				throw new RuntimeException("unexpected choice " + nodeChoice.which + " is " + nodeChoice.choice.getClass());

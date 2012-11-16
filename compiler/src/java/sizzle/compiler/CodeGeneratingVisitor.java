@@ -279,13 +279,16 @@ public class CodeGeneratingVisitor extends GJDepthFirst<String, SymbolTable> {
 
 			switch (nodeChoice.which) {
 			case 0: // initializer
-				final SizzleType t;
+				SizzleType t;
+				Node elem = (Expression) ((NodeSequence) nodeChoice.choice).elementAt(1);
 				try {
 					argu.setOperandType(type);
-					t = this.typechecker.visit((Expression) ((NodeSequence) nodeChoice.choice).elementAt(1), argu.cloneNonLocals());
+					t = elem.accept(this.typechecker, argu.cloneNonLocals());
 				} catch (final IOException e) {
 					throw new RuntimeException(e.getClass().getSimpleName() + " caught", e);
 				}
+				if (t instanceof SizzleFunction && !(elem instanceof Function))
+					t = ((SizzleFunction)t).getType();
 
 				String src = ((NodeSequence) nodeChoice.choice).elementAt(1).accept(this, argu);
 
