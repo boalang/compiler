@@ -504,49 +504,49 @@ public class SymbolTable {
 
 	private void importLibs(final List<URL> urls) throws IOException {
 		// load built-in functions
-		String[] builtinFuncs = {
-			"sizzle.functions.BoaAstIntrinsics",
-			"sizzle.functions.BoaIntrinsics",
-			"sizzle.functions.BoaJavaFeaturesIntrinsics",
-			"sizzle.functions.BoaMetricIntrinsics",
-			"sizzle.functions.BoaModifierIntrinsics",
-			"sizzle.functions.SizzleCasts",
-			"sizzle.functions.SizzleEncodingIntrinsics",
-			"sizzle.functions.SizzleFileIntrinsics",
-			"sizzle.functions.SizzleMathIntrinsics",
-			"sizzle.functions.SizzleSortIntrinsics",
-			"sizzle.functions.SizzleSpecialIntrinsics",
-			"sizzle.functions.SizzleStringIntrinsics",
-			"sizzle.functions.SizzleTimeIntrinsics"
+		final Class<?>[] builtinFuncs = {
+			sizzle.functions.BoaAstIntrinsics.class,
+			sizzle.functions.BoaIntrinsics.class,
+			sizzle.functions.BoaJavaFeaturesIntrinsics.class,
+			sizzle.functions.BoaMetricIntrinsics.class,
+			sizzle.functions.BoaModifierIntrinsics.class,
+			sizzle.functions.SizzleCasts.class,
+			sizzle.functions.SizzleEncodingIntrinsics.class,
+			sizzle.functions.SizzleFileIntrinsics.class,
+			sizzle.functions.SizzleMathIntrinsics.class,
+			sizzle.functions.SizzleSortIntrinsics.class,
+			sizzle.functions.SizzleSpecialIntrinsics.class,
+			sizzle.functions.SizzleStringIntrinsics.class,
+			sizzle.functions.SizzleTimeIntrinsics.class
 		};
-		for (String s : builtinFuncs)
-			this.importFunctions(s);
+		for (final Class<?> c : builtinFuncs)
+			this.importFunctions(c);
 
 		// load built-in aggregators
-		String[] builtinAggs = {
-			"sizzle.aggregators.CollectionAggregator",
-			"sizzle.aggregators.DistinctAggregator",
-			"sizzle.aggregators.FloatHistogramAggregator",
-			"sizzle.aggregators.FloatMeanAggregator",
-			"sizzle.aggregators.FloatQuantileAggregator",
-			"sizzle.aggregators.FloatSumAggregator",
-			"sizzle.aggregators.IntHistogramAggregator",
-			"sizzle.aggregators.IntMeanAggregator",
-			"sizzle.aggregators.IntQuantileAggregator",
-			"sizzle.aggregators.IntSumAggregator",
-			"sizzle.aggregators.LogAggregator",
-			"sizzle.aggregators.MaximumAggregator",
-			"sizzle.aggregators.MinimumAggregator",
-			"sizzle.aggregators.MrcounterAggregator",
-			"sizzle.aggregators.SetAggregator",
-			"sizzle.aggregators.StderrAggregator",
-			"sizzle.aggregators.StdoutAggregator",
-			"sizzle.aggregators.TextAggregator",
-			"sizzle.aggregators.TopAggregator",
-			"sizzle.aggregators.UniqueAggregator"
+		final Class<?>[] builtinAggs = {
+			sizzle.aggregators.CollectionAggregator.class,
+			sizzle.aggregators.DistinctAggregator.class,
+			sizzle.aggregators.FloatHistogramAggregator.class,
+			sizzle.aggregators.FloatMeanAggregator.class,
+			sizzle.aggregators.FloatQuantileAggregator.class,
+			sizzle.aggregators.FloatSumAggregator.class,
+			sizzle.aggregators.IntHistogramAggregator.class,
+			sizzle.aggregators.IntMeanAggregator.class,
+			sizzle.aggregators.IntQuantileAggregator.class,
+			sizzle.aggregators.IntSumAggregator.class,
+			sizzle.aggregators.LogAggregator.class,
+			sizzle.aggregators.MaximumAggregator.class,
+			sizzle.aggregators.MinimumAggregator.class,
+			sizzle.aggregators.MrcounterAggregator.class,
+			sizzle.aggregators.SetAggregator.class,
+			sizzle.aggregators.StderrAggregator.class,
+			sizzle.aggregators.StdoutAggregator.class,
+			sizzle.aggregators.TextAggregator.class,
+			sizzle.aggregators.TopAggregator.class,
+			sizzle.aggregators.UniqueAggregator.class
 		};
-		for (String s : builtinAggs)
-			this.importAggregator(s);
+		for (final Class<?> c : builtinAggs)
+			this.importAggregator(c);
 
 		// also check any libs passed into the compiler
 		if (urls.size() > 0) {
