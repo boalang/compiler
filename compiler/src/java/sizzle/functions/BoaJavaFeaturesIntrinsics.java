@@ -27,10 +27,8 @@ public class BoaJavaFeaturesIntrinsics {
 	public static int usesEnhancedFor(final Revision r) {
 		int count = 0;
 
-		for (int i = 0; i < r.getFilesCount(); i++) {
-			final ASTRoot ast = BoaAstIntrinsics.getast(r, r.getFiles(i));
-			count += usesEnhancedFor(ast);
-		}
+		for (int i = 0; i < r.getFilesCount(); i++)
+			count += usesEnhancedFor(BoaAstIntrinsics.getast(r, r.getFiles(i)));
 
 		return count;
 	}
@@ -217,10 +215,8 @@ public class BoaJavaFeaturesIntrinsics {
 	public static int usesAssert(final Revision r) {
 		int count = 0;
 
-		for (int i = 0; i < r.getFilesCount(); i++) {
-			final ASTRoot ast = BoaAstIntrinsics.getast(r, r.getFiles(i));
-			count += usesAssert(ast);
-		}
+		for (int i = 0; i < r.getFilesCount(); i++)
+			count += usesAssert(BoaAstIntrinsics.getast(r, r.getFiles(i)));
 
 		return count;
 	}
@@ -336,10 +332,8 @@ public class BoaJavaFeaturesIntrinsics {
 	public static int usesEnums(final Revision r) {
 		int count = 0;
 
-		for (int i = 0; i < r.getFilesCount(); i++) {
-			final ASTRoot ast = BoaAstIntrinsics.getast(r, r.getFiles(i));
-			count += usesEnums(ast);
-		}
+		for (int i = 0; i < r.getFilesCount(); i++)
+			count += usesEnums(BoaAstIntrinsics.getast(r, r.getFiles(i)));
 
 		return count;
 	}
@@ -455,10 +449,8 @@ public class BoaJavaFeaturesIntrinsics {
 	public static int usesTryResources(final Revision r) {
 		int count = 0;
 
-		for (int i = 0; i < r.getFilesCount(); i++) {
-			final ASTRoot ast = BoaAstIntrinsics.getast(r, r.getFiles(i));
-			count += usesTryResources(ast);
-		}
+		for (int i = 0; i < r.getFilesCount(); i++)
+			count += usesTryResources(BoaAstIntrinsics.getast(r, r.getFiles(i)));
 
 		return count;
 	}
@@ -574,10 +566,8 @@ public class BoaJavaFeaturesIntrinsics {
 	public static int usesGenericsDefineType(final Revision r) {
 		int count = 0;
 
-		for (int i = 0; i < r.getFilesCount(); i++) {
-			final ASTRoot ast = BoaAstIntrinsics.getast(r, r.getFiles(i));
-			count += usesGenericsDefineType(ast);
-		}
+		for (int i = 0; i < r.getFilesCount(); i++)
+			count += usesGenericsDefineType(BoaAstIntrinsics.getast(r, r.getFiles(i)));
 
 		return count;
 	}
@@ -693,10 +683,8 @@ public class BoaJavaFeaturesIntrinsics {
 	public static int usesGenericsDefineMethod(final Revision r) {
 		int count = 0;
 
-		for (int i = 0; i < r.getFilesCount(); i++) {
-			final ASTRoot ast = BoaAstIntrinsics.getast(r, r.getFiles(i));
-			count += usesGenericsDefineMethod(ast);
-		}
+		for (int i = 0; i < r.getFilesCount(); i++)
+			count += usesGenericsDefineMethod(BoaAstIntrinsics.getast(r, r.getFiles(i)));
 
 		return count;
 	}
@@ -812,10 +800,8 @@ public class BoaJavaFeaturesIntrinsics {
 	public static int usesGenericsDefineField(final Revision r) {
 		int count = 0;
 
-		for (int i = 0; i < r.getFilesCount(); i++) {
-			final ASTRoot ast = BoaAstIntrinsics.getast(r, r.getFiles(i));
-			count += usesGenericsDefineField(ast);
-		}
+		for (int i = 0; i < r.getFilesCount(); i++)
+			count += usesGenericsDefineField(BoaAstIntrinsics.getast(r, r.getFiles(i)));
 
 		return count;
 	}
@@ -940,10 +926,8 @@ public class BoaJavaFeaturesIntrinsics {
 	public static int usesGenericsWildcardSuper(final Revision r) {
 		int count = 0;
 
-		for (int i = 0; i < r.getFilesCount(); i++) {
-			final ASTRoot ast = BoaAstIntrinsics.getast(r, r.getFiles(i));
-			count += usesGenericsWildcardSuper(ast);
-		}
+		for (int i = 0; i < r.getFilesCount(); i++)
+			count += usesGenericsWildcardSuper(BoaAstIntrinsics.getast(r, r.getFiles(i)));
 
 		return count;
 	}
@@ -1090,10 +1074,8 @@ public class BoaJavaFeaturesIntrinsics {
 	public static int usesGenericsWildcardExtends(final Revision r) {
 		int count = 0;
 
-		for (int i = 0; i < r.getFilesCount(); i++) {
-			final ASTRoot ast = BoaAstIntrinsics.getast(r, r.getFiles(i));
-			count += usesGenericsWildcardExtends(ast);
-		}
+		for (int i = 0; i < r.getFilesCount(); i++)
+			count += usesGenericsWildcardExtends(BoaAstIntrinsics.getast(r, r.getFiles(i)));
 
 		return count;
 	}
@@ -1240,10 +1222,8 @@ public class BoaJavaFeaturesIntrinsics {
 	public static int usesGenericsWildcard(final Revision r) {
 		int count = 0;
 
-		for (int i = 0; i < r.getFilesCount(); i++) {
-			final ASTRoot ast = BoaAstIntrinsics.getast(r, r.getFiles(i));
-			count += usesGenericsWildcard(ast);
-		}
+		for (int i = 0; i < r.getFilesCount(); i++)
+			count += usesGenericsWildcard(BoaAstIntrinsics.getast(r, r.getFiles(i)));
 
 		return count;
 	}
@@ -1390,10 +1370,8 @@ public class BoaJavaFeaturesIntrinsics {
 	public static int usesAnnotationsDefine(final Revision r) {
 		int count = 0;
 
-		for (int i = 0; i < r.getFilesCount(); i++) {
-			final ASTRoot ast = BoaAstIntrinsics.getast(r, r.getFiles(i));
-			count += usesAnnotationsDefine(ast);
-		}
+		for (int i = 0; i < r.getFilesCount(); i++)
+			count += usesAnnotationsDefine(BoaAstIntrinsics.getast(r, r.getFiles(i)));
 
 		return count;
 	}
@@ -1509,10 +1487,8 @@ public class BoaJavaFeaturesIntrinsics {
 	public static int usesAnnotationsUses(final Revision r) {
 		int count = 0;
 
-		for (int i = 0; i < r.getFilesCount(); i++) {
-			final ASTRoot ast = BoaAstIntrinsics.getast(r, r.getFiles(i));
-			count += usesAnnotationsUses(ast);
-		}
+		for (int i = 0; i < r.getFilesCount(); i++)
+			count += usesAnnotationsUses(BoaAstIntrinsics.getast(r, r.getFiles(i)));
 
 		return count;
 	}
@@ -1638,10 +1614,8 @@ public class BoaJavaFeaturesIntrinsics {
 	public static int usesMultiCatch(final Revision r) {
 		int count = 0;
 
-		for (int i = 0; i < r.getFilesCount(); i++) {
-			final ASTRoot ast = BoaAstIntrinsics.getast(r, r.getFiles(i));
-			count += usesMultiCatch(ast);
-		}
+		for (int i = 0; i < r.getFilesCount(); i++)
+			count += usesMultiCatch(BoaAstIntrinsics.getast(r, r.getFiles(i)));
 
 		return count;
 	}
@@ -1757,10 +1731,8 @@ public class BoaJavaFeaturesIntrinsics {
 	public static int usesBinaryLit(final Revision r) {
 		int count = 0;
 
-		for (int i = 0; i < r.getFilesCount(); i++) {
-			final ASTRoot ast = BoaAstIntrinsics.getast(r, r.getFiles(i));
-			count += usesBinaryLit(ast);
-		}
+		for (int i = 0; i < r.getFilesCount(); i++)
+			count += usesBinaryLit(BoaAstIntrinsics.getast(r, r.getFiles(i)));
 
 		return count;
 	}
@@ -1881,10 +1853,8 @@ public class BoaJavaFeaturesIntrinsics {
 	public static int usesUnderscoreLit(final Revision r) {
 		int count = 0;
 
-		for (int i = 0; i < r.getFilesCount(); i++) {
-			final ASTRoot ast = BoaAstIntrinsics.getast(r, r.getFiles(i));
-			count += usesUnderscoreLit(ast);
-		}
+		for (int i = 0; i < r.getFilesCount(); i++)
+			count += usesUnderscoreLit(BoaAstIntrinsics.getast(r, r.getFiles(i)));
 
 		return count;
 	}
@@ -2006,10 +1976,8 @@ public class BoaJavaFeaturesIntrinsics {
 	public static int usesDiamond(final Revision r) {
 		int count = 0;
 
-		for (int i = 0; i < r.getFilesCount(); i++) {
-			final ASTRoot ast = BoaAstIntrinsics.getast(r, r.getFiles(i));
-			count += usesDiamond(ast);
-		}
+		for (int i = 0; i < r.getFilesCount(); i++)
+			count += usesDiamond(BoaAstIntrinsics.getast(r, r.getFiles(i)));
 
 		return count;
 	}
@@ -2132,10 +2100,8 @@ public class BoaJavaFeaturesIntrinsics {
 	public static int usesSafeVarargs(final Revision r) {
 		int count = 0;
 
-		for (int i = 0; i < r.getFilesCount(); i++) {
-			final ASTRoot ast = BoaAstIntrinsics.getast(r, r.getFiles(i));
-			count += usesSafeVarargs(ast);
-		}
+		for (int i = 0; i < r.getFilesCount(); i++)
+			count += usesSafeVarargs(BoaAstIntrinsics.getast(r, r.getFiles(i)));
 
 		return count;
 	}
