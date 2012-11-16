@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
 import org.scannotation.AnnotationDB;
 import org.scannotation.ClasspathUrlFinder;
 
@@ -68,8 +67,6 @@ import sizzle.types.TypeProtoTuple;
 import sizzle.types.VisibilityProtoMap;
 
 public class SymbolTable {
-	private static Logger LOG = Logger.getLogger(SymbolTable.class);
-
 	private static final boolean strictCompatibility = true;
 
 	private final ClassLoader loader;
@@ -511,21 +508,14 @@ public class SymbolTable {
 		// int sum aggregator
 		db.scanArchives(ClasspathUrlFinder.findClassBase(IntSumAggregator.class));
 
-		for (final URL s : ClasspathUrlFinder.findClassPaths())
-			if (s.getPath().endsWith("/"))
-				db.scanArchives(s);
-
+		// also check any libs passed into the compiler
 		for (final URL url : urls)
 			db.scanArchives(url);
 
 		final Map<String, Set<String>> annotationIndex = db.getAnnotationIndex();
 
 		for (final String c : annotationIndex.get(AggregatorSpec.class.getCanonicalName()))
-			try {
-				this.importAggregator(c);
-			} catch (final NoClassDefFoundError e) {
-				SymbolTable.LOG.error("unable to import aggregator " + c + ": " + e.getClass().getSimpleName() + " for " + e.getMessage());
-			}
+			this.importAggregator(c);
 
 		for (final String c : annotationIndex.get(FunctionSpec.class.getCanonicalName()))
 			this.importFunctions(c);
