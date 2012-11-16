@@ -18,14 +18,6 @@ import org.apache.hadoop.fs.Path;
 public class SizzleFileIntrinsics {
 	private static FileSystem fs;
 
-	static {
-		try {
-			SizzleFileIntrinsics.fs = FileSystem.get(new Configuration());
-		} catch (final IOException e) {
-			throw new RuntimeException(e.getClass().getSimpleName() + " caught", e);
-		}
-	}
-
 	/**
 	 * Return the entire contents of the named file as an uninterpreted array of
 	 * bytes.
@@ -39,7 +31,16 @@ public class SizzleFileIntrinsics {
 	 */
 	@FunctionSpec(name = "load", returnType = "bytes", formalParameters = { "string" })
 	public static byte[] load(final String file) throws IOException {
-		final InputStream i = new BufferedInputStream(SizzleFileIntrinsics.fs.open(new Path(file)));
+		if (fs == null) {
+			try {
+				fs = FileSystem.get(new Configuration());
+			} catch (final IOException e) {
+				fs = null;
+				throw new RuntimeException(e.getClass().getSimpleName() + " caught", e);
+			}
+		}
+
+		final InputStream i = new BufferedInputStream(fs.open(new Path(file)));
 
 		try {
 			final ByteArrayOutputStream o = new ByteArrayOutputStream();
