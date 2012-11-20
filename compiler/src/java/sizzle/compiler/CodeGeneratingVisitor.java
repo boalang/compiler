@@ -953,7 +953,33 @@ public class CodeGeneratingVisitor extends GJDepthFirst<String, SymbolTable> {
 
 	@Override
 	public String visit(final Operand n, final SymbolTable argu) {
-		return n.f0.choice.accept(this, argu);
+		switch (n.f0.which) {
+		case 0: // identifier
+		case 1: // string literal
+		case 2: // integer literal
+		case 3: // floating point literal
+		case 4: // composite
+		case 5: // function
+		case 8: // statement expression
+			return n.f0.choice.accept(this, argu);
+		case 6: // unary operator
+			NodeChoice c = (NodeChoice)((NodeSequence) n.f0.choice).nodes.elementAt(0);
+			switch (c.which) {
+			case 0:
+			case 1:
+			case 2:
+			case 3:
+				return c.choice.accept(this, argu) + ((NodeSequence) n.f0.choice).nodes.elementAt(1).accept(this, argu);
+			case 4:
+				return "!" + ((NodeSequence) n.f0.choice).nodes.elementAt(1).accept(this, argu);
+			default:
+				throw new RuntimeException("unexpected choice " + c.which + " is " + c.choice.getClass());
+			}
+		case 9: // parenthetical
+			return "(" + ((NodeSequence) n.f0.choice).nodes.elementAt(1).accept(this, argu) + ")";
+		default:
+			throw new RuntimeException("unexpected choice " + n.f0.which + " is " + n.f0.choice.getClass());
+		}
 	}
 
 	@Override
