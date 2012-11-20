@@ -428,7 +428,7 @@ public class CodeGeneratingVisitor extends GJDepthFirst<String, SymbolTable> {
 
 	@Override
 	public String visit(final Statement n, final SymbolTable argu) {
-		return n.f0.choice.accept(this, argu);
+		return n.f0.choice.accept(this, argu) + "\n";
 	}
 
 	@Override
@@ -683,7 +683,7 @@ public class CodeGeneratingVisitor extends GJDepthFirst<String, SymbolTable> {
 			final List<String> operands = new ArrayList<String>();
 
 			for (final Node node : n.f1.nodes) {
-				operators.add("||");
+				operators.add(" || ");
 				operands.add(((NodeSequence) node).elementAt(1).accept(this, argu));
 			}
 
@@ -705,7 +705,7 @@ public class CodeGeneratingVisitor extends GJDepthFirst<String, SymbolTable> {
 			final List<String> operands = new ArrayList<String>();
 
 			for (final Node node : n.f1.nodes) {
-				operators.add("&&");
+				operators.add(" && ");
 				operands.add(((NodeSequence) node).elementAt(1).accept(this, argu));
 			}
 

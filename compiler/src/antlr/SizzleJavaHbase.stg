@@ -131,7 +131,7 @@ public class <name> extends sizzle.runtime.SizzleRunner {
 		public <name>SizzleCombiner() {
 			super();
 			
-			<tables:{ <it><\n> }>
+			<tables:{<it><\n>}>
 		}
 	}
 	
@@ -140,7 +140,7 @@ public class <name> extends sizzle.runtime.SizzleRunner {
 			super();
 
 
-			<tables:{ <it><\n> }>
+			<tables:{<it><\n>}>
 		}
 	}
 	

@@ -17,13 +17,13 @@ identifierMap ::= [
 		"input" : "_inputStream"
 ]
 		
-VarDecl(type, id, initializer) ::= "<type> ___<id><if(initializer)> = <initializer><endif>;"
+VarDecl(type, id, initializer) ::= "<type> ___<id><if(initializer)> = <initializer><endif>;<\n>"
 ArrayType(type) ::= "new <type>[];"
 MapType(key, value) ::= "new java.util.HashMap\<<key>, <value>\>();"
 ExprList(expressions) ::= "<first(expressions)><rest(expressions):{, <it>}>"
-Block(statements) ::= "{ <statements:{<it>}> }"
+Block(statements) ::= "{<\n><statements:{<it>}><\n>}"
 ExprStatement(expression, operator) ::= "<expression><operator>"
-ForStatement(declaration, expression, exprstmt, statement) ::= "for (<declaration> <expression>; <exprstmt>) <statement>"
+ForStatement(declaration, expression, exprstmt, statement) ::= "for (<declaration> <expression>; <exprstmt>)<\n><statement>"
 IfStatement(expression, statement, elseStatement) ::= <<
 if (<expression>)
 	<statement>
@@ -78,5 +78,5 @@ new sizzle.runtime.SizzleFunc\<<ret>\>() {
 	}
 }
 >>
-Return(expr) ::= "return<if(expr)> <expr><endif>;"
+Return(expr) ::= "return<if(expr)> <expr><endif>;<\n>"
 
