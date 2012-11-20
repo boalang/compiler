@@ -366,7 +366,7 @@ public class SymbolTable {
 
 	public void set(final String id, final SizzleType type, final boolean global) {
 		if (this.idmap.containsKey(id))
-			throw new TypeException(id + " already declared as " + this.idmap.get(id));
+			throw new RuntimeException(id + " already declared as " + this.idmap.get(id));
 
 		if (type instanceof SizzleFunction)
 			this.setFunction(id, (SizzleFunction) type);
@@ -391,7 +391,7 @@ public class SymbolTable {
 		if (this.locals.containsKey(id))
 			return this.locals.get(id);
 
-		throw new TypeException("no such identifier " + id);
+		throw new RuntimeException("no such identifier " + id);
 	}
 
 	public boolean hasType(final String id) {
@@ -405,7 +405,7 @@ public class SymbolTable {
 		if (id.startsWith("array of "))
 			return new SizzleArray(this.getType(id.substring("array of ".length())));
 
-		throw new TypeException("no such type " + id);
+		throw new RuntimeException("no such type " + id);
 	}
 
 	public void setType(final String id, final SizzleType sizzleType) {
@@ -432,7 +432,7 @@ public class SymbolTable {
 		try {
 			this.importAggregator(Class.forName(c, false, this.loader));
 		} catch (final ClassNotFoundException e) {
-			throw new TypeException("no such class " + c, e);
+			throw new RuntimeException("no such class " + c, e);
 		}
 	}
 
@@ -442,7 +442,7 @@ public class SymbolTable {
 		else if (this.aggregators.containsKey(name))
 			return this.aggregators.get(name);
 		else
-			throw new TypeException("no such aggregator " + name + " of " + type);
+			throw new RuntimeException("no such aggregator " + name + " of " + type);
 	}
 
 	public List<Class<?>> getAggregators(final String name, final SizzleType type) {
@@ -482,7 +482,7 @@ public class SymbolTable {
 			else if (dep.endsWith(".avro"))
 				this.importAvro(dep);
 			else
-				throw new TypeException("unknown dependency in " + dep);
+				throw new RuntimeException("unknown dependency in " + dep);
 
 		this.setFunction(annotation.name(),
 				new SizzleFunction(m.getDeclaringClass().getCanonicalName() + '.' + m.getName(), this.getType(annotation.returnType()), formalParameterTypes));
@@ -498,7 +498,7 @@ public class SymbolTable {
 		try {
 			this.importFunctions(Class.forName(c));
 		} catch (final ClassNotFoundException e) {
-			throw new TypeException("no such class " + c, e);
+			throw new RuntimeException("no such class " + c, e);
 		}
 	}
 
@@ -575,7 +575,7 @@ public class SymbolTable {
 		try {
 			wrapper = Class.forName("sizzle.types." + camelCased);
 		} catch (final ClassNotFoundException e) {
-			throw new TypeException("no such proto " + name);
+			throw new RuntimeException("no such proto " + name);
 		}
 
 		for (final Class<?> c : wrapper.getClasses()) {

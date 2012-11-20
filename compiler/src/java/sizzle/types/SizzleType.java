@@ -1,7 +1,5 @@
 package sizzle.types;
 
-import sizzle.compiler.TypeException;
-
 /**
  * Base class for the types in Sizzle.
  * 
@@ -21,7 +19,7 @@ public abstract class SizzleType {
 	 */
 	public SizzleScalar arithmetics(final SizzleType that) {
 		// by default, no types are allowed in arithmetic
-		throw new TypeException("incorrect type " + this + " for arithmetic with " + that);
+		throw new RuntimeException("incorrect type " + this + " for arithmetic with " + that);
 	}
 
 	/**
@@ -68,7 +66,7 @@ public abstract class SizzleType {
 	 *         Sizzle type
 	 */
 	public String toJavaType() {
-		throw new TypeException("no java equivalent for type " + this.toString());
+		throw new RuntimeException("no java equivalent for type " + this.toString());
 	}
 
 	/**

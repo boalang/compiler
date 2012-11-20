@@ -1,7 +1,5 @@
 package sizzle.types;
 
-import sizzle.compiler.TypeException;
-
 /**
  * A {@link SizzleType} representing an array of scalar values.
  * 
@@ -94,7 +92,7 @@ public class SizzleArray extends SizzleType {
 		if (this.type instanceof SizzleScalar)
 			return (SizzleScalar) this.type;
 
-		throw new TypeException("this shouldn't happen");
+		throw new RuntimeException("this shouldn't happen");
 	}
 
 	/**

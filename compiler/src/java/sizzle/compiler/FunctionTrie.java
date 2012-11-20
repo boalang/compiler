@@ -56,7 +56,7 @@ public class FunctionTrie {
 		final SizzleFunction function = this.getFunction(ids);
 
 		if (function == null)
-			throw new TypeException("no such function " + name + "(" + Arrays.toString(formalParameters) + ")");
+			throw new RuntimeException("no such function " + name + "(" + Arrays.toString(formalParameters) + ")");
 
 		return function;
 	}
