@@ -278,7 +278,7 @@ public class CodeGeneratingVisitor extends GJDepthFirst<String, SymbolTable> {
 				} catch (final IOException e) {
 					throw new RuntimeException(e.getClass().getSimpleName() + " caught", e);
 				}
-				if (t instanceof SizzleFunction && !(elem instanceof Function))
+				if (t instanceof SizzleFunction && !elem.accept(new IsFunctionVisitor(), argu))
 					t = ((SizzleFunction)t).getType();
 
 				String src = ((NodeSequence) nodeChoice.choice).elementAt(1).accept(this, argu);

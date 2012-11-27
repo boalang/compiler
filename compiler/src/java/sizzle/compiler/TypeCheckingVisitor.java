@@ -165,7 +165,7 @@ public class TypeCheckingVisitor extends GJDepthFirst<SizzleType, SymbolTable> {
 			case 0: // initializer
 				Node elem = ((NodeSequence) nodeChoice.choice).elementAt(1);
 				rhs = elem.accept(this, argu);
-				if (rhs instanceof SizzleFunction && !(elem instanceof Function))
+				if (rhs instanceof SizzleFunction && !elem.accept(new IsFunctionVisitor(), argu))
 					rhs = ((SizzleFunction)rhs).getType();
 				break;
 			default:
