@@ -67,7 +67,10 @@ public class BoaAstIntrinsics {
 					throw new RuntimeException("row '" + rowName + "' cell '" + colName + "' not found");
 				final byte[] val = res.value();
 	
-				b.mergeFrom(CodedInputStream.newInstance(val, 0, val.length));
+				CodedInputStream _stream = CodedInputStream.newInstance(val, 0, val.length);
+				// defaults to 64, really big ASTs require more
+				_stream.setRecursionLimit(Integer.MAX_VALUE);
+				b.mergeFrom(_stream);
 				context.getCounter(HBASE_COUNTER.GETS_SUCCEED).increment(1);
 				return b.build();
 			} catch (final InvalidProtocolBufferException e) {
