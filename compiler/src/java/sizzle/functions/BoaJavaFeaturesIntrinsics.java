@@ -14,8 +14,8 @@ import sizzle.types.Code.*;
  */
 public class BoaJavaFeaturesIntrinsics {
 	@FunctionSpec(name = "uses_enhanced_for", returnType = "int", formalParameters = { "CodeRepository" })
-	public static int usesEnhancedFor(final CodeRepository r) {
-		int count = 0;
+	public static long usesEnhancedFor(final CodeRepository r) {
+		long count = 0;
 
 		for (int i = 0; i < r.getRevisionsCount(); i++)
 			count += usesEnhancedFor(r.getRevisions(i));
@@ -24,8 +24,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_enhanced_for", returnType = "int", formalParameters = { "Revision" })
-	public static int usesEnhancedFor(final Revision r) {
-		int count = 0;
+	public static long usesEnhancedFor(final Revision r) {
+		long count = 0;
 
 		for (int i = 0; i < r.getFilesCount(); i++)
 			count += usesEnhancedFor(BoaAstIntrinsics.getast(r, r.getFiles(i)));
@@ -34,8 +34,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_enhanced_for", returnType = "int", formalParameters = { "ASTRoot" })
-	public static int usesEnhancedFor(final ASTRoot f) {
-		int count = 0;
+	public static long usesEnhancedFor(final ASTRoot f) {
+		long count = 0;
 
 		for (int i = 0; i < f.getNamespacesCount(); i++)
 			for (int j = 0; j < f.getNamespaces(i).getDeclarationsCount(); j++)
@@ -45,8 +45,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_enhanced_for", returnType = "int", formalParameters = { "Declaration" })
-	public static int usesEnhancedFor(final Declaration d) {
-		int count = 0;
+	public static long usesEnhancedFor(final Declaration d) {
+		long count = 0;
 
 		for (int i = 0; i < d.getMethodsCount(); i++)
 			count += usesEnhancedFor(d.getMethods(i));
@@ -61,8 +61,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_enhanced_for", returnType = "int", formalParameters = { "Method" })
-	public static int usesEnhancedFor(final Method m) {
-		int count = 0;
+	public static long usesEnhancedFor(final Method m) {
+		long count = 0;
 
 		for (int i = 0; i < m.getArgumentsCount(); i++)
 			count += usesEnhancedFor(m.getArguments(i));
@@ -74,8 +74,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_enhanced_for", returnType = "int", formalParameters = { "Variable" })
-	public static int usesEnhancedFor(final Variable v) {
-		int count = 0;
+	public static long usesEnhancedFor(final Variable v) {
+		long count = 0;
 
 		if (v.hasInitializer())
 			count += usesEnhancedFor(v.getInitializer());
@@ -84,8 +84,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_enhanced_for", returnType = "int", formalParameters = { "Statement" })
-	public static int usesEnhancedFor(final Statement s) {
-		int count = 0;
+	public static long usesEnhancedFor(final Statement s) {
+		long count = 0;
 
 		if (s.getKind() == Statement.StatementKind.FOR && s.hasVariableDeclaration())
 			count++;
@@ -115,8 +115,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_enhanced_for", returnType = "int", formalParameters = { "Expression" })
-	public static int usesEnhancedFor(final Expression e) {
-		int count = 0;
+	public static long usesEnhancedFor(final Expression e) {
+		long count = 0;
 
 		for (int i = 0; i < e.getVariableDeclsCount(); i++)
 			count += usesEnhancedFor(e.getVariableDecls(i));
@@ -131,8 +131,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_varargs", returnType = "int", formalParameters = { "CodeRepository" })
-	public static int usesVarargs(final CodeRepository r) {
-		int count = 0;
+	public static long usesVarargs(final CodeRepository r) {
+		long count = 0;
 
 		for (int i = 0; i < r.getRevisionsCount(); i++)
 			count += usesVarargs(r.getRevisions(i));
@@ -141,8 +141,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_varargs", returnType = "int", formalParameters = { "Revision" })
-	public static int usesVarargs(final Revision r) {
-		int count = 0;
+	public static long usesVarargs(final Revision r) {
+		long count = 0;
 
 		for (int i = 0; i < r.getFilesCount(); i++)
 			count += usesVarargs(BoaAstIntrinsics.getast(r, r.getFiles(i)));
@@ -151,8 +151,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_varargs", returnType = "int", formalParameters = { "ASTRoot" })
-	public static int usesVarargs(final ASTRoot f) {
-		int count = 0;
+	public static long usesVarargs(final ASTRoot f) {
+		long count = 0;
 
 		for (int i = 0; i < f.getNamespacesCount(); i++)
 			for (int j = 0; j < f.getNamespaces(i).getDeclarationsCount(); j++)
@@ -162,8 +162,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_varargs", returnType = "int", formalParameters = { "Declaration" })
-	public static int usesVarargs(final Declaration d) {
-		int count = 0;
+	public static long usesVarargs(final Declaration d) {
+		long count = 0;
 
 		for (int i = 0; i < d.getMethodsCount(); i++)
 			count += usesVarargs(d.getMethods(i));
@@ -175,8 +175,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_varargs", returnType = "int", formalParameters = { "Method" })
-	public static int usesVarargs(final Method m) {
-		int count = 0;
+	public static long usesVarargs(final Method m) {
+		long count = 0;
 
 		if (m.getArgumentsCount() > 0)
 			if (m.getArguments(m.getArgumentsCount() - 1).getVariableType().getName().contains("..."))
@@ -189,8 +189,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_varargs", returnType = "int", formalParameters = { "Statement" })
-	public static int usesVarargs(final Statement s) {
-		int count = 0;
+	public static long usesVarargs(final Statement s) {
+		long count = 0;
 
 		if (s.hasTypeDeclaration())
 			count += usesVarargs(s.getTypeDeclaration());
@@ -202,8 +202,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_assert", returnType = "int", formalParameters = { "CodeRepository" })
-	public static int usesAssert(final CodeRepository r) {
-		int count = 0;
+	public static long usesAssert(final CodeRepository r) {
+		long count = 0;
 
 		for (int i = 0; i < r.getRevisionsCount(); i++)
 			count += usesAssert(r.getRevisions(i));
@@ -212,8 +212,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_assert", returnType = "int", formalParameters = { "Revision" })
-	public static int usesAssert(final Revision r) {
-		int count = 0;
+	public static long usesAssert(final Revision r) {
+		long count = 0;
 
 		for (int i = 0; i < r.getFilesCount(); i++)
 			count += usesAssert(BoaAstIntrinsics.getast(r, r.getFiles(i)));
@@ -222,8 +222,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_assert", returnType = "int", formalParameters = { "ASTRoot" })
-	public static int usesAssert(final ASTRoot f) {
-		int count = 0;
+	public static long usesAssert(final ASTRoot f) {
+		long count = 0;
 
 		for (int i = 0; i < f.getNamespacesCount(); i++)
 			for (int j = 0; j < f.getNamespaces(i).getDeclarationsCount(); j++)
@@ -233,8 +233,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_assert", returnType = "int", formalParameters = { "Declaration" })
-	public static int usesAssert(final Declaration d) {
-		int count = 0;
+	public static long usesAssert(final Declaration d) {
+		long count = 0;
 
 		for (int i = 0; i < d.getMethodsCount(); i++)
 			count += usesAssert(d.getMethods(i));
@@ -249,8 +249,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_assert", returnType = "int", formalParameters = { "Method" })
-	public static int usesAssert(final Method m) {
-		int count = 0;
+	public static long usesAssert(final Method m) {
+		long count = 0;
 
 		for (int i = 0; i < m.getArgumentsCount(); i++)
 			count += usesAssert(m.getArguments(i));
@@ -262,8 +262,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_assert", returnType = "int", formalParameters = { "Variable" })
-	public static int usesAssert(final Variable v) {
-		int count = 0;
+	public static long usesAssert(final Variable v) {
+		long count = 0;
 
 		if (v.hasInitializer())
 			count += usesAssert(v.getInitializer());
@@ -272,8 +272,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_assert", returnType = "int", formalParameters = { "Statement" })
-	public static int usesAssert(final Statement s) {
-		int count = 0;
+	public static long usesAssert(final Statement s) {
+		long count = 0;
 
 		if (s.getKind() == Statement.StatementKind.ASSERT)
 			count++;
@@ -303,8 +303,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_assert", returnType = "int", formalParameters = { "Expression" })
-	public static int usesAssert(final Expression e) {
-		int count = 0;
+	public static long usesAssert(final Expression e) {
+		long count = 0;
 
 		for (int i = 0; i < e.getVariableDeclsCount(); i++)
 			count += usesAssert(e.getVariableDecls(i));
@@ -319,8 +319,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_enums", returnType = "int", formalParameters = { "CodeRepository" })
-	public static int usesEnums(final CodeRepository r) {
-		int count = 0;
+	public static long usesEnums(final CodeRepository r) {
+		long count = 0;
 
 		for (int i = 0; i < r.getRevisionsCount(); i++)
 			count += usesEnums(r.getRevisions(i));
@@ -329,8 +329,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_enums", returnType = "int", formalParameters = { "Revision" })
-	public static int usesEnums(final Revision r) {
-		int count = 0;
+	public static long usesEnums(final Revision r) {
+		long count = 0;
 
 		for (int i = 0; i < r.getFilesCount(); i++)
 			count += usesEnums(BoaAstIntrinsics.getast(r, r.getFiles(i)));
@@ -339,8 +339,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_enums", returnType = "int", formalParameters = { "ASTRoot" })
-	public static int usesEnums(final ASTRoot f) {
-		int count = 0;
+	public static long usesEnums(final ASTRoot f) {
+		long count = 0;
 
 		for (int i = 0; i < f.getNamespacesCount(); i++)
 			for (int j = 0; j < f.getNamespaces(i).getDeclarationsCount(); j++)
@@ -350,8 +350,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_enums", returnType = "int", formalParameters = { "Declaration" })
-	public static int usesEnums(final Declaration d) {
-		int count = 0;
+	public static long usesEnums(final Declaration d) {
+		long count = 0;
 
 		if (d.getKind() == TypeKind.ENUM)
 			count++;
@@ -369,8 +369,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_enums", returnType = "int", formalParameters = { "Method" })
-	public static int usesEnums(final Method m) {
-		int count = 0;
+	public static long usesEnums(final Method m) {
+		long count = 0;
 
 		for (int i = 0; i < m.getArgumentsCount(); i++)
 			count += usesEnums(m.getArguments(i));
@@ -382,8 +382,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_enums", returnType = "int", formalParameters = { "Variable" })
-	public static int usesEnums(final Variable v) {
-		int count = 0;
+	public static long usesEnums(final Variable v) {
+		long count = 0;
 
 		if (v.hasInitializer())
 			count += usesEnums(v.getInitializer());
@@ -392,8 +392,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_enums", returnType = "int", formalParameters = { "Statement" })
-	public static int usesEnums(final Statement s) {
-		int count = 0;
+	public static long usesEnums(final Statement s) {
+		long count = 0;
 
 		if (s.hasCondition())
 			count += usesEnums(s.getCondition());
@@ -420,8 +420,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_enums", returnType = "int", formalParameters = { "Expression" })
-	public static int usesEnums(final Expression e) {
-		int count = 0;
+	public static long usesEnums(final Expression e) {
+		long count = 0;
 
 		for (int i = 0; i < e.getVariableDeclsCount(); i++)
 			count += usesEnums(e.getVariableDecls(i));
@@ -436,8 +436,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_try_resources", returnType = "int", formalParameters = { "CodeRepository" })
-	public static int usesTryResources(final CodeRepository r) {
-		int count = 0;
+	public static long usesTryResources(final CodeRepository r) {
+		long count = 0;
 
 		for (int i = 0; i < r.getRevisionsCount(); i++)
 			count += usesTryResources(r.getRevisions(i));
@@ -446,8 +446,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_try_resources", returnType = "int", formalParameters = { "Revision" })
-	public static int usesTryResources(final Revision r) {
-		int count = 0;
+	public static long usesTryResources(final Revision r) {
+		long count = 0;
 
 		for (int i = 0; i < r.getFilesCount(); i++)
 			count += usesTryResources(BoaAstIntrinsics.getast(r, r.getFiles(i)));
@@ -456,8 +456,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_try_resources", returnType = "int", formalParameters = { "ASTRoot" })
-	public static int usesTryResources(final ASTRoot f) {
-		int count = 0;
+	public static long usesTryResources(final ASTRoot f) {
+		long count = 0;
 
 		for (int i = 0; i < f.getNamespacesCount(); i++)
 			for (int j = 0; j < f.getNamespaces(i).getDeclarationsCount(); j++)
@@ -467,8 +467,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_try_resources", returnType = "int", formalParameters = { "Declaration" })
-	public static int usesTryResources(final Declaration d) {
-		int count = 0;
+	public static long usesTryResources(final Declaration d) {
+		long count = 0;
 
 		for (int i = 0; i < d.getMethodsCount(); i++)
 			count += usesTryResources(d.getMethods(i));
@@ -483,8 +483,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_try_resources", returnType = "int", formalParameters = { "Method" })
-	public static int usesTryResources(final Method m) {
-		int count = 0;
+	public static long usesTryResources(final Method m) {
+		long count = 0;
 
 		for (int i = 0; i < m.getArgumentsCount(); i++)
 			count += usesTryResources(m.getArguments(i));
@@ -496,8 +496,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_try_resources", returnType = "int", formalParameters = { "Variable" })
-	public static int usesTryResources(final Variable v) {
-		int count = 0;
+	public static long usesTryResources(final Variable v) {
+		long count = 0;
 
 		if (v.hasInitializer())
 			count += usesTryResources(v.getInitializer());
@@ -506,8 +506,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_try_resources", returnType = "int", formalParameters = { "Statement" })
-	public static int usesTryResources(final Statement s) {
-		int count = 0;
+	public static long usesTryResources(final Statement s) {
+		long count = 0;
 
 		if (s.getKind() == Statement.StatementKind.TRY && s.getInitializationsCount() > 0)
 			count++;
@@ -537,8 +537,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_try_resources", returnType = "int", formalParameters = { "Expression" })
-	public static int usesTryResources(final Expression e) {
-		int count = 0;
+	public static long usesTryResources(final Expression e) {
+		long count = 0;
 
 		for (int i = 0; i < e.getVariableDeclsCount(); i++)
 			count += usesTryResources(e.getVariableDecls(i));
@@ -553,8 +553,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_generics_define_type", returnType = "int", formalParameters = { "CodeRepository" })
-	public static int usesGenericsDefineType(final CodeRepository r) {
-		int count = 0;
+	public static long usesGenericsDefineType(final CodeRepository r) {
+		long count = 0;
 
 		for (int i = 0; i < r.getRevisionsCount(); i++)
 			count += usesGenericsDefineType(r.getRevisions(i));
@@ -563,8 +563,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_generics_define_type", returnType = "int", formalParameters = { "Revision" })
-	public static int usesGenericsDefineType(final Revision r) {
-		int count = 0;
+	public static long usesGenericsDefineType(final Revision r) {
+		long count = 0;
 
 		for (int i = 0; i < r.getFilesCount(); i++)
 			count += usesGenericsDefineType(BoaAstIntrinsics.getast(r, r.getFiles(i)));
@@ -573,8 +573,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_generics_define_type", returnType = "int", formalParameters = { "ASTRoot" })
-	public static int usesGenericsDefineType(final ASTRoot f) {
-		int count = 0;
+	public static long usesGenericsDefineType(final ASTRoot f) {
+		long count = 0;
 
 		for (int i = 0; i < f.getNamespacesCount(); i++)
 			for (int j = 0; j < f.getNamespaces(i).getDeclarationsCount(); j++)
@@ -584,8 +584,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_generics_define_type", returnType = "int", formalParameters = { "Declaration" })
-	public static int usesGenericsDefineType(final Declaration d) {
-		int count = 0;
+	public static long usesGenericsDefineType(final Declaration d) {
+		long count = 0;
 
 		if (d.getGenericParametersCount() > 0)
 			count++;
@@ -603,8 +603,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_generics_define_type", returnType = "int", formalParameters = { "Method" })
-	public static int usesGenericsDefineType(final Method m) {
-		int count = 0;
+	public static long usesGenericsDefineType(final Method m) {
+		long count = 0;
 
 		for (int i = 0; i < m.getArgumentsCount(); i++)
 			count += usesGenericsDefineType(m.getArguments(i));
@@ -616,8 +616,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_generics_define_type", returnType = "int", formalParameters = { "Variable" })
-	public static int usesGenericsDefineType(final Variable v) {
-		int count = 0;
+	public static long usesGenericsDefineType(final Variable v) {
+		long count = 0;
 
 		if (v.hasInitializer())
 			count += usesGenericsDefineType(v.getInitializer());
@@ -626,8 +626,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_generics_define_type", returnType = "int", formalParameters = { "Statement" })
-	public static int usesGenericsDefineType(final Statement s) {
-		int count = 0;
+	public static long usesGenericsDefineType(final Statement s) {
+		long count = 0;
 
 		if (s.hasCondition())
 			count += usesGenericsDefineType(s.getCondition());
@@ -654,8 +654,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_generics_define_type", returnType = "int", formalParameters = { "Expression" })
-	public static int usesGenericsDefineType(final Expression e) {
-		int count = 0;
+	public static long usesGenericsDefineType(final Expression e) {
+		long count = 0;
 
 		for (int i = 0; i < e.getVariableDeclsCount(); i++)
 			count += usesGenericsDefineType(e.getVariableDecls(i));
@@ -670,8 +670,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_generics_define_method", returnType = "int", formalParameters = { "CodeRepository" })
-	public static int usesGenericsDefineMethod(final CodeRepository r) {
-		int count = 0;
+	public static long usesGenericsDefineMethod(final CodeRepository r) {
+		long count = 0;
 
 		for (int i = 0; i < r.getRevisionsCount(); i++)
 			count += usesGenericsDefineMethod(r.getRevisions(i));
@@ -680,8 +680,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_generics_define_method", returnType = "int", formalParameters = { "Revision" })
-	public static int usesGenericsDefineMethod(final Revision r) {
-		int count = 0;
+	public static long usesGenericsDefineMethod(final Revision r) {
+		long count = 0;
 
 		for (int i = 0; i < r.getFilesCount(); i++)
 			count += usesGenericsDefineMethod(BoaAstIntrinsics.getast(r, r.getFiles(i)));
@@ -690,8 +690,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_generics_define_method", returnType = "int", formalParameters = { "ASTRoot" })
-	public static int usesGenericsDefineMethod(final ASTRoot f) {
-		int count = 0;
+	public static long usesGenericsDefineMethod(final ASTRoot f) {
+		long count = 0;
 
 		for (int i = 0; i < f.getNamespacesCount(); i++)
 			for (int j = 0; j < f.getNamespaces(i).getDeclarationsCount(); j++)
@@ -701,8 +701,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_generics_define_method", returnType = "int", formalParameters = { "Declaration" })
-	public static int usesGenericsDefineMethod(final Declaration d) {
-		int count = 0;
+	public static long usesGenericsDefineMethod(final Declaration d) {
+		long count = 0;
 
 		for (int i = 0; i < d.getMethodsCount(); i++)
 			count += usesGenericsDefineMethod(d.getMethods(i));
@@ -717,8 +717,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_generics_define_method", returnType = "int", formalParameters = { "Method" })
-	public static int usesGenericsDefineMethod(final Method m) {
-		int count = 0;
+	public static long usesGenericsDefineMethod(final Method m) {
+		long count = 0;
 
 		if (m.getGenericParametersCount() > 0)
 			count++;
@@ -733,8 +733,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_generics_define_method", returnType = "int", formalParameters = { "Variable" })
-	public static int usesGenericsDefineMethod(final Variable v) {
-		int count = 0;
+	public static long usesGenericsDefineMethod(final Variable v) {
+		long count = 0;
 
 		if (v.hasInitializer())
 			count += usesGenericsDefineMethod(v.getInitializer());
@@ -743,8 +743,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_generics_define_method", returnType = "int", formalParameters = { "Statement" })
-	public static int usesGenericsDefineMethod(final Statement s) {
-		int count = 0;
+	public static long usesGenericsDefineMethod(final Statement s) {
+		long count = 0;
 
 		if (s.hasCondition())
 			count += usesGenericsDefineMethod(s.getCondition());
@@ -771,8 +771,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_generics_define_method", returnType = "int", formalParameters = { "Expression" })
-	public static int usesGenericsDefineMethod(final Expression e) {
-		int count = 0;
+	public static long usesGenericsDefineMethod(final Expression e) {
+		long count = 0;
 
 		for (int i = 0; i < e.getVariableDeclsCount(); i++)
 			count += usesGenericsDefineMethod(e.getVariableDecls(i));
@@ -787,8 +787,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_generics_define_field", returnType = "int", formalParameters = { "CodeRepository" })
-	public static int usesGenericsDefineField(final CodeRepository r) {
-		int count = 0;
+	public static long usesGenericsDefineField(final CodeRepository r) {
+		long count = 0;
 
 		for (int i = 0; i < r.getRevisionsCount(); i++)
 			count += usesGenericsDefineField(r.getRevisions(i));
@@ -797,8 +797,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_generics_define_field", returnType = "int", formalParameters = { "Revision" })
-	public static int usesGenericsDefineField(final Revision r) {
-		int count = 0;
+	public static long usesGenericsDefineField(final Revision r) {
+		long count = 0;
 
 		for (int i = 0; i < r.getFilesCount(); i++)
 			count += usesGenericsDefineField(BoaAstIntrinsics.getast(r, r.getFiles(i)));
@@ -807,8 +807,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_generics_define_field", returnType = "int", formalParameters = { "ASTRoot" })
-	public static int usesGenericsDefineField(final ASTRoot f) {
-		int count = 0;
+	public static long usesGenericsDefineField(final ASTRoot f) {
+		long count = 0;
 
 		for (int i = 0; i < f.getNamespacesCount(); i++)
 			for (int j = 0; j < f.getNamespaces(i).getDeclarationsCount(); j++)
@@ -818,8 +818,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_generics_define_field", returnType = "int", formalParameters = { "Declaration" })
-	public static int usesGenericsDefineField(final Declaration d) {
-		int count = 0;
+	public static long usesGenericsDefineField(final Declaration d) {
+		long count = 0;
 
 		for (int i = 0; i < d.getMethodsCount(); i++)
 			count += usesGenericsDefineField(d.getMethods(i));
@@ -834,8 +834,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_generics_define_field", returnType = "int", formalParameters = { "Method" })
-	public static int usesGenericsDefineField(final Method m) {
-		int count = 0;
+	public static long usesGenericsDefineField(final Method m) {
+		long count = 0;
 
 		for (int i = 0; i < m.getArgumentsCount(); i++)
 			count += usesGenericsDefineField(m.getArguments(i));
@@ -847,8 +847,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_generics_define_field", returnType = "int", formalParameters = { "Variable" })
-	public static int usesGenericsDefineField(final Variable v) {
-		int count = 0;
+	public static long usesGenericsDefineField(final Variable v) {
+		long count = 0;
 
 		count += usesGenericsDefineField(v.getVariableType());
 
@@ -859,8 +859,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_generics_define_field", returnType = "int", formalParameters = { "Statement" })
-	public static int usesGenericsDefineField(final Statement s) {
-		int count = 0;
+	public static long usesGenericsDefineField(final Statement s) {
+		long count = 0;
 
 		if (s.hasCondition())
 			count += usesGenericsDefineField(s.getCondition());
@@ -887,8 +887,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_generics_define_field", returnType = "int", formalParameters = { "Expression" })
-	public static int usesGenericsDefineField(final Expression e) {
-		int count = 0;
+	public static long usesGenericsDefineField(final Expression e) {
+		long count = 0;
 
 		for (int i = 0; i < e.getVariableDeclsCount(); i++)
 			count += usesGenericsDefineField(e.getVariableDecls(i));
@@ -903,8 +903,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_generics_define_field", returnType = "int", formalParameters = { "Type" })
-	public static int usesGenericsDefineField(final Type t) {
-		int count = 0;
+	public static long usesGenericsDefineField(final Type t) {
+		long count = 0;
 
 		if (t.getName().contains("<"))
 			count++;
@@ -913,8 +913,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_generics_wildcard_super", returnType = "int", formalParameters = { "CodeRepository" })
-	public static int usesGenericsWildcardSuper(final CodeRepository r) {
-		int count = 0;
+	public static long usesGenericsWildcardSuper(final CodeRepository r) {
+		long count = 0;
 
 		for (int i = 0; i < r.getRevisionsCount(); i++)
 			count += usesGenericsWildcardSuper(r.getRevisions(i));
@@ -923,8 +923,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_generics_wildcard_super", returnType = "int", formalParameters = { "Revision" })
-	public static int usesGenericsWildcardSuper(final Revision r) {
-		int count = 0;
+	public static long usesGenericsWildcardSuper(final Revision r) {
+		long count = 0;
 
 		for (int i = 0; i < r.getFilesCount(); i++)
 			count += usesGenericsWildcardSuper(BoaAstIntrinsics.getast(r, r.getFiles(i)));
@@ -933,8 +933,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_generics_wildcard_super", returnType = "int", formalParameters = { "ASTRoot" })
-	public static int usesGenericsWildcardSuper(final ASTRoot f) {
-		int count = 0;
+	public static long usesGenericsWildcardSuper(final ASTRoot f) {
+		long count = 0;
 
 		for (int i = 0; i < f.getNamespacesCount(); i++)
 			for (int j = 0; j < f.getNamespaces(i).getDeclarationsCount(); j++)
@@ -944,8 +944,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_generics_wildcard_super", returnType = "int", formalParameters = { "Declaration" })
-	public static int usesGenericsWildcardSuper(final Declaration d) {
-		int count = 0;
+	public static long usesGenericsWildcardSuper(final Declaration d) {
+		long count = 0;
 
 		for (int i = 0; i < d.getGenericParametersCount(); i++)
 			count += usesGenericsWildcardSuper(d.getGenericParameters(i));
@@ -966,8 +966,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_generics_wildcard_super", returnType = "int", formalParameters = { "Method" })
-	public static int usesGenericsWildcardSuper(final Method m) {
-		int count = 0;
+	public static long usesGenericsWildcardSuper(final Method m) {
+		long count = 0;
 
 		for (int i = 0; i < m.getGenericParametersCount(); i++)
 			count += usesGenericsWildcardSuper(m.getGenericParameters(i));
@@ -987,8 +987,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_generics_wildcard_super", returnType = "int", formalParameters = { "Variable" })
-	public static int usesGenericsWildcardSuper(final Variable v) {
-		int count = 0;
+	public static long usesGenericsWildcardSuper(final Variable v) {
+		long count = 0;
 
 		count += usesGenericsWildcardSuper(v.getVariableType());
 
@@ -999,8 +999,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_generics_wildcard_super", returnType = "int", formalParameters = { "Statement" })
-	public static int usesGenericsWildcardSuper(final Statement s) {
-		int count = 0;
+	public static long usesGenericsWildcardSuper(final Statement s) {
+		long count = 0;
 
 		if (s.hasCondition())
 			count += usesGenericsWildcardSuper(s.getCondition());
@@ -1027,8 +1027,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_generics_wildcard_super", returnType = "int", formalParameters = { "Expression" })
-	public static int usesGenericsWildcardSuper(final Expression e) {
-		int count = 0;
+	public static long usesGenericsWildcardSuper(final Expression e) {
+		long count = 0;
 
 		for (int i = 0; i < e.getGenericParametersCount(); i++)
 			count += usesGenericsWildcardSuper(e.getGenericParameters(i));
@@ -1051,8 +1051,8 @@ public class BoaJavaFeaturesIntrinsics {
 	private static Matcher wildcardSuperMatcher = Pattern.compile("<\\s*\\?\\s+super\\s+[^>]+>").matcher("");
 
 	@FunctionSpec(name = "uses_generics_wildcard_super", returnType = "int", formalParameters = { "Type" })
-	public static int usesGenericsWildcardSuper(final Type t) {
-		int count = 0;
+	public static long usesGenericsWildcardSuper(final Type t) {
+		long count = 0;
 
 		if (wildcardSuperMatcher.reset(t.getName()).matches())
 			count++;
@@ -1061,8 +1061,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_generics_wildcard_extends", returnType = "int", formalParameters = { "CodeRepository" })
-	public static int usesGenericsWildcardExtends(final CodeRepository r) {
-		int count = 0;
+	public static long usesGenericsWildcardExtends(final CodeRepository r) {
+		long count = 0;
 
 		for (int i = 0; i < r.getRevisionsCount(); i++)
 			count += usesGenericsWildcardExtends(r.getRevisions(i));
@@ -1071,8 +1071,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_generics_wildcard_extends", returnType = "int", formalParameters = { "Revision" })
-	public static int usesGenericsWildcardExtends(final Revision r) {
-		int count = 0;
+	public static long usesGenericsWildcardExtends(final Revision r) {
+		long count = 0;
 
 		for (int i = 0; i < r.getFilesCount(); i++)
 			count += usesGenericsWildcardExtends(BoaAstIntrinsics.getast(r, r.getFiles(i)));
@@ -1081,8 +1081,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_generics_wildcard_extends", returnType = "int", formalParameters = { "ASTRoot" })
-	public static int usesGenericsWildcardExtends(final ASTRoot f) {
-		int count = 0;
+	public static long usesGenericsWildcardExtends(final ASTRoot f) {
+		long count = 0;
 
 		for (int i = 0; i < f.getNamespacesCount(); i++)
 			for (int j = 0; j < f.getNamespaces(i).getDeclarationsCount(); j++)
@@ -1092,8 +1092,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_generics_wildcard_extends", returnType = "int", formalParameters = { "Declaration" })
-	public static int usesGenericsWildcardExtends(final Declaration d) {
-		int count = 0;
+	public static long usesGenericsWildcardExtends(final Declaration d) {
+		long count = 0;
 
 		for (int i = 0; i < d.getGenericParametersCount(); i++)
 			count += usesGenericsWildcardSuper(d.getGenericParameters(i));
@@ -1114,8 +1114,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_generics_wildcard_extends", returnType = "int", formalParameters = { "Method" })
-	public static int usesGenericsWildcardExtends(final Method m) {
-		int count = 0;
+	public static long usesGenericsWildcardExtends(final Method m) {
+		long count = 0;
 
 		for (int i = 0; i < m.getGenericParametersCount(); i++)
 			count += usesGenericsWildcardSuper(m.getGenericParameters(i));
@@ -1135,8 +1135,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_generics_wildcard_extends", returnType = "int", formalParameters = { "Variable" })
-	public static int usesGenericsWildcardExtends(final Variable v) {
-		int count = 0;
+	public static long usesGenericsWildcardExtends(final Variable v) {
+		long count = 0;
 
 		count += usesGenericsWildcardExtends(v.getVariableType());
 
@@ -1147,8 +1147,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_generics_wildcard_extends", returnType = "int", formalParameters = { "Statement" })
-	public static int usesGenericsWildcardExtends(final Statement s) {
-		int count = 0;
+	public static long usesGenericsWildcardExtends(final Statement s) {
+		long count = 0;
 
 		if (s.hasCondition())
 			count += usesGenericsWildcardExtends(s.getCondition());
@@ -1175,8 +1175,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_generics_wildcard_extends", returnType = "int", formalParameters = { "Expression" })
-	public static int usesGenericsWildcardExtends(final Expression e) {
-		int count = 0;
+	public static long usesGenericsWildcardExtends(final Expression e) {
+		long count = 0;
 
 		for (int i = 0; i < e.getGenericParametersCount(); i++)
 			count += usesGenericsWildcardSuper(e.getGenericParameters(i));
@@ -1199,8 +1199,8 @@ public class BoaJavaFeaturesIntrinsics {
 	private static Matcher wildcardExtendsMatcher = Pattern.compile("<\\s*\\?\\s+extends\\s+[^>]+>").matcher("");
 
 	@FunctionSpec(name = "uses_generics_wildcard_extends", returnType = "int", formalParameters = { "Type" })
-	public static int usesGenericsWildcardExtends(final Type t) {
-		int count = 0;
+	public static long usesGenericsWildcardExtends(final Type t) {
+		long count = 0;
 
 		if (wildcardExtendsMatcher.reset(t.getName()).matches())
 			count++;
@@ -1209,8 +1209,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_generics_wildcard", returnType = "int", formalParameters = { "CodeRepository" })
-	public static int usesGenericsWildcard(final CodeRepository r) {
-		int count = 0;
+	public static long usesGenericsWildcard(final CodeRepository r) {
+		long count = 0;
 
 		for (int i = 0; i < r.getRevisionsCount(); i++)
 			count += usesGenericsWildcard(r.getRevisions(i));
@@ -1219,8 +1219,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_generics_wildcard", returnType = "int", formalParameters = { "Revision" })
-	public static int usesGenericsWildcard(final Revision r) {
-		int count = 0;
+	public static long usesGenericsWildcard(final Revision r) {
+		long count = 0;
 
 		for (int i = 0; i < r.getFilesCount(); i++)
 			count += usesGenericsWildcard(BoaAstIntrinsics.getast(r, r.getFiles(i)));
@@ -1229,8 +1229,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_generics_wildcard", returnType = "int", formalParameters = { "ASTRoot" })
-	public static int usesGenericsWildcard(final ASTRoot f) {
-		int count = 0;
+	public static long usesGenericsWildcard(final ASTRoot f) {
+		long count = 0;
 
 		for (int i = 0; i < f.getNamespacesCount(); i++)
 			for (int j = 0; j < f.getNamespaces(i).getDeclarationsCount(); j++)
@@ -1240,8 +1240,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_generics_wildcard", returnType = "int", formalParameters = { "Declaration" })
-	public static int usesGenericsWildcard(final Declaration d) {
-		int count = 0;
+	public static long usesGenericsWildcard(final Declaration d) {
+		long count = 0;
 
 		for (int i = 0; i < d.getGenericParametersCount(); i++)
 			count += usesGenericsWildcardSuper(d.getGenericParameters(i));
@@ -1262,8 +1262,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_generics_wildcard", returnType = "int", formalParameters = { "Method" })
-	public static int usesGenericsWildcard(final Method m) {
-		int count = 0;
+	public static long usesGenericsWildcard(final Method m) {
+		long count = 0;
 
 		for (int i = 0; i < m.getGenericParametersCount(); i++)
 			count += usesGenericsWildcardSuper(m.getGenericParameters(i));
@@ -1283,8 +1283,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_generics_wildcard", returnType = "int", formalParameters = { "Variable" })
-	public static int usesGenericsWildcard(final Variable v) {
-		int count = 0;
+	public static long usesGenericsWildcard(final Variable v) {
+		long count = 0;
 
 		count += usesGenericsWildcard(v.getVariableType());
 
@@ -1295,8 +1295,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_generics_wildcard", returnType = "int", formalParameters = { "Statement" })
-	public static int usesGenericsWildcard(final Statement s) {
-		int count = 0;
+	public static long usesGenericsWildcard(final Statement s) {
+		long count = 0;
 
 		if (s.hasCondition())
 			count += usesGenericsWildcard(s.getCondition());
@@ -1323,8 +1323,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_generics_wildcard", returnType = "int", formalParameters = { "Expression" })
-	public static int usesGenericsWildcard(final Expression e) {
-		int count = 0;
+	public static long usesGenericsWildcard(final Expression e) {
+		long count = 0;
 
 		for (int i = 0; i < e.getGenericParametersCount(); i++)
 			count += usesGenericsWildcardSuper(e.getGenericParameters(i));
@@ -1347,8 +1347,8 @@ public class BoaJavaFeaturesIntrinsics {
 	private static Matcher wildcardMatcher = Pattern.compile("<\\s*\\?\\s*>").matcher("");
 
 	@FunctionSpec(name = "uses_generics_wildcard", returnType = "int", formalParameters = { "Type" })
-	public static int usesGenericsWildcard(final Type t) {
-		int count = 0;
+	public static long usesGenericsWildcard(final Type t) {
+		long count = 0;
 
 		if (wildcardMatcher.reset(t.getName()).matches())
 			count++;
@@ -1357,8 +1357,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_annotations_define", returnType = "int", formalParameters = { "CodeRepository" })
-	public static int usesAnnotationsDefine(final CodeRepository r) {
-		int count = 0;
+	public static long usesAnnotationsDefine(final CodeRepository r) {
+		long count = 0;
 
 		for (int i = 0; i < r.getRevisionsCount(); i++)
 			count += usesAnnotationsDefine(r.getRevisions(i));
@@ -1367,8 +1367,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_annotations_define", returnType = "int", formalParameters = { "Revision" })
-	public static int usesAnnotationsDefine(final Revision r) {
-		int count = 0;
+	public static long usesAnnotationsDefine(final Revision r) {
+		long count = 0;
 
 		for (int i = 0; i < r.getFilesCount(); i++)
 			count += usesAnnotationsDefine(BoaAstIntrinsics.getast(r, r.getFiles(i)));
@@ -1377,8 +1377,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_annotations_define", returnType = "int", formalParameters = { "ASTRoot" })
-	public static int usesAnnotationsDefine(final ASTRoot f) {
-		int count = 0;
+	public static long usesAnnotationsDefine(final ASTRoot f) {
+		long count = 0;
 
 		for (int i = 0; i < f.getNamespacesCount(); i++)
 			for (int j = 0; j < f.getNamespaces(i).getDeclarationsCount(); j++)
@@ -1388,8 +1388,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_annotations_define", returnType = "int", formalParameters = { "Declaration" })
-	public static int usesAnnotationsDefine(final Declaration d) {
-		int count = 0;
+	public static long usesAnnotationsDefine(final Declaration d) {
+		long count = 0;
 
 		if (d.getKind() == TypeKind.ANNOTATION)
 			count++;
@@ -1407,8 +1407,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_annotations_define", returnType = "int", formalParameters = { "Method" })
-	public static int usesAnnotationsDefine(final Method m) {
-		int count = 0;
+	public static long usesAnnotationsDefine(final Method m) {
+		long count = 0;
 
 		for (int i = 0; i < m.getArgumentsCount(); i++)
 			count += usesAnnotationsDefine(m.getArguments(i));
@@ -1420,8 +1420,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_annotations_define", returnType = "int", formalParameters = { "Variable" })
-	public static int usesAnnotationsDefine(final Variable v) {
-		int count = 0;
+	public static long usesAnnotationsDefine(final Variable v) {
+		long count = 0;
 
 		if (v.hasInitializer())
 			count += usesAnnotationsDefine(v.getInitializer());
@@ -1430,8 +1430,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_annotations_define", returnType = "int", formalParameters = { "Statement" })
-	public static int usesAnnotationsDefine(final Statement s) {
-		int count = 0;
+	public static long usesAnnotationsDefine(final Statement s) {
+		long count = 0;
 
 		if (s.hasCondition())
 			count += usesAnnotationsDefine(s.getCondition());
@@ -1458,8 +1458,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_annotations_define", returnType = "int", formalParameters = { "Expression" })
-	public static int usesAnnotationsDefine(final Expression e) {
-		int count = 0;
+	public static long usesAnnotationsDefine(final Expression e) {
+		long count = 0;
 
 		for (int i = 0; i < e.getVariableDeclsCount(); i++)
 			count += usesAnnotationsDefine(e.getVariableDecls(i));
@@ -1474,8 +1474,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_annotations_uses", returnType = "int", formalParameters = { "CodeRepository" })
-	public static int usesAnnotationsUses(final CodeRepository r) {
-		int count = 0;
+	public static long usesAnnotationsUses(final CodeRepository r) {
+		long count = 0;
 
 		for (int i = 0; i < r.getRevisionsCount(); i++)
 			count += usesAnnotationsUses(r.getRevisions(i));
@@ -1484,8 +1484,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_annotations_uses", returnType = "int", formalParameters = { "Revision" })
-	public static int usesAnnotationsUses(final Revision r) {
-		int count = 0;
+	public static long usesAnnotationsUses(final Revision r) {
+		long count = 0;
 
 		for (int i = 0; i < r.getFilesCount(); i++)
 			count += usesAnnotationsUses(BoaAstIntrinsics.getast(r, r.getFiles(i)));
@@ -1494,8 +1494,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_annotations_uses", returnType = "int", formalParameters = { "ASTRoot" })
-	public static int usesAnnotationsUses(final ASTRoot f) {
-		int count = 0;
+	public static long usesAnnotationsUses(final ASTRoot f) {
+		long count = 0;
 
 		for (int i = 0; i < f.getNamespacesCount(); i++)
 			for (int j = 0; j < f.getNamespaces(i).getDeclarationsCount(); j++) {
@@ -1509,8 +1509,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_annotations_uses", returnType = "int", formalParameters = { "Declaration" })
-	public static int usesAnnotationsUses(final Declaration d) {
-		int count = 0;
+	public static long usesAnnotationsUses(final Declaration d) {
+		long count = 0;
 
 		if (BoaModifierIntrinsics.hasAnnotation(d))
 			count++;
@@ -1528,8 +1528,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_annotations_uses", returnType = "int", formalParameters = { "Method" })
-	public static int usesAnnotationsUses(final Method m) {
-		int count = 0;
+	public static long usesAnnotationsUses(final Method m) {
+		long count = 0;
 
 		if (BoaModifierIntrinsics.hasAnnotation(m))
 			count++;
@@ -1544,8 +1544,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_annotations_uses", returnType = "int", formalParameters = { "Variable" })
-	public static int usesAnnotationsUses(final Variable v) {
-		int count = 0;
+	public static long usesAnnotationsUses(final Variable v) {
+		long count = 0;
 
 		if (BoaModifierIntrinsics.hasAnnotation(v))
 			count++;
@@ -1557,8 +1557,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_annotations_uses", returnType = "int", formalParameters = { "Statement" })
-	public static int usesAnnotationsUses(final Statement s) {
-		int count = 0;
+	public static long usesAnnotationsUses(final Statement s) {
+		long count = 0;
 
 		if (s.hasCondition())
 			count += usesAnnotationsUses(s.getCondition());
@@ -1585,8 +1585,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_annotations_uses", returnType = "int", formalParameters = { "Expression" })
-	public static int usesAnnotationsUses(final Expression e) {
-		int count = 0;
+	public static long usesAnnotationsUses(final Expression e) {
+		long count = 0;
 
 		for (int i = 0; i < e.getVariableDeclsCount(); i++)
 			count += usesAnnotationsUses(e.getVariableDecls(i));
@@ -1601,8 +1601,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_multi_catch", returnType = "int", formalParameters = { "CodeRepository" })
-	public static int usesMultiCatch(final CodeRepository r) {
-		int count = 0;
+	public static long usesMultiCatch(final CodeRepository r) {
+		long count = 0;
 
 		for (int i = 0; i < r.getRevisionsCount(); i++)
 			count += usesMultiCatch(r.getRevisions(i));
@@ -1611,8 +1611,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_multi_catch", returnType = "int", formalParameters = { "Revision" })
-	public static int usesMultiCatch(final Revision r) {
-		int count = 0;
+	public static long usesMultiCatch(final Revision r) {
+		long count = 0;
 
 		for (int i = 0; i < r.getFilesCount(); i++)
 			count += usesMultiCatch(BoaAstIntrinsics.getast(r, r.getFiles(i)));
@@ -1621,8 +1621,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_multi_catch", returnType = "int", formalParameters = { "ASTRoot" })
-	public static int usesMultiCatch(final ASTRoot f) {
-		int count = 0;
+	public static long usesMultiCatch(final ASTRoot f) {
+		long count = 0;
 
 		for (int i = 0; i < f.getNamespacesCount(); i++)
 			for (int j = 0; j < f.getNamespaces(i).getDeclarationsCount(); j++)
@@ -1632,8 +1632,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_multi_catch", returnType = "int", formalParameters = { "Declaration" })
-	public static int usesMultiCatch(final Declaration d) {
-		int count = 0;
+	public static long usesMultiCatch(final Declaration d) {
+		long count = 0;
 
 		for (int i = 0; i < d.getMethodsCount(); i++)
 			count += usesMultiCatch(d.getMethods(i));
@@ -1648,8 +1648,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_multi_catch", returnType = "int", formalParameters = { "Method" })
-	public static int usesMultiCatch(final Method m) {
-		int count = 0;
+	public static long usesMultiCatch(final Method m) {
+		long count = 0;
 
 		for (int i = 0; i < m.getArgumentsCount(); i++)
 			count += usesMultiCatch(m.getArguments(i));
@@ -1661,8 +1661,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_multi_catch", returnType = "int", formalParameters = { "Variable" })
-	public static int usesMultiCatch(final Variable v) {
-		int count = 0;
+	public static long usesMultiCatch(final Variable v) {
+		long count = 0;
 
 		if (v.hasInitializer())
 			count += usesMultiCatch(v.getInitializer());
@@ -1671,8 +1671,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_multi_catch", returnType = "int", formalParameters = { "Statement" })
-	public static int usesMultiCatch(final Statement s) {
-		int count = 0;
+	public static long usesMultiCatch(final Statement s) {
+		long count = 0;
 
 		if (s.getKind() == Statement.StatementKind.CATCH && s.getVariableDeclaration().getName().contains("|"))
 			count++;
@@ -1702,8 +1702,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_multi_catch", returnType = "int", formalParameters = { "Expression" })
-	public static int usesMultiCatch(final Expression e) {
-		int count = 0;
+	public static long usesMultiCatch(final Expression e) {
+		long count = 0;
 
 		for (int i = 0; i < e.getVariableDeclsCount(); i++)
 			count += usesMultiCatch(e.getVariableDecls(i));
@@ -1718,8 +1718,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_binary_lit", returnType = "int", formalParameters = { "CodeRepository" })
-	public static int usesBinaryLit(final CodeRepository r) {
-		int count = 0;
+	public static long usesBinaryLit(final CodeRepository r) {
+		long count = 0;
 
 		for (int i = 0; i < r.getRevisionsCount(); i++)
 			count += usesBinaryLit(r.getRevisions(i));
@@ -1728,8 +1728,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_binary_lit", returnType = "int", formalParameters = { "Revision" })
-	public static int usesBinaryLit(final Revision r) {
-		int count = 0;
+	public static long usesBinaryLit(final Revision r) {
+		long count = 0;
 
 		for (int i = 0; i < r.getFilesCount(); i++)
 			count += usesBinaryLit(BoaAstIntrinsics.getast(r, r.getFiles(i)));
@@ -1738,8 +1738,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_binary_lit", returnType = "int", formalParameters = { "ASTRoot" })
-	public static int usesBinaryLit(final ASTRoot f) {
-		int count = 0;
+	public static long usesBinaryLit(final ASTRoot f) {
+		long count = 0;
 
 		for (int i = 0; i < f.getNamespacesCount(); i++)
 			for (int j = 0; j < f.getNamespaces(i).getDeclarationsCount(); j++)
@@ -1749,8 +1749,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_binary_lit", returnType = "int", formalParameters = { "Declaration" })
-	public static int usesBinaryLit(final Declaration d) {
-		int count = 0;
+	public static long usesBinaryLit(final Declaration d) {
+		long count = 0;
 
 		for (int i = 0; i < d.getMethodsCount(); i++)
 			count += usesBinaryLit(d.getMethods(i));
@@ -1765,8 +1765,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_binary_lit", returnType = "int", formalParameters = { "Method" })
-	public static int usesBinaryLit(final Method m) {
-		int count = 0;
+	public static long usesBinaryLit(final Method m) {
+		long count = 0;
 
 		for (int i = 0; i < m.getArgumentsCount(); i++)
 			count += usesBinaryLit(m.getArguments(i));
@@ -1778,8 +1778,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_binary_lit", returnType = "int", formalParameters = { "Variable" })
-	public static int usesBinaryLit(final Variable v) {
-		int count = 0;
+	public static long usesBinaryLit(final Variable v) {
+		long count = 0;
 
 		if (v.hasInitializer())
 			count += usesBinaryLit(v.getInitializer());
@@ -1788,8 +1788,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_binary_lit", returnType = "int", formalParameters = { "Statement" })
-	public static int usesBinaryLit(final Statement s) {
-		int count = 0;
+	public static long usesBinaryLit(final Statement s) {
+		long count = 0;
 
 		if (s.hasCondition())
 			count += usesBinaryLit(s.getCondition());
@@ -1821,8 +1821,8 @@ public class BoaJavaFeaturesIntrinsics {
 	private static Matcher binaryMatcher = Pattern.compile("0[bB][01][01_]*[01][L]?").matcher("");
 
 	@FunctionSpec(name = "uses_binary_lit", returnType = "int", formalParameters = { "Expression" })
-	public static int usesBinaryLit(final Expression e) {
-		int count = 0;
+	public static long usesBinaryLit(final Expression e) {
+		long count = 0;
 
 		if (e.getKind() == Expression.ExpressionKind.LITERAL && e.hasLiteral() && binaryMatcher.reset(e.getLiteral()).matches())
 			count++;
@@ -1840,8 +1840,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_underscore_lit", returnType = "int", formalParameters = { "CodeRepository" })
-	public static int usesUnderscoreLit(final CodeRepository r) {
-		int count = 0;
+	public static long usesUnderscoreLit(final CodeRepository r) {
+		long count = 0;
 
 		for (int i = 0; i < r.getRevisionsCount(); i++)
 			count += usesUnderscoreLit(r.getRevisions(i));
@@ -1850,8 +1850,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_underscore_lit", returnType = "int", formalParameters = { "Revision" })
-	public static int usesUnderscoreLit(final Revision r) {
-		int count = 0;
+	public static long usesUnderscoreLit(final Revision r) {
+		long count = 0;
 
 		for (int i = 0; i < r.getFilesCount(); i++)
 			count += usesUnderscoreLit(BoaAstIntrinsics.getast(r, r.getFiles(i)));
@@ -1860,8 +1860,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_underscore_lit", returnType = "int", formalParameters = { "ASTRoot" })
-	public static int usesUnderscoreLit(final ASTRoot f) {
-		int count = 0;
+	public static long usesUnderscoreLit(final ASTRoot f) {
+		long count = 0;
 
 		for (int i = 0; i < f.getNamespacesCount(); i++)
 			for (int j = 0; j < f.getNamespaces(i).getDeclarationsCount(); j++)
@@ -1871,8 +1871,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_underscore_lit", returnType = "int", formalParameters = { "Declaration" })
-	public static int usesUnderscoreLit(final Declaration d) {
-		int count = 0;
+	public static long usesUnderscoreLit(final Declaration d) {
+		long count = 0;
 
 		for (int i = 0; i < d.getMethodsCount(); i++)
 			count += usesUnderscoreLit(d.getMethods(i));
@@ -1887,8 +1887,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_underscore_lit", returnType = "int", formalParameters = { "Method" })
-	public static int usesUnderscoreLit(final Method m) {
-		int count = 0;
+	public static long usesUnderscoreLit(final Method m) {
+		long count = 0;
 
 		for (int i = 0; i < m.getArgumentsCount(); i++)
 			count += usesUnderscoreLit(m.getArguments(i));
@@ -1900,8 +1900,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_underscore_lit", returnType = "int", formalParameters = { "Variable" })
-	public static int usesUnderscoreLit(final Variable v) {
-		int count = 0;
+	public static long usesUnderscoreLit(final Variable v) {
+		long count = 0;
 
 		if (v.hasInitializer())
 			count += usesUnderscoreLit(v.getInitializer());
@@ -1910,8 +1910,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_underscore_lit", returnType = "int", formalParameters = { "Statement" })
-	public static int usesUnderscoreLit(final Statement s) {
-		int count = 0;
+	public static long usesUnderscoreLit(final Statement s) {
+		long count = 0;
 
 		if (s.hasCondition())
 			count += usesUnderscoreLit(s.getCondition());
@@ -1943,8 +1943,8 @@ public class BoaJavaFeaturesIntrinsics {
 	private static Matcher underscoreMatcher = Pattern.compile("(0[bBx])?([0-9]+.[0-9]+)?[0-9A-Fa-f]([0-9A-Fa-f_])*[0-9A-Fa-f][FL]?").matcher("");
 
 	@FunctionSpec(name = "uses_underscore_lit", returnType = "int", formalParameters = { "Expression" })
-	public static int usesUnderscoreLit(final Expression e) {
-		int count = 0;
+	public static long usesUnderscoreLit(final Expression e) {
+		long count = 0;
 
 		if (e.getKind() == Expression.ExpressionKind.LITERAL && e.hasLiteral()
 				&& e.getLiteral().contains("_") && underscoreMatcher.reset(e.getLiteral()).matches())
@@ -1963,8 +1963,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_diamond", returnType = "int", formalParameters = { "CodeRepository" })
-	public static int usesDiamond(final CodeRepository r) {
-		int count = 0;
+	public static long usesDiamond(final CodeRepository r) {
+		long count = 0;
 
 		for (int i = 0; i < r.getRevisionsCount(); i++)
 			count += usesDiamond(r.getRevisions(i));
@@ -1973,8 +1973,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_diamond", returnType = "int", formalParameters = { "Revision" })
-	public static int usesDiamond(final Revision r) {
-		int count = 0;
+	public static long usesDiamond(final Revision r) {
+		long count = 0;
 
 		for (int i = 0; i < r.getFilesCount(); i++)
 			count += usesDiamond(BoaAstIntrinsics.getast(r, r.getFiles(i)));
@@ -1983,8 +1983,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_diamond", returnType = "int", formalParameters = { "ASTRoot" })
-	public static int usesDiamond(final ASTRoot f) {
-		int count = 0;
+	public static long usesDiamond(final ASTRoot f) {
+		long count = 0;
 
 		for (int i = 0; i < f.getNamespacesCount(); i++)
 			for (int j = 0; j < f.getNamespaces(i).getDeclarationsCount(); j++)
@@ -1994,8 +1994,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_diamond", returnType = "int", formalParameters = { "Declaration" })
-	public static int usesDiamond(final Declaration d) {
-		int count = 0;
+	public static long usesDiamond(final Declaration d) {
+		long count = 0;
 
 		for (int i = 0; i < d.getMethodsCount(); i++)
 			count += usesDiamond(d.getMethods(i));
@@ -2010,8 +2010,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_diamond", returnType = "int", formalParameters = { "Method" })
-	public static int usesDiamond(final Method m) {
-		int count = 0;
+	public static long usesDiamond(final Method m) {
+		long count = 0;
 
 		for (int i = 0; i < m.getStatementsCount(); i++)
 			count += usesDiamond(m.getStatements(i));
@@ -2020,8 +2020,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_diamond", returnType = "int", formalParameters = { "Variable" })
-	public static int usesDiamond(final Variable v) {
-		int count = 0;
+	public static long usesDiamond(final Variable v) {
+		long count = 0;
 
 		if (v.hasInitializer())
 			count += usesDiamond(v.getInitializer());
@@ -2030,8 +2030,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_diamond", returnType = "int", formalParameters = { "Statement" })
-	public static int usesDiamond(final Statement s) {
-		int count = 0;
+	public static long usesDiamond(final Statement s) {
+		long count = 0;
 
 		if (s.hasCondition())
 			count += usesDiamond(s.getCondition());
@@ -2058,8 +2058,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_diamond", returnType = "int", formalParameters = { "Expression" })
-	public static int usesDiamond(final Expression e) {
-		int count = 0;
+	public static long usesDiamond(final Expression e) {
+		long count = 0;
 
 		if (e.hasNewType())
 			count += usesDiamond(e.getNewType());
@@ -2077,8 +2077,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_diamond", returnType = "int", formalParameters = { "Type" })
-	public static int usesDiamond(final Type t) {
-		int count = 0;
+	public static long usesDiamond(final Type t) {
+		long count = 0;
 
 		if (t.getName().contains("<>"))
 			count++;
@@ -2087,8 +2087,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_safe_varargs", returnType = "int", formalParameters = { "CodeRepository" })
-	public static int usesSafeVarargs(final CodeRepository r) {
-		int count = 0;
+	public static long usesSafeVarargs(final CodeRepository r) {
+		long count = 0;
 
 		for (int i = 0; i < r.getRevisionsCount(); i++)
 			count += usesSafeVarargs(r.getRevisions(i));
@@ -2097,8 +2097,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_safe_varargs", returnType = "int", formalParameters = { "Revision" })
-	public static int usesSafeVarargs(final Revision r) {
-		int count = 0;
+	public static long usesSafeVarargs(final Revision r) {
+		long count = 0;
 
 		for (int i = 0; i < r.getFilesCount(); i++)
 			count += usesSafeVarargs(BoaAstIntrinsics.getast(r, r.getFiles(i)));
@@ -2107,8 +2107,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_safe_varargs", returnType = "int", formalParameters = { "ASTRoot" })
-	public static int usesSafeVarargs(final ASTRoot f) {
-		int count = 0;
+	public static long usesSafeVarargs(final ASTRoot f) {
+		long count = 0;
 
 		for (int i = 0; i < f.getNamespacesCount(); i++)
 			for (int j = 0; j < f.getNamespaces(i).getDeclarationsCount(); j++)
@@ -2118,8 +2118,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_safe_varargs", returnType = "int", formalParameters = { "Declaration" })
-	public static int usesSafeVarargs(final Declaration d) {
-		int count = 0;
+	public static long usesSafeVarargs(final Declaration d) {
+		long count = 0;
 
 		for (int i = 0; i < d.getMethodsCount(); i++)
 			count += usesSafeVarargs(d.getMethods(i));
@@ -2134,8 +2134,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_safe_varargs", returnType = "int", formalParameters = { "Method" })
-	public static int usesSafeVarargs(final Method m) {
-		int count = 0;
+	public static long usesSafeVarargs(final Method m) {
+		long count = 0;
 
 		// @SafeVarargs
 		if (BoaModifierIntrinsics.hasAnnotation(m, "SafeVarargs"))
@@ -2173,8 +2173,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_safe_varargs", returnType = "int", formalParameters = { "Variable" })
-	public static int usesSafeVarargs(final Variable v) {
-		int count = 0;
+	public static long usesSafeVarargs(final Variable v) {
+		long count = 0;
 
 		if (v.hasInitializer())
 			count += usesSafeVarargs(v.getInitializer());
@@ -2183,8 +2183,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_safe_varargs", returnType = "int", formalParameters = { "Statement" })
-	public static int usesSafeVarargs(final Statement s) {
-		int count = 0;
+	public static long usesSafeVarargs(final Statement s) {
+		long count = 0;
 
 		if (s.hasCondition())
 			count += usesSafeVarargs(s.getCondition());
@@ -2211,8 +2211,8 @@ public class BoaJavaFeaturesIntrinsics {
 	}
 
 	@FunctionSpec(name = "uses_safe_varargs", returnType = "int", formalParameters = { "Expression" })
-	public static int usesSafeVarargs(final Expression e) {
-		int count = 0;
+	public static long usesSafeVarargs(final Expression e) {
+		long count = 0;
 
 		for (int i = 0; i < e.getVariableDeclsCount(); i++)
 			count += usesSafeVarargs(e.getVariableDecls(i));
