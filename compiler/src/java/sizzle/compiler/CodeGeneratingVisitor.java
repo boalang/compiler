@@ -255,6 +255,15 @@ public class CodeGeneratingVisitor extends GJDepthFirst<String, SymbolTable> {
 	public String visit(final VarDecl n, final SymbolTable argu) {
 		final SizzleType type = argu.get(n.f0.f0.tokenImage);
 
+		final String lhsType;
+		if (n.f2.present()) {
+			argu.setId(n.f0.f0.tokenImage);
+			lhsType = n.f2.node.accept(this, argu);
+			argu.setId(null);
+		} else {
+			lhsType = null;
+		}
+
 		if (type instanceof SizzleTable)
 			return null;
 
@@ -298,10 +307,8 @@ public class CodeGeneratingVisitor extends GJDepthFirst<String, SymbolTable> {
 			default:
 				throw new RuntimeException("unexpected choice " + nodeChoice.which + " is a " + nodeChoice.choice.getClass().getSimpleName().toString());
 			}
-		} else if (n.f2.present()) {
-			argu.setId(n.f0.f0.tokenImage);
-			st.setAttribute("initializer", n.f2.node.accept(this, argu));
-			argu.setId(null);
+		} else if (lhsType != null) {
+			st.setAttribute("initializer", lhsType);
 		}
 
 		return st.toString();
