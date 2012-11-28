@@ -728,22 +728,13 @@ public class CodeGeneratingVisitor extends GJDepthFirst<String, SymbolTable> {
 					operands.add("");
 					break;
 				}
-				operators.add(" == ");
-				break;
+				// fall through
 			case 1:
-				operators.add(" != ");
-				break;
 			case 2:
-				operators.add(" < ");
-				break;
 			case 3:
-				operators.add(" <= ");
-				break;
 			case 4:
-				operators.add(" > ");
-				break;
 			case 5:
-				operators.add(" >= ");
+				operators.add(" " + ((NodeToken)nodeChoice.choice).tokenImage + " ");
 				break;
 			default:
 				throw new RuntimeException("unexpected choice " + nodeChoice.which + " is " + nodeChoice.choice.getClass());
