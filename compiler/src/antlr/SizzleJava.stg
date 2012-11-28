@@ -17,13 +17,20 @@ identifierMap ::= [
 		"input" : "_inputStream"
 ]
 		
-VarDecl(type, id, initializer) ::= "<type> ___<id><if(initializer)> = <initializer><endif>;"
+VarDecl(type, id, initializer) ::= "<type> ___<id><if(initializer)> = <initializer><endif>;<\n>"
 ArrayType(type) ::= "new <type>[]"
 MapType(key, value) ::= "new java.util.HashMap\<<key>, <value>\>()"
 ExprList(expressions) ::= "<first(expressions)><rest(expressions):{, <it>}>"
-Block(statements) ::= "{<\n><statements:{<it>}><\n>}"
-ExprStatement(expression, operator) ::= "<expression><operator>"
-ForStatement(declaration, expression, exprstmt, statement) ::= "for (<declaration> <expression>; <exprstmt>)<\n><statement>"
+Block(statements) ::= <<
+{
+	<statements:{<it>}>
+}
+>>
+ExprStatement(expression, operator) ::= "<expression><operator>;<\n>"
+ForStatement(declaration, expression, exprstmt, statement) ::= <<
+for (<declaration> <expression>; <exprstmt>)
+	<statement>
+>>
 IfStatement(expression, statement, elseStatement) ::= <<
 if (<expression>)
 	<statement>
@@ -69,7 +76,7 @@ Composite(type, pairlist, exprlist) ::= "<if(exprlist)>new <type> { <exprlist> }
 PairList(pairs) ::= "<pairs:{<it>;<\n>}>"
 Pair(map, key, value) ::= "<map>.put(<key>, <value>)"
 Identifier(id) ::= "<if(identifierMap.(id))><identifierMap.(id)><else>___<id><endif>"
-Assignment(lhs, rhs) ::= "<lhs> = <rhs>;"
+Assignment(lhs, rhs) ::= "<lhs> = <rhs>;<\n>"
 Function(ret, parameters, body) ::= <<
 new sizzle.runtime.SizzleFunc\<<ret>\>() {
 	public <ret> invoke(Object[] args) {

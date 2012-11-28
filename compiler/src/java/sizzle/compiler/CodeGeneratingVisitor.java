@@ -421,7 +421,7 @@ public class CodeGeneratingVisitor extends GJDepthFirst<String, SymbolTable> {
 
 	@Override
 	public String visit(final Statement n, final SymbolTable argu) {
-		return n.f0.choice.accept(this, argu) + "\n";
+		return n.f0.choice.accept(this, argu);
 	}
 
 	@Override

@@ -161,4 +161,4 @@ public class <name> extends sizzle.runtime.SizzleRunner {
 }
 >>
 
-EmitStatement(indices, id, expression, weight) ::= "context.write(new sizzle.io.EmitKey(<if(indices)><indices:{\"[\" + <it> + \"]\"}; separator=\" + \">, <endif><id>), new sizzle.io.EmitValue(<expression><if(weight)>, <weight><endif>));"
+EmitStatement(indices, id, expression, weight) ::= "context.write(new sizzle.io.EmitKey(<if(indices)><indices:{\"[\" + <it> + \"]\"}; separator=\" + \">, <endif><id>), new sizzle.io.EmitValue(<expression><if(weight)>, <weight><endif>));<\n>"
