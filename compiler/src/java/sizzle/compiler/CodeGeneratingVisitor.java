@@ -565,9 +565,9 @@ public class CodeGeneratingVisitor extends GJDepthFirst<String, SymbolTable> {
 
 	@Override
 	public String visit(final ForExprStatement n, final SymbolTable argu) {
-		final ExprStatement exprStatement = new ExprStatement(n.f0, n.f1, new NodeToken(";"));
-
-		return exprStatement.accept(this, argu);
+		if (n.f1.present())
+			return n.f0.accept(this, argu) + ((NodeToken)((NodeChoice)n.f1.node).choice).tokenImage;
+		return n.f0.accept(this, argu);
 	}
 
 	@Override
