@@ -961,7 +961,7 @@ public class CodeGeneratingVisitor extends GJDepthFirst<String, SymbolTable> {
 			case 1:
 			case 2:
 			case 3:
-				return c.choice.accept(this, argu) + ((NodeSequence) n.f0.choice).nodes.elementAt(1).accept(this, argu);
+				return ((NodeToken)c.choice).tokenImage + ((NodeSequence) n.f0.choice).nodes.elementAt(1).accept(this, argu);
 			case 4:
 				return "!" + ((NodeSequence) n.f0.choice).nodes.elementAt(1).accept(this, argu);
 			default:
