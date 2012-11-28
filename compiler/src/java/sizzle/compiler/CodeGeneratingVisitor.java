@@ -1096,7 +1096,7 @@ public class CodeGeneratingVisitor extends GJDepthFirst<String, SymbolTable> {
 
 	@Override
 	public String visit(final CharLiteral n, final SymbolTable argu) {
-		throw new RuntimeException("unimplemented");
+		return n.f0.tokenImage;
 	}
 
 	@Override
