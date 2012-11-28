@@ -86,6 +86,7 @@ import sizzle.types.SizzleFunction;
 import sizzle.types.SizzleInt;
 import sizzle.types.SizzleMap;
 import sizzle.types.SizzleName;
+import sizzle.types.SizzleProtoList;
 import sizzle.types.SizzleProtoMap;
 import sizzle.types.SizzleProtoTuple;
 import sizzle.types.SizzleScalar;
@@ -731,6 +732,11 @@ public class TypeCheckingVisitor extends GJDepthFirst<SizzleType, SymbolTable> {
 							throw new TypeException(n, "invalid operand type " + index + " for indexing into array");
 
 						type = ((SizzleArray) type).getType();
+					} else if (type instanceof SizzleProtoList) {
+						if (!(index instanceof SizzleInt))
+							throw new TypeException(n, "invalid operand type " + index + " for indexing into array");
+
+						type = ((SizzleProtoList) type).getType();
 					} else if (type instanceof SizzleMap) {
 						if (!((SizzleMap) type).getIndexType().assigns(index))
 							throw new TypeException(n, "invalid operand type " + index + " for indexing into " + type);

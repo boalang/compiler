@@ -841,16 +841,9 @@ public class CodeGeneratingVisitor extends GJDepthFirst<String, SymbolTable> {
 
 			// operand is a proto tuple
 			if (opType instanceof SizzleProtoTuple) {
-				final SizzleProtoTuple tuple;
-				if (opType instanceof SizzleProtoTuple)
-					tuple = (SizzleProtoTuple) opType;
-				else if (argu.getOperandType() instanceof SizzleProtoList)
-					tuple = (SizzleProtoTuple) ((SizzleProtoList) opType).getType();
-				else
-					throw new RuntimeException("unimplemented");
-	
-				argu.setOperandType(tuple.getMember(member));
-				if (tuple.getMember(member) instanceof SizzleArray)
+				final SizzleType memberType = ((SizzleProtoTuple) opType).getMember(member);
+				argu.setOperandType(memberType);
+				if (memberType instanceof SizzleProtoList)
 					return ".get" + camelCase(n.f1.f0.tokenImage) + "List()";
 				return ".get" + camelCase(n.f1.f0.tokenImage) + "()";
 			}
@@ -879,7 +872,7 @@ public class CodeGeneratingVisitor extends GJDepthFirst<String, SymbolTable> {
 			argu.setOperandType(((SizzleMap) t).getType());
 			st.setAttribute("map", true);
 		} else if (t instanceof SizzleProtoList) {
-			argu.setOperandType(((SizzleArray) t).getType());
+			argu.setOperandType(((SizzleProtoList) t).getType());
 			st.setAttribute("map", true);
 		} else if (t instanceof SizzleArray) {
 			argu.setOperandType(((SizzleArray) t).getType());

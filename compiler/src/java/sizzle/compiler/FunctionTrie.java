@@ -19,7 +19,7 @@ public class FunctionTrie {
 	private SizzleFunction getFunction(final Object[] ids) {
 		if (this.trie.containsKey(ids[0])) {
 			if (ids[0].equals(""))
-				return (SizzleFunction) this.trie.get("");
+				return getFunction();
 			else
 				return ((FunctionTrie) this.trie.get(ids[0])).getFunction(Arrays.copyOfRange(ids, 1, ids.length));
 		} else {
