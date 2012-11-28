@@ -79,7 +79,7 @@ Identifier(id) ::= "<if(identifierMap.(id))><identifierMap.(id)><else>___<id><en
 Assignment(lhs, rhs) ::= "<lhs> = <rhs>;<\n>"
 Function(ret, parameters, body) ::= <<
 new sizzle.runtime.SizzleFunc\<<ret>\>() {
-	public <ret> invoke(Object[] args) {
+	public <ret> invoke(Object[] args) throws Exception {
 		<parameters>
 		<body>
 	}
