@@ -17,9 +17,9 @@ identifierMap ::= [
 		"input" : "_inputStream"
 ]
 		
-VarDecl(type, id, initializer) ::= "<type> ___<id><if(initializer)> = <initializer><endif>;<\n>"
-ArrayType(type) ::= "new <type>[];"
-MapType(key, value) ::= "new java.util.HashMap\<<key>, <value>\>();"
+VarDecl(type, id, initializer) ::= "<type> ___<id><if(initializer)> = <initializer><endif>;"
+ArrayType(type) ::= "new <type>[]"
+MapType(key, value) ::= "new java.util.HashMap\<<key>, <value>\>()"
 ExprList(expressions) ::= "<first(expressions)><rest(expressions):{, <it>}>"
 Block(statements) ::= "{<\n><statements:{<it>}><\n>}"
 ExprStatement(expression, operator) ::= "<expression><operator>"
