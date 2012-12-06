@@ -43,6 +43,7 @@ public abstract class SizzleRunner {
 
 		// map output compression
 		configuration.setBoolean("mapred.compress.map.output", true);
+		configuration.set("mapred.map.output.compression.type", "BLOCK");
 		configuration.setClass("mapred.map.output.compression.codec", GzipCodec.class, CompressionCodec.class);
 
 		final Job job = new Job(configuration);
