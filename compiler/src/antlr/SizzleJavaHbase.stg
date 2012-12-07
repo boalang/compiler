@@ -45,7 +45,7 @@ public class <name> extends sizzle.runtime.SizzleRunner {
 		jb.getConfiguration().set("boa.hbase.table", args[0]);
 
 		final org.apache.hadoop.hbase.client.Scan scan = new org.apache.hadoop.hbase.client.Scan();
-		scan.setCaching(500);
+		scan.setCaching(10);
 		scan.setCacheBlocks(false);
 		scan.setFilter(new org.apache.hadoop.hbase.filter.RowFilter(org.apache.hadoop.hbase.filter.CompareFilter.CompareOp.NOT_EQUAL, new org.apache.hadoop.hbase.filter.SubstringComparator("!!")));
 		scan.addColumn(org.apache.hadoop.hbase.util.Bytes.toBytes("metadata"), org.apache.hadoop.hbase.util.Bytes.toBytes("proto"));
