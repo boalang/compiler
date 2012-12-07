@@ -70,7 +70,7 @@ public class BoaAstIntrinsics {
 		for (int i = 0; i < 10; i++)
 			try {
 				if (table == null)
-					table = new HTable(HBaseConfiguration.create(), context.getConfiguration().get("boa.hbase.table"));
+					table = new HTable(HBaseConfiguration.create(), "boa_input");
 
 				final Result res = table.get(get);
 				if (!res.containsColumn(family, colName) || res.isEmpty())
