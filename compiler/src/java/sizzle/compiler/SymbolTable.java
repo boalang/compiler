@@ -86,6 +86,7 @@ public class SymbolTable {
 	static {
 		// this maps the Java types in protocol buffers into Sizzle types
 		protomap = new HashMap<Class<?>, SizzleType>();
+
 		protomap.put(int.class, new SizzleInt());
 		protomap.put(long.class, new SizzleInt());
 		protomap.put(float.class, new SizzleFloat());
@@ -96,6 +97,7 @@ public class SymbolTable {
 
 		// variables with a global scope
 		globals = new HashMap<String, SizzleType>();
+
 		globals.put("input", new SizzleBytes());
 		globals.put("true", new SizzleBool());
 		globals.put("false", new SizzleBool());
@@ -114,8 +116,8 @@ public class SymbolTable {
 		this.loader = Thread.currentThread().getContextClassLoader();
 
 		// this maps scalar Sizzle scalar types names to their classes
-		// TODO: do this via reflection
 		this.idmap = new HashMap<String, SizzleType>();
+
 		this.idmap.put("any", new SizzleAny());
 		this.idmap.put("none", null);
 		this.idmap.put("bool", new SizzleBool());
@@ -154,14 +156,6 @@ public class SymbolTable {
 		this.idmap.put("Variable", new VariableProtoTuple());
 		this.idmap.put("Visibility", new VisibilityProtoMap());
 
-		// does the same for arrays
-		// for (final String key : new HashSet<String>(this.idmap.keySet())) {
-		// final SizzleType value = this.idmap.get(key);
-		// if (value instanceof SizzleScalar)
-		// this.idmap.put("array of " + key, new SizzleArray((SizzleScalar)
-		// value));
-		// }
-
 		// variables with a local scope
 		this.locals = new HashMap<String, SizzleType>();
 		this.aggregators = new HashMap<String, Class<?>>();
@@ -174,8 +168,7 @@ public class SymbolTable {
 		this.setFunction("def", new SizzleFunction(new SizzleBool(), new SizzleType[] { new SizzleAny() }, "${0} != null"));
 		this.setFunction("len", new SizzleFunction(new SizzleInt(), new SizzleType[] { new SizzleProtoList(new SizzleScalar()) }, "${0}.size()"));
 		this.setFunction("len", new SizzleFunction(new SizzleInt(), new SizzleType[] { new SizzleArray(new SizzleScalar()) }, "${0}.length"));
-		this.setFunction("len", new SizzleFunction(new SizzleInt(), new SizzleType[] { new SizzleMap(new SizzleScalar(), new SizzleScalar()) },
-				"${0}.keySet().size()"));
+		this.setFunction("len", new SizzleFunction(new SizzleInt(), new SizzleType[] { new SizzleMap(new SizzleScalar(), new SizzleScalar()) }, "${0}.keySet().size()"));
 		this.setFunction("len", new SizzleFunction(new SizzleInt(), new SizzleType[] { new SizzleString() }, "${0}.length()"));
 		this.setFunction("len", new SizzleFunction(new SizzleInt(), new SizzleType[] { new SizzleBytes() }, "${0}.length"));
 		this.setFunction("haskey", new SizzleFunction(new SizzleBool(), new SizzleType[] { new SizzleMap(new SizzleScalar(), new SizzleScalar()),
@@ -193,29 +186,11 @@ public class SymbolTable {
 		this.setFunction("fingerprintof", new SizzleFunction(new SizzleFingerprint(), new SizzleScalar[] { new SizzleInt() }));
 		this.setFunction("fingerprintof", new SizzleFunction(new SizzleFingerprint(), new SizzleScalar[] { new SizzleTime() }));
 
-		/* expose all the casting constructors to Sawzall */
-
-		this.setFunction(new ASTRootProtoTuple().toJavaType(), new SizzleFunction(new SizzleBytes(), new SizzleType[] { new SizzleBytes() }, new ASTRootProtoTuple().toJavaType() + ".parseFrom(${0})"));
-		this.setFunction(new BugProtoTuple().toJavaType(), new SizzleFunction(new SizzleBytes(), new SizzleType[] { new SizzleBytes() }, new BugProtoTuple().toJavaType() + ".parseFrom(${0})"));
-		this.setFunction(new BugRepositoryProtoTuple().toJavaType(), new SizzleFunction(new SizzleBytes(), new SizzleType[] { new SizzleBytes() }, new BugRepositoryProtoTuple().toJavaType() + ".parseFrom(${0})"));
-		this.setFunction(new CodeRepositoryProtoTuple().toJavaType(), new SizzleFunction(new SizzleBytes(), new SizzleType[] { new SizzleBytes() }, new CodeRepositoryProtoTuple().toJavaType() + ".parseFrom(${0})"));
-		this.setFunction(new CommentProtoTuple().toJavaType(), new SizzleFunction(new SizzleBytes(), new SizzleType[] { new SizzleBytes() }, new CommentProtoTuple().toJavaType() + ".parseFrom(${0})"));
-		this.setFunction(new DeclarationProtoTuple().toJavaType(), new SizzleFunction(new SizzleBytes(), new SizzleType[] { new SizzleBytes() }, new DeclarationProtoTuple().toJavaType() + ".parseFrom(${0})"));
-		this.setFunction(new ExpressionProtoTuple().toJavaType(), new SizzleFunction(new SizzleBytes(), new SizzleType[] { new SizzleBytes() }, new ExpressionProtoTuple().toJavaType() + ".parseFrom(${0})"));
-		this.setFunction(new ChangedFileProtoTuple().toJavaType(), new SizzleFunction(new SizzleBytes(), new SizzleType[] { new SizzleBytes() }, new ChangedFileProtoTuple().toJavaType() + ".parseFrom(${0})"));
-		this.setFunction(new MethodProtoTuple().toJavaType(), new SizzleFunction(new SizzleBytes(), new SizzleType[] { new SizzleBytes() }, new MethodProtoTuple().toJavaType() + ".parseFrom(${0})"));
-		this.setFunction(new ModifierProtoTuple().toJavaType(), new SizzleFunction(new SizzleBytes(), new SizzleType[] { new SizzleBytes() }, new ModifierProtoTuple().toJavaType() + ".parseFrom(${0})"));
-		this.setFunction(new NamespaceProtoTuple().toJavaType(), new SizzleFunction(new SizzleBytes(), new SizzleType[] { new SizzleBytes() }, new NamespaceProtoTuple().toJavaType() + ".parseFrom(${0})"));
-		this.setFunction(new PersonProtoTuple().toJavaType(), new SizzleFunction(new SizzleBytes(), new SizzleType[] { new SizzleBytes() }, new PersonProtoTuple().toJavaType() + ".parseFrom(${0})"));
+		// expose the casts for all possible input types
 		this.setFunction(new ProjectProtoTuple().toString(), new SizzleFunction(new ProjectProtoTuple(), new SizzleType[] { new SizzleBytes() }, new ProjectProtoTuple().toJavaType() + ".parseFrom(${0})"));
-		this.setFunction(new RevisionProtoTuple().toJavaType(), new SizzleFunction(new SizzleBytes(), new SizzleType[] { new SizzleBytes() }, new RevisionProtoTuple().toJavaType() + ".parseFrom(${0})"));
-		this.setFunction(new StatementProtoTuple().toJavaType(), new SizzleFunction(new SizzleBytes(), new SizzleType[] { new SizzleBytes() }, new StatementProtoTuple().toJavaType() + ".parseFrom(${0})"));
-		this.setFunction(new TypeProtoTuple().toJavaType(), new SizzleFunction(new SizzleBytes(), new SizzleType[] { new SizzleBytes() }, new TypeProtoTuple().toJavaType() + ".parseFrom(${0})"));
-		this.setFunction(new VariableProtoTuple().toJavaType(), new SizzleFunction(new SizzleBytes(), new SizzleType[] { new SizzleBytes() }, new VariableProtoTuple().toJavaType() + ".parseFrom(${0})"));
 
 		// string to bool
-		this.setFunction("bool",
-				new SizzleFunction("sizzle.functions.SizzleCasts.stringToBoolean", new SizzleBool(), new SizzleScalar[] { new SizzleString() }));
+		this.setFunction("bool", new SizzleFunction("sizzle.functions.SizzleCasts.stringToBoolean", new SizzleBool(), new SizzleScalar[] { new SizzleString() }));
 
 		// bool to int
 		this.setFunction("int", new SizzleFunction("sizzle.functions.SizzleCasts.booleanToLong", new SizzleInt(), new SizzleScalar[] { new SizzleBool() }));
@@ -228,11 +203,9 @@ public class SymbolTable {
 		// string to int
 		this.setFunction("int", new SizzleFunction("java.lang.Long.decode", new SizzleInt(), new SizzleScalar[] { new SizzleString() }));
 		// string to int with param base
-		this.setFunction("int", new SizzleFunction(new SizzleInt(), new SizzleScalar[] { new SizzleString(), new SizzleInt() },
-				"java.lang.Long.parseLong(${0}, (int)${1})"));
+		this.setFunction("int", new SizzleFunction(new SizzleInt(), new SizzleScalar[] { new SizzleString(), new SizzleInt() }, "java.lang.Long.parseLong(${0}, (int)${1})"));
 		// bytes to int with param encoding format
-		this.setFunction("int", new SizzleFunction("sizzle.functions.SizzleCasts.bytesToLong", new SizzleInt(), new SizzleScalar[] { new SizzleBytes(),
-				new SizzleString() }));
+		this.setFunction("int", new SizzleFunction("sizzle.functions.SizzleCasts.bytesToLong", new SizzleInt(), new SizzleScalar[] { new SizzleBytes(), new SizzleString() }));
 
 		// int to float
 		this.setFunction("float", new SizzleFunction(new SizzleFloat(), new SizzleScalar[] { new SizzleInt() }, "(double)${0}"));
@@ -244,27 +217,23 @@ public class SymbolTable {
 		// string to time
 		this.setFunction("time", new SizzleFunction("sizzle.functions.SizzleCasts.stringToTime", new SizzleTime(), new SizzleScalar[] { new SizzleString() }));
 		// string to time
-		this.setFunction("time", new SizzleFunction("sizzle.functions.SizzleCasts.stringToTime", new SizzleTime(), new SizzleScalar[] { new SizzleString(),
-				new SizzleString() }));
+		this.setFunction("time", new SizzleFunction("sizzle.functions.SizzleCasts.stringToTime", new SizzleTime(), new SizzleScalar[] { new SizzleString(), new SizzleString() }));
 
 		// int to fingerprint
 		this.setFunction("fingerprint", new SizzleFunction(new SizzleFingerprint(), new SizzleScalar[] { new SizzleInt() }));
 		// string to fingerprint
 		this.setFunction("fingerprint", new SizzleFunction("java.lang.Long.parseLong", new SizzleInt(), new SizzleScalar[] { new SizzleString() }));
 		// string to fingerprint with param base
-		this.setFunction("fingerprint", new SizzleFunction("java.lang.Long.parseLong", new SizzleInt(), new SizzleScalar[] { new SizzleString(),
-				new SizzleInt() }));
+		this.setFunction("fingerprint", new SizzleFunction("java.lang.Long.parseLong", new SizzleInt(), new SizzleScalar[] { new SizzleString(), new SizzleInt() }));
 		// bytes to fingerprint
-		this.setFunction("fingerprint", new SizzleFunction("sizzle.functions.SizzleCasts.bytesToFingerprint", new SizzleFingerprint(),
-				new SizzleScalar[] { new SizzleBytes() }));
+		this.setFunction("fingerprint", new SizzleFunction("sizzle.functions.SizzleCasts.bytesToFingerprint", new SizzleFingerprint(), new SizzleScalar[] { new SizzleBytes() }));
 
 		// bool to string
 		this.setFunction("string", new SizzleFunction("java.lang.Boolean.toString", new SizzleString(), new SizzleScalar[] { new SizzleBool() }));
 		// int to string
 		this.setFunction("string", new SizzleFunction("java.lang.Long.toString", new SizzleString(), new SizzleScalar[] { new SizzleInt() }));
 		// int to string with parameter base
-		this.setFunction("string", new SizzleFunction("sizzle.functions.SizzleCasts.longToString", new SizzleString(), new SizzleScalar[] { new SizzleInt(),
-				new SizzleInt() }));
+		this.setFunction("string", new SizzleFunction("sizzle.functions.SizzleCasts.longToString", new SizzleString(), new SizzleScalar[] { new SizzleInt(), new SizzleInt() }));
 		// float to string
 		this.setFunction("string", new SizzleFunction("java.lang.Double.toString", new SizzleString(), new SizzleScalar[] { new SizzleFloat() }));
 		// time to string
@@ -277,14 +246,11 @@ public class SymbolTable {
 		this.setFunction("string", new SizzleFunction("new java.lang.String", new SizzleString(), new SizzleScalar[] { new SizzleBytes(), new SizzleString() }));
 
 		// int to bytes with param encoding format
-		this.setFunction("bytes", new SizzleFunction("sizzle.functions.SizzleCasts.longToBytes", new SizzleInt(), new SizzleScalar[] { new SizzleInt(),
-				new SizzleString() }));
+		this.setFunction("bytes", new SizzleFunction("sizzle.functions.SizzleCasts.longToBytes", new SizzleInt(), new SizzleScalar[] { new SizzleInt(), new SizzleString() }));
 		// fingerprint to bytes
-		this.setFunction("bytes", new SizzleFunction("sizzle.functions.SizzleCasts.fingerprintToBytes", new SizzleBytes(),
-				new SizzleScalar[] { new SizzleFingerprint() }));
+		this.setFunction("bytes", new SizzleFunction("sizzle.functions.SizzleCasts.fingerprintToBytes", new SizzleBytes(), new SizzleScalar[] { new SizzleFingerprint() }));
 		// string to bytes
-		this.setFunction("bytes",
-				new SizzleFunction("sizzle.functions.SizzleCasts.stringToBytes", new SizzleBytes(), new SizzleScalar[] { new SizzleString() }));
+		this.setFunction("bytes", new SizzleFunction("sizzle.functions.SizzleCasts.stringToBytes", new SizzleBytes(), new SizzleScalar[] { new SizzleString() }));
 
 		/* expose the java.lang.Math class to Sawzall */
 
@@ -301,8 +267,7 @@ public class SymbolTable {
 		this.setFunction("ln", new SizzleFunction("java.lang.Math.log", new SizzleFloat(), new SizzleScalar[] { new SizzleFloat() }));
 
 		// expose the rest of the unary functions
-		for (final String s : Arrays.asList("log10", "exp", "sqrt", "sin", "cos", "tan", "asin", "acos", "atan", "cosh", "sinh", "tanh", "ceil", "floor",
-				"round"))
+		for (final String s : Arrays.asList("log10", "exp", "sqrt", "sin", "cos", "tan", "asin", "acos", "atan", "cosh", "sinh", "tanh", "ceil", "floor", "round"))
 			this.setFunction(s, new SizzleFunction("java.lang.Math." + s, new SizzleFloat(), new SizzleScalar[] { new SizzleFloat() }));
 
 		// expose the binary functions
@@ -316,10 +281,8 @@ public class SymbolTable {
 		this.setFunction("max", new SizzleFunction(new SizzleTime(), new SizzleScalar[] { new SizzleTime(), new SizzleTime() }, "(${0} > ${1} ? ${0} : ${1})"));
 		this.setFunction("min", new SizzleFunction(new SizzleTime(), new SizzleScalar[] { new SizzleTime(), new SizzleTime() }, "(${0} < ${1} ? ${0} : ${1})"));
 
-		this.setFunction("max", new SizzleFunction(new SizzleString(), new SizzleScalar[] { new SizzleString(), new SizzleString() },
-				"(${0}.compareTo(${1}) > 0 ? ${0} : ${1})"));
-		this.setFunction("min", new SizzleFunction(new SizzleString(), new SizzleScalar[] { new SizzleString(), new SizzleString() },
-				"(${0}.compareTo(${1}) < 0 ? ${0} : ${1})"));
+		this.setFunction("max", new SizzleFunction(new SizzleString(), new SizzleScalar[] { new SizzleString(), new SizzleString() }, "(${0}.compareTo(${1}) > 0 ? ${0} : ${1})"));
+		this.setFunction("min", new SizzleFunction(new SizzleString(), new SizzleScalar[] { new SizzleString(), new SizzleString() }, "(${0}.compareTo(${1}) < 0 ? ${0} : ${1})"));
 
 		// expose whatever is left, assuming we are not aiming for strict
 		// compatibility
@@ -327,8 +290,7 @@ public class SymbolTable {
 			// random takes no argument
 
 			// these three have capitals in the name
-			this.setFunction("ieeeremainder", new SizzleFunction("java.lang.Math.IEEEremainder", new SizzleFloat(), new SizzleScalar[] { new SizzleFloat(),
-					new SizzleFloat() }));
+			this.setFunction("ieeeremainder", new SizzleFunction("java.lang.Math.IEEEremainder", new SizzleFloat(), new SizzleScalar[] { new SizzleFloat(), new SizzleFloat() }));
 			this.setFunction("todegrees", new SizzleFunction("java.lang.Math.toDegrees", new SizzleFloat(), new SizzleScalar[] { new SizzleFloat() }));
 			this.setFunction("toradians", new SizzleFunction("java.lang.Math.toRadians", new SizzleFloat(), new SizzleScalar[] { new SizzleFloat() }));
 
@@ -337,8 +299,7 @@ public class SymbolTable {
 				this.setFunction(s, new SizzleFunction("java.lang.Math." + s, new SizzleFloat(), new SizzleScalar[] { new SizzleFloat() }));
 
 			// and binaries
-			this.setFunction("hypot",
-					new SizzleFunction("java.lang.Math.hypot", new SizzleFloat(), new SizzleScalar[] { new SizzleFloat(), new SizzleFloat() }));
+			this.setFunction("hypot", new SizzleFunction("java.lang.Math.hypot", new SizzleFloat(), new SizzleScalar[] { new SizzleFloat(), new SizzleFloat() }));
 		}
 
 		// add in the default tables
