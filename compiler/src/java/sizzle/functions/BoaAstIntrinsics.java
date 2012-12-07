@@ -72,12 +72,12 @@ public class BoaAstIntrinsics {
 				if (table == null)
 					table = new HTable(HBaseConfiguration.create(), context.getConfiguration().get("boa.hbase.table"));
 
-				Result res = table.get(get);
+				final Result res = table.get(get);
 				if (!res.containsColumn(family, colName) || res.isEmpty())
 					throw new RuntimeException("row '" + rowName + "' cell '" + colName + "' not found");
 				final byte[] val = res.value();
 	
-				CodedInputStream _stream = CodedInputStream.newInstance(val, 0, val.length);
+				final CodedInputStream _stream = CodedInputStream.newInstance(val, 0, val.length);
 				// defaults to 64, really big ASTs require more
 				_stream.setRecursionLimit(Integer.MAX_VALUE);
 				b.mergeFrom(_stream);
@@ -119,7 +119,7 @@ public class BoaAstIntrinsics {
 
 	@FunctionSpec(name = "len", returnType = "int", formalParameters = { "CodeRepository" })
 	public static long ast_len(final CodeRepository r) {
-		long count = 1;
+		long count = 0;
 
 		for (int i = 0; i < r.getRevisionsCount(); i++)
 			count += ast_len(r.getRevisions(i));
@@ -129,14 +129,15 @@ public class BoaAstIntrinsics {
 
 	@FunctionSpec(name = "len", returnType = "int", formalParameters = { "Revision" })
 	public static long ast_len(final Revision r) {
-		long count = 1;
+		long count = 0;
 
 		for (int i = 0; i < r.getFilesCount(); i++) {
-			ChangedFile.FileKind k = r.getFiles(i).getKind();
+			final ChangedFile.FileKind k = r.getFiles(i).getKind();
 			if (k == ChangedFile.FileKind.UNKNOWN) continue;
 			if (k == ChangedFile.FileKind.BINARY) continue;
 			if (k == ChangedFile.FileKind.TEXT) continue;
 			if (k == ChangedFile.FileKind.XML) continue;
+
 			count += ast_len(BoaAstIntrinsics.getast(r, r.getFiles(i)));
 		}
 
@@ -145,11 +146,10 @@ public class BoaAstIntrinsics {
 
 	@FunctionSpec(name = "len", returnType = "int", formalParameters = { "ASTRoot" })
 	public static long ast_len(final ASTRoot f) {
-		long count = 1;
+		long count = 0;
 
 		for (int i = 0; i < f.getNamespacesCount(); i++)
-			for (int j = 0; j < f.getNamespaces(i).getDeclarationsCount(); j++)
-				count += ast_len(f.getNamespaces(i).getDeclarations(j));
+			count += ast_len(f.getNamespaces(i));
 
 		return count;
 	}
@@ -197,19 +197,15 @@ public class BoaAstIntrinsics {
 
 	@FunctionSpec(name = "len", returnType = "int", formalParameters = { "Type" })
 	public static long ast_len(final Type t) {
-		long count = 1;
-
-		return count;
+		return 1;
 	}
 
 	@FunctionSpec(name = "len", returnType = "int", formalParameters = { "Method" })
 	public static long ast_len(final Method m) {
-		long count = 1;
+		long count = 1 + ast_len(m.getReturnType());
 
 		for (int i = 0; i < m.getModifiersCount(); i++)
 			count += ast_len(m.getModifiers(i));
-
-		count += ast_len(m.getReturnType());
 
 		for (int i = 0; i < m.getGenericParametersCount(); i++)
 			count += ast_len(m.getGenericParameters(i));
@@ -231,9 +227,7 @@ public class BoaAstIntrinsics {
 
 	@FunctionSpec(name = "len", returnType = "int", formalParameters = { "Variable" })
 	public static long ast_len(final Variable v) {
-		long count = 1;
-
-		count += ast_len(v.getVariableType());
+		long count = 1 + ast_len(v.getVariableType());
 
 		for (int i = 0; i < v.getModifiersCount(); i++)
 			count += ast_len(v.getModifiers(i));
@@ -315,8 +309,6 @@ public class BoaAstIntrinsics {
 
 	@FunctionSpec(name = "len", returnType = "int", formalParameters = { "Comment" })
 	public static long ast_len(final Comment c) {
-		long count = 1;
-
-		return count;
+		return 1;
 	}
 }
