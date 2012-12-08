@@ -367,8 +367,8 @@ public class SymbolTable {
 			return new SizzleArray(this.getType(id.substring("array of ".length()).trim()));
 
 		if (id.startsWith("map"))
-			return new SizzleMap(this.getType(id.substring(id.indexOf("[") + 1, id.indexOf("]")).trim()),
-					this.getType(id.substring(id.indexOf(" of ") + " of ".length()).trim()));
+			return new SizzleMap(this.getType(id.substring(id.indexOf(" of ") + " of ".length()).trim()),
+					this.getType(id.substring(id.indexOf("[") + 1, id.indexOf("]")).trim()));
 
 		throw new RuntimeException("no such type " + id);
 	}
