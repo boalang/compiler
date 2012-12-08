@@ -88,6 +88,7 @@ public class BoaAstIntrinsics {
 				context.getCounter(HBASE_COUNTER.GETS_BADPROTOBUF).increment(1);
 				break;
 			} catch (final IOException e) {
+				System.err.println("hbase error: " + e.getMessage());
 				close();
 				try { Thread.sleep(500); } catch (InterruptedException e1) { }
 			} catch (final RuntimeException e) {
