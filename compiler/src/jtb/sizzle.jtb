@@ -82,7 +82,6 @@ TOKEN :
 | < SWITCH : "switch" >
 | < RETURN : "return" >
 | < WEIGHT : "weight" >
-| < FORMAT : "format" >
 | < RESULT : "result" >
 | < DEFAULT_ : "default" >
 | < CONTINUE : "continue" >
@@ -367,7 +366,10 @@ void OutputType() :
     "file" "(" ExprList() ")" 
   | "proc" "(" ExprList() ")"
   ]
-  [ "format" "(" ExprList() ")" ]
+  [ 
+    LOOKAHEAD("format" "(" ExprList() ")")
+    "format" "(" ExprList() ")"
+  ]
 }
 
 // ExprList = Expression {',' Expression }.
