@@ -1048,13 +1048,13 @@ public class BoaJavaFeaturesIntrinsics {
 		return count;
 	}
 
-	private static Matcher wildcardSuperMatcher = Pattern.compile("<\\s*\\?\\s+super\\s+[^>]+>").matcher("");
+	private static Matcher wildcardSuperMatcher = Pattern.compile("\\?\\s*super\\s+.+").matcher("");
 
 	@FunctionSpec(name = "uses_generics_wildcard_super", returnType = "int", formalParameters = { "Type" })
 	public static long usesGenericsWildcardSuper(final Type t) {
 		long count = 0;
 
-		if (wildcardSuperMatcher.reset(t.getName()).matches())
+		if (wildcardSuperMatcher.reset(t.getName()).find())
 			count++;
 
 		return count;
@@ -1196,13 +1196,13 @@ public class BoaJavaFeaturesIntrinsics {
 		return count;
 	}
 
-	private static Matcher wildcardExtendsMatcher = Pattern.compile("<\\s*\\?\\s+extends\\s+[^>]+>").matcher("");
+	private static Matcher wildcardExtendsMatcher = Pattern.compile("\\?\\s*extends\\s+.+").matcher("");
 
 	@FunctionSpec(name = "uses_generics_wildcard_extends", returnType = "int", formalParameters = { "Type" })
 	public static long usesGenericsWildcardExtends(final Type t) {
 		long count = 0;
 
-		if (wildcardExtendsMatcher.reset(t.getName()).matches())
+		if (wildcardExtendsMatcher.reset(t.getName()).find())
 			count++;
 
 		return count;
@@ -1344,13 +1344,13 @@ public class BoaJavaFeaturesIntrinsics {
 		return count;
 	}
 
-	private static Matcher wildcardMatcher = Pattern.compile("<\\s*\\?\\s*>").matcher("");
-
 	@FunctionSpec(name = "uses_generics_wildcard", returnType = "int", formalParameters = { "Type" })
 	public static long usesGenericsWildcard(final Type t) {
 		long count = 0;
 
-		if (wildcardMatcher.reset(t.getName()).matches())
+		if (t.getName().contains("?")
+				&& !wildcardExtendsMatcher.reset(t.getName()).find()
+				&& !wildcardSuperMatcher.reset(t.getName()).find())
 			count++;
 
 		return count;
@@ -1674,7 +1674,7 @@ public class BoaJavaFeaturesIntrinsics {
 	public static long usesMultiCatch(final Statement s) {
 		long count = 0;
 
-		if (s.getKind() == Statement.StatementKind.CATCH && s.getVariableDeclaration().getName().contains("|"))
+		if (s.getKind() == Statement.StatementKind.CATCH && s.getVariableDeclaration().getVariableType().getName().contains("|"))
 			count++;
 
 		if (s.hasCondition())
