@@ -1096,7 +1096,7 @@ public class BoaJavaFeaturesIntrinsics {
 		long count = 0;
 
 		for (int i = 0; i < d.getGenericParametersCount(); i++)
-			count += usesGenericsWildcardSuper(d.getGenericParameters(i));
+			count += usesGenericsWildcardExtends(d.getGenericParameters(i));
 
 		for (int i = 0; i < d.getParentsCount(); i++)
 			count += usesGenericsWildcardExtends(d.getParents(i));
@@ -1118,7 +1118,7 @@ public class BoaJavaFeaturesIntrinsics {
 		long count = 0;
 
 		for (int i = 0; i < m.getGenericParametersCount(); i++)
-			count += usesGenericsWildcardSuper(m.getGenericParameters(i));
+			count += usesGenericsWildcardExtends(m.getGenericParameters(i));
 
 		count += usesGenericsWildcardExtends(m.getReturnType());
 
@@ -1179,7 +1179,7 @@ public class BoaJavaFeaturesIntrinsics {
 		long count = 0;
 
 		for (int i = 0; i < e.getGenericParametersCount(); i++)
-			count += usesGenericsWildcardSuper(e.getGenericParameters(i));
+			count += usesGenericsWildcardExtends(e.getGenericParameters(i));
 
 		if (e.hasNewType())
 			count += usesGenericsWildcardExtends(e.getNewType());
@@ -1244,7 +1244,7 @@ public class BoaJavaFeaturesIntrinsics {
 		long count = 0;
 
 		for (int i = 0; i < d.getGenericParametersCount(); i++)
-			count += usesGenericsWildcardSuper(d.getGenericParameters(i));
+			count += usesGenericsWildcard(d.getGenericParameters(i));
 
 		for (int i = 0; i < d.getParentsCount(); i++)
 			count += usesGenericsWildcard(d.getParents(i));
@@ -1266,7 +1266,7 @@ public class BoaJavaFeaturesIntrinsics {
 		long count = 0;
 
 		for (int i = 0; i < m.getGenericParametersCount(); i++)
-			count += usesGenericsWildcardSuper(m.getGenericParameters(i));
+			count += usesGenericsWildcard(m.getGenericParameters(i));
 
 		count += usesGenericsWildcard(m.getReturnType());
 
@@ -1327,7 +1327,7 @@ public class BoaJavaFeaturesIntrinsics {
 		long count = 0;
 
 		for (int i = 0; i < e.getGenericParametersCount(); i++)
-			count += usesGenericsWildcardSuper(e.getGenericParameters(i));
+			count += usesGenericsWildcard(e.getGenericParameters(i));
 
 		if (e.hasNewType())
 			count += usesGenericsWildcard(e.getNewType());
