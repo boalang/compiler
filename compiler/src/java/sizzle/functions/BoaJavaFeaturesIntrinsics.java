@@ -1,11 +1,14 @@
 package sizzle.functions;
 
+import java.util.HashMap;
+import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import sizzle.types.Ast.Expression.ExpressionKind;
 import sizzle.types.Ast.*;
 import sizzle.types.Code.*;
+import sizzle.types.Diff.ChangedFile;
 
 /**
  * Boa domain-specific functions for finding Java language features.
@@ -2224,5 +2227,384 @@ public class BoaJavaFeaturesIntrinsics {
 			count += usesSafeVarargs(e.getMethodArgs(i));
 
 		return count;
+	}
+
+	@FunctionSpec(name = "collect_annotations", returnType = "map[string] of int", formalParameters = { "CodeRepository", "map[string] of int" })
+	public static HashMap<String,Long> collect_annotations(final CodeRepository r, HashMap<String,Long> counts) {
+		for (int i = 0; i < r.getRevisionsCount(); i++)
+			counts = collect_annotations(r.getRevisions(i), counts);
+
+		return counts;
+	}
+
+	@FunctionSpec(name = "collect_annotations", returnType = "map[string] of int", formalParameters = { "Revision", "map[string] of int" })
+	public static HashMap<String,Long> collect_annotations(final Revision r, HashMap<String,Long> counts) {
+		for (int i = 0; i < r.getFilesCount(); i++) {
+			final ChangedFile.FileKind k = r.getFiles(i).getKind();
+			if (k == ChangedFile.FileKind.UNKNOWN) continue;
+			if (k == ChangedFile.FileKind.BINARY) continue;
+			if (k == ChangedFile.FileKind.TEXT) continue;
+			if (k == ChangedFile.FileKind.XML) continue;
+
+			counts = collect_annotations(BoaAstIntrinsics.getast(r, r.getFiles(i)), counts);
+		}
+
+		return counts;
+	}
+
+	@FunctionSpec(name = "collect_annotations", returnType = "map[string] of int", formalParameters = { "ASTRoot", "map[string] of int" })
+	public static HashMap<String,Long> collect_annotations(final ASTRoot f, HashMap<String,Long> counts) {
+		for (int i = 0; i < f.getNamespacesCount(); i++)
+			counts = collect_annotations(f.getNamespaces(i), counts);
+
+		return counts;
+	}
+
+	@FunctionSpec(name = "collect_annotations", returnType = "map[string] of int", formalParameters = { "Namespace", "map[string] of int" })
+	public static HashMap<String,Long> collect_annotations(final Namespace n, HashMap<String,Long> counts) {
+		for (int i = 0; i < n.getDeclarationsCount(); i++)
+			counts = collect_annotations(n.getDeclarations(i), counts);
+
+		for (int i = 0; i < n.getModifiersCount(); i++)
+			counts = collect_annotations(n.getModifiers(i), counts);
+
+		return counts;
+	}
+
+	@FunctionSpec(name = "collect_annotations", returnType = "map[string] of int", formalParameters = { "Declaration", "map[string] of int" })
+	public static HashMap<String,Long> collect_annotations(final Declaration d, HashMap<String,Long> counts) {
+		for (int i = 0; i < d.getModifiersCount(); i++)
+			counts = collect_annotations(d.getModifiers(i), counts);
+
+		for (int i = 0; i < d.getMethodsCount(); i++)
+			counts = collect_annotations(d.getMethods(i), counts);
+
+		for (int i = 0; i < d.getFieldsCount(); i++)
+			counts = collect_annotations(d.getFields(i), counts);
+
+		for (int i = 0; i < d.getNestedDeclarationsCount(); i++)
+			counts = collect_annotations(d.getNestedDeclarations(i), counts);
+
+		return counts;
+	}
+
+	@FunctionSpec(name = "collect_annotations", returnType = "map[string] of int", formalParameters = { "Method", "map[string] of int" })
+	public static HashMap<String,Long> collect_annotations(final Method m, HashMap<String,Long> counts) {
+		for (int i = 0; i < m.getModifiersCount(); i++)
+			counts = collect_annotations(m.getModifiers(i), counts);
+
+		for (int i = 0; i < m.getArgumentsCount(); i++)
+			counts = collect_annotations(m.getArguments(i), counts);
+
+		for (int i = 0; i < m.getStatementsCount(); i++)
+			counts = collect_annotations(m.getStatements(i), counts);
+
+		return counts;
+	}
+
+	@FunctionSpec(name = "collect_annotations", returnType = "map[string] of int", formalParameters = { "Variable", "map[string] of int" })
+	public static HashMap<String,Long> collect_annotations(final Variable v, HashMap<String,Long> counts) {
+		for (int i = 0; i < v.getModifiersCount(); i++)
+			counts = collect_annotations(v.getModifiers(i), counts);
+
+		return counts;
+	}
+
+	@FunctionSpec(name = "collect_annotations", returnType = "map[string] of int", formalParameters = { "Statement", "map[string] of int" })
+	public static HashMap<String,Long> collect_annotations(final Statement s, HashMap<String,Long> counts) {
+		for (int i = 0; i < s.getStatementsCount(); i++)
+			counts = collect_annotations(s.getStatements(i), counts);
+
+		for (int i = 0; i < s.getInitializationsCount(); i++)
+			counts = collect_annotations(s.getInitializations(i), counts);
+
+		if (s.hasCondition())
+			counts = collect_annotations(s.getCondition(), counts);
+
+		for (int i = 0; i < s.getUpdatesCount(); i++)
+			counts = collect_annotations(s.getUpdates(i), counts);
+
+		if (s.hasVariableDeclaration())
+			counts = collect_annotations(s.getVariableDeclaration(), counts);
+
+		if (s.hasTypeDeclaration())
+			counts = collect_annotations(s.getTypeDeclaration(), counts);
+
+		if (s.hasExpression())
+			counts = collect_annotations(s.getExpression(), counts);
+
+		return counts;
+	}
+
+	@FunctionSpec(name = "collect_annotations", returnType = "map[string] of int", formalParameters = { "Expression", "map[string] of int" })
+	public static HashMap<String,Long> collect_annotations(final Expression e, HashMap<String,Long> counts) {
+		for (int i = 0; i < e.getExpressionsCount(); i++)
+			counts = collect_annotations(e.getExpressions(i), counts);
+
+		for (int i = 0; i < e.getVariableDeclsCount(); i++)
+			counts = collect_annotations(e.getVariableDecls(i), counts);
+
+		if (e.hasAnonDeclaration())
+			counts = collect_annotations(e.getAnonDeclaration(), counts);
+
+		return counts;
+	}
+
+	@FunctionSpec(name = "collect_annotations", returnType = "map[string] of int", formalParameters = { "Modifier", "map[string] of int" })
+	public static HashMap<String,Long> collect_annotations(final Modifier m, HashMap<String,Long> counts) {
+		if (m.getKind() == Modifier.ModifierKind.ANNOTATION) {
+			final String name = BoaAstIntrinsics.type_name(m.getAnnotationName());
+			final long count = counts.containsKey(name) ? counts.get(name) : 0;
+			counts.put(name, count + 1);
+		}
+
+		return counts;
+	}
+
+	@FunctionSpec(name = "collect_generic_types", returnType = "map[string] of int", formalParameters = { "CodeRepository", "map[string] of int" })
+	public static HashMap<String,Long> collect_generic_types(final CodeRepository r, HashMap<String,Long> counts) {
+		for (int i = 0; i < r.getRevisionsCount(); i++)
+			counts = collect_generic_types(r.getRevisions(i), counts);
+
+		return counts;
+	}
+
+	@FunctionSpec(name = "collect_generic_types", returnType = "map[string] of int", formalParameters = { "Revision", "map[string] of int" })
+	public static HashMap<String,Long> collect_generic_types(final Revision r, HashMap<String,Long> counts) {
+		for (int i = 0; i < r.getFilesCount(); i++) {
+			final ChangedFile.FileKind k = r.getFiles(i).getKind();
+			if (k == ChangedFile.FileKind.UNKNOWN) continue;
+			if (k == ChangedFile.FileKind.BINARY) continue;
+			if (k == ChangedFile.FileKind.TEXT) continue;
+			if (k == ChangedFile.FileKind.XML) continue;
+
+			counts = collect_generic_types(BoaAstIntrinsics.getast(r, r.getFiles(i)), counts);
+		}
+
+		return counts;
+	}
+
+	@FunctionSpec(name = "collect_generic_types", returnType = "map[string] of int", formalParameters = { "ASTRoot", "map[string] of int" })
+	public static HashMap<String,Long> collect_generic_types(final ASTRoot f, HashMap<String,Long> counts) {
+		for (int i = 0; i < f.getNamespacesCount(); i++)
+			counts = collect_generic_types(f.getNamespaces(i), counts);
+
+		return counts;
+	}
+
+	@FunctionSpec(name = "collect_generic_types", returnType = "map[string] of int", formalParameters = { "Namespace", "map[string] of int" })
+	public static HashMap<String,Long> collect_generic_types(final Namespace n, HashMap<String,Long> counts) {
+		for (int i = 0; i < n.getDeclarationsCount(); i++)
+			counts = collect_generic_types(n.getDeclarations(i), counts);
+
+		return counts;
+	}
+
+	@FunctionSpec(name = "collect_generic_types", returnType = "map[string] of int", formalParameters = { "Declaration", "map[string] of int" })
+	public static HashMap<String,Long> collect_generic_types(final Declaration d, HashMap<String,Long> counts) {
+		for (int i = 0; i < d.getGenericParametersCount(); i++)
+			counts = collect_generic_types(d.getGenericParameters(i), counts);
+
+		for (int i = 0; i < d.getParentsCount(); i++)
+			counts = collect_generic_types(d.getParents(i), counts);
+
+		for (int i = 0; i < d.getMethodsCount(); i++)
+			counts = collect_generic_types(d.getMethods(i), counts);
+
+		for (int i = 0; i < d.getFieldsCount(); i++)
+			counts = collect_generic_types(d.getFields(i), counts);
+
+		for (int i = 0; i < d.getNestedDeclarationsCount(); i++)
+			counts = collect_generic_types(d.getNestedDeclarations(i), counts);
+
+		return counts;
+	}
+
+	@FunctionSpec(name = "collect_generic_types", returnType = "map[string] of int", formalParameters = { "Type", "map[string] of int" })
+	public static HashMap<String,Long> collect_generic_types(final Type t, HashMap<String,Long> counts) {
+		try {
+			parseGenericType(BoaAstIntrinsics.type_name(t.getName()).trim(), counts);
+		} catch (StackOverflowError e) {
+			System.err.println("STACK ERR: " + t.getName() + " -> " + BoaAstIntrinsics.type_name(t.getName()).trim());
+		}
+
+		return counts;
+	}
+
+	public static void testGenericParser() {
+		final String[] tests = new String[] {
+			"$_T4_$_ extends $Mc4$<Integer>.$Mc5<Integer>",
+			"$_T4_$_ extends $Mc4$<Integer>.$Mc5<Integer> & $Mi4$.$$$$$Mi5 & $Mi4$.$$$$Mi5 & $Mi4$.$$$Mi5 & $Mi4$.$$Mi5 & $Mi4$.$Mi5 & $Mi4$.Mi5 & $Mi4$",
+			"ClassException<E> | Exception",
+			"EextendsEnum<E>&Language<E>",
+			"Class<?>...",
+			"List<String>",
+			"HashMap<String,Integer>",
+			"HashMap<String, Integer>",
+			"HashMap<String, List<Integer>>",
+			"HashMap<String, HashMap<String, List<Integer>>>"
+		};
+		for (final String s : tests)
+			testGeneric(s);
+	}
+
+	public static void testGeneric(final String s) {
+		System.out.println("-----------------");
+		System.out.println("testing: " + s);
+		final HashMap<String,Long> counts = new HashMap<String,Long>();
+		parseGenericType(s, counts);
+		System.out.println(counts);
+	}
+
+	private static void parseGenericType(final String name, final HashMap<String,Long> counts) {
+		if (!name.contains("<") || name.startsWith("<"))
+			return;
+
+		if (name.contains("|")) {
+			for (final String s : name.split("\\|"))
+				parseGenericType(s.trim(), counts);
+			return;
+		}
+
+		if (name.contains("&")) {
+			int count = 0;
+			int last = 0;
+			for (int i = 0; i < name.length(); i++)
+				switch (name.charAt(i)) {
+				case '<':
+					count++;
+					break;
+				case '>':
+					count--;
+					break;
+				case '&':
+					if (count == 0) {
+						parseGenericType(name.substring(last, i).trim(), counts);
+						last = i + 1;
+					}
+					break;
+				default:
+					break;
+				}
+			parseGenericType(name.substring(last).trim(), counts);
+			return;
+		}
+
+		foundType(name, counts);
+
+		int start = name.indexOf("<");
+
+		final Stack<Integer> starts = new Stack<Integer>();
+		int lastStart = start + 1;
+		for (int i = lastStart; i < name.lastIndexOf(">"); i++)
+			switch (name.charAt(i)) {
+			case '<':
+				starts.push(lastStart);
+				lastStart = i + 1;
+				break;
+			case '>':
+				if (!starts.empty())
+					foundType(name.substring(starts.pop(), i + 1).trim(), counts);
+				break;
+			case '&':
+			case '|':
+			case ',':
+			case ' ':
+			case '.':
+			case '\t':
+				lastStart = i + 1;
+			default:
+				break;
+			}
+	}
+
+	private static void foundType(final String name, final HashMap<String,Long> counts) {
+		final String type = name.endsWith("...") ? name.substring(0, name.length() - 3).trim() : name.trim();
+		final long count = counts.containsKey(type) ? counts.get(type) : 0;
+		counts.put(type, count + 1);
+
+		String rawType = type.substring(0, type.indexOf("<")).trim();
+		if (!type.endsWith(">"))
+			rawType += type.substring(type.lastIndexOf(">") + 1).trim();
+		final long rawCount = counts.containsKey(rawType) ? counts.get(rawType) : 0;
+		counts.put(rawType, rawCount + 1);
+	}
+
+	@FunctionSpec(name = "collect_generic_types", returnType = "map[string] of int", formalParameters = { "Method", "map[string] of int" })
+	public static HashMap<String,Long> collect_generic_types(final Method m, HashMap<String,Long> counts) {
+		counts = collect_generic_types(m.getReturnType(), counts);
+
+		for (int i = 0; i < m.getGenericParametersCount(); i++)
+			counts = collect_generic_types(m.getGenericParameters(i), counts);
+
+		for (int i = 0; i < m.getArgumentsCount(); i++)
+			counts = collect_generic_types(m.getArguments(i), counts);
+
+		for (int i = 0; i < m.getExceptionTypesCount(); i++)
+			counts = collect_generic_types(m.getExceptionTypes(i), counts);
+
+		for (int i = 0; i < m.getStatementsCount(); i++)
+			counts = collect_generic_types(m.getStatements(i), counts);
+
+		return counts;
+	}
+
+	@FunctionSpec(name = "collect_generic_types", returnType = "map[string] of int", formalParameters = { "Variable", "map[string] of int" })
+	public static HashMap<String,Long> collect_generic_types(final Variable v, HashMap<String,Long> counts) {
+		counts = collect_generic_types(v.getVariableType(), counts);
+
+		if (v.hasInitializer())
+			counts = collect_generic_types(v.getInitializer(), counts);
+
+		return counts;
+	}
+
+	@FunctionSpec(name = "collect_generic_types", returnType = "map[string] of int", formalParameters = { "Statement", "map[string] of int" })
+	public static HashMap<String,Long> collect_generic_types(final Statement s, HashMap<String,Long> counts) {
+		for (int i = 0; i < s.getStatementsCount(); i++)
+			counts = collect_generic_types(s.getStatements(i), counts);
+
+		for (int i = 0; i < s.getInitializationsCount(); i++)
+			counts = collect_generic_types(s.getInitializations(i), counts);
+
+		if (s.hasCondition())
+			counts = collect_generic_types(s.getCondition(), counts);
+
+		for (int i = 0; i < s.getUpdatesCount(); i++)
+			counts = collect_generic_types(s.getUpdates(i), counts);
+
+		if (s.hasVariableDeclaration())
+			counts = collect_generic_types(s.getVariableDeclaration(), counts);
+
+		if (s.hasTypeDeclaration())
+			counts = collect_generic_types(s.getTypeDeclaration(), counts);
+
+		if (s.hasExpression())
+			counts = collect_generic_types(s.getExpression(), counts);
+
+		return counts;
+	}
+
+	@FunctionSpec(name = "collect_generic_types", returnType = "map[string] of int", formalParameters = { "Expression", "map[string] of int" })
+	public static HashMap<String,Long> collect_generic_types(final Expression e, HashMap<String,Long> counts) {
+		if (e.hasNewType())
+			counts = collect_generic_types(e.getNewType(), counts);
+
+		for (int i = 0; i < e.getGenericParametersCount(); i++)
+			counts = collect_generic_types(e.getGenericParameters(i), counts);
+
+		for (int i = 0; i < e.getExpressionsCount(); i++)
+			counts = collect_generic_types(e.getExpressions(i), counts);
+
+		for (int i = 0; i < e.getVariableDeclsCount(); i++)
+			counts = collect_generic_types(e.getVariableDecls(i), counts);
+
+		for (int i = 0; i < e.getMethodArgsCount(); i++)
+			counts = collect_generic_types(e.getMethodArgs(i), counts);
+
+		if (e.hasAnonDeclaration())
+			counts = collect_generic_types(e.getAnonDeclaration(), counts);
+
+		return counts;
 	}
 }
