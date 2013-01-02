@@ -23,7 +23,6 @@ import sizzle.types.Ast.Namespace;
 import sizzle.types.Ast.Statement;
 import sizzle.types.Ast.Type;
 import sizzle.types.Ast.Variable;
-import sizzle.types.Code.CodeRepository;
 import sizzle.types.Code.Revision;
 import sizzle.types.Diff.ChangedFile;
 
@@ -37,14 +36,16 @@ public class BoaAstIntrinsics {
 	private static Context context;
 	private static HTable table;
 
-	private final static byte[] family = Bytes.toBytes("code");
+	private final static byte[] codeFamily = Bytes.toBytes("code");
+	private final static byte[] locFamily = Bytes.toBytes("loc");
 
 	public static enum HBASE_COUNTER {
-		GETS,
-		GETS_EMPTY,
-		GETS_BADPROTOBUF,
+		GETS_ATTEMPTED,
 		GETS_SUCCEED,
-		GETS_FAILED
+		GETS_FAILED,
+		GETS_FAIL_MISSING,
+		GETS_FAIL_BADPROTOBUF,
+		GETS_FAIL_BADLOC,
 	};
 
 	/**
@@ -57,13 +58,13 @@ public class BoaAstIntrinsics {
 	@SuppressWarnings("unchecked")
 	@FunctionSpec(name = "getast", returnType = "ASTRoot", formalParameters = { "Revision", "ChangedFile" })
 	public static ASTRoot getast(final Revision rev, final ChangedFile f) {
-		context.getCounter(HBASE_COUNTER.GETS).increment(1);
+		context.getCounter(HBASE_COUNTER.GETS_ATTEMPTED).increment(1);
 		final ASTRoot.Builder b = ASTRoot.newBuilder();
 
 		final byte[] rowName = Bytes.toBytes(rev.getKey());
 		final Get get = new Get(rowName);
 		final byte[] colName = Bytes.toBytes(f.getName());
-		get.addColumn(family, colName);
+		get.addColumn(codeFamily, colName);
 
 		// retry on errors
 		// sometimes HBase has connection problems which resolve fairly quick
@@ -73,8 +74,8 @@ public class BoaAstIntrinsics {
 					table = new HTable(HBaseConfiguration.create(), "boa_input");
 
 				final Result res = table.get(get);
-				if (!res.containsColumn(family, colName) || res.isEmpty())
-					throw new RuntimeException("row '" + rowName + "' cell '" + colName + "' not found");
+				if (!res.containsColumn(codeFamily, colName) || res.isEmpty())
+					throw new RuntimeException("cell not found");
 				final byte[] val = res.value();
 	
 				final CodedInputStream _stream = CodedInputStream.newInstance(val, 0, val.length);
@@ -85,7 +86,7 @@ public class BoaAstIntrinsics {
 				return b.build();
 			} catch (final InvalidProtocolBufferException e) {
 				e.printStackTrace();
-				context.getCounter(HBASE_COUNTER.GETS_BADPROTOBUF).increment(1);
+				context.getCounter(HBASE_COUNTER.GETS_FAIL_BADPROTOBUF).increment(1);
 				break;
 			} catch (final IOException e) {
 				System.err.println("hbase error: " + e.getMessage());
@@ -93,7 +94,7 @@ public class BoaAstIntrinsics {
 				try { Thread.sleep(500); } catch (InterruptedException e1) { }
 			} catch (final RuntimeException e) {
 				e.printStackTrace();
-				context.getCounter(HBASE_COUNTER.GETS_EMPTY).increment(1);
+				context.getCounter(HBASE_COUNTER.GETS_FAIL_MISSING).increment(1);
 				break;
 			}
 
