@@ -44,6 +44,12 @@ public class ExpressionProtoTuple extends SizzleProtoTuple {
 
 		names.put("method_args", 9);
 		members.add(new SizzleProtoList(new ExpressionProtoTuple()));
+
+		names.put("anon_declaration", 10);
+		members.add(new DeclarationProtoTuple());
+
+		names.put("annotation", 11);
+		members.add(new ModifierProtoTuple());
 	}
 
 	/**

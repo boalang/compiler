@@ -152,7 +152,8 @@ message Expression {
 		ASSIGN_LSHIFT = 45;
 		ASSIGN_RSHIFT = 46;
 		ASSIGN_UNSIGNEDRSHIFT = 47;
-		OTHER = 48;
+		ANNOTATION = 48;
+		OTHER = 49;
 	}
 	required ExpressionKind kind = 1;
 	repeated Expression expressions = 2;
@@ -165,7 +166,8 @@ message Expression {
 	optional string method = 9;
 	repeated Expression method_args = 10;
 	optional Declaration anon_declaration = 11;
-//	required PositionInfo position = 12;
+	optional Modifier annotation = 12;
+//	required PositionInfo position = 13;
 }
 
 message Modifier {
