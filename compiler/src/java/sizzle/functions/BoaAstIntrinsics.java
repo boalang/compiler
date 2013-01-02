@@ -164,31 +164,33 @@ public class BoaAstIntrinsics {
 			}
 	}
 
-	@FunctionSpec(name = "len", returnType = "int", formalParameters = { "CodeRepository" })
-	public static long ast_len(final CodeRepository r) {
-		long count = 0;
+	@FunctionSpec(name = "type_name", returnType = "string", formalParameters = { "string" })
+	public static String type_name(final String s) {
+		// first, normalize the string
+		final String t = s.replaceAll("<\\s+", "<")
+			.replaceAll(",\\s+", ", ")
+			.replaceAll("\\s*>\\s*", ">")
+			.replaceAll("\\s*&\\s*", " & ")
+			.replaceAll("\\s*\\|\\s*", " | ");
 
-		for (int i = 0; i < r.getRevisionsCount(); i++)
-			count += ast_len(r.getRevisions(i));
+		if (!t.contains("."))
+			return t;
 
-		return count;
-	}
-
-	@FunctionSpec(name = "len", returnType = "int", formalParameters = { "Revision" })
-	public static long ast_len(final Revision r) {
-		long count = 0;
-
-		for (int i = 0; i < r.getFilesCount(); i++) {
-			final ChangedFile.FileKind k = r.getFiles(i).getKind();
-			if (k == ChangedFile.FileKind.UNKNOWN) continue;
-			if (k == ChangedFile.FileKind.BINARY) continue;
-			if (k == ChangedFile.FileKind.TEXT) continue;
-			if (k == ChangedFile.FileKind.XML) continue;
-
-			count += ast_len(BoaAstIntrinsics.getast(r, r.getFiles(i)));
-		}
-
-		return count;
+		/*
+		 * Remove qualifiers from anywhere in the string...
+		 * 
+		 * SomeType                               =>  SomeType
+		 * foo.SomeType                           =>  SomeType
+		 * foo.bar.SomeType                       =>  SomeType
+		 * SomeType<T>                            =>  SomeType<T>
+		 * SomeType<T, S>                         =>  SomeType<T, S>
+		 * SomeType<foo.bar.T, S>                 =>  SomeType<T, S>
+		 * SomeType<T, foo.bar.S>                 =>  SomeType<T, S>
+		 * foo.bar.SomeType<T, foo.bar.S<bar.Q>>  =>  SomeType<T, S<Q>>
+		 * SomeType|foo.Bar                       =>  SomeType|Bar
+		 * foo<T>.bar<T>                          =>  foo<T>.bar<T>
+		 */
+		return t.replaceAll("[^\\s,<>|]+\\.([^\\s\\[.,><|]+)", "$1");
 	}
 
 	@FunctionSpec(name = "len", returnType = "int", formalParameters = { "ASTRoot" })
