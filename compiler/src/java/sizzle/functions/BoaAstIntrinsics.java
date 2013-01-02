@@ -103,6 +103,51 @@ public class BoaAstIntrinsics {
 		return b.build();
 	}
 
+	@SuppressWarnings("unchecked")
+	@FunctionSpec(name = "loc", returnType = "int", formalParameters = { "Revision", "ChangedFile" })
+	public static long loc(final Revision rev, final ChangedFile f) {
+		context.getCounter(HBASE_COUNTER.GETS_ATTEMPTED).increment(1);
+
+		final byte[] rowName = Bytes.toBytes(rev.getKey());
+		final Get get = new Get(rowName);
+		final byte[] colName = Bytes.toBytes(f.getName());
+		get.addColumn(locFamily, colName);
+
+		// retry on errors
+		// sometimes HBase has connection problems which resolve fairly quick
+		for (int i = 0; i < 10; i++)
+			try {
+				if (table == null)
+					table = new HTable(HBaseConfiguration.create(), "boa_input");
+
+				final Result res = table.get(get);
+				if (!res.containsColumn(locFamily, colName) || res.isEmpty()) {
+					context.getCounter(HBASE_COUNTER.GETS_FAIL_MISSING).increment(1);
+					throw new RuntimeException("cell not found");
+				}
+	
+				final String s = Bytes.toString(res.value());
+				final String[] parts = s.split(",");
+				if (parts.length != 6) {
+					context.getCounter(HBASE_COUNTER.GETS_FAIL_BADLOC).increment(1);
+					throw new RuntimeException("contains invalid LOC: '" + s + "'");
+				}
+				context.getCounter(HBASE_COUNTER.GETS_SUCCEED).increment(1);
+				return Long.parseLong(parts[1].trim()) + Long.parseLong(parts[2].trim());
+			} catch (final IOException e) {
+				System.err.println("hbase error: " + e.getMessage());
+				close();
+				try { Thread.sleep(500); } catch (InterruptedException e1) { }
+			} catch (final RuntimeException e) {
+				e.printStackTrace();
+				break;
+			}
+
+		System.err.println("error with loc: " + rev.getKey() + "!!" + f.getName());
+		context.getCounter(HBASE_COUNTER.GETS_FAILED).increment(1);
+		return -1;
+	}
+
 	@SuppressWarnings("rawtypes")
 	public static void initialize(final Context context) {
 		BoaAstIntrinsics.context = context;
