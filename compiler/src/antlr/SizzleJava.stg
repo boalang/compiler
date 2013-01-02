@@ -8,8 +8,8 @@ identifierMap ::= [
 		"inf" : "Double.POSITIVE_INFINITY",
 		"NaN" : "Double.NaN",
 		"nan" : "Double.NaN",
-		"SECOND" : "1000 * 1000",
-		"SEC" : "1000 * 1000",
+		"SECOND" : "(1000 * 1000)",
+		"SEC" : "(1000 * 1000)",
 		"MINUTE" : "(60 * 1000 * 1000)",
 		"MIN" : "(60 * 1000 * 1000)",
 		"HOUR" : "(60 * 60 * 1000 * 1000)",
@@ -40,19 +40,23 @@ else
 <endif>
 >>
 WhenStatement(all, some, len, type, index, expression, statement) ::= <<
-{
 	<if(all)>
-	boolean _satisfied_<index> = true;
-	for (<type> ___<index> = 0; ___<index> \< <len>; ___<index>++)
-		if (!(<expression>)) {
-			_satisfied_<index> = false;
-			break;
+	{
+		boolean _satisfied_<index> = true;
+		for (<type> ___<index> = 0; ___<index> \< <len>; ___<index>++)
+			if (!(<expression>))
+			{
+				_satisfied_<index> = false;
+				break;
+			}
+		if (_satisfied_<index>)
+		{
+			<statement>
 		}
-	if (_satisfied_<index>) {
-		<statement>
 	}
 	<else>
-	for (<type> ___<index> = 0; ___<index> \< <len>; ___<index>++) {
+	for (<type> ___<index> = 0; ___<index> \< <len>; ___<index>++)
+	{
 		<if(some)>
 		boolean _stop_<index> = false;
 		<endif>
@@ -67,7 +71,6 @@ WhenStatement(all, some, len, type, index, expression, statement) ::= <<
 		<endif>
 	}
 	<endif>
-}
 >>
 Expression(lhs, operators, operands) ::= "<lhs><operators,operands:{operator,operand|<operator><operand>}>"
 Index(map, operand, index, slice) ::= "<if(map)><operand>.get((int)<index>)<elseif(slice)>java.util.Arrays.copyOfRange(<operand>, <index>, <slice>)<else><operand>[(int)<index>]<endif>"
