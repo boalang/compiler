@@ -133,17 +133,14 @@ public class <name> extends sizzle.runtime.SizzleRunner {
 		public <name>SizzleCombiner() {
 			super();
 			
-			<tables:{<it><\n>}>
-		}
+			<tables:{<it><\n>}>		}
 	}
 	
 	static class <name>SizzleReducer extends sizzle.runtime.SizzleReducer {
 		public <name>SizzleReducer() {
 			super();
 
-
-			<tables:{<it><\n>}>
-		}
+			<tables:{<it><\n>}>		}
 	}
 	
 	@Override
