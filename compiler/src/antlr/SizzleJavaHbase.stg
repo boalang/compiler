@@ -51,10 +51,8 @@ public class <name> extends sizzle.runtime.SizzleRunner {
 		scan.addColumn(org.apache.hadoop.hbase.util.Bytes.toBytes("metadata"), org.apache.hadoop.hbase.util.Bytes.toBytes("proto"));
 		org.apache.hadoop.hbase.mapreduce.TableMapReduceUtil.initTableMapperJob(org.apache.hadoop.hbase.util.Bytes.toBytes(args[0]), scan, <name>SizzleMapper.class, sizzle.io.EmitKey.class, sizzle.io.EmitValue.class, jb);
 
-		if (id > 0) {
+		if (id > 0)
 			jb.getConfiguration().setInt("boa.hadoop.jobid", id);
-			jb.getConfiguration().set("boa.hadoop.output", args[1]);
-		}
 		jb.submit();
 		if (id > 0)
 			sizzle.io.SizzleOutputCommitter.setJobID(jb.getJobID().toString(), id);
