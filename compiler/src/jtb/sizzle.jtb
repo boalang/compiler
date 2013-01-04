@@ -623,6 +623,7 @@ void Expression() :
 {
   Conjunction()
   (
+    LOOKAHEAD(( "||" | "or" ) Conjunction())
     (
       "||"
     | "or"
