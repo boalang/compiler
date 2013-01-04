@@ -61,15 +61,27 @@ public class <name> extends sizzle.runtime.SizzleRunner {
 		System.err.println("Job ID: " + jb.getJobID().toString());
 
 		if (line.hasOption("block")) {
+			double lastSetup = -1;
+			double lastMap = -1;
+			double lastReduce = -1;
 			while (!jb.isComplete()) {
-				if (jb.setupProgress() \< 1)
-					System.err.println("SETUP: " + (jb.setupProgress() * 100) + "%");
-				else if (jb.mapProgress() \< 1)
-					System.err.println("MAP: " + (jb.mapProgress() * 100) + "%");
-				else
-					System.err.println("REDUCE: " + (jb.reduceProgress() * 100) + "%");
+				double newSetup = jb.setupProgress();
+				double newMap = jb.mapProgress();
+				double newReduce = jb.reduceProgress();
+				if (newSetup != lastSetup) {
+					lastSetup = newSetup;
+					System.err.println("SETUP : " + (newSetup * 100) + "%");
+				}
+				if (newMap != lastMap) {
+					lastMap = newMap;
+					System.err.println("MAP   : " + (newMap * 100) + "%");
+				}
+				if (newReduce != lastReduce) {
+					lastReduce = newReduce;
+					System.err.println("REDUCE: " + (newReduce * 100) + "%");
+				}
 				try {
-					Thread.sleep (1000);
+					Thread.sleep (500);
 				} catch (final Exception e) {}
 			}
 			System.err.println("JOB FINISHED: " + (jb.isSuccessful() ? "Success" : "Failed"));
