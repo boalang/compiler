@@ -3,7 +3,6 @@ package sizzle.io;
 import java.io.*;
 import java.sql.*;
 
-import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.Path;
