@@ -1,7 +1,6 @@
 package sizzle.functions;
 
-import sizzle.types.Ast.Declaration;
-import sizzle.types.Ast.Statement.StatementKind;
+import sizzle.types.Ast.*;
 
 /**
  * Boa domain-specific functions for computing software engineering metrics.
@@ -9,6 +8,20 @@ import sizzle.types.Ast.Statement.StatementKind;
  * @author rdyer
  */
 public class BoaMetricIntrinsics {
+	////////////////////////////////
+	// Number of Attributes (NOA) //
+	////////////////////////////////
+
+	private static class BoaNOAVisitor extends BoaCountingVisitor {
+		@Override
+		public boolean preVisit(final Declaration node) {
+			if (node.getKind() == TypeKind.CLASS)
+				count += node.getFieldsCount();
+			return true;
+		}
+	}
+	private static BoaNOAVisitor noaVisitor = new BoaNOAVisitor();
+
 	/**
 	 * Computes the Number of Attributes (NOA) metric for a Declaration.
 	 * 
@@ -16,19 +29,24 @@ public class BoaMetricIntrinsics {
 	 * @return the NOA value for decl
 	 */
 	@FunctionSpec(name = "get_metric_noa", returnType = "int", formalParameters = { "Declaration" })
-	public static int getMetricNOA(final Declaration decl) {
-	    int count = decl.getFieldsCount();
-
-	    for (int i = 0; i < decl.getMethodsCount(); i++)
-		    for (int j = 0; j < decl.getMethods(i).getStatementsCount(); j++)
-		    	if (decl.getMethods(i).getStatements(j).getKind() == StatementKind.TYPEDECL)
-		    		count += getMetricNOA(decl.getMethods(i).getStatements(j).getTypeDeclaration());
-
-	    for (int i = 0; i < decl.getNestedDeclarationsCount(); i++)
-	        count += getMetricNOA(decl.getNestedDeclarations(i));
-
-	    return count;
+	public static long getMetricNOA(final Declaration decl) {
+		noaVisitor.initialize().visit(decl);
+		return noaVisitor.count;
 	}
+
+	////////////////////////////////
+	// Number of Operations (NOO) //
+	////////////////////////////////
+
+	private static class BoaNOOVisitor extends BoaCountingVisitor {
+		@Override
+		public boolean preVisit(final Declaration node) {
+			if (node.getKind() == TypeKind.CLASS)
+				count += node.getMethodsCount();
+    		return true;
+		}
+	}
+	private static BoaNOOVisitor nooVisitor = new BoaNOOVisitor();
 
 	/**
 	 * Computes the Number of Operations (NOO) metric for a Declaration.
@@ -37,19 +55,24 @@ public class BoaMetricIntrinsics {
 	 * @return the NOO value for decl
 	 */
 	@FunctionSpec(name = "get_metric_noo", returnType = "int", formalParameters = { "Declaration" })
-	public static int getMetricNOO(final Declaration decl) {
-	    int count = decl.getMethodsCount();
-
-	    for (int i = 0; i < decl.getMethodsCount(); i++)
-		    for (int j = 0; j < decl.getMethods(i).getStatementsCount(); j++)
-		    	if (decl.getMethods(i).getStatements(j).getKind() == StatementKind.TYPEDECL)
-		    		count += getMetricNOO(decl.getMethods(i).getStatements(j).getTypeDeclaration());
-
-	    for (int i = 0; i < decl.getNestedDeclarationsCount(); i++)
-	        count += getMetricNOO(decl.getNestedDeclarations(i));
-
-	    return count;
+	public static long getMetricNOO(final Declaration decl) {
+		nooVisitor.initialize().visit(decl);
+		return nooVisitor.count;
 	}
+
+	////////////////////////////////////
+	// Number of Public Methods (NPM) //
+	////////////////////////////////////
+
+	private static class BoaNPMVisitor extends BoaCountingVisitor {
+		@Override
+		public boolean preVisit(final Method node) {
+    		if (BoaModifierIntrinsics.hasModifierPublic(node))
+    			count++;
+    		return true;
+		}
+	}
+	private static BoaNPMVisitor npmVisitor = new BoaNPMVisitor();
 
 	/**
 	 * Computes the Number of Public Methods (NPM) metric for a Declaration.
@@ -58,21 +81,8 @@ public class BoaMetricIntrinsics {
 	 * @return the NPM value for decl
 	 */
 	@FunctionSpec(name = "get_metric_npm", returnType = "int", formalParameters = { "Declaration" })
-	public static int getMetricNPM(final Declaration decl) {
-	    int count = 0;
-
-	    for (int i = 0; i < decl.getMethodsCount(); i++) {
-		    for (int j = 0; j < decl.getMethods(i).getStatementsCount(); j++)
-		    	if (decl.getMethods(i).getStatements(j).getKind() == StatementKind.TYPEDECL)
-		    		count += getMetricNPM(decl.getMethods(i).getStatements(j).getTypeDeclaration());
-
-    		if (BoaModifierIntrinsics.hasModifierPublic(decl.getMethods(i)))
-	            count++;
-    	}
-
-	    for (int i = 0; i < decl.getNestedDeclarationsCount(); i++)
-	        count += getMetricNPM(decl.getNestedDeclarations(i));
-
-	    return count;
+	public static long getMetricNPM(final Declaration decl) {
+		npmVisitor.initialize().visit(decl);
+		return npmVisitor.count;
 	}
 }
