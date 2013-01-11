@@ -1,5 +1,7 @@
 package sizzle.functions;
 
+import java.util.HashMap;
+
 import sizzle.types.Ast.*;
 
 /**
@@ -84,5 +86,40 @@ public class BoaMetricIntrinsics {
 	public static long getMetricNPM(final Declaration node) {
 		npmVisitor.initialize().visit(node);
 		return npmVisitor.count;
+	}
+
+	////////////////////////////////
+	// Number of Children (NOC) //
+	////////////////////////////////
+
+	private static class BoaNOCVisitor extends BoaCollectingVisitor<String,Long> {
+		private String ns;
+		@Override
+		protected boolean preVisit(Namespace node) {
+			this.ns = node.getName();
+			return super.preVisit(node);
+		}
+		@Override
+		protected boolean preVisit(Declaration node) {
+			for (final Type t : node.getParentsList()) {
+				final String key = ns + "." + t.getName();
+				final long val = map.containsKey(key) ? map.get(key) : 0;
+				map.put(key, val + 1);
+			}
+			return super.preVisit(node);
+		}
+	}
+	private static BoaNOCVisitor nocVisitor = new BoaNOCVisitor();
+
+	/**
+	 * (Partially) Computes the Number of Children (NOC) metric.
+	 * 
+	 * @param node the node to compute NOC for
+	 * @return a map containing partial computation of the NOC metric
+	 */
+	@FunctionSpec(name = "get_metric_noc", returnType = "map[string] of int", formalParameters = { "ASTRoot" })
+	public static HashMap<String,Long> getMetricNOC(final ASTRoot node) {
+		nocVisitor.initialize(new HashMap<String,Long>()).visit(node);
+		return nocVisitor.map;
 	}
 }
