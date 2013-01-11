@@ -464,19 +464,13 @@ public class BoaJavaFeaturesIntrinsics {
 	// Collect Annotations Used //
 	//////////////////////////////
 
-	private static class AnnotationCollectingVisitor extends BoaAbstractVisitor {
-		public HashMap<String,Long> counts;
-		public AnnotationCollectingVisitor initialize(final HashMap<String,Long> counts) {
-			this.counts = counts;
-			return this;
-		}
-
+	private static class AnnotationCollectingVisitor extends BoaCollectingVisitor<String,Long> {
 		@Override
 		protected boolean preVisit(Modifier node) {
 			if (node.getKind() == Modifier.ModifierKind.ANNOTATION) {
 				final String name = BoaAstIntrinsics.type_name(node.getAnnotationName());
-				final long count = counts.containsKey(name) ? counts.get(name) : 0;
-				counts.put(name, count + 1);
+				final long count = map.containsKey(name) ? map.get(name) : 0;
+				map.put(name, count + 1);
 			}
 			return true;
 		}
@@ -484,25 +478,20 @@ public class BoaJavaFeaturesIntrinsics {
 	private static AnnotationCollectingVisitor annotationCollectingVisitor = new AnnotationCollectingVisitor();
 
 	@FunctionSpec(name = "collect_annotations", returnType = "map[string] of int", formalParameters = { "ASTRoot", "map[string] of int" })
-	public static HashMap<String,Long> collect_annotations(final ASTRoot f, HashMap<String,Long> counts) {
-		annotationCollectingVisitor.initialize(counts).visit(f);
-		return annotationCollectingVisitor.counts;
+	public static HashMap<String,Long> collect_annotations(final ASTRoot f, final HashMap<String,Long> map) {
+		annotationCollectingVisitor.initialize(map).visit(f);
+		return annotationCollectingVisitor.map;
 	}
 
 	///////////////////////////
 	// Collect Generics Used //
 	///////////////////////////
 
-	private static class GenericsCollectingVisitor extends BoaAbstractVisitor {
-		public HashMap<String,Long> counts;
-		public GenericsCollectingVisitor initialize(final HashMap<String,Long> counts) {
-			this.counts = counts;
-			return this;
-		}
+	private static class GenericsCollectingVisitor extends BoaCollectingVisitor<String,Long> {
 		@Override
 		protected boolean preVisit(Type node) {
 			try {
-				parseGenericType(BoaAstIntrinsics.type_name(node.getName()).trim(), counts);
+				parseGenericType(BoaAstIntrinsics.type_name(node.getName()).trim(), map);
 			} catch (final StackOverflowError e) {
 				System.err.println("STACK ERR: " + node.getName() + " -> " + BoaAstIntrinsics.type_name(node.getName()).trim());
 			}
@@ -512,9 +501,9 @@ public class BoaJavaFeaturesIntrinsics {
 	private static GenericsCollectingVisitor genericsCollectingVisitor = new GenericsCollectingVisitor();
 
 	@FunctionSpec(name = "collect_generic_types", returnType = "map[string] of int", formalParameters = { "ASTRoot", "map[string] of int" })
-	public static HashMap<String,Long> collect_generic_types(final ASTRoot f, HashMap<String,Long> counts) {
-		genericsCollectingVisitor.initialize(counts).visit(f);
-		return genericsCollectingVisitor.counts;
+	public static HashMap<String,Long> collect_generic_types(final ASTRoot f, final HashMap<String,Long> map) {
+		genericsCollectingVisitor.initialize(map).visit(f);
+		return genericsCollectingVisitor.map;
 	}
 
 	public static void testGenericParser() {
