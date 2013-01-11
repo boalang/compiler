@@ -75,14 +75,14 @@ public class BoaMetricIntrinsics {
 	private static BoaNPMVisitor npmVisitor = new BoaNPMVisitor();
 
 	/**
-	 * Computes the Number of Public Methods (NPM) metric for a Declaration.
+	 * Computes the Number of Public Methods (NPM) metric for a node.
 	 * 
-	 * @param decl the Declaration to compute NPM for
+	 * @param node the node to compute NPM for
 	 * @return the NPM value for decl
 	 */
 	@FunctionSpec(name = "get_metric_npm", returnType = "int", formalParameters = { "Declaration" })
-	public static long getMetricNPM(final Declaration decl) {
-		npmVisitor.initialize().visit(decl);
+	public static long getMetricNPM(final Declaration node) {
+		npmVisitor.initialize().visit(node);
 		return npmVisitor.count;
 	}
 }
