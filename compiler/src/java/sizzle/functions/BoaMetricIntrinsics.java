@@ -122,4 +122,109 @@ public class BoaMetricIntrinsics {
 		nocVisitor.initialize(new HashMap<String,Long>()).visit(node);
 		return nocVisitor.map;
 	}
+
+	///////////////////////////////////////////
+	// Lack of Cohesion in Operations (LCOO) //
+	///////////////////////////////////////////
+
+	private static class BoaLCOOVisitor extends BoaCountingVisitor {
+		// TODO
+	}
+	private static BoaLCOOVisitor lcooVisitor = new BoaLCOOVisitor();
+
+	/**
+	 * Computes the Lack of Cohesion in Operations (LCOO) metric for a node.
+	 * 
+	 * @param node the node to compute LCOO for
+	 * @return the LCOO value for node
+	 */
+	@FunctionSpec(name = "get_metric_lcoo", returnType = "int", formalParameters = { "Declaration" })
+	public static long getMetricLCOO(final Declaration node) {
+		lcooVisitor.initialize().visit(node);
+		return lcooVisitor.count;
+	}
+
+	/////////////////////////////////////
+	// Depth of Inheritance Tree (DIT) //
+	/////////////////////////////////////
+
+	private static class BoaDITVisitor extends BoaCountingVisitor {
+		// TODO
+	}
+	private static BoaDITVisitor ditVisitor = new BoaDITVisitor();
+
+	/**
+	 * Computes the Depth of Inheritance Tree (DIT) metric for a node.
+	 * 
+	 * @param node the node to compute DIT for
+	 * @return the DIT value for node
+	 */
+	@FunctionSpec(name = "get_metric_dit", returnType = "int", formalParameters = { "Declaration" })
+	public static long getMetricDIT(final Declaration node) {
+		ditVisitor.initialize().visit(node);
+		return ditVisitor.count;
+	}
+
+	////////////////////////////////
+	// Response For a Class (RFC) //
+	////////////////////////////////
+
+	private static class BoaRFCVisitor extends BoaCountingVisitor {
+		// TODO
+	}
+	private static BoaRFCVisitor rfcVisitor = new BoaRFCVisitor();
+
+	/**
+	 * Computes the Response For a Class (RFC) metric for a node.
+	 * 
+	 * @param node the node to compute RFC for
+	 * @return the RFC value for node
+	 */
+	@FunctionSpec(name = "get_metric_rfc", returnType = "int", formalParameters = { "Declaration" })
+	public static long getMetricRFC(final Declaration node) {
+		rfcVisitor.initialize().visit(node);
+		return rfcVisitor.count;
+	}
+
+	////////////////////////////////////
+	// Coupling Between Classes (CBC) //
+	////////////////////////////////////
+
+	private static class BoaCBCVisitor extends BoaCountingVisitor {
+		// TODO
+	}
+	private static BoaCBCVisitor cbcVisitor = new BoaCBCVisitor();
+
+	/**
+	 * Computes the Coupling Between Classes (CBC) metric for a node.
+	 * 
+	 * @param node the node to compute CBC for
+	 * @return the CBC value for node
+	 */
+	@FunctionSpec(name = "get_metric_cbc", returnType = "int", formalParameters = { "Declaration" })
+	public static long getMetricCBC(final Declaration node) {
+		cbcVisitor.initialize().visit(node);
+		return cbcVisitor.count;
+	}
+
+	////////////////////////////
+	// Afferent Coupling (CA) //
+	////////////////////////////
+
+	private static class BoaCAVisitor extends BoaCountingVisitor {
+		// TODO
+	}
+	private static BoaCAVisitor caVisitor = new BoaCAVisitor();
+
+	/**
+	 * Computes the Afferent Coupling (CA) metric for a node.
+	 * 
+	 * @param node the node to compute CA for
+	 * @return the CA value for node
+	 */
+	@FunctionSpec(name = "get_metric_ca", returnType = "int", formalParameters = { "Declaration" })
+	public static long getMetricCA(final Declaration node) {
+		caVisitor.initialize().visit(node);
+		return caVisitor.count;
+	}
 }
