@@ -23,14 +23,14 @@ public class BoaMetricIntrinsics {
 	private static BoaNOAVisitor noaVisitor = new BoaNOAVisitor();
 
 	/**
-	 * Computes the Number of Attributes (NOA) metric for a Declaration.
+	 * Computes the Number of Attributes (NOA) metric for a node.
 	 * 
-	 * @param decl the Declaration to compute NOA for
+	 * @param node the node to compute NOA for
 	 * @return the NOA value for decl
 	 */
 	@FunctionSpec(name = "get_metric_noa", returnType = "int", formalParameters = { "Declaration" })
-	public static long getMetricNOA(final Declaration decl) {
-		noaVisitor.initialize().visit(decl);
+	public static long getMetricNOA(final Declaration node) {
+		noaVisitor.initialize().visit(node);
 		return noaVisitor.count;
 	}
 
@@ -49,14 +49,14 @@ public class BoaMetricIntrinsics {
 	private static BoaNOOVisitor nooVisitor = new BoaNOOVisitor();
 
 	/**
-	 * Computes the Number of Operations (NOO) metric for a Declaration.
+	 * Computes the Number of Operations (NOO) metric for a node.
 	 * 
-	 * @param decl the Declaration to compute NOO for
+	 * @param node the node to compute NOO for
 	 * @return the NOO value for decl
 	 */
 	@FunctionSpec(name = "get_metric_noo", returnType = "int", formalParameters = { "Declaration" })
-	public static long getMetricNOO(final Declaration decl) {
-		nooVisitor.initialize().visit(decl);
+	public static long getMetricNOO(final Declaration node) {
+		nooVisitor.initialize().visit(node);
 		return nooVisitor.count;
 	}
 
