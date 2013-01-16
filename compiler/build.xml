@@ -39,7 +39,7 @@
 	</target>
 
 	<target name="parser" depends="tree">
-		<javacc target="build/javacc/sizzle.jj" outputdirectory="build/java/sizzle/parser" javacchome="lib" static="true" />
+		<javacc target="build/javacc/sizzle.jj" outputdirectory="build/java/sizzle/parser" debugparser="false" debuglookahead="false" debugtokenmanager="false" javacchome="lib" static="true" />
 	</target>
 
 	<target name="compile-generated" depends="parser">
