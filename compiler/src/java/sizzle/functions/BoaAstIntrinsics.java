@@ -49,8 +49,17 @@ public class BoaAstIntrinsics {
 	@SuppressWarnings("unchecked")
 	@FunctionSpec(name = "getast", returnType = "ASTRoot", formalParameters = { "Revision", "ChangedFile" })
 	public static ASTRoot getast(final Revision rev, final ChangedFile f) {
-		context.getCounter(HBASE_COUNTER.GETS_ATTEMPTED).increment(1);
 		final ASTRoot.Builder b = ASTRoot.newBuilder();
+
+		// since we know only certain kinds have ASTs, filter before looking in HBase
+		final ChangedFile.FileKind kind = f.getKind();
+		if (kind != ChangedFile.FileKind.SOURCE_JAVA_ERROR
+				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS2
+				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS3
+				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS4)
+			return b.build();
+
+		context.getCounter(HBASE_COUNTER.GETS_ATTEMPTED).increment(1);
 
 		final byte[] rowName = Bytes.toBytes(rev.getKey());
 		final Get get = new Get(rowName);
