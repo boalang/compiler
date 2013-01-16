@@ -67,15 +67,14 @@ import sizzle.types.VisibilityProtoMap;
 public class SymbolTable {
 	private static final boolean strictCompatibility = true;
 
+	private static HashMap<String, Class<?>> aggregators;
+	private static final Map<Class<?>, SizzleType> protomap;
+	private static Map<String, SizzleType> idmap;
+	private static final Map<String, SizzleType> globals;
+
 	private final ClassLoader loader;
 
 	private FunctionTrie functions;
-	private HashMap<String, Class<?>> aggregators;
-
-	private static final Map<Class<?>, SizzleType> protomap;
-	private Map<String, SizzleType> idmap;
-
-	private static final Map<String, SizzleType> globals;
 	private Map<String, SizzleType> locals;
 
 	private String id;
@@ -84,6 +83,8 @@ public class SymbolTable {
 	private boolean needsBoxing;
 
 	static {
+		aggregators = new HashMap<String, Class<?>>();
+
 		// this maps the Java types in protocol buffers into Sizzle types
 		protomap = new HashMap<Class<?>, SizzleType>();
 
@@ -106,6 +107,47 @@ public class SymbolTable {
 		globals.put("inf", new SizzleFloat());
 		globals.put("NaN", new SizzleFloat());
 		globals.put("nan", new SizzleFloat());
+
+		// this maps scalar Sizzle scalar types names to their classes
+		idmap = new HashMap<String, SizzleType>();
+
+		idmap.put("any", new SizzleAny());
+		idmap.put("none", null);
+		idmap.put("bool", new SizzleBool());
+		idmap.put("int", new SizzleInt());
+		idmap.put("float", new SizzleFloat());
+		idmap.put("time", new SizzleTime());
+		idmap.put("fingerprint", new SizzleFingerprint());
+		idmap.put("string", new SizzleString());
+		idmap.put("bytes", new SizzleBytes());
+
+		idmap.put("ASTRoot", new ASTRootProtoTuple());
+		idmap.put("Bug", new BugProtoTuple());
+		idmap.put("BugRepository", new BugRepositoryProtoTuple());
+		idmap.put("BugStatus", new BugStatusProtoMap());
+		idmap.put("ChangedFile", new ChangedFileProtoTuple());
+		idmap.put("ChangeKind", new ChangeKindProtoMap());
+		idmap.put("CodeRepository", new CodeRepositoryProtoTuple());
+		idmap.put("CommentKind", new CommentKindProtoMap());
+		idmap.put("Comment", new CommentProtoTuple());
+		idmap.put("Declaration", new DeclarationProtoTuple());
+		idmap.put("ExpressionKind", new ExpressionKindProtoMap());
+		idmap.put("Expression", new ExpressionProtoTuple());
+		idmap.put("FileKind", new FileKindProtoMap());
+		idmap.put("Method", new MethodProtoTuple());
+		idmap.put("ModifierKind", new ModifierKindProtoMap());
+		idmap.put("Modifier", new ModifierProtoTuple());
+		idmap.put("Namespace", new NamespaceProtoTuple());
+		idmap.put("Person", new PersonProtoTuple());
+		idmap.put("Project", new ProjectProtoTuple());
+		idmap.put("RepositoryKind", new RepositoryKindProtoMap());
+		idmap.put("Revision", new RevisionProtoTuple());
+		idmap.put("StatementKind", new StatementKindProtoMap());
+		idmap.put("Statement", new StatementProtoTuple());
+		idmap.put("TypeKind", new TypeKindProtoMap());
+		idmap.put("Type", new TypeProtoTuple());
+		idmap.put("Variable", new VariableProtoTuple());
+		idmap.put("Visibility", new VisibilityProtoMap());
 	}
 
 	private SymbolTable() {
@@ -115,50 +157,8 @@ public class SymbolTable {
 	public SymbolTable(final List<URL> libs) throws IOException {
 		this.loader = Thread.currentThread().getContextClassLoader();
 
-		// this maps scalar Sizzle scalar types names to their classes
-		this.idmap = new HashMap<String, SizzleType>();
-
-		this.idmap.put("any", new SizzleAny());
-		this.idmap.put("none", null);
-		this.idmap.put("bool", new SizzleBool());
-		this.idmap.put("int", new SizzleInt());
-		this.idmap.put("float", new SizzleFloat());
-		this.idmap.put("time", new SizzleTime());
-		this.idmap.put("fingerprint", new SizzleFingerprint());
-		this.idmap.put("string", new SizzleString());
-		this.idmap.put("bytes", new SizzleBytes());
-
-		this.idmap.put("ASTRoot", new ASTRootProtoTuple());
-		this.idmap.put("Bug", new BugProtoTuple());
-		this.idmap.put("BugRepository", new BugRepositoryProtoTuple());
-		this.idmap.put("BugStatus", new BugStatusProtoMap());
-		this.idmap.put("ChangedFile", new ChangedFileProtoTuple());
-		this.idmap.put("ChangeKind", new ChangeKindProtoMap());
-		this.idmap.put("CodeRepository", new CodeRepositoryProtoTuple());
-		this.idmap.put("CommentKind", new CommentKindProtoMap());
-		this.idmap.put("Comment", new CommentProtoTuple());
-		this.idmap.put("Declaration", new DeclarationProtoTuple());
-		this.idmap.put("ExpressionKind", new ExpressionKindProtoMap());
-		this.idmap.put("Expression", new ExpressionProtoTuple());
-		this.idmap.put("FileKind", new FileKindProtoMap());
-		this.idmap.put("Method", new MethodProtoTuple());
-		this.idmap.put("ModifierKind", new ModifierKindProtoMap());
-		this.idmap.put("Modifier", new ModifierProtoTuple());
-		this.idmap.put("Namespace", new NamespaceProtoTuple());
-		this.idmap.put("Person", new PersonProtoTuple());
-		this.idmap.put("Project", new ProjectProtoTuple());
-		this.idmap.put("RepositoryKind", new RepositoryKindProtoMap());
-		this.idmap.put("Revision", new RevisionProtoTuple());
-		this.idmap.put("StatementKind", new StatementKindProtoMap());
-		this.idmap.put("Statement", new StatementProtoTuple());
-		this.idmap.put("TypeKind", new TypeKindProtoMap());
-		this.idmap.put("Type", new TypeProtoTuple());
-		this.idmap.put("Variable", new VariableProtoTuple());
-		this.idmap.put("Visibility", new VisibilityProtoMap());
-
 		// variables with a local scope
 		this.locals = new HashMap<String, SizzleType>();
-		this.aggregators = new HashMap<String, Class<?>>();
 		this.functions = new FunctionTrie();
 
 		// these generic functions require more finagling than can currently be
@@ -313,8 +313,6 @@ public class SymbolTable {
 	public SymbolTable cloneNonLocals() throws IOException {
 		SymbolTable st = new SymbolTable();
 
-		st.aggregators = this.aggregators;
-		st.idmap = this.idmap;
 		st.functions = this.functions;
 		st.locals = new HashMap<String, SizzleType>(this.locals);
 
@@ -326,8 +324,8 @@ public class SymbolTable {
 	}
 
 	public void set(final String id, final SizzleType type, final boolean global) {
-		if (this.idmap.containsKey(id))
-			throw new RuntimeException(id + " already declared as " + this.idmap.get(id));
+		if (idmap.containsKey(id))
+			throw new RuntimeException(id + " already declared as " + idmap.get(id));
 
 		if (type instanceof SizzleFunction)
 			this.setFunction(id, (SizzleFunction) type);
@@ -343,8 +341,8 @@ public class SymbolTable {
 	}
 
 	public SizzleType get(final String id) {
-		if (this.idmap.containsKey(id))
-			return new SizzleName(this.idmap.get(id));
+		if (idmap.containsKey(id))
+			return new SizzleName(idmap.get(id));
 
 		if (globals.containsKey(id))
 			return globals.get(id);
@@ -356,12 +354,12 @@ public class SymbolTable {
 	}
 
 	public boolean hasType(final String id) {
-		return this.idmap.containsKey(id);
+		return idmap.containsKey(id);
 	}
 
 	public SizzleType getType(final String id) {
-		if (this.idmap.containsKey(id))
-			return this.idmap.get(id);
+		if (idmap.containsKey(id))
+			return idmap.get(id);
 
 		if (id.startsWith("array of "))
 			return new SizzleArray(this.getType(id.substring("array of ".length()).trim()));
@@ -374,7 +372,7 @@ public class SymbolTable {
 	}
 
 	public void setType(final String id, final SizzleType sizzleType) {
-		this.idmap.put(id, sizzleType);
+		idmap.put(id, sizzleType);
 	}
 
 	private void importAggregator(final Class<?> clazz) {
@@ -388,9 +386,9 @@ public class SymbolTable {
 
 		final String type = annotation.type();
 		if (type.equals("any"))
-			this.aggregators.put(annotation.name(), clazz);
+			aggregators.put(annotation.name(), clazz);
 		else
-			this.aggregators.put(annotation.name() + ":" + type, clazz);
+			aggregators.put(annotation.name() + ":" + type, clazz);
 	}
 
 	private void importAggregator(final String c) {
@@ -402,10 +400,10 @@ public class SymbolTable {
 	}
 
 	public Class<?> getAggregator(final String name, final SizzleScalar type) {
-		if (this.aggregators.containsKey(name + ":" + type))
-			return this.aggregators.get(name + ":" + type);
-		else if (this.aggregators.containsKey(name))
-			return this.aggregators.get(name);
+		if (aggregators.containsKey(name + ":" + type))
+			return aggregators.get(name + ":" + type);
+		else if (aggregators.containsKey(name))
+			return aggregators.get(name);
 		else
 			throw new RuntimeException("no such aggregator " + name + " of " + type);
 	}
@@ -560,7 +558,7 @@ public class SymbolTable {
 				members.add(protomap.get(type));
 			}
 
-			this.idmap.put(c.getSimpleName(), new SizzleProtoTuple(members, names));
+			idmap.put(c.getSimpleName(), new SizzleProtoTuple(members, names));
 			// TODO support protocol buffer casts
 		}
 	}
