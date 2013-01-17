@@ -1,98 +1,16 @@
 package sizzle.compiler;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
-import java.util.Vector;
 import java.util.regex.Pattern;
 
 import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
 
-import sizzle.parser.syntaxtree.ArrayType;
-import sizzle.parser.syntaxtree.Assignment;
-import sizzle.parser.syntaxtree.Block;
-import sizzle.parser.syntaxtree.BreakStatement;
-import sizzle.parser.syntaxtree.BytesLiteral;
-import sizzle.parser.syntaxtree.Call;
-import sizzle.parser.syntaxtree.CharLiteral;
-import sizzle.parser.syntaxtree.Comparison;
-import sizzle.parser.syntaxtree.Component;
-import sizzle.parser.syntaxtree.Composite;
-import sizzle.parser.syntaxtree.Conjunction;
-import sizzle.parser.syntaxtree.ContinueStatement;
-import sizzle.parser.syntaxtree.Declaration;
-import sizzle.parser.syntaxtree.DoStatement;
-import sizzle.parser.syntaxtree.EmitStatement;
-import sizzle.parser.syntaxtree.ExprList;
-import sizzle.parser.syntaxtree.ExprStatement;
-import sizzle.parser.syntaxtree.Expression;
-import sizzle.parser.syntaxtree.Factor;
-import sizzle.parser.syntaxtree.FingerprintLiteral;
-import sizzle.parser.syntaxtree.FloatingPointLiteral;
-import sizzle.parser.syntaxtree.ForExprStatement;
-import sizzle.parser.syntaxtree.ForStatement;
-import sizzle.parser.syntaxtree.ForVarDecl;
-import sizzle.parser.syntaxtree.Function;
-import sizzle.parser.syntaxtree.FunctionType;
-import sizzle.parser.syntaxtree.Identifier;
-import sizzle.parser.syntaxtree.IdentifierList;
-import sizzle.parser.syntaxtree.IfStatement;
-import sizzle.parser.syntaxtree.Index;
-import sizzle.parser.syntaxtree.IntegerLiteral;
-import sizzle.parser.syntaxtree.MapType;
-import sizzle.parser.syntaxtree.Node;
-import sizzle.parser.syntaxtree.NodeChoice;
-import sizzle.parser.syntaxtree.NodeSequence;
-import sizzle.parser.syntaxtree.NodeToken;
-import sizzle.parser.syntaxtree.Operand;
-import sizzle.parser.syntaxtree.OutputType;
-import sizzle.parser.syntaxtree.Pair;
-import sizzle.parser.syntaxtree.PairList;
-import sizzle.parser.syntaxtree.Program;
-import sizzle.parser.syntaxtree.ProtoFieldDecl;
-import sizzle.parser.syntaxtree.ProtoMember;
-import sizzle.parser.syntaxtree.ProtoMemberList;
-import sizzle.parser.syntaxtree.ProtoTupleType;
-import sizzle.parser.syntaxtree.Regexp;
-import sizzle.parser.syntaxtree.RegexpList;
-import sizzle.parser.syntaxtree.ResultStatement;
-import sizzle.parser.syntaxtree.ReturnStatement;
-import sizzle.parser.syntaxtree.Selector;
-import sizzle.parser.syntaxtree.SimpleExpr;
-import sizzle.parser.syntaxtree.SimpleMember;
-import sizzle.parser.syntaxtree.SimpleMemberList;
-import sizzle.parser.syntaxtree.SimpleTupleType;
-import sizzle.parser.syntaxtree.Start;
-import sizzle.parser.syntaxtree.Statement;
-import sizzle.parser.syntaxtree.StatementExpr;
-import sizzle.parser.syntaxtree.StaticVarDecl;
-import sizzle.parser.syntaxtree.StringLiteral;
-import sizzle.parser.syntaxtree.SwitchStatement;
-import sizzle.parser.syntaxtree.Term;
-import sizzle.parser.syntaxtree.TimeLiteral;
-import sizzle.parser.syntaxtree.TupleType;
-import sizzle.parser.syntaxtree.Type;
-import sizzle.parser.syntaxtree.TypeDecl;
-import sizzle.parser.syntaxtree.VarDecl;
-import sizzle.parser.syntaxtree.WhenStatement;
-import sizzle.parser.syntaxtree.WhileStatement;
+import sizzle.parser.syntaxtree.*;
 import sizzle.parser.visitor.GJDepthFirst;
-import sizzle.types.SizzleArray;
-import sizzle.types.SizzleFunction;
-import sizzle.types.SizzleMap;
-import sizzle.types.SizzleName;
-import sizzle.types.SizzleProtoList;
-import sizzle.types.SizzleProtoMap;
-import sizzle.types.SizzleProtoTuple;
-import sizzle.types.SizzleString;
-import sizzle.types.SizzleTable;
-import sizzle.types.SizzleTuple;
-import sizzle.types.SizzleType;
+import sizzle.types.*;
 
 class TableDescription {
 	private String aggregator;
@@ -942,10 +860,11 @@ public class CodeGeneratingVisitor extends GJDepthFirst<String, SymbolTable> {
 		case 2: // integer literal
 		case 3: // floating point literal
 		case 4: // composite
-		case 5: // function
-		case 8: // statement expression
+		case 5: // visitor
+		case 6: // function
+		case 9: // statement expression
 			return n.f0.choice.accept(this, argu);
-		case 6: // unary operator
+		case 7: // unary operator
 			NodeChoice c = (NodeChoice)((NodeSequence) n.f0.choice).nodes.elementAt(0);
 			switch (c.which) {
 			case 0:
@@ -958,7 +877,7 @@ public class CodeGeneratingVisitor extends GJDepthFirst<String, SymbolTable> {
 			default:
 				throw new RuntimeException("unexpected choice " + c.which + " is " + c.choice.getClass());
 			}
-		case 9: // parenthetical
+		case 10: // parenthetical
 			return "(" + ((NodeSequence) n.f0.choice).nodes.elementAt(1).accept(this, argu) + ")";
 		default:
 			throw new RuntimeException("unexpected choice " + n.f0.which + " is " + n.f0.choice.getClass());
@@ -1152,5 +1071,98 @@ public class CodeGeneratingVisitor extends GJDepthFirst<String, SymbolTable> {
 			}
 
 		return camelized.toString();
+	}
+
+	@Override
+	public String visit(final EmptyStatement n, final SymbolTable argu) {
+		return ";\n";
+	}
+
+	@Override
+	public String visit(final StopStatement n, final SymbolTable argu) {
+		return "return false;\n";
+	}
+
+	@Override
+	public String visit(final VisitorExpr n, final SymbolTable argu) {
+		return "new sizzle.runtime.BoaAbstractVisitor()" + n.f1.accept(this, argu);
+	}
+
+	@Override
+	public String visit(final VisitorType n, final SymbolTable argu) {
+		throw new RuntimeException("unimplemented");
+	}
+
+	@Override
+	public String visit(final VisitStatement n, final SymbolTable argu) {
+		SymbolTable st;
+		try {
+			st = argu.cloneNonLocals();
+		} catch (final IOException e) {
+			throw new RuntimeException(e.getClass().getSimpleName() + " caught", e);
+		}
+
+		st.setIsBeforeVisitor(n.f0.which == 0 && n.f1.which != 2);
+
+		final boolean isBefore = n.f0.which == 0;
+		String s = "";
+		switch (n.f1.which) {
+		case 0: // single type
+			final String typeName = ((Identifier)((NodeSequence)n.f1.choice).nodes.get(2)).f0.tokenImage;
+			final String ident = ((Identifier)((NodeSequence)n.f1.choice).nodes.get(0)).f0.tokenImage;
+			final SizzleType type = st.get(typeName);
+			if (type != null)
+				st.set(ident, type);
+			else
+				throw new TypeException(n, "Invalid type '" + typeName + "'");
+
+			s = "@Override\nprotected ";
+			s += isBefore ? "boolean preVisit" : "void postVisit";
+			s += "(final " + argu.get(typeName).toJavaType() + " ___" + ident + ") throws Exception {\n";
+			s += n.f3.accept(this, st);
+			if (isBefore && !lastStatementIsStop(n.f3))
+				s += "return true;\n";
+			s += "}\n";
+			break;
+		case 1: // list of types
+			final IdentifierList idlist = (IdentifierList)n.f1.choice;
+			final List<String> ids = new ArrayList<String>();
+			ids.add(idlist.f0.f0.tokenImage);
+			if (idlist.f1.present())
+				for (final Node ns : idlist.f1.nodes)
+					ids.add(((Identifier)((NodeSequence)ns).nodes.get(1)).f0.tokenImage);
+			for (final String t : ids) {
+				s += "@Override\nprotected ";
+				s += isBefore ? "boolean preVisit" : "void postVisit";
+				s += "(final " + argu.get(t).toJavaType() + " __UNUSED) throws Exception {\n";
+				s += n.f3.accept(this, st);
+				if (isBefore && !lastStatementIsStop(n.f3))
+					s += "return true;\n";
+				s += "}\n";
+			}
+			break;
+		case 2: // wildcard
+			s = "@Override\nprotected void ";
+			s += isBefore ? "defaultPreVisit" : "defaultPostVisit";
+			s += "() throws Exception {\n";
+			s += n.f3.accept(this, st);
+			s += "}\n";
+			break;
+		default:
+			throw new RuntimeException("unexpected choice " + n.f0.which + " is " + n.f0.choice.getClass());
+		}
+		return s;
+	}
+
+	private boolean lastStatementIsStop(Statement s) {
+		if (s.f0.choice instanceof StopStatement)
+			return true;
+
+		if (s.f0.choice instanceof Block)
+			for (final Node n : ((Block)s.f0.choice).f1.nodes)
+				if (((NodeChoice)n).which == 1 && ((Statement)((NodeChoice)n).choice).f0.choice instanceof StopStatement)
+					return true;
+
+		return false;
 	}
 }

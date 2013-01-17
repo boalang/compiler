@@ -31,7 +31,7 @@ public class BoaMetricIntrinsics {
 	 * @return the NOA value for decl
 	 */
 	@FunctionSpec(name = "get_metric_noa", returnType = "int", formalParameters = { "Declaration" })
-	public static long getMetricNOA(final Declaration node) {
+	public static long getMetricNOA(final Declaration node) throws Exception {
 		noaVisitor.initialize().visit(node);
 		return noaVisitor.count;
 	}
@@ -57,7 +57,7 @@ public class BoaMetricIntrinsics {
 	 * @return the NOO value for decl
 	 */
 	@FunctionSpec(name = "get_metric_noo", returnType = "int", formalParameters = { "Declaration" })
-	public static long getMetricNOO(final Declaration node) {
+	public static long getMetricNOO(final Declaration node) throws Exception {
 		nooVisitor.initialize().visit(node);
 		return nooVisitor.count;
 	}
@@ -83,7 +83,7 @@ public class BoaMetricIntrinsics {
 	 * @return the NPM value for decl
 	 */
 	@FunctionSpec(name = "get_metric_npm", returnType = "int", formalParameters = { "Declaration" })
-	public static long getMetricNPM(final Declaration node) {
+	public static long getMetricNPM(final Declaration node) throws Exception {
 		npmVisitor.initialize().visit(node);
 		return npmVisitor.count;
 	}
@@ -95,12 +95,12 @@ public class BoaMetricIntrinsics {
 	private static class BoaNOCVisitor extends BoaCollectingVisitor<String,Long> {
 		private String ns;
 		@Override
-		protected boolean preVisit(Namespace node) {
+		protected boolean preVisit(Namespace node) throws Exception {
 			this.ns = node.getName();
 			return super.preVisit(node);
 		}
 		@Override
-		protected boolean preVisit(Declaration node) {
+		protected boolean preVisit(Declaration node) throws Exception {
 			for (final Type t : node.getParentsList()) {
 				final String key = ns + "." + t.getName();
 				final long val = map.containsKey(key) ? map.get(key) : 0;
@@ -118,7 +118,7 @@ public class BoaMetricIntrinsics {
 	 * @return a map containing partial computation of the NOC metric
 	 */
 	@FunctionSpec(name = "get_metric_noc", returnType = "map[string] of int", formalParameters = { "ASTRoot" })
-	public static HashMap<String,Long> getMetricNOC(final ASTRoot node) {
+	public static HashMap<String,Long> getMetricNOC(final ASTRoot node) throws Exception {
 		nocVisitor.initialize(new HashMap<String,Long>()).visit(node);
 		return nocVisitor.map;
 	}
@@ -139,7 +139,7 @@ public class BoaMetricIntrinsics {
 	 * @return the LCOO value for node
 	 */
 	@FunctionSpec(name = "get_metric_lcoo", returnType = "int", formalParameters = { "Declaration" })
-	public static long getMetricLCOO(final Declaration node) {
+	public static long getMetricLCOO(final Declaration node) throws Exception {
 		lcooVisitor.initialize().visit(node);
 		return lcooVisitor.count;
 	}
@@ -160,7 +160,7 @@ public class BoaMetricIntrinsics {
 	 * @return the DIT value for node
 	 */
 	@FunctionSpec(name = "get_metric_dit", returnType = "int", formalParameters = { "Declaration" })
-	public static long getMetricDIT(final Declaration node) {
+	public static long getMetricDIT(final Declaration node) throws Exception {
 		ditVisitor.initialize().visit(node);
 		return ditVisitor.count;
 	}
@@ -181,7 +181,7 @@ public class BoaMetricIntrinsics {
 	 * @return the RFC value for node
 	 */
 	@FunctionSpec(name = "get_metric_rfc", returnType = "int", formalParameters = { "Declaration" })
-	public static long getMetricRFC(final Declaration node) {
+	public static long getMetricRFC(final Declaration node) throws Exception {
 		rfcVisitor.initialize().visit(node);
 		return rfcVisitor.count;
 	}
@@ -202,7 +202,7 @@ public class BoaMetricIntrinsics {
 	 * @return the CBC value for node
 	 */
 	@FunctionSpec(name = "get_metric_cbc", returnType = "int", formalParameters = { "Declaration" })
-	public static long getMetricCBC(final Declaration node) {
+	public static long getMetricCBC(final Declaration node) throws Exception {
 		cbcVisitor.initialize().visit(node);
 		return cbcVisitor.count;
 	}
@@ -223,7 +223,7 @@ public class BoaMetricIntrinsics {
 	 * @return the CA value for node
 	 */
 	@FunctionSpec(name = "get_metric_ca", returnType = "int", formalParameters = { "Declaration" })
-	public static long getMetricCA(final Declaration node) {
+	public static long getMetricCA(final Declaration node) throws Exception {
 		caVisitor.initialize().visit(node);
 		return caVisitor.count;
 	}

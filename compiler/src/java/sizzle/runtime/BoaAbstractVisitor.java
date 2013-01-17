@@ -1,7 +1,8 @@
-package sizzle.functions;
+package sizzle.runtime;
 
 import java.util.List;
 
+import sizzle.functions.BoaAstIntrinsics;
 import sizzle.types.Ast.*;
 import sizzle.types.Code.CodeRepository;
 import sizzle.types.Code.Revision;
@@ -33,57 +34,57 @@ public abstract class BoaAbstractVisitor {
 	 * Provides a default action for pre-visiting nodes.
 	 * Any <code>preVisit()</code> method that is not overridden calls this method.
 	 */
-	protected void defaultPreVisit() { }
+	protected void defaultPreVisit() throws Exception { }
 
-	protected boolean preVisit(final Project node) {
+	protected boolean preVisit(final Project node) throws Exception {
 		defaultPreVisit();
 		return true;
 	}
-	protected boolean preVisit(final CodeRepository node) {
+	protected boolean preVisit(final CodeRepository node) throws Exception {
 		defaultPreVisit();
 		return true;
 	}
-	protected boolean preVisit(final Revision node) {
+	protected boolean preVisit(final Revision node) throws Exception {
 		defaultPreVisit();
 		return true;
 	}
-	protected boolean preVisit(final ASTRoot node) {
+	protected boolean preVisit(final ASTRoot node) throws Exception {
 		defaultPreVisit();
 		return true;
 	}
-	protected boolean preVisit(final Namespace node) {
+	protected boolean preVisit(final Namespace node) throws Exception {
 		defaultPreVisit();
 		return true;
 	}
-	protected boolean preVisit(final Declaration node) {
+	protected boolean preVisit(final Declaration node) throws Exception {
 		defaultPreVisit();
 		return true;
 	}
-	protected boolean preVisit(final Type node) {
+	protected boolean preVisit(final Type node) throws Exception {
 		defaultPreVisit();
 		return true;
 	}
-	protected boolean preVisit(final Method node) {
+	protected boolean preVisit(final Method node) throws Exception {
 		defaultPreVisit();
 		return true;
 	}
-	protected boolean preVisit(final Variable node) {
+	protected boolean preVisit(final Variable node) throws Exception {
 		defaultPreVisit();
 		return true;
 	}
-	protected boolean preVisit(final Statement node) {
+	protected boolean preVisit(final Statement node) throws Exception {
 		defaultPreVisit();
 		return true;
 	}
-	protected boolean preVisit(final Expression node) {
+	protected boolean preVisit(final Expression node) throws Exception {
 		defaultPreVisit();
 		return true;
 	}
-	protected boolean preVisit(final Modifier node) {
+	protected boolean preVisit(final Modifier node) throws Exception {
 		defaultPreVisit();
 		return true;
 	}
-	protected boolean preVisit(final Comment node) {
+	protected boolean preVisit(final Comment node) throws Exception {
 		defaultPreVisit();
 		return true;
 	}
@@ -92,49 +93,49 @@ public abstract class BoaAbstractVisitor {
 	 * Provides a default action for post-visiting nodes.
 	 * Any <code>postVisit()</code> method that is not overridden calls this method.
 	 */
-	protected void defaultPostVisit() { }
+	protected void defaultPostVisit() throws Exception { }
 
-	protected void postVisit(final Project node) {
+	protected void postVisit(final Project node) throws Exception {
 		defaultPostVisit();
 	}
-	protected void postVisit(final CodeRepository node) {
+	protected void postVisit(final CodeRepository node) throws Exception {
 		defaultPostVisit();
 	}
-	protected void postVisit(final Revision node) {
+	protected void postVisit(final Revision node) throws Exception {
 		defaultPostVisit();
 	}
-	protected void postVisit(final ASTRoot node) {
+	protected void postVisit(final ASTRoot node) throws Exception {
 		defaultPostVisit();
 	}
-	protected void postVisit(final Namespace node) {
+	protected void postVisit(final Namespace node) throws Exception {
 		defaultPostVisit();
 	}
-	protected void postVisit(final Declaration node) {
+	protected void postVisit(final Declaration node) throws Exception {
 		defaultPostVisit();
 	}
-	protected void postVisit(final Type node) {
+	protected void postVisit(final Type node) throws Exception {
 		defaultPostVisit();
 	}
-	protected void postVisit(final Method node) {
+	protected void postVisit(final Method node) throws Exception {
 		defaultPostVisit();
 	}
-	protected void postVisit(final Variable node) {
+	protected void postVisit(final Variable node) throws Exception {
 		defaultPostVisit();
 	}
-	protected void postVisit(final Statement node) {
+	protected void postVisit(final Statement node) throws Exception {
 		defaultPostVisit();
 	}
-	protected void postVisit(final Expression node) {
+	protected void postVisit(final Expression node) throws Exception {
 		defaultPostVisit();
 	}
-	protected void postVisit(final Modifier node) {
+	protected void postVisit(final Modifier node) throws Exception {
 		defaultPostVisit();
 	}
-	protected void postVisit(final Comment node) {
+	protected void postVisit(final Comment node) throws Exception {
 		defaultPostVisit();
 	}
 
-	public final void visit(final Project node) {
+	public final void visit(final Project node) throws Exception {
 		if (preVisit(node)) {
 			final List<CodeRepository> reposList = node.getCodeRepositoriesList();
 			for (int i = 0; i < reposList.size(); i++)
@@ -143,7 +144,7 @@ public abstract class BoaAbstractVisitor {
 			postVisit(node);
 		}
 	}
-	public final void visit(final CodeRepository node) {
+	public final void visit(final CodeRepository node) throws Exception {
 		if (preVisit(node)) {
 			final List<Revision> revisionsList = node.getRevisionsList();
 			for (int i = 0; i < revisionsList.size(); i++)
@@ -152,7 +153,7 @@ public abstract class BoaAbstractVisitor {
 			postVisit(node);
 		}
 	}
-	public final void visit(final Revision node) {
+	public final void visit(final Revision node) throws Exception {
 		if (preVisit(node)) {
 			final List<ChangedFile> filesList = node.getFilesList();
 			for (int i = 0; i < filesList.size(); i++)
@@ -161,7 +162,7 @@ public abstract class BoaAbstractVisitor {
 			postVisit(node);
 		}
 	}
-	public final void visit(final ASTRoot node) {
+	public final void visit(final ASTRoot node) throws Exception {
 		if (preVisit(node)) {
 			final List<Namespace> namespacesList = node.getNamespacesList();
 			for (int i = 0; i < namespacesList.size(); i++)
@@ -170,7 +171,7 @@ public abstract class BoaAbstractVisitor {
 			postVisit(node);
 		}
 	}
-	public final void visit(final Namespace node) {
+	public final void visit(final Namespace node) throws Exception {
 		if (preVisit(node)) {
 			final List<Declaration> declarationsList = node.getDeclarationsList();
 			for (int i = 0; i < declarationsList.size(); i++)
@@ -183,7 +184,7 @@ public abstract class BoaAbstractVisitor {
 			postVisit(node);
 		}
 	}
-	public final void visit(final Declaration node) {
+	public final void visit(final Declaration node) throws Exception {
 		if (preVisit(node)) {
 			final List<Modifier> modifiersList = node.getModifiersList();
 			for (int i = 0; i < modifiersList.size(); i++)
@@ -216,12 +217,12 @@ public abstract class BoaAbstractVisitor {
 			postVisit(node);
 		}
 	}
-	public final void visit(final Type node) {
+	public final void visit(final Type node) throws Exception {
 		if (preVisit(node)) {
 			postVisit(node);
 		}
 	}
-	public final void visit(final Method node) {
+	public final void visit(final Method node) throws Exception {
 		if (preVisit(node)) {
 			visit(node.getReturnType());
 
@@ -252,7 +253,7 @@ public abstract class BoaAbstractVisitor {
 			postVisit(node);
 		}
 	}
-	public final void visit(final Variable node) {
+	public final void visit(final Variable node) throws Exception {
 		if (preVisit(node)) {
 			visit(node.getVariableType());
 
@@ -270,7 +271,7 @@ public abstract class BoaAbstractVisitor {
 			postVisit(node);
 		}
 	}
-	public final void visit(final Statement node) {
+	public final void visit(final Statement node) throws Exception {
 		if (preVisit(node)) {
 			final List<Comment> commentsList = node.getCommentsList();
 			for (int i = 0; i < commentsList.size(); i++)
@@ -303,7 +304,7 @@ public abstract class BoaAbstractVisitor {
 			postVisit(node);
 		}
 	}
-	public final void visit(final Expression node) {
+	public final void visit(final Expression node) throws Exception {
 		if (preVisit(node)) {
 			final List<Expression> expressionsList = node.getExpressionsList();
 			for (int i = 0; i < expressionsList.size(); i++)
@@ -330,7 +331,7 @@ public abstract class BoaAbstractVisitor {
 			postVisit(node);
 		}
 	}
-	public final void visit(final Modifier node) {
+	public final void visit(final Modifier node) throws Exception {
 		if (preVisit(node)) {
 			final List<Expression> annotationValuesList = node.getAnnotationValuesList();
 			for (int i = 0; i < annotationValuesList.size(); i++)
@@ -339,7 +340,7 @@ public abstract class BoaAbstractVisitor {
 			postVisit(node);
 		}
 	}
-	public final void visit(final Comment node) {
+	public final void visit(final Comment node) throws Exception {
 		if (preVisit(node)) {
 			postVisit(node);
 		}

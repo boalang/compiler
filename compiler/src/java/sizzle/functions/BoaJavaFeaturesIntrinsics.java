@@ -30,7 +30,7 @@ public class BoaJavaFeaturesIntrinsics {
 	private static EnhancedForVisitor enhancedForVisitor = new EnhancedForVisitor();
 
 	@FunctionSpec(name = "uses_enhanced_for", returnType = "int", formalParameters = { "ASTRoot" })
-	public static long usesEnhancedFor(final ASTRoot f) {
+	public static long usesEnhancedFor(final ASTRoot f) throws Exception {
 		enhancedForVisitor.initialize().visit(f);
 		return enhancedForVisitor.count;
 	}
@@ -51,7 +51,7 @@ public class BoaJavaFeaturesIntrinsics {
 	private static VarargsVisitor varargsVisitor = new VarargsVisitor();
 
 	@FunctionSpec(name = "uses_varargs", returnType = "int", formalParameters = { "ASTRoot" })
-	public static long usesVarargs(final ASTRoot f) {
+	public static long usesVarargs(final ASTRoot f) throws Exception {
 		varargsVisitor.initialize().visit(f);
 		return varargsVisitor.count;
 	}
@@ -71,7 +71,7 @@ public class BoaJavaFeaturesIntrinsics {
 	private static AssertVisitor assertVisitor = new AssertVisitor();
 
 	@FunctionSpec(name = "uses_assert", returnType = "int", formalParameters = { "ASTRoot" })
-	public static long usesAssert(final ASTRoot f) {
+	public static long usesAssert(final ASTRoot f) throws Exception {
 		assertVisitor.initialize().visit(f);
 		return assertVisitor.count;
 	}
@@ -91,7 +91,7 @@ public class BoaJavaFeaturesIntrinsics {
 	private static EnumVisitor enumVisitor = new EnumVisitor();
 
 	@FunctionSpec(name = "uses_enums", returnType = "int", formalParameters = { "ASTRoot" })
-	public static long usesEnums(final ASTRoot f) {
+	public static long usesEnums(final ASTRoot f) throws Exception {
 		enumVisitor.initialize().visit(f);
 		return enumVisitor.count;
 	}
@@ -111,7 +111,7 @@ public class BoaJavaFeaturesIntrinsics {
 	private static TryResourcesVisitor tryResourcesVisitor = new TryResourcesVisitor();
 
 	@FunctionSpec(name = "uses_try_resources", returnType = "int", formalParameters = { "ASTRoot" })
-	public static long usesTryResources(final ASTRoot f) {
+	public static long usesTryResources(final ASTRoot f) throws Exception {
 		tryResourcesVisitor.initialize().visit(f);
 		return tryResourcesVisitor.count;
 	}
@@ -131,7 +131,7 @@ public class BoaJavaFeaturesIntrinsics {
 	private static GenericTypeVisitor genericTypeVisitor = new GenericTypeVisitor();
 
 	@FunctionSpec(name = "uses_generics_define_type", returnType = "int", formalParameters = { "ASTRoot" })
-	public static long usesGenericsDefineType(final ASTRoot f) {
+	public static long usesGenericsDefineType(final ASTRoot f) throws Exception {
 		genericTypeVisitor.initialize().visit(f);
 		return genericTypeVisitor.count;
 	}
@@ -151,7 +151,7 @@ public class BoaJavaFeaturesIntrinsics {
 	private static GenericMethodVisitor genericMethodVisitor = new GenericMethodVisitor();
 
 	@FunctionSpec(name = "uses_generics_define_method", returnType = "int", formalParameters = { "ASTRoot" })
-	public static long usesGenericsDefineMethod(final ASTRoot f) {
+	public static long usesGenericsDefineMethod(final ASTRoot f) throws Exception {
 		genericMethodVisitor.initialize().visit(f);
 		return genericMethodVisitor.count;
 	}
@@ -168,7 +168,7 @@ public class BoaJavaFeaturesIntrinsics {
 			return true;
 		}
 		@Override
-		protected boolean preVisit(Declaration node) {
+		protected boolean preVisit(Declaration node) throws Exception {
 			final List<Method> methodsList = node.getMethodsList();
 			for (int i = 0; i < methodsList.size(); i++)
 				visit(methodsList.get(i));
@@ -184,7 +184,7 @@ public class BoaJavaFeaturesIntrinsics {
 			return false;
 		}
 		@Override
-		protected boolean preVisit(Method node) {
+		protected boolean preVisit(Method node) throws Exception {
 			final List<Statement> statementsList = node.getStatementsList();
 			for (int i = 0; i < statementsList.size(); i++)
 				visit(statementsList.get(i));
@@ -192,7 +192,7 @@ public class BoaJavaFeaturesIntrinsics {
 			return false;
 		}
 		@Override
-		protected boolean preVisit(Statement node) {
+		protected boolean preVisit(Statement node) throws Exception {
 			final List<Statement> statementsList = node.getStatementsList();
 			for (int i = 0; i < statementsList.size(); i++)
 				visit(statementsList.get(i));
@@ -214,7 +214,7 @@ public class BoaJavaFeaturesIntrinsics {
 	private static GenericFieldVisitor genericFieldVisitor = new GenericFieldVisitor();
 
 	@FunctionSpec(name = "uses_generics_define_field", returnType = "int", formalParameters = { "ASTRoot" })
-	public static long usesGenericsDefineField(final ASTRoot f) {
+	public static long usesGenericsDefineField(final ASTRoot f) throws Exception {
 		genericFieldVisitor.initialize().visit(f);
 		return genericFieldVisitor.count;
 	}
@@ -236,7 +236,7 @@ public class BoaJavaFeaturesIntrinsics {
 	private static GenericSuperWildcardVisitor genericSuperWildcardVisitor = new GenericSuperWildcardVisitor();
 
 	@FunctionSpec(name = "uses_generics_wildcard_super", returnType = "int", formalParameters = { "ASTRoot" })
-	public static long usesGenericsWildcardSuper(final ASTRoot f) {
+	public static long usesGenericsWildcardSuper(final ASTRoot f) throws Exception {
 		genericSuperWildcardVisitor.initialize().visit(f);
 		return genericSuperWildcardVisitor.count;
 	}
@@ -258,7 +258,7 @@ public class BoaJavaFeaturesIntrinsics {
 	private static GenericExtendsWildcardVisitor genericExtendsWildcardVisitor = new GenericExtendsWildcardVisitor();
 
 	@FunctionSpec(name = "uses_generics_wildcard_extends", returnType = "int", formalParameters = { "ASTRoot" })
-	public static long usesGenericsWildcardExtends(final ASTRoot f) {
+	public static long usesGenericsWildcardExtends(final ASTRoot f) throws Exception {
 		genericExtendsWildcardVisitor.initialize().visit(f);
 		return genericExtendsWildcardVisitor.count;
 	}
@@ -280,7 +280,7 @@ public class BoaJavaFeaturesIntrinsics {
 	private static GenericOtherWildcardVisitor genericOtherWildcardVisitor = new GenericOtherWildcardVisitor();
 
 	@FunctionSpec(name = "uses_generics_wildcard", returnType = "int", formalParameters = { "ASTRoot" })
-	public static long usesGenericsWildcard(final ASTRoot f) {
+	public static long usesGenericsWildcard(final ASTRoot f) throws Exception {
 		genericOtherWildcardVisitor.initialize().visit(f);
 		return genericOtherWildcardVisitor.count;
 	}
@@ -300,7 +300,7 @@ public class BoaJavaFeaturesIntrinsics {
 	private static DeclaresAnnotationVisitor declaresAnnotationVisitor = new DeclaresAnnotationVisitor();
 
 	@FunctionSpec(name = "uses_annotations_define", returnType = "int", formalParameters = { "ASTRoot" })
-	public static long usesAnnotationsDefine(final ASTRoot f) {
+	public static long usesAnnotationsDefine(final ASTRoot f) throws Exception {
 		declaresAnnotationVisitor.initialize().visit(f);
 		return declaresAnnotationVisitor.count;
 	}
@@ -320,7 +320,7 @@ public class BoaJavaFeaturesIntrinsics {
 	private static UsesAnnotationVisitor usesAnnotationVisitor = new UsesAnnotationVisitor();
 
 	@FunctionSpec(name = "uses_annotations_uses", returnType = "int", formalParameters = { "ASTRoot" })
-	public static long usesAnnotationsUses(final ASTRoot f) {
+	public static long usesAnnotationsUses(final ASTRoot f) throws Exception {
 		usesAnnotationVisitor.initialize().visit(f);
 		return usesAnnotationVisitor.count;
 	}
@@ -340,7 +340,7 @@ public class BoaJavaFeaturesIntrinsics {
 	private static MultiCatchVisitor multiCatchVisitor = new MultiCatchVisitor();
 
 	@FunctionSpec(name = "uses_multi_catch", returnType = "int", formalParameters = { "ASTRoot" })
-	public static long usesMultiCatch(final ASTRoot f) {
+	public static long usesMultiCatch(final ASTRoot f) throws Exception {
 		multiCatchVisitor.initialize().visit(f);
 		return multiCatchVisitor.count;
 	}
@@ -365,7 +365,7 @@ public class BoaJavaFeaturesIntrinsics {
 	private static BinaryLitVisitor binaryLitVisitor = new BinaryLitVisitor();
 
 	@FunctionSpec(name = "uses_binary_lit", returnType = "int", formalParameters = { "ASTRoot" })
-	public static long usesBinaryLit(final ASTRoot f) {
+	public static long usesBinaryLit(final ASTRoot f) throws Exception {
 		binaryLitVisitor.initialize().visit(f);
 		return binaryLitVisitor.count;
 	}
@@ -391,7 +391,7 @@ public class BoaJavaFeaturesIntrinsics {
 	private static UnderscoreLitVisitor underscoreLitVisitor = new UnderscoreLitVisitor();
 
 	@FunctionSpec(name = "uses_underscore_lit", returnType = "int", formalParameters = { "ASTRoot" })
-	public static long usesUnderscoreLit(final ASTRoot f) {
+	public static long usesUnderscoreLit(final ASTRoot f) throws Exception {
 		underscoreLitVisitor.initialize().visit(f);
 		return underscoreLitVisitor.count;
 	}
@@ -411,7 +411,7 @@ public class BoaJavaFeaturesIntrinsics {
 	private static DiamondVisitor diamondVisitor = new DiamondVisitor();
 
 	@FunctionSpec(name = "uses_diamond", returnType = "int", formalParameters = { "ASTRoot" })
-	public static long usesDiamond(final ASTRoot f) {
+	public static long usesDiamond(final ASTRoot f) throws Exception {
 		diamondVisitor.initialize().visit(f);
 		return diamondVisitor.count;
 	}
@@ -455,7 +455,7 @@ public class BoaJavaFeaturesIntrinsics {
 	private static SafeVarargsVisitor safeVarargsVisitor = new SafeVarargsVisitor();
 
 	@FunctionSpec(name = "uses_safe_varargs", returnType = "int", formalParameters = { "ASTRoot" })
-	public static long usesSafeVarargs(final ASTRoot f) {
+	public static long usesSafeVarargs(final ASTRoot f) throws Exception {
 		safeVarargsVisitor.initialize().visit(f);
 		return safeVarargsVisitor.count;
 	}
@@ -478,7 +478,7 @@ public class BoaJavaFeaturesIntrinsics {
 	private static AnnotationCollectingVisitor annotationCollectingVisitor = new AnnotationCollectingVisitor();
 
 	@FunctionSpec(name = "collect_annotations", returnType = "map[string] of int", formalParameters = { "ASTRoot", "map[string] of int" })
-	public static HashMap<String,Long> collect_annotations(final ASTRoot f, final HashMap<String,Long> map) {
+	public static HashMap<String,Long> collect_annotations(final ASTRoot f, final HashMap<String,Long> map) throws Exception {
 		annotationCollectingVisitor.initialize(map).visit(f);
 		return annotationCollectingVisitor.map;
 	}
@@ -501,7 +501,7 @@ public class BoaJavaFeaturesIntrinsics {
 	private static GenericsCollectingVisitor genericsCollectingVisitor = new GenericsCollectingVisitor();
 
 	@FunctionSpec(name = "collect_generic_types", returnType = "map[string] of int", formalParameters = { "ASTRoot", "map[string] of int" })
-	public static HashMap<String,Long> collect_generic_types(final ASTRoot f, final HashMap<String,Long> map) {
+	public static HashMap<String,Long> collect_generic_types(final ASTRoot f, final HashMap<String,Long> map) throws Exception {
 		genericsCollectingVisitor.initialize(map).visit(f);
 		return genericsCollectingVisitor.map;
 	}

@@ -87,6 +87,11 @@ TOKEN :
 | < CONTINUE : "continue" >
 | < SUBMATCH : "submatch" >
 | < FUNCTION : "function" >
+| < VISITOR : "visitor" >
+| < BEFORE : "before" >
+| < AFTER : "after" >
+| < WILDCARD : "_" >
+| < STOP : "stop" >
 | < PARSEDMESSAGE : "parsedmessage" >
 }
 
@@ -218,7 +223,7 @@ void VarDecl() :
 
 // Type =
 //   type_name | ArrayType | MapType | TupleType |
-//   OutputType | FunctionType | 'proto' Type.
+//   OutputType | FunctionType | VisitorType | 'proto' Type.
 // type_name = identifier.
 void Type() :
 {}
@@ -229,6 +234,7 @@ void Type() :
 | TupleType()
 | OutputType()
 | FunctionType()
+| VisitorType()
 | "protox" Type()
 }
 
@@ -398,6 +404,13 @@ void FunctionType() :
   [ ":" Type() ]
 }
 
+// VisitorType = 'visitor'.
+void VisitorType() :
+{}
+{
+  "visitor"
+}
+
 // Statement =
 //   Assignment | Block | BreakStatement | ContinueStatement | DoStatement |
 //   EmitStatement | ExprStatement | ForStatement | IfStatement | ResultStatement |
@@ -422,9 +435,19 @@ void Statement() :
 | SwitchStatement()
 | WhenStatement()
 | WhileStatement()
+| VisitStatement()
+| StopStatement()
+| EmptyStatement()
 }
 
-// Assignment = Factor '=' Expression ';'
+// EmptyStatement = ';'.
+void EmptyStatement() :
+{}
+{
+  ";"
+}
+
+// Assignment = Factor '=' Expression ';'.
 void Assignment() :
 {}
 {
@@ -448,14 +471,14 @@ void Block() :
 void BreakStatement() :
 {}
 {
-  "break"
+  "break" ";"
 }
 
 // ContinueStatement = 'continue'.
 void ContinueStatement() :
 {}
 {
-  "continue"
+  "continue" ";"
 }
 
 // DoStatement = 'do' Statement 'while' '(' Expression ')' ';'.
@@ -546,7 +569,7 @@ void IfStatement() :
 void ResultStatement() :
 {}
 {
-  "result" Expression()
+  "result" Expression() ";"
 }
 
 // ReturnStatement = 'return' [ Expression ].
@@ -615,6 +638,30 @@ void WhileStatement() :
 {}
 {
   "while" "(" Expression() ")" Statement()
+}
+
+// VisitStatement = ('before' | 'after') (var_decl ":" Type | IdentifierList) '->' Statement.
+void VisitStatement() :
+{}
+{
+  (
+    "before" 
+  | "after" 
+  )
+  (
+    LOOKAHEAD(Identifier() ":")
+    Identifier() ":" Identifier()
+  | IdentifierList()
+  | "_"
+  )
+  "->" Statement()
+}
+
+// StopStatement = ';'.
+void StopStatement() :
+{}
+{
+  "stop" ";"
 }
 
 // Expression = Conjunction {('||' | 'or') Conjunction}.
@@ -780,6 +827,7 @@ void Operand() :
 | FloatingPointLiteral()
 | LOOKAHEAD(Composite())
   Composite()
+| VisitorExpr()
 | Function()
 | (
     "+"
@@ -825,11 +873,18 @@ void Pair() :
   Expression() ":" Expression()
 }
 
-// Function = Type Block.
+// Function = FunctionType Block.
 void Function() :
 {}
 {
-  Type() Block()
+  FunctionType() Block()
+}
+
+// VisitorExpr = VisitorType Block.
+void VisitorExpr() :
+{}
+{
+  VisitorType() Block()
 }
 
 // StatementExpr = '?' Block .

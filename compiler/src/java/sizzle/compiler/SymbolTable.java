@@ -31,6 +31,7 @@ import sizzle.types.BugStatusProtoMap;
 import sizzle.types.CodeRepositoryProtoTuple;
 import sizzle.types.CommentProtoTuple;
 import sizzle.types.NamespaceProtoTuple;
+import sizzle.types.SizzleVisitor;
 import sizzle.types.StatementKindProtoMap;
 import sizzle.types.StatementProtoTuple;
 import sizzle.types.TypeKindProtoMap;
@@ -81,6 +82,7 @@ public class SymbolTable {
 	private Operand operand;
 	private SizzleType operandType;
 	private boolean needsBoxing;
+	private boolean isBeforeVisitor = false;
 
 	static {
 		aggregators = new HashMap<String, Class<?>>();
@@ -185,6 +187,9 @@ public class SymbolTable {
 		// these fingerprints are identity functions
 		this.setFunction("fingerprintof", new SizzleFunction(new SizzleFingerprint(), new SizzleScalar[] { new SizzleInt() }));
 		this.setFunction("fingerprintof", new SizzleFunction(new SizzleFingerprint(), new SizzleScalar[] { new SizzleTime() }));
+
+		this.setFunction("visit", new SizzleFunction(new SizzleAny(), new SizzleType[] { new SizzleScalar(), new SizzleVisitor() }, "${1}.visit(${0})"));
+		this.setFunction("visit", new SizzleFunction(new SizzleAny(), new SizzleType[] { new SizzleScalar() }, "visit(${0})"));
 
 		// expose the casts for all possible input types
 		this.setFunction(new ProjectProtoTuple().toString(), new SizzleFunction(new ProjectProtoTuple(), new SizzleType[] { new SizzleBytes() }, new ProjectProtoTuple().toJavaType() + ".parseFrom(${0})"));
@@ -315,6 +320,7 @@ public class SymbolTable {
 
 		st.functions = this.functions;
 		st.locals = new HashMap<String, SizzleType>(this.locals);
+		st.isBeforeVisitor = this.isBeforeVisitor;
 
 		return st;
 	}
@@ -627,6 +633,14 @@ public class SymbolTable {
 
 	public boolean getNeedsBoxing() {
 		return this.needsBoxing;
+	}
+
+	public void setIsBeforeVisitor(final boolean isBeforeVisitor) {
+		this.isBeforeVisitor = isBeforeVisitor;
+	}
+
+	public boolean getIsBeforeVisitor() {
+		return this.isBeforeVisitor;
 	}
 
 	@Override

@@ -5,96 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sizzle.aggregators.AggregatorSpec;
-import sizzle.parser.syntaxtree.ArrayType;
-import sizzle.parser.syntaxtree.Assignment;
-import sizzle.parser.syntaxtree.Block;
-import sizzle.parser.syntaxtree.BreakStatement;
-import sizzle.parser.syntaxtree.BytesLiteral;
-import sizzle.parser.syntaxtree.Call;
-import sizzle.parser.syntaxtree.CharLiteral;
-import sizzle.parser.syntaxtree.Comparison;
-import sizzle.parser.syntaxtree.Component;
-import sizzle.parser.syntaxtree.Composite;
-import sizzle.parser.syntaxtree.Conjunction;
-import sizzle.parser.syntaxtree.ContinueStatement;
-import sizzle.parser.syntaxtree.Declaration;
-import sizzle.parser.syntaxtree.DoStatement;
-import sizzle.parser.syntaxtree.EmitStatement;
-import sizzle.parser.syntaxtree.ExprList;
-import sizzle.parser.syntaxtree.ExprStatement;
-import sizzle.parser.syntaxtree.Expression;
-import sizzle.parser.syntaxtree.Factor;
-import sizzle.parser.syntaxtree.FingerprintLiteral;
-import sizzle.parser.syntaxtree.FloatingPointLiteral;
-import sizzle.parser.syntaxtree.ForExprStatement;
-import sizzle.parser.syntaxtree.ForStatement;
-import sizzle.parser.syntaxtree.ForVarDecl;
-import sizzle.parser.syntaxtree.Function;
-import sizzle.parser.syntaxtree.FunctionType;
-import sizzle.parser.syntaxtree.Identifier;
-import sizzle.parser.syntaxtree.IdentifierList;
-import sizzle.parser.syntaxtree.IfStatement;
-import sizzle.parser.syntaxtree.Index;
-import sizzle.parser.syntaxtree.IntegerLiteral;
-import sizzle.parser.syntaxtree.MapType;
-import sizzle.parser.syntaxtree.Node;
-import sizzle.parser.syntaxtree.NodeChoice;
-import sizzle.parser.syntaxtree.NodeListOptional;
-import sizzle.parser.syntaxtree.NodeSequence;
-import sizzle.parser.syntaxtree.NodeToken;
-import sizzle.parser.syntaxtree.Operand;
-import sizzle.parser.syntaxtree.OutputType;
-import sizzle.parser.syntaxtree.Pair;
-import sizzle.parser.syntaxtree.PairList;
-import sizzle.parser.syntaxtree.Program;
-import sizzle.parser.syntaxtree.Proto;
-import sizzle.parser.syntaxtree.ProtoFieldDecl;
-import sizzle.parser.syntaxtree.ProtoMember;
-import sizzle.parser.syntaxtree.ProtoMemberList;
-import sizzle.parser.syntaxtree.ProtoTupleType;
-import sizzle.parser.syntaxtree.Regexp;
-import sizzle.parser.syntaxtree.RegexpList;
-import sizzle.parser.syntaxtree.ResultStatement;
-import sizzle.parser.syntaxtree.ReturnStatement;
-import sizzle.parser.syntaxtree.Selector;
-import sizzle.parser.syntaxtree.SimpleExpr;
-import sizzle.parser.syntaxtree.SimpleMember;
-import sizzle.parser.syntaxtree.SimpleMemberList;
-import sizzle.parser.syntaxtree.SimpleTupleType;
-import sizzle.parser.syntaxtree.Start;
-import sizzle.parser.syntaxtree.Statement;
-import sizzle.parser.syntaxtree.StatementExpr;
-import sizzle.parser.syntaxtree.StaticVarDecl;
-import sizzle.parser.syntaxtree.StringLiteral;
-import sizzle.parser.syntaxtree.SwitchStatement;
-import sizzle.parser.syntaxtree.Term;
-import sizzle.parser.syntaxtree.TimeLiteral;
-import sizzle.parser.syntaxtree.TupleType;
-import sizzle.parser.syntaxtree.Type;
-import sizzle.parser.syntaxtree.TypeDecl;
-import sizzle.parser.syntaxtree.VarDecl;
-import sizzle.parser.syntaxtree.WhenStatement;
-import sizzle.parser.syntaxtree.WhileStatement;
+import sizzle.parser.syntaxtree.*;
 import sizzle.parser.visitor.GJDepthFirst;
-import sizzle.types.SizzleAny;
-import sizzle.types.SizzleArray;
-import sizzle.types.SizzleBool;
-import sizzle.types.SizzleBytes;
-import sizzle.types.SizzleFingerprint;
-import sizzle.types.SizzleFloat;
-import sizzle.types.SizzleFunction;
-import sizzle.types.SizzleInt;
-import sizzle.types.SizzleMap;
-import sizzle.types.SizzleName;
-import sizzle.types.SizzleProtoList;
-import sizzle.types.SizzleProtoMap;
-import sizzle.types.SizzleProtoTuple;
-import sizzle.types.SizzleScalar;
-import sizzle.types.SizzleString;
-import sizzle.types.SizzleTable;
-import sizzle.types.SizzleTime;
-import sizzle.types.SizzleTuple;
-import sizzle.types.SizzleType;
+import sizzle.types.*;
 
 /**
  * Prescan the Sizzle program and check that all variables are consistently
@@ -818,11 +731,12 @@ public class TypeCheckingVisitor extends GJDepthFirst<SizzleType, SymbolTable> {
 		case 2: // integer literal
 		case 3: // floating point literal
 		case 4: // composite
-		case 5: // function
-		case 8: // statement expression
+		case 5: // visitor
+		case 6: // function
+		case 9: // statement expression
 			return n.f0.choice.accept(this, argu);
-		case 6: // unary operator
-		case 9: // parenthetical
+		case 7: // unary operator
+		case 10: // parenthetical
 			return ((NodeSequence) n.f0.choice).nodes.elementAt(1).accept(this, argu);
 		default:
 			throw new RuntimeException("unexpected choice " + n.f0.which + " is " + n.f0.choice.getClass());
@@ -988,5 +902,59 @@ public class TypeCheckingVisitor extends GJDepthFirst<SizzleType, SymbolTable> {
 				types.add(((NodeSequence) node).elementAt(1).accept(this, argu));
 
 		return types;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public SizzleType visit(final EmptyStatement n, final SymbolTable argu) {
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public SizzleType visit(final StopStatement n, final SymbolTable argu) {
+		if (!argu.getIsBeforeVisitor())
+			throw new TypeException(n, "Stop statement only allowed inside non-wildcard 'before' visitors");
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public SizzleType visit(final VisitorExpr n, final SymbolTable argu) {
+		n.f1.accept(this, argu);
+		return n.f0.accept(this, argu);
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public SizzleType visit(final VisitorType n, final SymbolTable argu) {
+		return new SizzleVisitor();
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public SizzleType visit(final VisitStatement n, final SymbolTable argu) {
+		SymbolTable st;
+		try {
+			st = argu.cloneNonLocals();
+		} catch (final IOException e) {
+			throw new RuntimeException(e.getClass().getSimpleName() + " caught", e);
+		}
+
+		
+		st.setIsBeforeVisitor(n.f0.which == 0 && n.f1.which != 2);
+
+		if (n.f1.which == 0) {
+			final String typeName = ((Identifier)((NodeSequence)n.f1.choice).nodes.get(2)).f0.tokenImage;
+			final SizzleType t = st.get(typeName);
+			if (t != null)
+				st.set(((Identifier)((NodeSequence)n.f1.choice).nodes.get(0)).f0.tokenImage, t);
+			else
+				throw new TypeException(n, "Invalid type '" + typeName + "'");
+		}
+
+		n.f3.accept(this, st);
+
+		return null;
 	}
 }

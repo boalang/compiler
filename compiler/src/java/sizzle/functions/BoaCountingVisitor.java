@@ -1,5 +1,7 @@
 package sizzle.functions;
 
+import sizzle.runtime.BoaAbstractVisitor;
+
 /**
  * Boa AST visitor that aggregates using a counter.
  * 

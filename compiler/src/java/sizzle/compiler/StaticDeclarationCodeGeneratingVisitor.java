@@ -2,73 +2,7 @@ package sizzle.compiler;
 
 import java.io.IOException;
 
-import sizzle.parser.syntaxtree.ArrayType;
-import sizzle.parser.syntaxtree.Assignment;
-import sizzle.parser.syntaxtree.Block;
-import sizzle.parser.syntaxtree.BreakStatement;
-import sizzle.parser.syntaxtree.BytesLiteral;
-import sizzle.parser.syntaxtree.Call;
-import sizzle.parser.syntaxtree.CharLiteral;
-import sizzle.parser.syntaxtree.Comparison;
-import sizzle.parser.syntaxtree.Component;
-import sizzle.parser.syntaxtree.Composite;
-import sizzle.parser.syntaxtree.Conjunction;
-import sizzle.parser.syntaxtree.ContinueStatement;
-import sizzle.parser.syntaxtree.Declaration;
-import sizzle.parser.syntaxtree.DoStatement;
-import sizzle.parser.syntaxtree.EmitStatement;
-import sizzle.parser.syntaxtree.ExprList;
-import sizzle.parser.syntaxtree.ExprStatement;
-import sizzle.parser.syntaxtree.Expression;
-import sizzle.parser.syntaxtree.Factor;
-import sizzle.parser.syntaxtree.FingerprintLiteral;
-import sizzle.parser.syntaxtree.FloatingPointLiteral;
-import sizzle.parser.syntaxtree.ForExprStatement;
-import sizzle.parser.syntaxtree.ForStatement;
-import sizzle.parser.syntaxtree.ForVarDecl;
-import sizzle.parser.syntaxtree.Function;
-import sizzle.parser.syntaxtree.FunctionType;
-import sizzle.parser.syntaxtree.Identifier;
-import sizzle.parser.syntaxtree.IdentifierList;
-import sizzle.parser.syntaxtree.IfStatement;
-import sizzle.parser.syntaxtree.Index;
-import sizzle.parser.syntaxtree.IntegerLiteral;
-import sizzle.parser.syntaxtree.MapType;
-import sizzle.parser.syntaxtree.Node;
-import sizzle.parser.syntaxtree.NodeChoice;
-import sizzle.parser.syntaxtree.Operand;
-import sizzle.parser.syntaxtree.OutputType;
-import sizzle.parser.syntaxtree.Pair;
-import sizzle.parser.syntaxtree.PairList;
-import sizzle.parser.syntaxtree.Program;
-import sizzle.parser.syntaxtree.Proto;
-import sizzle.parser.syntaxtree.ProtoFieldDecl;
-import sizzle.parser.syntaxtree.ProtoMember;
-import sizzle.parser.syntaxtree.ProtoMemberList;
-import sizzle.parser.syntaxtree.ProtoTupleType;
-import sizzle.parser.syntaxtree.Regexp;
-import sizzle.parser.syntaxtree.RegexpList;
-import sizzle.parser.syntaxtree.ResultStatement;
-import sizzle.parser.syntaxtree.ReturnStatement;
-import sizzle.parser.syntaxtree.Selector;
-import sizzle.parser.syntaxtree.SimpleExpr;
-import sizzle.parser.syntaxtree.SimpleMember;
-import sizzle.parser.syntaxtree.SimpleMemberList;
-import sizzle.parser.syntaxtree.SimpleTupleType;
-import sizzle.parser.syntaxtree.Start;
-import sizzle.parser.syntaxtree.Statement;
-import sizzle.parser.syntaxtree.StatementExpr;
-import sizzle.parser.syntaxtree.StaticVarDecl;
-import sizzle.parser.syntaxtree.StringLiteral;
-import sizzle.parser.syntaxtree.SwitchStatement;
-import sizzle.parser.syntaxtree.Term;
-import sizzle.parser.syntaxtree.TimeLiteral;
-import sizzle.parser.syntaxtree.TupleType;
-import sizzle.parser.syntaxtree.Type;
-import sizzle.parser.syntaxtree.TypeDecl;
-import sizzle.parser.syntaxtree.VarDecl;
-import sizzle.parser.syntaxtree.WhenStatement;
-import sizzle.parser.syntaxtree.WhileStatement;
+import sizzle.parser.syntaxtree.*;
 import sizzle.parser.visitor.GJDepthFirst;
 
 /**
@@ -438,108 +372,28 @@ public class StaticDeclarationCodeGeneratingVisitor extends GJDepthFirst<String,
 		throw new RuntimeException("unimplemented");
 	}
 
-	// private final NameFindingVisitor namefinder;
-	//
-	// /**
-	// * Construct a StaticDeclarationCodeGeneratingVisitor.
-	// *
-	// * @param namefinder
-	// * A {@link NameFindingVisitor} used to find names.
-	// */
-	// public StaticDeclarationCodeGeneratingVisitor(final NameFindingVisitor
-	// namefinder) {
-	// this.namefinder = namefinder;
-	// }
-	//
-	// /** {@inheritDoc} */
-	// @Override
-	// public String visit(final Pair n, final SymbolTable argu) {
-	// return argu.getMapName() + ".put(" + n.f0.accept(this, argu) + ", " +
-	// n.f2.accept(this, argu) + ");\n";
-	// }
-	//
-	// /** {@inheritDoc} */
-	// @Override
-	// public String visit(final PairList n, final SymbolTable argu) {
-	// final StringBuilder src = new StringBuilder();
-	//
-	// src.append(n.f0.accept(this, argu));
-	//
-	// if (n.f1.present())
-	// for (final Node node : n.f1.nodes)
-	// src.append(node.accept(this, argu));
-	//
-	// return src.toString();
-	// }
-	//
-	// /** {@inheritDoc} */
-	// @Override
-	// public String visit(final Start n, final SymbolTable argu) {
-	// return n.f0.accept(this, argu);
-	// }
-	//
-	// /** {@inheritDoc} */
-	// @Override
-	// public String visit(final Program n, final SymbolTable argu) {
-	// final StringBuilder statements = new StringBuilder();
-	//
-	// for (final Node i : n.f0.nodes) {
-	// final String src = ((Statement) i).accept(this, argu);
-	// if (src != null && !src.equals(""))
-	// statements.append(src + "\n");
-	// }
-	//
-	// return statements.toString();
-	// }
-	//
-	// /** {@inheritDoc} */
-	// @Override
-	// public String visit(final Statement n, final SymbolTable argu) {
-	// switch (n.f0.which) {
-	// case 2: // static variable declaration
-	// return ((VariableDeclaration) n.f0.choice).accept(this, argu);
-	// default:
-	// return "";
-	// }
-	// }
-	//
-	// /** {@inheritDoc} */
-	// @Override
-	// public String visit(final StaticVariableDeclaration n, final SymbolTable
-	// argu) {
-	// return n.f1.accept(this, argu);
-	// }
-	//
-	// /** {@inheritDoc} */
-	// @Override
-	// public String visit(final VariableDeclaration n, final SymbolTable argu)
-	// {
-	// final StringBuilder src = new StringBuilder();
-	//
-	// for (final String id : this.namefinder.visit(n.f1)) {
-	// final SizzleType sizzleType = argu.get(id);
-	//
-	// final String javaType = sizzleType.toJavaType();
-	//
-	// if (n.f3.present()) {
-	// argu.setInitializerType(sizzleType);
-	// argu.setMapName("___" + id);
-	// final String initializer = ((Initializer) ((NodeSequence)
-	// n.f3.node).elementAt(1)).accept(this, argu);
-	// argu.setMapName(null);
-	// argu.setInitializerType(null);
-	//
-	// src.append("private static final " + javaType + " ___" + id + " = " +
-	// initializer + ";");
-	// if (sizzleType.getClass().equals(SizzleMap.class)) {
-	// src.append("\n{\n" + argu.getStaticInitializer() + "\n}\n");
-	// }
-	// } else {
-	// throw new RuntimeException("static variables must be initialized");
-	// }
-	//
-	// }
-	//
-	// return src.toString();
-	// }
+	@Override
+	public String visit(final EmptyStatement n, final SymbolTable argu) {
+		throw new RuntimeException("unimplemented");
+	}
+
+	@Override
+	public String visit(final StopStatement n, final SymbolTable argu) {
+		throw new RuntimeException("unimplemented");
+	}
+
+	@Override
+	public String visit(final VisitorExpr n, final SymbolTable argu) {
+		throw new RuntimeException("unimplemented");
+	}
+
+	@Override
+	public String visit(final VisitorType n, final SymbolTable argu) {
+		throw new RuntimeException("unimplemented");
+	}
+
+	@Override
+	public String visit(final VisitStatement n, final SymbolTable argu) {
+		throw new RuntimeException("unimplemented");
+	}
 }

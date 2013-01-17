@@ -206,61 +206,61 @@ public class BoaAstIntrinsics {
 	private static ASTLenVisitor lenVisitor = new ASTLenVisitor();
 
 	@FunctionSpec(name = "len", returnType = "int", formalParameters = { "ASTRoot" })
-	public static long ast_len(final ASTRoot f) {
+	public static long ast_len(final ASTRoot f) throws Exception {
 		lenVisitor.initialize().visit(f);
 		return lenVisitor.count;
 	}
 
 	@FunctionSpec(name = "len", returnType = "int", formalParameters = { "Namespace" })
-	public static long ast_len(final Namespace n) {
+	public static long ast_len(final Namespace n) throws Exception {
 		lenVisitor.initialize().visit(n);
 		return lenVisitor.count;
 	}
 
 	@FunctionSpec(name = "len", returnType = "int", formalParameters = { "Declaration" })
-	public static long ast_len(final Declaration d) {
+	public static long ast_len(final Declaration d) throws Exception {
 		lenVisitor.initialize().visit(d);
 		return lenVisitor.count;
 	}
 
 	@FunctionSpec(name = "len", returnType = "int", formalParameters = { "Type" })
-	public static long ast_len(final Type t) {
+	public static long ast_len(final Type t) throws Exception {
 		lenVisitor.initialize().visit(t);
 		return lenVisitor.count;
 	}
 
 	@FunctionSpec(name = "len", returnType = "int", formalParameters = { "Method" })
-	public static long ast_len(final Method m) {
+	public static long ast_len(final Method m) throws Exception {
 		lenVisitor.initialize().visit(m);
 		return lenVisitor.count;
 	}
 
 	@FunctionSpec(name = "len", returnType = "int", formalParameters = { "Variable" })
-	public static long ast_len(final Variable v) {
+	public static long ast_len(final Variable v) throws Exception {
 		lenVisitor.initialize().visit(v);
 		return lenVisitor.count;
 	}
 
 	@FunctionSpec(name = "len", returnType = "int", formalParameters = { "Statement" })
-	public static long ast_len(final Statement s) {
+	public static long ast_len(final Statement s) throws Exception {
 		lenVisitor.initialize().visit(s);
 		return lenVisitor.count;
 	}
 
 	@FunctionSpec(name = "len", returnType = "int", formalParameters = { "Expression" })
-	public static long ast_len(final Expression e) {
+	public static long ast_len(final Expression e) throws Exception {
 		lenVisitor.initialize().visit(e);
 		return lenVisitor.count;
 	}
 
 	@FunctionSpec(name = "len", returnType = "int", formalParameters = { "Modifier" })
-	public static long ast_len(final Modifier m) {
+	public static long ast_len(final Modifier m) throws Exception {
 		lenVisitor.initialize().visit(m);
 		return lenVisitor.count;
 	}
 
 	@FunctionSpec(name = "len", returnType = "int", formalParameters = { "Comment" })
-	public static long ast_len(final Comment c) {
+	public static long ast_len(final Comment c) throws Exception {
 		lenVisitor.initialize().visit(c);
 		return lenVisitor.count;
 	}
