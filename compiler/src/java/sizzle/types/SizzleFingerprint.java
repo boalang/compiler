@@ -1,7 +1,5 @@
 package sizzle.types;
 
-import sizzle.compiler.TypeException;
-
 /**
  * A {@link SizzleScalar} representing a 64 bit signature value.
  * 
@@ -13,7 +11,7 @@ public class SizzleFingerprint extends SizzleScalar {
 	@Override
 	public SizzleScalar arithmetics(final SizzleType that) {
 		// no math for fingerprints
-		throw new TypeException("incorrect type " + this + " for arithmetic with " + that);
+		throw new RuntimeException("incorrect type " + this + " for arithmetic with " + that);
 	}
 
 	/** {@inheritDoc} */

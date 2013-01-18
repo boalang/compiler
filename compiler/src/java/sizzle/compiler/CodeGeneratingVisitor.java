@@ -170,8 +170,8 @@ public class CodeGeneratingVisitor extends GJDepthFirst<String, SymbolTable> {
 	private String skipIndex = "";
 	private boolean abortGeneration = false;
 
-	public CodeGeneratingVisitor(final String name, final StringTemplateGroup stg) throws IOException {
-		this.typechecker = new TypeCheckingVisitor();
+	public CodeGeneratingVisitor(final TypeCheckingVisitor typechecker, final String name, final StringTemplateGroup stg) throws IOException {
+		this.typechecker = typechecker;
 		this.namefinder = new NameFindingVisitor();
 		this.indexeefinder = new IndexeeFindingVisitor(this, namefinder);
 		this.staticdeclarator = new StaticDeclarationCodeGeneratingVisitor(this);
@@ -279,13 +279,16 @@ public class CodeGeneratingVisitor extends GJDepthFirst<String, SymbolTable> {
 
 			switch (nodeChoice.which) {
 			case 0: // initializer
-				final SizzleType t;
+				SizzleType t;
+				Node elem = (Expression) ((NodeSequence) nodeChoice.choice).elementAt(1);
 				try {
 					argu.setOperandType(type);
-					t = this.typechecker.visit((Expression) ((NodeSequence) nodeChoice.choice).elementAt(1), argu.cloneNonLocals());
+					t = elem.accept(this.typechecker, argu.cloneNonLocals());
 				} catch (final IOException e) {
 					throw new RuntimeException(e.getClass().getSimpleName() + " caught", e);
 				}
+				if (t instanceof SizzleFunction && !elem.accept(new IsFunctionVisitor(), argu))
+					t = ((SizzleFunction)t).getType();
 
 				String src = ((NodeSequence) nodeChoice.choice).elementAt(1).accept(this, argu);
 
@@ -451,11 +454,20 @@ public class CodeGeneratingVisitor extends GJDepthFirst<String, SymbolTable> {
 	public String visit(final Block n, final SymbolTable argu) {
 		final StringTemplate st = this.stg.getInstanceOf("Block");
 
+		SymbolTable symtab;
+		try {
+			symtab = argu.cloneNonLocals();
+		} catch (final IOException e) {
+			throw new RuntimeException(e.getClass().getSimpleName() + " caught", e);
+		}
+		
 		final List<String> statements = new ArrayList<String>();
 
 		if (n.f1.present())
-			for (final Node node : n.f1.nodes)
-				statements.add(node.accept(this, argu));
+			for (final Node node : n.f1.nodes) {
+				node.accept(typechecker, symtab);
+				statements.add(node.accept(this, symtab));
+			}
 
 		st.setAttribute("statements", statements);
 
@@ -553,9 +565,9 @@ public class CodeGeneratingVisitor extends GJDepthFirst<String, SymbolTable> {
 
 	@Override
 	public String visit(final ForExprStatement n, final SymbolTable argu) {
-		final ExprStatement exprStatement = new ExprStatement(n.f0, n.f1, new NodeToken(";"));
-
-		return exprStatement.accept(this, argu);
+		if (n.f1.present())
+			return n.f0.accept(this, argu) + ((NodeToken)((NodeChoice)n.f1.node).choice).tokenImage;
+		return n.f0.accept(this, argu);
 	}
 
 	@Override
@@ -723,22 +735,13 @@ public class CodeGeneratingVisitor extends GJDepthFirst<String, SymbolTable> {
 					operands.add("");
 					break;
 				}
-				operators.add(" == ");
-				break;
+				// fall through
 			case 1:
-				operators.add(" != ");
-				break;
 			case 2:
-				operators.add(" < ");
-				break;
 			case 3:
-				operators.add(" <= ");
-				break;
 			case 4:
-				operators.add(" > ");
-				break;
 			case 5:
-				operators.add(" >= ");
+				operators.add(" " + ((NodeToken)nodeChoice.choice).tokenImage + " ");
 				break;
 			default:
 				throw new RuntimeException("unexpected choice " + nodeChoice.which + " is " + nodeChoice.choice.getClass());
@@ -845,16 +848,9 @@ public class CodeGeneratingVisitor extends GJDepthFirst<String, SymbolTable> {
 
 			// operand is a proto tuple
 			if (opType instanceof SizzleProtoTuple) {
-				final SizzleProtoTuple tuple;
-				if (opType instanceof SizzleProtoTuple)
-					tuple = (SizzleProtoTuple) opType;
-				else if (argu.getOperandType() instanceof SizzleProtoList)
-					tuple = (SizzleProtoTuple) ((SizzleProtoList) opType).getType();
-				else
-					throw new RuntimeException("unimplemented");
-	
-				argu.setOperandType(tuple.getMember(member));
-				if (tuple.getMember(member) instanceof SizzleArray)
+				final SizzleType memberType = ((SizzleProtoTuple) opType).getMember(member);
+				argu.setOperandType(memberType);
+				if (memberType instanceof SizzleProtoList)
 					return ".get" + camelCase(n.f1.f0.tokenImage) + "List()";
 				return ".get" + camelCase(n.f1.f0.tokenImage) + "()";
 			}
@@ -883,7 +879,7 @@ public class CodeGeneratingVisitor extends GJDepthFirst<String, SymbolTable> {
 			argu.setOperandType(((SizzleMap) t).getType());
 			st.setAttribute("map", true);
 		} else if (t instanceof SizzleProtoList) {
-			argu.setOperandType(((SizzleArray) t).getType());
+			argu.setOperandType(((SizzleProtoList) t).getType());
 			st.setAttribute("map", true);
 		} else if (t instanceof SizzleArray) {
 			argu.setOperandType(((SizzleArray) t).getType());
@@ -906,13 +902,12 @@ public class CodeGeneratingVisitor extends GJDepthFirst<String, SymbolTable> {
 		final SizzleFunction f = argu.getFunction(this.namefinder.visit(argu.getOperand()).toArray()[0].toString(), this.typechecker.check(n, argu));
 
 		if (f.hasMacro()) {
-			List<String> parts = new ArrayList<String>();
-			ExprList list = (ExprList) n.f1.node;
+			final List<String> parts = new ArrayList<String>();
+			final ExprList list = (ExprList) n.f1.node;
 			parts.add(list.f0.accept(this, argu));
 			if (list.f1.present())
-				for (Node node : list.f1.nodes)
-					if (node instanceof Expression)
-						parts.add(((Expression) node).accept(this, argu));
+				for (final Node node : list.f1.nodes)
+					parts.add(((Expression)((NodeSequence)node).elementAt(1)).accept(this, argu));
 			st.setAttribute("call", CodeGeneratingVisitor.expand(f.getMacro(), parts.toArray(new String[]{})));
 		} else if (f.hasName()) {
 			st.setAttribute("operand", f.getName());
@@ -941,7 +936,33 @@ public class CodeGeneratingVisitor extends GJDepthFirst<String, SymbolTable> {
 
 	@Override
 	public String visit(final Operand n, final SymbolTable argu) {
-		return n.f0.choice.accept(this, argu);
+		switch (n.f0.which) {
+		case 0: // identifier
+		case 1: // string literal
+		case 2: // integer literal
+		case 3: // floating point literal
+		case 4: // composite
+		case 5: // function
+		case 8: // statement expression
+			return n.f0.choice.accept(this, argu);
+		case 6: // unary operator
+			NodeChoice c = (NodeChoice)((NodeSequence) n.f0.choice).nodes.elementAt(0);
+			switch (c.which) {
+			case 0:
+			case 1:
+			case 2:
+			case 3:
+				return ((NodeToken)c.choice).tokenImage + ((NodeSequence) n.f0.choice).nodes.elementAt(1).accept(this, argu);
+			case 4:
+				return "!" + ((NodeSequence) n.f0.choice).nodes.elementAt(1).accept(this, argu);
+			default:
+				throw new RuntimeException("unexpected choice " + c.which + " is " + c.choice.getClass());
+			}
+		case 9: // parenthetical
+			return "(" + ((NodeSequence) n.f0.choice).nodes.elementAt(1).accept(this, argu) + ")";
+		default:
+			throw new RuntimeException("unexpected choice " + n.f0.which + " is " + n.f0.choice.getClass());
+		}
 	}
 
 	@Override
@@ -1019,7 +1040,7 @@ public class CodeGeneratingVisitor extends GJDepthFirst<String, SymbolTable> {
 		this.typechecker.visit(n.f1, funcArgu);
 
 		if (!(t instanceof SizzleFunction))
-			throw new RuntimeException("type " + t + " no a function type");
+			throw new TypeException(n ,"type " + t + " no a function type");
 		final SizzleFunction funcType = ((SizzleFunction) t);
 
 		SizzleType[] paramTypes = funcType.getFormalParameters();
@@ -1075,7 +1096,7 @@ public class CodeGeneratingVisitor extends GJDepthFirst<String, SymbolTable> {
 
 	@Override
 	public String visit(final CharLiteral n, final SymbolTable argu) {
-		throw new RuntimeException("unimplemented");
+		return n.f0.tokenImage;
 	}
 
 	@Override

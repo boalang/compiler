@@ -17,7 +17,7 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.Mapper;
-import org.apache.hadoop.io.compress.GzipCodec;
+import org.apache.hadoop.io.compress.SnappyCodec;
 import org.apache.hadoop.io.compress.CompressionCodec;
 
 import sizzle.io.SizzleOutputFormat;
@@ -48,7 +48,8 @@ public abstract class SizzleRunner {
 
 		// map output compression
 		configuration.setBoolean("mapred.compress.map.output", true);
-		configuration.setClass("mapred.map.output.compression.codec", GzipCodec.class, CompressionCodec.class);
+		configuration.set("mapred.map.output.compression.type", "BLOCK");
+		configuration.setClass("mapred.map.output.compression.codec", SnappyCodec.class, CompressionCodec.class);
 
 		final Job job = new Job(configuration);
 

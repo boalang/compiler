@@ -444,7 +444,21 @@ public class IndexeeFindingVisitor extends GJDepthFirst<Set<String>, String> {
 	/** {@inheritDoc} */
 	@Override
 	public Set<String> visit(final Operand n, final String argu) {
-		return n.f0.accept(this, argu);
+		switch (n.f0.which) {
+		case 0: // identifier
+		case 1: // string literal
+		case 2: // integer literal
+		case 3: // floating point literal
+		case 4: // composite
+		case 5: // function
+		case 8: // statement expression
+			return n.f0.choice.accept(this, argu);
+		case 6: // unary operator
+		case 9: // parenthetical
+			return ((NodeSequence)n.f0.choice).elementAt(1).accept(this, argu);
+		default:
+			throw new RuntimeException("unimplemented");
+		}
 	}
 
 	/** {@inheritDoc} */

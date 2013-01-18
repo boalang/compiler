@@ -12,12 +12,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
 import org.scannotation.AnnotationDB;
-import org.scannotation.ClasspathUrlFinder;
 
 import sizzle.aggregators.AggregatorSpec;
-import sizzle.aggregators.IntSumAggregator;
 import sizzle.functions.FunctionSpec;
 import sizzle.parser.syntaxtree.Operand;
 import sizzle.types.CommentKindProtoMap;
@@ -66,8 +63,6 @@ import sizzle.types.TypeProtoTuple;
 import sizzle.types.VisibilityProtoMap;
 
 public class SymbolTable {
-	private static Logger LOG = Logger.getLogger(SymbolTable.class);
-
 	private static final boolean strictCompatibility = true;
 
 	private final ClassLoader loader;
@@ -366,7 +361,7 @@ public class SymbolTable {
 
 	public void set(final String id, final SizzleType type, final boolean global) {
 		if (this.idmap.containsKey(id))
-			throw new TypeException(id + " already declared as " + this.idmap.get(id));
+			throw new RuntimeException(id + " already declared as " + this.idmap.get(id));
 
 		if (type instanceof SizzleFunction)
 			this.setFunction(id, (SizzleFunction) type);
@@ -391,7 +386,7 @@ public class SymbolTable {
 		if (this.locals.containsKey(id))
 			return this.locals.get(id);
 
-		throw new TypeException("no such identifier " + id);
+		throw new RuntimeException("no such identifier " + id);
 	}
 
 	public boolean hasType(final String id) {
@@ -403,9 +398,13 @@ public class SymbolTable {
 			return this.idmap.get(id);
 
 		if (id.startsWith("array of "))
-			return new SizzleArray(this.getType(id.substring("array of ".length())));
+			return new SizzleArray(this.getType(id.substring("array of ".length()).trim()));
 
-		throw new TypeException("no such type " + id);
+		if (id.startsWith("map"))
+			return new SizzleMap(this.getType(id.substring(id.indexOf(" of ") + " of ".length()).trim()),
+					this.getType(id.substring(id.indexOf("[") + 1, id.indexOf("]")).trim()));
+
+		throw new RuntimeException("no such type " + id);
 	}
 
 	public void setType(final String id, final SizzleType sizzleType) {
@@ -418,6 +417,9 @@ public class SymbolTable {
 
 		final AggregatorSpec annotation = clazz.getAnnotation(AggregatorSpec.class);
 
+		if (annotation == null)
+			return;
+
 		final String type = annotation.type();
 		if (type.equals("any"))
 			this.aggregators.put(annotation.name(), clazz);
@@ -429,7 +431,7 @@ public class SymbolTable {
 		try {
 			this.importAggregator(Class.forName(c, false, this.loader));
 		} catch (final ClassNotFoundException e) {
-			throw new TypeException("no such class " + c, e);
+			throw new RuntimeException("no such class " + c, e);
 		}
 	}
 
@@ -439,7 +441,7 @@ public class SymbolTable {
 		else if (this.aggregators.containsKey(name))
 			return this.aggregators.get(name);
 		else
-			throw new TypeException("no such aggregator " + name + " of " + type);
+			throw new RuntimeException("no such aggregator " + name + " of " + type);
 	}
 
 	public List<Class<?>> getAggregators(final String name, final SizzleType type) {
@@ -456,6 +458,9 @@ public class SymbolTable {
 
 	private void importFunction(final Method m) {
 		final FunctionSpec annotation = m.getAnnotation(FunctionSpec.class);
+
+		if (annotation == null)
+			return;
 
 		final String[] formalParameters = annotation.formalParameters();
 		final SizzleType[] formalParameterTypes = new SizzleType[formalParameters.length];
@@ -476,7 +481,7 @@ public class SymbolTable {
 			else if (dep.endsWith(".avro"))
 				this.importAvro(dep);
 			else
-				throw new TypeException("unknown dependency in " + dep);
+				throw new RuntimeException("unknown dependency in " + dep);
 
 		this.setFunction(annotation.name(),
 				new SizzleFunction(m.getDeclaringClass().getCanonicalName() + '.' + m.getName(), this.getType(annotation.returnType()), formalParameterTypes));
@@ -492,37 +497,73 @@ public class SymbolTable {
 		try {
 			this.importFunctions(Class.forName(c));
 		} catch (final ClassNotFoundException e) {
-			throw new TypeException("no such class " + c, e);
+			throw new RuntimeException("no such class " + c, e);
 		}
 	}
 
 	private void importLibs(final List<URL> urls) throws IOException {
-		final AnnotationDB db = new AnnotationDB();
-		db.setScanMethodAnnotations(true);
-		db.setScanClassAnnotations(true);
-
-		// let's assume the entire runtime is in the same classpath entry as the
-		// int sum aggregator
-		db.scanArchives(ClasspathUrlFinder.findClassBase(IntSumAggregator.class));
-
-		for (final URL s : ClasspathUrlFinder.findClassPaths())
-			if (s.getPath().endsWith("/"))
-				db.scanArchives(s);
-
-		for (final URL url : urls)
-			db.scanArchives(url);
-
-		final Map<String, Set<String>> annotationIndex = db.getAnnotationIndex();
-
-		for (final String c : annotationIndex.get(AggregatorSpec.class.getCanonicalName()))
-			try {
-				this.importAggregator(c);
-			} catch (final NoClassDefFoundError e) {
-				SymbolTable.LOG.error("unable to import aggregator " + c + ": " + e.getClass().getSimpleName() + " for " + e.getMessage());
-			}
-
-		for (final String c : annotationIndex.get(FunctionSpec.class.getCanonicalName()))
+		// load built-in functions
+		final Class<?>[] builtinFuncs = {
+			sizzle.functions.BoaIntrinsics.class,
+			sizzle.functions.BoaJavaFeaturesIntrinsics.class,
+			sizzle.functions.BoaMetricIntrinsics.class,
+			sizzle.functions.BoaModifierIntrinsics.class,
+			sizzle.functions.SizzleCasts.class,
+			sizzle.functions.SizzleEncodingIntrinsics.class,
+			sizzle.functions.SizzleFileIntrinsics.class,
+			sizzle.functions.SizzleMathIntrinsics.class,
+			sizzle.functions.SizzleSortIntrinsics.class,
+			sizzle.functions.SizzleSpecialIntrinsics.class,
+			sizzle.functions.SizzleStringIntrinsics.class,
+			sizzle.functions.SizzleTimeIntrinsics.class
+		};
+		for (final Class<?> c : builtinFuncs)
 			this.importFunctions(c);
+
+		// load built-in aggregators
+		final Class<?>[] builtinAggs = {
+			sizzle.aggregators.CollectionAggregator.class,
+			sizzle.aggregators.DistinctAggregator.class,
+			sizzle.aggregators.FloatHistogramAggregator.class,
+			sizzle.aggregators.FloatMeanAggregator.class,
+			sizzle.aggregators.FloatQuantileAggregator.class,
+			sizzle.aggregators.FloatSumAggregator.class,
+			sizzle.aggregators.IntHistogramAggregator.class,
+			sizzle.aggregators.IntMeanAggregator.class,
+			sizzle.aggregators.IntQuantileAggregator.class,
+			sizzle.aggregators.IntSumAggregator.class,
+			sizzle.aggregators.LogAggregator.class,
+			sizzle.aggregators.MaximumAggregator.class,
+			sizzle.aggregators.MinimumAggregator.class,
+			sizzle.aggregators.MrcounterAggregator.class,
+			sizzle.aggregators.SetAggregator.class,
+			sizzle.aggregators.StderrAggregator.class,
+			sizzle.aggregators.StdoutAggregator.class,
+			sizzle.aggregators.TextAggregator.class,
+			sizzle.aggregators.TopAggregator.class,
+			sizzle.aggregators.UniqueAggregator.class
+		};
+		for (final Class<?> c : builtinAggs)
+			this.importAggregator(c);
+
+		// also check any libs passed into the compiler
+		if (urls.size() > 0) {
+			final AnnotationDB db = new AnnotationDB();
+			db.setScanMethodAnnotations(true);
+			db.setScanClassAnnotations(true);
+//			db.setScanPackages(new String[] {"sizzle.aggregators", "sizzle.functions"});
+
+			for (final URL url : urls)
+				db.scanArchives(url);
+	
+			final Map<String, Set<String>> annotationIndex = db.getAnnotationIndex();
+	
+			for (final String s : annotationIndex.get(AggregatorSpec.class.getCanonicalName()))
+				this.importAggregator(s);
+	
+			for (final String s : annotationIndex.get(FunctionSpec.class.getCanonicalName()))
+				this.importFunctions(s);
+		}
 	}
 
 	void importProto(final String name) {
@@ -532,7 +573,7 @@ public class SymbolTable {
 		try {
 			wrapper = Class.forName("sizzle.types." + camelCased);
 		} catch (final ClassNotFoundException e) {
-			throw new TypeException("no such proto " + name);
+			throw new RuntimeException("no such proto " + name);
 		}
 
 		for (final Class<?> c : wrapper.getClasses()) {

@@ -82,7 +82,6 @@ TOKEN :
 | < SWITCH : "switch" >
 | < RETURN : "return" >
 | < WEIGHT : "weight" >
-| < FORMAT : "format" >
 | < RESULT : "result" >
 | < DEFAULT_ : "default" >
 | < CONTINUE : "continue" >
@@ -367,7 +366,10 @@ void OutputType() :
     "file" "(" ExprList() ")" 
   | "proc" "(" ExprList() ")"
   ]
-  [ "format" "(" ExprList() ")" ]
+  [ 
+    LOOKAHEAD("format" "(" ExprList() ")")
+    "format" "(" ExprList() ")"
+  ]
 }
 
 // ExprList = Expression {',' Expression }.
@@ -410,7 +412,8 @@ void Statement() :
 | BreakStatement()
 | ContinueStatement()
 | DoStatement()
-| EmitStatement()
+| LOOKAHEAD(EmitStatement())
+  EmitStatement()
 | ExprStatement()
 | ForStatement()
 | IfStatement()
@@ -462,7 +465,7 @@ void DoStatement() :
   "do" Statement() "while" "(" Expression() ")" ";"
 }
 
-// EmitStatement = 'emit' OutputDesignator '<-' Expression ['weight' Expression] ';'.
+// EmitStatement = OutputDesignator '<<' Expression ['weight' Expression] ';'.
 // OutputDesignator = var_name {'[' Expression ']'}.
 void EmitStatement() :
 {}
@@ -620,6 +623,7 @@ void Expression() :
 {
   Conjunction()
   (
+    LOOKAHEAD(( "||" | "or" ) Conjunction())
     (
       "||"
     | "or"

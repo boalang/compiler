@@ -5,7 +5,7 @@ package sizzle.types;
  * 
  * @author rdyer
  */
-public class VisibilityProtoMap extends SizzleMap {
+public class VisibilityProtoMap extends SizzleProtoMap {
 	/**
 	 * Construct a {@link VisibilityProtoMap}.
 	 */
