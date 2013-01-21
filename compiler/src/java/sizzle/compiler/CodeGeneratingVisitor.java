@@ -173,13 +173,10 @@ public class CodeGeneratingVisitor extends GJDepthFirst<String, SymbolTable> {
 	public String visit(final VarDecl n, final SymbolTable argu) {
 		final SizzleType type = argu.get(n.f0.f0.tokenImage);
 
-		final String lhsType;
 		if (n.f2.present()) {
 			argu.setId(n.f0.f0.tokenImage);
-			lhsType = n.f2.node.accept(this, argu);
+			n.f2.node.accept(this, argu);
 			argu.setId(null);
-		} else {
-			lhsType = null;
 		}
 
 		if (type instanceof SizzleTable)
@@ -192,41 +189,40 @@ public class CodeGeneratingVisitor extends GJDepthFirst<String, SymbolTable> {
 		final StringTemplate st = this.stg.getInstanceOf("Assignment");
 		st.setAttribute("lhs", idSt.toString());
 
-		if (n.f3.present()) {
-			final NodeChoice nodeChoice = (NodeChoice) n.f3.node;
+		if (!n.f3.present())
+			return null;
 
-			switch (nodeChoice.which) {
-			case 0: // initializer
-				SizzleType t;
-				Node elem = (Expression) ((NodeSequence) nodeChoice.choice).elementAt(1);
-				try {
-					argu.setOperandType(type);
-					t = elem.accept(this.typechecker, argu.cloneNonLocals());
-				} catch (final IOException e) {
-					throw new RuntimeException(e.getClass().getSimpleName() + " caught", e);
-				}
-				if (t instanceof SizzleFunction && !elem.accept(new IsFunctionVisitor(), argu))
-					t = ((SizzleFunction)t).getType();
+		final NodeChoice nodeChoice = (NodeChoice) n.f3.node;
 
-				String src = ((NodeSequence) nodeChoice.choice).elementAt(1).accept(this, argu);
-
-				if (!type.assigns(t)) {
-					final SizzleFunction f = argu.getCast(t, type);
-
-					if (f.hasName()) {
-						src = f.getName() + "(" + src + ")";
-					} else if (f.hasMacro()) {
-						src = CodeGeneratingVisitor.expand(f.getMacro(), src.split(","));
-					}
-				}
-
-				st.setAttribute("rhs", src);
-				break;
-			default:
-				throw new RuntimeException("unexpected choice " + nodeChoice.which + " is a " + nodeChoice.choice.getClass().getSimpleName().toString());
+		switch (nodeChoice.which) {
+		case 0: // initializer
+			SizzleType t;
+			Node elem = (Expression) ((NodeSequence) nodeChoice.choice).elementAt(1);
+			try {
+				argu.setOperandType(type);
+				t = elem.accept(this.typechecker, argu.cloneNonLocals());
+			} catch (final IOException e) {
+				throw new RuntimeException(e.getClass().getSimpleName() + " caught", e);
 			}
-		} else if (lhsType != null) {
-			st.setAttribute("rhs", lhsType);
+			if (t instanceof SizzleFunction && !elem.accept(new IsFunctionVisitor(), argu))
+				t = ((SizzleFunction)t).getType();
+
+			String src = ((NodeSequence) nodeChoice.choice).elementAt(1).accept(this, argu);
+
+			if (!type.assigns(t)) {
+				final SizzleFunction f = argu.getCast(t, type);
+
+				if (f.hasName()) {
+					src = f.getName() + "(" + src + ")";
+				} else if (f.hasMacro()) {
+					src = CodeGeneratingVisitor.expand(f.getMacro(), src.split(","));
+				}
+			}
+
+			st.setAttribute("rhs", src);
+			break;
+		default:
+			throw new RuntimeException("unexpected choice " + nodeChoice.which + " is a " + nodeChoice.choice.getClass().getSimpleName().toString());
 		}
 
 		return st.toString();
