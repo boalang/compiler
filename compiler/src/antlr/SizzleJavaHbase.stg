@@ -23,6 +23,9 @@ public class <name> extends sizzle.runtime.SizzleRunner {
 		
 		return job;
 	}
+
+	private static final byte[] HBASE_FAMILY = org.apache.hadoop.hbase.util.Bytes.toBytes("metadata");
+	private static final byte[] HBASE_QUALIFIER = org.apache.hadoop.hbase.util.Bytes.toBytes("proto");
 	
 	public static void main(String[] args) throws java.io.IOException, InterruptedException, ClassNotFoundException {
 		final <name> runner = new <name>();
@@ -48,7 +51,7 @@ public class <name> extends sizzle.runtime.SizzleRunner {
 		scan.setCaching(10);
 		scan.setCacheBlocks(false);
 		scan.setFilter(new org.apache.hadoop.hbase.filter.RowFilter(org.apache.hadoop.hbase.filter.CompareFilter.CompareOp.NOT_EQUAL, new org.apache.hadoop.hbase.filter.SubstringComparator("!!")));
-		scan.addColumn(org.apache.hadoop.hbase.util.Bytes.toBytes("metadata"), org.apache.hadoop.hbase.util.Bytes.toBytes("proto"));
+		scan.addColumn(HBASE_FAMILY, HBASE_QUALIFIER);
 		org.apache.hadoop.hbase.mapreduce.TableMapReduceUtil.initTableMapperJob(org.apache.hadoop.hbase.util.Bytes.toBytes(args[0]), scan, <name>SizzleMapper.class, sizzle.io.EmitKey.class, sizzle.io.EmitValue.class, jb);
 
 		if (id > 0)
@@ -63,9 +66,9 @@ public class <name> extends sizzle.runtime.SizzleRunner {
 			double lastMap = -1;
 			double lastReduce = -1;
 			while (!jb.isComplete()) {
-				double newSetup = jb.setupProgress();
-				double newMap = jb.mapProgress();
-				double newReduce = jb.reduceProgress();
+				final double newSetup = jb.setupProgress();
+				final double newMap = jb.mapProgress();
+				final double newReduce = jb.reduceProgress();
 				if (newSetup != lastSetup) {
 					lastSetup = newSetup;
 					System.err.println("SETUP : " + (newSetup * 100) + "%");
@@ -103,10 +106,7 @@ public class <name> extends sizzle.runtime.SizzleRunner {
 		@Override
 		protected void map(final org.apache.hadoop.hbase.io.ImmutableBytesWritable row, final org.apache.hadoop.hbase.client.Result columns, final org.apache.hadoop.mapreduce.Mapper.Context context) throws java.io.IOException {
 			try {
-				byte[] value = null;
-				for (org.apache.hadoop.hbase.KeyValue kv : columns.list())
-					value = kv.getValue();
-
+				final byte[] value = columns.getColumnLatest(HBASE_FAMILY, HBASE_QUALIFIER).getValue();
 				final com.google.protobuf.CodedInputStream _inputStream = com.google.protobuf.CodedInputStream.newInstance(value, 0, value.length);
 				<statements:{<it><\n>}>
 			} catch (final java.io.IOException e) {
