@@ -83,7 +83,7 @@ public class CodeGeneratingVisitor extends GJDepthFirst<String, SymbolTable> {
 	private final HashMap<String, TableDescription> tables;
 
 	private final String name;
-	private final StringTemplateGroup stg;
+	public final StringTemplateGroup stg;
 
 	private String skipIndex = "";
 	private boolean abortGeneration = false;
@@ -185,12 +185,12 @@ public class CodeGeneratingVisitor extends GJDepthFirst<String, SymbolTable> {
 		if (type instanceof SizzleTable)
 			return null;
 
-		final StringTemplate st = this.stg.getInstanceOf("VarDecl");
+		final StringTemplate idSt = this.stg.getInstanceOf("Identifier");
 
-		st.setAttribute("id", n.f0.f0.tokenImage);
+		idSt.setAttribute("id", n.f0.f0.tokenImage);
 
-		// TODO: make templates for types
-		st.setAttribute("type", type.toJavaType());
+		final StringTemplate st = this.stg.getInstanceOf("Assignment");
+		st.setAttribute("lhs", idSt.toString());
 
 		if (n.f3.present()) {
 			final NodeChoice nodeChoice = (NodeChoice) n.f3.node;
@@ -220,13 +220,13 @@ public class CodeGeneratingVisitor extends GJDepthFirst<String, SymbolTable> {
 					}
 				}
 
-				st.setAttribute("initializer", src);
+				st.setAttribute("rhs", src);
 				break;
 			default:
 				throw new RuntimeException("unexpected choice " + nodeChoice.which + " is a " + nodeChoice.choice.getClass().getSimpleName().toString());
 			}
 		} else if (lhsType != null) {
-			st.setAttribute("initializer", lhsType);
+			st.setAttribute("rhs", lhsType);
 		}
 
 		return st.toString();

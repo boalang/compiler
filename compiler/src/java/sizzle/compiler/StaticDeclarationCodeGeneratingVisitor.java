@@ -2,8 +2,12 @@ package sizzle.compiler;
 
 import java.io.IOException;
 
+import org.antlr.stringtemplate.StringTemplate;
+
 import sizzle.parser.syntaxtree.*;
 import sizzle.parser.visitor.GJDepthFirst;
+import sizzle.types.SizzleTable;
+import sizzle.types.SizzleType;
 
 /**
  * Prescan the Sizzle program and generate initializer code for any static
@@ -54,9 +58,8 @@ public class StaticDeclarationCodeGeneratingVisitor extends GJDepthFirst<String,
 		case 0: // type declaration
 			return null;
 		case 1: // static var declaration
-			return n.f0.choice.accept(this, argu);
 		case 2: // variable declaration
-			return null;
+			return n.f0.choice.accept(this, argu);
 		default:
 			throw new RuntimeException("unexpected choice " + n.f0.which + " is " + n.f0.choice.getClass());
 		}
@@ -74,7 +77,17 @@ public class StaticDeclarationCodeGeneratingVisitor extends GJDepthFirst<String,
 
 	@Override
 	public String visit(final VarDecl n, final SymbolTable argu) {
-		throw new RuntimeException("unimplemented");
+		final SizzleType type = argu.get(n.f0.f0.tokenImage);
+
+		if (type instanceof SizzleTable)
+			return null;
+
+		final StringTemplate st = this.codegenerator.stg.getInstanceOf("VarDecl");
+
+		st.setAttribute("id", n.f0.f0.tokenImage);
+		st.setAttribute("type", type.toJavaType());
+
+		return st.toString();
 	}
 
 	@Override
