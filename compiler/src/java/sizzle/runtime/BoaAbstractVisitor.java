@@ -48,6 +48,10 @@ public abstract class BoaAbstractVisitor {
 		defaultPreVisit();
 		return true;
 	}
+	protected boolean preVisit(final ChangedFile node) throws Exception {
+		defaultPreVisit();
+		return true;
+	}
 	protected boolean preVisit(final ASTRoot node) throws Exception {
 		defaultPreVisit();
 		return true;
@@ -104,6 +108,9 @@ public abstract class BoaAbstractVisitor {
 	protected void postVisit(final Revision node) throws Exception {
 		defaultPostVisit();
 	}
+	protected void postVisit(final ChangedFile node) throws Exception {
+		defaultPostVisit();
+	}
 	protected void postVisit(final ASTRoot node) throws Exception {
 		defaultPostVisit();
 	}
@@ -153,11 +160,20 @@ public abstract class BoaAbstractVisitor {
 			postVisit(node);
 		}
 	}
+	Revision lastRev = null;
 	public final void visit(final Revision node) throws Exception {
 		if (preVisit(node)) {
+			lastRev = node;
 			final List<ChangedFile> filesList = node.getFilesList();
 			for (int i = 0; i < filesList.size(); i++)
 				visit(BoaAstIntrinsics.getast(node, filesList.get(i)));
+
+			postVisit(node);
+		}
+	}
+	public final void visit(final ChangedFile node) throws Exception {
+		if (preVisit(node)) {
+			visit(BoaAstIntrinsics.getast(lastRev, node));
 
 			postVisit(node);
 		}
