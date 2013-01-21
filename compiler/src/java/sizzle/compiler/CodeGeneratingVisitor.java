@@ -566,7 +566,7 @@ public class CodeGeneratingVisitor extends GJDepthFirst<String, SymbolTable> {
 //				String func = indexeeType instanceof SizzleArray) ? ".length()" : ".size()";
 				String func = ".size()";
 				if (src.length() > 0)
-					src = "min(" + indexee + func + ", " + src + ")";
+					src = "java.lang.Math.min(" + indexee + func + ", " + src + ")";
 				else
 					src = indexee + func;
 			}
