@@ -81,8 +81,14 @@ Pair(map, key, value) ::= "<map>.put(<key>, <value>)"
 Identifier(id) ::= "<if(identifierMap.(id))><identifierMap.(id)><else>___<id><endif>"
 Assignment(lhs, rhs) ::= "<lhs> = <rhs>;<\n>"
 Function(ret, parameters, body) ::= <<
+<if(ret)>
 new sizzle.runtime.SizzleFunc\<<ret>\>() {
 	public <ret> invoke(Object[] args) throws Exception {
+<else>
+new sizzle.runtime.SizzleVoidFunc() {
+	public void invoke(Object[] args) throws Exception {
+<endif>
+
 		<parameters>
 		<body>
 	}

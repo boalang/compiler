@@ -337,7 +337,7 @@ public class CodeGeneratingVisitor extends GJDepthFirst<String, SymbolTable> {
 
 	@Override
 	public String visit(final FunctionType n, final SymbolTable argu) {
-		throw new RuntimeException("unimplemented");
+		return null;
 	}
 
 	@Override
@@ -964,7 +964,8 @@ public class CodeGeneratingVisitor extends GJDepthFirst<String, SymbolTable> {
 		for (int i = 0; i < paramTypes.length; i++)
 			params.add(paramTypes[i].toBoxedJavaType() + " ___" + ((SizzleName) paramTypes[i]).getId() + " = (" + paramTypes[i].toBoxedJavaType() + ")args[" + i + "];");
 
-		st.setAttribute("ret", funcType.getType().toBoxedJavaType());
+		if (!(funcType.getType() instanceof SizzleAny))
+			st.setAttribute("ret", funcType.getType().toBoxedJavaType());
 		st.setAttribute("parameters", params);
 		st.setAttribute("body", n.f1.accept(this, funcArgu));
 

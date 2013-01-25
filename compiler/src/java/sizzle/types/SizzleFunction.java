@@ -222,6 +222,8 @@ public class SizzleFunction extends SizzleType {
 	/** {@inheritDoc} */
 	@Override
 	public String toJavaType() {
+		if (type instanceof SizzleAny)
+			return "sizzle.runtime.SizzleVoidFunc";
 		return "sizzle.runtime.SizzleFunc<" + type.toBoxedJavaType() + ">";
 	}
 
