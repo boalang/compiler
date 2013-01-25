@@ -24,14 +24,14 @@ public class StatementProtoTuple extends SizzleProtoTuple {
 		names.put("statements", 2);
 		members.add(new SizzleProtoList(new StatementProtoTuple()));
 
-		names.put("condition", 3);
+		names.put("initializations", 3);
+		members.add(new SizzleProtoList(new ExpressionProtoTuple()));
+
+		names.put("condition", 4);
 		members.add(new ExpressionProtoTuple());
 
-		names.put("initialization", 4);
-		members.add(new ExpressionProtoTuple());
-
-		names.put("increment", 5);
-		members.add(new ExpressionProtoTuple());
+		names.put("updates", 5);
+		members.add(new SizzleProtoList(new ExpressionProtoTuple()));
 
 		names.put("variable_declaration", 6);
 		members.add(new VariableProtoTuple());
