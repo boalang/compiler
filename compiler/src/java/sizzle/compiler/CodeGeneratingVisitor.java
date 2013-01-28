@@ -119,10 +119,6 @@ public class CodeGeneratingVisitor extends GJDepthFirst<String, SymbolTable> {
 
 		st.setAttribute("name", this.name);
 
-		st.setAttribute("inputFormatClass", "org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat");
-		st.setAttribute("keyClass", "org.apache.hadoop.io.Text");
-		st.setAttribute("valueClass", "org.apache.hadoop.io.BytesWritable");
-
 		st.setAttribute("staticDeclarations", this.staticdeclarator.visit(n, argu));
 		st.setAttribute("staticStatements", this.staticinitializer.visit(n, argu));
 

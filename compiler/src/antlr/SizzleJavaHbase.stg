@@ -1,6 +1,6 @@
 group SizzleJavaHadoop : SizzleJava;
 
-Program(name, inputFormatClass, keyClass, valueClass, staticDeclarations, staticStatements, statements, tables) ::= <<
+Program(name, staticDeclarations, staticStatements, statements, tables) ::= <<
 package sizzle;
 
 public class <name> extends sizzle.runtime.SizzleRunner {
@@ -13,7 +13,6 @@ public class <name> extends sizzle.runtime.SizzleRunner {
 		job.getConfiguration().setBoolean("mapred.reduce.tasks.speculative.execution", false);
 		job.getConfiguration().setLong("mapred.job.reuse.jvm.num.tasks", -1);
 
-		job.setInputFormatClass(<inputFormatClass>.class);
 		job.setJobName("<name>: " + out);
 		job.setJarByClass(<name>SizzleMapper.class);
 		
