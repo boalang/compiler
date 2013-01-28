@@ -350,7 +350,7 @@ public class CodeGeneratingVisitor extends GJDepthFirst<String, SymbolTable> {
 
 		// FIXME rdyer hack to fix assigning to maps
 		if (lhs.contains(".get(")) {
-			final String s = lhs.replaceFirst(Pattern.quote(".get((int)"), ".put(");
+			final String s = lhs.replaceFirst(Pattern.quote(".get("), ".put(");
 			return s.substring(0, s.lastIndexOf(')')) + ", " + rhs + s.substring(s.lastIndexOf(')')) + ";";
 		}
 
@@ -797,7 +797,11 @@ public class CodeGeneratingVisitor extends GJDepthFirst<String, SymbolTable> {
 
 		st.setAttribute("operand", "");
 
-		st.setAttribute("index", n.f1.accept(this, argu));
+		SizzleType indexType = n.f1.accept(typechecker, argu);
+		if (indexType instanceof SizzleInt)
+			st.setAttribute("index", "(int)" + n.f1.accept(this, argu));
+		else
+			st.setAttribute("index", n.f1.accept(this, argu));
 
 		if (n.f2.present())
 			st.setAttribute("slice", ((NodeSequence) n.f2.node).elementAt(1).accept(this, argu));
