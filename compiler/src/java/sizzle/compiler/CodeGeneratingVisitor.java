@@ -173,6 +173,7 @@ public class CodeGeneratingVisitor extends GJDepthFirst<String, SymbolTable> {
 		if (n.f2.present()) {
 			argu.setId(n.f0.f0.tokenImage);
 			lhsType = n.f2.node.accept(typechecker, argu);
+			n.f2.node.accept(this, argu);
 			argu.setId(null);
 		} else {
 			lhsType = null;
