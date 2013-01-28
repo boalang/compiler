@@ -169,10 +169,13 @@ public class CodeGeneratingVisitor extends GJDepthFirst<String, SymbolTable> {
 	public String visit(final VarDecl n, final SymbolTable argu) {
 		final SizzleType type = argu.get(n.f0.f0.tokenImage);
 
+		final SizzleType lhsType;
 		if (n.f2.present()) {
 			argu.setId(n.f0.f0.tokenImage);
-			n.f2.node.accept(this, argu);
+			lhsType = n.f2.node.accept(typechecker, argu);
 			argu.setId(null);
+		} else {
+			lhsType = null;
 		}
 
 		if (type instanceof SizzleTable)
@@ -185,8 +188,13 @@ public class CodeGeneratingVisitor extends GJDepthFirst<String, SymbolTable> {
 		final StringTemplate st = this.stg.getInstanceOf("Assignment");
 		st.setAttribute("lhs", idSt.toString());
 
-		if (!n.f3.present())
-			return null;
+		if (!n.f3.present()) {
+			if (!(lhsType instanceof SizzleMap))
+				return null;
+			
+			st.setAttribute("rhs", n.f2.node.accept(this, argu));
+			return st.toString();
+		}
 
 		final NodeChoice nodeChoice = (NodeChoice) n.f3.node;
 
