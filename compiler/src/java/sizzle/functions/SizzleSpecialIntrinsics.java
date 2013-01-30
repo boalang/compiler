@@ -178,38 +178,35 @@ public class SizzleSpecialIntrinsics {
 			throw new RuntimeException("unimplemented");
 	}
 
-	private static SawyerReturn sawyer(final String string, final String[] regexes) {
+	private static SawyerReturn sawyer(final String string, final Matcher[] matchers) {
 		final List<String> result = new ArrayList<String>();
 
-		final Pattern p = Pattern.compile(regexes[0]);
+		final Matcher matcher = matchers[0].reset(string);
 
-		final Matcher matcher = p.matcher(string);
-		if (matcher.find()) {
-			if (regexes.length > 1) {
-				final SawyerReturn sawyerReturn = SizzleSpecialIntrinsics.sawyer(string.substring(matcher.end()),
-						Arrays.copyOfRange(regexes, 1, regexes.length));
-
-				result.add(string.substring(matcher.start(), matcher.end()));
-				result.addAll(sawyerReturn.getResult());
-
-				return new SawyerReturn(result, sawyerReturn.getLeftover());
-			} else {
-				result.add(string.substring(matcher.start(), matcher.end()));
-
-				return new SawyerReturn(result, string.substring(matcher.end()));
-			}
-		} else {
+		if (!matcher.find())
 			return new SawyerReturn(result, string);
-		}
 
+		result.add(matcher.group());
+
+		if (matchers.length == 1)
+			return new SawyerReturn(result, string.substring(matcher.end()));
+
+		final SawyerReturn sawyerReturn = SizzleSpecialIntrinsics.sawyer(string.substring(matcher.end()), Arrays.copyOfRange(matchers, 1, matchers.length));
+		result.addAll(sawyerReturn.getResult());
+
+		return new SawyerReturn(result, sawyerReturn.getLeftover());
 	}
 
-	private static String[] saw(final int n, final String string, final String[] regexes) {
+	private static String[] saw(final long n, final String string, final String[] regexes) {
 		final List<String> result = new ArrayList<String>();
 
+		final Matcher[] matchers = new Matcher[regexes.length];
+		for (int i = 0; i < regexes.length; i++)
+			matchers[i] = Pattern.compile(regexes[i]).matcher("");
+
 		String todo = string;
-		for (int i = 0; i < n; i++) {
-			final SawyerReturn sawyerReturn = SizzleSpecialIntrinsics.sawyer(todo, Arrays.copyOf(regexes, regexes.length));
+		for (long i = 0; i < n; i++) {
+			final SawyerReturn sawyerReturn = SizzleSpecialIntrinsics.sawyer(todo, matchers);
 			result.addAll(sawyerReturn.getResult());
 			if (sawyerReturn.getLeftover().equals("") || sawyerReturn.getLeftover().equals(todo))
 				break;
@@ -226,14 +223,14 @@ public class SizzleSpecialIntrinsics {
 	}
 
 	@FunctionSpec(name = "splitn", returnType = "array of string", formalParameters = { "int", "string", "string..." })
-	public static String[] sawn(final int n, final String string, final String... regexes) {
+	public static String[] sawn(final long n, final String string, final String... regexes) {
 		return SizzleSpecialIntrinsics.saw(n, string, regexes);
 	}
 
 	@FunctionSpec(name = "splitall", returnType = "array of string", formalParameters = { "string", "string..." })
 	public static String[] sawzall(final String string, final String... regexes) {
 		// will someone ever trigger this obscure bug?
-		return SizzleSpecialIntrinsics.saw(Integer.MAX_VALUE, string, regexes);
+		return SizzleSpecialIntrinsics.saw(Long.MAX_VALUE, string, regexes);
 	}
 }
 
