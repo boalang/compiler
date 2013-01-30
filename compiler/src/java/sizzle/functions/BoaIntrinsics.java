@@ -6,6 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import sizzle.types.Code.Revision;
+import sizzle.types.Diff.ChangedFile;
 
 /**
  * Boa domain-specific functions.
@@ -54,5 +55,19 @@ public class BoaIntrinsics {
 			if (rev.getFiles(i).getName().toLowerCase().endsWith("." + ext.toLowerCase()))
 				return true;
 		return false;
+	}
+
+	/**
+	 * Matches a *Kind enum to the given string.
+	 * 
+	 * @param s the string to match against
+	 * @param kind the *Kind to match
+	 * @return true if the string matches the given *Kind
+	 */
+	@FunctionSpec(name = "iskind", returnType = "bool", formalParameters = { "string", "int" })
+	public static boolean iskind(final String s, final Object kind) {
+		if (kind instanceof ChangedFile.FileKind)
+			return ((ChangedFile.FileKind)kind).name().startsWith(s);
+		throw new RuntimeException("Invalid argument type");
 	}
 }
