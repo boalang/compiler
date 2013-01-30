@@ -137,6 +137,20 @@ public class SizzleStringIntrinsics {
 	}
 
 	/**
+	 * Returns the substring of <em>str</em> from <em>start</em> inclusive to <em>end</em> exclusive.
+	 * 
+	 * @param str
+	 * @param start
+	 * @param end
+	 * 
+	 * @return the substring of <em>str</em>
+	 */
+	@FunctionSpec(name = "substring", returnType = "string", formalParameters = { "string", "int", "int"})
+	public static String substring(final String str, final long start, final long end) {
+		return str.substring((int)start, (int)end);
+	}
+
+	/**
 	 * Return a copy of string <em>str</em>, with non-overlapping instances of
 	 * <em>lit</em> replaced by <em>rep</em>. If <em>replace_all</em> is false,
 	 * only the first found instance is replaced.
@@ -326,7 +340,7 @@ public class SizzleStringIntrinsics {
 	 * value is a flat array of the collected fields.
 	 * 
 	 * @param csv An arry of byte containing the input data
-         * @param fields An array of long specified the fields to be returned
+     * @param fields An array of long specified the fields to be returned
 	 * 
 	 * @return An array of byte[] containing the collected fields
 	 */
