@@ -151,6 +151,46 @@ public class SizzleStringIntrinsics {
 	}
 
 	/**
+	 * Splits a string into an array of strings using the given regex.
+	 * 
+	 * @param str
+	 * @param regex
+	 * 
+	 * @return the substrings of <em>str</em>, split once by <em>regex</em>
+	 */
+	@FunctionSpec(name = "split", returnType = "array of string", formalParameters = { "string", "string"})
+	public static String[] split(final String str, final String regex) {
+		return str.split(regex, 1);
+	}
+
+	/**
+	 * Splits a string into an array of strings using the given regex.
+	 * 
+	 * @param str
+	 * @param regex
+	 * @param n
+	 * 
+	 * @return the substrings of <em>str</em>, split at most <em>n</em> times by <em>regex</em>
+	 */
+	@FunctionSpec(name = "splitn", returnType = "array of string", formalParameters = { "string", "string", "int"})
+	public static String[] splitn(final String str, final String regex, final long n) {
+		return str.split(regex, (int)n);
+	}
+
+	/**
+	 * Splits a string into an array of strings using the given regex.
+	 * 
+	 * @param str
+	 * @param regex
+	 * 
+	 * @return the substrings of <em>str</em>, split entirely by <em>regex</em>
+	 */
+	@FunctionSpec(name = "splitall", returnType = "array of string", formalParameters = { "string", "string"})
+	public static String[] splitall(final String str, final String regex) {
+		return str.split(regex);
+	}
+
+	/**
 	 * Return a copy of string <em>str</em>, with non-overlapping instances of
 	 * <em>lit</em> replaced by <em>rep</em>. If <em>replace_all</em> is false,
 	 * only the first found instance is replaced.
