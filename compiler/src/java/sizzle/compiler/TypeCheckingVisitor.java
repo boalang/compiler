@@ -828,7 +828,11 @@ public class TypeCheckingVisitor extends GJDepthFirst<SizzleType, SymbolTable> {
 		if (argu.hasType(id))
 			return argu.getType(id);
 
-		return argu.get(id);
+		try {
+			return argu.get(id);
+		} catch (final RuntimeException e) {
+			throw new TypeException(n, "invalid identifier '" + id + "'", e);
+		}
 	}
 
 	/** {@inheritDoc} */
