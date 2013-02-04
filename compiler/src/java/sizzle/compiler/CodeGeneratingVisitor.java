@@ -969,7 +969,7 @@ public class CodeGeneratingVisitor extends GJDepthFirst<String, SymbolTable> {
 		this.typechecker.visit(n.f1, funcArgu);
 
 		if (!(t instanceof SizzleFunction))
-			throw new TypeException(n ,"type " + t + " no a function type");
+			throw new TypeException(n ,"type " + t + " is not a function type");
 		final SizzleFunction funcType = ((SizzleFunction) t);
 
 		SizzleType[] paramTypes = funcType.getFormalParameters();

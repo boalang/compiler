@@ -66,7 +66,7 @@ public class FunctionTrie {
 			this.getFunction(name, formalParameters);
 
 			return true;
-		} catch (final TypeException e) {
+		} catch (final RuntimeException e) {
 			return false;
 		}
 	}

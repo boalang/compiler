@@ -594,7 +594,7 @@ public class SymbolTable {
 			this.getFunction(to.toString(), new SizzleType[] { from });
 
 			return true;
-		} catch (final TypeException e) {
+		} catch (final RuntimeException e) {
 			return false;
 		}
 	}

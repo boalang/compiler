@@ -51,7 +51,7 @@ public class TypeCheckingVisitor extends GJDepthFirst<SizzleType, SymbolTable> {
 		final String id = n.f1.f0.tokenImage;
 
 		if (argu.hasType(id))
-			throw new TypeException(n, id + " already defined as " + argu.getType(id));
+			throw new TypeException(n, "'" + id + "' already defined as type '" + argu.getType(id) + "'");
 
 		argu.setType(id, new SizzleName(n.f3.accept(this, argu)));
 
@@ -70,7 +70,7 @@ public class TypeCheckingVisitor extends GJDepthFirst<SizzleType, SymbolTable> {
 		final String id = n.f0.f0.tokenImage;
 
 		if (argu.contains(id))
-			throw new TypeException(n, "variable " + id + " already declared as " + argu.get(id));
+			throw new TypeException(n, "variable '" + id + "' already declared as '" + argu.get(id) + "'");
 
 		SizzleType rhs = null;
 		if (n.f3.present()) {
@@ -95,10 +95,10 @@ public class TypeCheckingVisitor extends GJDepthFirst<SizzleType, SymbolTable> {
 				rhs = new SizzleArray(((SizzleTuple)rhs).getMember(0));
 
 			if (rhs != null && !lhs.assigns(rhs) && !argu.hasCast(rhs, lhs))
-				throw new TypeException(n, "incorrect type " + rhs + " for assignment to " + id + ':' + lhs);
+				throw new TypeException(n, "incorrect type '" + rhs + "' for assignment to '" + id + ": " + lhs + "'");
 		} else {
 			if (rhs == null)
-				throw new TypeException(n, "variable declaration requires a type or an initializer");
+				throw new TypeException(n, "variable declaration requires an explicit type or an initializer");
 
 			lhs = rhs;
 		}
@@ -208,7 +208,7 @@ public class TypeCheckingVisitor extends GJDepthFirst<SizzleType, SymbolTable> {
 				final SizzleType sizzleType = ((NodeSequence) node).elementAt(1).accept(this, argu);
 
 				if (!(sizzleType instanceof SizzleScalar))
-					throw new TypeException(n, "incorrect type " + sizzleType + " for index");
+					throw new TypeException(n, "incorrect type '" + sizzleType + "' for index");
 
 				indexTypes.add((SizzleScalar) sizzleType);
 			}
@@ -233,7 +233,7 @@ public class TypeCheckingVisitor extends GJDepthFirst<SizzleType, SymbolTable> {
 
 		if (n.f2.present())
 			if (annotation.formalParameters().length == 0)
-				throw new TypeException(n, "no arguments for table " + n.f1.f0.tokenImage);
+				throw new TypeException(n, "no arguments for table '" + n.f1.f0.tokenImage + "'");
 
 		return new SizzleTable(type, indexTypes, tweight);
 	}
@@ -305,7 +305,7 @@ public class TypeCheckingVisitor extends GJDepthFirst<SizzleType, SymbolTable> {
 
 		if (!(lhs instanceof SizzleArray && rhs instanceof SizzleTuple))
 			if (!lhs.assigns(rhs))
-				throw new TypeException(n, "invalid type " + rhs + " for assignment to " + lhs);
+				throw new TypeException(n, "invalid type '" + rhs + "' for assignment to '" + lhs + "'");
 
 		return null;
 	}
@@ -354,7 +354,7 @@ public class TypeCheckingVisitor extends GJDepthFirst<SizzleType, SymbolTable> {
 		final SizzleTable t = (SizzleTable) argu.get(id);
 
 		if (t == null)
-			throw new TypeException(n, "emitting to undeclared table " + id);
+			throw new TypeException(n, "emitting to undeclared table '" + id + "'");
 
 		if (n.f1.present()) {
 			final List<SizzleType> indices = new ArrayList<SizzleType>();
@@ -362,17 +362,17 @@ public class TypeCheckingVisitor extends GJDepthFirst<SizzleType, SymbolTable> {
 				indices.add(((NodeSequence) node).nodes.get(1).accept(this, argu));
 
 			if (indices.size() != t.countIndices())
-				throw new TypeException(n, "incorrect number of indices for " + id);
+				throw new TypeException(n, "incorrect number of indices for '" + id + "'");
 
 			for (int i = 0; i < t.countIndices(); i++)
 				if (!t.getIndex(i).assigns(indices.get(i)))
-					throw new TypeException(n, "incorrect type " + indices.get(i) + " for index " + i);
+					throw new TypeException(n, "incorrect type '" + indices.get(i) + "' for index '" + i + "'");
 		} else if (t.countIndices() > 0)
 			throw new TypeException(n, "indices missing from emit");
 
 		final SizzleType expression = n.f3.accept(this, argu);
 		if (!t.accepts(expression))
-			throw new TypeException(n, "incorrect type " + expression + " for " + id + ":" + t);
+			throw new TypeException(n, "incorrect type '" + expression + "' for '" + id + ": " + t + "'");
 
 		if (n.f4.present()) {
 			if (t.getWeightType() == null)
@@ -381,7 +381,7 @@ public class TypeCheckingVisitor extends GJDepthFirst<SizzleType, SymbolTable> {
 			final SizzleType wtype = ((NodeSequence) n.f4.node).nodes.get(1).accept(this, argu);
 
 			if (!t.acceptsWeight(wtype))
-				throw new TypeException(n, "incorrect type " + wtype + " for weight of " + id + ":" + t.getWeightType());
+				throw new TypeException(n, "incorrect type '" + wtype + "' for weight of '" + id + ": " + t.getWeightType() + "'");
 		} else if (t.getWeightType() != null)
 			throw new TypeException(n, "no weight specified by emit");
 
@@ -394,7 +394,7 @@ public class TypeCheckingVisitor extends GJDepthFirst<SizzleType, SymbolTable> {
 		final SizzleType type = n.f0.accept(this, argu);
 
 		if (n.f1.present() && !(type instanceof SizzleInt))
-			throw new TypeException(n, type + " not valid for operator " + n.f1.toString());
+			throw new TypeException(n, "'" + type + "' not valid for operator '" + n.f1.toString() + "'");
 
 		return type;
 	}
@@ -446,7 +446,7 @@ public class TypeCheckingVisitor extends GJDepthFirst<SizzleType, SymbolTable> {
 		final SizzleType test = n.f2.accept(this, argu);
 
 		if (!(test instanceof SizzleBool) && !(test instanceof SizzleFunction && ((SizzleFunction) test).getType() instanceof SizzleBool))
-			throw new TypeException(n, "invalid type " + test + " for if test");
+			throw new TypeException(n, "invalid type '" + test + "' for if conditional");
 
 		n.f4.accept(this, argu);
 
@@ -520,12 +520,12 @@ public class TypeCheckingVisitor extends GJDepthFirst<SizzleType, SymbolTable> {
 
 		if (n.f1.present()) {
 			if (!(ltype instanceof SizzleBool))
-				throw new TypeException(n, "invalid type " + ltype + " for disjunction");
+				throw new TypeException(n, "invalid type '" + ltype + "' for disjunction");
 
 			final SizzleType rtype = n.f0.accept(this, argu);
 
 			if (!(rtype instanceof SizzleBool))
-				throw new TypeException(n, "invalid type " + rtype + " for disjunction");
+				throw new TypeException(n, "invalid type '" + rtype + "' for disjunction");
 		}
 
 		return ltype;
@@ -540,7 +540,7 @@ public class TypeCheckingVisitor extends GJDepthFirst<SizzleType, SymbolTable> {
 			final SizzleType rhs = n.f0.accept(this, argu);
 
 			if (!rhs.compares(lhs))
-				throw new TypeException(n, "invalid type " + rhs + " for conjunction with " + lhs);
+				throw new TypeException(n, "invalid type '" + rhs + "' for conjunction with '" + lhs + "'");
 
 			return new SizzleBool();
 		}
@@ -557,7 +557,7 @@ public class TypeCheckingVisitor extends GJDepthFirst<SizzleType, SymbolTable> {
 			final SizzleType rhs = ((NodeSequence) n.f1.node).nodes.get(1).accept(this, argu);
 
 			if (!rhs.compares(lhs))
-				throw new TypeException(n, "invalid type " + rhs + " for comparison with " + lhs);
+				throw new TypeException(n, "invalid type '" + rhs + "' for comparison with '" + lhs + "'");
 
 			return new SizzleBool();
 		}
@@ -634,13 +634,13 @@ public class TypeCheckingVisitor extends GJDepthFirst<SizzleType, SymbolTable> {
 
 					if (type instanceof SizzleTuple) {
 						if (!((SizzleTuple) type).hasMember(selector))
-							throw new TypeException(n, type + " has no member named '" + selector + "'");
+							throw new TypeException(n, "'" + type + "' has no member named '" + selector + "'");
 
 						type = ((SizzleTuple) type).getMember(selector);
 						break;
 					}
 
-					throw new TypeException(n, "invalid operand type " + type + " for member selection");
+					throw new TypeException(n, "invalid operand type '" + type + "' for member selection");
 				case 1: // index
 					if (type == null)
 						type = n.f0.accept(this, argu);
@@ -648,21 +648,21 @@ public class TypeCheckingVisitor extends GJDepthFirst<SizzleType, SymbolTable> {
 
 					if (type instanceof SizzleArray) {
 						if (!(index instanceof SizzleInt))
-							throw new TypeException(n, "invalid operand type " + index + " for indexing into array");
+							throw new TypeException(n, "invalid operand type '" + index + "' for indexing into array");
 
 						type = ((SizzleArray) type).getType();
 					} else if (type instanceof SizzleProtoList) {
 						if (!(index instanceof SizzleInt))
-							throw new TypeException(n, "invalid operand type " + index + " for indexing into array");
+							throw new TypeException(n, "invalid operand type '" + index + "' for indexing into array");
 
 						type = ((SizzleProtoList) type).getType();
 					} else if (type instanceof SizzleMap) {
 						if (!((SizzleMap) type).getIndexType().assigns(index))
-							throw new TypeException(n, "invalid operand type " + index + " for indexing into " + type);
+							throw new TypeException(n, "invalid operand type '" + index + "' for indexing into '" + type + "'");
 
 						type = ((SizzleMap) type).getType();
 					} else {
-						throw new TypeException(n, "invalid operand type " + type + " for indexing expression");
+						throw new TypeException(n, "invalid operand type '" + type + "' for indexing expression");
 					}
 					break;
 				case 2: // call
@@ -696,12 +696,12 @@ public class TypeCheckingVisitor extends GJDepthFirst<SizzleType, SymbolTable> {
 
 		if (n.f2.present()) {
 			if (!(index instanceof SizzleInt))
-				throw new TypeException(n, "invalid type " + index + " for slice expression");
+				throw new TypeException(n, "invalid type '" + index + "' for slice expression");
 
 			final SizzleType slice = ((NodeSequence) n.f2.node).elementAt(1).accept(this, argu);
 
 			if (!(slice instanceof SizzleInt))
-				throw new TypeException(n, "invalid type " + slice + " for slice expression");
+				throw new TypeException(n, "invalid type '" + slice + "' for slice expression");
 		}
 
 		return index;
@@ -777,7 +777,7 @@ public class TypeCheckingVisitor extends GJDepthFirst<SizzleType, SymbolTable> {
 		if (n.f1.present())
 			for (final Node node : n.f1.nodes)
 				if (!sizzleMap.assigns(((NodeSequence) node).elementAt(1).accept(this, argu)))
-					throw new TypeException(n, "incorrect type " + node + " for " + sizzleMap);
+					throw new TypeException(n, "incorrect type '" + node + "' for " + sizzleMap);
 
 		return sizzleMap;
 	}
@@ -920,7 +920,7 @@ public class TypeCheckingVisitor extends GJDepthFirst<SizzleType, SymbolTable> {
 	@Override
 	public SizzleType visit(final StopStatement n, final SymbolTable argu) {
 		if (!argu.getIsBeforeVisitor())
-			throw new TypeException(n, "Stop statement only allowed inside non-wildcard 'before' visitors");
+			throw new TypeException(n, "Stop statement only allowed inside non-wildcard 'before' clauses");
 		return null;
 	}
 
