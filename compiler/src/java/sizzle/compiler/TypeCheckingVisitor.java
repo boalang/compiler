@@ -497,6 +497,12 @@ public class TypeCheckingVisitor extends GJDepthFirst<SizzleType, SymbolTable> {
 
 	/** {@inheritDoc} */
 	@Override
+	public SizzleType visit(final WhenKind n, final SymbolTable argu) {
+		throw new RuntimeException("unimplemented");
+	}
+
+	/** {@inheritDoc} */
+	@Override
 	public SizzleType visit(final IdentifierList n, final SymbolTable argu) {
 		throw new RuntimeException("unimplemented");
 	}

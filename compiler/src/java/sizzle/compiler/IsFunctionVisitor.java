@@ -216,6 +216,12 @@ public class IsFunctionVisitor extends GJDepthFirst<Boolean, SymbolTable> {
 
 	/** {@inheritDoc} */
 	@Override
+	public Boolean visit(final WhenKind n, final SymbolTable argu) {
+		throw new RuntimeException("unimplemented");
+	}
+
+	/** {@inheritDoc} */
+	@Override
 	public Boolean visit(final IdentifierList n, final SymbolTable argu) {
 		return false;
 	}

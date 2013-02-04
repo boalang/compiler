@@ -242,6 +242,11 @@ public class StaticDeclarationCodeGeneratingVisitor extends GJDepthFirst<String,
 
 	@Override
 	public String visit(final WhenStatement n, final SymbolTable argu) {
+		return n.f8.accept(this, argu);
+	}
+
+	@Override
+	public String visit(final WhenKind n, final SymbolTable argu) {
 		throw new RuntimeException("unimplemented");
 	}
 

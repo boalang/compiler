@@ -238,6 +238,11 @@ public class StaticInitializationCodeGeneratingVisitor extends GJDepthFirst<Stri
 	}
 
 	@Override
+	public String visit(final WhenKind n, final SymbolTable argu) {
+		throw new RuntimeException("unimplemented");
+	}
+
+	@Override
 	public String visit(final IdentifierList n, final SymbolTable argu) {
 		throw new RuntimeException("unimplemented");
 	}

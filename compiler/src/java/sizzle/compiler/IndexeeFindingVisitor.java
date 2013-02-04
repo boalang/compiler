@@ -241,6 +241,12 @@ public class IndexeeFindingVisitor extends GJDepthFirst<Set<String>, String> {
 
 	/** {@inheritDoc} */
 	@Override
+	public Set<String> visit(final WhenKind n, final String argu) {
+		throw new RuntimeException("unimplemented");
+	}
+
+	/** {@inheritDoc} */
+	@Override
 	public Set<String> visit(final IdentifierList n, final String argu) {
 		throw new RuntimeException("unimplemented");
 	}

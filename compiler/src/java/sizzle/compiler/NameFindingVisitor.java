@@ -185,6 +185,11 @@ public class NameFindingVisitor extends GJNoArguDepthFirst<Set<String>> {
 	}
 
 	@Override
+	public Set<String> visit(final WhenKind n) {
+		throw new RuntimeException("unimplemented");
+	}
+
+	@Override
 	public Set<String> visit(final IdentifierList n) {
 		final HashSet<String> set = new HashSet<String>();
 
