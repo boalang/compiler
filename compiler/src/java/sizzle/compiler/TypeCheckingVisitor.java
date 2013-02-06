@@ -548,6 +548,9 @@ public class TypeCheckingVisitor extends DefaultVisitor<SizzleType, SymbolTable>
 	/** {@inheritDoc} */
 	@Override
 	public SizzleType visit(final ReturnStatement n, final SymbolTable argu) {
+		if (argu.getIsBeforeVisitor())
+			throw new TypeException(n, "return statement not allowed inside visitors");
+
 		syms.put(n, argu);
 
 		// FIXME rdyer need to check return type matches function declaration's return
