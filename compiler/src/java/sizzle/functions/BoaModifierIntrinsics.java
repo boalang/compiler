@@ -21,7 +21,7 @@ public class BoaModifierIntrinsics {
 	 * @param name the annotation to look for
 	 * @return the annotation Modifier or null
 	 */
-	@FunctionSpec(name = "get_annotation", returnType = "bool", formalParameters = { "Method", "string" })
+	@FunctionSpec(name = "get_annotation", returnType = "Modifier", formalParameters = { "Method", "string" })
 	public static Modifier getAnnotation(final Method m, final String name) {
 		for (int i = 0; i < m.getModifiersCount(); i++) {
 			Modifier mod = m.getModifiers(i);
@@ -172,7 +172,7 @@ public class BoaModifierIntrinsics {
 	 * @param name the annotation to look for
 	 * @return the annotation Modifier or null
 	 */
-	@FunctionSpec(name = "get_annotation", returnType = "bool", formalParameters = { "Variable", "string" })
+	@FunctionSpec(name = "get_annotation", returnType = "Modifier", formalParameters = { "Variable", "string" })
 	public static Modifier getAnnotation(final Variable v, final String name) {
 		for (int i = 0; i < v.getModifiersCount(); i++) {
 			Modifier mod = v.getModifiers(i);
@@ -323,7 +323,7 @@ public class BoaModifierIntrinsics {
 	 * @param name the annotation to look for
 	 * @return the annotation Modifier or null
 	 */
-	@FunctionSpec(name = "get_annotation", returnType = "bool", formalParameters = { "Declaration", "string" })
+	@FunctionSpec(name = "get_annotation", returnType = "Modifier", formalParameters = { "Declaration", "string" })
 	public static Modifier getAnnotation(final Declaration d, final String name) {
 		for (int i = 0; i < d.getModifiersCount(); i++) {
 			Modifier mod = d.getModifiers(i);
@@ -474,7 +474,7 @@ public class BoaModifierIntrinsics {
 	 * @param name the annotation to look for
 	 * @return the annotation Modifier or null
 	 */
-	@FunctionSpec(name = "get_annotation", returnType = "bool", formalParameters = { "Namespace", "string" })
+	@FunctionSpec(name = "get_annotation", returnType = "Modifier", formalParameters = { "Namespace", "string" })
 	public static Modifier getAnnotation(final Namespace n, final String name) {
 		for (int i = 0; i < n.getModifiersCount(); i++) {
 			Modifier mod = n.getModifiers(i);
