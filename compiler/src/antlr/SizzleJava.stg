@@ -80,18 +80,28 @@ PairList(pairs) ::= "<pairs:{<it>;<\n>}>"
 Pair(map, key, value) ::= "<map>.put(<key>, <value>)"
 Identifier(id) ::= "<if(identifierMap.(id))><identifierMap.(id)><else>___<id><endif>"
 Assignment(lhs, rhs) ::= "<lhs> = <rhs>;<\n>"
-Function(ret, parameters, body) ::= <<
+Stop() ::= "return false;<\n>"
+Empty() ::= ";<\n>"
+Function(ret, staticDeclarations, parameters, body) ::= <<
 <if(ret)>
 new sizzle.runtime.SizzleFunc\<<ret>\>() {
+	<staticDeclarations>
 	public <ret> invoke(Object[] args) throws Exception {
 <else>
 new sizzle.runtime.SizzleVoidFunc() {
+	<staticDeclarations>
 	public void invoke(Object[] args) throws Exception {
 <endif>
 
 		<parameters>
 		<body>
 	}
+}
+>>
+Visitor(staticDeclarations, body) ::= <<
+new sizzle.runtime.BoaAbstractVisitor() {
+	<staticDeclarations>
+	<body:{<it><\n>}>
 }
 >>
 Return(expr) ::= "return<if(expr)> <expr><endif>;<\n>"

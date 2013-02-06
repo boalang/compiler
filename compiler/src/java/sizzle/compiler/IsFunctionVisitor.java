@@ -1,9 +1,8 @@
 package sizzle.compiler;
 
 import sizzle.parser.syntaxtree.*;
-import sizzle.parser.visitor.GJDepthFirst;
 
-public class IsFunctionVisitor extends GJDepthFirst<Boolean, SymbolTable> {
+public class IsFunctionVisitor extends DefaultVisitor<Boolean, SymbolTable> {
 	/** {@inheritDoc} */
 	@Override
 	public Boolean visit(final Start n, final SymbolTable argu) {
@@ -216,12 +215,6 @@ public class IsFunctionVisitor extends GJDepthFirst<Boolean, SymbolTable> {
 
 	/** {@inheritDoc} */
 	@Override
-	public Boolean visit(final WhenKind n, final SymbolTable argu) {
-		throw new RuntimeException("unimplemented");
-	}
-
-	/** {@inheritDoc} */
-	@Override
 	public Boolean visit(final IdentifierList n, final SymbolTable argu) {
 		return false;
 	}
@@ -300,8 +293,20 @@ public class IsFunctionVisitor extends GJDepthFirst<Boolean, SymbolTable> {
 
 	/** {@inheritDoc} */
 	@Override
-	public Boolean visit(final Operand n, final SymbolTable argu) {
-		return n.f0.choice.accept(this, argu);
+	public Boolean visitOperandDollar(final Operand n, final SymbolTable argu) {
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public Boolean visitOperandFactor(final NodeToken op, final Factor n, final SymbolTable argu) {
+		return n.accept(this, argu);
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public Boolean visitOperandParen(final Expression n, final SymbolTable argu) {
+		return n.accept(this, argu);
 	}
 
 	/** {@inheritDoc} */
