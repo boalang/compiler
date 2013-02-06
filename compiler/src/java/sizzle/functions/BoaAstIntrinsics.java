@@ -29,6 +29,7 @@ public class BoaAstIntrinsics {
 
 	private final static byte[] codeFamily = Bytes.toBytes("code");
 	private final static byte[] locFamily = Bytes.toBytes("loc");
+	private static String astTable;
 
 	public static enum HBASE_COUNTER {
 		GETS_ATTEMPTED,
@@ -71,7 +72,7 @@ public class BoaAstIntrinsics {
 		for (int i = 0; i < 10; i++)
 			try {
 				if (table == null)
-					table = new HTable(HBaseConfiguration.create(), "boa_input");
+					table = new HTable(HBaseConfiguration.create(), astTable);
 
 				final Result res = table.get(get);
 				if (!res.containsColumn(codeFamily, colName) || res.isEmpty())
@@ -118,7 +119,7 @@ public class BoaAstIntrinsics {
 		for (int i = 0; i < 10; i++)
 			try {
 				if (table == null)
-					table = new HTable(HBaseConfiguration.create(), "boa_input");
+					table = new HTable(HBaseConfiguration.create(), astTable);
 
 				final Result res = table.get(get);
 				if (!res.containsColumn(locFamily, colName) || res.isEmpty()) {
@@ -151,6 +152,7 @@ public class BoaAstIntrinsics {
 	@SuppressWarnings("rawtypes")
 	public static void initialize(final Context context) {
 		BoaAstIntrinsics.context = context;
+		astTable = context.getConfiguration().get("boa.hbase.table", "boa_input");
 	}
 
 	public static void close() {
