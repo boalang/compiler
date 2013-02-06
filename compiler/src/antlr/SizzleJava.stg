@@ -80,8 +80,15 @@ PairList(pairs) ::= "<pairs:{<it>;<\n>}>"
 Pair(map, key, value) ::= "<map>.put(<key>, <value>)"
 Identifier(id) ::= "<if(identifierMap.(id))><identifierMap.(id)><else>___<id><endif>"
 Assignment(lhs, rhs) ::= "<lhs> = <rhs>;<\n>"
+Break() ::= "break;<\n>"
+Continue() ::= "continue;<\n>"
 Stop() ::= "return false;<\n>"
 Empty() ::= ";<\n>"
+DoWhile(condition, stmt) ::= <<
+do {
+	<condition>
+} while (<stmt>);
+>>
 Function(ret, staticDeclarations, parameters, body) ::= <<
 <if(ret)>
 new sizzle.runtime.SizzleFunc\<<ret>\>() {

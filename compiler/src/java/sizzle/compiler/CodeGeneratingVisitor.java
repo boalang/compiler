@@ -360,6 +360,29 @@ public class CodeGeneratingVisitor extends DefaultVisitorNoArgu<String> {
 
 	/** {@inheritDoc} */
 	@Override
+	public String visit(final BreakStatement n) {
+		return this.stg.getInstanceOf("Break").toString();
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String visit(final ContinueStatement n) {
+		return this.stg.getInstanceOf("Continue").toString();
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String visit(final DoStatement n) {
+		final StringTemplate st = this.stg.getInstanceOf("DoWhile");
+
+		st.setAttribute("condition", n.f4.accept(this));
+		st.setAttribute("stmt", n.f2.accept(this));
+
+		return st.toString();
+	}
+
+	/** {@inheritDoc} */
+	@Override
 	public String visit(final EmitStatement n) {
 		final StringTemplate st = this.stg.getInstanceOf("EmitStatement");
 

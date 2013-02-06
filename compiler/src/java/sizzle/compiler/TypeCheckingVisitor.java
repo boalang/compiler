@@ -386,6 +386,39 @@ public class TypeCheckingVisitor extends DefaultVisitor<SizzleType, SymbolTable>
 
 	/** {@inheritDoc} */
 	@Override
+	public SizzleType visit(final BreakStatement n, final SymbolTable argu) {
+		syms.put(n, argu);
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public SizzleType visit(final ContinueStatement n, final SymbolTable argu) {
+		syms.put(n, argu);
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public SizzleType visit(final DoStatement n, final SymbolTable argu) {
+		SymbolTable st;
+
+		try {
+			st = argu.cloneNonLocals();
+		} catch (final IOException e) {
+			throw new RuntimeException(e.getClass().getSimpleName() + " caught", e);
+		}
+
+		syms.put(n, st);
+
+		n.f4.accept(this, st);
+		n.f2.accept(this, st);
+
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
 	public SizzleType visit(final EmitStatement n, final SymbolTable argu) {
 		syms.put(n, argu);
 
