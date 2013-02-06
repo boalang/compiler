@@ -39,7 +39,7 @@ public class BoaModifierIntrinsics {
 	 * @param kind the ModifierKind to test for
 	 * @return true if m contains a modifier kind
 	 */
-	@FunctionSpec(name = "has_modifier", returnType = "bool", formalParameters = { "Method", "ModifierKind" })
+	@FunctionSpec(name = "has_modifier", returnType = "bool", formalParameters = { "Method", "int" })
 	public static boolean hasModifier(final Method m, final ModifierKind kind) {
 		for (int i = 0; i < m.getModifiersCount(); i++)
 			if (m.getModifiers(i).getKind() == kind)
@@ -55,8 +55,8 @@ public class BoaModifierIntrinsics {
 	 * @param v the Visibility modifier to test for
 	 * @return true if m contains a visibility modifier v
 	 */
-	@FunctionSpec(name = "has_modifier", returnType = "bool", formalParameters = { "Method", "Visibility" })
-	public static boolean hasModifier(final Method m, final Visibility v) {
+	@FunctionSpec(name = "has_visibility", returnType = "bool", formalParameters = { "Method", "int" })
+	public static boolean hasVisibility(final Method m, final Visibility v) {
 		for (int i = 0; i < m.getModifiersCount(); i++)
 			if (m.getModifiers(i).getKind() == ModifierKind.VISIBILITY
 				&& (m.getModifiers(i).getVisibility() & v.getNumber()) == v.getNumber())
@@ -129,7 +129,7 @@ public class BoaModifierIntrinsics {
 	 */
 	@FunctionSpec(name = "has_modifier_public", returnType = "bool", formalParameters = { "Method" })
 	public static boolean hasModifierPublic(final Method m) {
-		return hasModifier(m, Visibility.PUBLIC);
+		return hasVisibility(m, Visibility.PUBLIC);
 	}
 
 	/**
@@ -140,7 +140,7 @@ public class BoaModifierIntrinsics {
 	 */
 	@FunctionSpec(name = "has_modifier_private", returnType = "bool", formalParameters = { "Method" })
 	public static boolean hasModifierPrivate(final Method m) {
-		return hasModifier(m, Visibility.PRIVATE);
+		return hasVisibility(m, Visibility.PRIVATE);
 	}
 
 	/**
@@ -151,7 +151,7 @@ public class BoaModifierIntrinsics {
 	 */
 	@FunctionSpec(name = "has_modifier_protected", returnType = "bool", formalParameters = { "Method" })
 	public static boolean hasModifierProtected(final Method m) {
-		return hasModifier(m, Visibility.PROTECTED);
+		return hasVisibility(m, Visibility.PROTECTED);
 	}
 
 	/**
@@ -162,7 +162,7 @@ public class BoaModifierIntrinsics {
 	 */
 	@FunctionSpec(name = "has_modifier_namespace", returnType = "bool", formalParameters = { "Method" })
 	public static boolean hasModifierNamespace(final Method m) {
-		return hasModifier(m, Visibility.NAMESPACE);
+		return hasVisibility(m, Visibility.NAMESPACE);
 	}
 
 	/**
@@ -190,7 +190,7 @@ public class BoaModifierIntrinsics {
 	 * @param kind the ModifierKind to test for
 	 * @return true if v contains a modifier kind
 	 */
-	@FunctionSpec(name = "has_modifier", returnType = "bool", formalParameters = { "Variable", "ModifierKind" })
+	@FunctionSpec(name = "has_modifier", returnType = "bool", formalParameters = { "Variable", "int" })
 	public static boolean hasModifier(final Variable v, final ModifierKind kind) {
 		for (int i = 0; i < v.getModifiersCount(); i++)
 			if (v.getModifiers(i).getKind() == kind)
@@ -206,8 +206,8 @@ public class BoaModifierIntrinsics {
 	 * @param v the Visibility modifier to test for
 	 * @return true if v contains a visibility modifier v
 	 */
-	@FunctionSpec(name = "has_modifier", returnType = "bool", formalParameters = { "Variable", "Visibility" })
-	public static boolean hasModifier(final Variable var, final Visibility v) {
+	@FunctionSpec(name = "has_visibility", returnType = "bool", formalParameters = { "Variable", "int" })
+	public static boolean hasVisibility(final Variable var, final Visibility v) {
 		for (int i = 0; i < var.getModifiersCount(); i++)
 			if (var.getModifiers(i).getKind() == ModifierKind.VISIBILITY
 				&& (var.getModifiers(i).getVisibility() & v.getNumber()) == v.getNumber())
@@ -280,7 +280,7 @@ public class BoaModifierIntrinsics {
 	 */
 	@FunctionSpec(name = "has_modifier_public", returnType = "bool", formalParameters = { "Variable" })
 	public static boolean hasModifierPublic(final Variable v) {
-		return hasModifier(v, Visibility.PUBLIC);
+		return hasVisibility(v, Visibility.PUBLIC);
 	}
 
 	/**
@@ -291,7 +291,7 @@ public class BoaModifierIntrinsics {
 	 */
 	@FunctionSpec(name = "has_modifier_private", returnType = "bool", formalParameters = { "Variable" })
 	public static boolean hasModifierPrivate(final Variable v) {
-		return hasModifier(v, Visibility.PRIVATE);
+		return hasVisibility(v, Visibility.PRIVATE);
 	}
 
 	/**
@@ -302,7 +302,7 @@ public class BoaModifierIntrinsics {
 	 */
 	@FunctionSpec(name = "has_modifier_protected", returnType = "bool", formalParameters = { "Variable" })
 	public static boolean hasModifierProtected(final Variable v) {
-		return hasModifier(v, Visibility.PROTECTED);
+		return hasVisibility(v, Visibility.PROTECTED);
 	}
 
 	/**
@@ -313,7 +313,7 @@ public class BoaModifierIntrinsics {
 	 */
 	@FunctionSpec(name = "has_modifier_namespace", returnType = "bool", formalParameters = { "Variable" })
 	public static boolean hasModifierNamespace(final Variable v) {
-		return hasModifier(v, Visibility.NAMESPACE);
+		return hasVisibility(v, Visibility.NAMESPACE);
 	}
 
 	/**
@@ -341,7 +341,7 @@ public class BoaModifierIntrinsics {
 	 * @param kind the ModifierKind to test for
 	 * @return true if d contains a modifier kind
 	 */
-	@FunctionSpec(name = "has_modifier", returnType = "bool", formalParameters = { "Declaration", "ModifierKind" })
+	@FunctionSpec(name = "has_modifier", returnType = "bool", formalParameters = { "Declaration", "int" })
 	public static boolean hasModifier(final Declaration d, final ModifierKind kind) {
 		for (int i = 0; i < d.getModifiersCount(); i++)
 			if (d.getModifiers(i).getKind() == kind)
@@ -357,8 +357,8 @@ public class BoaModifierIntrinsics {
 	 * @param v the Visibility modifier to test for
 	 * @return true if d contains a visibility modifier v
 	 */
-	@FunctionSpec(name = "has_modifier", returnType = "bool", formalParameters = { "Declaration", "Visibility" })
-	public static boolean hasModifier(final Declaration d, final Visibility v) {
+	@FunctionSpec(name = "has_visibility", returnType = "bool", formalParameters = { "Declaration", "int" })
+	public static boolean hasVisibility(final Declaration d, final Visibility v) {
 		for (int i = 0; i < d.getModifiersCount(); i++)
 			if (d.getModifiers(i).getKind() == ModifierKind.VISIBILITY
 				&& (d.getModifiers(i).getVisibility() & v.getNumber()) == v.getNumber())
@@ -431,7 +431,7 @@ public class BoaModifierIntrinsics {
 	 */
 	@FunctionSpec(name = "has_modifier_public", returnType = "bool", formalParameters = { "Declaration" })
 	public static boolean hasModifierPublic(final Declaration d) {
-		return hasModifier(d, Visibility.PUBLIC);
+		return hasVisibility(d, Visibility.PUBLIC);
 	}
 
 	/**
@@ -442,7 +442,7 @@ public class BoaModifierIntrinsics {
 	 */
 	@FunctionSpec(name = "has_modifier_private", returnType = "bool", formalParameters = { "Declaration" })
 	public static boolean hasModifierPrivate(final Declaration d) {
-		return hasModifier(d, Visibility.PRIVATE);
+		return hasVisibility(d, Visibility.PRIVATE);
 	}
 
 	/**
@@ -453,7 +453,7 @@ public class BoaModifierIntrinsics {
 	 */
 	@FunctionSpec(name = "has_modifier_protected", returnType = "bool", formalParameters = { "Declaration" })
 	public static boolean hasModifierProtected(final Declaration d) {
-		return hasModifier(d, Visibility.PROTECTED);
+		return hasVisibility(d, Visibility.PROTECTED);
 	}
 
 	/**
@@ -464,7 +464,7 @@ public class BoaModifierIntrinsics {
 	 */
 	@FunctionSpec(name = "has_modifier_namespace", returnType = "bool", formalParameters = { "Declaration" })
 	public static boolean hasModifierNamespace(final Declaration d) {
-		return hasModifier(d, Visibility.NAMESPACE);
+		return hasVisibility(d, Visibility.NAMESPACE);
 	}
 
 	/**
@@ -492,7 +492,7 @@ public class BoaModifierIntrinsics {
 	 * @param kind the ModifierKind to test for
 	 * @return true if d contains a modifier kind
 	 */
-	@FunctionSpec(name = "has_modifier", returnType = "bool", formalParameters = { "Namespace", "ModifierKind" })
+	@FunctionSpec(name = "has_modifier", returnType = "bool", formalParameters = { "Namespace", "int" })
 	public static boolean hasModifier(final Namespace n, final ModifierKind kind) {
 		for (int i = 0; i < n.getModifiersCount(); i++)
 			if (n.getModifiers(i).getKind() == kind)
@@ -508,8 +508,8 @@ public class BoaModifierIntrinsics {
 	 * @param v the Visibility modifier to test for
 	 * @return true if d contains a visibility modifier v
 	 */
-	@FunctionSpec(name = "has_modifier", returnType = "bool", formalParameters = { "Namespace", "Visibility" })
-	public static boolean hasModifier(final Namespace n, final Visibility v) {
+	@FunctionSpec(name = "has_visibility", returnType = "bool", formalParameters = { "Namespace", "int" })
+	public static boolean hasVisibility(final Namespace n, final Visibility v) {
 		for (int i = 0; i < n.getModifiersCount(); i++)
 			if (n.getModifiers(i).getKind() == ModifierKind.VISIBILITY
 				&& (n.getModifiers(i).getVisibility() & v.getNumber()) == v.getNumber())
@@ -582,7 +582,7 @@ public class BoaModifierIntrinsics {
 	 */
 	@FunctionSpec(name = "has_modifier_public", returnType = "bool", formalParameters = { "Namespace" })
 	public static boolean hasModifierPublic(final Namespace n) {
-		return hasModifier(n, Visibility.PUBLIC);
+		return hasVisibility(n, Visibility.PUBLIC);
 	}
 
 	/**
@@ -593,7 +593,7 @@ public class BoaModifierIntrinsics {
 	 */
 	@FunctionSpec(name = "has_modifier_private", returnType = "bool", formalParameters = { "Namespace" })
 	public static boolean hasModifierPrivate(final Namespace n) {
-		return hasModifier(n, Visibility.PRIVATE);
+		return hasVisibility(n, Visibility.PRIVATE);
 	}
 
 	/**
@@ -604,7 +604,7 @@ public class BoaModifierIntrinsics {
 	 */
 	@FunctionSpec(name = "has_modifier_protected", returnType = "bool", formalParameters = { "Namespace" })
 	public static boolean hasModifierProtected(final Namespace n) {
-		return hasModifier(n, Visibility.PROTECTED);
+		return hasVisibility(n, Visibility.PROTECTED);
 	}
 
 	/**
@@ -615,6 +615,6 @@ public class BoaModifierIntrinsics {
 	 */
 	@FunctionSpec(name = "has_modifier_namespace", returnType = "bool", formalParameters = { "Namespace" })
 	public static boolean hasModifierNamespace(final Namespace n) {
-		return hasModifier(n, Visibility.NAMESPACE);
+		return hasVisibility(n, Visibility.NAMESPACE);
 	}
 }
