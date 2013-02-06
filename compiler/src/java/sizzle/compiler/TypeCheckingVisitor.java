@@ -326,7 +326,7 @@ public class TypeCheckingVisitor extends DefaultVisitor<SizzleType, SymbolTable>
 				idents.get(i).accept(this, argu);
 			}
 		} else {
-			params = null;
+			params = new SizzleType[0];
 		}
 
 		final SizzleType ret;

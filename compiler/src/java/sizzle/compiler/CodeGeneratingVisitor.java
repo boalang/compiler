@@ -792,6 +792,8 @@ public class CodeGeneratingVisitor extends DefaultVisitorNoArgu<String> {
 
 			if (n.f1.present())
 				st.setAttribute("parameters", "new Object[] {" + ((ExprList) n.f1.node).accept(this) + "}");
+			else
+				st.setAttribute("parameters", "new Object[0]");
 		}
 
 		return st.toString();
