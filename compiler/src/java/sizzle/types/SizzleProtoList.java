@@ -89,10 +89,7 @@ public class SizzleProtoList extends SizzleType {
 	 *         array
 	 */
 	public SizzleScalar getType() {
-		if (this.type instanceof SizzleScalar)
-			return (SizzleScalar) this.type;
-
-		throw new RuntimeException("this shouldn't happen");
+		return (SizzleScalar) this.type;
 	}
 
 	/**

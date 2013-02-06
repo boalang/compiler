@@ -16,7 +16,7 @@ public class NameFindingVisitor extends DefaultVisitorNoArgu<Set<String>> {
 
 		if (n.f1.present())
 			for (final Node node : n.f1.nodes)
-				set.addAll(((NodeSequence) node).elementAt(1).accept(this));
+				set.addAll(((NodeSequence)node).elementAt(1).accept(this));
 
 		return set;
 	}
@@ -30,7 +30,7 @@ public class NameFindingVisitor extends DefaultVisitorNoArgu<Set<String>> {
 
 		if (n.f1.present())
 			for (final Node node : n.f1.nodes)
-				set.addAll(node.accept(this));
+				set.addAll(((NodeSequence)node).elementAt(1).accept(this));
 
 		return set;
 	}
@@ -44,7 +44,7 @@ public class NameFindingVisitor extends DefaultVisitorNoArgu<Set<String>> {
 
 		if (n.f1.present())
 			for (final Node node : n.f1.nodes)
-				set.addAll(node.accept(this));
+				set.addAll(((NodeSequence)node).elementAt(1).accept(this));
 
 		return set;
 	}
@@ -57,7 +57,7 @@ public class NameFindingVisitor extends DefaultVisitorNoArgu<Set<String>> {
 		set.addAll(n.f0.accept(this));
 
 		if (n.f1.present())
-			set.addAll(n.f1.node.accept(this));
+			set.addAll(((NodeSequence)((NodeOptional)n.f1).node).elementAt(1).accept(this));
 
 		return set;
 	}
@@ -71,7 +71,7 @@ public class NameFindingVisitor extends DefaultVisitorNoArgu<Set<String>> {
 
 		if (n.f1.present())
 			for (final Node node : n.f1.nodes)
-				set.addAll(node.accept(this));
+				set.addAll(((NodeSequence)node).elementAt(1).accept(this));
 
 		return set;
 	}
@@ -85,7 +85,7 @@ public class NameFindingVisitor extends DefaultVisitorNoArgu<Set<String>> {
 
 		if (n.f1.present())
 			for (final Node node : n.f1.nodes)
-				set.addAll(node.accept(this));
+				set.addAll(((NodeSequence)node).elementAt(1).accept(this));
 
 		return set;
 	}
@@ -114,6 +114,28 @@ public class NameFindingVisitor extends DefaultVisitorNoArgu<Set<String>> {
 	@Override
 	public Set<String> visit(final Index n) {
 		return new HashSet<String>();
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public Set<String> visit(Call n) {
+		if (n.f1.present())
+			return n.f1.node.accept(this);
+		return new HashSet<String>();
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public Set<String> visit(ExprList n) {
+		final HashSet<String> set = new HashSet<String>();
+
+		set.addAll(n.f0.accept(this));
+
+		if (n.f1.present())
+			for (final Node node : n.f1.nodes)
+				set.addAll(((NodeSequence)node).elementAt(1).accept(this));
+
+		return set;
 	}
 
 	/** {@inheritDoc} */

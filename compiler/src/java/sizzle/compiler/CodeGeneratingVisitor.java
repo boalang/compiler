@@ -668,21 +668,20 @@ public class CodeGeneratingVisitor extends DefaultVisitorNoArgu<String> {
 			final SymbolTable argu = this.typechecker.getSyms(n);
 			final NodeChoice nodeChoice = (NodeChoice) n.f1.nodes.get(0);
 
+			argu.setOperand(n.f0);
+
 			switch (nodeChoice.which) {
 			case 0: // selector
 			case 1: // index
-				argu.setOperand(n.f0);
 				argu.setOperandType(this.typechecker.getBinding(n.f0));
 				String accept = n.f0.accept(this);
 				abortGeneration = false;
 				for (int i = 0; !abortGeneration && i < n.f1.nodes.size(); i++)
 					accept += n.f1.nodes.elementAt(i).accept(this);
-				argu.setOperand(null);
+				argu.getOperandType();
 				return accept;
 			case 2: // call
-				argu.setOperand(n.f0);
 				accept = n.f1.nodes.elementAt(0).accept(this);
-				argu.setOperand(null);
 				return accept;
 			default:
 				throw new RuntimeException("unexpected choice " + nodeChoice.which + " is " + nodeChoice.choice.getClass());
@@ -702,8 +701,10 @@ public class CodeGeneratingVisitor extends DefaultVisitorNoArgu<String> {
 				opType = ((SizzleName) opType).getType();
 
 			// operand is a proto map (aka enum)
-			if (opType instanceof SizzleProtoMap)
+			if (opType instanceof SizzleProtoMap) {
+				argu.setOperandType(new SizzleInt());
 				return "." + n.f1.f0.tokenImage;
+			}
 
 			final String member = n.f1.f0.tokenImage;
 
@@ -717,8 +718,11 @@ public class CodeGeneratingVisitor extends DefaultVisitorNoArgu<String> {
 			}
 
 			// operand is a tuple
-			if (opType instanceof SizzleTuple)
-				return "[" + ((SizzleTuple) opType).getMemberIndex(member) + "]";
+			if (opType instanceof SizzleTuple) {
+				final SizzleTuple tuple = (SizzleTuple) opType;
+				argu.setOperandType(tuple.getMember(member));
+				return "[" + tuple.getMemberIndex(member) + "]";
+			}
 
 			throw new RuntimeException("unimplemented");
 		} catch (final TypeException e) {
@@ -752,7 +756,7 @@ public class CodeGeneratingVisitor extends DefaultVisitorNoArgu<String> {
 
 		SizzleType indexType = this.typechecker.getBinding(n.f1);
 		if (indexType instanceof SizzleInt)
-			st.setAttribute("index", "(int)" + n.f1.accept(this));
+			st.setAttribute("index", "(int)(" + n.f1.accept(this) + ")");
 		else
 			st.setAttribute("index", n.f1.accept(this));
 

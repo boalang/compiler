@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.Stack;
 
 import org.scannotation.AnnotationDB;
 
@@ -80,7 +81,7 @@ public class SymbolTable {
 
 	private String id;
 	private Operand operand;
-	private SizzleType operandType;
+	private Stack<SizzleType> operandType = new Stack<SizzleType>();
 	private boolean needsBoxing;
 	private boolean isBeforeVisitor = false;
 
@@ -620,11 +621,11 @@ public class SymbolTable {
 	}
 
 	public void setOperandType(final SizzleType operandType) {
-		this.operandType = operandType;
+		this.operandType.push(operandType);
 	}
 
 	public SizzleType getOperandType() {
-		return this.operandType;
+		return this.operandType.pop();
 	}
 
 	public void setNeedsBoxing(final boolean needsBoxing) {
