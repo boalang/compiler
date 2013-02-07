@@ -494,6 +494,7 @@ public class SymbolTable {
 
 		// load built-in aggregators
 		final Class<?>[] builtinAggs = {
+			sizzle.aggregators.BottomAggregator.class,
 			sizzle.aggregators.CollectionAggregator.class,
 			sizzle.aggregators.DistinctAggregator.class,
 			sizzle.aggregators.FloatHistogramAggregator.class,

@@ -6,23 +6,23 @@ import java.util.Map.Entry;
 import sizzle.io.EmitKey;
 
 /**
- * A Sizzle aggregator to estimate the top <i>n</i> values in a dataset by
+ * A Sizzle aggregator to estimate the bottom <i>n</i> values in a dataset by
  * cardinality.
  * 
  * @author anthonyu
  */
-@AggregatorSpec(name = "top", formalParameters = { "int" }, weightType = "int")
-public class TopAggregator extends Aggregator {
+@AggregatorSpec(name = "bottom", formalParameters = { "int" }, weightType = "int")
+public class BottomAggregator extends Aggregator {
 	private CountingSet<String> set;
 	private final CountedString[] list;
 	private final int last;
 
 	/**
-	 * Construct a {@link TopAggregator}.
+	 * Construct a {@link BottomAggregator}.
 	 * 
 	 * @param n A long representing the number of values to return
 	 */
-	public TopAggregator(final long n) {
+	public BottomAggregator(final long n) {
 		super(n);
 
 		// an array of weighted string of length n
@@ -40,7 +40,7 @@ public class TopAggregator extends Aggregator {
 
 		// clear out the list
 		for (int i = 0; i < this.getArg(); i++)
-			this.list[i] = new CountedString("", Long.MIN_VALUE);
+			this.list[i] = new CountedString("", Long.MAX_VALUE);
 	}
 
 	/** {@inheritDoc} */
@@ -65,11 +65,11 @@ public class TopAggregator extends Aggregator {
 			// Programming, 2002.
 
 			for (final Entry<String, Long> e : this.set.getEntries()) {
-				if (e.getValue() > this.list[this.last].getCount() || e.getValue() == this.list[this.last].getCount()
+				if (e.getValue() < this.list[this.last].getCount() || e.getValue() == this.list[this.last].getCount()
 						&& this.list[this.last].getString().compareTo(e.getKey()) > 0) {
 					// find this new item's position within the list
 					for (int i = 0; i < this.getArg(); i++)
-						if (e.getValue().longValue() > this.list[i].getCount() || e.getValue() == this.list[i].getCount()
+						if (e.getValue() < this.list[i].getCount() || e.getValue() == this.list[i].getCount()
 								&& this.list[i].getString().compareTo(e.getKey()) > 0) {
 							// here it is. move all subsequent items down one
 							for (int j = (int) (this.getArg() - 2); j >= i; j--)
@@ -84,7 +84,7 @@ public class TopAggregator extends Aggregator {
 			}
 
 			for (final CountedString c : this.list)
-				if (c.getCount() > Long.MIN_VALUE)
+				if (c.getCount() < Long.MAX_VALUE)
 					this.collect(c.toString());
 		}
 	}
@@ -99,50 +99,5 @@ public class TopAggregator extends Aggregator {
 	@Override
 	public boolean isCommutative() {
 		return true;
-	}
-}
-
-/**
- * A tuple containing a {@link String} and its count.
- * 
- * @author anthonyu
- */
-class CountedString {
-	private final String string;
-	private final long count;
-
-	/**
-	 * Construct a {@link CountedString}.
-	 * 
-	 * @param string A {@link String} containing the string part of the tuple
-	 * @param weight A long representing the count part of the tuple
-	 */
-	public CountedString(final String string, final long count) {
-		this.string = string;
-		this.count = count;
-	}
-
-	/**
-	 * Get the string part of the tuple.
-	 * 
-	 * @return A {@link String} containing the string part of the tuple
-	 */
-	public String getString() {
-		return this.string;
-	}
-
-	/**
-	 * Get the string part of the tuple.
-	 * 
-	 * @return A long representing the count part of the tuple
-	 */
-	public long getCount() {
-		return this.count;
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public String toString() {
-		return this.string + ", " + this.count + ", 0";
 	}
 }

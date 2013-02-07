@@ -9,14 +9,14 @@ import sizzle.io.EmitKey;
  * dataset by weight.
  * 
  * @author anthonyu
- * 
  */
 abstract class MinOrMaxAggregator extends Aggregator {
 	protected final WeightedString[] list;
 	private final int last;
+	protected double DefaultWeight;
 
 	/**
-	 * Construct a MinOrMaxAggregator.
+	 * Construct a {@link MinOrMaxAggregator}.
 	 * 
 	 * @param n
 	 *            A long representing the number of values to return
@@ -35,6 +35,10 @@ abstract class MinOrMaxAggregator extends Aggregator {
 	@Override
 	public void start(final EmitKey key) {
 		super.start(key);
+
+		// clear out the list
+		for (int i = 0; i < this.getArg(); i++)
+			this.list[i] = new WeightedString("", DefaultWeight);
 	}
 
 	/** {@inheritDoc} */
@@ -42,14 +46,13 @@ abstract class MinOrMaxAggregator extends Aggregator {
 	public void aggregate(final String data, final String metadata) {
 		double weight;
 		if (metadata == null)
-			// by default, minimum weight
-			weight = Double.MIN_VALUE;
+			weight = DefaultWeight;
 		else
 			weight = Double.parseDouble(metadata);
 
 		final WeightedString s = new WeightedString(data, weight);
 
-		if (this.compare(s, this.list[this.last]) > 0) {
+		if (this.compare(s, this.list[this.last]) > 0)
 			// find this new item's position within the list
 			for (int i = 0; i < this.getArg(); i++)
 				if (this.compare(s, this.list[i]) > 0) {
@@ -62,7 +65,6 @@ abstract class MinOrMaxAggregator extends Aggregator {
 
 					break;
 				}
-		}
 	}
 
 	/**
@@ -76,9 +78,11 @@ abstract class MinOrMaxAggregator extends Aggregator {
 	 *            A {@link WeightedString} containing a {@link String} and its
 	 *            weight.
 	 * 
-	 * @return An int representing the comparison between the two strings.
+	 * @return A positive integer if <em>a</em> is smaller than <em>b</em>, zero
+	 *         if they are equal, and a negative integer if <em>a</em> is larger
+	 *         than <em>b</em>.
 	 */
-	abstract protected int compare(WeightedString s, WeightedString weightedString);
+	abstract protected int compare(WeightedString a, WeightedString b);
 
 	/** {@inheritDoc} */
 	@Override

@@ -8,50 +8,44 @@ import java.util.Set;
 import java.util.TreeMap;
 
 /**
- * A sorted counting set. Like a SortedSet, but also keeps track of how many
+ * A sorted counting set. Like a {@link SortedSet}, but also keeps track of how many
  * times a given member has been added.
  * 
  * @author anthonyu
  * 
- * @param <T>
- *            The type of value that will be inserted into the set
+ * @param <T> The type of value that will be inserted into the set
  */
-public class SortedCountingSet<T> implements Iterable<T> {
+class SortedCountingSet<T> implements Iterable<T> {
 	private final TreeMap<T, Long> map;
 
 	/**
-	 * Construct a SortedCountingSet.
+	 * Construct a {@link SortedCountingSet}.
 	 */
 	public SortedCountingSet() {
 		this.map = new TreeMap<T, Long>();
 	}
 
 	/**
-	 * Add a value to the set.
+	 * Add a value to the set, with cardinality 1.
 	 * 
-	 * @param t
-	 *            The value to be added
+	 * @param t The value to be added
 	 */
 	public void add(final T t) {
-		// add it with cardinality 1
 		this.add(t, 1);
 	}
 
 	/**
 	 * Add a value and its cardinality to the set.
 	 * 
-	 * @param t
-	 *            The value to be added
-	 * @param n
-	 *            The cardinality of the value
+	 * @param t The value to be added
+	 * @param n The cardinality of the value
 	 */
 	public void add(final T t, final long n) {
-		// if the map already has this key, add n to the current cardiality and
-		// reinsert
+		// if the map already has this key, add n to the current cardiality and reinsert
 		if (this.map.containsKey(t))
-			this.map.put(t, Long.valueOf(this.map.get(t).longValue() + n));
+			this.map.put(t, this.map.get(t) + n);
 		else
-			this.map.put(t, Long.valueOf(n));
+			this.map.put(t, n);
 	}
 
 	/** {@inheritDoc} */
