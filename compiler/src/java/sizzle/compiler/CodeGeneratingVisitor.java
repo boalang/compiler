@@ -78,6 +78,7 @@ public class CodeGeneratingVisitor extends DefaultVisitorNoArgu<String> {
 	private final IndexeeFindingVisitor indexeefinder;
 	private final StaticDeclarationCodeGeneratingVisitor staticdeclarator;
 	private final StaticInitializationCodeGeneratingVisitor staticinitializer;
+	private final FunctionDeclaratorVisitor functiondeclarator;
 
 	private final HashMap<String, TableDescription> tables;
 
@@ -93,6 +94,7 @@ public class CodeGeneratingVisitor extends DefaultVisitorNoArgu<String> {
 		this.indexeefinder = new IndexeeFindingVisitor(this, namefinder);
 		this.staticdeclarator = new StaticDeclarationCodeGeneratingVisitor(this);
 		this.staticinitializer = new StaticInitializationCodeGeneratingVisitor(this);
+		this.functiondeclarator = new FunctionDeclaratorVisitor(this);
 
 		this.tables = new HashMap<String, TableDescription>();
 		this.tables.put("stdout", new TableDescription("stdout", new SizzleString()));
@@ -115,7 +117,7 @@ public class CodeGeneratingVisitor extends DefaultVisitorNoArgu<String> {
 
 		st.setAttribute("name", this.name);
 
-		st.setAttribute("staticDeclarations", this.staticdeclarator.visit(n));
+		st.setAttribute("staticDeclarations", this.staticdeclarator.visit(n) + this.functiondeclarator.visit(n));
 		st.setAttribute("staticStatements", this.staticinitializer.visit(n));
 
 		final List<String> statements = new ArrayList<String>();
@@ -177,12 +179,8 @@ public class CodeGeneratingVisitor extends DefaultVisitorNoArgu<String> {
 		if (type instanceof SizzleTable)
 			return null;
 
-		final StringTemplate idSt = this.stg.getInstanceOf("Identifier");
-
-		idSt.setAttribute("id", n.f0.f0.tokenImage);
-
 		final StringTemplate st = this.stg.getInstanceOf("Assignment");
-		st.setAttribute("lhs", idSt.toString());
+		st.setAttribute("lhs", "___" + n.f0.f0.tokenImage);
 
 		if (!n.f3.present()) {
 			if (!(lhsType instanceof SizzleMap))
@@ -313,7 +311,32 @@ public class CodeGeneratingVisitor extends DefaultVisitorNoArgu<String> {
 	/** {@inheritDoc} */
 	@Override
 	public String visit(final FunctionType n) {
-		return null;
+		final StringTemplate st = this.stg.getInstanceOf("FunctionType");
+
+		final SizzleType t = this.typechecker.getBinding(n);
+		if (!(t instanceof SizzleFunction))
+			throw new TypeException(n ,"type " + t + " is not a function type");
+
+		final SizzleFunction funcType = ((SizzleFunction) t);
+
+		final SizzleType[] paramTypes = funcType.getFormalParameters();
+		final List<String> args = new ArrayList<String>();
+		final List<String> types = new ArrayList<String>();
+
+		for (int i = 0; i < paramTypes.length; i++) {
+			args.add(((SizzleName) paramTypes[i]).getId());
+			types.add(paramTypes[i].toJavaType());
+		}
+
+		st.setAttribute("name", funcType.toJavaType());
+		if (funcType.getType() instanceof SizzleAny)
+			st.setAttribute("ret", "void");
+		else
+			st.setAttribute("ret", funcType.getType().toBoxedJavaType());
+		st.setAttribute("args", args);
+		st.setAttribute("types", types);
+
+		return st.toString();
 	}
 
 	/** {@inheritDoc} */
@@ -790,9 +813,7 @@ public class CodeGeneratingVisitor extends DefaultVisitorNoArgu<String> {
 			st.setAttribute("operand", argu.getOperand().accept(this) + ".invoke");
 
 			if (n.f1.present())
-				st.setAttribute("parameters", "new Object[] {" + ((ExprList) n.f1.node).accept(this) + "}");
-			else
-				st.setAttribute("parameters", "new Object[0]");
+				st.setAttribute("parameters", ((ExprList) n.f1.node).accept(this));
 		}
 
 		return st.toString();
@@ -878,21 +899,28 @@ public class CodeGeneratingVisitor extends DefaultVisitorNoArgu<String> {
 		final StringTemplate st = this.stg.getInstanceOf("Function");
 
 		final SizzleType t = this.typechecker.getBinding(n.f0);
-
 		if (!(t instanceof SizzleFunction))
 			throw new TypeException(n ,"type " + t + " is not a function type");
+
 		final SizzleFunction funcType = ((SizzleFunction) t);
 
-		SizzleType[] paramTypes = funcType.getFormalParameters();
-		List<String> params = new ArrayList<String>();
+		final SizzleType[] paramTypes = funcType.getFormalParameters();
+		final List<String> args = new ArrayList<String>();
+		final List<String> types = new ArrayList<String>();
 
-		for (int i = 0; i < paramTypes.length; i++)
-			params.add(paramTypes[i].toBoxedJavaType() + " ___" + ((SizzleName) paramTypes[i]).getId() + " = (" + paramTypes[i].toBoxedJavaType() + ")args[" + i + "];");
+		for (int i = 0; i < paramTypes.length; i++) {
+			args.add(((SizzleName) paramTypes[i]).getId());
+			types.add(paramTypes[i].toJavaType());
+		}
 
-		if (!(funcType.getType() instanceof SizzleAny))
-			st.setAttribute("ret", funcType.getType().toBoxedJavaType());
+		st.setAttribute("type", funcType.toJavaType());
 		st.setAttribute("staticDeclarations", this.staticdeclarator.visit(n.f1));
-		st.setAttribute("parameters", params);
+		if (funcType.getType() instanceof SizzleAny)
+			st.setAttribute("ret", "void");
+		else
+			st.setAttribute("ret", funcType.getType().toBoxedJavaType());
+		st.setAttribute("args", args);
+		st.setAttribute("types", types);
 		st.setAttribute("body", n.f1.accept(this));
 
 		return st.toString();

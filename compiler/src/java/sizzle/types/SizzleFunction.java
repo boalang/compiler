@@ -222,9 +222,20 @@ public class SizzleFunction extends SizzleType {
 	/** {@inheritDoc} */
 	@Override
 	public String toJavaType() {
+		String s = "BoaFunc";
 		if (type instanceof SizzleAny)
-			return "sizzle.runtime.SizzleVoidFunc";
-		return "sizzle.runtime.SizzleFunc<" + type.toBoxedJavaType() + ">";
+			s += "Void";
+		else
+			s += cleanType(type.toJavaType());
+		for (final SizzleType t : this.formalParameters)
+			s += "_" + cleanType(t.toJavaType());
+		return s;
+	}
+
+	private String cleanType(String s) {
+		if (!s.contains("."))
+			return s;
+		return s.substring(s.lastIndexOf(".") + 1);
 	}
 
 	/** {@inheritDoc} */

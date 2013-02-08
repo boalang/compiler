@@ -88,18 +88,16 @@ do {
 	<condition>
 } while (<stmt>);
 >>
-Function(ret, staticDeclarations, parameters, body) ::= <<
-<if(ret)>
-new sizzle.runtime.SizzleFunc\<<ret>\>() {
+FunctionType(name, ret, args, types) ::= <<
+public abstract class <name> {
+	public abstract <ret> invoke(<args,types:{arg,type|final <type> ___<arg>}; separator=", ">) throws Exception;
+}
+>>
+Function(type, staticDeclarations, ret, args, types, body) ::= <<
+new <type>() {
 	<staticDeclarations>
-	public <ret> invoke(Object[] args) throws Exception {
-<else>
-new sizzle.runtime.SizzleVoidFunc() {
-	<staticDeclarations>
-	public void invoke(Object[] args) throws Exception {
-<endif>
-
-		<parameters:{<it><\n>}><body>
+	public <ret> invoke(<args,types:{arg,type|final <type> ___<arg>}; separator=", ">) throws Exception {
+		<body>
 	}
 }
 >>
