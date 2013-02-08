@@ -5,8 +5,10 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import sizzle.types.Code.CodeRepository;
 import sizzle.types.Code.Revision;
 import sizzle.types.Diff.ChangedFile;
+import sizzle.types.Toplevel.Project;
 
 /**
  * Boa domain-specific functions.
@@ -43,7 +45,37 @@ public class BoaIntrinsics {
 	}
 
 	/**
-	 * Does a Revision contain a file of the specified type? This only compares based on file extension.
+	 * Does a Project contain a file of the specified type? This compares based on file extension.
+	 * 
+	 * @param p the Project to examine
+	 * @param ext the file extension to look for
+	 * @return true if the Project contains at least 1 file with the specified extension
+	 */
+	@FunctionSpec(name = "hasfiletype", returnType = "bool", formalParameters = { "Project", "string" })
+	public static boolean hasfile(final Project p, final String ext) {
+		for (int i = 0; i < p.getCodeRepositoriesCount(); i++)
+			if (hasfile(p.getCodeRepositories(i), ext))
+				return true;
+		return false;
+	}
+
+	/**
+	 * Does a CodeRepository contain a file of the specified type? This compares based on file extension.
+	 * 
+	 * @param cr the CodeRepository to examine
+	 * @param ext the file extension to look for
+	 * @return true if the CodeRepository contains at least 1 file with the specified extension
+	 */
+	@FunctionSpec(name = "hasfiletype", returnType = "bool", formalParameters = { "CodeRepository", "string" })
+	public static boolean hasfile(final CodeRepository cr, final String ext) {
+		for (int i = 0; i < cr.getRevisionsCount(); i++)
+			if (hasfile(cr.getRevisions(i), ext))
+				return true;
+		return false;
+	}
+
+	/**
+	 * Does a Revision contain a file of the specified type? This compares based on file extension.
 	 * 
 	 * @param rev the Revision to examine
 	 * @param ext the file extension to look for
