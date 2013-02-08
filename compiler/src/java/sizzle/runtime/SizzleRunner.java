@@ -73,6 +73,8 @@ public abstract class SizzleRunner {
 										.create("j"));
 	}
 
+	protected static Options getOptions() { return options; }
+
 	public static CommandLine parseArgs(String[] args, String usage) {
 		CommandLine line = null;
 

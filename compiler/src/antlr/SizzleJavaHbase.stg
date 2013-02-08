@@ -26,6 +26,14 @@ public class <name> extends sizzle.runtime.SizzleRunner {
 
 	private static final byte[] HBASE_FAMILY = org.apache.hadoop.hbase.util.Bytes.toBytes("metadata");
 	private static final byte[] HBASE_QUALIFIER = org.apache.hadoop.hbase.util.Bytes.toBytes("proto");
+
+	static {
+		getOptions().addOption(org.apache.commons.cli.OptionBuilder.withLongOpt("astTable")
+																	.withDescription("which HBase table to use for AST rows")
+																	.hasArg()
+																	.withArgName("TABLE")
+																	.create("a"));
+	}
 	
 	public static void main(String[] args) throws java.io.IOException, InterruptedException, ClassNotFoundException {
 		final <name> runner = new <name>();
@@ -46,6 +54,8 @@ public class <name> extends sizzle.runtime.SizzleRunner {
 		
 		final org.apache.hadoop.mapreduce.Job jb = runner.job(org.apache.hadoop.hbase.HBaseConfiguration.create(), new org.apache.hadoop.fs.Path(args[1]), robust);
 		jb.getConfiguration().set("boa.hbase.table", args[0]);
+		if (line.hasOption("astTable"))
+			jb.getConfiguration().set("boa.hbase.ast.table", line.getOptionValue("astTable"));
 
 		final org.apache.hadoop.hbase.client.Scan scan = new org.apache.hadoop.hbase.client.Scan();
 		scan.setCaching(10);
