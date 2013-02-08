@@ -606,7 +606,7 @@ public class TypeCheckingVisitor extends DefaultVisitor<SizzleType, SymbolTable>
 				throw new TypeException(n, "invalid type '" + ltype + "' for disjunction");
 
 			for (final Node node : n.f1.nodes) {
-				final SizzleType rtype = node.accept(this, argu);
+				final SizzleType rtype = ((NodeSequence)node).elementAt(1).accept(this, argu);
 	
 				if (!(rtype instanceof SizzleBool))
 					throw new TypeException(n, "invalid type '" + rtype + "' for disjunction");
