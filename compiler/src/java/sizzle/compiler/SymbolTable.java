@@ -32,6 +32,7 @@ import sizzle.types.BugStatusProtoMap;
 import sizzle.types.CodeRepositoryProtoTuple;
 import sizzle.types.CommentProtoTuple;
 import sizzle.types.NamespaceProtoTuple;
+import sizzle.types.SizzleStack;
 import sizzle.types.SizzleVisitor;
 import sizzle.types.StatementKindProtoMap;
 import sizzle.types.StatementProtoTuple;
@@ -172,6 +173,7 @@ public class SymbolTable {
 		this.setFunction("len", new SizzleFunction(new SizzleInt(), new SizzleType[] { new SizzleProtoList(new SizzleScalar()) }, "${0}.size()"));
 		this.setFunction("len", new SizzleFunction(new SizzleInt(), new SizzleType[] { new SizzleArray(new SizzleScalar()) }, "${0}.length"));
 		this.setFunction("len", new SizzleFunction(new SizzleInt(), new SizzleType[] { new SizzleMap(new SizzleScalar(), new SizzleScalar()) }, "${0}.keySet().size()"));
+		this.setFunction("len", new SizzleFunction(new SizzleInt(), new SizzleType[] { new SizzleStack(new SizzleScalar()) }, "${0}.size()"));
 		this.setFunction("len", new SizzleFunction(new SizzleInt(), new SizzleType[] { new SizzleString() }, "${0}.length()"));
 		this.setFunction("len", new SizzleFunction(new SizzleInt(), new SizzleType[] { new SizzleBytes() }, "${0}.length"));
 		this.setFunction("haskey", new SizzleFunction(new SizzleBool(), new SizzleType[] { new SizzleMap(new SizzleScalar(), new SizzleScalar()),
@@ -191,6 +193,11 @@ public class SymbolTable {
 
 		this.setFunction("visit", new SizzleFunction(new SizzleAny(), new SizzleType[] { new SizzleScalar(), new SizzleVisitor() }, "${1}.visit(${0})"));
 		this.setFunction("visit", new SizzleFunction(new SizzleAny(), new SizzleType[] { new SizzleScalar() }, "visit(${0})"));
+
+		// stack functions
+		this.setFunction("push", new SizzleFunction(new SizzleAny(), new SizzleType[] { new SizzleStack(new SizzleScalar()), new SizzleScalar() }, "${0}.push(${1})"));
+		this.setFunction("pop", new SizzleFunction(new SizzleAny(), new SizzleType[] { new SizzleStack(new SizzleScalar()) }, "sizzle.functions.BoaIntrinsics.stack_pop(${0})"));
+		this.setFunction("peek", new SizzleFunction(new SizzleAny(), new SizzleType[] { new SizzleStack(new SizzleScalar()) }, "sizzle.functions.BoaIntrinsics.stack_peek(${0})"));
 
 		// expose the casts for all possible input types
 		this.setFunction(new ProjectProtoTuple().toString(), new SizzleFunction(new ProjectProtoTuple(), new SizzleType[] { new SizzleBytes() }, new ProjectProtoTuple().toJavaType() + ".parseFrom(${0})"));

@@ -113,6 +113,12 @@ public class IsFunctionVisitor extends DefaultVisitor<Boolean, SymbolTable> {
 
 	/** {@inheritDoc} */
 	@Override
+	public Boolean visit(final StackType n, final SymbolTable argu) {
+		return false;
+	}
+
+	/** {@inheritDoc} */
+	@Override
 	public Boolean visit(final OutputType n, final SymbolTable argu) {
 		return false;
 	}

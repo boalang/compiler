@@ -183,7 +183,7 @@ public class CodeGeneratingVisitor extends DefaultVisitorNoArgu<String> {
 		st.setAttribute("lhs", "___" + n.f0.f0.tokenImage);
 
 		if (!n.f3.present()) {
-			if (!(lhsType instanceof SizzleMap))
+			if (!(lhsType instanceof SizzleMap || lhsType instanceof SizzleStack))
 				return null;
 			
 			st.setAttribute("rhs", n.f2.node.accept(this));
@@ -265,6 +265,19 @@ public class CodeGeneratingVisitor extends DefaultVisitorNoArgu<String> {
 		argu.setNeedsBoxing(true);
 		st.setAttribute("key", n.f2.accept(this));
 		st.setAttribute("value", n.f5.accept(this));
+		argu.setNeedsBoxing(false);
+
+		return st.toString();
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String visit(final StackType n) {
+		final SymbolTable argu = this.typechecker.getSyms(n);
+		final StringTemplate st = this.stg.getInstanceOf("StackType");
+
+		argu.setNeedsBoxing(true);
+		st.setAttribute("value", n.f2.accept(this));
 		argu.setNeedsBoxing(false);
 
 		return st.toString();

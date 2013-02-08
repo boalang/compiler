@@ -144,6 +144,7 @@ public class TypeCheckingVisitor extends DefaultVisitor<SizzleType, SymbolTable>
 		case 4: // table
 		case 5: // function
 		case 6: // visitor
+		case 8: // stack
 			bindings.put(n, n.f0.choice.accept(this, argu));
 			break;
 		case 7: // proto type
@@ -230,6 +231,15 @@ public class TypeCheckingVisitor extends DefaultVisitor<SizzleType, SymbolTable>
 		syms.put(n, argu);
 
 		bindings.put(n, new SizzleMap(n.f5.accept(this, argu), n.f2.accept(this, argu)));
+		return bindings.get(n);
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public SizzleType visit(final StackType n, final SymbolTable argu) {
+		syms.put(n, argu);
+
+		bindings.put(n, new SizzleStack(n.f2.accept(this, argu)));
 		return bindings.get(n);
 	}
 

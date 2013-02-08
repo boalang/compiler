@@ -20,6 +20,7 @@ identifierMap ::= [
 VarDecl(type, id, initializer) ::= "<type> ___<id><if(initializer)> = <initializer><endif>;<\n>"
 ArrayType(type) ::= "new <type>[]"
 MapType(key, value) ::= "new java.util.HashMap\<<key>, <value>\>()"
+StackType(value) ::= "new java.util.Stack\<<value>\>()"
 ExprList(expressions) ::= "<first(expressions)><rest(expressions):{, <it>}>"
 Block(statements) ::= <<
 {

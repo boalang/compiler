@@ -116,6 +116,12 @@ public class DefaultVisitorNoArgu<RET> extends GJNoArguDepthFirst<RET> {
 
 	/** {@inheritDoc} */
 	@Override
+	public RET visit(final StackType n) {
+		throw new RuntimeException("unimplemented");
+	}
+
+	/** {@inheritDoc} */
+	@Override
 	public RET visit(final OutputType n) {
 		throw new RuntimeException("unimplemented");
 	}

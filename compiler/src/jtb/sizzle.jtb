@@ -57,6 +57,7 @@ TOKEN :
 | < AND : "and" >
 | < ALL : "all" >
 | < MAP : "map" >
+| < STACK : "stack" >
 | < FOR : "for" >
 | < WHENEACH : "foreach" >
 | < WHENALL : "ifall" >
@@ -223,7 +224,7 @@ void VarDecl() :
 
 // Type =
 //   type_name | ArrayType | MapType | TupleType |
-//   OutputType | FunctionType | VisitorType | 'proto' Type.
+//   OutputType | FunctionType | VisitorType | 'proto' Type | StackType.
 // type_name = identifier.
 void Type() :
 {}
@@ -236,6 +237,7 @@ void Type() :
 | FunctionType()
 | VisitorType()
 | "protox" Type()
+| StackType()
 }
 
 // Component = [component_name ':'] ComponentType.
@@ -342,6 +344,14 @@ void MapType() :
 {}
 {
   "map" "[" Component() "]" "of" Component()
+}
+
+// StackType = 'stack' 'of' Value.
+// Value = Component.
+void StackType() :
+{}
+{
+  "stack" "of" Component()
 }
 
 // OutputType =

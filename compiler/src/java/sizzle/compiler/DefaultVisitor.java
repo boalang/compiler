@@ -116,6 +116,12 @@ public class DefaultVisitor<RET, ARG> extends GJDepthFirst<RET, ARG> {
 
 	/** {@inheritDoc} */
 	@Override
+	public RET visit(final StackType n, final ARG argu) {
+		throw new RuntimeException("unimplemented");
+	}
+
+	/** {@inheritDoc} */
+	@Override
 	public RET visit(final OutputType n, final ARG argu) {
 		throw new RuntimeException("unimplemented");
 	}

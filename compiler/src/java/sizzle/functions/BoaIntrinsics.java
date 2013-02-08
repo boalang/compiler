@@ -70,4 +70,16 @@ public class BoaIntrinsics {
 			return ((ChangedFile.FileKind)kind).name().startsWith(s);
 		throw new RuntimeException("Invalid argument type");
 	}
+
+	public static <T> T stack_pop(final java.util.Stack<T> s) {
+		if (s.empty())
+			return null;
+		return s.pop();
+	}
+
+	public static <T> T stack_peek(final java.util.Stack<T> s) {
+		if (s.empty())
+			return null;
+		return s.peek();
+	}
 }
