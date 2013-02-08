@@ -160,20 +160,19 @@ public abstract class BoaAbstractVisitor {
 			postVisit(node);
 		}
 	}
-	Revision lastRev = null;
 	public final void visit(final Revision node) throws Exception {
 		if (preVisit(node)) {
-			lastRev = node;
 			final List<ChangedFile> filesList = node.getFilesList();
-			for (int i = 0; i < filesList.size(); i++)
-				visit(BoaAstIntrinsics.getast(node, filesList.get(i)));
+			final int filesSize = filesList.size();
+			for (int i = 0; i < filesSize; i++)
+				visit(filesList.get(i));
 
 			postVisit(node);
 		}
 	}
 	public final void visit(final ChangedFile node) throws Exception {
 		if (preVisit(node)) {
-			visit(BoaAstIntrinsics.getast(lastRev, node));
+			visit(BoaAstIntrinsics.getast(node));
 
 			postVisit(node);
 		}

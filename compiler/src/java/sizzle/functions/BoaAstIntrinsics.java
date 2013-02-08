@@ -14,7 +14,6 @@ import com.google.protobuf.CodedInputStream;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 import sizzle.types.Ast.*;
-import sizzle.types.Code.Revision;
 import sizzle.types.Diff.ChangedFile;
 
 /**
@@ -49,8 +48,8 @@ public class BoaAstIntrinsics {
 	 * @return the AST, or an empty AST on any sort of error
 	 */
 	@SuppressWarnings("unchecked")
-	@FunctionSpec(name = "getast", returnType = "ASTRoot", formalParameters = { "Revision", "ChangedFile" })
-	public static ASTRoot getast(final Revision rev, final ChangedFile f) {
+	@FunctionSpec(name = "getast", returnType = "ASTRoot", formalParameters = { "ChangedFile" })
+	public static ASTRoot getast(final ChangedFile f) {
 		// since we know only certain kinds have ASTs, filter before looking in HBase
 		final ChangedFile.FileKind kind = f.getKind();
 		if (kind != ChangedFile.FileKind.SOURCE_JAVA_ERROR
@@ -67,7 +66,7 @@ public class BoaAstIntrinsics {
 			context.progress();
 		}
 
-		final byte[] rowName = Bytes.toBytes(rev.getKey());
+		final byte[] rowName = Bytes.toBytes(f.getKey());
 		final Get get = new Get(rowName);
 		final byte[] colName = Bytes.toBytes(f.getName());
 		get.addColumn(codeFamily, colName);
@@ -104,17 +103,17 @@ public class BoaAstIntrinsics {
 				break;
 			}
 
-		System.err.println("error with ast: " + rev.getKey() + "!!" + f.getName());
+		System.err.println("error with ast: " + f.getKey() + "!!" + f.getName());
 		context.getCounter(HBASE_COUNTER.GETS_FAILED).increment(1);
 		return ASTRoot.newBuilder().build();
 	}
 
 	@SuppressWarnings("unchecked")
-	@FunctionSpec(name = "loc", returnType = "int", formalParameters = { "Revision", "ChangedFile" })
-	public static long loc(final Revision rev, final ChangedFile f) {
+	@FunctionSpec(name = "loc", returnType = "int", formalParameters = { "ChangedFile" })
+	public static long loc(final ChangedFile f) {
 		context.getCounter(HBASE_COUNTER.GETS_ATTEMPTED).increment(1);
 
-		final byte[] rowName = Bytes.toBytes(rev.getKey());
+		final byte[] rowName = Bytes.toBytes(f.getKey());
 		final Get get = new Get(rowName);
 		final byte[] colName = Bytes.toBytes(f.getName());
 		get.addColumn(locFamily, colName);
@@ -149,7 +148,7 @@ public class BoaAstIntrinsics {
 				break;
 			}
 
-		System.err.println("error with loc: " + rev.getKey() + "!!" + f.getName());
+		System.err.println("error with loc: " + f.getKey() + "!!" + f.getName());
 		context.getCounter(HBASE_COUNTER.GETS_FAILED).increment(1);
 		return -1;
 	}
@@ -157,7 +156,7 @@ public class BoaAstIntrinsics {
 	@SuppressWarnings("rawtypes")
 	public static void initialize(final Context context) {
 		BoaAstIntrinsics.context = context;
-		astTable = context.getConfiguration().get("boa.hbase.table", "boa_input");
+		astTable = context.getConfiguration().get("boa.hbase.ast.table", "boa_input");
 	}
 
 	public static void close() {

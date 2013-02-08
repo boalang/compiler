@@ -22,6 +22,7 @@ message ChangedFile {
 	repeated Namespace namespaces = 4;
 //	repeated ChangedNamespace changed_namespaces = 5;
 //	optional string content = 6;
+	required string key = 5;
 }
 
 message ChangedASTRoot {

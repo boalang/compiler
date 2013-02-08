@@ -32,6 +32,10 @@ public final class Diff {
         getNamespacesOrBuilderList();
     sizzle.types.Ast.NamespaceOrBuilder getNamespacesOrBuilder(
         int index);
+    
+    // required string key = 5;
+    boolean hasKey();
+    String getKey();
   }
   public static final class ChangedFile extends
       com.google.protobuf.GeneratedMessage
@@ -222,11 +226,44 @@ public final class Diff {
       return namespaces_.get(index);
     }
     
+    // required string key = 5;
+    public static final int KEY_FIELD_NUMBER = 5;
+    private java.lang.Object key_;
+    public boolean hasKey() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    public String getKey() {
+      java.lang.Object ref = key_;
+      if (ref instanceof String) {
+        return (String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        String s = bs.toStringUtf8();
+        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+          key_ = s;
+        }
+        return s;
+      }
+    }
+    private com.google.protobuf.ByteString getKeyBytes() {
+      java.lang.Object ref = key_;
+      if (ref instanceof String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+        key_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+    
     private void initFields() {
       change_ = sizzle.types.Shared.ChangeKind.ADDED;
       kind_ = sizzle.types.Diff.ChangedFile.FileKind.UNKNOWN;
       name_ = "";
       namespaces_ = java.util.Collections.emptyList();
+      key_ = "";
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -242,6 +279,10 @@ public final class Diff {
         return false;
       }
       if (!hasName()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasKey()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -270,6 +311,9 @@ public final class Diff {
       for (int i = 0; i < namespaces_.size(); i++) {
         output.writeMessage(4, namespaces_.get(i));
       }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeBytes(5, getKeyBytes());
+      }
       getUnknownFields().writeTo(output);
     }
     
@@ -294,6 +338,10 @@ public final class Diff {
       for (int i = 0; i < namespaces_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(4, namespaces_.get(i));
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(5, getKeyBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -432,6 +480,8 @@ public final class Diff {
         } else {
           namespacesBuilder_.clear();
         }
+        key_ = "";
+        bitField0_ = (bitField0_ & ~0x00000010);
         return this;
       }
       
@@ -491,6 +541,10 @@ public final class Diff {
         } else {
           result.namespaces_ = namespacesBuilder_.build();
         }
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.key_ = key_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -542,6 +596,9 @@ public final class Diff {
             }
           }
         }
+        if (other.hasKey()) {
+          setKey(other.getKey());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -556,6 +613,10 @@ public final class Diff {
           return false;
         }
         if (!hasName()) {
+          
+          return false;
+        }
+        if (!hasKey()) {
           
           return false;
         }
@@ -622,6 +683,11 @@ public final class Diff {
               sizzle.types.Ast.Namespace.Builder subBuilder = sizzle.types.Ast.Namespace.newBuilder();
               input.readMessage(subBuilder, extensionRegistry);
               addNamespaces(subBuilder.buildPartial());
+              break;
+            }
+            case 42: {
+              bitField0_ |= 0x00000010;
+              key_ = input.readBytes();
               break;
             }
           }
@@ -898,6 +964,42 @@ public final class Diff {
           namespaces_ = null;
         }
         return namespacesBuilder_;
+      }
+      
+      // required string key = 5;
+      private java.lang.Object key_ = "";
+      public boolean hasKey() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
+      }
+      public String getKey() {
+        java.lang.Object ref = key_;
+        if (!(ref instanceof String)) {
+          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+          key_ = s;
+          return s;
+        } else {
+          return (String) ref;
+        }
+      }
+      public Builder setKey(String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000010;
+        key_ = value;
+        onChanged();
+        return this;
+      }
+      public Builder clearKey() {
+        bitField0_ = (bitField0_ & ~0x00000010);
+        key_ = getDefaultInstance().getKey();
+        onChanged();
+        return this;
+      }
+      void setKey(com.google.protobuf.ByteString value) {
+        bitField0_ |= 0x00000010;
+        key_ = value;
+        onChanged();
       }
       
       // @@protoc_insertion_point(builder_scope:sizzle.types.ChangedFile)
@@ -15670,91 +15772,92 @@ public final class Diff {
   static {
     java.lang.String[] descriptorData = {
       "\n\ndiff.proto\022\014sizzle.types\032\014shared.proto" +
-      "\032\tast.proto\"\266\002\n\013ChangedFile\022(\n\006change\030\001 " +
+      "\032\tast.proto\"\303\002\n\013ChangedFile\022(\n\006change\030\001 " +
       "\002(\0162\030.sizzle.types.ChangeKind\0220\n\004kind\030\002 " +
       "\002(\0162\".sizzle.types.ChangedFile.FileKind\022" +
       "\014\n\004name\030\003 \002(\t\022+\n\nnamespaces\030\004 \003(\0132\027.sizz" +
-      "le.types.Namespace\"\217\001\n\010FileKind\022\013\n\007UNKNO" +
-      "WN\020\001\022\n\n\006BINARY\020\002\022\010\n\004TEXT\020\003\022\007\n\003XML\020\004\022\025\n\021S" +
-      "OURCE_JAVA_ERROR\020\005\022\024\n\020SOURCE_JAVA_JLS2\020\006" +
-      "\022\024\n\020SOURCE_JAVA_JLS3\020\007\022\024\n\020SOURCE_JAVA_JL" +
-      "S4\020\010\"D\n\016ChangedASTRoot\0222\n\nnamespaces\030\001 \003",
-      "(\0132\036.sizzle.types.ChangedNamespace\"\344\001\n\020C" +
-      "hangedNamespace\022(\n\006change\030\001 \002(\0162\030.sizzle" +
-      ".types.ChangeKind\022\014\n\004name\030\002 \001(\t\0220\n\tmodif" +
-      "iers\030\003 \003(\0132\035.sizzle.types.ChangedModifie" +
-      "r\0226\n\014declarations\030\004 \003(\0132 .sizzle.types.C" +
-      "hangedDeclaration\022.\n\010comments\030\005 \003(\0132\034.si" +
-      "zzle.types.ChangedComment\"\323\003\n\022ChangedDec" +
-      "laration\022(\n\006change\030\001 \002(\0162\030.sizzle.types." +
-      "ChangeKind\022$\n\004kind\030\002 \002(\0162\026.sizzle.types." +
-      "TypeKind\022\014\n\004name\030\003 \001(\t\0220\n\tmodifiers\030\004 \003(",
-      "\0132\035.sizzle.types.ChangedModifier\0225\n\022gene" +
-      "ric_parameters\030\005 \003(\0132\031.sizzle.types.Chan" +
-      "gedType\022*\n\007parents\030\006 \003(\0132\031.sizzle.types." +
-      "ChangedType\022,\n\007methods\030\007 \003(\0132\033.sizzle.ty" +
-      "pes.ChangedMethod\022-\n\006fields\030\010 \003(\0132\035.sizz" +
-      "le.types.ChangedVariable\022=\n\023nested_decla" +
-      "rations\030\t \003(\0132 .sizzle.types.ChangedDecl" +
-      "aration\022.\n\010comments\030\n \003(\0132\034.sizzle.types" +
-      ".ChangedComment\"w\n\013ChangedType\022(\n\006change" +
-      "\030\001 \002(\0162\030.sizzle.types.ChangeKind\022$\n\004kind",
-      "\030\002 \001(\0162\026.sizzle.types.TypeKind\022\014\n\004name\030\003" +
-      " \001(\t\022\n\n\002id\030\004 \001(\t\"\252\003\n\rChangedMethod\022(\n\006ch" +
-      "ange\030\001 \002(\0162\030.sizzle.types.ChangeKind\022\014\n\004" +
-      "name\030\002 \001(\t\0220\n\tmodifiers\030\003 \003(\0132\035.sizzle.t" +
-      "ypes.ChangedModifier\022.\n\013return_type\030\004 \001(" +
-      "\0132\031.sizzle.types.ChangedType\0225\n\022generic_" +
-      "parameters\030\005 \003(\0132\031.sizzle.types.ChangedT" +
-      "ype\0220\n\targuments\030\006 \003(\0132\035.sizzle.types.Ch" +
-      "angedVariable\0222\n\017exception_types\030\007 \003(\0132\031" +
-      ".sizzle.types.ChangedType\0222\n\nstatements\030",
-      "\010 \003(\0132\036.sizzle.types.ChangedStatement\022.\n" +
-      "\010comments\030\t \003(\0132\034.sizzle.types.ChangedCo" +
-      "mment\"\223\002\n\017ChangedVariable\022(\n\006change\030\001 \002(" +
-      "\0162\030.sizzle.types.ChangeKind\022\014\n\004name\030\002 \001(" +
-      "\t\0220\n\rvariable_type\030\003 \001(\0132\031.sizzle.types." +
-      "ChangedType\0220\n\tmodifiers\030\004 \003(\0132\035.sizzle." +
-      "types.ChangedModifier\0224\n\013initializer\030\005 \001" +
-      "(\0132\037.sizzle.types.ChangedExpression\022.\n\010c" +
-      "omments\030\006 \003(\0132\034.sizzle.types.ChangedComm" +
-      "ent\"\243\004\n\020ChangedStatement\022(\n\006change\030\001 \002(\016",
-      "2\030.sizzle.types.ChangeKind\0223\n\004kind\030\002 \002(\016" +
-      "2%.sizzle.types.Statement.StatementKind\022" +
-      ".\n\010comments\030\003 \003(\0132\034.sizzle.types.Changed" +
-      "Comment\0222\n\nstatements\030\004 \003(\0132\036.sizzle.typ" +
-      "es.ChangedStatement\0228\n\017initializations\030\005" +
-      " \003(\0132\037.sizzle.types.ChangedExpression\0222\n" +
-      "\tcondition\030\006 \001(\0132\037.sizzle.types.ChangedE" +
-      "xpression\0220\n\007updates\030\007 \003(\0132\037.sizzle.type" +
-      "s.ChangedExpression\022;\n\024variable_declarat" +
-      "ion\030\010 \001(\0132\035.sizzle.types.ChangedVariable",
-      "\022:\n\020type_declaration\030\t \001(\0132 .sizzle.type" +
-      "s.ChangedDeclaration\0223\n\nexpression\030\n \001(\013" +
-      "2\037.sizzle.types.ChangedExpression\"\376\003\n\021Ch" +
-      "angedExpression\022(\n\006change\030\001 \002(\0162\030.sizzle" +
-      ".types.ChangeKind\0225\n\004kind\030\002 \002(\0162\'.sizzle" +
-      ".types.Expression.ExpressionKind\0224\n\013expr" +
-      "essions\030\003 \003(\0132\037.sizzle.types.ChangedExpr" +
-      "ession\0225\n\016variable_decls\030\004 \003(\0132\035.sizzle." +
-      "types.ChangedVariable\022+\n\010new_type\030\005 \001(\0132" +
-      "\031.sizzle.types.ChangedType\0225\n\022generic_pa",
-      "rameters\030\006 \003(\0132\031.sizzle.types.ChangedTyp" +
-      "e\022\022\n\nis_postfix\030\007 \001(\010\022\017\n\007literal\030\010 \001(\t\022\020" +
-      "\n\010variable\030\t \001(\t\022\016\n\006method\030\n \001(\t\0224\n\013meth" +
-      "od_args\030\013 \003(\0132\037.sizzle.types.ChangedExpr" +
-      "ession\022:\n\020anon_declaration\030\014 \001(\0132 .sizzl" +
-      "e.types.ChangedDeclaration\"\202\002\n\017ChangedMo" +
-      "difier\022(\n\006change\030\001 \002(\0162\030.sizzle.types.Ch" +
-      "angeKind\0221\n\004kind\030\002 \002(\0162#.sizzle.types.Mo" +
-      "difier.ModifierKind\022\022\n\nvisibility\030\003 \001(\r\022" +
-      "\027\n\017annotation_name\030\004 \001(\t\022\032\n\022annotation_m",
-      "embers\030\005 \003(\t\022:\n\021annotation_values\030\006 \003(\0132" +
-      "\037.sizzle.types.ChangedExpression\022\r\n\005othe" +
-      "r\030\007 \001(\t\"\216\001\n\016ChangedComment\022(\n\006change\030\001 \002" +
-      "(\0162\030.sizzle.types.ChangeKind\022/\n\004kind\030\002 \002" +
-      "(\0162!.sizzle.types.Comment.CommentKind\022\r\n" +
-      "\005value\030\003 \001(\t\022\022\n\nstart_line\030\004 \001(\005B\002H\001"
+      "le.types.Namespace\022\013\n\003key\030\005 \002(\t\"\217\001\n\010File" +
+      "Kind\022\013\n\007UNKNOWN\020\001\022\n\n\006BINARY\020\002\022\010\n\004TEXT\020\003\022" +
+      "\007\n\003XML\020\004\022\025\n\021SOURCE_JAVA_ERROR\020\005\022\024\n\020SOURC" +
+      "E_JAVA_JLS2\020\006\022\024\n\020SOURCE_JAVA_JLS3\020\007\022\024\n\020S" +
+      "OURCE_JAVA_JLS4\020\010\"D\n\016ChangedASTRoot\0222\n\nn",
+      "amespaces\030\001 \003(\0132\036.sizzle.types.ChangedNa" +
+      "mespace\"\344\001\n\020ChangedNamespace\022(\n\006change\030\001" +
+      " \002(\0162\030.sizzle.types.ChangeKind\022\014\n\004name\030\002" +
+      " \001(\t\0220\n\tmodifiers\030\003 \003(\0132\035.sizzle.types.C" +
+      "hangedModifier\0226\n\014declarations\030\004 \003(\0132 .s" +
+      "izzle.types.ChangedDeclaration\022.\n\010commen" +
+      "ts\030\005 \003(\0132\034.sizzle.types.ChangedComment\"\323" +
+      "\003\n\022ChangedDeclaration\022(\n\006change\030\001 \002(\0162\030." +
+      "sizzle.types.ChangeKind\022$\n\004kind\030\002 \002(\0162\026." +
+      "sizzle.types.TypeKind\022\014\n\004name\030\003 \001(\t\0220\n\tm",
+      "odifiers\030\004 \003(\0132\035.sizzle.types.ChangedMod" +
+      "ifier\0225\n\022generic_parameters\030\005 \003(\0132\031.sizz" +
+      "le.types.ChangedType\022*\n\007parents\030\006 \003(\0132\031." +
+      "sizzle.types.ChangedType\022,\n\007methods\030\007 \003(" +
+      "\0132\033.sizzle.types.ChangedMethod\022-\n\006fields" +
+      "\030\010 \003(\0132\035.sizzle.types.ChangedVariable\022=\n" +
+      "\023nested_declarations\030\t \003(\0132 .sizzle.type" +
+      "s.ChangedDeclaration\022.\n\010comments\030\n \003(\0132\034" +
+      ".sizzle.types.ChangedComment\"w\n\013ChangedT" +
+      "ype\022(\n\006change\030\001 \002(\0162\030.sizzle.types.Chang",
+      "eKind\022$\n\004kind\030\002 \001(\0162\026.sizzle.types.TypeK" +
+      "ind\022\014\n\004name\030\003 \001(\t\022\n\n\002id\030\004 \001(\t\"\252\003\n\rChange" +
+      "dMethod\022(\n\006change\030\001 \002(\0162\030.sizzle.types.C" +
+      "hangeKind\022\014\n\004name\030\002 \001(\t\0220\n\tmodifiers\030\003 \003" +
+      "(\0132\035.sizzle.types.ChangedModifier\022.\n\013ret" +
+      "urn_type\030\004 \001(\0132\031.sizzle.types.ChangedTyp" +
+      "e\0225\n\022generic_parameters\030\005 \003(\0132\031.sizzle.t" +
+      "ypes.ChangedType\0220\n\targuments\030\006 \003(\0132\035.si" +
+      "zzle.types.ChangedVariable\0222\n\017exception_" +
+      "types\030\007 \003(\0132\031.sizzle.types.ChangedType\0222",
+      "\n\nstatements\030\010 \003(\0132\036.sizzle.types.Change" +
+      "dStatement\022.\n\010comments\030\t \003(\0132\034.sizzle.ty" +
+      "pes.ChangedComment\"\223\002\n\017ChangedVariable\022(" +
+      "\n\006change\030\001 \002(\0162\030.sizzle.types.ChangeKind" +
+      "\022\014\n\004name\030\002 \001(\t\0220\n\rvariable_type\030\003 \001(\0132\031." +
+      "sizzle.types.ChangedType\0220\n\tmodifiers\030\004 " +
+      "\003(\0132\035.sizzle.types.ChangedModifier\0224\n\013in" +
+      "itializer\030\005 \001(\0132\037.sizzle.types.ChangedEx" +
+      "pression\022.\n\010comments\030\006 \003(\0132\034.sizzle.type" +
+      "s.ChangedComment\"\243\004\n\020ChangedStatement\022(\n",
+      "\006change\030\001 \002(\0162\030.sizzle.types.ChangeKind\022" +
+      "3\n\004kind\030\002 \002(\0162%.sizzle.types.Statement.S" +
+      "tatementKind\022.\n\010comments\030\003 \003(\0132\034.sizzle." +
+      "types.ChangedComment\0222\n\nstatements\030\004 \003(\013" +
+      "2\036.sizzle.types.ChangedStatement\0228\n\017init" +
+      "ializations\030\005 \003(\0132\037.sizzle.types.Changed" +
+      "Expression\0222\n\tcondition\030\006 \001(\0132\037.sizzle.t" +
+      "ypes.ChangedExpression\0220\n\007updates\030\007 \003(\0132" +
+      "\037.sizzle.types.ChangedExpression\022;\n\024vari" +
+      "able_declaration\030\010 \001(\0132\035.sizzle.types.Ch",
+      "angedVariable\022:\n\020type_declaration\030\t \001(\0132" +
+      " .sizzle.types.ChangedDeclaration\0223\n\nexp" +
+      "ression\030\n \001(\0132\037.sizzle.types.ChangedExpr" +
+      "ession\"\376\003\n\021ChangedExpression\022(\n\006change\030\001" +
+      " \002(\0162\030.sizzle.types.ChangeKind\0225\n\004kind\030\002" +
+      " \002(\0162\'.sizzle.types.Expression.Expressio" +
+      "nKind\0224\n\013expressions\030\003 \003(\0132\037.sizzle.type" +
+      "s.ChangedExpression\0225\n\016variable_decls\030\004 " +
+      "\003(\0132\035.sizzle.types.ChangedVariable\022+\n\010ne" +
+      "w_type\030\005 \001(\0132\031.sizzle.types.ChangedType\022",
+      "5\n\022generic_parameters\030\006 \003(\0132\031.sizzle.typ" +
+      "es.ChangedType\022\022\n\nis_postfix\030\007 \001(\010\022\017\n\007li" +
+      "teral\030\010 \001(\t\022\020\n\010variable\030\t \001(\t\022\016\n\006method\030" +
+      "\n \001(\t\0224\n\013method_args\030\013 \003(\0132\037.sizzle.type" +
+      "s.ChangedExpression\022:\n\020anon_declaration\030" +
+      "\014 \001(\0132 .sizzle.types.ChangedDeclaration\"" +
+      "\202\002\n\017ChangedModifier\022(\n\006change\030\001 \002(\0162\030.si" +
+      "zzle.types.ChangeKind\0221\n\004kind\030\002 \002(\0162#.si" +
+      "zzle.types.Modifier.ModifierKind\022\022\n\nvisi" +
+      "bility\030\003 \001(\r\022\027\n\017annotation_name\030\004 \001(\t\022\032\n",
+      "\022annotation_members\030\005 \003(\t\022:\n\021annotation_" +
+      "values\030\006 \003(\0132\037.sizzle.types.ChangedExpre" +
+      "ssion\022\r\n\005other\030\007 \001(\t\"\216\001\n\016ChangedComment\022" +
+      "(\n\006change\030\001 \002(\0162\030.sizzle.types.ChangeKin" +
+      "d\022/\n\004kind\030\002 \002(\0162!.sizzle.types.Comment.C" +
+      "ommentKind\022\r\n\005value\030\003 \001(\t\022\022\n\nstart_line\030" +
+      "\004 \001(\005B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -15766,7 +15869,7 @@ public final class Diff {
           internal_static_sizzle_types_ChangedFile_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_sizzle_types_ChangedFile_descriptor,
-              new java.lang.String[] { "Change", "Kind", "Name", "Namespaces", },
+              new java.lang.String[] { "Change", "Kind", "Name", "Namespaces", "Key", },
               sizzle.types.Diff.ChangedFile.class,
               sizzle.types.Diff.ChangedFile.Builder.class);
           internal_static_sizzle_types_ChangedASTRoot_descriptor =

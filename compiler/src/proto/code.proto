@@ -26,5 +26,4 @@ message Revision {
 	required uint64 commit_date = 4;
 	required string log = 5;
 	repeated ChangedFile files = 6;
-	required string key = 7;
 }
