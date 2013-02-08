@@ -712,7 +712,7 @@ public class TypeException extends RuntimeException {
 		@Override
 		public NodeToken visit(final Factor n) {
 			if (n.f1.present())
-				return ((NodeList)n.f1.nodes.elementAt(n.f1.size() - 1)).accept(this);
+				return ((NodeChoice)n.f1.nodes.elementAt(n.f1.size() - 1)).choice.accept(this);
 			return n.f0.accept(this);
 		}
 
