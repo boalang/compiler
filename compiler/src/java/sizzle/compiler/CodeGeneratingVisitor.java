@@ -681,8 +681,7 @@ public class CodeGeneratingVisitor extends DefaultVisitorNoArgu<String> {
 				argu.getOperandType();
 				return accept;
 			case 2: // call
-				accept = n.f1.nodes.elementAt(0).accept(this);
-				return accept;
+				return n.f1.nodes.elementAt(0).accept(this);
 			default:
 				throw new RuntimeException("unexpected choice " + nodeChoice.which + " is " + nodeChoice.choice.getClass());
 			}
@@ -1016,65 +1015,69 @@ public class CodeGeneratingVisitor extends DefaultVisitorNoArgu<String> {
 		argu.setIsBeforeVisitor(n.f0.which == 0 && n.f1.which != 2);
 
 		final boolean isBefore = n.f0.which == 0;
-		String s = "";
+
+		final StringTemplate st = this.stg.getInstanceOf("VisitClause");
+		final List<String> body = new ArrayList<String>();
+		final List<String> types = new ArrayList<String>();
+		final List<String> ids = new ArrayList<String>();
+
+		if (n.f3.f0.which == 1)
+			for (final Node b : ((Block)n.f3.f0.choice).f1.nodes)
+				body.add(b.accept(this));
+		else
+			body.add(n.f3.accept(this));
+
 		switch (n.f1.which) {
 		case 0: // single type
-			final String typeName = ((Identifier)((NodeSequence)n.f1.choice).nodes.get(2)).f0.tokenImage;
-			final String ident = ((Identifier)((NodeSequence)n.f1.choice).nodes.get(0)).f0.tokenImage;
-			final SizzleType type = argu.get(typeName);
-			if (type != null)
-				argu.set(ident, type);
-			else
-				throw new TypeException(n, "Invalid type '" + typeName + "'");
+			final Identifier typeId = (Identifier)((NodeSequence)n.f1.choice).nodes.get(2);
+			SizzleType type = argu.get(typeId.f0.tokenImage);
+			if (type == null)
+				throw new TypeException(n, "Invalid type '" + typeId.f0.tokenImage + "'");
+			types.add(type.toJavaType());
 
-			s = "@Override\nprotected ";
-			s += isBefore ? "boolean preVisit" : "void postVisit";
-			s += "(final " + argu.get(typeName).toJavaType() + " ___" + ident + ") throws Exception {\n";
-			if (n.f3.f0.which == 1)
-				for (final Node b : ((Block)n.f3.f0.choice).f1.nodes)
-					s += b.accept(this);
-			else
-				s += n.f3.accept(this);
+			final String id = ((Identifier)((NodeSequence)n.f1.choice).nodes.get(0)).f0.tokenImage;
+			argu.set(id, type);
+			ids.add(" ___" + id);
+
+			st.setAttribute("ret", isBefore ? "boolean" : "void");
+			st.setAttribute("name", isBefore ? "preVisit" : "postVisit");
 			if (isBefore && !lastStatementIsStop(n.f3))
-				s += "return true;\n";
-			s += "}\n";
+				body.add("return true;\n");
 			break;
 		case 1: // list of types
 			final IdentifierList idlist = (IdentifierList)n.f1.choice;
-			final List<String> ids = new ArrayList<String>();
-			ids.add(idlist.f0.f0.tokenImage);
+			type = argu.get(idlist.f0.f0.tokenImage);
+			if (type == null)
+				throw new TypeException(n, "Invalid type '" + idlist.f0.f0.tokenImage + "'");
+			types.add(type.toJavaType());
+			ids.add("__UNUSED");
+
 			if (idlist.f1.present())
-				for (final Node ns : idlist.f1.nodes)
-					ids.add(((Identifier)((NodeSequence)ns).nodes.get(1)).f0.tokenImage);
-			for (final String t : ids) {
-				s += "@Override\nprotected ";
-				s += isBefore ? "boolean preVisit" : "void postVisit";
-				s += "(final " + argu.get(t).toJavaType() + " __UNUSED) throws Exception {\n";
-				if (n.f3.f0.which == 1)
-					for (final Node b : ((Block)n.f3.f0.choice).f1.nodes)
-						s += b.accept(this);
-				else
-					s += n.f3.accept(this);
-				if (isBefore && !lastStatementIsStop(n.f3))
-					s += "return true;\n";
-				s += "}\n";
-			}
+				for (final Node ns : idlist.f1.nodes) {
+					types.add(argu.get(((Identifier)((NodeSequence)ns).nodes.get(1)).f0.tokenImage).toJavaType());
+					ids.add("__UNUSED");
+				}
+
+			st.setAttribute("ret", isBefore ? "boolean" : "void");
+			st.setAttribute("name", isBefore ? "preVisit" : "postVisit");
+			if (isBefore && !lastStatementIsStop(n.f3))
+				body.add("return true;\n");
 			break;
 		case 2: // wildcard
-			s = "@Override\nprotected void ";
-			s += isBefore ? "defaultPreVisit" : "defaultPostVisit";
-			s += "() throws Exception {\n";
-			if (n.f3.f0.which == 1)
-				for (final Node b : ((Block)n.f3.f0.choice).f1.nodes)
-					s += b.accept(this);
-			else
-				s += n.f3.accept(this);
-			s += "}\n";
+			st.setAttribute("ret", "void");
+			st.setAttribute("name", isBefore ? "defaultPreVisit" : "defaultPostVisit");
 			break;
 		default:
 			throw new RuntimeException("unexpected choice " + n.f0.which + " is " + n.f0.choice.getClass());
 		}
-		return s;
+
+		st.setAttribute("body", body);
+		if (ids.size() > 0) {
+			st.setAttribute("args", ids);
+			st.setAttribute("types", types);
+		}
+
+		return st.toString();
 	}
 
 	private boolean lastStatementIsStop(Statement s) {

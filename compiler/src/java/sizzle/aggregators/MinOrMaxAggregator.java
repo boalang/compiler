@@ -183,6 +183,6 @@ class WeightedString {
 	/** {@inheritDoc} */
 	@Override
 	public String toString() {
-		return this.string + " weight " + this.weight;
+		return this.string + ", " + this.weight;
 	}
 }

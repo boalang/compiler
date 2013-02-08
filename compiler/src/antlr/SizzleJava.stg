@@ -23,8 +23,7 @@ MapType(key, value) ::= "new java.util.HashMap\<<key>, <value>\>()"
 ExprList(expressions) ::= "<first(expressions)><rest(expressions):{, <it>}>"
 Block(statements) ::= <<
 {
-	<statements:{<it>}>
-}
+	<statements:{<it>}>}
 >>
 ExprStatement(expression, operator) ::= "<expression><operator>;<\n>"
 ForStatement(declaration, expression, exprstmt, statement) ::= <<
@@ -100,16 +99,24 @@ new sizzle.runtime.SizzleVoidFunc() {
 	public void invoke(Object[] args) throws Exception {
 <endif>
 
-		<parameters>
-		<body>
+		<parameters:{<it><\n>}><body>
 	}
 }
 >>
 Visitor(staticDeclarations, body) ::= <<
 new sizzle.runtime.BoaAbstractVisitor() {
-	<staticDeclarations>
-	<body:{<it><\n>}>
-}
+	<staticDeclarations><body:{<it><\n>}>}
+>>
+VisitClause(ret, name, args, types, body) ::= <<
+<if(args)>
+<args,types:{arg,type|
+@Override
+protected <ret> <name>(final <type> <arg>) throws Exception {
+	<body>}}>
+<else>
+@Override
+protected void <name>() throws Exception {
+	<body>}<endif>
 >>
 Return(expr) ::= "return<if(expr)> <expr><endif>;<\n>"
 
