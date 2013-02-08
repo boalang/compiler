@@ -170,15 +170,18 @@ public class BoaJavaFeaturesIntrinsics {
 		@Override
 		protected boolean preVisit(Declaration node) throws Exception {
 			final List<Method> methodsList = node.getMethodsList();
-			for (int i = 0; i < methodsList.size(); i++)
+			final long methodsSize = methodsList.size();
+			for (int i = 0; i < methodsSize; i++)
 				visit(methodsList.get(i));
 
 			final List<Variable> fieldsList = node.getFieldsList();
-			for (int i = 0; i < fieldsList.size(); i++)
+			final int fieldsSize = fieldsList.size();
+			for (int i = 0; i < fieldsSize; i++)
 				visit(fieldsList.get(i));
 
 			final List<Declaration> nestedList = node.getNestedDeclarationsList();
-			for (int i = 0; i < nestedList.size(); i++)
+			final int nestedSize = nestedList.size();
+			for (int i = 0; i < nestedSize; i++)
 				visit(nestedList.get(i));
 	
 			return false;
@@ -186,7 +189,8 @@ public class BoaJavaFeaturesIntrinsics {
 		@Override
 		protected boolean preVisit(Method node) throws Exception {
 			final List<Statement> statementsList = node.getStatementsList();
-			for (int i = 0; i < statementsList.size(); i++)
+			final int statementsSize = statementsList.size();
+			for (int i = 0; i < statementsSize; i++)
 				visit(statementsList.get(i));
 
 			return false;
@@ -194,7 +198,8 @@ public class BoaJavaFeaturesIntrinsics {
 		@Override
 		protected boolean preVisit(Statement node) throws Exception {
 			final List<Statement> statementsList = node.getStatementsList();
-			for (int i = 0; i < statementsList.size(); i++)
+			final int statementsSize = statementsList.size();
+			for (int i = 0; i < statementsSize; i++)
 				visit(statementsList.get(i));
 
 			if (node.hasTypeDeclaration())
