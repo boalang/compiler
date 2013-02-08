@@ -177,7 +177,8 @@ message Modifier {
 		FINAL = 3;
 		STATIC = 4;
 		SYNCHRONIZED = 5;
-		OTHER = 6;
+		ABSTRACT = 6;
+		OTHER = 7;
 	}
 	enum Visibility {
 		PUBLIC = 1;

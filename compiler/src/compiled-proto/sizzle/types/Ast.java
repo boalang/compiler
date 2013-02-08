@@ -12944,7 +12944,8 @@ public final class Ast {
       FINAL(2, 3),
       STATIC(3, 4),
       SYNCHRONIZED(4, 5),
-      OTHER(5, 6),
+      ABSTRACT(5, 6),
+      OTHER(6, 7),
       ;
       
       public static final int VISIBILITY_VALUE = 1;
@@ -12952,7 +12953,8 @@ public final class Ast {
       public static final int FINAL_VALUE = 3;
       public static final int STATIC_VALUE = 4;
       public static final int SYNCHRONIZED_VALUE = 5;
-      public static final int OTHER_VALUE = 6;
+      public static final int ABSTRACT_VALUE = 6;
+      public static final int OTHER_VALUE = 7;
       
       
       public final int getNumber() { return value; }
@@ -12964,7 +12966,8 @@ public final class Ast {
           case 3: return FINAL;
           case 4: return STATIC;
           case 5: return SYNCHRONIZED;
-          case 6: return OTHER;
+          case 6: return ABSTRACT;
+          case 7: return OTHER;
           default: return null;
         }
       }
@@ -12995,7 +12998,7 @@ public final class Ast {
       }
       
       private static final ModifierKind[] VALUES = {
-        VISIBILITY, ANNOTATION, FINAL, STATIC, SYNCHRONIZED, OTHER, 
+        VISIBILITY, ANNOTATION, FINAL, STATIC, SYNCHRONIZED, ABSTRACT, OTHER, 
       };
       
       public static ModifierKind valueOf(
@@ -15530,27 +15533,27 @@ public final class Ast {
       "OR\020*\022\021\n\rASSIGN_BITAND\020+\022\020\n\014ASSIGN_BITOR\020" +
       ",\022\021\n\rASSIGN_LSHIFT\020-\022\021\n\rASSIGN_RSHIFT\020.\022" +
       "\031\n\025ASSIGN_UNSIGNEDRSHIFT\020/\022\016\n\nANNOTATION" +
-      "\0200\022\t\n\005OTHER\0201\"\363\002\n\010Modifier\0221\n\004kind\030\001 \002(\016" +
+      "\0200\022\t\n\005OTHER\0201\"\201\003\n\010Modifier\0221\n\004kind\030\001 \002(\016" +
       "2#.sizzle.types.Modifier.ModifierKind\022\022\n" +
       "\nvisibility\030\002 \001(\r\022\027\n\017annotation_name\030\003 \001",
       "(\t\022\032\n\022annotation_members\030\004 \003(\t\0223\n\021annota" +
       "tion_values\030\005 \003(\0132\030.sizzle.types.Express" +
-      "ion\022\r\n\005other\030\006 \001(\t\"b\n\014ModifierKind\022\016\n\nVI" +
+      "ion\022\r\n\005other\030\006 \001(\t\"p\n\014ModifierKind\022\016\n\nVI" +
       "SIBILITY\020\001\022\016\n\nANNOTATION\020\002\022\t\n\005FINAL\020\003\022\n\n" +
-      "\006STATIC\020\004\022\020\n\014SYNCHRONIZED\020\005\022\t\n\005OTHER\020\006\"C" +
-      "\n\nVisibility\022\n\n\006PUBLIC\020\001\022\013\n\007PRIVATE\020\002\022\r\n" +
-      "\tPROTECTED\020\004\022\r\n\tNAMESPACE\020\010\"\256\001\n\007Comment\022" +
-      "/\n\004kind\030\001 \002(\0162!.sizzle.types.Comment.Com" +
-      "mentKind\022\r\n\005value\030\002 \002(\t\022,\n\010position\030\003 \002(" +
-      "\0132\032.sizzle.types.PositionInfo\"5\n\013Comment",
-      "Kind\022\010\n\004LINE\020\001\022\t\n\005BLOCK\020\002\022\007\n\003DOC\020\003\022\010\n\004SP" +
-      "EC\020\004\"{\n\014PositionInfo\022\021\n\tstart_pos\030\001 \002(\005\022" +
-      "\016\n\006length\030\002 \002(\005\022\022\n\nstart_line\030\003 \002(\005\022\021\n\ts" +
-      "tart_col\030\004 \002(\005\022\020\n\010end_line\030\005 \002(\005\022\017\n\007end_" +
-      "col\030\006 \002(\005*\177\n\010TypeKind\022\t\n\005CLASS\020\001\022\r\n\tINTE" +
-      "RFACE\020\002\022\r\n\tANONYMOUS\020\003\022\n\n\006STRUCT\020\004\022\010\n\004EN" +
-      "UM\020\005\022\016\n\nANNOTATION\020\006\022\014\n\010DELEGATE\020\007\022\013\n\007GE" +
-      "NERIC\020\010\022\t\n\005OTHER\020\tB\002H\001"
+      "\006STATIC\020\004\022\020\n\014SYNCHRONIZED\020\005\022\014\n\010ABSTRACT\020" +
+      "\006\022\t\n\005OTHER\020\007\"C\n\nVisibility\022\n\n\006PUBLIC\020\001\022\013" +
+      "\n\007PRIVATE\020\002\022\r\n\tPROTECTED\020\004\022\r\n\tNAMESPACE\020" +
+      "\010\"\256\001\n\007Comment\022/\n\004kind\030\001 \002(\0162!.sizzle.typ" +
+      "es.Comment.CommentKind\022\r\n\005value\030\002 \002(\t\022,\n" +
+      "\010position\030\003 \002(\0132\032.sizzle.types.PositionI",
+      "nfo\"5\n\013CommentKind\022\010\n\004LINE\020\001\022\t\n\005BLOCK\020\002\022" +
+      "\007\n\003DOC\020\003\022\010\n\004SPEC\020\004\"{\n\014PositionInfo\022\021\n\tst" +
+      "art_pos\030\001 \002(\005\022\016\n\006length\030\002 \002(\005\022\022\n\nstart_l" +
+      "ine\030\003 \002(\005\022\021\n\tstart_col\030\004 \002(\005\022\020\n\010end_line" +
+      "\030\005 \002(\005\022\017\n\007end_col\030\006 \002(\005*\177\n\010TypeKind\022\t\n\005C" +
+      "LASS\020\001\022\r\n\tINTERFACE\020\002\022\r\n\tANONYMOUS\020\003\022\n\n\006" +
+      "STRUCT\020\004\022\010\n\004ENUM\020\005\022\016\n\nANNOTATION\020\006\022\014\n\010DE" +
+      "LEGATE\020\007\022\013\n\007GENERIC\020\010\022\t\n\005OTHER\020\tB\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
