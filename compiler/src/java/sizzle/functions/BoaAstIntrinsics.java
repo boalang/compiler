@@ -26,6 +26,7 @@ public class BoaAstIntrinsics {
 	@SuppressWarnings("rawtypes")
 	private static Context context;
 	private static HTable table;
+	private static long counter = 0;
 
 	private final static byte[] codeFamily = Bytes.toBytes("code");
 	private final static byte[] locFamily = Bytes.toBytes("loc");
@@ -50,17 +51,21 @@ public class BoaAstIntrinsics {
 	@SuppressWarnings("unchecked")
 	@FunctionSpec(name = "getast", returnType = "ASTRoot", formalParameters = { "Revision", "ChangedFile" })
 	public static ASTRoot getast(final Revision rev, final ChangedFile f) {
-		final ASTRoot.Builder b = ASTRoot.newBuilder();
-
 		// since we know only certain kinds have ASTs, filter before looking in HBase
 		final ChangedFile.FileKind kind = f.getKind();
 		if (kind != ChangedFile.FileKind.SOURCE_JAVA_ERROR
 				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS2
 				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS3
 				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS4)
-			return b.build();
+			return ASTRoot.newBuilder().build();
 
 		context.getCounter(HBASE_COUNTER.GETS_ATTEMPTED).increment(1);
+
+		// let the task tracker know we are alive every so often
+		if (++counter == 100) {
+			counter = 0;
+			context.progress();
+		}
 
 		final byte[] rowName = Bytes.toBytes(rev.getKey());
 		final Get get = new Get(rowName);
@@ -82,9 +87,9 @@ public class BoaAstIntrinsics {
 				final CodedInputStream _stream = CodedInputStream.newInstance(val, 0, val.length);
 				// defaults to 64, really big ASTs require more
 				_stream.setRecursionLimit(Integer.MAX_VALUE);
-				b.mergeFrom(_stream);
+				final ASTRoot root = ASTRoot.parseFrom(_stream);
 				context.getCounter(HBASE_COUNTER.GETS_SUCCEED).increment(1);
-				return b.build();
+				return root;
 			} catch (final InvalidProtocolBufferException e) {
 				e.printStackTrace();
 				context.getCounter(HBASE_COUNTER.GETS_FAIL_BADPROTOBUF).increment(1);
@@ -101,7 +106,7 @@ public class BoaAstIntrinsics {
 
 		System.err.println("error with ast: " + rev.getKey() + "!!" + f.getName());
 		context.getCounter(HBASE_COUNTER.GETS_FAILED).increment(1);
-		return b.build();
+		return ASTRoot.newBuilder().build();
 	}
 
 	@SuppressWarnings("unchecked")
