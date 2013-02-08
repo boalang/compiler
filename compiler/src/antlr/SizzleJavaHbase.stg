@@ -12,6 +12,7 @@ public class <name> extends sizzle.runtime.SizzleRunner {
 		job.getConfiguration().setBoolean("mapred.map.tasks.speculative.execution", false);
 		job.getConfiguration().setBoolean("mapred.reduce.tasks.speculative.execution", false);
 		job.getConfiguration().setLong("mapred.job.reuse.jvm.num.tasks", -1);
+		job.getConfiguration().setLong("mapred.task.timeout", 1800000);
 
 		job.setJobName("<name>: " + out);
 		job.setJarByClass(<name>SizzleMapper.class);
