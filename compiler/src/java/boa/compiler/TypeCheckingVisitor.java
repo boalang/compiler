@@ -588,7 +588,10 @@ public class TypeCheckingVisitor extends DefaultVisitor<BoaType, SymbolTable> {
 		st.set(n.f2.f0.tokenImage, n.f4.accept(this, argu));
 		n.f2.accept(this, st);
 
-		n.f6.accept(this, st);
+		BoaType cond = n.f6.accept(this, st);
+		if (!(cond instanceof BoaBool))
+			throw new TypeException(n.f6, "Quantifier condition must be boolean");
+
 		n.f8.accept(this, st);
 
 		return null;
