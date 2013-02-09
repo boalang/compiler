@@ -1,6 +1,7 @@
 package sizzle.types;
 
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * A {@link SizzleType} that represents a function, its return value, and its
@@ -272,5 +273,46 @@ public class SizzleFunction extends SizzleType {
 		} else if (!this.type.equals(other.type))
 			return false;
 		return true;
+	}
+
+	public SizzleType erase(final List<SizzleType> actualParameters) {
+		SizzleType t = type;
+		if (t instanceof SizzleArray) {
+			t = ((SizzleArray)t).getType();
+			if (t instanceof SizzleTypeVar)
+				return replaceVar(((SizzleTypeVar)t).getName(), actualParameters);
+		}
+		if (t instanceof SizzleTypeVar)
+			return replaceVar(((SizzleTypeVar)t).getName(), actualParameters);
+
+		return type;
+	}
+
+	private SizzleType replaceVar(final String var, final List<SizzleType> actual) {
+		for (int i = 0; i < formalParameters.length; i++) {
+			SizzleType t = replaceVar(var, formalParameters[i], actual.get(i));
+			if (t != null)
+				return t;
+		}
+		throw new RuntimeException("Invalid type parameter");
+	}
+
+	private SizzleType replaceVar(final String var, final SizzleType formal, final SizzleType actual) {
+		if (formal instanceof SizzleTypeVar) {
+			final SizzleTypeVar tv = (SizzleTypeVar)formal;
+			if (tv.getName().equals(var))
+				return actual;
+		}
+		if (formal instanceof SizzleArray)
+			return replaceVar(var, ((SizzleArray)formal).getType(), ((SizzleArray)actual).getType());
+		if (formal instanceof SizzleStack)
+			return replaceVar(var, ((SizzleStack)formal).getType(), ((SizzleStack)actual).getType());
+		if (formal instanceof SizzleMap) {
+			final SizzleType t = replaceVar(var, ((SizzleMap)formal).getType(), ((SizzleMap)actual).getType());
+			if (t != null)
+				return t;
+			return replaceVar(var, ((SizzleMap)formal).getIndexType(), ((SizzleMap)actual).getIndexType());
+		}
+		return null;
 	}
 }

@@ -750,7 +750,7 @@ public class TypeCheckingVisitor extends DefaultVisitor<SizzleType, SymbolTable>
 
 					final List<SizzleType> formalParameters = this.check((Call) nodeChoice.choice, argu);
 
-					bindings.put(node, new FunctionFindingVisitor(formalParameters).visit(n.f0, argu));
+					bindings.put(node, new FunctionFindingVisitor(formalParameters).visit(n.f0, argu).erase(formalParameters));
 					bindings.put(n, bindings.get(node));
 					return bindings.get(n);
 				default:
