@@ -1,4 +1,4 @@
-package sizzle.types;
+package boa.types;
 
 import "shared.proto";
 

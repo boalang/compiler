@@ -1,0 +1,46 @@
+package boa.types;
+
+/**
+ * A {@link BoaScalar} representing a time value in milliseconds since 1970.
+ * 
+ * @author anthonyu
+ * 
+ */
+public class BoaTime extends BoaScalar {
+	/** {@inheritDoc} */
+	@Override
+	public BoaScalar arithmetics(final BoaType that) {
+		// if that is a function, try its return type
+		if (that instanceof BoaFunction)
+			return this.arithmetics(((BoaFunction) that).getType());
+		// otherwise, if it is a time or in, the type is time
+		else if (that instanceof BoaTime || that instanceof BoaInt)
+			return new BoaTime();
+
+		return super.arithmetics(that);
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean accepts(final BoaType that) {
+		return this.assigns(that);
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String toString() {
+		return "time";
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String toJavaType() {
+		return "long";
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String toBoxedJavaType() {
+		return "Long";
+	}
+}
