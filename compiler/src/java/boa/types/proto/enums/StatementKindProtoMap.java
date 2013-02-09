@@ -14,8 +14,25 @@ public class StatementKindProtoMap extends BoaProtoMap {
 	public StatementKindProtoMap() {
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String toJavaType() {
 		return "boa.types.Ast.Statement.StatementKind";
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean hasAttribute(final String s) {
+		try {
+			return boa.types.Ast.Statement.StatementKind.valueOf(s) != null;
+		} catch (final Exception e) {
+			return false;
+		}
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String toString() {
+		return "StatementKind";
 	}
 }

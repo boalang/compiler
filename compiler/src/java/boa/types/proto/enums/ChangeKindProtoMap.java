@@ -14,8 +14,25 @@ public class ChangeKindProtoMap extends BoaProtoMap {
 	public ChangeKindProtoMap() {
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String toJavaType() {
 		return "boa.types.Shared.ChangeKind";
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean hasAttribute(final String s) {
+		try {
+			return boa.types.Shared.ChangeKind.valueOf(s) != null;
+		} catch (final Exception e) {
+			return false;
+		}
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String toString() {
+		return "ChangeKind";
 	}
 }

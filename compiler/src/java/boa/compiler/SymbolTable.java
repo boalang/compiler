@@ -35,7 +35,7 @@ import boa.types.proto.RevisionProtoTuple;
 import boa.types.proto.StatementProtoTuple;
 import boa.types.proto.TypeProtoTuple;
 import boa.types.proto.VariableProtoTuple;
-import boa.types.proto.enums.BugStatusProtoMap;
+import boa.types.proto.enums.IssueKindProtoMap;
 import boa.types.proto.enums.ChangeKindProtoMap;
 import boa.types.proto.enums.CommentKindProtoMap;
 import boa.types.proto.enums.ExpressionKindProtoMap;
@@ -109,7 +109,7 @@ public class SymbolTable {
 		idmap.put("ASTRoot", new ASTRootProtoTuple());
 		idmap.put("Bug", new BugProtoTuple());
 		idmap.put("BugRepository", new BugRepositoryProtoTuple());
-		idmap.put("BugStatus", new BugStatusProtoMap());
+		idmap.put("BugStatus", new IssueKindProtoMap());
 		idmap.put("ChangedFile", new ChangedFileProtoTuple());
 		idmap.put("ChangeKind", new ChangeKindProtoMap());
 		idmap.put("CodeRepository", new CodeRepositoryProtoTuple());

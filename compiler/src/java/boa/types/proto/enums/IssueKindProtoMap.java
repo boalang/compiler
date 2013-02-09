@@ -3,28 +3,28 @@ package boa.types.proto.enums;
 import boa.types.BoaProtoMap;
 
 /**
- * A {@link TypeKindProtoMap}.
+ * A {@link IssueKindProtoMap}.
  * 
  * @author rdyer
  */
-public class TypeKindProtoMap extends BoaProtoMap {
+public class IssueKindProtoMap extends BoaProtoMap {
 	/**
-	 * Construct a {@link TypeKindProtoMap}.
+	 * Construct a {@link IssueKindProtoMap}.
 	 */
-	public TypeKindProtoMap() {
+	public IssueKindProtoMap() {
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public String toJavaType() {
-		return "boa.types.Ast.TypeKind";
+		return "boa.types.Issues.IssueRepository.IssueKind";
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public boolean hasAttribute(final String s) {
 		try {
-			return boa.types.Ast.TypeKind.valueOf(s) != null;
+			return boa.types.Issues.IssueRepository.IssueKind.valueOf(s) != null;
 		} catch (final Exception e) {
 			return false;
 		}
@@ -33,6 +33,6 @@ public class TypeKindProtoMap extends BoaProtoMap {
 	/** {@inheritDoc} */
 	@Override
 	public String toString() {
-		return "TypeKind";
+		return "IssueKind";
 	}
 }

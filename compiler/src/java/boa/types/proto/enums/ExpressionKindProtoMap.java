@@ -14,8 +14,25 @@ public class ExpressionKindProtoMap extends BoaProtoMap {
 	public ExpressionKindProtoMap() {
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public String toJavaType() {
 		return "boa.types.Ast.Expression.ExpressionKind";
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean hasAttribute(final String s) {
+		try {
+			return boa.types.Ast.Expression.ExpressionKind.valueOf(s) != null;
+		} catch (final Exception e) {
+			return false;
+		}
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String toString() {
+		return "ExpressionKind";
 	}
 }

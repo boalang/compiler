@@ -775,14 +775,13 @@ public class TypeCheckingVisitor extends DefaultVisitor<BoaType, SymbolTable> {
 		BoaType type = argu.getOperandType();
 
 		if (type instanceof BoaProtoMap) {
-			// FIXME rdyer how do we verify the enum value exists?
-//			if (!((BoaTuple) type).hasMember(selector))
-//				throw new TypeException(type + " has no member named '" + selector + "'");
+			if (!((BoaProtoMap) type).hasAttribute(selector))
+				throw new TypeException(n.f1, type + " has no member named '" + selector + "'");
 
 			type = new BoaInt();
 		} else if (type instanceof BoaTuple) {
 			if (!((BoaTuple) type).hasMember(selector))
-				throw new TypeException(n, "'" + type + "' has no member named '" + selector + "'");
+				throw new TypeException(n.f1, "'" + type + "' has no member named '" + selector + "'");
 
 			type = ((BoaTuple) type).getMember(selector);
 		} else {
