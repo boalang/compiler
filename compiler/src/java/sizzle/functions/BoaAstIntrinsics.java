@@ -14,7 +14,10 @@ import com.google.protobuf.CodedInputStream;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 import sizzle.types.Ast.*;
+import sizzle.types.Code.CodeRepository;
+import sizzle.types.Code.Revision;
 import sizzle.types.Diff.ChangedFile;
+import sizzle.types.Toplevel.Project;
 
 /**
  * Boa functions for working with ASTs.
@@ -199,75 +202,33 @@ public class BoaAstIntrinsics {
 		return t.replaceAll("[^\\s,<>|]+\\.([^\\s\\[.,><|]+)", "$1");
 	}
 
-	private static class ASTLenVisitor extends BoaCountingVisitor {
+	/**
+	 * A visitor that returns the total number of AST nodes.
+	 */
+	public final static BoaCountingVisitor lenVisitor = new BoaCountingVisitor() {
 		@Override
 		protected void defaultPreVisit() {
 			count++;
 		}
 		@Override
-		protected boolean preVisit(ASTRoot node) {
+		protected boolean preVisit(final Project node) throws Exception {
 			return true;
 		}
-	}
-	private static ASTLenVisitor lenVisitor = new ASTLenVisitor();
-
-	@FunctionSpec(name = "len", returnType = "int", formalParameters = { "ASTRoot" })
-	public static long ast_len(final ASTRoot f) throws Exception {
-		lenVisitor.initialize().visit(f);
-		return lenVisitor.count;
-	}
-
-	@FunctionSpec(name = "len", returnType = "int", formalParameters = { "Namespace" })
-	public static long ast_len(final Namespace n) throws Exception {
-		lenVisitor.initialize().visit(n);
-		return lenVisitor.count;
-	}
-
-	@FunctionSpec(name = "len", returnType = "int", formalParameters = { "Declaration" })
-	public static long ast_len(final Declaration d) throws Exception {
-		lenVisitor.initialize().visit(d);
-		return lenVisitor.count;
-	}
-
-	@FunctionSpec(name = "len", returnType = "int", formalParameters = { "Type" })
-	public static long ast_len(final Type t) throws Exception {
-		lenVisitor.initialize().visit(t);
-		return lenVisitor.count;
-	}
-
-	@FunctionSpec(name = "len", returnType = "int", formalParameters = { "Method" })
-	public static long ast_len(final Method m) throws Exception {
-		lenVisitor.initialize().visit(m);
-		return lenVisitor.count;
-	}
-
-	@FunctionSpec(name = "len", returnType = "int", formalParameters = { "Variable" })
-	public static long ast_len(final Variable v) throws Exception {
-		lenVisitor.initialize().visit(v);
-		return lenVisitor.count;
-	}
-
-	@FunctionSpec(name = "len", returnType = "int", formalParameters = { "Statement" })
-	public static long ast_len(final Statement s) throws Exception {
-		lenVisitor.initialize().visit(s);
-		return lenVisitor.count;
-	}
-
-	@FunctionSpec(name = "len", returnType = "int", formalParameters = { "Expression" })
-	public static long ast_len(final Expression e) throws Exception {
-		lenVisitor.initialize().visit(e);
-		return lenVisitor.count;
-	}
-
-	@FunctionSpec(name = "len", returnType = "int", formalParameters = { "Modifier" })
-	public static long ast_len(final Modifier m) throws Exception {
-		lenVisitor.initialize().visit(m);
-		return lenVisitor.count;
-	}
-
-	@FunctionSpec(name = "len", returnType = "int", formalParameters = { "Comment" })
-	public static long ast_len(final Comment c) throws Exception {
-		lenVisitor.initialize().visit(c);
-		return lenVisitor.count;
-	}
+		@Override
+		protected boolean preVisit(final CodeRepository node) throws Exception {
+			return true;
+		}
+		@Override
+		protected boolean preVisit(final Revision node) throws Exception {
+			return true;
+		}
+		@Override
+		protected boolean preVisit(final ChangedFile node) throws Exception {
+			return true;
+		}
+		@Override
+		protected boolean preVisit(final ASTRoot node) throws Exception {
+			return true;
+		}
+	};
 }

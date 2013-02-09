@@ -191,8 +191,10 @@ public class SymbolTable {
 		this.setFunction("fingerprintof", new SizzleFunction(new SizzleFingerprint(), new SizzleScalar[] { new SizzleInt() }));
 		this.setFunction("fingerprintof", new SizzleFunction(new SizzleFingerprint(), new SizzleScalar[] { new SizzleTime() }));
 
+		// visitors
 		this.setFunction("visit", new SizzleFunction(new SizzleAny(), new SizzleType[] { new SizzleScalar(), new SizzleVisitor() }, "${1}.visit(${0})"));
 		this.setFunction("visit", new SizzleFunction(new SizzleAny(), new SizzleType[] { new SizzleScalar() }, "visit(${0})"));
+		this.setFunction("ast_len", new SizzleFunction(new SizzleInt(), new SizzleType[] { new SizzleAny() }, "sizzle.functions.BoaAstIntrinsics.lenVisitor.getCount(${0})"));
 
 		// stack functions
 		this.setFunction("push", new SizzleFunction(new SizzleAny(), new SizzleType[] { new SizzleStack(new SizzleScalar()), new SizzleScalar() }, "${0}.push(${1})"));
