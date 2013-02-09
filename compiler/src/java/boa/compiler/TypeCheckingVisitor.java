@@ -67,7 +67,7 @@ public class TypeCheckingVisitor extends DefaultVisitor<BoaType, SymbolTable> {
 		final String id = n.f1.f0.tokenImage;
 
 		if (argu.hasType(id))
-			throw new TypeException(n, "'" + id + "' already defined as type '" + argu.getType(id) + "'");
+			throw new TypeException(n.f1, "'" + id + "' already defined as type '" + argu.getType(id) + "'");
 
 		bindings.put(n, new BoaName(n.f3.accept(this, argu)));
 		bindings.put(n.f1, bindings.get(n));
@@ -93,7 +93,7 @@ public class TypeCheckingVisitor extends DefaultVisitor<BoaType, SymbolTable> {
 		final String id = n.f0.f0.tokenImage;
 
 		if (argu.contains(id))
-			throw new TypeException(n, "variable '" + id + "' already declared as '" + argu.get(id) + "'");
+			throw new TypeException(n.f0, "variable '" + id + "' already declared as '" + argu.get(id) + "'");
 
 		BoaType rhs = null;
 		if (n.f3.present()) {
@@ -118,7 +118,7 @@ public class TypeCheckingVisitor extends DefaultVisitor<BoaType, SymbolTable> {
 				rhs = new BoaArray(((BoaTuple)rhs).getMember(0));
 
 			if (rhs != null && !lhs.assigns(rhs) && !argu.hasCast(rhs, lhs))
-				throw new TypeException(n, "incorrect type '" + rhs + "' for assignment to '" + id + ": " + lhs + "'");
+				throw new TypeException(n.f3, "incorrect type '" + rhs + "' for assignment to '" + id + ": " + lhs + "'");
 		} else {
 			if (rhs == null)
 				throw new TypeException(n, "variable declaration requires an explicit type or an initializer");
@@ -254,10 +254,11 @@ public class TypeCheckingVisitor extends DefaultVisitor<BoaType, SymbolTable> {
 			indexTypes = new ArrayList<BoaScalar>();
 
 			for (final Node node : n.f3.nodes) {
-				final BoaType boaType = ((NodeSequence) node).elementAt(1).accept(this, argu);
+				final Node curNode = ((NodeSequence) node).elementAt(1);
+				final BoaType boaType = curNode.accept(this, argu);
 
 				if (!(boaType instanceof BoaScalar))
-					throw new TypeException(n, "incorrect type '" + boaType + "' for index");
+					throw new TypeException(curNode, "incorrect type '" + boaType + "' for index");
 
 				indexTypes.add((BoaScalar) boaType);
 			}
@@ -270,19 +271,19 @@ public class TypeCheckingVisitor extends DefaultVisitor<BoaType, SymbolTable> {
 		BoaScalar tweight = null;
 		if (n.f6.present()) {
 			if (annotation.weightType().equals("none"))
-				throw new TypeException(n, "unexpected weight for table declaration");
+				throw new TypeException(n.f6, "unexpected weight for table declaration");
 
 			final BoaType aweight = argu.getType(annotation.weightType());
 			tweight = (BoaScalar) ((NodeSequence) n.f6.node).nodes.get(1).accept(this, argu);
 
 			if (!aweight.assigns(tweight))
-				throw new TypeException(n, "incorrect weight type for table declaration");
+				throw new TypeException(n.f6, "incorrect weight type for table declaration");
 		} else if (!annotation.weightType().equals("none"))
 			throw new TypeException(n, "missing weight for table declaration");
 
 		if (n.f2.present())
 			if (annotation.formalParameters().length == 0)
-				throw new TypeException(n, "no arguments for table '" + n.f1.f0.tokenImage + "'");
+				throw new TypeException(n.f2, "table '" + n.f1.f0.tokenImage + "' takes no arguments");
 
 		bindings.put(n, new BoaTable(type, indexTypes, tweight));
 		argu.set(n.f1.f0.tokenImage, bindings.get(n));
@@ -369,7 +370,7 @@ public class TypeCheckingVisitor extends DefaultVisitor<BoaType, SymbolTable> {
 
 		if (!(lhs instanceof BoaArray && rhs instanceof BoaTuple))
 			if (!lhs.assigns(rhs))
-				throw new TypeException(n, "invalid type '" + rhs + "' for assignment to '" + lhs + "'");
+				throw new TypeException(n.f2, "invalid type '" + rhs + "' for assignment to '" + lhs + "'");
 
 		bindings.put(n, lhs);
 		return null;
@@ -437,40 +438,40 @@ public class TypeCheckingVisitor extends DefaultVisitor<BoaType, SymbolTable> {
 		final BoaType type = n.f0.accept(this, argu);
 
 		if (type == null)
-			throw new TypeException(n, "emitting to undeclared output '" + id + "'");
+			throw new TypeException(n.f0, "emitting to undeclared output '" + id + "'");
 		if (!(type instanceof BoaTable))
-			throw new TypeException(n, "emitting to non-output variable '" + id + "'");
+			throw new TypeException(n.f0, "emitting to non-output variable '" + id + "'");
 
 		final BoaTable t = (BoaTable) type;
 
 		if (n.f1.present()) {
+			if (n.f1.nodes.size() != t.countIndices())
+				throw new TypeException(n.f0, "incorrect number of indices for '" + id + "'");
+
 			final List<BoaType> indices = new ArrayList<BoaType>();
-			for (final Node node : n.f1.nodes)
+			for (int i = 0; i < n.f1.nodes.size() && i < t.countIndices(); i++) {
+				final Node node = n.f1.nodes.get(i);
 				indices.add(((NodeSequence) node).nodes.get(1).accept(this, argu));
-
-			if (indices.size() != t.countIndices())
-				throw new TypeException(n, "incorrect number of indices for '" + id + "'");
-
-			for (int i = 0; i < t.countIndices(); i++)
 				if (!t.getIndex(i).assigns(indices.get(i)))
-					throw new TypeException(n, "incorrect type '" + indices.get(i) + "' for index '" + i + "'");
+					throw new TypeException(node, "incorrect type '" + indices.get(i) + "' for index '" + i + "'");
+			}
 		} else if (t.countIndices() > 0)
 			throw new TypeException(n, "indices missing from emit");
 
 		final BoaType expression = n.f3.accept(this, argu);
 		if (!t.accepts(expression))
-			throw new TypeException(n, "incorrect type '" + expression + "' for '" + id + ": " + t + "'");
+			throw new TypeException(n.f3, "incorrect type '" + expression + "' for '" + id + ": " + t + "'");
 
 		if (n.f4.present()) {
 			if (t.getWeightType() == null)
-				throw new TypeException(n, "unexpected weight specified by emit");
+				throw new TypeException(n.f4, "weight found but output table not declared with a weight");
 
 			final BoaType wtype = ((NodeSequence) n.f4.node).nodes.get(1).accept(this, argu);
 
 			if (!t.acceptsWeight(wtype))
-				throw new TypeException(n, "incorrect type '" + wtype + "' for weight of '" + id + ": " + t.getWeightType() + "'");
+				throw new TypeException(n.f4, "incorrect type '" + wtype + "' for weight of '" + id + ": " + t.getWeightType() + "'");
 		} else if (t.getWeightType() != null)
-			throw new TypeException(n, "no weight specified by emit");
+			throw new TypeException(n, "must specify a weight");
 
 		return null;
 	}
@@ -484,7 +485,7 @@ public class TypeCheckingVisitor extends DefaultVisitor<BoaType, SymbolTable> {
 		bindings.put(n, type);
 
 		if (n.f1.present() && !(type instanceof BoaInt))
-			throw new TypeException(n, "'" + type + "' not valid for operator '" + n.f1.toString() + "'");
+			throw new TypeException(n.f0, "'" + type + "' not valid for operator '" + n.f1.toString() + "'");
 
 		return bindings.get(n);
 	}
@@ -546,7 +547,7 @@ public class TypeCheckingVisitor extends DefaultVisitor<BoaType, SymbolTable> {
 		final BoaType test = n.f2.accept(this, argu);
 
 		if (!(test instanceof BoaBool) && !(test instanceof BoaFunction && ((BoaFunction) test).getType() instanceof BoaBool))
-			throw new TypeException(n, "invalid type '" + test + "' for if conditional");
+			throw new TypeException(n.f2, "invalid type '" + test + "' for if condition");
 
 		n.f4.accept(this, argu);
 
@@ -607,13 +608,13 @@ public class TypeCheckingVisitor extends DefaultVisitor<BoaType, SymbolTable> {
 
 		if (n.f1.present()) {
 			if (!(ltype instanceof BoaBool))
-				throw new TypeException(n, "invalid type '" + ltype + "' for disjunction");
+				throw new TypeException(n.f0, "invalid type '" + ltype + "' for disjunction");
 
 			for (final Node node : n.f1.nodes) {
 				final BoaType rtype = ((NodeSequence)node).elementAt(1).accept(this, argu);
 	
 				if (!(rtype instanceof BoaBool))
-					throw new TypeException(n, "invalid type '" + rtype + "' for disjunction");
+					throw new TypeException(node, "invalid type '" + rtype + "' for disjunction");
 			}
 		}
 
@@ -629,11 +630,14 @@ public class TypeCheckingVisitor extends DefaultVisitor<BoaType, SymbolTable> {
 		bindings.put(n, lhs);
 
 		if (n.f1.present()) {
+			if (!(lhs instanceof BoaBool))
+				throw new TypeException(n.f0, "invalid type '" + lhs + "' for conjunction");
+
 			for (final Node node : n.f1.nodes) {
 				final BoaType rhs = ((NodeSequence)node).nodes.elementAt(1).accept(this, argu);
 
-				if (!rhs.compares(lhs))
-					throw new TypeException(n, "invalid type '" + rhs + "' for conjunction with '" + lhs + "'");
+				if (!(rhs instanceof BoaBool))
+					throw new TypeException(node, "invalid type '" + rhs + "' for conjunction");
 			}
 
 			bindings.put(n, new BoaBool());
@@ -654,7 +658,7 @@ public class TypeCheckingVisitor extends DefaultVisitor<BoaType, SymbolTable> {
 			final BoaType rhs = ((NodeSequence) n.f1.node).nodes.get(1).accept(this, argu);
 
 			if (!rhs.compares(lhs))
-				throw new TypeException(n, "invalid type '" + rhs + "' for comparison with '" + lhs + "'");
+				throw new TypeException(n.f1, "invalid type '" + rhs + "' for comparison with '" + lhs + "'");
 
 			bindings.put(n, new BoaBool());
 		}
@@ -731,21 +735,21 @@ public class TypeCheckingVisitor extends DefaultVisitor<BoaType, SymbolTable> {
 
 					if (type instanceof BoaArray) {
 						if (!(index instanceof BoaInt))
-							throw new TypeException(n, "invalid operand type '" + index + "' for indexing into array");
+							throw new TypeException(nodeChoice.choice, "invalid operand type '" + index + "' for indexing into array");
 
 						type = ((BoaArray) type).getType();
 					} else if (type instanceof BoaProtoList) {
 						if (!(index instanceof BoaInt))
-							throw new TypeException(n, "invalid operand type '" + index + "' for indexing into array");
+							throw new TypeException(nodeChoice.choice, "invalid operand type '" + index + "' for indexing into array");
 
 						type = ((BoaProtoList) type).getType();
 					} else if (type instanceof BoaMap) {
 						if (!((BoaMap) type).getIndexType().assigns(index))
-							throw new TypeException(n, "invalid operand type '" + index + "' for indexing into '" + type + "'");
+							throw new TypeException(nodeChoice.choice, "invalid operand type '" + index + "' for indexing into '" + type + "'");
 
 						type = ((BoaMap) type).getType();
 					} else {
-						throw new TypeException(n, "invalid operand type '" + type + "' for indexing expression");
+						throw new TypeException(nodeChoice.choice, "invalid operand type '" + type + "' for indexing expression");
 					}
 					break;
 				case 2: // call
@@ -808,12 +812,12 @@ public class TypeCheckingVisitor extends DefaultVisitor<BoaType, SymbolTable> {
 
 		if (n.f2.present()) {
 			if (!(index instanceof BoaInt))
-				throw new TypeException(n, "invalid type '" + index + "' for slice expression");
+				throw new TypeException(n.f1, "invalid type '" + index + "' for slice expression");
 
 			final BoaType slice = ((NodeSequence) n.f2.node).elementAt(1).accept(this, argu);
 
 			if (!(slice instanceof BoaInt))
-				throw new TypeException(n, "invalid type '" + slice + "' for slice expression");
+				throw new TypeException(n.f2, "invalid type '" + slice + "' for slice expression");
 		}
 
 		return bindings.get(n);
@@ -905,7 +909,7 @@ public class TypeCheckingVisitor extends DefaultVisitor<BoaType, SymbolTable> {
 		if (n.f1.present())
 			for (final Node node : n.f1.nodes)
 				if (!boaMap.assigns(((NodeSequence) node).elementAt(1).accept(this, argu)))
-					throw new TypeException(n, "incorrect type '" + node + "' for " + boaMap);
+					throw new TypeException(node, "incorrect type '" + node + "' for " + boaMap);
 
 		return bindings.get(n);
 	}
@@ -1135,7 +1139,7 @@ public class TypeCheckingVisitor extends DefaultVisitor<BoaType, SymbolTable> {
 			final String typeName = typeId.f0.tokenImage;
 			final BoaType t = typeId.accept(this, st);
 			if (t == null)
-				throw new TypeException(n, "Invalid type '" + typeName + "'");
+				throw new TypeException(n.f1, "Invalid type '" + typeName + "'");
 			final Identifier id = (Identifier)((NodeSequence)n.f1.choice).nodes.get(0);
 			st.set(id.f0.tokenImage, t);
 			id.accept(this, st);
