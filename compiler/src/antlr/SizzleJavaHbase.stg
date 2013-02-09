@@ -119,6 +119,11 @@ public class <name> extends sizzle.runtime.SizzleRunner {
 				final byte[] value = columns.getColumnLatest(HBASE_FAMILY, HBASE_QUALIFIER).getValue();
 				final com.google.protobuf.CodedInputStream _inputStream = com.google.protobuf.CodedInputStream.newInstance(value, 0, value.length);
 				<statements:{<it><\n>}>
+			} catch (final com.google.protobuf.InvalidProtocolBufferException e) {
+				if (this.robust)
+					LOG.error(e.getClass().getName() + " caught", e);
+				else
+					throw e;
 			} catch (final java.io.IOException e) {
 				throw e;
 			} catch (final RuntimeException e) {
