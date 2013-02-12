@@ -113,7 +113,14 @@ public class NameFindingVisitor extends DefaultVisitorNoArgu<Set<String>> {
 	/** {@inheritDoc} */
 	@Override
 	public Set<String> visit(final Index n) {
-		return new HashSet<String>();
+		final HashSet<String> set = new HashSet<String>();
+
+		set.addAll(n.f1.accept(this));
+
+		if (n.f2.present())
+			set.addAll(((NodeSequence)n.f2.node).elementAt(1).accept(this));
+
+		return set;
 	}
 
 	/** {@inheritDoc} */

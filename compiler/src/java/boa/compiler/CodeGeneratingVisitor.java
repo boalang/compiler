@@ -92,7 +92,7 @@ public class CodeGeneratingVisitor extends DefaultVisitorNoArgu<String> {
 	public CodeGeneratingVisitor(final TypeCheckingVisitor typechecker, final String name, final StringTemplateGroup stg) throws IOException {
 		this.typechecker = typechecker;
 		this.namefinder = new NameFindingVisitor();
-		this.indexeefinder = new IndexeeFindingVisitor(this, namefinder);
+		this.indexeefinder = new IndexeeFindingVisitor(namefinder);
 		this.staticdeclarator = new StaticDeclarationCodeGeneratingVisitor(this);
 		this.staticinitializer = new StaticInitializationCodeGeneratingVisitor(this);
 		this.functiondeclarator = new FunctionDeclaratorVisitor(this);
@@ -105,7 +105,7 @@ public class CodeGeneratingVisitor extends DefaultVisitorNoArgu<String> {
 		this.stg = stg;
 	}
 
-	public void setSkipIndex(final String skipIndex)
+	private void setSkipIndex(final String skipIndex)
 	{
 		this.skipIndex = skipIndex;
 	}
@@ -536,21 +536,26 @@ public class CodeGeneratingVisitor extends DefaultVisitorNoArgu<String> {
 		st.setAttribute("type", type.toJavaType());
 		st.setAttribute("index", id);
 
-		final Set<String> indexees = this.indexeefinder.visit(n.f6, id);
+		this.indexeefinder.lastFactors.clear();
+		final Set<Node> indexees = this.indexeefinder.visit(n.f6, id);
 	
 		if (indexees.size() > 0) {
-			final List<String> array = new ArrayList<String>(indexees);
+			final List<Node> array = new ArrayList<Node>(indexees);
 			String src = "";
 			for (int i = 0; i < array.size(); i++) {
-				String indexee = array.get(i);
-				// FIXME rdyer
-//				BoaType indexeeType = this.typechecker.visit(indexee.cloneNonLocals());
-//				String func = indexeeType instanceof BoaArray) ? ".length()" : ".size()";
-				String func = ".size()";
+				final Factor indexee = (Factor)array.get(i);
+
+				setSkipIndex(id);
+				final String code = indexee.accept(this);
+				setSkipIndex("");
+
+				final BoaType indexeeType = typechecker.getBinding(this.indexeefinder.lastFactors.get(indexee));
+				final String func = (indexeeType instanceof BoaArray) ? ".length" : ".size()";
+
 				if (src.length() > 0)
-					src = "java.lang.Math.min(" + indexee + func + ", " + src + ")";
+					src = "java.lang.Math.min(" + code + func + ", " + src + ")";
 				else
-					src = indexee + func;
+					src = code + func;
 			}
 
 			st.setAttribute("len", src);
