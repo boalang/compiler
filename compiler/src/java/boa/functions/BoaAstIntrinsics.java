@@ -1,6 +1,7 @@
 package boa.functions;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.client.Get;
@@ -17,6 +18,7 @@ import boa.types.Ast.*;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
+import boa.types.Shared.ChangeKind;
 import boa.types.Toplevel.Project;
 
 /**
@@ -206,29 +208,76 @@ public class BoaAstIntrinsics {
 	 * A visitor that returns the total number of AST nodes.
 	 */
 	public final static BoaCountingVisitor lenVisitor = new BoaCountingVisitor() {
+		/** {@inheritDoc} */
 		@Override
 		protected void defaultPreVisit() {
 			count++;
 		}
+		/** {@inheritDoc} */
 		@Override
 		protected boolean preVisit(final Project node) throws Exception {
 			return true;
 		}
+		/** {@inheritDoc} */
 		@Override
 		protected boolean preVisit(final CodeRepository node) throws Exception {
 			return true;
 		}
+		/** {@inheritDoc} */
 		@Override
 		protected boolean preVisit(final Revision node) throws Exception {
 			return true;
 		}
+		/** {@inheritDoc} */
 		@Override
 		protected boolean preVisit(final ChangedFile node) throws Exception {
 			return true;
 		}
+		/** {@inheritDoc} */
 		@Override
 		protected boolean preVisit(final ASTRoot node) throws Exception {
 			return true;
 		}
 	};
+
+	/**
+	 * 
+	 */
+	public static class SnapshotVisitor extends BoaCollectingVisitor<String, ChangedFile> {
+		private long timestamp;
+
+		public SnapshotVisitor initialize(final long timestamp) {
+			initialize(new HashMap<String, ChangedFile>());
+			this.timestamp = timestamp;
+			return this;
+		}
+
+		/** {@inheritDoc} */
+		@Override
+		protected boolean preVisit(final Revision node) throws Exception {
+			return node.getCommitDate() <= timestamp;
+		}
+		/** {@inheritDoc} */
+		@Override
+		protected boolean preVisit(final ChangedFile node) throws Exception {
+			if (node.getChange() == ChangeKind.DELETED)
+				map.remove(node.getName());
+			else
+				map.put(node.getName(), node);
+			return false;
+		}
+	}
+
+	public final static SnapshotVisitor snapshot = new SnapshotVisitor();
+
+	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "time" })
+	public static ChangedFile[] getSnapshot(final CodeRepository cr, final long timestamp) throws Exception {
+		snapshot.initialize(timestamp).visit(cr);
+		return snapshot.map.values().toArray(new ChangedFile[0]);
+	}
+
+	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository" })
+	public static ChangedFile[] getSnapshot(final CodeRepository cr) throws Exception {
+		return getSnapshot(cr, Long.MAX_VALUE);
+	}
 }

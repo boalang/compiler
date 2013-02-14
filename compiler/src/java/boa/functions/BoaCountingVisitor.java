@@ -15,6 +15,7 @@ import boa.types.Toplevel.Project;
 public class BoaCountingVisitor extends BoaAbstractVisitor {
 	public long count;
 
+	/** {@inheritDoc} */
 	@Override
 	public BoaAbstractVisitor initialize() {
 		count = 0;
