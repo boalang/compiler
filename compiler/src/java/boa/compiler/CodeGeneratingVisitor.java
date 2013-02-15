@@ -532,14 +532,14 @@ public class CodeGeneratingVisitor extends DefaultVisitorNoArgu<String> {
 
 				final List<String> cases = new ArrayList<String>();
 				String s = ns.elementAt(1).accept(this);
-				if (s.indexOf(".") > -1)
+				if (typechecker.getBinding(ns.elementAt(1)) instanceof BoaProtoMap)
 					s = s.substring(s.lastIndexOf(".") + 1);
 				cases.add(s);
 				final NodeListOptional caseExprs = (NodeListOptional)ns.elementAt(2);
 				if (caseExprs.present())
 					for (final Node expr : caseExprs.nodes) {
 						s = ((NodeSequence)expr).elementAt(1).accept(this);
-						if (s.indexOf(".") > -1)
+						if (typechecker.getBinding(((NodeSequence)expr).elementAt(1)) instanceof BoaProtoMap)
 							s = s.substring(s.lastIndexOf(".") + 1);
 						cases.add(s);
 					}
