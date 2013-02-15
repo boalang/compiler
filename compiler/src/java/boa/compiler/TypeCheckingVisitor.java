@@ -658,7 +658,7 @@ public class TypeCheckingVisitor extends DefaultVisitor<BoaType, SymbolTable> {
 			final BoaType rhs = ((NodeSequence) n.f1.node).nodes.get(1).accept(this, argu);
 
 			if (!rhs.compares(lhs))
-				throw new TypeException(n.f1, "invalid type '" + rhs + "' for comparison with '" + lhs + "'");
+				throw new TypeException(((NodeSequence) n.f1.node).nodes.get(1), "invalid type '" + rhs + "' for comparison with '" + lhs + "'");
 
 			bindings.put(n, new BoaBool());
 		}
