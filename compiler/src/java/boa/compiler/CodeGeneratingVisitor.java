@@ -83,6 +83,8 @@ public class CodeGeneratingVisitor extends DefaultVisitorNoArgu<String> {
 
 	private final HashMap<String, TableDescription> tables;
 
+	private boolean hasEmit = false;
+
 	private final String name;
 	public final StringTemplateGroup stg;
 
@@ -129,6 +131,9 @@ public class CodeGeneratingVisitor extends DefaultVisitorNoArgu<String> {
 
 		if (this.tables.size() == 0)
 			throw new TypeException(n, "No output variables were declared - must declare at least one output variable");
+
+		if (!hasEmit)
+			throw new TypeException(n, "No emit statements detected - there will be no output generated");
 
 		final List<String> tables = new ArrayList<String>();
 		for (final Entry<String, TableDescription> entry : this.tables.entrySet()) {
@@ -423,6 +428,8 @@ public class CodeGeneratingVisitor extends DefaultVisitorNoArgu<String> {
 	@Override
 	public String visit(final EmitStatement n) {
 		final StringTemplate st = this.stg.getInstanceOf("EmitStatement");
+
+		hasEmit = true;
 
 		if (n.f1.present()) {
 			final List<String> indices = new ArrayList<String>();
