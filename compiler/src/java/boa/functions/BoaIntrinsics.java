@@ -90,17 +90,15 @@ public class BoaIntrinsics {
 	}
 
 	/**
-	 * Matches a *Kind enum to the given string.
+	 * Matches a FileKind enum to the given string.
 	 * 
 	 * @param s the string to match against
-	 * @param kind the *Kind to match
-	 * @return true if the string matches the given *Kind
+	 * @param kind the FileKind to match
+	 * @return true if the string matches the given kind
 	 */
-	@FunctionSpec(name = "iskind", returnType = "bool", formalParameters = { "string", "int" })
-	public static boolean iskind(final String s, final Object kind) {
-		if (kind instanceof ChangedFile.FileKind)
-			return ((ChangedFile.FileKind)kind).name().startsWith(s);
-		throw new RuntimeException("Invalid argument type");
+	@FunctionSpec(name = "iskind", returnType = "bool", formalParameters = { "string", "FileKind" })
+	public static boolean iskind(final String s, final ChangedFile.FileKind kind) {
+		return kind.name().startsWith(s);
 	}
 
 	public static <T> T stack_pop(final java.util.Stack<T> s) {

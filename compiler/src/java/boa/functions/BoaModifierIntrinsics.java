@@ -39,7 +39,7 @@ public class BoaModifierIntrinsics {
 	 * @param kind the ModifierKind to test for
 	 * @return true if m contains a modifier kind
 	 */
-	@FunctionSpec(name = "has_modifier", returnType = "bool", formalParameters = { "Method", "int" })
+	@FunctionSpec(name = "has_modifier", returnType = "bool", formalParameters = { "Method", "ModifierKind" })
 	public static boolean hasModifier(final Method m, final ModifierKind kind) {
 		for (int i = 0; i < m.getModifiersCount(); i++)
 			if (m.getModifiers(i).getKind() == kind)
@@ -55,7 +55,7 @@ public class BoaModifierIntrinsics {
 	 * @param v the Visibility modifier to test for
 	 * @return true if m contains a visibility modifier v
 	 */
-	@FunctionSpec(name = "has_visibility", returnType = "bool", formalParameters = { "Method", "int" })
+	@FunctionSpec(name = "has_visibility", returnType = "bool", formalParameters = { "Method", "Visibility" })
 	public static boolean hasVisibility(final Method m, final Visibility v) {
 		for (int i = 0; i < m.getModifiersCount(); i++)
 			if (m.getModifiers(i).getKind() == ModifierKind.VISIBILITY
@@ -190,7 +190,7 @@ public class BoaModifierIntrinsics {
 	 * @param kind the ModifierKind to test for
 	 * @return true if v contains a modifier kind
 	 */
-	@FunctionSpec(name = "has_modifier", returnType = "bool", formalParameters = { "Variable", "int" })
+	@FunctionSpec(name = "has_modifier", returnType = "bool", formalParameters = { "Variable", "ModifierKind" })
 	public static boolean hasModifier(final Variable v, final ModifierKind kind) {
 		for (int i = 0; i < v.getModifiersCount(); i++)
 			if (v.getModifiers(i).getKind() == kind)
@@ -206,7 +206,7 @@ public class BoaModifierIntrinsics {
 	 * @param v the Visibility modifier to test for
 	 * @return true if v contains a visibility modifier v
 	 */
-	@FunctionSpec(name = "has_visibility", returnType = "bool", formalParameters = { "Variable", "int" })
+	@FunctionSpec(name = "has_visibility", returnType = "bool", formalParameters = { "Variable", "Visibility" })
 	public static boolean hasVisibility(final Variable var, final Visibility v) {
 		for (int i = 0; i < var.getModifiersCount(); i++)
 			if (var.getModifiers(i).getKind() == ModifierKind.VISIBILITY
@@ -341,7 +341,7 @@ public class BoaModifierIntrinsics {
 	 * @param kind the ModifierKind to test for
 	 * @return true if d contains a modifier kind
 	 */
-	@FunctionSpec(name = "has_modifier", returnType = "bool", formalParameters = { "Declaration", "int" })
+	@FunctionSpec(name = "has_modifier", returnType = "bool", formalParameters = { "Declaration", "ModifierKind" })
 	public static boolean hasModifier(final Declaration d, final ModifierKind kind) {
 		for (int i = 0; i < d.getModifiersCount(); i++)
 			if (d.getModifiers(i).getKind() == kind)
@@ -357,7 +357,7 @@ public class BoaModifierIntrinsics {
 	 * @param v the Visibility modifier to test for
 	 * @return true if d contains a visibility modifier v
 	 */
-	@FunctionSpec(name = "has_visibility", returnType = "bool", formalParameters = { "Declaration", "int" })
+	@FunctionSpec(name = "has_visibility", returnType = "bool", formalParameters = { "Declaration", "Visibility" })
 	public static boolean hasVisibility(final Declaration d, final Visibility v) {
 		for (int i = 0; i < d.getModifiersCount(); i++)
 			if (d.getModifiers(i).getKind() == ModifierKind.VISIBILITY
@@ -492,7 +492,7 @@ public class BoaModifierIntrinsics {
 	 * @param kind the ModifierKind to test for
 	 * @return true if d contains a modifier kind
 	 */
-	@FunctionSpec(name = "has_modifier", returnType = "bool", formalParameters = { "Namespace", "int" })
+	@FunctionSpec(name = "has_modifier", returnType = "bool", formalParameters = { "Namespace", "ModifierKind" })
 	public static boolean hasModifier(final Namespace n, final ModifierKind kind) {
 		for (int i = 0; i < n.getModifiersCount(); i++)
 			if (n.getModifiers(i).getKind() == kind)
@@ -508,7 +508,7 @@ public class BoaModifierIntrinsics {
 	 * @param v the Visibility modifier to test for
 	 * @return true if d contains a visibility modifier v
 	 */
-	@FunctionSpec(name = "has_visibility", returnType = "bool", formalParameters = { "Namespace", "int" })
+	@FunctionSpec(name = "has_visibility", returnType = "bool", formalParameters = { "Namespace", "Visibility" })
 	public static boolean hasVisibility(final Namespace n, final Visibility v) {
 		for (int i = 0; i < n.getModifiersCount(); i++)
 			if (n.getModifiers(i).getKind() == ModifierKind.VISIBILITY
