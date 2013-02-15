@@ -210,8 +210,9 @@ public class BoaAstIntrinsics {
 	public final static BoaCountingVisitor lenVisitor = new BoaCountingVisitor() {
 		/** {@inheritDoc} */
 		@Override
-		protected void defaultPreVisit() {
+		protected boolean defaultPreVisit() {
 			count++;
+			return true;
 		}
 		/** {@inheritDoc} */
 		@Override

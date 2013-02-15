@@ -1096,7 +1096,7 @@ public class TypeCheckingVisitor extends DefaultVisitor<BoaType, SymbolTable> {
 		syms.put(n, argu);
 
 		if (!argu.getIsBeforeVisitor())
-			throw new TypeException(n, "Stop statement only allowed inside non-wildcard 'before' clauses");
+			throw new TypeException(n, "Stop statement only allowed inside 'before' clauses");
 		return null;
 	}
 
@@ -1131,7 +1131,7 @@ public class TypeCheckingVisitor extends DefaultVisitor<BoaType, SymbolTable> {
 
 		syms.put(n, st);
 		
-		st.setIsBeforeVisitor(n.f0.which == 0 && n.f1.which != 2);
+		st.setIsBeforeVisitor(n.f0.which == 0);
 
 		switch (n.f1.which) {
 		case 0: // single type

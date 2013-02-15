@@ -1066,21 +1066,14 @@ public class CodeGeneratingVisitor extends DefaultVisitorNoArgu<String> {
 	/** {@inheritDoc} */
 	@Override
 	public String visit(final VisitStatement n) {
+		final StringTemplate st = this.stg.getInstanceOf("VisitClause");
 		final SymbolTable argu = this.typechecker.getSyms(n);
-		argu.setIsBeforeVisitor(n.f0.which == 0 && n.f1.which != 2);
 
 		final boolean isBefore = n.f0.which == 0;
 
-		final StringTemplate st = this.stg.getInstanceOf("VisitClause");
 		final List<String> body = new ArrayList<String>();
 		final List<String> types = new ArrayList<String>();
 		final List<String> ids = new ArrayList<String>();
-
-		if (n.f3.f0.which == 1)
-			for (final Node b : ((Block)n.f3.f0.choice).f1.nodes)
-				body.add(b.accept(this));
-		else
-			body.add(n.f3.accept(this));
 
 		switch (n.f1.which) {
 		case 0: // single type
@@ -1094,10 +1087,7 @@ public class CodeGeneratingVisitor extends DefaultVisitorNoArgu<String> {
 			argu.set(id, type);
 			ids.add(" ___" + id);
 
-			st.setAttribute("ret", isBefore ? "boolean" : "void");
 			st.setAttribute("name", isBefore ? "preVisit" : "postVisit");
-			if (isBefore && !lastStatementIsStop(n.f3))
-				body.add("return true;\n");
 			break;
 		case 1: // list of types
 			final IdentifierList idlist = (IdentifierList)n.f1.choice;
@@ -1113,20 +1103,26 @@ public class CodeGeneratingVisitor extends DefaultVisitorNoArgu<String> {
 					ids.add("__UNUSED");
 				}
 
-			st.setAttribute("ret", isBefore ? "boolean" : "void");
 			st.setAttribute("name", isBefore ? "preVisit" : "postVisit");
-			if (isBefore && !lastStatementIsStop(n.f3))
-				body.add("return true;\n");
 			break;
 		case 2: // wildcard
-			st.setAttribute("ret", "void");
 			st.setAttribute("name", isBefore ? "defaultPreVisit" : "defaultPostVisit");
 			break;
 		default:
 			throw new RuntimeException("unexpected choice " + n.f0.which + " is " + n.f0.choice.getClass());
 		}
 
+		st.setAttribute("ret", isBefore ? "boolean" : "void");
+
+		if (n.f3.f0.which == 1)
+			for (final Node b : ((Block)n.f3.f0.choice).f1.nodes)
+				body.add(b.accept(this));
+		else
+			body.add(n.f3.accept(this));
+		if (isBefore && !lastStatementIsStop(n.f3))
+			body.add("return true;\n");
 		st.setAttribute("body", body);
+
 		if (ids.size() > 0) {
 			st.setAttribute("args", ids);
 			st.setAttribute("types", types);

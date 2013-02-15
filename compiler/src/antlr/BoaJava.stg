@@ -114,7 +114,7 @@ protected <ret> <name>(final <type> <arg>) throws Exception {
 	<body>}}>
 <else>
 @Override
-protected void <name>() throws Exception {
+protected <ret> <name>() throws Exception {
 	<body>}<endif>
 >>
 Return(expr) ::= "return<if(expr)> <expr><endif>;<\n>"

@@ -34,64 +34,54 @@ public abstract class BoaAbstractVisitor {
 	/**
 	 * Provides a default action for pre-visiting nodes.
 	 * Any <code>preVisit()</code> method that is not overridden calls this method.
+	 * 
+	 * @return always returns true
 	 */
-	protected void defaultPreVisit() throws Exception { }
+	protected boolean defaultPreVisit() throws Exception {
+		return true;
+	}
 
 	protected boolean preVisit(final Project node) throws Exception {
-		defaultPreVisit();
-		return true;
+		return defaultPreVisit();
 	}
 	protected boolean preVisit(final CodeRepository node) throws Exception {
-		defaultPreVisit();
-		return true;
+		return defaultPreVisit();
 	}
 	protected boolean preVisit(final Revision node) throws Exception {
-		defaultPreVisit();
-		return true;
+		return defaultPreVisit();
 	}
 	protected boolean preVisit(final ChangedFile node) throws Exception {
-		defaultPreVisit();
-		return true;
+		return defaultPreVisit();
 	}
 	protected boolean preVisit(final ASTRoot node) throws Exception {
-		defaultPreVisit();
-		return true;
+		return defaultPreVisit();
 	}
 	protected boolean preVisit(final Namespace node) throws Exception {
-		defaultPreVisit();
-		return true;
+		return defaultPreVisit();
 	}
 	protected boolean preVisit(final Declaration node) throws Exception {
-		defaultPreVisit();
-		return true;
+		return defaultPreVisit();
 	}
 	protected boolean preVisit(final Type node) throws Exception {
-		defaultPreVisit();
-		return true;
+		return defaultPreVisit();
 	}
 	protected boolean preVisit(final Method node) throws Exception {
-		defaultPreVisit();
-		return true;
+		return defaultPreVisit();
 	}
 	protected boolean preVisit(final Variable node) throws Exception {
-		defaultPreVisit();
-		return true;
+		return defaultPreVisit();
 	}
 	protected boolean preVisit(final Statement node) throws Exception {
-		defaultPreVisit();
-		return true;
+		return defaultPreVisit();
 	}
 	protected boolean preVisit(final Expression node) throws Exception {
-		defaultPreVisit();
-		return true;
+		return defaultPreVisit();
 	}
 	protected boolean preVisit(final Modifier node) throws Exception {
-		defaultPreVisit();
-		return true;
+		return defaultPreVisit();
 	}
 	protected boolean preVisit(final Comment node) throws Exception {
-		defaultPreVisit();
-		return true;
+		return defaultPreVisit();
 	}
 
 	/**
