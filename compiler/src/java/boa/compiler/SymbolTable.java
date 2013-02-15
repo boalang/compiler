@@ -293,11 +293,6 @@ public class SymbolTable {
 			this.setFunction("hypot", new BoaFunction("java.lang.Math.hypot", new BoaFloat(), new BoaScalar[] { new BoaFloat(), new BoaFloat() }));
 		}
 
-		// add in the default tables
-		// FIXME: support format strings and files
-		this.set("stdout", new BoaTable(new BoaString()));
-		this.set("stderr", new BoaTable(new BoaString()));
-
 		this.importLibs(libs);
 	}
 

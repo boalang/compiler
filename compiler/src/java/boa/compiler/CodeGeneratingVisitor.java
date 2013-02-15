@@ -98,8 +98,6 @@ public class CodeGeneratingVisitor extends DefaultVisitorNoArgu<String> {
 		this.functiondeclarator = new FunctionDeclaratorVisitor(this);
 
 		this.tables = new HashMap<String, TableDescription>();
-		this.tables.put("stdout", new TableDescription("stdout", new BoaString()));
-		this.tables.put("stderr", new TableDescription("stderr", new BoaString()));
 
 		this.name = name;
 		this.stg = stg;
@@ -128,6 +126,9 @@ public class CodeGeneratingVisitor extends DefaultVisitorNoArgu<String> {
 				statements.add(statement);
 		}
 		st.setAttribute("statements", statements);
+
+		if (this.tables.size() == 0)
+			throw new TypeException(n, "No output variables were declared - must declare at least one output variable");
 
 		final List<String> tables = new ArrayList<String>();
 		for (final Entry<String, TableDescription> entry : this.tables.entrySet()) {
