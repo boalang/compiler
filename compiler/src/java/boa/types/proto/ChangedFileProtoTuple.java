@@ -5,10 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import boa.types.BoaInt;
 import boa.types.BoaProtoTuple;
 import boa.types.BoaString;
 import boa.types.BoaType;
+import boa.types.proto.enums.ChangeKindProtoMap;
+import boa.types.proto.enums.FileKindProtoMap;
 
 /**
  * A {@link ChangedFileProtoTuple}.
@@ -23,10 +24,10 @@ public class ChangedFileProtoTuple extends BoaProtoTuple {
 		int counter = 0;
 
 		names.put("change", counter++);
-		members.add(new BoaInt());
+		members.add(new ChangeKindProtoMap());
 
 		names.put("kind", counter++);
-		members.add(new BoaInt());
+		members.add(new FileKindProtoMap());
 
 		names.put("name", counter++);
 		members.add(new BoaString());

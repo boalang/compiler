@@ -6,11 +6,11 @@ import java.util.List;
 import java.util.Map;
 
 import boa.types.BoaBool;
-import boa.types.BoaInt;
 import boa.types.BoaProtoList;
 import boa.types.BoaProtoTuple;
 import boa.types.BoaString;
 import boa.types.BoaType;
+import boa.types.proto.enums.ExpressionKindProtoMap;
 
 /**
  * A {@link ExpressionProtoTuple}.
@@ -23,7 +23,7 @@ public class ExpressionProtoTuple extends BoaProtoTuple {
 
 	static {
 		names.put("kind", 0);
-		members.add(new BoaInt());
+		members.add(new ExpressionKindProtoMap());
 
 		names.put("expressions", 1);
 		members.add(new BoaProtoList(new ExpressionProtoTuple()));

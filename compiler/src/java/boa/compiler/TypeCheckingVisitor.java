@@ -576,6 +576,54 @@ public class TypeCheckingVisitor extends DefaultVisitor<BoaType, SymbolTable> {
 
 	/** {@inheritDoc} */
 	@Override
+	public BoaType visit(final SwitchStatement n, final SymbolTable argu) {
+		SymbolTable st;
+		try {
+			st = argu.cloneNonLocals();
+		} catch (final IOException e) {
+			throw new RuntimeException(e.getClass().getSimpleName() + " caught", e);
+		}
+
+		syms.put(n, st);
+
+		final BoaType expr = n.f2.accept(this, st);
+		if (!(expr instanceof BoaInt) && !(expr instanceof BoaProtoMap))
+			throw new TypeException(n.f2, "Switch expression must be int or enum, found: " + expr);
+
+		if (n.f5.present())
+			for (final Node node : n.f5.nodes) {
+				final NodeSequence ns = (NodeSequence)node;
+
+				BoaType caseExpr = ns.elementAt(1).accept(this, st);
+				if (!expr.assigns(caseExpr))
+					throw new TypeException(ns.elementAt(1), "Case expression must be " + expr + ", found: " + caseExpr);
+
+				final NodeListOptional exprs = (NodeListOptional)ns.elementAt(2);
+				if (exprs.present())
+					for (final Node exprNode : exprs.nodes) {
+						final NodeSequence exprSeq = (NodeSequence)exprNode;
+						caseExpr = exprSeq.elementAt(1).accept(this, st);
+						if (!expr.assigns(caseExpr))
+							throw new TypeException(exprSeq.elementAt(1), "Case expression must be " + expr + ", found: " + caseExpr);
+					}
+
+				ns.elementAt(4).accept(this, st);
+				final NodeListOptional stmts = (NodeListOptional)ns.elementAt(5);
+				if (stmts.present())
+					for (final Node stmtNode : stmts.nodes)
+						stmtNode.accept(this, st);
+			}
+
+		n.f8.accept(this, st);
+		if (n.f9.present())
+			for (final Node node : n.f9.nodes)
+				node.accept(this, st);
+
+		return null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
 	public BoaType visit(final WhenStatement n, final SymbolTable argu) {
 		SymbolTable st;
 		try {
@@ -784,8 +832,6 @@ public class TypeCheckingVisitor extends DefaultVisitor<BoaType, SymbolTable> {
 		if (type instanceof BoaProtoMap) {
 			if (!((BoaProtoMap) type).hasAttribute(selector))
 				throw new TypeException(n.f1, type + " has no member named '" + selector + "'");
-
-			type = new BoaInt();
 		} else if (type instanceof BoaTuple) {
 			if (!((BoaTuple) type).hasMember(selector))
 				throw new TypeException(n.f1, "'" + type + "' has no member named '" + selector + "'");

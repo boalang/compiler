@@ -259,8 +259,25 @@ public class FunctionDeclaratorVisitor extends DefaultVisitorNoArgu<String> {
 	/** {@inheritDoc} */
 	@Override
 	public String visit(final SwitchStatement n) {
-		// TODO Auto-generated method stub
-		return super.visit(n);
+		final StringBuilder sb = new StringBuilder();
+
+		final String s = n.f8.accept(this);
+
+		if (s != null)
+			sb.append(s);
+
+		if (n.f9.present())
+			for (final Node node : n.f9.nodes) {
+				final String accept = node.accept(this);
+	
+				if (accept != null)
+					sb.append(accept);
+			}
+
+		if (sb.length() > 0)
+			return sb.toString();
+
+		return null;
 	}
 
 	/** {@inheritDoc} */

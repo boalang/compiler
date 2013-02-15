@@ -190,7 +190,8 @@ public class CodeGeneratingVisitor extends DefaultVisitorNoArgu<String> {
 		st.setAttribute("lhs", "___" + n.f0.f0.tokenImage);
 
 		if (!n.f3.present()) {
-			if (!(lhsType instanceof BoaMap || lhsType instanceof BoaStack))
+			if (lhsType instanceof BoaProtoMap ||
+					!(lhsType instanceof BoaMap || lhsType instanceof BoaStack))
 				return null;
 			
 			st.setAttribute("rhs", n.f2.node.accept(this));
@@ -513,6 +514,57 @@ public class CodeGeneratingVisitor extends DefaultVisitorNoArgu<String> {
 
 		if (n.f1.present())
 			st.setAttribute("expr", n.f1.node.accept(this));
+
+		return st.toString();
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String visit(final SwitchStatement n) {
+		final StringTemplate st = this.stg.getInstanceOf("Switch");
+
+		final List<String> caseStmts = new ArrayList<String>();
+
+		if (n.f5.present())
+			for (final Node node : n.f5.nodes) {
+				final StringTemplate caseSt = this.stg.getInstanceOf("Case");
+				final NodeSequence ns = (NodeSequence)node;
+
+				final List<String> cases = new ArrayList<String>();
+				String s = ns.elementAt(1).accept(this);
+				if (s.indexOf(".") > -1)
+					s = s.substring(s.lastIndexOf(".") + 1);
+				cases.add(s);
+				final NodeListOptional caseExprs = (NodeListOptional)ns.elementAt(2);
+				if (caseExprs.present())
+					for (final Node expr : caseExprs.nodes) {
+						s = ((NodeSequence)expr).elementAt(1).accept(this);
+						if (s.indexOf(".") > -1)
+							s = s.substring(s.lastIndexOf(".") + 1);
+						cases.add(s);
+					}
+
+				final List<String> caseBody = new ArrayList<String>();
+				caseBody.add(ns.elementAt(4).accept(this));
+				final NodeListOptional caseBodyStmts = (NodeListOptional)ns.elementAt(5);
+				if (caseBodyStmts.present())
+					for (final Node stmt : caseBodyStmts.nodes)
+						caseBody.add(stmt.accept(this));
+
+				caseSt.setAttribute("cases", cases);
+				caseSt.setAttribute("body", caseBody);
+				caseStmts.add(caseSt.toString());
+			}
+
+		final List<String> defBody = new ArrayList<String>();
+		defBody.add(n.f8.accept(this));
+		if (n.f9.present())
+			for (final Node node : n.f9.nodes)
+				defBody.add(node.accept(this));
+
+		st.setAttribute("expr", n.f2.accept(this));
+		st.setAttribute("cases", caseStmts);
+		st.setAttribute("body", defBody);
 
 		return st.toString();
 	}

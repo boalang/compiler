@@ -5,11 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import boa.types.BoaInt;
 import boa.types.BoaProtoList;
 import boa.types.BoaProtoTuple;
 import boa.types.BoaString;
 import boa.types.BoaType;
+import boa.types.proto.enums.ModifierKindProtoMap;
+import boa.types.proto.enums.VisibilityProtoMap;
 
 /**
  * A {@link ModifierProtoTuple}.
@@ -22,10 +23,10 @@ public class ModifierProtoTuple extends BoaProtoTuple {
 
 	static {
 		names.put("kind", 0);
-		members.add(new BoaInt());
+		members.add(new ModifierKindProtoMap());
 
 		names.put("visibility", 1);
-		members.add(new BoaInt());
+		members.add(new VisibilityProtoMap());
 
 		names.put("annotation_name", 2);
 		members.add(new BoaString());

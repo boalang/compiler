@@ -23,4 +23,16 @@ public class BoaProtoMap extends BoaMap {
 	public boolean hasAttribute(final String s) {
 		throw new RuntimeException("proto map must override hasAttribute()");
 	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean assigns(BoaType obj) {
+		return this.getClass() == obj.getClass();
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public boolean compares(BoaType obj) {
+		return this.getClass() == obj.getClass();
+	}
 }

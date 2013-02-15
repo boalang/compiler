@@ -5,11 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import boa.types.BoaInt;
 import boa.types.BoaProtoList;
 import boa.types.BoaProtoTuple;
 import boa.types.BoaString;
 import boa.types.BoaType;
+import boa.types.proto.enums.TypeKindProtoMap;
 
 /**
  * A {@link DeclarationProtoTuple}.
@@ -25,7 +25,7 @@ public class DeclarationProtoTuple extends BoaProtoTuple {
 		members.add(new BoaString());
 
 		names.put("kind", 1);
-		members.add(new BoaInt());
+		members.add(new TypeKindProtoMap());
 
 		names.put("modifiers", 2);
 		members.add(new BoaProtoList(new ModifierProtoTuple()));

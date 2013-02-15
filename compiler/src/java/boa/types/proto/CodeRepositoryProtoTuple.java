@@ -5,11 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import boa.types.BoaInt;
 import boa.types.BoaProtoList;
 import boa.types.BoaProtoTuple;
 import boa.types.BoaString;
 import boa.types.BoaType;
+import boa.types.proto.enums.RepositoryKindProtoMap;
 
 /**
  * A {@link BoaProtoTuple}.
@@ -26,7 +26,7 @@ public class CodeRepositoryProtoTuple extends BoaProtoTuple {
 		members.add(new BoaString());
 
 		names.put("kind", 1);
-		members.add(new BoaInt());
+		members.add(new RepositoryKindProtoMap());
 
 		names.put("revisions", 2);
 		members.add(new BoaProtoList(new RevisionProtoTuple()));

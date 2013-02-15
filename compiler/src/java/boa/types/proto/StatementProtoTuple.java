@@ -5,10 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import boa.types.BoaInt;
 import boa.types.BoaProtoList;
 import boa.types.BoaProtoTuple;
 import boa.types.BoaType;
+import boa.types.proto.enums.StatementKindProtoMap;
 
 /**
  * A {@link StatementProtoTuple}.
@@ -21,7 +21,7 @@ public class StatementProtoTuple extends BoaProtoTuple {
 
 	static {
 		names.put("kind", 0);
-		members.add(new BoaInt());
+		members.add(new StatementKindProtoMap());
 
 		names.put("comments", 1);
 		members.add(new BoaProtoList(new CommentProtoTuple()));

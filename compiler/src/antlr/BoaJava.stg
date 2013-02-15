@@ -84,6 +84,19 @@ Break() ::= "break;<\n>"
 Continue() ::= "continue;<\n>"
 Stop() ::= "return false;<\n>"
 Empty() ::= ";<\n>"
+Switch(expr, cases, body) ::= <<
+switch (<expr>) {
+<cases>
+default:
+	<body>
+}
+
+>>
+Case(cases, body) ::= <<
+<cases:{
+case <it>:}>
+	<body>
+>>
 DoWhile(condition, stmt) ::= <<
 do {
 	<condition>

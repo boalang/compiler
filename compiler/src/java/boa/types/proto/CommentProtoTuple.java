@@ -9,6 +9,7 @@ import boa.types.BoaInt;
 import boa.types.BoaProtoTuple;
 import boa.types.BoaString;
 import boa.types.BoaType;
+import boa.types.proto.enums.CommentKindProtoMap;
 
 /**
  * A {@link CommentProtoTuple}.
@@ -21,7 +22,7 @@ public class CommentProtoTuple extends BoaProtoTuple {
 
 	static {
 		names.put("kind", 0);
-		members.add(new BoaInt());
+		members.add(new CommentKindProtoMap());
 
 		names.put("value", 1);
 		members.add(new BoaString());
