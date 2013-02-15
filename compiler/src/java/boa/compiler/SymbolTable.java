@@ -490,8 +490,6 @@ public class SymbolTable {
 			boa.aggregators.MinimumAggregator.class,
 			boa.aggregators.MrcounterAggregator.class,
 			boa.aggregators.SetAggregator.class,
-			boa.aggregators.StderrAggregator.class,
-			boa.aggregators.StdoutAggregator.class,
 			boa.aggregators.TextAggregator.class,
 			boa.aggregators.TopAggregator.class,
 			boa.aggregators.UniqueAggregator.class
