@@ -14,20 +14,25 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.io.compress.SnappyCodec;
 import org.apache.hadoop.io.compress.CompressionCodec;
 
+import boa.io.BoaOutputFormat;
 import boa.io.EmitKey;
 import boa.io.EmitValue;
-import boa.io.BoaOutputFormat;
 
 
 @SuppressWarnings("static-access")
 public abstract class BoaRunner {
 	/**
 	 * Create a {@link Job} describing the work to be done by this Boa job.
+	 * 
+	 * @param ins
+	 *            An array of {@link Path} containing the locations of the input
+	 *            files
 	 * 
 	 * @param out
 	 *            A {@link Path} containing the location of the output file
@@ -39,7 +44,7 @@ public abstract class BoaRunner {
 	 * @return A {@link Job} describing the work to be done by this Boa job
 	 * @throws IOException
 	 */
-	public Job job(final Configuration configuration, final Path out, final boolean robust) throws IOException {
+	public Job job(final Configuration configuration, final Path[] ins, final Path out, final boolean robust) throws IOException {
 		configuration.setBoolean("boa.runtime.robust", robust);
 
 		// map output compression
@@ -47,8 +52,15 @@ public abstract class BoaRunner {
 		configuration.set("mapred.map.output.compression.type", "BLOCK");
 		configuration.setClass("mapred.map.output.compression.codec", SnappyCodec.class, CompressionCodec.class);
 
+		configuration.setBoolean("mapred.map.tasks.speculative.execution", false);
+		configuration.setBoolean("mapred.reduce.tasks.speculative.execution", false);
+		configuration.setLong("mapred.job.reuse.jvm.num.tasks", -1);
+
 		final Job job = new Job(configuration);
 
+		if (ins != null)
+			for (final Path in : ins)
+				FileInputFormat.addInputPath(job, in);
 		FileOutputFormat.setOutputPath(job, out);
 
 		job.setMapOutputKeyClass(EmitKey.class);
@@ -72,6 +84,11 @@ public abstract class BoaRunner {
 										.hasArg()
 										.withArgName("ID")
 										.create("j"));
+		options.addOption(org.apache.commons.cli.OptionBuilder.withLongOpt("astTable")
+										.withDescription("which HBase table to use for AST rows")
+										.hasArg()
+										.withArgName("TABLE")
+										.create("a"));
 	}
 
 	protected static Options getOptions() { return options; }
@@ -93,6 +110,7 @@ public abstract class BoaRunner {
 		new HelpFormatter().printHelp("[options] " + usage, options);
 		System.exit(-1);
 	}
+
 	public abstract String getUsage();
 
 	public abstract Mapper<?,?,?,?> getMapper();

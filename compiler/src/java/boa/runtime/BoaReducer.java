@@ -32,6 +32,7 @@ public abstract class BoaReducer extends Reducer<EmitKey, EmitValue, Text, NullW
 
 	/**
 	 * A {@link Map} from {@link String} to {@link Table} indexing instantiated
+	 * tables to their Boa identifiers.
 	 */
 	protected Map<String, Table> tables;
 
@@ -39,7 +40,7 @@ public abstract class BoaReducer extends Reducer<EmitKey, EmitValue, Text, NullW
 	private boolean robust;
 
 	/**
-	 * Construct a BoaReducer.
+	 * Construct a {@link BoaReducer}.
 	 */
 	protected BoaReducer() {
 		this.tables = new HashMap<String, Table>();
@@ -63,41 +64,31 @@ public abstract class BoaReducer extends Reducer<EmitKey, EmitValue, Text, NullW
 	protected void reduce(final EmitKey key, final Iterable<EmitValue> values, final Context context) throws IOException, InterruptedException {
 		// get the table named by the emit key
 		final Table t = this.tables.get(key.getName());
-		// tell it we are not combining
+
 		t.setCombining(false);
-
-		// Counter counter = context.getCounter("Values Emitted",
-		// key.toString());
-		// LOG.fatal("counter for "+ counter.getDisplayName() + " " +
-		// key.toString() + " " + Long.toString(counter.getValue()));
-
-		// initialize the table
 		t.start(key);
-		// set the reducer context
 		t.setContext(context);
 
-		// for each of the values
 		for (final EmitValue value : values)
 			try {
-				// aggregate it
 				t.aggregate(value.getData(), value.getMetadata());
 			} catch (final FinishedException e) {
 				// we are done
 				return;
 			} catch (final IOException e) {
-				// won't be robust to IOException
+				// won't be robust to IOExceptions
 				throw e;
 			} catch (final InterruptedException e) {
 				// won't be robust to InterruptedExceptions
 				throw e;
 			} catch (final RuntimeException e) {
 				if (this.robust)
-					BoaReducer.LOG.error(e.getClass().getName() + " caught", e);
+					LOG.error(e.getClass().getName() + " caught", e);
 				else
 					throw e;
 			} catch (final Exception e) {
 				if (this.robust)
-					BoaReducer.LOG.error(e.getClass().getName() + " caught", e);
+					LOG.error(e.getClass().getName() + " caught", e);
 				else
 					throw new RuntimeException(e.getClass().getName() + " caught", e);
 			}

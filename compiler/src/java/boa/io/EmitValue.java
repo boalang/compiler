@@ -44,6 +44,16 @@ public class EmitValue implements Writable {
 	 * 
 	 * @param data
 	 *            An array of {@link String} containing the data to be emitted
+	 */
+	public EmitValue(final String[] data) {
+		this(data, null);
+	}
+
+	/**
+	 * Construct an EmitValue.
+	 * 
+	 * @param data
+	 *            An array of {@link Object} containing the data to be emitted
 	 * @param metadata
 	 *            A {@link String} containing the metadata to be emitted
 	 */
@@ -62,8 +72,6 @@ public class EmitValue implements Writable {
 	 * 
 	 * @param data
 	 *            An array of {@link String} containing the data to be emitted
-	 * @param metadata
-	 *            A {@link String} containing the metadata to be emitted
 	 */
 	public EmitValue(final Object[] data) {
 		this(data, null);

@@ -29,12 +29,15 @@ import boa.types.Toplevel.Project;
 public class BoaAstIntrinsics {
 	@SuppressWarnings("rawtypes")
 	private static Context context;
-	private static HTable table;
 	private static long counter = 0;
 
-	private final static byte[] codeFamily = Bytes.toBytes("code");
-	private final static byte[] locFamily = Bytes.toBytes("loc");
-	private static String astTable;
+	private final static byte[] astFamily = Bytes.toBytes("a");
+	private static HTable astTable;
+	private static String astTableName;
+
+	private final static byte[] locFamily = Bytes.toBytes("l");
+	private static HTable locTable;
+	private static String locTableName;
 
 	public static enum HBASE_COUNTER {
 		GETS_ATTEMPTED,
@@ -74,17 +77,17 @@ public class BoaAstIntrinsics {
 		final byte[] rowName = Bytes.toBytes(f.getKey());
 		final Get get = new Get(rowName);
 		final byte[] colName = Bytes.toBytes(f.getName());
-		get.addColumn(codeFamily, colName);
+		get.addColumn(astFamily, colName);
 
 		// retry on errors
 		// sometimes HBase has connection problems which resolve fairly quick
 		for (int i = 0; i < 10; i++)
 			try {
-				if (table == null)
-					table = new HTable(HBaseConfiguration.create(), astTable);
+				if (astTable == null)
+					astTable = new HTable(HBaseConfiguration.create(), astTableName);
 
-				final Result res = table.get(get);
-				if (!res.containsColumn(codeFamily, colName) || res.isEmpty())
+				final Result res = astTable.get(get);
+				if (!res.containsColumn(astFamily, colName) || res.isEmpty())
 					throw new RuntimeException("cell not found");
 				final byte[] val = res.value();
 	
@@ -100,7 +103,7 @@ public class BoaAstIntrinsics {
 				break;
 			} catch (final IOException e) {
 				System.err.println("hbase error: " + e.getMessage());
-				close();
+				closeAst();
 				try { Thread.sleep(500); } catch (InterruptedException e1) { }
 			} catch (final RuntimeException e) {
 				e.printStackTrace();
@@ -127,10 +130,10 @@ public class BoaAstIntrinsics {
 		// sometimes HBase has connection problems which resolve fairly quick
 		for (int i = 0; i < 10; i++)
 			try {
-				if (table == null)
-					table = new HTable(HBaseConfiguration.create(), astTable);
+				if (locTable == null)
+					locTable = new HTable(HBaseConfiguration.create(), locTableName);
 
-				final Result res = table.get(get);
+				final Result res = locTable.get(get);
 				if (!res.containsColumn(locFamily, colName) || res.isEmpty()) {
 					context.getCounter(HBASE_COUNTER.GETS_FAIL_MISSING).increment(1);
 					throw new RuntimeException("cell not found");
@@ -146,7 +149,7 @@ public class BoaAstIntrinsics {
 				return Long.parseLong(parts[1].trim()) + Long.parseLong(parts[2].trim());
 			} catch (final IOException e) {
 				System.err.println("hbase error: " + e.getMessage());
-				close();
+				closeLoc();
 				try { Thread.sleep(500); } catch (InterruptedException e1) { }
 			} catch (final RuntimeException e) {
 				e.printStackTrace();
@@ -161,17 +164,34 @@ public class BoaAstIntrinsics {
 	@SuppressWarnings("rawtypes")
 	public static void initialize(final Context context) {
 		BoaAstIntrinsics.context = context;
-		astTable = context.getConfiguration().get("boa.hbase.ast.table", "boa_input");
+		astTableName = context.getConfiguration().get("boa.hbase.ast.table", "ast");
+		locTableName = context.getConfiguration().get("boa.hbase.loc.table", "loc");
 	}
 
 	public static void close() {
-		if (table != null)
+		closeAst();
+		closeLoc();
+	}
+
+	private static void closeAst() {
+		if (astTable != null)
 			try {
-				table.close();
+				astTable.close();
 			} catch (final IOException e) {
 				e.printStackTrace();
 			} finally {
-				table = null;
+				astTable = null;
+			}
+	}
+
+	private static void closeLoc() {
+		if (locTable != null)
+			try {
+				locTable.close();
+			} catch (final IOException e) {
+				e.printStackTrace();
+			} finally {
+				locTable = null;
 			}
 	}
 
@@ -280,5 +300,10 @@ public class BoaAstIntrinsics {
 	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository" })
 	public static ChangedFile[] getSnapshot(final CodeRepository cr) throws Exception {
 		return getSnapshot(cr, Long.MAX_VALUE);
+	}
+
+	@FunctionSpec(name = "isliteral", returnType = "bool", formalParameters = { "Expression", "string" })
+	public static boolean isLiteral(final Expression e, final String lit) throws Exception {
+		return e.getKind() == Expression.ExpressionKind.LITERAL && e.hasLiteral() && e.getLiteral().equals(lit);
 	}
 }

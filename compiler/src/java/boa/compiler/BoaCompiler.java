@@ -50,6 +50,7 @@ public class BoaCompiler {
 		options.addOption("l", "libs", true, "extra jars (functions/aggregators) to be compiled in");
 		options.addOption("i", "in", true, "file to be compiled");
 		options.addOption("o", "out", true, "the name of the resulting jar");
+		options.addOption("b", "hbase", false, "use HBase templates");
 		options.addOption("n", "name", true, "the name of the generated main class");
 
 		CommandLine cl;
@@ -131,7 +132,12 @@ public class BoaCompiler {
 			
 			final StringTemplateGroup stg;
 			
-			final BufferedReader s = new BufferedReader(new InputStreamReader(CodeGeneratingVisitor.class.getClassLoader().getResource("BoaJavaHbase.stg").openStream()));
+			final String templateName;
+			if (cl.hasOption('b'))
+				templateName = "Hbase";
+			else
+				templateName = "Hadoop";
+			final BufferedReader s = new BufferedReader(new InputStreamReader(CodeGeneratingVisitor.class.getClassLoader().getResource("BoaJava" + templateName + ".stg").openStream()));
 			try {
 				stg = new StringTemplateGroup(s);
 				stg.setSuperGroup(superStg);
@@ -161,7 +167,7 @@ public class BoaCompiler {
 		final String runtimePath = root + "/dist/boa-runtime.jar";
 		final StringBuilder classPath = new StringBuilder(runtimePath);
 
-		final Matcher m = Pattern.compile("(hadoop-[a-z]+-[\\d+\\.]+|hbase-[\\d+\\.]+)\\.jar").matcher("");
+		final Matcher m = Pattern.compile("(hadoop-[a-z]+-[\\d\\.]+|hbase-[\\d\\.]+|protobuf-java-[\\d\\.]+)\\.jar").matcher("");
 		for (final File f : hadoopBase.listFiles())
 			if (m.reset(f.getName()).matches())
 				classPath.append(":" + f);

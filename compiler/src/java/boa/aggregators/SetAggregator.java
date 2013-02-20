@@ -40,6 +40,7 @@ public class SetAggregator extends Aggregator {
 		this.max = n;
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void start(final EmitKey key) {
 		super.start(key);
@@ -57,6 +58,7 @@ public class SetAggregator extends Aggregator {
 			throw new FinishedException();
 	}
 
+	/** {@inheritDoc} */
 	@Override
 	public void finish() throws IOException, InterruptedException {
 		for (final String s : this.set)

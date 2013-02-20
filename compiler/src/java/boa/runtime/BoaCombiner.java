@@ -39,7 +39,7 @@ public abstract class BoaCombiner extends Reducer<EmitKey, EmitValue, EmitKey, E
 	private boolean robust;
 
 	/**
-	 * Construct a BoaCombiner.
+	 * Construct a {@link BoaCombiner}.
 	 */
 	protected BoaCombiner() {
 		this.tables = new HashMap<String, Table>();
@@ -73,17 +73,8 @@ public abstract class BoaCombiner extends Reducer<EmitKey, EmitValue, EmitKey, E
 			return;
 		}
 
-		// tell it we will be combining
 		t.setCombining(true);
-
-		// Counter counter = context.getCounter("Values Emitted",
-		// key.toString());
-		// LOG.fatal("counter for \"Values Output\"" + key.toString() + " " +
-		// Long.toString(counter.getValue()));
-
-		// initialize the table
 		t.start(key);
-		// set the reducer context
 		t.setContext(context);
 
 		for (final EmitValue value : values)
@@ -100,12 +91,12 @@ public abstract class BoaCombiner extends Reducer<EmitKey, EmitValue, EmitKey, E
 				throw e;
 			} catch (final RuntimeException e) {
 				if (this.robust)
-					BoaCombiner.LOG.error(e.getClass().getName() + " caught", e);
+					LOG.error(e.getClass().getName() + " caught", e);
 				else
 					throw e;
 			} catch (final Exception e) {
 				if (this.robust)
-					BoaCombiner.LOG.error(e.getClass().getName() + " caught", e);
+					LOG.error(e.getClass().getName() + " caught", e);
 				else
 					throw new RuntimeException(e.getClass().getName() + " caught", e);
 			}

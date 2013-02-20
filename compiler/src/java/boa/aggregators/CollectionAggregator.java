@@ -1,8 +1,10 @@
 package boa.aggregators;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
-import boa.io.EmitValue;
+import boa.io.EmitKey;
 
 
 /**
@@ -13,24 +15,29 @@ import boa.io.EmitValue;
  */
 @AggregatorSpec(name = "collection")
 public class CollectionAggregator extends Aggregator {
-	private String data;
+	private List<String> data;
+
+	/** {@inheritDoc} */
+	@Override
+	public void start(final EmitKey key) {
+		super.start(key);
+
+		this.data = new ArrayList<String>();
+	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void aggregate(final String data, final String metadata) throws IOException, InterruptedException {
-		this.data = data;
+		this.data.add(data);
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void finish() throws IOException, InterruptedException {
-		this.collect(this.data);
-	}
+		for (final String s : this.data)
+			this.collect(s);
 
-	/** {@inheritDoc} */
-	@Override
-	public EmitValue getResult() {
-		return new EmitValue(this.data);
+		super.finish();
 	}
 
 	/** {@inheritDoc} */

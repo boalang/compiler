@@ -30,15 +30,15 @@ message Declaration {
 }
 
 enum TypeKind {
-	CLASS = 1;
-	INTERFACE = 2;
-	ANONYMOUS = 3;
-	STRUCT = 4;
-	ENUM = 5;
-	ANNOTATION = 6;
-	DELEGATE = 7;
-	GENERIC = 8;
-	OTHER = 9;
+	OTHER = 1;
+	CLASS = 2;
+	INTERFACE = 3;
+	ANONYMOUS = 4;
+	STRUCT = 5;
+	ENUM = 6;
+	ANNOTATION = 7;
+	DELEGATE = 8;
+	GENERIC = 9;
 }
 
 message Type {
@@ -70,26 +70,26 @@ message Variable {
 
 message Statement {
 	enum StatementKind {
-		BLOCK = 1;
-		TYPEDECL = 3;
-		EXPRESSION = 4;
-		SYNCHRONIZED = 5;
-		RETURN = 6;
-		FOR = 7;
-		DO = 8;
-		WHILE = 9;
-		IF = 10;
-		ASSERT = 11;
-		BREAK = 12;
-		CONTINUE = 13;
-		LABEL = 14;
-		SWITCH = 15;
-		CASE = 16;
-		TRY = 17;
-		THROW = 18;
-		CATCH = 19;
-		EMPTY = 20;
-		OTHER = 21;
+		OTHER = 1;
+		BLOCK = 2;
+		TYPEDECL = 4;
+		EXPRESSION = 5;
+		SYNCHRONIZED = 6;
+		RETURN = 7;
+		FOR = 8;
+		DO = 9;
+		WHILE = 10;
+		IF = 11;
+		ASSERT = 12;
+		BREAK = 13;
+		CONTINUE = 14;
+		LABEL = 15;
+		SWITCH = 16;
+		CASE = 17;
+		TRY = 18;
+		THROW = 19;
+		CATCH = 20;
+		EMPTY = 21;
 	}
 	required StatementKind kind = 1;
 	repeated Comment comments = 2;
@@ -105,55 +105,55 @@ message Statement {
 
 message Expression {
 	enum ExpressionKind {
-		LITERAL = 1;
-		VARACCESS = 2;
-		VARDECL = 3;
-		METHODCALL = 4;
-		CAST = 5;
-		ARRAYINDEX = 6;
-		ARRAYINIT = 7;
-		TYPECOMPARE = 8;
-		NEW = 9;
-		NEWARRAY = 10;
-		OP_ADD = 11;
-		OP_SUB = 12;
-		OP_MULT = 13;
-		OP_DIV = 14;
-		OP_MOD = 15;
-		OP_INC = 16;
-		OP_DEC = 17;
-		BIT_LSHIFT = 18;
-		BIT_RSHIFT = 19;
-		BIT_UNSIGNEDRSHIFT = 20;
-		BIT_AND = 21;
-		BIT_OR = 22;
-		BIT_NOT = 23;
-		BIT_XOR = 24;
-		LOGICAL_NOT = 25;
-		LOGICAL_AND = 26;
-		LOGICAL_OR = 27;
-		LOGICAL_EQ = 28;
-		LOGICAL_NEQ = 29;
-		LT = 30;
-		GT = 31;
-		LTEQ = 32;
-		GTEQ = 33;
-		CONDITIONAL = 34;
-		NULLCOALESCE = 35;
-		ASSIGN = 36;
-		ASSIGN_ADD = 37;
-		ASSIGN_SUB = 38;
-		ASSIGN_MULT = 39;
-		ASSIGN_DIV = 40;
-		ASSIGN_MOD = 41;
-		ASSIGN_BITXOR = 42;
-		ASSIGN_BITAND = 43;
-		ASSIGN_BITOR = 44;
-		ASSIGN_LSHIFT = 45;
-		ASSIGN_RSHIFT = 46;
-		ASSIGN_UNSIGNEDRSHIFT = 47;
-		ANNOTATION = 48;
-		OTHER = 49;
+		OTHER = 1;
+		LITERAL = 2;
+		VARACCESS = 3;
+		VARDECL = 4;
+		METHODCALL = 5;
+		CAST = 6;
+		ARRAYINDEX = 7;
+		ARRAYINIT = 8;
+		TYPECOMPARE = 9;
+		NEW = 10;
+		NEWARRAY = 11;
+		OP_ADD = 12;
+		OP_SUB = 13;
+		OP_MULT = 14;
+		OP_DIV = 15;
+		OP_MOD = 16;
+		OP_INC = 17;
+		OP_DEC = 18;
+		BIT_LSHIFT = 19;
+		BIT_RSHIFT = 20;
+		BIT_UNSIGNEDRSHIFT = 21;
+		BIT_AND = 22;
+		BIT_OR = 23;
+		BIT_NOT = 24;
+		BIT_XOR = 25;
+		LOGICAL_NOT = 26;
+		LOGICAL_AND = 27;
+		LOGICAL_OR = 28;
+		EQ = 29;
+		NEQ = 30;
+		LT = 31;
+		GT = 32;
+		LTEQ = 33;
+		GTEQ = 34;
+		CONDITIONAL = 35;
+		NULLCOALESCE = 36;
+		ASSIGN = 37;
+		ASSIGN_ADD = 38;
+		ASSIGN_SUB = 39;
+		ASSIGN_MULT = 40;
+		ASSIGN_DIV = 41;
+		ASSIGN_MOD = 42;
+		ASSIGN_BITXOR = 43;
+		ASSIGN_BITAND = 44;
+		ASSIGN_BITOR = 45;
+		ASSIGN_LSHIFT = 46;
+		ASSIGN_RSHIFT = 47;
+		ASSIGN_UNSIGNEDRSHIFT = 48;
+		ANNOTATION = 49;
 	}
 	required ExpressionKind kind = 1;
 	repeated Expression expressions = 2;
@@ -172,13 +172,13 @@ message Expression {
 
 message Modifier {
 	enum ModifierKind {
-		VISIBILITY = 1;
-		ANNOTATION = 2;
-		FINAL = 3;
-		STATIC = 4;
-		SYNCHRONIZED = 5;
-		ABSTRACT = 6;
-		OTHER = 7;
+		OTHER = 1;
+		VISIBILITY = 2;
+		ANNOTATION = 3;
+		FINAL = 4;
+		STATIC = 5;
+		SYNCHRONIZED = 6;
+		ABSTRACT = 7;
 	}
 	enum Visibility {
 		PUBLIC = 1;
