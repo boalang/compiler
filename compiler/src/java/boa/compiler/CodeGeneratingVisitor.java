@@ -443,7 +443,7 @@ public class CodeGeneratingVisitor extends DefaultVisitorNoArgu<String> {
 
 		st.setAttribute("id", Character.toString('"') + n.f0.f0.tokenImage + '"');
 
-		st.setAttribute("expression", n.f3.f0.accept(this));
+		st.setAttribute("expression", n.f3.accept(this));
 
 		if (n.f4.present())
 			st.setAttribute("weight", ((NodeSequence) n.f4.node).elementAt(1).accept(this));
@@ -498,8 +498,8 @@ public class CodeGeneratingVisitor extends DefaultVisitorNoArgu<String> {
 	public String visit(final IfStatement n) {
 		final StringTemplate st = this.stg.getInstanceOf("IfStatement");
 
-		st.setAttribute("expression", n.f2.f0.accept(this));
-		st.setAttribute("statement", n.f4.f0.accept(this));
+		st.setAttribute("expression", n.f2.accept(this));
+		st.setAttribute("statement", n.f4.accept(this));
 
 		if (n.f5.present())
 			st.setAttribute("elseStatement", ((NodeSequence) n.f5.node).nodes.elementAt(1).accept(this));

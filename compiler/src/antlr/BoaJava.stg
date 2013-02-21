@@ -72,7 +72,7 @@ WhenStatement(all, some, len, type, index, expression, statement) ::= <<
 	}
 	<endif>
 >>
-Expression(lhs, operators, operands) ::= "<lhs><operators,operands:{operator,operand|<operator><operand>}>"
+Expression(lhs, operators, operands) ::= "<lhs><operators,operands:{operator,operand| <operator> <operand>}>"
 Index(map, operand, index, slice) ::= "<if(map)><operand>.get(<index>)<elseif(slice)>java.util.Arrays.copyOfRange(<operand>, <index>, <slice>)<else><operand>[<index>]<endif>"
 Call(call, operand, parameters) ::= "<if(call)><call><else><operand>(<parameters>)<endif>"
 Composite(type, pairlist, exprlist) ::= "<if(exprlist)>new <type> { <exprlist> }<else>new java.util.HashMap()<endif>"
