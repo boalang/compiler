@@ -329,7 +329,7 @@ public class SymbolTable {
 
 	public BoaType get(final String id) {
 		if (idmap.containsKey(id))
-			return new BoaName(idmap.get(id));
+			return idmap.get(id);
 
 		if (globals.containsKey(id))
 			return globals.get(id);

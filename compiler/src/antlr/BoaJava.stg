@@ -103,13 +103,14 @@ do {
 } while (<stmt>);
 >>
 FunctionType(name, ret, args, types) ::= <<
-public abstract class <name> {
-	public abstract <ret> invoke(<args,types:{arg,type|final <type> ___<arg>}; separator=", ">) throws Exception;
-}
+public interface <name> {
+	<ret> invoke(<args,types:{arg,type|final <type> ___<arg>}; separator=", ">) throws Exception;
+}<\n>
 >>
 Function(type, staticDeclarations, ret, args, types, body) ::= <<
 new <type>() {
 	<staticDeclarations>
+	@Override
 	public <ret> invoke(<args,types:{arg,type|final <type> ___<arg>}; separator=", ">) throws Exception {
 		<body>
 	}

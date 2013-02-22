@@ -1,7 +1,7 @@
 package boa.types;
 
 /**
- * A {@link BoaProtoMap}, which is actually a Protocol Buffer enum.
+ * A {@link BoaMap}, which is actually a Protocol Buffer enum.
  * 
  * @author rdyer
  * 

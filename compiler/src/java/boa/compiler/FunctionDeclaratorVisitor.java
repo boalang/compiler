@@ -94,7 +94,7 @@ public class FunctionDeclaratorVisitor extends DefaultVisitorNoArgu<String> {
 	public String visit(final Type n) {
 		if (n.f0.which != 5)
 			return null;
-		return n.f0.choice.accept(this.codegenerator);
+		return n.f0.choice.accept(this);
 	}
 
 	/** {@inheritDoc} */
