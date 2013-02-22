@@ -291,7 +291,7 @@ public class BoaAstIntrinsics {
 			if (kinds != null) {
 				boolean filter = true;
 				for (final String kind : kinds)
-					if (!node.getKind().name().startsWith(kind)) {
+					if (node.getKind().name().startsWith(kind)) {
 						filter = false;
 						break;
 					}
