@@ -678,8 +678,6 @@ public class CodeGeneratingVisitor extends DefaultVisitorNoArgu<String> {
 	public String visit(final Comparison n) {
 		final StringTemplate st = this.stg.getInstanceOf("Expression");
 
-		st.setAttribute("lhs", n.f0.accept(this));
-
 		if (n.f1.present()) {
 			final List<String> operators = new ArrayList<String>();
 			final List<String> operands = new ArrayList<String>();
@@ -690,8 +688,9 @@ public class CodeGeneratingVisitor extends DefaultVisitorNoArgu<String> {
 			case 0:
 			case 1:
 				// special case string (in)equality
-				// FIXME rdyer string != is doing == right now
-				if (n.f0.accept(this.typechecker, this.typechecker.getSyms(n.f0)) instanceof BoaString) {
+				if (typechecker.getBinding(n.f0) instanceof BoaString) {
+					if (nodeChoice.which == 1)
+						st.setAttribute("lhs", "!" + n.f0.accept(this));
 					operators.add(".equals(" + nodes.elementAt(1).accept(this) + ")");
 					operands.add("");
 					break;
@@ -711,6 +710,9 @@ public class CodeGeneratingVisitor extends DefaultVisitorNoArgu<String> {
 			st.setAttribute("operators", operators);
 			st.setAttribute("operands", operands);
 		}
+
+		if (st.getAttribute("lhs") == null)
+			st.setAttribute("lhs", n.f0.accept(this));
 
 		return st.toString();
 	}
