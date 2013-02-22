@@ -288,20 +288,21 @@ public class BoaAstIntrinsics {
 		/** {@inheritDoc} */
 		@Override
 		protected boolean preVisit(final ChangedFile node) throws Exception {
-			if (kinds != null) {
-				boolean filter = true;
-				for (final String kind : kinds)
-					if (node.getKind().name().startsWith(kind)) {
-						filter = false;
-						break;
-					}
-				if (filter)
-					return false;
-			}
+			boolean filter = kinds.length > 0;
+			final String kindName = node.getKind().name();
+			for (final String kind : kinds)
+				if (kindName.startsWith(kind)) {
+					filter = false;
+					break;
+				}
+			if (filter)
+				return false;
+
 			if (node.getChange() == ChangeKind.DELETED)
 				map.remove(node.getName());
 			else
 				map.put(node.getName(), node);
+
 			return false;
 		}
 	}
@@ -321,13 +322,12 @@ public class BoaAstIntrinsics {
 
 	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "time" })
 	public static ChangedFile[] getSnapshot(final CodeRepository cr, final long timestamp) throws Exception {
-		snapshot.initialize(timestamp).visit(cr);
-		return snapshot.map.values().toArray(new ChangedFile[0]);
+		return getSnapshot(cr, timestamp, new String[0]);
 	}
 
 	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository" })
 	public static ChangedFile[] getSnapshot(final CodeRepository cr) throws Exception {
-		return getSnapshot(cr, Long.MAX_VALUE);
+		return getSnapshot(cr, Long.MAX_VALUE, new String[0]);
 	}
 
 	@FunctionSpec(name = "isliteral", returnType = "bool", formalParameters = { "Expression", "string" })
