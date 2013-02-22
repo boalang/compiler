@@ -271,10 +271,12 @@ public class BoaAstIntrinsics {
 	 */
 	public static class SnapshotVisitor extends BoaCollectingVisitor<String, ChangedFile> {
 		private long timestamp;
+		private String[] kinds;
 
-		public SnapshotVisitor initialize(final long timestamp) {
+		public SnapshotVisitor initialize(final long timestamp, final String... kinds) {
 			initialize(new HashMap<String, ChangedFile>());
 			this.timestamp = timestamp;
+			this.kinds = kinds;
 			return this;
 		}
 
@@ -286,6 +288,16 @@ public class BoaAstIntrinsics {
 		/** {@inheritDoc} */
 		@Override
 		protected boolean preVisit(final ChangedFile node) throws Exception {
+			if (kinds != null) {
+				boolean filter = true;
+				for (final String kind : kinds)
+					if (!node.getKind().name().startsWith(kind)) {
+						filter = false;
+						break;
+					}
+				if (filter)
+					return false;
+			}
 			if (node.getChange() == ChangeKind.DELETED)
 				map.remove(node.getName());
 			else
@@ -295,6 +307,17 @@ public class BoaAstIntrinsics {
 	}
 
 	public final static SnapshotVisitor snapshot = new SnapshotVisitor();
+
+	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "time", "string..." })
+	public static ChangedFile[] getSnapshot(final CodeRepository cr, final long timestamp, final String... kinds) throws Exception {
+		snapshot.initialize(timestamp, kinds).visit(cr);
+		return snapshot.map.values().toArray(new ChangedFile[0]);
+	}
+
+	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "string..." })
+	public static ChangedFile[] getSnapshot(final CodeRepository cr, final String... kinds) throws Exception {
+		return getSnapshot(cr, Long.MAX_VALUE, kinds);
+	}
 
 	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "time" })
 	public static ChangedFile[] getSnapshot(final CodeRepository cr, final long timestamp) throws Exception {
