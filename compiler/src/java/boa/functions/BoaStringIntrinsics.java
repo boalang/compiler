@@ -137,6 +137,19 @@ public class BoaStringIntrinsics {
 	}
 
 	/**
+	 * Returns the substring of <em>str</em> from <em>start</em> to the end.
+	 * 
+	 * @param str
+	 * @param start
+	 * 
+	 * @return the substring of <em>str</em>
+	 */
+	@FunctionSpec(name = "substring", returnType = "string", formalParameters = { "string", "int"})
+	public static String substring(final String str, final long start) {
+		return str.substring((int)start);
+	}
+
+	/**
 	 * Returns the substring of <em>str</em> from <em>start</em> inclusive to <em>end</em> exclusive.
 	 * 
 	 * @param str
