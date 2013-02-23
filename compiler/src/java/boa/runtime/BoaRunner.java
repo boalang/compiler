@@ -85,7 +85,7 @@ public abstract class BoaRunner {
 										.withArgName("ID")
 										.create("j"));
 		options.addOption(org.apache.commons.cli.OptionBuilder.withLongOpt("astTable")
-										.withDescription("which HBase table to use for AST rows")
+										.withDescription("which HBase TABLE to use for AST rows")
 										.hasArg()
 										.withArgName("TABLE")
 										.create("a"));

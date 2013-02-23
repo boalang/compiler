@@ -20,6 +20,14 @@ public class <name> extends boa.runtime.BoaRunner {
 		return job;
 	}
 
+	static {
+		getOptions().addOption(org.apache.commons.cli.OptionBuilder.withLongOpt("splitsize")
+										.withDescription("split size in BYTES")
+										.hasArg()
+										.withArgName("BYTES")
+										.create("s"));
+	}
+
 	public static void main(String[] args) throws java.io.IOException, InterruptedException, ClassNotFoundException {
 		final <name> runner = new <name>();
 		
@@ -42,6 +50,11 @@ public class <name> extends boa.runtime.BoaRunner {
 			ins[i] = new org.apache.hadoop.fs.Path(args[i]);
 		
 		final org.apache.hadoop.mapreduce.Job jb = runner.job(new org.apache.hadoop.conf.Configuration(), ins, new org.apache.hadoop.fs.Path(args[args.length - 1]), robust);
+
+		if (line.hasOption("splitsize"))
+			jb.getConfiguration().setInt("mapred.max.split.size", Integer.parseInt(line.getOptionValue("splitsize")));
+		else
+			jb.getConfiguration().setInt("mapred.max.split.size", 10000000);
 
 		if (line.hasOption("astTable"))
 			jb.getConfiguration().set("boa.hbase.ast.table", line.getOptionValue("astTable"));
