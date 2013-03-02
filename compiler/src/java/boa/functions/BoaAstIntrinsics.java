@@ -3,12 +3,17 @@ package boa.functions;
 import java.io.IOException;
 import java.util.HashMap;
 
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.BytesWritable;
+import org.apache.hadoop.io.Text;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.util.Bytes;
-
+import org.apache.hadoop.io.MapFile;
 import org.apache.hadoop.mapreduce.Mapper.Context;
 
 import com.google.protobuf.CodedInputStream;
@@ -39,7 +44,7 @@ public class BoaAstIntrinsics {
 	private static HTable locTable;
 	private static String locTableName;
 
-	public static enum HBASE_COUNTER {
+	public static enum AST_COUNTER {
 		GETS_ATTEMPTED,
 		GETS_SUCCEED,
 		GETS_FAILED,
@@ -63,7 +68,7 @@ public class BoaAstIntrinsics {
 	@SuppressWarnings("unchecked")
 	@FunctionSpec(name = "getast", returnType = "ASTRoot", formalParameters = { "ChangedFile" })
 	public static ASTRoot getast(final ChangedFile f) {
-		// since we know only certain kinds have ASTs, filter before looking in HBase
+		// since we know only certain kinds have ASTs, filter before looking up
 		final ChangedFile.FileKind kind = f.getKind();
 		if (kind != ChangedFile.FileKind.SOURCE_JAVA_ERROR
 				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS2
@@ -71,14 +76,56 @@ public class BoaAstIntrinsics {
 				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS4)
 			return ASTRoot.newBuilder().build();
 
-		context.getCounter(HBASE_COUNTER.GETS_ATTEMPTED).increment(1);
+		context.getCounter(AST_COUNTER.GETS_ATTEMPTED).increment(1);
 
 		// let the task tracker know we are alive every so often
-		if (++counter == 100) {
+		if (++counter == 1000) {
 			counter = 0;
 			context.progress();
 		}
 
+		if (map != null)
+			return getAstMap(f);
+		return getAstHbase(f);
+	}
+
+	@SuppressWarnings("unchecked")
+	private static ASTRoot getAstMap(final ChangedFile f) {
+		final String rowName = f.getKey() + "!!" + f.getName();
+
+		try {
+			final BytesWritable value = new BytesWritable();
+			if (map.get(new Text(rowName), value) == null) {
+				context.getCounter(AST_COUNTER.GETS_FAIL_MISSING).increment(1);
+			} else {
+				final CodedInputStream _stream = CodedInputStream.newInstance(value.getBytes(), 0, value.getLength());
+				// defaults to 64, really big ASTs require more
+				_stream.setRecursionLimit(Integer.MAX_VALUE);
+				final ASTRoot root = ASTRoot.parseFrom(_stream);
+				context.getCounter(AST_COUNTER.GETS_SUCCEED).increment(1);
+				return root;
+			}
+		} catch (final InvalidProtocolBufferException e) {
+			e.printStackTrace();
+			context.getCounter(AST_COUNTER.GETS_FAIL_BADPROTOBUF).increment(1);
+		} catch (final IOException e) {
+			e.printStackTrace();
+			context.getCounter(AST_COUNTER.GETS_FAIL_MISSING).increment(1);
+		} catch (final RuntimeException e) {
+			e.printStackTrace();
+			context.getCounter(AST_COUNTER.GETS_FAIL_MISSING).increment(1);
+		} catch (final Error e) {
+			e.printStackTrace();
+			context.getCounter(AST_COUNTER.GETS_FAIL_BADPROTOBUF).increment(1);
+		}
+
+		System.err.println("error with ast: " + rowName);
+		context.getCounter(AST_COUNTER.GETS_FAILED).increment(1);
+		return ASTRoot.newBuilder().build();
+	}
+
+	@SuppressWarnings("unchecked")
+	public static ASTRoot getAstHbase(final ChangedFile f) {
 		final byte[] rowName = Bytes.toBytes(f.getKey());
 		final Get get = new Get(rowName);
 		final byte[] colName = Bytes.toBytes(f.getName());
@@ -100,11 +147,11 @@ public class BoaAstIntrinsics {
 				// defaults to 64, really big ASTs require more
 				_stream.setRecursionLimit(Integer.MAX_VALUE);
 				final ASTRoot root = ASTRoot.parseFrom(_stream);
-				context.getCounter(HBASE_COUNTER.GETS_SUCCEED).increment(1);
+				context.getCounter(AST_COUNTER.GETS_SUCCEED).increment(1);
 				return root;
 			} catch (final InvalidProtocolBufferException e) {
 				e.printStackTrace();
-				context.getCounter(HBASE_COUNTER.GETS_FAIL_BADPROTOBUF).increment(1);
+				context.getCounter(AST_COUNTER.GETS_FAIL_BADPROTOBUF).increment(1);
 				break;
 			} catch (final IOException e) {
 				System.err.println("hbase error: " + e.getMessage());
@@ -112,19 +159,19 @@ public class BoaAstIntrinsics {
 				try { Thread.sleep(500); } catch (InterruptedException e1) { }
 			} catch (final RuntimeException e) {
 				e.printStackTrace();
-				context.getCounter(HBASE_COUNTER.GETS_FAIL_MISSING).increment(1);
+				context.getCounter(AST_COUNTER.GETS_FAIL_MISSING).increment(1);
 				break;
 			}
 
 		System.err.println("error with ast: " + f.getKey() + "!!" + f.getName());
-		context.getCounter(HBASE_COUNTER.GETS_FAILED).increment(1);
+		context.getCounter(AST_COUNTER.GETS_FAILED).increment(1);
 		return ASTRoot.newBuilder().build();
 	}
 
 	@SuppressWarnings("unchecked")
 	@FunctionSpec(name = "loc", returnType = "int", formalParameters = { "ChangedFile" })
 	public static long loc(final ChangedFile f) {
-		context.getCounter(HBASE_COUNTER.GETS_ATTEMPTED).increment(1);
+		context.getCounter(AST_COUNTER.GETS_ATTEMPTED).increment(1);
 
 		final byte[] rowName = Bytes.toBytes(f.getKey());
 		final Get get = new Get(rowName);
@@ -140,17 +187,17 @@ public class BoaAstIntrinsics {
 
 				final Result res = locTable.get(get);
 				if (!res.containsColumn(locFamily, colName) || res.isEmpty()) {
-					context.getCounter(HBASE_COUNTER.GETS_FAIL_MISSING).increment(1);
+					context.getCounter(AST_COUNTER.GETS_FAIL_MISSING).increment(1);
 					throw new RuntimeException("cell not found");
 				}
 	
 				final String s = Bytes.toString(res.value());
 				final String[] parts = s.split(",");
 				if (parts.length != 6) {
-					context.getCounter(HBASE_COUNTER.GETS_FAIL_BADLOC).increment(1);
+					context.getCounter(AST_COUNTER.GETS_FAIL_BADLOC).increment(1);
 					throw new RuntimeException("contains invalid LOC: '" + s + "'");
 				}
-				context.getCounter(HBASE_COUNTER.GETS_SUCCEED).increment(1);
+				context.getCounter(AST_COUNTER.GETS_SUCCEED).increment(1);
 				return Long.parseLong(parts[1].trim()) + Long.parseLong(parts[2].trim());
 			} catch (final IOException e) {
 				System.err.println("hbase error: " + e.getMessage());
@@ -162,20 +209,37 @@ public class BoaAstIntrinsics {
 			}
 
 		System.err.println("error with loc: " + f.getKey() + "!!" + f.getName());
-		context.getCounter(HBASE_COUNTER.GETS_FAILED).increment(1);
+		context.getCounter(AST_COUNTER.GETS_FAILED).increment(1);
 		return -1;
 	}
+
+	private static MapFile.Reader map;
 
 	@SuppressWarnings("rawtypes")
 	public static void initialize(final Context context) {
 		BoaAstIntrinsics.context = context;
 		astTableName = context.getConfiguration().get("boa.hbase.ast.table", "ast");
-		locTableName = context.getConfiguration().get("boa.hbase.loc.table", "loc");
+		//locTableName = context.getConfiguration().get("boa.hbase.loc.table", "loc");
+		final Configuration conf = new Configuration();
+		try {
+			FileSystem fs = FileSystem.get(conf);
+			if (fs.exists(new Path("hdfs://boa-nn1/ast/data")) && fs.exists(new Path("hdfs://boa-nn1/ast/index")))
+				map = new MapFile.Reader(fs, "hdfs://boa-nn1/ast/", conf);
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void close() {
+		if (map != null)
+			try {
+				map.close();
+			} catch (final IOException e) {
+				e.printStackTrace();
+			}
+		map = null;
 		closeAst();
-		closeLoc();
+		//closeLoc();
 	}
 
 	private static void closeAst() {
