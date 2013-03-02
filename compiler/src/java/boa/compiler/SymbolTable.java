@@ -479,6 +479,7 @@ public class SymbolTable {
 		final Class<?>[] builtinAggs = {
 			boa.aggregators.BottomAggregator.class,
 			boa.aggregators.CollectionAggregator.class,
+			boa.aggregators.ConfidenceIntervalAggregator.class,
 			boa.aggregators.DistinctAggregator.class,
 			boa.aggregators.FloatHistogramAggregator.class,
 			boa.aggregators.FloatMeanAggregator.class,
@@ -488,14 +489,20 @@ public class SymbolTable {
 			boa.aggregators.IntMeanAggregator.class,
 			boa.aggregators.IntQuantileAggregator.class,
 			boa.aggregators.IntSumAggregator.class,
+			boa.aggregators.KurtosisAggregator.class,
 			boa.aggregators.LogAggregator.class,
 			boa.aggregators.MaximumAggregator.class,
+			boa.aggregators.MedianAggregator.class,
 			boa.aggregators.MinimumAggregator.class,
 			boa.aggregators.MrcounterAggregator.class,
 			boa.aggregators.SetAggregator.class,
+			boa.aggregators.SkewnessAggregator.class,
+			boa.aggregators.StatisticsAggregator.class,
+			boa.aggregators.StDevAggregator.class,
 			boa.aggregators.TextAggregator.class,
 			boa.aggregators.TopAggregator.class,
-			boa.aggregators.UniqueAggregator.class
+			boa.aggregators.UniqueAggregator.class,
+			boa.aggregators.VarianceAggregator.class,
 		};
 		for (final Class<?> c : builtinAggs)
 			this.importAggregator(c);
