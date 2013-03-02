@@ -47,6 +47,10 @@ public abstract class BoaRunner {
 	public Job job(final Configuration configuration, final Path[] ins, final Path out, final boolean robust) throws IOException {
 		configuration.setBoolean("boa.runtime.robust", robust);
 
+		// faster local reads
+		configuration.setBoolean("dfs.client.read.shortcircuit", true);
+		configuration.setBoolean("dfs.client.read.shortcircuit.skip.checksum", true);
+
 		// map output compression
 		configuration.setBoolean("mapred.compress.map.output", true);
 		configuration.set("mapred.map.output.compression.type", "BLOCK");
