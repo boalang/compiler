@@ -453,7 +453,7 @@ public class TypeCheckingVisitor extends DefaultVisitor<BoaType, SymbolTable> {
 				final Node node = n.f1.nodes.get(i);
 				indices.add(((NodeSequence) node).nodes.get(1).accept(this, argu));
 				if (!t.getIndex(i).assigns(indices.get(i)))
-					throw new TypeException(node, "incorrect type '" + indices.get(i) + "' for index '" + i + "'");
+					throw new TypeException(((NodeSequence) node).nodes.get(1), "incorrect type '" + indices.get(i) + "' for index '" + i + "'");
 			}
 		} else if (t.countIndices() > 0)
 			throw new TypeException(n, "indices missing from emit");
