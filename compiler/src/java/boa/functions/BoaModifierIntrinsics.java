@@ -58,8 +58,7 @@ public class BoaModifierIntrinsics {
 	@FunctionSpec(name = "has_visibility", returnType = "bool", formalParameters = { "Method", "Visibility" })
 	public static boolean hasVisibility(final Method m, final Visibility v) {
 		for (int i = 0; i < m.getModifiersCount(); i++)
-			if (m.getModifiers(i).getKind() == ModifierKind.VISIBILITY
-				&& (m.getModifiers(i).getVisibility() & v.getNumber()) == v.getNumber())
+			if (m.getModifiers(i).getKind() == ModifierKind.VISIBILITY && m.getModifiers(i).getVisibility() == v)
 				return true;
 
 		return false;
@@ -209,8 +208,7 @@ public class BoaModifierIntrinsics {
 	@FunctionSpec(name = "has_visibility", returnType = "bool", formalParameters = { "Variable", "Visibility" })
 	public static boolean hasVisibility(final Variable var, final Visibility v) {
 		for (int i = 0; i < var.getModifiersCount(); i++)
-			if (var.getModifiers(i).getKind() == ModifierKind.VISIBILITY
-				&& (var.getModifiers(i).getVisibility() & v.getNumber()) == v.getNumber())
+			if (var.getModifiers(i).getKind() == ModifierKind.VISIBILITY && var.getModifiers(i).getVisibility() == v)
 				return true;
 
 		return false;
@@ -360,8 +358,7 @@ public class BoaModifierIntrinsics {
 	@FunctionSpec(name = "has_visibility", returnType = "bool", formalParameters = { "Declaration", "Visibility" })
 	public static boolean hasVisibility(final Declaration d, final Visibility v) {
 		for (int i = 0; i < d.getModifiersCount(); i++)
-			if (d.getModifiers(i).getKind() == ModifierKind.VISIBILITY
-				&& (d.getModifiers(i).getVisibility() & v.getNumber()) == v.getNumber())
+			if (d.getModifiers(i).getKind() == ModifierKind.VISIBILITY && d.getModifiers(i).getVisibility() == v)
 				return true;
 
 		return false;
@@ -511,8 +508,7 @@ public class BoaModifierIntrinsics {
 	@FunctionSpec(name = "has_visibility", returnType = "bool", formalParameters = { "Namespace", "Visibility" })
 	public static boolean hasVisibility(final Namespace n, final Visibility v) {
 		for (int i = 0; i < n.getModifiersCount(); i++)
-			if (n.getModifiers(i).getKind() == ModifierKind.VISIBILITY
-				&& (n.getModifiers(i).getVisibility() & v.getNumber()) == v.getNumber())
+			if (n.getModifiers(i).getKind() == ModifierKind.VISIBILITY && n.getModifiers(i).getVisibility() == v)
 				return true;
 
 		return false;

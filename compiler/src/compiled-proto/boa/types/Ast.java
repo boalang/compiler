@@ -12882,9 +12882,9 @@ public final class Ast {
     boolean hasKind();
     boa.types.Ast.Modifier.ModifierKind getKind();
     
-    // optional uint32 visibility = 2;
+    // optional .boa.types.Modifier.Visibility visibility = 2;
     boolean hasVisibility();
-    int getVisibility();
+    boa.types.Ast.Modifier.Visibility getVisibility();
     
     // optional string annotation_name = 3;
     boolean hasAnnotationName();
@@ -13025,14 +13025,14 @@ public final class Ast {
         implements com.google.protobuf.ProtocolMessageEnum {
       PUBLIC(0, 1),
       PRIVATE(1, 2),
-      PROTECTED(2, 4),
-      NAMESPACE(3, 8),
+      PROTECTED(2, 3),
+      NAMESPACE(3, 4),
       ;
       
       public static final int PUBLIC_VALUE = 1;
       public static final int PRIVATE_VALUE = 2;
-      public static final int PROTECTED_VALUE = 4;
-      public static final int NAMESPACE_VALUE = 8;
+      public static final int PROTECTED_VALUE = 3;
+      public static final int NAMESPACE_VALUE = 4;
       
       
       public final int getNumber() { return value; }
@@ -13041,8 +13041,8 @@ public final class Ast {
         switch (value) {
           case 1: return PUBLIC;
           case 2: return PRIVATE;
-          case 4: return PROTECTED;
-          case 8: return NAMESPACE;
+          case 3: return PROTECTED;
+          case 4: return NAMESPACE;
           default: return null;
         }
       }
@@ -13107,13 +13107,13 @@ public final class Ast {
       return kind_;
     }
     
-    // optional uint32 visibility = 2;
+    // optional .boa.types.Modifier.Visibility visibility = 2;
     public static final int VISIBILITY_FIELD_NUMBER = 2;
-    private int visibility_;
+    private boa.types.Ast.Modifier.Visibility visibility_;
     public boolean hasVisibility() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
-    public int getVisibility() {
+    public boa.types.Ast.Modifier.Visibility getVisibility() {
       return visibility_;
     }
     
@@ -13218,7 +13218,7 @@ public final class Ast {
     
     private void initFields() {
       kind_ = boa.types.Ast.Modifier.ModifierKind.OTHER;
-      visibility_ = 0;
+      visibility_ = boa.types.Ast.Modifier.Visibility.PUBLIC;
       annotationName_ = "";
       annotationMembers_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       annotationValues_ = java.util.Collections.emptyList();
@@ -13250,7 +13250,7 @@ public final class Ast {
         output.writeEnum(1, kind_.getNumber());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeUInt32(2, visibility_);
+        output.writeEnum(2, visibility_.getNumber());
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeBytes(3, getAnnotationNameBytes());
@@ -13279,7 +13279,7 @@ public final class Ast {
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeUInt32Size(2, visibility_);
+          .computeEnumSize(2, visibility_.getNumber());
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
@@ -13429,7 +13429,7 @@ public final class Ast {
         super.clear();
         kind_ = boa.types.Ast.Modifier.ModifierKind.OTHER;
         bitField0_ = (bitField0_ & ~0x00000001);
-        visibility_ = 0;
+        visibility_ = boa.types.Ast.Modifier.Visibility.PUBLIC;
         bitField0_ = (bitField0_ & ~0x00000002);
         annotationName_ = "";
         bitField0_ = (bitField0_ & ~0x00000004);
@@ -13629,8 +13629,14 @@ public final class Ast {
               break;
             }
             case 16: {
-              bitField0_ |= 0x00000002;
-              visibility_ = input.readUInt32();
+              int rawValue = input.readEnum();
+              boa.types.Ast.Modifier.Visibility value = boa.types.Ast.Modifier.Visibility.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(2, rawValue);
+              } else {
+                bitField0_ |= 0x00000002;
+                visibility_ = value;
+              }
               break;
             }
             case 26: {
@@ -13684,15 +13690,18 @@ public final class Ast {
         return this;
       }
       
-      // optional uint32 visibility = 2;
-      private int visibility_ ;
+      // optional .boa.types.Modifier.Visibility visibility = 2;
+      private boa.types.Ast.Modifier.Visibility visibility_ = boa.types.Ast.Modifier.Visibility.PUBLIC;
       public boolean hasVisibility() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
-      public int getVisibility() {
+      public boa.types.Ast.Modifier.Visibility getVisibility() {
         return visibility_;
       }
-      public Builder setVisibility(int value) {
+      public Builder setVisibility(boa.types.Ast.Modifier.Visibility value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
         bitField0_ |= 0x00000002;
         visibility_ = value;
         onChanged();
@@ -13700,7 +13709,7 @@ public final class Ast {
       }
       public Builder clearVisibility() {
         bitField0_ = (bitField0_ & ~0x00000002);
-        visibility_ = 0;
+        visibility_ = boa.types.Ast.Modifier.Visibility.PUBLIC;
         onChanged();
         return this;
       }
@@ -15529,28 +15538,28 @@ public final class Ast {
       ")\022\016\n\nASSIGN_MOD\020*\022\021\n\rASSIGN_BITXOR\020+\022\021\n\r" +
       "ASSIGN_BITAND\020,\022\020\n\014ASSIGN_BITOR\020-\022\021\n\rASS" +
       "IGN_LSHIFT\020.\022\021\n\rASSIGN_RSHIFT\020/\022\031\n\025ASSIG" +
-      "N_UNSIGNEDRSHIFT\0200\022\016\n\nANNOTATION\0201\"\373\002\n\010M" +
+      "N_UNSIGNEDRSHIFT\0200\022\016\n\nANNOTATION\0201\"\233\003\n\010M" +
       "odifier\022.\n\004kind\030\001 \002(\0162 .boa.types.Modifi" +
-      "er.ModifierKind\022\022\n\nvisibility\030\002 \001(\r\022\027\n\017a" +
-      "nnotation_name\030\003 \001(\t\022\032\n\022annotation_membe" +
-      "rs\030\004 \003(\t\0220\n\021annotation_values\030\005 \003(\0132\025.bo" +
-      "a.types.Expression\022\r\n\005other\030\006 \001(\t\"p\n\014Mod" +
-      "ifierKind\022\t\n\005OTHER\020\001\022\016\n\nVISIBILITY\020\002\022\016\n\n",
-      "ANNOTATION\020\003\022\t\n\005FINAL\020\004\022\n\n\006STATIC\020\005\022\020\n\014S" +
-      "YNCHRONIZED\020\006\022\014\n\010ABSTRACT\020\007\"C\n\nVisibilit" +
-      "y\022\n\n\006PUBLIC\020\001\022\013\n\007PRIVATE\020\002\022\r\n\tPROTECTED\020" +
-      "\004\022\r\n\tNAMESPACE\020\010\"\250\001\n\007Comment\022,\n\004kind\030\001 \002" +
-      "(\0162\036.boa.types.Comment.CommentKind\022\r\n\005va" +
-      "lue\030\002 \002(\t\022)\n\010position\030\003 \002(\0132\027.boa.types." +
-      "PositionInfo\"5\n\013CommentKind\022\010\n\004LINE\020\001\022\t\n" +
-      "\005BLOCK\020\002\022\007\n\003DOC\020\003\022\010\n\004SPEC\020\004\"{\n\014PositionI" +
-      "nfo\022\021\n\tstart_pos\030\001 \002(\005\022\016\n\006length\030\002 \002(\005\022\022" +
-      "\n\nstart_line\030\003 \002(\005\022\021\n\tstart_col\030\004 \002(\005\022\020\n",
-      "\010end_line\030\005 \002(\005\022\017\n\007end_col\030\006 \002(\005*\177\n\010Type" +
-      "Kind\022\t\n\005OTHER\020\001\022\t\n\005CLASS\020\002\022\r\n\tINTERFACE\020" +
-      "\003\022\r\n\tANONYMOUS\020\004\022\n\n\006STRUCT\020\005\022\010\n\004ENUM\020\006\022\016" +
-      "\n\nANNOTATION\020\007\022\014\n\010DELEGATE\020\010\022\013\n\007GENERIC\020" +
-      "\tB\002H\001"
+      "er.ModifierKind\0222\n\nvisibility\030\002 \001(\0162\036.bo" +
+      "a.types.Modifier.Visibility\022\027\n\017annotatio" +
+      "n_name\030\003 \001(\t\022\032\n\022annotation_members\030\004 \003(\t" +
+      "\0220\n\021annotation_values\030\005 \003(\0132\025.boa.types." +
+      "Expression\022\r\n\005other\030\006 \001(\t\"p\n\014ModifierKin",
+      "d\022\t\n\005OTHER\020\001\022\016\n\nVISIBILITY\020\002\022\016\n\nANNOTATI" +
+      "ON\020\003\022\t\n\005FINAL\020\004\022\n\n\006STATIC\020\005\022\020\n\014SYNCHRONI" +
+      "ZED\020\006\022\014\n\010ABSTRACT\020\007\"C\n\nVisibility\022\n\n\006PUB" +
+      "LIC\020\001\022\013\n\007PRIVATE\020\002\022\r\n\tPROTECTED\020\003\022\r\n\tNAM" +
+      "ESPACE\020\004\"\250\001\n\007Comment\022,\n\004kind\030\001 \002(\0162\036.boa" +
+      ".types.Comment.CommentKind\022\r\n\005value\030\002 \002(" +
+      "\t\022)\n\010position\030\003 \002(\0132\027.boa.types.Position" +
+      "Info\"5\n\013CommentKind\022\010\n\004LINE\020\001\022\t\n\005BLOCK\020\002" +
+      "\022\007\n\003DOC\020\003\022\010\n\004SPEC\020\004\"{\n\014PositionInfo\022\021\n\ts" +
+      "tart_pos\030\001 \002(\005\022\016\n\006length\030\002 \002(\005\022\022\n\nstart_",
+      "line\030\003 \002(\005\022\021\n\tstart_col\030\004 \002(\005\022\020\n\010end_lin" +
+      "e\030\005 \002(\005\022\017\n\007end_col\030\006 \002(\005*\177\n\010TypeKind\022\t\n\005" +
+      "OTHER\020\001\022\t\n\005CLASS\020\002\022\r\n\tINTERFACE\020\003\022\r\n\tANO" +
+      "NYMOUS\020\004\022\n\n\006STRUCT\020\005\022\010\n\004ENUM\020\006\022\016\n\nANNOTA" +
+      "TION\020\007\022\014\n\010DELEGATE\020\010\022\013\n\007GENERIC\020\tB\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

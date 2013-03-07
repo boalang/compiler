@@ -183,11 +183,11 @@ message Modifier {
 	enum Visibility {
 		PUBLIC = 1;
 		PRIVATE = 2;
-		PROTECTED = 4;
-		NAMESPACE = 8;
+		PROTECTED = 3;
+		NAMESPACE = 4;
 	}
 	required ModifierKind kind = 1;
-	optional uint32 visibility = 2;
+	optional Visibility visibility = 2;
 	optional string annotation_name = 3;
 	repeated string annotation_members = 4;
 	repeated Expression annotation_values = 5;
