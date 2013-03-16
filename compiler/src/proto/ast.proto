@@ -6,7 +6,8 @@ option optimize_for = SPEED;
 
 message ASTRoot {
 	repeated Namespace namespaces = 1;
-//	repeated Comment comments = 2;
+	repeated string imports = 2;
+//	repeated Comment comments = 3;
 }
 
 message Namespace {
