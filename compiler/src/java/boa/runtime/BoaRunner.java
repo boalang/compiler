@@ -51,6 +51,11 @@ public abstract class BoaRunner {
 		configuration.setBoolean("dfs.client.read.shortcircuit", true);
 		configuration.setBoolean("dfs.client.read.shortcircuit.skip.checksum", true);
 
+		// by default our MapFile's index every key, which takes up
+		// a lot of memory - this lets you skip keys in the index and
+		// control the memory requirements (as a tradeoff of slower gets)
+		//configuration.setLong("io.map.index.skip", 128);
+
 		// map output compression
 		configuration.setBoolean("mapred.compress.map.output", true);
 		configuration.set("mapred.map.output.compression.type", "BLOCK");
