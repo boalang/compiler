@@ -191,9 +191,9 @@ public class SymbolTable {
 		// float to int
 		this.setFunction("int", new BoaFunction(new BoaInt(), new BoaScalar[] { new BoaFloat() }, "(long)${0}"));
 		// time to int
-		this.setFunction("int", new BoaFunction(new BoaInt(), new BoaScalar[] { new BoaTime() }));
+		this.setFunction("int", new BoaFunction(new BoaInt(), new BoaScalar[] { new BoaTime() }, "${0}"));
 		// fingerprint to int
-		this.setFunction("int", new BoaFunction(new BoaInt(), new BoaScalar[] { new BoaFingerprint() }));
+		this.setFunction("int", new BoaFunction(new BoaInt(), new BoaScalar[] { new BoaFingerprint() }, "${0}"));
 		// string to int
 		this.setFunction("int", new BoaFunction("java.lang.Long.decode", new BoaInt(), new BoaScalar[] { new BoaString() }));
 		// string to int with param base
@@ -207,14 +207,14 @@ public class SymbolTable {
 		this.setFunction("float", new BoaFunction("java.lang.Double.parseDouble", new BoaFloat(), new BoaScalar[] { new BoaString() }));
 
 		// int to time
-		this.setFunction("time", new BoaFunction(new BoaTime(), new BoaScalar[] { new BoaInt() }));
+		this.setFunction("time", new BoaFunction(new BoaTime(), new BoaScalar[] { new BoaInt() }, "${0}"));
 		// string to time
 		this.setFunction("time", new BoaFunction("boa.functions.BoaCasts.stringToTime", new BoaTime(), new BoaScalar[] { new BoaString() }));
 		// string to time
 		this.setFunction("time", new BoaFunction("boa.functions.BoaCasts.stringToTime", new BoaTime(), new BoaScalar[] { new BoaString(), new BoaString() }));
 
 		// int to fingerprint
-		this.setFunction("fingerprint", new BoaFunction(new BoaFingerprint(), new BoaScalar[] { new BoaInt() }));
+		this.setFunction("fingerprint", new BoaFunction(new BoaFingerprint(), new BoaScalar[] { new BoaInt() }, "${0}"));
 		// string to fingerprint
 		this.setFunction("fingerprint", new BoaFunction("java.lang.Long.parseLong", new BoaInt(), new BoaScalar[] { new BoaString() }));
 		// string to fingerprint with param base
