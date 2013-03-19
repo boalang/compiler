@@ -277,12 +277,13 @@ public class BoaFunction extends BoaType {
 
 	public BoaType erase(final List<BoaType> actualParameters) {
 		BoaType t = type;
+
 		if (t instanceof BoaArray) {
 			t = ((BoaArray)t).getType();
 			if (t instanceof BoaTypeVar)
-				return replaceVar(((BoaTypeVar)t).getName(), actualParameters);
+				return new BoaArray(replaceVar(((BoaTypeVar)t).getName(), actualParameters));
 		}
-		if (t instanceof BoaTypeVar)
+		else if (t instanceof BoaTypeVar)
 			return replaceVar(((BoaTypeVar)t).getName(), actualParameters);
 
 		return type;

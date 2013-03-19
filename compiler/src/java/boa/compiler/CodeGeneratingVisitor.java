@@ -213,11 +213,10 @@ public class CodeGeneratingVisitor extends DefaultVisitorNoArgu<String> {
 			if (!type.assigns(t)) {
 				final BoaFunction f = argu.getCast(t, type);
 
-				if (f.hasName()) {
+				if (f.hasName())
 					src = f.getName() + "(" + src + ")";
-				} else if (f.hasMacro()) {
+				else if (f.hasMacro())
 					src = CodeGeneratingVisitor.expand(f.getMacro(), src.split(","));
-				}
 			}
 
 			st.setAttribute("rhs", src);
@@ -1063,6 +1062,9 @@ public class CodeGeneratingVisitor extends DefaultVisitorNoArgu<String> {
 
 	private static String expand(final String template, final String... parameters) {
 		String replaced = template;
+
+		// FIXME rdyer
+		replaced = replaced.replace("${K}", "String");
 
 		for (int i = 0; i < parameters.length; i++)
 			replaced = replaced.replace("${" + i + "}", parameters[i]);
