@@ -30,6 +30,11 @@ public class TypeCheckingVisitor extends DefaultVisitor<BoaType, SymbolTable> {
 		return syms.get(n);
 	}
 
+	// FIXME rdyer this should be removed
+	public void setSyms(Node n, SymbolTable s) {
+		syms.put(n,  s);
+	}
+
 	/** {@inheritDoc} */
 	@Override
 	public BoaType visit(final Program n, final SymbolTable argu) {
@@ -522,9 +527,8 @@ public class TypeCheckingVisitor extends DefaultVisitor<BoaType, SymbolTable> {
 	public BoaType visit(final ForVarDecl n, final SymbolTable argu) {
 		syms.put(n, argu);
 
-		final VarDecl varDecl = new VarDecl(n.f0, n.f1, n.f2, n.f3, new NodeToken(";"));
-
-		bindings.put(n, varDecl.accept(this, argu));
+		// FIXME rdyer
+		bindings.put(n, new VarDecl(n.f0, n.f1, n.f2, n.f3, new NodeToken(";")).accept(this, argu));
 		return bindings.get(n);
 	}
 
@@ -533,9 +537,7 @@ public class TypeCheckingVisitor extends DefaultVisitor<BoaType, SymbolTable> {
 	public BoaType visit(final ForExprStatement n, final SymbolTable argu) {
 		syms.put(n, argu);
 
-		final ExprStatement exprStatement = new ExprStatement(n.f0, n.f1, new NodeToken(";"));
-
-		bindings.put(n, exprStatement.accept(this, argu));
+		bindings.put(n, n.f0.accept(this, argu));
 		return bindings.get(n);
 	}
 

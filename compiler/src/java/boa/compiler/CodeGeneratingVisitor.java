@@ -480,9 +480,10 @@ public class CodeGeneratingVisitor extends DefaultVisitorNoArgu<String> {
 	/** {@inheritDoc} */
 	@Override
 	public String visit(final ForVarDecl n) {
+		// FIXME rdyer this is bad
 		final VarDecl varDecl = new VarDecl(n.f0, n.f1, n.f2, n.f3, new NodeToken(";"));
-
-		return varDecl.accept(this);
+		this.typechecker.setSyms(varDecl, this.typechecker.getSyms(n));
+		return this.typechecker.getSyms(n).get(n.f0.f0.tokenImage).toJavaType() + " " + varDecl.accept(this);
 	}
 
 	/** {@inheritDoc} */
