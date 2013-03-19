@@ -150,7 +150,7 @@ public class SymbolTable {
 		// (easily) done with a static method, so they are handled with macros
 
 		// FIXME rdyer - def(protolist[i]) should generate "i < protolist.size()"
-		this.setFunction("def", new BoaFunction(new BoaBool(), new BoaType[] { new BoaAny() }, "${0} != null"));
+		this.setFunction("def", new BoaFunction(new BoaBool(), new BoaType[] { new BoaAny() }, "(${0} != null)"));
 		this.setFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaProtoList(new BoaScalar()) }, "${0}.size()"));
 		this.setFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaArray(new BoaScalar()) }, "${0}.length"));
 		this.setFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaMap(new BoaScalar(), new BoaScalar()) }, "${0}.keySet().size()"));
