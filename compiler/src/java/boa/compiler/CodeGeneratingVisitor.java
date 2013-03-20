@@ -689,10 +689,18 @@ public class CodeGeneratingVisitor extends DefaultVisitorNoArgu<String> {
 			case 1:
 				// special case string (in)equality
 				if (typechecker.getBinding(n.f0) instanceof BoaString) {
+					final String expr = n.f0.accept(this) + ".equals(" + nodes.elementAt(1).accept(this) + ")";
 					if (nodeChoice.which == 1)
-						st.setAttribute("lhs", "!" + n.f0.accept(this));
-					operators.add(".equals(" + nodes.elementAt(1).accept(this) + ")");
-					operands.add("");
+						st.setAttribute("lhs", "!" + expr);
+					else
+						st.setAttribute("lhs", expr);
+					break;
+				}
+				// special case AST (in)equality
+				if (typechecker.getBinding(n.f0) instanceof BoaProtoTuple) {
+					st.setAttribute("lhs", n.f0.accept(this) + ".hashCode()");
+					operators.add(((NodeToken)nodeChoice.choice).tokenImage);
+					operands.add(nodes.elementAt(1).accept(this) + ".hashCode()");
 					break;
 				}
 				// fall through
@@ -700,7 +708,8 @@ public class CodeGeneratingVisitor extends DefaultVisitorNoArgu<String> {
 			case 3:
 			case 4:
 			case 5:
-				operators.add(" " + ((NodeToken)nodeChoice.choice).tokenImage + " ");
+				st.setAttribute("lhs", n.f0.accept(this));
+				operators.add(((NodeToken)nodeChoice.choice).tokenImage);
 				operands.add(nodes.elementAt(1).accept(this));
 				break;
 			default:
@@ -709,9 +718,7 @@ public class CodeGeneratingVisitor extends DefaultVisitorNoArgu<String> {
 
 			st.setAttribute("operators", operators);
 			st.setAttribute("operands", operands);
-		}
-
-		if (st.getAttribute("lhs") == null)
+		} else
 			st.setAttribute("lhs", n.f0.accept(this));
 
 		return st.toString();

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 import boa.aggregators.AggregatorSpec;
 import boa.types.*;
@@ -710,6 +711,12 @@ public class TypeCheckingVisitor extends DefaultVisitor<BoaType, SymbolTable> {
 			if (!rhs.compares(lhs))
 				throw new TypeException(((NodeSequence) n.f1.node).nodes.get(1), "invalid type '" + rhs + "' for comparison with '" + lhs + "'");
 
+			if (lhs instanceof BoaString || lhs instanceof BoaProtoTuple) {
+				final Vector<Node> nodes = ((NodeSequence) n.f1.node).nodes;
+				final NodeChoice nodeChoice = (NodeChoice) nodes.elementAt(0);
+				if (nodeChoice.which > 1)
+					throw new TypeException(n.f0, "invalid comparison operator '" + ((NodeToken)nodeChoice.choice).tokenImage + "' for type '" + lhs + "'");
+			}
 			bindings.put(n, new BoaBool());
 		}
 

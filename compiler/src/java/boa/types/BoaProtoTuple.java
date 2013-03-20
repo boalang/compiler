@@ -35,7 +35,7 @@ public class BoaProtoTuple extends BoaTuple {
 		if (!super.assigns(that))
 			return false;
 
-		return (that instanceof BoaProtoTuple);
+		return this.getClass() == that.getClass();
 	}
 
 	/** {@inheritDoc} */
