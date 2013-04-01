@@ -33,8 +33,8 @@ public class <name> extends boa.runtime.BoaRunner {
 		
 		final org.apache.commons.cli.CommandLine line = parseArgs(args, runner.getUsage());
 		args = line.getArgs();
-		if (args.length \< 2) {
-			System.err.println("Not enough arguments. Must give at least 1 input file and the output directory.");
+		if (args.length != 2) {
+			System.err.println("Not enough arguments. Must give input directory and output directory.");
 			printHelp(runner.getUsage());
 		}
 
@@ -45,19 +45,16 @@ public class <name> extends boa.runtime.BoaRunner {
 		else
 			id = 0;
 		
-		final org.apache.hadoop.fs.Path[] ins = new org.apache.hadoop.fs.Path[args.length - 1];
-		for (int i = 0; i \< ins.length; i++)
-			ins[i] = new org.apache.hadoop.fs.Path(args[i]);
+		final org.apache.hadoop.fs.Path[] ins = new org.apache.hadoop.fs.Path[1];
+		ins[0] = new org.apache.hadoop.fs.Path(args[0] + "/projects.seq");
 		
-		final org.apache.hadoop.mapreduce.Job jb = runner.job(new org.apache.hadoop.conf.Configuration(), ins, new org.apache.hadoop.fs.Path(args[args.length - 1]), robust);
+		final org.apache.hadoop.mapreduce.Job jb = runner.job(new org.apache.hadoop.conf.Configuration(), ins, new org.apache.hadoop.fs.Path(args[1]), robust);
+		jb.getConfiguration().set("boa.input.dir", args[0]);
 
 		if (line.hasOption("splitsize"))
 			jb.getConfiguration().setInt("mapred.max.split.size", Integer.parseInt(line.getOptionValue("splitsize")));
 		else
 			jb.getConfiguration().setInt("mapred.max.split.size", 10000000);
-
-		if (line.hasOption("astTable"))
-			jb.getConfiguration().set("boa.hbase.ast.table", line.getOptionValue("astTable"));
 
 		jb.setInputFormatClass(org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat.class);
 

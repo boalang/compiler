@@ -34,15 +34,8 @@ import boa.types.Toplevel.Project;
 public class BoaAstIntrinsics {
 	@SuppressWarnings("rawtypes")
 	private static Context context;
+	private static MapFile.Reader map;
 	private static long counter = 0;
-
-	private final static byte[] astFamily = Bytes.toBytes("a");
-	private static HTable astTable;
-	private static String astTableName;
-
-	private final static byte[] locFamily = Bytes.toBytes("l");
-	private static HTable locTable;
-	private static String locTableName;
 
 	public static enum AST_COUNTER {
 		GETS_ATTEMPTED,
@@ -84,13 +77,6 @@ public class BoaAstIntrinsics {
 			context.progress();
 		}
 
-		if (map != null)
-			return getAstMap(f);
-		return getAstHbase(f);
-	}
-
-	@SuppressWarnings("unchecked")
-	private static ASTRoot getAstMap(final ChangedFile f) {
 		final String rowName = f.getKey() + "!!" + f.getName();
 
 		try {
@@ -124,107 +110,15 @@ public class BoaAstIntrinsics {
 		return ASTRoot.newBuilder().build();
 	}
 
-	@SuppressWarnings("unchecked")
-	public static ASTRoot getAstHbase(final ChangedFile f) {
-		final byte[] rowName = Bytes.toBytes(f.getKey());
-		final Get get = new Get(rowName);
-		final byte[] colName = Bytes.toBytes(f.getName());
-		get.addColumn(astFamily, colName);
-
-		// retry on errors
-		// sometimes HBase has connection problems which resolve fairly quick
-		for (int i = 0; i < 10; i++)
-			try {
-				if (astTable == null)
-					astTable = new HTable(HBaseConfiguration.create(), astTableName);
-
-				final Result res = astTable.get(get);
-				if (!res.containsColumn(astFamily, colName) || res.isEmpty())
-					throw new RuntimeException("cell not found");
-				final byte[] val = res.value();
-	
-				final CodedInputStream _stream = CodedInputStream.newInstance(val, 0, val.length);
-				// defaults to 64, really big ASTs require more
-				_stream.setRecursionLimit(Integer.MAX_VALUE);
-				final ASTRoot root = ASTRoot.parseFrom(_stream);
-				context.getCounter(AST_COUNTER.GETS_SUCCEED).increment(1);
-				return root;
-			} catch (final InvalidProtocolBufferException e) {
-				e.printStackTrace();
-				context.getCounter(AST_COUNTER.GETS_FAIL_BADPROTOBUF).increment(1);
-				break;
-			} catch (final IOException e) {
-				System.err.println("hbase error: " + e.getMessage());
-				closeAst();
-				try { Thread.sleep(500); } catch (InterruptedException e1) { }
-			} catch (final RuntimeException e) {
-				e.printStackTrace();
-				context.getCounter(AST_COUNTER.GETS_FAIL_MISSING).increment(1);
-				break;
-			}
-
-		System.err.println("error with ast: " + f.getKey() + "!!" + f.getName());
-		context.getCounter(AST_COUNTER.GETS_FAILED).increment(1);
-		return ASTRoot.newBuilder().build();
-	}
-
-	@SuppressWarnings("unchecked")
-	@FunctionSpec(name = "loc", returnType = "int", formalParameters = { "ChangedFile" })
-	public static long loc(final ChangedFile f) {
-		context.getCounter(AST_COUNTER.GETS_ATTEMPTED).increment(1);
-
-		final byte[] rowName = Bytes.toBytes(f.getKey());
-		final Get get = new Get(rowName);
-		final byte[] colName = Bytes.toBytes(f.getName());
-		get.addColumn(locFamily, colName);
-
-		// retry on errors
-		// sometimes HBase has connection problems which resolve fairly quick
-		for (int i = 0; i < 10; i++)
-			try {
-				if (locTable == null)
-					locTable = new HTable(HBaseConfiguration.create(), locTableName);
-
-				final Result res = locTable.get(get);
-				if (!res.containsColumn(locFamily, colName) || res.isEmpty()) {
-					context.getCounter(AST_COUNTER.GETS_FAIL_MISSING).increment(1);
-					throw new RuntimeException("cell not found");
-				}
-	
-				final String s = Bytes.toString(res.value());
-				final String[] parts = s.split(",");
-				if (parts.length != 6) {
-					context.getCounter(AST_COUNTER.GETS_FAIL_BADLOC).increment(1);
-					throw new RuntimeException("contains invalid LOC: '" + s + "'");
-				}
-				context.getCounter(AST_COUNTER.GETS_SUCCEED).increment(1);
-				return Long.parseLong(parts[1].trim()) + Long.parseLong(parts[2].trim());
-			} catch (final IOException e) {
-				System.err.println("hbase error: " + e.getMessage());
-				closeLoc();
-				try { Thread.sleep(500); } catch (InterruptedException e1) { }
-			} catch (final RuntimeException e) {
-				e.printStackTrace();
-				break;
-			}
-
-		System.err.println("error with loc: " + f.getKey() + "!!" + f.getName());
-		context.getCounter(AST_COUNTER.GETS_FAILED).increment(1);
-		return -1;
-	}
-
-	private static MapFile.Reader map;
-
 	@SuppressWarnings("rawtypes")
 	public static void initialize(final Context context) {
 		BoaAstIntrinsics.context = context;
-		astTableName = context.getConfiguration().get("boa.hbase.ast.table", "ast");
-		//locTableName = context.getConfiguration().get("boa.hbase.loc.table", "loc");
 		final Configuration conf = new Configuration();
 		try {
 			FileSystem fs = FileSystem.get(conf);
-			if (fs.exists(new Path("hdfs://boa-nn1/ast/data")) && fs.exists(new Path("hdfs://boa-nn1/ast/index")))
-				map = new MapFile.Reader(fs, "hdfs://boa-nn1/ast/", conf);
+			final String dir = "hdfs://boa-nn1/" + context.getConfiguration().get("boa.input.dir", "/repcache/") + "ast/";
+			if (fs.exists(new Path(dir + "data")) && fs.exists(new Path(dir + "index")))
+				map = new MapFile.Reader(fs, dir, conf);
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
@@ -238,30 +132,6 @@ public class BoaAstIntrinsics {
 				e.printStackTrace();
 			}
 		map = null;
-		closeAst();
-		//closeLoc();
-	}
-
-	private static void closeAst() {
-		if (astTable != null)
-			try {
-				astTable.close();
-			} catch (final IOException e) {
-				e.printStackTrace();
-			} finally {
-				astTable = null;
-			}
-	}
-
-	private static void closeLoc() {
-		if (locTable != null)
-			try {
-				locTable.close();
-			} catch (final IOException e) {
-				e.printStackTrace();
-			} finally {
-				locTable = null;
-			}
 	}
 
 	@FunctionSpec(name = "type_name", returnType = "string", formalParameters = { "string" })
