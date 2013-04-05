@@ -24,7 +24,6 @@ import boa.io.BoaOutputFormat;
 import boa.io.EmitKey;
 import boa.io.EmitValue;
 
-
 @SuppressWarnings("static-access")
 public abstract class BoaRunner {
 	/**
@@ -71,6 +70,8 @@ public abstract class BoaRunner {
 			for (final Path in : ins)
 				FileInputFormat.addInputPath(job, in);
 		FileOutputFormat.setOutputPath(job, out);
+
+		job.setPartitionerClass(BoaPartitioner.class);
 
 		job.setMapOutputKeyClass(EmitKey.class);
 		job.setMapOutputValueClass(EmitValue.class);
