@@ -10,22 +10,24 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.compress.CompressionCodec;
+import org.apache.hadoop.io.compress.SnappyCodec;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.Mapper;
-import org.apache.hadoop.io.compress.SnappyCodec;
-import org.apache.hadoop.io.compress.CompressionCodec;
+import org.apache.hadoop.util.Tool;
 
 import boa.io.BoaOutputFormat;
 import boa.io.EmitKey;
 import boa.io.EmitValue;
 
 @SuppressWarnings("static-access")
-public abstract class BoaRunner {
+public abstract class BoaRunner extends Configured implements Tool {
 	/**
 	 * Create a {@link Job} describing the work to be done by this Boa job.
 	 * 
@@ -43,7 +45,9 @@ public abstract class BoaRunner {
 	 * @return A {@link Job} describing the work to be done by this Boa job
 	 * @throws IOException
 	 */
-	public Job job(final Configuration configuration, final Path[] ins, final Path out, final boolean robust) throws IOException {
+	public Job job(final Path[] ins, final Path out, final boolean robust) throws IOException {
+		final Configuration configuration = getConf();
+
 		configuration.setBoolean("boa.runtime.robust", robust);
 
 		// faster local reads
