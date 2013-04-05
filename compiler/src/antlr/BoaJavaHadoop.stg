@@ -6,8 +6,8 @@ package boa;
 public class <name> extends boa.runtime.BoaRunner {
 	/** {@inheritDoc} */
 	@Override
-	public org.apache.hadoop.mapreduce.Job job(final org.apache.hadoop.conf.Configuration configuration, final org.apache.hadoop.fs.Path[] ins, final org.apache.hadoop.fs.Path out, final boolean robust) throws java.io.IOException {
-		final org.apache.hadoop.mapreduce.Job job = super.job(configuration, ins, out, robust);
+	public org.apache.hadoop.mapreduce.Job job(final org.apache.hadoop.fs.Path[] ins, final org.apache.hadoop.fs.Path out, final boolean robust) throws java.io.IOException {
+		final org.apache.hadoop.mapreduce.Job job = super.job(ins, out, robust);
 
 		job.setJobName("<name>: " + out);
 
@@ -28,14 +28,17 @@ public class <name> extends boa.runtime.BoaRunner {
 										.create("s"));
 	}
 
-	public static void main(String[] args) throws java.io.IOException, InterruptedException, ClassNotFoundException {
-		final <name> runner = new <name>();
-		
-		final org.apache.commons.cli.CommandLine line = parseArgs(args, runner.getUsage());
+	public static void main(String[] args) throws Exception {
+		System.exit(org.apache.hadoop.util.ToolRunner.run(new <name>(), args));
+	}
+
+	@Override
+	public int run(String[] args) throws Exception {
+		final org.apache.commons.cli.CommandLine line = parseArgs(args, getUsage());
 		args = line.getArgs();
 		if (args.length != 2) {
 			System.err.println("Not enough arguments. Must give input directory and output directory.");
-			printHelp(runner.getUsage());
+			printHelp(getUsage());
 		}
 
 		final boolean robust = line.hasOption("robust");
@@ -48,7 +51,7 @@ public class <name> extends boa.runtime.BoaRunner {
 		final org.apache.hadoop.fs.Path[] ins = new org.apache.hadoop.fs.Path[1];
 		ins[0] = new org.apache.hadoop.fs.Path(args[0] + "/projects.seq");
 		
-		final org.apache.hadoop.mapreduce.Job jb = runner.job(new org.apache.hadoop.conf.Configuration(), ins, new org.apache.hadoop.fs.Path(args[1]), robust);
+		final org.apache.hadoop.mapreduce.Job jb = job(ins, new org.apache.hadoop.fs.Path(args[1]), robust);
 		jb.getConfiguration().set("boa.input.dir", args[0]);
 
 		if (line.hasOption("splitsize"))
@@ -90,7 +93,9 @@ public class <name> extends boa.runtime.BoaRunner {
 				} catch (final Exception e) {}
 			}
 			System.err.println("JOB FINISHED: " + (jb.isSuccessful() ? "Success" : "Failed"));
+			return jb.isSuccessful() ? 0 : 1;
 		}
+		return 0;
 	}
 
 	public String getUsage() {
