@@ -94,7 +94,7 @@ public class <name> extends boa.runtime.BoaRunner {
 	}
 
 	public String getUsage() {
-		return "\<input1\> [.. \<inputN\>] \<outputDir\>";
+		return "\<inputDir\> \<outputDir\>";
 	}
 	
 	static class <name>BoaMapper extends boa.runtime.BoaMapper {
