@@ -26,6 +26,7 @@ import java.util.zip.ZipEntry;
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
 
+import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
 
 import org.apache.commons.cli.CommandLine;
@@ -154,9 +155,20 @@ public class BoaCompiler {
 				final TypeCheckingVisitor typeChecker = new TypeCheckingVisitor();
 				typeChecker.visit(p, new SymbolTable(libs));
 
-				final String src = new CodeGeneratingVisitor(typeChecker, className, stg).visit(p);
+				final ArrayList<String> jobnames = new ArrayList<String>();
+				final ArrayList<String> jobs = new ArrayList<String>();
 
-				o.write(src.getBytes());
+				jobnames.add("0");
+				jobs.add(new CodeGeneratingVisitor(typeChecker, "0", stg).visit(p));
+
+				final StringTemplate st = stg.getInstanceOf("Program");
+
+				st.setAttribute("name", className);
+				st.setAttribute("jobs", jobs);
+				st.setAttribute("jobnames", jobnames);
+				st.setAttribute("tables", CodeGeneratingVisitor.tableStrings);
+
+				o.write(st.toString().getBytes());
 			} finally {
 				r.close();
 			}

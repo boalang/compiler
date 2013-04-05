@@ -110,11 +110,13 @@ public class CodeGeneratingVisitor extends DefaultVisitorNoArgu<String> {
 		this.skipIndex = skipIndex;
 	}
 
+	final public static List<String> tableStrings = new ArrayList<String>();
+
 	/** {@inheritDoc} */
 	@Override
 	public String visit(final Program n) {
 		final SymbolTable argu = this.typechecker.getSyms(n);
-		final StringTemplate st = this.stg.getInstanceOf("Program");
+		final StringTemplate st = this.stg.getInstanceOf("Job");
 
 		st.setAttribute("name", this.name);
 
@@ -135,7 +137,6 @@ public class CodeGeneratingVisitor extends DefaultVisitorNoArgu<String> {
 		if (!hasEmit)
 			throw new TypeException(n, "No emit statements detected - there will be no output generated");
 
-		final List<String> tables = new ArrayList<String>();
 		for (final Entry<String, TableDescription> entry : this.tables.entrySet()) {
 			final String id = entry.getKey();
 			final TableDescription description = entry.getValue();
@@ -146,10 +147,8 @@ public class CodeGeneratingVisitor extends DefaultVisitorNoArgu<String> {
 			for (final Class<?> c : argu.getAggregators(description.getAggregator(), type))
 				src.append(", new " + c.getCanonicalName() + "(" + parameters + ")");
 
-			tables.add("this.tables.put(\"" + id + "\", new boa.aggregators.Table(" + src.toString().substring(2) + "));");
+			tableStrings.add("this.tables.put(\"" + name + "::" + id + "\", new boa.aggregators.Table(" + src.toString().substring(2) + "));");
 		}
-
-		st.setAttribute("tables", tables);
 
 		return st.toString();
 	}
@@ -440,7 +439,8 @@ public class CodeGeneratingVisitor extends DefaultVisitorNoArgu<String> {
 			st.setAttribute("indices", indices);
 		}
 
-		st.setAttribute("id", Character.toString('"') + n.f0.f0.tokenImage + '"');
+		st.setAttribute("id", "\"" + n.f0.f0.tokenImage + "\"");
+		st.setAttribute("job", name);
 
 		st.setAttribute("expression", n.f3.accept(this));
 

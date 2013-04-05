@@ -16,17 +16,17 @@ import org.apache.hadoop.io.WritableComparator;
  * which is an index into that table.
  * 
  * @author anthonyu
- * 
+ * @author rdyer
  */
 public class EmitKey implements WritableComparable<EmitKey>, RawComparator<EmitKey>, Serializable {
 	private static final long serialVersionUID = -6302400030199718829L;
 
 	private String index;
 	private String name;
+	private String id;
 
 	/**
 	 * Construct an EmitKey.
-	 * 
 	 */
 	public EmitKey() {
 		// default constructor for Writable
@@ -39,9 +39,11 @@ public class EmitKey implements WritableComparable<EmitKey>, RawComparator<EmitK
 	 *            A {@link String} containing the name of the table this was
 	 *            emitted to
 	 * 
+	 * @param id
+	 *            A {@link String} containing the job id this was emitted to
 	 */
-	public EmitKey(final String name) {
-		this("[]", name);
+	public EmitKey(final String name, final String id) {
+		this("[]", name, id);
 	}
 
 	/**
@@ -55,13 +57,16 @@ public class EmitKey implements WritableComparable<EmitKey>, RawComparator<EmitK
 	 *            A {@link String} containing the name of the table this was
 	 *            emitted to
 	 * 
+	 * @param id
+	 *            A {@link String} containing the job id this was emitted to
 	 */
-	public EmitKey(final String index, final String name) {
+	public EmitKey(final String index, final String name, final String id) {
 		if (index.equals(""))
 			throw new RuntimeException();
 
 		this.index = index;
 		this.name = name;
+		this.id = id;
 	}
 
 	/** {@inheritDoc} */
@@ -69,6 +74,7 @@ public class EmitKey implements WritableComparable<EmitKey>, RawComparator<EmitK
 	public void readFields(final DataInput in) throws IOException {
 		this.index = Text.readString(in);
 		this.name = Text.readString(in);
+		this.id = Text.readString(in);
 	}
 
 	/** {@inheritDoc} */
@@ -76,6 +82,7 @@ public class EmitKey implements WritableComparable<EmitKey>, RawComparator<EmitK
 	public void write(final DataOutput out) throws IOException {
 		Text.writeString(out, this.index);
 		Text.writeString(out, this.name);
+		Text.writeString(out, this.id);
 	}
 
 	/** {@inheritDoc} */
@@ -95,14 +102,16 @@ public class EmitKey implements WritableComparable<EmitKey>, RawComparator<EmitK
 	public int compareTo(final EmitKey that) {
 		// compare the names
 		final int c = this.name.compareTo(that.name);
-
-		// if the names are different
 		if (c != 0)
-			// return that difference
 			return c;
-		else
-			// otherwise compare the indices
-			return this.index.compareTo(that.index);
+
+		// compare the ids 
+		final int c2 = this.id.compareTo(that.id);
+		if (c2 != 0)
+			return c2;
+
+		// compare the indices
+		return this.index.compareTo(that.index);
 	}
 
 	/** {@inheritDoc} */
@@ -111,6 +120,7 @@ public class EmitKey implements WritableComparable<EmitKey>, RawComparator<EmitK
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + (this.index == null ? 0 : this.index.hashCode());
+		result = prime * result + (this.id == null ? 0 : this.id.hashCode());
 		result = prime * result + (this.name == null ? 0 : this.name.hashCode());
 		return result;
 	}
@@ -125,6 +135,11 @@ public class EmitKey implements WritableComparable<EmitKey>, RawComparator<EmitK
 		if (this.getClass() != obj.getClass())
 			return false;
 		final EmitKey other = (EmitKey) obj;
+		if (this.id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!this.id.equals(other.id))
+			return false;
 		if (this.index == null) {
 			if (other.index != null)
 				return false;
@@ -180,9 +195,34 @@ public class EmitKey implements WritableComparable<EmitKey>, RawComparator<EmitK
 		this.name = name;
 	}
 
+	/**
+	 * Get the job id this key was emitted to.
+	 * 
+	 * @return A {@link String} containing the name of the job id this key was
+	 *         emitted to
+	 */
+	public String getId() {
+		return this.id;
+	}
+
+	/**
+	 * Set the job id this key was emitted to.
+	 * 
+	 * @param name
+	 *            A {@link String} containing the name of the job id this key was
+	 *            emitted to
+	 */
+	public void setId(final String id) {
+		this.id = id;
+	}
+
 	/** {@inheritDoc} */
 	@Override
 	public String toString() {
 		return this.name + this.index;
+	}
+
+	public String getKey() {
+		return this.id + "::" + this.name;
 	}
 }

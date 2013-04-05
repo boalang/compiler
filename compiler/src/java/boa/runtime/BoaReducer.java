@@ -63,7 +63,7 @@ public abstract class BoaReducer extends Reducer<EmitKey, EmitValue, Text, NullW
 	@Override
 	protected void reduce(final EmitKey key, final Iterable<EmitValue> values, final Context context) throws IOException, InterruptedException {
 		// get the table named by the emit key
-		final Table t = this.tables.get(key.getName());
+		final Table t = this.tables.get(key.getKey());
 
 		t.setCombining(false);
 		t.start(key);
