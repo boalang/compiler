@@ -202,7 +202,7 @@ public class SymbolTable {
 		this.setFunction("isequal", new BoaFunction(new BoaBool(), new BoaType[] { new VariableProtoTuple(), new VariableProtoTuple() }, "(${0}.hashCode() == ${1}.hashCode())"));
 
 		// expose the casts for all possible input types
-		this.setFunction(new ProjectProtoTuple().toString(), new BoaFunction(new ProjectProtoTuple(), new BoaType[] { new BoaBytes() }, new ProjectProtoTuple().toJavaType() + ".parseFrom(${0})"));
+		this.setFunction(new ProjectProtoTuple().toString(), new BoaFunction(new ProjectProtoTuple(), new BoaType[] { new BoaBytes() }, "${0}"));
 
 		// string to bool
 		this.setFunction("bool", new BoaFunction("boa.functions.BoaCasts.stringToBoolean", new BoaBool(), new BoaScalar[] { new BoaString() }));

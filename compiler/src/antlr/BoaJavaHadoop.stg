@@ -61,7 +61,7 @@ public class <name> extends boa.runtime.BoaRunner {
 
 		jb.setInputFormatClass(org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat.class);
 
-		//jb.setNumReduceTasks();
+		jb.setNumReduceTasks(<length(jobs)>);
 
 		if (id > 0)
 			jb.getConfiguration().setInt("boa.hadoop.jobid", id);
@@ -105,25 +105,21 @@ public class <name> extends boa.runtime.BoaRunner {
 	}
 	
 	static class <name>BoaMapper extends boa.runtime.BoaMapper {
-		<jobs:{<it><\n>}>
-
-		/** {@inheritDoc} */
+		<jobs:{<it><\n>}>		/** {@inheritDoc} */
 		@Override
 		protected void map(final org.apache.hadoop.io.Text key, final org.apache.hadoop.io.BytesWritable value, final org.apache.hadoop.mapreduce.Mapper\<org.apache.hadoop.io.Text, org.apache.hadoop.io.BytesWritable, boa.io.EmitKey, boa.io.EmitValue\>.Context context) throws java.io.IOException {
-			final com.google.protobuf.CodedInputStream _inputStream = com.google.protobuf.CodedInputStream.newInstance(value.getBytes(), 0, value.getLength());
-			<jobnames:{
-				if (_job_<it> != null)
-					try {
-						_job_<it>.map(_inputStream, context);
-					} catch (final Error e) {
-						LOG.error(e.getClass().getName() + " caught", e);
-						_job_<it> = null;
-					} catch (final Exception e) {
-						LOG.error(e.getClass().getName() + " caught", e);
-						_job_<it> = null;
-					}
-			}>
-		}
+			com.google.protobuf.CodedInputStream _inputStream = com.google.protobuf.CodedInputStream.newInstance(value.getBytes(), 0, value.getLength());
+			boa.types.Toplevel.Project _p = boa.types.Toplevel.Project.parseFrom(_inputStream);
+			<jobnames:{if (_job_<it> != null)
+	try {
+		_job_<it>.map(_p, context);
+	} catch (final Error e) {
+		LOG.error(e.getClass().getName() + " caught", e);
+		_job_<it> = null;
+	} catch (final Exception e) {
+		LOG.error(e.getClass().getName() + " caught", e);
+		_job_<it> = null;
+	}<\n>}>		}
 
 		/** {@inheritDoc} */
 		@Override
@@ -172,19 +168,19 @@ public class <name> extends boa.runtime.BoaRunner {
 >>
 
 Job(name, staticDeclarations, staticStatements, statements) ::= <<
-private static class BoaJobMapper<name> {
+private static class Job<name> {
 	<staticDeclarations>
-	
 	<if(staticStatements)>
 	{
 		<staticStatements>
 	}
 	
 	<endif>
-	public void map(final com.google.protobuf.CodedInputStream _inputStream, final org.apache.hadoop.mapreduce.Mapper\<org.apache.hadoop.io.Text, org.apache.hadoop.io.BytesWritable, boa.io.EmitKey, boa.io.EmitValue\>.Context context) throws Exception {
+	public void map(final boa.types.Toplevel.Project _input, final org.apache.hadoop.mapreduce.Mapper\<org.apache.hadoop.io.Text, org.apache.hadoop.io.BytesWritable, boa.io.EmitKey, boa.io.EmitValue\>.Context context) throws Exception {
 		<statements:{<it><\n>}>	}
 }
-private static BoaJobMapper<name> _job_<name> = new BoaJobMapper<name>();
+private static Job<name> _job_<name> = new Job<name>();
+
 >>
 
-EmitStatement(indices, id, job, expression, weight) ::= "context.write(new boa.io.EmitKey(<if(indices)><indices:{\"[\" + <it> + \"]\"}; separator=\" + \">, <endif><id>, \"<job>\"), new boa.io.EmitValue(<expression><if(weight)>, <weight><endif>));<\n>"
+EmitStatement(indices, id, job, expression, weight) ::= "context.write(new boa.io.EmitKey(<if(indices)><indices:{\"[\" + <it> + \"]\"}; separator=\" + \">, <endif><id>, <job>), new boa.io.EmitValue(<expression><if(weight)>, <weight><endif>));<\n>"

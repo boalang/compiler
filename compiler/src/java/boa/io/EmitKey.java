@@ -21,9 +21,9 @@ import org.apache.hadoop.io.WritableComparator;
 public class EmitKey implements WritableComparable<EmitKey>, RawComparator<EmitKey>, Serializable {
 	private static final long serialVersionUID = -6302400030199718829L;
 
+	private int id = 0;
 	private String index;
 	private String name;
-	private String id;
 
 	/**
 	 * Construct an EmitKey.
@@ -40,9 +40,9 @@ public class EmitKey implements WritableComparable<EmitKey>, RawComparator<EmitK
 	 *            emitted to
 	 * 
 	 * @param id
-	 *            A {@link String} containing the job id this was emitted to
+	 *            An int containing the job id this was emitted to
 	 */
-	public EmitKey(final String name, final String id) {
+	public EmitKey(final String name, final int id) {
 		this("[]", name, id);
 	}
 
@@ -58,9 +58,9 @@ public class EmitKey implements WritableComparable<EmitKey>, RawComparator<EmitK
 	 *            emitted to
 	 * 
 	 * @param id
-	 *            A {@link String} containing the job id this was emitted to
+	 *            An int containing the job id this was emitted to
 	 */
-	public EmitKey(final String index, final String name, final String id) {
+	public EmitKey(final String index, final String name, final int id) {
 		if (index.equals(""))
 			throw new RuntimeException();
 
@@ -72,17 +72,17 @@ public class EmitKey implements WritableComparable<EmitKey>, RawComparator<EmitK
 	/** {@inheritDoc} */
 	@Override
 	public void readFields(final DataInput in) throws IOException {
+		this.id = in.readInt();
 		this.index = Text.readString(in);
 		this.name = Text.readString(in);
-		this.id = Text.readString(in);
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void write(final DataOutput out) throws IOException {
+		out.writeInt(this.id);
 		Text.writeString(out, this.index);
 		Text.writeString(out, this.name);
-		Text.writeString(out, this.id);
 	}
 
 	/** {@inheritDoc} */
@@ -101,17 +101,17 @@ public class EmitKey implements WritableComparable<EmitKey>, RawComparator<EmitK
 	@Override
 	public int compareTo(final EmitKey that) {
 		// compare the names
-		final int c = this.name.compareTo(that.name);
+		int c = this.name.compareTo(that.name);
+		if (c != 0)
+			return c;
+
+		// compare the indices
+		c = this.index.compareTo(that.index);
 		if (c != 0)
 			return c;
 
 		// compare the ids 
-		final int c2 = this.id.compareTo(that.id);
-		if (c2 != 0)
-			return c2;
-
-		// compare the indices
-		return this.index.compareTo(that.index);
+		return (this.id - that.id);
 	}
 
 	/** {@inheritDoc} */
@@ -120,8 +120,8 @@ public class EmitKey implements WritableComparable<EmitKey>, RawComparator<EmitK
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + (this.index == null ? 0 : this.index.hashCode());
-		result = prime * result + (this.id == null ? 0 : this.id.hashCode());
 		result = prime * result + (this.name == null ? 0 : this.name.hashCode());
+		result = prime * result + this.id;
 		return result;
 	}
 
@@ -135,10 +135,7 @@ public class EmitKey implements WritableComparable<EmitKey>, RawComparator<EmitK
 		if (this.getClass() != obj.getClass())
 			return false;
 		final EmitKey other = (EmitKey) obj;
-		if (this.id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!this.id.equals(other.id))
+		if (this.id != other.id)
 			return false;
 		if (this.index == null) {
 			if (other.index != null)
@@ -198,10 +195,9 @@ public class EmitKey implements WritableComparable<EmitKey>, RawComparator<EmitK
 	/**
 	 * Get the job id this key was emitted to.
 	 * 
-	 * @return A {@link String} containing the name of the job id this key was
-	 *         emitted to
+	 * @return An int containing the name of the job id this key was emitted to
 	 */
-	public String getId() {
+	public int getId() {
 		return this.id;
 	}
 
@@ -209,10 +205,9 @@ public class EmitKey implements WritableComparable<EmitKey>, RawComparator<EmitK
 	 * Set the job id this key was emitted to.
 	 * 
 	 * @param name
-	 *            A {@link String} containing the name of the job id this key was
-	 *            emitted to
+	 *            An int containing the name of the job id this key was emitted to
 	 */
-	public void setId(final String id) {
+	public void setId(final int id) {
 		this.id = id;
 	}
 

@@ -94,13 +94,23 @@ public class BoaCompiler {
 			return;
 		}
 
-		final File inputFile = new File(cl.getOptionValue('i'));
+		final ArrayList<File> inputFiles = new ArrayList<File>();
+		final String[] inputPaths = cl.getOptionValue('i').split(",");
+		for (final String s : inputPaths)
+			inputFiles.add(new File(s));
 
 		final String className;
 		if (cl.hasOption('n'))
 			className = cl.getOptionValue('n');
-		else
-			className = pascalCase(inputFile.getName().substring(0, inputFile.getName().lastIndexOf('.')));
+		else {
+			String s = "";
+			for (final File f : inputFiles) {
+				if (s.length() != 0)
+					s += "_";
+				s += pascalCase(f.getName().substring(0, f.getName().lastIndexOf('.')));
+			}
+			className = s;
+		}
 
 		// get the filename of the jar we will be writing
 		final String jarName;
@@ -146,32 +156,39 @@ public class BoaCompiler {
 				s.close();
 			}
 
-			final BufferedReader r = new BufferedReader(new FileReader(inputFile));
-			
-			try {
-				new BoaParser(r);
-				final Program p = BoaParser.Start().f0;
+			final ArrayList<String> jobnames = new ArrayList<String>();
+			final ArrayList<String> jobs = new ArrayList<String>();
+			BoaParser parser = null;
 
-				final TypeCheckingVisitor typeChecker = new TypeCheckingVisitor();
-				typeChecker.visit(p, new SymbolTable(libs));
-
-				final ArrayList<String> jobnames = new ArrayList<String>();
-				final ArrayList<String> jobs = new ArrayList<String>();
-
-				jobnames.add("0");
-				jobs.add(new CodeGeneratingVisitor(typeChecker, "0", stg).visit(p));
-
-				final StringTemplate st = stg.getInstanceOf("Program");
-
-				st.setAttribute("name", className);
-				st.setAttribute("jobs", jobs);
-				st.setAttribute("jobnames", jobnames);
-				st.setAttribute("tables", CodeGeneratingVisitor.tableStrings);
-
-				o.write(st.toString().getBytes());
-			} finally {
-				r.close();
+			for (int i = 0; i < inputFiles.size(); i++) {
+				final File f = inputFiles.get(i);
+				final BufferedReader r = new BufferedReader(new FileReader(f));
+				
+				try {
+					if (parser == null)
+						parser = new BoaParser(r);
+					else
+						BoaParser.ReInit(r);
+					final Program p = BoaParser.Start().f0;
+	
+					final TypeCheckingVisitor typeChecker = new TypeCheckingVisitor();
+					typeChecker.visit(p, new SymbolTable(libs));
+	
+					jobnames.add("" + i);
+					jobs.add(new CodeGeneratingVisitor(typeChecker, "" + i, stg).visit(p));
+				} finally {
+					r.close();
+				}
 			}
+
+			final StringTemplate st = stg.getInstanceOf("Program");
+
+			st.setAttribute("name", className);
+			st.setAttribute("jobs", jobs);
+			st.setAttribute("jobnames", jobnames);
+			st.setAttribute("tables", CodeGeneratingVisitor.tableStrings);
+
+			o.write(st.toString().getBytes());
 		} finally {
 			o.close();
 		}

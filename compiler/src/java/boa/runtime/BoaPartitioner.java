@@ -13,10 +13,6 @@ import boa.io.EmitValue;
  */
 public class BoaPartitioner extends Partitioner<EmitKey, EmitValue> {
 	public int getPartition(final EmitKey key, final EmitValue value, final int num) {
-		String str = key.toString();
-		int pos = str.indexOf("::");
-		if (pos == -1)
-			return key.hashCode() % num;
-		return Integer.parseInt(str.substring(0, pos)) % num;
+		return key.getId() % num;
 	}
 }
