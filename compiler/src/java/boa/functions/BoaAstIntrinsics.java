@@ -74,6 +74,9 @@ public class BoaAstIntrinsics {
 
 		final String rowName = f.getKey() + "!!" + f.getName();
 
+		if (map == null)
+			openMap();
+
 		try {
 			final BytesWritable value = new BytesWritable();
 			if (map.get(new Text(rowName), value) == null) {
@@ -108,18 +111,24 @@ public class BoaAstIntrinsics {
 	@SuppressWarnings("rawtypes")
 	public static void initialize(final Context context) {
 		BoaAstIntrinsics.context = context;
+	}
+
+	public static void openMap() {
 		final Configuration conf = new Configuration();
 		try {
 			FileSystem fs = FileSystem.get(conf);
-			final String dir = "hdfs://boa-nn1/" + context.getConfiguration().get("boa.input.dir", "/repcache/") + "ast/";
-			if (fs.exists(new Path(dir + "data")) && fs.exists(new Path(dir + "index")))
-				map = new MapFile.Reader(fs, dir, conf);
+			final String dir = "hdfs://boa-nn1/" + context.getConfiguration().get("boa.input.dir", "repcache/live") + "/ast/";
+			map = new MapFile.Reader(fs, dir, conf);
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 	public static void close() {
+		closeMap();
+	}
+
+	public static void closeMap() {
 		if (map != null)
 			try {
 				map.close();
