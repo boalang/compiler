@@ -30,7 +30,6 @@ public class BoaAstIntrinsics {
 	@SuppressWarnings("rawtypes")
 	private static Context context;
 	private static MapFile.Reader map;
-	private static long counter = 0;
 
 	public static enum AST_COUNTER {
 		GETS_ATTEMPTED,
@@ -65,12 +64,6 @@ public class BoaAstIntrinsics {
 			return ASTRoot.newBuilder().build();
 
 		context.getCounter(AST_COUNTER.GETS_ATTEMPTED).increment(1);
-
-		// let the task tracker know we are alive every so often
-		if (++counter == 1000) {
-			counter = 0;
-			context.progress();
-		}
 
 		final String rowName = f.getKey() + "!!" + f.getName();
 

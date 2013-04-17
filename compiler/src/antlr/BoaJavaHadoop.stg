@@ -119,7 +119,8 @@ public class <name> extends boa.runtime.BoaRunner {
 	} catch (final Exception e) {
 		LOG.error(e.getClass().getName() + " caught", e);
 		_job_<it> = null;
-	}<\n>}>		}
+	}
+	context.progress();<\n>}>		}
 
 		/** {@inheritDoc} */
 		@Override
