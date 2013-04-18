@@ -13,9 +13,11 @@ import org.apache.hadoop.mapreduce.TaskAttemptContext;
 
 public class BoaOutputCommitter extends FileOutputCommitter {
 	private final Path outputPath;
+	private final TaskAttemptContext context;
 
 	public BoaOutputCommitter(Path output, TaskAttemptContext context) throws java.io.IOException {
 		super(output, context);
+		this.context = context;
 		this.outputPath = output;
 	}
 
@@ -102,8 +104,7 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 							ps.setInt(2, out.size());
 							ps.setString(3, out.toString());
 							ps.executeUpdate();
-							// FIXME
-							//context.getProgressible().progress();
+							this.context.progress();
 
 							pos += out.size();
 							out.reset();
@@ -115,8 +116,7 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 						ps.setInt(2, out.size());
 						ps.setString(3, out.toString());
 						ps.executeUpdate();
-						// FIXME
-						//context.getProgressible().progress();
+						this.context.progress();
 					}
 				} finally {
 					try { if (ps != null) ps.close(); } catch (final Exception e) { e.printStackTrace(); }
