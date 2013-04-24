@@ -159,6 +159,7 @@ public class BoaCompiler {
 			final ArrayList<String> jobnames = new ArrayList<String>();
 			final ArrayList<String> jobs = new ArrayList<String>();
 			BoaParser parser = null;
+			boolean isSimple = true;
 
 			for (int i = 0; i < inputFiles.size(); i++) {
 				final File f = inputFiles.get(i);
@@ -173,6 +174,7 @@ public class BoaCompiler {
 	
 					final TypeCheckingVisitor typeChecker = new TypeCheckingVisitor();
 					typeChecker.visit(p, new SymbolTable(libs));
+					isSimple &= new SimpleTaskVisitor().visit(p);
 	
 					jobnames.add("" + i);
 					jobs.add(new CodeGeneratingVisitor(typeChecker, "" + i, stg).visit(p));
@@ -187,6 +189,7 @@ public class BoaCompiler {
 			st.setAttribute("jobs", jobs);
 			st.setAttribute("jobnames", jobnames);
 			st.setAttribute("tables", CodeGeneratingVisitor.tableStrings);
+			st.setAttribute("splitsize", isSimple ? 64 * 1024 * 1024 : 10 * 1024 * 1024);
 
 			o.write(st.toString().getBytes());
 		} finally {

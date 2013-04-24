@@ -1,6 +1,6 @@
 group BoaJavaHadoop : BoaJava;
 
-Program(name, jobs, jobnames, tables) ::= <<
+Program(name, jobs, jobnames, tables, splitsize) ::= <<
 package boa;
 
 public class <name> extends boa.runtime.BoaRunner {
@@ -57,7 +57,7 @@ public class <name> extends boa.runtime.BoaRunner {
 		if (line.hasOption("splitsize"))
 			jb.getConfiguration().setInt("mapred.max.split.size", Integer.parseInt(line.getOptionValue("splitsize")));
 		else
-			jb.getConfiguration().setInt("mapred.max.split.size", 10000000);
+			jb.getConfiguration().setInt("mapred.max.split.size", <splitsize>);
 
 		jb.setInputFormatClass(org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat.class);
 
