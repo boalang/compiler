@@ -7,9 +7,22 @@ import boa.compiler.ast.statements.VarDeclStatement;
 import boa.compiler.visitors.AbstractVisitorNoArg;
 import boa.types.BoaTable;
 
+/**
+ * Finds and renames all variables in the tree, including their declarations
+ * and uses.  Renames are done by adding a specified prefix to the front of
+ * the names.
+ * 
+ * @author rdyer
+ */
 public class VariableRenameTransformer extends AbstractVisitorNoArg {
 	private String prefix = "";
 
+	/**
+	 * Starts a variable renaming transformation with a given prefix.
+	 * 
+	 * @param n the node to start transform at
+	 * @param prefix the prefix to add to the start of names
+	 */
 	public void start(Node n, String prefix) {
 		this.prefix = prefix + "_";
 		start(n);
@@ -28,6 +41,7 @@ public class VariableRenameTransformer extends AbstractVisitorNoArg {
 
 	@Override
 	public void visit(Selector n) {
+		// do nothing, we dont want to rename the selector's identifier
 	}
 
 	/** {@inheritDoc} */
