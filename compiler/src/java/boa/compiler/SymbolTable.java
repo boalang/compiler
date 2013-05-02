@@ -1,62 +1,26 @@
 package boa.compiler;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
-import java.util.Stack;
 
 import org.scannotation.AnnotationDB;
 
 import boa.aggregators.AggregatorSpec;
 import boa.functions.FunctionSpec;
 import boa.types.*;
-import boa.types.proto.ASTRootProtoTuple;
-import boa.types.proto.BugProtoTuple;
-import boa.types.proto.BugRepositoryProtoTuple;
-import boa.types.proto.ChangedFileProtoTuple;
-import boa.types.proto.CodeRepositoryProtoTuple;
-import boa.types.proto.CommentProtoTuple;
-import boa.types.proto.DeclarationProtoTuple;
-import boa.types.proto.ExpressionProtoTuple;
-import boa.types.proto.MethodProtoTuple;
-import boa.types.proto.ModifierProtoTuple;
-import boa.types.proto.NamespaceProtoTuple;
-import boa.types.proto.PersonProtoTuple;
-import boa.types.proto.ProjectProtoTuple;
-import boa.types.proto.RevisionProtoTuple;
-import boa.types.proto.StatementProtoTuple;
-import boa.types.proto.TypeProtoTuple;
-import boa.types.proto.VariableProtoTuple;
-import boa.types.proto.enums.IssueKindProtoMap;
-import boa.types.proto.enums.ChangeKindProtoMap;
-import boa.types.proto.enums.CommentKindProtoMap;
-import boa.types.proto.enums.ExpressionKindProtoMap;
-import boa.types.proto.enums.FileKindProtoMap;
-import boa.types.proto.enums.ModifierKindProtoMap;
-import boa.types.proto.enums.RepositoryKindProtoMap;
-import boa.types.proto.enums.StatementKindProtoMap;
-import boa.types.proto.enums.TypeKindProtoMap;
-import boa.types.proto.enums.VisibilityProtoMap;
+import boa.types.proto.*;
+import boa.types.proto.enums.*;
 
-import boa.parser.syntaxtree.Operand;
+import boa.compiler.ast.Operand;
 
 public class SymbolTable {
-	private static final boolean strictCompatibility = true;
-
 	private static HashMap<String, Class<?>> aggregators;
 	private static final Map<Class<?>, BoaType> protomap;
 	private static Map<String, BoaType> idmap;
 	private static final Map<String, BoaType> globals;
-
-	private final ClassLoader loader;
 
 	private FunctionTrie functions;
 	private Map<String, BoaType> locals;
@@ -136,14 +100,9 @@ public class SymbolTable {
 	}
 
 	private SymbolTable() {
-		this.loader = Thread.currentThread().getContextClassLoader();
-	}
-
-	public SymbolTable(final List<URL> libs) throws IOException {
-		this.loader = Thread.currentThread().getContextClassLoader();
-
 		// variables with a local scope
 		this.locals = new HashMap<String, BoaType>();
+
 		this.functions = new FunctionTrie();
 
 		// these generic functions require more finagling than can currently be
@@ -282,13 +241,19 @@ public class SymbolTable {
 		this.setFunction("ln", new BoaFunction("java.lang.Math.log", new BoaFloat(), new BoaScalar[] { new BoaFloat() }));
 
 		// expose the rest of the unary functions
-		for (final String s : Arrays.asList("log10", "exp", "sqrt", "sin", "cos", "tan", "asin", "acos", "atan", "cosh", "sinh", "tanh", "ceil", "floor", "round"))
+		for (final String s : Arrays.asList("log10", "exp", "sqrt", "sin", "cos", "tan", "asin", "acos", "atan", "cosh", "sinh", "tanh", "ceil", "floor", "round", "cbrt", "expm1", "log1p", "rint", "signum", "ulp"))
 			this.setFunction(s, new BoaFunction("java.lang.Math." + s, new BoaFloat(), new BoaScalar[] { new BoaFloat() }));
 
 		// expose the binary functions
-		for (final String s : Arrays.asList("pow", "atan2"))
+		for (final String s : Arrays.asList("pow", "atan2", "hypot"))
 			this.setFunction(s, new BoaFunction("java.lang.Math." + s, new BoaFloat(), new BoaScalar[] { new BoaFloat(), new BoaFloat() }));
 
+		// these three have capitals in the name
+		this.setFunction("ieeeremainder", new BoaFunction("java.lang.Math.IEEEremainder", new BoaFloat(), new BoaScalar[] { new BoaFloat(), new BoaFloat() }));
+		this.setFunction("todegrees", new BoaFunction("java.lang.Math.toDegrees", new BoaFloat(), new BoaScalar[] { new BoaFloat() }));
+		this.setFunction("toradians", new BoaFunction("java.lang.Math.toRadians", new BoaFloat(), new BoaScalar[] { new BoaFloat() }));
+
+		// max and min
 		for (final String s : Arrays.asList("max", "min"))
 			for (final BoaScalar t : Arrays.asList(new BoaInt(), new BoaFloat()))
 				this.setFunction(s, new BoaFunction("java.lang.Math." + s, t, new BoaScalar[] { t, t }));
@@ -298,25 +263,10 @@ public class SymbolTable {
 
 		this.setFunction("max", new BoaFunction(new BoaString(), new BoaScalar[] { new BoaString(), new BoaString() }, "(${0}.compareTo(${1}) > 0 ? ${0} : ${1})"));
 		this.setFunction("min", new BoaFunction(new BoaString(), new BoaScalar[] { new BoaString(), new BoaString() }, "(${0}.compareTo(${1}) < 0 ? ${0} : ${1})"));
+	}
 
-		// expose whatever is left, assuming we are not aiming for strict
-		// compatibility
-		if (!strictCompatibility) {
-			// random takes no argument
-
-			// these three have capitals in the name
-			this.setFunction("ieeeremainder", new BoaFunction("java.lang.Math.IEEEremainder", new BoaFloat(), new BoaScalar[] { new BoaFloat(), new BoaFloat() }));
-			this.setFunction("todegrees", new BoaFunction("java.lang.Math.toDegrees", new BoaFloat(), new BoaScalar[] { new BoaFloat() }));
-			this.setFunction("toradians", new BoaFunction("java.lang.Math.toRadians", new BoaFloat(), new BoaScalar[] { new BoaFloat() }));
-
-			// the unaries
-			for (final String s : Arrays.asList("cbrt", "expm1", "log1p", "rint", "signum", "ulp"))
-				this.setFunction(s, new BoaFunction("java.lang.Math." + s, new BoaFloat(), new BoaScalar[] { new BoaFloat() }));
-
-			// and binaries
-			this.setFunction("hypot", new BoaFunction("java.lang.Math.hypot", new BoaFloat(), new BoaScalar[] { new BoaFloat(), new BoaFloat() }));
-		}
-
+	public SymbolTable(final List<URL> libs) throws IOException {
+		this();
 		this.importLibs(libs);
 	}
 
@@ -404,7 +354,7 @@ public class SymbolTable {
 
 	private void importAggregator(final String c) {
 		try {
-			this.importAggregator(Class.forName(c, false, this.loader));
+			this.importAggregator(Class.forName(c));
 		} catch (final ClassNotFoundException e) {
 			throw new RuntimeException("no such class " + c, e);
 		}
@@ -450,16 +400,7 @@ public class SymbolTable {
 				formalParameterTypes[i] = this.getType(id);
 		}
 
-		for (final String dep : annotation.typeDependencies())
-			if (dep.endsWith(".proto"))
-				this.importProto(dep);
-			else if (dep.endsWith(".avro"))
-				this.importAvro(dep);
-			else
-				throw new RuntimeException("unknown dependency in " + dep);
-
-		this.setFunction(annotation.name(),
-				new BoaFunction(m.getDeclaringClass().getCanonicalName() + '.' + m.getName(), this.getType(annotation.returnType()), formalParameterTypes));
+		this.setFunction(annotation.name(), new BoaFunction(m.getDeclaringClass().getCanonicalName() + '.' + m.getName(), this.getType(annotation.returnType()), formalParameterTypes));
 	}
 
 	private void importFunctions(final Class<?> c) {
@@ -548,42 +489,6 @@ public class SymbolTable {
 		}
 	}
 
-	void importProto(final String name) {
-		final String camelCased = SymbolTable.camelCase(name.substring(0, name.indexOf('.')));
-
-		Class<?> wrapper;
-		try {
-			wrapper = Class.forName("boa.types." + camelCased);
-		} catch (final ClassNotFoundException e) {
-			throw new RuntimeException("no such proto " + name);
-		}
-
-		for (final Class<?> c : wrapper.getClasses()) {
-			final List<BoaType> members = new ArrayList<BoaType>();
-			final Map<String, Integer> names = new HashMap<String, Integer>();
-
-			int i = 0;
-			for (final Field field : c.getDeclaredFields()) {
-				if (!field.getName().endsWith("_") || field.getName().startsWith("bitField"))
-					continue;
-
-				final String member = SymbolTable.deCamelCase(field.getName().substring(0, field.getName().length() - 1));
-
-				final Class<?> type = field.getType();
-
-				names.put(member, i++);
-				members.add(protomap.get(type));
-			}
-
-			idmap.put(c.getSimpleName(), new BoaProtoTuple(members, names));
-			// TODO support protocol buffer casts
-		}
-	}
-
-	private void importAvro(final String dep) {
-		throw new RuntimeException("unimplemented");
-	}
-
 	public BoaFunction getFunction(final String id) {
 		return this.getFunction(id, new BoaType[0]);
 	}
@@ -662,39 +567,5 @@ public class SymbolTable {
 			r.add(entry.getKey() + ":" + entry.getValue());
 
 		return r.toString();
-	}
-
-	private static String camelCase(final String string) {
-		final StringBuilder camelized = new StringBuilder();
-
-		boolean lower = false;
-		for (final char c : string.toCharArray())
-			if (c == '_')
-				lower = false;
-			else if (Character.isDigit(c)) {
-				camelized.append(c);
-				lower = false;
-			} else if (Character.isLetter(c)) {
-				if (lower)
-					camelized.append(c);
-				else
-					camelized.append(Character.toUpperCase(c));
-
-				lower = true;
-			}
-
-		return camelized.toString();
-	}
-
-	private static String deCamelCase(final String string) {
-		final StringBuilder decamelized = new StringBuilder();
-
-		for (final char c : string.toCharArray())
-			if (Character.isUpperCase(c))
-				decamelized.append(Character.toString('_') + Character.toLowerCase(c));
-			else
-				decamelized.append(c);
-
-		return decamelized.toString();
 	}
 }

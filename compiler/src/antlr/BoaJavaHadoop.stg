@@ -109,10 +109,10 @@ public class <name> extends boa.runtime.BoaRunner {
 		@Override
 		protected void map(final org.apache.hadoop.io.Text key, final org.apache.hadoop.io.BytesWritable value, final org.apache.hadoop.mapreduce.Mapper\<org.apache.hadoop.io.Text, org.apache.hadoop.io.BytesWritable, boa.io.EmitKey, boa.io.EmitValue\>.Context context) throws java.io.IOException {
 			com.google.protobuf.CodedInputStream _inputStream = com.google.protobuf.CodedInputStream.newInstance(value.getBytes(), 0, value.getLength());
-			boa.types.Toplevel.Project _p = boa.types.Toplevel.Project.parseFrom(_inputStream);
+			boa.types.Toplevel.Project _input = boa.types.Toplevel.Project.parseFrom(_inputStream);
 			<jobnames:{if (_job_<it> != null)
 	try {
-		_job_<it>.map(_p, context);
+		_job_<it>.map(_input, context);
 	} catch (final Error e) {
 		LOG.error(e.getClass().getName() + " caught", e);
 		_job_<it> = null;

@@ -1,17 +1,6 @@
 package boa.compiler;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,6 +26,10 @@ import org.apache.log4j.Logger;
 
 import org.scannotation.ClasspathUrlFinder;
 
+import boa.compiler.ast.Node;
+import boa.compiler.visitors.CodeGeneratingVisitor;
+import boa.compiler.visitors.IsSimpleTaskVisitor;
+import boa.compiler.visitors.TypeCheckingVisitor;
 import boa.parser.ParseException;
 import boa.parser.BoaParser;
 import boa.parser.syntaxtree.Program;
@@ -171,17 +164,26 @@ public class BoaCompiler {
 					else
 						BoaParser.ReInit(r);
 					final Program p = BoaParser.Start().f0;
-	
-					final TypeCheckingVisitor typeChecker = new TypeCheckingVisitor();
-					typeChecker.visit(p, new SymbolTable(libs));
-					isSimple &= new SimpleTaskVisitor().visit(p);
-	
+					final Node p2 = new ParseTreeAdapter().visit(p);
+
 					jobnames.add("" + i);
-					jobs.add(new CodeGeneratingVisitor(typeChecker, "" + i, stg).visit(p));
+
+					final TypeCheckingVisitor typeChecker = new TypeCheckingVisitor();
+					typeChecker.start(p2, new SymbolTable(libs));
+
+					final IsSimpleTaskVisitor simpleVisitor = new IsSimpleTaskVisitor();
+					simpleVisitor.start(p2);
+					isSimple &= simpleVisitor.isSimple();
+	
+					final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(jobnames.get(jobnames.size() - 1), stg);
+					cg.start(p2);
+					jobs.add(cg.getCode());
 				} finally {
 					r.close();
 				}
 			}
+
+			BoaCompiler.LOG.info("task complexity: " + (isSimple ? "simple" : "complex"));
 
 			final StringTemplate st = stg.getInstanceOf("Program");
 

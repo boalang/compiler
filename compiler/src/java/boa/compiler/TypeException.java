@@ -1,5 +1,7 @@
 package boa.compiler;
 
+import java.util.List;
+
 import boa.parser.syntaxtree.*;
 import boa.parser.visitor.GJNoArguDepthFirst;
 
@@ -24,6 +26,12 @@ public class TypeException extends RuntimeException {
 	public TypeException(final Node n, final String text) {
 		super(getMessage(n, text));
 	}
+	public TypeException(final boa.compiler.ast.Node n, final String text) {
+		super(getMessage(n, text));
+	}
+	public TypeException(final List<? extends boa.compiler.ast.Node> n, final String text) {
+		super(getMessage(n, text));
+	}
 
 	/**
 	 * Construct a TypeException caused by another exception.
@@ -39,6 +47,12 @@ public class TypeException extends RuntimeException {
 	public TypeException(final Node n, final String text, final Throwable e) {
 		super(getMessage(n, text), e);
 	}
+	public TypeException(final boa.compiler.ast.Node n, final String text, final Throwable e) {
+		super(getMessage(n, text), e);
+	}
+	public TypeException(final List<? extends boa.compiler.ast.Node> n, final String text, final Throwable e) {
+		super(getMessage(n, text), e);
+	}
 
 	private static String getMessage(final Node n, final String text) {
 		final NodeToken first = n.accept(new FirstNodeTokenVisitor());
@@ -46,6 +60,14 @@ public class TypeException extends RuntimeException {
 
 		return "Error at lines " + first.beginLine + "-" + last.endLine +
 				", columns " + first.beginColumn + "-" + last.endColumn + ": " + text;
+	}
+	private static String getMessage(final boa.compiler.ast.Node n, final String text) {
+		return "Error at lines " + n.getBeginLine() + "-" + n.getEndLine() +
+				", columns " + n.getBeginColumn() + "-" + n.getEndColumn() + ": " + text;
+	}
+	private static String getMessage(final List<? extends boa.compiler.ast.Node> n, final String text) {
+		return "Error at lines " + n.get(0).getBeginLine() + "-" + n.get(n.size() - 1).getEndLine() +
+				", columns " + n.get(0).getBeginColumn() + "-" + n.get(n.size() - 1).getEndColumn() + ": " + text;
 	}
 
 	private static class FirstNodeTokenVisitor extends GJNoArguDepthFirst<NodeToken> {
