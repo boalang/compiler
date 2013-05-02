@@ -223,11 +223,7 @@ public class BoaFunction extends BoaType {
 	/** {@inheritDoc} */
 	@Override
 	public String toJavaType() {
-		String s = "BoaFunc";
-		if (type instanceof BoaAny)
-			s += "Void";
-		else
-			s += cleanType(type.toJavaType());
+		String s = "BoaFunc_" + cleanType(type.toJavaType()) + "_";
 		for (final BoaType t : this.formalParameters)
 			s += "_" + cleanType(t.toJavaType());
 		return s;

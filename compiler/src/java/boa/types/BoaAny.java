@@ -23,6 +23,12 @@ public class BoaAny extends BoaType {
 
 	/** {@inheritDoc} */
 	@Override
+	public String toJavaType() {
+		return "void";
+	}
+
+	/** {@inheritDoc} */
+	@Override
 	public String toString() {
 		return "any";
 	}
