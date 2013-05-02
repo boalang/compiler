@@ -9,11 +9,10 @@ import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
 
 import boa.compiler.TypeException;
+import boa.compiler.ast.Component;
 import boa.compiler.ast.types.FunctionType;
 import boa.types.BoaAny;
 import boa.types.BoaFunction;
-import boa.types.BoaName;
-import boa.types.BoaType;
 
 /***
  * Finds the set of all function types and generates classes for each unique type.
@@ -43,13 +42,13 @@ public class FunctionDeclaratorCodeGeneratingVisitor extends AbstractCodeGenerat
 
 		final BoaFunction funcType = ((BoaFunction) n.type);
 
-		final BoaType[] paramTypes = funcType.getFormalParameters();
+		final List<Component> params = n.getArgs();
 		final List<String> args = new ArrayList<String>();
 		final List<String> types = new ArrayList<String>();
 
-		for (int i = 0; i < paramTypes.length; i++) {
-			args.add(((BoaName) paramTypes[i]).getId());
-			types.add(paramTypes[i].toJavaType());
+		for (final Component c : params) {
+			args.add(c.getIdentifier().getToken());
+			types.add(c.getType().type.toJavaType());
 		}
 
 		st.setAttribute("name", funcType.toJavaType());
