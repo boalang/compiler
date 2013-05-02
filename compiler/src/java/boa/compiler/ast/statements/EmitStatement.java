@@ -67,10 +67,14 @@ public class EmitStatement extends Statement {
 		this.weight = weight;
 	}
 
+	/** {@inheritDoc} */
+	@Override
 	public <A> void accept(AbstractVisitor<A> v, A arg) {
 		v.visit(this, arg);
 	}
 
+	/** {@inheritDoc} */
+	@Override
 	public void accept(AbstractVisitorNoArg v) {
 		v.visit(this);
 	}

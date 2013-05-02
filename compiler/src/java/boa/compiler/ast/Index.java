@@ -36,10 +36,14 @@ public class Index extends Node {
 		this.end = end;
 	}
 
+	/** {@inheritDoc} */
+	@Override
 	public <A> void accept(AbstractVisitor<A> v, A arg) {
 		v.visit(this, arg);
 	}
 
+	/** {@inheritDoc} */
+	@Override
 	public void accept(AbstractVisitorNoArg v) {
 		v.visit(this);
 	}

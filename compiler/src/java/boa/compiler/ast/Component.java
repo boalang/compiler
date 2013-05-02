@@ -36,10 +36,14 @@ public class Component extends AbstractType {
 		this.t = t;
 	}
 
+	/** {@inheritDoc} */
+	@Override
 	public <A> void accept(AbstractVisitor<A> v, A arg) {
 		v.visit(this, arg);
 	}
 
+	/** {@inheritDoc} */
+	@Override
 	public void accept(AbstractVisitorNoArg v) {
 		v.visit(this);
 	}

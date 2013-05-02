@@ -11,8 +11,6 @@ import boa.types.BoaType;
  */
 public abstract class Node {
 	protected Node parent;
-	protected int beginLine, beginColumn;
-	protected int endLine, endColumn;
 
 	public Node getParent() {
 		return parent;
@@ -21,6 +19,9 @@ public abstract class Node {
 	public void setParent(final Node parent) {
 		this.parent = parent;
 	}
+
+	protected int beginLine, beginColumn;
+	protected int endLine, endColumn;
 
 	public Node setPositions(final int beginLine, final int beginColumn, final int endLine, final int endColumn) {
 		this.beginLine = beginLine;
@@ -46,9 +47,9 @@ public abstract class Node {
 		return endColumn;
 	}
 
-	public abstract <A> void accept(AbstractVisitor<A> v, A arg);
-	public abstract void accept(AbstractVisitorNoArg v);
-
 	public BoaType type = null;
 	public SymbolTable env = null;
+
+	public abstract <A> void accept(AbstractVisitor<A> v, A arg);
+	public abstract void accept(AbstractVisitorNoArg v);
 }

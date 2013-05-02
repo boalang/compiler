@@ -10,7 +10,7 @@ import boa.compiler.visitors.AbstractVisitorNoArg;
  */
 public class Identifier extends AbstractType {
 	protected String token;
-	
+
 	public String getToken() {
 		return token;
 	}
@@ -19,10 +19,14 @@ public class Identifier extends AbstractType {
 		this.token = token;
 	}
 
+	/** {@inheritDoc} */
+	@Override
 	public <A> void accept(AbstractVisitor<A> v, A arg) {
 		v.visit(this, arg);
 	}
 
+	/** {@inheritDoc} */
+	@Override
 	public void accept(AbstractVisitorNoArg v) {
 		v.visit(this);
 	}
