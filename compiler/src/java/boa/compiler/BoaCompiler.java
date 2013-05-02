@@ -26,13 +26,13 @@ import org.apache.log4j.Logger;
 
 import org.scannotation.ClasspathUrlFinder;
 
-import boa.compiler.ast.Node;
+import boa.compiler.ast.Program;
+import boa.compiler.transforms.VariableRenameTransformer;
 import boa.compiler.visitors.CodeGeneratingVisitor;
 import boa.compiler.visitors.IsSimpleTaskVisitor;
 import boa.compiler.visitors.TypeCheckingVisitor;
 import boa.parser.ParseException;
 import boa.parser.BoaParser;
-import boa.parser.syntaxtree.Program;
 
 public class BoaCompiler {
 	private static Logger LOG = Logger.getLogger(BoaCompiler.class);
@@ -149,10 +149,14 @@ public class BoaCompiler {
 				s.close();
 			}
 
-			final ArrayList<String> jobnames = new ArrayList<String>();
-			final ArrayList<String> jobs = new ArrayList<String>();
+			final List<String> jobnames = new ArrayList<String>();
+			final List<String> jobs = new ArrayList<String>();
 			BoaParser parser = null;
 			boolean isSimple = true;
+
+			final List<Program> visitorPrograms = new ArrayList<Program>();
+
+			SymbolTable.initialize(libs);
 
 			for (int i = 0; i < inputFiles.size(); i++) {
 				final File f = inputFiles.get(i);
@@ -163,27 +167,44 @@ public class BoaCompiler {
 						parser = new BoaParser(r);
 					else
 						BoaParser.ReInit(r);
-					final Program p = BoaParser.Start().f0;
-					final Node p2 = new ParseTreeAdapter().visit(p);
+					final Program p = (Program)new ParseTreeAdapter().visit(BoaParser.Start().f0);
 
-					jobnames.add("" + i);
+					final String jobName = "" + i;
+					jobnames.add(jobName);
 
 					final TypeCheckingVisitor typeChecker = new TypeCheckingVisitor();
-					typeChecker.start(p2, new SymbolTable(libs));
+					typeChecker.start(p, new SymbolTable());
 
 					final IsSimpleTaskVisitor simpleVisitor = new IsSimpleTaskVisitor();
-					simpleVisitor.start(p2);
-					isSimple &= simpleVisitor.isSimple();
-	
-					final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(jobnames.get(jobnames.size() - 1), stg);
-					cg.start(p2);
-					jobs.add(cg.getCode());
+					simpleVisitor.start(p);
+					final boolean jobIsSimple = simpleVisitor.isSimple();
+
+					BoaCompiler.LOG.info(f.getName() + ": task complexity: " + (jobIsSimple ? "simple" : "complex"));
+					isSimple &= jobIsSimple;
+
+					// if a job has no visitor, let it have its own method
+					if (jobIsSimple) {
+						final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(jobName, stg);
+						cg.start(p);
+						jobs.add(cg.getCode());
+					}
+					// if a job has visitors, fuse them all together into a single program
+					else {
+						final VariableRenameTransformer varRename = new VariableRenameTransformer();
+						varRename.start(p, jobName);
+						visitorPrograms.add(p);
+						p.jobName = jobName;
+					}
 				} finally {
 					r.close();
 				}
 			}
 
-			BoaCompiler.LOG.info("task complexity: " + (isSimple ? "simple" : "complex"));
+			for (final Program p : visitorPrograms) {
+				final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(p.jobName, stg);
+				cg.start(p);
+				jobs.add(cg.getCode());
+			}
 
 			final StringTemplate st = stg.getInstanceOf("Program");
 

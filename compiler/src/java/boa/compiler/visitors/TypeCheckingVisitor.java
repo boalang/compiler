@@ -195,7 +195,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 		n.env = env;
 
 		if (env.hasType(n.getToken()))
-			n.type = env.getType(n.getToken());
+			n.type = SymbolTable.getType(n.getToken());
 		else
 			try {
 				n.type = env.get(n.getToken());
@@ -671,7 +671,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 			c.getIdentifier().accept(this, st);
 		} else if (!n.hasWildcard()) {
 			for (final Identifier id : n.getIdList()) {
-				if (st.getType(id.getToken()) == null)
+				if (SymbolTable.getType(id.getToken()) == null)
 					throw new TypeException(id, "Invalid type '" + id.getToken() + "'");
 				id.accept(this, st);
 			}
@@ -903,7 +903,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 			if (annotation.weightType().equals("none"))
 				throw new TypeException(n.getWeight(), "unexpected weight for table declaration");
 
-			final BoaType aweight = env.getType(annotation.weightType());
+			final BoaType aweight = SymbolTable.getType(annotation.weightType());
 			n.getWeight().accept(this, env);
 			tweight = (BoaScalar) n.getWeight().type;
 

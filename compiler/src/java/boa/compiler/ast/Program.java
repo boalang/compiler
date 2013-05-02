@@ -31,6 +31,8 @@ public class Program extends Node {
 		statements.add(s);
 	}
 
+	public String jobName;
+
 	/** {@inheritDoc} */
 	@Override
 	public <A> void accept(AbstractVisitor<A> v, A arg) {

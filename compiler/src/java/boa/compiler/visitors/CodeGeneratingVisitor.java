@@ -353,9 +353,9 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		if (argu.hasType(id)) {
 			if (argu.getNeedsBoxing())
-				code.add(argu.getType(id).toBoxedJavaType());
+				code.add(SymbolTable.getType(id).toBoxedJavaType());
 			else
-				code.add(argu.getType(id).toJavaType());
+				code.add(SymbolTable.getType(id).toJavaType());
 			return;
 		}
 

@@ -261,15 +261,14 @@ public class SymbolTable {
 		globalFunctions.addFunction("min", new BoaFunction(new BoaString(), new BoaScalar[] { new BoaString(), new BoaString() }, "(${0}.compareTo(${1}) < 0 ? ${0} : ${1})"));
 	}
 
-	private SymbolTable() {
+	public SymbolTable() {
 		// variables with a local scope
 		this.locals = new HashMap<String, BoaType>();
 		functions = new FunctionTrie();
 	}
 
-	public SymbolTable(final List<URL> libs) throws IOException {
-		this();
-		this.importLibs(libs);
+	public static void initialize(final List<URL> libs) throws IOException {
+		importLibs(libs);
 	}
 
 	public SymbolTable cloneNonLocals() throws IOException {
@@ -324,16 +323,16 @@ public class SymbolTable {
 		return idmap.containsKey(id);
 	}
 
-	public BoaType getType(final String id) {
+	public static BoaType getType(final String id) {
 		if (idmap.containsKey(id))
 			return idmap.get(id);
 
 		if (id.startsWith("array of "))
-			return new BoaArray(this.getType(id.substring("array of ".length()).trim()));
+			return new BoaArray(getType(id.substring("array of ".length()).trim()));
 
 		if (id.startsWith("map"))
-			return new BoaMap(this.getType(id.substring(id.indexOf(" of ") + " of ".length()).trim()),
-					this.getType(id.substring(id.indexOf("[") + 1, id.indexOf("]")).trim()));
+			return new BoaMap(getType(id.substring(id.indexOf(" of ") + " of ".length()).trim()),
+					getType(id.substring(id.indexOf("[") + 1, id.indexOf("]")).trim()));
 
 		throw new RuntimeException("no such type " + id);
 	}
@@ -342,7 +341,7 @@ public class SymbolTable {
 		idmap.put(id, boaType);
 	}
 
-	private void importAggregator(final Class<?> clazz) {
+	private static void importAggregator(final Class<?> clazz) {
 		if (!clazz.isAnnotationPresent(AggregatorSpec.class))
 			return;
 
@@ -358,9 +357,9 @@ public class SymbolTable {
 			aggregators.put(annotation.name() + ":" + type, clazz);
 	}
 
-	private void importAggregator(final String c) {
+	private static void importAggregator(final String c) {
 		try {
-			this.importAggregator(Class.forName(c));
+			importAggregator(Class.forName(c));
 		} catch (final ClassNotFoundException e) {
 			throw new RuntimeException("no such class " + c, e);
 		}
@@ -387,7 +386,7 @@ public class SymbolTable {
 		return aggregators;
 	}
 
-	private void importFunction(final Method m) {
+	private static void importFunction(final Method m) {
 		final FunctionSpec annotation = m.getAnnotation(FunctionSpec.class);
 
 		if (annotation == null)
@@ -401,29 +400,29 @@ public class SymbolTable {
 
 			// check for varargs
 			if (id.endsWith("..."))
-				formalParameterTypes[i] = new BoaVarargs(this.getType(id.substring(0, id.indexOf('.'))));
+				formalParameterTypes[i] = new BoaVarargs(getType(id.substring(0, id.indexOf('.'))));
 			else
-				formalParameterTypes[i] = this.getType(id);
+				formalParameterTypes[i] = getType(id);
 		}
 
-		globalFunctions.addFunction(annotation.name(), new BoaFunction(m.getDeclaringClass().getCanonicalName() + '.' + m.getName(), this.getType(annotation.returnType()), formalParameterTypes));
+		globalFunctions.addFunction(annotation.name(), new BoaFunction(m.getDeclaringClass().getCanonicalName() + '.' + m.getName(), getType(annotation.returnType()), formalParameterTypes));
 	}
 
-	private void importFunctions(final Class<?> c) {
+	private static void importFunctions(final Class<?> c) {
 		for (final Method m : c.getMethods())
 			if (m.isAnnotationPresent(FunctionSpec.class))
-				this.importFunction(m);
+				importFunction(m);
 	}
 
-	private void importFunctions(final String c) {
+	private static void importFunctions(final String c) {
 		try {
-			this.importFunctions(Class.forName(c));
+			importFunctions(Class.forName(c));
 		} catch (final ClassNotFoundException e) {
 			throw new RuntimeException("no such class " + c, e);
 		}
 	}
 
-	private void importLibs(final List<URL> urls) throws IOException {
+	private static void importLibs(final List<URL> urls) throws IOException {
 		// load built-in functions
 		final Class<?>[] builtinFuncs = {
 			boa.functions.BoaAstIntrinsics.class,
@@ -441,7 +440,7 @@ public class SymbolTable {
 			boa.functions.BoaTimeIntrinsics.class
 		};
 		for (final Class<?> c : builtinFuncs)
-			this.importFunctions(c);
+			importFunctions(c);
 
 		// load built-in aggregators
 		final Class<?>[] builtinAggs = {
@@ -473,7 +472,7 @@ public class SymbolTable {
 			boa.aggregators.VarianceAggregator.class,
 		};
 		for (final Class<?> c : builtinAggs)
-			this.importAggregator(c);
+			importAggregator(c);
 
 		// also check any libs passed into the compiler
 		if (urls.size() > 0) {
@@ -488,10 +487,10 @@ public class SymbolTable {
 			final Map<String, Set<String>> annotationIndex = db.getAnnotationIndex();
 	
 			for (final String s : annotationIndex.get(AggregatorSpec.class.getCanonicalName()))
-				this.importAggregator(s);
+				importAggregator(s);
 	
 			for (final String s : annotationIndex.get(FunctionSpec.class.getCanonicalName()))
-				this.importFunctions(s);
+				importFunctions(s);
 		}
 	}
 
