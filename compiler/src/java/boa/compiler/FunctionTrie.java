@@ -44,6 +44,10 @@ public class FunctionTrie {
 		return (BoaFunction) this.trie.get("");
 	}
 
+	public boolean hasFunction(final String name) {
+		return this.trie.containsKey(name);
+	}
+
 	public BoaFunction getFunction(final String name, final BoaType[] formalParameters) {
 		final Object[] ids = new Object[formalParameters.length + 2];
 
@@ -54,22 +58,7 @@ public class FunctionTrie {
 
 		ids[ids.length - 1] = "";
 
-		final BoaFunction function = this.getFunction(ids);
-
-		if (function == null)
-			throw new RuntimeException("no such function " + name + "(" + Arrays.toString(formalParameters) + ")");
-
-		return function;
-	}
-
-	public boolean hasFunction(final String name, final BoaType[] formalParameters) {
-		try {
-			this.getFunction(name, formalParameters);
-
-			return true;
-		} catch (final RuntimeException e) {
-			return false;
-		}
+		return this.getFunction(ids);
 	}
 
 	@SuppressWarnings("unchecked")

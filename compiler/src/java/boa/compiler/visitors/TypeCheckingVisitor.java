@@ -601,8 +601,12 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 
 		final String id = n.getId().getToken();
 
-		if (env.contains(id))
+		if (env.hasGlobal(id))
+			throw new TypeException(n.getId(), "name conflict: constant '" + id + "' already exists");
+		if (env.hasLocal(id))
 			throw new TypeException(n.getId(), "variable '" + id + "' already declared as '" + env.get(id) + "'");
+		if (env.hasFunction(id) || env.hasLocalFunction(id))
+			throw new TypeException(n.getId(), "name conflict: function '" + id + "' already exists");
 
 		BoaType rhs = null;
 		if (n.hasInitializer()) {
