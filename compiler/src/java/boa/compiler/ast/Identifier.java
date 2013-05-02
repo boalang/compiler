@@ -15,6 +15,10 @@ public class Identifier extends AbstractType {
 		return token;
 	}
 
+	public void setToken(final String token) {
+		this.token = token;
+	}
+
 	public Identifier (final String token) {
 		this.token = token;
 	}
