@@ -38,13 +38,19 @@ public class Component extends AbstractType {
 
 	/** {@inheritDoc} */
 	@Override
-	public <A> void accept(AbstractVisitor<A> v, A arg) {
+	public <A> void accept(final AbstractVisitor<A> v, A arg) {
 		v.visit(this, arg);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void accept(AbstractVisitorNoArg v) {
+	public void accept(final AbstractVisitorNoArg v) {
 		v.visit(this);
+	}
+
+	public Component clone() {
+		final Component c = new Component(id.clone(), t.clone());
+		copyFieldsTo(c);
+		return c;
 	}
 }

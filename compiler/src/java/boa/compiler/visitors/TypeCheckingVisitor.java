@@ -5,7 +5,7 @@ import java.util.*;
 
 import boa.aggregators.AggregatorSpec;
 import boa.compiler.SymbolTable;
-import boa.compiler.TypeException;
+import boa.compiler.TypeCheckException;
 import boa.compiler.ast.*;
 import boa.compiler.ast.expressions.*;
 import boa.compiler.ast.literals.*;
@@ -20,10 +20,58 @@ import boa.types.*;
  * @author rdyer
  */
 public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
+	/**
+	 * 
+	 * @author rdyer
+	 */
+	protected class FunctionFindingVisitor extends AbstractVisitor<SymbolTable> {
+		protected BoaFunction func;
+		protected final List<BoaType> formalParameters;
+
+		public boolean hasFunction() {
+			return func != null;
+		}
+
+		public BoaFunction getFunction() {
+			return func;
+		}
+
+		public FunctionFindingVisitor(final List<BoaType> formalParameters) {
+			this.formalParameters = formalParameters;
+		}
+
+		/** {@inheritDoc} */
+		@Override
+		protected void initialize(SymbolTable arg) {
+			func = null;
+		}
+
+		/** {@inheritDoc} */
+		@Override
+		public void visit(final Identifier n, final SymbolTable arg) {
+			func = arg.getFunction(n.getToken(), this.formalParameters);
+		}
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void visit(Start n, SymbolTable env) {
+		n.env = env;
+		super.visit(n, env);
+	}
+
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Program n, final SymbolTable env) {
-		n.env = env;
+		SymbolTable st;
+
+		try {
+			st = env.cloneNonLocals();
+		} catch (final IOException e) {
+			throw new RuntimeException(e.getClass().getSimpleName() + " caught", e);
+		}
+
+		n.env = st;
 
 		for (final Statement s : n.getStatements())
 			s.accept(this, env);
@@ -52,11 +100,11 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 			n.getRhs().accept(this, env);
 
 			if (!n.getRhs().type.compares(n.getLhs().type))
-				throw new TypeException(n.getRhs(), "incompatible types for comparison: required '" + n.getLhs().type + "', found '" + n.getRhs().type + "'");
+				throw new TypeCheckException(n.getRhs(), "incompatible types for comparison: required '" + n.getLhs().type + "', found '" + n.getRhs().type + "'");
 
 			if (n.getLhs().type instanceof BoaString || n.getLhs().type instanceof BoaProtoTuple)
 				if (!n.getOp().equals("==") && !n.getOp().equals("!="))
-					throw new TypeException(n.getLhs(), "invalid comparison operator '" + n.getOp() + "' for type '" + n.getLhs().type + "'");
+					throw new TypeCheckException(n.getLhs(), "invalid comparison operator '" + n.getOp() + "' for type '" + n.getLhs().type + "'");
 
 			n.type = new BoaBool();
 		}
@@ -87,7 +135,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 			n.type = new BoaMap();
 			return;
 		}
-		// FIXME composite could be truly empty, not 'map empty'
+		// FIXME rdyer composite could be truly empty, not 'map empty'
 //		n.type = new BoaArray();
 
 		if (n.getPairsSize() > 0)
@@ -107,12 +155,12 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 
 		if (n.getRhsSize() > 0) {
 			if (!(ltype instanceof BoaBool))
-				throw new TypeException(n.getLhs(), "incompatible types for conjunction: required 'bool', found '" + ltype + "'");
+				throw new TypeCheckException(n.getLhs(), "incompatible types for conjunction: required 'bool', found '" + ltype + "'");
 
 			for (final Comparison c : n.getRhs()) {
 				c.accept(this, env);
 				if (!(c.type instanceof BoaBool))
-					throw new TypeException(c, "incompatible types for conjunction: required 'bool', found '" + c.type + "'");
+					throw new TypeCheckException(c, "incompatible types for conjunction: required 'bool', found '" + c.type + "'");
 			}
 
 			n.type = new BoaBool();
@@ -151,21 +199,21 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 
 					if (type instanceof BoaArray) {
 						if (!(index instanceof BoaInt))
-							throw new TypeException(node, "invalid operand type '" + index + "' for indexing into array");
+							throw new TypeCheckException(node, "invalid operand type '" + index + "' for indexing into array");
 
 						type = ((BoaArray) type).getType();
 					} else if (type instanceof BoaProtoList) {
 						if (!(index instanceof BoaInt))
-							throw new TypeException(node, "invalid operand type '" + index + "' for indexing into array");
+							throw new TypeCheckException(node, "invalid operand type '" + index + "' for indexing into array");
 
 						type = ((BoaProtoList) type).getType();
 					} else if (type instanceof BoaMap) {
 						if (!((BoaMap) type).getIndexType().assigns(index))
-							throw new TypeException(node, "invalid operand type '" + index + "' for indexing into '" + type + "'");
+							throw new TypeCheckException(node, "invalid operand type '" + index + "' for indexing into '" + type + "'");
 
 						type = ((BoaMap) type).getType();
 					} else {
-						throw new TypeException(node, "invalid operand type '" + type + "' for indexing expression");
+						throw new TypeCheckException(node, "invalid operand type '" + type + "' for indexing expression");
 					}
 				} else {
 					node.accept(this, env);
@@ -200,7 +248,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 			try {
 				n.type = env.get(n.getToken());
 			} catch (final RuntimeException e) {
-				throw new TypeException(n, "invalid identifier '" + n.getToken() + "'", e);
+				throw new TypeCheckException(n, "invalid identifier '" + n.getToken() + "'", e);
 			}
 	}
 
@@ -217,11 +265,11 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 
 		if (n.hasEnd()) {
 			if (!(n.getStart().type instanceof BoaInt))
-				throw new TypeException(n.getStart(), "invalid type '" + n.getStart().type + "' for slice expression");
+				throw new TypeCheckException(n.getStart(), "invalid type '" + n.getStart().type + "' for slice expression");
 
 			n.getEnd().accept(this, env);
 			if (!(n.getEnd().type instanceof BoaInt))
-				throw new TypeException(n.getEnd(), "invalid type '" + n.getEnd().type + "' for slice expression");
+				throw new TypeCheckException(n.getEnd(), "invalid type '" + n.getEnd().type + "' for slice expression");
 		}
 	}
 
@@ -244,14 +292,14 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 
 		if (type instanceof BoaProtoMap) {
 			if (!((BoaProtoMap) type).hasAttribute(selector))
-				throw new TypeException(n.getId(), type + " has no member named '" + selector + "'");
+				throw new TypeCheckException(n.getId(), type + " has no member named '" + selector + "'");
 		} else if (type instanceof BoaTuple) {
 			if (!((BoaTuple) type).hasMember(selector))
-				throw new TypeException(n.getId(), "'" + type + "' has no member named '" + selector + "'");
+				throw new TypeCheckException(n.getId(), "'" + type + "' has no member named '" + selector + "'");
 
 			type = ((BoaTuple) type).getMember(selector);
 		} else {
-			throw new TypeException(n, "invalid operand type '" + type + "' for member selection");
+			throw new TypeCheckException(n, "invalid operand type '" + type + "' for member selection");
 		}
 
 		n.type = type;
@@ -304,7 +352,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 
 		if (!(n.getLhs().type instanceof BoaArray && n.getRhs().type instanceof BoaTuple))
 			if (!n.getLhs().type.assigns(n.getRhs().type))
-				throw new TypeException(n.getRhs(), "incompatible types for assignment: required '" + n.getLhs().type + "', found '" + n.getRhs().type + "'");
+				throw new TypeCheckException(n.getRhs(), "incompatible types for assignment: required '" + n.getLhs().type + "', found '" + n.getRhs().type + "'");
 
 		n.type = n.getLhs().type;
 	}
@@ -365,36 +413,36 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 		final BoaType type = n.getId().type;
 
 		if (type == null)
-			throw new TypeException(n.getId(), "emitting to undeclared output variable '" + id + "'");
+			throw new TypeCheckException(n.getId(), "emitting to undeclared output variable '" + id + "'");
 		if (!(type instanceof BoaTable))
-			throw new TypeException(n.getId(), "emitting to non-output variable '" + id + "'");
+			throw new TypeCheckException(n.getId(), "emitting to non-output variable '" + id + "'");
 
 		final BoaTable t = (BoaTable) type;
 
 		if (n.getIndicesSize() != t.countIndices())
-			throw new TypeException(n.getId(), "output variable '" + id + "': incorrect number of indices for '" + id + "': required " + t.countIndices() + ", found " + n.getIndicesSize());
+			throw new TypeCheckException(n.getId(), "output variable '" + id + "': incorrect number of indices for '" + id + "': required " + t.countIndices() + ", found " + n.getIndicesSize());
 
 		if (n.getIndicesSize() > 0)
 			for (int i = 0; i < n.getIndicesSize() && i < t.countIndices(); i++) {
 				n.getIndice(i).accept(this, env);
 				if (!t.getIndex(i).assigns(n.getIndice(i).type))
-					throw new TypeException(n.getIndice(i), "output variable '" + id + "': incompatible types for index '" + i + "': required '" + t.getIndex(i) + "', found '" + n.getIndice(i) + "'");
+					throw new TypeCheckException(n.getIndice(i), "output variable '" + id + "': incompatible types for index '" + i + "': required '" + t.getIndex(i) + "', found '" + n.getIndice(i) + "'");
 			}
 
 		n.getValue().accept(this, env);
 		if (!t.accepts(n.getValue().type))
-			throw new TypeException(n.getValue(), "output variable '" + id + "': incompatible emit value types: required '" + t.getType() + "', found '" + n.getValue().type + "'");
+			throw new TypeCheckException(n.getValue(), "output variable '" + id + "': incompatible emit value types: required '" + t.getType() + "', found '" + n.getValue().type + "'");
 
 		if (n.hasWeight()) {
 			if (t.getWeightType() == null)
-				throw new TypeException(n.getWeight(), "output variable '" + id + "': emit contains a weight, but variable not declared with a weight");
+				throw new TypeCheckException(n.getWeight(), "output variable '" + id + "': emit contains a weight, but variable not declared with a weight");
 
 			n.getWeight().accept(this, env);
 
 			if (!t.acceptsWeight(n.getWeight().type))
-				throw new TypeException(n.getWeight(), "output variable '" + id + "': incompatible types for weight: required '" + t.getWeightType() + "', found '" + n.getWeight().type + "'");
+				throw new TypeCheckException(n.getWeight(), "output variable '" + id + "': incompatible types for weight: required '" + t.getWeightType() + "', found '" + n.getWeight().type + "'");
 		} else if (t.getWeightType() != null)
-			throw new TypeException(n, "output variable '" + id + "': emit must specify a weight");
+			throw new TypeCheckException(n, "output variable '" + id + "': emit must specify a weight");
 	}
 
 	/** {@inheritDoc} */
@@ -413,7 +461,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 
 		n.getCondition().accept(this, st);
 		if (!(n.getCondition().type instanceof BoaBool))
-			throw new TypeException(n.getCondition(), "incompatible types for exists condition: required 'boolean', found '" + n.getCondition().type + "'");
+			throw new TypeCheckException(n.getCondition(), "incompatible types for exists condition: required 'boolean', found '" + n.getCondition().type + "'");
 
 		n.getBody().accept(this, st);
 	}
@@ -443,7 +491,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 
 		n.getCondition().accept(this, st);
 		if (!(n.getCondition().type instanceof BoaBool))
-			throw new TypeException(n.getCondition(), "incompatible types for foreach condition: required 'boolean', found '" + n.getCondition().type + "'");
+			throw new TypeCheckException(n.getCondition(), "incompatible types for foreach condition: required 'boolean', found '" + n.getCondition().type + "'");
 
 		n.getBody().accept(this, st);
 	}
@@ -489,7 +537,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 
 		n.getCondition().accept(this, st);
 		if (!(n.getCondition().type instanceof BoaBool))
-			throw new TypeException(n.getCondition(), "incompatible types for ifall condition: required 'boolean', found '" + n.getCondition().type + "'");
+			throw new TypeCheckException(n.getCondition(), "incompatible types for ifall condition: required 'boolean', found '" + n.getCondition().type + "'");
 
 		n.getBody().accept(this, env);
 	}
@@ -503,7 +551,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 
 		if (!(n.getCondition().type instanceof BoaBool))
 			if (!(n.getCondition().type instanceof BoaFunction && ((BoaFunction) n.getCondition().type).getType() instanceof BoaBool))
-				throw new TypeException(n.getCondition(), "incompatible types for if condition: required 'boolean', found '" + n.getCondition().type + "'");
+				throw new TypeCheckException(n.getCondition(), "incompatible types for if condition: required 'boolean', found '" + n.getCondition().type + "'");
 
 		n.getBody().accept(this, env);
 
@@ -518,7 +566,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 
 		n.getExpr().accept(this, env);
 		if (!(n.getExpr().type instanceof BoaInt))
-			throw new TypeException(n.getExpr(), "incompatible types for operator '" + n.getOp() + "': required 'int', found '" + n.getExpr().type + "'");
+			throw new TypeCheckException(n.getExpr(), "incompatible types for operator '" + n.getOp() + "': required 'int', found '" + n.getExpr().type + "'");
 
 		n.type = n.getExpr().type;
 	}
@@ -533,7 +581,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 	@Override
 	public void visit(final ReturnStatement n, final SymbolTable env) {
 		if (env.getIsBeforeVisitor())
-			throw new TypeException(n, "return statement not allowed inside visitors");
+			throw new TypeCheckException(n, "return statement not allowed inside visitors");
 
 		n.env = env;
 
@@ -552,7 +600,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 		n.env = env;
 
 		if (!env.getIsBeforeVisitor())
-			throw new TypeException(n, "Stop statement only allowed inside 'before' visits");
+			throw new TypeCheckException(n, "Stop statement only allowed inside 'before' visits");
 	}
 
 	/** {@inheritDoc} */
@@ -563,8 +611,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 		for (final Expression e : n.getCases())
 			e.accept(this, env);
 
-		for (final Statement s : n.getStmts())
-			s.accept(this, env);
+		n.getBody().accept(this, env);
 	}
 
 	/** {@inheritDoc} */
@@ -582,13 +629,13 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 		n.getCondition().accept(this, st);
 		final BoaType expr = n.getCondition().type;
 		if (!(expr instanceof BoaInt) && !(expr instanceof BoaProtoMap))
-			throw new TypeException(n.getCondition(), "incompatible types for switch expression: required 'int' or 'enum', found: " + expr);
+			throw new TypeCheckException(n.getCondition(), "incompatible types for switch expression: required 'int' or 'enum', found: " + expr);
 
 		for (final SwitchCase sc : n.getCases()) {
 			sc.accept(this, st);
 			for (final Expression e : sc.getCases())
 				if (!expr.assigns(e.type))
-					throw new TypeException(e, "incompatible types for case expression: required '" + expr + "', found '" + e.type + "'");
+					throw new TypeCheckException(e, "incompatible types for case expression: required '" + expr + "', found '" + e.type + "'");
 		}
 
 		n.getDefault().accept(this, st);
@@ -602,9 +649,9 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 		final String id = n.getId().getToken();
 
 		if (env.hasGlobal(id))
-			throw new TypeException(n.getId(), "name conflict: constant '" + id + "' already exists");
+			throw new TypeCheckException(n.getId(), "name conflict: constant '" + id + "' already exists");
 		if (env.hasLocal(id))
-			throw new TypeException(n.getId(), "variable '" + id + "' already declared as '" + env.get(id) + "'");
+			throw new TypeCheckException(n.getId(), "variable '" + id + "' already declared as '" + env.get(id) + "'");
 
 		BoaType rhs = null;
 		if (n.hasInitializer()) {
@@ -630,16 +677,16 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 				rhs = new BoaArray(((BoaTuple)rhs).getMember(0));
 
 			if (rhs != null && !lhs.assigns(rhs) && !env.hasCast(rhs, lhs))
-				throw new TypeException(n.getInitializer(), "incorrect type '" + rhs + "' for assignment to '" + id + ": " + lhs + "'");
+				throw new TypeCheckException(n.getInitializer(), "incorrect type '" + rhs + "' for assignment to '" + id + ": " + lhs + "'");
 		} else {
 			if (rhs == null)
-				throw new TypeException(n, "variable declaration requires an explicit type or an initializer");
+				throw new TypeCheckException(n, "variable declaration requires an explicit type or an initializer");
 
 			lhs = rhs;
 		}
 
-		if (lhs instanceof BoaFunction && (env.hasFunction(id) || env.hasLocalFunction(id)))
-			throw new TypeException(n.getId(), "name conflict: a function '" + id + "' already exists");
+		if (lhs instanceof BoaFunction && (env.hasGlobalFunction(id) || env.hasLocalFunction(id)))
+			throw new TypeCheckException(n.getId(), "name conflict: a function '" + id + "' already exists");
 
 		env.set(id, lhs);
 		n.type = lhs;
@@ -660,23 +707,16 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 		n.env = st;
 
 		if (n.hasComponent()) {
-			final Component c = n.getComponent();
-
-			// first see if the type is valid
-			c.getType().accept(this, st);
-			if (c.getType().type == null)
-				throw new TypeException(c.getType(), "Invalid type '" + ((Identifier)c.getType()).getToken() + "'");
-
-			// then update the table
-			st.set(c.getIdentifier().getToken(), c.getType().type);
-			c.getIdentifier().accept(this, st);
-		} else if (!n.hasWildcard()) {
+			n.getComponent().accept(this, st);
+			if (n.getComponent().type instanceof BoaName)
+				n.getComponent().type = n.getComponent().getType().type;
+		}
+		else if (!n.hasWildcard())
 			for (final Identifier id : n.getIdList()) {
 				if (SymbolTable.getType(id.getToken()) == null)
-					throw new TypeException(id, "Invalid type '" + id.getToken() + "'");
+					throw new TypeCheckException(id, "Invalid type '" + id.getToken() + "'");
 				id.accept(this, st);
 			}
-		}
 
 		n.getBody().accept(this, st);
 	}
@@ -712,12 +752,12 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 
 		if (n.getRhsSize() > 0) {
 			if (!(ltype instanceof BoaBool))
-				throw new TypeException(n.getLhs(), "incompatible types for disjunction: required 'bool', found '" + ltype + "'");
+				throw new TypeCheckException(n.getLhs(), "incompatible types for disjunction: required 'bool', found '" + ltype + "'");
 
 			for (final Conjunction c : n.getRhs()) {
 				c.accept(this, env);
 				if (!(c.type instanceof BoaBool))
-					throw new TypeException(c, "incompatible types for disjunction: required 'bool', found '" + c.type + "'");
+					throw new TypeCheckException(c, "incompatible types for disjunction: required 'bool', found '" + c.type + "'");
 			}
 
 			n.type = new BoaBool();
@@ -883,7 +923,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 				c.accept(this, env);
 
 				if (!(c.type instanceof BoaScalar))
-					throw new TypeException(c, "incorrect type '" + c.type + "' for index");
+					throw new TypeCheckException(c, "incorrect type '" + c.type + "' for index");
 
 				indexTypes.add((BoaScalar) c.type);
 			}
@@ -896,25 +936,25 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 		try {
 			annotation = env.getAggregators(n.getId().getToken(), type).get(0).getAnnotation(AggregatorSpec.class);
 		} catch (final RuntimeException e) {
-			throw new TypeException(n, e.getMessage(), e);
+			throw new TypeCheckException(n, e.getMessage(), e);
 		}
 
 		BoaScalar tweight = null;
 		if (n.hasWeight()) {
 			if (annotation.weightType().equals("none"))
-				throw new TypeException(n.getWeight(), "unexpected weight for table declaration");
+				throw new TypeCheckException(n.getWeight(), "unexpected weight for table declaration");
 
 			final BoaType aweight = SymbolTable.getType(annotation.weightType());
 			n.getWeight().accept(this, env);
 			tweight = (BoaScalar) n.getWeight().type;
 
 			if (!aweight.assigns(tweight))
-				throw new TypeException(n.getWeight(), "incorrect weight type for table declaration");
+				throw new TypeCheckException(n.getWeight(), "incorrect weight type for table declaration");
 		} else if (!annotation.weightType().equals("none"))
-			throw new TypeException(n, "missing weight for table declaration");
+			throw new TypeCheckException(n, "missing weight for table declaration");
 
 		if (n.getArgsSize() > 0 && annotation.formalParameters().length == 0)
-			throw new TypeException(n.getArgs(), "table '" + n.getId().getToken() + "' takes no arguments");
+			throw new TypeCheckException(n.getArgs(), "table '" + n.getId().getToken() + "' takes no arguments");
 
 		n.type = new BoaTable(type, indexTypes, tweight);
 		env.set(n.getId().getToken(), n.type);
@@ -951,14 +991,14 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 		n.type = new BoaVisitor();
 	}
 
-	private List<BoaType> check(final Call c, final SymbolTable env) {
+	protected List<BoaType> check(final Call c, final SymbolTable env) {
 		if (c.getArgsSize() > 0)
 			return this.check(c.getArgs(), env);
 
 		return new ArrayList<BoaType>();
 	}
 
-	private List<BoaType> check(final List<Expression> el, final SymbolTable env) {
+	protected List<BoaType> check(final List<Expression> el, final SymbolTable env) {
 		final List<BoaType> types = new ArrayList<BoaType>();
 
 		for (final Expression e : el) {
@@ -969,20 +1009,20 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 		return types;
 	}
 
-	private BoaType checkPairs(final List<Pair> pl, final SymbolTable env) {
+	protected BoaType checkPairs(final List<Pair> pl, final SymbolTable env) {
 		pl.get(0).accept(this, env);
 		final BoaMap boaMap = (BoaMap) pl.get(0).type;
 
 		for (final Pair p : pl) {
 			p.accept(this, env);
 			if (!boaMap.assigns(p.type))
-				throw new TypeException(p, "incompatible types: required '" + boaMap + "', found '" + p.type + "'");
+				throw new TypeCheckException(p, "incompatible types: required '" + boaMap + "', found '" + p.type + "'");
 		}
 
 		return boaMap;
 	}
 
-	private BoaType assignableType(BoaType t) {
+	protected BoaType assignableType(BoaType t) {
 		if (t instanceof BoaFunction)
 			return ((BoaFunction) t).getType();
 		return t;

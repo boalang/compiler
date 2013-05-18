@@ -1,7 +1,6 @@
 package boa.types;
 
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -10,21 +9,11 @@ import java.util.Map;
  * arbitrary type.
  * 
  * @author anthonyu
- * 
  */
 public class BoaTuple extends BoaScalar {
-	private final List<BoaType> members;
-	private final Map<String, Integer> names;
+	protected final List<BoaType> members;
+	protected final Map<String, Integer> names;
 
-	/**
-	 * Construct a BoaTuple.
-	 * 
-	 * @param members
-	 *            A {@link LinkedHashMap} of {@link BoaType} containing a
-	 *            mapping from the names to the types of the members of this
-	 *            tuple
-	 * 
-	 */
 	public BoaTuple(final List<BoaType> members) {
 		this.members = members;
 		this.names = new HashMap<String, Integer>();

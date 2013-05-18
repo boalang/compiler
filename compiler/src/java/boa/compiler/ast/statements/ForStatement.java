@@ -12,7 +12,7 @@ public class ForStatement extends Statement {
 	protected Statement init;
 	protected Expression condition;
 	protected Statement update;
-	protected Statement body;
+	protected Block body;
 
 	public boolean hasInit() {
 		return init != null;
@@ -38,16 +38,11 @@ public class ForStatement extends Statement {
 		return update;
 	}
 
-	public Statement getBody() {
+	public Block getBody() {
 		return body;
 	}
 
-	public ForStatement(final Statement body) {
-		body.setParent(this);
-		this.body = body;
-	}
-
-	public ForStatement(final Statement init, final Expression condition, final Statement update, final Statement body) {
+	public ForStatement(final Statement init, final Expression condition, final Statement update, final Block body) {
 		if (init != null)
 			init.setParent(this);
 		if (condition != null)
@@ -63,13 +58,25 @@ public class ForStatement extends Statement {
 
 	/** {@inheritDoc} */
 	@Override
-	public <A> void accept(AbstractVisitor<A> v, A arg) {
+	public <A> void accept(final AbstractVisitor<A> v, A arg) {
 		v.visit(this, arg);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void accept(AbstractVisitorNoArg v) {
+	public void accept(final AbstractVisitorNoArg v) {
 		v.visit(this);
+	}
+
+	public ForStatement clone() {
+		final ForStatement f = new ForStatement(null, null, null, body.clone());
+		if (hasInit())
+			f.init = init.clone();
+		if (hasCondition())
+			f.condition = condition.clone();
+		if (hasUpdate())
+			f.update = update.clone();
+		copyFieldsTo(f);
+		return f;
 	}
 }

@@ -88,13 +88,27 @@ public class OutputType extends AbstractType {
 
 	/** {@inheritDoc} */
 	@Override
-	public <A> void accept(AbstractVisitor<A> v, A arg) {
+	public <A> void accept(final AbstractVisitor<A> v, A arg) {
 		v.visit(this, arg);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void accept(AbstractVisitorNoArg v) {
+	public void accept(final AbstractVisitorNoArg v) {
 		v.visit(this);
+	}
+
+	public OutputType clone() {
+		final OutputType o;
+		if (hasWeight())
+			o = new OutputType(id.clone(), t.clone(), weight.clone());
+		else
+			o = new OutputType(id.clone(), t.clone());
+		for (final Expression e : args)
+			o.addArg(e.clone());
+		for (final Component c : indices)
+			o.addIndice(c.clone());
+		copyFieldsTo(o);
+		return o;
 	}
 }

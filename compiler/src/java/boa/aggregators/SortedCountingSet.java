@@ -52,16 +52,10 @@ class SortedCountingSet<T> implements Iterable<T> {
 	@Override
 	public Iterator<T> iterator() {
 		return new Iterator<T>() {
-			private Entry<T, Long> lastEntry;
-			private Entry<T, Long> thisEntry;
+			private Entry<T, Long> lastEntry = SortedCountingSet.this.map.lastEntry();
+			private Entry<T, Long> thisEntry = SortedCountingSet.this.map.firstEntry();
 
-			private long cursor;
-
-			{
-				this.thisEntry = SortedCountingSet.this.map.firstEntry();
-				this.lastEntry = SortedCountingSet.this.map.lastEntry();
-				this.cursor = 0;
-			}
+			private long cursor = 0;
 
 			@Override
 			public boolean hasNext() {

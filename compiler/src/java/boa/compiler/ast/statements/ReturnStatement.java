@@ -29,13 +29,23 @@ public class ReturnStatement extends Statement {
 
 	/** {@inheritDoc} */
 	@Override
-	public <A> void accept(AbstractVisitor<A> v, A arg) {
+	public <A> void accept(final AbstractVisitor<A> v, A arg) {
 		v.visit(this, arg);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void accept(AbstractVisitorNoArg v) {
+	public void accept(final AbstractVisitorNoArg v) {
 		v.visit(this);
+	}
+
+	public ReturnStatement clone() {
+		final ReturnStatement s;
+		if (hasExpr())
+			s = new ReturnStatement(expr.clone());
+		else
+			s = new ReturnStatement();
+		copyFieldsTo(s);
+		return s;
 	}
 }

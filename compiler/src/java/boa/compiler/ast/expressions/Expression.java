@@ -44,13 +44,21 @@ public class Expression extends Node {
 
 	/** {@inheritDoc} */
 	@Override
-	public <A> void accept(AbstractVisitor<A> v, A arg) {
+	public <A> void accept(final AbstractVisitor<A> v, A arg) {
 		v.visit(this, arg);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void accept(AbstractVisitorNoArg v) {
+	public void accept(final AbstractVisitorNoArg v) {
 		v.visit(this);
+	}
+
+	public Expression clone() {
+		final Expression e = new Expression(lhs.clone());
+		for (final Conjunction c : rhs)
+			e.addRhs(c.clone());
+		copyFieldsTo(e);
+		return e;
 	}
 }

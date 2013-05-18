@@ -14,7 +14,7 @@ import boa.compiler.visitors.AbstractVisitorNoArg;
 public class SwitchCase extends Statement {
 	protected boolean isDefault;
 	protected final List<Expression> cases = new ArrayList<Expression>();
-	protected final List<Statement> stmts = new ArrayList<Statement>();
+	protected final Block body;
 
 	public boolean isDefault() {
 		return isDefault;
@@ -37,36 +37,33 @@ public class SwitchCase extends Statement {
 		cases.add(e);
 	}
 
-	public List<Statement> getStmts() {
-		return stmts;
+	public Block getBody() {
+		return body;
 	}
 
-	public int getStmtsSize() {
-		return stmts.size();
-	}
-
-	public Statement getStmt(final int index) {
-		return stmts.get(index);
-	}
-
-	public void addStatement(final Statement s) {
-		s.setParent(this);
-		stmts.add(s);
-	}
-
-	public SwitchCase(final boolean isDefault) {
+	public SwitchCase(final boolean isDefault, final Block body) {
+		body.setParent(this);
 		this.isDefault = isDefault;
+		this.body = body;
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public <A> void accept(AbstractVisitor<A> v, A arg) {
+	public <A> void accept(final AbstractVisitor<A> v, A arg) {
 		v.visit(this, arg);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void accept(AbstractVisitorNoArg v) {
+	public void accept(final AbstractVisitorNoArg v) {
 		v.visit(this);
+	}
+
+	public SwitchCase clone() {
+		final SwitchCase sc = new SwitchCase(isDefault, body.clone());
+		for (final Expression e : cases)
+			sc.addCase(e.clone());
+		copyFieldsTo(sc);
+		return sc;
 	}
 }

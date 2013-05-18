@@ -69,13 +69,23 @@ public class EmitStatement extends Statement {
 
 	/** {@inheritDoc} */
 	@Override
-	public <A> void accept(AbstractVisitor<A> v, A arg) {
+	public <A> void accept(final AbstractVisitor<A> v, A arg) {
 		v.visit(this, arg);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void accept(AbstractVisitorNoArg v) {
+	public void accept(final AbstractVisitorNoArg v) {
 		v.visit(this);
+	}
+
+	public EmitStatement clone() {
+		final EmitStatement e = new EmitStatement(id.clone(), value.clone());
+		if (hasWeight())
+			e.weight = weight.clone();
+		for (final Expression i : indices)
+			e.addIndice(i.clone());
+		copyFieldsTo(e);
+		return e;
 	}
 }

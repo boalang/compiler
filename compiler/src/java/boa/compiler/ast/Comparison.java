@@ -48,13 +48,23 @@ public class Comparison extends Node {
 
 	/** {@inheritDoc} */
 	@Override
-	public <A> void accept(AbstractVisitor<A> v, A arg) {
+	public <A> void accept(final AbstractVisitor<A> v, A arg) {
 		v.visit(this, arg);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void accept(AbstractVisitorNoArg v) {
+	public void accept(final AbstractVisitorNoArg v) {
 		v.visit(this);
+	}
+
+	public Comparison clone() {
+		final Comparison c;
+		if (hasOp())
+			c = new Comparison(lhs.clone(), op, rhs.clone());
+		else
+			c = new Comparison(lhs.clone());
+		copyFieldsTo(c);
+		return c;
 	}
 }

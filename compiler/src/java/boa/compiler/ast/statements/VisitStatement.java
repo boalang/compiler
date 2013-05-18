@@ -17,7 +17,7 @@ public class VisitStatement extends Statement {
 	protected boolean wildcard = false;
 	protected Component node;
 	protected final List<Identifier> ids = new ArrayList<Identifier>();
-	protected Statement body;
+	protected Block body;
 
 	public boolean isBefore() {
 		return before;
@@ -52,18 +52,23 @@ public class VisitStatement extends Statement {
 		ids.add(id);
 	}
 
-	public Statement getBody() {
+	public Block getBody() {
 		return body;
 	}
 
-	public VisitStatement(final boolean before, final boolean wildcard, final Statement body) {
+	public void replaceBody(final Block body) {
+		body.setParent(this);
+		this.body = body;
+	}
+
+	public VisitStatement(final boolean before, final boolean wildcard, final Block body) {
 		body.setParent(this);
 		this.before = before;
 		this.wildcard = wildcard;
 		this.body = body;
 	}
 
-	public VisitStatement(final boolean before, final Component node, final Statement body) {
+	public VisitStatement(final boolean before, final Component node, final Block body) {
 		node.setParent(this);
 		body.setParent(this);
 		this.before = before;
@@ -81,5 +86,15 @@ public class VisitStatement extends Statement {
 	@Override
 	public void accept(AbstractVisitorNoArg v) {
 		v.visit(this);
+	}
+
+	public VisitStatement clone() {
+		final VisitStatement v = new VisitStatement(before, wildcard, body.clone());
+		if (hasComponent())
+			v.node = node.clone();
+		for (final Identifier id : ids)
+			v.addId(id.clone());
+		copyFieldsTo(v);
+		return v;
 	}
 }

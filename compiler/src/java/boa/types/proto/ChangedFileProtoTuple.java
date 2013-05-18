@@ -31,6 +31,10 @@ public class ChangedFileProtoTuple extends BoaProtoTuple {
 
 		names.put("name", counter++);
 		members.add(new BoaString());
+
+		// NOTE: this is here to make reachableTypes() work properly
+		names.put("_placeholder_", counter++);
+		members.add(new NamespaceProtoTuple());
 	}
 
 	/**
@@ -40,6 +44,7 @@ public class ChangedFileProtoTuple extends BoaProtoTuple {
 		super(members, names);
 	}
 
+	/** @{inheritDoc} */
 	@Override
 	public String toJavaType() {
 		return "boa.types.Diff.ChangedFile";

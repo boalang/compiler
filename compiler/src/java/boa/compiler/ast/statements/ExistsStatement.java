@@ -12,7 +12,7 @@ import boa.compiler.visitors.AbstractVisitorNoArg;
 public class ExistsStatement extends Statement {
 	protected Component var;
 	protected Expression condition;
-	protected Statement body;
+	protected Block body;
 
 	public Component getVar() {
 		return var;
@@ -22,11 +22,11 @@ public class ExistsStatement extends Statement {
 		return condition;
 	}
 
-	public Statement getBody() {
+	public Block getBody() {
 		return body;
 	}
 
-	public ExistsStatement(final Component var, final Expression condition, final Statement body) {
+	public ExistsStatement(final Component var, final Expression condition, final Block body) {
 		var.setParent(this);
 		condition.setParent(this);
 		body.setParent(this);
@@ -37,13 +37,19 @@ public class ExistsStatement extends Statement {
 
 	/** {@inheritDoc} */
 	@Override
-	public <A> void accept(AbstractVisitor<A> v, A arg) {
+	public <A> void accept(final AbstractVisitor<A> v, A arg) {
 		v.visit(this, arg);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void accept(AbstractVisitorNoArg v) {
+	public void accept(final AbstractVisitorNoArg v) {
 		v.visit(this);
+	}
+
+	public ExistsStatement clone() {
+		final ExistsStatement s = new ExistsStatement(var.clone(), condition.clone(), body.clone());
+		copyFieldsTo(s);
+		return s;
 	}
 }

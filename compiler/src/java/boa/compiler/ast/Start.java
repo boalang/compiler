@@ -1,7 +1,5 @@
 package boa.compiler.ast;
 
-import boa.compiler.ast.statements.Block;
-import boa.compiler.ast.statements.Statement;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
 
@@ -9,8 +7,17 @@ import boa.compiler.visitors.AbstractVisitorNoArg;
  * 
  * @author rdyer
  */
-public class Program extends Block {
-	public String jobName;
+public class Start extends Node {
+	protected Program p;
+
+	public Program getProgram() {
+		return p;
+	}
+
+	public Start(final Program p) {
+		p.setParent(this);
+		this.p = p;
+	}
 
 	/** {@inheritDoc} */
 	@Override
@@ -24,12 +31,9 @@ public class Program extends Block {
 		v.visit(this);
 	}
 
-	public Program clone() {
-		final Program p = new Program();
-		p.jobName = jobName;
-		for (final Statement s : statements)
-			p.addStatement(s.clone());
-		copyFieldsTo(p);
-		return p;
+	public Start clone() {
+		final Start s = new Start(p.clone());
+		copyFieldsTo(s);
+		return s;
 	}
 }

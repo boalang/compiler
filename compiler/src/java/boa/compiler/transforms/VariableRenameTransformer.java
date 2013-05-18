@@ -4,8 +4,8 @@ import boa.compiler.ast.Identifier;
 import boa.compiler.ast.Node;
 import boa.compiler.ast.Selector;
 import boa.compiler.ast.statements.VarDeclStatement;
+import boa.compiler.ast.statements.VisitStatement;
 import boa.compiler.visitors.AbstractVisitorNoArg;
-import boa.types.BoaTable;
 
 /**
  * Finds and renames all variables in the tree, including their declarations
@@ -15,7 +15,7 @@ import boa.types.BoaTable;
  * @author rdyer
  */
 public class VariableRenameTransformer extends AbstractVisitorNoArg {
-	private String prefix = "";
+	protected String prefix = "";
 
 	/**
 	 * Starts a variable renaming transformation with a given prefix.
@@ -28,17 +28,45 @@ public class VariableRenameTransformer extends AbstractVisitorNoArg {
 		start(n);
 	}
 
+	protected String argName;
+
+	/** {@inheritDoc} */
 	@Override
-	public void visit(VarDeclStatement n) {
-		if (n.type instanceof BoaTable)
+	protected void initialize() {
+		argName = null;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void visit(VisitStatement n) {
+		// special case variable renaming for visit statements that name
+		// their argument - this allows merging two visit statements from
+		// different programs together, ensuring they use the same arg name
+		if (n.hasComponent()) {
+			argName = n.getComponent().getIdentifier().getToken();
+			n.getComponent().accept(this);
+			n.getBody().accept(this);
 			return;
-
-		final String newToken = prefix + n.getId().getToken();
-		n.env.set(newToken, n.env.get(n.getId().getToken()));
-
+		}
 		super.visit(n);
 	}
 
+	/** {@inheritDoc} */
+	@Override
+	public void visit(VarDeclStatement n) {
+		final String newToken;
+		if (!n.getId().getToken().equals(argName))
+			newToken = prefix + n.getId().getToken();
+		else
+			newToken = "_n";
+		n.env.set(newToken, n.env.get(n.getId().getToken()));
+
+		n.getId().accept(this);
+		if (n.hasInitializer())
+			n.getInitializer().accept(this);
+	}
+
+	/** {@inheritDoc} */
 	@Override
 	public void visit(Selector n) {
 		// do nothing, we dont want to rename the selector's identifier
@@ -49,9 +77,12 @@ public class VariableRenameTransformer extends AbstractVisitorNoArg {
 	public void visit(Identifier n) {
 		final String id = n.getToken();
 
-		if (n.env.hasType(id) || n.env.hasGlobal(id) || n.env.hasFunction(id) || n.type instanceof BoaTable)
+		if (n.env.hasType(id) || n.env.hasGlobal(id) || n.env.hasGlobalFunction(id))
 			return;
 
-		n.setToken(prefix + id);
+		if (!id.equals(argName))
+			n.setToken(prefix + id);
+		else
+			n.setToken("_n");
 	}
 }

@@ -27,13 +27,19 @@ public class UnaryFactor extends Operand {
 
 	/** {@inheritDoc} */
 	@Override
-	public <A> void accept(AbstractVisitor<A> v, A arg) {
+	public <A> void accept(final AbstractVisitor<A> v, A arg) {
 		v.visit(this, arg);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void accept(AbstractVisitorNoArg v) {
+	public void accept(final AbstractVisitorNoArg v) {
 		v.visit(this);
+	}
+
+	public UnaryFactor clone() {
+		final UnaryFactor uf = new UnaryFactor(op, f.clone());
+		copyFieldsTo(uf);
+		return uf;
 	}
 }

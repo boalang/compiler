@@ -2,12 +2,9 @@ package boa.aggregators;
 
 import java.io.IOException;
 
-
-import org.apache.hadoop.util.bloom.Filter;
 import org.apache.hadoop.util.bloom.Key;
 
 import boa.io.EmitKey;
-
 
 /**
  * A Boa aggregator to estimate the size of the set of unique values in a
@@ -27,13 +24,13 @@ public class UniqueAggregator extends DistinctAggregator {
 	 *            The size of the internal table used to perform the
 	 *            calculation.
 	 */
-	public UniqueAggregator(long arg) {
+	public UniqueAggregator(final long arg) {
 		super(arg);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void start(EmitKey key) {
+	public void start(final EmitKey key) {
 		super.start(key);
 
 		// clear out the internal total
@@ -42,17 +39,16 @@ public class UniqueAggregator extends DistinctAggregator {
 
 	/** {@inheritDoc} */
 	@Override
-	public void aggregate(String data, String metadata) throws IOException, InterruptedException {
+	public void aggregate(final String data, final String metadata) throws IOException, InterruptedException {
 		// instantiate a bloom filter input key initialized by the data
-		Key key = new Key(data.getBytes());
+		final Key key = new Key(data.getBytes());
 
 		// if the key is already in the filter, forget about it
-		Filter filter = this.getFilter();
-		if (filter.membershipTest(key))
+		if (this.filter.membershipTest(key))
 			return;
 
 		// add the key to the bloom filter
-		filter.add(key);
+		this.filter.add(key);
 
 		if (this.isCombining())
 			this.collect(data);

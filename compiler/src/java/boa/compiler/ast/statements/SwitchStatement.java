@@ -50,13 +50,21 @@ public class SwitchStatement extends Statement {
 
 	/** {@inheritDoc} */
 	@Override
-	public <A> void accept(AbstractVisitor<A> v, A arg) {
+	public <A> void accept(final AbstractVisitor<A> v, A arg) {
 		v.visit(this, arg);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void accept(AbstractVisitorNoArg v) {
+	public void accept(final AbstractVisitorNoArg v) {
 		v.visit(this);
+	}
+
+	public SwitchStatement clone() {
+		final SwitchStatement sw = new SwitchStatement(condition.clone(), dfault.clone());
+		for (final SwitchCase c : cases)
+			sw.addCase(c.clone());
+		copyFieldsTo(sw);
+		return sw;
 	}
 }

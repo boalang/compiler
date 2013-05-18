@@ -10,17 +10,17 @@ import boa.compiler.visitors.AbstractVisitorNoArg;
  */
 public class DoStatement extends Statement {
 	protected Expression condition;
-	protected Statement body;
+	protected Block body;
 
 	public Expression getCondition() {
 		return condition;
 	}
 
-	public Statement getBody() {
+	public Block getBody() {
 		return body;
 	}
 
-	public DoStatement(final Expression condition, final Statement body) {
+	public DoStatement(final Expression condition, final Block body) {
 		condition.setParent(this);
 		body.setParent(this);
 		this.condition = condition;
@@ -29,13 +29,19 @@ public class DoStatement extends Statement {
 
 	/** {@inheritDoc} */
 	@Override
-	public <A> void accept(AbstractVisitor<A> v, A arg) {
+	public <A> void accept(final AbstractVisitor<A> v, A arg) {
 		v.visit(this, arg);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void accept(AbstractVisitorNoArg v) {
+	public void accept(final AbstractVisitorNoArg v) {
 		v.visit(this);
+	}
+
+	public DoStatement clone() {
+		final DoStatement s = new DoStatement(condition.clone(), body.clone());
+		copyFieldsTo(s);
+		return s;
 	}
 }

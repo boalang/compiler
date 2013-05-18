@@ -129,6 +129,7 @@ public class SymbolTable {
 		// visitors
 		globalFunctions.addFunction("visit", new BoaFunction(new BoaAny(), new BoaType[] { new BoaScalar(), new BoaVisitor() }, "${1}.visit(${0})"));
 		globalFunctions.addFunction("visit", new BoaFunction(new BoaAny(), new BoaType[] { new BoaScalar() }, "visit(${0})"));
+		globalFunctions.addFunction("_cur_visitor", new BoaFunction(new BoaVisitor(), new BoaType[] { }, "this"));
 		globalFunctions.addFunction("ast_len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaAny() }, "boa.functions.BoaAstIntrinsics.lenVisitor.getCount(${0})"));
 
 		// stack functions
@@ -432,7 +433,6 @@ public class SymbolTable {
 			boa.functions.BoaModifierIntrinsics.class,
 			boa.functions.BoaCasts.class,
 			boa.functions.BoaEncodingIntrinsics.class,
-			boa.functions.BoaFileIntrinsics.class,
 			boa.functions.BoaMathIntrinsics.class,
 			boa.functions.BoaSortIntrinsics.class,
 			boa.functions.BoaSpecialIntrinsics.class,
@@ -461,7 +461,6 @@ public class SymbolTable {
 			boa.aggregators.MaximumAggregator.class,
 			boa.aggregators.MedianAggregator.class,
 			boa.aggregators.MinimumAggregator.class,
-			boa.aggregators.MrcounterAggregator.class,
 			boa.aggregators.SetAggregator.class,
 			boa.aggregators.SkewnessAggregator.class,
 			boa.aggregators.StatisticsAggregator.class,
@@ -511,7 +510,7 @@ public class SymbolTable {
 		return function;
 	}
 
-	public boolean hasFunction(final String id) {
+	public boolean hasGlobalFunction(final String id) {
 		return globalFunctions.hasFunction(id);
 	}
 

@@ -20,9 +20,21 @@ public abstract class AbstractVisitor<ARG> {
 		n.accept(this, arg);
 	}
 
+	public void visit(final Start n, final ARG arg) {
+		n.getProgram().accept(this, arg);
+	}
+
 	public void visit(final Program n, final ARG arg) {
-		for (final Statement s : n.getStatements())
-			s.accept(this, arg);
+		int len = n.getStatementsSize();
+		for (int i = 0; i < n.getStatementsSize(); i++) {
+			n.getStatement(i).accept(this, arg);
+			// if a node was added, dont visit it and
+			// dont re-visit the node we were just at
+			if (len != n.getStatementsSize()) {
+				i += (n.getStatementsSize() - len);
+				len = n.getStatementsSize();
+			}
+		}
 	}
 
 	public void visit(final Call n, final ARG arg) {
@@ -98,8 +110,16 @@ public abstract class AbstractVisitor<ARG> {
 	}
 
 	public void visit(final Block n, final ARG arg) {
-		for (final Node s : n.getStatements())
-			s.accept(this, arg);
+		int len = n.getStatementsSize();
+		for (int i = 0; i < n.getStatementsSize(); i++) {
+			n.getStatement(i).accept(this, arg);
+			// if a node was added, dont visit it and
+			// dont re-visit the node we were just at
+			if (len != n.getStatementsSize()) {
+				i += (n.getStatementsSize() - len);
+				len = n.getStatementsSize();
+			}
+		}
 	}
 
 	public void visit(final BreakStatement n, final ARG arg) {
@@ -180,8 +200,7 @@ public abstract class AbstractVisitor<ARG> {
 	public void visit(final SwitchCase n, final ARG arg) {
 		for (final Expression e : n.getCases())
 			e.accept(this, arg);
-		for (final Statement s : n.getStmts())
-			s.accept(this, arg);
+		n.getBody().accept(this, arg);
 	}
 
 	public void visit(final SwitchStatement n, final ARG arg) {

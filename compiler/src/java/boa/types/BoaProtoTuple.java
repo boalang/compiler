@@ -1,9 +1,9 @@
 package boa.types;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * A {@link BoaTuple} representing a protocol buffer tuple.
@@ -12,19 +12,6 @@ import java.util.Map;
  * 
  */
 public class BoaProtoTuple extends BoaTuple {
-	/**
-	 * Construct a BoaProtoTuple.
-	 * 
-	 * @param members
-	 *            A {@link LinkedHashMap} of {@link BoaType} containing a
-	 *            mapping from the names to the types of the members of this
-	 *            tuple
-	 * 
-	 */
-	public BoaProtoTuple(final List<BoaType> members) {
-		this(members, new HashMap<String, Integer>());
-	}
-
 	public BoaProtoTuple(final List<BoaType> members, final Map<String, Integer> names) {
 		super(members, names);
 	}
@@ -57,4 +44,30 @@ public class BoaProtoTuple extends BoaTuple {
 		String type = toJavaType();
 		return type.substring(1 + type.lastIndexOf('.'));
 	}
+
+	/**
+	 * The set of all types that may be visited when starting a
+	 * visit from this type.
+	 * 
+	 * @return the set of reachable types
+	 */
+	@SuppressWarnings("unchecked")
+	public Set<Class<? extends BoaProtoTuple>> reachableTypes() {
+		if (reachableTypesCache != null)
+			return reachableTypesCache;
+
+		reachableTypesCache = new HashSet<Class<? extends BoaProtoTuple>>();
+		reachableTypesCache.add((Class<? extends BoaProtoTuple>) this.getClass());
+		for (final BoaType t : members)
+			if (t instanceof BoaProtoTuple) {
+				reachableTypesCache.add((Class<? extends BoaProtoTuple>) t.getClass());
+				reachableTypesCache.addAll(((BoaProtoTuple) t).reachableTypes());
+			} else if (t instanceof BoaProtoList) {
+				reachableTypesCache.addAll(((BoaProtoList) t).reachableTypes());
+			}
+
+		return reachableTypesCache;
+	}
+
+	protected Set<Class<? extends BoaProtoTuple>> reachableTypesCache;
 }

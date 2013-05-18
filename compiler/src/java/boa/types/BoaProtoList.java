@@ -1,5 +1,8 @@
 package boa.types;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * A {@link BoaType} representing an array of scalar values that is a BoaProtoTuple member.
  * 
@@ -72,7 +75,6 @@ public class BoaProtoList extends BoaType {
 	/** {@inheritDoc} */
 	@Override
 	public boolean compares(final BoaType that) {
-		// FIXME: is this needed?
 		// if that is an array..
 		if (that instanceof BoaProtoList)
 			// check against the element types of these arrays
@@ -152,5 +154,15 @@ public class BoaProtoList extends BoaType {
 			return "protolist of none";
 		else
 			return "protolist of " + this.type.toString();
+	}
+
+	@SuppressWarnings("unchecked")
+	public Set<Class<? extends BoaProtoTuple>> reachableTypes() {
+		if (this.type instanceof BoaProtoTuple) {
+			final Set<Class<? extends BoaProtoTuple>> set = ((BoaProtoTuple) this.type).reachableTypes();
+			set.add((Class<? extends BoaProtoTuple>) this.type.getClass());
+			return set;
+		}
+		return new HashSet<Class<? extends BoaProtoTuple>>();
 	}
 }

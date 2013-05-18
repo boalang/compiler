@@ -20,13 +20,15 @@ public class PersonProtoTuple extends BoaProtoTuple {
 	private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
 	static {
-		names.put("username", 0);
+		int counter = 0;
+
+		names.put("username", counter++);
 		members.add(new BoaString());
 
-		names.put("real_name", 1);
+		names.put("real_name", counter++);
 		members.add(new BoaString());
 
-		names.put("email", 2);
+		names.put("email", counter++);
 		members.add(new BoaString());
 	}
 
@@ -37,6 +39,7 @@ public class PersonProtoTuple extends BoaProtoTuple {
 		super(members, names);
 	}
 
+	/** @{inheritDoc} */
 	@Override
 	public String toJavaType() {
 		return "boa.types.Shared.Person";

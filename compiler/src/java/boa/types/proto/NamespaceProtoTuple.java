@@ -20,16 +20,18 @@ public class NamespaceProtoTuple extends BoaProtoTuple {
 	private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
 	static {
-		names.put("name", 0);
+		int counter = 0;
+
+		names.put("name", counter++);
 		members.add(new BoaString());
 
-		names.put("modifiers", 1);
+		names.put("modifiers", counter++);
 		members.add(new BoaProtoList(new ModifierProtoTuple()));
 
-		names.put("declarations", 2);
+		names.put("declarations", counter++);
 		members.add(new BoaProtoList(new DeclarationProtoTuple()));
 
-		names.put("comments", 3);
+		names.put("comments", counter++);
 		members.add(new BoaProtoList(new CommentProtoTuple()));
 	}
 
@@ -40,6 +42,7 @@ public class NamespaceProtoTuple extends BoaProtoTuple {
 		super(members, names);
 	}
 
+	/** @{inheritDoc} */
 	@Override
 	public String toJavaType() {
 		return "boa.types.Ast.Namespace";

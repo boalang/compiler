@@ -25,26 +25,36 @@ public class Index extends Node {
 	}
 
 	public Index (final Expression start) {
-		start.setParent(this);
-		this.start = start;
+		this(start, null);
 	}
 
 	public Index (final Expression start, final Expression end) {
 		start.setParent(this);
-		end.setParent(this);
+		if (end != null)
+			end.setParent(this);
 		this.start = start;
 		this.end = end;
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public <A> void accept(AbstractVisitor<A> v, A arg) {
+	public <A> void accept(final AbstractVisitor<A> v, A arg) {
 		v.visit(this, arg);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void accept(AbstractVisitorNoArg v) {
+	public void accept(final AbstractVisitorNoArg v) {
 		v.visit(this);
+	}
+
+	public Index clone() {
+		final Index i;
+		if (hasEnd())
+			i = new Index(start.clone(), end.clone());
+		else
+			i = new Index(start.clone());
+		copyFieldsTo(i);
+		return i;
 	}
 }

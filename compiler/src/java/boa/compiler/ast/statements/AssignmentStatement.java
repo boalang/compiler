@@ -30,13 +30,19 @@ public class AssignmentStatement extends Statement {
 
 	/** {@inheritDoc} */
 	@Override
-	public <A> void accept(AbstractVisitor<A> v, A arg) {
+	public <A> void accept(final AbstractVisitor<A> v, A arg) {
 		v.visit(this, arg);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void accept(AbstractVisitorNoArg v) {
+	public void accept(final AbstractVisitorNoArg v) {
 		v.visit(this);
+	}
+
+	public AssignmentStatement clone() {
+		final AssignmentStatement s = new AssignmentStatement(lhs.clone(), rhs.clone());
+		copyFieldsTo(s);
+		return s;
 	}
 }

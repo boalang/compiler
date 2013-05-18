@@ -22,13 +22,15 @@ public class CodeRepositoryProtoTuple extends BoaProtoTuple {
 	private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
 	static {
-		names.put("url", 0);
+		int counter = 0;
+
+		names.put("url", counter++);
 		members.add(new BoaString());
 
-		names.put("kind", 1);
+		names.put("kind", counter++);
 		members.add(new RepositoryKindProtoMap());
 
-		names.put("revisions", 2);
+		names.put("revisions", counter++);
 		members.add(new BoaProtoList(new RevisionProtoTuple()));
 	}
 
@@ -39,6 +41,7 @@ public class CodeRepositoryProtoTuple extends BoaProtoTuple {
 		super(members, names);
 	}
 
+	/** @{inheritDoc} */
 	@Override
 	public String toJavaType() {
 		return "boa.types.Code.CodeRepository";

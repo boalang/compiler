@@ -9,7 +9,7 @@ import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
 
 import boa.compiler.SymbolTable;
-import boa.compiler.TypeException;
+import boa.compiler.TypeCheckException;
 import boa.compiler.ast.*;
 import boa.compiler.ast.expressions.*;
 import boa.compiler.ast.literals.*;
@@ -17,105 +17,294 @@ import boa.compiler.ast.statements.*;
 import boa.compiler.ast.types.*;
 import boa.types.*;
 
-/**
- * 
- * @author anthonyu
- */
-class TableDescription {
-	private String aggregator;
-	private BoaType type;
-	private List<String> parameters;
-
-	public TableDescription(final String aggregator, final BoaType type) {
-		this(aggregator, type, null);
-	}
-
-	public TableDescription(final String aggregator, final BoaType type, final List<String> parameters) {
-		this.aggregator = aggregator;
-		this.type = type;
-		this.parameters = parameters;
-	}
-
-	/**
-	 * @return the name
-	 */
-	public String getAggregator() {
-		return this.aggregator;
-	}
-
-	/**
-	 * @return the parameters
-	 */
-	public List<String> getParameters() {
-		return this.parameters;
-	}
-
-	/**
-	 * @param name
-	 *            the name to set
-	 */
-	public void setAggregator(final String aggregator) {
-		this.aggregator = aggregator;
-	}
-
-	/**
-	 * @param parameters
-	 *            the parameters to set
-	 */
-	public void setParameters(final List<String> parameters) {
-		this.parameters = parameters;
-	}
-
-	/**
-	 * @return the types
-	 */
-	public BoaType getType() {
-		return this.type;
-	}
-
-	/**
-	 * @param types
-	 *            the types to set
-	 */
-	public void setTypes(final BoaType type) {
-		this.type = type;
-	}
-}
-
 /***
  * 
  * @author anthonyu
  * @author rdyer
  */
 public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
-	private final IdentifierFindingVisitor idFinder;
-	private final IndexeeFindingVisitor indexeeFinder;
-	private final VarDeclCodeGeneratingVisitor varDecl;
-	private final StaticInitializationCodeGeneratingVisitor staticInitialization;
-	private final FunctionDeclaratorCodeGeneratingVisitor functionDeclarator;
+	/**
+	 * 
+	 * @author anthonyu
+	 */
+	protected class TableDescription {
+		protected String aggregator;
+		protected BoaType type;
+		protected List<String> parameters;
 
-	private final HashMap<String, TableDescription> tables;
+		public TableDescription(final String aggregator, final BoaType type) {
+			this(aggregator, type, null);
+		}
 
-	private boolean hasEmit = false;
+		public TableDescription(final String aggregator, final BoaType type, final List<String> parameters) {
+			this.aggregator = aggregator;
+			this.type = type;
+			this.parameters = parameters;
+		}
 
-	private final String name;
+		/**
+		 * @return the name
+		 */
+		public String getAggregator() {
+			return this.aggregator;
+		}
 
-	private String skipIndex = "";
-	private boolean abortGeneration = false;
+		/**
+		 * @return the parameters
+		 */
+		public List<String> getParameters() {
+			return this.parameters;
+		}
+
+		/**
+		 * @param name
+		 *            the name to set
+		 */
+		public void setAggregator(final String aggregator) {
+			this.aggregator = aggregator;
+		}
+
+		/**
+		 * @param parameters
+		 *            the parameters to set
+		 */
+		public void setParameters(final List<String> parameters) {
+			this.parameters = parameters;
+		}
+
+		/**
+		 * @return the types
+		 */
+		public BoaType getType() {
+			return this.type;
+		}
+
+		/**
+		 * @param types
+		 *            the types to set
+		 */
+		public void setTypes(final BoaType type) {
+			this.type = type;
+		}
+	}
+
+	/**
+	 * Scan the program and generate code for any variable declarations.
+	 * 
+	 * @author rdyer
+	 */
+	protected class VarDeclCodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
+		public VarDeclCodeGeneratingVisitor() {
+			this.stg = CodeGeneratingVisitor.this.stg;
+		}
+
+		/** {@inheritDoc} */
+		@Override
+		public void visit(final VarDeclStatement n) {
+			if (n.type instanceof BoaTable)
+				return;
+
+			final StringTemplate st = this.stg.getInstanceOf("VarDecl");
+
+			st.setAttribute("id", n.getId().getToken());
+			st.setAttribute("type", n.type.toJavaType());
+
+			if (n.isStatic())
+				st.setAttribute("isstatic", true);
+
+			code.add(st.toString());
+		}
+	}
+
+	/***
+	 * Finds the set of all function types and generates classes for each unique type.
+	 * 
+	 * @author rdyer
+	 */
+	protected class FunctionDeclaratorCodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
+		protected final Set<String> funcs = new HashSet<String>();
+
+		public FunctionDeclaratorCodeGeneratingVisitor() {
+			this.stg = CodeGeneratingVisitor.this.stg;
+		}
+
+		/** {@inheritDoc} */
+		@Override
+		public void visit(final FunctionType n) {
+			final String name = ((BoaFunction)n.type).toJavaType();
+			if (funcs.contains(name))
+				return;
+
+			funcs.add(name);
+
+			final StringTemplate st = this.stg.getInstanceOf("FunctionType");
+
+			if (!(n.type instanceof BoaFunction))
+				throw new TypeCheckException(n ,"type " + n.type + " is not a function type");
+
+			final BoaFunction funcType = ((BoaFunction) n.type);
+
+			final List<Component> params = n.getArgs();
+			final List<String> args = new ArrayList<String>();
+			final List<String> types = new ArrayList<String>();
+
+			for (final Component c : params) {
+				args.add(c.getIdentifier().getToken());
+				types.add(c.getType().type.toJavaType());
+			}
+
+			st.setAttribute("name", funcType.toJavaType());
+			if (funcType.getType() instanceof BoaAny)
+				st.setAttribute("ret", "void");
+			else
+				st.setAttribute("ret", funcType.getType().toBoxedJavaType());
+			st.setAttribute("args", args);
+			st.setAttribute("types", types);
+
+			code.add(st.toString());
+		}
+	}
+
+	/**
+	 * 
+	 * @author rdyer
+	 */
+	protected class StaticInitializationCodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
+		public StaticInitializationCodeGeneratingVisitor() {
+			this.stg = CodeGeneratingVisitor.this.stg;
+		}
+
+		/** {@inheritDoc} */
+		@Override
+		public void visit(final VarDeclStatement n) {
+			if (!n.isStatic() || !n.hasInitializer())
+				return;
+
+			n.env.setId("___" + n.getId().getToken());
+			n.getInitializer().accept(this);
+			n.env.setId(null);
+		}
+
+		/** {@inheritDoc} */
+		@Override
+		public void visit(final Composite n) {
+			if (n.isEmpty())
+				return;
+
+			String s = "";
+
+			for (final Pair p : n.getPairs()) {
+				if (s.length() > 0)
+					s += "\n";
+				p.accept(this);
+				s += code.pop();
+			}
+
+			code.add(s);
+		}
+	}
+
+	/**
+	 * 
+	 * @author rdyer
+	 */
+	protected class IdentifierFindingVisitor extends AbstractVisitorNoArg {
+		protected final Set<String> names = new HashSet<String>();
+
+		public Set<String> getNames() {
+			return names;
+		}
+
+		/** {@inheritDoc} */
+		@Override
+		protected void initialize() {
+			names.clear();
+		}
+
+		/** {@inheritDoc} */
+		@Override
+		public void visit(final Identifier n) {
+			names.add(n.getToken());
+		}
+	}
+
+	/**
+	 * 
+	 * @author rdyer
+	 */
+	protected class IndexeeFindingVisitor extends AbstractVisitor<String> {
+		protected Factor firstFactor;
+		protected Node lastFactor;
+
+		protected Map<Node, Node> lastFactors = new HashMap<Node, Node>();
+		protected final Set<Node> indexees = new HashSet<Node>();
+
+		/** {@inheritDoc} */
+		@Override
+		protected void initialize(String arg) {
+			lastFactors.clear();
+			indexees.clear();
+			firstFactor = null;
+			lastFactor = null;
+		}
+
+		public Map<Node, Node> getFactors() {
+			return lastFactors;
+		}
+
+		public Set<Node> getIndexees() {
+			return indexees;
+		}
+
+		/** {@inheritDoc} */
+		@Override
+		public void visit(final Factor n, final String arg) {
+			firstFactor = n;
+			n.getOperand().accept(this, arg);
+			lastFactor = n.getOperand();
+
+			for (final Node f : n.getOps()) {
+				f.accept(this, arg);
+				lastFactor = f;
+			}
+		}
+
+		/** {@inheritDoc} */
+		@Override
+		public void visit(final Index n, final String arg) {
+			CodeGeneratingVisitor.this.idFinder.start(n);
+
+			if (CodeGeneratingVisitor.this.idFinder.getNames().contains(arg)) {
+				indexees.add(firstFactor);
+				lastFactors.put(firstFactor, lastFactor);
+			}
+		}
+	}
+
+	protected final IdentifierFindingVisitor idFinder = new IdentifierFindingVisitor();
+	protected final IndexeeFindingVisitor indexeeFinder = new IndexeeFindingVisitor();
+	protected final VarDeclCodeGeneratingVisitor varDecl;
+	protected final StaticInitializationCodeGeneratingVisitor staticInitialization;
+	protected final FunctionDeclaratorCodeGeneratingVisitor functionDeclarator;
+
+	protected final HashMap<String, TableDescription> tables = new HashMap<String, TableDescription>();
+
+	protected boolean hasEmit = false;
+
+	protected final String name;
+
+	protected String skipIndex = "";
+	protected boolean abortGeneration = false;
 
 	final public static List<String> tableStrings = new ArrayList<String>();
 
 	public CodeGeneratingVisitor(final String name, final StringTemplateGroup stg) throws IOException {
-		this.idFinder = new IdentifierFindingVisitor();
-		this.indexeeFinder = new IndexeeFindingVisitor(idFinder);
-		this.varDecl = new VarDeclCodeGeneratingVisitor(stg);
-		this.staticInitialization = new StaticInitializationCodeGeneratingVisitor(stg);
-		this.functionDeclarator = new FunctionDeclaratorCodeGeneratingVisitor(stg);
-
-		this.tables = new HashMap<String, TableDescription>();
-
 		this.name = name;
 		this.stg = stg;
+
+		varDecl = new VarDeclCodeGeneratingVisitor();
+		staticInitialization = new StaticInitializationCodeGeneratingVisitor();
+		functionDeclarator = new FunctionDeclaratorCodeGeneratingVisitor();
 	}
 
 	/** {@inheritDoc} */
@@ -145,13 +334,20 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		st.setAttribute("statements", statements);
 
 		if (this.tables.size() == 0)
-			throw new TypeException(n, "No output variables were declared - must declare at least one output variable");
+			throw new TypeCheckException(n, "No output variables were declared - must declare at least one output variable");
 
 		if (!hasEmit)
-			throw new TypeException(n, "No emit statements detected - there will be no output generated");
+			throw new TypeCheckException(n, "No emit statements detected - there will be no output generated");
 
 		for (final Entry<String, TableDescription> entry : this.tables.entrySet()) {
-			final String id = entry.getKey();
+			String id = entry.getKey();
+			String prefix = name;
+
+			if (id.matches("\\d+_.*")) {
+				prefix = id.substring(0, id.indexOf('_'));
+				id = id.substring(id.indexOf('_') + 1);
+			}
+
 			final TableDescription description = entry.getValue();
 			final String parameters = description.getParameters() == null ? "" : description.getParameters().get(0);
 			final BoaType type = description.getType();
@@ -160,7 +356,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			for (final Class<?> c : argu.getAggregators(description.getAggregator(), type))
 				src.append(", new " + c.getCanonicalName() + "(" + parameters + ")");
 
-			tableStrings.add("this.tables.put(\"" + name + "::" + id + "\", new boa.aggregators.Table(" + src.toString().substring(2) + "));");
+			tableStrings.add("this.tables.put(\"" + prefix + "::" + id + "\", new boa.aggregators.Table(" + src.toString().substring(2) + "));");
 		}
 
 		code.add(st.toString());
@@ -276,7 +472,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			st.setAttribute("pairlist", code.removeLast());
 		}
 		if (n.getExprsSize() > 0) {
-			// FIXME
+			// FIXME rdyer
 			BoaType t = n.type;
 //			BoaType t = ((ExprList) nodeChoice.choice).type;
 
@@ -461,7 +657,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			}
 
 			throw new RuntimeException("unimplemented");
-		} catch (final TypeException e) {
+		} catch (final TypeCheckException e) {
 			throw new RuntimeException("unimplemented");
 		}
 	}
@@ -586,8 +782,16 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			st.setAttribute("indices", indices);
 		}
 
-		st.setAttribute("id", "\"" + n.getId().getToken() + "\"");
-		st.setAttribute("job", name);
+		String id = n.getId().getToken();
+		String prefix = name;
+
+		if (id.matches("\\d+_.*")) {
+			prefix = id.substring(0, id.indexOf('_'));
+			id = id.substring(id.indexOf('_') + 1);
+		}
+
+		st.setAttribute("id", "\"" + id + "\"");
+		st.setAttribute("job", prefix);
 
 		n.getValue().accept(this);
 		st.setAttribute("expression", code.removeLast());
@@ -847,7 +1051,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final SwitchCase n) {
-		final StringTemplate caseSt = this.stg.getInstanceOf("Case");
+		final StringTemplate caseSt = this.stg.getInstanceOf("SwitchCase");
 
 		final List<String> cases = new ArrayList<String>();
 		for (final Expression expr : n.getCases()) {
@@ -858,14 +1062,9 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			cases.add(s);
 		}
 
-		final List<String> caseBody = new ArrayList<String>();
-		for (final Statement stmt : n.getStmts()) {
-			stmt.accept(this);
-			caseBody.add(code.removeLast());
-		}
-
 		caseSt.setAttribute("cases", cases);
-		caseSt.setAttribute("body", caseBody);
+		n.getBody().accept(this);
+		caseSt.setAttribute("body", code.removeLast());
 		code.add(caseSt.toString());
 	}
 
@@ -1066,7 +1265,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		final StringTemplate st = this.stg.getInstanceOf("Function");
 
 		if (!(n.getType().type instanceof BoaFunction))
-			throw new TypeException(n ,"type " + n.getType().type + " is not a function type");
+			throw new TypeCheckException(n ,"type " + n.getType().type + " is not a function type");
 
 		final BoaFunction funcType = ((BoaFunction) n.getType().type);
 
@@ -1209,7 +1408,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		final StringTemplate st = this.stg.getInstanceOf("FunctionType");
 
 		if (!(n.type instanceof BoaFunction))
-			throw new TypeException(n ,"type " + n.type + " is not a function type");
+			throw new TypeCheckException(n ,"type " + n.type + " is not a function type");
 
 		final BoaFunction funcType = ((BoaFunction) n.type);
 
@@ -1292,7 +1491,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		throw new RuntimeException("unimplemented");
 	}
 
-	private static String expand(final String template, final String... parameters) {
+	protected static String expand(final String template, final String... parameters) {
 		String replaced = template;
 
 		// FIXME rdyer
@@ -1304,7 +1503,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		return replaced;
 	}
 
-	private static String camelCase(final String string) {
+	protected static String camelCase(final String string) {
 		final StringBuilder camelized = new StringBuilder();
 
 		boolean lower = false;
@@ -1326,7 +1525,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		return camelized.toString();
 	}
 
-	private boolean lastStatementIsStop(Statement s) {
+	protected boolean lastStatementIsStop(Statement s) {
 		if (s instanceof StopStatement)
 			return true;
 
@@ -1338,14 +1537,14 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		return false;
 	}
 
-	private List<BoaType> check(final Call c) {
+	protected List<BoaType> check(final Call c) {
 		if (c.getArgsSize() > 0)
 			return this.check(c.getArgs());
 
 		return new ArrayList<BoaType>();
 	}
 
-	private List<BoaType> check(final List<Expression> el) {
+	protected List<BoaType> check(final List<Expression> el) {
 		final List<BoaType> types = new ArrayList<BoaType>();
 
 		for (final Expression e : el)
@@ -1354,7 +1553,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		return types;
 	}
 
-	private BoaType assignableType(BoaType t) {
+	protected BoaType assignableType(BoaType t) {
 		if (t instanceof BoaFunction)
 			return ((BoaFunction) t).getType();
 		return t;

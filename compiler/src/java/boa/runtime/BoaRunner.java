@@ -80,7 +80,6 @@ public abstract class BoaRunner extends Configured implements Tool {
 		job.setMapOutputKeyClass(EmitKey.class);
 		job.setMapOutputValueClass(EmitValue.class);
 
-		// TODO: support protobufs/sequence files/avro here
 		job.setOutputFormatClass(BoaOutputFormat.class);
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(NullWritable.class);

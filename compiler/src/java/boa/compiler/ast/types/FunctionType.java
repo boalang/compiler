@@ -50,13 +50,25 @@ public class FunctionType extends AbstractType {
 
 	/** {@inheritDoc} */
 	@Override
-	public <A> void accept(AbstractVisitor<A> v, A arg) {
+	public <A> void accept(final AbstractVisitor<A> v, A arg) {
 		v.visit(this, arg);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void accept(AbstractVisitorNoArg v) {
+	public void accept(final AbstractVisitorNoArg v) {
 		v.visit(this);
+	}
+
+	public FunctionType clone() {
+		final FunctionType f;
+		if (hasType())
+			f = new FunctionType(t.clone());
+		else
+			f = new FunctionType();
+		for (final Component c : args)
+			f.addArg(c.clone());
+		copyFieldsTo(f);
+		return f;
 	}
 }

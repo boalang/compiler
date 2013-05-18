@@ -29,13 +29,19 @@ public class Pair extends Node {
 
 	/** {@inheritDoc} */
 	@Override
-	public <A> void accept(AbstractVisitor<A> v, A arg) {
+	public <A> void accept(final AbstractVisitor<A> v, A arg) {
 		v.visit(this, arg);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void accept(AbstractVisitorNoArg v) {
+	public void accept(final AbstractVisitorNoArg v) {
 		v.visit(this);
+	}
+
+	public Pair clone() {
+		final Pair p = new Pair(e1.clone(), e2.clone());
+		copyFieldsTo(p);
+		return p;
 	}
 }

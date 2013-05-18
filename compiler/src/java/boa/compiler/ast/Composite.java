@@ -60,13 +60,23 @@ public class Composite extends Operand {
 
 	/** {@inheritDoc} */
 	@Override
-	public <A> void accept(AbstractVisitor<A> v, A arg) {
+	public <A> void accept(final AbstractVisitor<A> v, A arg) {
 		v.visit(this, arg);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void accept(AbstractVisitorNoArg v) {
+	public void accept(final AbstractVisitorNoArg v) {
 		v.visit(this);
+	}
+
+	public Composite clone() {
+		final Composite c = new Composite(empty);
+		for (final Expression e : exprs)
+			c.addExpr(e.clone());
+		for (final Pair p : pairs)
+			c.addPair(p.clone());
+		copyFieldsTo(c);
+		return c;
 	}
 }

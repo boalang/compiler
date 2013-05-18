@@ -44,6 +44,8 @@ public class BoaAstIntrinsics {
 		return f.getKey() + "!!" + f.getName();
 	}
 
+	private static final ASTRoot emptyAst = ASTRoot.newBuilder().build();
+
 	/**
 	 * Given a Revision and ChangedFile, return the AST for that file at that revision.
 	 * 
@@ -60,7 +62,7 @@ public class BoaAstIntrinsics {
 				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS2
 				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS3
 				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS4)
-			return ASTRoot.newBuilder().build();
+			return emptyAst;
 
 		context.getCounter(AST_COUNTER.GETS_ATTEMPTED).increment(1);
 
@@ -97,15 +99,15 @@ public class BoaAstIntrinsics {
 
 		System.err.println("error with ast: " + rowName);
 		context.getCounter(AST_COUNTER.GETS_FAILED).increment(1);
-		return ASTRoot.newBuilder().build();
+		return emptyAst;
 	}
 
 	@SuppressWarnings("rawtypes")
-	public static void initialize(final Context context) {
+	public static void setup(final Context context) {
 		BoaAstIntrinsics.context = context;
 	}
 
-	public static void openMap() {
+	private static void openMap() {
 		final Configuration conf = new Configuration();
 		try {
 			FileSystem fs = FileSystem.get(conf);
@@ -116,11 +118,12 @@ public class BoaAstIntrinsics {
 		}
 	}
 
-	public static void close() {
+	@SuppressWarnings("rawtypes")
+	public static void cleanup(final Context context) {
 		closeMap();
 	}
 
-	public static void closeMap() {
+	private static void closeMap() {
 		if (map != null)
 			try {
 				map.close();

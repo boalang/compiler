@@ -10,14 +10,14 @@ import boa.compiler.visitors.AbstractVisitorNoArg;
  */
 public class IfStatement extends Statement {
 	protected Expression condition;
-	protected Statement body;
-	protected Statement elseBody;
+	protected Block body;
+	protected Block elseBody;
 
 	public Expression getCondition() {
 		return condition;
 	}
 
-	public Statement getBody() {
+	public Block getBody() {
 		return body;
 	}
 
@@ -25,18 +25,18 @@ public class IfStatement extends Statement {
 		return elseBody != null;
 	}
 
-	public Statement getElse() {
+	public Block getElse() {
 		return elseBody;
 	}
 
-	public IfStatement(final Expression condition, final Statement body) {
+	public IfStatement(final Expression condition, final Block body) {
 		condition.setParent(this);
 		body.setParent(this);
 		this.condition = condition;
 		this.body = body;
 	}
 
-	public IfStatement(final Expression condition, final Statement body, final Statement elseBody) {
+	public IfStatement(final Expression condition, final Block body, final Block elseBody) {
 		condition.setParent(this);
 		body.setParent(this);
 		elseBody.setParent(this);
@@ -47,13 +47,23 @@ public class IfStatement extends Statement {
 
 	/** {@inheritDoc} */
 	@Override
-	public <A> void accept(AbstractVisitor<A> v, A arg) {
+	public <A> void accept(final AbstractVisitor<A> v, A arg) {
 		v.visit(this, arg);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void accept(AbstractVisitorNoArg v) {
+	public void accept(final AbstractVisitorNoArg v) {
 		v.visit(this);
+	}
+
+	public IfStatement clone() {
+		final IfStatement s;
+		if (hasElse())
+			s = new IfStatement(condition.clone(), body.clone(), elseBody.clone());
+		else
+			s = new IfStatement(condition.clone(), body.clone());
+		copyFieldsTo(s);
+		return s;
 	}
 }

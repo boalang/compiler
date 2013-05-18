@@ -23,7 +23,7 @@ abstract class QuantileAggregator extends Aggregator {
 	 * @param n
 	 *            A long representing the number of quantiles to calculate
 	 */
-	public QuantileAggregator(long n) {
+	public QuantileAggregator(final long n) {
 		super(n);
 	}
 
@@ -35,8 +35,8 @@ abstract class QuantileAggregator extends Aggregator {
 	 * 
 	 * @return A long representing the value in metadata
 	 */
-	public long count(String metadata) {
-		long count;
+	public long count(final String metadata) {
+		final long count;
 		if (metadata == null)
 			count = 1;
 		else
@@ -49,7 +49,7 @@ abstract class QuantileAggregator extends Aggregator {
 
 	/** {@inheritDoc} */
 	@Override
-	public void start(EmitKey key) {
+	public void start(final EmitKey key) {
 		super.start(key);
 
 		this.total = 0;
@@ -57,27 +57,27 @@ abstract class QuantileAggregator extends Aggregator {
 
 	/** {@inheritDoc} */
 	@Override
-	public abstract void aggregate(String data, String metadata) throws IOException;
+	public abstract void aggregate(final String data, final String metadata) throws IOException;
 
 	/** {@inheritDoc} */
 	@Override
 	public void finish() throws IOException, InterruptedException {
 		// if we're in the combiner, just output the compressed data
 		if (this.isCombining()) {
-			for (Pair<String, Long> e : this.getTuples())
+			for (final Pair<String, Long> e : this.getTuples())
 				this.collect(e.getFirst(), e.getSecond().toString());
 		} else {
 			// otherwise, set up the quantiles
-			int n = (int) (this.getArg() - 1);
-			String[] quartiles = new String[n];
-			double step = this.total / (double) n;
+			final int n = (int) (this.getArg() - 1);
+			final String[] quartiles = new String[n];
+			final double step = this.total / (double) n;
 
 			long last = 0;
 			long q = 0;
-			for (Pair<String, Long> e : this.getTuples()) {
+			for (final Pair<String, Long> e : this.getTuples()) {
 				q += e.getSecond();
 
-				int curr = (int) (q / step);
+				final int curr = (int) (q / step);
 
 				if (curr == last)
 					continue;

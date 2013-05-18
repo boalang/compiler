@@ -6,4 +6,5 @@ package boa.compiler.ast.literals;
  */
 public interface ILiteral {
 	String getLiteral();
+	ILiteral clone();
 }

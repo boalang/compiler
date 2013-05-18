@@ -59,13 +59,21 @@ public class Conjunction extends Node {
 
 	/** {@inheritDoc} */
 	@Override
-	public <A> void accept(AbstractVisitor<A> v, A arg) {
+	public <A> void accept(final AbstractVisitor<A> v, A arg) {
 		v.visit(this, arg);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void accept(AbstractVisitorNoArg v) {
+	public void accept(final AbstractVisitorNoArg v) {
 		v.visit(this);
+	}
+
+	public Conjunction clone() {
+		final Conjunction c = new Conjunction(lhs.clone());
+		for (final Comparison c2 : rhs)
+			c.addRhs(c2.clone());
+		copyFieldsTo(c);
+		return c;
 	}
 }

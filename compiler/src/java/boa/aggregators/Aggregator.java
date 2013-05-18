@@ -9,12 +9,10 @@ import org.apache.hadoop.mapreduce.Reducer.Context;
 import boa.io.EmitKey;
 import boa.io.EmitValue;
 
-
 /**
  * The base class for all Boa aggregators.
  * 
  * @author anthonyu
- * 
  */
 public abstract class Aggregator {
 	private long arg;

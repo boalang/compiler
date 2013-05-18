@@ -28,13 +28,19 @@ public class PostfixStatement extends Statement {
 
 	/** {@inheritDoc} */
 	@Override
-	public <A> void accept(AbstractVisitor<A> v, A arg) {
+	public <A> void accept(final AbstractVisitor<A> v, A arg) {
 		v.visit(this, arg);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void accept(AbstractVisitorNoArg v) {
+	public void accept(final AbstractVisitorNoArg v) {
 		v.visit(this);
+	}
+
+	public PostfixStatement clone() {
+		final PostfixStatement s = new PostfixStatement(e.clone(), op);
+		copyFieldsTo(s);
+		return s;
 	}
 }

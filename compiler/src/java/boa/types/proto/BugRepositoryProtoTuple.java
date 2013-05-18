@@ -21,10 +21,12 @@ public class BugRepositoryProtoTuple extends BoaProtoTuple {
 	private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
 	static {
-		names.put("url", 0);
+		int counter = 0;
+
+		names.put("url", counter++);
 		members.add(new BoaString());
 
-		names.put("bugs", 1);
+		names.put("bugs", counter++);
 		members.add(new BoaProtoList(new BugProtoTuple()));
 	}
 
@@ -35,6 +37,7 @@ public class BugRepositoryProtoTuple extends BoaProtoTuple {
 		super(members, names);
 	}
 
+	/** @{inheritDoc} */
 	@Override
 	public String toJavaType() {
 		return "boa.types.Bugs.BugRepository";

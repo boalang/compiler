@@ -28,14 +28,14 @@ Block(statements) ::= <<
 ExprStatement(expression, operator) ::= "<expression><operator>;<\n>"
 ForStatement(declaration, expression, exprstmt, statement) ::= <<
 for (<declaration> <expression>; <exprstmt>)
-	<statement>
+<statement>
 >>
 IfStatement(expression, statement, elseStatement) ::= <<
 if (<expression>)
-	<statement>
+<statement>
 <if(elseStatement)>
 else
-	<elseStatement>
+<elseStatement>
 <endif>
 >>
 WhenStatement(all, some, len, type, index, expression, statement) ::= <<
@@ -47,9 +47,8 @@ WhenStatement(all, some, len, type, index, expression, statement) ::= <<
 			_satisfied_<index> = false;
 			break;
 		}
-	if (_satisfied_<index>) {
-		<statement>
-	}
+	if (_satisfied_<index>)
+	<statement>
 }
 <else>
 for (<type> ___<index> = 0; ___<index> \< <len>; ___<index>++) {
@@ -66,6 +65,7 @@ for (<type> ___<index> = 0; ___<index> \< <len>; ___<index>++) {
 	if (_stop_<index>) break;
 	<endif>
 }
+
 <endif>
 >>
 Expression(lhs, operators, operands) ::= "<lhs><operators,operands:{operator,operand|<\ ><operator> <operand>}>"
@@ -81,26 +81,23 @@ Stop() ::= "return false;<\n>"
 Empty() ::= ";<\n>"
 Switch(expr, cases, body) ::= <<
 switch (<expr>) {
-<cases>
-default:
+<cases>default:
 	<body>
 }
 
 >>
-Case(cases, body) ::= <<
-<cases:{
-case <it>:}>
-	<body>
+SwitchCase(cases, body) ::= <<
+<cases:{case <it>:<\n>}><body>
+
 >>
 DoWhile(condition, stmt) ::= <<
-do {
-	<condition>
-} while (<stmt>);
+do
+<condition>
+while (<stmt>);
 >>
 While(condition, stmt) ::= <<
-while (<stmt>) {
-	<condition>
-}
+while (<stmt>)
+<condition>
 >>
 FunctionType(name, ret, args, types) ::= <<
 private interface <name> {

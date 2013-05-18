@@ -27,9 +27,10 @@ import org.apache.log4j.Logger;
 import org.scannotation.ClasspathUrlFinder;
 
 import boa.compiler.ast.Program;
-import boa.compiler.transforms.VariableRenameTransformer;
+import boa.compiler.ast.Start;
+import boa.compiler.transforms.VisitorMergingTransformer;
 import boa.compiler.visitors.CodeGeneratingVisitor;
-import boa.compiler.visitors.IsSimpleTaskVisitor;
+import boa.compiler.visitors.TaskClassifyingVisitor;
 import boa.compiler.visitors.TypeCheckingVisitor;
 import boa.parser.ParseException;
 import boa.parser.BoaParser;
@@ -45,6 +46,8 @@ public class BoaCompiler {
 		options.addOption("i", "in", true, "file to be compiled");
 		options.addOption("o", "out", true, "the name of the resulting jar");
 		options.addOption("b", "hbase", false, "use HBase templates");
+		options.addOption("nv", "no-visitor-fusion", false, "disable visitor fusion");
+		options.addOption("v", "visitors-fused", true, "number of visitors to fuse");
 		options.addOption("n", "name", true, "the name of the generated main class");
 
 		CommandLine cl;
@@ -133,9 +136,9 @@ public class BoaCompiler {
 			} finally {
 				t.close();
 			}
-			
+
 			final StringTemplateGroup stg;
-			
+
 			final String templateName;
 			if (cl.hasOption('b'))
 				templateName = "Hbase";
@@ -161,54 +164,64 @@ public class BoaCompiler {
 			for (int i = 0; i < inputFiles.size(); i++) {
 				final File f = inputFiles.get(i);
 				final BufferedReader r = new BufferedReader(new FileReader(f));
-				
+
 				try {
 					if (parser == null)
 						parser = new BoaParser(r);
 					else
 						BoaParser.ReInit(r);
-					final Program p = (Program)new ParseTreeAdapter().visit(BoaParser.Start().f0);
+					final Start p = (Start)new ParseTreeAdapter().visit(BoaParser.Start());
 
 					final String jobName = "" + i;
-					jobnames.add(jobName);
 
 					final TypeCheckingVisitor typeChecker = new TypeCheckingVisitor();
 					typeChecker.start(p, new SymbolTable());
 
-					final IsSimpleTaskVisitor simpleVisitor = new IsSimpleTaskVisitor();
+					final TaskClassifyingVisitor simpleVisitor = new TaskClassifyingVisitor();
 					simpleVisitor.start(p);
-					final boolean jobIsSimple = simpleVisitor.isSimple();
+					final boolean jobIsSimple = !simpleVisitor.hasVisitor();
 
 					BoaCompiler.LOG.info(f.getName() + ": task complexity: " + (jobIsSimple ? "simple" : "complex"));
 					isSimple &= jobIsSimple;
 
-					// if a job has no visitor, let it have its own method
-					if (jobIsSimple) {
+					// if a job has no visitor, let it have its own method (unless disabled)
+					if (jobIsSimple || cl.hasOption("nv") || inputFiles.size() == 1) {
 						final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(jobName, stg);
 						cg.start(p);
 						jobs.add(cg.getCode());
+
+						jobnames.add(jobName);
 					}
 					// if a job has visitors, fuse them all together into a single program
 					else {
-						final VariableRenameTransformer varRename = new VariableRenameTransformer();
-						varRename.start(p, jobName);
-						visitorPrograms.add(p);
-						p.jobName = jobName;
+						p.getProgram().jobName = jobName;
+						visitorPrograms.add(p.getProgram());
 					}
 				} finally {
 					r.close();
 				}
 			}
 
-			for (final Program p : visitorPrograms) {
-				final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(p.jobName, stg);
-				cg.start(p);
-				jobs.add(cg.getCode());
+			final int maxVisitors;
+			if (cl.hasOption('v'))
+				maxVisitors = Integer.parseInt(cl.getOptionValue('v'));
+			else
+				maxVisitors = Integer.MAX_VALUE;
+
+			if (!visitorPrograms.isEmpty()) {
+				for (final Program p : new VisitorMergingTransformer().mergePrograms(visitorPrograms, maxVisitors)) {
+					final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(p.jobName, stg);
+					cg.start(p);
+					jobs.add(cg.getCode());
+	
+					jobnames.add(p.jobName);
+				}
 			}
 
 			final StringTemplate st = stg.getInstanceOf("Program");
 
 			st.setAttribute("name", className);
+			st.setAttribute("numreducers", inputFiles.size());
 			st.setAttribute("jobs", jobs);
 			st.setAttribute("jobnames", jobnames);
 			st.setAttribute("tables", CodeGeneratingVisitor.tableStrings);

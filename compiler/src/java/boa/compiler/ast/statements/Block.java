@@ -12,9 +12,9 @@ import boa.compiler.visitors.AbstractVisitorNoArg;
  * @author rdyer
  */
 public class Block extends Statement {
-	protected final List<Node> statements = new ArrayList<Node>();
+	protected final List<Statement> statements = new ArrayList<Statement>();
 
-	public List<Node> getStatements() {
+	public List<Statement> getStatements() {
 		return statements;
 	}
 
@@ -22,24 +22,73 @@ public class Block extends Statement {
 		return statements.size();
 	}
 
-	public Node getStatement(final int index) {
+	public Statement getStatement(final int index) {
 		return statements.get(index);
 	}
 
-	public void addStatement(final Statement s) {
+	public Block addStatement(final Statement s) {
 		s.setParent(this);
 		statements.add(s);
+		return this;
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public <A> void accept(AbstractVisitor<A> v, A arg) {
+	public <A> void accept(final AbstractVisitor<A> v, A arg) {
 		v.visit(this, arg);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void accept(AbstractVisitorNoArg v) {
+	public void accept(final AbstractVisitorNoArg v) {
 		v.visit(this);
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public Node insertStatementBefore(final Statement s, final Node n) {
+		int index = 0;
+		for (; index < statements.size() && statements.get(index) != n; index++)
+			;
+		if (index == statements.size())
+			return super.insertStatementBefore(s, n);
+		s.setParent(this);
+		statements.add(index, s);
+		return this;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public Node insertStatementAfter(final Statement s, final Node n) {
+		int index = 0;
+		for (; index < statements.size() && statements.get(index) != n; index++)
+			;
+		if (index == statements.size())
+			return super.insertStatementAfter(s, n);
+		s.setParent(this);
+		statements.add(index + 1, s);
+		return this;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void replaceStatement(final Statement oldStmt, final Statement newStmt) {
+		int index = 0;
+		for (; index < statements.size() && statements.get(index) != oldStmt; index++)
+			;
+		if (index == statements.size())
+			super.replaceStatement(oldStmt, newStmt);
+		else {
+			newStmt.setParent(this);
+			statements.set(index, newStmt);
+		}
+	}
+
+	public Block clone() {
+		final Block b = new Block();
+		for (final Statement s : statements)
+			b.addStatement(s.clone());
+		copyFieldsTo(b);
+		return b;
 	}
 }

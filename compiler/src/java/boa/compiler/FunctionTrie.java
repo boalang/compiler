@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 import boa.types.BoaFunction;
+import boa.types.BoaName;
 import boa.types.BoaType;
 import boa.types.BoaVarargs;
 
@@ -88,7 +89,10 @@ public class FunctionTrie {
 		ids[0] = name;
 
 		for (int i = 0; i < formalParameters.length; i++)
-			ids[i + 1] = formalParameters[i];
+			if (formalParameters[i] instanceof BoaName)
+				ids[i + 1] = ((BoaName)formalParameters[i]).getType();
+			else
+				ids[i + 1] = formalParameters[i];
 
 		ids[ids.length - 1] = "";
 

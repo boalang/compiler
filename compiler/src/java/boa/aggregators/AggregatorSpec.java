@@ -9,7 +9,6 @@ import java.lang.annotation.Target;
  * Specification annotation for Boa aggregators in Java.
  * 
  * @author anthonyu
- * 
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)

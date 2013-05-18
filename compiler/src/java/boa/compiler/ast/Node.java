@@ -1,8 +1,10 @@
 package boa.compiler.ast;
 
 import boa.compiler.SymbolTable;
+import boa.compiler.ast.statements.Statement;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.parser.syntaxtree.NodeToken;
 import boa.types.BoaType;
 
 /**
@@ -31,6 +33,10 @@ public abstract class Node {
 		return this;
 	}
 
+	public Node setPositions(final NodeToken first, final NodeToken last) {
+		return setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
+	}
+
 	public int getBeginLine() {
 		return beginLine;
 	}
@@ -50,6 +56,37 @@ public abstract class Node {
 	public BoaType type = null;
 	public SymbolTable env = null;
 
-	public abstract <A> void accept(AbstractVisitor<A> v, A arg);
-	public abstract void accept(AbstractVisitorNoArg v);
+	public abstract Node clone();
+
+	protected void copyFieldsTo(Node newNode) {
+		newNode.type = type;
+		newNode.env = env;
+		newNode.beginLine = beginLine;
+		newNode.beginColumn = beginColumn;
+		newNode.endLine = endLine;
+		newNode.endColumn = endColumn;
+	}
+
+	public abstract <A> void accept(final AbstractVisitor<A> v, final A arg);
+	public abstract void accept(final AbstractVisitorNoArg v);
+
+	public Node insertStatementBefore(final Statement s) {
+		return insertStatementBefore(s, this);
+	}
+
+	public Node insertStatementBefore(final Statement s, final Node n) {
+		return parent.insertStatementBefore(s, this);
+	}
+
+	public Node insertStatementAfter(final Statement s) {
+		return insertStatementAfter(s, this);
+	}
+
+	public Node insertStatementAfter(final Statement s, final Node n) {
+		return parent.insertStatementAfter(s, this);
+	}
+
+	public void replaceStatement(final Statement oldStmt, final Statement newStmt) {
+		parent.replaceStatement(oldStmt, newStmt);
+	}
 }

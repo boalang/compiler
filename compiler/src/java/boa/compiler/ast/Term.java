@@ -47,7 +47,7 @@ public class Term extends Node {
 		return rhs.get(index);
 	}
 
-	public void addArg(final Factor f) {
+	public void addRhs(final Factor f) {
 		f.setParent(this);
 		rhs.add(f);
 	}
@@ -59,13 +59,23 @@ public class Term extends Node {
 
 	/** {@inheritDoc} */
 	@Override
-	public <A> void accept(AbstractVisitor<A> v, A arg) {
+	public <A> void accept(final AbstractVisitor<A> v, A arg) {
 		v.visit(this, arg);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void accept(AbstractVisitorNoArg v) {
+	public void accept(final AbstractVisitorNoArg v) {
 		v.visit(this);
+	}
+
+	public Term clone() {
+		final Term t = new Term(lhs.clone());
+		for (final String s : ops)
+			t.addOp(s);
+		for (final Factor f : rhs)
+			t.addRhs(f.clone());
+		copyFieldsTo(t);
+		return t;
 	}
 }
