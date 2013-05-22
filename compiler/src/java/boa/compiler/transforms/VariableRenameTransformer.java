@@ -15,7 +15,8 @@ import boa.compiler.visitors.AbstractVisitorNoArg;
  * @author rdyer
  */
 public class VariableRenameTransformer extends AbstractVisitorNoArg {
-	protected String prefix = "";
+	protected String prefix = "_";
+	protected final String nodeName = "_n";
 
 	/**
 	 * Starts a variable renaming transformation with a given prefix.
@@ -46,6 +47,7 @@ public class VariableRenameTransformer extends AbstractVisitorNoArg {
 			argName = n.getComponent().getIdentifier().getToken();
 			n.getComponent().accept(this);
 			n.getBody().accept(this);
+			argName = "";
 			return;
 		}
 		super.visit(n);
@@ -58,7 +60,7 @@ public class VariableRenameTransformer extends AbstractVisitorNoArg {
 		if (!n.getId().getToken().equals(argName))
 			newToken = prefix + n.getId().getToken();
 		else
-			newToken = "_n";
+			newToken = nodeName;
 		n.env.set(newToken, n.env.get(n.getId().getToken()));
 
 		n.getId().accept(this);
@@ -83,6 +85,6 @@ public class VariableRenameTransformer extends AbstractVisitorNoArg {
 		if (!id.equals(argName))
 			n.setToken(prefix + id);
 		else
-			n.setToken("_n");
+			n.setToken(nodeName);
 	}
 }
