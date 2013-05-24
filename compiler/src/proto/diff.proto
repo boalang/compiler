@@ -19,10 +19,8 @@ message ChangedFile {
 	required ChangeKind change = 1;
 	required FileKind kind = 2;
 	required string name = 3;
-	repeated Namespace namespaces = 4;
-//	repeated ChangedNamespace changed_namespaces = 5;
-//	optional string content = 6;
-	required string key = 5;
+	required string key = 4;
+	optional ASTRoot ast = 5;
 }
 
 message ChangedASTRoot {

@@ -34,7 +34,7 @@ public class ChangedFileProtoTuple extends BoaProtoTuple {
 
 		// NOTE: this is here to make reachableTypes() work properly
 		names.put("_placeholder_", counter++);
-		members.add(new NamespaceProtoTuple());
+		members.add(new ASTRootProtoTuple());
 	}
 
 	/**

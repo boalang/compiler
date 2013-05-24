@@ -23,19 +23,14 @@ public final class Diff {
     boolean hasName();
     String getName();
     
-    // repeated .boa.types.Namespace namespaces = 4;
-    java.util.List<boa.types.Ast.Namespace> 
-        getNamespacesList();
-    boa.types.Ast.Namespace getNamespaces(int index);
-    int getNamespacesCount();
-    java.util.List<? extends boa.types.Ast.NamespaceOrBuilder> 
-        getNamespacesOrBuilderList();
-    boa.types.Ast.NamespaceOrBuilder getNamespacesOrBuilder(
-        int index);
-    
-    // required string key = 5;
+    // required string key = 4;
     boolean hasKey();
     String getKey();
+    
+    // optional .boa.types.ASTRoot ast = 5;
+    boolean hasAst();
+    boa.types.Ast.ASTRoot getAst();
+    boa.types.Ast.ASTRootOrBuilder getAstOrBuilder();
   }
   public static final class ChangedFile extends
       com.google.protobuf.GeneratedMessage
@@ -205,29 +200,8 @@ public final class Diff {
       }
     }
     
-    // repeated .boa.types.Namespace namespaces = 4;
-    public static final int NAMESPACES_FIELD_NUMBER = 4;
-    private java.util.List<boa.types.Ast.Namespace> namespaces_;
-    public java.util.List<boa.types.Ast.Namespace> getNamespacesList() {
-      return namespaces_;
-    }
-    public java.util.List<? extends boa.types.Ast.NamespaceOrBuilder> 
-        getNamespacesOrBuilderList() {
-      return namespaces_;
-    }
-    public int getNamespacesCount() {
-      return namespaces_.size();
-    }
-    public boa.types.Ast.Namespace getNamespaces(int index) {
-      return namespaces_.get(index);
-    }
-    public boa.types.Ast.NamespaceOrBuilder getNamespacesOrBuilder(
-        int index) {
-      return namespaces_.get(index);
-    }
-    
-    // required string key = 5;
-    public static final int KEY_FIELD_NUMBER = 5;
+    // required string key = 4;
+    public static final int KEY_FIELD_NUMBER = 4;
     private java.lang.Object key_;
     public boolean hasKey() {
       return ((bitField0_ & 0x00000008) == 0x00000008);
@@ -258,12 +232,25 @@ public final class Diff {
       }
     }
     
+    // optional .boa.types.ASTRoot ast = 5;
+    public static final int AST_FIELD_NUMBER = 5;
+    private boa.types.Ast.ASTRoot ast_;
+    public boolean hasAst() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    public boa.types.Ast.ASTRoot getAst() {
+      return ast_;
+    }
+    public boa.types.Ast.ASTRootOrBuilder getAstOrBuilder() {
+      return ast_;
+    }
+    
     private void initFields() {
       change_ = boa.types.Shared.ChangeKind.ADDED;
       kind_ = boa.types.Diff.ChangedFile.FileKind.UNKNOWN;
       name_ = "";
-      namespaces_ = java.util.Collections.emptyList();
       key_ = "";
+      ast_ = boa.types.Ast.ASTRoot.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -286,8 +273,8 @@ public final class Diff {
         memoizedIsInitialized = 0;
         return false;
       }
-      for (int i = 0; i < getNamespacesCount(); i++) {
-        if (!getNamespaces(i).isInitialized()) {
+      if (hasAst()) {
+        if (!getAst().isInitialized()) {
           memoizedIsInitialized = 0;
           return false;
         }
@@ -308,11 +295,11 @@ public final class Diff {
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeBytes(3, getNameBytes());
       }
-      for (int i = 0; i < namespaces_.size(); i++) {
-        output.writeMessage(4, namespaces_.get(i));
-      }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeBytes(5, getKeyBytes());
+        output.writeBytes(4, getKeyBytes());
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeMessage(5, ast_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -335,13 +322,13 @@ public final class Diff {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(3, getNameBytes());
       }
-      for (int i = 0; i < namespaces_.size(); i++) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(4, namespaces_.get(i));
-      }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(5, getKeyBytes());
+          .computeBytesSize(4, getKeyBytes());
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(5, ast_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -459,7 +446,7 @@ public final class Diff {
       }
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-          getNamespacesFieldBuilder();
+          getAstFieldBuilder();
         }
       }
       private static Builder create() {
@@ -474,13 +461,13 @@ public final class Diff {
         bitField0_ = (bitField0_ & ~0x00000002);
         name_ = "";
         bitField0_ = (bitField0_ & ~0x00000004);
-        if (namespacesBuilder_ == null) {
-          namespaces_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000008);
-        } else {
-          namespacesBuilder_.clear();
-        }
         key_ = "";
+        bitField0_ = (bitField0_ & ~0x00000008);
+        if (astBuilder_ == null) {
+          ast_ = boa.types.Ast.ASTRoot.getDefaultInstance();
+        } else {
+          astBuilder_.clear();
+        }
         bitField0_ = (bitField0_ & ~0x00000010);
         return this;
       }
@@ -532,19 +519,18 @@ public final class Diff {
           to_bitField0_ |= 0x00000004;
         }
         result.name_ = name_;
-        if (namespacesBuilder_ == null) {
-          if (((bitField0_ & 0x00000008) == 0x00000008)) {
-            namespaces_ = java.util.Collections.unmodifiableList(namespaces_);
-            bitField0_ = (bitField0_ & ~0x00000008);
-          }
-          result.namespaces_ = namespaces_;
-        } else {
-          result.namespaces_ = namespacesBuilder_.build();
-        }
-        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
           to_bitField0_ |= 0x00000008;
         }
         result.key_ = key_;
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        if (astBuilder_ == null) {
+          result.ast_ = ast_;
+        } else {
+          result.ast_ = astBuilder_.build();
+        }
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -570,34 +556,11 @@ public final class Diff {
         if (other.hasName()) {
           setName(other.getName());
         }
-        if (namespacesBuilder_ == null) {
-          if (!other.namespaces_.isEmpty()) {
-            if (namespaces_.isEmpty()) {
-              namespaces_ = other.namespaces_;
-              bitField0_ = (bitField0_ & ~0x00000008);
-            } else {
-              ensureNamespacesIsMutable();
-              namespaces_.addAll(other.namespaces_);
-            }
-            onChanged();
-          }
-        } else {
-          if (!other.namespaces_.isEmpty()) {
-            if (namespacesBuilder_.isEmpty()) {
-              namespacesBuilder_.dispose();
-              namespacesBuilder_ = null;
-              namespaces_ = other.namespaces_;
-              bitField0_ = (bitField0_ & ~0x00000008);
-              namespacesBuilder_ = 
-                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
-                   getNamespacesFieldBuilder() : null;
-            } else {
-              namespacesBuilder_.addAllMessages(other.namespaces_);
-            }
-          }
-        }
         if (other.hasKey()) {
           setKey(other.getKey());
+        }
+        if (other.hasAst()) {
+          mergeAst(other.getAst());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -620,8 +583,8 @@ public final class Diff {
           
           return false;
         }
-        for (int i = 0; i < getNamespacesCount(); i++) {
-          if (!getNamespaces(i).isInitialized()) {
+        if (hasAst()) {
+          if (!getAst().isInitialized()) {
             
             return false;
           }
@@ -680,14 +643,17 @@ public final class Diff {
               break;
             }
             case 34: {
-              boa.types.Ast.Namespace.Builder subBuilder = boa.types.Ast.Namespace.newBuilder();
-              input.readMessage(subBuilder, extensionRegistry);
-              addNamespaces(subBuilder.buildPartial());
+              bitField0_ |= 0x00000008;
+              key_ = input.readBytes();
               break;
             }
             case 42: {
-              bitField0_ |= 0x00000010;
-              key_ = input.readBytes();
+              boa.types.Ast.ASTRoot.Builder subBuilder = boa.types.Ast.ASTRoot.newBuilder();
+              if (hasAst()) {
+                subBuilder.mergeFrom(getAst());
+              }
+              input.readMessage(subBuilder, extensionRegistry);
+              setAst(subBuilder.buildPartial());
               break;
             }
           }
@@ -780,196 +746,10 @@ public final class Diff {
         onChanged();
       }
       
-      // repeated .boa.types.Namespace namespaces = 4;
-      private java.util.List<boa.types.Ast.Namespace> namespaces_ =
-        java.util.Collections.emptyList();
-      private void ensureNamespacesIsMutable() {
-        if (!((bitField0_ & 0x00000008) == 0x00000008)) {
-          namespaces_ = new java.util.ArrayList<boa.types.Ast.Namespace>(namespaces_);
-          bitField0_ |= 0x00000008;
-         }
-      }
-      
-      private com.google.protobuf.RepeatedFieldBuilder<
-          boa.types.Ast.Namespace, boa.types.Ast.Namespace.Builder, boa.types.Ast.NamespaceOrBuilder> namespacesBuilder_;
-      
-      public java.util.List<boa.types.Ast.Namespace> getNamespacesList() {
-        if (namespacesBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(namespaces_);
-        } else {
-          return namespacesBuilder_.getMessageList();
-        }
-      }
-      public int getNamespacesCount() {
-        if (namespacesBuilder_ == null) {
-          return namespaces_.size();
-        } else {
-          return namespacesBuilder_.getCount();
-        }
-      }
-      public boa.types.Ast.Namespace getNamespaces(int index) {
-        if (namespacesBuilder_ == null) {
-          return namespaces_.get(index);
-        } else {
-          return namespacesBuilder_.getMessage(index);
-        }
-      }
-      public Builder setNamespaces(
-          int index, boa.types.Ast.Namespace value) {
-        if (namespacesBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureNamespacesIsMutable();
-          namespaces_.set(index, value);
-          onChanged();
-        } else {
-          namespacesBuilder_.setMessage(index, value);
-        }
-        return this;
-      }
-      public Builder setNamespaces(
-          int index, boa.types.Ast.Namespace.Builder builderForValue) {
-        if (namespacesBuilder_ == null) {
-          ensureNamespacesIsMutable();
-          namespaces_.set(index, builderForValue.build());
-          onChanged();
-        } else {
-          namespacesBuilder_.setMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      public Builder addNamespaces(boa.types.Ast.Namespace value) {
-        if (namespacesBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureNamespacesIsMutable();
-          namespaces_.add(value);
-          onChanged();
-        } else {
-          namespacesBuilder_.addMessage(value);
-        }
-        return this;
-      }
-      public Builder addNamespaces(
-          int index, boa.types.Ast.Namespace value) {
-        if (namespacesBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureNamespacesIsMutable();
-          namespaces_.add(index, value);
-          onChanged();
-        } else {
-          namespacesBuilder_.addMessage(index, value);
-        }
-        return this;
-      }
-      public Builder addNamespaces(
-          boa.types.Ast.Namespace.Builder builderForValue) {
-        if (namespacesBuilder_ == null) {
-          ensureNamespacesIsMutable();
-          namespaces_.add(builderForValue.build());
-          onChanged();
-        } else {
-          namespacesBuilder_.addMessage(builderForValue.build());
-        }
-        return this;
-      }
-      public Builder addNamespaces(
-          int index, boa.types.Ast.Namespace.Builder builderForValue) {
-        if (namespacesBuilder_ == null) {
-          ensureNamespacesIsMutable();
-          namespaces_.add(index, builderForValue.build());
-          onChanged();
-        } else {
-          namespacesBuilder_.addMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      public Builder addAllNamespaces(
-          java.lang.Iterable<? extends boa.types.Ast.Namespace> values) {
-        if (namespacesBuilder_ == null) {
-          ensureNamespacesIsMutable();
-          super.addAll(values, namespaces_);
-          onChanged();
-        } else {
-          namespacesBuilder_.addAllMessages(values);
-        }
-        return this;
-      }
-      public Builder clearNamespaces() {
-        if (namespacesBuilder_ == null) {
-          namespaces_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000008);
-          onChanged();
-        } else {
-          namespacesBuilder_.clear();
-        }
-        return this;
-      }
-      public Builder removeNamespaces(int index) {
-        if (namespacesBuilder_ == null) {
-          ensureNamespacesIsMutable();
-          namespaces_.remove(index);
-          onChanged();
-        } else {
-          namespacesBuilder_.remove(index);
-        }
-        return this;
-      }
-      public boa.types.Ast.Namespace.Builder getNamespacesBuilder(
-          int index) {
-        return getNamespacesFieldBuilder().getBuilder(index);
-      }
-      public boa.types.Ast.NamespaceOrBuilder getNamespacesOrBuilder(
-          int index) {
-        if (namespacesBuilder_ == null) {
-          return namespaces_.get(index);  } else {
-          return namespacesBuilder_.getMessageOrBuilder(index);
-        }
-      }
-      public java.util.List<? extends boa.types.Ast.NamespaceOrBuilder> 
-           getNamespacesOrBuilderList() {
-        if (namespacesBuilder_ != null) {
-          return namespacesBuilder_.getMessageOrBuilderList();
-        } else {
-          return java.util.Collections.unmodifiableList(namespaces_);
-        }
-      }
-      public boa.types.Ast.Namespace.Builder addNamespacesBuilder() {
-        return getNamespacesFieldBuilder().addBuilder(
-            boa.types.Ast.Namespace.getDefaultInstance());
-      }
-      public boa.types.Ast.Namespace.Builder addNamespacesBuilder(
-          int index) {
-        return getNamespacesFieldBuilder().addBuilder(
-            index, boa.types.Ast.Namespace.getDefaultInstance());
-      }
-      public java.util.List<boa.types.Ast.Namespace.Builder> 
-           getNamespacesBuilderList() {
-        return getNamespacesFieldBuilder().getBuilderList();
-      }
-      private com.google.protobuf.RepeatedFieldBuilder<
-          boa.types.Ast.Namespace, boa.types.Ast.Namespace.Builder, boa.types.Ast.NamespaceOrBuilder> 
-          getNamespacesFieldBuilder() {
-        if (namespacesBuilder_ == null) {
-          namespacesBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              boa.types.Ast.Namespace, boa.types.Ast.Namespace.Builder, boa.types.Ast.NamespaceOrBuilder>(
-                  namespaces_,
-                  ((bitField0_ & 0x00000008) == 0x00000008),
-                  getParentForChildren(),
-                  isClean());
-          namespaces_ = null;
-        }
-        return namespacesBuilder_;
-      }
-      
-      // required string key = 5;
+      // required string key = 4;
       private java.lang.Object key_ = "";
       public boolean hasKey() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
+        return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       public String getKey() {
         java.lang.Object ref = key_;
@@ -985,21 +765,111 @@ public final class Diff {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000010;
+  bitField0_ |= 0x00000008;
         key_ = value;
         onChanged();
         return this;
       }
       public Builder clearKey() {
-        bitField0_ = (bitField0_ & ~0x00000010);
+        bitField0_ = (bitField0_ & ~0x00000008);
         key_ = getDefaultInstance().getKey();
         onChanged();
         return this;
       }
       void setKey(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00000010;
+        bitField0_ |= 0x00000008;
         key_ = value;
         onChanged();
+      }
+      
+      // optional .boa.types.ASTRoot ast = 5;
+      private boa.types.Ast.ASTRoot ast_ = boa.types.Ast.ASTRoot.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.ASTRoot, boa.types.Ast.ASTRoot.Builder, boa.types.Ast.ASTRootOrBuilder> astBuilder_;
+      public boolean hasAst() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
+      }
+      public boa.types.Ast.ASTRoot getAst() {
+        if (astBuilder_ == null) {
+          return ast_;
+        } else {
+          return astBuilder_.getMessage();
+        }
+      }
+      public Builder setAst(boa.types.Ast.ASTRoot value) {
+        if (astBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ast_ = value;
+          onChanged();
+        } else {
+          astBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000010;
+        return this;
+      }
+      public Builder setAst(
+          boa.types.Ast.ASTRoot.Builder builderForValue) {
+        if (astBuilder_ == null) {
+          ast_ = builderForValue.build();
+          onChanged();
+        } else {
+          astBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000010;
+        return this;
+      }
+      public Builder mergeAst(boa.types.Ast.ASTRoot value) {
+        if (astBuilder_ == null) {
+          if (((bitField0_ & 0x00000010) == 0x00000010) &&
+              ast_ != boa.types.Ast.ASTRoot.getDefaultInstance()) {
+            ast_ =
+              boa.types.Ast.ASTRoot.newBuilder(ast_).mergeFrom(value).buildPartial();
+          } else {
+            ast_ = value;
+          }
+          onChanged();
+        } else {
+          astBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000010;
+        return this;
+      }
+      public Builder clearAst() {
+        if (astBuilder_ == null) {
+          ast_ = boa.types.Ast.ASTRoot.getDefaultInstance();
+          onChanged();
+        } else {
+          astBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000010);
+        return this;
+      }
+      public boa.types.Ast.ASTRoot.Builder getAstBuilder() {
+        bitField0_ |= 0x00000010;
+        onChanged();
+        return getAstFieldBuilder().getBuilder();
+      }
+      public boa.types.Ast.ASTRootOrBuilder getAstOrBuilder() {
+        if (astBuilder_ != null) {
+          return astBuilder_.getMessageOrBuilder();
+        } else {
+          return ast_;
+        }
+      }
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.ASTRoot, boa.types.Ast.ASTRoot.Builder, boa.types.Ast.ASTRootOrBuilder> 
+          getAstFieldBuilder() {
+        if (astBuilder_ == null) {
+          astBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              boa.types.Ast.ASTRoot, boa.types.Ast.ASTRoot.Builder, boa.types.Ast.ASTRootOrBuilder>(
+                  ast_,
+                  getParentForChildren(),
+                  isClean());
+          ast_ = null;
+        }
+        return astBuilder_;
       }
       
       // @@protoc_insertion_point(builder_scope:boa.types.ChangedFile)
@@ -3195,7 +3065,7 @@ public final class Diff {
     
     private void initFields() {
       change_ = boa.types.Shared.ChangeKind.ADDED;
-      kind_ = boa.types.Ast.TypeKind.CLASS;
+      kind_ = boa.types.Ast.TypeKind.OTHER;
       name_ = "";
       modifiers_ = java.util.Collections.emptyList();
       genericParameters_ = java.util.Collections.emptyList();
@@ -3479,7 +3349,7 @@ public final class Diff {
         super.clear();
         change_ = boa.types.Shared.ChangeKind.ADDED;
         bitField0_ = (bitField0_ & ~0x00000001);
-        kind_ = boa.types.Ast.TypeKind.CLASS;
+        kind_ = boa.types.Ast.TypeKind.OTHER;
         bitField0_ = (bitField0_ & ~0x00000002);
         name_ = "";
         bitField0_ = (bitField0_ & ~0x00000004);
@@ -4026,7 +3896,7 @@ public final class Diff {
       }
       
       // required .boa.types.TypeKind kind = 2;
-      private boa.types.Ast.TypeKind kind_ = boa.types.Ast.TypeKind.CLASS;
+      private boa.types.Ast.TypeKind kind_ = boa.types.Ast.TypeKind.OTHER;
       public boolean hasKind() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
@@ -4044,7 +3914,7 @@ public final class Diff {
       }
       public Builder clearKind() {
         bitField0_ = (bitField0_ & ~0x00000002);
-        kind_ = boa.types.Ast.TypeKind.CLASS;
+        kind_ = boa.types.Ast.TypeKind.OTHER;
         onChanged();
         return this;
       }
@@ -5532,7 +5402,7 @@ public final class Diff {
     
     private void initFields() {
       change_ = boa.types.Shared.ChangeKind.ADDED;
-      kind_ = boa.types.Ast.TypeKind.CLASS;
+      kind_ = boa.types.Ast.TypeKind.OTHER;
       name_ = "";
       id_ = "";
     }
@@ -5715,7 +5585,7 @@ public final class Diff {
         super.clear();
         change_ = boa.types.Shared.ChangeKind.ADDED;
         bitField0_ = (bitField0_ & ~0x00000001);
-        kind_ = boa.types.Ast.TypeKind.CLASS;
+        kind_ = boa.types.Ast.TypeKind.OTHER;
         bitField0_ = (bitField0_ & ~0x00000002);
         name_ = "";
         bitField0_ = (bitField0_ & ~0x00000004);
@@ -5901,7 +5771,7 @@ public final class Diff {
       }
       
       // optional .boa.types.TypeKind kind = 2;
-      private boa.types.Ast.TypeKind kind_ = boa.types.Ast.TypeKind.CLASS;
+      private boa.types.Ast.TypeKind kind_ = boa.types.Ast.TypeKind.OTHER;
       public boolean hasKind() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
@@ -5919,7 +5789,7 @@ public final class Diff {
       }
       public Builder clearKind() {
         bitField0_ = (bitField0_ & ~0x00000002);
-        kind_ = boa.types.Ast.TypeKind.CLASS;
+        kind_ = boa.types.Ast.TypeKind.OTHER;
         onChanged();
         return this;
       }
@@ -9908,7 +9778,7 @@ public final class Diff {
     
     private void initFields() {
       change_ = boa.types.Shared.ChangeKind.ADDED;
-      kind_ = boa.types.Ast.Statement.StatementKind.BLOCK;
+      kind_ = boa.types.Ast.Statement.StatementKind.OTHER;
       comments_ = java.util.Collections.emptyList();
       statements_ = java.util.Collections.emptyList();
       initializations_ = java.util.Collections.emptyList();
@@ -10199,7 +10069,7 @@ public final class Diff {
         super.clear();
         change_ = boa.types.Shared.ChangeKind.ADDED;
         bitField0_ = (bitField0_ & ~0x00000001);
-        kind_ = boa.types.Ast.Statement.StatementKind.BLOCK;
+        kind_ = boa.types.Ast.Statement.StatementKind.OTHER;
         bitField0_ = (bitField0_ & ~0x00000002);
         if (commentsBuilder_ == null) {
           comments_ = java.util.Collections.emptyList();
@@ -10701,7 +10571,7 @@ public final class Diff {
       }
       
       // required .boa.types.Statement.StatementKind kind = 2;
-      private boa.types.Ast.Statement.StatementKind kind_ = boa.types.Ast.Statement.StatementKind.BLOCK;
+      private boa.types.Ast.Statement.StatementKind kind_ = boa.types.Ast.Statement.StatementKind.OTHER;
       public boolean hasKind() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
@@ -10719,7 +10589,7 @@ public final class Diff {
       }
       public Builder clearKind() {
         bitField0_ = (bitField0_ & ~0x00000002);
-        kind_ = boa.types.Ast.Statement.StatementKind.BLOCK;
+        kind_ = boa.types.Ast.Statement.StatementKind.OTHER;
         onChanged();
         return this;
       }
@@ -12183,7 +12053,7 @@ public final class Diff {
     
     private void initFields() {
       change_ = boa.types.Shared.ChangeKind.ADDED;
-      kind_ = boa.types.Ast.Expression.ExpressionKind.LITERAL;
+      kind_ = boa.types.Ast.Expression.ExpressionKind.OTHER;
       expressions_ = java.util.Collections.emptyList();
       variableDecls_ = java.util.Collections.emptyList();
       newType_ = boa.types.Diff.ChangedType.getDefaultInstance();
@@ -12476,7 +12346,7 @@ public final class Diff {
         super.clear();
         change_ = boa.types.Shared.ChangeKind.ADDED;
         bitField0_ = (bitField0_ & ~0x00000001);
-        kind_ = boa.types.Ast.Expression.ExpressionKind.LITERAL;
+        kind_ = boa.types.Ast.Expression.ExpressionKind.OTHER;
         bitField0_ = (bitField0_ & ~0x00000002);
         if (expressionsBuilder_ == null) {
           expressions_ = java.util.Collections.emptyList();
@@ -12970,7 +12840,7 @@ public final class Diff {
       }
       
       // required .boa.types.Expression.ExpressionKind kind = 2;
-      private boa.types.Ast.Expression.ExpressionKind kind_ = boa.types.Ast.Expression.ExpressionKind.LITERAL;
+      private boa.types.Ast.Expression.ExpressionKind kind_ = boa.types.Ast.Expression.ExpressionKind.OTHER;
       public boolean hasKind() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
@@ -12988,7 +12858,7 @@ public final class Diff {
       }
       public Builder clearKind() {
         bitField0_ = (bitField0_ & ~0x00000002);
-        kind_ = boa.types.Ast.Expression.ExpressionKind.LITERAL;
+        kind_ = boa.types.Ast.Expression.ExpressionKind.OTHER;
         onChanged();
         return this;
       }
@@ -14255,7 +14125,7 @@ public final class Diff {
     
     private void initFields() {
       change_ = boa.types.Shared.ChangeKind.ADDED;
-      kind_ = boa.types.Ast.Modifier.ModifierKind.VISIBILITY;
+      kind_ = boa.types.Ast.Modifier.ModifierKind.OTHER;
       visibility_ = 0;
       annotationName_ = "";
       annotationMembers_ = com.google.protobuf.LazyStringArrayList.EMPTY;
@@ -14478,7 +14348,7 @@ public final class Diff {
         super.clear();
         change_ = boa.types.Shared.ChangeKind.ADDED;
         bitField0_ = (bitField0_ & ~0x00000001);
-        kind_ = boa.types.Ast.Modifier.ModifierKind.VISIBILITY;
+        kind_ = boa.types.Ast.Modifier.ModifierKind.OTHER;
         bitField0_ = (bitField0_ & ~0x00000002);
         visibility_ = 0;
         bitField0_ = (bitField0_ & ~0x00000004);
@@ -14758,7 +14628,7 @@ public final class Diff {
       }
       
       // required .boa.types.Modifier.ModifierKind kind = 2;
-      private boa.types.Ast.Modifier.ModifierKind kind_ = boa.types.Ast.Modifier.ModifierKind.VISIBILITY;
+      private boa.types.Ast.Modifier.ModifierKind kind_ = boa.types.Ast.Modifier.ModifierKind.OTHER;
       public boolean hasKind() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
@@ -14776,7 +14646,7 @@ public final class Diff {
       }
       public Builder clearKind() {
         bitField0_ = (bitField0_ & ~0x00000002);
-        kind_ = boa.types.Ast.Modifier.ModifierKind.VISIBILITY;
+        kind_ = boa.types.Ast.Modifier.ModifierKind.OTHER;
         onChanged();
         return this;
       }
@@ -15772,88 +15642,87 @@ public final class Diff {
   static {
     java.lang.String[] descriptorData = {
       "\n\ndiff.proto\022\tboa.types\032\014shared.proto\032\ta" +
-      "st.proto\"\272\002\n\013ChangedFile\022%\n\006change\030\001 \002(\016" +
+      "st.proto\"\261\002\n\013ChangedFile\022%\n\006change\030\001 \002(\016" +
       "2\025.boa.types.ChangeKind\022-\n\004kind\030\002 \002(\0162\037." +
       "boa.types.ChangedFile.FileKind\022\014\n\004name\030\003" +
-      " \002(\t\022(\n\nnamespaces\030\004 \003(\0132\024.boa.types.Nam" +
-      "espace\022\013\n\003key\030\005 \002(\t\"\217\001\n\010FileKind\022\013\n\007UNKN" +
-      "OWN\020\001\022\n\n\006BINARY\020\002\022\010\n\004TEXT\020\003\022\007\n\003XML\020\004\022\025\n\021" +
-      "SOURCE_JAVA_ERROR\020\005\022\024\n\020SOURCE_JAVA_JLS2\020" +
-      "\006\022\024\n\020SOURCE_JAVA_JLS3\020\007\022\024\n\020SOURCE_JAVA_J" +
-      "LS4\020\010\"A\n\016ChangedASTRoot\022/\n\nnamespaces\030\001 ",
-      "\003(\0132\033.boa.types.ChangedNamespace\"\330\001\n\020Cha" +
-      "ngedNamespace\022%\n\006change\030\001 \002(\0162\025.boa.type" +
-      "s.ChangeKind\022\014\n\004name\030\002 \001(\t\022-\n\tmodifiers\030" +
-      "\003 \003(\0132\032.boa.types.ChangedModifier\0223\n\014dec" +
-      "larations\030\004 \003(\0132\035.boa.types.ChangedDecla" +
-      "ration\022+\n\010comments\030\005 \003(\0132\031.boa.types.Cha" +
-      "ngedComment\"\270\003\n\022ChangedDeclaration\022%\n\006ch" +
-      "ange\030\001 \002(\0162\025.boa.types.ChangeKind\022!\n\004kin" +
-      "d\030\002 \002(\0162\023.boa.types.TypeKind\022\014\n\004name\030\003 \001" +
-      "(\t\022-\n\tmodifiers\030\004 \003(\0132\032.boa.types.Change",
-      "dModifier\0222\n\022generic_parameters\030\005 \003(\0132\026." +
-      "boa.types.ChangedType\022\'\n\007parents\030\006 \003(\0132\026" +
-      ".boa.types.ChangedType\022)\n\007methods\030\007 \003(\0132" +
-      "\030.boa.types.ChangedMethod\022*\n\006fields\030\010 \003(" +
-      "\0132\032.boa.types.ChangedVariable\022:\n\023nested_" +
-      "declarations\030\t \003(\0132\035.boa.types.ChangedDe" +
-      "claration\022+\n\010comments\030\n \003(\0132\031.boa.types." +
-      "ChangedComment\"q\n\013ChangedType\022%\n\006change\030" +
-      "\001 \002(\0162\025.boa.types.ChangeKind\022!\n\004kind\030\002 \001" +
-      "(\0162\023.boa.types.TypeKind\022\014\n\004name\030\003 \001(\t\022\n\n",
-      "\002id\030\004 \001(\t\"\222\003\n\rChangedMethod\022%\n\006change\030\001 " +
-      "\002(\0162\025.boa.types.ChangeKind\022\014\n\004name\030\002 \001(\t" +
-      "\022-\n\tmodifiers\030\003 \003(\0132\032.boa.types.ChangedM" +
-      "odifier\022+\n\013return_type\030\004 \001(\0132\026.boa.types" +
-      ".ChangedType\0222\n\022generic_parameters\030\005 \003(\013" +
-      "2\026.boa.types.ChangedType\022-\n\targuments\030\006 " +
-      "\003(\0132\032.boa.types.ChangedVariable\022/\n\017excep" +
-      "tion_types\030\007 \003(\0132\026.boa.types.ChangedType" +
-      "\022/\n\nstatements\030\010 \003(\0132\033.boa.types.Changed" +
-      "Statement\022+\n\010comments\030\t \003(\0132\031.boa.types.",
-      "ChangedComment\"\204\002\n\017ChangedVariable\022%\n\006ch" +
-      "ange\030\001 \002(\0162\025.boa.types.ChangeKind\022\014\n\004nam" +
-      "e\030\002 \001(\t\022-\n\rvariable_type\030\003 \001(\0132\026.boa.typ" +
-      "es.ChangedType\022-\n\tmodifiers\030\004 \003(\0132\032.boa." +
-      "types.ChangedModifier\0221\n\013initializer\030\005 \001" +
-      "(\0132\034.boa.types.ChangedExpression\022+\n\010comm" +
-      "ents\030\006 \003(\0132\031.boa.types.ChangedComment\"\205\004" +
-      "\n\020ChangedStatement\022%\n\006change\030\001 \002(\0162\025.boa" +
-      ".types.ChangeKind\0220\n\004kind\030\002 \002(\0162\".boa.ty" +
-      "pes.Statement.StatementKind\022+\n\010comments\030",
-      "\003 \003(\0132\031.boa.types.ChangedComment\022/\n\nstat" +
-      "ements\030\004 \003(\0132\033.boa.types.ChangedStatemen" +
-      "t\0225\n\017initializations\030\005 \003(\0132\034.boa.types.C" +
-      "hangedExpression\022/\n\tcondition\030\006 \001(\0132\034.bo" +
-      "a.types.ChangedExpression\022-\n\007updates\030\007 \003" +
-      "(\0132\034.boa.types.ChangedExpression\0228\n\024vari" +
-      "able_declaration\030\010 \001(\0132\032.boa.types.Chang" +
-      "edVariable\0227\n\020type_declaration\030\t \001(\0132\035.b" +
-      "oa.types.ChangedDeclaration\0220\n\nexpressio" +
-      "n\030\n \001(\0132\034.boa.types.ChangedExpression\"\346\003",
-      "\n\021ChangedExpression\022%\n\006change\030\001 \002(\0162\025.bo" +
-      "a.types.ChangeKind\0222\n\004kind\030\002 \002(\0162$.boa.t" +
-      "ypes.Expression.ExpressionKind\0221\n\013expres" +
-      "sions\030\003 \003(\0132\034.boa.types.ChangedExpressio" +
-      "n\0222\n\016variable_decls\030\004 \003(\0132\032.boa.types.Ch" +
-      "angedVariable\022(\n\010new_type\030\005 \001(\0132\026.boa.ty" +
-      "pes.ChangedType\0222\n\022generic_parameters\030\006 " +
-      "\003(\0132\026.boa.types.ChangedType\022\022\n\nis_postfi" +
-      "x\030\007 \001(\010\022\017\n\007literal\030\010 \001(\t\022\020\n\010variable\030\t \001" +
-      "(\t\022\016\n\006method\030\n \001(\t\0221\n\013method_args\030\013 \003(\0132",
-      "\034.boa.types.ChangedExpression\0227\n\020anon_de" +
-      "claration\030\014 \001(\0132\035.boa.types.ChangedDecla" +
-      "ration\"\371\001\n\017ChangedModifier\022%\n\006change\030\001 \002" +
-      "(\0162\025.boa.types.ChangeKind\022.\n\004kind\030\002 \002(\0162" +
-      " .boa.types.Modifier.ModifierKind\022\022\n\nvis" +
-      "ibility\030\003 \001(\r\022\027\n\017annotation_name\030\004 \001(\t\022\032" +
-      "\n\022annotation_members\030\005 \003(\t\0227\n\021annotation" +
-      "_values\030\006 \003(\0132\034.boa.types.ChangedExpress" +
-      "ion\022\r\n\005other\030\007 \001(\t\"\210\001\n\016ChangedComment\022%\n" +
-      "\006change\030\001 \002(\0162\025.boa.types.ChangeKind\022,\n\004",
-      "kind\030\002 \002(\0162\036.boa.types.Comment.CommentKi" +
-      "nd\022\r\n\005value\030\003 \001(\t\022\022\n\nstart_line\030\004 \001(\005B\002H" +
-      "\001"
+      " \002(\t\022\013\n\003key\030\004 \002(\t\022\037\n\003ast\030\005 \001(\0132\022.boa.typ" +
+      "es.ASTRoot\"\217\001\n\010FileKind\022\013\n\007UNKNOWN\020\001\022\n\n\006" +
+      "BINARY\020\002\022\010\n\004TEXT\020\003\022\007\n\003XML\020\004\022\025\n\021SOURCE_JA" +
+      "VA_ERROR\020\005\022\024\n\020SOURCE_JAVA_JLS2\020\006\022\024\n\020SOUR" +
+      "CE_JAVA_JLS3\020\007\022\024\n\020SOURCE_JAVA_JLS4\020\010\"A\n\016" +
+      "ChangedASTRoot\022/\n\nnamespaces\030\001 \003(\0132\033.boa",
+      ".types.ChangedNamespace\"\330\001\n\020ChangedNames" +
+      "pace\022%\n\006change\030\001 \002(\0162\025.boa.types.ChangeK" +
+      "ind\022\014\n\004name\030\002 \001(\t\022-\n\tmodifiers\030\003 \003(\0132\032.b" +
+      "oa.types.ChangedModifier\0223\n\014declarations" +
+      "\030\004 \003(\0132\035.boa.types.ChangedDeclaration\022+\n" +
+      "\010comments\030\005 \003(\0132\031.boa.types.ChangedComme" +
+      "nt\"\270\003\n\022ChangedDeclaration\022%\n\006change\030\001 \002(" +
+      "\0162\025.boa.types.ChangeKind\022!\n\004kind\030\002 \002(\0162\023" +
+      ".boa.types.TypeKind\022\014\n\004name\030\003 \001(\t\022-\n\tmod" +
+      "ifiers\030\004 \003(\0132\032.boa.types.ChangedModifier",
+      "\0222\n\022generic_parameters\030\005 \003(\0132\026.boa.types" +
+      ".ChangedType\022\'\n\007parents\030\006 \003(\0132\026.boa.type" +
+      "s.ChangedType\022)\n\007methods\030\007 \003(\0132\030.boa.typ" +
+      "es.ChangedMethod\022*\n\006fields\030\010 \003(\0132\032.boa.t" +
+      "ypes.ChangedVariable\022:\n\023nested_declarati" +
+      "ons\030\t \003(\0132\035.boa.types.ChangedDeclaration" +
+      "\022+\n\010comments\030\n \003(\0132\031.boa.types.ChangedCo" +
+      "mment\"q\n\013ChangedType\022%\n\006change\030\001 \002(\0162\025.b" +
+      "oa.types.ChangeKind\022!\n\004kind\030\002 \001(\0162\023.boa." +
+      "types.TypeKind\022\014\n\004name\030\003 \001(\t\022\n\n\002id\030\004 \001(\t",
+      "\"\222\003\n\rChangedMethod\022%\n\006change\030\001 \002(\0162\025.boa" +
+      ".types.ChangeKind\022\014\n\004name\030\002 \001(\t\022-\n\tmodif" +
+      "iers\030\003 \003(\0132\032.boa.types.ChangedModifier\022+" +
+      "\n\013return_type\030\004 \001(\0132\026.boa.types.ChangedT" +
+      "ype\0222\n\022generic_parameters\030\005 \003(\0132\026.boa.ty" +
+      "pes.ChangedType\022-\n\targuments\030\006 \003(\0132\032.boa" +
+      ".types.ChangedVariable\022/\n\017exception_type" +
+      "s\030\007 \003(\0132\026.boa.types.ChangedType\022/\n\nstate" +
+      "ments\030\010 \003(\0132\033.boa.types.ChangedStatement" +
+      "\022+\n\010comments\030\t \003(\0132\031.boa.types.ChangedCo",
+      "mment\"\204\002\n\017ChangedVariable\022%\n\006change\030\001 \002(" +
+      "\0162\025.boa.types.ChangeKind\022\014\n\004name\030\002 \001(\t\022-" +
+      "\n\rvariable_type\030\003 \001(\0132\026.boa.types.Change" +
+      "dType\022-\n\tmodifiers\030\004 \003(\0132\032.boa.types.Cha" +
+      "ngedModifier\0221\n\013initializer\030\005 \001(\0132\034.boa." +
+      "types.ChangedExpression\022+\n\010comments\030\006 \003(" +
+      "\0132\031.boa.types.ChangedComment\"\205\004\n\020Changed" +
+      "Statement\022%\n\006change\030\001 \002(\0162\025.boa.types.Ch" +
+      "angeKind\0220\n\004kind\030\002 \002(\0162\".boa.types.State" +
+      "ment.StatementKind\022+\n\010comments\030\003 \003(\0132\031.b",
+      "oa.types.ChangedComment\022/\n\nstatements\030\004 " +
+      "\003(\0132\033.boa.types.ChangedStatement\0225\n\017init" +
+      "ializations\030\005 \003(\0132\034.boa.types.ChangedExp" +
+      "ression\022/\n\tcondition\030\006 \001(\0132\034.boa.types.C" +
+      "hangedExpression\022-\n\007updates\030\007 \003(\0132\034.boa." +
+      "types.ChangedExpression\0228\n\024variable_decl" +
+      "aration\030\010 \001(\0132\032.boa.types.ChangedVariabl" +
+      "e\0227\n\020type_declaration\030\t \001(\0132\035.boa.types." +
+      "ChangedDeclaration\0220\n\nexpression\030\n \001(\0132\034" +
+      ".boa.types.ChangedExpression\"\346\003\n\021Changed",
+      "Expression\022%\n\006change\030\001 \002(\0162\025.boa.types.C" +
+      "hangeKind\0222\n\004kind\030\002 \002(\0162$.boa.types.Expr" +
+      "ession.ExpressionKind\0221\n\013expressions\030\003 \003" +
+      "(\0132\034.boa.types.ChangedExpression\0222\n\016vari" +
+      "able_decls\030\004 \003(\0132\032.boa.types.ChangedVari" +
+      "able\022(\n\010new_type\030\005 \001(\0132\026.boa.types.Chang" +
+      "edType\0222\n\022generic_parameters\030\006 \003(\0132\026.boa" +
+      ".types.ChangedType\022\022\n\nis_postfix\030\007 \001(\010\022\017" +
+      "\n\007literal\030\010 \001(\t\022\020\n\010variable\030\t \001(\t\022\016\n\006met" +
+      "hod\030\n \001(\t\0221\n\013method_args\030\013 \003(\0132\034.boa.typ",
+      "es.ChangedExpression\0227\n\020anon_declaration" +
+      "\030\014 \001(\0132\035.boa.types.ChangedDeclaration\"\371\001" +
+      "\n\017ChangedModifier\022%\n\006change\030\001 \002(\0162\025.boa." +
+      "types.ChangeKind\022.\n\004kind\030\002 \002(\0162 .boa.typ" +
+      "es.Modifier.ModifierKind\022\022\n\nvisibility\030\003" +
+      " \001(\r\022\027\n\017annotation_name\030\004 \001(\t\022\032\n\022annotat" +
+      "ion_members\030\005 \003(\t\0227\n\021annotation_values\030\006" +
+      " \003(\0132\034.boa.types.ChangedExpression\022\r\n\005ot" +
+      "her\030\007 \001(\t\"\210\001\n\016ChangedComment\022%\n\006change\030\001" +
+      " \002(\0162\025.boa.types.ChangeKind\022,\n\004kind\030\002 \002(",
+      "\0162\036.boa.types.Comment.CommentKind\022\r\n\005val" +
+      "ue\030\003 \001(\t\022\022\n\nstart_line\030\004 \001(\005B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -15865,7 +15734,7 @@ public final class Diff {
           internal_static_boa_types_ChangedFile_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_ChangedFile_descriptor,
-              new java.lang.String[] { "Change", "Kind", "Name", "Namespaces", "Key", },
+              new java.lang.String[] { "Change", "Kind", "Name", "Key", "Ast", },
               boa.types.Diff.ChangedFile.class,
               boa.types.Diff.ChangedFile.Builder.class);
           internal_static_boa_types_ChangedASTRoot_descriptor =
