@@ -29,6 +29,7 @@ import org.scannotation.ClasspathUrlFinder;
 import boa.compiler.ast.Program;
 import boa.compiler.ast.Start;
 import boa.compiler.transforms.VisitorMergingTransformer;
+import boa.compiler.transforms.VisitorOptimizingTransformer;
 import boa.compiler.visitors.CodeGeneratingVisitor;
 import boa.compiler.visitors.TaskClassifyingVisitor;
 import boa.compiler.visitors.TypeCheckingVisitor;
@@ -184,7 +185,11 @@ public class BoaCompiler {
 					BoaCompiler.LOG.info(f.getName() + ": task complexity: " + (jobIsSimple ? "simple" : "complex"));
 					isSimple &= jobIsSimple;
 
-					// if a job has no visitor, let it have its own method (unless disabled)
+					if (!jobIsSimple)
+						new VisitorOptimizingTransformer().start(p);
+						
+					// if a job has no visitor, let it have its own method
+					// also let jobs have own methods if visitor merging is disabled
 					if (jobIsSimple || cl.hasOption("nv") || inputFiles.size() == 1) {
 						final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(jobName, stg);
 						cg.start(p);
@@ -208,7 +213,7 @@ public class BoaCompiler {
 			else
 				maxVisitors = Integer.MAX_VALUE;
 
-			if (!visitorPrograms.isEmpty()) {
+			if (!visitorPrograms.isEmpty())
 				for (final Program p : new VisitorMergingTransformer().mergePrograms(visitorPrograms, maxVisitors)) {
 					final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(p.jobName, stg);
 					cg.start(p);
@@ -216,7 +221,6 @@ public class BoaCompiler {
 	
 					jobnames.add(p.jobName);
 				}
-			}
 
 			final StringTemplate st = stg.getInstanceOf("Program");
 
