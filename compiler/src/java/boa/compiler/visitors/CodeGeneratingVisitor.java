@@ -1182,7 +1182,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 			argu.set(id, c.getType().type);
 			types.add(c.getType().type.toJavaType());
-			ids.add(" ___" + id);
+			ids.add("___" + id);
 
 			st.setAttribute("name", isBefore ? "preVisit" : "postVisit");
 		} else {
