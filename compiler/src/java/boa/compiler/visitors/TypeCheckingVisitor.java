@@ -135,13 +135,11 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 			n.type = new BoaMap();
 			return;
 		}
-		// FIXME rdyer composite could be truly empty, not 'map empty'
-//		n.type = new BoaArray();
 
 		if (n.getPairsSize() > 0)
 			n.type = checkPairs(n.getPairs(), env);
 		else
-			n.type = check(n.getExprs(), env).get(0);
+			n.type = new BoaArray(check(n.getExprs(), env).get(0));
 	}
 
 	/** {@inheritDoc} */
