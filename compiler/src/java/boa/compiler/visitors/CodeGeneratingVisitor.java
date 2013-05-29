@@ -806,57 +806,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 	/** {@inheritDoc} */
 	@Override
-	public void visit(final ExistsStatement n) {
-		final SymbolTable argu = n.env;
-		final StringTemplate st = this.stg.getInstanceOf("WhenStatement");
-
-		st.setAttribute("some", "true");
-
-		final BoaType type = n.getVar().getType().type;
-
-		final String id = n.getVar().getIdentifier().getToken();
-
-		argu.set(id, type);
-		st.setAttribute("type", type.toJavaType());
-		st.setAttribute("index", id);
-
-		this.indexeeFinder.start(n.getCondition(), id);
-		final Set<Node> indexees = this.indexeeFinder.getIndexees();
-	
-		if (indexees.size() > 0) {
-			final List<Node> array = new ArrayList<Node>(indexees);
-			String src = "";
-			for (int i = 0; i < array.size(); i++) {
-				final Factor indexee = (Factor)array.get(i);
-
-				this.skipIndex = id;
-				indexee.accept(this);
-				final String src2 = code.removeLast();
-				this.skipIndex = "";
-
-				final BoaType indexeeType = this.indexeeFinder.getFactors().get(indexee).type;
-				final String func = (indexeeType instanceof BoaArray) ? ".length" : ".size()";
-
-				if (src.length() > 0)
-					src = "java.lang.Math.min(" + src2 + func + ", " + src + ")";
-				else
-					src = src2 + func;
-			}
-
-			st.setAttribute("len", src);
-		}
-
-		n.getCondition().accept(this);
-		st.setAttribute("expression", code.removeLast());
-
-		n.getBody().accept(this);
-		st.setAttribute("statement", code.removeLast());
-
-		code.add(st.toString());
-	}
-
-	/** {@inheritDoc} */
-	@Override
 	public void visit(final ExprStatement n) {
 		final StringTemplate st = this.stg.getInstanceOf("ExprStatement");
 
@@ -868,19 +817,37 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 	/** {@inheritDoc} */
 	@Override
-	public void visit(final ForeachStatement n) {
-		final SymbolTable argu = n.env;
+	public void visit(final ExistsStatement n) {
 		final StringTemplate st = this.stg.getInstanceOf("WhenStatement");
+		st.setAttribute("some", "true");
+		generateQuantifier(n, n.getVar(), n.getCondition(), n.getBody(), "exists", st);
+	}
 
-		final BoaType type = n.getVar().getType().type;
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final ForeachStatement n) {
+		final StringTemplate st = this.stg.getInstanceOf("WhenStatement");
+		generateQuantifier(n, n.getVar(), n.getCondition(), n.getBody(), "foreach", st);
+	}
 
-		final String id = n.getVar().getIdentifier().getToken();
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final IfAllStatement n) {
+		final StringTemplate st = this.stg.getInstanceOf("WhenStatement");
+		st.setAttribute("all", "true");
+		generateQuantifier(n, n.getVar(), n.getCondition(), n.getBody(), "ifall", st);
+	}
 
-		argu.set(id, type);
+	protected void generateQuantifier(final Node n, final Component c, final Expression e, final Block b, final String kind, final StringTemplate st) {
+		final BoaType type = c.getType().type;
+
+		final String id = c.getIdentifier().getToken();
+
+		n.env.set(id, type);
 		st.setAttribute("type", type.toJavaType());
 		st.setAttribute("index", id);
 
-		this.indexeeFinder.start(n.getCondition(), id);
+		this.indexeeFinder.start(e, id);
 		final Set<Node> indexees = this.indexeeFinder.getIndexees();
 	
 		if (indexees.size() > 0) {
@@ -904,12 +871,14 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			}
 
 			st.setAttribute("len", src);
+		} else {
+			throw new TypeCheckException(e, "quantifier variable '" + id + "' must be used in the " + kind + " condition expression");
 		}
 
-		n.getCondition().accept(this);
+		e.accept(this);
 		st.setAttribute("expression", code.removeLast());
 
-		n.getBody().accept(this);
+		b.accept(this);
 		st.setAttribute("statement", code.removeLast());
 
 		code.add(st.toString());
@@ -934,57 +903,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			n.getUpdate().accept(this);
 			st.setAttribute("exprstmt", code.removeLast());
 		}
-
-		n.getBody().accept(this);
-		st.setAttribute("statement", code.removeLast());
-
-		code.add(st.toString());
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public void visit(final IfAllStatement n) {
-		final SymbolTable argu = n.env;
-		final StringTemplate st = this.stg.getInstanceOf("WhenStatement");
-
-		st.setAttribute("all", "true");
-
-		final BoaType type = n.getVar().getType().type;
-
-		final String id = n.getVar().getIdentifier().getToken();
-
-		argu.set(id, type);
-		st.setAttribute("type", type.toJavaType());
-		st.setAttribute("index", id);
-
-		this.indexeeFinder.start(n.getCondition(), id);
-		final Set<Node> indexees = this.indexeeFinder.getIndexees();
-	
-		if (indexees.size() > 0) {
-			final List<Node> array = new ArrayList<Node>(indexees);
-			String src = "";
-			for (int i = 0; i < array.size(); i++) {
-				final Factor indexee = (Factor)array.get(i);
-
-				this.skipIndex = id;
-				indexee.accept(this);
-				final String src2 = code.removeLast();
-				this.skipIndex = "";
-
-				final BoaType indexeeType = this.indexeeFinder.getFactors().get(indexee).type;
-				final String func = (indexeeType instanceof BoaArray) ? ".length" : ".size()";
-
-				if (src.length() > 0)
-					src = "java.lang.Math.min(" + src2 + func + ", " + src + ")";
-				else
-					src = src2 + func;
-			}
-
-			st.setAttribute("len", src);
-		}
-
-		n.getCondition().accept(this);
-		st.setAttribute("expression", code.removeLast());
 
 		n.getBody().accept(this);
 		st.setAttribute("statement", code.removeLast());

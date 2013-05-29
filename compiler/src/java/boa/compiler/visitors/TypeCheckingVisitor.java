@@ -447,27 +447,6 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 
 	/** {@inheritDoc} */
 	@Override
-	public void visit(final ExistsStatement n, final SymbolTable env) {
-		SymbolTable st;
-		try {
-			st = env.cloneNonLocals();
-		} catch (final IOException e) {
-			throw new RuntimeException(e.getClass().getSimpleName() + " caught", e);
-		}
-
-		n.env = st;
-
-		n.getVar().accept(this, st);
-
-		n.getCondition().accept(this, st);
-		if (!(n.getCondition().type instanceof BoaBool))
-			throw new TypeCheckException(n.getCondition(), "incompatible types for exists condition: required 'boolean', found '" + n.getCondition().type + "'");
-
-		n.getBody().accept(this, st);
-	}
-
-	/** {@inheritDoc} */
-	@Override
 	public void visit(final ExprStatement n, final SymbolTable env) {
 		n.env = env;
 
@@ -477,23 +456,42 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 
 	/** {@inheritDoc} */
 	@Override
+	public void visit(final ExistsStatement n, final SymbolTable env) {
+		checkQuantifier(n, n.getVar(), n.getCondition(), n.getBody(), "exists", env);
+	}
+
+	/** {@inheritDoc} */
+	@Override
 	public void visit(final ForeachStatement n, final SymbolTable env) {
+		checkQuantifier(n, n.getVar(), n.getCondition(), n.getBody(), "foreach", env);
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final IfAllStatement n, final SymbolTable env) {
+		checkQuantifier(n, n.getVar(), n.getCondition(), n.getBody(), "ifall", env);
+	}
+
+	protected void checkQuantifier(final Node n, final Component c, final Expression e, final Block b, final String kind, final SymbolTable env) {
 		SymbolTable st;
 		try {
 			st = env.cloneNonLocals();
-		} catch (final IOException e) {
-			throw new RuntimeException(e.getClass().getSimpleName() + " caught", e);
+		} catch (final IOException ex) {
+			throw new RuntimeException(e.getClass().getSimpleName() + " caught", ex);
 		}
 
 		n.env = st;
 
-		n.getVar().accept(this, st);
+		c.accept(this, st);
 
-		n.getCondition().accept(this, st);
-		if (!(n.getCondition().type instanceof BoaBool))
-			throw new TypeCheckException(n.getCondition(), "incompatible types for foreach condition: required 'boolean', found '" + n.getCondition().type + "'");
+		e.accept(this, st);
+		if (!(e.type instanceof BoaBool))
+			throw new TypeCheckException(e, "incompatible types for " + kind + " condition: required 'boolean', found '" + e.type + "'");
 
-		n.getBody().accept(this, st);
+		if (n instanceof IfAllStatement)
+			b.accept(this, env);
+		else
+			b.accept(this, st);
 	}
 
 	/** {@inheritDoc} */
@@ -519,27 +517,6 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 			n.getUpdate().accept(this, st);
 
 		n.getBody().accept(this, st);
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public void visit(final IfAllStatement n, final SymbolTable env) {
-		SymbolTable st;
-		try {
-			st = env.cloneNonLocals();
-		} catch (final IOException e) {
-			throw new RuntimeException(e.getClass().getSimpleName() + " caught", e);
-		}
-
-		n.env = st;
-
-		n.getVar().accept(this, st);
-
-		n.getCondition().accept(this, st);
-		if (!(n.getCondition().type instanceof BoaBool))
-			throw new TypeCheckException(n.getCondition(), "incompatible types for ifall condition: required 'boolean', found '" + n.getCondition().type + "'");
-
-		n.getBody().accept(this, env);
 	}
 
 	/** {@inheritDoc} */
