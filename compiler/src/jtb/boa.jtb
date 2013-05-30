@@ -9,7 +9,11 @@ PARSER_BEGIN(BoaParser)
 package boa.parser;
 
 public class BoaParser
-{}
+{
+	public void setTabSize(final int size) {
+		jj_input_stream.setTabSize(size);
+	}
+}
 
 PARSER_END(BoaParser)
 

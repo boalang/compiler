@@ -171,6 +171,7 @@ public class BoaCompiler {
 						parser = new BoaParser(r);
 					else
 						BoaParser.ReInit(r);
+					parser.setTabSize(4);
 					final Start p = (Start)new ParseTreeAdapter().visit(BoaParser.Start());
 
 					final String jobName = "" + i;
