@@ -52,7 +52,7 @@ public class LocalAggregationTransformer extends AbstractVisitorNoArg {
 		/** {@inheritDoc} */
 		@Override
 		public void visit(final OutputType n) {
-			if (n.getId().getToken().equals("sum"))
+			if (n.getId().getToken().equals("sum") && n.getIndicesSize() == 0)
 				vars.add(lastId);
 		}
 	}
