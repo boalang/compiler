@@ -14,7 +14,9 @@ import boa.compiler.ast.expressions.ParenExpression;
 import boa.compiler.ast.expressions.SimpleExpr;
 import boa.compiler.ast.literals.IntegerLiteral;
 import boa.compiler.ast.statements.AssignmentStatement;
+import boa.compiler.ast.statements.Block;
 import boa.compiler.ast.statements.EmitStatement;
+import boa.compiler.ast.statements.IfStatement;
 import boa.compiler.ast.statements.VarDeclStatement;
 import boa.compiler.ast.types.OutputType;
 import boa.compiler.visitors.AbstractVisitorNoArg;
@@ -94,8 +96,8 @@ public class LocalAggregationTransformer extends AbstractVisitorNoArg {
 		for (final String s : outputVarFinder.getVars()) {
 			final Identifier id = new Identifier(varPrefix + s);
 			id.env = n.env;
-			n.getStatements().add(new EmitStatement(
-					new Identifier(s),
+			n.getStatements().add(
+				new IfStatement(
 					new Expression(
 						new Conjunction(
 							new Comparison(
@@ -103,10 +105,34 @@ public class LocalAggregationTransformer extends AbstractVisitorNoArg {
 									new Term(
 										new Factor(id)
 									)
+								),
+								"!=",
+								new SimpleExpr(
+									new Term(
+										new Factor(new IntegerLiteral("0"))
+									)
 								)
 							)
 						)
-					)));
+					),
+					new Block().addStatement(
+						new EmitStatement(
+							new Identifier(s),
+							new Expression(
+								new Conjunction(
+									new Comparison(
+										new SimpleExpr(
+											new Term(
+												new Factor(id.clone())
+											)
+										)
+									)
+								)
+							)
+						)
+					)
+				)
+			);
 		}
 	}
 
