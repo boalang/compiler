@@ -28,6 +28,7 @@ import org.scannotation.ClasspathUrlFinder;
 
 import boa.compiler.ast.Program;
 import boa.compiler.ast.Start;
+import boa.compiler.transforms.LocalAggregationTransformer;
 import boa.compiler.transforms.VisitorMergingTransformer;
 import boa.compiler.transforms.VisitorOptimizingTransformer;
 import boa.compiler.visitors.CodeGeneratingVisitor;
@@ -185,6 +186,8 @@ public class BoaCompiler {
 
 					BoaCompiler.LOG.info(f.getName() + ": task complexity: " + (jobIsSimple ? "simple" : "complex"));
 					isSimple &= jobIsSimple;
+
+					new LocalAggregationTransformer().start(p);
 
 					if (!jobIsSimple)
 						new VisitorOptimizingTransformer().start(p);
