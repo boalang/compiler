@@ -25,12 +25,18 @@ import boa.types.BoaInt;
 /**
  * Performs aggregations locally (in Boa) as much as possible, before
  * sending output to the output variable.  This is like a combiner step,
- * but performed via rewrites to the Boa program.
+ * but performed via rewrites to the Boa program (and thus happens
+ * before the combiner).
  * 
  * @author rdyer
  */
 public class LocalAggregationTransformer extends AbstractVisitorNoArg {
-	protected class OutputVarFindingVisitor extends AbstractVisitorNoArg {
+	/**
+	 * Finds all output variables using a 'sum' aggregator.
+	 * 
+	 * @author rdyer
+	 */
+	protected class SumAggregatorFindingVisitor extends AbstractVisitorNoArg {
 		private final List<String> vars = new ArrayList<String>();
 		private String lastId;
 
@@ -48,7 +54,8 @@ public class LocalAggregationTransformer extends AbstractVisitorNoArg {
 		@Override
 		public void visit(final VarDeclStatement n) {
 			lastId = n.getId().getToken();
-			super.visit(n);
+			if (n.hasType() && !n.hasInitializer())
+				n.getType().accept(this);
 		}
 
 		/** {@inheritDoc} */
@@ -59,73 +66,44 @@ public class LocalAggregationTransformer extends AbstractVisitorNoArg {
 		}
 	}
 
-	protected final OutputVarFindingVisitor outputVarFinder = new OutputVarFindingVisitor();
+	protected final SumAggregatorFindingVisitor sumAggregatorFinder = new SumAggregatorFindingVisitor();
 
 	protected final String varPrefix = "_local_aggregator_";
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Program n) {
-		outputVarFinder.start(n);
-		for (final String s : outputVarFinder.getVars()) {
-			final VarDeclStatement var = new VarDeclStatement(
-					new Identifier(varPrefix + s),
-					new Expression(
-						new Conjunction(
-							new Comparison(
-								new SimpleExpr(
-									new Term(
-										new Factor(
-											new IntegerLiteral("0")
-										)
-									)
-								)
-							)
-						)
-					)
-				);
-			n.getStatements().add(0, var);
+		sumAggregatorFinder.start(n);
 
-			n.env.set(varPrefix + s, new BoaInt());
-			var.type = var.getInitializer().type = new BoaInt();
-			var.env = n.env;
-		}
+		for (final String s : sumAggregatorFinder.getVars())
+			generateCacheVariable(n, s);
 
 		super.visit(n);
 
-		for (final String s : outputVarFinder.getVars()) {
-			final Identifier id = new Identifier(varPrefix + s);
-			id.env = n.env;
-			n.getStatements().add(
-				new IfStatement(
-					new Expression(
-						new Conjunction(
-							new Comparison(
-								new SimpleExpr(
-									new Term(
-										new Factor(id)
-									)
-								),
-								"!=",
-								new SimpleExpr(
-									new Term(
-										new Factor(new IntegerLiteral("0"))
-									)
-								)
-							)
-						)
-					),
-					new Block().addStatement(
-						new EmitStatement(
-							new Identifier(s),
-							new Expression(
-								new Conjunction(
-									new Comparison(
-										new SimpleExpr(
-											new Term(
-												new Factor(id.clone())
-											)
-										)
+		for (final String s : sumAggregatorFinder.getVars())
+			generateCacheOutput(n, s);
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final EmitStatement n) {
+		final String id = n.getId().getToken();
+		if (!sumAggregatorFinder.getVars().contains(id))
+			return;
+
+		generateStoreValue(n);
+	}
+
+	protected void generateCacheVariable(final Program n, final String s) {
+		final VarDeclStatement var = new VarDeclStatement(
+				new Identifier(varPrefix + s),
+				new Expression(
+					new Conjunction(
+						new Comparison(
+							new SimpleExpr(
+								new Term(
+									new Factor(
+										new IntegerLiteral("0")
 									)
 								)
 							)
@@ -133,15 +111,56 @@ public class LocalAggregationTransformer extends AbstractVisitorNoArg {
 					)
 				)
 			);
-		}
+		n.getStatements().add(0, var);
+
+		n.env.set(varPrefix + s, new BoaInt());
+		var.type = var.getInitializer().type = new BoaInt();
+		var.env = n.env;
 	}
 
-	/** {@inheritDoc} */
-	@Override
-	public void visit(final EmitStatement n) {
-		if (!outputVarFinder.getVars().contains(n.getId().getToken()))
-			return;
+	protected void generateCacheOutput(final Program n, String s) {
+		final Identifier id = new Identifier(varPrefix + s);
+		id.env = n.env;
+		n.getStatements().add(
+			new IfStatement(
+				new Expression(
+					new Conjunction(
+						new Comparison(
+							new SimpleExpr(
+								new Term(
+									new Factor(id)
+								)
+							),
+							"!=",
+							new SimpleExpr(
+								new Term(
+									new Factor(new IntegerLiteral("0"))
+								)
+							)
+						)
+					)
+				),
+				new Block().addStatement(
+					new EmitStatement(
+						new Identifier(s),
+						new Expression(
+							new Conjunction(
+								new Comparison(
+									new SimpleExpr(
+										new Term(
+											new Factor(id.clone())
+										)
+									)
+								)
+							)
+						)
+					)
+				)
+			)
+		);
+	}
 
+	protected void generateStoreValue(final EmitStatement n) {
 		final Identifier id = new Identifier(varPrefix + n.getId().getToken());
 		id.env = n.env;
 
