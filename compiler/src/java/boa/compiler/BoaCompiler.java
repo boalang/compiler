@@ -188,13 +188,13 @@ public class BoaCompiler {
 					isSimple &= jobIsSimple;
 
 					new LocalAggregationTransformer().start(p);
-
-					if (!jobIsSimple)
-						new VisitorOptimizingTransformer().start(p);
 						
 					// if a job has no visitor, let it have its own method
 					// also let jobs have own methods if visitor merging is disabled
 					if (jobIsSimple || cl.hasOption("nv") || inputFiles.size() == 1) {
+						if (!jobIsSimple)
+							new VisitorOptimizingTransformer().start(p);
+
 						final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(jobName, stg);
 						cg.start(p);
 						jobs.add(cg.getCode());
@@ -219,6 +219,7 @@ public class BoaCompiler {
 
 			if (!visitorPrograms.isEmpty())
 				for (final Program p : new VisitorMergingTransformer().mergePrograms(visitorPrograms, maxVisitors)) {
+					new VisitorOptimizingTransformer().start(p);
 					final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(p.jobName, stg);
 					cg.start(p);
 					jobs.add(cg.getCode());
