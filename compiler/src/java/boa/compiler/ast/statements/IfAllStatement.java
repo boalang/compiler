@@ -22,6 +22,10 @@ public class IfAllStatement extends Statement {
 		return condition;
 	}
 
+	public void setCondition(final Expression e) {
+		condition = e;
+	}
+
 	public Block getBody() {
 		return body;
 	}

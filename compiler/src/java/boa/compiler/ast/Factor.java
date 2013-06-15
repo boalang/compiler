@@ -30,9 +30,10 @@ public class Factor extends Node {
 		return ops.get(index);
 	}
 
-	public void addOp(final Node op) {
+	public Factor addOp(final Node op) {
 		op.setParent(this);
 		ops.add(op);
+		return this;
 	}
 
 	public Factor (final Operand op) {

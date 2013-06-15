@@ -455,22 +455,28 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final ExistsStatement n, final SymbolTable env) {
-		checkQuantifier(n, n.getVar(), n.getCondition(), n.getBody(), "exists", env);
+		final Expression e = checkQuantifier(n, n.getVar(), n.getCondition(), n.getBody(), "exists", env);
+		if (e != n.getCondition())
+			n.setCondition(e);
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final ForeachStatement n, final SymbolTable env) {
-		checkQuantifier(n, n.getVar(), n.getCondition(), n.getBody(), "foreach", env);
+		final Expression e = checkQuantifier(n, n.getVar(), n.getCondition(), n.getBody(), "foreach", env);
+		if (e != n.getCondition())
+			n.setCondition(e);
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final IfAllStatement n, final SymbolTable env) {
-		checkQuantifier(n, n.getVar(), n.getCondition(), n.getBody(), "ifall", env);
+		final Expression e = checkQuantifier(n, n.getVar(), n.getCondition(), n.getBody(), "ifall", env);
+		if (e != n.getCondition())
+			n.setCondition(e);
 	}
 
-	protected void checkQuantifier(final Node n, final Component c, final Expression e, final Block b, final String kind, final SymbolTable env) {
+	protected Expression checkQuantifier(final Node n, final Component c, Expression e, final Block b, final String kind, final SymbolTable env) {
 		SymbolTable st;
 		try {
 			st = env.cloneNonLocals();
@@ -483,6 +489,24 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 		c.accept(this, st);
 
 		e.accept(this, st);
+
+		if (e.type instanceof BoaProtoTuple) {
+			e = new Expression(
+					new Conjunction(
+						new Comparison(
+							new SimpleExpr(
+								new Term(
+									new Factor(
+										new Identifier("def")
+									).addOp(new Call().addArg(e.clone()))
+								)
+							)
+						)
+					)
+				);
+			e.accept(this, st);
+		}
+
 		if (!(e.type instanceof BoaBool))
 			throw new TypeCheckException(e, "incompatible types for " + kind + " condition: required 'boolean', found '" + e.type + "'");
 
@@ -490,6 +514,8 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 			b.accept(this, env);
 		else
 			b.accept(this, st);
+
+		return e;
 	}
 
 	/** {@inheritDoc} */

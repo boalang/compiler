@@ -26,9 +26,10 @@ public class Call extends Node {
 		return args.get(index);
 	}
 
-	public void addArg(final Expression e) {
+	public Call addArg(final Expression e) {
 		e.setParent(this);
 		args.add(e);
+		return this;
 	}
 
 	/** {@inheritDoc} */
