@@ -21,6 +21,50 @@ import boa.types.*;
  */
 public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 	/**
+	 * This does type checking of function bodies to ensure the
+	 * returns are the correct type.
+	 * 
+	 * @author rdyer
+	 */
+	protected class ReturnCheckingVisitor extends AbstractVisitorNoArg {
+		protected BoaType retType;
+
+		/**
+		 * Initialize the visitor with the function's return type.
+		 * 
+		 * @param funcType the function's return type
+		 */
+		public void initialize(final AbstractType funcType) {
+			initialize();
+			retType = funcType == null ? null : funcType.type;
+		}
+
+		/** {@inheritDoc} */
+		@Override
+		public void visit(final Block n) {
+			super.visit(n);
+
+			// look for unreachable code (any statement after a return or stop)
+			for (int i = 0; i < n.getStatementsSize() - 1; i++) {
+				final Statement s = n.getStatement(i);
+				if (s instanceof ReturnStatement || s instanceof StopStatement)
+					throw new TypeCheckException(n.getStatement(i + 1), "unreachable code");
+			}
+		}
+
+		/** {@inheritDoc} */
+		@Override
+		public void visit(final ReturnStatement n) {
+			if (n.hasExpr() && retType == null)
+				throw new TypeCheckException(n.getExpr(), "returning values not allowed by function's type");
+			if (retType != null && !n.hasExpr())
+				throw new TypeCheckException(n, "must return a value of type '" + retType + "'");
+			if (retType != null && !retType.assigns(n.getExpr().type))
+				throw new TypeCheckException(n.getExpr(), "incompatible types: required '" + retType + "', found '" + n.getExpr().type + "'");
+		}
+	}
+
+	/**
 	 * 
 	 * @author rdyer
 	 */
@@ -52,6 +96,8 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 			func = arg.getFunction(n.getToken(), this.formalParameters);
 		}
 	}
+
+	protected ReturnCheckingVisitor returnFinder = new ReturnCheckingVisitor();
 
 	/** {@inheritDoc} */
 	@Override
@@ -779,7 +825,13 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 
 		n.getType().accept(this, st);
 		n.type = n.getType().type;
+
 		n.getBody().accept(this, st);
+		returnFinder.initialize(n.getType().getType());
+		returnFinder.start(n.getBody());
+		if (n.getType().hasType()
+				&& (n.getBody().getStatementsSize() == 0 || !(n.getBody().getStatement(n.getBody().getStatementsSize() - 1) instanceof ReturnStatement)))
+			throw new TypeCheckException(n.getBody(), "missing return statement");
 	}
 
 	/** {@inheritDoc} */
