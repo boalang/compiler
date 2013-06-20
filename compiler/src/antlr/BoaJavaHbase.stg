@@ -42,8 +42,8 @@ public class <name> extends boa.runtime.BoaRunner {
 		
 		final org.apache.hadoop.mapreduce.Job jb = runner.job(org.apache.hadoop.hbase.HBaseConfiguration.create(), null, new org.apache.hadoop.fs.Path(args[1]), robust);
 
-		if (line.hasOption("astTable"))
-			jb.getConfiguration().set("boa.hbase.ast.table", line.getOptionValue("astTable"));
+		if (line.hasOption("ast"))
+			jb.getConfiguration().set("boa.hbase.ast.table", line.getOptionValue("ast"));
 
 		jb.getConfiguration().setLong("mapred.task.timeout", 1800000);
 		jb.getConfiguration().set("boa.hbase.table", args[0]);

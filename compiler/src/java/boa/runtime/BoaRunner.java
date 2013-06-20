@@ -97,10 +97,10 @@ public abstract class BoaRunner extends Configured implements Tool {
 										.hasArg()
 										.withArgName("ID")
 										.create("j"));
-		options.addOption(org.apache.commons.cli.OptionBuilder.withLongOpt("astTable")
-										.withDescription("which HBase TABLE to use for AST rows")
+		options.addOption(org.apache.commons.cli.OptionBuilder.withLongOpt("ast")
+										.withDescription("which INPUT to use for ASTs")
 										.hasArg()
-										.withArgName("TABLE")
+										.withArgName("INPUT")
 										.create("a"));
 	}
 

@@ -53,6 +53,8 @@ public class <name> extends boa.runtime.BoaRunner {
 		
 		final org.apache.hadoop.mapreduce.Job jb = job(ins, new org.apache.hadoop.fs.Path(args[1]), robust);
 		jb.getConfiguration().set("boa.input.dir", args[0]);
+		if (line.hasOption("ast"))
+			jb.getConfiguration().set("boa.ast.dir", line.getOptionValue("ast"));
 
 		if (line.hasOption("splitsize"))
 			jb.getConfiguration().setInt("mapred.max.split.size", Integer.parseInt(line.getOptionValue("splitsize")));
