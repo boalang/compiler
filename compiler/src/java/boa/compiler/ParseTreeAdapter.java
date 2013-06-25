@@ -567,8 +567,14 @@ public class ParseTreeAdapter extends GJNoArguDepthFirst<Node> {
 
 		@Override
 		public boa.parser.syntaxtree.NodeToken visit(final boa.parser.syntaxtree.ForVarDecl n) {
-			if (n.f3.present())
-				return ((boa.parser.syntaxtree.NodeChoice)n.f3.node).accept(this);
+			if (n.f3.present()) {
+				switch (((boa.parser.syntaxtree.NodeChoice)n.f3.node).which) {
+				case 0:
+					return ((boa.parser.syntaxtree.NodeSequence)((boa.parser.syntaxtree.NodeChoice)n.f3.node).choice).elementAt(1).accept(this);
+				default:
+					return ((boa.parser.syntaxtree.NodeChoice)n.f3.node).choice.accept(this);
+				}
+			}
 			if (n.f2.present())
 				return n.f2.accept(this);
 			return n.f1;
@@ -577,7 +583,7 @@ public class ParseTreeAdapter extends GJNoArguDepthFirst<Node> {
 		@Override
 		public boa.parser.syntaxtree.NodeToken visit(final boa.parser.syntaxtree.ForExprStatement n) {
 			if (n.f1.present())
-				return (boa.parser.syntaxtree.NodeToken)n.f1.node;
+				return (boa.parser.syntaxtree.NodeToken)((boa.parser.syntaxtree.NodeChoice)n.f1.node).choice;
 			return n.f0.accept(this);
 		}
 
@@ -1063,6 +1069,43 @@ public class ParseTreeAdapter extends GJNoArguDepthFirst<Node> {
 	/** {@inheritDoc} */
 	@Override
 	public Node visit(final boa.parser.syntaxtree.ExprStatement n) {
+		if (n.f1.present())
+			return new PostfixStatement((Expression)n.f0.accept(this), ((boa.parser.syntaxtree.NodeToken)((boa.parser.syntaxtree.NodeChoice)n.f1.node).choice).tokenImage).setPositions(firstVisitor.visit(n), lastVisitor.visit(n));
+		return new ExprStatement((Expression)n.f0.accept(this)).setPositions(firstVisitor.visit(n), lastVisitor.visit(n));
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public Node visit(final boa.parser.syntaxtree.ForVarDecl n) {
+		final Node t;
+		if (n.f2.present())
+			t = n.f2.accept(this);
+		else
+			t = null;
+
+		final Node initializer;
+		if (n.f3.present()) {
+			final boa.parser.syntaxtree.NodeChoice nc = (boa.parser.syntaxtree.NodeChoice)n.f3.node;
+			switch (nc.which) {
+			case 0:
+				initializer = ((boa.parser.syntaxtree.NodeSequence)nc.choice).elementAt(1).accept(this);
+				break;
+			case 1:
+				initializer = nc.choice.accept(this);
+				break;
+			default:
+				throw new RuntimeException("unexpected choice " + nc.which + " is " + nc.choice.getClass());
+			}
+		} else {
+			initializer = null;
+		}
+
+		return new VarDeclStatement((Identifier)n.f0.accept(this), (AbstractType)t, (Expression)initializer).setPositions(firstVisitor.visit(n), lastVisitor.visit(n));
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public Node visit(final boa.parser.syntaxtree.ForExprStatement n) {
 		if (n.f1.present())
 			return new PostfixStatement((Expression)n.f0.accept(this), ((boa.parser.syntaxtree.NodeToken)((boa.parser.syntaxtree.NodeChoice)n.f1.node).choice).tokenImage).setPositions(firstVisitor.visit(n), lastVisitor.visit(n));
 		return new ExprStatement((Expression)n.f0.accept(this)).setPositions(firstVisitor.visit(n), lastVisitor.visit(n));

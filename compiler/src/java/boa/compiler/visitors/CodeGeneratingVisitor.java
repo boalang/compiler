@@ -891,17 +891,23 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		if (n.hasInit()) {
 			n.getInit().accept(this);
-			st.setAttribute("declaration", code.removeLast());
-		}
+			// FIXME rdyer this is a bit of a hack, to remove the newline
+			final String s = code.removeLast();
+			st.setAttribute("declaration", s.substring(0, s.length() - 1));
+		} else
+			st.setAttribute("declaration", ";");
 
 		if (n.hasCondition()) {
 			n.getCondition().accept(this);
 			st.setAttribute("expression", code.removeLast());
-		}
+		} else
+			st.setAttribute("declaration", ";");
 
 		if (n.hasUpdate()) {
 			n.getUpdate().accept(this);
-			st.setAttribute("exprstmt", code.removeLast());
+			// FIXME rdyer this is a bit of a hack, to remove the semicolon+newline
+			final String s = code.removeLast();
+			st.setAttribute("exprstmt", s.substring(0, s.length() - 2));
 		}
 
 		n.getBody().accept(this);
