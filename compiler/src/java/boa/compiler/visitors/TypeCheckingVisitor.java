@@ -266,7 +266,11 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 					final List<BoaType> formalParameters = this.check((Call) node, env);
 
 					final FunctionFindingVisitor v = new FunctionFindingVisitor(formalParameters);
-					v.start((Identifier)n.getOperand(), env);
+					try {
+						v.start((Identifier)n.getOperand(), env);
+					} catch (final RuntimeException e) {
+						throw new TypeCheckException(n.getOperand(), e.getMessage(), e);
+					}
 					node.type = v.getFunction().erase(formalParameters);
 					n.type = node.type;
 					return;
