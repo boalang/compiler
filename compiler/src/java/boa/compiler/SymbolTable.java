@@ -138,25 +138,6 @@ public class SymbolTable {
 		globalFunctions.addFunction("peek", new BoaFunction(new BoaTypeVar("V"), new BoaType[] { new BoaStack(new BoaTypeVar("V")) }, "boa.functions.BoaIntrinsics.stack_peek(${0})"));
 		globalFunctions.addFunction("clear", new BoaFunction(new BoaAny(), new BoaType[] { new BoaStack(new BoaTypeVar("V")) }, "${0}.clear()"));
 
-		// AST comparisons
-		globalFunctions.addFunction("isequal", new BoaFunction(new BoaBool(), new BoaType[] { new ProjectProtoTuple(), new ProjectProtoTuple() }, "(${0}.hashCode() == ${1}.hashCode())"));
-		globalFunctions.addFunction("isequal", new BoaFunction(new BoaBool(), new BoaType[] { new StatementProtoTuple(), new StatementProtoTuple() }, "(${0}.hashCode() == ${1}.hashCode())"));
-		globalFunctions.addFunction("isequal", new BoaFunction(new BoaBool(), new BoaType[] { new ASTRootProtoTuple(), new ASTRootProtoTuple() }, "(${0}.hashCode() == ${1}.hashCode())"));
-		globalFunctions.addFunction("isequal", new BoaFunction(new BoaBool(), new BoaType[] { new BugProtoTuple(), new BugProtoTuple() }, "(${0}.hashCode() == ${1}.hashCode())"));
-		globalFunctions.addFunction("isequal", new BoaFunction(new BoaBool(), new BoaType[] { new BugRepositoryProtoTuple(), new BugRepositoryProtoTuple() }, "(${0}.hashCode() == ${1}.hashCode())"));
-		globalFunctions.addFunction("isequal", new BoaFunction(new BoaBool(), new BoaType[] { new ChangedFileProtoTuple(), new ChangedFileProtoTuple() }, "(${0}.hashCode() == ${1}.hashCode())"));
-		globalFunctions.addFunction("isequal", new BoaFunction(new BoaBool(), new BoaType[] { new CodeRepositoryProtoTuple(), new CodeRepositoryProtoTuple() }, "(${0}.hashCode() == ${1}.hashCode())"));
-		globalFunctions.addFunction("isequal", new BoaFunction(new BoaBool(), new BoaType[] { new CommentProtoTuple(), new CommentProtoTuple() }, "(${0}.hashCode() == ${1}.hashCode())"));
-		globalFunctions.addFunction("isequal", new BoaFunction(new BoaBool(), new BoaType[] { new DeclarationProtoTuple(), new DeclarationProtoTuple() }, "(${0}.hashCode() == ${1}.hashCode())"));
-		globalFunctions.addFunction("isequal", new BoaFunction(new BoaBool(), new BoaType[] { new ExpressionProtoTuple(), new ExpressionProtoTuple() }, "(${0}.hashCode() == ${1}.hashCode())"));
-		globalFunctions.addFunction("isequal", new BoaFunction(new BoaBool(), new BoaType[] { new MethodProtoTuple(), new MethodProtoTuple() }, "(${0}.hashCode() == ${1}.hashCode())"));
-		globalFunctions.addFunction("isequal", new BoaFunction(new BoaBool(), new BoaType[] { new ModifierProtoTuple(), new ModifierProtoTuple() }, "(${0}.hashCode() == ${1}.hashCode())"));
-		globalFunctions.addFunction("isequal", new BoaFunction(new BoaBool(), new BoaType[] { new NamespaceProtoTuple(), new NamespaceProtoTuple() }, "(${0}.hashCode() == ${1}.hashCode())"));
-		globalFunctions.addFunction("isequal", new BoaFunction(new BoaBool(), new BoaType[] { new PersonProtoTuple(), new PersonProtoTuple() }, "(${0}.hashCode() == ${1}.hashCode())"));
-		globalFunctions.addFunction("isequal", new BoaFunction(new BoaBool(), new BoaType[] { new RevisionProtoTuple(), new RevisionProtoTuple() }, "(${0}.hashCode() == ${1}.hashCode())"));
-		globalFunctions.addFunction("isequal", new BoaFunction(new BoaBool(), new BoaType[] { new TypeProtoTuple(), new TypeProtoTuple() }, "(${0}.hashCode() == ${1}.hashCode())"));
-		globalFunctions.addFunction("isequal", new BoaFunction(new BoaBool(), new BoaType[] { new VariableProtoTuple(), new VariableProtoTuple() }, "(${0}.hashCode() == ${1}.hashCode())"));
-
 		// expose the casts for all possible input types
 		globalFunctions.addFunction(new ProjectProtoTuple().toString(), new BoaFunction(new ProjectProtoTuple(), new BoaType[] { new BoaBytes() }, "${0}"));
 
