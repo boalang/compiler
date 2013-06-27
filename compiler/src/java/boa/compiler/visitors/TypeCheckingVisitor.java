@@ -474,7 +474,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 			for (int i = 0; i < n.getIndicesSize() && i < t.countIndices(); i++) {
 				n.getIndice(i).accept(this, env);
 				if (!t.getIndex(i).assigns(n.getIndice(i).type))
-					throw new TypeCheckException(n.getIndice(i), "output variable '" + id + "': incompatible types for index '" + i + "': required '" + t.getIndex(i) + "', found '" + n.getIndice(i) + "'");
+					throw new TypeCheckException(n.getIndice(i), "output variable '" + id + "': incompatible types for index '" + i + "': required '" + t.getIndex(i) + "', found '" + n.getIndice(i).type + "'");
 			}
 
 		n.getValue().accept(this, env);
