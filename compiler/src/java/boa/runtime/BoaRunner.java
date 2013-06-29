@@ -90,6 +90,7 @@ public abstract class BoaRunner extends Configured implements Tool {
 	protected static Options options = new Options();
 
 	static {
+		options.addOption("p", "profile", false, "if true, profiles the execution of 1 map task");
 		options.addOption("r", "robust", false, "if true, logs non-IO exceptions and continues");
 		options.addOption("b", "block", false, "if true, wait for job to finish and show status");
 		options.addOption(OptionBuilder.withLongOpt("job")

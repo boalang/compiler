@@ -61,6 +61,14 @@ public class <name> extends boa.runtime.BoaRunner {
 		else
 			jb.getConfiguration().setInt("mapred.max.split.size", <splitsize>);
 
+		if (line.hasOption("profile")) {
+			jb.getConfiguration().setBoolean("mapred.task.profile", true);
+			jb.getConfiguration().set("mapred.task.profile.maps", "1");
+			jb.getConfiguration().set("mapred.task.profile.reduces", "0");
+			//jb.getConfiguration().set("mapred.task.profile.params", "-agentlib:hprof=cpu=samples,heap=sites,force=n,thread=y,verbose=n,file=%s");
+			jb.getConfiguration().set("mapred.task.profile.params", "-agentlib:hprof=cpu=times,heap=sites,force=n,verbose=n,file=%s");
+		}
+
 		jb.setInputFormatClass(org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat.class);
 
 		jb.setNumReduceTasks(<numreducers>);
