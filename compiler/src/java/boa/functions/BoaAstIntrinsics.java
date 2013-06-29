@@ -222,19 +222,20 @@ public class BoaAstIntrinsics {
 		@Override
 		protected boolean preVisit(final ChangedFile node) throws Exception {
 			boolean filter = kinds.length > 0;
+
 			final String kindName = node.getKind().name();
 			for (final String kind : kinds)
 				if (kindName.startsWith(kind)) {
 					filter = false;
 					break;
 				}
-			if (filter)
-				return false;
 
-			if (node.getChange() == ChangeKind.DELETED)
-				map.remove(node.getName());
-			else
-				map.put(node.getName(), node);
+			if (!filter) {
+				if (node.getChange() == ChangeKind.DELETED)
+					map.remove(node.getName());
+				else
+					map.put(node.getName(), node);
+			}
 
 			return false;
 		}
