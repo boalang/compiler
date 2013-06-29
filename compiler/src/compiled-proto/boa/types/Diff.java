@@ -10,608 +10,119 @@ public final class Diff {
   }
   public interface ChangedFileOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
-    
+
     // required .boa.types.ChangeKind change = 1;
+    /**
+     * <code>required .boa.types.ChangeKind change = 1;</code>
+     */
     boolean hasChange();
+    /**
+     * <code>required .boa.types.ChangeKind change = 1;</code>
+     */
     boa.types.Shared.ChangeKind getChange();
-    
+
     // required .boa.types.ChangedFile.FileKind kind = 2;
+    /**
+     * <code>required .boa.types.ChangedFile.FileKind kind = 2;</code>
+     */
     boolean hasKind();
+    /**
+     * <code>required .boa.types.ChangedFile.FileKind kind = 2;</code>
+     */
     boa.types.Diff.ChangedFile.FileKind getKind();
-    
+
     // required string name = 3;
+    /**
+     * <code>required string name = 3;</code>
+     */
     boolean hasName();
-    String getName();
-    
+    /**
+     * <code>required string name = 3;</code>
+     */
+    java.lang.String getName();
+    /**
+     * <code>required string name = 3;</code>
+     */
+    com.google.protobuf.ByteString
+        getNameBytes();
+
     // required string key = 4;
+    /**
+     * <code>required string key = 4;</code>
+     */
     boolean hasKey();
-    String getKey();
-    
+    /**
+     * <code>required string key = 4;</code>
+     */
+    java.lang.String getKey();
+    /**
+     * <code>required string key = 4;</code>
+     */
+    com.google.protobuf.ByteString
+        getKeyBytes();
+
     // optional .boa.types.ASTRoot ast = 5;
+    /**
+     * <code>optional .boa.types.ASTRoot ast = 5;</code>
+     */
     boolean hasAst();
+    /**
+     * <code>optional .boa.types.ASTRoot ast = 5;</code>
+     */
     boa.types.Ast.ASTRoot getAst();
+    /**
+     * <code>optional .boa.types.ASTRoot ast = 5;</code>
+     */
     boa.types.Ast.ASTRootOrBuilder getAstOrBuilder();
   }
+  /**
+   * Protobuf type {@code boa.types.ChangedFile}
+   */
   public static final class ChangedFile extends
       com.google.protobuf.GeneratedMessage
       implements ChangedFileOrBuilder {
     // Use ChangedFile.newBuilder() to construct.
-    private ChangedFile(Builder builder) {
+    private ChangedFile(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
+      this.unknownFields = builder.getUnknownFields();
     }
-    private ChangedFile(boolean noInit) {}
-    
+    private ChangedFile(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
     private static final ChangedFile defaultInstance;
     public static ChangedFile getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public ChangedFile getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return boa.types.Diff.internal_static_boa_types_ChangedFile_descriptor;
-    }
-    
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return boa.types.Diff.internal_static_boa_types_ChangedFile_fieldAccessorTable;
-    }
-    
-    public enum FileKind
-        implements com.google.protobuf.ProtocolMessageEnum {
-      UNKNOWN(0, 1),
-      BINARY(1, 2),
-      TEXT(2, 3),
-      XML(3, 4),
-      SOURCE_JAVA_ERROR(4, 5),
-      SOURCE_JAVA_JLS2(5, 6),
-      SOURCE_JAVA_JLS3(6, 7),
-      SOURCE_JAVA_JLS4(7, 8),
-      ;
-      
-      public static final int UNKNOWN_VALUE = 1;
-      public static final int BINARY_VALUE = 2;
-      public static final int TEXT_VALUE = 3;
-      public static final int XML_VALUE = 4;
-      public static final int SOURCE_JAVA_ERROR_VALUE = 5;
-      public static final int SOURCE_JAVA_JLS2_VALUE = 6;
-      public static final int SOURCE_JAVA_JLS3_VALUE = 7;
-      public static final int SOURCE_JAVA_JLS4_VALUE = 8;
-      
-      
-      public final int getNumber() { return value; }
-      
-      public static FileKind valueOf(int value) {
-        switch (value) {
-          case 1: return UNKNOWN;
-          case 2: return BINARY;
-          case 3: return TEXT;
-          case 4: return XML;
-          case 5: return SOURCE_JAVA_ERROR;
-          case 6: return SOURCE_JAVA_JLS2;
-          case 7: return SOURCE_JAVA_JLS3;
-          case 8: return SOURCE_JAVA_JLS4;
-          default: return null;
-        }
-      }
-      
-      public static com.google.protobuf.Internal.EnumLiteMap<FileKind>
-          internalGetValueMap() {
-        return internalValueMap;
-      }
-      private static com.google.protobuf.Internal.EnumLiteMap<FileKind>
-          internalValueMap =
-            new com.google.protobuf.Internal.EnumLiteMap<FileKind>() {
-              public FileKind findValueByNumber(int number) {
-                return FileKind.valueOf(number);
-              }
-            };
-      
-      public final com.google.protobuf.Descriptors.EnumValueDescriptor
-          getValueDescriptor() {
-        return getDescriptor().getValues().get(index);
-      }
-      public final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptorForType() {
-        return getDescriptor();
-      }
-      public static final com.google.protobuf.Descriptors.EnumDescriptor
-          getDescriptor() {
-        return boa.types.Diff.ChangedFile.getDescriptor().getEnumTypes().get(0);
-      }
-      
-      private static final FileKind[] VALUES = {
-        UNKNOWN, BINARY, TEXT, XML, SOURCE_JAVA_ERROR, SOURCE_JAVA_JLS2, SOURCE_JAVA_JLS3, SOURCE_JAVA_JLS4, 
-      };
-      
-      public static FileKind valueOf(
-          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
-        if (desc.getType() != getDescriptor()) {
-          throw new java.lang.IllegalArgumentException(
-            "EnumValueDescriptor is not for this type.");
-        }
-        return VALUES[desc.getIndex()];
-      }
-      
-      private final int index;
-      private final int value;
-      
-      private FileKind(int index, int value) {
-        this.index = index;
-        this.value = value;
-      }
-      
-      // @@protoc_insertion_point(enum_scope:boa.types.ChangedFile.FileKind)
-    }
-    
-    private int bitField0_;
-    // required .boa.types.ChangeKind change = 1;
-    public static final int CHANGE_FIELD_NUMBER = 1;
-    private boa.types.Shared.ChangeKind change_;
-    public boolean hasChange() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    public boa.types.Shared.ChangeKind getChange() {
-      return change_;
-    }
-    
-    // required .boa.types.ChangedFile.FileKind kind = 2;
-    public static final int KIND_FIELD_NUMBER = 2;
-    private boa.types.Diff.ChangedFile.FileKind kind_;
-    public boolean hasKind() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    public boa.types.Diff.ChangedFile.FileKind getKind() {
-      return kind_;
-    }
-    
-    // required string name = 3;
-    public static final int NAME_FIELD_NUMBER = 3;
-    private java.lang.Object name_;
-    public boolean hasName() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
-    }
-    public String getName() {
-      java.lang.Object ref = name_;
-      if (ref instanceof String) {
-        return (String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
-          name_ = s;
-        }
-        return s;
-      }
-    }
-    private com.google.protobuf.ByteString getNameBytes() {
-      java.lang.Object ref = name_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
-        name_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-    
-    // required string key = 4;
-    public static final int KEY_FIELD_NUMBER = 4;
-    private java.lang.Object key_;
-    public boolean hasKey() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
-    }
-    public String getKey() {
-      java.lang.Object ref = key_;
-      if (ref instanceof String) {
-        return (String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
-          key_ = s;
-        }
-        return s;
-      }
-    }
-    private com.google.protobuf.ByteString getKeyBytes() {
-      java.lang.Object ref = key_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
-        key_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-    
-    // optional .boa.types.ASTRoot ast = 5;
-    public static final int AST_FIELD_NUMBER = 5;
-    private boa.types.Ast.ASTRoot ast_;
-    public boolean hasAst() {
-      return ((bitField0_ & 0x00000010) == 0x00000010);
-    }
-    public boa.types.Ast.ASTRoot getAst() {
-      return ast_;
-    }
-    public boa.types.Ast.ASTRootOrBuilder getAstOrBuilder() {
-      return ast_;
-    }
-    
-    private void initFields() {
-      change_ = boa.types.Shared.ChangeKind.ADDED;
-      kind_ = boa.types.Diff.ChangedFile.FileKind.UNKNOWN;
-      name_ = "";
-      key_ = "";
-      ast_ = boa.types.Ast.ASTRoot.getDefaultInstance();
-    }
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
-      
-      if (!hasChange()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasKind()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasName()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasKey()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (hasAst()) {
-        if (!getAst().isInitialized()) {
-          memoizedIsInitialized = 0;
-          return false;
-        }
-      }
-      memoizedIsInitialized = 1;
-      return true;
-    }
-    
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeEnum(1, change_.getNumber());
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeEnum(2, kind_.getNumber());
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeBytes(3, getNameBytes());
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeBytes(4, getKeyBytes());
-      }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeMessage(5, ast_);
-      }
-      getUnknownFields().writeTo(output);
-    }
-    
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-    
-      size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(1, change_.getNumber());
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(2, kind_.getNumber());
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(3, getNameBytes());
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(4, getKeyBytes());
-      }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(5, ast_);
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-    
-    private static final long serialVersionUID = 0L;
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
     @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
     }
-    
-    public static boa.types.Diff.ChangedFile parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
-    }
-    public static boa.types.Diff.ChangedFile parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
-    }
-    public static boa.types.Diff.ChangedFile parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
-    }
-    public static boa.types.Diff.ChangedFile parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
-    }
-    public static boa.types.Diff.ChangedFile parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
-    }
-    public static boa.types.Diff.ChangedFile parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
-    }
-    public static boa.types.Diff.ChangedFile parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
-    }
-    public static boa.types.Diff.ChangedFile parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
-    }
-    public static boa.types.Diff.ChangedFile parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
-    }
-    public static boa.types.Diff.ChangedFile parseFrom(
+    private ChangedFile(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
-    }
-    
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(boa.types.Diff.ChangedFile prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-    
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements boa.types.Diff.ChangedFileOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return boa.types.Diff.internal_static_boa_types_ChangedFile_descriptor;
-      }
-      
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return boa.types.Diff.internal_static_boa_types_ChangedFile_fieldAccessorTable;
-      }
-      
-      // Construct using boa.types.Diff.ChangedFile.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-      
-      private Builder(BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-          getAstFieldBuilder();
-        }
-      }
-      private static Builder create() {
-        return new Builder();
-      }
-      
-      public Builder clear() {
-        super.clear();
-        change_ = boa.types.Shared.ChangeKind.ADDED;
-        bitField0_ = (bitField0_ & ~0x00000001);
-        kind_ = boa.types.Diff.ChangedFile.FileKind.UNKNOWN;
-        bitField0_ = (bitField0_ & ~0x00000002);
-        name_ = "";
-        bitField0_ = (bitField0_ & ~0x00000004);
-        key_ = "";
-        bitField0_ = (bitField0_ & ~0x00000008);
-        if (astBuilder_ == null) {
-          ast_ = boa.types.Ast.ASTRoot.getDefaultInstance();
-        } else {
-          astBuilder_.clear();
-        }
-        bitField0_ = (bitField0_ & ~0x00000010);
-        return this;
-      }
-      
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-      
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return boa.types.Diff.ChangedFile.getDescriptor();
-      }
-      
-      public boa.types.Diff.ChangedFile getDefaultInstanceForType() {
-        return boa.types.Diff.ChangedFile.getDefaultInstance();
-      }
-      
-      public boa.types.Diff.ChangedFile build() {
-        boa.types.Diff.ChangedFile result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-      
-      private boa.types.Diff.ChangedFile buildParsed()
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        boa.types.Diff.ChangedFile result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
-        }
-        return result;
-      }
-      
-      public boa.types.Diff.ChangedFile buildPartial() {
-        boa.types.Diff.ChangedFile result = new boa.types.Diff.ChangedFile(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.change_ = change_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.kind_ = kind_;
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000004;
-        }
-        result.name_ = name_;
-        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
-          to_bitField0_ |= 0x00000008;
-        }
-        result.key_ = key_;
-        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
-          to_bitField0_ |= 0x00000010;
-        }
-        if (astBuilder_ == null) {
-          result.ast_ = ast_;
-        } else {
-          result.ast_ = astBuilder_.build();
-        }
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
-      }
-      
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof boa.types.Diff.ChangedFile) {
-          return mergeFrom((boa.types.Diff.ChangedFile)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-      
-      public Builder mergeFrom(boa.types.Diff.ChangedFile other) {
-        if (other == boa.types.Diff.ChangedFile.getDefaultInstance()) return this;
-        if (other.hasChange()) {
-          setChange(other.getChange());
-        }
-        if (other.hasKind()) {
-          setKind(other.getKind());
-        }
-        if (other.hasName()) {
-          setName(other.getName());
-        }
-        if (other.hasKey()) {
-          setKey(other.getKey());
-        }
-        if (other.hasAst()) {
-          mergeAst(other.getAst());
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-      
-      public final boolean isInitialized() {
-        if (!hasChange()) {
-          
-          return false;
-        }
-        if (!hasKind()) {
-          
-          return false;
-        }
-        if (!hasName()) {
-          
-          return false;
-        }
-        if (!hasKey()) {
-          
-          return false;
-        }
-        if (hasAst()) {
-          if (!getAst().isInitialized()) {
-            
-            return false;
-          }
-        }
-        return true;
-      }
-      
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
-        while (true) {
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
           int tag = input.readTag();
           switch (tag) {
             case 0:
-              this.setUnknownFields(unknownFields.build());
-              onChanged();
-              return this;
+              done = true;
+              break;
             default: {
               if (!parseUnknownField(input, unknownFields,
                                      extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                onChanged();
-                return this;
+                done = true;
               }
               break;
             }
@@ -648,28 +159,703 @@ public final class Diff {
               break;
             }
             case 42: {
-              boa.types.Ast.ASTRoot.Builder subBuilder = boa.types.Ast.ASTRoot.newBuilder();
-              if (hasAst()) {
-                subBuilder.mergeFrom(getAst());
+              boa.types.Ast.ASTRoot.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000010) == 0x00000010)) {
+                subBuilder = ast_.toBuilder();
               }
-              input.readMessage(subBuilder, extensionRegistry);
-              setAst(subBuilder.buildPartial());
+              ast_ = input.readMessage(boa.types.Ast.ASTRoot.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(ast_);
+                ast_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000010;
               break;
             }
           }
         }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
       }
-      
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return boa.types.Diff.internal_static_boa_types_ChangedFile_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return boa.types.Diff.internal_static_boa_types_ChangedFile_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              boa.types.Diff.ChangedFile.class, boa.types.Diff.ChangedFile.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<ChangedFile> PARSER =
+        new com.google.protobuf.AbstractParser<ChangedFile>() {
+      public ChangedFile parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new ChangedFile(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<ChangedFile> getParserForType() {
+      return PARSER;
+    }
+
+    /**
+     * Protobuf enum {@code boa.types.ChangedFile.FileKind}
+     */
+    public enum FileKind
+        implements com.google.protobuf.ProtocolMessageEnum {
+      /**
+       * <code>UNKNOWN = 1;</code>
+       */
+      UNKNOWN(0, 1),
+      /**
+       * <code>BINARY = 2;</code>
+       */
+      BINARY(1, 2),
+      /**
+       * <code>TEXT = 3;</code>
+       */
+      TEXT(2, 3),
+      /**
+       * <code>XML = 4;</code>
+       */
+      XML(3, 4),
+      /**
+       * <code>SOURCE_JAVA_ERROR = 5;</code>
+       */
+      SOURCE_JAVA_ERROR(4, 5),
+      /**
+       * <code>SOURCE_JAVA_JLS2 = 6;</code>
+       */
+      SOURCE_JAVA_JLS2(5, 6),
+      /**
+       * <code>SOURCE_JAVA_JLS3 = 7;</code>
+       */
+      SOURCE_JAVA_JLS3(6, 7),
+      /**
+       * <code>SOURCE_JAVA_JLS4 = 8;</code>
+       */
+      SOURCE_JAVA_JLS4(7, 8),
+      ;
+
+      /**
+       * <code>UNKNOWN = 1;</code>
+       */
+      public static final int UNKNOWN_VALUE = 1;
+      /**
+       * <code>BINARY = 2;</code>
+       */
+      public static final int BINARY_VALUE = 2;
+      /**
+       * <code>TEXT = 3;</code>
+       */
+      public static final int TEXT_VALUE = 3;
+      /**
+       * <code>XML = 4;</code>
+       */
+      public static final int XML_VALUE = 4;
+      /**
+       * <code>SOURCE_JAVA_ERROR = 5;</code>
+       */
+      public static final int SOURCE_JAVA_ERROR_VALUE = 5;
+      /**
+       * <code>SOURCE_JAVA_JLS2 = 6;</code>
+       */
+      public static final int SOURCE_JAVA_JLS2_VALUE = 6;
+      /**
+       * <code>SOURCE_JAVA_JLS3 = 7;</code>
+       */
+      public static final int SOURCE_JAVA_JLS3_VALUE = 7;
+      /**
+       * <code>SOURCE_JAVA_JLS4 = 8;</code>
+       */
+      public static final int SOURCE_JAVA_JLS4_VALUE = 8;
+
+
+      public final int getNumber() { return value; }
+
+      public static FileKind valueOf(int value) {
+        switch (value) {
+          case 1: return UNKNOWN;
+          case 2: return BINARY;
+          case 3: return TEXT;
+          case 4: return XML;
+          case 5: return SOURCE_JAVA_ERROR;
+          case 6: return SOURCE_JAVA_JLS2;
+          case 7: return SOURCE_JAVA_JLS3;
+          case 8: return SOURCE_JAVA_JLS4;
+          default: return null;
+        }
+      }
+
+      public static com.google.protobuf.Internal.EnumLiteMap<FileKind>
+          internalGetValueMap() {
+        return internalValueMap;
+      }
+      private static com.google.protobuf.Internal.EnumLiteMap<FileKind>
+          internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<FileKind>() {
+              public FileKind findValueByNumber(int number) {
+                return FileKind.valueOf(number);
+              }
+            };
+
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor
+          getValueDescriptor() {
+        return getDescriptor().getValues().get(index);
+      }
+      public final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptorForType() {
+        return getDescriptor();
+      }
+      public static final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptor() {
+        return boa.types.Diff.ChangedFile.getDescriptor().getEnumTypes().get(0);
+      }
+
+      private static final FileKind[] VALUES = values();
+
+      public static FileKind valueOf(
+          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+        if (desc.getType() != getDescriptor()) {
+          throw new java.lang.IllegalArgumentException(
+            "EnumValueDescriptor is not for this type.");
+        }
+        return VALUES[desc.getIndex()];
+      }
+
+      private final int index;
+      private final int value;
+
+      private FileKind(int index, int value) {
+        this.index = index;
+        this.value = value;
+      }
+
+      // @@protoc_insertion_point(enum_scope:boa.types.ChangedFile.FileKind)
+    }
+
+    private int bitField0_;
+    // required .boa.types.ChangeKind change = 1;
+    public static final int CHANGE_FIELD_NUMBER = 1;
+    private boa.types.Shared.ChangeKind change_;
+    /**
+     * <code>required .boa.types.ChangeKind change = 1;</code>
+     */
+    public boolean hasChange() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>required .boa.types.ChangeKind change = 1;</code>
+     */
+    public boa.types.Shared.ChangeKind getChange() {
+      return change_;
+    }
+
+    // required .boa.types.ChangedFile.FileKind kind = 2;
+    public static final int KIND_FIELD_NUMBER = 2;
+    private boa.types.Diff.ChangedFile.FileKind kind_;
+    /**
+     * <code>required .boa.types.ChangedFile.FileKind kind = 2;</code>
+     */
+    public boolean hasKind() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>required .boa.types.ChangedFile.FileKind kind = 2;</code>
+     */
+    public boa.types.Diff.ChangedFile.FileKind getKind() {
+      return kind_;
+    }
+
+    // required string name = 3;
+    public static final int NAME_FIELD_NUMBER = 3;
+    private java.lang.Object name_;
+    /**
+     * <code>required string name = 3;</code>
+     */
+    public boolean hasName() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>required string name = 3;</code>
+     */
+    public java.lang.String getName() {
+      java.lang.Object ref = name_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          name_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string name = 3;</code>
+     */
+    public com.google.protobuf.ByteString
+        getNameBytes() {
+      java.lang.Object ref = name_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        name_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    // required string key = 4;
+    public static final int KEY_FIELD_NUMBER = 4;
+    private java.lang.Object key_;
+    /**
+     * <code>required string key = 4;</code>
+     */
+    public boolean hasKey() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>required string key = 4;</code>
+     */
+    public java.lang.String getKey() {
+      java.lang.Object ref = key_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          key_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string key = 4;</code>
+     */
+    public com.google.protobuf.ByteString
+        getKeyBytes() {
+      java.lang.Object ref = key_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        key_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    // optional .boa.types.ASTRoot ast = 5;
+    public static final int AST_FIELD_NUMBER = 5;
+    private boa.types.Ast.ASTRoot ast_;
+    /**
+     * <code>optional .boa.types.ASTRoot ast = 5;</code>
+     */
+    public boolean hasAst() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    /**
+     * <code>optional .boa.types.ASTRoot ast = 5;</code>
+     */
+    public boa.types.Ast.ASTRoot getAst() {
+      return ast_;
+    }
+    /**
+     * <code>optional .boa.types.ASTRoot ast = 5;</code>
+     */
+    public boa.types.Ast.ASTRootOrBuilder getAstOrBuilder() {
+      return ast_;
+    }
+
+    private void initFields() {
+      change_ = boa.types.Shared.ChangeKind.ADDED;
+      kind_ = boa.types.Diff.ChangedFile.FileKind.UNKNOWN;
+      name_ = "";
+      key_ = "";
+      ast_ = boa.types.Ast.ASTRoot.getDefaultInstance();
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+
+      if (!hasChange()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasKind()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasName()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasKey()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (hasAst()) {
+        if (!getAst().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeEnum(1, change_.getNumber());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeEnum(2, kind_.getNumber());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeBytes(3, getNameBytes());
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeBytes(4, getKeyBytes());
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeMessage(5, ast_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(1, change_.getNumber());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(2, kind_.getNumber());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(3, getNameBytes());
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(4, getKeyBytes());
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(5, ast_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static boa.types.Diff.ChangedFile parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static boa.types.Diff.ChangedFile parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static boa.types.Diff.ChangedFile parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static boa.types.Diff.ChangedFile parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static boa.types.Diff.ChangedFile parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static boa.types.Diff.ChangedFile parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static boa.types.Diff.ChangedFile parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static boa.types.Diff.ChangedFile parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static boa.types.Diff.ChangedFile parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static boa.types.Diff.ChangedFile parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(boa.types.Diff.ChangedFile prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code boa.types.ChangedFile}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements boa.types.Diff.ChangedFileOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return boa.types.Diff.internal_static_boa_types_ChangedFile_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return boa.types.Diff.internal_static_boa_types_ChangedFile_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                boa.types.Diff.ChangedFile.class, boa.types.Diff.ChangedFile.Builder.class);
+      }
+
+      // Construct using boa.types.Diff.ChangedFile.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getAstFieldBuilder();
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        change_ = boa.types.Shared.ChangeKind.ADDED;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        kind_ = boa.types.Diff.ChangedFile.FileKind.UNKNOWN;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        name_ = "";
+        bitField0_ = (bitField0_ & ~0x00000004);
+        key_ = "";
+        bitField0_ = (bitField0_ & ~0x00000008);
+        if (astBuilder_ == null) {
+          ast_ = boa.types.Ast.ASTRoot.getDefaultInstance();
+        } else {
+          astBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000010);
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return boa.types.Diff.internal_static_boa_types_ChangedFile_descriptor;
+      }
+
+      public boa.types.Diff.ChangedFile getDefaultInstanceForType() {
+        return boa.types.Diff.ChangedFile.getDefaultInstance();
+      }
+
+      public boa.types.Diff.ChangedFile build() {
+        boa.types.Diff.ChangedFile result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public boa.types.Diff.ChangedFile buildPartial() {
+        boa.types.Diff.ChangedFile result = new boa.types.Diff.ChangedFile(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.change_ = change_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.kind_ = kind_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.name_ = name_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.key_ = key_;
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        if (astBuilder_ == null) {
+          result.ast_ = ast_;
+        } else {
+          result.ast_ = astBuilder_.build();
+        }
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof boa.types.Diff.ChangedFile) {
+          return mergeFrom((boa.types.Diff.ChangedFile)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(boa.types.Diff.ChangedFile other) {
+        if (other == boa.types.Diff.ChangedFile.getDefaultInstance()) return this;
+        if (other.hasChange()) {
+          setChange(other.getChange());
+        }
+        if (other.hasKind()) {
+          setKind(other.getKind());
+        }
+        if (other.hasName()) {
+          bitField0_ |= 0x00000004;
+          name_ = other.name_;
+          onChanged();
+        }
+        if (other.hasKey()) {
+          bitField0_ |= 0x00000008;
+          key_ = other.key_;
+          onChanged();
+        }
+        if (other.hasAst()) {
+          mergeAst(other.getAst());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        if (!hasChange()) {
+          
+          return false;
+        }
+        if (!hasKind()) {
+          
+          return false;
+        }
+        if (!hasName()) {
+          
+          return false;
+        }
+        if (!hasKey()) {
+          
+          return false;
+        }
+        if (hasAst()) {
+          if (!getAst().isInitialized()) {
+            
+            return false;
+          }
+        }
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        boa.types.Diff.ChangedFile parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (boa.types.Diff.ChangedFile) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
       private int bitField0_;
-      
+
       // required .boa.types.ChangeKind change = 1;
       private boa.types.Shared.ChangeKind change_ = boa.types.Shared.ChangeKind.ADDED;
+      /**
+       * <code>required .boa.types.ChangeKind change = 1;</code>
+       */
       public boolean hasChange() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
+      /**
+       * <code>required .boa.types.ChangeKind change = 1;</code>
+       */
       public boa.types.Shared.ChangeKind getChange() {
         return change_;
       }
+      /**
+       * <code>required .boa.types.ChangeKind change = 1;</code>
+       */
       public Builder setChange(boa.types.Shared.ChangeKind value) {
         if (value == null) {
           throw new NullPointerException();
@@ -679,21 +865,33 @@ public final class Diff {
         onChanged();
         return this;
       }
+      /**
+       * <code>required .boa.types.ChangeKind change = 1;</code>
+       */
       public Builder clearChange() {
         bitField0_ = (bitField0_ & ~0x00000001);
         change_ = boa.types.Shared.ChangeKind.ADDED;
         onChanged();
         return this;
       }
-      
+
       // required .boa.types.ChangedFile.FileKind kind = 2;
       private boa.types.Diff.ChangedFile.FileKind kind_ = boa.types.Diff.ChangedFile.FileKind.UNKNOWN;
+      /**
+       * <code>required .boa.types.ChangedFile.FileKind kind = 2;</code>
+       */
       public boolean hasKind() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
+      /**
+       * <code>required .boa.types.ChangedFile.FileKind kind = 2;</code>
+       */
       public boa.types.Diff.ChangedFile.FileKind getKind() {
         return kind_;
       }
+      /**
+       * <code>required .boa.types.ChangedFile.FileKind kind = 2;</code>
+       */
       public Builder setKind(boa.types.Diff.ChangedFile.FileKind value) {
         if (value == null) {
           throw new NullPointerException();
@@ -703,29 +901,59 @@ public final class Diff {
         onChanged();
         return this;
       }
+      /**
+       * <code>required .boa.types.ChangedFile.FileKind kind = 2;</code>
+       */
       public Builder clearKind() {
         bitField0_ = (bitField0_ & ~0x00000002);
         kind_ = boa.types.Diff.ChangedFile.FileKind.UNKNOWN;
         onChanged();
         return this;
       }
-      
+
       // required string name = 3;
       private java.lang.Object name_ = "";
+      /**
+       * <code>required string name = 3;</code>
+       */
       public boolean hasName() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
-      public String getName() {
+      /**
+       * <code>required string name = 3;</code>
+       */
+      public java.lang.String getName() {
         java.lang.Object ref = name_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
           name_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
-      public Builder setName(String value) {
+      /**
+       * <code>required string name = 3;</code>
+       */
+      public com.google.protobuf.ByteString
+          getNameBytes() {
+        java.lang.Object ref = name_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          name_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string name = 3;</code>
+       */
+      public Builder setName(
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -734,34 +962,72 @@ public final class Diff {
         onChanged();
         return this;
       }
+      /**
+       * <code>required string name = 3;</code>
+       */
       public Builder clearName() {
         bitField0_ = (bitField0_ & ~0x00000004);
         name_ = getDefaultInstance().getName();
         onChanged();
         return this;
       }
-      void setName(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00000004;
+      /**
+       * <code>required string name = 3;</code>
+       */
+      public Builder setNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000004;
         name_ = value;
         onChanged();
+        return this;
       }
-      
+
       // required string key = 4;
       private java.lang.Object key_ = "";
+      /**
+       * <code>required string key = 4;</code>
+       */
       public boolean hasKey() {
         return ((bitField0_ & 0x00000008) == 0x00000008);
       }
-      public String getKey() {
+      /**
+       * <code>required string key = 4;</code>
+       */
+      public java.lang.String getKey() {
         java.lang.Object ref = key_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
           key_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
-      public Builder setKey(String value) {
+      /**
+       * <code>required string key = 4;</code>
+       */
+      public com.google.protobuf.ByteString
+          getKeyBytes() {
+        java.lang.Object ref = key_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          key_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string key = 4;</code>
+       */
+      public Builder setKey(
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -770,25 +1036,42 @@ public final class Diff {
         onChanged();
         return this;
       }
+      /**
+       * <code>required string key = 4;</code>
+       */
       public Builder clearKey() {
         bitField0_ = (bitField0_ & ~0x00000008);
         key_ = getDefaultInstance().getKey();
         onChanged();
         return this;
       }
-      void setKey(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00000008;
+      /**
+       * <code>required string key = 4;</code>
+       */
+      public Builder setKeyBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000008;
         key_ = value;
         onChanged();
+        return this;
       }
-      
+
       // optional .boa.types.ASTRoot ast = 5;
       private boa.types.Ast.ASTRoot ast_ = boa.types.Ast.ASTRoot.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           boa.types.Ast.ASTRoot, boa.types.Ast.ASTRoot.Builder, boa.types.Ast.ASTRootOrBuilder> astBuilder_;
+      /**
+       * <code>optional .boa.types.ASTRoot ast = 5;</code>
+       */
       public boolean hasAst() {
         return ((bitField0_ & 0x00000010) == 0x00000010);
       }
+      /**
+       * <code>optional .boa.types.ASTRoot ast = 5;</code>
+       */
       public boa.types.Ast.ASTRoot getAst() {
         if (astBuilder_ == null) {
           return ast_;
@@ -796,6 +1079,9 @@ public final class Diff {
           return astBuilder_.getMessage();
         }
       }
+      /**
+       * <code>optional .boa.types.ASTRoot ast = 5;</code>
+       */
       public Builder setAst(boa.types.Ast.ASTRoot value) {
         if (astBuilder_ == null) {
           if (value == null) {
@@ -809,6 +1095,9 @@ public final class Diff {
         bitField0_ |= 0x00000010;
         return this;
       }
+      /**
+       * <code>optional .boa.types.ASTRoot ast = 5;</code>
+       */
       public Builder setAst(
           boa.types.Ast.ASTRoot.Builder builderForValue) {
         if (astBuilder_ == null) {
@@ -820,6 +1109,9 @@ public final class Diff {
         bitField0_ |= 0x00000010;
         return this;
       }
+      /**
+       * <code>optional .boa.types.ASTRoot ast = 5;</code>
+       */
       public Builder mergeAst(boa.types.Ast.ASTRoot value) {
         if (astBuilder_ == null) {
           if (((bitField0_ & 0x00000010) == 0x00000010) &&
@@ -836,6 +1128,9 @@ public final class Diff {
         bitField0_ |= 0x00000010;
         return this;
       }
+      /**
+       * <code>optional .boa.types.ASTRoot ast = 5;</code>
+       */
       public Builder clearAst() {
         if (astBuilder_ == null) {
           ast_ = boa.types.Ast.ASTRoot.getDefaultInstance();
@@ -846,11 +1141,17 @@ public final class Diff {
         bitField0_ = (bitField0_ & ~0x00000010);
         return this;
       }
+      /**
+       * <code>optional .boa.types.ASTRoot ast = 5;</code>
+       */
       public boa.types.Ast.ASTRoot.Builder getAstBuilder() {
         bitField0_ |= 0x00000010;
         onChanged();
         return getAstFieldBuilder().getBuilder();
       }
+      /**
+       * <code>optional .boa.types.ASTRoot ast = 5;</code>
+       */
       public boa.types.Ast.ASTRootOrBuilder getAstOrBuilder() {
         if (astBuilder_ != null) {
           return astBuilder_.getMessageOrBuilder();
@@ -858,6 +1159,9 @@ public final class Diff {
           return ast_;
         }
       }
+      /**
+       * <code>optional .boa.types.ASTRoot ast = 5;</code>
+       */
       private com.google.protobuf.SingleFieldBuilder<
           boa.types.Ast.ASTRoot, boa.types.Ast.ASTRoot.Builder, boa.types.Ast.ASTRootOrBuilder> 
           getAstFieldBuilder() {
@@ -871,80 +1175,183 @@ public final class Diff {
         }
         return astBuilder_;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:boa.types.ChangedFile)
     }
-    
+
     static {
       defaultInstance = new ChangedFile(true);
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:boa.types.ChangedFile)
   }
-  
+
   public interface ChangedASTRootOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
-    
+
     // repeated .boa.types.ChangedNamespace namespaces = 1;
+    /**
+     * <code>repeated .boa.types.ChangedNamespace namespaces = 1;</code>
+     */
     java.util.List<boa.types.Diff.ChangedNamespace> 
         getNamespacesList();
+    /**
+     * <code>repeated .boa.types.ChangedNamespace namespaces = 1;</code>
+     */
     boa.types.Diff.ChangedNamespace getNamespaces(int index);
+    /**
+     * <code>repeated .boa.types.ChangedNamespace namespaces = 1;</code>
+     */
     int getNamespacesCount();
+    /**
+     * <code>repeated .boa.types.ChangedNamespace namespaces = 1;</code>
+     */
     java.util.List<? extends boa.types.Diff.ChangedNamespaceOrBuilder> 
         getNamespacesOrBuilderList();
+    /**
+     * <code>repeated .boa.types.ChangedNamespace namespaces = 1;</code>
+     */
     boa.types.Diff.ChangedNamespaceOrBuilder getNamespacesOrBuilder(
         int index);
   }
+  /**
+   * Protobuf type {@code boa.types.ChangedASTRoot}
+   */
   public static final class ChangedASTRoot extends
       com.google.protobuf.GeneratedMessage
       implements ChangedASTRootOrBuilder {
     // Use ChangedASTRoot.newBuilder() to construct.
-    private ChangedASTRoot(Builder builder) {
+    private ChangedASTRoot(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
+      this.unknownFields = builder.getUnknownFields();
     }
-    private ChangedASTRoot(boolean noInit) {}
-    
+    private ChangedASTRoot(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
     private static final ChangedASTRoot defaultInstance;
     public static ChangedASTRoot getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public ChangedASTRoot getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private ChangedASTRoot(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+                namespaces_ = new java.util.ArrayList<boa.types.Diff.ChangedNamespace>();
+                mutable_bitField0_ |= 0x00000001;
+              }
+              namespaces_.add(input.readMessage(boa.types.Diff.ChangedNamespace.PARSER, extensionRegistry));
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+          namespaces_ = java.util.Collections.unmodifiableList(namespaces_);
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return boa.types.Diff.internal_static_boa_types_ChangedASTRoot_descriptor;
     }
-    
+
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return boa.types.Diff.internal_static_boa_types_ChangedASTRoot_fieldAccessorTable;
+      return boa.types.Diff.internal_static_boa_types_ChangedASTRoot_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              boa.types.Diff.ChangedASTRoot.class, boa.types.Diff.ChangedASTRoot.Builder.class);
     }
-    
+
+    public static com.google.protobuf.Parser<ChangedASTRoot> PARSER =
+        new com.google.protobuf.AbstractParser<ChangedASTRoot>() {
+      public ChangedASTRoot parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new ChangedASTRoot(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<ChangedASTRoot> getParserForType() {
+      return PARSER;
+    }
+
     // repeated .boa.types.ChangedNamespace namespaces = 1;
     public static final int NAMESPACES_FIELD_NUMBER = 1;
     private java.util.List<boa.types.Diff.ChangedNamespace> namespaces_;
+    /**
+     * <code>repeated .boa.types.ChangedNamespace namespaces = 1;</code>
+     */
     public java.util.List<boa.types.Diff.ChangedNamespace> getNamespacesList() {
       return namespaces_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedNamespace namespaces = 1;</code>
+     */
     public java.util.List<? extends boa.types.Diff.ChangedNamespaceOrBuilder> 
         getNamespacesOrBuilderList() {
       return namespaces_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedNamespace namespaces = 1;</code>
+     */
     public int getNamespacesCount() {
       return namespaces_.size();
     }
+    /**
+     * <code>repeated .boa.types.ChangedNamespace namespaces = 1;</code>
+     */
     public boa.types.Diff.ChangedNamespace getNamespaces(int index) {
       return namespaces_.get(index);
     }
+    /**
+     * <code>repeated .boa.types.ChangedNamespace namespaces = 1;</code>
+     */
     public boa.types.Diff.ChangedNamespaceOrBuilder getNamespacesOrBuilder(
         int index) {
       return namespaces_.get(index);
     }
-    
+
     private void initFields() {
       namespaces_ = java.util.Collections.emptyList();
     }
@@ -952,7 +1359,7 @@ public final class Diff {
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized != -1) return isInitialized == 1;
-      
+
       for (int i = 0; i < getNamespacesCount(); i++) {
         if (!getNamespaces(i).isInitialized()) {
           memoizedIsInitialized = 0;
@@ -962,7 +1369,7 @@ public final class Diff {
       memoizedIsInitialized = 1;
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
@@ -971,12 +1378,12 @@ public final class Diff {
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
       if (size != -1) return size;
-    
+
       size = 0;
       for (int i = 0; i < namespaces_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
@@ -986,94 +1393,83 @@ public final class Diff {
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     private static final long serialVersionUID = 0L;
     @java.lang.Override
     protected java.lang.Object writeReplace()
         throws java.io.ObjectStreamException {
       return super.writeReplace();
     }
-    
+
     public static boa.types.Diff.ChangedASTRoot parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
+      return PARSER.parseFrom(data);
     }
     public static boa.types.Diff.ChangedASTRoot parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(data, extensionRegistry);
     }
     public static boa.types.Diff.ChangedASTRoot parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
+      return PARSER.parseFrom(data);
     }
     public static boa.types.Diff.ChangedASTRoot parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(data, extensionRegistry);
     }
     public static boa.types.Diff.ChangedASTRoot parseFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
+      return PARSER.parseFrom(input);
     }
     public static boa.types.Diff.ChangedASTRoot parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(input, extensionRegistry);
     }
     public static boa.types.Diff.ChangedASTRoot parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
+      return PARSER.parseDelimitedFrom(input);
     }
     public static boa.types.Diff.ChangedASTRoot parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
     }
     public static boa.types.Diff.ChangedASTRoot parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
+      return PARSER.parseFrom(input);
     }
     public static boa.types.Diff.ChangedASTRoot parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(input, extensionRegistry);
     }
-    
+
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder(boa.types.Diff.ChangedASTRoot prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
-    
+
     @java.lang.Override
     protected Builder newBuilderForType(
         com.google.protobuf.GeneratedMessage.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
+    /**
+     * Protobuf type {@code boa.types.ChangedASTRoot}
+     */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
        implements boa.types.Diff.ChangedASTRootOrBuilder {
@@ -1081,18 +1477,21 @@ public final class Diff {
           getDescriptor() {
         return boa.types.Diff.internal_static_boa_types_ChangedASTRoot_descriptor;
       }
-      
+
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return boa.types.Diff.internal_static_boa_types_ChangedASTRoot_fieldAccessorTable;
+        return boa.types.Diff.internal_static_boa_types_ChangedASTRoot_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                boa.types.Diff.ChangedASTRoot.class, boa.types.Diff.ChangedASTRoot.Builder.class);
       }
-      
+
       // Construct using boa.types.Diff.ChangedASTRoot.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
-      
-      private Builder(BuilderParent parent) {
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -1104,7 +1503,7 @@ public final class Diff {
       private static Builder create() {
         return new Builder();
       }
-      
+
       public Builder clear() {
         super.clear();
         if (namespacesBuilder_ == null) {
@@ -1115,20 +1514,20 @@ public final class Diff {
         }
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(buildPartial());
       }
-      
+
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return boa.types.Diff.ChangedASTRoot.getDescriptor();
+        return boa.types.Diff.internal_static_boa_types_ChangedASTRoot_descriptor;
       }
-      
+
       public boa.types.Diff.ChangedASTRoot getDefaultInstanceForType() {
         return boa.types.Diff.ChangedASTRoot.getDefaultInstance();
       }
-      
+
       public boa.types.Diff.ChangedASTRoot build() {
         boa.types.Diff.ChangedASTRoot result = buildPartial();
         if (!result.isInitialized()) {
@@ -1136,17 +1535,7 @@ public final class Diff {
         }
         return result;
       }
-      
-      private boa.types.Diff.ChangedASTRoot buildParsed()
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        boa.types.Diff.ChangedASTRoot result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
-        }
-        return result;
-      }
-      
+
       public boa.types.Diff.ChangedASTRoot buildPartial() {
         boa.types.Diff.ChangedASTRoot result = new boa.types.Diff.ChangedASTRoot(this);
         int from_bitField0_ = bitField0_;
@@ -1162,7 +1551,7 @@ public final class Diff {
         onBuilt();
         return result;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof boa.types.Diff.ChangedASTRoot) {
           return mergeFrom((boa.types.Diff.ChangedASTRoot)other);
@@ -1171,7 +1560,7 @@ public final class Diff {
           return this;
         }
       }
-      
+
       public Builder mergeFrom(boa.types.Diff.ChangedASTRoot other) {
         if (other == boa.types.Diff.ChangedASTRoot.getDefaultInstance()) return this;
         if (namespacesBuilder_ == null) {
@@ -1203,7 +1592,7 @@ public final class Diff {
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
+
       public final boolean isInitialized() {
         for (int i = 0; i < getNamespacesCount(); i++) {
           if (!getNamespaces(i).isInitialized()) {
@@ -1213,42 +1602,26 @@ public final class Diff {
         }
         return true;
       }
-      
+
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
-        while (true) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              this.setUnknownFields(unknownFields.build());
-              onChanged();
-              return this;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                onChanged();
-                return this;
-              }
-              break;
-            }
-            case 10: {
-              boa.types.Diff.ChangedNamespace.Builder subBuilder = boa.types.Diff.ChangedNamespace.newBuilder();
-              input.readMessage(subBuilder, extensionRegistry);
-              addNamespaces(subBuilder.buildPartial());
-              break;
-            }
+        boa.types.Diff.ChangedASTRoot parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (boa.types.Diff.ChangedASTRoot) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
           }
         }
+        return this;
       }
-      
       private int bitField0_;
-      
+
       // repeated .boa.types.ChangedNamespace namespaces = 1;
       private java.util.List<boa.types.Diff.ChangedNamespace> namespaces_ =
         java.util.Collections.emptyList();
@@ -1258,10 +1631,13 @@ public final class Diff {
           bitField0_ |= 0x00000001;
          }
       }
-      
+
       private com.google.protobuf.RepeatedFieldBuilder<
           boa.types.Diff.ChangedNamespace, boa.types.Diff.ChangedNamespace.Builder, boa.types.Diff.ChangedNamespaceOrBuilder> namespacesBuilder_;
-      
+
+      /**
+       * <code>repeated .boa.types.ChangedNamespace namespaces = 1;</code>
+       */
       public java.util.List<boa.types.Diff.ChangedNamespace> getNamespacesList() {
         if (namespacesBuilder_ == null) {
           return java.util.Collections.unmodifiableList(namespaces_);
@@ -1269,6 +1645,9 @@ public final class Diff {
           return namespacesBuilder_.getMessageList();
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedNamespace namespaces = 1;</code>
+       */
       public int getNamespacesCount() {
         if (namespacesBuilder_ == null) {
           return namespaces_.size();
@@ -1276,6 +1655,9 @@ public final class Diff {
           return namespacesBuilder_.getCount();
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedNamespace namespaces = 1;</code>
+       */
       public boa.types.Diff.ChangedNamespace getNamespaces(int index) {
         if (namespacesBuilder_ == null) {
           return namespaces_.get(index);
@@ -1283,6 +1665,9 @@ public final class Diff {
           return namespacesBuilder_.getMessage(index);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedNamespace namespaces = 1;</code>
+       */
       public Builder setNamespaces(
           int index, boa.types.Diff.ChangedNamespace value) {
         if (namespacesBuilder_ == null) {
@@ -1297,6 +1682,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedNamespace namespaces = 1;</code>
+       */
       public Builder setNamespaces(
           int index, boa.types.Diff.ChangedNamespace.Builder builderForValue) {
         if (namespacesBuilder_ == null) {
@@ -1308,6 +1696,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedNamespace namespaces = 1;</code>
+       */
       public Builder addNamespaces(boa.types.Diff.ChangedNamespace value) {
         if (namespacesBuilder_ == null) {
           if (value == null) {
@@ -1321,6 +1712,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedNamespace namespaces = 1;</code>
+       */
       public Builder addNamespaces(
           int index, boa.types.Diff.ChangedNamespace value) {
         if (namespacesBuilder_ == null) {
@@ -1335,6 +1729,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedNamespace namespaces = 1;</code>
+       */
       public Builder addNamespaces(
           boa.types.Diff.ChangedNamespace.Builder builderForValue) {
         if (namespacesBuilder_ == null) {
@@ -1346,6 +1743,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedNamespace namespaces = 1;</code>
+       */
       public Builder addNamespaces(
           int index, boa.types.Diff.ChangedNamespace.Builder builderForValue) {
         if (namespacesBuilder_ == null) {
@@ -1357,6 +1757,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedNamespace namespaces = 1;</code>
+       */
       public Builder addAllNamespaces(
           java.lang.Iterable<? extends boa.types.Diff.ChangedNamespace> values) {
         if (namespacesBuilder_ == null) {
@@ -1368,6 +1771,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedNamespace namespaces = 1;</code>
+       */
       public Builder clearNamespaces() {
         if (namespacesBuilder_ == null) {
           namespaces_ = java.util.Collections.emptyList();
@@ -1378,6 +1784,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedNamespace namespaces = 1;</code>
+       */
       public Builder removeNamespaces(int index) {
         if (namespacesBuilder_ == null) {
           ensureNamespacesIsMutable();
@@ -1388,10 +1797,16 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedNamespace namespaces = 1;</code>
+       */
       public boa.types.Diff.ChangedNamespace.Builder getNamespacesBuilder(
           int index) {
         return getNamespacesFieldBuilder().getBuilder(index);
       }
+      /**
+       * <code>repeated .boa.types.ChangedNamespace namespaces = 1;</code>
+       */
       public boa.types.Diff.ChangedNamespaceOrBuilder getNamespacesOrBuilder(
           int index) {
         if (namespacesBuilder_ == null) {
@@ -1399,6 +1814,9 @@ public final class Diff {
           return namespacesBuilder_.getMessageOrBuilder(index);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedNamespace namespaces = 1;</code>
+       */
       public java.util.List<? extends boa.types.Diff.ChangedNamespaceOrBuilder> 
            getNamespacesOrBuilderList() {
         if (namespacesBuilder_ != null) {
@@ -1407,15 +1825,24 @@ public final class Diff {
           return java.util.Collections.unmodifiableList(namespaces_);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedNamespace namespaces = 1;</code>
+       */
       public boa.types.Diff.ChangedNamespace.Builder addNamespacesBuilder() {
         return getNamespacesFieldBuilder().addBuilder(
             boa.types.Diff.ChangedNamespace.getDefaultInstance());
       }
+      /**
+       * <code>repeated .boa.types.ChangedNamespace namespaces = 1;</code>
+       */
       public boa.types.Diff.ChangedNamespace.Builder addNamespacesBuilder(
           int index) {
         return getNamespacesFieldBuilder().addBuilder(
             index, boa.types.Diff.ChangedNamespace.getDefaultInstance());
       }
+      /**
+       * <code>repeated .boa.types.ChangedNamespace namespaces = 1;</code>
+       */
       public java.util.List<boa.types.Diff.ChangedNamespace.Builder> 
            getNamespacesBuilderList() {
         return getNamespacesFieldBuilder().getBuilderList();
@@ -1434,193 +1861,428 @@ public final class Diff {
         }
         return namespacesBuilder_;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:boa.types.ChangedASTRoot)
     }
-    
+
     static {
       defaultInstance = new ChangedASTRoot(true);
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:boa.types.ChangedASTRoot)
   }
-  
+
   public interface ChangedNamespaceOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
-    
+
     // required .boa.types.ChangeKind change = 1;
+    /**
+     * <code>required .boa.types.ChangeKind change = 1;</code>
+     */
     boolean hasChange();
+    /**
+     * <code>required .boa.types.ChangeKind change = 1;</code>
+     */
     boa.types.Shared.ChangeKind getChange();
-    
+
     // optional string name = 2;
+    /**
+     * <code>optional string name = 2;</code>
+     */
     boolean hasName();
-    String getName();
-    
+    /**
+     * <code>optional string name = 2;</code>
+     */
+    java.lang.String getName();
+    /**
+     * <code>optional string name = 2;</code>
+     */
+    com.google.protobuf.ByteString
+        getNameBytes();
+
     // repeated .boa.types.ChangedModifier modifiers = 3;
+    /**
+     * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+     */
     java.util.List<boa.types.Diff.ChangedModifier> 
         getModifiersList();
+    /**
+     * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+     */
     boa.types.Diff.ChangedModifier getModifiers(int index);
+    /**
+     * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+     */
     int getModifiersCount();
+    /**
+     * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+     */
     java.util.List<? extends boa.types.Diff.ChangedModifierOrBuilder> 
         getModifiersOrBuilderList();
+    /**
+     * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+     */
     boa.types.Diff.ChangedModifierOrBuilder getModifiersOrBuilder(
         int index);
-    
+
     // repeated .boa.types.ChangedDeclaration declarations = 4;
+    /**
+     * <code>repeated .boa.types.ChangedDeclaration declarations = 4;</code>
+     */
     java.util.List<boa.types.Diff.ChangedDeclaration> 
         getDeclarationsList();
+    /**
+     * <code>repeated .boa.types.ChangedDeclaration declarations = 4;</code>
+     */
     boa.types.Diff.ChangedDeclaration getDeclarations(int index);
+    /**
+     * <code>repeated .boa.types.ChangedDeclaration declarations = 4;</code>
+     */
     int getDeclarationsCount();
+    /**
+     * <code>repeated .boa.types.ChangedDeclaration declarations = 4;</code>
+     */
     java.util.List<? extends boa.types.Diff.ChangedDeclarationOrBuilder> 
         getDeclarationsOrBuilderList();
+    /**
+     * <code>repeated .boa.types.ChangedDeclaration declarations = 4;</code>
+     */
     boa.types.Diff.ChangedDeclarationOrBuilder getDeclarationsOrBuilder(
         int index);
-    
+
     // repeated .boa.types.ChangedComment comments = 5;
+    /**
+     * <code>repeated .boa.types.ChangedComment comments = 5;</code>
+     */
     java.util.List<boa.types.Diff.ChangedComment> 
         getCommentsList();
+    /**
+     * <code>repeated .boa.types.ChangedComment comments = 5;</code>
+     */
     boa.types.Diff.ChangedComment getComments(int index);
+    /**
+     * <code>repeated .boa.types.ChangedComment comments = 5;</code>
+     */
     int getCommentsCount();
+    /**
+     * <code>repeated .boa.types.ChangedComment comments = 5;</code>
+     */
     java.util.List<? extends boa.types.Diff.ChangedCommentOrBuilder> 
         getCommentsOrBuilderList();
+    /**
+     * <code>repeated .boa.types.ChangedComment comments = 5;</code>
+     */
     boa.types.Diff.ChangedCommentOrBuilder getCommentsOrBuilder(
         int index);
   }
+  /**
+   * Protobuf type {@code boa.types.ChangedNamespace}
+   */
   public static final class ChangedNamespace extends
       com.google.protobuf.GeneratedMessage
       implements ChangedNamespaceOrBuilder {
     // Use ChangedNamespace.newBuilder() to construct.
-    private ChangedNamespace(Builder builder) {
+    private ChangedNamespace(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
+      this.unknownFields = builder.getUnknownFields();
     }
-    private ChangedNamespace(boolean noInit) {}
-    
+    private ChangedNamespace(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
     private static final ChangedNamespace defaultInstance;
     public static ChangedNamespace getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public ChangedNamespace getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private ChangedNamespace(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 8: {
+              int rawValue = input.readEnum();
+              boa.types.Shared.ChangeKind value = boa.types.Shared.ChangeKind.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(1, rawValue);
+              } else {
+                bitField0_ |= 0x00000001;
+                change_ = value;
+              }
+              break;
+            }
+            case 18: {
+              bitField0_ |= 0x00000002;
+              name_ = input.readBytes();
+              break;
+            }
+            case 26: {
+              if (!((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
+                modifiers_ = new java.util.ArrayList<boa.types.Diff.ChangedModifier>();
+                mutable_bitField0_ |= 0x00000004;
+              }
+              modifiers_.add(input.readMessage(boa.types.Diff.ChangedModifier.PARSER, extensionRegistry));
+              break;
+            }
+            case 34: {
+              if (!((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
+                declarations_ = new java.util.ArrayList<boa.types.Diff.ChangedDeclaration>();
+                mutable_bitField0_ |= 0x00000008;
+              }
+              declarations_.add(input.readMessage(boa.types.Diff.ChangedDeclaration.PARSER, extensionRegistry));
+              break;
+            }
+            case 42: {
+              if (!((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
+                comments_ = new java.util.ArrayList<boa.types.Diff.ChangedComment>();
+                mutable_bitField0_ |= 0x00000010;
+              }
+              comments_.add(input.readMessage(boa.types.Diff.ChangedComment.PARSER, extensionRegistry));
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
+          modifiers_ = java.util.Collections.unmodifiableList(modifiers_);
+        }
+        if (((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
+          declarations_ = java.util.Collections.unmodifiableList(declarations_);
+        }
+        if (((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
+          comments_ = java.util.Collections.unmodifiableList(comments_);
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return boa.types.Diff.internal_static_boa_types_ChangedNamespace_descriptor;
     }
-    
+
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return boa.types.Diff.internal_static_boa_types_ChangedNamespace_fieldAccessorTable;
+      return boa.types.Diff.internal_static_boa_types_ChangedNamespace_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              boa.types.Diff.ChangedNamespace.class, boa.types.Diff.ChangedNamespace.Builder.class);
     }
-    
+
+    public static com.google.protobuf.Parser<ChangedNamespace> PARSER =
+        new com.google.protobuf.AbstractParser<ChangedNamespace>() {
+      public ChangedNamespace parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new ChangedNamespace(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<ChangedNamespace> getParserForType() {
+      return PARSER;
+    }
+
     private int bitField0_;
     // required .boa.types.ChangeKind change = 1;
     public static final int CHANGE_FIELD_NUMBER = 1;
     private boa.types.Shared.ChangeKind change_;
+    /**
+     * <code>required .boa.types.ChangeKind change = 1;</code>
+     */
     public boolean hasChange() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
+    /**
+     * <code>required .boa.types.ChangeKind change = 1;</code>
+     */
     public boa.types.Shared.ChangeKind getChange() {
       return change_;
     }
-    
+
     // optional string name = 2;
     public static final int NAME_FIELD_NUMBER = 2;
     private java.lang.Object name_;
+    /**
+     * <code>optional string name = 2;</code>
+     */
     public boolean hasName() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
-    public String getName() {
+    /**
+     * <code>optional string name = 2;</code>
+     */
+    public java.lang.String getName() {
       java.lang.Object ref = name_;
-      if (ref instanceof String) {
-        return (String) ref;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
           name_ = s;
         }
         return s;
       }
     }
-    private com.google.protobuf.ByteString getNameBytes() {
+    /**
+     * <code>optional string name = 2;</code>
+     */
+    public com.google.protobuf.ByteString
+        getNameBytes() {
       java.lang.Object ref = name_;
-      if (ref instanceof String) {
+      if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
         name_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
-    
+
     // repeated .boa.types.ChangedModifier modifiers = 3;
     public static final int MODIFIERS_FIELD_NUMBER = 3;
     private java.util.List<boa.types.Diff.ChangedModifier> modifiers_;
+    /**
+     * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+     */
     public java.util.List<boa.types.Diff.ChangedModifier> getModifiersList() {
       return modifiers_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+     */
     public java.util.List<? extends boa.types.Diff.ChangedModifierOrBuilder> 
         getModifiersOrBuilderList() {
       return modifiers_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+     */
     public int getModifiersCount() {
       return modifiers_.size();
     }
+    /**
+     * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+     */
     public boa.types.Diff.ChangedModifier getModifiers(int index) {
       return modifiers_.get(index);
     }
+    /**
+     * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+     */
     public boa.types.Diff.ChangedModifierOrBuilder getModifiersOrBuilder(
         int index) {
       return modifiers_.get(index);
     }
-    
+
     // repeated .boa.types.ChangedDeclaration declarations = 4;
     public static final int DECLARATIONS_FIELD_NUMBER = 4;
     private java.util.List<boa.types.Diff.ChangedDeclaration> declarations_;
+    /**
+     * <code>repeated .boa.types.ChangedDeclaration declarations = 4;</code>
+     */
     public java.util.List<boa.types.Diff.ChangedDeclaration> getDeclarationsList() {
       return declarations_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedDeclaration declarations = 4;</code>
+     */
     public java.util.List<? extends boa.types.Diff.ChangedDeclarationOrBuilder> 
         getDeclarationsOrBuilderList() {
       return declarations_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedDeclaration declarations = 4;</code>
+     */
     public int getDeclarationsCount() {
       return declarations_.size();
     }
+    /**
+     * <code>repeated .boa.types.ChangedDeclaration declarations = 4;</code>
+     */
     public boa.types.Diff.ChangedDeclaration getDeclarations(int index) {
       return declarations_.get(index);
     }
+    /**
+     * <code>repeated .boa.types.ChangedDeclaration declarations = 4;</code>
+     */
     public boa.types.Diff.ChangedDeclarationOrBuilder getDeclarationsOrBuilder(
         int index) {
       return declarations_.get(index);
     }
-    
+
     // repeated .boa.types.ChangedComment comments = 5;
     public static final int COMMENTS_FIELD_NUMBER = 5;
     private java.util.List<boa.types.Diff.ChangedComment> comments_;
+    /**
+     * <code>repeated .boa.types.ChangedComment comments = 5;</code>
+     */
     public java.util.List<boa.types.Diff.ChangedComment> getCommentsList() {
       return comments_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedComment comments = 5;</code>
+     */
     public java.util.List<? extends boa.types.Diff.ChangedCommentOrBuilder> 
         getCommentsOrBuilderList() {
       return comments_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedComment comments = 5;</code>
+     */
     public int getCommentsCount() {
       return comments_.size();
     }
+    /**
+     * <code>repeated .boa.types.ChangedComment comments = 5;</code>
+     */
     public boa.types.Diff.ChangedComment getComments(int index) {
       return comments_.get(index);
     }
+    /**
+     * <code>repeated .boa.types.ChangedComment comments = 5;</code>
+     */
     public boa.types.Diff.ChangedCommentOrBuilder getCommentsOrBuilder(
         int index) {
       return comments_.get(index);
     }
-    
+
     private void initFields() {
       change_ = boa.types.Shared.ChangeKind.ADDED;
       name_ = "";
@@ -1632,7 +2294,7 @@ public final class Diff {
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized != -1) return isInitialized == 1;
-      
+
       if (!hasChange()) {
         memoizedIsInitialized = 0;
         return false;
@@ -1658,7 +2320,7 @@ public final class Diff {
       memoizedIsInitialized = 1;
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
@@ -1679,12 +2341,12 @@ public final class Diff {
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
       if (size != -1) return size;
-    
+
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
@@ -1710,94 +2372,83 @@ public final class Diff {
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     private static final long serialVersionUID = 0L;
     @java.lang.Override
     protected java.lang.Object writeReplace()
         throws java.io.ObjectStreamException {
       return super.writeReplace();
     }
-    
+
     public static boa.types.Diff.ChangedNamespace parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
+      return PARSER.parseFrom(data);
     }
     public static boa.types.Diff.ChangedNamespace parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(data, extensionRegistry);
     }
     public static boa.types.Diff.ChangedNamespace parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
+      return PARSER.parseFrom(data);
     }
     public static boa.types.Diff.ChangedNamespace parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(data, extensionRegistry);
     }
     public static boa.types.Diff.ChangedNamespace parseFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
+      return PARSER.parseFrom(input);
     }
     public static boa.types.Diff.ChangedNamespace parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(input, extensionRegistry);
     }
     public static boa.types.Diff.ChangedNamespace parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
+      return PARSER.parseDelimitedFrom(input);
     }
     public static boa.types.Diff.ChangedNamespace parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
     }
     public static boa.types.Diff.ChangedNamespace parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
+      return PARSER.parseFrom(input);
     }
     public static boa.types.Diff.ChangedNamespace parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(input, extensionRegistry);
     }
-    
+
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder(boa.types.Diff.ChangedNamespace prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
-    
+
     @java.lang.Override
     protected Builder newBuilderForType(
         com.google.protobuf.GeneratedMessage.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
+    /**
+     * Protobuf type {@code boa.types.ChangedNamespace}
+     */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
        implements boa.types.Diff.ChangedNamespaceOrBuilder {
@@ -1805,18 +2456,21 @@ public final class Diff {
           getDescriptor() {
         return boa.types.Diff.internal_static_boa_types_ChangedNamespace_descriptor;
       }
-      
+
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return boa.types.Diff.internal_static_boa_types_ChangedNamespace_fieldAccessorTable;
+        return boa.types.Diff.internal_static_boa_types_ChangedNamespace_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                boa.types.Diff.ChangedNamespace.class, boa.types.Diff.ChangedNamespace.Builder.class);
       }
-      
+
       // Construct using boa.types.Diff.ChangedNamespace.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
-      
-      private Builder(BuilderParent parent) {
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -1830,7 +2484,7 @@ public final class Diff {
       private static Builder create() {
         return new Builder();
       }
-      
+
       public Builder clear() {
         super.clear();
         change_ = boa.types.Shared.ChangeKind.ADDED;
@@ -1857,20 +2511,20 @@ public final class Diff {
         }
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(buildPartial());
       }
-      
+
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return boa.types.Diff.ChangedNamespace.getDescriptor();
+        return boa.types.Diff.internal_static_boa_types_ChangedNamespace_descriptor;
       }
-      
+
       public boa.types.Diff.ChangedNamespace getDefaultInstanceForType() {
         return boa.types.Diff.ChangedNamespace.getDefaultInstance();
       }
-      
+
       public boa.types.Diff.ChangedNamespace build() {
         boa.types.Diff.ChangedNamespace result = buildPartial();
         if (!result.isInitialized()) {
@@ -1878,17 +2532,7 @@ public final class Diff {
         }
         return result;
       }
-      
-      private boa.types.Diff.ChangedNamespace buildParsed()
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        boa.types.Diff.ChangedNamespace result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
-        }
-        return result;
-      }
-      
+
       public boa.types.Diff.ChangedNamespace buildPartial() {
         boa.types.Diff.ChangedNamespace result = new boa.types.Diff.ChangedNamespace(this);
         int from_bitField0_ = bitField0_;
@@ -1932,7 +2576,7 @@ public final class Diff {
         onBuilt();
         return result;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof boa.types.Diff.ChangedNamespace) {
           return mergeFrom((boa.types.Diff.ChangedNamespace)other);
@@ -1941,14 +2585,16 @@ public final class Diff {
           return this;
         }
       }
-      
+
       public Builder mergeFrom(boa.types.Diff.ChangedNamespace other) {
         if (other == boa.types.Diff.ChangedNamespace.getDefaultInstance()) return this;
         if (other.hasChange()) {
           setChange(other.getChange());
         }
         if (other.hasName()) {
-          setName(other.getName());
+          bitField0_ |= 0x00000002;
+          name_ = other.name_;
+          onChanged();
         }
         if (modifiersBuilder_ == null) {
           if (!other.modifiers_.isEmpty()) {
@@ -2031,7 +2677,7 @@ public final class Diff {
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
+
       public final boolean isInitialized() {
         if (!hasChange()) {
           
@@ -2057,78 +2703,43 @@ public final class Diff {
         }
         return true;
       }
-      
+
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
-        while (true) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              this.setUnknownFields(unknownFields.build());
-              onChanged();
-              return this;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                onChanged();
-                return this;
-              }
-              break;
-            }
-            case 8: {
-              int rawValue = input.readEnum();
-              boa.types.Shared.ChangeKind value = boa.types.Shared.ChangeKind.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(1, rawValue);
-              } else {
-                bitField0_ |= 0x00000001;
-                change_ = value;
-              }
-              break;
-            }
-            case 18: {
-              bitField0_ |= 0x00000002;
-              name_ = input.readBytes();
-              break;
-            }
-            case 26: {
-              boa.types.Diff.ChangedModifier.Builder subBuilder = boa.types.Diff.ChangedModifier.newBuilder();
-              input.readMessage(subBuilder, extensionRegistry);
-              addModifiers(subBuilder.buildPartial());
-              break;
-            }
-            case 34: {
-              boa.types.Diff.ChangedDeclaration.Builder subBuilder = boa.types.Diff.ChangedDeclaration.newBuilder();
-              input.readMessage(subBuilder, extensionRegistry);
-              addDeclarations(subBuilder.buildPartial());
-              break;
-            }
-            case 42: {
-              boa.types.Diff.ChangedComment.Builder subBuilder = boa.types.Diff.ChangedComment.newBuilder();
-              input.readMessage(subBuilder, extensionRegistry);
-              addComments(subBuilder.buildPartial());
-              break;
-            }
+        boa.types.Diff.ChangedNamespace parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (boa.types.Diff.ChangedNamespace) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
           }
         }
+        return this;
       }
-      
       private int bitField0_;
-      
+
       // required .boa.types.ChangeKind change = 1;
       private boa.types.Shared.ChangeKind change_ = boa.types.Shared.ChangeKind.ADDED;
+      /**
+       * <code>required .boa.types.ChangeKind change = 1;</code>
+       */
       public boolean hasChange() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
+      /**
+       * <code>required .boa.types.ChangeKind change = 1;</code>
+       */
       public boa.types.Shared.ChangeKind getChange() {
         return change_;
       }
+      /**
+       * <code>required .boa.types.ChangeKind change = 1;</code>
+       */
       public Builder setChange(boa.types.Shared.ChangeKind value) {
         if (value == null) {
           throw new NullPointerException();
@@ -2138,29 +2749,59 @@ public final class Diff {
         onChanged();
         return this;
       }
+      /**
+       * <code>required .boa.types.ChangeKind change = 1;</code>
+       */
       public Builder clearChange() {
         bitField0_ = (bitField0_ & ~0x00000001);
         change_ = boa.types.Shared.ChangeKind.ADDED;
         onChanged();
         return this;
       }
-      
+
       // optional string name = 2;
       private java.lang.Object name_ = "";
+      /**
+       * <code>optional string name = 2;</code>
+       */
       public boolean hasName() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
-      public String getName() {
+      /**
+       * <code>optional string name = 2;</code>
+       */
+      public java.lang.String getName() {
         java.lang.Object ref = name_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
           name_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
-      public Builder setName(String value) {
+      /**
+       * <code>optional string name = 2;</code>
+       */
+      public com.google.protobuf.ByteString
+          getNameBytes() {
+        java.lang.Object ref = name_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          name_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string name = 2;</code>
+       */
+      public Builder setName(
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -2169,18 +2810,29 @@ public final class Diff {
         onChanged();
         return this;
       }
+      /**
+       * <code>optional string name = 2;</code>
+       */
       public Builder clearName() {
         bitField0_ = (bitField0_ & ~0x00000002);
         name_ = getDefaultInstance().getName();
         onChanged();
         return this;
       }
-      void setName(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00000002;
+      /**
+       * <code>optional string name = 2;</code>
+       */
+      public Builder setNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
         name_ = value;
         onChanged();
+        return this;
       }
-      
+
       // repeated .boa.types.ChangedModifier modifiers = 3;
       private java.util.List<boa.types.Diff.ChangedModifier> modifiers_ =
         java.util.Collections.emptyList();
@@ -2190,10 +2842,13 @@ public final class Diff {
           bitField0_ |= 0x00000004;
          }
       }
-      
+
       private com.google.protobuf.RepeatedFieldBuilder<
           boa.types.Diff.ChangedModifier, boa.types.Diff.ChangedModifier.Builder, boa.types.Diff.ChangedModifierOrBuilder> modifiersBuilder_;
-      
+
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+       */
       public java.util.List<boa.types.Diff.ChangedModifier> getModifiersList() {
         if (modifiersBuilder_ == null) {
           return java.util.Collections.unmodifiableList(modifiers_);
@@ -2201,6 +2856,9 @@ public final class Diff {
           return modifiersBuilder_.getMessageList();
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+       */
       public int getModifiersCount() {
         if (modifiersBuilder_ == null) {
           return modifiers_.size();
@@ -2208,6 +2866,9 @@ public final class Diff {
           return modifiersBuilder_.getCount();
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+       */
       public boa.types.Diff.ChangedModifier getModifiers(int index) {
         if (modifiersBuilder_ == null) {
           return modifiers_.get(index);
@@ -2215,6 +2876,9 @@ public final class Diff {
           return modifiersBuilder_.getMessage(index);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+       */
       public Builder setModifiers(
           int index, boa.types.Diff.ChangedModifier value) {
         if (modifiersBuilder_ == null) {
@@ -2229,6 +2893,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+       */
       public Builder setModifiers(
           int index, boa.types.Diff.ChangedModifier.Builder builderForValue) {
         if (modifiersBuilder_ == null) {
@@ -2240,6 +2907,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+       */
       public Builder addModifiers(boa.types.Diff.ChangedModifier value) {
         if (modifiersBuilder_ == null) {
           if (value == null) {
@@ -2253,6 +2923,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+       */
       public Builder addModifiers(
           int index, boa.types.Diff.ChangedModifier value) {
         if (modifiersBuilder_ == null) {
@@ -2267,6 +2940,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+       */
       public Builder addModifiers(
           boa.types.Diff.ChangedModifier.Builder builderForValue) {
         if (modifiersBuilder_ == null) {
@@ -2278,6 +2954,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+       */
       public Builder addModifiers(
           int index, boa.types.Diff.ChangedModifier.Builder builderForValue) {
         if (modifiersBuilder_ == null) {
@@ -2289,6 +2968,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+       */
       public Builder addAllModifiers(
           java.lang.Iterable<? extends boa.types.Diff.ChangedModifier> values) {
         if (modifiersBuilder_ == null) {
@@ -2300,6 +2982,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+       */
       public Builder clearModifiers() {
         if (modifiersBuilder_ == null) {
           modifiers_ = java.util.Collections.emptyList();
@@ -2310,6 +2995,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+       */
       public Builder removeModifiers(int index) {
         if (modifiersBuilder_ == null) {
           ensureModifiersIsMutable();
@@ -2320,10 +3008,16 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+       */
       public boa.types.Diff.ChangedModifier.Builder getModifiersBuilder(
           int index) {
         return getModifiersFieldBuilder().getBuilder(index);
       }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+       */
       public boa.types.Diff.ChangedModifierOrBuilder getModifiersOrBuilder(
           int index) {
         if (modifiersBuilder_ == null) {
@@ -2331,6 +3025,9 @@ public final class Diff {
           return modifiersBuilder_.getMessageOrBuilder(index);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+       */
       public java.util.List<? extends boa.types.Diff.ChangedModifierOrBuilder> 
            getModifiersOrBuilderList() {
         if (modifiersBuilder_ != null) {
@@ -2339,15 +3036,24 @@ public final class Diff {
           return java.util.Collections.unmodifiableList(modifiers_);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+       */
       public boa.types.Diff.ChangedModifier.Builder addModifiersBuilder() {
         return getModifiersFieldBuilder().addBuilder(
             boa.types.Diff.ChangedModifier.getDefaultInstance());
       }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+       */
       public boa.types.Diff.ChangedModifier.Builder addModifiersBuilder(
           int index) {
         return getModifiersFieldBuilder().addBuilder(
             index, boa.types.Diff.ChangedModifier.getDefaultInstance());
       }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+       */
       public java.util.List<boa.types.Diff.ChangedModifier.Builder> 
            getModifiersBuilderList() {
         return getModifiersFieldBuilder().getBuilderList();
@@ -2366,7 +3072,7 @@ public final class Diff {
         }
         return modifiersBuilder_;
       }
-      
+
       // repeated .boa.types.ChangedDeclaration declarations = 4;
       private java.util.List<boa.types.Diff.ChangedDeclaration> declarations_ =
         java.util.Collections.emptyList();
@@ -2376,10 +3082,13 @@ public final class Diff {
           bitField0_ |= 0x00000008;
          }
       }
-      
+
       private com.google.protobuf.RepeatedFieldBuilder<
           boa.types.Diff.ChangedDeclaration, boa.types.Diff.ChangedDeclaration.Builder, boa.types.Diff.ChangedDeclarationOrBuilder> declarationsBuilder_;
-      
+
+      /**
+       * <code>repeated .boa.types.ChangedDeclaration declarations = 4;</code>
+       */
       public java.util.List<boa.types.Diff.ChangedDeclaration> getDeclarationsList() {
         if (declarationsBuilder_ == null) {
           return java.util.Collections.unmodifiableList(declarations_);
@@ -2387,6 +3096,9 @@ public final class Diff {
           return declarationsBuilder_.getMessageList();
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedDeclaration declarations = 4;</code>
+       */
       public int getDeclarationsCount() {
         if (declarationsBuilder_ == null) {
           return declarations_.size();
@@ -2394,6 +3106,9 @@ public final class Diff {
           return declarationsBuilder_.getCount();
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedDeclaration declarations = 4;</code>
+       */
       public boa.types.Diff.ChangedDeclaration getDeclarations(int index) {
         if (declarationsBuilder_ == null) {
           return declarations_.get(index);
@@ -2401,6 +3116,9 @@ public final class Diff {
           return declarationsBuilder_.getMessage(index);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedDeclaration declarations = 4;</code>
+       */
       public Builder setDeclarations(
           int index, boa.types.Diff.ChangedDeclaration value) {
         if (declarationsBuilder_ == null) {
@@ -2415,6 +3133,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedDeclaration declarations = 4;</code>
+       */
       public Builder setDeclarations(
           int index, boa.types.Diff.ChangedDeclaration.Builder builderForValue) {
         if (declarationsBuilder_ == null) {
@@ -2426,6 +3147,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedDeclaration declarations = 4;</code>
+       */
       public Builder addDeclarations(boa.types.Diff.ChangedDeclaration value) {
         if (declarationsBuilder_ == null) {
           if (value == null) {
@@ -2439,6 +3163,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedDeclaration declarations = 4;</code>
+       */
       public Builder addDeclarations(
           int index, boa.types.Diff.ChangedDeclaration value) {
         if (declarationsBuilder_ == null) {
@@ -2453,6 +3180,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedDeclaration declarations = 4;</code>
+       */
       public Builder addDeclarations(
           boa.types.Diff.ChangedDeclaration.Builder builderForValue) {
         if (declarationsBuilder_ == null) {
@@ -2464,6 +3194,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedDeclaration declarations = 4;</code>
+       */
       public Builder addDeclarations(
           int index, boa.types.Diff.ChangedDeclaration.Builder builderForValue) {
         if (declarationsBuilder_ == null) {
@@ -2475,6 +3208,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedDeclaration declarations = 4;</code>
+       */
       public Builder addAllDeclarations(
           java.lang.Iterable<? extends boa.types.Diff.ChangedDeclaration> values) {
         if (declarationsBuilder_ == null) {
@@ -2486,6 +3222,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedDeclaration declarations = 4;</code>
+       */
       public Builder clearDeclarations() {
         if (declarationsBuilder_ == null) {
           declarations_ = java.util.Collections.emptyList();
@@ -2496,6 +3235,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedDeclaration declarations = 4;</code>
+       */
       public Builder removeDeclarations(int index) {
         if (declarationsBuilder_ == null) {
           ensureDeclarationsIsMutable();
@@ -2506,10 +3248,16 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedDeclaration declarations = 4;</code>
+       */
       public boa.types.Diff.ChangedDeclaration.Builder getDeclarationsBuilder(
           int index) {
         return getDeclarationsFieldBuilder().getBuilder(index);
       }
+      /**
+       * <code>repeated .boa.types.ChangedDeclaration declarations = 4;</code>
+       */
       public boa.types.Diff.ChangedDeclarationOrBuilder getDeclarationsOrBuilder(
           int index) {
         if (declarationsBuilder_ == null) {
@@ -2517,6 +3265,9 @@ public final class Diff {
           return declarationsBuilder_.getMessageOrBuilder(index);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedDeclaration declarations = 4;</code>
+       */
       public java.util.List<? extends boa.types.Diff.ChangedDeclarationOrBuilder> 
            getDeclarationsOrBuilderList() {
         if (declarationsBuilder_ != null) {
@@ -2525,15 +3276,24 @@ public final class Diff {
           return java.util.Collections.unmodifiableList(declarations_);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedDeclaration declarations = 4;</code>
+       */
       public boa.types.Diff.ChangedDeclaration.Builder addDeclarationsBuilder() {
         return getDeclarationsFieldBuilder().addBuilder(
             boa.types.Diff.ChangedDeclaration.getDefaultInstance());
       }
+      /**
+       * <code>repeated .boa.types.ChangedDeclaration declarations = 4;</code>
+       */
       public boa.types.Diff.ChangedDeclaration.Builder addDeclarationsBuilder(
           int index) {
         return getDeclarationsFieldBuilder().addBuilder(
             index, boa.types.Diff.ChangedDeclaration.getDefaultInstance());
       }
+      /**
+       * <code>repeated .boa.types.ChangedDeclaration declarations = 4;</code>
+       */
       public java.util.List<boa.types.Diff.ChangedDeclaration.Builder> 
            getDeclarationsBuilderList() {
         return getDeclarationsFieldBuilder().getBuilderList();
@@ -2552,7 +3312,7 @@ public final class Diff {
         }
         return declarationsBuilder_;
       }
-      
+
       // repeated .boa.types.ChangedComment comments = 5;
       private java.util.List<boa.types.Diff.ChangedComment> comments_ =
         java.util.Collections.emptyList();
@@ -2562,10 +3322,13 @@ public final class Diff {
           bitField0_ |= 0x00000010;
          }
       }
-      
+
       private com.google.protobuf.RepeatedFieldBuilder<
           boa.types.Diff.ChangedComment, boa.types.Diff.ChangedComment.Builder, boa.types.Diff.ChangedCommentOrBuilder> commentsBuilder_;
-      
+
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 5;</code>
+       */
       public java.util.List<boa.types.Diff.ChangedComment> getCommentsList() {
         if (commentsBuilder_ == null) {
           return java.util.Collections.unmodifiableList(comments_);
@@ -2573,6 +3336,9 @@ public final class Diff {
           return commentsBuilder_.getMessageList();
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 5;</code>
+       */
       public int getCommentsCount() {
         if (commentsBuilder_ == null) {
           return comments_.size();
@@ -2580,6 +3346,9 @@ public final class Diff {
           return commentsBuilder_.getCount();
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 5;</code>
+       */
       public boa.types.Diff.ChangedComment getComments(int index) {
         if (commentsBuilder_ == null) {
           return comments_.get(index);
@@ -2587,6 +3356,9 @@ public final class Diff {
           return commentsBuilder_.getMessage(index);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 5;</code>
+       */
       public Builder setComments(
           int index, boa.types.Diff.ChangedComment value) {
         if (commentsBuilder_ == null) {
@@ -2601,6 +3373,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 5;</code>
+       */
       public Builder setComments(
           int index, boa.types.Diff.ChangedComment.Builder builderForValue) {
         if (commentsBuilder_ == null) {
@@ -2612,6 +3387,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 5;</code>
+       */
       public Builder addComments(boa.types.Diff.ChangedComment value) {
         if (commentsBuilder_ == null) {
           if (value == null) {
@@ -2625,6 +3403,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 5;</code>
+       */
       public Builder addComments(
           int index, boa.types.Diff.ChangedComment value) {
         if (commentsBuilder_ == null) {
@@ -2639,6 +3420,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 5;</code>
+       */
       public Builder addComments(
           boa.types.Diff.ChangedComment.Builder builderForValue) {
         if (commentsBuilder_ == null) {
@@ -2650,6 +3434,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 5;</code>
+       */
       public Builder addComments(
           int index, boa.types.Diff.ChangedComment.Builder builderForValue) {
         if (commentsBuilder_ == null) {
@@ -2661,6 +3448,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 5;</code>
+       */
       public Builder addAllComments(
           java.lang.Iterable<? extends boa.types.Diff.ChangedComment> values) {
         if (commentsBuilder_ == null) {
@@ -2672,6 +3462,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 5;</code>
+       */
       public Builder clearComments() {
         if (commentsBuilder_ == null) {
           comments_ = java.util.Collections.emptyList();
@@ -2682,6 +3475,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 5;</code>
+       */
       public Builder removeComments(int index) {
         if (commentsBuilder_ == null) {
           ensureCommentsIsMutable();
@@ -2692,10 +3488,16 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 5;</code>
+       */
       public boa.types.Diff.ChangedComment.Builder getCommentsBuilder(
           int index) {
         return getCommentsFieldBuilder().getBuilder(index);
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 5;</code>
+       */
       public boa.types.Diff.ChangedCommentOrBuilder getCommentsOrBuilder(
           int index) {
         if (commentsBuilder_ == null) {
@@ -2703,6 +3505,9 @@ public final class Diff {
           return commentsBuilder_.getMessageOrBuilder(index);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 5;</code>
+       */
       public java.util.List<? extends boa.types.Diff.ChangedCommentOrBuilder> 
            getCommentsOrBuilderList() {
         if (commentsBuilder_ != null) {
@@ -2711,15 +3516,24 @@ public final class Diff {
           return java.util.Collections.unmodifiableList(comments_);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 5;</code>
+       */
       public boa.types.Diff.ChangedComment.Builder addCommentsBuilder() {
         return getCommentsFieldBuilder().addBuilder(
             boa.types.Diff.ChangedComment.getDefaultInstance());
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 5;</code>
+       */
       public boa.types.Diff.ChangedComment.Builder addCommentsBuilder(
           int index) {
         return getCommentsFieldBuilder().addBuilder(
             index, boa.types.Diff.ChangedComment.getDefaultInstance());
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 5;</code>
+       */
       public java.util.List<boa.types.Diff.ChangedComment.Builder> 
            getCommentsBuilderList() {
         return getCommentsFieldBuilder().getBuilderList();
@@ -2738,331 +3552,753 @@ public final class Diff {
         }
         return commentsBuilder_;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:boa.types.ChangedNamespace)
     }
-    
+
     static {
       defaultInstance = new ChangedNamespace(true);
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:boa.types.ChangedNamespace)
   }
-  
+
   public interface ChangedDeclarationOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
-    
+
     // required .boa.types.ChangeKind change = 1;
+    /**
+     * <code>required .boa.types.ChangeKind change = 1;</code>
+     */
     boolean hasChange();
+    /**
+     * <code>required .boa.types.ChangeKind change = 1;</code>
+     */
     boa.types.Shared.ChangeKind getChange();
-    
+
     // required .boa.types.TypeKind kind = 2;
+    /**
+     * <code>required .boa.types.TypeKind kind = 2;</code>
+     */
     boolean hasKind();
+    /**
+     * <code>required .boa.types.TypeKind kind = 2;</code>
+     */
     boa.types.Ast.TypeKind getKind();
-    
+
     // optional string name = 3;
+    /**
+     * <code>optional string name = 3;</code>
+     */
     boolean hasName();
-    String getName();
-    
+    /**
+     * <code>optional string name = 3;</code>
+     */
+    java.lang.String getName();
+    /**
+     * <code>optional string name = 3;</code>
+     */
+    com.google.protobuf.ByteString
+        getNameBytes();
+
     // repeated .boa.types.ChangedModifier modifiers = 4;
+    /**
+     * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+     */
     java.util.List<boa.types.Diff.ChangedModifier> 
         getModifiersList();
+    /**
+     * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+     */
     boa.types.Diff.ChangedModifier getModifiers(int index);
+    /**
+     * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+     */
     int getModifiersCount();
+    /**
+     * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+     */
     java.util.List<? extends boa.types.Diff.ChangedModifierOrBuilder> 
         getModifiersOrBuilderList();
+    /**
+     * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+     */
     boa.types.Diff.ChangedModifierOrBuilder getModifiersOrBuilder(
         int index);
-    
+
     // repeated .boa.types.ChangedType generic_parameters = 5;
+    /**
+     * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+     */
     java.util.List<boa.types.Diff.ChangedType> 
         getGenericParametersList();
+    /**
+     * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+     */
     boa.types.Diff.ChangedType getGenericParameters(int index);
+    /**
+     * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+     */
     int getGenericParametersCount();
+    /**
+     * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+     */
     java.util.List<? extends boa.types.Diff.ChangedTypeOrBuilder> 
         getGenericParametersOrBuilderList();
+    /**
+     * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+     */
     boa.types.Diff.ChangedTypeOrBuilder getGenericParametersOrBuilder(
         int index);
-    
+
     // repeated .boa.types.ChangedType parents = 6;
+    /**
+     * <code>repeated .boa.types.ChangedType parents = 6;</code>
+     */
     java.util.List<boa.types.Diff.ChangedType> 
         getParentsList();
+    /**
+     * <code>repeated .boa.types.ChangedType parents = 6;</code>
+     */
     boa.types.Diff.ChangedType getParents(int index);
+    /**
+     * <code>repeated .boa.types.ChangedType parents = 6;</code>
+     */
     int getParentsCount();
+    /**
+     * <code>repeated .boa.types.ChangedType parents = 6;</code>
+     */
     java.util.List<? extends boa.types.Diff.ChangedTypeOrBuilder> 
         getParentsOrBuilderList();
+    /**
+     * <code>repeated .boa.types.ChangedType parents = 6;</code>
+     */
     boa.types.Diff.ChangedTypeOrBuilder getParentsOrBuilder(
         int index);
-    
+
     // repeated .boa.types.ChangedMethod methods = 7;
+    /**
+     * <code>repeated .boa.types.ChangedMethod methods = 7;</code>
+     */
     java.util.List<boa.types.Diff.ChangedMethod> 
         getMethodsList();
+    /**
+     * <code>repeated .boa.types.ChangedMethod methods = 7;</code>
+     */
     boa.types.Diff.ChangedMethod getMethods(int index);
+    /**
+     * <code>repeated .boa.types.ChangedMethod methods = 7;</code>
+     */
     int getMethodsCount();
+    /**
+     * <code>repeated .boa.types.ChangedMethod methods = 7;</code>
+     */
     java.util.List<? extends boa.types.Diff.ChangedMethodOrBuilder> 
         getMethodsOrBuilderList();
+    /**
+     * <code>repeated .boa.types.ChangedMethod methods = 7;</code>
+     */
     boa.types.Diff.ChangedMethodOrBuilder getMethodsOrBuilder(
         int index);
-    
+
     // repeated .boa.types.ChangedVariable fields = 8;
+    /**
+     * <code>repeated .boa.types.ChangedVariable fields = 8;</code>
+     */
     java.util.List<boa.types.Diff.ChangedVariable> 
         getFieldsList();
+    /**
+     * <code>repeated .boa.types.ChangedVariable fields = 8;</code>
+     */
     boa.types.Diff.ChangedVariable getFields(int index);
+    /**
+     * <code>repeated .boa.types.ChangedVariable fields = 8;</code>
+     */
     int getFieldsCount();
+    /**
+     * <code>repeated .boa.types.ChangedVariable fields = 8;</code>
+     */
     java.util.List<? extends boa.types.Diff.ChangedVariableOrBuilder> 
         getFieldsOrBuilderList();
+    /**
+     * <code>repeated .boa.types.ChangedVariable fields = 8;</code>
+     */
     boa.types.Diff.ChangedVariableOrBuilder getFieldsOrBuilder(
         int index);
-    
+
     // repeated .boa.types.ChangedDeclaration nested_declarations = 9;
+    /**
+     * <code>repeated .boa.types.ChangedDeclaration nested_declarations = 9;</code>
+     */
     java.util.List<boa.types.Diff.ChangedDeclaration> 
         getNestedDeclarationsList();
+    /**
+     * <code>repeated .boa.types.ChangedDeclaration nested_declarations = 9;</code>
+     */
     boa.types.Diff.ChangedDeclaration getNestedDeclarations(int index);
+    /**
+     * <code>repeated .boa.types.ChangedDeclaration nested_declarations = 9;</code>
+     */
     int getNestedDeclarationsCount();
+    /**
+     * <code>repeated .boa.types.ChangedDeclaration nested_declarations = 9;</code>
+     */
     java.util.List<? extends boa.types.Diff.ChangedDeclarationOrBuilder> 
         getNestedDeclarationsOrBuilderList();
+    /**
+     * <code>repeated .boa.types.ChangedDeclaration nested_declarations = 9;</code>
+     */
     boa.types.Diff.ChangedDeclarationOrBuilder getNestedDeclarationsOrBuilder(
         int index);
-    
+
     // repeated .boa.types.ChangedComment comments = 10;
+    /**
+     * <code>repeated .boa.types.ChangedComment comments = 10;</code>
+     */
     java.util.List<boa.types.Diff.ChangedComment> 
         getCommentsList();
+    /**
+     * <code>repeated .boa.types.ChangedComment comments = 10;</code>
+     */
     boa.types.Diff.ChangedComment getComments(int index);
+    /**
+     * <code>repeated .boa.types.ChangedComment comments = 10;</code>
+     */
     int getCommentsCount();
+    /**
+     * <code>repeated .boa.types.ChangedComment comments = 10;</code>
+     */
     java.util.List<? extends boa.types.Diff.ChangedCommentOrBuilder> 
         getCommentsOrBuilderList();
+    /**
+     * <code>repeated .boa.types.ChangedComment comments = 10;</code>
+     */
     boa.types.Diff.ChangedCommentOrBuilder getCommentsOrBuilder(
         int index);
   }
+  /**
+   * Protobuf type {@code boa.types.ChangedDeclaration}
+   */
   public static final class ChangedDeclaration extends
       com.google.protobuf.GeneratedMessage
       implements ChangedDeclarationOrBuilder {
     // Use ChangedDeclaration.newBuilder() to construct.
-    private ChangedDeclaration(Builder builder) {
+    private ChangedDeclaration(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
+      this.unknownFields = builder.getUnknownFields();
     }
-    private ChangedDeclaration(boolean noInit) {}
-    
+    private ChangedDeclaration(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
     private static final ChangedDeclaration defaultInstance;
     public static ChangedDeclaration getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public ChangedDeclaration getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private ChangedDeclaration(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 8: {
+              int rawValue = input.readEnum();
+              boa.types.Shared.ChangeKind value = boa.types.Shared.ChangeKind.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(1, rawValue);
+              } else {
+                bitField0_ |= 0x00000001;
+                change_ = value;
+              }
+              break;
+            }
+            case 16: {
+              int rawValue = input.readEnum();
+              boa.types.Ast.TypeKind value = boa.types.Ast.TypeKind.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(2, rawValue);
+              } else {
+                bitField0_ |= 0x00000002;
+                kind_ = value;
+              }
+              break;
+            }
+            case 26: {
+              bitField0_ |= 0x00000004;
+              name_ = input.readBytes();
+              break;
+            }
+            case 34: {
+              if (!((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
+                modifiers_ = new java.util.ArrayList<boa.types.Diff.ChangedModifier>();
+                mutable_bitField0_ |= 0x00000008;
+              }
+              modifiers_.add(input.readMessage(boa.types.Diff.ChangedModifier.PARSER, extensionRegistry));
+              break;
+            }
+            case 42: {
+              if (!((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
+                genericParameters_ = new java.util.ArrayList<boa.types.Diff.ChangedType>();
+                mutable_bitField0_ |= 0x00000010;
+              }
+              genericParameters_.add(input.readMessage(boa.types.Diff.ChangedType.PARSER, extensionRegistry));
+              break;
+            }
+            case 50: {
+              if (!((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
+                parents_ = new java.util.ArrayList<boa.types.Diff.ChangedType>();
+                mutable_bitField0_ |= 0x00000020;
+              }
+              parents_.add(input.readMessage(boa.types.Diff.ChangedType.PARSER, extensionRegistry));
+              break;
+            }
+            case 58: {
+              if (!((mutable_bitField0_ & 0x00000040) == 0x00000040)) {
+                methods_ = new java.util.ArrayList<boa.types.Diff.ChangedMethod>();
+                mutable_bitField0_ |= 0x00000040;
+              }
+              methods_.add(input.readMessage(boa.types.Diff.ChangedMethod.PARSER, extensionRegistry));
+              break;
+            }
+            case 66: {
+              if (!((mutable_bitField0_ & 0x00000080) == 0x00000080)) {
+                fields_ = new java.util.ArrayList<boa.types.Diff.ChangedVariable>();
+                mutable_bitField0_ |= 0x00000080;
+              }
+              fields_.add(input.readMessage(boa.types.Diff.ChangedVariable.PARSER, extensionRegistry));
+              break;
+            }
+            case 74: {
+              if (!((mutable_bitField0_ & 0x00000100) == 0x00000100)) {
+                nestedDeclarations_ = new java.util.ArrayList<boa.types.Diff.ChangedDeclaration>();
+                mutable_bitField0_ |= 0x00000100;
+              }
+              nestedDeclarations_.add(input.readMessage(boa.types.Diff.ChangedDeclaration.PARSER, extensionRegistry));
+              break;
+            }
+            case 82: {
+              if (!((mutable_bitField0_ & 0x00000200) == 0x00000200)) {
+                comments_ = new java.util.ArrayList<boa.types.Diff.ChangedComment>();
+                mutable_bitField0_ |= 0x00000200;
+              }
+              comments_.add(input.readMessage(boa.types.Diff.ChangedComment.PARSER, extensionRegistry));
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
+          modifiers_ = java.util.Collections.unmodifiableList(modifiers_);
+        }
+        if (((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
+          genericParameters_ = java.util.Collections.unmodifiableList(genericParameters_);
+        }
+        if (((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
+          parents_ = java.util.Collections.unmodifiableList(parents_);
+        }
+        if (((mutable_bitField0_ & 0x00000040) == 0x00000040)) {
+          methods_ = java.util.Collections.unmodifiableList(methods_);
+        }
+        if (((mutable_bitField0_ & 0x00000080) == 0x00000080)) {
+          fields_ = java.util.Collections.unmodifiableList(fields_);
+        }
+        if (((mutable_bitField0_ & 0x00000100) == 0x00000100)) {
+          nestedDeclarations_ = java.util.Collections.unmodifiableList(nestedDeclarations_);
+        }
+        if (((mutable_bitField0_ & 0x00000200) == 0x00000200)) {
+          comments_ = java.util.Collections.unmodifiableList(comments_);
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return boa.types.Diff.internal_static_boa_types_ChangedDeclaration_descriptor;
     }
-    
+
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return boa.types.Diff.internal_static_boa_types_ChangedDeclaration_fieldAccessorTable;
+      return boa.types.Diff.internal_static_boa_types_ChangedDeclaration_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              boa.types.Diff.ChangedDeclaration.class, boa.types.Diff.ChangedDeclaration.Builder.class);
     }
-    
+
+    public static com.google.protobuf.Parser<ChangedDeclaration> PARSER =
+        new com.google.protobuf.AbstractParser<ChangedDeclaration>() {
+      public ChangedDeclaration parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new ChangedDeclaration(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<ChangedDeclaration> getParserForType() {
+      return PARSER;
+    }
+
     private int bitField0_;
     // required .boa.types.ChangeKind change = 1;
     public static final int CHANGE_FIELD_NUMBER = 1;
     private boa.types.Shared.ChangeKind change_;
+    /**
+     * <code>required .boa.types.ChangeKind change = 1;</code>
+     */
     public boolean hasChange() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
+    /**
+     * <code>required .boa.types.ChangeKind change = 1;</code>
+     */
     public boa.types.Shared.ChangeKind getChange() {
       return change_;
     }
-    
+
     // required .boa.types.TypeKind kind = 2;
     public static final int KIND_FIELD_NUMBER = 2;
     private boa.types.Ast.TypeKind kind_;
+    /**
+     * <code>required .boa.types.TypeKind kind = 2;</code>
+     */
     public boolean hasKind() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
+    /**
+     * <code>required .boa.types.TypeKind kind = 2;</code>
+     */
     public boa.types.Ast.TypeKind getKind() {
       return kind_;
     }
-    
+
     // optional string name = 3;
     public static final int NAME_FIELD_NUMBER = 3;
     private java.lang.Object name_;
+    /**
+     * <code>optional string name = 3;</code>
+     */
     public boolean hasName() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
-    public String getName() {
+    /**
+     * <code>optional string name = 3;</code>
+     */
+    public java.lang.String getName() {
       java.lang.Object ref = name_;
-      if (ref instanceof String) {
-        return (String) ref;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
           name_ = s;
         }
         return s;
       }
     }
-    private com.google.protobuf.ByteString getNameBytes() {
+    /**
+     * <code>optional string name = 3;</code>
+     */
+    public com.google.protobuf.ByteString
+        getNameBytes() {
       java.lang.Object ref = name_;
-      if (ref instanceof String) {
+      if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
         name_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
-    
+
     // repeated .boa.types.ChangedModifier modifiers = 4;
     public static final int MODIFIERS_FIELD_NUMBER = 4;
     private java.util.List<boa.types.Diff.ChangedModifier> modifiers_;
+    /**
+     * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+     */
     public java.util.List<boa.types.Diff.ChangedModifier> getModifiersList() {
       return modifiers_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+     */
     public java.util.List<? extends boa.types.Diff.ChangedModifierOrBuilder> 
         getModifiersOrBuilderList() {
       return modifiers_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+     */
     public int getModifiersCount() {
       return modifiers_.size();
     }
+    /**
+     * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+     */
     public boa.types.Diff.ChangedModifier getModifiers(int index) {
       return modifiers_.get(index);
     }
+    /**
+     * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+     */
     public boa.types.Diff.ChangedModifierOrBuilder getModifiersOrBuilder(
         int index) {
       return modifiers_.get(index);
     }
-    
+
     // repeated .boa.types.ChangedType generic_parameters = 5;
     public static final int GENERIC_PARAMETERS_FIELD_NUMBER = 5;
     private java.util.List<boa.types.Diff.ChangedType> genericParameters_;
+    /**
+     * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+     */
     public java.util.List<boa.types.Diff.ChangedType> getGenericParametersList() {
       return genericParameters_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+     */
     public java.util.List<? extends boa.types.Diff.ChangedTypeOrBuilder> 
         getGenericParametersOrBuilderList() {
       return genericParameters_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+     */
     public int getGenericParametersCount() {
       return genericParameters_.size();
     }
+    /**
+     * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+     */
     public boa.types.Diff.ChangedType getGenericParameters(int index) {
       return genericParameters_.get(index);
     }
+    /**
+     * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+     */
     public boa.types.Diff.ChangedTypeOrBuilder getGenericParametersOrBuilder(
         int index) {
       return genericParameters_.get(index);
     }
-    
+
     // repeated .boa.types.ChangedType parents = 6;
     public static final int PARENTS_FIELD_NUMBER = 6;
     private java.util.List<boa.types.Diff.ChangedType> parents_;
+    /**
+     * <code>repeated .boa.types.ChangedType parents = 6;</code>
+     */
     public java.util.List<boa.types.Diff.ChangedType> getParentsList() {
       return parents_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedType parents = 6;</code>
+     */
     public java.util.List<? extends boa.types.Diff.ChangedTypeOrBuilder> 
         getParentsOrBuilderList() {
       return parents_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedType parents = 6;</code>
+     */
     public int getParentsCount() {
       return parents_.size();
     }
+    /**
+     * <code>repeated .boa.types.ChangedType parents = 6;</code>
+     */
     public boa.types.Diff.ChangedType getParents(int index) {
       return parents_.get(index);
     }
+    /**
+     * <code>repeated .boa.types.ChangedType parents = 6;</code>
+     */
     public boa.types.Diff.ChangedTypeOrBuilder getParentsOrBuilder(
         int index) {
       return parents_.get(index);
     }
-    
+
     // repeated .boa.types.ChangedMethod methods = 7;
     public static final int METHODS_FIELD_NUMBER = 7;
     private java.util.List<boa.types.Diff.ChangedMethod> methods_;
+    /**
+     * <code>repeated .boa.types.ChangedMethod methods = 7;</code>
+     */
     public java.util.List<boa.types.Diff.ChangedMethod> getMethodsList() {
       return methods_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedMethod methods = 7;</code>
+     */
     public java.util.List<? extends boa.types.Diff.ChangedMethodOrBuilder> 
         getMethodsOrBuilderList() {
       return methods_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedMethod methods = 7;</code>
+     */
     public int getMethodsCount() {
       return methods_.size();
     }
+    /**
+     * <code>repeated .boa.types.ChangedMethod methods = 7;</code>
+     */
     public boa.types.Diff.ChangedMethod getMethods(int index) {
       return methods_.get(index);
     }
+    /**
+     * <code>repeated .boa.types.ChangedMethod methods = 7;</code>
+     */
     public boa.types.Diff.ChangedMethodOrBuilder getMethodsOrBuilder(
         int index) {
       return methods_.get(index);
     }
-    
+
     // repeated .boa.types.ChangedVariable fields = 8;
     public static final int FIELDS_FIELD_NUMBER = 8;
     private java.util.List<boa.types.Diff.ChangedVariable> fields_;
+    /**
+     * <code>repeated .boa.types.ChangedVariable fields = 8;</code>
+     */
     public java.util.List<boa.types.Diff.ChangedVariable> getFieldsList() {
       return fields_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedVariable fields = 8;</code>
+     */
     public java.util.List<? extends boa.types.Diff.ChangedVariableOrBuilder> 
         getFieldsOrBuilderList() {
       return fields_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedVariable fields = 8;</code>
+     */
     public int getFieldsCount() {
       return fields_.size();
     }
+    /**
+     * <code>repeated .boa.types.ChangedVariable fields = 8;</code>
+     */
     public boa.types.Diff.ChangedVariable getFields(int index) {
       return fields_.get(index);
     }
+    /**
+     * <code>repeated .boa.types.ChangedVariable fields = 8;</code>
+     */
     public boa.types.Diff.ChangedVariableOrBuilder getFieldsOrBuilder(
         int index) {
       return fields_.get(index);
     }
-    
+
     // repeated .boa.types.ChangedDeclaration nested_declarations = 9;
     public static final int NESTED_DECLARATIONS_FIELD_NUMBER = 9;
     private java.util.List<boa.types.Diff.ChangedDeclaration> nestedDeclarations_;
+    /**
+     * <code>repeated .boa.types.ChangedDeclaration nested_declarations = 9;</code>
+     */
     public java.util.List<boa.types.Diff.ChangedDeclaration> getNestedDeclarationsList() {
       return nestedDeclarations_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedDeclaration nested_declarations = 9;</code>
+     */
     public java.util.List<? extends boa.types.Diff.ChangedDeclarationOrBuilder> 
         getNestedDeclarationsOrBuilderList() {
       return nestedDeclarations_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedDeclaration nested_declarations = 9;</code>
+     */
     public int getNestedDeclarationsCount() {
       return nestedDeclarations_.size();
     }
+    /**
+     * <code>repeated .boa.types.ChangedDeclaration nested_declarations = 9;</code>
+     */
     public boa.types.Diff.ChangedDeclaration getNestedDeclarations(int index) {
       return nestedDeclarations_.get(index);
     }
+    /**
+     * <code>repeated .boa.types.ChangedDeclaration nested_declarations = 9;</code>
+     */
     public boa.types.Diff.ChangedDeclarationOrBuilder getNestedDeclarationsOrBuilder(
         int index) {
       return nestedDeclarations_.get(index);
     }
-    
+
     // repeated .boa.types.ChangedComment comments = 10;
     public static final int COMMENTS_FIELD_NUMBER = 10;
     private java.util.List<boa.types.Diff.ChangedComment> comments_;
+    /**
+     * <code>repeated .boa.types.ChangedComment comments = 10;</code>
+     */
     public java.util.List<boa.types.Diff.ChangedComment> getCommentsList() {
       return comments_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedComment comments = 10;</code>
+     */
     public java.util.List<? extends boa.types.Diff.ChangedCommentOrBuilder> 
         getCommentsOrBuilderList() {
       return comments_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedComment comments = 10;</code>
+     */
     public int getCommentsCount() {
       return comments_.size();
     }
+    /**
+     * <code>repeated .boa.types.ChangedComment comments = 10;</code>
+     */
     public boa.types.Diff.ChangedComment getComments(int index) {
       return comments_.get(index);
     }
+    /**
+     * <code>repeated .boa.types.ChangedComment comments = 10;</code>
+     */
     public boa.types.Diff.ChangedCommentOrBuilder getCommentsOrBuilder(
         int index) {
       return comments_.get(index);
     }
-    
+
     private void initFields() {
       change_ = boa.types.Shared.ChangeKind.ADDED;
       kind_ = boa.types.Ast.TypeKind.OTHER;
@@ -3079,7 +4315,7 @@ public final class Diff {
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized != -1) return isInitialized == 1;
-      
+
       if (!hasChange()) {
         memoizedIsInitialized = 0;
         return false;
@@ -3133,7 +4369,7 @@ public final class Diff {
       memoizedIsInitialized = 1;
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
@@ -3169,12 +4405,12 @@ public final class Diff {
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
       if (size != -1) return size;
-    
+
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
@@ -3220,94 +4456,83 @@ public final class Diff {
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     private static final long serialVersionUID = 0L;
     @java.lang.Override
     protected java.lang.Object writeReplace()
         throws java.io.ObjectStreamException {
       return super.writeReplace();
     }
-    
+
     public static boa.types.Diff.ChangedDeclaration parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
+      return PARSER.parseFrom(data);
     }
     public static boa.types.Diff.ChangedDeclaration parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(data, extensionRegistry);
     }
     public static boa.types.Diff.ChangedDeclaration parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
+      return PARSER.parseFrom(data);
     }
     public static boa.types.Diff.ChangedDeclaration parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(data, extensionRegistry);
     }
     public static boa.types.Diff.ChangedDeclaration parseFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
+      return PARSER.parseFrom(input);
     }
     public static boa.types.Diff.ChangedDeclaration parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(input, extensionRegistry);
     }
     public static boa.types.Diff.ChangedDeclaration parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
+      return PARSER.parseDelimitedFrom(input);
     }
     public static boa.types.Diff.ChangedDeclaration parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
     }
     public static boa.types.Diff.ChangedDeclaration parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
+      return PARSER.parseFrom(input);
     }
     public static boa.types.Diff.ChangedDeclaration parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(input, extensionRegistry);
     }
-    
+
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder(boa.types.Diff.ChangedDeclaration prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
-    
+
     @java.lang.Override
     protected Builder newBuilderForType(
         com.google.protobuf.GeneratedMessage.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
+    /**
+     * Protobuf type {@code boa.types.ChangedDeclaration}
+     */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
        implements boa.types.Diff.ChangedDeclarationOrBuilder {
@@ -3315,18 +4540,21 @@ public final class Diff {
           getDescriptor() {
         return boa.types.Diff.internal_static_boa_types_ChangedDeclaration_descriptor;
       }
-      
+
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return boa.types.Diff.internal_static_boa_types_ChangedDeclaration_fieldAccessorTable;
+        return boa.types.Diff.internal_static_boa_types_ChangedDeclaration_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                boa.types.Diff.ChangedDeclaration.class, boa.types.Diff.ChangedDeclaration.Builder.class);
       }
-      
+
       // Construct using boa.types.Diff.ChangedDeclaration.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
-      
-      private Builder(BuilderParent parent) {
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -3344,7 +4572,7 @@ public final class Diff {
       private static Builder create() {
         return new Builder();
       }
-      
+
       public Builder clear() {
         super.clear();
         change_ = boa.types.Shared.ChangeKind.ADDED;
@@ -3397,20 +4625,20 @@ public final class Diff {
         }
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(buildPartial());
       }
-      
+
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return boa.types.Diff.ChangedDeclaration.getDescriptor();
+        return boa.types.Diff.internal_static_boa_types_ChangedDeclaration_descriptor;
       }
-      
+
       public boa.types.Diff.ChangedDeclaration getDefaultInstanceForType() {
         return boa.types.Diff.ChangedDeclaration.getDefaultInstance();
       }
-      
+
       public boa.types.Diff.ChangedDeclaration build() {
         boa.types.Diff.ChangedDeclaration result = buildPartial();
         if (!result.isInitialized()) {
@@ -3418,17 +4646,7 @@ public final class Diff {
         }
         return result;
       }
-      
-      private boa.types.Diff.ChangedDeclaration buildParsed()
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        boa.types.Diff.ChangedDeclaration result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
-        }
-        return result;
-      }
-      
+
       public boa.types.Diff.ChangedDeclaration buildPartial() {
         boa.types.Diff.ChangedDeclaration result = new boa.types.Diff.ChangedDeclaration(this);
         int from_bitField0_ = bitField0_;
@@ -3512,7 +4730,7 @@ public final class Diff {
         onBuilt();
         return result;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof boa.types.Diff.ChangedDeclaration) {
           return mergeFrom((boa.types.Diff.ChangedDeclaration)other);
@@ -3521,7 +4739,7 @@ public final class Diff {
           return this;
         }
       }
-      
+
       public Builder mergeFrom(boa.types.Diff.ChangedDeclaration other) {
         if (other == boa.types.Diff.ChangedDeclaration.getDefaultInstance()) return this;
         if (other.hasChange()) {
@@ -3531,7 +4749,9 @@ public final class Diff {
           setKind(other.getKind());
         }
         if (other.hasName()) {
-          setName(other.getName());
+          bitField0_ |= 0x00000004;
+          name_ = other.name_;
+          onChanged();
         }
         if (modifiersBuilder_ == null) {
           if (!other.modifiers_.isEmpty()) {
@@ -3718,7 +4938,7 @@ public final class Diff {
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
+
       public final boolean isInitialized() {
         if (!hasChange()) {
           
@@ -3772,113 +4992,43 @@ public final class Diff {
         }
         return true;
       }
-      
+
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
-        while (true) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              this.setUnknownFields(unknownFields.build());
-              onChanged();
-              return this;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                onChanged();
-                return this;
-              }
-              break;
-            }
-            case 8: {
-              int rawValue = input.readEnum();
-              boa.types.Shared.ChangeKind value = boa.types.Shared.ChangeKind.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(1, rawValue);
-              } else {
-                bitField0_ |= 0x00000001;
-                change_ = value;
-              }
-              break;
-            }
-            case 16: {
-              int rawValue = input.readEnum();
-              boa.types.Ast.TypeKind value = boa.types.Ast.TypeKind.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(2, rawValue);
-              } else {
-                bitField0_ |= 0x00000002;
-                kind_ = value;
-              }
-              break;
-            }
-            case 26: {
-              bitField0_ |= 0x00000004;
-              name_ = input.readBytes();
-              break;
-            }
-            case 34: {
-              boa.types.Diff.ChangedModifier.Builder subBuilder = boa.types.Diff.ChangedModifier.newBuilder();
-              input.readMessage(subBuilder, extensionRegistry);
-              addModifiers(subBuilder.buildPartial());
-              break;
-            }
-            case 42: {
-              boa.types.Diff.ChangedType.Builder subBuilder = boa.types.Diff.ChangedType.newBuilder();
-              input.readMessage(subBuilder, extensionRegistry);
-              addGenericParameters(subBuilder.buildPartial());
-              break;
-            }
-            case 50: {
-              boa.types.Diff.ChangedType.Builder subBuilder = boa.types.Diff.ChangedType.newBuilder();
-              input.readMessage(subBuilder, extensionRegistry);
-              addParents(subBuilder.buildPartial());
-              break;
-            }
-            case 58: {
-              boa.types.Diff.ChangedMethod.Builder subBuilder = boa.types.Diff.ChangedMethod.newBuilder();
-              input.readMessage(subBuilder, extensionRegistry);
-              addMethods(subBuilder.buildPartial());
-              break;
-            }
-            case 66: {
-              boa.types.Diff.ChangedVariable.Builder subBuilder = boa.types.Diff.ChangedVariable.newBuilder();
-              input.readMessage(subBuilder, extensionRegistry);
-              addFields(subBuilder.buildPartial());
-              break;
-            }
-            case 74: {
-              boa.types.Diff.ChangedDeclaration.Builder subBuilder = boa.types.Diff.ChangedDeclaration.newBuilder();
-              input.readMessage(subBuilder, extensionRegistry);
-              addNestedDeclarations(subBuilder.buildPartial());
-              break;
-            }
-            case 82: {
-              boa.types.Diff.ChangedComment.Builder subBuilder = boa.types.Diff.ChangedComment.newBuilder();
-              input.readMessage(subBuilder, extensionRegistry);
-              addComments(subBuilder.buildPartial());
-              break;
-            }
+        boa.types.Diff.ChangedDeclaration parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (boa.types.Diff.ChangedDeclaration) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
           }
         }
+        return this;
       }
-      
       private int bitField0_;
-      
+
       // required .boa.types.ChangeKind change = 1;
       private boa.types.Shared.ChangeKind change_ = boa.types.Shared.ChangeKind.ADDED;
+      /**
+       * <code>required .boa.types.ChangeKind change = 1;</code>
+       */
       public boolean hasChange() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
+      /**
+       * <code>required .boa.types.ChangeKind change = 1;</code>
+       */
       public boa.types.Shared.ChangeKind getChange() {
         return change_;
       }
+      /**
+       * <code>required .boa.types.ChangeKind change = 1;</code>
+       */
       public Builder setChange(boa.types.Shared.ChangeKind value) {
         if (value == null) {
           throw new NullPointerException();
@@ -3888,21 +5038,33 @@ public final class Diff {
         onChanged();
         return this;
       }
+      /**
+       * <code>required .boa.types.ChangeKind change = 1;</code>
+       */
       public Builder clearChange() {
         bitField0_ = (bitField0_ & ~0x00000001);
         change_ = boa.types.Shared.ChangeKind.ADDED;
         onChanged();
         return this;
       }
-      
+
       // required .boa.types.TypeKind kind = 2;
       private boa.types.Ast.TypeKind kind_ = boa.types.Ast.TypeKind.OTHER;
+      /**
+       * <code>required .boa.types.TypeKind kind = 2;</code>
+       */
       public boolean hasKind() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
+      /**
+       * <code>required .boa.types.TypeKind kind = 2;</code>
+       */
       public boa.types.Ast.TypeKind getKind() {
         return kind_;
       }
+      /**
+       * <code>required .boa.types.TypeKind kind = 2;</code>
+       */
       public Builder setKind(boa.types.Ast.TypeKind value) {
         if (value == null) {
           throw new NullPointerException();
@@ -3912,29 +5074,59 @@ public final class Diff {
         onChanged();
         return this;
       }
+      /**
+       * <code>required .boa.types.TypeKind kind = 2;</code>
+       */
       public Builder clearKind() {
         bitField0_ = (bitField0_ & ~0x00000002);
         kind_ = boa.types.Ast.TypeKind.OTHER;
         onChanged();
         return this;
       }
-      
+
       // optional string name = 3;
       private java.lang.Object name_ = "";
+      /**
+       * <code>optional string name = 3;</code>
+       */
       public boolean hasName() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
-      public String getName() {
+      /**
+       * <code>optional string name = 3;</code>
+       */
+      public java.lang.String getName() {
         java.lang.Object ref = name_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
           name_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
-      public Builder setName(String value) {
+      /**
+       * <code>optional string name = 3;</code>
+       */
+      public com.google.protobuf.ByteString
+          getNameBytes() {
+        java.lang.Object ref = name_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          name_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string name = 3;</code>
+       */
+      public Builder setName(
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -3943,18 +5135,29 @@ public final class Diff {
         onChanged();
         return this;
       }
+      /**
+       * <code>optional string name = 3;</code>
+       */
       public Builder clearName() {
         bitField0_ = (bitField0_ & ~0x00000004);
         name_ = getDefaultInstance().getName();
         onChanged();
         return this;
       }
-      void setName(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00000004;
+      /**
+       * <code>optional string name = 3;</code>
+       */
+      public Builder setNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000004;
         name_ = value;
         onChanged();
+        return this;
       }
-      
+
       // repeated .boa.types.ChangedModifier modifiers = 4;
       private java.util.List<boa.types.Diff.ChangedModifier> modifiers_ =
         java.util.Collections.emptyList();
@@ -3964,10 +5167,13 @@ public final class Diff {
           bitField0_ |= 0x00000008;
          }
       }
-      
+
       private com.google.protobuf.RepeatedFieldBuilder<
           boa.types.Diff.ChangedModifier, boa.types.Diff.ChangedModifier.Builder, boa.types.Diff.ChangedModifierOrBuilder> modifiersBuilder_;
-      
+
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+       */
       public java.util.List<boa.types.Diff.ChangedModifier> getModifiersList() {
         if (modifiersBuilder_ == null) {
           return java.util.Collections.unmodifiableList(modifiers_);
@@ -3975,6 +5181,9 @@ public final class Diff {
           return modifiersBuilder_.getMessageList();
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+       */
       public int getModifiersCount() {
         if (modifiersBuilder_ == null) {
           return modifiers_.size();
@@ -3982,6 +5191,9 @@ public final class Diff {
           return modifiersBuilder_.getCount();
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+       */
       public boa.types.Diff.ChangedModifier getModifiers(int index) {
         if (modifiersBuilder_ == null) {
           return modifiers_.get(index);
@@ -3989,6 +5201,9 @@ public final class Diff {
           return modifiersBuilder_.getMessage(index);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+       */
       public Builder setModifiers(
           int index, boa.types.Diff.ChangedModifier value) {
         if (modifiersBuilder_ == null) {
@@ -4003,6 +5218,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+       */
       public Builder setModifiers(
           int index, boa.types.Diff.ChangedModifier.Builder builderForValue) {
         if (modifiersBuilder_ == null) {
@@ -4014,6 +5232,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+       */
       public Builder addModifiers(boa.types.Diff.ChangedModifier value) {
         if (modifiersBuilder_ == null) {
           if (value == null) {
@@ -4027,6 +5248,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+       */
       public Builder addModifiers(
           int index, boa.types.Diff.ChangedModifier value) {
         if (modifiersBuilder_ == null) {
@@ -4041,6 +5265,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+       */
       public Builder addModifiers(
           boa.types.Diff.ChangedModifier.Builder builderForValue) {
         if (modifiersBuilder_ == null) {
@@ -4052,6 +5279,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+       */
       public Builder addModifiers(
           int index, boa.types.Diff.ChangedModifier.Builder builderForValue) {
         if (modifiersBuilder_ == null) {
@@ -4063,6 +5293,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+       */
       public Builder addAllModifiers(
           java.lang.Iterable<? extends boa.types.Diff.ChangedModifier> values) {
         if (modifiersBuilder_ == null) {
@@ -4074,6 +5307,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+       */
       public Builder clearModifiers() {
         if (modifiersBuilder_ == null) {
           modifiers_ = java.util.Collections.emptyList();
@@ -4084,6 +5320,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+       */
       public Builder removeModifiers(int index) {
         if (modifiersBuilder_ == null) {
           ensureModifiersIsMutable();
@@ -4094,10 +5333,16 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+       */
       public boa.types.Diff.ChangedModifier.Builder getModifiersBuilder(
           int index) {
         return getModifiersFieldBuilder().getBuilder(index);
       }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+       */
       public boa.types.Diff.ChangedModifierOrBuilder getModifiersOrBuilder(
           int index) {
         if (modifiersBuilder_ == null) {
@@ -4105,6 +5350,9 @@ public final class Diff {
           return modifiersBuilder_.getMessageOrBuilder(index);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+       */
       public java.util.List<? extends boa.types.Diff.ChangedModifierOrBuilder> 
            getModifiersOrBuilderList() {
         if (modifiersBuilder_ != null) {
@@ -4113,15 +5361,24 @@ public final class Diff {
           return java.util.Collections.unmodifiableList(modifiers_);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+       */
       public boa.types.Diff.ChangedModifier.Builder addModifiersBuilder() {
         return getModifiersFieldBuilder().addBuilder(
             boa.types.Diff.ChangedModifier.getDefaultInstance());
       }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+       */
       public boa.types.Diff.ChangedModifier.Builder addModifiersBuilder(
           int index) {
         return getModifiersFieldBuilder().addBuilder(
             index, boa.types.Diff.ChangedModifier.getDefaultInstance());
       }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+       */
       public java.util.List<boa.types.Diff.ChangedModifier.Builder> 
            getModifiersBuilderList() {
         return getModifiersFieldBuilder().getBuilderList();
@@ -4140,7 +5397,7 @@ public final class Diff {
         }
         return modifiersBuilder_;
       }
-      
+
       // repeated .boa.types.ChangedType generic_parameters = 5;
       private java.util.List<boa.types.Diff.ChangedType> genericParameters_ =
         java.util.Collections.emptyList();
@@ -4150,10 +5407,13 @@ public final class Diff {
           bitField0_ |= 0x00000010;
          }
       }
-      
+
       private com.google.protobuf.RepeatedFieldBuilder<
           boa.types.Diff.ChangedType, boa.types.Diff.ChangedType.Builder, boa.types.Diff.ChangedTypeOrBuilder> genericParametersBuilder_;
-      
+
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+       */
       public java.util.List<boa.types.Diff.ChangedType> getGenericParametersList() {
         if (genericParametersBuilder_ == null) {
           return java.util.Collections.unmodifiableList(genericParameters_);
@@ -4161,6 +5421,9 @@ public final class Diff {
           return genericParametersBuilder_.getMessageList();
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+       */
       public int getGenericParametersCount() {
         if (genericParametersBuilder_ == null) {
           return genericParameters_.size();
@@ -4168,6 +5431,9 @@ public final class Diff {
           return genericParametersBuilder_.getCount();
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+       */
       public boa.types.Diff.ChangedType getGenericParameters(int index) {
         if (genericParametersBuilder_ == null) {
           return genericParameters_.get(index);
@@ -4175,6 +5441,9 @@ public final class Diff {
           return genericParametersBuilder_.getMessage(index);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+       */
       public Builder setGenericParameters(
           int index, boa.types.Diff.ChangedType value) {
         if (genericParametersBuilder_ == null) {
@@ -4189,6 +5458,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+       */
       public Builder setGenericParameters(
           int index, boa.types.Diff.ChangedType.Builder builderForValue) {
         if (genericParametersBuilder_ == null) {
@@ -4200,6 +5472,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+       */
       public Builder addGenericParameters(boa.types.Diff.ChangedType value) {
         if (genericParametersBuilder_ == null) {
           if (value == null) {
@@ -4213,6 +5488,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+       */
       public Builder addGenericParameters(
           int index, boa.types.Diff.ChangedType value) {
         if (genericParametersBuilder_ == null) {
@@ -4227,6 +5505,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+       */
       public Builder addGenericParameters(
           boa.types.Diff.ChangedType.Builder builderForValue) {
         if (genericParametersBuilder_ == null) {
@@ -4238,6 +5519,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+       */
       public Builder addGenericParameters(
           int index, boa.types.Diff.ChangedType.Builder builderForValue) {
         if (genericParametersBuilder_ == null) {
@@ -4249,6 +5533,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+       */
       public Builder addAllGenericParameters(
           java.lang.Iterable<? extends boa.types.Diff.ChangedType> values) {
         if (genericParametersBuilder_ == null) {
@@ -4260,6 +5547,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+       */
       public Builder clearGenericParameters() {
         if (genericParametersBuilder_ == null) {
           genericParameters_ = java.util.Collections.emptyList();
@@ -4270,6 +5560,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+       */
       public Builder removeGenericParameters(int index) {
         if (genericParametersBuilder_ == null) {
           ensureGenericParametersIsMutable();
@@ -4280,10 +5573,16 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+       */
       public boa.types.Diff.ChangedType.Builder getGenericParametersBuilder(
           int index) {
         return getGenericParametersFieldBuilder().getBuilder(index);
       }
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+       */
       public boa.types.Diff.ChangedTypeOrBuilder getGenericParametersOrBuilder(
           int index) {
         if (genericParametersBuilder_ == null) {
@@ -4291,6 +5590,9 @@ public final class Diff {
           return genericParametersBuilder_.getMessageOrBuilder(index);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+       */
       public java.util.List<? extends boa.types.Diff.ChangedTypeOrBuilder> 
            getGenericParametersOrBuilderList() {
         if (genericParametersBuilder_ != null) {
@@ -4299,15 +5601,24 @@ public final class Diff {
           return java.util.Collections.unmodifiableList(genericParameters_);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+       */
       public boa.types.Diff.ChangedType.Builder addGenericParametersBuilder() {
         return getGenericParametersFieldBuilder().addBuilder(
             boa.types.Diff.ChangedType.getDefaultInstance());
       }
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+       */
       public boa.types.Diff.ChangedType.Builder addGenericParametersBuilder(
           int index) {
         return getGenericParametersFieldBuilder().addBuilder(
             index, boa.types.Diff.ChangedType.getDefaultInstance());
       }
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+       */
       public java.util.List<boa.types.Diff.ChangedType.Builder> 
            getGenericParametersBuilderList() {
         return getGenericParametersFieldBuilder().getBuilderList();
@@ -4326,7 +5637,7 @@ public final class Diff {
         }
         return genericParametersBuilder_;
       }
-      
+
       // repeated .boa.types.ChangedType parents = 6;
       private java.util.List<boa.types.Diff.ChangedType> parents_ =
         java.util.Collections.emptyList();
@@ -4336,10 +5647,13 @@ public final class Diff {
           bitField0_ |= 0x00000020;
          }
       }
-      
+
       private com.google.protobuf.RepeatedFieldBuilder<
           boa.types.Diff.ChangedType, boa.types.Diff.ChangedType.Builder, boa.types.Diff.ChangedTypeOrBuilder> parentsBuilder_;
-      
+
+      /**
+       * <code>repeated .boa.types.ChangedType parents = 6;</code>
+       */
       public java.util.List<boa.types.Diff.ChangedType> getParentsList() {
         if (parentsBuilder_ == null) {
           return java.util.Collections.unmodifiableList(parents_);
@@ -4347,6 +5661,9 @@ public final class Diff {
           return parentsBuilder_.getMessageList();
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedType parents = 6;</code>
+       */
       public int getParentsCount() {
         if (parentsBuilder_ == null) {
           return parents_.size();
@@ -4354,6 +5671,9 @@ public final class Diff {
           return parentsBuilder_.getCount();
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedType parents = 6;</code>
+       */
       public boa.types.Diff.ChangedType getParents(int index) {
         if (parentsBuilder_ == null) {
           return parents_.get(index);
@@ -4361,6 +5681,9 @@ public final class Diff {
           return parentsBuilder_.getMessage(index);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedType parents = 6;</code>
+       */
       public Builder setParents(
           int index, boa.types.Diff.ChangedType value) {
         if (parentsBuilder_ == null) {
@@ -4375,6 +5698,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedType parents = 6;</code>
+       */
       public Builder setParents(
           int index, boa.types.Diff.ChangedType.Builder builderForValue) {
         if (parentsBuilder_ == null) {
@@ -4386,6 +5712,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedType parents = 6;</code>
+       */
       public Builder addParents(boa.types.Diff.ChangedType value) {
         if (parentsBuilder_ == null) {
           if (value == null) {
@@ -4399,6 +5728,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedType parents = 6;</code>
+       */
       public Builder addParents(
           int index, boa.types.Diff.ChangedType value) {
         if (parentsBuilder_ == null) {
@@ -4413,6 +5745,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedType parents = 6;</code>
+       */
       public Builder addParents(
           boa.types.Diff.ChangedType.Builder builderForValue) {
         if (parentsBuilder_ == null) {
@@ -4424,6 +5759,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedType parents = 6;</code>
+       */
       public Builder addParents(
           int index, boa.types.Diff.ChangedType.Builder builderForValue) {
         if (parentsBuilder_ == null) {
@@ -4435,6 +5773,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedType parents = 6;</code>
+       */
       public Builder addAllParents(
           java.lang.Iterable<? extends boa.types.Diff.ChangedType> values) {
         if (parentsBuilder_ == null) {
@@ -4446,6 +5787,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedType parents = 6;</code>
+       */
       public Builder clearParents() {
         if (parentsBuilder_ == null) {
           parents_ = java.util.Collections.emptyList();
@@ -4456,6 +5800,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedType parents = 6;</code>
+       */
       public Builder removeParents(int index) {
         if (parentsBuilder_ == null) {
           ensureParentsIsMutable();
@@ -4466,10 +5813,16 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedType parents = 6;</code>
+       */
       public boa.types.Diff.ChangedType.Builder getParentsBuilder(
           int index) {
         return getParentsFieldBuilder().getBuilder(index);
       }
+      /**
+       * <code>repeated .boa.types.ChangedType parents = 6;</code>
+       */
       public boa.types.Diff.ChangedTypeOrBuilder getParentsOrBuilder(
           int index) {
         if (parentsBuilder_ == null) {
@@ -4477,6 +5830,9 @@ public final class Diff {
           return parentsBuilder_.getMessageOrBuilder(index);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedType parents = 6;</code>
+       */
       public java.util.List<? extends boa.types.Diff.ChangedTypeOrBuilder> 
            getParentsOrBuilderList() {
         if (parentsBuilder_ != null) {
@@ -4485,15 +5841,24 @@ public final class Diff {
           return java.util.Collections.unmodifiableList(parents_);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedType parents = 6;</code>
+       */
       public boa.types.Diff.ChangedType.Builder addParentsBuilder() {
         return getParentsFieldBuilder().addBuilder(
             boa.types.Diff.ChangedType.getDefaultInstance());
       }
+      /**
+       * <code>repeated .boa.types.ChangedType parents = 6;</code>
+       */
       public boa.types.Diff.ChangedType.Builder addParentsBuilder(
           int index) {
         return getParentsFieldBuilder().addBuilder(
             index, boa.types.Diff.ChangedType.getDefaultInstance());
       }
+      /**
+       * <code>repeated .boa.types.ChangedType parents = 6;</code>
+       */
       public java.util.List<boa.types.Diff.ChangedType.Builder> 
            getParentsBuilderList() {
         return getParentsFieldBuilder().getBuilderList();
@@ -4512,7 +5877,7 @@ public final class Diff {
         }
         return parentsBuilder_;
       }
-      
+
       // repeated .boa.types.ChangedMethod methods = 7;
       private java.util.List<boa.types.Diff.ChangedMethod> methods_ =
         java.util.Collections.emptyList();
@@ -4522,10 +5887,13 @@ public final class Diff {
           bitField0_ |= 0x00000040;
          }
       }
-      
+
       private com.google.protobuf.RepeatedFieldBuilder<
           boa.types.Diff.ChangedMethod, boa.types.Diff.ChangedMethod.Builder, boa.types.Diff.ChangedMethodOrBuilder> methodsBuilder_;
-      
+
+      /**
+       * <code>repeated .boa.types.ChangedMethod methods = 7;</code>
+       */
       public java.util.List<boa.types.Diff.ChangedMethod> getMethodsList() {
         if (methodsBuilder_ == null) {
           return java.util.Collections.unmodifiableList(methods_);
@@ -4533,6 +5901,9 @@ public final class Diff {
           return methodsBuilder_.getMessageList();
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedMethod methods = 7;</code>
+       */
       public int getMethodsCount() {
         if (methodsBuilder_ == null) {
           return methods_.size();
@@ -4540,6 +5911,9 @@ public final class Diff {
           return methodsBuilder_.getCount();
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedMethod methods = 7;</code>
+       */
       public boa.types.Diff.ChangedMethod getMethods(int index) {
         if (methodsBuilder_ == null) {
           return methods_.get(index);
@@ -4547,6 +5921,9 @@ public final class Diff {
           return methodsBuilder_.getMessage(index);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedMethod methods = 7;</code>
+       */
       public Builder setMethods(
           int index, boa.types.Diff.ChangedMethod value) {
         if (methodsBuilder_ == null) {
@@ -4561,6 +5938,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedMethod methods = 7;</code>
+       */
       public Builder setMethods(
           int index, boa.types.Diff.ChangedMethod.Builder builderForValue) {
         if (methodsBuilder_ == null) {
@@ -4572,6 +5952,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedMethod methods = 7;</code>
+       */
       public Builder addMethods(boa.types.Diff.ChangedMethod value) {
         if (methodsBuilder_ == null) {
           if (value == null) {
@@ -4585,6 +5968,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedMethod methods = 7;</code>
+       */
       public Builder addMethods(
           int index, boa.types.Diff.ChangedMethod value) {
         if (methodsBuilder_ == null) {
@@ -4599,6 +5985,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedMethod methods = 7;</code>
+       */
       public Builder addMethods(
           boa.types.Diff.ChangedMethod.Builder builderForValue) {
         if (methodsBuilder_ == null) {
@@ -4610,6 +5999,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedMethod methods = 7;</code>
+       */
       public Builder addMethods(
           int index, boa.types.Diff.ChangedMethod.Builder builderForValue) {
         if (methodsBuilder_ == null) {
@@ -4621,6 +6013,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedMethod methods = 7;</code>
+       */
       public Builder addAllMethods(
           java.lang.Iterable<? extends boa.types.Diff.ChangedMethod> values) {
         if (methodsBuilder_ == null) {
@@ -4632,6 +6027,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedMethod methods = 7;</code>
+       */
       public Builder clearMethods() {
         if (methodsBuilder_ == null) {
           methods_ = java.util.Collections.emptyList();
@@ -4642,6 +6040,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedMethod methods = 7;</code>
+       */
       public Builder removeMethods(int index) {
         if (methodsBuilder_ == null) {
           ensureMethodsIsMutable();
@@ -4652,10 +6053,16 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedMethod methods = 7;</code>
+       */
       public boa.types.Diff.ChangedMethod.Builder getMethodsBuilder(
           int index) {
         return getMethodsFieldBuilder().getBuilder(index);
       }
+      /**
+       * <code>repeated .boa.types.ChangedMethod methods = 7;</code>
+       */
       public boa.types.Diff.ChangedMethodOrBuilder getMethodsOrBuilder(
           int index) {
         if (methodsBuilder_ == null) {
@@ -4663,6 +6070,9 @@ public final class Diff {
           return methodsBuilder_.getMessageOrBuilder(index);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedMethod methods = 7;</code>
+       */
       public java.util.List<? extends boa.types.Diff.ChangedMethodOrBuilder> 
            getMethodsOrBuilderList() {
         if (methodsBuilder_ != null) {
@@ -4671,15 +6081,24 @@ public final class Diff {
           return java.util.Collections.unmodifiableList(methods_);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedMethod methods = 7;</code>
+       */
       public boa.types.Diff.ChangedMethod.Builder addMethodsBuilder() {
         return getMethodsFieldBuilder().addBuilder(
             boa.types.Diff.ChangedMethod.getDefaultInstance());
       }
+      /**
+       * <code>repeated .boa.types.ChangedMethod methods = 7;</code>
+       */
       public boa.types.Diff.ChangedMethod.Builder addMethodsBuilder(
           int index) {
         return getMethodsFieldBuilder().addBuilder(
             index, boa.types.Diff.ChangedMethod.getDefaultInstance());
       }
+      /**
+       * <code>repeated .boa.types.ChangedMethod methods = 7;</code>
+       */
       public java.util.List<boa.types.Diff.ChangedMethod.Builder> 
            getMethodsBuilderList() {
         return getMethodsFieldBuilder().getBuilderList();
@@ -4698,7 +6117,7 @@ public final class Diff {
         }
         return methodsBuilder_;
       }
-      
+
       // repeated .boa.types.ChangedVariable fields = 8;
       private java.util.List<boa.types.Diff.ChangedVariable> fields_ =
         java.util.Collections.emptyList();
@@ -4708,10 +6127,13 @@ public final class Diff {
           bitField0_ |= 0x00000080;
          }
       }
-      
+
       private com.google.protobuf.RepeatedFieldBuilder<
           boa.types.Diff.ChangedVariable, boa.types.Diff.ChangedVariable.Builder, boa.types.Diff.ChangedVariableOrBuilder> fieldsBuilder_;
-      
+
+      /**
+       * <code>repeated .boa.types.ChangedVariable fields = 8;</code>
+       */
       public java.util.List<boa.types.Diff.ChangedVariable> getFieldsList() {
         if (fieldsBuilder_ == null) {
           return java.util.Collections.unmodifiableList(fields_);
@@ -4719,6 +6141,9 @@ public final class Diff {
           return fieldsBuilder_.getMessageList();
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedVariable fields = 8;</code>
+       */
       public int getFieldsCount() {
         if (fieldsBuilder_ == null) {
           return fields_.size();
@@ -4726,6 +6151,9 @@ public final class Diff {
           return fieldsBuilder_.getCount();
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedVariable fields = 8;</code>
+       */
       public boa.types.Diff.ChangedVariable getFields(int index) {
         if (fieldsBuilder_ == null) {
           return fields_.get(index);
@@ -4733,6 +6161,9 @@ public final class Diff {
           return fieldsBuilder_.getMessage(index);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedVariable fields = 8;</code>
+       */
       public Builder setFields(
           int index, boa.types.Diff.ChangedVariable value) {
         if (fieldsBuilder_ == null) {
@@ -4747,6 +6178,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedVariable fields = 8;</code>
+       */
       public Builder setFields(
           int index, boa.types.Diff.ChangedVariable.Builder builderForValue) {
         if (fieldsBuilder_ == null) {
@@ -4758,6 +6192,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedVariable fields = 8;</code>
+       */
       public Builder addFields(boa.types.Diff.ChangedVariable value) {
         if (fieldsBuilder_ == null) {
           if (value == null) {
@@ -4771,6 +6208,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedVariable fields = 8;</code>
+       */
       public Builder addFields(
           int index, boa.types.Diff.ChangedVariable value) {
         if (fieldsBuilder_ == null) {
@@ -4785,6 +6225,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedVariable fields = 8;</code>
+       */
       public Builder addFields(
           boa.types.Diff.ChangedVariable.Builder builderForValue) {
         if (fieldsBuilder_ == null) {
@@ -4796,6 +6239,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedVariable fields = 8;</code>
+       */
       public Builder addFields(
           int index, boa.types.Diff.ChangedVariable.Builder builderForValue) {
         if (fieldsBuilder_ == null) {
@@ -4807,6 +6253,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedVariable fields = 8;</code>
+       */
       public Builder addAllFields(
           java.lang.Iterable<? extends boa.types.Diff.ChangedVariable> values) {
         if (fieldsBuilder_ == null) {
@@ -4818,6 +6267,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedVariable fields = 8;</code>
+       */
       public Builder clearFields() {
         if (fieldsBuilder_ == null) {
           fields_ = java.util.Collections.emptyList();
@@ -4828,6 +6280,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedVariable fields = 8;</code>
+       */
       public Builder removeFields(int index) {
         if (fieldsBuilder_ == null) {
           ensureFieldsIsMutable();
@@ -4838,10 +6293,16 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedVariable fields = 8;</code>
+       */
       public boa.types.Diff.ChangedVariable.Builder getFieldsBuilder(
           int index) {
         return getFieldsFieldBuilder().getBuilder(index);
       }
+      /**
+       * <code>repeated .boa.types.ChangedVariable fields = 8;</code>
+       */
       public boa.types.Diff.ChangedVariableOrBuilder getFieldsOrBuilder(
           int index) {
         if (fieldsBuilder_ == null) {
@@ -4849,6 +6310,9 @@ public final class Diff {
           return fieldsBuilder_.getMessageOrBuilder(index);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedVariable fields = 8;</code>
+       */
       public java.util.List<? extends boa.types.Diff.ChangedVariableOrBuilder> 
            getFieldsOrBuilderList() {
         if (fieldsBuilder_ != null) {
@@ -4857,15 +6321,24 @@ public final class Diff {
           return java.util.Collections.unmodifiableList(fields_);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedVariable fields = 8;</code>
+       */
       public boa.types.Diff.ChangedVariable.Builder addFieldsBuilder() {
         return getFieldsFieldBuilder().addBuilder(
             boa.types.Diff.ChangedVariable.getDefaultInstance());
       }
+      /**
+       * <code>repeated .boa.types.ChangedVariable fields = 8;</code>
+       */
       public boa.types.Diff.ChangedVariable.Builder addFieldsBuilder(
           int index) {
         return getFieldsFieldBuilder().addBuilder(
             index, boa.types.Diff.ChangedVariable.getDefaultInstance());
       }
+      /**
+       * <code>repeated .boa.types.ChangedVariable fields = 8;</code>
+       */
       public java.util.List<boa.types.Diff.ChangedVariable.Builder> 
            getFieldsBuilderList() {
         return getFieldsFieldBuilder().getBuilderList();
@@ -4884,7 +6357,7 @@ public final class Diff {
         }
         return fieldsBuilder_;
       }
-      
+
       // repeated .boa.types.ChangedDeclaration nested_declarations = 9;
       private java.util.List<boa.types.Diff.ChangedDeclaration> nestedDeclarations_ =
         java.util.Collections.emptyList();
@@ -4894,10 +6367,13 @@ public final class Diff {
           bitField0_ |= 0x00000100;
          }
       }
-      
+
       private com.google.protobuf.RepeatedFieldBuilder<
           boa.types.Diff.ChangedDeclaration, boa.types.Diff.ChangedDeclaration.Builder, boa.types.Diff.ChangedDeclarationOrBuilder> nestedDeclarationsBuilder_;
-      
+
+      /**
+       * <code>repeated .boa.types.ChangedDeclaration nested_declarations = 9;</code>
+       */
       public java.util.List<boa.types.Diff.ChangedDeclaration> getNestedDeclarationsList() {
         if (nestedDeclarationsBuilder_ == null) {
           return java.util.Collections.unmodifiableList(nestedDeclarations_);
@@ -4905,6 +6381,9 @@ public final class Diff {
           return nestedDeclarationsBuilder_.getMessageList();
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedDeclaration nested_declarations = 9;</code>
+       */
       public int getNestedDeclarationsCount() {
         if (nestedDeclarationsBuilder_ == null) {
           return nestedDeclarations_.size();
@@ -4912,6 +6391,9 @@ public final class Diff {
           return nestedDeclarationsBuilder_.getCount();
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedDeclaration nested_declarations = 9;</code>
+       */
       public boa.types.Diff.ChangedDeclaration getNestedDeclarations(int index) {
         if (nestedDeclarationsBuilder_ == null) {
           return nestedDeclarations_.get(index);
@@ -4919,6 +6401,9 @@ public final class Diff {
           return nestedDeclarationsBuilder_.getMessage(index);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedDeclaration nested_declarations = 9;</code>
+       */
       public Builder setNestedDeclarations(
           int index, boa.types.Diff.ChangedDeclaration value) {
         if (nestedDeclarationsBuilder_ == null) {
@@ -4933,6 +6418,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedDeclaration nested_declarations = 9;</code>
+       */
       public Builder setNestedDeclarations(
           int index, boa.types.Diff.ChangedDeclaration.Builder builderForValue) {
         if (nestedDeclarationsBuilder_ == null) {
@@ -4944,6 +6432,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedDeclaration nested_declarations = 9;</code>
+       */
       public Builder addNestedDeclarations(boa.types.Diff.ChangedDeclaration value) {
         if (nestedDeclarationsBuilder_ == null) {
           if (value == null) {
@@ -4957,6 +6448,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedDeclaration nested_declarations = 9;</code>
+       */
       public Builder addNestedDeclarations(
           int index, boa.types.Diff.ChangedDeclaration value) {
         if (nestedDeclarationsBuilder_ == null) {
@@ -4971,6 +6465,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedDeclaration nested_declarations = 9;</code>
+       */
       public Builder addNestedDeclarations(
           boa.types.Diff.ChangedDeclaration.Builder builderForValue) {
         if (nestedDeclarationsBuilder_ == null) {
@@ -4982,6 +6479,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedDeclaration nested_declarations = 9;</code>
+       */
       public Builder addNestedDeclarations(
           int index, boa.types.Diff.ChangedDeclaration.Builder builderForValue) {
         if (nestedDeclarationsBuilder_ == null) {
@@ -4993,6 +6493,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedDeclaration nested_declarations = 9;</code>
+       */
       public Builder addAllNestedDeclarations(
           java.lang.Iterable<? extends boa.types.Diff.ChangedDeclaration> values) {
         if (nestedDeclarationsBuilder_ == null) {
@@ -5004,6 +6507,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedDeclaration nested_declarations = 9;</code>
+       */
       public Builder clearNestedDeclarations() {
         if (nestedDeclarationsBuilder_ == null) {
           nestedDeclarations_ = java.util.Collections.emptyList();
@@ -5014,6 +6520,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedDeclaration nested_declarations = 9;</code>
+       */
       public Builder removeNestedDeclarations(int index) {
         if (nestedDeclarationsBuilder_ == null) {
           ensureNestedDeclarationsIsMutable();
@@ -5024,10 +6533,16 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedDeclaration nested_declarations = 9;</code>
+       */
       public boa.types.Diff.ChangedDeclaration.Builder getNestedDeclarationsBuilder(
           int index) {
         return getNestedDeclarationsFieldBuilder().getBuilder(index);
       }
+      /**
+       * <code>repeated .boa.types.ChangedDeclaration nested_declarations = 9;</code>
+       */
       public boa.types.Diff.ChangedDeclarationOrBuilder getNestedDeclarationsOrBuilder(
           int index) {
         if (nestedDeclarationsBuilder_ == null) {
@@ -5035,6 +6550,9 @@ public final class Diff {
           return nestedDeclarationsBuilder_.getMessageOrBuilder(index);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedDeclaration nested_declarations = 9;</code>
+       */
       public java.util.List<? extends boa.types.Diff.ChangedDeclarationOrBuilder> 
            getNestedDeclarationsOrBuilderList() {
         if (nestedDeclarationsBuilder_ != null) {
@@ -5043,15 +6561,24 @@ public final class Diff {
           return java.util.Collections.unmodifiableList(nestedDeclarations_);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedDeclaration nested_declarations = 9;</code>
+       */
       public boa.types.Diff.ChangedDeclaration.Builder addNestedDeclarationsBuilder() {
         return getNestedDeclarationsFieldBuilder().addBuilder(
             boa.types.Diff.ChangedDeclaration.getDefaultInstance());
       }
+      /**
+       * <code>repeated .boa.types.ChangedDeclaration nested_declarations = 9;</code>
+       */
       public boa.types.Diff.ChangedDeclaration.Builder addNestedDeclarationsBuilder(
           int index) {
         return getNestedDeclarationsFieldBuilder().addBuilder(
             index, boa.types.Diff.ChangedDeclaration.getDefaultInstance());
       }
+      /**
+       * <code>repeated .boa.types.ChangedDeclaration nested_declarations = 9;</code>
+       */
       public java.util.List<boa.types.Diff.ChangedDeclaration.Builder> 
            getNestedDeclarationsBuilderList() {
         return getNestedDeclarationsFieldBuilder().getBuilderList();
@@ -5070,7 +6597,7 @@ public final class Diff {
         }
         return nestedDeclarationsBuilder_;
       }
-      
+
       // repeated .boa.types.ChangedComment comments = 10;
       private java.util.List<boa.types.Diff.ChangedComment> comments_ =
         java.util.Collections.emptyList();
@@ -5080,10 +6607,13 @@ public final class Diff {
           bitField0_ |= 0x00000200;
          }
       }
-      
+
       private com.google.protobuf.RepeatedFieldBuilder<
           boa.types.Diff.ChangedComment, boa.types.Diff.ChangedComment.Builder, boa.types.Diff.ChangedCommentOrBuilder> commentsBuilder_;
-      
+
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 10;</code>
+       */
       public java.util.List<boa.types.Diff.ChangedComment> getCommentsList() {
         if (commentsBuilder_ == null) {
           return java.util.Collections.unmodifiableList(comments_);
@@ -5091,6 +6621,9 @@ public final class Diff {
           return commentsBuilder_.getMessageList();
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 10;</code>
+       */
       public int getCommentsCount() {
         if (commentsBuilder_ == null) {
           return comments_.size();
@@ -5098,6 +6631,9 @@ public final class Diff {
           return commentsBuilder_.getCount();
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 10;</code>
+       */
       public boa.types.Diff.ChangedComment getComments(int index) {
         if (commentsBuilder_ == null) {
           return comments_.get(index);
@@ -5105,6 +6641,9 @@ public final class Diff {
           return commentsBuilder_.getMessage(index);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 10;</code>
+       */
       public Builder setComments(
           int index, boa.types.Diff.ChangedComment value) {
         if (commentsBuilder_ == null) {
@@ -5119,6 +6658,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 10;</code>
+       */
       public Builder setComments(
           int index, boa.types.Diff.ChangedComment.Builder builderForValue) {
         if (commentsBuilder_ == null) {
@@ -5130,6 +6672,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 10;</code>
+       */
       public Builder addComments(boa.types.Diff.ChangedComment value) {
         if (commentsBuilder_ == null) {
           if (value == null) {
@@ -5143,6 +6688,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 10;</code>
+       */
       public Builder addComments(
           int index, boa.types.Diff.ChangedComment value) {
         if (commentsBuilder_ == null) {
@@ -5157,6 +6705,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 10;</code>
+       */
       public Builder addComments(
           boa.types.Diff.ChangedComment.Builder builderForValue) {
         if (commentsBuilder_ == null) {
@@ -5168,6 +6719,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 10;</code>
+       */
       public Builder addComments(
           int index, boa.types.Diff.ChangedComment.Builder builderForValue) {
         if (commentsBuilder_ == null) {
@@ -5179,6 +6733,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 10;</code>
+       */
       public Builder addAllComments(
           java.lang.Iterable<? extends boa.types.Diff.ChangedComment> values) {
         if (commentsBuilder_ == null) {
@@ -5190,6 +6747,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 10;</code>
+       */
       public Builder clearComments() {
         if (commentsBuilder_ == null) {
           comments_ = java.util.Collections.emptyList();
@@ -5200,6 +6760,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 10;</code>
+       */
       public Builder removeComments(int index) {
         if (commentsBuilder_ == null) {
           ensureCommentsIsMutable();
@@ -5210,10 +6773,16 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 10;</code>
+       */
       public boa.types.Diff.ChangedComment.Builder getCommentsBuilder(
           int index) {
         return getCommentsFieldBuilder().getBuilder(index);
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 10;</code>
+       */
       public boa.types.Diff.ChangedCommentOrBuilder getCommentsOrBuilder(
           int index) {
         if (commentsBuilder_ == null) {
@@ -5221,6 +6790,9 @@ public final class Diff {
           return commentsBuilder_.getMessageOrBuilder(index);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 10;</code>
+       */
       public java.util.List<? extends boa.types.Diff.ChangedCommentOrBuilder> 
            getCommentsOrBuilderList() {
         if (commentsBuilder_ != null) {
@@ -5229,15 +6801,24 @@ public final class Diff {
           return java.util.Collections.unmodifiableList(comments_);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 10;</code>
+       */
       public boa.types.Diff.ChangedComment.Builder addCommentsBuilder() {
         return getCommentsFieldBuilder().addBuilder(
             boa.types.Diff.ChangedComment.getDefaultInstance());
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 10;</code>
+       */
       public boa.types.Diff.ChangedComment.Builder addCommentsBuilder(
           int index) {
         return getCommentsFieldBuilder().addBuilder(
             index, boa.types.Diff.ChangedComment.getDefaultInstance());
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 10;</code>
+       */
       public java.util.List<boa.types.Diff.ChangedComment.Builder> 
            getCommentsBuilderList() {
         return getCommentsFieldBuilder().getBuilderList();
@@ -5256,455 +6837,119 @@ public final class Diff {
         }
         return commentsBuilder_;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:boa.types.ChangedDeclaration)
     }
-    
+
     static {
       defaultInstance = new ChangedDeclaration(true);
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:boa.types.ChangedDeclaration)
   }
-  
+
   public interface ChangedTypeOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
-    
+
     // required .boa.types.ChangeKind change = 1;
+    /**
+     * <code>required .boa.types.ChangeKind change = 1;</code>
+     */
     boolean hasChange();
+    /**
+     * <code>required .boa.types.ChangeKind change = 1;</code>
+     */
     boa.types.Shared.ChangeKind getChange();
-    
+
     // optional .boa.types.TypeKind kind = 2;
+    /**
+     * <code>optional .boa.types.TypeKind kind = 2;</code>
+     */
     boolean hasKind();
+    /**
+     * <code>optional .boa.types.TypeKind kind = 2;</code>
+     */
     boa.types.Ast.TypeKind getKind();
-    
+
     // optional string name = 3;
+    /**
+     * <code>optional string name = 3;</code>
+     */
     boolean hasName();
-    String getName();
-    
+    /**
+     * <code>optional string name = 3;</code>
+     */
+    java.lang.String getName();
+    /**
+     * <code>optional string name = 3;</code>
+     */
+    com.google.protobuf.ByteString
+        getNameBytes();
+
     // optional string id = 4;
+    /**
+     * <code>optional string id = 4;</code>
+     */
     boolean hasId();
-    String getId();
+    /**
+     * <code>optional string id = 4;</code>
+     */
+    java.lang.String getId();
+    /**
+     * <code>optional string id = 4;</code>
+     */
+    com.google.protobuf.ByteString
+        getIdBytes();
   }
+  /**
+   * Protobuf type {@code boa.types.ChangedType}
+   */
   public static final class ChangedType extends
       com.google.protobuf.GeneratedMessage
       implements ChangedTypeOrBuilder {
     // Use ChangedType.newBuilder() to construct.
-    private ChangedType(Builder builder) {
+    private ChangedType(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
+      this.unknownFields = builder.getUnknownFields();
     }
-    private ChangedType(boolean noInit) {}
-    
+    private ChangedType(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
     private static final ChangedType defaultInstance;
     public static ChangedType getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public ChangedType getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return boa.types.Diff.internal_static_boa_types_ChangedType_descriptor;
-    }
-    
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return boa.types.Diff.internal_static_boa_types_ChangedType_fieldAccessorTable;
-    }
-    
-    private int bitField0_;
-    // required .boa.types.ChangeKind change = 1;
-    public static final int CHANGE_FIELD_NUMBER = 1;
-    private boa.types.Shared.ChangeKind change_;
-    public boolean hasChange() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    public boa.types.Shared.ChangeKind getChange() {
-      return change_;
-    }
-    
-    // optional .boa.types.TypeKind kind = 2;
-    public static final int KIND_FIELD_NUMBER = 2;
-    private boa.types.Ast.TypeKind kind_;
-    public boolean hasKind() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    public boa.types.Ast.TypeKind getKind() {
-      return kind_;
-    }
-    
-    // optional string name = 3;
-    public static final int NAME_FIELD_NUMBER = 3;
-    private java.lang.Object name_;
-    public boolean hasName() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
-    }
-    public String getName() {
-      java.lang.Object ref = name_;
-      if (ref instanceof String) {
-        return (String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
-          name_ = s;
-        }
-        return s;
-      }
-    }
-    private com.google.protobuf.ByteString getNameBytes() {
-      java.lang.Object ref = name_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
-        name_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-    
-    // optional string id = 4;
-    public static final int ID_FIELD_NUMBER = 4;
-    private java.lang.Object id_;
-    public boolean hasId() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
-    }
-    public String getId() {
-      java.lang.Object ref = id_;
-      if (ref instanceof String) {
-        return (String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
-          id_ = s;
-        }
-        return s;
-      }
-    }
-    private com.google.protobuf.ByteString getIdBytes() {
-      java.lang.Object ref = id_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
-        id_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-    
-    private void initFields() {
-      change_ = boa.types.Shared.ChangeKind.ADDED;
-      kind_ = boa.types.Ast.TypeKind.OTHER;
-      name_ = "";
-      id_ = "";
-    }
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
-      
-      if (!hasChange()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      memoizedIsInitialized = 1;
-      return true;
-    }
-    
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeEnum(1, change_.getNumber());
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeEnum(2, kind_.getNumber());
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeBytes(3, getNameBytes());
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeBytes(4, getIdBytes());
-      }
-      getUnknownFields().writeTo(output);
-    }
-    
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-    
-      size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(1, change_.getNumber());
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(2, kind_.getNumber());
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(3, getNameBytes());
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(4, getIdBytes());
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-    
-    private static final long serialVersionUID = 0L;
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
     @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
     }
-    
-    public static boa.types.Diff.ChangedType parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
-    }
-    public static boa.types.Diff.ChangedType parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
-    }
-    public static boa.types.Diff.ChangedType parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
-    }
-    public static boa.types.Diff.ChangedType parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
-    }
-    public static boa.types.Diff.ChangedType parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
-    }
-    public static boa.types.Diff.ChangedType parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
-    }
-    public static boa.types.Diff.ChangedType parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
-    }
-    public static boa.types.Diff.ChangedType parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
-    }
-    public static boa.types.Diff.ChangedType parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
-    }
-    public static boa.types.Diff.ChangedType parseFrom(
+    private ChangedType(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
-    }
-    
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(boa.types.Diff.ChangedType prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-    
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements boa.types.Diff.ChangedTypeOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return boa.types.Diff.internal_static_boa_types_ChangedType_descriptor;
-      }
-      
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return boa.types.Diff.internal_static_boa_types_ChangedType_fieldAccessorTable;
-      }
-      
-      // Construct using boa.types.Diff.ChangedType.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-      
-      private Builder(BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-        }
-      }
-      private static Builder create() {
-        return new Builder();
-      }
-      
-      public Builder clear() {
-        super.clear();
-        change_ = boa.types.Shared.ChangeKind.ADDED;
-        bitField0_ = (bitField0_ & ~0x00000001);
-        kind_ = boa.types.Ast.TypeKind.OTHER;
-        bitField0_ = (bitField0_ & ~0x00000002);
-        name_ = "";
-        bitField0_ = (bitField0_ & ~0x00000004);
-        id_ = "";
-        bitField0_ = (bitField0_ & ~0x00000008);
-        return this;
-      }
-      
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-      
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return boa.types.Diff.ChangedType.getDescriptor();
-      }
-      
-      public boa.types.Diff.ChangedType getDefaultInstanceForType() {
-        return boa.types.Diff.ChangedType.getDefaultInstance();
-      }
-      
-      public boa.types.Diff.ChangedType build() {
-        boa.types.Diff.ChangedType result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-      
-      private boa.types.Diff.ChangedType buildParsed()
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        boa.types.Diff.ChangedType result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
-        }
-        return result;
-      }
-      
-      public boa.types.Diff.ChangedType buildPartial() {
-        boa.types.Diff.ChangedType result = new boa.types.Diff.ChangedType(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.change_ = change_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.kind_ = kind_;
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000004;
-        }
-        result.name_ = name_;
-        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
-          to_bitField0_ |= 0x00000008;
-        }
-        result.id_ = id_;
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
-      }
-      
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof boa.types.Diff.ChangedType) {
-          return mergeFrom((boa.types.Diff.ChangedType)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-      
-      public Builder mergeFrom(boa.types.Diff.ChangedType other) {
-        if (other == boa.types.Diff.ChangedType.getDefaultInstance()) return this;
-        if (other.hasChange()) {
-          setChange(other.getChange());
-        }
-        if (other.hasKind()) {
-          setKind(other.getKind());
-        }
-        if (other.hasName()) {
-          setName(other.getName());
-        }
-        if (other.hasId()) {
-          setId(other.getId());
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-      
-      public final boolean isInitialized() {
-        if (!hasChange()) {
-          
-          return false;
-        }
-        return true;
-      }
-      
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
-        while (true) {
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
           int tag = input.readTag();
           switch (tag) {
             case 0:
-              this.setUnknownFields(unknownFields.build());
-              onChanged();
-              return this;
+              done = true;
+              break;
             default: {
               if (!parseUnknownField(input, unknownFields,
                                      extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                onChanged();
-                return this;
+                done = true;
               }
               break;
             }
@@ -5742,18 +6987,469 @@ public final class Diff {
             }
           }
         }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
       }
-      
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return boa.types.Diff.internal_static_boa_types_ChangedType_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return boa.types.Diff.internal_static_boa_types_ChangedType_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              boa.types.Diff.ChangedType.class, boa.types.Diff.ChangedType.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<ChangedType> PARSER =
+        new com.google.protobuf.AbstractParser<ChangedType>() {
+      public ChangedType parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new ChangedType(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<ChangedType> getParserForType() {
+      return PARSER;
+    }
+
+    private int bitField0_;
+    // required .boa.types.ChangeKind change = 1;
+    public static final int CHANGE_FIELD_NUMBER = 1;
+    private boa.types.Shared.ChangeKind change_;
+    /**
+     * <code>required .boa.types.ChangeKind change = 1;</code>
+     */
+    public boolean hasChange() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>required .boa.types.ChangeKind change = 1;</code>
+     */
+    public boa.types.Shared.ChangeKind getChange() {
+      return change_;
+    }
+
+    // optional .boa.types.TypeKind kind = 2;
+    public static final int KIND_FIELD_NUMBER = 2;
+    private boa.types.Ast.TypeKind kind_;
+    /**
+     * <code>optional .boa.types.TypeKind kind = 2;</code>
+     */
+    public boolean hasKind() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>optional .boa.types.TypeKind kind = 2;</code>
+     */
+    public boa.types.Ast.TypeKind getKind() {
+      return kind_;
+    }
+
+    // optional string name = 3;
+    public static final int NAME_FIELD_NUMBER = 3;
+    private java.lang.Object name_;
+    /**
+     * <code>optional string name = 3;</code>
+     */
+    public boolean hasName() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>optional string name = 3;</code>
+     */
+    public java.lang.String getName() {
+      java.lang.Object ref = name_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          name_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string name = 3;</code>
+     */
+    public com.google.protobuf.ByteString
+        getNameBytes() {
+      java.lang.Object ref = name_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        name_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    // optional string id = 4;
+    public static final int ID_FIELD_NUMBER = 4;
+    private java.lang.Object id_;
+    /**
+     * <code>optional string id = 4;</code>
+     */
+    public boolean hasId() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>optional string id = 4;</code>
+     */
+    public java.lang.String getId() {
+      java.lang.Object ref = id_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          id_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string id = 4;</code>
+     */
+    public com.google.protobuf.ByteString
+        getIdBytes() {
+      java.lang.Object ref = id_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        id_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    private void initFields() {
+      change_ = boa.types.Shared.ChangeKind.ADDED;
+      kind_ = boa.types.Ast.TypeKind.OTHER;
+      name_ = "";
+      id_ = "";
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+
+      if (!hasChange()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeEnum(1, change_.getNumber());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeEnum(2, kind_.getNumber());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeBytes(3, getNameBytes());
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeBytes(4, getIdBytes());
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(1, change_.getNumber());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(2, kind_.getNumber());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(3, getNameBytes());
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(4, getIdBytes());
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static boa.types.Diff.ChangedType parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static boa.types.Diff.ChangedType parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static boa.types.Diff.ChangedType parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static boa.types.Diff.ChangedType parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static boa.types.Diff.ChangedType parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static boa.types.Diff.ChangedType parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static boa.types.Diff.ChangedType parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static boa.types.Diff.ChangedType parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static boa.types.Diff.ChangedType parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static boa.types.Diff.ChangedType parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(boa.types.Diff.ChangedType prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code boa.types.ChangedType}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements boa.types.Diff.ChangedTypeOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return boa.types.Diff.internal_static_boa_types_ChangedType_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return boa.types.Diff.internal_static_boa_types_ChangedType_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                boa.types.Diff.ChangedType.class, boa.types.Diff.ChangedType.Builder.class);
+      }
+
+      // Construct using boa.types.Diff.ChangedType.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        change_ = boa.types.Shared.ChangeKind.ADDED;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        kind_ = boa.types.Ast.TypeKind.OTHER;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        name_ = "";
+        bitField0_ = (bitField0_ & ~0x00000004);
+        id_ = "";
+        bitField0_ = (bitField0_ & ~0x00000008);
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return boa.types.Diff.internal_static_boa_types_ChangedType_descriptor;
+      }
+
+      public boa.types.Diff.ChangedType getDefaultInstanceForType() {
+        return boa.types.Diff.ChangedType.getDefaultInstance();
+      }
+
+      public boa.types.Diff.ChangedType build() {
+        boa.types.Diff.ChangedType result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public boa.types.Diff.ChangedType buildPartial() {
+        boa.types.Diff.ChangedType result = new boa.types.Diff.ChangedType(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.change_ = change_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.kind_ = kind_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.name_ = name_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.id_ = id_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof boa.types.Diff.ChangedType) {
+          return mergeFrom((boa.types.Diff.ChangedType)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(boa.types.Diff.ChangedType other) {
+        if (other == boa.types.Diff.ChangedType.getDefaultInstance()) return this;
+        if (other.hasChange()) {
+          setChange(other.getChange());
+        }
+        if (other.hasKind()) {
+          setKind(other.getKind());
+        }
+        if (other.hasName()) {
+          bitField0_ |= 0x00000004;
+          name_ = other.name_;
+          onChanged();
+        }
+        if (other.hasId()) {
+          bitField0_ |= 0x00000008;
+          id_ = other.id_;
+          onChanged();
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        if (!hasChange()) {
+          
+          return false;
+        }
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        boa.types.Diff.ChangedType parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (boa.types.Diff.ChangedType) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
       private int bitField0_;
-      
+
       // required .boa.types.ChangeKind change = 1;
       private boa.types.Shared.ChangeKind change_ = boa.types.Shared.ChangeKind.ADDED;
+      /**
+       * <code>required .boa.types.ChangeKind change = 1;</code>
+       */
       public boolean hasChange() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
+      /**
+       * <code>required .boa.types.ChangeKind change = 1;</code>
+       */
       public boa.types.Shared.ChangeKind getChange() {
         return change_;
       }
+      /**
+       * <code>required .boa.types.ChangeKind change = 1;</code>
+       */
       public Builder setChange(boa.types.Shared.ChangeKind value) {
         if (value == null) {
           throw new NullPointerException();
@@ -5763,21 +7459,33 @@ public final class Diff {
         onChanged();
         return this;
       }
+      /**
+       * <code>required .boa.types.ChangeKind change = 1;</code>
+       */
       public Builder clearChange() {
         bitField0_ = (bitField0_ & ~0x00000001);
         change_ = boa.types.Shared.ChangeKind.ADDED;
         onChanged();
         return this;
       }
-      
+
       // optional .boa.types.TypeKind kind = 2;
       private boa.types.Ast.TypeKind kind_ = boa.types.Ast.TypeKind.OTHER;
+      /**
+       * <code>optional .boa.types.TypeKind kind = 2;</code>
+       */
       public boolean hasKind() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
+      /**
+       * <code>optional .boa.types.TypeKind kind = 2;</code>
+       */
       public boa.types.Ast.TypeKind getKind() {
         return kind_;
       }
+      /**
+       * <code>optional .boa.types.TypeKind kind = 2;</code>
+       */
       public Builder setKind(boa.types.Ast.TypeKind value) {
         if (value == null) {
           throw new NullPointerException();
@@ -5787,29 +7495,59 @@ public final class Diff {
         onChanged();
         return this;
       }
+      /**
+       * <code>optional .boa.types.TypeKind kind = 2;</code>
+       */
       public Builder clearKind() {
         bitField0_ = (bitField0_ & ~0x00000002);
         kind_ = boa.types.Ast.TypeKind.OTHER;
         onChanged();
         return this;
       }
-      
+
       // optional string name = 3;
       private java.lang.Object name_ = "";
+      /**
+       * <code>optional string name = 3;</code>
+       */
       public boolean hasName() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
-      public String getName() {
+      /**
+       * <code>optional string name = 3;</code>
+       */
+      public java.lang.String getName() {
         java.lang.Object ref = name_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
           name_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
-      public Builder setName(String value) {
+      /**
+       * <code>optional string name = 3;</code>
+       */
+      public com.google.protobuf.ByteString
+          getNameBytes() {
+        java.lang.Object ref = name_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          name_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string name = 3;</code>
+       */
+      public Builder setName(
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -5818,34 +7556,72 @@ public final class Diff {
         onChanged();
         return this;
       }
+      /**
+       * <code>optional string name = 3;</code>
+       */
       public Builder clearName() {
         bitField0_ = (bitField0_ & ~0x00000004);
         name_ = getDefaultInstance().getName();
         onChanged();
         return this;
       }
-      void setName(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00000004;
+      /**
+       * <code>optional string name = 3;</code>
+       */
+      public Builder setNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000004;
         name_ = value;
         onChanged();
+        return this;
       }
-      
+
       // optional string id = 4;
       private java.lang.Object id_ = "";
+      /**
+       * <code>optional string id = 4;</code>
+       */
       public boolean hasId() {
         return ((bitField0_ & 0x00000008) == 0x00000008);
       }
-      public String getId() {
+      /**
+       * <code>optional string id = 4;</code>
+       */
+      public java.lang.String getId() {
         java.lang.Object ref = id_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
           id_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
-      public Builder setId(String value) {
+      /**
+       * <code>optional string id = 4;</code>
+       */
+      public com.google.protobuf.ByteString
+          getIdBytes() {
+        java.lang.Object ref = id_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          id_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string id = 4;</code>
+       */
+      public Builder setId(
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -5854,315 +7630,715 @@ public final class Diff {
         onChanged();
         return this;
       }
+      /**
+       * <code>optional string id = 4;</code>
+       */
       public Builder clearId() {
         bitField0_ = (bitField0_ & ~0x00000008);
         id_ = getDefaultInstance().getId();
         onChanged();
         return this;
       }
-      void setId(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00000008;
+      /**
+       * <code>optional string id = 4;</code>
+       */
+      public Builder setIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000008;
         id_ = value;
         onChanged();
+        return this;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:boa.types.ChangedType)
     }
-    
+
     static {
       defaultInstance = new ChangedType(true);
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:boa.types.ChangedType)
   }
-  
+
   public interface ChangedMethodOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
-    
+
     // required .boa.types.ChangeKind change = 1;
+    /**
+     * <code>required .boa.types.ChangeKind change = 1;</code>
+     */
     boolean hasChange();
+    /**
+     * <code>required .boa.types.ChangeKind change = 1;</code>
+     */
     boa.types.Shared.ChangeKind getChange();
-    
+
     // optional string name = 2;
+    /**
+     * <code>optional string name = 2;</code>
+     */
     boolean hasName();
-    String getName();
-    
+    /**
+     * <code>optional string name = 2;</code>
+     */
+    java.lang.String getName();
+    /**
+     * <code>optional string name = 2;</code>
+     */
+    com.google.protobuf.ByteString
+        getNameBytes();
+
     // repeated .boa.types.ChangedModifier modifiers = 3;
+    /**
+     * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+     */
     java.util.List<boa.types.Diff.ChangedModifier> 
         getModifiersList();
+    /**
+     * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+     */
     boa.types.Diff.ChangedModifier getModifiers(int index);
+    /**
+     * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+     */
     int getModifiersCount();
+    /**
+     * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+     */
     java.util.List<? extends boa.types.Diff.ChangedModifierOrBuilder> 
         getModifiersOrBuilderList();
+    /**
+     * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+     */
     boa.types.Diff.ChangedModifierOrBuilder getModifiersOrBuilder(
         int index);
-    
+
     // optional .boa.types.ChangedType return_type = 4;
+    /**
+     * <code>optional .boa.types.ChangedType return_type = 4;</code>
+     */
     boolean hasReturnType();
+    /**
+     * <code>optional .boa.types.ChangedType return_type = 4;</code>
+     */
     boa.types.Diff.ChangedType getReturnType();
+    /**
+     * <code>optional .boa.types.ChangedType return_type = 4;</code>
+     */
     boa.types.Diff.ChangedTypeOrBuilder getReturnTypeOrBuilder();
-    
+
     // repeated .boa.types.ChangedType generic_parameters = 5;
+    /**
+     * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+     */
     java.util.List<boa.types.Diff.ChangedType> 
         getGenericParametersList();
+    /**
+     * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+     */
     boa.types.Diff.ChangedType getGenericParameters(int index);
+    /**
+     * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+     */
     int getGenericParametersCount();
+    /**
+     * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+     */
     java.util.List<? extends boa.types.Diff.ChangedTypeOrBuilder> 
         getGenericParametersOrBuilderList();
+    /**
+     * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+     */
     boa.types.Diff.ChangedTypeOrBuilder getGenericParametersOrBuilder(
         int index);
-    
+
     // repeated .boa.types.ChangedVariable arguments = 6;
+    /**
+     * <code>repeated .boa.types.ChangedVariable arguments = 6;</code>
+     */
     java.util.List<boa.types.Diff.ChangedVariable> 
         getArgumentsList();
+    /**
+     * <code>repeated .boa.types.ChangedVariable arguments = 6;</code>
+     */
     boa.types.Diff.ChangedVariable getArguments(int index);
+    /**
+     * <code>repeated .boa.types.ChangedVariable arguments = 6;</code>
+     */
     int getArgumentsCount();
+    /**
+     * <code>repeated .boa.types.ChangedVariable arguments = 6;</code>
+     */
     java.util.List<? extends boa.types.Diff.ChangedVariableOrBuilder> 
         getArgumentsOrBuilderList();
+    /**
+     * <code>repeated .boa.types.ChangedVariable arguments = 6;</code>
+     */
     boa.types.Diff.ChangedVariableOrBuilder getArgumentsOrBuilder(
         int index);
-    
+
     // repeated .boa.types.ChangedType exception_types = 7;
+    /**
+     * <code>repeated .boa.types.ChangedType exception_types = 7;</code>
+     */
     java.util.List<boa.types.Diff.ChangedType> 
         getExceptionTypesList();
+    /**
+     * <code>repeated .boa.types.ChangedType exception_types = 7;</code>
+     */
     boa.types.Diff.ChangedType getExceptionTypes(int index);
+    /**
+     * <code>repeated .boa.types.ChangedType exception_types = 7;</code>
+     */
     int getExceptionTypesCount();
+    /**
+     * <code>repeated .boa.types.ChangedType exception_types = 7;</code>
+     */
     java.util.List<? extends boa.types.Diff.ChangedTypeOrBuilder> 
         getExceptionTypesOrBuilderList();
+    /**
+     * <code>repeated .boa.types.ChangedType exception_types = 7;</code>
+     */
     boa.types.Diff.ChangedTypeOrBuilder getExceptionTypesOrBuilder(
         int index);
-    
+
     // repeated .boa.types.ChangedStatement statements = 8;
+    /**
+     * <code>repeated .boa.types.ChangedStatement statements = 8;</code>
+     */
     java.util.List<boa.types.Diff.ChangedStatement> 
         getStatementsList();
+    /**
+     * <code>repeated .boa.types.ChangedStatement statements = 8;</code>
+     */
     boa.types.Diff.ChangedStatement getStatements(int index);
+    /**
+     * <code>repeated .boa.types.ChangedStatement statements = 8;</code>
+     */
     int getStatementsCount();
+    /**
+     * <code>repeated .boa.types.ChangedStatement statements = 8;</code>
+     */
     java.util.List<? extends boa.types.Diff.ChangedStatementOrBuilder> 
         getStatementsOrBuilderList();
+    /**
+     * <code>repeated .boa.types.ChangedStatement statements = 8;</code>
+     */
     boa.types.Diff.ChangedStatementOrBuilder getStatementsOrBuilder(
         int index);
-    
+
     // repeated .boa.types.ChangedComment comments = 9;
+    /**
+     * <code>repeated .boa.types.ChangedComment comments = 9;</code>
+     */
     java.util.List<boa.types.Diff.ChangedComment> 
         getCommentsList();
+    /**
+     * <code>repeated .boa.types.ChangedComment comments = 9;</code>
+     */
     boa.types.Diff.ChangedComment getComments(int index);
+    /**
+     * <code>repeated .boa.types.ChangedComment comments = 9;</code>
+     */
     int getCommentsCount();
+    /**
+     * <code>repeated .boa.types.ChangedComment comments = 9;</code>
+     */
     java.util.List<? extends boa.types.Diff.ChangedCommentOrBuilder> 
         getCommentsOrBuilderList();
+    /**
+     * <code>repeated .boa.types.ChangedComment comments = 9;</code>
+     */
     boa.types.Diff.ChangedCommentOrBuilder getCommentsOrBuilder(
         int index);
   }
+  /**
+   * Protobuf type {@code boa.types.ChangedMethod}
+   */
   public static final class ChangedMethod extends
       com.google.protobuf.GeneratedMessage
       implements ChangedMethodOrBuilder {
     // Use ChangedMethod.newBuilder() to construct.
-    private ChangedMethod(Builder builder) {
+    private ChangedMethod(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
+      this.unknownFields = builder.getUnknownFields();
     }
-    private ChangedMethod(boolean noInit) {}
-    
+    private ChangedMethod(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
     private static final ChangedMethod defaultInstance;
     public static ChangedMethod getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public ChangedMethod getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private ChangedMethod(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 8: {
+              int rawValue = input.readEnum();
+              boa.types.Shared.ChangeKind value = boa.types.Shared.ChangeKind.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(1, rawValue);
+              } else {
+                bitField0_ |= 0x00000001;
+                change_ = value;
+              }
+              break;
+            }
+            case 18: {
+              bitField0_ |= 0x00000002;
+              name_ = input.readBytes();
+              break;
+            }
+            case 26: {
+              if (!((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
+                modifiers_ = new java.util.ArrayList<boa.types.Diff.ChangedModifier>();
+                mutable_bitField0_ |= 0x00000004;
+              }
+              modifiers_.add(input.readMessage(boa.types.Diff.ChangedModifier.PARSER, extensionRegistry));
+              break;
+            }
+            case 34: {
+              boa.types.Diff.ChangedType.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000004) == 0x00000004)) {
+                subBuilder = returnType_.toBuilder();
+              }
+              returnType_ = input.readMessage(boa.types.Diff.ChangedType.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(returnType_);
+                returnType_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000004;
+              break;
+            }
+            case 42: {
+              if (!((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
+                genericParameters_ = new java.util.ArrayList<boa.types.Diff.ChangedType>();
+                mutable_bitField0_ |= 0x00000010;
+              }
+              genericParameters_.add(input.readMessage(boa.types.Diff.ChangedType.PARSER, extensionRegistry));
+              break;
+            }
+            case 50: {
+              if (!((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
+                arguments_ = new java.util.ArrayList<boa.types.Diff.ChangedVariable>();
+                mutable_bitField0_ |= 0x00000020;
+              }
+              arguments_.add(input.readMessage(boa.types.Diff.ChangedVariable.PARSER, extensionRegistry));
+              break;
+            }
+            case 58: {
+              if (!((mutable_bitField0_ & 0x00000040) == 0x00000040)) {
+                exceptionTypes_ = new java.util.ArrayList<boa.types.Diff.ChangedType>();
+                mutable_bitField0_ |= 0x00000040;
+              }
+              exceptionTypes_.add(input.readMessage(boa.types.Diff.ChangedType.PARSER, extensionRegistry));
+              break;
+            }
+            case 66: {
+              if (!((mutable_bitField0_ & 0x00000080) == 0x00000080)) {
+                statements_ = new java.util.ArrayList<boa.types.Diff.ChangedStatement>();
+                mutable_bitField0_ |= 0x00000080;
+              }
+              statements_.add(input.readMessage(boa.types.Diff.ChangedStatement.PARSER, extensionRegistry));
+              break;
+            }
+            case 74: {
+              if (!((mutable_bitField0_ & 0x00000100) == 0x00000100)) {
+                comments_ = new java.util.ArrayList<boa.types.Diff.ChangedComment>();
+                mutable_bitField0_ |= 0x00000100;
+              }
+              comments_.add(input.readMessage(boa.types.Diff.ChangedComment.PARSER, extensionRegistry));
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
+          modifiers_ = java.util.Collections.unmodifiableList(modifiers_);
+        }
+        if (((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
+          genericParameters_ = java.util.Collections.unmodifiableList(genericParameters_);
+        }
+        if (((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
+          arguments_ = java.util.Collections.unmodifiableList(arguments_);
+        }
+        if (((mutable_bitField0_ & 0x00000040) == 0x00000040)) {
+          exceptionTypes_ = java.util.Collections.unmodifiableList(exceptionTypes_);
+        }
+        if (((mutable_bitField0_ & 0x00000080) == 0x00000080)) {
+          statements_ = java.util.Collections.unmodifiableList(statements_);
+        }
+        if (((mutable_bitField0_ & 0x00000100) == 0x00000100)) {
+          comments_ = java.util.Collections.unmodifiableList(comments_);
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return boa.types.Diff.internal_static_boa_types_ChangedMethod_descriptor;
     }
-    
+
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return boa.types.Diff.internal_static_boa_types_ChangedMethod_fieldAccessorTable;
+      return boa.types.Diff.internal_static_boa_types_ChangedMethod_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              boa.types.Diff.ChangedMethod.class, boa.types.Diff.ChangedMethod.Builder.class);
     }
-    
+
+    public static com.google.protobuf.Parser<ChangedMethod> PARSER =
+        new com.google.protobuf.AbstractParser<ChangedMethod>() {
+      public ChangedMethod parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new ChangedMethod(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<ChangedMethod> getParserForType() {
+      return PARSER;
+    }
+
     private int bitField0_;
     // required .boa.types.ChangeKind change = 1;
     public static final int CHANGE_FIELD_NUMBER = 1;
     private boa.types.Shared.ChangeKind change_;
+    /**
+     * <code>required .boa.types.ChangeKind change = 1;</code>
+     */
     public boolean hasChange() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
+    /**
+     * <code>required .boa.types.ChangeKind change = 1;</code>
+     */
     public boa.types.Shared.ChangeKind getChange() {
       return change_;
     }
-    
+
     // optional string name = 2;
     public static final int NAME_FIELD_NUMBER = 2;
     private java.lang.Object name_;
+    /**
+     * <code>optional string name = 2;</code>
+     */
     public boolean hasName() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
-    public String getName() {
+    /**
+     * <code>optional string name = 2;</code>
+     */
+    public java.lang.String getName() {
       java.lang.Object ref = name_;
-      if (ref instanceof String) {
-        return (String) ref;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
           name_ = s;
         }
         return s;
       }
     }
-    private com.google.protobuf.ByteString getNameBytes() {
+    /**
+     * <code>optional string name = 2;</code>
+     */
+    public com.google.protobuf.ByteString
+        getNameBytes() {
       java.lang.Object ref = name_;
-      if (ref instanceof String) {
+      if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
         name_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
-    
+
     // repeated .boa.types.ChangedModifier modifiers = 3;
     public static final int MODIFIERS_FIELD_NUMBER = 3;
     private java.util.List<boa.types.Diff.ChangedModifier> modifiers_;
+    /**
+     * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+     */
     public java.util.List<boa.types.Diff.ChangedModifier> getModifiersList() {
       return modifiers_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+     */
     public java.util.List<? extends boa.types.Diff.ChangedModifierOrBuilder> 
         getModifiersOrBuilderList() {
       return modifiers_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+     */
     public int getModifiersCount() {
       return modifiers_.size();
     }
+    /**
+     * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+     */
     public boa.types.Diff.ChangedModifier getModifiers(int index) {
       return modifiers_.get(index);
     }
+    /**
+     * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+     */
     public boa.types.Diff.ChangedModifierOrBuilder getModifiersOrBuilder(
         int index) {
       return modifiers_.get(index);
     }
-    
+
     // optional .boa.types.ChangedType return_type = 4;
     public static final int RETURN_TYPE_FIELD_NUMBER = 4;
     private boa.types.Diff.ChangedType returnType_;
+    /**
+     * <code>optional .boa.types.ChangedType return_type = 4;</code>
+     */
     public boolean hasReturnType() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
+    /**
+     * <code>optional .boa.types.ChangedType return_type = 4;</code>
+     */
     public boa.types.Diff.ChangedType getReturnType() {
       return returnType_;
     }
+    /**
+     * <code>optional .boa.types.ChangedType return_type = 4;</code>
+     */
     public boa.types.Diff.ChangedTypeOrBuilder getReturnTypeOrBuilder() {
       return returnType_;
     }
-    
+
     // repeated .boa.types.ChangedType generic_parameters = 5;
     public static final int GENERIC_PARAMETERS_FIELD_NUMBER = 5;
     private java.util.List<boa.types.Diff.ChangedType> genericParameters_;
+    /**
+     * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+     */
     public java.util.List<boa.types.Diff.ChangedType> getGenericParametersList() {
       return genericParameters_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+     */
     public java.util.List<? extends boa.types.Diff.ChangedTypeOrBuilder> 
         getGenericParametersOrBuilderList() {
       return genericParameters_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+     */
     public int getGenericParametersCount() {
       return genericParameters_.size();
     }
+    /**
+     * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+     */
     public boa.types.Diff.ChangedType getGenericParameters(int index) {
       return genericParameters_.get(index);
     }
+    /**
+     * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+     */
     public boa.types.Diff.ChangedTypeOrBuilder getGenericParametersOrBuilder(
         int index) {
       return genericParameters_.get(index);
     }
-    
+
     // repeated .boa.types.ChangedVariable arguments = 6;
     public static final int ARGUMENTS_FIELD_NUMBER = 6;
     private java.util.List<boa.types.Diff.ChangedVariable> arguments_;
+    /**
+     * <code>repeated .boa.types.ChangedVariable arguments = 6;</code>
+     */
     public java.util.List<boa.types.Diff.ChangedVariable> getArgumentsList() {
       return arguments_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedVariable arguments = 6;</code>
+     */
     public java.util.List<? extends boa.types.Diff.ChangedVariableOrBuilder> 
         getArgumentsOrBuilderList() {
       return arguments_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedVariable arguments = 6;</code>
+     */
     public int getArgumentsCount() {
       return arguments_.size();
     }
+    /**
+     * <code>repeated .boa.types.ChangedVariable arguments = 6;</code>
+     */
     public boa.types.Diff.ChangedVariable getArguments(int index) {
       return arguments_.get(index);
     }
+    /**
+     * <code>repeated .boa.types.ChangedVariable arguments = 6;</code>
+     */
     public boa.types.Diff.ChangedVariableOrBuilder getArgumentsOrBuilder(
         int index) {
       return arguments_.get(index);
     }
-    
+
     // repeated .boa.types.ChangedType exception_types = 7;
     public static final int EXCEPTION_TYPES_FIELD_NUMBER = 7;
     private java.util.List<boa.types.Diff.ChangedType> exceptionTypes_;
+    /**
+     * <code>repeated .boa.types.ChangedType exception_types = 7;</code>
+     */
     public java.util.List<boa.types.Diff.ChangedType> getExceptionTypesList() {
       return exceptionTypes_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedType exception_types = 7;</code>
+     */
     public java.util.List<? extends boa.types.Diff.ChangedTypeOrBuilder> 
         getExceptionTypesOrBuilderList() {
       return exceptionTypes_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedType exception_types = 7;</code>
+     */
     public int getExceptionTypesCount() {
       return exceptionTypes_.size();
     }
+    /**
+     * <code>repeated .boa.types.ChangedType exception_types = 7;</code>
+     */
     public boa.types.Diff.ChangedType getExceptionTypes(int index) {
       return exceptionTypes_.get(index);
     }
+    /**
+     * <code>repeated .boa.types.ChangedType exception_types = 7;</code>
+     */
     public boa.types.Diff.ChangedTypeOrBuilder getExceptionTypesOrBuilder(
         int index) {
       return exceptionTypes_.get(index);
     }
-    
+
     // repeated .boa.types.ChangedStatement statements = 8;
     public static final int STATEMENTS_FIELD_NUMBER = 8;
     private java.util.List<boa.types.Diff.ChangedStatement> statements_;
+    /**
+     * <code>repeated .boa.types.ChangedStatement statements = 8;</code>
+     */
     public java.util.List<boa.types.Diff.ChangedStatement> getStatementsList() {
       return statements_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedStatement statements = 8;</code>
+     */
     public java.util.List<? extends boa.types.Diff.ChangedStatementOrBuilder> 
         getStatementsOrBuilderList() {
       return statements_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedStatement statements = 8;</code>
+     */
     public int getStatementsCount() {
       return statements_.size();
     }
+    /**
+     * <code>repeated .boa.types.ChangedStatement statements = 8;</code>
+     */
     public boa.types.Diff.ChangedStatement getStatements(int index) {
       return statements_.get(index);
     }
+    /**
+     * <code>repeated .boa.types.ChangedStatement statements = 8;</code>
+     */
     public boa.types.Diff.ChangedStatementOrBuilder getStatementsOrBuilder(
         int index) {
       return statements_.get(index);
     }
-    
+
     // repeated .boa.types.ChangedComment comments = 9;
     public static final int COMMENTS_FIELD_NUMBER = 9;
     private java.util.List<boa.types.Diff.ChangedComment> comments_;
+    /**
+     * <code>repeated .boa.types.ChangedComment comments = 9;</code>
+     */
     public java.util.List<boa.types.Diff.ChangedComment> getCommentsList() {
       return comments_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedComment comments = 9;</code>
+     */
     public java.util.List<? extends boa.types.Diff.ChangedCommentOrBuilder> 
         getCommentsOrBuilderList() {
       return comments_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedComment comments = 9;</code>
+     */
     public int getCommentsCount() {
       return comments_.size();
     }
+    /**
+     * <code>repeated .boa.types.ChangedComment comments = 9;</code>
+     */
     public boa.types.Diff.ChangedComment getComments(int index) {
       return comments_.get(index);
     }
+    /**
+     * <code>repeated .boa.types.ChangedComment comments = 9;</code>
+     */
     public boa.types.Diff.ChangedCommentOrBuilder getCommentsOrBuilder(
         int index) {
       return comments_.get(index);
     }
-    
+
     private void initFields() {
       change_ = boa.types.Shared.ChangeKind.ADDED;
       name_ = "";
@@ -6178,7 +8354,7 @@ public final class Diff {
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized != -1) return isInitialized == 1;
-      
+
       if (!hasChange()) {
         memoizedIsInitialized = 0;
         return false;
@@ -6228,7 +8404,7 @@ public final class Diff {
       memoizedIsInitialized = 1;
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
@@ -6261,12 +8437,12 @@ public final class Diff {
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
       if (size != -1) return size;
-    
+
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
@@ -6308,94 +8484,83 @@ public final class Diff {
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     private static final long serialVersionUID = 0L;
     @java.lang.Override
     protected java.lang.Object writeReplace()
         throws java.io.ObjectStreamException {
       return super.writeReplace();
     }
-    
+
     public static boa.types.Diff.ChangedMethod parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
+      return PARSER.parseFrom(data);
     }
     public static boa.types.Diff.ChangedMethod parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(data, extensionRegistry);
     }
     public static boa.types.Diff.ChangedMethod parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
+      return PARSER.parseFrom(data);
     }
     public static boa.types.Diff.ChangedMethod parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(data, extensionRegistry);
     }
     public static boa.types.Diff.ChangedMethod parseFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
+      return PARSER.parseFrom(input);
     }
     public static boa.types.Diff.ChangedMethod parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(input, extensionRegistry);
     }
     public static boa.types.Diff.ChangedMethod parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
+      return PARSER.parseDelimitedFrom(input);
     }
     public static boa.types.Diff.ChangedMethod parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
     }
     public static boa.types.Diff.ChangedMethod parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
+      return PARSER.parseFrom(input);
     }
     public static boa.types.Diff.ChangedMethod parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(input, extensionRegistry);
     }
-    
+
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder(boa.types.Diff.ChangedMethod prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
-    
+
     @java.lang.Override
     protected Builder newBuilderForType(
         com.google.protobuf.GeneratedMessage.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
+    /**
+     * Protobuf type {@code boa.types.ChangedMethod}
+     */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
        implements boa.types.Diff.ChangedMethodOrBuilder {
@@ -6403,18 +8568,21 @@ public final class Diff {
           getDescriptor() {
         return boa.types.Diff.internal_static_boa_types_ChangedMethod_descriptor;
       }
-      
+
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return boa.types.Diff.internal_static_boa_types_ChangedMethod_fieldAccessorTable;
+        return boa.types.Diff.internal_static_boa_types_ChangedMethod_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                boa.types.Diff.ChangedMethod.class, boa.types.Diff.ChangedMethod.Builder.class);
       }
-      
+
       // Construct using boa.types.Diff.ChangedMethod.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
-      
-      private Builder(BuilderParent parent) {
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -6432,7 +8600,7 @@ public final class Diff {
       private static Builder create() {
         return new Builder();
       }
-      
+
       public Builder clear() {
         super.clear();
         change_ = boa.types.Shared.ChangeKind.ADDED;
@@ -6483,20 +8651,20 @@ public final class Diff {
         }
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(buildPartial());
       }
-      
+
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return boa.types.Diff.ChangedMethod.getDescriptor();
+        return boa.types.Diff.internal_static_boa_types_ChangedMethod_descriptor;
       }
-      
+
       public boa.types.Diff.ChangedMethod getDefaultInstanceForType() {
         return boa.types.Diff.ChangedMethod.getDefaultInstance();
       }
-      
+
       public boa.types.Diff.ChangedMethod build() {
         boa.types.Diff.ChangedMethod result = buildPartial();
         if (!result.isInitialized()) {
@@ -6504,17 +8672,7 @@ public final class Diff {
         }
         return result;
       }
-      
-      private boa.types.Diff.ChangedMethod buildParsed()
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        boa.types.Diff.ChangedMethod result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
-        }
-        return result;
-      }
-      
+
       public boa.types.Diff.ChangedMethod buildPartial() {
         boa.types.Diff.ChangedMethod result = new boa.types.Diff.ChangedMethod(this);
         int from_bitField0_ = bitField0_;
@@ -6593,7 +8751,7 @@ public final class Diff {
         onBuilt();
         return result;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof boa.types.Diff.ChangedMethod) {
           return mergeFrom((boa.types.Diff.ChangedMethod)other);
@@ -6602,14 +8760,16 @@ public final class Diff {
           return this;
         }
       }
-      
+
       public Builder mergeFrom(boa.types.Diff.ChangedMethod other) {
         if (other == boa.types.Diff.ChangedMethod.getDefaultInstance()) return this;
         if (other.hasChange()) {
           setChange(other.getChange());
         }
         if (other.hasName()) {
-          setName(other.getName());
+          bitField0_ |= 0x00000002;
+          name_ = other.name_;
+          onChanged();
         }
         if (modifiersBuilder_ == null) {
           if (!other.modifiers_.isEmpty()) {
@@ -6773,7 +8933,7 @@ public final class Diff {
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
+
       public final boolean isInitialized() {
         if (!hasChange()) {
           
@@ -6823,27 +8983,1858 @@ public final class Diff {
         }
         return true;
       }
-      
+
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
-        while (true) {
+        boa.types.Diff.ChangedMethod parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (boa.types.Diff.ChangedMethod) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      // required .boa.types.ChangeKind change = 1;
+      private boa.types.Shared.ChangeKind change_ = boa.types.Shared.ChangeKind.ADDED;
+      /**
+       * <code>required .boa.types.ChangeKind change = 1;</code>
+       */
+      public boolean hasChange() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>required .boa.types.ChangeKind change = 1;</code>
+       */
+      public boa.types.Shared.ChangeKind getChange() {
+        return change_;
+      }
+      /**
+       * <code>required .boa.types.ChangeKind change = 1;</code>
+       */
+      public Builder setChange(boa.types.Shared.ChangeKind value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        bitField0_ |= 0x00000001;
+        change_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required .boa.types.ChangeKind change = 1;</code>
+       */
+      public Builder clearChange() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        change_ = boa.types.Shared.ChangeKind.ADDED;
+        onChanged();
+        return this;
+      }
+
+      // optional string name = 2;
+      private java.lang.Object name_ = "";
+      /**
+       * <code>optional string name = 2;</code>
+       */
+      public boolean hasName() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>optional string name = 2;</code>
+       */
+      public java.lang.String getName() {
+        java.lang.Object ref = name_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          name_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string name = 2;</code>
+       */
+      public com.google.protobuf.ByteString
+          getNameBytes() {
+        java.lang.Object ref = name_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          name_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string name = 2;</code>
+       */
+      public Builder setName(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        name_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string name = 2;</code>
+       */
+      public Builder clearName() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        name_ = getDefaultInstance().getName();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string name = 2;</code>
+       */
+      public Builder setNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        name_ = value;
+        onChanged();
+        return this;
+      }
+
+      // repeated .boa.types.ChangedModifier modifiers = 3;
+      private java.util.List<boa.types.Diff.ChangedModifier> modifiers_ =
+        java.util.Collections.emptyList();
+      private void ensureModifiersIsMutable() {
+        if (!((bitField0_ & 0x00000004) == 0x00000004)) {
+          modifiers_ = new java.util.ArrayList<boa.types.Diff.ChangedModifier>(modifiers_);
+          bitField0_ |= 0x00000004;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Diff.ChangedModifier, boa.types.Diff.ChangedModifier.Builder, boa.types.Diff.ChangedModifierOrBuilder> modifiersBuilder_;
+
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+       */
+      public java.util.List<boa.types.Diff.ChangedModifier> getModifiersList() {
+        if (modifiersBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(modifiers_);
+        } else {
+          return modifiersBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+       */
+      public int getModifiersCount() {
+        if (modifiersBuilder_ == null) {
+          return modifiers_.size();
+        } else {
+          return modifiersBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+       */
+      public boa.types.Diff.ChangedModifier getModifiers(int index) {
+        if (modifiersBuilder_ == null) {
+          return modifiers_.get(index);
+        } else {
+          return modifiersBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+       */
+      public Builder setModifiers(
+          int index, boa.types.Diff.ChangedModifier value) {
+        if (modifiersBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureModifiersIsMutable();
+          modifiers_.set(index, value);
+          onChanged();
+        } else {
+          modifiersBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+       */
+      public Builder setModifiers(
+          int index, boa.types.Diff.ChangedModifier.Builder builderForValue) {
+        if (modifiersBuilder_ == null) {
+          ensureModifiersIsMutable();
+          modifiers_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          modifiersBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+       */
+      public Builder addModifiers(boa.types.Diff.ChangedModifier value) {
+        if (modifiersBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureModifiersIsMutable();
+          modifiers_.add(value);
+          onChanged();
+        } else {
+          modifiersBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+       */
+      public Builder addModifiers(
+          int index, boa.types.Diff.ChangedModifier value) {
+        if (modifiersBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureModifiersIsMutable();
+          modifiers_.add(index, value);
+          onChanged();
+        } else {
+          modifiersBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+       */
+      public Builder addModifiers(
+          boa.types.Diff.ChangedModifier.Builder builderForValue) {
+        if (modifiersBuilder_ == null) {
+          ensureModifiersIsMutable();
+          modifiers_.add(builderForValue.build());
+          onChanged();
+        } else {
+          modifiersBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+       */
+      public Builder addModifiers(
+          int index, boa.types.Diff.ChangedModifier.Builder builderForValue) {
+        if (modifiersBuilder_ == null) {
+          ensureModifiersIsMutable();
+          modifiers_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          modifiersBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+       */
+      public Builder addAllModifiers(
+          java.lang.Iterable<? extends boa.types.Diff.ChangedModifier> values) {
+        if (modifiersBuilder_ == null) {
+          ensureModifiersIsMutable();
+          super.addAll(values, modifiers_);
+          onChanged();
+        } else {
+          modifiersBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+       */
+      public Builder clearModifiers() {
+        if (modifiersBuilder_ == null) {
+          modifiers_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000004);
+          onChanged();
+        } else {
+          modifiersBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+       */
+      public Builder removeModifiers(int index) {
+        if (modifiersBuilder_ == null) {
+          ensureModifiersIsMutable();
+          modifiers_.remove(index);
+          onChanged();
+        } else {
+          modifiersBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+       */
+      public boa.types.Diff.ChangedModifier.Builder getModifiersBuilder(
+          int index) {
+        return getModifiersFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+       */
+      public boa.types.Diff.ChangedModifierOrBuilder getModifiersOrBuilder(
+          int index) {
+        if (modifiersBuilder_ == null) {
+          return modifiers_.get(index);  } else {
+          return modifiersBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+       */
+      public java.util.List<? extends boa.types.Diff.ChangedModifierOrBuilder> 
+           getModifiersOrBuilderList() {
+        if (modifiersBuilder_ != null) {
+          return modifiersBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(modifiers_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+       */
+      public boa.types.Diff.ChangedModifier.Builder addModifiersBuilder() {
+        return getModifiersFieldBuilder().addBuilder(
+            boa.types.Diff.ChangedModifier.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+       */
+      public boa.types.Diff.ChangedModifier.Builder addModifiersBuilder(
+          int index) {
+        return getModifiersFieldBuilder().addBuilder(
+            index, boa.types.Diff.ChangedModifier.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 3;</code>
+       */
+      public java.util.List<boa.types.Diff.ChangedModifier.Builder> 
+           getModifiersBuilderList() {
+        return getModifiersFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Diff.ChangedModifier, boa.types.Diff.ChangedModifier.Builder, boa.types.Diff.ChangedModifierOrBuilder> 
+          getModifiersFieldBuilder() {
+        if (modifiersBuilder_ == null) {
+          modifiersBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              boa.types.Diff.ChangedModifier, boa.types.Diff.ChangedModifier.Builder, boa.types.Diff.ChangedModifierOrBuilder>(
+                  modifiers_,
+                  ((bitField0_ & 0x00000004) == 0x00000004),
+                  getParentForChildren(),
+                  isClean());
+          modifiers_ = null;
+        }
+        return modifiersBuilder_;
+      }
+
+      // optional .boa.types.ChangedType return_type = 4;
+      private boa.types.Diff.ChangedType returnType_ = boa.types.Diff.ChangedType.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Diff.ChangedType, boa.types.Diff.ChangedType.Builder, boa.types.Diff.ChangedTypeOrBuilder> returnTypeBuilder_;
+      /**
+       * <code>optional .boa.types.ChangedType return_type = 4;</code>
+       */
+      public boolean hasReturnType() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      /**
+       * <code>optional .boa.types.ChangedType return_type = 4;</code>
+       */
+      public boa.types.Diff.ChangedType getReturnType() {
+        if (returnTypeBuilder_ == null) {
+          return returnType_;
+        } else {
+          return returnTypeBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .boa.types.ChangedType return_type = 4;</code>
+       */
+      public Builder setReturnType(boa.types.Diff.ChangedType value) {
+        if (returnTypeBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          returnType_ = value;
+          onChanged();
+        } else {
+          returnTypeBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000008;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.ChangedType return_type = 4;</code>
+       */
+      public Builder setReturnType(
+          boa.types.Diff.ChangedType.Builder builderForValue) {
+        if (returnTypeBuilder_ == null) {
+          returnType_ = builderForValue.build();
+          onChanged();
+        } else {
+          returnTypeBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000008;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.ChangedType return_type = 4;</code>
+       */
+      public Builder mergeReturnType(boa.types.Diff.ChangedType value) {
+        if (returnTypeBuilder_ == null) {
+          if (((bitField0_ & 0x00000008) == 0x00000008) &&
+              returnType_ != boa.types.Diff.ChangedType.getDefaultInstance()) {
+            returnType_ =
+              boa.types.Diff.ChangedType.newBuilder(returnType_).mergeFrom(value).buildPartial();
+          } else {
+            returnType_ = value;
+          }
+          onChanged();
+        } else {
+          returnTypeBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000008;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.ChangedType return_type = 4;</code>
+       */
+      public Builder clearReturnType() {
+        if (returnTypeBuilder_ == null) {
+          returnType_ = boa.types.Diff.ChangedType.getDefaultInstance();
+          onChanged();
+        } else {
+          returnTypeBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000008);
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.ChangedType return_type = 4;</code>
+       */
+      public boa.types.Diff.ChangedType.Builder getReturnTypeBuilder() {
+        bitField0_ |= 0x00000008;
+        onChanged();
+        return getReturnTypeFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .boa.types.ChangedType return_type = 4;</code>
+       */
+      public boa.types.Diff.ChangedTypeOrBuilder getReturnTypeOrBuilder() {
+        if (returnTypeBuilder_ != null) {
+          return returnTypeBuilder_.getMessageOrBuilder();
+        } else {
+          return returnType_;
+        }
+      }
+      /**
+       * <code>optional .boa.types.ChangedType return_type = 4;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Diff.ChangedType, boa.types.Diff.ChangedType.Builder, boa.types.Diff.ChangedTypeOrBuilder> 
+          getReturnTypeFieldBuilder() {
+        if (returnTypeBuilder_ == null) {
+          returnTypeBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              boa.types.Diff.ChangedType, boa.types.Diff.ChangedType.Builder, boa.types.Diff.ChangedTypeOrBuilder>(
+                  returnType_,
+                  getParentForChildren(),
+                  isClean());
+          returnType_ = null;
+        }
+        return returnTypeBuilder_;
+      }
+
+      // repeated .boa.types.ChangedType generic_parameters = 5;
+      private java.util.List<boa.types.Diff.ChangedType> genericParameters_ =
+        java.util.Collections.emptyList();
+      private void ensureGenericParametersIsMutable() {
+        if (!((bitField0_ & 0x00000010) == 0x00000010)) {
+          genericParameters_ = new java.util.ArrayList<boa.types.Diff.ChangedType>(genericParameters_);
+          bitField0_ |= 0x00000010;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Diff.ChangedType, boa.types.Diff.ChangedType.Builder, boa.types.Diff.ChangedTypeOrBuilder> genericParametersBuilder_;
+
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+       */
+      public java.util.List<boa.types.Diff.ChangedType> getGenericParametersList() {
+        if (genericParametersBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(genericParameters_);
+        } else {
+          return genericParametersBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+       */
+      public int getGenericParametersCount() {
+        if (genericParametersBuilder_ == null) {
+          return genericParameters_.size();
+        } else {
+          return genericParametersBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+       */
+      public boa.types.Diff.ChangedType getGenericParameters(int index) {
+        if (genericParametersBuilder_ == null) {
+          return genericParameters_.get(index);
+        } else {
+          return genericParametersBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+       */
+      public Builder setGenericParameters(
+          int index, boa.types.Diff.ChangedType value) {
+        if (genericParametersBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureGenericParametersIsMutable();
+          genericParameters_.set(index, value);
+          onChanged();
+        } else {
+          genericParametersBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+       */
+      public Builder setGenericParameters(
+          int index, boa.types.Diff.ChangedType.Builder builderForValue) {
+        if (genericParametersBuilder_ == null) {
+          ensureGenericParametersIsMutable();
+          genericParameters_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          genericParametersBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+       */
+      public Builder addGenericParameters(boa.types.Diff.ChangedType value) {
+        if (genericParametersBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureGenericParametersIsMutable();
+          genericParameters_.add(value);
+          onChanged();
+        } else {
+          genericParametersBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+       */
+      public Builder addGenericParameters(
+          int index, boa.types.Diff.ChangedType value) {
+        if (genericParametersBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureGenericParametersIsMutable();
+          genericParameters_.add(index, value);
+          onChanged();
+        } else {
+          genericParametersBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+       */
+      public Builder addGenericParameters(
+          boa.types.Diff.ChangedType.Builder builderForValue) {
+        if (genericParametersBuilder_ == null) {
+          ensureGenericParametersIsMutable();
+          genericParameters_.add(builderForValue.build());
+          onChanged();
+        } else {
+          genericParametersBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+       */
+      public Builder addGenericParameters(
+          int index, boa.types.Diff.ChangedType.Builder builderForValue) {
+        if (genericParametersBuilder_ == null) {
+          ensureGenericParametersIsMutable();
+          genericParameters_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          genericParametersBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+       */
+      public Builder addAllGenericParameters(
+          java.lang.Iterable<? extends boa.types.Diff.ChangedType> values) {
+        if (genericParametersBuilder_ == null) {
+          ensureGenericParametersIsMutable();
+          super.addAll(values, genericParameters_);
+          onChanged();
+        } else {
+          genericParametersBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+       */
+      public Builder clearGenericParameters() {
+        if (genericParametersBuilder_ == null) {
+          genericParameters_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000010);
+          onChanged();
+        } else {
+          genericParametersBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+       */
+      public Builder removeGenericParameters(int index) {
+        if (genericParametersBuilder_ == null) {
+          ensureGenericParametersIsMutable();
+          genericParameters_.remove(index);
+          onChanged();
+        } else {
+          genericParametersBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+       */
+      public boa.types.Diff.ChangedType.Builder getGenericParametersBuilder(
+          int index) {
+        return getGenericParametersFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+       */
+      public boa.types.Diff.ChangedTypeOrBuilder getGenericParametersOrBuilder(
+          int index) {
+        if (genericParametersBuilder_ == null) {
+          return genericParameters_.get(index);  } else {
+          return genericParametersBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+       */
+      public java.util.List<? extends boa.types.Diff.ChangedTypeOrBuilder> 
+           getGenericParametersOrBuilderList() {
+        if (genericParametersBuilder_ != null) {
+          return genericParametersBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(genericParameters_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+       */
+      public boa.types.Diff.ChangedType.Builder addGenericParametersBuilder() {
+        return getGenericParametersFieldBuilder().addBuilder(
+            boa.types.Diff.ChangedType.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+       */
+      public boa.types.Diff.ChangedType.Builder addGenericParametersBuilder(
+          int index) {
+        return getGenericParametersFieldBuilder().addBuilder(
+            index, boa.types.Diff.ChangedType.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 5;</code>
+       */
+      public java.util.List<boa.types.Diff.ChangedType.Builder> 
+           getGenericParametersBuilderList() {
+        return getGenericParametersFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Diff.ChangedType, boa.types.Diff.ChangedType.Builder, boa.types.Diff.ChangedTypeOrBuilder> 
+          getGenericParametersFieldBuilder() {
+        if (genericParametersBuilder_ == null) {
+          genericParametersBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              boa.types.Diff.ChangedType, boa.types.Diff.ChangedType.Builder, boa.types.Diff.ChangedTypeOrBuilder>(
+                  genericParameters_,
+                  ((bitField0_ & 0x00000010) == 0x00000010),
+                  getParentForChildren(),
+                  isClean());
+          genericParameters_ = null;
+        }
+        return genericParametersBuilder_;
+      }
+
+      // repeated .boa.types.ChangedVariable arguments = 6;
+      private java.util.List<boa.types.Diff.ChangedVariable> arguments_ =
+        java.util.Collections.emptyList();
+      private void ensureArgumentsIsMutable() {
+        if (!((bitField0_ & 0x00000020) == 0x00000020)) {
+          arguments_ = new java.util.ArrayList<boa.types.Diff.ChangedVariable>(arguments_);
+          bitField0_ |= 0x00000020;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Diff.ChangedVariable, boa.types.Diff.ChangedVariable.Builder, boa.types.Diff.ChangedVariableOrBuilder> argumentsBuilder_;
+
+      /**
+       * <code>repeated .boa.types.ChangedVariable arguments = 6;</code>
+       */
+      public java.util.List<boa.types.Diff.ChangedVariable> getArgumentsList() {
+        if (argumentsBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(arguments_);
+        } else {
+          return argumentsBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.ChangedVariable arguments = 6;</code>
+       */
+      public int getArgumentsCount() {
+        if (argumentsBuilder_ == null) {
+          return arguments_.size();
+        } else {
+          return argumentsBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.ChangedVariable arguments = 6;</code>
+       */
+      public boa.types.Diff.ChangedVariable getArguments(int index) {
+        if (argumentsBuilder_ == null) {
+          return arguments_.get(index);
+        } else {
+          return argumentsBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.ChangedVariable arguments = 6;</code>
+       */
+      public Builder setArguments(
+          int index, boa.types.Diff.ChangedVariable value) {
+        if (argumentsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureArgumentsIsMutable();
+          arguments_.set(index, value);
+          onChanged();
+        } else {
+          argumentsBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedVariable arguments = 6;</code>
+       */
+      public Builder setArguments(
+          int index, boa.types.Diff.ChangedVariable.Builder builderForValue) {
+        if (argumentsBuilder_ == null) {
+          ensureArgumentsIsMutable();
+          arguments_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          argumentsBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedVariable arguments = 6;</code>
+       */
+      public Builder addArguments(boa.types.Diff.ChangedVariable value) {
+        if (argumentsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureArgumentsIsMutable();
+          arguments_.add(value);
+          onChanged();
+        } else {
+          argumentsBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedVariable arguments = 6;</code>
+       */
+      public Builder addArguments(
+          int index, boa.types.Diff.ChangedVariable value) {
+        if (argumentsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureArgumentsIsMutable();
+          arguments_.add(index, value);
+          onChanged();
+        } else {
+          argumentsBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedVariable arguments = 6;</code>
+       */
+      public Builder addArguments(
+          boa.types.Diff.ChangedVariable.Builder builderForValue) {
+        if (argumentsBuilder_ == null) {
+          ensureArgumentsIsMutable();
+          arguments_.add(builderForValue.build());
+          onChanged();
+        } else {
+          argumentsBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedVariable arguments = 6;</code>
+       */
+      public Builder addArguments(
+          int index, boa.types.Diff.ChangedVariable.Builder builderForValue) {
+        if (argumentsBuilder_ == null) {
+          ensureArgumentsIsMutable();
+          arguments_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          argumentsBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedVariable arguments = 6;</code>
+       */
+      public Builder addAllArguments(
+          java.lang.Iterable<? extends boa.types.Diff.ChangedVariable> values) {
+        if (argumentsBuilder_ == null) {
+          ensureArgumentsIsMutable();
+          super.addAll(values, arguments_);
+          onChanged();
+        } else {
+          argumentsBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedVariable arguments = 6;</code>
+       */
+      public Builder clearArguments() {
+        if (argumentsBuilder_ == null) {
+          arguments_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000020);
+          onChanged();
+        } else {
+          argumentsBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedVariable arguments = 6;</code>
+       */
+      public Builder removeArguments(int index) {
+        if (argumentsBuilder_ == null) {
+          ensureArgumentsIsMutable();
+          arguments_.remove(index);
+          onChanged();
+        } else {
+          argumentsBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedVariable arguments = 6;</code>
+       */
+      public boa.types.Diff.ChangedVariable.Builder getArgumentsBuilder(
+          int index) {
+        return getArgumentsFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.ChangedVariable arguments = 6;</code>
+       */
+      public boa.types.Diff.ChangedVariableOrBuilder getArgumentsOrBuilder(
+          int index) {
+        if (argumentsBuilder_ == null) {
+          return arguments_.get(index);  } else {
+          return argumentsBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.ChangedVariable arguments = 6;</code>
+       */
+      public java.util.List<? extends boa.types.Diff.ChangedVariableOrBuilder> 
+           getArgumentsOrBuilderList() {
+        if (argumentsBuilder_ != null) {
+          return argumentsBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(arguments_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.ChangedVariable arguments = 6;</code>
+       */
+      public boa.types.Diff.ChangedVariable.Builder addArgumentsBuilder() {
+        return getArgumentsFieldBuilder().addBuilder(
+            boa.types.Diff.ChangedVariable.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.ChangedVariable arguments = 6;</code>
+       */
+      public boa.types.Diff.ChangedVariable.Builder addArgumentsBuilder(
+          int index) {
+        return getArgumentsFieldBuilder().addBuilder(
+            index, boa.types.Diff.ChangedVariable.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.ChangedVariable arguments = 6;</code>
+       */
+      public java.util.List<boa.types.Diff.ChangedVariable.Builder> 
+           getArgumentsBuilderList() {
+        return getArgumentsFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Diff.ChangedVariable, boa.types.Diff.ChangedVariable.Builder, boa.types.Diff.ChangedVariableOrBuilder> 
+          getArgumentsFieldBuilder() {
+        if (argumentsBuilder_ == null) {
+          argumentsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              boa.types.Diff.ChangedVariable, boa.types.Diff.ChangedVariable.Builder, boa.types.Diff.ChangedVariableOrBuilder>(
+                  arguments_,
+                  ((bitField0_ & 0x00000020) == 0x00000020),
+                  getParentForChildren(),
+                  isClean());
+          arguments_ = null;
+        }
+        return argumentsBuilder_;
+      }
+
+      // repeated .boa.types.ChangedType exception_types = 7;
+      private java.util.List<boa.types.Diff.ChangedType> exceptionTypes_ =
+        java.util.Collections.emptyList();
+      private void ensureExceptionTypesIsMutable() {
+        if (!((bitField0_ & 0x00000040) == 0x00000040)) {
+          exceptionTypes_ = new java.util.ArrayList<boa.types.Diff.ChangedType>(exceptionTypes_);
+          bitField0_ |= 0x00000040;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Diff.ChangedType, boa.types.Diff.ChangedType.Builder, boa.types.Diff.ChangedTypeOrBuilder> exceptionTypesBuilder_;
+
+      /**
+       * <code>repeated .boa.types.ChangedType exception_types = 7;</code>
+       */
+      public java.util.List<boa.types.Diff.ChangedType> getExceptionTypesList() {
+        if (exceptionTypesBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(exceptionTypes_);
+        } else {
+          return exceptionTypesBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.ChangedType exception_types = 7;</code>
+       */
+      public int getExceptionTypesCount() {
+        if (exceptionTypesBuilder_ == null) {
+          return exceptionTypes_.size();
+        } else {
+          return exceptionTypesBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.ChangedType exception_types = 7;</code>
+       */
+      public boa.types.Diff.ChangedType getExceptionTypes(int index) {
+        if (exceptionTypesBuilder_ == null) {
+          return exceptionTypes_.get(index);
+        } else {
+          return exceptionTypesBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.ChangedType exception_types = 7;</code>
+       */
+      public Builder setExceptionTypes(
+          int index, boa.types.Diff.ChangedType value) {
+        if (exceptionTypesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureExceptionTypesIsMutable();
+          exceptionTypes_.set(index, value);
+          onChanged();
+        } else {
+          exceptionTypesBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedType exception_types = 7;</code>
+       */
+      public Builder setExceptionTypes(
+          int index, boa.types.Diff.ChangedType.Builder builderForValue) {
+        if (exceptionTypesBuilder_ == null) {
+          ensureExceptionTypesIsMutable();
+          exceptionTypes_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          exceptionTypesBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedType exception_types = 7;</code>
+       */
+      public Builder addExceptionTypes(boa.types.Diff.ChangedType value) {
+        if (exceptionTypesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureExceptionTypesIsMutable();
+          exceptionTypes_.add(value);
+          onChanged();
+        } else {
+          exceptionTypesBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedType exception_types = 7;</code>
+       */
+      public Builder addExceptionTypes(
+          int index, boa.types.Diff.ChangedType value) {
+        if (exceptionTypesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureExceptionTypesIsMutable();
+          exceptionTypes_.add(index, value);
+          onChanged();
+        } else {
+          exceptionTypesBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedType exception_types = 7;</code>
+       */
+      public Builder addExceptionTypes(
+          boa.types.Diff.ChangedType.Builder builderForValue) {
+        if (exceptionTypesBuilder_ == null) {
+          ensureExceptionTypesIsMutable();
+          exceptionTypes_.add(builderForValue.build());
+          onChanged();
+        } else {
+          exceptionTypesBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedType exception_types = 7;</code>
+       */
+      public Builder addExceptionTypes(
+          int index, boa.types.Diff.ChangedType.Builder builderForValue) {
+        if (exceptionTypesBuilder_ == null) {
+          ensureExceptionTypesIsMutable();
+          exceptionTypes_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          exceptionTypesBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedType exception_types = 7;</code>
+       */
+      public Builder addAllExceptionTypes(
+          java.lang.Iterable<? extends boa.types.Diff.ChangedType> values) {
+        if (exceptionTypesBuilder_ == null) {
+          ensureExceptionTypesIsMutable();
+          super.addAll(values, exceptionTypes_);
+          onChanged();
+        } else {
+          exceptionTypesBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedType exception_types = 7;</code>
+       */
+      public Builder clearExceptionTypes() {
+        if (exceptionTypesBuilder_ == null) {
+          exceptionTypes_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000040);
+          onChanged();
+        } else {
+          exceptionTypesBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedType exception_types = 7;</code>
+       */
+      public Builder removeExceptionTypes(int index) {
+        if (exceptionTypesBuilder_ == null) {
+          ensureExceptionTypesIsMutable();
+          exceptionTypes_.remove(index);
+          onChanged();
+        } else {
+          exceptionTypesBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedType exception_types = 7;</code>
+       */
+      public boa.types.Diff.ChangedType.Builder getExceptionTypesBuilder(
+          int index) {
+        return getExceptionTypesFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.ChangedType exception_types = 7;</code>
+       */
+      public boa.types.Diff.ChangedTypeOrBuilder getExceptionTypesOrBuilder(
+          int index) {
+        if (exceptionTypesBuilder_ == null) {
+          return exceptionTypes_.get(index);  } else {
+          return exceptionTypesBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.ChangedType exception_types = 7;</code>
+       */
+      public java.util.List<? extends boa.types.Diff.ChangedTypeOrBuilder> 
+           getExceptionTypesOrBuilderList() {
+        if (exceptionTypesBuilder_ != null) {
+          return exceptionTypesBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(exceptionTypes_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.ChangedType exception_types = 7;</code>
+       */
+      public boa.types.Diff.ChangedType.Builder addExceptionTypesBuilder() {
+        return getExceptionTypesFieldBuilder().addBuilder(
+            boa.types.Diff.ChangedType.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.ChangedType exception_types = 7;</code>
+       */
+      public boa.types.Diff.ChangedType.Builder addExceptionTypesBuilder(
+          int index) {
+        return getExceptionTypesFieldBuilder().addBuilder(
+            index, boa.types.Diff.ChangedType.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.ChangedType exception_types = 7;</code>
+       */
+      public java.util.List<boa.types.Diff.ChangedType.Builder> 
+           getExceptionTypesBuilderList() {
+        return getExceptionTypesFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Diff.ChangedType, boa.types.Diff.ChangedType.Builder, boa.types.Diff.ChangedTypeOrBuilder> 
+          getExceptionTypesFieldBuilder() {
+        if (exceptionTypesBuilder_ == null) {
+          exceptionTypesBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              boa.types.Diff.ChangedType, boa.types.Diff.ChangedType.Builder, boa.types.Diff.ChangedTypeOrBuilder>(
+                  exceptionTypes_,
+                  ((bitField0_ & 0x00000040) == 0x00000040),
+                  getParentForChildren(),
+                  isClean());
+          exceptionTypes_ = null;
+        }
+        return exceptionTypesBuilder_;
+      }
+
+      // repeated .boa.types.ChangedStatement statements = 8;
+      private java.util.List<boa.types.Diff.ChangedStatement> statements_ =
+        java.util.Collections.emptyList();
+      private void ensureStatementsIsMutable() {
+        if (!((bitField0_ & 0x00000080) == 0x00000080)) {
+          statements_ = new java.util.ArrayList<boa.types.Diff.ChangedStatement>(statements_);
+          bitField0_ |= 0x00000080;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Diff.ChangedStatement, boa.types.Diff.ChangedStatement.Builder, boa.types.Diff.ChangedStatementOrBuilder> statementsBuilder_;
+
+      /**
+       * <code>repeated .boa.types.ChangedStatement statements = 8;</code>
+       */
+      public java.util.List<boa.types.Diff.ChangedStatement> getStatementsList() {
+        if (statementsBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(statements_);
+        } else {
+          return statementsBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.ChangedStatement statements = 8;</code>
+       */
+      public int getStatementsCount() {
+        if (statementsBuilder_ == null) {
+          return statements_.size();
+        } else {
+          return statementsBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.ChangedStatement statements = 8;</code>
+       */
+      public boa.types.Diff.ChangedStatement getStatements(int index) {
+        if (statementsBuilder_ == null) {
+          return statements_.get(index);
+        } else {
+          return statementsBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.ChangedStatement statements = 8;</code>
+       */
+      public Builder setStatements(
+          int index, boa.types.Diff.ChangedStatement value) {
+        if (statementsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureStatementsIsMutable();
+          statements_.set(index, value);
+          onChanged();
+        } else {
+          statementsBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedStatement statements = 8;</code>
+       */
+      public Builder setStatements(
+          int index, boa.types.Diff.ChangedStatement.Builder builderForValue) {
+        if (statementsBuilder_ == null) {
+          ensureStatementsIsMutable();
+          statements_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          statementsBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedStatement statements = 8;</code>
+       */
+      public Builder addStatements(boa.types.Diff.ChangedStatement value) {
+        if (statementsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureStatementsIsMutable();
+          statements_.add(value);
+          onChanged();
+        } else {
+          statementsBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedStatement statements = 8;</code>
+       */
+      public Builder addStatements(
+          int index, boa.types.Diff.ChangedStatement value) {
+        if (statementsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureStatementsIsMutable();
+          statements_.add(index, value);
+          onChanged();
+        } else {
+          statementsBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedStatement statements = 8;</code>
+       */
+      public Builder addStatements(
+          boa.types.Diff.ChangedStatement.Builder builderForValue) {
+        if (statementsBuilder_ == null) {
+          ensureStatementsIsMutable();
+          statements_.add(builderForValue.build());
+          onChanged();
+        } else {
+          statementsBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedStatement statements = 8;</code>
+       */
+      public Builder addStatements(
+          int index, boa.types.Diff.ChangedStatement.Builder builderForValue) {
+        if (statementsBuilder_ == null) {
+          ensureStatementsIsMutable();
+          statements_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          statementsBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedStatement statements = 8;</code>
+       */
+      public Builder addAllStatements(
+          java.lang.Iterable<? extends boa.types.Diff.ChangedStatement> values) {
+        if (statementsBuilder_ == null) {
+          ensureStatementsIsMutable();
+          super.addAll(values, statements_);
+          onChanged();
+        } else {
+          statementsBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedStatement statements = 8;</code>
+       */
+      public Builder clearStatements() {
+        if (statementsBuilder_ == null) {
+          statements_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000080);
+          onChanged();
+        } else {
+          statementsBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedStatement statements = 8;</code>
+       */
+      public Builder removeStatements(int index) {
+        if (statementsBuilder_ == null) {
+          ensureStatementsIsMutable();
+          statements_.remove(index);
+          onChanged();
+        } else {
+          statementsBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedStatement statements = 8;</code>
+       */
+      public boa.types.Diff.ChangedStatement.Builder getStatementsBuilder(
+          int index) {
+        return getStatementsFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.ChangedStatement statements = 8;</code>
+       */
+      public boa.types.Diff.ChangedStatementOrBuilder getStatementsOrBuilder(
+          int index) {
+        if (statementsBuilder_ == null) {
+          return statements_.get(index);  } else {
+          return statementsBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.ChangedStatement statements = 8;</code>
+       */
+      public java.util.List<? extends boa.types.Diff.ChangedStatementOrBuilder> 
+           getStatementsOrBuilderList() {
+        if (statementsBuilder_ != null) {
+          return statementsBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(statements_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.ChangedStatement statements = 8;</code>
+       */
+      public boa.types.Diff.ChangedStatement.Builder addStatementsBuilder() {
+        return getStatementsFieldBuilder().addBuilder(
+            boa.types.Diff.ChangedStatement.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.ChangedStatement statements = 8;</code>
+       */
+      public boa.types.Diff.ChangedStatement.Builder addStatementsBuilder(
+          int index) {
+        return getStatementsFieldBuilder().addBuilder(
+            index, boa.types.Diff.ChangedStatement.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.ChangedStatement statements = 8;</code>
+       */
+      public java.util.List<boa.types.Diff.ChangedStatement.Builder> 
+           getStatementsBuilderList() {
+        return getStatementsFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Diff.ChangedStatement, boa.types.Diff.ChangedStatement.Builder, boa.types.Diff.ChangedStatementOrBuilder> 
+          getStatementsFieldBuilder() {
+        if (statementsBuilder_ == null) {
+          statementsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              boa.types.Diff.ChangedStatement, boa.types.Diff.ChangedStatement.Builder, boa.types.Diff.ChangedStatementOrBuilder>(
+                  statements_,
+                  ((bitField0_ & 0x00000080) == 0x00000080),
+                  getParentForChildren(),
+                  isClean());
+          statements_ = null;
+        }
+        return statementsBuilder_;
+      }
+
+      // repeated .boa.types.ChangedComment comments = 9;
+      private java.util.List<boa.types.Diff.ChangedComment> comments_ =
+        java.util.Collections.emptyList();
+      private void ensureCommentsIsMutable() {
+        if (!((bitField0_ & 0x00000100) == 0x00000100)) {
+          comments_ = new java.util.ArrayList<boa.types.Diff.ChangedComment>(comments_);
+          bitField0_ |= 0x00000100;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Diff.ChangedComment, boa.types.Diff.ChangedComment.Builder, boa.types.Diff.ChangedCommentOrBuilder> commentsBuilder_;
+
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 9;</code>
+       */
+      public java.util.List<boa.types.Diff.ChangedComment> getCommentsList() {
+        if (commentsBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(comments_);
+        } else {
+          return commentsBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 9;</code>
+       */
+      public int getCommentsCount() {
+        if (commentsBuilder_ == null) {
+          return comments_.size();
+        } else {
+          return commentsBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 9;</code>
+       */
+      public boa.types.Diff.ChangedComment getComments(int index) {
+        if (commentsBuilder_ == null) {
+          return comments_.get(index);
+        } else {
+          return commentsBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 9;</code>
+       */
+      public Builder setComments(
+          int index, boa.types.Diff.ChangedComment value) {
+        if (commentsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureCommentsIsMutable();
+          comments_.set(index, value);
+          onChanged();
+        } else {
+          commentsBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 9;</code>
+       */
+      public Builder setComments(
+          int index, boa.types.Diff.ChangedComment.Builder builderForValue) {
+        if (commentsBuilder_ == null) {
+          ensureCommentsIsMutable();
+          comments_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          commentsBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 9;</code>
+       */
+      public Builder addComments(boa.types.Diff.ChangedComment value) {
+        if (commentsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureCommentsIsMutable();
+          comments_.add(value);
+          onChanged();
+        } else {
+          commentsBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 9;</code>
+       */
+      public Builder addComments(
+          int index, boa.types.Diff.ChangedComment value) {
+        if (commentsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureCommentsIsMutable();
+          comments_.add(index, value);
+          onChanged();
+        } else {
+          commentsBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 9;</code>
+       */
+      public Builder addComments(
+          boa.types.Diff.ChangedComment.Builder builderForValue) {
+        if (commentsBuilder_ == null) {
+          ensureCommentsIsMutable();
+          comments_.add(builderForValue.build());
+          onChanged();
+        } else {
+          commentsBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 9;</code>
+       */
+      public Builder addComments(
+          int index, boa.types.Diff.ChangedComment.Builder builderForValue) {
+        if (commentsBuilder_ == null) {
+          ensureCommentsIsMutable();
+          comments_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          commentsBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 9;</code>
+       */
+      public Builder addAllComments(
+          java.lang.Iterable<? extends boa.types.Diff.ChangedComment> values) {
+        if (commentsBuilder_ == null) {
+          ensureCommentsIsMutable();
+          super.addAll(values, comments_);
+          onChanged();
+        } else {
+          commentsBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 9;</code>
+       */
+      public Builder clearComments() {
+        if (commentsBuilder_ == null) {
+          comments_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000100);
+          onChanged();
+        } else {
+          commentsBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 9;</code>
+       */
+      public Builder removeComments(int index) {
+        if (commentsBuilder_ == null) {
+          ensureCommentsIsMutable();
+          comments_.remove(index);
+          onChanged();
+        } else {
+          commentsBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 9;</code>
+       */
+      public boa.types.Diff.ChangedComment.Builder getCommentsBuilder(
+          int index) {
+        return getCommentsFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 9;</code>
+       */
+      public boa.types.Diff.ChangedCommentOrBuilder getCommentsOrBuilder(
+          int index) {
+        if (commentsBuilder_ == null) {
+          return comments_.get(index);  } else {
+          return commentsBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 9;</code>
+       */
+      public java.util.List<? extends boa.types.Diff.ChangedCommentOrBuilder> 
+           getCommentsOrBuilderList() {
+        if (commentsBuilder_ != null) {
+          return commentsBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(comments_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 9;</code>
+       */
+      public boa.types.Diff.ChangedComment.Builder addCommentsBuilder() {
+        return getCommentsFieldBuilder().addBuilder(
+            boa.types.Diff.ChangedComment.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 9;</code>
+       */
+      public boa.types.Diff.ChangedComment.Builder addCommentsBuilder(
+          int index) {
+        return getCommentsFieldBuilder().addBuilder(
+            index, boa.types.Diff.ChangedComment.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 9;</code>
+       */
+      public java.util.List<boa.types.Diff.ChangedComment.Builder> 
+           getCommentsBuilderList() {
+        return getCommentsFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Diff.ChangedComment, boa.types.Diff.ChangedComment.Builder, boa.types.Diff.ChangedCommentOrBuilder> 
+          getCommentsFieldBuilder() {
+        if (commentsBuilder_ == null) {
+          commentsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              boa.types.Diff.ChangedComment, boa.types.Diff.ChangedComment.Builder, boa.types.Diff.ChangedCommentOrBuilder>(
+                  comments_,
+                  ((bitField0_ & 0x00000100) == 0x00000100),
+                  getParentForChildren(),
+                  isClean());
+          comments_ = null;
+        }
+        return commentsBuilder_;
+      }
+
+      // @@protoc_insertion_point(builder_scope:boa.types.ChangedMethod)
+    }
+
+    static {
+      defaultInstance = new ChangedMethod(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:boa.types.ChangedMethod)
+  }
+
+  public interface ChangedVariableOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+
+    // required .boa.types.ChangeKind change = 1;
+    /**
+     * <code>required .boa.types.ChangeKind change = 1;</code>
+     */
+    boolean hasChange();
+    /**
+     * <code>required .boa.types.ChangeKind change = 1;</code>
+     */
+    boa.types.Shared.ChangeKind getChange();
+
+    // optional string name = 2;
+    /**
+     * <code>optional string name = 2;</code>
+     */
+    boolean hasName();
+    /**
+     * <code>optional string name = 2;</code>
+     */
+    java.lang.String getName();
+    /**
+     * <code>optional string name = 2;</code>
+     */
+    com.google.protobuf.ByteString
+        getNameBytes();
+
+    // optional .boa.types.ChangedType variable_type = 3;
+    /**
+     * <code>optional .boa.types.ChangedType variable_type = 3;</code>
+     */
+    boolean hasVariableType();
+    /**
+     * <code>optional .boa.types.ChangedType variable_type = 3;</code>
+     */
+    boa.types.Diff.ChangedType getVariableType();
+    /**
+     * <code>optional .boa.types.ChangedType variable_type = 3;</code>
+     */
+    boa.types.Diff.ChangedTypeOrBuilder getVariableTypeOrBuilder();
+
+    // repeated .boa.types.ChangedModifier modifiers = 4;
+    /**
+     * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+     */
+    java.util.List<boa.types.Diff.ChangedModifier> 
+        getModifiersList();
+    /**
+     * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+     */
+    boa.types.Diff.ChangedModifier getModifiers(int index);
+    /**
+     * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+     */
+    int getModifiersCount();
+    /**
+     * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+     */
+    java.util.List<? extends boa.types.Diff.ChangedModifierOrBuilder> 
+        getModifiersOrBuilderList();
+    /**
+     * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+     */
+    boa.types.Diff.ChangedModifierOrBuilder getModifiersOrBuilder(
+        int index);
+
+    // optional .boa.types.ChangedExpression initializer = 5;
+    /**
+     * <code>optional .boa.types.ChangedExpression initializer = 5;</code>
+     */
+    boolean hasInitializer();
+    /**
+     * <code>optional .boa.types.ChangedExpression initializer = 5;</code>
+     */
+    boa.types.Diff.ChangedExpression getInitializer();
+    /**
+     * <code>optional .boa.types.ChangedExpression initializer = 5;</code>
+     */
+    boa.types.Diff.ChangedExpressionOrBuilder getInitializerOrBuilder();
+
+    // repeated .boa.types.ChangedComment comments = 6;
+    /**
+     * <code>repeated .boa.types.ChangedComment comments = 6;</code>
+     */
+    java.util.List<boa.types.Diff.ChangedComment> 
+        getCommentsList();
+    /**
+     * <code>repeated .boa.types.ChangedComment comments = 6;</code>
+     */
+    boa.types.Diff.ChangedComment getComments(int index);
+    /**
+     * <code>repeated .boa.types.ChangedComment comments = 6;</code>
+     */
+    int getCommentsCount();
+    /**
+     * <code>repeated .boa.types.ChangedComment comments = 6;</code>
+     */
+    java.util.List<? extends boa.types.Diff.ChangedCommentOrBuilder> 
+        getCommentsOrBuilderList();
+    /**
+     * <code>repeated .boa.types.ChangedComment comments = 6;</code>
+     */
+    boa.types.Diff.ChangedCommentOrBuilder getCommentsOrBuilder(
+        int index);
+  }
+  /**
+   * Protobuf type {@code boa.types.ChangedVariable}
+   */
+  public static final class ChangedVariable extends
+      com.google.protobuf.GeneratedMessage
+      implements ChangedVariableOrBuilder {
+    // Use ChangedVariable.newBuilder() to construct.
+    private ChangedVariable(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private ChangedVariable(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final ChangedVariable defaultInstance;
+    public static ChangedVariable getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public ChangedVariable getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private ChangedVariable(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
           int tag = input.readTag();
           switch (tag) {
             case 0:
-              this.setUnknownFields(unknownFields.build());
-              onChanged();
-              return this;
+              done = true;
+              break;
             default: {
               if (!parseUnknownField(input, unknownFields,
                                      extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                onChanged();
-                return this;
+                done = true;
               }
               break;
             }
@@ -6864,1513 +10855,268 @@ public final class Diff {
               break;
             }
             case 26: {
-              boa.types.Diff.ChangedModifier.Builder subBuilder = boa.types.Diff.ChangedModifier.newBuilder();
-              input.readMessage(subBuilder, extensionRegistry);
-              addModifiers(subBuilder.buildPartial());
+              boa.types.Diff.ChangedType.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000004) == 0x00000004)) {
+                subBuilder = variableType_.toBuilder();
+              }
+              variableType_ = input.readMessage(boa.types.Diff.ChangedType.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(variableType_);
+                variableType_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000004;
               break;
             }
             case 34: {
-              boa.types.Diff.ChangedType.Builder subBuilder = boa.types.Diff.ChangedType.newBuilder();
-              if (hasReturnType()) {
-                subBuilder.mergeFrom(getReturnType());
+              if (!((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
+                modifiers_ = new java.util.ArrayList<boa.types.Diff.ChangedModifier>();
+                mutable_bitField0_ |= 0x00000008;
               }
-              input.readMessage(subBuilder, extensionRegistry);
-              setReturnType(subBuilder.buildPartial());
+              modifiers_.add(input.readMessage(boa.types.Diff.ChangedModifier.PARSER, extensionRegistry));
               break;
             }
             case 42: {
-              boa.types.Diff.ChangedType.Builder subBuilder = boa.types.Diff.ChangedType.newBuilder();
-              input.readMessage(subBuilder, extensionRegistry);
-              addGenericParameters(subBuilder.buildPartial());
+              boa.types.Diff.ChangedExpression.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000008) == 0x00000008)) {
+                subBuilder = initializer_.toBuilder();
+              }
+              initializer_ = input.readMessage(boa.types.Diff.ChangedExpression.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(initializer_);
+                initializer_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000008;
               break;
             }
             case 50: {
-              boa.types.Diff.ChangedVariable.Builder subBuilder = boa.types.Diff.ChangedVariable.newBuilder();
-              input.readMessage(subBuilder, extensionRegistry);
-              addArguments(subBuilder.buildPartial());
-              break;
-            }
-            case 58: {
-              boa.types.Diff.ChangedType.Builder subBuilder = boa.types.Diff.ChangedType.newBuilder();
-              input.readMessage(subBuilder, extensionRegistry);
-              addExceptionTypes(subBuilder.buildPartial());
-              break;
-            }
-            case 66: {
-              boa.types.Diff.ChangedStatement.Builder subBuilder = boa.types.Diff.ChangedStatement.newBuilder();
-              input.readMessage(subBuilder, extensionRegistry);
-              addStatements(subBuilder.buildPartial());
-              break;
-            }
-            case 74: {
-              boa.types.Diff.ChangedComment.Builder subBuilder = boa.types.Diff.ChangedComment.newBuilder();
-              input.readMessage(subBuilder, extensionRegistry);
-              addComments(subBuilder.buildPartial());
+              if (!((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
+                comments_ = new java.util.ArrayList<boa.types.Diff.ChangedComment>();
+                mutable_bitField0_ |= 0x00000020;
+              }
+              comments_.add(input.readMessage(boa.types.Diff.ChangedComment.PARSER, extensionRegistry));
               break;
             }
           }
         }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
+          modifiers_ = java.util.Collections.unmodifiableList(modifiers_);
+        }
+        if (((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
+          comments_ = java.util.Collections.unmodifiableList(comments_);
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
       }
-      
-      private int bitField0_;
-      
-      // required .boa.types.ChangeKind change = 1;
-      private boa.types.Shared.ChangeKind change_ = boa.types.Shared.ChangeKind.ADDED;
-      public boolean hasChange() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
-      }
-      public boa.types.Shared.ChangeKind getChange() {
-        return change_;
-      }
-      public Builder setChange(boa.types.Shared.ChangeKind value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        bitField0_ |= 0x00000001;
-        change_ = value;
-        onChanged();
-        return this;
-      }
-      public Builder clearChange() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        change_ = boa.types.Shared.ChangeKind.ADDED;
-        onChanged();
-        return this;
-      }
-      
-      // optional string name = 2;
-      private java.lang.Object name_ = "";
-      public boolean hasName() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      public String getName() {
-        java.lang.Object ref = name_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
-          name_ = s;
-          return s;
-        } else {
-          return (String) ref;
-        }
-      }
-      public Builder setName(String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000002;
-        name_ = value;
-        onChanged();
-        return this;
-      }
-      public Builder clearName() {
-        bitField0_ = (bitField0_ & ~0x00000002);
-        name_ = getDefaultInstance().getName();
-        onChanged();
-        return this;
-      }
-      void setName(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00000002;
-        name_ = value;
-        onChanged();
-      }
-      
-      // repeated .boa.types.ChangedModifier modifiers = 3;
-      private java.util.List<boa.types.Diff.ChangedModifier> modifiers_ =
-        java.util.Collections.emptyList();
-      private void ensureModifiersIsMutable() {
-        if (!((bitField0_ & 0x00000004) == 0x00000004)) {
-          modifiers_ = new java.util.ArrayList<boa.types.Diff.ChangedModifier>(modifiers_);
-          bitField0_ |= 0x00000004;
-         }
-      }
-      
-      private com.google.protobuf.RepeatedFieldBuilder<
-          boa.types.Diff.ChangedModifier, boa.types.Diff.ChangedModifier.Builder, boa.types.Diff.ChangedModifierOrBuilder> modifiersBuilder_;
-      
-      public java.util.List<boa.types.Diff.ChangedModifier> getModifiersList() {
-        if (modifiersBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(modifiers_);
-        } else {
-          return modifiersBuilder_.getMessageList();
-        }
-      }
-      public int getModifiersCount() {
-        if (modifiersBuilder_ == null) {
-          return modifiers_.size();
-        } else {
-          return modifiersBuilder_.getCount();
-        }
-      }
-      public boa.types.Diff.ChangedModifier getModifiers(int index) {
-        if (modifiersBuilder_ == null) {
-          return modifiers_.get(index);
-        } else {
-          return modifiersBuilder_.getMessage(index);
-        }
-      }
-      public Builder setModifiers(
-          int index, boa.types.Diff.ChangedModifier value) {
-        if (modifiersBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureModifiersIsMutable();
-          modifiers_.set(index, value);
-          onChanged();
-        } else {
-          modifiersBuilder_.setMessage(index, value);
-        }
-        return this;
-      }
-      public Builder setModifiers(
-          int index, boa.types.Diff.ChangedModifier.Builder builderForValue) {
-        if (modifiersBuilder_ == null) {
-          ensureModifiersIsMutable();
-          modifiers_.set(index, builderForValue.build());
-          onChanged();
-        } else {
-          modifiersBuilder_.setMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      public Builder addModifiers(boa.types.Diff.ChangedModifier value) {
-        if (modifiersBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureModifiersIsMutable();
-          modifiers_.add(value);
-          onChanged();
-        } else {
-          modifiersBuilder_.addMessage(value);
-        }
-        return this;
-      }
-      public Builder addModifiers(
-          int index, boa.types.Diff.ChangedModifier value) {
-        if (modifiersBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureModifiersIsMutable();
-          modifiers_.add(index, value);
-          onChanged();
-        } else {
-          modifiersBuilder_.addMessage(index, value);
-        }
-        return this;
-      }
-      public Builder addModifiers(
-          boa.types.Diff.ChangedModifier.Builder builderForValue) {
-        if (modifiersBuilder_ == null) {
-          ensureModifiersIsMutable();
-          modifiers_.add(builderForValue.build());
-          onChanged();
-        } else {
-          modifiersBuilder_.addMessage(builderForValue.build());
-        }
-        return this;
-      }
-      public Builder addModifiers(
-          int index, boa.types.Diff.ChangedModifier.Builder builderForValue) {
-        if (modifiersBuilder_ == null) {
-          ensureModifiersIsMutable();
-          modifiers_.add(index, builderForValue.build());
-          onChanged();
-        } else {
-          modifiersBuilder_.addMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      public Builder addAllModifiers(
-          java.lang.Iterable<? extends boa.types.Diff.ChangedModifier> values) {
-        if (modifiersBuilder_ == null) {
-          ensureModifiersIsMutable();
-          super.addAll(values, modifiers_);
-          onChanged();
-        } else {
-          modifiersBuilder_.addAllMessages(values);
-        }
-        return this;
-      }
-      public Builder clearModifiers() {
-        if (modifiersBuilder_ == null) {
-          modifiers_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000004);
-          onChanged();
-        } else {
-          modifiersBuilder_.clear();
-        }
-        return this;
-      }
-      public Builder removeModifiers(int index) {
-        if (modifiersBuilder_ == null) {
-          ensureModifiersIsMutable();
-          modifiers_.remove(index);
-          onChanged();
-        } else {
-          modifiersBuilder_.remove(index);
-        }
-        return this;
-      }
-      public boa.types.Diff.ChangedModifier.Builder getModifiersBuilder(
-          int index) {
-        return getModifiersFieldBuilder().getBuilder(index);
-      }
-      public boa.types.Diff.ChangedModifierOrBuilder getModifiersOrBuilder(
-          int index) {
-        if (modifiersBuilder_ == null) {
-          return modifiers_.get(index);  } else {
-          return modifiersBuilder_.getMessageOrBuilder(index);
-        }
-      }
-      public java.util.List<? extends boa.types.Diff.ChangedModifierOrBuilder> 
-           getModifiersOrBuilderList() {
-        if (modifiersBuilder_ != null) {
-          return modifiersBuilder_.getMessageOrBuilderList();
-        } else {
-          return java.util.Collections.unmodifiableList(modifiers_);
-        }
-      }
-      public boa.types.Diff.ChangedModifier.Builder addModifiersBuilder() {
-        return getModifiersFieldBuilder().addBuilder(
-            boa.types.Diff.ChangedModifier.getDefaultInstance());
-      }
-      public boa.types.Diff.ChangedModifier.Builder addModifiersBuilder(
-          int index) {
-        return getModifiersFieldBuilder().addBuilder(
-            index, boa.types.Diff.ChangedModifier.getDefaultInstance());
-      }
-      public java.util.List<boa.types.Diff.ChangedModifier.Builder> 
-           getModifiersBuilderList() {
-        return getModifiersFieldBuilder().getBuilderList();
-      }
-      private com.google.protobuf.RepeatedFieldBuilder<
-          boa.types.Diff.ChangedModifier, boa.types.Diff.ChangedModifier.Builder, boa.types.Diff.ChangedModifierOrBuilder> 
-          getModifiersFieldBuilder() {
-        if (modifiersBuilder_ == null) {
-          modifiersBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              boa.types.Diff.ChangedModifier, boa.types.Diff.ChangedModifier.Builder, boa.types.Diff.ChangedModifierOrBuilder>(
-                  modifiers_,
-                  ((bitField0_ & 0x00000004) == 0x00000004),
-                  getParentForChildren(),
-                  isClean());
-          modifiers_ = null;
-        }
-        return modifiersBuilder_;
-      }
-      
-      // optional .boa.types.ChangedType return_type = 4;
-      private boa.types.Diff.ChangedType returnType_ = boa.types.Diff.ChangedType.getDefaultInstance();
-      private com.google.protobuf.SingleFieldBuilder<
-          boa.types.Diff.ChangedType, boa.types.Diff.ChangedType.Builder, boa.types.Diff.ChangedTypeOrBuilder> returnTypeBuilder_;
-      public boolean hasReturnType() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
-      }
-      public boa.types.Diff.ChangedType getReturnType() {
-        if (returnTypeBuilder_ == null) {
-          return returnType_;
-        } else {
-          return returnTypeBuilder_.getMessage();
-        }
-      }
-      public Builder setReturnType(boa.types.Diff.ChangedType value) {
-        if (returnTypeBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          returnType_ = value;
-          onChanged();
-        } else {
-          returnTypeBuilder_.setMessage(value);
-        }
-        bitField0_ |= 0x00000008;
-        return this;
-      }
-      public Builder setReturnType(
-          boa.types.Diff.ChangedType.Builder builderForValue) {
-        if (returnTypeBuilder_ == null) {
-          returnType_ = builderForValue.build();
-          onChanged();
-        } else {
-          returnTypeBuilder_.setMessage(builderForValue.build());
-        }
-        bitField0_ |= 0x00000008;
-        return this;
-      }
-      public Builder mergeReturnType(boa.types.Diff.ChangedType value) {
-        if (returnTypeBuilder_ == null) {
-          if (((bitField0_ & 0x00000008) == 0x00000008) &&
-              returnType_ != boa.types.Diff.ChangedType.getDefaultInstance()) {
-            returnType_ =
-              boa.types.Diff.ChangedType.newBuilder(returnType_).mergeFrom(value).buildPartial();
-          } else {
-            returnType_ = value;
-          }
-          onChanged();
-        } else {
-          returnTypeBuilder_.mergeFrom(value);
-        }
-        bitField0_ |= 0x00000008;
-        return this;
-      }
-      public Builder clearReturnType() {
-        if (returnTypeBuilder_ == null) {
-          returnType_ = boa.types.Diff.ChangedType.getDefaultInstance();
-          onChanged();
-        } else {
-          returnTypeBuilder_.clear();
-        }
-        bitField0_ = (bitField0_ & ~0x00000008);
-        return this;
-      }
-      public boa.types.Diff.ChangedType.Builder getReturnTypeBuilder() {
-        bitField0_ |= 0x00000008;
-        onChanged();
-        return getReturnTypeFieldBuilder().getBuilder();
-      }
-      public boa.types.Diff.ChangedTypeOrBuilder getReturnTypeOrBuilder() {
-        if (returnTypeBuilder_ != null) {
-          return returnTypeBuilder_.getMessageOrBuilder();
-        } else {
-          return returnType_;
-        }
-      }
-      private com.google.protobuf.SingleFieldBuilder<
-          boa.types.Diff.ChangedType, boa.types.Diff.ChangedType.Builder, boa.types.Diff.ChangedTypeOrBuilder> 
-          getReturnTypeFieldBuilder() {
-        if (returnTypeBuilder_ == null) {
-          returnTypeBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-              boa.types.Diff.ChangedType, boa.types.Diff.ChangedType.Builder, boa.types.Diff.ChangedTypeOrBuilder>(
-                  returnType_,
-                  getParentForChildren(),
-                  isClean());
-          returnType_ = null;
-        }
-        return returnTypeBuilder_;
-      }
-      
-      // repeated .boa.types.ChangedType generic_parameters = 5;
-      private java.util.List<boa.types.Diff.ChangedType> genericParameters_ =
-        java.util.Collections.emptyList();
-      private void ensureGenericParametersIsMutable() {
-        if (!((bitField0_ & 0x00000010) == 0x00000010)) {
-          genericParameters_ = new java.util.ArrayList<boa.types.Diff.ChangedType>(genericParameters_);
-          bitField0_ |= 0x00000010;
-         }
-      }
-      
-      private com.google.protobuf.RepeatedFieldBuilder<
-          boa.types.Diff.ChangedType, boa.types.Diff.ChangedType.Builder, boa.types.Diff.ChangedTypeOrBuilder> genericParametersBuilder_;
-      
-      public java.util.List<boa.types.Diff.ChangedType> getGenericParametersList() {
-        if (genericParametersBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(genericParameters_);
-        } else {
-          return genericParametersBuilder_.getMessageList();
-        }
-      }
-      public int getGenericParametersCount() {
-        if (genericParametersBuilder_ == null) {
-          return genericParameters_.size();
-        } else {
-          return genericParametersBuilder_.getCount();
-        }
-      }
-      public boa.types.Diff.ChangedType getGenericParameters(int index) {
-        if (genericParametersBuilder_ == null) {
-          return genericParameters_.get(index);
-        } else {
-          return genericParametersBuilder_.getMessage(index);
-        }
-      }
-      public Builder setGenericParameters(
-          int index, boa.types.Diff.ChangedType value) {
-        if (genericParametersBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureGenericParametersIsMutable();
-          genericParameters_.set(index, value);
-          onChanged();
-        } else {
-          genericParametersBuilder_.setMessage(index, value);
-        }
-        return this;
-      }
-      public Builder setGenericParameters(
-          int index, boa.types.Diff.ChangedType.Builder builderForValue) {
-        if (genericParametersBuilder_ == null) {
-          ensureGenericParametersIsMutable();
-          genericParameters_.set(index, builderForValue.build());
-          onChanged();
-        } else {
-          genericParametersBuilder_.setMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      public Builder addGenericParameters(boa.types.Diff.ChangedType value) {
-        if (genericParametersBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureGenericParametersIsMutable();
-          genericParameters_.add(value);
-          onChanged();
-        } else {
-          genericParametersBuilder_.addMessage(value);
-        }
-        return this;
-      }
-      public Builder addGenericParameters(
-          int index, boa.types.Diff.ChangedType value) {
-        if (genericParametersBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureGenericParametersIsMutable();
-          genericParameters_.add(index, value);
-          onChanged();
-        } else {
-          genericParametersBuilder_.addMessage(index, value);
-        }
-        return this;
-      }
-      public Builder addGenericParameters(
-          boa.types.Diff.ChangedType.Builder builderForValue) {
-        if (genericParametersBuilder_ == null) {
-          ensureGenericParametersIsMutable();
-          genericParameters_.add(builderForValue.build());
-          onChanged();
-        } else {
-          genericParametersBuilder_.addMessage(builderForValue.build());
-        }
-        return this;
-      }
-      public Builder addGenericParameters(
-          int index, boa.types.Diff.ChangedType.Builder builderForValue) {
-        if (genericParametersBuilder_ == null) {
-          ensureGenericParametersIsMutable();
-          genericParameters_.add(index, builderForValue.build());
-          onChanged();
-        } else {
-          genericParametersBuilder_.addMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      public Builder addAllGenericParameters(
-          java.lang.Iterable<? extends boa.types.Diff.ChangedType> values) {
-        if (genericParametersBuilder_ == null) {
-          ensureGenericParametersIsMutable();
-          super.addAll(values, genericParameters_);
-          onChanged();
-        } else {
-          genericParametersBuilder_.addAllMessages(values);
-        }
-        return this;
-      }
-      public Builder clearGenericParameters() {
-        if (genericParametersBuilder_ == null) {
-          genericParameters_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000010);
-          onChanged();
-        } else {
-          genericParametersBuilder_.clear();
-        }
-        return this;
-      }
-      public Builder removeGenericParameters(int index) {
-        if (genericParametersBuilder_ == null) {
-          ensureGenericParametersIsMutable();
-          genericParameters_.remove(index);
-          onChanged();
-        } else {
-          genericParametersBuilder_.remove(index);
-        }
-        return this;
-      }
-      public boa.types.Diff.ChangedType.Builder getGenericParametersBuilder(
-          int index) {
-        return getGenericParametersFieldBuilder().getBuilder(index);
-      }
-      public boa.types.Diff.ChangedTypeOrBuilder getGenericParametersOrBuilder(
-          int index) {
-        if (genericParametersBuilder_ == null) {
-          return genericParameters_.get(index);  } else {
-          return genericParametersBuilder_.getMessageOrBuilder(index);
-        }
-      }
-      public java.util.List<? extends boa.types.Diff.ChangedTypeOrBuilder> 
-           getGenericParametersOrBuilderList() {
-        if (genericParametersBuilder_ != null) {
-          return genericParametersBuilder_.getMessageOrBuilderList();
-        } else {
-          return java.util.Collections.unmodifiableList(genericParameters_);
-        }
-      }
-      public boa.types.Diff.ChangedType.Builder addGenericParametersBuilder() {
-        return getGenericParametersFieldBuilder().addBuilder(
-            boa.types.Diff.ChangedType.getDefaultInstance());
-      }
-      public boa.types.Diff.ChangedType.Builder addGenericParametersBuilder(
-          int index) {
-        return getGenericParametersFieldBuilder().addBuilder(
-            index, boa.types.Diff.ChangedType.getDefaultInstance());
-      }
-      public java.util.List<boa.types.Diff.ChangedType.Builder> 
-           getGenericParametersBuilderList() {
-        return getGenericParametersFieldBuilder().getBuilderList();
-      }
-      private com.google.protobuf.RepeatedFieldBuilder<
-          boa.types.Diff.ChangedType, boa.types.Diff.ChangedType.Builder, boa.types.Diff.ChangedTypeOrBuilder> 
-          getGenericParametersFieldBuilder() {
-        if (genericParametersBuilder_ == null) {
-          genericParametersBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              boa.types.Diff.ChangedType, boa.types.Diff.ChangedType.Builder, boa.types.Diff.ChangedTypeOrBuilder>(
-                  genericParameters_,
-                  ((bitField0_ & 0x00000010) == 0x00000010),
-                  getParentForChildren(),
-                  isClean());
-          genericParameters_ = null;
-        }
-        return genericParametersBuilder_;
-      }
-      
-      // repeated .boa.types.ChangedVariable arguments = 6;
-      private java.util.List<boa.types.Diff.ChangedVariable> arguments_ =
-        java.util.Collections.emptyList();
-      private void ensureArgumentsIsMutable() {
-        if (!((bitField0_ & 0x00000020) == 0x00000020)) {
-          arguments_ = new java.util.ArrayList<boa.types.Diff.ChangedVariable>(arguments_);
-          bitField0_ |= 0x00000020;
-         }
-      }
-      
-      private com.google.protobuf.RepeatedFieldBuilder<
-          boa.types.Diff.ChangedVariable, boa.types.Diff.ChangedVariable.Builder, boa.types.Diff.ChangedVariableOrBuilder> argumentsBuilder_;
-      
-      public java.util.List<boa.types.Diff.ChangedVariable> getArgumentsList() {
-        if (argumentsBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(arguments_);
-        } else {
-          return argumentsBuilder_.getMessageList();
-        }
-      }
-      public int getArgumentsCount() {
-        if (argumentsBuilder_ == null) {
-          return arguments_.size();
-        } else {
-          return argumentsBuilder_.getCount();
-        }
-      }
-      public boa.types.Diff.ChangedVariable getArguments(int index) {
-        if (argumentsBuilder_ == null) {
-          return arguments_.get(index);
-        } else {
-          return argumentsBuilder_.getMessage(index);
-        }
-      }
-      public Builder setArguments(
-          int index, boa.types.Diff.ChangedVariable value) {
-        if (argumentsBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureArgumentsIsMutable();
-          arguments_.set(index, value);
-          onChanged();
-        } else {
-          argumentsBuilder_.setMessage(index, value);
-        }
-        return this;
-      }
-      public Builder setArguments(
-          int index, boa.types.Diff.ChangedVariable.Builder builderForValue) {
-        if (argumentsBuilder_ == null) {
-          ensureArgumentsIsMutable();
-          arguments_.set(index, builderForValue.build());
-          onChanged();
-        } else {
-          argumentsBuilder_.setMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      public Builder addArguments(boa.types.Diff.ChangedVariable value) {
-        if (argumentsBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureArgumentsIsMutable();
-          arguments_.add(value);
-          onChanged();
-        } else {
-          argumentsBuilder_.addMessage(value);
-        }
-        return this;
-      }
-      public Builder addArguments(
-          int index, boa.types.Diff.ChangedVariable value) {
-        if (argumentsBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureArgumentsIsMutable();
-          arguments_.add(index, value);
-          onChanged();
-        } else {
-          argumentsBuilder_.addMessage(index, value);
-        }
-        return this;
-      }
-      public Builder addArguments(
-          boa.types.Diff.ChangedVariable.Builder builderForValue) {
-        if (argumentsBuilder_ == null) {
-          ensureArgumentsIsMutable();
-          arguments_.add(builderForValue.build());
-          onChanged();
-        } else {
-          argumentsBuilder_.addMessage(builderForValue.build());
-        }
-        return this;
-      }
-      public Builder addArguments(
-          int index, boa.types.Diff.ChangedVariable.Builder builderForValue) {
-        if (argumentsBuilder_ == null) {
-          ensureArgumentsIsMutable();
-          arguments_.add(index, builderForValue.build());
-          onChanged();
-        } else {
-          argumentsBuilder_.addMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      public Builder addAllArguments(
-          java.lang.Iterable<? extends boa.types.Diff.ChangedVariable> values) {
-        if (argumentsBuilder_ == null) {
-          ensureArgumentsIsMutable();
-          super.addAll(values, arguments_);
-          onChanged();
-        } else {
-          argumentsBuilder_.addAllMessages(values);
-        }
-        return this;
-      }
-      public Builder clearArguments() {
-        if (argumentsBuilder_ == null) {
-          arguments_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000020);
-          onChanged();
-        } else {
-          argumentsBuilder_.clear();
-        }
-        return this;
-      }
-      public Builder removeArguments(int index) {
-        if (argumentsBuilder_ == null) {
-          ensureArgumentsIsMutable();
-          arguments_.remove(index);
-          onChanged();
-        } else {
-          argumentsBuilder_.remove(index);
-        }
-        return this;
-      }
-      public boa.types.Diff.ChangedVariable.Builder getArgumentsBuilder(
-          int index) {
-        return getArgumentsFieldBuilder().getBuilder(index);
-      }
-      public boa.types.Diff.ChangedVariableOrBuilder getArgumentsOrBuilder(
-          int index) {
-        if (argumentsBuilder_ == null) {
-          return arguments_.get(index);  } else {
-          return argumentsBuilder_.getMessageOrBuilder(index);
-        }
-      }
-      public java.util.List<? extends boa.types.Diff.ChangedVariableOrBuilder> 
-           getArgumentsOrBuilderList() {
-        if (argumentsBuilder_ != null) {
-          return argumentsBuilder_.getMessageOrBuilderList();
-        } else {
-          return java.util.Collections.unmodifiableList(arguments_);
-        }
-      }
-      public boa.types.Diff.ChangedVariable.Builder addArgumentsBuilder() {
-        return getArgumentsFieldBuilder().addBuilder(
-            boa.types.Diff.ChangedVariable.getDefaultInstance());
-      }
-      public boa.types.Diff.ChangedVariable.Builder addArgumentsBuilder(
-          int index) {
-        return getArgumentsFieldBuilder().addBuilder(
-            index, boa.types.Diff.ChangedVariable.getDefaultInstance());
-      }
-      public java.util.List<boa.types.Diff.ChangedVariable.Builder> 
-           getArgumentsBuilderList() {
-        return getArgumentsFieldBuilder().getBuilderList();
-      }
-      private com.google.protobuf.RepeatedFieldBuilder<
-          boa.types.Diff.ChangedVariable, boa.types.Diff.ChangedVariable.Builder, boa.types.Diff.ChangedVariableOrBuilder> 
-          getArgumentsFieldBuilder() {
-        if (argumentsBuilder_ == null) {
-          argumentsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              boa.types.Diff.ChangedVariable, boa.types.Diff.ChangedVariable.Builder, boa.types.Diff.ChangedVariableOrBuilder>(
-                  arguments_,
-                  ((bitField0_ & 0x00000020) == 0x00000020),
-                  getParentForChildren(),
-                  isClean());
-          arguments_ = null;
-        }
-        return argumentsBuilder_;
-      }
-      
-      // repeated .boa.types.ChangedType exception_types = 7;
-      private java.util.List<boa.types.Diff.ChangedType> exceptionTypes_ =
-        java.util.Collections.emptyList();
-      private void ensureExceptionTypesIsMutable() {
-        if (!((bitField0_ & 0x00000040) == 0x00000040)) {
-          exceptionTypes_ = new java.util.ArrayList<boa.types.Diff.ChangedType>(exceptionTypes_);
-          bitField0_ |= 0x00000040;
-         }
-      }
-      
-      private com.google.protobuf.RepeatedFieldBuilder<
-          boa.types.Diff.ChangedType, boa.types.Diff.ChangedType.Builder, boa.types.Diff.ChangedTypeOrBuilder> exceptionTypesBuilder_;
-      
-      public java.util.List<boa.types.Diff.ChangedType> getExceptionTypesList() {
-        if (exceptionTypesBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(exceptionTypes_);
-        } else {
-          return exceptionTypesBuilder_.getMessageList();
-        }
-      }
-      public int getExceptionTypesCount() {
-        if (exceptionTypesBuilder_ == null) {
-          return exceptionTypes_.size();
-        } else {
-          return exceptionTypesBuilder_.getCount();
-        }
-      }
-      public boa.types.Diff.ChangedType getExceptionTypes(int index) {
-        if (exceptionTypesBuilder_ == null) {
-          return exceptionTypes_.get(index);
-        } else {
-          return exceptionTypesBuilder_.getMessage(index);
-        }
-      }
-      public Builder setExceptionTypes(
-          int index, boa.types.Diff.ChangedType value) {
-        if (exceptionTypesBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureExceptionTypesIsMutable();
-          exceptionTypes_.set(index, value);
-          onChanged();
-        } else {
-          exceptionTypesBuilder_.setMessage(index, value);
-        }
-        return this;
-      }
-      public Builder setExceptionTypes(
-          int index, boa.types.Diff.ChangedType.Builder builderForValue) {
-        if (exceptionTypesBuilder_ == null) {
-          ensureExceptionTypesIsMutable();
-          exceptionTypes_.set(index, builderForValue.build());
-          onChanged();
-        } else {
-          exceptionTypesBuilder_.setMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      public Builder addExceptionTypes(boa.types.Diff.ChangedType value) {
-        if (exceptionTypesBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureExceptionTypesIsMutable();
-          exceptionTypes_.add(value);
-          onChanged();
-        } else {
-          exceptionTypesBuilder_.addMessage(value);
-        }
-        return this;
-      }
-      public Builder addExceptionTypes(
-          int index, boa.types.Diff.ChangedType value) {
-        if (exceptionTypesBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureExceptionTypesIsMutable();
-          exceptionTypes_.add(index, value);
-          onChanged();
-        } else {
-          exceptionTypesBuilder_.addMessage(index, value);
-        }
-        return this;
-      }
-      public Builder addExceptionTypes(
-          boa.types.Diff.ChangedType.Builder builderForValue) {
-        if (exceptionTypesBuilder_ == null) {
-          ensureExceptionTypesIsMutable();
-          exceptionTypes_.add(builderForValue.build());
-          onChanged();
-        } else {
-          exceptionTypesBuilder_.addMessage(builderForValue.build());
-        }
-        return this;
-      }
-      public Builder addExceptionTypes(
-          int index, boa.types.Diff.ChangedType.Builder builderForValue) {
-        if (exceptionTypesBuilder_ == null) {
-          ensureExceptionTypesIsMutable();
-          exceptionTypes_.add(index, builderForValue.build());
-          onChanged();
-        } else {
-          exceptionTypesBuilder_.addMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      public Builder addAllExceptionTypes(
-          java.lang.Iterable<? extends boa.types.Diff.ChangedType> values) {
-        if (exceptionTypesBuilder_ == null) {
-          ensureExceptionTypesIsMutable();
-          super.addAll(values, exceptionTypes_);
-          onChanged();
-        } else {
-          exceptionTypesBuilder_.addAllMessages(values);
-        }
-        return this;
-      }
-      public Builder clearExceptionTypes() {
-        if (exceptionTypesBuilder_ == null) {
-          exceptionTypes_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000040);
-          onChanged();
-        } else {
-          exceptionTypesBuilder_.clear();
-        }
-        return this;
-      }
-      public Builder removeExceptionTypes(int index) {
-        if (exceptionTypesBuilder_ == null) {
-          ensureExceptionTypesIsMutable();
-          exceptionTypes_.remove(index);
-          onChanged();
-        } else {
-          exceptionTypesBuilder_.remove(index);
-        }
-        return this;
-      }
-      public boa.types.Diff.ChangedType.Builder getExceptionTypesBuilder(
-          int index) {
-        return getExceptionTypesFieldBuilder().getBuilder(index);
-      }
-      public boa.types.Diff.ChangedTypeOrBuilder getExceptionTypesOrBuilder(
-          int index) {
-        if (exceptionTypesBuilder_ == null) {
-          return exceptionTypes_.get(index);  } else {
-          return exceptionTypesBuilder_.getMessageOrBuilder(index);
-        }
-      }
-      public java.util.List<? extends boa.types.Diff.ChangedTypeOrBuilder> 
-           getExceptionTypesOrBuilderList() {
-        if (exceptionTypesBuilder_ != null) {
-          return exceptionTypesBuilder_.getMessageOrBuilderList();
-        } else {
-          return java.util.Collections.unmodifiableList(exceptionTypes_);
-        }
-      }
-      public boa.types.Diff.ChangedType.Builder addExceptionTypesBuilder() {
-        return getExceptionTypesFieldBuilder().addBuilder(
-            boa.types.Diff.ChangedType.getDefaultInstance());
-      }
-      public boa.types.Diff.ChangedType.Builder addExceptionTypesBuilder(
-          int index) {
-        return getExceptionTypesFieldBuilder().addBuilder(
-            index, boa.types.Diff.ChangedType.getDefaultInstance());
-      }
-      public java.util.List<boa.types.Diff.ChangedType.Builder> 
-           getExceptionTypesBuilderList() {
-        return getExceptionTypesFieldBuilder().getBuilderList();
-      }
-      private com.google.protobuf.RepeatedFieldBuilder<
-          boa.types.Diff.ChangedType, boa.types.Diff.ChangedType.Builder, boa.types.Diff.ChangedTypeOrBuilder> 
-          getExceptionTypesFieldBuilder() {
-        if (exceptionTypesBuilder_ == null) {
-          exceptionTypesBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              boa.types.Diff.ChangedType, boa.types.Diff.ChangedType.Builder, boa.types.Diff.ChangedTypeOrBuilder>(
-                  exceptionTypes_,
-                  ((bitField0_ & 0x00000040) == 0x00000040),
-                  getParentForChildren(),
-                  isClean());
-          exceptionTypes_ = null;
-        }
-        return exceptionTypesBuilder_;
-      }
-      
-      // repeated .boa.types.ChangedStatement statements = 8;
-      private java.util.List<boa.types.Diff.ChangedStatement> statements_ =
-        java.util.Collections.emptyList();
-      private void ensureStatementsIsMutable() {
-        if (!((bitField0_ & 0x00000080) == 0x00000080)) {
-          statements_ = new java.util.ArrayList<boa.types.Diff.ChangedStatement>(statements_);
-          bitField0_ |= 0x00000080;
-         }
-      }
-      
-      private com.google.protobuf.RepeatedFieldBuilder<
-          boa.types.Diff.ChangedStatement, boa.types.Diff.ChangedStatement.Builder, boa.types.Diff.ChangedStatementOrBuilder> statementsBuilder_;
-      
-      public java.util.List<boa.types.Diff.ChangedStatement> getStatementsList() {
-        if (statementsBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(statements_);
-        } else {
-          return statementsBuilder_.getMessageList();
-        }
-      }
-      public int getStatementsCount() {
-        if (statementsBuilder_ == null) {
-          return statements_.size();
-        } else {
-          return statementsBuilder_.getCount();
-        }
-      }
-      public boa.types.Diff.ChangedStatement getStatements(int index) {
-        if (statementsBuilder_ == null) {
-          return statements_.get(index);
-        } else {
-          return statementsBuilder_.getMessage(index);
-        }
-      }
-      public Builder setStatements(
-          int index, boa.types.Diff.ChangedStatement value) {
-        if (statementsBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureStatementsIsMutable();
-          statements_.set(index, value);
-          onChanged();
-        } else {
-          statementsBuilder_.setMessage(index, value);
-        }
-        return this;
-      }
-      public Builder setStatements(
-          int index, boa.types.Diff.ChangedStatement.Builder builderForValue) {
-        if (statementsBuilder_ == null) {
-          ensureStatementsIsMutable();
-          statements_.set(index, builderForValue.build());
-          onChanged();
-        } else {
-          statementsBuilder_.setMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      public Builder addStatements(boa.types.Diff.ChangedStatement value) {
-        if (statementsBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureStatementsIsMutable();
-          statements_.add(value);
-          onChanged();
-        } else {
-          statementsBuilder_.addMessage(value);
-        }
-        return this;
-      }
-      public Builder addStatements(
-          int index, boa.types.Diff.ChangedStatement value) {
-        if (statementsBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureStatementsIsMutable();
-          statements_.add(index, value);
-          onChanged();
-        } else {
-          statementsBuilder_.addMessage(index, value);
-        }
-        return this;
-      }
-      public Builder addStatements(
-          boa.types.Diff.ChangedStatement.Builder builderForValue) {
-        if (statementsBuilder_ == null) {
-          ensureStatementsIsMutable();
-          statements_.add(builderForValue.build());
-          onChanged();
-        } else {
-          statementsBuilder_.addMessage(builderForValue.build());
-        }
-        return this;
-      }
-      public Builder addStatements(
-          int index, boa.types.Diff.ChangedStatement.Builder builderForValue) {
-        if (statementsBuilder_ == null) {
-          ensureStatementsIsMutable();
-          statements_.add(index, builderForValue.build());
-          onChanged();
-        } else {
-          statementsBuilder_.addMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      public Builder addAllStatements(
-          java.lang.Iterable<? extends boa.types.Diff.ChangedStatement> values) {
-        if (statementsBuilder_ == null) {
-          ensureStatementsIsMutable();
-          super.addAll(values, statements_);
-          onChanged();
-        } else {
-          statementsBuilder_.addAllMessages(values);
-        }
-        return this;
-      }
-      public Builder clearStatements() {
-        if (statementsBuilder_ == null) {
-          statements_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000080);
-          onChanged();
-        } else {
-          statementsBuilder_.clear();
-        }
-        return this;
-      }
-      public Builder removeStatements(int index) {
-        if (statementsBuilder_ == null) {
-          ensureStatementsIsMutable();
-          statements_.remove(index);
-          onChanged();
-        } else {
-          statementsBuilder_.remove(index);
-        }
-        return this;
-      }
-      public boa.types.Diff.ChangedStatement.Builder getStatementsBuilder(
-          int index) {
-        return getStatementsFieldBuilder().getBuilder(index);
-      }
-      public boa.types.Diff.ChangedStatementOrBuilder getStatementsOrBuilder(
-          int index) {
-        if (statementsBuilder_ == null) {
-          return statements_.get(index);  } else {
-          return statementsBuilder_.getMessageOrBuilder(index);
-        }
-      }
-      public java.util.List<? extends boa.types.Diff.ChangedStatementOrBuilder> 
-           getStatementsOrBuilderList() {
-        if (statementsBuilder_ != null) {
-          return statementsBuilder_.getMessageOrBuilderList();
-        } else {
-          return java.util.Collections.unmodifiableList(statements_);
-        }
-      }
-      public boa.types.Diff.ChangedStatement.Builder addStatementsBuilder() {
-        return getStatementsFieldBuilder().addBuilder(
-            boa.types.Diff.ChangedStatement.getDefaultInstance());
-      }
-      public boa.types.Diff.ChangedStatement.Builder addStatementsBuilder(
-          int index) {
-        return getStatementsFieldBuilder().addBuilder(
-            index, boa.types.Diff.ChangedStatement.getDefaultInstance());
-      }
-      public java.util.List<boa.types.Diff.ChangedStatement.Builder> 
-           getStatementsBuilderList() {
-        return getStatementsFieldBuilder().getBuilderList();
-      }
-      private com.google.protobuf.RepeatedFieldBuilder<
-          boa.types.Diff.ChangedStatement, boa.types.Diff.ChangedStatement.Builder, boa.types.Diff.ChangedStatementOrBuilder> 
-          getStatementsFieldBuilder() {
-        if (statementsBuilder_ == null) {
-          statementsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              boa.types.Diff.ChangedStatement, boa.types.Diff.ChangedStatement.Builder, boa.types.Diff.ChangedStatementOrBuilder>(
-                  statements_,
-                  ((bitField0_ & 0x00000080) == 0x00000080),
-                  getParentForChildren(),
-                  isClean());
-          statements_ = null;
-        }
-        return statementsBuilder_;
-      }
-      
-      // repeated .boa.types.ChangedComment comments = 9;
-      private java.util.List<boa.types.Diff.ChangedComment> comments_ =
-        java.util.Collections.emptyList();
-      private void ensureCommentsIsMutable() {
-        if (!((bitField0_ & 0x00000100) == 0x00000100)) {
-          comments_ = new java.util.ArrayList<boa.types.Diff.ChangedComment>(comments_);
-          bitField0_ |= 0x00000100;
-         }
-      }
-      
-      private com.google.protobuf.RepeatedFieldBuilder<
-          boa.types.Diff.ChangedComment, boa.types.Diff.ChangedComment.Builder, boa.types.Diff.ChangedCommentOrBuilder> commentsBuilder_;
-      
-      public java.util.List<boa.types.Diff.ChangedComment> getCommentsList() {
-        if (commentsBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(comments_);
-        } else {
-          return commentsBuilder_.getMessageList();
-        }
-      }
-      public int getCommentsCount() {
-        if (commentsBuilder_ == null) {
-          return comments_.size();
-        } else {
-          return commentsBuilder_.getCount();
-        }
-      }
-      public boa.types.Diff.ChangedComment getComments(int index) {
-        if (commentsBuilder_ == null) {
-          return comments_.get(index);
-        } else {
-          return commentsBuilder_.getMessage(index);
-        }
-      }
-      public Builder setComments(
-          int index, boa.types.Diff.ChangedComment value) {
-        if (commentsBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureCommentsIsMutable();
-          comments_.set(index, value);
-          onChanged();
-        } else {
-          commentsBuilder_.setMessage(index, value);
-        }
-        return this;
-      }
-      public Builder setComments(
-          int index, boa.types.Diff.ChangedComment.Builder builderForValue) {
-        if (commentsBuilder_ == null) {
-          ensureCommentsIsMutable();
-          comments_.set(index, builderForValue.build());
-          onChanged();
-        } else {
-          commentsBuilder_.setMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      public Builder addComments(boa.types.Diff.ChangedComment value) {
-        if (commentsBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureCommentsIsMutable();
-          comments_.add(value);
-          onChanged();
-        } else {
-          commentsBuilder_.addMessage(value);
-        }
-        return this;
-      }
-      public Builder addComments(
-          int index, boa.types.Diff.ChangedComment value) {
-        if (commentsBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureCommentsIsMutable();
-          comments_.add(index, value);
-          onChanged();
-        } else {
-          commentsBuilder_.addMessage(index, value);
-        }
-        return this;
-      }
-      public Builder addComments(
-          boa.types.Diff.ChangedComment.Builder builderForValue) {
-        if (commentsBuilder_ == null) {
-          ensureCommentsIsMutable();
-          comments_.add(builderForValue.build());
-          onChanged();
-        } else {
-          commentsBuilder_.addMessage(builderForValue.build());
-        }
-        return this;
-      }
-      public Builder addComments(
-          int index, boa.types.Diff.ChangedComment.Builder builderForValue) {
-        if (commentsBuilder_ == null) {
-          ensureCommentsIsMutable();
-          comments_.add(index, builderForValue.build());
-          onChanged();
-        } else {
-          commentsBuilder_.addMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      public Builder addAllComments(
-          java.lang.Iterable<? extends boa.types.Diff.ChangedComment> values) {
-        if (commentsBuilder_ == null) {
-          ensureCommentsIsMutable();
-          super.addAll(values, comments_);
-          onChanged();
-        } else {
-          commentsBuilder_.addAllMessages(values);
-        }
-        return this;
-      }
-      public Builder clearComments() {
-        if (commentsBuilder_ == null) {
-          comments_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000100);
-          onChanged();
-        } else {
-          commentsBuilder_.clear();
-        }
-        return this;
-      }
-      public Builder removeComments(int index) {
-        if (commentsBuilder_ == null) {
-          ensureCommentsIsMutable();
-          comments_.remove(index);
-          onChanged();
-        } else {
-          commentsBuilder_.remove(index);
-        }
-        return this;
-      }
-      public boa.types.Diff.ChangedComment.Builder getCommentsBuilder(
-          int index) {
-        return getCommentsFieldBuilder().getBuilder(index);
-      }
-      public boa.types.Diff.ChangedCommentOrBuilder getCommentsOrBuilder(
-          int index) {
-        if (commentsBuilder_ == null) {
-          return comments_.get(index);  } else {
-          return commentsBuilder_.getMessageOrBuilder(index);
-        }
-      }
-      public java.util.List<? extends boa.types.Diff.ChangedCommentOrBuilder> 
-           getCommentsOrBuilderList() {
-        if (commentsBuilder_ != null) {
-          return commentsBuilder_.getMessageOrBuilderList();
-        } else {
-          return java.util.Collections.unmodifiableList(comments_);
-        }
-      }
-      public boa.types.Diff.ChangedComment.Builder addCommentsBuilder() {
-        return getCommentsFieldBuilder().addBuilder(
-            boa.types.Diff.ChangedComment.getDefaultInstance());
-      }
-      public boa.types.Diff.ChangedComment.Builder addCommentsBuilder(
-          int index) {
-        return getCommentsFieldBuilder().addBuilder(
-            index, boa.types.Diff.ChangedComment.getDefaultInstance());
-      }
-      public java.util.List<boa.types.Diff.ChangedComment.Builder> 
-           getCommentsBuilderList() {
-        return getCommentsFieldBuilder().getBuilderList();
-      }
-      private com.google.protobuf.RepeatedFieldBuilder<
-          boa.types.Diff.ChangedComment, boa.types.Diff.ChangedComment.Builder, boa.types.Diff.ChangedCommentOrBuilder> 
-          getCommentsFieldBuilder() {
-        if (commentsBuilder_ == null) {
-          commentsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              boa.types.Diff.ChangedComment, boa.types.Diff.ChangedComment.Builder, boa.types.Diff.ChangedCommentOrBuilder>(
-                  comments_,
-                  ((bitField0_ & 0x00000100) == 0x00000100),
-                  getParentForChildren(),
-                  isClean());
-          comments_ = null;
-        }
-        return commentsBuilder_;
-      }
-      
-      // @@protoc_insertion_point(builder_scope:boa.types.ChangedMethod)
     }
-    
-    static {
-      defaultInstance = new ChangedMethod(true);
-      defaultInstance.initFields();
-    }
-    
-    // @@protoc_insertion_point(class_scope:boa.types.ChangedMethod)
-  }
-  
-  public interface ChangedVariableOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
-    
-    // required .boa.types.ChangeKind change = 1;
-    boolean hasChange();
-    boa.types.Shared.ChangeKind getChange();
-    
-    // optional string name = 2;
-    boolean hasName();
-    String getName();
-    
-    // optional .boa.types.ChangedType variable_type = 3;
-    boolean hasVariableType();
-    boa.types.Diff.ChangedType getVariableType();
-    boa.types.Diff.ChangedTypeOrBuilder getVariableTypeOrBuilder();
-    
-    // repeated .boa.types.ChangedModifier modifiers = 4;
-    java.util.List<boa.types.Diff.ChangedModifier> 
-        getModifiersList();
-    boa.types.Diff.ChangedModifier getModifiers(int index);
-    int getModifiersCount();
-    java.util.List<? extends boa.types.Diff.ChangedModifierOrBuilder> 
-        getModifiersOrBuilderList();
-    boa.types.Diff.ChangedModifierOrBuilder getModifiersOrBuilder(
-        int index);
-    
-    // optional .boa.types.ChangedExpression initializer = 5;
-    boolean hasInitializer();
-    boa.types.Diff.ChangedExpression getInitializer();
-    boa.types.Diff.ChangedExpressionOrBuilder getInitializerOrBuilder();
-    
-    // repeated .boa.types.ChangedComment comments = 6;
-    java.util.List<boa.types.Diff.ChangedComment> 
-        getCommentsList();
-    boa.types.Diff.ChangedComment getComments(int index);
-    int getCommentsCount();
-    java.util.List<? extends boa.types.Diff.ChangedCommentOrBuilder> 
-        getCommentsOrBuilderList();
-    boa.types.Diff.ChangedCommentOrBuilder getCommentsOrBuilder(
-        int index);
-  }
-  public static final class ChangedVariable extends
-      com.google.protobuf.GeneratedMessage
-      implements ChangedVariableOrBuilder {
-    // Use ChangedVariable.newBuilder() to construct.
-    private ChangedVariable(Builder builder) {
-      super(builder);
-    }
-    private ChangedVariable(boolean noInit) {}
-    
-    private static final ChangedVariable defaultInstance;
-    public static ChangedVariable getDefaultInstance() {
-      return defaultInstance;
-    }
-    
-    public ChangedVariable getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-    
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return boa.types.Diff.internal_static_boa_types_ChangedVariable_descriptor;
     }
-    
+
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return boa.types.Diff.internal_static_boa_types_ChangedVariable_fieldAccessorTable;
+      return boa.types.Diff.internal_static_boa_types_ChangedVariable_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              boa.types.Diff.ChangedVariable.class, boa.types.Diff.ChangedVariable.Builder.class);
     }
-    
+
+    public static com.google.protobuf.Parser<ChangedVariable> PARSER =
+        new com.google.protobuf.AbstractParser<ChangedVariable>() {
+      public ChangedVariable parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new ChangedVariable(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<ChangedVariable> getParserForType() {
+      return PARSER;
+    }
+
     private int bitField0_;
     // required .boa.types.ChangeKind change = 1;
     public static final int CHANGE_FIELD_NUMBER = 1;
     private boa.types.Shared.ChangeKind change_;
+    /**
+     * <code>required .boa.types.ChangeKind change = 1;</code>
+     */
     public boolean hasChange() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
+    /**
+     * <code>required .boa.types.ChangeKind change = 1;</code>
+     */
     public boa.types.Shared.ChangeKind getChange() {
       return change_;
     }
-    
+
     // optional string name = 2;
     public static final int NAME_FIELD_NUMBER = 2;
     private java.lang.Object name_;
+    /**
+     * <code>optional string name = 2;</code>
+     */
     public boolean hasName() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
-    public String getName() {
+    /**
+     * <code>optional string name = 2;</code>
+     */
+    public java.lang.String getName() {
       java.lang.Object ref = name_;
-      if (ref instanceof String) {
-        return (String) ref;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
           name_ = s;
         }
         return s;
       }
     }
-    private com.google.protobuf.ByteString getNameBytes() {
+    /**
+     * <code>optional string name = 2;</code>
+     */
+    public com.google.protobuf.ByteString
+        getNameBytes() {
       java.lang.Object ref = name_;
-      if (ref instanceof String) {
+      if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
         name_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
-    
+
     // optional .boa.types.ChangedType variable_type = 3;
     public static final int VARIABLE_TYPE_FIELD_NUMBER = 3;
     private boa.types.Diff.ChangedType variableType_;
+    /**
+     * <code>optional .boa.types.ChangedType variable_type = 3;</code>
+     */
     public boolean hasVariableType() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
+    /**
+     * <code>optional .boa.types.ChangedType variable_type = 3;</code>
+     */
     public boa.types.Diff.ChangedType getVariableType() {
       return variableType_;
     }
+    /**
+     * <code>optional .boa.types.ChangedType variable_type = 3;</code>
+     */
     public boa.types.Diff.ChangedTypeOrBuilder getVariableTypeOrBuilder() {
       return variableType_;
     }
-    
+
     // repeated .boa.types.ChangedModifier modifiers = 4;
     public static final int MODIFIERS_FIELD_NUMBER = 4;
     private java.util.List<boa.types.Diff.ChangedModifier> modifiers_;
+    /**
+     * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+     */
     public java.util.List<boa.types.Diff.ChangedModifier> getModifiersList() {
       return modifiers_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+     */
     public java.util.List<? extends boa.types.Diff.ChangedModifierOrBuilder> 
         getModifiersOrBuilderList() {
       return modifiers_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+     */
     public int getModifiersCount() {
       return modifiers_.size();
     }
+    /**
+     * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+     */
     public boa.types.Diff.ChangedModifier getModifiers(int index) {
       return modifiers_.get(index);
     }
+    /**
+     * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+     */
     public boa.types.Diff.ChangedModifierOrBuilder getModifiersOrBuilder(
         int index) {
       return modifiers_.get(index);
     }
-    
+
     // optional .boa.types.ChangedExpression initializer = 5;
     public static final int INITIALIZER_FIELD_NUMBER = 5;
     private boa.types.Diff.ChangedExpression initializer_;
+    /**
+     * <code>optional .boa.types.ChangedExpression initializer = 5;</code>
+     */
     public boolean hasInitializer() {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
+    /**
+     * <code>optional .boa.types.ChangedExpression initializer = 5;</code>
+     */
     public boa.types.Diff.ChangedExpression getInitializer() {
       return initializer_;
     }
+    /**
+     * <code>optional .boa.types.ChangedExpression initializer = 5;</code>
+     */
     public boa.types.Diff.ChangedExpressionOrBuilder getInitializerOrBuilder() {
       return initializer_;
     }
-    
+
     // repeated .boa.types.ChangedComment comments = 6;
     public static final int COMMENTS_FIELD_NUMBER = 6;
     private java.util.List<boa.types.Diff.ChangedComment> comments_;
+    /**
+     * <code>repeated .boa.types.ChangedComment comments = 6;</code>
+     */
     public java.util.List<boa.types.Diff.ChangedComment> getCommentsList() {
       return comments_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedComment comments = 6;</code>
+     */
     public java.util.List<? extends boa.types.Diff.ChangedCommentOrBuilder> 
         getCommentsOrBuilderList() {
       return comments_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedComment comments = 6;</code>
+     */
     public int getCommentsCount() {
       return comments_.size();
     }
+    /**
+     * <code>repeated .boa.types.ChangedComment comments = 6;</code>
+     */
     public boa.types.Diff.ChangedComment getComments(int index) {
       return comments_.get(index);
     }
+    /**
+     * <code>repeated .boa.types.ChangedComment comments = 6;</code>
+     */
     public boa.types.Diff.ChangedCommentOrBuilder getCommentsOrBuilder(
         int index) {
       return comments_.get(index);
     }
-    
+
     private void initFields() {
       change_ = boa.types.Shared.ChangeKind.ADDED;
       name_ = "";
@@ -8383,7 +11129,7 @@ public final class Diff {
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized != -1) return isInitialized == 1;
-      
+
       if (!hasChange()) {
         memoizedIsInitialized = 0;
         return false;
@@ -8415,7 +11161,7 @@ public final class Diff {
       memoizedIsInitialized = 1;
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
@@ -8439,12 +11185,12 @@ public final class Diff {
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
       if (size != -1) return size;
-    
+
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
@@ -8474,94 +11220,83 @@ public final class Diff {
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     private static final long serialVersionUID = 0L;
     @java.lang.Override
     protected java.lang.Object writeReplace()
         throws java.io.ObjectStreamException {
       return super.writeReplace();
     }
-    
+
     public static boa.types.Diff.ChangedVariable parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
+      return PARSER.parseFrom(data);
     }
     public static boa.types.Diff.ChangedVariable parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(data, extensionRegistry);
     }
     public static boa.types.Diff.ChangedVariable parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
+      return PARSER.parseFrom(data);
     }
     public static boa.types.Diff.ChangedVariable parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(data, extensionRegistry);
     }
     public static boa.types.Diff.ChangedVariable parseFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
+      return PARSER.parseFrom(input);
     }
     public static boa.types.Diff.ChangedVariable parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(input, extensionRegistry);
     }
     public static boa.types.Diff.ChangedVariable parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
+      return PARSER.parseDelimitedFrom(input);
     }
     public static boa.types.Diff.ChangedVariable parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
     }
     public static boa.types.Diff.ChangedVariable parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
+      return PARSER.parseFrom(input);
     }
     public static boa.types.Diff.ChangedVariable parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(input, extensionRegistry);
     }
-    
+
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder(boa.types.Diff.ChangedVariable prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
-    
+
     @java.lang.Override
     protected Builder newBuilderForType(
         com.google.protobuf.GeneratedMessage.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
+    /**
+     * Protobuf type {@code boa.types.ChangedVariable}
+     */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
        implements boa.types.Diff.ChangedVariableOrBuilder {
@@ -8569,18 +11304,21 @@ public final class Diff {
           getDescriptor() {
         return boa.types.Diff.internal_static_boa_types_ChangedVariable_descriptor;
       }
-      
+
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return boa.types.Diff.internal_static_boa_types_ChangedVariable_fieldAccessorTable;
+        return boa.types.Diff.internal_static_boa_types_ChangedVariable_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                boa.types.Diff.ChangedVariable.class, boa.types.Diff.ChangedVariable.Builder.class);
       }
-      
+
       // Construct using boa.types.Diff.ChangedVariable.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
-      
-      private Builder(BuilderParent parent) {
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -8595,7 +11333,7 @@ public final class Diff {
       private static Builder create() {
         return new Builder();
       }
-      
+
       public Builder clear() {
         super.clear();
         change_ = boa.types.Shared.ChangeKind.ADDED;
@@ -8628,20 +11366,20 @@ public final class Diff {
         }
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(buildPartial());
       }
-      
+
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return boa.types.Diff.ChangedVariable.getDescriptor();
+        return boa.types.Diff.internal_static_boa_types_ChangedVariable_descriptor;
       }
-      
+
       public boa.types.Diff.ChangedVariable getDefaultInstanceForType() {
         return boa.types.Diff.ChangedVariable.getDefaultInstance();
       }
-      
+
       public boa.types.Diff.ChangedVariable build() {
         boa.types.Diff.ChangedVariable result = buildPartial();
         if (!result.isInitialized()) {
@@ -8649,17 +11387,7 @@ public final class Diff {
         }
         return result;
       }
-      
-      private boa.types.Diff.ChangedVariable buildParsed()
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        boa.types.Diff.ChangedVariable result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
-        }
-        return result;
-      }
-      
+
       public boa.types.Diff.ChangedVariable buildPartial() {
         boa.types.Diff.ChangedVariable result = new boa.types.Diff.ChangedVariable(this);
         int from_bitField0_ = bitField0_;
@@ -8710,7 +11438,7 @@ public final class Diff {
         onBuilt();
         return result;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof boa.types.Diff.ChangedVariable) {
           return mergeFrom((boa.types.Diff.ChangedVariable)other);
@@ -8719,14 +11447,16 @@ public final class Diff {
           return this;
         }
       }
-      
+
       public Builder mergeFrom(boa.types.Diff.ChangedVariable other) {
         if (other == boa.types.Diff.ChangedVariable.getDefaultInstance()) return this;
         if (other.hasChange()) {
           setChange(other.getChange());
         }
         if (other.hasName()) {
-          setName(other.getName());
+          bitField0_ |= 0x00000002;
+          name_ = other.name_;
+          onChanged();
         }
         if (other.hasVariableType()) {
           mergeVariableType(other.getVariableType());
@@ -8789,7 +11519,7 @@ public final class Diff {
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
+
       public final boolean isInitialized() {
         if (!hasChange()) {
           
@@ -8821,90 +11551,43 @@ public final class Diff {
         }
         return true;
       }
-      
+
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
-        while (true) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              this.setUnknownFields(unknownFields.build());
-              onChanged();
-              return this;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                onChanged();
-                return this;
-              }
-              break;
-            }
-            case 8: {
-              int rawValue = input.readEnum();
-              boa.types.Shared.ChangeKind value = boa.types.Shared.ChangeKind.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(1, rawValue);
-              } else {
-                bitField0_ |= 0x00000001;
-                change_ = value;
-              }
-              break;
-            }
-            case 18: {
-              bitField0_ |= 0x00000002;
-              name_ = input.readBytes();
-              break;
-            }
-            case 26: {
-              boa.types.Diff.ChangedType.Builder subBuilder = boa.types.Diff.ChangedType.newBuilder();
-              if (hasVariableType()) {
-                subBuilder.mergeFrom(getVariableType());
-              }
-              input.readMessage(subBuilder, extensionRegistry);
-              setVariableType(subBuilder.buildPartial());
-              break;
-            }
-            case 34: {
-              boa.types.Diff.ChangedModifier.Builder subBuilder = boa.types.Diff.ChangedModifier.newBuilder();
-              input.readMessage(subBuilder, extensionRegistry);
-              addModifiers(subBuilder.buildPartial());
-              break;
-            }
-            case 42: {
-              boa.types.Diff.ChangedExpression.Builder subBuilder = boa.types.Diff.ChangedExpression.newBuilder();
-              if (hasInitializer()) {
-                subBuilder.mergeFrom(getInitializer());
-              }
-              input.readMessage(subBuilder, extensionRegistry);
-              setInitializer(subBuilder.buildPartial());
-              break;
-            }
-            case 50: {
-              boa.types.Diff.ChangedComment.Builder subBuilder = boa.types.Diff.ChangedComment.newBuilder();
-              input.readMessage(subBuilder, extensionRegistry);
-              addComments(subBuilder.buildPartial());
-              break;
-            }
+        boa.types.Diff.ChangedVariable parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (boa.types.Diff.ChangedVariable) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
           }
         }
+        return this;
       }
-      
       private int bitField0_;
-      
+
       // required .boa.types.ChangeKind change = 1;
       private boa.types.Shared.ChangeKind change_ = boa.types.Shared.ChangeKind.ADDED;
+      /**
+       * <code>required .boa.types.ChangeKind change = 1;</code>
+       */
       public boolean hasChange() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
+      /**
+       * <code>required .boa.types.ChangeKind change = 1;</code>
+       */
       public boa.types.Shared.ChangeKind getChange() {
         return change_;
       }
+      /**
+       * <code>required .boa.types.ChangeKind change = 1;</code>
+       */
       public Builder setChange(boa.types.Shared.ChangeKind value) {
         if (value == null) {
           throw new NullPointerException();
@@ -8914,29 +11597,59 @@ public final class Diff {
         onChanged();
         return this;
       }
+      /**
+       * <code>required .boa.types.ChangeKind change = 1;</code>
+       */
       public Builder clearChange() {
         bitField0_ = (bitField0_ & ~0x00000001);
         change_ = boa.types.Shared.ChangeKind.ADDED;
         onChanged();
         return this;
       }
-      
+
       // optional string name = 2;
       private java.lang.Object name_ = "";
+      /**
+       * <code>optional string name = 2;</code>
+       */
       public boolean hasName() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
-      public String getName() {
+      /**
+       * <code>optional string name = 2;</code>
+       */
+      public java.lang.String getName() {
         java.lang.Object ref = name_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
           name_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
-      public Builder setName(String value) {
+      /**
+       * <code>optional string name = 2;</code>
+       */
+      public com.google.protobuf.ByteString
+          getNameBytes() {
+        java.lang.Object ref = name_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          name_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string name = 2;</code>
+       */
+      public Builder setName(
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -8945,25 +11658,42 @@ public final class Diff {
         onChanged();
         return this;
       }
+      /**
+       * <code>optional string name = 2;</code>
+       */
       public Builder clearName() {
         bitField0_ = (bitField0_ & ~0x00000002);
         name_ = getDefaultInstance().getName();
         onChanged();
         return this;
       }
-      void setName(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00000002;
+      /**
+       * <code>optional string name = 2;</code>
+       */
+      public Builder setNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
         name_ = value;
         onChanged();
+        return this;
       }
-      
+
       // optional .boa.types.ChangedType variable_type = 3;
       private boa.types.Diff.ChangedType variableType_ = boa.types.Diff.ChangedType.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           boa.types.Diff.ChangedType, boa.types.Diff.ChangedType.Builder, boa.types.Diff.ChangedTypeOrBuilder> variableTypeBuilder_;
+      /**
+       * <code>optional .boa.types.ChangedType variable_type = 3;</code>
+       */
       public boolean hasVariableType() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
+      /**
+       * <code>optional .boa.types.ChangedType variable_type = 3;</code>
+       */
       public boa.types.Diff.ChangedType getVariableType() {
         if (variableTypeBuilder_ == null) {
           return variableType_;
@@ -8971,6 +11701,9 @@ public final class Diff {
           return variableTypeBuilder_.getMessage();
         }
       }
+      /**
+       * <code>optional .boa.types.ChangedType variable_type = 3;</code>
+       */
       public Builder setVariableType(boa.types.Diff.ChangedType value) {
         if (variableTypeBuilder_ == null) {
           if (value == null) {
@@ -8984,6 +11717,9 @@ public final class Diff {
         bitField0_ |= 0x00000004;
         return this;
       }
+      /**
+       * <code>optional .boa.types.ChangedType variable_type = 3;</code>
+       */
       public Builder setVariableType(
           boa.types.Diff.ChangedType.Builder builderForValue) {
         if (variableTypeBuilder_ == null) {
@@ -8995,6 +11731,9 @@ public final class Diff {
         bitField0_ |= 0x00000004;
         return this;
       }
+      /**
+       * <code>optional .boa.types.ChangedType variable_type = 3;</code>
+       */
       public Builder mergeVariableType(boa.types.Diff.ChangedType value) {
         if (variableTypeBuilder_ == null) {
           if (((bitField0_ & 0x00000004) == 0x00000004) &&
@@ -9011,6 +11750,9 @@ public final class Diff {
         bitField0_ |= 0x00000004;
         return this;
       }
+      /**
+       * <code>optional .boa.types.ChangedType variable_type = 3;</code>
+       */
       public Builder clearVariableType() {
         if (variableTypeBuilder_ == null) {
           variableType_ = boa.types.Diff.ChangedType.getDefaultInstance();
@@ -9021,11 +11763,17 @@ public final class Diff {
         bitField0_ = (bitField0_ & ~0x00000004);
         return this;
       }
+      /**
+       * <code>optional .boa.types.ChangedType variable_type = 3;</code>
+       */
       public boa.types.Diff.ChangedType.Builder getVariableTypeBuilder() {
         bitField0_ |= 0x00000004;
         onChanged();
         return getVariableTypeFieldBuilder().getBuilder();
       }
+      /**
+       * <code>optional .boa.types.ChangedType variable_type = 3;</code>
+       */
       public boa.types.Diff.ChangedTypeOrBuilder getVariableTypeOrBuilder() {
         if (variableTypeBuilder_ != null) {
           return variableTypeBuilder_.getMessageOrBuilder();
@@ -9033,6 +11781,9 @@ public final class Diff {
           return variableType_;
         }
       }
+      /**
+       * <code>optional .boa.types.ChangedType variable_type = 3;</code>
+       */
       private com.google.protobuf.SingleFieldBuilder<
           boa.types.Diff.ChangedType, boa.types.Diff.ChangedType.Builder, boa.types.Diff.ChangedTypeOrBuilder> 
           getVariableTypeFieldBuilder() {
@@ -9046,7 +11797,7 @@ public final class Diff {
         }
         return variableTypeBuilder_;
       }
-      
+
       // repeated .boa.types.ChangedModifier modifiers = 4;
       private java.util.List<boa.types.Diff.ChangedModifier> modifiers_ =
         java.util.Collections.emptyList();
@@ -9056,10 +11807,13 @@ public final class Diff {
           bitField0_ |= 0x00000008;
          }
       }
-      
+
       private com.google.protobuf.RepeatedFieldBuilder<
           boa.types.Diff.ChangedModifier, boa.types.Diff.ChangedModifier.Builder, boa.types.Diff.ChangedModifierOrBuilder> modifiersBuilder_;
-      
+
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+       */
       public java.util.List<boa.types.Diff.ChangedModifier> getModifiersList() {
         if (modifiersBuilder_ == null) {
           return java.util.Collections.unmodifiableList(modifiers_);
@@ -9067,6 +11821,9 @@ public final class Diff {
           return modifiersBuilder_.getMessageList();
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+       */
       public int getModifiersCount() {
         if (modifiersBuilder_ == null) {
           return modifiers_.size();
@@ -9074,6 +11831,9 @@ public final class Diff {
           return modifiersBuilder_.getCount();
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+       */
       public boa.types.Diff.ChangedModifier getModifiers(int index) {
         if (modifiersBuilder_ == null) {
           return modifiers_.get(index);
@@ -9081,6 +11841,9 @@ public final class Diff {
           return modifiersBuilder_.getMessage(index);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+       */
       public Builder setModifiers(
           int index, boa.types.Diff.ChangedModifier value) {
         if (modifiersBuilder_ == null) {
@@ -9095,6 +11858,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+       */
       public Builder setModifiers(
           int index, boa.types.Diff.ChangedModifier.Builder builderForValue) {
         if (modifiersBuilder_ == null) {
@@ -9106,6 +11872,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+       */
       public Builder addModifiers(boa.types.Diff.ChangedModifier value) {
         if (modifiersBuilder_ == null) {
           if (value == null) {
@@ -9119,6 +11888,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+       */
       public Builder addModifiers(
           int index, boa.types.Diff.ChangedModifier value) {
         if (modifiersBuilder_ == null) {
@@ -9133,6 +11905,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+       */
       public Builder addModifiers(
           boa.types.Diff.ChangedModifier.Builder builderForValue) {
         if (modifiersBuilder_ == null) {
@@ -9144,6 +11919,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+       */
       public Builder addModifiers(
           int index, boa.types.Diff.ChangedModifier.Builder builderForValue) {
         if (modifiersBuilder_ == null) {
@@ -9155,6 +11933,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+       */
       public Builder addAllModifiers(
           java.lang.Iterable<? extends boa.types.Diff.ChangedModifier> values) {
         if (modifiersBuilder_ == null) {
@@ -9166,6 +11947,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+       */
       public Builder clearModifiers() {
         if (modifiersBuilder_ == null) {
           modifiers_ = java.util.Collections.emptyList();
@@ -9176,6 +11960,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+       */
       public Builder removeModifiers(int index) {
         if (modifiersBuilder_ == null) {
           ensureModifiersIsMutable();
@@ -9186,10 +11973,16 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+       */
       public boa.types.Diff.ChangedModifier.Builder getModifiersBuilder(
           int index) {
         return getModifiersFieldBuilder().getBuilder(index);
       }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+       */
       public boa.types.Diff.ChangedModifierOrBuilder getModifiersOrBuilder(
           int index) {
         if (modifiersBuilder_ == null) {
@@ -9197,6 +11990,9 @@ public final class Diff {
           return modifiersBuilder_.getMessageOrBuilder(index);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+       */
       public java.util.List<? extends boa.types.Diff.ChangedModifierOrBuilder> 
            getModifiersOrBuilderList() {
         if (modifiersBuilder_ != null) {
@@ -9205,15 +12001,24 @@ public final class Diff {
           return java.util.Collections.unmodifiableList(modifiers_);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+       */
       public boa.types.Diff.ChangedModifier.Builder addModifiersBuilder() {
         return getModifiersFieldBuilder().addBuilder(
             boa.types.Diff.ChangedModifier.getDefaultInstance());
       }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+       */
       public boa.types.Diff.ChangedModifier.Builder addModifiersBuilder(
           int index) {
         return getModifiersFieldBuilder().addBuilder(
             index, boa.types.Diff.ChangedModifier.getDefaultInstance());
       }
+      /**
+       * <code>repeated .boa.types.ChangedModifier modifiers = 4;</code>
+       */
       public java.util.List<boa.types.Diff.ChangedModifier.Builder> 
            getModifiersBuilderList() {
         return getModifiersFieldBuilder().getBuilderList();
@@ -9232,14 +12037,20 @@ public final class Diff {
         }
         return modifiersBuilder_;
       }
-      
+
       // optional .boa.types.ChangedExpression initializer = 5;
       private boa.types.Diff.ChangedExpression initializer_ = boa.types.Diff.ChangedExpression.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           boa.types.Diff.ChangedExpression, boa.types.Diff.ChangedExpression.Builder, boa.types.Diff.ChangedExpressionOrBuilder> initializerBuilder_;
+      /**
+       * <code>optional .boa.types.ChangedExpression initializer = 5;</code>
+       */
       public boolean hasInitializer() {
         return ((bitField0_ & 0x00000010) == 0x00000010);
       }
+      /**
+       * <code>optional .boa.types.ChangedExpression initializer = 5;</code>
+       */
       public boa.types.Diff.ChangedExpression getInitializer() {
         if (initializerBuilder_ == null) {
           return initializer_;
@@ -9247,6 +12058,9 @@ public final class Diff {
           return initializerBuilder_.getMessage();
         }
       }
+      /**
+       * <code>optional .boa.types.ChangedExpression initializer = 5;</code>
+       */
       public Builder setInitializer(boa.types.Diff.ChangedExpression value) {
         if (initializerBuilder_ == null) {
           if (value == null) {
@@ -9260,6 +12074,9 @@ public final class Diff {
         bitField0_ |= 0x00000010;
         return this;
       }
+      /**
+       * <code>optional .boa.types.ChangedExpression initializer = 5;</code>
+       */
       public Builder setInitializer(
           boa.types.Diff.ChangedExpression.Builder builderForValue) {
         if (initializerBuilder_ == null) {
@@ -9271,6 +12088,9 @@ public final class Diff {
         bitField0_ |= 0x00000010;
         return this;
       }
+      /**
+       * <code>optional .boa.types.ChangedExpression initializer = 5;</code>
+       */
       public Builder mergeInitializer(boa.types.Diff.ChangedExpression value) {
         if (initializerBuilder_ == null) {
           if (((bitField0_ & 0x00000010) == 0x00000010) &&
@@ -9287,6 +12107,9 @@ public final class Diff {
         bitField0_ |= 0x00000010;
         return this;
       }
+      /**
+       * <code>optional .boa.types.ChangedExpression initializer = 5;</code>
+       */
       public Builder clearInitializer() {
         if (initializerBuilder_ == null) {
           initializer_ = boa.types.Diff.ChangedExpression.getDefaultInstance();
@@ -9297,11 +12120,17 @@ public final class Diff {
         bitField0_ = (bitField0_ & ~0x00000010);
         return this;
       }
+      /**
+       * <code>optional .boa.types.ChangedExpression initializer = 5;</code>
+       */
       public boa.types.Diff.ChangedExpression.Builder getInitializerBuilder() {
         bitField0_ |= 0x00000010;
         onChanged();
         return getInitializerFieldBuilder().getBuilder();
       }
+      /**
+       * <code>optional .boa.types.ChangedExpression initializer = 5;</code>
+       */
       public boa.types.Diff.ChangedExpressionOrBuilder getInitializerOrBuilder() {
         if (initializerBuilder_ != null) {
           return initializerBuilder_.getMessageOrBuilder();
@@ -9309,6 +12138,9 @@ public final class Diff {
           return initializer_;
         }
       }
+      /**
+       * <code>optional .boa.types.ChangedExpression initializer = 5;</code>
+       */
       private com.google.protobuf.SingleFieldBuilder<
           boa.types.Diff.ChangedExpression, boa.types.Diff.ChangedExpression.Builder, boa.types.Diff.ChangedExpressionOrBuilder> 
           getInitializerFieldBuilder() {
@@ -9322,7 +12154,7 @@ public final class Diff {
         }
         return initializerBuilder_;
       }
-      
+
       // repeated .boa.types.ChangedComment comments = 6;
       private java.util.List<boa.types.Diff.ChangedComment> comments_ =
         java.util.Collections.emptyList();
@@ -9332,10 +12164,13 @@ public final class Diff {
           bitField0_ |= 0x00000020;
          }
       }
-      
+
       private com.google.protobuf.RepeatedFieldBuilder<
           boa.types.Diff.ChangedComment, boa.types.Diff.ChangedComment.Builder, boa.types.Diff.ChangedCommentOrBuilder> commentsBuilder_;
-      
+
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 6;</code>
+       */
       public java.util.List<boa.types.Diff.ChangedComment> getCommentsList() {
         if (commentsBuilder_ == null) {
           return java.util.Collections.unmodifiableList(comments_);
@@ -9343,6 +12178,9 @@ public final class Diff {
           return commentsBuilder_.getMessageList();
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 6;</code>
+       */
       public int getCommentsCount() {
         if (commentsBuilder_ == null) {
           return comments_.size();
@@ -9350,6 +12188,9 @@ public final class Diff {
           return commentsBuilder_.getCount();
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 6;</code>
+       */
       public boa.types.Diff.ChangedComment getComments(int index) {
         if (commentsBuilder_ == null) {
           return comments_.get(index);
@@ -9357,6 +12198,9 @@ public final class Diff {
           return commentsBuilder_.getMessage(index);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 6;</code>
+       */
       public Builder setComments(
           int index, boa.types.Diff.ChangedComment value) {
         if (commentsBuilder_ == null) {
@@ -9371,6 +12215,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 6;</code>
+       */
       public Builder setComments(
           int index, boa.types.Diff.ChangedComment.Builder builderForValue) {
         if (commentsBuilder_ == null) {
@@ -9382,6 +12229,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 6;</code>
+       */
       public Builder addComments(boa.types.Diff.ChangedComment value) {
         if (commentsBuilder_ == null) {
           if (value == null) {
@@ -9395,6 +12245,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 6;</code>
+       */
       public Builder addComments(
           int index, boa.types.Diff.ChangedComment value) {
         if (commentsBuilder_ == null) {
@@ -9409,6 +12262,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 6;</code>
+       */
       public Builder addComments(
           boa.types.Diff.ChangedComment.Builder builderForValue) {
         if (commentsBuilder_ == null) {
@@ -9420,6 +12276,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 6;</code>
+       */
       public Builder addComments(
           int index, boa.types.Diff.ChangedComment.Builder builderForValue) {
         if (commentsBuilder_ == null) {
@@ -9431,6 +12290,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 6;</code>
+       */
       public Builder addAllComments(
           java.lang.Iterable<? extends boa.types.Diff.ChangedComment> values) {
         if (commentsBuilder_ == null) {
@@ -9442,6 +12304,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 6;</code>
+       */
       public Builder clearComments() {
         if (commentsBuilder_ == null) {
           comments_ = java.util.Collections.emptyList();
@@ -9452,6 +12317,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 6;</code>
+       */
       public Builder removeComments(int index) {
         if (commentsBuilder_ == null) {
           ensureCommentsIsMutable();
@@ -9462,10 +12330,16 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 6;</code>
+       */
       public boa.types.Diff.ChangedComment.Builder getCommentsBuilder(
           int index) {
         return getCommentsFieldBuilder().getBuilder(index);
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 6;</code>
+       */
       public boa.types.Diff.ChangedCommentOrBuilder getCommentsOrBuilder(
           int index) {
         if (commentsBuilder_ == null) {
@@ -9473,6 +12347,9 @@ public final class Diff {
           return commentsBuilder_.getMessageOrBuilder(index);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 6;</code>
+       */
       public java.util.List<? extends boa.types.Diff.ChangedCommentOrBuilder> 
            getCommentsOrBuilderList() {
         if (commentsBuilder_ != null) {
@@ -9481,15 +12358,24 @@ public final class Diff {
           return java.util.Collections.unmodifiableList(comments_);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 6;</code>
+       */
       public boa.types.Diff.ChangedComment.Builder addCommentsBuilder() {
         return getCommentsFieldBuilder().addBuilder(
             boa.types.Diff.ChangedComment.getDefaultInstance());
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 6;</code>
+       */
       public boa.types.Diff.ChangedComment.Builder addCommentsBuilder(
           int index) {
         return getCommentsFieldBuilder().addBuilder(
             index, boa.types.Diff.ChangedComment.getDefaultInstance());
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 6;</code>
+       */
       public java.util.List<boa.types.Diff.ChangedComment.Builder> 
            getCommentsBuilderList() {
         return getCommentsFieldBuilder().getBuilderList();
@@ -9508,274 +12394,670 @@ public final class Diff {
         }
         return commentsBuilder_;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:boa.types.ChangedVariable)
     }
-    
+
     static {
       defaultInstance = new ChangedVariable(true);
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:boa.types.ChangedVariable)
   }
-  
+
   public interface ChangedStatementOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
-    
+
     // required .boa.types.ChangeKind change = 1;
+    /**
+     * <code>required .boa.types.ChangeKind change = 1;</code>
+     */
     boolean hasChange();
+    /**
+     * <code>required .boa.types.ChangeKind change = 1;</code>
+     */
     boa.types.Shared.ChangeKind getChange();
-    
+
     // required .boa.types.Statement.StatementKind kind = 2;
+    /**
+     * <code>required .boa.types.Statement.StatementKind kind = 2;</code>
+     */
     boolean hasKind();
+    /**
+     * <code>required .boa.types.Statement.StatementKind kind = 2;</code>
+     */
     boa.types.Ast.Statement.StatementKind getKind();
-    
+
     // repeated .boa.types.ChangedComment comments = 3;
+    /**
+     * <code>repeated .boa.types.ChangedComment comments = 3;</code>
+     */
     java.util.List<boa.types.Diff.ChangedComment> 
         getCommentsList();
+    /**
+     * <code>repeated .boa.types.ChangedComment comments = 3;</code>
+     */
     boa.types.Diff.ChangedComment getComments(int index);
+    /**
+     * <code>repeated .boa.types.ChangedComment comments = 3;</code>
+     */
     int getCommentsCount();
+    /**
+     * <code>repeated .boa.types.ChangedComment comments = 3;</code>
+     */
     java.util.List<? extends boa.types.Diff.ChangedCommentOrBuilder> 
         getCommentsOrBuilderList();
+    /**
+     * <code>repeated .boa.types.ChangedComment comments = 3;</code>
+     */
     boa.types.Diff.ChangedCommentOrBuilder getCommentsOrBuilder(
         int index);
-    
+
     // repeated .boa.types.ChangedStatement statements = 4;
+    /**
+     * <code>repeated .boa.types.ChangedStatement statements = 4;</code>
+     */
     java.util.List<boa.types.Diff.ChangedStatement> 
         getStatementsList();
+    /**
+     * <code>repeated .boa.types.ChangedStatement statements = 4;</code>
+     */
     boa.types.Diff.ChangedStatement getStatements(int index);
+    /**
+     * <code>repeated .boa.types.ChangedStatement statements = 4;</code>
+     */
     int getStatementsCount();
+    /**
+     * <code>repeated .boa.types.ChangedStatement statements = 4;</code>
+     */
     java.util.List<? extends boa.types.Diff.ChangedStatementOrBuilder> 
         getStatementsOrBuilderList();
+    /**
+     * <code>repeated .boa.types.ChangedStatement statements = 4;</code>
+     */
     boa.types.Diff.ChangedStatementOrBuilder getStatementsOrBuilder(
         int index);
-    
+
     // repeated .boa.types.ChangedExpression initializations = 5;
+    /**
+     * <code>repeated .boa.types.ChangedExpression initializations = 5;</code>
+     */
     java.util.List<boa.types.Diff.ChangedExpression> 
         getInitializationsList();
+    /**
+     * <code>repeated .boa.types.ChangedExpression initializations = 5;</code>
+     */
     boa.types.Diff.ChangedExpression getInitializations(int index);
+    /**
+     * <code>repeated .boa.types.ChangedExpression initializations = 5;</code>
+     */
     int getInitializationsCount();
+    /**
+     * <code>repeated .boa.types.ChangedExpression initializations = 5;</code>
+     */
     java.util.List<? extends boa.types.Diff.ChangedExpressionOrBuilder> 
         getInitializationsOrBuilderList();
+    /**
+     * <code>repeated .boa.types.ChangedExpression initializations = 5;</code>
+     */
     boa.types.Diff.ChangedExpressionOrBuilder getInitializationsOrBuilder(
         int index);
-    
+
     // optional .boa.types.ChangedExpression condition = 6;
+    /**
+     * <code>optional .boa.types.ChangedExpression condition = 6;</code>
+     */
     boolean hasCondition();
+    /**
+     * <code>optional .boa.types.ChangedExpression condition = 6;</code>
+     */
     boa.types.Diff.ChangedExpression getCondition();
+    /**
+     * <code>optional .boa.types.ChangedExpression condition = 6;</code>
+     */
     boa.types.Diff.ChangedExpressionOrBuilder getConditionOrBuilder();
-    
+
     // repeated .boa.types.ChangedExpression updates = 7;
+    /**
+     * <code>repeated .boa.types.ChangedExpression updates = 7;</code>
+     */
     java.util.List<boa.types.Diff.ChangedExpression> 
         getUpdatesList();
+    /**
+     * <code>repeated .boa.types.ChangedExpression updates = 7;</code>
+     */
     boa.types.Diff.ChangedExpression getUpdates(int index);
+    /**
+     * <code>repeated .boa.types.ChangedExpression updates = 7;</code>
+     */
     int getUpdatesCount();
+    /**
+     * <code>repeated .boa.types.ChangedExpression updates = 7;</code>
+     */
     java.util.List<? extends boa.types.Diff.ChangedExpressionOrBuilder> 
         getUpdatesOrBuilderList();
+    /**
+     * <code>repeated .boa.types.ChangedExpression updates = 7;</code>
+     */
     boa.types.Diff.ChangedExpressionOrBuilder getUpdatesOrBuilder(
         int index);
-    
+
     // optional .boa.types.ChangedVariable variable_declaration = 8;
+    /**
+     * <code>optional .boa.types.ChangedVariable variable_declaration = 8;</code>
+     */
     boolean hasVariableDeclaration();
+    /**
+     * <code>optional .boa.types.ChangedVariable variable_declaration = 8;</code>
+     */
     boa.types.Diff.ChangedVariable getVariableDeclaration();
+    /**
+     * <code>optional .boa.types.ChangedVariable variable_declaration = 8;</code>
+     */
     boa.types.Diff.ChangedVariableOrBuilder getVariableDeclarationOrBuilder();
-    
+
     // optional .boa.types.ChangedDeclaration type_declaration = 9;
+    /**
+     * <code>optional .boa.types.ChangedDeclaration type_declaration = 9;</code>
+     */
     boolean hasTypeDeclaration();
+    /**
+     * <code>optional .boa.types.ChangedDeclaration type_declaration = 9;</code>
+     */
     boa.types.Diff.ChangedDeclaration getTypeDeclaration();
+    /**
+     * <code>optional .boa.types.ChangedDeclaration type_declaration = 9;</code>
+     */
     boa.types.Diff.ChangedDeclarationOrBuilder getTypeDeclarationOrBuilder();
-    
+
     // optional .boa.types.ChangedExpression expression = 10;
+    /**
+     * <code>optional .boa.types.ChangedExpression expression = 10;</code>
+     */
     boolean hasExpression();
+    /**
+     * <code>optional .boa.types.ChangedExpression expression = 10;</code>
+     */
     boa.types.Diff.ChangedExpression getExpression();
+    /**
+     * <code>optional .boa.types.ChangedExpression expression = 10;</code>
+     */
     boa.types.Diff.ChangedExpressionOrBuilder getExpressionOrBuilder();
   }
+  /**
+   * Protobuf type {@code boa.types.ChangedStatement}
+   */
   public static final class ChangedStatement extends
       com.google.protobuf.GeneratedMessage
       implements ChangedStatementOrBuilder {
     // Use ChangedStatement.newBuilder() to construct.
-    private ChangedStatement(Builder builder) {
+    private ChangedStatement(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
+      this.unknownFields = builder.getUnknownFields();
     }
-    private ChangedStatement(boolean noInit) {}
-    
+    private ChangedStatement(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
     private static final ChangedStatement defaultInstance;
     public static ChangedStatement getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public ChangedStatement getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private ChangedStatement(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 8: {
+              int rawValue = input.readEnum();
+              boa.types.Shared.ChangeKind value = boa.types.Shared.ChangeKind.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(1, rawValue);
+              } else {
+                bitField0_ |= 0x00000001;
+                change_ = value;
+              }
+              break;
+            }
+            case 16: {
+              int rawValue = input.readEnum();
+              boa.types.Ast.Statement.StatementKind value = boa.types.Ast.Statement.StatementKind.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(2, rawValue);
+              } else {
+                bitField0_ |= 0x00000002;
+                kind_ = value;
+              }
+              break;
+            }
+            case 26: {
+              if (!((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
+                comments_ = new java.util.ArrayList<boa.types.Diff.ChangedComment>();
+                mutable_bitField0_ |= 0x00000004;
+              }
+              comments_.add(input.readMessage(boa.types.Diff.ChangedComment.PARSER, extensionRegistry));
+              break;
+            }
+            case 34: {
+              if (!((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
+                statements_ = new java.util.ArrayList<boa.types.Diff.ChangedStatement>();
+                mutable_bitField0_ |= 0x00000008;
+              }
+              statements_.add(input.readMessage(boa.types.Diff.ChangedStatement.PARSER, extensionRegistry));
+              break;
+            }
+            case 42: {
+              if (!((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
+                initializations_ = new java.util.ArrayList<boa.types.Diff.ChangedExpression>();
+                mutable_bitField0_ |= 0x00000010;
+              }
+              initializations_.add(input.readMessage(boa.types.Diff.ChangedExpression.PARSER, extensionRegistry));
+              break;
+            }
+            case 50: {
+              boa.types.Diff.ChangedExpression.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000004) == 0x00000004)) {
+                subBuilder = condition_.toBuilder();
+              }
+              condition_ = input.readMessage(boa.types.Diff.ChangedExpression.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(condition_);
+                condition_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000004;
+              break;
+            }
+            case 58: {
+              if (!((mutable_bitField0_ & 0x00000040) == 0x00000040)) {
+                updates_ = new java.util.ArrayList<boa.types.Diff.ChangedExpression>();
+                mutable_bitField0_ |= 0x00000040;
+              }
+              updates_.add(input.readMessage(boa.types.Diff.ChangedExpression.PARSER, extensionRegistry));
+              break;
+            }
+            case 66: {
+              boa.types.Diff.ChangedVariable.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000008) == 0x00000008)) {
+                subBuilder = variableDeclaration_.toBuilder();
+              }
+              variableDeclaration_ = input.readMessage(boa.types.Diff.ChangedVariable.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(variableDeclaration_);
+                variableDeclaration_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000008;
+              break;
+            }
+            case 74: {
+              boa.types.Diff.ChangedDeclaration.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000010) == 0x00000010)) {
+                subBuilder = typeDeclaration_.toBuilder();
+              }
+              typeDeclaration_ = input.readMessage(boa.types.Diff.ChangedDeclaration.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(typeDeclaration_);
+                typeDeclaration_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000010;
+              break;
+            }
+            case 82: {
+              boa.types.Diff.ChangedExpression.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000020) == 0x00000020)) {
+                subBuilder = expression_.toBuilder();
+              }
+              expression_ = input.readMessage(boa.types.Diff.ChangedExpression.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(expression_);
+                expression_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000020;
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
+          comments_ = java.util.Collections.unmodifiableList(comments_);
+        }
+        if (((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
+          statements_ = java.util.Collections.unmodifiableList(statements_);
+        }
+        if (((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
+          initializations_ = java.util.Collections.unmodifiableList(initializations_);
+        }
+        if (((mutable_bitField0_ & 0x00000040) == 0x00000040)) {
+          updates_ = java.util.Collections.unmodifiableList(updates_);
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return boa.types.Diff.internal_static_boa_types_ChangedStatement_descriptor;
     }
-    
+
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return boa.types.Diff.internal_static_boa_types_ChangedStatement_fieldAccessorTable;
+      return boa.types.Diff.internal_static_boa_types_ChangedStatement_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              boa.types.Diff.ChangedStatement.class, boa.types.Diff.ChangedStatement.Builder.class);
     }
-    
+
+    public static com.google.protobuf.Parser<ChangedStatement> PARSER =
+        new com.google.protobuf.AbstractParser<ChangedStatement>() {
+      public ChangedStatement parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new ChangedStatement(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<ChangedStatement> getParserForType() {
+      return PARSER;
+    }
+
     private int bitField0_;
     // required .boa.types.ChangeKind change = 1;
     public static final int CHANGE_FIELD_NUMBER = 1;
     private boa.types.Shared.ChangeKind change_;
+    /**
+     * <code>required .boa.types.ChangeKind change = 1;</code>
+     */
     public boolean hasChange() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
+    /**
+     * <code>required .boa.types.ChangeKind change = 1;</code>
+     */
     public boa.types.Shared.ChangeKind getChange() {
       return change_;
     }
-    
+
     // required .boa.types.Statement.StatementKind kind = 2;
     public static final int KIND_FIELD_NUMBER = 2;
     private boa.types.Ast.Statement.StatementKind kind_;
+    /**
+     * <code>required .boa.types.Statement.StatementKind kind = 2;</code>
+     */
     public boolean hasKind() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
+    /**
+     * <code>required .boa.types.Statement.StatementKind kind = 2;</code>
+     */
     public boa.types.Ast.Statement.StatementKind getKind() {
       return kind_;
     }
-    
+
     // repeated .boa.types.ChangedComment comments = 3;
     public static final int COMMENTS_FIELD_NUMBER = 3;
     private java.util.List<boa.types.Diff.ChangedComment> comments_;
+    /**
+     * <code>repeated .boa.types.ChangedComment comments = 3;</code>
+     */
     public java.util.List<boa.types.Diff.ChangedComment> getCommentsList() {
       return comments_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedComment comments = 3;</code>
+     */
     public java.util.List<? extends boa.types.Diff.ChangedCommentOrBuilder> 
         getCommentsOrBuilderList() {
       return comments_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedComment comments = 3;</code>
+     */
     public int getCommentsCount() {
       return comments_.size();
     }
+    /**
+     * <code>repeated .boa.types.ChangedComment comments = 3;</code>
+     */
     public boa.types.Diff.ChangedComment getComments(int index) {
       return comments_.get(index);
     }
+    /**
+     * <code>repeated .boa.types.ChangedComment comments = 3;</code>
+     */
     public boa.types.Diff.ChangedCommentOrBuilder getCommentsOrBuilder(
         int index) {
       return comments_.get(index);
     }
-    
+
     // repeated .boa.types.ChangedStatement statements = 4;
     public static final int STATEMENTS_FIELD_NUMBER = 4;
     private java.util.List<boa.types.Diff.ChangedStatement> statements_;
+    /**
+     * <code>repeated .boa.types.ChangedStatement statements = 4;</code>
+     */
     public java.util.List<boa.types.Diff.ChangedStatement> getStatementsList() {
       return statements_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedStatement statements = 4;</code>
+     */
     public java.util.List<? extends boa.types.Diff.ChangedStatementOrBuilder> 
         getStatementsOrBuilderList() {
       return statements_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedStatement statements = 4;</code>
+     */
     public int getStatementsCount() {
       return statements_.size();
     }
+    /**
+     * <code>repeated .boa.types.ChangedStatement statements = 4;</code>
+     */
     public boa.types.Diff.ChangedStatement getStatements(int index) {
       return statements_.get(index);
     }
+    /**
+     * <code>repeated .boa.types.ChangedStatement statements = 4;</code>
+     */
     public boa.types.Diff.ChangedStatementOrBuilder getStatementsOrBuilder(
         int index) {
       return statements_.get(index);
     }
-    
+
     // repeated .boa.types.ChangedExpression initializations = 5;
     public static final int INITIALIZATIONS_FIELD_NUMBER = 5;
     private java.util.List<boa.types.Diff.ChangedExpression> initializations_;
+    /**
+     * <code>repeated .boa.types.ChangedExpression initializations = 5;</code>
+     */
     public java.util.List<boa.types.Diff.ChangedExpression> getInitializationsList() {
       return initializations_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedExpression initializations = 5;</code>
+     */
     public java.util.List<? extends boa.types.Diff.ChangedExpressionOrBuilder> 
         getInitializationsOrBuilderList() {
       return initializations_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedExpression initializations = 5;</code>
+     */
     public int getInitializationsCount() {
       return initializations_.size();
     }
+    /**
+     * <code>repeated .boa.types.ChangedExpression initializations = 5;</code>
+     */
     public boa.types.Diff.ChangedExpression getInitializations(int index) {
       return initializations_.get(index);
     }
+    /**
+     * <code>repeated .boa.types.ChangedExpression initializations = 5;</code>
+     */
     public boa.types.Diff.ChangedExpressionOrBuilder getInitializationsOrBuilder(
         int index) {
       return initializations_.get(index);
     }
-    
+
     // optional .boa.types.ChangedExpression condition = 6;
     public static final int CONDITION_FIELD_NUMBER = 6;
     private boa.types.Diff.ChangedExpression condition_;
+    /**
+     * <code>optional .boa.types.ChangedExpression condition = 6;</code>
+     */
     public boolean hasCondition() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
+    /**
+     * <code>optional .boa.types.ChangedExpression condition = 6;</code>
+     */
     public boa.types.Diff.ChangedExpression getCondition() {
       return condition_;
     }
+    /**
+     * <code>optional .boa.types.ChangedExpression condition = 6;</code>
+     */
     public boa.types.Diff.ChangedExpressionOrBuilder getConditionOrBuilder() {
       return condition_;
     }
-    
+
     // repeated .boa.types.ChangedExpression updates = 7;
     public static final int UPDATES_FIELD_NUMBER = 7;
     private java.util.List<boa.types.Diff.ChangedExpression> updates_;
+    /**
+     * <code>repeated .boa.types.ChangedExpression updates = 7;</code>
+     */
     public java.util.List<boa.types.Diff.ChangedExpression> getUpdatesList() {
       return updates_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedExpression updates = 7;</code>
+     */
     public java.util.List<? extends boa.types.Diff.ChangedExpressionOrBuilder> 
         getUpdatesOrBuilderList() {
       return updates_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedExpression updates = 7;</code>
+     */
     public int getUpdatesCount() {
       return updates_.size();
     }
+    /**
+     * <code>repeated .boa.types.ChangedExpression updates = 7;</code>
+     */
     public boa.types.Diff.ChangedExpression getUpdates(int index) {
       return updates_.get(index);
     }
+    /**
+     * <code>repeated .boa.types.ChangedExpression updates = 7;</code>
+     */
     public boa.types.Diff.ChangedExpressionOrBuilder getUpdatesOrBuilder(
         int index) {
       return updates_.get(index);
     }
-    
+
     // optional .boa.types.ChangedVariable variable_declaration = 8;
     public static final int VARIABLE_DECLARATION_FIELD_NUMBER = 8;
     private boa.types.Diff.ChangedVariable variableDeclaration_;
+    /**
+     * <code>optional .boa.types.ChangedVariable variable_declaration = 8;</code>
+     */
     public boolean hasVariableDeclaration() {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
+    /**
+     * <code>optional .boa.types.ChangedVariable variable_declaration = 8;</code>
+     */
     public boa.types.Diff.ChangedVariable getVariableDeclaration() {
       return variableDeclaration_;
     }
+    /**
+     * <code>optional .boa.types.ChangedVariable variable_declaration = 8;</code>
+     */
     public boa.types.Diff.ChangedVariableOrBuilder getVariableDeclarationOrBuilder() {
       return variableDeclaration_;
     }
-    
+
     // optional .boa.types.ChangedDeclaration type_declaration = 9;
     public static final int TYPE_DECLARATION_FIELD_NUMBER = 9;
     private boa.types.Diff.ChangedDeclaration typeDeclaration_;
+    /**
+     * <code>optional .boa.types.ChangedDeclaration type_declaration = 9;</code>
+     */
     public boolean hasTypeDeclaration() {
       return ((bitField0_ & 0x00000010) == 0x00000010);
     }
+    /**
+     * <code>optional .boa.types.ChangedDeclaration type_declaration = 9;</code>
+     */
     public boa.types.Diff.ChangedDeclaration getTypeDeclaration() {
       return typeDeclaration_;
     }
+    /**
+     * <code>optional .boa.types.ChangedDeclaration type_declaration = 9;</code>
+     */
     public boa.types.Diff.ChangedDeclarationOrBuilder getTypeDeclarationOrBuilder() {
       return typeDeclaration_;
     }
-    
+
     // optional .boa.types.ChangedExpression expression = 10;
     public static final int EXPRESSION_FIELD_NUMBER = 10;
     private boa.types.Diff.ChangedExpression expression_;
+    /**
+     * <code>optional .boa.types.ChangedExpression expression = 10;</code>
+     */
     public boolean hasExpression() {
       return ((bitField0_ & 0x00000020) == 0x00000020);
     }
+    /**
+     * <code>optional .boa.types.ChangedExpression expression = 10;</code>
+     */
     public boa.types.Diff.ChangedExpression getExpression() {
       return expression_;
     }
+    /**
+     * <code>optional .boa.types.ChangedExpression expression = 10;</code>
+     */
     public boa.types.Diff.ChangedExpressionOrBuilder getExpressionOrBuilder() {
       return expression_;
     }
-    
+
     private void initFields() {
       change_ = boa.types.Shared.ChangeKind.ADDED;
       kind_ = boa.types.Ast.Statement.StatementKind.OTHER;
@@ -9792,7 +13074,7 @@ public final class Diff {
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized != -1) return isInitialized == 1;
-      
+
       if (!hasChange()) {
         memoizedIsInitialized = 0;
         return false;
@@ -9852,7 +13134,7 @@ public final class Diff {
       memoizedIsInitialized = 1;
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
@@ -9888,12 +13170,12 @@ public final class Diff {
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
       if (size != -1) return size;
-    
+
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
@@ -9939,94 +13221,83 @@ public final class Diff {
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     private static final long serialVersionUID = 0L;
     @java.lang.Override
     protected java.lang.Object writeReplace()
         throws java.io.ObjectStreamException {
       return super.writeReplace();
     }
-    
+
     public static boa.types.Diff.ChangedStatement parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
+      return PARSER.parseFrom(data);
     }
     public static boa.types.Diff.ChangedStatement parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(data, extensionRegistry);
     }
     public static boa.types.Diff.ChangedStatement parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
+      return PARSER.parseFrom(data);
     }
     public static boa.types.Diff.ChangedStatement parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(data, extensionRegistry);
     }
     public static boa.types.Diff.ChangedStatement parseFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
+      return PARSER.parseFrom(input);
     }
     public static boa.types.Diff.ChangedStatement parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(input, extensionRegistry);
     }
     public static boa.types.Diff.ChangedStatement parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
+      return PARSER.parseDelimitedFrom(input);
     }
     public static boa.types.Diff.ChangedStatement parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
     }
     public static boa.types.Diff.ChangedStatement parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
+      return PARSER.parseFrom(input);
     }
     public static boa.types.Diff.ChangedStatement parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(input, extensionRegistry);
     }
-    
+
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder(boa.types.Diff.ChangedStatement prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
-    
+
     @java.lang.Override
     protected Builder newBuilderForType(
         com.google.protobuf.GeneratedMessage.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
+    /**
+     * Protobuf type {@code boa.types.ChangedStatement}
+     */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
        implements boa.types.Diff.ChangedStatementOrBuilder {
@@ -10034,18 +13305,21 @@ public final class Diff {
           getDescriptor() {
         return boa.types.Diff.internal_static_boa_types_ChangedStatement_descriptor;
       }
-      
+
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return boa.types.Diff.internal_static_boa_types_ChangedStatement_fieldAccessorTable;
+        return boa.types.Diff.internal_static_boa_types_ChangedStatement_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                boa.types.Diff.ChangedStatement.class, boa.types.Diff.ChangedStatement.Builder.class);
       }
-      
+
       // Construct using boa.types.Diff.ChangedStatement.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
-      
-      private Builder(BuilderParent parent) {
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -10064,7 +13338,7 @@ public final class Diff {
       private static Builder create() {
         return new Builder();
       }
-      
+
       public Builder clear() {
         super.clear();
         change_ = boa.types.Shared.ChangeKind.ADDED;
@@ -10121,20 +13395,20 @@ public final class Diff {
         bitField0_ = (bitField0_ & ~0x00000200);
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(buildPartial());
       }
-      
+
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return boa.types.Diff.ChangedStatement.getDescriptor();
+        return boa.types.Diff.internal_static_boa_types_ChangedStatement_descriptor;
       }
-      
+
       public boa.types.Diff.ChangedStatement getDefaultInstanceForType() {
         return boa.types.Diff.ChangedStatement.getDefaultInstance();
       }
-      
+
       public boa.types.Diff.ChangedStatement build() {
         boa.types.Diff.ChangedStatement result = buildPartial();
         if (!result.isInitialized()) {
@@ -10142,17 +13416,7 @@ public final class Diff {
         }
         return result;
       }
-      
-      private boa.types.Diff.ChangedStatement buildParsed()
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        boa.types.Diff.ChangedStatement result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
-        }
-        return result;
-      }
-      
+
       public boa.types.Diff.ChangedStatement buildPartial() {
         boa.types.Diff.ChangedStatement result = new boa.types.Diff.ChangedStatement(this);
         int from_bitField0_ = bitField0_;
@@ -10237,7 +13501,7 @@ public final class Diff {
         onBuilt();
         return result;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof boa.types.Diff.ChangedStatement) {
           return mergeFrom((boa.types.Diff.ChangedStatement)other);
@@ -10246,7 +13510,7 @@ public final class Diff {
           return this;
         }
       }
-      
+
       public Builder mergeFrom(boa.types.Diff.ChangedStatement other) {
         if (other == boa.types.Diff.ChangedStatement.getDefaultInstance()) return this;
         if (other.hasChange()) {
@@ -10374,7 +13638,7 @@ public final class Diff {
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
+
       public final boolean isInitialized() {
         if (!hasChange()) {
           
@@ -10434,126 +13698,43 @@ public final class Diff {
         }
         return true;
       }
-      
+
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
-        while (true) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              this.setUnknownFields(unknownFields.build());
-              onChanged();
-              return this;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                onChanged();
-                return this;
-              }
-              break;
-            }
-            case 8: {
-              int rawValue = input.readEnum();
-              boa.types.Shared.ChangeKind value = boa.types.Shared.ChangeKind.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(1, rawValue);
-              } else {
-                bitField0_ |= 0x00000001;
-                change_ = value;
-              }
-              break;
-            }
-            case 16: {
-              int rawValue = input.readEnum();
-              boa.types.Ast.Statement.StatementKind value = boa.types.Ast.Statement.StatementKind.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(2, rawValue);
-              } else {
-                bitField0_ |= 0x00000002;
-                kind_ = value;
-              }
-              break;
-            }
-            case 26: {
-              boa.types.Diff.ChangedComment.Builder subBuilder = boa.types.Diff.ChangedComment.newBuilder();
-              input.readMessage(subBuilder, extensionRegistry);
-              addComments(subBuilder.buildPartial());
-              break;
-            }
-            case 34: {
-              boa.types.Diff.ChangedStatement.Builder subBuilder = boa.types.Diff.ChangedStatement.newBuilder();
-              input.readMessage(subBuilder, extensionRegistry);
-              addStatements(subBuilder.buildPartial());
-              break;
-            }
-            case 42: {
-              boa.types.Diff.ChangedExpression.Builder subBuilder = boa.types.Diff.ChangedExpression.newBuilder();
-              input.readMessage(subBuilder, extensionRegistry);
-              addInitializations(subBuilder.buildPartial());
-              break;
-            }
-            case 50: {
-              boa.types.Diff.ChangedExpression.Builder subBuilder = boa.types.Diff.ChangedExpression.newBuilder();
-              if (hasCondition()) {
-                subBuilder.mergeFrom(getCondition());
-              }
-              input.readMessage(subBuilder, extensionRegistry);
-              setCondition(subBuilder.buildPartial());
-              break;
-            }
-            case 58: {
-              boa.types.Diff.ChangedExpression.Builder subBuilder = boa.types.Diff.ChangedExpression.newBuilder();
-              input.readMessage(subBuilder, extensionRegistry);
-              addUpdates(subBuilder.buildPartial());
-              break;
-            }
-            case 66: {
-              boa.types.Diff.ChangedVariable.Builder subBuilder = boa.types.Diff.ChangedVariable.newBuilder();
-              if (hasVariableDeclaration()) {
-                subBuilder.mergeFrom(getVariableDeclaration());
-              }
-              input.readMessage(subBuilder, extensionRegistry);
-              setVariableDeclaration(subBuilder.buildPartial());
-              break;
-            }
-            case 74: {
-              boa.types.Diff.ChangedDeclaration.Builder subBuilder = boa.types.Diff.ChangedDeclaration.newBuilder();
-              if (hasTypeDeclaration()) {
-                subBuilder.mergeFrom(getTypeDeclaration());
-              }
-              input.readMessage(subBuilder, extensionRegistry);
-              setTypeDeclaration(subBuilder.buildPartial());
-              break;
-            }
-            case 82: {
-              boa.types.Diff.ChangedExpression.Builder subBuilder = boa.types.Diff.ChangedExpression.newBuilder();
-              if (hasExpression()) {
-                subBuilder.mergeFrom(getExpression());
-              }
-              input.readMessage(subBuilder, extensionRegistry);
-              setExpression(subBuilder.buildPartial());
-              break;
-            }
+        boa.types.Diff.ChangedStatement parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (boa.types.Diff.ChangedStatement) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
           }
         }
+        return this;
       }
-      
       private int bitField0_;
-      
+
       // required .boa.types.ChangeKind change = 1;
       private boa.types.Shared.ChangeKind change_ = boa.types.Shared.ChangeKind.ADDED;
+      /**
+       * <code>required .boa.types.ChangeKind change = 1;</code>
+       */
       public boolean hasChange() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
+      /**
+       * <code>required .boa.types.ChangeKind change = 1;</code>
+       */
       public boa.types.Shared.ChangeKind getChange() {
         return change_;
       }
+      /**
+       * <code>required .boa.types.ChangeKind change = 1;</code>
+       */
       public Builder setChange(boa.types.Shared.ChangeKind value) {
         if (value == null) {
           throw new NullPointerException();
@@ -10563,21 +13744,33 @@ public final class Diff {
         onChanged();
         return this;
       }
+      /**
+       * <code>required .boa.types.ChangeKind change = 1;</code>
+       */
       public Builder clearChange() {
         bitField0_ = (bitField0_ & ~0x00000001);
         change_ = boa.types.Shared.ChangeKind.ADDED;
         onChanged();
         return this;
       }
-      
+
       // required .boa.types.Statement.StatementKind kind = 2;
       private boa.types.Ast.Statement.StatementKind kind_ = boa.types.Ast.Statement.StatementKind.OTHER;
+      /**
+       * <code>required .boa.types.Statement.StatementKind kind = 2;</code>
+       */
       public boolean hasKind() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
+      /**
+       * <code>required .boa.types.Statement.StatementKind kind = 2;</code>
+       */
       public boa.types.Ast.Statement.StatementKind getKind() {
         return kind_;
       }
+      /**
+       * <code>required .boa.types.Statement.StatementKind kind = 2;</code>
+       */
       public Builder setKind(boa.types.Ast.Statement.StatementKind value) {
         if (value == null) {
           throw new NullPointerException();
@@ -10587,13 +13780,16 @@ public final class Diff {
         onChanged();
         return this;
       }
+      /**
+       * <code>required .boa.types.Statement.StatementKind kind = 2;</code>
+       */
       public Builder clearKind() {
         bitField0_ = (bitField0_ & ~0x00000002);
         kind_ = boa.types.Ast.Statement.StatementKind.OTHER;
         onChanged();
         return this;
       }
-      
+
       // repeated .boa.types.ChangedComment comments = 3;
       private java.util.List<boa.types.Diff.ChangedComment> comments_ =
         java.util.Collections.emptyList();
@@ -10603,10 +13799,13 @@ public final class Diff {
           bitField0_ |= 0x00000004;
          }
       }
-      
+
       private com.google.protobuf.RepeatedFieldBuilder<
           boa.types.Diff.ChangedComment, boa.types.Diff.ChangedComment.Builder, boa.types.Diff.ChangedCommentOrBuilder> commentsBuilder_;
-      
+
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 3;</code>
+       */
       public java.util.List<boa.types.Diff.ChangedComment> getCommentsList() {
         if (commentsBuilder_ == null) {
           return java.util.Collections.unmodifiableList(comments_);
@@ -10614,6 +13813,9 @@ public final class Diff {
           return commentsBuilder_.getMessageList();
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 3;</code>
+       */
       public int getCommentsCount() {
         if (commentsBuilder_ == null) {
           return comments_.size();
@@ -10621,6 +13823,9 @@ public final class Diff {
           return commentsBuilder_.getCount();
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 3;</code>
+       */
       public boa.types.Diff.ChangedComment getComments(int index) {
         if (commentsBuilder_ == null) {
           return comments_.get(index);
@@ -10628,6 +13833,9 @@ public final class Diff {
           return commentsBuilder_.getMessage(index);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 3;</code>
+       */
       public Builder setComments(
           int index, boa.types.Diff.ChangedComment value) {
         if (commentsBuilder_ == null) {
@@ -10642,6 +13850,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 3;</code>
+       */
       public Builder setComments(
           int index, boa.types.Diff.ChangedComment.Builder builderForValue) {
         if (commentsBuilder_ == null) {
@@ -10653,6 +13864,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 3;</code>
+       */
       public Builder addComments(boa.types.Diff.ChangedComment value) {
         if (commentsBuilder_ == null) {
           if (value == null) {
@@ -10666,6 +13880,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 3;</code>
+       */
       public Builder addComments(
           int index, boa.types.Diff.ChangedComment value) {
         if (commentsBuilder_ == null) {
@@ -10680,6 +13897,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 3;</code>
+       */
       public Builder addComments(
           boa.types.Diff.ChangedComment.Builder builderForValue) {
         if (commentsBuilder_ == null) {
@@ -10691,6 +13911,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 3;</code>
+       */
       public Builder addComments(
           int index, boa.types.Diff.ChangedComment.Builder builderForValue) {
         if (commentsBuilder_ == null) {
@@ -10702,6 +13925,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 3;</code>
+       */
       public Builder addAllComments(
           java.lang.Iterable<? extends boa.types.Diff.ChangedComment> values) {
         if (commentsBuilder_ == null) {
@@ -10713,6 +13939,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 3;</code>
+       */
       public Builder clearComments() {
         if (commentsBuilder_ == null) {
           comments_ = java.util.Collections.emptyList();
@@ -10723,6 +13952,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 3;</code>
+       */
       public Builder removeComments(int index) {
         if (commentsBuilder_ == null) {
           ensureCommentsIsMutable();
@@ -10733,10 +13965,16 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 3;</code>
+       */
       public boa.types.Diff.ChangedComment.Builder getCommentsBuilder(
           int index) {
         return getCommentsFieldBuilder().getBuilder(index);
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 3;</code>
+       */
       public boa.types.Diff.ChangedCommentOrBuilder getCommentsOrBuilder(
           int index) {
         if (commentsBuilder_ == null) {
@@ -10744,6 +13982,9 @@ public final class Diff {
           return commentsBuilder_.getMessageOrBuilder(index);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 3;</code>
+       */
       public java.util.List<? extends boa.types.Diff.ChangedCommentOrBuilder> 
            getCommentsOrBuilderList() {
         if (commentsBuilder_ != null) {
@@ -10752,15 +13993,24 @@ public final class Diff {
           return java.util.Collections.unmodifiableList(comments_);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 3;</code>
+       */
       public boa.types.Diff.ChangedComment.Builder addCommentsBuilder() {
         return getCommentsFieldBuilder().addBuilder(
             boa.types.Diff.ChangedComment.getDefaultInstance());
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 3;</code>
+       */
       public boa.types.Diff.ChangedComment.Builder addCommentsBuilder(
           int index) {
         return getCommentsFieldBuilder().addBuilder(
             index, boa.types.Diff.ChangedComment.getDefaultInstance());
       }
+      /**
+       * <code>repeated .boa.types.ChangedComment comments = 3;</code>
+       */
       public java.util.List<boa.types.Diff.ChangedComment.Builder> 
            getCommentsBuilderList() {
         return getCommentsFieldBuilder().getBuilderList();
@@ -10779,7 +14029,7 @@ public final class Diff {
         }
         return commentsBuilder_;
       }
-      
+
       // repeated .boa.types.ChangedStatement statements = 4;
       private java.util.List<boa.types.Diff.ChangedStatement> statements_ =
         java.util.Collections.emptyList();
@@ -10789,10 +14039,13 @@ public final class Diff {
           bitField0_ |= 0x00000008;
          }
       }
-      
+
       private com.google.protobuf.RepeatedFieldBuilder<
           boa.types.Diff.ChangedStatement, boa.types.Diff.ChangedStatement.Builder, boa.types.Diff.ChangedStatementOrBuilder> statementsBuilder_;
-      
+
+      /**
+       * <code>repeated .boa.types.ChangedStatement statements = 4;</code>
+       */
       public java.util.List<boa.types.Diff.ChangedStatement> getStatementsList() {
         if (statementsBuilder_ == null) {
           return java.util.Collections.unmodifiableList(statements_);
@@ -10800,6 +14053,9 @@ public final class Diff {
           return statementsBuilder_.getMessageList();
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedStatement statements = 4;</code>
+       */
       public int getStatementsCount() {
         if (statementsBuilder_ == null) {
           return statements_.size();
@@ -10807,6 +14063,9 @@ public final class Diff {
           return statementsBuilder_.getCount();
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedStatement statements = 4;</code>
+       */
       public boa.types.Diff.ChangedStatement getStatements(int index) {
         if (statementsBuilder_ == null) {
           return statements_.get(index);
@@ -10814,6 +14073,9 @@ public final class Diff {
           return statementsBuilder_.getMessage(index);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedStatement statements = 4;</code>
+       */
       public Builder setStatements(
           int index, boa.types.Diff.ChangedStatement value) {
         if (statementsBuilder_ == null) {
@@ -10828,6 +14090,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedStatement statements = 4;</code>
+       */
       public Builder setStatements(
           int index, boa.types.Diff.ChangedStatement.Builder builderForValue) {
         if (statementsBuilder_ == null) {
@@ -10839,6 +14104,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedStatement statements = 4;</code>
+       */
       public Builder addStatements(boa.types.Diff.ChangedStatement value) {
         if (statementsBuilder_ == null) {
           if (value == null) {
@@ -10852,6 +14120,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedStatement statements = 4;</code>
+       */
       public Builder addStatements(
           int index, boa.types.Diff.ChangedStatement value) {
         if (statementsBuilder_ == null) {
@@ -10866,6 +14137,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedStatement statements = 4;</code>
+       */
       public Builder addStatements(
           boa.types.Diff.ChangedStatement.Builder builderForValue) {
         if (statementsBuilder_ == null) {
@@ -10877,6 +14151,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedStatement statements = 4;</code>
+       */
       public Builder addStatements(
           int index, boa.types.Diff.ChangedStatement.Builder builderForValue) {
         if (statementsBuilder_ == null) {
@@ -10888,6 +14165,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedStatement statements = 4;</code>
+       */
       public Builder addAllStatements(
           java.lang.Iterable<? extends boa.types.Diff.ChangedStatement> values) {
         if (statementsBuilder_ == null) {
@@ -10899,6 +14179,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedStatement statements = 4;</code>
+       */
       public Builder clearStatements() {
         if (statementsBuilder_ == null) {
           statements_ = java.util.Collections.emptyList();
@@ -10909,6 +14192,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedStatement statements = 4;</code>
+       */
       public Builder removeStatements(int index) {
         if (statementsBuilder_ == null) {
           ensureStatementsIsMutable();
@@ -10919,10 +14205,16 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedStatement statements = 4;</code>
+       */
       public boa.types.Diff.ChangedStatement.Builder getStatementsBuilder(
           int index) {
         return getStatementsFieldBuilder().getBuilder(index);
       }
+      /**
+       * <code>repeated .boa.types.ChangedStatement statements = 4;</code>
+       */
       public boa.types.Diff.ChangedStatementOrBuilder getStatementsOrBuilder(
           int index) {
         if (statementsBuilder_ == null) {
@@ -10930,6 +14222,9 @@ public final class Diff {
           return statementsBuilder_.getMessageOrBuilder(index);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedStatement statements = 4;</code>
+       */
       public java.util.List<? extends boa.types.Diff.ChangedStatementOrBuilder> 
            getStatementsOrBuilderList() {
         if (statementsBuilder_ != null) {
@@ -10938,15 +14233,24 @@ public final class Diff {
           return java.util.Collections.unmodifiableList(statements_);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedStatement statements = 4;</code>
+       */
       public boa.types.Diff.ChangedStatement.Builder addStatementsBuilder() {
         return getStatementsFieldBuilder().addBuilder(
             boa.types.Diff.ChangedStatement.getDefaultInstance());
       }
+      /**
+       * <code>repeated .boa.types.ChangedStatement statements = 4;</code>
+       */
       public boa.types.Diff.ChangedStatement.Builder addStatementsBuilder(
           int index) {
         return getStatementsFieldBuilder().addBuilder(
             index, boa.types.Diff.ChangedStatement.getDefaultInstance());
       }
+      /**
+       * <code>repeated .boa.types.ChangedStatement statements = 4;</code>
+       */
       public java.util.List<boa.types.Diff.ChangedStatement.Builder> 
            getStatementsBuilderList() {
         return getStatementsFieldBuilder().getBuilderList();
@@ -10965,7 +14269,7 @@ public final class Diff {
         }
         return statementsBuilder_;
       }
-      
+
       // repeated .boa.types.ChangedExpression initializations = 5;
       private java.util.List<boa.types.Diff.ChangedExpression> initializations_ =
         java.util.Collections.emptyList();
@@ -10975,10 +14279,13 @@ public final class Diff {
           bitField0_ |= 0x00000010;
          }
       }
-      
+
       private com.google.protobuf.RepeatedFieldBuilder<
           boa.types.Diff.ChangedExpression, boa.types.Diff.ChangedExpression.Builder, boa.types.Diff.ChangedExpressionOrBuilder> initializationsBuilder_;
-      
+
+      /**
+       * <code>repeated .boa.types.ChangedExpression initializations = 5;</code>
+       */
       public java.util.List<boa.types.Diff.ChangedExpression> getInitializationsList() {
         if (initializationsBuilder_ == null) {
           return java.util.Collections.unmodifiableList(initializations_);
@@ -10986,6 +14293,9 @@ public final class Diff {
           return initializationsBuilder_.getMessageList();
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression initializations = 5;</code>
+       */
       public int getInitializationsCount() {
         if (initializationsBuilder_ == null) {
           return initializations_.size();
@@ -10993,6 +14303,9 @@ public final class Diff {
           return initializationsBuilder_.getCount();
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression initializations = 5;</code>
+       */
       public boa.types.Diff.ChangedExpression getInitializations(int index) {
         if (initializationsBuilder_ == null) {
           return initializations_.get(index);
@@ -11000,6 +14313,9 @@ public final class Diff {
           return initializationsBuilder_.getMessage(index);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression initializations = 5;</code>
+       */
       public Builder setInitializations(
           int index, boa.types.Diff.ChangedExpression value) {
         if (initializationsBuilder_ == null) {
@@ -11014,6 +14330,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression initializations = 5;</code>
+       */
       public Builder setInitializations(
           int index, boa.types.Diff.ChangedExpression.Builder builderForValue) {
         if (initializationsBuilder_ == null) {
@@ -11025,6 +14344,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression initializations = 5;</code>
+       */
       public Builder addInitializations(boa.types.Diff.ChangedExpression value) {
         if (initializationsBuilder_ == null) {
           if (value == null) {
@@ -11038,6 +14360,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression initializations = 5;</code>
+       */
       public Builder addInitializations(
           int index, boa.types.Diff.ChangedExpression value) {
         if (initializationsBuilder_ == null) {
@@ -11052,6 +14377,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression initializations = 5;</code>
+       */
       public Builder addInitializations(
           boa.types.Diff.ChangedExpression.Builder builderForValue) {
         if (initializationsBuilder_ == null) {
@@ -11063,6 +14391,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression initializations = 5;</code>
+       */
       public Builder addInitializations(
           int index, boa.types.Diff.ChangedExpression.Builder builderForValue) {
         if (initializationsBuilder_ == null) {
@@ -11074,6 +14405,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression initializations = 5;</code>
+       */
       public Builder addAllInitializations(
           java.lang.Iterable<? extends boa.types.Diff.ChangedExpression> values) {
         if (initializationsBuilder_ == null) {
@@ -11085,6 +14419,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression initializations = 5;</code>
+       */
       public Builder clearInitializations() {
         if (initializationsBuilder_ == null) {
           initializations_ = java.util.Collections.emptyList();
@@ -11095,6 +14432,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression initializations = 5;</code>
+       */
       public Builder removeInitializations(int index) {
         if (initializationsBuilder_ == null) {
           ensureInitializationsIsMutable();
@@ -11105,10 +14445,16 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression initializations = 5;</code>
+       */
       public boa.types.Diff.ChangedExpression.Builder getInitializationsBuilder(
           int index) {
         return getInitializationsFieldBuilder().getBuilder(index);
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression initializations = 5;</code>
+       */
       public boa.types.Diff.ChangedExpressionOrBuilder getInitializationsOrBuilder(
           int index) {
         if (initializationsBuilder_ == null) {
@@ -11116,6 +14462,9 @@ public final class Diff {
           return initializationsBuilder_.getMessageOrBuilder(index);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression initializations = 5;</code>
+       */
       public java.util.List<? extends boa.types.Diff.ChangedExpressionOrBuilder> 
            getInitializationsOrBuilderList() {
         if (initializationsBuilder_ != null) {
@@ -11124,15 +14473,24 @@ public final class Diff {
           return java.util.Collections.unmodifiableList(initializations_);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression initializations = 5;</code>
+       */
       public boa.types.Diff.ChangedExpression.Builder addInitializationsBuilder() {
         return getInitializationsFieldBuilder().addBuilder(
             boa.types.Diff.ChangedExpression.getDefaultInstance());
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression initializations = 5;</code>
+       */
       public boa.types.Diff.ChangedExpression.Builder addInitializationsBuilder(
           int index) {
         return getInitializationsFieldBuilder().addBuilder(
             index, boa.types.Diff.ChangedExpression.getDefaultInstance());
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression initializations = 5;</code>
+       */
       public java.util.List<boa.types.Diff.ChangedExpression.Builder> 
            getInitializationsBuilderList() {
         return getInitializationsFieldBuilder().getBuilderList();
@@ -11151,14 +14509,20 @@ public final class Diff {
         }
         return initializationsBuilder_;
       }
-      
+
       // optional .boa.types.ChangedExpression condition = 6;
       private boa.types.Diff.ChangedExpression condition_ = boa.types.Diff.ChangedExpression.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           boa.types.Diff.ChangedExpression, boa.types.Diff.ChangedExpression.Builder, boa.types.Diff.ChangedExpressionOrBuilder> conditionBuilder_;
+      /**
+       * <code>optional .boa.types.ChangedExpression condition = 6;</code>
+       */
       public boolean hasCondition() {
         return ((bitField0_ & 0x00000020) == 0x00000020);
       }
+      /**
+       * <code>optional .boa.types.ChangedExpression condition = 6;</code>
+       */
       public boa.types.Diff.ChangedExpression getCondition() {
         if (conditionBuilder_ == null) {
           return condition_;
@@ -11166,6 +14530,9 @@ public final class Diff {
           return conditionBuilder_.getMessage();
         }
       }
+      /**
+       * <code>optional .boa.types.ChangedExpression condition = 6;</code>
+       */
       public Builder setCondition(boa.types.Diff.ChangedExpression value) {
         if (conditionBuilder_ == null) {
           if (value == null) {
@@ -11179,6 +14546,9 @@ public final class Diff {
         bitField0_ |= 0x00000020;
         return this;
       }
+      /**
+       * <code>optional .boa.types.ChangedExpression condition = 6;</code>
+       */
       public Builder setCondition(
           boa.types.Diff.ChangedExpression.Builder builderForValue) {
         if (conditionBuilder_ == null) {
@@ -11190,6 +14560,9 @@ public final class Diff {
         bitField0_ |= 0x00000020;
         return this;
       }
+      /**
+       * <code>optional .boa.types.ChangedExpression condition = 6;</code>
+       */
       public Builder mergeCondition(boa.types.Diff.ChangedExpression value) {
         if (conditionBuilder_ == null) {
           if (((bitField0_ & 0x00000020) == 0x00000020) &&
@@ -11206,6 +14579,9 @@ public final class Diff {
         bitField0_ |= 0x00000020;
         return this;
       }
+      /**
+       * <code>optional .boa.types.ChangedExpression condition = 6;</code>
+       */
       public Builder clearCondition() {
         if (conditionBuilder_ == null) {
           condition_ = boa.types.Diff.ChangedExpression.getDefaultInstance();
@@ -11216,11 +14592,17 @@ public final class Diff {
         bitField0_ = (bitField0_ & ~0x00000020);
         return this;
       }
+      /**
+       * <code>optional .boa.types.ChangedExpression condition = 6;</code>
+       */
       public boa.types.Diff.ChangedExpression.Builder getConditionBuilder() {
         bitField0_ |= 0x00000020;
         onChanged();
         return getConditionFieldBuilder().getBuilder();
       }
+      /**
+       * <code>optional .boa.types.ChangedExpression condition = 6;</code>
+       */
       public boa.types.Diff.ChangedExpressionOrBuilder getConditionOrBuilder() {
         if (conditionBuilder_ != null) {
           return conditionBuilder_.getMessageOrBuilder();
@@ -11228,6 +14610,9 @@ public final class Diff {
           return condition_;
         }
       }
+      /**
+       * <code>optional .boa.types.ChangedExpression condition = 6;</code>
+       */
       private com.google.protobuf.SingleFieldBuilder<
           boa.types.Diff.ChangedExpression, boa.types.Diff.ChangedExpression.Builder, boa.types.Diff.ChangedExpressionOrBuilder> 
           getConditionFieldBuilder() {
@@ -11241,7 +14626,7 @@ public final class Diff {
         }
         return conditionBuilder_;
       }
-      
+
       // repeated .boa.types.ChangedExpression updates = 7;
       private java.util.List<boa.types.Diff.ChangedExpression> updates_ =
         java.util.Collections.emptyList();
@@ -11251,10 +14636,13 @@ public final class Diff {
           bitField0_ |= 0x00000040;
          }
       }
-      
+
       private com.google.protobuf.RepeatedFieldBuilder<
           boa.types.Diff.ChangedExpression, boa.types.Diff.ChangedExpression.Builder, boa.types.Diff.ChangedExpressionOrBuilder> updatesBuilder_;
-      
+
+      /**
+       * <code>repeated .boa.types.ChangedExpression updates = 7;</code>
+       */
       public java.util.List<boa.types.Diff.ChangedExpression> getUpdatesList() {
         if (updatesBuilder_ == null) {
           return java.util.Collections.unmodifiableList(updates_);
@@ -11262,6 +14650,9 @@ public final class Diff {
           return updatesBuilder_.getMessageList();
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression updates = 7;</code>
+       */
       public int getUpdatesCount() {
         if (updatesBuilder_ == null) {
           return updates_.size();
@@ -11269,6 +14660,9 @@ public final class Diff {
           return updatesBuilder_.getCount();
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression updates = 7;</code>
+       */
       public boa.types.Diff.ChangedExpression getUpdates(int index) {
         if (updatesBuilder_ == null) {
           return updates_.get(index);
@@ -11276,6 +14670,9 @@ public final class Diff {
           return updatesBuilder_.getMessage(index);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression updates = 7;</code>
+       */
       public Builder setUpdates(
           int index, boa.types.Diff.ChangedExpression value) {
         if (updatesBuilder_ == null) {
@@ -11290,6 +14687,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression updates = 7;</code>
+       */
       public Builder setUpdates(
           int index, boa.types.Diff.ChangedExpression.Builder builderForValue) {
         if (updatesBuilder_ == null) {
@@ -11301,6 +14701,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression updates = 7;</code>
+       */
       public Builder addUpdates(boa.types.Diff.ChangedExpression value) {
         if (updatesBuilder_ == null) {
           if (value == null) {
@@ -11314,6 +14717,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression updates = 7;</code>
+       */
       public Builder addUpdates(
           int index, boa.types.Diff.ChangedExpression value) {
         if (updatesBuilder_ == null) {
@@ -11328,6 +14734,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression updates = 7;</code>
+       */
       public Builder addUpdates(
           boa.types.Diff.ChangedExpression.Builder builderForValue) {
         if (updatesBuilder_ == null) {
@@ -11339,6 +14748,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression updates = 7;</code>
+       */
       public Builder addUpdates(
           int index, boa.types.Diff.ChangedExpression.Builder builderForValue) {
         if (updatesBuilder_ == null) {
@@ -11350,6 +14762,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression updates = 7;</code>
+       */
       public Builder addAllUpdates(
           java.lang.Iterable<? extends boa.types.Diff.ChangedExpression> values) {
         if (updatesBuilder_ == null) {
@@ -11361,6 +14776,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression updates = 7;</code>
+       */
       public Builder clearUpdates() {
         if (updatesBuilder_ == null) {
           updates_ = java.util.Collections.emptyList();
@@ -11371,6 +14789,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression updates = 7;</code>
+       */
       public Builder removeUpdates(int index) {
         if (updatesBuilder_ == null) {
           ensureUpdatesIsMutable();
@@ -11381,10 +14802,16 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression updates = 7;</code>
+       */
       public boa.types.Diff.ChangedExpression.Builder getUpdatesBuilder(
           int index) {
         return getUpdatesFieldBuilder().getBuilder(index);
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression updates = 7;</code>
+       */
       public boa.types.Diff.ChangedExpressionOrBuilder getUpdatesOrBuilder(
           int index) {
         if (updatesBuilder_ == null) {
@@ -11392,6 +14819,9 @@ public final class Diff {
           return updatesBuilder_.getMessageOrBuilder(index);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression updates = 7;</code>
+       */
       public java.util.List<? extends boa.types.Diff.ChangedExpressionOrBuilder> 
            getUpdatesOrBuilderList() {
         if (updatesBuilder_ != null) {
@@ -11400,15 +14830,24 @@ public final class Diff {
           return java.util.Collections.unmodifiableList(updates_);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression updates = 7;</code>
+       */
       public boa.types.Diff.ChangedExpression.Builder addUpdatesBuilder() {
         return getUpdatesFieldBuilder().addBuilder(
             boa.types.Diff.ChangedExpression.getDefaultInstance());
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression updates = 7;</code>
+       */
       public boa.types.Diff.ChangedExpression.Builder addUpdatesBuilder(
           int index) {
         return getUpdatesFieldBuilder().addBuilder(
             index, boa.types.Diff.ChangedExpression.getDefaultInstance());
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression updates = 7;</code>
+       */
       public java.util.List<boa.types.Diff.ChangedExpression.Builder> 
            getUpdatesBuilderList() {
         return getUpdatesFieldBuilder().getBuilderList();
@@ -11427,14 +14866,20 @@ public final class Diff {
         }
         return updatesBuilder_;
       }
-      
+
       // optional .boa.types.ChangedVariable variable_declaration = 8;
       private boa.types.Diff.ChangedVariable variableDeclaration_ = boa.types.Diff.ChangedVariable.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           boa.types.Diff.ChangedVariable, boa.types.Diff.ChangedVariable.Builder, boa.types.Diff.ChangedVariableOrBuilder> variableDeclarationBuilder_;
+      /**
+       * <code>optional .boa.types.ChangedVariable variable_declaration = 8;</code>
+       */
       public boolean hasVariableDeclaration() {
         return ((bitField0_ & 0x00000080) == 0x00000080);
       }
+      /**
+       * <code>optional .boa.types.ChangedVariable variable_declaration = 8;</code>
+       */
       public boa.types.Diff.ChangedVariable getVariableDeclaration() {
         if (variableDeclarationBuilder_ == null) {
           return variableDeclaration_;
@@ -11442,6 +14887,9 @@ public final class Diff {
           return variableDeclarationBuilder_.getMessage();
         }
       }
+      /**
+       * <code>optional .boa.types.ChangedVariable variable_declaration = 8;</code>
+       */
       public Builder setVariableDeclaration(boa.types.Diff.ChangedVariable value) {
         if (variableDeclarationBuilder_ == null) {
           if (value == null) {
@@ -11455,6 +14903,9 @@ public final class Diff {
         bitField0_ |= 0x00000080;
         return this;
       }
+      /**
+       * <code>optional .boa.types.ChangedVariable variable_declaration = 8;</code>
+       */
       public Builder setVariableDeclaration(
           boa.types.Diff.ChangedVariable.Builder builderForValue) {
         if (variableDeclarationBuilder_ == null) {
@@ -11466,6 +14917,9 @@ public final class Diff {
         bitField0_ |= 0x00000080;
         return this;
       }
+      /**
+       * <code>optional .boa.types.ChangedVariable variable_declaration = 8;</code>
+       */
       public Builder mergeVariableDeclaration(boa.types.Diff.ChangedVariable value) {
         if (variableDeclarationBuilder_ == null) {
           if (((bitField0_ & 0x00000080) == 0x00000080) &&
@@ -11482,6 +14936,9 @@ public final class Diff {
         bitField0_ |= 0x00000080;
         return this;
       }
+      /**
+       * <code>optional .boa.types.ChangedVariable variable_declaration = 8;</code>
+       */
       public Builder clearVariableDeclaration() {
         if (variableDeclarationBuilder_ == null) {
           variableDeclaration_ = boa.types.Diff.ChangedVariable.getDefaultInstance();
@@ -11492,11 +14949,17 @@ public final class Diff {
         bitField0_ = (bitField0_ & ~0x00000080);
         return this;
       }
+      /**
+       * <code>optional .boa.types.ChangedVariable variable_declaration = 8;</code>
+       */
       public boa.types.Diff.ChangedVariable.Builder getVariableDeclarationBuilder() {
         bitField0_ |= 0x00000080;
         onChanged();
         return getVariableDeclarationFieldBuilder().getBuilder();
       }
+      /**
+       * <code>optional .boa.types.ChangedVariable variable_declaration = 8;</code>
+       */
       public boa.types.Diff.ChangedVariableOrBuilder getVariableDeclarationOrBuilder() {
         if (variableDeclarationBuilder_ != null) {
           return variableDeclarationBuilder_.getMessageOrBuilder();
@@ -11504,6 +14967,9 @@ public final class Diff {
           return variableDeclaration_;
         }
       }
+      /**
+       * <code>optional .boa.types.ChangedVariable variable_declaration = 8;</code>
+       */
       private com.google.protobuf.SingleFieldBuilder<
           boa.types.Diff.ChangedVariable, boa.types.Diff.ChangedVariable.Builder, boa.types.Diff.ChangedVariableOrBuilder> 
           getVariableDeclarationFieldBuilder() {
@@ -11517,14 +14983,20 @@ public final class Diff {
         }
         return variableDeclarationBuilder_;
       }
-      
+
       // optional .boa.types.ChangedDeclaration type_declaration = 9;
       private boa.types.Diff.ChangedDeclaration typeDeclaration_ = boa.types.Diff.ChangedDeclaration.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           boa.types.Diff.ChangedDeclaration, boa.types.Diff.ChangedDeclaration.Builder, boa.types.Diff.ChangedDeclarationOrBuilder> typeDeclarationBuilder_;
+      /**
+       * <code>optional .boa.types.ChangedDeclaration type_declaration = 9;</code>
+       */
       public boolean hasTypeDeclaration() {
         return ((bitField0_ & 0x00000100) == 0x00000100);
       }
+      /**
+       * <code>optional .boa.types.ChangedDeclaration type_declaration = 9;</code>
+       */
       public boa.types.Diff.ChangedDeclaration getTypeDeclaration() {
         if (typeDeclarationBuilder_ == null) {
           return typeDeclaration_;
@@ -11532,6 +15004,9 @@ public final class Diff {
           return typeDeclarationBuilder_.getMessage();
         }
       }
+      /**
+       * <code>optional .boa.types.ChangedDeclaration type_declaration = 9;</code>
+       */
       public Builder setTypeDeclaration(boa.types.Diff.ChangedDeclaration value) {
         if (typeDeclarationBuilder_ == null) {
           if (value == null) {
@@ -11545,6 +15020,9 @@ public final class Diff {
         bitField0_ |= 0x00000100;
         return this;
       }
+      /**
+       * <code>optional .boa.types.ChangedDeclaration type_declaration = 9;</code>
+       */
       public Builder setTypeDeclaration(
           boa.types.Diff.ChangedDeclaration.Builder builderForValue) {
         if (typeDeclarationBuilder_ == null) {
@@ -11556,6 +15034,9 @@ public final class Diff {
         bitField0_ |= 0x00000100;
         return this;
       }
+      /**
+       * <code>optional .boa.types.ChangedDeclaration type_declaration = 9;</code>
+       */
       public Builder mergeTypeDeclaration(boa.types.Diff.ChangedDeclaration value) {
         if (typeDeclarationBuilder_ == null) {
           if (((bitField0_ & 0x00000100) == 0x00000100) &&
@@ -11572,6 +15053,9 @@ public final class Diff {
         bitField0_ |= 0x00000100;
         return this;
       }
+      /**
+       * <code>optional .boa.types.ChangedDeclaration type_declaration = 9;</code>
+       */
       public Builder clearTypeDeclaration() {
         if (typeDeclarationBuilder_ == null) {
           typeDeclaration_ = boa.types.Diff.ChangedDeclaration.getDefaultInstance();
@@ -11582,11 +15066,17 @@ public final class Diff {
         bitField0_ = (bitField0_ & ~0x00000100);
         return this;
       }
+      /**
+       * <code>optional .boa.types.ChangedDeclaration type_declaration = 9;</code>
+       */
       public boa.types.Diff.ChangedDeclaration.Builder getTypeDeclarationBuilder() {
         bitField0_ |= 0x00000100;
         onChanged();
         return getTypeDeclarationFieldBuilder().getBuilder();
       }
+      /**
+       * <code>optional .boa.types.ChangedDeclaration type_declaration = 9;</code>
+       */
       public boa.types.Diff.ChangedDeclarationOrBuilder getTypeDeclarationOrBuilder() {
         if (typeDeclarationBuilder_ != null) {
           return typeDeclarationBuilder_.getMessageOrBuilder();
@@ -11594,6 +15084,9 @@ public final class Diff {
           return typeDeclaration_;
         }
       }
+      /**
+       * <code>optional .boa.types.ChangedDeclaration type_declaration = 9;</code>
+       */
       private com.google.protobuf.SingleFieldBuilder<
           boa.types.Diff.ChangedDeclaration, boa.types.Diff.ChangedDeclaration.Builder, boa.types.Diff.ChangedDeclarationOrBuilder> 
           getTypeDeclarationFieldBuilder() {
@@ -11607,14 +15100,20 @@ public final class Diff {
         }
         return typeDeclarationBuilder_;
       }
-      
+
       // optional .boa.types.ChangedExpression expression = 10;
       private boa.types.Diff.ChangedExpression expression_ = boa.types.Diff.ChangedExpression.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           boa.types.Diff.ChangedExpression, boa.types.Diff.ChangedExpression.Builder, boa.types.Diff.ChangedExpressionOrBuilder> expressionBuilder_;
+      /**
+       * <code>optional .boa.types.ChangedExpression expression = 10;</code>
+       */
       public boolean hasExpression() {
         return ((bitField0_ & 0x00000200) == 0x00000200);
       }
+      /**
+       * <code>optional .boa.types.ChangedExpression expression = 10;</code>
+       */
       public boa.types.Diff.ChangedExpression getExpression() {
         if (expressionBuilder_ == null) {
           return expression_;
@@ -11622,6 +15121,9 @@ public final class Diff {
           return expressionBuilder_.getMessage();
         }
       }
+      /**
+       * <code>optional .boa.types.ChangedExpression expression = 10;</code>
+       */
       public Builder setExpression(boa.types.Diff.ChangedExpression value) {
         if (expressionBuilder_ == null) {
           if (value == null) {
@@ -11635,6 +15137,9 @@ public final class Diff {
         bitField0_ |= 0x00000200;
         return this;
       }
+      /**
+       * <code>optional .boa.types.ChangedExpression expression = 10;</code>
+       */
       public Builder setExpression(
           boa.types.Diff.ChangedExpression.Builder builderForValue) {
         if (expressionBuilder_ == null) {
@@ -11646,6 +15151,9 @@ public final class Diff {
         bitField0_ |= 0x00000200;
         return this;
       }
+      /**
+       * <code>optional .boa.types.ChangedExpression expression = 10;</code>
+       */
       public Builder mergeExpression(boa.types.Diff.ChangedExpression value) {
         if (expressionBuilder_ == null) {
           if (((bitField0_ & 0x00000200) == 0x00000200) &&
@@ -11662,6 +15170,9 @@ public final class Diff {
         bitField0_ |= 0x00000200;
         return this;
       }
+      /**
+       * <code>optional .boa.types.ChangedExpression expression = 10;</code>
+       */
       public Builder clearExpression() {
         if (expressionBuilder_ == null) {
           expression_ = boa.types.Diff.ChangedExpression.getDefaultInstance();
@@ -11672,11 +15183,17 @@ public final class Diff {
         bitField0_ = (bitField0_ & ~0x00000200);
         return this;
       }
+      /**
+       * <code>optional .boa.types.ChangedExpression expression = 10;</code>
+       */
       public boa.types.Diff.ChangedExpression.Builder getExpressionBuilder() {
         bitField0_ |= 0x00000200;
         onChanged();
         return getExpressionFieldBuilder().getBuilder();
       }
+      /**
+       * <code>optional .boa.types.ChangedExpression expression = 10;</code>
+       */
       public boa.types.Diff.ChangedExpressionOrBuilder getExpressionOrBuilder() {
         if (expressionBuilder_ != null) {
           return expressionBuilder_.getMessageOrBuilder();
@@ -11684,6 +15201,9 @@ public final class Diff {
           return expression_;
         }
       }
+      /**
+       * <code>optional .boa.types.ChangedExpression expression = 10;</code>
+       */
       private com.google.protobuf.SingleFieldBuilder<
           boa.types.Diff.ChangedExpression, boa.types.Diff.ChangedExpression.Builder, boa.types.Diff.ChangedExpressionOrBuilder> 
           getExpressionFieldBuilder() {
@@ -11697,360 +15217,792 @@ public final class Diff {
         }
         return expressionBuilder_;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:boa.types.ChangedStatement)
     }
-    
+
     static {
       defaultInstance = new ChangedStatement(true);
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:boa.types.ChangedStatement)
   }
-  
+
   public interface ChangedExpressionOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
-    
+
     // required .boa.types.ChangeKind change = 1;
+    /**
+     * <code>required .boa.types.ChangeKind change = 1;</code>
+     */
     boolean hasChange();
+    /**
+     * <code>required .boa.types.ChangeKind change = 1;</code>
+     */
     boa.types.Shared.ChangeKind getChange();
-    
+
     // required .boa.types.Expression.ExpressionKind kind = 2;
+    /**
+     * <code>required .boa.types.Expression.ExpressionKind kind = 2;</code>
+     */
     boolean hasKind();
+    /**
+     * <code>required .boa.types.Expression.ExpressionKind kind = 2;</code>
+     */
     boa.types.Ast.Expression.ExpressionKind getKind();
-    
+
     // repeated .boa.types.ChangedExpression expressions = 3;
+    /**
+     * <code>repeated .boa.types.ChangedExpression expressions = 3;</code>
+     */
     java.util.List<boa.types.Diff.ChangedExpression> 
         getExpressionsList();
+    /**
+     * <code>repeated .boa.types.ChangedExpression expressions = 3;</code>
+     */
     boa.types.Diff.ChangedExpression getExpressions(int index);
+    /**
+     * <code>repeated .boa.types.ChangedExpression expressions = 3;</code>
+     */
     int getExpressionsCount();
+    /**
+     * <code>repeated .boa.types.ChangedExpression expressions = 3;</code>
+     */
     java.util.List<? extends boa.types.Diff.ChangedExpressionOrBuilder> 
         getExpressionsOrBuilderList();
+    /**
+     * <code>repeated .boa.types.ChangedExpression expressions = 3;</code>
+     */
     boa.types.Diff.ChangedExpressionOrBuilder getExpressionsOrBuilder(
         int index);
-    
+
     // repeated .boa.types.ChangedVariable variable_decls = 4;
+    /**
+     * <code>repeated .boa.types.ChangedVariable variable_decls = 4;</code>
+     */
     java.util.List<boa.types.Diff.ChangedVariable> 
         getVariableDeclsList();
+    /**
+     * <code>repeated .boa.types.ChangedVariable variable_decls = 4;</code>
+     */
     boa.types.Diff.ChangedVariable getVariableDecls(int index);
+    /**
+     * <code>repeated .boa.types.ChangedVariable variable_decls = 4;</code>
+     */
     int getVariableDeclsCount();
+    /**
+     * <code>repeated .boa.types.ChangedVariable variable_decls = 4;</code>
+     */
     java.util.List<? extends boa.types.Diff.ChangedVariableOrBuilder> 
         getVariableDeclsOrBuilderList();
+    /**
+     * <code>repeated .boa.types.ChangedVariable variable_decls = 4;</code>
+     */
     boa.types.Diff.ChangedVariableOrBuilder getVariableDeclsOrBuilder(
         int index);
-    
+
     // optional .boa.types.ChangedType new_type = 5;
+    /**
+     * <code>optional .boa.types.ChangedType new_type = 5;</code>
+     */
     boolean hasNewType();
+    /**
+     * <code>optional .boa.types.ChangedType new_type = 5;</code>
+     */
     boa.types.Diff.ChangedType getNewType();
+    /**
+     * <code>optional .boa.types.ChangedType new_type = 5;</code>
+     */
     boa.types.Diff.ChangedTypeOrBuilder getNewTypeOrBuilder();
-    
+
     // repeated .boa.types.ChangedType generic_parameters = 6;
+    /**
+     * <code>repeated .boa.types.ChangedType generic_parameters = 6;</code>
+     */
     java.util.List<boa.types.Diff.ChangedType> 
         getGenericParametersList();
+    /**
+     * <code>repeated .boa.types.ChangedType generic_parameters = 6;</code>
+     */
     boa.types.Diff.ChangedType getGenericParameters(int index);
+    /**
+     * <code>repeated .boa.types.ChangedType generic_parameters = 6;</code>
+     */
     int getGenericParametersCount();
+    /**
+     * <code>repeated .boa.types.ChangedType generic_parameters = 6;</code>
+     */
     java.util.List<? extends boa.types.Diff.ChangedTypeOrBuilder> 
         getGenericParametersOrBuilderList();
+    /**
+     * <code>repeated .boa.types.ChangedType generic_parameters = 6;</code>
+     */
     boa.types.Diff.ChangedTypeOrBuilder getGenericParametersOrBuilder(
         int index);
-    
+
     // optional bool is_postfix = 7;
+    /**
+     * <code>optional bool is_postfix = 7;</code>
+     */
     boolean hasIsPostfix();
+    /**
+     * <code>optional bool is_postfix = 7;</code>
+     */
     boolean getIsPostfix();
-    
+
     // optional string literal = 8;
+    /**
+     * <code>optional string literal = 8;</code>
+     */
     boolean hasLiteral();
-    String getLiteral();
-    
+    /**
+     * <code>optional string literal = 8;</code>
+     */
+    java.lang.String getLiteral();
+    /**
+     * <code>optional string literal = 8;</code>
+     */
+    com.google.protobuf.ByteString
+        getLiteralBytes();
+
     // optional string variable = 9;
+    /**
+     * <code>optional string variable = 9;</code>
+     */
     boolean hasVariable();
-    String getVariable();
-    
+    /**
+     * <code>optional string variable = 9;</code>
+     */
+    java.lang.String getVariable();
+    /**
+     * <code>optional string variable = 9;</code>
+     */
+    com.google.protobuf.ByteString
+        getVariableBytes();
+
     // optional string method = 10;
+    /**
+     * <code>optional string method = 10;</code>
+     */
     boolean hasMethod();
-    String getMethod();
-    
+    /**
+     * <code>optional string method = 10;</code>
+     */
+    java.lang.String getMethod();
+    /**
+     * <code>optional string method = 10;</code>
+     */
+    com.google.protobuf.ByteString
+        getMethodBytes();
+
     // repeated .boa.types.ChangedExpression method_args = 11;
+    /**
+     * <code>repeated .boa.types.ChangedExpression method_args = 11;</code>
+     */
     java.util.List<boa.types.Diff.ChangedExpression> 
         getMethodArgsList();
+    /**
+     * <code>repeated .boa.types.ChangedExpression method_args = 11;</code>
+     */
     boa.types.Diff.ChangedExpression getMethodArgs(int index);
+    /**
+     * <code>repeated .boa.types.ChangedExpression method_args = 11;</code>
+     */
     int getMethodArgsCount();
+    /**
+     * <code>repeated .boa.types.ChangedExpression method_args = 11;</code>
+     */
     java.util.List<? extends boa.types.Diff.ChangedExpressionOrBuilder> 
         getMethodArgsOrBuilderList();
+    /**
+     * <code>repeated .boa.types.ChangedExpression method_args = 11;</code>
+     */
     boa.types.Diff.ChangedExpressionOrBuilder getMethodArgsOrBuilder(
         int index);
-    
+
     // optional .boa.types.ChangedDeclaration anon_declaration = 12;
+    /**
+     * <code>optional .boa.types.ChangedDeclaration anon_declaration = 12;</code>
+     */
     boolean hasAnonDeclaration();
+    /**
+     * <code>optional .boa.types.ChangedDeclaration anon_declaration = 12;</code>
+     */
     boa.types.Diff.ChangedDeclaration getAnonDeclaration();
+    /**
+     * <code>optional .boa.types.ChangedDeclaration anon_declaration = 12;</code>
+     */
     boa.types.Diff.ChangedDeclarationOrBuilder getAnonDeclarationOrBuilder();
   }
+  /**
+   * Protobuf type {@code boa.types.ChangedExpression}
+   */
   public static final class ChangedExpression extends
       com.google.protobuf.GeneratedMessage
       implements ChangedExpressionOrBuilder {
     // Use ChangedExpression.newBuilder() to construct.
-    private ChangedExpression(Builder builder) {
+    private ChangedExpression(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
+      this.unknownFields = builder.getUnknownFields();
     }
-    private ChangedExpression(boolean noInit) {}
-    
+    private ChangedExpression(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
     private static final ChangedExpression defaultInstance;
     public static ChangedExpression getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public ChangedExpression getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private ChangedExpression(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 8: {
+              int rawValue = input.readEnum();
+              boa.types.Shared.ChangeKind value = boa.types.Shared.ChangeKind.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(1, rawValue);
+              } else {
+                bitField0_ |= 0x00000001;
+                change_ = value;
+              }
+              break;
+            }
+            case 16: {
+              int rawValue = input.readEnum();
+              boa.types.Ast.Expression.ExpressionKind value = boa.types.Ast.Expression.ExpressionKind.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(2, rawValue);
+              } else {
+                bitField0_ |= 0x00000002;
+                kind_ = value;
+              }
+              break;
+            }
+            case 26: {
+              if (!((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
+                expressions_ = new java.util.ArrayList<boa.types.Diff.ChangedExpression>();
+                mutable_bitField0_ |= 0x00000004;
+              }
+              expressions_.add(input.readMessage(boa.types.Diff.ChangedExpression.PARSER, extensionRegistry));
+              break;
+            }
+            case 34: {
+              if (!((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
+                variableDecls_ = new java.util.ArrayList<boa.types.Diff.ChangedVariable>();
+                mutable_bitField0_ |= 0x00000008;
+              }
+              variableDecls_.add(input.readMessage(boa.types.Diff.ChangedVariable.PARSER, extensionRegistry));
+              break;
+            }
+            case 42: {
+              boa.types.Diff.ChangedType.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000004) == 0x00000004)) {
+                subBuilder = newType_.toBuilder();
+              }
+              newType_ = input.readMessage(boa.types.Diff.ChangedType.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(newType_);
+                newType_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000004;
+              break;
+            }
+            case 50: {
+              if (!((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
+                genericParameters_ = new java.util.ArrayList<boa.types.Diff.ChangedType>();
+                mutable_bitField0_ |= 0x00000020;
+              }
+              genericParameters_.add(input.readMessage(boa.types.Diff.ChangedType.PARSER, extensionRegistry));
+              break;
+            }
+            case 56: {
+              bitField0_ |= 0x00000008;
+              isPostfix_ = input.readBool();
+              break;
+            }
+            case 66: {
+              bitField0_ |= 0x00000010;
+              literal_ = input.readBytes();
+              break;
+            }
+            case 74: {
+              bitField0_ |= 0x00000020;
+              variable_ = input.readBytes();
+              break;
+            }
+            case 82: {
+              bitField0_ |= 0x00000040;
+              method_ = input.readBytes();
+              break;
+            }
+            case 90: {
+              if (!((mutable_bitField0_ & 0x00000400) == 0x00000400)) {
+                methodArgs_ = new java.util.ArrayList<boa.types.Diff.ChangedExpression>();
+                mutable_bitField0_ |= 0x00000400;
+              }
+              methodArgs_.add(input.readMessage(boa.types.Diff.ChangedExpression.PARSER, extensionRegistry));
+              break;
+            }
+            case 98: {
+              boa.types.Diff.ChangedDeclaration.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000080) == 0x00000080)) {
+                subBuilder = anonDeclaration_.toBuilder();
+              }
+              anonDeclaration_ = input.readMessage(boa.types.Diff.ChangedDeclaration.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(anonDeclaration_);
+                anonDeclaration_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000080;
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
+          expressions_ = java.util.Collections.unmodifiableList(expressions_);
+        }
+        if (((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
+          variableDecls_ = java.util.Collections.unmodifiableList(variableDecls_);
+        }
+        if (((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
+          genericParameters_ = java.util.Collections.unmodifiableList(genericParameters_);
+        }
+        if (((mutable_bitField0_ & 0x00000400) == 0x00000400)) {
+          methodArgs_ = java.util.Collections.unmodifiableList(methodArgs_);
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return boa.types.Diff.internal_static_boa_types_ChangedExpression_descriptor;
     }
-    
+
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return boa.types.Diff.internal_static_boa_types_ChangedExpression_fieldAccessorTable;
+      return boa.types.Diff.internal_static_boa_types_ChangedExpression_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              boa.types.Diff.ChangedExpression.class, boa.types.Diff.ChangedExpression.Builder.class);
     }
-    
+
+    public static com.google.protobuf.Parser<ChangedExpression> PARSER =
+        new com.google.protobuf.AbstractParser<ChangedExpression>() {
+      public ChangedExpression parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new ChangedExpression(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<ChangedExpression> getParserForType() {
+      return PARSER;
+    }
+
     private int bitField0_;
     // required .boa.types.ChangeKind change = 1;
     public static final int CHANGE_FIELD_NUMBER = 1;
     private boa.types.Shared.ChangeKind change_;
+    /**
+     * <code>required .boa.types.ChangeKind change = 1;</code>
+     */
     public boolean hasChange() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
+    /**
+     * <code>required .boa.types.ChangeKind change = 1;</code>
+     */
     public boa.types.Shared.ChangeKind getChange() {
       return change_;
     }
-    
+
     // required .boa.types.Expression.ExpressionKind kind = 2;
     public static final int KIND_FIELD_NUMBER = 2;
     private boa.types.Ast.Expression.ExpressionKind kind_;
+    /**
+     * <code>required .boa.types.Expression.ExpressionKind kind = 2;</code>
+     */
     public boolean hasKind() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
+    /**
+     * <code>required .boa.types.Expression.ExpressionKind kind = 2;</code>
+     */
     public boa.types.Ast.Expression.ExpressionKind getKind() {
       return kind_;
     }
-    
+
     // repeated .boa.types.ChangedExpression expressions = 3;
     public static final int EXPRESSIONS_FIELD_NUMBER = 3;
     private java.util.List<boa.types.Diff.ChangedExpression> expressions_;
+    /**
+     * <code>repeated .boa.types.ChangedExpression expressions = 3;</code>
+     */
     public java.util.List<boa.types.Diff.ChangedExpression> getExpressionsList() {
       return expressions_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedExpression expressions = 3;</code>
+     */
     public java.util.List<? extends boa.types.Diff.ChangedExpressionOrBuilder> 
         getExpressionsOrBuilderList() {
       return expressions_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedExpression expressions = 3;</code>
+     */
     public int getExpressionsCount() {
       return expressions_.size();
     }
+    /**
+     * <code>repeated .boa.types.ChangedExpression expressions = 3;</code>
+     */
     public boa.types.Diff.ChangedExpression getExpressions(int index) {
       return expressions_.get(index);
     }
+    /**
+     * <code>repeated .boa.types.ChangedExpression expressions = 3;</code>
+     */
     public boa.types.Diff.ChangedExpressionOrBuilder getExpressionsOrBuilder(
         int index) {
       return expressions_.get(index);
     }
-    
+
     // repeated .boa.types.ChangedVariable variable_decls = 4;
     public static final int VARIABLE_DECLS_FIELD_NUMBER = 4;
     private java.util.List<boa.types.Diff.ChangedVariable> variableDecls_;
+    /**
+     * <code>repeated .boa.types.ChangedVariable variable_decls = 4;</code>
+     */
     public java.util.List<boa.types.Diff.ChangedVariable> getVariableDeclsList() {
       return variableDecls_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedVariable variable_decls = 4;</code>
+     */
     public java.util.List<? extends boa.types.Diff.ChangedVariableOrBuilder> 
         getVariableDeclsOrBuilderList() {
       return variableDecls_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedVariable variable_decls = 4;</code>
+     */
     public int getVariableDeclsCount() {
       return variableDecls_.size();
     }
+    /**
+     * <code>repeated .boa.types.ChangedVariable variable_decls = 4;</code>
+     */
     public boa.types.Diff.ChangedVariable getVariableDecls(int index) {
       return variableDecls_.get(index);
     }
+    /**
+     * <code>repeated .boa.types.ChangedVariable variable_decls = 4;</code>
+     */
     public boa.types.Diff.ChangedVariableOrBuilder getVariableDeclsOrBuilder(
         int index) {
       return variableDecls_.get(index);
     }
-    
+
     // optional .boa.types.ChangedType new_type = 5;
     public static final int NEW_TYPE_FIELD_NUMBER = 5;
     private boa.types.Diff.ChangedType newType_;
+    /**
+     * <code>optional .boa.types.ChangedType new_type = 5;</code>
+     */
     public boolean hasNewType() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
+    /**
+     * <code>optional .boa.types.ChangedType new_type = 5;</code>
+     */
     public boa.types.Diff.ChangedType getNewType() {
       return newType_;
     }
+    /**
+     * <code>optional .boa.types.ChangedType new_type = 5;</code>
+     */
     public boa.types.Diff.ChangedTypeOrBuilder getNewTypeOrBuilder() {
       return newType_;
     }
-    
+
     // repeated .boa.types.ChangedType generic_parameters = 6;
     public static final int GENERIC_PARAMETERS_FIELD_NUMBER = 6;
     private java.util.List<boa.types.Diff.ChangedType> genericParameters_;
+    /**
+     * <code>repeated .boa.types.ChangedType generic_parameters = 6;</code>
+     */
     public java.util.List<boa.types.Diff.ChangedType> getGenericParametersList() {
       return genericParameters_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedType generic_parameters = 6;</code>
+     */
     public java.util.List<? extends boa.types.Diff.ChangedTypeOrBuilder> 
         getGenericParametersOrBuilderList() {
       return genericParameters_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedType generic_parameters = 6;</code>
+     */
     public int getGenericParametersCount() {
       return genericParameters_.size();
     }
+    /**
+     * <code>repeated .boa.types.ChangedType generic_parameters = 6;</code>
+     */
     public boa.types.Diff.ChangedType getGenericParameters(int index) {
       return genericParameters_.get(index);
     }
+    /**
+     * <code>repeated .boa.types.ChangedType generic_parameters = 6;</code>
+     */
     public boa.types.Diff.ChangedTypeOrBuilder getGenericParametersOrBuilder(
         int index) {
       return genericParameters_.get(index);
     }
-    
+
     // optional bool is_postfix = 7;
     public static final int IS_POSTFIX_FIELD_NUMBER = 7;
     private boolean isPostfix_;
+    /**
+     * <code>optional bool is_postfix = 7;</code>
+     */
     public boolean hasIsPostfix() {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
+    /**
+     * <code>optional bool is_postfix = 7;</code>
+     */
     public boolean getIsPostfix() {
       return isPostfix_;
     }
-    
+
     // optional string literal = 8;
     public static final int LITERAL_FIELD_NUMBER = 8;
     private java.lang.Object literal_;
+    /**
+     * <code>optional string literal = 8;</code>
+     */
     public boolean hasLiteral() {
       return ((bitField0_ & 0x00000010) == 0x00000010);
     }
-    public String getLiteral() {
+    /**
+     * <code>optional string literal = 8;</code>
+     */
+    public java.lang.String getLiteral() {
       java.lang.Object ref = literal_;
-      if (ref instanceof String) {
-        return (String) ref;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
           literal_ = s;
         }
         return s;
       }
     }
-    private com.google.protobuf.ByteString getLiteralBytes() {
+    /**
+     * <code>optional string literal = 8;</code>
+     */
+    public com.google.protobuf.ByteString
+        getLiteralBytes() {
       java.lang.Object ref = literal_;
-      if (ref instanceof String) {
+      if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
         literal_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
-    
+
     // optional string variable = 9;
     public static final int VARIABLE_FIELD_NUMBER = 9;
     private java.lang.Object variable_;
+    /**
+     * <code>optional string variable = 9;</code>
+     */
     public boolean hasVariable() {
       return ((bitField0_ & 0x00000020) == 0x00000020);
     }
-    public String getVariable() {
+    /**
+     * <code>optional string variable = 9;</code>
+     */
+    public java.lang.String getVariable() {
       java.lang.Object ref = variable_;
-      if (ref instanceof String) {
-        return (String) ref;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
           variable_ = s;
         }
         return s;
       }
     }
-    private com.google.protobuf.ByteString getVariableBytes() {
+    /**
+     * <code>optional string variable = 9;</code>
+     */
+    public com.google.protobuf.ByteString
+        getVariableBytes() {
       java.lang.Object ref = variable_;
-      if (ref instanceof String) {
+      if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
         variable_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
-    
+
     // optional string method = 10;
     public static final int METHOD_FIELD_NUMBER = 10;
     private java.lang.Object method_;
+    /**
+     * <code>optional string method = 10;</code>
+     */
     public boolean hasMethod() {
       return ((bitField0_ & 0x00000040) == 0x00000040);
     }
-    public String getMethod() {
+    /**
+     * <code>optional string method = 10;</code>
+     */
+    public java.lang.String getMethod() {
       java.lang.Object ref = method_;
-      if (ref instanceof String) {
-        return (String) ref;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
           method_ = s;
         }
         return s;
       }
     }
-    private com.google.protobuf.ByteString getMethodBytes() {
+    /**
+     * <code>optional string method = 10;</code>
+     */
+    public com.google.protobuf.ByteString
+        getMethodBytes() {
       java.lang.Object ref = method_;
-      if (ref instanceof String) {
+      if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
         method_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
-    
+
     // repeated .boa.types.ChangedExpression method_args = 11;
     public static final int METHOD_ARGS_FIELD_NUMBER = 11;
     private java.util.List<boa.types.Diff.ChangedExpression> methodArgs_;
+    /**
+     * <code>repeated .boa.types.ChangedExpression method_args = 11;</code>
+     */
     public java.util.List<boa.types.Diff.ChangedExpression> getMethodArgsList() {
       return methodArgs_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedExpression method_args = 11;</code>
+     */
     public java.util.List<? extends boa.types.Diff.ChangedExpressionOrBuilder> 
         getMethodArgsOrBuilderList() {
       return methodArgs_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedExpression method_args = 11;</code>
+     */
     public int getMethodArgsCount() {
       return methodArgs_.size();
     }
+    /**
+     * <code>repeated .boa.types.ChangedExpression method_args = 11;</code>
+     */
     public boa.types.Diff.ChangedExpression getMethodArgs(int index) {
       return methodArgs_.get(index);
     }
+    /**
+     * <code>repeated .boa.types.ChangedExpression method_args = 11;</code>
+     */
     public boa.types.Diff.ChangedExpressionOrBuilder getMethodArgsOrBuilder(
         int index) {
       return methodArgs_.get(index);
     }
-    
+
     // optional .boa.types.ChangedDeclaration anon_declaration = 12;
     public static final int ANON_DECLARATION_FIELD_NUMBER = 12;
     private boa.types.Diff.ChangedDeclaration anonDeclaration_;
+    /**
+     * <code>optional .boa.types.ChangedDeclaration anon_declaration = 12;</code>
+     */
     public boolean hasAnonDeclaration() {
       return ((bitField0_ & 0x00000080) == 0x00000080);
     }
+    /**
+     * <code>optional .boa.types.ChangedDeclaration anon_declaration = 12;</code>
+     */
     public boa.types.Diff.ChangedDeclaration getAnonDeclaration() {
       return anonDeclaration_;
     }
+    /**
+     * <code>optional .boa.types.ChangedDeclaration anon_declaration = 12;</code>
+     */
     public boa.types.Diff.ChangedDeclarationOrBuilder getAnonDeclarationOrBuilder() {
       return anonDeclaration_;
     }
-    
+
     private void initFields() {
       change_ = boa.types.Shared.ChangeKind.ADDED;
       kind_ = boa.types.Ast.Expression.ExpressionKind.OTHER;
@@ -12069,7 +16021,7 @@ public final class Diff {
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized != -1) return isInitialized == 1;
-      
+
       if (!hasChange()) {
         memoizedIsInitialized = 0;
         return false;
@@ -12117,7 +16069,7 @@ public final class Diff {
       memoizedIsInitialized = 1;
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
@@ -12159,12 +16111,12 @@ public final class Diff {
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
       if (size != -1) return size;
-    
+
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
@@ -12218,94 +16170,83 @@ public final class Diff {
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     private static final long serialVersionUID = 0L;
     @java.lang.Override
     protected java.lang.Object writeReplace()
         throws java.io.ObjectStreamException {
       return super.writeReplace();
     }
-    
+
     public static boa.types.Diff.ChangedExpression parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
+      return PARSER.parseFrom(data);
     }
     public static boa.types.Diff.ChangedExpression parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(data, extensionRegistry);
     }
     public static boa.types.Diff.ChangedExpression parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
+      return PARSER.parseFrom(data);
     }
     public static boa.types.Diff.ChangedExpression parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(data, extensionRegistry);
     }
     public static boa.types.Diff.ChangedExpression parseFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
+      return PARSER.parseFrom(input);
     }
     public static boa.types.Diff.ChangedExpression parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(input, extensionRegistry);
     }
     public static boa.types.Diff.ChangedExpression parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
+      return PARSER.parseDelimitedFrom(input);
     }
     public static boa.types.Diff.ChangedExpression parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
     }
     public static boa.types.Diff.ChangedExpression parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
+      return PARSER.parseFrom(input);
     }
     public static boa.types.Diff.ChangedExpression parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(input, extensionRegistry);
     }
-    
+
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder(boa.types.Diff.ChangedExpression prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
-    
+
     @java.lang.Override
     protected Builder newBuilderForType(
         com.google.protobuf.GeneratedMessage.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
+    /**
+     * Protobuf type {@code boa.types.ChangedExpression}
+     */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
        implements boa.types.Diff.ChangedExpressionOrBuilder {
@@ -12313,18 +16254,21 @@ public final class Diff {
           getDescriptor() {
         return boa.types.Diff.internal_static_boa_types_ChangedExpression_descriptor;
       }
-      
+
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return boa.types.Diff.internal_static_boa_types_ChangedExpression_fieldAccessorTable;
+        return boa.types.Diff.internal_static_boa_types_ChangedExpression_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                boa.types.Diff.ChangedExpression.class, boa.types.Diff.ChangedExpression.Builder.class);
       }
-      
+
       // Construct using boa.types.Diff.ChangedExpression.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
-      
-      private Builder(BuilderParent parent) {
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -12341,7 +16285,7 @@ public final class Diff {
       private static Builder create() {
         return new Builder();
       }
-      
+
       public Builder clear() {
         super.clear();
         change_ = boa.types.Shared.ChangeKind.ADDED;
@@ -12394,20 +16338,20 @@ public final class Diff {
         bitField0_ = (bitField0_ & ~0x00000800);
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(buildPartial());
       }
-      
+
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return boa.types.Diff.ChangedExpression.getDescriptor();
+        return boa.types.Diff.internal_static_boa_types_ChangedExpression_descriptor;
       }
-      
+
       public boa.types.Diff.ChangedExpression getDefaultInstanceForType() {
         return boa.types.Diff.ChangedExpression.getDefaultInstance();
       }
-      
+
       public boa.types.Diff.ChangedExpression build() {
         boa.types.Diff.ChangedExpression result = buildPartial();
         if (!result.isInitialized()) {
@@ -12415,17 +16359,7 @@ public final class Diff {
         }
         return result;
       }
-      
-      private boa.types.Diff.ChangedExpression buildParsed()
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        boa.types.Diff.ChangedExpression result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
-        }
-        return result;
-      }
-      
+
       public boa.types.Diff.ChangedExpression buildPartial() {
         boa.types.Diff.ChangedExpression result = new boa.types.Diff.ChangedExpression(this);
         int from_bitField0_ = bitField0_;
@@ -12510,7 +16444,7 @@ public final class Diff {
         onBuilt();
         return result;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof boa.types.Diff.ChangedExpression) {
           return mergeFrom((boa.types.Diff.ChangedExpression)other);
@@ -12519,7 +16453,7 @@ public final class Diff {
           return this;
         }
       }
-      
+
       public Builder mergeFrom(boa.types.Diff.ChangedExpression other) {
         if (other == boa.types.Diff.ChangedExpression.getDefaultInstance()) return this;
         if (other.hasChange()) {
@@ -12613,13 +16547,19 @@ public final class Diff {
           setIsPostfix(other.getIsPostfix());
         }
         if (other.hasLiteral()) {
-          setLiteral(other.getLiteral());
+          bitField0_ |= 0x00000080;
+          literal_ = other.literal_;
+          onChanged();
         }
         if (other.hasVariable()) {
-          setVariable(other.getVariable());
+          bitField0_ |= 0x00000100;
+          variable_ = other.variable_;
+          onChanged();
         }
         if (other.hasMethod()) {
-          setMethod(other.getMethod());
+          bitField0_ |= 0x00000200;
+          method_ = other.method_;
+          onChanged();
         }
         if (methodArgsBuilder_ == null) {
           if (!other.methodArgs_.isEmpty()) {
@@ -12653,7 +16593,7 @@ public final class Diff {
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
+
       public final boolean isInitialized() {
         if (!hasChange()) {
           
@@ -12701,128 +16641,43 @@ public final class Diff {
         }
         return true;
       }
-      
+
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
-        while (true) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              this.setUnknownFields(unknownFields.build());
-              onChanged();
-              return this;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                onChanged();
-                return this;
-              }
-              break;
-            }
-            case 8: {
-              int rawValue = input.readEnum();
-              boa.types.Shared.ChangeKind value = boa.types.Shared.ChangeKind.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(1, rawValue);
-              } else {
-                bitField0_ |= 0x00000001;
-                change_ = value;
-              }
-              break;
-            }
-            case 16: {
-              int rawValue = input.readEnum();
-              boa.types.Ast.Expression.ExpressionKind value = boa.types.Ast.Expression.ExpressionKind.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(2, rawValue);
-              } else {
-                bitField0_ |= 0x00000002;
-                kind_ = value;
-              }
-              break;
-            }
-            case 26: {
-              boa.types.Diff.ChangedExpression.Builder subBuilder = boa.types.Diff.ChangedExpression.newBuilder();
-              input.readMessage(subBuilder, extensionRegistry);
-              addExpressions(subBuilder.buildPartial());
-              break;
-            }
-            case 34: {
-              boa.types.Diff.ChangedVariable.Builder subBuilder = boa.types.Diff.ChangedVariable.newBuilder();
-              input.readMessage(subBuilder, extensionRegistry);
-              addVariableDecls(subBuilder.buildPartial());
-              break;
-            }
-            case 42: {
-              boa.types.Diff.ChangedType.Builder subBuilder = boa.types.Diff.ChangedType.newBuilder();
-              if (hasNewType()) {
-                subBuilder.mergeFrom(getNewType());
-              }
-              input.readMessage(subBuilder, extensionRegistry);
-              setNewType(subBuilder.buildPartial());
-              break;
-            }
-            case 50: {
-              boa.types.Diff.ChangedType.Builder subBuilder = boa.types.Diff.ChangedType.newBuilder();
-              input.readMessage(subBuilder, extensionRegistry);
-              addGenericParameters(subBuilder.buildPartial());
-              break;
-            }
-            case 56: {
-              bitField0_ |= 0x00000040;
-              isPostfix_ = input.readBool();
-              break;
-            }
-            case 66: {
-              bitField0_ |= 0x00000080;
-              literal_ = input.readBytes();
-              break;
-            }
-            case 74: {
-              bitField0_ |= 0x00000100;
-              variable_ = input.readBytes();
-              break;
-            }
-            case 82: {
-              bitField0_ |= 0x00000200;
-              method_ = input.readBytes();
-              break;
-            }
-            case 90: {
-              boa.types.Diff.ChangedExpression.Builder subBuilder = boa.types.Diff.ChangedExpression.newBuilder();
-              input.readMessage(subBuilder, extensionRegistry);
-              addMethodArgs(subBuilder.buildPartial());
-              break;
-            }
-            case 98: {
-              boa.types.Diff.ChangedDeclaration.Builder subBuilder = boa.types.Diff.ChangedDeclaration.newBuilder();
-              if (hasAnonDeclaration()) {
-                subBuilder.mergeFrom(getAnonDeclaration());
-              }
-              input.readMessage(subBuilder, extensionRegistry);
-              setAnonDeclaration(subBuilder.buildPartial());
-              break;
-            }
+        boa.types.Diff.ChangedExpression parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (boa.types.Diff.ChangedExpression) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
           }
         }
+        return this;
       }
-      
       private int bitField0_;
-      
+
       // required .boa.types.ChangeKind change = 1;
       private boa.types.Shared.ChangeKind change_ = boa.types.Shared.ChangeKind.ADDED;
+      /**
+       * <code>required .boa.types.ChangeKind change = 1;</code>
+       */
       public boolean hasChange() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
+      /**
+       * <code>required .boa.types.ChangeKind change = 1;</code>
+       */
       public boa.types.Shared.ChangeKind getChange() {
         return change_;
       }
+      /**
+       * <code>required .boa.types.ChangeKind change = 1;</code>
+       */
       public Builder setChange(boa.types.Shared.ChangeKind value) {
         if (value == null) {
           throw new NullPointerException();
@@ -12832,21 +16687,33 @@ public final class Diff {
         onChanged();
         return this;
       }
+      /**
+       * <code>required .boa.types.ChangeKind change = 1;</code>
+       */
       public Builder clearChange() {
         bitField0_ = (bitField0_ & ~0x00000001);
         change_ = boa.types.Shared.ChangeKind.ADDED;
         onChanged();
         return this;
       }
-      
+
       // required .boa.types.Expression.ExpressionKind kind = 2;
       private boa.types.Ast.Expression.ExpressionKind kind_ = boa.types.Ast.Expression.ExpressionKind.OTHER;
+      /**
+       * <code>required .boa.types.Expression.ExpressionKind kind = 2;</code>
+       */
       public boolean hasKind() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
+      /**
+       * <code>required .boa.types.Expression.ExpressionKind kind = 2;</code>
+       */
       public boa.types.Ast.Expression.ExpressionKind getKind() {
         return kind_;
       }
+      /**
+       * <code>required .boa.types.Expression.ExpressionKind kind = 2;</code>
+       */
       public Builder setKind(boa.types.Ast.Expression.ExpressionKind value) {
         if (value == null) {
           throw new NullPointerException();
@@ -12856,13 +16723,16 @@ public final class Diff {
         onChanged();
         return this;
       }
+      /**
+       * <code>required .boa.types.Expression.ExpressionKind kind = 2;</code>
+       */
       public Builder clearKind() {
         bitField0_ = (bitField0_ & ~0x00000002);
         kind_ = boa.types.Ast.Expression.ExpressionKind.OTHER;
         onChanged();
         return this;
       }
-      
+
       // repeated .boa.types.ChangedExpression expressions = 3;
       private java.util.List<boa.types.Diff.ChangedExpression> expressions_ =
         java.util.Collections.emptyList();
@@ -12872,10 +16742,13 @@ public final class Diff {
           bitField0_ |= 0x00000004;
          }
       }
-      
+
       private com.google.protobuf.RepeatedFieldBuilder<
           boa.types.Diff.ChangedExpression, boa.types.Diff.ChangedExpression.Builder, boa.types.Diff.ChangedExpressionOrBuilder> expressionsBuilder_;
-      
+
+      /**
+       * <code>repeated .boa.types.ChangedExpression expressions = 3;</code>
+       */
       public java.util.List<boa.types.Diff.ChangedExpression> getExpressionsList() {
         if (expressionsBuilder_ == null) {
           return java.util.Collections.unmodifiableList(expressions_);
@@ -12883,6 +16756,9 @@ public final class Diff {
           return expressionsBuilder_.getMessageList();
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression expressions = 3;</code>
+       */
       public int getExpressionsCount() {
         if (expressionsBuilder_ == null) {
           return expressions_.size();
@@ -12890,6 +16766,9 @@ public final class Diff {
           return expressionsBuilder_.getCount();
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression expressions = 3;</code>
+       */
       public boa.types.Diff.ChangedExpression getExpressions(int index) {
         if (expressionsBuilder_ == null) {
           return expressions_.get(index);
@@ -12897,6 +16776,9 @@ public final class Diff {
           return expressionsBuilder_.getMessage(index);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression expressions = 3;</code>
+       */
       public Builder setExpressions(
           int index, boa.types.Diff.ChangedExpression value) {
         if (expressionsBuilder_ == null) {
@@ -12911,6 +16793,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression expressions = 3;</code>
+       */
       public Builder setExpressions(
           int index, boa.types.Diff.ChangedExpression.Builder builderForValue) {
         if (expressionsBuilder_ == null) {
@@ -12922,6 +16807,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression expressions = 3;</code>
+       */
       public Builder addExpressions(boa.types.Diff.ChangedExpression value) {
         if (expressionsBuilder_ == null) {
           if (value == null) {
@@ -12935,6 +16823,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression expressions = 3;</code>
+       */
       public Builder addExpressions(
           int index, boa.types.Diff.ChangedExpression value) {
         if (expressionsBuilder_ == null) {
@@ -12949,6 +16840,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression expressions = 3;</code>
+       */
       public Builder addExpressions(
           boa.types.Diff.ChangedExpression.Builder builderForValue) {
         if (expressionsBuilder_ == null) {
@@ -12960,6 +16854,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression expressions = 3;</code>
+       */
       public Builder addExpressions(
           int index, boa.types.Diff.ChangedExpression.Builder builderForValue) {
         if (expressionsBuilder_ == null) {
@@ -12971,6 +16868,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression expressions = 3;</code>
+       */
       public Builder addAllExpressions(
           java.lang.Iterable<? extends boa.types.Diff.ChangedExpression> values) {
         if (expressionsBuilder_ == null) {
@@ -12982,6 +16882,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression expressions = 3;</code>
+       */
       public Builder clearExpressions() {
         if (expressionsBuilder_ == null) {
           expressions_ = java.util.Collections.emptyList();
@@ -12992,6 +16895,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression expressions = 3;</code>
+       */
       public Builder removeExpressions(int index) {
         if (expressionsBuilder_ == null) {
           ensureExpressionsIsMutable();
@@ -13002,10 +16908,16 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression expressions = 3;</code>
+       */
       public boa.types.Diff.ChangedExpression.Builder getExpressionsBuilder(
           int index) {
         return getExpressionsFieldBuilder().getBuilder(index);
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression expressions = 3;</code>
+       */
       public boa.types.Diff.ChangedExpressionOrBuilder getExpressionsOrBuilder(
           int index) {
         if (expressionsBuilder_ == null) {
@@ -13013,6 +16925,9 @@ public final class Diff {
           return expressionsBuilder_.getMessageOrBuilder(index);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression expressions = 3;</code>
+       */
       public java.util.List<? extends boa.types.Diff.ChangedExpressionOrBuilder> 
            getExpressionsOrBuilderList() {
         if (expressionsBuilder_ != null) {
@@ -13021,15 +16936,24 @@ public final class Diff {
           return java.util.Collections.unmodifiableList(expressions_);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression expressions = 3;</code>
+       */
       public boa.types.Diff.ChangedExpression.Builder addExpressionsBuilder() {
         return getExpressionsFieldBuilder().addBuilder(
             boa.types.Diff.ChangedExpression.getDefaultInstance());
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression expressions = 3;</code>
+       */
       public boa.types.Diff.ChangedExpression.Builder addExpressionsBuilder(
           int index) {
         return getExpressionsFieldBuilder().addBuilder(
             index, boa.types.Diff.ChangedExpression.getDefaultInstance());
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression expressions = 3;</code>
+       */
       public java.util.List<boa.types.Diff.ChangedExpression.Builder> 
            getExpressionsBuilderList() {
         return getExpressionsFieldBuilder().getBuilderList();
@@ -13048,7 +16972,7 @@ public final class Diff {
         }
         return expressionsBuilder_;
       }
-      
+
       // repeated .boa.types.ChangedVariable variable_decls = 4;
       private java.util.List<boa.types.Diff.ChangedVariable> variableDecls_ =
         java.util.Collections.emptyList();
@@ -13058,10 +16982,13 @@ public final class Diff {
           bitField0_ |= 0x00000008;
          }
       }
-      
+
       private com.google.protobuf.RepeatedFieldBuilder<
           boa.types.Diff.ChangedVariable, boa.types.Diff.ChangedVariable.Builder, boa.types.Diff.ChangedVariableOrBuilder> variableDeclsBuilder_;
-      
+
+      /**
+       * <code>repeated .boa.types.ChangedVariable variable_decls = 4;</code>
+       */
       public java.util.List<boa.types.Diff.ChangedVariable> getVariableDeclsList() {
         if (variableDeclsBuilder_ == null) {
           return java.util.Collections.unmodifiableList(variableDecls_);
@@ -13069,6 +16996,9 @@ public final class Diff {
           return variableDeclsBuilder_.getMessageList();
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedVariable variable_decls = 4;</code>
+       */
       public int getVariableDeclsCount() {
         if (variableDeclsBuilder_ == null) {
           return variableDecls_.size();
@@ -13076,6 +17006,9 @@ public final class Diff {
           return variableDeclsBuilder_.getCount();
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedVariable variable_decls = 4;</code>
+       */
       public boa.types.Diff.ChangedVariable getVariableDecls(int index) {
         if (variableDeclsBuilder_ == null) {
           return variableDecls_.get(index);
@@ -13083,6 +17016,9 @@ public final class Diff {
           return variableDeclsBuilder_.getMessage(index);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedVariable variable_decls = 4;</code>
+       */
       public Builder setVariableDecls(
           int index, boa.types.Diff.ChangedVariable value) {
         if (variableDeclsBuilder_ == null) {
@@ -13097,6 +17033,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedVariable variable_decls = 4;</code>
+       */
       public Builder setVariableDecls(
           int index, boa.types.Diff.ChangedVariable.Builder builderForValue) {
         if (variableDeclsBuilder_ == null) {
@@ -13108,6 +17047,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedVariable variable_decls = 4;</code>
+       */
       public Builder addVariableDecls(boa.types.Diff.ChangedVariable value) {
         if (variableDeclsBuilder_ == null) {
           if (value == null) {
@@ -13121,6 +17063,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedVariable variable_decls = 4;</code>
+       */
       public Builder addVariableDecls(
           int index, boa.types.Diff.ChangedVariable value) {
         if (variableDeclsBuilder_ == null) {
@@ -13135,6 +17080,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedVariable variable_decls = 4;</code>
+       */
       public Builder addVariableDecls(
           boa.types.Diff.ChangedVariable.Builder builderForValue) {
         if (variableDeclsBuilder_ == null) {
@@ -13146,6 +17094,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedVariable variable_decls = 4;</code>
+       */
       public Builder addVariableDecls(
           int index, boa.types.Diff.ChangedVariable.Builder builderForValue) {
         if (variableDeclsBuilder_ == null) {
@@ -13157,6 +17108,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedVariable variable_decls = 4;</code>
+       */
       public Builder addAllVariableDecls(
           java.lang.Iterable<? extends boa.types.Diff.ChangedVariable> values) {
         if (variableDeclsBuilder_ == null) {
@@ -13168,6 +17122,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedVariable variable_decls = 4;</code>
+       */
       public Builder clearVariableDecls() {
         if (variableDeclsBuilder_ == null) {
           variableDecls_ = java.util.Collections.emptyList();
@@ -13178,6 +17135,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedVariable variable_decls = 4;</code>
+       */
       public Builder removeVariableDecls(int index) {
         if (variableDeclsBuilder_ == null) {
           ensureVariableDeclsIsMutable();
@@ -13188,10 +17148,16 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedVariable variable_decls = 4;</code>
+       */
       public boa.types.Diff.ChangedVariable.Builder getVariableDeclsBuilder(
           int index) {
         return getVariableDeclsFieldBuilder().getBuilder(index);
       }
+      /**
+       * <code>repeated .boa.types.ChangedVariable variable_decls = 4;</code>
+       */
       public boa.types.Diff.ChangedVariableOrBuilder getVariableDeclsOrBuilder(
           int index) {
         if (variableDeclsBuilder_ == null) {
@@ -13199,6 +17165,9 @@ public final class Diff {
           return variableDeclsBuilder_.getMessageOrBuilder(index);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedVariable variable_decls = 4;</code>
+       */
       public java.util.List<? extends boa.types.Diff.ChangedVariableOrBuilder> 
            getVariableDeclsOrBuilderList() {
         if (variableDeclsBuilder_ != null) {
@@ -13207,15 +17176,24 @@ public final class Diff {
           return java.util.Collections.unmodifiableList(variableDecls_);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedVariable variable_decls = 4;</code>
+       */
       public boa.types.Diff.ChangedVariable.Builder addVariableDeclsBuilder() {
         return getVariableDeclsFieldBuilder().addBuilder(
             boa.types.Diff.ChangedVariable.getDefaultInstance());
       }
+      /**
+       * <code>repeated .boa.types.ChangedVariable variable_decls = 4;</code>
+       */
       public boa.types.Diff.ChangedVariable.Builder addVariableDeclsBuilder(
           int index) {
         return getVariableDeclsFieldBuilder().addBuilder(
             index, boa.types.Diff.ChangedVariable.getDefaultInstance());
       }
+      /**
+       * <code>repeated .boa.types.ChangedVariable variable_decls = 4;</code>
+       */
       public java.util.List<boa.types.Diff.ChangedVariable.Builder> 
            getVariableDeclsBuilderList() {
         return getVariableDeclsFieldBuilder().getBuilderList();
@@ -13234,14 +17212,20 @@ public final class Diff {
         }
         return variableDeclsBuilder_;
       }
-      
+
       // optional .boa.types.ChangedType new_type = 5;
       private boa.types.Diff.ChangedType newType_ = boa.types.Diff.ChangedType.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           boa.types.Diff.ChangedType, boa.types.Diff.ChangedType.Builder, boa.types.Diff.ChangedTypeOrBuilder> newTypeBuilder_;
+      /**
+       * <code>optional .boa.types.ChangedType new_type = 5;</code>
+       */
       public boolean hasNewType() {
         return ((bitField0_ & 0x00000010) == 0x00000010);
       }
+      /**
+       * <code>optional .boa.types.ChangedType new_type = 5;</code>
+       */
       public boa.types.Diff.ChangedType getNewType() {
         if (newTypeBuilder_ == null) {
           return newType_;
@@ -13249,6 +17233,9 @@ public final class Diff {
           return newTypeBuilder_.getMessage();
         }
       }
+      /**
+       * <code>optional .boa.types.ChangedType new_type = 5;</code>
+       */
       public Builder setNewType(boa.types.Diff.ChangedType value) {
         if (newTypeBuilder_ == null) {
           if (value == null) {
@@ -13262,6 +17249,9 @@ public final class Diff {
         bitField0_ |= 0x00000010;
         return this;
       }
+      /**
+       * <code>optional .boa.types.ChangedType new_type = 5;</code>
+       */
       public Builder setNewType(
           boa.types.Diff.ChangedType.Builder builderForValue) {
         if (newTypeBuilder_ == null) {
@@ -13273,6 +17263,9 @@ public final class Diff {
         bitField0_ |= 0x00000010;
         return this;
       }
+      /**
+       * <code>optional .boa.types.ChangedType new_type = 5;</code>
+       */
       public Builder mergeNewType(boa.types.Diff.ChangedType value) {
         if (newTypeBuilder_ == null) {
           if (((bitField0_ & 0x00000010) == 0x00000010) &&
@@ -13289,6 +17282,9 @@ public final class Diff {
         bitField0_ |= 0x00000010;
         return this;
       }
+      /**
+       * <code>optional .boa.types.ChangedType new_type = 5;</code>
+       */
       public Builder clearNewType() {
         if (newTypeBuilder_ == null) {
           newType_ = boa.types.Diff.ChangedType.getDefaultInstance();
@@ -13299,11 +17295,17 @@ public final class Diff {
         bitField0_ = (bitField0_ & ~0x00000010);
         return this;
       }
+      /**
+       * <code>optional .boa.types.ChangedType new_type = 5;</code>
+       */
       public boa.types.Diff.ChangedType.Builder getNewTypeBuilder() {
         bitField0_ |= 0x00000010;
         onChanged();
         return getNewTypeFieldBuilder().getBuilder();
       }
+      /**
+       * <code>optional .boa.types.ChangedType new_type = 5;</code>
+       */
       public boa.types.Diff.ChangedTypeOrBuilder getNewTypeOrBuilder() {
         if (newTypeBuilder_ != null) {
           return newTypeBuilder_.getMessageOrBuilder();
@@ -13311,6 +17313,9 @@ public final class Diff {
           return newType_;
         }
       }
+      /**
+       * <code>optional .boa.types.ChangedType new_type = 5;</code>
+       */
       private com.google.protobuf.SingleFieldBuilder<
           boa.types.Diff.ChangedType, boa.types.Diff.ChangedType.Builder, boa.types.Diff.ChangedTypeOrBuilder> 
           getNewTypeFieldBuilder() {
@@ -13324,7 +17329,7 @@ public final class Diff {
         }
         return newTypeBuilder_;
       }
-      
+
       // repeated .boa.types.ChangedType generic_parameters = 6;
       private java.util.List<boa.types.Diff.ChangedType> genericParameters_ =
         java.util.Collections.emptyList();
@@ -13334,10 +17339,13 @@ public final class Diff {
           bitField0_ |= 0x00000020;
          }
       }
-      
+
       private com.google.protobuf.RepeatedFieldBuilder<
           boa.types.Diff.ChangedType, boa.types.Diff.ChangedType.Builder, boa.types.Diff.ChangedTypeOrBuilder> genericParametersBuilder_;
-      
+
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 6;</code>
+       */
       public java.util.List<boa.types.Diff.ChangedType> getGenericParametersList() {
         if (genericParametersBuilder_ == null) {
           return java.util.Collections.unmodifiableList(genericParameters_);
@@ -13345,6 +17353,9 @@ public final class Diff {
           return genericParametersBuilder_.getMessageList();
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 6;</code>
+       */
       public int getGenericParametersCount() {
         if (genericParametersBuilder_ == null) {
           return genericParameters_.size();
@@ -13352,6 +17363,9 @@ public final class Diff {
           return genericParametersBuilder_.getCount();
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 6;</code>
+       */
       public boa.types.Diff.ChangedType getGenericParameters(int index) {
         if (genericParametersBuilder_ == null) {
           return genericParameters_.get(index);
@@ -13359,6 +17373,9 @@ public final class Diff {
           return genericParametersBuilder_.getMessage(index);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 6;</code>
+       */
       public Builder setGenericParameters(
           int index, boa.types.Diff.ChangedType value) {
         if (genericParametersBuilder_ == null) {
@@ -13373,6 +17390,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 6;</code>
+       */
       public Builder setGenericParameters(
           int index, boa.types.Diff.ChangedType.Builder builderForValue) {
         if (genericParametersBuilder_ == null) {
@@ -13384,6 +17404,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 6;</code>
+       */
       public Builder addGenericParameters(boa.types.Diff.ChangedType value) {
         if (genericParametersBuilder_ == null) {
           if (value == null) {
@@ -13397,6 +17420,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 6;</code>
+       */
       public Builder addGenericParameters(
           int index, boa.types.Diff.ChangedType value) {
         if (genericParametersBuilder_ == null) {
@@ -13411,6 +17437,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 6;</code>
+       */
       public Builder addGenericParameters(
           boa.types.Diff.ChangedType.Builder builderForValue) {
         if (genericParametersBuilder_ == null) {
@@ -13422,6 +17451,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 6;</code>
+       */
       public Builder addGenericParameters(
           int index, boa.types.Diff.ChangedType.Builder builderForValue) {
         if (genericParametersBuilder_ == null) {
@@ -13433,6 +17465,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 6;</code>
+       */
       public Builder addAllGenericParameters(
           java.lang.Iterable<? extends boa.types.Diff.ChangedType> values) {
         if (genericParametersBuilder_ == null) {
@@ -13444,6 +17479,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 6;</code>
+       */
       public Builder clearGenericParameters() {
         if (genericParametersBuilder_ == null) {
           genericParameters_ = java.util.Collections.emptyList();
@@ -13454,6 +17492,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 6;</code>
+       */
       public Builder removeGenericParameters(int index) {
         if (genericParametersBuilder_ == null) {
           ensureGenericParametersIsMutable();
@@ -13464,10 +17505,16 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 6;</code>
+       */
       public boa.types.Diff.ChangedType.Builder getGenericParametersBuilder(
           int index) {
         return getGenericParametersFieldBuilder().getBuilder(index);
       }
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 6;</code>
+       */
       public boa.types.Diff.ChangedTypeOrBuilder getGenericParametersOrBuilder(
           int index) {
         if (genericParametersBuilder_ == null) {
@@ -13475,6 +17522,9 @@ public final class Diff {
           return genericParametersBuilder_.getMessageOrBuilder(index);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 6;</code>
+       */
       public java.util.List<? extends boa.types.Diff.ChangedTypeOrBuilder> 
            getGenericParametersOrBuilderList() {
         if (genericParametersBuilder_ != null) {
@@ -13483,15 +17533,24 @@ public final class Diff {
           return java.util.Collections.unmodifiableList(genericParameters_);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 6;</code>
+       */
       public boa.types.Diff.ChangedType.Builder addGenericParametersBuilder() {
         return getGenericParametersFieldBuilder().addBuilder(
             boa.types.Diff.ChangedType.getDefaultInstance());
       }
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 6;</code>
+       */
       public boa.types.Diff.ChangedType.Builder addGenericParametersBuilder(
           int index) {
         return getGenericParametersFieldBuilder().addBuilder(
             index, boa.types.Diff.ChangedType.getDefaultInstance());
       }
+      /**
+       * <code>repeated .boa.types.ChangedType generic_parameters = 6;</code>
+       */
       public java.util.List<boa.types.Diff.ChangedType.Builder> 
            getGenericParametersBuilderList() {
         return getGenericParametersFieldBuilder().getBuilderList();
@@ -13510,44 +17569,83 @@ public final class Diff {
         }
         return genericParametersBuilder_;
       }
-      
+
       // optional bool is_postfix = 7;
       private boolean isPostfix_ ;
+      /**
+       * <code>optional bool is_postfix = 7;</code>
+       */
       public boolean hasIsPostfix() {
         return ((bitField0_ & 0x00000040) == 0x00000040);
       }
+      /**
+       * <code>optional bool is_postfix = 7;</code>
+       */
       public boolean getIsPostfix() {
         return isPostfix_;
       }
+      /**
+       * <code>optional bool is_postfix = 7;</code>
+       */
       public Builder setIsPostfix(boolean value) {
         bitField0_ |= 0x00000040;
         isPostfix_ = value;
         onChanged();
         return this;
       }
+      /**
+       * <code>optional bool is_postfix = 7;</code>
+       */
       public Builder clearIsPostfix() {
         bitField0_ = (bitField0_ & ~0x00000040);
         isPostfix_ = false;
         onChanged();
         return this;
       }
-      
+
       // optional string literal = 8;
       private java.lang.Object literal_ = "";
+      /**
+       * <code>optional string literal = 8;</code>
+       */
       public boolean hasLiteral() {
         return ((bitField0_ & 0x00000080) == 0x00000080);
       }
-      public String getLiteral() {
+      /**
+       * <code>optional string literal = 8;</code>
+       */
+      public java.lang.String getLiteral() {
         java.lang.Object ref = literal_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
           literal_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
-      public Builder setLiteral(String value) {
+      /**
+       * <code>optional string literal = 8;</code>
+       */
+      public com.google.protobuf.ByteString
+          getLiteralBytes() {
+        java.lang.Object ref = literal_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          literal_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string literal = 8;</code>
+       */
+      public Builder setLiteral(
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -13556,34 +17654,72 @@ public final class Diff {
         onChanged();
         return this;
       }
+      /**
+       * <code>optional string literal = 8;</code>
+       */
       public Builder clearLiteral() {
         bitField0_ = (bitField0_ & ~0x00000080);
         literal_ = getDefaultInstance().getLiteral();
         onChanged();
         return this;
       }
-      void setLiteral(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00000080;
+      /**
+       * <code>optional string literal = 8;</code>
+       */
+      public Builder setLiteralBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000080;
         literal_ = value;
         onChanged();
+        return this;
       }
-      
+
       // optional string variable = 9;
       private java.lang.Object variable_ = "";
+      /**
+       * <code>optional string variable = 9;</code>
+       */
       public boolean hasVariable() {
         return ((bitField0_ & 0x00000100) == 0x00000100);
       }
-      public String getVariable() {
+      /**
+       * <code>optional string variable = 9;</code>
+       */
+      public java.lang.String getVariable() {
         java.lang.Object ref = variable_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
           variable_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
-      public Builder setVariable(String value) {
+      /**
+       * <code>optional string variable = 9;</code>
+       */
+      public com.google.protobuf.ByteString
+          getVariableBytes() {
+        java.lang.Object ref = variable_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          variable_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string variable = 9;</code>
+       */
+      public Builder setVariable(
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -13592,34 +17728,72 @@ public final class Diff {
         onChanged();
         return this;
       }
+      /**
+       * <code>optional string variable = 9;</code>
+       */
       public Builder clearVariable() {
         bitField0_ = (bitField0_ & ~0x00000100);
         variable_ = getDefaultInstance().getVariable();
         onChanged();
         return this;
       }
-      void setVariable(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00000100;
+      /**
+       * <code>optional string variable = 9;</code>
+       */
+      public Builder setVariableBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000100;
         variable_ = value;
         onChanged();
+        return this;
       }
-      
+
       // optional string method = 10;
       private java.lang.Object method_ = "";
+      /**
+       * <code>optional string method = 10;</code>
+       */
       public boolean hasMethod() {
         return ((bitField0_ & 0x00000200) == 0x00000200);
       }
-      public String getMethod() {
+      /**
+       * <code>optional string method = 10;</code>
+       */
+      public java.lang.String getMethod() {
         java.lang.Object ref = method_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
           method_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
-      public Builder setMethod(String value) {
+      /**
+       * <code>optional string method = 10;</code>
+       */
+      public com.google.protobuf.ByteString
+          getMethodBytes() {
+        java.lang.Object ref = method_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          method_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string method = 10;</code>
+       */
+      public Builder setMethod(
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -13628,18 +17802,29 @@ public final class Diff {
         onChanged();
         return this;
       }
+      /**
+       * <code>optional string method = 10;</code>
+       */
       public Builder clearMethod() {
         bitField0_ = (bitField0_ & ~0x00000200);
         method_ = getDefaultInstance().getMethod();
         onChanged();
         return this;
       }
-      void setMethod(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00000200;
+      /**
+       * <code>optional string method = 10;</code>
+       */
+      public Builder setMethodBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000200;
         method_ = value;
         onChanged();
+        return this;
       }
-      
+
       // repeated .boa.types.ChangedExpression method_args = 11;
       private java.util.List<boa.types.Diff.ChangedExpression> methodArgs_ =
         java.util.Collections.emptyList();
@@ -13649,10 +17834,13 @@ public final class Diff {
           bitField0_ |= 0x00000400;
          }
       }
-      
+
       private com.google.protobuf.RepeatedFieldBuilder<
           boa.types.Diff.ChangedExpression, boa.types.Diff.ChangedExpression.Builder, boa.types.Diff.ChangedExpressionOrBuilder> methodArgsBuilder_;
-      
+
+      /**
+       * <code>repeated .boa.types.ChangedExpression method_args = 11;</code>
+       */
       public java.util.List<boa.types.Diff.ChangedExpression> getMethodArgsList() {
         if (methodArgsBuilder_ == null) {
           return java.util.Collections.unmodifiableList(methodArgs_);
@@ -13660,6 +17848,9 @@ public final class Diff {
           return methodArgsBuilder_.getMessageList();
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression method_args = 11;</code>
+       */
       public int getMethodArgsCount() {
         if (methodArgsBuilder_ == null) {
           return methodArgs_.size();
@@ -13667,6 +17858,9 @@ public final class Diff {
           return methodArgsBuilder_.getCount();
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression method_args = 11;</code>
+       */
       public boa.types.Diff.ChangedExpression getMethodArgs(int index) {
         if (methodArgsBuilder_ == null) {
           return methodArgs_.get(index);
@@ -13674,6 +17868,9 @@ public final class Diff {
           return methodArgsBuilder_.getMessage(index);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression method_args = 11;</code>
+       */
       public Builder setMethodArgs(
           int index, boa.types.Diff.ChangedExpression value) {
         if (methodArgsBuilder_ == null) {
@@ -13688,6 +17885,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression method_args = 11;</code>
+       */
       public Builder setMethodArgs(
           int index, boa.types.Diff.ChangedExpression.Builder builderForValue) {
         if (methodArgsBuilder_ == null) {
@@ -13699,6 +17899,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression method_args = 11;</code>
+       */
       public Builder addMethodArgs(boa.types.Diff.ChangedExpression value) {
         if (methodArgsBuilder_ == null) {
           if (value == null) {
@@ -13712,6 +17915,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression method_args = 11;</code>
+       */
       public Builder addMethodArgs(
           int index, boa.types.Diff.ChangedExpression value) {
         if (methodArgsBuilder_ == null) {
@@ -13726,6 +17932,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression method_args = 11;</code>
+       */
       public Builder addMethodArgs(
           boa.types.Diff.ChangedExpression.Builder builderForValue) {
         if (methodArgsBuilder_ == null) {
@@ -13737,6 +17946,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression method_args = 11;</code>
+       */
       public Builder addMethodArgs(
           int index, boa.types.Diff.ChangedExpression.Builder builderForValue) {
         if (methodArgsBuilder_ == null) {
@@ -13748,6 +17960,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression method_args = 11;</code>
+       */
       public Builder addAllMethodArgs(
           java.lang.Iterable<? extends boa.types.Diff.ChangedExpression> values) {
         if (methodArgsBuilder_ == null) {
@@ -13759,6 +17974,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression method_args = 11;</code>
+       */
       public Builder clearMethodArgs() {
         if (methodArgsBuilder_ == null) {
           methodArgs_ = java.util.Collections.emptyList();
@@ -13769,6 +17987,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression method_args = 11;</code>
+       */
       public Builder removeMethodArgs(int index) {
         if (methodArgsBuilder_ == null) {
           ensureMethodArgsIsMutable();
@@ -13779,10 +18000,16 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression method_args = 11;</code>
+       */
       public boa.types.Diff.ChangedExpression.Builder getMethodArgsBuilder(
           int index) {
         return getMethodArgsFieldBuilder().getBuilder(index);
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression method_args = 11;</code>
+       */
       public boa.types.Diff.ChangedExpressionOrBuilder getMethodArgsOrBuilder(
           int index) {
         if (methodArgsBuilder_ == null) {
@@ -13790,6 +18017,9 @@ public final class Diff {
           return methodArgsBuilder_.getMessageOrBuilder(index);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression method_args = 11;</code>
+       */
       public java.util.List<? extends boa.types.Diff.ChangedExpressionOrBuilder> 
            getMethodArgsOrBuilderList() {
         if (methodArgsBuilder_ != null) {
@@ -13798,15 +18028,24 @@ public final class Diff {
           return java.util.Collections.unmodifiableList(methodArgs_);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression method_args = 11;</code>
+       */
       public boa.types.Diff.ChangedExpression.Builder addMethodArgsBuilder() {
         return getMethodArgsFieldBuilder().addBuilder(
             boa.types.Diff.ChangedExpression.getDefaultInstance());
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression method_args = 11;</code>
+       */
       public boa.types.Diff.ChangedExpression.Builder addMethodArgsBuilder(
           int index) {
         return getMethodArgsFieldBuilder().addBuilder(
             index, boa.types.Diff.ChangedExpression.getDefaultInstance());
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression method_args = 11;</code>
+       */
       public java.util.List<boa.types.Diff.ChangedExpression.Builder> 
            getMethodArgsBuilderList() {
         return getMethodArgsFieldBuilder().getBuilderList();
@@ -13825,14 +18064,20 @@ public final class Diff {
         }
         return methodArgsBuilder_;
       }
-      
+
       // optional .boa.types.ChangedDeclaration anon_declaration = 12;
       private boa.types.Diff.ChangedDeclaration anonDeclaration_ = boa.types.Diff.ChangedDeclaration.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           boa.types.Diff.ChangedDeclaration, boa.types.Diff.ChangedDeclaration.Builder, boa.types.Diff.ChangedDeclarationOrBuilder> anonDeclarationBuilder_;
+      /**
+       * <code>optional .boa.types.ChangedDeclaration anon_declaration = 12;</code>
+       */
       public boolean hasAnonDeclaration() {
         return ((bitField0_ & 0x00000800) == 0x00000800);
       }
+      /**
+       * <code>optional .boa.types.ChangedDeclaration anon_declaration = 12;</code>
+       */
       public boa.types.Diff.ChangedDeclaration getAnonDeclaration() {
         if (anonDeclarationBuilder_ == null) {
           return anonDeclaration_;
@@ -13840,6 +18085,9 @@ public final class Diff {
           return anonDeclarationBuilder_.getMessage();
         }
       }
+      /**
+       * <code>optional .boa.types.ChangedDeclaration anon_declaration = 12;</code>
+       */
       public Builder setAnonDeclaration(boa.types.Diff.ChangedDeclaration value) {
         if (anonDeclarationBuilder_ == null) {
           if (value == null) {
@@ -13853,6 +18101,9 @@ public final class Diff {
         bitField0_ |= 0x00000800;
         return this;
       }
+      /**
+       * <code>optional .boa.types.ChangedDeclaration anon_declaration = 12;</code>
+       */
       public Builder setAnonDeclaration(
           boa.types.Diff.ChangedDeclaration.Builder builderForValue) {
         if (anonDeclarationBuilder_ == null) {
@@ -13864,6 +18115,9 @@ public final class Diff {
         bitField0_ |= 0x00000800;
         return this;
       }
+      /**
+       * <code>optional .boa.types.ChangedDeclaration anon_declaration = 12;</code>
+       */
       public Builder mergeAnonDeclaration(boa.types.Diff.ChangedDeclaration value) {
         if (anonDeclarationBuilder_ == null) {
           if (((bitField0_ & 0x00000800) == 0x00000800) &&
@@ -13880,6 +18134,9 @@ public final class Diff {
         bitField0_ |= 0x00000800;
         return this;
       }
+      /**
+       * <code>optional .boa.types.ChangedDeclaration anon_declaration = 12;</code>
+       */
       public Builder clearAnonDeclaration() {
         if (anonDeclarationBuilder_ == null) {
           anonDeclaration_ = boa.types.Diff.ChangedDeclaration.getDefaultInstance();
@@ -13890,11 +18147,17 @@ public final class Diff {
         bitField0_ = (bitField0_ & ~0x00000800);
         return this;
       }
+      /**
+       * <code>optional .boa.types.ChangedDeclaration anon_declaration = 12;</code>
+       */
       public boa.types.Diff.ChangedDeclaration.Builder getAnonDeclarationBuilder() {
         bitField0_ |= 0x00000800;
         onChanged();
         return getAnonDeclarationFieldBuilder().getBuilder();
       }
+      /**
+       * <code>optional .boa.types.ChangedDeclaration anon_declaration = 12;</code>
+       */
       public boa.types.Diff.ChangedDeclarationOrBuilder getAnonDeclarationOrBuilder() {
         if (anonDeclarationBuilder_ != null) {
           return anonDeclarationBuilder_.getMessageOrBuilder();
@@ -13902,6 +18165,9 @@ public final class Diff {
           return anonDeclaration_;
         }
       }
+      /**
+       * <code>optional .boa.types.ChangedDeclaration anon_declaration = 12;</code>
+       */
       private com.google.protobuf.SingleFieldBuilder<
           boa.types.Diff.ChangedDeclaration, boa.types.Diff.ChangedDeclaration.Builder, boa.types.Diff.ChangedDeclarationOrBuilder> 
           getAnonDeclarationFieldBuilder() {
@@ -13915,214 +18181,476 @@ public final class Diff {
         }
         return anonDeclarationBuilder_;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:boa.types.ChangedExpression)
     }
-    
+
     static {
       defaultInstance = new ChangedExpression(true);
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:boa.types.ChangedExpression)
   }
-  
+
   public interface ChangedModifierOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
-    
+
     // required .boa.types.ChangeKind change = 1;
+    /**
+     * <code>required .boa.types.ChangeKind change = 1;</code>
+     */
     boolean hasChange();
+    /**
+     * <code>required .boa.types.ChangeKind change = 1;</code>
+     */
     boa.types.Shared.ChangeKind getChange();
-    
+
     // required .boa.types.Modifier.ModifierKind kind = 2;
+    /**
+     * <code>required .boa.types.Modifier.ModifierKind kind = 2;</code>
+     */
     boolean hasKind();
+    /**
+     * <code>required .boa.types.Modifier.ModifierKind kind = 2;</code>
+     */
     boa.types.Ast.Modifier.ModifierKind getKind();
-    
+
     // optional uint32 visibility = 3;
+    /**
+     * <code>optional uint32 visibility = 3;</code>
+     */
     boolean hasVisibility();
+    /**
+     * <code>optional uint32 visibility = 3;</code>
+     */
     int getVisibility();
-    
+
     // optional string annotation_name = 4;
+    /**
+     * <code>optional string annotation_name = 4;</code>
+     */
     boolean hasAnnotationName();
-    String getAnnotationName();
-    
+    /**
+     * <code>optional string annotation_name = 4;</code>
+     */
+    java.lang.String getAnnotationName();
+    /**
+     * <code>optional string annotation_name = 4;</code>
+     */
+    com.google.protobuf.ByteString
+        getAnnotationNameBytes();
+
     // repeated string annotation_members = 5;
-    java.util.List<String> getAnnotationMembersList();
+    /**
+     * <code>repeated string annotation_members = 5;</code>
+     */
+    java.util.List<java.lang.String>
+    getAnnotationMembersList();
+    /**
+     * <code>repeated string annotation_members = 5;</code>
+     */
     int getAnnotationMembersCount();
-    String getAnnotationMembers(int index);
-    
+    /**
+     * <code>repeated string annotation_members = 5;</code>
+     */
+    java.lang.String getAnnotationMembers(int index);
+    /**
+     * <code>repeated string annotation_members = 5;</code>
+     */
+    com.google.protobuf.ByteString
+        getAnnotationMembersBytes(int index);
+
     // repeated .boa.types.ChangedExpression annotation_values = 6;
+    /**
+     * <code>repeated .boa.types.ChangedExpression annotation_values = 6;</code>
+     */
     java.util.List<boa.types.Diff.ChangedExpression> 
         getAnnotationValuesList();
+    /**
+     * <code>repeated .boa.types.ChangedExpression annotation_values = 6;</code>
+     */
     boa.types.Diff.ChangedExpression getAnnotationValues(int index);
+    /**
+     * <code>repeated .boa.types.ChangedExpression annotation_values = 6;</code>
+     */
     int getAnnotationValuesCount();
+    /**
+     * <code>repeated .boa.types.ChangedExpression annotation_values = 6;</code>
+     */
     java.util.List<? extends boa.types.Diff.ChangedExpressionOrBuilder> 
         getAnnotationValuesOrBuilderList();
+    /**
+     * <code>repeated .boa.types.ChangedExpression annotation_values = 6;</code>
+     */
     boa.types.Diff.ChangedExpressionOrBuilder getAnnotationValuesOrBuilder(
         int index);
-    
+
     // optional string other = 7;
+    /**
+     * <code>optional string other = 7;</code>
+     */
     boolean hasOther();
-    String getOther();
+    /**
+     * <code>optional string other = 7;</code>
+     */
+    java.lang.String getOther();
+    /**
+     * <code>optional string other = 7;</code>
+     */
+    com.google.protobuf.ByteString
+        getOtherBytes();
   }
+  /**
+   * Protobuf type {@code boa.types.ChangedModifier}
+   */
   public static final class ChangedModifier extends
       com.google.protobuf.GeneratedMessage
       implements ChangedModifierOrBuilder {
     // Use ChangedModifier.newBuilder() to construct.
-    private ChangedModifier(Builder builder) {
+    private ChangedModifier(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
+      this.unknownFields = builder.getUnknownFields();
     }
-    private ChangedModifier(boolean noInit) {}
-    
+    private ChangedModifier(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
     private static final ChangedModifier defaultInstance;
     public static ChangedModifier getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public ChangedModifier getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private ChangedModifier(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 8: {
+              int rawValue = input.readEnum();
+              boa.types.Shared.ChangeKind value = boa.types.Shared.ChangeKind.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(1, rawValue);
+              } else {
+                bitField0_ |= 0x00000001;
+                change_ = value;
+              }
+              break;
+            }
+            case 16: {
+              int rawValue = input.readEnum();
+              boa.types.Ast.Modifier.ModifierKind value = boa.types.Ast.Modifier.ModifierKind.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(2, rawValue);
+              } else {
+                bitField0_ |= 0x00000002;
+                kind_ = value;
+              }
+              break;
+            }
+            case 24: {
+              bitField0_ |= 0x00000004;
+              visibility_ = input.readUInt32();
+              break;
+            }
+            case 34: {
+              bitField0_ |= 0x00000008;
+              annotationName_ = input.readBytes();
+              break;
+            }
+            case 42: {
+              if (!((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
+                annotationMembers_ = new com.google.protobuf.LazyStringArrayList();
+                mutable_bitField0_ |= 0x00000010;
+              }
+              annotationMembers_.add(input.readBytes());
+              break;
+            }
+            case 50: {
+              if (!((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
+                annotationValues_ = new java.util.ArrayList<boa.types.Diff.ChangedExpression>();
+                mutable_bitField0_ |= 0x00000020;
+              }
+              annotationValues_.add(input.readMessage(boa.types.Diff.ChangedExpression.PARSER, extensionRegistry));
+              break;
+            }
+            case 58: {
+              bitField0_ |= 0x00000010;
+              other_ = input.readBytes();
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
+          annotationMembers_ = new com.google.protobuf.UnmodifiableLazyStringList(annotationMembers_);
+        }
+        if (((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
+          annotationValues_ = java.util.Collections.unmodifiableList(annotationValues_);
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return boa.types.Diff.internal_static_boa_types_ChangedModifier_descriptor;
     }
-    
+
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return boa.types.Diff.internal_static_boa_types_ChangedModifier_fieldAccessorTable;
+      return boa.types.Diff.internal_static_boa_types_ChangedModifier_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              boa.types.Diff.ChangedModifier.class, boa.types.Diff.ChangedModifier.Builder.class);
     }
-    
+
+    public static com.google.protobuf.Parser<ChangedModifier> PARSER =
+        new com.google.protobuf.AbstractParser<ChangedModifier>() {
+      public ChangedModifier parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new ChangedModifier(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<ChangedModifier> getParserForType() {
+      return PARSER;
+    }
+
     private int bitField0_;
     // required .boa.types.ChangeKind change = 1;
     public static final int CHANGE_FIELD_NUMBER = 1;
     private boa.types.Shared.ChangeKind change_;
+    /**
+     * <code>required .boa.types.ChangeKind change = 1;</code>
+     */
     public boolean hasChange() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
+    /**
+     * <code>required .boa.types.ChangeKind change = 1;</code>
+     */
     public boa.types.Shared.ChangeKind getChange() {
       return change_;
     }
-    
+
     // required .boa.types.Modifier.ModifierKind kind = 2;
     public static final int KIND_FIELD_NUMBER = 2;
     private boa.types.Ast.Modifier.ModifierKind kind_;
+    /**
+     * <code>required .boa.types.Modifier.ModifierKind kind = 2;</code>
+     */
     public boolean hasKind() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
+    /**
+     * <code>required .boa.types.Modifier.ModifierKind kind = 2;</code>
+     */
     public boa.types.Ast.Modifier.ModifierKind getKind() {
       return kind_;
     }
-    
+
     // optional uint32 visibility = 3;
     public static final int VISIBILITY_FIELD_NUMBER = 3;
     private int visibility_;
+    /**
+     * <code>optional uint32 visibility = 3;</code>
+     */
     public boolean hasVisibility() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
+    /**
+     * <code>optional uint32 visibility = 3;</code>
+     */
     public int getVisibility() {
       return visibility_;
     }
-    
+
     // optional string annotation_name = 4;
     public static final int ANNOTATION_NAME_FIELD_NUMBER = 4;
     private java.lang.Object annotationName_;
+    /**
+     * <code>optional string annotation_name = 4;</code>
+     */
     public boolean hasAnnotationName() {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
-    public String getAnnotationName() {
+    /**
+     * <code>optional string annotation_name = 4;</code>
+     */
+    public java.lang.String getAnnotationName() {
       java.lang.Object ref = annotationName_;
-      if (ref instanceof String) {
-        return (String) ref;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
           annotationName_ = s;
         }
         return s;
       }
     }
-    private com.google.protobuf.ByteString getAnnotationNameBytes() {
+    /**
+     * <code>optional string annotation_name = 4;</code>
+     */
+    public com.google.protobuf.ByteString
+        getAnnotationNameBytes() {
       java.lang.Object ref = annotationName_;
-      if (ref instanceof String) {
+      if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
         annotationName_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
-    
+
     // repeated string annotation_members = 5;
     public static final int ANNOTATION_MEMBERS_FIELD_NUMBER = 5;
     private com.google.protobuf.LazyStringList annotationMembers_;
-    public java.util.List<String>
+    /**
+     * <code>repeated string annotation_members = 5;</code>
+     */
+    public java.util.List<java.lang.String>
         getAnnotationMembersList() {
       return annotationMembers_;
     }
+    /**
+     * <code>repeated string annotation_members = 5;</code>
+     */
     public int getAnnotationMembersCount() {
       return annotationMembers_.size();
     }
-    public String getAnnotationMembers(int index) {
+    /**
+     * <code>repeated string annotation_members = 5;</code>
+     */
+    public java.lang.String getAnnotationMembers(int index) {
       return annotationMembers_.get(index);
     }
-    
+    /**
+     * <code>repeated string annotation_members = 5;</code>
+     */
+    public com.google.protobuf.ByteString
+        getAnnotationMembersBytes(int index) {
+      return annotationMembers_.getByteString(index);
+    }
+
     // repeated .boa.types.ChangedExpression annotation_values = 6;
     public static final int ANNOTATION_VALUES_FIELD_NUMBER = 6;
     private java.util.List<boa.types.Diff.ChangedExpression> annotationValues_;
+    /**
+     * <code>repeated .boa.types.ChangedExpression annotation_values = 6;</code>
+     */
     public java.util.List<boa.types.Diff.ChangedExpression> getAnnotationValuesList() {
       return annotationValues_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedExpression annotation_values = 6;</code>
+     */
     public java.util.List<? extends boa.types.Diff.ChangedExpressionOrBuilder> 
         getAnnotationValuesOrBuilderList() {
       return annotationValues_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedExpression annotation_values = 6;</code>
+     */
     public int getAnnotationValuesCount() {
       return annotationValues_.size();
     }
+    /**
+     * <code>repeated .boa.types.ChangedExpression annotation_values = 6;</code>
+     */
     public boa.types.Diff.ChangedExpression getAnnotationValues(int index) {
       return annotationValues_.get(index);
     }
+    /**
+     * <code>repeated .boa.types.ChangedExpression annotation_values = 6;</code>
+     */
     public boa.types.Diff.ChangedExpressionOrBuilder getAnnotationValuesOrBuilder(
         int index) {
       return annotationValues_.get(index);
     }
-    
+
     // optional string other = 7;
     public static final int OTHER_FIELD_NUMBER = 7;
     private java.lang.Object other_;
+    /**
+     * <code>optional string other = 7;</code>
+     */
     public boolean hasOther() {
       return ((bitField0_ & 0x00000010) == 0x00000010);
     }
-    public String getOther() {
+    /**
+     * <code>optional string other = 7;</code>
+     */
+    public java.lang.String getOther() {
       java.lang.Object ref = other_;
-      if (ref instanceof String) {
-        return (String) ref;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
           other_ = s;
         }
         return s;
       }
     }
-    private com.google.protobuf.ByteString getOtherBytes() {
+    /**
+     * <code>optional string other = 7;</code>
+     */
+    public com.google.protobuf.ByteString
+        getOtherBytes() {
       java.lang.Object ref = other_;
-      if (ref instanceof String) {
+      if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
         other_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
-    
+
     private void initFields() {
       change_ = boa.types.Shared.ChangeKind.ADDED;
       kind_ = boa.types.Ast.Modifier.ModifierKind.OTHER;
@@ -14136,7 +18664,7 @@ public final class Diff {
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized != -1) return isInitialized == 1;
-      
+
       if (!hasChange()) {
         memoizedIsInitialized = 0;
         return false;
@@ -14154,7 +18682,7 @@ public final class Diff {
       memoizedIsInitialized = 1;
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
@@ -14181,12 +18709,12 @@ public final class Diff {
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
       if (size != -1) return size;
-    
+
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
@@ -14225,94 +18753,83 @@ public final class Diff {
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     private static final long serialVersionUID = 0L;
     @java.lang.Override
     protected java.lang.Object writeReplace()
         throws java.io.ObjectStreamException {
       return super.writeReplace();
     }
-    
+
     public static boa.types.Diff.ChangedModifier parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
+      return PARSER.parseFrom(data);
     }
     public static boa.types.Diff.ChangedModifier parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(data, extensionRegistry);
     }
     public static boa.types.Diff.ChangedModifier parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
+      return PARSER.parseFrom(data);
     }
     public static boa.types.Diff.ChangedModifier parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(data, extensionRegistry);
     }
     public static boa.types.Diff.ChangedModifier parseFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
+      return PARSER.parseFrom(input);
     }
     public static boa.types.Diff.ChangedModifier parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(input, extensionRegistry);
     }
     public static boa.types.Diff.ChangedModifier parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
+      return PARSER.parseDelimitedFrom(input);
     }
     public static boa.types.Diff.ChangedModifier parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
     }
     public static boa.types.Diff.ChangedModifier parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
+      return PARSER.parseFrom(input);
     }
     public static boa.types.Diff.ChangedModifier parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(input, extensionRegistry);
     }
-    
+
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder(boa.types.Diff.ChangedModifier prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
-    
+
     @java.lang.Override
     protected Builder newBuilderForType(
         com.google.protobuf.GeneratedMessage.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
+    /**
+     * Protobuf type {@code boa.types.ChangedModifier}
+     */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
        implements boa.types.Diff.ChangedModifierOrBuilder {
@@ -14320,18 +18837,21 @@ public final class Diff {
           getDescriptor() {
         return boa.types.Diff.internal_static_boa_types_ChangedModifier_descriptor;
       }
-      
+
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return boa.types.Diff.internal_static_boa_types_ChangedModifier_fieldAccessorTable;
+        return boa.types.Diff.internal_static_boa_types_ChangedModifier_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                boa.types.Diff.ChangedModifier.class, boa.types.Diff.ChangedModifier.Builder.class);
       }
-      
+
       // Construct using boa.types.Diff.ChangedModifier.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
-      
-      private Builder(BuilderParent parent) {
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -14343,7 +18863,7 @@ public final class Diff {
       private static Builder create() {
         return new Builder();
       }
-      
+
       public Builder clear() {
         super.clear();
         change_ = boa.types.Shared.ChangeKind.ADDED;
@@ -14366,20 +18886,20 @@ public final class Diff {
         bitField0_ = (bitField0_ & ~0x00000040);
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(buildPartial());
       }
-      
+
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return boa.types.Diff.ChangedModifier.getDescriptor();
+        return boa.types.Diff.internal_static_boa_types_ChangedModifier_descriptor;
       }
-      
+
       public boa.types.Diff.ChangedModifier getDefaultInstanceForType() {
         return boa.types.Diff.ChangedModifier.getDefaultInstance();
       }
-      
+
       public boa.types.Diff.ChangedModifier build() {
         boa.types.Diff.ChangedModifier result = buildPartial();
         if (!result.isInitialized()) {
@@ -14387,17 +18907,7 @@ public final class Diff {
         }
         return result;
       }
-      
-      private boa.types.Diff.ChangedModifier buildParsed()
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        boa.types.Diff.ChangedModifier result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
-        }
-        return result;
-      }
-      
+
       public boa.types.Diff.ChangedModifier buildPartial() {
         boa.types.Diff.ChangedModifier result = new boa.types.Diff.ChangedModifier(this);
         int from_bitField0_ = bitField0_;
@@ -14441,7 +18951,7 @@ public final class Diff {
         onBuilt();
         return result;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof boa.types.Diff.ChangedModifier) {
           return mergeFrom((boa.types.Diff.ChangedModifier)other);
@@ -14450,7 +18960,7 @@ public final class Diff {
           return this;
         }
       }
-      
+
       public Builder mergeFrom(boa.types.Diff.ChangedModifier other) {
         if (other == boa.types.Diff.ChangedModifier.getDefaultInstance()) return this;
         if (other.hasChange()) {
@@ -14463,7 +18973,9 @@ public final class Diff {
           setVisibility(other.getVisibility());
         }
         if (other.hasAnnotationName()) {
-          setAnnotationName(other.getAnnotationName());
+          bitField0_ |= 0x00000008;
+          annotationName_ = other.annotationName_;
+          onChanged();
         }
         if (!other.annotationMembers_.isEmpty()) {
           if (annotationMembers_.isEmpty()) {
@@ -14502,12 +19014,14 @@ public final class Diff {
           }
         }
         if (other.hasOther()) {
-          setOther(other.getOther());
+          bitField0_ |= 0x00000040;
+          other_ = other.other_;
+          onChanged();
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
+
       public final boolean isInitialized() {
         if (!hasChange()) {
           
@@ -14525,92 +19039,43 @@ public final class Diff {
         }
         return true;
       }
-      
+
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
-        while (true) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              this.setUnknownFields(unknownFields.build());
-              onChanged();
-              return this;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                onChanged();
-                return this;
-              }
-              break;
-            }
-            case 8: {
-              int rawValue = input.readEnum();
-              boa.types.Shared.ChangeKind value = boa.types.Shared.ChangeKind.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(1, rawValue);
-              } else {
-                bitField0_ |= 0x00000001;
-                change_ = value;
-              }
-              break;
-            }
-            case 16: {
-              int rawValue = input.readEnum();
-              boa.types.Ast.Modifier.ModifierKind value = boa.types.Ast.Modifier.ModifierKind.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(2, rawValue);
-              } else {
-                bitField0_ |= 0x00000002;
-                kind_ = value;
-              }
-              break;
-            }
-            case 24: {
-              bitField0_ |= 0x00000004;
-              visibility_ = input.readUInt32();
-              break;
-            }
-            case 34: {
-              bitField0_ |= 0x00000008;
-              annotationName_ = input.readBytes();
-              break;
-            }
-            case 42: {
-              ensureAnnotationMembersIsMutable();
-              annotationMembers_.add(input.readBytes());
-              break;
-            }
-            case 50: {
-              boa.types.Diff.ChangedExpression.Builder subBuilder = boa.types.Diff.ChangedExpression.newBuilder();
-              input.readMessage(subBuilder, extensionRegistry);
-              addAnnotationValues(subBuilder.buildPartial());
-              break;
-            }
-            case 58: {
-              bitField0_ |= 0x00000040;
-              other_ = input.readBytes();
-              break;
-            }
+        boa.types.Diff.ChangedModifier parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (boa.types.Diff.ChangedModifier) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
           }
         }
+        return this;
       }
-      
       private int bitField0_;
-      
+
       // required .boa.types.ChangeKind change = 1;
       private boa.types.Shared.ChangeKind change_ = boa.types.Shared.ChangeKind.ADDED;
+      /**
+       * <code>required .boa.types.ChangeKind change = 1;</code>
+       */
       public boolean hasChange() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
+      /**
+       * <code>required .boa.types.ChangeKind change = 1;</code>
+       */
       public boa.types.Shared.ChangeKind getChange() {
         return change_;
       }
+      /**
+       * <code>required .boa.types.ChangeKind change = 1;</code>
+       */
       public Builder setChange(boa.types.Shared.ChangeKind value) {
         if (value == null) {
           throw new NullPointerException();
@@ -14620,21 +19085,33 @@ public final class Diff {
         onChanged();
         return this;
       }
+      /**
+       * <code>required .boa.types.ChangeKind change = 1;</code>
+       */
       public Builder clearChange() {
         bitField0_ = (bitField0_ & ~0x00000001);
         change_ = boa.types.Shared.ChangeKind.ADDED;
         onChanged();
         return this;
       }
-      
+
       // required .boa.types.Modifier.ModifierKind kind = 2;
       private boa.types.Ast.Modifier.ModifierKind kind_ = boa.types.Ast.Modifier.ModifierKind.OTHER;
+      /**
+       * <code>required .boa.types.Modifier.ModifierKind kind = 2;</code>
+       */
       public boolean hasKind() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
+      /**
+       * <code>required .boa.types.Modifier.ModifierKind kind = 2;</code>
+       */
       public boa.types.Ast.Modifier.ModifierKind getKind() {
         return kind_;
       }
+      /**
+       * <code>required .boa.types.Modifier.ModifierKind kind = 2;</code>
+       */
       public Builder setKind(boa.types.Ast.Modifier.ModifierKind value) {
         if (value == null) {
           throw new NullPointerException();
@@ -14644,50 +19121,92 @@ public final class Diff {
         onChanged();
         return this;
       }
+      /**
+       * <code>required .boa.types.Modifier.ModifierKind kind = 2;</code>
+       */
       public Builder clearKind() {
         bitField0_ = (bitField0_ & ~0x00000002);
         kind_ = boa.types.Ast.Modifier.ModifierKind.OTHER;
         onChanged();
         return this;
       }
-      
+
       // optional uint32 visibility = 3;
       private int visibility_ ;
+      /**
+       * <code>optional uint32 visibility = 3;</code>
+       */
       public boolean hasVisibility() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
+      /**
+       * <code>optional uint32 visibility = 3;</code>
+       */
       public int getVisibility() {
         return visibility_;
       }
+      /**
+       * <code>optional uint32 visibility = 3;</code>
+       */
       public Builder setVisibility(int value) {
         bitField0_ |= 0x00000004;
         visibility_ = value;
         onChanged();
         return this;
       }
+      /**
+       * <code>optional uint32 visibility = 3;</code>
+       */
       public Builder clearVisibility() {
         bitField0_ = (bitField0_ & ~0x00000004);
         visibility_ = 0;
         onChanged();
         return this;
       }
-      
+
       // optional string annotation_name = 4;
       private java.lang.Object annotationName_ = "";
+      /**
+       * <code>optional string annotation_name = 4;</code>
+       */
       public boolean hasAnnotationName() {
         return ((bitField0_ & 0x00000008) == 0x00000008);
       }
-      public String getAnnotationName() {
+      /**
+       * <code>optional string annotation_name = 4;</code>
+       */
+      public java.lang.String getAnnotationName() {
         java.lang.Object ref = annotationName_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
           annotationName_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
-      public Builder setAnnotationName(String value) {
+      /**
+       * <code>optional string annotation_name = 4;</code>
+       */
+      public com.google.protobuf.ByteString
+          getAnnotationNameBytes() {
+        java.lang.Object ref = annotationName_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          annotationName_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string annotation_name = 4;</code>
+       */
+      public Builder setAnnotationName(
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -14696,18 +19215,29 @@ public final class Diff {
         onChanged();
         return this;
       }
+      /**
+       * <code>optional string annotation_name = 4;</code>
+       */
       public Builder clearAnnotationName() {
         bitField0_ = (bitField0_ & ~0x00000008);
         annotationName_ = getDefaultInstance().getAnnotationName();
         onChanged();
         return this;
       }
-      void setAnnotationName(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00000008;
+      /**
+       * <code>optional string annotation_name = 4;</code>
+       */
+      public Builder setAnnotationNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000008;
         annotationName_ = value;
         onChanged();
+        return this;
       }
-      
+
       // repeated string annotation_members = 5;
       private com.google.protobuf.LazyStringList annotationMembers_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       private void ensureAnnotationMembersIsMutable() {
@@ -14716,18 +19246,37 @@ public final class Diff {
           bitField0_ |= 0x00000010;
          }
       }
-      public java.util.List<String>
+      /**
+       * <code>repeated string annotation_members = 5;</code>
+       */
+      public java.util.List<java.lang.String>
           getAnnotationMembersList() {
         return java.util.Collections.unmodifiableList(annotationMembers_);
       }
+      /**
+       * <code>repeated string annotation_members = 5;</code>
+       */
       public int getAnnotationMembersCount() {
         return annotationMembers_.size();
       }
-      public String getAnnotationMembers(int index) {
+      /**
+       * <code>repeated string annotation_members = 5;</code>
+       */
+      public java.lang.String getAnnotationMembers(int index) {
         return annotationMembers_.get(index);
       }
+      /**
+       * <code>repeated string annotation_members = 5;</code>
+       */
+      public com.google.protobuf.ByteString
+          getAnnotationMembersBytes(int index) {
+        return annotationMembers_.getByteString(index);
+      }
+      /**
+       * <code>repeated string annotation_members = 5;</code>
+       */
       public Builder setAnnotationMembers(
-          int index, String value) {
+          int index, java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -14736,7 +19285,11 @@ public final class Diff {
         onChanged();
         return this;
       }
-      public Builder addAnnotationMembers(String value) {
+      /**
+       * <code>repeated string annotation_members = 5;</code>
+       */
+      public Builder addAnnotationMembers(
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -14745,25 +19298,39 @@ public final class Diff {
         onChanged();
         return this;
       }
+      /**
+       * <code>repeated string annotation_members = 5;</code>
+       */
       public Builder addAllAnnotationMembers(
-          java.lang.Iterable<String> values) {
+          java.lang.Iterable<java.lang.String> values) {
         ensureAnnotationMembersIsMutable();
         super.addAll(values, annotationMembers_);
         onChanged();
         return this;
       }
+      /**
+       * <code>repeated string annotation_members = 5;</code>
+       */
       public Builder clearAnnotationMembers() {
         annotationMembers_ = com.google.protobuf.LazyStringArrayList.EMPTY;
         bitField0_ = (bitField0_ & ~0x00000010);
         onChanged();
         return this;
       }
-      void addAnnotationMembers(com.google.protobuf.ByteString value) {
-        ensureAnnotationMembersIsMutable();
+      /**
+       * <code>repeated string annotation_members = 5;</code>
+       */
+      public Builder addAnnotationMembersBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureAnnotationMembersIsMutable();
         annotationMembers_.add(value);
         onChanged();
+        return this;
       }
-      
+
       // repeated .boa.types.ChangedExpression annotation_values = 6;
       private java.util.List<boa.types.Diff.ChangedExpression> annotationValues_ =
         java.util.Collections.emptyList();
@@ -14773,10 +19340,13 @@ public final class Diff {
           bitField0_ |= 0x00000020;
          }
       }
-      
+
       private com.google.protobuf.RepeatedFieldBuilder<
           boa.types.Diff.ChangedExpression, boa.types.Diff.ChangedExpression.Builder, boa.types.Diff.ChangedExpressionOrBuilder> annotationValuesBuilder_;
-      
+
+      /**
+       * <code>repeated .boa.types.ChangedExpression annotation_values = 6;</code>
+       */
       public java.util.List<boa.types.Diff.ChangedExpression> getAnnotationValuesList() {
         if (annotationValuesBuilder_ == null) {
           return java.util.Collections.unmodifiableList(annotationValues_);
@@ -14784,6 +19354,9 @@ public final class Diff {
           return annotationValuesBuilder_.getMessageList();
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression annotation_values = 6;</code>
+       */
       public int getAnnotationValuesCount() {
         if (annotationValuesBuilder_ == null) {
           return annotationValues_.size();
@@ -14791,6 +19364,9 @@ public final class Diff {
           return annotationValuesBuilder_.getCount();
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression annotation_values = 6;</code>
+       */
       public boa.types.Diff.ChangedExpression getAnnotationValues(int index) {
         if (annotationValuesBuilder_ == null) {
           return annotationValues_.get(index);
@@ -14798,6 +19374,9 @@ public final class Diff {
           return annotationValuesBuilder_.getMessage(index);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression annotation_values = 6;</code>
+       */
       public Builder setAnnotationValues(
           int index, boa.types.Diff.ChangedExpression value) {
         if (annotationValuesBuilder_ == null) {
@@ -14812,6 +19391,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression annotation_values = 6;</code>
+       */
       public Builder setAnnotationValues(
           int index, boa.types.Diff.ChangedExpression.Builder builderForValue) {
         if (annotationValuesBuilder_ == null) {
@@ -14823,6 +19405,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression annotation_values = 6;</code>
+       */
       public Builder addAnnotationValues(boa.types.Diff.ChangedExpression value) {
         if (annotationValuesBuilder_ == null) {
           if (value == null) {
@@ -14836,6 +19421,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression annotation_values = 6;</code>
+       */
       public Builder addAnnotationValues(
           int index, boa.types.Diff.ChangedExpression value) {
         if (annotationValuesBuilder_ == null) {
@@ -14850,6 +19438,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression annotation_values = 6;</code>
+       */
       public Builder addAnnotationValues(
           boa.types.Diff.ChangedExpression.Builder builderForValue) {
         if (annotationValuesBuilder_ == null) {
@@ -14861,6 +19452,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression annotation_values = 6;</code>
+       */
       public Builder addAnnotationValues(
           int index, boa.types.Diff.ChangedExpression.Builder builderForValue) {
         if (annotationValuesBuilder_ == null) {
@@ -14872,6 +19466,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression annotation_values = 6;</code>
+       */
       public Builder addAllAnnotationValues(
           java.lang.Iterable<? extends boa.types.Diff.ChangedExpression> values) {
         if (annotationValuesBuilder_ == null) {
@@ -14883,6 +19480,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression annotation_values = 6;</code>
+       */
       public Builder clearAnnotationValues() {
         if (annotationValuesBuilder_ == null) {
           annotationValues_ = java.util.Collections.emptyList();
@@ -14893,6 +19493,9 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression annotation_values = 6;</code>
+       */
       public Builder removeAnnotationValues(int index) {
         if (annotationValuesBuilder_ == null) {
           ensureAnnotationValuesIsMutable();
@@ -14903,10 +19506,16 @@ public final class Diff {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression annotation_values = 6;</code>
+       */
       public boa.types.Diff.ChangedExpression.Builder getAnnotationValuesBuilder(
           int index) {
         return getAnnotationValuesFieldBuilder().getBuilder(index);
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression annotation_values = 6;</code>
+       */
       public boa.types.Diff.ChangedExpressionOrBuilder getAnnotationValuesOrBuilder(
           int index) {
         if (annotationValuesBuilder_ == null) {
@@ -14914,6 +19523,9 @@ public final class Diff {
           return annotationValuesBuilder_.getMessageOrBuilder(index);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression annotation_values = 6;</code>
+       */
       public java.util.List<? extends boa.types.Diff.ChangedExpressionOrBuilder> 
            getAnnotationValuesOrBuilderList() {
         if (annotationValuesBuilder_ != null) {
@@ -14922,15 +19534,24 @@ public final class Diff {
           return java.util.Collections.unmodifiableList(annotationValues_);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression annotation_values = 6;</code>
+       */
       public boa.types.Diff.ChangedExpression.Builder addAnnotationValuesBuilder() {
         return getAnnotationValuesFieldBuilder().addBuilder(
             boa.types.Diff.ChangedExpression.getDefaultInstance());
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression annotation_values = 6;</code>
+       */
       public boa.types.Diff.ChangedExpression.Builder addAnnotationValuesBuilder(
           int index) {
         return getAnnotationValuesFieldBuilder().addBuilder(
             index, boa.types.Diff.ChangedExpression.getDefaultInstance());
       }
+      /**
+       * <code>repeated .boa.types.ChangedExpression annotation_values = 6;</code>
+       */
       public java.util.List<boa.types.Diff.ChangedExpression.Builder> 
            getAnnotationValuesBuilderList() {
         return getAnnotationValuesFieldBuilder().getBuilderList();
@@ -14949,23 +19570,50 @@ public final class Diff {
         }
         return annotationValuesBuilder_;
       }
-      
+
       // optional string other = 7;
       private java.lang.Object other_ = "";
+      /**
+       * <code>optional string other = 7;</code>
+       */
       public boolean hasOther() {
         return ((bitField0_ & 0x00000040) == 0x00000040);
       }
-      public String getOther() {
+      /**
+       * <code>optional string other = 7;</code>
+       */
+      public java.lang.String getOther() {
         java.lang.Object ref = other_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
           other_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
-      public Builder setOther(String value) {
+      /**
+       * <code>optional string other = 7;</code>
+       */
+      public com.google.protobuf.ByteString
+          getOtherBytes() {
+        java.lang.Object ref = other_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          other_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string other = 7;</code>
+       */
+      public Builder setOther(
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -14974,452 +19622,136 @@ public final class Diff {
         onChanged();
         return this;
       }
+      /**
+       * <code>optional string other = 7;</code>
+       */
       public Builder clearOther() {
         bitField0_ = (bitField0_ & ~0x00000040);
         other_ = getDefaultInstance().getOther();
         onChanged();
         return this;
       }
-      void setOther(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00000040;
+      /**
+       * <code>optional string other = 7;</code>
+       */
+      public Builder setOtherBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000040;
         other_ = value;
         onChanged();
+        return this;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:boa.types.ChangedModifier)
     }
-    
+
     static {
       defaultInstance = new ChangedModifier(true);
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:boa.types.ChangedModifier)
   }
-  
+
   public interface ChangedCommentOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
-    
+
     // required .boa.types.ChangeKind change = 1;
+    /**
+     * <code>required .boa.types.ChangeKind change = 1;</code>
+     */
     boolean hasChange();
+    /**
+     * <code>required .boa.types.ChangeKind change = 1;</code>
+     */
     boa.types.Shared.ChangeKind getChange();
-    
+
     // required .boa.types.Comment.CommentKind kind = 2;
+    /**
+     * <code>required .boa.types.Comment.CommentKind kind = 2;</code>
+     */
     boolean hasKind();
+    /**
+     * <code>required .boa.types.Comment.CommentKind kind = 2;</code>
+     */
     boa.types.Ast.Comment.CommentKind getKind();
-    
+
     // optional string value = 3;
+    /**
+     * <code>optional string value = 3;</code>
+     */
     boolean hasValue();
-    String getValue();
-    
+    /**
+     * <code>optional string value = 3;</code>
+     */
+    java.lang.String getValue();
+    /**
+     * <code>optional string value = 3;</code>
+     */
+    com.google.protobuf.ByteString
+        getValueBytes();
+
     // optional int32 start_line = 4;
+    /**
+     * <code>optional int32 start_line = 4;</code>
+     */
     boolean hasStartLine();
+    /**
+     * <code>optional int32 start_line = 4;</code>
+     */
     int getStartLine();
   }
+  /**
+   * Protobuf type {@code boa.types.ChangedComment}
+   */
   public static final class ChangedComment extends
       com.google.protobuf.GeneratedMessage
       implements ChangedCommentOrBuilder {
     // Use ChangedComment.newBuilder() to construct.
-    private ChangedComment(Builder builder) {
+    private ChangedComment(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
+      this.unknownFields = builder.getUnknownFields();
     }
-    private ChangedComment(boolean noInit) {}
-    
+    private ChangedComment(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
     private static final ChangedComment defaultInstance;
     public static ChangedComment getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public ChangedComment getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return boa.types.Diff.internal_static_boa_types_ChangedComment_descriptor;
-    }
-    
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return boa.types.Diff.internal_static_boa_types_ChangedComment_fieldAccessorTable;
-    }
-    
-    private int bitField0_;
-    // required .boa.types.ChangeKind change = 1;
-    public static final int CHANGE_FIELD_NUMBER = 1;
-    private boa.types.Shared.ChangeKind change_;
-    public boolean hasChange() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    public boa.types.Shared.ChangeKind getChange() {
-      return change_;
-    }
-    
-    // required .boa.types.Comment.CommentKind kind = 2;
-    public static final int KIND_FIELD_NUMBER = 2;
-    private boa.types.Ast.Comment.CommentKind kind_;
-    public boolean hasKind() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    public boa.types.Ast.Comment.CommentKind getKind() {
-      return kind_;
-    }
-    
-    // optional string value = 3;
-    public static final int VALUE_FIELD_NUMBER = 3;
-    private java.lang.Object value_;
-    public boolean hasValue() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
-    }
-    public String getValue() {
-      java.lang.Object ref = value_;
-      if (ref instanceof String) {
-        return (String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
-          value_ = s;
-        }
-        return s;
-      }
-    }
-    private com.google.protobuf.ByteString getValueBytes() {
-      java.lang.Object ref = value_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
-        value_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-    
-    // optional int32 start_line = 4;
-    public static final int START_LINE_FIELD_NUMBER = 4;
-    private int startLine_;
-    public boolean hasStartLine() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
-    }
-    public int getStartLine() {
-      return startLine_;
-    }
-    
-    private void initFields() {
-      change_ = boa.types.Shared.ChangeKind.ADDED;
-      kind_ = boa.types.Ast.Comment.CommentKind.LINE;
-      value_ = "";
-      startLine_ = 0;
-    }
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
-      
-      if (!hasChange()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasKind()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      memoizedIsInitialized = 1;
-      return true;
-    }
-    
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeEnum(1, change_.getNumber());
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeEnum(2, kind_.getNumber());
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeBytes(3, getValueBytes());
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeInt32(4, startLine_);
-      }
-      getUnknownFields().writeTo(output);
-    }
-    
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-    
-      size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(1, change_.getNumber());
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(2, kind_.getNumber());
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(3, getValueBytes());
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(4, startLine_);
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-    
-    private static final long serialVersionUID = 0L;
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
     @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
     }
-    
-    public static boa.types.Diff.ChangedComment parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
-    }
-    public static boa.types.Diff.ChangedComment parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
-    }
-    public static boa.types.Diff.ChangedComment parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
-    }
-    public static boa.types.Diff.ChangedComment parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
-    }
-    public static boa.types.Diff.ChangedComment parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
-    }
-    public static boa.types.Diff.ChangedComment parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
-    }
-    public static boa.types.Diff.ChangedComment parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
-    }
-    public static boa.types.Diff.ChangedComment parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
-    }
-    public static boa.types.Diff.ChangedComment parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
-    }
-    public static boa.types.Diff.ChangedComment parseFrom(
+    private ChangedComment(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
-    }
-    
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(boa.types.Diff.ChangedComment prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-    
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements boa.types.Diff.ChangedCommentOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return boa.types.Diff.internal_static_boa_types_ChangedComment_descriptor;
-      }
-      
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return boa.types.Diff.internal_static_boa_types_ChangedComment_fieldAccessorTable;
-      }
-      
-      // Construct using boa.types.Diff.ChangedComment.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-      
-      private Builder(BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-        }
-      }
-      private static Builder create() {
-        return new Builder();
-      }
-      
-      public Builder clear() {
-        super.clear();
-        change_ = boa.types.Shared.ChangeKind.ADDED;
-        bitField0_ = (bitField0_ & ~0x00000001);
-        kind_ = boa.types.Ast.Comment.CommentKind.LINE;
-        bitField0_ = (bitField0_ & ~0x00000002);
-        value_ = "";
-        bitField0_ = (bitField0_ & ~0x00000004);
-        startLine_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000008);
-        return this;
-      }
-      
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-      
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return boa.types.Diff.ChangedComment.getDescriptor();
-      }
-      
-      public boa.types.Diff.ChangedComment getDefaultInstanceForType() {
-        return boa.types.Diff.ChangedComment.getDefaultInstance();
-      }
-      
-      public boa.types.Diff.ChangedComment build() {
-        boa.types.Diff.ChangedComment result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-      
-      private boa.types.Diff.ChangedComment buildParsed()
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        boa.types.Diff.ChangedComment result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
-        }
-        return result;
-      }
-      
-      public boa.types.Diff.ChangedComment buildPartial() {
-        boa.types.Diff.ChangedComment result = new boa.types.Diff.ChangedComment(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.change_ = change_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.kind_ = kind_;
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000004;
-        }
-        result.value_ = value_;
-        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
-          to_bitField0_ |= 0x00000008;
-        }
-        result.startLine_ = startLine_;
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
-      }
-      
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof boa.types.Diff.ChangedComment) {
-          return mergeFrom((boa.types.Diff.ChangedComment)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-      
-      public Builder mergeFrom(boa.types.Diff.ChangedComment other) {
-        if (other == boa.types.Diff.ChangedComment.getDefaultInstance()) return this;
-        if (other.hasChange()) {
-          setChange(other.getChange());
-        }
-        if (other.hasKind()) {
-          setKind(other.getKind());
-        }
-        if (other.hasValue()) {
-          setValue(other.getValue());
-        }
-        if (other.hasStartLine()) {
-          setStartLine(other.getStartLine());
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-      
-      public final boolean isInitialized() {
-        if (!hasChange()) {
-          
-          return false;
-        }
-        if (!hasKind()) {
-          
-          return false;
-        }
-        return true;
-      }
-      
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
-        while (true) {
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
           int tag = input.readTag();
           switch (tag) {
             case 0:
-              this.setUnknownFields(unknownFields.build());
-              onChanged();
-              return this;
+              done = true;
+              break;
             default: {
               if (!parseUnknownField(input, unknownFields,
                                      extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                onChanged();
-                return this;
+                done = true;
               }
               break;
             }
@@ -15457,18 +19789,448 @@ public final class Diff {
             }
           }
         }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
       }
-      
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return boa.types.Diff.internal_static_boa_types_ChangedComment_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return boa.types.Diff.internal_static_boa_types_ChangedComment_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              boa.types.Diff.ChangedComment.class, boa.types.Diff.ChangedComment.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<ChangedComment> PARSER =
+        new com.google.protobuf.AbstractParser<ChangedComment>() {
+      public ChangedComment parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new ChangedComment(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<ChangedComment> getParserForType() {
+      return PARSER;
+    }
+
+    private int bitField0_;
+    // required .boa.types.ChangeKind change = 1;
+    public static final int CHANGE_FIELD_NUMBER = 1;
+    private boa.types.Shared.ChangeKind change_;
+    /**
+     * <code>required .boa.types.ChangeKind change = 1;</code>
+     */
+    public boolean hasChange() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>required .boa.types.ChangeKind change = 1;</code>
+     */
+    public boa.types.Shared.ChangeKind getChange() {
+      return change_;
+    }
+
+    // required .boa.types.Comment.CommentKind kind = 2;
+    public static final int KIND_FIELD_NUMBER = 2;
+    private boa.types.Ast.Comment.CommentKind kind_;
+    /**
+     * <code>required .boa.types.Comment.CommentKind kind = 2;</code>
+     */
+    public boolean hasKind() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>required .boa.types.Comment.CommentKind kind = 2;</code>
+     */
+    public boa.types.Ast.Comment.CommentKind getKind() {
+      return kind_;
+    }
+
+    // optional string value = 3;
+    public static final int VALUE_FIELD_NUMBER = 3;
+    private java.lang.Object value_;
+    /**
+     * <code>optional string value = 3;</code>
+     */
+    public boolean hasValue() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>optional string value = 3;</code>
+     */
+    public java.lang.String getValue() {
+      java.lang.Object ref = value_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          value_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string value = 3;</code>
+     */
+    public com.google.protobuf.ByteString
+        getValueBytes() {
+      java.lang.Object ref = value_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        value_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    // optional int32 start_line = 4;
+    public static final int START_LINE_FIELD_NUMBER = 4;
+    private int startLine_;
+    /**
+     * <code>optional int32 start_line = 4;</code>
+     */
+    public boolean hasStartLine() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>optional int32 start_line = 4;</code>
+     */
+    public int getStartLine() {
+      return startLine_;
+    }
+
+    private void initFields() {
+      change_ = boa.types.Shared.ChangeKind.ADDED;
+      kind_ = boa.types.Ast.Comment.CommentKind.LINE;
+      value_ = "";
+      startLine_ = 0;
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+
+      if (!hasChange()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasKind()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeEnum(1, change_.getNumber());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeEnum(2, kind_.getNumber());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeBytes(3, getValueBytes());
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeInt32(4, startLine_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(1, change_.getNumber());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(2, kind_.getNumber());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(3, getValueBytes());
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(4, startLine_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static boa.types.Diff.ChangedComment parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static boa.types.Diff.ChangedComment parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static boa.types.Diff.ChangedComment parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static boa.types.Diff.ChangedComment parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static boa.types.Diff.ChangedComment parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static boa.types.Diff.ChangedComment parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static boa.types.Diff.ChangedComment parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static boa.types.Diff.ChangedComment parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static boa.types.Diff.ChangedComment parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static boa.types.Diff.ChangedComment parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(boa.types.Diff.ChangedComment prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code boa.types.ChangedComment}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements boa.types.Diff.ChangedCommentOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return boa.types.Diff.internal_static_boa_types_ChangedComment_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return boa.types.Diff.internal_static_boa_types_ChangedComment_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                boa.types.Diff.ChangedComment.class, boa.types.Diff.ChangedComment.Builder.class);
+      }
+
+      // Construct using boa.types.Diff.ChangedComment.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        change_ = boa.types.Shared.ChangeKind.ADDED;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        kind_ = boa.types.Ast.Comment.CommentKind.LINE;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        value_ = "";
+        bitField0_ = (bitField0_ & ~0x00000004);
+        startLine_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000008);
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return boa.types.Diff.internal_static_boa_types_ChangedComment_descriptor;
+      }
+
+      public boa.types.Diff.ChangedComment getDefaultInstanceForType() {
+        return boa.types.Diff.ChangedComment.getDefaultInstance();
+      }
+
+      public boa.types.Diff.ChangedComment build() {
+        boa.types.Diff.ChangedComment result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public boa.types.Diff.ChangedComment buildPartial() {
+        boa.types.Diff.ChangedComment result = new boa.types.Diff.ChangedComment(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.change_ = change_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.kind_ = kind_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.value_ = value_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.startLine_ = startLine_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof boa.types.Diff.ChangedComment) {
+          return mergeFrom((boa.types.Diff.ChangedComment)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(boa.types.Diff.ChangedComment other) {
+        if (other == boa.types.Diff.ChangedComment.getDefaultInstance()) return this;
+        if (other.hasChange()) {
+          setChange(other.getChange());
+        }
+        if (other.hasKind()) {
+          setKind(other.getKind());
+        }
+        if (other.hasValue()) {
+          bitField0_ |= 0x00000004;
+          value_ = other.value_;
+          onChanged();
+        }
+        if (other.hasStartLine()) {
+          setStartLine(other.getStartLine());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        if (!hasChange()) {
+          
+          return false;
+        }
+        if (!hasKind()) {
+          
+          return false;
+        }
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        boa.types.Diff.ChangedComment parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (boa.types.Diff.ChangedComment) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
       private int bitField0_;
-      
+
       // required .boa.types.ChangeKind change = 1;
       private boa.types.Shared.ChangeKind change_ = boa.types.Shared.ChangeKind.ADDED;
+      /**
+       * <code>required .boa.types.ChangeKind change = 1;</code>
+       */
       public boolean hasChange() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
+      /**
+       * <code>required .boa.types.ChangeKind change = 1;</code>
+       */
       public boa.types.Shared.ChangeKind getChange() {
         return change_;
       }
+      /**
+       * <code>required .boa.types.ChangeKind change = 1;</code>
+       */
       public Builder setChange(boa.types.Shared.ChangeKind value) {
         if (value == null) {
           throw new NullPointerException();
@@ -15478,21 +20240,33 @@ public final class Diff {
         onChanged();
         return this;
       }
+      /**
+       * <code>required .boa.types.ChangeKind change = 1;</code>
+       */
       public Builder clearChange() {
         bitField0_ = (bitField0_ & ~0x00000001);
         change_ = boa.types.Shared.ChangeKind.ADDED;
         onChanged();
         return this;
       }
-      
+
       // required .boa.types.Comment.CommentKind kind = 2;
       private boa.types.Ast.Comment.CommentKind kind_ = boa.types.Ast.Comment.CommentKind.LINE;
+      /**
+       * <code>required .boa.types.Comment.CommentKind kind = 2;</code>
+       */
       public boolean hasKind() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
+      /**
+       * <code>required .boa.types.Comment.CommentKind kind = 2;</code>
+       */
       public boa.types.Ast.Comment.CommentKind getKind() {
         return kind_;
       }
+      /**
+       * <code>required .boa.types.Comment.CommentKind kind = 2;</code>
+       */
       public Builder setKind(boa.types.Ast.Comment.CommentKind value) {
         if (value == null) {
           throw new NullPointerException();
@@ -15502,29 +20276,59 @@ public final class Diff {
         onChanged();
         return this;
       }
+      /**
+       * <code>required .boa.types.Comment.CommentKind kind = 2;</code>
+       */
       public Builder clearKind() {
         bitField0_ = (bitField0_ & ~0x00000002);
         kind_ = boa.types.Ast.Comment.CommentKind.LINE;
         onChanged();
         return this;
       }
-      
+
       // optional string value = 3;
       private java.lang.Object value_ = "";
+      /**
+       * <code>optional string value = 3;</code>
+       */
       public boolean hasValue() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
-      public String getValue() {
+      /**
+       * <code>optional string value = 3;</code>
+       */
+      public java.lang.String getValue() {
         java.lang.Object ref = value_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
           value_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
-      public Builder setValue(String value) {
+      /**
+       * <code>optional string value = 3;</code>
+       */
+      public com.google.protobuf.ByteString
+          getValueBytes() {
+        java.lang.Object ref = value_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          value_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string value = 3;</code>
+       */
+      public Builder setValue(
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -15533,50 +20337,73 @@ public final class Diff {
         onChanged();
         return this;
       }
+      /**
+       * <code>optional string value = 3;</code>
+       */
       public Builder clearValue() {
         bitField0_ = (bitField0_ & ~0x00000004);
         value_ = getDefaultInstance().getValue();
         onChanged();
         return this;
       }
-      void setValue(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00000004;
+      /**
+       * <code>optional string value = 3;</code>
+       */
+      public Builder setValueBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000004;
         value_ = value;
         onChanged();
+        return this;
       }
-      
+
       // optional int32 start_line = 4;
       private int startLine_ ;
+      /**
+       * <code>optional int32 start_line = 4;</code>
+       */
       public boolean hasStartLine() {
         return ((bitField0_ & 0x00000008) == 0x00000008);
       }
+      /**
+       * <code>optional int32 start_line = 4;</code>
+       */
       public int getStartLine() {
         return startLine_;
       }
+      /**
+       * <code>optional int32 start_line = 4;</code>
+       */
       public Builder setStartLine(int value) {
         bitField0_ |= 0x00000008;
         startLine_ = value;
         onChanged();
         return this;
       }
+      /**
+       * <code>optional int32 start_line = 4;</code>
+       */
       public Builder clearStartLine() {
         bitField0_ = (bitField0_ & ~0x00000008);
         startLine_ = 0;
         onChanged();
         return this;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:boa.types.ChangedComment)
     }
-    
+
     static {
       defaultInstance = new ChangedComment(true);
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:boa.types.ChangedComment)
   }
-  
+
   private static com.google.protobuf.Descriptors.Descriptor
     internal_static_boa_types_ChangedFile_descriptor;
   private static
@@ -15632,7 +20459,7 @@ public final class Diff {
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_boa_types_ChangedComment_fieldAccessorTable;
-  
+
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
     return descriptor;
@@ -15734,89 +20561,67 @@ public final class Diff {
           internal_static_boa_types_ChangedFile_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_ChangedFile_descriptor,
-              new java.lang.String[] { "Change", "Kind", "Name", "Key", "Ast", },
-              boa.types.Diff.ChangedFile.class,
-              boa.types.Diff.ChangedFile.Builder.class);
+              new java.lang.String[] { "Change", "Kind", "Name", "Key", "Ast", });
           internal_static_boa_types_ChangedASTRoot_descriptor =
             getDescriptor().getMessageTypes().get(1);
           internal_static_boa_types_ChangedASTRoot_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_ChangedASTRoot_descriptor,
-              new java.lang.String[] { "Namespaces", },
-              boa.types.Diff.ChangedASTRoot.class,
-              boa.types.Diff.ChangedASTRoot.Builder.class);
+              new java.lang.String[] { "Namespaces", });
           internal_static_boa_types_ChangedNamespace_descriptor =
             getDescriptor().getMessageTypes().get(2);
           internal_static_boa_types_ChangedNamespace_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_ChangedNamespace_descriptor,
-              new java.lang.String[] { "Change", "Name", "Modifiers", "Declarations", "Comments", },
-              boa.types.Diff.ChangedNamespace.class,
-              boa.types.Diff.ChangedNamespace.Builder.class);
+              new java.lang.String[] { "Change", "Name", "Modifiers", "Declarations", "Comments", });
           internal_static_boa_types_ChangedDeclaration_descriptor =
             getDescriptor().getMessageTypes().get(3);
           internal_static_boa_types_ChangedDeclaration_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_ChangedDeclaration_descriptor,
-              new java.lang.String[] { "Change", "Kind", "Name", "Modifiers", "GenericParameters", "Parents", "Methods", "Fields", "NestedDeclarations", "Comments", },
-              boa.types.Diff.ChangedDeclaration.class,
-              boa.types.Diff.ChangedDeclaration.Builder.class);
+              new java.lang.String[] { "Change", "Kind", "Name", "Modifiers", "GenericParameters", "Parents", "Methods", "Fields", "NestedDeclarations", "Comments", });
           internal_static_boa_types_ChangedType_descriptor =
             getDescriptor().getMessageTypes().get(4);
           internal_static_boa_types_ChangedType_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_ChangedType_descriptor,
-              new java.lang.String[] { "Change", "Kind", "Name", "Id", },
-              boa.types.Diff.ChangedType.class,
-              boa.types.Diff.ChangedType.Builder.class);
+              new java.lang.String[] { "Change", "Kind", "Name", "Id", });
           internal_static_boa_types_ChangedMethod_descriptor =
             getDescriptor().getMessageTypes().get(5);
           internal_static_boa_types_ChangedMethod_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_ChangedMethod_descriptor,
-              new java.lang.String[] { "Change", "Name", "Modifiers", "ReturnType", "GenericParameters", "Arguments", "ExceptionTypes", "Statements", "Comments", },
-              boa.types.Diff.ChangedMethod.class,
-              boa.types.Diff.ChangedMethod.Builder.class);
+              new java.lang.String[] { "Change", "Name", "Modifiers", "ReturnType", "GenericParameters", "Arguments", "ExceptionTypes", "Statements", "Comments", });
           internal_static_boa_types_ChangedVariable_descriptor =
             getDescriptor().getMessageTypes().get(6);
           internal_static_boa_types_ChangedVariable_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_ChangedVariable_descriptor,
-              new java.lang.String[] { "Change", "Name", "VariableType", "Modifiers", "Initializer", "Comments", },
-              boa.types.Diff.ChangedVariable.class,
-              boa.types.Diff.ChangedVariable.Builder.class);
+              new java.lang.String[] { "Change", "Name", "VariableType", "Modifiers", "Initializer", "Comments", });
           internal_static_boa_types_ChangedStatement_descriptor =
             getDescriptor().getMessageTypes().get(7);
           internal_static_boa_types_ChangedStatement_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_ChangedStatement_descriptor,
-              new java.lang.String[] { "Change", "Kind", "Comments", "Statements", "Initializations", "Condition", "Updates", "VariableDeclaration", "TypeDeclaration", "Expression", },
-              boa.types.Diff.ChangedStatement.class,
-              boa.types.Diff.ChangedStatement.Builder.class);
+              new java.lang.String[] { "Change", "Kind", "Comments", "Statements", "Initializations", "Condition", "Updates", "VariableDeclaration", "TypeDeclaration", "Expression", });
           internal_static_boa_types_ChangedExpression_descriptor =
             getDescriptor().getMessageTypes().get(8);
           internal_static_boa_types_ChangedExpression_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_ChangedExpression_descriptor,
-              new java.lang.String[] { "Change", "Kind", "Expressions", "VariableDecls", "NewType", "GenericParameters", "IsPostfix", "Literal", "Variable", "Method", "MethodArgs", "AnonDeclaration", },
-              boa.types.Diff.ChangedExpression.class,
-              boa.types.Diff.ChangedExpression.Builder.class);
+              new java.lang.String[] { "Change", "Kind", "Expressions", "VariableDecls", "NewType", "GenericParameters", "IsPostfix", "Literal", "Variable", "Method", "MethodArgs", "AnonDeclaration", });
           internal_static_boa_types_ChangedModifier_descriptor =
             getDescriptor().getMessageTypes().get(9);
           internal_static_boa_types_ChangedModifier_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_ChangedModifier_descriptor,
-              new java.lang.String[] { "Change", "Kind", "Visibility", "AnnotationName", "AnnotationMembers", "AnnotationValues", "Other", },
-              boa.types.Diff.ChangedModifier.class,
-              boa.types.Diff.ChangedModifier.Builder.class);
+              new java.lang.String[] { "Change", "Kind", "Visibility", "AnnotationName", "AnnotationMembers", "AnnotationValues", "Other", });
           internal_static_boa_types_ChangedComment_descriptor =
             getDescriptor().getMessageTypes().get(10);
           internal_static_boa_types_ChangedComment_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_ChangedComment_descriptor,
-              new java.lang.String[] { "Change", "Kind", "Value", "StartLine", },
-              boa.types.Diff.ChangedComment.class,
-              boa.types.Diff.ChangedComment.Builder.class);
+              new java.lang.String[] { "Change", "Kind", "Value", "StartLine", });
           return null;
         }
       };
@@ -15827,6 +20632,6 @@ public final class Diff {
           boa.types.Ast.getDescriptor(),
         }, assigner);
   }
-  
+
   // @@protoc_insertion_point(outer_class_scope)
 }
