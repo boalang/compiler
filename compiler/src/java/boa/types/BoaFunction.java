@@ -234,9 +234,10 @@ public class BoaFunction extends BoaType {
 	}
 
 	private String cleanType(String s) {
-		if (!s.contains("."))
-			return s;
-		return s.substring(s.lastIndexOf(".") + 1);
+		final String s2 = s.replace('<', '_').replace('>', '_').replaceAll(",\\s+", "_");
+		if (!s2.contains("."))
+			return s2;
+		return s2.substring(s2.lastIndexOf(".") + 1);
 	}
 
 	/** {@inheritDoc} */
