@@ -7,7 +7,7 @@ package boa.types;
  * 
  */
 public class BoaMap extends BoaType {
-	private final BoaType type;
+	private final BoaType valueType;
 	private final BoaType indexType;
 
 	/**
@@ -20,17 +20,17 @@ public class BoaMap extends BoaType {
 	/**
 	 * Construct a BoaMap.
 	 * 
-	 * @param boaType
-	 *            A {@link BoaType} representing the type of the values in
+	 * @param valueType
+	 *            A {@link BoaType} representing the valueType of the values in
 	 *            this map
 	 * 
-	 * @param boaType2
-	 *            A {@link BoaType} representing the type of the indices in
+	 * @param indexType
+	 *            A {@link BoaType} representing the valueType of the indices in
 	 *            this map
 	 */
-	public BoaMap(final BoaType boaType, final BoaType boaType2) {
-		this.type = boaType;
-		this.indexType = boaType2;
+	public BoaMap(final BoaType valueType, final BoaType indexType) {
+		this.valueType = valueType;
+		this.indexType = indexType;
 	}
 
 	/** {@inheritDoc} */
@@ -44,12 +44,12 @@ public class BoaMap extends BoaType {
 		if (!(that instanceof BoaMap))
 			return false;
 
-		// if that index type is not equivalent this this's, forget it
+		// if that index valueType is not equivalent this this's, forget it
 		if (!((BoaMap) that).indexType.assigns(this.indexType))
 			return false;
 
-		// same for the value type
-		if (!((BoaMap) that).type.assigns(this.type))
+		// same for the value valueType
+		if (!((BoaMap) that).valueType.assigns(this.valueType))
 			return false;
 
 		// ok
@@ -67,12 +67,12 @@ public class BoaMap extends BoaType {
 		if (!(that instanceof BoaMap))
 			return false;
 
-		// if that index type is not equivalent this this's, forget it
+		// if that index valueType is not equivalent this this's, forget it
 		if (!this.indexType.accepts(((BoaMap) that).indexType))
 			return false;
 
-		// same for the value type
-		if (!this.type.accepts(((BoaMap) that).type))
+		// same for the value valueType
+		if (!this.valueType.accepts(((BoaMap) that).valueType))
 			return false;
 
 		// ok
@@ -80,19 +80,19 @@ public class BoaMap extends BoaType {
 	}
 
 	/**
-	 * Get the type of the values of this map.
+	 * Get the valueType of the values of this map.
 	 * 
-	 * @return A {@link BoaType} representing the type of the values of this
+	 * @return A {@link BoaType} representing the valueType of the values of this
 	 *         map
 	 */
 	public BoaType getType() {
-		return this.type;
+		return this.valueType;
 	}
 
 	/**
-	 * Get the type of the indices of this map.
+	 * Get the valueType of the indices of this map.
 	 * 
-	 * @return A {@link BoaType} representing the type of the indices of this
+	 * @return A {@link BoaType} representing the valueType of the indices of this
 	 *         map
 	 */
 	public BoaType getIndexType() {
@@ -102,13 +102,13 @@ public class BoaMap extends BoaType {
 	/** {@inheritDoc} */
 	@Override
 	public String toString() {
-		return "map[" + this.indexType + "] of " + this.type;
+		return "map[" + this.indexType + "] of " + this.valueType;
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public String toJavaType() {
-		return "java.util.HashMap<" + this.indexType.toBoxedJavaType() + ", " + this.type.toBoxedJavaType() + ">";
+		return "java.util.HashMap<" + this.indexType.toBoxedJavaType() + ", " + this.valueType.toBoxedJavaType() + ">";
 	}
 
 	/** {@inheritDoc} */
@@ -117,7 +117,7 @@ public class BoaMap extends BoaType {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + (this.indexType == null ? 0 : this.indexType.hashCode());
-		result = prime * result + (this.type == null ? 0 : this.type.hashCode());
+		result = prime * result + (this.valueType == null ? 0 : this.valueType.hashCode());
 		return result;
 	}
 
@@ -136,10 +136,10 @@ public class BoaMap extends BoaType {
 				return false;
 		} else if (!this.indexType.equals(other.indexType))
 			return false;
-		if (this.type == null) {
-			if (other.type != null)
+		if (this.valueType == null) {
+			if (other.valueType != null)
 				return false;
-		} else if (!this.type.equals(other.type))
+		} else if (!this.valueType.equals(other.valueType))
 			return false;
 		return true;
 	}

@@ -10,73 +10,233 @@ public final class Code {
   }
   public interface CodeRepositoryOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
-    
+
     // required string url = 1;
+    /**
+     * <code>required string url = 1;</code>
+     */
     boolean hasUrl();
-    String getUrl();
-    
+    /**
+     * <code>required string url = 1;</code>
+     */
+    java.lang.String getUrl();
+    /**
+     * <code>required string url = 1;</code>
+     */
+    com.google.protobuf.ByteString
+        getUrlBytes();
+
     // required .boa.types.CodeRepository.RepositoryKind kind = 2;
+    /**
+     * <code>required .boa.types.CodeRepository.RepositoryKind kind = 2;</code>
+     */
     boolean hasKind();
+    /**
+     * <code>required .boa.types.CodeRepository.RepositoryKind kind = 2;</code>
+     */
     boa.types.Code.CodeRepository.RepositoryKind getKind();
-    
+
     // repeated .boa.types.Revision revisions = 3;
+    /**
+     * <code>repeated .boa.types.Revision revisions = 3;</code>
+     */
     java.util.List<boa.types.Code.Revision> 
         getRevisionsList();
+    /**
+     * <code>repeated .boa.types.Revision revisions = 3;</code>
+     */
     boa.types.Code.Revision getRevisions(int index);
+    /**
+     * <code>repeated .boa.types.Revision revisions = 3;</code>
+     */
     int getRevisionsCount();
+    /**
+     * <code>repeated .boa.types.Revision revisions = 3;</code>
+     */
     java.util.List<? extends boa.types.Code.RevisionOrBuilder> 
         getRevisionsOrBuilderList();
+    /**
+     * <code>repeated .boa.types.Revision revisions = 3;</code>
+     */
     boa.types.Code.RevisionOrBuilder getRevisionsOrBuilder(
         int index);
   }
+  /**
+   * Protobuf type {@code boa.types.CodeRepository}
+   */
   public static final class CodeRepository extends
       com.google.protobuf.GeneratedMessage
       implements CodeRepositoryOrBuilder {
     // Use CodeRepository.newBuilder() to construct.
-    private CodeRepository(Builder builder) {
+    private CodeRepository(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
+      this.unknownFields = builder.getUnknownFields();
     }
-    private CodeRepository(boolean noInit) {}
-    
+    private CodeRepository(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
     private static final CodeRepository defaultInstance;
     public static CodeRepository getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public CodeRepository getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private CodeRepository(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              bitField0_ |= 0x00000001;
+              url_ = input.readBytes();
+              break;
+            }
+            case 16: {
+              int rawValue = input.readEnum();
+              boa.types.Code.CodeRepository.RepositoryKind value = boa.types.Code.CodeRepository.RepositoryKind.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(2, rawValue);
+              } else {
+                bitField0_ |= 0x00000002;
+                kind_ = value;
+              }
+              break;
+            }
+            case 26: {
+              if (!((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
+                revisions_ = new java.util.ArrayList<boa.types.Code.Revision>();
+                mutable_bitField0_ |= 0x00000004;
+              }
+              revisions_.add(input.readMessage(boa.types.Code.Revision.PARSER, extensionRegistry));
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
+          revisions_ = java.util.Collections.unmodifiableList(revisions_);
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return boa.types.Code.internal_static_boa_types_CodeRepository_descriptor;
     }
-    
+
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return boa.types.Code.internal_static_boa_types_CodeRepository_fieldAccessorTable;
+      return boa.types.Code.internal_static_boa_types_CodeRepository_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              boa.types.Code.CodeRepository.class, boa.types.Code.CodeRepository.Builder.class);
     }
-    
+
+    public static com.google.protobuf.Parser<CodeRepository> PARSER =
+        new com.google.protobuf.AbstractParser<CodeRepository>() {
+      public CodeRepository parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new CodeRepository(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<CodeRepository> getParserForType() {
+      return PARSER;
+    }
+
+    /**
+     * Protobuf enum {@code boa.types.CodeRepository.RepositoryKind}
+     */
     public enum RepositoryKind
         implements com.google.protobuf.ProtocolMessageEnum {
+      /**
+       * <code>UNKNOWN = 1;</code>
+       */
       UNKNOWN(0, 1),
+      /**
+       * <code>SVN = 2;</code>
+       */
       SVN(1, 2),
+      /**
+       * <code>CVS = 3;</code>
+       */
       CVS(2, 3),
+      /**
+       * <code>GIT = 4;</code>
+       */
       GIT(3, 4),
+      /**
+       * <code>HG = 5;</code>
+       */
       HG(4, 5),
+      /**
+       * <code>BZR = 6;</code>
+       */
       BZR(5, 6),
       ;
-      
+
+      /**
+       * <code>UNKNOWN = 1;</code>
+       */
       public static final int UNKNOWN_VALUE = 1;
+      /**
+       * <code>SVN = 2;</code>
+       */
       public static final int SVN_VALUE = 2;
+      /**
+       * <code>CVS = 3;</code>
+       */
       public static final int CVS_VALUE = 3;
+      /**
+       * <code>GIT = 4;</code>
+       */
       public static final int GIT_VALUE = 4;
+      /**
+       * <code>HG = 5;</code>
+       */
       public static final int HG_VALUE = 5;
+      /**
+       * <code>BZR = 6;</code>
+       */
       public static final int BZR_VALUE = 6;
-      
-      
+
+
       public final int getNumber() { return value; }
-      
+
       public static RepositoryKind valueOf(int value) {
         switch (value) {
           case 1: return UNKNOWN;
@@ -88,7 +248,7 @@ public final class Code {
           default: return null;
         }
       }
-      
+
       public static com.google.protobuf.Internal.EnumLiteMap<RepositoryKind>
           internalGetValueMap() {
         return internalValueMap;
@@ -100,7 +260,7 @@ public final class Code {
                 return RepositoryKind.valueOf(number);
               }
             };
-      
+
       public final com.google.protobuf.Descriptors.EnumValueDescriptor
           getValueDescriptor() {
         return getDescriptor().getValues().get(index);
@@ -113,11 +273,9 @@ public final class Code {
           getDescriptor() {
         return boa.types.Code.CodeRepository.getDescriptor().getEnumTypes().get(0);
       }
-      
-      private static final RepositoryKind[] VALUES = {
-        UNKNOWN, SVN, CVS, GIT, HG, BZR, 
-      };
-      
+
+      private static final RepositoryKind[] VALUES = values();
+
       public static RepositoryKind valueOf(
           com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
         if (desc.getType() != getDescriptor()) {
@@ -126,82 +284,114 @@ public final class Code {
         }
         return VALUES[desc.getIndex()];
       }
-      
+
       private final int index;
       private final int value;
-      
+
       private RepositoryKind(int index, int value) {
         this.index = index;
         this.value = value;
       }
-      
+
       // @@protoc_insertion_point(enum_scope:boa.types.CodeRepository.RepositoryKind)
     }
-    
+
     private int bitField0_;
     // required string url = 1;
     public static final int URL_FIELD_NUMBER = 1;
     private java.lang.Object url_;
+    /**
+     * <code>required string url = 1;</code>
+     */
     public boolean hasUrl() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
-    public String getUrl() {
+    /**
+     * <code>required string url = 1;</code>
+     */
+    public java.lang.String getUrl() {
       java.lang.Object ref = url_;
-      if (ref instanceof String) {
-        return (String) ref;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
           url_ = s;
         }
         return s;
       }
     }
-    private com.google.protobuf.ByteString getUrlBytes() {
+    /**
+     * <code>required string url = 1;</code>
+     */
+    public com.google.protobuf.ByteString
+        getUrlBytes() {
       java.lang.Object ref = url_;
-      if (ref instanceof String) {
+      if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
         url_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
-    
+
     // required .boa.types.CodeRepository.RepositoryKind kind = 2;
     public static final int KIND_FIELD_NUMBER = 2;
     private boa.types.Code.CodeRepository.RepositoryKind kind_;
+    /**
+     * <code>required .boa.types.CodeRepository.RepositoryKind kind = 2;</code>
+     */
     public boolean hasKind() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
+    /**
+     * <code>required .boa.types.CodeRepository.RepositoryKind kind = 2;</code>
+     */
     public boa.types.Code.CodeRepository.RepositoryKind getKind() {
       return kind_;
     }
-    
+
     // repeated .boa.types.Revision revisions = 3;
     public static final int REVISIONS_FIELD_NUMBER = 3;
     private java.util.List<boa.types.Code.Revision> revisions_;
+    /**
+     * <code>repeated .boa.types.Revision revisions = 3;</code>
+     */
     public java.util.List<boa.types.Code.Revision> getRevisionsList() {
       return revisions_;
     }
+    /**
+     * <code>repeated .boa.types.Revision revisions = 3;</code>
+     */
     public java.util.List<? extends boa.types.Code.RevisionOrBuilder> 
         getRevisionsOrBuilderList() {
       return revisions_;
     }
+    /**
+     * <code>repeated .boa.types.Revision revisions = 3;</code>
+     */
     public int getRevisionsCount() {
       return revisions_.size();
     }
+    /**
+     * <code>repeated .boa.types.Revision revisions = 3;</code>
+     */
     public boa.types.Code.Revision getRevisions(int index) {
       return revisions_.get(index);
     }
+    /**
+     * <code>repeated .boa.types.Revision revisions = 3;</code>
+     */
     public boa.types.Code.RevisionOrBuilder getRevisionsOrBuilder(
         int index) {
       return revisions_.get(index);
     }
-    
+
     private void initFields() {
       url_ = "";
       kind_ = boa.types.Code.CodeRepository.RepositoryKind.UNKNOWN;
@@ -211,7 +401,7 @@ public final class Code {
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized != -1) return isInitialized == 1;
-      
+
       if (!hasUrl()) {
         memoizedIsInitialized = 0;
         return false;
@@ -229,7 +419,7 @@ public final class Code {
       memoizedIsInitialized = 1;
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
@@ -244,12 +434,12 @@ public final class Code {
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
       if (size != -1) return size;
-    
+
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
@@ -267,94 +457,83 @@ public final class Code {
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     private static final long serialVersionUID = 0L;
     @java.lang.Override
     protected java.lang.Object writeReplace()
         throws java.io.ObjectStreamException {
       return super.writeReplace();
     }
-    
+
     public static boa.types.Code.CodeRepository parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
+      return PARSER.parseFrom(data);
     }
     public static boa.types.Code.CodeRepository parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(data, extensionRegistry);
     }
     public static boa.types.Code.CodeRepository parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
+      return PARSER.parseFrom(data);
     }
     public static boa.types.Code.CodeRepository parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(data, extensionRegistry);
     }
     public static boa.types.Code.CodeRepository parseFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
+      return PARSER.parseFrom(input);
     }
     public static boa.types.Code.CodeRepository parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(input, extensionRegistry);
     }
     public static boa.types.Code.CodeRepository parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
+      return PARSER.parseDelimitedFrom(input);
     }
     public static boa.types.Code.CodeRepository parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
     }
     public static boa.types.Code.CodeRepository parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
+      return PARSER.parseFrom(input);
     }
     public static boa.types.Code.CodeRepository parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(input, extensionRegistry);
     }
-    
+
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder(boa.types.Code.CodeRepository prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
-    
+
     @java.lang.Override
     protected Builder newBuilderForType(
         com.google.protobuf.GeneratedMessage.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
+    /**
+     * Protobuf type {@code boa.types.CodeRepository}
+     */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
        implements boa.types.Code.CodeRepositoryOrBuilder {
@@ -362,18 +541,21 @@ public final class Code {
           getDescriptor() {
         return boa.types.Code.internal_static_boa_types_CodeRepository_descriptor;
       }
-      
+
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return boa.types.Code.internal_static_boa_types_CodeRepository_fieldAccessorTable;
+        return boa.types.Code.internal_static_boa_types_CodeRepository_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                boa.types.Code.CodeRepository.class, boa.types.Code.CodeRepository.Builder.class);
       }
-      
+
       // Construct using boa.types.Code.CodeRepository.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
-      
-      private Builder(BuilderParent parent) {
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -385,7 +567,7 @@ public final class Code {
       private static Builder create() {
         return new Builder();
       }
-      
+
       public Builder clear() {
         super.clear();
         url_ = "";
@@ -400,20 +582,20 @@ public final class Code {
         }
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(buildPartial());
       }
-      
+
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return boa.types.Code.CodeRepository.getDescriptor();
+        return boa.types.Code.internal_static_boa_types_CodeRepository_descriptor;
       }
-      
+
       public boa.types.Code.CodeRepository getDefaultInstanceForType() {
         return boa.types.Code.CodeRepository.getDefaultInstance();
       }
-      
+
       public boa.types.Code.CodeRepository build() {
         boa.types.Code.CodeRepository result = buildPartial();
         if (!result.isInitialized()) {
@@ -421,17 +603,7 @@ public final class Code {
         }
         return result;
       }
-      
-      private boa.types.Code.CodeRepository buildParsed()
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        boa.types.Code.CodeRepository result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
-        }
-        return result;
-      }
-      
+
       public boa.types.Code.CodeRepository buildPartial() {
         boa.types.Code.CodeRepository result = new boa.types.Code.CodeRepository(this);
         int from_bitField0_ = bitField0_;
@@ -457,7 +629,7 @@ public final class Code {
         onBuilt();
         return result;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof boa.types.Code.CodeRepository) {
           return mergeFrom((boa.types.Code.CodeRepository)other);
@@ -466,11 +638,13 @@ public final class Code {
           return this;
         }
       }
-      
+
       public Builder mergeFrom(boa.types.Code.CodeRepository other) {
         if (other == boa.types.Code.CodeRepository.getDefaultInstance()) return this;
         if (other.hasUrl()) {
-          setUrl(other.getUrl());
+          bitField0_ |= 0x00000001;
+          url_ = other.url_;
+          onChanged();
         }
         if (other.hasKind()) {
           setKind(other.getKind());
@@ -504,7 +678,7 @@ public final class Code {
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
+
       public final boolean isInitialized() {
         if (!hasUrl()) {
           
@@ -522,74 +696,69 @@ public final class Code {
         }
         return true;
       }
-      
+
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
-        while (true) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              this.setUnknownFields(unknownFields.build());
-              onChanged();
-              return this;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                onChanged();
-                return this;
-              }
-              break;
-            }
-            case 10: {
-              bitField0_ |= 0x00000001;
-              url_ = input.readBytes();
-              break;
-            }
-            case 16: {
-              int rawValue = input.readEnum();
-              boa.types.Code.CodeRepository.RepositoryKind value = boa.types.Code.CodeRepository.RepositoryKind.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(2, rawValue);
-              } else {
-                bitField0_ |= 0x00000002;
-                kind_ = value;
-              }
-              break;
-            }
-            case 26: {
-              boa.types.Code.Revision.Builder subBuilder = boa.types.Code.Revision.newBuilder();
-              input.readMessage(subBuilder, extensionRegistry);
-              addRevisions(subBuilder.buildPartial());
-              break;
-            }
+        boa.types.Code.CodeRepository parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (boa.types.Code.CodeRepository) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
           }
         }
+        return this;
       }
-      
       private int bitField0_;
-      
+
       // required string url = 1;
       private java.lang.Object url_ = "";
+      /**
+       * <code>required string url = 1;</code>
+       */
       public boolean hasUrl() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
-      public String getUrl() {
+      /**
+       * <code>required string url = 1;</code>
+       */
+      public java.lang.String getUrl() {
         java.lang.Object ref = url_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
           url_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
-      public Builder setUrl(String value) {
+      /**
+       * <code>required string url = 1;</code>
+       */
+      public com.google.protobuf.ByteString
+          getUrlBytes() {
+        java.lang.Object ref = url_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          url_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string url = 1;</code>
+       */
+      public Builder setUrl(
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -598,26 +767,46 @@ public final class Code {
         onChanged();
         return this;
       }
+      /**
+       * <code>required string url = 1;</code>
+       */
       public Builder clearUrl() {
         bitField0_ = (bitField0_ & ~0x00000001);
         url_ = getDefaultInstance().getUrl();
         onChanged();
         return this;
       }
-      void setUrl(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00000001;
+      /**
+       * <code>required string url = 1;</code>
+       */
+      public Builder setUrlBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
         url_ = value;
         onChanged();
+        return this;
       }
-      
+
       // required .boa.types.CodeRepository.RepositoryKind kind = 2;
       private boa.types.Code.CodeRepository.RepositoryKind kind_ = boa.types.Code.CodeRepository.RepositoryKind.UNKNOWN;
+      /**
+       * <code>required .boa.types.CodeRepository.RepositoryKind kind = 2;</code>
+       */
       public boolean hasKind() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
+      /**
+       * <code>required .boa.types.CodeRepository.RepositoryKind kind = 2;</code>
+       */
       public boa.types.Code.CodeRepository.RepositoryKind getKind() {
         return kind_;
       }
+      /**
+       * <code>required .boa.types.CodeRepository.RepositoryKind kind = 2;</code>
+       */
       public Builder setKind(boa.types.Code.CodeRepository.RepositoryKind value) {
         if (value == null) {
           throw new NullPointerException();
@@ -627,13 +816,16 @@ public final class Code {
         onChanged();
         return this;
       }
+      /**
+       * <code>required .boa.types.CodeRepository.RepositoryKind kind = 2;</code>
+       */
       public Builder clearKind() {
         bitField0_ = (bitField0_ & ~0x00000002);
         kind_ = boa.types.Code.CodeRepository.RepositoryKind.UNKNOWN;
         onChanged();
         return this;
       }
-      
+
       // repeated .boa.types.Revision revisions = 3;
       private java.util.List<boa.types.Code.Revision> revisions_ =
         java.util.Collections.emptyList();
@@ -643,10 +835,13 @@ public final class Code {
           bitField0_ |= 0x00000004;
          }
       }
-      
+
       private com.google.protobuf.RepeatedFieldBuilder<
           boa.types.Code.Revision, boa.types.Code.Revision.Builder, boa.types.Code.RevisionOrBuilder> revisionsBuilder_;
-      
+
+      /**
+       * <code>repeated .boa.types.Revision revisions = 3;</code>
+       */
       public java.util.List<boa.types.Code.Revision> getRevisionsList() {
         if (revisionsBuilder_ == null) {
           return java.util.Collections.unmodifiableList(revisions_);
@@ -654,6 +849,9 @@ public final class Code {
           return revisionsBuilder_.getMessageList();
         }
       }
+      /**
+       * <code>repeated .boa.types.Revision revisions = 3;</code>
+       */
       public int getRevisionsCount() {
         if (revisionsBuilder_ == null) {
           return revisions_.size();
@@ -661,6 +859,9 @@ public final class Code {
           return revisionsBuilder_.getCount();
         }
       }
+      /**
+       * <code>repeated .boa.types.Revision revisions = 3;</code>
+       */
       public boa.types.Code.Revision getRevisions(int index) {
         if (revisionsBuilder_ == null) {
           return revisions_.get(index);
@@ -668,6 +869,9 @@ public final class Code {
           return revisionsBuilder_.getMessage(index);
         }
       }
+      /**
+       * <code>repeated .boa.types.Revision revisions = 3;</code>
+       */
       public Builder setRevisions(
           int index, boa.types.Code.Revision value) {
         if (revisionsBuilder_ == null) {
@@ -682,6 +886,9 @@ public final class Code {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.Revision revisions = 3;</code>
+       */
       public Builder setRevisions(
           int index, boa.types.Code.Revision.Builder builderForValue) {
         if (revisionsBuilder_ == null) {
@@ -693,6 +900,9 @@ public final class Code {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.Revision revisions = 3;</code>
+       */
       public Builder addRevisions(boa.types.Code.Revision value) {
         if (revisionsBuilder_ == null) {
           if (value == null) {
@@ -706,6 +916,9 @@ public final class Code {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.Revision revisions = 3;</code>
+       */
       public Builder addRevisions(
           int index, boa.types.Code.Revision value) {
         if (revisionsBuilder_ == null) {
@@ -720,6 +933,9 @@ public final class Code {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.Revision revisions = 3;</code>
+       */
       public Builder addRevisions(
           boa.types.Code.Revision.Builder builderForValue) {
         if (revisionsBuilder_ == null) {
@@ -731,6 +947,9 @@ public final class Code {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.Revision revisions = 3;</code>
+       */
       public Builder addRevisions(
           int index, boa.types.Code.Revision.Builder builderForValue) {
         if (revisionsBuilder_ == null) {
@@ -742,6 +961,9 @@ public final class Code {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.Revision revisions = 3;</code>
+       */
       public Builder addAllRevisions(
           java.lang.Iterable<? extends boa.types.Code.Revision> values) {
         if (revisionsBuilder_ == null) {
@@ -753,6 +975,9 @@ public final class Code {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.Revision revisions = 3;</code>
+       */
       public Builder clearRevisions() {
         if (revisionsBuilder_ == null) {
           revisions_ = java.util.Collections.emptyList();
@@ -763,6 +988,9 @@ public final class Code {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.Revision revisions = 3;</code>
+       */
       public Builder removeRevisions(int index) {
         if (revisionsBuilder_ == null) {
           ensureRevisionsIsMutable();
@@ -773,10 +1001,16 @@ public final class Code {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.Revision revisions = 3;</code>
+       */
       public boa.types.Code.Revision.Builder getRevisionsBuilder(
           int index) {
         return getRevisionsFieldBuilder().getBuilder(index);
       }
+      /**
+       * <code>repeated .boa.types.Revision revisions = 3;</code>
+       */
       public boa.types.Code.RevisionOrBuilder getRevisionsOrBuilder(
           int index) {
         if (revisionsBuilder_ == null) {
@@ -784,6 +1018,9 @@ public final class Code {
           return revisionsBuilder_.getMessageOrBuilder(index);
         }
       }
+      /**
+       * <code>repeated .boa.types.Revision revisions = 3;</code>
+       */
       public java.util.List<? extends boa.types.Code.RevisionOrBuilder> 
            getRevisionsOrBuilderList() {
         if (revisionsBuilder_ != null) {
@@ -792,15 +1029,24 @@ public final class Code {
           return java.util.Collections.unmodifiableList(revisions_);
         }
       }
+      /**
+       * <code>repeated .boa.types.Revision revisions = 3;</code>
+       */
       public boa.types.Code.Revision.Builder addRevisionsBuilder() {
         return getRevisionsFieldBuilder().addBuilder(
             boa.types.Code.Revision.getDefaultInstance());
       }
+      /**
+       * <code>repeated .boa.types.Revision revisions = 3;</code>
+       */
       public boa.types.Code.Revision.Builder addRevisionsBuilder(
           int index) {
         return getRevisionsFieldBuilder().addBuilder(
             index, boa.types.Code.Revision.getDefaultInstance());
       }
+      /**
+       * <code>repeated .boa.types.Revision revisions = 3;</code>
+       */
       public java.util.List<boa.types.Code.Revision.Builder> 
            getRevisionsBuilderList() {
         return getRevisionsFieldBuilder().getBuilderList();
@@ -819,181 +1065,407 @@ public final class Code {
         }
         return revisionsBuilder_;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:boa.types.CodeRepository)
     }
-    
+
     static {
       defaultInstance = new CodeRepository(true);
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:boa.types.CodeRepository)
   }
-  
+
   public interface RevisionOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
-    
+
     // required int32 id = 1;
+    /**
+     * <code>required int32 id = 1;</code>
+     */
     boolean hasId();
+    /**
+     * <code>required int32 id = 1;</code>
+     */
     int getId();
-    
+
     // required .boa.types.Person author = 2;
+    /**
+     * <code>required .boa.types.Person author = 2;</code>
+     */
     boolean hasAuthor();
+    /**
+     * <code>required .boa.types.Person author = 2;</code>
+     */
     boa.types.Shared.Person getAuthor();
+    /**
+     * <code>required .boa.types.Person author = 2;</code>
+     */
     boa.types.Shared.PersonOrBuilder getAuthorOrBuilder();
-    
+
     // required .boa.types.Person committer = 3;
+    /**
+     * <code>required .boa.types.Person committer = 3;</code>
+     */
     boolean hasCommitter();
+    /**
+     * <code>required .boa.types.Person committer = 3;</code>
+     */
     boa.types.Shared.Person getCommitter();
+    /**
+     * <code>required .boa.types.Person committer = 3;</code>
+     */
     boa.types.Shared.PersonOrBuilder getCommitterOrBuilder();
-    
+
     // required uint64 commit_date = 4;
+    /**
+     * <code>required uint64 commit_date = 4;</code>
+     */
     boolean hasCommitDate();
+    /**
+     * <code>required uint64 commit_date = 4;</code>
+     */
     long getCommitDate();
-    
+
     // required string log = 5;
+    /**
+     * <code>required string log = 5;</code>
+     */
     boolean hasLog();
-    String getLog();
-    
+    /**
+     * <code>required string log = 5;</code>
+     */
+    java.lang.String getLog();
+    /**
+     * <code>required string log = 5;</code>
+     */
+    com.google.protobuf.ByteString
+        getLogBytes();
+
     // repeated .boa.types.ChangedFile files = 6;
+    /**
+     * <code>repeated .boa.types.ChangedFile files = 6;</code>
+     */
     java.util.List<boa.types.Diff.ChangedFile> 
         getFilesList();
+    /**
+     * <code>repeated .boa.types.ChangedFile files = 6;</code>
+     */
     boa.types.Diff.ChangedFile getFiles(int index);
+    /**
+     * <code>repeated .boa.types.ChangedFile files = 6;</code>
+     */
     int getFilesCount();
+    /**
+     * <code>repeated .boa.types.ChangedFile files = 6;</code>
+     */
     java.util.List<? extends boa.types.Diff.ChangedFileOrBuilder> 
         getFilesOrBuilderList();
+    /**
+     * <code>repeated .boa.types.ChangedFile files = 6;</code>
+     */
     boa.types.Diff.ChangedFileOrBuilder getFilesOrBuilder(
         int index);
   }
+  /**
+   * Protobuf type {@code boa.types.Revision}
+   */
   public static final class Revision extends
       com.google.protobuf.GeneratedMessage
       implements RevisionOrBuilder {
     // Use Revision.newBuilder() to construct.
-    private Revision(Builder builder) {
+    private Revision(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
+      this.unknownFields = builder.getUnknownFields();
     }
-    private Revision(boolean noInit) {}
-    
+    private Revision(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
     private static final Revision defaultInstance;
     public static Revision getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public Revision getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private Revision(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 8: {
+              bitField0_ |= 0x00000001;
+              id_ = input.readInt32();
+              break;
+            }
+            case 18: {
+              boa.types.Shared.Person.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000002) == 0x00000002)) {
+                subBuilder = author_.toBuilder();
+              }
+              author_ = input.readMessage(boa.types.Shared.Person.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(author_);
+                author_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000002;
+              break;
+            }
+            case 26: {
+              boa.types.Shared.Person.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000004) == 0x00000004)) {
+                subBuilder = committer_.toBuilder();
+              }
+              committer_ = input.readMessage(boa.types.Shared.Person.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(committer_);
+                committer_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000004;
+              break;
+            }
+            case 32: {
+              bitField0_ |= 0x00000008;
+              commitDate_ = input.readUInt64();
+              break;
+            }
+            case 42: {
+              bitField0_ |= 0x00000010;
+              log_ = input.readBytes();
+              break;
+            }
+            case 50: {
+              if (!((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
+                files_ = new java.util.ArrayList<boa.types.Diff.ChangedFile>();
+                mutable_bitField0_ |= 0x00000020;
+              }
+              files_.add(input.readMessage(boa.types.Diff.ChangedFile.PARSER, extensionRegistry));
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
+          files_ = java.util.Collections.unmodifiableList(files_);
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
       return boa.types.Code.internal_static_boa_types_Revision_descriptor;
     }
-    
+
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return boa.types.Code.internal_static_boa_types_Revision_fieldAccessorTable;
+      return boa.types.Code.internal_static_boa_types_Revision_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              boa.types.Code.Revision.class, boa.types.Code.Revision.Builder.class);
     }
-    
+
+    public static com.google.protobuf.Parser<Revision> PARSER =
+        new com.google.protobuf.AbstractParser<Revision>() {
+      public Revision parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new Revision(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<Revision> getParserForType() {
+      return PARSER;
+    }
+
     private int bitField0_;
     // required int32 id = 1;
     public static final int ID_FIELD_NUMBER = 1;
     private int id_;
+    /**
+     * <code>required int32 id = 1;</code>
+     */
     public boolean hasId() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
+    /**
+     * <code>required int32 id = 1;</code>
+     */
     public int getId() {
       return id_;
     }
-    
+
     // required .boa.types.Person author = 2;
     public static final int AUTHOR_FIELD_NUMBER = 2;
     private boa.types.Shared.Person author_;
+    /**
+     * <code>required .boa.types.Person author = 2;</code>
+     */
     public boolean hasAuthor() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
+    /**
+     * <code>required .boa.types.Person author = 2;</code>
+     */
     public boa.types.Shared.Person getAuthor() {
       return author_;
     }
+    /**
+     * <code>required .boa.types.Person author = 2;</code>
+     */
     public boa.types.Shared.PersonOrBuilder getAuthorOrBuilder() {
       return author_;
     }
-    
+
     // required .boa.types.Person committer = 3;
     public static final int COMMITTER_FIELD_NUMBER = 3;
     private boa.types.Shared.Person committer_;
+    /**
+     * <code>required .boa.types.Person committer = 3;</code>
+     */
     public boolean hasCommitter() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
+    /**
+     * <code>required .boa.types.Person committer = 3;</code>
+     */
     public boa.types.Shared.Person getCommitter() {
       return committer_;
     }
+    /**
+     * <code>required .boa.types.Person committer = 3;</code>
+     */
     public boa.types.Shared.PersonOrBuilder getCommitterOrBuilder() {
       return committer_;
     }
-    
+
     // required uint64 commit_date = 4;
     public static final int COMMIT_DATE_FIELD_NUMBER = 4;
     private long commitDate_;
+    /**
+     * <code>required uint64 commit_date = 4;</code>
+     */
     public boolean hasCommitDate() {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
+    /**
+     * <code>required uint64 commit_date = 4;</code>
+     */
     public long getCommitDate() {
       return commitDate_;
     }
-    
+
     // required string log = 5;
     public static final int LOG_FIELD_NUMBER = 5;
     private java.lang.Object log_;
+    /**
+     * <code>required string log = 5;</code>
+     */
     public boolean hasLog() {
       return ((bitField0_ & 0x00000010) == 0x00000010);
     }
-    public String getLog() {
+    /**
+     * <code>required string log = 5;</code>
+     */
+    public java.lang.String getLog() {
       java.lang.Object ref = log_;
-      if (ref instanceof String) {
-        return (String) ref;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
           log_ = s;
         }
         return s;
       }
     }
-    private com.google.protobuf.ByteString getLogBytes() {
+    /**
+     * <code>required string log = 5;</code>
+     */
+    public com.google.protobuf.ByteString
+        getLogBytes() {
       java.lang.Object ref = log_;
-      if (ref instanceof String) {
+      if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
         log_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
-    
+
     // repeated .boa.types.ChangedFile files = 6;
     public static final int FILES_FIELD_NUMBER = 6;
     private java.util.List<boa.types.Diff.ChangedFile> files_;
+    /**
+     * <code>repeated .boa.types.ChangedFile files = 6;</code>
+     */
     public java.util.List<boa.types.Diff.ChangedFile> getFilesList() {
       return files_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedFile files = 6;</code>
+     */
     public java.util.List<? extends boa.types.Diff.ChangedFileOrBuilder> 
         getFilesOrBuilderList() {
       return files_;
     }
+    /**
+     * <code>repeated .boa.types.ChangedFile files = 6;</code>
+     */
     public int getFilesCount() {
       return files_.size();
     }
+    /**
+     * <code>repeated .boa.types.ChangedFile files = 6;</code>
+     */
     public boa.types.Diff.ChangedFile getFiles(int index) {
       return files_.get(index);
     }
+    /**
+     * <code>repeated .boa.types.ChangedFile files = 6;</code>
+     */
     public boa.types.Diff.ChangedFileOrBuilder getFilesOrBuilder(
         int index) {
       return files_.get(index);
     }
-    
+
     private void initFields() {
       id_ = 0;
       author_ = boa.types.Shared.Person.getDefaultInstance();
@@ -1006,7 +1478,7 @@ public final class Code {
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized != -1) return isInitialized == 1;
-      
+
       if (!hasId()) {
         memoizedIsInitialized = 0;
         return false;
@@ -1044,7 +1516,7 @@ public final class Code {
       memoizedIsInitialized = 1;
       return true;
     }
-    
+
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
@@ -1068,12 +1540,12 @@ public final class Code {
       }
       getUnknownFields().writeTo(output);
     }
-    
+
     private int memoizedSerializedSize = -1;
     public int getSerializedSize() {
       int size = memoizedSerializedSize;
       if (size != -1) return size;
-    
+
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
@@ -1103,94 +1575,83 @@ public final class Code {
       memoizedSerializedSize = size;
       return size;
     }
-    
+
     private static final long serialVersionUID = 0L;
     @java.lang.Override
     protected java.lang.Object writeReplace()
         throws java.io.ObjectStreamException {
       return super.writeReplace();
     }
-    
+
     public static boa.types.Code.Revision parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
+      return PARSER.parseFrom(data);
     }
     public static boa.types.Code.Revision parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(data, extensionRegistry);
     }
     public static boa.types.Code.Revision parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
+      return PARSER.parseFrom(data);
     }
     public static boa.types.Code.Revision parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(data, extensionRegistry);
     }
     public static boa.types.Code.Revision parseFrom(java.io.InputStream input)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
+      return PARSER.parseFrom(input);
     }
     public static boa.types.Code.Revision parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(input, extensionRegistry);
     }
     public static boa.types.Code.Revision parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
+      return PARSER.parseDelimitedFrom(input);
     }
     public static boa.types.Code.Revision parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
     }
     public static boa.types.Code.Revision parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
+      return PARSER.parseFrom(input);
     }
     public static boa.types.Code.Revision parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
+      return PARSER.parseFrom(input, extensionRegistry);
     }
-    
+
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
     public static Builder newBuilder(boa.types.Code.Revision prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
-    
+
     @java.lang.Override
     protected Builder newBuilderForType(
         com.google.protobuf.GeneratedMessage.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
+    /**
+     * Protobuf type {@code boa.types.Revision}
+     */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
        implements boa.types.Code.RevisionOrBuilder {
@@ -1198,18 +1659,21 @@ public final class Code {
           getDescriptor() {
         return boa.types.Code.internal_static_boa_types_Revision_descriptor;
       }
-      
+
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return boa.types.Code.internal_static_boa_types_Revision_fieldAccessorTable;
+        return boa.types.Code.internal_static_boa_types_Revision_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                boa.types.Code.Revision.class, boa.types.Code.Revision.Builder.class);
       }
-      
+
       // Construct using boa.types.Code.Revision.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
-      
-      private Builder(BuilderParent parent) {
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -1223,7 +1687,7 @@ public final class Code {
       private static Builder create() {
         return new Builder();
       }
-      
+
       public Builder clear() {
         super.clear();
         id_ = 0;
@@ -1252,20 +1716,20 @@ public final class Code {
         }
         return this;
       }
-      
+
       public Builder clone() {
         return create().mergeFrom(buildPartial());
       }
-      
+
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return boa.types.Code.Revision.getDescriptor();
+        return boa.types.Code.internal_static_boa_types_Revision_descriptor;
       }
-      
+
       public boa.types.Code.Revision getDefaultInstanceForType() {
         return boa.types.Code.Revision.getDefaultInstance();
       }
-      
+
       public boa.types.Code.Revision build() {
         boa.types.Code.Revision result = buildPartial();
         if (!result.isInitialized()) {
@@ -1273,17 +1737,7 @@ public final class Code {
         }
         return result;
       }
-      
-      private boa.types.Code.Revision buildParsed()
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        boa.types.Code.Revision result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
-        }
-        return result;
-      }
-      
+
       public boa.types.Code.Revision buildPartial() {
         boa.types.Code.Revision result = new boa.types.Code.Revision(this);
         int from_bitField0_ = bitField0_;
@@ -1329,7 +1783,7 @@ public final class Code {
         onBuilt();
         return result;
       }
-      
+
       public Builder mergeFrom(com.google.protobuf.Message other) {
         if (other instanceof boa.types.Code.Revision) {
           return mergeFrom((boa.types.Code.Revision)other);
@@ -1338,7 +1792,7 @@ public final class Code {
           return this;
         }
       }
-      
+
       public Builder mergeFrom(boa.types.Code.Revision other) {
         if (other == boa.types.Code.Revision.getDefaultInstance()) return this;
         if (other.hasId()) {
@@ -1354,7 +1808,9 @@ public final class Code {
           setCommitDate(other.getCommitDate());
         }
         if (other.hasLog()) {
-          setLog(other.getLog());
+          bitField0_ |= 0x00000010;
+          log_ = other.log_;
+          onChanged();
         }
         if (filesBuilder_ == null) {
           if (!other.files_.isEmpty()) {
@@ -1385,7 +1841,7 @@ public final class Code {
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
-      
+
       public final boolean isInitialized() {
         if (!hasId()) {
           
@@ -1423,103 +1879,72 @@ public final class Code {
         }
         return true;
       }
-      
+
       public Builder mergeFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
-        while (true) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              this.setUnknownFields(unknownFields.build());
-              onChanged();
-              return this;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                onChanged();
-                return this;
-              }
-              break;
-            }
-            case 8: {
-              bitField0_ |= 0x00000001;
-              id_ = input.readInt32();
-              break;
-            }
-            case 18: {
-              boa.types.Shared.Person.Builder subBuilder = boa.types.Shared.Person.newBuilder();
-              if (hasAuthor()) {
-                subBuilder.mergeFrom(getAuthor());
-              }
-              input.readMessage(subBuilder, extensionRegistry);
-              setAuthor(subBuilder.buildPartial());
-              break;
-            }
-            case 26: {
-              boa.types.Shared.Person.Builder subBuilder = boa.types.Shared.Person.newBuilder();
-              if (hasCommitter()) {
-                subBuilder.mergeFrom(getCommitter());
-              }
-              input.readMessage(subBuilder, extensionRegistry);
-              setCommitter(subBuilder.buildPartial());
-              break;
-            }
-            case 32: {
-              bitField0_ |= 0x00000008;
-              commitDate_ = input.readUInt64();
-              break;
-            }
-            case 42: {
-              bitField0_ |= 0x00000010;
-              log_ = input.readBytes();
-              break;
-            }
-            case 50: {
-              boa.types.Diff.ChangedFile.Builder subBuilder = boa.types.Diff.ChangedFile.newBuilder();
-              input.readMessage(subBuilder, extensionRegistry);
-              addFiles(subBuilder.buildPartial());
-              break;
-            }
+        boa.types.Code.Revision parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (boa.types.Code.Revision) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
           }
         }
+        return this;
       }
-      
       private int bitField0_;
-      
+
       // required int32 id = 1;
       private int id_ ;
+      /**
+       * <code>required int32 id = 1;</code>
+       */
       public boolean hasId() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
+      /**
+       * <code>required int32 id = 1;</code>
+       */
       public int getId() {
         return id_;
       }
+      /**
+       * <code>required int32 id = 1;</code>
+       */
       public Builder setId(int value) {
         bitField0_ |= 0x00000001;
         id_ = value;
         onChanged();
         return this;
       }
+      /**
+       * <code>required int32 id = 1;</code>
+       */
       public Builder clearId() {
         bitField0_ = (bitField0_ & ~0x00000001);
         id_ = 0;
         onChanged();
         return this;
       }
-      
+
       // required .boa.types.Person author = 2;
       private boa.types.Shared.Person author_ = boa.types.Shared.Person.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           boa.types.Shared.Person, boa.types.Shared.Person.Builder, boa.types.Shared.PersonOrBuilder> authorBuilder_;
+      /**
+       * <code>required .boa.types.Person author = 2;</code>
+       */
       public boolean hasAuthor() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
+      /**
+       * <code>required .boa.types.Person author = 2;</code>
+       */
       public boa.types.Shared.Person getAuthor() {
         if (authorBuilder_ == null) {
           return author_;
@@ -1527,6 +1952,9 @@ public final class Code {
           return authorBuilder_.getMessage();
         }
       }
+      /**
+       * <code>required .boa.types.Person author = 2;</code>
+       */
       public Builder setAuthor(boa.types.Shared.Person value) {
         if (authorBuilder_ == null) {
           if (value == null) {
@@ -1540,6 +1968,9 @@ public final class Code {
         bitField0_ |= 0x00000002;
         return this;
       }
+      /**
+       * <code>required .boa.types.Person author = 2;</code>
+       */
       public Builder setAuthor(
           boa.types.Shared.Person.Builder builderForValue) {
         if (authorBuilder_ == null) {
@@ -1551,6 +1982,9 @@ public final class Code {
         bitField0_ |= 0x00000002;
         return this;
       }
+      /**
+       * <code>required .boa.types.Person author = 2;</code>
+       */
       public Builder mergeAuthor(boa.types.Shared.Person value) {
         if (authorBuilder_ == null) {
           if (((bitField0_ & 0x00000002) == 0x00000002) &&
@@ -1567,6 +2001,9 @@ public final class Code {
         bitField0_ |= 0x00000002;
         return this;
       }
+      /**
+       * <code>required .boa.types.Person author = 2;</code>
+       */
       public Builder clearAuthor() {
         if (authorBuilder_ == null) {
           author_ = boa.types.Shared.Person.getDefaultInstance();
@@ -1577,11 +2014,17 @@ public final class Code {
         bitField0_ = (bitField0_ & ~0x00000002);
         return this;
       }
+      /**
+       * <code>required .boa.types.Person author = 2;</code>
+       */
       public boa.types.Shared.Person.Builder getAuthorBuilder() {
         bitField0_ |= 0x00000002;
         onChanged();
         return getAuthorFieldBuilder().getBuilder();
       }
+      /**
+       * <code>required .boa.types.Person author = 2;</code>
+       */
       public boa.types.Shared.PersonOrBuilder getAuthorOrBuilder() {
         if (authorBuilder_ != null) {
           return authorBuilder_.getMessageOrBuilder();
@@ -1589,6 +2032,9 @@ public final class Code {
           return author_;
         }
       }
+      /**
+       * <code>required .boa.types.Person author = 2;</code>
+       */
       private com.google.protobuf.SingleFieldBuilder<
           boa.types.Shared.Person, boa.types.Shared.Person.Builder, boa.types.Shared.PersonOrBuilder> 
           getAuthorFieldBuilder() {
@@ -1602,14 +2048,20 @@ public final class Code {
         }
         return authorBuilder_;
       }
-      
+
       // required .boa.types.Person committer = 3;
       private boa.types.Shared.Person committer_ = boa.types.Shared.Person.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           boa.types.Shared.Person, boa.types.Shared.Person.Builder, boa.types.Shared.PersonOrBuilder> committerBuilder_;
+      /**
+       * <code>required .boa.types.Person committer = 3;</code>
+       */
       public boolean hasCommitter() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
+      /**
+       * <code>required .boa.types.Person committer = 3;</code>
+       */
       public boa.types.Shared.Person getCommitter() {
         if (committerBuilder_ == null) {
           return committer_;
@@ -1617,6 +2069,9 @@ public final class Code {
           return committerBuilder_.getMessage();
         }
       }
+      /**
+       * <code>required .boa.types.Person committer = 3;</code>
+       */
       public Builder setCommitter(boa.types.Shared.Person value) {
         if (committerBuilder_ == null) {
           if (value == null) {
@@ -1630,6 +2085,9 @@ public final class Code {
         bitField0_ |= 0x00000004;
         return this;
       }
+      /**
+       * <code>required .boa.types.Person committer = 3;</code>
+       */
       public Builder setCommitter(
           boa.types.Shared.Person.Builder builderForValue) {
         if (committerBuilder_ == null) {
@@ -1641,6 +2099,9 @@ public final class Code {
         bitField0_ |= 0x00000004;
         return this;
       }
+      /**
+       * <code>required .boa.types.Person committer = 3;</code>
+       */
       public Builder mergeCommitter(boa.types.Shared.Person value) {
         if (committerBuilder_ == null) {
           if (((bitField0_ & 0x00000004) == 0x00000004) &&
@@ -1657,6 +2118,9 @@ public final class Code {
         bitField0_ |= 0x00000004;
         return this;
       }
+      /**
+       * <code>required .boa.types.Person committer = 3;</code>
+       */
       public Builder clearCommitter() {
         if (committerBuilder_ == null) {
           committer_ = boa.types.Shared.Person.getDefaultInstance();
@@ -1667,11 +2131,17 @@ public final class Code {
         bitField0_ = (bitField0_ & ~0x00000004);
         return this;
       }
+      /**
+       * <code>required .boa.types.Person committer = 3;</code>
+       */
       public boa.types.Shared.Person.Builder getCommitterBuilder() {
         bitField0_ |= 0x00000004;
         onChanged();
         return getCommitterFieldBuilder().getBuilder();
       }
+      /**
+       * <code>required .boa.types.Person committer = 3;</code>
+       */
       public boa.types.Shared.PersonOrBuilder getCommitterOrBuilder() {
         if (committerBuilder_ != null) {
           return committerBuilder_.getMessageOrBuilder();
@@ -1679,6 +2149,9 @@ public final class Code {
           return committer_;
         }
       }
+      /**
+       * <code>required .boa.types.Person committer = 3;</code>
+       */
       private com.google.protobuf.SingleFieldBuilder<
           boa.types.Shared.Person, boa.types.Shared.Person.Builder, boa.types.Shared.PersonOrBuilder> 
           getCommitterFieldBuilder() {
@@ -1692,44 +2165,83 @@ public final class Code {
         }
         return committerBuilder_;
       }
-      
+
       // required uint64 commit_date = 4;
       private long commitDate_ ;
+      /**
+       * <code>required uint64 commit_date = 4;</code>
+       */
       public boolean hasCommitDate() {
         return ((bitField0_ & 0x00000008) == 0x00000008);
       }
+      /**
+       * <code>required uint64 commit_date = 4;</code>
+       */
       public long getCommitDate() {
         return commitDate_;
       }
+      /**
+       * <code>required uint64 commit_date = 4;</code>
+       */
       public Builder setCommitDate(long value) {
         bitField0_ |= 0x00000008;
         commitDate_ = value;
         onChanged();
         return this;
       }
+      /**
+       * <code>required uint64 commit_date = 4;</code>
+       */
       public Builder clearCommitDate() {
         bitField0_ = (bitField0_ & ~0x00000008);
         commitDate_ = 0L;
         onChanged();
         return this;
       }
-      
+
       // required string log = 5;
       private java.lang.Object log_ = "";
+      /**
+       * <code>required string log = 5;</code>
+       */
       public boolean hasLog() {
         return ((bitField0_ & 0x00000010) == 0x00000010);
       }
-      public String getLog() {
+      /**
+       * <code>required string log = 5;</code>
+       */
+      public java.lang.String getLog() {
         java.lang.Object ref = log_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
           log_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
-      public Builder setLog(String value) {
+      /**
+       * <code>required string log = 5;</code>
+       */
+      public com.google.protobuf.ByteString
+          getLogBytes() {
+        java.lang.Object ref = log_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          log_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string log = 5;</code>
+       */
+      public Builder setLog(
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -1738,18 +2250,29 @@ public final class Code {
         onChanged();
         return this;
       }
+      /**
+       * <code>required string log = 5;</code>
+       */
       public Builder clearLog() {
         bitField0_ = (bitField0_ & ~0x00000010);
         log_ = getDefaultInstance().getLog();
         onChanged();
         return this;
       }
-      void setLog(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00000010;
+      /**
+       * <code>required string log = 5;</code>
+       */
+      public Builder setLogBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000010;
         log_ = value;
         onChanged();
+        return this;
       }
-      
+
       // repeated .boa.types.ChangedFile files = 6;
       private java.util.List<boa.types.Diff.ChangedFile> files_ =
         java.util.Collections.emptyList();
@@ -1759,10 +2282,13 @@ public final class Code {
           bitField0_ |= 0x00000020;
          }
       }
-      
+
       private com.google.protobuf.RepeatedFieldBuilder<
           boa.types.Diff.ChangedFile, boa.types.Diff.ChangedFile.Builder, boa.types.Diff.ChangedFileOrBuilder> filesBuilder_;
-      
+
+      /**
+       * <code>repeated .boa.types.ChangedFile files = 6;</code>
+       */
       public java.util.List<boa.types.Diff.ChangedFile> getFilesList() {
         if (filesBuilder_ == null) {
           return java.util.Collections.unmodifiableList(files_);
@@ -1770,6 +2296,9 @@ public final class Code {
           return filesBuilder_.getMessageList();
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedFile files = 6;</code>
+       */
       public int getFilesCount() {
         if (filesBuilder_ == null) {
           return files_.size();
@@ -1777,6 +2306,9 @@ public final class Code {
           return filesBuilder_.getCount();
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedFile files = 6;</code>
+       */
       public boa.types.Diff.ChangedFile getFiles(int index) {
         if (filesBuilder_ == null) {
           return files_.get(index);
@@ -1784,6 +2316,9 @@ public final class Code {
           return filesBuilder_.getMessage(index);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedFile files = 6;</code>
+       */
       public Builder setFiles(
           int index, boa.types.Diff.ChangedFile value) {
         if (filesBuilder_ == null) {
@@ -1798,6 +2333,9 @@ public final class Code {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedFile files = 6;</code>
+       */
       public Builder setFiles(
           int index, boa.types.Diff.ChangedFile.Builder builderForValue) {
         if (filesBuilder_ == null) {
@@ -1809,6 +2347,9 @@ public final class Code {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedFile files = 6;</code>
+       */
       public Builder addFiles(boa.types.Diff.ChangedFile value) {
         if (filesBuilder_ == null) {
           if (value == null) {
@@ -1822,6 +2363,9 @@ public final class Code {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedFile files = 6;</code>
+       */
       public Builder addFiles(
           int index, boa.types.Diff.ChangedFile value) {
         if (filesBuilder_ == null) {
@@ -1836,6 +2380,9 @@ public final class Code {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedFile files = 6;</code>
+       */
       public Builder addFiles(
           boa.types.Diff.ChangedFile.Builder builderForValue) {
         if (filesBuilder_ == null) {
@@ -1847,6 +2394,9 @@ public final class Code {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedFile files = 6;</code>
+       */
       public Builder addFiles(
           int index, boa.types.Diff.ChangedFile.Builder builderForValue) {
         if (filesBuilder_ == null) {
@@ -1858,6 +2408,9 @@ public final class Code {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedFile files = 6;</code>
+       */
       public Builder addAllFiles(
           java.lang.Iterable<? extends boa.types.Diff.ChangedFile> values) {
         if (filesBuilder_ == null) {
@@ -1869,6 +2422,9 @@ public final class Code {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedFile files = 6;</code>
+       */
       public Builder clearFiles() {
         if (filesBuilder_ == null) {
           files_ = java.util.Collections.emptyList();
@@ -1879,6 +2435,9 @@ public final class Code {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedFile files = 6;</code>
+       */
       public Builder removeFiles(int index) {
         if (filesBuilder_ == null) {
           ensureFilesIsMutable();
@@ -1889,10 +2448,16 @@ public final class Code {
         }
         return this;
       }
+      /**
+       * <code>repeated .boa.types.ChangedFile files = 6;</code>
+       */
       public boa.types.Diff.ChangedFile.Builder getFilesBuilder(
           int index) {
         return getFilesFieldBuilder().getBuilder(index);
       }
+      /**
+       * <code>repeated .boa.types.ChangedFile files = 6;</code>
+       */
       public boa.types.Diff.ChangedFileOrBuilder getFilesOrBuilder(
           int index) {
         if (filesBuilder_ == null) {
@@ -1900,6 +2465,9 @@ public final class Code {
           return filesBuilder_.getMessageOrBuilder(index);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedFile files = 6;</code>
+       */
       public java.util.List<? extends boa.types.Diff.ChangedFileOrBuilder> 
            getFilesOrBuilderList() {
         if (filesBuilder_ != null) {
@@ -1908,15 +2476,24 @@ public final class Code {
           return java.util.Collections.unmodifiableList(files_);
         }
       }
+      /**
+       * <code>repeated .boa.types.ChangedFile files = 6;</code>
+       */
       public boa.types.Diff.ChangedFile.Builder addFilesBuilder() {
         return getFilesFieldBuilder().addBuilder(
             boa.types.Diff.ChangedFile.getDefaultInstance());
       }
+      /**
+       * <code>repeated .boa.types.ChangedFile files = 6;</code>
+       */
       public boa.types.Diff.ChangedFile.Builder addFilesBuilder(
           int index) {
         return getFilesFieldBuilder().addBuilder(
             index, boa.types.Diff.ChangedFile.getDefaultInstance());
       }
+      /**
+       * <code>repeated .boa.types.ChangedFile files = 6;</code>
+       */
       public java.util.List<boa.types.Diff.ChangedFile.Builder> 
            getFilesBuilderList() {
         return getFilesFieldBuilder().getBuilderList();
@@ -1935,18 +2512,18 @@ public final class Code {
         }
         return filesBuilder_;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:boa.types.Revision)
     }
-    
+
     static {
       defaultInstance = new Revision(true);
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:boa.types.Revision)
   }
-  
+
   private static com.google.protobuf.Descriptors.Descriptor
     internal_static_boa_types_CodeRepository_descriptor;
   private static
@@ -1957,7 +2534,7 @@ public final class Code {
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_boa_types_Revision_fieldAccessorTable;
-  
+
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
     return descriptor;
@@ -1988,17 +2565,13 @@ public final class Code {
           internal_static_boa_types_CodeRepository_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_CodeRepository_descriptor,
-              new java.lang.String[] { "Url", "Kind", "Revisions", },
-              boa.types.Code.CodeRepository.class,
-              boa.types.Code.CodeRepository.Builder.class);
+              new java.lang.String[] { "Url", "Kind", "Revisions", });
           internal_static_boa_types_Revision_descriptor =
             getDescriptor().getMessageTypes().get(1);
           internal_static_boa_types_Revision_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Revision_descriptor,
-              new java.lang.String[] { "Id", "Author", "Committer", "CommitDate", "Log", "Files", },
-              boa.types.Code.Revision.class,
-              boa.types.Code.Revision.Builder.class);
+              new java.lang.String[] { "Id", "Author", "Committer", "CommitDate", "Log", "Files", });
           return null;
         }
       };
@@ -2009,6 +2582,6 @@ public final class Code {
           boa.types.Shared.getDescriptor(),
         }, assigner);
   }
-  
+
   // @@protoc_insertion_point(outer_class_scope)
 }

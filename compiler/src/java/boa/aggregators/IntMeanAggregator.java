@@ -4,13 +4,10 @@ import java.io.IOException;
 
 import boa.io.EmitKey;
 
-
-
 /**
  * A Boa aggregator to calculate a mean of the values in a dataset.
  * 
  * @author anthonyu
- * 
  */
 @AggregatorSpec(name = "mean", type = "int")
 public class IntMeanAggregator extends MeanAggregator {
@@ -18,7 +15,7 @@ public class IntMeanAggregator extends MeanAggregator {
 
 	/** {@inheritDoc} */
 	@Override
-	public void start(EmitKey key) {
+	public void start(final EmitKey key) {
 		super.start(key);
 
 		this.sum = 0;
@@ -26,7 +23,7 @@ public class IntMeanAggregator extends MeanAggregator {
 
 	/** {@inheritDoc} */
 	@Override
-	public void aggregate(String data, String metadata) throws IOException, InterruptedException {
+	public void aggregate(final String data, final String metadata) throws IOException, InterruptedException {
 		if (data.indexOf('.') != -1)
 			this.aggregate(Double.valueOf(data).longValue(), metadata);
 		else
@@ -35,7 +32,7 @@ public class IntMeanAggregator extends MeanAggregator {
 
 	/** {@inheritDoc} */
 	@Override
-	public void aggregate(long data, String metadata) {
+	public void aggregate(final long data, final String metadata) {
 		this.sum += data;
 
 		super.count(metadata);
@@ -43,7 +40,7 @@ public class IntMeanAggregator extends MeanAggregator {
 
 	/** {@inheritDoc} */
 	@Override
-	public void aggregate(double data, String metadata) {
+	public void aggregate(final double data, final String metadata) {
 		this.aggregate(Double.valueOf(data).longValue(), metadata);
 	}
 

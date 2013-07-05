@@ -20,19 +20,21 @@ public class VariableProtoTuple extends BoaProtoTuple {
 	private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
 	static {
-		names.put("name", 0);
+		int counter = 0;
+
+		names.put("name", counter++);
 		members.add(new BoaString());
 
-		names.put("variable_type", 1);
+		names.put("variable_type", counter++);
 		members.add(new TypeProtoTuple());
 
-		names.put("modifiers", 2);
+		names.put("modifiers", counter++);
 		members.add(new BoaProtoList(new ModifierProtoTuple()));
 
-		names.put("initializer", 3);
+		names.put("initializer", counter++);
 		members.add(new ExpressionProtoTuple());
 
-		names.put("comments", 4);
+		names.put("comments", counter++);
 		members.add(new BoaProtoList(new CommentProtoTuple()));
 	}
 
@@ -43,6 +45,7 @@ public class VariableProtoTuple extends BoaProtoTuple {
 		super(members, names);
 	}
 
+	/** @{inheritDoc} */
 	@Override
 	public String toJavaType() {
 		return "boa.types.Ast.Variable";

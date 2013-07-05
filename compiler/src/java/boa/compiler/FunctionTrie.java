@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 import boa.types.BoaFunction;
+import boa.types.BoaName;
 import boa.types.BoaType;
 import boa.types.BoaVarargs;
 
@@ -44,6 +45,10 @@ public class FunctionTrie {
 		return (BoaFunction) this.trie.get("");
 	}
 
+	public boolean hasFunction(final String name) {
+		return this.trie.containsKey(name);
+	}
+
 	public BoaFunction getFunction(final String name, final BoaType[] formalParameters) {
 		final Object[] ids = new Object[formalParameters.length + 2];
 
@@ -54,22 +59,7 @@ public class FunctionTrie {
 
 		ids[ids.length - 1] = "";
 
-		final BoaFunction function = this.getFunction(ids);
-
-		if (function == null)
-			throw new RuntimeException("no such function " + name + "(" + Arrays.toString(formalParameters) + ")");
-
-		return function;
-	}
-
-	public boolean hasFunction(final String name, final BoaType[] formalParameters) {
-		try {
-			this.getFunction(name, formalParameters);
-
-			return true;
-		} catch (final RuntimeException e) {
-			return false;
-		}
+		return this.getFunction(ids);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -99,7 +89,10 @@ public class FunctionTrie {
 		ids[0] = name;
 
 		for (int i = 0; i < formalParameters.length; i++)
-			ids[i + 1] = formalParameters[i];
+			if (formalParameters[i] instanceof BoaName)
+				ids[i + 1] = ((BoaName)formalParameters[i]).getType();
+			else
+				ids[i + 1] = formalParameters[i];
 
 		ids[ids.length - 1] = "";
 

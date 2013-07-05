@@ -7,6 +7,7 @@ import java.util.Map;
 
 import boa.types.BoaProtoList;
 import boa.types.BoaProtoTuple;
+import boa.types.BoaString;
 import boa.types.BoaType;
 
 /**
@@ -23,6 +24,9 @@ public class ASTRootProtoTuple extends BoaProtoTuple {
 
 		names.put("namespaces", counter++);
 		members.add(new BoaProtoList(new NamespaceProtoTuple()));
+
+		names.put("imports", counter++);
+		members.add(new BoaProtoList(new BoaString()));
 	}
 
 	/**
@@ -32,6 +36,7 @@ public class ASTRootProtoTuple extends BoaProtoTuple {
 		super(members, names);
 	}
 
+	/** @{inheritDoc} */
 	@Override
 	public String toJavaType() {
 		return "boa.types.Ast.ASTRoot";

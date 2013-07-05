@@ -20,28 +20,30 @@ public class MethodProtoTuple extends BoaProtoTuple {
 	private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
 	static {
-		names.put("name", 0);
+		int counter = 0;
+
+		names.put("name", counter++);
 		members.add(new BoaString());
 
-		names.put("modifiers", 1);
+		names.put("modifiers", counter++);
 		members.add(new BoaProtoList(new ModifierProtoTuple()));
 
-		names.put("return_type", 2);
+		names.put("return_type", counter++);
 		members.add(new TypeProtoTuple());
 
-		names.put("generic_parameters", 3);
+		names.put("generic_parameters", counter++);
 		members.add(new BoaProtoList(new TypeProtoTuple()));
 
-		names.put("arguments", 4);
+		names.put("arguments", counter++);
 		members.add(new BoaProtoList(new VariableProtoTuple()));
 
-		names.put("exception_types", 5);
+		names.put("exception_types", counter++);
 		members.add(new BoaProtoList(new TypeProtoTuple()));
 
-		names.put("statements", 6);
+		names.put("statements", counter++);
 		members.add(new BoaProtoList(new StatementProtoTuple()));
 
-		names.put("comments", 7);
+		names.put("comments", counter++);
 		members.add(new BoaProtoList(new CommentProtoTuple()));
 	}
 
@@ -52,6 +54,7 @@ public class MethodProtoTuple extends BoaProtoTuple {
 		super(members, names);
 	}
 
+	/** @{inheritDoc} */
 	@Override
 	public String toJavaType() {
 		return "boa.types.Ast.Method";

@@ -22,7 +22,7 @@ public class StatisticsAggregator extends Aggregator {
 
 	/** {@inheritDoc} */
 	@Override
-	public void start(EmitKey key) {
+	public void start(final EmitKey key) {
 		super.start(key);
 
 		map = new TreeMap<Long, Long>();
@@ -43,7 +43,7 @@ public class StatisticsAggregator extends Aggregator {
 
 	/** {@inheritDoc} */
 	@Override
-	public void aggregate(String data, String metadata) throws IOException, InterruptedException {
+	public void aggregate(final String data, final String metadata) throws IOException, InterruptedException {
 		for (final String s : data.split(";")) {
 			final int idx = s.indexOf(":");
 			if (idx > 0) {
@@ -58,7 +58,7 @@ public class StatisticsAggregator extends Aggregator {
 
 	/** {@inheritDoc} */
 	@Override
-	public void aggregate(long data, String metadata) {
+	public void aggregate(final long data, final String metadata) {
 		if (map.containsKey(data))
 			map.put(data, map.get(data) + 1L);
 		else
@@ -68,7 +68,7 @@ public class StatisticsAggregator extends Aggregator {
 
 	/** {@inheritDoc} */
 	@Override
-	public void aggregate(double data, String metadata) {
+	public void aggregate(final double data, final String metadata) {
 		this.aggregate(Double.valueOf(data).longValue(), metadata);
 	}
 

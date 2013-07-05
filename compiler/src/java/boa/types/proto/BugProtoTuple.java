@@ -22,28 +22,30 @@ public class BugProtoTuple extends BoaProtoTuple {
 	private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
 	static {
-		names.put("id", 0);
+		int counter = 0;
+
+		names.put("id", counter++);
 		members.add(new BoaInt());
 
-		names.put("reporter", 1);
+		names.put("reporter", counter++);
 		members.add(new PersonProtoTuple());
 
-		names.put("reported_date", 2);
+		names.put("reported_date", counter++);
 		members.add(new BoaTime());
 
-		names.put("closed_date", 3);
+		names.put("closed_date", counter++);
 		members.add(new BoaTime());
 
-		names.put("summary", 4);
+		names.put("summary", counter++);
 		members.add(new BoaString());
 
-		names.put("description", 5);
+		names.put("description", counter++);
 		members.add(new BoaString());
 
-		names.put("status", 6);
+		names.put("status", counter++);
 		members.add(new BoaInt());
 
-		names.put("severity", 7);
+		names.put("severity", counter++);
 		members.add(new BoaString());
 	}
 
@@ -54,6 +56,7 @@ public class BugProtoTuple extends BoaProtoTuple {
 		super(members, names);
 	}
 
+	/** @{inheritDoc} */
 	@Override
 	public String toJavaType() {
 		return "boa.types.Bugs.Bug";

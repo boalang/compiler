@@ -72,7 +72,6 @@ public class BoaArray extends BoaType {
 	/** {@inheritDoc} */
 	@Override
 	public boolean compares(final BoaType that) {
-		// FIXME: is this needed?
 		// if that is an array..
 		if (that instanceof BoaArray)
 			// check against the element types of these arrays

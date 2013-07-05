@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import boa.io.EmitKey;
 
-
 /**
  * A Boa aggregator to calculate the top or bottom <i>n</i> values in a
  * dataset by weight.

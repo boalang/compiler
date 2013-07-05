@@ -6,13 +6,10 @@ import java.util.List;
 
 import boa.io.EmitKey;
 
-
-
 /**
  * A Boa aggregator to calculate a histogram for the values in a dataset.
  * 
  * @author anthonyu
- * 
  */
 abstract class HistogramAggregator extends Aggregator {
 	private final long min;
@@ -33,13 +30,13 @@ abstract class HistogramAggregator extends Aggregator {
 	 * @param buckets
 	 *            A long representing the number of buckets in the histogram
 	 */
-	public HistogramAggregator(long min, long max, long buckets) {
+	public HistogramAggregator(final long min, final long max, final long buckets) {
 		this.min = min;
 		this.max = max;
 		this.buckets = (int) buckets;
 	}
 
-	public long count(String metadata) {
+	public long count(final String metadata) {
 		// if the metadata is null, it counts as a single
 		if (metadata == null)
 			return 1;
@@ -50,20 +47,20 @@ abstract class HistogramAggregator extends Aggregator {
 
 	/** {@inheritDoc} */
 	@Override
-	public void start(EmitKey key) {
+	public void start(final EmitKey key) {
 		super.start(key);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public abstract void aggregate(String data, String metadata) throws NumberFormatException, IOException, InterruptedException;
+	public abstract void aggregate(final String data, final String metadata) throws NumberFormatException, IOException, InterruptedException;
 
 	/** {@inheritDoc} */
 	@Override
 	public void finish() throws IOException, InterruptedException {
 		if (this.isCombining()) {
 			// if we're in the combiner, just output the compressed data
-			for (Pair<Number, Long> p : this.getTuples())
+			for (final Pair<Number, Long> p : this.getTuples())
 				this.collect(p.getFirst().toString(), p.getSecond().toString());
 		} else {
 			// otherwise, set up the histogram
@@ -73,7 +70,7 @@ abstract class HistogramAggregator extends Aggregator {
 
 			// for each of the compressed data points, increment the bucket it
 			// belongs to by its cardinality
-			for (Pair<Number, Long> p : this.getTuples())
+			for (final Pair<Number, Long> p : this.getTuples())
 				buckets[(int) ((p.getFirst().longValue() - this.min) / step)] += p.getSecond();
 
 			this.collect(Arrays.toString(buckets));

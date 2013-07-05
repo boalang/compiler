@@ -1,17 +1,6 @@
 package boa.compiler;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,6 +15,7 @@ import java.util.zip.ZipEntry;
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
 
+import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
 
 import org.apache.commons.cli.CommandLine;
@@ -36,9 +26,16 @@ import org.apache.log4j.Logger;
 
 import org.scannotation.ClasspathUrlFinder;
 
+import boa.compiler.ast.Program;
+import boa.compiler.ast.Start;
+import boa.compiler.transforms.LocalAggregationTransformer;
+import boa.compiler.transforms.VisitorMergingTransformer;
+import boa.compiler.transforms.VisitorOptimizingTransformer;
+import boa.compiler.visitors.CodeGeneratingVisitor;
+import boa.compiler.visitors.TaskClassifyingVisitor;
+import boa.compiler.visitors.TypeCheckingVisitor;
 import boa.parser.ParseException;
 import boa.parser.BoaParser;
-import boa.parser.syntaxtree.Program;
 
 public class BoaCompiler {
 	private static Logger LOG = Logger.getLogger(BoaCompiler.class);
@@ -51,6 +48,8 @@ public class BoaCompiler {
 		options.addOption("i", "in", true, "file to be compiled");
 		options.addOption("o", "out", true, "the name of the resulting jar");
 		options.addOption("b", "hbase", false, "use HBase templates");
+		options.addOption("nv", "no-visitor-fusion", false, "disable visitor fusion");
+		options.addOption("v", "visitors-fused", true, "number of visitors to fuse");
 		options.addOption("n", "name", true, "the name of the generated main class");
 
 		CommandLine cl;
@@ -93,13 +92,23 @@ public class BoaCompiler {
 			return;
 		}
 
-		final File inputFile = new File(cl.getOptionValue('i'));
+		final ArrayList<File> inputFiles = new ArrayList<File>();
+		final String[] inputPaths = cl.getOptionValue('i').split(",");
+		for (final String s : inputPaths)
+			inputFiles.add(new File(s));
 
 		final String className;
 		if (cl.hasOption('n'))
 			className = cl.getOptionValue('n');
-		else
-			className = pascalCase(inputFile.getName().substring(0, inputFile.getName().lastIndexOf('.')));
+		else {
+			String s = "";
+			for (final File f : inputFiles) {
+				if (s.length() != 0)
+					s += "_";
+				s += pascalCase(f.getName().substring(0, f.getName().lastIndexOf('.')));
+			}
+			className = s;
+		}
 
 		// get the filename of the jar we will be writing
 		final String jarName;
@@ -129,9 +138,9 @@ public class BoaCompiler {
 			} finally {
 				t.close();
 			}
-			
+
 			final StringTemplateGroup stg;
-			
+
 			final String templateName;
 			if (cl.hasOption('b'))
 				templateName = "Hbase";
@@ -145,21 +154,89 @@ public class BoaCompiler {
 				s.close();
 			}
 
-			final BufferedReader r = new BufferedReader(new FileReader(inputFile));
-			
-			try {
-				new BoaParser(r);
-				final Program p = BoaParser.Start().f0;
+			final List<String> jobnames = new ArrayList<String>();
+			final List<String> jobs = new ArrayList<String>();
+			BoaParser parser = null;
+			boolean isSimple = true;
 
-				final TypeCheckingVisitor typeChecker = new TypeCheckingVisitor();
-				typeChecker.visit(p, new SymbolTable(libs));
+			final List<Program> visitorPrograms = new ArrayList<Program>();
 
-				final String src = new CodeGeneratingVisitor(typeChecker, className, stg).visit(p);
+			SymbolTable.initialize(libs);
 
-				o.write(src.getBytes());
-			} finally {
-				r.close();
+			for (int i = 0; i < inputFiles.size(); i++) {
+				final File f = inputFiles.get(i);
+				final BufferedReader r = new BufferedReader(new FileReader(f));
+
+				try {
+					if (parser == null)
+						parser = new BoaParser(r);
+					else
+						BoaParser.ReInit(r);
+					parser.setTabSize(4);
+					final Start p = (Start)new ParseTreeAdapter().visit(BoaParser.Start());
+
+					final String jobName = "" + i;
+
+					final TypeCheckingVisitor typeChecker = new TypeCheckingVisitor();
+					typeChecker.start(p, new SymbolTable());
+
+					final TaskClassifyingVisitor simpleVisitor = new TaskClassifyingVisitor();
+					simpleVisitor.start(p);
+					final boolean jobIsSimple = !simpleVisitor.hasVisitor();
+
+					BoaCompiler.LOG.info(f.getName() + ": task complexity: " + (jobIsSimple ? "simple" : "complex"));
+					isSimple &= jobIsSimple;
+
+					new LocalAggregationTransformer().start(p);
+						
+					// if a job has no visitor, let it have its own method
+					// also let jobs have own methods if visitor merging is disabled
+					if (jobIsSimple || cl.hasOption("nv") || inputFiles.size() == 1) {
+						if (!jobIsSimple)
+							new VisitorOptimizingTransformer().start(p);
+
+						final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(jobName, stg);
+						cg.start(p);
+						jobs.add(cg.getCode());
+
+						jobnames.add(jobName);
+					}
+					// if a job has visitors, fuse them all together into a single program
+					else {
+						p.getProgram().jobName = jobName;
+						visitorPrograms.add(p.getProgram());
+					}
+				} finally {
+					r.close();
+				}
 			}
+
+			final int maxVisitors;
+			if (cl.hasOption('v'))
+				maxVisitors = Integer.parseInt(cl.getOptionValue('v'));
+			else
+				maxVisitors = Integer.MAX_VALUE;
+
+			if (!visitorPrograms.isEmpty())
+				for (final Program p : new VisitorMergingTransformer().mergePrograms(visitorPrograms, maxVisitors)) {
+					new VisitorOptimizingTransformer().start(p);
+					final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(p.jobName, stg);
+					cg.start(p);
+					jobs.add(cg.getCode());
+	
+					jobnames.add(p.jobName);
+				}
+
+			final StringTemplate st = stg.getInstanceOf("Program");
+
+			st.setAttribute("name", className);
+			st.setAttribute("numreducers", inputFiles.size());
+			st.setAttribute("jobs", jobs);
+			st.setAttribute("jobnames", jobnames);
+			st.setAttribute("tables", CodeGeneratingVisitor.tableStrings);
+			st.setAttribute("splitsize", isSimple ? 64 * 1024 * 1024 : 10 * 1024 * 1024);
+
+			o.write(st.toString().getBytes());
 		} finally {
 			o.close();
 		}

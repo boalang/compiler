@@ -117,7 +117,7 @@
 			<zipfileset excludes="META-INF/" src="lib/scannotation-1.0.3.jar" />
 			<zipfileset excludes="META-INF/" src="lib/javassist-3.8.0.GA.jar" />
 			<zipfileset excludes="META-INF/" src="lib/antlr-3.2.jar" />
-			<zipfileset excludes="META-INF/" src="lib/protobuf-java-2.4.1.jar" />
+			<zipfileset excludes="META-INF/" src="lib/protobuf-java-2.5.0.jar" />
 		</jar>
 	</target>
 

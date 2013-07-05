@@ -1,62 +1,27 @@
 package boa.compiler;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
-import java.util.Stack;
 
 import org.scannotation.AnnotationDB;
 
 import boa.aggregators.AggregatorSpec;
 import boa.functions.FunctionSpec;
 import boa.types.*;
-import boa.types.proto.ASTRootProtoTuple;
-import boa.types.proto.BugProtoTuple;
-import boa.types.proto.BugRepositoryProtoTuple;
-import boa.types.proto.ChangedFileProtoTuple;
-import boa.types.proto.CodeRepositoryProtoTuple;
-import boa.types.proto.CommentProtoTuple;
-import boa.types.proto.DeclarationProtoTuple;
-import boa.types.proto.ExpressionProtoTuple;
-import boa.types.proto.MethodProtoTuple;
-import boa.types.proto.ModifierProtoTuple;
-import boa.types.proto.NamespaceProtoTuple;
-import boa.types.proto.PersonProtoTuple;
-import boa.types.proto.ProjectProtoTuple;
-import boa.types.proto.RevisionProtoTuple;
-import boa.types.proto.StatementProtoTuple;
-import boa.types.proto.TypeProtoTuple;
-import boa.types.proto.VariableProtoTuple;
-import boa.types.proto.enums.IssueKindProtoMap;
-import boa.types.proto.enums.ChangeKindProtoMap;
-import boa.types.proto.enums.CommentKindProtoMap;
-import boa.types.proto.enums.ExpressionKindProtoMap;
-import boa.types.proto.enums.FileKindProtoMap;
-import boa.types.proto.enums.ModifierKindProtoMap;
-import boa.types.proto.enums.RepositoryKindProtoMap;
-import boa.types.proto.enums.StatementKindProtoMap;
-import boa.types.proto.enums.TypeKindProtoMap;
-import boa.types.proto.enums.VisibilityProtoMap;
+import boa.types.proto.*;
+import boa.types.proto.enums.*;
 
-import boa.parser.syntaxtree.Operand;
+import boa.compiler.ast.Operand;
 
 public class SymbolTable {
-	private static final boolean strictCompatibility = true;
-
 	private static HashMap<String, Class<?>> aggregators;
 	private static final Map<Class<?>, BoaType> protomap;
 	private static Map<String, BoaType> idmap;
 	private static final Map<String, BoaType> globals;
-
-	private final ClassLoader loader;
+	private static FunctionTrie globalFunctions;
 
 	private FunctionTrie functions;
 	private Map<String, BoaType> locals;
@@ -133,191 +98,153 @@ public class SymbolTable {
 		idmap.put("Type", new TypeProtoTuple());
 		idmap.put("Variable", new VariableProtoTuple());
 		idmap.put("Visibility", new VisibilityProtoMap());
-	}
 
-	private SymbolTable() {
-		this.loader = Thread.currentThread().getContextClassLoader();
-	}
-
-	public SymbolTable(final List<URL> libs) throws IOException {
-		this.loader = Thread.currentThread().getContextClassLoader();
-
-		// variables with a local scope
-		this.locals = new HashMap<String, BoaType>();
-		this.functions = new FunctionTrie();
+		globalFunctions = new FunctionTrie();
 
 		// these generic functions require more finagling than can currently be
 		// (easily) done with a static method, so they are handled with macros
 
 		// FIXME rdyer - def(protolist[i]) should generate "i < protolist.size()"
-		this.setFunction("def", new BoaFunction(new BoaBool(), new BoaType[] { new BoaAny() }, "(${0} != null)"));
-		this.setFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaProtoList(new BoaScalar()) }, "${0}.size()"));
-		this.setFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaArray(new BoaScalar()) }, "${0}.length"));
-		this.setFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaMap(new BoaScalar(), new BoaScalar()) }, "${0}.keySet().size()"));
-		this.setFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaStack(new BoaScalar()) }, "${0}.size()"));
-		this.setFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaString() }, "${0}.length()"));
-		this.setFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaBytes() }, "${0}.length"));
+		globalFunctions.addFunction("def", new BoaFunction(new BoaBool(), new BoaType[] { new BoaAny() }, "(${0} != null)"));
+		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaProtoList(new BoaScalar()) }, "${0}.size()"));
+		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaArray(new BoaScalar()) }, "${0}.length"));
+		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaMap(new BoaScalar(), new BoaScalar()) }, "${0}.keySet().size()"));
+		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaStack(new BoaScalar()) }, "${0}.size()"));
+		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaString() }, "${0}.length()"));
+		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaBytes() }, "${0}.length"));
 
 		// map functions
-		this.setFunction("haskey", new BoaFunction(new BoaBool(), new BoaType[] { new BoaMap(new BoaScalar(), new BoaScalar()), new BoaScalar() }, "${0}.containsKey(${1})"));
-		this.setFunction("keys", new BoaFunction(new BoaArray(new BoaTypeVar("K")), new BoaType[] { new BoaMap(new BoaTypeVar("V"), new BoaTypeVar("K")) }, "${0}.keySet().toArray(new ${K}[0])"));
-		this.setFunction("lookup", new BoaFunction(new BoaTypeVar("V"), new BoaType[] { new BoaMap(new BoaTypeVar("V"), new BoaTypeVar("K")), new BoaTypeVar("K"), new BoaTypeVar("V") }, "(${0}.containsKey(${1}) ? ${0}.get(${1}) : ${2})"));
-		this.setFunction("remove", new BoaFunction(new BoaAny(), new BoaType[] { new BoaMap(new BoaTypeVar("V"), new BoaTypeVar("K")), new BoaTypeVar("K") }, "${0}.remove(${1})"));
-		this.setFunction("clear", new BoaFunction(new BoaAny(), new BoaType[] { new BoaMap(new BoaTypeVar("V"), new BoaTypeVar("K")) }, "${0}.clear()"));
+		globalFunctions.addFunction("haskey", new BoaFunction(new BoaBool(), new BoaType[] { new BoaMap(new BoaScalar(), new BoaScalar()), new BoaScalar() }, "${0}.containsKey(${1})"));
+		globalFunctions.addFunction("keys", new BoaFunction(new BoaArray(new BoaTypeVar("K")), new BoaType[] { new BoaMap(new BoaTypeVar("V"), new BoaTypeVar("K")) }, "${0}.keySet().toArray(new ${K}[0])"));
+		globalFunctions.addFunction("lookup", new BoaFunction(new BoaTypeVar("V"), new BoaType[] { new BoaMap(new BoaTypeVar("V"), new BoaTypeVar("K")), new BoaTypeVar("K"), new BoaTypeVar("V") }, "(${0}.containsKey(${1}) ? ${0}.get(${1}) : ${2})"));
+		globalFunctions.addFunction("remove", new BoaFunction(new BoaAny(), new BoaType[] { new BoaMap(new BoaTypeVar("V"), new BoaTypeVar("K")), new BoaTypeVar("K") }, "${0}.remove(${1})"));
+		globalFunctions.addFunction("clear", new BoaFunction(new BoaAny(), new BoaType[] { new BoaMap(new BoaTypeVar("V"), new BoaTypeVar("K")) }, "${0}.clear()"));
 
-		this.setFunction("regex", new BoaFunction(new BoaString(), new BoaType[] { new BoaName(new BoaScalar()), new BoaInt() }, "boa.functions.BoaSpecialIntrinsics.regex(\"${0}\", ${1})"));
-		this.setFunction("regex", new BoaFunction(new BoaString(), new BoaType[] { new BoaName(new BoaScalar()) }, "boa.functions.BoaSpecialIntrinsics.regex(\"${0}\")"));
+		globalFunctions.addFunction("regex", new BoaFunction(new BoaString(), new BoaType[] { new BoaName(new BoaScalar()), new BoaInt() }, "boa.functions.BoaSpecialIntrinsics.regex(\"${0}\", ${1})"));
+		globalFunctions.addFunction("regex", new BoaFunction(new BoaString(), new BoaType[] { new BoaName(new BoaScalar()) }, "boa.functions.BoaSpecialIntrinsics.regex(\"${0}\")"));
 		// these fingerprints are identity functions
-		this.setFunction("fingerprintof", new BoaFunction(new BoaFingerprint(), new BoaScalar[] { new BoaInt() }));
-		this.setFunction("fingerprintof", new BoaFunction(new BoaFingerprint(), new BoaScalar[] { new BoaTime() }));
+		globalFunctions.addFunction("fingerprintof", new BoaFunction(new BoaFingerprint(), new BoaScalar[] { new BoaInt() }));
+		globalFunctions.addFunction("fingerprintof", new BoaFunction(new BoaFingerprint(), new BoaScalar[] { new BoaTime() }));
 
 		// visitors
-		this.setFunction("visit", new BoaFunction(new BoaAny(), new BoaType[] { new BoaScalar(), new BoaVisitor() }, "${1}.visit(${0})"));
-		this.setFunction("visit", new BoaFunction(new BoaAny(), new BoaType[] { new BoaScalar() }, "visit(${0})"));
-		this.setFunction("ast_len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaAny() }, "boa.functions.BoaAstIntrinsics.lenVisitor.getCount(${0})"));
+		globalFunctions.addFunction("visit", new BoaFunction(new BoaAny(), new BoaType[] { new BoaScalar(), new BoaVisitor() }, "${1}.visit(${0})"));
+		globalFunctions.addFunction("visit", new BoaFunction(new BoaAny(), new BoaType[] { new BoaScalar() }, "visit(${0})"));
+		globalFunctions.addFunction("_cur_visitor", new BoaFunction(new BoaVisitor(), new BoaType[] { }, "this"));
+		globalFunctions.addFunction("ast_len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaAny() }, "boa.functions.BoaAstIntrinsics.lenVisitor.getCount(${0})"));
 
 		// stack functions
-		this.setFunction("push", new BoaFunction(new BoaAny(), new BoaType[] { new BoaStack(new BoaTypeVar("V")), new BoaTypeVar("V") }, "${0}.push(${1})"));
-		this.setFunction("pop", new BoaFunction(new BoaTypeVar("V"), new BoaType[] { new BoaStack(new BoaTypeVar("V")) }, "boa.functions.BoaIntrinsics.stack_pop(${0})"));
-		this.setFunction("peek", new BoaFunction(new BoaTypeVar("V"), new BoaType[] { new BoaStack(new BoaTypeVar("V")) }, "boa.functions.BoaIntrinsics.stack_peek(${0})"));
-		this.setFunction("clear", new BoaFunction(new BoaAny(), new BoaType[] { new BoaStack(new BoaTypeVar("V")) }, "${0}.clear()"));
-
-		// AST comparisons
-		this.setFunction("isequal", new BoaFunction(new BoaBool(), new BoaType[] { new ProjectProtoTuple(), new ProjectProtoTuple() }, "(${0}.hashCode() == ${1}.hashCode())"));
-		this.setFunction("isequal", new BoaFunction(new BoaBool(), new BoaType[] { new StatementProtoTuple(), new StatementProtoTuple() }, "(${0}.hashCode() == ${1}.hashCode())"));
-		this.setFunction("isequal", new BoaFunction(new BoaBool(), new BoaType[] { new ASTRootProtoTuple(), new ASTRootProtoTuple() }, "(${0}.hashCode() == ${1}.hashCode())"));
-		this.setFunction("isequal", new BoaFunction(new BoaBool(), new BoaType[] { new BugProtoTuple(), new BugProtoTuple() }, "(${0}.hashCode() == ${1}.hashCode())"));
-		this.setFunction("isequal", new BoaFunction(new BoaBool(), new BoaType[] { new BugRepositoryProtoTuple(), new BugRepositoryProtoTuple() }, "(${0}.hashCode() == ${1}.hashCode())"));
-		this.setFunction("isequal", new BoaFunction(new BoaBool(), new BoaType[] { new ChangedFileProtoTuple(), new ChangedFileProtoTuple() }, "(${0}.hashCode() == ${1}.hashCode())"));
-		this.setFunction("isequal", new BoaFunction(new BoaBool(), new BoaType[] { new CodeRepositoryProtoTuple(), new CodeRepositoryProtoTuple() }, "(${0}.hashCode() == ${1}.hashCode())"));
-		this.setFunction("isequal", new BoaFunction(new BoaBool(), new BoaType[] { new CommentProtoTuple(), new CommentProtoTuple() }, "(${0}.hashCode() == ${1}.hashCode())"));
-		this.setFunction("isequal", new BoaFunction(new BoaBool(), new BoaType[] { new DeclarationProtoTuple(), new DeclarationProtoTuple() }, "(${0}.hashCode() == ${1}.hashCode())"));
-		this.setFunction("isequal", new BoaFunction(new BoaBool(), new BoaType[] { new ExpressionProtoTuple(), new ExpressionProtoTuple() }, "(${0}.hashCode() == ${1}.hashCode())"));
-		this.setFunction("isequal", new BoaFunction(new BoaBool(), new BoaType[] { new MethodProtoTuple(), new MethodProtoTuple() }, "(${0}.hashCode() == ${1}.hashCode())"));
-		this.setFunction("isequal", new BoaFunction(new BoaBool(), new BoaType[] { new ModifierProtoTuple(), new ModifierProtoTuple() }, "(${0}.hashCode() == ${1}.hashCode())"));
-		this.setFunction("isequal", new BoaFunction(new BoaBool(), new BoaType[] { new NamespaceProtoTuple(), new NamespaceProtoTuple() }, "(${0}.hashCode() == ${1}.hashCode())"));
-		this.setFunction("isequal", new BoaFunction(new BoaBool(), new BoaType[] { new PersonProtoTuple(), new PersonProtoTuple() }, "(${0}.hashCode() == ${1}.hashCode())"));
-		this.setFunction("isequal", new BoaFunction(new BoaBool(), new BoaType[] { new RevisionProtoTuple(), new RevisionProtoTuple() }, "(${0}.hashCode() == ${1}.hashCode())"));
-		this.setFunction("isequal", new BoaFunction(new BoaBool(), new BoaType[] { new TypeProtoTuple(), new TypeProtoTuple() }, "(${0}.hashCode() == ${1}.hashCode())"));
-		this.setFunction("isequal", new BoaFunction(new BoaBool(), new BoaType[] { new VariableProtoTuple(), new VariableProtoTuple() }, "(${0}.hashCode() == ${1}.hashCode())"));
+		globalFunctions.addFunction("push", new BoaFunction(new BoaAny(), new BoaType[] { new BoaStack(new BoaTypeVar("V")), new BoaTypeVar("V") }, "${0}.push(${1})"));
+		globalFunctions.addFunction("pop", new BoaFunction(new BoaTypeVar("V"), new BoaType[] { new BoaStack(new BoaTypeVar("V")) }, "boa.functions.BoaIntrinsics.stack_pop(${0})"));
+		globalFunctions.addFunction("peek", new BoaFunction(new BoaTypeVar("V"), new BoaType[] { new BoaStack(new BoaTypeVar("V")) }, "boa.functions.BoaIntrinsics.stack_peek(${0})"));
+		globalFunctions.addFunction("clear", new BoaFunction(new BoaAny(), new BoaType[] { new BoaStack(new BoaTypeVar("V")) }, "${0}.clear()"));
 
 		// expose the casts for all possible input types
-		this.setFunction(new ProjectProtoTuple().toString(), new BoaFunction(new ProjectProtoTuple(), new BoaType[] { new BoaBytes() }, new ProjectProtoTuple().toJavaType() + ".parseFrom(${0})"));
+		globalFunctions.addFunction(new ProjectProtoTuple().toString(), new BoaFunction(new ProjectProtoTuple(), new BoaType[] { new BoaBytes() }, "${0}"));
 
 		// string to bool
-		this.setFunction("bool", new BoaFunction("boa.functions.BoaCasts.stringToBoolean", new BoaBool(), new BoaScalar[] { new BoaString() }));
+		globalFunctions.addFunction("bool", new BoaFunction("boa.functions.BoaCasts.stringToBoolean", new BoaBool(), new BoaScalar[] { new BoaString() }));
 
 		// bool to int
-		this.setFunction("int", new BoaFunction("boa.functions.BoaCasts.booleanToLong", new BoaInt(), new BoaScalar[] { new BoaBool() }));
+		globalFunctions.addFunction("int", new BoaFunction("boa.functions.BoaCasts.booleanToLong", new BoaInt(), new BoaScalar[] { new BoaBool() }));
 		// float to int
-		this.setFunction("int", new BoaFunction(new BoaInt(), new BoaScalar[] { new BoaFloat() }, "(long)${0}"));
+		globalFunctions.addFunction("int", new BoaFunction(new BoaInt(), new BoaScalar[] { new BoaFloat() }, "(long)${0}"));
 		// time to int
-		this.setFunction("int", new BoaFunction(new BoaInt(), new BoaScalar[] { new BoaTime() }, "${0}"));
+		globalFunctions.addFunction("int", new BoaFunction(new BoaInt(), new BoaScalar[] { new BoaTime() }, "${0}"));
 		// fingerprint to int
-		this.setFunction("int", new BoaFunction(new BoaInt(), new BoaScalar[] { new BoaFingerprint() }, "${0}"));
+		globalFunctions.addFunction("int", new BoaFunction(new BoaInt(), new BoaScalar[] { new BoaFingerprint() }, "${0}"));
 		// string to int
-		this.setFunction("int", new BoaFunction("java.lang.Long.decode", new BoaInt(), new BoaScalar[] { new BoaString() }));
+		globalFunctions.addFunction("int", new BoaFunction("java.lang.Long.decode", new BoaInt(), new BoaScalar[] { new BoaString() }));
 		// string to int with param base
-		this.setFunction("int", new BoaFunction(new BoaInt(), new BoaScalar[] { new BoaString(), new BoaInt() }, "java.lang.Long.parseLong(${0}, (int)${1})"));
+		globalFunctions.addFunction("int", new BoaFunction(new BoaInt(), new BoaScalar[] { new BoaString(), new BoaInt() }, "java.lang.Long.parseLong(${0}, (int)${1})"));
 		// bytes to int with param encoding format
-		this.setFunction("int", new BoaFunction("boa.functions.BoaCasts.bytesToLong", new BoaInt(), new BoaScalar[] { new BoaBytes(), new BoaString() }));
+		globalFunctions.addFunction("int", new BoaFunction("boa.functions.BoaCasts.bytesToLong", new BoaInt(), new BoaScalar[] { new BoaBytes(), new BoaString() }));
 
 		// int to float
-		this.setFunction("float", new BoaFunction(new BoaFloat(), new BoaScalar[] { new BoaInt() }, "(double)${0}"));
+		globalFunctions.addFunction("float", new BoaFunction(new BoaFloat(), new BoaScalar[] { new BoaInt() }, "(double)${0}"));
 		// string to float
-		this.setFunction("float", new BoaFunction("java.lang.Double.parseDouble", new BoaFloat(), new BoaScalar[] { new BoaString() }));
+		globalFunctions.addFunction("float", new BoaFunction("java.lang.Double.parseDouble", new BoaFloat(), new BoaScalar[] { new BoaString() }));
 
 		// int to time
-		this.setFunction("time", new BoaFunction(new BoaTime(), new BoaScalar[] { new BoaInt() }, "${0}"));
+		globalFunctions.addFunction("time", new BoaFunction(new BoaTime(), new BoaScalar[] { new BoaInt() }, "${0}"));
 		// string to time
-		this.setFunction("time", new BoaFunction("boa.functions.BoaCasts.stringToTime", new BoaTime(), new BoaScalar[] { new BoaString() }));
+		globalFunctions.addFunction("time", new BoaFunction("boa.functions.BoaCasts.stringToTime", new BoaTime(), new BoaScalar[] { new BoaString() }));
 		// string to time
-		this.setFunction("time", new BoaFunction("boa.functions.BoaCasts.stringToTime", new BoaTime(), new BoaScalar[] { new BoaString(), new BoaString() }));
+		globalFunctions.addFunction("time", new BoaFunction("boa.functions.BoaCasts.stringToTime", new BoaTime(), new BoaScalar[] { new BoaString(), new BoaString() }));
 
 		// int to fingerprint
-		this.setFunction("fingerprint", new BoaFunction(new BoaFingerprint(), new BoaScalar[] { new BoaInt() }, "${0}"));
+		globalFunctions.addFunction("fingerprint", new BoaFunction(new BoaFingerprint(), new BoaScalar[] { new BoaInt() }, "${0}"));
 		// string to fingerprint
-		this.setFunction("fingerprint", new BoaFunction("java.lang.Long.parseLong", new BoaInt(), new BoaScalar[] { new BoaString() }));
+		globalFunctions.addFunction("fingerprint", new BoaFunction("java.lang.Long.parseLong", new BoaInt(), new BoaScalar[] { new BoaString() }));
 		// string to fingerprint with param base
-		this.setFunction("fingerprint", new BoaFunction("java.lang.Long.parseLong", new BoaInt(), new BoaScalar[] { new BoaString(), new BoaInt() }));
+		globalFunctions.addFunction("fingerprint", new BoaFunction("java.lang.Long.parseLong", new BoaInt(), new BoaScalar[] { new BoaString(), new BoaInt() }));
 		// bytes to fingerprint
-		this.setFunction("fingerprint", new BoaFunction("boa.functions.BoaCasts.bytesToFingerprint", new BoaFingerprint(), new BoaScalar[] { new BoaBytes() }));
+		globalFunctions.addFunction("fingerprint", new BoaFunction("boa.functions.BoaCasts.bytesToFingerprint", new BoaFingerprint(), new BoaScalar[] { new BoaBytes() }));
 
 		// bool to string
-		this.setFunction("string", new BoaFunction("java.lang.Boolean.toString", new BoaString(), new BoaScalar[] { new BoaBool() }));
+		globalFunctions.addFunction("string", new BoaFunction("java.lang.Boolean.toString", new BoaString(), new BoaScalar[] { new BoaBool() }));
 		// int to string
-		this.setFunction("string", new BoaFunction("java.lang.Long.toString", new BoaString(), new BoaScalar[] { new BoaInt() }));
+		globalFunctions.addFunction("string", new BoaFunction("java.lang.Long.toString", new BoaString(), new BoaScalar[] { new BoaInt() }));
 		// int to string with parameter base
-		this.setFunction("string", new BoaFunction("boa.functions.BoaCasts.longToString", new BoaString(), new BoaScalar[] { new BoaInt(), new BoaInt() }));
+		globalFunctions.addFunction("string", new BoaFunction("boa.functions.BoaCasts.longToString", new BoaString(), new BoaScalar[] { new BoaInt(), new BoaInt() }));
 		// float to string
-		this.setFunction("string", new BoaFunction("java.lang.Double.toString", new BoaString(), new BoaScalar[] { new BoaFloat() }));
+		globalFunctions.addFunction("string", new BoaFunction("java.lang.Double.toString", new BoaString(), new BoaScalar[] { new BoaFloat() }));
 		// time to string
-		this.setFunction("string", new BoaFunction("boa.functions.BoaCasts.timeToString", new BoaString(), new BoaScalar[] { new BoaTime() }));
+		globalFunctions.addFunction("string", new BoaFunction("boa.functions.BoaCasts.timeToString", new BoaString(), new BoaScalar[] { new BoaTime() }));
 		// fingerprint to string
-		this.setFunction("string", new BoaFunction("java.lang.Long.toHexString", new BoaString(), new BoaScalar[] { new BoaFingerprint() }));
+		globalFunctions.addFunction("string", new BoaFunction("java.lang.Long.toHexString", new BoaString(), new BoaScalar[] { new BoaFingerprint() }));
 		// bytes to string
-		this.setFunction("string", new BoaFunction("new java.lang.String", new BoaString(), new BoaScalar[] { new BoaBytes() }));
+		globalFunctions.addFunction("string", new BoaFunction("new java.lang.String", new BoaString(), new BoaScalar[] { new BoaBytes() }));
 		// bytes to string
-		this.setFunction("string", new BoaFunction("new java.lang.String", new BoaString(), new BoaScalar[] { new BoaBytes(), new BoaString() }));
+		globalFunctions.addFunction("string", new BoaFunction("new java.lang.String", new BoaString(), new BoaScalar[] { new BoaBytes(), new BoaString() }));
 
 		// int to bytes with param encoding format
-		this.setFunction("bytes", new BoaFunction("boa.functions.BoaCasts.longToBytes", new BoaInt(), new BoaScalar[] { new BoaInt(), new BoaString() }));
+		globalFunctions.addFunction("bytes", new BoaFunction("boa.functions.BoaCasts.longToBytes", new BoaInt(), new BoaScalar[] { new BoaInt(), new BoaString() }));
 		// fingerprint to bytes
-		this.setFunction("bytes", new BoaFunction("boa.functions.BoaCasts.fingerprintToBytes", new BoaBytes(), new BoaScalar[] { new BoaFingerprint() }));
+		globalFunctions.addFunction("bytes", new BoaFunction("boa.functions.BoaCasts.fingerprintToBytes", new BoaBytes(), new BoaScalar[] { new BoaFingerprint() }));
 		// string to bytes
-		this.setFunction("bytes", new BoaFunction("boa.functions.BoaCasts.stringToBytes", new BoaBytes(), new BoaScalar[] { new BoaString() }));
+		globalFunctions.addFunction("bytes", new BoaFunction("boa.functions.BoaCasts.stringToBytes", new BoaBytes(), new BoaScalar[] { new BoaString() }));
 
 		/* expose the java.lang.Math class to Sawzall */
 
-		this.setFunction("highbit", new BoaFunction("java.lang.Long.highestOneBit", new BoaInt(), new BoaScalar[] { new BoaInt() }));
+		globalFunctions.addFunction("highbit", new BoaFunction("java.lang.Long.highestOneBit", new BoaInt(), new BoaScalar[] { new BoaInt() }));
 
 		// abs just needs to be overloaded
-		this.setFunction("abs", new BoaFunction("java.lang.Math.abs", new BoaFloat(), new BoaScalar[] { new BoaInt() }));
-		this.setFunction("abs", new BoaFunction("java.lang.Math.abs", new BoaFloat(), new BoaScalar[] { new BoaFloat() }));
-
-		// abs is also named fabs in Sawzall
-		this.setFunction("fabs", new BoaFunction("java.lang.Math.abs", new BoaFloat(), new BoaScalar[] { new BoaFloat() }));
-
-		// log is named ln in Sawzall
-		this.setFunction("ln", new BoaFunction("java.lang.Math.log", new BoaFloat(), new BoaScalar[] { new BoaFloat() }));
+		globalFunctions.addFunction("abs", new BoaFunction("java.lang.Math.abs", new BoaFloat(), new BoaScalar[] { new BoaInt() }));
+		globalFunctions.addFunction("abs", new BoaFunction("java.lang.Math.abs", new BoaFloat(), new BoaScalar[] { new BoaFloat() }));
 
 		// expose the rest of the unary functions
-		for (final String s : Arrays.asList("log10", "exp", "sqrt", "sin", "cos", "tan", "asin", "acos", "atan", "cosh", "sinh", "tanh", "ceil", "floor", "round"))
-			this.setFunction(s, new BoaFunction("java.lang.Math." + s, new BoaFloat(), new BoaScalar[] { new BoaFloat() }));
+		for (final String s : Arrays.asList("log", "log10", "exp", "sqrt", "sin", "cos", "tan", "asin", "acos", "atan", "cosh", "sinh", "tanh", "ceil", "floor", "round", "cbrt", "expm1", "log1p", "rint", "signum", "ulp"))
+			globalFunctions.addFunction(s, new BoaFunction("java.lang.Math." + s, new BoaFloat(), new BoaScalar[] { new BoaFloat() }));
 
 		// expose the binary functions
-		for (final String s : Arrays.asList("pow", "atan2"))
-			this.setFunction(s, new BoaFunction("java.lang.Math." + s, new BoaFloat(), new BoaScalar[] { new BoaFloat(), new BoaFloat() }));
+		for (final String s : Arrays.asList("pow", "atan2", "hypot"))
+			globalFunctions.addFunction(s, new BoaFunction("java.lang.Math." + s, new BoaFloat(), new BoaScalar[] { new BoaFloat(), new BoaFloat() }));
 
+		// these three have capitals in the name
+		globalFunctions.addFunction("ieeeremainder", new BoaFunction("java.lang.Math.IEEEremainder", new BoaFloat(), new BoaScalar[] { new BoaFloat(), new BoaFloat() }));
+		globalFunctions.addFunction("todegrees", new BoaFunction("java.lang.Math.toDegrees", new BoaFloat(), new BoaScalar[] { new BoaFloat() }));
+		globalFunctions.addFunction("toradians", new BoaFunction("java.lang.Math.toRadians", new BoaFloat(), new BoaScalar[] { new BoaFloat() }));
+
+		// max and min
 		for (final String s : Arrays.asList("max", "min"))
 			for (final BoaScalar t : Arrays.asList(new BoaInt(), new BoaFloat()))
-				this.setFunction(s, new BoaFunction("java.lang.Math." + s, t, new BoaScalar[] { t, t }));
+				globalFunctions.addFunction(s, new BoaFunction("java.lang.Math." + s, t, new BoaScalar[] { t, t }));
 
-		this.setFunction("max", new BoaFunction(new BoaTime(), new BoaScalar[] { new BoaTime(), new BoaTime() }, "(${0} > ${1} ? ${0} : ${1})"));
-		this.setFunction("min", new BoaFunction(new BoaTime(), new BoaScalar[] { new BoaTime(), new BoaTime() }, "(${0} < ${1} ? ${0} : ${1})"));
+		globalFunctions.addFunction("max", new BoaFunction(new BoaTime(), new BoaScalar[] { new BoaTime(), new BoaTime() }, "(${0} > ${1} ? ${0} : ${1})"));
+		globalFunctions.addFunction("min", new BoaFunction(new BoaTime(), new BoaScalar[] { new BoaTime(), new BoaTime() }, "(${0} < ${1} ? ${0} : ${1})"));
 
-		this.setFunction("max", new BoaFunction(new BoaString(), new BoaScalar[] { new BoaString(), new BoaString() }, "(${0}.compareTo(${1}) > 0 ? ${0} : ${1})"));
-		this.setFunction("min", new BoaFunction(new BoaString(), new BoaScalar[] { new BoaString(), new BoaString() }, "(${0}.compareTo(${1}) < 0 ? ${0} : ${1})"));
+		globalFunctions.addFunction("max", new BoaFunction(new BoaString(), new BoaScalar[] { new BoaString(), new BoaString() }, "(${0}.compareTo(${1}) > 0 ? ${0} : ${1})"));
+		globalFunctions.addFunction("min", new BoaFunction(new BoaString(), new BoaScalar[] { new BoaString(), new BoaString() }, "(${0}.compareTo(${1}) < 0 ? ${0} : ${1})"));
+	}
 
-		// expose whatever is left, assuming we are not aiming for strict
-		// compatibility
-		if (!strictCompatibility) {
-			// random takes no argument
+	public SymbolTable() {
+		// variables with a local scope
+		this.locals = new HashMap<String, BoaType>();
+		functions = new FunctionTrie();
+	}
 
-			// these three have capitals in the name
-			this.setFunction("ieeeremainder", new BoaFunction("java.lang.Math.IEEEremainder", new BoaFloat(), new BoaScalar[] { new BoaFloat(), new BoaFloat() }));
-			this.setFunction("todegrees", new BoaFunction("java.lang.Math.toDegrees", new BoaFloat(), new BoaScalar[] { new BoaFloat() }));
-			this.setFunction("toradians", new BoaFunction("java.lang.Math.toRadians", new BoaFloat(), new BoaScalar[] { new BoaFloat() }));
-
-			// the unaries
-			for (final String s : Arrays.asList("cbrt", "expm1", "log1p", "rint", "signum", "ulp"))
-				this.setFunction(s, new BoaFunction("java.lang.Math." + s, new BoaFloat(), new BoaScalar[] { new BoaFloat() }));
-
-			// and binaries
-			this.setFunction("hypot", new BoaFunction("java.lang.Math.hypot", new BoaFloat(), new BoaScalar[] { new BoaFloat(), new BoaFloat() }));
-		}
-
-		this.importLibs(libs);
+	public static void initialize(final List<URL> libs) throws IOException {
+		importLibs(libs);
 	}
 
 	public SymbolTable cloneNonLocals() throws IOException {
@@ -347,8 +274,12 @@ public class SymbolTable {
 			this.locals.put(id, type);
 	}
 
-	public boolean contains(final String id) {
-		return globals.containsKey(id) || this.locals.containsKey(id);
+	public boolean hasGlobal(final String id) {
+		return globals.containsKey(id);
+	}
+
+	public boolean hasLocal(final String id) {
+		return this.locals.containsKey(id);
 	}
 
 	public BoaType get(final String id) {
@@ -368,16 +299,16 @@ public class SymbolTable {
 		return idmap.containsKey(id);
 	}
 
-	public BoaType getType(final String id) {
+	public static BoaType getType(final String id) {
 		if (idmap.containsKey(id))
 			return idmap.get(id);
 
 		if (id.startsWith("array of "))
-			return new BoaArray(this.getType(id.substring("array of ".length()).trim()));
+			return new BoaArray(getType(id.substring("array of ".length()).trim()));
 
 		if (id.startsWith("map"))
-			return new BoaMap(this.getType(id.substring(id.indexOf(" of ") + " of ".length()).trim()),
-					this.getType(id.substring(id.indexOf("[") + 1, id.indexOf("]")).trim()));
+			return new BoaMap(getType(id.substring(id.indexOf(" of ") + " of ".length()).trim()),
+					getType(id.substring(id.indexOf("[") + 1, id.indexOf("]")).trim()));
 
 		throw new RuntimeException("no such type " + id);
 	}
@@ -386,7 +317,7 @@ public class SymbolTable {
 		idmap.put(id, boaType);
 	}
 
-	private void importAggregator(final Class<?> clazz) {
+	private static void importAggregator(final Class<?> clazz) {
 		if (!clazz.isAnnotationPresent(AggregatorSpec.class))
 			return;
 
@@ -402,9 +333,9 @@ public class SymbolTable {
 			aggregators.put(annotation.name() + ":" + type, clazz);
 	}
 
-	private void importAggregator(final String c) {
+	private static void importAggregator(final String c) {
 		try {
-			this.importAggregator(Class.forName(c, false, this.loader));
+			importAggregator(Class.forName(c));
 		} catch (final ClassNotFoundException e) {
 			throw new RuntimeException("no such class " + c, e);
 		}
@@ -431,7 +362,7 @@ public class SymbolTable {
 		return aggregators;
 	}
 
-	private void importFunction(final Method m) {
+	private static void importFunction(final Method m) {
 		final FunctionSpec annotation = m.getAnnotation(FunctionSpec.class);
 
 		if (annotation == null)
@@ -445,38 +376,29 @@ public class SymbolTable {
 
 			// check for varargs
 			if (id.endsWith("..."))
-				formalParameterTypes[i] = new BoaVarargs(this.getType(id.substring(0, id.indexOf('.'))));
+				formalParameterTypes[i] = new BoaVarargs(getType(id.substring(0, id.indexOf('.'))));
 			else
-				formalParameterTypes[i] = this.getType(id);
+				formalParameterTypes[i] = getType(id);
 		}
 
-		for (final String dep : annotation.typeDependencies())
-			if (dep.endsWith(".proto"))
-				this.importProto(dep);
-			else if (dep.endsWith(".avro"))
-				this.importAvro(dep);
-			else
-				throw new RuntimeException("unknown dependency in " + dep);
-
-		this.setFunction(annotation.name(),
-				new BoaFunction(m.getDeclaringClass().getCanonicalName() + '.' + m.getName(), this.getType(annotation.returnType()), formalParameterTypes));
+		globalFunctions.addFunction(annotation.name(), new BoaFunction(m.getDeclaringClass().getCanonicalName() + '.' + m.getName(), getType(annotation.returnType()), formalParameterTypes));
 	}
 
-	private void importFunctions(final Class<?> c) {
+	private static void importFunctions(final Class<?> c) {
 		for (final Method m : c.getMethods())
 			if (m.isAnnotationPresent(FunctionSpec.class))
-				this.importFunction(m);
+				importFunction(m);
 	}
 
-	private void importFunctions(final String c) {
+	private static void importFunctions(final String c) {
 		try {
-			this.importFunctions(Class.forName(c));
+			importFunctions(Class.forName(c));
 		} catch (final ClassNotFoundException e) {
 			throw new RuntimeException("no such class " + c, e);
 		}
 	}
 
-	private void importLibs(final List<URL> urls) throws IOException {
+	private static void importLibs(final List<URL> urls) throws IOException {
 		// load built-in functions
 		final Class<?>[] builtinFuncs = {
 			boa.functions.BoaAstIntrinsics.class,
@@ -486,7 +408,6 @@ public class SymbolTable {
 			boa.functions.BoaModifierIntrinsics.class,
 			boa.functions.BoaCasts.class,
 			boa.functions.BoaEncodingIntrinsics.class,
-			boa.functions.BoaFileIntrinsics.class,
 			boa.functions.BoaMathIntrinsics.class,
 			boa.functions.BoaSortIntrinsics.class,
 			boa.functions.BoaSpecialIntrinsics.class,
@@ -494,7 +415,7 @@ public class SymbolTable {
 			boa.functions.BoaTimeIntrinsics.class
 		};
 		for (final Class<?> c : builtinFuncs)
-			this.importFunctions(c);
+			importFunctions(c);
 
 		// load built-in aggregators
 		final Class<?>[] builtinAggs = {
@@ -515,7 +436,6 @@ public class SymbolTable {
 			boa.aggregators.MaximumAggregator.class,
 			boa.aggregators.MedianAggregator.class,
 			boa.aggregators.MinimumAggregator.class,
-			boa.aggregators.MrcounterAggregator.class,
 			boa.aggregators.SetAggregator.class,
 			boa.aggregators.SkewnessAggregator.class,
 			boa.aggregators.StatisticsAggregator.class,
@@ -526,7 +446,7 @@ public class SymbolTable {
 			boa.aggregators.VarianceAggregator.class,
 		};
 		for (final Class<?> c : builtinAggs)
-			this.importAggregator(c);
+			importAggregator(c);
 
 		// also check any libs passed into the compiler
 		if (urls.size() > 0) {
@@ -541,47 +461,11 @@ public class SymbolTable {
 			final Map<String, Set<String>> annotationIndex = db.getAnnotationIndex();
 	
 			for (final String s : annotationIndex.get(AggregatorSpec.class.getCanonicalName()))
-				this.importAggregator(s);
+				importAggregator(s);
 	
 			for (final String s : annotationIndex.get(FunctionSpec.class.getCanonicalName()))
-				this.importFunctions(s);
+				importFunctions(s);
 		}
-	}
-
-	void importProto(final String name) {
-		final String camelCased = SymbolTable.camelCase(name.substring(0, name.indexOf('.')));
-
-		Class<?> wrapper;
-		try {
-			wrapper = Class.forName("boa.types." + camelCased);
-		} catch (final ClassNotFoundException e) {
-			throw new RuntimeException("no such proto " + name);
-		}
-
-		for (final Class<?> c : wrapper.getClasses()) {
-			final List<BoaType> members = new ArrayList<BoaType>();
-			final Map<String, Integer> names = new HashMap<String, Integer>();
-
-			int i = 0;
-			for (final Field field : c.getDeclaredFields()) {
-				if (!field.getName().endsWith("_") || field.getName().startsWith("bitField"))
-					continue;
-
-				final String member = SymbolTable.deCamelCase(field.getName().substring(0, field.getName().length() - 1));
-
-				final Class<?> type = field.getType();
-
-				names.put(member, i++);
-				members.add(protomap.get(type));
-			}
-
-			idmap.put(c.getSimpleName(), new BoaProtoTuple(members, names));
-			// TODO support protocol buffer casts
-		}
-	}
-
-	private void importAvro(final String dep) {
-		throw new RuntimeException("unimplemented");
 	}
 
 	public BoaFunction getFunction(final String id) {
@@ -593,7 +477,20 @@ public class SymbolTable {
 	}
 
 	public BoaFunction getFunction(final String id, final BoaType[] formalParameters) {
-		return this.functions.getFunction(id, formalParameters);
+		BoaFunction function = globalFunctions.getFunction(id, formalParameters);
+		if (function == null)
+			function = this.functions.getFunction(id, formalParameters);
+		if (function == null)
+			throw new RuntimeException("no such function " + id + "(" + Arrays.toString(formalParameters) + ")");
+		return function;
+	}
+
+	public boolean hasGlobalFunction(final String id) {
+		return globalFunctions.hasFunction(id);
+	}
+
+	public boolean hasLocalFunction(final String id) {
+		return functions.hasFunction(id);
 	}
 
 	public void setFunction(final String id, final BoaFunction boaFunction) {
@@ -662,39 +559,5 @@ public class SymbolTable {
 			r.add(entry.getKey() + ":" + entry.getValue());
 
 		return r.toString();
-	}
-
-	private static String camelCase(final String string) {
-		final StringBuilder camelized = new StringBuilder();
-
-		boolean lower = false;
-		for (final char c : string.toCharArray())
-			if (c == '_')
-				lower = false;
-			else if (Character.isDigit(c)) {
-				camelized.append(c);
-				lower = false;
-			} else if (Character.isLetter(c)) {
-				if (lower)
-					camelized.append(c);
-				else
-					camelized.append(Character.toUpperCase(c));
-
-				lower = true;
-			}
-
-		return camelized.toString();
-	}
-
-	private static String deCamelCase(final String string) {
-		final StringBuilder decamelized = new StringBuilder();
-
-		for (final char c : string.toCharArray())
-			if (Character.isUpperCase(c))
-				decamelized.append(Character.toString('_') + Character.toLowerCase(c));
-			else
-				decamelized.append(c);
-
-		return decamelized.toString();
 	}
 }

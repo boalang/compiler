@@ -8,7 +8,6 @@ import org.apache.log4j.Logger;
  * A Boa aggregator to log values in a dataset by weight.
  * 
  * @author anthonyu
- * 
  */
 @AggregatorSpec(name = "log", weightType = "string")
 public class LogAggregator extends Aggregator {

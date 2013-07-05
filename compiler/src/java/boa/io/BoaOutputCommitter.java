@@ -13,9 +13,11 @@ import org.apache.hadoop.mapreduce.TaskAttemptContext;
 
 public class BoaOutputCommitter extends FileOutputCommitter {
 	private final Path outputPath;
+	private final TaskAttemptContext context;
 
 	public BoaOutputCommitter(Path output, TaskAttemptContext context) throws java.io.IOException {
 		super(output, context);
+		this.context = context;
 		this.outputPath = output;
 	}
 
@@ -39,6 +41,9 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 	private final static String password = "";
 
 	private void updateStatus(final boolean error, final int jobId) {
+		if (jobId == 0)
+			return;
+
 		Connection con = null;
 		try {
 			con = DriverManager.getConnection(url, user, password);
@@ -58,6 +63,9 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 	}
 
 	private void storeOutput(final JobContext context, final int jobId) {
+		if (jobId == 0)
+			return;
+
 		Connection con = null;
 		FileSystem fileSystem = null;
 		FSDataInputStream in = null;
@@ -96,6 +104,7 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 							ps.setInt(2, out.size());
 							ps.setString(3, out.toString());
 							ps.executeUpdate();
+							this.context.progress();
 
 							pos += out.size();
 							out.reset();
@@ -107,6 +116,7 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 						ps.setInt(2, out.size());
 						ps.setString(3, out.toString());
 						ps.executeUpdate();
+						this.context.progress();
 					}
 				} finally {
 					try { if (ps != null) ps.close(); } catch (final Exception e) { e.printStackTrace(); }
@@ -123,6 +133,9 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 	}
 
 	public static void setJobID(final String id, final int jobId) {
+		if (jobId == 0)
+			return;
+
 		Connection con = null;
 		try {
 			con = DriverManager.getConnection(url, user, password);

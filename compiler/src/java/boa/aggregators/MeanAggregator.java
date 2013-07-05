@@ -6,12 +6,11 @@ import boa.io.EmitKey;
  * A Boa aggregator to calculate a mean of the values in a dataset.
  * 
  * @author anthonyu
- * 
  */
 abstract class MeanAggregator extends Aggregator {
 	private long count;
 
-	public void count(String metadata) {
+	public void count(final String metadata) {
 		if (metadata == null)
 			this.count++;
 		else
@@ -20,7 +19,7 @@ abstract class MeanAggregator extends Aggregator {
 
 	/** {@inheritDoc} */
 	@Override
-	public void start(EmitKey key) {
+	public void start(final EmitKey key) {
 		super.start(key);
 
 		this.count = 0;

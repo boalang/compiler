@@ -26,7 +26,6 @@ import boa.io.BoaOutputFormat;
 import boa.io.EmitKey;
 import boa.io.EmitValue;
 
-
 @SuppressWarnings("static-access")
 public abstract class BoaRunner extends Configured implements Tool {
 	/**
@@ -76,10 +75,11 @@ public abstract class BoaRunner extends Configured implements Tool {
 				FileInputFormat.addInputPath(job, in);
 		FileOutputFormat.setOutputPath(job, out);
 
+		job.setPartitionerClass(BoaPartitioner.class);
+
 		job.setMapOutputKeyClass(EmitKey.class);
 		job.setMapOutputValueClass(EmitValue.class);
 
-		// TODO: support protobufs/sequence files/avro here
 		job.setOutputFormatClass(BoaOutputFormat.class);
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(NullWritable.class);
@@ -90,6 +90,7 @@ public abstract class BoaRunner extends Configured implements Tool {
 	protected static Options options = new Options();
 
 	static {
+		options.addOption("p", "profile", false, "if true, profiles the execution of 1 map task");
 		options.addOption("r", "robust", false, "if true, logs non-IO exceptions and continues");
 		options.addOption("b", "block", false, "if true, wait for job to finish and show status");
 		options.addOption(OptionBuilder.withLongOpt("job")
@@ -97,10 +98,10 @@ public abstract class BoaRunner extends Configured implements Tool {
 										.hasArg()
 										.withArgName("ID")
 										.create("j"));
-		options.addOption(org.apache.commons.cli.OptionBuilder.withLongOpt("astTable")
-										.withDescription("which HBase TABLE to use for AST rows")
+		options.addOption(org.apache.commons.cli.OptionBuilder.withLongOpt("ast")
+										.withDescription("which INPUT to use for ASTs")
 										.hasArg()
-										.withArgName("TABLE")
+										.withArgName("INPUT")
 										.create("a"));
 	}
 

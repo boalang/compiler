@@ -5,14 +5,8 @@ import java.util.HashMap;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.Text;
-import org.apache.hadoop.hbase.HBaseConfiguration;
-import org.apache.hadoop.hbase.client.Get;
-import org.apache.hadoop.hbase.client.HTable;
-import org.apache.hadoop.hbase.client.Result;
-import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.hadoop.io.MapFile;
 import org.apache.hadoop.mapreduce.Mapper.Context;
 
@@ -35,7 +29,6 @@ public class BoaAstIntrinsics {
 	@SuppressWarnings("rawtypes")
 	private static Context context;
 	private static MapFile.Reader map;
-	private static long counter = 0;
 
 	public static enum AST_COUNTER {
 		GETS_ATTEMPTED,
@@ -50,6 +43,8 @@ public class BoaAstIntrinsics {
 	public static String changedfileToString(final ChangedFile f) {
 		return f.getKey() + "!!" + f.getName();
 	}
+
+	private static final ASTRoot emptyAst = ASTRoot.newBuilder().build();
 
 	/**
 	 * Given a Revision and ChangedFile, return the AST for that file at that revision.
@@ -67,17 +62,14 @@ public class BoaAstIntrinsics {
 				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS2
 				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS3
 				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS4)
-			return ASTRoot.newBuilder().build();
+			return emptyAst;
 
 		context.getCounter(AST_COUNTER.GETS_ATTEMPTED).increment(1);
 
-		// let the task tracker know we are alive every so often
-		if (++counter == 1000) {
-			counter = 0;
-			context.progress();
-		}
-
 		final String rowName = f.getKey() + "!!" + f.getName();
+
+		if (map == null)
+			openMap();
 
 		try {
 			final BytesWritable value = new BytesWritable();
@@ -107,24 +99,31 @@ public class BoaAstIntrinsics {
 
 		System.err.println("error with ast: " + rowName);
 		context.getCounter(AST_COUNTER.GETS_FAILED).increment(1);
-		return ASTRoot.newBuilder().build();
+		return emptyAst;
 	}
 
 	@SuppressWarnings("rawtypes")
-	public static void initialize(final Context context) {
+	public static void setup(final Context context) {
 		BoaAstIntrinsics.context = context;
+	}
+
+	private static void openMap() {
 		final Configuration conf = new Configuration();
 		try {
 			FileSystem fs = FileSystem.get(conf);
-			final String dir = "hdfs://boa-nn1/" + context.getConfiguration().get("boa.input.dir", "/repcache/") + "ast/";
-			if (fs.exists(new Path(dir + "data")) && fs.exists(new Path(dir + "index")))
-				map = new MapFile.Reader(fs, dir, conf);
+			final String dir = "hdfs://boa-nn1/" + context.getConfiguration().get("boa.ast.dir", context.getConfiguration().get("boa.input.dir", "repcache/live")) + "/ast/";
+			map = new MapFile.Reader(fs, dir, conf);
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	public static void close() {
+	@SuppressWarnings("rawtypes")
+	public static void cleanup(final Context context) {
+		closeMap();
+	}
+
+	private static void closeMap() {
 		if (map != null)
 			try {
 				map.close();
@@ -223,19 +222,20 @@ public class BoaAstIntrinsics {
 		@Override
 		protected boolean preVisit(final ChangedFile node) throws Exception {
 			boolean filter = kinds.length > 0;
+
 			final String kindName = node.getKind().name();
 			for (final String kind : kinds)
 				if (kindName.startsWith(kind)) {
 					filter = false;
 					break;
 				}
-			if (filter)
-				return false;
 
-			if (node.getChange() == ChangeKind.DELETED)
-				map.remove(node.getName());
-			else
-				map.put(node.getName(), node);
+			if (!filter) {
+				if (node.getChange() == ChangeKind.DELETED)
+					map.remove(node.getName());
+				else
+					map.put(node.getName(), node);
+			}
 
 			return false;
 		}

@@ -21,13 +21,15 @@ public class CommentProtoTuple extends BoaProtoTuple {
 	private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
 	static {
-		names.put("kind", 0);
+		int count = 0;
+
+		names.put("kind", count++);
 		members.add(new CommentKindProtoMap());
 
-		names.put("value", 1);
+		names.put("value", count++);
 		members.add(new BoaString());
 
-		names.put("start_line", 2);
+		names.put("start_line", count++);
 		members.add(new BoaInt());
 	}
 
@@ -38,6 +40,7 @@ public class CommentProtoTuple extends BoaProtoTuple {
 		super(members, names);
 	}
 
+	/** @{inheritDoc} */
 	@Override
 	public String toJavaType() {
 		return "boa.types.Ast.Comment";

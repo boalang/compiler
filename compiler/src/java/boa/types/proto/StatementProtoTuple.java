@@ -20,31 +20,33 @@ public class StatementProtoTuple extends BoaProtoTuple {
 	private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
 	static {
-		names.put("kind", 0);
+		int counter = 0;
+
+		names.put("kind", counter++);
 		members.add(new StatementKindProtoMap());
 
-		names.put("comments", 1);
+		names.put("comments", counter++);
 		members.add(new BoaProtoList(new CommentProtoTuple()));
 
-		names.put("statements", 2);
+		names.put("statements", counter++);
 		members.add(new BoaProtoList(new StatementProtoTuple()));
 
-		names.put("initializations", 3);
+		names.put("initializations", counter++);
 		members.add(new BoaProtoList(new ExpressionProtoTuple()));
 
-		names.put("condition", 4);
+		names.put("condition", counter++);
 		members.add(new ExpressionProtoTuple());
 
-		names.put("updates", 5);
+		names.put("updates", counter++);
 		members.add(new BoaProtoList(new ExpressionProtoTuple()));
 
-		names.put("variable_declaration", 6);
+		names.put("variable_declaration", counter++);
 		members.add(new VariableProtoTuple());
 
-		names.put("type_declaration", 7);
+		names.put("type_declaration", counter++);
 		members.add(new DeclarationProtoTuple());
 
-		names.put("expression", 8);
+		names.put("expression", counter++);
 		members.add(new ExpressionProtoTuple());
 	}
 
@@ -55,6 +57,7 @@ public class StatementProtoTuple extends BoaProtoTuple {
 		super(members, names);
 	}
 
+	/** @{inheritDoc} */
 	@Override
 	public String toJavaType() {
 		return "boa.types.Ast.Statement";

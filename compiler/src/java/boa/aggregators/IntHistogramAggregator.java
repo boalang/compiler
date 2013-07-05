@@ -7,13 +7,10 @@ import java.util.Map.Entry;
 
 import boa.io.EmitKey;
 
-
-
 /**
  * A Boa aggregator to calculate a histogram for the values in a dataset.
  * 
  * @author anthonyu
- * 
  */
 @AggregatorSpec(name = "histogram", type = "int", formalParameters = { "int", "int", "int" })
 public class IntHistogramAggregator extends HistogramAggregator {
@@ -33,13 +30,13 @@ public class IntHistogramAggregator extends HistogramAggregator {
 	 * @param buckets
 	 *            A long representing the number of buckets in the histogram
 	 */
-	public IntHistogramAggregator(long min, long max, long buckets) {
+	public IntHistogramAggregator(final long min, final long max, final long buckets) {
 		super(min, max, buckets);
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void start(EmitKey key) {
+	public void start(final EmitKey key) {
 		super.start(key);
 
 		this.list = new SortedCountingSet<Long>();
@@ -47,7 +44,7 @@ public class IntHistogramAggregator extends HistogramAggregator {
 
 	/** {@inheritDoc} */
 	@Override
-	public void aggregate(String data, String metadata) throws NumberFormatException, IOException, InterruptedException {
+	public void aggregate(final String data, final String metadata) throws NumberFormatException, IOException, InterruptedException {
 		if (data.indexOf('.') != -1)
 			this.aggregate(Double.valueOf(data).longValue(), metadata);
 		else
@@ -56,20 +53,20 @@ public class IntHistogramAggregator extends HistogramAggregator {
 
 	/** {@inheritDoc} */
 	@Override
-	public void aggregate(long data, String metadata) throws IOException {
+	public void aggregate(final long data, final String metadata) throws IOException {
 		this.list.add(Long.valueOf(data), super.count(metadata));
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public void aggregate(double data, String metadata) throws IOException {
+	public void aggregate(final double data, final String metadata) throws IOException {
 		this.aggregate(Double.valueOf(data).longValue(), metadata);
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public List<Pair<Number, Long>> getTuples() {
-		List<Pair<Number, Long>> list = new ArrayList<Pair<Number, Long>>();
+		final List<Pair<Number, Long>> list = new ArrayList<Pair<Number, Long>>();
 
 		// convert the map entries into a list of Pair
 		for (final Entry<Long, Long> e : this.list.getEntries())

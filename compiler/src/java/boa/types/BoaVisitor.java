@@ -24,7 +24,6 @@ public class BoaVisitor extends BoaType {
 	/** {@inheritDoc} */
 	@Override
 	public String toString() {
-		// TODO ??
 		return "visitor";
 	}
 

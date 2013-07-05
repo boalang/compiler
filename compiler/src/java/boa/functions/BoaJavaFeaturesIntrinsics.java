@@ -447,7 +447,6 @@ public class BoaJavaFeaturesIntrinsics {
 									if (e.getExpressions(j).getLiteral().equals("varargs"))
 										foundVarargs = true;
 								}
-							// TODO verify this works
 							if (foundUnchecked && foundVarargs)
 								count++;
 						}

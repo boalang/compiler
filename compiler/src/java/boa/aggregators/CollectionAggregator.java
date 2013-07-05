@@ -6,12 +6,10 @@ import java.util.List;
 
 import boa.io.EmitKey;
 
-
 /**
  * A Boa aggregator to output all of the values in a dataset.
  * 
  * @author anthonyu
- * 
  */
 @AggregatorSpec(name = "collection")
 public class CollectionAggregator extends Aggregator {

@@ -1,6 +1,6 @@
 group BoaJavaHadoop : BoaJava;
 
-Program(name, staticDeclarations, staticStatements, statements, tables) ::= <<
+Program(name, numreducers, jobs, jobnames, tables, splitsize) ::= <<
 package boa;
 
 public class <name> extends boa.runtime.BoaRunner {
@@ -52,17 +52,32 @@ public class <name> extends boa.runtime.BoaRunner {
 		ins[0] = new org.apache.hadoop.fs.Path(args[0] + "/projects.seq");
 		
 		final org.apache.hadoop.mapreduce.Job jb = job(ins, new org.apache.hadoop.fs.Path(args[1]), robust);
-		jb.getConfiguration().set("boa.input.dir", args[0]);
+
+		org.apache.hadoop.conf.Configuration configuration = jb.getConfiguration();
+
+		configuration.set("boa.input.dir", args[0]);
+		if (line.hasOption("ast"))
+			configuration.set("boa.ast.dir", line.getOptionValue("ast"));
 
 		if (line.hasOption("splitsize"))
-			jb.getConfiguration().setInt("mapred.max.split.size", Integer.parseInt(line.getOptionValue("splitsize")));
+			configuration.setInt("mapred.max.split.size", Integer.parseInt(line.getOptionValue("splitsize")));
 		else
-			jb.getConfiguration().setInt("mapred.max.split.size", 10000000);
+			configuration.setInt("mapred.max.split.size", <splitsize>);
+
+		if (line.hasOption("profile")) {
+			configuration.setBoolean("mapred.task.profile", true);
+			configuration.set("mapred.task.profile.maps", "1");
+			configuration.set("mapred.task.profile.reduces", "0");
+			//configuration.set("mapred.task.profile.params", "-agentlib:hprof=cpu=samples,heap=sites,force=n,thread=y,verbose=n,file=%s");
+			configuration.set("mapred.task.profile.params", "-agentlib:hprof=cpu=times,heap=sites,force=n,verbose=n,file=%s");
+		}
 
 		jb.setInputFormatClass(org.apache.hadoop.mapreduce.lib.input.SequenceFileInputFormat.class);
 
+		jb.setNumReduceTasks(<numreducers>);
+
 		if (id > 0)
-			jb.getConfiguration().setInt("boa.hadoop.jobid", id);
+			configuration.setInt("boa.hadoop.jobid", id);
 		jb.submit();
 		if (id > 0)
 			boa.io.BoaOutputCommitter.setJobID(jb.getJobID().toString(), id);
@@ -103,51 +118,31 @@ public class <name> extends boa.runtime.BoaRunner {
 	}
 	
 	static class <name>BoaMapper extends boa.runtime.BoaMapper {
-		<staticDeclarations>
-		
-		<if(staticStatements)>
-		{
-			<staticStatements>
-		}
-		
-		<endif>
-		/** {@inheritDoc} */
+		<jobs:{<it><\n>}>		/** {@inheritDoc} */
 		@Override
 		protected void map(final org.apache.hadoop.io.Text key, final org.apache.hadoop.io.BytesWritable value, final org.apache.hadoop.mapreduce.Mapper\<org.apache.hadoop.io.Text, org.apache.hadoop.io.BytesWritable, boa.io.EmitKey, boa.io.EmitValue\>.Context context) throws java.io.IOException {
-			try {
-				final com.google.protobuf.CodedInputStream _inputStream = com.google.protobuf.CodedInputStream.newInstance(value.getBytes(), 0, value.getLength());
-				<statements:{<it><\n>}>
-			} catch (final com.google.protobuf.InvalidProtocolBufferException e) {
-				if (this.robust)
-					LOG.error(e.getClass().getName() + " caught", e);
-				else
-					throw e;
-			} catch (final java.io.IOException e) {
-				throw e;
-			} catch (final RuntimeException e) {
-				if (this.robust)
-					LOG.error(e.getClass().getName() + " caught", e);
-				else
-					throw e;
-			} catch (final Exception e) {
-				if (this.robust)
-					LOG.error(e.getClass().getName() + " caught", e);
-				else
-					throw new RuntimeException(e.getClass().getName() + " caught", e);
-			}
-		}
+			boa.types.Toplevel.Project _input = boa.types.Toplevel.Project.parseFrom(com.google.protobuf.CodedInputStream.newInstance(value.getBytes(), 0, value.getLength()));
+			<jobnames:{if (_job_<it> != null) {
+	try {
+		_job_<it>.map(_input, context);
+	} catch (final Throwable e) {
+		LOG.error("Job<it>: " + e.getClass().getName() + " caught", e);
+		_job_<it> = null;
+	}
+	context.progress();
+}<\n>}>		}
 
 		/** {@inheritDoc} */
 		@Override
 		protected void setup(final org.apache.hadoop.mapreduce.Mapper.Context context) throws java.io.IOException, java.lang.InterruptedException {
-			boa.functions.BoaAstIntrinsics.initialize(context);
+			boa.functions.BoaAstIntrinsics.setup(context);
 			super.setup(context);
 		}
 
 		/** {@inheritDoc} */
 		@Override
 		protected void cleanup(final org.apache.hadoop.mapreduce.Mapper.Context context) throws java.io.IOException, java.lang.InterruptedException {
-			boa.functions.BoaAstIntrinsics.close();
+			boa.functions.BoaAstIntrinsics.cleanup(context);
 			super.cleanup(context);
 		}
 	}
@@ -183,4 +178,20 @@ public class <name> extends boa.runtime.BoaRunner {
 }
 >>
 
-EmitStatement(indices, id, expression, weight) ::= "context.write(new boa.io.EmitKey(<if(indices)><indices:{\"[\" + <it> + \"]\"}; separator=\" + \">, <endif><id>), new boa.io.EmitValue(<expression><if(weight)>, <weight><endif>));<\n>"
+Job(name, staticDeclarations, staticStatements, statements) ::= <<
+private static class Job<name> {
+	<staticDeclarations>
+	<if(staticStatements)>
+	{
+		<staticStatements>
+	}
+	
+	<endif>
+	public void map(final boa.types.Toplevel.Project _input, final org.apache.hadoop.mapreduce.Mapper\<org.apache.hadoop.io.Text, org.apache.hadoop.io.BytesWritable, boa.io.EmitKey, boa.io.EmitValue\>.Context context) throws Exception {
+		<statements:{<it><\n>}>	}
+}
+private static Job<name> _job_<name> = new Job<name>();
+
+>>
+
+EmitStatement(indices, id, job, expression, weight) ::= "context.write(new boa.io.EmitKey(<if(indices)><indices:{\"[\" + <it> + \"]\"}; separator=\" + \">, <endif><id>, <job>), new boa.io.EmitValue(<expression><if(weight)>, <weight><endif>));<\n>"

@@ -1,0 +1,41 @@
+package boa.compiler.ast.expressions;
+
+import boa.compiler.ast.Operand;
+import boa.compiler.ast.statements.Block;
+import boa.compiler.visitors.AbstractVisitor;
+import boa.compiler.visitors.AbstractVisitorNoArg;
+
+/**
+ * 
+ * @author rdyer
+ */
+public class StatementExpr extends Operand {
+	protected Block b;
+
+	public Block getBlock() {
+		return b;
+	}
+
+	public StatementExpr (final Block b) {
+		b.setParent(this);
+		this.b = b;
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public <A> void accept(final AbstractVisitor<A> v, A arg) {
+		v.visit(this, arg);
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void accept(final AbstractVisitorNoArg v) {
+		v.visit(this);
+	}
+
+	public StatementExpr clone() {
+		final StatementExpr e = new StatementExpr(b.clone());
+		copyFieldsTo(e);
+		return e;
+	}
+}

@@ -22,22 +22,24 @@ public class ModifierProtoTuple extends BoaProtoTuple {
 	private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
 	static {
-		names.put("kind", 0);
+		int counter = 0;
+
+		names.put("kind", counter++);
 		members.add(new ModifierKindProtoMap());
 
-		names.put("visibility", 1);
+		names.put("visibility", counter++);
 		members.add(new VisibilityProtoMap());
 
-		names.put("annotation_name", 2);
+		names.put("annotation_name", counter++);
 		members.add(new BoaString());
 
-		names.put("annotation_members", 3);
+		names.put("annotation_members", counter++);
 		members.add(new BoaProtoList(new BoaString()));
 
-		names.put("annotation_values", 4);
+		names.put("annotation_values", counter++);
 		members.add(new BoaProtoList(new ExpressionProtoTuple()));
 
-		names.put("other", 5);
+		names.put("other", counter++);
 		members.add(new BoaString());
 	}
 
@@ -48,6 +50,7 @@ public class ModifierProtoTuple extends BoaProtoTuple {
 		super(members, names);
 	}
 
+	/** @{inheritDoc} */
 	@Override
 	public String toJavaType() {
 		return "boa.types.Ast.Modifier";

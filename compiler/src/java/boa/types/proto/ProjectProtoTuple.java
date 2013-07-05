@@ -23,58 +23,60 @@ public class ProjectProtoTuple extends BoaProtoTuple {
 	private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
 	static {
-		names.put("name", 0);
+		int counter = 0;
+
+		names.put("name", counter++);
 		members.add(new BoaString());
 
-		names.put("project_url", 1);
+		names.put("project_url", counter++);
 		members.add(new BoaString());
 
-		names.put("homepage_url", 2);
+		names.put("homepage_url", counter++);
 		members.add(new BoaString());
 
-		names.put("created_date", 3);
+		names.put("created_date", counter++);
 		members.add(new BoaTime());
 
-		names.put("id", 4);
+		names.put("id", counter++);
 		members.add(new BoaString());
 
-		names.put("description", 5);
+		names.put("description", counter++);
 		members.add(new BoaString());
 
-		names.put("operating_systems", 6);
+		names.put("operating_systems", counter++);
 		members.add(new BoaProtoList(new BoaString()));
 
-		names.put("programming_languages", 7);
+		names.put("programming_languages", counter++);
 		members.add(new BoaProtoList(new BoaString()));
 
-		names.put("databases", 8);
+		names.put("databases", counter++);
 		members.add(new BoaProtoList(new BoaString()));
 
-		names.put("licenses", 9);
+		names.put("licenses", counter++);
 		members.add(new BoaProtoList(new BoaString()));
 
-		names.put("interfaces", 10);
+		names.put("interfaces", counter++);
 		members.add(new BoaProtoList(new BoaString()));
 
-		names.put("audiences", 11);
+		names.put("audiences", counter++);
 		members.add(new BoaProtoList(new BoaString()));
 
-		names.put("topics", 12);
+		names.put("topics", counter++);
 		members.add(new BoaProtoList(new BoaString()));
 
-		names.put("donations", 13);
+		names.put("donations", counter++);
 		members.add(new BoaBool());
 
-		names.put("maintainers", 14);
+		names.put("maintainers", counter++);
 		members.add(new BoaProtoList(new PersonProtoTuple()));
 
-		names.put("developers", 15);
+		names.put("developers", counter++);
 		members.add(new BoaProtoList(new PersonProtoTuple()));
 
-		names.put("code_repositories", 16);
+		names.put("code_repositories", counter++);
 		members.add(new BoaProtoList(new CodeRepositoryProtoTuple()));
 
-		names.put("bug_repositories", 17);
+		names.put("bug_repositories", counter++);
 		members.add(new BoaProtoList(new BugRepositoryProtoTuple()));
 	}
 
@@ -85,6 +87,7 @@ public class ProjectProtoTuple extends BoaProtoTuple {
 		super(members, names);
 	}
 
+	/** @{inheritDoc} */
 	@Override
 	public String toJavaType() {
 		return "boa.types.Toplevel.Project";

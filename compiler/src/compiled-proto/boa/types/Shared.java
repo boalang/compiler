@@ -8,20 +8,41 @@ public final class Shared {
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistry registry) {
   }
+  /**
+   * Protobuf enum {@code boa.types.ChangeKind}
+   */
   public enum ChangeKind
       implements com.google.protobuf.ProtocolMessageEnum {
+    /**
+     * <code>ADDED = 1;</code>
+     */
     ADDED(0, 1),
+    /**
+     * <code>DELETED = 2;</code>
+     */
     DELETED(1, 2),
+    /**
+     * <code>MODIFIED = 3;</code>
+     */
     MODIFIED(2, 3),
     ;
-    
+
+    /**
+     * <code>ADDED = 1;</code>
+     */
     public static final int ADDED_VALUE = 1;
+    /**
+     * <code>DELETED = 2;</code>
+     */
     public static final int DELETED_VALUE = 2;
+    /**
+     * <code>MODIFIED = 3;</code>
+     */
     public static final int MODIFIED_VALUE = 3;
-    
-    
+
+
     public final int getNumber() { return value; }
-    
+
     public static ChangeKind valueOf(int value) {
       switch (value) {
         case 1: return ADDED;
@@ -30,7 +51,7 @@ public final class Shared {
         default: return null;
       }
     }
-    
+
     public static com.google.protobuf.Internal.EnumLiteMap<ChangeKind>
         internalGetValueMap() {
       return internalValueMap;
@@ -42,7 +63,7 @@ public final class Shared {
               return ChangeKind.valueOf(number);
             }
           };
-    
+
     public final com.google.protobuf.Descriptors.EnumValueDescriptor
         getValueDescriptor() {
       return getDescriptor().getValues().get(index);
@@ -55,11 +76,9 @@ public final class Shared {
         getDescriptor() {
       return boa.types.Shared.getDescriptor().getEnumTypes().get(0);
     }
-    
-    private static final ChangeKind[] VALUES = {
-      ADDED, DELETED, MODIFIED, 
-    };
-    
+
+    private static final ChangeKind[] VALUES = values();
+
     public static ChangeKind valueOf(
         com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
       if (desc.getType() != getDescriptor()) {
@@ -68,462 +87,114 @@ public final class Shared {
       }
       return VALUES[desc.getIndex()];
     }
-    
+
     private final int index;
     private final int value;
-    
+
     private ChangeKind(int index, int value) {
       this.index = index;
       this.value = value;
     }
-    
+
     // @@protoc_insertion_point(enum_scope:boa.types.ChangeKind)
   }
-  
+
   public interface PersonOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
-    
+
     // required string username = 1;
+    /**
+     * <code>required string username = 1;</code>
+     */
     boolean hasUsername();
-    String getUsername();
-    
+    /**
+     * <code>required string username = 1;</code>
+     */
+    java.lang.String getUsername();
+    /**
+     * <code>required string username = 1;</code>
+     */
+    com.google.protobuf.ByteString
+        getUsernameBytes();
+
     // required string real_name = 2;
+    /**
+     * <code>required string real_name = 2;</code>
+     */
     boolean hasRealName();
-    String getRealName();
-    
+    /**
+     * <code>required string real_name = 2;</code>
+     */
+    java.lang.String getRealName();
+    /**
+     * <code>required string real_name = 2;</code>
+     */
+    com.google.protobuf.ByteString
+        getRealNameBytes();
+
     // required string email = 3;
+    /**
+     * <code>required string email = 3;</code>
+     */
     boolean hasEmail();
-    String getEmail();
+    /**
+     * <code>required string email = 3;</code>
+     */
+    java.lang.String getEmail();
+    /**
+     * <code>required string email = 3;</code>
+     */
+    com.google.protobuf.ByteString
+        getEmailBytes();
   }
+  /**
+   * Protobuf type {@code boa.types.Person}
+   */
   public static final class Person extends
       com.google.protobuf.GeneratedMessage
       implements PersonOrBuilder {
     // Use Person.newBuilder() to construct.
-    private Person(Builder builder) {
+    private Person(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
+      this.unknownFields = builder.getUnknownFields();
     }
-    private Person(boolean noInit) {}
-    
+    private Person(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
     private static final Person defaultInstance;
     public static Person getDefaultInstance() {
       return defaultInstance;
     }
-    
+
     public Person getDefaultInstanceForType() {
       return defaultInstance;
     }
-    
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return boa.types.Shared.internal_static_boa_types_Person_descriptor;
-    }
-    
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return boa.types.Shared.internal_static_boa_types_Person_fieldAccessorTable;
-    }
-    
-    private int bitField0_;
-    // required string username = 1;
-    public static final int USERNAME_FIELD_NUMBER = 1;
-    private java.lang.Object username_;
-    public boolean hasUsername() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    public String getUsername() {
-      java.lang.Object ref = username_;
-      if (ref instanceof String) {
-        return (String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
-          username_ = s;
-        }
-        return s;
-      }
-    }
-    private com.google.protobuf.ByteString getUsernameBytes() {
-      java.lang.Object ref = username_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
-        username_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-    
-    // required string real_name = 2;
-    public static final int REAL_NAME_FIELD_NUMBER = 2;
-    private java.lang.Object realName_;
-    public boolean hasRealName() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    public String getRealName() {
-      java.lang.Object ref = realName_;
-      if (ref instanceof String) {
-        return (String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
-          realName_ = s;
-        }
-        return s;
-      }
-    }
-    private com.google.protobuf.ByteString getRealNameBytes() {
-      java.lang.Object ref = realName_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
-        realName_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-    
-    // required string email = 3;
-    public static final int EMAIL_FIELD_NUMBER = 3;
-    private java.lang.Object email_;
-    public boolean hasEmail() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
-    }
-    public String getEmail() {
-      java.lang.Object ref = email_;
-      if (ref instanceof String) {
-        return (String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
-          email_ = s;
-        }
-        return s;
-      }
-    }
-    private com.google.protobuf.ByteString getEmailBytes() {
-      java.lang.Object ref = email_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
-        email_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-    
-    private void initFields() {
-      username_ = "";
-      realName_ = "";
-      email_ = "";
-    }
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
-      
-      if (!hasUsername()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasRealName()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasEmail()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      memoizedIsInitialized = 1;
-      return true;
-    }
-    
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeBytes(1, getUsernameBytes());
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeBytes(2, getRealNameBytes());
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeBytes(3, getEmailBytes());
-      }
-      getUnknownFields().writeTo(output);
-    }
-    
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-    
-      size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(1, getUsernameBytes());
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(2, getRealNameBytes());
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(3, getEmailBytes());
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-    
-    private static final long serialVersionUID = 0L;
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
     @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
     }
-    
-    public static boa.types.Shared.Person parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
-    }
-    public static boa.types.Shared.Person parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
-    }
-    public static boa.types.Shared.Person parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data).buildParsed();
-    }
-    public static boa.types.Shared.Person parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return newBuilder().mergeFrom(data, extensionRegistry)
-               .buildParsed();
-    }
-    public static boa.types.Shared.Person parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
-    }
-    public static boa.types.Shared.Person parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
-    }
-    public static boa.types.Shared.Person parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
-    }
-    public static boa.types.Shared.Person parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      Builder builder = newBuilder();
-      if (builder.mergeDelimitedFrom(input, extensionRegistry)) {
-        return builder.buildParsed();
-      } else {
-        return null;
-      }
-    }
-    public static boa.types.Shared.Person parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input).buildParsed();
-    }
-    public static boa.types.Shared.Person parseFrom(
+    private Person(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return newBuilder().mergeFrom(input, extensionRegistry)
-               .buildParsed();
-    }
-    
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(boa.types.Shared.Person prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-    
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements boa.types.Shared.PersonOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return boa.types.Shared.internal_static_boa_types_Person_descriptor;
-      }
-      
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return boa.types.Shared.internal_static_boa_types_Person_fieldAccessorTable;
-      }
-      
-      // Construct using boa.types.Shared.Person.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-      
-      private Builder(BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-        }
-      }
-      private static Builder create() {
-        return new Builder();
-      }
-      
-      public Builder clear() {
-        super.clear();
-        username_ = "";
-        bitField0_ = (bitField0_ & ~0x00000001);
-        realName_ = "";
-        bitField0_ = (bitField0_ & ~0x00000002);
-        email_ = "";
-        bitField0_ = (bitField0_ & ~0x00000004);
-        return this;
-      }
-      
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-      
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return boa.types.Shared.Person.getDescriptor();
-      }
-      
-      public boa.types.Shared.Person getDefaultInstanceForType() {
-        return boa.types.Shared.Person.getDefaultInstance();
-      }
-      
-      public boa.types.Shared.Person build() {
-        boa.types.Shared.Person result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-      
-      private boa.types.Shared.Person buildParsed()
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        boa.types.Shared.Person result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(
-            result).asInvalidProtocolBufferException();
-        }
-        return result;
-      }
-      
-      public boa.types.Shared.Person buildPartial() {
-        boa.types.Shared.Person result = new boa.types.Shared.Person(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.username_ = username_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.realName_ = realName_;
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000004;
-        }
-        result.email_ = email_;
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
-      }
-      
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof boa.types.Shared.Person) {
-          return mergeFrom((boa.types.Shared.Person)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-      
-      public Builder mergeFrom(boa.types.Shared.Person other) {
-        if (other == boa.types.Shared.Person.getDefaultInstance()) return this;
-        if (other.hasUsername()) {
-          setUsername(other.getUsername());
-        }
-        if (other.hasRealName()) {
-          setRealName(other.getRealName());
-        }
-        if (other.hasEmail()) {
-          setEmail(other.getEmail());
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-      
-      public final boolean isInitialized() {
-        if (!hasUsername()) {
-          
-          return false;
-        }
-        if (!hasRealName()) {
-          
-          return false;
-        }
-        if (!hasEmail()) {
-          
-          return false;
-        }
-        return true;
-      }
-      
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder(
-            this.getUnknownFields());
-        while (true) {
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
           int tag = input.readTag();
           switch (tag) {
             case 0:
-              this.setUnknownFields(unknownFields.build());
-              onChanged();
-              return this;
+              done = true;
+              break;
             default: {
               if (!parseUnknownField(input, unknownFields,
                                      extensionRegistry, tag)) {
-                this.setUnknownFields(unknownFields.build());
-                onChanged();
-                return this;
+                done = true;
               }
               break;
             }
@@ -544,26 +215,507 @@ public final class Shared {
             }
           }
         }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
       }
-      
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return boa.types.Shared.internal_static_boa_types_Person_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return boa.types.Shared.internal_static_boa_types_Person_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              boa.types.Shared.Person.class, boa.types.Shared.Person.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<Person> PARSER =
+        new com.google.protobuf.AbstractParser<Person>() {
+      public Person parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new Person(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<Person> getParserForType() {
+      return PARSER;
+    }
+
+    private int bitField0_;
+    // required string username = 1;
+    public static final int USERNAME_FIELD_NUMBER = 1;
+    private java.lang.Object username_;
+    /**
+     * <code>required string username = 1;</code>
+     */
+    public boolean hasUsername() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>required string username = 1;</code>
+     */
+    public java.lang.String getUsername() {
+      java.lang.Object ref = username_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          username_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string username = 1;</code>
+     */
+    public com.google.protobuf.ByteString
+        getUsernameBytes() {
+      java.lang.Object ref = username_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        username_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    // required string real_name = 2;
+    public static final int REAL_NAME_FIELD_NUMBER = 2;
+    private java.lang.Object realName_;
+    /**
+     * <code>required string real_name = 2;</code>
+     */
+    public boolean hasRealName() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>required string real_name = 2;</code>
+     */
+    public java.lang.String getRealName() {
+      java.lang.Object ref = realName_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          realName_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string real_name = 2;</code>
+     */
+    public com.google.protobuf.ByteString
+        getRealNameBytes() {
+      java.lang.Object ref = realName_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        realName_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    // required string email = 3;
+    public static final int EMAIL_FIELD_NUMBER = 3;
+    private java.lang.Object email_;
+    /**
+     * <code>required string email = 3;</code>
+     */
+    public boolean hasEmail() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>required string email = 3;</code>
+     */
+    public java.lang.String getEmail() {
+      java.lang.Object ref = email_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          email_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string email = 3;</code>
+     */
+    public com.google.protobuf.ByteString
+        getEmailBytes() {
+      java.lang.Object ref = email_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        email_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    private void initFields() {
+      username_ = "";
+      realName_ = "";
+      email_ = "";
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+
+      if (!hasUsername()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasRealName()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasEmail()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeBytes(1, getUsernameBytes());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeBytes(2, getRealNameBytes());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeBytes(3, getEmailBytes());
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(1, getUsernameBytes());
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(2, getRealNameBytes());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(3, getEmailBytes());
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static boa.types.Shared.Person parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static boa.types.Shared.Person parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static boa.types.Shared.Person parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static boa.types.Shared.Person parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static boa.types.Shared.Person parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static boa.types.Shared.Person parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static boa.types.Shared.Person parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static boa.types.Shared.Person parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static boa.types.Shared.Person parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static boa.types.Shared.Person parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(boa.types.Shared.Person prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code boa.types.Person}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements boa.types.Shared.PersonOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return boa.types.Shared.internal_static_boa_types_Person_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return boa.types.Shared.internal_static_boa_types_Person_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                boa.types.Shared.Person.class, boa.types.Shared.Person.Builder.class);
+      }
+
+      // Construct using boa.types.Shared.Person.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        username_ = "";
+        bitField0_ = (bitField0_ & ~0x00000001);
+        realName_ = "";
+        bitField0_ = (bitField0_ & ~0x00000002);
+        email_ = "";
+        bitField0_ = (bitField0_ & ~0x00000004);
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return boa.types.Shared.internal_static_boa_types_Person_descriptor;
+      }
+
+      public boa.types.Shared.Person getDefaultInstanceForType() {
+        return boa.types.Shared.Person.getDefaultInstance();
+      }
+
+      public boa.types.Shared.Person build() {
+        boa.types.Shared.Person result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public boa.types.Shared.Person buildPartial() {
+        boa.types.Shared.Person result = new boa.types.Shared.Person(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.username_ = username_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.realName_ = realName_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.email_ = email_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof boa.types.Shared.Person) {
+          return mergeFrom((boa.types.Shared.Person)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(boa.types.Shared.Person other) {
+        if (other == boa.types.Shared.Person.getDefaultInstance()) return this;
+        if (other.hasUsername()) {
+          bitField0_ |= 0x00000001;
+          username_ = other.username_;
+          onChanged();
+        }
+        if (other.hasRealName()) {
+          bitField0_ |= 0x00000002;
+          realName_ = other.realName_;
+          onChanged();
+        }
+        if (other.hasEmail()) {
+          bitField0_ |= 0x00000004;
+          email_ = other.email_;
+          onChanged();
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        if (!hasUsername()) {
+          
+          return false;
+        }
+        if (!hasRealName()) {
+          
+          return false;
+        }
+        if (!hasEmail()) {
+          
+          return false;
+        }
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        boa.types.Shared.Person parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (boa.types.Shared.Person) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
       private int bitField0_;
-      
+
       // required string username = 1;
       private java.lang.Object username_ = "";
+      /**
+       * <code>required string username = 1;</code>
+       */
       public boolean hasUsername() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
-      public String getUsername() {
+      /**
+       * <code>required string username = 1;</code>
+       */
+      public java.lang.String getUsername() {
         java.lang.Object ref = username_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
           username_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
-      public Builder setUsername(String value) {
+      /**
+       * <code>required string username = 1;</code>
+       */
+      public com.google.protobuf.ByteString
+          getUsernameBytes() {
+        java.lang.Object ref = username_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          username_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string username = 1;</code>
+       */
+      public Builder setUsername(
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -572,34 +724,72 @@ public final class Shared {
         onChanged();
         return this;
       }
+      /**
+       * <code>required string username = 1;</code>
+       */
       public Builder clearUsername() {
         bitField0_ = (bitField0_ & ~0x00000001);
         username_ = getDefaultInstance().getUsername();
         onChanged();
         return this;
       }
-      void setUsername(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00000001;
+      /**
+       * <code>required string username = 1;</code>
+       */
+      public Builder setUsernameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
         username_ = value;
         onChanged();
+        return this;
       }
-      
+
       // required string real_name = 2;
       private java.lang.Object realName_ = "";
+      /**
+       * <code>required string real_name = 2;</code>
+       */
       public boolean hasRealName() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
-      public String getRealName() {
+      /**
+       * <code>required string real_name = 2;</code>
+       */
+      public java.lang.String getRealName() {
         java.lang.Object ref = realName_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
           realName_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
-      public Builder setRealName(String value) {
+      /**
+       * <code>required string real_name = 2;</code>
+       */
+      public com.google.protobuf.ByteString
+          getRealNameBytes() {
+        java.lang.Object ref = realName_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          realName_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string real_name = 2;</code>
+       */
+      public Builder setRealName(
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -608,34 +798,72 @@ public final class Shared {
         onChanged();
         return this;
       }
+      /**
+       * <code>required string real_name = 2;</code>
+       */
       public Builder clearRealName() {
         bitField0_ = (bitField0_ & ~0x00000002);
         realName_ = getDefaultInstance().getRealName();
         onChanged();
         return this;
       }
-      void setRealName(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00000002;
+      /**
+       * <code>required string real_name = 2;</code>
+       */
+      public Builder setRealNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
         realName_ = value;
         onChanged();
+        return this;
       }
-      
+
       // required string email = 3;
       private java.lang.Object email_ = "";
+      /**
+       * <code>required string email = 3;</code>
+       */
       public boolean hasEmail() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
-      public String getEmail() {
+      /**
+       * <code>required string email = 3;</code>
+       */
+      public java.lang.String getEmail() {
         java.lang.Object ref = email_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
           email_ = s;
           return s;
         } else {
-          return (String) ref;
+          return (java.lang.String) ref;
         }
       }
-      public Builder setEmail(String value) {
+      /**
+       * <code>required string email = 3;</code>
+       */
+      public com.google.protobuf.ByteString
+          getEmailBytes() {
+        java.lang.Object ref = email_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          email_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string email = 3;</code>
+       */
+      public Builder setEmail(
+          java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
@@ -644,35 +872,46 @@ public final class Shared {
         onChanged();
         return this;
       }
+      /**
+       * <code>required string email = 3;</code>
+       */
       public Builder clearEmail() {
         bitField0_ = (bitField0_ & ~0x00000004);
         email_ = getDefaultInstance().getEmail();
         onChanged();
         return this;
       }
-      void setEmail(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00000004;
+      /**
+       * <code>required string email = 3;</code>
+       */
+      public Builder setEmailBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000004;
         email_ = value;
         onChanged();
+        return this;
       }
-      
+
       // @@protoc_insertion_point(builder_scope:boa.types.Person)
     }
-    
+
     static {
       defaultInstance = new Person(true);
       defaultInstance.initFields();
     }
-    
+
     // @@protoc_insertion_point(class_scope:boa.types.Person)
   }
-  
+
   private static com.google.protobuf.Descriptors.Descriptor
     internal_static_boa_types_Person_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_boa_types_Person_fieldAccessorTable;
-  
+
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
     return descriptor;
@@ -696,9 +935,7 @@ public final class Shared {
           internal_static_boa_types_Person_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Person_descriptor,
-              new java.lang.String[] { "Username", "RealName", "Email", },
-              boa.types.Shared.Person.class,
-              boa.types.Shared.Person.Builder.class);
+              new java.lang.String[] { "Username", "RealName", "Email", });
           return null;
         }
       };
@@ -707,6 +944,6 @@ public final class Shared {
         new com.google.protobuf.Descriptors.FileDescriptor[] {
         }, assigner);
   }
-  
+
   // @@protoc_insertion_point(outer_class_scope)
 }

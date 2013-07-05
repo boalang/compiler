@@ -20,13 +20,15 @@ public class TypeProtoTuple extends BoaProtoTuple {
 	private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
 	static {
-		names.put("name", 0);
+		int counter = 0;
+
+		names.put("name", counter++);
 		members.add(new BoaString());
 
-		names.put("kind", 1);
+		names.put("kind", counter++);
 		members.add(new TypeKindProtoMap());
 
-		names.put("id", 3);
+		names.put("id", counter++);
 		members.add(new BoaString());
 	}
 
@@ -37,6 +39,7 @@ public class TypeProtoTuple extends BoaProtoTuple {
 		super(members, names);
 	}
 
+	/** @{inheritDoc} */
 	@Override
 	public String toJavaType() {
 		return "boa.types.Ast.Type";
