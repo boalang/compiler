@@ -1,0 +1,135 @@
+group BoaJava;
+
+identifierMap ::= [
+		"true" : "true",
+		"false" : "false",
+		"PI" : "Math.PI",
+		"Inf" : "Double.POSITIVE_INFINITY",
+		"inf" : "Double.POSITIVE_INFINITY",
+		"NaN" : "Double.NaN",
+		"nan" : "Double.NaN",
+		"SECOND" : "(1000 * 1000)",
+		"SEC" : "(1000 * 1000)",
+		"MINUTE" : "(60 * 1000 * 1000)",
+		"MIN" : "(60 * 1000 * 1000)",
+		"HOUR" : "(60 * 60 * 1000 * 1000)",
+		"HR" : "(60 * 60 * 1000 * 1000)",
+		"input" : "_inputStream"
+]
+		
+VarDecl(type, id, initializer) ::= "<type> ___<id><if(initializer)> = <initializer><endif>;<\n>"
+ArrayType(type) ::= "new <type>[]"
+MapType(key, value) ::= "new java.util.HashMap\<<key>, <value>\>()"
+StackType(value) ::= "new java.util.Stack\<<value>\>()"
+ExprList(expressions) ::= "<first(expressions)><rest(expressions):{, <it>}>"
+Block(statements) ::= <<
+{
+	<statements:{<it>}>}
+>>
+ExprStatement(expression, operator) ::= "<expression><operator>;<\n>"
+ForStatement(declaration, expression, exprstmt, statement) ::= <<
+for (<declaration> <expression>; <exprstmt>)
+	<statement>
+>>
+IfStatement(expression, statement, elseStatement) ::= <<
+if (<expression>)
+	<statement>
+<if(elseStatement)>
+else
+	<elseStatement>
+<endif>
+>>
+WhenStatement(all, some, len, type, index, expression, statement) ::= <<
+	<if(all)>
+	{
+		boolean _satisfied_<index> = true;
+		for (<type> ___<index> = 0; ___<index> \< <len>; ___<index>++)
+			if (!(<expression>))
+			{
+				_satisfied_<index> = false;
+				break;
+			}
+		if (_satisfied_<index>)
+		{
+			<statement>
+		}
+	}
+	<else>
+	for (<type> ___<index> = 0; ___<index> \< <len>; ___<index>++)
+	{
+		<if(some)>
+		boolean _stop_<index> = false;
+		<endif>
+		if (<expression>) {
+			<if(some)>
+			_stop_<index> = true;
+			<endif>
+			<statement>
+		}
+		<if(some)>
+		if (_stop_<index>) break;
+		<endif>
+	}
+	<endif>
+>>
+Expression(lhs, operators, operands) ::= "<lhs><operators,operands:{operator,operand|<\ ><operator> <operand>}>"
+Index(map, operand, index, slice) ::= "<if(map)><operand>.get(<index>)<elseif(slice)>java.util.Arrays.copyOfRange(<operand>, <index>, <slice>)<else><operand>[<index>]<endif>"
+Call(call, operand, parameters) ::= "<if(call)><call><else><operand>(<parameters>)<endif>"
+Composite(type, pairlist, exprlist) ::= "<if(exprlist)>new <type> { <exprlist> }<else>new java.util.HashMap()<endif>"
+PairList(pairs) ::= "<pairs:{<it>;<\n>}>"
+Pair(map, key, value) ::= "<map>.put(<key>, <value>)"
+Identifier(id) ::= "<if(identifierMap.(id))><identifierMap.(id)><else>___<id><endif>"
+Assignment(lhs, rhs) ::= "<lhs> = <rhs>;<\n>"
+Break() ::= "break;<\n>"
+Continue() ::= "continue;<\n>"
+Stop() ::= "return false;<\n>"
+Empty() ::= ";<\n>"
+Switch(expr, cases, body) ::= <<
+switch (<expr>) {
+<cases>
+default:
+	<body>
+}
+
+>>
+Case(cases, body) ::= <<
+<cases:{
+case <it>:}>
+	<body>
+>>
+DoWhile(condition, stmt) ::= <<
+do {
+	<condition>
+} while (<stmt>);
+>>
+FunctionType(name, ret, args, types) ::= <<
+public interface <name> {
+	<ret> invoke(<args,types:{arg,type|final <type> ___<arg>}; separator=", ">) throws Exception;
+}<\n>
+>>
+Function(type, staticDeclarations, ret, args, types, body) ::= <<
+new <type>() {
+	<staticDeclarations>
+	@Override
+	public <ret> invoke(<args,types:{arg,type|final <type> ___<arg>}; separator=", ">) throws Exception {
+		<body>
+	}
+}
+>>
+Visitor(staticDeclarations, body) ::= <<
+new boa.runtime.BoaAbstractVisitor() {
+	<staticDeclarations><body:{<it><\n>}>}
+>>
+VisitClause(ret, name, args, types, body) ::= <<
+<if(args)>
+<args,types:{arg,type|
+@Override
+protected <ret> <name>(final <type> <arg>) throws Exception {
+	<body>}}>
+<else>
+@Override
+protected <ret> <name>() throws Exception {
+	<body>}<endif>
+>>
+Return(expr) ::= "return<if(expr)> <expr><endif>;<\n>"
+

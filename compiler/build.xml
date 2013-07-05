@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<project name="sizzle" default="package">
+<project name="boa" default="package">
 	<property name="ant.build.javac.source" value="1.6" />
 	<property name="ant.build.javac.target" value="1.6" />
 
@@ -12,7 +12,7 @@
 	</path>
 
 	<target name="init">
-		<mkdir dir="build/java/sizzle/parser" />
+		<mkdir dir="build/java/boa/parser" />
 		<mkdir dir="build/javacc" />
 		<mkdir dir="build/classes" />
 		<mkdir dir="build/testclasses" />
@@ -29,17 +29,17 @@
 	</target>
 
 	<target name="tree" depends="init">
-		<java jar="lib/jtb132.jar" fork="true" dir="build/java/sizzle/parser">
+		<java jar="lib/jtb132.jar" fork="true" dir="build/java/boa/parser">
 			<arg value="-o" />
-			<arg value="../../../javacc/sizzle.jj" />
+			<arg value="../../../javacc/boa.jj" />
 			<arg value="-p" />
-			<arg value="sizzle.parser" />
-			<arg value="../../../../src/jtb/sizzle.jtb" />
+			<arg value="boa.parser" />
+			<arg value="../../../../src/jtb/boa.jtb" />
 		</java>
 	</target>
 
 	<target name="parser" depends="tree">
-		<javacc target="build/javacc/sizzle.jj" outputdirectory="build/java/sizzle/parser" debugparser="false" debuglookahead="false" debugtokenmanager="false" javacchome="lib" static="true" />
+		<javacc target="build/javacc/boa.jj" outputdirectory="build/java/boa/parser" debugparser="false" debuglookahead="false" debugtokenmanager="false" javacchome="lib" static="true" />
 	</target>
 
 	<target name="compile-generated" depends="parser">
@@ -75,24 +75,24 @@
 	</target>
 
 	<target name="doc" depends="init">
-		<javadoc destdir="build/classes" sourcepath="src/java" packagenames="sizzle.*">
+		<javadoc destdir="build/classes" sourcepath="src/java" packagenames="boa.*">
 			<classpath refid="classpath" />
 		</javadoc>
 	</target>
 
 	<target name="package" depends="compile">
-		<jar destfile="dist/sizzle-runtime.jar">
+		<jar destfile="dist/boa-runtime.jar">
 			<fileset dir="build/classes">
 				<patternset>
-					<include name="sizzle/" />
+					<include name="boa/" />
 					<exclude name="**/compiler/" />
+					<exclude name="**/parser/" />
 				</patternset>
 			</fileset>
-			<zipfileset excludes="META-INF/" src="lib/protobuf-java-2.4.1.jar" />
 		</jar>
-		<jar destfile="dist/sizzle-compiler.jar">
+		<jar destfile="dist/boa-compiler.jar">
 			<manifest>
-				<attribute name="Main-Class" value="sizzle.compiler.SizzleCompiler" />
+				<attribute name="Main-Class" value="boa.compiler.BoaCompiler" />
 			</manifest>
 			<fileset dir="build/classes">
 				<patternset>
@@ -100,13 +100,18 @@
 					<exclude name="**/runtime/" />
 				</patternset>
 			</fileset>
+			<fileset dir="build/classes">
+				<patternset>
+					<include name="**/runtime/BoaAbstractVisitor.class" />
+				</patternset>
+			</fileset>
 			<fileset dir="conf" />
 			<fileset dir="src/antlr" />
 			<zipfileset excludes="META-INF/" src="lib/commons-logging-1.1.1.jar" />
 			<zipfileset excludes="META-INF/" src="lib/commons-configuration-1.6.jar" />
 			<zipfileset excludes="META-INF/" src="lib/commons-lang-2.4.jar" />
-			<zipfileset excludes="META-INF/" src="lib/hadoop-core-1.0.3.jar" />
-			<zipfileset excludes="META-INF/" src="lib/hbase-0.94.1.jar" />
+			<zipfileset excludes="META-INF/" src="lib/hadoop-core-1.0.4.jar" />
+			<zipfileset excludes="META-INF/" src="lib/hbase-0.94.5.jar" />
 			<zipfileset excludes="META-INF/" src="lib/log4j-1.2.15.jar" />
 			<zipfileset excludes="META-INF/" src="lib/commons-cli-1.2.jar" />
 			<zipfileset excludes="META-INF/" src="lib/scannotation-1.0.3.jar" />

@@ -1,4 +1,4 @@
-package sizzle.types;
+package boa.types;
 
 import "shared.proto";
 import "ast.proto";
@@ -20,8 +20,13 @@ message ChangedFile {
 	required FileKind kind = 2;
 	required string name = 3;
 	repeated Namespace namespaces = 4;
-	repeated ChangedNamespace changed_namespaces = 5;
-	optional string content = 6;
+//	repeated ChangedNamespace changed_namespaces = 5;
+//	optional string content = 6;
+	required string key = 5;
+}
+
+message ChangedASTRoot {
+	repeated ChangedNamespace namespaces = 1;
 }
 
 message ChangedNamespace {
