@@ -115,10 +115,10 @@ public class BoaAstIntrinsics {
 		BoaAstIntrinsics.context = context;
 		final Configuration conf = new Configuration();
 		try {
-			FileSystem fs = FileSystem.get(conf);
-			final String dir = "hdfs://boa-nn1/" + context.getConfiguration().get("boa.input.dir", "/repcache/") + "ast/";
-			if (fs.exists(new Path(dir + "data")) && fs.exists(new Path(dir + "index")))
-				map = new MapFile.Reader(fs, dir, conf);
+			final FileSystem fs = FileSystem.get(conf);
+			final Path p = new Path("hdfs://boa-nn1/", new Path(context.getConfiguration().get("boa.input.dir", "/repcache"), new Path("ast")));
+			if (fs.exists(new Path(p, "data")) && fs.exists(new Path(p, "index")))
+				map = new MapFile.Reader(fs, p.toString(), conf);
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
