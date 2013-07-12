@@ -3,6 +3,7 @@ package boa.compiler.visitors;
 import java.io.IOException;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.antlr.stringtemplate.StringTemplate;
@@ -369,7 +370,8 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		final StringTemplate st = this.stg.getInstanceOf("Call");
 
 		this.idFinder.start(argu.getOperand());
-		final BoaFunction f = argu.getFunction(this.idFinder.getNames().toArray()[0].toString(), check(n));
+		final String funcName = this.idFinder.getNames().toArray()[0].toString();
+		final BoaFunction f = argu.getFunction(funcName, check(n));
 
 		if (f.hasMacro()) {
 			final List<String> parts = new ArrayList<String>();
@@ -378,7 +380,18 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				parts.add(code.removeLast());
 			}
 
-			st.setAttribute("call", expand(f.getMacro(), parts.toArray(new String[]{})));
+			final String s = expand(f.getMacro(), parts.toArray(new String[]{}));
+
+			// FIXME rdyer a hack, so that "def(pbuf.attr)" generates "pbuf.hasAttr()"
+			if (funcName.equals("def")) {
+				final Matcher m = Pattern.compile("\\((\\w+).get(\\w+)\\(\\) != null\\)").matcher(s);
+				if (m.matches() && !m.group(2).endsWith("List"))
+					st.setAttribute("call", m.group(1) + ".has" + m.group(2) + "()");
+				else
+					st.setAttribute("call", s);
+			} else {
+				st.setAttribute("call", s);
+			}
 		} else {
 			if (f.hasName()) {
 				st.setAttribute("operand", f.getName());
