@@ -5,9 +5,10 @@ import java.util.HashMap;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.BytesWritable;
-import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.MapFile;
+import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper.Context;
 
 import com.google.protobuf.CodedInputStream;
@@ -110,9 +111,11 @@ public class BoaAstIntrinsics {
 	private static void openMap() {
 		final Configuration conf = new Configuration();
 		try {
-			FileSystem fs = FileSystem.get(conf);
-			final String dir = "hdfs://boa-nn1/" + context.getConfiguration().get("boa.ast.dir", context.getConfiguration().get("boa.input.dir", "repcache/live")) + "/ast/";
-			map = new MapFile.Reader(fs, dir, conf);
+			final FileSystem fs = FileSystem.get(conf);
+			final Path p = new Path("hdfs://boa-nn1/",
+								new Path(context.getConfiguration().get("boa.ast.dir", context.getConfiguration().get("boa.input.dir", "repcache/live")),
+								new Path("ast")));
+			map = new MapFile.Reader(fs, p.toString(), conf);
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
