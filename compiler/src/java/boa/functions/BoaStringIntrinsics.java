@@ -452,7 +452,7 @@ public class BoaStringIntrinsics {
 	 * @return A string containing the arguments formatted according to the
 	 *         format string <em>fmt</em>
 	 */
-	@FunctionSpec(name = "format", returnType = "string", formalParameters = { "string", "string..." })
+	@FunctionSpec(name = "format", returnType = "string", formalParameters = { "string", "any..." })
 	public static String format(final String format, final Object... args) {
 		// TODO: support the Sawzall differences listed in the javadoc above
 		return String.format(format, args);
