@@ -41,7 +41,7 @@ public class SizzleOutputCommitter extends FileOutputCommitter {
 			con = DriverManager.getConnection(url, user, password);
 			PreparedStatement ps = null;
 			try {
-				ps = con.prepareStatement("UPDATE boa_jobs SET hadoop_end=CURRENT_TIMESTAMP(), hadoop_status=?, hadoop_result=\"\" WHERE id=" + jobId);
+				ps = con.prepareStatement("UPDATE boa_jobs SET hadoop_end=CURRENT_TIMESTAMP(), hadoop_status=? WHERE id=" + jobId);
 				ps.setInt(1, error ? -1 : 2);
 				ps.executeUpdate();
 			} finally {
@@ -77,7 +77,15 @@ public class SizzleOutputCommitter extends FileOutputCommitter {
 			con = DriverManager.getConnection(url, user, password);
 			PreparedStatement ps = null;
 			try {
-				ps = con.prepareStatement("UPDATE boa_jobs SET hadoop_result=INSERT(hadoop_result, ?, ?, ?) WHERE id=" + jobId);
+				ps = con.prepareStatement("INSERT INTO boa_output (id) VALUES (" + jobId + ")");
+				ps.executeUpdate();
+			} catch (Exception e) {
+			} finally {
+				try { if (ps != null) ps.close(); } catch (Exception e) { e.printStackTrace(); }
+			}
+
+			try {
+				ps = con.prepareStatement("UPDATE boa_output SET result=INSERT(result, ?, ?, ?) WHERE id=" + jobId);
 
 				byte[] b = new byte[4096];
 				int numBytes = 0;
