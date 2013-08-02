@@ -132,10 +132,6 @@ public class SizzleCompiler {
 		else
 			out = filename.substring(0, filename.indexOf('.')) + ".jar";
 
-		// check filename for sanity
-		if (!(filename.endsWith(".sizzle") || filename.endsWith(".szl")))
-			throw new RuntimeException("unsupported extension for " + in.getAbsolutePath());
-
 		// make the output directory
 		final File dir = new File(new File(System.getProperty("java.io.tmpdir")), UUID.randomUUID().toString());
 		final File dirfile = new File(dir.getPath() + File.separatorChar + "sizzle");
