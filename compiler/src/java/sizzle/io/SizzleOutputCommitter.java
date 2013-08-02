@@ -77,7 +77,7 @@ public class SizzleOutputCommitter extends FileOutputCommitter {
 			con = DriverManager.getConnection(url, user, password);
 			PreparedStatement ps = null;
 			try {
-				ps = con.prepareStatement("INSERT INTO boa_output (id) VALUES (" + jobId + ")");
+				ps = con.prepareStatement("INSERT INTO boa_output (id, result) VALUES (" + jobId + ", '')");
 				ps.executeUpdate();
 			} catch (Exception e) {
 			} finally {
