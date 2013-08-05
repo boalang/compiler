@@ -115,10 +115,21 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 						ps.setInt(2, out.size());
 						ps.setString(3, out.toString());
 						ps.executeUpdate();
+
+						pos += out.size();
 					}
 				} finally {
 					try { if (ps != null) ps.close(); } catch (final Exception e) { e.printStackTrace(); }
 				}
+			}
+
+			PreparedStatement ps = null;
+			try {
+				ps = con.prepareStatement("UPDATE boa_output SET length=? WHERE id=" + jobId);
+				ps.setLong(1, pos - 1);
+				ps.executeUpdate();
+			} finally {
+				try { if (ps != null) ps.close(); } catch (final Exception e) { e.printStackTrace(); }
 			}
 		} catch (final Exception e) {
 			e.printStackTrace();
