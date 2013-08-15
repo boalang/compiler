@@ -97,7 +97,7 @@ public class SizzleSpecialIntrinsics {
 	 * 
 	 * @return The fingerprint of d
 	 */
-	@FunctionSpec(name = "fingerprintof", formalParameters = { "float" })
+	@FunctionSpec(name = "fingerprintof", returnType = "int", formalParameters = { "float" })
 	public long fingerprintOf(final double d) {
 		return SizzleSpecialIntrinsics
 				.byteArrayToLong(SizzleSpecialIntrinsics.md.digest(SizzleSpecialIntrinsics.longToByteArray(Double.doubleToRawLongBits(d))));
@@ -112,7 +112,7 @@ public class SizzleSpecialIntrinsics {
 	 * 
 	 * @return The fingerprint of s
 	 */
-	@FunctionSpec(name = "fingerprintof", formalParameters = { "string" })
+	@FunctionSpec(name = "fingerprintof", returnType = "int", formalParameters = { "string" })
 	public long fingerprintOf(final String s) {
 		return SizzleSpecialIntrinsics.byteArrayToLong(SizzleSpecialIntrinsics.md.digest(s.getBytes()));
 	}
@@ -126,7 +126,7 @@ public class SizzleSpecialIntrinsics {
 	 * 
 	 * @return The fingerprint of bs
 	 */
-	@FunctionSpec(name = "fingerprintof", formalParameters = { "bytes" })
+	@FunctionSpec(name = "fingerprintof", returnType = "int", formalParameters = { "bytes" })
 	public long fingerprintOf(final byte[] bs) {
 		return SizzleSpecialIntrinsics.byteArrayToLong(SizzleSpecialIntrinsics.md.digest(bs));
 	}
@@ -140,7 +140,7 @@ public class SizzleSpecialIntrinsics {
 	 * 
 	 * @return The fingerprint of b
 	 */
-	@FunctionSpec(name = "fingerprintof", formalParameters = { "bool" })
+	@FunctionSpec(name = "fingerprintof", returnType = "int", formalParameters = { "bool" })
 	public long fingerprintOf(final boolean b) {
 		if (b)
 			return 1;
@@ -157,7 +157,7 @@ public class SizzleSpecialIntrinsics {
 	 * 
 	 * @return The fingerprint of l
 	 */
-	@FunctionSpec(name = "fingerprintof", formalParameters = { "fingerprint" })
+	@FunctionSpec(name = "fingerprintof", returnType = "int", formalParameters = { "fingerprint" })
 	public long fingerprintOf(final long l) {
 		return SizzleSpecialIntrinsics.byteArrayToLong(SizzleSpecialIntrinsics.md.digest(SizzleSpecialIntrinsics.longToByteArray(l)));
 	}
