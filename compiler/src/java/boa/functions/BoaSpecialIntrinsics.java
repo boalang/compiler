@@ -92,7 +92,7 @@ public class BoaSpecialIntrinsics {
 	 * 
 	 * @return The fingerprint of d
 	 */
-	@FunctionSpec(name = "fingerprintof", formalParameters = { "float" })
+	@FunctionSpec(name = "fingerprintof", returnType = "fingerprint", formalParameters = { "float" })
 	public long fingerprintOf(final double d) {
 		return BoaSpecialIntrinsics
 				.byteArrayToLong(BoaSpecialIntrinsics.md.digest(BoaSpecialIntrinsics.longToByteArray(Double.doubleToRawLongBits(d))));
@@ -107,7 +107,7 @@ public class BoaSpecialIntrinsics {
 	 * 
 	 * @return The fingerprint of s
 	 */
-	@FunctionSpec(name = "fingerprintof", formalParameters = { "string" })
+	@FunctionSpec(name = "fingerprintof", returnType = "fingerprint", formalParameters = { "string" })
 	public long fingerprintOf(final String s) {
 		return BoaSpecialIntrinsics.byteArrayToLong(BoaSpecialIntrinsics.md.digest(s.getBytes()));
 	}
@@ -121,7 +121,7 @@ public class BoaSpecialIntrinsics {
 	 * 
 	 * @return The fingerprint of bs
 	 */
-	@FunctionSpec(name = "fingerprintof", formalParameters = { "bytes" })
+	@FunctionSpec(name = "fingerprintof", returnType = "fingerprint", formalParameters = { "bytes" })
 	public long fingerprintOf(final byte[] bs) {
 		return BoaSpecialIntrinsics.byteArrayToLong(BoaSpecialIntrinsics.md.digest(bs));
 	}
@@ -135,7 +135,7 @@ public class BoaSpecialIntrinsics {
 	 * 
 	 * @return The fingerprint of b
 	 */
-	@FunctionSpec(name = "fingerprintof", formalParameters = { "bool" })
+	@FunctionSpec(name = "fingerprintof", returnType = "fingerprint", formalParameters = { "bool" })
 	public long fingerprintOf(final boolean b) {
 		if (b)
 			return 1;
@@ -152,7 +152,7 @@ public class BoaSpecialIntrinsics {
 	 * 
 	 * @return The fingerprint of l
 	 */
-	@FunctionSpec(name = "fingerprintof", formalParameters = { "fingerprint" })
+	@FunctionSpec(name = "fingerprintof", returnType = "fingerprint", formalParameters = { "fingerprint" })
 	public long fingerprintOf(final long l) {
 		return BoaSpecialIntrinsics.byteArrayToLong(BoaSpecialIntrinsics.md.digest(BoaSpecialIntrinsics.longToByteArray(l)));
 	}
