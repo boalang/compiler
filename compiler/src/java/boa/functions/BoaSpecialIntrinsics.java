@@ -52,7 +52,7 @@ public class BoaSpecialIntrinsics {
 	 * @return True iff <em>condition</em> is true
 	 */
 	@FunctionSpec(name = "assert", formalParameters = { "bool", "string" })
-	public void azzert(final boolean condition, final String message) {
+	public static void azzert(final boolean condition, final String message) {
 		if (!condition)
 			throw new RuntimeException("assertion failed: " + message);
 	}
@@ -68,7 +68,7 @@ public class BoaSpecialIntrinsics {
 	 * @return True iff <em>condition</em> is true
 	 */
 	@FunctionSpec(name = "assert", formalParameters = { "bool" })
-	public void azzert(final boolean condition) {
+	public static void azzert(final boolean condition) {
 		if (!condition)
 			throw new RuntimeException("assertion failed");
 	}
@@ -93,9 +93,8 @@ public class BoaSpecialIntrinsics {
 	 * @return The fingerprint of d
 	 */
 	@FunctionSpec(name = "fingerprintof", returnType = "fingerprint", formalParameters = { "float" })
-	public long fingerprintOf(final double d) {
-		return BoaSpecialIntrinsics
-				.byteArrayToLong(BoaSpecialIntrinsics.md.digest(BoaSpecialIntrinsics.longToByteArray(Double.doubleToRawLongBits(d))));
+	public static long fingerprintOf(final double d) {
+		return BoaSpecialIntrinsics.byteArrayToLong(BoaSpecialIntrinsics.md.digest(BoaSpecialIntrinsics.longToByteArray(Double.doubleToRawLongBits(d))));
 	}
 
 	/**
@@ -108,7 +107,7 @@ public class BoaSpecialIntrinsics {
 	 * @return The fingerprint of s
 	 */
 	@FunctionSpec(name = "fingerprintof", returnType = "fingerprint", formalParameters = { "string" })
-	public long fingerprintOf(final String s) {
+	public static long fingerprintOf(final String s) {
 		return BoaSpecialIntrinsics.byteArrayToLong(BoaSpecialIntrinsics.md.digest(s.getBytes()));
 	}
 
@@ -122,7 +121,7 @@ public class BoaSpecialIntrinsics {
 	 * @return The fingerprint of bs
 	 */
 	@FunctionSpec(name = "fingerprintof", returnType = "fingerprint", formalParameters = { "bytes" })
-	public long fingerprintOf(final byte[] bs) {
+	public static long fingerprintOf(final byte[] bs) {
 		return BoaSpecialIntrinsics.byteArrayToLong(BoaSpecialIntrinsics.md.digest(bs));
 	}
 
@@ -136,7 +135,7 @@ public class BoaSpecialIntrinsics {
 	 * @return The fingerprint of b
 	 */
 	@FunctionSpec(name = "fingerprintof", returnType = "fingerprint", formalParameters = { "bool" })
-	public long fingerprintOf(final boolean b) {
+	public static long fingerprintOf(final boolean b) {
 		if (b)
 			return 1;
 
@@ -153,7 +152,7 @@ public class BoaSpecialIntrinsics {
 	 * @return The fingerprint of l
 	 */
 	@FunctionSpec(name = "fingerprintof", returnType = "fingerprint", formalParameters = { "fingerprint" })
-	public long fingerprintOf(final long l) {
+	public static long fingerprintOf(final long l) {
 		return BoaSpecialIntrinsics.byteArrayToLong(BoaSpecialIntrinsics.md.digest(BoaSpecialIntrinsics.longToByteArray(l)));
 	}
 
