@@ -25,8 +25,8 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 	public void commitJob(JobContext context) throws java.io.IOException {
 		super.commitJob(context);
 		int jobId = context.getConfiguration().getInt("boa.hadoop.jobid", 0);
-		updateStatus(false, jobId);
 		storeOutput(context, jobId);
+		updateStatus(false, jobId);
 	}
 
 	@Override
