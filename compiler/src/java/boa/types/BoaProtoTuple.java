@@ -42,7 +42,7 @@ public class BoaProtoTuple extends BoaTuple {
 	@Override
 	public String toString() {
 		String type = toJavaType();
-		return type.substring(1 + type.lastIndexOf('.'));
+		return type.substring(type.lastIndexOf('.') + 1);
 	}
 
 	/**

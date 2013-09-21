@@ -152,7 +152,6 @@ public class BoaArray extends BoaType {
 	public String toString() {
 		if (this.type == null)
 			return "array of none";
-		else
-			return "array of " + this.type.toString();
+		return "array of " + this.type.toString();
 	}
 }
