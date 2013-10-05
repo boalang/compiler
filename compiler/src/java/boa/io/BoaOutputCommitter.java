@@ -1,6 +1,5 @@
 package boa.io;
 
-import java.io.*;
 import java.sql.*;
 
 import org.apache.hadoop.fs.FileSystem;

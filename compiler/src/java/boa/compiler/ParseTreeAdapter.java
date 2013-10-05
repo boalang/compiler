@@ -63,44 +63,17 @@ public class ParseTreeAdapter extends GJNoArguDepthFirst<Node> {
 
 		@Override
 		public boa.parser.syntaxtree.NodeToken visit(final boa.parser.syntaxtree.TupleType n) {
-			return n.f0.choice.accept(this);
-		}
-
-		@Override
-		public boa.parser.syntaxtree.NodeToken visit(final boa.parser.syntaxtree.SimpleTupleType n) {
 			return n.f0;
 		}
 
 		@Override
-		public boa.parser.syntaxtree.NodeToken visit(final boa.parser.syntaxtree.SimpleMemberList n) {
+		public boa.parser.syntaxtree.NodeToken visit(final boa.parser.syntaxtree.MemberList n) {
 			return n.f0.accept(this);
 		}
 
 		@Override
-		public boa.parser.syntaxtree.NodeToken visit(final boa.parser.syntaxtree.SimpleMember n) {
+		public boa.parser.syntaxtree.NodeToken visit(final boa.parser.syntaxtree.Member n) {
 			return n.f0.choice.accept(this);
-		}
-
-		@Override
-		public boa.parser.syntaxtree.NodeToken visit(final boa.parser.syntaxtree.ProtoTupleType n) {
-			if (n.f0.present())
-				return n.f0.node.accept(this);				
-			return n.f1.accept(this);
-		}
-
-		@Override
-		public boa.parser.syntaxtree.NodeToken visit(final boa.parser.syntaxtree.ProtoMemberList n) {
-			return n.f0.accept(this);
-		}
-
-		@Override
-		public boa.parser.syntaxtree.NodeToken visit(final boa.parser.syntaxtree.ProtoMember n) {
-			return n.f0.choice.accept(this);
-		}
-
-		@Override
-		public boa.parser.syntaxtree.NodeToken visit(final boa.parser.syntaxtree.ProtoFieldDecl n) {
-			return n.f0.accept(this);
 		}
 
 		@Override
@@ -264,20 +237,6 @@ public class ParseTreeAdapter extends GJNoArguDepthFirst<Node> {
 		}
 
 		@Override
-		public boa.parser.syntaxtree.NodeToken visit(final boa.parser.syntaxtree.RegexpList n) {
-			return n.f0.accept(this);
-		}
-
-		@Override
-		public boa.parser.syntaxtree.NodeToken visit(final boa.parser.syntaxtree.Regexp n) {
-			if (n.f0.present())
-				return n.f0.node.accept(this);
-			if (n.f1.present())
-				return n.f1.node.accept(this);
-			return n.f2.accept(this);
-		}
-
-		@Override
 		public boa.parser.syntaxtree.NodeToken visit(final boa.parser.syntaxtree.Operand n) {
 			switch (n.f0.which) {
 			case 7:
@@ -434,16 +393,11 @@ public class ParseTreeAdapter extends GJNoArguDepthFirst<Node> {
 
 		@Override
 		public boa.parser.syntaxtree.NodeToken visit(final boa.parser.syntaxtree.TupleType n) {
-			return n.f0.choice.accept(this);
-		}
-
-		@Override
-		public boa.parser.syntaxtree.NodeToken visit(final boa.parser.syntaxtree.SimpleTupleType n) {
 			return n.f2;
 		}
 
 		@Override
-		public boa.parser.syntaxtree.NodeToken visit(final boa.parser.syntaxtree.SimpleMemberList n) {
+		public boa.parser.syntaxtree.NodeToken visit(final boa.parser.syntaxtree.MemberList n) {
 			if (n.f2.present())
 				return (boa.parser.syntaxtree.NodeToken)n.f2.node;
 			if (n.f1.present()) {
@@ -454,36 +408,8 @@ public class ParseTreeAdapter extends GJNoArguDepthFirst<Node> {
 		}
 
 		@Override
-		public boa.parser.syntaxtree.NodeToken visit(final boa.parser.syntaxtree.SimpleMember n) {
+		public boa.parser.syntaxtree.NodeToken visit(final boa.parser.syntaxtree.Member n) {
 			return n.f0.choice.accept(this);
-		}
-
-		@Override
-		public boa.parser.syntaxtree.NodeToken visit(final boa.parser.syntaxtree.ProtoTupleType n) {
-			return n.f3;
-		}
-
-		@Override
-		public boa.parser.syntaxtree.NodeToken visit(final boa.parser.syntaxtree.ProtoMemberList n) {
-			if (n.f2.present())
-				return (boa.parser.syntaxtree.NodeToken)n.f2.node;
-			if (n.f1.present()) {
-				final boa.parser.syntaxtree.NodeSequence l = (boa.parser.syntaxtree.NodeSequence)n.f1.nodes.lastElement();
-				return l.nodes.lastElement().accept(this);
-			}
-			return n.f0.accept(this);
-		}
-
-		@Override
-		public boa.parser.syntaxtree.NodeToken visit(final boa.parser.syntaxtree.ProtoMember n) {
-			return n.f0.choice.accept(this);
-		}
-
-		@Override
-		public boa.parser.syntaxtree.NodeToken visit(final boa.parser.syntaxtree.ProtoFieldDecl n) {
-			if (n.f4.present())
-				return ((boa.parser.syntaxtree.NodeSequence)n.f4.node).elementAt(1).accept(this);
-			return n.f3.accept(this);
 		}
 
 		@Override
@@ -701,20 +627,6 @@ public class ParseTreeAdapter extends GJNoArguDepthFirst<Node> {
 		}
 
 		@Override
-		public boa.parser.syntaxtree.NodeToken visit(final boa.parser.syntaxtree.RegexpList n) {
-			if (n.f1.present()) {
-				final boa.parser.syntaxtree.NodeSequence l = (boa.parser.syntaxtree.NodeSequence)n.f1.nodes.lastElement();
-				return l.nodes.lastElement().accept(this);
-			}
-			return n.f0.accept(this);
-		}
-
-		@Override
-		public boa.parser.syntaxtree.NodeToken visit(final boa.parser.syntaxtree.Regexp n) {
-			return n.f2.accept(this);
-		}
-
-		@Override
 		public boa.parser.syntaxtree.NodeToken visit(final boa.parser.syntaxtree.Operand n) {
 			switch (n.f0.which) {
 			case 7:
@@ -909,17 +821,11 @@ public class ParseTreeAdapter extends GJNoArguDepthFirst<Node> {
 	/** {@inheritDoc} */
 	@Override
 	public Node visit(final boa.parser.syntaxtree.TupleType n) {
-		return n.f0.accept(this);
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public Node visit(final boa.parser.syntaxtree.SimpleTupleType n) {
 		final TupleType t = new TupleType();
 		t.setPositions(firstVisitor.visit(n), lastVisitor.visit(n));
 
 		if (n.f1.present()) {
-			final boa.parser.syntaxtree.SimpleMemberList ml = (boa.parser.syntaxtree.SimpleMemberList)n.f1.node;
+			final boa.parser.syntaxtree.MemberList ml = (boa.parser.syntaxtree.MemberList)n.f1.node;
 
 			t.addMember((Component) ml.f0.accept(this));
 
@@ -933,7 +839,7 @@ public class ParseTreeAdapter extends GJNoArguDepthFirst<Node> {
 
 	/** {@inheritDoc} */
 	@Override
-	public Node visit(final boa.parser.syntaxtree.SimpleMember n) {
+	public Node visit(final boa.parser.syntaxtree.Member n) {
 		return n.f0.accept(this);
 	}
 
@@ -1460,9 +1366,8 @@ public class ParseTreeAdapter extends GJNoArguDepthFirst<Node> {
 		case 0: // STRING
 			return new StringLiteral(((boa.parser.syntaxtree.NodeToken) n.f0.choice).tokenImage).setPositions(firstVisitor.visit(n), lastVisitor.visit(n));
 		case 1: // REGEX
-			String s = ((boa.parser.syntaxtree.NodeToken) n.f0.choice).tokenImage;
-			s = "\"" + s.substring(1, s.length() - 1).replace("\\", "\\\\") + "\"";
-			return new StringLiteral(s).setPositions(firstVisitor.visit(n), lastVisitor.visit(n));
+			final String s = ((boa.parser.syntaxtree.NodeToken) n.f0.choice).tokenImage;
+			return new StringLiteral("\"" + s.substring(1, s.length() - 1).replace("\\", "\\\\") + "\"").setPositions(firstVisitor.visit(n), lastVisitor.visit(n));
 		default:
 			throw new RuntimeException("unimplemented");
 		}

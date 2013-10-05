@@ -35,20 +35,6 @@ SPECIAL_TOKEN : /* COMMENTS */
     | "\r"
     | "\r\n"
     ) >
-//|  < PROTO_STATEMENT :
-//    "proto" (~[ "\n", "\r" ])*
-//    (
-//      "\n"
-//    | "\r"
-//    | "\r\n"
-//    ) >  { if (java.lang.System.currentTimeMillis() > 0) throw new java.lang.RuntimeException(matchedToken.toString().substring(7).replace("\"", "")); }
-| < INCLUDE_STATEMENT :
-    "include" (~[ "\n", "\r" ])*
-    (
-      "\n"
-    | "\r"
-    | "\r\n"
-    ) > 
 }
 
 TOKEN :
@@ -80,8 +66,6 @@ TOKEN :
 | < OUTPUT : "output" >
 | < WHILE : "while" >
 | < BREAK : "break" >
-| < PROTO : "proto" >
-| < PROTOX : "protox" >
 | < ARRAY : "array" >
 | < STATIC : "static" >
 | < SWITCH : "switch" >
@@ -185,7 +169,6 @@ void Program() :
     LOOKAHEAD(Declaration())
     Declaration()
   | Statement()
-  | Proto()
   )+
 }
 
@@ -228,7 +211,7 @@ void VarDecl() :
 
 // Type =
 //   type_name | ArrayType | MapType | TupleType |
-//   OutputType | FunctionType | VisitorType | 'proto' Type | StackType.
+//   OutputType | FunctionType | VisitorType | StackType.
 // type_name = identifier.
 void Type() :
 {}
@@ -240,7 +223,6 @@ void Type() :
 | OutputType()
 | FunctionType()
 | VisitorType()
-| "protox" Type()
 | StackType()
 }
 
@@ -265,80 +247,32 @@ void ArrayType() :
   "array" "of" Component()
 }
 
-// TupleType = SimpleTupleType | ProtoTupleType.
+// TupleType = '{' [MemberList] '}'.
 void TupleType() :
 {}
 {
-  LOOKAHEAD(SimpleTupleType())
-  SimpleTupleType()
-| ProtoTupleType()
+	"{" [ MemberList() ] "}"
 }
 
-// SimpleTupleType = '{' [SimpleMemberList] '}'.
-void SimpleTupleType() :
+// MemberList = Member {',' Member} [','].
+void MemberList() :
 {}
 {
-	"{" [ SimpleMemberList() ] "}"
-}
-
-// SimpleMemberList = SimpleMember {',' SimpleMember} [','].
-void SimpleMemberList() :
-{}
-{
-  SimpleMember()
+  Member()
   (
-    LOOKAHEAD("," SimpleMember())
-    "," SimpleMember()
+    LOOKAHEAD("," Member())
+    "," Member()
   )*
   [","]
 }
 
-// SimpleMember = TypeDecl | StaticVarDecl | SimpleFieldDecl.
-// SimpleFieldDecl = Component.
-void SimpleMember() :
+// Member = TypeDecl | StaticVarDecl | Component.
+void Member() :
 {}
 {
   TypeDecl()
 | StaticVarDecl()
 | Component()
-}
-
-// ProtoTupleType = ['parsedmessage'] '{' [ProtoMemberList] '}'.
-void ProtoTupleType() :
-{}
-{
-  [ "parsedmessage" ] "{" [ ProtoMemberList() ] "}"
-}
-
-// ProtoMemberList = ProtoMember {',' ProtoMember} [','].
-void ProtoMemberList() :
-{}
-{
-  ProtoMember()
-  (
-    LOOKAHEAD("," ProtoMember())
-    "," ProtoMember()
-  )*
-  [","]
-}
-
-// ProtoMember = TypeDecl | StaticVarDecl | ProtoFieldDecl.
-void ProtoMember() :
-{}
-{
-  TypeDecl()
-| StaticVarDecl()
-| ProtoFieldDecl()
-}
-
-// ProtoFieldDecl = Component ['=' ProtoFieldDefault] '@' proto_field_tag [':' proto_field_type].
-// ProtoFieldDefault = Expression.
-// proto_field_tag = integer.
-// proto_field_type = identifier.
-void ProtoFieldDecl() :
-{}
-{
-  Component() [ "=" Expression() ] "@" Identifier() [ ":" Identifier() ]
 }
 
 // MapType = 'map' '[' Key ']' 'of' Value.
@@ -762,7 +696,7 @@ void Term() :
   )*
 }
 
-// Factor = Operand { Selector | Index | Call | SawCall }.
+// Factor = Operand { Selector | Index | Call }.
 void Factor() :
 {}
 {
@@ -771,7 +705,6 @@ void Factor() :
     Selector()
   | Index()
   | Call()
-//  | SawCall()
   )*
 }
 
@@ -795,36 +728,6 @@ void Call() :
 {}
 {
   "(" [ ExprList() ] ")"
-}
-
-// SawCall =
-//   '(' [IterationCount ','] InputString
-//   ',' RegexpList [',' 'rest' Factor] ')'.
-// IterationCount = Expression.
-// InputString = Expression.
-// saw_name = identifier.???
-//void SawCall() :
-//{}
-//{
-//  "(" [ Expression() "," ] Expression() "," RegexpList() [ "," "rest" Factor() ] ")"
-//}
-
-// RegexpList = Regexp {',' Regexp}.
-void RegexpList() :
-{}
-{
-  Regexp()
-  (
-    LOOKAHEAD("," Regexp())
-    "," Regexp()
-  )*
-}
-
-// Regexp = ['skip'] ['submatch'] string.
-void Regexp() :
-{}
-{
-  [ "skip" ] [ "submatch" ] StringLiteral() 
 }
 
 // Operand =
@@ -906,22 +809,6 @@ void StatementExpr() :
 {}
 {
   "?" Block()
-}
-
-// Include = 'include' file_name.
-// file_name = string.
-//void Include() :
-//{}
-//{
-//  "include" StringLiteral()
-//}
-
-// Proto = 'proto' file_name.
-// file_name = string.
-void Proto() :
-{}
-{
-  "proto" StringLiteral()
 }
 
 // identifier = (letter | '_') {letter | '_' | digit}.
