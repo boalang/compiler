@@ -12,7 +12,7 @@ import boa.io.EmitKey;
  * 
  * @author anthonyu
  */
-@AggregatorSpec(name = "histogram", type = "float", formalParameters = { "int", "int", "int" })
+@AggregatorSpec(name = "histogram", formalParameters = { "int", "int", "int" }, type = "float")
 public class FloatHistogramAggregator extends HistogramAggregator {
 	private SortedCountingSet<Double> list;
 
@@ -45,7 +45,7 @@ public class FloatHistogramAggregator extends HistogramAggregator {
 	/** {@inheritDoc} */
 	@Override
 	public void aggregate(final String data, final String metadata) throws NumberFormatException, IOException, InterruptedException {
-		this.aggregate(Double.valueOf(data), metadata);
+		this.aggregate(Double.parseDouble(data), metadata);
 	}
 
 	/** {@inheritDoc} */

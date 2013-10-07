@@ -29,7 +29,7 @@ public abstract class BottomOrTopAggregator extends Aggregator {
 		// an array of weighted string of length n
 		this.list = new CountedString[(int) n];
 		// the index of the last entry in the list
-		this.last = (int) (this.getArg() - 1);
+		this.last = (int) (n - 1);
 	}
 
 	/** {@inheritDoc} */

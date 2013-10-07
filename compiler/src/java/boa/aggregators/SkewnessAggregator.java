@@ -27,12 +27,6 @@ public class SkewnessAggregator extends Aggregator {
 
 	/** {@inheritDoc} */
 	@Override
-	public boolean isAssociative() {
-		return false;
-	}
-
-	/** {@inheritDoc} */
-	@Override
 	public boolean isCommutative() {
 		return true;
 	}

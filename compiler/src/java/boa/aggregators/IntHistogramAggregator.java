@@ -45,10 +45,7 @@ public class IntHistogramAggregator extends HistogramAggregator {
 	/** {@inheritDoc} */
 	@Override
 	public void aggregate(final String data, final String metadata) throws NumberFormatException, IOException, InterruptedException {
-		if (data.indexOf('.') != -1)
-			this.aggregate(Double.valueOf(data).longValue(), metadata);
-		else
-			this.aggregate(Long.parseLong(data), metadata);
+		this.aggregate(Double.valueOf(data).longValue(), metadata);
 	}
 
 	/** {@inheritDoc} */

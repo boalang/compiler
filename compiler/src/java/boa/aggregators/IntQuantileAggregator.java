@@ -12,7 +12,7 @@ import boa.io.EmitKey;
  * 
  * @author anthonyu
  */
-@AggregatorSpec(name = "quantile", type = "int", formalParameters = { "int" })
+@AggregatorSpec(name = "quantile", formalParameters = { "int" }, type = "int")
 public class IntQuantileAggregator extends QuantileAggregator {
 	private SortedCountingSet<Long> list;
 
@@ -37,10 +37,7 @@ public class IntQuantileAggregator extends QuantileAggregator {
 	/** {@inheritDoc} */
 	@Override
 	public void aggregate(final String data, final String metadata) throws IOException {
-		if (data.indexOf('.') != -1)
-			this.aggregate(Double.valueOf(data).longValue(), metadata);
-		else
-			this.aggregate(Long.parseLong(data), metadata);
+		this.aggregate(Double.valueOf(data).longValue(), metadata);
 	}
 
 	/** {@inheritDoc} */

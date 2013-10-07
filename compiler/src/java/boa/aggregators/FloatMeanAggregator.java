@@ -24,10 +24,7 @@ public class FloatMeanAggregator extends MeanAggregator {
 	/** {@inheritDoc} */
 	@Override
 	public void aggregate(final String data, final String metadata) throws IOException, InterruptedException {
-		if (data.indexOf('.') != -1)
-			this.aggregate(Double.parseDouble(data), metadata);
-		else
-			this.aggregate(Long.parseLong(data), metadata);
+		this.aggregate(Double.parseDouble(data), metadata);
 	}
 
 	/** {@inheritDoc} */

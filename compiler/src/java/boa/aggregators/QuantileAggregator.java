@@ -6,13 +6,10 @@ import java.util.List;
 
 import boa.io.EmitKey;
 
-
-
 /**
  * A Boa aggregator to calculate the quantiles for the values in a dataset.
  * 
  * @author anthonyu
- * 
  */
 abstract class QuantileAggregator extends Aggregator {
 	private int total;
@@ -37,6 +34,7 @@ abstract class QuantileAggregator extends Aggregator {
 	 */
 	public long count(final String metadata) {
 		final long count;
+
 		if (metadata == null)
 			count = 1;
 		else
@@ -69,7 +67,7 @@ abstract class QuantileAggregator extends Aggregator {
 		} else {
 			// otherwise, set up the quantiles
 			final int n = (int) (this.getArg() - 1);
-			final String[] quartiles = new String[n];
+			final String[] quantiles = new String[n];
 			final double step = this.total / (double) n;
 
 			long last = 0;
@@ -84,10 +82,10 @@ abstract class QuantileAggregator extends Aggregator {
 
 				last = curr;
 
-				quartiles[curr - 1] = e.getFirst();
+				quantiles[curr - 1] = e.getFirst();
 			}
 
-			this.collect(Arrays.toString(quartiles));
+			this.collect(Arrays.toString(quantiles));
 		}
 	}
 

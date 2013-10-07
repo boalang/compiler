@@ -15,7 +15,7 @@ import boa.io.EmitKey;
  * 
  * @author anthonyu
  */
-@AggregatorSpec(name = "distinct", formalParameters = { "int" })
+@AggregatorSpec(name = "distinct")
 public class DistinctAggregator extends Aggregator {
 	// from o.a.h.io.BloomMapFile#initBloomFilter
 	private static final int HASH_COUNT = 5;
@@ -42,7 +42,7 @@ public class DistinctAggregator extends Aggregator {
 		// single key, where <code>k<code> is the number of hash functions,
 		// <code>n</code> is the number of keys and <code>c</code> is the
 		// desired max. error rate.
-		this.vectorSize = (int) Math.ceil(-DistinctAggregator.HASH_COUNT * arg / Math.log(1.0 - Math.pow(errorRate, 1.0 / DistinctAggregator.HASH_COUNT)));
+		this.vectorSize = (int) Math.ceil(-HASH_COUNT * arg / Math.log(1.0 - Math.pow(errorRate, 1.0 / HASH_COUNT)));
 	}
 
 	/** {@inheritDoc} */
@@ -50,7 +50,7 @@ public class DistinctAggregator extends Aggregator {
 	public void start(final EmitKey key) {
 		super.start(key);
 
-		this.filter = new DynamicBloomFilter(this.vectorSize, DistinctAggregator.HASH_COUNT, Hash.MURMUR_HASH, (int) this.getArg());
+		this.filter = new DynamicBloomFilter(this.vectorSize, HASH_COUNT, Hash.MURMUR_HASH, (int) this.getArg());
 	}
 
 	/** {@inheritDoc} */

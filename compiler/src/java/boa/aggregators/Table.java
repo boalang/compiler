@@ -9,12 +9,10 @@ import org.apache.hadoop.mapreduce.Reducer.Context;
 import boa.io.EmitKey;
 import boa.io.EmitValue;
 
-
 /**
  * A container for one or more Boa aggregators.
  * 
  * @author anthonyu
- * 
  */
 public class Table {
 	private final Aggregator[] aggregators;

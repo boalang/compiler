@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.TreeMap;
 import java.util.SortedMap;
 
+import org.apache.commons.math.stat.descriptive.SummaryStatistics;
+
 import boa.io.EmitKey;
 
 /**
@@ -14,7 +16,6 @@ import boa.io.EmitKey;
 @AggregatorSpec(name = "stdev", type = "int")
 public class StDevAggregator extends Aggregator {
 	private SortedMap<Long, Long> map;
-	private long count;
 
 	/** {@inheritDoc} */
 	@Override
@@ -22,7 +23,6 @@ public class StDevAggregator extends Aggregator {
 		super.start(key);
 
 		map = new TreeMap<Long, Long>();
-		count = 0;
 	}
 
 	/** {@inheritDoc} */
@@ -43,10 +43,9 @@ public class StDevAggregator extends Aggregator {
 		for (final String s : data.split(";")) {
 			final int idx = s.indexOf(":");
 			if (idx > 0) {
-				final long item = Long.valueOf(s.substring(0, idx));
 				final long count = Long.valueOf(s.substring(idx + 1));
 				for (int i = 0; i < count; i++)
-					aggregate(item, metadata);
+					aggregate(Long.valueOf(s.substring(0, idx)), metadata);
 			} else
 				aggregate(Long.valueOf(s), metadata);
 		}
@@ -59,7 +58,6 @@ public class StDevAggregator extends Aggregator {
 			map.put(data, map.get(data) + 1L);
 		else
 			map.put(data, 1L);
-		count++;
 	}
 
 	/** {@inheritDoc} */
@@ -73,20 +71,20 @@ public class StDevAggregator extends Aggregator {
 	public void finish() throws IOException, InterruptedException {
 		if (this.isCombining()) {
 			String s = "";
-			for (Long key : map.keySet())
+			for (final Long key : map.keySet())
 				s += key + ":" + map.get(key) + ";";
 			this.collect(s, null);
 			return;
 		}
 
-		double s1 = 0;
-		double s2 = 0;
+		final SummaryStatistics summaryStatistics = new SummaryStatistics();
 
-		for (Long key : map.keySet()) {
-			s1 += key * map.get(key);
-			s2 += key * key * map.get(key);
+		for (final Long key : map.keySet()) {
+			final long count = map.get(key);
+			for (long i = 0; i < count; i++)
+				summaryStatistics.addValue(key);
 		}
 
-		this.collect(Math.sqrt(s2 / (double)(count - 1) - s1 * s1 / (double)(count * (count - 1))));
+		this.collect(summaryStatistics.getStandardDeviation());
 	}
 }

@@ -11,7 +11,6 @@ import boa.io.EmitKey;
  * dataset. Roughly equivalent to a count(distinct(*)).
  * 
  * @author anthonyu
- * 
  */
 @AggregatorSpec(name = "unique", formalParameters = { "int" })
 public class UniqueAggregator extends DistinctAggregator {

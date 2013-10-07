@@ -9,7 +9,7 @@ import org.apache.log4j.Logger;
  * 
  * @author anthonyu
  */
-@AggregatorSpec(name = "log", weightType = "string")
+//@AggregatorSpec(name = "log", weightType = "string")
 public class LogAggregator extends Aggregator {
 	private static Logger logger = Logger.getLogger(LogAggregator.class);
 

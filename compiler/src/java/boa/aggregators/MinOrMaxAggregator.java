@@ -45,6 +45,7 @@ abstract class MinOrMaxAggregator extends Aggregator {
 	@Override
 	public void aggregate(final String data, final String metadata) {
 		double weight;
+
 		if (metadata == null)
 			weight = DefaultWeight;
 		else
@@ -111,7 +112,6 @@ abstract class MinOrMaxAggregator extends Aggregator {
  * A tuple containing a {@link String} and its weight.
  * 
  * @author anthonyu
- * 
  */
 class WeightedString {
 	private final String string;
@@ -165,18 +165,21 @@ class WeightedString {
 	public boolean equals(final Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
+
+		if (obj == null || this.getClass() != obj.getClass())
 			return false;
-		if (this.getClass() != obj.getClass())
-			return false;
+
 		final WeightedString other = (WeightedString) obj;
-		if (this.string == null) {
-			if (other.string != null)
+
+		if (this.string == null && other.string != null)
 				return false;
-		} else if (!this.string.equals(other.string))
+
+		if (this.string != null && !this.string.equals(other.string))
 			return false;
+
 		if (Double.doubleToLongBits(this.weight) != Double.doubleToLongBits(other.weight))
 			return false;
+
 		return true;
 	}
 
