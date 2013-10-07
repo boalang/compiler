@@ -498,7 +498,6 @@ void ForVarDecl() :
 }
 
 // needed for the lack of semicolons
-
 void ForExprStatement() :
 {}
 {
@@ -579,7 +578,13 @@ void WhenKind() :
 | < WHENSOME >
 }
 
-// nonstandard but necessary for a program in "Interpreting the Data"
+// WhileStatement = 'while' '(' Expression ')' Statement.
+void WhileStatement() :
+{}
+{
+  "while" "(" Expression() ")" Statement()
+}
+
 void IdentifierList() :
 {}
 {
@@ -589,14 +594,7 @@ void IdentifierList() :
   )*
 }
 
-// WhileStatement = 'while' '(' Expression ')' Statement.
-void WhileStatement() :
-{}
-{
-  "while" "(" Expression() ")" Statement()
-}
-
-// VisitStatement = ('before' | 'after') (var_decl ":" Type | IdentifierList) '->' Statement.
+// VisitStatement = ('before' | 'after') (var_name ":" type_name | IdentifierList) '->' Statement.
 void VisitStatement() :
 {}
 {
@@ -748,6 +746,8 @@ void Operand() :
   LOOKAHEAD(Identifier())
   Identifier()
 | StringLiteral()
+| CharLiteral()
+| TimeLiteral()
 | IntegerLiteral()
 | FloatingPointLiteral()
 | LOOKAHEAD(Composite())
@@ -819,7 +819,7 @@ void StatementExpr() :
   "?" Block()
 }
 
-// identifier = (letter | '_') {letter | '_' | digit}.
+// identifier = letter {letter | '_' | digit}.
 // letter = 'A' .. 'Z' | 'a' .. 'z'.
 // digit = '0' .. '9'.
 void Identifier() :

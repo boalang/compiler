@@ -1,6 +1,7 @@
 package boa.compiler.visitors;
 
 import java.io.IOException;
+import java.text.DateFormat;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
@@ -1322,7 +1323,33 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final TimeLiteral n) {
-		throw new RuntimeException("unimplemented");
+		final String lit = n.getLiteral();
+		if (lit.startsWith("T")) {
+			Date date = null;
+			DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM);
+			try {
+				date = df.parse(lit);
+			} catch (Exception e) { }
+			df = DateFormat.getDateInstance(DateFormat.LONG);
+			try {
+				date = df.parse(lit);
+			} catch (Exception e) { }
+			df = DateFormat.getDateInstance(DateFormat.SHORT);
+			try {
+				date = df.parse(lit);
+			} catch (Exception e) { }
+			df = DateFormat.getDateInstance(DateFormat.FULL);
+			try {
+				date = df.parse(lit);
+			} catch (Exception e) { }
+
+			if (date == null)
+				throw new TypeCheckException(n, "Invalid time literal");
+
+			code.add("" + (date.getTime() * 1000));
+		} else {
+			code.add(lit.substring(0, lit.length() - 1));
+		}
 	}
 
 	//

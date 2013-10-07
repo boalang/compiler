@@ -239,11 +239,11 @@ public class ParseTreeAdapter extends GJNoArguDepthFirst<Node> {
 		@Override
 		public boa.parser.syntaxtree.NodeToken visit(final boa.parser.syntaxtree.Operand n) {
 			switch (n.f0.which) {
-			case 7:
+			case 9:
 				return (boa.parser.syntaxtree.NodeToken)((boa.parser.syntaxtree.NodeChoice)((boa.parser.syntaxtree.NodeSequence)n.f0.choice).elementAt(0)).choice;
-			case 8:
-				return (boa.parser.syntaxtree.NodeToken)n.f0.choice;
 			case 10:
+				return (boa.parser.syntaxtree.NodeToken)n.f0.choice;
+			case 12:
 				return (boa.parser.syntaxtree.NodeToken)((boa.parser.syntaxtree.NodeSequence)n.f0.choice).elementAt(0);
 			default:
 				return n.f0.choice.accept(this);
@@ -629,11 +629,11 @@ public class ParseTreeAdapter extends GJNoArguDepthFirst<Node> {
 		@Override
 		public boa.parser.syntaxtree.NodeToken visit(final boa.parser.syntaxtree.Operand n) {
 			switch (n.f0.which) {
-			case 7:
+			case 9:
 				return ((boa.parser.syntaxtree.NodeSequence)n.f0.choice).elementAt(1).accept(this);
-			case 8:
-				return (boa.parser.syntaxtree.NodeToken)n.f0.choice;
 			case 10:
+				return (boa.parser.syntaxtree.NodeToken)n.f0.choice;
+			case 12:
 				return (boa.parser.syntaxtree.NodeToken)((boa.parser.syntaxtree.NodeSequence)n.f0.choice).elementAt(2);
 			default:
 				return n.f0.choice.accept(this);
@@ -1260,20 +1260,22 @@ public class ParseTreeAdapter extends GJNoArguDepthFirst<Node> {
 		switch (n.f0.which) {
 		case 0: // identifier
 		case 1: // string literal
-		case 2: // integer literal
-		case 3: // floating point literal
-		case 4: // composite
-		case 5: // visitor
-		case 6: // function
-		case 9: // statement expression
+		case 2: // char literal
+		case 3: // time literal
+		case 4: // integer literal
+		case 5: // floating point literal
+		case 6: // composite
+		case 7: // visitor
+		case 8: // function
+		case 11: // statement expression
 			return n.f0.choice.accept(this);
-		case 7: // unary operator
+		case 9: // unary operator
 			final Vector<boa.parser.syntaxtree.Node> nodes = ((boa.parser.syntaxtree.NodeSequence) n.f0.choice).nodes;
 			return new UnaryFactor(((boa.parser.syntaxtree.NodeToken)((boa.parser.syntaxtree.NodeChoice)nodes.elementAt(0)).choice).tokenImage, (Factor)nodes.elementAt(1).accept(this)).setPositions(firstVisitor.visit(n), lastVisitor.visit(n));
-		case 10: // paren
+		case 12: // paren
 			final boa.parser.syntaxtree.NodeSequence ns = (boa.parser.syntaxtree.NodeSequence) n.f0.choice;
 			return new ParenExpression((Expression)ns.nodes.elementAt(1).accept(this)).setPositions((boa.parser.syntaxtree.NodeToken)ns.nodes.elementAt(0), (boa.parser.syntaxtree.NodeToken)ns.nodes.elementAt(2));
-		case 8: // $
+		case 10: // $
 		default:
 			throw new RuntimeException("unexpected choice " + n.f0.which + " is " + n.f0.choice.getClass());
 		}
