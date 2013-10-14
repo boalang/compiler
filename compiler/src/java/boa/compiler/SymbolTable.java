@@ -415,7 +415,6 @@ public class SymbolTable {
 		final Class<?>[] builtinFuncs = {
 			boa.functions.BoaAstIntrinsics.class,
 			boa.functions.BoaIntrinsics.class,
-			boa.functions.BoaJavaFeaturesIntrinsics.class,
 			boa.functions.BoaMetricIntrinsics.class,
 			boa.functions.BoaModifierIntrinsics.class,
 			boa.functions.BoaCasts.class,
