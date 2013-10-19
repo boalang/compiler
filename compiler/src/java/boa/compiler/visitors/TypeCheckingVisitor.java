@@ -268,6 +268,8 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 					final FunctionFindingVisitor v = new FunctionFindingVisitor(formalParameters);
 					try {
 						v.start((Identifier)n.getOperand(), env);
+					} catch (final ClassCastException e) {
+						throw new TypeCheckException(n.getOperand(), "Function declarations must be assigned to a variable and can not be used anonymously", e);
 					} catch (final RuntimeException e) {
 						throw new TypeCheckException(n.getOperand(), e.getMessage(), e);
 					}
