@@ -110,7 +110,10 @@ public class BoaCompiler {
 			for (final File f : inputFiles) {
 				if (s.length() != 0)
 					s += "_";
-				s += pascalCase(f.getName().substring(0, f.getName().lastIndexOf('.')));
+				if (f.getName().indexOf('.') != -1)
+					s += pascalCase(f.getName().substring(0, f.getName().lastIndexOf('.')));
+				else
+					s += pascalCase(f.getName());
 			}
 			className = s;
 		}
