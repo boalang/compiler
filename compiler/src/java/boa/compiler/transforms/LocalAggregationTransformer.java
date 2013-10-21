@@ -3,6 +3,7 @@ package boa.compiler.transforms;
 import java.util.ArrayList;
 import java.util.List;
 
+import boa.aggregators.Aggregator;
 import boa.compiler.ast.Comparison;
 import boa.compiler.ast.Conjunction;
 import boa.compiler.ast.Factor;
@@ -32,7 +33,7 @@ import boa.types.BoaInt;
  */
 public class LocalAggregationTransformer extends AbstractVisitorNoArg {
 	/**
-	 * Finds all output variables using a 'sum' aggregator.
+	 * Finds all output variables using a 'sum' {@link Aggregator}.
 	 * 
 	 * @author rdyer
 	 */
@@ -54,7 +55,7 @@ public class LocalAggregationTransformer extends AbstractVisitorNoArg {
 		public void visit(final VarDeclStatement n) {
 			if (n.hasType() && n.getType() instanceof OutputType) {
 				final OutputType t = (OutputType) n.getType();
-				if (t.getId().getToken().equals("sum") && t.getIndicesSize() == 0)
+				if ("sum".equals(t.getId().getToken()) && t.getIndicesSize() == 0)
 					vars.add(n.getId().getToken());
 			}
 		}
@@ -81,8 +82,7 @@ public class LocalAggregationTransformer extends AbstractVisitorNoArg {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final EmitStatement n) {
-		final String id = n.getId().getToken();
-		if (!sumAggregatorFinder.getVars().contains(id))
+		if (!sumAggregatorFinder.getVars().contains(n.getId().getToken()))
 			return;
 
 		generateStoreValue(n);
