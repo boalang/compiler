@@ -37,6 +37,12 @@ import boa.compiler.visitors.TypeCheckingVisitor;
 import boa.parser.ParseException;
 import boa.parser.BoaParser;
 
+/**
+ * The main entry point for the Boa compiler.
+ *
+ * @author anthonyu
+ * @author rdyer
+ */
 public class BoaCompiler {
 	private static Logger LOG = Logger.getLogger(BoaCompiler.class);
 
@@ -45,21 +51,19 @@ public class BoaCompiler {
 		final Options options = new Options();
 		options.addOption("h", "hadoop-base", true, "base directory for Hadoop installation");
 		options.addOption("l", "libs", true, "extra jars (functions/aggregators) to be compiled in");
-		options.addOption("i", "in", true, "file to be compiled");
+		options.addOption("i", "in", true, "file(s) to be compiled (comma-separated list)");
 		options.addOption("o", "out", true, "the name of the resulting jar");
 		options.addOption("b", "hbase", false, "use HBase templates");
 		options.addOption("nv", "no-visitor-fusion", false, "disable visitor fusion");
 		options.addOption("v", "visitors-fused", true, "number of visitors to fuse");
 		options.addOption("n", "name", true, "the name of the generated main class");
 
-		CommandLine cl;
+		final CommandLine cl;
 		try {
 			cl = new PosixParser().parse(options, args);
 		} catch (final org.apache.commons.cli.ParseException e) {
 			System.err.println(e.getMessage());
-
-			final HelpFormatter formatter = new HelpFormatter();
-			formatter.printHelp("BoaCompiler", options);
+			new HelpFormatter().printHelp("BoaCompiler", options);
 
 			return;
 		}
@@ -97,10 +101,11 @@ public class BoaCompiler {
 		for (final String s : inputPaths)
 			inputFiles.add(new File(s));
 
+		// get the name of the generated class
 		final String className;
-		if (cl.hasOption('n'))
+		if (cl.hasOption('n')) {
 			className = cl.getOptionValue('n');
-		else {
+		} else {
 			String s = "";
 			for (final File f : inputFiles) {
 				if (s.length() != 0)
@@ -123,6 +128,7 @@ public class BoaCompiler {
 		if (!outputSrcDir.mkdirs())
 			throw new IOException("unable to mkdir " + outputSrcDir);
 
+		// find custom libs to load
 		final List<URL> libs = new ArrayList<URL>();
 		if (cl.hasOption('l'))
 			for (final String lib : cl.getOptionValues('l'))
@@ -259,13 +265,13 @@ public class BoaCompiler {
 
 		generateJar(cl, jarName, outputRoot, runtimePath);
 
-		BoaCompiler.delete(outputRoot);
+		delete(outputRoot);
 	}
 
 	private static final void delete(final File f) throws IOException {
 		if (f.isDirectory())
 			for (final File g : f.listFiles())
-				BoaCompiler.delete(g);
+				delete(g);
 
 		if (!f.delete())
 			throw new IOException("unable to delete file " + f);
@@ -275,13 +281,13 @@ public class BoaCompiler {
 		final JarOutputStream jar = new JarOutputStream(new BufferedOutputStream(new FileOutputStream(new File(jarName))));
 		try {
 			final int offset = dir.toString().length() + 1;
-			for (final String f : BoaCompiler.findFiles(dir, new ArrayList<String>())) {
-				BoaCompiler.LOG.info("adding " + f + " to " + jarName);
+			for (final String f : findFiles(dir, new ArrayList<String>())) {
+				//LOG.info("adding " + f + " to " + jarName);
 				jar.putNextEntry(new ZipEntry(f.substring(offset)));
 
 				final InputStream inx = new BufferedInputStream(new FileInputStream(f));
 				try {
-					BoaCompiler.write(inx, jar);
+					write(inx, jar);
 				} finally {
 					inx.close();
 				}
@@ -297,11 +303,11 @@ public class BoaCompiler {
 			for (final String lib : libsJars) {
 				final File f = new File(lib);
 
-				BoaCompiler.LOG.info("adding lib/" + f.getName() + " to " + jarName);
+				//LOG.info("adding lib/" + f.getName() + " to " + jarName);
 				jar.putNextEntry(new JarEntry("lib" + File.separatorChar + f.getName()));
 				final InputStream inx = new BufferedInputStream(new FileInputStream(f));
 				try {
-					BoaCompiler.write(inx, jar);
+					write(inx, jar);
 				} finally {
 					inx.close();
 				}
@@ -314,7 +320,7 @@ public class BoaCompiler {
 	private static final List<String> findFiles(final File f, final List<String> l) {
 		if (f.isDirectory())
 			for (final File g : f.listFiles())
-				BoaCompiler.findFiles(g, l);
+				findFiles(g, l);
 		else
 			l.add(f.toString());
 

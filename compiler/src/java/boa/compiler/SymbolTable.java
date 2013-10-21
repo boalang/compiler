@@ -275,7 +275,7 @@ public class SymbolTable {
 
 	public void set(final String id, final BoaType type, final boolean global) {
 		if (idmap.containsKey(id))
-			throw new RuntimeException(id + " already declared as " + idmap.get(id));
+			throw new RuntimeException(id + " already declared as type " + idmap.get(id));
 
 		if (type instanceof BoaFunction)
 			this.setFunction(id, (BoaFunction) type);

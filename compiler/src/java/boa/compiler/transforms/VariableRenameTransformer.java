@@ -1,5 +1,7 @@
 package boa.compiler.transforms;
 
+import java.util.Stack;
+
 import boa.compiler.ast.Identifier;
 import boa.compiler.ast.Node;
 import boa.compiler.ast.Selector;
@@ -16,7 +18,7 @@ import boa.compiler.visitors.AbstractVisitorNoArg;
  */
 public class VariableRenameTransformer extends AbstractVisitorNoArg {
 	protected String prefix = "_";
-	protected final String nodeName = "_n";
+	protected final String visitArgName = "_n";
 
 	/**
 	 * Starts a variable renaming transformation with a given prefix.
@@ -29,12 +31,14 @@ public class VariableRenameTransformer extends AbstractVisitorNoArg {
 		start(n);
 	}
 
-	protected String argName;
+	protected String oldVisitArgName;
+	protected final Stack<String> oldVisitArgNames = new Stack<String>();
 
 	/** {@inheritDoc} */
 	@Override
 	protected void initialize() {
-		argName = null;
+		oldVisitArgName = null;
+		oldVisitArgNames.clear();
 	}
 
 	/** {@inheritDoc} */
@@ -44,10 +48,11 @@ public class VariableRenameTransformer extends AbstractVisitorNoArg {
 		// their argument - this allows merging two visit statements from
 		// different programs together, ensuring they use the same arg name
 		if (n.hasComponent()) {
-			argName = n.getComponent().getIdentifier().getToken();
+			oldVisitArgNames.push(oldVisitArgName);
+			oldVisitArgName = n.getComponent().getIdentifier().getToken();
 			n.getComponent().accept(this);
 			n.getBody().accept(this);
-			argName = "";
+			oldVisitArgName = oldVisitArgNames.pop();
 			return;
 		}
 		super.visit(n);
@@ -56,12 +61,14 @@ public class VariableRenameTransformer extends AbstractVisitorNoArg {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(VarDeclStatement n) {
-		final String newToken;
-		if (!n.getId().getToken().equals(argName))
-			newToken = prefix + n.getId().getToken();
+		final String oldId = n.getId().getToken();
+
+		final String newId;
+		if (n.getId().getToken().equals(oldVisitArgName))
+			newId = visitArgName;
 		else
-			newToken = nodeName;
-		n.env.set(newToken, n.env.get(n.getId().getToken()));
+			newId = prefix + oldId;
+		n.env.set(newId, n.env.get(oldId));
 
 		n.getId().accept(this);
 		if (n.hasInitializer())
@@ -77,14 +84,14 @@ public class VariableRenameTransformer extends AbstractVisitorNoArg {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(Identifier n) {
-		final String id = n.getToken();
+		final String oldId = n.getToken();
 
-		if (n.env.hasType(id) || n.env.hasGlobal(id) || n.env.hasGlobalFunction(id))
+		if (n.env.hasType(oldId) || n.env.hasGlobal(oldId) || n.env.hasGlobalFunction(oldId))
 			return;
 
-		if (!id.equals(argName))
-			n.setToken(prefix + id);
+		if (oldId.equals(oldVisitArgName))
+			n.setToken(visitArgName);
 		else
-			n.setToken(nodeName);
+			n.setToken(prefix + oldId);
 	}
 }
