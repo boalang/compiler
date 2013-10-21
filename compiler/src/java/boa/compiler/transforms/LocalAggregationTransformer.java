@@ -38,7 +38,6 @@ public class LocalAggregationTransformer extends AbstractVisitorNoArg {
 	 */
 	protected class SumAggregatorFindingVisitor extends AbstractVisitorNoArg {
 		private final List<String> vars = new ArrayList<String>();
-		private String lastId;
 
 		public List<String> getVars() {
 			return vars;
@@ -53,16 +52,11 @@ public class LocalAggregationTransformer extends AbstractVisitorNoArg {
 		/** {@inheritDoc} */
 		@Override
 		public void visit(final VarDeclStatement n) {
-			lastId = n.getId().getToken();
-			if (n.hasType() && !n.hasInitializer())
-				n.getType().accept(this);
-		}
-
-		/** {@inheritDoc} */
-		@Override
-		public void visit(final OutputType n) {
-			if (n.getId().getToken().equals("sum") && n.getIndicesSize() == 0)
-				vars.add(lastId);
+			if (n.hasType() && n.getType() instanceof OutputType) {
+				final OutputType t = (OutputType) n.getType();
+				if (t.getId().getToken().equals("sum") && t.getIndicesSize() == 0)
+					vars.add(n.getId().getToken());
+			}
 		}
 	}
 
