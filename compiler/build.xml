@@ -94,17 +94,7 @@
 			<manifest>
 				<attribute name="Main-Class" value="boa.compiler.BoaCompiler" />
 			</manifest>
-			<fileset dir="build/classes">
-				<patternset>
-					<exclude name="**/io/" />
-					<exclude name="**/runtime/" />
-				</patternset>
-			</fileset>
-			<fileset dir="build/classes">
-				<patternset>
-					<include name="**/runtime/BoaAbstractVisitor.class" />
-				</patternset>
-			</fileset>
+			<fileset dir="build/classes" />
 			<fileset dir="conf" />
 			<fileset dir="src/antlr" />
 			<zipfileset excludes="META-INF/" src="lib/commons-logging-1.1.1.jar" />

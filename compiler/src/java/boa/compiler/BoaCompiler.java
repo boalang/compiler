@@ -19,8 +19,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 
 import javax.tools.JavaCompiler;
@@ -46,7 +44,6 @@ public class BoaCompiler {
 	public static void main(final String[] args) throws IOException, ParseException {
 		// parse the command line options
 		final Options options = new Options();
-		options.addOption("h", "hadoop-base", true, "base directory for Hadoop installation");
 		options.addOption("l", "libs", true, "extra jars (functions/aggregators) to be compiled in");
 		options.addOption("i", "in", true, "file to be compiled");
 		options.addOption("o", "out", true, "the name of the resulting jar");
@@ -64,24 +61,6 @@ public class BoaCompiler {
 
 			return;
 		}
-
-		// get the base of the hadoop installation for compilation purposes
-		File hadoopBase;
-		if (cl.hasOption('h')) {
-			hadoopBase = new File(cl.getOptionValue('h'));
-		} else {
-			System.err.println("missing required option `hadoop-base'");
-
-			final HelpFormatter formatter = new HelpFormatter();
-			formatter.printHelp("BoaCompiler", options);
-
-			return;
-		}
-
-		// find the location of the jar this class is in
-		final String path = ClasspathUrlFinder.findClassBase(BoaCompiler.class).getPath();
-		// find the location of the compiler distribution
-		final String root = new File(path.substring(path.indexOf(':') + 1, path.indexOf('!'))).getParentFile().getParent();
 
 		// get the filename of the program we will be compiling
 		if (!cl.hasOption('i')) {
@@ -164,23 +143,17 @@ public class BoaCompiler {
 			o.close();
 		}
 
-		final String runtimePath = root + "/dist/boa-runtime.jar";
-		final StringBuilder classPath = new StringBuilder(runtimePath);
-
-		final Matcher m = Pattern.compile("(hadoop-[a-z]+-[\\d\\.]+|hbase-[\\d\\.]+|protobuf-java-[\\d\\.]+)\\.jar").matcher("");
-		for (final File f : hadoopBase.listFiles())
-			if (m.reset(f.getName()).matches())
-				classPath.append(":" + f);
-		for (final File f : new File(hadoopBase, "lib").listFiles())
-			if (f.toString().endsWith(".jar"))
-				classPath.append(":" + f);
-
 		final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
 		BoaCompiler.LOG.info("compiling " + outputFile);
-		if (compiler.run(null, null, null, "-cp", classPath.toString(), outputFile.toString()) != 0)
+		if (compiler.run(null, null, null, "-cp", System.getProperty("java.class.path"), outputFile.toString()) != 0)
 			throw new RuntimeException("compile failed");
 
-		generateJar(cl, jarName, outputRoot, runtimePath);
+		// find the location of the jar this class is in
+		final String path = ClasspathUrlFinder.findClassBase(BoaCompiler.class).getPath();
+		// find the location of the compiler distribution
+		final String root = new File(path.substring(path.indexOf(':') + 1, path.indexOf('!'))).getParentFile().getParent();
+
+		generateJar(cl, jarName, outputRoot, root + "/dist/boa-runtime.jar");
 
 		BoaCompiler.delete(outputRoot);
 	}
