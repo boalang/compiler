@@ -51,7 +51,7 @@
 		</javac>
 	</target>
 
-	<target name="compile" depends="compile-generated">
+	<target name="compile">
 		<javac includeantruntime="true" srcdir="src/java" destdir="build/classes" debug="on" debuglevel="lines,vars,source">
 			<classpath refid="classpath" />
 		</javac>
@@ -87,6 +87,9 @@
 					<include name="boa/" />
 					<exclude name="**/compiler/" />
 					<exclude name="**/parser/" />
+					<exclude name="**/boa/types/proto/" />
+					<exclude name="**/boa/types/Boa*" />
+					<exclude name="**/runtime/types/" />
 				</patternset>
 			</fileset>
 		</jar>
@@ -94,17 +97,7 @@
 			<manifest>
 				<attribute name="Main-Class" value="boa.compiler.BoaCompiler" />
 			</manifest>
-			<fileset dir="build/classes">
-				<patternset>
-					<exclude name="**/io/" />
-					<exclude name="**/runtime/" />
-				</patternset>
-			</fileset>
-			<fileset dir="build/classes">
-				<patternset>
-					<include name="**/runtime/BoaAbstractVisitor.class" />
-				</patternset>
-			</fileset>
+			<fileset dir="build/classes" />
 			<fileset dir="conf" />
 			<fileset dir="src/antlr" />
 			<zipfileset excludes="META-INF/" src="lib/commons-logging-1.1.1.jar" />
