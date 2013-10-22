@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
-import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 
 import javax.tools.JavaCompiler;
@@ -71,7 +70,6 @@ public class SizzleCompiler {
 	public static void main(final String[] args) throws IOException, ParseException {
 		// parse the command line options
 		final Options options = new Options();
-		options.addOption("h", "hadoop-base", true, "base directory for Hadoop installation");
 		options.addOption("l", "libs", true, "extra jars to be compiled into the jar");
 		options.addOption("i", "in", true, "file to be compiled");
 		options.addOption("o", "out", true, "the name of the resulting jar");
@@ -89,24 +87,6 @@ public class SizzleCompiler {
 
 			return;
 		}
-
-		// get the base of the hadoop installation for compilation purposes
-		String hadoopBase;
-		if (cl.hasOption('h')) {
-			hadoopBase = cl.getOptionValue('h');
-		} else {
-			System.err.println("missing required option `hadoop-base'");
-
-			final HelpFormatter formatter = new HelpFormatter();
-			formatter.printHelp("SizzleCompiler", options);
-
-			return;
-		}
-
-		// find the location of the jar this class is in
-		final String path = ClasspathUrlFinder.findClassBase(SizzleCompiler.class).getPath();
-		// find the location of the Sizzle distribution
-		final String root = new File(path.substring(path.indexOf(':') + 1, path.indexOf('!'))).getParentFile().getParent();
 
 		// get the filename of the sizzle program we will be compiling
 		File in;
@@ -187,21 +167,11 @@ public class SizzleCompiler {
 			o.close();
 		}
 
-		final String runtime = root + "/dist/sizzle-runtime.jar";
-		final StringBuilder classPath = new StringBuilder(runtime);
-		for (final File f : new File(hadoopBase).listFiles())
-			if (Pattern.compile("hadoop-[a-z]+-[\\d+\\.]+\\.jar").matcher(f.getName()).matches()
-				|| Pattern.compile("hbase-[\\d+\\.]+\\.jar").matcher(f.getName()).matches())
-				classPath.append(":" + f);
-		for (final File f : new File(hadoopBase + File.separatorChar + "lib").listFiles())
-			if (f.toString().endsWith(".jar"))
-				classPath.append(":" + f);
-
 		final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
 		for (final String f1 : SizzleCompiler.find(dir)) {
 			SizzleCompiler.LOG.info("compiling " + f1);
 			if (f1.toString().endsWith(".java"))
-				if (compiler.run(null, null, null, "-cp", classPath.toString(), f1.toString()) != 0)
+				if (compiler.run(null, null, null, "-cp", System.getProperty("java.class.path"), f1.toString()) != 0)
 					throw new RuntimeException("compile failed");
 		}
 
@@ -222,8 +192,13 @@ public class SizzleCompiler {
 				jar.closeEntry();
 			}
 
+			// find the location of the jar this class is in
+			final String path = ClasspathUrlFinder.findClassBase(SizzleCompiler.class).getPath();
+			// find the location of the Sizzle distribution
+			final String root = new File(path.substring(path.indexOf(':') + 1, path.indexOf('!'))).getParentFile().getParent();
+
 			final List<String> libsJars = new ArrayList<String>();
-			libsJars.add(runtime);
+			libsJars.add(root + "/dist/sizzle-runtime.jar");
 			if (cl.hasOption('l'))
 				libsJars.addAll(Arrays.asList(cl.getOptionValues('l')));
 			for (final String lib : libsJars) {
