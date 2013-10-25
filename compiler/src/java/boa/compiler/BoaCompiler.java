@@ -201,7 +201,7 @@ public class BoaCompiler {
 						visitorPrograms.add(p.getProgram());
 					}
 				} catch (final Exception e) {
-					System.err.println(f.getName() + ": compilation failed: " + e);
+					System.err.print(f.getName() + ": compilation failed: ");
 					e.printStackTrace();
 				} finally {
 					r.close();
