@@ -875,6 +875,9 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 	public void visit(final VisitorExpression n, final SymbolTable env) {
 		n.env = env;
 		n.getType().accept(this, env);
+		for (final Statement s : n.getBody().getStatements())
+			if (!(s instanceof VisitStatement))
+				throw new TypeCheckException(s, "only 'before' or 'after' visit statements are allowed inside visitor bodies");
 		n.getBody().accept(this, env);
 		n.type = n.getType().type;
 	}
