@@ -21,6 +21,56 @@ import boa.types.*;
  */
 public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 	/**
+	 * This verifies visitors have at most 1 before/after for a type.
+	 * 
+	 * @author rdyer
+	 */
+	protected class VisitorCheckingVisitor extends AbstractVisitorNoArg {
+		protected Set<String> befores = new HashSet<String>();
+		protected Set<String> afters = new HashSet<String>();
+		protected boolean nested = false;
+
+		/** {@inheritDoc} */
+		@Override
+		public void initialize() {
+			befores.clear();
+			afters.clear();
+			nested = false;
+		}
+
+		/** {@inheritDoc} */
+		@Override
+		public void visit(final VisitorExpression n) {
+			// dont nest
+			if (nested)
+				return;
+			nested = true;
+			n.getBody().accept(this);
+		}
+
+		/** {@inheritDoc} */
+		@Override
+		public void visit(final VisitStatement n) {
+			final Set<String> s = n.isBefore() ? befores : afters;
+
+			if (n.hasComponent()) {
+				final Identifier id = (Identifier)n.getComponent().getType();
+				final String token = id.getToken();
+				if (s.contains(token))
+					throw new TypeCheckException(id, "The type '" + token + "' already has a '" + (n.isBefore() ? "before" : "after") + "' visit statement");
+				s.add(token);
+			} else if (n.getIdListSize() > 0) {
+				for (final Identifier id : n.getIdList()) {
+					final String token = id.getToken();
+					if (s.contains(token))
+						throw new TypeCheckException(id, "The type '" + token + "' already has a '" + (n.isBefore() ? "before" : "after") + "' visit statement");
+					s.add(token);
+				}
+			}
+		}
+	}
+
+	/**
 	 * This does type checking of function bodies to ensure the
 	 * returns are the correct type.
 	 * 
@@ -97,6 +147,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 		}
 	}
 
+	protected VisitorCheckingVisitor visitorChecker = new VisitorCheckingVisitor();
 	protected ReturnCheckingVisitor returnFinder = new ReturnCheckingVisitor();
 
 	/** {@inheritDoc} */
@@ -878,6 +929,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 		for (final Statement s : n.getBody().getStatements())
 			if (!(s instanceof VisitStatement))
 				throw new TypeCheckException(s, "only 'before' or 'after' visit statements are allowed inside visitor bodies");
+		visitorChecker.start(n);
 		n.getBody().accept(this, env);
 		n.type = n.getType().type;
 	}
