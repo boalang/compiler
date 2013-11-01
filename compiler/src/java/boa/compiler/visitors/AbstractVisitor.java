@@ -267,9 +267,6 @@ public abstract class AbstractVisitor<ARG> {
 	//
 	// literals
 	//
-	public void visit(final BytesLiteral n, final ARG arg) {
-	}
-
 	public void visit(final CharLiteral n, final ARG arg) {
 	}
 

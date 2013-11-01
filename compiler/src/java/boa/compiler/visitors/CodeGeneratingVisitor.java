@@ -1292,12 +1292,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	//
 	/** {@inheritDoc} */
 	@Override
-	public void visit(final BytesLiteral n) {
-		throw new RuntimeException("unimplemented");
-	}
-
-	/** {@inheritDoc} */
-	@Override
 	public void visit(final CharLiteral n) {
 		code.add(n.getLiteral());
 	}

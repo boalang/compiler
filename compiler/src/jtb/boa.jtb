@@ -141,9 +141,6 @@ TOKEN : /* LITERALS */
     )*
     "\"" >
 | < FINGERPRINT_LITERAL : < INTEGER_LITERAL > [ "p", "P" ] >
-| < BYTES_LITERAL :
-    "B" < STRING_LITERAL >
-  | "X" "\"" ( < HEX_DIGIT_LITERAL > < HEX_DIGIT_LITERAL > )* "\"" >
 | < TIME_LITERAL :
     < INTEGER_LITERAL > [ "t", "T" ]
   | "T" < STRING_LITERAL > >
@@ -887,14 +884,6 @@ void StringLiteral() :
 {
   < STRING_LITERAL >
   | < REGEX_LITERAL >
-}
-
-// bytes = 'B' string | 'X' hex_string.
-// hex_string = '"' { hex_digit hex_digit } '"' .
-void BytesLiteral() : 
-{}
-{
-  < BYTES_LITERAL >
 }
 
 // time = integer ('T' | 't') | 'T' string.

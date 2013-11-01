@@ -115,20 +115,6 @@ public class BoaSpecialIntrinsics {
 	 * The fingerprintof function returns the 64-bit fingerprint of the
 	 * argument, which may be of any type.
 	 * 
-	 * @param bs
-	 *            An array of byte to be fingerprinted
-	 * 
-	 * @return The fingerprint of bs
-	 */
-	@FunctionSpec(name = "fingerprintof", returnType = "fingerprint", formalParameters = { "bytes" })
-	public static long fingerprintOf(final byte[] bs) {
-		return BoaSpecialIntrinsics.byteArrayToLong(BoaSpecialIntrinsics.md.digest(bs));
-	}
-
-	/**
-	 * The fingerprintof function returns the 64-bit fingerprint of the
-	 * argument, which may be of any type.
-	 * 
 	 * @param b
 	 *            A boolean to be fingerprinted
 	 * 

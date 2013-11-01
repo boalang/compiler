@@ -150,42 +150,6 @@ public class BoaSortIntrinsics {
 	 * as a second argument, but it is curently ignored.)
 	 * 
 	 * @param a
-	 *            An array of byte[]
-	 * 
-	 * @return A sorted copy of <em>a</em>
-	 */
-	@FunctionSpec(name = "sort", returnType = "array of bytes", formalParameters = { "array of bytes" })
-	public static byte[][] sortBytesArray(final byte[][] a) {
-		final byte[][] b = Arrays.copyOf(a, a.length);
-
-		Arrays.sort(b);
-
-		return b;
-	}
-
-	/**
-	 * Returns the sorted version of an array. Only scalar values can be sorted.
-	 * Values will be arranged in increasing order. (An optional comparison
-	 * function, which takes two elements and returns int {-,0,+}, is accepted
-	 * as a second argument, but it is curently ignored.)
-	 * 
-	 * @param a
-	 *            An array of byte[]
-	 * 
-	 * @return A sorted copy of <em>a</em>
-	 */
-	@FunctionSpec(name = "sort", returnType = "array of bytes", formalParameters = { "array of bytes", "string" })
-	public static byte[][] sortBytesArray(final byte[][] a, final String ignored) {
-		return BoaSortIntrinsics.sortBytesArray(a);
-	}
-
-	/**
-	 * Returns the sorted version of an array. Only scalar values can be sorted.
-	 * Values will be arranged in increasing order. (An optional comparison
-	 * function, which takes two elements and returns int {-,0,+}, is accepted
-	 * as a second argument, but it is curently ignored.)
-	 * 
-	 * @param a
 	 *            An array of long
 	 * 
 	 * @return A sorted copy of <em>a</em>

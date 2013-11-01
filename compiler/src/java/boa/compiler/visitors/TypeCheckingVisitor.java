@@ -939,13 +939,6 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 	//
 	/** {@inheritDoc} */
 	@Override
-	public void visit(final BytesLiteral n, final SymbolTable env) {
-		n.env = env;
-		n.type = new BoaBytes();
-	}
-
-	/** {@inheritDoc} */
-	@Override
 	public void visit(final CharLiteral n, final SymbolTable env) {
 		n.env = env;
 		n.type = new BoaInt();

@@ -43,7 +43,6 @@ public class SymbolTable {
 		protomap.put(float.class, new BoaFloat());
 		protomap.put(double.class, new BoaFloat());
 		protomap.put(boolean.class, new BoaBool());
-		protomap.put(byte[].class, new BoaBytes());
 		protomap.put(Object.class, new BoaString());
 
 		// variables with a global scope
@@ -69,7 +68,6 @@ public class SymbolTable {
 		idmap.put("time", new BoaTime());
 		idmap.put("fingerprint", new BoaFingerprint());
 		idmap.put("string", new BoaString());
-		idmap.put("bytes", new BoaBytes());
 
 		idmap.put("ASTRoot", new ASTRootProtoTuple());
 		idmap.put("Bug", new BugProtoTuple());
@@ -111,7 +109,6 @@ public class SymbolTable {
 		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaMap(new BoaScalar(), new BoaScalar()) }, "${0}.keySet().size()"));
 		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaStack(new BoaScalar()) }, "${0}.size()"));
 		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaString() }, "${0}.length()"));
-		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaBytes() }, "${0}.length"));
 
 		// map functions
 		globalFunctions.addFunction("haskey", new BoaFunction(new BoaBool(), new BoaType[] { new BoaMap(new BoaScalar(), new BoaScalar()), new BoaScalar() }, "${0}.containsKey(${1})"));
@@ -165,8 +162,6 @@ public class SymbolTable {
 		globalFunctions.addFunction("int", new BoaFunction("java.lang.Long.decode", new BoaInt(), new BoaScalar[] { new BoaString() }));
 		// string to int with param base
 		globalFunctions.addFunction("int", new BoaFunction(new BoaInt(), new BoaScalar[] { new BoaString(), new BoaInt() }, "java.lang.Long.parseLong(${0}, (int)${1})"));
-		// bytes to int with param encoding format
-		globalFunctions.addFunction("int", new BoaFunction("boa.functions.BoaCasts.bytesToLong", new BoaInt(), new BoaScalar[] { new BoaBytes(), new BoaString() }));
 
 		// int to float
 		globalFunctions.addFunction("float", new BoaFunction(new BoaFloat(), new BoaScalar[] { new BoaInt() }, "(double)${0}"));
@@ -186,8 +181,6 @@ public class SymbolTable {
 		globalFunctions.addFunction("fingerprint", new BoaFunction("java.lang.Long.parseLong", new BoaInt(), new BoaScalar[] { new BoaString() }));
 		// string to fingerprint with param base
 		globalFunctions.addFunction("fingerprint", new BoaFunction("java.lang.Long.parseLong", new BoaInt(), new BoaScalar[] { new BoaString(), new BoaInt() }));
-		// bytes to fingerprint
-		globalFunctions.addFunction("fingerprint", new BoaFunction("boa.functions.BoaCasts.bytesToFingerprint", new BoaFingerprint(), new BoaScalar[] { new BoaBytes() }));
 
 		// bool to string
 		globalFunctions.addFunction("string", new BoaFunction("java.lang.Boolean.toString", new BoaString(), new BoaScalar[] { new BoaBool() }));
@@ -201,17 +194,6 @@ public class SymbolTable {
 		globalFunctions.addFunction("string", new BoaFunction("boa.functions.BoaCasts.timeToString", new BoaString(), new BoaScalar[] { new BoaTime() }));
 		// fingerprint to string
 		globalFunctions.addFunction("string", new BoaFunction("java.lang.Long.toHexString", new BoaString(), new BoaScalar[] { new BoaFingerprint() }));
-		// bytes to string
-		globalFunctions.addFunction("string", new BoaFunction("new java.lang.String", new BoaString(), new BoaScalar[] { new BoaBytes() }));
-		// bytes to string
-		globalFunctions.addFunction("string", new BoaFunction("new java.lang.String", new BoaString(), new BoaScalar[] { new BoaBytes(), new BoaString() }));
-
-		// int to bytes with param encoding format
-		globalFunctions.addFunction("bytes", new BoaFunction("boa.functions.BoaCasts.longToBytes", new BoaInt(), new BoaScalar[] { new BoaInt(), new BoaString() }));
-		// fingerprint to bytes
-		globalFunctions.addFunction("bytes", new BoaFunction("boa.functions.BoaCasts.fingerprintToBytes", new BoaBytes(), new BoaScalar[] { new BoaFingerprint() }));
-		// string to bytes
-		globalFunctions.addFunction("bytes", new BoaFunction("boa.functions.BoaCasts.stringToBytes", new BoaBytes(), new BoaScalar[] { new BoaString() }));
 
 		/* expose the java.lang.Math class to Sawzall */
 
@@ -415,7 +397,6 @@ public class SymbolTable {
 			boa.functions.BoaMetricIntrinsics.class,
 			boa.functions.BoaModifierIntrinsics.class,
 			boa.functions.BoaCasts.class,
-			boa.functions.BoaEncodingIntrinsics.class,
 			boa.functions.BoaMathIntrinsics.class,
 			boa.functions.BoaSortIntrinsics.class,
 			boa.functions.BoaSpecialIntrinsics.class,

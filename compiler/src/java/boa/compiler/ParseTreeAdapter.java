@@ -306,11 +306,6 @@ public class ParseTreeAdapter extends GJNoArguDepthFirst<Node> {
 		}
 
 		@Override
-		public boa.parser.syntaxtree.NodeToken visit(final boa.parser.syntaxtree.BytesLiteral n) {
-			return n.f0;
-		}
-
-		@Override
 		public boa.parser.syntaxtree.NodeToken visit(final boa.parser.syntaxtree.TimeLiteral n) {
 			return n.f0;
 		}
@@ -697,11 +692,6 @@ public class ParseTreeAdapter extends GJNoArguDepthFirst<Node> {
 		@Override
 		public boa.parser.syntaxtree.NodeToken visit(final boa.parser.syntaxtree.StringLiteral n) {
 			return (boa.parser.syntaxtree.NodeToken)n.f0.choice;
-		}
-
-		@Override
-		public boa.parser.syntaxtree.NodeToken visit(final boa.parser.syntaxtree.BytesLiteral n) {
-			return n.f0;
 		}
 
 		@Override
@@ -1373,12 +1363,6 @@ public class ParseTreeAdapter extends GJNoArguDepthFirst<Node> {
 		default:
 			throw new RuntimeException("unimplemented");
 		}
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public Node visit(final boa.parser.syntaxtree.BytesLiteral n) {
-		return new BytesLiteral(n.f0.tokenImage).setPositions(firstVisitor.visit(n), lastVisitor.visit(n));
 	}
 
 	/** {@inheritDoc} */

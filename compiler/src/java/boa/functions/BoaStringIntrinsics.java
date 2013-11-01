@@ -85,58 +85,6 @@ public class BoaStringIntrinsics {
 	}
 
 	/**
-	 * Search for the first occurrence of the literal bytes p within b and
-	 * return the integer index of its first byte, or -1 if it does not occur.
-	 * 
-	 * @param p
-	 *            An array of byte containing the needle
-	 * 
-	 * @param s
-	 *            A array of byte containing the haystack
-	 * 
-	 * @return A long representing the first occurrence of the literal bytes
-	 *         <em>p</em> within <em>s</em> and return the integer index of its
-	 *         first byte, or -1 if it does not occur
-	 */
-	@FunctionSpec(name = "bytesfind", returnType = "int", formalParameters = { "bytes", "bytes" })
-	public static long indexOf(final byte[] p, final byte[] s) {
-		for (int i = 0; i < s.length; i++)
-			for (int j = 0; j < p.length; j++)
-				if (s[i] != p[j])
-					break;
-				else if (j == p.length - 1)
-					return i;
-
-		return -1;
-	}
-
-	/**
-	 * Search for the last occurrence of the literal bytes p within b and return
-	 * the integer index of its first byte, or -1 if it does not occur.
-	 * 
-	 * @param p
-	 *            An array of byte containing the needle
-	 * 
-	 * @param s
-	 *            A array of byte containing the haystack
-	 * 
-	 * @return A long representing the last occurrence of the literal bytes
-	 *         <em>p</em> within <em>s</em> and return the integer index of its
-	 *         first byte, or -1 if it does not occur
-	 */
-	@FunctionSpec(name = "bytesrfind", returnType = "int", formalParameters = { "bytes", "bytes" })
-	public static long lastIndexOf(final byte[] p, final byte[] s) {
-		for (int i = s.length - p.length; i >= 0; i--)
-			for (int j = 0; j < p.length; j++)
-				if (s[i] != p[j])
-					break;
-				else if (j == p.length - 1)
-					return i;
-
-		return -1;
-	}
-
-	/**
 	 * Returns the substring of <em>str</em> from <em>start</em> to the end.
 	 * 
 	 * @param str
@@ -360,64 +308,6 @@ public class BoaStringIntrinsics {
 		split.add(sb.toString());
 
 		return split;
-	}
-
-	/**
-	 * The function splitcsvline takes a line of UTF-8 bytes and splits it at
-	 * commas, ignoring leading and trailing white space and using '"' for
-	 * quoting. It returns the array of fields produced.
-	 * 
-	 * @param string
-	 *            The {@link String} to be split
-	 * 
-	 * @return An array of byte[] containing the splits
-	 * 
-	 */
-	@FunctionSpec(name = "splitcsvline", returnType = "array of bytes", formalParameters = { "bytes" })
-	public static byte[][] splitCsvLine(final byte[] csv) {
-		final List<String> split = BoaStringIntrinsics.splitCsv(new String(csv));
-
-		final byte[][] bytes = new byte[split.size()][];
-
-		for (int i = 0; i < split.size(); i++)
-			bytes[i] = split.get(i).getBytes();
-
-		return bytes;
-	}
-
-	/**
-	 * The function splitcsv takes an array of UTF-8 bytes containing lines of
-	 * text, such as that produced by the load() builtin. It splits each line
-	 * using the same method as splitcsvline, and then selects the fields
-	 * indicated by the second argument (numbered starting at 1). The return
-	 * value is a flat array of the collected fields.
-	 * 
-	 * @param csv An arry of byte containing the input data
-     * @param fields An array of long specified the fields to be returned
-	 * 
-	 * @return An array of byte[] containing the collected fields
-	 */
-	@FunctionSpec(name = "splitcsv", returnType = "array of bytes", formalParameters = { "bytes", "array of int" })
-	public static byte[][] splitCsv(final byte[] csv, final long[] fields) {
-		final List<List<String>> strings = new ArrayList<List<String>>();
-
-		for (final String line : new String(csv).split("\n")) {
-			final List<String> values = BoaStringIntrinsics.splitCsv(line);
-
-			final List<String> b = new ArrayList<String>();
-			for (final long field : fields)
-				b.add(values.get((int) field - 1));
-
-			strings.add(b);
-		}
-
-		final byte[][] output = new byte[strings.size() * fields.length][];
-
-		for (int i = 0; i < strings.size(); i++)
-			for (int j = 0; j < fields.length; j++)
-				output[i * 2 + j] = strings.get(i).get(j).getBytes();
-
-		return output;
 	}
 
 	/**
