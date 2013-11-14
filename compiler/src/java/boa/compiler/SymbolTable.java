@@ -148,6 +148,9 @@ public class SymbolTable {
 		globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { new TypeKindProtoMap() }, "${0}.name()"));
 		globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { new VisibilityProtoMap() }, "${0}.name()"));
 
+		// arrays to string
+		globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { new BoaArray(new BoaScalar()) }, "boa.functions.BoaIntrinsics.arrayToString(${0})"));
+
 		// protolist of string to string
 		globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { new BoaProtoList(new BoaString()) }, "boa.functions.BoaIntrinsics.protolistToString(${0})"));
 

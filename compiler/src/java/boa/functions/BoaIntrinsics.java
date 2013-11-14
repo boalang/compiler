@@ -125,6 +125,46 @@ public class BoaIntrinsics {
 		return s;
 	}
 
+	public static <T> String arrayToString(T[] arr) {
+		String s = "";
+		for (final T val : arr)
+			if (s.isEmpty())
+				s += val;
+			else
+				s += ", " + val;
+		return s;
+	}
+
+	public static String arrayToString(long[] arr) {
+		String s = "";
+		for (final long val : arr)
+			if (s.isEmpty())
+				s += val;
+			else
+				s += ", " + val;
+		return s;
+	}
+
+	public static String arrayToString(double[] arr) {
+		String s = "";
+		for (final double val : arr)
+			if (s.isEmpty())
+				s += val;
+			else
+				s += ", " + val;
+		return s;
+	}
+
+	public static String arrayToString(boolean[] arr) {
+		String s = "";
+		for (final boolean val : arr)
+			if (s.isEmpty())
+				s += val;
+			else
+				s += ", " + val;
+		return s;
+	}
+
 	public static <T> T[] basic_array(final T[] arr) {
 		return arr;
 	}
