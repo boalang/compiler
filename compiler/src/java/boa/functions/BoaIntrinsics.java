@@ -114,4 +114,14 @@ public class BoaIntrinsics {
 			return null;
 		return s.peek();
 	}
+
+	public static String protolistToString(List<String> l) {
+		String s = "";
+		for (final String str : l)
+			if (s.isEmpty())
+				s += str;
+			else
+				s += ", " + str;
+		return s;
+	}
 }
