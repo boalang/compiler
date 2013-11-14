@@ -381,7 +381,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				parts.add(code.removeLast());
 			}
 
-			final String s = expand(f.getMacro(), parts.toArray(new String[]{}));
+			final String s = expand(f.getMacro(), n.getArgs(), parts.toArray(new String[]{}));
 
 			// FIXME rdyer a hack, so that "def(pbuf.attr)" generates "pbuf.hasAttr()"
 			if (funcName.equals("def")) {
@@ -1092,7 +1092,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			if (f.hasName())
 				src = f.getName() + "(" + src + ")";
 			else if (f.hasMacro())
-				src = CodeGeneratingVisitor.expand(f.getMacro(), src.split(","));
+				src = expand(f.getMacro(), src.split(","));
 		}
 
 		st.setAttribute("rhs", src);
@@ -1450,10 +1450,17 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	}
 
 	protected static String expand(final String template, final String... parameters) {
+		return expand(template, new ArrayList<Expression>(), parameters);
+	}
+
+	protected static String expand(final String template, final List<Expression> args, final String... parameters) {
 		String replaced = template;
 
-		// FIXME rdyer
-		replaced = replaced.replace("${K}", "String");
+		if (args.size() == 1 && args.get(0).type instanceof BoaMap) {
+			BoaMap m = (BoaMap)args.get(0).type;
+			replaced = replaced.replace("${K}", m.getIndexType().toBoxedJavaType());
+			replaced = replaced.replace("${V}", m.getType().toBoxedJavaType());
+		}
 
 		for (int i = 0; i < parameters.length; i++)
 			replaced = replaced.replace("${" + i + "}", parameters[i]);

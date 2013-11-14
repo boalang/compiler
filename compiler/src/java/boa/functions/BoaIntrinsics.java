@@ -124,4 +124,29 @@ public class BoaIntrinsics {
 				s += ", " + str;
 		return s;
 	}
+
+	public static <T> T[] basic_array(final T[] arr) {
+		return arr;
+	}
+
+	public static <T> long[] basic_array(final Long[] arr) {
+		long[] arr2 = new long[arr.length];
+		for (int i = 0; i < arr.length; i++)
+			arr2[i] = arr[i];
+		return arr2;
+	}
+
+	public static <T> double[] basic_array(final Double[] arr) {
+		double[] arr2 = new double[arr.length];
+		for (int i = 0; i < arr.length; i++)
+			arr2[i] = arr[i];
+		return arr2;
+	}
+
+	public static <T> boolean[] basic_array(final Boolean[] arr) {
+		boolean[] arr2 = new boolean[arr.length];
+		for (int i = 0; i < arr.length; i++)
+			arr2[i] = arr[i];
+		return arr2;
+	}
 }

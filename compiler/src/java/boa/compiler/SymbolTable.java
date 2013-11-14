@@ -112,7 +112,8 @@ public class SymbolTable {
 
 		// map functions
 		globalFunctions.addFunction("haskey", new BoaFunction(new BoaBool(), new BoaType[] { new BoaMap(new BoaScalar(), new BoaScalar()), new BoaScalar() }, "${0}.containsKey(${1})"));
-		globalFunctions.addFunction("keys", new BoaFunction(new BoaArray(new BoaTypeVar("K")), new BoaType[] { new BoaMap(new BoaTypeVar("V"), new BoaTypeVar("K")) }, "${0}.keySet().toArray(new ${K}[0])"));
+		globalFunctions.addFunction("keys", new BoaFunction(new BoaArray(new BoaTypeVar("K")), new BoaType[] { new BoaMap(new BoaTypeVar("V"), new BoaTypeVar("K")) }, "boa.functions.BoaIntrinsics.basic_array(${0}.keySet().toArray(new ${K}[0]))"));
+		globalFunctions.addFunction("values", new BoaFunction(new BoaArray(new BoaTypeVar("V")), new BoaType[] { new BoaMap(new BoaTypeVar("V"), new BoaTypeVar("K")) }, "boa.functions.BoaIntrinsics.basic_array(${0}.values().toArray(new ${V}[0]))"));
 		globalFunctions.addFunction("lookup", new BoaFunction(new BoaTypeVar("V"), new BoaType[] { new BoaMap(new BoaTypeVar("V"), new BoaTypeVar("K")), new BoaTypeVar("K"), new BoaTypeVar("V") }, "(${0}.containsKey(${1}) ? ${0}.get(${1}) : ${2})"));
 		globalFunctions.addFunction("remove", new BoaFunction(new BoaAny(), new BoaType[] { new BoaMap(new BoaTypeVar("V"), new BoaTypeVar("K")), new BoaTypeVar("K") }, "${0}.remove(${1})"));
 		globalFunctions.addFunction("clear", new BoaFunction(new BoaAny(), new BoaType[] { new BoaMap(new BoaTypeVar("V"), new BoaTypeVar("K")) }, "${0}.clear()"));
