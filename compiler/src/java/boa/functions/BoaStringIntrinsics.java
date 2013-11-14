@@ -1,8 +1,6 @@
 package boa.functions;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -277,37 +275,6 @@ public class BoaStringIntrinsics {
 			matches[i] = m.group(i);
 
 		return matches;
-	}
-
-	private static List<String> splitCsv(final String s) {
-		final List<String> split = new ArrayList<String>();
-
-		boolean inQuote = false;
-		StringBuilder sb = new StringBuilder();
-		for (final char c : s.trim().toCharArray())
-			switch (c) {
-			case ',':
-				if (!inQuote) {
-					split.add(sb.toString());
-					sb = new StringBuilder();
-				} else {
-					sb.append(c);
-				}
-				break;
-			case '"':
-				if (!inQuote) {
-					inQuote = true;
-				} else {
-					inQuote = false;
-				}
-				break;
-			default:
-				sb.append(c);
-			}
-
-		split.add(sb.toString());
-
-		return split;
 	}
 
 	/**
