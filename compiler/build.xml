@@ -11,9 +11,6 @@
 		<fileset dir="lib" includes="*.jar" />
 	</path>
 
-	<uptodate property="tree-uptodate" srcfile="src/jtb/boa.jtb" targetfile="build/javacc/boa.jj" />
-	<uptodate property="parser-uptodate" srcfile="build/javacc/boa.jj" targetfile="build/java/boa/parser/BoaParser.java" />
-
 	<target name="init">
 		<mkdir dir="build/java/boa/parser" />
 		<mkdir dir="build/javacc" />
@@ -31,6 +28,7 @@
 		</apply>
 	</target>
 
+	<uptodate property="tree-uptodate" srcfile="src/jtb/boa.jtb" targetfile="build/javacc/boa.jj" />
 	<target name="tree" depends="init" unless="tree-uptodate">
 		<java jar="lib/jtb132.jar" fork="true" dir="build/java/boa/parser">
 			<arg value="-o" />
@@ -41,7 +39,7 @@
 		</java>
 	</target>
 
-	<target name="parser" depends="tree" unless="parser-uptodate">
+	<target name="parser" depends="tree" unless="tree-uptodate">
 		<javacc target="build/javacc/boa.jj" outputdirectory="build/java/boa/parser" debugparser="false" debuglookahead="false" debugtokenmanager="false" javacchome="lib" static="true" />
 	</target>
 
@@ -121,6 +119,25 @@
 	</target>
 
 	<target name="package" depends="compile,package-runtime,package-compiler" />
+
+	<target name="clean-gen">
+		<delete dir="build/javacc" />
+		<delete dir="build/java/boa/parser" />
+		<delete dir="build/classes/boa/parser" />
+		<delete dir="build/classes/boa/types" />
+	</target>
+
+	<target name="clean-src">
+		<delete>
+			<fileset dir="build/classes">
+				<patternset>
+					<include name="boa/" />
+					<exclude name="boa/parser/" />
+					<exclude name="boa/types/" />
+				</patternset>
+			</fileset>
+		</delete>
+	</target>
 
 	<target name="clean">
 		<delete dir="build" />
