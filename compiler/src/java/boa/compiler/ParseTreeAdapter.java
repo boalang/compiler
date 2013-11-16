@@ -847,6 +847,12 @@ public class ParseTreeAdapter extends GJNoArguDepthFirst<Node> {
 
 	/** {@inheritDoc} */
 	@Override
+	public Node visit(final boa.parser.syntaxtree.SetType n) {
+		return new SetType((Component) n.f2.accept(this)).setPositions(n.f0, lastVisitor.visit(n.f2));
+	}
+
+	/** {@inheritDoc} */
+	@Override
 	public Node visit(final boa.parser.syntaxtree.OutputType n) {
 		final OutputType t;
 		if (n.f6.present())

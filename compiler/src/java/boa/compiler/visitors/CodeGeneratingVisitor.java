@@ -1062,7 +1062,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		if (!n.hasInitializer()) {
 			if (lhsType instanceof BoaProtoMap ||
-					!(lhsType instanceof BoaMap || lhsType instanceof BoaStack)) {
+					!(lhsType instanceof BoaMap || lhsType instanceof BoaStack || lhsType instanceof BoaSet)) {
 				code.add("");
 				return;
 			}
@@ -1431,6 +1431,21 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	@Override
 	public void visit(final StackType n) {
 		final StringTemplate st = this.stg.getInstanceOf("StackType");
+
+		n.env.setNeedsBoxing(true);
+
+		n.getValue().accept(this);
+		st.setAttribute("value", code.removeLast());
+
+		n.env.setNeedsBoxing(false);
+
+		code.add(st.toString());
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final SetType n) {
+		final StringTemplate st = this.stg.getInstanceOf("SetType");
 
 		n.env.setNeedsBoxing(true);
 

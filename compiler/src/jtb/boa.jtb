@@ -48,6 +48,7 @@ TOKEN :
 | < ALL : "all" >
 | < MAP : "map" >
 | < STACK : "stack" >
+| < SET : "set" >
 | < FOR : "for" >
 | < WHENEACH : "foreach" >
 | < WHENALL : "ifall" >
@@ -216,7 +217,7 @@ void VarDecl() :
 
 // Type =
 //   type_name | ArrayType | MapType | TupleType |
-//   OutputType | FunctionType | VisitorType | StackType.
+//   OutputType | FunctionType | VisitorType | StackType | SetType.
 // type_name = identifier.
 void Type() :
 {}
@@ -229,6 +230,7 @@ void Type() :
 | FunctionType()
 | VisitorType()
 | StackType()
+| SetType()
 }
 
 // Component = [component_name ':'] ComponentType.
@@ -295,6 +297,14 @@ void StackType() :
 {}
 {
   "stack" "of" Component()
+}
+
+// SetType = 'set' 'of' Value.
+// Value = Component.
+void SetType() :
+{}
+{
+  "set" "of" Component()
 }
 
 // OutputType =

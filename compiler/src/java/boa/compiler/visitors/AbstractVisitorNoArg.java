@@ -314,6 +314,10 @@ public abstract class AbstractVisitorNoArg {
 		n.getValue().accept(this);
 	}
 
+	public void visit(final SetType n) {
+		n.getValue().accept(this);
+	}
+
 	public void visit(final TupleType n) {
 		for (final Component c : n.getMembers())
 			c.accept(this);
