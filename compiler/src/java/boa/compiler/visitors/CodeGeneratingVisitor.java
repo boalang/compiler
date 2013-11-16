@@ -1245,19 +1245,36 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	public void visit(final SimpleExpr n) {
 		final StringTemplate st = this.stg.getInstanceOf("Expression");
 
-		n.getLhs().accept(this);
-		st.setAttribute("lhs", code.removeLast());
+		// support '+' (concat) on arrays
+		if (n.getLhs().type instanceof BoaArray) {
+			n.getLhs().accept(this);
+			String str = code.removeLast();
 
-		if (n.getRhsSize() > 0) {
-			final List<String> operands = new ArrayList<String>();
-
-			for (final Term t : n.getRhs()) {
-				t.accept(this);
-				operands.add(code.removeLast());
+			if (n.getRhsSize() > 0) {
+				str = "boa.functions.BoaIntrinsics.concat(" + str;
+				for (final Term t : n.getRhs()) {
+					t.accept(this);
+					str = str + ", " + code.removeLast();
+				}
+				str = str + ")";
 			}
 
-			st.setAttribute("operators", n.getOps());
-			st.setAttribute("operands", operands);
+			st.setAttribute("lhs", str);
+		} else {
+			n.getLhs().accept(this);
+			st.setAttribute("lhs", code.removeLast());
+	
+			if (n.getRhsSize() > 0) {
+				final List<String> operands = new ArrayList<String>();
+	
+				for (final Term t : n.getRhs()) {
+					t.accept(this);
+					operands.add(code.removeLast());
+				}
+	
+				st.setAttribute("operators", n.getOps());
+				st.setAttribute("operands", operands);
+			}
 		}
 
 		code.add(st.toString());
