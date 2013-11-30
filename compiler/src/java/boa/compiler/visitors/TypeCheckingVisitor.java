@@ -692,7 +692,6 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 
 		n.env = env;
 
-		// FIXME rdyer need to check return type matches function declaration's return
 		if (n.hasExpr()) {
 			n.getExpr().accept(this, env);
 			n.type = n.getExpr().type;
