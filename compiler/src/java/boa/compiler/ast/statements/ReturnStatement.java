@@ -20,10 +20,12 @@ public class ReturnStatement extends Statement {
 	}
 
 	public ReturnStatement() {
+		this(null);
 	}
 
 	public ReturnStatement(final Expression expr) {
-		expr.setParent(this);
+		if (expr != null)
+			expr.setParent(this);
 		this.expr = expr;
 	}
 

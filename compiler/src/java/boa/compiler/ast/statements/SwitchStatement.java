@@ -42,8 +42,10 @@ public class SwitchStatement extends Statement {
 	}
 
 	public SwitchStatement(final Expression condition, final SwitchCase dfault) {
-		condition.setParent(this);
-		dfault.setParent(this);
+		if (condition != null)
+			condition.setParent(this);
+		if (dfault != null)
+			dfault.setParent(this);
 		this.condition = condition;
 		this.dfault = dfault;
 	}

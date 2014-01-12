@@ -16,7 +16,8 @@ public class ParenExpression extends Operand {
 	}
 
 	public ParenExpression (final Expression e) {
-		e.setParent(this);
+		if (e != null)
+			e.setParent(this);
 		this.e = e;
 	}
 

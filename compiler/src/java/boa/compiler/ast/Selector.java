@@ -15,7 +15,8 @@ public class Selector extends Node {
 	}
 
 	public Selector (final Identifier id) {
-		id.setParent(this);
+		if (id != null)
+			id.setParent(this);
 		this.id = id;
 	}
 

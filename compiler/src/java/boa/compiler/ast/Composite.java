@@ -20,6 +20,10 @@ public class Composite extends Operand {
 		return empty;
 	}
 
+	public void setEmpty(final boolean empty) {
+		this.empty = empty;
+	}
+
 	public List<Pair> getPairs() {
 		return pairs;
 	}
@@ -52,6 +56,10 @@ public class Composite extends Operand {
 	public void addExpr(final Expression e) {
 		e.setParent(this);
 		exprs.add(e);
+	}
+
+	public Composite () {
+		this(false);
 	}
 
 	public Composite (final boolean empty) {

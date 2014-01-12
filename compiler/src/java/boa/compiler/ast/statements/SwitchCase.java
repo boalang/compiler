@@ -42,7 +42,8 @@ public class SwitchCase extends Statement {
 	}
 
 	public SwitchCase(final boolean isDefault, final Block body) {
-		body.setParent(this);
+		if (body != null)
+			body.setParent(this);
 		this.isDefault = isDefault;
 		this.body = body;
 	}

@@ -17,7 +17,8 @@ public class StatementExpr extends Operand {
 	}
 
 	public StatementExpr (final Block b) {
-		b.setParent(this);
+		if (b != null)
+			b.setParent(this);
 		this.b = b;
 	}
 

@@ -37,7 +37,8 @@ public class Factor extends Node {
 	}
 
 	public Factor (final Operand op) {
-		op.setParent(this);
+		if (op != null)
+			op.setParent(this);
 		this.op = op;
 	}
 

@@ -157,11 +157,6 @@ public class ParseTreeAdapter extends GJNoArguDepthFirst<Node> {
 		}
 
 		@Override
-		public boa.parser.syntaxtree.NodeToken visit(final boa.parser.syntaxtree.ResultStatement n) {
-			return n.f0;
-		}
-
-		@Override
 		public boa.parser.syntaxtree.NodeToken visit(final boa.parser.syntaxtree.ReturnStatement n) {
 			return n.f0;
 		}
@@ -268,11 +263,6 @@ public class ParseTreeAdapter extends GJNoArguDepthFirst<Node> {
 		@Override
 		public boa.parser.syntaxtree.NodeToken visit(final boa.parser.syntaxtree.Function n) {
 			return n.f0.accept(this);
-		}
-
-		@Override
-		public boa.parser.syntaxtree.NodeToken visit(final boa.parser.syntaxtree.StatementExpr n) {
-			return n.f0;
 		}
 
 		@Override
@@ -414,10 +404,8 @@ public class ParseTreeAdapter extends GJNoArguDepthFirst<Node> {
 
 		@Override
 		public boa.parser.syntaxtree.NodeToken visit(final boa.parser.syntaxtree.OutputType n) {
-			if (n.f8.present())
-				return (boa.parser.syntaxtree.NodeToken)((boa.parser.syntaxtree.NodeSequence)n.f6.node).elementAt(3);
 			if (n.f7.present())
-				return (boa.parser.syntaxtree.NodeToken)((boa.parser.syntaxtree.NodeSequence)((boa.parser.syntaxtree.NodeChoice)n.f6.node).choice).elementAt(3);
+				return (boa.parser.syntaxtree.NodeToken)((boa.parser.syntaxtree.NodeSequence)n.f7.node).elementAt(3);
 			if (n.f6.present())
 				return ((boa.parser.syntaxtree.NodeSequence)n.f6.node).elementAt(1).accept(this);
 			return n.f5.accept(this);
@@ -513,11 +501,6 @@ public class ParseTreeAdapter extends GJNoArguDepthFirst<Node> {
 			if (n.f5.present())
 				return ((boa.parser.syntaxtree.NodeSequence)n.f5.node).elementAt(1).accept(this);
 			return n.f4.accept(this);
-		}
-
-		@Override
-		public boa.parser.syntaxtree.NodeToken visit(final boa.parser.syntaxtree.ResultStatement n) {
-			return n.f2;
 		}
 
 		@Override
@@ -660,11 +643,6 @@ public class ParseTreeAdapter extends GJNoArguDepthFirst<Node> {
 		}
 
 		@Override
-		public boa.parser.syntaxtree.NodeToken visit(final boa.parser.syntaxtree.StatementExpr n) {
-			return n.f1.accept(this);
-		}
-
-		@Override
 		public boa.parser.syntaxtree.NodeToken visit(final boa.parser.syntaxtree.Identifier n) {
 			return n.f0;
 		}
@@ -769,21 +747,10 @@ public class ParseTreeAdapter extends GJNoArguDepthFirst<Node> {
 			t = null;
 
 		final Node initializer;
-		if (n.f3.present()) {
-			final boa.parser.syntaxtree.NodeChoice nc = (boa.parser.syntaxtree.NodeChoice)n.f3.node;
-			switch (nc.which) {
-			case 0:
-				initializer = ((boa.parser.syntaxtree.NodeSequence)nc.choice).elementAt(1).accept(this);
-				break;
-			case 1:
-				initializer = nc.choice.accept(this);
-				break;
-			default:
-				throw new RuntimeException("unexpected choice " + nc.which + " is " + nc.choice.getClass());
-			}
-		} else {
+		if (n.f3.present())
+			initializer = ((boa.parser.syntaxtree.NodeSequence)n.f3.node).elementAt(1).accept(this);
+		else
 			initializer = null;
-		}
 
 		return new VarDeclStatement((Identifier)n.f0.accept(this), (AbstractType)t, (Expression)initializer).setPositions(firstVisitor.visit(n), lastVisitor.visit(n));
 	}
@@ -1043,12 +1010,6 @@ public class ParseTreeAdapter extends GJNoArguDepthFirst<Node> {
 		if (n.f5.present())
 			return new IfStatement((Expression)n.f2.accept(this), ensureBlock((Statement)n.f4.accept(this)), ensureBlock((Statement)((boa.parser.syntaxtree.NodeSequence)n.f5.node).elementAt(1).accept(this))).setPositions(firstVisitor.visit(n), lastVisitor.visit(n));
 		return new IfStatement((Expression)n.f2.accept(this), ensureBlock((Statement)n.f4.accept(this))).setPositions(firstVisitor.visit(n), lastVisitor.visit(n));
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public Node visit(final boa.parser.syntaxtree.ResultStatement n) {
-		return new ResultStatement((Expression)n.f1.accept(this)).setPositions(firstVisitor.visit(n), lastVisitor.visit(n));
 	}
 
 	/** {@inheritDoc} */
@@ -1325,12 +1286,6 @@ public class ParseTreeAdapter extends GJNoArguDepthFirst<Node> {
 	@Override
 	public Node visit(final boa.parser.syntaxtree.Function n) {
 		return new FunctionExpression((FunctionType)n.f0.accept(this), (Block)n.f1.accept(this)).setPositions(firstVisitor.visit(n), lastVisitor.visit(n));
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public Node visit(final boa.parser.syntaxtree.StatementExpr n) {
-		return new StatementExpr((Block)n.f1.accept(this)).setPositions(firstVisitor.visit(n), lastVisitor.visit(n));
 	}
 
 	/** {@inheritDoc} */

@@ -16,7 +16,8 @@ public class ExprStatement extends Statement {
 	}
 
 	public ExprStatement (final Expression e) {
-		e.setParent(this);
+		if (e != null)
+			e.setParent(this);
 		this.e = e;
 	}
 

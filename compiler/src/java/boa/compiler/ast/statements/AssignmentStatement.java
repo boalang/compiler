@@ -22,8 +22,10 @@ public class AssignmentStatement extends Statement {
 	}
 
 	public AssignmentStatement(final Factor lhs, final Expression rhs) {
-		lhs.setParent(this);
-		rhs.setParent(this);
+		if (lhs != null)
+			lhs.setParent(this);
+		if (rhs != null)
+			rhs.setParent(this);
 		this.lhs = lhs;
 		this.rhs = rhs;
 	}

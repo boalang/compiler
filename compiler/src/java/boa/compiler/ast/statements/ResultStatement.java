@@ -16,7 +16,8 @@ public class ResultStatement extends Statement {
 	}
 
 	public ResultStatement(final Expression expr) {
-		expr.setParent(this);
+		if (expr != null)
+			expr.setParent(this);
 		this.expr = expr;
 	}
 

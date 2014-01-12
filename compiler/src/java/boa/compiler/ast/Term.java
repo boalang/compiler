@@ -53,7 +53,8 @@ public class Term extends Node {
 	}
 
 	public Term (final Factor lhs) {
-		lhs.setParent(this);
+		if (lhs != null)
+			lhs.setParent(this);
 		this.lhs = lhs;
 	}
 

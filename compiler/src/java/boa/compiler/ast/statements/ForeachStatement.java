@@ -31,9 +31,12 @@ public class ForeachStatement extends Statement {
 	}
 
 	public ForeachStatement(final Component var, final Expression condition, final Block body) {
-		var.setParent(this);
-		condition.setParent(this);
-		body.setParent(this);
+		if (var != null)
+			var.setParent(this);
+		if (condition != null)
+			condition.setParent(this);
+		if (body != null)
+			body.setParent(this);
 		this.var = var;
 		this.condition = condition;
 		this.body = body;

@@ -16,7 +16,8 @@ public class StackType extends AbstractType {
 	}
 
 	public StackType (final Component value) {
-		value.setParent(this);
+		if (value != null)
+			value.setParent(this);
 		this.value = value;
 	}
 

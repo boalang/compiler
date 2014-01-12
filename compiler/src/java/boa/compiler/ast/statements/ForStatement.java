@@ -49,7 +49,8 @@ public class ForStatement extends Statement {
 			condition.setParent(this);
 		if (update != null)
 			update.setParent(this);
-		body.setParent(this);
+		if (body != null)
+			body.setParent(this);
 		this.init = init;
 		this.condition = condition;
 		this.update = update;

@@ -55,7 +55,8 @@ public class SimpleExpr extends Node {
 	}
 
 	public SimpleExpr (final Term lhs) {
-		lhs.setParent(this);
+		if (lhs != null)
+			lhs.setParent(this);
 		this.lhs = lhs;
 	}
 

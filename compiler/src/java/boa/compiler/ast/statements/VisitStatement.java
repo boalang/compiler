@@ -23,8 +23,16 @@ public class VisitStatement extends Statement {
 		return before;
 	}
 
+	public void setBefore(final boolean before) {
+		this.before = before;
+	}
+
 	public boolean hasWildcard() {
 		return wildcard;
+	}
+
+	public void setWildcard(final boolean wildcard) {
+		this.wildcard = wildcard;
 	}
 
 	public boolean hasComponent() {
@@ -33,6 +41,11 @@ public class VisitStatement extends Statement {
 
 	public Component getComponent() {
 		return node;
+	}
+
+	public void setComponent(final Component node) {
+		node.setParent(this);
+		this.node = node;
 	}
 
 	public List<Identifier> getIdList() {
@@ -52,25 +65,34 @@ public class VisitStatement extends Statement {
 		ids.add(id);
 	}
 
+	public void setIdList(final List<Identifier> ids) {
+		for (final Identifier id : ids)
+			addId(id);
+	}
+
 	public Block getBody() {
 		return body;
 	}
 
-	public void replaceBody(final Block body) {
+	public void setBody(final Block body) {
 		body.setParent(this);
 		this.body = body;
+	}
+
+	public VisitStatement() {
+		this(false, null, null);
 	}
 
 	public VisitStatement(final boolean before, final boolean wildcard, final Block body) {
-		body.setParent(this);
-		this.before = before;
+		this(before, null, body);
 		this.wildcard = wildcard;
-		this.body = body;
 	}
 
 	public VisitStatement(final boolean before, final Component node, final Block body) {
-		node.setParent(this);
-		body.setParent(this);
+		if (node != null)
+			node.setParent(this);
+		if (body != null)
+			body.setParent(this);
 		this.before = before;
 		this.node = node;
 		this.body = body;

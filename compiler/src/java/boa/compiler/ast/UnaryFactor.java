@@ -20,7 +20,8 @@ public class UnaryFactor extends Operand {
 	}
 
 	public UnaryFactor (final String op, final Factor f) {
-		f.setParent(this);
+		if (f != null)
+			f.setParent(this);
 		this.op = op;
 		this.f = f;
 	}

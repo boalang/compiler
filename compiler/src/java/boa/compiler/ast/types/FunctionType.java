@@ -40,11 +40,17 @@ public class FunctionType extends AbstractType {
 		return t;
 	}
 
+	public void setType(final AbstractType t) {
+		t.setParent(this);
+		this.t = t;
+	}
+
 	public FunctionType () {
 	}
 
 	public FunctionType (final AbstractType t) {
-		t.setParent(this);
+		if (t != null)
+			t.setParent(this);
 		this.t = t;
 	}
 

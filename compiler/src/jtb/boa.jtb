@@ -45,25 +45,17 @@ TOKEN :
 | < DO : "do" >
 | < OR : "or" >
 | < AND : "and" >
-| < ALL : "all" >
 | < MAP : "map" >
 | < STACK : "stack" >
 | < SET : "set" >
 | < FOR : "for" >
-| < WHENEACH : "foreach" >
-| < WHENALL : "ifall" >
-| < WHENSOME : "exists" >
+| < FOREACH : "foreach" >
+| < IFALL : "ifall" >
+| < EXISTS : "exists" >
 | < NOT : "not" >
 | < TYPE : "type" >
-| < PROC : "proc" >
-| < FILE : "file" >
 | < ELSE : "else" >
 | < CASE : "case" >
-| < SOME : "some" >
-| < EACH : "each" >
-| < WHEN : "when" >
-| < SKIP_ : "skip" >
-| < REST : "rest" >
 | < OUTPUT : "output" >
 | < WHILE : "while" >
 | < BREAK : "break" >
@@ -72,17 +64,14 @@ TOKEN :
 | < SWITCH : "switch" >
 | < RETURN : "return" >
 | < WEIGHT : "weight" >
-| < RESULT : "result" >
 | < DEFAULT_ : "default" >
 | < CONTINUE : "continue" >
-| < SUBMATCH : "submatch" >
 | < FUNCTION : "function" >
 | < VISITOR : "visitor" >
 | < BEFORE : "before" >
 | < AFTER : "after" >
 | < WILDCARD : "_" >
 | < STOP : "stop" >
-| < PARSEDMESSAGE : "parsedmessage" >
 }
 
 TOKEN : /* LITERALS */
@@ -202,7 +191,7 @@ void StaticVarDecl() :
   "static" VarDecl()
 }
 
-// VarDecl = var_name ':' [Type] ['=' Expression | Block] ';'.
+// VarDecl = var_name ':' [Type] ['=' Expression] ';'.
 // var_name = identifier.
 void VarDecl() :
 {}
@@ -212,7 +201,7 @@ void VarDecl() :
     LOOKAHEAD(Type())
     Type()
   ]
-  [ "=" Expression() | Block() ] ";"
+  [ "=" Expression() ] ";"
 }
 
 // Type =
@@ -308,15 +297,12 @@ void SetType() :
 }
 
 // OutputType =
-//   'table' table_type [Parameter] {Index} 'of' Element [Weight]
-//   [FileSpec | ProcSpec ] [FormatSpec].
+//   'table' table_type [Parameter] {Index} 'of' Element [Weight] [FormatSpec].
 // table_type = identifier.
 // Parameter = '(' Expression ')'.
 // Index = '[' Component ']'.
 // Element = Component.
 // Weight = 'weight' Component.
-// FileSpec = 'file' '(' ArgumentList ')'.
-// ProcSpec = 'proc' '(' ArgumentList ')'.
 // FormatSpec = 'format' '(' ArgumentList ')'.
 // ArgumentList = ExprList.
 void OutputType() :
@@ -330,10 +316,6 @@ void OutputType() :
   [
     LOOKAHEAD("weight" Component())
     "weight" Component()
-  ]
-  [
-    "file" "(" ExprList() ")" 
-  | "proc" "(" ExprList() ")"
   ]
   [ 
     LOOKAHEAD("format" "(" ExprList() ")")
@@ -376,7 +358,7 @@ void VisitorType() :
 
 // Statement =
 //   Assignment | Block | BreakStatement | ContinueStatement | DoStatement |
-//   EmitStatement | ExprStatement | ForStatement | IfStatement | ResultStatement |
+//   EmitStatement | ExprStatement | ForStatement | IfStatement |
 //   ReturnStatement | SwitchStatement | WhenStatement | WhileStatement.
 void Statement() :
 {}
@@ -393,7 +375,6 @@ void Statement() :
 | ExprStatement()
 | ForStatement()
 | IfStatement()
-| ResultStatement()
 | ReturnStatement()
 | SwitchStatement()
 | WhenStatement()
@@ -527,13 +508,6 @@ void IfStatement() :
   ]
 }
 
-// ResultStatement = 'result' Expression.
-void ResultStatement() :
-{}
-{
-  "result" Expression() ";"
-}
-
 // ReturnStatement = 'return' [ Expression ].
 void ReturnStatement() :
 {}
@@ -580,9 +554,9 @@ void WhenStatement() :
 void WhenKind() :
 {}
 {
-  < WHENEACH >
-| < WHENALL >
-| < WHENSOME >
+  < FOREACH >
+| < IFALL >
+| < EXISTS >
 }
 
 // WhileStatement = 'while' '(' Expression ')' Statement.
@@ -744,8 +718,8 @@ void Call() :
 }
 
 // Operand =
-//   identifier | literal | Composite | Function | unary_operator Factor |
-//   '$' | StatementExpr | '(' Expression ')'.
+//   identifier | literal | Composite | Function | Visitor | unary_operator Factor |
+//   '$' | '(' Expression ')'.
 // unary_operator = '+' | '-' | '~' | '!' | 'not'.
 void Operand() :
 {}
@@ -770,7 +744,6 @@ void Operand() :
   )
   Factor()
 | "$"
-| StatementExpr()
 | "(" Expression() ")"
 }
 
@@ -812,18 +785,11 @@ void Function() :
   FunctionType() Block()
 }
 
-// VisitorExpr = VisitorType Block.
+// Visitor = VisitorType Block.
 void VisitorExpr() :
 {}
 {
   VisitorType() Block()
-}
-
-// StatementExpr = '?' Block .
-void StatementExpr() :
-{}
-{
-  "?" Block()
 }
 
 // identifier = letter {letter | '_' | digit}.

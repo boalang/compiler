@@ -34,13 +34,14 @@ public class Comparison extends Node {
 	}
 
 	public Comparison (final SimpleExpr lhs) {
-		lhs.setParent(this);
-		this.lhs = lhs;
+		this(lhs, null, null);
 	}
 
 	public Comparison (final SimpleExpr lhs, final String op, final SimpleExpr rhs) {
-		lhs.setParent(this);
-		rhs.setParent(this);
+		if (lhs != null)
+			lhs.setParent(this);
+		if (rhs != null)
+			rhs.setParent(this);
 		this.lhs = lhs;
 		this.op = op;
 		this.rhs = rhs;

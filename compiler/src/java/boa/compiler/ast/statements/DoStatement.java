@@ -21,8 +21,10 @@ public class DoStatement extends Statement {
 	}
 
 	public DoStatement(final Expression condition, final Block body) {
-		condition.setParent(this);
-		body.setParent(this);
+		if (condition != null)
+			condition.setParent(this);
+		if (body != null)
+			body.setParent(this);
 		this.condition = condition;
 		this.body = body;
 	}

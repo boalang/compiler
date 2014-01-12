@@ -24,6 +24,11 @@ public class OutputType extends AbstractType {
 		return id;
 	}
 
+	public void setId(final Identifier id) {
+		id.setParent(this);
+		this.id = id;
+	}
+
 	public List<Expression> getArgs() {
 		return args;
 	}
@@ -62,6 +67,11 @@ public class OutputType extends AbstractType {
 		return t;
 	}
 
+	public void setType(final Component t) {
+		t.setParent(this);
+		this.t = t;
+	}
+
 	public boolean hasWeight() {
 		return weight != null;
 	}
@@ -70,17 +80,26 @@ public class OutputType extends AbstractType {
 		return weight;
 	}
 
+	public void setWeight(final Component weight) {
+		weight.setParent(this);
+		this.weight = weight;
+	}
+
+	public OutputType (final Identifier id) {
+		this(id, null, null);
+	}
+
 	public OutputType (final Identifier id, final Component t) {
-		id.setParent(this);
-		t.setParent(this);
-		this.id = id;
-		this.t = t;
+		this(id, t, null);
 	}
 
 	public OutputType (final Identifier id, final Component t, final Component weight) {
-		id.setParent(this);
-		t.setParent(this);
-		weight.setParent(this);
+		if (id != null)
+			id.setParent(this);
+		if (t != null)
+			t.setParent(this);
+		if (weight != null)
+			weight.setParent(this);
 		this.id = id;
 		this.t = t;
 		this.weight = weight;

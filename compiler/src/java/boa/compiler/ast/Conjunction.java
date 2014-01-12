@@ -19,6 +19,11 @@ public class Conjunction extends Node {
 		return lhs;
 	}
 
+	public void setLhs(final Comparison lhs) {
+		lhs.setParent(this);
+		this.lhs = lhs;
+	}
+
 	public List<String> getOps() {
 		return ops;
 	}
@@ -52,8 +57,13 @@ public class Conjunction extends Node {
 		rhs.add(c);
 	}
 
+	public Conjunction () {
+		this(null);
+	}
+
 	public Conjunction (final Comparison lhs) {
-		lhs.setParent(this);
+		if (lhs != null)
+			lhs.setParent(this);
 		this.lhs = lhs;
 	}
 

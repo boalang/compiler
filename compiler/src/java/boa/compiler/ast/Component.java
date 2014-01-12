@@ -20,8 +20,18 @@ public class Component extends AbstractType {
 		return id;
 	}
 
+	public void setIdentifier(final Identifier id) {
+		id.setParent(this);
+		this.id = id;
+	}
+
 	public AbstractType getType() {
 		return t;
+	}
+
+	public void setType(final AbstractType t) {
+		t.setParent(this);
+		this.t = t;
 	}
 
 	public Component (final AbstractType t) {
@@ -31,7 +41,8 @@ public class Component extends AbstractType {
 	public Component (final Identifier id, final AbstractType t) {
 		if (id != null)
 			id.setParent(this);
-		t.setParent(this);
+		if (t != null)
+			t.setParent(this);
 		this.id = id;
 		this.t = t;
 	}

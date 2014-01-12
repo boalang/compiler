@@ -30,16 +30,16 @@ public class IfStatement extends Statement {
 	}
 
 	public IfStatement(final Expression condition, final Block body) {
-		condition.setParent(this);
-		body.setParent(this);
-		this.condition = condition;
-		this.body = body;
+		this(condition, body, null);
 	}
 
 	public IfStatement(final Expression condition, final Block body, final Block elseBody) {
-		condition.setParent(this);
-		body.setParent(this);
-		elseBody.setParent(this);
+		if (condition != null)
+			condition.setParent(this);
+		if (body != null)
+			body.setParent(this);
+		if (elseBody != null)
+			elseBody.setParent(this);
 		this.condition = condition;
 		this.body = body;
 		this.elseBody = elseBody;

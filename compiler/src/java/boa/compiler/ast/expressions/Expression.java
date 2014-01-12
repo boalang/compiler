@@ -20,6 +20,11 @@ public class Expression extends Node {
 		return lhs;
 	}
 
+	public void setLhs(final Conjunction lhs) {
+		lhs.setParent(this);
+		this.lhs = lhs;
+	}
+
 	public List<Conjunction> getRhs() {
 		return rhs;
 	}
@@ -37,8 +42,13 @@ public class Expression extends Node {
 		rhs.add(c);
 	}
 
+	public Expression () {
+		this(null);
+	}
+
 	public Expression (final Conjunction lhs) {
-		lhs.setParent(this);
+		if (lhs != null)
+			lhs.setParent(this);
 		this.lhs = lhs;
 	}
 

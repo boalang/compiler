@@ -23,8 +23,10 @@ public class VisitorExpression extends Operand {
 	}
 
 	public VisitorExpression (final VisitorType t, final Block body) {
-		t.setParent(this);
-		body.setParent(this);
+		if (t != null)
+			t.setParent(this);
+		if (body != null)
+			body.setParent(this);
 		this.t = t;
 		this.body = body;
 	}

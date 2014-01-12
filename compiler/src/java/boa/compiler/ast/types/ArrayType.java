@@ -16,7 +16,8 @@ public class ArrayType extends AbstractType {
 	}
 
 	public ArrayType (final Component value) {
-		value.setParent(this);
+		if (value != null)
+			value.setParent(this);
 		this.value = value;
 	}
 
