@@ -331,7 +331,9 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		final List<String> statements = new ArrayList<String>();
 		for (final Statement s : n.getStatements()) {
 			s.accept(this);
-			statements.add(code.removeLast());
+			final String statement = code.removeLast();
+			if (!statement.isEmpty())
+				statements.add(statement);
 		}
 		st.setAttribute("statements", statements);
 
@@ -744,7 +746,9 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		for (final Node node : n.getStatements()) {
 			node.accept(this);
-			statements.add(code.removeLast());
+			final String statement = code.removeLast();
+			if (!statement.isEmpty())
+				statements.add(statement);
 		}
 
 		st.setAttribute("statements", statements);
