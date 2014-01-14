@@ -285,6 +285,11 @@ public abstract class AbstractVisitor<ARG> {
 	//
 	// types
 	//
+	public void visit(final TypeDecl n, final ARG arg) {
+		n.getId().accept(this, arg);
+		n.getType().accept(this, arg);
+	}
+
 	public void visit(final ArrayType n, final ARG arg) {
 		n.getValue().accept(this, arg);
 	}

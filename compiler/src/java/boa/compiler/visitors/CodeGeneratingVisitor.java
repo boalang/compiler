@@ -1071,6 +1071,8 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				return;
 			}
 
+			// FIXME rdyer if the type is a type identifier, n.getType() returns Identifier
+			// and maps/stacks/sets wind up not having the proper constructors here
 			n.getType().accept(this);
 			st.setAttribute("rhs", code.removeLast());
 			code.add(st.toString());
@@ -1370,6 +1372,12 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	//
 	// types
 	//
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final TypeDecl n) {
+		code.add("");
+	}
+
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final ArrayType n) {

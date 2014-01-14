@@ -732,6 +732,12 @@ public class ParseTreeAdapter extends GJNoArguDepthFirst<Node> {
 
 	/** {@inheritDoc} */
 	@Override
+	public Node visit(final boa.parser.syntaxtree.TypeDecl n) {
+		return new TypeDecl((Identifier)n.f1.accept(this), (AbstractType)n.f3.accept(this));
+	}
+
+	/** {@inheritDoc} */
+	@Override
 	public Node visit(final boa.parser.syntaxtree.StaticVarDecl n) {
 		final VarDeclStatement var = (VarDeclStatement)n.f1.accept(this);
 		return new VarDeclStatement(true, var.getId(), var.getType(), var.getInitializer()).setPositions(firstVisitor.visit(n), lastVisitor.visit(n));

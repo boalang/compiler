@@ -992,6 +992,16 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 	//
 	/** {@inheritDoc} */
 	@Override
+	public void visit(final TypeDecl n, final SymbolTable env) {
+		n.env = env;
+		n.getType().accept(this, env);
+		n.type = n.getType().type;
+		n.env.setType(n.getId().getToken(), n.type);
+		n.getId().accept(this, env);
+	}
+
+	/** {@inheritDoc} */
+	@Override
 	public void visit(final ArrayType n, final SymbolTable env) {
 		n.env = env;
 		n.getValue().accept(this, env);
