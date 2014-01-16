@@ -924,7 +924,11 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 		} else
 			for (final Term t : n.getRhs()) {
 				t.accept(this, env);
-				type = type.arithmetics(t.type);
+				try {
+					type = type.arithmetics(t.type);
+				} catch (final RuntimeException e) {
+					throw new TypeCheckException(t, e.getMessage(), e);
+				}
 			}
 
 		n.type = type;
