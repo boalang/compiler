@@ -6,6 +6,7 @@ import java.util.List;
 import boa.compiler.ast.Component;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.parser.Token;
 
 /**
  * 
@@ -49,5 +50,9 @@ public class TupleType extends AbstractType {
 			t.addMember(c.clone());
 		copyFieldsTo(t);
 		return t;
+	}
+
+	public TupleType setPositions(final Token first, final Token last) {
+		return (TupleType)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
 }

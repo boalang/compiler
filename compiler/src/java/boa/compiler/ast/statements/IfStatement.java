@@ -1,8 +1,10 @@
 package boa.compiler.ast.statements;
 
+import boa.compiler.ast.Node;
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.parser.Token;
 
 /**
  * 
@@ -29,8 +31,24 @@ public class IfStatement extends Statement {
 		return elseBody;
 	}
 
+	public IfStatement(final Expression condition, final Statement s) {
+		this(condition, Node.ensureBlock(s));
+	}
+
 	public IfStatement(final Expression condition, final Block body) {
 		this(condition, body, null);
+	}
+
+	public IfStatement(final Expression condition, final Block body, final Statement s2) {
+		this(condition, body, Node.ensureBlock(s2));
+	}
+
+	public IfStatement(final Expression condition, final Statement s, final Block elseBody) {
+		this(condition, Node.ensureBlock(s), elseBody);
+	}
+
+	public IfStatement(final Expression condition, final Statement s, final Statement s2) {
+		this(condition, Node.ensureBlock(s), Node.ensureBlock(s2));
 	}
 
 	public IfStatement(final Expression condition, final Block body, final Block elseBody) {
@@ -65,5 +83,9 @@ public class IfStatement extends Statement {
 			s = new IfStatement(condition.clone(), body.clone());
 		copyFieldsTo(s);
 		return s;
+	}
+
+	public IfStatement setPositions(final Token first, final Node last) {
+		return (IfStatement)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
 }

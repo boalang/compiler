@@ -2,6 +2,7 @@ package boa.compiler.ast;
 
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.parser.Token;
 
 /**
  * 
@@ -35,5 +36,9 @@ public class Start extends Node {
 		final Start s = new Start(p.clone());
 		copyFieldsTo(s);
 		return s;
+	}
+
+	public Start setPositions(final Node first, final Token last) {
+		return (Start)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
 }

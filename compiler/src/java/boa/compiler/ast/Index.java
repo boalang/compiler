@@ -3,6 +3,7 @@ package boa.compiler.ast;
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.parser.Token;
 
 /**
  * 
@@ -67,5 +68,9 @@ public class Index extends Node {
 			i = new Index(start.clone());
 		copyFieldsTo(i);
 		return i;
+	}
+
+	public Index setPositions(final Token first, final Token last) {
+		return (Index)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
 }

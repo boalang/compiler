@@ -48,11 +48,11 @@ public class TypeCheckException extends RuntimeException {
 	}
 
 	private static String getMessage(final Node n, final String text) {
-		return "Error at lines " + n.getBeginLine() + "-" + n.getEndLine() +
-				", columns " + n.getBeginColumn() + "-" + n.getEndColumn() + ": " + text;
+		return "Error at lines " + n.beginLine + "-" + n.endLine +
+				", columns " + n.beginColumn + "-" + n.endColumn + ": " + text;
 	}
 	private static String getMessage(final List<? extends Node> n, final String text) {
-		return "Error at lines " + n.get(0).getBeginLine() + "-" + n.get(n.size() - 1).getEndLine() +
-				", columns " + n.get(0).getBeginColumn() + "-" + n.get(n.size() - 1).getEndColumn() + ": " + text;
+		return "Error at lines " + n.get(0).beginLine + "-" + n.get(n.size() - 1).endLine +
+				", columns " + n.get(0).beginColumn + "-" + n.get(n.size() - 1).endColumn + ": " + text;
 	}
 }

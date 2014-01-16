@@ -1,9 +1,11 @@
 package boa.compiler.ast.statements;
 
 import boa.compiler.ast.Component;
+import boa.compiler.ast.Node;
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.parser.Token;
 
 /**
  * 
@@ -28,6 +30,10 @@ public class ForeachStatement extends Statement {
 
 	public Block getBody() {
 		return body;
+	}
+
+	public ForeachStatement(final Component var, final Expression condition, final Statement s) {
+		this(var, condition, Node.ensureBlock(s));
 	}
 
 	public ForeachStatement(final Component var, final Expression condition, final Block body) {
@@ -58,5 +64,9 @@ public class ForeachStatement extends Statement {
 		final ForeachStatement s = new ForeachStatement(var.clone(), condition.clone(), body.clone());
 		copyFieldsTo(s);
 		return s;
+	}
+
+	public ForeachStatement setPositions(final Token first, final Node last) {
+		return (ForeachStatement)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
 }

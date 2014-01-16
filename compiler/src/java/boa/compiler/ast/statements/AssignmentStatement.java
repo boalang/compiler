@@ -1,9 +1,11 @@
 package boa.compiler.ast.statements;
 
 import boa.compiler.ast.Factor;
+import boa.compiler.ast.Node;
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.parser.Token;
 
 /**
  * 
@@ -46,5 +48,9 @@ public class AssignmentStatement extends Statement {
 		final AssignmentStatement s = new AssignmentStatement(lhs.clone(), rhs.clone());
 		copyFieldsTo(s);
 		return s;
+	}
+
+	public AssignmentStatement setPositions(final Node first, final Token last) {
+		return (AssignmentStatement)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
 }

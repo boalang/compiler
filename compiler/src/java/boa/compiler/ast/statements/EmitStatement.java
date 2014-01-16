@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import boa.compiler.ast.Identifier;
+import boa.compiler.ast.Node;
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.parser.Token;
 
 /**
  * 
@@ -101,5 +103,9 @@ public class EmitStatement extends Statement {
 			e.addIndice(i.clone());
 		copyFieldsTo(e);
 		return e;
+	}
+
+	public EmitStatement setPositions(final Node first, final Token last) {
+		return (EmitStatement)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
 }

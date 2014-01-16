@@ -1,5 +1,6 @@
 package boa.compiler.ast.expressions;
 
+import boa.compiler.ast.Node;
 import boa.compiler.ast.Operand;
 import boa.compiler.ast.statements.Block;
 import boa.compiler.ast.types.FunctionType;
@@ -47,5 +48,9 @@ public class FunctionExpression extends Operand {
 		final FunctionExpression e = new FunctionExpression(t.clone(), body.clone());
 		copyFieldsTo(e);
 		return e;
+	}
+
+	public FunctionExpression setPositions(final Node first, final Node last) {
+		return (FunctionExpression)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
 }

@@ -1,5 +1,6 @@
 package boa.compiler.ast;
 
+import boa.compiler.ast.Node;
 import boa.compiler.ast.expressions.SimpleExpr;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
@@ -67,5 +68,13 @@ public class Comparison extends Node {
 			c = new Comparison(lhs.clone());
 		copyFieldsTo(c);
 		return c;
+	}
+
+	public Comparison setPositions(final Node first) {
+		return (Comparison)setPositions(first.beginLine, first.beginColumn, first.endLine, first.endColumn);
+	}
+
+	public Comparison setPositions(final Node first, final Node last) {
+		return (Comparison)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
 }

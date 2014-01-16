@@ -5,9 +5,11 @@ import java.util.List;
 
 import boa.compiler.ast.Component;
 import boa.compiler.ast.Identifier;
+import boa.compiler.ast.Node;
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.parser.Token;
 
 /**
  * 
@@ -129,5 +131,17 @@ public class OutputType extends AbstractType {
 			o.addIndice(c.clone());
 		copyFieldsTo(o);
 		return o;
+	}
+
+	public OutputType setPositions(final Token first, final Node last) {
+		return (OutputType)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
+	}
+
+	public OutputType setEnd(final Token last) {
+		return (OutputType)setPositions(beginLine, beginColumn, last.endLine, last.endColumn);
+	}
+
+	public OutputType setEnd(final Node last) {
+		return (OutputType)setPositions(beginLine, beginColumn, last.endLine, last.endColumn);
 	}
 }

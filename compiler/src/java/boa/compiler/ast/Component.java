@@ -1,5 +1,6 @@
 package boa.compiler.ast;
 
+import boa.compiler.ast.Node;
 import boa.compiler.ast.types.AbstractType;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
@@ -63,5 +64,11 @@ public class Component extends AbstractType {
 		final Component c = new Component(id.clone(), t.clone());
 		copyFieldsTo(c);
 		return c;
+	}
+
+	public Component setPositions(final Node first, final Node last) {
+		if (first == null)
+			return (Component)setPositions(last.beginLine, last.beginColumn, last.endLine, last.endColumn);
+		return (Component)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
 }

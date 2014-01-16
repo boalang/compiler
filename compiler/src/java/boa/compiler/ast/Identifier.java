@@ -3,6 +3,7 @@ package boa.compiler.ast;
 import boa.compiler.ast.types.AbstractType;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.parser.Token;
 
 /**
  * 
@@ -39,5 +40,9 @@ public class Identifier extends AbstractType {
 		final Identifier id = new Identifier(token);
 		copyFieldsTo(id);
 		return id;
+	}
+
+	public Identifier setPositions(final Token first) {
+		return (Identifier)setPositions(first.beginLine, first.beginColumn, first.endLine, first.endColumn);
 	}
 }

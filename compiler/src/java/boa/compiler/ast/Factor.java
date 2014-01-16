@@ -61,4 +61,10 @@ public class Factor extends Node {
 		copyFieldsTo(f);
 		return f;
 	}
+
+	public Factor setPositions(final Node first, final Node last) {
+		if (last == null)
+			return (Factor)setPositions(first.beginLine, first.beginColumn, first.endLine, first.endColumn);
+		return (Factor)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
+	}
 }

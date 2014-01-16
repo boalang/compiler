@@ -1,10 +1,12 @@
 package boa.compiler.ast.statements;
 
 import boa.compiler.ast.Identifier;
+import boa.compiler.ast.Node;
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.ast.types.AbstractType;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.parser.Token;
 
 /**
  * 
@@ -105,5 +107,21 @@ public class VarDeclStatement extends Statement {
 			v.initializer = initializer.clone();
 		copyFieldsTo(v);
 		return v;
+	}
+
+	public VarDeclStatement setStart(final Token first) {
+		return (VarDeclStatement)setPositions(first.beginLine, first.beginColumn, endLine, endColumn);
+	}
+
+	public VarDeclStatement setEnd(final Token last) {
+		return (VarDeclStatement)setPositions(beginLine, beginColumn, last.endLine, last.endColumn);
+	}
+
+	public VarDeclStatement setPositions(final Node first, final Node middle, final Node last) {
+		if (last != null)
+			return (VarDeclStatement)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
+		if (middle != null)
+			return (VarDeclStatement)setPositions(first.beginLine, first.beginColumn, middle.endLine, middle.endColumn);
+		return (VarDeclStatement)setPositions(first.beginLine, first.beginColumn, first.endLine, first.endColumn);
 	}
 }

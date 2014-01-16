@@ -13,7 +13,6 @@
 
 	<target name="init">
 		<mkdir dir="build/java/boa/parser" />
-		<mkdir dir="build/javacc" />
 		<mkdir dir="build/classes" />
 		<mkdir dir="build/testclasses" />
 		<mkdir dir="dist" />
@@ -28,32 +27,23 @@
 		</apply>
 	</target>
 
-	<uptodate property="tree-uptodate" srcfile="src/jtb/boa.jtb" targetfile="build/javacc/boa.jj" />
-	<target name="tree" depends="init" unless="tree-uptodate">
-		<java jar="lib/jtb132.jar" fork="true" dir="build/java/boa/parser">
-			<arg value="-o" />
-			<arg value="../../../javacc/boa.jj" />
-			<arg value="-p" />
-			<arg value="boa.parser" />
-			<arg value="../../../../src/jtb/boa.jtb" />
-		</java>
-	</target>
-
-	<target name="parser" depends="tree" unless="tree-uptodate">
-		<javacc target="build/javacc/boa.jj" outputdirectory="build/java/boa/parser" debugparser="false" debuglookahead="false" debugtokenmanager="false" javacchome="lib" static="true" />
-	</target>
-
-	<target name="compile-generated" depends="parser">
-		<javac includeantruntime="true" srcdir="build/java" destdir="build/classes" debug="on" debuglevel="lines,vars,source">
-			<classpath refid="classpath" />
-		</javac>
+	<target name="compile-protobuf" depends="init">
 		<javac includeantruntime="true" srcdir="src/compiled-proto" destdir="build/classes" debug="on" debuglevel="lines,vars,source">
 			<classpath refid="classpath" />
 		</javac>
 	</target>
 
-	<target name="compile" depends="compile-generated">
-		<javac includeantruntime="true" srcdir="src/java" destdir="build/classes" debug="on" debuglevel="lines,vars,source">
+	<uptodate property="parser-uptodate" srcfile="src/jj/boa.jj" targetfile="build/java/boa/parser/BoaParser.java" />
+	<target name="parser" depends="init" unless="parser-uptodate">
+		<javacc target="src/jj/boa.jj" outputdirectory="build/java/boa/parser" debugparser="false" debuglookahead="false" debugtokenmanager="false" javacchome="lib" static="true" />
+	</target>
+
+	<target name="compile" depends="compile-protobuf,parser">
+		<javac includeantruntime="true" destdir="build/classes" debug="on" debuglevel="lines,vars,source">
+			<src>
+				<pathelement location="src/java" />
+				<pathelement location="build/java" />
+			</src>
 			<classpath refid="classpath" />
 		</javac>
 	</target>
@@ -121,8 +111,7 @@
 	<target name="package" depends="compile,package-runtime,package-compiler" />
 
 	<target name="clean-gen">
-		<delete dir="build/javacc" />
-		<delete dir="build/java/boa/parser" />
+		<delete dir="build/java" />
 		<delete dir="build/classes/boa/parser" />
 		<delete dir="build/classes/boa/types" />
 	</target>

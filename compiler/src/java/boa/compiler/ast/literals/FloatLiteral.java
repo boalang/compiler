@@ -3,6 +3,7 @@ package boa.compiler.ast.literals;
 import boa.compiler.ast.Operand;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.parser.Token;
 
 /**
  * 
@@ -35,5 +36,9 @@ public class FloatLiteral extends Operand implements ILiteral {
 		final FloatLiteral l = new FloatLiteral(literal);
 		copyFieldsTo(l);
 		return l;
+	}
+
+	public FloatLiteral setPositions(final Token first) {
+		return (FloatLiteral)setPositions(first.beginLine, first.beginColumn, first.endLine, first.endColumn);
 	}
 }

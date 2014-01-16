@@ -2,9 +2,10 @@ package boa.compiler.ast;
 
 import boa.compiler.SymbolTable;
 import boa.compiler.ast.statements.Statement;
+import boa.compiler.ast.statements.Block;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
-import boa.parser.syntaxtree.NodeToken;
+import boa.parser.Token;
 import boa.types.BoaType;
 
 /**
@@ -22,8 +23,8 @@ public abstract class Node {
 		this.parent = parent;
 	}
 
-	protected int beginLine, beginColumn;
-	protected int endLine, endColumn;
+	public int beginLine, beginColumn;
+	public int endLine, endColumn;
 
 	public Node setPositions(final int beginLine, final int beginColumn, final int endLine, final int endColumn) {
 		this.beginLine = beginLine;
@@ -33,30 +34,44 @@ public abstract class Node {
 		return this;
 	}
 
-	public Node setPositions(final NodeToken first, final NodeToken last) {
+/*
+	public Node setPositions(final Node first) {
+		return setPositions(first.beginLine, first.beginColumn, first.endLine, first.endColumn);
+	}
+
+	public Node setPositions(final Token first) {
+		return setPositions(first.beginLine, first.beginColumn, first.endLine, first.endColumn);
+	}
+
+	public Node setPositions(final Node first, final Node last) {
 		return setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
 
-	public int getBeginLine() {
-		return beginLine;
+	public Node setPositions(final Node first, final Token last) {
+		return setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
 
-	public int getBeginColumn() {
-		return beginColumn;
+	public Node setPositions(final Token first, final Token last) {
+		return setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
 
-	public int getEndLine() {
-		return endLine;
+	public Node setPositions(final Token first, final Node last) {
+		return setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
-
-	public int getEndColumn() {
-		return endColumn;
-	}
+*/
 
 	public BoaType type = null;
 	public SymbolTable env = null;
 
 	public abstract Node clone();
+
+	public static Block ensureBlock(final Statement s) {
+		if (s == null) return null;
+		final Block body;
+		if (s instanceof Block)
+			return (Block)s;
+		return new Block().addStatement(s);
+	}
 
 	protected void copyFieldsTo(Node newNode) {
 		newNode.type = type;

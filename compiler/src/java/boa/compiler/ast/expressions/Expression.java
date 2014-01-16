@@ -71,4 +71,10 @@ public class Expression extends Node {
 		copyFieldsTo(e);
 		return e;
 	}
+
+	public Expression setPositions(final Node first, final Node last) {
+		if (last == null)
+			return (Expression)setPositions(first.beginLine, first.beginColumn, first.endLine, first.endColumn);
+		return (Expression)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
+	}
 }

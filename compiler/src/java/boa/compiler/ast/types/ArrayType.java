@@ -1,8 +1,10 @@
 package boa.compiler.ast.types;
 
 import boa.compiler.ast.Component;
+import boa.compiler.ast.Node;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.parser.Token;
 
 /**
  * 
@@ -37,5 +39,9 @@ public class ArrayType extends AbstractType {
 		final ArrayType t = new ArrayType(value.clone());
 		copyFieldsTo(t);
 		return t;
+	}
+
+	public ArrayType setPositions(final Token first, final Node last) {
+		return (ArrayType)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
 }

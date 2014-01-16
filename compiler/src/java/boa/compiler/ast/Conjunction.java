@@ -3,6 +3,7 @@ package boa.compiler.ast;
 import java.util.ArrayList;
 import java.util.List;
 
+import boa.compiler.ast.Node;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
 
@@ -85,5 +86,11 @@ public class Conjunction extends Node {
 			c.addRhs(c2.clone());
 		copyFieldsTo(c);
 		return c;
+	}
+
+	public Conjunction setPositions(final Node first, final Node last) {
+		if (last == null)
+			return (Conjunction)setPositions(first.beginLine, first.beginColumn, first.endLine, first.endColumn);
+		return (Conjunction)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
 }

@@ -1,8 +1,10 @@
 package boa.compiler.ast.statements;
 
+import boa.compiler.ast.Node;
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.parser.Token;
 
 /**
  * 
@@ -18,6 +20,10 @@ public class WhileStatement extends Statement {
 
 	public Block getBody() {
 		return body;
+	}
+
+	public WhileStatement(final Expression condition, final Statement s) {
+		this(condition, Node.ensureBlock(s));
 	}
 
 	public WhileStatement(final Expression condition, final Block body) {
@@ -45,5 +51,9 @@ public class WhileStatement extends Statement {
 		final WhileStatement s = new WhileStatement(condition.clone(), body.clone());
 		copyFieldsTo(s);
 		return s;
+	}
+
+	public WhileStatement setPositions(final Token first, final Node last) {
+		return (WhileStatement)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
 }

@@ -79,4 +79,10 @@ public class Term extends Node {
 		copyFieldsTo(t);
 		return t;
 	}
+
+	public Term setPositions(final Node first, final Node last) {
+		if (last == null)
+			return (Term)setPositions(first.beginLine, first.beginColumn, first.endLine, first.endColumn);
+		return (Term)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
+	}
 }

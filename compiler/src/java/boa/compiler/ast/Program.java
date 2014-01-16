@@ -32,4 +32,8 @@ public class Program extends Block {
 		copyFieldsTo(p);
 		return p;
 	}
+
+	public Program setPositions(final Node first, final Node last) {
+		return (Program)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
+	}
 }

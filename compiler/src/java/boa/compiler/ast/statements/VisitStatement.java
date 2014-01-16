@@ -5,8 +5,10 @@ import java.util.List;
 
 import boa.compiler.ast.Component;
 import boa.compiler.ast.Identifier;
+import boa.compiler.ast.Node;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.parser.Token;
 
 /**
  * 
@@ -21,10 +23,6 @@ public class VisitStatement extends Statement {
 
 	public boolean isBefore() {
 		return before;
-	}
-
-	public void setBefore(final boolean before) {
-		this.before = before;
 	}
 
 	public boolean hasWildcard() {
@@ -65,13 +63,12 @@ public class VisitStatement extends Statement {
 		ids.add(id);
 	}
 
-	public void setIdList(final List<Identifier> ids) {
-		for (final Identifier id : ids)
-			addId(id);
-	}
-
 	public Block getBody() {
 		return body;
+	}
+
+	public void setBody(final Statement s) {
+		setBody(ensureBlock(s));
 	}
 
 	public void setBody(final Block body) {
@@ -79,8 +76,8 @@ public class VisitStatement extends Statement {
 		this.body = body;
 	}
 
-	public VisitStatement() {
-		this(false, null, null);
+	public VisitStatement(final boolean before) {
+		this.before = before;
 	}
 
 	public VisitStatement(final boolean before, final boolean wildcard, final Block body) {
@@ -118,5 +115,9 @@ public class VisitStatement extends Statement {
 			v.addId(id.clone());
 		copyFieldsTo(v);
 		return v;
+	}
+
+	public VisitStatement setPositions(final Token first, final Node last) {
+		return (VisitStatement)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
 }
