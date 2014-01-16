@@ -455,7 +455,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 			if (!n.getLhs().type.assigns(n.getRhs().type))
 				throw new TypeCheckException(n.getRhs(), "incompatible types for assignment: required '" + n.getLhs().type + "', found '" + n.getRhs().type + "'");
 
-		if (n.getLhs().getOperand().type instanceof BoaProtoTuple)
+		if (n.getLhs().getOperand().type instanceof BoaProtoTuple && n.getLhs().getOpsSize() > 0)
 			throw new TypeCheckException(n.getLhs(), "assignment not allowed to input-derived type '" + n.getLhs().getOperand().type + "'");
 
 		n.type = n.getLhs().type;
