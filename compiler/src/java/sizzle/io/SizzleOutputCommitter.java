@@ -37,7 +37,7 @@ public class SizzleOutputCommitter extends FileOutputCommitter {
 		updateStatus(true, context.getConfiguration().getInt("boa.hadoop.jobid", 0));
 	}
 
-	static String url = "jdbc:mysql://boa-head:3306/drupal";
+	static String url = "jdbc:mysql://head:3306/drupal";
 	static String user = "drupal";
 	static String password = "";
 
