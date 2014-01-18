@@ -37,7 +37,7 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 		updateStatus(true, jobId);
 	}
 
-	private final static String url = "jdbc:mysql://boa-head:3306/drupal";
+	private final static String url = "jdbc:mysql://head:3306/drupal";
 	private final static String user = "drupal";
 	private final static String password = "";
 
