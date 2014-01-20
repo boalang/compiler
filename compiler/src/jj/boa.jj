@@ -22,6 +22,18 @@ public class BoaParser {
   public void setTabSize(final int size) {
     jj_input_stream.setTabSize(size);
   }
+  public static void error_skipto(int kind, ParseException e) {
+    System.out.println(e.toString());
+
+    Token t;
+    do {
+      t = getNextToken();
+    } while (t.kind != kind);
+  }
+
+  public static void error_skipto(int kind) {
+    error_skipto(kind, generateParseException());
+  }
 }
 
 PARSER_END(BoaParser)
@@ -43,6 +55,7 @@ SPECIAL_TOKEN :
 TOKEN :
 {
   < DOLLAR : "$" >
+| < SEMICOLON : ";" >
 | < OF : "of" >
 | < IF : "if" >
 | < DO : "do" >
@@ -122,13 +135,17 @@ Program Program() :
 }
 {
   (
-    (
-      LOOKAHEAD( Declaration() )
-      toAdd = Declaration()
-    |
-      toAdd = Statement()
-    )
-    { toReturn.addStatement(toAdd); }
+    try {
+      (
+        LOOKAHEAD( Declaration() )
+        toAdd = Declaration()
+      |
+        toAdd = Statement()
+      )
+      { toReturn.addStatement(toAdd); }
+    } catch (ParseException e) {
+      error_skipto(SEMICOLON, e);
+    }
   )+
   { return toReturn.setPositions(toReturn.getStatement(0), toReturn.getStatement(toReturn.getStatementsSize() - 1)); }
 }
@@ -163,8 +180,8 @@ TypeDecl TypeDecl() :
   typeName = Identifier()
   "="
   type = Type()
-  end = ";"
-    
+  end = < SEMICOLON >
+
   { return new TypeDecl(typeName, type).setPositions(start, end); }
 }
 
@@ -189,7 +206,7 @@ VarDeclStatement VarDecl() :
 }
 {
   toReturn = ForVarDecl()
-  end = ";"
+  end = < SEMICOLON >
   { return toReturn.setEnd(end); }
 }
 
@@ -552,7 +569,7 @@ Block EmptyStatement() :
   Token start;
 }
 {
-  start = ";"
+  start = < SEMICOLON >
   { return new Block().setPositions(start, start); }
 }
 
@@ -567,7 +584,7 @@ AssignmentStatement Assignment() :
   factor = Factor()
   "="
   expression = Expression()
-  end = ";"
+  end = < SEMICOLON >
   { return new AssignmentStatement(factor, expression).setPositions(factor, end); }
 }
 
@@ -602,7 +619,7 @@ BreakStatement BreakStatement() :
 }
 {
   start = < BREAK >
-  end = ";"
+  end = < SEMICOLON >
   { return new BreakStatement().setPositions(start, end); }
 }
 
@@ -614,7 +631,7 @@ ContinueStatement ContinueStatement() :
 }
 {
   start = < CONTINUE >
-  end = ";"
+  end = < SEMICOLON >
   { return new ContinueStatement().setPositions(start, end); }
 }
 
@@ -633,7 +650,7 @@ DoStatement DoStatement() :
   "("
   expression = Expression()
   ")"
-  end = ";"
+  end = < SEMICOLON >
   { return new DoStatement(expression, statement).setPositions(start, end); }
 }
 
@@ -671,7 +688,7 @@ EmitStatement EmitStatement() :
     { toReturn.setWeight(weight); }
   ]
 
-  end = ";"
+  end = < SEMICOLON >
   { return toReturn.setPositions(varName, end); }
 }
 
@@ -697,12 +714,12 @@ ForStatement ForStatement() :
       initialize = ForExprStatement()
     )
   ]
-  ";"
+  < SEMICOLON >
 
   [
     expression = Expression()
   ]
-  ";"
+  < SEMICOLON >
 
   [
     (
@@ -766,7 +783,7 @@ Statement ExprStatement() :
 }
 {
   toReturn = ForExprStatement()
-  end = ";"
+  end = < SEMICOLON >
   { return toReturn.setPositions(toReturn, end); }
 }
 
@@ -806,7 +823,7 @@ ResultStatement ResultStatement() :
 {
   start = < RESULT >
   expression = Expression()
-  end = ";"
+  end = < SEMICOLON >
   { return new ResultStatement(expression).setPositions(start, end); }
 }
 
@@ -822,7 +839,7 @@ ReturnStatement ReturnStatement() :
   [
     expression = Expression()
   ]
-  end = ";"
+  end = < SEMICOLON >
   { return new ReturnStatement(expression).setPositions(start, end); }
 }
 
@@ -909,7 +926,7 @@ ForeachStatement ForeachStatement() :
   id = Identifier()
   ":"
   type = Type()
-  ";"
+  < SEMICOLON >
   expression = Expression()
   ")"
   statement = Statement()
@@ -930,7 +947,7 @@ IfAllStatement IfAllStatement() :
   id = Identifier()
   ":"
   type = Type()
-  ";"
+  < SEMICOLON >
   expression = Expression()
   ")"
   statement = Statement()
@@ -951,7 +968,7 @@ ExistsStatement ExistsStatement() :
   id = Identifier()
   ":"
   type = Type()
-  ";"
+  < SEMICOLON >
   expression = Expression()
   ")"
   statement = Statement()
@@ -1024,7 +1041,7 @@ StopStatement StopStatement() :
 }
 {
   start = < STOP >
-  end = ";"
+  end = < SEMICOLON >
   { return new StopStatement().setPositions(start, end); }
 }
 
