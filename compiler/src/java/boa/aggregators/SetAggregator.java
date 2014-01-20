@@ -5,12 +5,10 @@ import java.util.HashSet;
 
 import boa.io.EmitKey;
 
-
 /**
  * A Boa aggregator to filter the values in a dataset by maximum size.
  * 
  * @author anthonyu
- * 
  */
 @AggregatorSpec(name = "set")
 public class SetAggregator extends Aggregator {
@@ -63,8 +61,6 @@ public class SetAggregator extends Aggregator {
 	public void finish() throws IOException, InterruptedException {
 		for (final String s : this.set)
 			this.collect(s);
-
-		super.finish();
 	}
 
 	/** {@inheritDoc} */

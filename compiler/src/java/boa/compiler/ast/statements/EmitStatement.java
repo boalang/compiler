@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import boa.compiler.ast.Identifier;
+import boa.compiler.ast.Node;
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.parser.Token;
 
 /**
  * 
@@ -43,6 +45,11 @@ public class EmitStatement extends Statement {
 		return value;
 	}
 
+	public void setValue(final Expression value) {
+		value.setParent(this);
+		this.value = value;
+	}
+
 	public boolean hasWeight() {
 		return weight != null;
 	}
@@ -51,17 +58,26 @@ public class EmitStatement extends Statement {
 		return weight;
 	}
 
+	public void setWeight(final Expression weight) {
+		weight.setParent(this);
+		this.weight = weight;
+	}
+
+	public EmitStatement (final Identifier id) {
+		this(id, null, null);
+	}
+
 	public EmitStatement (final Identifier id, final Expression value) {
-		id.setParent(this);
-		value.setParent(this);
-		this.id = id;
-		this.value = value;
+		this(id, value, null);
 	}
 
 	public EmitStatement (final Identifier id, final Expression value, final Expression weight) {
-		id.setParent(this);
-		value.setParent(this);
-		weight.setParent(this);
+		if (id != null)
+			id.setParent(this);
+		if (value != null)
+			value.setParent(this);
+		if (weight != null)
+			weight.setParent(this);
 		this.id = id;
 		this.value = value;
 		this.weight = weight;
@@ -87,5 +103,9 @@ public class EmitStatement extends Statement {
 			e.addIndice(i.clone());
 		copyFieldsTo(e);
 		return e;
+	}
+
+	public EmitStatement setPositions(final Node first, final Token last) {
+		return (EmitStatement)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
 }

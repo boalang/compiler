@@ -6,6 +6,7 @@ import java.util.List;
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.parser.Token;
 
 /**
  * 
@@ -41,9 +42,20 @@ public class SwitchStatement extends Statement {
 		return dfault;
 	}
 
-	public SwitchStatement(final Expression condition, final SwitchCase dfault) {
-		condition.setParent(this);
+	public void setDefault(final SwitchCase dfault) {
 		dfault.setParent(this);
+		this.dfault = dfault;
+	}
+
+	public SwitchStatement(final Expression condition) {
+		this(condition, null);
+	}
+
+	public SwitchStatement(final Expression condition, final SwitchCase dfault) {
+		if (condition != null)
+			condition.setParent(this);
+		if (dfault != null)
+			dfault.setParent(this);
 		this.condition = condition;
 		this.dfault = dfault;
 	}
@@ -66,5 +78,9 @@ public class SwitchStatement extends Statement {
 			sw.addCase(c.clone());
 		copyFieldsTo(sw);
 		return sw;
+	}
+
+	public SwitchStatement setPositions(final Token first, final Token last) {
+		return (SwitchStatement)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
 }

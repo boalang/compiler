@@ -21,6 +21,56 @@ import boa.types.*;
  */
 public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 	/**
+	 * This verifies visitors have at most 1 before/after for a type.
+	 * 
+	 * @author rdyer
+	 */
+	protected class VisitorCheckingVisitor extends AbstractVisitorNoArg {
+		protected Set<String> befores = new HashSet<String>();
+		protected Set<String> afters = new HashSet<String>();
+		protected boolean nested = false;
+
+		/** {@inheritDoc} */
+		@Override
+		public void initialize() {
+			befores.clear();
+			afters.clear();
+			nested = false;
+		}
+
+		/** {@inheritDoc} */
+		@Override
+		public void visit(final VisitorExpression n) {
+			// dont nest
+			if (nested)
+				return;
+			nested = true;
+			n.getBody().accept(this);
+		}
+
+		/** {@inheritDoc} */
+		@Override
+		public void visit(final VisitStatement n) {
+			final Set<String> s = n.isBefore() ? befores : afters;
+
+			if (n.hasComponent()) {
+				final Identifier id = (Identifier)n.getComponent().getType();
+				final String token = id.getToken();
+				if (s.contains(token))
+					throw new TypeCheckException(id, "The type '" + token + "' already has a '" + (n.isBefore() ? "before" : "after") + "' visit statement");
+				s.add(token);
+			} else if (n.getIdListSize() > 0) {
+				for (final Identifier id : n.getIdList()) {
+					final String token = id.getToken();
+					if (s.contains(token))
+						throw new TypeCheckException(id, "The type '" + token + "' already has a '" + (n.isBefore() ? "before" : "after") + "' visit statement");
+					s.add(token);
+				}
+			}
+		}
+	}
+
+	/**
 	 * This does type checking of function bodies to ensure the
 	 * returns are the correct type.
 	 * 
@@ -97,6 +147,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 		}
 	}
 
+	protected VisitorCheckingVisitor visitorChecker = new VisitorCheckingVisitor();
 	protected ReturnCheckingVisitor returnFinder = new ReturnCheckingVisitor();
 
 	/** {@inheritDoc} */
@@ -268,6 +319,8 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 					final FunctionFindingVisitor v = new FunctionFindingVisitor(formalParameters);
 					try {
 						v.start((Identifier)n.getOperand(), env);
+					} catch (final ClassCastException e) {
+						throw new TypeCheckException(n.getOperand(), "Function declarations must be assigned to a variable and can not be used anonymously", e);
 					} catch (final RuntimeException e) {
 						throw new TypeCheckException(n.getOperand(), e.getMessage(), e);
 					}
@@ -401,6 +454,9 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 		if (!(n.getLhs().type instanceof BoaArray && n.getRhs().type instanceof BoaTuple))
 			if (!n.getLhs().type.assigns(n.getRhs().type))
 				throw new TypeCheckException(n.getRhs(), "incompatible types for assignment: required '" + n.getLhs().type + "', found '" + n.getRhs().type + "'");
+
+		if (n.getLhs().getOperand().type instanceof BoaProtoTuple && n.getLhs().getOpsSize() > 0)
+			throw new TypeCheckException(n.getLhs(), "assignment not allowed to input-derived type '" + n.getLhs().getOperand().type + "'");
 
 		n.type = n.getLhs().type;
 	}
@@ -636,7 +692,6 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 
 		n.env = env;
 
-		// FIXME rdyer need to check return type matches function declaration's return
 		if (n.hasExpr()) {
 			n.getExpr().accept(this, env);
 			n.type = n.getExpr().type;
@@ -854,10 +909,27 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 		n.getLhs().accept(this, env);
 		BoaType type = n.getLhs().type;
 
-		for (final Term t : n.getRhs()) {
-			t.accept(this, env);
-			type = type.arithmetics(t.type);
-		}
+		// only allow '+' (concat) on arrays
+		if (type instanceof BoaArray) {
+			for (final String s : n.getOps())
+				if (!s.equals("+"))
+					throw new TypeCheckException(n, "arrays do not support the '" + s + "' arithmetic operator, perhaps you meant '+'?");
+
+			final BoaType valType = ((BoaArray)type).getType();
+			for (final Term t : n.getRhs()) {
+				t.accept(this, env);
+				if (!(t.type instanceof BoaArray) || !valType.assigns(((BoaArray)t.type).getType()))
+					throw new TypeCheckException(t, "invalid array concatenation, found: " + t.type + " expected: " + type);
+			}
+		} else
+			for (final Term t : n.getRhs()) {
+				t.accept(this, env);
+				try {
+					type = type.arithmetics(t.type);
+				} catch (final RuntimeException e) {
+					throw new TypeCheckException(t, e.getMessage(), e);
+				}
+			}
 
 		n.type = type;
 	}
@@ -873,6 +945,10 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 	public void visit(final VisitorExpression n, final SymbolTable env) {
 		n.env = env;
 		n.getType().accept(this, env);
+		for (final Statement s : n.getBody().getStatements())
+			if (!(s instanceof VisitStatement))
+				throw new TypeCheckException(s, "only 'before' or 'after' visit statements are allowed inside visitor bodies");
+		visitorChecker.start(n);
 		n.getBody().accept(this, env);
 		n.type = n.getType().type;
 	}
@@ -880,13 +956,6 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 	//
 	// literals
 	//
-	/** {@inheritDoc} */
-	@Override
-	public void visit(final BytesLiteral n, final SymbolTable env) {
-		n.env = env;
-		n.type = new BoaBytes();
-	}
-
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final CharLiteral n, final SymbolTable env) {
@@ -925,6 +994,16 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 	//
 	// types
 	//
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final TypeDecl n, final SymbolTable env) {
+		n.env = env;
+		n.getType().accept(this, env);
+		n.type = n.getType().type;
+		n.env.setType(n.getId().getToken(), n.type);
+		n.getId().accept(this, env);
+	}
+
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final ArrayType n, final SymbolTable env) {
@@ -1024,6 +1103,14 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 		n.env = env;
 		n.getValue().accept(this, env);
 		n.type = new BoaStack(n.getValue().type);
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final SetType n, final SymbolTable env) {
+		n.env = env;
+		n.getValue().accept(this, env);
+		n.type = new BoaSet(n.getValue().type);
 	}
 
 	/** {@inheritDoc} */

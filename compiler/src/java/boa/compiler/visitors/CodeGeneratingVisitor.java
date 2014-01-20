@@ -1,8 +1,10 @@
 package boa.compiler.visitors;
 
 import java.io.IOException;
+import java.text.DateFormat;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.antlr.stringtemplate.StringTemplate;
@@ -329,7 +331,9 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		final List<String> statements = new ArrayList<String>();
 		for (final Statement s : n.getStatements()) {
 			s.accept(this);
-			statements.add(code.removeLast());
+			final String statement = code.removeLast();
+			if (!statement.isEmpty())
+				statements.add(statement);
 		}
 		st.setAttribute("statements", statements);
 
@@ -369,7 +373,8 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		final StringTemplate st = this.stg.getInstanceOf("Call");
 
 		this.idFinder.start(argu.getOperand());
-		final BoaFunction f = argu.getFunction(this.idFinder.getNames().toArray()[0].toString(), check(n));
+		final String funcName = this.idFinder.getNames().toArray()[0].toString();
+		final BoaFunction f = argu.getFunction(funcName, check(n));
 
 		if (f.hasMacro()) {
 			final List<String> parts = new ArrayList<String>();
@@ -378,7 +383,18 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				parts.add(code.removeLast());
 			}
 
-			st.setAttribute("call", expand(f.getMacro(), parts.toArray(new String[]{})));
+			final String s = expand(f.getMacro(), n.getArgs(), parts.toArray(new String[]{}));
+
+			// FIXME rdyer a hack, so that "def(pbuf.attr)" generates "pbuf.hasAttr()"
+			if (funcName.equals("def")) {
+				final Matcher m = Pattern.compile("\\((\\w+).get(\\w+)\\(\\) != null\\)").matcher(s);
+				if (m.matches() && !m.group(2).endsWith("List"))
+					st.setAttribute("call", m.group(1) + ".has" + m.group(2) + "()");
+				else
+					st.setAttribute("call", s);
+			} else {
+				st.setAttribute("call", s);
+			}
 		} else {
 			if (f.hasName()) {
 				st.setAttribute("operand", f.getName());
@@ -730,7 +746,9 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		for (final Node node : n.getStatements()) {
 			node.accept(this);
-			statements.add(code.removeLast());
+			final String statement = code.removeLast();
+			if (!statement.isEmpty())
+				statements.add(statement);
 		}
 
 		st.setAttribute("statements", statements);
@@ -1048,11 +1066,13 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		if (!n.hasInitializer()) {
 			if (lhsType instanceof BoaProtoMap ||
-					!(lhsType instanceof BoaMap || lhsType instanceof BoaStack)) {
+					!(lhsType instanceof BoaMap || lhsType instanceof BoaStack || lhsType instanceof BoaSet)) {
 				code.add("");
 				return;
 			}
 
+			// FIXME rdyer if the type is a type identifier, n.getType() returns Identifier
+			// and maps/stacks/sets wind up not having the proper constructors here
 			n.getType().accept(this);
 			st.setAttribute("rhs", code.removeLast());
 			code.add(st.toString());
@@ -1078,7 +1098,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			if (f.hasName())
 				src = f.getName() + "(" + src + ")";
 			else if (f.hasMacro())
-				src = CodeGeneratingVisitor.expand(f.getMacro(), src.split(","));
+				src = expand(f.getMacro(), src.split(","));
 		}
 
 		st.setAttribute("rhs", src);
@@ -1231,19 +1251,36 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	public void visit(final SimpleExpr n) {
 		final StringTemplate st = this.stg.getInstanceOf("Expression");
 
-		n.getLhs().accept(this);
-		st.setAttribute("lhs", code.removeLast());
+		// support '+' (concat) on arrays
+		if (n.getLhs().type instanceof BoaArray) {
+			n.getLhs().accept(this);
+			String str = code.removeLast();
 
-		if (n.getRhsSize() > 0) {
-			final List<String> operands = new ArrayList<String>();
-
-			for (final Term t : n.getRhs()) {
-				t.accept(this);
-				operands.add(code.removeLast());
+			if (n.getRhsSize() > 0) {
+				str = "boa.functions.BoaIntrinsics.concat(" + str;
+				for (final Term t : n.getRhs()) {
+					t.accept(this);
+					str = str + ", " + code.removeLast();
+				}
+				str = str + ")";
 			}
 
-			st.setAttribute("operators", n.getOps());
-			st.setAttribute("operands", operands);
+			st.setAttribute("lhs", str);
+		} else {
+			n.getLhs().accept(this);
+			st.setAttribute("lhs", code.removeLast());
+	
+			if (n.getRhsSize() > 0) {
+				final List<String> operands = new ArrayList<String>();
+	
+				for (final Term t : n.getRhs()) {
+					t.accept(this);
+					operands.add(code.removeLast());
+				}
+	
+				st.setAttribute("operators", n.getOps());
+				st.setAttribute("operands", operands);
+			}
 		}
 
 		code.add(st.toString());
@@ -1278,12 +1315,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	//
 	/** {@inheritDoc} */
 	@Override
-	public void visit(final BytesLiteral n) {
-		throw new RuntimeException("unimplemented");
-	}
-
-	/** {@inheritDoc} */
-	@Override
 	public void visit(final CharLiteral n) {
 		code.add(n.getLiteral());
 	}
@@ -1309,12 +1340,44 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final TimeLiteral n) {
-		throw new RuntimeException("unimplemented");
+		final String lit = n.getLiteral();
+		if (lit.startsWith("T")) {
+			Date date = null;
+			DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM);
+			try {
+				date = df.parse(lit);
+			} catch (Exception e) { }
+			df = DateFormat.getDateInstance(DateFormat.LONG);
+			try {
+				date = df.parse(lit);
+			} catch (Exception e) { }
+			df = DateFormat.getDateInstance(DateFormat.SHORT);
+			try {
+				date = df.parse(lit);
+			} catch (Exception e) { }
+			df = DateFormat.getDateInstance(DateFormat.FULL);
+			try {
+				date = df.parse(lit);
+			} catch (Exception e) { }
+
+			if (date == null)
+				throw new TypeCheckException(n, "Invalid time literal");
+
+			code.add("" + (date.getTime() * 1000));
+		} else {
+			code.add(lit.substring(0, lit.length() - 1));
+		}
 	}
 
 	//
 	// types
 	//
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final TypeDecl n) {
+		code.add("");
+	}
+
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final ArrayType n) {
@@ -1410,16 +1473,38 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 	/** {@inheritDoc} */
 	@Override
+	public void visit(final SetType n) {
+		final StringTemplate st = this.stg.getInstanceOf("SetType");
+
+		n.env.setNeedsBoxing(true);
+
+		n.getValue().accept(this);
+		st.setAttribute("value", code.removeLast());
+
+		n.env.setNeedsBoxing(false);
+
+		code.add(st.toString());
+	}
+
+	/** {@inheritDoc} */
+	@Override
 	public void visit(final TupleType n) {
 //		return n.f0.accept(this);
 		throw new RuntimeException("unimplemented");
 	}
 
 	protected static String expand(final String template, final String... parameters) {
+		return expand(template, new ArrayList<Expression>(), parameters);
+	}
+
+	protected static String expand(final String template, final List<Expression> args, final String... parameters) {
 		String replaced = template;
 
-		// FIXME rdyer
-		replaced = replaced.replace("${K}", "String");
+		if (args.size() == 1 && args.get(0).type instanceof BoaMap) {
+			BoaMap m = (BoaMap)args.get(0).type;
+			replaced = replaced.replace("${K}", m.getIndexType().toBoxedJavaType());
+			replaced = replaced.replace("${V}", m.getType().toBoxedJavaType());
+		}
 
 		for (int i = 0; i < parameters.length; i++)
 			replaced = replaced.replace("${" + i + "}", parameters[i]);

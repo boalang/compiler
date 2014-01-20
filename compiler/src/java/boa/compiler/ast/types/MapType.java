@@ -1,8 +1,10 @@
 package boa.compiler.ast.types;
 
 import boa.compiler.ast.Component;
+import boa.compiler.ast.Node;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.parser.Token;
 
 /**
  * 
@@ -21,8 +23,10 @@ public class MapType extends AbstractType {
 	}
 
 	public MapType (final Component index, final Component value) {
-		index.setParent(this);
-		value.setParent(this);
+		if (index != null)
+			index.setParent(this);
+		if (value != null)
+			value.setParent(this);
 		this.index = index;
 		this.value = value;
 	}
@@ -43,5 +47,9 @@ public class MapType extends AbstractType {
 		final MapType t = new MapType(index.clone(), value.clone());
 		copyFieldsTo(t);
 		return t;
+	}
+
+	public MapType setPositions(final Token first, final Node last) {
+		return (MapType)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
 }

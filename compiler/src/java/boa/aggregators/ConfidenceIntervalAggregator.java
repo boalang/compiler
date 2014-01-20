@@ -18,6 +18,7 @@ import boa.io.EmitKey;
 @AggregatorSpec(name = "confidence", formalParameters = {"float"}, type = "int")
 public class ConfidenceIntervalAggregator extends Aggregator {
 	private SortedMap<Long, Long> map;
+	private double n;
 
 	/**
 	 * Construct a {@link ConfidenceIntervalAggregator}.
@@ -30,10 +31,10 @@ public class ConfidenceIntervalAggregator extends Aggregator {
 	 * Construct a {@link ConfidenceIntervalAggregator}.
 	 * 
 	 * @param n
-	 *            A long representing the significance
+	 *            A double representing the significance
 	 */
-	public ConfidenceIntervalAggregator(final long n) {
-		super(n);
+	public ConfidenceIntervalAggregator(final double n) {
+		this.n = n;
 	}
 
 	/** {@inheritDoc} */
@@ -104,8 +105,7 @@ public class ConfidenceIntervalAggregator extends Aggregator {
 				for (int i = 0; i < map.get(key); i++)
 					summaryStatistics.addValue(key);
 
-			final TDistributionImpl tDist = new TDistributionImpl(summaryStatistics.getN() - 1);
-			final double a = tDist.inverseCumulativeProbability(1.0 - getArg() / 200.0);
+			final double a = new TDistributionImpl(summaryStatistics.getN() - 1).inverseCumulativeProbability(1.0 - n / 200.0);
 	
 			this.collect(a * summaryStatistics.getStandardDeviation() / Math.sqrt(summaryStatistics.getN()));
 		} catch (final MathException e) {

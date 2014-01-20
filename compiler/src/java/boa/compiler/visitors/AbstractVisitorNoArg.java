@@ -265,9 +265,6 @@ public abstract class AbstractVisitorNoArg {
 	//
 	// literals
 	//
-	public void visit(final BytesLiteral n) {
-	}
-
 	public void visit(final CharLiteral n) {
 	}
 
@@ -286,6 +283,11 @@ public abstract class AbstractVisitorNoArg {
 	//
 	// types
 	//
+	public void visit(final TypeDecl n) {
+		n.getId().accept(this);
+		n.getType().accept(this);
+	}
+
 	public void visit(final ArrayType n) {
 		n.getValue().accept(this);
 	}
@@ -314,6 +316,10 @@ public abstract class AbstractVisitorNoArg {
 	}
 
 	public void visit(final StackType n) {
+		n.getValue().accept(this);
+	}
+
+	public void visit(final SetType n) {
 		n.getValue().accept(this);
 	}
 

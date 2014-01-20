@@ -3,6 +3,7 @@ package boa.compiler.ast.statements;
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.parser.Token;
 
 /**
  * 
@@ -20,10 +21,12 @@ public class ReturnStatement extends Statement {
 	}
 
 	public ReturnStatement() {
+		this(null);
 	}
 
 	public ReturnStatement(final Expression expr) {
-		expr.setParent(this);
+		if (expr != null)
+			expr.setParent(this);
 		this.expr = expr;
 	}
 
@@ -47,5 +50,9 @@ public class ReturnStatement extends Statement {
 			s = new ReturnStatement();
 		copyFieldsTo(s);
 		return s;
+	}
+
+	public ReturnStatement setPositions(final Token first, final Token last) {
+		return (ReturnStatement)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
 }

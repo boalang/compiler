@@ -19,15 +19,15 @@ public @interface AggregatorSpec {
 	String name();
 
 	/**
+	 * The Boa types of each of its formal parameters.
+	 */
+	String[] formalParameters() default {};
+
+	/**
 	 * The Boa type to be emitted to this aggregator. Defaults to "any",
 	 * meaning it accepts all types.
 	 */
 	String type() default "any";
-
-	/**
-	 * The Boa types of each of its formal parameters.
-	 */
-	String[] formalParameters() default {};
 
 	/**
 	 * The Boa type that emits to this table will be weighted by. Defaults to

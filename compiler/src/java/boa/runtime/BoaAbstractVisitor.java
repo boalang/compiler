@@ -8,6 +8,7 @@ import boa.types.Ast.*;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
+import boa.types.Shared.Person;
 import boa.types.Toplevel.Project;
 
 /**
@@ -83,6 +84,9 @@ public abstract class BoaAbstractVisitor {
 	protected boolean preVisit(final Comment node) throws Exception {
 		return defaultPreVisit();
 	}
+	protected boolean preVisit(final Person node) throws Exception {
+		return defaultPreVisit();
+	}
 
 	/**
 	 * Provides a default action for post-visiting nodes.
@@ -132,6 +136,9 @@ public abstract class BoaAbstractVisitor {
 	protected void postVisit(final Comment node) throws Exception {
 		defaultPostVisit();
 	}
+	protected void postVisit(final Person node) throws Exception {
+		defaultPostVisit();
+	}
 
 	public final void visit(final Project node) throws Exception {
 		if (preVisit(node)) {
@@ -139,6 +146,16 @@ public abstract class BoaAbstractVisitor {
 			final int reposSize = reposList.size();
 			for (int i = 0; i < reposSize; i++)
 				visit(reposList.get(i));
+
+			final List<Person> devsList = node.getDevelopersList();
+			final int devsSize = devsList.size();
+			for (int i = 0; i < devsSize; i++)
+				visit(devsList.get(i));
+
+			final List<Person> maintsList = node.getMaintainersList();
+			final int maintsSize = maintsList.size();
+			for (int i = 0; i < maintsSize; i++)
+				visit(maintsList.get(i));
 
 			postVisit(node);
 		}
@@ -159,6 +176,12 @@ public abstract class BoaAbstractVisitor {
 			final int filesSize = filesList.size();
 			for (int i = 0; i < filesSize; i++)
 				visit(filesList.get(i));
+
+			if (node.hasAuthor())
+				visit(node.getAuthor());
+
+			if (node.hasCommitter())
+				visit(node.getCommitter());
 
 			postVisit(node);
 		}
@@ -376,6 +399,11 @@ public abstract class BoaAbstractVisitor {
 		}
 	}
 	public final void visit(final Comment node) throws Exception {
+		if (preVisit(node)) {
+			postVisit(node);
+		}
+	}
+	public final void visit(final Person node) throws Exception {
 		if (preVisit(node)) {
 			postVisit(node);
 		}

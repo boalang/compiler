@@ -1,5 +1,6 @@
 package boa.compiler.ast;
 
+import boa.compiler.ast.Node;
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
@@ -43,5 +44,9 @@ public class Pair extends Node {
 		final Pair p = new Pair(e1.clone(), e2.clone());
 		copyFieldsTo(p);
 		return p;
+	}
+
+	public Pair setPositions(final Node first, final Node last) {
+		return (Pair)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
 }

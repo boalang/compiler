@@ -55,7 +55,8 @@ public class SimpleExpr extends Node {
 	}
 
 	public SimpleExpr (final Term lhs) {
-		lhs.setParent(this);
+		if (lhs != null)
+			lhs.setParent(this);
 		this.lhs = lhs;
 	}
 
@@ -79,5 +80,11 @@ public class SimpleExpr extends Node {
 			e.addRhs(t.clone());
 		copyFieldsTo(e);
 		return e;
+	}
+
+	public SimpleExpr setPositions(final Node first, final Node last) {
+		if (last == null)
+			return (SimpleExpr)setPositions(first.beginLine, first.beginColumn, first.endLine, first.endColumn);
+		return (SimpleExpr)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
 }

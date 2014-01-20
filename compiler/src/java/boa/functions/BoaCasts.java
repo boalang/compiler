@@ -45,51 +45,6 @@ public class BoaCasts {
 	}
 
 	/**
-	 * Convert a byte string into a long.
-	 * 
-	 * @param bs
-	 *            An array of bytes containing the bit-level representation of a
-	 *            long integer
-	 * 
-	 * @param encodingFormat
-	 *            A {@link String} containing the encoding format. Supported int
-	 *            encoding formats for conversion between bytes and int are
-	 *            "fixed32-big", "fixed32-little", "fixed64-big",
-	 *            "fixed64-little" (32- and 64-bit big- and little-endian packed
-	 *            bytes), "saw" (an alias of "fixed64-big", "varint" (64-bit
-	 *            run-length-encoded format used in protocol buffers), and
-	 *            "zigzag" (a variant of "varint" which uses the ZigZag encoding
-	 *            to encode negative numbers efficiently). The encoding
-	 *            parameter is required.
-	 * 
-	 * @return A long representing the value in <em>bs</em>
-	 */
-	public static long bytesToLong(final byte[] bs, final String encodingFormat) {
-		long l = 0;
-
-		if (encodingFormat.startsWith("fixed")) {
-			final boolean little = encodingFormat.endsWith("little");
-			long tmp;
-			for (int i = 0; i < bs.length; i++) {
-				tmp = 0;
-				if (little)
-					tmp = bs[i];
-				else
-					tmp = bs[bs.length - i - 1];
-
-				l |= tmp << ((i & 7) << 3);
-			}
-			// TODO: support these
-		} else if (encodingFormat.equals("saw") || encodingFormat.equals("varint") || encodingFormat.equals("zigzag")) {
-			throw new RuntimeException("unimplemented encoding " + encodingFormat);
-		} else {
-			throw new IllegalArgumentException("unsupported encoding " + encodingFormat);
-		}
-
-		return l;
-	}
-
-	/**
 	 * Parse a time string.
 	 * 
 	 * @param s
@@ -119,25 +74,6 @@ public class BoaCasts {
 	 */
 	public static long stringToTime(final String s) throws ParseException {
 		return BoaCasts.stringToTime(s, "PST8PDT");
-	}
-
-	/**
-	 * Pack an array of byte into a fingerprint.
-	 * 
-	 * @param bs
-	 *            The array of byte to be packed
-	 * 
-	 * @return A long representing the packed bytes
-	 */
-	public static long bytesToFingerprint(final byte[] bs) {
-		long l = 0;
-
-		for (final byte b : bs) {
-			l <<= 8;
-			l |= b & 0xff;
-		}
-
-		return l;
 	}
 
 	/**
@@ -191,61 +127,5 @@ public class BoaCasts {
 	 */
 	public static String timeToString(final long t) {
 		return BoaCasts.timeToString(t, "PST8PDT");
-	}
-
-	/**
-	 * Convert a long into a byte string.
-	 * 
-	 * @param l
-	 *            A long representing the value to be converted
-	 * 
-	 * @param encodingFormat
-	 *            A {@link String} containing the encoding format. Supported int
-	 *            encoding formats for conversion between bytes and int are
-	 *            "fixed32-big", "fixed32-little", "fixed64-big",
-	 *            "fixed64-little" (32- and 64-bit big- and little-endian packed
-	 *            bytes), "saw" (an alias of "fixed64-big", "varint" (64-bit
-	 *            run-length-encoded format used in protocol buffers), and
-	 *            "zigzag" (a variant of "varint" which uses the ZigZag encoding
-	 *            to encode negative numbers efficiently). The encoding
-	 *            parameter is required.
-	 * 
-	 * @return An array of byte containing the bytes of <em>l</em>
-	 */
-	public static long longToBytes(final long l, final String encodingFormat) {
-		if (encodingFormat.startsWith("fixed") || encodingFormat.equals("saw") || encodingFormat.equals("varint") || encodingFormat.equals("zigzag")) {
-			throw new RuntimeException("unimplemented encoding " + encodingFormat);
-		} else {
-			throw new IllegalArgumentException("unsupported encoding " + encodingFormat);
-		}
-	}
-
-	/**
-	 * Unpack a fingerprint into an array of byte.
-	 * 
-	 * @param f
-	 *            A long representing the fingerprint to be unpacked
-	 * 
-	 * @return An array of byte containing the unpacked value
-	 */
-	public static byte[] fingerprintToBytes(final long f) {
-		final byte[] bs = new byte[8];
-
-		for (int i = 0; i < 8; i++)
-			bs[i] = (byte) (f >> i & 0xff);
-
-		return bs;
-	}
-
-	/**
-	 * Extract the bytes from a {@link String}.
-	 * 
-	 * @param s
-	 *            A {@link String}
-	 * 
-	 * @return An array of byte containing the bytes of <em>s</em>
-	 */
-	public static byte[] stringToBytes(final String s) {
-		return s.getBytes();
 	}
 }

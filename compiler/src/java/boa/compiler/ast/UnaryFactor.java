@@ -1,7 +1,9 @@
 package boa.compiler.ast;
 
+import boa.compiler.ast.Node;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.parser.Token;
 
 /**
  * 
@@ -20,7 +22,8 @@ public class UnaryFactor extends Operand {
 	}
 
 	public UnaryFactor (final String op, final Factor f) {
-		f.setParent(this);
+		if (f != null)
+			f.setParent(this);
 		this.op = op;
 		this.f = f;
 	}
@@ -41,5 +44,9 @@ public class UnaryFactor extends Operand {
 		final UnaryFactor uf = new UnaryFactor(op, f.clone());
 		copyFieldsTo(uf);
 		return uf;
+	}
+
+	public UnaryFactor setPositions(final Token first, final Node last) {
+		return (UnaryFactor)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import boa.compiler.ast.Node;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.parser.Token;
 
 /**
  * 
@@ -90,5 +91,9 @@ public class Block extends Statement {
 			b.addStatement(s.clone());
 		copyFieldsTo(b);
 		return b;
+	}
+
+	public Block setPositions(final Token first, final Token last) {
+		return (Block)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
 }

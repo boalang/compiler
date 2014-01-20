@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.TreeMap;
 import java.util.SortedMap;
 
+import org.apache.commons.math.stat.descriptive.SummaryStatistics;
+
 import boa.io.EmitKey;
 
 /**
@@ -14,7 +16,6 @@ import boa.io.EmitKey;
 @AggregatorSpec(name = "variance", type = "int")
 public class VarianceAggregator extends Aggregator {
 	private SortedMap<Long, Long> map;
-	private long count;
 
 	/** {@inheritDoc} */
 	@Override
@@ -22,13 +23,6 @@ public class VarianceAggregator extends Aggregator {
 		super.start(key);
 
 		map = new TreeMap<Long, Long>();
-		count = 0;
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public boolean isAssociative() {
-		return false;
 	}
 
 	/** {@inheritDoc} */
@@ -43,10 +37,9 @@ public class VarianceAggregator extends Aggregator {
 		for (final String s : data.split(";")) {
 			final int idx = s.indexOf(":");
 			if (idx > 0) {
-				final long item = Long.valueOf(s.substring(0, idx));
 				final long count = Long.valueOf(s.substring(idx + 1));
 				for (int i = 0; i < count; i++)
-					aggregate(item, metadata);
+					aggregate(Long.valueOf(s.substring(0, idx)), metadata);
 			} else
 				aggregate(Long.valueOf(s), metadata);
 		}
@@ -59,7 +52,6 @@ public class VarianceAggregator extends Aggregator {
 			map.put(data, map.get(data) + 1L);
 		else
 			map.put(data, 1L);
-		count++;
 	}
 
 	/** {@inheritDoc} */
@@ -79,14 +71,14 @@ public class VarianceAggregator extends Aggregator {
 			return;
 		}
 
-		double s1 = 0;
-		double s2 = 0;
+		final SummaryStatistics summaryStatistics = new SummaryStatistics();
 
 		for (final Long key : map.keySet()) {
-			s1 += key * map.get(key);
-			s2 += key * key * map.get(key);
+			final long count = map.get(key);
+			for (long i = 0; i < count; i++)
+				summaryStatistics.addValue(key);
 		}
 
-		this.collect(s2 / (double)(count - 1) - s1 * s1 / (double)(count * (count - 1)));
+		this.collect(summaryStatistics.getVariance());
 	}
 }

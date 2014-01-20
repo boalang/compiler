@@ -10,14 +10,14 @@ import boa.parser.Token;
  * 
  * @author rdyer
  */
-public class StackType extends AbstractType {
+public class SetType extends AbstractType {
 	protected Component value;
 
 	public Component getValue() {
 		return value;
 	}
 
-	public StackType (final Component value) {
+	public SetType (final Component value) {
 		if (value != null)
 			value.setParent(this);
 		this.value = value;
@@ -35,13 +35,13 @@ public class StackType extends AbstractType {
 		v.visit(this);
 	}
 
-	public StackType clone() {
-		final StackType t = new StackType(value.clone());
+	public SetType clone() {
+		final SetType t = new SetType(value.clone());
 		copyFieldsTo(t);
 		return t;
 	}
 
-	public StackType setPositions(final Token first, final Node last) {
-		return (StackType)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
+	public SetType setPositions(final Token first, final Node last) {
+		return (SetType)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
 }

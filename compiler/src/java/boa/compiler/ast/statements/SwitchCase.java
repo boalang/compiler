@@ -3,9 +3,11 @@ package boa.compiler.ast.statements;
 import java.util.ArrayList;
 import java.util.List;
 
+import boa.compiler.ast.Node;
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.parser.Token;
 
 /**
  * 
@@ -42,7 +44,8 @@ public class SwitchCase extends Statement {
 	}
 
 	public SwitchCase(final boolean isDefault, final Block body) {
-		body.setParent(this);
+		if (body != null)
+			body.setParent(this);
 		this.isDefault = isDefault;
 		this.body = body;
 	}
@@ -65,5 +68,9 @@ public class SwitchCase extends Statement {
 			sc.addCase(e.clone());
 		copyFieldsTo(sc);
 		return sc;
+	}
+
+	public SwitchCase setPositions(final Token first, final Node last) {
+		return (SwitchCase)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
 }

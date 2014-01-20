@@ -36,7 +36,7 @@ public class VisitorMergingTransformer {
 		int stop = maxMerged;
 
 		while (pos < programs.size()) {
-			Program current = programs.get(pos++);
+			final Program current = programs.get(pos++);
 			preProcessProgram(current);
 
 			for (; pos < stop && pos < programs.size(); pos++) {
@@ -54,7 +54,7 @@ public class VisitorMergingTransformer {
 	}
 
 	/**
-	 * Determines if a tree has a visitor declaration.
+	 * Determines if a tree has a top-level visitor declaration.
 	 * 
 	 * @author rdyer
 	 */
@@ -111,10 +111,11 @@ public class VisitorMergingTransformer {
 		public void visit(final Factor n) {
 			if (n.getOperand() instanceof Identifier) {
 				final Identifier id = (Identifier)n.getOperand();
+
 				if (id.getToken().equals("visit") && n.getOpsSize() == 1 && n.getOp(0) instanceof Call) {
 					final Call c = (Call) n.getOp(0);
-					if (c.getArgsSize() == 2 && c.getArg(0).type instanceof ProjectProtoTuple
-							&& c.getArg(1).type instanceof BoaVisitor)
+
+					if (c.getArgsSize() == 2 && c.getArg(0).type instanceof ProjectProtoTuple && c.getArg(1).type instanceof BoaVisitor)
 						hasVisitCall = true;
 				}
 			}

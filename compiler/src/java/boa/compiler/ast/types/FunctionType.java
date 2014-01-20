@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import boa.compiler.ast.Component;
+import boa.compiler.ast.Node;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.parser.Token;
 
 /**
  * 
@@ -40,11 +42,17 @@ public class FunctionType extends AbstractType {
 		return t;
 	}
 
+	public void setType(final AbstractType t) {
+		t.setParent(this);
+		this.t = t;
+	}
+
 	public FunctionType () {
 	}
 
 	public FunctionType (final AbstractType t) {
-		t.setParent(this);
+		if (t != null)
+			t.setParent(this);
 		this.t = t;
 	}
 
@@ -70,5 +78,13 @@ public class FunctionType extends AbstractType {
 			f.addArg(c.clone());
 		copyFieldsTo(f);
 		return f;
+	}
+
+	public FunctionType setPositions(final Token first, final Token last) {
+		return (FunctionType)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
+	}
+
+	public FunctionType setEnd(final Node last) {
+		return (FunctionType)setPositions(beginLine, beginColumn, last.endLine, last.endColumn);
 	}
 }

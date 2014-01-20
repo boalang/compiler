@@ -45,9 +45,9 @@ public class BoaTuple extends BoaScalar {
 			return true;
 		}
 
-		// have to construct it somehow
-		if (that instanceof BoaBytes)
-			return true;
+		// FIXME have to construct it somehow
+		//if (that instanceof BoaBytes)
+		//	return true;
 
 		if (!(that instanceof BoaTuple))
 			return false;

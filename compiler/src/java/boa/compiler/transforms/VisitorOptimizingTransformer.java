@@ -17,7 +17,7 @@ import boa.types.proto.*;
 
 /**
  * Optimizes a visitor by adding stop statements if the visitor doesn't look
- * at AST nodes.  This avoids calling getast on each ChangedFile, saving a
+ * at AST nodes.  This avoids calling getast() on each ChangedFile, saving a
  * significant amount of time.
  * 
  * @author rdyer
@@ -26,8 +26,7 @@ public class VisitorOptimizingTransformer extends AbstractVisitorNoArg {
 	protected final static Set<Class<? extends BoaType>> astTypes = new HashSet<Class<? extends BoaType>>();
 
 	static {
-		for (final Class<? extends BoaType> c : new ASTRootProtoTuple().reachableTypes())
-			astTypes.add(c);
+		astTypes.addAll(new ASTRootProtoTuple().reachableTypes());
 	}
 
 	protected Set<Class<? extends BoaType>> types;
@@ -87,7 +86,7 @@ public class VisitorOptimizingTransformer extends AbstractVisitorNoArg {
 				if (afterChangedFile != null)
 					for (final Statement s : afterChangedFile.getBody().getStatements())
 						beforeChangedFile.getBody().addStatement(s.clone());
-	
+
 				beforeChangedFile.getBody().addStatement(new StopStatement());
 			}
 		}

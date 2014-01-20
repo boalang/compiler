@@ -1,7 +1,9 @@
 package boa.compiler.ast;
 
+import boa.compiler.ast.Node;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.parser.Token;
 
 /**
  * 
@@ -15,7 +17,8 @@ public class Selector extends Node {
 	}
 
 	public Selector (final Identifier id) {
-		id.setParent(this);
+		if (id != null)
+			id.setParent(this);
 		this.id = id;
 	}
 
@@ -35,5 +38,9 @@ public class Selector extends Node {
 		final Selector s = new Selector(id.clone());
 		copyFieldsTo(s);
 		return s;
+	}
+
+	public Selector setPositions(final Token first, final Node last) {
+		return (Selector)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
 }

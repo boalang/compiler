@@ -144,7 +144,7 @@ public class BoaProtoList extends BoaType {
 	/** {@inheritDoc} */
 	@Override
 	public String toJavaType() {
-		return this.type.toJavaType() + "[]";
+		return "java.util.List<" + this.type.toJavaType() + ">";
 	}
 
 	/** {@inheritDoc} */

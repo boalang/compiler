@@ -7,15 +7,12 @@ import java.util.Map.Entry;
 
 import boa.io.EmitKey;
 
-
-
 /**
  * A Boa aggregator to calculate the quantiles for the values in a dataset.
  * 
  * @author anthonyu
- * 
  */
-@AggregatorSpec(name = "quantile", type = "float", formalParameters = { "int" })
+@AggregatorSpec(name = "quantile", formalParameters = { "int" }, type = "float")
 public class FloatQuantileAggregator extends QuantileAggregator {
 	private SortedCountingSet<Double> list;
 

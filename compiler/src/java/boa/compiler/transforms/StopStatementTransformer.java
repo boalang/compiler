@@ -302,7 +302,7 @@ public class StopStatementTransformer extends AbstractVisitorNoArg {
 						));
 			final Factor f2 = new Factor(new Identifier(funcName));
 			f2.addOp(c2);
-			v.replaceBody(new Block().addStatement(new ExprStatement(
+			v.setBody(new Block().addStatement(new ExprStatement(
 							new Expression(
 								new Conjunction(
 									new Comparison(
@@ -484,7 +484,7 @@ public class StopStatementTransformer extends AbstractVisitorNoArg {
 						)
 					)
 				), v.getBody().clone()));
-		v.replaceBody(body);
+		v.setBody(body);
 	}
 
 	protected void createReset(final Block body) {

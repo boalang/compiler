@@ -5,9 +5,11 @@ import java.util.List;
 
 import boa.compiler.ast.Component;
 import boa.compiler.ast.Identifier;
+import boa.compiler.ast.Node;
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.parser.Token;
 
 /**
  * 
@@ -22,6 +24,11 @@ public class OutputType extends AbstractType {
 
 	public Identifier getId() {
 		return id;
+	}
+
+	public void setId(final Identifier id) {
+		id.setParent(this);
+		this.id = id;
 	}
 
 	public List<Expression> getArgs() {
@@ -62,6 +69,11 @@ public class OutputType extends AbstractType {
 		return t;
 	}
 
+	public void setType(final Component t) {
+		t.setParent(this);
+		this.t = t;
+	}
+
 	public boolean hasWeight() {
 		return weight != null;
 	}
@@ -70,17 +82,26 @@ public class OutputType extends AbstractType {
 		return weight;
 	}
 
+	public void setWeight(final Component weight) {
+		weight.setParent(this);
+		this.weight = weight;
+	}
+
+	public OutputType (final Identifier id) {
+		this(id, null, null);
+	}
+
 	public OutputType (final Identifier id, final Component t) {
-		id.setParent(this);
-		t.setParent(this);
-		this.id = id;
-		this.t = t;
+		this(id, t, null);
 	}
 
 	public OutputType (final Identifier id, final Component t, final Component weight) {
-		id.setParent(this);
-		t.setParent(this);
-		weight.setParent(this);
+		if (id != null)
+			id.setParent(this);
+		if (t != null)
+			t.setParent(this);
+		if (weight != null)
+			weight.setParent(this);
 		this.id = id;
 		this.t = t;
 		this.weight = weight;
@@ -110,5 +131,17 @@ public class OutputType extends AbstractType {
 			o.addIndice(c.clone());
 		copyFieldsTo(o);
 		return o;
+	}
+
+	public OutputType setPositions(final Token first, final Node last) {
+		return (OutputType)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
+	}
+
+	public OutputType setEnd(final Token last) {
+		return (OutputType)setPositions(beginLine, beginColumn, last.endLine, last.endColumn);
+	}
+
+	public OutputType setEnd(final Node last) {
+		return (OutputType)setPositions(beginLine, beginColumn, last.endLine, last.endColumn);
 	}
 }

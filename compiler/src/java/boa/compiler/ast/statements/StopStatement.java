@@ -2,6 +2,7 @@ package boa.compiler.ast.statements;
 
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.parser.Token;
 
 /**
  * 
@@ -24,5 +25,9 @@ public class StopStatement extends Statement {
 		final StopStatement s = new StopStatement();
 		copyFieldsTo(s);
 		return s;
+	}
+
+	public StopStatement setPositions(final Token first, final Token last) {
+		return (StopStatement)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
 }

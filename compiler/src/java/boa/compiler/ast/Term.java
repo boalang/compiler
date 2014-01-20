@@ -53,7 +53,8 @@ public class Term extends Node {
 	}
 
 	public Term (final Factor lhs) {
-		lhs.setParent(this);
+		if (lhs != null)
+			lhs.setParent(this);
 		this.lhs = lhs;
 	}
 
@@ -77,5 +78,11 @@ public class Term extends Node {
 			t.addRhs(f.clone());
 		copyFieldsTo(t);
 		return t;
+	}
+
+	public Term setPositions(final Node first, final Node last) {
+		if (last == null)
+			return (Term)setPositions(first.beginLine, first.beginColumn, first.endLine, first.endColumn);
+		return (Term)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
 }

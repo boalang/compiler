@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 
 import javax.tools.JavaCompiler;
@@ -37,75 +35,71 @@ import boa.compiler.visitors.TypeCheckingVisitor;
 import boa.parser.ParseException;
 import boa.parser.BoaParser;
 
+/**
+ * The main entry point for the Boa compiler.
+ *
+ * @author anthonyu
+ * @author rdyer
+ */
 public class BoaCompiler {
 	private static Logger LOG = Logger.getLogger(BoaCompiler.class);
 
 	public static void main(final String[] args) throws IOException, ParseException {
 		// parse the command line options
 		final Options options = new Options();
-		options.addOption("h", "hadoop-base", true, "base directory for Hadoop installation");
 		options.addOption("l", "libs", true, "extra jars (functions/aggregators) to be compiled in");
-		options.addOption("i", "in", true, "file to be compiled");
+		options.addOption("i", "in", true, "file(s) to be compiled (comma-separated list)");
 		options.addOption("o", "out", true, "the name of the resulting jar");
 		options.addOption("b", "hbase", false, "use HBase templates");
 		options.addOption("nv", "no-visitor-fusion", false, "disable visitor fusion");
 		options.addOption("v", "visitors-fused", true, "number of visitors to fuse");
 		options.addOption("n", "name", true, "the name of the generated main class");
 
-		CommandLine cl;
+		final CommandLine cl;
 		try {
 			cl = new PosixParser().parse(options, args);
 		} catch (final org.apache.commons.cli.ParseException e) {
 			System.err.println(e.getMessage());
-
-			final HelpFormatter formatter = new HelpFormatter();
-			formatter.printHelp("BoaCompiler", options);
+			new HelpFormatter().printHelp("BoaCompiler", options);
 
 			return;
 		}
-
-		// get the base of the hadoop installation for compilation purposes
-		File hadoopBase;
-		if (cl.hasOption('h')) {
-			hadoopBase = new File(cl.getOptionValue('h'));
-		} else {
-			System.err.println("missing required option `hadoop-base'");
-
-			final HelpFormatter formatter = new HelpFormatter();
-			formatter.printHelp("BoaCompiler", options);
-
-			return;
-		}
-
-		// find the location of the jar this class is in
-		final String path = ClasspathUrlFinder.findClassBase(BoaCompiler.class).getPath();
-		// find the location of the compiler distribution
-		final String root = new File(path.substring(path.indexOf(':') + 1, path.indexOf('!'))).getParentFile().getParent();
 
 		// get the filename of the program we will be compiling
-		if (!cl.hasOption('i')) {
-			System.err.println("missing required option `in'");
+		final ArrayList<File> inputFiles = new ArrayList<File>();
+		if (cl.hasOption('i')) {
+			final String[] inputPaths = cl.getOptionValue('i').split(",");
 
-			final HelpFormatter formatter = new HelpFormatter();
-			formatter.printHelp("BoaCompiler", options);
+			for (final String s : inputPaths) {
+				final File f = new File(s);
+				if (!f.exists())
+					System.err.println("File '" + s + "' does not exist, skipping");
+				else
+					inputFiles.add(new File(s));
+			}
+		}
+
+		if (inputFiles.size() == 0) {
+			System.err.println("missing required option `in'");
+			new HelpFormatter().printHelp("BoaCompiler", options);
 
 			return;
 		}
 
-		final ArrayList<File> inputFiles = new ArrayList<File>();
-		final String[] inputPaths = cl.getOptionValue('i').split(",");
-		for (final String s : inputPaths)
-			inputFiles.add(new File(s));
 
+		// get the name of the generated class
 		final String className;
-		if (cl.hasOption('n'))
+		if (cl.hasOption('n')) {
 			className = cl.getOptionValue('n');
-		else {
+		} else {
 			String s = "";
 			for (final File f : inputFiles) {
 				if (s.length() != 0)
 					s += "_";
-				s += pascalCase(f.getName().substring(0, f.getName().lastIndexOf('.')));
+				if (f.getName().indexOf('.') != -1)
+					s += pascalCase(f.getName().substring(0, f.getName().lastIndexOf('.')));
+				else
+					s += pascalCase(f.getName());
 			}
 			className = s;
 		}
@@ -123,6 +117,7 @@ public class BoaCompiler {
 		if (!outputSrcDir.mkdirs())
 			throw new IOException("unable to mkdir " + outputSrcDir);
 
+		// find custom libs to load
 		final List<URL> libs = new ArrayList<URL>();
 		if (cl.hasOption('l'))
 			for (final String lib : cl.getOptionValues('l'))
@@ -173,7 +168,7 @@ public class BoaCompiler {
 					else
 						BoaParser.ReInit(r);
 					parser.setTabSize(4);
-					final Start p = (Start)new ParseTreeAdapter().visit(BoaParser.Start());
+					final Start p = BoaParser.Start();
 
 					final String jobName = "" + i;
 
@@ -182,17 +177,16 @@ public class BoaCompiler {
 
 					final TaskClassifyingVisitor simpleVisitor = new TaskClassifyingVisitor();
 					simpleVisitor.start(p);
-					final boolean jobIsSimple = !simpleVisitor.hasVisitor();
 
-					BoaCompiler.LOG.info(f.getName() + ": task complexity: " + (jobIsSimple ? "simple" : "complex"));
-					isSimple &= jobIsSimple;
+					LOG.info(f.getName() + ": task complexity: " + (!simpleVisitor.hasVisitor() ? "simple" : "complex"));
+					isSimple &= !simpleVisitor.hasVisitor();
 
 					new LocalAggregationTransformer().start(p);
 						
 					// if a job has no visitor, let it have its own method
 					// also let jobs have own methods if visitor merging is disabled
-					if (jobIsSimple || cl.hasOption("nv") || inputFiles.size() == 1) {
-						if (!jobIsSimple)
+					if (!simpleVisitor.hasVisitor() || cl.hasOption("nv") || inputFiles.size() == 1) {
+						if (simpleVisitor.hasVisitor())
 							new VisitorOptimizingTransformer().start(p);
 
 						final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(jobName, stg);
@@ -206,6 +200,9 @@ public class BoaCompiler {
 						p.getProgram().jobName = jobName;
 						visitorPrograms.add(p.getProgram());
 					}
+				} catch (final Exception e) {
+					System.err.print(f.getName() + ": compilation failed: ");
+					e.printStackTrace();
 				} finally {
 					r.close();
 				}
@@ -218,14 +215,32 @@ public class BoaCompiler {
 				maxVisitors = Integer.MAX_VALUE;
 
 			if (!visitorPrograms.isEmpty())
-				for (final Program p : new VisitorMergingTransformer().mergePrograms(visitorPrograms, maxVisitors)) {
-					new VisitorOptimizingTransformer().start(p);
-					final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(p.jobName, stg);
-					cg.start(p);
-					jobs.add(cg.getCode());
-	
-					jobnames.add(p.jobName);
+				try {
+					for (final Program p : new VisitorMergingTransformer().mergePrograms(visitorPrograms, maxVisitors)) {
+						new VisitorOptimizingTransformer().start(p);
+						final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(p.jobName, stg);
+						cg.start(p);
+						jobs.add(cg.getCode());
+		
+						jobnames.add(p.jobName);
+					}
+				} catch (final Exception e) {
+					System.err.println("error fusing visitors - falling back: " + e);
+					e.printStackTrace();
+
+					for (final Program p : visitorPrograms) {
+						new VisitorOptimizingTransformer().start(p);
+
+						final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(p.jobName, stg);
+						cg.start(p);
+						jobs.add(cg.getCode());
+
+						jobnames.add(p.jobName);
+					}
 				}
+
+			if (jobs.size() == 0)
+				throw new RuntimeException("no files compiled without error");
 
 			final StringTemplate st = stg.getInstanceOf("Program");
 
@@ -241,31 +256,27 @@ public class BoaCompiler {
 			o.close();
 		}
 
-		final String runtimePath = root + "/dist/boa-runtime.jar";
-		final StringBuilder classPath = new StringBuilder(runtimePath);
-
-		final Matcher m = Pattern.compile("(hadoop-[a-z]+-[\\d\\.]+|hbase-[\\d\\.]+|protobuf-java-[\\d\\.]+)\\.jar").matcher("");
-		for (final File f : hadoopBase.listFiles())
-			if (m.reset(f.getName()).matches())
-				classPath.append(":" + f);
-		for (final File f : new File(hadoopBase, "lib").listFiles())
-			if (f.toString().endsWith(".jar"))
-				classPath.append(":" + f);
-
+		// compile the generated .java file
 		final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-		BoaCompiler.LOG.info("compiling " + outputFile);
-		if (compiler.run(null, null, null, "-cp", classPath.toString(), outputFile.toString()) != 0)
+		LOG.info("compiling: " + outputFile);
+		LOG.info("classpath: " + System.getProperty("java.class.path"));
+		if (compiler.run(null, null, null, "-cp", System.getProperty("java.class.path"), outputFile.toString()) != 0)
 			throw new RuntimeException("compile failed");
 
-		generateJar(cl, jarName, outputRoot, runtimePath);
+		// find the location of the jar this class is in
+		final String path = ClasspathUrlFinder.findClassBase(BoaCompiler.class).getPath();
+		// find the location of the compiler distribution
+		final String root = new File(path.substring(path.indexOf(':') + 1, path.indexOf('!'))).getParentFile().getParent();
 
-		BoaCompiler.delete(outputRoot);
+		generateJar(cl, jarName, outputRoot, root + "/dist/boa-runtime.jar");
+
+		delete(outputRoot);
 	}
 
 	private static final void delete(final File f) throws IOException {
 		if (f.isDirectory())
 			for (final File g : f.listFiles())
-				BoaCompiler.delete(g);
+				delete(g);
 
 		if (!f.delete())
 			throw new IOException("unable to delete file " + f);
@@ -275,13 +286,13 @@ public class BoaCompiler {
 		final JarOutputStream jar = new JarOutputStream(new BufferedOutputStream(new FileOutputStream(new File(jarName))));
 		try {
 			final int offset = dir.toString().length() + 1;
-			for (final String f : BoaCompiler.findFiles(dir, new ArrayList<String>())) {
-				BoaCompiler.LOG.info("adding " + f + " to " + jarName);
+			for (final String f : findFiles(dir, new ArrayList<String>())) {
+				//LOG.info("adding " + f + " to " + jarName);
 				jar.putNextEntry(new ZipEntry(f.substring(offset)));
 
 				final InputStream inx = new BufferedInputStream(new FileInputStream(f));
 				try {
-					BoaCompiler.write(inx, jar);
+					write(inx, jar);
 				} finally {
 					inx.close();
 				}
@@ -297,11 +308,11 @@ public class BoaCompiler {
 			for (final String lib : libsJars) {
 				final File f = new File(lib);
 
-				BoaCompiler.LOG.info("adding lib/" + f.getName() + " to " + jarName);
+				//LOG.info("adding lib/" + f.getName() + " to " + jarName);
 				jar.putNextEntry(new JarEntry("lib" + File.separatorChar + f.getName()));
 				final InputStream inx = new BufferedInputStream(new FileInputStream(f));
 				try {
-					BoaCompiler.write(inx, jar);
+					write(inx, jar);
 				} finally {
 					inx.close();
 				}
@@ -314,7 +325,7 @@ public class BoaCompiler {
 	private static final List<String> findFiles(final File f, final List<String> l) {
 		if (f.isDirectory())
 			for (final File g : f.listFiles())
-				BoaCompiler.findFiles(g, l);
+				findFiles(g, l);
 		else
 			l.add(f.toString());
 

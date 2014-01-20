@@ -34,8 +34,6 @@ public class CollectionAggregator extends Aggregator {
 	public void finish() throws IOException, InterruptedException {
 		for (final String s : this.data)
 			this.collect(s);
-
-		super.finish();
 	}
 
 	/** {@inheritDoc} */

@@ -1,8 +1,10 @@
 package boa.compiler.ast.statements;
 
+import boa.compiler.ast.Node;
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.parser.Token;
 
 /**
  * 
@@ -16,7 +18,8 @@ public class ExprStatement extends Statement {
 	}
 
 	public ExprStatement (final Expression e) {
-		e.setParent(this);
+		if (e != null)
+			e.setParent(this);
 		this.e = e;
 	}
 
@@ -36,5 +39,9 @@ public class ExprStatement extends Statement {
 		final ExprStatement s = new ExprStatement(e.clone());
 		copyFieldsTo(s);
 		return s;
+	}
+
+	public ExprStatement setPositions(final Node first) {
+		return (ExprStatement)setPositions(first.beginLine, first.beginColumn, first.endLine, first.endColumn);
 	}
 }

@@ -37,7 +37,8 @@ public class Factor extends Node {
 	}
 
 	public Factor (final Operand op) {
-		op.setParent(this);
+		if (op != null)
+			op.setParent(this);
 		this.op = op;
 	}
 
@@ -59,5 +60,11 @@ public class Factor extends Node {
 			f.addOp(n.clone());
 		copyFieldsTo(f);
 		return f;
+	}
+
+	public Factor setPositions(final Node first, final Node last) {
+		if (last == null)
+			return (Factor)setPositions(first.beginLine, first.beginColumn, first.endLine, first.endColumn);
+		return (Factor)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
 }

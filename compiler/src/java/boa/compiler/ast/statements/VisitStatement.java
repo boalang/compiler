@@ -5,8 +5,10 @@ import java.util.List;
 
 import boa.compiler.ast.Component;
 import boa.compiler.ast.Identifier;
+import boa.compiler.ast.Node;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.parser.Token;
 
 /**
  * 
@@ -27,12 +29,21 @@ public class VisitStatement extends Statement {
 		return wildcard;
 	}
 
+	public void setWildcard(final boolean wildcard) {
+		this.wildcard = wildcard;
+	}
+
 	public boolean hasComponent() {
 		return node != null;
 	}
 
 	public Component getComponent() {
 		return node;
+	}
+
+	public void setComponent(final Component node) {
+		node.setParent(this);
+		this.node = node;
 	}
 
 	public List<Identifier> getIdList() {
@@ -56,21 +67,29 @@ public class VisitStatement extends Statement {
 		return body;
 	}
 
-	public void replaceBody(final Block body) {
+	public void setBody(final Statement s) {
+		setBody(ensureBlock(s));
+	}
+
+	public void setBody(final Block body) {
 		body.setParent(this);
 		this.body = body;
+	}
+
+	public VisitStatement(final boolean before) {
+		this.before = before;
 	}
 
 	public VisitStatement(final boolean before, final boolean wildcard, final Block body) {
-		body.setParent(this);
-		this.before = before;
+		this(before, null, body);
 		this.wildcard = wildcard;
-		this.body = body;
 	}
 
 	public VisitStatement(final boolean before, final Component node, final Block body) {
-		node.setParent(this);
-		body.setParent(this);
+		if (node != null)
+			node.setParent(this);
+		if (body != null)
+			body.setParent(this);
 		this.before = before;
 		this.node = node;
 		this.body = body;
@@ -96,5 +115,9 @@ public class VisitStatement extends Statement {
 			v.addId(id.clone());
 		copyFieldsTo(v);
 		return v;
+	}
+
+	public VisitStatement setPositions(final Token first, final Node last) {
+		return (VisitStatement)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
 }

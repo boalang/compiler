@@ -19,7 +19,7 @@ public abstract class BoaType {
 	 */
 	public BoaScalar arithmetics(final BoaType that) {
 		// by default, no types are allowed in arithmetic
-		throw new RuntimeException("incorrect type " + this + " for arithmetic with " + that);
+		throw new RuntimeException("incorrect type for arithmetic, found: " + that + ", expected: " + this);
 	}
 
 	/**

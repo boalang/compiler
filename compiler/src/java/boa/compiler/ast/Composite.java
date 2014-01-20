@@ -6,6 +6,7 @@ import java.util.List;
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.parser.Token;
 
 /**
  * 
@@ -18,6 +19,10 @@ public class Composite extends Operand {
 
 	public boolean isEmpty() {
 		return empty;
+	}
+
+	public void setEmpty(final boolean empty) {
+		this.empty = empty;
 	}
 
 	public List<Pair> getPairs() {
@@ -54,6 +59,10 @@ public class Composite extends Operand {
 		exprs.add(e);
 	}
 
+	public Composite () {
+		this(false);
+	}
+
 	public Composite (final boolean empty) {
 		this.empty = empty;
 	}
@@ -78,5 +87,9 @@ public class Composite extends Operand {
 			c.addPair(p.clone());
 		copyFieldsTo(c);
 		return c;
+	}
+
+	public Composite setPositions(final Token first, final Token last) {
+		return (Composite)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
 }

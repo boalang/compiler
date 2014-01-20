@@ -1,8 +1,10 @@
 package boa.compiler.ast.statements;
 
+import boa.compiler.ast.Node;
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.parser.Token;
 
 /**
  * 
@@ -42,6 +44,10 @@ public class ForStatement extends Statement {
 		return body;
 	}
 
+	public ForStatement(final Statement init, final Expression condition, final Statement update, final Statement s) {
+		this(init, condition, update, Node.ensureBlock(s));
+	}
+
 	public ForStatement(final Statement init, final Expression condition, final Statement update, final Block body) {
 		if (init != null)
 			init.setParent(this);
@@ -49,7 +55,8 @@ public class ForStatement extends Statement {
 			condition.setParent(this);
 		if (update != null)
 			update.setParent(this);
-		body.setParent(this);
+		if (body != null)
+			body.setParent(this);
 		this.init = init;
 		this.condition = condition;
 		this.update = update;
@@ -78,5 +85,9 @@ public class ForStatement extends Statement {
 			f.update = update.clone();
 		copyFieldsTo(f);
 		return f;
+	}
+
+	public ForStatement setPositions(final Token first, final Node last) {
+		return (ForStatement)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
 }

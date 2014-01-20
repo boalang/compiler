@@ -1,9 +1,11 @@
 package boa.compiler.ast.expressions;
 
+import boa.compiler.ast.Node;
 import boa.compiler.ast.Operand;
 import boa.compiler.ast.statements.Block;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.parser.Token;
 
 /**
  * 
@@ -17,7 +19,8 @@ public class StatementExpr extends Operand {
 	}
 
 	public StatementExpr (final Block b) {
-		b.setParent(this);
+		if (b != null)
+			b.setParent(this);
 		this.b = b;
 	}
 
@@ -37,5 +40,9 @@ public class StatementExpr extends Operand {
 		final StatementExpr e = new StatementExpr(b.clone());
 		copyFieldsTo(e);
 		return e;
+	}
+
+	public StatementExpr setPositions(final Token first, final Node last) {
+		return (StatementExpr)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
 }

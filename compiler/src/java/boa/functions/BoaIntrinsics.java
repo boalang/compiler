@@ -1,6 +1,7 @@
 package boa.functions;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -113,5 +114,142 @@ public class BoaIntrinsics {
 		if (s.empty())
 			return null;
 		return s.peek();
+	}
+
+	public static String protolistToString(final List<String> l) {
+		String s = "";
+		for (final String str : l)
+			if (s.isEmpty())
+				s += str;
+			else
+				s += ", " + str;
+		return s;
+	}
+
+	public static <T> String arrayToString(final T[] arr) {
+		String s = "";
+		for (final T val : arr)
+			if (s.isEmpty())
+				s += val;
+			else
+				s += ", " + val;
+		return s;
+	}
+
+	public static String arrayToString(final long[] arr) {
+		String s = "";
+		for (final long val : arr)
+			if (s.isEmpty())
+				s += val;
+			else
+				s += ", " + val;
+		return s;
+	}
+
+	public static String arrayToString(final double[] arr) {
+		String s = "";
+		for (final double val : arr)
+			if (s.isEmpty())
+				s += val;
+			else
+				s += ", " + val;
+		return s;
+	}
+
+	public static String arrayToString(final boolean[] arr) {
+		String s = "";
+		for (final boolean val : arr)
+			if (s.isEmpty())
+				s += val;
+			else
+				s += ", " + val;
+		return s;
+	}
+
+	public static <T> T[] basic_array(final T[] arr) {
+		return arr;
+	}
+
+	public static <T> long[] basic_array(final Long[] arr) {
+		long[] arr2 = new long[arr.length];
+		for (int i = 0; i < arr.length; i++)
+			arr2[i] = arr[i];
+		return arr2;
+	}
+
+	public static <T> double[] basic_array(final Double[] arr) {
+		double[] arr2 = new double[arr.length];
+		for (int i = 0; i < arr.length; i++)
+			arr2[i] = arr[i];
+		return arr2;
+	}
+
+	public static <T> boolean[] basic_array(final Boolean[] arr) {
+		boolean[] arr2 = new boolean[arr.length];
+		for (int i = 0; i < arr.length; i++)
+			arr2[i] = arr[i];
+		return arr2;
+	}
+
+	public static <T> T[] concat(final T[] first, @SuppressWarnings("unchecked") final T[]... rest) {
+		int totalLength = first.length;
+		for (T[] array : rest)
+			totalLength += array.length;
+		
+		final T[] result = Arrays.copyOf(first, totalLength);
+		int offset = first.length;
+		for (T[] array : rest) {
+			System.arraycopy(array, 0, result, offset, array.length);
+			offset += array.length;
+		}
+		return result;
+	}
+
+	public static long[] concat(final long[] first, final long[]... rest) {
+		int totalLength = first.length;
+		for (long[] array : rest)
+			totalLength += array.length;
+		
+		final long[] result = new long[totalLength];
+		System.arraycopy(first, 0, result, 0, first.length);
+
+		int offset = first.length;
+		for (long[] array : rest) {
+			System.arraycopy(array, 0, result, offset, array.length);
+			offset += array.length;
+		}
+		return result;
+	}
+
+	public static double[] concat(final double[] first, final double[]... rest) {
+		int totalLength = first.length;
+		for (double[] array : rest)
+			totalLength += array.length;
+		
+		final double[] result = new double[totalLength];
+		System.arraycopy(first, 0, result, 0, first.length);
+
+		int offset = first.length;
+		for (double[] array : rest) {
+			System.arraycopy(array, 0, result, offset, array.length);
+			offset += array.length;
+		}
+		return result;
+	}
+
+	public static boolean[] concat(final boolean[] first, final boolean[]... rest) {
+		int totalLength = first.length;
+		for (boolean[] array : rest)
+			totalLength += array.length;
+		
+		final boolean[] result = new boolean[totalLength];
+		System.arraycopy(first, 0, result, 0, first.length);
+
+		int offset = first.length;
+		for (boolean[] array : rest) {
+			System.arraycopy(array, 0, result, offset, array.length);
+			offset += array.length;
+		}
+		return result;
 	}
 }

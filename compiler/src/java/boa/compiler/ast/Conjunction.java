@@ -3,6 +3,7 @@ package boa.compiler.ast;
 import java.util.ArrayList;
 import java.util.List;
 
+import boa.compiler.ast.Node;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
 
@@ -17,6 +18,11 @@ public class Conjunction extends Node {
 
 	public Comparison getLhs() {
 		return lhs;
+	}
+
+	public void setLhs(final Comparison lhs) {
+		lhs.setParent(this);
+		this.lhs = lhs;
 	}
 
 	public List<String> getOps() {
@@ -52,8 +58,13 @@ public class Conjunction extends Node {
 		rhs.add(c);
 	}
 
+	public Conjunction () {
+		this(null);
+	}
+
 	public Conjunction (final Comparison lhs) {
-		lhs.setParent(this);
+		if (lhs != null)
+			lhs.setParent(this);
 		this.lhs = lhs;
 	}
 
@@ -75,5 +86,11 @@ public class Conjunction extends Node {
 			c.addRhs(c2.clone());
 		copyFieldsTo(c);
 		return c;
+	}
+
+	public Conjunction setPositions(final Node first, final Node last) {
+		if (last == null)
+			return (Conjunction)setPositions(first.beginLine, first.beginColumn, first.endLine, first.endColumn);
+		return (Conjunction)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
 }

@@ -1,10 +1,10 @@
 package boa.io;
 
-import java.io.*;
 import java.sql.*;
 
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.FSDataInputStream;
+import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputCommitter;
 import org.apache.hadoop.mapreduce.JobContext;
@@ -25,8 +25,8 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 	public void commitJob(JobContext context) throws java.io.IOException {
 		super.commitJob(context);
 		int jobId = context.getConfiguration().getInt("boa.hadoop.jobid", 0);
-		updateStatus(false, jobId);
 		storeOutput(context, jobId);
+		updateStatus(false, jobId);
 	}
 
 	@Override
@@ -36,7 +36,7 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 		updateStatus(true, jobId);
 	}
 
-	private final static String url = "jdbc:mysql://boa-head:3306/drupal";
+	private final static String url = "jdbc:mysql://head:3306/drupal";
 	private final static String user = "drupal";
 	private final static String password = "";
 
@@ -49,7 +49,7 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 			con = DriverManager.getConnection(url, user, password);
 			PreparedStatement ps = null;
 			try {
-				ps = con.prepareStatement("UPDATE boa_jobs SET hadoop_end=CURRENT_TIMESTAMP(), hadoop_status=?, hadoop_result=\"\" WHERE id=" + jobId);
+				ps = con.prepareStatement("UPDATE boa_jobs SET hadoop_end=CURRENT_TIMESTAMP(), hadoop_status=? WHERE id=" + jobId);
 				ps.setInt(1, error ? -1 : 2);
 				ps.executeUpdate();
 			} finally {
@@ -69,18 +69,29 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 		Connection con = null;
 		FileSystem fileSystem = null;
 		FSDataInputStream in = null;
-		ByteArrayOutputStream out = null;
+		FSDataOutputStream out = null;
 
 		try {
 			fileSystem = outputPath.getFileSystem(context.getConfiguration());
 
 			con = DriverManager.getConnection(url, user, password);
 
+			PreparedStatement ps = null;
+			try {
+				ps = con.prepareStatement("INSERT INTO boa_output (id, length) VALUES (" + jobId + ", 0)");
+				ps.executeUpdate();
+			} catch (final Exception e) {
+			} finally {
+				try { if (ps != null) ps.close(); } catch (final Exception e) { e.printStackTrace(); }
+			}
+
+			fileSystem.mkdirs(new Path("/boa", new Path("" + jobId)));
+			out = fileSystem.create(new Path("/boa", new Path("" + jobId, new Path("output.txt"))));
+
 			int partNum = 0;
 
-			final byte[] b = new byte[4096];
-			long pos = 1;
-			out = new ByteArrayOutputStream();
+			final byte[] b = new byte[67108864];
+			int length = 0;
 
 			while (true) {
 				final Path path = new Path(outputPath, "part-r-" + String.format("%05d", partNum++));
@@ -91,43 +102,29 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 					try { in.close(); } catch (final Exception e) { e.printStackTrace(); }
 				in = fileSystem.open(path);
 
-				PreparedStatement ps = null;
-				try {
-					ps = con.prepareStatement("UPDATE boa_jobs SET hadoop_result=INSERT(hadoop_result, ?, ?, ?) WHERE id=" + jobId);
+				int numBytes = 0;
 
-					int numBytes = 0;
+				while ((numBytes = in.read(b)) > 0) {
+					out.write(b, 0, numBytes);
+					length += numBytes;
 
-					while ((numBytes = in.read(b)) > 0) {
-						out.write(b, 0, numBytes);
-						if (out.size() >= 4194304) {
-							ps.setLong(1, pos);
-							ps.setInt(2, out.size());
-							ps.setString(3, out.toString());
-							ps.executeUpdate();
-							this.context.progress();
-
-							pos += out.size();
-							out.reset();
-						}
-					}
-
-					if (out.size() > 0) {
-						ps.setLong(1, pos);
-						ps.setInt(2, out.size());
-						ps.setString(3, out.toString());
-						ps.executeUpdate();
-						this.context.progress();
-					}
-				} finally {
-					try { if (ps != null) ps.close(); } catch (final Exception e) { e.printStackTrace(); }
+					this.context.progress();
 				}
+			}
+
+			try {
+				ps = con.prepareStatement("UPDATE boa_output SET length=? WHERE id=" + jobId);
+				ps.setLong(1, length);
+				ps.executeUpdate();
+			} finally {
+				try { if (ps != null) ps.close(); } catch (final Exception e) { e.printStackTrace(); }
 			}
 		} catch (final Exception e) {
 			e.printStackTrace();
 		} finally {
 			try { if (con != null) con.close(); } catch (final Exception e) { e.printStackTrace(); }
-			try { if (out != null) out.close(); } catch (final Exception e) { e.printStackTrace(); }
 			try { if (in != null) in.close(); } catch (final Exception e) { e.printStackTrace(); }
+			try { if (out != null) out.close(); } catch (final Exception e) { e.printStackTrace(); }
 			try { if (fileSystem != null) fileSystem.close(); } catch (final Exception e) { e.printStackTrace(); }
 		}
 	}
