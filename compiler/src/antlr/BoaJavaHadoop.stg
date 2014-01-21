@@ -116,21 +116,29 @@ public class <name> extends boa.runtime.BoaRunner {
 	public String getUsage() {
 		return "\<inputDir\> \<outputDir\>";
 	}
+
+	static interface BoaJob {
+		void map(final boa.types.Toplevel.Project _input, final org.apache.hadoop.mapreduce.Mapper\<org.apache.hadoop.io.Text, org.apache.hadoop.io.BytesWritable, boa.io.EmitKey, boa.io.EmitValue\>.Context context) throws Exception;
+	}
 	
 	static class <name>BoaMapper extends boa.runtime.BoaMapper {
 		<jobs:{<it><\n>}>		/** {@inheritDoc} */
 		@Override
 		protected void map(final org.apache.hadoop.io.Text key, final org.apache.hadoop.io.BytesWritable value, final org.apache.hadoop.mapreduce.Mapper\<org.apache.hadoop.io.Text, org.apache.hadoop.io.BytesWritable, boa.io.EmitKey, boa.io.EmitValue\>.Context context) throws java.io.IOException {
 			boa.types.Toplevel.Project _input = boa.types.Toplevel.Project.parseFrom(com.google.protobuf.CodedInputStream.newInstance(value.getBytes(), 0, value.getLength()));
-			<jobnames:{if (_job_<it> != null) {
-	try {
-		_job_<it>.map(_input, context);
-	} catch (final Throwable e) {
-		LOG.error("Job<it>: " + e.getClass().getName() + " caught", e);
-		_job_<it> = null;
-	}
-	context.progress();
-}<\n>}>		}
+			<jobnames:{_job_<it> = runJob("Job<it>", _job_<it>, _input, context);<\n>}>		}
+
+		private BoaJob runJob(final String name, final BoaJob job, final boa.types.Toplevel.Project input, final org.apache.hadoop.mapreduce.Mapper\<org.apache.hadoop.io.Text, org.apache.hadoop.io.BytesWritable, boa.io.EmitKey, boa.io.EmitValue\>.Context context) {
+			if (job != null)
+				try {
+					job.map(input, context);
+				} catch (final Throwable e) {
+					LOG.error(name + ": " + e.getClass().getName() + " caught", e);
+					return null;
+				}
+			context.progress();
+			return job;
+		}
 
 		/** {@inheritDoc} */
 		@Override
@@ -179,7 +187,7 @@ public class <name> extends boa.runtime.BoaRunner {
 >>
 
 Job(name, staticDeclarations, staticStatements, statements) ::= <<
-private static class Job<name> {
+private static class Job<name> implements BoaJob {
 	<staticDeclarations>
 	<if(staticStatements)>
 	{
@@ -190,7 +198,7 @@ private static class Job<name> {
 	public void map(final boa.types.Toplevel.Project _input, final org.apache.hadoop.mapreduce.Mapper\<org.apache.hadoop.io.Text, org.apache.hadoop.io.BytesWritable, boa.io.EmitKey, boa.io.EmitValue\>.Context context) throws Exception {
 		<statements:{<it><\n>}>	}
 }
-private static Job<name> _job_<name> = new Job<name>();
+private static BoaJob _job_<name> = new Job<name>();
 
 >>
 
