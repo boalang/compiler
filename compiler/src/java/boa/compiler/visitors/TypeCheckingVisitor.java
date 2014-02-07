@@ -1086,7 +1086,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 
 			if (!aweight.assigns(tweight))
 				throw new TypeCheckException(n.getWeight(), "invalid weight type, found: " + tweight + " expected: " + aweight);
-		} else if (!annotation.weightType().equals("none"))
+		} else if (!annotation.weightType().equals("none") && !annotation.weightType().equals("any"))
 			throw new TypeCheckException(n, "output aggregator expects a weight type");
 
 		if (n.getArgsSize() > 0 && annotation.formalParameters().length == 0)
