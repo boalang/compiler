@@ -1078,19 +1078,19 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 		BoaScalar tweight = null;
 		if (n.hasWeight()) {
 			if (annotation.weightType().equals("none"))
-				throw new TypeCheckException(n.getWeight(), "unexpected weight for table declaration");
+				throw new TypeCheckException(n.getWeight(), "output aggregator '" + n.getId().getToken() + "' does not expect a weight");
 
 			final BoaType aweight = SymbolTable.getType(annotation.weightType());
 			n.getWeight().accept(this, env);
 			tweight = (BoaScalar) n.getWeight().type;
 
 			if (!aweight.assigns(tweight))
-				throw new TypeCheckException(n.getWeight(), "incorrect weight type for table declaration");
+				throw new TypeCheckException(n.getWeight(), "invalid weight type, found: " + tweight + " expected: " + aweight);
 		} else if (!annotation.weightType().equals("none"))
-			throw new TypeCheckException(n, "missing weight for table declaration");
+			throw new TypeCheckException(n, "output aggregator expects a weight type");
 
 		if (n.getArgsSize() > 0 && annotation.formalParameters().length == 0)
-			throw new TypeCheckException(n.getArgs(), "table '" + n.getId().getToken() + "' takes no arguments");
+			throw new TypeCheckException(n.getArgs(), "output aggregator '" + n.getId().getToken() + "' takes no arguments");
 
 		n.type = new BoaTable(type, indexTypes, tweight);
 		env.set(n.getId().getToken(), n.type);
