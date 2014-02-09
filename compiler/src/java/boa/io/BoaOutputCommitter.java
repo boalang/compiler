@@ -90,8 +90,9 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 
 			int partNum = 0;
 
-			final byte[] b = new byte[67108864];
-			int length = 0;
+			final byte[] b = new byte[64 * 1024 * 1024];
+			long length = 0;
+			boolean hasWebResult = false;
 
 			while (true) {
 				final Path path = new Path(outputPath, "part-r-" + String.format("%05d", partNum++));
@@ -105,6 +106,17 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 				int numBytes = 0;
 
 				while ((numBytes = in.read(b)) > 0) {
+					if (!hasWebResult) {
+						hasWebResult = true;
+
+						try {
+							ps = con.prepareStatement("UPDATE boa_output SET web_result=? WHERE id=" + jobId);
+							ps.setString(1, new String(b, 0, 64 * 1024));
+							ps.executeUpdate();
+						} finally {
+							try { if (ps != null) ps.close(); } catch (final Exception e) { e.printStackTrace(); }
+						}
+					}
 					out.write(b, 0, numBytes);
 					length += numBytes;
 
