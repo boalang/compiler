@@ -248,7 +248,8 @@ public class BoaCompiler {
 			st.setAttribute("numreducers", inputFiles.size());
 			st.setAttribute("jobs", jobs);
 			st.setAttribute("jobnames", jobnames);
-			st.setAttribute("tables", CodeGeneratingVisitor.tableStrings);
+			st.setAttribute("combineTables", CodeGeneratingVisitor.combineTableStrings);
+			st.setAttribute("reduceTables", CodeGeneratingVisitor.reduceTableStrings);
 			st.setAttribute("splitsize", isSimple ? 64 * 1024 * 1024 : 10 * 1024 * 1024);
 
 			o.write(st.toString().getBytes());

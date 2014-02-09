@@ -49,16 +49,4 @@ public abstract class GraphAggregator extends Aggregator {
 	}
 
 	protected abstract String format(final String idx, final String data, final String metadata);
-
-	/** {@inheritDoc} */
-	@Override
-	public boolean isAssociative() {
-		return true;
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public boolean isCommutative() {
-		return true;
-	}
 }

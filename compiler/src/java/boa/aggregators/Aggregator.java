@@ -137,15 +137,6 @@ public abstract class Aggregator {
 		this.combining = combining;
 	}
 
-	// these are checked at runtime by the combiner
-	public boolean isAssociative() {
-		return false;
-	}
-
-	public boolean isCommutative() {
-		return false;
-	}
-
 	@SuppressWarnings("rawtypes")
 	public Context getContext() {
 		return this.context;

@@ -9,7 +9,7 @@ import boa.io.EmitKey;
  * 
  * @author anthonyu
  */
-@AggregatorSpec(name = "mean", type = "float")
+@AggregatorSpec(name = "mean", type = "float", canCombine = true)
 public class FloatMeanAggregator extends MeanAggregator {
 	private double sum;
 

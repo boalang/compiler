@@ -12,7 +12,7 @@ import boa.io.EmitKey;
  * 
  * @author anthonyu
  */
-@AggregatorSpec(name = "histogram", formalParameters = { "int", "int", "int" }, type = "float")
+@AggregatorSpec(name = "histogram", formalParameters = { "int", "int", "int" }, type = "float", canCombine = true)
 public class FloatHistogramAggregator extends HistogramAggregator {
 	private SortedCountingSet<Double> list;
 

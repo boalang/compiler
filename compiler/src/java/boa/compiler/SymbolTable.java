@@ -445,7 +445,6 @@ public class SymbolTable {
 			boa.aggregators.SkewnessAggregator.class,
 			boa.aggregators.StatisticsAggregator.class,
 			boa.aggregators.StDevAggregator.class,
-			boa.aggregators.TextAggregator.class,
 			boa.aggregators.TopAggregator.class,
 			boa.aggregators.UniqueAggregator.class,
 			boa.aggregators.VarianceAggregator.class,

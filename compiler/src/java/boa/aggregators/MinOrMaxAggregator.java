@@ -94,18 +94,6 @@ abstract class MinOrMaxAggregator extends Aggregator {
 			else
 				this.collect(this.list[i].toString());
 	}
-
-	/** {@inheritDoc} */
-	@Override
-	public boolean isAssociative() {
-		return true;
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public boolean isCommutative() {
-		return true;
-	}
 }
 
 /**

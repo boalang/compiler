@@ -34,14 +34,6 @@ public class Table {
 		return this.aggregators;
 	}
 
-	public boolean isAssociative() {
-		for (final Aggregator a : this.aggregators)
-			if (!a.isAssociative())
-				return false;
-
-		return true;
-	}
-
 	public void setCombining(final boolean combining) {
 		this.combining = combining;
 

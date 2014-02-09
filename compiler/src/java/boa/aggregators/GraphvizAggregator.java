@@ -15,7 +15,7 @@ import boa.io.EmitValue;
  * 
  * @author rdyer
  */
-@AggregatorSpec(name = "graphviz", weightType = "any")
+@AggregatorSpec(name = "graphviz", weightType = "any", canCombine = true)
 public class GraphvizAggregator extends GraphAggregator {
 	/** {@inheritDoc} */
 	@Override

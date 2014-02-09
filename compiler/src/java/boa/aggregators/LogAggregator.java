@@ -29,16 +29,4 @@ public class LogAggregator extends Aggregator {
 		else if (metadata.equals("fatal"))
 			LogAggregator.logger.fatal(data);
 	}
-
-	/** {@inheritDoc} */
-	@Override
-	public boolean isAssociative() {
-		return true;
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public boolean isCommutative() {
-		return true;
-	}
 }

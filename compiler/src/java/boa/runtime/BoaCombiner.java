@@ -61,17 +61,17 @@ public abstract class BoaCombiner extends Reducer<EmitKey, EmitValue, EmitKey, E
 	/** {@inheritDoc} */
 	@Override
 	protected void reduce(final EmitKey key, final Iterable<EmitValue> values, final Context context) throws IOException, InterruptedException {
-		// get the table named by the emit key
-		final Table t = this.tables.get(key.getKey());
-
-		// if we are non-associative, just pass the output through
+		// if we can't combine, just pass the output through
 		// TODO: find away to avoid combiner entirely when non-associative
-		if (!t.isAssociative()) {
+		if (!this.tables.containsKey(key.getKey())) {
 			for (final EmitValue value : values)
 				context.write(key, value);
 
 			return;
 		}
+
+		// get the table named by the emit key
+		final Table t = this.tables.get(key.getKey());
 
 		t.setCombining(true);
 		t.start(key);

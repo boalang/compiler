@@ -27,12 +27,6 @@ public class SkewnessAggregator extends Aggregator {
 
 	/** {@inheritDoc} */
 	@Override
-	public boolean isCommutative() {
-		return true;
-	}
-
-	/** {@inheritDoc} */
-	@Override
 	public void aggregate(final String data, final String metadata) throws IOException, InterruptedException {
 		for (final String s : data.split(";")) {
 			final int idx = s.indexOf(":");

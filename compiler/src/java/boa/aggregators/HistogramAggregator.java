@@ -84,16 +84,4 @@ abstract class HistogramAggregator extends Aggregator {
 	 *         containing the data points from the dataset
 	 */
 	public abstract List<Pair<Number, Long>> getTuples();
-
-	/** {@inheritDoc} */
-	@Override
-	public boolean isAssociative() {
-		return true;
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public boolean isCommutative() {
-		return true;
-	}
 }

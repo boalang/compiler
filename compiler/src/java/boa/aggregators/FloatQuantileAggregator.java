@@ -12,7 +12,7 @@ import boa.io.EmitKey;
  * 
  * @author anthonyu
  */
-@AggregatorSpec(name = "quantile", formalParameters = { "int" }, type = "float")
+@AggregatorSpec(name = "quantile", formalParameters = { "int" }, type = "float", canCombine = true)
 public class FloatQuantileAggregator extends QuantileAggregator {
 	private SortedCountingSet<Double> list;
 

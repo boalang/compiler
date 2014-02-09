@@ -10,7 +10,7 @@ import boa.io.EmitKey;
  * 
  * @author anthonyu
  */
-@AggregatorSpec(name = "set")
+@AggregatorSpec(name = "set", canCombine = true)
 public class SetAggregator extends Aggregator {
 	private HashSet<String> set;
 	private final long max;
@@ -61,17 +61,5 @@ public class SetAggregator extends Aggregator {
 	public void finish() throws IOException, InterruptedException {
 		for (final String s : this.set)
 			this.collect(s);
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public boolean isAssociative() {
-		return true;
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public boolean isCommutative() {
-		return true;
 	}
 }

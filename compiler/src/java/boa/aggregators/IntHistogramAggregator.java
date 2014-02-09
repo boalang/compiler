@@ -12,7 +12,7 @@ import boa.io.EmitKey;
  * 
  * @author anthonyu
  */
-@AggregatorSpec(name = "histogram", type = "int", formalParameters = { "int", "int", "int" })
+@AggregatorSpec(name = "histogram", type = "int", formalParameters = { "int", "int", "int" }, canCombine = true)
 public class IntHistogramAggregator extends HistogramAggregator {
 	private SortedCountingSet<Long> list;
 

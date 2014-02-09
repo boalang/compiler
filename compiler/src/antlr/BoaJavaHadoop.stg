@@ -1,6 +1,6 @@
 group BoaJavaHadoop : BoaJava;
 
-Program(name, numreducers, jobs, jobnames, tables, splitsize) ::= <<
+Program(name, numreducers, jobs, jobnames, combineTables, reduceTables, splitsize) ::= <<
 package boa;
 
 public class <name> extends boa.runtime.BoaRunner {
@@ -14,7 +14,9 @@ public class <name> extends boa.runtime.BoaRunner {
 		job.setJarByClass(<name>BoaMapper.class);
 
 		job.setMapperClass(<name>BoaMapper.class);
+		<if(combineTables)>
 		job.setCombinerClass(<name>BoaCombiner.class);
+		<endif>
 		job.setReducerClass(<name>BoaReducer.class);
 
 		return job;
@@ -159,14 +161,14 @@ public class <name> extends boa.runtime.BoaRunner {
 		public <name>BoaCombiner() {
 			super();
 			
-			<tables:{<it><\n>}>		}
+			<combineTables:{<it><\n>}>		}
 	}
 	
 	static class <name>BoaReducer extends boa.runtime.BoaReducer {
 		public <name>BoaReducer() {
 			super();
 
-			<tables:{<it><\n>}>		}
+			<reduceTables:{<it><\n>}>		}
 	}
 	
 	@Override

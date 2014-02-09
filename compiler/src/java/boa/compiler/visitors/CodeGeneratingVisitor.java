@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateGroup;
 
+import boa.aggregators.AggregatorSpec;
 import boa.compiler.SymbolTable;
 import boa.compiler.TypeCheckException;
 import boa.compiler.ast.*;
@@ -298,7 +299,8 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	protected String skipIndex = "";
 	protected boolean abortGeneration = false;
 
-	final public static List<String> tableStrings = new ArrayList<String>();
+	final public static List<String> combineTableStrings = new ArrayList<String>();
+	final public static List<String> reduceTableStrings = new ArrayList<String>();
 
 	public CodeGeneratingVisitor(final String name, final StringTemplateGroup stg) throws IOException {
 		this.name = name;
@@ -357,10 +359,21 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			final BoaType type = description.getType();
 
 			final StringBuilder src = new StringBuilder();
-			for (final Class<?> c : argu.getAggregators(description.getAggregator(), type))
+			boolean combines = false;
+			for (final Class<?> c : argu.getAggregators(description.getAggregator(), type)) {
 				src.append(", new " + c.getCanonicalName() + "(" + parameters + ")");
+				try {
+					final AggregatorSpec annotation = c.getAnnotation(AggregatorSpec.class);
+					if (annotation.canCombine())
+						combines = true;
+				} catch (final RuntimeException e) {
+					throw new TypeCheckException(n, e.getMessage(), e);
+				}
+			}
 
-			tableStrings.add("this.tables.put(\"" + prefix + "::" + id + "\", new boa.aggregators.Table(" + src.toString().substring(2) + "));");
+			if (combines)
+				combineTableStrings.add("this.tables.put(\"" + prefix + "::" + id + "\", new boa.aggregators.Table(" + src.toString().substring(2) + "));");
+			reduceTableStrings.add("this.tables.put(\"" + prefix + "::" + id + "\", new boa.aggregators.Table(" + src.toString().substring(2) + "));");
 		}
 
 		code.add(st.toString());

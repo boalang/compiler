@@ -15,7 +15,7 @@ import boa.io.EmitKey;
  * 
  * @author anthonyu
  */
-@AggregatorSpec(name = "distinct")
+@AggregatorSpec(name = "distinct", canCombine = true)
 public class DistinctAggregator extends Aggregator {
 	// from o.a.h.io.BloomMapFile#initBloomFilter
 	private static final int HASH_COUNT = 5;
@@ -68,17 +68,5 @@ public class DistinctAggregator extends Aggregator {
 
 		// and collect it
 		this.collect(data);
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public boolean isAssociative() {
-		return true;
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public boolean isCommutative() {
-		return true;
 	}
 }

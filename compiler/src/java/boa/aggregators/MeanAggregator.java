@@ -25,18 +25,6 @@ abstract class MeanAggregator extends Aggregator {
 		this.count = 0;
 	}
 
-	/** {@inheritDoc} */
-	@Override
-	public boolean isAssociative() {
-		return true;
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public boolean isCommutative() {
-		return true;
-	}
-
 	/**
 	 * Return the count of the values in the dataset.
 	 * 

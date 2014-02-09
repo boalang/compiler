@@ -88,18 +88,6 @@ public abstract class BottomOrTopAggregator extends Aggregator {
 					this.collect(c.toString());
 		}
 	}
-
-	/** {@inheritDoc} */
-	@Override
-	public boolean isAssociative() {
-		return true;
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public boolean isCommutative() {
-		return true;
-	}
 }
 
 /**

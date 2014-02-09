@@ -10,7 +10,7 @@ import boa.io.EmitValue;
  * 
  * @author anthonyu
  */
-@AggregatorSpec(name = "sum", type = "float")
+@AggregatorSpec(name = "sum", type = "float", canCombine = true)
 public class FloatSumAggregator extends Aggregator {
 	private double sum;
 
@@ -50,17 +50,5 @@ public class FloatSumAggregator extends Aggregator {
 	@Override
 	public EmitValue getResult() {
 		return new EmitValue(this.sum);
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public boolean isAssociative() {
-		return true;
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public boolean isCommutative() {
-		return true;
 	}
 }

@@ -9,6 +9,7 @@ import java.lang.annotation.Target;
  * Specification annotation for Boa aggregators in Java.
  * 
  * @author anthonyu
+ * @author rdyer
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
@@ -34,4 +35,9 @@ public @interface AggregatorSpec {
 	 * "none", meaning that it accepts no weights.
 	 */
 	String weightType() default "none";
+
+	/**
+	 * Can this aggregator combine?
+	 */
+	boolean canCombine() default false;
 }

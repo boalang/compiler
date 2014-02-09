@@ -7,7 +7,7 @@ package boa.aggregators;
  * @author anthonyu
  * @author rdyer
  */
-@AggregatorSpec(name = "top", formalParameters = { "int" }, weightType = "int")
+@AggregatorSpec(name = "top", formalParameters = { "int" }, weightType = "int", canCombine = true)
 public class TopAggregator extends BottomOrTopAggregator {
 	/**
 	 * Construct a {@link TopAggregator}.

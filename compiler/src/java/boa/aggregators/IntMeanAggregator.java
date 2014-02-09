@@ -9,7 +9,7 @@ import boa.io.EmitKey;
  * 
  * @author anthonyu
  */
-@AggregatorSpec(name = "mean", type = "int")
+@AggregatorSpec(name = "mean", type = "int", canCombine = true)
 public class IntMeanAggregator extends MeanAggregator {
 	private long sum;
 

@@ -10,7 +10,7 @@ import boa.io.EmitValue;
  * 
  * @author anthonyu
  */
-@AggregatorSpec(name = "sum", type = "int")
+@AggregatorSpec(name = "sum", type = "int", canCombine = true)
 public class IntSumAggregator extends Aggregator {
 	private long sum;
 
@@ -50,17 +50,5 @@ public class IntSumAggregator extends Aggregator {
 	@Override
 	public EmitValue getResult() {
 		return new EmitValue(this.sum);
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public boolean isAssociative() {
-		return true;
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public boolean isCommutative() {
-		return true;
 	}
 }

@@ -12,7 +12,7 @@ import boa.io.EmitKey;
  * 
  * @author anthonyu
  */
-@AggregatorSpec(name = "unique", formalParameters = { "int" })
+@AggregatorSpec(name = "unique", formalParameters = { "int" }, canCombine = true)
 public class UniqueAggregator extends DistinctAggregator {
 	private long total;
 

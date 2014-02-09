@@ -15,7 +15,7 @@ import boa.io.EmitValue;
  * 
  * @author rdyer
  */
-@AggregatorSpec(name = "graph")
+@AggregatorSpec(name = "graph", canCombine = true)
 public class GraphCSVAggregator extends GraphAggregator {
 	/** {@inheritDoc} */
 	@Override
