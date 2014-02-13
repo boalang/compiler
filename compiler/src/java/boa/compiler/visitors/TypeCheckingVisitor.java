@@ -921,6 +921,17 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 				if (!(t.type instanceof BoaArray) || !valType.assigns(((BoaArray)t.type).getType()))
 					throw new TypeCheckException(t, "invalid array concatenation, found: " + t.type + " expected: " + type);
 			}
+		// only allow '+' (concat) on strings
+		} else if (type instanceof BoaString) {
+			for (final String s : n.getOps())
+				if (!s.equals("+"))
+					throw new TypeCheckException(n, "strings do not support the '" + s + "' arithmetic operator, perhaps you meant '+'?");
+
+			for (final Term t : n.getRhs()) {
+				t.accept(this, env);
+				if (!(t.type instanceof BoaString))
+					throw new TypeCheckException(t, "invalid string concatenation, found: " + t.type + " expected: string");
+			}
 		} else
 			for (final Term t : n.getRhs()) {
 				t.accept(this, env);
