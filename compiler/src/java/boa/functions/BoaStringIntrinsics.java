@@ -9,9 +9,23 @@ import java.util.regex.Pattern;
  * String Manipulation
  * 
  * @author anthonyu
- * 
+ * @author rdyer
  */
 public class BoaStringIntrinsics {
+	/**
+	 * Returns a copy of the given {@link String} with all leading and trailing whitespace removed.
+	 * 
+	 * @param s
+	 *            A {@link String} to remove whitespace
+	 * 
+	 * @return A copy of <i>s</i> with all leading and trailing whitespace removed.
+	 * 
+	 */
+	@FunctionSpec(name = "trim", returnType = "string", formalParameters = { "string" })
+	public static String trim(final String s) {
+		return s.trim();
+	}
+
 	/**
 	 * Returns a copy of the given {@link String} with all characters lowered.
 	 * 
