@@ -2,6 +2,7 @@ package boa.compiler.visitors;
 
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
@@ -1354,32 +1355,35 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	@Override
 	public void visit(final TimeLiteral n) {
 		final String lit = n.getLiteral();
+
+		// time lit is a string, convert to an int
 		if (lit.startsWith("T")) {
-			Date date = null;
-			DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM);
+			final String s = lit.substring(2, lit.length() - 1);
+
+			// first try a standard format
 			try {
-				date = df.parse(lit);
-			} catch (Exception e) { }
-			df = DateFormat.getDateInstance(DateFormat.LONG);
-			try {
-				date = df.parse(lit);
-			} catch (Exception e) { }
-			df = DateFormat.getDateInstance(DateFormat.SHORT);
-			try {
-				date = df.parse(lit);
-			} catch (Exception e) { }
-			df = DateFormat.getDateInstance(DateFormat.FULL);
-			try {
-				date = df.parse(lit);
+				final DateFormat df = new SimpleDateFormat("EEE MMM dd kk:mm:ss zzz yyyy");
+				code.add(formatDate(df.parse(s)));
+				return;
 			} catch (Exception e) { }
 
-			if (date == null)
-				throw new TypeCheckException(n, "Invalid time literal");
+			// then try every possible combination of built in formats
+			final int [] formats = new int[] {DateFormat.DEFAULT, DateFormat.FULL, DateFormat.SHORT, DateFormat.LONG, DateFormat.MEDIUM};
+			for (final int f : formats)
+				for (final int f2 : formats)
+					try {
+						final DateFormat df = DateFormat.getDateTimeInstance(f, f2);
+						code.add(formatDate(df.parse(s)));
+						return;
+					} catch (Exception e) { }
 
-			code.add("" + (date.getTime() * 1000));
-		} else {
-			code.add(lit.substring(0, lit.length() - 1));
+			throw new TypeCheckException(n, "Invalid time literal '" + s + "'");
 		}
+
+		code.add(lit.substring(0, lit.length() - 1));
+	}
+	private String formatDate(final Date date) {
+		return "" + (date.getTime() * 1000) + "L";
 	}
 
 	//
