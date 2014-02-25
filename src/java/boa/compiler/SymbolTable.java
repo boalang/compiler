@@ -78,6 +78,7 @@ public class SymbolTable {
 		idmap.put("CodeRepository", new CodeRepositoryProtoTuple());
 		idmap.put("CommentKind", new CommentKindProtoMap());
 		idmap.put("Comment", new CommentProtoTuple());
+		idmap.put("CommentsRoot", new CommentsRootProtoTuple());
 		idmap.put("Declaration", new DeclarationProtoTuple());
 		idmap.put("ExpressionKind", new ExpressionKindProtoMap());
 		idmap.put("Expression", new ExpressionProtoTuple());

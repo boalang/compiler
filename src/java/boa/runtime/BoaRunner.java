@@ -103,6 +103,11 @@ public abstract class BoaRunner extends Configured implements Tool {
 										.hasArg()
 										.withArgName("INPUT")
 										.create("a"));
+		options.addOption(org.apache.commons.cli.OptionBuilder.withLongOpt("comments")
+										.withDescription("which INPUT to use for comments")
+										.hasArg()
+										.withArgName("INPUT")
+										.create("c"));
 	}
 
 	protected static Options getOptions() { return options; }

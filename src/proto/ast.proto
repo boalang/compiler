@@ -4,6 +4,10 @@ import "shared.proto";
 
 option optimize_for = SPEED;
 
+message CommentsRoot {
+	repeated Comment comments = 1;
+}
+
 message ASTRoot {
 	repeated Namespace namespaces = 1;
 	repeated string imports = 2;

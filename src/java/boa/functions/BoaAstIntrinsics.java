@@ -29,7 +29,7 @@ import boa.types.Toplevel.Project;
 public class BoaAstIntrinsics {
 	@SuppressWarnings("rawtypes")
 	private static Context context;
-	private static MapFile.Reader map;
+	private static MapFile.Reader map, commentsMap;
 
 	public static enum AST_COUNTER {
 		GETS_ATTEMPTED,
@@ -46,11 +46,11 @@ public class BoaAstIntrinsics {
 	}
 
 	private static final ASTRoot emptyAst = ASTRoot.newBuilder().build();
+	private static final CommentsRoot emptyComments = CommentsRoot.newBuilder().build();
 
 	/**
-	 * Given a Revision and ChangedFile, return the AST for that file at that revision.
+	 * Given a ChangedFile, return the AST for that file at that revision.
 	 * 
-	 * @param rev the Revision to get a snapshot of the AST from
 	 * @param f the ChangedFile to get a snapshot of the AST for
 	 * @return the AST, or an empty AST on any sort of error
 	 */
@@ -103,6 +103,49 @@ public class BoaAstIntrinsics {
 		return emptyAst;
 	}
 
+	/**
+	 * Given a ChangedFile, return the comments for that file at that revision.
+	 * 
+	 * @param f the ChangedFile to get a snapshot of the comments for
+	 * @return the comments list, or an empty list on any sort of error
+	 */
+	@SuppressWarnings("unchecked")
+	@FunctionSpec(name = "getcomments", returnType = "CommentsRoot", formalParameters = { "ChangedFile" })
+	public static CommentsRoot getcomments(final ChangedFile f) {
+		// since we know only certain kinds have comments, filter before looking up
+		final ChangedFile.FileKind kind = f.getKind();
+		if (kind != ChangedFile.FileKind.SOURCE_JAVA_ERROR
+				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS2
+				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS3
+				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS4)
+			return emptyComments;
+
+		final String rowName = f.getKey() + "!!" + f.getName();
+
+		if (commentsMap == null)
+			openCommentMap();
+
+		try {
+			final BytesWritable value = new BytesWritable();
+			if (commentsMap.get(new Text(rowName), value) != null) {
+				final CodedInputStream _stream = CodedInputStream.newInstance(value.getBytes(), 0, value.getLength());
+				final CommentsRoot root = CommentsRoot.parseFrom(_stream);
+				return root;
+			}
+		} catch (final InvalidProtocolBufferException e) {
+			e.printStackTrace();
+		} catch (final IOException e) {
+			e.printStackTrace();
+		} catch (final RuntimeException e) {
+			e.printStackTrace();
+		} catch (final Error e) {
+			e.printStackTrace();
+		}
+
+		System.err.println("error with comments: " + rowName);
+		return emptyComments;
+	}
+
 	@SuppressWarnings("rawtypes")
 	public static void setup(final Context context) {
 		BoaAstIntrinsics.context = context;
@@ -121,9 +164,23 @@ public class BoaAstIntrinsics {
 		}
 	}
 
+	private static void openCommentMap() {
+		final Configuration conf = new Configuration();
+		try {
+			final FileSystem fs = FileSystem.get(conf);
+			final Path p = new Path("hdfs://boa-nn1/",
+								new Path(context.getConfiguration().get("boa.comments.dir", context.getConfiguration().get("boa.input.dir", "repcache/live")),
+								new Path("comments")));
+			commentsMap = new MapFile.Reader(fs, p.toString(), conf);
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	@SuppressWarnings("rawtypes")
 	public static void cleanup(final Context context) {
 		closeMap();
+		closeCommentMap();
 	}
 
 	private static void closeMap() {
@@ -134,6 +191,16 @@ public class BoaAstIntrinsics {
 				e.printStackTrace();
 			}
 		map = null;
+	}
+
+	private static void closeCommentMap() {
+		if (commentsMap != null)
+			try {
+				commentsMap.close();
+			} catch (final IOException e) {
+				e.printStackTrace();
+			}
+		commentsMap = null;
 	}
 
 	@FunctionSpec(name = "type_name", returnType = "string", formalParameters = { "string" })

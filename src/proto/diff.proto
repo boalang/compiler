@@ -21,6 +21,7 @@ message ChangedFile {
 	required string name = 3;
 	required string key = 4;
 	optional ASTRoot ast = 5;
+	optional CommentsRoot comments = 6;
 }
 
 message ChangedASTRoot {

@@ -153,6 +153,692 @@ public final class Ast {
     // @@protoc_insertion_point(enum_scope:boa.types.TypeKind)
   }
 
+  public interface CommentsRootOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+
+    // repeated .boa.types.Comment comments = 1;
+    /**
+     * <code>repeated .boa.types.Comment comments = 1;</code>
+     */
+    java.util.List<boa.types.Ast.Comment> 
+        getCommentsList();
+    /**
+     * <code>repeated .boa.types.Comment comments = 1;</code>
+     */
+    boa.types.Ast.Comment getComments(int index);
+    /**
+     * <code>repeated .boa.types.Comment comments = 1;</code>
+     */
+    int getCommentsCount();
+    /**
+     * <code>repeated .boa.types.Comment comments = 1;</code>
+     */
+    java.util.List<? extends boa.types.Ast.CommentOrBuilder> 
+        getCommentsOrBuilderList();
+    /**
+     * <code>repeated .boa.types.Comment comments = 1;</code>
+     */
+    boa.types.Ast.CommentOrBuilder getCommentsOrBuilder(
+        int index);
+  }
+  /**
+   * Protobuf type {@code boa.types.CommentsRoot}
+   */
+  public static final class CommentsRoot extends
+      com.google.protobuf.GeneratedMessage
+      implements CommentsRootOrBuilder {
+    // Use CommentsRoot.newBuilder() to construct.
+    private CommentsRoot(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private CommentsRoot(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final CommentsRoot defaultInstance;
+    public static CommentsRoot getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public CommentsRoot getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private CommentsRoot(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+                comments_ = new java.util.ArrayList<boa.types.Ast.Comment>();
+                mutable_bitField0_ |= 0x00000001;
+              }
+              comments_.add(input.readMessage(boa.types.Ast.Comment.PARSER, extensionRegistry));
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+          comments_ = java.util.Collections.unmodifiableList(comments_);
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return boa.types.Ast.internal_static_boa_types_CommentsRoot_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return boa.types.Ast.internal_static_boa_types_CommentsRoot_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              boa.types.Ast.CommentsRoot.class, boa.types.Ast.CommentsRoot.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<CommentsRoot> PARSER =
+        new com.google.protobuf.AbstractParser<CommentsRoot>() {
+      public CommentsRoot parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new CommentsRoot(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<CommentsRoot> getParserForType() {
+      return PARSER;
+    }
+
+    // repeated .boa.types.Comment comments = 1;
+    public static final int COMMENTS_FIELD_NUMBER = 1;
+    private java.util.List<boa.types.Ast.Comment> comments_;
+    /**
+     * <code>repeated .boa.types.Comment comments = 1;</code>
+     */
+    public java.util.List<boa.types.Ast.Comment> getCommentsList() {
+      return comments_;
+    }
+    /**
+     * <code>repeated .boa.types.Comment comments = 1;</code>
+     */
+    public java.util.List<? extends boa.types.Ast.CommentOrBuilder> 
+        getCommentsOrBuilderList() {
+      return comments_;
+    }
+    /**
+     * <code>repeated .boa.types.Comment comments = 1;</code>
+     */
+    public int getCommentsCount() {
+      return comments_.size();
+    }
+    /**
+     * <code>repeated .boa.types.Comment comments = 1;</code>
+     */
+    public boa.types.Ast.Comment getComments(int index) {
+      return comments_.get(index);
+    }
+    /**
+     * <code>repeated .boa.types.Comment comments = 1;</code>
+     */
+    public boa.types.Ast.CommentOrBuilder getCommentsOrBuilder(
+        int index) {
+      return comments_.get(index);
+    }
+
+    private void initFields() {
+      comments_ = java.util.Collections.emptyList();
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+
+      for (int i = 0; i < getCommentsCount(); i++) {
+        if (!getComments(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      for (int i = 0; i < comments_.size(); i++) {
+        output.writeMessage(1, comments_.get(i));
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      for (int i = 0; i < comments_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(1, comments_.get(i));
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static boa.types.Ast.CommentsRoot parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static boa.types.Ast.CommentsRoot parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static boa.types.Ast.CommentsRoot parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static boa.types.Ast.CommentsRoot parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static boa.types.Ast.CommentsRoot parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static boa.types.Ast.CommentsRoot parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static boa.types.Ast.CommentsRoot parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static boa.types.Ast.CommentsRoot parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static boa.types.Ast.CommentsRoot parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static boa.types.Ast.CommentsRoot parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(boa.types.Ast.CommentsRoot prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code boa.types.CommentsRoot}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements boa.types.Ast.CommentsRootOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return boa.types.Ast.internal_static_boa_types_CommentsRoot_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return boa.types.Ast.internal_static_boa_types_CommentsRoot_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                boa.types.Ast.CommentsRoot.class, boa.types.Ast.CommentsRoot.Builder.class);
+      }
+
+      // Construct using boa.types.Ast.CommentsRoot.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getCommentsFieldBuilder();
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        if (commentsBuilder_ == null) {
+          comments_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+        } else {
+          commentsBuilder_.clear();
+        }
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return boa.types.Ast.internal_static_boa_types_CommentsRoot_descriptor;
+      }
+
+      public boa.types.Ast.CommentsRoot getDefaultInstanceForType() {
+        return boa.types.Ast.CommentsRoot.getDefaultInstance();
+      }
+
+      public boa.types.Ast.CommentsRoot build() {
+        boa.types.Ast.CommentsRoot result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public boa.types.Ast.CommentsRoot buildPartial() {
+        boa.types.Ast.CommentsRoot result = new boa.types.Ast.CommentsRoot(this);
+        int from_bitField0_ = bitField0_;
+        if (commentsBuilder_ == null) {
+          if (((bitField0_ & 0x00000001) == 0x00000001)) {
+            comments_ = java.util.Collections.unmodifiableList(comments_);
+            bitField0_ = (bitField0_ & ~0x00000001);
+          }
+          result.comments_ = comments_;
+        } else {
+          result.comments_ = commentsBuilder_.build();
+        }
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof boa.types.Ast.CommentsRoot) {
+          return mergeFrom((boa.types.Ast.CommentsRoot)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(boa.types.Ast.CommentsRoot other) {
+        if (other == boa.types.Ast.CommentsRoot.getDefaultInstance()) return this;
+        if (commentsBuilder_ == null) {
+          if (!other.comments_.isEmpty()) {
+            if (comments_.isEmpty()) {
+              comments_ = other.comments_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+            } else {
+              ensureCommentsIsMutable();
+              comments_.addAll(other.comments_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.comments_.isEmpty()) {
+            if (commentsBuilder_.isEmpty()) {
+              commentsBuilder_.dispose();
+              commentsBuilder_ = null;
+              comments_ = other.comments_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+              commentsBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getCommentsFieldBuilder() : null;
+            } else {
+              commentsBuilder_.addAllMessages(other.comments_);
+            }
+          }
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        for (int i = 0; i < getCommentsCount(); i++) {
+          if (!getComments(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        boa.types.Ast.CommentsRoot parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (boa.types.Ast.CommentsRoot) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      // repeated .boa.types.Comment comments = 1;
+      private java.util.List<boa.types.Ast.Comment> comments_ =
+        java.util.Collections.emptyList();
+      private void ensureCommentsIsMutable() {
+        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
+          comments_ = new java.util.ArrayList<boa.types.Ast.Comment>(comments_);
+          bitField0_ |= 0x00000001;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Comment, boa.types.Ast.Comment.Builder, boa.types.Ast.CommentOrBuilder> commentsBuilder_;
+
+      /**
+       * <code>repeated .boa.types.Comment comments = 1;</code>
+       */
+      public java.util.List<boa.types.Ast.Comment> getCommentsList() {
+        if (commentsBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(comments_);
+        } else {
+          return commentsBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Comment comments = 1;</code>
+       */
+      public int getCommentsCount() {
+        if (commentsBuilder_ == null) {
+          return comments_.size();
+        } else {
+          return commentsBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Comment comments = 1;</code>
+       */
+      public boa.types.Ast.Comment getComments(int index) {
+        if (commentsBuilder_ == null) {
+          return comments_.get(index);
+        } else {
+          return commentsBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Comment comments = 1;</code>
+       */
+      public Builder setComments(
+          int index, boa.types.Ast.Comment value) {
+        if (commentsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureCommentsIsMutable();
+          comments_.set(index, value);
+          onChanged();
+        } else {
+          commentsBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Comment comments = 1;</code>
+       */
+      public Builder setComments(
+          int index, boa.types.Ast.Comment.Builder builderForValue) {
+        if (commentsBuilder_ == null) {
+          ensureCommentsIsMutable();
+          comments_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          commentsBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Comment comments = 1;</code>
+       */
+      public Builder addComments(boa.types.Ast.Comment value) {
+        if (commentsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureCommentsIsMutable();
+          comments_.add(value);
+          onChanged();
+        } else {
+          commentsBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Comment comments = 1;</code>
+       */
+      public Builder addComments(
+          int index, boa.types.Ast.Comment value) {
+        if (commentsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureCommentsIsMutable();
+          comments_.add(index, value);
+          onChanged();
+        } else {
+          commentsBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Comment comments = 1;</code>
+       */
+      public Builder addComments(
+          boa.types.Ast.Comment.Builder builderForValue) {
+        if (commentsBuilder_ == null) {
+          ensureCommentsIsMutable();
+          comments_.add(builderForValue.build());
+          onChanged();
+        } else {
+          commentsBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Comment comments = 1;</code>
+       */
+      public Builder addComments(
+          int index, boa.types.Ast.Comment.Builder builderForValue) {
+        if (commentsBuilder_ == null) {
+          ensureCommentsIsMutable();
+          comments_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          commentsBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Comment comments = 1;</code>
+       */
+      public Builder addAllComments(
+          java.lang.Iterable<? extends boa.types.Ast.Comment> values) {
+        if (commentsBuilder_ == null) {
+          ensureCommentsIsMutable();
+          super.addAll(values, comments_);
+          onChanged();
+        } else {
+          commentsBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Comment comments = 1;</code>
+       */
+      public Builder clearComments() {
+        if (commentsBuilder_ == null) {
+          comments_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+          onChanged();
+        } else {
+          commentsBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Comment comments = 1;</code>
+       */
+      public Builder removeComments(int index) {
+        if (commentsBuilder_ == null) {
+          ensureCommentsIsMutable();
+          comments_.remove(index);
+          onChanged();
+        } else {
+          commentsBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Comment comments = 1;</code>
+       */
+      public boa.types.Ast.Comment.Builder getCommentsBuilder(
+          int index) {
+        return getCommentsFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.Comment comments = 1;</code>
+       */
+      public boa.types.Ast.CommentOrBuilder getCommentsOrBuilder(
+          int index) {
+        if (commentsBuilder_ == null) {
+          return comments_.get(index);  } else {
+          return commentsBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Comment comments = 1;</code>
+       */
+      public java.util.List<? extends boa.types.Ast.CommentOrBuilder> 
+           getCommentsOrBuilderList() {
+        if (commentsBuilder_ != null) {
+          return commentsBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(comments_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Comment comments = 1;</code>
+       */
+      public boa.types.Ast.Comment.Builder addCommentsBuilder() {
+        return getCommentsFieldBuilder().addBuilder(
+            boa.types.Ast.Comment.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Comment comments = 1;</code>
+       */
+      public boa.types.Ast.Comment.Builder addCommentsBuilder(
+          int index) {
+        return getCommentsFieldBuilder().addBuilder(
+            index, boa.types.Ast.Comment.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Comment comments = 1;</code>
+       */
+      public java.util.List<boa.types.Ast.Comment.Builder> 
+           getCommentsBuilderList() {
+        return getCommentsFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Comment, boa.types.Ast.Comment.Builder, boa.types.Ast.CommentOrBuilder> 
+          getCommentsFieldBuilder() {
+        if (commentsBuilder_ == null) {
+          commentsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              boa.types.Ast.Comment, boa.types.Ast.Comment.Builder, boa.types.Ast.CommentOrBuilder>(
+                  comments_,
+                  ((bitField0_ & 0x00000001) == 0x00000001),
+                  getParentForChildren(),
+                  isClean());
+          comments_ = null;
+        }
+        return commentsBuilder_;
+      }
+
+      // @@protoc_insertion_point(builder_scope:boa.types.CommentsRoot)
+    }
+
+    static {
+      defaultInstance = new CommentsRoot(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:boa.types.CommentsRoot)
+  }
+
   public interface ASTRootOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
@@ -21305,6 +21991,11 @@ public final class Ast {
   }
 
   private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_boa_types_CommentsRoot_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_boa_types_CommentsRoot_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
     internal_static_boa_types_ASTRoot_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
@@ -21368,170 +22059,177 @@ public final class Ast {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\tast.proto\022\tboa.types\032\014shared.proto\"D\n\007" +
-      "ASTRoot\022(\n\nnamespaces\030\001 \003(\0132\024.boa.types." +
-      "Namespace\022\017\n\007imports\030\002 \003(\t\"o\n\tNamespace\022" +
-      "\014\n\004name\030\001 \002(\t\022&\n\tmodifiers\030\002 \003(\0132\023.boa.t" +
-      "ypes.Modifier\022,\n\014declarations\030\003 \003(\0132\026.bo" +
-      "a.types.Declaration\"\331\002\n\013Declaration\022\014\n\004n" +
-      "ame\030\001 \002(\t\022!\n\004kind\030\002 \002(\0162\023.boa.types.Type" +
-      "Kind\022&\n\tmodifiers\030\003 \003(\0132\023.boa.types.Modi" +
-      "fier\022+\n\022generic_parameters\030\004 \003(\0132\017.boa.t" +
-      "ypes.Type\022 \n\007parents\030\005 \003(\0132\017.boa.types.T",
-      "ype\022\"\n\007methods\030\006 \003(\0132\021.boa.types.Method\022" +
-      "#\n\006fields\030\007 \003(\0132\023.boa.types.Variable\0223\n\023" +
-      "nested_declarations\030\010 \003(\0132\026.boa.types.De" +
-      "claration\022$\n\010comments\030\t \003(\0132\022.boa.types." +
-      "Comment\"C\n\004Type\022\014\n\004name\030\001 \002(\t\022!\n\004kind\030\002 " +
-      "\002(\0162\023.boa.types.TypeKind\022\n\n\002id\030\004 \001(\t\"\263\002\n" +
-      "\006Method\022\014\n\004name\030\001 \001(\t\022&\n\tmodifiers\030\002 \003(\013" +
-      "2\023.boa.types.Modifier\022$\n\013return_type\030\003 \002" +
-      "(\0132\017.boa.types.Type\022+\n\022generic_parameter" +
-      "s\030\004 \003(\0132\017.boa.types.Type\022&\n\targuments\030\005 ",
-      "\003(\0132\023.boa.types.Variable\022(\n\017exception_ty" +
-      "pes\030\006 \003(\0132\017.boa.types.Type\022(\n\nstatements" +
-      "\030\007 \003(\0132\024.boa.types.Statement\022$\n\010comments" +
-      "\030\010 \003(\0132\022.boa.types.Comment\"\272\001\n\010Variable\022" +
-      "\014\n\004name\030\001 \002(\t\022&\n\rvariable_type\030\002 \002(\0132\017.b" +
-      "oa.types.Type\022&\n\tmodifiers\030\003 \003(\0132\023.boa.t" +
-      "ypes.Modifier\022*\n\013initializer\030\004 \001(\0132\025.boa" +
-      ".types.Expression\022$\n\010comments\030\005 \003(\0132\022.bo" +
-      "a.types.Comment\"\227\005\n\tStatement\0220\n\004kind\030\001 " +
-      "\002(\0162\".boa.types.Statement.StatementKind\022",
-      "$\n\010comments\030\002 \003(\0132\022.boa.types.Comment\022(\n" +
-      "\nstatements\030\003 \003(\0132\024.boa.types.Statement\022" +
-      ".\n\017initializations\030\004 \003(\0132\025.boa.types.Exp" +
-      "ression\022(\n\tcondition\030\005 \001(\0132\025.boa.types.E" +
-      "xpression\022&\n\007updates\030\006 \003(\0132\025.boa.types.E" +
-      "xpression\0221\n\024variable_declaration\030\007 \001(\0132" +
-      "\023.boa.types.Variable\0220\n\020type_declaration" +
-      "\030\010 \001(\0132\026.boa.types.Declaration\022)\n\nexpres" +
-      "sion\030\t \001(\0132\025.boa.types.Expression\"\365\001\n\rSt" +
-      "atementKind\022\t\n\005OTHER\020\001\022\t\n\005BLOCK\020\002\022\014\n\010TYP",
-      "EDECL\020\004\022\016\n\nEXPRESSION\020\005\022\020\n\014SYNCHRONIZED\020" +
-      "\006\022\n\n\006RETURN\020\007\022\007\n\003FOR\020\010\022\006\n\002DO\020\t\022\t\n\005WHILE\020" +
-      "\n\022\006\n\002IF\020\013\022\n\n\006ASSERT\020\014\022\t\n\005BREAK\020\r\022\014\n\010CONT" +
-      "INUE\020\016\022\t\n\005LABEL\020\017\022\n\n\006SWITCH\020\020\022\010\n\004CASE\020\021\022" +
-      "\007\n\003TRY\020\022\022\t\n\005THROW\020\023\022\t\n\005CATCH\020\024\022\t\n\005EMPTY\020" +
-      "\025\"\217\t\n\nExpression\0222\n\004kind\030\001 \002(\0162$.boa.typ" +
-      "es.Expression.ExpressionKind\022*\n\013expressi" +
-      "ons\030\002 \003(\0132\025.boa.types.Expression\022+\n\016vari" +
-      "able_decls\030\003 \003(\0132\023.boa.types.Variable\022!\n" +
-      "\010new_type\030\004 \001(\0132\017.boa.types.Type\022+\n\022gene",
-      "ric_parameters\030\005 \003(\0132\017.boa.types.Type\022\022\n" +
-      "\nis_postfix\030\006 \001(\010\022\017\n\007literal\030\007 \001(\t\022\020\n\010va" +
-      "riable\030\010 \001(\t\022\016\n\006method\030\t \001(\t\022*\n\013method_a" +
-      "rgs\030\n \003(\0132\025.boa.types.Expression\0220\n\020anon" +
-      "_declaration\030\013 \001(\0132\026.boa.types.Declarati" +
-      "on\022\'\n\nannotation\030\014 \001(\0132\023.boa.types.Modif" +
-      "ier\"\325\005\n\016ExpressionKind\022\t\n\005OTHER\020\001\022\013\n\007LIT" +
-      "ERAL\020\002\022\r\n\tVARACCESS\020\003\022\013\n\007VARDECL\020\004\022\016\n\nME" +
-      "THODCALL\020\005\022\010\n\004CAST\020\006\022\016\n\nARRAYINDEX\020\007\022\r\n\t" +
-      "ARRAYINIT\020\010\022\017\n\013TYPECOMPARE\020\t\022\007\n\003NEW\020\n\022\014\n",
-      "\010NEWARRAY\020\013\022\n\n\006OP_ADD\020\014\022\n\n\006OP_SUB\020\r\022\013\n\007O" +
-      "P_MULT\020\016\022\n\n\006OP_DIV\020\017\022\n\n\006OP_MOD\020\020\022\n\n\006OP_I" +
-      "NC\020\021\022\n\n\006OP_DEC\020\022\022\016\n\nBIT_LSHIFT\020\023\022\016\n\nBIT_" +
-      "RSHIFT\020\024\022\026\n\022BIT_UNSIGNEDRSHIFT\020\025\022\013\n\007BIT_" +
-      "AND\020\026\022\n\n\006BIT_OR\020\027\022\013\n\007BIT_NOT\020\030\022\013\n\007BIT_XO" +
-      "R\020\031\022\017\n\013LOGICAL_NOT\020\032\022\017\n\013LOGICAL_AND\020\033\022\016\n" +
-      "\nLOGICAL_OR\020\034\022\006\n\002EQ\020\035\022\007\n\003NEQ\020\036\022\006\n\002LT\020\037\022\006" +
-      "\n\002GT\020 \022\010\n\004LTEQ\020!\022\010\n\004GTEQ\020\"\022\017\n\013CONDITIONA" +
-      "L\020#\022\020\n\014NULLCOALESCE\020$\022\n\n\006ASSIGN\020%\022\016\n\nASS" +
-      "IGN_ADD\020&\022\016\n\nASSIGN_SUB\020\'\022\017\n\013ASSIGN_MULT",
-      "\020(\022\016\n\nASSIGN_DIV\020)\022\016\n\nASSIGN_MOD\020*\022\021\n\rAS" +
-      "SIGN_BITXOR\020+\022\021\n\rASSIGN_BITAND\020,\022\020\n\014ASSI" +
-      "GN_BITOR\020-\022\021\n\rASSIGN_LSHIFT\020.\022\021\n\rASSIGN_" +
-      "RSHIFT\020/\022\031\n\025ASSIGN_UNSIGNEDRSHIFT\0200\022\016\n\nA" +
-      "NNOTATION\0201\"\233\003\n\010Modifier\022.\n\004kind\030\001 \002(\0162 " +
-      ".boa.types.Modifier.ModifierKind\0222\n\nvisi" +
-      "bility\030\002 \001(\0162\036.boa.types.Modifier.Visibi" +
-      "lity\022\027\n\017annotation_name\030\003 \001(\t\022\032\n\022annotat" +
-      "ion_members\030\004 \003(\t\0220\n\021annotation_values\030\005" +
-      " \003(\0132\025.boa.types.Expression\022\r\n\005other\030\006 \001",
-      "(\t\"p\n\014ModifierKind\022\t\n\005OTHER\020\001\022\016\n\nVISIBIL" +
-      "ITY\020\002\022\016\n\nANNOTATION\020\003\022\t\n\005FINAL\020\004\022\n\n\006STAT" +
-      "IC\020\005\022\020\n\014SYNCHRONIZED\020\006\022\014\n\010ABSTRACT\020\007\"C\n\n" +
-      "Visibility\022\n\n\006PUBLIC\020\001\022\013\n\007PRIVATE\020\002\022\r\n\tP" +
-      "ROTECTED\020\003\022\r\n\tNAMESPACE\020\004\"\250\001\n\007Comment\022,\n" +
-      "\004kind\030\001 \002(\0162\036.boa.types.Comment.CommentK" +
-      "ind\022\r\n\005value\030\002 \002(\t\022)\n\010position\030\003 \002(\0132\027.b" +
-      "oa.types.PositionInfo\"5\n\013CommentKind\022\010\n\004" +
-      "LINE\020\001\022\t\n\005BLOCK\020\002\022\007\n\003DOC\020\003\022\010\n\004SPEC\020\004\"{\n\014" +
-      "PositionInfo\022\021\n\tstart_pos\030\001 \002(\005\022\016\n\006lengt",
-      "h\030\002 \002(\005\022\022\n\nstart_line\030\003 \002(\005\022\021\n\tstart_col" +
-      "\030\004 \002(\005\022\020\n\010end_line\030\005 \002(\005\022\017\n\007end_col\030\006 \002(" +
-      "\005*\177\n\010TypeKind\022\t\n\005OTHER\020\001\022\t\n\005CLASS\020\002\022\r\n\tI" +
-      "NTERFACE\020\003\022\r\n\tANONYMOUS\020\004\022\n\n\006STRUCT\020\005\022\010\n" +
-      "\004ENUM\020\006\022\016\n\nANNOTATION\020\007\022\014\n\010DELEGATE\020\010\022\013\n" +
-      "\007GENERIC\020\tB\002H\001"
+      "\n\tast.proto\022\tboa.types\032\014shared.proto\"4\n\014" +
+      "CommentsRoot\022$\n\010comments\030\001 \003(\0132\022.boa.typ" +
+      "es.Comment\"D\n\007ASTRoot\022(\n\nnamespaces\030\001 \003(" +
+      "\0132\024.boa.types.Namespace\022\017\n\007imports\030\002 \003(\t" +
+      "\"o\n\tNamespace\022\014\n\004name\030\001 \002(\t\022&\n\tmodifiers" +
+      "\030\002 \003(\0132\023.boa.types.Modifier\022,\n\014declarati" +
+      "ons\030\003 \003(\0132\026.boa.types.Declaration\"\331\002\n\013De" +
+      "claration\022\014\n\004name\030\001 \002(\t\022!\n\004kind\030\002 \002(\0162\023." +
+      "boa.types.TypeKind\022&\n\tmodifiers\030\003 \003(\0132\023." +
+      "boa.types.Modifier\022+\n\022generic_parameters",
+      "\030\004 \003(\0132\017.boa.types.Type\022 \n\007parents\030\005 \003(\013" +
+      "2\017.boa.types.Type\022\"\n\007methods\030\006 \003(\0132\021.boa" +
+      ".types.Method\022#\n\006fields\030\007 \003(\0132\023.boa.type" +
+      "s.Variable\0223\n\023nested_declarations\030\010 \003(\0132" +
+      "\026.boa.types.Declaration\022$\n\010comments\030\t \003(" +
+      "\0132\022.boa.types.Comment\"C\n\004Type\022\014\n\004name\030\001 " +
+      "\002(\t\022!\n\004kind\030\002 \002(\0162\023.boa.types.TypeKind\022\n" +
+      "\n\002id\030\004 \001(\t\"\263\002\n\006Method\022\014\n\004name\030\001 \001(\t\022&\n\tm" +
+      "odifiers\030\002 \003(\0132\023.boa.types.Modifier\022$\n\013r" +
+      "eturn_type\030\003 \002(\0132\017.boa.types.Type\022+\n\022gen",
+      "eric_parameters\030\004 \003(\0132\017.boa.types.Type\022&" +
+      "\n\targuments\030\005 \003(\0132\023.boa.types.Variable\022(" +
+      "\n\017exception_types\030\006 \003(\0132\017.boa.types.Type" +
+      "\022(\n\nstatements\030\007 \003(\0132\024.boa.types.Stateme" +
+      "nt\022$\n\010comments\030\010 \003(\0132\022.boa.types.Comment" +
+      "\"\272\001\n\010Variable\022\014\n\004name\030\001 \002(\t\022&\n\rvariable_" +
+      "type\030\002 \002(\0132\017.boa.types.Type\022&\n\tmodifiers" +
+      "\030\003 \003(\0132\023.boa.types.Modifier\022*\n\013initializ" +
+      "er\030\004 \001(\0132\025.boa.types.Expression\022$\n\010comme" +
+      "nts\030\005 \003(\0132\022.boa.types.Comment\"\227\005\n\tStatem",
+      "ent\0220\n\004kind\030\001 \002(\0162\".boa.types.Statement." +
+      "StatementKind\022$\n\010comments\030\002 \003(\0132\022.boa.ty" +
+      "pes.Comment\022(\n\nstatements\030\003 \003(\0132\024.boa.ty" +
+      "pes.Statement\022.\n\017initializations\030\004 \003(\0132\025" +
+      ".boa.types.Expression\022(\n\tcondition\030\005 \001(\013" +
+      "2\025.boa.types.Expression\022&\n\007updates\030\006 \003(\013" +
+      "2\025.boa.types.Expression\0221\n\024variable_decl" +
+      "aration\030\007 \001(\0132\023.boa.types.Variable\0220\n\020ty" +
+      "pe_declaration\030\010 \001(\0132\026.boa.types.Declara" +
+      "tion\022)\n\nexpression\030\t \001(\0132\025.boa.types.Exp",
+      "ression\"\365\001\n\rStatementKind\022\t\n\005OTHER\020\001\022\t\n\005" +
+      "BLOCK\020\002\022\014\n\010TYPEDECL\020\004\022\016\n\nEXPRESSION\020\005\022\020\n" +
+      "\014SYNCHRONIZED\020\006\022\n\n\006RETURN\020\007\022\007\n\003FOR\020\010\022\006\n\002" +
+      "DO\020\t\022\t\n\005WHILE\020\n\022\006\n\002IF\020\013\022\n\n\006ASSERT\020\014\022\t\n\005B" +
+      "REAK\020\r\022\014\n\010CONTINUE\020\016\022\t\n\005LABEL\020\017\022\n\n\006SWITC" +
+      "H\020\020\022\010\n\004CASE\020\021\022\007\n\003TRY\020\022\022\t\n\005THROW\020\023\022\t\n\005CAT" +
+      "CH\020\024\022\t\n\005EMPTY\020\025\"\217\t\n\nExpression\0222\n\004kind\030\001" +
+      " \002(\0162$.boa.types.Expression.ExpressionKi" +
+      "nd\022*\n\013expressions\030\002 \003(\0132\025.boa.types.Expr" +
+      "ession\022+\n\016variable_decls\030\003 \003(\0132\023.boa.typ",
+      "es.Variable\022!\n\010new_type\030\004 \001(\0132\017.boa.type" +
+      "s.Type\022+\n\022generic_parameters\030\005 \003(\0132\017.boa" +
+      ".types.Type\022\022\n\nis_postfix\030\006 \001(\010\022\017\n\007liter" +
+      "al\030\007 \001(\t\022\020\n\010variable\030\010 \001(\t\022\016\n\006method\030\t \001" +
+      "(\t\022*\n\013method_args\030\n \003(\0132\025.boa.types.Expr" +
+      "ession\0220\n\020anon_declaration\030\013 \001(\0132\026.boa.t" +
+      "ypes.Declaration\022\'\n\nannotation\030\014 \001(\0132\023.b" +
+      "oa.types.Modifier\"\325\005\n\016ExpressionKind\022\t\n\005" +
+      "OTHER\020\001\022\013\n\007LITERAL\020\002\022\r\n\tVARACCESS\020\003\022\013\n\007V" +
+      "ARDECL\020\004\022\016\n\nMETHODCALL\020\005\022\010\n\004CAST\020\006\022\016\n\nAR",
+      "RAYINDEX\020\007\022\r\n\tARRAYINIT\020\010\022\017\n\013TYPECOMPARE" +
+      "\020\t\022\007\n\003NEW\020\n\022\014\n\010NEWARRAY\020\013\022\n\n\006OP_ADD\020\014\022\n\n" +
+      "\006OP_SUB\020\r\022\013\n\007OP_MULT\020\016\022\n\n\006OP_DIV\020\017\022\n\n\006OP" +
+      "_MOD\020\020\022\n\n\006OP_INC\020\021\022\n\n\006OP_DEC\020\022\022\016\n\nBIT_LS" +
+      "HIFT\020\023\022\016\n\nBIT_RSHIFT\020\024\022\026\n\022BIT_UNSIGNEDRS" +
+      "HIFT\020\025\022\013\n\007BIT_AND\020\026\022\n\n\006BIT_OR\020\027\022\013\n\007BIT_N" +
+      "OT\020\030\022\013\n\007BIT_XOR\020\031\022\017\n\013LOGICAL_NOT\020\032\022\017\n\013LO" +
+      "GICAL_AND\020\033\022\016\n\nLOGICAL_OR\020\034\022\006\n\002EQ\020\035\022\007\n\003N" +
+      "EQ\020\036\022\006\n\002LT\020\037\022\006\n\002GT\020 \022\010\n\004LTEQ\020!\022\010\n\004GTEQ\020\"" +
+      "\022\017\n\013CONDITIONAL\020#\022\020\n\014NULLCOALESCE\020$\022\n\n\006A",
+      "SSIGN\020%\022\016\n\nASSIGN_ADD\020&\022\016\n\nASSIGN_SUB\020\'\022" +
+      "\017\n\013ASSIGN_MULT\020(\022\016\n\nASSIGN_DIV\020)\022\016\n\nASSI" +
+      "GN_MOD\020*\022\021\n\rASSIGN_BITXOR\020+\022\021\n\rASSIGN_BI" +
+      "TAND\020,\022\020\n\014ASSIGN_BITOR\020-\022\021\n\rASSIGN_LSHIF" +
+      "T\020.\022\021\n\rASSIGN_RSHIFT\020/\022\031\n\025ASSIGN_UNSIGNE" +
+      "DRSHIFT\0200\022\016\n\nANNOTATION\0201\"\233\003\n\010Modifier\022." +
+      "\n\004kind\030\001 \002(\0162 .boa.types.Modifier.Modifi" +
+      "erKind\0222\n\nvisibility\030\002 \001(\0162\036.boa.types.M" +
+      "odifier.Visibility\022\027\n\017annotation_name\030\003 " +
+      "\001(\t\022\032\n\022annotation_members\030\004 \003(\t\0220\n\021annot",
+      "ation_values\030\005 \003(\0132\025.boa.types.Expressio" +
+      "n\022\r\n\005other\030\006 \001(\t\"p\n\014ModifierKind\022\t\n\005OTHE" +
+      "R\020\001\022\016\n\nVISIBILITY\020\002\022\016\n\nANNOTATION\020\003\022\t\n\005F" +
+      "INAL\020\004\022\n\n\006STATIC\020\005\022\020\n\014SYNCHRONIZED\020\006\022\014\n\010" +
+      "ABSTRACT\020\007\"C\n\nVisibility\022\n\n\006PUBLIC\020\001\022\013\n\007" +
+      "PRIVATE\020\002\022\r\n\tPROTECTED\020\003\022\r\n\tNAMESPACE\020\004\"" +
+      "\250\001\n\007Comment\022,\n\004kind\030\001 \002(\0162\036.boa.types.Co" +
+      "mment.CommentKind\022\r\n\005value\030\002 \002(\t\022)\n\010posi" +
+      "tion\030\003 \002(\0132\027.boa.types.PositionInfo\"5\n\013C" +
+      "ommentKind\022\010\n\004LINE\020\001\022\t\n\005BLOCK\020\002\022\007\n\003DOC\020\003",
+      "\022\010\n\004SPEC\020\004\"{\n\014PositionInfo\022\021\n\tstart_pos\030" +
+      "\001 \002(\005\022\016\n\006length\030\002 \002(\005\022\022\n\nstart_line\030\003 \002(" +
+      "\005\022\021\n\tstart_col\030\004 \002(\005\022\020\n\010end_line\030\005 \002(\005\022\017" +
+      "\n\007end_col\030\006 \002(\005*\177\n\010TypeKind\022\t\n\005OTHER\020\001\022\t" +
+      "\n\005CLASS\020\002\022\r\n\tINTERFACE\020\003\022\r\n\tANONYMOUS\020\004\022" +
+      "\n\n\006STRUCT\020\005\022\010\n\004ENUM\020\006\022\016\n\nANNOTATION\020\007\022\014\n" +
+      "\010DELEGATE\020\010\022\013\n\007GENERIC\020\tB\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
         public com.google.protobuf.ExtensionRegistry assignDescriptors(
             com.google.protobuf.Descriptors.FileDescriptor root) {
           descriptor = root;
-          internal_static_boa_types_ASTRoot_descriptor =
+          internal_static_boa_types_CommentsRoot_descriptor =
             getDescriptor().getMessageTypes().get(0);
+          internal_static_boa_types_CommentsRoot_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_boa_types_CommentsRoot_descriptor,
+              new java.lang.String[] { "Comments", });
+          internal_static_boa_types_ASTRoot_descriptor =
+            getDescriptor().getMessageTypes().get(1);
           internal_static_boa_types_ASTRoot_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_ASTRoot_descriptor,
               new java.lang.String[] { "Namespaces", "Imports", });
           internal_static_boa_types_Namespace_descriptor =
-            getDescriptor().getMessageTypes().get(1);
+            getDescriptor().getMessageTypes().get(2);
           internal_static_boa_types_Namespace_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Namespace_descriptor,
               new java.lang.String[] { "Name", "Modifiers", "Declarations", });
           internal_static_boa_types_Declaration_descriptor =
-            getDescriptor().getMessageTypes().get(2);
+            getDescriptor().getMessageTypes().get(3);
           internal_static_boa_types_Declaration_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Declaration_descriptor,
               new java.lang.String[] { "Name", "Kind", "Modifiers", "GenericParameters", "Parents", "Methods", "Fields", "NestedDeclarations", "Comments", });
           internal_static_boa_types_Type_descriptor =
-            getDescriptor().getMessageTypes().get(3);
+            getDescriptor().getMessageTypes().get(4);
           internal_static_boa_types_Type_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Type_descriptor,
               new java.lang.String[] { "Name", "Kind", "Id", });
           internal_static_boa_types_Method_descriptor =
-            getDescriptor().getMessageTypes().get(4);
+            getDescriptor().getMessageTypes().get(5);
           internal_static_boa_types_Method_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Method_descriptor,
               new java.lang.String[] { "Name", "Modifiers", "ReturnType", "GenericParameters", "Arguments", "ExceptionTypes", "Statements", "Comments", });
           internal_static_boa_types_Variable_descriptor =
-            getDescriptor().getMessageTypes().get(5);
+            getDescriptor().getMessageTypes().get(6);
           internal_static_boa_types_Variable_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Variable_descriptor,
               new java.lang.String[] { "Name", "VariableType", "Modifiers", "Initializer", "Comments", });
           internal_static_boa_types_Statement_descriptor =
-            getDescriptor().getMessageTypes().get(6);
+            getDescriptor().getMessageTypes().get(7);
           internal_static_boa_types_Statement_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Statement_descriptor,
               new java.lang.String[] { "Kind", "Comments", "Statements", "Initializations", "Condition", "Updates", "VariableDeclaration", "TypeDeclaration", "Expression", });
           internal_static_boa_types_Expression_descriptor =
-            getDescriptor().getMessageTypes().get(7);
+            getDescriptor().getMessageTypes().get(8);
           internal_static_boa_types_Expression_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Expression_descriptor,
               new java.lang.String[] { "Kind", "Expressions", "VariableDecls", "NewType", "GenericParameters", "IsPostfix", "Literal", "Variable", "Method", "MethodArgs", "AnonDeclaration", "Annotation", });
           internal_static_boa_types_Modifier_descriptor =
-            getDescriptor().getMessageTypes().get(8);
+            getDescriptor().getMessageTypes().get(9);
           internal_static_boa_types_Modifier_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Modifier_descriptor,
               new java.lang.String[] { "Kind", "Visibility", "AnnotationName", "AnnotationMembers", "AnnotationValues", "Other", });
           internal_static_boa_types_Comment_descriptor =
-            getDescriptor().getMessageTypes().get(9);
+            getDescriptor().getMessageTypes().get(10);
           internal_static_boa_types_Comment_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Comment_descriptor,
               new java.lang.String[] { "Kind", "Value", "Position", });
           internal_static_boa_types_PositionInfo_descriptor =
-            getDescriptor().getMessageTypes().get(10);
+            getDescriptor().getMessageTypes().get(11);
           internal_static_boa_types_PositionInfo_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_PositionInfo_descriptor,
