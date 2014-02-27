@@ -43,11 +43,14 @@ public class TaskClassifyingVisitor extends AbstractVisitorNoArg {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(Factor n) {
-		if (n.getOperand() instanceof Identifier && ((Identifier)n.getOperand()).getToken().equals("getast"))
-			if (n.getOpsSize() > 0 && n.getOp(0) instanceof Call) {
-				complex = true;
-				return;
-			}
+		if (n.getOperand() instanceof Identifier) {
+			final String id = ((Identifier)n.getOperand()).getToken();
+			if ("getast".equals(id) || "getcomments".equals(id))
+				if (n.getOpsSize() > 0 && n.getOp(0) instanceof Call) {
+					complex = true;
+					return;
+				}
+		}
 
 		super.visit(n);
 	}
