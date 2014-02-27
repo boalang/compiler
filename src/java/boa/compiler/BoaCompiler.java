@@ -178,15 +178,15 @@ public class BoaCompiler {
 					final TaskClassifyingVisitor simpleVisitor = new TaskClassifyingVisitor();
 					simpleVisitor.start(p);
 
-					LOG.info(f.getName() + ": task complexity: " + (!simpleVisitor.hasVisitor() ? "simple" : "complex"));
-					isSimple &= !simpleVisitor.hasVisitor();
+					LOG.info(f.getName() + ": task complexity: " + (!simpleVisitor.isComplex() ? "simple" : "complex"));
+					isSimple &= !simpleVisitor.isComplex();
 
 					new LocalAggregationTransformer().start(p);
 						
 					// if a job has no visitor, let it have its own method
 					// also let jobs have own methods if visitor merging is disabled
-					if (!simpleVisitor.hasVisitor() || cl.hasOption("nv") || inputFiles.size() == 1) {
-						if (simpleVisitor.hasVisitor())
+					if (!simpleVisitor.isComplex() || cl.hasOption("nv") || inputFiles.size() == 1) {
+						if (simpleVisitor.isComplex())
 							new VisitorOptimizingTransformer().start(p);
 
 						final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(jobName, stg);
