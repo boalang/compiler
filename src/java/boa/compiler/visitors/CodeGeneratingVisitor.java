@@ -97,6 +97,42 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	 * @author rdyer
 	 */
 	protected class VarDeclCodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
+		private boolean nest;
+
+		/** {@inheritDoc} */
+		@Override
+		protected void initialize() {
+			super.initialize();
+			nest = true;
+		}
+
+		/** {@inheritDoc} */
+		@Override
+		public void visit(final Program n) {
+			if (!nest) return;
+
+			nest = false;
+			super.visit(n);
+		}
+
+		/** {@inheritDoc} */
+		@Override
+		public void visit(final FunctionExpression n) {
+			if (!nest) return;
+
+			nest = false;
+			super.visit(n);
+		}
+
+		/** {@inheritDoc} */
+		@Override
+		public void visit(final VisitorExpression n) {
+			if (!nest) return;
+
+			nest = false;
+			super.visit(n);
+		}
+
 		/** {@inheritDoc} */
 		@Override
 		public void visit(final VarDeclStatement n) {
@@ -1222,7 +1258,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			types.add(c.getType().type.toJavaType());
 		}
 
-		this.varDecl.start(n.getBody());
+		this.varDecl.start(n);
 		st.setAttribute("staticDeclarations", this.varDecl.getCode());
 
 		st.setAttribute("type", funcType.toJavaType());
@@ -1297,7 +1333,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	public void visit(final VisitorExpression n) {
 		final StringTemplate st = stg.getInstanceOf("Visitor");
 
-		this.varDecl.start(n.getBody());
+		this.varDecl.start(n);
 		st.setAttribute("staticDeclarations", this.varDecl.getCode());
 
 		final List<String> body = new ArrayList<String>();
