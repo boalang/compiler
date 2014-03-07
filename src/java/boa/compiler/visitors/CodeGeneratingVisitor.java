@@ -9,7 +9,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.antlr.stringtemplate.StringTemplate;
-import org.antlr.stringtemplate.StringTemplateGroup;
 
 import boa.aggregators.AggregatorSpec;
 import boa.compiler.SymbolTable;
@@ -104,7 +103,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			if (n.type instanceof BoaTable)
 				return;
 
-			final StringTemplate st = this.stg.getInstanceOf("VarDecl");
+			final StringTemplate st = stg.getInstanceOf("VarDecl");
 
 			st.setAttribute("id", n.getId().getToken());
 			st.setAttribute("type", n.type.toJavaType());
@@ -133,7 +132,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 			funcs.add(name);
 
-			final StringTemplate st = this.stg.getInstanceOf("FunctionType");
+			final StringTemplate st = stg.getInstanceOf("FunctionType");
 
 			if (!(n.type instanceof BoaFunction))
 				throw new TypeCheckException(n ,"type " + n.type + " is not a function type");
@@ -303,7 +302,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	@Override
 	public void visit(final Program n) {
 		final SymbolTable argu = n.env;
-		final StringTemplate st = this.stg.getInstanceOf("Job");
+		final StringTemplate st = stg.getInstanceOf("Job");
 
 		st.setAttribute("name", this.name);
 
@@ -371,7 +370,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	@Override
 	public void visit(final Call n) {
 		final SymbolTable argu = n.env;
-		final StringTemplate st = this.stg.getInstanceOf("Call");
+		final StringTemplate st = stg.getInstanceOf("Call");
 
 		this.idFinder.start(argu.getOperand());
 		final String funcName = this.idFinder.getNames().toArray()[0].toString();
@@ -416,7 +415,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Comparison n) {
-		final StringTemplate st = this.stg.getInstanceOf("Expression");
+		final StringTemplate st = stg.getInstanceOf("Expression");
 
 		if (n.hasRhs()) {
 			final List<String> operators = new ArrayList<String>();
@@ -482,7 +481,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Composite n) {
-		final StringTemplate st = this.stg.getInstanceOf("Composite");
+		final StringTemplate st = stg.getInstanceOf("Composite");
 
 		if (n.getPairsSize() > 0) {
 			visit(n.getPairs());
@@ -507,7 +506,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Conjunction n) {
-		final StringTemplate st = this.stg.getInstanceOf("Expression");
+		final StringTemplate st = stg.getInstanceOf("Expression");
 
 		n.getLhs().accept(this);
 		st.setAttribute("lhs", code.removeLast());
@@ -573,7 +572,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		}
 
 		// otherwise return the identifier template
-		final StringTemplate st = this.stg.getInstanceOf("Identifier");
+		final StringTemplate st = stg.getInstanceOf("Identifier");
 
 		st.setAttribute("id", id);
 
@@ -591,7 +590,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		}
 
 		final SymbolTable argu = n.env;
-		final StringTemplate st = this.stg.getInstanceOf("Index");
+		final StringTemplate st = stg.getInstanceOf("Index");
 
 		final BoaType t = argu.getOperandType();
 		if (t instanceof BoaMap) {
@@ -624,7 +623,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Pair n) {
-		final StringTemplate st = this.stg.getInstanceOf("Pair");
+		final StringTemplate st = stg.getInstanceOf("Pair");
 
 		st.setAttribute("map", n.env.getId());
 
@@ -682,7 +681,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Term n) {
-		final StringTemplate st = this.stg.getInstanceOf("Expression");
+		final StringTemplate st = stg.getInstanceOf("Expression");
 
 		n.getLhs().accept(this);
 		st.setAttribute("lhs", code.removeLast());
@@ -718,7 +717,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final AssignmentStatement n) {
-		final StringTemplate st = this.stg.getInstanceOf("Assignment");
+		final StringTemplate st = stg.getInstanceOf("Assignment");
 
 		n.getLhs().accept(this);
 		final String lhs = code.removeLast();
@@ -741,7 +740,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Block n) {
-		final StringTemplate st = this.stg.getInstanceOf("Block");
+		final StringTemplate st = stg.getInstanceOf("Block");
 
 		final List<String> statements = new ArrayList<String>();
 
@@ -760,19 +759,19 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final BreakStatement n) {
-		code.add(this.stg.getInstanceOf("Break").toString());
+		code.add(stg.getInstanceOf("Break").toString());
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final ContinueStatement n) {
-		code.add(this.stg.getInstanceOf("Continue").toString());
+		code.add(stg.getInstanceOf("Continue").toString());
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final DoStatement n) {
-		final StringTemplate st = this.stg.getInstanceOf("DoWhile");
+		final StringTemplate st = stg.getInstanceOf("DoWhile");
 
 		n.getCondition().accept(this);
 		st.setAttribute("condition", code.removeLast());
@@ -786,7 +785,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final EmitStatement n) {
-		final StringTemplate st = this.stg.getInstanceOf("EmitStatement");
+		final StringTemplate st = stg.getInstanceOf("EmitStatement");
 
 		hasEmit = true;
 
@@ -826,7 +825,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final ExprStatement n) {
-		final StringTemplate st = this.stg.getInstanceOf("ExprStatement");
+		final StringTemplate st = stg.getInstanceOf("ExprStatement");
 
 		n.getExpr().accept(this);
 		st.setAttribute("expression", code.removeLast());
@@ -837,7 +836,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final ExistsStatement n) {
-		final StringTemplate st = this.stg.getInstanceOf("WhenStatement");
+		final StringTemplate st = stg.getInstanceOf("WhenStatement");
 		st.setAttribute("some", "true");
 		generateQuantifier(n, n.getVar(), n.getCondition(), n.getBody(), "exists", st);
 	}
@@ -845,14 +844,14 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final ForeachStatement n) {
-		final StringTemplate st = this.stg.getInstanceOf("WhenStatement");
+		final StringTemplate st = stg.getInstanceOf("WhenStatement");
 		generateQuantifier(n, n.getVar(), n.getCondition(), n.getBody(), "foreach", st);
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final IfAllStatement n) {
-		final StringTemplate st = this.stg.getInstanceOf("WhenStatement");
+		final StringTemplate st = stg.getInstanceOf("WhenStatement");
 		st.setAttribute("all", "true");
 		generateQuantifier(n, n.getVar(), n.getCondition(), n.getBody(), "ifall", st);
 	}
@@ -906,7 +905,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final ForStatement n) {
-		final StringTemplate st = this.stg.getInstanceOf("ForStatement");
+		final StringTemplate st = stg.getInstanceOf("ForStatement");
 
 		if (n.hasInit()) {
 			n.getInit().accept(this);
@@ -938,7 +937,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final IfStatement n) {
-		final StringTemplate st = this.stg.getInstanceOf("IfStatement");
+		final StringTemplate st = stg.getInstanceOf("IfStatement");
 
 		n.getCondition().accept(this);
 		st.setAttribute("expression", code.removeLast());
@@ -957,7 +956,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final PostfixStatement n) {
-		final StringTemplate st = this.stg.getInstanceOf("ExprStatement");
+		final StringTemplate st = stg.getInstanceOf("ExprStatement");
 
 		n.getExpr().accept(this);
 		st.setAttribute("expression", code.removeLast());
@@ -975,7 +974,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final ReturnStatement n) {
-		final StringTemplate st = this.stg.getInstanceOf("Return");
+		final StringTemplate st = stg.getInstanceOf("Return");
 
 		if (n.hasExpr()) {
 			n.getExpr().accept(this);
@@ -988,13 +987,13 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final StopStatement n) {
-		code.add(this.stg.getInstanceOf("Stop").toString());
+		code.add(stg.getInstanceOf("Stop").toString());
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final SwitchCase n) {
-		final StringTemplate caseSt = this.stg.getInstanceOf("SwitchCase");
+		final StringTemplate caseSt = stg.getInstanceOf("SwitchCase");
 
 		final List<String> cases = new ArrayList<String>();
 		for (final Expression expr : n.getCases()) {
@@ -1014,7 +1013,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final SwitchStatement n) {
-		final StringTemplate st = this.stg.getInstanceOf("Switch");
+		final StringTemplate st = stg.getInstanceOf("Switch");
 
 		final List<String> caseStmts = new ArrayList<String>();
 
@@ -1062,7 +1061,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			return;
 		}
 
-		final StringTemplate st = this.stg.getInstanceOf("Assignment");
+		final StringTemplate st = stg.getInstanceOf("Assignment");
 		st.setAttribute("lhs", "___" + n.getId().getToken());
 
 		if (!n.hasInitializer()) {
@@ -1110,7 +1109,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final VisitStatement n) {
-		final StringTemplate st = this.stg.getInstanceOf("VisitClause");
+		final StringTemplate st = stg.getInstanceOf("VisitClause");
 		final SymbolTable argu = n.env;
 
 		final boolean isBefore = n.isBefore();
@@ -1165,7 +1164,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final WhileStatement n) {
-		final StringTemplate st = this.stg.getInstanceOf("While");
+		final StringTemplate st = stg.getInstanceOf("While");
 
 		n.getCondition().accept(this);
 		st.setAttribute("condition", code.removeLast());
@@ -1182,7 +1181,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Expression n) {
-		final StringTemplate st = this.stg.getInstanceOf("Expression");
+		final StringTemplate st = stg.getInstanceOf("Expression");
 
 		n.getLhs().accept(this);
 		st.setAttribute("lhs", code.removeLast());
@@ -1207,7 +1206,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final FunctionExpression n) {
-		final StringTemplate st = this.stg.getInstanceOf("Function");
+		final StringTemplate st = stg.getInstanceOf("Function");
 
 		if (!(n.getType().type instanceof BoaFunction))
 			throw new TypeCheckException(n ,"type " + n.getType().type + " is not a function type");
@@ -1250,7 +1249,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final SimpleExpr n) {
-		final StringTemplate st = this.stg.getInstanceOf("Expression");
+		final StringTemplate st = stg.getInstanceOf("Expression");
 
 		// support '+' (concat) on arrays
 		if (n.getLhs().type instanceof BoaArray) {
@@ -1296,7 +1295,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final VisitorExpression n) {
-		final StringTemplate st = this.stg.getInstanceOf("Visitor");
+		final StringTemplate st = stg.getInstanceOf("Visitor");
 
 		this.varDecl.start(n.getBody());
 		st.setAttribute("staticDeclarations", this.varDecl.getCode());
@@ -1385,7 +1384,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final ArrayType n) {
-		final StringTemplate st = this.stg.getInstanceOf("ArrayType");
+		final StringTemplate st = stg.getInstanceOf("ArrayType");
 
 		n.getValue().accept(this);
 		st.setAttribute("type", code.removeLast());
@@ -1396,7 +1395,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final FunctionType n) {
-		final StringTemplate st = this.stg.getInstanceOf("FunctionType");
+		final StringTemplate st = stg.getInstanceOf("FunctionType");
 
 		if (!(n.type instanceof BoaFunction))
 			throw new TypeCheckException(n ,"type " + n.type + " is not a function type");
@@ -1426,7 +1425,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final MapType n) {
-		final StringTemplate st = this.stg.getInstanceOf("MapType");
+		final StringTemplate st = stg.getInstanceOf("MapType");
 
 		n.env.setNeedsBoxing(true);
 
@@ -1463,7 +1462,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final StackType n) {
-		final StringTemplate st = this.stg.getInstanceOf("StackType");
+		final StringTemplate st = stg.getInstanceOf("StackType");
 
 		n.env.setNeedsBoxing(true);
 
@@ -1478,7 +1477,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final SetType n) {
-		final StringTemplate st = this.stg.getInstanceOf("SetType");
+		final StringTemplate st = stg.getInstanceOf("SetType");
 
 		n.env.setNeedsBoxing(true);
 

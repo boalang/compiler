@@ -109,7 +109,6 @@ public class BoaAstIntrinsics {
 	 * @param f the ChangedFile to get a snapshot of the comments for
 	 * @return the comments list, or an empty list on any sort of error
 	 */
-	@SuppressWarnings("unchecked")
 	@FunctionSpec(name = "getcomments", returnType = "CommentsRoot", formalParameters = { "ChangedFile" })
 	public static CommentsRoot getcomments(final ChangedFile f) {
 		// since we know only certain kinds have comments, filter before looking up

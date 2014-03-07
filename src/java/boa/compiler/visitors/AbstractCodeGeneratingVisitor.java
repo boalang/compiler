@@ -43,7 +43,7 @@ public abstract class AbstractCodeGeneratingVisitor extends AbstractVisitorNoArg
 	public void visit(final Pair n) {
 		super.visit(n);
 
-		final StringTemplate st = this.stg.getInstanceOf("Pair");
+		final StringTemplate st = stg.getInstanceOf("Pair");
 
 		st.setAttribute("map", n.env.getId());
 		st.setAttribute("key", code.pop());

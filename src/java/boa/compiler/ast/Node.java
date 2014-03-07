@@ -5,7 +5,6 @@ import boa.compiler.ast.statements.Statement;
 import boa.compiler.ast.statements.Block;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
-import boa.parser.Token;
 import boa.types.BoaType;
 
 /**
@@ -67,9 +66,7 @@ public abstract class Node {
 
 	public static Block ensureBlock(final Statement s) {
 		if (s == null) return null;
-		final Block body;
-		if (s instanceof Block)
-			return (Block)s;
+		if (s instanceof Block) return (Block)s;
 		return new Block().addStatement(s);
 	}
 

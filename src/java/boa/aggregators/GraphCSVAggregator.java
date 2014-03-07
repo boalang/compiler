@@ -3,12 +3,6 @@ package boa.aggregators;
 import java.util.*;
 import java.io.IOException;
 
-import org.apache.hadoop.io.NullWritable;
-import org.apache.hadoop.io.Text;
-
-import boa.io.EmitKey;
-import boa.io.EmitValue;
-
 
 /**
  * A Boa aggregator to output graph data in CSV format as an adjacency list.

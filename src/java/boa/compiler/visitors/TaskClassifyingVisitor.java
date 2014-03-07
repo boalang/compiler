@@ -8,7 +8,6 @@ import boa.compiler.ast.Factor;
 import boa.compiler.ast.Identifier;
 import boa.compiler.ast.expressions.VisitorExpression;
 import boa.compiler.ast.statements.VisitStatement;
-import boa.compiler.ast.types.VisitorType;
 
 import boa.types.BoaType;
 import boa.types.proto.ASTRootProtoTuple;
