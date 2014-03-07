@@ -1028,7 +1028,12 @@ VisitStatement VisitStatement() :
     { toReturn.setWildcard(true); }
   )
   "->"
-  statement = Statement()
+  (
+    LOOKAHEAD( Declaration() )
+    toAdd = Declaration()
+  |
+    toAdd = Statement()
+  )
   { toReturn.setBody(statement); }
   { return toReturn.setPositions(start, statement); }
 }
