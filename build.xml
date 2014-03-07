@@ -5,6 +5,9 @@
 
 	<property name="src.proto" location="src/proto" />
 
+	<property name="debug.enabled" location="on" />
+	<property name="debug.level" location="lines,vars,source" />
+
 	<path id="classpath">
 		<pathelement location="build/classes" />
 		<pathelement location="build/testclasses" />
@@ -28,7 +31,7 @@
 	</target>
 
 	<target name="compile-protobuf" depends="init">
-		<javac includeantruntime="true" srcdir="src/compiled-proto" destdir="build/classes" debug="on" debuglevel="lines,vars,source">
+		<javac includeantruntime="true" srcdir="src/compiled-proto" destdir="build/classes" debug="${debug.enabled}" debuglevel="${debug.level}">
 			<classpath refid="classpath" />
 		</javac>
 	</target>
@@ -39,7 +42,7 @@
 	</target>
 
 	<target name="compile" depends="compile-protobuf,parser">
-		<javac includeantruntime="true" destdir="build/classes" debug="on" debuglevel="lines,vars,source">
+		<javac includeantruntime="true" destdir="build/classes" debug="${debug.enabled}" debuglevel="${debug.level}">
 			<src>
 				<pathelement location="src/java" />
 				<pathelement location="build/java" />
@@ -49,7 +52,7 @@
 	</target>
 
 	<target name="compile-tests" depends="compile">
-		<javac includeantruntime="true" srcdir="src/test" destdir="build/testclasses" debug="on" debuglevel="lines,vars,source">
+		<javac includeantruntime="true" srcdir="src/test" destdir="build/testclasses" debug="${debug.enabled}" debuglevel="${debug.level}">
 			<classpath refid="classpath" />
 		</javac>
 	</target>
