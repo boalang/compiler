@@ -98,10 +98,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	 * @author rdyer
 	 */
 	protected class VarDeclCodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
-		public VarDeclCodeGeneratingVisitor() {
-			this.stg = CodeGeneratingVisitor.this.stg;
-		}
-
 		/** {@inheritDoc} */
 		@Override
 		public void visit(final VarDeclStatement n) {
@@ -127,10 +123,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	 */
 	protected class FunctionDeclaratorCodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		protected final Set<String> funcs = new HashSet<String>();
-
-		public FunctionDeclaratorCodeGeneratingVisitor() {
-			this.stg = CodeGeneratingVisitor.this.stg;
-		}
 
 		/** {@inheritDoc} */
 		@Override
@@ -174,10 +166,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	 * @author rdyer
 	 */
 	protected class StaticInitializationCodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
-		public StaticInitializationCodeGeneratingVisitor() {
-			this.stg = CodeGeneratingVisitor.this.stg;
-		}
-
 		/** {@inheritDoc} */
 		@Override
 		public void visit(final VarDeclStatement n) {
@@ -303,9 +291,8 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	final public static List<String> combineTableStrings = new ArrayList<String>();
 	final public static List<String> reduceTableStrings = new ArrayList<String>();
 
-	public CodeGeneratingVisitor(final String name, final StringTemplateGroup stg) throws IOException {
+	public CodeGeneratingVisitor(final String name) throws IOException {
 		this.name = name;
-		this.stg = stg;
 
 		varDecl = new VarDeclCodeGeneratingVisitor();
 		staticInitialization = new StaticInitializationCodeGeneratingVisitor();

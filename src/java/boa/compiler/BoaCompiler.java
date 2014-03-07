@@ -29,6 +29,7 @@ import boa.compiler.ast.Start;
 import boa.compiler.transforms.LocalAggregationTransformer;
 import boa.compiler.transforms.VisitorMergingTransformer;
 import boa.compiler.transforms.VisitorOptimizingTransformer;
+import boa.compiler.visitors.AbstractCodeGeneratingVisitor;
 import boa.compiler.visitors.CodeGeneratingVisitor;
 import boa.compiler.visitors.TaskClassifyingVisitor;
 import boa.compiler.visitors.TypeCheckingVisitor;
@@ -145,6 +146,7 @@ public class BoaCompiler {
 			try {
 				stg = new StringTemplateGroup(s);
 				stg.setSuperGroup(superStg);
+				AbstractCodeGeneratingVisitor.stg = stg;
 			} finally {
 				s.close();
 			}
@@ -189,7 +191,7 @@ public class BoaCompiler {
 						if (!simpleVisitor.isComplex())
 							new VisitorOptimizingTransformer().start(p);
 
-						final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(jobName, stg);
+						final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(jobName);
 						cg.start(p);
 						jobs.add(cg.getCode());
 
@@ -218,7 +220,8 @@ public class BoaCompiler {
 				try {
 					for (final Program p : new VisitorMergingTransformer().mergePrograms(visitorPrograms, maxVisitors)) {
 						new VisitorOptimizingTransformer().start(p);
-						final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(p.jobName, stg);
+
+						final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(p.jobName);
 						cg.start(p);
 						jobs.add(cg.getCode());
 		
@@ -231,7 +234,7 @@ public class BoaCompiler {
 					for (final Program p : visitorPrograms) {
 						new VisitorOptimizingTransformer().start(p);
 
-						final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(p.jobName, stg);
+						final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(p.jobName);
 						cg.start(p);
 						jobs.add(cg.getCode());
 

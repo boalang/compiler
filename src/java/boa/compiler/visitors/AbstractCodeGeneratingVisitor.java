@@ -14,8 +14,9 @@ import boa.compiler.ast.Pair;
  * @author rdyer
  */
 public abstract class AbstractCodeGeneratingVisitor extends AbstractVisitorNoArg {
+	public static StringTemplateGroup stg;
+
 	protected final LinkedList<String> code = new LinkedList<String>();
-	protected StringTemplateGroup stg;
 
 	public String getCode() {
 		String str = "";
