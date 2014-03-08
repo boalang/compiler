@@ -250,11 +250,6 @@ public abstract class BoaAbstractVisitor {
 			for (int i = 0; i < nestedSize; i++)
 				visit(nestedList.get(i));
 
-			final List<Comment> commentsList = node.getCommentsList();
-			final int commentsSize = commentsList.size();
-			for (int i = 0; i < commentsSize; i++)
-				visit(commentsList.get(i));
-
 			postVisit(node);
 		}
 	}
@@ -292,11 +287,6 @@ public abstract class BoaAbstractVisitor {
 			for (int i = 0; i < statementsSize; i++)
 				visit(statementsList.get(i));
 
-			final List<Comment> commentsList = node.getCommentsList();
-			final int commentsSize = commentsList.size();
-			for (int i = 0; i < commentsSize; i++)
-				visit(commentsList.get(i));
-
 			postVisit(node);
 		}
 	}
@@ -312,21 +302,11 @@ public abstract class BoaAbstractVisitor {
 			if (node.hasInitializer())
 				visit(node.getInitializer());
 
-			final List<Comment> commentsList = node.getCommentsList();
-			final int commentsSize = commentsList.size();
-			for (int i = 0; i < commentsSize; i++)
-				visit(commentsList.get(i));
-
 			postVisit(node);
 		}
 	}
 	public final void visit(final Statement node) throws Exception {
 		if (preVisit(node)) {
-			final List<Comment> commentsList = node.getCommentsList();
-			final int commentsSize = commentsList.size();
-			for (int i = 0; i < commentsSize; i++)
-				visit(commentsList.get(i));
-
 			final List<Statement> statementsList = node.getStatementsList();
 			final int statementsSize = statementsList.size();
 			for (int i = 0; i < statementsSize; i++)
