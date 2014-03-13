@@ -162,6 +162,8 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		/** {@inheritDoc} */
 		@Override
 		public void visit(final FunctionType n) {
+			super.visit(n);
+
 			final String name = ((BoaFunction)n.type).toJavaType();
 			if (funcs.contains(name))
 				return;
