@@ -609,23 +609,26 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		if (n.getOpsSize() > 0) {
 			n.env.setOperand(n.getOperand());
 
-			final Node o = n.getOp(0);
+			String accept = "";
+			abortGeneration = false;
 
-			if (o instanceof Selector || o instanceof Index) {
+			if (!(n.getOp(0) instanceof Call)) {
 				n.env.setOperandType(n.getOperand().type);
 				n.getOperand().accept(this);
-				String accept = code.removeLast();
-				abortGeneration = false;
-				for (int i = 0; !abortGeneration && i < n.getOpsSize(); i++) {
-					n.getOp(i).accept(this);
-					accept += code.removeLast();
-				}
-				n.env.getOperandType();
-				code.add(accept);
-			} else if (o instanceof Call) {
-				o.accept(this);
-				code.add(code.removeLast());
+				accept = code.removeLast();
 			}
+
+			for (int i = 0; !abortGeneration && i < n.getOpsSize(); i++) {
+				final Node o = n.getOp(i);
+
+				o.accept(this);
+				accept += code.removeLast();
+			}
+
+			if (!(n.getOp(0) instanceof Call))
+				n.env.getOperandType();
+
+			code.add(accept);
 		} else {
 			n.getOperand().accept(this);
 			code.add(code.removeLast());

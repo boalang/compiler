@@ -232,12 +232,12 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 		if (n.hasRhs()) {
 			n.getRhs().accept(this, env);
 
-			if (!n.getRhs().type.compares(n.getLhs().type))
-				throw new TypeCheckException(n.getRhs(), "incompatible types for comparison: required '" + n.getLhs().type + "', found '" + n.getRhs().type + "'");
+			if (!n.getRhs().type.compares(n.type))
+				throw new TypeCheckException(n.getRhs(), "incompatible types for comparison: required '" + n.type + "', found '" + n.getRhs().type + "'");
 
-			if (n.getLhs().type instanceof BoaString || n.getLhs().type instanceof BoaProtoTuple)
+			if (n.type instanceof BoaString || n.type instanceof BoaProtoTuple)
 				if (!n.getOp().equals("==") && !n.getOp().equals("!="))
-					throw new TypeCheckException(n.getLhs(), "invalid comparison operator '" + n.getOp() + "' for type '" + n.getLhs().type + "'");
+					throw new TypeCheckException(n.getLhs(), "invalid comparison operator '" + n.getOp() + "' for type '" + n.type + "'");
 
 			n.type = new BoaBool();
 		}
@@ -360,9 +360,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 					} catch (final RuntimeException e) {
 						throw new TypeCheckException(n.getOperand(), e.getMessage(), e);
 					}
-					node.type = v.getFunction().erase(formalParameters);
-					n.type = node.type;
-					return;
+					type = v.getFunction().erase(formalParameters);
 				}
 				node.type = type;
 			}
