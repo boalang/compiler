@@ -5,8 +5,8 @@
 
 	<property name="src.proto" location="src/proto" />
 
-	<property name="debug.enabled" location="on" />
-	<property name="debug.level" location="lines,vars,source" />
+	<property name="debug.enabled" value="on" />
+	<property name="debug.level" value="lines,vars,source" />
 
 	<path id="classpath">
 		<pathelement location="build/classes" />
