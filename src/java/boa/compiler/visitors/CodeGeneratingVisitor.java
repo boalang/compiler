@@ -310,8 +310,45 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		}
 	}
 
+	/**
+	 * Finds if the expression is a Call.
+	 * 
+	 * @author rdyer
+	 */
+	protected class CallFindingVisitor extends AbstractVisitorNoArg {
+		protected boolean isCall;
+
+		public boolean isCall() {
+			return isCall;
+		}
+
+		/** {@inheritDoc} */
+		@Override
+		public void initialize() {
+			super.initialize();
+			isCall = false;
+		}
+
+		/** {@inheritDoc} */
+		@Override
+		public void visit(final Factor n) {
+			for (final Node node : n.getOps()) {
+				isCall = false;
+				node.accept(this);
+			}
+		}
+
+		/** {@inheritDoc} */
+		@Override
+		public void visit(final Call n) {
+			isCall = true;
+		}
+	}
+
+
 	protected final IdentifierFindingVisitor idFinder = new IdentifierFindingVisitor();
 	protected final IndexeeFindingVisitor indexeeFinder = new IndexeeFindingVisitor();
+	protected final CallFindingVisitor callFinder = new CallFindingVisitor();
 	protected final VarDeclCodeGeneratingVisitor varDecl;
 	protected final StaticInitializationCodeGeneratingVisitor staticInitialization;
 	protected final FunctionDeclaratorCodeGeneratingVisitor functionDeclarator;
@@ -1597,15 +1634,19 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	protected List<BoaType> check(final List<Expression> el) {
 		final List<BoaType> types = new ArrayList<BoaType>();
 
-		for (final Expression e : el)
-			types.add(assignableType(e.type));
+		for (final Expression e : el) {
+			// special case of a function call, use its return type instead of function type
+			if (e.type instanceof BoaFunction) {
+				callFinder.start(e);
+				if (callFinder.isCall()) {
+					types.add(((BoaFunction) e.type).getType());
+					continue;
+				}
+			}
+
+			types.add(e.type);
+		}
 
 		return types;
-	}
-
-	protected BoaType assignableType(BoaType t) {
-		if (t instanceof BoaFunction)
-			return ((BoaFunction) t).getType();
-		return t;
 	}
 }

@@ -115,6 +115,41 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 	}
 
 	/**
+	 * Finds if the expression is a Call.
+	 * 
+	 * @author rdyer
+	 */
+	protected class CallFindingVisitor extends AbstractVisitorNoArg {
+		protected boolean isCall;
+
+		public boolean isCall() {
+			return isCall;
+		}
+
+		/** {@inheritDoc} */
+		@Override
+		public void initialize() {
+			super.initialize();
+			isCall = false;
+		}
+
+		/** {@inheritDoc} */
+		@Override
+		public void visit(final Factor n) {
+			for (final Node node : n.getOps()) {
+				isCall = false;
+				node.accept(this);
+			}
+		}
+
+		/** {@inheritDoc} */
+		@Override
+		public void visit(final Call n) {
+			isCall = true;
+		}
+	}
+
+	/**
 	 * 
 	 * @author rdyer
 	 */
@@ -147,8 +182,9 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 		}
 	}
 
-	protected VisitorCheckingVisitor visitorChecker = new VisitorCheckingVisitor();
-	protected ReturnCheckingVisitor returnFinder = new ReturnCheckingVisitor();
+	protected final VisitorCheckingVisitor visitorChecker = new VisitorCheckingVisitor();
+	protected final ReturnCheckingVisitor returnFinder = new ReturnCheckingVisitor();
+	protected final CallFindingVisitor callFinder = new CallFindingVisitor();
 
 	/** {@inheritDoc} */
 	@Override
@@ -1158,7 +1194,17 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 
 		for (final Expression e : el) {
 			e.accept(this, env);
-			types.add(assignableType(e.type));
+
+			// special case of a function call, use its return type instead of function type
+			if (e.type instanceof BoaFunction) {
+				callFinder.start(e);
+				if (callFinder.isCall()) {
+					types.add(((BoaFunction) e.type).getType());
+					continue;
+				}
+			}
+
+			types.add(e.type);
 		}
 
 		return types;
@@ -1175,11 +1221,5 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 		}
 
 		return boaMap;
-	}
-
-	protected BoaType assignableType(BoaType t) {
-		if (t instanceof BoaFunction)
-			return ((BoaFunction) t).getType();
-		return t;
 	}
 }
