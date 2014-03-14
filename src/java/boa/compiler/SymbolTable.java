@@ -531,6 +531,10 @@ public class SymbolTable {
 		return this.operandType.pop();
 	}
 
+	public boolean hasOperandType() {
+		return !this.operandType.empty();
+	}
+
 	public void setNeedsBoxing(final boolean needsBoxing) {
 		this.needsBoxing = needsBoxing;
 	}

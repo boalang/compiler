@@ -567,7 +567,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			BoaType t = n.type;
 //			BoaType t = ((ExprList) nodeChoice.choice).type;
 
-			if (n.env.getOperandType() instanceof BoaArray && t instanceof BoaTuple)
+			if (n.env.hasOperandType() && n.env.getOperandType() instanceof BoaArray && t instanceof BoaTuple)
 				t = new BoaArray(((BoaTuple)t).getMember(0));
 
 			visit(n.getExprs());
