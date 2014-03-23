@@ -1,0 +1,2 @@
+INPUTS: output sum of int;
+output << 1;

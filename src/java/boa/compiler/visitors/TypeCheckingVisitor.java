@@ -795,6 +795,10 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 
 		BoaType rhs = null;
 		if (n.hasInitializer()) {
+			// TODO rdyer need to enforce not allowing assignment of type names to vars
+			//if (n.getInitializer() instanceof Identifier && env.hasType(((Identifier)n.getInitializer()).getToken()))
+			//	throw new TypeCheckException(n.getInitializer(), "type '" + ((Identifier)n.getInitializer()).getToken() + "' can not be assigned to a variable");
+
 			n.getInitializer().accept(this, env);
 			rhs = n.getInitializer().type;
 
@@ -810,6 +814,9 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 
 		BoaType lhs;
 		if (n.hasType()) {
+			if (n.getType() instanceof Identifier && !env.hasType(((Identifier)n.getType()).getToken()))
+				throw new TypeCheckException(n.getType(), "type '" + ((Identifier)n.getType()).getToken() + "' undefined");
+
 			n.getType().accept(this, env);
 			lhs = n.getType().type;
 

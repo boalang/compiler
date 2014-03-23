@@ -1,0 +1,5 @@
+# this is a lexer erorr
+# there is no EOL on the last line, which is a comment
+# so it hits EOF before EOL and doesnt recognize the comment token
+
+#});
