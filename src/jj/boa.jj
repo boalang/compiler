@@ -119,10 +119,12 @@ TOKEN :
 Start Start() :
 {
   Token end;
-  Program program;
+  Program program = new Program();
 }
 {
-  program = Program()
+  [
+    program = Program()
+  ]
   end = < EOF >
   { return new Start(program).setPositions(program, end); }
 }
