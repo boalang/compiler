@@ -1,0 +1,3 @@
+O: output sum of int;
+O << 1;
+p: input = input; # error
