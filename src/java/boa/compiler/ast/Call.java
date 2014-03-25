@@ -33,6 +33,14 @@ public class Call extends Node {
 		return this;
 	}
 
+	public void setArgs(final List<Expression> args) {
+		this.args.clear();
+		for (final Expression e : args) {
+			e.setParent(this);
+			this.args.add(e);
+		}
+	}
+
 	public Call() {
 	}
 

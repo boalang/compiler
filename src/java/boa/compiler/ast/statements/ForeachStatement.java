@@ -24,8 +24,9 @@ public class ForeachStatement extends Statement {
 		return condition;
 	}
 
-	public void setCondition(final Expression e) {
-		condition = e;
+	public void setCondition(final Expression condition) {
+		condition.setParent(this);
+		this.condition = condition;
 	}
 
 	public Block getBody() {

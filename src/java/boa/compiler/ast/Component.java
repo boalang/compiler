@@ -35,6 +35,9 @@ public class Component extends AbstractType {
 		this.t = t;
 	}
 
+	public Component () {
+	}
+
 	public Component (final AbstractType t) {
 		this(null, t);
 	}

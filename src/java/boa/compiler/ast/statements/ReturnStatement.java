@@ -20,6 +20,11 @@ public class ReturnStatement extends Statement {
 		return expr;
 	}
 
+	public void setExpr(final Expression expr) {
+		expr.setParent(this);
+		this.expr = expr;
+	}
+
 	public ReturnStatement() {
 		this(null);
 	}

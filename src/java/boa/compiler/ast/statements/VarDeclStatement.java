@@ -38,12 +38,22 @@ public class VarDeclStatement extends Statement {
 		return t;
 	}
 
+	public void setType(final AbstractType t) {
+		t.setParent(this);
+		this.t = t;
+	}
+
 	public boolean hasInitializer() {
 		return initializer != null;
 	}
 
 	public Expression getInitializer() {
 		return initializer;
+	}
+
+	public void setInitializer(final Expression initializer) {
+		initializer.setParent(this);
+		this.initializer = initializer;
 	}
 
 	public VarDeclStatement (final Identifier identifier) {

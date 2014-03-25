@@ -24,12 +24,22 @@ public class ForStatement extends Statement {
 		return init;
 	}
 
+	public void setInit(final Statement init) {
+		init.setParent(this);
+		this.init = init;
+	}
+
 	public boolean hasCondition() {
 		return condition != null;
 	}
 
 	public Expression getCondition() {
 		return condition;
+	}
+
+	public void setCondition(final Expression condition) {
+		condition.setParent(this);
+		this.condition = condition;
 	}
 
 	public boolean hasUpdate() {
@@ -40,8 +50,25 @@ public class ForStatement extends Statement {
 		return update;
 	}
 
+	public void setUpdate(final Statement update) {
+		update.setParent(this);
+		this.update = update;
+	}
+
 	public Block getBody() {
 		return body;
+	}
+
+	public void setBody(final Statement s) {
+		setBody(Node.ensureBlock(s));
+	}
+
+	public void setBody(final Block body) {
+		body.setParent(this);
+		this.body = body;
+	}
+
+	public ForStatement() {
 	}
 
 	public ForStatement(final Statement init, final Expression condition, final Statement update, final Statement s) {

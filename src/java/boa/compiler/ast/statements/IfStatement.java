@@ -31,6 +31,15 @@ public class IfStatement extends Statement {
 		return elseBody;
 	}
 
+	public void setElse(final Statement elseBody) {
+		setElse(Node.ensureBlock(elseBody));
+	}
+
+	public void setElse(final Block elseBody) {
+		elseBody.setParent(this);
+		this.elseBody = elseBody;
+	}
+
 	public IfStatement(final Expression condition, final Statement s) {
 		this(condition, Node.ensureBlock(s));
 	}
