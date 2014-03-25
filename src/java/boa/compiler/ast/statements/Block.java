@@ -28,8 +28,10 @@ public class Block extends Statement {
 	}
 
 	public Block addStatement(final Statement s) {
-		s.setParent(this);
-		statements.add(s);
+		if (s != null) {
+			s.setParent(this);
+			statements.add(s);
+		}
 		return this;
 	}
 

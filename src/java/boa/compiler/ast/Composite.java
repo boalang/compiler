@@ -67,7 +67,7 @@ public class Composite extends Operand {
 		if (exprs != null)
 			for (final Expression e : exprs) {
 				e.setParent(this);
-				exprs.add(e);
+				this.exprs.add(e);
 			}
 	}
 

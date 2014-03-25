@@ -55,7 +55,7 @@ public class SwitchCase extends Statement {
 		if (cases != null)
 			for (final Expression e : cases) {
 				e.setParent(this);
-				cases.add(e);
+				this.cases.add(e);
 			}
 	}
 

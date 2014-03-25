@@ -40,7 +40,7 @@ public class Call extends Node {
 		if (args != null)
 			for (final Expression e : args) {
 				e.setParent(this);
-				args.add(e);
+				this.args.add(e);
 			}
 	}
 
