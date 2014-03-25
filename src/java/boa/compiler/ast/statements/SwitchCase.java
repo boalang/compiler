@@ -44,10 +44,19 @@ public class SwitchCase extends Statement {
 	}
 
 	public SwitchCase(final boolean isDefault, final Block body) {
+		this(isDefault, body, null);
+	}
+
+	public SwitchCase(final boolean isDefault, final Block body, final List<Expression> cases) {
 		if (body != null)
 			body.setParent(this);
 		this.isDefault = isDefault;
 		this.body = body;
+		if (cases != null)
+			for (final Expression e : cases) {
+				e.setParent(this);
+				cases.add(e);
+			}
 	}
 
 	/** {@inheritDoc} */

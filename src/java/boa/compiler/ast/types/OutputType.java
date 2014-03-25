@@ -48,6 +48,12 @@ public class OutputType extends AbstractType {
 		args.add(e);
 	}
 
+	public void setArgs(final List<Expression> es) {
+		args.clear();
+		for (final Expression e : es)
+			addArg(e);
+	}
+
 	public List<Component> getIndices() {
 		return indices;
 	}

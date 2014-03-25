@@ -33,6 +33,17 @@ public class Call extends Node {
 		return this;
 	}
 
+	public Call() {
+	}
+
+	public Call(final List<Expression> args) {
+		if (args != null)
+			for (final Expression e : args) {
+				e.setParent(this);
+				args.add(e);
+			}
+	}
+
 	/** {@inheritDoc} */
 	@Override
 	public <A> void accept(final AbstractVisitor<A> v, A arg) {
