@@ -1032,9 +1032,9 @@ VisitStatement VisitStatement() :
   "->"
   (
     LOOKAHEAD( Declaration() )
-    toAdd = Declaration()
+    statement = Declaration()
   |
-    toAdd = Statement()
+    statement = Statement()
   )
   { toReturn.setBody(statement); }
   { return toReturn.setPositions(start, statement); }
