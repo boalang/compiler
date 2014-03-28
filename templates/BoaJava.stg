@@ -1,5 +1,3 @@
-group BoaJava;
-
 identifierMap ::= [
 		"true" : "true",
 		"false" : "false",
@@ -19,12 +17,12 @@ identifierMap ::= [
 		
 VarDecl(isstatic, type, id) ::= "<if(isstatic)>static <endif><type> ___<id>;<\n>"
 ArrayType(type) ::= "new <type>[]"
-MapType(key, value) ::= "new java.util.HashMap\<<key>, <value>\>()"
-StackType(value) ::= "new java.util.Stack\<<value>\>()"
-SetType(value) ::= "new java.util.HashSet\<<value>\>()"
+MapType(key, value) ::= "new java.util.HashMap\<<key>, <value>>()"
+StackType(value) ::= "new java.util.Stack\<<value>>()"
+SetType(value) ::= "new java.util.HashSet\<<value>>()"
 Block(statements) ::= <<
 {
-	<statements:{<it>}>}
+	<statements:{s | <s>}>}
 >>
 ExprStatement(expression, operator) ::= "<expression><operator>;<\n>"
 ForStatement(declaration, expression, exprstmt, statement) ::= <<
@@ -84,17 +82,17 @@ Assignment(lhs, rhs) ::= "<lhs> = <rhs>;<\n>"
 Break() ::= "break;<\n>"
 Continue() ::= "continue;<\n>"
 Stop() ::= "return false;<\n>"
-Empty() ::= ";<\n>"
 Switch(expr, cases, body) ::= <<
 switch (<expr>)
 {
-	<cases>default:
+	<cases>
+	default:
 	<body>
 }
 
 >>
 SwitchCase(cases, body) ::= <<
-<cases:{case <it>:<\n>}><body>
+<cases:{c | case <c>:<\n>}><body>
 
 >>
 DoWhile(condition, stmt) ::= <<
@@ -123,12 +121,14 @@ new <type>()
 	public <ret> invoke(<args,types:{arg,type|final <type> ___<arg>}; separator=", ">) throws Exception
 	<body>
 }
-
 >>
 Visitor(staticDeclarations, body) ::= <<
 new boa.runtime.BoaAbstractVisitor()
 {
-	<staticDeclarations><body:{<it><\n>}>}
+	<if(staticDeclarations)>
+	<staticDeclarations>
+	<endif>
+	<body:{s | <s><\n>}>}
 >>
 VisitClause(ret, name, args, types, body) ::= <<
 <if(args)>
@@ -136,7 +136,7 @@ VisitClause(ret, name, args, types, body) ::= <<
 @Override
 protected <ret> <name>(final <type> <arg>) throws Exception
 {
-	<body>}}>
+	<body>\}}>
 <else>
 @Override
 protected <ret> <name>() throws Exception

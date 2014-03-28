@@ -1,5 +1,3 @@
-group BoaJavaHadoop : BoaJava;
-
 Program(name, numreducers, jobs, jobnames, combineTables, reduceTables, splitsize) ::= <<
 package boa;
 
@@ -118,21 +116,21 @@ public class <name> extends boa.runtime.BoaRunner {
 	}
 
 	public String getUsage() {
-		return "\<inputDir\> \<outputDir\>";
+		return "\<inputDir> \<outputDir>";
 	}
 
 	static interface BoaJob {
-		void map(final boa.types.Toplevel.Project _input, final org.apache.hadoop.mapreduce.Mapper\<org.apache.hadoop.io.Text, org.apache.hadoop.io.BytesWritable, boa.io.EmitKey, boa.io.EmitValue\>.Context context) throws Exception;
+		void map(final boa.types.Toplevel.Project _input, final org.apache.hadoop.mapreduce.Mapper\<org.apache.hadoop.io.Text, org.apache.hadoop.io.BytesWritable, boa.io.EmitKey, boa.io.EmitValue>.Context context) throws Exception;
 	}
 	
 	static class <name>BoaMapper extends boa.runtime.BoaMapper {
-		<jobs:{<it><\n>}>		/** {@inheritDoc} */
+		<jobs:{j | <j><\n>}>		/** {@inheritDoc} */
 		@Override
-		protected void map(final org.apache.hadoop.io.Text key, final org.apache.hadoop.io.BytesWritable value, final org.apache.hadoop.mapreduce.Mapper\<org.apache.hadoop.io.Text, org.apache.hadoop.io.BytesWritable, boa.io.EmitKey, boa.io.EmitValue\>.Context context) throws java.io.IOException {
+		protected void map(final org.apache.hadoop.io.Text key, final org.apache.hadoop.io.BytesWritable value, final org.apache.hadoop.mapreduce.Mapper\<org.apache.hadoop.io.Text, org.apache.hadoop.io.BytesWritable, boa.io.EmitKey, boa.io.EmitValue>.Context context) throws java.io.IOException {
 			boa.types.Toplevel.Project _input = boa.types.Toplevel.Project.parseFrom(com.google.protobuf.CodedInputStream.newInstance(value.getBytes(), 0, value.getLength()));
-			<jobnames:{_job_<it> = runJob("Job<it>", _job_<it>, _input, context);<\n>}>		}
+			<jobnames:{n | _job_<n> = runJob("Job<n>", _job_<n>, _input, context);<\n>}>		}
 
-		private BoaJob runJob(final String name, final BoaJob job, final boa.types.Toplevel.Project input, final org.apache.hadoop.mapreduce.Mapper\<org.apache.hadoop.io.Text, org.apache.hadoop.io.BytesWritable, boa.io.EmitKey, boa.io.EmitValue\>.Context context) {
+		private BoaJob runJob(final String name, final BoaJob job, final boa.types.Toplevel.Project input, final org.apache.hadoop.mapreduce.Mapper\<org.apache.hadoop.io.Text, org.apache.hadoop.io.BytesWritable, boa.io.EmitKey, boa.io.EmitValue>.Context context) {
 			if (job != null)
 				try {
 					job.map(input, context);
@@ -163,14 +161,14 @@ public class <name> extends boa.runtime.BoaRunner {
 		public <name>BoaCombiner() {
 			super();
 			
-			<combineTables:{<it><\n>}>		}
+			<combineTables:{t | <t><\n>}>		}
 	}
 	
 	static class <name>BoaReducer extends boa.runtime.BoaReducer {
 		public <name>BoaReducer() {
 			super();
 
-			<reduceTables:{<it><\n>}>		}
+			<reduceTables:{t | <t><\n>}>		}
 	}
 	
 	@Override
@@ -199,11 +197,11 @@ private static class Job<name> implements BoaJob {
 	}
 	
 	<endif>
-	public void map(final boa.types.Toplevel.Project _input, final org.apache.hadoop.mapreduce.Mapper\<org.apache.hadoop.io.Text, org.apache.hadoop.io.BytesWritable, boa.io.EmitKey, boa.io.EmitValue\>.Context context) throws Exception {
-		<statements:{<it><\n>}>	}
+	public void map(final boa.types.Toplevel.Project _input, final org.apache.hadoop.mapreduce.Mapper\<org.apache.hadoop.io.Text, org.apache.hadoop.io.BytesWritable, boa.io.EmitKey, boa.io.EmitValue>.Context context) throws Exception {
+		<statements:{s | <s><\n>}>	}
 }
 private static BoaJob _job_<name> = new Job<name>();
 
 >>
 
-EmitStatement(indices, id, job, expression, weight) ::= "context.write(new boa.io.EmitKey(<if(indices)><indices:{\"[\" + <it> + \"]\"}; separator=\" + \">, <endif><id>, <job>), new boa.io.EmitValue(<expression><if(weight)>, <weight><endif>));<\n>"
+EmitStatement(indices, id, job, expression, weight) ::= "context.write(new boa.io.EmitKey(<if(indices)><indices:{idx | \"[\" + <idx> + \"]\"}; separator=\" + \">, <endif><id>, <job>), new boa.io.EmitValue(<expression><if(weight)>, <weight><endif>));<\n>"

@@ -96,7 +96,7 @@
 			</manifest>
 			<fileset dir="build/classes" />
 			<fileset dir="conf" />
-			<fileset dir="src/antlr" />
+			<fileset dir="templates" />
 			<zipfileset excludes="META-INF/" src="lib/commons-logging-1.1.1.jar" />
 			<zipfileset excludes="META-INF/" src="lib/commons-configuration-1.6.jar" />
 			<zipfileset excludes="META-INF/" src="lib/commons-lang-2.4.jar" />
@@ -106,7 +106,7 @@
 			<zipfileset excludes="META-INF/" src="lib/commons-cli-1.2.jar" />
 			<zipfileset excludes="META-INF/" src="lib/scannotation-1.0.3.jar" />
 			<zipfileset excludes="META-INF/" src="lib/javassist-3.8.0.GA.jar" />
-			<zipfileset excludes="META-INF/" src="lib/antlr-3.2.jar" />
+			<zipfileset excludes="META-INF/" src="lib/ST-4.0.8.jar" />
 			<zipfileset excludes="META-INF/" src="lib/protobuf-java-2.5.0.jar" />
 		</jar>
 	</target>

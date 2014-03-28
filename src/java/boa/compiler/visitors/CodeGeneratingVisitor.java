@@ -8,7 +8,7 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.antlr.stringtemplate.StringTemplate;
+import org.stringtemplate.v4.ST;
 
 import boa.aggregators.AggregatorSpec;
 import boa.compiler.SymbolTable;
@@ -139,15 +139,15 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			if (n.type instanceof BoaTable)
 				return;
 
-			final StringTemplate st = stg.getInstanceOf("VarDecl");
+			final ST st = stg.getInstanceOf("VarDecl");
 
-			st.setAttribute("id", n.getId().getToken());
-			st.setAttribute("type", n.type.toJavaType());
+			st.add("id", n.getId().getToken());
+			st.add("type", n.type.toJavaType());
 
 			if (n.isStatic())
-				st.setAttribute("isstatic", true);
+				st.add("isstatic", true);
 
-			code.add(st.toString());
+			code.add(st.render());
 		}
 	}
 
@@ -170,7 +170,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 			funcs.add(name);
 
-			final StringTemplate st = stg.getInstanceOf("FunctionType");
+			final ST st = stg.getInstanceOf("FunctionType");
 
 			if (!(n.type instanceof BoaFunction))
 				throw new TypeCheckException(n ,"type " + n.type + " is not a function type");
@@ -186,15 +186,15 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				types.add(c.getType().type.toJavaType());
 			}
 
-			st.setAttribute("name", funcType.toJavaType());
+			st.add("name", funcType.toJavaType());
 			if (funcType.getType() instanceof BoaAny)
-				st.setAttribute("ret", "void");
+				st.add("ret", "void");
 			else
-				st.setAttribute("ret", funcType.getType().toBoxedJavaType());
-			st.setAttribute("args", args);
-			st.setAttribute("types", types);
+				st.add("ret", funcType.getType().toBoxedJavaType());
+			st.add("args", args);
+			st.add("types", types);
 
-			code.add(st.toString());
+			code.add(st.render());
 		}
 	}
 
@@ -377,20 +377,20 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	@Override
 	public void visit(final Program n) {
 		final SymbolTable argu = n.env;
-		final StringTemplate st = stg.getInstanceOf("Job");
+		final ST st = stg.getInstanceOf("Job");
 
-		st.setAttribute("name", this.name);
+		st.add("name", this.name);
 
 		this.varDecl.start(n);
 		this.functionDeclarator.start(n);
 		if (this.functionDeclarator.hasCode())
-			st.setAttribute("staticDeclarations", this.varDecl.getCode() + "\n" + this.functionDeclarator.getCode());
+			st.add("staticDeclarations", this.varDecl.getCode() + "\n" + this.functionDeclarator.getCode());
 		else
-			st.setAttribute("staticDeclarations", this.varDecl.getCode());
+			st.add("staticDeclarations", this.varDecl.getCode());
 
 		this.staticInitialization.start(n);
 		if (this.staticInitialization.hasCode())
-			st.setAttribute("staticStatements", this.staticInitialization.getCode());
+			st.add("staticStatements", this.staticInitialization.getCode());
 
 		final List<String> statements = new ArrayList<String>();
 		for (final Statement s : n.getStatements()) {
@@ -399,7 +399,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			if (!statement.isEmpty())
 				statements.add(statement);
 		}
-		st.setAttribute("statements", statements);
+		st.add("statements", statements);
 
 		if (this.tables.size() == 0)
 			throw new TypeCheckException(n, "No output variables were declared - must declare at least one output variable");
@@ -438,14 +438,14 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			reduceTableStrings.add("this.tables.put(\"" + prefix + "::" + id + "\", new boa.aggregators.Table(" + src.toString().substring(2) + "));");
 		}
 
-		code.add(st.toString());
+		code.add(st.render());
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Call n) {
 		final SymbolTable argu = n.env;
-		final StringTemplate st = stg.getInstanceOf("Call");
+		final ST st = stg.getInstanceOf("Call");
 
 		this.idFinder.start(argu.getOperand());
 		final String funcName = this.idFinder.getNames().toArray()[0].toString();
@@ -464,33 +464,33 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			if (funcName.equals("def")) {
 				final Matcher m = Pattern.compile("\\((\\w+).get(\\w+)\\(\\) != null\\)").matcher(s);
 				if (m.matches() && !m.group(2).endsWith("List"))
-					st.setAttribute("call", m.group(1) + ".has" + m.group(2) + "()");
+					st.add("call", m.group(1) + ".has" + m.group(2) + "()");
 				else
-					st.setAttribute("call", s);
+					st.add("call", s);
 			} else {
-				st.setAttribute("call", s);
+				st.add("call", s);
 			}
 		} else {
 			if (f.hasName()) {
-				st.setAttribute("operand", f.getName());
+				st.add("operand", f.getName());
 			} else {
 				argu.getOperand().accept(this);
-				st.setAttribute("operand", code.removeLast() + ".invoke");
+				st.add("operand", code.removeLast() + ".invoke");
 			}
 
 			if (n.getArgsSize() > 0) {
 				visit(n.getArgs());
-				st.setAttribute("parameters", code.removeLast());
+				st.add("parameters", code.removeLast());
 			}
 		}
 
-		code.add(st.toString());
+		code.add(st.render());
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Comparison n) {
-		final StringTemplate st = stg.getInstanceOf("Expression");
+		final ST st = stg.getInstanceOf("Expression");
 
 		if (n.hasRhs()) {
 			final List<String> operators = new ArrayList<String>();
@@ -504,14 +504,14 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 					final String expr = code.removeLast() + ".equals(" + code.removeLast() + ")";
 
 					if (n.getOp().equals("!="))
-						st.setAttribute("lhs", "!" + expr);
+						st.add("lhs", "!" + expr);
 					else
-						st.setAttribute("lhs", expr);
+						st.add("lhs", expr);
 				}
 				// special case AST (in)equality
 				else if (n.getLhs().type instanceof BoaProtoTuple) {
 					n.getLhs().accept(this);
-					st.setAttribute("lhs", code.removeLast() + ".hashCode()");
+					st.add("lhs", code.removeLast() + ".hashCode()");
 
 					n.getRhs().accept(this);
 					operands.add(code.removeLast() + ".hashCode()");
@@ -519,7 +519,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 					operators.add(n.getOp());
 				} else {
 					n.getLhs().accept(this);
-					st.setAttribute("lhs", code.removeLast());
+					st.add("lhs", code.removeLast());
 
 					n.getRhs().accept(this);
 					operands.add(code.removeLast());
@@ -528,7 +528,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				}
 			} else {
 				n.getLhs().accept(this);
-				st.setAttribute("lhs", code.removeLast());
+				st.add("lhs", code.removeLast());
 
 				n.getRhs().accept(this);
 				operands.add(code.removeLast());
@@ -536,14 +536,14 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				operators.add(n.getOp());
 			}
 
-			st.setAttribute("operators", operators);
-			st.setAttribute("operands", operands);
+			st.add("operators", operators);
+			st.add("operands", operands);
 		} else {
 			n.getLhs().accept(this);
-			st.setAttribute("lhs", code.removeLast());
+			st.add("lhs", code.removeLast());
 		}
 
-		code.add(st.toString());
+		code.add(st.render());
 	}
 
 	/** {@inheritDoc} */
@@ -556,11 +556,11 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Composite n) {
-		final StringTemplate st = stg.getInstanceOf("Composite");
+		final ST st = stg.getInstanceOf("Composite");
 
 		if (n.getPairsSize() > 0) {
 			visit(n.getPairs());
-			st.setAttribute("pairlist", code.removeLast());
+			st.add("pairlist", code.removeLast());
 		}
 		if (n.getExprsSize() > 0) {
 			// FIXME rdyer
@@ -571,20 +571,20 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				t = new BoaArray(((BoaTuple)t).getMember(0));
 
 			visit(n.getExprs());
-			st.setAttribute("exprlist", code.removeLast());
-			st.setAttribute("type", t.toJavaType());
+			st.add("exprlist", code.removeLast());
+			st.add("type", t.toJavaType());
 		}
 
-		code.add(st.toString());
+		code.add(st.render());
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Conjunction n) {
-		final StringTemplate st = stg.getInstanceOf("Expression");
+		final ST st = stg.getInstanceOf("Expression");
 
 		n.getLhs().accept(this);
-		st.setAttribute("lhs", code.removeLast());
+		st.add("lhs", code.removeLast());
 
 		if (n.getRhsSize() > 0) {
 			final List<String> operators = new ArrayList<String>();
@@ -596,11 +596,11 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				operands.add(code.removeLast());
 			}
 
-			st.setAttribute("operators", operators);
-			st.setAttribute("operands", operands);
+			st.add("operators", operators);
+			st.add("operands", operands);
 		}
 
-		code.add(st.toString());
+		code.add(st.render());
 	}
 
 	/** {@inheritDoc} */
@@ -650,11 +650,11 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		}
 
 		// otherwise return the identifier template
-		final StringTemplate st = stg.getInstanceOf("Identifier");
+		final ST st = stg.getInstanceOf("Identifier");
 
-		st.setAttribute("id", id);
+		st.add("id", id);
 
-		code.add(st.toString());
+		code.add(st.render());
 	}
 
 	/** {@inheritDoc} */
@@ -668,50 +668,50 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		}
 
 		final SymbolTable argu = n.env;
-		final StringTemplate st = stg.getInstanceOf("Index");
+		final ST st = stg.getInstanceOf("Index");
 
 		final BoaType t = argu.getOperandType();
 		if (t instanceof BoaMap) {
 			argu.setOperandType(((BoaMap) t).getType());
-			st.setAttribute("map", true);
+			st.add("map", true);
 		} else if (t instanceof BoaProtoList) {
 			argu.setOperandType(((BoaProtoList) t).getType());
-			st.setAttribute("map", true);
+			st.add("map", true);
 		} else if (t instanceof BoaArray) {
 			argu.setOperandType(((BoaArray) t).getType());
 		}
 
-		st.setAttribute("operand", "");
+		st.add("operand", "");
 
 		BoaType indexType = n.getStart().type;
 		n.getStart().accept(this);
 		if (indexType instanceof BoaInt)
-			st.setAttribute("index", "(int)(" + code.removeLast() + ")");
+			st.add("index", "(int)(" + code.removeLast() + ")");
 		else
-			st.setAttribute("index", code.removeLast());
+			st.add("index", code.removeLast());
 
 		if (n.hasEnd()) {
 			n.getEnd().accept(this);
-			st.setAttribute("slice", code.removeLast());
+			st.add("slice", code.removeLast());
 		}
 
-		code.add(st.toString());
+		code.add(st.render());
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Pair n) {
-		final StringTemplate st = stg.getInstanceOf("Pair");
+		final ST st = stg.getInstanceOf("Pair");
 
-		st.setAttribute("map", n.env.getId());
+		st.add("map", n.env.getId());
 
 		n.getExpr1().accept(this);
-		st.setAttribute("key", code.removeLast());
+		st.add("key", code.removeLast());
 
 		n.getExpr2().accept(this);
-		st.setAttribute("value", code.removeLast());
+		st.add("value", code.removeLast());
 
-		code.add(st.toString());
+		code.add(st.render());
 	}
 
 	/** {@inheritDoc} */
@@ -759,10 +759,10 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Term n) {
-		final StringTemplate st = stg.getInstanceOf("Expression");
+		final ST st = stg.getInstanceOf("Expression");
 
 		n.getLhs().accept(this);
-		st.setAttribute("lhs", code.removeLast());
+		st.add("lhs", code.removeLast());
 
 		if (n.getRhsSize() > 0) {
 			final List<String> operands = new ArrayList<String>();
@@ -772,11 +772,11 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				operands.add(code.removeLast());
 			}
 
-			st.setAttribute("operators", n.getOps());
-			st.setAttribute("operands", operands);
+			st.add("operators", n.getOps());
+			st.add("operands", operands);
 		}
 
-		code.add(st.toString());
+		code.add(st.render());
 	}
 
 	/** {@inheritDoc} */
@@ -795,7 +795,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final AssignmentStatement n) {
-		final StringTemplate st = stg.getInstanceOf("Assignment");
+		final ST st = stg.getInstanceOf("Assignment");
 
 		n.getLhs().accept(this);
 		final String lhs = code.removeLast();
@@ -809,16 +809,16 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			return;
 		}
 
-		st.setAttribute("lhs", lhs);
-		st.setAttribute("rhs", rhs);
+		st.add("lhs", lhs);
+		st.add("rhs", rhs);
 
-		code.add(st.toString());
+		code.add(st.render());
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Block n) {
-		final StringTemplate st = stg.getInstanceOf("Block");
+		final ST st = stg.getInstanceOf("Block");
 
 		final List<String> statements = new ArrayList<String>();
 
@@ -829,41 +829,41 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				statements.add(statement);
 		}
 
-		st.setAttribute("statements", statements);
+		st.add("statements", statements);
 
-		code.add(st.toString());
+		code.add(st.render());
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final BreakStatement n) {
-		code.add(stg.getInstanceOf("Break").toString());
+		code.add(stg.getInstanceOf("Break").render());
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final ContinueStatement n) {
-		code.add(stg.getInstanceOf("Continue").toString());
+		code.add(stg.getInstanceOf("Continue").render());
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final DoStatement n) {
-		final StringTemplate st = stg.getInstanceOf("DoWhile");
+		final ST st = stg.getInstanceOf("DoWhile");
 
 		n.getCondition().accept(this);
-		st.setAttribute("condition", code.removeLast());
+		st.add("condition", code.removeLast());
 
 		n.getBody().accept(this);
-		st.setAttribute("stmt", code.removeLast());
+		st.add("stmt", code.removeLast());
 
-		code.add(st.toString());
+		code.add(st.render());
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final EmitStatement n) {
-		final StringTemplate st = stg.getInstanceOf("EmitStatement");
+		final ST st = stg.getInstanceOf("EmitStatement");
 
 		hasEmit = true;
 
@@ -875,7 +875,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				indices.add(code.removeLast());
 			}
 
-			st.setAttribute("indices", indices);
+			st.add("indices", indices);
 		}
 
 		String id = n.getId().getToken();
@@ -886,62 +886,62 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			id = id.substring(id.indexOf('_') + 1);
 		}
 
-		st.setAttribute("id", "\"" + id + "\"");
-		st.setAttribute("job", prefix);
+		st.add("id", "\"" + id + "\"");
+		st.add("job", prefix);
 
 		n.getValue().accept(this);
-		st.setAttribute("expression", code.removeLast());
+		st.add("expression", code.removeLast());
 
 		if (n.hasWeight()) {
 			n.getWeight().accept(this);
-			st.setAttribute("weight", code.removeLast());
+			st.add("weight", code.removeLast());
 		}
 
-		code.add(st.toString());
+		code.add(st.render());
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final ExprStatement n) {
-		final StringTemplate st = stg.getInstanceOf("ExprStatement");
+		final ST st = stg.getInstanceOf("ExprStatement");
 
 		n.getExpr().accept(this);
-		st.setAttribute("expression", code.removeLast());
+		st.add("expression", code.removeLast());
 
-		code.add(st.toString());
+		code.add(st.render());
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final ExistsStatement n) {
-		final StringTemplate st = stg.getInstanceOf("WhenStatement");
-		st.setAttribute("some", "true");
+		final ST st = stg.getInstanceOf("WhenStatement");
+		st.add("some", "true");
 		generateQuantifier(n, n.getVar(), n.getCondition(), n.getBody(), "exists", st);
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final ForeachStatement n) {
-		final StringTemplate st = stg.getInstanceOf("WhenStatement");
+		final ST st = stg.getInstanceOf("WhenStatement");
 		generateQuantifier(n, n.getVar(), n.getCondition(), n.getBody(), "foreach", st);
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final IfAllStatement n) {
-		final StringTemplate st = stg.getInstanceOf("WhenStatement");
-		st.setAttribute("all", "true");
+		final ST st = stg.getInstanceOf("WhenStatement");
+		st.add("all", "true");
 		generateQuantifier(n, n.getVar(), n.getCondition(), n.getBody(), "ifall", st);
 	}
 
-	protected void generateQuantifier(final Node n, final Component c, final Expression e, final Block b, final String kind, final StringTemplate st) {
+	protected void generateQuantifier(final Node n, final Component c, final Expression e, final Block b, final String kind, final ST st) {
 		final BoaType type = c.getType().type;
 
 		final String id = c.getIdentifier().getToken();
 
 		n.env.set(id, type);
-		st.setAttribute("type", type.toJavaType());
-		st.setAttribute("index", id);
+		st.add("type", type.toJavaType());
+		st.add("index", id);
 
 		this.indexeeFinder.start(e, id);
 		final Set<Node> indexees = this.indexeeFinder.getIndexees();
@@ -966,81 +966,81 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 					src = src2 + func;
 			}
 
-			st.setAttribute("len", src);
+			st.add("len", src);
 		} else {
 			throw new TypeCheckException(e, "quantifier variable '" + id + "' must be used in the " + kind + " condition expression");
 		}
 
 		e.accept(this);
-		st.setAttribute("expression", code.removeLast());
+		st.add("expression", code.removeLast());
 
 		b.accept(this);
-		st.setAttribute("statement", code.removeLast());
+		st.add("statement", code.removeLast());
 
-		code.add(st.toString());
+		code.add(st.render());
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final ForStatement n) {
-		final StringTemplate st = stg.getInstanceOf("ForStatement");
+		final ST st = stg.getInstanceOf("ForStatement");
 
 		if (n.hasInit()) {
 			n.getInit().accept(this);
 			// FIXME rdyer this is a bit of a hack, to remove the newline
 			final String s = code.removeLast();
-			st.setAttribute("declaration", s.substring(0, s.length() - 1));
+			st.add("declaration", s.substring(0, s.length() - 1));
 		} else
-			st.setAttribute("declaration", ";");
+			st.add("declaration", ";");
 
 		if (n.hasCondition()) {
 			n.getCondition().accept(this);
-			st.setAttribute("expression", code.removeLast());
+			st.add("expression", code.removeLast());
 		} else
-			st.setAttribute("declaration", ";");
+			st.add("declaration", ";");
 
 		if (n.hasUpdate()) {
 			n.getUpdate().accept(this);
 			// FIXME rdyer this is a bit of a hack, to remove the semicolon+newline
 			final String s = code.removeLast();
-			st.setAttribute("exprstmt", s.substring(0, s.length() - 2));
+			st.add("exprstmt", s.substring(0, s.length() - 2));
 		}
 
 		n.getBody().accept(this);
-		st.setAttribute("statement", code.removeLast());
+		st.add("statement", code.removeLast());
 
-		code.add(st.toString());
+		code.add(st.render());
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final IfStatement n) {
-		final StringTemplate st = stg.getInstanceOf("IfStatement");
+		final ST st = stg.getInstanceOf("IfStatement");
 
 		n.getCondition().accept(this);
-		st.setAttribute("expression", code.removeLast());
+		st.add("expression", code.removeLast());
 
 		n.getBody().accept(this);
-		st.setAttribute("statement", code.removeLast());
+		st.add("statement", code.removeLast());
 
 		if (n.hasElse()) {
 			n.getElse().accept(this);
-			st.setAttribute("elseStatement", code.removeLast());
+			st.add("elseStatement", code.removeLast());
 		}
 
-		code.add(st.toString());
+		code.add(st.render());
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final PostfixStatement n) {
-		final StringTemplate st = stg.getInstanceOf("ExprStatement");
+		final ST st = stg.getInstanceOf("ExprStatement");
 
 		n.getExpr().accept(this);
-		st.setAttribute("expression", code.removeLast());
-		st.setAttribute("operator", n.getOp());
+		st.add("expression", code.removeLast());
+		st.add("operator", n.getOp());
 
-		code.add(st.toString());
+		code.add(st.render());
 	}
 
 	/** {@inheritDoc} */
@@ -1052,26 +1052,26 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final ReturnStatement n) {
-		final StringTemplate st = stg.getInstanceOf("Return");
+		final ST st = stg.getInstanceOf("Return");
 
 		if (n.hasExpr()) {
 			n.getExpr().accept(this);
-			st.setAttribute("expr", code.removeLast());
+			st.add("expr", code.removeLast());
 		}
 
-		code.add(st.toString());
+		code.add(st.render());
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final StopStatement n) {
-		code.add(stg.getInstanceOf("Stop").toString());
+		code.add(stg.getInstanceOf("Stop").render());
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final SwitchCase n) {
-		final StringTemplate caseSt = stg.getInstanceOf("SwitchCase");
+		final ST st = stg.getInstanceOf("SwitchCase");
 
 		final List<String> cases = new ArrayList<String>();
 		for (final Expression expr : n.getCases()) {
@@ -1082,16 +1082,16 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			cases.add(s);
 		}
 
-		caseSt.setAttribute("cases", cases);
+		st.add("cases", cases);
 		n.getBody().accept(this);
-		caseSt.setAttribute("body", code.removeLast());
-		code.add(caseSt.toString());
+		st.add("body", code.removeLast());
+		code.add(st.render());
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final SwitchStatement n) {
-		final StringTemplate st = stg.getInstanceOf("Switch");
+		final ST st = stg.getInstanceOf("Switch");
 
 		final List<String> caseStmts = new ArrayList<String>();
 
@@ -1105,11 +1105,11 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		defBody.add(code.removeLast());
 
 		n.getCondition().accept(this);
-		st.setAttribute("expr", code.removeLast());
-		st.setAttribute("cases", caseStmts);
-		st.setAttribute("body", defBody);
+		st.add("expr", code.removeLast());
+		st.add("cases", caseStmts);
+		st.add("body", defBody);
 
-		code.add(st.toString());
+		code.add(st.render());
 	}
 
 	/** {@inheritDoc} */
@@ -1139,8 +1139,8 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			return;
 		}
 
-		final StringTemplate st = stg.getInstanceOf("Assignment");
-		st.setAttribute("lhs", "___" + n.getId().getToken());
+		final ST st = stg.getInstanceOf("Assignment");
+		st.add("lhs", "___" + n.getId().getToken());
 
 		if (!n.hasInitializer()) {
 			if (lhsType instanceof BoaProtoMap ||
@@ -1152,8 +1152,8 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			// FIXME rdyer if the type is a type identifier, n.getType() returns Identifier
 			// and maps/stacks/sets wind up not having the proper constructors here
 			n.getType().accept(this);
-			st.setAttribute("rhs", code.removeLast());
-			code.add(st.toString());
+			st.add("rhs", code.removeLast());
+			code.add(st.render());
 			return;
 		}
 
@@ -1179,15 +1179,15 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				src = expand(f.getMacro(), src.split(","));
 		}
 
-		st.setAttribute("rhs", src);
+		st.add("rhs", src);
 
-		code.add(st.toString());
+		code.add(st.render());
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final VisitStatement n) {
-		final StringTemplate st = stg.getInstanceOf("VisitClause");
+		final ST st = stg.getInstanceOf("VisitClause");
 		final SymbolTable argu = n.env;
 
 		final boolean isBefore = n.isBefore();
@@ -1197,7 +1197,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		final List<String> ids = new ArrayList<String>();
 
 		if (n.hasWildcard()) {
-			st.setAttribute("name", isBefore ? "defaultPreVisit" : "defaultPostVisit");
+			st.add("name", isBefore ? "defaultPreVisit" : "defaultPostVisit");
 		} else if (n.hasComponent()) {
 			final Component c = n.getComponent();
 			final String id = c.getIdentifier().getToken();
@@ -1206,17 +1206,17 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			types.add(c.getType().type.toJavaType());
 			ids.add("___" + id);
 
-			st.setAttribute("name", isBefore ? "preVisit" : "postVisit");
+			st.add("name", isBefore ? "preVisit" : "postVisit");
 		} else {
 			for (final Identifier id : n.getIdList()) {
 				types.add(argu.get(id.getToken()).toJavaType());
 				ids.add("__UNUSED");
 			}
 
-			st.setAttribute("name", isBefore ? "preVisit" : "postVisit");
+			st.add("name", isBefore ? "preVisit" : "postVisit");
 		}
 
-		st.setAttribute("ret", isBefore ? "boolean" : "void");
+		st.add("ret", isBefore ? "boolean" : "void");
 
 		if (n.getBody() instanceof Block) {
 			for (final Node b : ((Block)n.getBody()).getStatements()) {
@@ -1229,28 +1229,28 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		}
 		if (isBefore && !lastStatementIsStop(n.getBody()))
 			body.add("return true;\n");
-		st.setAttribute("body", body);
+		st.add("body", body);
 
 		if (ids.size() > 0) {
-			st.setAttribute("args", ids);
-			st.setAttribute("types", types);
+			st.add("args", ids);
+			st.add("types", types);
 		}
 
-		code.add(st.toString());
+		code.add(st.render());
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final WhileStatement n) {
-		final StringTemplate st = stg.getInstanceOf("While");
+		final ST st = stg.getInstanceOf("While");
 
 		n.getCondition().accept(this);
-		st.setAttribute("condition", code.removeLast());
+		st.add("condition", code.removeLast());
 
 		n.getBody().accept(this);
-		st.setAttribute("stmt", code.removeLast());
+		st.add("stmt", code.removeLast());
 
-		code.add(st.toString());
+		code.add(st.render());
 	}
 
 	//
@@ -1259,10 +1259,10 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Expression n) {
-		final StringTemplate st = stg.getInstanceOf("Expression");
+		final ST st = stg.getInstanceOf("Expression");
 
 		n.getLhs().accept(this);
-		st.setAttribute("lhs", code.removeLast());
+		st.add("lhs", code.removeLast());
 
 		if (n.getRhsSize() > 0) {
 			final List<String> operators = new ArrayList<String>();
@@ -1274,17 +1274,17 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				operands.add(code.removeLast());
 			}
 
-			st.setAttribute("operators", operators);
-			st.setAttribute("operands", operands);
+			st.add("operators", operators);
+			st.add("operands", operands);
 		}
 
-		code.add(st.toString());
+		code.add(st.render());
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final FunctionExpression n) {
-		final StringTemplate st = stg.getInstanceOf("Function");
+		final ST st = stg.getInstanceOf("Function");
 
 		if (!(n.getType().type instanceof BoaFunction))
 			throw new TypeCheckException(n ,"type " + n.getType().type + " is not a function type");
@@ -1301,20 +1301,20 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		}
 
 		this.varDecl.start(n);
-		st.setAttribute("staticDeclarations", this.varDecl.getCode());
+		st.add("staticDeclarations", this.varDecl.getCode());
 
-		st.setAttribute("type", funcType.toJavaType());
+		st.add("type", funcType.toJavaType());
 		if (funcType.getType() instanceof BoaAny)
-			st.setAttribute("ret", "void");
+			st.add("ret", "void");
 		else
-			st.setAttribute("ret", funcType.getType().toBoxedJavaType());
-		st.setAttribute("args", args);
-		st.setAttribute("types", types);
+			st.add("ret", funcType.getType().toBoxedJavaType());
+		st.add("args", args);
+		st.add("types", types);
 
 		n.getBody().accept(this);
-		st.setAttribute("body", code.removeLast());
+		st.add("body", code.removeLast());
 
-		code.add(st.toString());
+		code.add(st.render());
 	}
 
 	/** {@inheritDoc} */
@@ -1327,7 +1327,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final SimpleExpr n) {
-		final StringTemplate st = stg.getInstanceOf("Expression");
+		final ST st = stg.getInstanceOf("Expression");
 
 		// support '+' (concat) on arrays
 		if (n.getLhs().type instanceof BoaArray) {
@@ -1343,10 +1343,10 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				str = str + ")";
 			}
 
-			st.setAttribute("lhs", str);
+			st.add("lhs", str);
 		} else {
 			n.getLhs().accept(this);
-			st.setAttribute("lhs", code.removeLast());
+			st.add("lhs", code.removeLast());
 	
 			if (n.getRhsSize() > 0) {
 				final List<String> operands = new ArrayList<String>();
@@ -1356,12 +1356,12 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 					operands.add(code.removeLast());
 				}
 	
-				st.setAttribute("operators", n.getOps());
-				st.setAttribute("operands", operands);
+				st.add("operators", n.getOps());
+				st.add("operands", operands);
 			}
 		}
 
-		code.add(st.toString());
+		code.add(st.render());
 	}
 
 	/** {@inheritDoc} */
@@ -1373,19 +1373,19 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final VisitorExpression n) {
-		final StringTemplate st = stg.getInstanceOf("Visitor");
+		final ST st = stg.getInstanceOf("Visitor");
 
 		this.varDecl.start(n);
-		st.setAttribute("staticDeclarations", this.varDecl.getCode());
+		st.add("staticDeclarations", this.varDecl.getCode());
 
 		final List<String> body = new ArrayList<String>();
 		for (final Node node : n.getBody().getStatements()) {
 			node.accept(this);
 			body.add(code.removeLast());
 		}
-		st.setAttribute("body", body);
+		st.add("body", body);
 
-		code.add(st.toString());
+		code.add(st.render());
 	}
 
 	//
@@ -1462,18 +1462,18 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final ArrayType n) {
-		final StringTemplate st = stg.getInstanceOf("ArrayType");
+		final ST st = stg.getInstanceOf("ArrayType");
 
 		n.getValue().accept(this);
-		st.setAttribute("type", code.removeLast());
+		st.add("type", code.removeLast());
 
-		code.add(st.toString());
+		code.add(st.render());
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final FunctionType n) {
-		final StringTemplate st = stg.getInstanceOf("FunctionType");
+		final ST st = stg.getInstanceOf("FunctionType");
 
 		if (!(n.type instanceof BoaFunction))
 			throw new TypeCheckException(n ,"type " + n.type + " is not a function type");
@@ -1489,33 +1489,33 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			types.add(paramTypes[i].toJavaType());
 		}
 
-		st.setAttribute("name", funcType.toJavaType());
+		st.add("name", funcType.toJavaType());
 		if (funcType.getType() instanceof BoaAny)
-			st.setAttribute("ret", "void");
+			st.add("ret", "void");
 		else
-			st.setAttribute("ret", funcType.getType().toBoxedJavaType());
-		st.setAttribute("args", args);
-		st.setAttribute("types", types);
+			st.add("ret", funcType.getType().toBoxedJavaType());
+		st.add("args", args);
+		st.add("types", types);
 
-		code.add(st.toString());
+		code.add(st.render());
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final MapType n) {
-		final StringTemplate st = stg.getInstanceOf("MapType");
+		final ST st = stg.getInstanceOf("MapType");
 
 		n.env.setNeedsBoxing(true);
 
 		n.getIndex().accept(this);
-		st.setAttribute("key", code.removeLast());
+		st.add("key", code.removeLast());
 
 		n.getValue().accept(this);
-		st.setAttribute("value", code.removeLast());
+		st.add("value", code.removeLast());
 
 		n.env.setNeedsBoxing(false);
 
-		code.add(st.toString());
+		code.add(st.render());
 	}
 
 	/** {@inheritDoc} */
@@ -1540,31 +1540,31 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final StackType n) {
-		final StringTemplate st = stg.getInstanceOf("StackType");
+		final ST st = stg.getInstanceOf("StackType");
 
 		n.env.setNeedsBoxing(true);
 
 		n.getValue().accept(this);
-		st.setAttribute("value", code.removeLast());
+		st.add("value", code.removeLast());
 
 		n.env.setNeedsBoxing(false);
 
-		code.add(st.toString());
+		code.add(st.render());
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final SetType n) {
-		final StringTemplate st = stg.getInstanceOf("SetType");
+		final ST st = stg.getInstanceOf("SetType");
 
 		n.env.setNeedsBoxing(true);
 
 		n.getValue().accept(this);
-		st.setAttribute("value", code.removeLast());
+		st.add("value", code.removeLast());
 
 		n.env.setNeedsBoxing(false);
 
-		code.add(st.toString());
+		code.add(st.render());
 	}
 
 	/** {@inheritDoc} */

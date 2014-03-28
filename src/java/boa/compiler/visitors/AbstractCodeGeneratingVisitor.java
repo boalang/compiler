@@ -3,8 +3,9 @@ package boa.compiler.visitors;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.antlr.stringtemplate.StringTemplate;
-import org.antlr.stringtemplate.StringTemplateGroup;
+import org.stringtemplate.v4.ST;
+import org.stringtemplate.v4.STGroup;
+import org.stringtemplate.v4.STGroupFile;
 
 import boa.compiler.ast.Node;
 import boa.compiler.ast.Pair;
@@ -14,7 +15,10 @@ import boa.compiler.ast.Pair;
  * @author rdyer
  */
 public abstract class AbstractCodeGeneratingVisitor extends AbstractVisitorNoArg {
-	public static StringTemplateGroup stg;
+	public static STGroup stg = new STGroupFile("BoaJavaHadoop.stg");
+	static {
+		stg.importTemplates(new STGroupFile("BoaJava.stg"));
+	}
 
 	protected final LinkedList<String> code = new LinkedList<String>();
 
@@ -43,13 +47,13 @@ public abstract class AbstractCodeGeneratingVisitor extends AbstractVisitorNoArg
 	public void visit(final Pair n) {
 		super.visit(n);
 
-		final StringTemplate st = stg.getInstanceOf("Pair");
+		final ST st = stg.getInstanceOf("Pair");
 
-		st.setAttribute("map", n.env.getId());
-		st.setAttribute("key", code.pop());
-		st.setAttribute("value", code.pop());
+		st.add("map", n.env.getId());
+		st.add("key", code.pop());
+		st.add("value", code.pop());
 
-		code.add(st.toString());
+		code.add(st.render());
 	}
 
 	protected void visit(final List<? extends Node> nl) {

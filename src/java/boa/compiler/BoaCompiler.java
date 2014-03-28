@@ -13,8 +13,7 @@ import java.util.zip.ZipEntry;
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
 
-import org.antlr.stringtemplate.StringTemplate;
-import org.antlr.stringtemplate.StringTemplateGroup;
+import org.stringtemplate.v4.ST;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.HelpFormatter;
@@ -51,7 +50,6 @@ public class BoaCompiler {
 		options.addOption("l", "libs", true, "extra jars (functions/aggregators) to be compiled in");
 		options.addOption("i", "in", true, "file(s) to be compiled (comma-separated list)");
 		options.addOption("o", "out", true, "the name of the resulting jar");
-		options.addOption("b", "hbase", false, "use HBase templates");
 		options.addOption("nv", "no-visitor-fusion", false, "disable visitor fusion");
 		options.addOption("v", "visitors-fused", true, "number of visitors to fuse");
 		options.addOption("n", "name", true, "the name of the generated main class");
@@ -127,30 +125,6 @@ public class BoaCompiler {
 		final File outputFile = new File(outputSrcDir, className + ".java");
 		final BufferedOutputStream o = new BufferedOutputStream(new FileOutputStream(outputFile));
 		try {
-			final StringTemplateGroup superStg;
-			final BufferedReader t = new BufferedReader(new InputStreamReader(CodeGeneratingVisitor.class.getClassLoader().getResource("BoaJava.stg").openStream()));
-			try {
-				superStg = new StringTemplateGroup(t);
-			} finally {
-				t.close();
-			}
-
-			final StringTemplateGroup stg;
-
-			final String templateName;
-			if (cl.hasOption('b'))
-				templateName = "Hbase";
-			else
-				templateName = "Hadoop";
-			final BufferedReader s = new BufferedReader(new InputStreamReader(CodeGeneratingVisitor.class.getClassLoader().getResource("BoaJava" + templateName + ".stg").openStream()));
-			try {
-				stg = new StringTemplateGroup(s);
-				stg.setSuperGroup(superStg);
-				AbstractCodeGeneratingVisitor.stg = stg;
-			} finally {
-				s.close();
-			}
-
 			final List<String> jobnames = new ArrayList<String>();
 			final List<String> jobs = new ArrayList<String>();
 			BoaParser parser = null;
@@ -245,17 +219,17 @@ public class BoaCompiler {
 			if (jobs.size() == 0)
 				throw new RuntimeException("no files compiled without error");
 
-			final StringTemplate st = stg.getInstanceOf("Program");
+			final ST st = AbstractCodeGeneratingVisitor.stg.getInstanceOf("Program");
 
-			st.setAttribute("name", className);
-			st.setAttribute("numreducers", inputFiles.size());
-			st.setAttribute("jobs", jobs);
-			st.setAttribute("jobnames", jobnames);
-			st.setAttribute("combineTables", CodeGeneratingVisitor.combineTableStrings);
-			st.setAttribute("reduceTables", CodeGeneratingVisitor.reduceTableStrings);
-			st.setAttribute("splitsize", isSimple ? 64 * 1024 * 1024 : 10 * 1024 * 1024);
+			st.add("name", className);
+			st.add("numreducers", inputFiles.size());
+			st.add("jobs", jobs);
+			st.add("jobnames", jobnames);
+			st.add("combineTables", CodeGeneratingVisitor.combineTableStrings);
+			st.add("reduceTables", CodeGeneratingVisitor.reduceTableStrings);
+			st.add("splitsize", isSimple ? 64 * 1024 * 1024 : 10 * 1024 * 1024);
 
-			o.write(st.toString().getBytes());
+			o.write(st.render().getBytes());
 		} finally {
 			o.close();
 		}
