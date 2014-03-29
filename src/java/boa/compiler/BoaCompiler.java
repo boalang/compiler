@@ -1,12 +1,18 @@
 package boa.compiler;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
-import java.util.jar.JarEntry;
 import java.util.jar.JarOutputStream;
 import java.util.zip.ZipEntry;
 
@@ -244,9 +250,15 @@ public class BoaCompiler {
 		// find the location of the jar this class is in
 		final String path = ClasspathUrlFinder.findClassBase(BoaCompiler.class).getPath();
 		// find the location of the compiler distribution
-		final String root = new File(path.substring(path.indexOf(':') + 1, path.indexOf('!'))).getParentFile().getParent();
+		final File root = new File(path.substring(path.indexOf(':') + 1, path.indexOf('!'))).getParentFile();
 
-		generateJar(cl, jarName, outputRoot, root + "/dist/boa-runtime.jar");
+		final List<File> libJars = new ArrayList<File>();
+		libJars.add(new File(root, "boa-runtime.jar"));
+		if (cl.hasOption('l'))
+			for (final String s : Arrays.asList(cl.getOptionValues('l')))
+				libJars.add(new File(s));
+
+		generateJar(jarName, outputRoot, libJars);
 
 		delete(outputRoot);
 	}
@@ -260,61 +272,45 @@ public class BoaCompiler {
 			throw new IOException("unable to delete file " + f);
 	}
 
-	private static void generateJar(CommandLine cl, String jarName, final File dir, final String runtimePath) throws IOException, FileNotFoundException {
+	private static void generateJar(final String jarName, final File dir, final List<File> libJars) throws IOException, FileNotFoundException {
+		final int offset = dir.toString().length() + 1;
+
 		final JarOutputStream jar = new JarOutputStream(new BufferedOutputStream(new FileOutputStream(new File(jarName))));
 		try {
-			final int offset = dir.toString().length() + 1;
-			for (final String f : findFiles(dir, new ArrayList<String>())) {
-				//LOG.info("adding " + f + " to " + jarName);
-				jar.putNextEntry(new ZipEntry(f.substring(offset)));
+			for (final File f : findFiles(dir, new ArrayList<File>()))
+				putJarEntry(jar, f, f.getPath().substring(offset));
 
-				final InputStream inx = new BufferedInputStream(new FileInputStream(f));
-				try {
-					write(inx, jar);
-				} finally {
-					inx.close();
-				}
-
-				jar.closeEntry();
-			}
-
-			final List<String> libsJars = new ArrayList<String>();
-			libsJars.add(runtimePath);
-			if (cl.hasOption('l'))
-				libsJars.addAll(Arrays.asList(cl.getOptionValues('l')));
-
-			for (final String lib : libsJars) {
-				final File f = new File(lib);
-
-				//LOG.info("adding lib/" + f.getName() + " to " + jarName);
-				jar.putNextEntry(new JarEntry("lib" + File.separatorChar + f.getName()));
-				final InputStream inx = new BufferedInputStream(new FileInputStream(f));
-				try {
-					write(inx, jar);
-				} finally {
-					inx.close();
-				}
-			}
+			for (final File f : libJars)
+				putJarEntry(jar, f, "lib" + File.separatorChar + f.getName());
 		} finally {
 			jar.close();
 		}
 	}
 
-	private static final List<String> findFiles(final File f, final List<String> l) {
+	private static final List<File> findFiles(final File f, final List<File> l) {
 		if (f.isDirectory())
 			for (final File g : f.listFiles())
 				findFiles(g, l);
 		else
-			l.add(f.toString());
+			l.add(f);
 
 		return l;
 	}
 
-	private static void write(final InputStream in, final OutputStream out) throws IOException {
-		final byte[] b = new byte[4096];
-		int len;
-		while ((len = in.read(b)) > 0)
-			out.write(b, 0, len);
+	private static void putJarEntry(final JarOutputStream jar, final File f, final String path) throws IOException {
+		jar.putNextEntry(new ZipEntry(path));
+
+		final InputStream in = new BufferedInputStream(new FileInputStream(f));
+		try {
+			final byte[] b = new byte[4096];
+			int len;
+			while ((len = in.read(b)) > 0)
+				jar.write(b, 0, len);
+		} finally {
+			in.close();
+		}
+
+		jar.closeEntry();
 	}
 
 	private static String pascalCase(final String string) {
