@@ -316,20 +316,16 @@ public class BoaCompiler {
 	private static String pascalCase(final String string) {
 		final StringBuilder pascalized = new StringBuilder();
 
-		boolean lower = false;
+		boolean upper = true;
 		for (final char c : string.toCharArray())
-			if (!Character.isDigit(c) && !Character.isLetter(c))
-				lower = false;
-			else if (Character.isDigit(c)) {
+			if (!Character.isDigit(c) && !Character.isLetter(c)) {
+				upper = true;
+			} else if (Character.isDigit(c)) {
 				pascalized.append(c);
-				lower = false;
+				upper = true;
 			} else if (Character.isLetter(c)) {
-				if (lower)
-					pascalized.append(c);
-				else
-					pascalized.append(Character.toUpperCase(c));
-
-				lower = true;
+				pascalized.append(upper ? Character.toUpperCase(c) : c);
+				upper = false;
 			}
 
 		return pascalized.toString();
