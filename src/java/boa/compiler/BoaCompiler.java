@@ -102,11 +102,11 @@ public class BoaCompiler {
 				if (s.length() != 0)
 					s += "_";
 				if (f.getName().indexOf('.') != -1)
-					s += pascalCase(f.getName().substring(0, f.getName().lastIndexOf('.')));
+					s += f.getName().substring(0, f.getName().lastIndexOf('.'));
 				else
-					s += pascalCase(f.getName());
+					s += f.getName();
 			}
-			className = s;
+			className = pascalCase(s);
 		}
 
 		// get the filename of the jar we will be writing
