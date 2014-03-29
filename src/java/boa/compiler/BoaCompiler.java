@@ -85,7 +85,7 @@ public class BoaCompiler {
 		}
 
 		if (inputFiles.size() == 0) {
-			System.err.println("missing required option `in'");
+			System.err.println("no valid input files found - did you use the --in option?");
 			new HelpFormatter().printHelp("BoaCompiler", options);
 
 			return;
