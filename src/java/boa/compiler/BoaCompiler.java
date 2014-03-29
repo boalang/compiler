@@ -318,10 +318,10 @@ public class BoaCompiler {
 
 		boolean upper = true;
 		for (final char c : string.toCharArray())
-			if (!Character.isDigit(c) && !Character.isLetter(c)) {
-				upper = true;
-			} else if (Character.isDigit(c)) {
+			if (Character.isDigit(c) || c == '_') {
 				pascalized.append(c);
+				upper = true;
+			} else if (!Character.isDigit(c) && !Character.isLetter(c)) {
 				upper = true;
 			} else if (Character.isLetter(c)) {
 				pascalized.append(upper ? Character.toUpperCase(c) : c);
