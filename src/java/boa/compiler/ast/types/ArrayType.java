@@ -39,10 +39,4 @@ public class ArrayType extends AbstractType {
 		copyFieldsTo(t);
 		return t;
 	}
-
-	/*
-	public ArrayType setPositions(final Token first, final Node last) {
-		return (ArrayType)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
-	}
-	*/
 }

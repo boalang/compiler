@@ -25,10 +25,4 @@ public class VisitorType extends AbstractType {
 		copyFieldsTo(t);
 		return t;
 	}
-
-	/*
-	public VisitorType setPositions(final Token first) {
-		return (VisitorType)setPositions(first.beginLine, first.beginColumn, first.endLine, first.endColumn);
-	}
-	*/
 }

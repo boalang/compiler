@@ -45,8 +45,4 @@ public class Pair extends Node {
 		copyFieldsTo(p);
 		return p;
 	}
-
-	public Pair setPositions(final Node first, final Node last) {
-		return (Pair)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
-	}
 }

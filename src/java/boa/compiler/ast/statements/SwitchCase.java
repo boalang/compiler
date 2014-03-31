@@ -77,10 +77,4 @@ public class SwitchCase extends Statement {
 		copyFieldsTo(sc);
 		return sc;
 	}
-
-	/*
-	public SwitchCase setPositions(final Token first, final Node last) {
-		return (SwitchCase)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
-	}
-	*/
 }

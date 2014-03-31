@@ -36,10 +36,4 @@ public class CharLiteral extends Operand implements ILiteral {
 		copyFieldsTo(l);
 		return l;
 	}
-
-	/*
-	public CharLiteral setPositions(final Token first) {
-		return (CharLiteral)setPositions(first.beginLine, first.beginColumn, first.endLine, first.endColumn);
-	}
-	*/
 }

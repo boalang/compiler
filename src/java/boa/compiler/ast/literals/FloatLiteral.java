@@ -36,10 +36,4 @@ public class FloatLiteral extends Operand implements ILiteral {
 		copyFieldsTo(l);
 		return l;
 	}
-
-	/*
-	public FloatLiteral setPositions(final Token first) {
-		return (FloatLiteral)setPositions(first.beginLine, first.beginColumn, first.endLine, first.endColumn);
-	}
-	*/
 }

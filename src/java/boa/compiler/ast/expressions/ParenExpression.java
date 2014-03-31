@@ -38,10 +38,4 @@ public class ParenExpression extends Operand {
 		copyFieldsTo(p);
 		return p;
 	}
-
-	/*
-	public ParenExpression setPositions(final Token first, final Token last) {
-		return (ParenExpression)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
-	}
-	*/
 }

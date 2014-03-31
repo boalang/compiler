@@ -40,10 +40,4 @@ public class Identifier extends AbstractType {
 		copyFieldsTo(id);
 		return id;
 	}
-
-	/*
-	public Identifier setPositions(final Token first) {
-		return (Identifier)setPositions(first.beginLine, first.beginColumn, first.endLine, first.endColumn);
-	}
-	*/
 }

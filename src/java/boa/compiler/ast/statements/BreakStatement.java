@@ -25,10 +25,4 @@ public class BreakStatement extends Statement {
 		copyFieldsTo(s);
 		return s;
 	}
-
-	/*
-	public BreakStatement setPositions(final Token first, final Token last) {
-		return (BreakStatement)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
-	}
-	*/
 }

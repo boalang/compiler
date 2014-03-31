@@ -36,10 +36,4 @@ public class Start extends Node {
 		copyFieldsTo(s);
 		return s;
 	}
-
-	/*
-	public Start setPositions(final Node first, final Token last) {
-		return (Start)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
-	}
-	*/
 }

@@ -68,10 +68,4 @@ public class Component extends AbstractType {
 		copyFieldsTo(c);
 		return c;
 	}
-
-	public Component setPositions(final Node first, final Node last) {
-		if (first == null)
-			return (Component)setPositions(last.beginLine, last.beginColumn, last.endLine, last.endColumn);
-		return (Component)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
-	}
 }

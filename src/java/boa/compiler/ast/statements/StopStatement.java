@@ -25,10 +25,4 @@ public class StopStatement extends Statement {
 		copyFieldsTo(s);
 		return s;
 	}
-
-	/*
-	public StopStatement setPositions(final Token first, final Token last) {
-		return (StopStatement)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
-	}
-	*/
 }

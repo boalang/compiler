@@ -69,12 +69,4 @@ public class Comparison extends Node {
 		copyFieldsTo(c);
 		return c;
 	}
-
-	public Comparison setPositions(final Node first) {
-		return (Comparison)setPositions(first.beginLine, first.beginColumn, first.endLine, first.endColumn);
-	}
-
-	public Comparison setPositions(final Node first, final Node last) {
-		return (Comparison)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
-	}
 }

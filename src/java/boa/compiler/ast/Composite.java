@@ -95,10 +95,4 @@ public class Composite extends Operand {
 		copyFieldsTo(c);
 		return c;
 	}
-
-	/*
-	public Composite setPositions(final Token first, final Token last) {
-		return (Composite)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
-	}
-	*/
 }

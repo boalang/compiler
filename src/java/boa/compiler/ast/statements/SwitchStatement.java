@@ -78,10 +78,4 @@ public class SwitchStatement extends Statement {
 		copyFieldsTo(sw);
 		return sw;
 	}
-
-	/*
-	public SwitchStatement setPositions(final Token first, final Token last) {
-		return (SwitchStatement)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
-	}
-	*/
 }

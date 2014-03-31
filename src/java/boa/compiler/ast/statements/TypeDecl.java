@@ -51,10 +51,4 @@ public class TypeDecl extends Statement {
 		copyFieldsTo(d);
 		return d;
 	}
-
-	/*
-	public TypeDecl setPositions(final Token first, final Token last) {
-		return (TypeDecl)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
-	}
-	*/
 }

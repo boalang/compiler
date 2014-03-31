@@ -39,10 +39,4 @@ public class StackType extends AbstractType {
 		copyFieldsTo(t);
 		return t;
 	}
-
-	/*
-	public StackType setPositions(final Token first, final Node last) {
-		return (StackType)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
-	}
-	*/
 }

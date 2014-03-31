@@ -93,10 +93,4 @@ public class Block extends Statement {
 		copyFieldsTo(b);
 		return b;
 	}
-
-	/*
-	public Block setPositions(final Token first, final Token last) {
-		return (Block)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
-	}
-	*/
 }

@@ -65,10 +65,4 @@ public class IfAllStatement extends Statement {
 		copyFieldsTo(s);
 		return s;
 	}
-
-	/*
-	public IfAllStatement setPositions(final Token first, final Node last) {
-		return (IfAllStatement)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
-	}
-	*/
 }

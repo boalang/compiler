@@ -39,10 +39,4 @@ public class SetType extends AbstractType {
 		copyFieldsTo(t);
 		return t;
 	}
-
-	/*
-	public SetType setPositions(final Token first, final Node last) {
-		return (SetType)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
-	}
-	*/
 }

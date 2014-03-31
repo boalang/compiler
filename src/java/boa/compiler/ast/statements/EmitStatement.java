@@ -103,10 +103,4 @@ public class EmitStatement extends Statement {
 		copyFieldsTo(e);
 		return e;
 	}
-
-	/*
-	public EmitStatement setPositions(final Node first, final Token last) {
-		return (EmitStatement)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
-	}
-	*/
 }

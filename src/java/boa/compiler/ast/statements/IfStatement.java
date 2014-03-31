@@ -92,10 +92,4 @@ public class IfStatement extends Statement {
 		copyFieldsTo(s);
 		return s;
 	}
-
-	/*
-	public IfStatement setPositions(final Token first, final Node last) {
-		return (IfStatement)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
-	}
-	*/
 }

@@ -78,14 +78,4 @@ public class FunctionType extends AbstractType {
 		copyFieldsTo(f);
 		return f;
 	}
-
-	/*
-	public FunctionType setPositions(final Token first, final Token last) {
-		return (FunctionType)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
-	}
-	*/
-
-	public FunctionType setEnd(final Node last) {
-		return (FunctionType)setPositions(beginLine, beginColumn, last.endLine, last.endColumn);
-	}
 }

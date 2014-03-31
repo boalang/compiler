@@ -139,18 +139,4 @@ public class OutputType extends AbstractType {
 		copyFieldsTo(o);
 		return o;
 	}
-
-	/*
-	public OutputType setPositions(final Token first, final Node last) {
-		return (OutputType)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
-	}
-
-	public OutputType setEnd(final Token last) {
-		return (OutputType)setPositions(beginLine, beginColumn, last.endLine, last.endColumn);
-	}
-	*/
-
-	public OutputType setEnd(final Node last) {
-		return (OutputType)setPositions(beginLine, beginColumn, last.endLine, last.endColumn);
-	}
 }

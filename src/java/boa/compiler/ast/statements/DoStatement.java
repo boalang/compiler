@@ -51,10 +51,4 @@ public class DoStatement extends Statement {
 		copyFieldsTo(s);
 		return s;
 	}
-
-	/*
-	public DoStatement setPositions(final Token first, final Token last) {
-		return (DoStatement)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
-	}
-	*/
 }

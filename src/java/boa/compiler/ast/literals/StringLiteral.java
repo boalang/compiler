@@ -42,10 +42,4 @@ public class StringLiteral extends Operand implements ILiteral {
 		copyFieldsTo(l);
 		return l;
 	}
-
-	/*
-	public StringLiteral setPositions(final Token first) {
-		return (StringLiteral)setPositions(first.beginLine, first.beginColumn, first.endLine, first.endColumn);
-	}
-	*/
 }

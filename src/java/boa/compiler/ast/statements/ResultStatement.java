@@ -38,10 +38,4 @@ public class ResultStatement extends Statement {
 		copyFieldsTo(s);
 		return s;
 	}
-
-	/*
-	public ResultStatement setPositions(final Token first, final Token last) {
-		return (ResultStatement)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
-	}
-	*/
 }

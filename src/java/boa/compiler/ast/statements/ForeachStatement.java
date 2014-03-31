@@ -65,10 +65,4 @@ public class ForeachStatement extends Statement {
 		copyFieldsTo(s);
 		return s;
 	}
-
-	/*
-	public ForeachStatement setPositions(final Token first, final Node last) {
-		return (ForeachStatement)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
-	}
-	*/
 }

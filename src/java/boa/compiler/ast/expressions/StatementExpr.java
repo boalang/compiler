@@ -40,10 +40,4 @@ public class StatementExpr extends Operand {
 		copyFieldsTo(e);
 		return e;
 	}
-
-	/*
-	public StatementExpr setPositions(final Token first, final Node last) {
-		return (StatementExpr)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
-	}
-	*/
 }

@@ -65,10 +65,4 @@ public class ExistsStatement extends Statement {
 		copyFieldsTo(s);
 		return s;
 	}
-
-	/*
-	public ExistsStatement setPositions(final Token first, final Node last) {
-		return (ExistsStatement)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
-	}
-	*/
 }

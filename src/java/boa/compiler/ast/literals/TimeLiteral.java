@@ -36,10 +36,4 @@ public class TimeLiteral extends Operand implements ILiteral {
 		copyFieldsTo(l);
 		return l;
 	}
-
-	/*
-	public TimeLiteral setPositions(final Token first) {
-		return (TimeLiteral)setPositions(first.beginLine, first.beginColumn, first.endLine, first.endColumn);
-	}
-	*/
 }

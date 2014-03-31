@@ -87,10 +87,4 @@ public class Conjunction extends Node {
 		copyFieldsTo(c);
 		return c;
 	}
-
-	public Conjunction setPositions(final Node first, final Node last) {
-		if (last == null)
-			return (Conjunction)setPositions(first.beginLine, first.beginColumn, first.endLine, first.endColumn);
-		return (Conjunction)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
-	}
 }

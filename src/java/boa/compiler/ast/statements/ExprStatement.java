@@ -39,8 +39,4 @@ public class ExprStatement extends Statement {
 		copyFieldsTo(s);
 		return s;
 	}
-
-	public ExprStatement setPositions(final Node first) {
-		return (ExprStatement)setPositions(first.beginLine, first.beginColumn, first.endLine, first.endColumn);
-	}
 }

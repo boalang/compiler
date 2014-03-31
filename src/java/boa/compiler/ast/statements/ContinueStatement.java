@@ -25,10 +25,4 @@ public class ContinueStatement extends Statement {
 		copyFieldsTo(s);
 		return s;
 	}
-
-	/*
-	public ContinueStatement setPositions(final Token first, final Token last) {
-		return (ContinueStatement)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
-	}
-	*/
 }

@@ -36,10 +36,4 @@ public class IntegerLiteral extends Operand implements ILiteral {
 		copyFieldsTo(l);
 		return l;
 	}
-
-	/*
-	public IntegerLiteral setPositions(final Token first) {
-		return (IntegerLiteral)setPositions(first.beginLine, first.beginColumn, first.endLine, first.endColumn);
-	}
-	*/
 }

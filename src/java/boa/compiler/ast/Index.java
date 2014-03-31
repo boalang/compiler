@@ -68,10 +68,4 @@ public class Index extends Node {
 		copyFieldsTo(i);
 		return i;
 	}
-
-	/*
-	public Index setPositions(final Token first, final Token last) {
-		return (Index)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
-	}
-	*/
 }

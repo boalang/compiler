@@ -112,10 +112,4 @@ public class ForStatement extends Statement {
 		copyFieldsTo(f);
 		return f;
 	}
-
-	/*
-	public ForStatement setPositions(final Token first, final Node last) {
-		return (ForStatement)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
-	}
-	*/
 }

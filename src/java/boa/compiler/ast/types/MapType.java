@@ -47,10 +47,4 @@ public class MapType extends AbstractType {
 		copyFieldsTo(t);
 		return t;
 	}
-
-	/*
-	public MapType setPositions(final Token first, final Node last) {
-		return (MapType)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
-	}
-	*/
 }

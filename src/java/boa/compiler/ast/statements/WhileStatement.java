@@ -51,10 +51,4 @@ public class WhileStatement extends Statement {
 		copyFieldsTo(s);
 		return s;
 	}
-
-	/*
-	public WhileStatement setPositions(final Token first, final Node last) {
-		return (WhileStatement)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
-	}
-	*/
 }

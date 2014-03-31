@@ -38,10 +38,4 @@ public class Selector extends Node {
 		copyFieldsTo(s);
 		return s;
 	}
-
-	/*
-	public Selector setPositions(final Token first, final Node last) {
-		return (Selector)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
-	}
-	*/
 }

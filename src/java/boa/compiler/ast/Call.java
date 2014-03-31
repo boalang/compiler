@@ -70,10 +70,4 @@ public class Call extends Node {
 		copyFieldsTo(c);
 		return c;
 	}
-
-	/*
-	public Call setPositions(final Token first, final Token last) {
-		return (Call)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
-	}
-	*/
 }

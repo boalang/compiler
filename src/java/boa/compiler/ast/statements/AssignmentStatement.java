@@ -48,10 +48,4 @@ public class AssignmentStatement extends Statement {
 		copyFieldsTo(s);
 		return s;
 	}
-
-	/*
-	public AssignmentStatement setPositions(final Node first, final Token last) {
-		return (AssignmentStatement)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
-	}
-	*/
 }

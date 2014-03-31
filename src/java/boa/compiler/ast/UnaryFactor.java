@@ -44,10 +44,4 @@ public class UnaryFactor extends Operand {
 		copyFieldsTo(uf);
 		return uf;
 	}
-
-	/*
-	public UnaryFactor setPositions(final Token first, final Node last) {
-		return (UnaryFactor)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
-	}
-	*/
 }

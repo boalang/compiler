@@ -49,8 +49,4 @@ public class VisitorExpression extends Operand {
 		copyFieldsTo(e);
 		return e;
 	}
-
-	public VisitorExpression setPositions(final Node first, final Node last) {
-		return (VisitorExpression)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
-	}
 }

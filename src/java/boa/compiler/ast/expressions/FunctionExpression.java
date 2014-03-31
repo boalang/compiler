@@ -49,8 +49,4 @@ public class FunctionExpression extends Operand {
 		copyFieldsTo(e);
 		return e;
 	}
-
-	public FunctionExpression setPositions(final Node first, final Node last) {
-		return (FunctionExpression)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
-	}
 }

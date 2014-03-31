@@ -115,10 +115,4 @@ public class VisitStatement extends Statement {
 		copyFieldsTo(v);
 		return v;
 	}
-
-	/*
-	public VisitStatement setPositions(final Token first, final Node last) {
-		return (VisitStatement)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
-	}
-	*/
 }

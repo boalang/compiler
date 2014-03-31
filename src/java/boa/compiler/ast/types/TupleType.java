@@ -50,10 +50,4 @@ public class TupleType extends AbstractType {
 		copyFieldsTo(t);
 		return t;
 	}
-
-	/*
-	public TupleType setPositions(final Token first, final Token last) {
-		return (TupleType)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
-	}
-	*/
 }

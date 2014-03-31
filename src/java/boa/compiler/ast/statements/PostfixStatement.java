@@ -45,10 +45,4 @@ public class PostfixStatement extends Statement {
 		copyFieldsTo(s);
 		return s;
 	}
-
-	/*
-	public PostfixStatement setPositions(final Node first, final Token last) {
-		return (PostfixStatement)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
-	}
-	*/
 }
