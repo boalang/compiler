@@ -35,6 +35,7 @@
 	</path>
 	<property name="src.paths" refid="src.paths" />
 	<path id="src.parser.paths">
+		<pathelement location="src/java/boa/compiler/" />
 		<pathelement location="build/java" />
 	</path>
 	<property name="src.parser.paths" refid="src.parser.paths" />
