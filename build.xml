@@ -1,46 +1,114 @@
 <?xml version="1.0" ?>
 <project name="boa" default="package">
+	<!-- paths -->
+	<property name="src.proto" location="src/proto" />
+	<property name="dst.proto" location="src/compiled-proto" />
+
+	<!-- Java version -->
 	<property name="ant.build.javac.source" value="1.6" />
 	<property name="ant.build.javac.target" value="1.6" />
 
-	<property name="src.proto" location="src/proto" />
-
+	<!-- debug properties -->
 	<property name="debug.enabled" value="on" />
 	<property name="debug.level" value="lines,vars,source" />
 
-	<path id="classpath">
-		<pathelement location="build/classes" />
-		<pathelement location="build/testclasses" />
-		<fileset dir="lib" includes="*.jar" />
+
+	<!-- paths -->
+	<path id="project.class.path">
+		<fileset dir="lib">
+			<include name="**/*.jar"/>
+		</fileset>
+		<dirset dir="build/classes">
+			<include name="**"/>
+		</dirset>
 	</path>
 
-	<target name="init">
+	<path id="test.class.path">
+		<path refid="project.class.path" />
+		<dirset dir="build/tests">
+			<include name="**"/>
+		</dirset>
+	</path>
+
+	<path id="src.paths">
+		<pathelement location="src/java" />
+	</path>
+	<property name="src.paths" refid="src.paths" />
+	<path id="src.parser.paths">
+		<pathelement location="build/java" />
+	</path>
+	<property name="src.parser.paths" refid="src.parser.paths" />
+
+
+	<!-- ensure target dirs exist -->
+	<target name="-init">
 		<mkdir dir="build/java/boa/parser" />
 		<mkdir dir="build/classes" />
-		<mkdir dir="build/testclasses" />
+		<mkdir dir="build/depcache" />
+		<mkdir dir="build/tests" />
 		<mkdir dir="dist" />
 	</target>
 
-	<target name="translate-proto" depends="init">
+	<!-- do a dependency check -->
+	<target name="-check-deps">
+		<depend srcdir="src/test;src/compiled-proto;${src.paths};${src.parser.paths}" destdir="build/classes" cache="build/depcache" closure="yes" />
+	</target>
+
+	<!-- Protocol Buffers schemas -->
+	<target name="-check-protobuf" depends="-init">
+		<condition property="protobuf.uptodate">
+			<and>
+				<uptodate srcfile="src/proto/ast.proto" targetfile="src/compiled-proto/boa/types/Ast.java" />
+				<uptodate srcfile="src/proto/code.proto" targetfile="src/compiled-proto/boa/types/Code.java" />
+				<uptodate srcfile="src/proto/diff.proto" targetfile="src/compiled-proto/boa/types/Diff.java" />
+				<uptodate srcfile="src/proto/issues.proto" targetfile="src/compiled-proto/boa/types/Issues.java" />
+				<uptodate srcfile="src/proto/shared.proto" targetfile="src/compiled-proto/boa/types/Shared.java" />
+				<uptodate srcfile="src/proto/toplevel.proto" targetfile="src/compiled-proto/boa/types/Toplevel.java" />
+			</and>
+		</condition>
+	</target>
+
+	<target name="-translate-protobuf" depends="-check-protobuf" unless="protobuf.uptodate">
 		<apply executable="protoc" parallel="true">
 			<arg value="--proto_path=${src.proto}" />
 			<arg value="--java_out=src/compiled-proto" />
 			<srcfile />
 			<fileset dir="${src.proto}" includes="*.proto" />
 		</apply>
+		<antcall target="-check-deps" />
 	</target>
 
-	<target name="compile-protobuf" depends="init">
+	<target name="compile-protobuf" depends="-translate-protobuf" description="Compiles the generated protobuf code.">
 		<javac includeantruntime="true" srcdir="src/compiled-proto" destdir="build/classes" debug="${debug.enabled}" debuglevel="${debug.level}">
-			<classpath refid="classpath" />
+			<classpath refid="project.class.path" />
 		</javac>
 	</target>
 
-	<uptodate property="parser-uptodate" srcfile="src/antlr/Boa.g" targetfile="build/java/boa/parser/BoaParser.java" />
-	<target name="parser" unless="parser-uptodate">
-		<antcall target="parser-force" />
+	<target name="clean-proto" description="Clean the compiled protobuf files.">
+		<delete>
+			<fileset dir="build/classes">
+				<patternset>
+					<include name="boa/types/" />
+					<exclude name="boa/types/Boa*" />
+					<exclude name="boa/types/proto/*" />
+				</patternset>
+			</fileset>
+		</delete>
 	</target>
-	<target name="parser-force" depends="init">
+
+
+	<!-- parser -->
+	<target name="-check-parser" depends="-init">
+		<condition property="parser.uptodate">
+			<and>
+				<uptodate srcfile="src/antlr/Boa.g" targetfile="build/java/boa/parser/BoaParser.java" />
+				<uptodate srcfile="src/antlr/Boa.g" targetfile="build/java/boa/parser/BoaLexer.java" />
+				<uptodate srcfile="src/antlr/Boa.g" targetfile="build/java/boa/parser/BoaListener.java" />
+			</and>
+		</condition>
+	</target>
+
+	<target name="-parser" depends="-check-parser" unless="parser.uptodate">
 		<java jar="lib/antlr-4.2-complete.jar" dir="src/antlr/" fork="true">
 			<arg value="-o" />
 			<arg value="../../build/java/boa/parser/" />
@@ -48,31 +116,56 @@
 			<arg value="boa.parser" />
 			<arg value="Boa.g" />
 		</java>
+		<antcall target="-check-deps" />
 	</target>
 
-	<target name="compile" depends="compile-protobuf,parser">
-		<javac includeantruntime="true" destdir="build/classes" debug="${debug.enabled}" debuglevel="${debug.level}">
-			<src>
-				<pathelement location="build/java" />
-				<pathelement location="src/java" />
-			</src>
-			<classpath refid="classpath" />
+	<target name="compile-parser" depends="-parser" description="Compile the parser.">
+		<javac includeantruntime="true" srcdir="${src.parser.paths}" destdir="build/classes" debug="${debug.enabled}" debuglevel="${debug.level}">
+			<classpath refid="project.class.path" />
 		</javac>
 	</target>
 
-	<target name="compile-tests" depends="compile">
-		<javac includeantruntime="true" srcdir="src/test" destdir="build/testclasses" debug="${debug.enabled}" debuglevel="${debug.level}">
-			<classpath refid="classpath" />
+	<target name="clean-parser" description="Clean all generated/compiled parser files.">
+		<delete dir="build/java" />
+		<delete dir="build/classes/boa/parser" />
+	</target>
+
+
+	<!-- main compilation targets -->
+	<target name="compile" depends="compile-protobuf,compile-parser" description="Compile the compiler.">
+		<antcall target="-check-deps" />
+		<javac includeantruntime="true" srcdir="${src.paths}" destdir="build/classes" debug="${debug.enabled}" debuglevel="${debug.level}">
+			<classpath refid="project.class.path" />
 		</javac>
 	</target>
 
-	<target name="test" depends="compile-tests">
+	<target name="clean-src" description="Clean the compiled files (excluding protobuf and parser).">
+		<delete>
+			<fileset dir="build/classes">
+				<patternset>
+					<include name="boa/**" />
+					<exclude name="boa/parser/**" />
+					<exclude name="boa/types/**" />
+				</patternset>
+			</fileset>
+			<fileset dir="build/classes/boa/types">
+				<patternset>
+					<include name="Boa*" />
+					<include name="proto/**" />
+				</patternset>
+			</fileset>
+		</delete>
+	</target>
+
+
+	<!-- testing -->
+	<target name="test" depends="-compile-tests" description="Run all unit tests.">
 		<junit fork="yes" haltonfailure="yes">
-			<classpath refid="classpath" />
+			<classpath refid="test.class.path" />
 			<batchtest>
 				<formatter type="plain" usefile="false" />
-				<fileset dir="build/testclasses">
-					<include name="**/Test*.class" />
+				<fileset dir="build/tests">
+					<include name="**/*.class" />
 					<exclude name="**/*$*.class" />
 				</fileset>
 			</batchtest>
@@ -80,13 +173,22 @@
 		<delete file="SecurityAuth.audit" />
 	</target>
 
-	<target name="doc" depends="init">
-		<javadoc destdir="build/classes" sourcepath="src/java" packagenames="boa.*">
-			<classpath refid="classpath" />
-		</javadoc>
+	<target name="-compile-tests" depends="compile">
+		<antcall target="-check-deps" />
+		<javac includeantruntime="true" srcdir="src/test" destdir="build/tests" debug="${debug.enabled}" debuglevel="${debug.level}">
+			<classpath refid="project.class.path" />
+		</javac>
 	</target>
 
-	<target name="package-runtime" depends="compile">
+	<target name="clean-tests" description="Clean the compiled test files.">
+		<delete dir="build/tests" />
+	</target>
+
+
+	<!-- packaging -->
+	<target name="package" depends="package-runtime,package-compiler" description="Package both the compiler and runtime JARs."/>
+
+	<target name="package-runtime" depends="compile" description="Package the runtime JAR.">
 		<jar destfile="dist/boa-runtime.jar">
 			<fileset dir="build/classes">
 				<patternset>
@@ -95,13 +197,12 @@
 					<exclude name="**/parser/" />
 					<exclude name="**/boa/types/proto/" />
 					<exclude name="**/boa/types/Boa*" />
-					<exclude name="**/runtime/types/" />
 				</patternset>
 			</fileset>
 		</jar>
 	</target>
 
-	<target name="package-compiler" depends="compile">
+	<target name="package-compiler" depends="compile" description="Package the compiler JAR.">
 		<jar destfile="dist/boa-compiler.jar">
 			<manifest>
 				<attribute name="Main-Class" value="boa.compiler.BoaCompiler" />
@@ -109,42 +210,27 @@
 			<fileset dir="build/classes" />
 			<fileset dir="conf" />
 			<fileset dir="templates" />
-			<zipfileset excludes="META-INF/" src="lib/commons-logging-1.1.1.jar" />
+			<zipfileset excludes="META-INF/" src="lib/antlr-runtime-4.2.jar" />
+			<zipfileset excludes="META-INF/" src="lib/commons-cli-1.2.jar" />
 			<zipfileset excludes="META-INF/" src="lib/commons-configuration-1.6.jar" />
 			<zipfileset excludes="META-INF/" src="lib/commons-lang-2.4.jar" />
+			<zipfileset excludes="META-INF/" src="lib/commons-logging-1.1.1.jar" />
 			<zipfileset excludes="META-INF/" src="lib/hadoop-core-1.0.4.jar" />
-			<zipfileset excludes="META-INF/" src="lib/hbase-0.94.5.jar" />
-			<zipfileset excludes="META-INF/" src="lib/log4j-1.2.15.jar" />
-			<zipfileset excludes="META-INF/" src="lib/commons-cli-1.2.jar" />
-			<zipfileset excludes="META-INF/" src="lib/scannotation-1.0.3.jar" />
 			<zipfileset excludes="META-INF/" src="lib/javassist-3.8.0.GA.jar" />
-			<zipfileset excludes="META-INF/" src="lib/ST-4.0.8.jar" />
-			<zipfileset excludes="META-INF/" src="lib/antlr-runtime-4.2.jar" />
+			<zipfileset excludes="META-INF/" src="lib/log4j-1.2.15.jar" />
 			<zipfileset excludes="META-INF/" src="lib/protobuf-java-2.5.0.jar" />
+			<zipfileset excludes="META-INF/" src="lib/scannotation-1.0.3.jar" />
+			<zipfileset excludes="META-INF/" src="lib/ST-4.0.8.jar" />
 		</jar>
 	</target>
 
-	<target name="package" depends="compile,package-runtime,package-compiler" />
-
-	<target name="clean-gen">
-		<delete dir="build/java" />
-		<delete dir="build/classes/boa/parser" />
-		<delete dir="build/classes/boa/types" />
+	<target name="clean-dist" description="Clean all JAR files.">
+		<delete dir="dist" />
 	</target>
 
-	<target name="clean-src">
-		<delete>
-			<fileset dir="build/classes">
-				<patternset>
-					<include name="boa/" />
-					<exclude name="boa/parser/" />
-					<exclude name="boa/types/" />
-				</patternset>
-			</fileset>
-		</delete>
-	</target>
 
-	<target name="clean">
+	<!-- project cleanup -->
+	<target name="clean" description="Clean all generated/compiled files.">
 		<delete dir="build" />
 		<delete dir="dist" />
 	</target>
