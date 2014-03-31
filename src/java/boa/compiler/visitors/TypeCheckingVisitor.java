@@ -264,15 +264,12 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 	public void visit(final Composite n, final SymbolTable env) {
 		n.env = env;
 
-		if (n.isEmpty()) {
-			n.type = new BoaMap();
-			return;
-		}
-
 		if (n.getPairsSize() > 0)
 			n.type = checkPairs(n.getPairs(), env);
-		else
+		else if (n.getExprsSize() > 0)
 			n.type = new BoaArray(check(n.getExprs(), env).get(0));
+		else
+			n.type = new BoaMap(new BoaAny(), new BoaAny());
 	}
 
 	/** {@inheritDoc} */

@@ -33,32 +33,6 @@ public abstract class Node {
 		return this;
 	}
 
-/*
-	public Node setPositions(final Node first) {
-		return setPositions(first.beginLine, first.beginColumn, first.endLine, first.endColumn);
-	}
-
-	public Node setPositions(final Token first) {
-		return setPositions(first.beginLine, first.beginColumn, first.endLine, first.endColumn);
-	}
-
-	public Node setPositions(final Node first, final Node last) {
-		return setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
-	}
-
-	public Node setPositions(final Node first, final Token last) {
-		return setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
-	}
-
-	public Node setPositions(final Token first, final Token last) {
-		return setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
-	}
-
-	public Node setPositions(final Token first, final Node last) {
-		return setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
-	}
-*/
-
 	public BoaType type = null;
 	public SymbolTable env = null;
 

@@ -36,16 +36,25 @@
 		</javac>
 	</target>
 
-	<uptodate property="parser-uptodate" srcfile="src/jj/boa.jj" targetfile="build/java/boa/parser/BoaParser.java" />
-	<target name="parser" depends="init" unless="parser-uptodate">
-		<javacc target="src/jj/boa.jj" outputdirectory="build/java/boa/parser" debugparser="false" debuglookahead="false" debugtokenmanager="false" javacchome="lib" static="true" />
+	<uptodate property="parser-uptodate" srcfile="src/antlr/Boa.g" targetfile="build/java/boa/parser/BoaParser.java" />
+	<target name="parser" unless="parser-uptodate">
+		<antcall target="parser-force" />
+	</target>
+	<target name="parser-force" depends="init">
+		<java jar="lib/antlr-4.2-complete.jar" dir="src/antlr/" fork="true">
+			<arg value="-long-messages" />
+			<arg value="-visitor" />
+			<arg value="-o" />
+			<arg value="../../build/java/boa/parser/" />
+			<arg value="Boa.g" />
+		</java>
 	</target>
 
 	<target name="compile" depends="compile-protobuf,parser">
 		<javac includeantruntime="true" destdir="build/classes" debug="${debug.enabled}" debuglevel="${debug.level}">
 			<src>
-				<pathelement location="src/java" />
 				<pathelement location="build/java" />
+				<pathelement location="src/java" />
 			</src>
 			<classpath refid="classpath" />
 		</javac>
@@ -62,7 +71,10 @@
 			<classpath refid="classpath" />
 			<batchtest>
 				<formatter type="plain" usefile="false" />
-				<fileset dir="build/testclasses" includes="**/Test*.class" />
+				<fileset dir="build/testclasses">
+					<include name="**/Test*.class" />
+					<exclude name="**/*$*.class" />
+				</fileset>
 			</batchtest>
 		</junit>
 		<delete file="SecurityAuth.audit" />
@@ -107,6 +119,7 @@
 			<zipfileset excludes="META-INF/" src="lib/scannotation-1.0.3.jar" />
 			<zipfileset excludes="META-INF/" src="lib/javassist-3.8.0.GA.jar" />
 			<zipfileset excludes="META-INF/" src="lib/ST-4.0.8.jar" />
+			<zipfileset excludes="META-INF/" src="lib/antlr-runtime-4.2.jar" />
 			<zipfileset excludes="META-INF/" src="lib/protobuf-java-2.5.0.jar" />
 		</jar>
 	</target>

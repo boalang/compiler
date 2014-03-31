@@ -4,7 +4,6 @@ import boa.compiler.ast.Node;
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
-import boa.parser.Token;
 
 /**
  * 
@@ -114,7 +113,9 @@ public class ForStatement extends Statement {
 		return f;
 	}
 
+	/*
 	public ForStatement setPositions(final Token first, final Node last) {
 		return (ForStatement)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
+	*/
 }

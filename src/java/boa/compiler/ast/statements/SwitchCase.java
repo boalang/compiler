@@ -7,7 +7,6 @@ import boa.compiler.ast.Node;
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
-import boa.parser.Token;
 
 /**
  * 
@@ -79,7 +78,9 @@ public class SwitchCase extends Statement {
 		return sc;
 	}
 
+	/*
 	public SwitchCase setPositions(final Token first, final Node last) {
 		return (SwitchCase)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
+	*/
 }

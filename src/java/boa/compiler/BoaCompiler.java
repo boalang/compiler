@@ -38,8 +38,18 @@ import boa.compiler.visitors.AbstractCodeGeneratingVisitor;
 import boa.compiler.visitors.CodeGeneratingVisitor;
 import boa.compiler.visitors.TaskClassifyingVisitor;
 import boa.compiler.visitors.TypeCheckingVisitor;
-import boa.parser.ParseException;
+
+import org.antlr.v4.runtime.ANTLRFileStream;
+import org.antlr.v4.runtime.BailErrorStrategy;
+import org.antlr.v4.runtime.BaseErrorListener;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.Recognizer;
+import org.antlr.v4.runtime.RecognitionException;
+import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.atn.PredictionMode;
+
 import boa.parser.BoaParser;
+import boa.parser.BoaLexer;
 
 /**
  * The main entry point for the Boa compiler.
@@ -50,7 +60,39 @@ import boa.parser.BoaParser;
 public class BoaCompiler {
 	private static Logger LOG = Logger.getLogger(BoaCompiler.class);
 
-	public static void main(final String[] args) throws IOException, ParseException {
+	public static class ParseErrorListener extends BaseErrorListener {
+		@Override
+		public void syntaxError(final Recognizer<?, ?> recognizer, final Object offendingSymbol, final int line, final int charPositionInLine, final String msg, final RecognitionException e) {
+			System.err.println("Encountered parse error at \"" + offendingSymbol + "\" line " + line + ", column " + charPositionInLine + ". " + msg);
+			underlineError(recognizer, (Token)offendingSymbol, line, charPositionInLine);
+			if (e != null)
+				e.printStackTrace();
+		}
+		protected void underlineError(final Recognizer<?, ?> recognizer, final Token offendingToken, final int line, final int charPositionInLine) {
+			final CommonTokenStream tokens = (CommonTokenStream)recognizer.getInputStream();
+			final String input = tokens.getTokenSource().getInputStream().toString();
+			final String[] lines = input.split("\n");
+			final String errorLine = lines[line - 1];
+			System.err.println(errorLine);
+
+			for (int i = 0; i < charPositionInLine; i++)
+				if (errorLine.charAt(i) == '\t')
+					System.err.print("\t");
+				else
+					System.err.print(" ");
+			final int start = offendingToken.getStartIndex();
+			final int stop = offendingToken.getStopIndex();
+			if (start >= 0 && stop >= 0)
+				for (int i = start; i <= stop; i++)
+					if (input.charAt(i) == '\t')
+						System.err.print("^^^^");
+					else
+						System.err.print("^");
+			System.err.println();
+		}
+	}
+
+	public static void main(final String[] args) throws IOException {
 		// parse the command line options
 		final Options options = new Options();
 		options.addOption("l", "libs", true, "extra jars (functions/aggregators) to be compiled in");
@@ -133,7 +175,6 @@ public class BoaCompiler {
 		try {
 			final List<String> jobnames = new ArrayList<String>();
 			final List<String> jobs = new ArrayList<String>();
-			BoaParser parser = null;
 			boolean isSimple = true;
 
 			final List<Program> visitorPrograms = new ArrayList<Program>();
@@ -142,15 +183,18 @@ public class BoaCompiler {
 
 			for (int i = 0; i < inputFiles.size(); i++) {
 				final File f = inputFiles.get(i);
-				final BufferedReader r = new BufferedReader(new FileReader(f));
-
 				try {
-					if (parser == null)
-						parser = new BoaParser(r);
-					else
-						BoaParser.ReInit(r);
-					parser.setTabSize(4);
-					final Start p = BoaParser.Start();
+					final CommonTokenStream tokens = new CommonTokenStream(new BoaLexer(new ANTLRFileStream(f.getAbsolutePath())));
+					final BoaParser parser = new BoaParser(tokens);
+
+					parser.removeErrorListeners();
+					parser.addErrorListener(new ParseErrorListener());
+					parser.setErrorHandler(new BailErrorStrategy());
+
+					parser.setBuildParseTree(false);
+					parser.getInterpreter().setPredictionMode(PredictionMode.SLL);
+
+					final Start p = parser.start().ast;
 
 					final String jobName = "" + i;
 
@@ -185,8 +229,6 @@ public class BoaCompiler {
 				} catch (final Exception e) {
 					System.err.print(f.getName() + ": compilation failed: ");
 					e.printStackTrace();
-				} finally {
-					r.close();
 				}
 			}
 

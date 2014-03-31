@@ -8,7 +8,6 @@ import boa.compiler.ast.Identifier;
 import boa.compiler.ast.Node;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
-import boa.parser.Token;
 
 /**
  * 
@@ -117,7 +116,9 @@ public class VisitStatement extends Statement {
 		return v;
 	}
 
+	/*
 	public VisitStatement setPositions(final Token first, final Node last) {
 		return (VisitStatement)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
+	*/
 }

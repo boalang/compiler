@@ -5,7 +5,6 @@ import boa.compiler.ast.Node;
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
-import boa.parser.Token;
 
 /**
  * 
@@ -67,7 +66,9 @@ public class ForeachStatement extends Statement {
 		return s;
 	}
 
+	/*
 	public ForeachStatement setPositions(final Token first, final Node last) {
 		return (ForeachStatement)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
+	*/
 }

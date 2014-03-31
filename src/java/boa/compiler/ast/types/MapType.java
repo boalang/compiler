@@ -4,7 +4,6 @@ import boa.compiler.ast.Component;
 import boa.compiler.ast.Node;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
-import boa.parser.Token;
 
 /**
  * 
@@ -49,7 +48,9 @@ public class MapType extends AbstractType {
 		return t;
 	}
 
+	/*
 	public MapType setPositions(final Token first, final Node last) {
 		return (MapType)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
+	*/
 }

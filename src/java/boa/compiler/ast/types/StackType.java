@@ -4,7 +4,6 @@ import boa.compiler.ast.Component;
 import boa.compiler.ast.Node;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
-import boa.parser.Token;
 
 /**
  * 
@@ -41,7 +40,9 @@ public class StackType extends AbstractType {
 		return t;
 	}
 
+	/*
 	public StackType setPositions(final Token first, final Node last) {
 		return (StackType)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
+	*/
 }

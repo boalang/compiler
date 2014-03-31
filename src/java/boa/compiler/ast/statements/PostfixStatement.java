@@ -4,7 +4,6 @@ import boa.compiler.ast.Node;
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
-import boa.parser.Token;
 
 /**
  * 
@@ -47,7 +46,9 @@ public class PostfixStatement extends Statement {
 		return s;
 	}
 
+	/*
 	public PostfixStatement setPositions(final Node first, final Token last) {
 		return (PostfixStatement)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
+	*/
 }

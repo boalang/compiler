@@ -3,7 +3,6 @@ package boa.compiler.ast.statements;
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
-import boa.parser.Token;
 
 /**
  * 
@@ -40,7 +39,9 @@ public class ResultStatement extends Statement {
 		return s;
 	}
 
+	/*
 	public ResultStatement setPositions(final Token first, final Token last) {
 		return (ResultStatement)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
+	*/
 }

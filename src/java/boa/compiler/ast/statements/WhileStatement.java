@@ -4,7 +4,6 @@ import boa.compiler.ast.Node;
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
-import boa.parser.Token;
 
 /**
  * 
@@ -53,7 +52,9 @@ public class WhileStatement extends Statement {
 		return s;
 	}
 
+	/*
 	public WhileStatement setPositions(final Token first, final Node last) {
 		return (WhileStatement)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
+	*/
 }

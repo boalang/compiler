@@ -9,7 +9,6 @@ import boa.compiler.ast.Node;
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
-import boa.parser.Token;
 
 /**
  * 
@@ -141,6 +140,7 @@ public class OutputType extends AbstractType {
 		return o;
 	}
 
+	/*
 	public OutputType setPositions(final Token first, final Node last) {
 		return (OutputType)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
@@ -148,6 +148,7 @@ public class OutputType extends AbstractType {
 	public OutputType setEnd(final Token last) {
 		return (OutputType)setPositions(beginLine, beginColumn, last.endLine, last.endColumn);
 	}
+	*/
 
 	public OutputType setEnd(final Node last) {
 		return (OutputType)setPositions(beginLine, beginColumn, last.endLine, last.endColumn);

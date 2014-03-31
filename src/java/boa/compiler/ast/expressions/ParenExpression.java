@@ -3,7 +3,6 @@ package boa.compiler.ast.expressions;
 import boa.compiler.ast.Operand;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
-import boa.parser.Token;
 
 /**
  * 
@@ -40,7 +39,9 @@ public class ParenExpression extends Operand {
 		return p;
 	}
 
+	/*
 	public ParenExpression setPositions(final Token first, final Token last) {
 		return (ParenExpression)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
+	*/
 }

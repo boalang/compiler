@@ -5,7 +5,6 @@ import boa.compiler.ast.Operand;
 import boa.compiler.ast.statements.Block;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
-import boa.parser.Token;
 
 /**
  * 
@@ -42,7 +41,9 @@ public class StatementExpr extends Operand {
 		return e;
 	}
 
+	/*
 	public StatementExpr setPositions(final Token first, final Node last) {
 		return (StatementExpr)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
+	*/
 }

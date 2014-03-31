@@ -2,7 +2,6 @@ package boa.compiler.ast.statements;
 
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
-import boa.parser.Token;
 
 /**
  * 
@@ -27,7 +26,9 @@ public class BreakStatement extends Statement {
 		return s;
 	}
 
+	/*
 	public BreakStatement setPositions(final Token first, final Token last) {
 		return (BreakStatement)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
+	*/
 }

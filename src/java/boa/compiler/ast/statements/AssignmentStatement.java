@@ -5,7 +5,6 @@ import boa.compiler.ast.Node;
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
-import boa.parser.Token;
 
 /**
  * 
@@ -50,7 +49,9 @@ public class AssignmentStatement extends Statement {
 		return s;
 	}
 
+	/*
 	public AssignmentStatement setPositions(final Node first, final Token last) {
 		return (AssignmentStatement)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
+	*/
 }

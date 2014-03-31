@@ -6,7 +6,6 @@ import boa.compiler.ast.expressions.Expression;
 import boa.compiler.ast.types.AbstractType;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
-import boa.parser.Token;
 
 /**
  * 
@@ -119,6 +118,7 @@ public class VarDeclStatement extends Statement {
 		return v;
 	}
 
+	/*
 	public VarDeclStatement setStart(final Token first) {
 		return (VarDeclStatement)setPositions(first.beginLine, first.beginColumn, endLine, endColumn);
 	}
@@ -126,6 +126,7 @@ public class VarDeclStatement extends Statement {
 	public VarDeclStatement setEnd(final Token last) {
 		return (VarDeclStatement)setPositions(beginLine, beginColumn, last.endLine, last.endColumn);
 	}
+	*/
 
 	public VarDeclStatement setPositions(final Node first, final Node middle, final Node last) {
 		if (last != null)

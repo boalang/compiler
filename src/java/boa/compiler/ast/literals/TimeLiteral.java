@@ -3,7 +3,6 @@ package boa.compiler.ast.literals;
 import boa.compiler.ast.Operand;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
-import boa.parser.Token;
 
 /**
  * 
@@ -38,7 +37,9 @@ public class TimeLiteral extends Operand implements ILiteral {
 		return l;
 	}
 
+	/*
 	public TimeLiteral setPositions(final Token first) {
 		return (TimeLiteral)setPositions(first.beginLine, first.beginColumn, first.endLine, first.endColumn);
 	}
+	*/
 }

@@ -8,7 +8,6 @@ import boa.compiler.ast.Node;
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
-import boa.parser.Token;
 
 /**
  * 
@@ -105,7 +104,9 @@ public class EmitStatement extends Statement {
 		return e;
 	}
 
+	/*
 	public EmitStatement setPositions(final Node first, final Token last) {
 		return (EmitStatement)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
+	*/
 }

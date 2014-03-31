@@ -3,7 +3,6 @@ package boa.compiler.ast;
 import boa.compiler.ast.Node;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
-import boa.parser.Token;
 
 /**
  * 
@@ -40,7 +39,9 @@ public class Selector extends Node {
 		return s;
 	}
 
+	/*
 	public Selector setPositions(final Token first, final Node last) {
 		return (Selector)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
+	*/
 }

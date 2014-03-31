@@ -6,7 +6,6 @@ import java.util.List;
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
-import boa.parser.Token;
 
 /**
  * 
@@ -80,7 +79,9 @@ public class SwitchStatement extends Statement {
 		return sw;
 	}
 
+	/*
 	public SwitchStatement setPositions(final Token first, final Token last) {
 		return (SwitchStatement)setPositions(first.beginLine, first.beginColumn, last.endLine, last.endColumn);
 	}
+	*/
 }
