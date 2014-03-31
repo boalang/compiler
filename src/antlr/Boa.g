@@ -1,8 +1,6 @@
 grammar Boa;
 
 @header {
-package boa.parser;
-
 import java.util.ArrayList;
 
 import boa.compiler.ast.*;

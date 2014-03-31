@@ -42,10 +42,10 @@
 	</target>
 	<target name="parser-force" depends="init">
 		<java jar="lib/antlr-4.2-complete.jar" dir="src/antlr/" fork="true">
-			<arg value="-long-messages" />
-			<arg value="-visitor" />
 			<arg value="-o" />
 			<arg value="../../build/java/boa/parser/" />
+			<arg value="-package" />
+			<arg value="boa.parser" />
 			<arg value="Boa.g" />
 		</java>
 	</target>

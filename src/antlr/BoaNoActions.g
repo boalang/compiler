@@ -1,9 +1,5 @@
 grammar BoaNoActions;
 
-@header {
-package boa.parser;
-}
-
 start
 	: program EOF
 	;
