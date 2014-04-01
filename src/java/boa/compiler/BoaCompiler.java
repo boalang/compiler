@@ -73,11 +73,11 @@ public class BoaCompiler {
 			final String input = tokens.getTokenSource().getInputStream().toString();
 			final String[] lines = input.split("\n");
 			final String errorLine = lines[line - 1];
-			System.err.println(errorLine);
+			System.err.println(errorLine.replaceAll("\t", "    "));
 
 			for (int i = 0; i < charPositionInLine; i++)
 				if (errorLine.charAt(i) == '\t')
-					System.err.print("\t");
+					System.err.print("    ");
 				else
 					System.err.print(" ");
 			final int start = offendingToken.getStartIndex();
@@ -189,7 +189,7 @@ public class BoaCompiler {
 
 					parser.removeErrorListeners();
 					parser.addErrorListener(new ParseErrorListener());
-					parser.setErrorHandler(new BailErrorStrategy());
+					//parser.setErrorHandler(new BailErrorStrategy());
 
 					parser.setBuildParseTree(false);
 					parser.getInterpreter().setPredictionMode(PredictionMode.SLL);

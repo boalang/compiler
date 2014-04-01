@@ -226,7 +226,7 @@ expression
 
 expressionList
 	: expression (COMMA expression)*
-	| expression (expression { notifyErrorListeners("error: ',' expected"); } | COMMA expression)*
+	| expression ({ notifyErrorListeners("error: ',' expected"); } expression | COMMA expression)*
 	;
 
 conjunction
@@ -291,7 +291,7 @@ functionExpression
 
 visitorExpression
 	: visitorType LBRACE (visitStatement)+ RBRACE
-	| visitorType LBRACE (statement { notifyErrorListeners("error: only 'before' and 'after' visit statements allowed inside visitor bodies"); } | visitStatement)+ RBRACE
+	| visitorType LBRACE ({ notifyErrorListeners("error: only 'before' and 'after' visit statements allowed inside visitor bodies"); } statement | visitStatement)+ RBRACE
 	;
 
 statementExpression
