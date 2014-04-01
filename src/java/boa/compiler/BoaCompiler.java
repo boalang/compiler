@@ -46,6 +46,7 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.TokenSource;
 import org.antlr.v4.runtime.atn.PredictionMode;
 
 import boa.parser.BoaParser;
@@ -60,17 +61,30 @@ import boa.parser.BoaLexer;
 public class BoaCompiler {
 	private static Logger LOG = Logger.getLogger(BoaCompiler.class);
 
-	public static class ParseErrorListener extends BaseErrorListener {
-		@Override
-		public void syntaxError(final Recognizer<?, ?> recognizer, final Object offendingSymbol, final int line, final int charPositionInLine, final String msg, final RecognitionException e) {
-			System.err.println("Encountered parse error at \"" + offendingSymbol + "\" line " + line + ", column " + charPositionInLine + ". " + msg);
-			underlineError(recognizer, (Token)offendingSymbol, line, charPositionInLine);
+	public abstract static class BoaErrorListener extends BaseErrorListener {
+		protected void error(final String kind, final TokenSource tokens, final Object offendingSymbol, final int line, final int charPositionInLine, final String msg, final RecognitionException e) {
+			final String filename = tokens.getSourceName();
+			System.err.print(filename.substring(filename.lastIndexOf(File.separator) + 1) + ": compilation failed: ");
+			System.err.print("Encountered " + kind + " error ");
+			if (offendingSymbol != null)
+				System.err.print("\"" + offendingSymbol + "\" ");
+			System.err.println("at line " + line + ", column " + charPositionInLine + ". " + msg);
+			final Token offendingToken = (Token)offendingSymbol;
+			int start = charPositionInLine;
+			int stop = charPositionInLine;
+			if (offendingToken != null) {
+				start = offendingToken.getStartIndex();
+				stop = offendingToken.getStopIndex();
+			}
+			underlineError(tokens, offendingToken, line, charPositionInLine, start, stop);
 			if (e != null)
-				e.printStackTrace();
+				for (final StackTraceElement st : e.getStackTrace())
+					System.err.println("\tat " + st);
+			else
+				System.err.println("\tat unknown stack");
 		}
-		protected void underlineError(final Recognizer<?, ?> recognizer, final Token offendingToken, final int line, final int charPositionInLine) {
-			final CommonTokenStream tokens = (CommonTokenStream)recognizer.getInputStream();
-			final String input = tokens.getTokenSource().getInputStream().toString();
+		protected void underlineError(final TokenSource tokens, final Token offendingToken, final int line, final int charPositionInLine, final int start, final int stop) {
+			final String input = tokens.getInputStream().toString();
 			final String[] lines = input.split("\n");
 			final String errorLine = lines[line - 1];
 			System.err.println(errorLine.replaceAll("\t", "    "));
@@ -80,8 +94,6 @@ public class BoaCompiler {
 					System.err.print("    ");
 				else
 					System.err.print(" ");
-			final int start = offendingToken.getStartIndex();
-			final int stop = offendingToken.getStopIndex();
 			if (start >= 0 && stop >= 0)
 				for (int i = start; i <= stop; i++)
 					if (input.charAt(i) == '\t')
@@ -89,6 +101,20 @@ public class BoaCompiler {
 					else
 						System.err.print("^");
 			System.err.println();
+		}
+	}
+
+	public static class LexerErrorListener extends BoaErrorListener {
+		@Override
+		public void syntaxError(final Recognizer<?, ?> recognizer, final Object offendingSymbol, final int line, final int charPositionInLine, final String msg, final RecognitionException e) {
+			error("lexer", (BoaLexer)recognizer, offendingSymbol, line, charPositionInLine, msg, e);
+		}
+	}
+
+	public static class ParseErrorListener extends BoaErrorListener {
+		@Override
+		public void syntaxError(final Recognizer<?, ?> recognizer, final Object offendingSymbol, final int line, final int charPositionInLine, final String msg, final RecognitionException e) {
+			error("parser", ((CommonTokenStream)recognizer.getInputStream()).getTokenSource(), offendingSymbol, line, charPositionInLine, msg, e);
 		}
 	}
 
@@ -184,9 +210,12 @@ public class BoaCompiler {
 			for (int i = 0; i < inputFiles.size(); i++) {
 				final File f = inputFiles.get(i);
 				try {
-					final CommonTokenStream tokens = new CommonTokenStream(new BoaLexer(new ANTLRFileStream(f.getAbsolutePath())));
-					final BoaParser parser = new BoaParser(tokens);
+					final BoaLexer lexer = new BoaLexer(new ANTLRFileStream(f.getAbsolutePath()));
+					lexer.removeErrorListeners();
+					lexer.addErrorListener(new LexerErrorListener());
+					//lexer.setErrorHandler(new BailErrorStrategy());
 
+					final BoaParser parser = new BoaParser(new CommonTokenStream(lexer));
 					parser.removeErrorListeners();
 					parser.addErrorListener(new ParseErrorListener());
 					//parser.setErrorHandler(new BailErrorStrategy());
