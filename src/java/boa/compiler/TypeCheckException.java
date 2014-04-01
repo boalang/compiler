@@ -13,6 +13,8 @@ import boa.compiler.ast.Node;
  */
 public class TypeCheckException extends RuntimeException {
 	private static final long serialVersionUID = -5838752670934187621L;
+	public Node n;
+	public Node n2;
 
 	/**
 	 * Construct a TypeCheckException.
@@ -23,10 +25,14 @@ public class TypeCheckException extends RuntimeException {
 	 *            A {@link String} containing the description of the error
 	 */
 	public TypeCheckException(final Node n, final String text) {
-		super(getMessage(n, text));
+		super(text);
+		this.n = n;
+		this.n2 = n;
 	}
 	public TypeCheckException(final List<? extends Node> n, final String text) {
-		super(getMessage(n, text));
+		super(text);
+		this.n = n.get(0);
+		this.n2 = n.get(n.size() - 1);
 	}
 
 	/**
@@ -41,18 +47,13 @@ public class TypeCheckException extends RuntimeException {
 	 *            exception
 	 */
 	public TypeCheckException(final Node n, final String text, final Throwable e) {
-		super(getMessage(n, text), e);
+		super(text, e);
+		this.n = n;
+		this.n2 = n;
 	}
 	public TypeCheckException(final List<? extends Node> n, final String text, final Throwable e) {
-		super(getMessage(n, text), e);
-	}
-
-	private static String getMessage(final Node n, final String text) {
-		return "Error at lines " + n.beginLine + "-" + n.endLine +
-				", columns " + n.beginColumn + "-" + n.endColumn + ": " + text;
-	}
-	private static String getMessage(final List<? extends Node> n, final String text) {
-		return "Error at lines " + n.get(0).beginLine + "-" + n.get(n.size() - 1).endLine +
-				", columns " + n.get(0).beginColumn + "-" + n.get(n.size() - 1).endColumn + ": " + text;
+		super(text, e);
+		this.n = n.get(0);
+		this.n2 = n.get(n.size() - 1);
 	}
 }

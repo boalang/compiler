@@ -62,28 +62,24 @@ public class BoaCompiler {
 	private static Logger LOG = Logger.getLogger(BoaCompiler.class);
 
 	public abstract static class BoaErrorListener extends BaseErrorListener {
-		protected void error(final String kind, final TokenSource tokens, final Object offendingSymbol, final int line, final int charPositionInLine, final String msg, final RecognitionException e) {
+		public static void error(final String kind, final TokenSource tokens, final Object offendingSymbol, final int line, final int charPositionInLine, final int length, final String msg, final Exception e) {
 			final String filename = tokens.getSourceName();
+
 			System.err.print(filename.substring(filename.lastIndexOf(File.separator) + 1) + ": compilation failed: ");
 			System.err.print("Encountered " + kind + " error ");
 			if (offendingSymbol != null)
 				System.err.print("\"" + offendingSymbol + "\" ");
 			System.err.println("at line " + line + ", column " + charPositionInLine + ". " + msg);
-			final Token offendingToken = (Token)offendingSymbol;
-			int start = charPositionInLine;
-			int stop = charPositionInLine;
-			if (offendingToken != null) {
-				start = offendingToken.getStartIndex();
-				stop = offendingToken.getStopIndex();
-			}
-			underlineError(tokens, offendingToken, line, charPositionInLine, start, stop);
+
+			underlineError(tokens, (Token)offendingSymbol, line, charPositionInLine, length);
+
 			if (e != null)
 				for (final StackTraceElement st : e.getStackTrace())
 					System.err.println("\tat " + st);
 			else
 				System.err.println("\tat unknown stack");
 		}
-		protected void underlineError(final TokenSource tokens, final Token offendingToken, final int line, final int charPositionInLine, final int start, final int stop) {
+		private static void underlineError(final TokenSource tokens, final Token offendingToken, final int line, final int charPositionInLine, final int length) {
 			final String input = tokens.getInputStream().toString();
 			final String[] lines = input.split("\n");
 			final String errorLine = lines[line - 1];
@@ -94,12 +90,11 @@ public class BoaCompiler {
 					System.err.print("    ");
 				else
 					System.err.print(" ");
-			if (start >= 0 && stop >= 0)
-				for (int i = start; i <= stop; i++)
-					if (input.charAt(i) == '\t')
-						System.err.print("^^^^");
-					else
-						System.err.print("^");
+			for (int i = 0; i < length; i++)
+				if (errorLine.charAt(charPositionInLine + i) == '\t')
+					System.err.print("^^^^");
+				else
+					System.err.print("^");
 			System.err.println();
 		}
 	}
@@ -107,14 +102,15 @@ public class BoaCompiler {
 	public static class LexerErrorListener extends BoaErrorListener {
 		@Override
 		public void syntaxError(final Recognizer<?, ?> recognizer, final Object offendingSymbol, final int line, final int charPositionInLine, final String msg, final RecognitionException e) {
-			error("lexer", (BoaLexer)recognizer, offendingSymbol, line, charPositionInLine, msg, e);
+			error("lexer", (BoaLexer)recognizer, offendingSymbol, line, charPositionInLine, 1, msg, e);
 		}
 	}
 
 	public static class ParseErrorListener extends BoaErrorListener {
 		@Override
 		public void syntaxError(final Recognizer<?, ?> recognizer, final Object offendingSymbol, final int line, final int charPositionInLine, final String msg, final RecognitionException e) {
-			error("parser", ((CommonTokenStream)recognizer.getInputStream()).getTokenSource(), offendingSymbol, line, charPositionInLine, msg, e);
+			final Token offendingToken = (Token)offendingSymbol;
+			error("parser", ((CommonTokenStream)recognizer.getInputStream()).getTokenSource(), offendingSymbol, line, charPositionInLine, offendingToken.getStopIndex() - offendingToken.getStartIndex() + 1, msg, e);
 		}
 	}
 
@@ -227,8 +223,13 @@ public class BoaCompiler {
 
 					final String jobName = "" + i;
 
-					final TypeCheckingVisitor typeChecker = new TypeCheckingVisitor();
-					typeChecker.start(p, new SymbolTable());
+					try {
+						final TypeCheckingVisitor typeChecker = new TypeCheckingVisitor();
+						typeChecker.start(p, new SymbolTable());
+					} catch (final TypeCheckException e) {
+						BoaErrorListener.error("typecheck", lexer, null, e.n.beginLine, e.n.beginColumn, e.n2.endColumn - e.n.beginColumn + 1, e.getMessage(), e);
+						throw e;
+					}
 
 					final TaskClassifyingVisitor simpleVisitor = new TaskClassifyingVisitor();
 					simpleVisitor.start(p);
@@ -255,6 +256,8 @@ public class BoaCompiler {
 						p.getProgram().jobName = jobName;
 						visitorPrograms.add(p.getProgram());
 					}
+				} catch (final TypeCheckException e) {
+					// already handled
 				} catch (final Exception e) {
 					System.err.print(f.getName() + ": compilation failed: ");
 					e.printStackTrace();
