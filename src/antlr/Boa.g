@@ -76,7 +76,7 @@ variableDeclaration returns [VarDeclStatement ast]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
 	: v=forVariableDeclaration SEMICOLON { $ast = $v.ast; }
-	|   forVariableDeclaration           { notifyErrorListeners("error: ';' expected"); }
+	| v=forVariableDeclaration           { $ast = $v.ast; notifyErrorListeners("error: ';' expected"); }
 	;
 
 type returns [AbstractType ast]
@@ -203,7 +203,7 @@ assignmentStatement returns [AssignmentStatement ast]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
 	: f=factor EQUALS e=expression SEMICOLON { $ast = new AssignmentStatement($f.ast, $e.ast); }
-	|   factor EQUALS   expression           { notifyErrorListeners("error: ';' expected"); }
+	| f=factor EQUALS e=expression           { $ast = new AssignmentStatement($f.ast, $e.ast); notifyErrorListeners("error: ';' expected"); }
 	;
 
 block returns [Block ast]
@@ -221,7 +221,7 @@ breakStatement returns [BreakStatement ast]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
 	: BREAK SEMICOLON { $ast = new BreakStatement(); }
-	| BREAK           { notifyErrorListeners("error: ';' expected"); }
+	| BREAK           { $ast = new BreakStatement(); notifyErrorListeners("error: ';' expected"); }
 	;
 
 continueStatement returns [ContinueStatement ast]
@@ -229,7 +229,7 @@ continueStatement returns [ContinueStatement ast]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
 	: CONTINUE SEMICOLON { $ast = new ContinueStatement(); }
-	| CONTINUE           { notifyErrorListeners("error: ';' expected"); }
+	| CONTINUE           { $ast = new ContinueStatement(); notifyErrorListeners("error: ';' expected"); }
 	;
 
 doStatement returns [DoStatement ast]
@@ -237,7 +237,7 @@ doStatement returns [DoStatement ast]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
 	: DO s=statement WHILE LPAREN e=expression RPAREN SEMICOLON { $ast = new DoStatement($e.ast, $s.ast); }
-	| DO   statement WHILE LPAREN   expression RPAREN           { notifyErrorListeners("error: ';' expected"); }
+	| DO s=statement WHILE LPAREN e=expression RPAREN           { $ast = new DoStatement($e.ast, $s.ast); notifyErrorListeners("error: ';' expected"); }
 	;
 
 emitStatement returns [EmitStatement ast]
@@ -245,7 +245,7 @@ emitStatement returns [EmitStatement ast]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
 	: id=identifier { $ast = new EmitStatement($id.ast); } (LBRACKET e=expression RBRACKET { $ast.addIndice($e.ast); })* EMIT e=expression { $ast.setValue($e.ast); } (WEIGHT w=expression { $ast.setWeight($w.ast); })? SEMICOLON
-	| identifier (LBRACKET expression RBRACKET)* EMIT expression (WEIGHT expression)? { notifyErrorListeners("error: ';' expected"); }
+	| id=identifier { $ast = new EmitStatement($id.ast); } (LBRACKET e=expression RBRACKET { $ast.addIndice($e.ast); })* EMIT e=expression { $ast.setValue($e.ast); } (WEIGHT w=expression { $ast.setWeight($w.ast); })? { notifyErrorListeners("error: ';' expected"); }
 	;
 
 forStatement returns [ForStatement ast]
@@ -283,7 +283,7 @@ expressionStatement returns [Statement ast]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
 	: e=forExpressionStatement SEMICOLON { $ast = $e.ast; }
-	|   forExpressionStatement           { notifyErrorListeners("error: ';' expected"); }
+	| e=forExpressionStatement           { $ast = $e.ast; notifyErrorListeners("error: ';' expected"); }
 	;
 
 ifStatement returns [IfStatement ast]
@@ -298,7 +298,7 @@ resultStatement returns [ResultStatement ast]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
 	: RESULT e=expression SEMICOLON { $ast = new ResultStatement($e.ast); }
-	| RESULT   expression           { notifyErrorListeners("error: ';' expected"); }
+	| RESULT e=expression           { $ast = new ResultStatement($e.ast); notifyErrorListeners("error: ';' expected"); }
 	;
 
 returnStatement returns [ReturnStatement ast]
@@ -306,7 +306,7 @@ returnStatement returns [ReturnStatement ast]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
 	: RETURN { $ast = new ReturnStatement(); } (e=expression { $ast.setExpr($e.ast); })? SEMICOLON
-	| RETURN                                      expression?                                      { notifyErrorListeners("error: ';' expected"); }
+	| RETURN { $ast = new ReturnStatement(); } (e=expression { $ast.setExpr($e.ast); })? { notifyErrorListeners("error: ';' expected"); }
 	;
 
 switchStatement returns [SwitchStatement ast]
@@ -372,7 +372,7 @@ stopStatement returns [StopStatement ast]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
 	: STOP SEMICOLON { $ast = new StopStatement(); }
-	| STOP           { notifyErrorListeners("error: ';' expected"); }
+	| STOP           { $ast = new StopStatement(); notifyErrorListeners("error: ';' expected"); }
 	;
 
 expression returns [Expression ast]
@@ -385,7 +385,7 @@ expression returns [Expression ast]
 expressionList returns [ArrayList<Expression> list]
 	@init { $list = new ArrayList<Expression>(); }
 	: e=expression { $list.add($e.ast); } (COMMA e=expression   { $list.add($e.ast); })*
-	|   expression ({ notifyErrorListeners("error: ',' expected"); } expression | COMMA expression)*
+	| e=expression { $list.add($e.ast); } ({ notifyErrorListeners("error: ',' expected"); } e=expression { $list.add($e.ast); } | COMMA e=expression { $list.add($e.ast); })*
 	;
 
 conjunction returns [Conjunction ast]
@@ -492,7 +492,7 @@ visitorExpression returns [VisitorExpression ast]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
 	: t=visitorType LBRACE (s=visitStatement { $b.addStatement($s.ast); })+ RBRACE { $ast = new VisitorExpression($t.ast, $b); }
-	|   visitorType LBRACE ({ notifyErrorListeners("error: only 'before' and 'after' visit statements allowed inside visitor bodies"); } statement | visitStatement)+ RBRACE
+	| t=visitorType LBRACE ({ notifyErrorListeners("error: only 'before' and 'after' visit statements allowed inside visitor bodies"); } statement | s=visitStatement { $b.addStatement($s.ast); })+ RBRACE { $ast = new VisitorExpression($t.ast, $b); }
 	;
 
 statementExpression returns [StatementExpr ast]
