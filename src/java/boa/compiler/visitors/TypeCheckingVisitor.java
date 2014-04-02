@@ -327,21 +327,21 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 
 					if (type instanceof BoaArray) {
 						if (!(index instanceof BoaInt))
-							throw new TypeCheckException(node, "invalid operand type '" + index + "' for indexing into array");
+							throw new TypeCheckException(node, "invalid index type '" + index + "' for indexing into '" + type + "'");
 
 						type = ((BoaArray) type).getType();
 					} else if (type instanceof BoaProtoList) {
 						if (!(index instanceof BoaInt))
-							throw new TypeCheckException(node, "invalid operand type '" + index + "' for indexing into array");
+							throw new TypeCheckException(node, "invalid index type '" + index + "' for indexing into '" + type + "'");
 
 						type = ((BoaProtoList) type).getType();
 					} else if (type instanceof BoaMap) {
 						if (!((BoaMap) type).getIndexType().assigns(index))
-							throw new TypeCheckException(node, "invalid operand type '" + index + "' for indexing into '" + type + "'");
+							throw new TypeCheckException(node, "invalid index type '" + index + "' for indexing into '" + type + "'");
 
 						type = ((BoaMap) type).getType();
 					} else {
-						throw new TypeCheckException(node, "invalid operand type '" + type + "' for indexing expression");
+						throw new TypeCheckException(node, "type '" + type + "' does not allow index operations");
 					}
 				} else {
 					node.accept(this, env);
