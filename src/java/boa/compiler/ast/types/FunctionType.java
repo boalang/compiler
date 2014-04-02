@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import boa.compiler.ast.Component;
-import boa.compiler.ast.Node;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
 

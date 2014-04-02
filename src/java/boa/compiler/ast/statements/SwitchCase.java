@@ -3,7 +3,6 @@ package boa.compiler.ast.statements;
 import java.util.ArrayList;
 import java.util.List;
 
-import boa.compiler.ast.Node;
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;

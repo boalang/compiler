@@ -40,7 +40,6 @@ import boa.compiler.visitors.TaskClassifyingVisitor;
 import boa.compiler.visitors.TypeCheckingVisitor;
 
 import org.antlr.v4.runtime.ANTLRFileStream;
-import org.antlr.v4.runtime.BailErrorStrategy;
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Recognizer;
@@ -209,12 +208,10 @@ public class BoaCompiler {
 					final BoaLexer lexer = new BoaLexer(new ANTLRFileStream(f.getAbsolutePath()));
 					lexer.removeErrorListeners();
 					lexer.addErrorListener(new LexerErrorListener());
-					//lexer.setErrorHandler(new BailErrorStrategy());
 
 					final BoaParser parser = new BoaParser(new CommonTokenStream(lexer));
 					parser.removeErrorListeners();
 					parser.addErrorListener(new ParseErrorListener());
-					//parser.setErrorHandler(new BailErrorStrategy());
 
 					parser.setBuildParseTree(false);
 					parser.getInterpreter().setPredictionMode(PredictionMode.SLL);

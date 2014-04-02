@@ -1,7 +1,6 @@
 package boa.compiler.ast.statements;
 
 import boa.compiler.ast.Factor;
-import boa.compiler.ast.Node;
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
