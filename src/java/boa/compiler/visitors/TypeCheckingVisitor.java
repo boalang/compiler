@@ -457,9 +457,14 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 			else
 				type = (BoaScalar) accepts;
 
-			for (final Factor f : n.getRhs()) {
+			for (int i = 0; i < n.getRhsSize(); i++) {
+				final Factor f = n.getRhs(i);
 				f.accept(this, env);
-				type = type.arithmetics(f.type);
+				try {
+					type = type.arithmetics(f.type);
+				} catch (final Exception e) {
+					throw new TypeCheckException(f, "type '" + f.type + "' does not support the '" + n.getOp(i) + "' operator", e);
+				}
 			}
 
 			n.type = type;
@@ -974,12 +979,13 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 					throw new TypeCheckException(t, "invalid string concatenation, found: " + t.type + " expected: string");
 			}
 		} else
-			for (final Term t : n.getRhs()) {
+			for (int i = 0; i < n.getRhsSize(); i++) {
+				final Term t = n.getRhs(i);
 				t.accept(this, env);
 				try {
 					type = type.arithmetics(t.type);
-				} catch (final RuntimeException e) {
-					throw new TypeCheckException(t, e.getMessage(), e);
+				} catch (final Exception e) {
+					throw new TypeCheckException(t, "type '" + t.type + "' does not support the '" + n.getOp(i) + "' operator", e);
 				}
 			}
 
