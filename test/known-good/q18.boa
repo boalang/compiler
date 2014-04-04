@@ -1,0 +1,35 @@
+ThisTotal: output sum of int;
+ThisMax: output maximum(1) of string weight int;
+ThisMin: output minimum(1) of string weight int;
+ThisMean: output mean of int;
+
+p: Project = input;
+
+this_cur_val := 0;
+this_s: stack of int;
+
+q18 := visitor {
+	before node: CodeRepository -> {
+		snapshot := getsnapshot(node, "SOURCE_JAVA_JLS");
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+	before node: Method -> {
+		push(this_s, this_cur_val);
+		this_cur_val = 0;
+	}
+	after node: Method -> {
+		ThisTotal << this_cur_val;
+		ThisMax << p.id weight this_cur_val;
+		ThisMin << p.id weight this_cur_val;
+		ThisMean << this_cur_val;
+		this_cur_val = pop(this_s);
+	}
+	before node: Expression ->
+		if (node.kind == ExpressionKind.LITERAL &&
+				(node.literal == "this" || match(`\.this$`, node.literal)))
+			this_cur_val++;
+};
+
+visit(p, q18);

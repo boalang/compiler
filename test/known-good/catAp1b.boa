@@ -1,0 +1,7 @@
+# Counting the N most used programming languages in 2011
+counts: output sum[string] of int;
+p: Project = input;
+
+if (yearof(p.created_date) == 2011)
+	foreach (i: int; def(p.programming_languages[i]))
+		counts[p.programming_languages[i]] << 1;

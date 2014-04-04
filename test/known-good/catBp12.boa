@@ -1,0 +1,8 @@
+# which year were SVN projects added most
+counts: output top(1) of int weight int;
+p: Project = input;
+
+exists (j: int; match(`^java$`, lowercase(p.programming_languages[j])))
+	foreach (i: int; p.code_repositories[i].kind == RepositoryKind.SVN)
+		if (len(p.code_repositories[i].revisions) > 0)
+			counts << yearof(p.code_repositories[i].revisions[0].commit_date) weight 1;

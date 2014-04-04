@@ -1,0 +1,7 @@
+len: output sum of int;
+p: Project = input;
+
+visit(p, visitor {
+	before _ -> len << 1;
+	before Project, CodeRepository, Revision, ASTRoot -> ;
+});

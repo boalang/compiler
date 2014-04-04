@@ -1,0 +1,53 @@
+Projects: output sum of int;
+ClassTotal: output sum of int;
+ClassMax: output maximum(1) of string weight int;
+ClassMin: output minimum(1) of string weight int;
+ClassMean: output mean of int;
+AbstractTotal: output sum of int;
+AbstractMax: output maximum(1) of string weight int;
+AbstractMin: output minimum(1) of string weight int;
+AbstractMean: output mean of int;
+
+p: Project = input;
+
+tot_count := 0;
+abs_count := 0;
+has_file := false;
+
+q1 := visitor {
+	before node: CodeRepository -> {
+		snapshot := getsnapshot(node, "SOURCE_JAVA_JLS");
+		has_file = len(snapshot) > 0;
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+	before node: Declaration ->
+		if (node.kind == TypeKind.CLASS) {
+			if (has_modifier(node, ModifierKind.ABSTRACT))
+				abs_count++;
+			tot_count++;
+		} else if (node.kind == TypeKind.ANONYMOUS) {
+			tot_count++;
+		}
+};
+
+visit(p, q1);
+
+if (has_file) {
+	Projects << 1;
+
+	ClassTotal << tot_count;
+	if (tot_count > 0) {
+		ClassMax << p.id weight tot_count;
+		ClassMin << p.id weight tot_count;
+		ClassMean << tot_count;
+	}
+
+	AbstractTotal << abs_count;
+	if (abs_count > 0) {
+		AbstractMax << p.id weight abs_count;
+		AbstractMin << p.id weight abs_count;
+		AbstractMean << abs_count;
+	}
+}

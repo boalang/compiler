@@ -1,0 +1,7 @@
+# what is the average churn rate?
+counts: output mean of int;
+p: Project = input;
+
+foreach (i: int; def(p.code_repositories[i]))
+	foreach (j: int; def(p.code_repositories[i].revisions[j]))
+		counts << len(p.code_repositories[i].revisions[j].files);

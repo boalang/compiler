@@ -1,0 +1,12 @@
+len: output sum[string] of int;
+p: Project = input;
+
+count := 0;
+
+lenVisitor := visitor {
+    before _ -> count++;
+    before Project, CodeRepository, Revision, ChangedFile, ASTRoot -> ;
+};
+
+visit(p, lenVisitor);
+len[p.id] << count;

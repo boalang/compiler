@@ -1,0 +1,6 @@
+# Counting the number of projects written in more than one languages
+counts: output sum of int;
+p: Project = input;
+
+if (len(p.programming_languages) > 1)
+	counts << 1;

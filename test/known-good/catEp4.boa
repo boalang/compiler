@@ -1,0 +1,6 @@
+# what are the 5 most popular databases?
+counts: output top(5) of string weight int;
+p: Project = input;
+
+foreach (i: int; def(p.databases[i]))
+	counts << p.databases[i] weight 1;

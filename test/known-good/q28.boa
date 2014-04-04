@@ -1,0 +1,34 @@
+LocalsTotal: output sum of int;
+LocalsMax: output maximum(1) of string weight int;
+LocalsMin: output minimum(1) of string weight int;
+LocalsMean: output mean of int;
+
+p: Project = input;
+
+locals_cur_val := 0;
+locals_s: stack of int;
+
+q28 := visitor {
+	before node: CodeRepository -> {
+		snapshot := getsnapshot(node, "SOURCE_JAVA_JLS");
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+	before node: Method -> {
+		push(locals_s, locals_cur_val);
+		locals_cur_val = 0;
+		foreach (i: int; def(node.statements[i]))
+			visit(node.statements[i]);
+		LocalsTotal << locals_cur_val;
+		LocalsMax << p.id weight locals_cur_val;
+		LocalsMin << p.id weight locals_cur_val;
+		LocalsMean << locals_cur_val;
+		locals_cur_val = pop(locals_s);
+		stop;
+	}
+	before node: Variable ->
+		locals_cur_val++;
+};
+
+visit(p, q28);

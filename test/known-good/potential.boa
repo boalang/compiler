@@ -1,0 +1,151 @@
+# measure potential use of Java features
+p: Project = input;
+AllPotential: output sum[string] of int;
+NewPotential: output sum[string] of int;
+OldPotential: output sum[string] of int;
+FilesPotential: output sum[string] of int;
+ProjectsPotential: output sum[string] of int;
+
+jdk: int;
+fileVer: map[string] of int;
+
+visit(p, visitor {
+    before node: Revision -> {
+		jdk = 0;
+		if (int(node.commit_date) > 1311872400000000)
+			jdk = 7;
+		else if (int(node.commit_date) > 1096563600000000)
+			jdk = 5;
+		else if (int(node.commit_date) > 1013018400000000)
+			jdk = 4;
+	}
+	before node: ChangedFile -> {
+		if (iskind("SOURCE_JAVA_JLS", node.kind) && node.change == ChangeKind.ADDED)
+			fileVer[node.name] = jdk;
+		stop;
+	}
+});
+
+old: map[string] of int;
+new: map[string] of int;
+cur_file: string;
+
+initialize := function(s: string) {
+	old[s] = 0;
+	new[s] = 0;
+};
+
+initialize("Varargs");
+initialize("Assert");
+initialize("BinaryLit");
+initialize("Diamond");
+initialize("MultiCatch");
+initialize("Underscore");
+
+filesVarargs: map[string] of bool;
+filesAssert: map[string] of bool;
+filesBinaryLit: map[string] of bool;
+filesDiamond: map[string] of bool;
+filesMultiCatch: map[string] of bool;
+filesUnderscore: map[string] of bool;
+
+foundUse := function(s: string, ver: int) {
+	if (haskey(fileVer, cur_file) && fileVer[cur_file] >= ver)
+		new[s] = new[s] + 1;
+	else
+		old[s] = old[s] + 1;
+};
+
+visit(p, visitor {
+	before node: CodeRepository -> {
+		snapshot := getsnapshot(node, "SOURCE_JAVA_JLS");
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+	before node: ChangedFile ->
+		cur_file = node.name;
+	before node: Method -> {
+		if (len(node.arguments) > 0 && match(`\[\]$`, node.arguments[len(node.arguments) - 1].variable_type.name)) {
+			foundUse("Varargs", 5);
+			filesVarargs[cur_file] = true;
+		}
+		if (len(node.statements) > 0)
+			visit(node.statements[0], visitor {
+				before node: Statement ->
+					if (node.kind == StatementKind.IF)
+						if (node.statements[0].kind == StatementKind.THROW)
+							if (match(`^IllegalArgumentException$`, node.statements[0].expression.new_type.name)) {
+								foundUse("Assert", 4);
+								filesAssert[cur_file] = true;
+							}
+			});
+	}
+	before node: Expression -> {
+		if (node.kind == ExpressionKind.BIT_LSHIFT && len(node.expressions) == 2)
+			if (node.expressions[0].kind == ExpressionKind.LITERAL && node.expressions[1].kind == ExpressionKind.LITERAL)
+				if (def(node.expressions[0].literal) && def(node.expressions[1].literal))
+					if (match(`^1$`, node.expressions[0].literal) && match(`^[0-9]+$`, node.expressions[1].literal)) {
+						foundUse("BinaryLit", 7);
+						filesBinaryLit[cur_file] = true;
+					}
+		if (node.kind == ExpressionKind.NEW && def(node.new_type)
+				&& strfind("<", node.new_type.name) > -1 && strfind("<>", node.new_type.name) == -1) {
+			foundUse("Diamond", 7);
+			filesDiamond[cur_file] = true;
+		}
+		if (node.kind == ExpressionKind.LITERAL && def(node.literal) && strfind("_", node.literal) == -1) {
+			if ((len(node.literal) > 6 && match(`[0-9]+[Ll]?`, node.literal))
+					|| (len(node.literal) > 5 && match(`0[x][0-9A-Fa-f]+[Ll]?`, node.literal))
+					|| (len(node.literal) > 17 && match(`0[bB][01]+[Ll]?`, node.literal))) {
+				foundUse("Underscore", 7);
+				filesUnderscore[cur_file] = true;
+			}
+		}
+	}
+	before node: Statement ->
+		if (node.kind == StatementKind.TRY && len(node.statements) > 2)
+			for (i := 1; i < len(node.statements) - 1; i++) {
+				found := false;
+				left := node.statements[i];
+				for (j := i + 1; j < len(node.statements); j++) {
+					right := node.statements[j];
+					if (left.kind != StatementKind.CATCH || right.kind != StatementKind.CATCH)
+						continue;
+					if (len(left.statements) != len(right.statements))
+						continue;
+
+					equal := true;
+					for (k := 0; k < len(left.statements); k++)
+						if (left.statements[k] != right.statements[k]) {
+							equal = false;
+							break;
+						}
+
+					if (equal) {
+						foundUse("MultiCatch", 7);
+						filesMultiCatch[cur_file] = true;
+						found = true;
+						break;
+					}
+				}
+				if (found)
+					break;
+			}
+});
+
+out := function(s: string, m: map[string] of bool) {
+	AllPotential[s] << new[s] + old[s];
+	NewPotential[s] << new[s];
+	OldPotential[s] << old[s];
+	if (new[s] + old[s] > 0)
+		ProjectsPotential[s] << 1;
+	FilesPotential[s] << len(m);
+};
+
+out("Varargs", filesVarargs);
+out("Assert", filesAssert);
+out("BinaryLit", filesBinaryLit);
+out("Diamond", filesDiamond);
+out("MultiCatch", filesMultiCatch);
+out("Underscore", filesUnderscore);

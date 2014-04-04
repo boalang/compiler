@@ -1,0 +1,7 @@
+# what are the N projects w/ the highest churn rate?
+counts: output mean[string] of int;
+p: Project = input;
+
+foreach (i: int; len(p.code_repositories[i].revisions) > 10)
+	foreach (j: int; len(p.code_repositories[i].revisions[j].files) < 100)
+		counts[p.id] << len(p.code_repositories[i].revisions[j].files);

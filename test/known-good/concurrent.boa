@@ -1,0 +1,44 @@
+Sequential: output collection[string] of string;
+p: Project = input;
+
+patterns := {
+	`^java\.util\\.concurrent\..*$`,
+	`^(java\.lang\.)?Runnable$`,
+	`^(java\.lang\.)?Thread$`,
+	`^(java\.util\.concurrent\.)?AbstractExecutorService$`,
+	`^(java\.util\.concurrent\.)?ThreadPoolExecutor$`,
+	`^(java\.util\.concurrent\.)?ScheduledThreadPoolExecutor$`,
+	`^(java\.util\.concurrent\.)?Callable(<.*>)?$`,
+	`^(java\.util\.concurrent\.)?Executor$`,
+	`^(java\.util\.concurrent\.)?ExecutorService$`,
+	`^(java\.util\.concurrent\.)?ScheduledExecutorService$`
+};
+
+usesConcurrent := false;
+
+visit(p, visitor {
+	# optimize so once we know to filter this project,
+	# we stop looking at more nodes
+	before _ ->
+		if (usesConcurrent)
+			stop;
+
+	before node: CodeRepository -> {
+		usesConcurrent = false;
+		snapshot := getsnapshot(node);
+		foreach (i: int; !usesConcurrent && def(snapshot[i]))
+			visit(snapshot[i]);
+		if (!usesConcurrent)
+			Sequential[p.id] << p.project_url;
+		stop;
+	}
+
+	before n: ASTRoot ->
+		foreach (i: int; !usesConcurrent && def(n.imports[i]))
+			exists (j: int; match(patterns[j], n.imports[i]))
+				usesConcurrent = true;
+	before n: Declaration ->
+		foreach (i: int; !usesConcurrent && def(n.parents[i].name))
+			exists (j: int; match(patterns[j], n.parents[i].name))
+				usesConcurrent = true;
+});

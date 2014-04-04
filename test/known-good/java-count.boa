@@ -1,0 +1,8 @@
+# count how many valid Java files are in the latest snapshot
+counts: output sum of int;
+p: Project = input;
+
+visit(p, visitor {
+	before node: CodeRepository ->
+		counts << len(getsnapshot(node, "SOURCE_JAVA_JLS"));
+});

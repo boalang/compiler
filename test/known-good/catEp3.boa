@@ -1,0 +1,6 @@
+# what databases are used?
+counts: output sum[string] of int;
+p: Project = input;
+
+foreach (i: int; def(p.databases[i]))
+	counts[p.databases[i]] << 1;

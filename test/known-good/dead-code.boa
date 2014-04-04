@@ -1,0 +1,58 @@
+# looking for dead code
+DEAD: output sum[string] of int;
+
+cur_file: string;
+s: stack of bool;
+alive := true;
+
+visit(input, visitor {
+	before _ -> if (!alive) stop;
+	before node: CodeRepository -> {
+		snapshot := getsnapshot(node);
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+	before node: ChangedFile -> {
+		cur_file = string(node);
+		alive = true;
+	}
+	before node: Statement -> {
+		if (!alive) {
+			DEAD[cur_file] << 1;
+			stop;
+		}
+		switch (node.kind) {
+		case StatementKind.RETURN, StatementKind.THROW,
+				StatementKind.BREAK, StatementKind.CONTINUE:
+			alive = false;
+			break;
+		case StatementKind.BLOCK, StatementKind.FOR, StatementKind.DO,
+				StatementKind.SYNCHRONIZED, StatementKind.CATCH,
+				StatementKind.CASE, StatementKind.WHILE:
+			push(s, alive);
+			alive = true;
+			break;
+		case StatementKind.IF, StatementKind.SWITCH, StatementKind.TRY:
+			foreach (i: int; def(node.statements[i])) {
+				push(s, alive);
+				alive = true;
+				visit(node.statements[i]);
+				alive = alive || pop(s);
+			}
+			stop;
+		default:
+			break;
+		}
+	}
+	after node: Statement ->
+		switch (node.kind) {
+		case StatementKind.BLOCK, StatementKind.FOR, StatementKind.DO,
+				StatementKind.SYNCHRONIZED, StatementKind.CATCH,
+				StatementKind.CASE, StatementKind.WHILE:
+			alive = alive && pop(s);
+			break;
+		default:
+			break;
+		}
+});

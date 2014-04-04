@@ -1,0 +1,7 @@
+# Counting the number of revisions for all Java projects with SVN
+counts: output sum of int;
+p: Project = input;
+
+exists (i: int; match(`^java$`, lowercase(p.programming_languages[i])))
+	foreach (j: int; p.code_repositories[j].kind == RepositoryKind.SVN)
+		counts << len(p.code_repositories[j].revisions);

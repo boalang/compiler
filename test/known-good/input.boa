@@ -1,0 +1,5 @@
+p: Project = input;
+TopPL: output top(5) of string weight int;
+
+foreach (i: int; def(p.programming_languages[i]))
+	TopPL << p.programming_languages[i] weight 1;

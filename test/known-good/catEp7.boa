@@ -1,0 +1,7 @@
+# pairs of programming language/database
+counts: output sum[string][string] of int;
+p: Project = input;
+
+foreach (i: int; def(p.programming_languages[i]))
+	foreach (j: int; def(p.databases[j]))
+		counts[p.programming_languages[i]][p.databases[j]] << 1;

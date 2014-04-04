@@ -1,0 +1,18 @@
+#
+# Author: rdyer
+#
+AnnotUse: output sum[string] of int;
+
+v := visitor {
+	before node: CodeRepository -> {
+		snapshot := getsnapshot(node);
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+	before node: Modifier ->
+		if (node.kind == ModifierKind.ANNOTATION)
+			AnnotUse[node.annotation_name] << 1;
+};
+
+visit(input, v);

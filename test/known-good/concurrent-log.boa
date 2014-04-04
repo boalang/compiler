@@ -1,0 +1,38 @@
+Counts: output sum of int;
+Projects: output sum[string] of int;
+p: Project = input;
+
+types: map[string] of int;
+
+visit(p, visitor {
+	before n: Declaration -> {
+		exists (i: int; n.parents[i].name == "Runnable"
+				|| n.parents[i].name == "Thread"
+				|| n.parents[i].name == "TimerTask"
+				|| n.parents[i].name == "Executor"
+				|| n.parents[i].name == "ExecutorService"
+				|| n.parents[i].name == "ScheduledExecutorService"
+				|| n.parents[i].name == "AbstractExecutorService"
+				|| n.parents[i].name == "ThreadPoolExecutor"
+				|| n.parents[i].name == "ScheduledThreadPoolExecutor"
+				|| match(`^Callable($|<.*>$)`, n.parents[i].name))
+			types[n.parents[i].name] = 1;
+		exists (i: int; match(`^Callable($|<.*>$)`, n.parents[i].name))
+			types["Callable"] = 1;
+	}
+});
+
+if (len(types) > 0) {
+	haslog := false;
+	visit(p, visitor {
+		before n: Revision -> {
+			if (match(`\b(race|deadlock|violation|deadlocking)\b`, n.log))
+				haslog = true;
+			stop;
+		}
+	});
+	if (haslog) {
+		Counts << 1;
+		Projects[p.id] << 1;
+	}
+}

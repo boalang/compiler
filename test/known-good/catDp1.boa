@@ -1,0 +1,6 @@
+# Counting the N most frequently used licenses
+counts: output top(5) of string weight int;
+p: Project = input;
+
+foreach (i: int; def(p.licenses[i]))
+	counts << p.licenses[i] weight 1;

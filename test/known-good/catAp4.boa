@@ -1,0 +1,13 @@
+# In what year was Java added the most?
+counts: output sum[int] of int;
+p: Project = input;
+
+HasJavaFile := function(rev: Revision): bool {
+	exists (i: int; match(`.java$`, rev.files[i].name))
+		return true;
+	return false;
+};
+
+foreach (i: int; def(p.code_repositories[i]))
+	exists (j: int; HasJavaFile(p.code_repositories[i].revisions[j]))
+		counts[yearof(p.code_repositories[i].revisions[j].commit_date)] << 1;

@@ -1,0 +1,38 @@
+NestedTotal: output sum of int;
+NestedMax: output maximum(1) of string weight int;
+NestedMin: output minimum(1) of string weight int;
+NestedMean: output mean of int;
+
+p: Project = input;
+
+nest_s := 0;
+nest_cur_val := 0;
+has_file := false;
+
+q4 := visitor {
+	before node: CodeRepository -> {
+		snapshot := getsnapshot(node, "SOURCE_JAVA_JLS");
+		has_file = len(snapshot) > 0;
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+	before node: Declaration ->
+		if (node.kind == TypeKind.CLASS) {
+			if (nest_s > 0)
+				nest_cur_val++;
+			nest_s++;
+		}
+	after node: Declaration ->
+		if (node.kind == TypeKind.CLASS)
+			nest_s--;
+};
+
+visit(p, q4);
+
+if (has_file) {
+	NestedTotal << nest_cur_val;
+	NestedMax << p.id weight nest_cur_val;
+	NestedMin << p.id weight nest_cur_val;
+	NestedMean << nest_cur_val;
+}

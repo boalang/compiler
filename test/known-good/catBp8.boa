@@ -1,0 +1,6 @@
+# How many developers work on multiple projects
+counts: output sum[string] of int;
+p: Project = input;
+
+foreach (i: int; def(p.developers[i].username))
+	counts[p.developers[i].username] << 1;

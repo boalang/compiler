@@ -1,0 +1,8 @@
+# Counting the average length of commit log message for all Java projects with SVN
+counts: output mean of int;
+p: Project = input;
+
+exists (i: int; match(`^java$`, lowercase(p.programming_languages[i])))
+	foreach (j: int; p.code_repositories[j].kind == RepositoryKind.SVN)
+		foreach (k: int; def(p.code_repositories[j].revisions[k]))
+			counts << len(splitall(p.code_repositories[j].revisions[k].log, " "));

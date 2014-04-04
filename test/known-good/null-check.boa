@@ -1,0 +1,19 @@
+counts: output sum of int;
+p: Project = input;
+
+visit(p, visitor {
+	before node: CodeRepository -> {
+		snapshot := getsnapshot(node);
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+	before node: Statement ->
+		if (node.kind == StatementKind.IF)
+			visit(node.expression, visitor {
+				before node: Expression ->
+					if (node.kind == ExpressionKind.EQ || node.kind == ExpressionKind.NEQ)
+						exists (i: int; isliteral(node.expressions[i], "null"))
+							counts << 1;
+			});
+});

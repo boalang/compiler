@@ -166,7 +166,7 @@
 			<batchtest>
 				<formatter type="plain" usefile="false" />
 				<fileset dir="build/tests">
-					<include name="boa/**/*.class" />
+					<include name="boa/**/Test*.class" />
 					<exclude name="**/*$*.class" />
 				</fileset>
 			</batchtest>

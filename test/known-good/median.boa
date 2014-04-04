@@ -1,0 +1,15 @@
+m: output median of int;
+ci: output confidence(95) of int;
+v: output variance of int;
+st: output stdev of int;
+s: output skewness of int;
+k: output kurtosis of int;
+
+p: Project = input;
+
+m << int(p.id);
+ci << int(p.id);
+v << int(p.id);
+st << int(p.id);
+s << int(p.id);
+k << int(p.id);

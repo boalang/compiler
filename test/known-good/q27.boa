@@ -1,0 +1,35 @@
+ReThrowTotal: output sum of int;
+ReThrowMax: output maximum(1) of string weight int;
+ReThrowMin: output minimum(1) of string weight int;
+ReThrowMean: output mean of int;
+
+p: Project = input;
+
+rethrows_cur_val := 0;
+rethrows_s: stack of int;
+
+q27 := visitor {
+	before node: CodeRepository -> {
+		snapshot := getsnapshot(node, "SOURCE_JAVA_JLS");
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+	before node: Statement ->
+		if (node.kind == StatementKind.THROW)
+			rethrows_cur_val++;
+		else if (node.kind == StatementKind.CATCH) {
+			push(rethrows_s, rethrows_cur_val);
+			rethrows_cur_val = 0;
+		}
+	after node: Statement ->
+		if (node.kind == StatementKind.CATCH) {
+			ReThrowTotal << rethrows_cur_val;
+			ReThrowMax << p.id weight rethrows_cur_val;
+			ReThrowMin << p.id weight rethrows_cur_val;
+			ReThrowMean << rethrows_cur_val;
+			rethrows_cur_val = pop(rethrows_s);
+		}
+};
+
+visit(p, q27);

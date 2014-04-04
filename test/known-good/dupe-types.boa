@@ -1,0 +1,25 @@
+types: output set[string][string] of string;
+p:Project = input;
+
+filemap: map[string] of string;
+
+cur_file: ChangedFile;
+names: stack of string;
+
+visit(p, visitor {
+	before node: ChangedFile -> cur_file = node;
+	before node: Namespace -> push(names, node.name);
+	before node: Declaration -> {
+		typename := node.name;
+		if (peek(names) != "")
+			typename = format("%s.%s", peek(names), node.name);
+		push(names, typename);
+
+		if (haskey(filemap, typename)) {
+			types[p.id][typename] << filemap[typename];
+			types[p.id][typename] << cur_file.name;
+		} else
+			filemap[typename] = cur_file.name;
+	}
+	after Namespace, Declaration -> pop(names);
+});

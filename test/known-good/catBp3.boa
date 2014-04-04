@@ -1,0 +1,8 @@
+# Counting the number of fixing revisons for all Java projects with SVN
+counts: output sum of int;
+p: Project = input;
+
+exists (i: int; match(`^java$`, lowercase(p.programming_languages[i])))
+	foreach (j: int; p.code_repositories[j].kind == RepositoryKind.SVN)
+		foreach (k: int; isfixingrevision(p.code_repositories[j].revisions[k].log))
+			counts << 1;

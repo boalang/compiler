@@ -1,0 +1,52 @@
+InterfaceTotal: output sum of int;
+InterfaceMax: output maximum(1) of string weight int;
+InterfaceMin: output minimum(1) of string weight int;
+InterfaceMean: output mean of int;
+MethodsInterfaceTotal: output sum of int;
+MethodsInterfaceMax: output maximum(1) of string weight int;
+MethodsInterfaceMin: output minimum(1) of string weight int;
+MethodsInterfaceMean: output mean of int;
+
+p: Project = input;
+
+interface_count := 0;
+methods_int_cur_val := 0;
+methods_int_s: stack of int;
+has_file := false;
+
+q10 := visitor {
+	before node: CodeRepository -> {
+		snapshot := getsnapshot(node, "SOURCE_JAVA_JLS");
+		has_file = len(snapshot) > 0;
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+	before node: Declaration ->
+		if (node.kind == TypeKind.INTERFACE) {
+			interface_count++;
+			push(methods_int_s, methods_int_cur_val);
+			methods_int_cur_val = 0;
+		} else
+			stop;
+	after node: Declaration -> {
+		MethodsInterfaceTotal << methods_int_cur_val;
+		if (methods_int_cur_val > 0) {
+			MethodsInterfaceMax << p.id weight methods_int_cur_val;
+			MethodsInterfaceMin << p.id weight methods_int_cur_val;
+			MethodsInterfaceMean << methods_int_cur_val;
+		}
+		methods_int_cur_val = pop(methods_int_s);
+	}
+	before node: Method ->
+		methods_int_cur_val++;
+};
+
+visit(p, q10);
+
+if (has_file) {
+	InterfaceTotal << interface_count;
+	InterfaceMax << p.id weight interface_count;
+	InterfaceMin << p.id weight interface_count;
+	InterfaceMean << interface_count;
+}

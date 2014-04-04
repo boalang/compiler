@@ -1,0 +1,6 @@
+# which projects support multiple OSes?
+counts: output collection[string] of string;
+p: Project = input;
+
+if (len(p.operating_systems) > 1)
+	counts[p.id] << p.project_url;

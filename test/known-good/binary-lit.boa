@@ -1,0 +1,23 @@
+#
+# Author: rdyer
+#
+USES: output collection[string][string][time] of int;
+p: Project = input;
+
+project_url := p.project_url;
+file_name: string;
+commit_date: time;
+
+binary_lit := visitor {
+	before node: ChangedFile -> {
+		if (!iskind("SOURCE_JAVA_JLS", node.kind))
+			stop;
+		file_name = node.name;
+	}
+	before node: Revision -> commit_date = node.commit_date;
+	before node: Expression ->
+		if (node.kind == ExpressionKind.LITERAL && def(node.literal) && match(`0[bB][01][01_]*[01][L]?`, node.literal))
+			USES[project_url][file_name][commit_date] << 1;
+};
+
+visit(p, binary_lit);

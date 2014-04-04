@@ -1,0 +1,6 @@
+# what are the 5 most supported OSes?
+counts: output top(5) of string weight int;
+p: Project = input;
+
+foreach (i: int; def(p.operating_systems[i]))
+	counts << p.operating_systems[i] weight 1;

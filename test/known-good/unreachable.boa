@@ -1,0 +1,38 @@
+DEAD: output collection of string;
+
+cur_file: string;
+cur_method: string;
+s: stack of bool;
+alive := true;
+
+visit(input, visitor {
+	before node: ChangedFile -> cur_file = string(node);
+	before node: Method -> {
+	    cur_method = node.name;
+	    push(s, alive);
+	    alive = true;
+	}
+	after node: Method -> {
+		if (!alive) DEAD << format("%s - %s", cur_file, cur_method);
+		alive = pop(s);
+	}
+	before node: Statement ->
+		switch (node.kind) {
+    	    case StatementKind.BREAK:
+				if (def(node.expression)) break;
+    		case StatementKind.RETURN, StatementKind.THROW, StatementKind.CONTINUE:
+    			alive = false;
+    			break;
+    		case StatementKind.IF, StatementKind.LABEL: stop;
+    		case StatementKind.FOR, StatementKind.DO, StatementKind.WHILE,
+    		        StatementKind.SWITCH, StatementKind.TRY:
+    		    foreach (i: int; node.statements[i]) {
+                    push(s, alive);
+                    visit(node.statements[i]);
+                    alive = pop(s);
+    		    }
+    			stop;
+    		default:
+    			break;
+		}
+});

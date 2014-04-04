@@ -1,0 +1,36 @@
+ConditionTotal: output sum of int;
+ConditionMax: output maximum(1) of string weight int;
+ConditionMin: output minimum(1) of string weight int;
+ConditionMean: output mean of int;
+
+p: Project = input;
+
+cond_cur_val := 0;
+cond_s: stack of int;
+
+q23 := visitor {
+	before node: CodeRepository -> {
+		snapshot := getsnapshot(node, "SOURCE_JAVA_JLS");
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+	before node: Method -> {
+		push(cond_s, cond_cur_val);
+		cond_cur_val = 0;
+	}
+	after node: Method -> {
+		ConditionTotal << cond_cur_val;
+		ConditionMax << p.id weight cond_cur_val;
+		ConditionMin << p.id weight cond_cur_val;
+		ConditionMean << cond_cur_val;
+		cond_cur_val = pop(cond_s);
+	}
+	before node: Statement ->
+		if (node.kind == StatementKind.IF || node.kind == StatementKind.FOR ||
+				node.kind == StatementKind.SWITCH || node.kind == StatementKind.DO ||
+				node.kind == StatementKind.WHILE)
+			cond_cur_val++;
+};
+
+visit(p, q23);

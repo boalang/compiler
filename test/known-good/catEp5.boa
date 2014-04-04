@@ -1,0 +1,6 @@
+# which projects support multiple databases?
+counts: output collection[string] of string;
+p: Project = input;
+
+if (len(p.databases) > 1)
+	counts[p.id] << p.name;

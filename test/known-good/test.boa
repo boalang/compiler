@@ -1,0 +1,45 @@
+AddedNullCheck: output sum of int;
+p: Project = input;
+
+isfixing := false;
+count := 0;
+# map of file names to the last revision of that file
+files: map[string] of ChangedFile;
+
+visit(p, visitor {
+	before node: Revision -> isfixing = isfixingrevision(node.log);
+	before node: ChangedFile -> {
+		# if this is a fixing revision and
+		# there was a previous version of the file
+		if (isfixing && haskey(files, node.name)) {
+			# count how many null checks were previously in the file
+			count = 0;
+			visit(getast(files[node.name]));
+			last := count;
+
+			# count how many null checks are currently in the file
+			count = 0;
+			visit(getast(node));
+
+			# if there are more null checks, output
+			if (count > last)
+				AddedNullCheck << 1;
+		}
+		if (node.change == ChangeKind.DELETED)
+			remove(files, node.name);
+		else
+			files[node.name] = node;
+		stop;
+	}
+	before node: Statement ->
+		# increase the counter if there is an IF statement
+		# where the boolean condition is of the form:
+		#	null == expr OR expr == null OR null != expr OR expr != null
+		if (node.kind == StatementKind.IF)
+			visit(node.expression, visitor {
+				before node: Expression ->
+					if (node.kind == ExpressionKind.EQ || node.kind == ExpressionKind.NEQ)
+						exists (i: int; isliteral(node.expressions[i], "null"))
+							count++;
+			});
+});

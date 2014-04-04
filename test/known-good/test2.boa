@@ -1,0 +1,9 @@
+Projects: output sum[string] of int;
+Revisions: output sum[string] of int;
+
+Projects[format("%d-%d", yearof(input.created_date), monthof(input.created_date))] << 1;
+
+visit(input, visitor {
+    before n: Revision ->
+        Revisions[format("%d-%d", yearof(n.commit_date), monthof(n.commit_date))] << 1;
+});

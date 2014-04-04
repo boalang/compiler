@@ -1,0 +1,14 @@
+counts1: output sum[int] of int;
+counts2: output sum[int] of int;
+counts3: output sum[int] of int;
+counts4: output sum[int] of int;
+p: Project = input;
+
+exists (i: int; match(`^java$`, lowercase(p.programming_languages[i])))
+	counts1[yearof(p.created_date)] << 1;
+exists (i: int; match(`^java$`, lowercase(p.programming_languages[i])))
+	counts2[yearof(p.created_date)] << 1;
+exists (i: int; match(`^java$`, lowercase(p.programming_languages[i])))
+	counts3[yearof(p.created_date)] << 1;
+exists (i: int; match(`^java$`, lowercase(p.programming_languages[i])))
+	counts4[yearof(p.created_date)] << 1;

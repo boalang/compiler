@@ -1,0 +1,38 @@
+NonVoidMethodsTotal: output sum of int;
+NonVoidMethodsMax: output maximum(1) of string weight int;
+NonVoidMethodsMin: output minimum(1) of string weight int;
+NonVoidMethodsMean: output mean of int;
+
+p: Project = input;
+
+non_void_cur_val := 0;
+non_void_s: stack of int;
+
+q16 := visitor {
+	before node: CodeRepository -> {
+		snapshot := getsnapshot(node, "SOURCE_JAVA_JLS");
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+	before node: Declaration ->
+		if (node.kind == TypeKind.CLASS || node.kind == TypeKind.ANONYMOUS) {
+			push(non_void_s, non_void_cur_val);
+			non_void_cur_val = 0;
+		} else
+			stop;
+	after node: Declaration -> {
+		NonVoidMethodsTotal << non_void_cur_val;
+		if (non_void_cur_val > 0) {
+			NonVoidMethodsMax << p.id weight non_void_cur_val;
+			NonVoidMethodsMin << p.id weight non_void_cur_val;
+			NonVoidMethodsMean << non_void_cur_val;
+		}
+		non_void_cur_val = pop(non_void_s);
+	}
+	before node: Method ->
+		if (node.return_type.name != "void")
+			non_void_cur_val++;
+};
+
+visit(p, q16);

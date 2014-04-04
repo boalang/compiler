@@ -1,0 +1,34 @@
+Projects: output sum of int;
+StaticTotal: output sum of int;
+StaticMax: output maximum(1) of string weight int;
+StaticMin: output minimum(1) of string weight int;
+StaticMean: output mean of int;
+
+p: Project = input;
+
+stat_count := 0;
+has_file := false;
+
+q2 := visitor {
+	before node: CodeRepository -> {
+		snapshot := getsnapshot(node, "SOURCE_JAVA_JLS");
+		has_file = len(snapshot) > 0;
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+	before node: Declaration ->
+		if (node.kind == TypeKind.CLASS && has_modifier(node, ModifierKind.STATIC))
+			stat_count++;
+};
+
+visit(p, q2);
+
+if (has_file) {
+	Projects << 1;
+
+	StaticTotal << stat_count;
+	StaticMax << p.id weight stat_count;
+	StaticMin << p.id weight stat_count;
+	StaticMean << stat_count;
+}

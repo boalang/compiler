@@ -1,0 +1,19 @@
+types: output set[string][string] of string;
+p:Project = input;
+
+ns_name: string;
+cur_file: ChangedFile;
+
+visit(p, visitor {
+	before node: ChangedFile -> cur_file = node;
+	before node: Namespace -> {
+		ns_name = node.name;
+		foreach (i: int; def(node.declarations[i]))
+			visit(node.declarations[i]);
+		stop;
+	}
+	before node: Declaration -> {
+		types[format("%s.%s", ns_name, node.name)][p.id] << cur_file.name;
+		stop;
+	}
+});

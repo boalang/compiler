@@ -1,0 +1,41 @@
+AddedNullCheck: output collection[string] of int;
+p: Project = input;
+
+cur_rev: Revision;
+count := 0;
+files: map[string] of ChangedFile;
+repo: CodeRepository;
+
+visit(p, visitor {
+	before node: CodeRepository -> repo = node;
+	before node: Revision -> cur_rev = node;
+	before node: ChangedFile -> {
+		if (isfixingrevision(cur_rev.log) && haskey(files, node.name)) {
+			count = 0;
+			visit(getast(files[node.name]));
+			last := count;
+
+			count = 0;
+			visit(getast(node));
+
+			if (count > last)
+				if (repo.kind == RepositoryKind.CVS)
+					AddedNullCheck[format("%s/viewvc%s?view=diff&diff_format=h&r1=text&tr1=%d&r2=text&tr2=%d", repo.url, substring(node.name, 6), cur_rev.id, (int(cur_rev.id) - 1))] << (count - last);
+				else
+					AddedNullCheck[format("%s%s?view=diff&diff_format=h&r1=%d&r2=%d", strreplace(repo.url, "svnroot", "viewvc", true), node.name, cur_rev.id, (int(cur_rev.id) - 1))] << (count - last);
+		}
+		if (node.change != ChangeKind.DELETED)
+			files[node.name] = node;
+		else
+			remove(files, node.name);
+		stop;
+	}
+	before node: Statement ->
+		if (node.kind == StatementKind.IF)
+			visit(node.expression, visitor {
+				before node: Expression ->
+					if (node.kind == ExpressionKind.EQ || node.kind == ExpressionKind.NEQ)
+						exists (i: int; isliteral(node.expressions[i], "null"))
+							count++;
+			});
+});

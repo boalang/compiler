@@ -1,0 +1,61 @@
+Projects: output sum of int;
+ASTProjects: output sum of int;
+Repositories: output sum of int;
+ASTRepositories: output sum of int;
+Revisions: output sum of int;
+RevisionsMean: output mean of int;
+RevisionsMax: output maximum(1) of string weight int;
+RevisionsMin: output minimum(1) of string weight int;
+JavaSnapshots: output sum of int;
+JavaSnapshotsMean: output mean of int;
+JavaSnapshotsMax: output maximum(1) of string weight int;
+JavaSnapshotsMin: output minimum(1) of string weight int;
+AST: output sum of int;
+ASTMean: output mean of int;
+ASTMax: output maximum(1) of string weight int;
+ASTMin: output minimum(1) of string weight int;
+
+p: Project = input;
+
+astCount := 0;
+javaFileCount := 0;
+revisions := 0;
+
+visit(p, visitor {
+    before _ -> astCount++;
+	before node: Project -> Projects << 1;
+	before node: CodeRepository -> Repositories << 1;
+	before node: Revision -> {
+		javaFileCount = 0;
+		revisions++;
+	}
+	after node: Revision -> {
+		JavaSnapshots << javaFileCount;
+		JavaSnapshotsMean << javaFileCount;
+		JavaSnapshotsMax << p.id weight javaFileCount;
+		JavaSnapshotsMin << p.id weight javaFileCount;
+	}
+    before node: ChangedFile -> {
+		if (!iskind("SOURCE_JAVA_JLS", node.kind))
+			stop;
+		astCount = 0;
+		javaFileCount++;
+	}
+	after ChangedFile -> {
+		AST << astCount;
+		ASTMean << astCount;
+		ASTMax << p.id weight astCount;
+		ASTMin << p.id weight astCount;
+	}
+	before ASTRoot -> ;
+});
+
+if (javaFileCount > 0) {
+	ASTProjects << 1;
+	ASTRepositories << 1;
+
+	Revisions << revisions;
+	RevisionsMean << revisions;
+	RevisionsMax << p.id weight revisions;
+	RevisionsMin << p.id weight revisions;
+}

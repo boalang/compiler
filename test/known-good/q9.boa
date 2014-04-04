@@ -1,0 +1,34 @@
+AssertTotal: output sum of int;
+AssertMax: output maximum(1) of string weight int;
+AssertMin: output minimum(1) of string weight int;
+AssertMean: output mean of int;
+
+p: Project = input;
+
+assert_cur_val := 0;
+assert_s: stack of int;
+
+q9 := visitor {
+	before node: CodeRepository -> {
+		snapshot := getsnapshot(node, "SOURCE_JAVA_JLS");
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+	before node: Method -> {
+		push(assert_s, assert_cur_val);
+		assert_cur_val = 0;
+	}
+	after node: Method -> {
+		AssertTotal << assert_cur_val;
+		AssertMax << p.id weight assert_cur_val;
+		AssertMin << p.id weight assert_cur_val;
+		AssertMean << assert_cur_val;
+		assert_cur_val = pop(assert_s);
+	}
+	before node: Statement ->
+		if (node.kind == StatementKind.ASSERT)
+			assert_cur_val++;
+};
+
+visit(p, q9);

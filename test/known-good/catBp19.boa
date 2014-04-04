@@ -1,0 +1,6 @@
+# how many projects self-classify into each topic?
+values: output sum[string] of int;
+p: Project = input;
+
+foreach (i: int; def(p.topics[i]))
+	values[lowercase(p.topics[i])] << 1;

@@ -19,82 +19,62 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.atn.PredictionMode;
 
 import boa.parser.BoaLexer;
+import boa.parser.BoaParser;
 
 @RunWith(JUnit4.class)
-public class TestLexer {
-	final private static String rootDir = "test/lexing/";
+public class TestParser {
+	final private static String rootDir = "test/parsing/";
 	final private static String badDir = rootDir + "errors/";
 
 
 	@Test
 	public void empty() throws IOException {
-		expectTokens(load(rootDir + "empty.boa"),
-			new int[] { BoaLexer.EOF },
-			new String[] { "<EOF>" });
+		expectErrors(load(badDir + "empty.boa"),
+			new String[] { "1,0: no viable alternative at input '<EOF>'" });
 	}
 
 	@Test
-	public void commentEOFnoEOL() throws IOException {
-		expectTokens(load(rootDir + "comment-eof-no-eol.boa"),
-			new int[] { BoaLexer.EOF },
-			new String[] { "<EOF>" });
-	}
-
-	@Test
-	public void badComment() throws IOException {
-		expectTokens(load(badDir + "bad-comment.boa"),
-			new int[] { BoaLexer.Identifier, BoaLexer.Identifier, BoaLexer.EOF },
-			new String[] { "bad", "comment", "<EOF>" },
-			new String[] { "1,0: token recognition error at: '@'" });
+	public void keywordAsId() throws IOException {
+		expectErrors(load(badDir + "keyword-as-id.boa"),
+			new String[] { "2,7: keyword 'output' can not be used as an identifier" });
 	}
 
 
 	///////////////////////////////////////////
 
 	private void expectErrors(final String input, final String[] strings) throws IOException {
-		expectTokens(input, new int[0], new String[0], strings);
+		expectTree(input, strings);
 	}
 
 	private void expectNoErrors(final String input) throws IOException {
-		expectTokens(input, new int[0], new String[0], new String[0]);
+		expectTree(input, new String[0]);
 	}
 
-	private void expectTokens(final String input, final int[] ids, final String[] strings) throws IOException {
-		expectTokens(input, ids, strings, new String[0]);
+	private void expectTree(final String input) throws IOException {
+		expectTree(input, new String[0]);
 	}
 
-	private void expectTokens(final String input, final int[] ids, final String[] strings, final String[] errors) throws IOException {
+	private void expectTree(final String input, final String[] errors) throws IOException {
 		final List<String> foundErr = new ArrayList<String>();
-		final BoaLexer lexer = new BoaLexer(new ANTLRInputStream(new StringReader(input)));
-		lexer.removeErrorListeners();
-		lexer.addErrorListener(new BaseErrorListener () {
+		final BoaParser parser = new BoaParser(new CommonTokenStream(new BoaLexer(new ANTLRInputStream(new StringReader(input)))));
+		parser.removeErrorListeners();
+		parser.addErrorListener(new BaseErrorListener () {
 			@Override
 			public void syntaxError(final Recognizer<?, ?> recognizer, final Object offendingSymbol, final int line, final int charPositionInLine, final String msg, final RecognitionException e) {
 				foundErr.add(line + "," + charPositionInLine + ": " + msg);
 			}
 		});
 
-		final CommonTokenStream tokens = new CommonTokenStream(lexer);
-		tokens.fill();
-
-		assertEquals("ids != strings", ids.length, strings.length);
-		if (ids.length > 0) {
-			final List<Token> t = tokens.getTokens();
-			assertEquals("wrong number of tokens", ids.length, t.size());
-
-			for (int i = 0; i < t.size(); i++) {
-				final Token token = t.get(i);
-				assertEquals("wrong token type", ids[i], token.getType());
-				assertEquals("wrong token type", strings[i], token.getText());
-			}
-		}
+		parser.getInterpreter().setPredictionMode(PredictionMode.SLL);
+		parser.start();
 
 		if (errors == null) {
 			assertTrue("Expected errors", foundErr.size() > 0);
 		} else {
-			assertEquals("wrong number of errors: " + input, errors.length, foundErr.size());
+			assertEquals("wrong number of errors", errors.length, foundErr.size());
 			for (int i = 0; i < foundErr.size(); i++)
 				assertEquals("wrong error", errors[i], foundErr.get(i));
 		}

@@ -1,0 +1,34 @@
+Methods: output set[string] of string;
+
+url: string;
+
+visit(input, visitor {
+	before n: ChangedFile -> url = string(n);
+	before n: Method -> {
+	    vars: set of string;
+	    foreach (i: int; def(n.arguments[i]))
+	        add(vars, n.arguments[i].name);
+
+        sideEffects := false;
+        visit(n, visitor {
+            before _ -> if (sideEffects) stop;
+            before node: Statement ->
+                if (def(node.variable_declaration))
+                    add(vars, node.variable_declaration.name);
+            before node: Expression -> {
+                foreach (i: int; def(node.variable_decls[i]))
+                    add(vars, node.variable_decls[i].name);
+                switch (node.kind) {
+                    case ExpressionKind.ASSIGN:
+                        if (!contains(vars, node.variable))
+                            sideEffects = true;
+                    case ExpressionKind.METHODCALL:
+                        sideEffects = true;
+                        break;
+                    default: break;
+                }
+            }
+    	});
+        if (!sideEffects) Methods[url] << n.name;
+    }
+});

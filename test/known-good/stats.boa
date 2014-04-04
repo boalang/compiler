@@ -1,0 +1,22 @@
+p: Project = input;
+PROJECTS: output sum of int;
+REPOS: output sum of int;
+REVS: output sum of int;
+FILES: output sum of int;
+SNAPSHOTS: output sum of int;
+AST: output sum of int;
+
+files: map[string] of bool;
+
+visit(p, visitor {
+    before Project -> PROJECTS << 1;
+    before CodeRepository -> REPOS << 1;
+    before Revision -> REVS << 1;
+    before f: ChangedFile -> {
+        if (!haskey(files, f.name))
+            FILES << 1;
+        files[f.name] = true;
+        SNAPSHOTS << 1;
+    }
+    before _ -> AST << 1;
+});

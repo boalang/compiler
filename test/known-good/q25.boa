@@ -1,0 +1,41 @@
+FinallyTotal: output sum of int;
+TryTotal: output sum of int;
+TryMax: output maximum(1) of string weight int;
+TryMin: output minimum(1) of string weight int;
+TryMean: output mean of int;
+
+p: Project = input;
+
+try_cur_val := 0;
+try_s: stack of int;
+
+q25 := visitor {
+	before node: CodeRepository -> {
+		snapshot := getsnapshot(node, "SOURCE_JAVA_JLS");
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+	before node: Method -> {
+		push(try_s, try_cur_val);
+		try_cur_val = 0;
+	}
+	after node: Method -> {
+		TryTotal << try_cur_val;
+		TryMax << p.id weight try_cur_val;
+		TryMin << p.id weight try_cur_val;
+		TryMean << try_cur_val;
+		try_cur_val = pop(try_s);
+	}
+	before node: Statement ->
+		if (node.kind == StatementKind.TRY) {
+			try_cur_val++;
+			if (len(node.statements) > 1) {
+				s := node.statements[len(node.statements) - 1];
+				if (s.kind != StatementKind.CATCH)
+					FinallyTotal << 1;
+			}
+		}
+};
+
+visit(p, q25);

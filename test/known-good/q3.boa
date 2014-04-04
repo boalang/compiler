@@ -1,0 +1,31 @@
+AnonTotal: output sum of int;
+AnonMax: output maximum(1) of string weight int;
+AnonMin: output minimum(1) of string weight int;
+AnonMean: output mean of int;
+
+p: Project = input;
+
+anon_count := 0;
+has_file := false;
+
+q3 := visitor {
+	before node: CodeRepository -> {
+		snapshot := getsnapshot(node, "SOURCE_JAVA_JLS");
+		has_file = len(snapshot) > 0;
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+	before node: Declaration ->
+		if (node.kind == TypeKind.ANONYMOUS)
+			anon_count++;
+};
+
+visit(p, q3);
+
+if (has_file) {
+	AnonTotal << anon_count;
+	AnonMax << p.id weight anon_count;
+	AnonMin << p.id weight anon_count;
+	AnonMean << anon_count;
+}

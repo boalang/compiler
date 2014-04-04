@@ -1,0 +1,6 @@
+# Counting the N most used programming languages
+counts: output top(5) of string weight int;
+p: Project = input;
+
+foreach (i: int; def(p.programming_languages[i]))
+	counts << p.programming_languages[i] weight 1;

@@ -1,0 +1,6 @@
+# Counting the number of projects using more than 1 license
+counts: output sum of int;
+p: Project = input;
+
+if (len(p.licenses) > 1)
+	counts << 1;

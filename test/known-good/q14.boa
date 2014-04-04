@@ -1,0 +1,26 @@
+ArityTotal: output sum of int;
+ArityMax: output maximum(1) of string weight int;
+ArityMin: output minimum(1) of string weight int;
+ArityMean: output mean of int;
+
+p: Project = input;
+
+q14 := visitor {
+	before node: CodeRepository -> {
+		snapshot := getsnapshot(node, "SOURCE_JAVA_JLS");
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+	before node: Method -> {
+		arity_cur_val := len(node.arguments);
+		ArityTotal << arity_cur_val;
+		if (arity_cur_val > 0) {
+			ArityMax << p.id weight arity_cur_val;
+			ArityMin << p.id weight arity_cur_val;
+			ArityMean << arity_cur_val;
+		}
+	}
+};
+
+visit(p, q14);

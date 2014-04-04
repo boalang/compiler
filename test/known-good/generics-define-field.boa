@@ -1,0 +1,51 @@
+#
+# Author: rdyer
+#
+USES: output collection[string][string][time] of int;
+p: Project = input;
+
+project_url := p.project_url;
+file_name: string;
+commit_date: time;
+
+gen_def_field := visitor {
+	before node: ChangedFile -> {
+		if (!iskind("SOURCE_JAVA_JLS", node.kind))
+			stop;
+		file_name = node.name;
+	}
+	before node: Revision -> commit_date = node.commit_date;
+	before Expression, Modifier -> stop;
+	before node: Declaration -> {
+		foreach (i: int; node.methods[i])
+			visit(node.methods[i]);
+
+		foreach (i: int; node.fields[i])
+			visit(node.fields[i]);
+
+		foreach (i: int; node.nested_declarations[i])
+			visit(node.nested_declarations[i]);
+
+		stop;
+	}
+	before node: Method -> {
+		foreach (i: int; node.statements[i])
+			visit(node.statements[i]);
+
+		stop;
+	}
+	before node: Statement -> {
+		foreach (i: int; node.statements[i])
+			visit(node.statements[i]);
+
+		if (def(node.type_declaration))
+			visit(node.type_declaration);
+
+		stop;
+	}
+	before node: Type ->
+		if (strfind("<", node.name) > -1)
+			USES[project_url][file_name][commit_date] << 1;
+};
+
+visit(p, gen_def_field);
