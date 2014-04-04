@@ -150,7 +150,7 @@ outputType returns [OutputType ast]
 	locals [int l, int c]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: OUTPUT (id=identifier { $ast = new OutputType($id.ast); } | tk=SET { $ast = new OutputType(new Identifier($tk.text)); }) (LPAREN el=expressionList RPAREN { $ast.setArgs($el.list); })? (LBRACKET m=component RBRACKET { $ast.addIndice($m.ast); })* OF m=component { $ast.setType($m.ast); } (WEIGHT m=component { $ast.setWeight($m.ast); })? (FORMAT LPAREN el=expressionList RPAREN)?
+	: OUTPUT (tk=SET { $ast = new OutputType(new Identifier($tk.text)); } | id=identifier { $ast = new OutputType($id.ast); }) (LPAREN el=expressionList RPAREN { $ast.setArgs($el.list); })? (LBRACKET m=component RBRACKET { $ast.addIndice($m.ast); })* OF m=component { $ast.setType($m.ast); } (WEIGHT m=component { $ast.setWeight($m.ast); })? (FORMAT LPAREN el=expressionList RPAREN)?
 	;
 
 functionType returns [FunctionType ast]
@@ -529,10 +529,40 @@ pair returns [boa.compiler.ast.Pair ast]
 
 identifier returns [Identifier ast]
 	locals [int l, int c]
-	@init { $l = getStartLine(); $c = getStartColumn(); }
+	@init { $l = getStartLine(); $c = getStartColumn(); $ast = new Identifier("<ERROR>"); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
 	: lit=Identifier { $ast = new Identifier($lit.text); }
 	| lit=FORMAT     { $ast = new Identifier($lit.text); }
+	| lit=OF       { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
+	| lit=IF       { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
+	| lit=DO       { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
+	| lit=MAP      { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
+	| lit=STACK    { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
+	| lit=SET      { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
+	| lit=FOR      { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
+	| lit=FOREACH  { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
+	| lit=IFALL    { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
+	| lit=EXISTS   { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
+	| lit=NOT      { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
+	| lit=TYPE     { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
+	| lit=ELSE     { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
+	| lit=CASE     { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
+	| lit=OUTPUT   { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
+	| lit=WHILE    { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
+	| lit=BREAK    { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
+	| lit=ARRAY    { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
+	| lit=STATIC   { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
+	| lit=SWITCH   { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
+	| lit=RETURN   { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
+	| lit=WEIGHT   { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
+	| lit=RESULT   { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
+	| lit=DEFAULT  { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
+	| lit=CONTINUE { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
+	| lit=FUNCTION { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
+	| lit=VISITOR  { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
+	| lit=BEFORE   { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
+	| lit=AFTER    { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
+	| lit=STOP     { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	;
 
 integerLiteral returns [IntegerLiteral ast]
