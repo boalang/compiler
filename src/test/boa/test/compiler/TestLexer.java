@@ -1,3 +1,5 @@
+package boa.test.compiler;
+
 import java.io.IOException;
 
 import org.junit.Assert;
@@ -10,11 +12,12 @@ import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.RecognitionException;
+import org.antlr.v4.test.BaseTest;
 
 import boa.parser.BoaLexer;
 
 @RunWith(JUnit4.class)
-public class TestLexer {
+public class TestLexer extends BaseTest {
 	@Test
 	public void commentEOFnoEOL() throws IOException {
 		lexFile("comment-eof-no-eol");
