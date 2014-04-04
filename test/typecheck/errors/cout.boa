@@ -1,0 +1,4 @@
+data: output collection of string;
+
+# C++ users might try to chain the emits, like with iostreams
+data << input.name << input.id; # error
