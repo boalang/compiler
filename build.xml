@@ -173,6 +173,33 @@
 		</junit>
 		<delete file="SecurityAuth.audit" />
 	</target>
+	<target name="test-lexer" depends="-compile-tests" description="Run lexer unit tests.">
+		<junit fork="yes" haltonfailure="yes">
+			<classpath refid="test.class.path" />
+			<test name="boa.test.compiler.TestLexer">
+				<formatter type="plain" usefile="false" />
+			</test>
+		</junit>
+		<delete file="SecurityAuth.audit" />
+	</target>
+	<target name="test-parser" depends="-compile-tests" description="Run parser unit tests.">
+		<junit fork="yes" haltonfailure="yes">
+			<classpath refid="test.class.path" />
+			<test name="boa.test.compiler.TestParser">
+				<formatter type="plain" usefile="false" />
+			</test>
+		</junit>
+		<delete file="SecurityAuth.audit" />
+	</target>
+	<target name="test-typecheck" depends="-compile-tests" description="Run typechecker unit tests.">
+		<junit fork="yes" haltonfailure="yes">
+			<classpath refid="test.class.path" />
+			<test name="boa.test.compiler.TestTypecheck">
+				<formatter type="plain" usefile="false" />
+			</test>
+		</junit>
+		<delete file="SecurityAuth.audit" />
+	</target>
 
 	<target name="-compile-tests" depends="compile">
 		<antcall target="-check-deps" />
