@@ -161,6 +161,7 @@ functionType returns [FunctionType ast]
 	}
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
 	: FUNCTION LPAREN (id=identifier COLON t=type { $ast.addArg(new Component($id.ast, $t.ast)); } (COMMA id=identifier COLON t=type { $ast.addArg(new Component($id.ast, $t.ast)); })*)? RPAREN (COLON t=type { $ast.setType($t.ast); })?
+	| FUNCTION LPAREN ((id=identifier COLON t=type { $ast.addArg(new Component($id.ast, $t.ast)); } | identifier { notifyErrorListeners("function arguments require an identifier and type"); }) (COMMA id=identifier COLON t=type { $ast.addArg(new Component($id.ast, $t.ast)); } | COMMA identifier { notifyErrorListeners("function arguments require an identifier and type"); })*)? RPAREN (COLON t=type { $ast.setType($t.ast); })?
 	;
 
 visitorType returns [VisitorType ast]
