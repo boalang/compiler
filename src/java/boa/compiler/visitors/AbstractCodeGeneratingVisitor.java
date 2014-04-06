@@ -15,9 +15,9 @@ import boa.compiler.ast.Pair;
  * @author rdyer
  */
 public abstract class AbstractCodeGeneratingVisitor extends AbstractVisitorNoArg {
-	public static STGroup stg = new STGroupFile("BoaJavaHadoop.stg");
+	public static STGroup stg = new STGroupFile("templates/BoaJavaHadoop.stg");
 	static {
-		stg.importTemplates(new STGroupFile("BoaJava.stg"));
+		stg.importTemplates(new STGroupFile("templates/BoaJava.stg"));
 	}
 
 	protected final LinkedList<String> code = new LinkedList<String>();

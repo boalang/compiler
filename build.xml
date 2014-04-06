@@ -200,6 +200,15 @@
 		</junit>
 		<delete file="SecurityAuth.audit" />
 	</target>
+	<target name="test-codegen" depends="-compile-tests" description="Run code generation unit tests.">
+		<junit fork="yes" haltonfailure="yes">
+			<classpath refid="test.class.path" />
+			<test name="boa.test.compiler.TestCodegen">
+				<formatter type="plain" usefile="false" />
+			</test>
+		</junit>
+		<delete file="SecurityAuth.audit" />
+	</target>
 
 	<target name="-compile-tests" depends="compile">
 		<antcall target="-check-deps" />
@@ -238,6 +247,11 @@
 			<fileset dir="build/classes" />
 			<fileset dir="conf" />
 			<fileset dir="templates" />
+			<fileset dir=".">
+				<patternset>
+					<include name="templates/" />
+				</patternset>
+			</fileset>
 			<zipfileset excludes="META-INF/" src="lib/antlr-runtime-4.2.jar" />
 			<zipfileset excludes="META-INF/" src="lib/commons-cli-1.2.jar" />
 			<zipfileset excludes="META-INF/" src="lib/commons-configuration-1.6.jar" />
