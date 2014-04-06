@@ -27,7 +27,7 @@ import boa.parser.BoaLexer;
 import boa.parser.BoaParser;
 
 @RunWith(Parameterized.class)
-public class TestGood {
+public class TestGood extends BaseTest {
 	final private static String goodDir = "test/known-good/";
 
 	@Parameters(name = "{0}")
@@ -73,19 +73,6 @@ public class TestGood {
 			assertEquals("wrong number of errors", errors.length, foundErr.size());
 			for (int i = 0; i < foundErr.size(); i++)
 				assertEquals("wrong error", errors[i], foundErr.get(i));
-		}
-	}
-
-	private String load(final String fileName) throws IOException {
-		BufferedInputStream in = null;
-		try {
-			in = new BufferedInputStream(new FileInputStream(fileName));
-			final byte[] bytes = new byte[(int) new File(fileName).length()];
-			in.read(bytes);
-			return new String(bytes);
-		} finally {
-			if (in != null)
-				in.close();
 		}
 	}
 }

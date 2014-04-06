@@ -1,8 +1,5 @@
 package boa.test.compiler;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -23,7 +20,7 @@ import org.antlr.v4.runtime.Token;
 import boa.parser.BoaLexer;
 
 @RunWith(JUnit4.class)
-public class TestLexer {
+public class TestLexer extends BaseTest {
 	final private static String rootDir = "test/lexing/";
 	final private static String badDir = rootDir + "errors/";
 
@@ -97,19 +94,6 @@ public class TestLexer {
 			assertEquals("wrong number of errors: " + input, errors.length, foundErr.size());
 			for (int i = 0; i < foundErr.size(); i++)
 				assertEquals("wrong error", errors[i], foundErr.get(i));
-		}
-	}
-
-	private String load(final String fileName) throws IOException {
-		BufferedInputStream in = null;
-		try {
-			in = new BufferedInputStream(new FileInputStream(fileName));
-			final byte[] bytes = new byte[(int) new File(fileName).length()];
-			in.read(bytes);
-			return new String(bytes);
-		} finally {
-			if (in != null)
-				in.close();
 		}
 	}
 }

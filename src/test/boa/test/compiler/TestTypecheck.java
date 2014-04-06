@@ -30,7 +30,7 @@ import boa.parser.BoaLexer;
 import boa.parser.BoaParser;
 
 @RunWith(JUnit4.class)
-public class TestTypecheck {
+public class TestTypecheck extends BaseTest {
 	final private static String rootDir = "test/typecheck/";
 	final private static String badDir = rootDir + "errors/";
 
@@ -73,19 +73,6 @@ public class TestTypecheck {
 				fail("found unexpected error: " + e.getMessage());
 			else
 				assertEquals(error, e.getMessage());
-		}
-	}
-
-	private String load(final String fileName) throws IOException {
-		BufferedInputStream in = null;
-		try {
-			in = new BufferedInputStream(new FileInputStream(fileName));
-			final byte[] bytes = new byte[(int) new File(fileName).length()];
-			in.read(bytes);
-			return new String(bytes);
-		} finally {
-			if (in != null)
-				in.close();
 		}
 	}
 }

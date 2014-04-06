@@ -25,7 +25,7 @@ import boa.parser.BoaLexer;
 import boa.parser.BoaParser;
 
 @RunWith(JUnit4.class)
-public class TestParser {
+public class TestParser extends BaseTest {
 	final private static String rootDir = "test/parsing/";
 	final private static String badDir = rootDir + "errors/";
 
@@ -77,19 +77,6 @@ public class TestParser {
 			assertEquals("wrong number of errors", errors.length, foundErr.size());
 			for (int i = 0; i < foundErr.size(); i++)
 				assertEquals("wrong error", errors[i], foundErr.get(i));
-		}
-	}
-
-	private String load(final String fileName) throws IOException {
-		BufferedInputStream in = null;
-		try {
-			in = new BufferedInputStream(new FileInputStream(fileName));
-			final byte[] bytes = new byte[(int) new File(fileName).length()];
-			in.read(bytes);
-			return new String(bytes);
-		} finally {
-			if (in != null)
-				in.close();
 		}
 	}
 }
