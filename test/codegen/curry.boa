@@ -1,0 +1,8 @@
+TEST: output collection of bool;
+
+curry := function(x: int) : function(y: int) : bool {
+	return function(y: int) : bool {
+		return x > y;
+	};
+};
+TEST << curry(3)(2);
