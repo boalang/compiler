@@ -156,9 +156,14 @@ public abstract class BaseTest {
 		parser.getInterpreter().setPredictionMode(PredictionMode.SLL);
 		final StartContext p = parser.start();
 
-		assertEquals("wrong number of errors", errors.length, foundErr.size());
-		for (int i = 0; i < foundErr.size(); i++)
-			assertEquals("wrong error", errors[i], foundErr.get(i));
+		if (!DEBUG)
+			assertEquals("wrong number of errors", errors.length, foundErr.size());
+		for (int i = 0; i < foundErr.size(); i++) {
+			if (DEBUG)
+				System.out.println(foundErr.get(i));
+			else
+				assertEquals("wrong error", errors[i], foundErr.get(i));
+		}
 
 		return p;
 	}

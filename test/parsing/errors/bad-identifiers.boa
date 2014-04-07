@@ -1,0 +1,4 @@
+# bad identifiers
+_invalid := 0;
+0invalid := 0;
+inval+id := 0;
