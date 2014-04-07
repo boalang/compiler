@@ -1,0 +1,11 @@
+o: output sum of int;
+o << 1;
+
+# test declaring and using sets
+s: set of int;
+add(s, 3);
+add(s, 3);
+add(s, 4);
+if (contains(s, 3))
+	remove(s, 3);
+clear(s);
