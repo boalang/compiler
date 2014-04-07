@@ -84,13 +84,15 @@ public class BoaCompiler {
 			final String errorLine = lines[line - 1];
 			System.err.println(errorLine.replaceAll("\t", "    "));
 
-			for (int i = 0; i < charPositionInLine; i++)
+			int stop = Math.min(charPositionInLine, errorLine.length());
+			for (int i = 0; i < stop; i++)
 				if (errorLine.charAt(i) == '\t')
 					System.err.print("    ");
 				else
 					System.err.print(" ");
-			for (int i = 0; i < length; i++)
-				if (errorLine.charAt(charPositionInLine + i) == '\t')
+			int stop2 = Math.min(stop + length, errorLine.length() - charPositionInLine - 1);
+			for (int i = stop; i < stop2; i++)
+				if (errorLine.charAt(i) == '\t')
 					System.err.print("^^^^");
 				else
 					System.err.print("^");
