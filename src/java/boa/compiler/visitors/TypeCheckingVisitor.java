@@ -82,11 +82,11 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 		/**
 		 * Initialize the visitor with the function's return type.
 		 * 
-		 * @param funcType the function's return type
+		 * @param retType the function's return type
 		 */
-		public void initialize(final AbstractType funcType) {
+		public void initialize(final BoaType retType) {
 			initialize();
-			retType = funcType == null ? null : funcType.type;
+			this.retType = retType;
 		}
 
 		/** {@inheritDoc} */
@@ -107,9 +107,9 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 		public void visit(final ReturnStatement n) {
 			if (n.hasExpr() && retType == null)
 				throw new TypeCheckException(n.getExpr(), "returning values not allowed by function's type");
-			if (retType != null && !n.hasExpr())
+			if (!(retType instanceof BoaAny) && !n.hasExpr())
 				throw new TypeCheckException(n, "must return a value of type '" + retType + "'");
-			if (retType != null && !retType.assigns(n.getExpr().type))
+			if (!(retType instanceof BoaAny) && !retType.assigns(n.getExpr().type))
 				throw new TypeCheckException(n.getExpr(), "incompatible types: required '" + retType + "', found '" + n.getExpr().type + "'");
 		}
 	}
@@ -930,12 +930,15 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 		n.env = st;
 
 		n.getType().accept(this, st);
-		n.type = n.getType().type;
+		if (!(n.getType().type instanceof BoaFunction))
+			throw new TypeCheckException(n.getType(), "the identifier '" + n.getType() + "' must be a function type");
+		final BoaFunction t = (BoaFunction)n.getType().type;
+		n.type = t;
 
 		n.getBody().accept(this, st);
-		returnFinder.initialize(n.getType().getType());
+		returnFinder.initialize(t.getType());
 		returnFinder.start(n.getBody());
-		if (n.getType().hasType()
+		if (!(t.getType() instanceof BoaAny)
 				&& (n.getBody().getStatementsSize() == 0 || !(n.getBody().getStatement(n.getBody().getStatementsSize() - 1) instanceof ReturnStatement)))
 			throw new TypeCheckException(n.getBody(), "missing return statement");
 	}

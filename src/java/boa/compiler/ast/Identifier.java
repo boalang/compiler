@@ -40,4 +40,8 @@ public class Identifier extends AbstractType {
 		copyFieldsTo(id);
 		return id;
 	}
+
+	public String toString() {
+		return token;
+	}
 }

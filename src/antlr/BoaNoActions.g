@@ -288,6 +288,7 @@ parenExpression
 
 functionExpression
 	: functionType block
+	| identifier   block
 	;
 
 visitorExpression

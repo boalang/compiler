@@ -486,6 +486,7 @@ functionExpression returns [FunctionExpression ast]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
 	: t=functionType b=block { $ast = new FunctionExpression($t.ast, $b.ast); }
+	| id=identifier  b=block { $ast = new FunctionExpression($id.ast, $b.ast); }
 	;
 
 visitorExpression returns [VisitorExpression ast]

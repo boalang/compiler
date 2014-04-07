@@ -1291,13 +1291,15 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		final BoaFunction funcType = ((BoaFunction) n.getType().type);
 
-		final List<Component> params = n.getType().getArgs();
+		final BoaType[] params = funcType.getFormalParameters();
 		final List<String> args = new ArrayList<String>();
 		final List<String> types = new ArrayList<String>();
 
-		for (final Component c : params) {
-			args.add(c.getIdentifier().getToken());
-			types.add(c.getType().type.toJavaType());
+		for (final BoaType c : params) {
+			if (!(c instanceof BoaName))
+				continue;
+			args.add(((BoaName)c).getId());
+			types.add(((BoaName)c).getType().toJavaType());
 		}
 
 		this.varDecl.start(n);

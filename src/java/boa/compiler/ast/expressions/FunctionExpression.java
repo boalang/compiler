@@ -2,7 +2,7 @@ package boa.compiler.ast.expressions;
 
 import boa.compiler.ast.Operand;
 import boa.compiler.ast.statements.Block;
-import boa.compiler.ast.types.FunctionType;
+import boa.compiler.ast.types.AbstractType;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
 
@@ -11,10 +11,10 @@ import boa.compiler.visitors.AbstractVisitorNoArg;
  * @author rdyer
  */
 public class FunctionExpression extends Operand {
-	protected FunctionType t;
+	protected AbstractType t;
 	protected Block body;
 
-	public FunctionType getType() {
+	public AbstractType getType() {
 		return t;
 	}
 
@@ -22,7 +22,7 @@ public class FunctionExpression extends Operand {
 		return body;
 	}
 
-	public FunctionExpression (final FunctionType t, final Block body) {
+	public FunctionExpression (final AbstractType t, final Block body) {
 		if (t != null)
 			t.setParent(this);
 		if (body != null)
