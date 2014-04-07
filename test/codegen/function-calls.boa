@@ -1,0 +1,7 @@
+# test using function results immediately
+o: output sum of int;
+
+m: map[int] of int;
+m[3] = 5;
+m[7] = 5;
+o << keys(m)[0];
