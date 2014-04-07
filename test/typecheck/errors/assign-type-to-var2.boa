@@ -1,0 +1,2 @@
+p: Project;
+p = Project; # error

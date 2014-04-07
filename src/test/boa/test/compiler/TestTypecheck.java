@@ -31,7 +31,12 @@ public class TestTypecheck extends BaseTest {
 
 	@Test
 	public void assignTypeToVar() throws IOException {
-		compile(load(badDir + "assign-type-to-var.boa"), "TODO");
+		compile(load(badDir + "assign-type-to-var.boa"), "type 'Project' is not a value and can not be assigned");
+	}
+
+	@Test
+	public void assignTypeToVar2() throws IOException {
+		compile(load(badDir + "assign-type-to-var2.boa"), "type 'Project' is not a value and can not be assigned");
 	}
 
 	@Test
