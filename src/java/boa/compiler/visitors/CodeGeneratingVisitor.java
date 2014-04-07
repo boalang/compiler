@@ -355,8 +355,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 	protected final HashMap<String, TableDescription> tables = new HashMap<String, TableDescription>();
 
-	protected boolean hasEmit = false;
-
 	protected final String name;
 
 	protected String skipIndex = "";
@@ -403,9 +401,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		if (this.tables.size() == 0)
 			throw new TypeCheckException(n, "No output variables were declared - must declare at least one output variable");
-
-		if (!hasEmit)
-			throw new TypeCheckException(n, "No emit statements detected - there will be no output generated");
 
 		for (final Entry<String, TableDescription> entry : this.tables.entrySet()) {
 			String id = entry.getKey();
@@ -864,8 +859,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	@Override
 	public void visit(final EmitStatement n) {
 		final ST st = stg.getInstanceOf("EmitStatement");
-
-		hasEmit = true;
 
 		if (n.getIndicesSize() > 0) {
 			final List<String> indices = new ArrayList<String>();

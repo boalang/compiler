@@ -186,11 +186,16 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 	protected final ReturnCheckingVisitor returnFinder = new ReturnCheckingVisitor();
 	protected final CallFindingVisitor callFinder = new CallFindingVisitor();
 
+	protected boolean hasEmit = false;
+
 	/** {@inheritDoc} */
 	@Override
 	public void visit(Start n, SymbolTable env) {
 		n.env = env;
 		super.visit(n, env);
+
+		if (!hasEmit)
+			throw new TypeCheckException(n, "No emit statements detected - there will be no output generated");
 	}
 
 	/** {@inheritDoc} */
@@ -550,6 +555,8 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final EmitStatement n, final SymbolTable env) {
+		hasEmit = true;
+
 		n.env = env;
 
 		n.getId().accept(this, env);
