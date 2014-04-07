@@ -9,7 +9,6 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public class TestCodegen extends BaseTest {
 	final private static String rootDir = "test/codegen/";
-	final private static String badDir = rootDir + "errors/";
 
 	@Test
 	public void curry() throws IOException {
