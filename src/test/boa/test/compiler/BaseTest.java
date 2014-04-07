@@ -41,6 +41,7 @@ import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.atn.PredictionMode;
 
+import org.junit.Before;
 import org.junit.BeforeClass;
 
 import org.stringtemplate.v4.ST;
@@ -64,8 +65,13 @@ public abstract class BaseTest {
 	protected static boolean DEBUG = false;
 
 	@BeforeClass
-	public static void setUp() throws IOException {
+	public static void initializeSymbols() throws IOException {
 		SymbolTable.initialize(new ArrayList<URL>());
+	}
+
+	@Before
+	public void disableDebug() throws IOException {
+		DEBUG = false;
 	}
 
 
