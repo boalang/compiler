@@ -1,7 +1,9 @@
 TEST: output collection of bool;
 
-curry := function(x: int) : function(y: int) : bool {
-	return function(y: int) : bool {
+type f = function(y: int) : bool;
+
+curry := function(x: int) : f {
+	return f {
 		return x > y;
 	};
 };
