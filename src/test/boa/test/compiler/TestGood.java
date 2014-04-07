@@ -18,7 +18,7 @@ public class TestGood extends BaseTest {
 	public static List<String[]> data() {
 		final List<String[]> files = new ArrayList<String[]>();
 		for (final File f : new File(goodDir).listFiles())
-			if (!f.isDirectory())
+			if (!f.isDirectory() && f.getName().endsWith(".boa"))
 				files.add(new String[] { f.getPath(), null });
 		return files;
 	}
@@ -27,6 +27,7 @@ public class TestGood extends BaseTest {
 	public TestGood(final String fileName, final String ignored) {
 		this.fileName = fileName;
 	}
+
 
 	// test a bunch of known good files
 	@Test
