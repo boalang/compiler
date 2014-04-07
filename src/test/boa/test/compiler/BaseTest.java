@@ -31,6 +31,8 @@ import org.stringtemplate.v4.ST;
 
 import boa.compiler.SymbolTable;
 import boa.compiler.ast.Start;
+import boa.compiler.transforms.LocalAggregationTransformer;
+import boa.compiler.transforms.VisitorOptimizingTransformer;
 import boa.compiler.visitors.AbstractCodeGeneratingVisitor;
 import boa.compiler.visitors.CodeGeneratingVisitor;
 import boa.compiler.visitors.TypeCheckingVisitor;
@@ -160,11 +162,17 @@ public abstract class BaseTest {
 			throw new IOException("unable to mkdir " + outputSrcDir);
 		final File outputFile = new File(outputSrcDir, "Test.java");
 
+		CodeGeneratingVisitor.combineTableStrings.clear();
+		CodeGeneratingVisitor.reduceTableStrings.clear();
+
 		final List<String> jobnames = new ArrayList<String>();
 		final List<String> jobs = new ArrayList<String>();
 
 		try {
 			new TypeCheckingVisitor().start(p, new SymbolTable());
+			new LocalAggregationTransformer().start(p);
+			new VisitorOptimizingTransformer().start(p);
+
 			final CodeGeneratingVisitor cg = new CodeGeneratingVisitor("1");
 			cg.start(p);
 			jobs.add(cg.getCode());
