@@ -1,0 +1,5 @@
+# time
+0t                                              # 0 microseconds
+1000000T                                        # 1 second
+T"Wed Feb  4 16:26:41 PST 2004"                 # date/time string with short tz
+T"Tue Jun  5 10:43:07 America/Los_Angeles 2007" # date/time string with long tz

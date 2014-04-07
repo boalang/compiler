@@ -84,6 +84,20 @@ public class TestLexer extends BaseTest {
 	}
 
 	@Test
+	public void identifierLiterals() throws IOException {
+		lex(load(rootDir + "identifier-lit.boa"),
+			new int[] { BoaLexer.Identifier, BoaLexer.Identifier, BoaLexer.Identifier, BoaLexer.Identifier, BoaLexer.EOF },
+			new String[] { "valid_", "valid0", "valid0_", "Valid_0_valid", "<EOF>" });
+	}
+
+	@Test
+	public void timeLiterals() throws IOException {
+		lex(load(rootDir + "time-lit.boa"),
+			new int[] { BoaLexer.TimeLiteral, BoaLexer.TimeLiteral, BoaLexer.TimeLiteral, BoaLexer.TimeLiteral, BoaLexer.EOF },
+			new String[] { "0t", "1000000T", "T\"Wed Feb  4 16:26:41 PST 2004\"", "T\"Tue Jun  5 10:43:07 America/Los_Angeles 2007\"", "<EOF>" });
+	}
+
+	@Test
 	public void badComment() throws IOException {
 		lex(load(badDir + "bad-comment.boa"),
 			new int[] { BoaLexer.Identifier, BoaLexer.Identifier, BoaLexer.EOF },
