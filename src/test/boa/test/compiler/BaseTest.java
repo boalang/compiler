@@ -61,6 +61,8 @@ import boa.parser.BoaParser.StartContext;
  * @author rdyer
  */
 public abstract class BaseTest {
+	protected static boolean DEBUG = false;
+
 	@BeforeClass
 	public static void setUp() throws IOException {
 		SymbolTable.initialize(new ArrayList<URL>());
@@ -93,16 +95,34 @@ public abstract class BaseTest {
 		final CommonTokenStream tokens = new CommonTokenStream(lexer);
 		tokens.fill();
 
-		assertEquals("ids != strings", ids.length, strings.length);
+		if (ids.length > 0 && strings.length > 0)
+			assertEquals("ids != strings", ids.length, strings.length);
+
 		if (ids.length > 0) {
 			final List<Token> t = tokens.getTokens();
-			assertEquals("wrong number of tokens", ids.length, t.size());
-
-			for (int i = 0; i < t.size(); i++) {
-				final Token token = t.get(i);
-				assertEquals("wrong token type", ids[i], token.getType());
-				assertEquals("wrong token type", strings[i], token.getText());
+			if (DEBUG) {
+				for (int i = 0; i < t.size(); i++) {
+					final Token token = t.get(i);
+					System.out.print(token.getType() + ", ");
+				}
+				System.out.println();
+				for (int i = 0; i < t.size(); i++) {
+					final Token token = t.get(i);
+					System.out.print(token.getText() + ", ");
+				}
+				System.out.println();
+				System.out.println();
 			}
+			assertEquals("wrong number of tokens", ids.length, t.size());
+			for (int i = 0; i < t.size(); i++)
+				assertEquals("wrong token type", ids[i], t.get(i).getType());
+		}
+
+		if (strings.length > 0) {
+			final List<Token> t = tokens.getTokens();
+			assertEquals("wrong number of tokens", strings.length, t.size());
+			for (int i = 0; i < t.size(); i++)
+				assertEquals("wrong token type", strings[i], t.get(i).getText());
 		}
 
 		assertEquals("wrong number of errors: " + input, errors.length, foundErr.size());

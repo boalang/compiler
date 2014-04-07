@@ -1,0 +1,31 @@
+# integer num
+7
+94
+50
+-7
+-94
+-50
+
+# hex num
+0x9aF
+0X9Af
+0x9
+0X9
+0x000
+-0x9aF
+-0X9Af
+-0x9
+-0X9
+-0x000
+
+# octal num
+0753
+0
+-0753
+-0
+
+# binary num
+0b10
+0B10
+0b0
+0B1
