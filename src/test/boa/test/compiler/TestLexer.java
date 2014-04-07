@@ -69,6 +69,21 @@ public class TestLexer extends BaseTest {
 	}
 
 	@Test
+	public void stringLiterals() throws IOException {
+
+		lex(load(rootDir + "string-lit.boa"),
+			new int[] { BoaLexer.StringLiteral, BoaLexer.StringLiteral, BoaLexer.StringLiteral, BoaLexer.StringLiteral, BoaLexer.StringLiteral, BoaLexer.StringLiteral, BoaLexer.StringLiteral, BoaLexer.StringLiteral, BoaLexer.StringLiteral, BoaLexer.StringLiteral, BoaLexer.StringLiteral, BoaLexer.StringLiteral, BoaLexer.StringLiteral, BoaLexer.EOF },
+			new String[] { "\"\"", "\"	 !@#$%^&*()-_=+[]{};:',.<>/?|`~1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ\"", "\"\\r\"", "\"\\n\"", "\"\\b\"", "\"\\t\"", "\"\\f\"", "\"\\\"\"", "\"\\'\"", "\"\\\\\"", "\"\\7\"", "\"\\77\"", "\"\\77\"", "<EOF>" });
+	}
+
+	@Test
+	public void regexLiterals() throws IOException {
+		lex(load(rootDir + "regex-lit.boa"),
+			new int[] { BoaLexer.RegexLiteral, BoaLexer.RegexLiteral, BoaLexer.EOF },
+			new String[] { "``", "`\\n\"\\r\\\\\\	 !@#$%^&*()-_=+[]{};:',.<>/?|~1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ`", "<EOF>" });
+	}
+
+	@Test
 	public void badComment() throws IOException {
 		lex(load(badDir + "bad-comment.boa"),
 			new int[] { BoaLexer.Identifier, BoaLexer.Identifier, BoaLexer.EOF },
