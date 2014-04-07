@@ -62,6 +62,13 @@ public class TestLexer extends BaseTest {
 	}
 
 	@Test
+	public void charLiterals() throws IOException {
+		lex(load(rootDir + "char-lit.boa"),
+			new int[] { BoaLexer.CharacterLiteral, BoaLexer.CharacterLiteral, BoaLexer.CharacterLiteral, BoaLexer.CharacterLiteral, BoaLexer.CharacterLiteral, BoaLexer.CharacterLiteral, BoaLexer.CharacterLiteral, BoaLexer.CharacterLiteral, BoaLexer.CharacterLiteral, BoaLexer.CharacterLiteral, BoaLexer.CharacterLiteral, BoaLexer.CharacterLiteral, BoaLexer.CharacterLiteral, BoaLexer.CharacterLiteral, BoaLexer.CharacterLiteral, BoaLexer.EOF },
+			new String[] { "'a'", "'\\n'", "'\\r'", "'\\t'", "'\\b'", "'\\f'", "'	'", "' '", "'\\\\'", "'\\''", "'\"'", "'\\\"'", "'\\0'", "'\\00'", "'\\000'", "<EOF>" });
+	}
+
+	@Test
 	public void badComment() throws IOException {
 		lex(load(badDir + "bad-comment.boa"),
 			new int[] { BoaLexer.Identifier, BoaLexer.Identifier, BoaLexer.EOF },
