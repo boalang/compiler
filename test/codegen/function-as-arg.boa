@@ -1,0 +1,11 @@
+TEST: output collection of int;
+
+imax := function(a: array of int, cmp: function(l: int, r: int) : int) : int {
+	v := a[0];
+	for (i := 1; i < len(a); i++)
+		if (cmp(v, a[i]) < 0)
+			v = a[i];
+	return v;
+};
+
+TEST << imax({1, 2}, function(l: int, r: int) : int { return l - r; });
