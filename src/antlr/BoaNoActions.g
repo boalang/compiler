@@ -469,7 +469,7 @@ IntegerLiteral
 	: [-]? DecimalNumeral
 	| [-]? HexNumeral 
 	| [-]? OctalNumeral 
-	| [-]? BinaryNumeral 
+	| BinaryNumeral 
 	;
 
 fragment
