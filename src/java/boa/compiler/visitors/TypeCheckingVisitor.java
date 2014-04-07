@@ -494,9 +494,9 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 		if (n.getLhs().getOperand().type instanceof BoaProtoTuple && n.getLhs().getOpsSize() > 0)
 			throw new TypeCheckException(n.getLhs(), "assignment not allowed to input-derived type '" + n.getLhs().getOperand().type + "'");
 
-		final Operand op = n.getRhs().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
-		if (op instanceof Identifier && env.hasType(((Identifier)op).getToken()))
-			throw new TypeCheckException(n.getRhs(), "type '" + op.type + "' is not a value and can not be assigned");
+		final Factor f = n.getRhs().getLhs().getLhs().getLhs().getLhs().getLhs();
+		if (f.getOperand() instanceof Identifier && f.getOpsSize() == 0 && env.hasType(((Identifier)f.getOperand()).getToken()))
+			throw new TypeCheckException(n.getRhs(), "type '" + f.getOperand().type + "' is not a value and can not be assigned");
 
 		n.type = n.getLhs().type;
 	}
@@ -804,9 +804,9 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 			n.getInitializer().accept(this, env);
 			rhs = n.getInitializer().type;
 
-			final Operand op = n.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
-			if (op instanceof Identifier && env.hasType(((Identifier)op).getToken()))
-				throw new TypeCheckException(n.getInitializer(), "type '" + op.type + "' is not a value and can not be assigned");
+			final Factor f = n.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs();
+			if (f.getOperand() instanceof Identifier && f.getOpsSize() == 0 && env.hasType(((Identifier)f.getOperand()).getToken()))
+				throw new TypeCheckException(n.getInitializer(), "type '" + f.getOperand().type + "' is not a value and can not be assigned");
 
 			// if type is a function but rhs isnt a function decl,
 			// then its a call so the lhs type is the return type
