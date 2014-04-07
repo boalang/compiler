@@ -50,14 +50,6 @@ public class TestLexer extends BaseTest {
 
 	///////////////////////////////////////////
 
-	private void expectErrors(final String input, final String[] strings) throws IOException {
-		expectTokens(input, new int[0], new String[0], strings);
-	}
-
-	private void expectNoErrors(final String input) throws IOException {
-		expectTokens(input, new int[0], new String[0], new String[0]);
-	}
-
 	private void expectTokens(final String input, final int[] ids, final String[] strings) throws IOException {
 		expectTokens(input, ids, strings, new String[0]);
 	}

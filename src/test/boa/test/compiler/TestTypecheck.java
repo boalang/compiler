@@ -1,25 +1,15 @@
 package boa.test.compiler;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.Assert.*;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
-import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.Recognizer;
-import org.antlr.v4.runtime.RecognitionException;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.atn.PredictionMode;
 
 import boa.compiler.SymbolTable;
@@ -33,13 +23,6 @@ import boa.parser.BoaParser;
 public class TestTypecheck extends BaseTest {
 	final private static String rootDir = "test/typecheck/";
 	final private static String badDir = rootDir + "errors/";
-
-	@BeforeClass
-	@SuppressWarnings("unchecked")
-	public static void setUp() throws IOException {
-		SymbolTable.initialize(new ArrayList());
-	}
-
 
 	@Test
 	public void cout() throws IOException {

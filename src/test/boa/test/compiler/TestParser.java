@@ -1,8 +1,5 @@
 package boa.test.compiler;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -18,7 +15,6 @@ import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.RecognitionException;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.atn.PredictionMode;
 
 import boa.parser.BoaLexer;
@@ -47,14 +43,6 @@ public class TestParser extends BaseTest {
 
 	private void expectErrors(final String input, final String[] strings) throws IOException {
 		expectTree(input, strings);
-	}
-
-	private void expectNoErrors(final String input) throws IOException {
-		expectTree(input, new String[0]);
-	}
-
-	private void expectTree(final String input) throws IOException {
-		expectTree(input, new String[0]);
 	}
 
 	private void expectTree(final String input, final String[] errors) throws IOException {
