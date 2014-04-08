@@ -28,10 +28,16 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
 import javax.tools.ToolProvider;
+import javax.tools.JavaCompiler;
+import javax.tools.JavaFileObject;
+import javax.tools.Diagnostic;
+import javax.tools.DiagnosticCollector;
+import javax.tools.StandardJavaFileManager;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.BaseErrorListener;
@@ -245,15 +251,25 @@ public abstract class BaseTest {
 				o.close();
 			}
 
-			if (ToolProvider.getSystemJavaCompiler().run(null, null, null, "-cp", System.getProperty("java.class.path"), outputFile.toString()) != 0)
-				throw new RuntimeException("compile failed");
+			final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+			final DiagnosticCollector<JavaFileObject> diagnostics = new DiagnosticCollector<JavaFileObject>();
+			final StandardJavaFileManager fileManager = compiler.getStandardFileManager(null, null, null);
+			final Iterable<? extends JavaFileObject> compilationUnits = fileManager.getJavaFileObjectsFromFiles(Arrays.asList(new File[] { outputFile }));
+
+			if (!compiler.getTask(null, fileManager, diagnostics, Arrays.asList(new String[] { "-cp", System.getProperty("java.class.path") }), null, compilationUnits).call())
+				for (final Diagnostic<? extends JavaFileObject> diagnostic : diagnostics.getDiagnostics())
+					throw new RuntimeException("Error on line " + diagnostic.getLineNumber() + ": " + diagnostic.getMessage(null));
 
 			if (error != null)
-				fail("expected error: " + error);
+				fail("expected to see exception: " + error);
 		} catch (final Exception e) {
-			if (error == null)
-				fail("found unexpected error: " + e.getMessage());
-			else
+			if (error == null) {
+				if (e.getMessage() == null) {
+					e.printStackTrace();
+					fail("unexpected exception");
+				} else
+					fail("found unexpected exception: " + e.getMessage());
+			} else
 				assertEquals(error, e.getMessage());
 		}
 
