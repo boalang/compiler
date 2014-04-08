@@ -18,6 +18,9 @@
 		<fileset dir="lib">
 			<include name="**/*.jar"/>
 		</fileset>
+		<fileset dir="rtlib">
+			<include name="**/*.jar"/>
+		</fileset>
 		<dirset dir="build/classes">
 			<include name="**"/>
 		</dirset>
