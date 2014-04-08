@@ -261,15 +261,12 @@
 					<include name="templates/" />
 				</patternset>
 			</fileset>
-			<zipfileset excludes="META-INF/" src="lib/antlr-runtime-4.2.jar" />
-			<zipfileset excludes="META-INF/" src="lib/commons-cli-1.2.jar" />
-			<zipfileset excludes="META-INF/" src="lib/commons-configuration-1.6.jar" />
-			<zipfileset excludes="META-INF/" src="lib/commons-lang-2.4.jar" />
-			<zipfileset excludes="META-INF/" src="lib/commons-logging-1.1.1.jar" />
-			<zipfileset excludes="META-INF/" src="lib/log4j-1.2.15.jar" />
-			<zipfileset excludes="META-INF/" src="lib/protobuf-java-2.5.0.jar" />
-			<zipfileset excludes="META-INF/" src="lib/scannotation-1.0.3.jar" />
-			<zipfileset excludes="META-INF/" src="lib/ST-4.0.8.jar" />
+			<zipfileset excludes="META-INF/" src="rtlib/antlr-runtime-4.2.jar" />
+			<zipfileset excludes="META-INF/" src="rtlib/commons-cli-1.2.jar" />
+			<zipfileset excludes="META-INF/" src="rtlib/log4j-1.2.15.jar" />
+			<zipfileset excludes="META-INF/" src="rtlib/protobuf-java-2.5.0.jar" />
+			<zipfileset excludes="META-INF/" src="rtlib/scannotation-1.0.3.jar" />
+			<zipfileset excludes="META-INF/" src="rtlib/ST-4.0.8.jar" />
 		</jar>
 	</target>
 
