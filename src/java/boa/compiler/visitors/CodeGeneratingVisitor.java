@@ -390,7 +390,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Program n) {
-		final SymbolTable argu = n.env;
 		final ST st = stg.getInstanceOf("Job");
 
 		st.add("name", this.name);
@@ -433,7 +432,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 			final StringBuilder src = new StringBuilder();
 			boolean combines = false;
-			for (final Class<?> c : argu.getAggregators(description.getAggregator(), type)) {
+			for (final Class<?> c : n.env.getAggregators(description.getAggregator(), type)) {
 				src.append(", new " + c.getCanonicalName() + "(" + parameters + ")");
 				try {
 					final AggregatorSpec annotation = c.getAnnotation(AggregatorSpec.class);
@@ -455,12 +454,11 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Call n) {
-		final SymbolTable argu = n.env;
 		final ST st = stg.getInstanceOf("Call");
 
-		this.idFinder.start(argu.getOperand());
+		this.idFinder.start(n.env.getOperand());
 		final String funcName = this.idFinder.getNames().toArray()[0].toString();
-		final BoaFunction f = argu.getFunction(funcName, check(n));
+		final BoaFunction f = n.env.getFunction(funcName, check(n));
 
 		if (f.hasMacro()) {
 			final List<String> parts = new ArrayList<String>();
@@ -485,7 +483,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			if (f.hasName()) {
 				st.add("operand", f.getName());
 			} else {
-				argu.getOperand().accept(this);
+				n.env.getOperand().accept(this);
 				st.add("operand", code.removeLast() + ".invoke");
 			}
 
@@ -649,11 +647,10 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Identifier n) {
-		final SymbolTable argu = n.env;
 		final String id = n.getToken();
 
-		if (argu.hasType(id)) {
-			if (argu.getNeedsBoxing())
+		if (n.env.hasType(id)) {
+			if (n.env.getNeedsBoxing())
 				code.add(SymbolTable.getType(id).toBoxedJavaType());
 			else
 				code.add(SymbolTable.getType(id).toJavaType());
@@ -678,18 +675,17 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			return;
 		}
 
-		final SymbolTable argu = n.env;
 		final ST st = stg.getInstanceOf("Index");
 
-		final BoaType t = argu.getOperandType();
+		final BoaType t = n.env.getOperandType();
 		if (t instanceof BoaMap) {
-			argu.setOperandType(((BoaMap) t).getType());
+			n.env.setOperandType(((BoaMap) t).getType());
 			st.add("map", true);
 		} else if (t instanceof BoaProtoList) {
-			argu.setOperandType(((BoaProtoList) t).getType());
+			n.env.setOperandType(((BoaProtoList) t).getType());
 			st.add("map", true);
 		} else if (t instanceof BoaArray) {
-			argu.setOperandType(((BoaArray) t).getType());
+			n.env.setOperandType(((BoaArray) t).getType());
 		}
 
 		st.add("operand", "");
@@ -1113,16 +1109,15 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			return;
 		}
 
-		final SymbolTable argu = n.env;
-		final BoaType type = argu.get(n.getId().getToken());
+		final BoaType type = n.env.get(n.getId().getToken());
 
 		final BoaType lhsType;
 		if (n.hasType()) {
-			argu.setId(n.getId().getToken());
+			n.env.setId(n.getId().getToken());
 			lhsType = n.getType().type;
 			n.getType().accept(this);
 			code.removeLast();
-			argu.setId(null);
+			n.env.setId(null);
 		} else {
 			lhsType = null;
 		}
@@ -1150,7 +1145,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			return;
 		}
 
-		argu.setOperandType(type);
+		n.env.setOperandType(type);
 		BoaType t = n.getInitializer().type;
 
 		if (t instanceof BoaFunction) {
@@ -1164,7 +1159,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		String src = code.removeLast();
 
 		if (!type.assigns(t)) {
-			final BoaFunction f = argu.getCast(t, type);
+			final BoaFunction f = n.env.getCast(t, type);
 
 			if (f.hasName())
 				src = f.getName() + "(" + src + ")";
@@ -1181,7 +1176,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	@Override
 	public void visit(final VisitStatement n) {
 		final ST st = stg.getInstanceOf("VisitClause");
-		final SymbolTable argu = n.env;
 
 		final boolean isBefore = n.isBefore();
 
@@ -1195,14 +1189,14 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			final Component c = n.getComponent();
 			final String id = c.getIdentifier().getToken();
 
-			argu.set(id, c.getType().type);
+			n.env.set(id, c.getType().type);
 			types.add(c.getType().type.toJavaType());
 			ids.add("___" + id);
 
 			st.add("name", isBefore ? "preVisit" : "postVisit");
 		} else {
 			for (final Identifier id : n.getIdList()) {
-				types.add(argu.get(id.getToken()).toJavaType());
+				types.add(n.env.get(id.getToken()).toJavaType());
 				ids.add("__UNUSED");
 			}
 
