@@ -432,7 +432,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 		n.env = env;
 		n.getExpr1().accept(this, env);
 		n.getExpr2().accept(this, env);
-		n.type = new BoaMap(n.getExpr1().type, n.getExpr2().type);
+		n.type = new BoaMap(n.getExpr2().type, n.getExpr1().type);
 	}
 
 	/** {@inheritDoc} */
