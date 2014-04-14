@@ -711,22 +711,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 	/** {@inheritDoc} */
 	@Override
-	public void visit(final Pair n) {
-		final ST st = stg.getInstanceOf("Pair");
-
-		st.add("map", n.env.getId());
-
-		n.getExpr1().accept(this);
-		st.add("key", code.removeLast());
-
-		n.getExpr2().accept(this);
-		st.add("value", code.removeLast());
-
-		code.add(st.render());
-	}
-
-	/** {@inheritDoc} */
-	@Override
 	public void visit(final Selector n) {
 		try {
 			BoaType opType = n.env.getOperandType();
