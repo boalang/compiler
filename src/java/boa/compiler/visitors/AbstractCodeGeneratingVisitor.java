@@ -68,8 +68,8 @@ public abstract class AbstractCodeGeneratingVisitor extends AbstractVisitorNoArg
 		final ST st = stg.getInstanceOf("Pair");
 
 		st.add("map", n.env.getId());
-		st.add("key", code.pop());
-		st.add("value", code.pop());
+		st.add("key", code.removeLast());
+		st.add("value", code.removeLast());
 
 		code.add(st.render());
 	}

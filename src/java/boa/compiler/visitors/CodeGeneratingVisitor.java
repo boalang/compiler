@@ -242,7 +242,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				if (s.length() > 0)
 					s += "\n";
 				p.accept(this);
-				s += code.pop();
+				s += code.removeLast();
 			}
 
 			code.add(s);
