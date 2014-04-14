@@ -60,20 +60,6 @@ public abstract class AbstractCodeGeneratingVisitor extends AbstractVisitorNoArg
 		code.clear();
 	}
 
-	/** {@inheritDoc} */
-	@Override
-	public void visit(final Pair n) {
-		super.visit(n);
-
-		final ST st = stg.getInstanceOf("Pair");
-
-		st.add("map", n.env.getId());
-		st.add("key", code.removeLast());
-		st.add("value", code.removeLast());
-
-		code.add(st.render());
-	}
-
 	protected void visit(final List<? extends Node> nl) {
 		String s = "";
 

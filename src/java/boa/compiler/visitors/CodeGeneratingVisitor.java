@@ -178,11 +178,11 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		/** {@inheritDoc} */
 		@Override
 		public void visit(final FunctionType n) {
-			super.visit(n);
-
 			final String name = ((BoaFunction)n.type).toJavaType();
 			if (funcs.contains(name))
 				return;
+
+			super.visit(n);
 
 			funcs.add(name);
 
@@ -228,6 +228,20 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			n.env.setId("___" + n.getId().getToken());
 			n.getInitializer().accept(this);
 			n.env.setId(null);
+		}
+
+		/** {@inheritDoc} */
+		@Override
+		public void visit(final Pair n) {
+			super.visit(n);
+
+			final ST st = stg.getInstanceOf("Pair");
+
+			st.add("map", n.env.getId());
+			st.add("value", code.removeLast());
+			st.add("key", code.removeLast());
+
+			code.add(st.render());
 		}
 
 		/** {@inheritDoc} */
@@ -568,10 +582,16 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		final ST st = stg.getInstanceOf("Composite");
 
 		if (n.getPairsSize() > 0) {
-			visit(n.getPairs());
-			st.add("pairlist", code.removeLast());
-		}
-		if (n.getExprsSize() > 0) {
+			String s = "\t{\n";
+			for (final Pair p : n.getPairs()) {
+				visit(p);
+				s += "\t\t" + code.removeLast() + "\n";
+			}
+			s += "\t}";
+
+			st.add("exprlist", s);
+			st.add("type", n.type.toBoxedJavaType() + "()");
+		} else if (n.getExprsSize() > 0) {
 			// FIXME rdyer
 			BoaType t = n.type;
 //			BoaType t = ((ExprList) nodeChoice.choice).type;
@@ -583,6 +603,20 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			st.add("exprlist", code.removeLast());
 			st.add("type", t.toJavaType());
 		}
+
+		code.add(st.render());
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final Pair n) {
+		super.visit(n);
+
+		final ST st = stg.getInstanceOf("Pair");
+
+		st.add("map", n.env.getId());
+		st.add("value", code.removeLast());
+		st.add("key", code.removeLast());
 
 		code.add(st.render());
 	}

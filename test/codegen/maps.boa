@@ -2,9 +2,9 @@ o: output sum of int;
 o << 1;
 
 # test declaring and using maps
-m: map[string] of int;
-m["hi"] = lookup(m, "3", 3);
-m[string(3)] = m["hi"];
+m: map[string] of int = { "1" : 1, "2" : 2 };
+m["2"] = lookup(m, "3", 3);
+m[string(3)] = m["hi"]; # undefined index -> RTE, not static error
 clear(m);
 
 m2: map[string] of string;
