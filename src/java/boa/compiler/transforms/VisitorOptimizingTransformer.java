@@ -45,6 +45,8 @@ public class VisitorOptimizingTransformer extends AbstractVisitorNoArg {
 		astTypes.addAll(new ASTRootProtoTuple().reachableTypes());
 	}
 
+	protected final static VariableRenameTransformer renamer = new VariableRenameTransformer();
+
 	protected Set<Class<? extends BoaType>> types;
 	protected final Stack<Set<Class<? extends BoaType>>> typeStack = new Stack<Set<Class<? extends BoaType>>>();
 
@@ -57,7 +59,7 @@ public class VisitorOptimizingTransformer extends AbstractVisitorNoArg {
 	/** {@inheritDoc} */
 	@Override
 	protected void initialize() {
-		types = null;
+		types = new HashSet<Class<? extends BoaType>>();
 		beforeChangedFile = afterChangedFile = null;
 
 		typeStack.clear();
@@ -87,14 +89,16 @@ public class VisitorOptimizingTransformer extends AbstractVisitorNoArg {
 					id = afterChangedFile.getComponent().getIdentifier().getToken();
 				else
 					id = "_n";
+
 				beforeChangedFile = new VisitStatement(true, new Component(new Identifier(id), new Identifier("ChangedFile")), new Block());
 				beforeChangedFile.env = n.env;
 				beforeChangedFile.getComponent().env = n.env;
 				beforeChangedFile.getComponent().getType().type = new ChangedFileProtoTuple();
+
 				n.getBody().addStatement(beforeChangedFile);
 			} else if (afterChangedFile != null) {
-				new VariableRenameTransformer().start(beforeChangedFile);
-				new VariableRenameTransformer().start(afterChangedFile);
+				renamer.start(beforeChangedFile);
+				renamer.start(afterChangedFile);
 			}
 
 			// if the before's last statement isnt a stop, merge in the after and add a stop

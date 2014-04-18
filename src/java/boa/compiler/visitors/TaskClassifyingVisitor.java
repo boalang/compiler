@@ -29,7 +29,7 @@ import boa.types.BoaType;
 import boa.types.proto.ASTRootProtoTuple;
 
 /**
- * Analyze the code to see if it is simple (no visitors).
+ * Analyze the code to see if it is simple or complex.
  * 
  * @author rdyer
  */
@@ -40,7 +40,7 @@ public class TaskClassifyingVisitor extends AbstractVisitorNoArg {
 		astTypes.addAll(new ASTRootProtoTuple().reachableTypes());
 	}
 
-	protected Set<Class<? extends BoaType>> types;
+	protected final Set<Class<? extends BoaType>> types = new HashSet<Class<? extends BoaType>>();
 
 	private boolean complex = false;
 
@@ -52,7 +52,7 @@ public class TaskClassifyingVisitor extends AbstractVisitorNoArg {
 	@Override
 	protected void initialize() {
 		complex = false;
-		types = new HashSet<Class<? extends BoaType>>();
+		types.clear();
 	}
 
 	/** {@inheritDoc} */
@@ -73,6 +73,8 @@ public class TaskClassifyingVisitor extends AbstractVisitorNoArg {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final VisitStatement n) {
+		super.visit(n);
+
 		if (n.hasWildcard())
 			complex = true;
 		else if (n.hasComponent())
@@ -80,8 +82,6 @@ public class TaskClassifyingVisitor extends AbstractVisitorNoArg {
 		else
 			for (final Identifier id : n.getIdList())
 				types.add(id.type.getClass());
-
-		super.visit(n);
 	}
 
 	/** {@inheritDoc} */
