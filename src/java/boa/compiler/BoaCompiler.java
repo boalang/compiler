@@ -257,8 +257,7 @@ public class BoaCompiler {
 					// if a job has no visitor, let it have its own method
 					// also let jobs have own methods if visitor merging is disabled
 					if (!simpleVisitor.isComplex() || cl.hasOption("nv") || inputFiles.size() == 1) {
-						if (!simpleVisitor.isComplex())
-							new VisitorOptimizingTransformer().start(p);
+						new VisitorOptimizingTransformer().start(p);
 
 						final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(jobName);
 						cg.start(p);
