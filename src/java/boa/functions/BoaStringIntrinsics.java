@@ -89,7 +89,7 @@ public class BoaStringIntrinsics {
 	 */
 	@FunctionSpec(name = "strfind", returnType = "int", formalParameters = { "string", "string" })
 	public static long indexOf(final String p, final String s) {
-		return s.indexOf(p, 0);
+		return s.indexOf(p);
 	}
 
 	/**
@@ -109,7 +109,7 @@ public class BoaStringIntrinsics {
 	 */
 	@FunctionSpec(name = "strrfind", returnType = "int", formalParameters = { "string", "string" })
 	public static long lastIndexOf(final String p, final String s) {
-		return s.lastIndexOf(p, 0);
+		return s.lastIndexOf(p);
 	}
 
 	/**
