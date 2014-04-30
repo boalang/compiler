@@ -242,6 +242,7 @@
 			<fileset dir="build/classes">
 				<patternset>
 					<include name="boa/" />
+					<include name="com/" />
 					<exclude name="**/compiler/" />
 					<exclude name="**/parser/" />
 					<exclude name="**/boa/types/proto/" />

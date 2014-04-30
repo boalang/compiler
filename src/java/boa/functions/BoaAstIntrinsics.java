@@ -56,7 +56,7 @@ public class BoaAstIntrinsics {
 		GETS_FAIL_BADLOC,
 	};
 
-	@FunctionSpec(name = "string", returnType = "string", formalParameters = { "ChangedFile" })
+	@FunctionSpec(name = "url", returnType = "string", formalParameters = { "ChangedFile" })
 	public static String changedfileToString(final ChangedFile f) {
 		return f.getKey() + "!!" + f.getName();
 	}
