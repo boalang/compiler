@@ -1,4 +1,4 @@
-TEST: output collection of bool;
+TEST: output collection of string;
 
 type f = function(y: int) : bool;
 
@@ -7,4 +7,5 @@ curry := function(x: int) : f {
 		return x > y;
 	};
 };
-TEST << curry(3)(2);
+
+if (curry(3)(2)) TEST << "OK";
