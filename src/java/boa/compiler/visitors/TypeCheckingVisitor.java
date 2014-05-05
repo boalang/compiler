@@ -120,6 +120,12 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 
 		/** {@inheritDoc} */
 		@Override
+		public void visit(final FunctionExpression n) {
+			// dont nest
+		}
+
+		/** {@inheritDoc} */
+		@Override
 		public void visit(final ReturnStatement n) {
 			if (n.hasExpr() && retType == null)
 				throw new TypeCheckException(n.getExpr(), "returning values not allowed by function's type");

@@ -1,0 +1,10 @@
+outer := function () : int {
+	inner := function () : bool {
+		return true;
+	};
+
+	return 1;
+};
+
+TEST: output collection of string;
+TEST << "OK";
