@@ -30,13 +30,24 @@ public class BoaProtoMap extends BoaMap {
 	}
 
 	/**
+	 * Returns the {@link Class} representing the Java enumeration of this type.
+	 */
+	protected Class getEnumClass() {
+		return getClass();
+	}
+
+	/**
 	 * Returns if this protobuf enum has the specified attribute.
 	 * 
 	 * @param s the attribute to check for
 	 * @return true if it has the attribute s
 	 */
 	public boolean hasAttribute(final String s) {
-		throw new RuntimeException("proto map must override hasAttribute()");
+		try {
+			return getEnumClass().getDeclaredField(s).getType() == getEnumClass();
+		} catch (final Exception e) {
+			return false;
+		}
 	}
 
 	/** {@inheritDoc} */
@@ -49,5 +60,18 @@ public class BoaProtoMap extends BoaMap {
 	@Override
 	public boolean compares(BoaType obj) {
 		return this.getClass() == obj.getClass();
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String toJavaType() {
+		return getEnumClass().getName().replace('$', '.');
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String toString() {
+		final String s = getEnumClass().getName();
+		return s.substring(s.lastIndexOf("$") + 1);
 	}
 }
