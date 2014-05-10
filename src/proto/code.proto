@@ -8,12 +8,16 @@ option optimize_for = SPEED;
 message CodeRepository {
 	required string url = 1;
 	enum RepositoryKind {
+		option allow_alias = true;
 		UNKNOWN = 1;
 		SVN = 2;
+		SUBVERSION = 2;
 		CVS = 3;
 		GIT = 4;
 		HG = 5;
+		MERCURIAL = 5;
 		BZR = 6;
+		BAZAAR = 6;
 	}
 	required RepositoryKind kind = 2;
 	repeated Revision revisions = 3;

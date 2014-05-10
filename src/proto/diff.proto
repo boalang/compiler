@@ -7,14 +7,22 @@ option optimize_for = SPEED;
 
 message ChangedFile {
 	enum FileKind {
+		option allow_alias = true;
 		UNKNOWN = 1;
+
 		BINARY = 2;
+
 		TEXT = 3;
 		XML = 4;
+
 		SOURCE_JAVA_ERROR = 5;
 		SOURCE_JAVA_JLS2 = 6;
 		SOURCE_JAVA_JLS3 = 7;
 		SOURCE_JAVA_JLS4 = 8;
+		JAVA_ERROR = 5;
+		JLS2 = 6;
+		JLS3 = 7;
+		JLS4 = 8;
 	}
 	required ChangeKind change = 1;
 	required FileKind kind = 2;

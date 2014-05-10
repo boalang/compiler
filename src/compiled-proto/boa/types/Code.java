@@ -194,21 +194,33 @@ public final class Code {
       /**
        * <code>CVS = 3;</code>
        */
-      CVS(2, 3),
+      CVS(3, 3),
       /**
        * <code>GIT = 4;</code>
        */
-      GIT(3, 4),
+      GIT(4, 4),
       /**
        * <code>HG = 5;</code>
        */
-      HG(4, 5),
+      HG(5, 5),
       /**
        * <code>BZR = 6;</code>
        */
-      BZR(5, 6),
+      BZR(7, 6),
       ;
 
+      /**
+       * <code>SUBVERSION = 2;</code>
+       */
+      public static final RepositoryKind SUBVERSION = SVN;
+      /**
+       * <code>MERCURIAL = 5;</code>
+       */
+      public static final RepositoryKind MERCURIAL = HG;
+      /**
+       * <code>BAZAAR = 6;</code>
+       */
+      public static final RepositoryKind BAZAAR = BZR;
       /**
        * <code>UNKNOWN = 1;</code>
        */
@@ -217,6 +229,10 @@ public final class Code {
        * <code>SVN = 2;</code>
        */
       public static final int SVN_VALUE = 2;
+      /**
+       * <code>SUBVERSION = 2;</code>
+       */
+      public static final int SUBVERSION_VALUE = 2;
       /**
        * <code>CVS = 3;</code>
        */
@@ -230,9 +246,17 @@ public final class Code {
        */
       public static final int HG_VALUE = 5;
       /**
+       * <code>MERCURIAL = 5;</code>
+       */
+      public static final int MERCURIAL_VALUE = 5;
+      /**
        * <code>BZR = 6;</code>
        */
       public static final int BZR_VALUE = 6;
+      /**
+       * <code>BAZAAR = 6;</code>
+       */
+      public static final int BAZAAR_VALUE = 6;
 
 
       public final int getNumber() { return value; }
@@ -274,7 +298,9 @@ public final class Code {
         return boa.types.Code.CodeRepository.getDescriptor().getEnumTypes().get(0);
       }
 
-      private static final RepositoryKind[] VALUES = values();
+      private static final RepositoryKind[] VALUES = {
+        UNKNOWN, SVN, SUBVERSION, CVS, GIT, HG, MERCURIAL, BZR, BAZAAR, 
+      };
 
       public static RepositoryKind valueOf(
           com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
@@ -2544,16 +2570,17 @@ public final class Code {
   static {
     java.lang.String[] descriptorData = {
       "\n\ncode.proto\022\tboa.types\032\ndiff.proto\032\014sha" +
-      "red.proto\"\310\001\n\016CodeRepository\022\013\n\003url\030\001 \002(" +
+      "red.proto\"\367\001\n\016CodeRepository\022\013\n\003url\030\001 \002(" +
       "\t\0226\n\004kind\030\002 \002(\0162(.boa.types.CodeReposito" +
       "ry.RepositoryKind\022&\n\trevisions\030\003 \003(\0132\023.b" +
-      "oa.types.Revision\"I\n\016RepositoryKind\022\013\n\007U" +
-      "NKNOWN\020\001\022\007\n\003SVN\020\002\022\007\n\003CVS\020\003\022\007\n\003GIT\020\004\022\006\n\002H" +
-      "G\020\005\022\007\n\003BZR\020\006\"\250\001\n\010Revision\022\n\n\002id\030\001 \002(\005\022!\n" +
-      "\006author\030\002 \002(\0132\021.boa.types.Person\022$\n\tcomm" +
-      "itter\030\003 \002(\0132\021.boa.types.Person\022\023\n\013commit" +
-      "_date\030\004 \002(\004\022\013\n\003log\030\005 \002(\t\022%\n\005files\030\006 \003(\0132",
-      "\026.boa.types.ChangedFileB\002H\001"
+      "oa.types.Revision\"x\n\016RepositoryKind\022\013\n\007U" +
+      "NKNOWN\020\001\022\007\n\003SVN\020\002\022\016\n\nSUBVERSION\020\002\022\007\n\003CVS" +
+      "\020\003\022\007\n\003GIT\020\004\022\006\n\002HG\020\005\022\r\n\tMERCURIAL\020\005\022\007\n\003BZ" +
+      "R\020\006\022\n\n\006BAZAAR\020\006\032\002\020\001\"\250\001\n\010Revision\022\n\n\002id\030\001" +
+      " \002(\005\022!\n\006author\030\002 \002(\0132\021.boa.types.Person\022" +
+      "$\n\tcommitter\030\003 \002(\0132\021.boa.types.Person\022\023\n",
+      "\013commit_date\030\004 \002(\004\022\013\n\003log\030\005 \002(\t\022%\n\005files" +
+      "\030\006 \003(\0132\026.boa.types.ChangedFileB\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

@@ -40,17 +40,21 @@ public final class Ast {
     /**
      * <code>ANNOTATION = 7;</code>
      */
-    ANNOTATION(6, 7),
+    ANNOTATION(7, 7),
     /**
      * <code>DELEGATE = 8;</code>
      */
-    DELEGATE(7, 8),
+    DELEGATE(8, 8),
     /**
      * <code>GENERIC = 9;</code>
      */
-    GENERIC(8, 9),
+    GENERIC(9, 9),
     ;
 
+    /**
+     * <code>ENUMERATION = 6;</code>
+     */
+    public static final TypeKind ENUMERATION = ENUM;
     /**
      * <code>OTHER = 1;</code>
      */
@@ -75,6 +79,10 @@ public final class Ast {
      * <code>ENUM = 6;</code>
      */
     public static final int ENUM_VALUE = 6;
+    /**
+     * <code>ENUMERATION = 6;</code>
+     */
+    public static final int ENUMERATION_VALUE = 6;
     /**
      * <code>ANNOTATION = 7;</code>
      */
@@ -131,7 +139,9 @@ public final class Ast {
       return boa.types.Ast.getDescriptor().getEnumTypes().get(0);
     }
 
-    private static final TypeKind[] VALUES = values();
+    private static final TypeKind[] VALUES = {
+      OTHER, CLASS, INTERFACE, ANONYMOUS, STRUCT, ENUM, ENUMERATION, ANNOTATION, DELEGATE, GENERIC, 
+    };
 
     public static TypeKind valueOf(
         com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
@@ -20437,9 +20447,17 @@ public final class Ast {
       /**
        * <code>SPEC = 4;</code>
        */
-      SPEC(3, 4),
+      SPEC(4, 4),
       ;
 
+      /**
+       * <code>DOCUMENTATION = 3;</code>
+       */
+      public static final CommentKind DOCUMENTATION = DOC;
+      /**
+       * <code>SPECIFICATION = 4;</code>
+       */
+      public static final CommentKind SPECIFICATION = SPEC;
       /**
        * <code>LINE = 1;</code>
        */
@@ -20453,9 +20471,17 @@ public final class Ast {
        */
       public static final int DOC_VALUE = 3;
       /**
+       * <code>DOCUMENTATION = 3;</code>
+       */
+      public static final int DOCUMENTATION_VALUE = 3;
+      /**
        * <code>SPEC = 4;</code>
        */
       public static final int SPEC_VALUE = 4;
+      /**
+       * <code>SPECIFICATION = 4;</code>
+       */
+      public static final int SPECIFICATION_VALUE = 4;
 
 
       public final int getNumber() { return value; }
@@ -20495,7 +20521,9 @@ public final class Ast {
         return boa.types.Ast.Comment.getDescriptor().getEnumTypes().get(0);
       }
 
-      private static final CommentKind[] VALUES = values();
+      private static final CommentKind[] VALUES = {
+        LINE, BLOCK, DOC, DOCUMENTATION, SPEC, SPECIFICATION, 
+      };
 
       public static CommentKind valueOf(
           com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
@@ -22145,17 +22173,19 @@ public final class Ast {
       "INAL\020\004\022\n\n\006STATIC\020\005\022\020\n\014SYNCHRONIZED\020\006\022\014\n\010" +
       "ABSTRACT\020\007\"C\n\nVisibility\022\n\n\006PUBLIC\020\001\022\013\n\007" +
       "PRIVATE\020\002\022\r\n\tPROTECTED\020\003\022\r\n\tNAMESPACE\020\004\"" +
-      "\250\001\n\007Comment\022,\n\004kind\030\001 \002(\0162\036.boa.types.Co" +
+      "\322\001\n\007Comment\022,\n\004kind\030\001 \002(\0162\036.boa.types.Co" +
       "mment.CommentKind\022\r\n\005value\030\002 \002(\t\022)\n\010posi" +
-      "tion\030\003 \002(\0132\027.boa.types.PositionInfo\"5\n\013C" +
+      "tion\030\003 \002(\0132\027.boa.types.PositionInfo\"_\n\013C" +
       "ommentKind\022\010\n\004LINE\020\001\022\t\n\005BLOCK\020\002\022\007\n\003DOC\020\003",
-      "\022\010\n\004SPEC\020\004\"{\n\014PositionInfo\022\021\n\tstart_pos\030" +
-      "\001 \002(\005\022\016\n\006length\030\002 \002(\005\022\022\n\nstart_line\030\003 \002(" +
-      "\005\022\021\n\tstart_col\030\004 \002(\005\022\020\n\010end_line\030\005 \002(\005\022\017" +
-      "\n\007end_col\030\006 \002(\005*\177\n\010TypeKind\022\t\n\005OTHER\020\001\022\t" +
-      "\n\005CLASS\020\002\022\r\n\tINTERFACE\020\003\022\r\n\tANONYMOUS\020\004\022" +
-      "\n\n\006STRUCT\020\005\022\010\n\004ENUM\020\006\022\016\n\nANNOTATION\020\007\022\014\n" +
-      "\010DELEGATE\020\010\022\013\n\007GENERIC\020\tB\002H\001"
+      "\022\021\n\rDOCUMENTATION\020\003\022\010\n\004SPEC\020\004\022\021\n\rSPECIFI" +
+      "CATION\020\004\032\002\020\001\"{\n\014PositionInfo\022\021\n\tstart_po" +
+      "s\030\001 \002(\005\022\016\n\006length\030\002 \002(\005\022\022\n\nstart_line\030\003 " +
+      "\002(\005\022\021\n\tstart_col\030\004 \002(\005\022\020\n\010end_line\030\005 \002(\005" +
+      "\022\017\n\007end_col\030\006 \002(\005*\224\001\n\010TypeKind\022\t\n\005OTHER\020" +
+      "\001\022\t\n\005CLASS\020\002\022\r\n\tINTERFACE\020\003\022\r\n\tANONYMOUS" +
+      "\020\004\022\n\n\006STRUCT\020\005\022\010\n\004ENUM\020\006\022\017\n\013ENUMERATION\020" +
+      "\006\022\016\n\nANNOTATION\020\007\022\014\n\010DELEGATE\020\010\022\013\n\007GENER" +
+      "IC\020\t\032\002\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

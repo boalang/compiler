@@ -9,7 +9,10 @@ message Person {
 }
 
 enum ChangeKind {
+	option allow_alias = true;
 	ADDED = 1;
 	DELETED = 2;
+	REMOVED = 2;
 	MODIFIED = 3;
+	CHANGED = 3;
 }

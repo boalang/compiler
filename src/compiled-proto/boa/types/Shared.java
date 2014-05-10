@@ -24,9 +24,17 @@ public final class Shared {
     /**
      * <code>MODIFIED = 3;</code>
      */
-    MODIFIED(2, 3),
+    MODIFIED(3, 3),
     ;
 
+    /**
+     * <code>REMOVED = 2;</code>
+     */
+    public static final ChangeKind REMOVED = DELETED;
+    /**
+     * <code>CHANGED = 3;</code>
+     */
+    public static final ChangeKind CHANGED = MODIFIED;
     /**
      * <code>ADDED = 1;</code>
      */
@@ -36,9 +44,17 @@ public final class Shared {
      */
     public static final int DELETED_VALUE = 2;
     /**
+     * <code>REMOVED = 2;</code>
+     */
+    public static final int REMOVED_VALUE = 2;
+    /**
      * <code>MODIFIED = 3;</code>
      */
     public static final int MODIFIED_VALUE = 3;
+    /**
+     * <code>CHANGED = 3;</code>
+     */
+    public static final int CHANGED_VALUE = 3;
 
 
     public final int getNumber() { return value; }
@@ -77,7 +93,9 @@ public final class Shared {
       return boa.types.Shared.getDescriptor().getEnumTypes().get(0);
     }
 
-    private static final ChangeKind[] VALUES = values();
+    private static final ChangeKind[] VALUES = {
+      ADDED, DELETED, REMOVED, MODIFIED, CHANGED, 
+    };
 
     public static ChangeKind valueOf(
         com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
@@ -922,8 +940,9 @@ public final class Shared {
     java.lang.String[] descriptorData = {
       "\n\014shared.proto\022\tboa.types\"<\n\006Person\022\020\n\010u" +
       "sername\030\001 \002(\t\022\021\n\treal_name\030\002 \002(\t\022\r\n\005emai" +
-      "l\030\003 \002(\t*2\n\nChangeKind\022\t\n\005ADDED\020\001\022\013\n\007DELE" +
-      "TED\020\002\022\014\n\010MODIFIED\020\003B\002H\001"
+      "l\030\003 \002(\t*P\n\nChangeKind\022\t\n\005ADDED\020\001\022\013\n\007DELE" +
+      "TED\020\002\022\013\n\007REMOVED\020\002\022\014\n\010MODIFIED\020\003\022\013\n\007CHAN" +
+      "GED\020\003\032\002\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
