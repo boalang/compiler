@@ -2,6 +2,7 @@ package boa.functions;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Stack;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
@@ -336,5 +337,150 @@ public class BoaAstIntrinsics {
 	@FunctionSpec(name = "isliteral", returnType = "bool", formalParameters = { "Expression", "string" })
 	public static boolean isLiteral(final Expression e, final String lit) throws Exception {
 		return e.getKind() == Expression.ExpressionKind.LITERAL && e.hasLiteral() && e.getLiteral().equals(lit);
+	}
+
+	//////////////////////////////
+	// Collect Annotations Used //
+	//////////////////////////////
+
+	private static class AnnotationCollectingVisitor extends BoaCollectingVisitor<String,Long> {
+		@Override
+		protected boolean preVisit(Modifier node) {
+			if (node.getKind() == Modifier.ModifierKind.ANNOTATION) {
+				final String name = BoaAstIntrinsics.type_name(node.getAnnotationName());
+				final long count = map.containsKey(name) ? map.get(name) : 0;
+				map.put(name, count + 1);
+			}
+			return true;
+		}
+	}
+	private static AnnotationCollectingVisitor annotationCollectingVisitor = new AnnotationCollectingVisitor();
+
+	@FunctionSpec(name = "collect_annotations", returnType = "map[string] of int", formalParameters = { "ASTRoot", "map[string] of int" })
+	public static HashMap<String,Long> collect_annotations(final ASTRoot f, final HashMap<String,Long> map) throws Exception {
+		annotationCollectingVisitor.initialize(map).visit(f);
+		return annotationCollectingVisitor.map;
+	}
+
+	///////////////////////////
+	// Collect Generics Used //
+	///////////////////////////
+
+	private static class GenericsCollectingVisitor extends BoaCollectingVisitor<String,Long> {
+		@Override
+		protected boolean preVisit(Type node) {
+			try {
+				parseGenericType(BoaAstIntrinsics.type_name(node.getName()).trim(), map);
+			} catch (final StackOverflowError e) {
+				System.err.println("STACK ERR: " + node.getName() + " -> " + BoaAstIntrinsics.type_name(node.getName()).trim());
+			}
+			return true;
+		}
+	}
+	private static GenericsCollectingVisitor genericsCollectingVisitor = new GenericsCollectingVisitor();
+
+	@FunctionSpec(name = "collect_generic_types", returnType = "map[string] of int", formalParameters = { "ASTRoot", "map[string] of int" })
+	public static HashMap<String,Long> collect_generic_types(final ASTRoot f, final HashMap<String,Long> map) throws Exception {
+		genericsCollectingVisitor.initialize(map).visit(f);
+		return genericsCollectingVisitor.map;
+	}
+
+	public static void testGenericParser() {
+		final String[] tests = new String[] {
+			"$_T4_$_ extends $Mc4$<Integer>.$Mc5<Integer>",
+			"$_T4_$_ extends $Mc4$<Integer>.$Mc5<Integer> & $Mi4$.$$$$$Mi5 & $Mi4$.$$$$Mi5 & $Mi4$.$$$Mi5 & $Mi4$.$$Mi5 & $Mi4$.$Mi5 & $Mi4$.Mi5 & $Mi4$",
+			"ClassException<E> | Exception",
+			"EextendsEnum<E>&Language<E>",
+			"Class<?>...",
+			"List<String>",
+			"HashMap<String,Integer>",
+			"HashMap<String, Integer>",
+			"HashMap<String, List<Integer>>",
+			"HashMap<String, HashMap<String, List<Integer>>>"
+		};
+		for (final String s : tests)
+			testGeneric(s);
+	}
+
+	public static void testGeneric(final String s) {
+		System.out.println("-----------------");
+		System.out.println("testing: " + s);
+		final HashMap<String,Long> counts = new HashMap<String,Long>();
+		parseGenericType(s, counts);
+		System.out.println(counts);
+	}
+
+	private static void parseGenericType(final String name, final HashMap<String,Long> counts) {
+		if (!name.contains("<") || name.startsWith("<"))
+			return;
+
+		if (name.contains("|")) {
+			for (final String s : name.split("\\|"))
+				parseGenericType(s.trim(), counts);
+			return;
+		}
+
+		if (name.contains("&")) {
+			int count = 0;
+			int last = 0;
+			for (int i = 0; i < name.length(); i++)
+				switch (name.charAt(i)) {
+				case '<':
+					count++;
+					break;
+				case '>':
+					count--;
+					break;
+				case '&':
+					if (count == 0) {
+						parseGenericType(name.substring(last, i).trim(), counts);
+						last = i + 1;
+					}
+					break;
+				default:
+					break;
+				}
+			parseGenericType(name.substring(last).trim(), counts);
+			return;
+		}
+
+		foundType(name, counts);
+
+		int start = name.indexOf("<");
+
+		final Stack<Integer> starts = new Stack<Integer>();
+		int lastStart = start + 1;
+		for (int i = lastStart; i < name.lastIndexOf(">"); i++)
+			switch (name.charAt(i)) {
+			case '<':
+				starts.push(lastStart);
+				lastStart = i + 1;
+				break;
+			case '>':
+				if (!starts.empty())
+					foundType(name.substring(starts.pop(), i + 1).trim(), counts);
+				break;
+			case '&':
+			case '|':
+			case ',':
+			case ' ':
+			case '.':
+			case '\t':
+				lastStart = i + 1;
+			default:
+				break;
+			}
+	}
+
+	private static void foundType(final String name, final HashMap<String,Long> counts) {
+		final String type = name.endsWith("...") ? name.substring(0, name.length() - 3).trim() : name.trim();
+		final long count = counts.containsKey(type) ? counts.get(type) : 0;
+		counts.put(type, count + 1);
+
+		String rawType = type.substring(0, type.indexOf("<")).trim();
+		if (!type.endsWith(">"))
+			rawType += type.substring(type.lastIndexOf(">") + 1).trim();
+		final long rawCount = counts.containsKey(rawType) ? counts.get(rawType) : 0;
+		counts.put(rawType, rawCount + 1);
 	}
 }
