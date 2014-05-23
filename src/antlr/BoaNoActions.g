@@ -5,10 +5,12 @@ start
 	;
 
 program
-	: (
-		declaration
-		| statement
-	  )+
+	: programStatement+
+	;
+
+programStatement
+	: declaration
+	| statement
 	;
 
 declaration
@@ -118,7 +120,7 @@ assignmentStatement
 	;
 
 block
-	: LBRACE (declaration | statement)* RBRACE
+	: LBRACE programStatement* RBRACE
 	;
 
 breakStatement
@@ -213,7 +215,7 @@ visitStatement
 			| identifier COLON identifier
 			| identifier (COMMA identifier)*
 		)
-		RIGHT_ARROW (declaration | statement)
+		RIGHT_ARROW programStatement
 	;
 
 stopStatement

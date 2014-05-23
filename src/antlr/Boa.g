@@ -43,10 +43,12 @@ program returns [Program ast]
 		$ast = new Program();
 	}
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: (
-		d=declaration { $ast.addStatement($d.ast); }
-		| s=statement { $ast.addStatement($s.ast); }
-	  )+
+	: (s=programStatement { $ast.addStatement($s.ast); })+
+	;
+
+programStatement returns [Statement ast]
+	: d=declaration { $ast = $d.ast; }
+	| s=statement   { $ast = $s.ast; }
 	;
 
 declaration returns [Statement ast]
@@ -214,7 +216,7 @@ block returns [Block ast]
 		$ast = new Block();
 	}
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: LBRACE (d=declaration { $ast.addStatement($d.ast); } | s=statement { $ast.addStatement($s.ast); })* RBRACE
+	: LBRACE (s=programStatement { $ast.addStatement($s.ast); })* RBRACE
 	;
 
 breakStatement returns [BreakStatement ast]
@@ -365,7 +367,7 @@ visitStatement returns [VisitStatement ast]
 			| id=identifier COLON t=identifier { $ast.setComponent(new Component($id.ast, $t.ast)); }
 			| id=identifier { $ast.addId($id.ast); } (COMMA id=identifier { $ast.addId($id.ast); })*
 		)
-		RIGHT_ARROW (d=declaration { $ast.setBody($d.ast); } | s=statement { $ast.setBody($s.ast); })
+		RIGHT_ARROW (s=programStatement { $ast.setBody($s.ast); })
 	;
 
 stopStatement returns [StopStatement ast]
