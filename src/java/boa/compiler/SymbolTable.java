@@ -86,7 +86,6 @@ public class SymbolTable {
 		idmap.put("int", new BoaInt());
 		idmap.put("float", new BoaFloat());
 		idmap.put("time", new BoaTime());
-		idmap.put("fingerprint", new BoaFingerprint());
 		idmap.put("string", new BoaString());
 
 		idmap.put("ASTRoot", new ASTRootProtoTuple());
@@ -143,8 +142,8 @@ public class SymbolTable {
 		globalFunctions.addFunction("regex", new BoaFunction(new BoaString(), new BoaType[] { new BoaName(new BoaScalar()), new BoaInt() }, "boa.functions.BoaSpecialIntrinsics.regex(\"${0}\", ${1})"));
 		globalFunctions.addFunction("regex", new BoaFunction(new BoaString(), new BoaType[] { new BoaName(new BoaScalar()) }, "boa.functions.BoaSpecialIntrinsics.regex(\"${0}\")"));
 		// these fingerprints are identity functions
-		globalFunctions.addFunction("fingerprintof", new BoaFunction(new BoaFingerprint(), new BoaScalar[] { new BoaInt() }));
-		globalFunctions.addFunction("fingerprintof", new BoaFunction(new BoaFingerprint(), new BoaScalar[] { new BoaTime() }));
+		globalFunctions.addFunction("fingerprintof", new BoaFunction(new BoaInt(), new BoaScalar[] { new BoaInt() }));
+		globalFunctions.addFunction("fingerprintof", new BoaFunction(new BoaInt(), new BoaScalar[] { new BoaTime() }));
 
 		// visitors
 		globalFunctions.addFunction("visit", new BoaFunction(new BoaAny(), new BoaType[] { new BoaScalar(), new BoaVisitor() }, "${1}.visit(${0})"));
@@ -209,8 +208,6 @@ public class SymbolTable {
 		globalFunctions.addFunction("int", new BoaFunction(new BoaInt(), new BoaScalar[] { new BoaFloat() }, "(long)${0}"));
 		// time to int
 		globalFunctions.addFunction("int", new BoaFunction(new BoaInt(), new BoaScalar[] { new BoaTime() }, "${0}"));
-		// fingerprint to int
-		globalFunctions.addFunction("int", new BoaFunction(new BoaInt(), new BoaScalar[] { new BoaFingerprint() }, "${0}"));
 		// string to int
 		globalFunctions.addFunction("int", new BoaFunction("java.lang.Long.decode", new BoaInt(), new BoaScalar[] { new BoaString() }));
 		// string to int with param base
@@ -228,8 +225,6 @@ public class SymbolTable {
 		// string to time
 		globalFunctions.addFunction("time", new BoaFunction("boa.functions.BoaCasts.stringToTime", new BoaTime(), new BoaScalar[] { new BoaString(), new BoaString() }));
 
-		// int to fingerprint
-		globalFunctions.addFunction("fingerprint", new BoaFunction(new BoaFingerprint(), new BoaScalar[] { new BoaInt() }, "${0}"));
 		// string to fingerprint
 		globalFunctions.addFunction("fingerprint", new BoaFunction("java.lang.Long.parseLong", new BoaInt(), new BoaScalar[] { new BoaString() }));
 		// string to fingerprint with param base
@@ -245,8 +240,6 @@ public class SymbolTable {
 		globalFunctions.addFunction("string", new BoaFunction("java.lang.Double.toString", new BoaString(), new BoaScalar[] { new BoaFloat() }));
 		// time to string
 		globalFunctions.addFunction("string", new BoaFunction("boa.functions.BoaCasts.timeToString", new BoaString(), new BoaScalar[] { new BoaTime() }));
-		// fingerprint to string
-		globalFunctions.addFunction("string", new BoaFunction("java.lang.Long.toHexString", new BoaString(), new BoaScalar[] { new BoaFingerprint() }));
 
 		/* expose the java.lang.Math class to Sawzall */
 

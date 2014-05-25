@@ -48,7 +48,6 @@ public class BoaSpecialIntrinsics {
 		BoaSpecialIntrinsics.regexMap.put("int,8", "0[0-7]+");
 		BoaSpecialIntrinsics.regexMap.put("string", "\\S+");
 		BoaSpecialIntrinsics.regexMap.put("time", "[0-9]+");
-		BoaSpecialIntrinsics.regexMap.put("fingerprint", "[0-9]+");
 		BoaSpecialIntrinsics.regexMap.put("float", "[-+]?[0-9]*\\.?[0-9]+(e[-+]?[0-9]+)?");
 	}
 
@@ -141,20 +140,6 @@ public class BoaSpecialIntrinsics {
 			return 1;
 
 		return 0;
-	}
-
-	/**
-	 * The fingerprintof function returns the 64-bit fingerprint of the
-	 * argument, which may be of any type.
-	 * 
-	 * @param l
-	 *            A long to be fingerprinted
-	 * 
-	 * @return The fingerprint of l
-	 */
-	@FunctionSpec(name = "fingerprintof", returnType = "fingerprint", formalParameters = { "fingerprint" })
-	public static long fingerprintOf(final long l) {
-		return BoaSpecialIntrinsics.byteArrayToLong(BoaSpecialIntrinsics.md.digest(BoaSpecialIntrinsics.longToByteArray(l)));
 	}
 
 	// TODO: implement new()

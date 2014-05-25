@@ -164,37 +164,5 @@ public class BoaSortIntrinsics {
 		return BoaSortIntrinsics.sortTimeArray(a);
 	}
 
-	/**
-	 * Returns the sorted version of an array. Only scalar values can be sorted.
-	 * Values will be arranged in increasing order. (An optional comparison
-	 * function, which takes two elements and returns int {-,0,+}, is accepted
-	 * as a second argument, but it is curently ignored.)
-	 * 
-	 * @param a
-	 *            An array of long
-	 * 
-	 * @return A sorted copy of <em>a</em>
-	 */
-	@FunctionSpec(name = "sort", returnType = "array of fingerprint", formalParameters = { "array of fingerprint" })
-	public static long[] sortFingerprintArray(final long[] a) {
-		return BoaSortIntrinsics.sortLongArray(a);
-	}
-
-	/**
-	 * Returns the sorted version of an array. Only scalar values can be sorted.
-	 * Values will be arranged in increasing order. (An optional comparison
-	 * function, which takes two elements and returns int {-,0,+}, is accepted
-	 * as a second argument, but it is curently ignored.)
-	 * 
-	 * @param a
-	 *            An array of long
-	 * 
-	 * @return A sorted copy of <em>a</em>
-	 */
-	@FunctionSpec(name = "sort", returnType = "array of fingerprint", formalParameters = { "array of fingerprint", "string" })
-	public static long[] sortFingerprintArray(final long[] a, final String ignored) {
-		return BoaSortIntrinsics.sortLongArray(a);
-	}
-
 	// TODO: implement sortx
 }
