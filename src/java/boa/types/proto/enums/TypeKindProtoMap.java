@@ -16,6 +16,8 @@
  */
 package boa.types.proto.enums;
 
+import com.google.protobuf.ProtocolMessageEnum;
+
 import boa.types.BoaProtoMap;
 
 /**
@@ -26,7 +28,7 @@ import boa.types.BoaProtoMap;
 public class TypeKindProtoMap extends BoaProtoMap {
 	/** {@inheritDoc} */
 	@Override
-	protected Class getEnumClass() {
+	protected Class<? extends ProtocolMessageEnum> getEnumClass() {
 		return boa.types.Ast.TypeKind.class;
 	}
 }

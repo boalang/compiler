@@ -16,6 +16,8 @@
  */
 package boa.types;
 
+import com.google.protobuf.ProtocolMessageEnum;
+
 /**
  * A {@link BoaMap}, which is actually a Protocol Buffer enum.
  * 
@@ -32,8 +34,8 @@ public class BoaProtoMap extends BoaMap {
 	/**
 	 * Returns the {@link Class} representing the Java enumeration of this type.
 	 */
-	protected Class getEnumClass() {
-		return getClass();
+	protected Class<? extends ProtocolMessageEnum> getEnumClass() {
+		return null;
 	}
 
 	/**

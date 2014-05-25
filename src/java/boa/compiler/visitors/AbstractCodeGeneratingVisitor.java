@@ -19,12 +19,10 @@ package boa.compiler.visitors;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
 import org.stringtemplate.v4.STGroupFile;
 
 import boa.compiler.ast.Node;
-import boa.compiler.ast.Pair;
 
 /**
  * The base class for any code generating visitors.
