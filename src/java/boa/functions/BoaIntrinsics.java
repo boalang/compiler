@@ -48,6 +48,17 @@ public class BoaIntrinsics {
 	}
 
 	/**
+	 * Is a Revision's log message indicating it is a fixing revision?
+	 * 
+	 * @param rev the revision to mine
+	 * @return true if the revision's log indicates a fixing revision
+	 */
+	@FunctionSpec(name = "isfixingrevision", returnType = "bool", formalParameters = { "Revision" })
+	public static boolean isfixingrevision(final Revision rev) {
+		return isfixingrevision(rev.getLog());
+	}
+
+	/**
 	 * Is a log message indicating it is a fixing revision?
 	 * 
 	 * @param log the revision's log message to mine
