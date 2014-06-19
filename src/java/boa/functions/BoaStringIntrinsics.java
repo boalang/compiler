@@ -320,7 +320,6 @@ public class BoaStringIntrinsics {
 	 * <li>%s prints a Sawzall string as UTF-8.
 	 * <li>%q like %s with double quotes and backslash escapes for special
 	 * characters.
-	 * <li>%p prints a fingerprint, in the format 0x%.16x.
 	 * <li>%t prints a time, in the format of the Unix function ctime without a
 	 * newline.
 	 * <li>%T prints a Sawzall type of the argument; %#T expands user-defined

@@ -97,51 +97,6 @@ public class BoaSpecialIntrinsics {
 				| (long) (0xff & bs[4]) << 24 | (long) (0xff & bs[5]) << 16 | (long) (0xff & bs[6]) << 8 | (long) (0xff & bs[7]) << 0;
 	}
 
-	/**
-	 * The fingerprintof function returns the 64-bit fingerprint of the
-	 * argument, which may be of any type.
-	 * 
-	 * @param d
-	 *            A double to be fingerprinted
-	 * 
-	 * @return The fingerprint of d
-	 */
-	@FunctionSpec(name = "fingerprintof", returnType = "fingerprint", formalParameters = { "float" })
-	public static long fingerprintOf(final double d) {
-		return BoaSpecialIntrinsics.byteArrayToLong(BoaSpecialIntrinsics.md.digest(BoaSpecialIntrinsics.longToByteArray(Double.doubleToRawLongBits(d))));
-	}
-
-	/**
-	 * The fingerprintof function returns the 64-bit fingerprint of the
-	 * argument, which may be of any type.
-	 * 
-	 * @param s
-	 *            A {@link String} to be fingerprinted
-	 * 
-	 * @return The fingerprint of s
-	 */
-	@FunctionSpec(name = "fingerprintof", returnType = "fingerprint", formalParameters = { "string" })
-	public static long fingerprintOf(final String s) {
-		return BoaSpecialIntrinsics.byteArrayToLong(BoaSpecialIntrinsics.md.digest(s.getBytes()));
-	}
-
-	/**
-	 * The fingerprintof function returns the 64-bit fingerprint of the
-	 * argument, which may be of any type.
-	 * 
-	 * @param b
-	 *            A boolean to be fingerprinted
-	 * 
-	 * @return The fingerprint of b
-	 */
-	@FunctionSpec(name = "fingerprintof", returnType = "fingerprint", formalParameters = { "bool" })
-	public static long fingerprintOf(final boolean b) {
-		if (b)
-			return 1;
-
-		return 0;
-	}
-
 	// TODO: implement new()
 
 	public static String regex(final String type, final long base) {
