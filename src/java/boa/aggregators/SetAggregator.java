@@ -66,10 +66,10 @@ public class SetAggregator extends Aggregator {
 	/** {@inheritDoc} */
 	@Override
 	public void aggregate(final String data, final String metadata) throws IOException, InterruptedException, FinishedException {
-		this.set.add(data);
-
-		if (this.set.size() > this.max)
+		if (this.set.size() >= this.max)
 			throw new FinishedException();
+
+		this.set.add(data);
 	}
 
 	/** {@inheritDoc} */
