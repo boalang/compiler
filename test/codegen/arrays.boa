@@ -1,0 +1,8 @@
+a: array of int;
+b := new(a, 3, 0);
+a = b;
+a = {1, 2, 3};
+a[2] = 4;
+
+TEST: output collection of string;
+TEST << "OK";
