@@ -30,7 +30,7 @@ import org.junit.runners.Parameterized.Parameters;
  * @author rdyer
  */
 @RunWith(Parameterized.class)
-public class TestCodegen extends BaseTest {
+public class TestCodegenGood extends BaseTest {
 	final private static String rootDir = "test/codegen/";
 
 	@Parameters(name = "{0}")
@@ -43,7 +43,7 @@ public class TestCodegen extends BaseTest {
 	}
 
 	private String fileName;
-	public TestCodegen(final String fileName, final String ignored) {
+	public TestCodegenGood(final String fileName, final String ignored) {
 		this.fileName = fileName;
 	}
 

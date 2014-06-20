@@ -26,7 +26,7 @@ import org.junit.runners.JUnit4;
  * @author rdyer
  */
 @RunWith(JUnit4.class)
-public class TestParser extends BaseTest {
+public class TestParserBad extends BaseTest {
 	final private static String rootDir = "test/parsing/";
 	final private static String badDir = rootDir + "errors/";
 

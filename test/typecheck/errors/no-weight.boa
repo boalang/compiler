@@ -1,0 +1,2 @@
+o: output minimum(5) of string weight int;
+o << "foo";

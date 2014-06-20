@@ -28,9 +28,8 @@ import boa.parser.BoaLexer;
  * @author rdyer
  */
 @RunWith(JUnit4.class)
-public class TestLexer extends BaseTest {
+public class TestLexerGood extends BaseTest {
 	final private static String rootDir = "test/lexing/";
-	final private static String badDir = rootDir + "errors/";
 
 
 	@Test
@@ -95,13 +94,5 @@ public class TestLexer extends BaseTest {
 		lex(load(rootDir + "time-lit.boa"),
 			new int[] { BoaLexer.TimeLiteral, BoaLexer.TimeLiteral, BoaLexer.TimeLiteral, BoaLexer.TimeLiteral, BoaLexer.EOF },
 			new String[] { "0t", "1000000T", "T\"Wed Feb  4 16:26:41 PST 2004\"", "T\"Tue Jun  5 10:43:07 America/Los_Angeles 2007\"", "<EOF>" });
-	}
-
-	@Test
-	public void badComment() throws IOException {
-		lex(load(badDir + "bad-comment.boa"),
-			new int[] { BoaLexer.Identifier, BoaLexer.Identifier, BoaLexer.EOF },
-			new String[] { "bad", "comment", "<EOF>" },
-			new String[] { "1,0: token recognition error at: '@'" });
 	}
 }

@@ -185,6 +185,10 @@ public abstract class BaseTest {
 	// type checking
 	//
 
+	protected void typecheck(final String input) throws IOException {
+		typecheck(input, null);
+	}
+
 	protected void typecheck(final String input, final String error) throws IOException {
 		final Start p = parse(input).ast;
 
