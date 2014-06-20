@@ -635,7 +635,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 
 		e.accept(this, st);
 
-		if (e.type instanceof BoaProtoTuple) {
+		if (!(e.type instanceof BoaBool)) {
 			e = new Expression(
 					new Conjunction(
 						new Comparison(
@@ -651,9 +651,6 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 				);
 			e.accept(this, st);
 		}
-
-		if (!(e.type instanceof BoaBool))
-			throw new TypeCheckException(e, "incompatible types for " + kind + " condition: required 'boolean', found '" + e.type + "'");
 
 		if (n instanceof IfAllStatement)
 			b.accept(this, env);
