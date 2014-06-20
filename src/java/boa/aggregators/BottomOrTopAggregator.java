@@ -30,9 +30,9 @@ import boa.io.EmitKey;
  */
 public abstract class BottomOrTopAggregator extends Aggregator {
 	protected CountingSet<String> set;
-	protected final CountedString[] list;
+	protected final WeightedString[] list;
 	protected final int last;
-	protected long DefaultValue;
+	protected double DefaultValue;
 
 	/**
 	 * Construct a {@link BottomOrTopAggregator}.
@@ -43,7 +43,7 @@ public abstract class BottomOrTopAggregator extends Aggregator {
 		super(n);
 
 		// an array of weighted string of length n
-		this.list = new CountedString[(int) n];
+		this.list = new WeightedString[(int) n];
 		// the index of the last entry in the list
 		this.last = (int) (n - 1);
 	}
@@ -57,25 +57,25 @@ public abstract class BottomOrTopAggregator extends Aggregator {
 
 		// clear out the list
 		for (int i = 0; i < this.getArg(); i++)
-			this.list[i] = new CountedString(null, DefaultValue);
+			this.list[i] = new WeightedString(null, DefaultValue);
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void aggregate(final String data, final String metadata) {
 		if (metadata == null)
-			this.set.add(data, 1);
+			this.set.add(data, 1.0);
 		else
-			this.set.add(data, Double.valueOf(metadata).longValue());
+			this.set.add(data, Double.valueOf(metadata));
 	}
 
-	protected abstract boolean shouldInsert(final long a, final long b);
+	protected abstract boolean shouldInsert(final double a, final double b);
 
 	/** {@inheritDoc} */
 	@Override
 	public void finish() throws IOException, InterruptedException {
 		if (this.isCombining()) {
-			for (final Entry<String, Long> e : this.set.getEntries())
+			for (final Entry<String, Double> e : this.set.getEntries())
 				this.collect(e.getKey().toString(), e.getValue().toString());
 		} else {
 			// TODO: replace this with the algorithm described in M. Charikar,
@@ -83,70 +83,25 @@ public abstract class BottomOrTopAggregator extends Aggregator {
 			// streams, Proc 29th Intl. Colloq. on Automata, Languages and
 			// Programming, 2002.
 
-			for (final Entry<String, Long> e : this.set.getEntries())
-				if (shouldInsert(e.getValue(), this.list[this.last].getCount()) ||
-						(e.getValue() == this.list[this.last].getCount() && this.list[this.last].getString().compareTo(e.getKey()) > 0))
+			for (final Entry<String, Double> e : this.set.getEntries())
+				if (shouldInsert(e.getValue(), this.list[this.last].getWeight()) ||
+						(e.getValue() == this.list[this.last].getWeight() && this.list[this.last].getString().compareTo(e.getKey()) > 0))
 					// find this new item's position within the list
 					for (int i = 0; i < this.getArg(); i++)
-						if (shouldInsert(e.getValue(), this.list[i].getCount()) ||
-								(e.getValue() == this.list[i].getCount() && this.list[i].getString().compareTo(e.getKey()) > 0)) {
+						if (shouldInsert(e.getValue(), this.list[i].getWeight()) ||
+								(e.getValue() == this.list[i].getWeight() && this.list[i].getString().compareTo(e.getKey()) > 0)) {
 							// here it is. move all subsequent items down one
 							for (int j = (int) (this.getArg() - 2); j >= i; j--)
 								this.list[j + 1] = this.list[j];
 
 							// insert the item where it belongs
-							this.list[i] = new CountedString(e.getKey(), e.getValue());
+							this.list[i] = new WeightedString(e.getKey(), e.getValue());
 							break;
 						}
 
-			for (final CountedString c : this.list)
+			for (final WeightedString c : this.list)
 				if (c.getString() != null)
 					this.collect(c.toString());
 		}
-	}
-}
-
-/**
- * A tuple containing a {@link String} and its count.
- * 
- * @author anthonyu
- */
-class CountedString {
-	private final String string;
-	private final long count;
-
-	/**
-	 * Construct a {@link CountedString}.
-	 * 
-	 * @param string A {@link String} containing the string part of the tuple
-	 * @param weight A long representing the count part of the tuple
-	 */
-	public CountedString(final String string, final long count) {
-		this.string = string;
-		this.count = count;
-	}
-
-	/**
-	 * Get the string part of the tuple.
-	 * 
-	 * @return A {@link String} containing the string part of the tuple
-	 */
-	public String getString() {
-		return this.string;
-	}
-
-	/**
-	 * Get the string part of the tuple.
-	 * 
-	 * @return A long representing the count part of the tuple
-	 */
-	public long getCount() {
-		return this.count;
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public String toString() {
-		return this.string + ", " + this.count;
 	}
 }

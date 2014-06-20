@@ -614,7 +614,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 
 			if (!t.acceptsWeight(n.getWeight().type))
 				throw new TypeCheckException(n.getWeight(), "output variable '" + id + "': incompatible types for weight: required '" + t.getWeightType() + "', found '" + n.getWeight().type + "'");
-		} else if (t.getWeightType() != null)
+		} else if (t.getWeightType() != null && !t.canOmitWeight())
 			throw new TypeCheckException(n, "output variable '" + id + "': emit must specify a weight");
 	}
 
@@ -1183,7 +1183,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 		if (n.getArgsSize() > 0 && annotation.formalParameters().length == 0)
 			throw new TypeCheckException(n.getArgs(), "output aggregator '" + n.getId().getToken() + "' takes no arguments");
 
-		n.type = new BoaTable(type, indexTypes, tweight);
+		n.type = new BoaTable(type, indexTypes, tweight, annotation.canOmitWeight());
 		env.set(n.getId().getToken(), n.type);
 		n.getId().accept(this, env);
 	}

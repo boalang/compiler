@@ -30,13 +30,13 @@ import java.util.Set;
  * @param <T> The type of value that will be inserted into the set
  */
 class CountingSet<T> {
-	private Map<T, Long> map;
+	private Map<T, Double> map;
 
 	/**
 	 * Construct a {@link CountingSet}.
 	 */
 	public CountingSet() {
-		this.map = new HashMap<T, Long>();
+		this.map = new HashMap<T, Double>();
 	}
 
 	/**
@@ -45,7 +45,7 @@ class CountingSet<T> {
 	 * @param t The value to be added
 	 */
 	public void add(final T t) {
-		this.add(t, 1);
+		this.add(t, 1.0);
 	}
 
 	/**
@@ -54,7 +54,7 @@ class CountingSet<T> {
 	 * @param t The value to be added
 	 * @param n The cardinality of the value
 	 */
-	public void add(final T t, final long n) {
+	public void add(final T t, final double n) {
 		// if the map already has this key, add n to the current cardiality and reinsert
 		if (this.map.containsKey(t))
 			this.map.put(t, this.map.get(t) + n);
@@ -63,7 +63,7 @@ class CountingSet<T> {
 	}
 
 	public void clear() {
-		this.map = new HashMap<T, Long>();
+		this.map = new HashMap<T, Double>();
 	}
 
 	/**
@@ -71,7 +71,7 @@ class CountingSet<T> {
 	 * 
 	 * @return A {@link Set} of T containing the entries in this set
 	 */
-	public Set<Entry<T, Long>> getEntries() {
+	public Set<Entry<T, Double>> getEntries() {
 		return this.map.entrySet();
 	}
 }

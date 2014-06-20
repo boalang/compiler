@@ -53,6 +53,12 @@ public @interface AggregatorSpec {
 	String weightType() default "none";
 
 	/**
+	 * If the aggregator declares a weight type, can emits omit a value.
+	 * If true, the aggregator should handle such a case (providing a default weight).
+	 */
+	boolean canOmitWeight() default false;
+
+	/**
 	 * Can this aggregator combine?
 	 */
 	boolean canCombine() default false;

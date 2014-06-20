@@ -23,7 +23,7 @@ package boa.aggregators;
  * @author anthonyu
  * @author rdyer
  */
-@AggregatorSpec(name = "bottom", formalParameters = { "int" }, weightType = "int", canCombine = true)
+@AggregatorSpec(name = "bottom", formalParameters = { "int" }, weightType = "float", canOmitWeight = true, canCombine = true)
 public class BottomAggregator extends BottomOrTopAggregator {
 	/**
 	 * Construct a {@link BottomAggregator}.
@@ -33,12 +33,12 @@ public class BottomAggregator extends BottomOrTopAggregator {
 	public BottomAggregator(final long n) {
 		super(n);
 
-		DefaultValue = Long.MAX_VALUE;
+		DefaultValue = Double.MAX_VALUE;
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	protected boolean shouldInsert(final long a, final long b) {
+	protected boolean shouldInsert(final double a, final double b) {
 		return a < b;
 	}
 }

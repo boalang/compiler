@@ -22,7 +22,7 @@ package boa.aggregators;
  * 
  * @author anthonyu
  */
-@AggregatorSpec(name = "maximum", formalParameters = { "int" }, weightType = "float", canCombine = true)
+@AggregatorSpec(name = "maximum", formalParameters = { "int" }, weightType = "float", canOmitWeight = true, canCombine = true)
 public class MaximumAggregator extends MinOrMaxAggregator {
 	/**
 	 * Construct a {@link MaximumAggregator}.

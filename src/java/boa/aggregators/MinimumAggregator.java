@@ -22,7 +22,7 @@ package boa.aggregators;
  * 
  * @author anthonyu
  */
-@AggregatorSpec(name = "minimum", formalParameters = { "int" }, weightType = "float", canCombine = true)
+@AggregatorSpec(name = "minimum", formalParameters = { "int" }, weightType = "float", canOmitWeight = true, canCombine = true)
 public class MinimumAggregator extends MinOrMaxAggregator {
 	/**
 	 * Construct a {@link MinimumAggregator}.

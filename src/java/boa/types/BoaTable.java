@@ -27,6 +27,7 @@ public class BoaTable extends BoaType {
 	private BoaType type;
 	private List<BoaScalar> indexTypes;
 	private BoaScalar weightType;
+	private boolean canOmitWeight;
 
 	/**
 	 * Construct a BoaTable.
@@ -36,7 +37,7 @@ public class BoaTable extends BoaType {
 	 *            this BoaTable
 	 */
 	public BoaTable(final BoaType type) {
-		this(type, null, null);
+		this(type, null, null, false);
 	}
 
 	/**
@@ -54,7 +55,7 @@ public class BoaTable extends BoaType {
 	 *            types of this BoaTable
 	 */
 	public BoaTable(final BoaType type, final List<BoaScalar> indexTypes) {
-		this(type, indexTypes, null);
+		this(type, indexTypes, null, false);
 	}
 
 	/**
@@ -72,10 +73,11 @@ public class BoaTable extends BoaType {
 	 *            BoaTable
 	 * 
 	 */
-	public BoaTable(final BoaType type, final List<BoaScalar> indexTypes, final BoaScalar weightType) {
+	public BoaTable(final BoaType type, final List<BoaScalar> indexTypes, final BoaScalar weightType, final boolean canOmitWeight) {
 		this.type = type;
 		this.indexTypes = indexTypes;
 		this.weightType = weightType;
+		this.canOmitWeight = canOmitWeight;
 	}
 
 	/**
@@ -195,6 +197,10 @@ public class BoaTable extends BoaType {
 	 */
 	public BoaScalar getWeightType() {
 		return this.weightType;
+	}
+
+	public boolean canOmitWeight() {
+		return this.canOmitWeight;
 	}
 
 	/**
