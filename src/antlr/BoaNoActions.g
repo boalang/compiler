@@ -139,8 +139,9 @@ doStatement
 	;
 
 emitStatement
-	: identifier (LBRACKET expression RBRACKET)* EMIT expression (WEIGHT expression)? SEMICOLON
-	| identifier (LBRACKET expression RBRACKET)* EMIT expression (WEIGHT expression)?           { notifyErrorListeners("error: ';' expected"); }
+	: identifier (LBRACKET expression RBRACKET)* EMIT expression                                                                       (WEIGHT expression)? SEMICOLON
+	| identifier (LBRACKET expression RBRACKET)* EMIT { notifyErrorListeners("error: expected 'expression' before keyword 'weight'"); } WEIGHT expression   SEMICOLON
+	| identifier (LBRACKET expression RBRACKET)* EMIT expression                                                                       (WEIGHT expression)?           { notifyErrorListeners("error: ';' expected"); }
 	;
 
 forStatement

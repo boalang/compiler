@@ -248,7 +248,8 @@ emitStatement returns [EmitStatement ast]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
 	: id=identifier { $ast = new EmitStatement($id.ast); } (LBRACKET e=expression RBRACKET { $ast.addIndice($e.ast); })* EMIT e=expression { $ast.setValue($e.ast); } (WEIGHT w=expression { $ast.setWeight($w.ast); })? SEMICOLON
-	| id=identifier { $ast = new EmitStatement($id.ast); } (LBRACKET e=expression RBRACKET { $ast.addIndice($e.ast); })* EMIT e=expression { $ast.setValue($e.ast); } (WEIGHT w=expression { $ast.setWeight($w.ast); })? { notifyErrorListeners("error: ';' expected"); }
+	| id=identifier { $ast = new EmitStatement($id.ast); } (LBRACKET e=expression RBRACKET)* EMIT { notifyErrorListeners("error: expected 'expression ' before keyword 'weight'"); } WEIGHT w=expression SEMICOLON
+	| id=identifier { $ast = new EmitStatement($id.ast); } (LBRACKET e=expression RBRACKET)* EMIT e=expression (WEIGHT w=expression)? { notifyErrorListeners("error: ';' expected"); }
 	;
 
 forStatement returns [ForStatement ast]
