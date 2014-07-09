@@ -110,12 +110,14 @@ public class BoaCompiler {
 					System.err.print("    ");
 				else
 					System.err.print(" ");
-			int stop2 = Math.min(stop + length, errorLine.length() - charPositionInLine - 1);
+
+			int stop2 = Math.min(stop + length, errorLine.length());
 			for (int i = stop; i < stop2; i++)
 				if (errorLine.charAt(i) == '\t')
 					System.err.print("^^^^");
 				else
 					System.err.print("^");
+
 			System.err.println();
 		}
 	}
