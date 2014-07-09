@@ -44,6 +44,12 @@ public class TestParserBad extends BaseTest {
 	}
 
 	@Test
+	public void badEmitWithWeight() throws IOException {
+		parse(load(badDir + "bad-emit-with-weight.boa"),
+			new String[] { "1,5: error: expected 'expression ' before keyword 'weight'" });
+	}
+
+	@Test
 	public void badIdentifiers() throws IOException {
 		parse(load(badDir + "bad-identifiers.boa"),
 			new String[] {
