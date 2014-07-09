@@ -77,7 +77,11 @@ public class BoaCompiler {
 	private static Logger LOG = Logger.getLogger(BoaCompiler.class);
 
 	public abstract static class BoaErrorListener extends BaseErrorListener {
+		public static boolean hasError = false;
+
 		public static void error(final String kind, final TokenSource tokens, final Object offendingSymbol, final int line, final int charPositionInLine, final int length, final String msg, final Exception e) {
+			hasError = true;
+
 			final String filename = tokens.getSourceName();
 
 			System.err.print(filename.substring(filename.lastIndexOf(File.separator) + 1) + ": compilation failed: ");
@@ -238,37 +242,39 @@ public class BoaCompiler {
 
 					final String jobName = "" + i;
 
-					try {
-						final TypeCheckingVisitor typeChecker = new TypeCheckingVisitor();
-						typeChecker.start(p, new SymbolTable());
-					} catch (final TypeCheckException e) {
-						BoaErrorListener.error("typecheck", lexer, null, e.n.beginLine, e.n.beginColumn, e.n2.endColumn - e.n.beginColumn + 1, e.getMessage(), e);
-						throw e;
-					}
+					if (!BoaErrorListener.hasError) {
+						try {
+							final TypeCheckingVisitor typeChecker = new TypeCheckingVisitor();
+							typeChecker.start(p, new SymbolTable());
+						} catch (final TypeCheckException e) {
+							BoaErrorListener.error("typecheck", lexer, null, e.n.beginLine, e.n.beginColumn, e.n2.endColumn - e.n.beginColumn + 1, e.getMessage(), e);
+							throw e;
+						}
 
-					final TaskClassifyingVisitor simpleVisitor = new TaskClassifyingVisitor();
-					simpleVisitor.start(p);
+						final TaskClassifyingVisitor simpleVisitor = new TaskClassifyingVisitor();
+						simpleVisitor.start(p);
 
-					LOG.info(f.getName() + ": task complexity: " + (!simpleVisitor.isComplex() ? "simple" : "complex"));
-					isSimple &= !simpleVisitor.isComplex();
+						LOG.info(f.getName() + ": task complexity: " + (!simpleVisitor.isComplex() ? "simple" : "complex"));
+						isSimple &= !simpleVisitor.isComplex();
 
-					new LocalAggregationTransformer().start(p);
-						
-					// if a job has no visitor, let it have its own method
-					// also let jobs have own methods if visitor merging is disabled
-					if (!simpleVisitor.isComplex() || cl.hasOption("nv") || inputFiles.size() == 1) {
-						new VisitorOptimizingTransformer().start(p);
+						new LocalAggregationTransformer().start(p);
+							
+						// if a job has no visitor, let it have its own method
+						// also let jobs have own methods if visitor merging is disabled
+						if (!simpleVisitor.isComplex() || cl.hasOption("nv") || inputFiles.size() == 1) {
+							new VisitorOptimizingTransformer().start(p);
 
-						final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(jobName);
-						cg.start(p);
-						jobs.add(cg.getCode());
+							final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(jobName);
+							cg.start(p);
+							jobs.add(cg.getCode());
 
-						jobnames.add(jobName);
-					}
-					// if a job has visitors, fuse them all together into a single program
-					else {
-						p.getProgram().jobName = jobName;
-						visitorPrograms.add(p.getProgram());
+							jobnames.add(jobName);
+						}
+						// if a job has visitors, fuse them all together into a single program
+						else {
+							p.getProgram().jobName = jobName;
+							visitorPrograms.add(p.getProgram());
+						}
 					}
 				} catch (final TypeCheckException e) {
 					// already handled
