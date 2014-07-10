@@ -35,6 +35,8 @@ import boa.types.Ast.*;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
+import boa.types.Issues.IssueRepository;
+import boa.types.Issues.IssuesRoot;
 import boa.types.Shared.ChangeKind;
 import boa.types.Toplevel.Project;
 
@@ -46,7 +48,7 @@ import boa.types.Toplevel.Project;
 public class BoaAstIntrinsics {
 	@SuppressWarnings("rawtypes")
 	private static Context context;
-	private static MapFile.Reader map, commentsMap;
+	private static MapFile.Reader map, commentsMap, issuesMap;
 
 	public static enum AST_COUNTER {
 		GETS_ATTEMPTED,
@@ -64,6 +66,7 @@ public class BoaAstIntrinsics {
 
 	private static final ASTRoot emptyAst = ASTRoot.newBuilder().build();
 	private static final CommentsRoot emptyComments = CommentsRoot.newBuilder().build();
+	private static final IssuesRoot emptyIssues = IssuesRoot.newBuilder().build();
 
 	/**
 	 * Given a ChangedFile, return the AST for that file at that revision.
@@ -162,6 +165,38 @@ public class BoaAstIntrinsics {
 		return emptyComments;
 	}
 
+	/**
+	 * Given an IssueRepository, return the issues.
+	 * 
+	 * @param f the IssueRepository to get issues for
+	 * @return the issues list, or an empty list on any sort of error
+	 */
+	@FunctionSpec(name = "getissues", returnType = "IssuesRoot", formalParameters = { "IssueRepository" })
+	public static IssuesRoot getissues(final IssueRepository f) {
+		if (issuesMap == null)
+			openIssuesMap();
+
+		try {
+			final BytesWritable value = new BytesWritable();
+			if (issuesMap.get(new Text(f.getKey()), value) != null) {
+				final CodedInputStream _stream = CodedInputStream.newInstance(value.getBytes(), 0, value.getLength());
+				final IssuesRoot root = IssuesRoot.parseFrom(_stream);
+				return root;
+			}
+		} catch (final InvalidProtocolBufferException e) {
+			e.printStackTrace();
+		} catch (final IOException e) {
+			e.printStackTrace();
+		} catch (final RuntimeException e) {
+			e.printStackTrace();
+		} catch (final Error e) {
+			e.printStackTrace();
+		}
+
+		System.err.println("error with issues: " + f.getKey());
+		return emptyIssues;
+	}
+
 	@SuppressWarnings("rawtypes")
 	public static void setup(final Context context) {
 		BoaAstIntrinsics.context = context;
@@ -193,10 +228,24 @@ public class BoaAstIntrinsics {
 		}
 	}
 
+	private static void openIssuesMap() {
+		final Configuration conf = new Configuration();
+		try {
+			final FileSystem fs = FileSystem.get(conf);
+			final Path p = new Path("hdfs://boa-nn1/",
+								new Path(context.getConfiguration().get("boa.issues.dir", context.getConfiguration().get("boa.input.dir", "repcache/live")),
+								new Path("issues")));
+			issuesMap = new MapFile.Reader(fs, p.toString(), conf);
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	@SuppressWarnings("rawtypes")
 	public static void cleanup(final Context context) {
 		closeMap();
 		closeCommentMap();
+		closeIssuesMap();
 	}
 
 	private static void closeMap() {
@@ -217,6 +266,16 @@ public class BoaAstIntrinsics {
 				e.printStackTrace();
 			}
 		commentsMap = null;
+	}
+
+	private static void closeIssuesMap() {
+		if (issuesMap != null)
+			try {
+				issuesMap.close();
+			} catch (final IOException e) {
+				e.printStackTrace();
+			}
+		issuesMap = null;
 	}
 
 	@FunctionSpec(name = "type_name", returnType = "string", formalParameters = { "string" })
