@@ -6,66 +6,74 @@ option optimize_for = SPEED;
 
 message IssueRepository {
 	enum IssueKind {
-		UNKNOWN = 1;
-		BUGS = 2;
-		FEATURES = 3;
-		SUPPORT = 4;
-		PATCHES = 5;
+		OTHER = 0;
+		BUGS = 1;
+		FEATURES = 2;
+		SUPPORT = 3;
+		PATCHES = 4;
 	}
 	required string url = 1;
 	required IssueKind kind = 2;
-	repeated Issue issues = 3;
+	required string key = 3;
+}
+
+message IssuesRoot {
+	repeated Issue issues = 1;
 }
 
 message Issue {
 	required string id = 1;
 	required string status = 2;
-	optional string component = 3;
-	required string priority = 4;
-	required string resolution = 5;
-	repeated string duplicated_by = 6;
-	optional string duplicate_of = 7;
-	optional string subcomponent = 8;
-	required string summary = 9;
-	optional string version = 10;
-	required int32 created_date = 11;
-	required int32 modified_date = 12;
-	optional int32 completed_date = 13;
-	repeated string keywords = 14;
-	required Person author = 15;
-	required string description = 16;
-	optional Person assignee = 17;
-	optional string os = 18;
-	optional string platform = 19;
-	optional string milestone = 20;
-	optional string depends_on = 21;
-	optional string blocked = 22;
-	optional int32 vote = 23;
-	optional string secrecy = 24;
-	repeated AttachedFile files = 25;
-	repeated IssueComment comments = 26;
+	required Person author = 3;
+	optional Person assignee = 4;
+	required string summary = 5;
+	required string description = 6;
+	required uint64 created_date = 7;
+	required uint64 modified_date = 8;
+	optional uint64 completed_date = 9;
+	repeated string keywords = 10;
+	optional int32 vote = 11;
+	optional string priority = 12;
+	repeated Attachment files = 13;
+	repeated IssueComment comments = 14;
+	/*
+	optional string component = 15;
+	optional string resolution = 16;
+	repeated string duplicated_by = 17;
+	optional string duplicate_of = 18;
+	optional string subcomponent = 19;
+	optional string version = 20;
+	optional string os = 21;
+	optional string platform = 22;
+	optional string milestone = 23;
+	optional string depends_on = 24;
+	optional string blocked = 25;
+	optional string secrecy = 26;
 	repeated IssueChange changes = 27;
+	*/
 }
 
-message AttachedFile {
-	required string filename = 1;
-	required string description = 2;
-	required string url = 3;
-	required int32 date = 4;
-	required Person author = 5;
+message Attachment {
+	required string url = 1;
+	required string filename = 2;
+	optional uint64 size = 3;
+	optional uint64 date = 4;
+	optional Person author = 5;
+	optional string description = 6;
 }
 
 message IssueComment {
 	required string id = 1;
-	required int32 date = 2;
+	required uint64 date = 2;
 	required Person author = 3;
 	required string description = 4;
+	repeated Attachment files = 5;
 }
 
 message IssueChange {
 	required string id = 1;
 	required string what = 2;
-	required int32 date = 3;
+	required uint64 date = 3;
 	required Person author = 4;
 	required string old_value = 5;
 	required string new_value = 6;

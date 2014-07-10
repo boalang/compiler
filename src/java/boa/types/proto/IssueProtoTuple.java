@@ -29,11 +29,11 @@ import boa.types.BoaTime;
 import boa.types.BoaType;
 
 /**
- * A {@link RevisionProtoTuple}.
+ * A {@link IssueProtoTuple}.
  * 
  * @author rdyer
  */
-public class RevisionProtoTuple extends BoaProtoTuple {
+public class IssueProtoTuple extends BoaProtoTuple {
 	private final static List<BoaType> members = new ArrayList<BoaType>();
 	private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
@@ -43,38 +43,56 @@ public class RevisionProtoTuple extends BoaProtoTuple {
 		names.put("id", counter++);
 		members.add(new BoaString());
 
+		names.put("status", counter++);
+		members.add(new BoaString());
+
 		names.put("author", counter++);
 		members.add(new PersonProtoTuple());
 
-		names.put("committer", counter++);
+		names.put("assignee", counter++);
 		members.add(new PersonProtoTuple());
 
-		names.put("commit_date", counter++);
+		names.put("summary", counter++);
+		members.add(new BoaString());
+
+		names.put("description", counter++);
+		members.add(new BoaString());
+
+		names.put("created_date", counter++);
 		members.add(new BoaTime());
 
-		names.put("log", counter++);
+		names.put("modified_date", counter++);
+		members.add(new BoaTime());
+
+		names.put("completed_date", counter++);
+		members.add(new BoaTime());
+
+		names.put("keywords", counter++);
+		members.add(new BoaProtoList(new BoaString()));
+
+		names.put("vote", counter++);
+		members.add(new BoaInt());
+
+		names.put("priority", counter++);
 		members.add(new BoaString());
 
 		names.put("files", counter++);
-		members.add(new BoaProtoList(new ChangedFileProtoTuple()));
+		members.add(new BoaProtoList(new AttachmentProtoTuple()));
 
-		names.put("parents", counter++);
-		members.add(new BoaProtoList(new BoaInt()));
-
-		names.put("children", counter++);
-		members.add(new BoaProtoList(new BoaInt()));
+		names.put("comments", counter++);
+		members.add(new BoaProtoList(new IssueCommentProtoTuple()));
 	}
 
 	/**
-	 * Construct a {@link RevisionProtoTuple}.
+	 * Construct a IssueProtoTuple.
 	 */
-	public RevisionProtoTuple() {
+	public IssueProtoTuple() {
 		super(members, names);
 	}
 
 	/** @{inheritDoc} */
 	@Override
 	public String toJavaType() {
-		return "boa.types.Code.Revision";
+		return "boa.types.Issues.Issue";
 	}
 }

@@ -243,117 +243,236 @@ public final class Diff {
     public enum FileKind
         implements com.google.protobuf.ProtocolMessageEnum {
       /**
-       * <code>UNKNOWN = 1;</code>
+       * <code>OTHER = 0;</code>
        */
-      UNKNOWN(0, 1),
+      OTHER(0, 0),
       /**
-       * <code>BINARY = 2;</code>
+       * <code>BINARY = 1;</code>
        */
-      BINARY(1, 2),
+      BINARY(1, 1),
       /**
-       * <code>TEXT = 3;</code>
+       * <code>TEXT = 2;</code>
        */
-      TEXT(2, 3),
+      TEXT(2, 2),
       /**
-       * <code>XML = 4;</code>
+       * <code>XML = 3;</code>
        */
-      XML(3, 4),
+      XML(3, 3),
       /**
-       * <code>SOURCE_JAVA_ERROR = 5;</code>
+       * <code>SOURCE_JAVA_ERROR = 100;</code>
        */
-      SOURCE_JAVA_ERROR(4, 5),
+      SOURCE_JAVA_ERROR(4, 100),
       /**
-       * <code>SOURCE_JAVA_JLS2 = 6;</code>
+       * <code>SOURCE_JAVA_JLS2 = 101;</code>
        */
-      SOURCE_JAVA_JLS2(5, 6),
+      SOURCE_JAVA_JLS2(5, 101),
       /**
-       * <code>SOURCE_JAVA_JLS3 = 7;</code>
+       * <code>SOURCE_JAVA_JLS3 = 102;</code>
        */
-      SOURCE_JAVA_JLS3(6, 7),
+      SOURCE_JAVA_JLS3(6, 102),
       /**
-       * <code>SOURCE_JAVA_JLS4 = 8;</code>
+       * <code>SOURCE_JAVA_JLS4 = 103;</code>
        */
-      SOURCE_JAVA_JLS4(7, 8),
+      SOURCE_JAVA_JLS4(7, 103),
+      /**
+       * <code>SOURCE_JAVA_JLS5 = 104;</code>
+       */
+      SOURCE_JAVA_JLS5(8, 104),
+      /**
+       * <code>SOURCE_CS_ERROR = 200;</code>
+       */
+      SOURCE_CS_ERROR(14, 200),
+      /**
+       * <code>SOURCE_CS_CS1 = 201;</code>
+       */
+      SOURCE_CS_CS1(15, 201),
+      /**
+       * <code>SOURCE_CS_CS2 = 202;</code>
+       */
+      SOURCE_CS_CS2(16, 202),
+      /**
+       * <code>SOURCE_CS_CS3 = 203;</code>
+       */
+      SOURCE_CS_CS3(17, 203),
+      /**
+       * <code>SOURCE_CS_CS4 = 204;</code>
+       */
+      SOURCE_CS_CS4(18, 204),
+      /**
+       * <code>SOURCE_CS_CS5 = 205;</code>
+       */
+      SOURCE_CS_CS5(19, 205),
       ;
 
       /**
-       * <code>JAVA_ERROR = 5;</code>
+       * <code>JAVA_ERROR = 100;</code>
        */
       public static final FileKind JAVA_ERROR = SOURCE_JAVA_ERROR;
       /**
-       * <code>JLS2 = 6;</code>
+       * <code>JLS2 = 101;</code>
        */
       public static final FileKind JLS2 = SOURCE_JAVA_JLS2;
       /**
-       * <code>JLS3 = 7;</code>
+       * <code>JLS3 = 102;</code>
        */
       public static final FileKind JLS3 = SOURCE_JAVA_JLS3;
       /**
-       * <code>JLS4 = 8;</code>
+       * <code>JLS4 = 103;</code>
        */
       public static final FileKind JLS4 = SOURCE_JAVA_JLS4;
       /**
-       * <code>UNKNOWN = 1;</code>
+       * <code>JLS5 = 104;</code>
        */
-      public static final int UNKNOWN_VALUE = 1;
+      public static final FileKind JLS5 = SOURCE_JAVA_JLS5;
       /**
-       * <code>BINARY = 2;</code>
+       * <code>CS_ERROR = 200;</code>
        */
-      public static final int BINARY_VALUE = 2;
+      public static final FileKind CS_ERROR = SOURCE_CS_ERROR;
       /**
-       * <code>TEXT = 3;</code>
+       * <code>CS1 = 201;</code>
        */
-      public static final int TEXT_VALUE = 3;
+      public static final FileKind CS1 = SOURCE_CS_CS1;
       /**
-       * <code>XML = 4;</code>
+       * <code>CS2 = 202;</code>
        */
-      public static final int XML_VALUE = 4;
+      public static final FileKind CS2 = SOURCE_CS_CS2;
       /**
-       * <code>SOURCE_JAVA_ERROR = 5;</code>
+       * <code>CS3 = 203;</code>
        */
-      public static final int SOURCE_JAVA_ERROR_VALUE = 5;
+      public static final FileKind CS3 = SOURCE_CS_CS3;
       /**
-       * <code>SOURCE_JAVA_JLS2 = 6;</code>
+       * <code>CS4 = 204;</code>
        */
-      public static final int SOURCE_JAVA_JLS2_VALUE = 6;
+      public static final FileKind CS4 = SOURCE_CS_CS4;
       /**
-       * <code>SOURCE_JAVA_JLS3 = 7;</code>
+       * <code>CS5 = 205;</code>
        */
-      public static final int SOURCE_JAVA_JLS3_VALUE = 7;
+      public static final FileKind CS5 = SOURCE_CS_CS5;
       /**
-       * <code>SOURCE_JAVA_JLS4 = 8;</code>
+       * <code>OTHER = 0;</code>
        */
-      public static final int SOURCE_JAVA_JLS4_VALUE = 8;
+      public static final int OTHER_VALUE = 0;
       /**
-       * <code>JAVA_ERROR = 5;</code>
+       * <code>BINARY = 1;</code>
        */
-      public static final int JAVA_ERROR_VALUE = 5;
+      public static final int BINARY_VALUE = 1;
       /**
-       * <code>JLS2 = 6;</code>
+       * <code>TEXT = 2;</code>
        */
-      public static final int JLS2_VALUE = 6;
+      public static final int TEXT_VALUE = 2;
       /**
-       * <code>JLS3 = 7;</code>
+       * <code>XML = 3;</code>
        */
-      public static final int JLS3_VALUE = 7;
+      public static final int XML_VALUE = 3;
       /**
-       * <code>JLS4 = 8;</code>
+       * <code>SOURCE_JAVA_ERROR = 100;</code>
        */
-      public static final int JLS4_VALUE = 8;
+      public static final int SOURCE_JAVA_ERROR_VALUE = 100;
+      /**
+       * <code>SOURCE_JAVA_JLS2 = 101;</code>
+       */
+      public static final int SOURCE_JAVA_JLS2_VALUE = 101;
+      /**
+       * <code>SOURCE_JAVA_JLS3 = 102;</code>
+       */
+      public static final int SOURCE_JAVA_JLS3_VALUE = 102;
+      /**
+       * <code>SOURCE_JAVA_JLS4 = 103;</code>
+       */
+      public static final int SOURCE_JAVA_JLS4_VALUE = 103;
+      /**
+       * <code>SOURCE_JAVA_JLS5 = 104;</code>
+       */
+      public static final int SOURCE_JAVA_JLS5_VALUE = 104;
+      /**
+       * <code>JAVA_ERROR = 100;</code>
+       */
+      public static final int JAVA_ERROR_VALUE = 100;
+      /**
+       * <code>JLS2 = 101;</code>
+       */
+      public static final int JLS2_VALUE = 101;
+      /**
+       * <code>JLS3 = 102;</code>
+       */
+      public static final int JLS3_VALUE = 102;
+      /**
+       * <code>JLS4 = 103;</code>
+       */
+      public static final int JLS4_VALUE = 103;
+      /**
+       * <code>JLS5 = 104;</code>
+       */
+      public static final int JLS5_VALUE = 104;
+      /**
+       * <code>SOURCE_CS_ERROR = 200;</code>
+       */
+      public static final int SOURCE_CS_ERROR_VALUE = 200;
+      /**
+       * <code>SOURCE_CS_CS1 = 201;</code>
+       */
+      public static final int SOURCE_CS_CS1_VALUE = 201;
+      /**
+       * <code>SOURCE_CS_CS2 = 202;</code>
+       */
+      public static final int SOURCE_CS_CS2_VALUE = 202;
+      /**
+       * <code>SOURCE_CS_CS3 = 203;</code>
+       */
+      public static final int SOURCE_CS_CS3_VALUE = 203;
+      /**
+       * <code>SOURCE_CS_CS4 = 204;</code>
+       */
+      public static final int SOURCE_CS_CS4_VALUE = 204;
+      /**
+       * <code>SOURCE_CS_CS5 = 205;</code>
+       */
+      public static final int SOURCE_CS_CS5_VALUE = 205;
+      /**
+       * <code>CS_ERROR = 200;</code>
+       */
+      public static final int CS_ERROR_VALUE = 200;
+      /**
+       * <code>CS1 = 201;</code>
+       */
+      public static final int CS1_VALUE = 201;
+      /**
+       * <code>CS2 = 202;</code>
+       */
+      public static final int CS2_VALUE = 202;
+      /**
+       * <code>CS3 = 203;</code>
+       */
+      public static final int CS3_VALUE = 203;
+      /**
+       * <code>CS4 = 204;</code>
+       */
+      public static final int CS4_VALUE = 204;
+      /**
+       * <code>CS5 = 205;</code>
+       */
+      public static final int CS5_VALUE = 205;
 
 
       public final int getNumber() { return value; }
 
       public static FileKind valueOf(int value) {
         switch (value) {
-          case 1: return UNKNOWN;
-          case 2: return BINARY;
-          case 3: return TEXT;
-          case 4: return XML;
-          case 5: return SOURCE_JAVA_ERROR;
-          case 6: return SOURCE_JAVA_JLS2;
-          case 7: return SOURCE_JAVA_JLS3;
-          case 8: return SOURCE_JAVA_JLS4;
+          case 0: return OTHER;
+          case 1: return BINARY;
+          case 2: return TEXT;
+          case 3: return XML;
+          case 100: return SOURCE_JAVA_ERROR;
+          case 101: return SOURCE_JAVA_JLS2;
+          case 102: return SOURCE_JAVA_JLS3;
+          case 103: return SOURCE_JAVA_JLS4;
+          case 104: return SOURCE_JAVA_JLS5;
+          case 200: return SOURCE_CS_ERROR;
+          case 201: return SOURCE_CS_CS1;
+          case 202: return SOURCE_CS_CS2;
+          case 203: return SOURCE_CS_CS3;
+          case 204: return SOURCE_CS_CS4;
+          case 205: return SOURCE_CS_CS5;
           default: return null;
         }
       }
@@ -384,7 +503,7 @@ public final class Diff {
       }
 
       private static final FileKind[] VALUES = {
-        UNKNOWN, BINARY, TEXT, XML, SOURCE_JAVA_ERROR, SOURCE_JAVA_JLS2, SOURCE_JAVA_JLS3, SOURCE_JAVA_JLS4, JAVA_ERROR, JLS2, JLS3, JLS4, 
+        OTHER, BINARY, TEXT, XML, SOURCE_JAVA_ERROR, SOURCE_JAVA_JLS2, SOURCE_JAVA_JLS3, SOURCE_JAVA_JLS4, SOURCE_JAVA_JLS5, JAVA_ERROR, JLS2, JLS3, JLS4, JLS5, SOURCE_CS_ERROR, SOURCE_CS_CS1, SOURCE_CS_CS2, SOURCE_CS_CS3, SOURCE_CS_CS4, SOURCE_CS_CS5, CS_ERROR, CS1, CS2, CS3, CS4, CS5, 
       };
 
       public static FileKind valueOf(
@@ -572,7 +691,7 @@ public final class Diff {
 
     private void initFields() {
       change_ = boa.types.Shared.ChangeKind.ADDED;
-      kind_ = boa.types.Diff.ChangedFile.FileKind.UNKNOWN;
+      kind_ = boa.types.Diff.ChangedFile.FileKind.OTHER;
       name_ = "";
       key_ = "";
       ast_ = boa.types.Ast.ASTRoot.getDefaultInstance();
@@ -789,7 +908,7 @@ public final class Diff {
         super.clear();
         change_ = boa.types.Shared.ChangeKind.ADDED;
         bitField0_ = (bitField0_ & ~0x00000001);
-        kind_ = boa.types.Diff.ChangedFile.FileKind.UNKNOWN;
+        kind_ = boa.types.Diff.ChangedFile.FileKind.OTHER;
         bitField0_ = (bitField0_ & ~0x00000002);
         name_ = "";
         bitField0_ = (bitField0_ & ~0x00000004);
@@ -997,7 +1116,7 @@ public final class Diff {
       }
 
       // required .boa.types.ChangedFile.FileKind kind = 2;
-      private boa.types.Diff.ChangedFile.FileKind kind_ = boa.types.Diff.ChangedFile.FileKind.UNKNOWN;
+      private boa.types.Diff.ChangedFile.FileKind kind_ = boa.types.Diff.ChangedFile.FileKind.OTHER;
       /**
        * <code>required .boa.types.ChangedFile.FileKind kind = 2;</code>
        */
@@ -1027,7 +1146,7 @@ public final class Diff {
        */
       public Builder clearKind() {
         bitField0_ = (bitField0_ & ~0x00000002);
-        kind_ = boa.types.Diff.ChangedFile.FileKind.UNKNOWN;
+        kind_ = boa.types.Diff.ChangedFile.FileKind.OTHER;
         onChanged();
         return this;
       }
@@ -20158,7 +20277,7 @@ public final class Diff {
 
     private void initFields() {
       change_ = boa.types.Shared.ChangeKind.ADDED;
-      kind_ = boa.types.Ast.Comment.CommentKind.LINE;
+      kind_ = boa.types.Ast.Comment.CommentKind.OTHER;
       value_ = "";
       startLine_ = 0;
     }
@@ -20337,7 +20456,7 @@ public final class Diff {
         super.clear();
         change_ = boa.types.Shared.ChangeKind.ADDED;
         bitField0_ = (bitField0_ & ~0x00000001);
-        kind_ = boa.types.Ast.Comment.CommentKind.LINE;
+        kind_ = boa.types.Ast.Comment.CommentKind.OTHER;
         bitField0_ = (bitField0_ & ~0x00000002);
         value_ = "";
         bitField0_ = (bitField0_ & ~0x00000004);
@@ -20489,7 +20608,7 @@ public final class Diff {
       }
 
       // required .boa.types.Comment.CommentKind kind = 2;
-      private boa.types.Ast.Comment.CommentKind kind_ = boa.types.Ast.Comment.CommentKind.LINE;
+      private boa.types.Ast.Comment.CommentKind kind_ = boa.types.Ast.Comment.CommentKind.OTHER;
       /**
        * <code>required .boa.types.Comment.CommentKind kind = 2;</code>
        */
@@ -20519,7 +20638,7 @@ public final class Diff {
        */
       public Builder clearKind() {
         bitField0_ = (bitField0_ & ~0x00000002);
-        kind_ = boa.types.Ast.Comment.CommentKind.LINE;
+        kind_ = boa.types.Ast.Comment.CommentKind.OTHER;
         onChanged();
         return this;
       }
@@ -20707,90 +20826,95 @@ public final class Diff {
   static {
     java.lang.String[] descriptorData = {
       "\n\ndiff.proto\022\tboa.types\032\014shared.proto\032\ta" +
-      "st.proto\"\216\003\n\013ChangedFile\022%\n\006change\030\001 \002(\016" +
+      "st.proto\"\347\004\n\013ChangedFile\022%\n\006change\030\001 \002(\016" +
       "2\025.boa.types.ChangeKind\022-\n\004kind\030\002 \002(\0162\037." +
       "boa.types.ChangedFile.FileKind\022\014\n\004name\030\003" +
       " \002(\t\022\013\n\003key\030\004 \002(\t\022\037\n\003ast\030\005 \001(\0132\022.boa.typ" +
       "es.ASTRoot\022)\n\010comments\030\006 \001(\0132\027.boa.types" +
-      ".CommentsRoot\"\301\001\n\010FileKind\022\013\n\007UNKNOWN\020\001\022" +
-      "\n\n\006BINARY\020\002\022\010\n\004TEXT\020\003\022\007\n\003XML\020\004\022\025\n\021SOURCE" +
-      "_JAVA_ERROR\020\005\022\024\n\020SOURCE_JAVA_JLS2\020\006\022\024\n\020S" +
-      "OURCE_JAVA_JLS3\020\007\022\024\n\020SOURCE_JAVA_JLS4\020\010\022",
-      "\016\n\nJAVA_ERROR\020\005\022\010\n\004JLS2\020\006\022\010\n\004JLS3\020\007\022\010\n\004J" +
-      "LS4\020\010\032\002\020\001\"A\n\016ChangedASTRoot\022/\n\nnamespace" +
-      "s\030\001 \003(\0132\033.boa.types.ChangedNamespace\"\330\001\n" +
-      "\020ChangedNamespace\022%\n\006change\030\001 \002(\0162\025.boa." +
-      "types.ChangeKind\022\014\n\004name\030\002 \001(\t\022-\n\tmodifi" +
-      "ers\030\003 \003(\0132\032.boa.types.ChangedModifier\0223\n" +
-      "\014declarations\030\004 \003(\0132\035.boa.types.ChangedD" +
-      "eclaration\022+\n\010comments\030\005 \003(\0132\031.boa.types" +
-      ".ChangedComment\"\270\003\n\022ChangedDeclaration\022%" +
-      "\n\006change\030\001 \002(\0162\025.boa.types.ChangeKind\022!\n",
-      "\004kind\030\002 \002(\0162\023.boa.types.TypeKind\022\014\n\004name" +
-      "\030\003 \001(\t\022-\n\tmodifiers\030\004 \003(\0132\032.boa.types.Ch" +
-      "angedModifier\0222\n\022generic_parameters\030\005 \003(" +
-      "\0132\026.boa.types.ChangedType\022\'\n\007parents\030\006 \003" +
-      "(\0132\026.boa.types.ChangedType\022)\n\007methods\030\007 " +
-      "\003(\0132\030.boa.types.ChangedMethod\022*\n\006fields\030" +
-      "\010 \003(\0132\032.boa.types.ChangedVariable\022:\n\023nes" +
-      "ted_declarations\030\t \003(\0132\035.boa.types.Chang" +
-      "edDeclaration\022+\n\010comments\030\n \003(\0132\031.boa.ty" +
-      "pes.ChangedComment\"q\n\013ChangedType\022%\n\006cha",
-      "nge\030\001 \002(\0162\025.boa.types.ChangeKind\022!\n\004kind" +
-      "\030\002 \001(\0162\023.boa.types.TypeKind\022\014\n\004name\030\003 \001(" +
-      "\t\022\n\n\002id\030\004 \001(\t\"\222\003\n\rChangedMethod\022%\n\006chang" +
-      "e\030\001 \002(\0162\025.boa.types.ChangeKind\022\014\n\004name\030\002" +
-      " \001(\t\022-\n\tmodifiers\030\003 \003(\0132\032.boa.types.Chan" +
-      "gedModifier\022+\n\013return_type\030\004 \001(\0132\026.boa.t" +
-      "ypes.ChangedType\0222\n\022generic_parameters\030\005" +
-      " \003(\0132\026.boa.types.ChangedType\022-\n\targument" +
-      "s\030\006 \003(\0132\032.boa.types.ChangedVariable\022/\n\017e" +
-      "xception_types\030\007 \003(\0132\026.boa.types.Changed",
-      "Type\022/\n\nstatements\030\010 \003(\0132\033.boa.types.Cha" +
-      "ngedStatement\022+\n\010comments\030\t \003(\0132\031.boa.ty" +
-      "pes.ChangedComment\"\204\002\n\017ChangedVariable\022%" +
-      "\n\006change\030\001 \002(\0162\025.boa.types.ChangeKind\022\014\n" +
-      "\004name\030\002 \001(\t\022-\n\rvariable_type\030\003 \001(\0132\026.boa" +
-      ".types.ChangedType\022-\n\tmodifiers\030\004 \003(\0132\032." +
-      "boa.types.ChangedModifier\0221\n\013initializer" +
-      "\030\005 \001(\0132\034.boa.types.ChangedExpression\022+\n\010" +
-      "comments\030\006 \003(\0132\031.boa.types.ChangedCommen" +
-      "t\"\205\004\n\020ChangedStatement\022%\n\006change\030\001 \002(\0162\025",
-      ".boa.types.ChangeKind\0220\n\004kind\030\002 \002(\0162\".bo" +
-      "a.types.Statement.StatementKind\022+\n\010comme" +
-      "nts\030\003 \003(\0132\031.boa.types.ChangedComment\022/\n\n" +
-      "statements\030\004 \003(\0132\033.boa.types.ChangedStat" +
-      "ement\0225\n\017initializations\030\005 \003(\0132\034.boa.typ" +
-      "es.ChangedExpression\022/\n\tcondition\030\006 \001(\0132" +
-      "\034.boa.types.ChangedExpression\022-\n\007updates" +
-      "\030\007 \003(\0132\034.boa.types.ChangedExpression\0228\n\024" +
-      "variable_declaration\030\010 \001(\0132\032.boa.types.C" +
-      "hangedVariable\0227\n\020type_declaration\030\t \001(\013",
-      "2\035.boa.types.ChangedDeclaration\0220\n\nexpre" +
-      "ssion\030\n \001(\0132\034.boa.types.ChangedExpressio" +
-      "n\"\346\003\n\021ChangedExpression\022%\n\006change\030\001 \002(\0162" +
-      "\025.boa.types.ChangeKind\0222\n\004kind\030\002 \002(\0162$.b" +
-      "oa.types.Expression.ExpressionKind\0221\n\013ex" +
-      "pressions\030\003 \003(\0132\034.boa.types.ChangedExpre" +
-      "ssion\0222\n\016variable_decls\030\004 \003(\0132\032.boa.type" +
-      "s.ChangedVariable\022(\n\010new_type\030\005 \001(\0132\026.bo" +
-      "a.types.ChangedType\0222\n\022generic_parameter" +
-      "s\030\006 \003(\0132\026.boa.types.ChangedType\022\022\n\nis_po",
-      "stfix\030\007 \001(\010\022\017\n\007literal\030\010 \001(\t\022\020\n\010variable" +
-      "\030\t \001(\t\022\016\n\006method\030\n \001(\t\0221\n\013method_args\030\013 " +
-      "\003(\0132\034.boa.types.ChangedExpression\0227\n\020ano" +
-      "n_declaration\030\014 \001(\0132\035.boa.types.ChangedD" +
-      "eclaration\"\371\001\n\017ChangedModifier\022%\n\006change" +
-      "\030\001 \002(\0162\025.boa.types.ChangeKind\022.\n\004kind\030\002 " +
-      "\002(\0162 .boa.types.Modifier.ModifierKind\022\022\n" +
-      "\nvisibility\030\003 \001(\r\022\027\n\017annotation_name\030\004 \001" +
-      "(\t\022\032\n\022annotation_members\030\005 \003(\t\0227\n\021annota" +
-      "tion_values\030\006 \003(\0132\034.boa.types.ChangedExp",
-      "ression\022\r\n\005other\030\007 \001(\t\"\210\001\n\016ChangedCommen" +
-      "t\022%\n\006change\030\001 \002(\0162\025.boa.types.ChangeKind" +
-      "\022,\n\004kind\030\002 \002(\0162\036.boa.types.Comment.Comme" +
-      "ntKind\022\r\n\005value\030\003 \001(\t\022\022\n\nstart_line\030\004 \001(" +
-      "\005B\002H\001"
+      ".CommentsRoot\"\232\003\n\010FileKind\022\t\n\005OTHER\020\000\022\n\n" +
+      "\006BINARY\020\001\022\010\n\004TEXT\020\002\022\007\n\003XML\020\003\022\025\n\021SOURCE_J" +
+      "AVA_ERROR\020d\022\024\n\020SOURCE_JAVA_JLS2\020e\022\024\n\020SOU" +
+      "RCE_JAVA_JLS3\020f\022\024\n\020SOURCE_JAVA_JLS4\020g\022\024\n",
+      "\020SOURCE_JAVA_JLS5\020h\022\016\n\nJAVA_ERROR\020d\022\010\n\004J" +
+      "LS2\020e\022\010\n\004JLS3\020f\022\010\n\004JLS4\020g\022\010\n\004JLS5\020h\022\024\n\017S" +
+      "OURCE_CS_ERROR\020\310\001\022\022\n\rSOURCE_CS_CS1\020\311\001\022\022\n" +
+      "\rSOURCE_CS_CS2\020\312\001\022\022\n\rSOURCE_CS_CS3\020\313\001\022\022\n" +
+      "\rSOURCE_CS_CS4\020\314\001\022\022\n\rSOURCE_CS_CS5\020\315\001\022\r\n" +
+      "\010CS_ERROR\020\310\001\022\010\n\003CS1\020\311\001\022\010\n\003CS2\020\312\001\022\010\n\003CS3\020" +
+      "\313\001\022\010\n\003CS4\020\314\001\022\010\n\003CS5\020\315\001\032\002\020\001\"A\n\016ChangedAST" +
+      "Root\022/\n\nnamespaces\030\001 \003(\0132\033.boa.types.Cha" +
+      "ngedNamespace\"\330\001\n\020ChangedNamespace\022%\n\006ch" +
+      "ange\030\001 \002(\0162\025.boa.types.ChangeKind\022\014\n\004nam",
+      "e\030\002 \001(\t\022-\n\tmodifiers\030\003 \003(\0132\032.boa.types.C" +
+      "hangedModifier\0223\n\014declarations\030\004 \003(\0132\035.b" +
+      "oa.types.ChangedDeclaration\022+\n\010comments\030" +
+      "\005 \003(\0132\031.boa.types.ChangedComment\"\270\003\n\022Cha" +
+      "ngedDeclaration\022%\n\006change\030\001 \002(\0162\025.boa.ty" +
+      "pes.ChangeKind\022!\n\004kind\030\002 \002(\0162\023.boa.types" +
+      ".TypeKind\022\014\n\004name\030\003 \001(\t\022-\n\tmodifiers\030\004 \003" +
+      "(\0132\032.boa.types.ChangedModifier\0222\n\022generi" +
+      "c_parameters\030\005 \003(\0132\026.boa.types.ChangedTy" +
+      "pe\022\'\n\007parents\030\006 \003(\0132\026.boa.types.ChangedT",
+      "ype\022)\n\007methods\030\007 \003(\0132\030.boa.types.Changed" +
+      "Method\022*\n\006fields\030\010 \003(\0132\032.boa.types.Chang" +
+      "edVariable\022:\n\023nested_declarations\030\t \003(\0132" +
+      "\035.boa.types.ChangedDeclaration\022+\n\010commen" +
+      "ts\030\n \003(\0132\031.boa.types.ChangedComment\"q\n\013C" +
+      "hangedType\022%\n\006change\030\001 \002(\0162\025.boa.types.C" +
+      "hangeKind\022!\n\004kind\030\002 \001(\0162\023.boa.types.Type" +
+      "Kind\022\014\n\004name\030\003 \001(\t\022\n\n\002id\030\004 \001(\t\"\222\003\n\rChang" +
+      "edMethod\022%\n\006change\030\001 \002(\0162\025.boa.types.Cha" +
+      "ngeKind\022\014\n\004name\030\002 \001(\t\022-\n\tmodifiers\030\003 \003(\013",
+      "2\032.boa.types.ChangedModifier\022+\n\013return_t" +
+      "ype\030\004 \001(\0132\026.boa.types.ChangedType\0222\n\022gen" +
+      "eric_parameters\030\005 \003(\0132\026.boa.types.Change" +
+      "dType\022-\n\targuments\030\006 \003(\0132\032.boa.types.Cha" +
+      "ngedVariable\022/\n\017exception_types\030\007 \003(\0132\026." +
+      "boa.types.ChangedType\022/\n\nstatements\030\010 \003(" +
+      "\0132\033.boa.types.ChangedStatement\022+\n\010commen" +
+      "ts\030\t \003(\0132\031.boa.types.ChangedComment\"\204\002\n\017" +
+      "ChangedVariable\022%\n\006change\030\001 \002(\0162\025.boa.ty" +
+      "pes.ChangeKind\022\014\n\004name\030\002 \001(\t\022-\n\rvariable",
+      "_type\030\003 \001(\0132\026.boa.types.ChangedType\022-\n\tm" +
+      "odifiers\030\004 \003(\0132\032.boa.types.ChangedModifi" +
+      "er\0221\n\013initializer\030\005 \001(\0132\034.boa.types.Chan" +
+      "gedExpression\022+\n\010comments\030\006 \003(\0132\031.boa.ty" +
+      "pes.ChangedComment\"\205\004\n\020ChangedStatement\022" +
+      "%\n\006change\030\001 \002(\0162\025.boa.types.ChangeKind\0220" +
+      "\n\004kind\030\002 \002(\0162\".boa.types.Statement.State" +
+      "mentKind\022+\n\010comments\030\003 \003(\0132\031.boa.types.C" +
+      "hangedComment\022/\n\nstatements\030\004 \003(\0132\033.boa." +
+      "types.ChangedStatement\0225\n\017initialization",
+      "s\030\005 \003(\0132\034.boa.types.ChangedExpression\022/\n" +
+      "\tcondition\030\006 \001(\0132\034.boa.types.ChangedExpr" +
+      "ession\022-\n\007updates\030\007 \003(\0132\034.boa.types.Chan" +
+      "gedExpression\0228\n\024variable_declaration\030\010 " +
+      "\001(\0132\032.boa.types.ChangedVariable\0227\n\020type_" +
+      "declaration\030\t \001(\0132\035.boa.types.ChangedDec" +
+      "laration\0220\n\nexpression\030\n \001(\0132\034.boa.types" +
+      ".ChangedExpression\"\346\003\n\021ChangedExpression" +
+      "\022%\n\006change\030\001 \002(\0162\025.boa.types.ChangeKind\022" +
+      "2\n\004kind\030\002 \002(\0162$.boa.types.Expression.Exp",
+      "ressionKind\0221\n\013expressions\030\003 \003(\0132\034.boa.t" +
+      "ypes.ChangedExpression\0222\n\016variable_decls" +
+      "\030\004 \003(\0132\032.boa.types.ChangedVariable\022(\n\010ne" +
+      "w_type\030\005 \001(\0132\026.boa.types.ChangedType\0222\n\022" +
+      "generic_parameters\030\006 \003(\0132\026.boa.types.Cha" +
+      "ngedType\022\022\n\nis_postfix\030\007 \001(\010\022\017\n\007literal\030" +
+      "\010 \001(\t\022\020\n\010variable\030\t \001(\t\022\016\n\006method\030\n \001(\t\022" +
+      "1\n\013method_args\030\013 \003(\0132\034.boa.types.Changed" +
+      "Expression\0227\n\020anon_declaration\030\014 \001(\0132\035.b" +
+      "oa.types.ChangedDeclaration\"\371\001\n\017ChangedM",
+      "odifier\022%\n\006change\030\001 \002(\0162\025.boa.types.Chan" +
+      "geKind\022.\n\004kind\030\002 \002(\0162 .boa.types.Modifie" +
+      "r.ModifierKind\022\022\n\nvisibility\030\003 \001(\r\022\027\n\017an" +
+      "notation_name\030\004 \001(\t\022\032\n\022annotation_member" +
+      "s\030\005 \003(\t\0227\n\021annotation_values\030\006 \003(\0132\034.boa" +
+      ".types.ChangedExpression\022\r\n\005other\030\007 \001(\t\"" +
+      "\210\001\n\016ChangedComment\022%\n\006change\030\001 \002(\0162\025.boa" +
+      ".types.ChangeKind\022,\n\004kind\030\002 \002(\0162\036.boa.ty" +
+      "pes.Comment.CommentKind\022\r\n\005value\030\003 \001(\t\022\022" +
+      "\n\nstart_line\030\004 \001(\005B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

@@ -9,25 +9,27 @@ message CodeRepository {
 	required string url = 1;
 	enum RepositoryKind {
 		option allow_alias = true;
-		UNKNOWN = 1;
-		SVN = 2;
-		SUBVERSION = 2;
-		CVS = 3;
-		GIT = 4;
-		HG = 5;
-		MERCURIAL = 5;
-		BZR = 6;
-		BAZAAR = 6;
+		OTHER = 0;
+		SVN = 1;
+		SUBVERSION = 1;
+		CVS = 2;
+		GIT = 3;
+		HG = 4;
+		MERCURIAL = 4;
+		BZR = 5;
+		BAZAAR = 5;
 	}
 	required RepositoryKind kind = 2;
 	repeated Revision revisions = 3;
 }
 
 message Revision {
-	required int32 id = 1;
+	required string id = 1;
 	required Person author = 2;
 	required Person committer = 3;
 	required uint64 commit_date = 4;
 	required string log = 5;
 	repeated ChangedFile files = 6;
+	repeated int32 parents = 7;
+	repeated int32 children = 8;
 }

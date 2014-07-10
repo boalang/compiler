@@ -89,9 +89,7 @@ public class SymbolTable {
 		idmap.put("string", new BoaString());
 
 		idmap.put("ASTRoot", new ASTRootProtoTuple());
-		idmap.put("Bug", new BugProtoTuple());
-		idmap.put("BugRepository", new BugRepositoryProtoTuple());
-		idmap.put("BugStatus", new IssueKindProtoMap());
+		idmap.put("Attachment", new AttachmentProtoTuple());
 		idmap.put("ChangedFile", new ChangedFileProtoTuple());
 		idmap.put("ChangeKind", new ChangeKindProtoMap());
 		idmap.put("CodeRepository", new CodeRepositoryProtoTuple());
@@ -102,6 +100,12 @@ public class SymbolTable {
 		idmap.put("ExpressionKind", new ExpressionKindProtoMap());
 		idmap.put("Expression", new ExpressionProtoTuple());
 		idmap.put("FileKind", new FileKindProtoMap());
+		idmap.put("ForgeKind", new ForgeKindProtoMap());
+		idmap.put("Issue", new IssueProtoTuple());
+		idmap.put("IssueComment", new IssueCommentProtoTuple());
+		idmap.put("IssueKind", new IssueKindProtoMap());
+		idmap.put("IssueRepository", new IssueRepositoryProtoTuple());
+		idmap.put("IssuesRoot", new IssuesRootProtoTuple());
 		idmap.put("Method", new MethodProtoTuple());
 		idmap.put("ModifierKind", new ModifierKindProtoMap());
 		idmap.put("Modifier", new ModifierProtoTuple());
@@ -168,9 +172,7 @@ public class SymbolTable {
 
 		// proto to string
 		globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { new ASTRootProtoTuple() }, "com.googlecode.protobuf.format.JsonFormat.printToString(${0})"));
-		globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { new BugProtoTuple() }, "com.googlecode.protobuf.format.JsonFormat.printToString(${0})"));
-		globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { new BugRepositoryProtoTuple() }, "com.googlecode.protobuf.format.JsonFormat.printToString(${0})"));
-		globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { new IssueKindProtoMap() }, "com.googlecode.protobuf.format.JsonFormat.printToString(${0})"));
+		globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { new AttachmentProtoTuple() }, "com.googlecode.protobuf.format.JsonFormat.printToString(${0})"));
 		globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { new ChangedFileProtoTuple() }, "com.googlecode.protobuf.format.JsonFormat.printToString(${0})"));
 		globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { new ChangeKindProtoMap() }, "com.googlecode.protobuf.format.JsonFormat.printToString(${0})"));
 		globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { new CodeRepositoryProtoTuple() }, "com.googlecode.protobuf.format.JsonFormat.printToString(${0})"));
@@ -181,6 +183,12 @@ public class SymbolTable {
 		globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { new ExpressionKindProtoMap() }, "com.googlecode.protobuf.format.JsonFormat.printToString(${0})"));
 		globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { new ExpressionProtoTuple() }, "com.googlecode.protobuf.format.JsonFormat.printToString(${0})"));
 		globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { new FileKindProtoMap() }, "com.googlecode.protobuf.format.JsonFormat.printToString(${0})"));
+		globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { new ForgeKindProtoMap() }, "com.googlecode.protobuf.format.JsonFormat.printToString(${0})"));
+		globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { new IssueProtoTuple() }, "com.googlecode.protobuf.format.JsonFormat.printToString(${0})"));
+		globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { new IssueCommentProtoTuple() }, "com.googlecode.protobuf.format.JsonFormat.printToString(${0})"));
+		globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { new IssueKindProtoMap() }, "com.googlecode.protobuf.format.JsonFormat.printToString(${0})"));
+		globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { new IssueRepositoryProtoTuple() }, "com.googlecode.protobuf.format.JsonFormat.printToString(${0})"));
+		globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { new IssuesRootProtoTuple() }, "com.googlecode.protobuf.format.JsonFormat.printToString(${0})"));
 		globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { new MethodProtoTuple() }, "com.googlecode.protobuf.format.JsonFormat.printToString(${0})"));
 		globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { new ModifierKindProtoMap() }, "com.googlecode.protobuf.format.JsonFormat.printToString(${0})"));
 		globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { new ModifierProtoTuple() }, "com.googlecode.protobuf.format.JsonFormat.printToString(${0})"));

@@ -184,91 +184,91 @@ public final class Code {
     public enum RepositoryKind
         implements com.google.protobuf.ProtocolMessageEnum {
       /**
-       * <code>UNKNOWN = 1;</code>
+       * <code>OTHER = 0;</code>
        */
-      UNKNOWN(0, 1),
+      OTHER(0, 0),
       /**
-       * <code>SVN = 2;</code>
+       * <code>SVN = 1;</code>
        */
-      SVN(1, 2),
+      SVN(1, 1),
       /**
-       * <code>CVS = 3;</code>
+       * <code>CVS = 2;</code>
        */
-      CVS(3, 3),
+      CVS(3, 2),
       /**
-       * <code>GIT = 4;</code>
+       * <code>GIT = 3;</code>
        */
-      GIT(4, 4),
+      GIT(4, 3),
       /**
-       * <code>HG = 5;</code>
+       * <code>HG = 4;</code>
        */
-      HG(5, 5),
+      HG(5, 4),
       /**
-       * <code>BZR = 6;</code>
+       * <code>BZR = 5;</code>
        */
-      BZR(7, 6),
+      BZR(7, 5),
       ;
 
       /**
-       * <code>SUBVERSION = 2;</code>
+       * <code>SUBVERSION = 1;</code>
        */
       public static final RepositoryKind SUBVERSION = SVN;
       /**
-       * <code>MERCURIAL = 5;</code>
+       * <code>MERCURIAL = 4;</code>
        */
       public static final RepositoryKind MERCURIAL = HG;
       /**
-       * <code>BAZAAR = 6;</code>
+       * <code>BAZAAR = 5;</code>
        */
       public static final RepositoryKind BAZAAR = BZR;
       /**
-       * <code>UNKNOWN = 1;</code>
+       * <code>OTHER = 0;</code>
        */
-      public static final int UNKNOWN_VALUE = 1;
+      public static final int OTHER_VALUE = 0;
       /**
-       * <code>SVN = 2;</code>
+       * <code>SVN = 1;</code>
        */
-      public static final int SVN_VALUE = 2;
+      public static final int SVN_VALUE = 1;
       /**
-       * <code>SUBVERSION = 2;</code>
+       * <code>SUBVERSION = 1;</code>
        */
-      public static final int SUBVERSION_VALUE = 2;
+      public static final int SUBVERSION_VALUE = 1;
       /**
-       * <code>CVS = 3;</code>
+       * <code>CVS = 2;</code>
        */
-      public static final int CVS_VALUE = 3;
+      public static final int CVS_VALUE = 2;
       /**
-       * <code>GIT = 4;</code>
+       * <code>GIT = 3;</code>
        */
-      public static final int GIT_VALUE = 4;
+      public static final int GIT_VALUE = 3;
       /**
-       * <code>HG = 5;</code>
+       * <code>HG = 4;</code>
        */
-      public static final int HG_VALUE = 5;
+      public static final int HG_VALUE = 4;
       /**
-       * <code>MERCURIAL = 5;</code>
+       * <code>MERCURIAL = 4;</code>
        */
-      public static final int MERCURIAL_VALUE = 5;
+      public static final int MERCURIAL_VALUE = 4;
       /**
-       * <code>BZR = 6;</code>
+       * <code>BZR = 5;</code>
        */
-      public static final int BZR_VALUE = 6;
+      public static final int BZR_VALUE = 5;
       /**
-       * <code>BAZAAR = 6;</code>
+       * <code>BAZAAR = 5;</code>
        */
-      public static final int BAZAAR_VALUE = 6;
+      public static final int BAZAAR_VALUE = 5;
 
 
       public final int getNumber() { return value; }
 
       public static RepositoryKind valueOf(int value) {
         switch (value) {
-          case 1: return UNKNOWN;
-          case 2: return SVN;
-          case 3: return CVS;
-          case 4: return GIT;
-          case 5: return HG;
-          case 6: return BZR;
+          case 0: return OTHER;
+          case 1: return SVN;
+          case 2: return CVS;
+          case 3: return GIT;
+          case 4: return HG;
+          case 5: return BZR;
           default: return null;
         }
       }
@@ -299,7 +299,7 @@ public final class Code {
       }
 
       private static final RepositoryKind[] VALUES = {
-        UNKNOWN, SVN, SUBVERSION, CVS, GIT, HG, MERCURIAL, BZR, BAZAAR, 
+        OTHER, SVN, SUBVERSION, CVS, GIT, HG, MERCURIAL, BZR, BAZAAR, 
       };
 
       public static RepositoryKind valueOf(
@@ -420,7 +420,7 @@ public final class Code {
 
     private void initFields() {
       url_ = "";
-      kind_ = boa.types.Code.CodeRepository.RepositoryKind.UNKNOWN;
+      kind_ = boa.types.Code.CodeRepository.RepositoryKind.OTHER;
       revisions_ = java.util.Collections.emptyList();
     }
     private byte memoizedIsInitialized = -1;
@@ -598,7 +598,7 @@ public final class Code {
         super.clear();
         url_ = "";
         bitField0_ = (bitField0_ & ~0x00000001);
-        kind_ = boa.types.Code.CodeRepository.RepositoryKind.UNKNOWN;
+        kind_ = boa.types.Code.CodeRepository.RepositoryKind.OTHER;
         bitField0_ = (bitField0_ & ~0x00000002);
         if (revisionsBuilder_ == null) {
           revisions_ = java.util.Collections.emptyList();
@@ -817,7 +817,7 @@ public final class Code {
       }
 
       // required .boa.types.CodeRepository.RepositoryKind kind = 2;
-      private boa.types.Code.CodeRepository.RepositoryKind kind_ = boa.types.Code.CodeRepository.RepositoryKind.UNKNOWN;
+      private boa.types.Code.CodeRepository.RepositoryKind kind_ = boa.types.Code.CodeRepository.RepositoryKind.OTHER;
       /**
        * <code>required .boa.types.CodeRepository.RepositoryKind kind = 2;</code>
        */
@@ -847,7 +847,7 @@ public final class Code {
        */
       public Builder clearKind() {
         bitField0_ = (bitField0_ & ~0x00000002);
-        kind_ = boa.types.Code.CodeRepository.RepositoryKind.UNKNOWN;
+        kind_ = boa.types.Code.CodeRepository.RepositoryKind.OTHER;
         onChanged();
         return this;
       }
@@ -1106,15 +1106,20 @@ public final class Code {
   public interface RevisionOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
-    // required int32 id = 1;
+    // required string id = 1;
     /**
-     * <code>required int32 id = 1;</code>
+     * <code>required string id = 1;</code>
      */
     boolean hasId();
     /**
-     * <code>required int32 id = 1;</code>
+     * <code>required string id = 1;</code>
      */
-    int getId();
+    java.lang.String getId();
+    /**
+     * <code>required string id = 1;</code>
+     */
+    com.google.protobuf.ByteString
+        getIdBytes();
 
     // required .boa.types.Person author = 2;
     /**
@@ -1193,6 +1198,34 @@ public final class Code {
      */
     boa.types.Diff.ChangedFileOrBuilder getFilesOrBuilder(
         int index);
+
+    // repeated int32 parents = 7;
+    /**
+     * <code>repeated int32 parents = 7;</code>
+     */
+    java.util.List<java.lang.Integer> getParentsList();
+    /**
+     * <code>repeated int32 parents = 7;</code>
+     */
+    int getParentsCount();
+    /**
+     * <code>repeated int32 parents = 7;</code>
+     */
+    int getParents(int index);
+
+    // repeated int32 children = 8;
+    /**
+     * <code>repeated int32 children = 8;</code>
+     */
+    java.util.List<java.lang.Integer> getChildrenList();
+    /**
+     * <code>repeated int32 children = 8;</code>
+     */
+    int getChildrenCount();
+    /**
+     * <code>repeated int32 children = 8;</code>
+     */
+    int getChildren(int index);
   }
   /**
    * Protobuf type {@code boa.types.Revision}
@@ -1245,9 +1278,9 @@ public final class Code {
               }
               break;
             }
-            case 8: {
+            case 10: {
               bitField0_ |= 0x00000001;
-              id_ = input.readInt32();
+              id_ = input.readBytes();
               break;
             }
             case 18: {
@@ -1294,6 +1327,48 @@ public final class Code {
               files_.add(input.readMessage(boa.types.Diff.ChangedFile.PARSER, extensionRegistry));
               break;
             }
+            case 56: {
+              if (!((mutable_bitField0_ & 0x00000040) == 0x00000040)) {
+                parents_ = new java.util.ArrayList<java.lang.Integer>();
+                mutable_bitField0_ |= 0x00000040;
+              }
+              parents_.add(input.readInt32());
+              break;
+            }
+            case 58: {
+              int length = input.readRawVarint32();
+              int limit = input.pushLimit(length);
+              if (!((mutable_bitField0_ & 0x00000040) == 0x00000040) && input.getBytesUntilLimit() > 0) {
+                parents_ = new java.util.ArrayList<java.lang.Integer>();
+                mutable_bitField0_ |= 0x00000040;
+              }
+              while (input.getBytesUntilLimit() > 0) {
+                parents_.add(input.readInt32());
+              }
+              input.popLimit(limit);
+              break;
+            }
+            case 64: {
+              if (!((mutable_bitField0_ & 0x00000080) == 0x00000080)) {
+                children_ = new java.util.ArrayList<java.lang.Integer>();
+                mutable_bitField0_ |= 0x00000080;
+              }
+              children_.add(input.readInt32());
+              break;
+            }
+            case 66: {
+              int length = input.readRawVarint32();
+              int limit = input.pushLimit(length);
+              if (!((mutable_bitField0_ & 0x00000080) == 0x00000080) && input.getBytesUntilLimit() > 0) {
+                children_ = new java.util.ArrayList<java.lang.Integer>();
+                mutable_bitField0_ |= 0x00000080;
+              }
+              while (input.getBytesUntilLimit() > 0) {
+                children_.add(input.readInt32());
+              }
+              input.popLimit(limit);
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -1304,6 +1379,12 @@ public final class Code {
       } finally {
         if (((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
           files_ = java.util.Collections.unmodifiableList(files_);
+        }
+        if (((mutable_bitField0_ & 0x00000040) == 0x00000040)) {
+          parents_ = java.util.Collections.unmodifiableList(parents_);
+        }
+        if (((mutable_bitField0_ & 0x00000080) == 0x00000080)) {
+          children_ = java.util.Collections.unmodifiableList(children_);
         }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -1337,20 +1418,47 @@ public final class Code {
     }
 
     private int bitField0_;
-    // required int32 id = 1;
+    // required string id = 1;
     public static final int ID_FIELD_NUMBER = 1;
-    private int id_;
+    private java.lang.Object id_;
     /**
-     * <code>required int32 id = 1;</code>
+     * <code>required string id = 1;</code>
      */
     public boolean hasId() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
-     * <code>required int32 id = 1;</code>
+     * <code>required string id = 1;</code>
      */
-    public int getId() {
-      return id_;
+    public java.lang.String getId() {
+      java.lang.Object ref = id_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          id_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string id = 1;</code>
+     */
+    public com.google.protobuf.ByteString
+        getIdBytes() {
+      java.lang.Object ref = id_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        id_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
     }
 
     // required .boa.types.Person author = 2;
@@ -1492,13 +1600,61 @@ public final class Code {
       return files_.get(index);
     }
 
+    // repeated int32 parents = 7;
+    public static final int PARENTS_FIELD_NUMBER = 7;
+    private java.util.List<java.lang.Integer> parents_;
+    /**
+     * <code>repeated int32 parents = 7;</code>
+     */
+    public java.util.List<java.lang.Integer>
+        getParentsList() {
+      return parents_;
+    }
+    /**
+     * <code>repeated int32 parents = 7;</code>
+     */
+    public int getParentsCount() {
+      return parents_.size();
+    }
+    /**
+     * <code>repeated int32 parents = 7;</code>
+     */
+    public int getParents(int index) {
+      return parents_.get(index);
+    }
+
+    // repeated int32 children = 8;
+    public static final int CHILDREN_FIELD_NUMBER = 8;
+    private java.util.List<java.lang.Integer> children_;
+    /**
+     * <code>repeated int32 children = 8;</code>
+     */
+    public java.util.List<java.lang.Integer>
+        getChildrenList() {
+      return children_;
+    }
+    /**
+     * <code>repeated int32 children = 8;</code>
+     */
+    public int getChildrenCount() {
+      return children_.size();
+    }
+    /**
+     * <code>repeated int32 children = 8;</code>
+     */
+    public int getChildren(int index) {
+      return children_.get(index);
+    }
+
     private void initFields() {
-      id_ = 0;
+      id_ = "";
       author_ = boa.types.Shared.Person.getDefaultInstance();
       committer_ = boa.types.Shared.Person.getDefaultInstance();
       commitDate_ = 0L;
       log_ = "";
       files_ = java.util.Collections.emptyList();
+      parents_ = java.util.Collections.emptyList();
+      children_ = java.util.Collections.emptyList();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -1547,7 +1703,7 @@ public final class Code {
                         throws java.io.IOException {
       getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeInt32(1, id_);
+        output.writeBytes(1, getIdBytes());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         output.writeMessage(2, author_);
@@ -1564,6 +1720,12 @@ public final class Code {
       for (int i = 0; i < files_.size(); i++) {
         output.writeMessage(6, files_.get(i));
       }
+      for (int i = 0; i < parents_.size(); i++) {
+        output.writeInt32(7, parents_.get(i));
+      }
+      for (int i = 0; i < children_.size(); i++) {
+        output.writeInt32(8, children_.get(i));
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -1575,7 +1737,7 @@ public final class Code {
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, id_);
+          .computeBytesSize(1, getIdBytes());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
@@ -1596,6 +1758,24 @@ public final class Code {
       for (int i = 0; i < files_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(6, files_.get(i));
+      }
+      {
+        int dataSize = 0;
+        for (int i = 0; i < parents_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeInt32SizeNoTag(parents_.get(i));
+        }
+        size += dataSize;
+        size += 1 * getParentsList().size();
+      }
+      {
+        int dataSize = 0;
+        for (int i = 0; i < children_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeInt32SizeNoTag(children_.get(i));
+        }
+        size += dataSize;
+        size += 1 * getChildrenList().size();
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1716,7 +1896,7 @@ public final class Code {
 
       public Builder clear() {
         super.clear();
-        id_ = 0;
+        id_ = "";
         bitField0_ = (bitField0_ & ~0x00000001);
         if (authorBuilder_ == null) {
           author_ = boa.types.Shared.Person.getDefaultInstance();
@@ -1740,6 +1920,10 @@ public final class Code {
         } else {
           filesBuilder_.clear();
         }
+        parents_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000040);
+        children_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000080);
         return this;
       }
 
@@ -1805,6 +1989,16 @@ public final class Code {
         } else {
           result.files_ = filesBuilder_.build();
         }
+        if (((bitField0_ & 0x00000040) == 0x00000040)) {
+          parents_ = java.util.Collections.unmodifiableList(parents_);
+          bitField0_ = (bitField0_ & ~0x00000040);
+        }
+        result.parents_ = parents_;
+        if (((bitField0_ & 0x00000080) == 0x00000080)) {
+          children_ = java.util.Collections.unmodifiableList(children_);
+          bitField0_ = (bitField0_ & ~0x00000080);
+        }
+        result.children_ = children_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -1822,7 +2016,9 @@ public final class Code {
       public Builder mergeFrom(boa.types.Code.Revision other) {
         if (other == boa.types.Code.Revision.getDefaultInstance()) return this;
         if (other.hasId()) {
-          setId(other.getId());
+          bitField0_ |= 0x00000001;
+          id_ = other.id_;
+          onChanged();
         }
         if (other.hasAuthor()) {
           mergeAuthor(other.getAuthor());
@@ -1863,6 +2059,26 @@ public final class Code {
               filesBuilder_.addAllMessages(other.files_);
             }
           }
+        }
+        if (!other.parents_.isEmpty()) {
+          if (parents_.isEmpty()) {
+            parents_ = other.parents_;
+            bitField0_ = (bitField0_ & ~0x00000040);
+          } else {
+            ensureParentsIsMutable();
+            parents_.addAll(other.parents_);
+          }
+          onChanged();
+        }
+        if (!other.children_.isEmpty()) {
+          if (children_.isEmpty()) {
+            children_ = other.children_;
+            bitField0_ = (bitField0_ & ~0x00000080);
+          } else {
+            ensureChildrenIsMutable();
+            children_.addAll(other.children_);
+          }
+          onChanged();
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -1925,35 +2141,76 @@ public final class Code {
       }
       private int bitField0_;
 
-      // required int32 id = 1;
-      private int id_ ;
+      // required string id = 1;
+      private java.lang.Object id_ = "";
       /**
-       * <code>required int32 id = 1;</code>
+       * <code>required string id = 1;</code>
        */
       public boolean hasId() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
-       * <code>required int32 id = 1;</code>
+       * <code>required string id = 1;</code>
        */
-      public int getId() {
-        return id_;
+      public java.lang.String getId() {
+        java.lang.Object ref = id_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          id_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
       }
       /**
-       * <code>required int32 id = 1;</code>
+       * <code>required string id = 1;</code>
        */
-      public Builder setId(int value) {
-        bitField0_ |= 0x00000001;
+      public com.google.protobuf.ByteString
+          getIdBytes() {
+        java.lang.Object ref = id_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          id_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string id = 1;</code>
+       */
+      public Builder setId(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
         id_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required int32 id = 1;</code>
+       * <code>required string id = 1;</code>
        */
       public Builder clearId() {
         bitField0_ = (bitField0_ & ~0x00000001);
-        id_ = 0;
+        id_ = getDefaultInstance().getId();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string id = 1;</code>
+       */
+      public Builder setIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+        id_ = value;
         onChanged();
         return this;
       }
@@ -2539,6 +2796,138 @@ public final class Code {
         return filesBuilder_;
       }
 
+      // repeated int32 parents = 7;
+      private java.util.List<java.lang.Integer> parents_ = java.util.Collections.emptyList();
+      private void ensureParentsIsMutable() {
+        if (!((bitField0_ & 0x00000040) == 0x00000040)) {
+          parents_ = new java.util.ArrayList<java.lang.Integer>(parents_);
+          bitField0_ |= 0x00000040;
+         }
+      }
+      /**
+       * <code>repeated int32 parents = 7;</code>
+       */
+      public java.util.List<java.lang.Integer>
+          getParentsList() {
+        return java.util.Collections.unmodifiableList(parents_);
+      }
+      /**
+       * <code>repeated int32 parents = 7;</code>
+       */
+      public int getParentsCount() {
+        return parents_.size();
+      }
+      /**
+       * <code>repeated int32 parents = 7;</code>
+       */
+      public int getParents(int index) {
+        return parents_.get(index);
+      }
+      /**
+       * <code>repeated int32 parents = 7;</code>
+       */
+      public Builder setParents(
+          int index, int value) {
+        ensureParentsIsMutable();
+        parents_.set(index, value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated int32 parents = 7;</code>
+       */
+      public Builder addParents(int value) {
+        ensureParentsIsMutable();
+        parents_.add(value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated int32 parents = 7;</code>
+       */
+      public Builder addAllParents(
+          java.lang.Iterable<? extends java.lang.Integer> values) {
+        ensureParentsIsMutable();
+        super.addAll(values, parents_);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated int32 parents = 7;</code>
+       */
+      public Builder clearParents() {
+        parents_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000040);
+        onChanged();
+        return this;
+      }
+
+      // repeated int32 children = 8;
+      private java.util.List<java.lang.Integer> children_ = java.util.Collections.emptyList();
+      private void ensureChildrenIsMutable() {
+        if (!((bitField0_ & 0x00000080) == 0x00000080)) {
+          children_ = new java.util.ArrayList<java.lang.Integer>(children_);
+          bitField0_ |= 0x00000080;
+         }
+      }
+      /**
+       * <code>repeated int32 children = 8;</code>
+       */
+      public java.util.List<java.lang.Integer>
+          getChildrenList() {
+        return java.util.Collections.unmodifiableList(children_);
+      }
+      /**
+       * <code>repeated int32 children = 8;</code>
+       */
+      public int getChildrenCount() {
+        return children_.size();
+      }
+      /**
+       * <code>repeated int32 children = 8;</code>
+       */
+      public int getChildren(int index) {
+        return children_.get(index);
+      }
+      /**
+       * <code>repeated int32 children = 8;</code>
+       */
+      public Builder setChildren(
+          int index, int value) {
+        ensureChildrenIsMutable();
+        children_.set(index, value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated int32 children = 8;</code>
+       */
+      public Builder addChildren(int value) {
+        ensureChildrenIsMutable();
+        children_.add(value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated int32 children = 8;</code>
+       */
+      public Builder addAllChildren(
+          java.lang.Iterable<? extends java.lang.Integer> values) {
+        ensureChildrenIsMutable();
+        super.addAll(values, children_);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated int32 children = 8;</code>
+       */
+      public Builder clearChildren() {
+        children_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000080);
+        onChanged();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:boa.types.Revision)
     }
 
@@ -2570,17 +2959,18 @@ public final class Code {
   static {
     java.lang.String[] descriptorData = {
       "\n\ncode.proto\022\tboa.types\032\ndiff.proto\032\014sha" +
-      "red.proto\"\367\001\n\016CodeRepository\022\013\n\003url\030\001 \002(" +
+      "red.proto\"\365\001\n\016CodeRepository\022\013\n\003url\030\001 \002(" +
       "\t\0226\n\004kind\030\002 \002(\0162(.boa.types.CodeReposito" +
       "ry.RepositoryKind\022&\n\trevisions\030\003 \003(\0132\023.b" +
-      "oa.types.Revision\"x\n\016RepositoryKind\022\013\n\007U" +
-      "NKNOWN\020\001\022\007\n\003SVN\020\002\022\016\n\nSUBVERSION\020\002\022\007\n\003CVS" +
-      "\020\003\022\007\n\003GIT\020\004\022\006\n\002HG\020\005\022\r\n\tMERCURIAL\020\005\022\007\n\003BZ" +
-      "R\020\006\022\n\n\006BAZAAR\020\006\032\002\020\001\"\250\001\n\010Revision\022\n\n\002id\030\001" +
-      " \002(\005\022!\n\006author\030\002 \002(\0132\021.boa.types.Person\022" +
-      "$\n\tcommitter\030\003 \002(\0132\021.boa.types.Person\022\023\n",
-      "\013commit_date\030\004 \002(\004\022\013\n\003log\030\005 \002(\t\022%\n\005files" +
-      "\030\006 \003(\0132\026.boa.types.ChangedFileB\002H\001"
+      "oa.types.Revision\"v\n\016RepositoryKind\022\t\n\005O" +
+      "THER\020\000\022\007\n\003SVN\020\001\022\016\n\nSUBVERSION\020\001\022\007\n\003CVS\020\002" +
+      "\022\007\n\003GIT\020\003\022\006\n\002HG\020\004\022\r\n\tMERCURIAL\020\004\022\007\n\003BZR\020" +
+      "\005\022\n\n\006BAZAAR\020\005\032\002\020\001\"\313\001\n\010Revision\022\n\n\002id\030\001 \002" +
+      "(\t\022!\n\006author\030\002 \002(\0132\021.boa.types.Person\022$\n" +
+      "\tcommitter\030\003 \002(\0132\021.boa.types.Person\022\023\n\013c",
+      "ommit_date\030\004 \002(\004\022\013\n\003log\030\005 \002(\t\022%\n\005files\030\006" +
+      " \003(\0132\026.boa.types.ChangedFile\022\017\n\007parents\030" +
+      "\007 \003(\005\022\020\n\010children\030\010 \003(\005B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -2598,7 +2988,7 @@ public final class Code {
           internal_static_boa_types_Revision_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Revision_descriptor,
-              new java.lang.String[] { "Id", "Author", "Committer", "CommitDate", "Log", "Files", });
+              new java.lang.String[] { "Id", "Author", "Committer", "CommitDate", "Log", "Files", "Parents", "Children", });
           return null;
         }
       };

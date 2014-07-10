@@ -27,6 +27,7 @@ import boa.types.BoaProtoTuple;
 import boa.types.BoaString;
 import boa.types.BoaTime;
 import boa.types.BoaType;
+import boa.types.proto.enums.ForgeKindProtoMap;
 
 /**
  * A {@link BoaProtoTuple}.
@@ -40,6 +41,9 @@ public class ProjectProtoTuple extends BoaProtoTuple {
 	static {
 		int counter = 0;
 
+		names.put("id", counter++);
+		members.add(new BoaString());
+
 		names.put("name", counter++);
 		members.add(new BoaString());
 
@@ -51,9 +55,6 @@ public class ProjectProtoTuple extends BoaProtoTuple {
 
 		names.put("created_date", counter++);
 		members.add(new BoaTime());
-
-		names.put("id", counter++);
-		members.add(new BoaString());
 
 		names.put("description", counter++);
 		members.add(new BoaString());
@@ -79,6 +80,12 @@ public class ProjectProtoTuple extends BoaProtoTuple {
 		names.put("topics", counter++);
 		members.add(new BoaProtoList(new BoaString()));
 
+		names.put("status", counter++);
+		members.add(new BoaProtoList(new BoaString()));
+
+		names.put("translations", counter++);
+		members.add(new BoaProtoList(new BoaString()));
+
 		names.put("donations", counter++);
 		members.add(new BoaBool());
 
@@ -91,8 +98,11 @@ public class ProjectProtoTuple extends BoaProtoTuple {
 		names.put("code_repositories", counter++);
 		members.add(new BoaProtoList(new CodeRepositoryProtoTuple()));
 
-		names.put("bug_repositories", counter++);
-		members.add(new BoaProtoList(new BugRepositoryProtoTuple()));
+		names.put("issue_repositories", counter++);
+		members.add(new BoaProtoList(new IssueRepositoryProtoTuple()));
+
+		names.put("kind", counter++);
+		members.add(new ForgeKindProtoMap());
 	}
 
 	/**

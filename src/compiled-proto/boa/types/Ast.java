@@ -14,102 +14,110 @@ public final class Ast {
   public enum TypeKind
       implements com.google.protobuf.ProtocolMessageEnum {
     /**
-     * <code>OTHER = 1;</code>
+     * <code>OTHER = 0;</code>
      */
-    OTHER(0, 1),
+    OTHER(0, 0),
     /**
-     * <code>CLASS = 2;</code>
+     * <code>CLASS = 1;</code>
      */
-    CLASS(1, 2),
+    CLASS(1, 1),
     /**
-     * <code>INTERFACE = 3;</code>
+     * <code>INTERFACE = 2;</code>
      */
-    INTERFACE(2, 3),
+    INTERFACE(2, 2),
     /**
-     * <code>ANONYMOUS = 4;</code>
+     * <code>ANONYMOUS = 3;</code>
      */
-    ANONYMOUS(3, 4),
+    ANONYMOUS(3, 3),
     /**
-     * <code>STRUCT = 5;</code>
+     * <code>STRUCT = 4;</code>
      */
-    STRUCT(4, 5),
+    STRUCT(5, 4),
     /**
-     * <code>ENUM = 6;</code>
+     * <code>ENUM = 5;</code>
      */
-    ENUM(5, 6),
+    ENUM(6, 5),
     /**
-     * <code>ANNOTATION = 7;</code>
+     * <code>ANNOTATION = 6;</code>
      */
-    ANNOTATION(7, 7),
+    ANNOTATION(8, 6),
     /**
-     * <code>DELEGATE = 8;</code>
+     * <code>DELEGATE = 7;</code>
      */
-    DELEGATE(8, 8),
+    DELEGATE(9, 7),
     /**
-     * <code>GENERIC = 9;</code>
+     * <code>GENERIC = 8;</code>
      */
-    GENERIC(9, 9),
+    GENERIC(10, 8),
     ;
 
     /**
-     * <code>ENUMERATION = 6;</code>
+     * <code>ANON = 3;</code>
+     */
+    public static final TypeKind ANON = ANONYMOUS;
+    /**
+     * <code>ENUMERATION = 5;</code>
      */
     public static final TypeKind ENUMERATION = ENUM;
     /**
-     * <code>OTHER = 1;</code>
+     * <code>OTHER = 0;</code>
      */
-    public static final int OTHER_VALUE = 1;
+    public static final int OTHER_VALUE = 0;
     /**
-     * <code>CLASS = 2;</code>
+     * <code>CLASS = 1;</code>
      */
-    public static final int CLASS_VALUE = 2;
+    public static final int CLASS_VALUE = 1;
     /**
-     * <code>INTERFACE = 3;</code>
+     * <code>INTERFACE = 2;</code>
      */
-    public static final int INTERFACE_VALUE = 3;
+    public static final int INTERFACE_VALUE = 2;
     /**
-     * <code>ANONYMOUS = 4;</code>
+     * <code>ANONYMOUS = 3;</code>
      */
-    public static final int ANONYMOUS_VALUE = 4;
+    public static final int ANONYMOUS_VALUE = 3;
     /**
-     * <code>STRUCT = 5;</code>
+     * <code>ANON = 3;</code>
      */
-    public static final int STRUCT_VALUE = 5;
+    public static final int ANON_VALUE = 3;
     /**
-     * <code>ENUM = 6;</code>
+     * <code>STRUCT = 4;</code>
      */
-    public static final int ENUM_VALUE = 6;
+    public static final int STRUCT_VALUE = 4;
     /**
-     * <code>ENUMERATION = 6;</code>
+     * <code>ENUM = 5;</code>
      */
-    public static final int ENUMERATION_VALUE = 6;
+    public static final int ENUM_VALUE = 5;
     /**
-     * <code>ANNOTATION = 7;</code>
+     * <code>ENUMERATION = 5;</code>
      */
-    public static final int ANNOTATION_VALUE = 7;
+    public static final int ENUMERATION_VALUE = 5;
     /**
-     * <code>DELEGATE = 8;</code>
+     * <code>ANNOTATION = 6;</code>
      */
-    public static final int DELEGATE_VALUE = 8;
+    public static final int ANNOTATION_VALUE = 6;
     /**
-     * <code>GENERIC = 9;</code>
+     * <code>DELEGATE = 7;</code>
      */
-    public static final int GENERIC_VALUE = 9;
+    public static final int DELEGATE_VALUE = 7;
+    /**
+     * <code>GENERIC = 8;</code>
+     */
+    public static final int GENERIC_VALUE = 8;
 
 
     public final int getNumber() { return value; }
 
     public static TypeKind valueOf(int value) {
       switch (value) {
-        case 1: return OTHER;
-        case 2: return CLASS;
-        case 3: return INTERFACE;
-        case 4: return ANONYMOUS;
-        case 5: return STRUCT;
-        case 6: return ENUM;
-        case 7: return ANNOTATION;
-        case 8: return DELEGATE;
-        case 9: return GENERIC;
+        case 0: return OTHER;
+        case 1: return CLASS;
+        case 2: return INTERFACE;
+        case 3: return ANONYMOUS;
+        case 4: return STRUCT;
+        case 5: return ENUM;
+        case 6: return ANNOTATION;
+        case 7: return DELEGATE;
+        case 8: return GENERIC;
         default: return null;
       }
     }
@@ -140,7 +148,7 @@ public final class Ast {
     }
 
     private static final TypeKind[] VALUES = {
-      OTHER, CLASS, INTERFACE, ANONYMOUS, STRUCT, ENUM, ENUMERATION, ANNOTATION, DELEGATE, GENERIC, 
+      OTHER, CLASS, INTERFACE, ANONYMOUS, ANON, STRUCT, ENUM, ENUMERATION, ANNOTATION, DELEGATE, GENERIC, 
     };
 
     public static TypeKind valueOf(
@@ -12337,193 +12345,209 @@ public final class Ast {
     public enum StatementKind
         implements com.google.protobuf.ProtocolMessageEnum {
       /**
-       * <code>OTHER = 1;</code>
+       * <code>OTHER = 0;</code>
        */
-      OTHER(0, 1),
+      OTHER(0, 0),
       /**
-       * <code>BLOCK = 2;</code>
+       * <code>BLOCK = 1;</code>
        */
-      BLOCK(1, 2),
+      BLOCK(1, 1),
       /**
-       * <code>TYPEDECL = 4;</code>
+       * <code>TYPEDECL = 2;</code>
        */
-      TYPEDECL(2, 4),
+      TYPEDECL(2, 2),
       /**
-       * <code>EXPRESSION = 5;</code>
+       * <code>EXPRESSION = 3;</code>
        */
-      EXPRESSION(3, 5),
+      EXPRESSION(3, 3),
       /**
-       * <code>SYNCHRONIZED = 6;</code>
+       * <code>SYNCHRONIZED = 4;</code>
        */
-      SYNCHRONIZED(4, 6),
+      SYNCHRONIZED(5, 4),
       /**
-       * <code>RETURN = 7;</code>
+       * <code>RETURN = 5;</code>
        */
-      RETURN(5, 7),
+      RETURN(7, 5),
       /**
-       * <code>FOR = 8;</code>
+       * <code>FOR = 6;</code>
        */
-      FOR(6, 8),
+      FOR(8, 6),
       /**
-       * <code>DO = 9;</code>
+       * <code>DO = 7;</code>
        */
-      DO(7, 9),
+      DO(9, 7),
       /**
-       * <code>WHILE = 10;</code>
+       * <code>WHILE = 8;</code>
        */
-      WHILE(8, 10),
+      WHILE(10, 8),
       /**
-       * <code>IF = 11;</code>
+       * <code>IF = 9;</code>
        */
-      IF(9, 11),
+      IF(11, 9),
       /**
-       * <code>ASSERT = 12;</code>
+       * <code>ASSERT = 10;</code>
        */
-      ASSERT(10, 12),
+      ASSERT(12, 10),
       /**
-       * <code>BREAK = 13;</code>
+       * <code>BREAK = 11;</code>
        */
-      BREAK(11, 13),
+      BREAK(13, 11),
       /**
-       * <code>CONTINUE = 14;</code>
+       * <code>CONTINUE = 12;</code>
        */
-      CONTINUE(12, 14),
+      CONTINUE(14, 12),
       /**
-       * <code>LABEL = 15;</code>
+       * <code>LABEL = 13;</code>
        */
-      LABEL(13, 15),
+      LABEL(15, 13),
       /**
-       * <code>SWITCH = 16;</code>
+       * <code>SWITCH = 14;</code>
        */
-      SWITCH(14, 16),
+      SWITCH(16, 14),
       /**
-       * <code>CASE = 17;</code>
+       * <code>CASE = 15;</code>
        */
-      CASE(15, 17),
+      CASE(17, 15),
       /**
-       * <code>TRY = 18;</code>
+       * <code>TRY = 16;</code>
        */
-      TRY(16, 18),
+      TRY(18, 16),
       /**
-       * <code>THROW = 19;</code>
+       * <code>THROW = 17;</code>
        */
-      THROW(17, 19),
+      THROW(19, 17),
       /**
-       * <code>CATCH = 20;</code>
+       * <code>CATCH = 18;</code>
        */
-      CATCH(18, 20),
+      CATCH(20, 18),
       /**
-       * <code>EMPTY = 21;</code>
+       * <code>EMPTY = 19;</code>
        */
-      EMPTY(19, 21),
+      EMPTY(21, 19),
       ;
 
       /**
-       * <code>OTHER = 1;</code>
+       * <code>EXPR = 3;</code>
        */
-      public static final int OTHER_VALUE = 1;
+      public static final StatementKind EXPR = EXPRESSION;
       /**
-       * <code>BLOCK = 2;</code>
+       * <code>SYNC = 4;</code>
        */
-      public static final int BLOCK_VALUE = 2;
+      public static final StatementKind SYNC = SYNCHRONIZED;
       /**
-       * <code>TYPEDECL = 4;</code>
+       * <code>OTHER = 0;</code>
        */
-      public static final int TYPEDECL_VALUE = 4;
+      public static final int OTHER_VALUE = 0;
       /**
-       * <code>EXPRESSION = 5;</code>
+       * <code>BLOCK = 1;</code>
        */
-      public static final int EXPRESSION_VALUE = 5;
+      public static final int BLOCK_VALUE = 1;
       /**
-       * <code>SYNCHRONIZED = 6;</code>
+       * <code>TYPEDECL = 2;</code>
        */
-      public static final int SYNCHRONIZED_VALUE = 6;
+      public static final int TYPEDECL_VALUE = 2;
       /**
-       * <code>RETURN = 7;</code>
+       * <code>EXPRESSION = 3;</code>
        */
-      public static final int RETURN_VALUE = 7;
+      public static final int EXPRESSION_VALUE = 3;
       /**
-       * <code>FOR = 8;</code>
+       * <code>EXPR = 3;</code>
        */
-      public static final int FOR_VALUE = 8;
+      public static final int EXPR_VALUE = 3;
       /**
-       * <code>DO = 9;</code>
+       * <code>SYNCHRONIZED = 4;</code>
        */
-      public static final int DO_VALUE = 9;
+      public static final int SYNCHRONIZED_VALUE = 4;
       /**
-       * <code>WHILE = 10;</code>
+       * <code>SYNC = 4;</code>
        */
-      public static final int WHILE_VALUE = 10;
+      public static final int SYNC_VALUE = 4;
       /**
-       * <code>IF = 11;</code>
+       * <code>RETURN = 5;</code>
        */
-      public static final int IF_VALUE = 11;
+      public static final int RETURN_VALUE = 5;
       /**
-       * <code>ASSERT = 12;</code>
+       * <code>FOR = 6;</code>
        */
-      public static final int ASSERT_VALUE = 12;
+      public static final int FOR_VALUE = 6;
       /**
-       * <code>BREAK = 13;</code>
+       * <code>DO = 7;</code>
        */
-      public static final int BREAK_VALUE = 13;
+      public static final int DO_VALUE = 7;
       /**
-       * <code>CONTINUE = 14;</code>
+       * <code>WHILE = 8;</code>
        */
-      public static final int CONTINUE_VALUE = 14;
+      public static final int WHILE_VALUE = 8;
       /**
-       * <code>LABEL = 15;</code>
+       * <code>IF = 9;</code>
        */
-      public static final int LABEL_VALUE = 15;
+      public static final int IF_VALUE = 9;
       /**
-       * <code>SWITCH = 16;</code>
+       * <code>ASSERT = 10;</code>
        */
-      public static final int SWITCH_VALUE = 16;
+      public static final int ASSERT_VALUE = 10;
       /**
-       * <code>CASE = 17;</code>
+       * <code>BREAK = 11;</code>
        */
-      public static final int CASE_VALUE = 17;
+      public static final int BREAK_VALUE = 11;
       /**
-       * <code>TRY = 18;</code>
+       * <code>CONTINUE = 12;</code>
        */
-      public static final int TRY_VALUE = 18;
+      public static final int CONTINUE_VALUE = 12;
       /**
-       * <code>THROW = 19;</code>
+       * <code>LABEL = 13;</code>
        */
-      public static final int THROW_VALUE = 19;
+      public static final int LABEL_VALUE = 13;
       /**
-       * <code>CATCH = 20;</code>
+       * <code>SWITCH = 14;</code>
        */
-      public static final int CATCH_VALUE = 20;
+      public static final int SWITCH_VALUE = 14;
       /**
-       * <code>EMPTY = 21;</code>
+       * <code>CASE = 15;</code>
        */
-      public static final int EMPTY_VALUE = 21;
+      public static final int CASE_VALUE = 15;
+      /**
+       * <code>TRY = 16;</code>
+       */
+      public static final int TRY_VALUE = 16;
+      /**
+       * <code>THROW = 17;</code>
+       */
+      public static final int THROW_VALUE = 17;
+      /**
+       * <code>CATCH = 18;</code>
+       */
+      public static final int CATCH_VALUE = 18;
+      /**
+       * <code>EMPTY = 19;</code>
+       */
+      public static final int EMPTY_VALUE = 19;
 
 
       public final int getNumber() { return value; }
 
       public static StatementKind valueOf(int value) {
         switch (value) {
-          case 1: return OTHER;
-          case 2: return BLOCK;
-          case 4: return TYPEDECL;
-          case 5: return EXPRESSION;
-          case 6: return SYNCHRONIZED;
-          case 7: return RETURN;
-          case 8: return FOR;
-          case 9: return DO;
-          case 10: return WHILE;
-          case 11: return IF;
-          case 12: return ASSERT;
-          case 13: return BREAK;
-          case 14: return CONTINUE;
-          case 15: return LABEL;
-          case 16: return SWITCH;
-          case 17: return CASE;
-          case 18: return TRY;
-          case 19: return THROW;
-          case 20: return CATCH;
-          case 21: return EMPTY;
+          case 0: return OTHER;
+          case 1: return BLOCK;
+          case 2: return TYPEDECL;
+          case 3: return EXPRESSION;
+          case 4: return SYNCHRONIZED;
+          case 5: return RETURN;
+          case 6: return FOR;
+          case 7: return DO;
+          case 8: return WHILE;
+          case 9: return IF;
+          case 10: return ASSERT;
+          case 11: return BREAK;
+          case 12: return CONTINUE;
+          case 13: return LABEL;
+          case 14: return SWITCH;
+          case 15: return CASE;
+          case 16: return TRY;
+          case 17: return THROW;
+          case 18: return CATCH;
+          case 19: return EMPTY;
           default: return null;
         }
       }
@@ -12553,7 +12577,9 @@ public final class Ast {
         return boa.types.Ast.Statement.getDescriptor().getEnumTypes().get(0);
       }
 
-      private static final StatementKind[] VALUES = values();
+      private static final StatementKind[] VALUES = {
+        OTHER, BLOCK, TYPEDECL, EXPRESSION, EXPR, SYNCHRONIZED, SYNC, RETURN, FOR, DO, WHILE, IF, ASSERT, BREAK, CONTINUE, LABEL, SWITCH, CASE, TRY, THROW, CATCH, EMPTY, 
+      };
 
       public static StatementKind valueOf(
           com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
@@ -15414,454 +15440,454 @@ public final class Ast {
     public enum ExpressionKind
         implements com.google.protobuf.ProtocolMessageEnum {
       /**
-       * <code>OTHER = 1;</code>
+       * <code>OTHER = 0;</code>
        */
-      OTHER(0, 1),
+      OTHER(0, 0),
       /**
-       * <code>LITERAL = 2;</code>
+       * <code>LITERAL = 1;</code>
        */
-      LITERAL(1, 2),
+      LITERAL(1, 1),
       /**
-       * <code>VARACCESS = 3;</code>
+       * <code>VARACCESS = 2;</code>
        */
-      VARACCESS(2, 3),
+      VARACCESS(2, 2),
       /**
-       * <code>VARDECL = 4;</code>
+       * <code>VARDECL = 3;</code>
        */
-      VARDECL(3, 4),
+      VARDECL(3, 3),
       /**
-       * <code>METHODCALL = 5;</code>
+       * <code>METHODCALL = 4;</code>
        */
-      METHODCALL(4, 5),
+      METHODCALL(4, 4),
       /**
-       * <code>CAST = 6;</code>
+       * <code>CAST = 5;</code>
        */
-      CAST(5, 6),
+      CAST(5, 5),
       /**
-       * <code>ARRAYINDEX = 7;</code>
+       * <code>ARRAYINDEX = 6;</code>
        */
-      ARRAYINDEX(6, 7),
+      ARRAYINDEX(6, 6),
       /**
-       * <code>ARRAYINIT = 8;</code>
+       * <code>ARRAYINIT = 7;</code>
        */
-      ARRAYINIT(7, 8),
+      ARRAYINIT(7, 7),
       /**
-       * <code>TYPECOMPARE = 9;</code>
+       * <code>TYPECOMPARE = 8;</code>
        */
-      TYPECOMPARE(8, 9),
+      TYPECOMPARE(8, 8),
       /**
-       * <code>NEW = 10;</code>
+       * <code>NEW = 9;</code>
        */
-      NEW(9, 10),
+      NEW(9, 9),
       /**
-       * <code>NEWARRAY = 11;</code>
+       * <code>NEWARRAY = 10;</code>
        */
-      NEWARRAY(10, 11),
+      NEWARRAY(10, 10),
       /**
-       * <code>OP_ADD = 12;</code>
+       * <code>OP_ADD = 11;</code>
        */
-      OP_ADD(11, 12),
+      OP_ADD(11, 11),
       /**
-       * <code>OP_SUB = 13;</code>
+       * <code>OP_SUB = 12;</code>
        */
-      OP_SUB(12, 13),
+      OP_SUB(12, 12),
       /**
-       * <code>OP_MULT = 14;</code>
+       * <code>OP_MULT = 13;</code>
        */
-      OP_MULT(13, 14),
+      OP_MULT(13, 13),
       /**
-       * <code>OP_DIV = 15;</code>
+       * <code>OP_DIV = 14;</code>
        */
-      OP_DIV(14, 15),
+      OP_DIV(14, 14),
       /**
-       * <code>OP_MOD = 16;</code>
+       * <code>OP_MOD = 15;</code>
        */
-      OP_MOD(15, 16),
+      OP_MOD(15, 15),
       /**
-       * <code>OP_INC = 17;</code>
+       * <code>OP_INC = 16;</code>
        */
-      OP_INC(16, 17),
+      OP_INC(16, 16),
       /**
-       * <code>OP_DEC = 18;</code>
+       * <code>OP_DEC = 17;</code>
        */
-      OP_DEC(17, 18),
+      OP_DEC(17, 17),
       /**
-       * <code>BIT_LSHIFT = 19;</code>
+       * <code>BIT_LSHIFT = 18;</code>
        */
-      BIT_LSHIFT(18, 19),
+      BIT_LSHIFT(18, 18),
       /**
-       * <code>BIT_RSHIFT = 20;</code>
+       * <code>BIT_RSHIFT = 19;</code>
        */
-      BIT_RSHIFT(19, 20),
+      BIT_RSHIFT(19, 19),
       /**
-       * <code>BIT_UNSIGNEDRSHIFT = 21;</code>
+       * <code>BIT_UNSIGNEDRSHIFT = 20;</code>
        */
-      BIT_UNSIGNEDRSHIFT(20, 21),
+      BIT_UNSIGNEDRSHIFT(20, 20),
       /**
-       * <code>BIT_AND = 22;</code>
+       * <code>BIT_AND = 21;</code>
        */
-      BIT_AND(21, 22),
+      BIT_AND(21, 21),
       /**
-       * <code>BIT_OR = 23;</code>
+       * <code>BIT_OR = 22;</code>
        */
-      BIT_OR(22, 23),
+      BIT_OR(22, 22),
       /**
-       * <code>BIT_NOT = 24;</code>
+       * <code>BIT_NOT = 23;</code>
        */
-      BIT_NOT(23, 24),
+      BIT_NOT(23, 23),
       /**
-       * <code>BIT_XOR = 25;</code>
+       * <code>BIT_XOR = 24;</code>
        */
-      BIT_XOR(24, 25),
+      BIT_XOR(24, 24),
       /**
-       * <code>LOGICAL_NOT = 26;</code>
+       * <code>LOGICAL_NOT = 25;</code>
        */
-      LOGICAL_NOT(25, 26),
+      LOGICAL_NOT(25, 25),
       /**
-       * <code>LOGICAL_AND = 27;</code>
+       * <code>LOGICAL_AND = 26;</code>
        */
-      LOGICAL_AND(26, 27),
+      LOGICAL_AND(26, 26),
       /**
-       * <code>LOGICAL_OR = 28;</code>
+       * <code>LOGICAL_OR = 27;</code>
        */
-      LOGICAL_OR(27, 28),
+      LOGICAL_OR(27, 27),
       /**
-       * <code>EQ = 29;</code>
+       * <code>EQ = 28;</code>
        */
-      EQ(28, 29),
+      EQ(28, 28),
       /**
-       * <code>NEQ = 30;</code>
+       * <code>NEQ = 29;</code>
        */
-      NEQ(29, 30),
+      NEQ(29, 29),
       /**
-       * <code>LT = 31;</code>
+       * <code>LT = 30;</code>
        */
-      LT(30, 31),
+      LT(30, 30),
       /**
-       * <code>GT = 32;</code>
+       * <code>GT = 31;</code>
        */
-      GT(31, 32),
+      GT(31, 31),
       /**
-       * <code>LTEQ = 33;</code>
+       * <code>LTEQ = 32;</code>
        */
-      LTEQ(32, 33),
+      LTEQ(32, 32),
       /**
-       * <code>GTEQ = 34;</code>
+       * <code>GTEQ = 33;</code>
        */
-      GTEQ(33, 34),
+      GTEQ(33, 33),
       /**
-       * <code>CONDITIONAL = 35;</code>
+       * <code>CONDITIONAL = 34;</code>
        */
-      CONDITIONAL(34, 35),
+      CONDITIONAL(34, 34),
       /**
-       * <code>NULLCOALESCE = 36;</code>
+       * <code>NULLCOALESCE = 35;</code>
        */
-      NULLCOALESCE(35, 36),
+      NULLCOALESCE(35, 35),
       /**
-       * <code>ASSIGN = 37;</code>
+       * <code>ASSIGN = 36;</code>
        */
-      ASSIGN(36, 37),
+      ASSIGN(36, 36),
       /**
-       * <code>ASSIGN_ADD = 38;</code>
+       * <code>ASSIGN_ADD = 37;</code>
        */
-      ASSIGN_ADD(37, 38),
+      ASSIGN_ADD(37, 37),
       /**
-       * <code>ASSIGN_SUB = 39;</code>
+       * <code>ASSIGN_SUB = 38;</code>
        */
-      ASSIGN_SUB(38, 39),
+      ASSIGN_SUB(38, 38),
       /**
-       * <code>ASSIGN_MULT = 40;</code>
+       * <code>ASSIGN_MULT = 39;</code>
        */
-      ASSIGN_MULT(39, 40),
+      ASSIGN_MULT(39, 39),
       /**
-       * <code>ASSIGN_DIV = 41;</code>
+       * <code>ASSIGN_DIV = 40;</code>
        */
-      ASSIGN_DIV(40, 41),
+      ASSIGN_DIV(40, 40),
       /**
-       * <code>ASSIGN_MOD = 42;</code>
+       * <code>ASSIGN_MOD = 41;</code>
        */
-      ASSIGN_MOD(41, 42),
+      ASSIGN_MOD(41, 41),
       /**
-       * <code>ASSIGN_BITXOR = 43;</code>
+       * <code>ASSIGN_BITXOR = 42;</code>
        */
-      ASSIGN_BITXOR(42, 43),
+      ASSIGN_BITXOR(42, 42),
       /**
-       * <code>ASSIGN_BITAND = 44;</code>
+       * <code>ASSIGN_BITAND = 43;</code>
        */
-      ASSIGN_BITAND(43, 44),
+      ASSIGN_BITAND(43, 43),
       /**
-       * <code>ASSIGN_BITOR = 45;</code>
+       * <code>ASSIGN_BITOR = 44;</code>
        */
-      ASSIGN_BITOR(44, 45),
+      ASSIGN_BITOR(44, 44),
       /**
-       * <code>ASSIGN_LSHIFT = 46;</code>
+       * <code>ASSIGN_LSHIFT = 45;</code>
        */
-      ASSIGN_LSHIFT(45, 46),
+      ASSIGN_LSHIFT(45, 45),
       /**
-       * <code>ASSIGN_RSHIFT = 47;</code>
+       * <code>ASSIGN_RSHIFT = 46;</code>
        */
-      ASSIGN_RSHIFT(46, 47),
+      ASSIGN_RSHIFT(46, 46),
       /**
-       * <code>ASSIGN_UNSIGNEDRSHIFT = 48;</code>
+       * <code>ASSIGN_UNSIGNEDRSHIFT = 47;</code>
        */
-      ASSIGN_UNSIGNEDRSHIFT(47, 48),
+      ASSIGN_UNSIGNEDRSHIFT(47, 47),
       /**
-       * <code>ANNOTATION = 49;</code>
+       * <code>ANNOTATION = 48;</code>
        */
-      ANNOTATION(48, 49),
+      ANNOTATION(48, 48),
       ;
 
       /**
-       * <code>OTHER = 1;</code>
+       * <code>OTHER = 0;</code>
        */
-      public static final int OTHER_VALUE = 1;
+      public static final int OTHER_VALUE = 0;
       /**
-       * <code>LITERAL = 2;</code>
+       * <code>LITERAL = 1;</code>
        */
-      public static final int LITERAL_VALUE = 2;
+      public static final int LITERAL_VALUE = 1;
       /**
-       * <code>VARACCESS = 3;</code>
+       * <code>VARACCESS = 2;</code>
        */
-      public static final int VARACCESS_VALUE = 3;
+      public static final int VARACCESS_VALUE = 2;
       /**
-       * <code>VARDECL = 4;</code>
+       * <code>VARDECL = 3;</code>
        */
-      public static final int VARDECL_VALUE = 4;
+      public static final int VARDECL_VALUE = 3;
       /**
-       * <code>METHODCALL = 5;</code>
+       * <code>METHODCALL = 4;</code>
        */
-      public static final int METHODCALL_VALUE = 5;
+      public static final int METHODCALL_VALUE = 4;
       /**
-       * <code>CAST = 6;</code>
+       * <code>CAST = 5;</code>
        */
-      public static final int CAST_VALUE = 6;
+      public static final int CAST_VALUE = 5;
       /**
-       * <code>ARRAYINDEX = 7;</code>
+       * <code>ARRAYINDEX = 6;</code>
        */
-      public static final int ARRAYINDEX_VALUE = 7;
+      public static final int ARRAYINDEX_VALUE = 6;
       /**
-       * <code>ARRAYINIT = 8;</code>
+       * <code>ARRAYINIT = 7;</code>
        */
-      public static final int ARRAYINIT_VALUE = 8;
+      public static final int ARRAYINIT_VALUE = 7;
       /**
-       * <code>TYPECOMPARE = 9;</code>
+       * <code>TYPECOMPARE = 8;</code>
        */
-      public static final int TYPECOMPARE_VALUE = 9;
+      public static final int TYPECOMPARE_VALUE = 8;
       /**
-       * <code>NEW = 10;</code>
+       * <code>NEW = 9;</code>
        */
-      public static final int NEW_VALUE = 10;
+      public static final int NEW_VALUE = 9;
       /**
-       * <code>NEWARRAY = 11;</code>
+       * <code>NEWARRAY = 10;</code>
        */
-      public static final int NEWARRAY_VALUE = 11;
+      public static final int NEWARRAY_VALUE = 10;
       /**
-       * <code>OP_ADD = 12;</code>
+       * <code>OP_ADD = 11;</code>
        */
-      public static final int OP_ADD_VALUE = 12;
+      public static final int OP_ADD_VALUE = 11;
       /**
-       * <code>OP_SUB = 13;</code>
+       * <code>OP_SUB = 12;</code>
        */
-      public static final int OP_SUB_VALUE = 13;
+      public static final int OP_SUB_VALUE = 12;
       /**
-       * <code>OP_MULT = 14;</code>
+       * <code>OP_MULT = 13;</code>
        */
-      public static final int OP_MULT_VALUE = 14;
+      public static final int OP_MULT_VALUE = 13;
       /**
-       * <code>OP_DIV = 15;</code>
+       * <code>OP_DIV = 14;</code>
        */
-      public static final int OP_DIV_VALUE = 15;
+      public static final int OP_DIV_VALUE = 14;
       /**
-       * <code>OP_MOD = 16;</code>
+       * <code>OP_MOD = 15;</code>
        */
-      public static final int OP_MOD_VALUE = 16;
+      public static final int OP_MOD_VALUE = 15;
       /**
-       * <code>OP_INC = 17;</code>
+       * <code>OP_INC = 16;</code>
        */
-      public static final int OP_INC_VALUE = 17;
+      public static final int OP_INC_VALUE = 16;
       /**
-       * <code>OP_DEC = 18;</code>
+       * <code>OP_DEC = 17;</code>
        */
-      public static final int OP_DEC_VALUE = 18;
+      public static final int OP_DEC_VALUE = 17;
       /**
-       * <code>BIT_LSHIFT = 19;</code>
+       * <code>BIT_LSHIFT = 18;</code>
        */
-      public static final int BIT_LSHIFT_VALUE = 19;
+      public static final int BIT_LSHIFT_VALUE = 18;
       /**
-       * <code>BIT_RSHIFT = 20;</code>
+       * <code>BIT_RSHIFT = 19;</code>
        */
-      public static final int BIT_RSHIFT_VALUE = 20;
+      public static final int BIT_RSHIFT_VALUE = 19;
       /**
-       * <code>BIT_UNSIGNEDRSHIFT = 21;</code>
+       * <code>BIT_UNSIGNEDRSHIFT = 20;</code>
        */
-      public static final int BIT_UNSIGNEDRSHIFT_VALUE = 21;
+      public static final int BIT_UNSIGNEDRSHIFT_VALUE = 20;
       /**
-       * <code>BIT_AND = 22;</code>
+       * <code>BIT_AND = 21;</code>
        */
-      public static final int BIT_AND_VALUE = 22;
+      public static final int BIT_AND_VALUE = 21;
       /**
-       * <code>BIT_OR = 23;</code>
+       * <code>BIT_OR = 22;</code>
        */
-      public static final int BIT_OR_VALUE = 23;
+      public static final int BIT_OR_VALUE = 22;
       /**
-       * <code>BIT_NOT = 24;</code>
+       * <code>BIT_NOT = 23;</code>
        */
-      public static final int BIT_NOT_VALUE = 24;
+      public static final int BIT_NOT_VALUE = 23;
       /**
-       * <code>BIT_XOR = 25;</code>
+       * <code>BIT_XOR = 24;</code>
        */
-      public static final int BIT_XOR_VALUE = 25;
+      public static final int BIT_XOR_VALUE = 24;
       /**
-       * <code>LOGICAL_NOT = 26;</code>
+       * <code>LOGICAL_NOT = 25;</code>
        */
-      public static final int LOGICAL_NOT_VALUE = 26;
+      public static final int LOGICAL_NOT_VALUE = 25;
       /**
-       * <code>LOGICAL_AND = 27;</code>
+       * <code>LOGICAL_AND = 26;</code>
        */
-      public static final int LOGICAL_AND_VALUE = 27;
+      public static final int LOGICAL_AND_VALUE = 26;
       /**
-       * <code>LOGICAL_OR = 28;</code>
+       * <code>LOGICAL_OR = 27;</code>
        */
-      public static final int LOGICAL_OR_VALUE = 28;
+      public static final int LOGICAL_OR_VALUE = 27;
       /**
-       * <code>EQ = 29;</code>
+       * <code>EQ = 28;</code>
        */
-      public static final int EQ_VALUE = 29;
+      public static final int EQ_VALUE = 28;
       /**
-       * <code>NEQ = 30;</code>
+       * <code>NEQ = 29;</code>
        */
-      public static final int NEQ_VALUE = 30;
+      public static final int NEQ_VALUE = 29;
       /**
-       * <code>LT = 31;</code>
+       * <code>LT = 30;</code>
        */
-      public static final int LT_VALUE = 31;
+      public static final int LT_VALUE = 30;
       /**
-       * <code>GT = 32;</code>
+       * <code>GT = 31;</code>
        */
-      public static final int GT_VALUE = 32;
+      public static final int GT_VALUE = 31;
       /**
-       * <code>LTEQ = 33;</code>
+       * <code>LTEQ = 32;</code>
        */
-      public static final int LTEQ_VALUE = 33;
+      public static final int LTEQ_VALUE = 32;
       /**
-       * <code>GTEQ = 34;</code>
+       * <code>GTEQ = 33;</code>
        */
-      public static final int GTEQ_VALUE = 34;
+      public static final int GTEQ_VALUE = 33;
       /**
-       * <code>CONDITIONAL = 35;</code>
+       * <code>CONDITIONAL = 34;</code>
        */
-      public static final int CONDITIONAL_VALUE = 35;
+      public static final int CONDITIONAL_VALUE = 34;
       /**
-       * <code>NULLCOALESCE = 36;</code>
+       * <code>NULLCOALESCE = 35;</code>
        */
-      public static final int NULLCOALESCE_VALUE = 36;
+      public static final int NULLCOALESCE_VALUE = 35;
       /**
-       * <code>ASSIGN = 37;</code>
+       * <code>ASSIGN = 36;</code>
        */
-      public static final int ASSIGN_VALUE = 37;
+      public static final int ASSIGN_VALUE = 36;
       /**
-       * <code>ASSIGN_ADD = 38;</code>
+       * <code>ASSIGN_ADD = 37;</code>
        */
-      public static final int ASSIGN_ADD_VALUE = 38;
+      public static final int ASSIGN_ADD_VALUE = 37;
       /**
-       * <code>ASSIGN_SUB = 39;</code>
+       * <code>ASSIGN_SUB = 38;</code>
        */
-      public static final int ASSIGN_SUB_VALUE = 39;
+      public static final int ASSIGN_SUB_VALUE = 38;
       /**
-       * <code>ASSIGN_MULT = 40;</code>
+       * <code>ASSIGN_MULT = 39;</code>
        */
-      public static final int ASSIGN_MULT_VALUE = 40;
+      public static final int ASSIGN_MULT_VALUE = 39;
       /**
-       * <code>ASSIGN_DIV = 41;</code>
+       * <code>ASSIGN_DIV = 40;</code>
        */
-      public static final int ASSIGN_DIV_VALUE = 41;
+      public static final int ASSIGN_DIV_VALUE = 40;
       /**
-       * <code>ASSIGN_MOD = 42;</code>
+       * <code>ASSIGN_MOD = 41;</code>
        */
-      public static final int ASSIGN_MOD_VALUE = 42;
+      public static final int ASSIGN_MOD_VALUE = 41;
       /**
-       * <code>ASSIGN_BITXOR = 43;</code>
+       * <code>ASSIGN_BITXOR = 42;</code>
        */
-      public static final int ASSIGN_BITXOR_VALUE = 43;
+      public static final int ASSIGN_BITXOR_VALUE = 42;
       /**
-       * <code>ASSIGN_BITAND = 44;</code>
+       * <code>ASSIGN_BITAND = 43;</code>
        */
-      public static final int ASSIGN_BITAND_VALUE = 44;
+      public static final int ASSIGN_BITAND_VALUE = 43;
       /**
-       * <code>ASSIGN_BITOR = 45;</code>
+       * <code>ASSIGN_BITOR = 44;</code>
        */
-      public static final int ASSIGN_BITOR_VALUE = 45;
+      public static final int ASSIGN_BITOR_VALUE = 44;
       /**
-       * <code>ASSIGN_LSHIFT = 46;</code>
+       * <code>ASSIGN_LSHIFT = 45;</code>
        */
-      public static final int ASSIGN_LSHIFT_VALUE = 46;
+      public static final int ASSIGN_LSHIFT_VALUE = 45;
       /**
-       * <code>ASSIGN_RSHIFT = 47;</code>
+       * <code>ASSIGN_RSHIFT = 46;</code>
        */
-      public static final int ASSIGN_RSHIFT_VALUE = 47;
+      public static final int ASSIGN_RSHIFT_VALUE = 46;
       /**
-       * <code>ASSIGN_UNSIGNEDRSHIFT = 48;</code>
+       * <code>ASSIGN_UNSIGNEDRSHIFT = 47;</code>
        */
-      public static final int ASSIGN_UNSIGNEDRSHIFT_VALUE = 48;
+      public static final int ASSIGN_UNSIGNEDRSHIFT_VALUE = 47;
       /**
-       * <code>ANNOTATION = 49;</code>
+       * <code>ANNOTATION = 48;</code>
        */
-      public static final int ANNOTATION_VALUE = 49;
+      public static final int ANNOTATION_VALUE = 48;
 
 
       public final int getNumber() { return value; }
 
       public static ExpressionKind valueOf(int value) {
         switch (value) {
-          case 1: return OTHER;
-          case 2: return LITERAL;
-          case 3: return VARACCESS;
-          case 4: return VARDECL;
-          case 5: return METHODCALL;
-          case 6: return CAST;
-          case 7: return ARRAYINDEX;
-          case 8: return ARRAYINIT;
-          case 9: return TYPECOMPARE;
-          case 10: return NEW;
-          case 11: return NEWARRAY;
-          case 12: return OP_ADD;
-          case 13: return OP_SUB;
-          case 14: return OP_MULT;
-          case 15: return OP_DIV;
-          case 16: return OP_MOD;
-          case 17: return OP_INC;
-          case 18: return OP_DEC;
-          case 19: return BIT_LSHIFT;
-          case 20: return BIT_RSHIFT;
-          case 21: return BIT_UNSIGNEDRSHIFT;
-          case 22: return BIT_AND;
-          case 23: return BIT_OR;
-          case 24: return BIT_NOT;
-          case 25: return BIT_XOR;
-          case 26: return LOGICAL_NOT;
-          case 27: return LOGICAL_AND;
-          case 28: return LOGICAL_OR;
-          case 29: return EQ;
-          case 30: return NEQ;
-          case 31: return LT;
-          case 32: return GT;
-          case 33: return LTEQ;
-          case 34: return GTEQ;
-          case 35: return CONDITIONAL;
-          case 36: return NULLCOALESCE;
-          case 37: return ASSIGN;
-          case 38: return ASSIGN_ADD;
-          case 39: return ASSIGN_SUB;
-          case 40: return ASSIGN_MULT;
-          case 41: return ASSIGN_DIV;
-          case 42: return ASSIGN_MOD;
-          case 43: return ASSIGN_BITXOR;
-          case 44: return ASSIGN_BITAND;
-          case 45: return ASSIGN_BITOR;
-          case 46: return ASSIGN_LSHIFT;
-          case 47: return ASSIGN_RSHIFT;
-          case 48: return ASSIGN_UNSIGNEDRSHIFT;
-          case 49: return ANNOTATION;
+          case 0: return OTHER;
+          case 1: return LITERAL;
+          case 2: return VARACCESS;
+          case 3: return VARDECL;
+          case 4: return METHODCALL;
+          case 5: return CAST;
+          case 6: return ARRAYINDEX;
+          case 7: return ARRAYINIT;
+          case 8: return TYPECOMPARE;
+          case 9: return NEW;
+          case 10: return NEWARRAY;
+          case 11: return OP_ADD;
+          case 12: return OP_SUB;
+          case 13: return OP_MULT;
+          case 14: return OP_DIV;
+          case 15: return OP_MOD;
+          case 16: return OP_INC;
+          case 17: return OP_DEC;
+          case 18: return BIT_LSHIFT;
+          case 19: return BIT_RSHIFT;
+          case 20: return BIT_UNSIGNEDRSHIFT;
+          case 21: return BIT_AND;
+          case 22: return BIT_OR;
+          case 23: return BIT_NOT;
+          case 24: return BIT_XOR;
+          case 25: return LOGICAL_NOT;
+          case 26: return LOGICAL_AND;
+          case 27: return LOGICAL_OR;
+          case 28: return EQ;
+          case 29: return NEQ;
+          case 30: return LT;
+          case 31: return GT;
+          case 32: return LTEQ;
+          case 33: return GTEQ;
+          case 34: return CONDITIONAL;
+          case 35: return NULLCOALESCE;
+          case 36: return ASSIGN;
+          case 37: return ASSIGN_ADD;
+          case 38: return ASSIGN_SUB;
+          case 39: return ASSIGN_MULT;
+          case 40: return ASSIGN_DIV;
+          case 41: return ASSIGN_MOD;
+          case 42: return ASSIGN_BITXOR;
+          case 43: return ASSIGN_BITAND;
+          case 44: return ASSIGN_BITOR;
+          case 45: return ASSIGN_LSHIFT;
+          case 46: return ASSIGN_RSHIFT;
+          case 47: return ASSIGN_UNSIGNEDRSHIFT;
+          case 48: return ANNOTATION;
           default: return null;
         }
       }
@@ -18877,76 +18903,84 @@ public final class Ast {
     public enum ModifierKind
         implements com.google.protobuf.ProtocolMessageEnum {
       /**
-       * <code>OTHER = 1;</code>
+       * <code>OTHER = 0;</code>
        */
-      OTHER(0, 1),
+      OTHER(0, 0),
       /**
-       * <code>VISIBILITY = 2;</code>
+       * <code>VISIBILITY = 1;</code>
        */
-      VISIBILITY(1, 2),
+      VISIBILITY(1, 1),
       /**
-       * <code>ANNOTATION = 3;</code>
+       * <code>ANNOTATION = 2;</code>
        */
-      ANNOTATION(2, 3),
+      ANNOTATION(2, 2),
       /**
-       * <code>FINAL = 4;</code>
+       * <code>FINAL = 3;</code>
        */
-      FINAL(3, 4),
+      FINAL(3, 3),
       /**
-       * <code>STATIC = 5;</code>
+       * <code>STATIC = 4;</code>
        */
-      STATIC(4, 5),
+      STATIC(4, 4),
       /**
-       * <code>SYNCHRONIZED = 6;</code>
+       * <code>SYNCHRONIZED = 5;</code>
        */
-      SYNCHRONIZED(5, 6),
+      SYNCHRONIZED(5, 5),
       /**
-       * <code>ABSTRACT = 7;</code>
+       * <code>ABSTRACT = 6;</code>
        */
-      ABSTRACT(6, 7),
+      ABSTRACT(7, 6),
       ;
 
       /**
-       * <code>OTHER = 1;</code>
+       * <code>SYNC = 5;</code>
        */
-      public static final int OTHER_VALUE = 1;
+      public static final ModifierKind SYNC = SYNCHRONIZED;
       /**
-       * <code>VISIBILITY = 2;</code>
+       * <code>OTHER = 0;</code>
        */
-      public static final int VISIBILITY_VALUE = 2;
+      public static final int OTHER_VALUE = 0;
       /**
-       * <code>ANNOTATION = 3;</code>
+       * <code>VISIBILITY = 1;</code>
        */
-      public static final int ANNOTATION_VALUE = 3;
+      public static final int VISIBILITY_VALUE = 1;
       /**
-       * <code>FINAL = 4;</code>
+       * <code>ANNOTATION = 2;</code>
        */
-      public static final int FINAL_VALUE = 4;
+      public static final int ANNOTATION_VALUE = 2;
       /**
-       * <code>STATIC = 5;</code>
+       * <code>FINAL = 3;</code>
        */
-      public static final int STATIC_VALUE = 5;
+      public static final int FINAL_VALUE = 3;
       /**
-       * <code>SYNCHRONIZED = 6;</code>
+       * <code>STATIC = 4;</code>
        */
-      public static final int SYNCHRONIZED_VALUE = 6;
+      public static final int STATIC_VALUE = 4;
       /**
-       * <code>ABSTRACT = 7;</code>
+       * <code>SYNCHRONIZED = 5;</code>
        */
-      public static final int ABSTRACT_VALUE = 7;
+      public static final int SYNCHRONIZED_VALUE = 5;
+      /**
+       * <code>SYNC = 5;</code>
+       */
+      public static final int SYNC_VALUE = 5;
+      /**
+       * <code>ABSTRACT = 6;</code>
+       */
+      public static final int ABSTRACT_VALUE = 6;
 
 
       public final int getNumber() { return value; }
 
       public static ModifierKind valueOf(int value) {
         switch (value) {
-          case 1: return OTHER;
-          case 2: return VISIBILITY;
-          case 3: return ANNOTATION;
-          case 4: return FINAL;
-          case 5: return STATIC;
-          case 6: return SYNCHRONIZED;
-          case 7: return ABSTRACT;
+          case 0: return OTHER;
+          case 1: return VISIBILITY;
+          case 2: return ANNOTATION;
+          case 3: return FINAL;
+          case 4: return STATIC;
+          case 5: return SYNCHRONIZED;
+          case 6: return ABSTRACT;
           default: return null;
         }
       }
@@ -18976,7 +19010,9 @@ public final class Ast {
         return boa.types.Ast.Modifier.getDescriptor().getEnumTypes().get(0);
       }
 
-      private static final ModifierKind[] VALUES = values();
+      private static final ModifierKind[] VALUES = {
+        OTHER, VISIBILITY, ANNOTATION, FINAL, STATIC, SYNCHRONIZED, SYNC, ABSTRACT, 
+      };
 
       public static ModifierKind valueOf(
           com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
@@ -20433,21 +20469,25 @@ public final class Ast {
     public enum CommentKind
         implements com.google.protobuf.ProtocolMessageEnum {
       /**
+       * <code>OTHER = 0;</code>
+       */
+      OTHER(0, 0),
+      /**
        * <code>LINE = 1;</code>
        */
-      LINE(0, 1),
+      LINE(1, 1),
       /**
        * <code>BLOCK = 2;</code>
        */
-      BLOCK(1, 2),
+      BLOCK(2, 2),
       /**
        * <code>DOC = 3;</code>
        */
-      DOC(2, 3),
+      DOC(3, 3),
       /**
        * <code>SPEC = 4;</code>
        */
-      SPEC(4, 4),
+      SPEC(5, 4),
       ;
 
       /**
@@ -20458,6 +20498,10 @@ public final class Ast {
        * <code>SPECIFICATION = 4;</code>
        */
       public static final CommentKind SPECIFICATION = SPEC;
+      /**
+       * <code>OTHER = 0;</code>
+       */
+      public static final int OTHER_VALUE = 0;
       /**
        * <code>LINE = 1;</code>
        */
@@ -20488,6 +20532,7 @@ public final class Ast {
 
       public static CommentKind valueOf(int value) {
         switch (value) {
+          case 0: return OTHER;
           case 1: return LINE;
           case 2: return BLOCK;
           case 3: return DOC;
@@ -20522,7 +20567,7 @@ public final class Ast {
       }
 
       private static final CommentKind[] VALUES = {
-        LINE, BLOCK, DOC, DOCUMENTATION, SPEC, SPECIFICATION, 
+        OTHER, LINE, BLOCK, DOC, DOCUMENTATION, SPEC, SPECIFICATION, 
       };
 
       public static CommentKind valueOf(
@@ -20628,7 +20673,7 @@ public final class Ast {
     }
 
     private void initFields() {
-      kind_ = boa.types.Ast.Comment.CommentKind.LINE;
+      kind_ = boa.types.Ast.Comment.CommentKind.OTHER;
       value_ = "";
       position_ = boa.types.Ast.PositionInfo.getDefaultInstance();
     }
@@ -20807,7 +20852,7 @@ public final class Ast {
 
       public Builder clear() {
         super.clear();
-        kind_ = boa.types.Ast.Comment.CommentKind.LINE;
+        kind_ = boa.types.Ast.Comment.CommentKind.OTHER;
         bitField0_ = (bitField0_ & ~0x00000001);
         value_ = "";
         bitField0_ = (bitField0_ & ~0x00000002);
@@ -20932,7 +20977,7 @@ public final class Ast {
       private int bitField0_;
 
       // required .boa.types.Comment.CommentKind kind = 1;
-      private boa.types.Ast.Comment.CommentKind kind_ = boa.types.Ast.Comment.CommentKind.LINE;
+      private boa.types.Ast.Comment.CommentKind kind_ = boa.types.Ast.Comment.CommentKind.OTHER;
       /**
        * <code>required .boa.types.Comment.CommentKind kind = 1;</code>
        */
@@ -20962,7 +21007,7 @@ public final class Ast {
        */
       public Builder clearKind() {
         bitField0_ = (bitField0_ & ~0x00000001);
-        kind_ = boa.types.Ast.Comment.CommentKind.LINE;
+        kind_ = boa.types.Ast.Comment.CommentKind.OTHER;
         onChanged();
         return this;
       }
@@ -22116,7 +22161,7 @@ public final class Ast {
       "type\030\002 \002(\0132\017.boa.types.Type\022&\n\tmodifiers" +
       "\030\003 \003(\0132\023.boa.types.Modifier\022*\n\013initializ" +
       "er\030\004 \001(\0132\025.boa.types.Expression\022$\n\010comme" +
-      "nts\030\005 \003(\0132\022.boa.types.Comment\"\227\005\n\tStatem",
+      "nts\030\005 \003(\0132\022.boa.types.Comment\"\257\005\n\tStatem",
       "ent\0220\n\004kind\030\001 \002(\0162\".boa.types.Statement." +
       "StatementKind\022$\n\010comments\030\002 \003(\0132\022.boa.ty" +
       "pes.Comment\022(\n\nstatements\030\003 \003(\0132\024.boa.ty" +
@@ -22127,65 +22172,66 @@ public final class Ast {
       "aration\030\007 \001(\0132\023.boa.types.Variable\0220\n\020ty" +
       "pe_declaration\030\010 \001(\0132\026.boa.types.Declara" +
       "tion\022)\n\nexpression\030\t \001(\0132\025.boa.types.Exp",
-      "ression\"\365\001\n\rStatementKind\022\t\n\005OTHER\020\001\022\t\n\005" +
-      "BLOCK\020\002\022\014\n\010TYPEDECL\020\004\022\016\n\nEXPRESSION\020\005\022\020\n" +
-      "\014SYNCHRONIZED\020\006\022\n\n\006RETURN\020\007\022\007\n\003FOR\020\010\022\006\n\002" +
-      "DO\020\t\022\t\n\005WHILE\020\n\022\006\n\002IF\020\013\022\n\n\006ASSERT\020\014\022\t\n\005B" +
-      "REAK\020\r\022\014\n\010CONTINUE\020\016\022\t\n\005LABEL\020\017\022\n\n\006SWITC" +
-      "H\020\020\022\010\n\004CASE\020\021\022\007\n\003TRY\020\022\022\t\n\005THROW\020\023\022\t\n\005CAT" +
-      "CH\020\024\022\t\n\005EMPTY\020\025\"\217\t\n\nExpression\0222\n\004kind\030\001" +
-      " \002(\0162$.boa.types.Expression.ExpressionKi" +
-      "nd\022*\n\013expressions\030\002 \003(\0132\025.boa.types.Expr" +
-      "ession\022+\n\016variable_decls\030\003 \003(\0132\023.boa.typ",
-      "es.Variable\022!\n\010new_type\030\004 \001(\0132\017.boa.type" +
-      "s.Type\022+\n\022generic_parameters\030\005 \003(\0132\017.boa" +
-      ".types.Type\022\022\n\nis_postfix\030\006 \001(\010\022\017\n\007liter" +
-      "al\030\007 \001(\t\022\020\n\010variable\030\010 \001(\t\022\016\n\006method\030\t \001" +
-      "(\t\022*\n\013method_args\030\n \003(\0132\025.boa.types.Expr" +
-      "ession\0220\n\020anon_declaration\030\013 \001(\0132\026.boa.t" +
-      "ypes.Declaration\022\'\n\nannotation\030\014 \001(\0132\023.b" +
-      "oa.types.Modifier\"\325\005\n\016ExpressionKind\022\t\n\005" +
-      "OTHER\020\001\022\013\n\007LITERAL\020\002\022\r\n\tVARACCESS\020\003\022\013\n\007V" +
-      "ARDECL\020\004\022\016\n\nMETHODCALL\020\005\022\010\n\004CAST\020\006\022\016\n\nAR",
-      "RAYINDEX\020\007\022\r\n\tARRAYINIT\020\010\022\017\n\013TYPECOMPARE" +
-      "\020\t\022\007\n\003NEW\020\n\022\014\n\010NEWARRAY\020\013\022\n\n\006OP_ADD\020\014\022\n\n" +
-      "\006OP_SUB\020\r\022\013\n\007OP_MULT\020\016\022\n\n\006OP_DIV\020\017\022\n\n\006OP" +
-      "_MOD\020\020\022\n\n\006OP_INC\020\021\022\n\n\006OP_DEC\020\022\022\016\n\nBIT_LS" +
-      "HIFT\020\023\022\016\n\nBIT_RSHIFT\020\024\022\026\n\022BIT_UNSIGNEDRS" +
-      "HIFT\020\025\022\013\n\007BIT_AND\020\026\022\n\n\006BIT_OR\020\027\022\013\n\007BIT_N" +
-      "OT\020\030\022\013\n\007BIT_XOR\020\031\022\017\n\013LOGICAL_NOT\020\032\022\017\n\013LO" +
-      "GICAL_AND\020\033\022\016\n\nLOGICAL_OR\020\034\022\006\n\002EQ\020\035\022\007\n\003N" +
-      "EQ\020\036\022\006\n\002LT\020\037\022\006\n\002GT\020 \022\010\n\004LTEQ\020!\022\010\n\004GTEQ\020\"" +
-      "\022\017\n\013CONDITIONAL\020#\022\020\n\014NULLCOALESCE\020$\022\n\n\006A",
-      "SSIGN\020%\022\016\n\nASSIGN_ADD\020&\022\016\n\nASSIGN_SUB\020\'\022" +
-      "\017\n\013ASSIGN_MULT\020(\022\016\n\nASSIGN_DIV\020)\022\016\n\nASSI" +
-      "GN_MOD\020*\022\021\n\rASSIGN_BITXOR\020+\022\021\n\rASSIGN_BI" +
-      "TAND\020,\022\020\n\014ASSIGN_BITOR\020-\022\021\n\rASSIGN_LSHIF" +
-      "T\020.\022\021\n\rASSIGN_RSHIFT\020/\022\031\n\025ASSIGN_UNSIGNE" +
-      "DRSHIFT\0200\022\016\n\nANNOTATION\0201\"\233\003\n\010Modifier\022." +
-      "\n\004kind\030\001 \002(\0162 .boa.types.Modifier.Modifi" +
-      "erKind\0222\n\nvisibility\030\002 \001(\0162\036.boa.types.M" +
-      "odifier.Visibility\022\027\n\017annotation_name\030\003 " +
-      "\001(\t\022\032\n\022annotation_members\030\004 \003(\t\0220\n\021annot",
-      "ation_values\030\005 \003(\0132\025.boa.types.Expressio" +
-      "n\022\r\n\005other\030\006 \001(\t\"p\n\014ModifierKind\022\t\n\005OTHE" +
-      "R\020\001\022\016\n\nVISIBILITY\020\002\022\016\n\nANNOTATION\020\003\022\t\n\005F" +
-      "INAL\020\004\022\n\n\006STATIC\020\005\022\020\n\014SYNCHRONIZED\020\006\022\014\n\010" +
-      "ABSTRACT\020\007\"C\n\nVisibility\022\n\n\006PUBLIC\020\001\022\013\n\007" +
-      "PRIVATE\020\002\022\r\n\tPROTECTED\020\003\022\r\n\tNAMESPACE\020\004\"" +
-      "\322\001\n\007Comment\022,\n\004kind\030\001 \002(\0162\036.boa.types.Co" +
-      "mment.CommentKind\022\r\n\005value\030\002 \002(\t\022)\n\010posi" +
-      "tion\030\003 \002(\0132\027.boa.types.PositionInfo\"_\n\013C" +
-      "ommentKind\022\010\n\004LINE\020\001\022\t\n\005BLOCK\020\002\022\007\n\003DOC\020\003",
-      "\022\021\n\rDOCUMENTATION\020\003\022\010\n\004SPEC\020\004\022\021\n\rSPECIFI" +
-      "CATION\020\004\032\002\020\001\"{\n\014PositionInfo\022\021\n\tstart_po" +
-      "s\030\001 \002(\005\022\016\n\006length\030\002 \002(\005\022\022\n\nstart_line\030\003 " +
-      "\002(\005\022\021\n\tstart_col\030\004 \002(\005\022\020\n\010end_line\030\005 \002(\005" +
-      "\022\017\n\007end_col\030\006 \002(\005*\224\001\n\010TypeKind\022\t\n\005OTHER\020" +
-      "\001\022\t\n\005CLASS\020\002\022\r\n\tINTERFACE\020\003\022\r\n\tANONYMOUS" +
-      "\020\004\022\n\n\006STRUCT\020\005\022\010\n\004ENUM\020\006\022\017\n\013ENUMERATION\020" +
-      "\006\022\016\n\nANNOTATION\020\007\022\014\n\010DELEGATE\020\010\022\013\n\007GENER" +
-      "IC\020\t\032\002\020\001B\002H\001"
+      "ression\"\215\002\n\rStatementKind\022\t\n\005OTHER\020\000\022\t\n\005" +
+      "BLOCK\020\001\022\014\n\010TYPEDECL\020\002\022\016\n\nEXPRESSION\020\003\022\010\n" +
+      "\004EXPR\020\003\022\020\n\014SYNCHRONIZED\020\004\022\010\n\004SYNC\020\004\022\n\n\006R" +
+      "ETURN\020\005\022\007\n\003FOR\020\006\022\006\n\002DO\020\007\022\t\n\005WHILE\020\010\022\006\n\002I" +
+      "F\020\t\022\n\n\006ASSERT\020\n\022\t\n\005BREAK\020\013\022\014\n\010CONTINUE\020\014" +
+      "\022\t\n\005LABEL\020\r\022\n\n\006SWITCH\020\016\022\010\n\004CASE\020\017\022\007\n\003TRY" +
+      "\020\020\022\t\n\005THROW\020\021\022\t\n\005CATCH\020\022\022\t\n\005EMPTY\020\023\032\002\020\001\"" +
+      "\217\t\n\nExpression\0222\n\004kind\030\001 \002(\0162$.boa.types" +
+      ".Expression.ExpressionKind\022*\n\013expression" +
+      "s\030\002 \003(\0132\025.boa.types.Expression\022+\n\016variab",
+      "le_decls\030\003 \003(\0132\023.boa.types.Variable\022!\n\010n" +
+      "ew_type\030\004 \001(\0132\017.boa.types.Type\022+\n\022generi" +
+      "c_parameters\030\005 \003(\0132\017.boa.types.Type\022\022\n\ni" +
+      "s_postfix\030\006 \001(\010\022\017\n\007literal\030\007 \001(\t\022\020\n\010vari" +
+      "able\030\010 \001(\t\022\016\n\006method\030\t \001(\t\022*\n\013method_arg" +
+      "s\030\n \003(\0132\025.boa.types.Expression\0220\n\020anon_d" +
+      "eclaration\030\013 \001(\0132\026.boa.types.Declaration" +
+      "\022\'\n\nannotation\030\014 \001(\0132\023.boa.types.Modifie" +
+      "r\"\325\005\n\016ExpressionKind\022\t\n\005OTHER\020\000\022\013\n\007LITER" +
+      "AL\020\001\022\r\n\tVARACCESS\020\002\022\013\n\007VARDECL\020\003\022\016\n\nMETH",
+      "ODCALL\020\004\022\010\n\004CAST\020\005\022\016\n\nARRAYINDEX\020\006\022\r\n\tAR" +
+      "RAYINIT\020\007\022\017\n\013TYPECOMPARE\020\010\022\007\n\003NEW\020\t\022\014\n\010N" +
+      "EWARRAY\020\n\022\n\n\006OP_ADD\020\013\022\n\n\006OP_SUB\020\014\022\013\n\007OP_" +
+      "MULT\020\r\022\n\n\006OP_DIV\020\016\022\n\n\006OP_MOD\020\017\022\n\n\006OP_INC" +
+      "\020\020\022\n\n\006OP_DEC\020\021\022\016\n\nBIT_LSHIFT\020\022\022\016\n\nBIT_RS" +
+      "HIFT\020\023\022\026\n\022BIT_UNSIGNEDRSHIFT\020\024\022\013\n\007BIT_AN" +
+      "D\020\025\022\n\n\006BIT_OR\020\026\022\013\n\007BIT_NOT\020\027\022\013\n\007BIT_XOR\020" +
+      "\030\022\017\n\013LOGICAL_NOT\020\031\022\017\n\013LOGICAL_AND\020\032\022\016\n\nL" +
+      "OGICAL_OR\020\033\022\006\n\002EQ\020\034\022\007\n\003NEQ\020\035\022\006\n\002LT\020\036\022\006\n\002" +
+      "GT\020\037\022\010\n\004LTEQ\020 \022\010\n\004GTEQ\020!\022\017\n\013CONDITIONAL\020",
+      "\"\022\020\n\014NULLCOALESCE\020#\022\n\n\006ASSIGN\020$\022\016\n\nASSIG" +
+      "N_ADD\020%\022\016\n\nASSIGN_SUB\020&\022\017\n\013ASSIGN_MULT\020\'" +
+      "\022\016\n\nASSIGN_DIV\020(\022\016\n\nASSIGN_MOD\020)\022\021\n\rASSI" +
+      "GN_BITXOR\020*\022\021\n\rASSIGN_BITAND\020+\022\020\n\014ASSIGN" +
+      "_BITOR\020,\022\021\n\rASSIGN_LSHIFT\020-\022\021\n\rASSIGN_RS" +
+      "HIFT\020.\022\031\n\025ASSIGN_UNSIGNEDRSHIFT\020/\022\016\n\nANN" +
+      "OTATION\0200\"\251\003\n\010Modifier\022.\n\004kind\030\001 \002(\0162 .b" +
+      "oa.types.Modifier.ModifierKind\0222\n\nvisibi" +
+      "lity\030\002 \001(\0162\036.boa.types.Modifier.Visibili" +
+      "ty\022\027\n\017annotation_name\030\003 \001(\t\022\032\n\022annotatio",
+      "n_members\030\004 \003(\t\0220\n\021annotation_values\030\005 \003" +
+      "(\0132\025.boa.types.Expression\022\r\n\005other\030\006 \001(\t" +
+      "\"~\n\014ModifierKind\022\t\n\005OTHER\020\000\022\016\n\nVISIBILIT" +
+      "Y\020\001\022\016\n\nANNOTATION\020\002\022\t\n\005FINAL\020\003\022\n\n\006STATIC" +
+      "\020\004\022\020\n\014SYNCHRONIZED\020\005\022\010\n\004SYNC\020\005\022\014\n\010ABSTRA" +
+      "CT\020\006\032\002\020\001\"C\n\nVisibility\022\n\n\006PUBLIC\020\001\022\013\n\007PR" +
+      "IVATE\020\002\022\r\n\tPROTECTED\020\003\022\r\n\tNAMESPACE\020\004\"\335\001" +
+      "\n\007Comment\022,\n\004kind\030\001 \002(\0162\036.boa.types.Comm" +
+      "ent.CommentKind\022\r\n\005value\030\002 \002(\t\022)\n\010positi" +
+      "on\030\003 \002(\0132\027.boa.types.PositionInfo\"j\n\013Com",
+      "mentKind\022\t\n\005OTHER\020\000\022\010\n\004LINE\020\001\022\t\n\005BLOCK\020\002" +
+      "\022\007\n\003DOC\020\003\022\021\n\rDOCUMENTATION\020\003\022\010\n\004SPEC\020\004\022\021" +
+      "\n\rSPECIFICATION\020\004\032\002\020\001\"{\n\014PositionInfo\022\021\n" +
+      "\tstart_pos\030\001 \002(\005\022\016\n\006length\030\002 \002(\005\022\022\n\nstar" +
+      "t_line\030\003 \002(\005\022\021\n\tstart_col\030\004 \002(\005\022\020\n\010end_l" +
+      "ine\030\005 \002(\005\022\017\n\007end_col\030\006 \002(\005*\236\001\n\010TypeKind\022" +
+      "\t\n\005OTHER\020\000\022\t\n\005CLASS\020\001\022\r\n\tINTERFACE\020\002\022\r\n\t" +
+      "ANONYMOUS\020\003\022\010\n\004ANON\020\003\022\n\n\006STRUCT\020\004\022\010\n\004ENU" +
+      "M\020\005\022\017\n\013ENUMERATION\020\005\022\016\n\nANNOTATION\020\006\022\014\n\010" +
+      "DELEGATE\020\007\022\013\n\007GENERIC\020\010\032\002\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

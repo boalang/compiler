@@ -36,30 +36,20 @@ public final class Issues {
      */
     boa.types.Issues.IssueRepository.IssueKind getKind();
 
-    // repeated .boa.types.Issue issues = 3;
+    // required string key = 3;
     /**
-     * <code>repeated .boa.types.Issue issues = 3;</code>
+     * <code>required string key = 3;</code>
      */
-    java.util.List<boa.types.Issues.Issue> 
-        getIssuesList();
+    boolean hasKey();
     /**
-     * <code>repeated .boa.types.Issue issues = 3;</code>
+     * <code>required string key = 3;</code>
      */
-    boa.types.Issues.Issue getIssues(int index);
+    java.lang.String getKey();
     /**
-     * <code>repeated .boa.types.Issue issues = 3;</code>
+     * <code>required string key = 3;</code>
      */
-    int getIssuesCount();
-    /**
-     * <code>repeated .boa.types.Issue issues = 3;</code>
-     */
-    java.util.List<? extends boa.types.Issues.IssueOrBuilder> 
-        getIssuesOrBuilderList();
-    /**
-     * <code>repeated .boa.types.Issue issues = 3;</code>
-     */
-    boa.types.Issues.IssueOrBuilder getIssuesOrBuilder(
-        int index);
+    com.google.protobuf.ByteString
+        getKeyBytes();
   }
   /**
    * Protobuf type {@code boa.types.IssueRepository}
@@ -129,11 +119,8 @@ public final class Issues {
               break;
             }
             case 26: {
-              if (!((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
-                issues_ = new java.util.ArrayList<boa.types.Issues.Issue>();
-                mutable_bitField0_ |= 0x00000004;
-              }
-              issues_.add(input.readMessage(boa.types.Issues.Issue.PARSER, extensionRegistry));
+              bitField0_ |= 0x00000004;
+              key_ = input.readBytes();
               break;
             }
           }
@@ -144,9 +131,6 @@ public final class Issues {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e.getMessage()).setUnfinishedMessage(this);
       } finally {
-        if (((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
-          issues_ = java.util.Collections.unmodifiableList(issues_);
-        }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
@@ -184,58 +168,58 @@ public final class Issues {
     public enum IssueKind
         implements com.google.protobuf.ProtocolMessageEnum {
       /**
-       * <code>UNKNOWN = 1;</code>
+       * <code>OTHER = 0;</code>
        */
-      UNKNOWN(0, 1),
+      OTHER(0, 0),
       /**
-       * <code>BUGS = 2;</code>
+       * <code>BUGS = 1;</code>
        */
-      BUGS(1, 2),
+      BUGS(1, 1),
       /**
-       * <code>FEATURES = 3;</code>
+       * <code>FEATURES = 2;</code>
        */
-      FEATURES(2, 3),
+      FEATURES(2, 2),
       /**
-       * <code>SUPPORT = 4;</code>
+       * <code>SUPPORT = 3;</code>
        */
-      SUPPORT(3, 4),
+      SUPPORT(3, 3),
       /**
-       * <code>PATCHES = 5;</code>
+       * <code>PATCHES = 4;</code>
        */
-      PATCHES(4, 5),
+      PATCHES(4, 4),
       ;
 
       /**
-       * <code>UNKNOWN = 1;</code>
+       * <code>OTHER = 0;</code>
        */
-      public static final int UNKNOWN_VALUE = 1;
+      public static final int OTHER_VALUE = 0;
       /**
-       * <code>BUGS = 2;</code>
+       * <code>BUGS = 1;</code>
        */
-      public static final int BUGS_VALUE = 2;
+      public static final int BUGS_VALUE = 1;
       /**
-       * <code>FEATURES = 3;</code>
+       * <code>FEATURES = 2;</code>
        */
-      public static final int FEATURES_VALUE = 3;
+      public static final int FEATURES_VALUE = 2;
       /**
-       * <code>SUPPORT = 4;</code>
+       * <code>SUPPORT = 3;</code>
        */
-      public static final int SUPPORT_VALUE = 4;
+      public static final int SUPPORT_VALUE = 3;
       /**
-       * <code>PATCHES = 5;</code>
+       * <code>PATCHES = 4;</code>
        */
-      public static final int PATCHES_VALUE = 5;
+      public static final int PATCHES_VALUE = 4;
 
 
       public final int getNumber() { return value; }
 
       public static IssueKind valueOf(int value) {
         switch (value) {
-          case 1: return UNKNOWN;
-          case 2: return BUGS;
-          case 3: return FEATURES;
-          case 4: return SUPPORT;
-          case 5: return PATCHES;
+          case 0: return OTHER;
+          case 1: return BUGS;
+          case 2: return FEATURES;
+          case 3: return SUPPORT;
+          case 4: return PATCHES;
           default: return null;
         }
       }
@@ -347,46 +331,53 @@ public final class Issues {
       return kind_;
     }
 
-    // repeated .boa.types.Issue issues = 3;
-    public static final int ISSUES_FIELD_NUMBER = 3;
-    private java.util.List<boa.types.Issues.Issue> issues_;
+    // required string key = 3;
+    public static final int KEY_FIELD_NUMBER = 3;
+    private java.lang.Object key_;
     /**
-     * <code>repeated .boa.types.Issue issues = 3;</code>
+     * <code>required string key = 3;</code>
      */
-    public java.util.List<boa.types.Issues.Issue> getIssuesList() {
-      return issues_;
+    public boolean hasKey() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
-     * <code>repeated .boa.types.Issue issues = 3;</code>
+     * <code>required string key = 3;</code>
      */
-    public java.util.List<? extends boa.types.Issues.IssueOrBuilder> 
-        getIssuesOrBuilderList() {
-      return issues_;
+    public java.lang.String getKey() {
+      java.lang.Object ref = key_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          key_ = s;
+        }
+        return s;
+      }
     }
     /**
-     * <code>repeated .boa.types.Issue issues = 3;</code>
+     * <code>required string key = 3;</code>
      */
-    public int getIssuesCount() {
-      return issues_.size();
-    }
-    /**
-     * <code>repeated .boa.types.Issue issues = 3;</code>
-     */
-    public boa.types.Issues.Issue getIssues(int index) {
-      return issues_.get(index);
-    }
-    /**
-     * <code>repeated .boa.types.Issue issues = 3;</code>
-     */
-    public boa.types.Issues.IssueOrBuilder getIssuesOrBuilder(
-        int index) {
-      return issues_.get(index);
+    public com.google.protobuf.ByteString
+        getKeyBytes() {
+      java.lang.Object ref = key_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        key_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
     }
 
     private void initFields() {
       url_ = "";
-      kind_ = boa.types.Issues.IssueRepository.IssueKind.UNKNOWN;
-      issues_ = java.util.Collections.emptyList();
+      kind_ = boa.types.Issues.IssueRepository.IssueKind.OTHER;
+      key_ = "";
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -401,11 +392,9 @@ public final class Issues {
         memoizedIsInitialized = 0;
         return false;
       }
-      for (int i = 0; i < getIssuesCount(); i++) {
-        if (!getIssues(i).isInitialized()) {
-          memoizedIsInitialized = 0;
-          return false;
-        }
+      if (!hasKey()) {
+        memoizedIsInitialized = 0;
+        return false;
       }
       memoizedIsInitialized = 1;
       return true;
@@ -420,8 +409,8 @@ public final class Issues {
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         output.writeEnum(2, kind_.getNumber());
       }
-      for (int i = 0; i < issues_.size(); i++) {
-        output.writeMessage(3, issues_.get(i));
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeBytes(3, getKeyBytes());
       }
       getUnknownFields().writeTo(output);
     }
@@ -440,9 +429,9 @@ public final class Issues {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(2, kind_.getNumber());
       }
-      for (int i = 0; i < issues_.size(); i++) {
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(3, issues_.get(i));
+          .computeBytesSize(3, getKeyBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -552,7 +541,6 @@ public final class Issues {
       }
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-          getIssuesFieldBuilder();
         }
       }
       private static Builder create() {
@@ -563,14 +551,10 @@ public final class Issues {
         super.clear();
         url_ = "";
         bitField0_ = (bitField0_ & ~0x00000001);
-        kind_ = boa.types.Issues.IssueRepository.IssueKind.UNKNOWN;
+        kind_ = boa.types.Issues.IssueRepository.IssueKind.OTHER;
         bitField0_ = (bitField0_ & ~0x00000002);
-        if (issuesBuilder_ == null) {
-          issues_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000004);
-        } else {
-          issuesBuilder_.clear();
-        }
+        key_ = "";
+        bitField0_ = (bitField0_ & ~0x00000004);
         return this;
       }
 
@@ -607,15 +591,10 @@ public final class Issues {
           to_bitField0_ |= 0x00000002;
         }
         result.kind_ = kind_;
-        if (issuesBuilder_ == null) {
-          if (((bitField0_ & 0x00000004) == 0x00000004)) {
-            issues_ = java.util.Collections.unmodifiableList(issues_);
-            bitField0_ = (bitField0_ & ~0x00000004);
-          }
-          result.issues_ = issues_;
-        } else {
-          result.issues_ = issuesBuilder_.build();
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
         }
+        result.key_ = key_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -640,31 +619,10 @@ public final class Issues {
         if (other.hasKind()) {
           setKind(other.getKind());
         }
-        if (issuesBuilder_ == null) {
-          if (!other.issues_.isEmpty()) {
-            if (issues_.isEmpty()) {
-              issues_ = other.issues_;
-              bitField0_ = (bitField0_ & ~0x00000004);
-            } else {
-              ensureIssuesIsMutable();
-              issues_.addAll(other.issues_);
-            }
-            onChanged();
-          }
-        } else {
-          if (!other.issues_.isEmpty()) {
-            if (issuesBuilder_.isEmpty()) {
-              issuesBuilder_.dispose();
-              issuesBuilder_ = null;
-              issues_ = other.issues_;
-              bitField0_ = (bitField0_ & ~0x00000004);
-              issuesBuilder_ = 
-                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
-                   getIssuesFieldBuilder() : null;
-            } else {
-              issuesBuilder_.addAllMessages(other.issues_);
-            }
-          }
+        if (other.hasKey()) {
+          bitField0_ |= 0x00000004;
+          key_ = other.key_;
+          onChanged();
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -679,11 +637,9 @@ public final class Issues {
           
           return false;
         }
-        for (int i = 0; i < getIssuesCount(); i++) {
-          if (!getIssues(i).isInitialized()) {
-            
-            return false;
-          }
+        if (!hasKey()) {
+          
+          return false;
         }
         return true;
       }
@@ -782,7 +738,7 @@ public final class Issues {
       }
 
       // required .boa.types.IssueRepository.IssueKind kind = 2;
-      private boa.types.Issues.IssueRepository.IssueKind kind_ = boa.types.Issues.IssueRepository.IssueKind.UNKNOWN;
+      private boa.types.Issues.IssueRepository.IssueKind kind_ = boa.types.Issues.IssueRepository.IssueKind.OTHER;
       /**
        * <code>required .boa.types.IssueRepository.IssueKind kind = 2;</code>
        */
@@ -812,18 +768,538 @@ public final class Issues {
        */
       public Builder clearKind() {
         bitField0_ = (bitField0_ & ~0x00000002);
-        kind_ = boa.types.Issues.IssueRepository.IssueKind.UNKNOWN;
+        kind_ = boa.types.Issues.IssueRepository.IssueKind.OTHER;
         onChanged();
         return this;
       }
 
-      // repeated .boa.types.Issue issues = 3;
+      // required string key = 3;
+      private java.lang.Object key_ = "";
+      /**
+       * <code>required string key = 3;</code>
+       */
+      public boolean hasKey() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>required string key = 3;</code>
+       */
+      public java.lang.String getKey() {
+        java.lang.Object ref = key_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          key_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>required string key = 3;</code>
+       */
+      public com.google.protobuf.ByteString
+          getKeyBytes() {
+        java.lang.Object ref = key_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          key_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string key = 3;</code>
+       */
+      public Builder setKey(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000004;
+        key_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string key = 3;</code>
+       */
+      public Builder clearKey() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        key_ = getDefaultInstance().getKey();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string key = 3;</code>
+       */
+      public Builder setKeyBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000004;
+        key_ = value;
+        onChanged();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:boa.types.IssueRepository)
+    }
+
+    static {
+      defaultInstance = new IssueRepository(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:boa.types.IssueRepository)
+  }
+
+  public interface IssuesRootOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+
+    // repeated .boa.types.Issue issues = 1;
+    /**
+     * <code>repeated .boa.types.Issue issues = 1;</code>
+     */
+    java.util.List<boa.types.Issues.Issue> 
+        getIssuesList();
+    /**
+     * <code>repeated .boa.types.Issue issues = 1;</code>
+     */
+    boa.types.Issues.Issue getIssues(int index);
+    /**
+     * <code>repeated .boa.types.Issue issues = 1;</code>
+     */
+    int getIssuesCount();
+    /**
+     * <code>repeated .boa.types.Issue issues = 1;</code>
+     */
+    java.util.List<? extends boa.types.Issues.IssueOrBuilder> 
+        getIssuesOrBuilderList();
+    /**
+     * <code>repeated .boa.types.Issue issues = 1;</code>
+     */
+    boa.types.Issues.IssueOrBuilder getIssuesOrBuilder(
+        int index);
+  }
+  /**
+   * Protobuf type {@code boa.types.IssuesRoot}
+   */
+  public static final class IssuesRoot extends
+      com.google.protobuf.GeneratedMessage
+      implements IssuesRootOrBuilder {
+    // Use IssuesRoot.newBuilder() to construct.
+    private IssuesRoot(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private IssuesRoot(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final IssuesRoot defaultInstance;
+    public static IssuesRoot getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public IssuesRoot getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private IssuesRoot(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 10: {
+              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+                issues_ = new java.util.ArrayList<boa.types.Issues.Issue>();
+                mutable_bitField0_ |= 0x00000001;
+              }
+              issues_.add(input.readMessage(boa.types.Issues.Issue.PARSER, extensionRegistry));
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
+          issues_ = java.util.Collections.unmodifiableList(issues_);
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return boa.types.Issues.internal_static_boa_types_IssuesRoot_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return boa.types.Issues.internal_static_boa_types_IssuesRoot_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              boa.types.Issues.IssuesRoot.class, boa.types.Issues.IssuesRoot.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<IssuesRoot> PARSER =
+        new com.google.protobuf.AbstractParser<IssuesRoot>() {
+      public IssuesRoot parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new IssuesRoot(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<IssuesRoot> getParserForType() {
+      return PARSER;
+    }
+
+    // repeated .boa.types.Issue issues = 1;
+    public static final int ISSUES_FIELD_NUMBER = 1;
+    private java.util.List<boa.types.Issues.Issue> issues_;
+    /**
+     * <code>repeated .boa.types.Issue issues = 1;</code>
+     */
+    public java.util.List<boa.types.Issues.Issue> getIssuesList() {
+      return issues_;
+    }
+    /**
+     * <code>repeated .boa.types.Issue issues = 1;</code>
+     */
+    public java.util.List<? extends boa.types.Issues.IssueOrBuilder> 
+        getIssuesOrBuilderList() {
+      return issues_;
+    }
+    /**
+     * <code>repeated .boa.types.Issue issues = 1;</code>
+     */
+    public int getIssuesCount() {
+      return issues_.size();
+    }
+    /**
+     * <code>repeated .boa.types.Issue issues = 1;</code>
+     */
+    public boa.types.Issues.Issue getIssues(int index) {
+      return issues_.get(index);
+    }
+    /**
+     * <code>repeated .boa.types.Issue issues = 1;</code>
+     */
+    public boa.types.Issues.IssueOrBuilder getIssuesOrBuilder(
+        int index) {
+      return issues_.get(index);
+    }
+
+    private void initFields() {
+      issues_ = java.util.Collections.emptyList();
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+
+      for (int i = 0; i < getIssuesCount(); i++) {
+        if (!getIssues(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      for (int i = 0; i < issues_.size(); i++) {
+        output.writeMessage(1, issues_.get(i));
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      for (int i = 0; i < issues_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(1, issues_.get(i));
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static boa.types.Issues.IssuesRoot parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static boa.types.Issues.IssuesRoot parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static boa.types.Issues.IssuesRoot parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static boa.types.Issues.IssuesRoot parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static boa.types.Issues.IssuesRoot parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static boa.types.Issues.IssuesRoot parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static boa.types.Issues.IssuesRoot parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static boa.types.Issues.IssuesRoot parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static boa.types.Issues.IssuesRoot parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static boa.types.Issues.IssuesRoot parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(boa.types.Issues.IssuesRoot prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code boa.types.IssuesRoot}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements boa.types.Issues.IssuesRootOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return boa.types.Issues.internal_static_boa_types_IssuesRoot_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return boa.types.Issues.internal_static_boa_types_IssuesRoot_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                boa.types.Issues.IssuesRoot.class, boa.types.Issues.IssuesRoot.Builder.class);
+      }
+
+      // Construct using boa.types.Issues.IssuesRoot.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getIssuesFieldBuilder();
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        if (issuesBuilder_ == null) {
+          issues_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000001);
+        } else {
+          issuesBuilder_.clear();
+        }
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return boa.types.Issues.internal_static_boa_types_IssuesRoot_descriptor;
+      }
+
+      public boa.types.Issues.IssuesRoot getDefaultInstanceForType() {
+        return boa.types.Issues.IssuesRoot.getDefaultInstance();
+      }
+
+      public boa.types.Issues.IssuesRoot build() {
+        boa.types.Issues.IssuesRoot result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public boa.types.Issues.IssuesRoot buildPartial() {
+        boa.types.Issues.IssuesRoot result = new boa.types.Issues.IssuesRoot(this);
+        int from_bitField0_ = bitField0_;
+        if (issuesBuilder_ == null) {
+          if (((bitField0_ & 0x00000001) == 0x00000001)) {
+            issues_ = java.util.Collections.unmodifiableList(issues_);
+            bitField0_ = (bitField0_ & ~0x00000001);
+          }
+          result.issues_ = issues_;
+        } else {
+          result.issues_ = issuesBuilder_.build();
+        }
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof boa.types.Issues.IssuesRoot) {
+          return mergeFrom((boa.types.Issues.IssuesRoot)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(boa.types.Issues.IssuesRoot other) {
+        if (other == boa.types.Issues.IssuesRoot.getDefaultInstance()) return this;
+        if (issuesBuilder_ == null) {
+          if (!other.issues_.isEmpty()) {
+            if (issues_.isEmpty()) {
+              issues_ = other.issues_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+            } else {
+              ensureIssuesIsMutable();
+              issues_.addAll(other.issues_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.issues_.isEmpty()) {
+            if (issuesBuilder_.isEmpty()) {
+              issuesBuilder_.dispose();
+              issuesBuilder_ = null;
+              issues_ = other.issues_;
+              bitField0_ = (bitField0_ & ~0x00000001);
+              issuesBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getIssuesFieldBuilder() : null;
+            } else {
+              issuesBuilder_.addAllMessages(other.issues_);
+            }
+          }
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        for (int i = 0; i < getIssuesCount(); i++) {
+          if (!getIssues(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        boa.types.Issues.IssuesRoot parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (boa.types.Issues.IssuesRoot) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      // repeated .boa.types.Issue issues = 1;
       private java.util.List<boa.types.Issues.Issue> issues_ =
         java.util.Collections.emptyList();
       private void ensureIssuesIsMutable() {
-        if (!((bitField0_ & 0x00000004) == 0x00000004)) {
+        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
           issues_ = new java.util.ArrayList<boa.types.Issues.Issue>(issues_);
-          bitField0_ |= 0x00000004;
+          bitField0_ |= 0x00000001;
          }
       }
 
@@ -831,7 +1307,7 @@ public final class Issues {
           boa.types.Issues.Issue, boa.types.Issues.Issue.Builder, boa.types.Issues.IssueOrBuilder> issuesBuilder_;
 
       /**
-       * <code>repeated .boa.types.Issue issues = 3;</code>
+       * <code>repeated .boa.types.Issue issues = 1;</code>
        */
       public java.util.List<boa.types.Issues.Issue> getIssuesList() {
         if (issuesBuilder_ == null) {
@@ -841,7 +1317,7 @@ public final class Issues {
         }
       }
       /**
-       * <code>repeated .boa.types.Issue issues = 3;</code>
+       * <code>repeated .boa.types.Issue issues = 1;</code>
        */
       public int getIssuesCount() {
         if (issuesBuilder_ == null) {
@@ -851,7 +1327,7 @@ public final class Issues {
         }
       }
       /**
-       * <code>repeated .boa.types.Issue issues = 3;</code>
+       * <code>repeated .boa.types.Issue issues = 1;</code>
        */
       public boa.types.Issues.Issue getIssues(int index) {
         if (issuesBuilder_ == null) {
@@ -861,7 +1337,7 @@ public final class Issues {
         }
       }
       /**
-       * <code>repeated .boa.types.Issue issues = 3;</code>
+       * <code>repeated .boa.types.Issue issues = 1;</code>
        */
       public Builder setIssues(
           int index, boa.types.Issues.Issue value) {
@@ -878,7 +1354,7 @@ public final class Issues {
         return this;
       }
       /**
-       * <code>repeated .boa.types.Issue issues = 3;</code>
+       * <code>repeated .boa.types.Issue issues = 1;</code>
        */
       public Builder setIssues(
           int index, boa.types.Issues.Issue.Builder builderForValue) {
@@ -892,7 +1368,7 @@ public final class Issues {
         return this;
       }
       /**
-       * <code>repeated .boa.types.Issue issues = 3;</code>
+       * <code>repeated .boa.types.Issue issues = 1;</code>
        */
       public Builder addIssues(boa.types.Issues.Issue value) {
         if (issuesBuilder_ == null) {
@@ -908,7 +1384,7 @@ public final class Issues {
         return this;
       }
       /**
-       * <code>repeated .boa.types.Issue issues = 3;</code>
+       * <code>repeated .boa.types.Issue issues = 1;</code>
        */
       public Builder addIssues(
           int index, boa.types.Issues.Issue value) {
@@ -925,7 +1401,7 @@ public final class Issues {
         return this;
       }
       /**
-       * <code>repeated .boa.types.Issue issues = 3;</code>
+       * <code>repeated .boa.types.Issue issues = 1;</code>
        */
       public Builder addIssues(
           boa.types.Issues.Issue.Builder builderForValue) {
@@ -939,7 +1415,7 @@ public final class Issues {
         return this;
       }
       /**
-       * <code>repeated .boa.types.Issue issues = 3;</code>
+       * <code>repeated .boa.types.Issue issues = 1;</code>
        */
       public Builder addIssues(
           int index, boa.types.Issues.Issue.Builder builderForValue) {
@@ -953,7 +1429,7 @@ public final class Issues {
         return this;
       }
       /**
-       * <code>repeated .boa.types.Issue issues = 3;</code>
+       * <code>repeated .boa.types.Issue issues = 1;</code>
        */
       public Builder addAllIssues(
           java.lang.Iterable<? extends boa.types.Issues.Issue> values) {
@@ -967,12 +1443,12 @@ public final class Issues {
         return this;
       }
       /**
-       * <code>repeated .boa.types.Issue issues = 3;</code>
+       * <code>repeated .boa.types.Issue issues = 1;</code>
        */
       public Builder clearIssues() {
         if (issuesBuilder_ == null) {
           issues_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000004);
+          bitField0_ = (bitField0_ & ~0x00000001);
           onChanged();
         } else {
           issuesBuilder_.clear();
@@ -980,7 +1456,7 @@ public final class Issues {
         return this;
       }
       /**
-       * <code>repeated .boa.types.Issue issues = 3;</code>
+       * <code>repeated .boa.types.Issue issues = 1;</code>
        */
       public Builder removeIssues(int index) {
         if (issuesBuilder_ == null) {
@@ -993,14 +1469,14 @@ public final class Issues {
         return this;
       }
       /**
-       * <code>repeated .boa.types.Issue issues = 3;</code>
+       * <code>repeated .boa.types.Issue issues = 1;</code>
        */
       public boa.types.Issues.Issue.Builder getIssuesBuilder(
           int index) {
         return getIssuesFieldBuilder().getBuilder(index);
       }
       /**
-       * <code>repeated .boa.types.Issue issues = 3;</code>
+       * <code>repeated .boa.types.Issue issues = 1;</code>
        */
       public boa.types.Issues.IssueOrBuilder getIssuesOrBuilder(
           int index) {
@@ -1010,7 +1486,7 @@ public final class Issues {
         }
       }
       /**
-       * <code>repeated .boa.types.Issue issues = 3;</code>
+       * <code>repeated .boa.types.Issue issues = 1;</code>
        */
       public java.util.List<? extends boa.types.Issues.IssueOrBuilder> 
            getIssuesOrBuilderList() {
@@ -1021,14 +1497,14 @@ public final class Issues {
         }
       }
       /**
-       * <code>repeated .boa.types.Issue issues = 3;</code>
+       * <code>repeated .boa.types.Issue issues = 1;</code>
        */
       public boa.types.Issues.Issue.Builder addIssuesBuilder() {
         return getIssuesFieldBuilder().addBuilder(
             boa.types.Issues.Issue.getDefaultInstance());
       }
       /**
-       * <code>repeated .boa.types.Issue issues = 3;</code>
+       * <code>repeated .boa.types.Issue issues = 1;</code>
        */
       public boa.types.Issues.Issue.Builder addIssuesBuilder(
           int index) {
@@ -1036,7 +1512,7 @@ public final class Issues {
             index, boa.types.Issues.Issue.getDefaultInstance());
       }
       /**
-       * <code>repeated .boa.types.Issue issues = 3;</code>
+       * <code>repeated .boa.types.Issue issues = 1;</code>
        */
       public java.util.List<boa.types.Issues.Issue.Builder> 
            getIssuesBuilderList() {
@@ -1049,7 +1525,7 @@ public final class Issues {
           issuesBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
               boa.types.Issues.Issue, boa.types.Issues.Issue.Builder, boa.types.Issues.IssueOrBuilder>(
                   issues_,
-                  ((bitField0_ & 0x00000004) == 0x00000004),
+                  ((bitField0_ & 0x00000001) == 0x00000001),
                   getParentForChildren(),
                   isClean());
           issues_ = null;
@@ -1057,15 +1533,15 @@ public final class Issues {
         return issuesBuilder_;
       }
 
-      // @@protoc_insertion_point(builder_scope:boa.types.IssueRepository)
+      // @@protoc_insertion_point(builder_scope:boa.types.IssuesRoot)
     }
 
     static {
-      defaultInstance = new IssueRepository(true);
+      defaultInstance = new IssuesRoot(true);
       defaultInstance.initFields();
     }
 
-    // @@protoc_insertion_point(class_scope:boa.types.IssueRepository)
+    // @@protoc_insertion_point(class_scope:boa.types.IssuesRoot)
   }
 
   public interface IssueOrBuilder
@@ -1101,397 +1577,272 @@ public final class Issues {
     com.google.protobuf.ByteString
         getStatusBytes();
 
-    // optional string component = 3;
+    // required .boa.types.Person author = 3;
     /**
-     * <code>optional string component = 3;</code>
+     * <code>required .boa.types.Person author = 3;</code>
      */
-    boolean hasComponent();
+    boolean hasAuthor();
     /**
-     * <code>optional string component = 3;</code>
+     * <code>required .boa.types.Person author = 3;</code>
      */
-    java.lang.String getComponent();
+    boa.types.Shared.Person getAuthor();
     /**
-     * <code>optional string component = 3;</code>
+     * <code>required .boa.types.Person author = 3;</code>
      */
-    com.google.protobuf.ByteString
-        getComponentBytes();
+    boa.types.Shared.PersonOrBuilder getAuthorOrBuilder();
 
-    // required string priority = 4;
+    // optional .boa.types.Person assignee = 4;
     /**
-     * <code>required string priority = 4;</code>
+     * <code>optional .boa.types.Person assignee = 4;</code>
      */
-    boolean hasPriority();
+    boolean hasAssignee();
     /**
-     * <code>required string priority = 4;</code>
+     * <code>optional .boa.types.Person assignee = 4;</code>
      */
-    java.lang.String getPriority();
+    boa.types.Shared.Person getAssignee();
     /**
-     * <code>required string priority = 4;</code>
+     * <code>optional .boa.types.Person assignee = 4;</code>
      */
-    com.google.protobuf.ByteString
-        getPriorityBytes();
+    boa.types.Shared.PersonOrBuilder getAssigneeOrBuilder();
 
-    // required string resolution = 5;
+    // required string summary = 5;
     /**
-     * <code>required string resolution = 5;</code>
-     */
-    boolean hasResolution();
-    /**
-     * <code>required string resolution = 5;</code>
-     */
-    java.lang.String getResolution();
-    /**
-     * <code>required string resolution = 5;</code>
-     */
-    com.google.protobuf.ByteString
-        getResolutionBytes();
-
-    // repeated string duplicated_by = 6;
-    /**
-     * <code>repeated string duplicated_by = 6;</code>
-     */
-    java.util.List<java.lang.String>
-    getDuplicatedByList();
-    /**
-     * <code>repeated string duplicated_by = 6;</code>
-     */
-    int getDuplicatedByCount();
-    /**
-     * <code>repeated string duplicated_by = 6;</code>
-     */
-    java.lang.String getDuplicatedBy(int index);
-    /**
-     * <code>repeated string duplicated_by = 6;</code>
-     */
-    com.google.protobuf.ByteString
-        getDuplicatedByBytes(int index);
-
-    // optional string duplicate_of = 7;
-    /**
-     * <code>optional string duplicate_of = 7;</code>
-     */
-    boolean hasDuplicateOf();
-    /**
-     * <code>optional string duplicate_of = 7;</code>
-     */
-    java.lang.String getDuplicateOf();
-    /**
-     * <code>optional string duplicate_of = 7;</code>
-     */
-    com.google.protobuf.ByteString
-        getDuplicateOfBytes();
-
-    // optional string subcomponent = 8;
-    /**
-     * <code>optional string subcomponent = 8;</code>
-     */
-    boolean hasSubcomponent();
-    /**
-     * <code>optional string subcomponent = 8;</code>
-     */
-    java.lang.String getSubcomponent();
-    /**
-     * <code>optional string subcomponent = 8;</code>
-     */
-    com.google.protobuf.ByteString
-        getSubcomponentBytes();
-
-    // required string summary = 9;
-    /**
-     * <code>required string summary = 9;</code>
+     * <code>required string summary = 5;</code>
      */
     boolean hasSummary();
     /**
-     * <code>required string summary = 9;</code>
+     * <code>required string summary = 5;</code>
      */
     java.lang.String getSummary();
     /**
-     * <code>required string summary = 9;</code>
+     * <code>required string summary = 5;</code>
      */
     com.google.protobuf.ByteString
         getSummaryBytes();
 
-    // optional string version = 10;
+    // required string description = 6;
     /**
-     * <code>optional string version = 10;</code>
-     */
-    boolean hasVersion();
-    /**
-     * <code>optional string version = 10;</code>
-     */
-    java.lang.String getVersion();
-    /**
-     * <code>optional string version = 10;</code>
-     */
-    com.google.protobuf.ByteString
-        getVersionBytes();
-
-    // required int32 created_date = 11;
-    /**
-     * <code>required int32 created_date = 11;</code>
-     */
-    boolean hasCreatedDate();
-    /**
-     * <code>required int32 created_date = 11;</code>
-     */
-    int getCreatedDate();
-
-    // required int32 modified_date = 12;
-    /**
-     * <code>required int32 modified_date = 12;</code>
-     */
-    boolean hasModifiedDate();
-    /**
-     * <code>required int32 modified_date = 12;</code>
-     */
-    int getModifiedDate();
-
-    // optional int32 completed_date = 13;
-    /**
-     * <code>optional int32 completed_date = 13;</code>
-     */
-    boolean hasCompletedDate();
-    /**
-     * <code>optional int32 completed_date = 13;</code>
-     */
-    int getCompletedDate();
-
-    // repeated string keywords = 14;
-    /**
-     * <code>repeated string keywords = 14;</code>
-     */
-    java.util.List<java.lang.String>
-    getKeywordsList();
-    /**
-     * <code>repeated string keywords = 14;</code>
-     */
-    int getKeywordsCount();
-    /**
-     * <code>repeated string keywords = 14;</code>
-     */
-    java.lang.String getKeywords(int index);
-    /**
-     * <code>repeated string keywords = 14;</code>
-     */
-    com.google.protobuf.ByteString
-        getKeywordsBytes(int index);
-
-    // required .boa.types.Person author = 15;
-    /**
-     * <code>required .boa.types.Person author = 15;</code>
-     */
-    boolean hasAuthor();
-    /**
-     * <code>required .boa.types.Person author = 15;</code>
-     */
-    boa.types.Shared.Person getAuthor();
-    /**
-     * <code>required .boa.types.Person author = 15;</code>
-     */
-    boa.types.Shared.PersonOrBuilder getAuthorOrBuilder();
-
-    // required string description = 16;
-    /**
-     * <code>required string description = 16;</code>
+     * <code>required string description = 6;</code>
      */
     boolean hasDescription();
     /**
-     * <code>required string description = 16;</code>
+     * <code>required string description = 6;</code>
      */
     java.lang.String getDescription();
     /**
-     * <code>required string description = 16;</code>
+     * <code>required string description = 6;</code>
      */
     com.google.protobuf.ByteString
         getDescriptionBytes();
 
-    // optional .boa.types.Person assignee = 17;
+    // required uint64 created_date = 7;
     /**
-     * <code>optional .boa.types.Person assignee = 17;</code>
+     * <code>required uint64 created_date = 7;</code>
      */
-    boolean hasAssignee();
+    boolean hasCreatedDate();
     /**
-     * <code>optional .boa.types.Person assignee = 17;</code>
+     * <code>required uint64 created_date = 7;</code>
      */
-    boa.types.Shared.Person getAssignee();
-    /**
-     * <code>optional .boa.types.Person assignee = 17;</code>
-     */
-    boa.types.Shared.PersonOrBuilder getAssigneeOrBuilder();
+    long getCreatedDate();
 
-    // optional string os = 18;
+    // required uint64 modified_date = 8;
     /**
-     * <code>optional string os = 18;</code>
+     * <code>required uint64 modified_date = 8;</code>
      */
-    boolean hasOs();
+    boolean hasModifiedDate();
     /**
-     * <code>optional string os = 18;</code>
+     * <code>required uint64 modified_date = 8;</code>
      */
-    java.lang.String getOs();
+    long getModifiedDate();
+
+    // optional uint64 completed_date = 9;
     /**
-     * <code>optional string os = 18;</code>
+     * <code>optional uint64 completed_date = 9;</code>
+     */
+    boolean hasCompletedDate();
+    /**
+     * <code>optional uint64 completed_date = 9;</code>
+     */
+    long getCompletedDate();
+
+    // repeated string keywords = 10;
+    /**
+     * <code>repeated string keywords = 10;</code>
+     */
+    java.util.List<java.lang.String>
+    getKeywordsList();
+    /**
+     * <code>repeated string keywords = 10;</code>
+     */
+    int getKeywordsCount();
+    /**
+     * <code>repeated string keywords = 10;</code>
+     */
+    java.lang.String getKeywords(int index);
+    /**
+     * <code>repeated string keywords = 10;</code>
      */
     com.google.protobuf.ByteString
-        getOsBytes();
+        getKeywordsBytes(int index);
 
-    // optional string platform = 19;
+    // optional int32 vote = 11;
     /**
-     * <code>optional string platform = 19;</code>
-     */
-    boolean hasPlatform();
-    /**
-     * <code>optional string platform = 19;</code>
-     */
-    java.lang.String getPlatform();
-    /**
-     * <code>optional string platform = 19;</code>
-     */
-    com.google.protobuf.ByteString
-        getPlatformBytes();
-
-    // optional string milestone = 20;
-    /**
-     * <code>optional string milestone = 20;</code>
-     */
-    boolean hasMilestone();
-    /**
-     * <code>optional string milestone = 20;</code>
-     */
-    java.lang.String getMilestone();
-    /**
-     * <code>optional string milestone = 20;</code>
-     */
-    com.google.protobuf.ByteString
-        getMilestoneBytes();
-
-    // optional string depends_on = 21;
-    /**
-     * <code>optional string depends_on = 21;</code>
-     */
-    boolean hasDependsOn();
-    /**
-     * <code>optional string depends_on = 21;</code>
-     */
-    java.lang.String getDependsOn();
-    /**
-     * <code>optional string depends_on = 21;</code>
-     */
-    com.google.protobuf.ByteString
-        getDependsOnBytes();
-
-    // optional string blocked = 22;
-    /**
-     * <code>optional string blocked = 22;</code>
-     */
-    boolean hasBlocked();
-    /**
-     * <code>optional string blocked = 22;</code>
-     */
-    java.lang.String getBlocked();
-    /**
-     * <code>optional string blocked = 22;</code>
-     */
-    com.google.protobuf.ByteString
-        getBlockedBytes();
-
-    // optional int32 vote = 23;
-    /**
-     * <code>optional int32 vote = 23;</code>
+     * <code>optional int32 vote = 11;</code>
      */
     boolean hasVote();
     /**
-     * <code>optional int32 vote = 23;</code>
+     * <code>optional int32 vote = 11;</code>
      */
     int getVote();
 
-    // optional string secrecy = 24;
+    // optional string priority = 12;
     /**
-     * <code>optional string secrecy = 24;</code>
+     * <code>optional string priority = 12;</code>
      */
-    boolean hasSecrecy();
+    boolean hasPriority();
     /**
-     * <code>optional string secrecy = 24;</code>
+     * <code>optional string priority = 12;</code>
      */
-    java.lang.String getSecrecy();
+    java.lang.String getPriority();
     /**
-     * <code>optional string secrecy = 24;</code>
+     * <code>optional string priority = 12;</code>
      */
     com.google.protobuf.ByteString
-        getSecrecyBytes();
+        getPriorityBytes();
 
-    // repeated .boa.types.AttachedFile files = 25;
+    // repeated .boa.types.Attachment files = 13;
     /**
-     * <code>repeated .boa.types.AttachedFile files = 25;</code>
+     * <code>repeated .boa.types.Attachment files = 13;</code>
      */
-    java.util.List<boa.types.Issues.AttachedFile> 
+    java.util.List<boa.types.Issues.Attachment> 
         getFilesList();
     /**
-     * <code>repeated .boa.types.AttachedFile files = 25;</code>
+     * <code>repeated .boa.types.Attachment files = 13;</code>
      */
-    boa.types.Issues.AttachedFile getFiles(int index);
+    boa.types.Issues.Attachment getFiles(int index);
     /**
-     * <code>repeated .boa.types.AttachedFile files = 25;</code>
+     * <code>repeated .boa.types.Attachment files = 13;</code>
      */
     int getFilesCount();
     /**
-     * <code>repeated .boa.types.AttachedFile files = 25;</code>
+     * <code>repeated .boa.types.Attachment files = 13;</code>
      */
-    java.util.List<? extends boa.types.Issues.AttachedFileOrBuilder> 
+    java.util.List<? extends boa.types.Issues.AttachmentOrBuilder> 
         getFilesOrBuilderList();
     /**
-     * <code>repeated .boa.types.AttachedFile files = 25;</code>
+     * <code>repeated .boa.types.Attachment files = 13;</code>
      */
-    boa.types.Issues.AttachedFileOrBuilder getFilesOrBuilder(
+    boa.types.Issues.AttachmentOrBuilder getFilesOrBuilder(
         int index);
 
-    // repeated .boa.types.IssueComment comments = 26;
+    // repeated .boa.types.IssueComment comments = 14;
     /**
-     * <code>repeated .boa.types.IssueComment comments = 26;</code>
+     * <code>repeated .boa.types.IssueComment comments = 14;</code>
+     *
+     * <pre>
+     *
+     *optional string component = 15;
+     *optional string resolution = 16;
+     *repeated string duplicated_by = 17;
+     *optional string duplicate_of = 18;
+     *optional string subcomponent = 19;
+     *optional string version = 20;
+     *optional string os = 21;
+     *optional string platform = 22;
+     *optional string milestone = 23;
+     *optional string depends_on = 24;
+     *optional string blocked = 25;
+     *optional string secrecy = 26;
+     *repeated IssueChange changes = 27;
+     * </pre>
      */
     java.util.List<boa.types.Issues.IssueComment> 
         getCommentsList();
     /**
-     * <code>repeated .boa.types.IssueComment comments = 26;</code>
+     * <code>repeated .boa.types.IssueComment comments = 14;</code>
+     *
+     * <pre>
+     *
+     *optional string component = 15;
+     *optional string resolution = 16;
+     *repeated string duplicated_by = 17;
+     *optional string duplicate_of = 18;
+     *optional string subcomponent = 19;
+     *optional string version = 20;
+     *optional string os = 21;
+     *optional string platform = 22;
+     *optional string milestone = 23;
+     *optional string depends_on = 24;
+     *optional string blocked = 25;
+     *optional string secrecy = 26;
+     *repeated IssueChange changes = 27;
+     * </pre>
      */
     boa.types.Issues.IssueComment getComments(int index);
     /**
-     * <code>repeated .boa.types.IssueComment comments = 26;</code>
+     * <code>repeated .boa.types.IssueComment comments = 14;</code>
+     *
+     * <pre>
+     *
+     *optional string component = 15;
+     *optional string resolution = 16;
+     *repeated string duplicated_by = 17;
+     *optional string duplicate_of = 18;
+     *optional string subcomponent = 19;
+     *optional string version = 20;
+     *optional string os = 21;
+     *optional string platform = 22;
+     *optional string milestone = 23;
+     *optional string depends_on = 24;
+     *optional string blocked = 25;
+     *optional string secrecy = 26;
+     *repeated IssueChange changes = 27;
+     * </pre>
      */
     int getCommentsCount();
     /**
-     * <code>repeated .boa.types.IssueComment comments = 26;</code>
+     * <code>repeated .boa.types.IssueComment comments = 14;</code>
+     *
+     * <pre>
+     *
+     *optional string component = 15;
+     *optional string resolution = 16;
+     *repeated string duplicated_by = 17;
+     *optional string duplicate_of = 18;
+     *optional string subcomponent = 19;
+     *optional string version = 20;
+     *optional string os = 21;
+     *optional string platform = 22;
+     *optional string milestone = 23;
+     *optional string depends_on = 24;
+     *optional string blocked = 25;
+     *optional string secrecy = 26;
+     *repeated IssueChange changes = 27;
+     * </pre>
      */
     java.util.List<? extends boa.types.Issues.IssueCommentOrBuilder> 
         getCommentsOrBuilderList();
     /**
-     * <code>repeated .boa.types.IssueComment comments = 26;</code>
+     * <code>repeated .boa.types.IssueComment comments = 14;</code>
+     *
+     * <pre>
+     *
+     *optional string component = 15;
+     *optional string resolution = 16;
+     *repeated string duplicated_by = 17;
+     *optional string duplicate_of = 18;
+     *optional string subcomponent = 19;
+     *optional string version = 20;
+     *optional string os = 21;
+     *optional string platform = 22;
+     *optional string milestone = 23;
+     *optional string depends_on = 24;
+     *optional string blocked = 25;
+     *optional string secrecy = 26;
+     *repeated IssueChange changes = 27;
+     * </pre>
      */
     boa.types.Issues.IssueCommentOrBuilder getCommentsOrBuilder(
-        int index);
-
-    // repeated .boa.types.IssueChange changes = 27;
-    /**
-     * <code>repeated .boa.types.IssueChange changes = 27;</code>
-     */
-    java.util.List<boa.types.Issues.IssueChange> 
-        getChangesList();
-    /**
-     * <code>repeated .boa.types.IssueChange changes = 27;</code>
-     */
-    boa.types.Issues.IssueChange getChanges(int index);
-    /**
-     * <code>repeated .boa.types.IssueChange changes = 27;</code>
-     */
-    int getChangesCount();
-    /**
-     * <code>repeated .boa.types.IssueChange changes = 27;</code>
-     */
-    java.util.List<? extends boa.types.Issues.IssueChangeOrBuilder> 
-        getChangesOrBuilderList();
-    /**
-     * <code>repeated .boa.types.IssueChange changes = 27;</code>
-     */
-    boa.types.Issues.IssueChangeOrBuilder getChangesOrBuilder(
         int index);
   }
   /**
@@ -1556,74 +1907,8 @@ public final class Issues {
               break;
             }
             case 26: {
-              bitField0_ |= 0x00000004;
-              component_ = input.readBytes();
-              break;
-            }
-            case 34: {
-              bitField0_ |= 0x00000008;
-              priority_ = input.readBytes();
-              break;
-            }
-            case 42: {
-              bitField0_ |= 0x00000010;
-              resolution_ = input.readBytes();
-              break;
-            }
-            case 50: {
-              if (!((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
-                duplicatedBy_ = new com.google.protobuf.LazyStringArrayList();
-                mutable_bitField0_ |= 0x00000020;
-              }
-              duplicatedBy_.add(input.readBytes());
-              break;
-            }
-            case 58: {
-              bitField0_ |= 0x00000020;
-              duplicateOf_ = input.readBytes();
-              break;
-            }
-            case 66: {
-              bitField0_ |= 0x00000040;
-              subcomponent_ = input.readBytes();
-              break;
-            }
-            case 74: {
-              bitField0_ |= 0x00000080;
-              summary_ = input.readBytes();
-              break;
-            }
-            case 82: {
-              bitField0_ |= 0x00000100;
-              version_ = input.readBytes();
-              break;
-            }
-            case 88: {
-              bitField0_ |= 0x00000200;
-              createdDate_ = input.readInt32();
-              break;
-            }
-            case 96: {
-              bitField0_ |= 0x00000400;
-              modifiedDate_ = input.readInt32();
-              break;
-            }
-            case 104: {
-              bitField0_ |= 0x00000800;
-              completedDate_ = input.readInt32();
-              break;
-            }
-            case 114: {
-              if (!((mutable_bitField0_ & 0x00002000) == 0x00002000)) {
-                keywords_ = new com.google.protobuf.LazyStringArrayList();
-                mutable_bitField0_ |= 0x00002000;
-              }
-              keywords_.add(input.readBytes());
-              break;
-            }
-            case 122: {
               boa.types.Shared.Person.Builder subBuilder = null;
-              if (((bitField0_ & 0x00001000) == 0x00001000)) {
+              if (((bitField0_ & 0x00000004) == 0x00000004)) {
                 subBuilder = author_.toBuilder();
               }
               author_ = input.readMessage(boa.types.Shared.Person.PARSER, extensionRegistry);
@@ -1631,17 +1916,12 @@ public final class Issues {
                 subBuilder.mergeFrom(author_);
                 author_ = subBuilder.buildPartial();
               }
-              bitField0_ |= 0x00001000;
+              bitField0_ |= 0x00000004;
               break;
             }
-            case 130: {
-              bitField0_ |= 0x00002000;
-              description_ = input.readBytes();
-              break;
-            }
-            case 138: {
+            case 34: {
               boa.types.Shared.Person.Builder subBuilder = null;
-              if (((bitField0_ & 0x00004000) == 0x00004000)) {
+              if (((bitField0_ & 0x00000008) == 0x00000008)) {
                 subBuilder = assignee_.toBuilder();
               }
               assignee_ = input.readMessage(boa.types.Shared.Person.PARSER, extensionRegistry);
@@ -1649,66 +1929,66 @@ public final class Issues {
                 subBuilder.mergeFrom(assignee_);
                 assignee_ = subBuilder.buildPartial();
               }
-              bitField0_ |= 0x00004000;
+              bitField0_ |= 0x00000008;
               break;
             }
-            case 146: {
-              bitField0_ |= 0x00008000;
-              os_ = input.readBytes();
+            case 42: {
+              bitField0_ |= 0x00000010;
+              summary_ = input.readBytes();
               break;
             }
-            case 154: {
-              bitField0_ |= 0x00010000;
-              platform_ = input.readBytes();
+            case 50: {
+              bitField0_ |= 0x00000020;
+              description_ = input.readBytes();
               break;
             }
-            case 162: {
-              bitField0_ |= 0x00020000;
-              milestone_ = input.readBytes();
+            case 56: {
+              bitField0_ |= 0x00000040;
+              createdDate_ = input.readUInt64();
               break;
             }
-            case 170: {
-              bitField0_ |= 0x00040000;
-              dependsOn_ = input.readBytes();
+            case 64: {
+              bitField0_ |= 0x00000080;
+              modifiedDate_ = input.readUInt64();
               break;
             }
-            case 178: {
-              bitField0_ |= 0x00080000;
-              blocked_ = input.readBytes();
+            case 72: {
+              bitField0_ |= 0x00000100;
+              completedDate_ = input.readUInt64();
               break;
             }
-            case 184: {
-              bitField0_ |= 0x00100000;
+            case 82: {
+              if (!((mutable_bitField0_ & 0x00000200) == 0x00000200)) {
+                keywords_ = new com.google.protobuf.LazyStringArrayList();
+                mutable_bitField0_ |= 0x00000200;
+              }
+              keywords_.add(input.readBytes());
+              break;
+            }
+            case 88: {
+              bitField0_ |= 0x00000200;
               vote_ = input.readInt32();
               break;
             }
-            case 194: {
-              bitField0_ |= 0x00200000;
-              secrecy_ = input.readBytes();
+            case 98: {
+              bitField0_ |= 0x00000400;
+              priority_ = input.readBytes();
               break;
             }
-            case 202: {
-              if (!((mutable_bitField0_ & 0x01000000) == 0x01000000)) {
-                files_ = new java.util.ArrayList<boa.types.Issues.AttachedFile>();
-                mutable_bitField0_ |= 0x01000000;
+            case 106: {
+              if (!((mutable_bitField0_ & 0x00001000) == 0x00001000)) {
+                files_ = new java.util.ArrayList<boa.types.Issues.Attachment>();
+                mutable_bitField0_ |= 0x00001000;
               }
-              files_.add(input.readMessage(boa.types.Issues.AttachedFile.PARSER, extensionRegistry));
+              files_.add(input.readMessage(boa.types.Issues.Attachment.PARSER, extensionRegistry));
               break;
             }
-            case 210: {
-              if (!((mutable_bitField0_ & 0x02000000) == 0x02000000)) {
+            case 114: {
+              if (!((mutable_bitField0_ & 0x00002000) == 0x00002000)) {
                 comments_ = new java.util.ArrayList<boa.types.Issues.IssueComment>();
-                mutable_bitField0_ |= 0x02000000;
+                mutable_bitField0_ |= 0x00002000;
               }
               comments_.add(input.readMessage(boa.types.Issues.IssueComment.PARSER, extensionRegistry));
-              break;
-            }
-            case 218: {
-              if (!((mutable_bitField0_ & 0x04000000) == 0x04000000)) {
-                changes_ = new java.util.ArrayList<boa.types.Issues.IssueChange>();
-                mutable_bitField0_ |= 0x04000000;
-              }
-              changes_.add(input.readMessage(boa.types.Issues.IssueChange.PARSER, extensionRegistry));
               break;
             }
           }
@@ -1719,20 +1999,14 @@ public final class Issues {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e.getMessage()).setUnfinishedMessage(this);
       } finally {
-        if (((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
-          duplicatedBy_ = new com.google.protobuf.UnmodifiableLazyStringList(duplicatedBy_);
-        }
-        if (((mutable_bitField0_ & 0x00002000) == 0x00002000)) {
+        if (((mutable_bitField0_ & 0x00000200) == 0x00000200)) {
           keywords_ = new com.google.protobuf.UnmodifiableLazyStringList(keywords_);
         }
-        if (((mutable_bitField0_ & 0x01000000) == 0x01000000)) {
+        if (((mutable_bitField0_ & 0x00001000) == 0x00001000)) {
           files_ = java.util.Collections.unmodifiableList(files_);
         }
-        if (((mutable_bitField0_ & 0x02000000) == 0x02000000)) {
+        if (((mutable_bitField0_ & 0x00002000) == 0x00002000)) {
           comments_ = java.util.Collections.unmodifiableList(comments_);
-        }
-        if (((mutable_bitField0_ & 0x04000000) == 0x04000000)) {
-          changes_ = java.util.Collections.unmodifiableList(changes_);
         }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -1852,262 +2126,61 @@ public final class Issues {
       }
     }
 
-    // optional string component = 3;
-    public static final int COMPONENT_FIELD_NUMBER = 3;
-    private java.lang.Object component_;
+    // required .boa.types.Person author = 3;
+    public static final int AUTHOR_FIELD_NUMBER = 3;
+    private boa.types.Shared.Person author_;
     /**
-     * <code>optional string component = 3;</code>
+     * <code>required .boa.types.Person author = 3;</code>
      */
-    public boolean hasComponent() {
+    public boolean hasAuthor() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
-     * <code>optional string component = 3;</code>
+     * <code>required .boa.types.Person author = 3;</code>
      */
-    public java.lang.String getComponent() {
-      java.lang.Object ref = component_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          component_ = s;
-        }
-        return s;
-      }
+    public boa.types.Shared.Person getAuthor() {
+      return author_;
     }
     /**
-     * <code>optional string component = 3;</code>
+     * <code>required .boa.types.Person author = 3;</code>
      */
-    public com.google.protobuf.ByteString
-        getComponentBytes() {
-      java.lang.Object ref = component_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        component_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
+    public boa.types.Shared.PersonOrBuilder getAuthorOrBuilder() {
+      return author_;
     }
 
-    // required string priority = 4;
-    public static final int PRIORITY_FIELD_NUMBER = 4;
-    private java.lang.Object priority_;
+    // optional .boa.types.Person assignee = 4;
+    public static final int ASSIGNEE_FIELD_NUMBER = 4;
+    private boa.types.Shared.Person assignee_;
     /**
-     * <code>required string priority = 4;</code>
+     * <code>optional .boa.types.Person assignee = 4;</code>
      */
-    public boolean hasPriority() {
+    public boolean hasAssignee() {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
-     * <code>required string priority = 4;</code>
+     * <code>optional .boa.types.Person assignee = 4;</code>
      */
-    public java.lang.String getPriority() {
-      java.lang.Object ref = priority_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          priority_ = s;
-        }
-        return s;
-      }
+    public boa.types.Shared.Person getAssignee() {
+      return assignee_;
     }
     /**
-     * <code>required string priority = 4;</code>
+     * <code>optional .boa.types.Person assignee = 4;</code>
      */
-    public com.google.protobuf.ByteString
-        getPriorityBytes() {
-      java.lang.Object ref = priority_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        priority_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
+    public boa.types.Shared.PersonOrBuilder getAssigneeOrBuilder() {
+      return assignee_;
     }
 
-    // required string resolution = 5;
-    public static final int RESOLUTION_FIELD_NUMBER = 5;
-    private java.lang.Object resolution_;
+    // required string summary = 5;
+    public static final int SUMMARY_FIELD_NUMBER = 5;
+    private java.lang.Object summary_;
     /**
-     * <code>required string resolution = 5;</code>
+     * <code>required string summary = 5;</code>
      */
-    public boolean hasResolution() {
+    public boolean hasSummary() {
       return ((bitField0_ & 0x00000010) == 0x00000010);
     }
     /**
-     * <code>required string resolution = 5;</code>
-     */
-    public java.lang.String getResolution() {
-      java.lang.Object ref = resolution_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          resolution_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>required string resolution = 5;</code>
-     */
-    public com.google.protobuf.ByteString
-        getResolutionBytes() {
-      java.lang.Object ref = resolution_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        resolution_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    // repeated string duplicated_by = 6;
-    public static final int DUPLICATED_BY_FIELD_NUMBER = 6;
-    private com.google.protobuf.LazyStringList duplicatedBy_;
-    /**
-     * <code>repeated string duplicated_by = 6;</code>
-     */
-    public java.util.List<java.lang.String>
-        getDuplicatedByList() {
-      return duplicatedBy_;
-    }
-    /**
-     * <code>repeated string duplicated_by = 6;</code>
-     */
-    public int getDuplicatedByCount() {
-      return duplicatedBy_.size();
-    }
-    /**
-     * <code>repeated string duplicated_by = 6;</code>
-     */
-    public java.lang.String getDuplicatedBy(int index) {
-      return duplicatedBy_.get(index);
-    }
-    /**
-     * <code>repeated string duplicated_by = 6;</code>
-     */
-    public com.google.protobuf.ByteString
-        getDuplicatedByBytes(int index) {
-      return duplicatedBy_.getByteString(index);
-    }
-
-    // optional string duplicate_of = 7;
-    public static final int DUPLICATE_OF_FIELD_NUMBER = 7;
-    private java.lang.Object duplicateOf_;
-    /**
-     * <code>optional string duplicate_of = 7;</code>
-     */
-    public boolean hasDuplicateOf() {
-      return ((bitField0_ & 0x00000020) == 0x00000020);
-    }
-    /**
-     * <code>optional string duplicate_of = 7;</code>
-     */
-    public java.lang.String getDuplicateOf() {
-      java.lang.Object ref = duplicateOf_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          duplicateOf_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>optional string duplicate_of = 7;</code>
-     */
-    public com.google.protobuf.ByteString
-        getDuplicateOfBytes() {
-      java.lang.Object ref = duplicateOf_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        duplicateOf_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    // optional string subcomponent = 8;
-    public static final int SUBCOMPONENT_FIELD_NUMBER = 8;
-    private java.lang.Object subcomponent_;
-    /**
-     * <code>optional string subcomponent = 8;</code>
-     */
-    public boolean hasSubcomponent() {
-      return ((bitField0_ & 0x00000040) == 0x00000040);
-    }
-    /**
-     * <code>optional string subcomponent = 8;</code>
-     */
-    public java.lang.String getSubcomponent() {
-      java.lang.Object ref = subcomponent_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          subcomponent_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>optional string subcomponent = 8;</code>
-     */
-    public com.google.protobuf.ByteString
-        getSubcomponentBytes() {
-      java.lang.Object ref = subcomponent_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        subcomponent_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    // required string summary = 9;
-    public static final int SUMMARY_FIELD_NUMBER = 9;
-    private java.lang.Object summary_;
-    /**
-     * <code>required string summary = 9;</code>
-     */
-    public boolean hasSummary() {
-      return ((bitField0_ & 0x00000080) == 0x00000080);
-    }
-    /**
-     * <code>required string summary = 9;</code>
+     * <code>required string summary = 5;</code>
      */
     public java.lang.String getSummary() {
       java.lang.Object ref = summary_;
@@ -2124,7 +2197,7 @@ public final class Issues {
       }
     }
     /**
-     * <code>required string summary = 9;</code>
+     * <code>required string summary = 5;</code>
      */
     public com.google.protobuf.ByteString
         getSummaryBytes() {
@@ -2140,160 +2213,17 @@ public final class Issues {
       }
     }
 
-    // optional string version = 10;
-    public static final int VERSION_FIELD_NUMBER = 10;
-    private java.lang.Object version_;
-    /**
-     * <code>optional string version = 10;</code>
-     */
-    public boolean hasVersion() {
-      return ((bitField0_ & 0x00000100) == 0x00000100);
-    }
-    /**
-     * <code>optional string version = 10;</code>
-     */
-    public java.lang.String getVersion() {
-      java.lang.Object ref = version_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          version_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>optional string version = 10;</code>
-     */
-    public com.google.protobuf.ByteString
-        getVersionBytes() {
-      java.lang.Object ref = version_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        version_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    // required int32 created_date = 11;
-    public static final int CREATED_DATE_FIELD_NUMBER = 11;
-    private int createdDate_;
-    /**
-     * <code>required int32 created_date = 11;</code>
-     */
-    public boolean hasCreatedDate() {
-      return ((bitField0_ & 0x00000200) == 0x00000200);
-    }
-    /**
-     * <code>required int32 created_date = 11;</code>
-     */
-    public int getCreatedDate() {
-      return createdDate_;
-    }
-
-    // required int32 modified_date = 12;
-    public static final int MODIFIED_DATE_FIELD_NUMBER = 12;
-    private int modifiedDate_;
-    /**
-     * <code>required int32 modified_date = 12;</code>
-     */
-    public boolean hasModifiedDate() {
-      return ((bitField0_ & 0x00000400) == 0x00000400);
-    }
-    /**
-     * <code>required int32 modified_date = 12;</code>
-     */
-    public int getModifiedDate() {
-      return modifiedDate_;
-    }
-
-    // optional int32 completed_date = 13;
-    public static final int COMPLETED_DATE_FIELD_NUMBER = 13;
-    private int completedDate_;
-    /**
-     * <code>optional int32 completed_date = 13;</code>
-     */
-    public boolean hasCompletedDate() {
-      return ((bitField0_ & 0x00000800) == 0x00000800);
-    }
-    /**
-     * <code>optional int32 completed_date = 13;</code>
-     */
-    public int getCompletedDate() {
-      return completedDate_;
-    }
-
-    // repeated string keywords = 14;
-    public static final int KEYWORDS_FIELD_NUMBER = 14;
-    private com.google.protobuf.LazyStringList keywords_;
-    /**
-     * <code>repeated string keywords = 14;</code>
-     */
-    public java.util.List<java.lang.String>
-        getKeywordsList() {
-      return keywords_;
-    }
-    /**
-     * <code>repeated string keywords = 14;</code>
-     */
-    public int getKeywordsCount() {
-      return keywords_.size();
-    }
-    /**
-     * <code>repeated string keywords = 14;</code>
-     */
-    public java.lang.String getKeywords(int index) {
-      return keywords_.get(index);
-    }
-    /**
-     * <code>repeated string keywords = 14;</code>
-     */
-    public com.google.protobuf.ByteString
-        getKeywordsBytes(int index) {
-      return keywords_.getByteString(index);
-    }
-
-    // required .boa.types.Person author = 15;
-    public static final int AUTHOR_FIELD_NUMBER = 15;
-    private boa.types.Shared.Person author_;
-    /**
-     * <code>required .boa.types.Person author = 15;</code>
-     */
-    public boolean hasAuthor() {
-      return ((bitField0_ & 0x00001000) == 0x00001000);
-    }
-    /**
-     * <code>required .boa.types.Person author = 15;</code>
-     */
-    public boa.types.Shared.Person getAuthor() {
-      return author_;
-    }
-    /**
-     * <code>required .boa.types.Person author = 15;</code>
-     */
-    public boa.types.Shared.PersonOrBuilder getAuthorOrBuilder() {
-      return author_;
-    }
-
-    // required string description = 16;
-    public static final int DESCRIPTION_FIELD_NUMBER = 16;
+    // required string description = 6;
+    public static final int DESCRIPTION_FIELD_NUMBER = 6;
     private java.lang.Object description_;
     /**
-     * <code>required string description = 16;</code>
+     * <code>required string description = 6;</code>
      */
     public boolean hasDescription() {
-      return ((bitField0_ & 0x00002000) == 0x00002000);
+      return ((bitField0_ & 0x00000020) == 0x00000020);
     }
     /**
-     * <code>required string description = 16;</code>
+     * <code>required string description = 6;</code>
      */
     public java.lang.String getDescription() {
       java.lang.Object ref = description_;
@@ -2310,7 +2240,7 @@ public final class Issues {
       }
     }
     /**
-     * <code>required string description = 16;</code>
+     * <code>required string description = 6;</code>
      */
     public com.google.protobuf.ByteString
         getDescriptionBytes() {
@@ -2326,273 +2256,114 @@ public final class Issues {
       }
     }
 
-    // optional .boa.types.Person assignee = 17;
-    public static final int ASSIGNEE_FIELD_NUMBER = 17;
-    private boa.types.Shared.Person assignee_;
+    // required uint64 created_date = 7;
+    public static final int CREATED_DATE_FIELD_NUMBER = 7;
+    private long createdDate_;
     /**
-     * <code>optional .boa.types.Person assignee = 17;</code>
+     * <code>required uint64 created_date = 7;</code>
      */
-    public boolean hasAssignee() {
-      return ((bitField0_ & 0x00004000) == 0x00004000);
+    public boolean hasCreatedDate() {
+      return ((bitField0_ & 0x00000040) == 0x00000040);
     }
     /**
-     * <code>optional .boa.types.Person assignee = 17;</code>
+     * <code>required uint64 created_date = 7;</code>
      */
-    public boa.types.Shared.Person getAssignee() {
-      return assignee_;
-    }
-    /**
-     * <code>optional .boa.types.Person assignee = 17;</code>
-     */
-    public boa.types.Shared.PersonOrBuilder getAssigneeOrBuilder() {
-      return assignee_;
+    public long getCreatedDate() {
+      return createdDate_;
     }
 
-    // optional string os = 18;
-    public static final int OS_FIELD_NUMBER = 18;
-    private java.lang.Object os_;
+    // required uint64 modified_date = 8;
+    public static final int MODIFIED_DATE_FIELD_NUMBER = 8;
+    private long modifiedDate_;
     /**
-     * <code>optional string os = 18;</code>
+     * <code>required uint64 modified_date = 8;</code>
      */
-    public boolean hasOs() {
-      return ((bitField0_ & 0x00008000) == 0x00008000);
+    public boolean hasModifiedDate() {
+      return ((bitField0_ & 0x00000080) == 0x00000080);
     }
     /**
-     * <code>optional string os = 18;</code>
+     * <code>required uint64 modified_date = 8;</code>
      */
-    public java.lang.String getOs() {
-      java.lang.Object ref = os_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          os_ = s;
-        }
-        return s;
-      }
+    public long getModifiedDate() {
+      return modifiedDate_;
+    }
+
+    // optional uint64 completed_date = 9;
+    public static final int COMPLETED_DATE_FIELD_NUMBER = 9;
+    private long completedDate_;
+    /**
+     * <code>optional uint64 completed_date = 9;</code>
+     */
+    public boolean hasCompletedDate() {
+      return ((bitField0_ & 0x00000100) == 0x00000100);
     }
     /**
-     * <code>optional string os = 18;</code>
+     * <code>optional uint64 completed_date = 9;</code>
+     */
+    public long getCompletedDate() {
+      return completedDate_;
+    }
+
+    // repeated string keywords = 10;
+    public static final int KEYWORDS_FIELD_NUMBER = 10;
+    private com.google.protobuf.LazyStringList keywords_;
+    /**
+     * <code>repeated string keywords = 10;</code>
+     */
+    public java.util.List<java.lang.String>
+        getKeywordsList() {
+      return keywords_;
+    }
+    /**
+     * <code>repeated string keywords = 10;</code>
+     */
+    public int getKeywordsCount() {
+      return keywords_.size();
+    }
+    /**
+     * <code>repeated string keywords = 10;</code>
+     */
+    public java.lang.String getKeywords(int index) {
+      return keywords_.get(index);
+    }
+    /**
+     * <code>repeated string keywords = 10;</code>
      */
     public com.google.protobuf.ByteString
-        getOsBytes() {
-      java.lang.Object ref = os_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        os_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
+        getKeywordsBytes(int index) {
+      return keywords_.getByteString(index);
     }
 
-    // optional string platform = 19;
-    public static final int PLATFORM_FIELD_NUMBER = 19;
-    private java.lang.Object platform_;
-    /**
-     * <code>optional string platform = 19;</code>
-     */
-    public boolean hasPlatform() {
-      return ((bitField0_ & 0x00010000) == 0x00010000);
-    }
-    /**
-     * <code>optional string platform = 19;</code>
-     */
-    public java.lang.String getPlatform() {
-      java.lang.Object ref = platform_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          platform_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>optional string platform = 19;</code>
-     */
-    public com.google.protobuf.ByteString
-        getPlatformBytes() {
-      java.lang.Object ref = platform_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        platform_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    // optional string milestone = 20;
-    public static final int MILESTONE_FIELD_NUMBER = 20;
-    private java.lang.Object milestone_;
-    /**
-     * <code>optional string milestone = 20;</code>
-     */
-    public boolean hasMilestone() {
-      return ((bitField0_ & 0x00020000) == 0x00020000);
-    }
-    /**
-     * <code>optional string milestone = 20;</code>
-     */
-    public java.lang.String getMilestone() {
-      java.lang.Object ref = milestone_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          milestone_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>optional string milestone = 20;</code>
-     */
-    public com.google.protobuf.ByteString
-        getMilestoneBytes() {
-      java.lang.Object ref = milestone_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        milestone_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    // optional string depends_on = 21;
-    public static final int DEPENDS_ON_FIELD_NUMBER = 21;
-    private java.lang.Object dependsOn_;
-    /**
-     * <code>optional string depends_on = 21;</code>
-     */
-    public boolean hasDependsOn() {
-      return ((bitField0_ & 0x00040000) == 0x00040000);
-    }
-    /**
-     * <code>optional string depends_on = 21;</code>
-     */
-    public java.lang.String getDependsOn() {
-      java.lang.Object ref = dependsOn_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          dependsOn_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>optional string depends_on = 21;</code>
-     */
-    public com.google.protobuf.ByteString
-        getDependsOnBytes() {
-      java.lang.Object ref = dependsOn_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        dependsOn_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    // optional string blocked = 22;
-    public static final int BLOCKED_FIELD_NUMBER = 22;
-    private java.lang.Object blocked_;
-    /**
-     * <code>optional string blocked = 22;</code>
-     */
-    public boolean hasBlocked() {
-      return ((bitField0_ & 0x00080000) == 0x00080000);
-    }
-    /**
-     * <code>optional string blocked = 22;</code>
-     */
-    public java.lang.String getBlocked() {
-      java.lang.Object ref = blocked_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          blocked_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>optional string blocked = 22;</code>
-     */
-    public com.google.protobuf.ByteString
-        getBlockedBytes() {
-      java.lang.Object ref = blocked_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        blocked_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    // optional int32 vote = 23;
-    public static final int VOTE_FIELD_NUMBER = 23;
+    // optional int32 vote = 11;
+    public static final int VOTE_FIELD_NUMBER = 11;
     private int vote_;
     /**
-     * <code>optional int32 vote = 23;</code>
+     * <code>optional int32 vote = 11;</code>
      */
     public boolean hasVote() {
-      return ((bitField0_ & 0x00100000) == 0x00100000);
+      return ((bitField0_ & 0x00000200) == 0x00000200);
     }
     /**
-     * <code>optional int32 vote = 23;</code>
+     * <code>optional int32 vote = 11;</code>
      */
     public int getVote() {
       return vote_;
     }
 
-    // optional string secrecy = 24;
-    public static final int SECRECY_FIELD_NUMBER = 24;
-    private java.lang.Object secrecy_;
+    // optional string priority = 12;
+    public static final int PRIORITY_FIELD_NUMBER = 12;
+    private java.lang.Object priority_;
     /**
-     * <code>optional string secrecy = 24;</code>
+     * <code>optional string priority = 12;</code>
      */
-    public boolean hasSecrecy() {
-      return ((bitField0_ & 0x00200000) == 0x00200000);
+    public boolean hasPriority() {
+      return ((bitField0_ & 0x00000400) == 0x00000400);
     }
     /**
-     * <code>optional string secrecy = 24;</code>
+     * <code>optional string priority = 12;</code>
      */
-    public java.lang.String getSecrecy() {
-      java.lang.Object ref = secrecy_;
+    public java.lang.String getPriority() {
+      java.lang.Object ref = priority_;
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
@@ -2600,164 +2371,200 @@ public final class Issues {
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
         if (bs.isValidUtf8()) {
-          secrecy_ = s;
+          priority_ = s;
         }
         return s;
       }
     }
     /**
-     * <code>optional string secrecy = 24;</code>
+     * <code>optional string priority = 12;</code>
      */
     public com.google.protobuf.ByteString
-        getSecrecyBytes() {
-      java.lang.Object ref = secrecy_;
+        getPriorityBytes() {
+      java.lang.Object ref = priority_;
       if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        secrecy_ = b;
+        priority_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
 
-    // repeated .boa.types.AttachedFile files = 25;
-    public static final int FILES_FIELD_NUMBER = 25;
-    private java.util.List<boa.types.Issues.AttachedFile> files_;
+    // repeated .boa.types.Attachment files = 13;
+    public static final int FILES_FIELD_NUMBER = 13;
+    private java.util.List<boa.types.Issues.Attachment> files_;
     /**
-     * <code>repeated .boa.types.AttachedFile files = 25;</code>
+     * <code>repeated .boa.types.Attachment files = 13;</code>
      */
-    public java.util.List<boa.types.Issues.AttachedFile> getFilesList() {
+    public java.util.List<boa.types.Issues.Attachment> getFilesList() {
       return files_;
     }
     /**
-     * <code>repeated .boa.types.AttachedFile files = 25;</code>
+     * <code>repeated .boa.types.Attachment files = 13;</code>
      */
-    public java.util.List<? extends boa.types.Issues.AttachedFileOrBuilder> 
+    public java.util.List<? extends boa.types.Issues.AttachmentOrBuilder> 
         getFilesOrBuilderList() {
       return files_;
     }
     /**
-     * <code>repeated .boa.types.AttachedFile files = 25;</code>
+     * <code>repeated .boa.types.Attachment files = 13;</code>
      */
     public int getFilesCount() {
       return files_.size();
     }
     /**
-     * <code>repeated .boa.types.AttachedFile files = 25;</code>
+     * <code>repeated .boa.types.Attachment files = 13;</code>
      */
-    public boa.types.Issues.AttachedFile getFiles(int index) {
+    public boa.types.Issues.Attachment getFiles(int index) {
       return files_.get(index);
     }
     /**
-     * <code>repeated .boa.types.AttachedFile files = 25;</code>
+     * <code>repeated .boa.types.Attachment files = 13;</code>
      */
-    public boa.types.Issues.AttachedFileOrBuilder getFilesOrBuilder(
+    public boa.types.Issues.AttachmentOrBuilder getFilesOrBuilder(
         int index) {
       return files_.get(index);
     }
 
-    // repeated .boa.types.IssueComment comments = 26;
-    public static final int COMMENTS_FIELD_NUMBER = 26;
+    // repeated .boa.types.IssueComment comments = 14;
+    public static final int COMMENTS_FIELD_NUMBER = 14;
     private java.util.List<boa.types.Issues.IssueComment> comments_;
     /**
-     * <code>repeated .boa.types.IssueComment comments = 26;</code>
+     * <code>repeated .boa.types.IssueComment comments = 14;</code>
+     *
+     * <pre>
+     *
+     *optional string component = 15;
+     *optional string resolution = 16;
+     *repeated string duplicated_by = 17;
+     *optional string duplicate_of = 18;
+     *optional string subcomponent = 19;
+     *optional string version = 20;
+     *optional string os = 21;
+     *optional string platform = 22;
+     *optional string milestone = 23;
+     *optional string depends_on = 24;
+     *optional string blocked = 25;
+     *optional string secrecy = 26;
+     *repeated IssueChange changes = 27;
+     * </pre>
      */
     public java.util.List<boa.types.Issues.IssueComment> getCommentsList() {
       return comments_;
     }
     /**
-     * <code>repeated .boa.types.IssueComment comments = 26;</code>
+     * <code>repeated .boa.types.IssueComment comments = 14;</code>
+     *
+     * <pre>
+     *
+     *optional string component = 15;
+     *optional string resolution = 16;
+     *repeated string duplicated_by = 17;
+     *optional string duplicate_of = 18;
+     *optional string subcomponent = 19;
+     *optional string version = 20;
+     *optional string os = 21;
+     *optional string platform = 22;
+     *optional string milestone = 23;
+     *optional string depends_on = 24;
+     *optional string blocked = 25;
+     *optional string secrecy = 26;
+     *repeated IssueChange changes = 27;
+     * </pre>
      */
     public java.util.List<? extends boa.types.Issues.IssueCommentOrBuilder> 
         getCommentsOrBuilderList() {
       return comments_;
     }
     /**
-     * <code>repeated .boa.types.IssueComment comments = 26;</code>
+     * <code>repeated .boa.types.IssueComment comments = 14;</code>
+     *
+     * <pre>
+     *
+     *optional string component = 15;
+     *optional string resolution = 16;
+     *repeated string duplicated_by = 17;
+     *optional string duplicate_of = 18;
+     *optional string subcomponent = 19;
+     *optional string version = 20;
+     *optional string os = 21;
+     *optional string platform = 22;
+     *optional string milestone = 23;
+     *optional string depends_on = 24;
+     *optional string blocked = 25;
+     *optional string secrecy = 26;
+     *repeated IssueChange changes = 27;
+     * </pre>
      */
     public int getCommentsCount() {
       return comments_.size();
     }
     /**
-     * <code>repeated .boa.types.IssueComment comments = 26;</code>
+     * <code>repeated .boa.types.IssueComment comments = 14;</code>
+     *
+     * <pre>
+     *
+     *optional string component = 15;
+     *optional string resolution = 16;
+     *repeated string duplicated_by = 17;
+     *optional string duplicate_of = 18;
+     *optional string subcomponent = 19;
+     *optional string version = 20;
+     *optional string os = 21;
+     *optional string platform = 22;
+     *optional string milestone = 23;
+     *optional string depends_on = 24;
+     *optional string blocked = 25;
+     *optional string secrecy = 26;
+     *repeated IssueChange changes = 27;
+     * </pre>
      */
     public boa.types.Issues.IssueComment getComments(int index) {
       return comments_.get(index);
     }
     /**
-     * <code>repeated .boa.types.IssueComment comments = 26;</code>
+     * <code>repeated .boa.types.IssueComment comments = 14;</code>
+     *
+     * <pre>
+     *
+     *optional string component = 15;
+     *optional string resolution = 16;
+     *repeated string duplicated_by = 17;
+     *optional string duplicate_of = 18;
+     *optional string subcomponent = 19;
+     *optional string version = 20;
+     *optional string os = 21;
+     *optional string platform = 22;
+     *optional string milestone = 23;
+     *optional string depends_on = 24;
+     *optional string blocked = 25;
+     *optional string secrecy = 26;
+     *repeated IssueChange changes = 27;
+     * </pre>
      */
     public boa.types.Issues.IssueCommentOrBuilder getCommentsOrBuilder(
         int index) {
       return comments_.get(index);
     }
 
-    // repeated .boa.types.IssueChange changes = 27;
-    public static final int CHANGES_FIELD_NUMBER = 27;
-    private java.util.List<boa.types.Issues.IssueChange> changes_;
-    /**
-     * <code>repeated .boa.types.IssueChange changes = 27;</code>
-     */
-    public java.util.List<boa.types.Issues.IssueChange> getChangesList() {
-      return changes_;
-    }
-    /**
-     * <code>repeated .boa.types.IssueChange changes = 27;</code>
-     */
-    public java.util.List<? extends boa.types.Issues.IssueChangeOrBuilder> 
-        getChangesOrBuilderList() {
-      return changes_;
-    }
-    /**
-     * <code>repeated .boa.types.IssueChange changes = 27;</code>
-     */
-    public int getChangesCount() {
-      return changes_.size();
-    }
-    /**
-     * <code>repeated .boa.types.IssueChange changes = 27;</code>
-     */
-    public boa.types.Issues.IssueChange getChanges(int index) {
-      return changes_.get(index);
-    }
-    /**
-     * <code>repeated .boa.types.IssueChange changes = 27;</code>
-     */
-    public boa.types.Issues.IssueChangeOrBuilder getChangesOrBuilder(
-        int index) {
-      return changes_.get(index);
-    }
-
     private void initFields() {
       id_ = "";
       status_ = "";
-      component_ = "";
-      priority_ = "";
-      resolution_ = "";
-      duplicatedBy_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      duplicateOf_ = "";
-      subcomponent_ = "";
-      summary_ = "";
-      version_ = "";
-      createdDate_ = 0;
-      modifiedDate_ = 0;
-      completedDate_ = 0;
-      keywords_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       author_ = boa.types.Shared.Person.getDefaultInstance();
-      description_ = "";
       assignee_ = boa.types.Shared.Person.getDefaultInstance();
-      os_ = "";
-      platform_ = "";
-      milestone_ = "";
-      dependsOn_ = "";
-      blocked_ = "";
+      summary_ = "";
+      description_ = "";
+      createdDate_ = 0L;
+      modifiedDate_ = 0L;
+      completedDate_ = 0L;
+      keywords_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       vote_ = 0;
-      secrecy_ = "";
+      priority_ = "";
       files_ = java.util.Collections.emptyList();
       comments_ = java.util.Collections.emptyList();
-      changes_ = java.util.Collections.emptyList();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -2772,15 +2579,15 @@ public final class Issues {
         memoizedIsInitialized = 0;
         return false;
       }
-      if (!hasPriority()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasResolution()) {
+      if (!hasAuthor()) {
         memoizedIsInitialized = 0;
         return false;
       }
       if (!hasSummary()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasDescription()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -2789,14 +2596,6 @@ public final class Issues {
         return false;
       }
       if (!hasModifiedDate()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasAuthor()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasDescription()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -2822,12 +2621,6 @@ public final class Issues {
           return false;
         }
       }
-      for (int i = 0; i < getChangesCount(); i++) {
-        if (!getChanges(i).isInitialized()) {
-          memoizedIsInitialized = 0;
-          return false;
-        }
-      }
       memoizedIsInitialized = 1;
       return true;
     }
@@ -2842,79 +2635,40 @@ public final class Issues {
         output.writeBytes(2, getStatusBytes());
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeBytes(3, getComponentBytes());
+        output.writeMessage(3, author_);
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeBytes(4, getPriorityBytes());
+        output.writeMessage(4, assignee_);
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeBytes(5, getResolutionBytes());
-      }
-      for (int i = 0; i < duplicatedBy_.size(); i++) {
-        output.writeBytes(6, duplicatedBy_.getByteString(i));
+        output.writeBytes(5, getSummaryBytes());
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        output.writeBytes(7, getDuplicateOfBytes());
+        output.writeBytes(6, getDescriptionBytes());
       }
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
-        output.writeBytes(8, getSubcomponentBytes());
+        output.writeUInt64(7, createdDate_);
       }
       if (((bitField0_ & 0x00000080) == 0x00000080)) {
-        output.writeBytes(9, getSummaryBytes());
+        output.writeUInt64(8, modifiedDate_);
       }
       if (((bitField0_ & 0x00000100) == 0x00000100)) {
-        output.writeBytes(10, getVersionBytes());
-      }
-      if (((bitField0_ & 0x00000200) == 0x00000200)) {
-        output.writeInt32(11, createdDate_);
-      }
-      if (((bitField0_ & 0x00000400) == 0x00000400)) {
-        output.writeInt32(12, modifiedDate_);
-      }
-      if (((bitField0_ & 0x00000800) == 0x00000800)) {
-        output.writeInt32(13, completedDate_);
+        output.writeUInt64(9, completedDate_);
       }
       for (int i = 0; i < keywords_.size(); i++) {
-        output.writeBytes(14, keywords_.getByteString(i));
+        output.writeBytes(10, keywords_.getByteString(i));
       }
-      if (((bitField0_ & 0x00001000) == 0x00001000)) {
-        output.writeMessage(15, author_);
+      if (((bitField0_ & 0x00000200) == 0x00000200)) {
+        output.writeInt32(11, vote_);
       }
-      if (((bitField0_ & 0x00002000) == 0x00002000)) {
-        output.writeBytes(16, getDescriptionBytes());
-      }
-      if (((bitField0_ & 0x00004000) == 0x00004000)) {
-        output.writeMessage(17, assignee_);
-      }
-      if (((bitField0_ & 0x00008000) == 0x00008000)) {
-        output.writeBytes(18, getOsBytes());
-      }
-      if (((bitField0_ & 0x00010000) == 0x00010000)) {
-        output.writeBytes(19, getPlatformBytes());
-      }
-      if (((bitField0_ & 0x00020000) == 0x00020000)) {
-        output.writeBytes(20, getMilestoneBytes());
-      }
-      if (((bitField0_ & 0x00040000) == 0x00040000)) {
-        output.writeBytes(21, getDependsOnBytes());
-      }
-      if (((bitField0_ & 0x00080000) == 0x00080000)) {
-        output.writeBytes(22, getBlockedBytes());
-      }
-      if (((bitField0_ & 0x00100000) == 0x00100000)) {
-        output.writeInt32(23, vote_);
-      }
-      if (((bitField0_ & 0x00200000) == 0x00200000)) {
-        output.writeBytes(24, getSecrecyBytes());
+      if (((bitField0_ & 0x00000400) == 0x00000400)) {
+        output.writeBytes(12, getPriorityBytes());
       }
       for (int i = 0; i < files_.size(); i++) {
-        output.writeMessage(25, files_.get(i));
+        output.writeMessage(13, files_.get(i));
       }
       for (int i = 0; i < comments_.size(); i++) {
-        output.writeMessage(26, comments_.get(i));
-      }
-      for (int i = 0; i < changes_.size(); i++) {
-        output.writeMessage(27, changes_.get(i));
+        output.writeMessage(14, comments_.get(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -2935,52 +2689,31 @@ public final class Issues {
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(3, getComponentBytes());
+          .computeMessageSize(3, author_);
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(4, getPriorityBytes());
+          .computeMessageSize(4, assignee_);
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(5, getResolutionBytes());
-      }
-      {
-        int dataSize = 0;
-        for (int i = 0; i < duplicatedBy_.size(); i++) {
-          dataSize += com.google.protobuf.CodedOutputStream
-            .computeBytesSizeNoTag(duplicatedBy_.getByteString(i));
-        }
-        size += dataSize;
-        size += 1 * getDuplicatedByList().size();
+          .computeBytesSize(5, getSummaryBytes());
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(7, getDuplicateOfBytes());
+          .computeBytesSize(6, getDescriptionBytes());
       }
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(8, getSubcomponentBytes());
+          .computeUInt64Size(7, createdDate_);
       }
       if (((bitField0_ & 0x00000080) == 0x00000080)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(9, getSummaryBytes());
+          .computeUInt64Size(8, modifiedDate_);
       }
       if (((bitField0_ & 0x00000100) == 0x00000100)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(10, getVersionBytes());
-      }
-      if (((bitField0_ & 0x00000200) == 0x00000200)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(11, createdDate_);
-      }
-      if (((bitField0_ & 0x00000400) == 0x00000400)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(12, modifiedDate_);
-      }
-      if (((bitField0_ & 0x00000800) == 0x00000800)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(13, completedDate_);
+          .computeUInt64Size(9, completedDate_);
       }
       {
         int dataSize = 0;
@@ -2991,57 +2724,21 @@ public final class Issues {
         size += dataSize;
         size += 1 * getKeywordsList().size();
       }
-      if (((bitField0_ & 0x00001000) == 0x00001000)) {
+      if (((bitField0_ & 0x00000200) == 0x00000200)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(15, author_);
+          .computeInt32Size(11, vote_);
       }
-      if (((bitField0_ & 0x00002000) == 0x00002000)) {
+      if (((bitField0_ & 0x00000400) == 0x00000400)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(16, getDescriptionBytes());
-      }
-      if (((bitField0_ & 0x00004000) == 0x00004000)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(17, assignee_);
-      }
-      if (((bitField0_ & 0x00008000) == 0x00008000)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(18, getOsBytes());
-      }
-      if (((bitField0_ & 0x00010000) == 0x00010000)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(19, getPlatformBytes());
-      }
-      if (((bitField0_ & 0x00020000) == 0x00020000)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(20, getMilestoneBytes());
-      }
-      if (((bitField0_ & 0x00040000) == 0x00040000)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(21, getDependsOnBytes());
-      }
-      if (((bitField0_ & 0x00080000) == 0x00080000)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(22, getBlockedBytes());
-      }
-      if (((bitField0_ & 0x00100000) == 0x00100000)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(23, vote_);
-      }
-      if (((bitField0_ & 0x00200000) == 0x00200000)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(24, getSecrecyBytes());
+          .computeBytesSize(12, getPriorityBytes());
       }
       for (int i = 0; i < files_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(25, files_.get(i));
+          .computeMessageSize(13, files_.get(i));
       }
       for (int i = 0; i < comments_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(26, comments_.get(i));
-      }
-      for (int i = 0; i < changes_.size(); i++) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(27, changes_.get(i));
+          .computeMessageSize(14, comments_.get(i));
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -3155,7 +2852,6 @@ public final class Issues {
           getAssigneeFieldBuilder();
           getFilesFieldBuilder();
           getCommentsFieldBuilder();
-          getChangesFieldBuilder();
         }
       }
       private static Builder create() {
@@ -3168,75 +2864,45 @@ public final class Issues {
         bitField0_ = (bitField0_ & ~0x00000001);
         status_ = "";
         bitField0_ = (bitField0_ & ~0x00000002);
-        component_ = "";
-        bitField0_ = (bitField0_ & ~0x00000004);
-        priority_ = "";
-        bitField0_ = (bitField0_ & ~0x00000008);
-        resolution_ = "";
-        bitField0_ = (bitField0_ & ~0x00000010);
-        duplicatedBy_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000020);
-        duplicateOf_ = "";
-        bitField0_ = (bitField0_ & ~0x00000040);
-        subcomponent_ = "";
-        bitField0_ = (bitField0_ & ~0x00000080);
-        summary_ = "";
-        bitField0_ = (bitField0_ & ~0x00000100);
-        version_ = "";
-        bitField0_ = (bitField0_ & ~0x00000200);
-        createdDate_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000400);
-        modifiedDate_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000800);
-        completedDate_ = 0;
-        bitField0_ = (bitField0_ & ~0x00001000);
-        keywords_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00002000);
         if (authorBuilder_ == null) {
           author_ = boa.types.Shared.Person.getDefaultInstance();
         } else {
           authorBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00004000);
-        description_ = "";
-        bitField0_ = (bitField0_ & ~0x00008000);
+        bitField0_ = (bitField0_ & ~0x00000004);
         if (assigneeBuilder_ == null) {
           assignee_ = boa.types.Shared.Person.getDefaultInstance();
         } else {
           assigneeBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00010000);
-        os_ = "";
-        bitField0_ = (bitField0_ & ~0x00020000);
-        platform_ = "";
-        bitField0_ = (bitField0_ & ~0x00040000);
-        milestone_ = "";
-        bitField0_ = (bitField0_ & ~0x00080000);
-        dependsOn_ = "";
-        bitField0_ = (bitField0_ & ~0x00100000);
-        blocked_ = "";
-        bitField0_ = (bitField0_ & ~0x00200000);
+        bitField0_ = (bitField0_ & ~0x00000008);
+        summary_ = "";
+        bitField0_ = (bitField0_ & ~0x00000010);
+        description_ = "";
+        bitField0_ = (bitField0_ & ~0x00000020);
+        createdDate_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000040);
+        modifiedDate_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000080);
+        completedDate_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000100);
+        keywords_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000200);
         vote_ = 0;
-        bitField0_ = (bitField0_ & ~0x00400000);
-        secrecy_ = "";
-        bitField0_ = (bitField0_ & ~0x00800000);
+        bitField0_ = (bitField0_ & ~0x00000400);
+        priority_ = "";
+        bitField0_ = (bitField0_ & ~0x00000800);
         if (filesBuilder_ == null) {
           files_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x01000000);
+          bitField0_ = (bitField0_ & ~0x00001000);
         } else {
           filesBuilder_.clear();
         }
         if (commentsBuilder_ == null) {
           comments_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x02000000);
+          bitField0_ = (bitField0_ & ~0x00002000);
         } else {
           commentsBuilder_.clear();
-        }
-        if (changesBuilder_ == null) {
-          changes_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x04000000);
-        } else {
-          changesBuilder_.clear();
         }
         return this;
       }
@@ -3277,129 +2943,70 @@ public final class Issues {
         if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
           to_bitField0_ |= 0x00000004;
         }
-        result.component_ = component_;
-        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
-          to_bitField0_ |= 0x00000008;
-        }
-        result.priority_ = priority_;
-        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
-          to_bitField0_ |= 0x00000010;
-        }
-        result.resolution_ = resolution_;
-        if (((bitField0_ & 0x00000020) == 0x00000020)) {
-          duplicatedBy_ = new com.google.protobuf.UnmodifiableLazyStringList(
-              duplicatedBy_);
-          bitField0_ = (bitField0_ & ~0x00000020);
-        }
-        result.duplicatedBy_ = duplicatedBy_;
-        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
-          to_bitField0_ |= 0x00000020;
-        }
-        result.duplicateOf_ = duplicateOf_;
-        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
-          to_bitField0_ |= 0x00000040;
-        }
-        result.subcomponent_ = subcomponent_;
-        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
-          to_bitField0_ |= 0x00000080;
-        }
-        result.summary_ = summary_;
-        if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
-          to_bitField0_ |= 0x00000100;
-        }
-        result.version_ = version_;
-        if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
-          to_bitField0_ |= 0x00000200;
-        }
-        result.createdDate_ = createdDate_;
-        if (((from_bitField0_ & 0x00000800) == 0x00000800)) {
-          to_bitField0_ |= 0x00000400;
-        }
-        result.modifiedDate_ = modifiedDate_;
-        if (((from_bitField0_ & 0x00001000) == 0x00001000)) {
-          to_bitField0_ |= 0x00000800;
-        }
-        result.completedDate_ = completedDate_;
-        if (((bitField0_ & 0x00002000) == 0x00002000)) {
-          keywords_ = new com.google.protobuf.UnmodifiableLazyStringList(
-              keywords_);
-          bitField0_ = (bitField0_ & ~0x00002000);
-        }
-        result.keywords_ = keywords_;
-        if (((from_bitField0_ & 0x00004000) == 0x00004000)) {
-          to_bitField0_ |= 0x00001000;
-        }
         if (authorBuilder_ == null) {
           result.author_ = author_;
         } else {
           result.author_ = authorBuilder_.build();
         }
-        if (((from_bitField0_ & 0x00008000) == 0x00008000)) {
-          to_bitField0_ |= 0x00002000;
-        }
-        result.description_ = description_;
-        if (((from_bitField0_ & 0x00010000) == 0x00010000)) {
-          to_bitField0_ |= 0x00004000;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
         }
         if (assigneeBuilder_ == null) {
           result.assignee_ = assignee_;
         } else {
           result.assignee_ = assigneeBuilder_.build();
         }
-        if (((from_bitField0_ & 0x00020000) == 0x00020000)) {
-          to_bitField0_ |= 0x00008000;
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000010;
         }
-        result.os_ = os_;
-        if (((from_bitField0_ & 0x00040000) == 0x00040000)) {
-          to_bitField0_ |= 0x00010000;
+        result.summary_ = summary_;
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+          to_bitField0_ |= 0x00000020;
         }
-        result.platform_ = platform_;
-        if (((from_bitField0_ & 0x00080000) == 0x00080000)) {
-          to_bitField0_ |= 0x00020000;
+        result.description_ = description_;
+        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
+          to_bitField0_ |= 0x00000040;
         }
-        result.milestone_ = milestone_;
-        if (((from_bitField0_ & 0x00100000) == 0x00100000)) {
-          to_bitField0_ |= 0x00040000;
+        result.createdDate_ = createdDate_;
+        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
+          to_bitField0_ |= 0x00000080;
         }
-        result.dependsOn_ = dependsOn_;
-        if (((from_bitField0_ & 0x00200000) == 0x00200000)) {
-          to_bitField0_ |= 0x00080000;
+        result.modifiedDate_ = modifiedDate_;
+        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
+          to_bitField0_ |= 0x00000100;
         }
-        result.blocked_ = blocked_;
-        if (((from_bitField0_ & 0x00400000) == 0x00400000)) {
-          to_bitField0_ |= 0x00100000;
+        result.completedDate_ = completedDate_;
+        if (((bitField0_ & 0x00000200) == 0x00000200)) {
+          keywords_ = new com.google.protobuf.UnmodifiableLazyStringList(
+              keywords_);
+          bitField0_ = (bitField0_ & ~0x00000200);
+        }
+        result.keywords_ = keywords_;
+        if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
+          to_bitField0_ |= 0x00000200;
         }
         result.vote_ = vote_;
-        if (((from_bitField0_ & 0x00800000) == 0x00800000)) {
-          to_bitField0_ |= 0x00200000;
+        if (((from_bitField0_ & 0x00000800) == 0x00000800)) {
+          to_bitField0_ |= 0x00000400;
         }
-        result.secrecy_ = secrecy_;
+        result.priority_ = priority_;
         if (filesBuilder_ == null) {
-          if (((bitField0_ & 0x01000000) == 0x01000000)) {
+          if (((bitField0_ & 0x00001000) == 0x00001000)) {
             files_ = java.util.Collections.unmodifiableList(files_);
-            bitField0_ = (bitField0_ & ~0x01000000);
+            bitField0_ = (bitField0_ & ~0x00001000);
           }
           result.files_ = files_;
         } else {
           result.files_ = filesBuilder_.build();
         }
         if (commentsBuilder_ == null) {
-          if (((bitField0_ & 0x02000000) == 0x02000000)) {
+          if (((bitField0_ & 0x00002000) == 0x00002000)) {
             comments_ = java.util.Collections.unmodifiableList(comments_);
-            bitField0_ = (bitField0_ & ~0x02000000);
+            bitField0_ = (bitField0_ & ~0x00002000);
           }
           result.comments_ = comments_;
         } else {
           result.comments_ = commentsBuilder_.build();
-        }
-        if (changesBuilder_ == null) {
-          if (((bitField0_ & 0x04000000) == 0x04000000)) {
-            changes_ = java.util.Collections.unmodifiableList(changes_);
-            bitField0_ = (bitField0_ & ~0x04000000);
-          }
-          result.changes_ = changes_;
-        } else {
-          result.changes_ = changesBuilder_.build();
         }
         result.bitField0_ = to_bitField0_;
         onBuilt();
@@ -3427,49 +3034,20 @@ public final class Issues {
           status_ = other.status_;
           onChanged();
         }
-        if (other.hasComponent()) {
-          bitField0_ |= 0x00000004;
-          component_ = other.component_;
-          onChanged();
+        if (other.hasAuthor()) {
+          mergeAuthor(other.getAuthor());
         }
-        if (other.hasPriority()) {
-          bitField0_ |= 0x00000008;
-          priority_ = other.priority_;
-          onChanged();
-        }
-        if (other.hasResolution()) {
-          bitField0_ |= 0x00000010;
-          resolution_ = other.resolution_;
-          onChanged();
-        }
-        if (!other.duplicatedBy_.isEmpty()) {
-          if (duplicatedBy_.isEmpty()) {
-            duplicatedBy_ = other.duplicatedBy_;
-            bitField0_ = (bitField0_ & ~0x00000020);
-          } else {
-            ensureDuplicatedByIsMutable();
-            duplicatedBy_.addAll(other.duplicatedBy_);
-          }
-          onChanged();
-        }
-        if (other.hasDuplicateOf()) {
-          bitField0_ |= 0x00000040;
-          duplicateOf_ = other.duplicateOf_;
-          onChanged();
-        }
-        if (other.hasSubcomponent()) {
-          bitField0_ |= 0x00000080;
-          subcomponent_ = other.subcomponent_;
-          onChanged();
+        if (other.hasAssignee()) {
+          mergeAssignee(other.getAssignee());
         }
         if (other.hasSummary()) {
-          bitField0_ |= 0x00000100;
+          bitField0_ |= 0x00000010;
           summary_ = other.summary_;
           onChanged();
         }
-        if (other.hasVersion()) {
-          bitField0_ |= 0x00000200;
-          version_ = other.version_;
+        if (other.hasDescription()) {
+          bitField0_ |= 0x00000020;
+          description_ = other.description_;
           onChanged();
         }
         if (other.hasCreatedDate()) {
@@ -3484,62 +3062,26 @@ public final class Issues {
         if (!other.keywords_.isEmpty()) {
           if (keywords_.isEmpty()) {
             keywords_ = other.keywords_;
-            bitField0_ = (bitField0_ & ~0x00002000);
+            bitField0_ = (bitField0_ & ~0x00000200);
           } else {
             ensureKeywordsIsMutable();
             keywords_.addAll(other.keywords_);
           }
           onChanged();
         }
-        if (other.hasAuthor()) {
-          mergeAuthor(other.getAuthor());
-        }
-        if (other.hasDescription()) {
-          bitField0_ |= 0x00008000;
-          description_ = other.description_;
-          onChanged();
-        }
-        if (other.hasAssignee()) {
-          mergeAssignee(other.getAssignee());
-        }
-        if (other.hasOs()) {
-          bitField0_ |= 0x00020000;
-          os_ = other.os_;
-          onChanged();
-        }
-        if (other.hasPlatform()) {
-          bitField0_ |= 0x00040000;
-          platform_ = other.platform_;
-          onChanged();
-        }
-        if (other.hasMilestone()) {
-          bitField0_ |= 0x00080000;
-          milestone_ = other.milestone_;
-          onChanged();
-        }
-        if (other.hasDependsOn()) {
-          bitField0_ |= 0x00100000;
-          dependsOn_ = other.dependsOn_;
-          onChanged();
-        }
-        if (other.hasBlocked()) {
-          bitField0_ |= 0x00200000;
-          blocked_ = other.blocked_;
-          onChanged();
-        }
         if (other.hasVote()) {
           setVote(other.getVote());
         }
-        if (other.hasSecrecy()) {
-          bitField0_ |= 0x00800000;
-          secrecy_ = other.secrecy_;
+        if (other.hasPriority()) {
+          bitField0_ |= 0x00000800;
+          priority_ = other.priority_;
           onChanged();
         }
         if (filesBuilder_ == null) {
           if (!other.files_.isEmpty()) {
             if (files_.isEmpty()) {
               files_ = other.files_;
-              bitField0_ = (bitField0_ & ~0x01000000);
+              bitField0_ = (bitField0_ & ~0x00001000);
             } else {
               ensureFilesIsMutable();
               files_.addAll(other.files_);
@@ -3552,7 +3094,7 @@ public final class Issues {
               filesBuilder_.dispose();
               filesBuilder_ = null;
               files_ = other.files_;
-              bitField0_ = (bitField0_ & ~0x01000000);
+              bitField0_ = (bitField0_ & ~0x00001000);
               filesBuilder_ = 
                 com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
                    getFilesFieldBuilder() : null;
@@ -3565,7 +3107,7 @@ public final class Issues {
           if (!other.comments_.isEmpty()) {
             if (comments_.isEmpty()) {
               comments_ = other.comments_;
-              bitField0_ = (bitField0_ & ~0x02000000);
+              bitField0_ = (bitField0_ & ~0x00002000);
             } else {
               ensureCommentsIsMutable();
               comments_.addAll(other.comments_);
@@ -3578,38 +3120,12 @@ public final class Issues {
               commentsBuilder_.dispose();
               commentsBuilder_ = null;
               comments_ = other.comments_;
-              bitField0_ = (bitField0_ & ~0x02000000);
+              bitField0_ = (bitField0_ & ~0x00002000);
               commentsBuilder_ = 
                 com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
                    getCommentsFieldBuilder() : null;
             } else {
               commentsBuilder_.addAllMessages(other.comments_);
-            }
-          }
-        }
-        if (changesBuilder_ == null) {
-          if (!other.changes_.isEmpty()) {
-            if (changes_.isEmpty()) {
-              changes_ = other.changes_;
-              bitField0_ = (bitField0_ & ~0x04000000);
-            } else {
-              ensureChangesIsMutable();
-              changes_.addAll(other.changes_);
-            }
-            onChanged();
-          }
-        } else {
-          if (!other.changes_.isEmpty()) {
-            if (changesBuilder_.isEmpty()) {
-              changesBuilder_.dispose();
-              changesBuilder_ = null;
-              changes_ = other.changes_;
-              bitField0_ = (bitField0_ & ~0x04000000);
-              changesBuilder_ = 
-                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
-                   getChangesFieldBuilder() : null;
-            } else {
-              changesBuilder_.addAllMessages(other.changes_);
             }
           }
         }
@@ -3626,15 +3142,15 @@ public final class Issues {
           
           return false;
         }
-        if (!hasPriority()) {
-          
-          return false;
-        }
-        if (!hasResolution()) {
+        if (!hasAuthor()) {
           
           return false;
         }
         if (!hasSummary()) {
+          
+          return false;
+        }
+        if (!hasDescription()) {
           
           return false;
         }
@@ -3643,14 +3159,6 @@ public final class Issues {
           return false;
         }
         if (!hasModifiedDate()) {
-          
-          return false;
-        }
-        if (!hasAuthor()) {
-          
-          return false;
-        }
-        if (!hasDescription()) {
           
           return false;
         }
@@ -3672,12 +3180,6 @@ public final class Issues {
         }
         for (int i = 0; i < getCommentsCount(); i++) {
           if (!getComments(i).isInitialized()) {
-            
-            return false;
-          }
-        }
-        for (int i = 0; i < getChangesCount(); i++) {
-          if (!getChanges(i).isInitialized()) {
             
             return false;
           }
@@ -3852,821 +3354,18 @@ public final class Issues {
         return this;
       }
 
-      // optional string component = 3;
-      private java.lang.Object component_ = "";
-      /**
-       * <code>optional string component = 3;</code>
-       */
-      public boolean hasComponent() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
-      }
-      /**
-       * <code>optional string component = 3;</code>
-       */
-      public java.lang.String getComponent() {
-        java.lang.Object ref = component_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          component_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>optional string component = 3;</code>
-       */
-      public com.google.protobuf.ByteString
-          getComponentBytes() {
-        java.lang.Object ref = component_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          component_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>optional string component = 3;</code>
-       */
-      public Builder setComponent(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000004;
-        component_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string component = 3;</code>
-       */
-      public Builder clearComponent() {
-        bitField0_ = (bitField0_ & ~0x00000004);
-        component_ = getDefaultInstance().getComponent();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string component = 3;</code>
-       */
-      public Builder setComponentBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000004;
-        component_ = value;
-        onChanged();
-        return this;
-      }
-
-      // required string priority = 4;
-      private java.lang.Object priority_ = "";
-      /**
-       * <code>required string priority = 4;</code>
-       */
-      public boolean hasPriority() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
-      }
-      /**
-       * <code>required string priority = 4;</code>
-       */
-      public java.lang.String getPriority() {
-        java.lang.Object ref = priority_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          priority_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>required string priority = 4;</code>
-       */
-      public com.google.protobuf.ByteString
-          getPriorityBytes() {
-        java.lang.Object ref = priority_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          priority_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>required string priority = 4;</code>
-       */
-      public Builder setPriority(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000008;
-        priority_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string priority = 4;</code>
-       */
-      public Builder clearPriority() {
-        bitField0_ = (bitField0_ & ~0x00000008);
-        priority_ = getDefaultInstance().getPriority();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string priority = 4;</code>
-       */
-      public Builder setPriorityBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000008;
-        priority_ = value;
-        onChanged();
-        return this;
-      }
-
-      // required string resolution = 5;
-      private java.lang.Object resolution_ = "";
-      /**
-       * <code>required string resolution = 5;</code>
-       */
-      public boolean hasResolution() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
-      }
-      /**
-       * <code>required string resolution = 5;</code>
-       */
-      public java.lang.String getResolution() {
-        java.lang.Object ref = resolution_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          resolution_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>required string resolution = 5;</code>
-       */
-      public com.google.protobuf.ByteString
-          getResolutionBytes() {
-        java.lang.Object ref = resolution_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          resolution_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>required string resolution = 5;</code>
-       */
-      public Builder setResolution(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000010;
-        resolution_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string resolution = 5;</code>
-       */
-      public Builder clearResolution() {
-        bitField0_ = (bitField0_ & ~0x00000010);
-        resolution_ = getDefaultInstance().getResolution();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string resolution = 5;</code>
-       */
-      public Builder setResolutionBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000010;
-        resolution_ = value;
-        onChanged();
-        return this;
-      }
-
-      // repeated string duplicated_by = 6;
-      private com.google.protobuf.LazyStringList duplicatedBy_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      private void ensureDuplicatedByIsMutable() {
-        if (!((bitField0_ & 0x00000020) == 0x00000020)) {
-          duplicatedBy_ = new com.google.protobuf.LazyStringArrayList(duplicatedBy_);
-          bitField0_ |= 0x00000020;
-         }
-      }
-      /**
-       * <code>repeated string duplicated_by = 6;</code>
-       */
-      public java.util.List<java.lang.String>
-          getDuplicatedByList() {
-        return java.util.Collections.unmodifiableList(duplicatedBy_);
-      }
-      /**
-       * <code>repeated string duplicated_by = 6;</code>
-       */
-      public int getDuplicatedByCount() {
-        return duplicatedBy_.size();
-      }
-      /**
-       * <code>repeated string duplicated_by = 6;</code>
-       */
-      public java.lang.String getDuplicatedBy(int index) {
-        return duplicatedBy_.get(index);
-      }
-      /**
-       * <code>repeated string duplicated_by = 6;</code>
-       */
-      public com.google.protobuf.ByteString
-          getDuplicatedByBytes(int index) {
-        return duplicatedBy_.getByteString(index);
-      }
-      /**
-       * <code>repeated string duplicated_by = 6;</code>
-       */
-      public Builder setDuplicatedBy(
-          int index, java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureDuplicatedByIsMutable();
-        duplicatedBy_.set(index, value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated string duplicated_by = 6;</code>
-       */
-      public Builder addDuplicatedBy(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureDuplicatedByIsMutable();
-        duplicatedBy_.add(value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated string duplicated_by = 6;</code>
-       */
-      public Builder addAllDuplicatedBy(
-          java.lang.Iterable<java.lang.String> values) {
-        ensureDuplicatedByIsMutable();
-        super.addAll(values, duplicatedBy_);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated string duplicated_by = 6;</code>
-       */
-      public Builder clearDuplicatedBy() {
-        duplicatedBy_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000020);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated string duplicated_by = 6;</code>
-       */
-      public Builder addDuplicatedByBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureDuplicatedByIsMutable();
-        duplicatedBy_.add(value);
-        onChanged();
-        return this;
-      }
-
-      // optional string duplicate_of = 7;
-      private java.lang.Object duplicateOf_ = "";
-      /**
-       * <code>optional string duplicate_of = 7;</code>
-       */
-      public boolean hasDuplicateOf() {
-        return ((bitField0_ & 0x00000040) == 0x00000040);
-      }
-      /**
-       * <code>optional string duplicate_of = 7;</code>
-       */
-      public java.lang.String getDuplicateOf() {
-        java.lang.Object ref = duplicateOf_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          duplicateOf_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>optional string duplicate_of = 7;</code>
-       */
-      public com.google.protobuf.ByteString
-          getDuplicateOfBytes() {
-        java.lang.Object ref = duplicateOf_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          duplicateOf_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>optional string duplicate_of = 7;</code>
-       */
-      public Builder setDuplicateOf(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000040;
-        duplicateOf_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string duplicate_of = 7;</code>
-       */
-      public Builder clearDuplicateOf() {
-        bitField0_ = (bitField0_ & ~0x00000040);
-        duplicateOf_ = getDefaultInstance().getDuplicateOf();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string duplicate_of = 7;</code>
-       */
-      public Builder setDuplicateOfBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000040;
-        duplicateOf_ = value;
-        onChanged();
-        return this;
-      }
-
-      // optional string subcomponent = 8;
-      private java.lang.Object subcomponent_ = "";
-      /**
-       * <code>optional string subcomponent = 8;</code>
-       */
-      public boolean hasSubcomponent() {
-        return ((bitField0_ & 0x00000080) == 0x00000080);
-      }
-      /**
-       * <code>optional string subcomponent = 8;</code>
-       */
-      public java.lang.String getSubcomponent() {
-        java.lang.Object ref = subcomponent_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          subcomponent_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>optional string subcomponent = 8;</code>
-       */
-      public com.google.protobuf.ByteString
-          getSubcomponentBytes() {
-        java.lang.Object ref = subcomponent_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          subcomponent_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>optional string subcomponent = 8;</code>
-       */
-      public Builder setSubcomponent(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000080;
-        subcomponent_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string subcomponent = 8;</code>
-       */
-      public Builder clearSubcomponent() {
-        bitField0_ = (bitField0_ & ~0x00000080);
-        subcomponent_ = getDefaultInstance().getSubcomponent();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string subcomponent = 8;</code>
-       */
-      public Builder setSubcomponentBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000080;
-        subcomponent_ = value;
-        onChanged();
-        return this;
-      }
-
-      // required string summary = 9;
-      private java.lang.Object summary_ = "";
-      /**
-       * <code>required string summary = 9;</code>
-       */
-      public boolean hasSummary() {
-        return ((bitField0_ & 0x00000100) == 0x00000100);
-      }
-      /**
-       * <code>required string summary = 9;</code>
-       */
-      public java.lang.String getSummary() {
-        java.lang.Object ref = summary_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          summary_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>required string summary = 9;</code>
-       */
-      public com.google.protobuf.ByteString
-          getSummaryBytes() {
-        java.lang.Object ref = summary_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          summary_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>required string summary = 9;</code>
-       */
-      public Builder setSummary(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000100;
-        summary_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string summary = 9;</code>
-       */
-      public Builder clearSummary() {
-        bitField0_ = (bitField0_ & ~0x00000100);
-        summary_ = getDefaultInstance().getSummary();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string summary = 9;</code>
-       */
-      public Builder setSummaryBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000100;
-        summary_ = value;
-        onChanged();
-        return this;
-      }
-
-      // optional string version = 10;
-      private java.lang.Object version_ = "";
-      /**
-       * <code>optional string version = 10;</code>
-       */
-      public boolean hasVersion() {
-        return ((bitField0_ & 0x00000200) == 0x00000200);
-      }
-      /**
-       * <code>optional string version = 10;</code>
-       */
-      public java.lang.String getVersion() {
-        java.lang.Object ref = version_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          version_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>optional string version = 10;</code>
-       */
-      public com.google.protobuf.ByteString
-          getVersionBytes() {
-        java.lang.Object ref = version_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          version_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>optional string version = 10;</code>
-       */
-      public Builder setVersion(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000200;
-        version_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string version = 10;</code>
-       */
-      public Builder clearVersion() {
-        bitField0_ = (bitField0_ & ~0x00000200);
-        version_ = getDefaultInstance().getVersion();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string version = 10;</code>
-       */
-      public Builder setVersionBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000200;
-        version_ = value;
-        onChanged();
-        return this;
-      }
-
-      // required int32 created_date = 11;
-      private int createdDate_ ;
-      /**
-       * <code>required int32 created_date = 11;</code>
-       */
-      public boolean hasCreatedDate() {
-        return ((bitField0_ & 0x00000400) == 0x00000400);
-      }
-      /**
-       * <code>required int32 created_date = 11;</code>
-       */
-      public int getCreatedDate() {
-        return createdDate_;
-      }
-      /**
-       * <code>required int32 created_date = 11;</code>
-       */
-      public Builder setCreatedDate(int value) {
-        bitField0_ |= 0x00000400;
-        createdDate_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required int32 created_date = 11;</code>
-       */
-      public Builder clearCreatedDate() {
-        bitField0_ = (bitField0_ & ~0x00000400);
-        createdDate_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // required int32 modified_date = 12;
-      private int modifiedDate_ ;
-      /**
-       * <code>required int32 modified_date = 12;</code>
-       */
-      public boolean hasModifiedDate() {
-        return ((bitField0_ & 0x00000800) == 0x00000800);
-      }
-      /**
-       * <code>required int32 modified_date = 12;</code>
-       */
-      public int getModifiedDate() {
-        return modifiedDate_;
-      }
-      /**
-       * <code>required int32 modified_date = 12;</code>
-       */
-      public Builder setModifiedDate(int value) {
-        bitField0_ |= 0x00000800;
-        modifiedDate_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required int32 modified_date = 12;</code>
-       */
-      public Builder clearModifiedDate() {
-        bitField0_ = (bitField0_ & ~0x00000800);
-        modifiedDate_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 completed_date = 13;
-      private int completedDate_ ;
-      /**
-       * <code>optional int32 completed_date = 13;</code>
-       */
-      public boolean hasCompletedDate() {
-        return ((bitField0_ & 0x00001000) == 0x00001000);
-      }
-      /**
-       * <code>optional int32 completed_date = 13;</code>
-       */
-      public int getCompletedDate() {
-        return completedDate_;
-      }
-      /**
-       * <code>optional int32 completed_date = 13;</code>
-       */
-      public Builder setCompletedDate(int value) {
-        bitField0_ |= 0x00001000;
-        completedDate_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 completed_date = 13;</code>
-       */
-      public Builder clearCompletedDate() {
-        bitField0_ = (bitField0_ & ~0x00001000);
-        completedDate_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // repeated string keywords = 14;
-      private com.google.protobuf.LazyStringList keywords_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      private void ensureKeywordsIsMutable() {
-        if (!((bitField0_ & 0x00002000) == 0x00002000)) {
-          keywords_ = new com.google.protobuf.LazyStringArrayList(keywords_);
-          bitField0_ |= 0x00002000;
-         }
-      }
-      /**
-       * <code>repeated string keywords = 14;</code>
-       */
-      public java.util.List<java.lang.String>
-          getKeywordsList() {
-        return java.util.Collections.unmodifiableList(keywords_);
-      }
-      /**
-       * <code>repeated string keywords = 14;</code>
-       */
-      public int getKeywordsCount() {
-        return keywords_.size();
-      }
-      /**
-       * <code>repeated string keywords = 14;</code>
-       */
-      public java.lang.String getKeywords(int index) {
-        return keywords_.get(index);
-      }
-      /**
-       * <code>repeated string keywords = 14;</code>
-       */
-      public com.google.protobuf.ByteString
-          getKeywordsBytes(int index) {
-        return keywords_.getByteString(index);
-      }
-      /**
-       * <code>repeated string keywords = 14;</code>
-       */
-      public Builder setKeywords(
-          int index, java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureKeywordsIsMutable();
-        keywords_.set(index, value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated string keywords = 14;</code>
-       */
-      public Builder addKeywords(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureKeywordsIsMutable();
-        keywords_.add(value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated string keywords = 14;</code>
-       */
-      public Builder addAllKeywords(
-          java.lang.Iterable<java.lang.String> values) {
-        ensureKeywordsIsMutable();
-        super.addAll(values, keywords_);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated string keywords = 14;</code>
-       */
-      public Builder clearKeywords() {
-        keywords_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00002000);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated string keywords = 14;</code>
-       */
-      public Builder addKeywordsBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureKeywordsIsMutable();
-        keywords_.add(value);
-        onChanged();
-        return this;
-      }
-
-      // required .boa.types.Person author = 15;
+      // required .boa.types.Person author = 3;
       private boa.types.Shared.Person author_ = boa.types.Shared.Person.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           boa.types.Shared.Person, boa.types.Shared.Person.Builder, boa.types.Shared.PersonOrBuilder> authorBuilder_;
       /**
-       * <code>required .boa.types.Person author = 15;</code>
+       * <code>required .boa.types.Person author = 3;</code>
        */
       public boolean hasAuthor() {
-        return ((bitField0_ & 0x00004000) == 0x00004000);
+        return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
-       * <code>required .boa.types.Person author = 15;</code>
+       * <code>required .boa.types.Person author = 3;</code>
        */
       public boa.types.Shared.Person getAuthor() {
         if (authorBuilder_ == null) {
@@ -4676,7 +3375,7 @@ public final class Issues {
         }
       }
       /**
-       * <code>required .boa.types.Person author = 15;</code>
+       * <code>required .boa.types.Person author = 3;</code>
        */
       public Builder setAuthor(boa.types.Shared.Person value) {
         if (authorBuilder_ == null) {
@@ -4688,11 +3387,11 @@ public final class Issues {
         } else {
           authorBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x00004000;
+        bitField0_ |= 0x00000004;
         return this;
       }
       /**
-       * <code>required .boa.types.Person author = 15;</code>
+       * <code>required .boa.types.Person author = 3;</code>
        */
       public Builder setAuthor(
           boa.types.Shared.Person.Builder builderForValue) {
@@ -4702,15 +3401,15 @@ public final class Issues {
         } else {
           authorBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x00004000;
+        bitField0_ |= 0x00000004;
         return this;
       }
       /**
-       * <code>required .boa.types.Person author = 15;</code>
+       * <code>required .boa.types.Person author = 3;</code>
        */
       public Builder mergeAuthor(boa.types.Shared.Person value) {
         if (authorBuilder_ == null) {
-          if (((bitField0_ & 0x00004000) == 0x00004000) &&
+          if (((bitField0_ & 0x00000004) == 0x00000004) &&
               author_ != boa.types.Shared.Person.getDefaultInstance()) {
             author_ =
               boa.types.Shared.Person.newBuilder(author_).mergeFrom(value).buildPartial();
@@ -4721,11 +3420,11 @@ public final class Issues {
         } else {
           authorBuilder_.mergeFrom(value);
         }
-        bitField0_ |= 0x00004000;
+        bitField0_ |= 0x00000004;
         return this;
       }
       /**
-       * <code>required .boa.types.Person author = 15;</code>
+       * <code>required .boa.types.Person author = 3;</code>
        */
       public Builder clearAuthor() {
         if (authorBuilder_ == null) {
@@ -4734,19 +3433,19 @@ public final class Issues {
         } else {
           authorBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00004000);
+        bitField0_ = (bitField0_ & ~0x00000004);
         return this;
       }
       /**
-       * <code>required .boa.types.Person author = 15;</code>
+       * <code>required .boa.types.Person author = 3;</code>
        */
       public boa.types.Shared.Person.Builder getAuthorBuilder() {
-        bitField0_ |= 0x00004000;
+        bitField0_ |= 0x00000004;
         onChanged();
         return getAuthorFieldBuilder().getBuilder();
       }
       /**
-       * <code>required .boa.types.Person author = 15;</code>
+       * <code>required .boa.types.Person author = 3;</code>
        */
       public boa.types.Shared.PersonOrBuilder getAuthorOrBuilder() {
         if (authorBuilder_ != null) {
@@ -4756,7 +3455,7 @@ public final class Issues {
         }
       }
       /**
-       * <code>required .boa.types.Person author = 15;</code>
+       * <code>required .boa.types.Person author = 3;</code>
        */
       private com.google.protobuf.SingleFieldBuilder<
           boa.types.Shared.Person, boa.types.Shared.Person.Builder, boa.types.Shared.PersonOrBuilder> 
@@ -4772,92 +3471,18 @@ public final class Issues {
         return authorBuilder_;
       }
 
-      // required string description = 16;
-      private java.lang.Object description_ = "";
-      /**
-       * <code>required string description = 16;</code>
-       */
-      public boolean hasDescription() {
-        return ((bitField0_ & 0x00008000) == 0x00008000);
-      }
-      /**
-       * <code>required string description = 16;</code>
-       */
-      public java.lang.String getDescription() {
-        java.lang.Object ref = description_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          description_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>required string description = 16;</code>
-       */
-      public com.google.protobuf.ByteString
-          getDescriptionBytes() {
-        java.lang.Object ref = description_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          description_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>required string description = 16;</code>
-       */
-      public Builder setDescription(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00008000;
-        description_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string description = 16;</code>
-       */
-      public Builder clearDescription() {
-        bitField0_ = (bitField0_ & ~0x00008000);
-        description_ = getDefaultInstance().getDescription();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string description = 16;</code>
-       */
-      public Builder setDescriptionBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00008000;
-        description_ = value;
-        onChanged();
-        return this;
-      }
-
-      // optional .boa.types.Person assignee = 17;
+      // optional .boa.types.Person assignee = 4;
       private boa.types.Shared.Person assignee_ = boa.types.Shared.Person.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           boa.types.Shared.Person, boa.types.Shared.Person.Builder, boa.types.Shared.PersonOrBuilder> assigneeBuilder_;
       /**
-       * <code>optional .boa.types.Person assignee = 17;</code>
+       * <code>optional .boa.types.Person assignee = 4;</code>
        */
       public boolean hasAssignee() {
-        return ((bitField0_ & 0x00010000) == 0x00010000);
+        return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       /**
-       * <code>optional .boa.types.Person assignee = 17;</code>
+       * <code>optional .boa.types.Person assignee = 4;</code>
        */
       public boa.types.Shared.Person getAssignee() {
         if (assigneeBuilder_ == null) {
@@ -4867,7 +3492,7 @@ public final class Issues {
         }
       }
       /**
-       * <code>optional .boa.types.Person assignee = 17;</code>
+       * <code>optional .boa.types.Person assignee = 4;</code>
        */
       public Builder setAssignee(boa.types.Shared.Person value) {
         if (assigneeBuilder_ == null) {
@@ -4879,11 +3504,11 @@ public final class Issues {
         } else {
           assigneeBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x00010000;
+        bitField0_ |= 0x00000008;
         return this;
       }
       /**
-       * <code>optional .boa.types.Person assignee = 17;</code>
+       * <code>optional .boa.types.Person assignee = 4;</code>
        */
       public Builder setAssignee(
           boa.types.Shared.Person.Builder builderForValue) {
@@ -4893,15 +3518,15 @@ public final class Issues {
         } else {
           assigneeBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x00010000;
+        bitField0_ |= 0x00000008;
         return this;
       }
       /**
-       * <code>optional .boa.types.Person assignee = 17;</code>
+       * <code>optional .boa.types.Person assignee = 4;</code>
        */
       public Builder mergeAssignee(boa.types.Shared.Person value) {
         if (assigneeBuilder_ == null) {
-          if (((bitField0_ & 0x00010000) == 0x00010000) &&
+          if (((bitField0_ & 0x00000008) == 0x00000008) &&
               assignee_ != boa.types.Shared.Person.getDefaultInstance()) {
             assignee_ =
               boa.types.Shared.Person.newBuilder(assignee_).mergeFrom(value).buildPartial();
@@ -4912,11 +3537,11 @@ public final class Issues {
         } else {
           assigneeBuilder_.mergeFrom(value);
         }
-        bitField0_ |= 0x00010000;
+        bitField0_ |= 0x00000008;
         return this;
       }
       /**
-       * <code>optional .boa.types.Person assignee = 17;</code>
+       * <code>optional .boa.types.Person assignee = 4;</code>
        */
       public Builder clearAssignee() {
         if (assigneeBuilder_ == null) {
@@ -4925,19 +3550,19 @@ public final class Issues {
         } else {
           assigneeBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00010000);
+        bitField0_ = (bitField0_ & ~0x00000008);
         return this;
       }
       /**
-       * <code>optional .boa.types.Person assignee = 17;</code>
+       * <code>optional .boa.types.Person assignee = 4;</code>
        */
       public boa.types.Shared.Person.Builder getAssigneeBuilder() {
-        bitField0_ |= 0x00010000;
+        bitField0_ |= 0x00000008;
         onChanged();
         return getAssigneeFieldBuilder().getBuilder();
       }
       /**
-       * <code>optional .boa.types.Person assignee = 17;</code>
+       * <code>optional .boa.types.Person assignee = 4;</code>
        */
       public boa.types.Shared.PersonOrBuilder getAssigneeOrBuilder() {
         if (assigneeBuilder_ != null) {
@@ -4947,7 +3572,7 @@ public final class Issues {
         }
       }
       /**
-       * <code>optional .boa.types.Person assignee = 17;</code>
+       * <code>optional .boa.types.Person assignee = 4;</code>
        */
       private com.google.protobuf.SingleFieldBuilder<
           boa.types.Shared.Person, boa.types.Shared.Person.Builder, boa.types.Shared.PersonOrBuilder> 
@@ -4963,500 +3588,470 @@ public final class Issues {
         return assigneeBuilder_;
       }
 
-      // optional string os = 18;
-      private java.lang.Object os_ = "";
+      // required string summary = 5;
+      private java.lang.Object summary_ = "";
       /**
-       * <code>optional string os = 18;</code>
+       * <code>required string summary = 5;</code>
        */
-      public boolean hasOs() {
-        return ((bitField0_ & 0x00020000) == 0x00020000);
+      public boolean hasSummary() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
       }
       /**
-       * <code>optional string os = 18;</code>
+       * <code>required string summary = 5;</code>
        */
-      public java.lang.String getOs() {
-        java.lang.Object ref = os_;
+      public java.lang.String getSummary() {
+        java.lang.Object ref = summary_;
         if (!(ref instanceof java.lang.String)) {
           java.lang.String s = ((com.google.protobuf.ByteString) ref)
               .toStringUtf8();
-          os_ = s;
+          summary_ = s;
           return s;
         } else {
           return (java.lang.String) ref;
         }
       }
       /**
-       * <code>optional string os = 18;</code>
+       * <code>required string summary = 5;</code>
        */
       public com.google.protobuf.ByteString
-          getOsBytes() {
-        java.lang.Object ref = os_;
+          getSummaryBytes() {
+        java.lang.Object ref = summary_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
-          os_ = b;
+          summary_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
         }
       }
       /**
-       * <code>optional string os = 18;</code>
+       * <code>required string summary = 5;</code>
        */
-      public Builder setOs(
+      public Builder setSummary(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00020000;
-        os_ = value;
+  bitField0_ |= 0x00000010;
+        summary_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional string os = 18;</code>
+       * <code>required string summary = 5;</code>
        */
-      public Builder clearOs() {
-        bitField0_ = (bitField0_ & ~0x00020000);
-        os_ = getDefaultInstance().getOs();
+      public Builder clearSummary() {
+        bitField0_ = (bitField0_ & ~0x00000010);
+        summary_ = getDefaultInstance().getSummary();
         onChanged();
         return this;
       }
       /**
-       * <code>optional string os = 18;</code>
+       * <code>required string summary = 5;</code>
        */
-      public Builder setOsBytes(
+      public Builder setSummaryBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00020000;
-        os_ = value;
+  bitField0_ |= 0x00000010;
+        summary_ = value;
         onChanged();
         return this;
       }
 
-      // optional string platform = 19;
-      private java.lang.Object platform_ = "";
+      // required string description = 6;
+      private java.lang.Object description_ = "";
       /**
-       * <code>optional string platform = 19;</code>
+       * <code>required string description = 6;</code>
        */
-      public boolean hasPlatform() {
-        return ((bitField0_ & 0x00040000) == 0x00040000);
+      public boolean hasDescription() {
+        return ((bitField0_ & 0x00000020) == 0x00000020);
       }
       /**
-       * <code>optional string platform = 19;</code>
+       * <code>required string description = 6;</code>
        */
-      public java.lang.String getPlatform() {
-        java.lang.Object ref = platform_;
+      public java.lang.String getDescription() {
+        java.lang.Object ref = description_;
         if (!(ref instanceof java.lang.String)) {
           java.lang.String s = ((com.google.protobuf.ByteString) ref)
               .toStringUtf8();
-          platform_ = s;
+          description_ = s;
           return s;
         } else {
           return (java.lang.String) ref;
         }
       }
       /**
-       * <code>optional string platform = 19;</code>
+       * <code>required string description = 6;</code>
        */
       public com.google.protobuf.ByteString
-          getPlatformBytes() {
-        java.lang.Object ref = platform_;
+          getDescriptionBytes() {
+        java.lang.Object ref = description_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
-          platform_ = b;
+          description_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
         }
       }
       /**
-       * <code>optional string platform = 19;</code>
+       * <code>required string description = 6;</code>
        */
-      public Builder setPlatform(
+      public Builder setDescription(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00040000;
-        platform_ = value;
+  bitField0_ |= 0x00000020;
+        description_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional string platform = 19;</code>
+       * <code>required string description = 6;</code>
        */
-      public Builder clearPlatform() {
-        bitField0_ = (bitField0_ & ~0x00040000);
-        platform_ = getDefaultInstance().getPlatform();
+      public Builder clearDescription() {
+        bitField0_ = (bitField0_ & ~0x00000020);
+        description_ = getDefaultInstance().getDescription();
         onChanged();
         return this;
       }
       /**
-       * <code>optional string platform = 19;</code>
+       * <code>required string description = 6;</code>
        */
-      public Builder setPlatformBytes(
+      public Builder setDescriptionBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00040000;
-        platform_ = value;
+  bitField0_ |= 0x00000020;
+        description_ = value;
         onChanged();
         return this;
       }
 
-      // optional string milestone = 20;
-      private java.lang.Object milestone_ = "";
+      // required uint64 created_date = 7;
+      private long createdDate_ ;
       /**
-       * <code>optional string milestone = 20;</code>
+       * <code>required uint64 created_date = 7;</code>
        */
-      public boolean hasMilestone() {
-        return ((bitField0_ & 0x00080000) == 0x00080000);
+      public boolean hasCreatedDate() {
+        return ((bitField0_ & 0x00000040) == 0x00000040);
       }
       /**
-       * <code>optional string milestone = 20;</code>
+       * <code>required uint64 created_date = 7;</code>
        */
-      public java.lang.String getMilestone() {
-        java.lang.Object ref = milestone_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          milestone_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
+      public long getCreatedDate() {
+        return createdDate_;
       }
       /**
-       * <code>optional string milestone = 20;</code>
+       * <code>required uint64 created_date = 7;</code>
+       */
+      public Builder setCreatedDate(long value) {
+        bitField0_ |= 0x00000040;
+        createdDate_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required uint64 created_date = 7;</code>
+       */
+      public Builder clearCreatedDate() {
+        bitField0_ = (bitField0_ & ~0x00000040);
+        createdDate_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      // required uint64 modified_date = 8;
+      private long modifiedDate_ ;
+      /**
+       * <code>required uint64 modified_date = 8;</code>
+       */
+      public boolean hasModifiedDate() {
+        return ((bitField0_ & 0x00000080) == 0x00000080);
+      }
+      /**
+       * <code>required uint64 modified_date = 8;</code>
+       */
+      public long getModifiedDate() {
+        return modifiedDate_;
+      }
+      /**
+       * <code>required uint64 modified_date = 8;</code>
+       */
+      public Builder setModifiedDate(long value) {
+        bitField0_ |= 0x00000080;
+        modifiedDate_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required uint64 modified_date = 8;</code>
+       */
+      public Builder clearModifiedDate() {
+        bitField0_ = (bitField0_ & ~0x00000080);
+        modifiedDate_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      // optional uint64 completed_date = 9;
+      private long completedDate_ ;
+      /**
+       * <code>optional uint64 completed_date = 9;</code>
+       */
+      public boolean hasCompletedDate() {
+        return ((bitField0_ & 0x00000100) == 0x00000100);
+      }
+      /**
+       * <code>optional uint64 completed_date = 9;</code>
+       */
+      public long getCompletedDate() {
+        return completedDate_;
+      }
+      /**
+       * <code>optional uint64 completed_date = 9;</code>
+       */
+      public Builder setCompletedDate(long value) {
+        bitField0_ |= 0x00000100;
+        completedDate_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional uint64 completed_date = 9;</code>
+       */
+      public Builder clearCompletedDate() {
+        bitField0_ = (bitField0_ & ~0x00000100);
+        completedDate_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      // repeated string keywords = 10;
+      private com.google.protobuf.LazyStringList keywords_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      private void ensureKeywordsIsMutable() {
+        if (!((bitField0_ & 0x00000200) == 0x00000200)) {
+          keywords_ = new com.google.protobuf.LazyStringArrayList(keywords_);
+          bitField0_ |= 0x00000200;
+         }
+      }
+      /**
+       * <code>repeated string keywords = 10;</code>
+       */
+      public java.util.List<java.lang.String>
+          getKeywordsList() {
+        return java.util.Collections.unmodifiableList(keywords_);
+      }
+      /**
+       * <code>repeated string keywords = 10;</code>
+       */
+      public int getKeywordsCount() {
+        return keywords_.size();
+      }
+      /**
+       * <code>repeated string keywords = 10;</code>
+       */
+      public java.lang.String getKeywords(int index) {
+        return keywords_.get(index);
+      }
+      /**
+       * <code>repeated string keywords = 10;</code>
        */
       public com.google.protobuf.ByteString
-          getMilestoneBytes() {
-        java.lang.Object ref = milestone_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          milestone_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
+          getKeywordsBytes(int index) {
+        return keywords_.getByteString(index);
       }
       /**
-       * <code>optional string milestone = 20;</code>
+       * <code>repeated string keywords = 10;</code>
        */
-      public Builder setMilestone(
+      public Builder setKeywords(
+          int index, java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureKeywordsIsMutable();
+        keywords_.set(index, value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string keywords = 10;</code>
+       */
+      public Builder addKeywords(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00080000;
-        milestone_ = value;
+  ensureKeywordsIsMutable();
+        keywords_.add(value);
         onChanged();
         return this;
       }
       /**
-       * <code>optional string milestone = 20;</code>
+       * <code>repeated string keywords = 10;</code>
        */
-      public Builder clearMilestone() {
-        bitField0_ = (bitField0_ & ~0x00080000);
-        milestone_ = getDefaultInstance().getMilestone();
+      public Builder addAllKeywords(
+          java.lang.Iterable<java.lang.String> values) {
+        ensureKeywordsIsMutable();
+        super.addAll(values, keywords_);
         onChanged();
         return this;
       }
       /**
-       * <code>optional string milestone = 20;</code>
+       * <code>repeated string keywords = 10;</code>
        */
-      public Builder setMilestoneBytes(
+      public Builder clearKeywords() {
+        keywords_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000200);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string keywords = 10;</code>
+       */
+      public Builder addKeywordsBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00080000;
-        milestone_ = value;
+  ensureKeywordsIsMutable();
+        keywords_.add(value);
         onChanged();
         return this;
       }
 
-      // optional string depends_on = 21;
-      private java.lang.Object dependsOn_ = "";
-      /**
-       * <code>optional string depends_on = 21;</code>
-       */
-      public boolean hasDependsOn() {
-        return ((bitField0_ & 0x00100000) == 0x00100000);
-      }
-      /**
-       * <code>optional string depends_on = 21;</code>
-       */
-      public java.lang.String getDependsOn() {
-        java.lang.Object ref = dependsOn_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          dependsOn_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>optional string depends_on = 21;</code>
-       */
-      public com.google.protobuf.ByteString
-          getDependsOnBytes() {
-        java.lang.Object ref = dependsOn_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          dependsOn_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>optional string depends_on = 21;</code>
-       */
-      public Builder setDependsOn(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00100000;
-        dependsOn_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string depends_on = 21;</code>
-       */
-      public Builder clearDependsOn() {
-        bitField0_ = (bitField0_ & ~0x00100000);
-        dependsOn_ = getDefaultInstance().getDependsOn();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string depends_on = 21;</code>
-       */
-      public Builder setDependsOnBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00100000;
-        dependsOn_ = value;
-        onChanged();
-        return this;
-      }
-
-      // optional string blocked = 22;
-      private java.lang.Object blocked_ = "";
-      /**
-       * <code>optional string blocked = 22;</code>
-       */
-      public boolean hasBlocked() {
-        return ((bitField0_ & 0x00200000) == 0x00200000);
-      }
-      /**
-       * <code>optional string blocked = 22;</code>
-       */
-      public java.lang.String getBlocked() {
-        java.lang.Object ref = blocked_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          blocked_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>optional string blocked = 22;</code>
-       */
-      public com.google.protobuf.ByteString
-          getBlockedBytes() {
-        java.lang.Object ref = blocked_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          blocked_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>optional string blocked = 22;</code>
-       */
-      public Builder setBlocked(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00200000;
-        blocked_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string blocked = 22;</code>
-       */
-      public Builder clearBlocked() {
-        bitField0_ = (bitField0_ & ~0x00200000);
-        blocked_ = getDefaultInstance().getBlocked();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string blocked = 22;</code>
-       */
-      public Builder setBlockedBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00200000;
-        blocked_ = value;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 vote = 23;
+      // optional int32 vote = 11;
       private int vote_ ;
       /**
-       * <code>optional int32 vote = 23;</code>
+       * <code>optional int32 vote = 11;</code>
        */
       public boolean hasVote() {
-        return ((bitField0_ & 0x00400000) == 0x00400000);
+        return ((bitField0_ & 0x00000400) == 0x00000400);
       }
       /**
-       * <code>optional int32 vote = 23;</code>
+       * <code>optional int32 vote = 11;</code>
        */
       public int getVote() {
         return vote_;
       }
       /**
-       * <code>optional int32 vote = 23;</code>
+       * <code>optional int32 vote = 11;</code>
        */
       public Builder setVote(int value) {
-        bitField0_ |= 0x00400000;
+        bitField0_ |= 0x00000400;
         vote_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional int32 vote = 23;</code>
+       * <code>optional int32 vote = 11;</code>
        */
       public Builder clearVote() {
-        bitField0_ = (bitField0_ & ~0x00400000);
+        bitField0_ = (bitField0_ & ~0x00000400);
         vote_ = 0;
         onChanged();
         return this;
       }
 
-      // optional string secrecy = 24;
-      private java.lang.Object secrecy_ = "";
+      // optional string priority = 12;
+      private java.lang.Object priority_ = "";
       /**
-       * <code>optional string secrecy = 24;</code>
+       * <code>optional string priority = 12;</code>
        */
-      public boolean hasSecrecy() {
-        return ((bitField0_ & 0x00800000) == 0x00800000);
+      public boolean hasPriority() {
+        return ((bitField0_ & 0x00000800) == 0x00000800);
       }
       /**
-       * <code>optional string secrecy = 24;</code>
+       * <code>optional string priority = 12;</code>
        */
-      public java.lang.String getSecrecy() {
-        java.lang.Object ref = secrecy_;
+      public java.lang.String getPriority() {
+        java.lang.Object ref = priority_;
         if (!(ref instanceof java.lang.String)) {
           java.lang.String s = ((com.google.protobuf.ByteString) ref)
               .toStringUtf8();
-          secrecy_ = s;
+          priority_ = s;
           return s;
         } else {
           return (java.lang.String) ref;
         }
       }
       /**
-       * <code>optional string secrecy = 24;</code>
+       * <code>optional string priority = 12;</code>
        */
       public com.google.protobuf.ByteString
-          getSecrecyBytes() {
-        java.lang.Object ref = secrecy_;
+          getPriorityBytes() {
+        java.lang.Object ref = priority_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
-          secrecy_ = b;
+          priority_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
         }
       }
       /**
-       * <code>optional string secrecy = 24;</code>
+       * <code>optional string priority = 12;</code>
        */
-      public Builder setSecrecy(
+      public Builder setPriority(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00800000;
-        secrecy_ = value;
+  bitField0_ |= 0x00000800;
+        priority_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional string secrecy = 24;</code>
+       * <code>optional string priority = 12;</code>
        */
-      public Builder clearSecrecy() {
-        bitField0_ = (bitField0_ & ~0x00800000);
-        secrecy_ = getDefaultInstance().getSecrecy();
+      public Builder clearPriority() {
+        bitField0_ = (bitField0_ & ~0x00000800);
+        priority_ = getDefaultInstance().getPriority();
         onChanged();
         return this;
       }
       /**
-       * <code>optional string secrecy = 24;</code>
+       * <code>optional string priority = 12;</code>
        */
-      public Builder setSecrecyBytes(
+      public Builder setPriorityBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00800000;
-        secrecy_ = value;
+  bitField0_ |= 0x00000800;
+        priority_ = value;
         onChanged();
         return this;
       }
 
-      // repeated .boa.types.AttachedFile files = 25;
-      private java.util.List<boa.types.Issues.AttachedFile> files_ =
+      // repeated .boa.types.Attachment files = 13;
+      private java.util.List<boa.types.Issues.Attachment> files_ =
         java.util.Collections.emptyList();
       private void ensureFilesIsMutable() {
-        if (!((bitField0_ & 0x01000000) == 0x01000000)) {
-          files_ = new java.util.ArrayList<boa.types.Issues.AttachedFile>(files_);
-          bitField0_ |= 0x01000000;
+        if (!((bitField0_ & 0x00001000) == 0x00001000)) {
+          files_ = new java.util.ArrayList<boa.types.Issues.Attachment>(files_);
+          bitField0_ |= 0x00001000;
          }
       }
 
       private com.google.protobuf.RepeatedFieldBuilder<
-          boa.types.Issues.AttachedFile, boa.types.Issues.AttachedFile.Builder, boa.types.Issues.AttachedFileOrBuilder> filesBuilder_;
+          boa.types.Issues.Attachment, boa.types.Issues.Attachment.Builder, boa.types.Issues.AttachmentOrBuilder> filesBuilder_;
 
       /**
-       * <code>repeated .boa.types.AttachedFile files = 25;</code>
+       * <code>repeated .boa.types.Attachment files = 13;</code>
        */
-      public java.util.List<boa.types.Issues.AttachedFile> getFilesList() {
+      public java.util.List<boa.types.Issues.Attachment> getFilesList() {
         if (filesBuilder_ == null) {
           return java.util.Collections.unmodifiableList(files_);
         } else {
@@ -5464,7 +4059,7 @@ public final class Issues {
         }
       }
       /**
-       * <code>repeated .boa.types.AttachedFile files = 25;</code>
+       * <code>repeated .boa.types.Attachment files = 13;</code>
        */
       public int getFilesCount() {
         if (filesBuilder_ == null) {
@@ -5474,9 +4069,9 @@ public final class Issues {
         }
       }
       /**
-       * <code>repeated .boa.types.AttachedFile files = 25;</code>
+       * <code>repeated .boa.types.Attachment files = 13;</code>
        */
-      public boa.types.Issues.AttachedFile getFiles(int index) {
+      public boa.types.Issues.Attachment getFiles(int index) {
         if (filesBuilder_ == null) {
           return files_.get(index);
         } else {
@@ -5484,10 +4079,10 @@ public final class Issues {
         }
       }
       /**
-       * <code>repeated .boa.types.AttachedFile files = 25;</code>
+       * <code>repeated .boa.types.Attachment files = 13;</code>
        */
       public Builder setFiles(
-          int index, boa.types.Issues.AttachedFile value) {
+          int index, boa.types.Issues.Attachment value) {
         if (filesBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -5501,10 +4096,10 @@ public final class Issues {
         return this;
       }
       /**
-       * <code>repeated .boa.types.AttachedFile files = 25;</code>
+       * <code>repeated .boa.types.Attachment files = 13;</code>
        */
       public Builder setFiles(
-          int index, boa.types.Issues.AttachedFile.Builder builderForValue) {
+          int index, boa.types.Issues.Attachment.Builder builderForValue) {
         if (filesBuilder_ == null) {
           ensureFilesIsMutable();
           files_.set(index, builderForValue.build());
@@ -5515,9 +4110,9 @@ public final class Issues {
         return this;
       }
       /**
-       * <code>repeated .boa.types.AttachedFile files = 25;</code>
+       * <code>repeated .boa.types.Attachment files = 13;</code>
        */
-      public Builder addFiles(boa.types.Issues.AttachedFile value) {
+      public Builder addFiles(boa.types.Issues.Attachment value) {
         if (filesBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -5531,10 +4126,10 @@ public final class Issues {
         return this;
       }
       /**
-       * <code>repeated .boa.types.AttachedFile files = 25;</code>
+       * <code>repeated .boa.types.Attachment files = 13;</code>
        */
       public Builder addFiles(
-          int index, boa.types.Issues.AttachedFile value) {
+          int index, boa.types.Issues.Attachment value) {
         if (filesBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -5548,10 +4143,10 @@ public final class Issues {
         return this;
       }
       /**
-       * <code>repeated .boa.types.AttachedFile files = 25;</code>
+       * <code>repeated .boa.types.Attachment files = 13;</code>
        */
       public Builder addFiles(
-          boa.types.Issues.AttachedFile.Builder builderForValue) {
+          boa.types.Issues.Attachment.Builder builderForValue) {
         if (filesBuilder_ == null) {
           ensureFilesIsMutable();
           files_.add(builderForValue.build());
@@ -5562,10 +4157,10 @@ public final class Issues {
         return this;
       }
       /**
-       * <code>repeated .boa.types.AttachedFile files = 25;</code>
+       * <code>repeated .boa.types.Attachment files = 13;</code>
        */
       public Builder addFiles(
-          int index, boa.types.Issues.AttachedFile.Builder builderForValue) {
+          int index, boa.types.Issues.Attachment.Builder builderForValue) {
         if (filesBuilder_ == null) {
           ensureFilesIsMutable();
           files_.add(index, builderForValue.build());
@@ -5576,10 +4171,10 @@ public final class Issues {
         return this;
       }
       /**
-       * <code>repeated .boa.types.AttachedFile files = 25;</code>
+       * <code>repeated .boa.types.Attachment files = 13;</code>
        */
       public Builder addAllFiles(
-          java.lang.Iterable<? extends boa.types.Issues.AttachedFile> values) {
+          java.lang.Iterable<? extends boa.types.Issues.Attachment> values) {
         if (filesBuilder_ == null) {
           ensureFilesIsMutable();
           super.addAll(values, files_);
@@ -5590,12 +4185,12 @@ public final class Issues {
         return this;
       }
       /**
-       * <code>repeated .boa.types.AttachedFile files = 25;</code>
+       * <code>repeated .boa.types.Attachment files = 13;</code>
        */
       public Builder clearFiles() {
         if (filesBuilder_ == null) {
           files_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x01000000);
+          bitField0_ = (bitField0_ & ~0x00001000);
           onChanged();
         } else {
           filesBuilder_.clear();
@@ -5603,7 +4198,7 @@ public final class Issues {
         return this;
       }
       /**
-       * <code>repeated .boa.types.AttachedFile files = 25;</code>
+       * <code>repeated .boa.types.Attachment files = 13;</code>
        */
       public Builder removeFiles(int index) {
         if (filesBuilder_ == null) {
@@ -5616,16 +4211,16 @@ public final class Issues {
         return this;
       }
       /**
-       * <code>repeated .boa.types.AttachedFile files = 25;</code>
+       * <code>repeated .boa.types.Attachment files = 13;</code>
        */
-      public boa.types.Issues.AttachedFile.Builder getFilesBuilder(
+      public boa.types.Issues.Attachment.Builder getFilesBuilder(
           int index) {
         return getFilesFieldBuilder().getBuilder(index);
       }
       /**
-       * <code>repeated .boa.types.AttachedFile files = 25;</code>
+       * <code>repeated .boa.types.Attachment files = 13;</code>
        */
-      public boa.types.Issues.AttachedFileOrBuilder getFilesOrBuilder(
+      public boa.types.Issues.AttachmentOrBuilder getFilesOrBuilder(
           int index) {
         if (filesBuilder_ == null) {
           return files_.get(index);  } else {
@@ -5633,9 +4228,9 @@ public final class Issues {
         }
       }
       /**
-       * <code>repeated .boa.types.AttachedFile files = 25;</code>
+       * <code>repeated .boa.types.Attachment files = 13;</code>
        */
-      public java.util.List<? extends boa.types.Issues.AttachedFileOrBuilder> 
+      public java.util.List<? extends boa.types.Issues.AttachmentOrBuilder> 
            getFilesOrBuilderList() {
         if (filesBuilder_ != null) {
           return filesBuilder_.getMessageOrBuilderList();
@@ -5644,35 +4239,35 @@ public final class Issues {
         }
       }
       /**
-       * <code>repeated .boa.types.AttachedFile files = 25;</code>
+       * <code>repeated .boa.types.Attachment files = 13;</code>
        */
-      public boa.types.Issues.AttachedFile.Builder addFilesBuilder() {
+      public boa.types.Issues.Attachment.Builder addFilesBuilder() {
         return getFilesFieldBuilder().addBuilder(
-            boa.types.Issues.AttachedFile.getDefaultInstance());
+            boa.types.Issues.Attachment.getDefaultInstance());
       }
       /**
-       * <code>repeated .boa.types.AttachedFile files = 25;</code>
+       * <code>repeated .boa.types.Attachment files = 13;</code>
        */
-      public boa.types.Issues.AttachedFile.Builder addFilesBuilder(
+      public boa.types.Issues.Attachment.Builder addFilesBuilder(
           int index) {
         return getFilesFieldBuilder().addBuilder(
-            index, boa.types.Issues.AttachedFile.getDefaultInstance());
+            index, boa.types.Issues.Attachment.getDefaultInstance());
       }
       /**
-       * <code>repeated .boa.types.AttachedFile files = 25;</code>
+       * <code>repeated .boa.types.Attachment files = 13;</code>
        */
-      public java.util.List<boa.types.Issues.AttachedFile.Builder> 
+      public java.util.List<boa.types.Issues.Attachment.Builder> 
            getFilesBuilderList() {
         return getFilesFieldBuilder().getBuilderList();
       }
       private com.google.protobuf.RepeatedFieldBuilder<
-          boa.types.Issues.AttachedFile, boa.types.Issues.AttachedFile.Builder, boa.types.Issues.AttachedFileOrBuilder> 
+          boa.types.Issues.Attachment, boa.types.Issues.Attachment.Builder, boa.types.Issues.AttachmentOrBuilder> 
           getFilesFieldBuilder() {
         if (filesBuilder_ == null) {
           filesBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              boa.types.Issues.AttachedFile, boa.types.Issues.AttachedFile.Builder, boa.types.Issues.AttachedFileOrBuilder>(
+              boa.types.Issues.Attachment, boa.types.Issues.Attachment.Builder, boa.types.Issues.AttachmentOrBuilder>(
                   files_,
-                  ((bitField0_ & 0x01000000) == 0x01000000),
+                  ((bitField0_ & 0x00001000) == 0x00001000),
                   getParentForChildren(),
                   isClean());
           files_ = null;
@@ -5680,13 +4275,13 @@ public final class Issues {
         return filesBuilder_;
       }
 
-      // repeated .boa.types.IssueComment comments = 26;
+      // repeated .boa.types.IssueComment comments = 14;
       private java.util.List<boa.types.Issues.IssueComment> comments_ =
         java.util.Collections.emptyList();
       private void ensureCommentsIsMutable() {
-        if (!((bitField0_ & 0x02000000) == 0x02000000)) {
+        if (!((bitField0_ & 0x00002000) == 0x00002000)) {
           comments_ = new java.util.ArrayList<boa.types.Issues.IssueComment>(comments_);
-          bitField0_ |= 0x02000000;
+          bitField0_ |= 0x00002000;
          }
       }
 
@@ -5694,7 +4289,24 @@ public final class Issues {
           boa.types.Issues.IssueComment, boa.types.Issues.IssueComment.Builder, boa.types.Issues.IssueCommentOrBuilder> commentsBuilder_;
 
       /**
-       * <code>repeated .boa.types.IssueComment comments = 26;</code>
+       * <code>repeated .boa.types.IssueComment comments = 14;</code>
+       *
+       * <pre>
+       *
+       *optional string component = 15;
+       *optional string resolution = 16;
+       *repeated string duplicated_by = 17;
+       *optional string duplicate_of = 18;
+       *optional string subcomponent = 19;
+       *optional string version = 20;
+       *optional string os = 21;
+       *optional string platform = 22;
+       *optional string milestone = 23;
+       *optional string depends_on = 24;
+       *optional string blocked = 25;
+       *optional string secrecy = 26;
+       *repeated IssueChange changes = 27;
+       * </pre>
        */
       public java.util.List<boa.types.Issues.IssueComment> getCommentsList() {
         if (commentsBuilder_ == null) {
@@ -5704,7 +4316,24 @@ public final class Issues {
         }
       }
       /**
-       * <code>repeated .boa.types.IssueComment comments = 26;</code>
+       * <code>repeated .boa.types.IssueComment comments = 14;</code>
+       *
+       * <pre>
+       *
+       *optional string component = 15;
+       *optional string resolution = 16;
+       *repeated string duplicated_by = 17;
+       *optional string duplicate_of = 18;
+       *optional string subcomponent = 19;
+       *optional string version = 20;
+       *optional string os = 21;
+       *optional string platform = 22;
+       *optional string milestone = 23;
+       *optional string depends_on = 24;
+       *optional string blocked = 25;
+       *optional string secrecy = 26;
+       *repeated IssueChange changes = 27;
+       * </pre>
        */
       public int getCommentsCount() {
         if (commentsBuilder_ == null) {
@@ -5714,7 +4343,24 @@ public final class Issues {
         }
       }
       /**
-       * <code>repeated .boa.types.IssueComment comments = 26;</code>
+       * <code>repeated .boa.types.IssueComment comments = 14;</code>
+       *
+       * <pre>
+       *
+       *optional string component = 15;
+       *optional string resolution = 16;
+       *repeated string duplicated_by = 17;
+       *optional string duplicate_of = 18;
+       *optional string subcomponent = 19;
+       *optional string version = 20;
+       *optional string os = 21;
+       *optional string platform = 22;
+       *optional string milestone = 23;
+       *optional string depends_on = 24;
+       *optional string blocked = 25;
+       *optional string secrecy = 26;
+       *repeated IssueChange changes = 27;
+       * </pre>
        */
       public boa.types.Issues.IssueComment getComments(int index) {
         if (commentsBuilder_ == null) {
@@ -5724,7 +4370,24 @@ public final class Issues {
         }
       }
       /**
-       * <code>repeated .boa.types.IssueComment comments = 26;</code>
+       * <code>repeated .boa.types.IssueComment comments = 14;</code>
+       *
+       * <pre>
+       *
+       *optional string component = 15;
+       *optional string resolution = 16;
+       *repeated string duplicated_by = 17;
+       *optional string duplicate_of = 18;
+       *optional string subcomponent = 19;
+       *optional string version = 20;
+       *optional string os = 21;
+       *optional string platform = 22;
+       *optional string milestone = 23;
+       *optional string depends_on = 24;
+       *optional string blocked = 25;
+       *optional string secrecy = 26;
+       *repeated IssueChange changes = 27;
+       * </pre>
        */
       public Builder setComments(
           int index, boa.types.Issues.IssueComment value) {
@@ -5741,7 +4404,24 @@ public final class Issues {
         return this;
       }
       /**
-       * <code>repeated .boa.types.IssueComment comments = 26;</code>
+       * <code>repeated .boa.types.IssueComment comments = 14;</code>
+       *
+       * <pre>
+       *
+       *optional string component = 15;
+       *optional string resolution = 16;
+       *repeated string duplicated_by = 17;
+       *optional string duplicate_of = 18;
+       *optional string subcomponent = 19;
+       *optional string version = 20;
+       *optional string os = 21;
+       *optional string platform = 22;
+       *optional string milestone = 23;
+       *optional string depends_on = 24;
+       *optional string blocked = 25;
+       *optional string secrecy = 26;
+       *repeated IssueChange changes = 27;
+       * </pre>
        */
       public Builder setComments(
           int index, boa.types.Issues.IssueComment.Builder builderForValue) {
@@ -5755,7 +4435,24 @@ public final class Issues {
         return this;
       }
       /**
-       * <code>repeated .boa.types.IssueComment comments = 26;</code>
+       * <code>repeated .boa.types.IssueComment comments = 14;</code>
+       *
+       * <pre>
+       *
+       *optional string component = 15;
+       *optional string resolution = 16;
+       *repeated string duplicated_by = 17;
+       *optional string duplicate_of = 18;
+       *optional string subcomponent = 19;
+       *optional string version = 20;
+       *optional string os = 21;
+       *optional string platform = 22;
+       *optional string milestone = 23;
+       *optional string depends_on = 24;
+       *optional string blocked = 25;
+       *optional string secrecy = 26;
+       *repeated IssueChange changes = 27;
+       * </pre>
        */
       public Builder addComments(boa.types.Issues.IssueComment value) {
         if (commentsBuilder_ == null) {
@@ -5771,7 +4468,24 @@ public final class Issues {
         return this;
       }
       /**
-       * <code>repeated .boa.types.IssueComment comments = 26;</code>
+       * <code>repeated .boa.types.IssueComment comments = 14;</code>
+       *
+       * <pre>
+       *
+       *optional string component = 15;
+       *optional string resolution = 16;
+       *repeated string duplicated_by = 17;
+       *optional string duplicate_of = 18;
+       *optional string subcomponent = 19;
+       *optional string version = 20;
+       *optional string os = 21;
+       *optional string platform = 22;
+       *optional string milestone = 23;
+       *optional string depends_on = 24;
+       *optional string blocked = 25;
+       *optional string secrecy = 26;
+       *repeated IssueChange changes = 27;
+       * </pre>
        */
       public Builder addComments(
           int index, boa.types.Issues.IssueComment value) {
@@ -5788,7 +4502,24 @@ public final class Issues {
         return this;
       }
       /**
-       * <code>repeated .boa.types.IssueComment comments = 26;</code>
+       * <code>repeated .boa.types.IssueComment comments = 14;</code>
+       *
+       * <pre>
+       *
+       *optional string component = 15;
+       *optional string resolution = 16;
+       *repeated string duplicated_by = 17;
+       *optional string duplicate_of = 18;
+       *optional string subcomponent = 19;
+       *optional string version = 20;
+       *optional string os = 21;
+       *optional string platform = 22;
+       *optional string milestone = 23;
+       *optional string depends_on = 24;
+       *optional string blocked = 25;
+       *optional string secrecy = 26;
+       *repeated IssueChange changes = 27;
+       * </pre>
        */
       public Builder addComments(
           boa.types.Issues.IssueComment.Builder builderForValue) {
@@ -5802,7 +4533,24 @@ public final class Issues {
         return this;
       }
       /**
-       * <code>repeated .boa.types.IssueComment comments = 26;</code>
+       * <code>repeated .boa.types.IssueComment comments = 14;</code>
+       *
+       * <pre>
+       *
+       *optional string component = 15;
+       *optional string resolution = 16;
+       *repeated string duplicated_by = 17;
+       *optional string duplicate_of = 18;
+       *optional string subcomponent = 19;
+       *optional string version = 20;
+       *optional string os = 21;
+       *optional string platform = 22;
+       *optional string milestone = 23;
+       *optional string depends_on = 24;
+       *optional string blocked = 25;
+       *optional string secrecy = 26;
+       *repeated IssueChange changes = 27;
+       * </pre>
        */
       public Builder addComments(
           int index, boa.types.Issues.IssueComment.Builder builderForValue) {
@@ -5816,7 +4564,24 @@ public final class Issues {
         return this;
       }
       /**
-       * <code>repeated .boa.types.IssueComment comments = 26;</code>
+       * <code>repeated .boa.types.IssueComment comments = 14;</code>
+       *
+       * <pre>
+       *
+       *optional string component = 15;
+       *optional string resolution = 16;
+       *repeated string duplicated_by = 17;
+       *optional string duplicate_of = 18;
+       *optional string subcomponent = 19;
+       *optional string version = 20;
+       *optional string os = 21;
+       *optional string platform = 22;
+       *optional string milestone = 23;
+       *optional string depends_on = 24;
+       *optional string blocked = 25;
+       *optional string secrecy = 26;
+       *repeated IssueChange changes = 27;
+       * </pre>
        */
       public Builder addAllComments(
           java.lang.Iterable<? extends boa.types.Issues.IssueComment> values) {
@@ -5830,12 +4595,29 @@ public final class Issues {
         return this;
       }
       /**
-       * <code>repeated .boa.types.IssueComment comments = 26;</code>
+       * <code>repeated .boa.types.IssueComment comments = 14;</code>
+       *
+       * <pre>
+       *
+       *optional string component = 15;
+       *optional string resolution = 16;
+       *repeated string duplicated_by = 17;
+       *optional string duplicate_of = 18;
+       *optional string subcomponent = 19;
+       *optional string version = 20;
+       *optional string os = 21;
+       *optional string platform = 22;
+       *optional string milestone = 23;
+       *optional string depends_on = 24;
+       *optional string blocked = 25;
+       *optional string secrecy = 26;
+       *repeated IssueChange changes = 27;
+       * </pre>
        */
       public Builder clearComments() {
         if (commentsBuilder_ == null) {
           comments_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x02000000);
+          bitField0_ = (bitField0_ & ~0x00002000);
           onChanged();
         } else {
           commentsBuilder_.clear();
@@ -5843,7 +4625,24 @@ public final class Issues {
         return this;
       }
       /**
-       * <code>repeated .boa.types.IssueComment comments = 26;</code>
+       * <code>repeated .boa.types.IssueComment comments = 14;</code>
+       *
+       * <pre>
+       *
+       *optional string component = 15;
+       *optional string resolution = 16;
+       *repeated string duplicated_by = 17;
+       *optional string duplicate_of = 18;
+       *optional string subcomponent = 19;
+       *optional string version = 20;
+       *optional string os = 21;
+       *optional string platform = 22;
+       *optional string milestone = 23;
+       *optional string depends_on = 24;
+       *optional string blocked = 25;
+       *optional string secrecy = 26;
+       *repeated IssueChange changes = 27;
+       * </pre>
        */
       public Builder removeComments(int index) {
         if (commentsBuilder_ == null) {
@@ -5856,14 +4655,48 @@ public final class Issues {
         return this;
       }
       /**
-       * <code>repeated .boa.types.IssueComment comments = 26;</code>
+       * <code>repeated .boa.types.IssueComment comments = 14;</code>
+       *
+       * <pre>
+       *
+       *optional string component = 15;
+       *optional string resolution = 16;
+       *repeated string duplicated_by = 17;
+       *optional string duplicate_of = 18;
+       *optional string subcomponent = 19;
+       *optional string version = 20;
+       *optional string os = 21;
+       *optional string platform = 22;
+       *optional string milestone = 23;
+       *optional string depends_on = 24;
+       *optional string blocked = 25;
+       *optional string secrecy = 26;
+       *repeated IssueChange changes = 27;
+       * </pre>
        */
       public boa.types.Issues.IssueComment.Builder getCommentsBuilder(
           int index) {
         return getCommentsFieldBuilder().getBuilder(index);
       }
       /**
-       * <code>repeated .boa.types.IssueComment comments = 26;</code>
+       * <code>repeated .boa.types.IssueComment comments = 14;</code>
+       *
+       * <pre>
+       *
+       *optional string component = 15;
+       *optional string resolution = 16;
+       *repeated string duplicated_by = 17;
+       *optional string duplicate_of = 18;
+       *optional string subcomponent = 19;
+       *optional string version = 20;
+       *optional string os = 21;
+       *optional string platform = 22;
+       *optional string milestone = 23;
+       *optional string depends_on = 24;
+       *optional string blocked = 25;
+       *optional string secrecy = 26;
+       *repeated IssueChange changes = 27;
+       * </pre>
        */
       public boa.types.Issues.IssueCommentOrBuilder getCommentsOrBuilder(
           int index) {
@@ -5873,7 +4706,24 @@ public final class Issues {
         }
       }
       /**
-       * <code>repeated .boa.types.IssueComment comments = 26;</code>
+       * <code>repeated .boa.types.IssueComment comments = 14;</code>
+       *
+       * <pre>
+       *
+       *optional string component = 15;
+       *optional string resolution = 16;
+       *repeated string duplicated_by = 17;
+       *optional string duplicate_of = 18;
+       *optional string subcomponent = 19;
+       *optional string version = 20;
+       *optional string os = 21;
+       *optional string platform = 22;
+       *optional string milestone = 23;
+       *optional string depends_on = 24;
+       *optional string blocked = 25;
+       *optional string secrecy = 26;
+       *repeated IssueChange changes = 27;
+       * </pre>
        */
       public java.util.List<? extends boa.types.Issues.IssueCommentOrBuilder> 
            getCommentsOrBuilderList() {
@@ -5884,14 +4734,48 @@ public final class Issues {
         }
       }
       /**
-       * <code>repeated .boa.types.IssueComment comments = 26;</code>
+       * <code>repeated .boa.types.IssueComment comments = 14;</code>
+       *
+       * <pre>
+       *
+       *optional string component = 15;
+       *optional string resolution = 16;
+       *repeated string duplicated_by = 17;
+       *optional string duplicate_of = 18;
+       *optional string subcomponent = 19;
+       *optional string version = 20;
+       *optional string os = 21;
+       *optional string platform = 22;
+       *optional string milestone = 23;
+       *optional string depends_on = 24;
+       *optional string blocked = 25;
+       *optional string secrecy = 26;
+       *repeated IssueChange changes = 27;
+       * </pre>
        */
       public boa.types.Issues.IssueComment.Builder addCommentsBuilder() {
         return getCommentsFieldBuilder().addBuilder(
             boa.types.Issues.IssueComment.getDefaultInstance());
       }
       /**
-       * <code>repeated .boa.types.IssueComment comments = 26;</code>
+       * <code>repeated .boa.types.IssueComment comments = 14;</code>
+       *
+       * <pre>
+       *
+       *optional string component = 15;
+       *optional string resolution = 16;
+       *repeated string duplicated_by = 17;
+       *optional string duplicate_of = 18;
+       *optional string subcomponent = 19;
+       *optional string version = 20;
+       *optional string os = 21;
+       *optional string platform = 22;
+       *optional string milestone = 23;
+       *optional string depends_on = 24;
+       *optional string blocked = 25;
+       *optional string secrecy = 26;
+       *repeated IssueChange changes = 27;
+       * </pre>
        */
       public boa.types.Issues.IssueComment.Builder addCommentsBuilder(
           int index) {
@@ -5899,7 +4783,24 @@ public final class Issues {
             index, boa.types.Issues.IssueComment.getDefaultInstance());
       }
       /**
-       * <code>repeated .boa.types.IssueComment comments = 26;</code>
+       * <code>repeated .boa.types.IssueComment comments = 14;</code>
+       *
+       * <pre>
+       *
+       *optional string component = 15;
+       *optional string resolution = 16;
+       *repeated string duplicated_by = 17;
+       *optional string duplicate_of = 18;
+       *optional string subcomponent = 19;
+       *optional string version = 20;
+       *optional string os = 21;
+       *optional string platform = 22;
+       *optional string milestone = 23;
+       *optional string depends_on = 24;
+       *optional string blocked = 25;
+       *optional string secrecy = 26;
+       *repeated IssueChange changes = 27;
+       * </pre>
        */
       public java.util.List<boa.types.Issues.IssueComment.Builder> 
            getCommentsBuilderList() {
@@ -5912,252 +4813,12 @@ public final class Issues {
           commentsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
               boa.types.Issues.IssueComment, boa.types.Issues.IssueComment.Builder, boa.types.Issues.IssueCommentOrBuilder>(
                   comments_,
-                  ((bitField0_ & 0x02000000) == 0x02000000),
+                  ((bitField0_ & 0x00002000) == 0x00002000),
                   getParentForChildren(),
                   isClean());
           comments_ = null;
         }
         return commentsBuilder_;
-      }
-
-      // repeated .boa.types.IssueChange changes = 27;
-      private java.util.List<boa.types.Issues.IssueChange> changes_ =
-        java.util.Collections.emptyList();
-      private void ensureChangesIsMutable() {
-        if (!((bitField0_ & 0x04000000) == 0x04000000)) {
-          changes_ = new java.util.ArrayList<boa.types.Issues.IssueChange>(changes_);
-          bitField0_ |= 0x04000000;
-         }
-      }
-
-      private com.google.protobuf.RepeatedFieldBuilder<
-          boa.types.Issues.IssueChange, boa.types.Issues.IssueChange.Builder, boa.types.Issues.IssueChangeOrBuilder> changesBuilder_;
-
-      /**
-       * <code>repeated .boa.types.IssueChange changes = 27;</code>
-       */
-      public java.util.List<boa.types.Issues.IssueChange> getChangesList() {
-        if (changesBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(changes_);
-        } else {
-          return changesBuilder_.getMessageList();
-        }
-      }
-      /**
-       * <code>repeated .boa.types.IssueChange changes = 27;</code>
-       */
-      public int getChangesCount() {
-        if (changesBuilder_ == null) {
-          return changes_.size();
-        } else {
-          return changesBuilder_.getCount();
-        }
-      }
-      /**
-       * <code>repeated .boa.types.IssueChange changes = 27;</code>
-       */
-      public boa.types.Issues.IssueChange getChanges(int index) {
-        if (changesBuilder_ == null) {
-          return changes_.get(index);
-        } else {
-          return changesBuilder_.getMessage(index);
-        }
-      }
-      /**
-       * <code>repeated .boa.types.IssueChange changes = 27;</code>
-       */
-      public Builder setChanges(
-          int index, boa.types.Issues.IssueChange value) {
-        if (changesBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureChangesIsMutable();
-          changes_.set(index, value);
-          onChanged();
-        } else {
-          changesBuilder_.setMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .boa.types.IssueChange changes = 27;</code>
-       */
-      public Builder setChanges(
-          int index, boa.types.Issues.IssueChange.Builder builderForValue) {
-        if (changesBuilder_ == null) {
-          ensureChangesIsMutable();
-          changes_.set(index, builderForValue.build());
-          onChanged();
-        } else {
-          changesBuilder_.setMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .boa.types.IssueChange changes = 27;</code>
-       */
-      public Builder addChanges(boa.types.Issues.IssueChange value) {
-        if (changesBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureChangesIsMutable();
-          changes_.add(value);
-          onChanged();
-        } else {
-          changesBuilder_.addMessage(value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .boa.types.IssueChange changes = 27;</code>
-       */
-      public Builder addChanges(
-          int index, boa.types.Issues.IssueChange value) {
-        if (changesBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureChangesIsMutable();
-          changes_.add(index, value);
-          onChanged();
-        } else {
-          changesBuilder_.addMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .boa.types.IssueChange changes = 27;</code>
-       */
-      public Builder addChanges(
-          boa.types.Issues.IssueChange.Builder builderForValue) {
-        if (changesBuilder_ == null) {
-          ensureChangesIsMutable();
-          changes_.add(builderForValue.build());
-          onChanged();
-        } else {
-          changesBuilder_.addMessage(builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .boa.types.IssueChange changes = 27;</code>
-       */
-      public Builder addChanges(
-          int index, boa.types.Issues.IssueChange.Builder builderForValue) {
-        if (changesBuilder_ == null) {
-          ensureChangesIsMutable();
-          changes_.add(index, builderForValue.build());
-          onChanged();
-        } else {
-          changesBuilder_.addMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .boa.types.IssueChange changes = 27;</code>
-       */
-      public Builder addAllChanges(
-          java.lang.Iterable<? extends boa.types.Issues.IssueChange> values) {
-        if (changesBuilder_ == null) {
-          ensureChangesIsMutable();
-          super.addAll(values, changes_);
-          onChanged();
-        } else {
-          changesBuilder_.addAllMessages(values);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .boa.types.IssueChange changes = 27;</code>
-       */
-      public Builder clearChanges() {
-        if (changesBuilder_ == null) {
-          changes_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x04000000);
-          onChanged();
-        } else {
-          changesBuilder_.clear();
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .boa.types.IssueChange changes = 27;</code>
-       */
-      public Builder removeChanges(int index) {
-        if (changesBuilder_ == null) {
-          ensureChangesIsMutable();
-          changes_.remove(index);
-          onChanged();
-        } else {
-          changesBuilder_.remove(index);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .boa.types.IssueChange changes = 27;</code>
-       */
-      public boa.types.Issues.IssueChange.Builder getChangesBuilder(
-          int index) {
-        return getChangesFieldBuilder().getBuilder(index);
-      }
-      /**
-       * <code>repeated .boa.types.IssueChange changes = 27;</code>
-       */
-      public boa.types.Issues.IssueChangeOrBuilder getChangesOrBuilder(
-          int index) {
-        if (changesBuilder_ == null) {
-          return changes_.get(index);  } else {
-          return changesBuilder_.getMessageOrBuilder(index);
-        }
-      }
-      /**
-       * <code>repeated .boa.types.IssueChange changes = 27;</code>
-       */
-      public java.util.List<? extends boa.types.Issues.IssueChangeOrBuilder> 
-           getChangesOrBuilderList() {
-        if (changesBuilder_ != null) {
-          return changesBuilder_.getMessageOrBuilderList();
-        } else {
-          return java.util.Collections.unmodifiableList(changes_);
-        }
-      }
-      /**
-       * <code>repeated .boa.types.IssueChange changes = 27;</code>
-       */
-      public boa.types.Issues.IssueChange.Builder addChangesBuilder() {
-        return getChangesFieldBuilder().addBuilder(
-            boa.types.Issues.IssueChange.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .boa.types.IssueChange changes = 27;</code>
-       */
-      public boa.types.Issues.IssueChange.Builder addChangesBuilder(
-          int index) {
-        return getChangesFieldBuilder().addBuilder(
-            index, boa.types.Issues.IssueChange.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .boa.types.IssueChange changes = 27;</code>
-       */
-      public java.util.List<boa.types.Issues.IssueChange.Builder> 
-           getChangesBuilderList() {
-        return getChangesFieldBuilder().getBuilderList();
-      }
-      private com.google.protobuf.RepeatedFieldBuilder<
-          boa.types.Issues.IssueChange, boa.types.Issues.IssueChange.Builder, boa.types.Issues.IssueChangeOrBuilder> 
-          getChangesFieldBuilder() {
-        if (changesBuilder_ == null) {
-          changesBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              boa.types.Issues.IssueChange, boa.types.Issues.IssueChange.Builder, boa.types.Issues.IssueChangeOrBuilder>(
-                  changes_,
-                  ((bitField0_ & 0x04000000) == 0x04000000),
-                  getParentForChildren(),
-                  isClean());
-          changes_ = null;
-        }
-        return changesBuilder_;
       }
 
       // @@protoc_insertion_point(builder_scope:boa.types.Issue)
@@ -6171,97 +4832,107 @@ public final class Issues {
     // @@protoc_insertion_point(class_scope:boa.types.Issue)
   }
 
-  public interface AttachedFileOrBuilder
+  public interface AttachmentOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
-    // required string filename = 1;
+    // required string url = 1;
     /**
-     * <code>required string filename = 1;</code>
-     */
-    boolean hasFilename();
-    /**
-     * <code>required string filename = 1;</code>
-     */
-    java.lang.String getFilename();
-    /**
-     * <code>required string filename = 1;</code>
-     */
-    com.google.protobuf.ByteString
-        getFilenameBytes();
-
-    // required string description = 2;
-    /**
-     * <code>required string description = 2;</code>
-     */
-    boolean hasDescription();
-    /**
-     * <code>required string description = 2;</code>
-     */
-    java.lang.String getDescription();
-    /**
-     * <code>required string description = 2;</code>
-     */
-    com.google.protobuf.ByteString
-        getDescriptionBytes();
-
-    // required string url = 3;
-    /**
-     * <code>required string url = 3;</code>
+     * <code>required string url = 1;</code>
      */
     boolean hasUrl();
     /**
-     * <code>required string url = 3;</code>
+     * <code>required string url = 1;</code>
      */
     java.lang.String getUrl();
     /**
-     * <code>required string url = 3;</code>
+     * <code>required string url = 1;</code>
      */
     com.google.protobuf.ByteString
         getUrlBytes();
 
-    // required int32 date = 4;
+    // required string filename = 2;
     /**
-     * <code>required int32 date = 4;</code>
+     * <code>required string filename = 2;</code>
+     */
+    boolean hasFilename();
+    /**
+     * <code>required string filename = 2;</code>
+     */
+    java.lang.String getFilename();
+    /**
+     * <code>required string filename = 2;</code>
+     */
+    com.google.protobuf.ByteString
+        getFilenameBytes();
+
+    // optional uint64 size = 3;
+    /**
+     * <code>optional uint64 size = 3;</code>
+     */
+    boolean hasSize();
+    /**
+     * <code>optional uint64 size = 3;</code>
+     */
+    long getSize();
+
+    // optional uint64 date = 4;
+    /**
+     * <code>optional uint64 date = 4;</code>
      */
     boolean hasDate();
     /**
-     * <code>required int32 date = 4;</code>
+     * <code>optional uint64 date = 4;</code>
      */
-    int getDate();
+    long getDate();
 
-    // required .boa.types.Person author = 5;
+    // optional .boa.types.Person author = 5;
     /**
-     * <code>required .boa.types.Person author = 5;</code>
+     * <code>optional .boa.types.Person author = 5;</code>
      */
     boolean hasAuthor();
     /**
-     * <code>required .boa.types.Person author = 5;</code>
+     * <code>optional .boa.types.Person author = 5;</code>
      */
     boa.types.Shared.Person getAuthor();
     /**
-     * <code>required .boa.types.Person author = 5;</code>
+     * <code>optional .boa.types.Person author = 5;</code>
      */
     boa.types.Shared.PersonOrBuilder getAuthorOrBuilder();
+
+    // optional string description = 6;
+    /**
+     * <code>optional string description = 6;</code>
+     */
+    boolean hasDescription();
+    /**
+     * <code>optional string description = 6;</code>
+     */
+    java.lang.String getDescription();
+    /**
+     * <code>optional string description = 6;</code>
+     */
+    com.google.protobuf.ByteString
+        getDescriptionBytes();
   }
   /**
-   * Protobuf type {@code boa.types.AttachedFile}
+   * Protobuf type {@code boa.types.Attachment}
    */
-  public static final class AttachedFile extends
+  public static final class Attachment extends
       com.google.protobuf.GeneratedMessage
-      implements AttachedFileOrBuilder {
-    // Use AttachedFile.newBuilder() to construct.
-    private AttachedFile(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      implements AttachmentOrBuilder {
+    // Use Attachment.newBuilder() to construct.
+    private Attachment(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
       this.unknownFields = builder.getUnknownFields();
     }
-    private AttachedFile(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+    private Attachment(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
 
-    private static final AttachedFile defaultInstance;
-    public static AttachedFile getDefaultInstance() {
+    private static final Attachment defaultInstance;
+    public static Attachment getDefaultInstance() {
       return defaultInstance;
     }
 
-    public AttachedFile getDefaultInstanceForType() {
+    public Attachment getDefaultInstanceForType() {
       return defaultInstance;
     }
 
@@ -6271,7 +4942,7 @@ public final class Issues {
         getUnknownFields() {
       return this.unknownFields;
     }
-    private AttachedFile(
+    private Attachment(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -6296,22 +4967,22 @@ public final class Issues {
             }
             case 10: {
               bitField0_ |= 0x00000001;
-              filename_ = input.readBytes();
+              url_ = input.readBytes();
               break;
             }
             case 18: {
               bitField0_ |= 0x00000002;
-              description_ = input.readBytes();
+              filename_ = input.readBytes();
               break;
             }
-            case 26: {
+            case 24: {
               bitField0_ |= 0x00000004;
-              url_ = input.readBytes();
+              size_ = input.readUInt64();
               break;
             }
             case 32: {
               bitField0_ |= 0x00000008;
-              date_ = input.readInt32();
+              date_ = input.readUInt64();
               break;
             }
             case 42: {
@@ -6325,6 +4996,11 @@ public final class Issues {
                 author_ = subBuilder.buildPartial();
               }
               bitField0_ |= 0x00000010;
+              break;
+            }
+            case 50: {
+              bitField0_ |= 0x00000020;
+              description_ = input.readBytes();
               break;
             }
           }
@@ -6341,129 +5017,43 @@ public final class Issues {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return boa.types.Issues.internal_static_boa_types_AttachedFile_descriptor;
+      return boa.types.Issues.internal_static_boa_types_Attachment_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return boa.types.Issues.internal_static_boa_types_AttachedFile_fieldAccessorTable
+      return boa.types.Issues.internal_static_boa_types_Attachment_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              boa.types.Issues.AttachedFile.class, boa.types.Issues.AttachedFile.Builder.class);
+              boa.types.Issues.Attachment.class, boa.types.Issues.Attachment.Builder.class);
     }
 
-    public static com.google.protobuf.Parser<AttachedFile> PARSER =
-        new com.google.protobuf.AbstractParser<AttachedFile>() {
-      public AttachedFile parsePartialFrom(
+    public static com.google.protobuf.Parser<Attachment> PARSER =
+        new com.google.protobuf.AbstractParser<Attachment>() {
+      public Attachment parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new AttachedFile(input, extensionRegistry);
+        return new Attachment(input, extensionRegistry);
       }
     };
 
     @java.lang.Override
-    public com.google.protobuf.Parser<AttachedFile> getParserForType() {
+    public com.google.protobuf.Parser<Attachment> getParserForType() {
       return PARSER;
     }
 
     private int bitField0_;
-    // required string filename = 1;
-    public static final int FILENAME_FIELD_NUMBER = 1;
-    private java.lang.Object filename_;
+    // required string url = 1;
+    public static final int URL_FIELD_NUMBER = 1;
+    private java.lang.Object url_;
     /**
-     * <code>required string filename = 1;</code>
+     * <code>required string url = 1;</code>
      */
-    public boolean hasFilename() {
+    public boolean hasUrl() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
-     * <code>required string filename = 1;</code>
-     */
-    public java.lang.String getFilename() {
-      java.lang.Object ref = filename_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          filename_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>required string filename = 1;</code>
-     */
-    public com.google.protobuf.ByteString
-        getFilenameBytes() {
-      java.lang.Object ref = filename_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        filename_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    // required string description = 2;
-    public static final int DESCRIPTION_FIELD_NUMBER = 2;
-    private java.lang.Object description_;
-    /**
-     * <code>required string description = 2;</code>
-     */
-    public boolean hasDescription() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    /**
-     * <code>required string description = 2;</code>
-     */
-    public java.lang.String getDescription() {
-      java.lang.Object ref = description_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          description_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>required string description = 2;</code>
-     */
-    public com.google.protobuf.ByteString
-        getDescriptionBytes() {
-      java.lang.Object ref = description_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        description_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    // required string url = 3;
-    public static final int URL_FIELD_NUMBER = 3;
-    private java.lang.Object url_;
-    /**
-     * <code>required string url = 3;</code>
-     */
-    public boolean hasUrl() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
-    }
-    /**
-     * <code>required string url = 3;</code>
+     * <code>required string url = 1;</code>
      */
     public java.lang.String getUrl() {
       java.lang.Object ref = url_;
@@ -6480,7 +5070,7 @@ public final class Issues {
       }
     }
     /**
-     * <code>required string url = 3;</code>
+     * <code>required string url = 1;</code>
      */
     public com.google.protobuf.ByteString
         getUrlBytes() {
@@ -6496,79 +5086,172 @@ public final class Issues {
       }
     }
 
-    // required int32 date = 4;
-    public static final int DATE_FIELD_NUMBER = 4;
-    private int date_;
+    // required string filename = 2;
+    public static final int FILENAME_FIELD_NUMBER = 2;
+    private java.lang.Object filename_;
     /**
-     * <code>required int32 date = 4;</code>
+     * <code>required string filename = 2;</code>
+     */
+    public boolean hasFilename() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>required string filename = 2;</code>
+     */
+    public java.lang.String getFilename() {
+      java.lang.Object ref = filename_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          filename_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string filename = 2;</code>
+     */
+    public com.google.protobuf.ByteString
+        getFilenameBytes() {
+      java.lang.Object ref = filename_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        filename_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    // optional uint64 size = 3;
+    public static final int SIZE_FIELD_NUMBER = 3;
+    private long size_;
+    /**
+     * <code>optional uint64 size = 3;</code>
+     */
+    public boolean hasSize() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>optional uint64 size = 3;</code>
+     */
+    public long getSize() {
+      return size_;
+    }
+
+    // optional uint64 date = 4;
+    public static final int DATE_FIELD_NUMBER = 4;
+    private long date_;
+    /**
+     * <code>optional uint64 date = 4;</code>
      */
     public boolean hasDate() {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
-     * <code>required int32 date = 4;</code>
+     * <code>optional uint64 date = 4;</code>
      */
-    public int getDate() {
+    public long getDate() {
       return date_;
     }
 
-    // required .boa.types.Person author = 5;
+    // optional .boa.types.Person author = 5;
     public static final int AUTHOR_FIELD_NUMBER = 5;
     private boa.types.Shared.Person author_;
     /**
-     * <code>required .boa.types.Person author = 5;</code>
+     * <code>optional .boa.types.Person author = 5;</code>
      */
     public boolean hasAuthor() {
       return ((bitField0_ & 0x00000010) == 0x00000010);
     }
     /**
-     * <code>required .boa.types.Person author = 5;</code>
+     * <code>optional .boa.types.Person author = 5;</code>
      */
     public boa.types.Shared.Person getAuthor() {
       return author_;
     }
     /**
-     * <code>required .boa.types.Person author = 5;</code>
+     * <code>optional .boa.types.Person author = 5;</code>
      */
     public boa.types.Shared.PersonOrBuilder getAuthorOrBuilder() {
       return author_;
     }
 
+    // optional string description = 6;
+    public static final int DESCRIPTION_FIELD_NUMBER = 6;
+    private java.lang.Object description_;
+    /**
+     * <code>optional string description = 6;</code>
+     */
+    public boolean hasDescription() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    /**
+     * <code>optional string description = 6;</code>
+     */
+    public java.lang.String getDescription() {
+      java.lang.Object ref = description_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          description_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string description = 6;</code>
+     */
+    public com.google.protobuf.ByteString
+        getDescriptionBytes() {
+      java.lang.Object ref = description_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        description_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private void initFields() {
-      filename_ = "";
-      description_ = "";
       url_ = "";
-      date_ = 0;
+      filename_ = "";
+      size_ = 0L;
+      date_ = 0L;
       author_ = boa.types.Shared.Person.getDefaultInstance();
+      description_ = "";
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized != -1) return isInitialized == 1;
 
-      if (!hasFilename()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasDescription()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
       if (!hasUrl()) {
         memoizedIsInitialized = 0;
         return false;
       }
-      if (!hasDate()) {
+      if (!hasFilename()) {
         memoizedIsInitialized = 0;
         return false;
       }
-      if (!hasAuthor()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!getAuthor().isInitialized()) {
-        memoizedIsInitialized = 0;
-        return false;
+      if (hasAuthor()) {
+        if (!getAuthor().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
       }
       memoizedIsInitialized = 1;
       return true;
@@ -6578,19 +5261,22 @@ public final class Issues {
                         throws java.io.IOException {
       getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeBytes(1, getFilenameBytes());
+        output.writeBytes(1, getUrlBytes());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeBytes(2, getDescriptionBytes());
+        output.writeBytes(2, getFilenameBytes());
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeBytes(3, getUrlBytes());
+        output.writeUInt64(3, size_);
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeInt32(4, date_);
+        output.writeUInt64(4, date_);
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         output.writeMessage(5, author_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        output.writeBytes(6, getDescriptionBytes());
       }
       getUnknownFields().writeTo(output);
     }
@@ -6603,23 +5289,27 @@ public final class Issues {
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(1, getFilenameBytes());
+          .computeBytesSize(1, getUrlBytes());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(2, getDescriptionBytes());
+          .computeBytesSize(2, getFilenameBytes());
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(3, getUrlBytes());
+          .computeUInt64Size(3, size_);
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(4, date_);
+          .computeUInt64Size(4, date_);
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(5, author_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(6, getDescriptionBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -6633,53 +5323,53 @@ public final class Issues {
       return super.writeReplace();
     }
 
-    public static boa.types.Issues.AttachedFile parseFrom(
+    public static boa.types.Issues.Attachment parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static boa.types.Issues.AttachedFile parseFrom(
+    public static boa.types.Issues.Attachment parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static boa.types.Issues.AttachedFile parseFrom(byte[] data)
+    public static boa.types.Issues.Attachment parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static boa.types.Issues.AttachedFile parseFrom(
+    public static boa.types.Issues.Attachment parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static boa.types.Issues.AttachedFile parseFrom(java.io.InputStream input)
+    public static boa.types.Issues.Attachment parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
-    public static boa.types.Issues.AttachedFile parseFrom(
+    public static boa.types.Issues.Attachment parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return PARSER.parseFrom(input, extensionRegistry);
     }
-    public static boa.types.Issues.AttachedFile parseDelimitedFrom(java.io.InputStream input)
+    public static boa.types.Issues.Attachment parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input);
     }
-    public static boa.types.Issues.AttachedFile parseDelimitedFrom(
+    public static boa.types.Issues.Attachment parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input, extensionRegistry);
     }
-    public static boa.types.Issues.AttachedFile parseFrom(
+    public static boa.types.Issues.Attachment parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
-    public static boa.types.Issues.AttachedFile parseFrom(
+    public static boa.types.Issues.Attachment parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -6688,7 +5378,7 @@ public final class Issues {
 
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(boa.types.Issues.AttachedFile prototype) {
+    public static Builder newBuilder(boa.types.Issues.Attachment prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
@@ -6700,24 +5390,24 @@ public final class Issues {
       return builder;
     }
     /**
-     * Protobuf type {@code boa.types.AttachedFile}
+     * Protobuf type {@code boa.types.Attachment}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements boa.types.Issues.AttachedFileOrBuilder {
+       implements boa.types.Issues.AttachmentOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return boa.types.Issues.internal_static_boa_types_AttachedFile_descriptor;
+        return boa.types.Issues.internal_static_boa_types_Attachment_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return boa.types.Issues.internal_static_boa_types_AttachedFile_fieldAccessorTable
+        return boa.types.Issues.internal_static_boa_types_Attachment_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                boa.types.Issues.AttachedFile.class, boa.types.Issues.AttachedFile.Builder.class);
+                boa.types.Issues.Attachment.class, boa.types.Issues.Attachment.Builder.class);
       }
 
-      // Construct using boa.types.Issues.AttachedFile.newBuilder()
+      // Construct using boa.types.Issues.Attachment.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -6738,13 +5428,13 @@ public final class Issues {
 
       public Builder clear() {
         super.clear();
-        filename_ = "";
-        bitField0_ = (bitField0_ & ~0x00000001);
-        description_ = "";
-        bitField0_ = (bitField0_ & ~0x00000002);
         url_ = "";
+        bitField0_ = (bitField0_ & ~0x00000001);
+        filename_ = "";
+        bitField0_ = (bitField0_ & ~0x00000002);
+        size_ = 0L;
         bitField0_ = (bitField0_ & ~0x00000004);
-        date_ = 0;
+        date_ = 0L;
         bitField0_ = (bitField0_ & ~0x00000008);
         if (authorBuilder_ == null) {
           author_ = boa.types.Shared.Person.getDefaultInstance();
@@ -6752,6 +5442,8 @@ public final class Issues {
           authorBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000010);
+        description_ = "";
+        bitField0_ = (bitField0_ & ~0x00000020);
         return this;
       }
 
@@ -6761,37 +5453,37 @@ public final class Issues {
 
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return boa.types.Issues.internal_static_boa_types_AttachedFile_descriptor;
+        return boa.types.Issues.internal_static_boa_types_Attachment_descriptor;
       }
 
-      public boa.types.Issues.AttachedFile getDefaultInstanceForType() {
-        return boa.types.Issues.AttachedFile.getDefaultInstance();
+      public boa.types.Issues.Attachment getDefaultInstanceForType() {
+        return boa.types.Issues.Attachment.getDefaultInstance();
       }
 
-      public boa.types.Issues.AttachedFile build() {
-        boa.types.Issues.AttachedFile result = buildPartial();
+      public boa.types.Issues.Attachment build() {
+        boa.types.Issues.Attachment result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public boa.types.Issues.AttachedFile buildPartial() {
-        boa.types.Issues.AttachedFile result = new boa.types.Issues.AttachedFile(this);
+      public boa.types.Issues.Attachment buildPartial() {
+        boa.types.Issues.Attachment result = new boa.types.Issues.Attachment(this);
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
           to_bitField0_ |= 0x00000001;
         }
-        result.filename_ = filename_;
+        result.url_ = url_;
         if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
           to_bitField0_ |= 0x00000002;
         }
-        result.description_ = description_;
+        result.filename_ = filename_;
         if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
           to_bitField0_ |= 0x00000004;
         }
-        result.url_ = url_;
+        result.size_ = size_;
         if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
           to_bitField0_ |= 0x00000008;
         }
@@ -6804,36 +5496,38 @@ public final class Issues {
         } else {
           result.author_ = authorBuilder_.build();
         }
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+          to_bitField0_ |= 0x00000020;
+        }
+        result.description_ = description_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
       }
 
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof boa.types.Issues.AttachedFile) {
-          return mergeFrom((boa.types.Issues.AttachedFile)other);
+        if (other instanceof boa.types.Issues.Attachment) {
+          return mergeFrom((boa.types.Issues.Attachment)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(boa.types.Issues.AttachedFile other) {
-        if (other == boa.types.Issues.AttachedFile.getDefaultInstance()) return this;
-        if (other.hasFilename()) {
+      public Builder mergeFrom(boa.types.Issues.Attachment other) {
+        if (other == boa.types.Issues.Attachment.getDefaultInstance()) return this;
+        if (other.hasUrl()) {
           bitField0_ |= 0x00000001;
+          url_ = other.url_;
+          onChanged();
+        }
+        if (other.hasFilename()) {
+          bitField0_ |= 0x00000002;
           filename_ = other.filename_;
           onChanged();
         }
-        if (other.hasDescription()) {
-          bitField0_ |= 0x00000002;
-          description_ = other.description_;
-          onChanged();
-        }
-        if (other.hasUrl()) {
-          bitField0_ |= 0x00000004;
-          url_ = other.url_;
-          onChanged();
+        if (other.hasSize()) {
+          setSize(other.getSize());
         }
         if (other.hasDate()) {
           setDate(other.getDate());
@@ -6841,34 +5535,29 @@ public final class Issues {
         if (other.hasAuthor()) {
           mergeAuthor(other.getAuthor());
         }
+        if (other.hasDescription()) {
+          bitField0_ |= 0x00000020;
+          description_ = other.description_;
+          onChanged();
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
 
       public final boolean isInitialized() {
-        if (!hasFilename()) {
-          
-          return false;
-        }
-        if (!hasDescription()) {
-          
-          return false;
-        }
         if (!hasUrl()) {
           
           return false;
         }
-        if (!hasDate()) {
+        if (!hasFilename()) {
           
           return false;
         }
-        if (!hasAuthor()) {
-          
-          return false;
-        }
-        if (!getAuthor().isInitialized()) {
-          
-          return false;
+        if (hasAuthor()) {
+          if (!getAuthor().isInitialized()) {
+            
+            return false;
+          }
         }
         return true;
       }
@@ -6877,11 +5566,11 @@ public final class Issues {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        boa.types.Issues.AttachedFile parsedMessage = null;
+        boa.types.Issues.Attachment parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (boa.types.Issues.AttachedFile) e.getUnfinishedMessage();
+          parsedMessage = (boa.types.Issues.Attachment) e.getUnfinishedMessage();
           throw e;
         } finally {
           if (parsedMessage != null) {
@@ -6892,164 +5581,16 @@ public final class Issues {
       }
       private int bitField0_;
 
-      // required string filename = 1;
-      private java.lang.Object filename_ = "";
+      // required string url = 1;
+      private java.lang.Object url_ = "";
       /**
-       * <code>required string filename = 1;</code>
+       * <code>required string url = 1;</code>
        */
-      public boolean hasFilename() {
+      public boolean hasUrl() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
-       * <code>required string filename = 1;</code>
-       */
-      public java.lang.String getFilename() {
-        java.lang.Object ref = filename_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          filename_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>required string filename = 1;</code>
-       */
-      public com.google.protobuf.ByteString
-          getFilenameBytes() {
-        java.lang.Object ref = filename_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          filename_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>required string filename = 1;</code>
-       */
-      public Builder setFilename(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
-        filename_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string filename = 1;</code>
-       */
-      public Builder clearFilename() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        filename_ = getDefaultInstance().getFilename();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string filename = 1;</code>
-       */
-      public Builder setFilenameBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
-        filename_ = value;
-        onChanged();
-        return this;
-      }
-
-      // required string description = 2;
-      private java.lang.Object description_ = "";
-      /**
-       * <code>required string description = 2;</code>
-       */
-      public boolean hasDescription() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      /**
-       * <code>required string description = 2;</code>
-       */
-      public java.lang.String getDescription() {
-        java.lang.Object ref = description_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          description_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>required string description = 2;</code>
-       */
-      public com.google.protobuf.ByteString
-          getDescriptionBytes() {
-        java.lang.Object ref = description_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          description_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>required string description = 2;</code>
-       */
-      public Builder setDescription(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000002;
-        description_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string description = 2;</code>
-       */
-      public Builder clearDescription() {
-        bitField0_ = (bitField0_ & ~0x00000002);
-        description_ = getDefaultInstance().getDescription();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string description = 2;</code>
-       */
-      public Builder setDescriptionBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000002;
-        description_ = value;
-        onChanged();
-        return this;
-      }
-
-      // required string url = 3;
-      private java.lang.Object url_ = "";
-      /**
-       * <code>required string url = 3;</code>
-       */
-      public boolean hasUrl() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
-      }
-      /**
-       * <code>required string url = 3;</code>
+       * <code>required string url = 1;</code>
        */
       public java.lang.String getUrl() {
         java.lang.Object ref = url_;
@@ -7063,7 +5604,7 @@ public final class Issues {
         }
       }
       /**
-       * <code>required string url = 3;</code>
+       * <code>required string url = 1;</code>
        */
       public com.google.protobuf.ByteString
           getUrlBytes() {
@@ -7079,86 +5620,193 @@ public final class Issues {
         }
       }
       /**
-       * <code>required string url = 3;</code>
+       * <code>required string url = 1;</code>
        */
       public Builder setUrl(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000004;
+  bitField0_ |= 0x00000001;
         url_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required string url = 3;</code>
+       * <code>required string url = 1;</code>
        */
       public Builder clearUrl() {
-        bitField0_ = (bitField0_ & ~0x00000004);
+        bitField0_ = (bitField0_ & ~0x00000001);
         url_ = getDefaultInstance().getUrl();
         onChanged();
         return this;
       }
       /**
-       * <code>required string url = 3;</code>
+       * <code>required string url = 1;</code>
        */
       public Builder setUrlBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000004;
+  bitField0_ |= 0x00000001;
         url_ = value;
         onChanged();
         return this;
       }
 
-      // required int32 date = 4;
-      private int date_ ;
+      // required string filename = 2;
+      private java.lang.Object filename_ = "";
       /**
-       * <code>required int32 date = 4;</code>
+       * <code>required string filename = 2;</code>
+       */
+      public boolean hasFilename() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>required string filename = 2;</code>
+       */
+      public java.lang.String getFilename() {
+        java.lang.Object ref = filename_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          filename_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>required string filename = 2;</code>
+       */
+      public com.google.protobuf.ByteString
+          getFilenameBytes() {
+        java.lang.Object ref = filename_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          filename_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string filename = 2;</code>
+       */
+      public Builder setFilename(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        filename_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string filename = 2;</code>
+       */
+      public Builder clearFilename() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        filename_ = getDefaultInstance().getFilename();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string filename = 2;</code>
+       */
+      public Builder setFilenameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        filename_ = value;
+        onChanged();
+        return this;
+      }
+
+      // optional uint64 size = 3;
+      private long size_ ;
+      /**
+       * <code>optional uint64 size = 3;</code>
+       */
+      public boolean hasSize() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>optional uint64 size = 3;</code>
+       */
+      public long getSize() {
+        return size_;
+      }
+      /**
+       * <code>optional uint64 size = 3;</code>
+       */
+      public Builder setSize(long value) {
+        bitField0_ |= 0x00000004;
+        size_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional uint64 size = 3;</code>
+       */
+      public Builder clearSize() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        size_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      // optional uint64 date = 4;
+      private long date_ ;
+      /**
+       * <code>optional uint64 date = 4;</code>
        */
       public boolean hasDate() {
         return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       /**
-       * <code>required int32 date = 4;</code>
+       * <code>optional uint64 date = 4;</code>
        */
-      public int getDate() {
+      public long getDate() {
         return date_;
       }
       /**
-       * <code>required int32 date = 4;</code>
+       * <code>optional uint64 date = 4;</code>
        */
-      public Builder setDate(int value) {
+      public Builder setDate(long value) {
         bitField0_ |= 0x00000008;
         date_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required int32 date = 4;</code>
+       * <code>optional uint64 date = 4;</code>
        */
       public Builder clearDate() {
         bitField0_ = (bitField0_ & ~0x00000008);
-        date_ = 0;
+        date_ = 0L;
         onChanged();
         return this;
       }
 
-      // required .boa.types.Person author = 5;
+      // optional .boa.types.Person author = 5;
       private boa.types.Shared.Person author_ = boa.types.Shared.Person.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           boa.types.Shared.Person, boa.types.Shared.Person.Builder, boa.types.Shared.PersonOrBuilder> authorBuilder_;
       /**
-       * <code>required .boa.types.Person author = 5;</code>
+       * <code>optional .boa.types.Person author = 5;</code>
        */
       public boolean hasAuthor() {
         return ((bitField0_ & 0x00000010) == 0x00000010);
       }
       /**
-       * <code>required .boa.types.Person author = 5;</code>
+       * <code>optional .boa.types.Person author = 5;</code>
        */
       public boa.types.Shared.Person getAuthor() {
         if (authorBuilder_ == null) {
@@ -7168,7 +5816,7 @@ public final class Issues {
         }
       }
       /**
-       * <code>required .boa.types.Person author = 5;</code>
+       * <code>optional .boa.types.Person author = 5;</code>
        */
       public Builder setAuthor(boa.types.Shared.Person value) {
         if (authorBuilder_ == null) {
@@ -7184,7 +5832,7 @@ public final class Issues {
         return this;
       }
       /**
-       * <code>required .boa.types.Person author = 5;</code>
+       * <code>optional .boa.types.Person author = 5;</code>
        */
       public Builder setAuthor(
           boa.types.Shared.Person.Builder builderForValue) {
@@ -7198,7 +5846,7 @@ public final class Issues {
         return this;
       }
       /**
-       * <code>required .boa.types.Person author = 5;</code>
+       * <code>optional .boa.types.Person author = 5;</code>
        */
       public Builder mergeAuthor(boa.types.Shared.Person value) {
         if (authorBuilder_ == null) {
@@ -7217,7 +5865,7 @@ public final class Issues {
         return this;
       }
       /**
-       * <code>required .boa.types.Person author = 5;</code>
+       * <code>optional .boa.types.Person author = 5;</code>
        */
       public Builder clearAuthor() {
         if (authorBuilder_ == null) {
@@ -7230,7 +5878,7 @@ public final class Issues {
         return this;
       }
       /**
-       * <code>required .boa.types.Person author = 5;</code>
+       * <code>optional .boa.types.Person author = 5;</code>
        */
       public boa.types.Shared.Person.Builder getAuthorBuilder() {
         bitField0_ |= 0x00000010;
@@ -7238,7 +5886,7 @@ public final class Issues {
         return getAuthorFieldBuilder().getBuilder();
       }
       /**
-       * <code>required .boa.types.Person author = 5;</code>
+       * <code>optional .boa.types.Person author = 5;</code>
        */
       public boa.types.Shared.PersonOrBuilder getAuthorOrBuilder() {
         if (authorBuilder_ != null) {
@@ -7248,7 +5896,7 @@ public final class Issues {
         }
       }
       /**
-       * <code>required .boa.types.Person author = 5;</code>
+       * <code>optional .boa.types.Person author = 5;</code>
        */
       private com.google.protobuf.SingleFieldBuilder<
           boa.types.Shared.Person, boa.types.Shared.Person.Builder, boa.types.Shared.PersonOrBuilder> 
@@ -7264,15 +5912,89 @@ public final class Issues {
         return authorBuilder_;
       }
 
-      // @@protoc_insertion_point(builder_scope:boa.types.AttachedFile)
+      // optional string description = 6;
+      private java.lang.Object description_ = "";
+      /**
+       * <code>optional string description = 6;</code>
+       */
+      public boolean hasDescription() {
+        return ((bitField0_ & 0x00000020) == 0x00000020);
+      }
+      /**
+       * <code>optional string description = 6;</code>
+       */
+      public java.lang.String getDescription() {
+        java.lang.Object ref = description_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          description_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string description = 6;</code>
+       */
+      public com.google.protobuf.ByteString
+          getDescriptionBytes() {
+        java.lang.Object ref = description_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          description_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string description = 6;</code>
+       */
+      public Builder setDescription(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000020;
+        description_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string description = 6;</code>
+       */
+      public Builder clearDescription() {
+        bitField0_ = (bitField0_ & ~0x00000020);
+        description_ = getDefaultInstance().getDescription();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string description = 6;</code>
+       */
+      public Builder setDescriptionBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000020;
+        description_ = value;
+        onChanged();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:boa.types.Attachment)
     }
 
     static {
-      defaultInstance = new AttachedFile(true);
+      defaultInstance = new Attachment(true);
       defaultInstance.initFields();
     }
 
-    // @@protoc_insertion_point(class_scope:boa.types.AttachedFile)
+    // @@protoc_insertion_point(class_scope:boa.types.Attachment)
   }
 
   public interface IssueCommentOrBuilder
@@ -7293,15 +6015,15 @@ public final class Issues {
     com.google.protobuf.ByteString
         getIdBytes();
 
-    // required int32 date = 2;
+    // required uint64 date = 2;
     /**
-     * <code>required int32 date = 2;</code>
+     * <code>required uint64 date = 2;</code>
      */
     boolean hasDate();
     /**
-     * <code>required int32 date = 2;</code>
+     * <code>required uint64 date = 2;</code>
      */
-    int getDate();
+    long getDate();
 
     // required .boa.types.Person author = 3;
     /**
@@ -7331,6 +6053,31 @@ public final class Issues {
      */
     com.google.protobuf.ByteString
         getDescriptionBytes();
+
+    // repeated .boa.types.Attachment files = 5;
+    /**
+     * <code>repeated .boa.types.Attachment files = 5;</code>
+     */
+    java.util.List<boa.types.Issues.Attachment> 
+        getFilesList();
+    /**
+     * <code>repeated .boa.types.Attachment files = 5;</code>
+     */
+    boa.types.Issues.Attachment getFiles(int index);
+    /**
+     * <code>repeated .boa.types.Attachment files = 5;</code>
+     */
+    int getFilesCount();
+    /**
+     * <code>repeated .boa.types.Attachment files = 5;</code>
+     */
+    java.util.List<? extends boa.types.Issues.AttachmentOrBuilder> 
+        getFilesOrBuilderList();
+    /**
+     * <code>repeated .boa.types.Attachment files = 5;</code>
+     */
+    boa.types.Issues.AttachmentOrBuilder getFilesOrBuilder(
+        int index);
   }
   /**
    * Protobuf type {@code boa.types.IssueComment}
@@ -7390,7 +6137,7 @@ public final class Issues {
             }
             case 16: {
               bitField0_ |= 0x00000002;
-              date_ = input.readInt32();
+              date_ = input.readUInt64();
               break;
             }
             case 26: {
@@ -7411,6 +6158,14 @@ public final class Issues {
               description_ = input.readBytes();
               break;
             }
+            case 42: {
+              if (!((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
+                files_ = new java.util.ArrayList<boa.types.Issues.Attachment>();
+                mutable_bitField0_ |= 0x00000010;
+              }
+              files_.add(input.readMessage(boa.types.Issues.Attachment.PARSER, extensionRegistry));
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -7419,6 +6174,9 @@ public final class Issues {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e.getMessage()).setUnfinishedMessage(this);
       } finally {
+        if (((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
+          files_ = java.util.Collections.unmodifiableList(files_);
+        }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
@@ -7494,19 +6252,19 @@ public final class Issues {
       }
     }
 
-    // required int32 date = 2;
+    // required uint64 date = 2;
     public static final int DATE_FIELD_NUMBER = 2;
-    private int date_;
+    private long date_;
     /**
-     * <code>required int32 date = 2;</code>
+     * <code>required uint64 date = 2;</code>
      */
     public boolean hasDate() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
-     * <code>required int32 date = 2;</code>
+     * <code>required uint64 date = 2;</code>
      */
-    public int getDate() {
+    public long getDate() {
       return date_;
     }
 
@@ -7575,11 +6333,48 @@ public final class Issues {
       }
     }
 
+    // repeated .boa.types.Attachment files = 5;
+    public static final int FILES_FIELD_NUMBER = 5;
+    private java.util.List<boa.types.Issues.Attachment> files_;
+    /**
+     * <code>repeated .boa.types.Attachment files = 5;</code>
+     */
+    public java.util.List<boa.types.Issues.Attachment> getFilesList() {
+      return files_;
+    }
+    /**
+     * <code>repeated .boa.types.Attachment files = 5;</code>
+     */
+    public java.util.List<? extends boa.types.Issues.AttachmentOrBuilder> 
+        getFilesOrBuilderList() {
+      return files_;
+    }
+    /**
+     * <code>repeated .boa.types.Attachment files = 5;</code>
+     */
+    public int getFilesCount() {
+      return files_.size();
+    }
+    /**
+     * <code>repeated .boa.types.Attachment files = 5;</code>
+     */
+    public boa.types.Issues.Attachment getFiles(int index) {
+      return files_.get(index);
+    }
+    /**
+     * <code>repeated .boa.types.Attachment files = 5;</code>
+     */
+    public boa.types.Issues.AttachmentOrBuilder getFilesOrBuilder(
+        int index) {
+      return files_.get(index);
+    }
+
     private void initFields() {
       id_ = "";
-      date_ = 0;
+      date_ = 0L;
       author_ = boa.types.Shared.Person.getDefaultInstance();
       description_ = "";
+      files_ = java.util.Collections.emptyList();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -7606,6 +6401,12 @@ public final class Issues {
         memoizedIsInitialized = 0;
         return false;
       }
+      for (int i = 0; i < getFilesCount(); i++) {
+        if (!getFiles(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
       memoizedIsInitialized = 1;
       return true;
     }
@@ -7617,13 +6418,16 @@ public final class Issues {
         output.writeBytes(1, getIdBytes());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeInt32(2, date_);
+        output.writeUInt64(2, date_);
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeMessage(3, author_);
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         output.writeBytes(4, getDescriptionBytes());
+      }
+      for (int i = 0; i < files_.size(); i++) {
+        output.writeMessage(5, files_.get(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -7640,7 +6444,7 @@ public final class Issues {
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(2, date_);
+          .computeUInt64Size(2, date_);
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
@@ -7649,6 +6453,10 @@ public final class Issues {
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(4, getDescriptionBytes());
+      }
+      for (int i = 0; i < files_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(5, files_.get(i));
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -7759,6 +6567,7 @@ public final class Issues {
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
           getAuthorFieldBuilder();
+          getFilesFieldBuilder();
         }
       }
       private static Builder create() {
@@ -7769,7 +6578,7 @@ public final class Issues {
         super.clear();
         id_ = "";
         bitField0_ = (bitField0_ & ~0x00000001);
-        date_ = 0;
+        date_ = 0L;
         bitField0_ = (bitField0_ & ~0x00000002);
         if (authorBuilder_ == null) {
           author_ = boa.types.Shared.Person.getDefaultInstance();
@@ -7779,6 +6588,12 @@ public final class Issues {
         bitField0_ = (bitField0_ & ~0x00000004);
         description_ = "";
         bitField0_ = (bitField0_ & ~0x00000008);
+        if (filesBuilder_ == null) {
+          files_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000010);
+        } else {
+          filesBuilder_.clear();
+        }
         return this;
       }
 
@@ -7827,6 +6642,15 @@ public final class Issues {
           to_bitField0_ |= 0x00000008;
         }
         result.description_ = description_;
+        if (filesBuilder_ == null) {
+          if (((bitField0_ & 0x00000010) == 0x00000010)) {
+            files_ = java.util.Collections.unmodifiableList(files_);
+            bitField0_ = (bitField0_ & ~0x00000010);
+          }
+          result.files_ = files_;
+        } else {
+          result.files_ = filesBuilder_.build();
+        }
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -7859,6 +6683,32 @@ public final class Issues {
           description_ = other.description_;
           onChanged();
         }
+        if (filesBuilder_ == null) {
+          if (!other.files_.isEmpty()) {
+            if (files_.isEmpty()) {
+              files_ = other.files_;
+              bitField0_ = (bitField0_ & ~0x00000010);
+            } else {
+              ensureFilesIsMutable();
+              files_.addAll(other.files_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.files_.isEmpty()) {
+            if (filesBuilder_.isEmpty()) {
+              filesBuilder_.dispose();
+              filesBuilder_ = null;
+              files_ = other.files_;
+              bitField0_ = (bitField0_ & ~0x00000010);
+              filesBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getFilesFieldBuilder() : null;
+            } else {
+              filesBuilder_.addAllMessages(other.files_);
+            }
+          }
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -7883,6 +6733,12 @@ public final class Issues {
         if (!getAuthor().isInitialized()) {
           
           return false;
+        }
+        for (int i = 0; i < getFilesCount(); i++) {
+          if (!getFiles(i).isInitialized()) {
+            
+            return false;
+          }
         }
         return true;
       }
@@ -7980,35 +6836,35 @@ public final class Issues {
         return this;
       }
 
-      // required int32 date = 2;
-      private int date_ ;
+      // required uint64 date = 2;
+      private long date_ ;
       /**
-       * <code>required int32 date = 2;</code>
+       * <code>required uint64 date = 2;</code>
        */
       public boolean hasDate() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
-       * <code>required int32 date = 2;</code>
+       * <code>required uint64 date = 2;</code>
        */
-      public int getDate() {
+      public long getDate() {
         return date_;
       }
       /**
-       * <code>required int32 date = 2;</code>
+       * <code>required uint64 date = 2;</code>
        */
-      public Builder setDate(int value) {
+      public Builder setDate(long value) {
         bitField0_ |= 0x00000002;
         date_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required int32 date = 2;</code>
+       * <code>required uint64 date = 2;</code>
        */
       public Builder clearDate() {
         bitField0_ = (bitField0_ & ~0x00000002);
-        date_ = 0;
+        date_ = 0L;
         onChanged();
         return this;
       }
@@ -8204,6 +7060,246 @@ public final class Issues {
         return this;
       }
 
+      // repeated .boa.types.Attachment files = 5;
+      private java.util.List<boa.types.Issues.Attachment> files_ =
+        java.util.Collections.emptyList();
+      private void ensureFilesIsMutable() {
+        if (!((bitField0_ & 0x00000010) == 0x00000010)) {
+          files_ = new java.util.ArrayList<boa.types.Issues.Attachment>(files_);
+          bitField0_ |= 0x00000010;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Issues.Attachment, boa.types.Issues.Attachment.Builder, boa.types.Issues.AttachmentOrBuilder> filesBuilder_;
+
+      /**
+       * <code>repeated .boa.types.Attachment files = 5;</code>
+       */
+      public java.util.List<boa.types.Issues.Attachment> getFilesList() {
+        if (filesBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(files_);
+        } else {
+          return filesBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Attachment files = 5;</code>
+       */
+      public int getFilesCount() {
+        if (filesBuilder_ == null) {
+          return files_.size();
+        } else {
+          return filesBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Attachment files = 5;</code>
+       */
+      public boa.types.Issues.Attachment getFiles(int index) {
+        if (filesBuilder_ == null) {
+          return files_.get(index);
+        } else {
+          return filesBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Attachment files = 5;</code>
+       */
+      public Builder setFiles(
+          int index, boa.types.Issues.Attachment value) {
+        if (filesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureFilesIsMutable();
+          files_.set(index, value);
+          onChanged();
+        } else {
+          filesBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attachment files = 5;</code>
+       */
+      public Builder setFiles(
+          int index, boa.types.Issues.Attachment.Builder builderForValue) {
+        if (filesBuilder_ == null) {
+          ensureFilesIsMutable();
+          files_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          filesBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attachment files = 5;</code>
+       */
+      public Builder addFiles(boa.types.Issues.Attachment value) {
+        if (filesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureFilesIsMutable();
+          files_.add(value);
+          onChanged();
+        } else {
+          filesBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attachment files = 5;</code>
+       */
+      public Builder addFiles(
+          int index, boa.types.Issues.Attachment value) {
+        if (filesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureFilesIsMutable();
+          files_.add(index, value);
+          onChanged();
+        } else {
+          filesBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attachment files = 5;</code>
+       */
+      public Builder addFiles(
+          boa.types.Issues.Attachment.Builder builderForValue) {
+        if (filesBuilder_ == null) {
+          ensureFilesIsMutable();
+          files_.add(builderForValue.build());
+          onChanged();
+        } else {
+          filesBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attachment files = 5;</code>
+       */
+      public Builder addFiles(
+          int index, boa.types.Issues.Attachment.Builder builderForValue) {
+        if (filesBuilder_ == null) {
+          ensureFilesIsMutable();
+          files_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          filesBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attachment files = 5;</code>
+       */
+      public Builder addAllFiles(
+          java.lang.Iterable<? extends boa.types.Issues.Attachment> values) {
+        if (filesBuilder_ == null) {
+          ensureFilesIsMutable();
+          super.addAll(values, files_);
+          onChanged();
+        } else {
+          filesBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attachment files = 5;</code>
+       */
+      public Builder clearFiles() {
+        if (filesBuilder_ == null) {
+          files_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000010);
+          onChanged();
+        } else {
+          filesBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attachment files = 5;</code>
+       */
+      public Builder removeFiles(int index) {
+        if (filesBuilder_ == null) {
+          ensureFilesIsMutable();
+          files_.remove(index);
+          onChanged();
+        } else {
+          filesBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attachment files = 5;</code>
+       */
+      public boa.types.Issues.Attachment.Builder getFilesBuilder(
+          int index) {
+        return getFilesFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.Attachment files = 5;</code>
+       */
+      public boa.types.Issues.AttachmentOrBuilder getFilesOrBuilder(
+          int index) {
+        if (filesBuilder_ == null) {
+          return files_.get(index);  } else {
+          return filesBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Attachment files = 5;</code>
+       */
+      public java.util.List<? extends boa.types.Issues.AttachmentOrBuilder> 
+           getFilesOrBuilderList() {
+        if (filesBuilder_ != null) {
+          return filesBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(files_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Attachment files = 5;</code>
+       */
+      public boa.types.Issues.Attachment.Builder addFilesBuilder() {
+        return getFilesFieldBuilder().addBuilder(
+            boa.types.Issues.Attachment.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Attachment files = 5;</code>
+       */
+      public boa.types.Issues.Attachment.Builder addFilesBuilder(
+          int index) {
+        return getFilesFieldBuilder().addBuilder(
+            index, boa.types.Issues.Attachment.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Attachment files = 5;</code>
+       */
+      public java.util.List<boa.types.Issues.Attachment.Builder> 
+           getFilesBuilderList() {
+        return getFilesFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Issues.Attachment, boa.types.Issues.Attachment.Builder, boa.types.Issues.AttachmentOrBuilder> 
+          getFilesFieldBuilder() {
+        if (filesBuilder_ == null) {
+          filesBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              boa.types.Issues.Attachment, boa.types.Issues.Attachment.Builder, boa.types.Issues.AttachmentOrBuilder>(
+                  files_,
+                  ((bitField0_ & 0x00000010) == 0x00000010),
+                  getParentForChildren(),
+                  isClean());
+          files_ = null;
+        }
+        return filesBuilder_;
+      }
+
       // @@protoc_insertion_point(builder_scope:boa.types.IssueComment)
     }
 
@@ -8248,15 +7344,15 @@ public final class Issues {
     com.google.protobuf.ByteString
         getWhatBytes();
 
-    // required int32 date = 3;
+    // required uint64 date = 3;
     /**
-     * <code>required int32 date = 3;</code>
+     * <code>required uint64 date = 3;</code>
      */
     boolean hasDate();
     /**
-     * <code>required int32 date = 3;</code>
+     * <code>required uint64 date = 3;</code>
      */
-    int getDate();
+    long getDate();
 
     // required .boa.types.Person author = 4;
     /**
@@ -8380,7 +7476,7 @@ public final class Issues {
             }
             case 24: {
               bitField0_ |= 0x00000004;
-              date_ = input.readInt32();
+              date_ = input.readUInt64();
               break;
             }
             case 34: {
@@ -8537,19 +7633,19 @@ public final class Issues {
       }
     }
 
-    // required int32 date = 3;
+    // required uint64 date = 3;
     public static final int DATE_FIELD_NUMBER = 3;
-    private int date_;
+    private long date_;
     /**
-     * <code>required int32 date = 3;</code>
+     * <code>required uint64 date = 3;</code>
      */
     public boolean hasDate() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
-     * <code>required int32 date = 3;</code>
+     * <code>required uint64 date = 3;</code>
      */
-    public int getDate() {
+    public long getDate() {
       return date_;
     }
 
@@ -8707,7 +7803,7 @@ public final class Issues {
     private void initFields() {
       id_ = "";
       what_ = "";
-      date_ = 0;
+      date_ = 0L;
       author_ = boa.types.Shared.Person.getDefaultInstance();
       oldValue_ = "";
       newValue_ = "";
@@ -8760,7 +7856,7 @@ public final class Issues {
         output.writeBytes(2, getWhatBytes());
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeInt32(3, date_);
+        output.writeUInt64(3, date_);
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         output.writeMessage(4, author_);
@@ -8793,7 +7889,7 @@ public final class Issues {
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(3, date_);
+          .computeUInt64Size(3, date_);
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
@@ -8932,7 +8028,7 @@ public final class Issues {
         bitField0_ = (bitField0_ & ~0x00000001);
         what_ = "";
         bitField0_ = (bitField0_ & ~0x00000002);
-        date_ = 0;
+        date_ = 0L;
         bitField0_ = (bitField0_ & ~0x00000004);
         if (authorBuilder_ == null) {
           author_ = boa.types.Shared.Person.getDefaultInstance();
@@ -9256,35 +8352,35 @@ public final class Issues {
         return this;
       }
 
-      // required int32 date = 3;
-      private int date_ ;
+      // required uint64 date = 3;
+      private long date_ ;
       /**
-       * <code>required int32 date = 3;</code>
+       * <code>required uint64 date = 3;</code>
        */
       public boolean hasDate() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
-       * <code>required int32 date = 3;</code>
+       * <code>required uint64 date = 3;</code>
        */
-      public int getDate() {
+      public long getDate() {
         return date_;
       }
       /**
-       * <code>required int32 date = 3;</code>
+       * <code>required uint64 date = 3;</code>
        */
-      public Builder setDate(int value) {
+      public Builder setDate(long value) {
         bitField0_ |= 0x00000004;
         date_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required int32 date = 3;</code>
+       * <code>required uint64 date = 3;</code>
        */
       public Builder clearDate() {
         bitField0_ = (bitField0_ & ~0x00000004);
-        date_ = 0;
+        date_ = 0L;
         onChanged();
         return this;
       }
@@ -9645,15 +8741,20 @@ public final class Issues {
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_boa_types_IssueRepository_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_boa_types_IssuesRoot_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_boa_types_IssuesRoot_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
     internal_static_boa_types_Issue_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_boa_types_Issue_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_boa_types_AttachedFile_descriptor;
+    internal_static_boa_types_Attachment_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_boa_types_AttachedFile_fieldAccessorTable;
+      internal_static_boa_types_Attachment_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
     internal_static_boa_types_IssueComment_descriptor;
   private static
@@ -9674,36 +8775,31 @@ public final class Issues {
   static {
     java.lang.String[] descriptorData = {
       "\n\014issues.proto\022\tboa.types\032\014shared.proto\"" +
-      "\300\001\n\017IssueRepository\022\013\n\003url\030\001 \002(\t\0222\n\004kind" +
+      "\251\001\n\017IssueRepository\022\013\n\003url\030\001 \002(\t\0222\n\004kind" +
       "\030\002 \002(\0162$.boa.types.IssueRepository.Issue" +
-      "Kind\022 \n\006issues\030\003 \003(\0132\020.boa.types.Issue\"J" +
-      "\n\tIssueKind\022\013\n\007UNKNOWN\020\001\022\010\n\004BUGS\020\002\022\014\n\010FE" +
-      "ATURES\020\003\022\013\n\007SUPPORT\020\004\022\013\n\007PATCHES\020\005\"\346\004\n\005I" +
-      "ssue\022\n\n\002id\030\001 \002(\t\022\016\n\006status\030\002 \002(\t\022\021\n\tcomp" +
-      "onent\030\003 \001(\t\022\020\n\010priority\030\004 \002(\t\022\022\n\nresolut" +
-      "ion\030\005 \002(\t\022\025\n\rduplicated_by\030\006 \003(\t\022\024\n\014dupl" +
-      "icate_of\030\007 \001(\t\022\024\n\014subcomponent\030\010 \001(\t\022\017\n\007",
-      "summary\030\t \002(\t\022\017\n\007version\030\n \001(\t\022\024\n\014create" +
-      "d_date\030\013 \002(\005\022\025\n\rmodified_date\030\014 \002(\005\022\026\n\016c" +
-      "ompleted_date\030\r \001(\005\022\020\n\010keywords\030\016 \003(\t\022!\n" +
-      "\006author\030\017 \002(\0132\021.boa.types.Person\022\023\n\013desc" +
-      "ription\030\020 \002(\t\022#\n\010assignee\030\021 \001(\0132\021.boa.ty" +
-      "pes.Person\022\n\n\002os\030\022 \001(\t\022\020\n\010platform\030\023 \001(\t" +
-      "\022\021\n\tmilestone\030\024 \001(\t\022\022\n\ndepends_on\030\025 \001(\t\022" +
-      "\017\n\007blocked\030\026 \001(\t\022\014\n\004vote\030\027 \001(\005\022\017\n\007secrec" +
-      "y\030\030 \001(\t\022&\n\005files\030\031 \003(\0132\027.boa.types.Attac" +
-      "hedFile\022)\n\010comments\030\032 \003(\0132\027.boa.types.Is",
-      "sueComment\022\'\n\007changes\030\033 \003(\0132\026.boa.types." +
-      "IssueChange\"s\n\014AttachedFile\022\020\n\010filename\030" +
-      "\001 \002(\t\022\023\n\013description\030\002 \002(\t\022\013\n\003url\030\003 \002(\t\022" +
-      "\014\n\004date\030\004 \002(\005\022!\n\006author\030\005 \002(\0132\021.boa.type" +
-      "s.Person\"`\n\014IssueComment\022\n\n\002id\030\001 \002(\t\022\014\n\004" +
-      "date\030\002 \002(\005\022!\n\006author\030\003 \002(\0132\021.boa.types.P" +
-      "erson\022\023\n\013description\030\004 \002(\t\"\223\001\n\013IssueChan" +
-      "ge\022\n\n\002id\030\001 \002(\t\022\014\n\004what\030\002 \002(\t\022\014\n\004date\030\003 \002" +
-      "(\005\022!\n\006author\030\004 \002(\0132\021.boa.types.Person\022\021\n" +
-      "\told_value\030\005 \002(\t\022\021\n\tnew_value\030\006 \002(\t\022\023\n\013d",
-      "escription\030\007 \001(\tB\002H\001"
+      "Kind\022\013\n\003key\030\003 \002(\t\"H\n\tIssueKind\022\t\n\005OTHER\020" +
+      "\000\022\010\n\004BUGS\020\001\022\014\n\010FEATURES\020\002\022\013\n\007SUPPORT\020\003\022\013" +
+      "\n\007PATCHES\020\004\".\n\nIssuesRoot\022 \n\006issues\030\001 \003(" +
+      "\0132\020.boa.types.Issue\"\331\002\n\005Issue\022\n\n\002id\030\001 \002(" +
+      "\t\022\016\n\006status\030\002 \002(\t\022!\n\006author\030\003 \002(\0132\021.boa." +
+      "types.Person\022#\n\010assignee\030\004 \001(\0132\021.boa.typ" +
+      "es.Person\022\017\n\007summary\030\005 \002(\t\022\023\n\013descriptio",
+      "n\030\006 \002(\t\022\024\n\014created_date\030\007 \002(\004\022\025\n\rmodifie" +
+      "d_date\030\010 \002(\004\022\026\n\016completed_date\030\t \001(\004\022\020\n\010" +
+      "keywords\030\n \003(\t\022\014\n\004vote\030\013 \001(\005\022\020\n\010priority" +
+      "\030\014 \001(\t\022$\n\005files\030\r \003(\0132\025.boa.types.Attach" +
+      "ment\022)\n\010comments\030\016 \003(\0132\027.boa.types.Issue" +
+      "Comment\"\177\n\nAttachment\022\013\n\003url\030\001 \002(\t\022\020\n\010fi" +
+      "lename\030\002 \002(\t\022\014\n\004size\030\003 \001(\004\022\014\n\004date\030\004 \001(\004" +
+      "\022!\n\006author\030\005 \001(\0132\021.boa.types.Person\022\023\n\013d" +
+      "escription\030\006 \001(\t\"\206\001\n\014IssueComment\022\n\n\002id\030" +
+      "\001 \002(\t\022\014\n\004date\030\002 \002(\004\022!\n\006author\030\003 \002(\0132\021.bo",
+      "a.types.Person\022\023\n\013description\030\004 \002(\t\022$\n\005f" +
+      "iles\030\005 \003(\0132\025.boa.types.Attachment\"\223\001\n\013Is" +
+      "sueChange\022\n\n\002id\030\001 \002(\t\022\014\n\004what\030\002 \002(\t\022\014\n\004d" +
+      "ate\030\003 \002(\004\022!\n\006author\030\004 \002(\0132\021.boa.types.Pe" +
+      "rson\022\021\n\told_value\030\005 \002(\t\022\021\n\tnew_value\030\006 \002" +
+      "(\t\022\023\n\013description\030\007 \001(\tB\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -9715,27 +8811,33 @@ public final class Issues {
           internal_static_boa_types_IssueRepository_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_IssueRepository_descriptor,
-              new java.lang.String[] { "Url", "Kind", "Issues", });
-          internal_static_boa_types_Issue_descriptor =
+              new java.lang.String[] { "Url", "Kind", "Key", });
+          internal_static_boa_types_IssuesRoot_descriptor =
             getDescriptor().getMessageTypes().get(1);
+          internal_static_boa_types_IssuesRoot_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_boa_types_IssuesRoot_descriptor,
+              new java.lang.String[] { "Issues", });
+          internal_static_boa_types_Issue_descriptor =
+            getDescriptor().getMessageTypes().get(2);
           internal_static_boa_types_Issue_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Issue_descriptor,
-              new java.lang.String[] { "Id", "Status", "Component", "Priority", "Resolution", "DuplicatedBy", "DuplicateOf", "Subcomponent", "Summary", "Version", "CreatedDate", "ModifiedDate", "CompletedDate", "Keywords", "Author", "Description", "Assignee", "Os", "Platform", "Milestone", "DependsOn", "Blocked", "Vote", "Secrecy", "Files", "Comments", "Changes", });
-          internal_static_boa_types_AttachedFile_descriptor =
-            getDescriptor().getMessageTypes().get(2);
-          internal_static_boa_types_AttachedFile_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_boa_types_AttachedFile_descriptor,
-              new java.lang.String[] { "Filename", "Description", "Url", "Date", "Author", });
-          internal_static_boa_types_IssueComment_descriptor =
+              new java.lang.String[] { "Id", "Status", "Author", "Assignee", "Summary", "Description", "CreatedDate", "ModifiedDate", "CompletedDate", "Keywords", "Vote", "Priority", "Files", "Comments", });
+          internal_static_boa_types_Attachment_descriptor =
             getDescriptor().getMessageTypes().get(3);
+          internal_static_boa_types_Attachment_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_boa_types_Attachment_descriptor,
+              new java.lang.String[] { "Url", "Filename", "Size", "Date", "Author", "Description", });
+          internal_static_boa_types_IssueComment_descriptor =
+            getDescriptor().getMessageTypes().get(4);
           internal_static_boa_types_IssueComment_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_IssueComment_descriptor,
-              new java.lang.String[] { "Id", "Date", "Author", "Description", });
+              new java.lang.String[] { "Id", "Date", "Author", "Description", "Files", });
           internal_static_boa_types_IssueChange_descriptor =
-            getDescriptor().getMessageTypes().get(4);
+            getDescriptor().getMessageTypes().get(5);
           internal_static_boa_types_IssueChange_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_IssueChange_descriptor,

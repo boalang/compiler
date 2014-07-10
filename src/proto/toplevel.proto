@@ -6,17 +6,13 @@ import "issues.proto";
 
 option optimize_for = SPEED;
 
-message Repository {
-	repeated Project projects = 1;
-}
-
 message Project {
-	required string name = 1;
-	required string project_url = 2;
-	required string homepage_url = 3;
-	required uint64 created_date = 4;
-	required string id = 5;
-	required string description = 6;
+	required string id = 1;
+	required string name = 2;
+	required string project_url = 3;
+	optional string homepage_url = 4;
+	optional uint64 created_date = 5;
+	optional string description = 6;
 	repeated string operating_systems = 7;
 	repeated string programming_languages = 8;
 	repeated string databases = 9;
@@ -24,9 +20,20 @@ message Project {
 	repeated string interfaces = 11;
 	repeated string audiences = 12;
 	repeated string topics = 13;
-	required bool donations = 14;
-	repeated Person maintainers = 15;
-	repeated Person developers = 16;
-	repeated CodeRepository code_repositories = 17;
-	repeated IssueRepository issue_repositories = 18;
+	repeated string status = 14;
+	repeated string translations = 15;
+	optional bool donations = 16;
+	repeated Person maintainers = 17;
+	repeated Person developers = 18;
+	repeated CodeRepository code_repositories = 19;
+	repeated IssueRepository issue_repositories = 20;
+	enum ForgeKind {
+		option allow_alias = true;
+		OTHER = 0;
+		SF = 1;
+		SOURCEFORGE = 1;
+		GITHUB = 2;
+		QUALITAS = 3;
+	}
+	required ForgeKind kind = 21;
 }
