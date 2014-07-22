@@ -20,6 +20,7 @@ import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
 import boa.types.Shared.ChangeKind;
+import boa.types.Shared.Person;
 import boa.types.Toplevel.Project;
 
 /**
@@ -265,6 +266,11 @@ public class BoaAstIntrinsics {
 		/** {@inheritDoc} */
 		@Override
 		protected boolean preVisit(final ASTRoot node) throws Exception {
+			return true;
+		}
+		/** {@inheritDoc} */
+		@Override
+		protected boolean preVisit(final Person node) throws Exception {
 			return true;
 		}
 	};
