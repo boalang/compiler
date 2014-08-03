@@ -168,6 +168,33 @@ public class SymbolTable {
 		globalFunctions.addFunction("int", new BoaFunction("java.lang.Long.decode", new BoaInt(), new BoaScalar[] { new BoaString() }));
 		// string to int with param base
 		globalFunctions.addFunction("int", new BoaFunction(new BoaInt(), new BoaScalar[] { new BoaString(), new BoaInt() }, "java.lang.Long.parseLong(${0}, (int)${1})"));
+		// proto to int (uses hash code)
+		globalFunctions.addFunction("int", new BoaFunction(new BoaInt(), new BoaType[] { new ASTRootProtoTuple() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("int", new BoaFunction(new BoaInt(), new BoaType[] { new ChangedFileProtoTuple() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("int", new BoaFunction(new BoaInt(), new BoaType[] { new ChangeKindProtoMap() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("int", new BoaFunction(new BoaInt(), new BoaType[] { new CodeRepositoryProtoTuple() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("int", new BoaFunction(new BoaInt(), new BoaType[] { new CommentKindProtoMap() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("int", new BoaFunction(new BoaInt(), new BoaType[] { new CommentProtoTuple() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("int", new BoaFunction(new BoaInt(), new BoaType[] { new CommentsRootProtoTuple() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("int", new BoaFunction(new BoaInt(), new BoaType[] { new DeclarationProtoTuple() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("int", new BoaFunction(new BoaInt(), new BoaType[] { new ExpressionKindProtoMap() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("int", new BoaFunction(new BoaInt(), new BoaType[] { new ExpressionProtoTuple() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("int", new BoaFunction(new BoaInt(), new BoaType[] { new FileKindProtoMap() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("int", new BoaFunction(new BoaInt(), new BoaType[] { new IssueKindProtoMap() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("int", new BoaFunction(new BoaInt(), new BoaType[] { new MethodProtoTuple() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("int", new BoaFunction(new BoaInt(), new BoaType[] { new ModifierKindProtoMap() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("int", new BoaFunction(new BoaInt(), new BoaType[] { new ModifierProtoTuple() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("int", new BoaFunction(new BoaInt(), new BoaType[] { new NamespaceProtoTuple() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("int", new BoaFunction(new BoaInt(), new BoaType[] { new PersonProtoTuple() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("int", new BoaFunction(new BoaInt(), new BoaType[] { new ProjectProtoTuple() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("int", new BoaFunction(new BoaInt(), new BoaType[] { new RepositoryKindProtoMap() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("int", new BoaFunction(new BoaInt(), new BoaType[] { new RevisionProtoTuple() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("int", new BoaFunction(new BoaInt(), new BoaType[] { new StatementKindProtoMap() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("int", new BoaFunction(new BoaInt(), new BoaType[] { new StatementProtoTuple() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("int", new BoaFunction(new BoaInt(), new BoaType[] { new TypeKindProtoMap() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("int", new BoaFunction(new BoaInt(), new BoaType[] { new TypeProtoTuple() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("int", new BoaFunction(new BoaInt(), new BoaType[] { new VariableProtoTuple() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("int", new BoaFunction(new BoaInt(), new BoaType[] { new VisibilityProtoMap() }, "${0}.hashCode()"));
 
 		// int to float
 		globalFunctions.addFunction("float", new BoaFunction(new BoaFloat(), new BoaScalar[] { new BoaInt() }, "(double)${0}"));
