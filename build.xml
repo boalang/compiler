@@ -215,9 +215,11 @@
 	<target name="test-codegen" depends="-compile-tests" description="Run code generation unit tests.">
 		<junit fork="yes" haltonfailure="yes">
 			<classpath refid="test.class.path" />
+			<!--
 			<test name="boa.test.compiler.TestCodegenBad">
 				<formatter type="plain" usefile="false" />
 			</test>
+			-->
 			<test name="boa.test.compiler.TestCodegenGood">
 				<formatter type="plain" usefile="false" />
 			</test>
