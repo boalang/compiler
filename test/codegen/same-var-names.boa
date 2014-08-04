@@ -1,0 +1,8 @@
+o: output sum of int;
+o << 1;
+
+if (input.id == "") {
+	var := true;
+} else {
+	var := false;
+}
