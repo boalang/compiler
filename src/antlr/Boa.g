@@ -259,7 +259,7 @@ forStatement returns [ForStatement ast]
 		$ast = new ForStatement();
 	}
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: FOR LPAREN (f=forExpression { $ast.setInit($f.ast); })? SEMICOLON (e=expression { $ast.setCondition($e.ast); })? SEMICOLON (f=forExpression { $ast.setUpdate($f.ast); })? RPAREN s=statement { $ast.setBody($s.ast); }
+	: FOR LPAREN (f=forExpression { $ast.setInit($f.ast); })? SEMICOLON (e=expression { $ast.setCondition($e.ast); })? SEMICOLON (f=forExpression { $ast.setUpdate($f.ast); })? RPAREN s=programStatement { $ast.setBody($s.ast); }
 	;
 
 forExpression returns [Statement ast]
@@ -294,7 +294,7 @@ ifStatement returns [IfStatement ast]
 	locals [int l, int c]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: IF LPAREN e=expression RPAREN s=statement { $ast = new IfStatement($e.ast, $s.ast); } (ELSE els=statement { $ast.setElse($els.ast); })?
+	: IF LPAREN e=expression RPAREN s=programStatement { $ast = new IfStatement($e.ast, $s.ast); } (ELSE els=programStatement { $ast.setElse($els.ast); })?
 	;
 
 resultStatement returns [ResultStatement ast]
@@ -320,42 +320,42 @@ switchStatement returns [SwitchStatement ast]
 	: SWITCH
 		LPAREN e=expression RPAREN { $ast = new SwitchStatement($e.ast); }
 		LBRACE (sc=switchCase { $ast.addCase($sc.ast); })*
-		DEFAULT COLON (s=statement { $b.addStatement($s.ast); })+ RBRACE { $ast.setDefault(new SwitchCase(true, $b)); }
+		DEFAULT COLON (s=programStatement { $b.addStatement($s.ast); })+ RBRACE { $ast.setDefault(new SwitchCase(true, $b)); }
 	;
 
 switchCase returns [SwitchCase ast]
 	locals [Block b = new Block(), int l, int c]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: CASE el=expressionList { $ast = new SwitchCase(false, $b, $el.list); } COLON (s=statement { $b.addStatement($s.ast); })+
+	: CASE el=expressionList { $ast = new SwitchCase(false, $b, $el.list); } COLON (s=programStatement { $b.addStatement($s.ast); })+
 	;
 
 foreachStatement returns [ForeachStatement ast]
 	locals [int l, int c]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: FOREACH LPAREN id=identifier COLON t=type SEMICOLON e=expression RPAREN s=statement { $ast = new ForeachStatement(new Component($id.ast, $t.ast), $e.ast, $s.ast); }
+	: FOREACH LPAREN id=identifier COLON t=type SEMICOLON e=expression RPAREN s=programStatement { $ast = new ForeachStatement(new Component($id.ast, $t.ast), $e.ast, $s.ast); }
 	;
 
 existsStatement returns [ExistsStatement ast]
 	locals [int l, int c]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: EXISTS LPAREN id=identifier COLON t=type SEMICOLON e=expression RPAREN s=statement { $ast = new ExistsStatement(new Component($id.ast, $t.ast), $e.ast, $s.ast); }
+	: EXISTS LPAREN id=identifier COLON t=type SEMICOLON e=expression RPAREN s=programStatement { $ast = new ExistsStatement(new Component($id.ast, $t.ast), $e.ast, $s.ast); }
 	;
 
 ifallStatement returns [IfAllStatement ast]
 	locals [int l, int c]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: IFALL LPAREN id=identifier COLON t=type SEMICOLON e=expression RPAREN s=statement { $ast = new IfAllStatement(new Component($id.ast, $t.ast), $e.ast, $s.ast); }
+	: IFALL LPAREN id=identifier COLON t=type SEMICOLON e=expression RPAREN s=programStatement { $ast = new IfAllStatement(new Component($id.ast, $t.ast), $e.ast, $s.ast); }
 	;
 
 whileStatement returns [WhileStatement ast]
 	locals [int l, int c]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: WHILE LPAREN e=expression RPAREN s=statement { $ast = new WhileStatement($e.ast, $s.ast); }
+	: WHILE LPAREN e=expression RPAREN s=programStatement { $ast = new WhileStatement($e.ast, $s.ast); }
 	;
 
 visitStatement returns [VisitStatement ast]
@@ -497,7 +497,7 @@ visitorExpression returns [VisitorExpression ast]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
 	: t=visitorType LBRACE (s=visitStatement { $b.addStatement($s.ast); })+ RBRACE { $ast = new VisitorExpression($t.ast, $b); }
-	| t=visitorType LBRACE ({ notifyErrorListeners("error: only 'before' and 'after' visit statements allowed inside visitor bodies"); } statement | s=visitStatement { $b.addStatement($s.ast); })+ RBRACE { $ast = new VisitorExpression($t.ast, $b); }
+	| t=visitorType LBRACE ({ notifyErrorListeners("error: only 'before' and 'after' visit statements allowed inside visitor bodies"); } programStatement | s=visitStatement { $b.addStatement($s.ast); })+ RBRACE { $ast = new VisitorExpression($t.ast, $b); }
 	;
 
 statementExpression returns [StatementExpr ast]

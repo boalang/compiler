@@ -145,7 +145,7 @@ emitStatement
 	;
 
 forStatement
-	: FOR LPAREN (forExpression)? SEMICOLON (expression)? SEMICOLON (forExpression)? RPAREN statement
+	: FOR LPAREN (forExpression)? SEMICOLON (expression)? SEMICOLON (forExpression)? RPAREN programStatement
 	;
 
 forExpression
@@ -168,7 +168,7 @@ expressionStatement
 	;
 
 ifStatement
-	: IF LPAREN expression RPAREN statement (ELSE statement)?
+	: IF LPAREN expression RPAREN programStatement (ELSE programStatement)?
 	;
 
 resultStatement
@@ -194,19 +194,19 @@ switchCase
 	;
 
 foreachStatement
-	: FOREACH LPAREN identifier COLON type SEMICOLON expression RPAREN statement
+	: FOREACH LPAREN identifier COLON type SEMICOLON expression RPAREN programStatement
 	;
 
 existsStatement
-	: EXISTS LPAREN identifier COLON type SEMICOLON expression RPAREN statement
+	: EXISTS LPAREN identifier COLON type SEMICOLON expression RPAREN programStatement
 	;
 
 ifallStatement
-	: IFALL LPAREN identifier COLON type SEMICOLON expression RPAREN statement
+	: IFALL LPAREN identifier COLON type SEMICOLON expression RPAREN programStatement
 	;
 
 whileStatement
-	: WHILE LPAREN expression RPAREN statement
+	: WHILE LPAREN expression RPAREN programStatement
 	;
 
 visitStatement
@@ -296,7 +296,7 @@ functionExpression
 
 visitorExpression
 	: visitorType LBRACE (visitStatement)+ RBRACE
-	| visitorType LBRACE ({ notifyErrorListeners("error: only 'before' and 'after' visit statements allowed inside visitor bodies"); } statement | visitStatement)+ RBRACE
+	| visitorType LBRACE ({ notifyErrorListeners("error: only 'before' and 'after' visit statements allowed inside visitor bodies"); } programStatement | visitStatement)+ RBRACE
 	;
 
 statementExpression
