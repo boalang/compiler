@@ -50,9 +50,4 @@ public class TestTypecheckBad extends BaseTest {
 	public void varAsType() throws IOException {
 		typecheck(load(badDir + "var-as-type.boa"), "type 'input' undefined");
 	}
-
-	@Test
-	public void noWeight() throws IOException {
-		typecheck(load(badDir + "no-weight.boa"), "output variable 'o': emit must specify a weight");
-	}
 }
