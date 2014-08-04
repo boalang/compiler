@@ -1,0 +1,4 @@
+if (input.id == "")
+	var := true;
+else
+	var := false;
