@@ -8,6 +8,9 @@
 	<property name="ant.build.javac.source" value="1.6" />
 	<property name="ant.build.javac.target" value="1.6" />
 
+	<!-- ANTLR version -->
+	<property name="antlr.version" value="4.4" />
+
 	<!-- debug properties -->
 	<property name="debug.enabled" value="on" />
 	<property name="debug.level" value="lines,vars,source" />
@@ -68,6 +71,7 @@
 				<uptodate srcfile="src/proto/issues.proto" targetfile="src/compiled-proto/boa/types/Issues.java" />
 				<uptodate srcfile="src/proto/shared.proto" targetfile="src/compiled-proto/boa/types/Shared.java" />
 				<uptodate srcfile="src/proto/toplevel.proto" targetfile="src/compiled-proto/boa/types/Toplevel.java" />
+				<uptodate srcfile="src/proto/output.proto" targetfile="src/compiled-proto/boa/types/Output.java" />
 			</and>
 		</condition>
 	</target>
@@ -113,7 +117,7 @@
 	</target>
 
 	<target name="-parser" depends="-check-parser" unless="parser.uptodate">
-		<java jar="lib/antlr-4.2-complete.jar" dir="src/antlr/" fork="true">
+		<java jar="lib/antlr-${antlr.version}-complete.jar" dir="src/antlr/" fork="true">
 			<arg value="-o" />
 			<arg value="../../build/java/boa/parser/" />
 			<arg value="-package" />
@@ -274,7 +278,7 @@
 					<include name="templates/" />
 				</patternset>
 			</fileset>
-			<zipfileset excludes="META-INF/" src="rtlib/antlr-runtime-4.2.jar" />
+			<zipfileset excludes="META-INF/" src="rtlib/antlr-runtime-${antlr.version}.jar" />
 			<zipfileset excludes="META-INF/" src="rtlib/commons-cli-1.2.jar" />
 			<zipfileset excludes="META-INF/" src="rtlib/log4j-1.2.15.jar" />
 			<zipfileset excludes="META-INF/" src="rtlib/protobuf-java-2.5.0.jar" />
