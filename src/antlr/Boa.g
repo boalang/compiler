@@ -314,8 +314,8 @@ returnStatement returns [ReturnStatement ast]
 	;
 
 switchStatement returns [SwitchStatement ast]
-	locals [Block b = new Block(), int l, int c]
-	@init { $l = getStartLine(); $c = getStartColumn(); }
+	locals [Block b, int l, int c]
+	@init { $b = new Block(); $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
 	: SWITCH
 		LPAREN e=expression RPAREN { $ast = new SwitchStatement($e.ast); }
@@ -324,8 +324,8 @@ switchStatement returns [SwitchStatement ast]
 	;
 
 switchCase returns [SwitchCase ast]
-	locals [Block b = new Block(), int l, int c]
-	@init { $l = getStartLine(); $c = getStartColumn(); }
+	locals [Block b, int l, int c]
+	@init { $b = new Block(); $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
 	: CASE el=expressionList { $ast = new SwitchCase(false, $b, $el.list); } COLON (s=programStatement { $b.addStatement($s.ast); })+
 	;
@@ -493,11 +493,10 @@ functionExpression returns [FunctionExpression ast]
 	;
 
 visitorExpression returns [VisitorExpression ast]
-	locals [Block b = new Block(), int l, int c]
-	@init { $l = getStartLine(); $c = getStartColumn(); }
+	locals [Block b, int l, int c]
+	@init { $b = new Block(); $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: t=visitorType LBRACE (s=visitStatement { $b.addStatement($s.ast); })+ RBRACE { $ast = new VisitorExpression($t.ast, $b); }
-	| t=visitorType LBRACE ({ notifyErrorListeners("error: only 'before' and 'after' visit statements allowed inside visitor bodies"); } programStatement | s=visitStatement { $b.addStatement($s.ast); })+ RBRACE { $ast = new VisitorExpression($t.ast, $b); }
+	: t=visitorType LBRACE ({ notifyErrorListeners("error: only 'before' and 'after' visit statements allowed inside visitor bodies"); } programStatement | s=visitStatement { $b.addStatement($s.ast); })+ RBRACE { $ast = new VisitorExpression($t.ast, $b); }
 	;
 
 statementExpression returns [StatementExpr ast]

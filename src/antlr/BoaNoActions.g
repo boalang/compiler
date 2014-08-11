@@ -295,8 +295,7 @@ functionExpression
 	;
 
 visitorExpression
-	: visitorType LBRACE (visitStatement)+ RBRACE
-	| visitorType LBRACE ({ notifyErrorListeners("error: only 'before' and 'after' visit statements allowed inside visitor bodies"); } programStatement | visitStatement)+ RBRACE
+	: visitorType LBRACE ({ notifyErrorListeners("error: only 'before' and 'after' visit statements allowed inside visitor bodies"); } programStatement | visitStatement)+ RBRACE
 	;
 
 statementExpression
