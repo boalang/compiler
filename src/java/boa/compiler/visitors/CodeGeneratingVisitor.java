@@ -1068,12 +1068,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 	/** {@inheritDoc} */
 	@Override
-	public void visit(final ResultStatement n) {
-		throw new RuntimeException("unimplemented");
-	}
-
-	/** {@inheritDoc} */
-	@Override
 	public void visit(final ReturnStatement n) {
 		final ST st = stg.getInstanceOf("Return");
 
@@ -1385,12 +1379,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		}
 
 		code.add(st.render());
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public void visit(final StatementExpr n) {
-		throw new RuntimeException("unimplemented");
 	}
 
 	/** {@inheritDoc} */

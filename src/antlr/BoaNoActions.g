@@ -98,7 +98,6 @@ statement
 	| doStatement
 	| forStatement
 	| ifStatement
-	| resultStatement
 	| returnStatement
 	| switchStatement
 	| foreachStatement
@@ -169,11 +168,6 @@ expressionStatement
 
 ifStatement
 	: IF LPAREN expression RPAREN programStatement (ELSE programStatement)?
-	;
-
-resultStatement
-	: RESULT expression SEMICOLON
-	| RESULT expression           { notifyErrorListeners("error: ';' expected"); }
 	;
 
 returnStatement
@@ -276,7 +270,6 @@ operand
 	| visitorExpression
 	| unaryFactor
 	| DOLLAR
-	| statementExpression
 	| parenExpression
 	| identifier
 	;
@@ -296,10 +289,6 @@ functionExpression
 
 visitorExpression
 	: visitorType LBRACE ({ notifyErrorListeners("error: only 'before' and 'after' visit statements allowed inside visitor bodies"); } programStatement | visitStatement)+ RBRACE
-	;
-
-statementExpression
-	: QUESTION block
 	;
 
 composite
@@ -337,7 +326,6 @@ identifier
 	| lit=SWITCH   { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=RETURN   { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=WEIGHT   { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
-	| lit=RESULT   { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=DEFAULT  { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=CONTINUE { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=FUNCTION { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
@@ -400,7 +388,6 @@ STATIC   : 'static';
 SWITCH   : 'switch';
 RETURN   : 'return';
 WEIGHT   : 'weight';
-RESULT   : 'result';
 DEFAULT  : 'default';
 CONTINUE : 'continue';
 FUNCTION : 'function';

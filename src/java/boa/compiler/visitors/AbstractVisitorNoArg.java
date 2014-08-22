@@ -200,10 +200,6 @@ public abstract class AbstractVisitorNoArg {
 		n.getExpr().accept(this);
 	}
 
-	public void visit(final ResultStatement n) {
-		n.getExpr().accept(this);
-	}
-
 	public void visit(final ReturnStatement n) {
 		if (n.hasExpr())
 			n.getExpr().accept(this);
@@ -268,10 +264,6 @@ public abstract class AbstractVisitorNoArg {
 		n.getLhs().accept(this);
 		for (final Term t : n.getRhs())
 			t.accept(this);
-	}
-
-	public void visit(final StatementExpr n) {
-		n.getBlock().accept(this);
 	}
 
 	public void visit(final VisitorExpression n) {

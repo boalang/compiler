@@ -746,12 +746,6 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 
 	/** {@inheritDoc} */
 	@Override
-	public void visit(final ResultStatement n, final SymbolTable env) {
-		throw new RuntimeException("unimplemented");
-	}
-
-	/** {@inheritDoc} */
-	@Override
 	public void visit(final ReturnStatement n, final SymbolTable env) {
 		if (env.getIsBeforeVisitor())
 			throw new TypeCheckException(n, "return statement not allowed inside visitors");
@@ -1020,12 +1014,6 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 			}
 
 		n.type = type;
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public void visit(final StatementExpr n, final SymbolTable env) {
-		throw new RuntimeException("unimplemented");
 	}
 
 	/** {@inheritDoc} */

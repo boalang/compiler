@@ -182,7 +182,6 @@ statement returns [Statement ast]
 	| ds=doStatement         { $ast = $ds.ast; }
 	| fors=forStatement      { $ast = $fors.ast; }
 	| ifs=ifStatement        { $ast = $ifs.ast; }
-	| res=resultStatement    { $ast = $res.ast; }
 	| ret=returnStatement    { $ast = $ret.ast; }
 	| sw=switchStatement     { $ast = $sw.ast; }
 	| each=foreachStatement  { $ast = $each.ast; }
@@ -295,14 +294,6 @@ ifStatement returns [IfStatement ast]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
 	: IF LPAREN e=expression RPAREN s=programStatement { $ast = new IfStatement($e.ast, $s.ast); } (ELSE els=programStatement { $ast.setElse($els.ast); })?
-	;
-
-resultStatement returns [ResultStatement ast]
-	locals [int l, int c]
-	@init { $l = getStartLine(); $c = getStartColumn(); }
-	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: RESULT e=expression SEMICOLON { $ast = new ResultStatement($e.ast); }
-	| RESULT e=expression           { $ast = new ResultStatement($e.ast); notifyErrorListeners("error: ';' expected"); }
 	;
 
 returnStatement returns [ReturnStatement ast]
@@ -465,7 +456,6 @@ operand returns [Operand ast]
 	| v=visitorExpression                          { $ast = $v.ast; }
 	| uf=unaryFactor                               { $ast = $uf.ast; }
 	| DOLLAR                                       // TODO
-	| se=statementExpression                       { $ast = $se.ast; }
 	| pe=parenExpression                           { $ast = $pe.ast; }
 	| id=identifier                                { $ast = $id.ast; }
 	;
@@ -497,13 +487,6 @@ visitorExpression returns [VisitorExpression ast]
 	@init { $b = new Block(); $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
 	: t=visitorType LBRACE ({ notifyErrorListeners("error: only 'before' and 'after' visit statements allowed inside visitor bodies"); } programStatement | s=visitStatement { $b.addStatement($s.ast); })+ RBRACE { $ast = new VisitorExpression($t.ast, $b); }
-	;
-
-statementExpression returns [StatementExpr ast]
-	locals [int l, int c]
-	@init { $l = getStartLine(); $c = getStartColumn(); }
-	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: QUESTION b=block { $ast = new StatementExpr($b.ast); }
 	;
 
 composite returns [Composite ast]
@@ -559,7 +542,6 @@ identifier returns [Identifier ast]
 	| lit=SWITCH   { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=RETURN   { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=WEIGHT   { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
-	| lit=RESULT   { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=DEFAULT  { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=CONTINUE { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=FUNCTION { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
@@ -637,7 +619,6 @@ STATIC   : 'static';
 SWITCH   : 'switch';
 RETURN   : 'return';
 WEIGHT   : 'weight';
-RESULT   : 'result';
 DEFAULT  : 'default';
 CONTINUE : 'continue';
 FUNCTION : 'function';
