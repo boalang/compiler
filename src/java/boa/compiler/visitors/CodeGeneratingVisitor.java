@@ -473,6 +473,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		this.idFinder.start(n.env.getOperand());
 		final String funcName = this.idFinder.getNames().toArray()[0].toString();
 		final BoaFunction f = n.env.getFunction(funcName, check(n));
+		n.env.setOperandType(f.getType());
 
 		if (f.hasMacro()) {
 			final List<String> parts = new ArrayList<String>();
@@ -656,8 +657,8 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			abortGeneration = false;
 
 			if (!(n.getOp(0) instanceof Call)) {
-				n.env.setOperandType(n.getOperand().type);
 				n.getOperand().accept(this);
+				n.env.setOperandType(n.getOperand().type);
 				accept = code.removeLast();
 			}
 
@@ -668,8 +669,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				accept += code.removeLast();
 			}
 
-			if (!(n.getOp(0) instanceof Call))
-				n.env.getOperandType();
+			n.env.getOperandType();
 
 			code.add(accept);
 		} else {
