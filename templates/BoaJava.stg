@@ -97,13 +97,13 @@ SwitchCase(cases, body) ::= <<
 >>
 DoWhile(condition, stmt) ::= <<
 do
-<condition>
-while (<stmt>);
+<stmt>
+while (<condition>);
 
 >>
 While(condition, stmt) ::= <<
-while (<stmt>)
-<condition>
+while (<condition>)
+<stmt>
 
 >>
 FunctionType(name, ret, args, types) ::= <<

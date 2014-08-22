@@ -1,0 +1,6 @@
+o: output sum of int;
+
+m: map[string] of int;
+
+while (haskey(m, "foo"))
+	o << 1;
