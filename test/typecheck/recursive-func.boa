@@ -1,0 +1,7 @@
+o: output sum of int;
+o << 1;
+
+f := function(i: int) {
+	if (i > 0)
+		f(i - 1);
+};
