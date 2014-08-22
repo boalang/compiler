@@ -43,6 +43,6 @@ public class BoaBool extends BoaScalar {
 	/** {@inheritDoc} */
 	@Override
 	public String toString() {
-		return "boolean";
+		return "bool";
 	}
 }
