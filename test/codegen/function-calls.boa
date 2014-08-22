@@ -1,7 +1,6 @@
 # test using function results immediately
-o: output sum of int;
+o: output collection of string;
 
-m: map[int] of int;
-m[3] = 5;
-m[7] = 5;
+m: map[string] of int;
+m["hi"] = 5;
 o << keys(m)[0];
