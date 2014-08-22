@@ -53,9 +53,9 @@ public class TestParserBad extends BaseTest {
 	public void badIdentifiers() throws IOException {
 		parse(load(badDir + "bad-identifiers.boa"),
 			new String[] {
-				"2,0: extraneous input '_' expecting {'of', 'if', 'do', 'map', 'stack', 'set', 'for', 'foreach', 'ifall', 'exists', 'not', 'type', 'else', 'case', 'output', 'format', 'while', 'break', 'array', 'static', 'switch', 'return', 'weight', 'result', 'default', 'continue', 'function', 'visitor', 'before', 'after', 'stop', ';', '{', '(', '+', '-', '~', '!', '?', '$', IntegerLiteral, FloatingPointLiteral, CharacterLiteral, RegexLiteral, StringLiteral, TimeLiteral, Identifier}",
+				"2,0: extraneous input '_' expecting {'of', 'if', 'do', 'map', 'stack', 'set', 'for', 'foreach', 'ifall', 'exists', 'not', 'type', 'else', 'case', 'output', 'format', 'while', 'break', 'array', 'static', 'switch', 'return', 'weight', 'default', 'continue', 'function', 'visitor', 'before', 'after', 'stop', ';', '{', '(', '+', '-', '~', '!', '$', IntegerLiteral, FloatingPointLiteral, CharacterLiteral, RegexLiteral, StringLiteral, TimeLiteral, Identifier}",
 				"3,1: error: ';' expected",
-				"4,9: mismatched input ':' expecting {<EOF>, 'of', 'if', 'do', 'map', 'stack', 'set', 'for', 'foreach', 'ifall', 'exists', 'not', 'type', 'else', 'case', 'output', 'format', 'while', 'break', 'array', 'static', 'switch', 'return', 'weight', 'result', 'default', 'continue', 'function', 'visitor', 'before', 'after', 'stop', ';', '.', '{', '(', '[', 'or', '|', '||', 'and', '&', '&&', '+', '-', '^', '*', '/', '%', '>>', '~', '!', '?', '$', '<<', IntegerLiteral, FloatingPointLiteral, CharacterLiteral, RegexLiteral, StringLiteral, TimeLiteral, Identifier}",
+				"4,9: mismatched input ':' expecting {<EOF>, 'of', 'if', 'do', 'map', 'stack', 'set', 'for', 'foreach', 'ifall', 'exists', 'not', 'type', 'else', 'case', 'output', 'format', 'while', 'break', 'array', 'static', 'switch', 'return', 'weight', 'default', 'continue', 'function', 'visitor', 'before', 'after', 'stop', ';', '.', '{', '(', '[', 'or', '|', '||', 'and', '&', '&&', '+', '-', '^', '*', '/', '%', '>>', '~', '!', '$', '<<', IntegerLiteral, FloatingPointLiteral, CharacterLiteral, RegexLiteral, StringLiteral, TimeLiteral, Identifier}",
 				"4,12: error: ';' expected"
 			});
 	}
