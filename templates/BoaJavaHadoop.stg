@@ -204,4 +204,4 @@ private static BoaJob _job_<name> = new Job<name>();
 
 >>
 
-EmitStatement(indices, id, job, expression, weight) ::= "context.write(new boa.io.EmitKey(<if(indices)><indices:{idx | \"[\" + <idx> + \"]\"}; separator=\" + \">, <endif><id>, <job>), new boa.io.EmitValue(<expression><if(weight)>, <weight><endif>));<\n>"
+EmitStatement(indices, id, job, expression, weight) ::= "context.write(new boa.io.EmitKey(<if(indices)><indices:{idx | \"[\" + (<idx>) + \"]\"}; separator=\" + \">, <endif><id>, <job>), new boa.io.EmitValue(<expression><if(weight)>, <weight><endif>));<\n>"
