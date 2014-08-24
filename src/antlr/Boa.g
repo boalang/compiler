@@ -270,7 +270,8 @@ forVariableDeclaration returns [VarDeclStatement ast]
 	locals [int l, int c]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: id=identifier COLON { $ast = new VarDeclStatement($id.ast); } (t=type { $ast.setType($t.ast); })? (EQUALS e=expression { $ast.setInitializer($e.ast); })?
+	: id=identifier COLON { $ast = new VarDeclStatement($id.ast); notifyErrorListeners("error: output variable declarations should not include '='"); } EQUALS ot=outputType { $ast.setType($ot.ast); }
+	| id=identifier COLON { $ast = new VarDeclStatement($id.ast); } (t=type { $ast.setType($t.ast); })? (EQUALS e=expression { $ast.setInitializer($e.ast); })?
 	;
 
 forExpressionStatement returns [Statement ast]

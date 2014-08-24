@@ -153,7 +153,8 @@ forExpression
 	;
 
 forVariableDeclaration
-	: identifier COLON (type)? (EQUALS expression)?
+	: identifier COLON { notifyErrorListeners("error: output variable declarations should not include '='"); } EQUALS outputType
+	| identifier COLON (type)? (EQUALS expression)?
 	;
 
 forExpressionStatement
