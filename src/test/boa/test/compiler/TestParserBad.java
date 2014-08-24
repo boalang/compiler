@@ -59,4 +59,10 @@ public class TestParserBad extends BaseTest {
 				"4,12: error: ';' expected"
 			});
 	}
+
+	@Test
+	public void outputVarEquals() throws IOException {
+		parse(load(badDir + "output-var-equals.boa"),
+			new String[] { "1,3: error: output variable declarations should not include '='" });
+	}
 }
