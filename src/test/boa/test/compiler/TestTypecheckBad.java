@@ -55,4 +55,9 @@ public class TestTypecheckBad extends BaseTest {
 	public void reDeclVar() throws IOException {
 		typecheck(load(badDir + "re-decl-var.boa"), "variable 'f' already declared as 'function[]: any'");
 	}
+
+	@Test
+	public void reDeclVar2() throws IOException {
+		typecheck(load(badDir + "re-decl-var2.boa"), "variable 'i' already declared as 'int'");
+	}
 }
