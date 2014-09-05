@@ -1,0 +1,5 @@
+o: output sum of int;
+o << 1;
+
+m: map[int] of string;
+m[0] = "0";

@@ -239,7 +239,11 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 			st.add("map", n.env.getId());
 			st.add("value", code.removeLast());
-			st.add("key", code.removeLast());
+			// FIXME rdyer this is a bit of a hack to fix maps with int keys
+			String key = code.removeLast();
+			if (key.startsWith("(int)("))
+				key = key.substring(5, key.length() - 1);
+			st.add("key", key);
 
 			code.add(st.render());
 		}
@@ -617,7 +621,11 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		st.add("map", n.env.getId());
 		st.add("value", code.removeLast());
-		st.add("key", code.removeLast());
+		// FIXME rdyer this is a bit of a hack to fix maps with int keys
+		String key = code.removeLast();
+		if (key.startsWith("(int)("))
+			key = key.substring(5, key.length() - 1);
+		st.add("key", key);
 
 		code.add(st.render());
 	}
@@ -829,7 +837,12 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		// FIXME rdyer hack to fix assigning to maps
 		if (lhs.contains(".get(")) {
-			final String s = lhs.replaceFirst(Pattern.quote(".get("), ".put(");
+			String s = lhs.replaceFirst(Pattern.quote(".get("), ".put(");
+			// FIXME rdyer this is a bit of a hack to fix maps with int keys
+			if (s.contains("(int)(")) {
+				s = s.replaceFirst(Pattern.quote("(int)("), "");
+				s = s.substring(0, s.lastIndexOf(')'));
+			}
 			code.add(s.substring(0, s.lastIndexOf(')')) + ", " + rhs + s.substring(s.lastIndexOf(')')) + ";");
 			return;
 		}
