@@ -1,0 +1,13 @@
+package boa.types;
+
+option optimize_for = SPEED;
+
+message BoaResult {
+	repeated ResultMap results = 1;
+}
+
+message ResultMap {
+	required string key = 1;
+	repeated string values = 2;
+	repeated ResultMap keys = 3;
+}

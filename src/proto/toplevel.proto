@@ -33,7 +33,8 @@ message Project {
 		SF = 1;
 		SOURCEFORGE = 1;
 		GITHUB = 2;
-		QUALITAS = 3;
+		APACHE = 3;
+		QUALITAS = 4;
 	}
 	required ForgeKind kind = 21;
 }

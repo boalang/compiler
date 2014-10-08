@@ -693,9 +693,13 @@ public final class Toplevel {
        */
       GITHUB(3, 2),
       /**
-       * <code>QUALITAS = 3;</code>
+       * <code>APACHE = 3;</code>
        */
-      QUALITAS(4, 3),
+      APACHE(4, 3),
+      /**
+       * <code>QUALITAS = 4;</code>
+       */
+      QUALITAS(5, 4),
       ;
 
       /**
@@ -719,9 +723,13 @@ public final class Toplevel {
        */
       public static final int GITHUB_VALUE = 2;
       /**
-       * <code>QUALITAS = 3;</code>
+       * <code>APACHE = 3;</code>
        */
-      public static final int QUALITAS_VALUE = 3;
+      public static final int APACHE_VALUE = 3;
+      /**
+       * <code>QUALITAS = 4;</code>
+       */
+      public static final int QUALITAS_VALUE = 4;
 
 
       public final int getNumber() { return value; }
@@ -731,7 +739,8 @@ public final class Toplevel {
           case 0: return OTHER;
           case 1: return SF;
           case 2: return GITHUB;
-          case 3: return QUALITAS;
+          case 3: return APACHE;
+          case 4: return QUALITAS;
           default: return null;
         }
       }
@@ -762,7 +771,7 @@ public final class Toplevel {
       }
 
       private static final ForgeKind[] VALUES = {
-        OTHER, SF, SOURCEFORGE, GITHUB, QUALITAS, 
+        OTHER, SF, SOURCEFORGE, GITHUB, APACHE, QUALITAS, 
       };
 
       public static ForgeKind valueOf(
@@ -4673,7 +4682,7 @@ public final class Toplevel {
   static {
     java.lang.String[] descriptorData = {
       "\n\016toplevel.proto\022\tboa.types\032\014shared.prot" +
-      "o\032\ncode.proto\032\014issues.proto\"\200\005\n\007Project\022" +
+      "o\032\ncode.proto\032\014issues.proto\"\214\005\n\007Project\022" +
       "\n\n\002id\030\001 \002(\t\022\014\n\004name\030\002 \002(\t\022\023\n\013project_url" +
       "\030\003 \002(\t\022\024\n\014homepage_url\030\004 \001(\t\022\024\n\014created_" +
       "date\030\005 \001(\004\022\023\n\013description\030\006 \001(\t\022\031\n\021opera" +
@@ -4687,9 +4696,10 @@ public final class Toplevel {
       "\021code_repositories\030\023 \003(\0132\031.boa.types.Cod" +
       "eRepository\0226\n\022issue_repositories\030\024 \003(\0132" +
       "\032.boa.types.IssueRepository\022*\n\004kind\030\025 \002(" +
-      "\0162\034.boa.types.Project.ForgeKind\"M\n\tForge" +
+      "\0162\034.boa.types.Project.ForgeKind\"Y\n\tForge" +
       "Kind\022\t\n\005OTHER\020\000\022\006\n\002SF\020\001\022\017\n\013SOURCEFORGE\020\001" +
-      "\022\n\n\006GITHUB\020\002\022\014\n\010QUALITAS\020\003\032\002\020\001B\002H\001"
+      "\022\n\n\006GITHUB\020\002\022\n\n\006APACHE\020\003\022\014\n\010QUALITAS\020\004\032\002" +
+      "\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
