@@ -329,7 +329,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 
 		BoaType type = null;
 
-		if (n.getOpsSize() > 0)
+		if (n.getOpsSize() > 0) {
 			for (final Node node : n.getOps()) {
 				if (node instanceof Selector) {
 					if (type == null) {
@@ -388,9 +388,12 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 				}
 				node.type = type;
 			}
-		else {
+		} else {
 			n.getOperand().accept(this, env);
 			type = n.getOperand().type;
+
+			if (type instanceof BoaFunction && n.getOperand() instanceof Identifier)
+				throw new TypeCheckException(n, "expected a call to function '" + n.getOperand() + "'");
 		}
 
 		n.type = type;

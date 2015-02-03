@@ -60,4 +60,9 @@ public class TestTypecheckBad extends BaseTest {
 	public void reDeclVar2() throws IOException {
 		typecheck(load(badDir + "re-decl-var2.boa"), "variable 'i' already declared as 'int'");
 	}
+
+	@Test
+	public void methodNoCall() throws IOException {
+		typecheck(load(badDir + "method-no-call.boa"), "expected a call to function 'f'");
+	}
 }
