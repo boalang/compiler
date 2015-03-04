@@ -1,0 +1,4 @@
+o: output sum of int;
+
+if (clear)
+	o << 1;

@@ -58,11 +58,16 @@ public class TestTypecheckBad extends BaseTest {
 
 	@Test
 	public void reDeclVar2() throws IOException {
-		typecheck(load(badDir + "re-decl-var2.boa"), "variable 'i' already declared as 'int'");
+		typecheck("autoaddedoutputvar: output sum of int;autoaddedoutputvar << 1;" + load(badDir + "re-decl-var2.boa"), "variable 'i' already declared as 'int'");
 	}
 
 	@Test
 	public void methodNoCall() throws IOException {
 		typecheck(load(badDir + "method-no-call.boa"), "expected a call to function 'f'");
+	}
+
+	@Test
+	public void buildinMethodNoCall() throws IOException {
+		typecheck(load(badDir + "builtin-method-no-call.boa"), "expected a call to function 'clear'");
 	}
 }

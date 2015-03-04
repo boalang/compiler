@@ -1,6 +1,3 @@
-o: output sum of int;
-o << 1;
-
 a: array of int;
 foreach (i: int; a[i] > 0)
 	foreach (i: int; a[i] > 0) {

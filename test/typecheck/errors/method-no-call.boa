@@ -1,4 +1,6 @@
 o: output sum of int;
 
-if (matches)
+f := function() : bool { return true; };
+
+if (f)
 	o << 1;

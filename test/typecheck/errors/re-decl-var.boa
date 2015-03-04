@@ -1,6 +1,3 @@
-o: output sum of int;
-o << 1;
-
 f: function();
 
 f := function() {
