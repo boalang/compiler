@@ -1,0 +1,24 @@
+o: output sum of int;
+o << 1;
+
+f := function(a1: map[string] of string,
+	a2: map[string] of string,
+	a3: map[string] of string,
+	a4: map[string] of string,
+	a5: map[string] of string,
+	a6: map[string] of string,
+	a7: map[string] of string,
+	a8: map[string] of string,
+	a9: map[string] of string,
+	a10: map[string] of string,
+	a11: map[string] of string,
+	a12: map[string] of string,
+	a13: map[string] of string,
+	a14: map[string] of string,
+	a15: map[string] of string,
+	a16: map[string] of string,
+	a17: map[string] of string,
+	a18: map[string] of string,
+	a19: map[string] of string,
+	a20: map[string] of string) {
+};
