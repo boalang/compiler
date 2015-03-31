@@ -1,7 +1,9 @@
 package boa.types;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A {@link BoaType} that represents a function, its return value, and its
@@ -11,6 +13,8 @@ import java.util.List;
  * 
  */
 public class BoaFunction extends BoaType {
+	private static final Map<String, String> funcNames = new HashMap<String, String>();
+
 	private BoaType type;
 	private BoaType[] formalParameters;
 	private String name;
@@ -223,10 +227,13 @@ public class BoaFunction extends BoaType {
 	/** {@inheritDoc} */
 	@Override
 	public String toJavaType() {
-		String s = "BoaFunc_" + cleanType(type.toJavaType()) + "_";
+		String s = cleanType(type.toJavaType()) + "_";
 		for (final BoaType t : this.formalParameters)
 			s += "_" + cleanType(t.toJavaType());
-		return s;
+		// use numbers for each unique type, to avoid generating really long filenames
+		if (!funcNames.containsKey(s))
+			funcNames.put(s, "BoaFunc_" + funcNames.size());
+		return funcNames.get(s);
 	}
 
 	private String cleanType(String s) {
