@@ -246,7 +246,7 @@ public class BoaCompiler {
 		final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
 		LOG.info("compiling: " + outputFile);
 		LOG.info("classpath: " + System.getProperty("java.class.path"));
-		if (compiler.run(null, null, null, "-cp", System.getProperty("java.class.path"), outputFile.toString()) != 0)
+		if (compiler.run(null, null, null, "-source", "5", "-target", "5", "-cp", System.getProperty("java.class.path"), outputFile.toString()) != 0)
 			throw new RuntimeException("compile failed");
 
 		// find the location of the jar this class is in
