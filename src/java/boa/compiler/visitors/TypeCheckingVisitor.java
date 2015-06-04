@@ -19,7 +19,7 @@ import boa.types.*;
  * @author anthonyu
  * @author rdyer
  */
-public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
+public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	/**
 	 * This verifies visitors have at most 1 before/after for a type.
 	 * 
@@ -153,7 +153,7 @@ public class TypeCheckingVisitor extends AbstractVisitor<SymbolTable> {
 	 * 
 	 * @author rdyer
 	 */
-	protected class FunctionFindingVisitor extends AbstractVisitor<SymbolTable> {
+	protected class FunctionFindingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		protected BoaFunction func;
 		protected final List<BoaType> formalParameters;
 

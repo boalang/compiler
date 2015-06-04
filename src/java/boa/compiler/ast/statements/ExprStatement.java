@@ -4,10 +4,12 @@ import boa.compiler.ast.Node;
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.compiler.visitors.AbstractVisitorNoReturn;
 
 /**
  * 
  * @author rdyer
+ * @author hridesh
  */
 public class ExprStatement extends Statement {
 	protected Expression e;
@@ -24,7 +26,13 @@ public class ExprStatement extends Statement {
 
 	/** {@inheritDoc} */
 	@Override
-	public <A> void accept(final AbstractVisitor<A> v, A arg) {
+	public <T,A> T accept(final AbstractVisitor<T,A> v, A arg) {
+		return v.visit(this, arg);
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
 		v.visit(this, arg);
 	}
 
