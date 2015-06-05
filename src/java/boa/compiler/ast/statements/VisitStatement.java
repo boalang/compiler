@@ -23,10 +23,12 @@ import boa.compiler.ast.Component;
 import boa.compiler.ast.Identifier;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.compiler.visitors.AbstractVisitorNoReturn;
 
 /**
  * 
  * @author rdyer
+ * @author hridesh
  */
 public class VisitStatement extends Statement {
 	protected boolean before;
@@ -111,7 +113,13 @@ public class VisitStatement extends Statement {
 
 	/** {@inheritDoc} */
 	@Override
-	public <A> void accept(AbstractVisitor<A> v, A arg) {
+	public <T,A> T accept(AbstractVisitor<T,A> v, A arg) {
+		return v.visit(this, arg);
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public <A> void accept(AbstractVisitorNoReturn<A> v, A arg) {
 		v.visit(this, arg);
 	}
 

@@ -21,11 +21,13 @@ import boa.compiler.ast.statements.Statement;
 import boa.compiler.ast.statements.Block;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.compiler.visitors.AbstractVisitorNoReturn;
 import boa.types.BoaType;
 
 /**
  * 
  * @author rdyer
+ * @author hridesh
  */
 public abstract class Node {
 	protected Node parent;
@@ -69,7 +71,8 @@ public abstract class Node {
 		newNode.endColumn = endColumn;
 	}
 
-	public abstract <A> void accept(final AbstractVisitor<A> v, final A arg);
+	public abstract <T,A> T accept(final AbstractVisitor<T,A> v, final A arg);
+	public abstract <A> void accept(final AbstractVisitorNoReturn<A> v, final A arg);
 	public abstract void accept(final AbstractVisitorNoArg v);
 
 	public Node insertStatementBefore(final Statement s) {

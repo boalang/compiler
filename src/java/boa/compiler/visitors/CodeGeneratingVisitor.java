@@ -295,7 +295,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	 * 
 	 * @author rdyer
 	 */
-	protected class IndexeeFindingVisitor extends AbstractVisitor<String> {
+	protected class IndexeeFindingVisitor extends AbstractVisitorNoReturn<String> {
 		protected Factor firstFactor;
 		protected Node lastFactor;
 

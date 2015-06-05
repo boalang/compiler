@@ -21,10 +21,12 @@ import boa.compiler.ast.statements.Block;
 import boa.compiler.ast.types.AbstractType;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.compiler.visitors.AbstractVisitorNoReturn;
 
 /**
  * 
  * @author rdyer
+ * @author hridesh
  */
 public class FunctionExpression extends Operand {
 	protected AbstractType t;
@@ -49,7 +51,13 @@ public class FunctionExpression extends Operand {
 
 	/** {@inheritDoc} */
 	@Override
-	public <A> void accept(final AbstractVisitor<A> v, A arg) {
+	public <T,A> T accept(final AbstractVisitor<T,A> v, A arg) {
+		return v.visit(this, arg);
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
 		v.visit(this, arg);
 	}
 
