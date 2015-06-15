@@ -1,7 +1,5 @@
 package boa.types;
 
-import "shared.proto";
-
 option optimize_for = SPEED;
 
 message CommentsRoot {

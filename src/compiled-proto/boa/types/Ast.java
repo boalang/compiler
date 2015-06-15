@@ -22132,106 +22132,106 @@ public final class Ast {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\tast.proto\022\tboa.types\032\014shared.proto\"4\n\014" +
-      "CommentsRoot\022$\n\010comments\030\001 \003(\0132\022.boa.typ" +
-      "es.Comment\"D\n\007ASTRoot\022(\n\nnamespaces\030\001 \003(" +
-      "\0132\024.boa.types.Namespace\022\017\n\007imports\030\002 \003(\t" +
-      "\"o\n\tNamespace\022\014\n\004name\030\001 \002(\t\022&\n\tmodifiers" +
-      "\030\002 \003(\0132\023.boa.types.Modifier\022,\n\014declarati" +
-      "ons\030\003 \003(\0132\026.boa.types.Declaration\"\331\002\n\013De" +
-      "claration\022\014\n\004name\030\001 \002(\t\022!\n\004kind\030\002 \002(\0162\023." +
-      "boa.types.TypeKind\022&\n\tmodifiers\030\003 \003(\0132\023." +
-      "boa.types.Modifier\022+\n\022generic_parameters",
-      "\030\004 \003(\0132\017.boa.types.Type\022 \n\007parents\030\005 \003(\013" +
-      "2\017.boa.types.Type\022\"\n\007methods\030\006 \003(\0132\021.boa" +
-      ".types.Method\022#\n\006fields\030\007 \003(\0132\023.boa.type" +
-      "s.Variable\0223\n\023nested_declarations\030\010 \003(\0132" +
-      "\026.boa.types.Declaration\022$\n\010comments\030\t \003(" +
-      "\0132\022.boa.types.Comment\"C\n\004Type\022\014\n\004name\030\001 " +
-      "\002(\t\022!\n\004kind\030\002 \002(\0162\023.boa.types.TypeKind\022\n" +
-      "\n\002id\030\004 \001(\t\"\263\002\n\006Method\022\014\n\004name\030\001 \001(\t\022&\n\tm" +
-      "odifiers\030\002 \003(\0132\023.boa.types.Modifier\022$\n\013r" +
-      "eturn_type\030\003 \002(\0132\017.boa.types.Type\022+\n\022gen",
-      "eric_parameters\030\004 \003(\0132\017.boa.types.Type\022&" +
-      "\n\targuments\030\005 \003(\0132\023.boa.types.Variable\022(" +
-      "\n\017exception_types\030\006 \003(\0132\017.boa.types.Type" +
-      "\022(\n\nstatements\030\007 \003(\0132\024.boa.types.Stateme" +
-      "nt\022$\n\010comments\030\010 \003(\0132\022.boa.types.Comment" +
-      "\"\272\001\n\010Variable\022\014\n\004name\030\001 \002(\t\022&\n\rvariable_" +
-      "type\030\002 \002(\0132\017.boa.types.Type\022&\n\tmodifiers" +
-      "\030\003 \003(\0132\023.boa.types.Modifier\022*\n\013initializ" +
-      "er\030\004 \001(\0132\025.boa.types.Expression\022$\n\010comme" +
-      "nts\030\005 \003(\0132\022.boa.types.Comment\"\257\005\n\tStatem",
-      "ent\0220\n\004kind\030\001 \002(\0162\".boa.types.Statement." +
-      "StatementKind\022$\n\010comments\030\002 \003(\0132\022.boa.ty" +
-      "pes.Comment\022(\n\nstatements\030\003 \003(\0132\024.boa.ty" +
-      "pes.Statement\022.\n\017initializations\030\004 \003(\0132\025" +
-      ".boa.types.Expression\022(\n\tcondition\030\005 \001(\013" +
-      "2\025.boa.types.Expression\022&\n\007updates\030\006 \003(\013" +
-      "2\025.boa.types.Expression\0221\n\024variable_decl" +
-      "aration\030\007 \001(\0132\023.boa.types.Variable\0220\n\020ty" +
-      "pe_declaration\030\010 \001(\0132\026.boa.types.Declara" +
-      "tion\022)\n\nexpression\030\t \001(\0132\025.boa.types.Exp",
-      "ression\"\215\002\n\rStatementKind\022\t\n\005OTHER\020\000\022\t\n\005" +
-      "BLOCK\020\001\022\014\n\010TYPEDECL\020\002\022\016\n\nEXPRESSION\020\003\022\010\n" +
-      "\004EXPR\020\003\022\020\n\014SYNCHRONIZED\020\004\022\010\n\004SYNC\020\004\022\n\n\006R" +
-      "ETURN\020\005\022\007\n\003FOR\020\006\022\006\n\002DO\020\007\022\t\n\005WHILE\020\010\022\006\n\002I" +
-      "F\020\t\022\n\n\006ASSERT\020\n\022\t\n\005BREAK\020\013\022\014\n\010CONTINUE\020\014" +
-      "\022\t\n\005LABEL\020\r\022\n\n\006SWITCH\020\016\022\010\n\004CASE\020\017\022\007\n\003TRY" +
-      "\020\020\022\t\n\005THROW\020\021\022\t\n\005CATCH\020\022\022\t\n\005EMPTY\020\023\032\002\020\001\"" +
-      "\217\t\n\nExpression\0222\n\004kind\030\001 \002(\0162$.boa.types" +
-      ".Expression.ExpressionKind\022*\n\013expression" +
-      "s\030\002 \003(\0132\025.boa.types.Expression\022+\n\016variab",
-      "le_decls\030\003 \003(\0132\023.boa.types.Variable\022!\n\010n" +
-      "ew_type\030\004 \001(\0132\017.boa.types.Type\022+\n\022generi" +
-      "c_parameters\030\005 \003(\0132\017.boa.types.Type\022\022\n\ni" +
-      "s_postfix\030\006 \001(\010\022\017\n\007literal\030\007 \001(\t\022\020\n\010vari" +
-      "able\030\010 \001(\t\022\016\n\006method\030\t \001(\t\022*\n\013method_arg" +
-      "s\030\n \003(\0132\025.boa.types.Expression\0220\n\020anon_d" +
-      "eclaration\030\013 \001(\0132\026.boa.types.Declaration" +
-      "\022\'\n\nannotation\030\014 \001(\0132\023.boa.types.Modifie" +
-      "r\"\325\005\n\016ExpressionKind\022\t\n\005OTHER\020\000\022\013\n\007LITER" +
-      "AL\020\001\022\r\n\tVARACCESS\020\002\022\013\n\007VARDECL\020\003\022\016\n\nMETH",
-      "ODCALL\020\004\022\010\n\004CAST\020\005\022\016\n\nARRAYINDEX\020\006\022\r\n\tAR" +
-      "RAYINIT\020\007\022\017\n\013TYPECOMPARE\020\010\022\007\n\003NEW\020\t\022\014\n\010N" +
-      "EWARRAY\020\n\022\n\n\006OP_ADD\020\013\022\n\n\006OP_SUB\020\014\022\013\n\007OP_" +
-      "MULT\020\r\022\n\n\006OP_DIV\020\016\022\n\n\006OP_MOD\020\017\022\n\n\006OP_INC" +
-      "\020\020\022\n\n\006OP_DEC\020\021\022\016\n\nBIT_LSHIFT\020\022\022\016\n\nBIT_RS" +
-      "HIFT\020\023\022\026\n\022BIT_UNSIGNEDRSHIFT\020\024\022\013\n\007BIT_AN" +
-      "D\020\025\022\n\n\006BIT_OR\020\026\022\013\n\007BIT_NOT\020\027\022\013\n\007BIT_XOR\020" +
-      "\030\022\017\n\013LOGICAL_NOT\020\031\022\017\n\013LOGICAL_AND\020\032\022\016\n\nL" +
-      "OGICAL_OR\020\033\022\006\n\002EQ\020\034\022\007\n\003NEQ\020\035\022\006\n\002LT\020\036\022\006\n\002" +
-      "GT\020\037\022\010\n\004LTEQ\020 \022\010\n\004GTEQ\020!\022\017\n\013CONDITIONAL\020",
-      "\"\022\020\n\014NULLCOALESCE\020#\022\n\n\006ASSIGN\020$\022\016\n\nASSIG" +
-      "N_ADD\020%\022\016\n\nASSIGN_SUB\020&\022\017\n\013ASSIGN_MULT\020\'" +
-      "\022\016\n\nASSIGN_DIV\020(\022\016\n\nASSIGN_MOD\020)\022\021\n\rASSI" +
-      "GN_BITXOR\020*\022\021\n\rASSIGN_BITAND\020+\022\020\n\014ASSIGN" +
-      "_BITOR\020,\022\021\n\rASSIGN_LSHIFT\020-\022\021\n\rASSIGN_RS" +
-      "HIFT\020.\022\031\n\025ASSIGN_UNSIGNEDRSHIFT\020/\022\016\n\nANN" +
-      "OTATION\0200\"\251\003\n\010Modifier\022.\n\004kind\030\001 \002(\0162 .b" +
-      "oa.types.Modifier.ModifierKind\0222\n\nvisibi" +
-      "lity\030\002 \001(\0162\036.boa.types.Modifier.Visibili" +
-      "ty\022\027\n\017annotation_name\030\003 \001(\t\022\032\n\022annotatio",
-      "n_members\030\004 \003(\t\0220\n\021annotation_values\030\005 \003" +
-      "(\0132\025.boa.types.Expression\022\r\n\005other\030\006 \001(\t" +
-      "\"~\n\014ModifierKind\022\t\n\005OTHER\020\000\022\016\n\nVISIBILIT" +
-      "Y\020\001\022\016\n\nANNOTATION\020\002\022\t\n\005FINAL\020\003\022\n\n\006STATIC" +
-      "\020\004\022\020\n\014SYNCHRONIZED\020\005\022\010\n\004SYNC\020\005\022\014\n\010ABSTRA" +
-      "CT\020\006\032\002\020\001\"C\n\nVisibility\022\n\n\006PUBLIC\020\001\022\013\n\007PR" +
-      "IVATE\020\002\022\r\n\tPROTECTED\020\003\022\r\n\tNAMESPACE\020\004\"\335\001" +
-      "\n\007Comment\022,\n\004kind\030\001 \002(\0162\036.boa.types.Comm" +
-      "ent.CommentKind\022\r\n\005value\030\002 \002(\t\022)\n\010positi" +
-      "on\030\003 \002(\0132\027.boa.types.PositionInfo\"j\n\013Com",
-      "mentKind\022\t\n\005OTHER\020\000\022\010\n\004LINE\020\001\022\t\n\005BLOCK\020\002" +
-      "\022\007\n\003DOC\020\003\022\021\n\rDOCUMENTATION\020\003\022\010\n\004SPEC\020\004\022\021" +
-      "\n\rSPECIFICATION\020\004\032\002\020\001\"{\n\014PositionInfo\022\021\n" +
-      "\tstart_pos\030\001 \002(\005\022\016\n\006length\030\002 \002(\005\022\022\n\nstar" +
-      "t_line\030\003 \002(\005\022\021\n\tstart_col\030\004 \002(\005\022\020\n\010end_l" +
-      "ine\030\005 \002(\005\022\017\n\007end_col\030\006 \002(\005*\236\001\n\010TypeKind\022" +
-      "\t\n\005OTHER\020\000\022\t\n\005CLASS\020\001\022\r\n\tINTERFACE\020\002\022\r\n\t" +
-      "ANONYMOUS\020\003\022\010\n\004ANON\020\003\022\n\n\006STRUCT\020\004\022\010\n\004ENU" +
-      "M\020\005\022\017\n\013ENUMERATION\020\005\022\016\n\nANNOTATION\020\006\022\014\n\010" +
-      "DELEGATE\020\007\022\013\n\007GENERIC\020\010\032\002\020\001B\002H\001"
+      "\n\tast.proto\022\tboa.types\"4\n\014CommentsRoot\022$" +
+      "\n\010comments\030\001 \003(\0132\022.boa.types.Comment\"D\n\007" +
+      "ASTRoot\022(\n\nnamespaces\030\001 \003(\0132\024.boa.types." +
+      "Namespace\022\017\n\007imports\030\002 \003(\t\"o\n\tNamespace\022" +
+      "\014\n\004name\030\001 \002(\t\022&\n\tmodifiers\030\002 \003(\0132\023.boa.t" +
+      "ypes.Modifier\022,\n\014declarations\030\003 \003(\0132\026.bo" +
+      "a.types.Declaration\"\331\002\n\013Declaration\022\014\n\004n" +
+      "ame\030\001 \002(\t\022!\n\004kind\030\002 \002(\0162\023.boa.types.Type" +
+      "Kind\022&\n\tmodifiers\030\003 \003(\0132\023.boa.types.Modi" +
+      "fier\022+\n\022generic_parameters\030\004 \003(\0132\017.boa.t",
+      "ypes.Type\022 \n\007parents\030\005 \003(\0132\017.boa.types.T" +
+      "ype\022\"\n\007methods\030\006 \003(\0132\021.boa.types.Method\022" +
+      "#\n\006fields\030\007 \003(\0132\023.boa.types.Variable\0223\n\023" +
+      "nested_declarations\030\010 \003(\0132\026.boa.types.De" +
+      "claration\022$\n\010comments\030\t \003(\0132\022.boa.types." +
+      "Comment\"C\n\004Type\022\014\n\004name\030\001 \002(\t\022!\n\004kind\030\002 " +
+      "\002(\0162\023.boa.types.TypeKind\022\n\n\002id\030\004 \001(\t\"\263\002\n" +
+      "\006Method\022\014\n\004name\030\001 \001(\t\022&\n\tmodifiers\030\002 \003(\013" +
+      "2\023.boa.types.Modifier\022$\n\013return_type\030\003 \002" +
+      "(\0132\017.boa.types.Type\022+\n\022generic_parameter",
+      "s\030\004 \003(\0132\017.boa.types.Type\022&\n\targuments\030\005 " +
+      "\003(\0132\023.boa.types.Variable\022(\n\017exception_ty" +
+      "pes\030\006 \003(\0132\017.boa.types.Type\022(\n\nstatements" +
+      "\030\007 \003(\0132\024.boa.types.Statement\022$\n\010comments" +
+      "\030\010 \003(\0132\022.boa.types.Comment\"\272\001\n\010Variable\022" +
+      "\014\n\004name\030\001 \002(\t\022&\n\rvariable_type\030\002 \002(\0132\017.b" +
+      "oa.types.Type\022&\n\tmodifiers\030\003 \003(\0132\023.boa.t" +
+      "ypes.Modifier\022*\n\013initializer\030\004 \001(\0132\025.boa" +
+      ".types.Expression\022$\n\010comments\030\005 \003(\0132\022.bo" +
+      "a.types.Comment\"\257\005\n\tStatement\0220\n\004kind\030\001 ",
+      "\002(\0162\".boa.types.Statement.StatementKind\022" +
+      "$\n\010comments\030\002 \003(\0132\022.boa.types.Comment\022(\n" +
+      "\nstatements\030\003 \003(\0132\024.boa.types.Statement\022" +
+      ".\n\017initializations\030\004 \003(\0132\025.boa.types.Exp" +
+      "ression\022(\n\tcondition\030\005 \001(\0132\025.boa.types.E" +
+      "xpression\022&\n\007updates\030\006 \003(\0132\025.boa.types.E" +
+      "xpression\0221\n\024variable_declaration\030\007 \001(\0132" +
+      "\023.boa.types.Variable\0220\n\020type_declaration" +
+      "\030\010 \001(\0132\026.boa.types.Declaration\022)\n\nexpres" +
+      "sion\030\t \001(\0132\025.boa.types.Expression\"\215\002\n\rSt",
+      "atementKind\022\t\n\005OTHER\020\000\022\t\n\005BLOCK\020\001\022\014\n\010TYP" +
+      "EDECL\020\002\022\016\n\nEXPRESSION\020\003\022\010\n\004EXPR\020\003\022\020\n\014SYN" +
+      "CHRONIZED\020\004\022\010\n\004SYNC\020\004\022\n\n\006RETURN\020\005\022\007\n\003FOR" +
+      "\020\006\022\006\n\002DO\020\007\022\t\n\005WHILE\020\010\022\006\n\002IF\020\t\022\n\n\006ASSERT\020" +
+      "\n\022\t\n\005BREAK\020\013\022\014\n\010CONTINUE\020\014\022\t\n\005LABEL\020\r\022\n\n" +
+      "\006SWITCH\020\016\022\010\n\004CASE\020\017\022\007\n\003TRY\020\020\022\t\n\005THROW\020\021\022" +
+      "\t\n\005CATCH\020\022\022\t\n\005EMPTY\020\023\032\002\020\001\"\217\t\n\nExpression" +
+      "\0222\n\004kind\030\001 \002(\0162$.boa.types.Expression.Ex" +
+      "pressionKind\022*\n\013expressions\030\002 \003(\0132\025.boa." +
+      "types.Expression\022+\n\016variable_decls\030\003 \003(\013",
+      "2\023.boa.types.Variable\022!\n\010new_type\030\004 \001(\0132" +
+      "\017.boa.types.Type\022+\n\022generic_parameters\030\005" +
+      " \003(\0132\017.boa.types.Type\022\022\n\nis_postfix\030\006 \001(" +
+      "\010\022\017\n\007literal\030\007 \001(\t\022\020\n\010variable\030\010 \001(\t\022\016\n\006" +
+      "method\030\t \001(\t\022*\n\013method_args\030\n \003(\0132\025.boa." +
+      "types.Expression\0220\n\020anon_declaration\030\013 \001" +
+      "(\0132\026.boa.types.Declaration\022\'\n\nannotation" +
+      "\030\014 \001(\0132\023.boa.types.Modifier\"\325\005\n\016Expressi" +
+      "onKind\022\t\n\005OTHER\020\000\022\013\n\007LITERAL\020\001\022\r\n\tVARACC" +
+      "ESS\020\002\022\013\n\007VARDECL\020\003\022\016\n\nMETHODCALL\020\004\022\010\n\004CA",
+      "ST\020\005\022\016\n\nARRAYINDEX\020\006\022\r\n\tARRAYINIT\020\007\022\017\n\013T" +
+      "YPECOMPARE\020\010\022\007\n\003NEW\020\t\022\014\n\010NEWARRAY\020\n\022\n\n\006O" +
+      "P_ADD\020\013\022\n\n\006OP_SUB\020\014\022\013\n\007OP_MULT\020\r\022\n\n\006OP_D" +
+      "IV\020\016\022\n\n\006OP_MOD\020\017\022\n\n\006OP_INC\020\020\022\n\n\006OP_DEC\020\021" +
+      "\022\016\n\nBIT_LSHIFT\020\022\022\016\n\nBIT_RSHIFT\020\023\022\026\n\022BIT_" +
+      "UNSIGNEDRSHIFT\020\024\022\013\n\007BIT_AND\020\025\022\n\n\006BIT_OR\020" +
+      "\026\022\013\n\007BIT_NOT\020\027\022\013\n\007BIT_XOR\020\030\022\017\n\013LOGICAL_N" +
+      "OT\020\031\022\017\n\013LOGICAL_AND\020\032\022\016\n\nLOGICAL_OR\020\033\022\006\n" +
+      "\002EQ\020\034\022\007\n\003NEQ\020\035\022\006\n\002LT\020\036\022\006\n\002GT\020\037\022\010\n\004LTEQ\020 " +
+      "\022\010\n\004GTEQ\020!\022\017\n\013CONDITIONAL\020\"\022\020\n\014NULLCOALE",
+      "SCE\020#\022\n\n\006ASSIGN\020$\022\016\n\nASSIGN_ADD\020%\022\016\n\nASS" +
+      "IGN_SUB\020&\022\017\n\013ASSIGN_MULT\020\'\022\016\n\nASSIGN_DIV" +
+      "\020(\022\016\n\nASSIGN_MOD\020)\022\021\n\rASSIGN_BITXOR\020*\022\021\n" +
+      "\rASSIGN_BITAND\020+\022\020\n\014ASSIGN_BITOR\020,\022\021\n\rAS" +
+      "SIGN_LSHIFT\020-\022\021\n\rASSIGN_RSHIFT\020.\022\031\n\025ASSI" +
+      "GN_UNSIGNEDRSHIFT\020/\022\016\n\nANNOTATION\0200\"\251\003\n\010" +
+      "Modifier\022.\n\004kind\030\001 \002(\0162 .boa.types.Modif" +
+      "ier.ModifierKind\0222\n\nvisibility\030\002 \001(\0162\036.b" +
+      "oa.types.Modifier.Visibility\022\027\n\017annotati" +
+      "on_name\030\003 \001(\t\022\032\n\022annotation_members\030\004 \003(",
+      "\t\0220\n\021annotation_values\030\005 \003(\0132\025.boa.types" +
+      ".Expression\022\r\n\005other\030\006 \001(\t\"~\n\014ModifierKi" +
+      "nd\022\t\n\005OTHER\020\000\022\016\n\nVISIBILITY\020\001\022\016\n\nANNOTAT" +
+      "ION\020\002\022\t\n\005FINAL\020\003\022\n\n\006STATIC\020\004\022\020\n\014SYNCHRON" +
+      "IZED\020\005\022\010\n\004SYNC\020\005\022\014\n\010ABSTRACT\020\006\032\002\020\001\"C\n\nVi" +
+      "sibility\022\n\n\006PUBLIC\020\001\022\013\n\007PRIVATE\020\002\022\r\n\tPRO" +
+      "TECTED\020\003\022\r\n\tNAMESPACE\020\004\"\335\001\n\007Comment\022,\n\004k" +
+      "ind\030\001 \002(\0162\036.boa.types.Comment.CommentKin" +
+      "d\022\r\n\005value\030\002 \002(\t\022)\n\010position\030\003 \002(\0132\027.boa" +
+      ".types.PositionInfo\"j\n\013CommentKind\022\t\n\005OT",
+      "HER\020\000\022\010\n\004LINE\020\001\022\t\n\005BLOCK\020\002\022\007\n\003DOC\020\003\022\021\n\rD" +
+      "OCUMENTATION\020\003\022\010\n\004SPEC\020\004\022\021\n\rSPECIFICATIO" +
+      "N\020\004\032\002\020\001\"{\n\014PositionInfo\022\021\n\tstart_pos\030\001 \002" +
+      "(\005\022\016\n\006length\030\002 \002(\005\022\022\n\nstart_line\030\003 \002(\005\022\021" +
+      "\n\tstart_col\030\004 \002(\005\022\020\n\010end_line\030\005 \002(\005\022\017\n\007e" +
+      "nd_col\030\006 \002(\005*\236\001\n\010TypeKind\022\t\n\005OTHER\020\000\022\t\n\005" +
+      "CLASS\020\001\022\r\n\tINTERFACE\020\002\022\r\n\tANONYMOUS\020\003\022\010\n" +
+      "\004ANON\020\003\022\n\n\006STRUCT\020\004\022\010\n\004ENUM\020\005\022\017\n\013ENUMERA" +
+      "TION\020\005\022\016\n\nANNOTATION\020\006\022\014\n\010DELEGATE\020\007\022\013\n\007" +
+      "GENERIC\020\010\032\002\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -22316,7 +22316,6 @@ public final class Ast {
     com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
-          boa.types.Shared.getDescriptor(),
         }, assigner);
   }
 
