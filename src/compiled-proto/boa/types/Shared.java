@@ -25,6 +25,14 @@ public final class Shared {
      * <code>MODIFIED = 3;</code>
      */
     MODIFIED(3, 3),
+    /**
+     * <code>RENAMED = 4;</code>
+     */
+    RENAMED(5, 4),
+    /**
+     * <code>COPIED = 5;</code>
+     */
+    COPIED(7, 5),
     ;
 
     /**
@@ -35,6 +43,10 @@ public final class Shared {
      * <code>CHANGED = 3;</code>
      */
     public static final ChangeKind CHANGED = MODIFIED;
+    /**
+     * <code>MOVED = 4;</code>
+     */
+    public static final ChangeKind MOVED = RENAMED;
     /**
      * <code>ADDED = 1;</code>
      */
@@ -55,6 +67,18 @@ public final class Shared {
      * <code>CHANGED = 3;</code>
      */
     public static final int CHANGED_VALUE = 3;
+    /**
+     * <code>RENAMED = 4;</code>
+     */
+    public static final int RENAMED_VALUE = 4;
+    /**
+     * <code>MOVED = 4;</code>
+     */
+    public static final int MOVED_VALUE = 4;
+    /**
+     * <code>COPIED = 5;</code>
+     */
+    public static final int COPIED_VALUE = 5;
 
 
     public final int getNumber() { return value; }
@@ -64,6 +88,8 @@ public final class Shared {
         case 1: return ADDED;
         case 2: return DELETED;
         case 3: return MODIFIED;
+        case 4: return RENAMED;
+        case 5: return COPIED;
         default: return null;
       }
     }
@@ -94,7 +120,7 @@ public final class Shared {
     }
 
     private static final ChangeKind[] VALUES = {
-      ADDED, DELETED, REMOVED, MODIFIED, CHANGED, 
+      ADDED, DELETED, REMOVED, MODIFIED, CHANGED, RENAMED, MOVED, COPIED, 
     };
 
     public static ChangeKind valueOf(
@@ -940,9 +966,10 @@ public final class Shared {
     java.lang.String[] descriptorData = {
       "\n\014shared.proto\022\tboa.types\"<\n\006Person\022\020\n\010u" +
       "sername\030\001 \002(\t\022\021\n\treal_name\030\002 \002(\t\022\r\n\005emai" +
-      "l\030\003 \002(\t*P\n\nChangeKind\022\t\n\005ADDED\020\001\022\013\n\007DELE" +
+      "l\030\003 \002(\t*t\n\nChangeKind\022\t\n\005ADDED\020\001\022\013\n\007DELE" +
       "TED\020\002\022\013\n\007REMOVED\020\002\022\014\n\010MODIFIED\020\003\022\013\n\007CHAN" +
-      "GED\020\003\032\002\020\001B\002H\001"
+      "GED\020\003\022\013\n\007RENAMED\020\004\022\t\n\005MOVED\020\004\022\n\n\006COPIED\020" +
+      "\005\032\002\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

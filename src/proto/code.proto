@@ -21,6 +21,10 @@ message CodeRepository {
 	}
 	required RepositoryKind kind = 2;
 	repeated Revision revisions = 3;
+	repeated int32 branches = 4;
+	repeated string branch_names = 5;
+	repeated int32 tags = 6;
+	repeated string tag_names = 7;
 }
 
 message Revision {
