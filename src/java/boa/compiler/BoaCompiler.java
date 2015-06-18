@@ -77,9 +77,9 @@ public class BoaCompiler {
 	private static Logger LOG = Logger.getLogger(BoaCompiler.class);
 
 	public abstract static class BoaErrorListener extends BaseErrorListener {
-		public static boolean hasError = false;
+		public boolean hasError = false;
 
-		public static void error(final String kind, final TokenSource tokens, final Object offendingSymbol, final int line, final int charPositionInLine, final int length, final String msg, final Exception e) {
+		public void error(final String kind, final TokenSource tokens, final Object offendingSymbol, final int line, final int charPositionInLine, final int length, final String msg, final Exception e) {
 			hasError = true;
 
 			final String filename = tokens.getSourceName();
@@ -98,7 +98,7 @@ public class BoaCompiler {
 			else
 				System.err.println("\tat unknown stack");
 		}
-		private static void underlineError(final TokenSource tokens, final Token offendingToken, final int line, final int charPositionInLine, final int length) {
+		private void underlineError(final TokenSource tokens, final Token offendingToken, final int line, final int charPositionInLine, final int length) {
 			final String input = tokens.getInputStream().toString();
 			final String[] lines = input.split("\n");
 			final String errorLine = lines[line - 1];
@@ -235,7 +235,9 @@ public class BoaCompiler {
 
 					final BoaParser parser = new BoaParser(new CommonTokenStream(lexer));
 					parser.removeErrorListeners();
-					parser.addErrorListener(new ParseErrorListener());
+
+					final BoaErrorListener parseErrorListener = new ParseErrorListener();
+					parser.addErrorListener(parseErrorListener);
 
 					parser.setBuildParseTree(false);
 					parser.getInterpreter().setPredictionMode(PredictionMode.SLL);
@@ -244,12 +246,11 @@ public class BoaCompiler {
 
 					final String jobName = "" + i;
 
-					if (!BoaErrorListener.hasError) {
+					if (!parseErrorListener.hasError) {
 						try {
-							final TypeCheckingVisitor typeChecker = new TypeCheckingVisitor();
-							typeChecker.start(p, new SymbolTable());
+							new TypeCheckingVisitor().start(p, new SymbolTable());
 						} catch (final TypeCheckException e) {
-							BoaErrorListener.error("typecheck", lexer, null, e.n.beginLine, e.n.beginColumn, e.n2.endColumn - e.n.beginColumn + 1, e.getMessage(), e);
+							parseErrorListener.error("typecheck", lexer, null, e.n.beginLine, e.n.beginColumn, e.n2.endColumn - e.n.beginColumn + 1, e.getMessage(), e);
 							throw e;
 						}
 
