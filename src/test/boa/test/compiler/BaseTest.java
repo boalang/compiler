@@ -46,6 +46,7 @@ import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.atn.PredictionMode;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -154,19 +155,40 @@ public abstract class BaseTest {
 	}
 
 	protected StartContext parse(final String input, final String[] errors) throws IOException {
-		final BoaParser parser = new BoaParser(lex(input));
+		final CommonTokenStream tokens = lex(input);
+		final BoaParser parser = new BoaParser(tokens);
 
 		final List<String> foundErr = new ArrayList<String>();
 		parser.removeErrorListeners();
-		parser.addErrorListener(new BaseErrorListener () {
+		parser.addErrorListener(new BaseErrorListener() {
 			@Override
-			public void syntaxError(final Recognizer<?, ?> recognizer, final Object offendingSymbol, final int line, final int charPositionInLine, final String msg, final RecognitionException e) {
-				foundErr.add(line + "," + charPositionInLine + ": " + msg);
+			public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) throws ParseCancellationException {
+				throw new ParseCancellationException(e);
 			}
 		});
 
+		parser.setBuildParseTree(false);
 		parser.getInterpreter().setPredictionMode(PredictionMode.SLL);
-		final StartContext p = parser.start();
+
+		StartContext p;
+		try {
+			p = parser.start();
+		} catch (final Exception e) {
+			// fall-back to LL mode parsing if SLL fails
+			tokens.reset();
+			parser.reset();
+
+			parser.removeErrorListeners();
+			parser.addErrorListener(new BaseErrorListener () {
+				@Override
+				public void syntaxError(final Recognizer<?, ?> recognizer, final Object offendingSymbol, final int line, final int charPositionInLine, final String msg, final RecognitionException e) {
+					foundErr.add(line + "," + charPositionInLine + ": " + msg);
+				}
+			});
+			parser.getInterpreter().setPredictionMode(PredictionMode.LL);
+
+			p = parser.start();
+		}
 
 		if (!DEBUG)
 			assertEquals("wrong number of errors", errors.length, foundErr.size());

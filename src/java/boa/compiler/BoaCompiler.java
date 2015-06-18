@@ -63,6 +63,7 @@ import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenSource;
 import org.antlr.v4.runtime.atn.PredictionMode;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
 
 import boa.parser.BoaParser;
 import boa.parser.BoaLexer;
@@ -233,8 +234,15 @@ public class BoaCompiler {
 					lexer.removeErrorListeners();
 					lexer.addErrorListener(new LexerErrorListener());
 
-					final BoaParser parser = new BoaParser(new CommonTokenStream(lexer));
+					final CommonTokenStream tokens = new CommonTokenStream(lexer);
+					final BoaParser parser = new BoaParser(tokens);
 					parser.removeErrorListeners();
+					parser.addErrorListener(new BaseErrorListener() {
+						@Override
+						public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) throws ParseCancellationException {
+							throw new ParseCancellationException(e);
+						}
+					});
 
 					final BoaErrorListener parseErrorListener = new ParseErrorListener();
 					parser.addErrorListener(parseErrorListener);
@@ -242,7 +250,20 @@ public class BoaCompiler {
 					parser.setBuildParseTree(false);
 					parser.getInterpreter().setPredictionMode(PredictionMode.SLL);
 
-					final Start p = parser.start().ast;
+					Start p;
+					try {
+						p = parser.start().ast;
+					} catch (final ParseCancellationException e) {
+						// fall-back to LL mode parsing if SLL fails
+						tokens.reset();
+						parser.reset();
+
+						parser.removeErrorListeners();
+						parser.addErrorListener(parseErrorListener);
+						parser.getInterpreter().setPredictionMode(PredictionMode.LL);
+
+						p = parser.start().ast;
+					}
 
 					final String jobName = "" + i;
 
