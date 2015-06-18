@@ -9,7 +9,7 @@
 	<property name="ant.build.javac.target" value="1.6" />
 
 	<!-- ANTLR version -->
-	<property name="antlr.version" value="4.4" />
+	<property name="antlr.version" value="4.5" />
 
 	<!-- debug properties -->
 	<property name="debug.enabled" value="on" />
