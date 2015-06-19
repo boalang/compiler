@@ -117,7 +117,7 @@
 	</target>
 
 	<target name="-parser" depends="-check-parser" unless="parser.uptodate">
-		<java jar="lib/antlr-${antlr.version}-complete.jar" dir="src/antlr/" fork="true">
+		<java jar="lib/antlr-${antlr.version}-complete.jar" dir="src/antlr/" fork="true" failonerror="true">
 			<arg value="-o" />
 			<arg value="../../build/java/boa/parser/" />
 			<arg value="-package" />
