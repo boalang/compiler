@@ -27,6 +27,14 @@ protected int getEndColumn() {
 	if (t == null) t = getCurrentToken();
 	return t.getCharPositionInLine() + t.getText().length() - 1;
 }
+protected void isSemicolon() {
+	if (!getCurrentToken().getText().equals(";")) {
+		notifyErrorListeners("error: ';' expected");
+		return;
+	}
+	setState(getState() + 1);
+	match(SEMICOLON);
+}
 }
 
 start returns [Start ast]
@@ -61,9 +69,7 @@ typeDeclaration returns [TypeDecl ast]
 	locals [int l, int c]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: TYPE id=identifier EQUALS t=type SEMICOLON { $ast = new TypeDecl($id.ast, $t.ast); }
-// FIXME this would be nice, but seems to make a ton of extra error messages
-//	| TYPE    identifier EQUALS   type           { notifyErrorListeners("error: ';' expected"); }
+	: TYPE id=identifier EQUALS t=type { isSemicolon(); $ast = new TypeDecl($id.ast, $t.ast); }
 	;
 
 staticVariableDeclaration returns [VarDeclStatement ast]
@@ -77,8 +83,7 @@ variableDeclaration returns [VarDeclStatement ast]
 	locals [int l, int c]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: v=forVariableDeclaration SEMICOLON { $ast = $v.ast; }
-	| v=forVariableDeclaration           { $ast = $v.ast; notifyErrorListeners("error: ';' expected"); }
+	: v=forVariableDeclaration  { isSemicolon(); $ast = $v.ast; }
 	;
 
 type returns [AbstractType ast]
@@ -204,8 +209,7 @@ assignmentStatement returns [AssignmentStatement ast]
 	locals [int l, int c]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: f=factor EQUALS e=expression SEMICOLON { $ast = new AssignmentStatement($f.ast, $e.ast); }
-	| f=factor EQUALS e=expression           { $ast = new AssignmentStatement($f.ast, $e.ast); notifyErrorListeners("error: ';' expected"); }
+	: f=factor EQUALS e=expression { isSemicolon(); $ast = new AssignmentStatement($f.ast, $e.ast); }
 	;
 
 block returns [Block ast]
@@ -222,33 +226,29 @@ breakStatement returns [BreakStatement ast]
 	locals [int l, int c]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: BREAK SEMICOLON { $ast = new BreakStatement(); }
-	| BREAK           { $ast = new BreakStatement(); notifyErrorListeners("error: ';' expected"); }
+	: BREAK { isSemicolon(); $ast = new BreakStatement(); }
 	;
 
 continueStatement returns [ContinueStatement ast]
 	locals [int l, int c]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: CONTINUE SEMICOLON { $ast = new ContinueStatement(); }
-	| CONTINUE           { $ast = new ContinueStatement(); notifyErrorListeners("error: ';' expected"); }
+	: CONTINUE { isSemicolon(); $ast = new ContinueStatement(); }
 	;
 
 doStatement returns [DoStatement ast]
 	locals [int l, int c]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: DO s=statement WHILE LPAREN e=expression RPAREN SEMICOLON { $ast = new DoStatement($e.ast, $s.ast); }
-	| DO s=statement WHILE LPAREN e=expression RPAREN           { $ast = new DoStatement($e.ast, $s.ast); notifyErrorListeners("error: ';' expected"); }
+	: DO s=statement WHILE LPAREN e=expression RPAREN { isSemicolon(); $ast = new DoStatement($e.ast, $s.ast); }
 	;
 
 emitStatement returns [EmitStatement ast]
 	locals [int l, int c]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: id=identifier { $ast = new EmitStatement($id.ast); } (LBRACKET e=expression RBRACKET { $ast.addIndice($e.ast); })* EMIT e=expression { $ast.setValue($e.ast); } (WEIGHT w=expression { $ast.setWeight($w.ast); })? SEMICOLON
-	| id=identifier { $ast = new EmitStatement($id.ast); } (LBRACKET e=expression RBRACKET)* EMIT { notifyErrorListeners("error: expected 'expression ' before keyword 'weight'"); } WEIGHT w=expression SEMICOLON
-	| id=identifier { $ast = new EmitStatement($id.ast); } (LBRACKET e=expression RBRACKET)* EMIT e=expression (WEIGHT w=expression)? { notifyErrorListeners("error: ';' expected"); }
+	: id=identifier { $ast = new EmitStatement($id.ast); } (LBRACKET e=expression RBRACKET)* EMIT { notifyErrorListeners("error: expected 'expression ' before keyword 'weight'"); } WEIGHT w=expression { isSemicolon(); }
+	| id=identifier { $ast = new EmitStatement($id.ast); } (LBRACKET e=expression RBRACKET { $ast.addIndice($e.ast); })* EMIT e=expression { $ast.setValue($e.ast); } (WEIGHT w=expression { $ast.setWeight($w.ast); })? { isSemicolon(); }
 	;
 
 forStatement returns [ForStatement ast]
@@ -270,8 +270,9 @@ forVariableDeclaration returns [VarDeclStatement ast]
 	locals [int l, int c]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: id=identifier COLON { $ast = new VarDeclStatement($id.ast); notifyErrorListeners("error: output variable declarations should not include '='"); } EQUALS ot=outputType { $ast.setType($ot.ast); }
-	| id=identifier COLON { $ast = new VarDeclStatement($id.ast); } (t=type { $ast.setType($t.ast); })? (EQUALS e=expression { $ast.setInitializer($e.ast); })?
+// FIXME this would be nice, but seems to cause ambiguities and performance issues
+//	: id=identifier COLON { $ast = new VarDeclStatement($id.ast); notifyErrorListeners("error: output variable declarations should not include '='"); } EQUALS ot=outputType { $ast.setType($ot.ast); }
+	: id=identifier COLON { $ast = new VarDeclStatement($id.ast); } (t=type { $ast.setType($t.ast); })? (EQUALS e=expression { $ast.setInitializer($e.ast); })?
 	;
 
 forExpressionStatement returns [Statement ast]
@@ -286,8 +287,7 @@ expressionStatement returns [Statement ast]
 	locals [int l, int c]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: e=forExpressionStatement SEMICOLON { $ast = $e.ast; }
-	| e=forExpressionStatement           { $ast = $e.ast; notifyErrorListeners("error: ';' expected"); }
+	: e=forExpressionStatement { isSemicolon(); $ast = $e.ast; }
 	;
 
 ifStatement returns [IfStatement ast]
@@ -301,8 +301,7 @@ returnStatement returns [ReturnStatement ast]
 	locals [int l, int c]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: RETURN { $ast = new ReturnStatement(); } (e=expression { $ast.setExpr($e.ast); })? SEMICOLON
-	| RETURN { $ast = new ReturnStatement(); } (e=expression { $ast.setExpr($e.ast); })? { notifyErrorListeners("error: ';' expected"); }
+	: RETURN { $ast = new ReturnStatement(); } (e=expression { $ast.setExpr($e.ast); })? { isSemicolon(); }
 	;
 
 switchStatement returns [SwitchStatement ast]
@@ -367,8 +366,7 @@ stopStatement returns [StopStatement ast]
 	locals [int l, int c]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: STOP SEMICOLON { $ast = new StopStatement(); }
-	| STOP           { $ast = new StopStatement(); notifyErrorListeners("error: ';' expected"); }
+	: STOP { isSemicolon(); $ast = new StopStatement(); }
 	;
 
 expression returns [Expression ast]

@@ -1,5 +1,16 @@
 grammar BoaNoActions;
 
+@parser::members {
+protected void isSemicolon() {
+	if (!getCurrentToken().getText().equals(";")) {
+		notifyErrorListeners("error: ';' expected");
+		return;
+	}
+	setState(getState() + 1);
+	match(SEMICOLON);
+}
+}
+
 start
 	: program EOF
 	;
@@ -20,9 +31,7 @@ declaration
 	;
 
 typeDeclaration
-	: TYPE identifier EQUALS type SEMICOLON
-// FIXME this would be nice, but seems to make a ton of extra error messages
-//	| TYPE identifier EQUALS type
+	: TYPE identifier EQUALS type { isSemiColon(); }
 	;
 
 staticVariableDeclaration
@@ -30,8 +39,7 @@ staticVariableDeclaration
 	;
 
 variableDeclaration
-	: forVariableDeclaration SEMICOLON
-	| forVariableDeclaration           { notifyErrorListeners("error: ';' expected"); }
+	: forVariableDeclaration { isSemiColon(); }
 	;
 
 type 
@@ -114,8 +122,7 @@ emptyStatement
 	;
 
 assignmentStatement
-	: factor EQUALS expression SEMICOLON
-	| factor EQUALS expression           { notifyErrorListeners("error: ';' expected"); }
+	: factor EQUALS expression { isSemiColon(); }
 	;
 
 block
@@ -123,24 +130,20 @@ block
 	;
 
 breakStatement
-	: BREAK SEMICOLON
-	| BREAK           { notifyErrorListeners("error: ';' expected"); }
+	: BREAK { isSemiColon(); }
 	;
 
 continueStatement
-	: CONTINUE SEMICOLON
-	| CONTINUE           { notifyErrorListeners("error: ';' expected"); }
+	: CONTINUE { isSemiColon(); }
 	;
 
 doStatement
-	: DO statement WHILE LPAREN expression RPAREN SEMICOLON
-	| DO statement WHILE LPAREN expression RPAREN           { notifyErrorListeners("error: ';' expected"); }
+	: DO statement WHILE LPAREN expression RPAREN { isSemiColon(); }
 	;
 
 emitStatement
-	: identifier (LBRACKET expression RBRACKET)* EMIT expression                                                                       (WEIGHT expression)? SEMICOLON
-	| identifier (LBRACKET expression RBRACKET)* EMIT { notifyErrorListeners("error: expected 'expression' before keyword 'weight'"); } WEIGHT expression   SEMICOLON
-	| identifier (LBRACKET expression RBRACKET)* EMIT expression                                                                       (WEIGHT expression)?           { notifyErrorListeners("error: ';' expected"); }
+	: identifier (LBRACKET expression RBRACKET)* EMIT { notifyErrorListeners("error: expected 'expression' before keyword 'weight'"); } WEIGHT expression { isSemicolon(); }
+	| identifier (LBRACKET expression RBRACKET)* EMIT expression                                                                       (WEIGHT expression)? { isSemicolon(); }
 	;
 
 forStatement
@@ -153,8 +156,9 @@ forExpression
 	;
 
 forVariableDeclaration
-	: identifier COLON { notifyErrorListeners("error: output variable declarations should not include '='"); } EQUALS outputType
-	| identifier COLON (type)? (EQUALS expression)?
+// FIXME this would be nice, but seems to cause ambiguities and performance issues
+//	: identifier COLON { notifyErrorListeners("error: output variable declarations should not include '='"); } EQUALS outputType
+	: identifier COLON (type)? (EQUALS expression)?
 	;
 
 forExpressionStatement
@@ -163,8 +167,7 @@ forExpressionStatement
 	;
 
 expressionStatement
-	: forExpressionStatement SEMICOLON
-	| forExpressionStatement           { notifyErrorListeners("error: ';' expected"); }
+	: forExpressionStatement { isSemicolon(); }
 	;
 
 ifStatement
@@ -172,8 +175,7 @@ ifStatement
 	;
 
 returnStatement
-	: RETURN expression? SEMICOLON
-	| RETURN expression?           { notifyErrorListeners("error: ';' expected"); }
+	: RETURN expression? { isSemicolon(); }
 	;
 
 switchStatement
@@ -215,8 +217,7 @@ visitStatement
 	;
 
 stopStatement
-	: STOP SEMICOLON
-	| STOP           { notifyErrorListeners("error: ';' expected"); }
+	: STOP { isSemicolon(); }
 	;
 
 expression
