@@ -89,20 +89,47 @@ public final class Diff {
      */
     boa.types.Ast.CommentsRootOrBuilder getCommentsOrBuilder();
 
-    // optional string old_name = 7;
+    // repeated .boa.types.ChangeKind changes = 7;
     /**
-     * <code>optional string old_name = 7;</code>
+     * <code>repeated .boa.types.ChangeKind changes = 7;</code>
      */
-    boolean hasOldName();
+    java.util.List<boa.types.Shared.ChangeKind> getChangesList();
     /**
-     * <code>optional string old_name = 7;</code>
+     * <code>repeated .boa.types.ChangeKind changes = 7;</code>
      */
-    java.lang.String getOldName();
+    int getChangesCount();
     /**
-     * <code>optional string old_name = 7;</code>
+     * <code>repeated .boa.types.ChangeKind changes = 7;</code>
      */
-    com.google.protobuf.ByteString
-        getOldNameBytes();
+    boa.types.Shared.ChangeKind getChanges(int index);
+
+    // repeated int32 previous_versions = 8;
+    /**
+     * <code>repeated int32 previous_versions = 8;</code>
+     */
+    java.util.List<java.lang.Integer> getPreviousVersionsList();
+    /**
+     * <code>repeated int32 previous_versions = 8;</code>
+     */
+    int getPreviousVersionsCount();
+    /**
+     * <code>repeated int32 previous_versions = 8;</code>
+     */
+    int getPreviousVersions(int index);
+
+    // repeated int32 previous_index = 9;
+    /**
+     * <code>repeated int32 previous_index = 9;</code>
+     */
+    java.util.List<java.lang.Integer> getPreviousIndexList();
+    /**
+     * <code>repeated int32 previous_index = 9;</code>
+     */
+    int getPreviousIndexCount();
+    /**
+     * <code>repeated int32 previous_index = 9;</code>
+     */
+    int getPreviousIndex(int index);
   }
   /**
    * Protobuf type {@code boa.types.ChangedFile}
@@ -213,9 +240,79 @@ public final class Diff {
               bitField0_ |= 0x00000020;
               break;
             }
+            case 56: {
+              int rawValue = input.readEnum();
+              boa.types.Shared.ChangeKind value = boa.types.Shared.ChangeKind.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(7, rawValue);
+              } else {
+                if (!((mutable_bitField0_ & 0x00000040) == 0x00000040)) {
+                  changes_ = new java.util.ArrayList<boa.types.Shared.ChangeKind>();
+                  mutable_bitField0_ |= 0x00000040;
+                }
+                changes_.add(value);
+              }
+              break;
+            }
             case 58: {
-              bitField0_ |= 0x00000040;
-              oldName_ = input.readBytes();
+              int length = input.readRawVarint32();
+              int oldLimit = input.pushLimit(length);
+              while(input.getBytesUntilLimit() > 0) {
+                int rawValue = input.readEnum();
+                boa.types.Shared.ChangeKind value = boa.types.Shared.ChangeKind.valueOf(rawValue);
+                if (value == null) {
+                  unknownFields.mergeVarintField(7, rawValue);
+                } else {
+                  if (!((mutable_bitField0_ & 0x00000040) == 0x00000040)) {
+                    changes_ = new java.util.ArrayList<boa.types.Shared.ChangeKind>();
+                    mutable_bitField0_ |= 0x00000040;
+                  }
+                  changes_.add(value);
+                }
+              }
+              input.popLimit(oldLimit);
+              break;
+            }
+            case 64: {
+              if (!((mutable_bitField0_ & 0x00000080) == 0x00000080)) {
+                previousVersions_ = new java.util.ArrayList<java.lang.Integer>();
+                mutable_bitField0_ |= 0x00000080;
+              }
+              previousVersions_.add(input.readInt32());
+              break;
+            }
+            case 66: {
+              int length = input.readRawVarint32();
+              int limit = input.pushLimit(length);
+              if (!((mutable_bitField0_ & 0x00000080) == 0x00000080) && input.getBytesUntilLimit() > 0) {
+                previousVersions_ = new java.util.ArrayList<java.lang.Integer>();
+                mutable_bitField0_ |= 0x00000080;
+              }
+              while (input.getBytesUntilLimit() > 0) {
+                previousVersions_.add(input.readInt32());
+              }
+              input.popLimit(limit);
+              break;
+            }
+            case 72: {
+              if (!((mutable_bitField0_ & 0x00000100) == 0x00000100)) {
+                previousIndex_ = new java.util.ArrayList<java.lang.Integer>();
+                mutable_bitField0_ |= 0x00000100;
+              }
+              previousIndex_.add(input.readInt32());
+              break;
+            }
+            case 74: {
+              int length = input.readRawVarint32();
+              int limit = input.pushLimit(length);
+              if (!((mutable_bitField0_ & 0x00000100) == 0x00000100) && input.getBytesUntilLimit() > 0) {
+                previousIndex_ = new java.util.ArrayList<java.lang.Integer>();
+                mutable_bitField0_ |= 0x00000100;
+              }
+              while (input.getBytesUntilLimit() > 0) {
+                previousIndex_.add(input.readInt32());
+              }
+              input.popLimit(limit);
               break;
             }
           }
@@ -226,6 +323,15 @@ public final class Diff {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e.getMessage()).setUnfinishedMessage(this);
       } finally {
+        if (((mutable_bitField0_ & 0x00000040) == 0x00000040)) {
+          changes_ = java.util.Collections.unmodifiableList(changes_);
+        }
+        if (((mutable_bitField0_ & 0x00000080) == 0x00000080)) {
+          previousVersions_ = java.util.Collections.unmodifiableList(previousVersions_);
+        }
+        if (((mutable_bitField0_ & 0x00000100) == 0x00000100)) {
+          previousIndex_ = java.util.Collections.unmodifiableList(previousIndex_);
+        }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
@@ -709,47 +815,72 @@ public final class Diff {
       return comments_;
     }
 
-    // optional string old_name = 7;
-    public static final int OLD_NAME_FIELD_NUMBER = 7;
-    private java.lang.Object oldName_;
+    // repeated .boa.types.ChangeKind changes = 7;
+    public static final int CHANGES_FIELD_NUMBER = 7;
+    private java.util.List<boa.types.Shared.ChangeKind> changes_;
     /**
-     * <code>optional string old_name = 7;</code>
+     * <code>repeated .boa.types.ChangeKind changes = 7;</code>
      */
-    public boolean hasOldName() {
-      return ((bitField0_ & 0x00000040) == 0x00000040);
+    public java.util.List<boa.types.Shared.ChangeKind> getChangesList() {
+      return changes_;
     }
     /**
-     * <code>optional string old_name = 7;</code>
+     * <code>repeated .boa.types.ChangeKind changes = 7;</code>
      */
-    public java.lang.String getOldName() {
-      java.lang.Object ref = oldName_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          oldName_ = s;
-        }
-        return s;
-      }
+    public int getChangesCount() {
+      return changes_.size();
     }
     /**
-     * <code>optional string old_name = 7;</code>
+     * <code>repeated .boa.types.ChangeKind changes = 7;</code>
      */
-    public com.google.protobuf.ByteString
-        getOldNameBytes() {
-      java.lang.Object ref = oldName_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        oldName_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
+    public boa.types.Shared.ChangeKind getChanges(int index) {
+      return changes_.get(index);
+    }
+
+    // repeated int32 previous_versions = 8;
+    public static final int PREVIOUS_VERSIONS_FIELD_NUMBER = 8;
+    private java.util.List<java.lang.Integer> previousVersions_;
+    /**
+     * <code>repeated int32 previous_versions = 8;</code>
+     */
+    public java.util.List<java.lang.Integer>
+        getPreviousVersionsList() {
+      return previousVersions_;
+    }
+    /**
+     * <code>repeated int32 previous_versions = 8;</code>
+     */
+    public int getPreviousVersionsCount() {
+      return previousVersions_.size();
+    }
+    /**
+     * <code>repeated int32 previous_versions = 8;</code>
+     */
+    public int getPreviousVersions(int index) {
+      return previousVersions_.get(index);
+    }
+
+    // repeated int32 previous_index = 9;
+    public static final int PREVIOUS_INDEX_FIELD_NUMBER = 9;
+    private java.util.List<java.lang.Integer> previousIndex_;
+    /**
+     * <code>repeated int32 previous_index = 9;</code>
+     */
+    public java.util.List<java.lang.Integer>
+        getPreviousIndexList() {
+      return previousIndex_;
+    }
+    /**
+     * <code>repeated int32 previous_index = 9;</code>
+     */
+    public int getPreviousIndexCount() {
+      return previousIndex_.size();
+    }
+    /**
+     * <code>repeated int32 previous_index = 9;</code>
+     */
+    public int getPreviousIndex(int index) {
+      return previousIndex_.get(index);
     }
 
     private void initFields() {
@@ -759,7 +890,9 @@ public final class Diff {
       key_ = "";
       ast_ = boa.types.Ast.ASTRoot.getDefaultInstance();
       comments_ = boa.types.Ast.CommentsRoot.getDefaultInstance();
-      oldName_ = "";
+      changes_ = java.util.Collections.emptyList();
+      previousVersions_ = java.util.Collections.emptyList();
+      previousIndex_ = java.util.Collections.emptyList();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -819,8 +952,14 @@ public final class Diff {
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         output.writeMessage(6, comments_);
       }
-      if (((bitField0_ & 0x00000040) == 0x00000040)) {
-        output.writeBytes(7, getOldNameBytes());
+      for (int i = 0; i < changes_.size(); i++) {
+        output.writeEnum(7, changes_.get(i).getNumber());
+      }
+      for (int i = 0; i < previousVersions_.size(); i++) {
+        output.writeInt32(8, previousVersions_.get(i));
+      }
+      for (int i = 0; i < previousIndex_.size(); i++) {
+        output.writeInt32(9, previousIndex_.get(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -855,9 +994,32 @@ public final class Diff {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(6, comments_);
       }
-      if (((bitField0_ & 0x00000040) == 0x00000040)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(7, getOldNameBytes());
+      {
+        int dataSize = 0;
+        for (int i = 0; i < changes_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeEnumSizeNoTag(changes_.get(i).getNumber());
+        }
+        size += dataSize;
+        size += 1 * changes_.size();
+      }
+      {
+        int dataSize = 0;
+        for (int i = 0; i < previousVersions_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeInt32SizeNoTag(previousVersions_.get(i));
+        }
+        size += dataSize;
+        size += 1 * getPreviousVersionsList().size();
+      }
+      {
+        int dataSize = 0;
+        for (int i = 0; i < previousIndex_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeInt32SizeNoTag(previousIndex_.get(i));
+        }
+        size += dataSize;
+        size += 1 * getPreviousIndexList().size();
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -997,8 +1159,12 @@ public final class Diff {
           commentsBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000020);
-        oldName_ = "";
+        changes_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000040);
+        previousVersions_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000080);
+        previousIndex_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000100);
         return this;
       }
 
@@ -1059,10 +1225,21 @@ public final class Diff {
         } else {
           result.comments_ = commentsBuilder_.build();
         }
-        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
-          to_bitField0_ |= 0x00000040;
+        if (((bitField0_ & 0x00000040) == 0x00000040)) {
+          changes_ = java.util.Collections.unmodifiableList(changes_);
+          bitField0_ = (bitField0_ & ~0x00000040);
         }
-        result.oldName_ = oldName_;
+        result.changes_ = changes_;
+        if (((bitField0_ & 0x00000080) == 0x00000080)) {
+          previousVersions_ = java.util.Collections.unmodifiableList(previousVersions_);
+          bitField0_ = (bitField0_ & ~0x00000080);
+        }
+        result.previousVersions_ = previousVersions_;
+        if (((bitField0_ & 0x00000100) == 0x00000100)) {
+          previousIndex_ = java.util.Collections.unmodifiableList(previousIndex_);
+          bitField0_ = (bitField0_ & ~0x00000100);
+        }
+        result.previousIndex_ = previousIndex_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -1101,9 +1278,34 @@ public final class Diff {
         if (other.hasComments()) {
           mergeComments(other.getComments());
         }
-        if (other.hasOldName()) {
-          bitField0_ |= 0x00000040;
-          oldName_ = other.oldName_;
+        if (!other.changes_.isEmpty()) {
+          if (changes_.isEmpty()) {
+            changes_ = other.changes_;
+            bitField0_ = (bitField0_ & ~0x00000040);
+          } else {
+            ensureChangesIsMutable();
+            changes_.addAll(other.changes_);
+          }
+          onChanged();
+        }
+        if (!other.previousVersions_.isEmpty()) {
+          if (previousVersions_.isEmpty()) {
+            previousVersions_ = other.previousVersions_;
+            bitField0_ = (bitField0_ & ~0x00000080);
+          } else {
+            ensurePreviousVersionsIsMutable();
+            previousVersions_.addAll(other.previousVersions_);
+          }
+          onChanged();
+        }
+        if (!other.previousIndex_.isEmpty()) {
+          if (previousIndex_.isEmpty()) {
+            previousIndex_ = other.previousIndex_;
+            bitField0_ = (bitField0_ & ~0x00000100);
+          } else {
+            ensurePreviousIndexIsMutable();
+            previousIndex_.addAll(other.previousIndex_);
+          }
           onChanged();
         }
         this.mergeUnknownFields(other.getUnknownFields());
@@ -1615,76 +1817,206 @@ public final class Diff {
         return commentsBuilder_;
       }
 
-      // optional string old_name = 7;
-      private java.lang.Object oldName_ = "";
-      /**
-       * <code>optional string old_name = 7;</code>
-       */
-      public boolean hasOldName() {
-        return ((bitField0_ & 0x00000040) == 0x00000040);
-      }
-      /**
-       * <code>optional string old_name = 7;</code>
-       */
-      public java.lang.String getOldName() {
-        java.lang.Object ref = oldName_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          oldName_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
+      // repeated .boa.types.ChangeKind changes = 7;
+      private java.util.List<boa.types.Shared.ChangeKind> changes_ =
+        java.util.Collections.emptyList();
+      private void ensureChangesIsMutable() {
+        if (!((bitField0_ & 0x00000040) == 0x00000040)) {
+          changes_ = new java.util.ArrayList<boa.types.Shared.ChangeKind>(changes_);
+          bitField0_ |= 0x00000040;
         }
       }
       /**
-       * <code>optional string old_name = 7;</code>
+       * <code>repeated .boa.types.ChangeKind changes = 7;</code>
        */
-      public com.google.protobuf.ByteString
-          getOldNameBytes() {
-        java.lang.Object ref = oldName_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          oldName_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
+      public java.util.List<boa.types.Shared.ChangeKind> getChangesList() {
+        return java.util.Collections.unmodifiableList(changes_);
       }
       /**
-       * <code>optional string old_name = 7;</code>
+       * <code>repeated .boa.types.ChangeKind changes = 7;</code>
        */
-      public Builder setOldName(
-          java.lang.String value) {
+      public int getChangesCount() {
+        return changes_.size();
+      }
+      /**
+       * <code>repeated .boa.types.ChangeKind changes = 7;</code>
+       */
+      public boa.types.Shared.ChangeKind getChanges(int index) {
+        return changes_.get(index);
+      }
+      /**
+       * <code>repeated .boa.types.ChangeKind changes = 7;</code>
+       */
+      public Builder setChanges(
+          int index, boa.types.Shared.ChangeKind value) {
         if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000040;
-        oldName_ = value;
+          throw new NullPointerException();
+        }
+        ensureChangesIsMutable();
+        changes_.set(index, value);
         onChanged();
         return this;
       }
       /**
-       * <code>optional string old_name = 7;</code>
+       * <code>repeated .boa.types.ChangeKind changes = 7;</code>
        */
-      public Builder clearOldName() {
+      public Builder addChanges(boa.types.Shared.ChangeKind value) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        ensureChangesIsMutable();
+        changes_.add(value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangeKind changes = 7;</code>
+       */
+      public Builder addAllChanges(
+          java.lang.Iterable<? extends boa.types.Shared.ChangeKind> values) {
+        ensureChangesIsMutable();
+        super.addAll(values, changes_);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.ChangeKind changes = 7;</code>
+       */
+      public Builder clearChanges() {
+        changes_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000040);
-        oldName_ = getDefaultInstance().getOldName();
+        onChanged();
+        return this;
+      }
+
+      // repeated int32 previous_versions = 8;
+      private java.util.List<java.lang.Integer> previousVersions_ = java.util.Collections.emptyList();
+      private void ensurePreviousVersionsIsMutable() {
+        if (!((bitField0_ & 0x00000080) == 0x00000080)) {
+          previousVersions_ = new java.util.ArrayList<java.lang.Integer>(previousVersions_);
+          bitField0_ |= 0x00000080;
+         }
+      }
+      /**
+       * <code>repeated int32 previous_versions = 8;</code>
+       */
+      public java.util.List<java.lang.Integer>
+          getPreviousVersionsList() {
+        return java.util.Collections.unmodifiableList(previousVersions_);
+      }
+      /**
+       * <code>repeated int32 previous_versions = 8;</code>
+       */
+      public int getPreviousVersionsCount() {
+        return previousVersions_.size();
+      }
+      /**
+       * <code>repeated int32 previous_versions = 8;</code>
+       */
+      public int getPreviousVersions(int index) {
+        return previousVersions_.get(index);
+      }
+      /**
+       * <code>repeated int32 previous_versions = 8;</code>
+       */
+      public Builder setPreviousVersions(
+          int index, int value) {
+        ensurePreviousVersionsIsMutable();
+        previousVersions_.set(index, value);
         onChanged();
         return this;
       }
       /**
-       * <code>optional string old_name = 7;</code>
+       * <code>repeated int32 previous_versions = 8;</code>
        */
-      public Builder setOldNameBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000040;
-        oldName_ = value;
+      public Builder addPreviousVersions(int value) {
+        ensurePreviousVersionsIsMutable();
+        previousVersions_.add(value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated int32 previous_versions = 8;</code>
+       */
+      public Builder addAllPreviousVersions(
+          java.lang.Iterable<? extends java.lang.Integer> values) {
+        ensurePreviousVersionsIsMutable();
+        super.addAll(values, previousVersions_);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated int32 previous_versions = 8;</code>
+       */
+      public Builder clearPreviousVersions() {
+        previousVersions_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000080);
+        onChanged();
+        return this;
+      }
+
+      // repeated int32 previous_index = 9;
+      private java.util.List<java.lang.Integer> previousIndex_ = java.util.Collections.emptyList();
+      private void ensurePreviousIndexIsMutable() {
+        if (!((bitField0_ & 0x00000100) == 0x00000100)) {
+          previousIndex_ = new java.util.ArrayList<java.lang.Integer>(previousIndex_);
+          bitField0_ |= 0x00000100;
+         }
+      }
+      /**
+       * <code>repeated int32 previous_index = 9;</code>
+       */
+      public java.util.List<java.lang.Integer>
+          getPreviousIndexList() {
+        return java.util.Collections.unmodifiableList(previousIndex_);
+      }
+      /**
+       * <code>repeated int32 previous_index = 9;</code>
+       */
+      public int getPreviousIndexCount() {
+        return previousIndex_.size();
+      }
+      /**
+       * <code>repeated int32 previous_index = 9;</code>
+       */
+      public int getPreviousIndex(int index) {
+        return previousIndex_.get(index);
+      }
+      /**
+       * <code>repeated int32 previous_index = 9;</code>
+       */
+      public Builder setPreviousIndex(
+          int index, int value) {
+        ensurePreviousIndexIsMutable();
+        previousIndex_.set(index, value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated int32 previous_index = 9;</code>
+       */
+      public Builder addPreviousIndex(int value) {
+        ensurePreviousIndexIsMutable();
+        previousIndex_.add(value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated int32 previous_index = 9;</code>
+       */
+      public Builder addAllPreviousIndex(
+          java.lang.Iterable<? extends java.lang.Integer> values) {
+        ensurePreviousIndexIsMutable();
+        super.addAll(values, previousIndex_);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated int32 previous_index = 9;</code>
+       */
+      public Builder clearPreviousIndex() {
+        previousIndex_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000100);
         onChanged();
         return this;
       }
@@ -20982,95 +21314,97 @@ public final class Diff {
   static {
     java.lang.String[] descriptorData = {
       "\n\ndiff.proto\022\tboa.types\032\014shared.proto\032\ta" +
-      "st.proto\"\371\004\n\013ChangedFile\022%\n\006change\030\001 \002(\016" +
+      "st.proto\"\302\005\n\013ChangedFile\022%\n\006change\030\001 \002(\016" +
       "2\025.boa.types.ChangeKind\022-\n\004kind\030\002 \002(\0162\037." +
       "boa.types.ChangedFile.FileKind\022\014\n\004name\030\003" +
       " \002(\t\022\013\n\003key\030\004 \002(\t\022\037\n\003ast\030\005 \001(\0132\022.boa.typ" +
       "es.ASTRoot\022)\n\010comments\030\006 \001(\0132\027.boa.types" +
-      ".CommentsRoot\022\020\n\010old_name\030\007 \001(\t\"\232\003\n\010File" +
-      "Kind\022\t\n\005OTHER\020\000\022\n\n\006BINARY\020\001\022\010\n\004TEXT\020\002\022\007\n" +
-      "\003XML\020\003\022\025\n\021SOURCE_JAVA_ERROR\020d\022\024\n\020SOURCE_" +
-      "JAVA_JLS2\020e\022\024\n\020SOURCE_JAVA_JLS3\020f\022\024\n\020SOU",
-      "RCE_JAVA_JLS4\020g\022\024\n\020SOURCE_JAVA_JLS5\020h\022\016\n" +
-      "\nJAVA_ERROR\020d\022\010\n\004JLS2\020e\022\010\n\004JLS3\020f\022\010\n\004JLS" +
-      "4\020g\022\010\n\004JLS5\020h\022\024\n\017SOURCE_CS_ERROR\020\310\001\022\022\n\rS" +
-      "OURCE_CS_CS1\020\311\001\022\022\n\rSOURCE_CS_CS2\020\312\001\022\022\n\rS" +
-      "OURCE_CS_CS3\020\313\001\022\022\n\rSOURCE_CS_CS4\020\314\001\022\022\n\rS" +
-      "OURCE_CS_CS5\020\315\001\022\r\n\010CS_ERROR\020\310\001\022\010\n\003CS1\020\311\001" +
-      "\022\010\n\003CS2\020\312\001\022\010\n\003CS3\020\313\001\022\010\n\003CS4\020\314\001\022\010\n\003CS5\020\315\001" +
-      "\032\002\020\001\"A\n\016ChangedASTRoot\022/\n\nnamespaces\030\001 \003" +
-      "(\0132\033.boa.types.ChangedNamespace\"\330\001\n\020Chan" +
-      "gedNamespace\022%\n\006change\030\001 \002(\0162\025.boa.types",
-      ".ChangeKind\022\014\n\004name\030\002 \001(\t\022-\n\tmodifiers\030\003" +
-      " \003(\0132\032.boa.types.ChangedModifier\0223\n\014decl" +
-      "arations\030\004 \003(\0132\035.boa.types.ChangedDeclar" +
-      "ation\022+\n\010comments\030\005 \003(\0132\031.boa.types.Chan" +
-      "gedComment\"\270\003\n\022ChangedDeclaration\022%\n\006cha" +
-      "nge\030\001 \002(\0162\025.boa.types.ChangeKind\022!\n\004kind" +
-      "\030\002 \002(\0162\023.boa.types.TypeKind\022\014\n\004name\030\003 \001(" +
-      "\t\022-\n\tmodifiers\030\004 \003(\0132\032.boa.types.Changed" +
-      "Modifier\0222\n\022generic_parameters\030\005 \003(\0132\026.b" +
-      "oa.types.ChangedType\022\'\n\007parents\030\006 \003(\0132\026.",
-      "boa.types.ChangedType\022)\n\007methods\030\007 \003(\0132\030" +
-      ".boa.types.ChangedMethod\022*\n\006fields\030\010 \003(\013" +
-      "2\032.boa.types.ChangedVariable\022:\n\023nested_d" +
-      "eclarations\030\t \003(\0132\035.boa.types.ChangedDec" +
-      "laration\022+\n\010comments\030\n \003(\0132\031.boa.types.C" +
-      "hangedComment\"q\n\013ChangedType\022%\n\006change\030\001" +
-      " \002(\0162\025.boa.types.ChangeKind\022!\n\004kind\030\002 \001(" +
-      "\0162\023.boa.types.TypeKind\022\014\n\004name\030\003 \001(\t\022\n\n\002" +
-      "id\030\004 \001(\t\"\222\003\n\rChangedMethod\022%\n\006change\030\001 \002" +
-      "(\0162\025.boa.types.ChangeKind\022\014\n\004name\030\002 \001(\t\022",
-      "-\n\tmodifiers\030\003 \003(\0132\032.boa.types.ChangedMo" +
-      "difier\022+\n\013return_type\030\004 \001(\0132\026.boa.types." +
-      "ChangedType\0222\n\022generic_parameters\030\005 \003(\0132" +
-      "\026.boa.types.ChangedType\022-\n\targuments\030\006 \003" +
-      "(\0132\032.boa.types.ChangedVariable\022/\n\017except" +
-      "ion_types\030\007 \003(\0132\026.boa.types.ChangedType\022" +
-      "/\n\nstatements\030\010 \003(\0132\033.boa.types.ChangedS" +
-      "tatement\022+\n\010comments\030\t \003(\0132\031.boa.types.C" +
-      "hangedComment\"\204\002\n\017ChangedVariable\022%\n\006cha" +
-      "nge\030\001 \002(\0162\025.boa.types.ChangeKind\022\014\n\004name",
-      "\030\002 \001(\t\022-\n\rvariable_type\030\003 \001(\0132\026.boa.type" +
-      "s.ChangedType\022-\n\tmodifiers\030\004 \003(\0132\032.boa.t" +
-      "ypes.ChangedModifier\0221\n\013initializer\030\005 \001(" +
-      "\0132\034.boa.types.ChangedExpression\022+\n\010comme" +
-      "nts\030\006 \003(\0132\031.boa.types.ChangedComment\"\205\004\n" +
-      "\020ChangedStatement\022%\n\006change\030\001 \002(\0162\025.boa." +
-      "types.ChangeKind\0220\n\004kind\030\002 \002(\0162\".boa.typ" +
-      "es.Statement.StatementKind\022+\n\010comments\030\003" +
-      " \003(\0132\031.boa.types.ChangedComment\022/\n\nstate" +
-      "ments\030\004 \003(\0132\033.boa.types.ChangedStatement",
-      "\0225\n\017initializations\030\005 \003(\0132\034.boa.types.Ch" +
-      "angedExpression\022/\n\tcondition\030\006 \001(\0132\034.boa" +
-      ".types.ChangedExpression\022-\n\007updates\030\007 \003(" +
-      "\0132\034.boa.types.ChangedExpression\0228\n\024varia" +
-      "ble_declaration\030\010 \001(\0132\032.boa.types.Change" +
-      "dVariable\0227\n\020type_declaration\030\t \001(\0132\035.bo" +
-      "a.types.ChangedDeclaration\0220\n\nexpression" +
-      "\030\n \001(\0132\034.boa.types.ChangedExpression\"\346\003\n" +
-      "\021ChangedExpression\022%\n\006change\030\001 \002(\0162\025.boa" +
-      ".types.ChangeKind\0222\n\004kind\030\002 \002(\0162$.boa.ty",
-      "pes.Expression.ExpressionKind\0221\n\013express" +
-      "ions\030\003 \003(\0132\034.boa.types.ChangedExpression" +
-      "\0222\n\016variable_decls\030\004 \003(\0132\032.boa.types.Cha" +
-      "ngedVariable\022(\n\010new_type\030\005 \001(\0132\026.boa.typ" +
-      "es.ChangedType\0222\n\022generic_parameters\030\006 \003" +
-      "(\0132\026.boa.types.ChangedType\022\022\n\nis_postfix" +
-      "\030\007 \001(\010\022\017\n\007literal\030\010 \001(\t\022\020\n\010variable\030\t \001(" +
-      "\t\022\016\n\006method\030\n \001(\t\0221\n\013method_args\030\013 \003(\0132\034" +
-      ".boa.types.ChangedExpression\0227\n\020anon_dec" +
-      "laration\030\014 \001(\0132\035.boa.types.ChangedDeclar",
-      "ation\"\371\001\n\017ChangedModifier\022%\n\006change\030\001 \002(" +
-      "\0162\025.boa.types.ChangeKind\022.\n\004kind\030\002 \002(\0162 " +
-      ".boa.types.Modifier.ModifierKind\022\022\n\nvisi" +
-      "bility\030\003 \001(\r\022\027\n\017annotation_name\030\004 \001(\t\022\032\n" +
-      "\022annotation_members\030\005 \003(\t\0227\n\021annotation_" +
-      "values\030\006 \003(\0132\034.boa.types.ChangedExpressi" +
-      "on\022\r\n\005other\030\007 \001(\t\"\210\001\n\016ChangedComment\022%\n\006" +
-      "change\030\001 \002(\0162\025.boa.types.ChangeKind\022,\n\004k" +
-      "ind\030\002 \002(\0162\036.boa.types.Comment.CommentKin" +
-      "d\022\r\n\005value\030\003 \001(\t\022\022\n\nstart_line\030\004 \001(\005B\002H\001"
+      ".CommentsRoot\022&\n\007changes\030\007 \003(\0162\025.boa.typ" +
+      "es.ChangeKind\022\031\n\021previous_versions\030\010 \003(\005" +
+      "\022\026\n\016previous_index\030\t \003(\005\"\232\003\n\010FileKind\022\t\n" +
+      "\005OTHER\020\000\022\n\n\006BINARY\020\001\022\010\n\004TEXT\020\002\022\007\n\003XML\020\003\022",
+      "\025\n\021SOURCE_JAVA_ERROR\020d\022\024\n\020SOURCE_JAVA_JL" +
+      "S2\020e\022\024\n\020SOURCE_JAVA_JLS3\020f\022\024\n\020SOURCE_JAV" +
+      "A_JLS4\020g\022\024\n\020SOURCE_JAVA_JLS5\020h\022\016\n\nJAVA_E" +
+      "RROR\020d\022\010\n\004JLS2\020e\022\010\n\004JLS3\020f\022\010\n\004JLS4\020g\022\010\n\004" +
+      "JLS5\020h\022\024\n\017SOURCE_CS_ERROR\020\310\001\022\022\n\rSOURCE_C" +
+      "S_CS1\020\311\001\022\022\n\rSOURCE_CS_CS2\020\312\001\022\022\n\rSOURCE_C" +
+      "S_CS3\020\313\001\022\022\n\rSOURCE_CS_CS4\020\314\001\022\022\n\rSOURCE_C" +
+      "S_CS5\020\315\001\022\r\n\010CS_ERROR\020\310\001\022\010\n\003CS1\020\311\001\022\010\n\003CS2" +
+      "\020\312\001\022\010\n\003CS3\020\313\001\022\010\n\003CS4\020\314\001\022\010\n\003CS5\020\315\001\032\002\020\001\"A\n" +
+      "\016ChangedASTRoot\022/\n\nnamespaces\030\001 \003(\0132\033.bo",
+      "a.types.ChangedNamespace\"\330\001\n\020ChangedName" +
+      "space\022%\n\006change\030\001 \002(\0162\025.boa.types.Change" +
+      "Kind\022\014\n\004name\030\002 \001(\t\022-\n\tmodifiers\030\003 \003(\0132\032." +
+      "boa.types.ChangedModifier\0223\n\014declaration" +
+      "s\030\004 \003(\0132\035.boa.types.ChangedDeclaration\022+" +
+      "\n\010comments\030\005 \003(\0132\031.boa.types.ChangedComm" +
+      "ent\"\270\003\n\022ChangedDeclaration\022%\n\006change\030\001 \002" +
+      "(\0162\025.boa.types.ChangeKind\022!\n\004kind\030\002 \002(\0162" +
+      "\023.boa.types.TypeKind\022\014\n\004name\030\003 \001(\t\022-\n\tmo" +
+      "difiers\030\004 \003(\0132\032.boa.types.ChangedModifie",
+      "r\0222\n\022generic_parameters\030\005 \003(\0132\026.boa.type" +
+      "s.ChangedType\022\'\n\007parents\030\006 \003(\0132\026.boa.typ" +
+      "es.ChangedType\022)\n\007methods\030\007 \003(\0132\030.boa.ty" +
+      "pes.ChangedMethod\022*\n\006fields\030\010 \003(\0132\032.boa." +
+      "types.ChangedVariable\022:\n\023nested_declarat" +
+      "ions\030\t \003(\0132\035.boa.types.ChangedDeclaratio" +
+      "n\022+\n\010comments\030\n \003(\0132\031.boa.types.ChangedC" +
+      "omment\"q\n\013ChangedType\022%\n\006change\030\001 \002(\0162\025." +
+      "boa.types.ChangeKind\022!\n\004kind\030\002 \001(\0162\023.boa" +
+      ".types.TypeKind\022\014\n\004name\030\003 \001(\t\022\n\n\002id\030\004 \001(",
+      "\t\"\222\003\n\rChangedMethod\022%\n\006change\030\001 \002(\0162\025.bo" +
+      "a.types.ChangeKind\022\014\n\004name\030\002 \001(\t\022-\n\tmodi" +
+      "fiers\030\003 \003(\0132\032.boa.types.ChangedModifier\022" +
+      "+\n\013return_type\030\004 \001(\0132\026.boa.types.Changed" +
+      "Type\0222\n\022generic_parameters\030\005 \003(\0132\026.boa.t" +
+      "ypes.ChangedType\022-\n\targuments\030\006 \003(\0132\032.bo" +
+      "a.types.ChangedVariable\022/\n\017exception_typ" +
+      "es\030\007 \003(\0132\026.boa.types.ChangedType\022/\n\nstat" +
+      "ements\030\010 \003(\0132\033.boa.types.ChangedStatemen" +
+      "t\022+\n\010comments\030\t \003(\0132\031.boa.types.ChangedC",
+      "omment\"\204\002\n\017ChangedVariable\022%\n\006change\030\001 \002" +
+      "(\0162\025.boa.types.ChangeKind\022\014\n\004name\030\002 \001(\t\022" +
+      "-\n\rvariable_type\030\003 \001(\0132\026.boa.types.Chang" +
+      "edType\022-\n\tmodifiers\030\004 \003(\0132\032.boa.types.Ch" +
+      "angedModifier\0221\n\013initializer\030\005 \001(\0132\034.boa" +
+      ".types.ChangedExpression\022+\n\010comments\030\006 \003" +
+      "(\0132\031.boa.types.ChangedComment\"\205\004\n\020Change" +
+      "dStatement\022%\n\006change\030\001 \002(\0162\025.boa.types.C" +
+      "hangeKind\0220\n\004kind\030\002 \002(\0162\".boa.types.Stat" +
+      "ement.StatementKind\022+\n\010comments\030\003 \003(\0132\031.",
+      "boa.types.ChangedComment\022/\n\nstatements\030\004" +
+      " \003(\0132\033.boa.types.ChangedStatement\0225\n\017ini" +
+      "tializations\030\005 \003(\0132\034.boa.types.ChangedEx" +
+      "pression\022/\n\tcondition\030\006 \001(\0132\034.boa.types." +
+      "ChangedExpression\022-\n\007updates\030\007 \003(\0132\034.boa" +
+      ".types.ChangedExpression\0228\n\024variable_dec" +
+      "laration\030\010 \001(\0132\032.boa.types.ChangedVariab" +
+      "le\0227\n\020type_declaration\030\t \001(\0132\035.boa.types" +
+      ".ChangedDeclaration\0220\n\nexpression\030\n \001(\0132" +
+      "\034.boa.types.ChangedExpression\"\346\003\n\021Change",
+      "dExpression\022%\n\006change\030\001 \002(\0162\025.boa.types." +
+      "ChangeKind\0222\n\004kind\030\002 \002(\0162$.boa.types.Exp" +
+      "ression.ExpressionKind\0221\n\013expressions\030\003 " +
+      "\003(\0132\034.boa.types.ChangedExpression\0222\n\016var" +
+      "iable_decls\030\004 \003(\0132\032.boa.types.ChangedVar" +
+      "iable\022(\n\010new_type\030\005 \001(\0132\026.boa.types.Chan" +
+      "gedType\0222\n\022generic_parameters\030\006 \003(\0132\026.bo" +
+      "a.types.ChangedType\022\022\n\nis_postfix\030\007 \001(\010\022" +
+      "\017\n\007literal\030\010 \001(\t\022\020\n\010variable\030\t \001(\t\022\016\n\006me" +
+      "thod\030\n \001(\t\0221\n\013method_args\030\013 \003(\0132\034.boa.ty",
+      "pes.ChangedExpression\0227\n\020anon_declaratio" +
+      "n\030\014 \001(\0132\035.boa.types.ChangedDeclaration\"\371" +
+      "\001\n\017ChangedModifier\022%\n\006change\030\001 \002(\0162\025.boa" +
+      ".types.ChangeKind\022.\n\004kind\030\002 \002(\0162 .boa.ty" +
+      "pes.Modifier.ModifierKind\022\022\n\nvisibility\030" +
+      "\003 \001(\r\022\027\n\017annotation_name\030\004 \001(\t\022\032\n\022annota" +
+      "tion_members\030\005 \003(\t\0227\n\021annotation_values\030" +
+      "\006 \003(\0132\034.boa.types.ChangedExpression\022\r\n\005o" +
+      "ther\030\007 \001(\t\"\210\001\n\016ChangedComment\022%\n\006change\030" +
+      "\001 \002(\0162\025.boa.types.ChangeKind\022,\n\004kind\030\002 \002",
+      "(\0162\036.boa.types.Comment.CommentKind\022\r\n\005va" +
+      "lue\030\003 \001(\t\022\022\n\nstart_line\030\004 \001(\005B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -21082,7 +21416,7 @@ public final class Diff {
           internal_static_boa_types_ChangedFile_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_ChangedFile_descriptor,
-              new java.lang.String[] { "Change", "Kind", "Name", "Key", "Ast", "Comments", "OldName", });
+              new java.lang.String[] { "Change", "Kind", "Name", "Key", "Ast", "Comments", "Changes", "PreviousVersions", "PreviousIndex", });
           internal_static_boa_types_ChangedASTRoot_descriptor =
             getDescriptor().getMessageTypes().get(1);
           internal_static_boa_types_ChangedASTRoot_fieldAccessorTable = new

@@ -45,7 +45,9 @@ message ChangedFile {
 	required string key = 4;
 	optional ASTRoot ast = 5;
 	optional CommentsRoot comments = 6;
-	optional string old_name = 7;
+	repeated ChangeKind changes = 7;
+	repeated int32 previous_versions = 8;
+	repeated int32 previous_index = 9;
 }
 
 message ChangedASTRoot {
