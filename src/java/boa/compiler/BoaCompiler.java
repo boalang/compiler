@@ -100,7 +100,7 @@ public class BoaCompiler {
 				System.err.println("\tat unknown stack");
 		}
 		private void underlineError(final TokenSource tokens, final Token offendingToken, final int line, final int charPositionInLine, final int length) {
-			final String input = tokens.getInputStream().toString();
+			final String input = tokens.getInputStream().toString() + "\n ";
 			final String[] lines = input.split("\n");
 			final String errorLine = lines[line - 1];
 			System.err.println(errorLine.replaceAll("\t", "    "));
