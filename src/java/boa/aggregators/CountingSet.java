@@ -54,7 +54,7 @@ class CountingSet<T> {
 	}
 
 	public void clear() {
-		this.map = new HashMap<T, Double>();
+		this.map.clear();
 	}
 
 	/**
