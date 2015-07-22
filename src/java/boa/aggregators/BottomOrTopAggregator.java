@@ -60,8 +60,8 @@ public abstract class BottomOrTopAggregator extends Aggregator {
 		this.set.clear();
 
 		final WeightedString defaultItem = new WeightedString(null, this.DefaultValue);
-		for (int i = 0; i= < this.last; i++)
-			this.list[i] = this.defaultItem;
+		for (int i = 0; i <= this.last; i++)
+			this.list[i] = defaultItem;
 	}
 
 	/** {@inheritDoc} */
