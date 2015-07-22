@@ -36,7 +36,6 @@ public abstract class BottomOrTopAggregator extends Aggregator {
 	protected final int last;
 
 	protected double DefaultValue;
-	protected WeightedString defaultItem;
 
 	/**
 	 * Construct a {@link BottomOrTopAggregator}.
@@ -60,8 +59,8 @@ public abstract class BottomOrTopAggregator extends Aggregator {
 		// clear out the data
 		this.set.clear();
 
-		this.defaultItem = new WeightedString(null, this.DefaultValue);
-		for (int i = 0; i < this.getArg(); i++)
+		final WeightedString defaultItem = new WeightedString(null, this.DefaultValue);
+		for (int i = 0; i= < this.last; i++)
 			this.list[i] = this.defaultItem;
 	}
 
@@ -92,11 +91,11 @@ public abstract class BottomOrTopAggregator extends Aggregator {
 				if (shouldInsert(e.getValue(), this.list[this.last].getWeight()) ||
 						(e.getValue() == this.list[this.last].getWeight() && this.list[this.last].getString().compareTo(e.getKey()) > 0))
 					// find this new item's position within the list
-					for (int i = 0; i < this.getArg(); i++)
+					for (int i = 0; i <= this.last; i++)
 						if (shouldInsert(e.getValue(), this.list[i].getWeight()) ||
 								(e.getValue() == this.list[i].getWeight() && this.list[i].getString().compareTo(e.getKey()) > 0)) {
 							// here it is. move all subsequent items down one
-							for (int j = (int) (this.getArg() - 2); j >= i; j--)
+							for (int j = this.last - 1; j >= i; j--)
 								this.list[j + 1] = this.list[j];
 
 							// insert the item where it belongs
