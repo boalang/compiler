@@ -13,7 +13,8 @@ import boa.io.EmitKey;
  * @author rdyer
  */
 public abstract class BottomOrTopAggregator extends Aggregator {
-	protected CountingSet<String> set;
+	protected final CountingSet<String> set = new CountingSet<String>();
+
 	protected final CountedString[] list;
 	protected final int last;
 	protected long DefaultValue;
@@ -37,11 +38,12 @@ public abstract class BottomOrTopAggregator extends Aggregator {
 	public void start(final EmitKey key) {
 		super.start(key);
 
-		this.set = new CountingSet<String>();
+		// clear out the data
+		this.set.clear();
 
-		// clear out the list
-		for (int i = 0; i < this.getArg(); i++)
-			this.list[i] = new CountedString(null, DefaultValue);
+		final CountedString defaultVal = new CountedString(null, DefaultValue);
+		for (int i = 0; i <= this.last; i++)
+			this.list[i] = defaultVal;
 	}
 
 	/** {@inheritDoc} */
@@ -71,11 +73,11 @@ public abstract class BottomOrTopAggregator extends Aggregator {
 				if (shouldInsert(e.getValue(), this.list[this.last].getCount()) ||
 						(e.getValue() == this.list[this.last].getCount() && this.list[this.last].getString().compareTo(e.getKey()) > 0))
 					// find this new item's position within the list
-					for (int i = 0; i < this.getArg(); i++)
+					for (int i = 0; i <= this.last; i++)
 						if (shouldInsert(e.getValue(), this.list[i].getCount()) ||
 								(e.getValue() == this.list[i].getCount() && this.list[i].getString().compareTo(e.getKey()) > 0)) {
 							// here it is. move all subsequent items down one
-							for (int j = (int) (this.getArg() - 2); j >= i; j--)
+							for (int j = this.last - 1; j >= i; j--)
 								this.list[j + 1] = this.list[j];
 
 							// insert the item where it belongs
