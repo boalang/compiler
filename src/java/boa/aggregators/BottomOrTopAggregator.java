@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2015, Anthony Urso, Hridesh Rajan, Robert Dyer,
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,10 +29,13 @@ import boa.io.EmitKey;
  * @author rdyer
  */
 public abstract class BottomOrTopAggregator extends Aggregator {
-	protected CountingSet<String> set;
+	protected final CountingSet<String> set = new CountingSet<String>();
+
 	protected final WeightedString[] list;
 	protected final int last;
+
 	protected double DefaultValue;
+	protected WeightedString defaultItem;
 
 	/**
 	 * Construct a {@link BottomOrTopAggregator}.
@@ -53,11 +56,12 @@ public abstract class BottomOrTopAggregator extends Aggregator {
 	public void start(final EmitKey key) {
 		super.start(key);
 
-		this.set = new CountingSet<String>();
+		// clear out the data
+		this.set.clear();
 
-		// clear out the list
+		this.defaultItem = new WeightedString(null, this.DefaultValue);
 		for (int i = 0; i < this.getArg(); i++)
-			this.list[i] = new WeightedString(null, DefaultValue);
+			this.list[i] = this.defaultItem;
 	}
 
 	/** {@inheritDoc} */
