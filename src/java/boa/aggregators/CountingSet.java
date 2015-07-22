@@ -24,15 +24,6 @@ class CountingSet<T> {
 	}
 
 	/**
-	 * Add a value to the set, with cardinality 1.
-	 * 
-	 * @param t The value to be added
-	 */
-	public void add(final T t) {
-		this.add(t, 1);
-	}
-
-	/**
 	 * Add a value and its cardinality to the set.
 	 * 
 	 * @param t The value to be added
@@ -47,7 +38,7 @@ class CountingSet<T> {
 	}
 
 	public void clear() {
-		this.map = new HashMap<T, Long>();
+		this.map.clear();
 	}
 
 	/**
