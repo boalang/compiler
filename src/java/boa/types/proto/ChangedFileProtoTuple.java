@@ -21,6 +21,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import boa.types.BoaInt;
+import boa.types.BoaProtoList;
 import boa.types.BoaProtoTuple;
 import boa.types.BoaString;
 import boa.types.BoaType;
@@ -51,6 +53,15 @@ public class ChangedFileProtoTuple extends BoaProtoTuple {
 		// NOTE: this is here to make reachableTypes() work properly
 		names.put("_placeholder_", counter++);
 		members.add(new ASTRootProtoTuple());
+
+		names.put("changes", counter++);
+		members.add(new BoaProtoList(new ChangeKindProtoMap()));
+
+		names.put("previous_versions", counter++);
+		members.add(new BoaProtoList(new BoaInt()));
+
+		names.put("previous_index", counter++);
+		members.add(new BoaProtoList(new BoaInt()));
 	}
 
 	/**

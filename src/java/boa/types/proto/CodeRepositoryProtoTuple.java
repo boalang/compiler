@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import boa.types.BoaInt;
 import boa.types.BoaProtoList;
 import boa.types.BoaProtoTuple;
 import boa.types.BoaString;
@@ -47,6 +48,18 @@ public class CodeRepositoryProtoTuple extends BoaProtoTuple {
 
 		names.put("revisions", counter++);
 		members.add(new BoaProtoList(new RevisionProtoTuple()));
+
+		names.put("branches", counter++);
+		members.add(new BoaProtoList(new BoaInt()));
+
+		names.put("branch_names", counter++);
+		members.add(new BoaProtoList(new BoaString()));
+
+		names.put("tags", counter++);
+		members.add(new BoaProtoList(new BoaInt()));
+
+		names.put("tag_names", counter++);
+		members.add(new BoaProtoList(new BoaString()));
 	}
 
 	/**

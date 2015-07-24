@@ -44,7 +44,7 @@ public class TypeProtoTuple extends BoaProtoTuple {
 		names.put("kind", counter++);
 		members.add(new TypeKindProtoMap());
 
-		names.put("id", counter++);
+		names.put("qualified_name", counter++);
 		members.add(new BoaString());
 	}
 
