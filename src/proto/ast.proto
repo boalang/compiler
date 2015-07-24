@@ -50,7 +50,7 @@ enum TypeKind {
 message Type {
 	required string name = 1;
 	required TypeKind kind = 2;
-	optional string id = 4;
+	optional int32 qualified_name = 3;
 }
 
 message Method {
