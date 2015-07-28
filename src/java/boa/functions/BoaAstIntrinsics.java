@@ -207,7 +207,7 @@ public class BoaAstIntrinsics {
 		final Configuration conf = new Configuration();
 		try {
 			final FileSystem fs = FileSystem.get(conf);
-			final Path p = new Path("hdfs://boa-nn1/",
+			final Path p = new Path("hdfs://boa-njt/",
 								new Path(context.getConfiguration().get("boa.ast.dir", context.getConfiguration().get("boa.input.dir", "repcache/live")),
 								new Path("ast")));
 			map = new MapFile.Reader(fs, p.toString(), conf);
@@ -220,7 +220,7 @@ public class BoaAstIntrinsics {
 		final Configuration conf = new Configuration();
 		try {
 			final FileSystem fs = FileSystem.get(conf);
-			final Path p = new Path("hdfs://boa-nn1/",
+			final Path p = new Path("hdfs://boa-njt/",
 								new Path(context.getConfiguration().get("boa.comments.dir", context.getConfiguration().get("boa.input.dir", "repcache/live")),
 								new Path("comments")));
 			commentsMap = new MapFile.Reader(fs, p.toString(), conf);
@@ -233,7 +233,7 @@ public class BoaAstIntrinsics {
 		final Configuration conf = new Configuration();
 		try {
 			final FileSystem fs = FileSystem.get(conf);
-			final Path p = new Path("hdfs://boa-nn1/",
+			final Path p = new Path("hdfs://boa-njt/",
 								new Path(context.getConfiguration().get("boa.issues.dir", context.getConfiguration().get("boa.input.dir", "repcache/live")),
 								new Path("issues")));
 			issuesMap = new MapFile.Reader(fs, p.toString(), conf);
