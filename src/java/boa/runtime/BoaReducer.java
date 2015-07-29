@@ -90,25 +90,10 @@ public abstract class BoaReducer extends Reducer<EmitKey, EmitValue, Text, NullW
 			} catch (final FinishedException e) {
 				// we are done
 				return;
-			} catch (final IOException e) {
-				// won't be robust to IOExceptions
-				throw e;
-			} catch (final InterruptedException e) {
-				// won't be robust to InterruptedExceptions
-				throw e;
-			} catch (final RuntimeException e) {
-				if (this.robust)
-					LOG.error(e.getClass().getName() + " caught", e);
-				else
-					throw e;
-			} catch (final Exception e) {
-				if (this.robust)
-					LOG.error(e.getClass().getName() + " caught", e);
-				else
-					throw new RuntimeException(e.getClass().getName() + " caught", e);
+			} catch (final Throwable e) {
+				throw new RuntimeException(e);
 			}
 
-		// finish it!
 		t.finish();
 	}
 }
