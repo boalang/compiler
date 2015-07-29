@@ -14,6 +14,7 @@ import org.apache.hadoop.mapreduce.TaskAttemptContext;
 public class BoaOutputCommitter extends FileOutputCommitter {
 	private final Path outputPath;
 	private final TaskAttemptContext context;
+	public static Throwable lastSeenEx = null;
 
 	public BoaOutputCommitter(Path output, TaskAttemptContext context) throws java.io.IOException {
 		super(output, context);
@@ -43,6 +44,9 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 	private void updateStatus(final boolean error, final int jobId) {
 		if (jobId == 0)
 			return;
+
+		if (error && lastSeenEx != null)
+			System.err.println(lastSeenEx.getCause().getMessage());
 
 		Connection con = null;
 		try {

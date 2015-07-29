@@ -127,19 +127,22 @@ public class <name> extends boa.runtime.BoaRunner {
 		<jobs:{j | <j><\n>}>		/** {@inheritDoc} */
 		@Override
 		protected void map(final org.apache.hadoop.io.Text key, final org.apache.hadoop.io.BytesWritable value, final org.apache.hadoop.mapreduce.Mapper\<org.apache.hadoop.io.Text, org.apache.hadoop.io.BytesWritable, boa.io.EmitKey, boa.io.EmitValue>.Context context) throws java.io.IOException {
-			boa.types.Toplevel.Project _input = boa.types.Toplevel.Project.parseFrom(com.google.protobuf.CodedInputStream.newInstance(value.getBytes(), 0, value.getLength()));
-			<jobnames:{n | _job_<n> = runJob("Job<n>", _job_<n>, _input, context);<\n>}>		}
+			try {
+				boa.types.Toplevel.Project _input = boa.types.Toplevel.Project.parseFrom(com.google.protobuf.CodedInputStream.newInstance(value.getBytes(), 0, value.getLength()));
+				<jobnames:{n | runJob("Job<n>", _job_<n>, _input, context);<\n>}>			} catch (final Throwable e) {
+				boa.io.BoaOutputCommitter.lastSeenEx = e;
+				throw new java.io.IOException(e);
+			}
+		}
 
-		private BoaJob runJob(final String name, final BoaJob job, final boa.types.Toplevel.Project input, final org.apache.hadoop.mapreduce.Mapper\<org.apache.hadoop.io.Text, org.apache.hadoop.io.BytesWritable, boa.io.EmitKey, boa.io.EmitValue>.Context context) {
-			if (job != null)
-				try {
-					job.map(input, context);
-				} catch (final Throwable e) {
-					LOG.error(name + ": " + e.getClass().getName() + " caught", e);
-					return null;
-				}
+		private void runJob(final String name, final BoaJob job, final boa.types.Toplevel.Project input, final org.apache.hadoop.mapreduce.Mapper\<org.apache.hadoop.io.Text, org.apache.hadoop.io.BytesWritable, boa.io.EmitKey, boa.io.EmitValue>.Context context) throws Throwable {
+			try {
+				job.map(input, context);
+			} catch (final Throwable e) {
+				LOG.error(name + ": " + e.getClass().getName() + " caught", e);
+				throw e;
+			}
 			context.progress();
-			return job;
 		}
 
 		/** {@inheritDoc} */
