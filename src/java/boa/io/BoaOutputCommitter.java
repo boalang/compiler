@@ -22,6 +22,11 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.FSDataInputStream;
 import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.mapred.JobClient;
+import org.apache.hadoop.mapred.JobConf;
+import org.apache.hadoop.mapred.JobID;
+import org.apache.hadoop.mapred.RunningJob;
+import org.apache.hadoop.mapred.TaskCompletionEvent;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputCommitter;
 import org.apache.hadoop.mapreduce.JobContext;
 import org.apache.hadoop.mapreduce.JobStatus;
@@ -39,6 +44,7 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 
 	public BoaOutputCommitter(Path output, TaskAttemptContext context) throws java.io.IOException {
 		super(output, context);
+
 		this.context = context;
 		this.outputPath = output;
 	}
@@ -46,36 +52,49 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 	@Override
 	public void commitJob(JobContext context) throws java.io.IOException {
 		super.commitJob(context);
-		int jobId = context.getConfiguration().getInt("boa.hadoop.jobid", 0);
-		storeOutput(context, jobId);
-		updateStatus(false, jobId);
+
+		int boaJobId = context.getConfiguration().getInt("boa.hadoop.jobid", 0);
+		storeOutput(context, boaJobId);
+		updateStatus(null, boaJobId);
 	}
 
 	@Override
 	public void abortJob(JobContext context, JobStatus.State runState) throws java.io.IOException {
 		super.abortJob(context, runState);
-		int jobId = context.getConfiguration().getInt("boa.hadoop.jobid", 0);
-		updateStatus(true, jobId);
+
+		final JobClient jobClient = new JobClient(new JobConf(context.getConfiguration()));
+		final RunningJob job = jobClient.getJob((org.apache.hadoop.mapred.JobID) JobID.forName(context.getConfiguration().get("mapred.job.id")));
+		String diag = "";
+		for (final TaskCompletionEvent event : job.getTaskCompletionEvents(0))
+			switch (event.getTaskStatus()) {
+				case SUCCEEDED:
+					break;
+				case FAILED:
+				case KILLED:
+				case OBSOLETE:
+				case TIPFAILED:
+					diag += job.getTaskDiagnostics(event.getTaskAttemptId()) + "\n\n";
+					break;
+			}
+		updateStatus(diag, context.getConfiguration().getInt("boa.hadoop.jobid", 0));
 	}
 
 	private final static String url = "jdbc:mysql://head:3306/drupal";
 	private final static String user = "drupal";
 	private final static String password = "";
 
-	private void updateStatus(final boolean error, final int jobId) {
+	private void updateStatus(final String error, final int jobId) {
 		if (jobId == 0)
 			return;
-
-		if (error && lastSeenEx != null)
-			System.err.println(lastSeenEx.getCause().getMessage());
 
 		Connection con = null;
 		try {
 			con = DriverManager.getConnection(url, user, password);
 			PreparedStatement ps = null;
 			try {
-				ps = con.prepareStatement("UPDATE boa_jobs SET hadoop_end=CURRENT_TIMESTAMP(), hadoop_status=? WHERE id=" + jobId);
-				ps.setInt(1, error ? -1 : 2);
+				ps = con.prepareStatement("UPDATE boa_jobs SET hadoop_end=CURRENT_TIMESTAMP(), hadoop_status=?, CONCAT(hadoop_output, ?) WHERE id=" + jobId);
+				ps.setInt(1, error != null ? -1 : 2);
+				ps.setString(2, error == null ? "" : error);
 				ps.executeUpdate();
 			} finally {
 				try { if (ps != null) ps.close(); } catch (final Exception e) { e.printStackTrace(); }
