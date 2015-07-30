@@ -52,7 +52,9 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 				case KILLED:
 				case OBSOLETE:
 				case TIPFAILED:
-					diag += job.getTaskDiagnostics(event.getTaskAttemptId()) + "\n\n";
+					for (final String s : job.getTaskDiagnostics(event.getTaskAttemptId()))
+						diag += s + "\n";
+					diag += "\n";
 					break;
 			}
 		updateStatus(diag, context.getConfiguration().getInt("boa.hadoop.jobid", 0));
@@ -71,7 +73,7 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 			con = DriverManager.getConnection(url, user, password);
 			PreparedStatement ps = null;
 			try {
-				ps = con.prepareStatement("UPDATE boa_jobs SET hadoop_end=CURRENT_TIMESTAMP(), hadoop_status=?, CONCAT(hadoop_output, ?) WHERE id=" + jobId);
+				ps = con.prepareStatement("UPDATE boa_jobs SET hadoop_end=CURRENT_TIMESTAMP(), hadoop_status=?, hadoop_output=CONCAT(hadoop_output, ?) WHERE id=" + jobId);
 				ps.setInt(1, error != null ? -1 : 2);
 				ps.setString(2, error == null ? "" : error);
 				ps.executeUpdate();
