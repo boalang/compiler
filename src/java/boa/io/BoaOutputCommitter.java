@@ -73,6 +73,7 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 				case KILLED:
 				case OBSOLETE:
 				case TIPFAILED:
+					diag += "Diagnostics for: " + event.getTaskTrackerHttp() + "\n";
 					for (final String s : job.getTaskDiagnostics(event.getTaskAttemptId()))
 						diag += s + "\n";
 					diag += "\n";
