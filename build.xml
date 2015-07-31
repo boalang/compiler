@@ -82,10 +82,9 @@
 			<srcfile />
 			<fileset dir="${src.proto}" includes="*.proto" />
 		</apply>
-		<antcall target="-check-deps" />
 	</target>
 
-	<target name="compile-protobuf" depends="-translate-protobuf" description="Compiles the generated protobuf code.">
+	<target name="compile-protobuf" depends="-translate-protobuf,-check-deps" description="Compiles the generated protobuf code.">
 		<javac includeantruntime="true" srcdir="src/compiled-proto" destdir="build/classes" debug="${debug.enabled}" debuglevel="${debug.level}">
 			<classpath refid="project.class.path" />
 		</javac>
@@ -123,10 +122,9 @@
 			<arg value="boa.parser" />
 			<arg value="Boa.g" />
 		</java>
-		<antcall target="-check-deps" />
 	</target>
 
-	<target name="compile-parser" depends="-parser" description="Compile the parser.">
+	<target name="compile-parser" depends="-parser,-check-deps" description="Compile the parser.">
 		<javac includeantruntime="true" srcdir="${src.parser.paths}" destdir="build/classes" debug="${debug.enabled}" debuglevel="${debug.level}">
 			<classpath refid="project.class.path" />
 		</javac>
@@ -139,8 +137,7 @@
 
 
 	<!-- main compilation targets -->
-	<target name="compile" depends="compile-protobuf,compile-parser" description="Compile the compiler.">
-		<antcall target="-check-deps" />
+	<target name="compile" depends="compile-protobuf,compile-parser,-check-deps" description="Compile the compiler.">
 		<javac includeantruntime="true" srcdir="${src.paths}" destdir="build/classes" debug="${debug.enabled}" debuglevel="${debug.level}">
 			<classpath refid="project.class.path" />
 		</javac>
@@ -234,8 +231,7 @@
 		<delete file="SecurityAuth.audit" />
 	</target>
 
-	<target name="-compile-tests" depends="compile">
-		<antcall target="-check-deps" />
+	<target name="-compile-tests" depends="compile,-check-deps">
 		<javac includeantruntime="true" srcdir="src/test" destdir="build/tests" debug="${debug.enabled}" debuglevel="${debug.level}">
 			<classpath refid="project.class.path" />
 		</javac>
