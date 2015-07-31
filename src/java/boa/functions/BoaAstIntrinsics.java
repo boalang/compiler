@@ -369,24 +369,28 @@ public class BoaAstIntrinsics {
 		protected boolean preVisit(final Revision node) throws Exception {
 			return node.getCommitDate() <= timestamp;
 		}
+
 		/** {@inheritDoc} */
 		@Override
 		protected boolean preVisit(final ChangedFile node) throws Exception {
+			if (node.getChange() == ChangeKind.DELETED) {
+				map.remove(node.getName());
+				return false;
+			}
+
 			boolean filter = kinds.length > 0;
 
-			final String kindName = node.getKind().name();
-			for (final String kind : kinds)
-				if (kindName.startsWith(kind)) {
-					filter = false;
-					break;
-				}
-
-			if (!filter) {
-				if (node.getChange() == ChangeKind.DELETED)
-					map.remove(node.getName());
-				else
-					map.put(node.getName(), node);
+			if (filter) {
+				final String kindName = node.getKind().name();
+				for (final String kind : kinds)
+					if (kindName.startsWith(kind)) {
+						filter = false;
+						break;
+					}
 			}
+
+			if (!filter)
+				map.put(node.getName(), node);
 
 			return false;
 		}
