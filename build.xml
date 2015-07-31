@@ -76,6 +76,7 @@
 	</target>
 
 	<target name="-translate-protobuf" depends="-check-protobuf" unless="protobuf.uptodate">
+		<echo level="error" message="Translating Protocol Buffer files to Java" />
 		<apply executable="protoc" parallel="true">
 			<arg value="--proto_path=${src.proto}" />
 			<arg value="--java_out=src/compiled-proto" />
@@ -115,6 +116,7 @@
 	</target>
 
 	<target name="-parser" depends="-check-parser" unless="parser.uptodate">
+		<echo level="error" message="Generating parser code" />
 		<java jar="lib/antlr-${antlr.version}-complete.jar" dir="src/antlr/" fork="true" failonerror="true">
 			<arg value="-o" />
 			<arg value="../../build/java/boa/parser/" />
