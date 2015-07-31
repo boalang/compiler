@@ -131,7 +131,7 @@ public class <name> extends boa.runtime.BoaRunner {
 				boa.types.Toplevel.Project _input = boa.types.Toplevel.Project.parseFrom(com.google.protobuf.CodedInputStream.newInstance(value.getBytes(), 0, value.getLength()));
 				<jobnames:{n | runJob("Job<n>", _job_<n>, _input, context);<\n>}>			} catch (final Throwable e) {
 				boa.io.BoaOutputCommitter.lastSeenEx = e;
-				throw new java.io.IOException(e);
+				throw new java.io.IOException("map failure for key '" + key.toString() + "'", e);
 			}
 		}
 
