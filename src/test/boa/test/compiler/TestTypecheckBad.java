@@ -67,6 +67,11 @@ public class TestTypecheckBad extends BaseTest {
 	}
 
 	@Test
+	public void methodCallWrongType() throws IOException {
+		typecheck(load(badDir + "method-call-wrong-type.boa"), "no such function push([stack of int, stack of int])");
+	}
+
+	@Test
 	public void buildinMethodNoCall() throws IOException {
 		typecheck(load(badDir + "builtin-method-no-call.boa"), "expected a call to function 'clear'");
 	}
