@@ -48,9 +48,9 @@ enum TypeKind {
 }
 
 message Type {
-	required TypeKind kind = 1;
-	required int32 name = 2;
-	optional int32 qualified_name = 3;
+	required string name = 1;
+	required TypeKind kind = 2;
+	optional string id = 4;
 }
 
 message Method {
