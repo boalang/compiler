@@ -55,7 +55,7 @@ public class LocalAggregationTransformer extends AbstractVisitorNoArg {
 		public void visit(final VarDeclStatement n) {
 			if (n.hasType() && n.getType() instanceof OutputType) {
 				final OutputType t = (OutputType) n.getType();
-				if ("sum".equals(t.getId().getToken()) && t.getIndicesSize() == 0)
+				if ("sum".equals(t.getId().getToken()) && t.getIndicesSize() == 0 && t.getType().getType() instanceof Identifier && ((Identifier)t.getType().getType()).getToken().equals("int"))
 					vars.add(n.getId().getToken());
 			}
 		}
