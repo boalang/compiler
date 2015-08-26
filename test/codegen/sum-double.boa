@@ -1,0 +1,3 @@
+o: output sum of float;
+
+o << 0.5;
