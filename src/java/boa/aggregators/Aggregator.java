@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2015, Anthony Urso, Hridesh Rajan, Robert Dyer, 
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,6 +29,7 @@ import boa.io.EmitValue;
  * The base class for all Boa aggregators.
  * 
  * @author anthonyu
+ * @author rdyer
  */
 public abstract class Aggregator {
 	private long arg;
@@ -76,19 +77,19 @@ public abstract class Aggregator {
 	}
 
 	public void aggregate(final long data, final String metadata) throws IOException, InterruptedException, FinishedException {
-		this.aggregate(Long.toString(data), metadata);
+		this.aggregate(EmitValue.valueToString(data), metadata);
 	}
 
 	public void aggregate(final long data) throws IOException, InterruptedException, FinishedException {
-		this.aggregate(data, null);
+		this.aggregate(EmitValue.valueToString(data), null);
 	}
 
 	public void aggregate(final double data, final String metadata) throws IOException, InterruptedException, FinishedException {
-		this.aggregate(Double.toString(data), metadata);
+		this.aggregate(EmitValue.valueToString(data), metadata);
 	}
 
 	public void aggregate(final double data) throws IOException, InterruptedException, FinishedException {
-		this.aggregate(data, null);
+		this.aggregate(EmitValue.valueToString(data), null);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -107,30 +108,20 @@ public abstract class Aggregator {
 
 	@SuppressWarnings("unchecked")
 	protected void collect(final long data, final String metadata) throws IOException, InterruptedException {
-		if (this.combining)
-			this.getContext().write(this.getKey(), new EmitValue(data, metadata));
-		else if (metadata != null)
-			this.getContext().write(new Text(this.getKey() + " = " + data + " weight " + metadata), NullWritable.get());
-		else
-			this.getContext().write(new Text(this.getKey() + " = " + data), NullWritable.get());
+		this.collect(EmitValue.valueToString(data), metadata);
 	}
 
 	protected void collect(final long data) throws IOException, InterruptedException {
-		this.collect(data, null);
+		this.collect(EmitValue.valueToString(data), null);
 	}
 
 	@SuppressWarnings("unchecked")
 	protected void collect(final double data, final String metadata) throws IOException, InterruptedException {
-		if (this.combining)
-			this.getContext().write(this.getKey(), new EmitValue(data, metadata));
-		else if (metadata != null)
-			this.getContext().write(new Text(this.getKey() + " = " + data + " weight " + metadata), NullWritable.get());
-		else
-			this.getContext().write(new Text(this.getKey() + " = " + data), NullWritable.get());
+		this.collect(EmitValue.valueToString(data), metadata);
 	}
 
 	protected void collect(final double data) throws IOException, InterruptedException {
-		this.collect(data, null);
+		this.collect(EmitValue.valueToString(data), null);
 	}
 
 	public void finish() throws IOException, InterruptedException {
