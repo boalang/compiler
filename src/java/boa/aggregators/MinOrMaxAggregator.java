@@ -18,6 +18,7 @@ package boa.aggregators;
 
 import java.io.IOException;
 
+import boa.functions.BoaCasts;
 import boa.io.EmitKey;
 
 /**
@@ -106,7 +107,7 @@ abstract class MinOrMaxAggregator extends Aggregator {
 	public void finish() throws IOException, InterruptedException {
 		for (int i = 0; i < this.getArg(); i++)
 			if (this.isCombining())
-				this.collect(this.list[i].getString(), Double.toString(this.list[i].getWeight()));
+				this.collect(this.list[i].getString(), BoaCasts.doubleToString(this.list[i].getWeight()));
 			else
 				this.collect(this.list[i].toString());
 	}
