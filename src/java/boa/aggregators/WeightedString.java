@@ -16,6 +16,8 @@
  */
 package boa.aggregators;
 
+import boa.functions.BoaCasts;
+
 /**
  * A tuple containing a {@link String} and its weight.
  * 
@@ -94,6 +96,6 @@ class WeightedString {
 	/** {@inheritDoc} */
 	@Override
 	public String toString() {
-		return this.string + ", " + this.weight;
+		return this.string + ", " + BoaCasts.doubleToString(this.weight);
 	}
 }
