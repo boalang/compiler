@@ -22,6 +22,7 @@ import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer.Context;
 
+import boa.functions.BoaCasts;
 import boa.io.EmitKey;
 import boa.io.EmitValue;
 
@@ -77,19 +78,19 @@ public abstract class Aggregator {
 	}
 
 	public void aggregate(final long data, final String metadata) throws IOException, InterruptedException, FinishedException {
-		this.aggregate(EmitValue.valueToString(data), metadata);
+		this.aggregate(BoaCasts.longToString(data), metadata);
 	}
 
 	public void aggregate(final long data) throws IOException, InterruptedException, FinishedException {
-		this.aggregate(EmitValue.valueToString(data), null);
+		this.aggregate(BoaCasts.longToString(data), null);
 	}
 
 	public void aggregate(final double data, final String metadata) throws IOException, InterruptedException, FinishedException {
-		this.aggregate(EmitValue.valueToString(data), metadata);
+		this.aggregate(BoaCasts.doubleToString(data), metadata);
 	}
 
 	public void aggregate(final double data) throws IOException, InterruptedException, FinishedException {
-		this.aggregate(EmitValue.valueToString(data), null);
+		this.aggregate(BoaCasts.doubleToString(data), null);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -108,20 +109,20 @@ public abstract class Aggregator {
 
 	@SuppressWarnings("unchecked")
 	protected void collect(final long data, final String metadata) throws IOException, InterruptedException {
-		this.collect(EmitValue.valueToString(data), metadata);
+		this.collect(BoaCasts.longToString(data), metadata);
 	}
 
 	protected void collect(final long data) throws IOException, InterruptedException {
-		this.collect(EmitValue.valueToString(data), null);
+		this.collect(BoaCasts.longToString(data), null);
 	}
 
 	@SuppressWarnings("unchecked")
 	protected void collect(final double data, final String metadata) throws IOException, InterruptedException {
-		this.collect(EmitValue.valueToString(data), metadata);
+		this.collect(BoaCasts.doubleToString(data), metadata);
 	}
 
 	protected void collect(final double data) throws IOException, InterruptedException {
-		this.collect(EmitValue.valueToString(data), null);
+		this.collect(BoaCasts.doubleToString(data), null);
 	}
 
 	public void finish() throws IOException, InterruptedException {

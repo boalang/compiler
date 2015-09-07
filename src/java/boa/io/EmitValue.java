@@ -24,6 +24,8 @@ import java.util.Arrays;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 
+import boa.functions.BoaCasts;
+
 /**
  * A {@link Writable} that contains a datum and an optional metadatum to be
  * emitted to a Boa table.
@@ -124,7 +126,7 @@ public class EmitValue implements Writable {
 	 *            A long representing the metadata to be emitted
 	 */
 	public EmitValue(final String data, final long metadata) {
-		this(data, valueToString(metadata));
+		this(data, BoaCasts.longToString(metadata));
 	}
 
 	/**
@@ -136,7 +138,7 @@ public class EmitValue implements Writable {
 	 *            A double representing the metadata to be emitted
 	 */
 	public EmitValue(final String data, final double metadata) {
-		this(data, valueToString(metadata));
+		this(data, BoaCasts.doubleToString(metadata));
 	}
 
 	/**
@@ -158,7 +160,7 @@ public class EmitValue implements Writable {
 	 *            A {@link String} containing the metadata to be emitted
 	 */
 	public EmitValue(final long data, final String metadata) {
-		this(valueToString(data), metadata);
+		this(BoaCasts.longToString(data), metadata);
 	}
 
 	/**
@@ -170,7 +172,7 @@ public class EmitValue implements Writable {
 	 *            A long representing the metadata to be emitted
 	 */
 	public EmitValue(final long data, final long metadata) {
-		this(data, valueToString(metadata));
+		this(data, BoaCasts.longToString(metadata));
 	}
 
 	/**
@@ -182,7 +184,7 @@ public class EmitValue implements Writable {
 	 *            A double representing the metadata to be emitted
 	 */
 	public EmitValue(final long data, final double metadata) {
-		this(data, valueToString(metadata));
+		this(data, BoaCasts.doubleToString(metadata));
 	}
 
 	/**
@@ -204,7 +206,7 @@ public class EmitValue implements Writable {
 	 *            A {@link String} containing the metadata to be emitted
 	 */
 	public EmitValue(final double data, final String metadata) {
-		this(valueToString(data), metadata);
+		this(BoaCasts.doubleToString(data), metadata);
 	}
 
 	/**
@@ -216,7 +218,7 @@ public class EmitValue implements Writable {
 	 *            A long representing the metadata to be emitted
 	 */
 	public EmitValue(final double data, final long metadata) {
-		this(data, valueToString(metadata));
+		this(data, BoaCasts.longToString(metadata));
 	}
 
 	/**
@@ -228,7 +230,7 @@ public class EmitValue implements Writable {
 	 *            A double representing the metadata to be emitted
 	 */
 	public EmitValue(final double data, final double metadata) {
-		this(data, valueToString(metadata));
+		this(data, BoaCasts.doubleToString(metadata));
 	}
 
 	/** {@inheritDoc} */
@@ -323,13 +325,5 @@ public class EmitValue implements Writable {
 	@Override
 	public String toString() {
 		return Arrays.toString(this.data) + ":" + this.metadata;
-	}
-
-	public static String valueToString(final long val) {
-		return Long.toString(val);
-	}
-
-	public static String valueToString(final double val) {
-		return Double.toString(val);
 	}
 }

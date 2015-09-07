@@ -18,6 +18,7 @@ package boa.aggregators;
 
 import java.io.IOException;
 
+import boa.functions.BoaCasts;
 import boa.io.EmitKey;
 
 /**
@@ -62,7 +63,7 @@ public class IntMeanAggregator extends MeanAggregator {
 	public void finish() throws IOException, InterruptedException {
 		// if we are in the combiner, output the sum and the count
 		if (this.isCombining())
-			this.collect(this.sum, Long.toString(this.getCount()));
+			this.collect(this.sum, BoaCasts.longToString(this.getCount()));
 		// otherwise, output the final answer
 		else
 			this.collect(this.sum / (double) this.getCount());

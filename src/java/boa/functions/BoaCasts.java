@@ -92,6 +92,30 @@ public class BoaCasts {
 	}
 
 	/**
+	 * Format a double into a {@link String}.
+	 * 
+	 * @param d
+	 *            A double
+	 * 
+	 * @return A {@link String} containing the number <em>d</em>
+	 */
+	public static String doubleToString(final double d) {
+		return Double.toString(d);
+	}
+
+	/**
+	 * Format a long into a {@link String}.
+	 * 
+	 * @param l
+	 *            A long
+	 * 
+	 * @return A {@link String} containing the number <em>l</em>
+	 */
+	public static String longToString(final long l) {
+		return Long.toString(l);
+	}
+
+	/**
 	 * Format a long into a {@link String} in the given radix.
 	 * 
 	 * @param l
