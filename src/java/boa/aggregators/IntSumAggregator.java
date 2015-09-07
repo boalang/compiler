@@ -41,7 +41,7 @@ public class IntSumAggregator extends Aggregator {
 	/** {@inheritDoc} */
 	@Override
 	public void aggregate(final String data, final String metadata) throws IOException, InterruptedException, FinishedException {
-		this.aggregate(Double.valueOf(data).longValue());
+		this.aggregate(Double.valueOf(data).longValue(), metadata);
 	}
 
 	/** {@inheritDoc} */
@@ -53,7 +53,7 @@ public class IntSumAggregator extends Aggregator {
 	/** {@inheritDoc} */
 	@Override
 	public void aggregate(final double data, final String metadata) throws IOException, InterruptedException, FinishedException {
-		this.aggregate(Double.valueOf(data).longValue());
+		this.aggregate(Double.valueOf(data).longValue(), metadata);
 	}
 
 	/** {@inheritDoc} */
