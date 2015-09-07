@@ -1,5 +1,5 @@
 /*
- * Copyright 2015, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2015, Anthony Urso, Hridesh Rajan, Robert Dyer,
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -156,9 +156,5 @@ public abstract class Aggregator {
 
 	public EmitKey getKey() {
 		return this.key;
-	}
-
-	public EmitValue getResult() {
-		throw new RuntimeException("unimplemented");
 	}
 }

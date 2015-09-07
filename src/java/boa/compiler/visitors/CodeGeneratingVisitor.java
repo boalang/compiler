@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2015, Anthony Urso, Hridesh Rajan, Robert Dyer,
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,16 +46,16 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	 * 
 	 * @author anthonyu
 	 */
-	protected class TableDescription {
+	protected class AggregatorDescription {
 		protected String aggregator;
 		protected BoaType type;
 		protected List<String> parameters;
 
-		public TableDescription(final String aggregator, final BoaType type) {
+		public AggregatorDescription(final String aggregator, final BoaType type) {
 			this(aggregator, type, null);
 		}
 
-		public TableDescription(final String aggregator, final BoaType type, final List<String> parameters) {
+		public AggregatorDescription(final String aggregator, final BoaType type, final List<String> parameters) {
 			this.aggregator = aggregator;
 			this.type = type;
 			this.parameters = parameters;
@@ -387,15 +387,15 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	protected final StaticInitializationCodeGeneratingVisitor staticInitialization;
 	protected final FunctionDeclaratorCodeGeneratingVisitor functionDeclarator;
 
-	protected final HashMap<String, TableDescription> tables = new HashMap<String, TableDescription>();
+	protected final HashMap<String, AggregatorDescription> aggregators = new HashMap<String, AggregatorDescription>();
 
 	protected final String name;
 
 	protected String skipIndex = "";
 	protected boolean abortGeneration = false;
 
-	final public static List<String> combineTableStrings = new ArrayList<String>();
-	final public static List<String> reduceTableStrings = new ArrayList<String>();
+	final public static List<String> combineAggregatorStrings = new ArrayList<String>();
+	final public static List<String> reduceAggregatorStrings = new ArrayList<String>();
 
 	public CodeGeneratingVisitor(final String name) throws IOException {
 		this.name = name;
@@ -432,10 +432,10 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		}
 		st.add("statements", statements);
 
-		if (this.tables.size() == 0)
+		if (this.aggregators.size() == 0)
 			throw new TypeCheckException(n, "No output variables were declared - must declare at least one output variable");
 
-		for (final Entry<String, TableDescription> entry : this.tables.entrySet()) {
+		for (final Entry<String, AggregatorDescription> entry : this.aggregators.entrySet()) {
 			String id = entry.getKey();
 			String prefix = name;
 
@@ -444,7 +444,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				id = id.substring(id.indexOf('_') + 1);
 			}
 
-			final TableDescription description = entry.getValue();
+			final AggregatorDescription description = entry.getValue();
 			final String parameters = description.getParameters() == null ? "" : description.getParameters().get(0);
 			final BoaType type = description.getType();
 
@@ -462,8 +462,8 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			}
 
 			if (combines)
-				combineTableStrings.add("this.tables.put(\"" + prefix + "::" + id + "\", new boa.aggregators.Table(" + src.toString().substring(2) + "));");
-			reduceTableStrings.add("this.tables.put(\"" + prefix + "::" + id + "\", new boa.aggregators.Table(" + src.toString().substring(2) + "));");
+				combineAggregatorStrings.add("this.aggregators.put(\"" + prefix + "::" + id + "\", " + src.toString().substring(2) + ");");
+			reduceAggregatorStrings.add("this.aggregators.put(\"" + prefix + "::" + id + "\", " + src.toString().substring(2) + ");");
 		}
 
 		code.add(st.render());
@@ -1553,9 +1553,9 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		if (n.getArgsSize() > 0) {
 			n.getArg(0).accept(this);
-			this.tables.put(id, new TableDescription(aggregator, t.getType(), Arrays.asList(code.removeLast())));
+			this.aggregators.put(id, new AggregatorDescription(aggregator, t.getType(), Arrays.asList(code.removeLast())));
 		} else {
-			this.tables.put(id, new TableDescription(aggregator, t.getType()));
+			this.aggregators.put(id, new AggregatorDescription(aggregator, t.getType()));
 		}
 
 		code.add("");

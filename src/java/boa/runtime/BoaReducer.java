@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2015, Anthony Urso, Hridesh Rajan, Robert Dyer,
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,8 +27,8 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.log4j.Logger;
 
+import boa.aggregators.Aggregator;
 import boa.aggregators.FinishedException;
-import boa.aggregators.Table;
 import boa.io.EmitKey;
 import boa.io.EmitValue;
 
@@ -37,6 +37,7 @@ import boa.io.EmitValue;
  * A {@link Reducer} that reduces the outputs for a single {@link EmitKey}.
  * 
  * @author anthonyu
+ * @author rdyer
  */
 public abstract class BoaReducer extends Reducer<EmitKey, EmitValue, Text, NullWritable> implements Configurable {
 	/**
@@ -46,10 +47,10 @@ public abstract class BoaReducer extends Reducer<EmitKey, EmitValue, Text, NullW
 	protected static final Logger LOG = Logger.getLogger(BoaReducer.class);
 
 	/**
-	 * A {@link Map} from {@link String} to {@link Table} indexing instantiated
-	 * tables to their Boa identifiers.
+	 * A {@link Map} from {@link String} to {@link Aggregator} indexing instantiated
+	 * aggregators to their Boa identifiers.
 	 */
-	protected Map<String, Table> tables;
+	protected Map<String, Aggregator> aggregators;
 
 	private Configuration conf;
 	private boolean robust;
@@ -58,7 +59,7 @@ public abstract class BoaReducer extends Reducer<EmitKey, EmitValue, Text, NullW
 	 * Construct a {@link BoaReducer}.
 	 */
 	protected BoaReducer() {
-		this.tables = new HashMap<String, Table>();
+		this.aggregators = new HashMap<String, Aggregator>();
 	}
 
 	/** {@inheritDoc} */
@@ -77,16 +78,17 @@ public abstract class BoaReducer extends Reducer<EmitKey, EmitValue, Text, NullW
 	/** {@inheritDoc} */
 	@Override
 	protected void reduce(final EmitKey key, final Iterable<EmitValue> values, final Context context) throws IOException, InterruptedException {
-		// get the table named by the emit key
-		final Table t = this.tables.get(key.getKey());
+		// get the aggregator named by the emit key
+		final Aggregator a = this.aggregators.get(key.getKey());
 
-		t.setCombining(false);
-		t.start(key);
-		t.setContext(context);
+		a.setCombining(false);
+		a.start(key);
+		a.setContext(context);
 
 		for (final EmitValue value : values)
 			try {
-				t.aggregate(value.getData(), value.getMetadata());
+				for (final String s : value.getData())
+					a.aggregate(s, value.getMetadata());
 			} catch (final FinishedException e) {
 				// we are done
 				return;
@@ -94,6 +96,6 @@ public abstract class BoaReducer extends Reducer<EmitKey, EmitValue, Text, NullW
 				throw new RuntimeException(e);
 			}
 
-		t.finish();
+		a.finish();
 	}
 }

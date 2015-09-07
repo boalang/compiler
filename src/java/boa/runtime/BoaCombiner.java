@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2015, Anthony Urso, Hridesh Rajan, Robert Dyer,
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,8 +25,8 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.log4j.Logger;
 
+import boa.aggregators.Aggregator;
 import boa.aggregators.FinishedException;
-import boa.aggregators.Table;
 import boa.io.EmitKey;
 import boa.io.EmitValue;
 
@@ -36,6 +36,7 @@ import boa.io.EmitValue;
  * order to save I/O.
  * 
  * @author anthonyu
+ * @author rdyer
  */
 public abstract class BoaCombiner extends Reducer<EmitKey, EmitValue, EmitKey, EmitValue> implements Configurable {
 	/**
@@ -45,10 +46,10 @@ public abstract class BoaCombiner extends Reducer<EmitKey, EmitValue, EmitKey, E
 	protected static final Logger LOG = Logger.getLogger(BoaCombiner.class);
 
 	/**
-	 * A {@link Map} from {@link String} to {@link Table} indexing instantiated
-	 * tables to their Boa identifiers.
+	 * A {@link Map} from {@link String} to {@link Aggregator} indexing instantiated
+	 * aggregators to their Boa identifiers.
 	 */
-	protected Map<String, Table> tables;
+	protected Map<String, Aggregator> aggregators;
 
 	private Configuration conf;
 	private boolean robust;
@@ -57,7 +58,7 @@ public abstract class BoaCombiner extends Reducer<EmitKey, EmitValue, EmitKey, E
 	 * Construct a {@link BoaCombiner}.
 	 */
 	protected BoaCombiner() {
-		this.tables = new HashMap<String, Table>();
+		this.aggregators = new HashMap<String, Aggregator>();
 	}
 
 	/** {@inheritDoc} */
@@ -78,45 +79,31 @@ public abstract class BoaCombiner extends Reducer<EmitKey, EmitValue, EmitKey, E
 	protected void reduce(final EmitKey key, final Iterable<EmitValue> values, final Context context) throws IOException, InterruptedException {
 		// if we can't combine, just pass the output through
 		// TODO: find away to avoid combiner entirely when non-associative
-		if (!this.tables.containsKey(key.getKey())) {
+		if (!this.aggregators.containsKey(key.getKey())) {
 			for (final EmitValue value : values)
 				context.write(key, value);
 
 			return;
 		}
 
-		// get the table named by the emit key
-		final Table t = this.tables.get(key.getKey());
+		// get the aggregator named by the emit key
+		final Aggregator a = this.aggregators.get(key.getKey());
 
-		t.setCombining(true);
-		t.start(key);
-		t.setContext(context);
+		a.setCombining(true);
+		a.start(key);
+		a.setContext(context);
 
 		for (final EmitValue value : values)
 			try {
-				t.aggregate(value.getData(), value.getMetadata());
+				for (final String s : value.getData())
+					a.aggregate(s, value.getMetadata());
 			} catch (final FinishedException e) {
 				// we are done
 				return;
-			} catch (final IOException e) {
-				// won't be robust to IOExceptions
-				throw e;
-			} catch (final InterruptedException e) {
-				// won't be robust to InterruptedExceptions
-				throw e;
-			} catch (final RuntimeException e) {
-				if (this.robust)
-					LOG.error(e.getClass().getName() + " caught", e);
-				else
-					throw e;
-			} catch (final Exception e) {
-				if (this.robust)
-					LOG.error(e.getClass().getName() + " caught", e);
-				else
-					throw new RuntimeException(e.getClass().getName() + " caught", e);
+			} catch (final Throwable e) {
+				throw new RuntimeException(e);
 			}
 
-		// finish it!
-		t.finish();
+		a.finish();
 	}
 }
