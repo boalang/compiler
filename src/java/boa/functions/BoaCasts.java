@@ -16,9 +16,12 @@
  */
 package boa.functions;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.TimeZone;
 
 /**
@@ -91,6 +94,8 @@ public class BoaCasts {
 		return BoaCasts.stringToTime(s, "PST8PDT");
 	}
 
+	private static final DecimalFormat df = new DecimalFormat("0", DecimalFormatSymbols.getInstance(Locale.ENGLISH));
+
 	/**
 	 * Format a double into a {@link String}.
 	 * 
@@ -100,7 +105,9 @@ public class BoaCasts {
 	 * @return A {@link String} containing the number <em>d</em>
 	 */
 	public static String doubleToString(final double d) {
-		return Double.toString(d);
+		df.setMaximumFractionDigits(340); // value in private field: DecimalFormat.DOUBLE_FRACTION_DIGITS
+		df.setMinimumFractionDigits(1);
+		return df.format(d);
 	}
 
 	/**
@@ -112,7 +119,8 @@ public class BoaCasts {
 	 * @return A {@link String} containing the number <em>l</em>
 	 */
 	public static String longToString(final long l) {
-		return Long.toString(l);
+		df.setMaximumFractionDigits(0);
+		return df.format(l);
 	}
 
 	/**
@@ -125,7 +133,7 @@ public class BoaCasts {
 	 *            The desired radix
 	 * 
 	 * @return A {@link String} containing the number <em>l</em> in base
-	 *         <em>radix<em>
+	 *         <em>radix</em>
 	 */
 	public static String longToString(final long l, final long radix) {
 		return Long.toString(l, (int) radix);
