@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2015, Anthony Urso, Hridesh Rajan, Robert Dyer, 
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,6 +29,7 @@ import org.apache.hadoop.io.Writable;
  * emitted to a Boa table.
  * 
  * @author anthonyu
+ * @author rdyer
  */
 public class EmitValue implements Writable {
 	private String[] data;
@@ -123,7 +124,7 @@ public class EmitValue implements Writable {
 	 *            A long representing the metadata to be emitted
 	 */
 	public EmitValue(final String data, final long metadata) {
-		this(data, Long.toString(metadata));
+		this(data, valueToString(metadata));
 	}
 
 	/**
@@ -135,7 +136,7 @@ public class EmitValue implements Writable {
 	 *            A double representing the metadata to be emitted
 	 */
 	public EmitValue(final String data, final double metadata) {
-		this(data, Double.toString(metadata));
+		this(data, valueToString(metadata));
 	}
 
 	/**
@@ -157,7 +158,7 @@ public class EmitValue implements Writable {
 	 *            A {@link String} containing the metadata to be emitted
 	 */
 	public EmitValue(final long data, final String metadata) {
-		this(Long.toString(data), metadata);
+		this(valueToString(data), metadata);
 	}
 
 	/**
@@ -169,7 +170,7 @@ public class EmitValue implements Writable {
 	 *            A long representing the metadata to be emitted
 	 */
 	public EmitValue(final long data, final long metadata) {
-		this(data, Long.toString(metadata));
+		this(data, valueToString(metadata));
 	}
 
 	/**
@@ -181,7 +182,7 @@ public class EmitValue implements Writable {
 	 *            A double representing the metadata to be emitted
 	 */
 	public EmitValue(final long data, final double metadata) {
-		this(data, Double.toString(metadata));
+		this(data, valueToString(metadata));
 	}
 
 	/**
@@ -203,7 +204,7 @@ public class EmitValue implements Writable {
 	 *            A {@link String} containing the metadata to be emitted
 	 */
 	public EmitValue(final double data, final String metadata) {
-		this(Double.toString(data), metadata);
+		this(valueToString(data), metadata);
 	}
 
 	/**
@@ -215,7 +216,7 @@ public class EmitValue implements Writable {
 	 *            A long representing the metadata to be emitted
 	 */
 	public EmitValue(final double data, final long metadata) {
-		this(data, Long.toString(metadata));
+		this(data, valueToString(metadata));
 	}
 
 	/**
@@ -227,7 +228,7 @@ public class EmitValue implements Writable {
 	 *            A double representing the metadata to be emitted
 	 */
 	public EmitValue(final double data, final double metadata) {
-		this(data, Double.toString(metadata));
+		this(data, valueToString(metadata));
 	}
 
 	/** {@inheritDoc} */
@@ -322,5 +323,13 @@ public class EmitValue implements Writable {
 	@Override
 	public String toString() {
 		return Arrays.toString(this.data) + ":" + this.metadata;
+	}
+
+	public static String valueToString(final long val) {
+		return Long.toString(val);
+	}
+
+	public static String valueToString(final double val) {
+		return Double.toString(val);
 	}
 }
