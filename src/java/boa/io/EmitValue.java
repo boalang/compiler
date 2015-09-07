@@ -102,7 +102,7 @@ public class EmitValue implements Writable {
 	 *            A {@link String} containing the data to be emitted
 	 */
 	public EmitValue(final String data) {
-		this(data, null);
+		this(new String[] { data }, null);
 	}
 
 	/**
@@ -126,7 +126,7 @@ public class EmitValue implements Writable {
 	 *            A long representing the metadata to be emitted
 	 */
 	public EmitValue(final String data, final long metadata) {
-		this(data, BoaCasts.longToString(metadata));
+		this(new String[] { data }, BoaCasts.longToString(metadata));
 	}
 
 	/**
@@ -138,7 +138,7 @@ public class EmitValue implements Writable {
 	 *            A double representing the metadata to be emitted
 	 */
 	public EmitValue(final String data, final double metadata) {
-		this(data, BoaCasts.doubleToString(metadata));
+		this(new String[] { data }, BoaCasts.doubleToString(metadata));
 	}
 
 	/**
@@ -148,7 +148,7 @@ public class EmitValue implements Writable {
 	 *            A long representing the data to be emitted
 	 */
 	public EmitValue(final long data) {
-		this(data, null);
+		this(new String[] { BoaCasts.longToString(data) }, null);
 	}
 
 	/**
@@ -160,7 +160,7 @@ public class EmitValue implements Writable {
 	 *            A {@link String} containing the metadata to be emitted
 	 */
 	public EmitValue(final long data, final String metadata) {
-		this(BoaCasts.longToString(data), metadata);
+		this(new String[] { BoaCasts.longToString(data) }, metadata);
 	}
 
 	/**
@@ -172,7 +172,7 @@ public class EmitValue implements Writable {
 	 *            A long representing the metadata to be emitted
 	 */
 	public EmitValue(final long data, final long metadata) {
-		this(data, BoaCasts.longToString(metadata));
+		this(new String[] { BoaCasts.longToString(data) }, BoaCasts.longToString(metadata));
 	}
 
 	/**
@@ -184,7 +184,7 @@ public class EmitValue implements Writable {
 	 *            A double representing the metadata to be emitted
 	 */
 	public EmitValue(final long data, final double metadata) {
-		this(data, BoaCasts.doubleToString(metadata));
+		this(new String[] { BoaCasts.longToString(data) }, BoaCasts.doubleToString(metadata));
 	}
 
 	/**
@@ -194,7 +194,7 @@ public class EmitValue implements Writable {
 	 *            A double representing the data to be emitted
 	 */
 	public EmitValue(final double data) {
-		this(data, null);
+		this(new String[] { BoaCasts.doubleToString(data) }, null);
 	}
 
 	/**
@@ -206,7 +206,7 @@ public class EmitValue implements Writable {
 	 *            A {@link String} containing the metadata to be emitted
 	 */
 	public EmitValue(final double data, final String metadata) {
-		this(BoaCasts.doubleToString(data), metadata);
+		this(new String[] { BoaCasts.doubleToString(data) }, metadata);
 	}
 
 	/**
@@ -218,7 +218,7 @@ public class EmitValue implements Writable {
 	 *            A long representing the metadata to be emitted
 	 */
 	public EmitValue(final double data, final long metadata) {
-		this(data, BoaCasts.longToString(metadata));
+		this(new String[] { BoaCasts.doubleToString(data) }, BoaCasts.longToString(metadata));
 	}
 
 	/**
@@ -230,7 +230,7 @@ public class EmitValue implements Writable {
 	 *            A double representing the metadata to be emitted
 	 */
 	public EmitValue(final double data, final double metadata) {
-		this(data, BoaCasts.doubleToString(metadata));
+		this(new String[] { BoaCasts.doubleToString(data) }, BoaCasts.doubleToString(metadata));
 	}
 
 	/** {@inheritDoc} */
