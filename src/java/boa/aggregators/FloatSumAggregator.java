@@ -41,13 +41,13 @@ public class FloatSumAggregator extends Aggregator {
 	/** {@inheritDoc} */
 	@Override
 	public void aggregate(final String data, final String metadata) throws IOException, InterruptedException, FinishedException {
-		this.aggregate(Double.parseDouble(data));
+		this.aggregate(Double.parseDouble(data), metadata);
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void aggregate(final long data, final String metadata) {
-		this.sum += data;
+		this.aggregate(Long.valueOf(data).doubleValue(), metadata);
 	}
 
 	/** {@inheritDoc} */
