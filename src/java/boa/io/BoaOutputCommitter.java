@@ -94,13 +94,18 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 		try {
 			con = DriverManager.getConnection(url, user, password);
 			PreparedStatement ps = null;
+			PreparedStatement ps2 = null;
 			try {
-				ps = con.prepareStatement("UPDATE boa_jobs SET hadoop_end=CURRENT_TIMESTAMP(), hadoop_status=?, hadoop_output=CONCAT(hadoop_output, ?) WHERE id=" + jobId);
+				ps = con.prepareStatement("UPDATE boa_jobs SET hadoop_end=CURRENT_TIMESTAMP(), hadoop_status=? WHERE id=" + jobId);
 				ps.setInt(1, error != null ? -1 : 2);
-				ps.setString(2, error == null ? "" : error);
 				ps.executeUpdate();
+
+				ps2 = con.prepareStatement("UPDATE boa_jobs SET hadoop_output=CONCAT(hadoop_output, ?) WHERE id=" + jobId);
+				ps2.setString(1, error == null ? "" : error);
+				ps2.executeUpdate();
 			} finally {
 				try { if (ps != null) ps.close(); } catch (final Exception e) { e.printStackTrace(); }
+				try { if (ps2 != null) ps2.close(); } catch (final Exception e) { e.printStackTrace(); }
 			}
 		} catch (final Exception e) {
 			e.printStackTrace();
