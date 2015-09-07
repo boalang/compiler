@@ -273,11 +273,11 @@ public class SymbolTable {
 		// bool to string
 		globalFunctions.addFunction("string", new BoaFunction("java.lang.Boolean.toString", new BoaString(), new BoaScalar[] { new BoaBool() }));
 		// int to string
-		globalFunctions.addFunction("string", new BoaFunction("java.lang.Long.toString", new BoaString(), new BoaScalar[] { new BoaInt() }));
+		globalFunctions.addFunction("string", new BoaFunction("boa.functions.BoaCasts.longToString", new BoaString(), new BoaScalar[] { new BoaInt() }));
 		// int to string with parameter base
 		globalFunctions.addFunction("string", new BoaFunction("boa.functions.BoaCasts.longToString", new BoaString(), new BoaScalar[] { new BoaInt(), new BoaInt() }));
 		// float to string
-		globalFunctions.addFunction("string", new BoaFunction("java.lang.Double.toString", new BoaString(), new BoaScalar[] { new BoaFloat() }));
+		globalFunctions.addFunction("string", new BoaFunction("boa.functions.BoaCasts.doubleToString", new BoaString(), new BoaScalar[] { new BoaFloat() }));
 		// time to string
 		globalFunctions.addFunction("string", new BoaFunction("boa.functions.BoaCasts.timeToString", new BoaString(), new BoaScalar[] { new BoaTime() }));
 
