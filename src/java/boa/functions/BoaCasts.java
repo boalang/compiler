@@ -120,6 +120,7 @@ public class BoaCasts {
 	 */
 	public static String longToString(final long l) {
 		df.setMaximumFractionDigits(0);
+		df.setMinimumFractionDigits(0);
 		return df.format(l);
 	}
 
