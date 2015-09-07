@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2015, Anthony Urso, Hridesh Rajan, Robert Dyer,
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,6 +25,7 @@ import boa.io.EmitValue;
  * A Boa aggregator to calculate the sum of the values in a dataset.
  * 
  * @author anthonyu
+ * @author rdyer
  */
 @AggregatorSpec(name = "sum", type = "float", canCombine = true)
 public class FloatSumAggregator extends Aggregator {
@@ -60,11 +61,5 @@ public class FloatSumAggregator extends Aggregator {
 	@Override
 	public void finish() throws IOException, InterruptedException {
 		this.collect(this.sum);
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public EmitValue getResult() {
-		return new EmitValue(this.sum);
 	}
 }

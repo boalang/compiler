@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2015, Anthony Urso, Hridesh Rajan, Robert Dyer,
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -348,8 +348,8 @@ public class BoaCompiler {
 			st.add("numreducers", inputFiles.size());
 			st.add("jobs", jobs);
 			st.add("jobnames", jobnames);
-			st.add("combineTables", CodeGeneratingVisitor.combineTableStrings);
-			st.add("reduceTables", CodeGeneratingVisitor.reduceTableStrings);
+			st.add("combineTables", CodeGeneratingVisitor.combineAggregatorStrings);
+			st.add("reduceTables", CodeGeneratingVisitor.reduceAggregatorStrings);
 			st.add("splitsize", isSimple ? 64 * 1024 * 1024 : 10 * 1024 * 1024);
 
 			o.write(st.render().getBytes());
