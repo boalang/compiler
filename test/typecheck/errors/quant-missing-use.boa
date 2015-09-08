@@ -1,0 +1,4 @@
+o: output collection of string;
+
+foreach (i: int; len(input.programming_languages) > 0)
+	o << "test";
