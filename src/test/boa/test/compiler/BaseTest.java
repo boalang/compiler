@@ -244,8 +244,8 @@ public abstract class BaseTest {
 			throw new IOException("unable to mkdir " + outputSrcDir);
 		final File outputFile = new File(outputSrcDir, "Test.java");
 
-		CodeGeneratingVisitor.combineTableStrings.clear();
-		CodeGeneratingVisitor.reduceTableStrings.clear();
+		CodeGeneratingVisitor.combineAggregatorStrings.clear();
+		CodeGeneratingVisitor.reduceAggregatorStrings.clear();
 
 		final List<String> jobnames = new ArrayList<String>();
 		final List<String> jobs = new ArrayList<String>();
@@ -266,8 +266,8 @@ public abstract class BaseTest {
 			st.add("numreducers", 1);
 			st.add("jobs", jobs);
 			st.add("jobnames", jobnames);
-			st.add("combineTables", CodeGeneratingVisitor.combineTableStrings);
-			st.add("reduceTables", CodeGeneratingVisitor.reduceTableStrings);
+			st.add("combineTables", CodeGeneratingVisitor.combineAggregatorStrings);
+			st.add("reduceTables", CodeGeneratingVisitor.reduceAggregatorStrings);
 			st.add("splitsize", 64 * 1024 * 1024);
 
 			final BufferedOutputStream o = new BufferedOutputStream(new FileOutputStream(outputFile));
