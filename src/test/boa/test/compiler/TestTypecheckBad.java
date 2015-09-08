@@ -75,4 +75,9 @@ public class TestTypecheckBad extends BaseTest {
 	public void buildinMethodNoCall() throws IOException {
 		typecheck(load(badDir + "builtin-method-no-call.boa"), "expected a call to function 'clear'");
 	}
+
+	@Test
+	public void quantMissingUse() throws IOException {
+		typecheck(load(badDir + "quant-missing-use.boa"), "quantifier variable 'i' must be used in the foreach condition expression");
+	}
 }
