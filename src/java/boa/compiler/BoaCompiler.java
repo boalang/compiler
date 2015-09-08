@@ -266,41 +266,38 @@ public class BoaCompiler {
 
 					final String jobName = "" + i;
 
-					if (!parseErrorListener.hasError) {
-						try {
+					try {
+						if (!parseErrorListener.hasError) {
 							new TypeCheckingVisitor().start(p, new SymbolTable());
-						} catch (final TypeCheckException e) {
-							parseErrorListener.error("typecheck", lexer, null, e.n.beginLine, e.n.beginColumn, e.n2.endColumn - e.n.beginColumn + 1, e.getMessage(), e);
-							throw e;
+
+							final TaskClassifyingVisitor simpleVisitor = new TaskClassifyingVisitor();
+							simpleVisitor.start(p);
+
+							LOG.info(f.getName() + ": task complexity: " + (!simpleVisitor.isComplex() ? "simple" : "complex"));
+							isSimple &= !simpleVisitor.isComplex();
+
+							new LocalAggregationTransformer().start(p);
+
+							// if a job has no visitor, let it have its own method
+							// also let jobs have own methods if visitor merging is disabled
+							if (!simpleVisitor.isComplex() || cl.hasOption("nv") || inputFiles.size() == 1) {
+								new VisitorOptimizingTransformer().start(p);
+
+								final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(jobName);
+								cg.start(p);
+								jobs.add(cg.getCode());
+
+								jobnames.add(jobName);
+							}
+							// if a job has visitors, fuse them all together into a single program
+							else {
+								p.getProgram().jobName = jobName;
+								visitorPrograms.add(p.getProgram());
+							}
 						}
-
-						final TaskClassifyingVisitor simpleVisitor = new TaskClassifyingVisitor();
-						simpleVisitor.start(p);
-
-						LOG.info(f.getName() + ": task complexity: " + (!simpleVisitor.isComplex() ? "simple" : "complex"));
-						isSimple &= !simpleVisitor.isComplex();
-
-						new LocalAggregationTransformer().start(p);
-							
-						// if a job has no visitor, let it have its own method
-						// also let jobs have own methods if visitor merging is disabled
-						if (!simpleVisitor.isComplex() || cl.hasOption("nv") || inputFiles.size() == 1) {
-							new VisitorOptimizingTransformer().start(p);
-
-							final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(jobName);
-							cg.start(p);
-							jobs.add(cg.getCode());
-
-							jobnames.add(jobName);
-						}
-						// if a job has visitors, fuse them all together into a single program
-						else {
-							p.getProgram().jobName = jobName;
-							visitorPrograms.add(p.getProgram());
-						}
+					} catch (final TypeCheckException e) {
+						parseErrorListener.error("typecheck", lexer, null, e.n.beginLine, e.n.beginColumn, e.n2.endColumn - e.n.beginColumn + 1, e.getMessage(), e);
 					}
-				} catch (final TypeCheckException e) {
-					// already handled
 				} catch (final Exception e) {
 					System.err.print(f.getName() + ": compilation failed: ");
 					e.printStackTrace();
