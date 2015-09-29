@@ -67,4 +67,12 @@ public class TestParserBad extends BaseTest {
 		parse(load(badDir + "output-var-equals.boa"),
 			new String[] { "1,3: error: output variable declarations should not include '='" });
 	}
+
+	@Test
+	public void assignToMap() throws IOException {
+		parse(load(badDir + "assign-to-map.boa"),
+			new String[] { "2,9: extraneous input ':' expecting {<EOF>, 'of', 'if', 'do', 'map', 'stack', 'set', 'for', 'foreach', 'ifall', 'exists', 'not', 'type', 'else', 'case', 'output', 'format', 'while', 'break', 'array', 'static', 'switch', 'return', 'weight', 'default', 'continue', 'function', 'visitor', 'before', 'after', 'stop', ';', '.', '{', '(', '[', 'or', '|', '||', 'and', '&', '&&', '+', '-', '^', '*', '/', '%', '>>', '~', '!', '$', '<<', IntegerLiteral, FloatingPointLiteral, CharacterLiteral, RegexLiteral, StringLiteral, TimeLiteral, Identifier}",
+				"2,12: error: ';' expected"
+			});
+	}
 }
