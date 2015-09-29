@@ -65,7 +65,7 @@ public class TestParserBad extends BaseTest {
 	@Test
 	public void outputVarEquals() throws IOException {
 		parse(load(badDir + "output-var-equals.boa"),
-			new String[] { "1,3: error: output variable declarations should not include '='" });
+			new String[] { "1,5: error: output variable declarations should not include '='" });
 	}
 
 	@Test

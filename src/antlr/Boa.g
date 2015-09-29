@@ -270,9 +270,7 @@ forVariableDeclaration returns [VarDeclStatement ast]
 	locals [int l, int c]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-// FIXME this would be nice, but seems to cause ambiguities and performance issues
-//	: id=identifier COLON { $ast = new VarDeclStatement($id.ast); notifyErrorListeners("error: output variable declarations should not include '='"); } EQUALS ot=outputType { $ast.setType($ot.ast); }
-	: id=identifier COLON { $ast = new VarDeclStatement($id.ast); } (t=type { $ast.setType($t.ast); })? (EQUALS e=expression { $ast.setInitializer($e.ast); })?
+	: id=identifier COLON { $ast = new VarDeclStatement($id.ast); } (t=type { $ast.setType($t.ast); })? (EQUALS ({ notifyErrorListeners("error: output variable declarations should not include '='"); } ot=outputType { $ast.setType($ot.ast); } | e=expression { $ast.setInitializer($e.ast); }))?
 	;
 
 forExpressionStatement returns [Statement ast]
