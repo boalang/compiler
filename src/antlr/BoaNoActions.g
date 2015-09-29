@@ -156,9 +156,7 @@ forExpression
 	;
 
 forVariableDeclaration
-// FIXME this would be nice, but seems to cause ambiguities and performance issues
-//	: identifier COLON { notifyErrorListeners("error: output variable declarations should not include '='"); } EQUALS outputType
-	: identifier COLON (type)? (EQUALS expression)?
+	: identifier COLON (type)? (EQUALS ({ notifyErrorListeners("error: output variable declarations should not include '='"); } outputType | expression))?
 	;
 
 forExpressionStatement
