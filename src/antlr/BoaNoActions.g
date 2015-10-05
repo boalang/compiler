@@ -205,7 +205,7 @@ whileStatement
 	;
 
 visitStatement
-	: (BEFORE | AFTER)
+	: (BEFORE | AFTER | { notifyErrorListeners("error: visit statements must start with 'before' or 'after'"); })
 		(
 			  WILDCARD
 			| identifier COLON identifier
@@ -288,7 +288,7 @@ functionExpression
 	;
 
 visitorExpression
-	: visitorType LBRACE ({ notifyErrorListeners("error: only 'before' and 'after' visit statements allowed inside visitor bodies"); } programStatement | visitStatement)+ RBRACE
+	: visitorType LBRACE (visitStatement | { notifyErrorListeners("error: only 'before' and 'after' visit statements allowed inside visitor bodies"); } programStatement)+ RBRACE
 	;
 
 composite

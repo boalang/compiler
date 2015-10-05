@@ -75,4 +75,12 @@ public class TestParserBad extends BaseTest {
 				"2,12: error: ';' expected"
 			});
 	}
+
+	@Test
+	public void visitorMissingBefore() throws IOException {
+		parse(load(badDir + "visitor-missing-before.boa"),
+			new String[] { "2,1: error: visit statements must start with 'before' or 'after'",
+				"3,1: error: visit statements must start with 'before' or 'after'"
+			});
+	}
 }
