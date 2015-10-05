@@ -1,0 +1,4 @@
+visit(input, visitor {
+	n: Revision -> stop;
+	n: ChangedFile -> stop;
+});

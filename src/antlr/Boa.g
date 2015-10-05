@@ -351,7 +351,7 @@ visitStatement returns [VisitStatement ast]
 	locals [int l, int c]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: (b=BEFORE | AFTER) { $ast = new VisitStatement($b != null); }
+	: (b=BEFORE | AFTER | { notifyErrorListeners("error: visit statements must start with 'before' or 'after'"); }) { $ast = new VisitStatement($b != null); }
 		(
 			  WILDCARD { $ast.setWildcard(true); }
 			| id=identifier COLON t=identifier { $ast.setComponent(new Component($id.ast, $t.ast)); }
@@ -483,7 +483,7 @@ visitorExpression returns [VisitorExpression ast]
 	locals [Block b, int l, int c]
 	@init { $b = new Block(); $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: t=visitorType LBRACE ({ notifyErrorListeners("error: only 'before' and 'after' visit statements allowed inside visitor bodies"); } programStatement | s=visitStatement { $b.addStatement($s.ast); })+ RBRACE { $ast = new VisitorExpression($t.ast, $b); }
+	: t=visitorType LBRACE (s=visitStatement { $b.addStatement($s.ast); } | { notifyErrorListeners("error: only 'before' and 'after' visit statements allowed inside visitor bodies"); } programStatement)+ RBRACE { $ast = new VisitorExpression($t.ast, $b); }
 	;
 
 composite returns [Composite ast]
