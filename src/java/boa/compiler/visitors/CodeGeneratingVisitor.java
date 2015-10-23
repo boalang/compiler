@@ -685,7 +685,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		BoaType indexType = n.getStart().type;
 		n.getStart().accept(this);
-		if (indexType instanceof BoaInt)
+		if (indexType instanceof BoaInt && !(t instanceof BoaMap))
 			st.add("index", "(int)(" + code.removeLast() + ")");
 		else
 			st.add("index", code.removeLast());
