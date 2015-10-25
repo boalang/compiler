@@ -161,6 +161,7 @@ forVariableDeclaration
 
 forExpressionStatement
 	: expression (INCR | DECR) # postfixStatement
+	| factor EQUALS expression # variableDeclaration
 	| expression               # exprStatement
 	;
 

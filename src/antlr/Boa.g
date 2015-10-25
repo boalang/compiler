@@ -278,6 +278,7 @@ forExpressionStatement returns [Statement ast]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
 	: e=expression op=(INCR | DECR) { $ast = new PostfixStatement($e.ast, $op.text); }
+	| f=factor EQUALS e=expression  { $ast = new AssignmentStatement($f.ast, $e.ast); }
 	| e=expression                  { $ast = new ExprStatement($e.ast); }
 	;
 
