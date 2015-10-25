@@ -83,7 +83,7 @@ variableDeclaration returns [VarDeclStatement ast]
 	locals [int l, int c]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: v=forVariableDeclaration  { isSemicolon(); $ast = $v.ast; }
+	: id=identifier COLON { $ast = new VarDeclStatement($id.ast); } (t=type { $ast.setType($t.ast); })? (EQUALS ({ notifyErrorListeners("error: output variable declarations should not include '='"); } ot=outputType { $ast.setType($ot.ast); } | e=expression { $ast.setInitializer($e.ast); }))? { isSemicolon(); }
 	;
 
 type returns [AbstractType ast]
@@ -270,7 +270,7 @@ forVariableDeclaration returns [VarDeclStatement ast]
 	locals [int l, int c]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: id=identifier COLON { $ast = new VarDeclStatement($id.ast); } (t=type { $ast.setType($t.ast); })? (EQUALS ({ notifyErrorListeners("error: output variable declarations should not include '='"); } ot=outputType { $ast.setType($ot.ast); } | e=expression { $ast.setInitializer($e.ast); }))?
+	: id=identifier COLON { $ast = new VarDeclStatement($id.ast); } (t=type { $ast.setType($t.ast); })? (EQUALS e=expression { $ast.setInitializer($e.ast); })?
 	;
 
 forExpressionStatement returns [Statement ast]
