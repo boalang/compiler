@@ -163,6 +163,7 @@ message Expression {
 		ASSIGN_RSHIFT = 46;
 		ASSIGN_UNSIGNEDRSHIFT = 47;
 		ANNOTATION = 48;
+		PAREN = 49;
 	}
 	required ExpressionKind kind = 1;
 	repeated Expression expressions = 2;

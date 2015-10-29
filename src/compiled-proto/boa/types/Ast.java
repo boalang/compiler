@@ -15752,6 +15752,10 @@ public final class Ast {
        * <code>ANNOTATION = 48;</code>
        */
       ANNOTATION(48, 48),
+      /**
+       * <code>PAREN = 49;</code>
+       */
+      PAREN(49, 49),
       ;
 
       /**
@@ -15950,6 +15954,10 @@ public final class Ast {
        * <code>ANNOTATION = 48;</code>
        */
       public static final int ANNOTATION_VALUE = 48;
+      /**
+       * <code>PAREN = 49;</code>
+       */
+      public static final int PAREN_VALUE = 49;
 
 
       public final int getNumber() { return value; }
@@ -16005,6 +16013,7 @@ public final class Ast {
           case 46: return ASSIGN_RSHIFT;
           case 47: return ASSIGN_UNSIGNEDRSHIFT;
           case 48: return ANNOTATION;
+          case 49: return PAREN;
           default: return null;
         }
       }
@@ -22296,7 +22305,7 @@ public final class Ast {
       "IF\020\t\022\n\n\006ASSERT\020\n\022\t\n\005BREAK\020\013\022\014\n\010CONTINUE\020" +
       "\014\022\t\n\005LABEL\020\r\022\n\n\006SWITCH\020\016\022\010\n\004CASE\020\017\022\007\n\003TR" +
       "Y\020\020\022\t\n\005THROW\020\021\022\t\n\005CATCH\020\022\022\t\n\005EMPTY\020\023\032\002\020\001" +
-      "\"\217\t\n\nExpression\0222\n\004kind\030\001 \002(\0162$.boa.type" +
+      "\"\232\t\n\nExpression\0222\n\004kind\030\001 \002(\0162$.boa.type" +
       "s.Expression.ExpressionKind\022*\n\013expressio" +
       "ns\030\002 \003(\0132\025.boa.types.Expression\022+\n\016varia",
       "ble_decls\030\003 \003(\0132\023.boa.types.Variable\022!\n\010" +
@@ -22307,7 +22316,7 @@ public final class Ast {
       "gs\030\n \003(\0132\025.boa.types.Expression\0220\n\020anon_" +
       "declaration\030\013 \001(\0132\026.boa.types.Declaratio" +
       "n\022\'\n\nannotation\030\014 \001(\0132\023.boa.types.Modifi" +
-      "er\"\325\005\n\016ExpressionKind\022\t\n\005OTHER\020\000\022\013\n\007LITE" +
+      "er\"\340\005\n\016ExpressionKind\022\t\n\005OTHER\020\000\022\013\n\007LITE" +
       "RAL\020\001\022\r\n\tVARACCESS\020\002\022\013\n\007VARDECL\020\003\022\016\n\nMET",
       "HODCALL\020\004\022\010\n\004CAST\020\005\022\016\n\nARRAYINDEX\020\006\022\r\n\tA" +
       "RRAYINIT\020\007\022\017\n\013TYPECOMPARE\020\010\022\007\n\003NEW\020\t\022\014\n\010" +
@@ -22325,30 +22334,31 @@ public final class Ast {
       "IGN_BITXOR\020*\022\021\n\rASSIGN_BITAND\020+\022\020\n\014ASSIG" +
       "N_BITOR\020,\022\021\n\rASSIGN_LSHIFT\020-\022\021\n\rASSIGN_R" +
       "SHIFT\020.\022\031\n\025ASSIGN_UNSIGNEDRSHIFT\020/\022\016\n\nAN" +
-      "NOTATION\0200\"\251\003\n\010Modifier\022.\n\004kind\030\001 \002(\0162 ." +
-      "boa.types.Modifier.ModifierKind\0222\n\nvisib" +
-      "ility\030\002 \001(\0162\036.boa.types.Modifier.Visibil" +
-      "ity\022\027\n\017annotation_name\030\003 \001(\t\022\032\n\022annotati",
-      "on_members\030\004 \003(\t\0220\n\021annotation_values\030\005 " +
-      "\003(\0132\025.boa.types.Expression\022\r\n\005other\030\006 \001(" +
-      "\t\"~\n\014ModifierKind\022\t\n\005OTHER\020\000\022\016\n\nVISIBILI" +
-      "TY\020\001\022\016\n\nANNOTATION\020\002\022\t\n\005FINAL\020\003\022\n\n\006STATI" +
-      "C\020\004\022\020\n\014SYNCHRONIZED\020\005\022\010\n\004SYNC\020\005\022\014\n\010ABSTR" +
-      "ACT\020\006\032\002\020\001\"C\n\nVisibility\022\n\n\006PUBLIC\020\001\022\013\n\007P" +
-      "RIVATE\020\002\022\r\n\tPROTECTED\020\003\022\r\n\tNAMESPACE\020\004\"\335" +
-      "\001\n\007Comment\022,\n\004kind\030\001 \002(\0162\036.boa.types.Com" +
-      "ment.CommentKind\022\r\n\005value\030\002 \002(\t\022)\n\010posit" +
-      "ion\030\003 \002(\0132\027.boa.types.PositionInfo\"j\n\013Co",
-      "mmentKind\022\t\n\005OTHER\020\000\022\010\n\004LINE\020\001\022\t\n\005BLOCK\020" +
-      "\002\022\007\n\003DOC\020\003\022\021\n\rDOCUMENTATION\020\003\022\010\n\004SPEC\020\004\022" +
-      "\021\n\rSPECIFICATION\020\004\032\002\020\001\"{\n\014PositionInfo\022\021" +
-      "\n\tstart_pos\030\001 \002(\005\022\016\n\006length\030\002 \002(\005\022\022\n\nsta" +
-      "rt_line\030\003 \002(\005\022\021\n\tstart_col\030\004 \002(\005\022\020\n\010end_" +
-      "line\030\005 \002(\005\022\017\n\007end_col\030\006 \002(\005*\236\001\n\010TypeKind" +
-      "\022\t\n\005OTHER\020\000\022\t\n\005CLASS\020\001\022\r\n\tINTERFACE\020\002\022\r\n" +
-      "\tANONYMOUS\020\003\022\010\n\004ANON\020\003\022\n\n\006STRUCT\020\004\022\010\n\004EN" +
-      "UM\020\005\022\017\n\013ENUMERATION\020\005\022\016\n\nANNOTATION\020\006\022\014\n" +
-      "\010DELEGATE\020\007\022\013\n\007GENERIC\020\010\032\002\020\001B\002H\001"
+      "NOTATION\0200\022\t\n\005PAREN\0201\"\251\003\n\010Modifier\022.\n\004ki" +
+      "nd\030\001 \002(\0162 .boa.types.Modifier.ModifierKi" +
+      "nd\0222\n\nvisibility\030\002 \001(\0162\036.boa.types.Modif" +
+      "ier.Visibility\022\027\n\017annotation_name\030\003 \001(\t\022",
+      "\032\n\022annotation_members\030\004 \003(\t\0220\n\021annotatio" +
+      "n_values\030\005 \003(\0132\025.boa.types.Expression\022\r\n" +
+      "\005other\030\006 \001(\t\"~\n\014ModifierKind\022\t\n\005OTHER\020\000\022" +
+      "\016\n\nVISIBILITY\020\001\022\016\n\nANNOTATION\020\002\022\t\n\005FINAL" +
+      "\020\003\022\n\n\006STATIC\020\004\022\020\n\014SYNCHRONIZED\020\005\022\010\n\004SYNC" +
+      "\020\005\022\014\n\010ABSTRACT\020\006\032\002\020\001\"C\n\nVisibility\022\n\n\006PU" +
+      "BLIC\020\001\022\013\n\007PRIVATE\020\002\022\r\n\tPROTECTED\020\003\022\r\n\tNA" +
+      "MESPACE\020\004\"\335\001\n\007Comment\022,\n\004kind\030\001 \002(\0162\036.bo" +
+      "a.types.Comment.CommentKind\022\r\n\005value\030\002 \002" +
+      "(\t\022)\n\010position\030\003 \002(\0132\027.boa.types.Positio",
+      "nInfo\"j\n\013CommentKind\022\t\n\005OTHER\020\000\022\010\n\004LINE\020" +
+      "\001\022\t\n\005BLOCK\020\002\022\007\n\003DOC\020\003\022\021\n\rDOCUMENTATION\020\003" +
+      "\022\010\n\004SPEC\020\004\022\021\n\rSPECIFICATION\020\004\032\002\020\001\"{\n\014Pos" +
+      "itionInfo\022\021\n\tstart_pos\030\001 \002(\005\022\016\n\006length\030\002" +
+      " \002(\005\022\022\n\nstart_line\030\003 \002(\005\022\021\n\tstart_col\030\004 " +
+      "\002(\005\022\020\n\010end_line\030\005 \002(\005\022\017\n\007end_col\030\006 \002(\005*\236" +
+      "\001\n\010TypeKind\022\t\n\005OTHER\020\000\022\t\n\005CLASS\020\001\022\r\n\tINT" +
+      "ERFACE\020\002\022\r\n\tANONYMOUS\020\003\022\010\n\004ANON\020\003\022\n\n\006STR" +
+      "UCT\020\004\022\010\n\004ENUM\020\005\022\017\n\013ENUMERATION\020\005\022\016\n\nANNO" +
+      "TATION\020\006\022\014\n\010DELEGATE\020\007\022\013\n\007GENERIC\020\010\032\002\020\001B",
+      "\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
