@@ -54,6 +54,9 @@ import boa.compiler.visitors.AbstractCodeGeneratingVisitor;
 import boa.compiler.visitors.CodeGeneratingVisitor;
 import boa.compiler.visitors.TaskClassifyingVisitor;
 import boa.compiler.visitors.TypeCheckingVisitor;
+import boa.compiler.listeners.BoaErrorListener;
+import boa.compiler.listeners.LexerErrorListener;
+import boa.compiler.listeners.ParserErrorListener;
 
 import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.BaseErrorListener;
@@ -76,68 +79,7 @@ import boa.parser.BoaLexer;
  */
 public class BoaCompiler {
 	private static Logger LOG = Logger.getLogger(BoaCompiler.class);
-
-	public abstract static class BoaErrorListener extends BaseErrorListener {
-		public boolean hasError = false;
-
-		public void error(final String kind, final TokenSource tokens, final Object offendingSymbol, final int line, final int charPositionInLine, final int length, final String msg, final Exception e) {
-			hasError = true;
-
-			final String filename = tokens.getSourceName();
-
-			System.err.print(filename.substring(filename.lastIndexOf(File.separator) + 1) + ": compilation failed: ");
-			System.err.print("Encountered " + kind + " error ");
-			if (offendingSymbol != null)
-				System.err.print("\"" + offendingSymbol + "\" ");
-			System.err.println("at line " + line + ", column " + charPositionInLine + ". " + msg);
-
-			underlineError(tokens, (Token)offendingSymbol, line, charPositionInLine, length);
-
-			if (e != null)
-				for (final StackTraceElement st : e.getStackTrace())
-					System.err.println("\tat " + st);
-			else
-				System.err.println("\tat unknown stack");
-		}
-		private void underlineError(final TokenSource tokens, final Token offendingToken, final int line, final int charPositionInLine, final int length) {
-			final String input = tokens.getInputStream().toString() + "\n ";
-			final String[] lines = input.split("\n");
-			final String errorLine = lines[line - 1];
-			System.err.println(errorLine.replaceAll("\t", "    "));
-
-			int stop = Math.min(charPositionInLine, errorLine.length());
-			for (int i = 0; i < stop; i++)
-				if (errorLine.charAt(i) == '\t')
-					System.err.print("    ");
-				else
-					System.err.print(" ");
-
-			int stop2 = Math.min(stop + length, errorLine.length());
-			for (int i = stop; i < stop2; i++)
-				if (errorLine.charAt(i) == '\t')
-					System.err.print("^^^^");
-				else
-					System.err.print("^");
-
-			System.err.println();
-		}
-	}
-
-	public static class LexerErrorListener extends BoaErrorListener {
-		@Override
-		public void syntaxError(final Recognizer<?, ?> recognizer, final Object offendingSymbol, final int line, final int charPositionInLine, final String msg, final RecognitionException e) {
-			error("lexer", (BoaLexer)recognizer, offendingSymbol, line, charPositionInLine, 1, msg, e);
-		}
-	}
-
-	public static class ParseErrorListener extends BoaErrorListener {
-		@Override
-		public void syntaxError(final Recognizer<?, ?> recognizer, final Object offendingSymbol, final int line, final int charPositionInLine, final String msg, final RecognitionException e) {
-			final Token offendingToken = (Token)offendingSymbol;
-			error("parser", ((CommonTokenStream)recognizer.getInputStream()).getTokenSource(), offendingSymbol, line, charPositionInLine, offendingToken.getStopIndex() - offendingToken.getStartIndex() + 1, msg, e);
-		}
-	}
-
+	
 	public static void main(final String[] args) throws IOException {
 		// parse the command line options
 		final Options options = new Options();
@@ -244,7 +186,7 @@ public class BoaCompiler {
 						}
 					});
 
-					final BoaErrorListener parseErrorListener = new ParseErrorListener();
+					final BoaErrorListener parserErrorListener = new ParserErrorListener();
 
 					parser.setBuildParseTree(false);
 					parser.getInterpreter().setPredictionMode(PredictionMode.SLL);
@@ -258,7 +200,7 @@ public class BoaCompiler {
 						parser.reset();
 
 						parser.removeErrorListeners();
-						parser.addErrorListener(parseErrorListener);
+						parser.addErrorListener(parserErrorListener);
 						parser.getInterpreter().setPredictionMode(PredictionMode.LL);
 
 						p = parser.start().ast;
@@ -267,7 +209,7 @@ public class BoaCompiler {
 					final String jobName = "" + i;
 
 					try {
-						if (!parseErrorListener.hasError) {
+						if (!parserErrorListener.hasError) {
 							new TypeCheckingVisitor().start(p, new SymbolTable());
 
 							final TaskClassifyingVisitor simpleVisitor = new TaskClassifyingVisitor();
@@ -296,7 +238,7 @@ public class BoaCompiler {
 							}
 						}
 					} catch (final TypeCheckException e) {
-						parseErrorListener.error("typecheck", lexer, null, e.n.beginLine, e.n.beginColumn, e.n2.endColumn - e.n.beginColumn + 1, e.getMessage(), e);
+						parserErrorListener.error("typecheck", lexer, null, e.n.beginLine, e.n.beginColumn, e.n2.endColumn - e.n.beginColumn + 1, e.getMessage(), e);
 					}
 				} catch (final Exception e) {
 					System.err.print(f.getName() + ": compilation failed: ");
