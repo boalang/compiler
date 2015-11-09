@@ -78,49 +78,13 @@ import boa.parser.BoaLexer;
  * @author rdyer
  */
 public class BoaCompiler {
+	
 	private static Logger LOG = Logger.getLogger(BoaCompiler.class);
 	
 	public static void main(final String[] args) throws IOException {
-		// parse the command line options
-		final Options options = new Options();
-		options.addOption("l", "libs", true, "extra jars (functions/aggregators) to be compiled in");
-		options.addOption("i", "in", true, "file(s) to be compiled (comma-separated list)");
-		options.addOption("o", "out", true, "the name of the resulting jar");
-		options.addOption("nv", "no-visitor-fusion", false, "disable visitor fusion");
-		options.addOption("v", "visitors-fused", true, "number of visitors to fuse");
-		options.addOption("n", "name", true, "the name of the generated main class");
-
-		final CommandLine cl;
-		try {
-			cl = new PosixParser().parse(options, args);
-		} catch (final org.apache.commons.cli.ParseException e) {
-			System.err.println(e.getMessage());
-			new HelpFormatter().printHelp("BoaCompiler", options);
-
-			return;
-		}
-
-		// get the filename of the program we will be compiling
-		final ArrayList<File> inputFiles = new ArrayList<File>();
-		if (cl.hasOption('i')) {
-			final String[] inputPaths = cl.getOptionValue('i').split(",");
-
-			for (final String s : inputPaths) {
-				final File f = new File(s);
-				if (!f.exists())
-					System.err.println("File '" + s + "' does not exist, skipping");
-				else
-					inputFiles.add(new File(s));
-			}
-		}
-
-		if (inputFiles.size() == 0) {
-			System.err.println("no valid input files found - did you use the --in option?");
-			new HelpFormatter().printHelp("BoaCompiler", options);
-
-			return;
-		}
-
+		CommandLine cl = processCommandLineOptions(args);
+		if(cl==null) return;
+		final ArrayList<File> inputFiles = BoaCompiler.inputFiles;
 
 		// get the name of the generated class
 		final String className;
@@ -296,6 +260,12 @@ public class BoaCompiler {
 			o.close();
 		}
 
+		compileGeneratedSrc(cl, jarName, outputRoot, outputFile);
+	}
+
+	private static void compileGeneratedSrc(final CommandLine cl,
+			final String jarName, final File outputRoot, final File outputFile)
+					throws RuntimeException, IOException, FileNotFoundException {
 		// compile the generated .java file
 		final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
 		LOG.info("compiling: " + outputFile);
@@ -317,6 +287,50 @@ public class BoaCompiler {
 		generateJar(jarName, outputRoot, libJars);
 
 		delete(outputRoot);
+	}
+
+	static ArrayList<File> inputFiles = null; 
+	private static CommandLine processCommandLineOptions(final String[] args) {
+		// parse the command line options
+		final Options options = new Options();
+		options.addOption("l", "libs", true, "extra jars (functions/aggregators) to be compiled in");
+		options.addOption("i", "in", true, "file(s) to be compiled (comma-separated list)");
+		options.addOption("o", "out", true, "the name of the resulting jar");
+		options.addOption("nv", "no-visitor-fusion", false, "disable visitor fusion");
+		options.addOption("v", "visitors-fused", true, "number of visitors to fuse");
+		options.addOption("n", "name", true, "the name of the generated main class");
+
+		final CommandLine cl;
+		try {
+			cl = new PosixParser().parse(options, args);
+		} catch (final org.apache.commons.cli.ParseException e) {
+			System.err.println(e.getMessage());
+			new HelpFormatter().printHelp("BoaCompiler", options);
+			return null;
+		}
+		
+		// get the filename of the program we will be compiling
+		inputFiles = new ArrayList<File>();
+		if (cl.hasOption('i')) {
+			final String[] inputPaths = cl.getOptionValue('i').split(",");
+
+			for (final String s : inputPaths) {
+				final File f = new File(s);
+				if (!f.exists())
+					System.err.println("File '" + s + "' does not exist, skipping");
+				else
+					inputFiles.add(new File(s));
+			}
+		}
+
+		if (inputFiles.size() == 0) {
+			System.err.println("no valid input files found - did you use the --in option?");
+			//new HelpFormatter().printHelp("BoaCompiler", options);
+			new HelpFormatter().printHelp("BoaCompiler", options);
+			return null;
+		}
+		
+		return cl;
 	}
 
 	private static final void delete(final File f) throws IOException {
