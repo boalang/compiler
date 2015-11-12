@@ -87,21 +87,7 @@ public class BoaCompiler {
 		final ArrayList<File> inputFiles = BoaCompiler.inputFiles;
 
 		// get the name of the generated class
-		final String className;
-		if (cl.hasOption('n')) {
-			className = cl.getOptionValue('n');
-		} else {
-			String s = "";
-			for (final File f : inputFiles) {
-				if (s.length() != 0)
-					s += "_";
-				if (f.getName().indexOf('.') != -1)
-					s += f.getName().substring(0, f.getName().lastIndexOf('.'));
-				else
-					s += f.getName();
-			}
-			className = pascalCase(s);
-		}
+		final String className = getGeneratedClass(cl);
 
 		// get the filename of the jar we will be writing
 		final String jarName;
@@ -333,6 +319,26 @@ public class BoaCompiler {
 		return cl;
 	}
 
+	private static final String getGeneratedClass(final CommandLine cl) {
+		// get the name of the generated class
+		final String className;
+		if (cl.hasOption('n')) {
+			className = cl.getOptionValue('n');
+		} else {
+			String s = "";
+			for (final File f : inputFiles) {
+				if (s.length() != 0)
+					s += "_";
+				if (f.getName().indexOf('.') != -1)
+					s += f.getName().substring(0, f.getName().lastIndexOf('.'));
+				else
+					s += f.getName();
+			}
+			className = pascalCase(s);
+		}
+		return className;
+	}
+	
 	private static final void delete(final File f) throws IOException {
 		if (f.isDirectory())
 			for (final File g : f.listFiles())
