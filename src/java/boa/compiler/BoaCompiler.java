@@ -137,24 +137,7 @@ public class BoaCompiler {
 					});
 
 					final BoaErrorListener parserErrorListener = new ParserErrorListener();
-
-					parser.setBuildParseTree(false);
-					parser.getInterpreter().setPredictionMode(PredictionMode.SLL);
-
-					Start p;
-					try {
-						p = parser.start().ast;
-					} catch (final ParseCancellationException e) {
-						// fall-back to LL mode parsing if SLL fails
-						tokens.reset();
-						parser.reset();
-
-						parser.removeErrorListeners();
-						parser.addErrorListener(parserErrorListener);
-						parser.getInterpreter().setPredictionMode(PredictionMode.LL);
-
-						p = parser.start().ast;
-					}
+					Start p = parse(tokens, parser, parserErrorListener);
 
 					final String jobName = "" + i;
 
@@ -247,6 +230,28 @@ public class BoaCompiler {
 		}
 
 		compileGeneratedSrc(cl, jarName, outputRoot, outputFile);
+	}
+
+	private static Start parse(final CommonTokenStream tokens,
+			final BoaParser parser,
+			final BoaErrorListener parserErrorListener) {
+
+		parser.setBuildParseTree(false);
+		parser.getInterpreter().setPredictionMode(PredictionMode.SLL);
+
+		try {
+			return parser.start().ast;
+		} catch (final ParseCancellationException e) {
+			// fall-back to LL mode parsing if SLL fails
+			tokens.reset();
+			parser.reset();
+
+			parser.removeErrorListeners();
+			parser.addErrorListener(parserErrorListener);
+			parser.getInterpreter().setPredictionMode(PredictionMode.LL);
+
+			return parser.start().ast;
+		}
 	}
 
 	private static void compileGeneratedSrc(final CommandLine cl,
