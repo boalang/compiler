@@ -454,14 +454,11 @@ public class BoaAstIntrinsics {
 	private static class GenericsCollectingVisitor extends BoaCollectingVisitor<String,Long> {
 		@Override
 		protected boolean preVisit(Type node) {
-			// FIXME
-			/*
 			try {
 				parseGenericType(BoaAstIntrinsics.type_name(node.getName()).trim(), map);
 			} catch (final StackOverflowError e) {
 				System.err.println("STACK ERR: " + node.getName() + " -> " + BoaAstIntrinsics.type_name(node.getName()).trim());
 			}
-			*/
 			return true;
 		}
 	}
