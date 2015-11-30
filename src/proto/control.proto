@@ -1,0 +1,36 @@
+package boa.types;
+
+import "ast.proto";
+
+option optimize_for = SPEED;
+
+message Graph {
+	repeated Node nodes = 1;
+	repeated Edge edges = 2;
+}
+
+message Node {
+	// nodetypes are intended to characterize analyses
+	enum NodeType {
+		ENTRY = 1; // indicates start and end nodes
+		OTHER = 2; // sequential
+		METHOD = 3; // method calls, leading to external cfg
+		CONTROL = 4; // evaluates predicate
+	}
+	required int32 id = 1;
+	required NodeType type = 2;
+}
+
+message Edge {
+	enum EdgeLabel {
+		NIL = 1; // no edge
+		DEFAULT = 2; // sequential
+		TRUE = 3; // true branch
+		FALSE = 4; // false branch
+		BACKEDGE = 5; // loop backedge
+		EXITEDGE = 6; // loop exitedge
+		DATA = 7; // data dependence edge
+		PDG = 8; // program dependence edge
+	}
+	required EdgeLabel label = 1;
+}
