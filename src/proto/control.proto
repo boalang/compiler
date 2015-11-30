@@ -1,4 +1,4 @@
-package boa.types;
+package boa.types; 
 
 import "ast.proto";
 
