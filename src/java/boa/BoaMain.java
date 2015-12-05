@@ -47,7 +47,7 @@ public class BoaMain {
 		    	    if(cl.hasOption("c")) {
     				String[] tempargs = new String[args.length-1];
     				System.arraycopy(args, 1, tempargs, 0, args.length-1);
-    				BoaCompiler.main(tempargs);
+    				boa.compiler.BoaCompiler.main(tempargs);
 		    	    }
 		    	}
 		} catch (final org.apache.commons.cli.ParseException e) {
