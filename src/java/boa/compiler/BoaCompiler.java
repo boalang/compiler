@@ -231,7 +231,11 @@ public class BoaCompiler {
 
 		compileGeneratedSrc(cl, jarName, outputRoot, outputFile);
 	}
-
+	
+	public static void parseOnly(final String[] args) throws IOException {
+	    System.out.println("TODO: implement functionality to parse and check.");
+	}
+	
 	private static Start parse(final CommonTokenStream tokens,
 			final BoaParser parser,
 			final BoaErrorListener parserErrorListener) {
