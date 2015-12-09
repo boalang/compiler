@@ -6572,15 +6572,20 @@ public final class Ast {
      */
     boa.types.Ast.TypeKind getKind();
 
-    // required int32 name = 2;
+    // required string name = 2;
     /**
-     * <code>required int32 name = 2;</code>
+     * <code>required string name = 2;</code>
      */
     boolean hasName();
     /**
-     * <code>required int32 name = 2;</code>
+     * <code>required string name = 2;</code>
      */
-    int getName();
+    java.lang.String getName();
+    /**
+     * <code>required string name = 2;</code>
+     */
+    com.google.protobuf.ByteString
+        getNameBytes();
 
     // optional int32 qualified_name = 3;
     /**
@@ -6654,9 +6659,9 @@ public final class Ast {
               }
               break;
             }
-            case 16: {
+            case 18: {
               bitField0_ |= 0x00000002;
-              name_ = input.readInt32();
+              name_ = input.readBytes();
               break;
             }
             case 24: {
@@ -6720,20 +6725,47 @@ public final class Ast {
       return kind_;
     }
 
-    // required int32 name = 2;
+    // required string name = 2;
     public static final int NAME_FIELD_NUMBER = 2;
-    private int name_;
+    private java.lang.Object name_;
     /**
-     * <code>required int32 name = 2;</code>
+     * <code>required string name = 2;</code>
      */
     public boolean hasName() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
-     * <code>required int32 name = 2;</code>
+     * <code>required string name = 2;</code>
      */
-    public int getName() {
-      return name_;
+    public java.lang.String getName() {
+      java.lang.Object ref = name_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          name_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string name = 2;</code>
+     */
+    public com.google.protobuf.ByteString
+        getNameBytes() {
+      java.lang.Object ref = name_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        name_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
     }
 
     // optional int32 qualified_name = 3;
@@ -6754,7 +6786,7 @@ public final class Ast {
 
     private void initFields() {
       kind_ = boa.types.Ast.TypeKind.OTHER;
-      name_ = 0;
+      name_ = "";
       qualifiedName_ = 0;
     }
     private byte memoizedIsInitialized = -1;
@@ -6781,7 +6813,7 @@ public final class Ast {
         output.writeEnum(1, kind_.getNumber());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeInt32(2, name_);
+        output.writeBytes(2, getNameBytes());
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeInt32(3, qualifiedName_);
@@ -6801,7 +6833,7 @@ public final class Ast {
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(2, name_);
+          .computeBytesSize(2, getNameBytes());
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
@@ -6925,7 +6957,7 @@ public final class Ast {
         super.clear();
         kind_ = boa.types.Ast.TypeKind.OTHER;
         bitField0_ = (bitField0_ & ~0x00000001);
-        name_ = 0;
+        name_ = "";
         bitField0_ = (bitField0_ & ~0x00000002);
         qualifiedName_ = 0;
         bitField0_ = (bitField0_ & ~0x00000004);
@@ -6989,7 +7021,9 @@ public final class Ast {
           setKind(other.getKind());
         }
         if (other.hasName()) {
-          setName(other.getName());
+          bitField0_ |= 0x00000002;
+          name_ = other.name_;
+          onChanged();
         }
         if (other.hasQualifiedName()) {
           setQualifiedName(other.getQualifiedName());
@@ -7065,35 +7099,76 @@ public final class Ast {
         return this;
       }
 
-      // required int32 name = 2;
-      private int name_ ;
+      // required string name = 2;
+      private java.lang.Object name_ = "";
       /**
-       * <code>required int32 name = 2;</code>
+       * <code>required string name = 2;</code>
        */
       public boolean hasName() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
-       * <code>required int32 name = 2;</code>
+       * <code>required string name = 2;</code>
        */
-      public int getName() {
-        return name_;
+      public java.lang.String getName() {
+        java.lang.Object ref = name_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          name_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
       }
       /**
-       * <code>required int32 name = 2;</code>
+       * <code>required string name = 2;</code>
        */
-      public Builder setName(int value) {
-        bitField0_ |= 0x00000002;
+      public com.google.protobuf.ByteString
+          getNameBytes() {
+        java.lang.Object ref = name_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          name_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string name = 2;</code>
+       */
+      public Builder setName(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
         name_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required int32 name = 2;</code>
+       * <code>required string name = 2;</code>
        */
       public Builder clearName() {
         bitField0_ = (bitField0_ & ~0x00000002);
-        name_ = 0;
+        name_ = getDefaultInstance().getName();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string name = 2;</code>
+       */
+      public Builder setNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        name_ = value;
         onChanged();
         return this;
       }
@@ -22115,7 +22190,7 @@ public final class Ast {
       "es.Variable\0223\n\023nested_declarations\030\010 \003(\013" +
       "2\026.boa.types.Declaration\022$\n\010comments\030\t \003" +
       "(\0132\022.boa.types.Comment\"O\n\004Type\022!\n\004kind\030\001" +
-      " \002(\0162\023.boa.types.TypeKind\022\014\n\004name\030\002 \002(\005\022" +
+      " \002(\0162\023.boa.types.TypeKind\022\014\n\004name\030\002 \002(\t\022" +
       "\026\n\016qualified_name\030\003 \001(\005\"\263\002\n\006Method\022\014\n\004na" +
       "me\030\001 \001(\t\022&\n\tmodifiers\030\002 \003(\0132\023.boa.types." +
       "Modifier\022$\n\013return_type\030\003 \002(\0132\017.boa.type",

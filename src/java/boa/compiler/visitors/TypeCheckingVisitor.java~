@@ -1197,7 +1197,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	public void visit(final ListType n, final SymbolTable env) {
 		n.env = env;
 		n.getValue().accept(this, env);
-		n.type = new BoaProtoList(n.getValue().type);
+		n.type = new BoaSet(n.getValue().type);
 	}
 
 	/** {@inheritDoc} */

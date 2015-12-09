@@ -12,7 +12,7 @@ import boa.types.Ast.Method;
  */
 public class BoaGraphIntrinsics {
 	
-	@FunctionSpec(name = "getCfg", returnType = "CfgGraph", formalParameters = { "Method", "string" })
+	@FunctionSpec(name = "getCfg", returnType = "ClientGraph", formalParameters = { "Method", "string" })
 	public static Graph getcfg(final Method method, final String cls) {
 		CFG cfg = new CFG(method, cls);
 		cfg.astToCFG();

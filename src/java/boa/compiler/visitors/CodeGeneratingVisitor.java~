@@ -1594,7 +1594,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final ListType n) {
-		final ST st = stg.getInstanceOf("ListType");
+		final ST st = stg.getInstanceOf("SetType");
 
 		n.env.setNeedsBoxing(true);
 

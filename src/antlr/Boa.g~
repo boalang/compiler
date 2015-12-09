@@ -95,7 +95,7 @@ type returns [AbstractType ast]
 	| v=visitorType  { $ast = $v.ast; }
 	| s=stackType    { $ast = $s.ast; }
 	| set=setType    { $ast = $set.ast; }
-	| list=listType  { $ast = $list.ast; }
+	| list=listType    { $ast = $list.ast; }
 	| id=identifier  { $ast = $id.ast; }
 	;
 

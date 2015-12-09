@@ -8,10 +8,10 @@ public final class Control {
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistry registry) {
   }
-  public interface GraphOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:boa.types.Graph)
-      com.google.protobuf.MessageOrBuilder {
+  public interface GraphOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
 
+    // repeated .boa.types.Node nodes = 1;
     /**
      * <code>repeated .boa.types.Node nodes = 1;</code>
      */
@@ -36,6 +36,7 @@ public final class Control {
     boa.types.Control.NodeOrBuilder getNodesOrBuilder(
         int index);
 
+    // repeated .boa.types.Edge edges = 2;
     /**
      * <code>repeated .boa.types.Edge edges = 2;</code>
      */
@@ -64,9 +65,8 @@ public final class Control {
    * Protobuf type {@code boa.types.Graph}
    */
   public static final class Graph extends
-      com.google.protobuf.GeneratedMessage implements
-      // @@protoc_insertion_point(message_implements:boa.types.Graph)
-      GraphOrBuilder {
+      com.google.protobuf.GeneratedMessage
+      implements GraphOrBuilder {
     // Use Graph.newBuilder() to construct.
     private Graph(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -173,6 +173,7 @@ public final class Control {
       return PARSER;
     }
 
+    // repeated .boa.types.Node nodes = 1;
     public static final int NODES_FIELD_NUMBER = 1;
     private java.util.List<boa.types.Control.Node> nodes_;
     /**
@@ -208,6 +209,7 @@ public final class Control {
       return nodes_.get(index);
     }
 
+    // repeated .boa.types.Edge edges = 2;
     public static final int EDGES_FIELD_NUMBER = 2;
     private java.util.List<boa.types.Control.Edge> edges_;
     /**
@@ -250,8 +252,7 @@ public final class Control {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized == 1) return true;
-      if (isInitialized == 0) return false;
+      if (isInitialized != -1) return isInitialized == 1;
 
       for (int i = 0; i < getNodesCount(); i++) {
         if (!getNodes(i).isInitialized()) {
@@ -377,9 +378,8 @@ public final class Control {
      * Protobuf type {@code boa.types.Graph}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:boa.types.Graph)
-        boa.types.Control.GraphOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements boa.types.Control.GraphOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return boa.types.Control.internal_static_boa_types_Graph_descriptor;
@@ -577,6 +577,7 @@ public final class Control {
       }
       private int bitField0_;
 
+      // repeated .boa.types.Node nodes = 1;
       private java.util.List<boa.types.Control.Node> nodes_ =
         java.util.Collections.emptyList();
       private void ensureNodesIsMutable() {
@@ -718,8 +719,7 @@ public final class Control {
           java.lang.Iterable<? extends boa.types.Control.Node> values) {
         if (nodesBuilder_ == null) {
           ensureNodesIsMutable();
-          com.google.protobuf.AbstractMessageLite.Builder.addAll(
-              values, nodes_);
+          super.addAll(values, nodes_);
           onChanged();
         } else {
           nodesBuilder_.addAllMessages(values);
@@ -817,6 +817,7 @@ public final class Control {
         return nodesBuilder_;
       }
 
+      // repeated .boa.types.Edge edges = 2;
       private java.util.List<boa.types.Control.Edge> edges_ =
         java.util.Collections.emptyList();
       private void ensureEdgesIsMutable() {
@@ -958,8 +959,7 @@ public final class Control {
           java.lang.Iterable<? extends boa.types.Control.Edge> values) {
         if (edgesBuilder_ == null) {
           ensureEdgesIsMutable();
-          com.google.protobuf.AbstractMessageLite.Builder.addAll(
-              values, edges_);
+          super.addAll(values, edges_);
           onChanged();
         } else {
           edgesBuilder_.addAllMessages(values);
@@ -1068,10 +1068,10 @@ public final class Control {
     // @@protoc_insertion_point(class_scope:boa.types.Graph)
   }
 
-  public interface NodeOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:boa.types.Node)
-      com.google.protobuf.MessageOrBuilder {
+  public interface NodeOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
 
+    // required int32 id = 1;
     /**
      * <code>required int32 id = 1;</code>
      */
@@ -1081,6 +1081,7 @@ public final class Control {
      */
     int getId();
 
+    // required .boa.types.Node.NodeType type = 2;
     /**
      * <code>required .boa.types.Node.NodeType type = 2;</code>
      */
@@ -1094,9 +1095,8 @@ public final class Control {
    * Protobuf type {@code boa.types.Node}
    */
   public static final class Node extends
-      com.google.protobuf.GeneratedMessage implements
-      // @@protoc_insertion_point(message_implements:boa.types.Node)
-      NodeOrBuilder {
+      com.google.protobuf.GeneratedMessage
+      implements NodeOrBuilder {
     // Use Node.newBuilder() to construct.
     private Node(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -1334,6 +1334,7 @@ public final class Control {
     }
 
     private int bitField0_;
+    // required int32 id = 1;
     public static final int ID_FIELD_NUMBER = 1;
     private int id_;
     /**
@@ -1349,6 +1350,7 @@ public final class Control {
       return id_;
     }
 
+    // required .boa.types.Node.NodeType type = 2;
     public static final int TYPE_FIELD_NUMBER = 2;
     private boa.types.Control.Node.NodeType type_;
     /**
@@ -1371,8 +1373,7 @@ public final class Control {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized == 1) return true;
-      if (isInitialized == 0) return false;
+      if (isInitialized != -1) return isInitialized == 1;
 
       if (!hasId()) {
         memoizedIsInitialized = 0;
@@ -1494,9 +1495,8 @@ public final class Control {
      * Protobuf type {@code boa.types.Node}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:boa.types.Node)
-        boa.types.Control.NodeOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements boa.types.Control.NodeOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return boa.types.Control.internal_static_boa_types_Node_descriptor;
@@ -1626,6 +1626,7 @@ public final class Control {
       }
       private int bitField0_;
 
+      // required int32 id = 1;
       private int id_ ;
       /**
        * <code>required int32 id = 1;</code>
@@ -1658,6 +1659,7 @@ public final class Control {
         return this;
       }
 
+      // required .boa.types.Node.NodeType type = 2;
       private boa.types.Control.Node.NodeType type_ = boa.types.Control.Node.NodeType.ENTRY;
       /**
        * <code>required .boa.types.Node.NodeType type = 2;</code>
@@ -1704,10 +1706,10 @@ public final class Control {
     // @@protoc_insertion_point(class_scope:boa.types.Node)
   }
 
-  public interface EdgeOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:boa.types.Edge)
-      com.google.protobuf.MessageOrBuilder {
+  public interface EdgeOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
 
+    // required .boa.types.Edge.EdgeLabel label = 1;
     /**
      * <code>required .boa.types.Edge.EdgeLabel label = 1;</code>
      */
@@ -1721,9 +1723,8 @@ public final class Control {
    * Protobuf type {@code boa.types.Edge}
    */
   public static final class Edge extends
-      com.google.protobuf.GeneratedMessage implements
-      // @@protoc_insertion_point(message_implements:boa.types.Edge)
-      EdgeOrBuilder {
+      com.google.protobuf.GeneratedMessage
+      implements EdgeOrBuilder {
     // Use Edge.newBuilder() to construct.
     private Edge(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -2020,6 +2021,7 @@ public final class Control {
     }
 
     private int bitField0_;
+    // required .boa.types.Edge.EdgeLabel label = 1;
     public static final int LABEL_FIELD_NUMBER = 1;
     private boa.types.Control.Edge.EdgeLabel label_;
     /**
@@ -2041,8 +2043,7 @@ public final class Control {
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
-      if (isInitialized == 1) return true;
-      if (isInitialized == 0) return false;
+      if (isInitialized != -1) return isInitialized == 1;
 
       if (!hasLabel()) {
         memoizedIsInitialized = 0;
@@ -2153,9 +2154,8 @@ public final class Control {
      * Protobuf type {@code boa.types.Edge}
      */
     public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:boa.types.Edge)
-        boa.types.Control.EdgeOrBuilder {
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements boa.types.Control.EdgeOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return boa.types.Control.internal_static_boa_types_Edge_descriptor;
@@ -2272,6 +2272,7 @@ public final class Control {
       }
       private int bitField0_;
 
+      // required .boa.types.Edge.EdgeLabel label = 1;
       private boa.types.Control.Edge.EdgeLabel label_ = boa.types.Control.Edge.EdgeLabel.NIL;
       /**
        * <code>required .boa.types.Edge.EdgeLabel label = 1;</code>
@@ -2318,17 +2319,17 @@ public final class Control {
     // @@protoc_insertion_point(class_scope:boa.types.Edge)
   }
 
-  private static final com.google.protobuf.Descriptors.Descriptor
+  private static com.google.protobuf.Descriptors.Descriptor
     internal_static_boa_types_Graph_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_boa_types_Graph_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
+  private static com.google.protobuf.Descriptors.Descriptor
     internal_static_boa_types_Node_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_boa_types_Node_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
+  private static com.google.protobuf.Descriptors.Descriptor
     internal_static_boa_types_Edge_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
@@ -2354,37 +2355,36 @@ public final class Control {
       "GE\020\006\022\010\n\004DATA\020\007\022\007\n\003PDG\020\010B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
-        new com.google.protobuf.Descriptors.FileDescriptor.    InternalDescriptorAssigner() {
-          public com.google.protobuf.ExtensionRegistry assignDescriptors(
-              com.google.protobuf.Descriptors.FileDescriptor root) {
-            descriptor = root;
-            return null;
-          }
-        };
+      new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
+        public com.google.protobuf.ExtensionRegistry assignDescriptors(
+            com.google.protobuf.Descriptors.FileDescriptor root) {
+          descriptor = root;
+          internal_static_boa_types_Graph_descriptor =
+            getDescriptor().getMessageTypes().get(0);
+          internal_static_boa_types_Graph_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_boa_types_Graph_descriptor,
+              new java.lang.String[] { "Nodes", "Edges", });
+          internal_static_boa_types_Node_descriptor =
+            getDescriptor().getMessageTypes().get(1);
+          internal_static_boa_types_Node_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_boa_types_Node_descriptor,
+              new java.lang.String[] { "Id", "Type", });
+          internal_static_boa_types_Edge_descriptor =
+            getDescriptor().getMessageTypes().get(2);
+          internal_static_boa_types_Edge_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_boa_types_Edge_descriptor,
+              new java.lang.String[] { "Label", });
+          return null;
+        }
+      };
     com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
           boa.types.Ast.getDescriptor(),
         }, assigner);
-    internal_static_boa_types_Graph_descriptor =
-      getDescriptor().getMessageTypes().get(0);
-    internal_static_boa_types_Graph_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-        internal_static_boa_types_Graph_descriptor,
-        new java.lang.String[] { "Nodes", "Edges", });
-    internal_static_boa_types_Node_descriptor =
-      getDescriptor().getMessageTypes().get(1);
-    internal_static_boa_types_Node_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-        internal_static_boa_types_Node_descriptor,
-        new java.lang.String[] { "Id", "Type", });
-    internal_static_boa_types_Edge_descriptor =
-      getDescriptor().getMessageTypes().get(2);
-    internal_static_boa_types_Edge_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-        internal_static_boa_types_Edge_descriptor,
-        new java.lang.String[] { "Label", });
-    boa.types.Ast.getDescriptor();
   }
 
   // @@protoc_insertion_point(outer_class_scope)

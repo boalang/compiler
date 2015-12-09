@@ -120,7 +120,7 @@ public class SymbolTable {
 		idmap.put("Type", new TypeProtoTuple());
 		idmap.put("Variable", new VariableProtoTuple());
 		idmap.put("Visibility", new VisibilityProtoMap());
-		idmap.put("CfgGraph", new CfgGraphProtoTuple());
+		idmap.put("CfgGraph", new ClientGraphProtoTuple());
 		idmap.put("Graph", new GraphProtoTuple());
 		idmap.put("Node", new NodeProtoTuple());
 		idmap.put("Edge", new EdgeProtoTuple());

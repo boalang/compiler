@@ -86,7 +86,7 @@ public class Graph{
 		return succs;
 	}
 
-	public final int getSize() {
+	public final int size() {
 		return size;
 	}
 
