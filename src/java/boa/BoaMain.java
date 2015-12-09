@@ -44,10 +44,16 @@ public class BoaMain {
 		    	    return;
 		    	} else {
 		    	    cl = new PosixParser().parse(options, new String[]{args[0]});
+		    	    String[] tempargs = new String[args.length-1];
+		    	    System.arraycopy(args, 1, tempargs, 0, args.length-1);
 		    	    if(cl.hasOption("c")) {
-    				String[] tempargs = new String[args.length-1];
-    				System.arraycopy(args, 1, tempargs, 0, args.length-1);
     				boa.compiler.BoaCompiler.main(tempargs);
+		    	    } else if (cl.hasOption("p")) {
+		    		boa.compiler.BoaCompiler.parseOnly(tempargs);
+		    	    } else if (cl.hasOption("e")) {
+		    		boa.evaluator.BoaEvaluator.main(tempargs);
+		    	    } else if (cl.hasOption("g")) {
+		    		boa.datagen.BoaGenerator.main(tempargs);
 		    	    }
 		    	}
 		} catch (final org.apache.commons.cli.ParseException e) {
