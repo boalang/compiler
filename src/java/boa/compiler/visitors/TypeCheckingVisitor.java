@@ -34,6 +34,7 @@ import boa.types.*;
  * 
  * @author anthonyu
  * @author rdyer
+ * @author rramu
  */
 public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	/**

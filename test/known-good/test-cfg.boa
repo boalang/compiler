@@ -13,9 +13,9 @@ q_all := visitor {
 	}
 
 	before method: Method -> {
-			cur_graph : CfgGraph;
+			cur_graph : Cfg;
 			node_list : list of Node;
-			cur_graph = getCfg(method,peek(cls_name));
+			cur_graph = getcfg(method,peek(cls_name));
 			m << cur_graph.size;
 		}
 };

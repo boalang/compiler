@@ -21,9 +21,9 @@ import com.google.protobuf.ProtocolMessageEnum;
 import boa.types.BoaProtoMap;
 
 /**
- * A {@link StatementKindProtoMap}.
+ * A {@link NodeTypeProtoMap}.
  * 
- * @author rdyer
+ * @author rramu
  */
 public class NodeTypeProtoMap extends BoaProtoMap {
 	/** {@inheritDoc} */

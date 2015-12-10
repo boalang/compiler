@@ -29,9 +29,9 @@ import boa.types.proto.enums.ChangeKindProtoMap;
 import boa.types.proto.enums.FileKindProtoMap;
 import boa.types.BoaProtoList;
 /**
- * A {@link ChangedFileProtoTuple}.
+ * A {@link GraphProtoTuple}.
  * 
- * @author rdyer
+ * @author rramu
  */
 public class GraphProtoTuple extends BoaProtoTuple {
 	private final static List<BoaType> members = new ArrayList<BoaType>();
@@ -49,7 +49,7 @@ public class GraphProtoTuple extends BoaProtoTuple {
 	}
 
 	/**
-	 * Construct a {@link ChangedFileProtoTuple}.
+	 * Construct a {@link GraphProtoTuple}.
 	 */
 	public GraphProtoTuple() {
 		super(members, names);

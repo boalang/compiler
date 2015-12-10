@@ -8,11 +8,12 @@ import boa.types.Ast.Method;
  * Boa functions for working with control flow graphs.
  * 
  * @author ganeshau
+ * @author rramu
  *
  */
 public class BoaGraphIntrinsics {
 	
-	@FunctionSpec(name = "getCfg", returnType = "CfgGraph", formalParameters = { "Method", "string" })
+	@FunctionSpec(name = "getcfg", returnType = "Cfg", formalParameters = { "Method", "string" })
 	public static Graph getcfg(final Method method, final String cls) {
 		CFG cfg = new CFG(method, cls);
 		cfg.astToCFG();

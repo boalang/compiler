@@ -28,9 +28,9 @@ import boa.types.proto.enums.EdgeLabelProtoMap;
 import boa.types.proto.enums.FileKindProtoMap;
 
 /**
- * A {@link ChangedFileProtoTuple}.
+ * A {@link EdgeProtoTuple}.
  * 
- * @author rdyer
+ * @author rramu
  */
 public class EdgeProtoTuple extends BoaProtoTuple {
 	private final static List<BoaType> members = new ArrayList<BoaType>();
@@ -45,7 +45,7 @@ public class EdgeProtoTuple extends BoaProtoTuple {
 	}
 
 	/**
-	 * Construct a {@link ChangedFileProtoTuple}.
+	 * Construct a {@link EdgeProtoTuple}.
 	 */
 	public EdgeProtoTuple() {
 		super(members, names);

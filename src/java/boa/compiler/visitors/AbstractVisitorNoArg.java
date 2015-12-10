@@ -26,6 +26,7 @@ import boa.compiler.ast.types.*;
  * An abstract visitor class that passes no arguments during the visit.
  * 
  * @author rdyer
+ * @author rramu
  */
 public abstract class AbstractVisitorNoArg {
 	protected void initialize() { }

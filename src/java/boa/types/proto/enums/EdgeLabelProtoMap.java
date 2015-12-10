@@ -21,9 +21,9 @@ import com.google.protobuf.ProtocolMessageEnum;
 import boa.types.BoaProtoMap;
 
 /**
- * A {@link StatementKindProtoMap}.
+ * A {@link EdgeLabelProtoMap}.
  * 
- * @author rdyer
+ * @author rramu
  */
 public class EdgeLabelProtoMap extends BoaProtoMap {
 	/** {@inheritDoc} */

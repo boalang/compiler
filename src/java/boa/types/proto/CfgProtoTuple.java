@@ -32,11 +32,11 @@ import boa.types.*;
 import boa.types.proto.*;
 import boa.types.proto.enums.*;
 /**
- * A {@link ChangedFileProtoTuple}.
+ * A {@link CfgProtoTuple}.
  * 
- * @author rdyer
+ * @author rramu
  */
-public class CfgGraphProtoTuple extends BoaProtoTuple {
+public class CfgProtoTuple extends BoaProtoTuple {
 	private final static List<BoaType> members = new ArrayList<BoaType>();
 	private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
@@ -63,9 +63,9 @@ public class CfgGraphProtoTuple extends BoaProtoTuple {
 	}
 
 	/**
-	 * Construct a {@link ChangedFileProtoTuple}.
+	 * Construct a {@link CfgProtoTuple}.
 	 */
-	public CfgGraphProtoTuple() {
+	public CfgProtoTuple() {
 		super(members, names);
 	}
 
