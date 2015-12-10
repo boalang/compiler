@@ -5,9 +5,14 @@ import java.util.HashSet;
 
 import boa.types.Ast.Expression;
 import boa.types.Ast.Statement;
-import boa.types.Control.Node.Builder;
-import boa.types.Control.Node.NodeType;
+import boa.types.Control.CFGNode.Builder;
+import boa.types.Control.CFGNode.CFGNodeType;
 
+/**
+ * Control flow graph builder node
+ * @author ganeshau
+ *
+ */
 public class CFGNode {
 	public static final int TYPE_METHOD = 1;
 	public static final int TYPE_CONTROL = 2;
@@ -212,23 +217,27 @@ public class CFGNode {
 	}
 
 	public Builder newBuilder() {
-		Builder b = boa.types.Control.Node.newBuilder();
+		Builder b = boa.types.Control.CFGNode.newBuilder();
 		b.setId(id);
 		b.setType(getNodeType());
+		if (this.stmt != null)
+			b.setStatement(stmt);
+		else if (this.expr != null)
+			b.setExpression(expr);
 		return b;
 	}
 
-	private NodeType getNodeType() {
+	private CFGNodeType getNodeType() {
 		switch (this.type) {
 		case TYPE_METHOD:
-			return NodeType.METHOD;
+			return CFGNodeType.METHOD;
 		case TYPE_CONTROL:
-			return NodeType.CONTROL;
+			return CFGNodeType.CONTROL;
 		case TYPE_ENTRY:
-			return NodeType.ENTRY;
+			return CFGNodeType.ENTRY;
 		case TYPE_OTHER:
 		default:
-			return NodeType.OTHER;
+			return CFGNodeType.OTHER;
 		}
 	}
 }
