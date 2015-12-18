@@ -1,5 +1,10 @@
 package boa.graphs.cfg;
 
+/**
+ * Control flow graph builder edge
+ * @author ganeshau
+ *
+ */
 public class CFGEdge {
 	public static long numOfEdges = 0;
 
