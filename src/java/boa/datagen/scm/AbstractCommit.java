@@ -20,9 +20,6 @@ package boa.datagen.scm;
 import java.io.*;
 import java.util.*;
 
-import org.apache.hadoop.hbase.client.HTableInterface;
-import org.apache.hadoop.hbase.client.HTablePool;
-import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.SequenceFile.Writer;
@@ -39,7 +36,6 @@ import boa.types.Diff.ChangedFile.FileKind;
 import boa.types.Shared.ChangeKind;
 import boa.types.Shared.Person;
 import boa.datagen.util.FileIO;
-import boa.datagen.util.HBaseUtil;
 import boa.datagen.util.JavaScriptErrorCheckVisitor;
 import boa.datagen.util.JavaScriptVisitor;
 import boa.datagen.util.JavaVisitor;
@@ -137,154 +133,6 @@ public abstract class AbstractCommit {
 		}
 
 		return revision.build();
-	}
-
-	public Revision asProtobuf(final boolean parse, final HTablePool tablePool, final HTableInterface table, final byte[] tableName, final String revKey, final String keyDelim) {
-		final Revision.Builder revision = Revision.newBuilder();
-		revision.setId(id);
-
-		final Person author = parsePerson(this.author);
-		final Person committer = parsePerson(this.committer);
-		revision.setAuthor(author == null ? committer : author);
-		revision.setCommitter(committer);
-
-		long time = -1;
-		if (date != null)
-			time = date.getTime() * 1000;
-		revision.setCommitDate(time);
-
-		if (message != null)
-			revision.setLog(message);
-		else
-			revision.setLog("");
-
-		for (final String path : changedPaths.keySet()) {
-			final ChangedFile.Builder fb = processChangeFile(path, parse, tablePool, table, tableName, revKey, keyDelim);
-			fb.setChange(ChangeKind.MODIFIED);
-			//fb.setKey("");
-			revision.addFiles(fb.build());
-		}
-		for (final String path : addedPaths.keySet()) {
-			final ChangedFile.Builder fb = processChangeFile(path, parse, tablePool, table, tableName, revKey, keyDelim);
-			fb.setChange(ChangeKind.ADDED);
-			//fb.setKey("");
-			revision.addFiles(fb.build());
-		}
-		for (final String path : removedPaths.keySet()) {
-			final ChangedFile.Builder fb = processChangeFile(path, false, null, null, null, revKey, keyDelim);
-			fb.setChange(ChangeKind.DELETED);
-			//fb.setKey("");
-			revision.addFiles(fb.build());
-		}
-
-		return revision.build();
-	}
-
-	private Builder processChangeFile(final String path, final boolean parse, final HTablePool tablePool, final HTableInterface table, final byte[] tableName, final String revKey, final String keyDelim) {
-		final ChangedFile.Builder fb = ChangedFile.newBuilder();
-		fb.setName(path);
-		fb.setKind(FileKind.OTHER);
-		
-		final String lowerPath = path.toLowerCase();
-		if (lowerPath.endsWith(".txt"))
-			fb.setKind(FileKind.TEXT);
-		else if (lowerPath.endsWith(".xml"))
-			fb.setKind(FileKind.XML);
-		else if (lowerPath.endsWith(".jar") || lowerPath.endsWith(".class"))
-			fb.setKind(FileKind.BINARY);
-		else if (lowerPath.endsWith(".java") && parse) {
-			final byte[] revKeyBytes = Bytes.toBytes(revKey);
-			final String content = getFileContents(path);
-
-			fb.setKind(FileKind.SOURCE_JAVA_JLS2);
-			if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_4, AST.JLS2, false, tablePool, table, tableName, revKeyBytes)) {
-				if (debug)
-					System.err.println("Found JLS2 parse error in: revision " + id + ": file " + path);
-
-				fb.setKind(FileKind.SOURCE_JAVA_JLS3);
-				if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_5, AST.JLS3, false, tablePool, table, tableName, revKeyBytes)) {
-					if (debug)
-						System.err.println("Found JLS3 parse error in: revision " + id + ": file " + path);
-
-					fb.setKind(FileKind.SOURCE_JAVA_JLS4);
-					if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_7, AST.JLS4, false, tablePool, table, tableName, revKeyBytes)) {
-						if (debug)
-							System.err.println("Found JLS4 parse error in: revision " + id + ": file " + path);
-
-						fb.setKind(FileKind.SOURCE_JAVA_JLS5);
-						if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_8, AST.JLS8, false, tablePool, table, tableName, revKeyBytes)) {
-							if (debug)
-								System.err.println("Found JLS5 parse error in: revision " + id + ": file " + path);
-
-							//fb.setContent(content);
-							fb.setKind(FileKind.SOURCE_JAVA_ERROR);
-							HBaseUtil.put(tablePool, table, tableName, revKeyBytes, code_family, Bytes.toBytes(path), ASTRoot.newBuilder().build().toByteArray());
-						} else
-							if (debug)
-								System.err.println("Accepted JLS5: revision " + id + ": file " + path);
-					} else
-						if (debug)
-							System.err.println("Accepted JLS4: revision " + id + ": file " + path);
-				} else
-					if (debug)
-						System.err.println("Accepted JLS3: revision " + id + ": file " + path);
-			} else
-				if (debug)
-					System.err.println("Accepted JLS2: revision " + id + ": file " + path);
-		}
-		fb.setKey(revKey);
-
-		return fb;
-	}
-
-	private boolean parseJavaFile(final String path, final Builder fb, final String content, final String compliance, final int astLevel, final boolean storeOnError, final HTablePool tablePool, final HTableInterface table, final byte[] tableName, final byte[] keyBytes) {
-		try {
-			final ASTParser parser = ASTParser.newParser(astLevel);
-			parser.setKind(ASTParser.K_COMPILATION_UNIT);
-			parser.setResolveBindings(true);
-			parser.setSource(content.toCharArray());
-
-			final Map options = JavaCore.getOptions();
-			JavaCore.setComplianceOptions(compliance, options);
-			parser.setCompilerOptions(options);
-
-			final CompilationUnit cu = (CompilationUnit) parser.createAST(null);
-
-			final JavaErrorCheckVisitor errorCheck = new JavaErrorCheckVisitor();
-			cu.accept(errorCheck);
-
-			if (!errorCheck.hasError || storeOnError) {
-				final ASTRoot.Builder ast = ASTRoot.newBuilder();
-				//final CommentsRoot.Builder comments = CommentsRoot.newBuilder();
-				final JavaVisitor visitor = new JavaVisitor(content, connector.nameIndices);
-				try {
-					ast.addNamespaces(visitor.getNamespaces(cu));
-					for (final String s : visitor.getImports())
-						ast.addImports(s);
-					/*for (final Comment c : visitor.getComments())
-						comments.addComments(c);*/
-				} catch (final UnsupportedOperationException e) {
-					return false;
-				} catch (final Exception e) {
-					if (debug)
-						System.err.println("Error visiting: " + path);
-					e.printStackTrace();
-					return false;
-				}
-				
-				if (table != null) {
-					HBaseUtil.put(tablePool, table, tableName, keyBytes, code_family, Bytes.toBytes(path), ast.build().toByteArray());
-				}
-				else
-					fb.setAst(ast);
-				//fb.setComments(comments);
-			}
-
-			return !errorCheck.hasError;
-		} catch (final Exception e) {
-			e.printStackTrace();
-			return false;
-		}
 	}
 
 	private Builder processChangeFile(String path, boolean parse, Writer astWriter, String revKey, String keyDelim) {

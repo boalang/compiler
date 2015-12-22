@@ -37,7 +37,7 @@ import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
  * @author josephb
  */
 public class GitConnector extends AbstractConnector {
-	private static final boolean debug = util.Properties.getBoolean("debug", main.DefaultProperties.DEBUG);
+	private static final boolean debug = boa.datagen.util.Properties.getBoolean("debug", boa.datagen.DefaultProperties.DEBUG);
 
 	private String path;
 

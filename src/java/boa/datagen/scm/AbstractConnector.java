@@ -21,8 +21,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.apache.hadoop.hbase.client.HTableInterface;
-import org.apache.hadoop.hbase.client.HTablePool;
 import org.apache.hadoop.io.SequenceFile.Writer;
 
 import boa.types.Code.Revision;
@@ -70,16 +68,4 @@ public abstract class AbstractConnector implements AutoCloseable {
 		return revs;
 	}
 
-	public List<Revision> getCommits(final boolean parse, final HTablePool tablePool, final HTableInterface table, final byte[] tableName, final String repoKey, final String keyDelim) {
-		if (revisions == null) {
-			revisions = new ArrayList<AbstractCommit>();
-			setRevisions();
-		}
-		final List<Revision> revs = new ArrayList<Revision>();
-		int i = 0;
-		for (final AbstractCommit rev : revisions)
-			revs.add(rev.asProtobuf(parse, tablePool, table, tableName, repoKey + keyDelim + (++i), keyDelim));
-
-		return revs;
-	}
 }
