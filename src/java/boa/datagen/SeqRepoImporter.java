@@ -53,12 +53,12 @@ import boa.datagen.util.Properties;
  * 
  */
 public class SeqRepoImporter {
-	private final static boolean debug = Properties.getBoolean("debug", main.DefaultProperties.DEBUG);
+	private final static boolean debug = Properties.getBoolean("debug", boa.datagen.DefaultProperties.DEBUG);
 
-	private final static String keyDelim = Properties.getProperty("hbase.delimiter", main.DefaultProperties.HBASE_DELIMITER);
+	private final static String keyDelim = Properties.getProperty("hbase.delimiter", boa.datagen.DefaultProperties.HBASE_DELIMITER);
 	
-	private final static File jsonCacheDir = new File(Properties.getProperty("gh.json.cache.path", main.DefaultProperties.GH_JSON_CACHE_PATH));
-	private final static File gitRootPath = new File(Properties.getProperty("gh.svn.path", main.DefaultProperties.GH_GIT_PATH));
+	private final static File jsonCacheDir = new File(Properties.getProperty("gh.json.cache.path", boa.datagen.DefaultProperties.GH_JSON_CACHE_PATH));
+	private final static File gitRootPath = new File(Properties.getProperty("gh.svn.path", boa.datagen.DefaultProperties.GH_GIT_PATH));
 	
 	private static final HashMap<String, String[]> repoInfo = new HashMap<String, String[]>();
 	
@@ -69,7 +69,7 @@ public class SeqRepoImporter {
 	private static FileSystem fileSystem = null;
 	private static String base = null;
 	
-	private final static int poolSize = Integer.parseInt(Properties.getProperty("num.threads", main.DefaultProperties.NUM_THREADS));
+	private final static int poolSize = Integer.parseInt(Properties.getProperty("num.threads", boa.datagen.DefaultProperties.NUM_THREADS));
 	private final static AtomicInteger numOfProcessedProjects = new AtomicInteger(0), listId = new AtomicInteger(0);
 	private final static int maxListId = 16;
 
