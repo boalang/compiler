@@ -43,8 +43,8 @@ import repositoryConnecting.GitConnector;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
 import boa.types.Toplevel.Project;
-import util.FileIO;
-import util.Properties;
+import boa.datagen.util.FileIO;
+import boa.datagen.util.Properties;
 
 /**
  * @author hoan
