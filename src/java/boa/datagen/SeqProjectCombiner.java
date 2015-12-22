@@ -46,7 +46,7 @@ public class SeqProjectCombiner {
 		String base = conf.get("fs.default.name", "");
 		
 		HashMap<String, String> sources = new HashMap<String, String>();
-		HashSet<String> marks = new HashSet<>();
+		HashSet<String> marks = new HashSet<String>();
 		FileStatus[] files = fileSystem.listStatus(new Path(base + "tmprepcache/2015-07"));
 		for (int i = 0; i < files.length; i++) {
 			FileStatus file = files[i];
