@@ -62,8 +62,8 @@ public class SeqRepoImporter {
 	
 	private static final HashMap<String, String[]> repoInfo = new HashMap<String, String[]>();
 	
-	private final static ArrayList<byte[]> cacheOfProjects = new ArrayList<>();
-	private final static HashSet<String> processedProjectIds = new HashSet<>();
+	private final static ArrayList<byte[]> cacheOfProjects = new ArrayList<byte[]>();
+	private final static HashSet<String> processedProjectIds = new HashSet<String>();
 	
 	private static Configuration conf = null;
 	private static FileSystem fileSystem = null;
@@ -305,7 +305,8 @@ public class SeqRepoImporter {
 			if (debug)
 				System.out.println("Has repository: " + name);
 
-			try (final AbstractConnector conn = new GitConnector(gitDir.getAbsolutePath())) {
+			final AbstractConnector conn = new GitConnector(gitDir.getAbsolutePath());
+			try {
 				final CodeRepository.Builder repoBuilder = CodeRepository.newBuilder(repo);
 				final String repoKey = "g:" + project.getId() + keyDelim + repo.getKind().getNumber();
 				for (final Revision rev : conn.getCommits(true, astWriter, repoKey, keyDelim)) {
@@ -321,6 +322,8 @@ public class SeqRepoImporter {
 				return projBuilder.build();
 			} catch (final Exception e) {
 				printError(e, "unknown error");
+			} finally {
+			    conn.close();
 			}
 
 			return project;
