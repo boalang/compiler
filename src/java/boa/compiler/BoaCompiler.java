@@ -233,7 +233,83 @@ public class BoaCompiler {
 	}
 	
 	public static void parseOnly(final String[] args) throws IOException {
-	    System.out.println("TODO: implement functionality to parse and check.");
+		CommandLine cl = processParseCommandLineOptions(args);
+		if(cl==null) return;
+		final ArrayList<File> inputFiles = BoaCompiler.inputFiles;
+
+		// find custom libs to load
+		final List<URL> libs = new ArrayList<URL>();
+		if (cl.hasOption('l'))
+			for (final String lib : cl.getOptionValues('l'))
+				libs.add(new File(lib).toURI().toURL());
+
+		final List<String> jobnames = new ArrayList<String>();
+		final List<String> jobs = new ArrayList<String>();
+		boolean isSimple = true;
+
+		final List<Program> visitorPrograms = new ArrayList<Program>();
+
+		SymbolTable.initialize(libs);
+
+		for (int i = 0; i < inputFiles.size(); i++) {
+			final File f = inputFiles.get(i);
+			try {
+				final BoaLexer lexer = new BoaLexer(new ANTLRFileStream(f.getAbsolutePath()));
+				lexer.removeErrorListeners();
+				lexer.addErrorListener(new LexerErrorListener());
+
+				final CommonTokenStream tokens = new CommonTokenStream(lexer);
+				final BoaParser parser = new BoaParser(tokens);
+				parser.removeErrorListeners();
+				parser.addErrorListener(new BaseErrorListener() {
+					@Override
+					public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) throws ParseCancellationException {
+						throw new ParseCancellationException(e);
+					}
+				});
+
+				final BoaErrorListener parserErrorListener = new ParserErrorListener();
+				Start p = parse(tokens, parser, parserErrorListener);
+
+				final String jobName = "" + i;
+
+				try {
+					if (!parserErrorListener.hasError) {
+						new TypeCheckingVisitor().start(p, new SymbolTable());
+
+						final TaskClassifyingVisitor simpleVisitor = new TaskClassifyingVisitor();
+						simpleVisitor.start(p);
+
+						LOG.info(f.getName() + ": task complexity: " + (!simpleVisitor.isComplex() ? "simple" : "complex"));
+						isSimple &= !simpleVisitor.isComplex();
+
+						new LocalAggregationTransformer().start(p);
+
+						// if a job has no visitor, let it have its own method
+						// also let jobs have own methods if visitor merging is disabled
+						if (!simpleVisitor.isComplex() || cl.hasOption("nv") || inputFiles.size() == 1) {
+							new VisitorOptimizingTransformer().start(p);
+
+							final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(jobName);
+							cg.start(p);
+							jobs.add(cg.getCode());
+
+							jobnames.add(jobName);
+						}
+						// if a job has visitors, fuse them all together into a single program
+						else {
+							p.getProgram().jobName = jobName;
+							visitorPrograms.add(p.getProgram());
+						}
+					}
+				} catch (final TypeCheckException e) {
+					parserErrorListener.error("typecheck", lexer, null, e.n.beginLine, e.n.beginColumn, e.n2.endColumn - e.n.beginColumn + 1, e.getMessage(), e);
+				}
+			} catch (final Exception e) {
+				System.err.print(f.getName() + ": parsing failed: ");
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	private static Start parse(final CommonTokenStream tokens,
@@ -300,7 +376,7 @@ public class BoaCompiler {
 			cl = new PosixParser().parse(options, args);
 		} catch (final org.apache.commons.cli.ParseException e) {
 			System.err.println(e.getMessage());
-			new HelpFormatter().printHelp("BoaCompiler", options);
+			new HelpFormatter().printHelp("Boa Compiler", options);
 			return null;
 		}
 		
@@ -321,13 +397,52 @@ public class BoaCompiler {
 		if (inputFiles.size() == 0) {
 			System.err.println("no valid input files found - did you use the --in option?");
 			//new HelpFormatter().printHelp("BoaCompiler", options);
-			new HelpFormatter().printHelp("BoaCompiler", options);
+			new HelpFormatter().printHelp("Boa Compiler", options);
 			return null;
 		}
 		
 		return cl;
 	}
 
+	private static CommandLine processParseCommandLineOptions(final String[] args) {
+		// parse the command line options
+		final Options options = new Options();
+		options.addOption("l", "libs", true, "extra jars (functions/aggregators) to be compiled in");
+		options.addOption("i", "in", true, "file(s) to be parsed (comma-separated list)");
+
+		final CommandLine cl;
+		try {
+			cl = new PosixParser().parse(options, args);
+		} catch (final org.apache.commons.cli.ParseException e) {
+			System.err.println(e.getMessage());
+			new HelpFormatter().printHelp("Boa Parser", options);
+			return null;
+		}
+		
+		// get the filename of the program we will be compiling
+		inputFiles = new ArrayList<File>();
+		if (cl.hasOption('i')) {
+			final String[] inputPaths = cl.getOptionValue('i').split(",");
+
+			for (final String s : inputPaths) {
+				final File f = new File(s);
+				if (!f.exists())
+					System.err.println("File '" + s + "' does not exist, skipping");
+				else
+					inputFiles.add(new File(s));
+			}
+		}
+
+		if (inputFiles.size() == 0) {
+			System.err.println("no valid input files found - did you use the --in option?");
+			//new HelpFormatter().printHelp("BoaCompiler", options);
+			new HelpFormatter().printHelp("Boa Parser", options);
+			return null;
+		}
+		
+		return cl;
+	}
+	
 	private static final String getGeneratedClass(final CommandLine cl) {
 		// get the name of the generated class
 		final String className;
