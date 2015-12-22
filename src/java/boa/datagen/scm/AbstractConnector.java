@@ -1,4 +1,4 @@
-p/*
+/*
  * Copyright 2015, Hridesh Rajan, Robert Dyer, Hoan Nguyen
  *                 and Iowa State University of Science and Technology
  *
@@ -32,7 +32,7 @@ import boa.types.Code.Revision;
  */
 public abstract class AbstractConnector implements AutoCloseable {
 	protected List<AbstractCommit> revisions = null;
-	protected HashMap<String, Integer> nameIndices = new HashMap<>();
+	protected HashMap<String, Integer> nameIndices = new HashMap<String, Integer>();
 
 	public abstract String getLastCommitId();
 	public abstract void setLastSeenCommitId(final String id);
