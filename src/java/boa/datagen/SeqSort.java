@@ -36,7 +36,7 @@ import org.apache.hadoop.mapred.lib.IdentityReducer;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
-import util.FileIO;
+import boa.datagen.util.FileIO;
 
 /**
  * @author hoan
