@@ -38,8 +38,8 @@ import org.apache.hadoop.io.Text;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 
-import repositoryConnecting.AbstractConnector;
-import repositoryConnecting.GitConnector;
+import boa.datagen.scm.AbstractConnector;
+import boa.datagen.scm.GitConnector;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
 import boa.types.Toplevel.Project;
@@ -323,7 +323,11 @@ public class SeqRepoImporter {
 			} catch (final Exception e) {
 				printError(e, "unknown error");
 			} finally {
-			    conn.close();
+			    try {
+				if(conn != null) conn.close();
+			    } catch (Exception e) {
+				printError(e, "error closing GitConnector");
+			    }
 			}
 
 			return project;
