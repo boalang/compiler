@@ -134,9 +134,9 @@ public class GitCommit extends AbstractCommit {
 	}
 
 	public void getChangeFiles(Map<String, Integer> revisionMap, RevCommit rc) {
-		HashMap<String, String> rChangedPaths = new HashMap<>();
-		HashMap<String, String> rRemovedPaths = new HashMap<>();
-		HashMap<String, String> rAddedPaths = new HashMap<>();
+		HashMap<String, String> rChangedPaths = new HashMap<String, String>();
+		HashMap<String, String> rRemovedPaths = new HashMap<String, String>();
+		HashMap<String, String> rAddedPaths = new HashMap<String, String>();
 		if (rc.getParentCount() == 0)
 			getChangeFiles(null, rc, rChangedPaths, rRemovedPaths, rAddedPaths);
 		else {
