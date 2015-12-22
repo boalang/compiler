@@ -25,7 +25,7 @@ import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.MapFile;
 import org.apache.hadoop.io.Text;
 
-import util.Properties;
+import boa.datagen.util.Properties;
 
 /**
  * @author hoan
