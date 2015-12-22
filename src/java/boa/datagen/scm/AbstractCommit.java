@@ -47,7 +47,6 @@ import boa.datagen.util.Properties;
  */
 public abstract class AbstractCommit {
 	protected static final boolean debug = false; //util.Properties.getBoolean("debug", main.DefaultProperties.DEBUG);
-	private final static byte[] code_family = Bytes.toBytes(Properties.getProperty("hbase.ast.col", boa.datagen.DefaultProperties.HBASE_AST_COL));
 	
 	protected AbstractConnector connector;
 	protected AbstractCommit(AbstractConnector cnn) {
