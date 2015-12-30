@@ -23,41 +23,37 @@ import java.util.Map;
 
 import boa.types.BoaProtoTuple;
 import boa.types.BoaString;
-import boa.types.BoaSet;
 import boa.types.BoaType;
-import boa.types.proto.enums.ChangeKindProtoMap;
+import boa.types.proto.enums.CFGEdgeLabelProtoMap;
 import boa.types.proto.enums.FileKindProtoMap;
-import boa.types.BoaProtoList;
+
 /**
- * A {@link GraphProtoTuple}.
+ * A {@link CFGEdgeProtoTuple}.
  * 
  * @author rramu
  */
-public class GraphProtoTuple extends BoaProtoTuple {
+public class CFGEdgeProtoTuple extends BoaProtoTuple {
 	private final static List<BoaType> members = new ArrayList<BoaType>();
 	private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
 	static {
 		int counter = 0;
 
-		names.put("nodes", counter++);
-		members.add(new BoaProtoList(new NodeProtoTuple()));
-
-		names.put("edges", counter++);
-		members.add(new BoaProtoList(new EdgeProtoTuple()));
+		names.put("label", counter++);
+		members.add(new CFGEdgeLabelProtoMap());
 
 	}
 
 	/**
-	 * Construct a {@link GraphProtoTuple}.
+	 * Construct a {@link CFGEdgeProtoTuple}.
 	 */
-	public GraphProtoTuple() {
+	public CFGEdgeProtoTuple() {
 		super(members, names);
 	}
 
 	/** @{inheritDoc} */
 	@Override
 	public String toJavaType() {
-		return "boa.types.Control.Graph";
+		return "boa.types.Control.CFGEdge";
 	}
 }

@@ -21,14 +21,14 @@ import com.google.protobuf.ProtocolMessageEnum;
 import boa.types.BoaProtoMap;
 
 /**
- * A {@link EdgeLabelProtoMap}.
+ * A {@link CFGEdgeLabelProtoMap}.
  * 
  * @author rramu
  */
-public class EdgeLabelProtoMap extends BoaProtoMap {
+public class CFGEdgeLabelProtoMap extends BoaProtoMap {
 	/** {@inheritDoc} */
 	@Override
 	protected Class<? extends ProtocolMessageEnum> getEnumClass() {
-		return boa.types.Control.Edge.EdgeLabel.class;
+		return boa.types.Control.CFGEdge.CFGEdgeLabel.class;
 	}
 }

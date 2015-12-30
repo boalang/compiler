@@ -21,14 +21,14 @@ import com.google.protobuf.ProtocolMessageEnum;
 import boa.types.BoaProtoMap;
 
 /**
- * A {@link NodeTypeProtoMap}.
+ * A {@link CFGNodeTypeProtoMap}.
  * 
  * @author rramu
  */
-public class NodeTypeProtoMap extends BoaProtoMap {
+public class CFGNodeTypeProtoMap extends BoaProtoMap {
 	/** {@inheritDoc} */
 	@Override
 	protected Class<? extends ProtocolMessageEnum> getEnumClass() {
-		return boa.types.Control.Node.NodeType.class;
+		return boa.types.Control.CFGNode.CFGNodeType.class;
 	}
 }

@@ -121,10 +121,9 @@ public class SymbolTable {
 		idmap.put("Type", new TypeProtoTuple());
 		idmap.put("Variable", new VariableProtoTuple());
 		idmap.put("Visibility", new VisibilityProtoMap());
-		idmap.put("Cfg", new CfgProtoTuple());
-		idmap.put("Graph", new GraphProtoTuple());
-		idmap.put("Node", new NodeProtoTuple());
-		idmap.put("Edge", new EdgeProtoTuple());
+		idmap.put("CFG", new CFGProtoTuple());
+		idmap.put("CFGNode", new CFGNodeProtoTuple());
+		idmap.put("CFGEdge", new CFGEdgeProtoTuple());
 
 		globalFunctions = new FunctionTrie();
 
@@ -171,11 +170,12 @@ public class SymbolTable {
 
 		// list functions
 		globalFunctions.addFunction("contains", new BoaFunction(new BoaBool(), new BoaType[] { new BoaProtoList(new BoaScalar()), new BoaScalar() }, "${0}.contains(${1})"));
-				globalFunctions.addFunction("add", new BoaFunction(new BoaAny(), new BoaType[] { new BoaProtoList(new BoaTypeVar("V")), new BoaTypeVar("V") }, "${0}.add(${1})"));
-				globalFunctions.addFunction("remove", new BoaFunction(new BoaAny(), new BoaType[] { new BoaProtoList(new BoaTypeVar("V")), new BoaTypeVar("V") }, "${0}.remove(${1})"));
-				globalFunctions.addFunction("clear", new BoaFunction(new BoaAny(), new BoaType[] { new BoaProtoList(new BoaTypeVar("V")) }, "${0}.clear()"));
-				globalFunctions.addFunction("get", new BoaFunction(new BoaAny(), new BoaType[] { new BoaProtoList(new BoaTypeVar("V")), new BoaInt() }, "${0}.get((int)${1})"));
-				globalFunctions.addFunction("size", new BoaFunction(new BoaInt(), new BoaType[] { new BoaProtoList(new BoaTypeVar("V"))}, "${0}.size()"));
+		globalFunctions.addFunction("add", new BoaFunction(new BoaAny(), new BoaType[] { new BoaProtoList(new BoaTypeVar("V")), new BoaTypeVar("V") }, "${0}.add(${1})"));
+		globalFunctions.addFunction("remove", new BoaFunction(new BoaAny(), new BoaType[] { new BoaProtoList(new BoaTypeVar("V")), new BoaTypeVar("V") }, "${0}.remove(${1})"));
+		globalFunctions.addFunction("clear", new BoaFunction(new BoaAny(), new BoaType[] { new BoaProtoList(new BoaTypeVar("V")) }, "${0}.clear()"));
+		globalFunctions.addFunction("get", new BoaFunction(new BoaTypeVar("V"), new BoaType[] { new BoaProtoList(new BoaTypeVar("V")), new BoaInt() }, "${0}.get((int)${1})"));				
+		globalFunctions.addFunction("size", new BoaFunction(new BoaInt(), new BoaType[] { new BoaProtoList(new BoaTypeVar("V"))}, "${0}.size()"));
+
 		// casts from enums to string
 		globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { new BoaProtoMap() }, "${0}.name()"));
 

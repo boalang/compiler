@@ -23,55 +23,41 @@ import java.util.Map;
 
 import boa.types.BoaProtoTuple;
 import boa.types.BoaString;
-import boa.types.BoaSet;
 import boa.types.BoaType;
-import boa.types.proto.enums.ChangeKindProtoMap;
+import boa.types.BoaInt;
+import boa.types.proto.enums.CFGNodeTypeProtoMap;
 import boa.types.proto.enums.FileKindProtoMap;
-import boa.types.BoaProtoList;
-import boa.types.*;
-import boa.types.proto.*;
-import boa.types.proto.enums.*;
+
 /**
- * A {@link CfgProtoTuple}.
+ * A {@link CFGNodeProtoTuple}.
  * 
  * @author rramu
  */
-public class CfgProtoTuple extends BoaProtoTuple {
+public class CFGNodeProtoTuple extends BoaProtoTuple {
 	private final static List<BoaType> members = new ArrayList<BoaType>();
 	private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
 	static {
 		int counter = 0;
 
-		names.put("method", counter++);
-		members.add(new MethodProtoTuple());
+		names.put("type", counter++);
+		members.add(new CFGNodeTypeProtoMap());
 
-		names.put("graph", counter++);
-		members.add(new GraphProtoTuple());
-
-		names.put("size", counter++);
+		names.put("id", counter++);
 		members.add(new BoaInt());
 
-		names.put("nodes", counter++);
-		members.add(new BoaMap(new BoaInt(),new NodeProtoTuple()));
-
-		names.put("nodeIds", counter++);
-		members.add(new BoaMap(new NodeProtoTuple(),new BoaInt()));
-
-		names.put("edges", counter++);
-		members.add(new EdgeLabelProtoMap());
 	}
 
 	/**
-	 * Construct a {@link CfgProtoTuple}.
+	 * Construct a {@link CFGNodeProtoTuple}.
 	 */
-	public CfgProtoTuple() {
+	public CFGNodeProtoTuple() {
 		super(members, names);
 	}
 
 	/** @{inheritDoc} */
 	@Override
 	public String toJavaType() {
-		return "boa.analysis.ds.Graph";
+		return "boa.types.Control.CFGNode";
 	}
 }

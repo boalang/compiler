@@ -23,41 +23,41 @@ import java.util.Map;
 
 import boa.types.BoaProtoTuple;
 import boa.types.BoaString;
+import boa.types.BoaSet;
 import boa.types.BoaType;
-import boa.types.BoaInt;
-import boa.types.proto.enums.NodeTypeProtoMap;
+import boa.types.proto.enums.ChangeKindProtoMap;
 import boa.types.proto.enums.FileKindProtoMap;
-
+import boa.types.BoaProtoList;
 /**
- * A {@link NodeProtoTuple}.
+ * A {@link CFGProtoTuple}.
  * 
  * @author rramu
  */
-public class NodeProtoTuple extends BoaProtoTuple {
+public class CFGProtoTuple extends BoaProtoTuple {
 	private final static List<BoaType> members = new ArrayList<BoaType>();
 	private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
 	static {
 		int counter = 0;
 
-		names.put("type", counter++);
-		members.add(new NodeTypeProtoMap());
+		names.put("nodes", counter++);
+		members.add(new BoaProtoList(new CFGNodeProtoTuple()));
 
-		names.put("stmtIndex", counter++);
-		members.add(new BoaInt());
+		names.put("edges", counter++);
+		members.add(new BoaProtoList(new CFGEdgeProtoTuple()));
 
 	}
 
 	/**
-	 * Construct a {@link NodeProtoTuple}.
+	 * Construct a {@link CFGhProtoTuple}.
 	 */
-	public NodeProtoTuple() {
+	public CFGProtoTuple() {
 		super(members, names);
 	}
 
 	/** @{inheritDoc} */
 	@Override
 	public String toJavaType() {
-		return "boa.types.Control.Node";
+		return "boa.types.Control.CFG";
 	}
 }

@@ -8,17 +8,10 @@ public final class Control {
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistry registry) {
   }
-<<<<<<< HEAD
-  public interface GraphOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
-
-    // repeated .boa.types.Node nodes = 1;
-=======
   public interface CFGOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
     // repeated .boa.types.CFGNode nodes = 1;
->>>>>>> 07b80102c81a5c83936cb34dc6b33f099ed18341
     /**
      * <code>repeated .boa.types.CFGNode nodes = 1;</code>
      */
@@ -43,11 +36,7 @@ public final class Control {
     boa.types.Control.CFGNodeOrBuilder getNodesOrBuilder(
         int index);
 
-<<<<<<< HEAD
-    // repeated .boa.types.Edge edges = 2;
-=======
     // repeated .boa.types.CFGEdge edges = 2;
->>>>>>> 07b80102c81a5c83936cb34dc6b33f099ed18341
     /**
      * <code>repeated .boa.types.CFGEdge edges = 2;</code>
      *
@@ -95,19 +84,11 @@ public final class Control {
   /**
    * Protobuf type {@code boa.types.CFG}
    */
-<<<<<<< HEAD
-  public static final class Graph extends
-      com.google.protobuf.GeneratedMessage
-      implements GraphOrBuilder {
-    // Use Graph.newBuilder() to construct.
-    private Graph(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
-=======
   public static final class CFG extends
       com.google.protobuf.GeneratedMessage
       implements CFGOrBuilder {
     // Use CFG.newBuilder() to construct.
     private CFG(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
->>>>>>> 07b80102c81a5c83936cb34dc6b33f099ed18341
       super(builder);
       this.unknownFields = builder.getUnknownFields();
     }
@@ -212,11 +193,7 @@ public final class Control {
       return PARSER;
     }
 
-<<<<<<< HEAD
-    // repeated .boa.types.Node nodes = 1;
-=======
     // repeated .boa.types.CFGNode nodes = 1;
->>>>>>> 07b80102c81a5c83936cb34dc6b33f099ed18341
     public static final int NODES_FIELD_NUMBER = 1;
     private java.util.List<boa.types.Control.CFGNode> nodes_;
     /**
@@ -252,11 +229,7 @@ public final class Control {
       return nodes_.get(index);
     }
 
-<<<<<<< HEAD
-    // repeated .boa.types.Edge edges = 2;
-=======
     // repeated .boa.types.CFGEdge edges = 2;
->>>>>>> 07b80102c81a5c83936cb34dc6b33f099ed18341
     public static final int EDGES_FIELD_NUMBER = 2;
     private java.util.List<boa.types.Control.CFGEdge> edges_;
     /**
@@ -446,11 +419,7 @@ public final class Control {
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
-<<<<<<< HEAD
-       implements boa.types.Control.GraphOrBuilder {
-=======
        implements boa.types.Control.CFGOrBuilder {
->>>>>>> 07b80102c81a5c83936cb34dc6b33f099ed18341
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return boa.types.Control.internal_static_boa_types_CFG_descriptor;
@@ -648,13 +617,8 @@ public final class Control {
       }
       private int bitField0_;
 
-<<<<<<< HEAD
-      // repeated .boa.types.Node nodes = 1;
-      private java.util.List<boa.types.Control.Node> nodes_ =
-=======
       // repeated .boa.types.CFGNode nodes = 1;
       private java.util.List<boa.types.Control.CFGNode> nodes_ =
->>>>>>> 07b80102c81a5c83936cb34dc6b33f099ed18341
         java.util.Collections.emptyList();
       private void ensureNodesIsMutable() {
         if (!((bitField0_ & 0x00000001) == 0x00000001)) {
@@ -893,13 +857,8 @@ public final class Control {
         return nodesBuilder_;
       }
 
-<<<<<<< HEAD
-      // repeated .boa.types.Edge edges = 2;
-      private java.util.List<boa.types.Control.Edge> edges_ =
-=======
       // repeated .boa.types.CFGEdge edges = 2;
       private java.util.List<boa.types.Control.CFGEdge> edges_ =
->>>>>>> 07b80102c81a5c83936cb34dc6b33f099ed18341
         java.util.Collections.emptyList();
       private void ensureEdgesIsMutable() {
         if (!((bitField0_ & 0x00000002) == 0x00000002)) {
@@ -1221,11 +1180,7 @@ public final class Control {
     // @@protoc_insertion_point(class_scope:boa.types.CFG)
   }
 
-<<<<<<< HEAD
-  public interface NodeOrBuilder
-=======
   public interface CFGNodeOrBuilder
->>>>>>> 07b80102c81a5c83936cb34dc6b33f099ed18341
       extends com.google.protobuf.MessageOrBuilder {
 
     // required int32 id = 1;
@@ -1238,11 +1193,7 @@ public final class Control {
      */
     int getId();
 
-<<<<<<< HEAD
-    // required .boa.types.Node.NodeType type = 2;
-=======
     // required .boa.types.CFGNode.CFGNodeType type = 2;
->>>>>>> 07b80102c81a5c83936cb34dc6b33f099ed18341
     /**
      * <code>required .boa.types.CFGNode.CFGNodeType type = 2;</code>
      */
@@ -1307,19 +1258,11 @@ public final class Control {
   /**
    * Protobuf type {@code boa.types.CFGNode}
    */
-<<<<<<< HEAD
-  public static final class Node extends
-      com.google.protobuf.GeneratedMessage
-      implements NodeOrBuilder {
-    // Use Node.newBuilder() to construct.
-    private Node(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
-=======
   public static final class CFGNode extends
       com.google.protobuf.GeneratedMessage
       implements CFGNodeOrBuilder {
     // Use CFGNode.newBuilder() to construct.
     private CFGNode(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
->>>>>>> 07b80102c81a5c83936cb34dc6b33f099ed18341
       super(builder);
       this.unknownFields = builder.getUnknownFields();
     }
@@ -1597,11 +1540,7 @@ public final class Control {
       return id_;
     }
 
-<<<<<<< HEAD
-    // required .boa.types.Node.NodeType type = 2;
-=======
     // required .boa.types.CFGNode.CFGNodeType type = 2;
->>>>>>> 07b80102c81a5c83936cb34dc6b33f099ed18341
     public static final int TYPE_FIELD_NUMBER = 2;
     private boa.types.Control.CFGNode.CFGNodeType type_;
     /**
@@ -1843,11 +1782,7 @@ public final class Control {
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
-<<<<<<< HEAD
-       implements boa.types.Control.NodeOrBuilder {
-=======
        implements boa.types.Control.CFGNodeOrBuilder {
->>>>>>> 07b80102c81a5c83936cb34dc6b33f099ed18341
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return boa.types.Control.internal_static_boa_types_CFGNode_descriptor;
@@ -2058,13 +1993,8 @@ public final class Control {
         return this;
       }
 
-<<<<<<< HEAD
-      // required .boa.types.Node.NodeType type = 2;
-      private boa.types.Control.Node.NodeType type_ = boa.types.Control.Node.NodeType.ENTRY;
-=======
       // required .boa.types.CFGNode.CFGNodeType type = 2;
       private boa.types.Control.CFGNode.CFGNodeType type_ = boa.types.Control.CFGNode.CFGNodeType.ENTRY;
->>>>>>> 07b80102c81a5c83936cb34dc6b33f099ed18341
       /**
        * <code>required .boa.types.CFGNode.CFGNodeType type = 2;</code>
        */
@@ -2416,17 +2346,10 @@ public final class Control {
     // @@protoc_insertion_point(class_scope:boa.types.CFGNode)
   }
 
-<<<<<<< HEAD
-  public interface EdgeOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
-
-    // required .boa.types.Edge.EdgeLabel label = 1;
-=======
   public interface CFGEdgeOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
     // required .boa.types.CFGEdge.CFGEdgeLabel label = 1;
->>>>>>> 07b80102c81a5c83936cb34dc6b33f099ed18341
     /**
      * <code>required .boa.types.CFGEdge.CFGEdgeLabel label = 1;</code>
      */
@@ -2439,19 +2362,11 @@ public final class Control {
   /**
    * Protobuf type {@code boa.types.CFGEdge}
    */
-<<<<<<< HEAD
-  public static final class Edge extends
-      com.google.protobuf.GeneratedMessage
-      implements EdgeOrBuilder {
-    // Use Edge.newBuilder() to construct.
-    private Edge(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
-=======
   public static final class CFGEdge extends
       com.google.protobuf.GeneratedMessage
       implements CFGEdgeOrBuilder {
     // Use CFGEdge.newBuilder() to construct.
     private CFGEdge(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
->>>>>>> 07b80102c81a5c83936cb34dc6b33f099ed18341
       super(builder);
       this.unknownFields = builder.getUnknownFields();
     }
@@ -2712,11 +2627,7 @@ public final class Control {
     }
 
     private int bitField0_;
-<<<<<<< HEAD
-    // required .boa.types.Edge.EdgeLabel label = 1;
-=======
     // required .boa.types.CFGEdge.CFGEdgeLabel label = 1;
->>>>>>> 07b80102c81a5c83936cb34dc6b33f099ed18341
     public static final int LABEL_FIELD_NUMBER = 1;
     private boa.types.Control.CFGEdge.CFGEdgeLabel label_;
     /**
@@ -2850,11 +2761,7 @@ public final class Control {
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
-<<<<<<< HEAD
-       implements boa.types.Control.EdgeOrBuilder {
-=======
        implements boa.types.Control.CFGEdgeOrBuilder {
->>>>>>> 07b80102c81a5c83936cb34dc6b33f099ed18341
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
         return boa.types.Control.internal_static_boa_types_CFGEdge_descriptor;
@@ -2971,13 +2878,8 @@ public final class Control {
       }
       private int bitField0_;
 
-<<<<<<< HEAD
-      // required .boa.types.Edge.EdgeLabel label = 1;
-      private boa.types.Control.Edge.EdgeLabel label_ = boa.types.Control.Edge.EdgeLabel.NIL;
-=======
       // required .boa.types.CFGEdge.CFGEdgeLabel label = 1;
       private boa.types.Control.CFGEdge.CFGEdgeLabel label_ = boa.types.Control.CFGEdge.CFGEdgeLabel.NIL;
->>>>>>> 07b80102c81a5c83936cb34dc6b33f099ed18341
       /**
        * <code>required .boa.types.CFGEdge.CFGEdgeLabel label = 1;</code>
        */
@@ -3024,19 +2926,6 @@ public final class Control {
   }
 
   private static com.google.protobuf.Descriptors.Descriptor
-<<<<<<< HEAD
-    internal_static_boa_types_Graph_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_boa_types_Graph_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_boa_types_Node_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_boa_types_Node_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_boa_types_Edge_descriptor;
-=======
     internal_static_boa_types_CFG_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
@@ -3048,7 +2937,6 @@ public final class Control {
       internal_static_boa_types_CFGNode_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
     internal_static_boa_types_CFGEdge_descriptor;
->>>>>>> 07b80102c81a5c83936cb34dc6b33f099ed18341
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_boa_types_CFGEdge_fieldAccessorTable;
@@ -3080,25 +2968,6 @@ public final class Control {
         public com.google.protobuf.ExtensionRegistry assignDescriptors(
             com.google.protobuf.Descriptors.FileDescriptor root) {
           descriptor = root;
-<<<<<<< HEAD
-          internal_static_boa_types_Graph_descriptor =
-            getDescriptor().getMessageTypes().get(0);
-          internal_static_boa_types_Graph_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_boa_types_Graph_descriptor,
-              new java.lang.String[] { "Nodes", "Edges", });
-          internal_static_boa_types_Node_descriptor =
-            getDescriptor().getMessageTypes().get(1);
-          internal_static_boa_types_Node_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_boa_types_Node_descriptor,
-              new java.lang.String[] { "Id", "Type", });
-          internal_static_boa_types_Edge_descriptor =
-            getDescriptor().getMessageTypes().get(2);
-          internal_static_boa_types_Edge_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_boa_types_Edge_descriptor,
-=======
           internal_static_boa_types_CFG_descriptor =
             getDescriptor().getMessageTypes().get(0);
           internal_static_boa_types_CFG_fieldAccessorTable = new
@@ -3116,7 +2985,6 @@ public final class Control {
           internal_static_boa_types_CFGEdge_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_CFGEdge_descriptor,
->>>>>>> 07b80102c81a5c83936cb34dc6b33f099ed18341
               new java.lang.String[] { "Label", });
           return null;
         }

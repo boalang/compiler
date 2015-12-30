@@ -26,6 +26,7 @@ import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
 import boa.types.Toplevel.Project;
+import boa.types.BoaInt;
 
 /**
  * Boa domain-specific functions.
