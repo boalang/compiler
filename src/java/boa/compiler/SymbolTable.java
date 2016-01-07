@@ -35,6 +35,7 @@ import boa.compiler.ast.Operand;
 /**
  * @author anthonyu
  * @author rdyer
+ * @author rramu
  */
 public class SymbolTable {
 	private static HashMap<String, Class<?>> aggregators;
@@ -120,6 +121,9 @@ public class SymbolTable {
 		idmap.put("Type", new TypeProtoTuple());
 		idmap.put("Variable", new VariableProtoTuple());
 		idmap.put("Visibility", new VisibilityProtoMap());
+		idmap.put("CFG", new CFGProtoTuple());
+		idmap.put("CFGNode", new CFGNodeProtoTuple());
+		idmap.put("CFGEdge", new CFGEdgeProtoTuple());
 
 		globalFunctions = new FunctionTrie();
 
@@ -479,6 +483,7 @@ public class SymbolTable {
 		// load built-in functions
 		final Class<?>[] builtinFuncs = {
 			boa.functions.BoaAstIntrinsics.class,
+			boa.functions.BoaGraphIntrinsics.class,
 			boa.functions.BoaIntrinsics.class,
 			boa.functions.BoaMetricIntrinsics.class,
 			boa.functions.BoaModifierIntrinsics.class,
