@@ -6,11 +6,10 @@ cls_name : stack of string;
 q_all := visitor {
 	before method: Method -> {
 			cur_graph : CFG;
-			node_list : list of CFGNode;
 			cur_graph = getcfg(method);
-			node_list = cur_graph.nodes;
+			node_list := cur_graph.nodes;
 			node : CFGNode;
-			node = get(node_list, 1);
+			node = node_list[0];
 			m << node.id;
 		}
 };

@@ -1594,21 +1594,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 	/** {@inheritDoc} */
 	@Override
-	public void visit(final ListType n) {
-		final ST st = stg.getInstanceOf("ListType");
-
-		n.env.setNeedsBoxing(true);
-
-		n.getValue().accept(this);
-		st.add("value", code.removeLast());
-
-		n.env.setNeedsBoxing(false);
-
-		code.add(st.render());
-	}
-
-	/** {@inheritDoc} */
-	@Override
 	public void visit(final TupleType n) {
 //		return n.f0.accept(this);
 		throw new RuntimeException("unimplemented");

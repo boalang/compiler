@@ -336,10 +336,6 @@ public abstract class AbstractVisitorNoReturn<ArgType> {
 		n.getValue().accept(this, arg);
 	}
 
-	public void visit(final ListType n, final ArgType arg) {
-		n.getValue().accept(this, arg);
-	}
-
 	public void visit(final TupleType n, final ArgType arg) {
 		for (final Component c : n.getMembers())
 			c.accept(this, arg);

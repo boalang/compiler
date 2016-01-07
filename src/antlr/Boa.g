@@ -95,7 +95,6 @@ type returns [AbstractType ast]
 	| v=visitorType  { $ast = $v.ast; }
 	| s=stackType    { $ast = $s.ast; }
 	| set=setType    { $ast = $set.ast; }
-	| list=listType  { $ast = $list.ast; }
 	| id=identifier  { $ast = $id.ast; }
 	;
 
@@ -152,13 +151,6 @@ setType returns [SetType ast]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
 	: SET OF m=component { $ast = new SetType($m.ast); }
-	;
-
-listType returns [ListType ast]
-	locals [int l, int c]
-	@init { $l = getStartLine(); $c = getStartColumn(); }
-	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: LIST OF m=component { $ast = new ListType($m.ast); }
 	;
 
 outputType returns [OutputType ast]
@@ -549,7 +541,6 @@ identifier returns [Identifier ast]
 	| lit=WEIGHT   { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=DEFAULT  { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=CONTINUE { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
-	| lit=LIST      { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }	
 	| lit=FUNCTION { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=VISITOR  { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
 	| lit=BEFORE   { notifyErrorListeners("keyword '" + $lit.text + "' can not be used as an identifier"); }
@@ -632,7 +623,6 @@ VISITOR  : 'visitor';
 BEFORE   : 'before';
 AFTER    : 'after';
 STOP     : 'stop';
-LIST      : 'list';
 //
 // separators
 //
