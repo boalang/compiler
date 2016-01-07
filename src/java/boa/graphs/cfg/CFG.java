@@ -1,3 +1,19 @@
+/*
+ * Copyright 2014, Hridesh Rajan, Robert Dyer, 
+ *                 and Iowa State University of Science and Technology
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package boa.graphs.cfg;
 
 import java.util.HashMap;
@@ -13,10 +29,14 @@ import boa.types.Ast.Expression.ExpressionKind;
 import boa.types.Ast.Statement.StatementKind;
 import boa.types.Ast.Type;
 import boa.types.Ast.Variable;
-import boa.types.Control.Edge;
-import boa.types.Control.Edge.EdgeLabel;
-import boa.types.Control.Graph.Builder;
+import boa.types.Control.CFG.Builder;
+import boa.types.Control.CFGEdge.CFGEdgeLabel;
 
+/**
+ * Control flow graph builder
+ * @author ganeshau
+ *
+ */
 public class CFG {
 	public static final int minSize = -1;
 
@@ -31,6 +51,7 @@ public class CFG {
 
 	public CFG(Method method) {
 		this.md = method;
+		this.class_name = "this";
 	}
 
 	public CFG(Method method, String cls_name) {
@@ -804,7 +825,7 @@ public class CFG {
 
 	public Builder newBuilder() {
 		int size = nodes.size();
-		Builder b = boa.types.Control.Graph.newBuilder();
+		Builder b = boa.types.Control.CFG.newBuilder();
 
 		for (Iterator<CFGNode> nodesIter = nodes.iterator(); nodesIter
 				.hasNext();) {
@@ -812,7 +833,7 @@ public class CFG {
 		}
 
 		CFGNode[] sortedNodes = sortNodes();
-		Map<Integer, EdgeLabel> edgeLabels = new HashMap<Integer, EdgeLabel>();
+		Map<Integer, CFGEdgeLabel> edgeLabels = new HashMap<Integer, CFGEdgeLabel>();
 		for (CFGNode node : sortedNodes) {
 			for (CFGEdge edge : node.getOutEdges()) {
 				CFGNode anoNode = edge.getDest();
@@ -827,30 +848,30 @@ public class CFG {
 		for (int i = 0; i < size; i++) {
 			for (int j = 0; j < size; j++) {
 				int index = i * size + j;
-				Edge.Builder eb = Edge.newBuilder();
+				boa.types.Control.CFGEdge.Builder eb = boa.types.Control.CFGEdge.newBuilder();
 				if (edgeLabels.containsKey(index))
 					eb.setLabel(edgeLabels.get(index));
 				else
-					eb.setLabel(boa.types.Control.Edge.EdgeLabel.NIL);
+					eb.setLabel(boa.types.Control.CFGEdge.CFGEdgeLabel.NIL);
 				b.addEdges(eb.build());
 			}
 		}
 		return b;
 	}
 
-	private final EdgeLabel getLabel(String label) {
+	private final CFGEdgeLabel getLabel(String label) {
 		if (label.equals(".")) {
-			return EdgeLabel.DEFAULT;
+			return CFGEdgeLabel.DEFAULT;
 		} else if (label.equals("T")) {
-			return EdgeLabel.TRUE;
+			return CFGEdgeLabel.TRUE;
 		} else if (label.equals("F")) {
-			return EdgeLabel.FALSE;
+			return CFGEdgeLabel.FALSE;
 		} else if (label.equals("B")) {
-			return EdgeLabel.BACKEDGE;
+			return CFGEdgeLabel.BACKEDGE;
 		} else if (label.equals("E")) {
-			return EdgeLabel.EXITEDGE;
+			return CFGEdgeLabel.EXITEDGE;
 		} else {
-			return EdgeLabel.NIL;
+			return CFGEdgeLabel.NIL;
 		}
 	}
 }
