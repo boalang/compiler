@@ -4,8 +4,12 @@ Development Setup
 This file describes how you might set up your development environment to view or edit the Boa compiler's source code.
 
 
-Eclipse From a Git Repository
------------------------------
+Set Up Eclipse Development From a Git Repository
+------------------------------------------------
+
+Below we describe how to create an Eclipse project, stored on your file system within your Eclipse workspace. This project is linked to your local copy of the Git repository, stored (potentially) elsewhere on the filesystem.
+
+Once we have performed this configuration, Eclipse will be able to perform the build, trigger `ant` targets, and to edit the project's source files.
 
 1. Import the a local Git repo:
     - Select "File > Import".
