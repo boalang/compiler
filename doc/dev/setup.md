@@ -27,13 +27,12 @@ Eclipse From a Git Repository
     - `cd` to the repo's root.
     - `ant compile`.
 
-5. Tidy up the project's source directories:
-    - From the `boa` project's "Properties", select the "Source" tab.
-    - Use "Link Source..." until each folder under `src` (e.g. `java` and `compiled-proto`) is a source folder on the build path.
-    - Use "Link Source..." again to add `build/java` as a source folder. Note that because the name `java` has already been used, you will need to name this source something else (e.g. `java-gen-src`).
-    - Your package explorer should now look something like this:
-
-    ![The Boa compiler as an Eclipse project from the package explorer view](img/eclipse_package_explorer_final.png)
+5. Make sure that the Eclipse project has linked to all the repo's source directories:
+    - From the newly-created `boa` project's "Properties > Java Build Path", select the "Source" tab.
+    - Use "Link Source..." until each of the directories under `src` (e.g. `src/java`, `src/test`, `src/compiled-proto`, etc.) has been added to the list of source directories.
+    - Use "Link Source..." again to add `build/java` as a source folder. Note that because the name `java` has already been used in the Java project, you will need to name this source something else (e.g. `java-gen-src`). This doesn't mean renaming the directory on the file system, just giving it a different logical name within your Eclipse project.
+    - After adding these directories, your "Source" tab should look something like this: ![](img/eclipse_source_tab_final.png)
+    - Your package explorer should now look something like this: ![](img/eclipse_package_explorer_final.png)
 
 6. Configure `ant` as an external tool so that you can trigger parts of the build which Eclipse can't perform (e.g. `compile-protobuf` and `compile-parser`).
     - Enter "External Tools Configuration".
