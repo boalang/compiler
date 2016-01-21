@@ -43,7 +43,7 @@ public class SeqSortMerge {
 		conf.set("fs.default.name", base);
 		FileSystem fs = FileSystem.get(conf);
 		
-		String inPath = "/tmprepcache/2015-07-sorted/";
+		String inPath = "/tmprepcache/sorted/";
 		while (true) {
 			FileStatus[] files = fs.listStatus(new Path(inPath));
 			if (files.length < 2) break;

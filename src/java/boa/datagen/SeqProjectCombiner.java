@@ -47,7 +47,7 @@ public class SeqProjectCombiner {
 		
 		HashMap<String, String> sources = new HashMap<String, String>();
 		HashSet<String> marks = new HashSet<String>();
-		FileStatus[] files = fileSystem.listStatus(new Path(base + "tmprepcache/2015-07"));
+		FileStatus[] files = fileSystem.listStatus(new Path(base + "tmprepcache"));
 		for (int i = 0; i < files.length; i++) {
 			FileStatus file = files[i];
 			String name = file.getPath().getName();
@@ -72,7 +72,7 @@ public class SeqProjectCombiner {
 				r.close();
 			}
 		}
-		SequenceFile.Writer w = SequenceFile.createWriter(fileSystem, conf, new Path(base + "repcache/2015-07/projects.seq"), Text.class, BytesWritable.class);
+		SequenceFile.Writer w = SequenceFile.createWriter(fileSystem, conf, new Path(base + args[0] + "/projects.seq"), Text.class, BytesWritable.class);
 		for (int i = 0; i < files.length; i++) {
 			FileStatus file = files[i];
 			String name = file.getPath().getName();
