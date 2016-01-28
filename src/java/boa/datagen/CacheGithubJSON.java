@@ -28,8 +28,9 @@ public class CacheGithubJSON {
 				}
 			}
 		}
-		FileIO.writeObjectToFile(repos, jsonCachePath + "-buf-map", false);
+		FileIO.writeObjectToFile(repos, jsonCachePath + "buf-map", false);
 		
 		System.out.println("Time: " + (System.currentTimeMillis() - startTime) / 1000);
 	}
 }
+	
