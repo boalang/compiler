@@ -59,17 +59,17 @@ public class BoaGenerator {
 			DefaultProperties.GH_JSON_CACHE_PATH = GH_JSON_CACHE_PATH;
 		}
 		
-//		CacheGithubJSON.main(args);
-//		try {
-//			SeqRepoImporter.main(args);
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//	    
-//		SeqProjectCombiner.main(args);
-//		SeqSort.main(args);
-//		SeqSortMerge.main(args);
+		CacheGithubJSON.main(args);
+		try {
+			SeqRepoImporter.main(args);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    
+		SeqProjectCombiner.main(args);
+		SeqSort.main(args);
+		SeqSortMerge.main(args);
 		try {
 			MapFileGen.main(args);
 		} catch (Exception e) {
