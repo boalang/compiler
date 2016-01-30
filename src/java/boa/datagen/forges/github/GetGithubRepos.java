@@ -6,15 +6,15 @@ import java.util.Comparator;
 
 import boa.datagen.util.FileIO;
 
-public class GetGithubMetadata {
+public class GetGithubRepos {
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		String outDir = "/remote/rs/tien/github/metadata-2015-09";
-		String username = "";
-		String password = "";
+		String outDir = Config.githubRepoListDir;
+		String username = "isu1000000";
+		String password = "isu123456";
 		if (args != null && args.length > 0) {
 			outDir = args[0];
 			if (args.length > 2) {
@@ -27,7 +27,6 @@ public class GetGithubMetadata {
 			}
 		}
 		String url = "https://api.github.com/repositories";
-		//String url = "https://github.com";
 		//System.out.println(url);
 		String pageContent = "";
 		//MetadataCacher mc = new MetadataCacher(url + "?since=532681", username , password);
