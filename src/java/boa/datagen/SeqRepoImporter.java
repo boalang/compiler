@@ -34,9 +34,15 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.Text;
+import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.api.errors.InvalidRemoteException;
+import org.eclipse.jgit.api.errors.TransportException;
+import org.eclipse.jgit.lib.RepositoryCache;
+import org.eclipse.jgit.util.FS;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 
+import boa.datagen.forges.github.RepositoryCloner;
 import boa.datagen.scm.AbstractConnector;
 import boa.datagen.scm.GitConnector;
 import boa.types.Code.CodeRepository;
@@ -47,7 +53,7 @@ import boa.datagen.util.Properties;
 
 /**
  * @author hoan
- * @author rdyer 
+ * @author rdyer
  * @author hridesh
  * 
  */
@@ -55,34 +61,42 @@ public class SeqRepoImporter {
 	private final static boolean debug = Properties.getBoolean("debug", DefaultProperties.DEBUG);
 
 	private final static String keyDelim = Properties.getProperty("hbase.delimiter", DefaultProperties.HBASE_DELIMITER);
-	
-	private final static File jsonCacheDir = new File(Properties.getProperty("gh.json.cache.path", DefaultProperties.GH_JSON_CACHE_PATH));
-	private final static File gitRootPath = new File(Properties.getProperty("gh.svn.path", DefaultProperties.GH_GIT_PATH));
-	
+
+	private static File jsonCacheDir = new File(
+			Properties.getProperty("gh.json.cache.path", DefaultProperties.GH_JSON_CACHE_PATH));
+	private final static File gitRootPath = new File(
+			Properties.getProperty("gh.svn.path", DefaultProperties.GH_GIT_PATH));
+
 	private final static ArrayList<byte[]> cacheOfProjects = new ArrayList<>();
 	private final static HashSet<String> processedProjectIds = new HashSet<>();
-	
+
 	private static Configuration conf = null;
 	private static FileSystem fileSystem = null;
 	private static String base = null;
-	
-	private final static int poolSize = Integer.parseInt(Properties.getProperty("num.threads", DefaultProperties.NUM_THREADS));
+
+	private final static int poolSize = Integer
+			.parseInt(Properties.getProperty("num.threads", DefaultProperties.NUM_THREADS));
 	private final static AtomicInteger numOfProcessedProjects = new AtomicInteger(0);
 
 	public static void main(String[] args) throws IOException, InterruptedException {
 		conf = new Configuration();
-		conf.set("fs.default.name", "hdfs://boa-njt/");
+		// currently using the cachejson location as tempCache
+		// conf.set("fs.default.name", "hdfs://boa-njt/");
+		// conf.set("fs.default.name",
+		// Properties.getProperty("gh.json.cache.path",
+		// DefaultProperties.GH_JSON_CACHE_PATH));
 		fileSystem = FileSystem.get(conf);
-		base = conf.get("fs.default.name", "");
+		base = Properties.getProperty("gh.json.cache.path", DefaultProperties.GH_JSON_CACHE_PATH);
 
 		buildCacheOfProjects();
 		getProcessedProjects();
-		
-		for (int i = 0; i < poolSize; i++) 
+
+		for (int i = 0; i < poolSize; i++)
 			new Thread(new ImportTask(i)).start();
 	}
 
 	private static void getProcessedProjects() throws IOException {
+
 		FileStatus[] files = fileSystem.listStatus(new Path(base + "tmprepcache"));
 		String hostname = InetAddress.getLocalHost().getHostName();
 		for (int i = 0; i < files.length; i++) {
@@ -110,9 +124,10 @@ public class SeqRepoImporter {
 	private static void buildCacheOfProjects() {
 		cacheOfProjects.clear();
 		for (File file : jsonCacheDir.listFiles()) {
-			if (file.getName().endsWith("-buf-map")) {
+			if (file.getName().endsWith("buf-map")) {
 				@SuppressWarnings("unchecked")
-				HashMap<String, byte[]> repos = (HashMap<String, byte[]>) FileIO.readObjectFromFile(file.getAbsolutePath());
+				HashMap<String, byte[]> repos = (HashMap<String, byte[]>) FileIO
+						.readObjectFromFile(file.getAbsolutePath());
 				for (String key : repos.keySet()) {
 					byte[] bs = repos.get(key);
 					if (poolSize > 1)
@@ -120,7 +135,8 @@ public class SeqRepoImporter {
 					else {
 						try {
 							Project p = Project.parseFrom(bs);
-							if (processedProjectIds.contains(p.getId())) continue;
+							if (processedProjectIds.contains(p.getId()))
+								continue;
 							cacheOfProjects.add(bs);
 						} catch (InvalidProtocolBufferException e) {
 							e.printStackTrace();
@@ -132,7 +148,7 @@ public class SeqRepoImporter {
 		}
 		System.out.println("Got cached projects: " + cacheOfProjects.size());
 	}
-	
+
 	@SuppressWarnings("unused")
 	private static void print(String id, Project p) {
 		System.out.print(id);
@@ -152,7 +168,7 @@ public class SeqRepoImporter {
 		private int id;
 		private int counter = 0;
 		SequenceFile.Writer projectWriter, astWriter;
-		
+
 		public ImportTask(int id) throws IOException {
 			this.id = id;
 		}
@@ -171,14 +187,17 @@ public class SeqRepoImporter {
 			String suffix = hostname + "-" + id + "-" + time + ".seq";
 			while (true) {
 				try {
-					projectWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "tmprepcache/projects-" + suffix), Text.class, BytesWritable.class);
-					astWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "tmprepcache/ast-" + suffix), Text.class, BytesWritable.class);
+					projectWriter = SequenceFile.createWriter(fileSystem, conf,
+							new Path(base + "tmprepcache/projects-" + suffix), Text.class, BytesWritable.class);
+					astWriter = SequenceFile.createWriter(fileSystem, conf,
+							new Path(base + "tmprepcache/ast-" + suffix), Text.class, BytesWritable.class);
 					break;
 				} catch (Throwable t) {
 					t.printStackTrace();
 					try {
 						Thread.sleep(1000);
-					} catch (InterruptedException e) {}
+					} catch (InterruptedException e) {
+					}
 				}
 			}
 		}
@@ -190,13 +209,15 @@ public class SeqRepoImporter {
 					astWriter.close();
 					try {
 						Thread.sleep(1000);
-					} catch (InterruptedException e) {}
+					} catch (InterruptedException e) {
+					}
 					break;
 				} catch (Throwable t) {
 					t.printStackTrace();
 					try {
 						Thread.sleep(1000);
-					} catch (InterruptedException e) {}
+					} catch (InterruptedException e) {
+					}
 				}
 			}
 		}
@@ -214,7 +235,8 @@ public class SeqRepoImporter {
 					Project cachedProject = null;
 					try {
 						cachedProject = Project.parseFrom(bs);
-						if (processedProjectIds.contains(cachedProject.getId())) continue;
+						if (processedProjectIds.contains(cachedProject.getId()))
+							continue;
 					} catch (InvalidProtocolBufferException e) {
 						e.printStackTrace();
 						continue;
@@ -225,7 +247,8 @@ public class SeqRepoImporter {
 					final String name = cachedProject.getName();
 
 					if (debug)
-						System.out.println("Processing " + pid + " / " + cacheOfProjects.size()  + " " + cachedProject.getId() + " " + name);
+						System.out.println("Processing " + pid + " / " + cacheOfProjects.size() + " "
+								+ cachedProject.getId() + " " + name);
 
 					Project project = storeRepository(cachedProject, 0);
 
@@ -248,40 +271,67 @@ public class SeqRepoImporter {
 					e.printStackTrace();
 				}
 			}
-			
+
 			closeWriters();
 		}
-		
+
 		private Project storeRepository(final Project project, final int i) {
 			final CodeRepository repo = project.getCodeRepositories(i);
 			final Project.Builder projBuilder = Project.newBuilder(project);
 
 			final String name = project.getName();
 			final File gitDir = new File(gitRootPath + "/" + name);
-			
-			if (gitDir.exists()) {
-				if (debug)
-					System.out.println("Has repository: " + name);
-	
-				try (final AbstractConnector conn = new GitConnector(gitDir.getAbsolutePath())) {
-					final CodeRepository.Builder repoBuilder = CodeRepository.newBuilder(repo);
-					final String repoKey = "g:" + project.getId() + keyDelim + repo.getKind().getNumber();
-					for (final Revision rev : conn.getCommits(true, astWriter, repoKey, keyDelim)) {
-						/*if (debug)
-							System.out.println("Storing '" + name + "' revision: " + rev.getId());*/
-	
-						// build new rev w/ no namespaces
-						final Revision.Builder revBuilder = Revision.newBuilder(rev);
-						repoBuilder.addRevisions(revBuilder);
-					}
-	
-					projBuilder.setCodeRepositories(i, repoBuilder);
-					return projBuilder.build();
-				} catch (final Exception e) {
-					printError(e, "unknown error");
-				}
+
+			// make sure the given directory exists else create a new one
+			if (!gitDir.exists()) {
+				gitDir.mkdirs();
 			}
-			
+
+			if (!RepositoryCache.FileKey.isGitRepository(gitDir, FS.DETECTED)) {
+				String[] args = { repo.getUrl(), gitRootPath + "/" + name };
+				try {
+					RepositoryCloner.clone(args);
+				} catch (InvalidRemoteException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (TransportException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (GitAPIException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}catch (org.eclipse.jgit.api.errors.JGitInternalException e) {
+					// TODO Auto-generated catch block
+					// this means code is already available and hence no need to clone
+				}
+
+			}
+
+			if (debug)
+				System.out.println("Has repository: " + name);
+
+			try (final AbstractConnector conn = new GitConnector(gitDir.getAbsolutePath())) {
+				final CodeRepository.Builder repoBuilder = CodeRepository.newBuilder(repo);
+				final String repoKey = "g:" + project.getId() + keyDelim + repo.getKind().getNumber();
+				for (final Revision rev : conn.getCommits(true, astWriter, repoKey, keyDelim)) {
+					
+					  if (debug) System.out.println("Storing '" + name + "' revision: " + rev.getId());
+					 
+
+					// build new rev w/ no namespaces
+					final Revision.Builder revBuilder = Revision.newBuilder(rev);
+					repoBuilder.addRevisions(revBuilder);
+				}
+
+				projBuilder.setCodeRepositories(i, repoBuilder);
+				return projBuilder.build();
+			} catch (final Exception e) {
+				printError(e, "unknown error");
+			}
+
 			return project;
 		}
 	}
@@ -290,9 +340,8 @@ public class SeqRepoImporter {
 		System.err.println("ERR: " + message);
 		if (debug) {
 			e.printStackTrace();
-			//System.exit(-1);
-		}
-		else
+			// System.exit(-1);
+		} else
 			System.err.println(e.getMessage());
 	}
 }
