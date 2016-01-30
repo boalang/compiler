@@ -8,6 +8,6 @@ public final class Config {
 	
 	public static String githubRepoListDir = "github/repos-list";
 	public static String githubRepoMetadataDir = "github/repos";
-	public static String githubRepoLanguagesDir = "github/repos";
+	public static String githubRepoLanguagesDir = "github/languages";
 	
 }
