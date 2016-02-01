@@ -72,4 +72,14 @@ public class TestLambda extends BaseTest {
 			"   }\n" +
 			"}"), null);
 	}
+
+	@Test
+	public void lambda2() {
+		assertEquals(parse(
+			"class t {\n" +
+			"	void m() {\n" + 
+			"		int x = 0; x += (x) -> x + x;\n" + 
+			"	}\n" +
+			"}"), null);
+	}
 }

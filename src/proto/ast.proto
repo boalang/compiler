@@ -164,6 +164,7 @@ message Expression {
 		ASSIGN_UNSIGNEDRSHIFT = 47;
 		ANNOTATION = 48;
 		PAREN = 49;
+		METHOD_REFERENCE = 50;
 	}
 	required ExpressionKind kind = 1;
 	repeated Expression expressions = 2;
