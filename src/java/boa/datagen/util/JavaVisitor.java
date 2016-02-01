@@ -1593,16 +1593,16 @@ public class JavaVisitor extends ASTVisitor {
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.METHOD_REFERENCE);
 		node.getExpression().accept(this);
-		eb.setExpression(expressions.pop());
+		eb.addExpressions(expressions.pop());
 
 		for (Object t : node.typeArguments()) {
 			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 			tb.setName(getIndex(typeName((org.eclipse.jdt.core.dom.Type)t)));
 			tb.setKind(boa.types.Ast.TypeKind.GENERIC);
-			b.addGenericParameters(tb.build());
+			eb.addGenericParameters(tb.build());
 		}
 
-		eb.setName(node.getName().getIdentifier());
+		eb.setMethod(node.getName().getIdentifier());
 		
 		expressions.push(eb.build());
 
