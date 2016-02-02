@@ -62,8 +62,7 @@ public class SeqRepoImporter {
 
 	private final static String keyDelim = Properties.getProperty("hbase.delimiter", DefaultProperties.HBASE_DELIMITER);
 
-	private static File jsonCacheDir = new File(
-			Properties.getProperty("gh.json.cache.path", DefaultProperties.GH_JSON_CACHE_PATH));
+	private static File jsonCacheDir = new File(Properties.getProperty("gh.json.cache.path", DefaultProperties.GH_JSON_CACHE_PATH));
 	private final static File gitRootPath = new File(
 			Properties.getProperty("gh.svn.path", DefaultProperties.GH_GIT_PATH));
 
@@ -91,13 +90,23 @@ public class SeqRepoImporter {
 		buildCacheOfProjects();
 		getProcessedProjects();
 
-		for (int i = 0; i < poolSize; i++)
-			new Thread(new ImportTask(i)).start();
+		Thread [] workers = new Thread[poolSize];
+		for (int i = 0; i < poolSize; i++){
+			workers[i] =new Thread(new ImportTask(i));
+			workers[i].start();
+		}
+		
+		for(Thread t :workers){
+			while(t.isAlive()){
+				Thread.sleep(1000);
+			}
+		}
+			
 	}
 
 	private static void getProcessedProjects() throws IOException {
 
-		FileStatus[] files = fileSystem.listStatus(new Path(base + "tmprepcache"));
+		FileStatus[] files = fileSystem.listStatus(new Path(base));
 		String hostname = InetAddress.getLocalHost().getHostName();
 		for (int i = 0; i < files.length; i++) {
 			FileStatus file = files[i];
@@ -184,13 +193,14 @@ public class SeqRepoImporter {
 					e.printStackTrace();
 				}
 			}
-			String suffix = hostname + "-" + id + "-" + time + ".seq";
+//			String suffix = hostname + "-" + id + "-" + time + ".seq";
+			String suffix = ".seq";
 			while (true) {
 				try {
 					projectWriter = SequenceFile.createWriter(fileSystem, conf,
-							new Path(base + "tmprepcache/projects-" + suffix), Text.class, BytesWritable.class);
+							new Path(base + "/projects" + suffix), Text.class, BytesWritable.class);
 					astWriter = SequenceFile.createWriter(fileSystem, conf,
-							new Path(base + "tmprepcache/ast-" + suffix), Text.class, BytesWritable.class);
+							new Path(base + "/ast" + suffix), Text.class, BytesWritable.class);
 					break;
 				} catch (Throwable t) {
 					t.printStackTrace();

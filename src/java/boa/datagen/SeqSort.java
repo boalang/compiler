@@ -133,7 +133,7 @@ public class SeqSort<K,V> extends Configured implements Tool {
 		
 		String inPath = "/tmprepcache/";
 		StringBuilder sb = new StringBuilder();
-		FileStatus[] files = fs.listStatus(new Path(base + inPath));
+		FileStatus[] files = fs.listStatus(new Path(base));
 		for (int i = 0; i < files.length; i++) {
 			FileStatus file = files[i];
 			String name = file.getPath().getName();

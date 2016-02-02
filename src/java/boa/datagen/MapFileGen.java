@@ -33,8 +33,9 @@ import boa.datagen.util.Properties;
  */
 public class MapFileGen {
 //	private final static String SEQ_FILE_PATH = Properties.getProperty("seq.file.path", "");
-	private final static String SEQ_FILE_PATH = Properties.getProperty("gh.json.cache.path", DefaultProperties.GH_JSON_CACHE_PATH)+"/tmprepcache";
+	private final static String SEQ_FILE_PATH = Properties.getProperty("gh.json.cache.path", DefaultProperties.GH_JSON_CACHE_PATH);
 	public static void main(String[] args) throws Exception {
+		System.out.println("generating data and index file");
 		if (SEQ_FILE_PATH.isEmpty()) {
 			System.out.println("Missing path to sequence file. Please specify it in the properties file.");
 			return;
@@ -65,6 +66,7 @@ public class MapFileGen {
 				if (fs.isFile(path)) {
 					Path dataFile = new Path(path.getParent(), MapFile.DATA_FILE_NAME);
 					fs.rename(path, dataFile);
+					System.out.println("finxing data file");
 					MapFile.fix(fs, dataFile.getParent(), Text.class, BytesWritable.class, false, conf);
 					break;
 				}
