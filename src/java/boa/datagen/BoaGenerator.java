@@ -56,7 +56,7 @@ public class BoaGenerator {
 		}
 
 		SeqProjectCombiner.main(args);
-//		SeqSort.main(args);
+		// SeqSort.main(args);
 		SeqSortMerge.main(args);
 		try {
 			MapFileGen.main(args);
@@ -68,7 +68,7 @@ public class BoaGenerator {
 		clear(args[0]);
 	}
 
-	private static final void printHelp(Options options, String message) {
+	private static final void printHelp(Options options, String message) {	
 		String header = "The most commonly used Boa options are:";
 		String footer = "\nPlease report issues at http://www.github.com/boalang/";
 		System.err.println(message);
@@ -82,13 +82,12 @@ public class BoaGenerator {
 	}
 
 	private static void addOptions(Options options) {
-		options.addOption("local", "json", false, "when user already have cloned repository or downloaded .json files");
-		options.addOption("remote", "json", false, "when user has username and repo name of the target repository");
-		options.addOption("input", "json", true, ".json files for metadata");
+		options.addOption("inputJson", "json", true, ".json files for metadata");
+		options.addOption("inputRepo", "json", true, ".json files for metadata");
 		options.addOption("output", "json", true, ".jsonCache files to be stored");
 		options.addOption("user", "json", true, ".json files for metadata");
 		options.addOption("password", "json", true, ".json files for metadata");
-		options.addOption("targetUsr", "json", true, ".json files for metadata");
+		options.addOption("targetUser", "json", true, ".json files for metadata");
 		options.addOption("targetRepo", "json", true, ".json files for metadata");
 		options.addOption("help", "help", true, "help");
 		options.addOption("user", "username", true, "help");
@@ -96,46 +95,41 @@ public class BoaGenerator {
 	}
 
 	private static void handleCmdOptions(CommandLine cl, Options options, final String[] args) {
-		if (!cl.hasOption("local") && !cl.hasOption("remote")) {
-			System.err.println("User must specify the path of the repository. Please see --remote and --local options");
-			printHelp(options);
-		}
-		if (cl.hasOption("local")) {
-			if (cl.hasOption("input") && cl.hasOption("output")) {
-				final String GH_JSON_PATH = cl.getOptionValue("input");
-				DefaultProperties.GH_JSON_PATH = GH_JSON_PATH;
+		if (cl.hasOption("inputJson") && cl.hasOption("inputRepo") && cl.hasOption("output")) {
+			DefaultProperties.GH_JSON_PATH = cl.getOptionValue("inputJson");
+			DefaultProperties.GH_JSON_CACHE_PATH = cl.getOptionValue("output");
+			// DefaultProperties.GH_GIT_PATH = GH_JSON_CACHE_PATH + "/github";
+			DefaultProperties.GH_GIT_PATH = cl.getOptionValue("inputRepo");
+
+		} else if (cl.hasOption("inputJson") && cl.hasOption("output")) {
+			DefaultProperties.GH_JSON_PATH = cl.getOptionValue("inputJson");
+			DefaultProperties.GH_JSON_CACHE_PATH = cl.getOptionValue("output");
+		} else if (cl.hasOption("inputRepo") && cl.hasOption("output")) {
+			DefaultProperties.GH_JSON_CACHE_PATH = cl.getOptionValue("output");
+			DefaultProperties.GH_GIT_PATH = cl.getOptionValue("inputRepo");
+			CacheGithubJSON.jsonAvailable=false;
+		} else if (cl.hasOption("user") && cl.hasOption("password") && cl.hasOption("targetUser")
+				&& cl.hasOption("targetRepo") && cl.hasOption("output")) {
+			try {
+				// because there is no input directory in this case, we need
+				// to create one
+				String GH_JSON_PATH = new java.io.File(".").getCanonicalPath();
+				DefaultProperties.GH_JSON_PATH = GH_JSON_PATH + "/input";
+				getGithubMetadata(DefaultProperties.GH_JSON_PATH, cl.getOptionValue("user"),
+						cl.getOptionValue("password"), cl.getOptionValue("targetUser"),
+						cl.getOptionValue("targetRepo"));
+
+				// output directory
 				final String GH_JSON_CACHE_PATH = cl.getOptionValue("output");
 				DefaultProperties.GH_JSON_CACHE_PATH = GH_JSON_CACHE_PATH;
 				DefaultProperties.GH_GIT_PATH = GH_JSON_CACHE_PATH + "/github";
-
-			} else {
-				System.err.println(
-						"User must specify the path of the input and output directory for the repositories.Please see --input and --output options");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		} else if (cl.hasOption("remote")) {
-			if (cl.hasOption("user") && cl.hasOption("password") && cl.hasOption("targetUsr")
-					&& cl.hasOption("targetRepo") && cl.hasOption("output")) {
-				try {
-					// because there is no input directory in this case, we need
-					// to create one
-					String GH_JSON_PATH = new java.io.File(".").getCanonicalPath();
-					DefaultProperties.GH_JSON_PATH = GH_JSON_PATH + "/input";
-					getGithubMetadata(DefaultProperties.GH_JSON_PATH, cl.getOptionValue("user"),
-							cl.getOptionValue("password"), cl.getOptionValue("targetUsr"),
-							cl.getOptionValue("targetRepo"));
-
-					// output directory
-					final String GH_JSON_CACHE_PATH = cl.getOptionValue("output");
-					DefaultProperties.GH_JSON_CACHE_PATH = GH_JSON_CACHE_PATH;
-					DefaultProperties.GH_GIT_PATH = GH_JSON_CACHE_PATH + "/github";
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			} else {
-				System.err.println(
-						"User must specify the path of the input and output directory for the repositories.Please see --input and --output options");
-			}
+		} else {
+			System.err.println("User must specify the path of the repository. Please see --remote and --local options");
+			printHelp(options);
 		}
 	}
 
@@ -145,9 +139,10 @@ public class BoaGenerator {
 		if (buf_map.exists()) {
 			buf_map.delete();
 		}
-			File clonedCode = new File(DefaultProperties.GH_JSON_CACHE_PATH + "/github");
-			if (clonedCode.exists())
-				org.apache.commons.io.FileUtils.deleteQuietly(clonedCode);
+		// File clonedCode = new File(DefaultProperties.GH_JSON_CACHE_PATH +
+		// "/github");
+		// if (clonedCode.exists())
+		// org.apache.commons.io.FileUtils.deleteQuietly(clonedCode);
 
 		if ("remote".equals(mode)) {
 			File inputDirectory = new File(DefaultProperties.GH_JSON_CACHE_PATH + "/buf-map");
@@ -156,9 +151,9 @@ public class BoaGenerator {
 		}
 	}
 
-	private static void getGithubMetadata(String inputPath, String username, String password, String targetUsr,
+	private static void getGithubMetadata(String inputPath, String username, String password, String targetUser,
 			String targetRepo) {
-			String[] args = {inputPath, username, password, targetUsr, targetRepo};
-			GetGithubRepoByUser.main(args);
+		String[] args = { inputPath, username, password, targetUser, targetRepo };
+		GetGithubRepoByUser.main(args);
 	}
 }
