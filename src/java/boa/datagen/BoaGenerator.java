@@ -16,12 +16,15 @@
  */
 package boa.datagen;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
+
+import boa.datagen.forges.github.GetGithubRepoByUser;
 
 /**
  * The main entry point for Boa tools for generating datasets.
@@ -48,12 +51,12 @@ public class BoaGenerator {
 		try {
 			SeqRepoImporter.main(args);
 		} catch (InterruptedException e) {
-			// TODO Auto-gene   rated catch block
+			// TODO Auto-gene rated catch block
 			e.printStackTrace();
 		}
 
 		SeqProjectCombiner.main(args);
-		SeqSort.main(args);
+//		SeqSort.main(args);
 		SeqSortMerge.main(args);
 		try {
 			MapFileGen.main(args);
@@ -61,6 +64,8 @@ public class BoaGenerator {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+		clear(args[0]);
 	}
 
 	private static final void printHelp(Options options, String message) {
@@ -81,6 +86,10 @@ public class BoaGenerator {
 		options.addOption("remote", "json", false, "when user has username and repo name of the target repository");
 		options.addOption("input", "json", true, ".json files for metadata");
 		options.addOption("output", "json", true, ".jsonCache files to be stored");
+		options.addOption("user", "json", true, ".json files for metadata");
+		options.addOption("password", "json", true, ".json files for metadata");
+		options.addOption("targetUsr", "json", true, ".json files for metadata");
+		options.addOption("targetRepo", "json", true, ".json files for metadata");
 		options.addOption("help", "help", true, "help");
 		options.addOption("user", "username", true, "help");
 		options.addOption("repo", "repo name", true, "help");
@@ -97,11 +106,59 @@ public class BoaGenerator {
 				DefaultProperties.GH_JSON_PATH = GH_JSON_PATH;
 				final String GH_JSON_CACHE_PATH = cl.getOptionValue("output");
 				DefaultProperties.GH_JSON_CACHE_PATH = GH_JSON_CACHE_PATH;
-			}else{
-				System.err.println("User must specify the path of the input and output directory for the repositories.Please see --input and --output options");
+				DefaultProperties.GH_GIT_PATH = GH_JSON_CACHE_PATH + "/github";
+
+			} else {
+				System.err.println(
+						"User must specify the path of the input and output directory for the repositories.Please see --input and --output options");
 			}
 		} else if (cl.hasOption("remote")) {
+			if (cl.hasOption("user") && cl.hasOption("password") && cl.hasOption("targetUsr")
+					&& cl.hasOption("targetRepo") && cl.hasOption("output")) {
+				try {
+					// because there is no input directory in this case, we need
+					// to create one
+					String GH_JSON_PATH = new java.io.File(".").getCanonicalPath();
+					DefaultProperties.GH_JSON_PATH = GH_JSON_PATH + "/input";
+					getGithubMetadata(DefaultProperties.GH_JSON_PATH, cl.getOptionValue("user"),
+							cl.getOptionValue("password"), cl.getOptionValue("targetUsr"),
+							cl.getOptionValue("targetRepo"));
 
+					// output directory
+					final String GH_JSON_CACHE_PATH = cl.getOptionValue("output");
+					DefaultProperties.GH_JSON_CACHE_PATH = GH_JSON_CACHE_PATH;
+					DefaultProperties.GH_GIT_PATH = GH_JSON_CACHE_PATH + "/github";
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			} else {
+				System.err.println(
+						"User must specify the path of the input and output directory for the repositories.Please see --input and --output options");
+			}
 		}
+	}
+
+	//
+	private static void clear(String mode) {
+		File buf_map = new File(DefaultProperties.GH_JSON_CACHE_PATH + "/buf-map");
+		if (buf_map.exists()) {
+			buf_map.delete();
+		}
+			File clonedCode = new File(DefaultProperties.GH_JSON_CACHE_PATH + "/github");
+			if (clonedCode.exists())
+				org.apache.commons.io.FileUtils.deleteQuietly(clonedCode);
+
+		if ("remote".equals(mode)) {
+			File inputDirectory = new File(DefaultProperties.GH_JSON_CACHE_PATH + "/buf-map");
+			if (inputDirectory.exists())
+				org.apache.commons.io.FileUtils.deleteQuietly(inputDirectory);
+		}
+	}
+
+	private static void getGithubMetadata(String inputPath, String username, String password, String targetUsr,
+			String targetRepo) {
+			String[] args = {inputPath, username, password, targetUsr, targetRepo};
+			GetGithubRepoByUser.main(args);
 	}
 }

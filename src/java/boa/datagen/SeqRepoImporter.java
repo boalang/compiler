@@ -73,8 +73,7 @@ public class SeqRepoImporter {
 	private static FileSystem fileSystem = null;
 	private static String base = null;
 
-	private final static int poolSize = Integer
-			.parseInt(Properties.getProperty("num.threads", DefaultProperties.NUM_THREADS));
+	private final static int poolSize = Integer.parseInt(Properties.getProperty("num.threads", DefaultProperties.NUM_THREADS));
 	private final static AtomicInteger numOfProcessedProjects = new AtomicInteger(0);
 
 	public static void main(String[] args) throws IOException, InterruptedException {
@@ -127,7 +126,7 @@ public class SeqRepoImporter {
 				}
 			}
 		}
-		System.out.println("Got processed projects: " + processedProjectIds.size());
+//		System.out.println("Got processed projects: " + processedProjectIds.size());
 	}
 
 	private static void buildCacheOfProjects() {
@@ -155,7 +154,7 @@ public class SeqRepoImporter {
 				repos.clear();
 			}
 		}
-		System.out.println("Got cached projects: " + cacheOfProjects.size());
+//		System.out.println("Got cached projects: " + cacheOfProjects.size());
 	}
 
 	@SuppressWarnings("unused")
@@ -329,8 +328,6 @@ public class SeqRepoImporter {
 				for (final Revision rev : conn.getCommits(true, astWriter, repoKey, keyDelim)) {
 					
 					  if (debug) System.out.println("Storing '" + name + "' revision: " + rev.getId());
-					 
-
 					// build new rev w/ no namespaces
 					final Revision.Builder revBuilder = Revision.newBuilder(rev);
 					repoBuilder.addRevisions(revBuilder);
