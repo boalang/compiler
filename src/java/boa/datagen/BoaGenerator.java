@@ -25,6 +25,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
 
 import boa.datagen.forges.github.GetGithubRepoByUser;
+import boa.datagen.forges.github.LocalGitSequenceGenerator;
 
 /**
  * The main entry point for Boa tools for generating datasets.
@@ -33,10 +34,12 @@ import boa.datagen.forges.github.GetGithubRepoByUser;
  * 
  */
 public class BoaGenerator {
+	public static boolean jsonAvailable = true;
+	public static boolean localCloning= false;
 	public static void main(final String[] args) throws IOException {
 		final Options options = new Options();
 		BoaGenerator.addOptions(options);
-
+		
 		final CommandLine cl;
 		try {
 			cl = new PosixParser().parse(options, args);
@@ -47,23 +50,42 @@ public class BoaGenerator {
 		}
 		BoaGenerator.handleCmdOptions(cl, options, args);
 
-		CacheGithubJSON.main(args);
-		try {
-			SeqRepoImporter.main(args);
-		} catch (InterruptedException e) {
-			// TODO Auto-gene rated catch block
-			e.printStackTrace();
+		/*
+		 * 1. if user provides local json files 2. if user provides username and password
+		 * in both the cases json files are going to be available 
+		 */
+		
+		if(jsonAvailable){
+			CacheGithubJSON.main(args);
+			try {
+				SeqRepoImporter.main(args);
+			} catch (InterruptedException e) {
+				// TODO Auto-gene rated catch block
+				e.printStackTrace();
+			}
+
+//			SeqProjectCombiner.main(args);
+//			 SeqSort.main(args);
+//			SeqSortMerge.main(args);
+			try {
+				MapFileGen.main(args);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}			
+		}else{ // when user provides local repo and does not have json files
+			File output = new File(DefaultProperties.GH_JSON_CACHE_PATH);
+			if(!output.exists())
+				output.mkdirs();
+			LocalGitSequenceGenerator.localGitSequenceGenerate(DefaultProperties.GH_GIT_PATH, DefaultProperties.GH_JSON_CACHE_PATH);
+			try {
+				MapFileGen.main(args);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
-		SeqProjectCombiner.main(args);
-		// SeqSort.main(args);
-		SeqSortMerge.main(args);
-		try {
-			MapFileGen.main(args);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
 		clear(args[0]);
 	}
@@ -83,15 +105,13 @@ public class BoaGenerator {
 
 	private static void addOptions(Options options) {
 		options.addOption("inputJson", "json", true, ".json files for metadata");
-		options.addOption("inputRepo", "json", true, ".json files for metadata");
-		options.addOption("output", "json", true, ".jsonCache files to be stored");
-		options.addOption("user", "json", true, ".json files for metadata");
-		options.addOption("password", "json", true, ".json files for metadata");
-		options.addOption("targetUser", "json", true, ".json files for metadata");
-		options.addOption("targetRepo", "json", true, ".json files for metadata");
+		options.addOption("inputRepo", "json", true, "cloned repo path");
+		options.addOption("output", "json", true, "directory where output is desired");
+		options.addOption("user", "json", true, "github username to authenticate");
+		options.addOption("password", "json", true, "github password to authenticate.");
+		options.addOption("targetUser", "json", true, "username of target repository");
+		options.addOption("targetRepo", "json", true, "name of the target repository");
 		options.addOption("help", "help", true, "help");
-		options.addOption("user", "username", true, "help");
-		options.addOption("repo", "repo name", true, "help");
 	}
 
 	private static void handleCmdOptions(CommandLine cl, Options options, final String[] args) {
@@ -100,14 +120,15 @@ public class BoaGenerator {
 			DefaultProperties.GH_JSON_CACHE_PATH = cl.getOptionValue("output");
 			// DefaultProperties.GH_GIT_PATH = GH_JSON_CACHE_PATH + "/github";
 			DefaultProperties.GH_GIT_PATH = cl.getOptionValue("inputRepo");
-
+			localCloning = true;
 		} else if (cl.hasOption("inputJson") && cl.hasOption("output")) {
 			DefaultProperties.GH_JSON_PATH = cl.getOptionValue("inputJson");
 			DefaultProperties.GH_JSON_CACHE_PATH = cl.getOptionValue("output");
 		} else if (cl.hasOption("inputRepo") && cl.hasOption("output")) {
 			DefaultProperties.GH_JSON_CACHE_PATH = cl.getOptionValue("output");
 			DefaultProperties.GH_GIT_PATH = cl.getOptionValue("inputRepo");
-			CacheGithubJSON.jsonAvailable=false;
+			jsonAvailable=false;
+			localCloning = true;
 		} else if (cl.hasOption("user") && cl.hasOption("password") && cl.hasOption("targetUser")
 				&& cl.hasOption("targetRepo") && cl.hasOption("output")) {
 			try {

@@ -289,7 +289,12 @@ public class SeqRepoImporter {
 			final Project.Builder projBuilder = Project.newBuilder(project);
 
 			final String name = project.getName();
-			final File gitDir = new File(gitRootPath + "/" + name);
+			File gitDir = null;
+			if(BoaGenerator.localCloning){
+				String path = gitRootPath.getAbsolutePath();
+				gitDir = new File(path);
+			}else	
+				gitDir = new File(gitRootPath + "/" + name);
 
 			// make sure the given directory exists else create a new one
 			if (!gitDir.exists()) {
@@ -313,8 +318,7 @@ public class SeqRepoImporter {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}catch (org.eclipse.jgit.api.errors.JGitInternalException e) {
-					// TODO Auto-generated catch block
-					// this means code is already available and hence no need to clone
+					//e.printStackTrace();
 				}
 
 			}
