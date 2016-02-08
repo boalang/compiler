@@ -1584,10 +1584,30 @@ public class JavaVisitor extends ASTVisitor {
 		list.add(b.build());
 		return false;
 	}
+	
 	@Override
 	public boolean visit(CreationReference node) {
-		throw new RuntimeException("visited unused node CreationReference");
+		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
+		eb.setKind(boa.types.Ast.Expression.ExpressionKind.METHOD_REFERENCE);
+		node.getType().accept(this); 
+		eb.addExpressions(expressions.pop());
+
+		for (Object t : node.typeArguments()) {
+			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
+			tb.setName(getIndex(typeName((org.eclipse.jdt.core.dom.Type)t)));
+			tb.setKind(boa.types.Ast.TypeKind.GENERIC);
+			eb.addGenericParameters(tb.build());
+		}
+
+		eb.setKind(boa.types.Ast.Expression.ExpressionKind.NEW);
+		
+		expressions.push(eb.build());
+		return false;
+
+		
+		
 	}
+	
 	@Override
 	public boolean visit(ExpressionMethodReference node) {
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
@@ -1611,8 +1631,24 @@ public class JavaVisitor extends ASTVisitor {
 	
 	 @Override
 	public boolean visit(SuperMethodReference node) {
-		throw new RuntimeException("visited unused node SuperMethodReference");
-	}
+			boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
+			eb.setKind(boa.types.Ast.Expression.ExpressionKind.METHOD_REFERENCE);
+			eb.setLiteral((node.getQualifier()) +".super"); 
+
+			for (Object t : node.typeArguments()) {
+				boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
+				tb.setName(getIndex(typeName((org.eclipse.jdt.core.dom.Type)t)));
+				tb.setKind(boa.types.Ast.TypeKind.GENERIC);
+				eb.addGenericParameters(tb.build());
+			}
+
+			eb.setMethod(node.getName().getIdentifier());
+			expressions.push(eb.build());
+
+			return false;
+ 
+	 }
+	
 	@Override
 	public boolean visit(TypeMethodReference node) {
 		/*
@@ -1621,8 +1657,28 @@ public class JavaVisitor extends ASTVisitor {
 			name: ???
 		}
 		*/
-		throw new RuntimeException("visited unused node TypeMethodReference");
+	
+		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
+		eb.setKind(boa.types.Ast.Expression.ExpressionKind.METHOD_REFERENCE);
+		node.getType().accept(this); 
+		eb.addExpressions(expressions.pop());
+
+		for (Object t : node.typeArguments()) {
+			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
+			tb.setName(getIndex(typeName((org.eclipse.jdt.core.dom.Type)t)));
+			tb.setKind(boa.types.Ast.TypeKind.GENERIC);
+			eb.addGenericParameters(tb.build());
+		}
+
+		eb.setMethod(node.getName().getIdentifier());
+		expressions.push(eb.build());
+
+		return false;
+	
+	
+	
 	}
+
 	@Override
 	public boolean visit(IntersectionType node) {
 		throw new RuntimeException("visited unused node IntersectionType");
