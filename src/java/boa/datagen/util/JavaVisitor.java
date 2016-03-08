@@ -1519,6 +1519,14 @@ public class JavaVisitor extends ASTVisitor {
 			return ((PrimitiveType)t).getPrimitiveTypeCode().toString();
 		if (t.isQualifiedType())
 			return typeName(((QualifiedType)t).getQualifier()) + "." + ((QualifiedType)t).getName().getFullyQualifiedName();
+		if (t.isIntersectionType()) {
+			String name = "";
+			for (Object o : ((IntersectionType)t).types()) {
+				if (name.length() > 0) name += " & ";
+				name += typeName((org.eclipse.jdt.core.dom.Type)o);
+			}
+			return name;
+		}
 		if (t.isUnionType()) {
 			String name = "";
 			for (Object o : ((UnionType)t).types()) {
