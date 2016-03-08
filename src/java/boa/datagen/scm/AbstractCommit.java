@@ -38,7 +38,8 @@ import boa.types.Shared.Person;
 import boa.datagen.util.FileIO;
 import boa.datagen.util.JavaScriptErrorCheckVisitor;
 import boa.datagen.util.JavaScriptVisitor;
-import boa.datagen.util.JavaVisitor;
+import boa.datagen.util.Java7Visitor;
+import boa.datagen.util.Java8Visitor;
 import boa.datagen.util.JavaErrorCheckVisitor;
 import boa.datagen.util.Properties;
 
@@ -164,13 +165,20 @@ public abstract class AbstractCommit {
 						if (debug)
 							System.err.println("Found JLS4 parse error in: revision " + id + ": file " + path);
 
-						//fb.setContent(content);
-						fb.setKind(FileKind.SOURCE_JAVA_ERROR);
-						try {
-							astWriter.append(new Text(revKey + keyDelim + fb.getName()), new BytesWritable(ASTRoot.newBuilder().build().toByteArray()));
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
+						fb.setKind(FileKind.SOURCE_JAVA_JLS8);
+						if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_8, AST.JLS8, false, astWriter, revKey + keyDelim + path)) {
+							if (debug)
+								System.err.println("Found JLS8 parse error in: revision " + id + ": file " + path);
+
+							fb.setKind(FileKind.SOURCE_JAVA_ERROR);
+							try {
+								astWriter.append(new Text(revKey + keyDelim + fb.getName()), new BytesWritable(ASTRoot.newBuilder().build().toByteArray()));
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+						} else
+							if (debug)
+								System.err.println("Accepted JLS8: revision " + id + ": file " + path);
 					} else
 						if (debug)
 							System.err.println("Accepted JLS4: revision " + id + ": file " + path);
@@ -336,8 +344,16 @@ public abstract class AbstractCommit {
 						if (debug)
 							System.err.println("Found JLS4 parse error in: revision " + id + ": file " + path);
 
-						//fb.setContent(content);
-						fb.setKind(FileKind.SOURCE_JAVA_ERROR);
+						fb.setKind(FileKind.SOURCE_JAVA_JLS8);
+						if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_8, AST.JLS8, false, null, null)) {
+							if (debug)
+								System.err.println("Found JLS8 parse error in: revision " + id + ": file " + path);
+
+							//fb.setContent(content);
+							fb.setKind(FileKind.SOURCE_JAVA_ERROR);
+						} else
+							if (debug)
+								System.err.println("Accepted JLS8: revision " + id + ": file " + path);
 					} else
 						if (debug)
 							System.err.println("Accepted JLS4: revision " + id + ": file " + path);
@@ -371,7 +387,11 @@ public abstract class AbstractCommit {
 			if (!errorCheck.hasError || storeOnError) {
 				final ASTRoot.Builder ast = ASTRoot.newBuilder();
 				//final CommentsRoot.Builder comments = CommentsRoot.newBuilder();
-				final JavaVisitor visitor = new JavaVisitor(content, connector.nameIndices);
+				final Java7Visitor visitor;
+				if (astLevel == AST.JLS8)
+					visitor = new Java8Visitor(content, connector.nameIndices);
+				else
+					visitor = new Java7Visitor(content, connector.nameIndices);
 				try {
 					ast.addNamespaces(visitor.getNamespaces(cu));
 					for (final String s : visitor.getImports())

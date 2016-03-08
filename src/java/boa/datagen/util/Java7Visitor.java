@@ -26,24 +26,24 @@ import boa.types.Ast.*;
 /**
  * @author rdyer
  */
-public class JavaVisitor extends ASTVisitor {
-	private HashMap<String, Integer> nameIndices;
+public class Java7Visitor extends ASTVisitor {
+	protected HashMap<String, Integer> nameIndices;
 	
-	private CompilationUnit root = null;
-	private PositionInfo.Builder pos = null;
-	private String src = null;
+	protected CompilationUnit root = null;
+	protected PositionInfo.Builder pos = null;
+	protected String src = null;
 
-	private Namespace.Builder b = Namespace.newBuilder();
-	private List<boa.types.Ast.Comment> comments = new ArrayList<boa.types.Ast.Comment>();
-	private List<String> imports = new ArrayList<String>();
-	private Stack<List<boa.types.Ast.Declaration>> declarations = new Stack<List<boa.types.Ast.Declaration>>();
-	private Stack<boa.types.Ast.Modifier> modifiers = new Stack<boa.types.Ast.Modifier>();
-	private Stack<boa.types.Ast.Expression> expressions = new Stack<boa.types.Ast.Expression>();
-	private Stack<List<boa.types.Ast.Variable>> fields = new Stack<List<boa.types.Ast.Variable>>();
-	private Stack<List<boa.types.Ast.Method>> methods = new Stack<List<boa.types.Ast.Method>>();
-	private Stack<List<boa.types.Ast.Statement>> statements = new Stack<List<boa.types.Ast.Statement>>();
+	protected Namespace.Builder b = Namespace.newBuilder();
+	protected List<boa.types.Ast.Comment> comments = new ArrayList<boa.types.Ast.Comment>();
+	protected List<String> imports = new ArrayList<String>();
+	protected Stack<List<boa.types.Ast.Declaration>> declarations = new Stack<List<boa.types.Ast.Declaration>>();
+	protected Stack<boa.types.Ast.Modifier> modifiers = new Stack<boa.types.Ast.Modifier>();
+	protected Stack<boa.types.Ast.Expression> expressions = new Stack<boa.types.Ast.Expression>();
+	protected Stack<List<boa.types.Ast.Variable>> fields = new Stack<List<boa.types.Ast.Variable>>();
+	protected Stack<List<boa.types.Ast.Method>> methods = new Stack<List<boa.types.Ast.Method>>();
+	protected Stack<List<boa.types.Ast.Statement>> statements = new Stack<List<boa.types.Ast.Statement>>();
 
-	public JavaVisitor(String src, HashMap<String, Integer> nameIndices) {
+	public Java7Visitor(String src, HashMap<String, Integer> nameIndices) {
 		super();
 		this.src = src;
 		this.nameIndices = nameIndices;
@@ -69,7 +69,7 @@ public class JavaVisitor extends ASTVisitor {
 	}
 */
 
-	private void buildPosition(final ASTNode node) {
+	protected void buildPosition(final ASTNode node) {
 		pos = PositionInfo.newBuilder();
 		int start = node.getStartPosition();
 		int length = node.getLength();
@@ -441,7 +441,7 @@ public class JavaVisitor extends ASTVisitor {
 	//////////////////////////////////////////////////////////////
 	// Modifiers and Annotations
 
-	private boa.types.Ast.Modifier.Builder getAnnotationBuilder(Annotation node) {
+	protected boa.types.Ast.Modifier.Builder getAnnotationBuilder(Annotation node) {
 		boa.types.Ast.Modifier.Builder b = boa.types.Ast.Modifier.newBuilder();
 //		b.setPosition(pos.build());
 		b.setKind(boa.types.Ast.Modifier.ModifierKind.ANNOTATION);
@@ -1504,7 +1504,7 @@ public class JavaVisitor extends ASTVisitor {
 	//////////////////////////////////////////////////////////////
 	// Utility methods
 
-	private String typeName(org.eclipse.jdt.core.dom.Type t) {
+	protected String typeName(org.eclipse.jdt.core.dom.Type t) {
 		if (t.isArrayType())
 			return typeName(((ArrayType)t).getComponentType()) + "[]";
 		if (t.isParameterizedType()) {
@@ -1800,7 +1800,7 @@ public class JavaVisitor extends ASTVisitor {
 		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
 	}
 
-	private int getIndex(String name) {
+	protected int getIndex(String name) {
 		Integer index = this.nameIndices.get(name);
 		if (index == null) {
 			index = this.nameIndices.size();
