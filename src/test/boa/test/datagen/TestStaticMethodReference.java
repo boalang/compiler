@@ -24,13 +24,20 @@ import static org.junit.Assert.assertEquals;
  * @author sfarheen
  * @author rdyer
  */
-public class TestMethodReference extends BaseTest {
+public class TestStaticMethodReference extends BaseTest {
 	@Test
 	public void methodReference() {
 		assertEquals(parse(
-			"public class MethodReferenceExample {\n" +
-			"   public static void main(String args[]){\n" +
-			"   }\n" +
-			"}"), null);
+			"public class StaticMethodReference {  \n"+
+			"public static void main(String args[]){   \n"+
+            "List names = new ArrayList(); \n"+
+            "names.add("Sun");\n"+
+            "names.add("Moon");\n"+
+            "names.add("Star");\n"+
+            "names.add("Earth");\n"+
+            "names.add("Mars");\n"+
+            "names.forEach(System.out::println);\n"+
+			"	}\n"+
+			" } "), null);
 	}
 }

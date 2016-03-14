@@ -353,7 +353,6 @@ public class Java7Visitor extends ASTVisitor {
 			}
 			b.addArguments(vb.build());
 		}
-		// FIXME
 		for (Object o : node.thrownExceptions()) {
 				boa.types.Ast.Type.Builder tp = boa.types.Ast.Type.newBuilder();
 				tp.setName(getIndex(((Name)o).getFullyQualifiedName()));
