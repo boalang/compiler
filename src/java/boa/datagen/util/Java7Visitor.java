@@ -354,20 +354,12 @@ public class Java7Visitor extends ASTVisitor {
 			b.addArguments(vb.build());
 		}
 		// FIXME
-		if (true)
-			for (Object o : node.thrownExceptionTypes()) {
-				boa.types.Ast.Type.Builder tp = boa.types.Ast.Type.newBuilder();
-				tb.setName(getIndex(typeName((org.eclipse.jdt.core.dom.Type)o)));
-				tp.setKind(boa.types.Ast.TypeKind.CLASS);
-				b.addExceptionTypes(tp.build());
-			}
-		else
-			for (Object o : node.thrownExceptions()) {
+		for (Object o : node.thrownExceptions()) {
 				boa.types.Ast.Type.Builder tp = boa.types.Ast.Type.newBuilder();
 				tp.setName(getIndex(((Name)o).getFullyQualifiedName()));
 				tp.setKind(boa.types.Ast.TypeKind.CLASS);
 				b.addExceptionTypes(tp.build());
-			}
+		}
 		if (node.getBody() != null) {
 			statements.push(new ArrayList<boa.types.Ast.Statement>());
 			node.getBody().accept(this);
@@ -1546,165 +1538,7 @@ public class Java7Visitor extends ASTVisitor {
 		return ((SimpleType)t).getName().getFullyQualifiedName();
 	}
 
-	//////////////////////////////////////////////////////////////
-	// Currently un-used node types
-
-	// begin java 8
-	@Override
-	public boolean visit(LambdaExpression node) {
-		//make it an expression, declaratio inside. inside the expression, have a method
-		List<boa.types.Ast.Method> list = methods.peek();
-		Method.Builder b = Method.newBuilder();
-		b.setName("");
-		boa.types.Ast.Type.Builder rt = boa.types.Ast.Type.newBuilder();
-		rt.setName(getIndex(""));
-		rt.setKind(boa.types.Ast.TypeKind.OTHER);
-		b.setReturnType(rt.build());
-		for (Object o : node.parameters()) {
-			VariableDeclaration ex = (VariableDeclaration)o;
-			Variable.Builder vb = Variable.newBuilder();
-			vb.setName(ex.getName().getFullyQualifiedName());
-			if (o instanceof SingleVariableDeclaration) {
-				SingleVariableDeclaration svd = (SingleVariableDeclaration)o;
-				boa.types.Ast.Type.Builder tp = boa.types.Ast.Type.newBuilder();
-				String name = typeName(svd.getType());
-				for (int i = 0; i < svd.getExtraDimensions(); i++)
-					name += "[]";
-				if (svd.isVarargs())
-					name += "...";
-				tp.setName(getIndex(name));
-				tp.setKind(boa.types.Ast.TypeKind.OTHER);
-				vb.setVariableType(tp.build());
-			} else {
-				VariableDeclarationFragment vdf = (VariableDeclarationFragment)o;
-				boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
-				tb.setName(getIndex(""));
-				tb.setKind(boa.types.Ast.TypeKind.OTHER);
-				vb.setVariableType(tb.build());
-			}
-			b.addArguments(vb.build());
-		}
-		if (node.getBody() != null) {
-			statements.push(new ArrayList<boa.types.Ast.Statement>());
-			node.getBody().accept(this);
-			for (boa.types.Ast.Statement s : statements.pop())
-				b.addStatements(s);
-		}
-		list.add(b.build());
-		return false;
-	}
 	
-	@Override
-	public boolean visit(CreationReference node) {
-		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
-		eb.setKind(boa.types.Ast.Expression.ExpressionKind.METHOD_REFERENCE);
-		
-		boa.types.Ast.Type.Builder tb1 = boa.types.Ast.Type.newBuilder();
-		tb1.setName(getIndex(typeName(node.getType())));
-		tb1.setKind(boa.types.Ast.TypeKind.OTHER); ////????other?
-		eb.setNewType(tb1.build());
-
-		for (Object t : node.typeArguments()) {
-			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
-			tb.setName(getIndex(typeName((org.eclipse.jdt.core.dom.Type)t)));
-			tb.setKind(boa.types.Ast.TypeKind.GENERIC);
-			eb.addGenericParameters(tb.build());
-		}
-
-		eb.setMethod("new");
-		
-		expressions.push(eb.build());
-		return false;
-	
-	}
-	
-	@Override
-	public boolean visit(ExpressionMethodReference node) {
-		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
-		eb.setKind(boa.types.Ast.Expression.ExpressionKind.METHOD_REFERENCE);
-		node.getExpression().accept(this);
-		eb.addExpressions(expressions.pop());
-
-		for (Object t : node.typeArguments()) {
-			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
-			tb.setName(getIndex(typeName((org.eclipse.jdt.core.dom.Type)t)));
-			tb.setKind(boa.types.Ast.TypeKind.GENERIC);
-			eb.addGenericParameters(tb.build());
-		}
-
-		eb.setMethod(node.getName().getIdentifier());
-		
-		expressions.push(eb.build());
-
-		return false;
-	}
-	
-	 @Override
-	public boolean visit(SuperMethodReference node) {
-			boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
-			eb.setKind(boa.types.Ast.Expression.ExpressionKind.METHOD_REFERENCE);
-			
-			if(node.getQualifier() != null)
-				eb.setLiteral((node.getQualifier()) +".super"); 
-			else
-				eb.setLiteral("super");
-			
-			for (Object t : node.typeArguments()) {
-				boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
-				tb.setName(getIndex(typeName((org.eclipse.jdt.core.dom.Type)t)));
-				tb.setKind(boa.types.Ast.TypeKind.GENERIC);
-				eb.addGenericParameters(tb.build());
-			}
-
-			eb.setMethod(node.getName().getIdentifier());
-			expressions.push(eb.build());
-
-			return false;
- 
-	 }
-	
-	@Override
-	public boolean visit(TypeMethodReference node) {
-		/*
-		Type {
-			kind: DELEGATE
-			name: ???
-		}
-		*/
-	
-		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
-		eb.setKind(boa.types.Ast.Expression.ExpressionKind.METHOD_REFERENCE);
-		
-		for (Object t : node.typeArguments()) {
-			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
-			tb.setName(getIndex(typeName((org.eclipse.jdt.core.dom.Type)t)));
-			tb.setKind(boa.types.Ast.TypeKind.GENERIC);
-			eb.addGenericParameters(tb.build());
-		}
-
-		eb.setMethod(getIndex(typeName(node.getType()))+"::"+node.getName().getIdentifier());
-		expressions.push(eb.build());
-
-		return false;
-	
-	
-	
-	}
-
-	@Override
-	public boolean visit(IntersectionType node) {
-		throw new RuntimeException("visited unused node IntersectionType");
-	}
-	@Override
-	public boolean visit(Dimension node) {
-		throw new RuntimeException("visited unused node Dimension");
-	}
-	@Override
-	public boolean visit(NameQualifiedType node) {
-		throw new RuntimeException("visited unused node NameQualifiedType");
-	}
-	// end java 8
-
 	@Override
 	public boolean visit(ArrayType node) {
 		throw new RuntimeException("visited unused node ArrayType");
