@@ -15174,28 +15174,42 @@ public final class Ast {
     // optional .boa.types.Modifier annotation = 12;
     /**
      * <code>optional .boa.types.Modifier annotation = 12;</code>
-     *
-     * <pre>
-     *	required PositionInfo position = 13;
-     * </pre>
      */
     boolean hasAnnotation();
     /**
      * <code>optional .boa.types.Modifier annotation = 12;</code>
-     *
-     * <pre>
-     *	required PositionInfo position = 13;
-     * </pre>
      */
     boa.types.Ast.Modifier getAnnotation();
     /**
      * <code>optional .boa.types.Modifier annotation = 12;</code>
-     *
-     * <pre>
-     *	required PositionInfo position = 13;
-     * </pre>
      */
     boa.types.Ast.ModifierOrBuilder getAnnotationOrBuilder();
+
+    // optional .boa.types.Method lambda = 13;
+    /**
+     * <code>optional .boa.types.Method lambda = 13;</code>
+     *
+     * <pre>
+     *	required PositionInfo position = 14;
+     * </pre>
+     */
+    boolean hasLambda();
+    /**
+     * <code>optional .boa.types.Method lambda = 13;</code>
+     *
+     * <pre>
+     *	required PositionInfo position = 14;
+     * </pre>
+     */
+    boa.types.Ast.Method getLambda();
+    /**
+     * <code>optional .boa.types.Method lambda = 13;</code>
+     *
+     * <pre>
+     *	required PositionInfo position = 14;
+     * </pre>
+     */
+    boa.types.Ast.MethodOrBuilder getLambdaOrBuilder();
   }
   /**
    * Protobuf type {@code boa.types.Expression}
@@ -15348,6 +15362,19 @@ public final class Ast {
                 annotation_ = subBuilder.buildPartial();
               }
               bitField0_ |= 0x00000080;
+              break;
+            }
+            case 106: {
+              boa.types.Ast.Method.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000100) == 0x00000100)) {
+                subBuilder = lambda_.toBuilder();
+              }
+              lambda_ = input.readMessage(boa.types.Ast.Method.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(lambda_);
+                lambda_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000100;
               break;
             }
           }
@@ -15610,6 +15637,14 @@ public final class Ast {
        * <code>METHOD_REFERENCE = 50;</code>
        */
       METHOD_REFERENCE(50, 50),
+      /**
+       * <code>LAMBDA = 51;</code>
+       */
+      LAMBDA(51, 51),
+      /**
+       * <code>ANON_METHOD = 52;</code>
+       */
+      ANON_METHOD(52, 52),
       ;
 
       /**
@@ -15816,6 +15851,14 @@ public final class Ast {
        * <code>METHOD_REFERENCE = 50;</code>
        */
       public static final int METHOD_REFERENCE_VALUE = 50;
+      /**
+       * <code>LAMBDA = 51;</code>
+       */
+      public static final int LAMBDA_VALUE = 51;
+      /**
+       * <code>ANON_METHOD = 52;</code>
+       */
+      public static final int ANON_METHOD_VALUE = 52;
 
 
       public final int getNumber() { return value; }
@@ -15873,6 +15916,8 @@ public final class Ast {
           case 48: return ANNOTATION;
           case 49: return PAREN;
           case 50: return METHOD_REFERENCE;
+          case 51: return LAMBDA;
+          case 52: return ANON_METHOD;
           default: return null;
         }
       }
@@ -16279,33 +16324,55 @@ public final class Ast {
     private boa.types.Ast.Modifier annotation_;
     /**
      * <code>optional .boa.types.Modifier annotation = 12;</code>
-     *
-     * <pre>
-     *	required PositionInfo position = 13;
-     * </pre>
      */
     public boolean hasAnnotation() {
       return ((bitField0_ & 0x00000080) == 0x00000080);
     }
     /**
      * <code>optional .boa.types.Modifier annotation = 12;</code>
-     *
-     * <pre>
-     *	required PositionInfo position = 13;
-     * </pre>
      */
     public boa.types.Ast.Modifier getAnnotation() {
       return annotation_;
     }
     /**
      * <code>optional .boa.types.Modifier annotation = 12;</code>
-     *
-     * <pre>
-     *	required PositionInfo position = 13;
-     * </pre>
      */
     public boa.types.Ast.ModifierOrBuilder getAnnotationOrBuilder() {
       return annotation_;
+    }
+
+    // optional .boa.types.Method lambda = 13;
+    public static final int LAMBDA_FIELD_NUMBER = 13;
+    private boa.types.Ast.Method lambda_;
+    /**
+     * <code>optional .boa.types.Method lambda = 13;</code>
+     *
+     * <pre>
+     *	required PositionInfo position = 14;
+     * </pre>
+     */
+    public boolean hasLambda() {
+      return ((bitField0_ & 0x00000100) == 0x00000100);
+    }
+    /**
+     * <code>optional .boa.types.Method lambda = 13;</code>
+     *
+     * <pre>
+     *	required PositionInfo position = 14;
+     * </pre>
+     */
+    public boa.types.Ast.Method getLambda() {
+      return lambda_;
+    }
+    /**
+     * <code>optional .boa.types.Method lambda = 13;</code>
+     *
+     * <pre>
+     *	required PositionInfo position = 14;
+     * </pre>
+     */
+    public boa.types.Ast.MethodOrBuilder getLambdaOrBuilder() {
+      return lambda_;
     }
 
     private void initFields() {
@@ -16321,6 +16388,7 @@ public final class Ast {
       methodArgs_ = java.util.Collections.emptyList();
       anonDeclaration_ = boa.types.Ast.Declaration.getDefaultInstance();
       annotation_ = boa.types.Ast.Modifier.getDefaultInstance();
+      lambda_ = boa.types.Ast.Method.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -16373,6 +16441,12 @@ public final class Ast {
           return false;
         }
       }
+      if (hasLambda()) {
+        if (!getLambda().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
       memoizedIsInitialized = 1;
       return true;
     }
@@ -16415,6 +16489,9 @@ public final class Ast {
       }
       if (((bitField0_ & 0x00000080) == 0x00000080)) {
         output.writeMessage(12, annotation_);
+      }
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        output.writeMessage(13, lambda_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -16472,6 +16549,10 @@ public final class Ast {
       if (((bitField0_ & 0x00000080) == 0x00000080)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(12, annotation_);
+      }
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(13, lambda_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -16588,6 +16669,7 @@ public final class Ast {
           getMethodArgsFieldBuilder();
           getAnonDeclarationFieldBuilder();
           getAnnotationFieldBuilder();
+          getLambdaFieldBuilder();
         }
       }
       private static Builder create() {
@@ -16648,6 +16730,12 @@ public final class Ast {
           annotationBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000800);
+        if (lambdaBuilder_ == null) {
+          lambda_ = boa.types.Ast.Method.getDefaultInstance();
+        } else {
+          lambdaBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00001000);
         return this;
       }
 
@@ -16755,6 +16843,14 @@ public final class Ast {
           result.annotation_ = annotation_;
         } else {
           result.annotation_ = annotationBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00001000) == 0x00001000)) {
+          to_bitField0_ |= 0x00000100;
+        }
+        if (lambdaBuilder_ == null) {
+          result.lambda_ = lambda_;
+        } else {
+          result.lambda_ = lambdaBuilder_.build();
         }
         result.bitField0_ = to_bitField0_;
         onBuilt();
@@ -16906,6 +17002,9 @@ public final class Ast {
         if (other.hasAnnotation()) {
           mergeAnnotation(other.getAnnotation());
         }
+        if (other.hasLambda()) {
+          mergeLambda(other.getLambda());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -16953,6 +17052,12 @@ public final class Ast {
         }
         if (hasAnnotation()) {
           if (!getAnnotation().isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasLambda()) {
+          if (!getLambda().isInitialized()) {
             
             return false;
           }
@@ -18470,20 +18575,12 @@ public final class Ast {
           boa.types.Ast.Modifier, boa.types.Ast.Modifier.Builder, boa.types.Ast.ModifierOrBuilder> annotationBuilder_;
       /**
        * <code>optional .boa.types.Modifier annotation = 12;</code>
-       *
-       * <pre>
-       *	required PositionInfo position = 13;
-       * </pre>
        */
       public boolean hasAnnotation() {
         return ((bitField0_ & 0x00000800) == 0x00000800);
       }
       /**
        * <code>optional .boa.types.Modifier annotation = 12;</code>
-       *
-       * <pre>
-       *	required PositionInfo position = 13;
-       * </pre>
        */
       public boa.types.Ast.Modifier getAnnotation() {
         if (annotationBuilder_ == null) {
@@ -18494,10 +18591,6 @@ public final class Ast {
       }
       /**
        * <code>optional .boa.types.Modifier annotation = 12;</code>
-       *
-       * <pre>
-       *	required PositionInfo position = 13;
-       * </pre>
        */
       public Builder setAnnotation(boa.types.Ast.Modifier value) {
         if (annotationBuilder_ == null) {
@@ -18514,10 +18607,6 @@ public final class Ast {
       }
       /**
        * <code>optional .boa.types.Modifier annotation = 12;</code>
-       *
-       * <pre>
-       *	required PositionInfo position = 13;
-       * </pre>
        */
       public Builder setAnnotation(
           boa.types.Ast.Modifier.Builder builderForValue) {
@@ -18532,10 +18621,6 @@ public final class Ast {
       }
       /**
        * <code>optional .boa.types.Modifier annotation = 12;</code>
-       *
-       * <pre>
-       *	required PositionInfo position = 13;
-       * </pre>
        */
       public Builder mergeAnnotation(boa.types.Ast.Modifier value) {
         if (annotationBuilder_ == null) {
@@ -18555,10 +18640,6 @@ public final class Ast {
       }
       /**
        * <code>optional .boa.types.Modifier annotation = 12;</code>
-       *
-       * <pre>
-       *	required PositionInfo position = 13;
-       * </pre>
        */
       public Builder clearAnnotation() {
         if (annotationBuilder_ == null) {
@@ -18572,10 +18653,6 @@ public final class Ast {
       }
       /**
        * <code>optional .boa.types.Modifier annotation = 12;</code>
-       *
-       * <pre>
-       *	required PositionInfo position = 13;
-       * </pre>
        */
       public boa.types.Ast.Modifier.Builder getAnnotationBuilder() {
         bitField0_ |= 0x00000800;
@@ -18584,10 +18661,6 @@ public final class Ast {
       }
       /**
        * <code>optional .boa.types.Modifier annotation = 12;</code>
-       *
-       * <pre>
-       *	required PositionInfo position = 13;
-       * </pre>
        */
       public boa.types.Ast.ModifierOrBuilder getAnnotationOrBuilder() {
         if (annotationBuilder_ != null) {
@@ -18598,10 +18671,6 @@ public final class Ast {
       }
       /**
        * <code>optional .boa.types.Modifier annotation = 12;</code>
-       *
-       * <pre>
-       *	required PositionInfo position = 13;
-       * </pre>
        */
       private com.google.protobuf.SingleFieldBuilder<
           boa.types.Ast.Modifier, boa.types.Ast.Modifier.Builder, boa.types.Ast.ModifierOrBuilder> 
@@ -18615,6 +18684,159 @@ public final class Ast {
           annotation_ = null;
         }
         return annotationBuilder_;
+      }
+
+      // optional .boa.types.Method lambda = 13;
+      private boa.types.Ast.Method lambda_ = boa.types.Ast.Method.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Method, boa.types.Ast.Method.Builder, boa.types.Ast.MethodOrBuilder> lambdaBuilder_;
+      /**
+       * <code>optional .boa.types.Method lambda = 13;</code>
+       *
+       * <pre>
+       *	required PositionInfo position = 14;
+       * </pre>
+       */
+      public boolean hasLambda() {
+        return ((bitField0_ & 0x00001000) == 0x00001000);
+      }
+      /**
+       * <code>optional .boa.types.Method lambda = 13;</code>
+       *
+       * <pre>
+       *	required PositionInfo position = 14;
+       * </pre>
+       */
+      public boa.types.Ast.Method getLambda() {
+        if (lambdaBuilder_ == null) {
+          return lambda_;
+        } else {
+          return lambdaBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .boa.types.Method lambda = 13;</code>
+       *
+       * <pre>
+       *	required PositionInfo position = 14;
+       * </pre>
+       */
+      public Builder setLambda(boa.types.Ast.Method value) {
+        if (lambdaBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          lambda_ = value;
+          onChanged();
+        } else {
+          lambdaBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00001000;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Method lambda = 13;</code>
+       *
+       * <pre>
+       *	required PositionInfo position = 14;
+       * </pre>
+       */
+      public Builder setLambda(
+          boa.types.Ast.Method.Builder builderForValue) {
+        if (lambdaBuilder_ == null) {
+          lambda_ = builderForValue.build();
+          onChanged();
+        } else {
+          lambdaBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00001000;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Method lambda = 13;</code>
+       *
+       * <pre>
+       *	required PositionInfo position = 14;
+       * </pre>
+       */
+      public Builder mergeLambda(boa.types.Ast.Method value) {
+        if (lambdaBuilder_ == null) {
+          if (((bitField0_ & 0x00001000) == 0x00001000) &&
+              lambda_ != boa.types.Ast.Method.getDefaultInstance()) {
+            lambda_ =
+              boa.types.Ast.Method.newBuilder(lambda_).mergeFrom(value).buildPartial();
+          } else {
+            lambda_ = value;
+          }
+          onChanged();
+        } else {
+          lambdaBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00001000;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Method lambda = 13;</code>
+       *
+       * <pre>
+       *	required PositionInfo position = 14;
+       * </pre>
+       */
+      public Builder clearLambda() {
+        if (lambdaBuilder_ == null) {
+          lambda_ = boa.types.Ast.Method.getDefaultInstance();
+          onChanged();
+        } else {
+          lambdaBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00001000);
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Method lambda = 13;</code>
+       *
+       * <pre>
+       *	required PositionInfo position = 14;
+       * </pre>
+       */
+      public boa.types.Ast.Method.Builder getLambdaBuilder() {
+        bitField0_ |= 0x00001000;
+        onChanged();
+        return getLambdaFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .boa.types.Method lambda = 13;</code>
+       *
+       * <pre>
+       *	required PositionInfo position = 14;
+       * </pre>
+       */
+      public boa.types.Ast.MethodOrBuilder getLambdaOrBuilder() {
+        if (lambdaBuilder_ != null) {
+          return lambdaBuilder_.getMessageOrBuilder();
+        } else {
+          return lambda_;
+        }
+      }
+      /**
+       * <code>optional .boa.types.Method lambda = 13;</code>
+       *
+       * <pre>
+       *	required PositionInfo position = 14;
+       * </pre>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Method, boa.types.Ast.Method.Builder, boa.types.Ast.MethodOrBuilder> 
+          getLambdaFieldBuilder() {
+        if (lambdaBuilder_ == null) {
+          lambdaBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              boa.types.Ast.Method, boa.types.Ast.Method.Builder, boa.types.Ast.MethodOrBuilder>(
+                  lambda_,
+                  getParentForChildren(),
+                  isClean());
+          lambda_ = null;
+        }
+        return lambdaBuilder_;
       }
 
       // @@protoc_insertion_point(builder_scope:boa.types.Expression)
@@ -22164,7 +22386,7 @@ public final class Ast {
       "\005WHILE\020\010\022\006\n\002IF\020\t\022\n\n\006ASSERT\020\n\022\t\n\005BREAK\020\013\022" +
       "\014\n\010CONTINUE\020\014\022\t\n\005LABEL\020\r\022\n\n\006SWITCH\020\016\022\010\n\004" +
       "CASE\020\017\022\007\n\003TRY\020\020\022\t\n\005THROW\020\021\022\t\n\005CATCH\020\022\022\t\n" +
-      "\005EMPTY\020\023\032\002\020\001\"\260\t\n\nExpression\0222\n\004kind\030\001 \002(" +
+      "\005EMPTY\020\023\032\002\020\001\"\360\t\n\nExpression\0222\n\004kind\030\001 \002(" +
       "\0162$.boa.types.Expression.ExpressionKind\022" +
       "*\n\013expressions\030\002 \003(\0132\025.boa.types.Express",
       "ion\022+\n\016variable_decls\030\003 \003(\0132\023.boa.types." +
@@ -22175,49 +22397,51 @@ public final class Ast {
       "*\n\013method_args\030\n \003(\0132\025.boa.types.Express" +
       "ion\0220\n\020anon_declaration\030\013 \001(\0132\026.boa.type" +
       "s.Declaration\022\'\n\nannotation\030\014 \001(\0132\023.boa." +
-      "types.Modifier\"\366\005\n\016ExpressionKind\022\t\n\005OTH" +
-      "ER\020\000\022\013\n\007LITERAL\020\001\022\r\n\tVARACCESS\020\002\022\013\n\007VARD",
-      "ECL\020\003\022\016\n\nMETHODCALL\020\004\022\010\n\004CAST\020\005\022\016\n\nARRAY" +
-      "INDEX\020\006\022\r\n\tARRAYINIT\020\007\022\017\n\013TYPECOMPARE\020\010\022" +
-      "\007\n\003NEW\020\t\022\014\n\010NEWARRAY\020\n\022\n\n\006OP_ADD\020\013\022\n\n\006OP" +
-      "_SUB\020\014\022\013\n\007OP_MULT\020\r\022\n\n\006OP_DIV\020\016\022\n\n\006OP_MO" +
-      "D\020\017\022\n\n\006OP_INC\020\020\022\n\n\006OP_DEC\020\021\022\016\n\nBIT_LSHIF" +
-      "T\020\022\022\016\n\nBIT_RSHIFT\020\023\022\026\n\022BIT_UNSIGNEDRSHIF" +
-      "T\020\024\022\013\n\007BIT_AND\020\025\022\n\n\006BIT_OR\020\026\022\013\n\007BIT_NOT\020" +
-      "\027\022\013\n\007BIT_XOR\020\030\022\017\n\013LOGICAL_NOT\020\031\022\017\n\013LOGIC" +
-      "AL_AND\020\032\022\016\n\nLOGICAL_OR\020\033\022\006\n\002EQ\020\034\022\007\n\003NEQ\020" +
-      "\035\022\006\n\002LT\020\036\022\006\n\002GT\020\037\022\010\n\004LTEQ\020 \022\010\n\004GTEQ\020!\022\017\n",
-      "\013CONDITIONAL\020\"\022\020\n\014NULLCOALESCE\020#\022\n\n\006ASSI" +
-      "GN\020$\022\016\n\nASSIGN_ADD\020%\022\016\n\nASSIGN_SUB\020&\022\017\n\013" +
-      "ASSIGN_MULT\020\'\022\016\n\nASSIGN_DIV\020(\022\016\n\nASSIGN_" +
-      "MOD\020)\022\021\n\rASSIGN_BITXOR\020*\022\021\n\rASSIGN_BITAN" +
-      "D\020+\022\020\n\014ASSIGN_BITOR\020,\022\021\n\rASSIGN_LSHIFT\020-" +
-      "\022\021\n\rASSIGN_RSHIFT\020.\022\031\n\025ASSIGN_UNSIGNEDRS" +
-      "HIFT\020/\022\016\n\nANNOTATION\0200\022\t\n\005PAREN\0201\022\024\n\020MET" +
-      "HOD_REFERENCE\0202\"\251\003\n\010Modifier\022.\n\004kind\030\001 \002" +
-      "(\0162 .boa.types.Modifier.ModifierKind\0222\n\n" +
-      "visibility\030\002 \001(\0162\036.boa.types.Modifier.Vi",
-      "sibility\022\027\n\017annotation_name\030\003 \001(\t\022\032\n\022ann" +
-      "otation_members\030\004 \003(\t\0220\n\021annotation_valu" +
-      "es\030\005 \003(\0132\025.boa.types.Expression\022\r\n\005other" +
-      "\030\006 \001(\t\"~\n\014ModifierKind\022\t\n\005OTHER\020\000\022\016\n\nVIS" +
-      "IBILITY\020\001\022\016\n\nANNOTATION\020\002\022\t\n\005FINAL\020\003\022\n\n\006" +
-      "STATIC\020\004\022\020\n\014SYNCHRONIZED\020\005\022\010\n\004SYNC\020\005\022\014\n\010" +
-      "ABSTRACT\020\006\032\002\020\001\"C\n\nVisibility\022\n\n\006PUBLIC\020\001" +
-      "\022\013\n\007PRIVATE\020\002\022\r\n\tPROTECTED\020\003\022\r\n\tNAMESPAC" +
-      "E\020\004\"\335\001\n\007Comment\022,\n\004kind\030\001 \002(\0162\036.boa.type" +
-      "s.Comment.CommentKind\022\r\n\005value\030\002 \002(\t\022)\n\010",
-      "position\030\003 \002(\0132\027.boa.types.PositionInfo\"" +
-      "j\n\013CommentKind\022\t\n\005OTHER\020\000\022\010\n\004LINE\020\001\022\t\n\005B" +
-      "LOCK\020\002\022\007\n\003DOC\020\003\022\021\n\rDOCUMENTATION\020\003\022\010\n\004SP" +
-      "EC\020\004\022\021\n\rSPECIFICATION\020\004\032\002\020\001\"{\n\014PositionI" +
-      "nfo\022\021\n\tstart_pos\030\001 \002(\005\022\016\n\006length\030\002 \002(\005\022\022" +
-      "\n\nstart_line\030\003 \002(\005\022\021\n\tstart_col\030\004 \002(\005\022\020\n" +
-      "\010end_line\030\005 \002(\005\022\017\n\007end_col\030\006 \002(\005*\236\001\n\010Typ" +
-      "eKind\022\t\n\005OTHER\020\000\022\t\n\005CLASS\020\001\022\r\n\tINTERFACE" +
-      "\020\002\022\r\n\tANONYMOUS\020\003\022\010\n\004ANON\020\003\022\n\n\006STRUCT\020\004\022" +
-      "\010\n\004ENUM\020\005\022\017\n\013ENUMERATION\020\005\022\016\n\nANNOTATION",
-      "\020\006\022\014\n\010DELEGATE\020\007\022\013\n\007GENERIC\020\010\032\002\020\001B\002H\001"
+      "types.Modifier\022!\n\006lambda\030\r \001(\0132\021.boa.typ" +
+      "es.Method\"\223\006\n\016ExpressionKind\022\t\n\005OTHER\020\000\022",
+      "\013\n\007LITERAL\020\001\022\r\n\tVARACCESS\020\002\022\013\n\007VARDECL\020\003" +
+      "\022\016\n\nMETHODCALL\020\004\022\010\n\004CAST\020\005\022\016\n\nARRAYINDEX" +
+      "\020\006\022\r\n\tARRAYINIT\020\007\022\017\n\013TYPECOMPARE\020\010\022\007\n\003NE" +
+      "W\020\t\022\014\n\010NEWARRAY\020\n\022\n\n\006OP_ADD\020\013\022\n\n\006OP_SUB\020" +
+      "\014\022\013\n\007OP_MULT\020\r\022\n\n\006OP_DIV\020\016\022\n\n\006OP_MOD\020\017\022\n" +
+      "\n\006OP_INC\020\020\022\n\n\006OP_DEC\020\021\022\016\n\nBIT_LSHIFT\020\022\022\016" +
+      "\n\nBIT_RSHIFT\020\023\022\026\n\022BIT_UNSIGNEDRSHIFT\020\024\022\013" +
+      "\n\007BIT_AND\020\025\022\n\n\006BIT_OR\020\026\022\013\n\007BIT_NOT\020\027\022\013\n\007" +
+      "BIT_XOR\020\030\022\017\n\013LOGICAL_NOT\020\031\022\017\n\013LOGICAL_AN" +
+      "D\020\032\022\016\n\nLOGICAL_OR\020\033\022\006\n\002EQ\020\034\022\007\n\003NEQ\020\035\022\006\n\002",
+      "LT\020\036\022\006\n\002GT\020\037\022\010\n\004LTEQ\020 \022\010\n\004GTEQ\020!\022\017\n\013COND" +
+      "ITIONAL\020\"\022\020\n\014NULLCOALESCE\020#\022\n\n\006ASSIGN\020$\022" +
+      "\016\n\nASSIGN_ADD\020%\022\016\n\nASSIGN_SUB\020&\022\017\n\013ASSIG" +
+      "N_MULT\020\'\022\016\n\nASSIGN_DIV\020(\022\016\n\nASSIGN_MOD\020)" +
+      "\022\021\n\rASSIGN_BITXOR\020*\022\021\n\rASSIGN_BITAND\020+\022\020" +
+      "\n\014ASSIGN_BITOR\020,\022\021\n\rASSIGN_LSHIFT\020-\022\021\n\rA" +
+      "SSIGN_RSHIFT\020.\022\031\n\025ASSIGN_UNSIGNEDRSHIFT\020" +
+      "/\022\016\n\nANNOTATION\0200\022\t\n\005PAREN\0201\022\024\n\020METHOD_R" +
+      "EFERENCE\0202\022\n\n\006LAMBDA\0203\022\017\n\013ANON_METHOD\0204\"" +
+      "\251\003\n\010Modifier\022.\n\004kind\030\001 \002(\0162 .boa.types.M",
+      "odifier.ModifierKind\0222\n\nvisibility\030\002 \001(\016" +
+      "2\036.boa.types.Modifier.Visibility\022\027\n\017anno" +
+      "tation_name\030\003 \001(\t\022\032\n\022annotation_members\030" +
+      "\004 \003(\t\0220\n\021annotation_values\030\005 \003(\0132\025.boa.t" +
+      "ypes.Expression\022\r\n\005other\030\006 \001(\t\"~\n\014Modifi" +
+      "erKind\022\t\n\005OTHER\020\000\022\016\n\nVISIBILITY\020\001\022\016\n\nANN" +
+      "OTATION\020\002\022\t\n\005FINAL\020\003\022\n\n\006STATIC\020\004\022\020\n\014SYNC" +
+      "HRONIZED\020\005\022\010\n\004SYNC\020\005\022\014\n\010ABSTRACT\020\006\032\002\020\001\"C" +
+      "\n\nVisibility\022\n\n\006PUBLIC\020\001\022\013\n\007PRIVATE\020\002\022\r\n" +
+      "\tPROTECTED\020\003\022\r\n\tNAMESPACE\020\004\"\335\001\n\007Comment\022",
+      ",\n\004kind\030\001 \002(\0162\036.boa.types.Comment.Commen" +
+      "tKind\022\r\n\005value\030\002 \002(\t\022)\n\010position\030\003 \002(\0132\027" +
+      ".boa.types.PositionInfo\"j\n\013CommentKind\022\t" +
+      "\n\005OTHER\020\000\022\010\n\004LINE\020\001\022\t\n\005BLOCK\020\002\022\007\n\003DOC\020\003\022" +
+      "\021\n\rDOCUMENTATION\020\003\022\010\n\004SPEC\020\004\022\021\n\rSPECIFIC" +
+      "ATION\020\004\032\002\020\001\"{\n\014PositionInfo\022\021\n\tstart_pos" +
+      "\030\001 \002(\005\022\016\n\006length\030\002 \002(\005\022\022\n\nstart_line\030\003 \002" +
+      "(\005\022\021\n\tstart_col\030\004 \002(\005\022\020\n\010end_line\030\005 \002(\005\022" +
+      "\017\n\007end_col\030\006 \002(\005*\236\001\n\010TypeKind\022\t\n\005OTHER\020\000" +
+      "\022\t\n\005CLASS\020\001\022\r\n\tINTERFACE\020\002\022\r\n\tANONYMOUS\020",
+      "\003\022\010\n\004ANON\020\003\022\n\n\006STRUCT\020\004\022\010\n\004ENUM\020\005\022\017\n\013ENU" +
+      "MERATION\020\005\022\016\n\nANNOTATION\020\006\022\014\n\010DELEGATE\020\007" +
+      "\022\013\n\007GENERIC\020\010\032\002\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -22277,7 +22501,7 @@ public final class Ast {
           internal_static_boa_types_Expression_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Expression_descriptor,
-              new java.lang.String[] { "Kind", "Expressions", "VariableDecls", "NewType", "GenericParameters", "IsPostfix", "Literal", "Variable", "Method", "MethodArgs", "AnonDeclaration", "Annotation", });
+              new java.lang.String[] { "Kind", "Expressions", "VariableDecls", "NewType", "GenericParameters", "IsPostfix", "Literal", "Variable", "Method", "MethodArgs", "AnonDeclaration", "Annotation", "Lambda", });
           internal_static_boa_types_Modifier_descriptor =
             getDescriptor().getMessageTypes().get(9);
           internal_static_boa_types_Modifier_fieldAccessorTable = new
