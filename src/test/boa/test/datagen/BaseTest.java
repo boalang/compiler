@@ -29,6 +29,9 @@ import boa.types.Ast.ASTRoot;
 
 import boa.datagen.util.JavaVisitor;
 
+/*
+ * @author rdyer
+ */
 public class BaseTest {
 	public static String parse(final String content) {
 		final ASTParser parser = ASTParser.newParser(AST.JLS8);

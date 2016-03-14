@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2016, Hridesh Rajan, Robert Dyer, Farheen Sultana
  *                 Iowa State University of Science and Technology,
  *                 and Bowling Green State University
  *
@@ -20,6 +20,10 @@ package boa.test.datagen;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
+/*
+ * @author rdyer
+ * @author sfarheen
+ */
 public class TestLambda extends BaseTest {
 	@Test
 	public void lambda() {
