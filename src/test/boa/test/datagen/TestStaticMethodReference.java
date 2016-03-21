@@ -31,13 +31,8 @@ public class TestStaticMethodReference extends BaseTest {
 			"public class StaticMethodReference {  \n"+
 			"public static void main(String args[]){   \n"+
             "List names = new ArrayList(); \n"+
-            "names.add("Sun");\n"+
-            "names.add("Moon");\n"+
-            "names.add("Star");\n"+
-            "names.add("Earth");\n"+
-            "names.add("Mars");\n"+
             "names.forEach(System.out::println);\n"+
-			"	}\n"+
-			" } "), null);
+			"}\n"+
+			"} "), null);
 	}
 }
