@@ -27,7 +27,8 @@ import org.eclipse.jdt.core.dom.*;
 
 import boa.types.Ast.ASTRoot;
 
-import boa.datagen.util.JavaVisitor;
+import boa.datagen.util.Java7Visitor;
+import boa.datagen.util.Java8Visitor;
 
 /*
  * @author rdyer
@@ -45,7 +46,7 @@ public class BaseTest {
 		final CompilationUnit cu = (CompilationUnit) parser.createAST(null);
 
 		final ASTRoot.Builder ast = ASTRoot.newBuilder();
-		final JavaVisitor visitor = new JavaVisitor(content, new HashMap<String, Integer>());
+		final Java7Visitor visitor = new Java8Visitor(content, new HashMap<String, Integer>());
 		try {
 			ast.addNamespaces(visitor.getNamespaces(cu));
 			for (final String s : visitor.getImports())
