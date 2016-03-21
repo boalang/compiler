@@ -28,12 +28,4 @@ public class JavaToBoa extends BaseTest {
 			else
 				System.out.println(parse(s));
 	}
-
-	public static String parseWrapped(final String content) {
-		String s = "class t {\n\tvoid m() {\n\t\t" + content;
-		if (!content.endsWith(";"))
-			s += ";\n";
-		s += "\n\t}\n}";
-		return parse(s);
-	}
 }

@@ -59,4 +59,12 @@ public class BaseTest {
 
 		return JsonFormat.printToString(ast.build());
 	}
+
+	public static String parseWrapped(final String content) {
+		String s = "class t {\n\tvoid m() {\n\t\t" + content;
+		if (!content.endsWith(";"))
+			s += ";\n";
+		s += "\n\t}\n}";
+		return parse(s);
+	}
 }

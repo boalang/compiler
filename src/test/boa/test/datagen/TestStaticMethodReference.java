@@ -27,11 +27,6 @@ import static org.junit.Assert.assertEquals;
 public class TestStaticMethodReference extends BaseTest {
 	@Test
 	public void methodReference() {
-		assertEquals(parse(
-			"class StaticMethodReference {\n" +
-			"	void m(List v) {\n" +
-			"		v.forEach(System.out::println);\n" +
-			"	}\n" +
-			"}"), null);
+		assertEquals(parseWrapped("v.forEach(System.out::println);"), null);
 	}
 }
