@@ -85,7 +85,7 @@
 		</apply>
 	</target>
 
-	<target name="compile-protobuf" depends="-translate-protobuf,-check-deps" description="Compiles the generated protobuf code.">
+	<target name="compile-protobuf" depends="-init,-check-deps" description="Compiles the generated protobuf code.">
 		<javac includeantruntime="true" srcdir="src/compiled-proto" destdir="build/classes" debug="${debug.enabled}" debuglevel="${debug.level}">
 			<classpath refid="project.class.path" />
 		</javac>
