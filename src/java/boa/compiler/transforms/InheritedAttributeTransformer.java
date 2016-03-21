@@ -24,6 +24,17 @@ import boa.compiler.visitors.AbstractVisitorNoArg;
  * Converts use of current(Type) inherited attributes in visitors
  * into stack variables.
  * 
+ * Logic
+ * 
+ * 1) Find if "current(T)" needs to be evaluated for any node. (Doubts : If Parser is not being modified do I check the program as plain text)
+ * 2) If yes; Find how many times current is called and for what types.
+ * 3) Create a stack of type T. (Doubt - Does Boa allow stacks of more than basic type ?)
+ * 4) Modifying the Typechecked AST
+ * 	* Every time encounter a node of type T during the visit of AST, add that node to stack.
+ *      * Where-ever we encounter the function "current" for a type T, replace/add with node on the top of the stack<T>
+ *      * Remember if there already is before/after code for the node(T) (then Push before the existing code and pop after the existing code)
+ * 5) Confusion : GenerateCacheOutput and GenerateCacheVariable in LocalAggregationTransformer; their significance (How does it apply in this case)
+ * 
  * @author rdyer
  * @author nbhide
  */
