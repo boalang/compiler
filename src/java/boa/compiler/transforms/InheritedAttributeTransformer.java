@@ -21,19 +21,21 @@ import boa.compiler.ast.Program;
 import boa.compiler.visitors.AbstractVisitorNoArg;
 
 /**
- * Converts use of current(Type) inherited attributes in visitors
- * into stack variables.
+ * Converts use of current(T) inherited attributes in visitors into stack variables.
  * 
- * Logic
+ * General algorithm:
  * 
- * 1) Find if "current(T)" needs to be evaluated for any node. (Doubts : If Parser is not being modified do I check the program as plain text)
- * 2) If yes; Find how many times current is called and for what types.
- * 3) Create a stack of type T. (Doubt - Does Boa allow stacks of more than basic type ?)
- * 4) Modifying the Typechecked AST
- * 	* Every time encounter a node of type T during the visit of AST, add that node to stack.
- *      * Where-ever we encounter the function "current" for a type T, replace/add with node on the top of the stack<T>
- *      * Remember if there already is before/after code for the node(T) (then Push before the existing code and pop after the existing code)
- * 5) Confusion : GenerateCacheOutput and GenerateCacheVariable in LocalAggregationTransformer; their significance (How does it apply in this case)
+ * 1) Find all instances of "current(T)" in the AST
+ * 2) Collect set of all unique types T found in #1
+ * 3) For each type T in the set from #2:
+ *    a) Add a variable 's_T' of type 'stack of T' at the top-most scope of the AST
+ *    b) Where-ever we encounter 'current(T)', replace with code for 's_T.peek()'
+ *    c) Add/Update the before clause for T
+ *       i)  If the visitor has a 'before T' clause, add 's_t.push(node)' as the first statement
+ *       ii) Otherwise, add a 'before T' clause with a 's_t.push(node)'
+ *    d) Add/Update the after clause for T
+ *       i)  If the visitor has a 'after T' clause, add 's_t.pop()' as the first statement
+ *       ii) Otherwise, add a 'after T' clause with a 's_t.pop()'
  * 
  * @author rdyer
  * @author nbhide
