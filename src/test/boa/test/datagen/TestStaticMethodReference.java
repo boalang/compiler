@@ -28,10 +28,9 @@ public class TestStaticMethodReference extends BaseTest {
 	@Test
 	public void methodReference() {
 		assertEquals(parse(
-			"public class StaticMethodReference {\n" +
-			"	public static void main(String args[]){\n" +
-			"		List names = new ArrayList(); \n" +
-			"		names.forEach(System.out::println);\n" +
+			"class StaticMethodReference {\n" +
+			"	void m(List v) {\n" +
+			"		v.forEach(System.out::println);\n" +
 			"	}\n" +
 			"}"), null);
 	}
