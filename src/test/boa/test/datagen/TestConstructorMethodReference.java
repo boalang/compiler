@@ -24,9 +24,11 @@ import static org.junit.Assert.assertEquals;
  * @author sfarheen
  * @author rdyer
  */
-public class TestStaticMethodReference extends BaseTest {
+public class TestConstructorMethodReference extends BaseTest {
 	@Test
 	public void methodReference() {
-		assertEquals(parseWrapped("Person::compareByAge;"), null);
+		assertEquals(parseWrapped(
+				"    ConstructorReference cref = Item::new;\n" +
+                "    Item item = cref.constructor();"), null);
 	}
 }

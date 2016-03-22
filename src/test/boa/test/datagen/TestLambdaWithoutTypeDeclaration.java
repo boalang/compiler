@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, Hridesh Rajan, Robert Dyer, Farheen Sultana
+a * Copyright 2016, Hridesh Rajan, Robert Dyer, Farheen Sultana
  *                 Iowa State University of Science and Technology,
  *                 and Bowling Green State University
  *
@@ -21,12 +21,18 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 /*
- * @author sfarheen
  * @author rdyer
+ * @author sfarheen
  */
-public class TestStaticMethodReference extends BaseTest {
+public class TestLambdaWithOutTypeDeclaration extends BaseTest {
 	@Test
-	public void methodReference() {
-		assertEquals(parseWrapped("Person::compareByAge;"), null);
+	public void lambda() {
+		assertEquals(parseWrapped(
+			"      MathOperation subtraction = (a, b) -> a - b;"), null)
+			}
+
+	@Test
+	public void lambda2() {
+		assertEquals(parseWrapped("x += (x) -> x + x;"), null);
 	}
 }

@@ -21,12 +21,18 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 /*
- * @author sfarheen
  * @author rdyer
+ * @author sfarheen
  */
-public class TestStaticMethodReference extends BaseTest {
+public class TestLambdaWithoutReturn extends BaseTest {
 	@Test
-	public void methodReference() {
-		assertEquals(parseWrapped("Person::compareByAge;"), null);
+	public void lambda() {
+		assertEquals(parseWrapped(
+			"      MathOperation division = (int a, int b) -> a / b;\n"), null)
+			}
+
+	@Test
+	public void lambda2() {
+		assertEquals(parseWrapped("x += (int x) ->  x + x; "), null);
 	}
 }

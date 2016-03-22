@@ -24,9 +24,9 @@ import static org.junit.Assert.assertEquals;
  * @author sfarheen
  * @author rdyer
  */
-public class TestStaticMethodReference extends BaseTest {
+public class TestInstanceMethodReference extends BaseTest {
 	@Test
 	public void methodReference() {
-		assertEquals(parseWrapped("Person::compareByAge;"), null);
+		assertEquals(parseWrapped("obj::compareByName;"), null);
 	}
 }
