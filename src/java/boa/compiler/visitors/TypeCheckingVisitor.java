@@ -460,6 +460,8 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 				throw new TypeCheckException(n.getId(), "'" + type + "' has no member named '" + selector + "'");
 
 			type = ((BoaTuple) type).getMember(selector);
+			if (type instanceof BoaName)
+				type = ((BoaName) type).getType();
 		} else {
 			throw new TypeCheckException(n, "invalid operand type '" + type + "' for member selection");
 		}
