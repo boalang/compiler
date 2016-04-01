@@ -22,21 +22,22 @@ import boa.compiler.visitors.AbstractVisitorNoArg;
 
 /**
  * Converts use of current(T) inherited attributes in visitors into stack variables.
- * 
+ *
  * General algorithm:
- * 
- * 1) Find all instances of "current(T)" in the AST
- * 2) Collect set of all unique types T found in #1
- * 3) For each type T in the set from #2:
- *    a) Add a variable 's_T' of type 'stack of T' at the top-most scope of the AST
- *    b) Where-ever we encounter 'current(T)', replace with code for 's_T.peek()'
- *    c) Add/Update the before clause for T
- *       i)  If the visitor has a 'before T' clause, add 's_t.push(node)' as the first statement
- *       ii) Otherwise, add a 'before T' clause with a 's_t.push(node)'
- *    d) Add/Update the after clause for T
- *       i)  If the visitor has a 'after T' clause, add 's_t.pop()' as the first statement
- *       ii) Otherwise, add a 'after T' clause with a 's_t.pop()'
- * 
+ *
+ * 1) Find each instance of VisitorExpression, then for each:
+ *    a) Find all instances of "current(T)" in the visitor
+ *    b) Collect set of all unique types T found in 1a
+ *    c) For each type T in the set from 1b:
+ *       i)   Add a variable 's_T_#' of type 'stack of T' at the top-most scope of the AST
+ *       ii)  Where-ever we encounter 'current(T)', replace with code for 's_T_#.peek()'
+ *       iii) Add/Update the before clause for T in the visitor
+ *            a) If the visitor has a 'before T' clause, add 's_t_#.push(node)' as the first statement
+ *            b) Otherwise, add a 'before T' clause with a 's_t_#.push(node)'
+ *       iv)  Add/Update the after clause for T in the visitor
+ *            a) If the visitor has a 'after T' clause, add 's_t_#.pop()' as the first statement
+ *            b) Otherwise, add a 'after T' clause with a 's_t_#.pop()'
+ *
  * @author rdyer
  * @author nbhide
  */
