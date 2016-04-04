@@ -339,6 +339,8 @@ public class BoaCompiler {
 					throws RuntimeException, IOException, FileNotFoundException {
 		// compile the generated .java file
 		final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+		if (compiler == null)
+			throw new RuntimeException("Could not get javac - are you running the Boa compiler with a JDK or a JRE?");
 		LOG.info("compiling: " + outputFile);
 		LOG.info("classpath: " + System.getProperty("java.class.path"));
 		if (compiler.run(null, null, null, "-source", "5", "-target", "5", "-cp", System.getProperty("java.class.path"), outputFile.toString()) != 0)
