@@ -1,5 +1,5 @@
 /*
-a * Copyright 2016, Hridesh Rajan, Robert Dyer, Farheen Sultana
+ * Copyright 2016, Hridesh Rajan, Robert Dyer, Farheen Sultana
  *                 Iowa State University of Science and Technology,
  *                 and Bowling Green State University
  *

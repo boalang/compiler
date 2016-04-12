@@ -1,6 +1,7 @@
 /*
- * Copyright 2015, Hridesh Rajan, Robert Dyer, Hoan Nguyen
- *                 and Iowa State University of Science and Technology
+ * Copyright 2016, Hridesh Rajan, Robert Dyer, Hoan Nguyen, Farheen Sultana
+ *                 Iowa State University of Science and Technology
+ *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

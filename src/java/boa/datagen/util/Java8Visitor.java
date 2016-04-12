@@ -1,6 +1,7 @@
 /*
- * Copyright 2015, Hridesh Rajan, Robert Dyer, Hoan Nguyen
- *                 and Iowa State University of Science and Technology
+ * Copyright 2016, Hridesh Rajan, Robert Dyer, Hoan Nguyen, Farheen Sultana
+ *                 Iowa State University of Science and Technology
+ *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +26,7 @@ import boa.types.Ast.*;
 
 /**
  * @author rdyer
+ * @author sfarheen
  */
 public class Java8Visitor extends Java7Visitor {
 	public Java8Visitor(String src, HashMap<String, Integer> nameIndices) {
@@ -33,16 +35,6 @@ public class Java8Visitor extends Java7Visitor {
 
 	// Field/Method Declarations
 
-	/*
-	 *  FIXME
-	 *  Method Declaration (JLS8 Changes):
-	 *  	Deprecated setExtraDimensions() and added extraDimensions()
-     *		Added getReceiverQualifier()
-	 *		Added getReceiverType()
-	 *		Added setReceiverQualifier()
-	 *		Added setReceiverType()
-	 */
-	
 	@Override
 	public boolean visit(MethodDeclaration node) {
 		List<boa.types.Ast.Method> list = methods.peek();
@@ -62,7 +54,7 @@ public class Java8Visitor extends Java7Visitor {
 		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 		if (node.getReturnType2() != null) {
 			String name = typeName(node.getReturnType2());
-			//FIXME JLS8: Deprecated setExtraDimensions() and added extraDimensions()
+			//FIXME JLS8: Deprecated getExtraDimensions() and added extraDimensions()
 			for (int i = 0; i < node.getExtraDimensions(); i++)
 				name += "[]";
 			tb.setName(getIndex(name));
@@ -88,6 +80,11 @@ public class Java8Visitor extends Java7Visitor {
 			tp.setKind(boa.types.Ast.TypeKind.GENERIC);
 			b.addGenericParameters(tp.build());
 		}
+		// FIXME put receiver parameters
+		/*
+     *		Added getReceiverQualifier()
+	 *		Added getReceiverType()
+	 */
 		for (Object o : node.parameters()) {
 			SingleVariableDeclaration ex = (SingleVariableDeclaration)o;
 			Variable.Builder vb = Variable.newBuilder();
@@ -102,7 +99,7 @@ public class Java8Visitor extends Java7Visitor {
 			}
 			boa.types.Ast.Type.Builder tp = boa.types.Ast.Type.newBuilder();
 			String name = typeName(ex.getType());
-			//FIXME JLS8: Deprecated setExtraDimensions() and added extraDimensions()
+			//FIXME JLS8: Deprecated getExtraDimensions() and added extraDimensions()
 			for (int i = 0; i < ex.getExtraDimensions(); i++)
 				name += "[]";
 			if (ex.isVarargs())
@@ -135,7 +132,6 @@ public class Java8Visitor extends Java7Visitor {
 	// begin java 8
 	@Override
 	public boolean visit(LambdaExpression node) {
-		//make it an expression, declaratio inside. inside the expression, have a method
 		Method.Builder b = Method.newBuilder();
 		b.setName("");
 		boa.types.Ast.Type.Builder rt = boa.types.Ast.Type.newBuilder();
@@ -150,7 +146,7 @@ public class Java8Visitor extends Java7Visitor {
 				SingleVariableDeclaration svd = (SingleVariableDeclaration)o;
 				boa.types.Ast.Type.Builder tp = boa.types.Ast.Type.newBuilder();
 				String name = typeName(svd.getType());
-				//FIXME JLS8: Deprecated setExtraDimensions() and added extraDimensions()
+				//FIXME JLS8: Deprecated getExtraDimensions() and added extraDimensions()
 				for (int i = 0; i < svd.getExtraDimensions(); i++)
 					name += "[]";
 				if (svd.isVarargs())
@@ -187,7 +183,7 @@ public class Java8Visitor extends Java7Visitor {
 		
 		boa.types.Ast.Type.Builder tb1 = boa.types.Ast.Type.newBuilder();
 		tb1.setName(getIndex(typeName(node.getType())));
-		tb1.setKind(boa.types.Ast.TypeKind.OTHER); ////????other?
+		tb1.setKind(boa.types.Ast.TypeKind.OTHER);
 		eb.setNewType(tb1.build());
 
 		for (Object t : node.typeArguments()) {
@@ -201,7 +197,6 @@ public class Java8Visitor extends Java7Visitor {
 		
 		expressions.push(eb.build());
 		return false;
-	
 	}
 	
 	@Override
@@ -225,12 +220,12 @@ public class Java8Visitor extends Java7Visitor {
 		return false;
 	}
 	
-	 @Override
+	@Override
 	public boolean visit(SuperMethodReference node) {
 			boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 			eb.setKind(boa.types.Ast.Expression.ExpressionKind.METHOD_REFERENCE);
 			
-			if(node.getQualifier() != null)
+			if (node.getQualifier() != null)
 				eb.setLiteral((node.getQualifier()) +".super"); 
 			else
 				eb.setLiteral("super");
@@ -246,18 +241,10 @@ public class Java8Visitor extends Java7Visitor {
 			expressions.push(eb.build());
 
 			return false;
- 
 	 }
 	
 	@Override
 	public boolean visit(TypeMethodReference node) {
-		/*
-		Type {
-			kind: DELEGATE
-			name: ???
-		}
-		*/
-	
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.METHOD_REFERENCE);
 		
@@ -272,7 +259,6 @@ public class Java8Visitor extends Java7Visitor {
 		expressions.push(eb.build());
 
 		return false;
-	
 	}
 	
 	/*
@@ -280,7 +266,6 @@ public class Java8Visitor extends Java7Visitor {
 	 * ArrayType (JLS8 Changes):
 	 * 		Added dimensions()
 	 *		Deprecated getComponentType()
-	 *   	Deprecated setComponentType()
 	 */
 
 	@Override
@@ -291,7 +276,6 @@ public class Java8Visitor extends Java7Visitor {
 	/*
 	 * FIXME
 	 * VariableDeclaration (JLS8 changes) :
-	 * 		Deprecated setExtraDimensions() and added extraDimensions()
 	 *		Deprecated getExtraDimensionsProperty() and added getExtraDimensions2Property()
      *
 	 * SingleVariableDeclaration (JLS8 Changes):
