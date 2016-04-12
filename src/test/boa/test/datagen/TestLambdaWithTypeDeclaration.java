@@ -27,9 +27,8 @@ import static org.junit.Assert.assertEquals;
 public class TestLambdaWithTypeDeclaration extends BaseTest {
 	@Test
 	public void lambda() {
-		assertEquals(parseWrapped(
-			"      MathOperation add = (int a, int b) -> a + b;"), null)
-			}
+		assertEquals(parseWrapped("      MathOperation add = (int a, int b) -> a + b;"), null);
+	}
 
 	@Test
 	public void lambda2() {

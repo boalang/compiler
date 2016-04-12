@@ -27,9 +27,8 @@ import static org.junit.Assert.assertEquals;
 public class TestLambdaWithoutParanthesis extends BaseTest {
 	@Test
 	public void lambda() {
-		assertEquals(parseWrapped(
-			"      MathOperation division = int a, int b -> a / b;"), null)
-			}
+		assertEquals(parseWrapped("      MathOperation division = int a, int b -> a / b;"), null);
+	}
 
 	@Test
 	public void lambda2() {

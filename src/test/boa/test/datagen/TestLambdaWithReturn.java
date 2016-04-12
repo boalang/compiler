@@ -27,9 +27,8 @@ import static org.junit.Assert.assertEquals;
 public class TestLambdaWithReturn extends BaseTest {
 	@Test
 	public void lambda() {
-		assertEquals(parseWrapped(
-			"      MathOperation multiplication = (int a, int b) -> { return a * b; }"), null)
-			}
+		assertEquals(parseWrapped("      MathOperation multiplication = (int a, int b) -> { return a * b; }"), null);
+	}
 
 	@Test
 	public void lambda2() {

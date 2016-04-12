@@ -27,9 +27,8 @@ import static org.junit.Assert.assertEquals;
 public class TestLambdaWithoutArguments extends BaseTest {
 	@Test
 	public void lambda() {
-		assertEquals(parseWrapped(
-			"      () -> System.out.println(hi);"), null)
-			}
+		assertEquals(parseWrapped("      () -> System.out.println(hi);"), null);
+	}
 
 	@Test
 	public void lambda2() {

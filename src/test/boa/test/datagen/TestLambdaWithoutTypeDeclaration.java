@@ -24,12 +24,11 @@ import static org.junit.Assert.assertEquals;
  * @author rdyer
  * @author sfarheen
  */
-public class TestLambdaWithOutTypeDeclaration extends BaseTest {
+public class TestLambdaWithoutTypeDeclaration extends BaseTest {
 	@Test
 	public void lambda() {
-		assertEquals(parseWrapped(
-			"      MathOperation subtraction = (a, b) -> a - b;"), null)
-			}
+		assertEquals(parseWrapped("      MathOperation subtraction = (a, b) -> a - b;"), null);
+	}
 
 	@Test
 	public void lambda2() {
