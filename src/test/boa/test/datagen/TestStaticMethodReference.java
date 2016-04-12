@@ -27,6 +27,34 @@ import static org.junit.Assert.assertEquals;
 public class TestStaticMethodReference extends BaseTest {
 	@Test
 	public void methodReference() {
-		assertEquals(parseWrapped("Person::compareByAge;"), null);
+		assertEquals(parseWrapped("Person::compareByAge;"),
+			"{\n" +
+			"   \"namespaces\": [\n" +
+			"      {\n" +
+			"         \"name\": \"\",\n" +
+			"         \"declarations\": [\n" +
+			"            {\n" +
+			"               \"name\": \"t\",\n" +
+			"               \"kind\": \"CLASS\",\n" +
+			"               \"methods\": [\n" +
+			"                  {\n" +
+			"                     \"name\": \"m\",\n" +
+			"                     \"return_type\": {\n" +
+			"                        \"kind\": \"OTHER\",\n" +
+			"                        \"name\": 0\n" +
+			"                     },\n" +
+			"                     \"statements\": [\n" +
+			"                        {\n" +
+			"                           \"kind\": \"BLOCK\"\n" +
+			"                        }\n" +
+			"                     ]\n" +
+			"                  }\n" +
+			"               ]\n" +
+			"            }\n" +
+			"         ]\n" +
+			"      }\n" +
+			"   ]\n" +
+			"}"
+		);
 	}
 }
