@@ -1,0 +1,17 @@
+o: output sum of int;
+o << 1;
+
+i: int;
+i = int(i);
+
+b: bool;
+b = bool(b);
+
+f: float;
+f = float(f);
+
+t: time;
+t = time(t);
+
+s: string;
+s = string(s);
