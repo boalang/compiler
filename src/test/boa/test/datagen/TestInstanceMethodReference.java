@@ -27,6 +27,34 @@ import static org.junit.Assert.assertEquals;
 public class TestInstanceMethodReference extends BaseTest {
 	@Test
 	public void methodReference() {
-		assertEquals(parseWrapped("obj::compareByName;"), null);
+		assertEquals(parseWrapped("obj::compareByName;"),
+			"{\n" +
+		    "   \"namespaces\": [\n" +
+		    "      {\n" +
+		    "         \"name\": \"\",\n" +
+		    "         \"declarations\": [\n" +
+		    "            {\n" +
+		    "               \"name\": \"t\",\n" +
+		    "               \"kind\": \"CLASS\",\n" +
+		    "               \"methods\": [\n" +
+		    "                  {\n" +
+		    "                     \"name\": \"m\",\n" +
+		    "                     \"return_type\": {\n" +
+		    "                        \"kind\": \"OTHER\",\n" +
+		    "                        \"name\": 0\n" +
+			"                     },\n" +
+			"                     \"statements\": [\n" +
+		    "                        {\n" +
+		    "                           \"kind\": \"BLOCK\"\n" +
+		    "                        }\n" +
+		    "                     ]\n" +
+		    "                  }\n" +
+		    "               ]\n" +
+		    "            }\n" +
+		    "         ]\n" +
+		    "      }\n" +
+		    "   ]\n" +
+		    "}" 
+		);
 	}
 }
