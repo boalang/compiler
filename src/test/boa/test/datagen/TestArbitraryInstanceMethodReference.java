@@ -27,6 +27,61 @@ import static org.junit.Assert.assertEquals;
 public class TestArbitraryInstanceMethodReference extends BaseTest {
 	@Test
 	public void methodReference() {
-		assertEquals(parseWrapped("items.forEach(Item::publish);"), null);
+		assertEquals(parseWrapped("items.forEach(Item::publish);"),
+			"{\n" +
+			"   \"namespaces\": [\n" +
+			"      {\n" +
+			"         \"name\": \"\",\n" +
+			"         \"declarations\": [\n" +
+			"            {\n" +
+			"               \"name\": \"t\",\n" +
+			"               \"kind\": \"CLASS\",\n" +
+			"               \"methods\": [\n" +
+			"                  {\n" +
+			"                     \"name\": \"m\",\n" +
+			"                     \"return_type\": {\n" +
+			"                        \"kind\": \"OTHER\",\n" +
+			"                        \"name\": 0\n" +
+			"                     },\n" +
+			"                     \"statements\": [\n" +
+			"                        {\n" +
+			"                           \"kind\": \"BLOCK\",\n" +
+			"                           \"statements\": [\n" +
+			"                              {\n" +
+			"                                 \"kind\": \"EXPRESSION\",\n" +
+			"                                 \"expression\": {\n" +
+			"                                    \"kind\": \"METHODCALL\",\n" +
+			"                                    \"expressions\": [\n" +
+			"                                       {\n" +
+			"                                          \"kind\": \"VARACCESS\",\n" +
+			"                                          \"variable\": \"items\"\n" +
+			"                                       }\n" +
+			"                                    ],\n" +
+			"                                    \"method\": \"forEach\",\n" +
+			"                                    \"method_args\": [\n" +
+			"                                       {\n" +
+			"                                          \"kind\": \"METHOD_REFERENCE\",\n" +
+			"                                          \"expressions\": [\n" +
+			"                                             {\n" +
+			"                                                \"kind\": \"VARACCESS\",\n" +
+			"                                                \"variable\": \"Item\"\n" +
+			"                                             }\n" +
+			"                                          ],\n" +
+			"                                          \"method\": \"publish\"\n" +
+			"                                       }\n" +
+			"                                    ]\n" +
+			"                                 }\n" +
+			"                              }\n" +
+			"                           ]\n" +
+			"                        }\n" +
+			"                     ]\n" +
+			"                  }\n" +
+			"               ]\n" +
+			"            }\n" +
+			"         ]\n" +
+			"      }\n" +
+			"   ]\n" +
+			"}"
+		);
 	}
 }
