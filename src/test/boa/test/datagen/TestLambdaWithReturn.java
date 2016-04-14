@@ -27,11 +27,189 @@ import static org.junit.Assert.assertEquals;
 public class TestLambdaWithReturn extends BaseTest {
 	@Test
 	public void lambda() {
-		assertEquals(parseWrapped("      MathOperation multiplication = (int a, int b) -> { return a * b; }"), null);
+		assertEquals(parseWrapped( " MathOperation multiplication = (int a, int b) -> { return a * b; } " ), 
+						"{\n" +
+					    "   \"namespaces\": [\n" +
+					    "      {\n" +
+					    "         \"name\": \"\",\n" +
+					    "         \"declarations\": [\n" +
+					    "            {\n" +
+					    "               \"name\": \"t\",\n" +
+					    "               \"kind\": \"CLASS\",\n" +
+					    "               \"methods\": [\n" +
+					    "                  {\n" +
+					    "                     \"name\": \"m\",\n" +
+					    "                     \"return_type\": {\n" +
+					    "                        \"kind\": \"OTHER\",\n" +
+					    "                        \"name\": 0\n" +
+					    "                     },\n" +
+					    "                     \"statements\": [\n" +
+					    "                        {\n" +
+					    "                           \"kind\": \"BLOCK\",\n" +
+					    "                           \"statements\": [\n" +
+					    "                              {\n" +
+					    "                                 \"kind\": \"EXPRESSION\",\n" +
+					    "                                 \"expression\": {\n" +
+					    "                                    \"kind\": \"VARDECL\",\n" +
+					    "                                    \"variable_decls\": [\n" +
+					    "                                       {\n" +
+					    "                                          \"name\": \"multiplication\",\n" +
+					    "                                          \"variable_type\": {\n" +
+					    "                                             \"kind\": \"OTHER\",\n" +
+					    "                                             \"name\": 1\n" +
+					    "                                          },\n" +
+					    "                                          \"initializer\": {\n" +
+					    "                                             \"kind\": \"LAMBDA\",\n" +
+					    "                                             \"lambda\": {\n" +
+					    "                                                \"name\": \"\",\n" +
+					    "                                                \"return_type\": {\n" +
+					    "                                                   \"kind\": \"OTHER\",\n" +
+					    "                                                   \"name\": 2\n" +
+					    "                                                },\n" +
+					    "                                                \"arguments\": [\n" +
+					    "                                                   {\n" +
+					    "                                                      \"name\": \"a\",\n" +
+					    "                                                      \"variable_type\": {\n" +
+					    "                                                         \"kind\": \"OTHER\",\n" +
+					    "                                                         \"name\": 3\n" +
+					    "                                                      }\n" +
+					    "                                                   },\n" +
+					    "                                                   {\n" +
+					    "                                                      \"name\": \"b\",\n" +
+					    "                                                      \"variable_type\": {\n" +
+					    "                                                         \"kind\": \"OTHER\",\n" +
+					    "                                                         \"name\": 3\n" +
+					    "                                                      }\n" +
+					    "                                                   }\n" +
+					    "                                                ],\n" +
+					    "                                                \"statements\": [\n" +
+					    "                                                   {\n" +
+					    "                                                      \"kind\": \"BLOCK\",\n" +
+					    "                                                      \"statements\": [\n" +
+					    "                                                         {\n" +
+					    "                                                            \"kind\": \"RETURN\",\n" +
+					    "                                                            \"expression\": {\n" +
+					    "                                                               \"kind\": \"OP_MULT\",\n" +
+					    "                                                               \"expressions\": [\n" +
+					    "                                                                  {\n" +
+					    "                                                                     \"kind\": \"VARACCESS\",\n" +
+					    "                                                                     \"variable\": \"a\"\n" +
+					    "                                                                  },\n" +
+					    "                                                                  {\n" +
+					    "                                                                     \"kind\": \"VARACCESS\",\n" +
+					    "                                                                     \"variable\": \"b\"\n" +
+					    "                                                                  }\n" +
+					    "                                                               ]\n" +
+					    "                                                            }\n" +
+					    "                                                         }\n" +
+					    "                                                      ]\n" +
+					    "                                                   }\n" +
+					    "                                                ]\n" +
+					    "                                             }\n" +
+					    "                                          }\n" +
+					    "                                       }\n" +
+					    "                                    ]\n" +
+					    "                                 }\n" +
+					    "                              }\n" +
+					    "                           ]\n" +
+					    "                        }\n" +
+					    "                     ]\n" +
+					    "                  }\n" +
+					    "               ]\n" +
+					    "            }\n" +
+					    "         ]\n" +
+					    "      }\n" +
+					    "   ]\n" +
+					    "}"
+				);
 	}
 
 	@Test
 	public void lambda2() {
-		assertEquals(parseWrapped("x += (int x) -> { return x + x; }"), null);
+		assertEquals(parseWrapped("x += (int x) -> { return x + x; }"), 
+						"{\n" +
+					    "   \"namespaces\": [\n" +
+					    "      {\n" +
+					    "         \"name\": \"\",\n" +
+					    "         \"declarations\": [\n" +
+					    "            {\n" +
+					    "               \"name\": \"t\",\n" +
+					    "               \"kind\": \"CLASS\",\n" +
+					    "               \"methods\": [\n" +
+					    "                  {\n" +
+					    "                     \"name\": \"m\",\n" +
+					    "                     \"return_type\": {\n" +
+					    "                        \"kind\": \"OTHER\",\n" +
+					    "                        \"name\": 0\n" +
+					    "                     },\n" +
+					    "                     \"statements\": [\n" +
+					    "                        {\n" +
+					    "                           \"kind\": \"BLOCK\",\n" +
+					    "                           \"statements\": [\n" +
+					    "                              {\n" +
+					    "                                 \"kind\": \"EXPRESSION\",\n" +
+					    "                                 \"expression\": {\n" +
+					    "                                    \"kind\": \"ASSIGN_ADD\",\n" +
+					    "                                    \"expressions\": [\n" +
+					    "                                       {\n" +
+					    "                                          \"kind\": \"VARACCESS\",\n" +
+					    "                                          \"variable\": \"x\"\n" +
+					    "                                       },\n" +
+					    "                                       {\n" +
+					    "                                          \"kind\": \"LAMBDA\",\n" +
+					    "                                          \"lambda\": {\n" +
+					    "                                             \"name\": \"\",\n" +
+					    "                                             \"return_type\": {\n" +
+					    "                                                \"kind\": \"OTHER\",\n" +
+					    "                                                \"name\": 1\n" +
+					    "                                             },\n" +
+					    "                                             \"arguments\": [\n" +
+					    "                                                {\n" +
+					    "                                                   \"name\": \"x\",\n" +
+					    "                                                   \"variable_type\": {\n" +
+					    "                                                      \"kind\": \"OTHER\",\n" +
+					    "                                                      \"name\": 2\n" +
+					    "                                                   }\n" +
+					    "                                                }\n" +
+					    "                                             ],\n" +
+					    "                                             \"statements\": [\n" +
+					    "                                                {\n" +
+					    "                                                   \"kind\": \"BLOCK\",\n" +
+					    "                                                   \"statements\": [\n" +
+					    "                                                      {\n" +
+					    "                                                         \"kind\": \"RETURN\",\n" +
+					    "                                                         \"expression\": {\n" +
+					    "                                                            \"kind\": \"OP_ADD\",\n" +
+					    "                                                            \"expressions\": [\n" +
+					    "                                                               {\n" +
+					    "                                                                  \"kind\": \"VARACCESS\",\n" +
+					    "                                                                  \"variable\": \"x\"\n" +
+					    "                                                               },\n" +
+					    "                                                               {\n" +
+					    "                                                                  \"kind\": \"VARACCESS\",\n" +
+					    "                                                                  \"variable\": \"x\"\n" +
+					    "                                                               }\n" +
+					    "                                                            ]\n" +
+					    "                                                         }\n" +
+					    "                                                      }\n" +
+					    "                                                   ]\n" +
+					    "                                                }\n" +
+					    "                                             ]\n" +
+					    "                                          }\n" +
+					    "                                       }\n" +
+					    "                                    ]\n" +
+					    "                                 }\n" +
+					    "                              }\n" +
+					    "                           ]\n" +
+					    "                        }\n" +
+					    "                     ]\n" +
+					    "                  }\n" +
+					    "               ]\n" +
+					    "            }\n" +
+					    "         ]\n" +
+					    "      }\n" +
+					    "   ]\n" +
+					    "}"
+				);
 	}
 }

@@ -27,11 +27,67 @@ import static org.junit.Assert.assertEquals;
 public class TestLambdaWithoutArguments extends BaseTest {
 	@Test
 	public void lambda() {
-		assertEquals(parseWrapped("      () -> System.out.println(hi);"), null);
+		assertEquals(parseWrapped("      () -> System.out.println(hi);"),
+						"{\n" +
+					    "   \"namespaces\": [\n" +
+					    "      {\n" +
+					    "         \"name\": \"\",\n" +
+					    "         \"declarations\": [\n" +
+					    "            {\n" +
+					    "               \"name\": \"t\",\n" +
+					    "               \"kind\": \"CLASS\",\n" +
+					    "               \"methods\": [\n" +
+					    "                  {\n" +
+					    "                     \"name\": \"m\",\n" +
+					    "                     \"return_type\": {\n" +
+					    "                        \"kind\": \"OTHER\",\n" +
+					    "                        \"name\": 0\n" +
+					    "                     },\n" +
+					    "                     \"statements\": [\n" +
+					    "                        {\n" +
+					    "                           \"kind\": \"BLOCK\"\n" +
+					    "                        }\n" +
+					    "                     ]\n" +
+					    "                  }\n" +
+					    "               ]\n" +
+					    "            }\n" +
+					    "         ]\n" +
+					    "      }\n" +
+					    "   ]\n" +
+					    "}"	
+				);
 	}
 
 	@Test
 	public void lambda2() {
-		assertEquals(parseWrapped(" () -> x;"), null);
+		assertEquals(parseWrapped(" () -> x;"),
+						"{\n" +
+					    "   \"namespaces\": [\n" +
+					    "      {\n" +
+					    "         \"name\": \"\",\n" +
+					    "         \"declarations\": [\n" +
+					    "            {\n" +
+					    "               \"name\": \"t\",\n" +
+					    "               \"kind\": \"CLASS\",\n" +
+					    "               \"methods\": [\n" +
+					    "                  {\n" +
+					    "                     \"name\": \"m\",\n" +
+					    "                     \"return_type\": {\n" +
+					    "                        \"kind\": \"OTHER\",\n" +
+					    "                        \"name\": 0\n" +
+					    "                     },\n" +
+					    "                     \"statements\": [\n" +
+					    "                        {\n" +
+					    "                           \"kind\": \"BLOCK\"\n" +
+					    "                        }\n" +
+					    "                     ]\n" +
+					    "                  }\n" +
+					    "               ]\n" +
+					    "            }\n" +
+					    "         ]\n" +
+					    "      }\n" +
+					    "   ]\n" +
+					    "}"
+				);
 	}
 }

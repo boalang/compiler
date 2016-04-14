@@ -27,11 +27,67 @@ import static org.junit.Assert.assertEquals;
 public class TestLambdaWithoutParanthesis extends BaseTest {
 	@Test
 	public void lambda() {
-		assertEquals(parseWrapped("      MathOperation division = int a, int b -> a / b;"), null);
+		assertEquals(parseWrapped("      MathOperation division = int a, int b -> a / b;"),
+						"{\n" +
+					    "   \"namespaces\": [\n" +
+					    "      {\n" +
+					    "         \"name\": \"\",\n" +
+					    "         \"declarations\": [\n" +
+					    "            {\n" +
+					    "               \"name\": \"t\",\n" +
+					    "               \"kind\": \"CLASS\",\n" +
+					    "               \"methods\": [\n" +
+					    "                  {\n" +
+					    "                     \"name\": \"m\",\n" +
+					    "                     \"return_type\": {\n" +
+					    "                        \"kind\": \"OTHER\",\n" +
+					    "                        \"name\": 0\n" +
+					    "                     },\n" +
+					    "                     \"statements\": [\n" +
+					    "                        {\n" +
+					    "                           \"kind\": \"BLOCK\"\n" +
+					    "                        }\n" +
+					    "                     ]\n" +
+					    "                  }\n" +
+					    "               ]\n" +
+					    "            }\n" +
+					    "         ]\n" +
+					    "      }\n" +
+					    "   ]\n" +
+					    "}"
+				);
 	}
 
 	@Test
 	public void lambda2() {
-		assertEquals(parseWrapped("x += int x -> x + x;"), null);
+		assertEquals(parseWrapped("x += int x -> x + x;"),
+						"{\n" +
+					    "   \"namespaces\": [\n" +
+					    "      {\n" +
+					    "         \"name\": \"\",\n" +
+					    "         \"declarations\": [\n" +
+					    "            {\n" +
+					    "               \"name\": \"t\",\n" +
+					    "               \"kind\": \"CLASS\",\n" +
+					    "               \"methods\": [\n" +
+					    "                  {\n" +
+					    "                     \"name\": \"m\",\n" +
+					    "                     \"return_type\": {\n" +
+					    "                        \"kind\": \"OTHER\",\n" +
+					    "                        \"name\": 0\n" +
+					    "                     },\n" +
+					    "                     \"statements\": [\n" +
+					    "                        {\n" +
+					    "                           \"kind\": \"BLOCK\"\n" +
+					    "                        }\n" +
+					    "                     ]\n" +
+					    "                  }\n" +
+					    "               ]\n" +
+					    "            }\n" +
+					    "         ]\n" +
+					    "      }\n" +
+					    "   ]\n" +
+					    "}"
+				);
 	}
 }
