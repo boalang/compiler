@@ -17,8 +17,17 @@
  */
 package boa.compiler.transforms;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.*;
+
+import boa.compiler.ast.Factor;
+import boa.compiler.ast.Identifier;
 import boa.compiler.ast.Program;
+import boa.compiler.ast.expressions.VisitorExpression;
+import boa.compiler.ast.statements.StopStatement;
 import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.types.BoaScalar;
 
 /**
  * Converts use of current(T) inherited attributes in visitors into stack variables.
@@ -43,8 +52,54 @@ import boa.compiler.visitors.AbstractVisitorNoArg;
  */
 public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 	/** {@inheritDoc} */
+	
+	private class FindVisitorExpressions extends AbstractVisitorNoArg {
+		
+		protected final List<VisitorExpression> VisitorList = new ArrayList<VisitorExpression>();
+
+		/**
+		 * Creates a list of all the Visitors in the Boa AST 
+		 *
+		 */
+		public List<VisitorExpression> getVisitors() {
+			return VisitorList;
+		}
+
+		/** @{inheritDoc} */
+		@Override
+		public void visit(final VisitorExpression n) {
+			// dont nest
+			VisitorList.add(n);
+		}
+	}
+		
+	public class FindCurrentForVisitors extends AbstractVisitorNoArg{
+		protected final Set<BoaScalar> listCurrent = new HashSet<BoaScalar>();
+		FindVisitorExpressions visitorFind = new FindVisitorExpressions();
+		
+		public Set<BoaScalar> getCurrentTypes(){
+			return listCurrent;
+		}
+		
+		/** @{inheritDoc} */
+		@Override
+		public void visit(final VisitorExpression n){
+			super.visit(n);
+		}
+		
+		/** @{inheritDoc} */
+		@Override
+		public void visit(final Factor n){
+			//n.getOp			
+		}
+	}
+	
+	public class TransformForCurrent extends AbstractVisitorNoArg{
+		
+	}
+	
 	@Override
 	public void visit(final Program n) {
-		// TODO
+	  		
 	}
 }
