@@ -174,6 +174,29 @@ public class SymbolTable {
 		// arrays to string
 		globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { new BoaArray(new BoaScalar()) }, "boa.functions.BoaIntrinsics.arrayToString(${0})"));
 
+		// FIXME
+		globalFunctions.addFunction("current", new BoaFunction(new ASTRootProtoTuple(), new BoaType[] { new ASTRootProtoTuple() }, ""));
+		globalFunctions.addFunction("current", new BoaFunction(new AttachmentProtoTuple(), new BoaType[] { new AttachmentProtoTuple() }, ""));
+		globalFunctions.addFunction("current", new BoaFunction(new ChangedFileProtoTuple(), new BoaType[] { new ChangedFileProtoTuple() }, ""));
+		globalFunctions.addFunction("current", new BoaFunction(new CodeRepositoryProtoTuple(), new BoaType[] { new CodeRepositoryProtoTuple() }, ""));
+		globalFunctions.addFunction("current", new BoaFunction(new CommentProtoTuple(), new BoaType[] { new CommentProtoTuple() }, ""));
+		globalFunctions.addFunction("current", new BoaFunction(new CommentsRootProtoTuple(), new BoaType[] { new CommentsRootProtoTuple() }, ""));
+		globalFunctions.addFunction("current", new BoaFunction(new DeclarationProtoTuple(), new BoaType[] { new DeclarationProtoTuple() }, ""));
+		globalFunctions.addFunction("current", new BoaFunction(new ExpressionProtoTuple(), new BoaType[] { new ExpressionProtoTuple() }, ""));
+		globalFunctions.addFunction("current", new BoaFunction(new IssueProtoTuple(), new BoaType[] { new IssueProtoTuple() }, ""));
+		globalFunctions.addFunction("current", new BoaFunction(new IssueCommentProtoTuple(), new BoaType[] { new IssueCommentProtoTuple() }, ""));
+		globalFunctions.addFunction("current", new BoaFunction(new IssueRepositoryProtoTuple(), new BoaType[] { new IssueRepositoryProtoTuple() }, ""));
+		globalFunctions.addFunction("current", new BoaFunction(new IssuesRootProtoTuple(), new BoaType[] { new IssuesRootProtoTuple() }, ""));
+		globalFunctions.addFunction("current", new BoaFunction(new MethodProtoTuple(), new BoaType[] { new MethodProtoTuple() }, ""));
+		globalFunctions.addFunction("current", new BoaFunction(new ModifierProtoTuple(), new BoaType[] { new ModifierProtoTuple() }, ""));
+		globalFunctions.addFunction("current", new BoaFunction(new NamespaceProtoTuple(), new BoaType[] { new NamespaceProtoTuple() }, ""));
+		globalFunctions.addFunction("current", new BoaFunction(new PersonProtoTuple(), new BoaType[] { new PersonProtoTuple() }, ""));
+		globalFunctions.addFunction("current", new BoaFunction(new ProjectProtoTuple(), new BoaType[] { new ProjectProtoTuple() }, ""));
+		globalFunctions.addFunction("current", new BoaFunction(new RevisionProtoTuple(), new BoaType[] { new RevisionProtoTuple() }, ""));
+		globalFunctions.addFunction("current", new BoaFunction(new StatementProtoTuple(), new BoaType[] { new StatementProtoTuple() }, ""));
+		globalFunctions.addFunction("current", new BoaFunction(new TypeProtoTuple(), new BoaType[] { new TypeProtoTuple() }, ""));
+		globalFunctions.addFunction("current", new BoaFunction(new VariableProtoTuple(), new BoaType[] { new VariableProtoTuple() }, ""));
+
 		// proto to string
 		globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { new ASTRootProtoTuple() }, "com.googlecode.protobuf.format.JsonFormat.printToString(${0})"));
 		globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { new AttachmentProtoTuple() }, "com.googlecode.protobuf.format.JsonFormat.printToString(${0})"));
