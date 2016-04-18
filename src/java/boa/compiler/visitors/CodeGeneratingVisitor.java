@@ -1661,6 +1661,37 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		throw new RuntimeException("unimplemented");
 	}
 
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final EnumType n) {
+		final ST st = stg.getInstanceOf("EnumType");
+
+		if (!(n.type instanceof BoaEnum))
+			throw new TypeCheckException(n ,"type " + n.type + " is not a enum type");
+
+		final BoaEnum enumType = ((BoaEnum) n.type);
+		final BoaType fieldType = enumType.getType();
+		final List<String> fields = new ArrayList<String>();
+		final List<String> values = new ArrayList<String>();
+
+		for (final EnumBodyDeclaration c : n.getMembers()) {
+			Factor f = c.getExp().getLhs().getLhs().getLhs().getLhs().getLhs();
+
+			if(f.getOperand() instanceof ILiteral) {
+				code.add(((ILiteral)(f.getOperand())).getLiteral());
+				fields.add(c.getIdentifier().getToken());
+				values.add(code.removeLast());
+			}
+		}
+
+		st.add("ename", enumType.toJavaType());
+		st.add("fields", fields);
+		st.add("values", values);
+		st.add("fname", fieldType.toJavaType());
+
+		code.add(st.render());
+	}
+
 	protected static String expand(final String template, final String... parameters) {
 		return expand(template, new ArrayList<Expression>(), parameters);
 	}
