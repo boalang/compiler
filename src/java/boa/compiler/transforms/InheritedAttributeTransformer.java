@@ -21,6 +21,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.*;
 
+import boa.compiler.ast.Call;
 import boa.compiler.ast.Factor;
 import boa.compiler.ast.Identifier;
 import boa.compiler.ast.Program;
@@ -52,31 +53,49 @@ import boa.types.BoaScalar;
  */
 public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 	/** {@inheritDoc} */
-	
+	private int stackCounter = 1;
+	private final String stackPrefix = "_s_"; 
 	private class FindVisitorExpressions extends AbstractVisitorNoArg {
 		
-		protected final List<VisitorExpression> VisitorList = new ArrayList<VisitorExpression>();
+		protected final List<VisitorExpression> visitorList = new ArrayList<VisitorExpression>();
 
 		/**
 		 * Creates a list of all the Visitors in the Boa AST 
 		 *
 		 */
+		
+		@Override
+		protected void initialize() {
+			visitorList.clear();
+			super.initialize();
+		}
 		public List<VisitorExpression> getVisitors() {
-			return VisitorList;
+			return visitorList;
 		}
 
 		/** @{inheritDoc} */
 		@Override
 		public void visit(final VisitorExpression n) {
-			// dont nest
-			VisitorList.add(n);
+			visitorList.add(n);
+			super.visit(n);
 		}
 	}
 		
 	public class FindCurrentForVisitors extends AbstractVisitorNoArg{
 		protected final Set<BoaScalar> listCurrent = new HashSet<BoaScalar>();
-		FindVisitorExpressions visitorFind = new FindVisitorExpressions();
+		protected VisitorExpression e = null;
+		protected boolean flagMyVE = false;
 		
+		FindCurrentForVisitors(VisitorExpression current){
+			e = current;
+		}
+		
+		@Override
+		protected void initialize() {
+			listCurrent.clear();
+			super.initialize();
+		}
+				
 		public Set<BoaScalar> getCurrentTypes(){
 			return listCurrent;
 		}
@@ -84,22 +103,52 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 		/** @{inheritDoc} */
 		@Override
 		public void visit(final VisitorExpression n){
-			super.visit(n);
+			if(e.equals(n))
+				flagMyVE = true;
 		}
+		
 		
 		/** @{inheritDoc} */
 		@Override
 		public void visit(final Factor n){
-			//n.getOp			
+			if(flagMyVE){
+				if(n.getOpsSize()==1){
+					if (n.getOperand() instanceof Identifier) {
+						final Identifier id = (Identifier)n.getOperand();
+						if (id.getToken().equals("current")) {
+							final Call c = (Call)n.getOp(0);
+							if (c.getArgsSize() == 1) {
+								final Identifier idType = (Identifier)c.getArg(0).getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
+								// listCurrent.add(idType.getToken()); What do I add to set which is of type BoaScalar
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 	
-	public class TransformForCurrent extends AbstractVisitorNoArg{
-		
-	}
-	
+	public class transformASTAlgorithm extends AbstractVisitorNoArg{
+		@Override
+		public void visit(final Program n) {
+			
+		}
+	} 
 	@Override
 	public void visit(final Program n) {
-	  		
+		
+		FindVisitorExpressions visitorsList = new FindVisitorExpressions();
+		visitorsList.start(n);
+		
+		for(VisitorExpression e: visitorsList.getVisitors()){
+			
+			FindCurrentForVisitors currentSet = new FindCurrentForVisitors(e);
+			currentSet.start(n);
+			for(BoaScalar b: currentSet.getCurrentTypes()){
+				// String currentStack = stackPrefix + b.  ? What do I add here ?
+			}
+			
+		}
+		
 	}
 }
