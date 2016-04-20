@@ -256,6 +256,13 @@
 		<delete dir="build/tests" />
 	</target>
 
+	<target name="java-to-boa" depends="-compile-tests" description="Convert Java code to Boa AST.">
+		<java classname="boa.test.datagen.JavaToBoa" fork="true" failonerror="true">
+			<classpath refid="test.class.path" />
+			<arg value="${java.code}" />
+		</java>
+	</target>
+
 
 	<!-- packaging -->
 	<target name="package" depends="package-runtime,package-compiler" description="Package both the compiler and runtime JARs."/>
