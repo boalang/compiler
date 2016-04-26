@@ -61,6 +61,24 @@ public class TestLambda extends Java8BaseTest {
 			"                           \"name\": 3\n" +
 			"                        }\n" +
 			"                     }\n" +
+			"                  ],\n" +
+			"                  \"statements\": [\n" +
+			"                     {\n" +
+			"                        \"kind\": \"EXPRESSION\",\n" +
+			"                        \"expression\": {\n" +
+			"                           \"kind\": \"OP_DIV\",\n" +
+			"                           \"expressions\": [\n" +
+			"                              {\n" +
+			"                                 \"kind\": \"VARACCESS\",\n" +
+			"                                 \"variable\": \"a\"\n" +
+			"                              },\n" +
+			"                              {\n" +
+			"                                 \"kind\": \"VARACCESS\",\n" +
+			"                                 \"variable\": \"b\"\n" +
+			"                              }\n" +
+			"                           ]\n" +
+			"                        }\n" +
+			"                     }\n" +
 			"                  ]\n" +
 			"               }\n" +
 			"            }\n" +
@@ -97,6 +115,24 @@ public class TestLambda extends Java8BaseTest {
 			"                     \"variable_type\": {\n" +
 			"                        \"kind\": \"OTHER\",\n" +
 			"                        \"name\": 2\n" +
+			"                     }\n" +
+			"                  }\n" +
+			"               ],\n" +
+			"               \"statements\": [\n" +
+			"                  {\n" +
+			"                     \"kind\": \"EXPRESSION\",\n" +
+			"                     \"expression\": {\n" +
+			"                        \"kind\": \"OP_ADD\",\n" +
+			"                        \"expressions\": [\n" +
+			"                           {\n" +
+			"                              \"kind\": \"VARACCESS\",\n" +
+			"                              \"variable\": \"x\"\n" +
+			"                           },\n" +
+			"                           {\n" +
+			"                              \"kind\": \"VARACCESS\",\n" +
+			"                              \"variable\": \"x\"\n" +
+			"                           }\n" +
+			"                        ]\n" +
 			"                     }\n" +
 			"                  }\n" +
 			"               ]\n" +
@@ -215,6 +251,24 @@ public class TestLambda extends Java8BaseTest {
 			"                           \"name\": 3\n" +
 			"                        }\n" +
 			"                     }\n" +
+			"                  ],\n" +
+			"                  \"statements\": [\n" +
+			"                     {\n" +
+			"                        \"kind\": \"EXPRESSION\",\n" +
+			"                        \"expression\": {\n" +
+			"                           \"kind\": \"OP_ADD\",\n" +
+			"                           \"expressions\": [\n" +
+			"                              {\n" +
+			"                                 \"kind\": \"VARACCESS\",\n" +
+			"                                 \"variable\": \"a\"\n" +
+			"                              },\n" +
+			"                              {\n" +
+			"                                 \"kind\": \"VARACCESS\",\n" +
+			"                                 \"variable\": \"b\"\n" +
+			"                              }\n" +
+			"                           ]\n" +
+			"                        }\n" +
+			"                     }\n" +
 			"                  ]\n" +
 			"               }\n" +
 			"            }\n" +
@@ -246,7 +300,16 @@ public class TestLambda extends Java8BaseTest {
 			"                  \"return_type\": {\n" +
 			"                     \"kind\": \"OTHER\",\n" +
 			"                     \"name\": 2\n" +
-			"                  }\n" +
+			"                  },\n" +
+			"                  \"statements\": [\n" +
+			"                     {\n" +
+			"                        \"kind\": \"EXPRESSION\",\n" +
+			"                        \"expression\": {\n" +
+			"                           \"kind\": \"METHODCALL\",\n" +
+			"                           \"method\": \"m\"\n" +
+			"                        }\n" +
+			"                     }\n" +
+			"                  ]\n" +
 			"               }\n" +
 			"            }\n" +
 			"         }\n" +
@@ -291,6 +354,24 @@ public class TestLambda extends Java8BaseTest {
 			"                        \"variable_type\": {\n" +
 			"                           \"kind\": \"OTHER\",\n" +
 			"                           \"name\": 3\n" +
+			"                        }\n" +
+			"                     }\n" +
+			"                  ],\n" +
+			"                  \"statements\": [\n" +
+			"                     {\n" +
+			"                        \"kind\": \"EXPRESSION\",\n" +
+			"                        \"expression\": {\n" +
+			"                           \"kind\": \"OP_DIV\",\n" +
+			"                           \"expressions\": [\n" +
+			"                              {\n" +
+			"                                 \"kind\": \"VARACCESS\",\n" +
+			"                                 \"variable\": \"a\"\n" +
+			"                              },\n" +
+			"                              {\n" +
+			"                                 \"kind\": \"VARACCESS\",\n" +
+			"                                 \"variable\": \"b\"\n" +
+			"                              }\n" +
+			"                           ]\n" +
 			"                        }\n" +
 			"                     }\n" +
 			"                  ]\n" +
@@ -338,6 +419,24 @@ public class TestLambda extends Java8BaseTest {
 			"                        \"variable_type\": {\n" +
 			"                           \"kind\": \"OTHER\",\n" +
 			"                           \"name\": 2\n" +
+			"                        }\n" +
+			"                     }\n" +
+			"                  ],\n" +
+			"                  \"statements\": [\n" +
+			"                     {\n" +
+			"                        \"kind\": \"EXPRESSION\",\n" +
+			"                        \"expression\": {\n" +
+			"                           \"kind\": \"OP_SUB\",\n" +
+			"                           \"expressions\": [\n" +
+			"                              {\n" +
+			"                                 \"kind\": \"VARACCESS\",\n" +
+			"                                 \"variable\": \"a\"\n" +
+			"                              },\n" +
+			"                              {\n" +
+			"                                 \"kind\": \"VARACCESS\",\n" +
+			"                                 \"variable\": \"b\"\n" +
+			"                              }\n" +
+			"                           ]\n" +
 			"                        }\n" +
 			"                     }\n" +
 			"                  ]\n" +
