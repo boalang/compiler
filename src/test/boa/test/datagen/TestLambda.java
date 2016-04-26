@@ -227,34 +227,32 @@ public class TestLambda extends Java8BaseTest {
 
 	@Test
 	public void lambdaNoArg() {
-		testWrapped("() -> m();",
+		testWrapped("int x = () -> m();",
 			"{\n" +
-			"   \"namespaces\": [\n" +
-			"      {\n" +
-			"         \"name\": \"\",\n" +
-			"         \"declarations\": [\n" +
-			"            {\n" +
-			"               \"name\": \"t\",\n" +
-			"               \"kind\": \"CLASS\",\n" +
-			"               \"methods\": [\n" +
-			"                  {\n" +
-			"                     \"name\": \"m\",\n" +
-			"                     \"return_type\": {\n" +
-			"                        \"kind\": \"OTHER\",\n" +
-			"                        \"name\": 0\n" +
-			"                     },\n" +
-			"                     \"statements\": [\n" +
-			"                        {\n" +
-			"                           \"kind\": \"BLOCK\"\n" +
-			"                        }\n" +
-			"                     ]\n" +
+			"   \"kind\": \"EXPRESSION\",\n" +
+			"   \"expression\": {\n" +
+			"      \"kind\": \"VARDECL\",\n" +
+			"      \"variable_decls\": [\n" +
+			"         {\n" +
+			"            \"name\": \"x\",\n" +
+			"            \"variable_type\": {\n" +
+			"               \"kind\": \"OTHER\",\n" +
+			"               \"name\": 1\n" +
+			"            },\n" +
+			"            \"initializer\": {\n" +
+			"               \"kind\": \"LAMBDA\",\n" +
+			"               \"lambda\": {\n" +
+			"                  \"name\": \"\",\n" +
+			"                  \"return_type\": {\n" +
+			"                     \"kind\": \"OTHER\",\n" +
+			"                     \"name\": 2\n" +
 			"                  }\n" +
-			"               ]\n" +
+			"               }\n" +
 			"            }\n" +
-			"         ]\n" +
-			"      }\n" +
-			"   ]\n" +
-			"}"	
+			"         }\n" +
+			"      ]\n" +
+			"   }\n" +
+			"}"
 		);
 	}
 
