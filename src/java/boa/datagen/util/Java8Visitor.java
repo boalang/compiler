@@ -229,25 +229,25 @@ public class Java8Visitor extends Java7Visitor {
 	
 	@Override
 	public boolean visit(SuperMethodReference node) {
-			boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
-			eb.setKind(boa.types.Ast.Expression.ExpressionKind.METHOD_REFERENCE);
-			
-			if (node.getQualifier() != null)
-				eb.setLiteral((node.getQualifier()) +".super"); 
-			else
-				eb.setLiteral("super");
-			
-			for (Object t : node.typeArguments()) {
-				boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
-				tb.setName(getIndex(typeName((org.eclipse.jdt.core.dom.Type)t)));
-				tb.setKind(boa.types.Ast.TypeKind.GENERIC);
-				eb.addGenericParameters(tb.build());
-			}
+		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
+		eb.setKind(boa.types.Ast.Expression.ExpressionKind.METHOD_REFERENCE);
+		
+		if (node.getQualifier() != null)
+			eb.setLiteral((node.getQualifier()) +".super"); 
+		else
+			eb.setLiteral("super");
+		
+		for (Object t : node.typeArguments()) {
+			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
+			tb.setName(getIndex(typeName((org.eclipse.jdt.core.dom.Type)t)));
+			tb.setKind(boa.types.Ast.TypeKind.GENERIC);
+			eb.addGenericParameters(tb.build());
+		}
 
-			eb.setMethod(node.getName().getIdentifier());
-			expressions.push(eb.build());
+		eb.setMethod(node.getName().getIdentifier());
+		expressions.push(eb.build());
 
-			return false;
+		return false;
 	 }
 	
 	@Override
