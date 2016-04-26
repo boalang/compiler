@@ -477,7 +477,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		this.idFinder.start(n.env.getOperand());
 		final String funcName = this.idFinder.getNames().toArray()[0].toString();
 		final BoaFunction f = n.env.getFunction(funcName, check(n));
-		n.env.setOperandType(f.getType());
+		n.env.setOperandType(n.type);
 
 		if (f.hasMacro()) {
 			final List<String> parts = new ArrayList<String>();
