@@ -92,17 +92,17 @@ public class TestLambda extends Java8BaseTest {
 	@Test
 	public void lambda2() {
 		testWrapped("x += (int x) -> x + x;",
-		    "{\n" +
-		    "   \"kind\": \"EXPRESSION\",\n" +
-		    "   \"expression\": {\n" +
-		    "      \"kind\": \"ASSIGN_ADD\",\n" +
-		    "      \"expressions\": [\n" +
-		    "         {\n" +
-		    "            \"kind\": \"VARACCESS\",\n" +
-		    "            \"variable\": \"x\"\n" +
-		    "         },\n" +
-		    "         {\n" +
-		    "            \"kind\": \"LAMBDA\",\n" +
+			"{\n" +
+			"   \"kind\": \"EXPRESSION\",\n" +
+			"   \"expression\": {\n" +
+			"      \"kind\": \"ASSIGN_ADD\",\n" +
+			"      \"expressions\": [\n" +
+			"         {\n" +
+			"            \"kind\": \"VARACCESS\",\n" +
+			"            \"variable\": \"x\"\n" +
+			"         },\n" +
+			"         {\n" +
+			"            \"kind\": \"LAMBDA\",\n" +
 			"            \"lambda\": {\n" +
 			"               \"name\": \"\",\n" +
 			"               \"return_type\": {\n" +
