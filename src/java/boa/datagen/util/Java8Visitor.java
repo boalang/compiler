@@ -166,6 +166,13 @@ public class Java8Visitor extends Java7Visitor {
 		if (node.getBody() != null) {
 			statements.push(new ArrayList<boa.types.Ast.Statement>());
 			node.getBody().accept(this);
+			if (node.getBody() instanceof org.eclipse.jdt.core.dom.Expression) {
+				boa.types.Ast.Expression e = expressions.pop();
+				boa.types.Ast.Statement.Builder sb = boa.types.Ast.Statement.newBuilder();
+				sb.setKind(boa.types.Ast.Statement.StatementKind.EXPRESSION);
+				sb.setExpression(e);
+				statements.peek().add(sb.build());
+			}
 			for (boa.types.Ast.Statement s : statements.pop())
 				b.addStatements(s);
 		}
