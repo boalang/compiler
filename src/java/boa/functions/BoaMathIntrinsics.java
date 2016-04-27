@@ -17,6 +17,7 @@
 package boa.functions;
 
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * The Boa implementations of the Sawzall math intrinsics that are not in the
@@ -56,7 +57,7 @@ public class BoaMathIntrinsics {
 		if (n < 1)
 			throw new IllegalArgumentException("n must be greater than zero");
 
-		return BoaMathIntrinsics.random.nextLong() % n;
+		return ThreadLocalRandom.current().nextLong(n);
 	}
 
 	/**
