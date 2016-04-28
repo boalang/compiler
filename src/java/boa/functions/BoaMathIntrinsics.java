@@ -16,8 +16,7 @@
  */
 package boa.functions;
 
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.SplittableRandom;
 
 /**
  * The Boa implementations of the Sawzall math intrinsics that are not in the
@@ -29,7 +28,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * @author anthonyu
  */
 public class BoaMathIntrinsics {
-	private static Random random = new Random();
+	public static SplittableRandom random = new SplittableRandom();
 
 	/**
 	 * Return a random floating point number x in the range 0.0 < x < 1.0.
@@ -57,7 +56,7 @@ public class BoaMathIntrinsics {
 		if (n < 1)
 			throw new IllegalArgumentException("n must be greater than zero");
 
-		return ThreadLocalRandom.current().nextLong(n);
+		return BoaMathIntrinsics.random.nextLong(n);
 	}
 
 	/**
