@@ -16,7 +16,7 @@
  */
 package boa.functions;
 
-import java.util.SplittableRandom;
+import java.util.Random;
 
 /**
  * The Boa implementations of the Sawzall math intrinsics that are not in the
@@ -28,7 +28,7 @@ import java.util.SplittableRandom;
  * @author anthonyu
  */
 public class BoaMathIntrinsics {
-	public static SplittableRandom random = new SplittableRandom();
+	public static Random random = new Random();
 
 	/**
 	 * Return a random floating point number x in the range 0.0 < x < 1.0.
@@ -56,7 +56,7 @@ public class BoaMathIntrinsics {
 		if (n < 1)
 			throw new IllegalArgumentException("n must be greater than zero");
 
-		return BoaMathIntrinsics.random.nextLong(n);
+		return (long) (BoaMathIntrinsics.random.nextDouble() * n);
 	}
 
 	/**
