@@ -22,13 +22,23 @@ import java.util.Set;
 import java.util.*;
 
 import boa.compiler.ast.Call;
+import boa.compiler.ast.Comparison;
+import boa.compiler.ast.Component;
+import boa.compiler.ast.Conjunction;
 import boa.compiler.ast.Factor;
 import boa.compiler.ast.Identifier;
 import boa.compiler.ast.Program;
+import boa.compiler.ast.Term;
+import boa.compiler.ast.expressions.Expression;
+import boa.compiler.ast.expressions.SimpleExpr;
 import boa.compiler.ast.expressions.VisitorExpression;
+import boa.compiler.ast.literals.IntegerLiteral;
 import boa.compiler.ast.statements.StopStatement;
+import boa.compiler.ast.statements.VarDeclStatement;
+import boa.compiler.ast.types.StackType;
 import boa.compiler.visitors.AbstractVisitorNoArg;
 import boa.types.BoaScalar;
+import boa.types.BoaStack;
 
 /**
  * Converts use of current(T) inherited attributes in visitors into stack variables.
@@ -83,12 +93,7 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 		
 	public class FindCurrentForVisitors extends AbstractVisitorNoArg{
 		protected final Set<BoaScalar> listCurrent = new HashSet<BoaScalar>();
-		protected VisitorExpression e = null;
-		protected boolean flagMyVE = false;
-		
-		FindCurrentForVisitors(VisitorExpression current){
-			e = current;
-		}
+		protected final List<Factor> factorList = new ArrayList<Factor>();
 		
 		@Override
 		protected void initialize() {
@@ -100,52 +105,96 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 			return listCurrent;
 		}
 		
+		public List<Factor> getFactorList(){
+			return factorList;
+		}
 		/** @{inheritDoc} */
 		@Override
 		public void visit(final VisitorExpression n){
-			if(e.equals(n))
-				flagMyVE = true;
+			//don't nest
 		}
-		
 		
 		/** @{inheritDoc} */
 		@Override
 		public void visit(final Factor n){
-			if(flagMyVE){
-				if(n.getOpsSize()==1){
-					if (n.getOperand() instanceof Identifier) {
-						final Identifier id = (Identifier)n.getOperand();
-						if (id.getToken().equals("current")) {
+			//if(n.getOpsSize()==1){
+				if (n.getOperand() instanceof Identifier){
+					final Identifier id = (Identifier)n.getOperand();
+					System.out.println(id.getToken());
+					if (id.getToken().equals("current")){
+						if(n.getOp(0) instanceof Call){
 							final Call c = (Call)n.getOp(0);
 							if (c.getArgsSize() == 1) {
-								final Identifier idType = (Identifier)c.getArg(0).getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
-								// listCurrent.add(idType.getToken()); What do I add to set which is of type BoaScalar
+								//final Identifier idType = (Identifier)c.getArg(0).getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
+								System.out.println("Inside check current");
+								listCurrent.add((BoaScalar)c.getArg(0).type);
+								factorList.add(n);
 							}
 						}
 					}
 				}
-			}
+			//}
+			super.visit(n);
 		}
 	}
 	
-	public class transformASTAlgorithm extends AbstractVisitorNoArg{
-		@Override
-		public void visit(final Program n) {
-			
-		}
-	} 
+	
+	private void replaceCurrentCall(Factor n, VarDeclStatement v){
+		//if(n.getOpsSize()==1){
+			if (n.getOperand() instanceof Identifier){
+				final Identifier id = (Identifier)n.getOperand();
+				System.out.println(id.getToken());
+				if (id.getToken().equals("current")){
+					if(n.getOp(0) instanceof Call){
+						final Call c = (Call)n.getOp(0);
+						if (c.getArgsSize() == 1) {
+							final Identifier idType = (Identifier)c.getArg(0).getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
+							id.setToken("peek");
+							if(idType.getToken().equals(v.type))
+							idType.setToken(v.getId().getToken());
+							
+						}
+					}
+				}
+			}
+		//}
+	}
+
+	private VarDeclStatement generateStackNode(BoaScalar b){
+		final String typeName = b.toJavaType();
+		final VarDeclStatement var = new VarDeclStatement(
+				new Identifier(stackPrefix + stackCounter),
+				new StackType(
+					new Component(
+						new Identifier(typeName.substring(typeName.lastIndexOf('.') + 1))
+					)
+				)
+			);
+		var.type = new BoaStack(b);
+		return var;
+	}
+	
 	@Override
 	public void visit(final Program n) {
-		
+		System.out.println("I am here");
 		FindVisitorExpressions visitorsList = new FindVisitorExpressions();
 		visitorsList.start(n);
+		System.out.println(visitorsList.getVisitors().size());
 		
 		for(VisitorExpression e: visitorsList.getVisitors()){
 			
-			FindCurrentForVisitors currentSet = new FindCurrentForVisitors(e);
-			currentSet.start(n);
+			FindCurrentForVisitors currentSet = new FindCurrentForVisitors();
+			currentSet.start(e.getBody());
+			System.out.println(currentSet.getCurrentTypes().size());
+			
 			for(BoaScalar b: currentSet.getCurrentTypes()){
-				// String currentStack = stackPrefix + b.  ? What do I add here ?
+				VarDeclStatement v = generateStackNode(b);
+				System.out.println(n.getStatements().size());
+				for(Factor f: currentSet.getFactorList()){
+					replaceCurrentCall(f, v);
+				}
+				System.out.println(b.toString());
+				
 			}
 			
 		}
