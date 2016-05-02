@@ -98,7 +98,8 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 		@Override
 		protected void initialize() {
 			listCurrent.clear();
-			super.initialize();
+			factorList.clear();
+			super.initialize();			
 		}
 				
 		public Set<BoaScalar> getCurrentTypes(){
@@ -120,15 +121,21 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 			//if(n.getOpsSize()==1){
 				if (n.getOperand() instanceof Identifier){
 					final Identifier id = (Identifier)n.getOperand();
-					System.out.println(id.getToken());
+					//System.out.println(id.getToken());
 					if (id.getToken().equals("current")){
 						if(n.getOp(0) instanceof Call){
 							final Call c = (Call)n.getOp(0);
 							if (c.getArgsSize() == 1) {
 								//final Identifier idType = (Identifier)c.getArg(0).getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
 								System.out.println("Inside check current");
-								listCurrent.add((BoaScalar)c.getArg(0).type);
-								factorList.add(n);
+								if((BoaScalar)c.getArg(0).type == null){
+									System.out.println("This is null");
+								}
+								else
+								{
+									listCurrent.add((BoaScalar)c.getArg(0).type);
+									factorList.add(n);
+								}
 							}
 						}
 					}
@@ -143,16 +150,20 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 		//if(n.getOpsSize()==1){
 			if (n.getOperand() instanceof Identifier){
 				final Identifier id = (Identifier)n.getOperand();
-				System.out.println(id.getToken());
 				if (id.getToken().equals("current")){
 					if(n.getOp(0) instanceof Call){
 						final Call c = (Call)n.getOp(0);
 						if (c.getArgsSize() == 1) {
-							final Identifier idType = (Identifier)c.getArg(0).getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
-							id.setToken("peek");
-							if(idType.getToken().equals(v.type))
-							idType.setToken(v.getId().getToken());
 							
+							final Identifier idType = (Identifier)c.getArg(0).getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
+							String stackType = v.type.toString();
+							System.out.println(stackType.substring(stackType.lastIndexOf(' ') + 1));
+							
+							if(idType.getToken().equals(stackType.substring(stackType.lastIndexOf(' ') + 1))){
+								id.setToken("peek");
+								idType.setToken(v.getId().getToken());
+								System.out.println(v.getId().getToken());
+							}
 						}
 					}
 				}
@@ -162,6 +173,7 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 
 	private VarDeclStatement generateStackNode(BoaScalar b){
 		final String typeName = b.toJavaType();
+		System.out.println(typeName);
 		final VarDeclStatement var = new VarDeclStatement(
 				new Identifier(stackPrefix + stackCounter),
 				new StackType(
@@ -189,11 +201,11 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 			
 			for(BoaScalar b: currentSet.getCurrentTypes()){
 				VarDeclStatement v = generateStackNode(b);
-				System.out.println(n.getStatements().size());
+				n.getStatements().add(0, v);
 				for(Factor f: currentSet.getFactorList()){
 					replaceCurrentCall(f, v);
 				}
-				System.out.println(b.toString());
+				//System.out.println(b.toString());
 				
 			}
 			
