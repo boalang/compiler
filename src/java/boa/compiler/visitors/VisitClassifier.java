@@ -17,9 +17,12 @@
 package boa.compiler.visitors;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import boa.compiler.ast.expressions.VisitorExpression;
+import boa.compiler.ast.Identifier;
 import boa.compiler.ast.statements.VisitStatement;
 
 /**
@@ -33,6 +36,8 @@ public class VisitClassifier extends AbstractVisitorNoArg {
 	protected VisitStatement defaultAfterVisit;
 	protected List<VisitStatement> befores = new ArrayList<VisitStatement>();
 	protected List<VisitStatement> afters = new ArrayList<VisitStatement>();
+	protected Map<String,VisitStatement> beforeMap = new HashMap<String,VisitStatement>();
+	protected Map<String,VisitStatement> afterMap = new HashMap<String,VisitStatement>();
 
 	public boolean hasDefaultBefore() {
 		return defaultBeforeVisit != null;
@@ -58,6 +63,14 @@ public class VisitClassifier extends AbstractVisitorNoArg {
 		return befores;
 	}
 
+	public Map<String,VisitStatement> getAfterMap() {
+		return afterMap;
+	}
+
+	public Map<String,VisitStatement> getBeforeMap() {
+		return beforeMap;
+	}
+
 	/** @{inheritDoc} */
 	@Override
 	protected void initialize() {
@@ -77,13 +90,25 @@ public class VisitClassifier extends AbstractVisitorNoArg {
 	@Override
 	public void visit(VisitStatement n) {
 		if (n.isBefore()) {
-			if (n.hasWildcard())
+			if (n.hasWildcard()) {
 				defaultBeforeVisit = n;
+				beforeMap.put("_", n);
+			}
+			if (n.hasComponent())
+				beforeMap.put(((Identifier)n.getComponent().getType()).getToken(), n);
+			for (final Identifier id : n.getIdList())
+				beforeMap.put(id.getToken(), n);
 			befores.add(n);
 		} else {
-			if (n.hasWildcard())
+			if (n.hasWildcard()) {
 				defaultAfterVisit = n;
-				afters.add(n);
+				afterMap.put("_", n);
+			}
+			if (n.hasComponent())
+				afterMap.put(((Identifier)n.getComponent().getType()).getToken(), n);
+			for (final Identifier id : n.getIdList())
+				afterMap.put(id.getToken(), n);
+			afters.add(n);
 		}
 	}
 }
