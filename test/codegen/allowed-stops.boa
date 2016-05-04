@@ -1,0 +1,13 @@
+o: output sum of int;
+
+visit(input, visitor {
+    before Project ->
+		exists (i: int; input.programming_languages[i] == "java") {
+            o << 1;
+            stop;
+        }
+    before n: Method ->
+		if (n.name == "foo")
+            stop;
+	before s: Statement -> stop;
+});
