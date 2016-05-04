@@ -1643,10 +1643,17 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		if (s instanceof StopStatement)
 			return true;
 
-		if (s instanceof Block)
-			for (final Node n : ((Block)s).getStatements())
-				if (n instanceof StopStatement)
-					return true;
+		if (s instanceof IfStatement) {
+			final IfStatement ifs = (IfStatement)s;
+			if (ifs.hasElse())
+				return lastStatementIsStop(ifs.getElse());
+		}
+
+		if (s instanceof Block) {
+			final List<Statement> stmts = ((Block)s).getStatements();
+			if (stmts.size() > 0)
+				return lastStatementIsStop(stmts.get(stmts.size() - 1));
+		}
 
 		return false;
 	}
