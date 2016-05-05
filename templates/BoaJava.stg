@@ -130,13 +130,12 @@ new boa.runtime.BoaAbstractVisitor()
 	<endif>
 	<body:{s | <s><\n>}>}
 >>
-VisitClause(ret, name, args, types, body) ::= <<
-<if(args)>
-<args,types:{arg,type|
+VisitClause(ret, name, arg, type, body) ::= <<
+<if(arg)>
 @Override
 protected <ret> <name>(final <type> <arg>) throws Exception
 {
-	<body>\}}>
+	<body>\}
 <else>
 @Override
 protected <ret> <name>() throws Exception
