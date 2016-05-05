@@ -238,7 +238,7 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 									)
 							);
 		
-		System.out.println(exp.type.toString());
+		//exp.type = new 
 		return exp;
 		
 	}
@@ -279,7 +279,7 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 										)
 								);
 			
-			System.out.println(exp.type.toString());
+			//System.out.println(exp.type.toString());
 			return exp;
 			
 		}
@@ -319,6 +319,15 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 				}
 				else if(getVS.getBeforeMap().containsKey("_")){
 					
+					Statement pushToStack = generatePushExpStatement(v.getId().getToken(), "node");
+					
+					Block blk = getVS.getBeforeMap().get("_").getBody().clone();
+					blk.addStatement(pushToStack);
+					
+					VisitStatement vs = new VisitStatement(true, 
+							new Component(new Identifier("node"), new Identifier(typeToFind)),blk);
+					
+					e.getBody().getStatements().add(vs);
 				}
 				else{
 					
@@ -329,7 +338,7 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 							new Block().addStatement(pushToStack)
 							);
 					
-					e.getBody().getStatements().add(0,vs);
+					e.getBody().getStatements().add(vs);
 				}
 				
 				//Add/Update After visit clause
@@ -339,8 +348,17 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 					vs.getBody().getStatements().add(popFromStack);
 					
 				}
-				else if(getVS.getBeforeMap().containsKey("_")){
+				else if(getVS.getAfterMap().containsKey("_")){
 					
+					Statement popFromStack = generatePopExpStatement(v.getId().getToken());
+					
+					Block blk = getVS.getAfterMap().get("_").getBody().clone();
+					blk.addStatement(popFromStack);
+					
+					VisitStatement vs = new VisitStatement(false, 
+							new Component(new Identifier("node"), new Identifier(typeToFind)),blk);
+					
+					e.getBody().getStatements().add(vs);
 				}
 				else{
 					
