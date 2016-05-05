@@ -162,6 +162,7 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 							if(idType.getToken().equals(stackType.substring(stackType.lastIndexOf(' ') + 1))){
 								id.setToken("peek");
 								idType.setToken(v.getId().getToken());
+								c.getArg(0).type = v.type;
 								System.out.println(v.getId().getToken());
 							}
 						}
@@ -300,6 +301,8 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 			//get set of all "types" on which current is called for this visitor expression
 			for(BoaScalar b: currentSet.getCurrentTypes()){
 				VarDeclStatement v = generateStackNode(b);
+				v.env = v.getType().env = ((StackType)v.getType()).getValue().getType().env = n.env;
+				v.env.set(v.getId().getToken(), v.type);
 				n.getStatements().add(0, v);
 				
 				//replace the current call with peek(generatedStack) 
@@ -326,6 +329,7 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 					
 					VisitStatement vs = new VisitStatement(true, 
 							new Component(new Identifier("node"), new Identifier(typeToFind)),blk);
+					vs.getComponent().getType().type = b;
 					
 					e.getBody().getStatements().add(vs);
 				}
@@ -337,6 +341,7 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 							new Component(new Identifier("node"), new Identifier(typeToFind)),
 							new Block().addStatement(pushToStack)
 							);
+					vs.getComponent().getType().type = b;
 					
 					e.getBody().getStatements().add(vs);
 				}
@@ -357,6 +362,7 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 					
 					VisitStatement vs = new VisitStatement(false, 
 							new Component(new Identifier("node"), new Identifier(typeToFind)),blk);
+					vs.getComponent().getType().type = b;
 					
 					e.getBody().getStatements().add(vs);
 				}
@@ -368,6 +374,7 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 							new Component(new Identifier("node"), new Identifier(typeToFind)),
 							new Block().addStatement(popFromStack)
 							);
+					vs.getComponent().getType().type = b;
 					
 					e.getBody().getStatements().add(vs);
 				}
