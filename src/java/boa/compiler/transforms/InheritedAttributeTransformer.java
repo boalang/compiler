@@ -21,6 +21,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.*;
 
+import boa.compiler.ast.statements.Block;
 import boa.compiler.ast.Call;
 import boa.compiler.ast.Comparison;
 import boa.compiler.ast.Component;
@@ -33,10 +34,14 @@ import boa.compiler.ast.expressions.Expression;
 import boa.compiler.ast.expressions.SimpleExpr;
 import boa.compiler.ast.expressions.VisitorExpression;
 import boa.compiler.ast.literals.IntegerLiteral;
+import boa.compiler.ast.statements.ExprStatement;
+import boa.compiler.ast.statements.Statement;
 import boa.compiler.ast.statements.StopStatement;
 import boa.compiler.ast.statements.VarDeclStatement;
+import boa.compiler.ast.statements.VisitStatement;
 import boa.compiler.ast.types.StackType;
 import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.compiler.visitors.VisitClassifier;
 import boa.types.BoaScalar;
 import boa.types.BoaStack;
 
@@ -128,14 +133,9 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 							if (c.getArgsSize() == 1) {
 								//final Identifier idType = (Identifier)c.getArg(0).getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
 								System.out.println("Inside check current");
-								if((BoaScalar)c.getArg(0).type == null){
-									System.out.println("This is null");
-								}
-								else
-								{
-									listCurrent.add((BoaScalar)c.getArg(0).type);
-									factorList.add(n);
-								}
+								listCurrent.add((BoaScalar)c.getArg(0).type);
+								factorList.add(n);
+								
 							}
 						}
 					}
@@ -182,10 +182,108 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 					)
 				)
 			);
+		stackCounter++;
 		var.type = new BoaStack(b);
 		return var;
 	}
 	
+	//Generate an expression statement to push node to the stack
+	private ExprStatement generatePushExpStatement(String stackName, String nodeName){
+		
+		Expression e1 = new Expression(
+				new Conjunction(
+						new Comparison(
+								new SimpleExpr(
+										new Term(
+												new Factor(
+														new Identifier(stackName)
+														)
+												)
+										)
+								)
+						)
+				);
+
+		Expression e2 = new Expression(
+				new Conjunction(
+						new Comparison(
+								new SimpleExpr(
+										new Term(
+												new Factor(
+														new Identifier(nodeName)
+														)
+												)
+										)
+								)
+						)
+				);
+		
+		Call c = new Call();
+		c.addArg(e1);
+		c.addArg(e2);
+		
+		final ExprStatement exp = new ExprStatement(
+				new Expression(
+						new Conjunction(
+								new Comparison(
+										new SimpleExpr(
+												new Term(
+														new Factor(
+																new Identifier("push")
+																).addOp(c)
+														)
+													)
+												)
+											)
+									)
+							);
+		
+		System.out.println(exp.type.toString());
+		return exp;
+		
+	}
+
+	//Generate an expression statement to Pop node to the stack
+		private ExprStatement generatePopExpStatement(String stackName){
+			
+			Expression e1 = new Expression(
+					new Conjunction(
+							new Comparison(
+									new SimpleExpr(
+											new Term(
+													new Factor(
+															new Identifier(stackName)
+															)
+													)
+											)
+									)
+							)
+					);
+
+			Call c = new Call();
+			c.addArg(e1);
+						
+			final ExprStatement exp = new ExprStatement(
+					new Expression(
+							new Conjunction(
+									new Comparison(
+											new SimpleExpr(
+													new Term(
+															new Factor(
+																	new Identifier("pop")
+																	).addOp(c)
+															)
+														)
+													)
+												)
+										)
+								);
+			
+			System.out.println(exp.type.toString());
+			return exp;
+			
+		}
+
 	@Override
 	public void visit(final Program n) {
 		System.out.println("I am here");
@@ -199,14 +297,62 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 			currentSet.start(e.getBody());
 			System.out.println(currentSet.getCurrentTypes().size());
 			
+			//get set of all "types" on which current is called for this visitor expression
 			for(BoaScalar b: currentSet.getCurrentTypes()){
 				VarDeclStatement v = generateStackNode(b);
 				n.getStatements().add(0, v);
+				
+				//replace the current call with peek(generatedStack) 
 				for(Factor f: currentSet.getFactorList()){
 					replaceCurrentCall(f, v);
 				}
-				//System.out.println(b.toString());
+				//Create object of Visit Classifier to get Before and After Maps
+				VisitClassifier getVS = new VisitClassifier();
+				getVS.start(e.getBody());
+				String typeToFind = b.toJavaType().substring(b.toJavaType().lastIndexOf('.') + 1);
 				
+				//Add/Update Before visit clause
+				if(getVS.getBeforeMap().containsKey(typeToFind)){
+					VisitStatement vs = getVS.getBeforeMap().get(typeToFind);
+					Statement pushToStack = generatePushExpStatement(v.getId().getToken(), vs.getComponent().getIdentifier().getToken()); 
+					vs.getBody().getStatements().add(0, pushToStack);
+				}
+				else if(getVS.getBeforeMap().containsKey("_")){
+					
+				}
+				else{
+					
+					Statement pushToStack = generatePushExpStatement(v.getId().getToken(), "node");
+					
+					VisitStatement vs = new VisitStatement(true, 
+							new Component(new Identifier("node"), new Identifier(typeToFind)),
+							new Block().addStatement(pushToStack)
+							);
+					
+					e.getBody().getStatements().add(0,vs);
+				}
+				
+				//Add/Update After visit clause
+				if(getVS.getAfterMap().containsKey(typeToFind)){
+					VisitStatement vs = getVS.getAfterMap().get(typeToFind);
+					Statement popFromStack = generatePopExpStatement(v.getId().getToken()); 
+					vs.getBody().getStatements().add(popFromStack);
+					
+				}
+				else if(getVS.getBeforeMap().containsKey("_")){
+					
+				}
+				else{
+					
+					Statement popFromStack = generatePopExpStatement(v.getId().getToken());
+					
+					VisitStatement vs = new VisitStatement(false, 
+							new Component(new Identifier("node"), new Identifier(typeToFind)),
+							new Block().addStatement(popFromStack)
+							);
+					
+					e.getBody().getStatements().add(vs);
+				}
 			}
 			
 		}
