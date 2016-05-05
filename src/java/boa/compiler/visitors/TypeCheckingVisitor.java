@@ -27,6 +27,7 @@ import boa.compiler.ast.expressions.*;
 import boa.compiler.ast.literals.*;
 import boa.compiler.ast.statements.*;
 import boa.compiler.ast.types.*;
+import boa.compiler.transforms.VisitorDesugar;
 import boa.types.*;
 
 /**
@@ -1030,6 +1031,8 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		visitorChecker.start(n);
 		n.getBody().accept(this, env);
 		n.type = n.getType().type;
+		final VisitorDesugar desugar = new VisitorDesugar();
+		desugar.start(n);
 	}
 
 	//
