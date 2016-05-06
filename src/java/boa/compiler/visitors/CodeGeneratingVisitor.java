@@ -1221,8 +1221,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		final boolean isBefore = n.isBefore();
 
 		final List<String> body = new ArrayList<String>();
-		final List<String> types = new ArrayList<String>();
-		final List<String> ids = new ArrayList<String>();
 
 		if (n.hasWildcard()) {
 			st.add("name", isBefore ? "defaultPreVisit" : "defaultPostVisit");
@@ -1231,15 +1229,8 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			final String id = c.getIdentifier().getToken();
 
 			n.env.set(id, c.getType().type);
-			types.add(c.getType().type.toJavaType());
-			ids.add("___" + id);
-
-			st.add("name", isBefore ? "preVisit" : "postVisit");
-		} else {
-			for (final Identifier id : n.getIdList()) {
-				types.add(n.env.get(id.getToken()).toJavaType());
-				ids.add("__UNUSED");
-			}
+			st.add("arg", "___" + id);
+			st.add("type", c.getType().type.toJavaType());
 
 			st.add("name", isBefore ? "preVisit" : "postVisit");
 		}
@@ -1258,11 +1249,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		if (isBefore && !lastStatementIsStop(n.getBody()))
 			body.add("return true;\n");
 		st.add("body", body);
-
-		if (ids.size() > 0) {
-			st.add("args", ids);
-			st.add("types", types);
-		}
 
 		code.add(st.render());
 	}
