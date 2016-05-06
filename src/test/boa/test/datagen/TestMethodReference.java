@@ -121,4 +121,38 @@ public class TestMethodReference extends Java8BaseTest {
 			"}"
 		);
 	}
+	
+	@Test
+	public void superMethodReference(){
+		testWrapped("m(super::sayHello);",
+						"{\n" +
+			    	    "   \"namespaces\": [\n" +
+			    	    "      {\n" +
+			    	    "         \"name\": \"\",\n" +
+			    	    "         \"declarations\": [\n" +
+			    	    "            {\n" +
+			    	    "               \"name\": \"t\",\n" +
+			    	    "               \"kind\": \"CLASS\",\n" +
+			    	    "               \"methods\": [\n" +
+			    	    "                  {\n" +
+			    	    "                     \"name\": \"m\",\n" +
+			    	    "                     \"return_type\": {\n" +
+			    	    "                        \"kind\": \"OTHER\",\n" +
+			    	    "                        \"name\": 0\n" +
+			    	    "                     },\n" +
+			    	    "                     \"statements\": [\n" +
+			    	    "                        {\n" +
+			    	    "                           \"kind\": \"BLOCK\"\n" +
+			    	    "                        }\n" +
+			    	    "                     ]\n" +
+			    	    "                  }\n" +
+			    	    "               ]\n" +
+			    	    "            }\n" +
+			    	    "         ]\n" +
+			    	    "      }\n" +
+			    	    "   ]\n" +
+			    	    "}"
+		);
+	}
+	
 }
