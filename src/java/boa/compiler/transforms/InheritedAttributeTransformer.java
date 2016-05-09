@@ -29,6 +29,7 @@ import boa.compiler.ast.Conjunction;
 import boa.compiler.ast.Factor;
 import boa.compiler.ast.Identifier;
 import boa.compiler.ast.Program;
+import boa.compiler.SymbolTable;
 import boa.compiler.ast.Term;
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.ast.expressions.SimpleExpr;
@@ -70,8 +71,9 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 	/** {@inheritDoc} */
 	private int stackCounter = 1;
 	private final String stackPrefix = "_s_"; 
+	private SymbolTable env;
+
 	private class FindVisitorExpressions extends AbstractVisitorNoArg {
-		
 		protected final List<VisitorExpression> visitorList = new ArrayList<VisitorExpression>();
 
 		/**
@@ -166,10 +168,10 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 		final String typeName = b.toJavaType();
 		System.out.println(typeName);
 		final VarDeclStatement var = new VarDeclStatement(
-				new Identifier(stackPrefix + stackCounter),
+				createIdentifier(stackPrefix + stackCounter),
 				new StackType(
 					new Component(
-						new Identifier(typeName.substring(typeName.lastIndexOf('.') + 1))
+						createIdentifier(typeName.substring(typeName.lastIndexOf('.') + 1))
 					)
 				)
 			);
@@ -179,7 +181,7 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 	}
 	
 	//Generate an expression statement to push node to the stack
-	private ExprStatement generatePushExpStatement(String stackName, String nodeName, VisitorExpression e){
+	private ExprStatement generatePushExpStatement(BoaScalar b, String stackName, String nodeName, VisitorExpression e){
 		
 		Expression e1 = new Expression(
 				new Conjunction(
@@ -187,13 +189,14 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 								new SimpleExpr(
 										new Term(
 												new Factor(
-														new Identifier(stackName)
+														createIdentifier(stackName)
 														)
 												)
 										)
 								)
 						)
 				);
+		e1.type = new BoaStack(b);
 
 		Expression e2 = new Expression(
 				new Conjunction(
@@ -201,13 +204,14 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 								new SimpleExpr(
 										new Term(
 												new Factor(
-														new Identifier(nodeName)
+														createIdentifier(nodeName)
 														)
 												)
 										)
 								)
 						)
 				);
+		e2.type = b;
 		
 		Call c = new Call();
 		c.addArg(e1);
@@ -223,7 +227,7 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 										new SimpleExpr(
 												new Term(
 														new Factor(
-																new Identifier("push")
+																createIdentifier("push")
 																).addOp(c)
 														)
 													)
@@ -238,7 +242,7 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 	}
 
 	//Generate an expression statement to Pop node to the stack
-		private ExprStatement generatePopExpStatement(String stackName, VisitorExpression e){
+		private ExprStatement generatePopExpStatement(BoaScalar b, String stackName, VisitorExpression e){
 			
 			Expression e1 = new Expression(
 					new Conjunction(
@@ -246,13 +250,14 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 									new SimpleExpr(
 											new Term(
 													new Factor(
-															new Identifier(stackName)
+															createIdentifier(stackName)
 															)
 													)
 											)
 									)
 							)
 					);
+			e1.type = new BoaStack(b);
 
 			Call c = new Call();
 			c.addArg(e1);
@@ -265,7 +270,7 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 											new SimpleExpr(
 													new Term(
 															new Factor(
-																	new Identifier("pop")
+																	createIdentifier("pop")
 																	).addOp(c)
 															)
 														)
@@ -279,8 +284,16 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 			
 		}
 
+	private Identifier createIdentifier(String name) {
+		Identifier id = new Identifier(name);
+		id.env = env;
+		return id;
+	}
+
 	@Override
 	public void visit(final Program n) {
+		env = n.env;
+
 		System.out.println("I am here");
 		FindVisitorExpressions visitorsList = new FindVisitorExpressions();
 		visitorsList.start(n);
@@ -298,6 +311,7 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 				v.env = v.getType().env = ((StackType)v.getType()).getValue().getType().env = n.env;
 				v.env.set(v.getId().getToken(), v.type);
 				n.getStatements().add(0, v);
+				env = e.env;
 				
 				//replace the current call with peek(generatedStack) 
 				for(Factor f: currentSet.getFactorList()){
@@ -311,18 +325,18 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 				//Add/Update Before visit clause
 				if(getVS.getBeforeMap().containsKey(typeToFind)){
 					VisitStatement vs = getVS.getBeforeMap().get(typeToFind);
-					Statement pushToStack = generatePushExpStatement(v.getId().getToken(), vs.getComponent().getIdentifier().getToken(), e); 
+					Statement pushToStack = generatePushExpStatement(b, v.getId().getToken(), vs.getComponent().getIdentifier().getToken(), e); 
 					vs.getBody().getStatements().add(0, pushToStack);
 				}
 				else if(getVS.getBeforeMap().containsKey("_")){
 					
-					Statement pushToStack = generatePushExpStatement(v.getId().getToken(), "node", e);
+					Statement pushToStack = generatePushExpStatement(b, v.getId().getToken(), "node", e);
 					
 					Block blk = getVS.getBeforeMap().get("_").getBody().clone();
 					blk.addStatement(pushToStack);
 					
 					VisitStatement vs = new VisitStatement(true, 
-							new Component(new Identifier("node"), new Identifier(typeToFind)),blk);
+							new Component(createIdentifier("node"), createIdentifier(typeToFind)),blk);
 					
 					vs.getComponent().getType().type = b;
 					
@@ -331,10 +345,10 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 				}
 				else{
 					
-					Statement pushToStack = generatePushExpStatement(v.getId().getToken(), "node",e);
+					Statement pushToStack = generatePushExpStatement(b, v.getId().getToken(), "node",e);
 					
 					VisitStatement vs = new VisitStatement(true, 
-							new Component(new Identifier("node"), new Identifier(typeToFind)),
+							new Component(createIdentifier("node"), createIdentifier(typeToFind)),
 							new Block().addStatement(pushToStack)
 							);
 					
@@ -348,19 +362,19 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 				//Add/Update After visit clause
 				if(getVS.getAfterMap().containsKey(typeToFind)){
 					VisitStatement vs = getVS.getAfterMap().get(typeToFind);
-					Statement popFromStack = generatePopExpStatement(v.getId().getToken(),e); 
+					Statement popFromStack = generatePopExpStatement(b, v.getId().getToken(),e); 
 					vs.getBody().getStatements().add(popFromStack);
 					
 				}
 				else if(getVS.getAfterMap().containsKey("_")){
 					
-					Statement popFromStack = generatePopExpStatement(v.getId().getToken(),e);
+					Statement popFromStack = generatePopExpStatement(b, v.getId().getToken(),e);
 					
 					Block blk = getVS.getAfterMap().get("_").getBody().clone();
 					blk.addStatement(popFromStack);
 					
 					VisitStatement vs = new VisitStatement(false, 
-							new Component(new Identifier("node"), new Identifier(typeToFind)),blk);
+							new Component(createIdentifier("node"), createIdentifier(typeToFind)),blk);
 					vs.getComponent().getType().type = b;
 					
 					e.getBody().getStatements().add(vs);
@@ -368,10 +382,10 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 				}
 				else{
 					
-					Statement popFromStack = generatePopExpStatement(v.getId().getToken(),e);
+					Statement popFromStack = generatePopExpStatement(b, v.getId().getToken(),e);
 					
 					VisitStatement vs = new VisitStatement(false, 
-							new Component(new Identifier("node"), new Identifier(typeToFind)),
+							new Component(createIdentifier("node"), createIdentifier(typeToFind)),
 							new Block().addStatement(popFromStack)
 							);
 					vs.getComponent().getType().type = b;
