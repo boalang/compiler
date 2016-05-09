@@ -346,13 +346,19 @@ public class BoaCompiler {
 		if (compiler.run(null, null, null, "-source", "5", "-target", "5", "-cp", System.getProperty("java.class.path"), outputFile.toString()) != 0)
 			throw new RuntimeException("compile failed");
 
-		// find the location of the jar this class is in
-		final String path = ClasspathUrlFinder.findClassBase(BoaCompiler.class).getPath();
-		// find the location of the compiler distribution
-		final File root = new File(path.substring(path.indexOf(':') + 1, path.indexOf('!'))).getParentFile();
-
 		final List<File> libJars = new ArrayList<File>();
-		libJars.add(new File(root, "boa-runtime.jar"));
+
+		if (cl.hasOption('j')) {
+			libJars.add(new File(cl.getOptionValue('j')));
+		} else {
+			// find the location of the jar this class is in
+			final String path = ClasspathUrlFinder.findClassBase(BoaCompiler.class).getPath();
+			// find the location of the compiler distribution
+			final File root = new File(path.substring(path.indexOf(':') + 1, path.indexOf('!'))).getParentFile();
+	
+			libJars.add(new File(root, "boa-runtime.jar"));
+		}
+
 		if (cl.hasOption('l'))
 			for (final String s : Arrays.asList(cl.getOptionValues('l')))
 				libJars.add(new File(s));
@@ -369,6 +375,7 @@ public class BoaCompiler {
 		options.addOption("l", "libs", true, "extra jars (functions/aggregators) to be compiled in");
 		options.addOption("i", "in", true, "file(s) to be compiled (comma-separated list)");
 		options.addOption("o", "out", true, "the name of the resulting jar");
+		options.addOption("j", "rtjar", true, "the path to the Boa runtime jar");
 		options.addOption("nv", "no-visitor-fusion", false, "disable visitor fusion");
 		options.addOption("v", "visitors-fused", true, "number of visitors to fuse");
 		options.addOption("n", "name", true, "the name of the generated main class");
