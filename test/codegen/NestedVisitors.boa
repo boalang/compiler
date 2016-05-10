@@ -1,0 +1,15 @@
+p: Project = input;
+counts: output sum of int;
+o: output sum of int;
+
+visit(p, visitor {
+   before s: Statement ->{
+      if ((s.kind == StatementKind.FOR) && match(`^test.*`, current(Method).name))
+         counts << 1;
+	  visit(input, visitor {
+			before _ -> o << 1;
+			before d: Declaration -> if (current(Method).name != "foo") stop;
+			after Statement -> o << 1;
+			});
+	 }
+});
