@@ -100,12 +100,12 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 		
 	public class FindCurrentForVisitors extends AbstractVisitorNoArg{
 		protected final Set<BoaScalar> listCurrent = new HashSet<BoaScalar>();
-		protected final List<Factor> factorList = new ArrayList<Factor>();
+		protected final Map<BoaScalar,List<Factor>> factorMap = new HashMap<BoaScalar, List<Factor>>();
 		
 		@Override
 		protected void initialize() {
 			listCurrent.clear();
-			factorList.clear();
+			factorMap.clear();
 			super.initialize();			
 		}
 				
@@ -113,8 +113,8 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 			return listCurrent;
 		}
 		
-		public List<Factor> getFactorList(){
-			return factorList;
+		public Map<BoaScalar, List<Factor>> getFactorList(){
+			return factorMap;
 		}
 		/** @{inheritDoc} */
 		@Override
@@ -136,7 +136,15 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 								//final Identifier idType = (Identifier)c.getArg(0).getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
 								System.out.println("Inside check current");
 								listCurrent.add((BoaScalar)c.getArg(0).type);
-								factorList.add(n);
+								if(factorMap.containsKey((BoaScalar)c.getArg(0).type))
+									factorMap.get((BoaScalar)c.getArg(0).type).add(n);
+								else
+								{
+									List<Factor> l1 = new ArrayList<Factor>();
+									l1.add(n);
+									factorMap.put((BoaScalar)c.getArg(0).type, l1);
+								}
+								
 								
 							}
 						}
@@ -236,7 +244,7 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 									)
 							);
 		
-		//exp.type = new 
+		exp.getExpr().getLhs().getLhs().getLhs().getLhs().getLhs().env = e.env;
 		return exp;
 		
 	}
@@ -280,6 +288,7 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 								);
 			
 			//System.out.println(exp.type.toString());
+			exp.getExpr().getLhs().getLhs().getLhs().getLhs().getLhs().env = e.env;
 			return exp;
 			
 		}
@@ -314,7 +323,7 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 				env = e.env;
 				
 				//replace the current call with peek(generatedStack) 
-				for(Factor f: currentSet.getFactorList()){
+				for(Factor f: currentSet.getFactorList().get(b)){
 					replaceCurrentCall(f, v);
 				}
 				//Create object of Visit Classifier to get Before and After Maps
@@ -333,7 +342,7 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 					Statement pushToStack = generatePushExpStatement(b, v.getId().getToken(), "node", e);
 					
 					Block blk = getVS.getBeforeMap().get("_").getBody().clone();
-					blk.addStatement(pushToStack);
+					blk.getStatements().add(0, pushToStack);
 					
 					VisitStatement vs = new VisitStatement(true, 
 							new Component(createIdentifier("node"), createIdentifier(typeToFind)),blk);
