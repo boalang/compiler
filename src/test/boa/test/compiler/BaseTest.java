@@ -256,7 +256,7 @@ public abstract class BaseTest {
 			new InheritedAttributeTransformer().start(p);
 			new LocalAggregationTransformer().start(p);
 			new VisitorOptimizingTransformer().start(p);
-			
+
 			final CodeGeneratingVisitor cg = new CodeGeneratingVisitor("1");
 			cg.start(p);
 			jobs.add(cg.getCode());
