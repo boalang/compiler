@@ -128,13 +128,10 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 			//if(n.getOpsSize()==1){
 				if (n.getOperand() instanceof Identifier){
 					final Identifier id = (Identifier)n.getOperand();
-					//System.out.println(id.getToken());
 					if (id.getToken().equals("current")){
 						if(n.getOp(0) instanceof Call){
 							final Call c = (Call)n.getOp(0);
 							if (c.getArgsSize() == 1) {
-								//final Identifier idType = (Identifier)c.getArg(0).getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
-								System.out.println("Inside check current");
 								listCurrent.add((BoaScalar)c.getArg(0).type);
 								if(factorMap.containsKey((BoaScalar)c.getArg(0).type))
 									factorMap.get((BoaScalar)c.getArg(0).type).add(n);
@@ -144,8 +141,7 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 									l1.add(n);
 									factorMap.put((BoaScalar)c.getArg(0).type, l1);
 								}
-								
-								
+									
 							}
 						}
 					}
@@ -163,18 +159,15 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 								
 			final Identifier idType = (Identifier)c.getArg(0).getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
 			String stackType = v.type.toString();
-			System.out.println(stackType.substring(stackType.lastIndexOf(' ') + 1));
-							
+										
 			id.setToken("peek");
 			idType.setToken(v.getId().getToken());
 			c.getArg(0).type = v.type;
-			System.out.println(v.getId().getToken());
-								
+			
 	}
 
 	private VarDeclStatement generateStackNode(BoaScalar b){
 		final String typeName = b.toJavaType();
-		System.out.println(typeName);
 		final VarDeclStatement var = new VarDeclStatement(
 				createIdentifier(stackPrefix + stackCounter),
 				new StackType(
@@ -226,8 +219,7 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 		c.addArg(e2);
 		
 		e1.getLhs().getLhs().getLhs().getLhs().getLhs().env = c.env = e.env;
-		//e1.getLhs().getLhs().getLhs().getLhs().getLhs().getOperand().type
-		
+				
 		final ExprStatement exp = new ExprStatement(
 				new Expression(
 						new Conjunction(
@@ -287,7 +279,6 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 										)
 								);
 			
-			//System.out.println(exp.type.toString());
 			exp.getExpr().getLhs().getLhs().getLhs().getLhs().getLhs().env = e.env;
 			return exp;
 			
@@ -303,17 +294,14 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 	public void visit(final Program n) {
 		env = n.env;
 
-		System.out.println("I am here");
 		FindVisitorExpressions visitorsList = new FindVisitorExpressions();
 		visitorsList.start(n);
-		System.out.println(visitorsList.getVisitors().size());
-		
+				
 		for(VisitorExpression e: visitorsList.getVisitors()){
 			
 			FindCurrentForVisitors currentSet = new FindCurrentForVisitors();
 			currentSet.start(e.getBody());
-			System.out.println(currentSet.getCurrentTypes().size());
-			
+						
 			//get set of all "types" on which current is called for this visitor expression
 			for(BoaScalar b: currentSet.getCurrentTypes()){
 				VarDeclStatement v = generateStackNode(b);
