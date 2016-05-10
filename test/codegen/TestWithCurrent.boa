@@ -1,0 +1,8 @@
+p: Project = input;
+counts: output sum of int;
+
+visit(p, visitor {
+   before s: Statement ->
+      if ((s.kind == StatementKind.FOR) && match(`^test.*`, current(Method).name))
+         counts << 1;
+});

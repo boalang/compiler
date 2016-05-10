@@ -1,0 +1,11 @@
+methods: stack of Method;
+p: Project = input;
+counts: output sum of int;
+visit(p, visitor {
+   before m: Method -> push(methods, m);
+   after m: Method -> pop(methods);
+   before s: Statement -> {
+  if(s.kind == StatementKind.FOR && match(`^test.*`, peek(methods).name))
+         counts << 1;
+		 }
+});

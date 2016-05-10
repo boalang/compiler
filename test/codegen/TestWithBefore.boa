@@ -1,0 +1,8 @@
+o: output sum of int;
+o << 1;
+
+visit(input, visitor {
+	before Method -> o << 1;
+	before _ -> o << 1;
+	before Statement -> if (current(Method).name != "foo") stop;
+});
