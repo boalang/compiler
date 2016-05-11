@@ -51,7 +51,7 @@ public class TestTypecheckBad extends BaseTest {
 		typecheck(load(badDir + "var-as-type.boa"), "type 'input' undefined");
 	}
 
-	//@Test
+	@Test
 	public void reDeclVar() throws IOException {
 		typecheck(load(badDir + "re-decl-var.boa"), "variable 'f' already declared as 'function[]: any'");
 	}
