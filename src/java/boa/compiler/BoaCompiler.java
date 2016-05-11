@@ -288,6 +288,8 @@ public class BoaCompiler {
 						LOG.info(f.getName() + ": task complexity: " + (!simpleVisitor.isComplex() ? "simple" : "complex"));
 						isSimple &= !simpleVisitor.isComplex();
 
+						new InheritedAttributeTransformer().start(p);
+
 						new LocalAggregationTransformer().start(p);
 
 						// if a job has no visitor, let it have its own method
