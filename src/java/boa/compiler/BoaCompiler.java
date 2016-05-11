@@ -51,6 +51,7 @@ import boa.compiler.transforms.LocalAggregationTransformer;
 import boa.compiler.transforms.VisitorMergingTransformer;
 import boa.compiler.transforms.VisitorOptimizingTransformer;
 import boa.compiler.visitors.AbstractCodeGeneratingVisitor;
+import boa.compiler.visitors.ASTPrintingVisitor;
 import boa.compiler.visitors.CodeGeneratingVisitor;
 import boa.compiler.visitors.TaskClassifyingVisitor;
 import boa.compiler.visitors.TypeCheckingVisitor;
@@ -137,7 +138,8 @@ public class BoaCompiler {
 					});
 
 					final BoaErrorListener parserErrorListener = new ParserErrorListener();
-					Start p = parse(tokens, parser, parserErrorListener);
+					final Start p = parse(tokens, parser, parserErrorListener);
+					if (cl.hasOption("ast")) new ASTPrintingVisitor().start(p);
 
 					final String jobName = "" + i;
 
@@ -158,6 +160,7 @@ public class BoaCompiler {
 							if (!simpleVisitor.isComplex() || cl.hasOption("nv") || inputFiles.size() == 1) {
 								new VisitorOptimizingTransformer().start(p);
 
+								if (cl.hasOption("ast")) new ASTPrintingVisitor().start(p);
 								final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(jobName);
 								cg.start(p);
 								jobs.add(cg.getCode());
@@ -190,6 +193,7 @@ public class BoaCompiler {
 					for (final Program p : new VisitorMergingTransformer().mergePrograms(visitorPrograms, maxVisitors)) {
 						new VisitorOptimizingTransformer().start(p);
 
+						if (cl.hasOption("ast")) new ASTPrintingVisitor().start(p);
 						final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(p.jobName);
 						cg.start(p);
 						jobs.add(cg.getCode());
@@ -203,6 +207,7 @@ public class BoaCompiler {
 					for (final Program p : visitorPrograms) {
 						new VisitorOptimizingTransformer().start(p);
 
+						if (cl.hasOption("ast")) new ASTPrintingVisitor().start(p);
 						final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(p.jobName);
 						cg.start(p);
 						jobs.add(cg.getCode());
@@ -269,7 +274,8 @@ public class BoaCompiler {
 				});
 
 				final BoaErrorListener parserErrorListener = new ParserErrorListener();
-				Start p = parse(tokens, parser, parserErrorListener);
+				final Start p = parse(tokens, parser, parserErrorListener);
+				if (cl.hasOption("ast")) new ASTPrintingVisitor().start(p);
 
 				final String jobName = "" + i;
 
@@ -290,6 +296,7 @@ public class BoaCompiler {
 						if (!simpleVisitor.isComplex() || cl.hasOption("nv") || inputFiles.size() == 1) {
 							new VisitorOptimizingTransformer().start(p);
 
+							if (cl.hasOption("ast")) new ASTPrintingVisitor().start(p);
 							final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(jobName);
 							cg.start(p);
 							jobs.add(cg.getCode());
@@ -379,6 +386,7 @@ public class BoaCompiler {
 		options.addOption("nv", "no-visitor-fusion", false, "disable visitor fusion");
 		options.addOption("v", "visitors-fused", true, "number of visitors to fuse");
 		options.addOption("n", "name", true, "the name of the generated main class");
+		options.addOption("ast", "ast-debug", false, "print the AST after parsing and before code generation (debug)");
 
 		final CommandLine cl;
 		try {
