@@ -1,4 +1,0 @@
-o: output collection of string;
-s: stack of Project;
-push(s, input);
-o << peek(s).id;
