@@ -176,8 +176,8 @@
 				</fileset>
 			</batchtest>
 		</junit>
-		<fail message="Test failure detected." if="test.failed" />
 		<delete file="SecurityAuth.audit" />
+		<fail message="Test failure detected." if="test.failed" />
 	</target>
 	<target name="test-lexer" depends="-compile-tests" description="Run lexer unit tests.">
 		<junit fork="yes" haltonfailure="no">
