@@ -17,11 +17,13 @@
  */
 package boa.compiler.transforms;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
-import java.util.*;
 
-import boa.compiler.ast.statements.Block;
 import boa.compiler.ast.Call;
 import boa.compiler.ast.Comparison;
 import boa.compiler.ast.Component;
@@ -29,18 +31,17 @@ import boa.compiler.ast.Conjunction;
 import boa.compiler.ast.Factor;
 import boa.compiler.ast.Identifier;
 import boa.compiler.ast.Program;
-import boa.compiler.SymbolTable;
 import boa.compiler.ast.Term;
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.ast.expressions.SimpleExpr;
 import boa.compiler.ast.expressions.VisitorExpression;
-import boa.compiler.ast.literals.IntegerLiteral;
+import boa.compiler.ast.statements.Block;
 import boa.compiler.ast.statements.ExprStatement;
 import boa.compiler.ast.statements.Statement;
-import boa.compiler.ast.statements.StopStatement;
 import boa.compiler.ast.statements.VarDeclStatement;
 import boa.compiler.ast.statements.VisitStatement;
 import boa.compiler.ast.types.StackType;
+import boa.compiler.SymbolTable;
 import boa.compiler.visitors.AbstractVisitorNoArg;
 import boa.compiler.visitors.VisitClassifier;
 import boa.types.BoaScalar;
@@ -68,105 +69,99 @@ import boa.types.BoaStack;
  * @author nbhide
  */
 public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
-	/** {@inheritDoc} */
-	private int stackCounter = 1;
-	private final String stackPrefix = "_s_"; 
+	private final static String stackPrefix = "_inhattr_";
+	private static int stackCounter = 0;
+
 	private SymbolTable env;
 
+	/**
+	 * Creates a list of all the {@link VisitorExpression}s in the Boa AST.
+	 */
 	private class FindVisitorExpressions extends AbstractVisitorNoArg {
-		protected final List<VisitorExpression> visitorList = new ArrayList<VisitorExpression>();
+		protected final List<VisitorExpression> visitors = new ArrayList<VisitorExpression>();
 
-		/**
-		 * Creates a list of all the Visitors in the Boa AST 
-		 *
-		 */
-		
+		/** @{inheritDoc} */
 		@Override
 		protected void initialize() {
-			visitorList.clear();
-			super.initialize();
+			visitors.clear();
 		}
+
 		public List<VisitorExpression> getVisitors() {
-			return visitorList;
+			return visitors;
 		}
 
 		/** @{inheritDoc} */
 		@Override
 		public void visit(final VisitorExpression n) {
-			visitorList.add(n);
+			visitors.add(n);
 			super.visit(n);
 		}
-	}
-		
-	public class FindCurrentForVisitors extends AbstractVisitorNoArg{
-		protected final Set<BoaScalar> listCurrent = new HashSet<BoaScalar>();
-		protected final Map<BoaScalar,List<Factor>> factorMap = new HashMap<BoaScalar, List<Factor>>();
-		
-		@Override
-		protected void initialize() {
-			listCurrent.clear();
-			factorMap.clear();
-			super.initialize();			
-		}
-				
-		public Set<BoaScalar> getCurrentTypes(){
-			return listCurrent;
-		}
-		
-		public Map<BoaScalar, List<Factor>> getFactorList(){
-			return factorMap;
-		}
-		/** @{inheritDoc} */
-		@Override
-		public void visit(final VisitorExpression n){
-			//don't nest
-		}
-		
-		/** @{inheritDoc} */
-		@Override
-		public void visit(final Factor n){
-			//if(n.getOpsSize()==1){
-				if (n.getOperand() instanceof Identifier){
-					final Identifier id = (Identifier)n.getOperand();
-					if (id.getToken().equals("current")){
-						if(n.getOp(0) instanceof Call){
-							final Call c = (Call)n.getOp(0);
-							if (c.getArgsSize() == 1) {
-								listCurrent.add((BoaScalar)c.getArg(0).type);
-								if(factorMap.containsKey((BoaScalar)c.getArg(0).type))
-									factorMap.get((BoaScalar)c.getArg(0).type).add(n);
-								else
-								{
-									List<Factor> l1 = new ArrayList<Factor>();
-									l1.add(n);
-									factorMap.put((BoaScalar)c.getArg(0).type, l1);
-								}
-									
-							}
-						}
-					}
-				}
-			//}
-			super.visit(n);
-		}
-	}
-	
-	
-	private void replaceCurrentCall(Factor n, VarDeclStatement v){
-		
-			final Identifier id = (Identifier)n.getOperand();
-			final Call c = (Call)n.getOp(0);
-								
-			final Identifier idType = (Identifier)c.getArg(0).getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
-			String stackType = v.type.toString();
-										
-			id.setToken("peek");
-			idType.setToken(v.getId().getToken());
-			c.getArg(0).type = v.type;
-			
 	}
 
-	private VarDeclStatement generateStackNode(BoaScalar b){
+	/**
+	 * Generates a set of all distinct types T in calls current(T) and also a
+	 * mapping from each type T found to a list of all uses in current(T).
+	 */
+	public class FindCurrentForVisitors extends AbstractVisitorNoArg{
+		protected final Set<BoaScalar> currents = new HashSet<BoaScalar>();
+		protected final Map<BoaScalar,List<Factor>> factorMap = new HashMap<BoaScalar,List<Factor>>();
+
+		/** @{inheritDoc} */
+		@Override
+		protected void initialize() {
+			currents.clear();
+			factorMap.clear();
+			super.initialize();
+		}
+
+		public Set<BoaScalar> getCurrentTypes() {
+			return currents;
+		}
+
+		public Map<BoaScalar,List<Factor>> getFactorList() {
+			return factorMap;
+		}
+
+		/** @{inheritDoc} */
+		@Override
+		public void visit(final VisitorExpression n) {
+			//don't nest
+		}
+
+		/** @{inheritDoc} */
+		@Override
+		public void visit(final Factor n) {
+			if (n.getOperand() instanceof Identifier) {
+				final Identifier id = (Identifier)n.getOperand();
+
+				if (id.getToken().equals("current") && n.getOp(0) instanceof Call) {
+					final Call c = (Call)n.getOp(0);
+
+					if (c.getArgsSize() == 1) {
+						final BoaScalar t = (BoaScalar)c.getArg(0).type;
+						currents.add(t);
+
+						if (!factorMap.containsKey(t))
+							factorMap.put(t, new ArrayList<Factor>());
+						factorMap.get(t).add(n);
+					}
+				}
+			}
+			super.visit(n);
+		}
+	}
+
+	private void replaceCurrentCall(final Factor n, final VarDeclStatement v) {
+		final Identifier id = (Identifier)n.getOperand();
+		final Call c = (Call)n.getOp(0);
+		final Identifier idType = (Identifier)c.getArg(0).getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
+
+		id.setToken("peek");
+		idType.setToken(v.getId().getToken());
+		c.getArg(0).type = v.type;
+	}
+
+	private VarDeclStatement generateStackNode(final BoaScalar b) {
 		final String typeName = b.toJavaType();
 		final VarDeclStatement var = new VarDeclStatement(
 				createIdentifier(stackPrefix + stackCounter),
@@ -180,219 +175,141 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 		var.type = new BoaStack(b);
 		return var;
 	}
-	
-	//Generate an expression statement to push node to the stack
-	private ExprStatement generatePushExpStatement(BoaScalar b, String stackName, String nodeName, VisitorExpression e){
-		
-		Expression e1 = new Expression(
-				new Conjunction(
-						new Comparison(
-								new SimpleExpr(
-										new Term(
-												new Factor(
-														createIdentifier(stackName)
-														)
-												)
-										)
-								)
-						)
-				);
+
+	// Generate an expression statement to push node to the stack
+	private ExprStatement generatePushExpStatement(final BoaScalar b, final String stackName, final String nodeName, final VisitorExpression e) {
+		final Expression e1 = createIdentifierExpr(stackName, e.env);
 		e1.type = new BoaStack(b);
 
-		Expression e2 = new Expression(
-				new Conjunction(
-						new Comparison(
-								new SimpleExpr(
-										new Term(
-												new Factor(
-														createIdentifier(nodeName)
-														)
-												)
-										)
-								)
-						)
-				);
+		final Expression e2 = createIdentifierExpr(nodeName, e.env);
 		e2.type = b;
-		
-		Call c = new Call();
+
+		final Call c = new Call();
 		c.addArg(e1);
 		c.addArg(e2);
-		
-		e1.getLhs().getLhs().getLhs().getLhs().getLhs().env = c.env = e.env;
-				
-		final ExprStatement exp = new ExprStatement(
-				new Expression(
-						new Conjunction(
-								new Comparison(
-										new SimpleExpr(
-												new Term(
-														new Factor(
-																createIdentifier("push")
-																).addOp(c)
-														)
-													)
-												)
-											)
-									)
-							);
-		
-		exp.getExpr().getLhs().getLhs().getLhs().getLhs().getLhs().env = e.env;
-		return exp;
-		
+		c.env = e.env;
+
+		return createIdentifierExprStatement("push", e.env, c);
 	}
 
-	//Generate an expression statement to Pop node to the stack
-		private ExprStatement generatePopExpStatement(BoaScalar b, String stackName, VisitorExpression e){
-			
-			Expression e1 = new Expression(
-					new Conjunction(
-							new Comparison(
-									new SimpleExpr(
-											new Term(
-													new Factor(
-															createIdentifier(stackName)
-															)
-													)
-											)
-									)
-							)
-					);
-			e1.type = new BoaStack(b);
+	// Generate an expression statement to Pop node off the stack
+	private ExprStatement generatePopExpStatement(final BoaScalar b, final String stackName, final VisitorExpression e) {
+		final Expression e1 = createIdentifierExpr(stackName, e.env);
+		e1.type = new BoaStack(b);
 
-			Call c = new Call();
-			c.addArg(e1);
-			e1.getLhs().getLhs().getLhs().getLhs().getLhs().env =c.env =e.env;
-			
-			final ExprStatement exp = new ExprStatement(
-					new Expression(
-							new Conjunction(
-									new Comparison(
-											new SimpleExpr(
-													new Term(
-															new Factor(
-																	createIdentifier("pop")
-																	).addOp(c)
-															)
-														)
-													)
-												)
-										)
-								);
-			
-			exp.getExpr().getLhs().getLhs().getLhs().getLhs().getLhs().env = e.env;
-			return exp;
-			
-		}
+		final Call c = new Call();
+		c.addArg(e1);
+		c.env = e.env;
 
-	private Identifier createIdentifier(String name) {
-		Identifier id = new Identifier(name);
+		return createIdentifierExprStatement("pop", e.env, c);
+	}
+
+	private ExprStatement createIdentifierExprStatement(final String name, final SymbolTable env, final Call c) {
+		final Expression exp = createIdentifierExpr(name, env);
+
+		exp.getLhs().getLhs().getLhs().getLhs().getLhs().addOp(c);
+
+		return new ExprStatement(exp);
+	}
+
+	private Expression createIdentifierExpr(final String name, final SymbolTable env) {
+		final Expression exp = new Expression(
+			new Conjunction(
+				new Comparison(
+					new SimpleExpr(
+						new Term(
+							new Factor(createIdentifier(name))
+						)
+					)
+				)
+			)
+		);
+		exp.getLhs().getLhs().getLhs().getLhs().getLhs().env = env;
+		return exp;
+	}
+
+	private Identifier createIdentifier(final String name) {
+		final Identifier id = new Identifier(name);
 		id.env = env;
 		return id;
 	}
 
+	/** @{inheritDoc} */
 	@Override
 	public void visit(final Program n) {
 		env = n.env;
 
-		FindVisitorExpressions visitorsList = new FindVisitorExpressions();
+		final FindVisitorExpressions visitorsList = new FindVisitorExpressions();
 		visitorsList.start(n);
-				
-		for(VisitorExpression e: visitorsList.getVisitors()){
-			
-			FindCurrentForVisitors currentSet = new FindCurrentForVisitors();
+
+		for (final VisitorExpression e: visitorsList.getVisitors()) {
+			final FindCurrentForVisitors currentSet = new FindCurrentForVisitors();
 			currentSet.start(e.getBody());
-						
-			//get set of all "types" on which current is called for this visitor expression
-			for(BoaScalar b: currentSet.getCurrentTypes()){
-				VarDeclStatement v = generateStackNode(b);
+
+			// get set of all "types" on which current is called for this visitor expression
+			for (final BoaScalar b: currentSet.getCurrentTypes()) {
+				env = e.env;
+
+				final VarDeclStatement v = generateStackNode(b);
 				v.env = v.getType().env = ((StackType)v.getType()).getValue().getType().env = n.env;
 				v.env.set(v.getId().getToken(), v.type);
 				n.getStatements().add(0, v);
-				env = e.env;
-				
-				//replace the current call with peek(generatedStack) 
-				for(Factor f: currentSet.getFactorList().get(b)){
+
+				// replace the current call with peek(generatedStack)
+				for (final Factor f: currentSet.getFactorList().get(b))
 					replaceCurrentCall(f, v);
-				}
-				//Create object of Visit Classifier to get Before and After Maps
-				VisitClassifier getVS = new VisitClassifier();
+
+				// Create object of Visit Classifier to get Before and After Maps
+				final VisitClassifier getVS = new VisitClassifier();
 				getVS.start(e.getBody());
-				String typeToFind = b.toJavaType().substring(b.toJavaType().lastIndexOf('.') + 1);
-				
-				//Add/Update Before visit clause
-				if(getVS.getBeforeMap().containsKey(typeToFind)){
-					VisitStatement vs = getVS.getBeforeMap().get(typeToFind);
-					Statement pushToStack = generatePushExpStatement(b, v.getId().getToken(), vs.getComponent().getIdentifier().getToken(), e); 
+				final String typeToFind = b.toJavaType().substring(b.toJavaType().lastIndexOf('.') + 1);
+
+				// Add/Update before clause
+				if (getVS.getBeforeMap().containsKey(typeToFind)) {
+					final VisitStatement vs = getVS.getBeforeMap().get(typeToFind);
+					final Statement pushToStack = generatePushExpStatement(b, v.getId().getToken(), vs.getComponent().getIdentifier().getToken(), e);
 					vs.getBody().getStatements().add(0, pushToStack);
-				}
-				else if(getVS.getBeforeMap().containsKey("_")){
-					
-					Statement pushToStack = generatePushExpStatement(b, v.getId().getToken(), "node", e);
-					
-					Block blk = getVS.getBeforeMap().get("_").getBody().clone();
-					blk.getStatements().add(0, pushToStack);
-					
-					VisitStatement vs = new VisitStatement(true, 
-							new Component(createIdentifier("node"), createIdentifier(typeToFind)),blk);
-					
+				} else {
+					final Block blk;
+					final Statement pushToStack = generatePushExpStatement(b, v.getId().getToken(), "node", e);
+
+					if (getVS.getBeforeMap().containsKey("_")) {
+						blk = getVS.getBeforeMap().get("_").getBody().clone();
+						blk.getStatements().add(0, pushToStack);
+					} else {
+						blk = new Block().addStatement(pushToStack);
+					}
+
+					final VisitStatement vs = new VisitStatement(true, new Component(createIdentifier("node"), createIdentifier(typeToFind)), blk);
 					vs.getComponent().getType().type = b;
-					
+					vs.env = e.env;
+
 					e.getBody().getStatements().add(vs);
-					((ExprStatement)pushToStack).getExpr().getLhs().getLhs().getLhs().getLhs().getLhs().env = vs.env = e.env;
 				}
-				else{
-					
-					Statement pushToStack = generatePushExpStatement(b, v.getId().getToken(), "node",e);
-					
-					VisitStatement vs = new VisitStatement(true, 
-							new Component(createIdentifier("node"), createIdentifier(typeToFind)),
-							new Block().addStatement(pushToStack)
-							);
-					
-					vs.getComponent().getType().type = b;
-					
-					e.getBody().getStatements().add(vs);
-					((ExprStatement)pushToStack).getExpr().getLhs().getLhs().getLhs().getLhs().getLhs().env = vs.env = e.env;
-					
-				}
-				
-				//Add/Update After visit clause
-				if(getVS.getAfterMap().containsKey(typeToFind)){
-					VisitStatement vs = getVS.getAfterMap().get(typeToFind);
-					Statement popFromStack = generatePopExpStatement(b, v.getId().getToken(),e); 
+
+				// Add/Update after clause
+				if (getVS.getAfterMap().containsKey(typeToFind)) {
+					final VisitStatement vs = getVS.getAfterMap().get(typeToFind);
+					final Statement popFromStack = generatePopExpStatement(b, v.getId().getToken(),e);
 					vs.getBody().getStatements().add(popFromStack);
-					
-				}
-				else if(getVS.getAfterMap().containsKey("_")){
-					
-					Statement popFromStack = generatePopExpStatement(b, v.getId().getToken(),e);
-					
-					Block blk = getVS.getAfterMap().get("_").getBody().clone();
-					blk.addStatement(popFromStack);
-					
-					VisitStatement vs = new VisitStatement(false, 
-							new Component(createIdentifier("node"), createIdentifier(typeToFind)),blk);
+				} else {
+					final Block blk;
+					final Statement popFromStack = generatePopExpStatement(b, v.getId().getToken(),e);
+
+					if (getVS.getAfterMap().containsKey("_")) {
+						blk = getVS.getAfterMap().get("_").getBody().clone();
+						blk.getStatements().add(popFromStack);
+					} else {
+						blk = new Block().addStatement(popFromStack);
+					}
+
+					final VisitStatement vs = new VisitStatement(false, new Component(createIdentifier("node"), createIdentifier(typeToFind)), blk);
 					vs.getComponent().getType().type = b;
-					
+					vs.env = e.env;
+
 					e.getBody().getStatements().add(vs);
-					((ExprStatement)popFromStack).getExpr().getLhs().getLhs().getLhs().getLhs().getLhs().env = vs.env = e.env;
-				}
-				else{
-					
-					Statement popFromStack = generatePopExpStatement(b, v.getId().getToken(),e);
-					
-					VisitStatement vs = new VisitStatement(false, 
-							new Component(createIdentifier("node"), createIdentifier(typeToFind)),
-							new Block().addStatement(popFromStack)
-							);
-					vs.getComponent().getType().type = b;
-					
-					e.getBody().getStatements().add(vs);
-					((ExprStatement)popFromStack).getExpr().getLhs().getLhs().getLhs().getLhs().getLhs().env = vs.env = e.env;
 				}
 			}
-			
 		}
-		
 	}
 }
