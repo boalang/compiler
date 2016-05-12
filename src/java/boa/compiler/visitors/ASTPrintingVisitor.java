@@ -336,7 +336,6 @@ public class ASTPrintingVisitor extends AbstractVisitorNoArg {
 		indent--;
 	}
 
-
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final SwitchCase n) {

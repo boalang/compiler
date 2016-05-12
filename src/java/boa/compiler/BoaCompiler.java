@@ -53,6 +53,7 @@ import boa.compiler.transforms.VisitorOptimizingTransformer;
 import boa.compiler.visitors.AbstractCodeGeneratingVisitor;
 import boa.compiler.visitors.ASTPrintingVisitor;
 import boa.compiler.visitors.CodeGeneratingVisitor;
+import boa.compiler.visitors.PrettyPrintVisitor;
 import boa.compiler.visitors.TaskClassifyingVisitor;
 import boa.compiler.visitors.TypeCheckingVisitor;
 import boa.compiler.listeners.BoaErrorListener;
@@ -160,6 +161,7 @@ public class BoaCompiler {
 							if (!simpleVisitor.isComplex() || cl.hasOption("nv") || inputFiles.size() == 1) {
 								new VisitorOptimizingTransformer().start(p);
 
+								if (cl.hasOption("pp")) new PrettyPrintVisitor().start(p);
 								if (cl.hasOption("ast")) new ASTPrintingVisitor().start(p);
 								final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(jobName);
 								cg.start(p);
@@ -193,6 +195,7 @@ public class BoaCompiler {
 					for (final Program p : new VisitorMergingTransformer().mergePrograms(visitorPrograms, maxVisitors)) {
 						new VisitorOptimizingTransformer().start(p);
 
+						if (cl.hasOption("pp")) new PrettyPrintVisitor().start(p);
 						if (cl.hasOption("ast")) new ASTPrintingVisitor().start(p);
 						final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(p.jobName);
 						cg.start(p);
@@ -207,6 +210,7 @@ public class BoaCompiler {
 					for (final Program p : visitorPrograms) {
 						new VisitorOptimizingTransformer().start(p);
 
+						if (cl.hasOption("pp")) new PrettyPrintVisitor().start(p);
 						if (cl.hasOption("ast")) new ASTPrintingVisitor().start(p);
 						final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(p.jobName);
 						cg.start(p);
@@ -296,6 +300,7 @@ public class BoaCompiler {
 						if (!simpleVisitor.isComplex() || cl.hasOption("nv") || inputFiles.size() == 1) {
 							new VisitorOptimizingTransformer().start(p);
 
+							if (cl.hasOption("pp")) new PrettyPrintVisitor().start(p);
 							if (cl.hasOption("ast")) new ASTPrintingVisitor().start(p);
 							final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(jobName);
 							cg.start(p);
@@ -387,6 +392,7 @@ public class BoaCompiler {
 		options.addOption("v", "visitors-fused", true, "number of visitors to fuse");
 		options.addOption("n", "name", true, "the name of the generated main class");
 		options.addOption("ast", "ast-debug", false, "print the AST after parsing and before code generation (debug)");
+		options.addOption("pp", "pretty-print", false, "pretty print the AST before code generation (debug)");
 
 		final CommandLine cl;
 		try {
