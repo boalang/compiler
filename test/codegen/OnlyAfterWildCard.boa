@@ -1,7 +1,0 @@
-o: output sum of int;
-o << 1;
-
-visit(input, visitor {
-	after _ -> o << 1;
-	before Statement -> if (current(Method).name != "foo") stop;
-});

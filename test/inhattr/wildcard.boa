@@ -1,0 +1,49 @@
+o: output sum of int;
+
+visit(input, visitor {
+	before _ -> stop;
+	before s: Statement ->
+		if (current(Method).name == "foo")
+			o << 1;
+});
+
+visit(input, visitor {
+	after _ -> o << 1;
+	before s: Statement ->
+		if (current(Method).name == "foo")
+			o << 1;
+});
+
+visit(input, visitor {
+	before _ -> stop;
+	after _ -> o << 1;
+	before s: Statement ->
+		if (current(Method).name == "foo")
+			o << 1;
+});
+
+visit(input, visitor {
+	before _ -> stop;
+	after Method -> o << 1;
+	before s: Statement ->
+		if (current(Method).name == "foo")
+			o << 1;
+});
+
+visit(input, visitor {
+	before Method -> o << 1;
+	after _ -> o << 1;
+	before s: Statement ->
+		if (current(Method).name == "foo")
+			o << 1;
+});
+
+visit(input, visitor {
+	before _ -> stop;
+	after _ -> o << 1;
+	before Method -> o << 1;
+	after Method -> o << 1;
+	before s: Statement ->
+		if (current(Method).name == "foo")
+			o << 1;
+});

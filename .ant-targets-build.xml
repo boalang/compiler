@@ -12,6 +12,7 @@ package-compiler
 package-runtime
 test
 test-codegen
+test-inhattr
 test-knowngood
 test-lexer
 test-parser
