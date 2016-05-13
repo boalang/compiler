@@ -1,6 +1,7 @@
 /*
- * Copyright 2015, Anthony Urso, Hridesh Rajan, Robert Dyer,
- *                 and Iowa State University of Science and Technology
+ * Copyright 2016, Anthony Urso, Hridesh Rajan, Robert Dyer, Neha Bhide
+ *                 Iowa State University of Science and Technology
+ *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,6 +48,7 @@ import org.scannotation.ClasspathUrlFinder;
 
 import boa.compiler.ast.Program;
 import boa.compiler.ast.Start;
+import boa.compiler.transforms.InheritedAttributeTransformer;
 import boa.compiler.transforms.LocalAggregationTransformer;
 import boa.compiler.transforms.VisitorMergingTransformer;
 import boa.compiler.transforms.VisitorOptimizingTransformer;
@@ -78,6 +80,7 @@ import boa.parser.BoaLexer;
  *
  * @author anthonyu
  * @author rdyer
+ * @author nbhide
  */
 public class BoaCompiler {
 	
@@ -153,6 +156,8 @@ public class BoaCompiler {
 
 							LOG.info(f.getName() + ": task complexity: " + (!simpleVisitor.isComplex() ? "simple" : "complex"));
 							isSimple &= !simpleVisitor.isComplex();
+							
+							new InheritedAttributeTransformer().start(p);
 
 							new LocalAggregationTransformer().start(p);
 
@@ -292,6 +297,8 @@ public class BoaCompiler {
 
 						LOG.info(f.getName() + ": task complexity: " + (!simpleVisitor.isComplex() ? "simple" : "complex"));
 						isSimple &= !simpleVisitor.isComplex();
+
+						new InheritedAttributeTransformer().start(p);
 
 						new LocalAggregationTransformer().start(p);
 
