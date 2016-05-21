@@ -1,0 +1,19 @@
+o: output sum of int;
+o << 1;
+
+m: map[string] of int;
+
+m["s"] = len(m);
+m["s"] = hash(input);
+m["s"] = dayofmonth(input.created_date);
+m["s"] = dayofweek(input.created_date);
+m["s"] = dayofyear(input.created_date);
+m["s"] = hourof(input.created_date);
+m["s"] = minuteof(input.created_date);
+m["s"] = monthof(input.created_date);
+m["s"] = secondof(input.created_date);
+m["s"] = yearof(input.created_date);
+m["s"] = highbit(1034847);
+m["s"] = nrand(50);
+m["s"] = strfind("sdfljk", "fdklsfd");
+m["s"] = strrfind("sdfljk", "fdklsfd");
