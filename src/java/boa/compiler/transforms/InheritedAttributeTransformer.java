@@ -102,7 +102,7 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 	 * Generates a set of all distinct types T in calls current(T) and also a
 	 * mapping from each type T found to a list of all uses in current(T).
 	 */
-	public class FindCurrentForVisitors extends AbstractVisitorNoArg{
+	private class FindCurrentForVisitors extends AbstractVisitorNoArg{
 		protected final Set<BoaScalar> currents = new HashSet<BoaScalar>();
 		protected final Map<BoaScalar,List<Factor>> factorMap = new HashMap<BoaScalar,List<Factor>>();
 
@@ -151,6 +151,7 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 		}
 	}
 
+	// replaces a call to current(T) to peek(s_T_#)
 	private void replaceCurrentCall(final Factor n, final VarDeclStatement v) {
 		final Identifier id = (Identifier)n.getOperand();
 		final Call c = (Call)n.getOp(0);
@@ -161,6 +162,7 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 		c.getArg(0).type = v.type;
 	}
 
+	// creates a stack variable
 	private VarDeclStatement generateStackNode(final BoaScalar b) {
 		final String typeName = b.toJavaType();
 		final VarDeclStatement var = new VarDeclStatement(
@@ -176,7 +178,7 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 		return var;
 	}
 
-	// Generate an expression statement to push node to the stack
+	// generate the push call
 	private ExprStatement generatePushExpStatement(final BoaScalar b, final String stackName, final String nodeName, final VisitorExpression e) {
 		final Expression e1 = createIdentifierExpr(stackName, e.env);
 		e1.type = new BoaStack(b);
@@ -192,7 +194,7 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 		return createIdentifierExprStatement("push", e.env, c);
 	}
 
-	// Generate an expression statement to Pop node off the stack
+	// generate the pop call
 	private ExprStatement generatePopExpStatement(final BoaScalar b, final String stackName, final VisitorExpression e) {
 		final Expression e1 = createIdentifierExpr(stackName, e.env);
 		e1.type = new BoaStack(b);
@@ -239,37 +241,42 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 	public void visit(final Program n) {
 		env = n.env;
 
+		// 1) Find each instance of VisitorExpression, then for each:
 		final FindVisitorExpressions visitorsList = new FindVisitorExpressions();
 		visitorsList.start(n);
 
 		for (final VisitorExpression e: visitorsList.getVisitors()) {
+		//    a) Find all instances of "current(T)" in the visitor
+		//    b) Collect set of all unique types T found in 1a
 			final FindCurrentForVisitors currentSet = new FindCurrentForVisitors();
 			currentSet.start(e.getBody());
 
-			// get set of all "types" on which current is called for this visitor expression
+		//    c) For each type T in the set from 1b:
 			for (final BoaScalar b: currentSet.getCurrentTypes()) {
 				env = e.env;
 
+		//       i)   Add a variable 's_T_#' of type 'stack of T' at the top-most scope of the AST
 				final VarDeclStatement v = generateStackNode(b);
 				v.env = v.getType().env = ((StackType)v.getType()).getValue().getType().env = n.env;
 				v.env.set(v.getId().getToken(), v.type);
 				n.getStatements().add(0, v);
 
-				// replace the current call with peek(generatedStack)
+		//       ii)  Where-ever we encounter 'current(T)', replace with code for 's_T_#.peek()'
 				for (final Factor f: currentSet.getFactorList().get(b))
 					replaceCurrentCall(f, v);
 
-				// Create object of Visit Classifier to get Before and After Maps
 				final VisitClassifier getVS = new VisitClassifier();
 				getVS.start(e.getBody());
 				final String typeToFind = b.toJavaType().substring(b.toJavaType().lastIndexOf('.') + 1);
 
-				// Add/Update before clause
+		//       iii) Add/Update the before clause for T in the visitor
+		//            a) If the visitor has a 'before T' clause, add 's_t_#.push(node)' as the first statement
 				if (getVS.getBeforeMap().containsKey(typeToFind)) {
 					final VisitStatement vs = getVS.getBeforeMap().get(typeToFind);
 					final Statement pushToStack = generatePushExpStatement(b, v.getId().getToken(), vs.getComponent().getIdentifier().getToken(), e);
 					vs.getBody().getStatements().add(0, pushToStack);
 				} else {
+		//            b) Otherwise, add a 'before T' clause with a 's_t_#.push(node)'
 					final Block blk;
 					final Statement pushToStack = generatePushExpStatement(b, v.getId().getToken(), "node", e);
 
@@ -287,12 +294,14 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 					e.getBody().getStatements().add(vs);
 				}
 
-				// Add/Update after clause
+		//       iv)  Add/Update the after clause for T in the visitor
+		//            a) If the visitor has a 'after T' clause, add 's_t_#.pop()' as the first statement
 				if (getVS.getAfterMap().containsKey(typeToFind)) {
 					final VisitStatement vs = getVS.getAfterMap().get(typeToFind);
 					final Statement popFromStack = generatePopExpStatement(b, v.getId().getToken(),e);
 					vs.getBody().getStatements().add(popFromStack);
 				} else {
+		//            b) Otherwise, add a 'after T' clause with a 's_t_#.pop()'
 					final Block blk;
 					final Statement popFromStack = generatePopExpStatement(b, v.getId().getToken(),e);
 
