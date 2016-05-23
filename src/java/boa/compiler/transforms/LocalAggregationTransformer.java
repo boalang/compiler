@@ -105,32 +105,13 @@ public class LocalAggregationTransformer extends AbstractVisitorNoArg {
 	}
 
 	protected void generateCacheVariable(final Program n, final String s) {
-		final VarDeclStatement var = new VarDeclStatement(
-				new Identifier(varPrefix + s),
-				new Expression(
-					new Conjunction(
-						new Comparison(
-							new SimpleExpr(
-								new Term(
-									new Factor(
-										new IntegerLiteral("0")
-									)
-								)
-							)
-						)
-					)
-				)
-			);
-		n.getStatements().add(0, var);
-
+		final VarDeclStatement var = ASTFactory.createVarDecl(varPrefix + s, new IntegerLiteral("0"), new BoaInt(), n.env);
 		n.env.set(varPrefix + s, new BoaInt());
-		var.type = var.getInitializer().type = new BoaInt();
-		var.env = n.env;
+		n.getStatements().add(0, var);
 	}
 
 	protected void generateCacheOutput(final Program n, String s) {
-		final Identifier id = new Identifier(varPrefix + s);
-		id.env = n.env;
+		final Identifier id = ASTFactory.createIdentifier(varPrefix + s, n.env);
 		n.getStatements().add(
 			new IfStatement(
 				new Expression(
@@ -152,7 +133,7 @@ public class LocalAggregationTransformer extends AbstractVisitorNoArg {
 				),
 				new Block().addStatement(
 					new EmitStatement(
-						new Identifier(s),
+						ASTFactory.createIdentifier(s, n.env),
 						new Expression(
 							new Conjunction(
 								new Comparison(
@@ -171,8 +152,7 @@ public class LocalAggregationTransformer extends AbstractVisitorNoArg {
 	}
 
 	protected void generateStoreValue(final EmitStatement n) {
-		final Identifier id = new Identifier(varPrefix + n.getId().getToken());
-		id.env = n.env;
+		final Identifier id = ASTFactory.createIdentifier(varPrefix + n.getId().getToken(), n.env);
 
 		final SimpleExpr e = new SimpleExpr(
 			new Term(

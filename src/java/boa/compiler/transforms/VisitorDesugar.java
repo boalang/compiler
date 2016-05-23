@@ -53,8 +53,7 @@ public class VisitorDesugar extends AbstractVisitorNoArg {
 			final List<Identifier> ids = vs.getIdList();
 
 			while (!ids.isEmpty()) {
-				final Identifier id = ids.remove(0);
-				final VisitStatement newVs = createVisit(vs, id);
+				final VisitStatement newVs = createVisit(vs, ids.remove(0));
 
 				if (ids.isEmpty())
 					b.replaceStatement(vs, newVs);

@@ -49,10 +49,9 @@ import boa.compiler.visitors.VisitClassifier;
 import boa.types.BoaProtoTuple;
 
 /**
- * Finds all visitors and converts the stop statements into a counter
- * functions.  This makes the visitor's side effects the same while
- * changing the semantics so it doesn't actually stop the visit (and
- * thus will visit all nodes).
+ * Finds all visitors and converts the stop statements into counter functions.
+ * This makes the visitor's side effects the same while changing the semantics
+ * so it doesn't actually stop the visit (and thus will visit all nodes).
  * 
  * General algorithm:
  * 
@@ -156,7 +155,7 @@ public class StopStatementTransformer extends AbstractVisitorNoArg {
 								new SimpleExpr(
 									new Term(
 										new Factor(
-											new Identifier(varCounterName)
+											ASTFactory.createIdentifier(varCounterName, n.env)
 										)
 									)
 								)
