@@ -1,0 +1,8 @@
+o: output sum of int;
+
+visit(input, visitor {
+	before Method -> if (current(Statement).kind == StatementKind.TYPEDECL) stop;
+	before Declaration ->
+		if (current(Statement).kind == StatementKind.TYPEDECL)
+			o << 1;
+});

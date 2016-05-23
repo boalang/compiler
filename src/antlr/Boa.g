@@ -683,9 +683,9 @@ RIGHT_ARROW : '->';
 //
 
 IntegerLiteral
-	: [-]? DecimalNumeral
-	| [-]? HexNumeral 
-	| [-]? OctalNumeral 
+	: DecimalNumeral
+	| HexNumeral 
+	| OctalNumeral 
 	| BinaryNumeral 
 	;
 
@@ -721,9 +721,9 @@ BinaryNumeral
 	;
 
 FloatingPointLiteral
-	: [-]? Digit+ DOT Digit* ExponentPart?
-	| [-]? DOT Digit+ ExponentPart?
-	| [-]? Digit+ ExponentPart
+	: Digit+ DOT Digit* ExponentPart?
+	| DOT Digit+ ExponentPart?
+	| Digit+ ExponentPart
 	;
 
 fragment
