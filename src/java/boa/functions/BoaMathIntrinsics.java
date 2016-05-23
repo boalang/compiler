@@ -28,7 +28,7 @@ import java.util.Random;
  * @author anthonyu
  */
 public class BoaMathIntrinsics {
-	private static Random random = new Random();
+	public static Random random = new Random();
 
 	/**
 	 * Return a random floating point number x in the range 0.0 < x < 1.0.
