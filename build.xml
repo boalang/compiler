@@ -166,7 +166,7 @@
 
 	<!-- testing -->
 	<target name="test" depends="-compile-tests" description="Run all unit tests.">
-		<junit fork="yes">
+		<junit fork="yes" haltonfailure="no" failureproperty="test.failed">
 			<classpath refid="test.class.path" />
 			<batchtest>
 				<formatter type="plain" usefile="false" />
@@ -177,6 +177,7 @@
 			</batchtest>
 		</junit>
 		<delete file="SecurityAuth.audit" />
+		<fail message="Test failure detected." if="test.failed" />
 	</target>
 	<target name="test-lexer" depends="-compile-tests" description="Run lexer unit tests.">
 		<junit fork="yes" haltonfailure="no">
