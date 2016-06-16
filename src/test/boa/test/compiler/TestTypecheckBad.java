@@ -80,4 +80,9 @@ public class TestTypecheckBad extends BaseTest {
 	public void quantMissingUse() throws IOException {
 		typecheck(load(badDir + "quant-missing-use.boa"), "quantifier variable 'i' must be used in the foreach condition expression");
 	}
+
+	@Test
+	public void currentBadType() throws IOException {
+		typecheck(load(badDir + "current-badtype.boa"), "no such function current([int])");
+	}
 }
