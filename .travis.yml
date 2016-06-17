@@ -1,8 +1,8 @@
 language: boa
 script: ant test
 notifications:
-     email:
-	recipients:
-		- boasupport@iastate.edu
-	on_success: change
-	on_failure: always
+  email:
+  recipients:
+    - boasupport@iastate.edu
+  on_success: change
+  on_failure: always
