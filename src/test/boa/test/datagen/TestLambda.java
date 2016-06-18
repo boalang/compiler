@@ -17,6 +17,8 @@
  */
 package boa.test.datagen;
 
+import java.io.IOException;
+
 import org.junit.Test;
 
 /*
@@ -25,427 +27,58 @@ import org.junit.Test;
  */
 public class TestLambda extends Java8BaseTest {
 	@Test
-	public void lambda() {
-		testWrapped("MathOperation division = (int a, int b) -> a / b;",
-			"{\n" +
-			"   \"kind\": \"EXPRESSION\",\n" +
-			"   \"expression\": {\n" +
-			"      \"kind\": \"VARDECL\",\n" +
-			"      \"variable_decls\": [\n" +
-			"         {\n" +
-			"            \"name\": \"division\",\n" +
-			"            \"variable_type\": {\n" +
-			"               \"kind\": \"OTHER\",\n" +
-			"               \"name\": 1\n" +
-			"            },\n" +
-			"            \"initializer\": {\n" +
-			"               \"kind\": \"LAMBDA\",\n" +
-			"               \"lambda\": {\n" +
-			"                  \"name\": \"\",\n" +
-			"                  \"return_type\": {\n" +
-			"                     \"kind\": \"OTHER\",\n" +
-			"                     \"name\": 2\n" +
-			"                  },\n" +
-			"                  \"arguments\": [\n" +
-			"                     {\n" +
-			"                        \"name\": \"a\",\n" +
-			"                        \"variable_type\": {\n" +
-			"                           \"kind\": \"OTHER\",\n" +
-			"                           \"name\": 3\n" +
-			"                        }\n" +
-			"                     },\n" +
-			"                     {\n" +
-			"                        \"name\": \"b\",\n" +
-			"                        \"variable_type\": {\n" +
-			"                           \"kind\": \"OTHER\",\n" +
-			"                           \"name\": 3\n" +
-			"                        }\n" +
-			"                     }\n" +
-			"                  ],\n" +
-			"                  \"statements\": [\n" +
-			"                     {\n" +
-			"                        \"kind\": \"EXPRESSION\",\n" +
-			"                        \"expression\": {\n" +
-			"                           \"kind\": \"OP_DIV\",\n" +
-			"                           \"expressions\": [\n" +
-			"                              {\n" +
-			"                                 \"kind\": \"VARACCESS\",\n" +
-			"                                 \"variable\": \"a\"\n" +
-			"                              },\n" +
-			"                              {\n" +
-			"                                 \"kind\": \"VARACCESS\",\n" +
-			"                                 \"variable\": \"b\"\n" +
-			"                              }\n" +
-			"                           ]\n" +
-			"                        }\n" +
-			"                     }\n" +
-			"                  ]\n" +
-			"               }\n" +
-			"            }\n" +
-			"         }\n" +
-			"      ]\n" +
-			"   }\n" +
-			"}"
+	public void lambda() throws IOException {
+		testWrapped(
+			load("test/datagen/java/lambda.java").trim(),
+			load("test/datagen/boa/lambda.boa").trim()
 		);
 	}
 
 	@Test
-	public void lambda2() {
-		testWrapped("x += (int x) -> x + x;",
-			"{\n" +
-			"   \"kind\": \"EXPRESSION\",\n" +
-			"   \"expression\": {\n" +
-			"      \"kind\": \"ASSIGN_ADD\",\n" +
-			"      \"expressions\": [\n" +
-			"         {\n" +
-			"            \"kind\": \"VARACCESS\",\n" +
-			"            \"variable\": \"x\"\n" +
-			"         },\n" +
-			"         {\n" +
-			"            \"kind\": \"LAMBDA\",\n" +
-			"            \"lambda\": {\n" +
-			"               \"name\": \"\",\n" +
-			"               \"return_type\": {\n" +
-			"                  \"kind\": \"OTHER\",\n" +
-			"                  \"name\": 1\n" +
-			"               },\n" +
-			"               \"arguments\": [\n" +
-			"                  {\n" +
-			"                     \"name\": \"x\",\n" +
-			"                     \"variable_type\": {\n" +
-			"                        \"kind\": \"OTHER\",\n" +
-			"                        \"name\": 2\n" +
-			"                     }\n" +
-			"                  }\n" +
-			"               ],\n" +
-			"               \"statements\": [\n" +
-			"                  {\n" +
-			"                     \"kind\": \"EXPRESSION\",\n" +
-			"                     \"expression\": {\n" +
-			"                        \"kind\": \"OP_ADD\",\n" +
-			"                        \"expressions\": [\n" +
-			"                           {\n" +
-			"                              \"kind\": \"VARACCESS\",\n" +
-			"                              \"variable\": \"x\"\n" +
-			"                           },\n" +
-			"                           {\n" +
-			"                              \"kind\": \"VARACCESS\",\n" +
-			"                              \"variable\": \"x\"\n" +
-			"                           }\n" +
-			"                        ]\n" +
-			"                     }\n" +
-			"                  }\n" +
-			"               ]\n" +
-			"            }\n" +
-			"         }\n" +
-			"      ]\n" +
-			"   }\n" +
-			"}"
+	public void lambda2() throws IOException {
+		testWrapped(
+			load("test/datagen/java/lambda2.java").trim(),
+			load("test/datagen/boa/lambda2.boa").trim()
 		);
 	}
 
 	@Test
-	public void lambdaWithReturn() {
-		testWrapped("MathOperation multiplication = (int a, int b) -> { return a * b; }",
-			"{\n" +
-			"   \"kind\": \"EXPRESSION\",\n" +
-			"   \"expression\": {\n" +
-			"      \"kind\": \"VARDECL\",\n" +
-			"      \"variable_decls\": [\n" +
-			"         {\n" +
-			"            \"name\": \"multiplication\",\n" +
-			"            \"variable_type\": {\n" +
-			"               \"kind\": \"OTHER\",\n" +
-			"               \"name\": 1\n" +
-			"            },\n" +
-			"            \"initializer\": {\n" +
-			"               \"kind\": \"LAMBDA\",\n" +
-			"               \"lambda\": {\n" +
-			"                  \"name\": \"\",\n" +
-			"                  \"return_type\": {\n" +
-			"                     \"kind\": \"OTHER\",\n" +
-			"                     \"name\": 2\n" +
-			"                  },\n" +
-			"                  \"arguments\": [\n" +
-			"                     {\n" +
-			"                        \"name\": \"a\",\n" +
-			"                        \"variable_type\": {\n" +
-			"                           \"kind\": \"OTHER\",\n" +
-			"                           \"name\": 3\n" +
-			"                        }\n" +
-			"                     },\n" +
-			"                     {\n" +
-			"                        \"name\": \"b\",\n" +
-			"                        \"variable_type\": {\n" +
-			"                           \"kind\": \"OTHER\",\n" +
-			"                           \"name\": 3\n" +
-			"                        }\n" +
-			"                     }\n" +
-			"                  ],\n" +
-			"                  \"statements\": [\n" +
-			"                     {\n" +
-			"                        \"kind\": \"BLOCK\",\n" +
-			"                        \"statements\": [\n" +
-			"                           {\n" +
-			"                              \"kind\": \"RETURN\",\n" +
-			"                              \"expression\": {\n" +
-			"                                 \"kind\": \"OP_MULT\",\n" +
-			"                                 \"expressions\": [\n" +
-			"                                    {\n" +
-			"                                       \"kind\": \"VARACCESS\",\n" +
-			"                                       \"variable\": \"a\"\n" +
-			"                                    },\n" +
-			"                                    {\n" +
-			"                                       \"kind\": \"VARACCESS\",\n" +
-			"                                       \"variable\": \"b\"\n" +
-			"                                    }\n" +
-			"                                 ]\n" +
-			"                              }\n" +
-			"                           }\n" +
-			"                        ]\n" +
-			"                     }\n" +
-			"                  ]\n" +
-			"               }\n" +
-			"            }\n" +
-			"         }\n" +
-			"      ]\n" +
-			"   }\n" +
-			"}"
+	public void lambdaWithReturn() throws IOException {
+		testWrapped(
+			load("test/datagen/java/lambda-ret.java").trim(),
+			load("test/datagen/boa/lambda-ret.boa").trim()
 		);
 	}
 
 	@Test
-	public void lambdaWithTypeDecl() {
-		testWrapped("MathOperation add = (int a, int b) -> a + b;",
-			"{\n" +
-			"   \"kind\": \"EXPRESSION\",\n" +
-			"   \"expression\": {\n" +
-			"      \"kind\": \"VARDECL\",\n" +
-			"      \"variable_decls\": [\n" +
-			"         {\n" +
-			"            \"name\": \"add\",\n" +
-			"            \"variable_type\": {\n" +
-			"               \"kind\": \"OTHER\",\n" +
-			"               \"name\": 1\n" +
-			"            },\n" +
-			"            \"initializer\": {\n" +
-			"               \"kind\": \"LAMBDA\",\n" +
-			"               \"lambda\": {\n" +
-			"                  \"name\": \"\",\n" +
-			"                  \"return_type\": {\n" +
-			"                     \"kind\": \"OTHER\",\n" +
-			"                     \"name\": 2\n" +
-			"                  },\n" +
-			"                  \"arguments\": [\n" +
-			"                     {\n" +
-			"                        \"name\": \"a\",\n" +
-			"                        \"variable_type\": {\n" +
-			"                           \"kind\": \"OTHER\",\n" +
-			"                           \"name\": 3\n" +
-			"                        }\n" +
-			"                     },\n" +
-			"                     {\n" +
-			"                        \"name\": \"b\",\n" +
-			"                        \"variable_type\": {\n" +
-			"                           \"kind\": \"OTHER\",\n" +
-			"                           \"name\": 3\n" +
-			"                        }\n" +
-			"                     }\n" +
-			"                  ],\n" +
-			"                  \"statements\": [\n" +
-			"                     {\n" +
-			"                        \"kind\": \"EXPRESSION\",\n" +
-			"                        \"expression\": {\n" +
-			"                           \"kind\": \"OP_ADD\",\n" +
-			"                           \"expressions\": [\n" +
-			"                              {\n" +
-			"                                 \"kind\": \"VARACCESS\",\n" +
-			"                                 \"variable\": \"a\"\n" +
-			"                              },\n" +
-			"                              {\n" +
-			"                                 \"kind\": \"VARACCESS\",\n" +
-			"                                 \"variable\": \"b\"\n" +
-			"                              }\n" +
-			"                           ]\n" +
-			"                        }\n" +
-			"                     }\n" +
-			"                  ]\n" +
-			"               }\n" +
-			"            }\n" +
-			"         }\n" +
-			"      ]\n" +
-			"   }\n" +
-			"}"
+	public void lambdaWithTypeDecl() throws IOException {
+		testWrapped(
+			load("test/datagen/java/lambda-withtype.java").trim(),
+			load("test/datagen/boa/lambda-withtype.boa").trim()
 		);
 	}
 
 	@Test
-	public void lambdaNoArg() {
-		testWrapped("int x = () -> m();",
-			"{\n" +
-			"   \"kind\": \"EXPRESSION\",\n" +
-			"   \"expression\": {\n" +
-			"      \"kind\": \"VARDECL\",\n" +
-			"      \"variable_decls\": [\n" +
-			"         {\n" +
-			"            \"name\": \"x\",\n" +
-			"            \"variable_type\": {\n" +
-			"               \"kind\": \"OTHER\",\n" +
-			"               \"name\": 1\n" +
-			"            },\n" +
-			"            \"initializer\": {\n" +
-			"               \"kind\": \"LAMBDA\",\n" +
-			"               \"lambda\": {\n" +
-			"                  \"name\": \"\",\n" +
-			"                  \"return_type\": {\n" +
-			"                     \"kind\": \"OTHER\",\n" +
-			"                     \"name\": 2\n" +
-			"                  },\n" +
-			"                  \"statements\": [\n" +
-			"                     {\n" +
-			"                        \"kind\": \"EXPRESSION\",\n" +
-			"                        \"expression\": {\n" +
-			"                           \"kind\": \"METHODCALL\",\n" +
-			"                           \"method\": \"m\"\n" +
-			"                        }\n" +
-			"                     }\n" +
-			"                  ]\n" +
-			"               }\n" +
-			"            }\n" +
-			"         }\n" +
-			"      ]\n" +
-			"   }\n" +
-			"}"
+	public void lambdaNoArg() throws IOException {
+		testWrapped(
+			load("test/datagen/java/lambda-noarg.java").trim(),
+			load("test/datagen/boa/lambda-noarg.boa").trim()
 		);
 	}
 
 	@Test
-	public void lambdaNoReturn() {
-		testWrapped("MathOperation division = (int a, int b) -> a / b;",
-			"{\n" +
-			"   \"kind\": \"EXPRESSION\",\n" +
-			"   \"expression\": {\n" +
-			"      \"kind\": \"VARDECL\",\n" +
-			"      \"variable_decls\": [\n" +
-			"         {\n" +
-			"            \"name\": \"division\",\n" +
-			"            \"variable_type\": {\n" +
-			"               \"kind\": \"OTHER\",\n" +
-			"               \"name\": 1\n" +
-			"            },\n" +
-			"            \"initializer\": {\n" +
-			"               \"kind\": \"LAMBDA\",\n" +
-			"               \"lambda\": {\n" +
-			"                  \"name\": \"\",\n" +
-			"                  \"return_type\": {\n" +
-			"                     \"kind\": \"OTHER\",\n" +
-			"                     \"name\": 2\n" +
-			"                  },\n" +
-			"                  \"arguments\": [\n" +
-			"                     {\n" +
-			"                        \"name\": \"a\",\n" +
-			"                        \"variable_type\": {\n" +
-			"                           \"kind\": \"OTHER\",\n" +
-			"                           \"name\": 3\n" +
-			"                        }\n" +
-			"                     },\n" +
-			"                     {\n" +
-			"                        \"name\": \"b\",\n" +
-			"                        \"variable_type\": {\n" +
-			"                           \"kind\": \"OTHER\",\n" +
-			"                           \"name\": 3\n" +
-			"                        }\n" +
-			"                     }\n" +
-			"                  ],\n" +
-			"                  \"statements\": [\n" +
-			"                     {\n" +
-			"                        \"kind\": \"EXPRESSION\",\n" +
-			"                        \"expression\": {\n" +
-			"                           \"kind\": \"OP_DIV\",\n" +
-			"                           \"expressions\": [\n" +
-			"                              {\n" +
-			"                                 \"kind\": \"VARACCESS\",\n" +
-			"                                 \"variable\": \"a\"\n" +
-			"                              },\n" +
-			"                              {\n" +
-			"                                 \"kind\": \"VARACCESS\",\n" +
-			"                                 \"variable\": \"b\"\n" +
-			"                              }\n" +
-			"                           ]\n" +
-			"                        }\n" +
-			"                     }\n" +
-			"                  ]\n" +
-			"               }\n" +
-			"            }\n" +
-			"         }\n" +
-			"      ]\n" +
-			"   }\n" +
-			"}"
+	public void lambdaNoReturn() throws IOException {
+		testWrapped(
+			load("test/datagen/java/lambda-noret.java").trim(),
+			load("test/datagen/boa/lambda-noret.boa").trim()
 		);
 	}
 
 	@Test
-	public void lambdaNoTypeDecl() {
-		testWrapped("MathOperation subtraction = (a, b) -> a - b;",
-			"{\n" +
-			"   \"kind\": \"EXPRESSION\",\n" +
-			"   \"expression\": {\n" +
-			"      \"kind\": \"VARDECL\",\n" +
-			"      \"variable_decls\": [\n" +
-			"         {\n" +
-			"            \"name\": \"subtraction\",\n" +
-			"            \"variable_type\": {\n" +
-			"               \"kind\": \"OTHER\",\n" +
-			"               \"name\": 1\n" +
-			"            },\n" +
-			"            \"initializer\": {\n" +
-			"               \"kind\": \"LAMBDA\",\n" +
-			"               \"lambda\": {\n" +
-			"                  \"name\": \"\",\n" +
-			"                  \"return_type\": {\n" +
-			"                     \"kind\": \"OTHER\",\n" +
-			"                     \"name\": 2\n" +
-			"                  },\n" +
-			"                  \"arguments\": [\n" +
-			"                     {\n" +
-			"                        \"name\": \"a\",\n" +
-			"                        \"variable_type\": {\n" +
-			"                           \"kind\": \"OTHER\",\n" +
-			"                           \"name\": 2\n" +
-			"                        }\n" +
-			"                     },\n" +
-			"                     {\n" +
-			"                        \"name\": \"b\",\n" +
-			"                        \"variable_type\": {\n" +
-			"                           \"kind\": \"OTHER\",\n" +
-			"                           \"name\": 2\n" +
-			"                        }\n" +
-			"                     }\n" +
-			"                  ],\n" +
-			"                  \"statements\": [\n" +
-			"                     {\n" +
-			"                        \"kind\": \"EXPRESSION\",\n" +
-			"                        \"expression\": {\n" +
-			"                           \"kind\": \"OP_SUB\",\n" +
-			"                           \"expressions\": [\n" +
-			"                              {\n" +
-			"                                 \"kind\": \"VARACCESS\",\n" +
-			"                                 \"variable\": \"a\"\n" +
-			"                              },\n" +
-			"                              {\n" +
-			"                                 \"kind\": \"VARACCESS\",\n" +
-			"                                 \"variable\": \"b\"\n" +
-			"                              }\n" +
-			"                           ]\n" +
-			"                        }\n" +
-			"                     }\n" +
-			"                  ]\n" +
-			"               }\n" +
-			"            }\n" +
-			"         }\n" +
-			"      ]\n" +
-			"   }\n" +
-			"}"
+	public void lambdaNoTypeDecl() throws IOException {
+		testWrapped(
+			load("test/datagen/java/lambda-notype.java").trim(),
+			load("test/datagen/boa/lambda-notype.boa").trim()
 		);
 	}
 }

@@ -17,6 +17,8 @@
  */
 package boa.test.datagen;
 
+import java.io.IOException;
+
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
@@ -26,42 +28,10 @@ import org.junit.Test;
  */
 public class TestDefaultMethods extends Java8BaseTest {
 	@Test
-	public void defaultMethod() {
+	public void defaultMethod() throws IOException {
 		assertEquals(
-			"{\n" +
-			"   \"namespaces\": [\n" +
-			"      {\n" +
-			"         \"name\": \"\",\n" +
-			"         \"declarations\": [\n" +
-			"            {\n" +
-			"               \"name\": \"I\",\n" +
-			"               \"kind\": \"INTERFACE\",\n" +
-			"               \"methods\": [\n" +
-			"                  {\n" +
-			"                     \"name\": \"notRequired\",\n" +
-			"                     \"modifiers\": [\n" +
-			"                        {\n" +
-			"                           \"kind\": \"OTHER\",\n" +
-			"                           \"other\": \"default\"\n" +
-			"                        }\n" +
-			"                     ],\n" +
-			"                     \"return_type\": {\n" +
-			"                        \"kind\": \"OTHER\",\n" +
-			"                        \"name\": 0\n" +
-			"                     },\n" +
-			"                     \"statements\": [\n" +
-			"                        {\n" +
-			"                           \"kind\": \"BLOCK\"\n" +
-			"                        }\n" +
-			"                     ]\n" +
-			"                  }\n" +
-			"               ]\n" +
-			"            }\n" +
-			"         ]\n" +
-			"      }\n" +
-			"   ]\n" +
-			"}",
-			parse("interface I {\n   default String notRequired() {}\n}")
+			load("test/datagen/boa/default-method.boa").trim(),
+			parseJava(load("test/datagen/java/default-method.java")).trim()
 		);
 	}
 }

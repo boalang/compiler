@@ -1,0 +1,34 @@
+{
+   "kind": "EXPRESSION",
+   "expression": {
+      "kind": "VARDECL",
+      "variable_decls": [
+         {
+            "name": "x",
+            "variable_type": {
+               "kind": "OTHER",
+               "name": 1
+            },
+            "initializer": {
+               "kind": "LAMBDA",
+               "lambda": {
+                  "name": "",
+                  "return_type": {
+                     "kind": "OTHER",
+                     "name": 2
+                  },
+                  "statements": [
+                     {
+                        "kind": "EXPRESSION",
+                        "expression": {
+                           "kind": "METHODCALL",
+                           "method": "m"
+                        }
+                     }
+                  ]
+               }
+            }
+         }
+      ]
+   }
+}

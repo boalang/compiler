@@ -26,6 +26,6 @@ public class JavaToBoa extends Java8BaseTest {
 			if (s.indexOf("class ") == -1)
 				System.out.println(parseWrapped(s));
 			else
-				System.out.println(parse(s));
+				System.out.println(parseJava(s));
 	}
 }

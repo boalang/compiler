@@ -17,6 +17,8 @@
  */
 package boa.test.datagen;
 
+import java.io.IOException;
+
 import org.junit.Test;
 
 /*
@@ -25,120 +27,42 @@ import org.junit.Test;
  */
 public class TestMethodReference extends Java8BaseTest {
 	@Test
-	public void staticMethodReference() {
-		testWrapped("m(Person::compareByAge);",
-		    "{\n" +
-		    "   \"kind\": \"EXPRESSION\",\n" +
-		    "   \"expression\": {\n" +
-		    "      \"kind\": \"METHODCALL\",\n" +
-		    "      \"method\": \"m\",\n" +
-		    "      \"method_args\": [\n" +
-		    "         {\n" +
-		    "            \"kind\": \"METHOD_REFERENCE\",\n" +
-			"            \"expressions\": [\n" +
-			"               {\n" +
-			"                  \"kind\": \"VARACCESS\",\n" +
-			"                  \"variable\": \"Person\"\n" +
-			"               }\n" +
-			"            ],\n" +
-		    "            \"method\": \"compareByAge\"\n" +
-			"         }\n" +
-			"      ]\n" +
-			"   }\n" +
-			"}"
+	public void staticMethodReference() throws IOException {
+		testWrapped(
+			load("test/datagen/java/static-meth-ref.java").trim(),
+			load("test/datagen/boa/static-meth-ref.boa").trim()
 		);
 	}
 
 	@Test
-	public void instanceMethodReference() {
-		testWrapped("m(String::compareToIgnoreCase);",
-		    "{\n" +
-		    "   \"kind\": \"EXPRESSION\",\n" +
-		    "   \"expression\": {\n" +
-		    "      \"kind\": \"METHODCALL\",\n" +
-		    "      \"method\": \"m\",\n" +
-		    "      \"method_args\": [\n" +
-		    "         {\n" +
-		    "            \"kind\": \"METHOD_REFERENCE\",\n" +
-			"            \"expressions\": [\n" +
-			"               {\n" +
-			"                  \"kind\": \"VARACCESS\",\n" +
-			"                  \"variable\": \"String\"\n" +
-			"               }\n" +
-			"            ],\n" +
-		    "            \"method\": \"compareToIgnoreCase\"\n" +
-			"         }\n" +
-			"      ]\n" +
-			"   }\n" +
-			"}"
+	public void instanceMethodReference() throws IOException {
+		testWrapped(
+			load("test/datagen/java/inst-meth-ref.java").trim(),
+			load("test/datagen/boa/inst-meth-ref.boa").trim()
 		);
 	}
 
 	@Test
-	public void arbitraryObjectMethodReference() {
-		testWrapped("m(o::compare);",
-			"{\n" +
-			"   \"kind\": \"EXPRESSION\",\n" +
-			"   \"expression\": {\n" +
-			"      \"kind\": \"METHODCALL\",\n" +
-			"      \"method\": \"m\",\n" +
-			"      \"method_args\": [\n" +
-			"         {\n" +
-			"            \"kind\": \"METHOD_REFERENCE\",\n" +
-			"            \"expressions\": [\n" +
-			"               {\n" +
-			"                  \"kind\": \"VARACCESS\",\n" +
-			"                  \"variable\": \"o\"\n" +
-			"               }\n" +
-			"            ],\n" +
-			"            \"method\": \"compare\"\n" +
-			"         }\n" +
-			"      ]\n" +
-			"   }\n" +
-			"}"
+	public void arbitraryObjectMethodReference() throws IOException {
+		testWrapped(
+			load("test/datagen/java/obj-meth-ref.java").trim(),
+			load("test/datagen/boa/obj-meth-ref.boa").trim()
 		);
 	}
 
 	@Test
-	public void constructorMethodReference() {
-		testWrapped("m(Item::new);",
-			"{\n" +
-			"   \"kind\": \"EXPRESSION\",\n" +
-			"   \"expression\": {\n" +
-			"      \"kind\": \"METHODCALL\",\n" +
-			"      \"method\": \"m\",\n" +
-			"      \"method_args\": [\n" +
-			"         {\n" +
-			"            \"kind\": \"METHOD_REFERENCE\",\n" +
-			"            \"new_type\": {\n" +
-			"               \"kind\": \"OTHER\",\n" +
-			"               \"name\": 1\n" +
-			"            },\n" +
-			"            \"method\": \"new\"\n" +
-			"         }\n" +
-			"      ]\n" +
-			"   }\n" +
-			"}"
+	public void constructorMethodReference() throws IOException {
+		testWrapped(
+			load("test/datagen/java/new-meth-ref.java").trim(),
+			load("test/datagen/boa/new-meth-ref.boa").trim()
 		);
 	}
 	
 	@Test
-	public void superMethodReference(){
-		testWrapped("m(super::sayHello);",
-			"{\n" +
-			"   \"kind\": \"EXPRESSION\",\n" +
-			"   \"expression\": {\n" +
-			"      \"kind\": \"METHODCALL\",\n" +
-			"      \"method\": \"m\",\n" +
-			"      \"method_args\": [\n" +
-			"         {\n" +
-			"            \"kind\": \"METHOD_REFERENCE\",\n" +
-			"            \"literal\": \"super\",\n" +
-			"            \"method\": \"sayHello\"\n" +
-			"         }\n" +
-			"      ]\n" +
-			"   }\n" +
-			"}"
+	public void superMethodReference() throws IOException {
+		testWrapped(
+			load("test/datagen/java/super-meth-ref.java").trim(),
+			load("test/datagen/boa/super-meth-ref.boa").trim()
 		);
 	}
 }

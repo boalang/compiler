@@ -34,9 +34,9 @@ public class Java8BaseTest extends Java7BaseTest {
 		visitor = new Java8Visitor("", new HashMap<String, Integer>());
 	}
 
-	public static String parse(final String content) {
+	public static String parseJava(final String content) {
 		setJava8();
-		return Java7BaseTest.parse(content);
+		return Java7BaseTest.parseJava(content);
 	}
 
 	public static void testWrapped(final String java, final String expected) {

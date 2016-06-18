@@ -17,6 +17,8 @@
  */
 package boa.test.datagen;
 
+import java.io.IOException;
+
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
@@ -26,36 +28,10 @@ import org.junit.Test;
  */
 public class TestReceiverParameter extends Java8BaseTest {
 	@Test
-	public void receiverParameter() {
+	public void receiverParameter() throws IOException {
 		assertEquals(
-			"{\n" +
-			"   \"namespaces\": [\n" +
-			"      {\n" +
-			"         \"name\": \"\",\n" +
-			"         \"declarations\": [\n" +
-			"            {\n" +
-			"               \"name\": \"t\",\n" +
-			"               \"kind\": \"CLASS\",\n" +
-			"               \"methods\": [\n" +
-			"                  {\n" +
-			"                     \"name\": \"m\",\n" +
-			"                     \"return_type\": {\n" +
-			"                        \"kind\": \"OTHER\",\n" +
-			"                        \"name\": 0\n" +
-			"                     },\n" +
-			"                     \"statements\": [\n" +
-			"                        {\n" +
-			"                           \"kind\": \"BLOCK\"\n" +
-			"                        }\n" +
-			"                     ]\n" +
-			"                  }\n" +
-			"               ]\n" +
-			"            }\n" +
-			"         ]\n" +
-			"      }\n" +
-			"   ]\n" +
-			"}",
-			parse("class t {\n   void m(Test this) {}\n}")
+			load("test/datagen/boa/rcv-param.boa").trim(),
+			parseJava(load("test/datagen/java/rcv-param.java")).trim()
 		);
 	}
 }

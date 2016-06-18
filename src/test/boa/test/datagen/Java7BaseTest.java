@@ -33,15 +33,17 @@ import boa.types.Ast.ASTRoot;
 
 import boa.datagen.util.Java7Visitor;
 
+import boa.test.compiler.BaseTest;
+
 /*
  * @author rdyer
  */
-public class Java7BaseTest {
+public class Java7BaseTest extends BaseTest {
 	protected static int astLevel = AST.JLS4;
 	protected static String javaVersion = JavaCore.VERSION_1_7;
 	protected static Java7Visitor visitor = new Java7Visitor("", new HashMap<String, Integer>());
 
-	protected static String parse(final String content) {
+	protected static String parseJava(final String content) {
 		final ASTParser parser = ASTParser.newParser(astLevel);
 		parser.setKind(ASTParser.K_COMPILATION_UNIT);
 		parser.setSource(content.toCharArray());
@@ -68,10 +70,10 @@ public class Java7BaseTest {
 
 	protected static String parseWrapped(final String content) {
 		String s = "class t {\n   void m() {\n      " + content.replaceAll("\n", "\n      ");
-		if (!content.endsWith(";"))
+		if (!content.endsWith(";") && !content.endsWith(";\n"))
 			s += ";";
 		s += "\n   }\n}";
-		return parse(s);
+		return parseJava(s);
 	}
 
 	public static void testWrapped(final String java, final String expected) {

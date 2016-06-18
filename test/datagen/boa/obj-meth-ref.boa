@@ -1,0 +1,19 @@
+{
+   "kind": "EXPRESSION",
+   "expression": {
+      "kind": "METHODCALL",
+      "method": "m",
+      "method_args": [
+         {
+            "kind": "METHOD_REFERENCE",
+            "expressions": [
+               {
+                  "kind": "VARACCESS",
+                  "variable": "o"
+               }
+            ],
+            "method": "compare"
+         }
+      ]
+   }
+}

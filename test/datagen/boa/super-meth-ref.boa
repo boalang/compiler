@@ -1,0 +1,14 @@
+{
+   "kind": "EXPRESSION",
+   "expression": {
+      "kind": "METHODCALL",
+      "method": "m",
+      "method_args": [
+         {
+            "kind": "METHOD_REFERENCE",
+            "literal": "super",
+            "method": "sayHello"
+         }
+      ]
+   }
+}

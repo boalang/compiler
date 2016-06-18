@@ -17,6 +17,8 @@
  */
 package boa.test.datagen;
 
+import java.io.IOException;
+
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
@@ -26,50 +28,10 @@ import org.junit.Test;
  */
 public class TestRepeatingAnnotations extends Java8BaseTest {
 	@Test
-	public void repeatedAnnotation() {
+	public void repeatedAnnotation() throws IOException {
 		assertEquals(
-			"{\n" +
-			"   \"namespaces\": [\n" +
-			"      {\n" +
-			"         \"name\": \"\",\n" +
-			"         \"declarations\": [\n" +
-			"            {\n" +
-			"               \"name\": \"C\",\n" +
-			"               \"kind\": \"CLASS\",\n" +
-			"               \"modifiers\": [\n" +
-			"                  {\n" +
-			"                     \"kind\": \"ANNOTATION\",\n" +
-			"                     \"annotation_name\": \"Annot\",\n" +
-			"                     \"annotation_members\": [\n" +
-			"                        \"value\"\n" +
-			"                     ],\n" +
-			"                     \"annotation_values\": [\n" +
-			"                        {\n" +
-			"                           \"kind\": \"LITERAL\",\n" +
-			"                           \"literal\": \"1\"\n" +
-			"                        }\n" +
-			"                     ]\n" +
-			"                  },\n" +
-			"                  {\n" +
-			"                     \"kind\": \"ANNOTATION\",\n" +
-			"                     \"annotation_name\": \"Annot\",\n" +
-			"                     \"annotation_members\": [\n" +
-			"                        \"value\"\n" +
-			"                     ],\n" +
-			"                     \"annotation_values\": [\n" +
-			"                        {\n" +
-			"                           \"kind\": \"LITERAL\",\n" +
-			"                           \"literal\": \"2\"\n" +
-			"                        }\n" +
-			"                     ]\n" +
-			"                  }\n" +
-			"               ]\n" +
-			"            }\n" +
-			"         ]\n" +
-			"      }\n" +
-			"   ]\n" +
-			"}",
-			parse("@Annot(1) @Annot(2) class C { }")
+			load("test/datagen/boa/repeating-annot.boa").trim(),
+			parseJava(load("test/datagen/java/repeating-annot.java")).trim()
 		);
 	}
 }
