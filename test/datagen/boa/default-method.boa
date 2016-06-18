@@ -1,0 +1,33 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "I",
+               "kind": "INTERFACE",
+               "methods": [
+                  {
+                     "name": "notRequired",
+                     "modifiers": [
+                        {
+                           "kind": "OTHER",
+                           "other": "default"
+                        }
+                     ],
+                     "return_type": {
+                        "kind": "OTHER",
+                        "name": 0
+                     },
+                     "statements": [
+                        {
+                           "kind": "BLOCK"
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}

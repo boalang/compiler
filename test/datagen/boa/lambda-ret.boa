@@ -1,0 +1,64 @@
+{
+   "kind": "EXPRESSION",
+   "expression": {
+      "kind": "VARDECL",
+      "variable_decls": [
+         {
+            "name": "multiplication",
+            "variable_type": {
+               "kind": "OTHER",
+               "name": 1
+            },
+            "initializer": {
+               "kind": "LAMBDA",
+               "lambda": {
+                  "name": "",
+                  "return_type": {
+                     "kind": "OTHER",
+                     "name": 2
+                  },
+                  "arguments": [
+                     {
+                        "name": "a",
+                        "variable_type": {
+                           "kind": "OTHER",
+                           "name": 3
+                        }
+                     },
+                     {
+                        "name": "b",
+                        "variable_type": {
+                           "kind": "OTHER",
+                           "name": 3
+                        }
+                     }
+                  ],
+                  "statements": [
+                     {
+                        "kind": "BLOCK",
+                        "statements": [
+                           {
+                              "kind": "RETURN",
+                              "expression": {
+                                 "kind": "OP_MULT",
+                                 "expressions": [
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "a"
+                                    },
+                                    {
+                                       "kind": "VARACCESS",
+                                       "variable": "b"
+                                    }
+                                 ]
+                              }
+                           }
+                        ]
+                     }
+                  ]
+               }
+            }
+         }
+      ]
+   }
+}

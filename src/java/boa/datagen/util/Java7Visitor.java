@@ -1,6 +1,7 @@
 /*
- * Copyright 2015, Hridesh Rajan, Robert Dyer, Hoan Nguyen
- *                 and Iowa State University of Science and Technology
+ * Copyright 2016, Hridesh Rajan, Robert Dyer, Hoan Nguyen, Farheen Sultana
+ *                 Iowa State University of Science and Technology
+ *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,24 +27,24 @@ import boa.types.Ast.*;
 /**
  * @author rdyer
  */
-public class JavaVisitor extends ASTVisitor {
-	private HashMap<String, Integer> nameIndices;
+public class Java7Visitor extends ASTVisitor {
+	protected HashMap<String, Integer> nameIndices;
 	
-	private CompilationUnit root = null;
-	private PositionInfo.Builder pos = null;
-	private String src = null;
+	protected CompilationUnit root = null;
+	protected PositionInfo.Builder pos = null;
+	protected String src = null;
 
-	private Namespace.Builder b = Namespace.newBuilder();
-	private List<boa.types.Ast.Comment> comments = new ArrayList<boa.types.Ast.Comment>();
-	private List<String> imports = new ArrayList<String>();
-	private Stack<List<boa.types.Ast.Declaration>> declarations = new Stack<List<boa.types.Ast.Declaration>>();
-	private Stack<boa.types.Ast.Modifier> modifiers = new Stack<boa.types.Ast.Modifier>();
-	private Stack<boa.types.Ast.Expression> expressions = new Stack<boa.types.Ast.Expression>();
-	private Stack<List<boa.types.Ast.Variable>> fields = new Stack<List<boa.types.Ast.Variable>>();
-	private Stack<List<boa.types.Ast.Method>> methods = new Stack<List<boa.types.Ast.Method>>();
-	private Stack<List<boa.types.Ast.Statement>> statements = new Stack<List<boa.types.Ast.Statement>>();
+	protected Namespace.Builder b = Namespace.newBuilder();
+	protected List<boa.types.Ast.Comment> comments = new ArrayList<boa.types.Ast.Comment>();
+	protected List<String> imports = new ArrayList<String>();
+	protected Stack<List<boa.types.Ast.Declaration>> declarations = new Stack<List<boa.types.Ast.Declaration>>();
+	protected Stack<boa.types.Ast.Modifier> modifiers = new Stack<boa.types.Ast.Modifier>();
+	protected Stack<boa.types.Ast.Expression> expressions = new Stack<boa.types.Ast.Expression>();
+	protected Stack<List<boa.types.Ast.Variable>> fields = new Stack<List<boa.types.Ast.Variable>>();
+	protected Stack<List<boa.types.Ast.Method>> methods = new Stack<List<boa.types.Ast.Method>>();
+	protected Stack<List<boa.types.Ast.Statement>> statements = new Stack<List<boa.types.Ast.Statement>>();
 
-	public JavaVisitor(String src, HashMap<String, Integer> nameIndices) {
+	public Java7Visitor(String src, HashMap<String, Integer> nameIndices) {
 		super();
 		this.src = src;
 		this.nameIndices = nameIndices;
@@ -69,7 +70,7 @@ public class JavaVisitor extends ASTVisitor {
 	}
 */
 
-	private void buildPosition(final ASTNode node) {
+	protected void buildPosition(final ASTNode node) {
 		pos = PositionInfo.newBuilder();
 		int start = node.getStartPosition();
 		int length = node.getLength();
@@ -354,10 +355,10 @@ public class JavaVisitor extends ASTVisitor {
 			b.addArguments(vb.build());
 		}
 		for (Object o : node.thrownExceptions()) {
-			boa.types.Ast.Type.Builder tp = boa.types.Ast.Type.newBuilder();
-			tp.setName(getIndex(((Name)o).getFullyQualifiedName()));
-			tp.setKind(boa.types.Ast.TypeKind.CLASS);
-			b.addExceptionTypes(tp.build());
+				boa.types.Ast.Type.Builder tp = boa.types.Ast.Type.newBuilder();
+				tp.setName(getIndex(((Name)o).getFullyQualifiedName()));
+				tp.setKind(boa.types.Ast.TypeKind.CLASS);
+				b.addExceptionTypes(tp.build());
 		}
 		if (node.getBody() != null) {
 			statements.push(new ArrayList<boa.types.Ast.Statement>());
@@ -432,7 +433,7 @@ public class JavaVisitor extends ASTVisitor {
 	//////////////////////////////////////////////////////////////
 	// Modifiers and Annotations
 
-	private boa.types.Ast.Modifier.Builder getAnnotationBuilder(Annotation node) {
+	protected boa.types.Ast.Modifier.Builder getAnnotationBuilder(Annotation node) {
 		boa.types.Ast.Modifier.Builder b = boa.types.Ast.Modifier.newBuilder();
 //		b.setPosition(pos.build());
 		b.setKind(boa.types.Ast.Modifier.ModifierKind.ANNOTATION);
@@ -1343,7 +1344,12 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(ParenthesizedExpression node) {
-		// TODO maybe? or ignore...
+		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+//		b.setPosition(pos.build());
+		b.setKind(boa.types.Ast.Expression.ExpressionKind.PAREN);
+		node.getExpression().accept(this);
+		b.addExpressions(expressions.pop());
+		expressions.push(b.build());
 		return true;
 	}
 
@@ -1490,7 +1496,7 @@ public class JavaVisitor extends ASTVisitor {
 	//////////////////////////////////////////////////////////////
 	// Utility methods
 
-	private String typeName(org.eclipse.jdt.core.dom.Type t) {
+	protected String typeName(org.eclipse.jdt.core.dom.Type t) {
 		if (t.isArrayType())
 			return typeName(((ArrayType)t).getComponentType()) + "[]";
 		if (t.isParameterizedType()) {
@@ -1505,6 +1511,14 @@ public class JavaVisitor extends ASTVisitor {
 			return ((PrimitiveType)t).getPrimitiveTypeCode().toString();
 		if (t.isQualifiedType())
 			return typeName(((QualifiedType)t).getQualifier()) + "." + ((QualifiedType)t).getName().getFullyQualifiedName();
+		if (t.isIntersectionType()) {
+			String name = "";
+			for (Object o : ((IntersectionType)t).types()) {
+				if (name.length() > 0) name += " & ";
+				name += typeName((org.eclipse.jdt.core.dom.Type)o);
+			}
+			return name;
+		}
 		if (t.isUnionType()) {
 			String name = "";
 			for (Object o : ((UnionType)t).types()) {
@@ -1524,44 +1538,7 @@ public class JavaVisitor extends ASTVisitor {
 		return ((SimpleType)t).getName().getFullyQualifiedName();
 	}
 
-	//////////////////////////////////////////////////////////////
-	// Currently un-used node types
-
-	// begin java 8
-	@Override
-	public boolean visit(LambdaExpression node) {
-		throw new RuntimeException("visited unused node LambdaExpression");
-	}
-	@Override
-	public boolean visit(CreationReference node) {
-		throw new RuntimeException("visited unused node CreationReference");
-	}
-	@Override
-	public boolean visit(ExpressionMethodReference node) {
-		throw new RuntimeException("visited unused node ExpressionMethodReference");
-	}
-	@Override
-	public boolean visit(SuperMethodReference node) {
-		throw new RuntimeException("visited unused node SuperMethodReference");
-	}
-	@Override
-	public boolean visit(TypeMethodReference node) {
-		throw new RuntimeException("visited unused node TypeMethodReference");
-	}
-	@Override
-	public boolean visit(IntersectionType node) {
-		throw new RuntimeException("visited unused node IntersectionType");
-	}
-	@Override
-	public boolean visit(Dimension node) {
-		throw new RuntimeException("visited unused node Dimension");
-	}
-	@Override
-	public boolean visit(NameQualifiedType node) {
-		throw new RuntimeException("visited unused node NameQualifiedType");
-	}
-	// end java 8
-
+	
 	@Override
 	public boolean visit(ArrayType node) {
 		throw new RuntimeException("visited unused node ArrayType");
@@ -1657,7 +1634,7 @@ public class JavaVisitor extends ASTVisitor {
 		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
 	}
 
-	private int getIndex(String name) {
+	protected int getIndex(String name) {
 		Integer index = this.nameIndices.get(name);
 		if (index == null) {
 			index = this.nameIndices.size();
