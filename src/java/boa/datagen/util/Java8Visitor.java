@@ -80,11 +80,18 @@ public class Java8Visitor extends Java7Visitor {
 			tp.setKind(boa.types.Ast.TypeKind.GENERIC);
 			b.addGenericParameters(tp.build());
 		}
-		// FIXME put receiver parameters
-		/*
-		 *		Added getReceiverQualifier()
-		 *		Added getReceiverType()
-		 */
+		if (node.getReceiverType() != null) {
+			Variable.Builder vb = Variable.newBuilder();
+//			vb.setPosition(pos.build()); // FIXME
+			vb.setName("this");
+			boa.types.Ast.Type.Builder tp = boa.types.Ast.Type.newBuilder();
+			String name = typeName(node.getReceiverType());
+			if (node.getReceiverQualifier() != null) name = node.getReceiverQualifier().getFullyQualifiedName() + "." + name;
+			tp.setName(getIndex(name));
+			tp.setKind(boa.types.Ast.TypeKind.OTHER); // FIXME change to receiver? or something?
+			vb.setVariableType(tp.build());
+			b.addArguments(vb.build());
+		}
 		for (Object o : node.parameters()) {
 			SingleVariableDeclaration ex = (SingleVariableDeclaration)o;
 			Variable.Builder vb = Variable.newBuilder();

@@ -34,4 +34,12 @@ public class TestReceiverParameter extends Java8BaseTest {
 			parseJava(load("test/datagen/java/rcv-param.java")).trim()
 		);
 	}
+
+	@Test
+	public void receiverParameterInner() throws IOException {
+		assertEquals(
+			load("test/datagen/boa/rcv-param-inner.boa").trim(),
+			parseJava(load("test/datagen/java/rcv-param-inner.java")).trim()
+		);
+	}
 }
