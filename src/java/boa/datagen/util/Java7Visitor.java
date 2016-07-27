@@ -1496,122 +1496,162 @@ public class Java7Visitor extends ASTVisitor {
 	//////////////////////////////////////////////////////////////
 	// Utility methods
 
-	protected String typeName(org.eclipse.jdt.core.dom.Type t) {
+	protected String typeName(final org.eclipse.jdt.core.dom.Type t) {
 		if (t.isArrayType())
-			return typeName(((ArrayType)t).getComponentType()) + "[]";
-		if (t.isParameterizedType()) {
-			String name = "";
-			for (Object o : ((ParameterizedType)t).typeArguments()) {
-				if (name.length() > 0) name += ", ";
-				name += typeName((org.eclipse.jdt.core.dom.Type)o);
-			}
-			return typeName(((ParameterizedType)t).getType()) + "<" + name + ">";
-		}
+			return typeName((ArrayType)t);
+		if (t.isParameterizedType())
+			return typeName((ParameterizedType)t);
 		if (t.isPrimitiveType())
-			return ((PrimitiveType)t).getPrimitiveTypeCode().toString();
+			return typeName((PrimitiveType)t);
 		if (t.isQualifiedType())
-			return typeName(((QualifiedType)t).getQualifier()) + "." + ((QualifiedType)t).getName().getFullyQualifiedName();
-		if (t.isIntersectionType()) {
-			String name = "";
-			for (Object o : ((IntersectionType)t).types()) {
-				if (name.length() > 0) name += " & ";
-				name += typeName((org.eclipse.jdt.core.dom.Type)o);
-			}
-			return name;
-		}
-		if (t.isUnionType()) {
-			String name = "";
-			for (Object o : ((UnionType)t).types()) {
-				if (name.length() > 0) name += " | ";
-				name += typeName((org.eclipse.jdt.core.dom.Type)o);
-			}
-			return name;
-		}
-		if (t.isWildcardType()) {
-			String name = "?";
-			if (((WildcardType)t).getBound() != null) {
-				name += " " + (((WildcardType)t).isUpperBound() ? "extends" : "super");
-				name += " " + typeName(((WildcardType)t).getBound());
-			}
-			return name;
-		}
-		return ((SimpleType)t).getName().getFullyQualifiedName();
+			return typeName((QualifiedType)t);
+		if (t.isIntersectionType())
+			return typeName((IntersectionType)t);
+		if (t.isUnionType())
+			return typeName((UnionType)t);
+		if (t.isWildcardType())
+			return typeName((WildcardType)t);
+		return typeName((SimpleType)t);
 	}
 
+	protected String typeName(final ArrayType t) {
+		return typeName(t.getComponentType()) + "[]";
+	}
+
+	protected String typeName(final ParameterizedType t) {
+		String name = "";
+		for (final Object o : t.typeArguments()) {
+			if (name.length() > 0) name += ", ";
+			name += typeName((org.eclipse.jdt.core.dom.Type)o);
+		}
+		return typeName(t.getType()) + "<" + name + ">";
+	}
+
+	protected String typeName(final PrimitiveType t) {
+		return t.getPrimitiveTypeCode().toString();
+	}
+
+	protected String typeName(final QualifiedType t) {
+		return typeName(t.getQualifier()) + "." + t.getName().getFullyQualifiedName();
+	}
+
+	protected String typeName(final IntersectionType t) {
+		String name = "";
+		for (final Object o : t.types()) {
+			if (name.length() > 0) name += " & ";
+			name += typeName((org.eclipse.jdt.core.dom.Type)o);
+		}
+		return name;
+	}
+
+	protected String typeName(final UnionType t) {
+		String name = "";
+		for (final Object o : t.types()) {
+			if (name.length() > 0) name += " | ";
+			name += typeName((org.eclipse.jdt.core.dom.Type)o);
+		}
+		return name;
+	}
+
+	protected String typeName(final WildcardType t) {
+		String name = "?";
+		if (t.getBound() != null) {
+			name += " " + (t.isUpperBound() ? "extends" : "super");
+			name += " " + typeName(t.getBound());
+		}
+		return name;
+	}
+
+	protected String typeName(final SimpleType t) {
+		return t.getName().getFullyQualifiedName();
+	}
+
+	protected int getIndex(final String name) {
+		Integer index = this.nameIndices.get(name);
+		if (index == null) {
+			index = this.nameIndices.size();
+			this.nameIndices.put(name, index);
+		}
+		return index;
+	}
+
+
+	//////////////////////////////////////////////////////////////
+	// Unused node types
 	
 	@Override
 	public boolean visit(ArrayType node) {
-		throw new RuntimeException("visited unused node ArrayType");
+		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
 	}
 
 	@Override
 	public boolean visit(ParameterizedType node) {
-		throw new RuntimeException("visited unused node ParameterizedType");
+		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
 	}
 
 	@Override
 	public boolean visit(PrimitiveType node) {
-		throw new RuntimeException("visited unused node PrimitiveType");
+		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
 	}
 
 	@Override
 	public boolean visit(QualifiedType node) {
-		throw new RuntimeException("visited unused node QualifiedType");
+		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
 	}
 
 	@Override
 	public boolean visit(SimpleType node) {
-		throw new RuntimeException("visited unused node SimpleType");
+		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
 	}
 
 	@Override
 	public boolean visit(UnionType node) {
-		throw new RuntimeException("visited unused node UnionType");
+		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
 	}
 
 	@Override
 	public boolean visit(WildcardType node) {
-		throw new RuntimeException("visited unused node WildcardType");
+		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
 	}
 
 	@Override
 	public boolean visit(EnumConstantDeclaration node) {
-		throw new RuntimeException("visited unused node EnumConstantDeclaration");
+		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
 	}
 
 	@Override
 	public boolean visit(ImportDeclaration node) {
-		throw new RuntimeException("visited unused node ImportDeclaration");
+		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
 	}
 
 	@Override
 	public boolean visit(PackageDeclaration node) {
-		throw new RuntimeException("visited unused node PackageDeclaration");
+		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
 	}
 
 	@Override
 	public boolean visit(SingleVariableDeclaration node) {
-		throw new RuntimeException("visited unused node SingleVariableDeclaration");
+		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
 	}
 
 	@Override
 	public boolean visit(MemberRef node) {
-		throw new RuntimeException("visited unused node MemberRef");
+		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
 	}
 
 	@Override
 	public boolean visit(MemberValuePair node) {
-		throw new RuntimeException("visited unused node MemberValuePair");
+		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
 	}
 
 	@Override
 	public boolean visit(TypeParameter node) {
-		throw new RuntimeException("visited unused node TypeParameter");
+		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
 	}
 
 	@Override
 	public boolean visit(VariableDeclarationFragment node) {
-		throw new RuntimeException("visited unused node VariableDeclarationFragment");
+		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
 	}
 	
 	@Override
@@ -1632,14 +1672,5 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(TextElement node) {
 		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
-	}
-
-	protected int getIndex(String name) {
-		Integer index = this.nameIndices.get(name);
-		if (index == null) {
-			index = this.nameIndices.size();
-			this.nameIndices.put(name, index);
-		}
-		return index;
 	}
 }
