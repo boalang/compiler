@@ -3,6 +3,7 @@ script: ant test
 notifications:
   email:
     recipients:
-      - boasupport@iastate.edu
+      - hridesh@iastate.edu
+      - rdyer@iastate.edu
     on_success: change
     on_failure: always
