@@ -1,0 +1,22 @@
+o: output sum of int;
+
+visit(input, visitor {
+	before _ -> o << 1;
+	after _ -> o << 1;
+	before Statement -> if (current(Method).name != "foo") stop;
+	before d: Declaration ->
+		if (current(Statement).kind == StatementKind.TYPEDECL)
+			o << 1;
+		else if (current(Statement).kind == StatementKind.FOR)
+			o << 2;
+});
+
+visit(input, visitor {
+	after _ -> o << 1;
+	before Statement -> o << 1;
+	before d: Declaration ->
+		if (current(Statement).kind == StatementKind.TYPEDECL)
+			o << 1;
+		else if(current(Statement).kind == StatementKind.FOR)
+			o << 1;
+});

@@ -1,6 +1,7 @@
 /*
- * Copyright 2015, Hridesh Rajan, Robert Dyer, Hoan Nguyen
- *                 and Iowa State University of Science and Technology
+ * Copyright 2016, Hridesh Rajan, Robert Dyer, Hoan Nguyen, Farheen Sultana
+ *                 Iowa State University of Science and Technology
+ *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,24 +27,24 @@ import boa.types.Ast.*;
 /**
  * @author rdyer
  */
-public class JavaVisitor extends ASTVisitor {
-	private HashMap<String, Integer> nameIndices;
+public class Java7Visitor extends ASTVisitor {
+	protected HashMap<String, Integer> nameIndices;
 	
-	private CompilationUnit root = null;
-	private PositionInfo.Builder pos = null;
-	private String src = null;
+	protected CompilationUnit root = null;
+	protected PositionInfo.Builder pos = null;
+	protected String src = null;
 
-	private Namespace.Builder b = Namespace.newBuilder();
-	private List<boa.types.Ast.Comment> comments = new ArrayList<boa.types.Ast.Comment>();
-	private List<String> imports = new ArrayList<String>();
-	private Stack<List<boa.types.Ast.Declaration>> declarations = new Stack<List<boa.types.Ast.Declaration>>();
-	private Stack<boa.types.Ast.Modifier> modifiers = new Stack<boa.types.Ast.Modifier>();
-	private Stack<boa.types.Ast.Expression> expressions = new Stack<boa.types.Ast.Expression>();
-	private Stack<List<boa.types.Ast.Variable>> fields = new Stack<List<boa.types.Ast.Variable>>();
-	private Stack<List<boa.types.Ast.Method>> methods = new Stack<List<boa.types.Ast.Method>>();
-	private Stack<List<boa.types.Ast.Statement>> statements = new Stack<List<boa.types.Ast.Statement>>();
+	protected Namespace.Builder b = Namespace.newBuilder();
+	protected List<boa.types.Ast.Comment> comments = new ArrayList<boa.types.Ast.Comment>();
+	protected List<String> imports = new ArrayList<String>();
+	protected Stack<List<boa.types.Ast.Declaration>> declarations = new Stack<List<boa.types.Ast.Declaration>>();
+	protected Stack<boa.types.Ast.Modifier> modifiers = new Stack<boa.types.Ast.Modifier>();
+	protected Stack<boa.types.Ast.Expression> expressions = new Stack<boa.types.Ast.Expression>();
+	protected Stack<List<boa.types.Ast.Variable>> fields = new Stack<List<boa.types.Ast.Variable>>();
+	protected Stack<List<boa.types.Ast.Method>> methods = new Stack<List<boa.types.Ast.Method>>();
+	protected Stack<List<boa.types.Ast.Statement>> statements = new Stack<List<boa.types.Ast.Statement>>();
 
-	public JavaVisitor(String src, HashMap<String, Integer> nameIndices) {
+	public Java7Visitor(String src, HashMap<String, Integer> nameIndices) {
 		super();
 		this.src = src;
 		this.nameIndices = nameIndices;
@@ -69,7 +70,7 @@ public class JavaVisitor extends ASTVisitor {
 	}
 */
 
-	private void buildPosition(final ASTNode node) {
+	protected void buildPosition(final ASTNode node) {
 		pos = PositionInfo.newBuilder();
 		int start = node.getStartPosition();
 		int length = node.getLength();
@@ -354,10 +355,10 @@ public class JavaVisitor extends ASTVisitor {
 			b.addArguments(vb.build());
 		}
 		for (Object o : node.thrownExceptions()) {
-			boa.types.Ast.Type.Builder tp = boa.types.Ast.Type.newBuilder();
-			tp.setName(getIndex(((Name)o).getFullyQualifiedName()));
-			tp.setKind(boa.types.Ast.TypeKind.CLASS);
-			b.addExceptionTypes(tp.build());
+				boa.types.Ast.Type.Builder tp = boa.types.Ast.Type.newBuilder();
+				tp.setName(getIndex(((Name)o).getFullyQualifiedName()));
+				tp.setKind(boa.types.Ast.TypeKind.CLASS);
+				b.addExceptionTypes(tp.build());
 		}
 		if (node.getBody() != null) {
 			statements.push(new ArrayList<boa.types.Ast.Statement>());
@@ -432,7 +433,7 @@ public class JavaVisitor extends ASTVisitor {
 	//////////////////////////////////////////////////////////////
 	// Modifiers and Annotations
 
-	private boa.types.Ast.Modifier.Builder getAnnotationBuilder(Annotation node) {
+	protected boa.types.Ast.Modifier.Builder getAnnotationBuilder(Annotation node) {
 		boa.types.Ast.Modifier.Builder b = boa.types.Ast.Modifier.newBuilder();
 //		b.setPosition(pos.build());
 		b.setKind(boa.types.Ast.Modifier.ModifierKind.ANNOTATION);
@@ -1343,7 +1344,12 @@ public class JavaVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(ParenthesizedExpression node) {
-		// TODO maybe? or ignore...
+		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+//		b.setPosition(pos.build());
+		b.setKind(boa.types.Ast.Expression.ExpressionKind.PAREN);
+		node.getExpression().accept(this);
+		b.addExpressions(expressions.pop());
+		expressions.push(b.build());
 		return true;
 	}
 
@@ -1490,151 +1496,162 @@ public class JavaVisitor extends ASTVisitor {
 	//////////////////////////////////////////////////////////////
 	// Utility methods
 
-	private String typeName(org.eclipse.jdt.core.dom.Type t) {
+	protected String typeName(final org.eclipse.jdt.core.dom.Type t) {
 		if (t.isArrayType())
-			return typeName(((ArrayType)t).getComponentType()) + "[]";
-		if (t.isParameterizedType()) {
-			String name = "";
-			for (Object o : ((ParameterizedType)t).typeArguments()) {
-				if (name.length() > 0) name += ", ";
-				name += typeName((org.eclipse.jdt.core.dom.Type)o);
-			}
-			return typeName(((ParameterizedType)t).getType()) + "<" + name + ">";
-		}
+			return typeName((ArrayType)t);
+		if (t.isParameterizedType())
+			return typeName((ParameterizedType)t);
 		if (t.isPrimitiveType())
-			return ((PrimitiveType)t).getPrimitiveTypeCode().toString();
+			return typeName((PrimitiveType)t);
 		if (t.isQualifiedType())
-			return typeName(((QualifiedType)t).getQualifier()) + "." + ((QualifiedType)t).getName().getFullyQualifiedName();
-		if (t.isUnionType()) {
-			String name = "";
-			for (Object o : ((UnionType)t).types()) {
-				if (name.length() > 0) name += " | ";
-				name += typeName((org.eclipse.jdt.core.dom.Type)o);
-			}
-			return name;
-		}
-		if (t.isWildcardType()) {
-			String name = "?";
-			if (((WildcardType)t).getBound() != null) {
-				name += " " + (((WildcardType)t).isUpperBound() ? "extends" : "super");
-				name += " " + typeName(((WildcardType)t).getBound());
-			}
-			return name;
-		}
-		return ((SimpleType)t).getName().getFullyQualifiedName();
+			return typeName((QualifiedType)t);
+		if (t.isIntersectionType())
+			return typeName((IntersectionType)t);
+		if (t.isUnionType())
+			return typeName((UnionType)t);
+		if (t.isWildcardType())
+			return typeName((WildcardType)t);
+		return typeName((SimpleType)t);
 	}
+
+	protected String typeName(final ArrayType t) {
+		return typeName(t.getComponentType()) + "[]";
+	}
+
+	protected String typeName(final ParameterizedType t) {
+		String name = "";
+		for (final Object o : t.typeArguments()) {
+			if (name.length() > 0) name += ", ";
+			name += typeName((org.eclipse.jdt.core.dom.Type)o);
+		}
+		return typeName(t.getType()) + "<" + name + ">";
+	}
+
+	protected String typeName(final PrimitiveType t) {
+		return t.getPrimitiveTypeCode().toString();
+	}
+
+	protected String typeName(final QualifiedType t) {
+		return typeName(t.getQualifier()) + "." + t.getName().getFullyQualifiedName();
+	}
+
+	protected String typeName(final IntersectionType t) {
+		String name = "";
+		for (final Object o : t.types()) {
+			if (name.length() > 0) name += " & ";
+			name += typeName((org.eclipse.jdt.core.dom.Type)o);
+		}
+		return name;
+	}
+
+	protected String typeName(final UnionType t) {
+		String name = "";
+		for (final Object o : t.types()) {
+			if (name.length() > 0) name += " | ";
+			name += typeName((org.eclipse.jdt.core.dom.Type)o);
+		}
+		return name;
+	}
+
+	protected String typeName(final WildcardType t) {
+		String name = "?";
+		if (t.getBound() != null) {
+			name += " " + (t.isUpperBound() ? "extends" : "super");
+			name += " " + typeName(t.getBound());
+		}
+		return name;
+	}
+
+	protected String typeName(final SimpleType t) {
+		return t.getName().getFullyQualifiedName();
+	}
+
+	protected int getIndex(final String name) {
+		Integer index = this.nameIndices.get(name);
+		if (index == null) {
+			index = this.nameIndices.size();
+			this.nameIndices.put(name, index);
+		}
+		return index;
+	}
+
 
 	//////////////////////////////////////////////////////////////
-	// Currently un-used node types
-
-	// begin java 8
-	@Override
-	public boolean visit(LambdaExpression node) {
-		throw new RuntimeException("visited unused node LambdaExpression");
-	}
-	@Override
-	public boolean visit(CreationReference node) {
-		throw new RuntimeException("visited unused node CreationReference");
-	}
-	@Override
-	public boolean visit(ExpressionMethodReference node) {
-		throw new RuntimeException("visited unused node ExpressionMethodReference");
-	}
-	@Override
-	public boolean visit(SuperMethodReference node) {
-		throw new RuntimeException("visited unused node SuperMethodReference");
-	}
-	@Override
-	public boolean visit(TypeMethodReference node) {
-		throw new RuntimeException("visited unused node TypeMethodReference");
-	}
-	@Override
-	public boolean visit(IntersectionType node) {
-		throw new RuntimeException("visited unused node IntersectionType");
-	}
-	@Override
-	public boolean visit(Dimension node) {
-		throw new RuntimeException("visited unused node Dimension");
-	}
-	@Override
-	public boolean visit(NameQualifiedType node) {
-		throw new RuntimeException("visited unused node NameQualifiedType");
-	}
-	// end java 8
-
+	// Unused node types
+	
 	@Override
 	public boolean visit(ArrayType node) {
-		throw new RuntimeException("visited unused node ArrayType");
+		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
 	}
 
 	@Override
 	public boolean visit(ParameterizedType node) {
-		throw new RuntimeException("visited unused node ParameterizedType");
+		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
 	}
 
 	@Override
 	public boolean visit(PrimitiveType node) {
-		throw new RuntimeException("visited unused node PrimitiveType");
+		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
 	}
 
 	@Override
 	public boolean visit(QualifiedType node) {
-		throw new RuntimeException("visited unused node QualifiedType");
+		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
 	}
 
 	@Override
 	public boolean visit(SimpleType node) {
-		throw new RuntimeException("visited unused node SimpleType");
+		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
 	}
 
 	@Override
 	public boolean visit(UnionType node) {
-		throw new RuntimeException("visited unused node UnionType");
+		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
 	}
 
 	@Override
 	public boolean visit(WildcardType node) {
-		throw new RuntimeException("visited unused node WildcardType");
+		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
 	}
 
 	@Override
 	public boolean visit(EnumConstantDeclaration node) {
-		throw new RuntimeException("visited unused node EnumConstantDeclaration");
+		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
 	}
 
 	@Override
 	public boolean visit(ImportDeclaration node) {
-		throw new RuntimeException("visited unused node ImportDeclaration");
+		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
 	}
 
 	@Override
 	public boolean visit(PackageDeclaration node) {
-		throw new RuntimeException("visited unused node PackageDeclaration");
+		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
 	}
 
 	@Override
 	public boolean visit(SingleVariableDeclaration node) {
-		throw new RuntimeException("visited unused node SingleVariableDeclaration");
+		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
 	}
 
 	@Override
 	public boolean visit(MemberRef node) {
-		throw new RuntimeException("visited unused node MemberRef");
+		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
 	}
 
 	@Override
 	public boolean visit(MemberValuePair node) {
-		throw new RuntimeException("visited unused node MemberValuePair");
+		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
 	}
 
 	@Override
 	public boolean visit(TypeParameter node) {
-		throw new RuntimeException("visited unused node TypeParameter");
+		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
 	}
 
 	@Override
 	public boolean visit(VariableDeclarationFragment node) {
-		throw new RuntimeException("visited unused node VariableDeclarationFragment");
+		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
 	}
 	
 	@Override
@@ -1655,14 +1672,5 @@ public class JavaVisitor extends ASTVisitor {
 	@Override
 	public boolean visit(TextElement node) {
 		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
-	}
-
-	private int getIndex(String name) {
-		Integer index = this.nameIndices.get(name);
-		if (index == null) {
-			index = this.nameIndices.size();
-			this.nameIndices.put(name, index);
-		}
-		return index;
 	}
 }

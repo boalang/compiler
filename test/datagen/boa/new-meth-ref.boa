@@ -1,0 +1,17 @@
+{
+   "kind": "EXPRESSION",
+   "expression": {
+      "kind": "METHODCALL",
+      "method": "m",
+      "method_args": [
+         {
+            "kind": "METHOD_REFERENCE",
+            "new_type": {
+               "kind": "OTHER",
+               "name": 1
+            },
+            "method": "new"
+         }
+      ]
+   }
+}

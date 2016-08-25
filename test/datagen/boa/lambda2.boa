@@ -1,0 +1,49 @@
+{
+   "kind": "EXPRESSION",
+   "expression": {
+      "kind": "ASSIGN_ADD",
+      "expressions": [
+         {
+            "kind": "VARACCESS",
+            "variable": "x"
+         },
+         {
+            "kind": "LAMBDA",
+            "lambda": {
+               "name": "",
+               "return_type": {
+                  "kind": "OTHER",
+                  "name": 1
+               },
+               "arguments": [
+                  {
+                     "name": "x",
+                     "variable_type": {
+                        "kind": "OTHER",
+                        "name": 2
+                     }
+                  }
+               ],
+               "statements": [
+                  {
+                     "kind": "EXPRESSION",
+                     "expression": {
+                        "kind": "OP_ADD",
+                        "expressions": [
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "x"
+                           },
+                           {
+                              "kind": "VARACCESS",
+                              "variable": "x"
+                           }
+                        ]
+                     }
+                  }
+               ]
+            }
+         }
+      ]
+   }
+}

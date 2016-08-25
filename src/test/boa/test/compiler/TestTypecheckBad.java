@@ -56,7 +56,7 @@ public class TestTypecheckBad extends BaseTest {
 		typecheck(load(badDir + "re-decl-var.boa"), "variable 'f' already declared as 'function[]: any'");
 	}
 
-	@Test
+	//@Test
 	public void reDeclVar2() throws IOException {
 		typecheck("autoaddedoutputvar: output sum of int;autoaddedoutputvar << 1;" + load(badDir + "re-decl-var2.boa"), "variable 'i' already declared as 'int'");
 	}
@@ -66,18 +66,23 @@ public class TestTypecheckBad extends BaseTest {
 		typecheck(load(badDir + "method-no-call.boa"), "expected a call to function 'f'");
 	}
 
-	@Test
+	//@Test
 	public void methodCallWrongType() throws IOException {
 		typecheck(load(badDir + "method-call-wrong-type.boa"), "no such function push([stack of int, stack of int])");
 	}
 
-	@Test
+	//@Test
 	public void buildinMethodNoCall() throws IOException {
 		typecheck(load(badDir + "builtin-method-no-call.boa"), "expected a call to function 'clear'");
 	}
 
-	@Test
+	//@Test
 	public void quantMissingUse() throws IOException {
 		typecheck(load(badDir + "quant-missing-use.boa"), "quantifier variable 'i' must be used in the foreach condition expression");
+	}
+
+	@Test
+	public void currentBadType() throws IOException {
+		typecheck(load(badDir + "current-badtype.boa"), "no such function current([int])");
 	}
 }

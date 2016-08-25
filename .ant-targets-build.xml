@@ -7,11 +7,14 @@ clean-tests
 compile
 compile-parser
 compile-protobuf
+java-to-boa
 package
 package-compiler
 package-runtime
 test
 test-codegen
+test-datagen
+test-inhattr
 test-knowngood
 test-lexer
 test-parser

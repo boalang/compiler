@@ -1,0 +1,5 @@
+o: output sum of int;
+o << 1;
+
+self: map[string] of bool;
+foreach (i : int; def(keys(self)[i])) {}

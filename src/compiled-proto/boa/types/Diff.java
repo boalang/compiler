@@ -401,9 +401,9 @@ public final class Diff {
        */
       SOURCE_JAVA_JLS4(7, 103),
       /**
-       * <code>SOURCE_JAVA_JLS5 = 104;</code>
+       * <code>SOURCE_JAVA_JLS8 = 104;</code>
        */
-      SOURCE_JAVA_JLS5(8, 104),
+      SOURCE_JAVA_JLS8(8, 104),
       /**
        * <code>SOURCE_CS_ERROR = 200;</code>
        */
@@ -447,9 +447,9 @@ public final class Diff {
        */
       public static final FileKind JLS4 = SOURCE_JAVA_JLS4;
       /**
-       * <code>JLS5 = 104;</code>
+       * <code>JLS8 = 104;</code>
        */
-      public static final FileKind JLS5 = SOURCE_JAVA_JLS5;
+      public static final FileKind JLS8 = SOURCE_JAVA_JLS8;
       /**
        * <code>CS_ERROR = 200;</code>
        */
@@ -507,9 +507,9 @@ public final class Diff {
        */
       public static final int SOURCE_JAVA_JLS4_VALUE = 103;
       /**
-       * <code>SOURCE_JAVA_JLS5 = 104;</code>
+       * <code>SOURCE_JAVA_JLS8 = 104;</code>
        */
-      public static final int SOURCE_JAVA_JLS5_VALUE = 104;
+      public static final int SOURCE_JAVA_JLS8_VALUE = 104;
       /**
        * <code>JAVA_ERROR = 100;</code>
        */
@@ -527,9 +527,9 @@ public final class Diff {
        */
       public static final int JLS4_VALUE = 103;
       /**
-       * <code>JLS5 = 104;</code>
+       * <code>JLS8 = 104;</code>
        */
-      public static final int JLS5_VALUE = 104;
+      public static final int JLS8_VALUE = 104;
       /**
        * <code>SOURCE_CS_ERROR = 200;</code>
        */
@@ -592,7 +592,7 @@ public final class Diff {
           case 101: return SOURCE_JAVA_JLS2;
           case 102: return SOURCE_JAVA_JLS3;
           case 103: return SOURCE_JAVA_JLS4;
-          case 104: return SOURCE_JAVA_JLS5;
+          case 104: return SOURCE_JAVA_JLS8;
           case 200: return SOURCE_CS_ERROR;
           case 201: return SOURCE_CS_CS1;
           case 202: return SOURCE_CS_CS2;
@@ -629,7 +629,7 @@ public final class Diff {
       }
 
       private static final FileKind[] VALUES = {
-        OTHER, BINARY, TEXT, XML, SOURCE_JAVA_ERROR, SOURCE_JAVA_JLS2, SOURCE_JAVA_JLS3, SOURCE_JAVA_JLS4, SOURCE_JAVA_JLS5, JAVA_ERROR, JLS2, JLS3, JLS4, JLS5, SOURCE_CS_ERROR, SOURCE_CS_CS1, SOURCE_CS_CS2, SOURCE_CS_CS3, SOURCE_CS_CS4, SOURCE_CS_CS5, CS_ERROR, CS1, CS2, CS3, CS4, CS5, 
+        OTHER, BINARY, TEXT, XML, SOURCE_JAVA_ERROR, SOURCE_JAVA_JLS2, SOURCE_JAVA_JLS3, SOURCE_JAVA_JLS4, SOURCE_JAVA_JLS8, JAVA_ERROR, JLS2, JLS3, JLS4, JLS8, SOURCE_CS_ERROR, SOURCE_CS_CS1, SOURCE_CS_CS2, SOURCE_CS_CS3, SOURCE_CS_CS4, SOURCE_CS_CS5, CS_ERROR, CS1, CS2, CS3, CS4, CS5, 
       };
 
       public static FileKind valueOf(
@@ -2058,9 +2058,9 @@ public final class Diff {
       "\005OTHER\020\000\022\n\n\006BINARY\020\001\022\010\n\004TEXT\020\002\022\007\n\003XML\020\003\022",
       "\025\n\021SOURCE_JAVA_ERROR\020d\022\024\n\020SOURCE_JAVA_JL" +
       "S2\020e\022\024\n\020SOURCE_JAVA_JLS3\020f\022\024\n\020SOURCE_JAV" +
-      "A_JLS4\020g\022\024\n\020SOURCE_JAVA_JLS5\020h\022\016\n\nJAVA_E" +
+      "A_JLS4\020g\022\024\n\020SOURCE_JAVA_JLS8\020h\022\016\n\nJAVA_E" +
       "RROR\020d\022\010\n\004JLS2\020e\022\010\n\004JLS3\020f\022\010\n\004JLS4\020g\022\010\n\004" +
-      "JLS5\020h\022\024\n\017SOURCE_CS_ERROR\020\310\001\022\022\n\rSOURCE_C" +
+      "JLS8\020h\022\024\n\017SOURCE_CS_ERROR\020\310\001\022\022\n\rSOURCE_C" +
       "S_CS1\020\311\001\022\022\n\rSOURCE_CS_CS2\020\312\001\022\022\n\rSOURCE_C" +
       "S_CS3\020\313\001\022\022\n\rSOURCE_CS_CS4\020\314\001\022\022\n\rSOURCE_C" +
       "S_CS5\020\315\001\022\r\n\010CS_ERROR\020\310\001\022\010\n\003CS1\020\311\001\022\010\n\003CS2" +

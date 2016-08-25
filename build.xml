@@ -166,12 +166,26 @@
 
 	<!-- testing -->
 	<target name="test" depends="-compile-tests" description="Run all unit tests.">
-		<junit fork="yes">
+		<junit fork="yes" haltonfailure="no" failureproperty="test.failed">
 			<classpath refid="test.class.path" />
 			<batchtest>
 				<formatter type="plain" usefile="false" />
 				<fileset dir="build/tests">
 					<include name="boa/**/Test*.class" />
+					<exclude name="**/*$*.class" />
+				</fileset>
+			</batchtest>
+		</junit>
+		<delete file="SecurityAuth.audit" />
+		<fail message="Test failure detected." if="test.failed" />
+	</target>
+	<target name="test-datagen" depends="-compile-tests" description="Run datagen unit tests.">
+		<junit fork="yes" haltonfailure="no">
+			<classpath refid="test.class.path" />
+			<batchtest>
+				<formatter type="plain" usefile="false" />
+				<fileset dir="build/tests">
+					<include name="boa/test/datagen/Test*.class" />
 					<exclude name="**/*$*.class" />
 				</fileset>
 			</batchtest>
@@ -214,6 +228,15 @@
 		</junit>
 		<delete file="SecurityAuth.audit" />
 	</target>
+	<target name="test-inhattr" depends="-compile-tests" description="Run inherited attribute unit tests.">
+		<junit fork="yes" haltonfailure="no">
+			<classpath refid="test.class.path" />
+			<test name="boa.test.compiler.TestInhAttr">
+				<formatter type="plain" usefile="false" />
+			</test>
+		</junit>
+		<delete file="SecurityAuth.audit" />
+	</target>
 	<target name="test-codegen" depends="-compile-tests" description="Run code generation unit tests.">
 		<junit fork="yes" haltonfailure="no">
 			<classpath refid="test.class.path" />
@@ -241,6 +264,13 @@
 
 	<target name="clean-tests" description="Clean the compiled test files.">
 		<delete dir="build/tests" />
+	</target>
+
+	<target name="java-to-boa" depends="-compile-tests" description="Convert Java code to Boa AST.">
+		<java classname="boa.test.datagen.JavaToBoa" fork="true" failonerror="true">
+			<classpath refid="test.class.path" />
+			<arg value="${java.code}" />
+		</java>
 	</target>
 
 

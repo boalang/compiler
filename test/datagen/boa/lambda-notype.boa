@@ -1,0 +1,59 @@
+{
+   "kind": "EXPRESSION",
+   "expression": {
+      "kind": "VARDECL",
+      "variable_decls": [
+         {
+            "name": "subtraction",
+            "variable_type": {
+               "kind": "OTHER",
+               "name": 1
+            },
+            "initializer": {
+               "kind": "LAMBDA",
+               "lambda": {
+                  "name": "",
+                  "return_type": {
+                     "kind": "OTHER",
+                     "name": 2
+                  },
+                  "arguments": [
+                     {
+                        "name": "a",
+                        "variable_type": {
+                           "kind": "OTHER",
+                           "name": 2
+                        }
+                     },
+                     {
+                        "name": "b",
+                        "variable_type": {
+                           "kind": "OTHER",
+                           "name": 2
+                        }
+                     }
+                  ],
+                  "statements": [
+                     {
+                        "kind": "EXPRESSION",
+                        "expression": {
+                           "kind": "OP_SUB",
+                           "expressions": [
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "a"
+                              },
+                              {
+                                 "kind": "VARACCESS",
+                                 "variable": "b"
+                              }
+                           ]
+                        }
+                     }
+                  ]
+               }
+            }
+         }
+      ]
+   }
+}
