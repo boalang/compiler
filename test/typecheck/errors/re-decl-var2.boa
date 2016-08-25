@@ -1,0 +1,4 @@
+a: array of int;
+foreach (i: int; a[i] > 0)
+	foreach (i: int; a[i] > 0) {
+	}

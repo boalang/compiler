@@ -1,0 +1,35 @@
+StringFieldTotal: output sum of int;
+StringFieldMax: output maximum(1) of string weight int;
+StringFieldMin: output minimum(1) of string weight int;
+StringFieldMean: output mean of int;
+
+p: Project = input;
+
+str_cur_val := 0;
+str_s: stack of int;
+
+q22 := visitor {
+	before node: CodeRepository -> {
+		snapshot := getsnapshot(node, "SOURCE_JAVA_JLS");
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+	before node: Declaration ->
+		if (node.kind == TypeKind.CLASS || node.kind == TypeKind.ANONYMOUS) {
+			push(str_s, str_cur_val);
+			str_cur_val = 0;
+			foreach (i: int; node.fields[i].variable_type.name == "String")
+				str_cur_val++;
+		} else
+			stop;
+	after node: Declaration -> {
+		StringFieldTotal << str_cur_val;
+		StringFieldMax << p.id weight str_cur_val;
+		StringFieldMin << p.id weight str_cur_val;
+		StringFieldMean << str_cur_val;
+		str_cur_val = pop(str_s);
+	}
+};
+
+visit(p, q22);

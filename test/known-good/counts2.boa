@@ -1,0 +1,82 @@
+# count metadata
+p: Project = input;
+Projects: output sum of int;
+NonEmptyProjects: output sum of int;
+NonEmptyJavaProjects: output sum of int;
+Repositories: output sum of int;
+Revisions: output sum of int;
+Snapshots: output sum of int;
+Files: output sum of int;
+JavaSnapshots: output sum of int;
+JavaFiles: output sum of int;
+JavaErrorFiles: output sum of int;
+JLS2Files: output sum of int;
+JLS3Files: output sum of int;
+JLS4Files: output sum of int;
+AstNodes: output sum of int;
+ErrorAstNodes: output sum of int;
+
+paths: map[string] of bool;
+javaPaths: map[string] of bool;
+pathKinds: map[string] of FileKind;
+
+Projects << 1;
+Repositories << len(p.code_repositories);
+
+projectEmpty := true;
+javaProjectEmpty := true;
+
+foreach (i: int; def(p.code_repositories[i])) {
+    Revisions << len(p.code_repositories[i].revisions);
+
+    foreach (j: int; def(p.code_repositories[i].revisions[j])) {
+        rev := p.code_repositories[i].revisions[j];
+
+        foreach (k: int; def(rev.files[k])) {
+            projectEmpty = false;
+            paths[rev.files[k].name] = true;
+
+            if (rev.files[k].change != ChangeKind.DELETED) {
+                Snapshots << 1;
+
+                pathKinds[rev.files[k].name] = rev.files[k].kind;
+
+                if (rev.files[k].kind == FileKind.SOURCE_JAVA_JLS2
+                        || rev.files[k].kind == FileKind.SOURCE_JAVA_JLS3
+                        || rev.files[k].kind == FileKind.SOURCE_JAVA_JLS4) {
+                    javaProjectEmpty = false;
+
+                    JavaSnapshots << 1;
+                    AstNodes << ast_len(getast(rev.files[k]));
+
+                    javaPaths[rev.files[k].name] = true;
+                } else if (rev.files[k].kind == FileKind.SOURCE_JAVA_ERROR) {
+                    ErrorAstNodes << ast_len(getast(rev.files[k]));
+
+                    javaPaths[rev.files[k].name] = true;
+                }
+            }
+        }
+    }
+}
+
+if (!projectEmpty)
+    NonEmptyProjects << 1;
+if (!javaProjectEmpty)
+    NonEmptyJavaProjects << 1;
+
+Files << len(paths);
+JavaFiles << len(javaPaths);
+
+keyset := keys(pathKinds);
+foreach (i: int; def(keyset[i])) {
+    k := pathKinds[keyset[i]];
+    if (k == FileKind.SOURCE_JAVA_JLS4)
+        JLS4Files << 1;
+    else if (k == FileKind.SOURCE_JAVA_JLS3)
+        JLS3Files << 1;
+    else if (k == FileKind.SOURCE_JAVA_JLS2)
+        JLS2Files << 1;
+    else if (k == FileKind.SOURCE_JAVA_ERROR)
+        JavaErrorFiles << 1;
+}

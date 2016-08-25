@@ -1,3 +1,0 @@
-f: function(v: int);
-f = function(v: int) {
-};

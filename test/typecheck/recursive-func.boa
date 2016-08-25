@@ -1,0 +1,4 @@
+f := function(i: int) {
+	if (i > 0)
+		f(i - 1);
+};

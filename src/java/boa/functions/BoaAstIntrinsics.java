@@ -83,8 +83,7 @@ public class BoaAstIntrinsics {
 		if (kind != ChangedFile.FileKind.SOURCE_JAVA_ERROR
 				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS2
 				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS3
-				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS4
-				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS8)
+				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS4)
 			return emptyAst;
 
 		context.getCounter(AST_COUNTER.GETS_ATTEMPTED).increment(1);
@@ -138,8 +137,7 @@ public class BoaAstIntrinsics {
 		if (kind != ChangedFile.FileKind.SOURCE_JAVA_ERROR
 				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS2
 				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS3
-				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS4
-				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS8)
+				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS4)
 			return emptyComments;
 
 		final String rowName = f.getKey() + "!!" + f.getName();

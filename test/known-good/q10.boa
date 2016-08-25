@@ -1,0 +1,37 @@
+MethodsTotal: output sum of int;
+MethodsMax: output maximum(1) of string weight int;
+MethodsMin: output minimum(1) of string weight int;
+MethodsMean: output mean of int;
+
+p: Project = input;
+
+methods_cur_val := 0;
+methods_s: stack of int;
+
+q10 := visitor {
+	before node: CodeRepository -> {
+		snapshot := getsnapshot(node, "SOURCE_JAVA_JLS");
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+	before node: Declaration ->
+		if (node.kind == TypeKind.CLASS || node.kind == TypeKind.ANONYMOUS) {
+			push(methods_s, methods_cur_val);
+			methods_cur_val = 0;
+		} else
+			stop;
+	after node: Declaration -> {
+		MethodsTotal << methods_cur_val;
+		if (methods_cur_val > 0) {
+			MethodsMax << p.id weight methods_cur_val;
+			MethodsMin << p.id weight methods_cur_val;
+			MethodsMean << methods_cur_val;
+		}
+		methods_cur_val = pop(methods_s);
+	}
+	before node: Method ->
+		methods_cur_val++;
+};
+
+visit(p, q10);

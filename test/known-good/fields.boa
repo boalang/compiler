@@ -1,0 +1,85 @@
+TotalClasses: output sum of int;
+NoFieldClasses: output sum of int;
+
+TotalStaticFields: output sum of int;
+MeanStaticFields: output mean of int;
+NonZeroMeanStaticFields: output mean of int;
+
+TotalInstanceFields: output sum of int;
+MeanInstanceFields: output mean of int;
+NonZeroMeanInstanceFields: output mean of int;
+
+MeanPrivateFields: output mean of int;
+NonZeroMeanPrivateFields: output mean of int;
+
+p: Project = input;
+
+static_count := 0;
+instance_count := 0;
+static_s: stack of int;
+instance_s: stack of int;
+
+fields: map[string] of bool;
+used_fields: map[string] of bool;
+
+visit(p, visitor {
+	before node: CodeRepository -> {
+		snapshot := getsnapshot(node, "SOURCE_JAVA_JLS");
+		foreach (i: int; def(snapshot[i])) {
+			clear(fields);
+			clear(used_fields);
+			visit(snapshot[i]);
+		}
+		stop;
+	}
+	before node: Declaration ->
+		if (node.kind == TypeKind.CLASS || node.kind == TypeKind.ANONYMOUS) {
+			TotalClasses << 1;
+			if (len(node.fields) == 0)
+				NoFieldClasses << 1;
+			else
+				foreach (i: int; def(node.fields[i]))
+					ifall (j: int; node.fields[i].modifiers[j].kind != ModifierKind.FINAL) {
+						exists (k: int; node.fields[i].modifiers[k].kind == ModifierKind.VISIBILITY
+								&& node.fields[i].modifiers[k].visibility == Visibility.PRIVATE)
+							fields[node.fields[i].name] = true;
+						exists (k: int; node.fields[i].modifiers[k].kind == ModifierKind.STATIC) {
+							TotalStaticFields << 1;
+							static_count++;
+						}
+						ifall (k: int; node.fields[i].modifiers[k].kind != ModifierKind.STATIC) {
+							TotalInstanceFields << 1;
+							instance_count++;
+						}
+					}
+			push(static_s, static_count);
+			push(instance_s, instance_count);
+			static_count = 0;
+			instance_count = 0;
+		}
+	before node: Method ->
+		if (node.name != "init")
+			foreach (i: int; def(node.statements[i]))
+				visit(node.statements[i], visitor {
+					before node: Variable -> used_fields[node.name] = true;
+				});
+	after node: Declaration ->
+		if (node.kind == TypeKind.CLASS || node.kind == TypeKind.ANONYMOUS) {
+			if (static_count > 0)
+				NonZeroMeanStaticFields << static_count;
+			MeanStaticFields << static_count;
+			if (instance_count > 0)
+				NonZeroMeanInstanceFields << instance_count;
+			MeanInstanceFields << instance_count;
+			static_count = pop(static_s);
+			instance_count = pop(instance_s);
+		}
+});
+
+k := keys(fields);
+count := 0;
+foreach (i: int; !haskey(used_fields, k[i]))
+	count++;
+if (count > 0)
+	NonZeroMeanPrivateFields << count;
+MeanPrivateFields << count;

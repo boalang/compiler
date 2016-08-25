@@ -1,0 +1,15 @@
+ThreadUse: output sum[string][string] of int;
+p: Project = input;
+
+cur_file: ChangedFile;
+seen: map[string] of bool;
+
+visit(p, visitor {
+	before n: ChangedFile -> cur_file = n;
+	before n: Declaration ->
+		exists (i: int; n.parents[i].name == "Thread")
+			if (!haskey(seen, n.name)) {
+				seen[n.name] = true;
+				ThreadUse[p.id][string(cur_file)] << 1;
+			}
+});
