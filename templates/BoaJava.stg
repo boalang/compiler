@@ -122,6 +122,20 @@ new <type>()
 	<body>
 }
 >>
+
+TupleType(name, fields, types) ::= <<
+private class <name>
+{
+	<fields,types:{field,type|<type> ___<field>}; separator="; ">;
+	<name>( <fields,types:{field,type|<type> ___<field>}; separator=", "> ){
+		<fields,types:{field,type|this.___<field> = ___<field>}; separator="; ">;
+	}
+
+}<\n>
+>>
+
+Tuple(name, exprlist) ::= "new <name>(<exprlist>) <\n>"
+
 Visitor(staticDeclarations, body) ::= <<
 new boa.runtime.BoaAbstractVisitor()
 {
