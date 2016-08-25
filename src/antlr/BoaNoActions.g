@@ -51,11 +51,16 @@ type
 	| visitorType
 	| stackType
 	| setType
+	| enumType
 	| identifier
 	;
 
 component
 	: (identifier COLON)? type
+	;
+	
+enumBodyDeclaration
+	: identifier EQUALS expression
 	;
 
 arrayType
@@ -64,6 +69,10 @@ arrayType
 
 tupleType
 	: LBRACE (member (COMMA member)* COMMA?)? RBRACE
+	;
+
+enumType
+	: ENUM LBRACE (enumBodyDeclaration (COMMA enumBodyDeclaration)* COMMA?)? RBRACE
 	;
 
 member
@@ -395,6 +404,7 @@ VISITOR  : 'visitor';
 BEFORE   : 'before';
 AFTER    : 'after';
 STOP     : 'stop';
+ENUM 	 : 'enum';
 
 //
 // separators

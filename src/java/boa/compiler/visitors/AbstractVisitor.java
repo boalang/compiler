@@ -27,6 +27,7 @@ import boa.compiler.ast.types.*;
  * 
  * @author rdyer
  * @author hridesh
+ * @author ankuraga
  *
  * @param <RetType> the return type to pass up the tree while visiting
  * @param <ArgType> the type of the argument to pass down the tree while visiting
@@ -74,6 +75,12 @@ public abstract class AbstractVisitor<ReturnType, ArgType> {
 		if (n.hasIdentifier())
 			n.getIdentifier().accept(this, arg);
 		n.getType().accept(this, arg);
+		return null;
+	}
+
+	public ReturnType visit(final EnumBodyDeclaration n, final ArgType arg) {
+		n.getIdentifier().accept(this, arg);
+		n.getExp().accept(this, arg);
 		return null;
 	}
 
@@ -388,6 +395,12 @@ public abstract class AbstractVisitor<ReturnType, ArgType> {
 
 	public ReturnType visit(final TupleType n, final ArgType arg) {
 		for (final Component c : n.getMembers())
+			c.accept(this, arg);
+		return null;
+	}
+
+	public ReturnType visit(final EnumType n, final ArgType arg) {
+		for (final EnumBodyDeclaration c : n.getMembers())
 			c.accept(this, arg);
 		return null;
 	}
