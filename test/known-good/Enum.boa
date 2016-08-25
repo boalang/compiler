@@ -1,0 +1,18 @@
+p: Project = input;
+
+type T1 = enum {A = "true", B = "false"};
+t1 : T1 = T1.A;
+
+type T2 = enum {A = "yes", B = "no"};
+t2 : T2 = T2.A;
+
+col : output collection of int;
+
+switch (t1) {
+	case T1.A : 
+		col  << 1; break;
+	case T1.B :
+		col  << 2; break;
+		
+	default: break;
+}

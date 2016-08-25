@@ -132,12 +132,12 @@ public class SymbolTable {
 
 		// FIXME rdyer - def(protolist[i]) should generate "i < protolist.size()"
 		globalFunctions.addFunction("def", new BoaFunction(new BoaBool(), new BoaType[] { new BoaAny() }, "(${0} != null)"));
-		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaProtoList(new BoaScalar()) }, "((long)${0}.size())"));
-		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaArray(new BoaScalar()) }, "((long)${0}.length)"));
-		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaMap(new BoaScalar(), new BoaScalar()) }, "((long)${0}.keySet().size())"));
-		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaStack(new BoaScalar()) }, "((long)${0}.size())"));
-		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaSet(new BoaScalar()) }, "((long)${0}.size())"));
-		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaString() }, "((long)${0}.length())"));
+		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaProtoList(new BoaScalar()) }, "${0}.size()"));
+		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaArray(new BoaScalar()) }, "${0}.length"));
+		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaMap(new BoaScalar(), new BoaScalar()) }, "${0}.keySet().size()"));
+		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaStack(new BoaScalar()) }, "${0}.size()"));
+		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaSet(new BoaScalar()) }, "${0}.size()"));
+		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaString() }, "${0}.length()"));
 
 		// map functions
 		globalFunctions.addFunction("haskey", new BoaFunction(new BoaBool(), new BoaType[] { new BoaMap(new BoaScalar(), new BoaScalar()), new BoaScalar() }, "${0}.containsKey(${1})"));
@@ -173,29 +173,6 @@ public class SymbolTable {
 
 		// arrays to string
 		globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { new BoaArray(new BoaScalar()) }, "boa.functions.BoaIntrinsics.arrayToString(${0})"));
-
-		// FIXME
-		globalFunctions.addFunction("current", new BoaFunction(new ASTRootProtoTuple(), new BoaType[] { new ASTRootProtoTuple() }, ""));
-		globalFunctions.addFunction("current", new BoaFunction(new AttachmentProtoTuple(), new BoaType[] { new AttachmentProtoTuple() }, ""));
-		globalFunctions.addFunction("current", new BoaFunction(new ChangedFileProtoTuple(), new BoaType[] { new ChangedFileProtoTuple() }, ""));
-		globalFunctions.addFunction("current", new BoaFunction(new CodeRepositoryProtoTuple(), new BoaType[] { new CodeRepositoryProtoTuple() }, ""));
-		globalFunctions.addFunction("current", new BoaFunction(new CommentProtoTuple(), new BoaType[] { new CommentProtoTuple() }, ""));
-		globalFunctions.addFunction("current", new BoaFunction(new CommentsRootProtoTuple(), new BoaType[] { new CommentsRootProtoTuple() }, ""));
-		globalFunctions.addFunction("current", new BoaFunction(new DeclarationProtoTuple(), new BoaType[] { new DeclarationProtoTuple() }, ""));
-		globalFunctions.addFunction("current", new BoaFunction(new ExpressionProtoTuple(), new BoaType[] { new ExpressionProtoTuple() }, ""));
-		globalFunctions.addFunction("current", new BoaFunction(new IssueProtoTuple(), new BoaType[] { new IssueProtoTuple() }, ""));
-		globalFunctions.addFunction("current", new BoaFunction(new IssueCommentProtoTuple(), new BoaType[] { new IssueCommentProtoTuple() }, ""));
-		globalFunctions.addFunction("current", new BoaFunction(new IssueRepositoryProtoTuple(), new BoaType[] { new IssueRepositoryProtoTuple() }, ""));
-		globalFunctions.addFunction("current", new BoaFunction(new IssuesRootProtoTuple(), new BoaType[] { new IssuesRootProtoTuple() }, ""));
-		globalFunctions.addFunction("current", new BoaFunction(new MethodProtoTuple(), new BoaType[] { new MethodProtoTuple() }, ""));
-		globalFunctions.addFunction("current", new BoaFunction(new ModifierProtoTuple(), new BoaType[] { new ModifierProtoTuple() }, ""));
-		globalFunctions.addFunction("current", new BoaFunction(new NamespaceProtoTuple(), new BoaType[] { new NamespaceProtoTuple() }, ""));
-		globalFunctions.addFunction("current", new BoaFunction(new PersonProtoTuple(), new BoaType[] { new PersonProtoTuple() }, ""));
-		globalFunctions.addFunction("current", new BoaFunction(new ProjectProtoTuple(), new BoaType[] { new ProjectProtoTuple() }, ""));
-		globalFunctions.addFunction("current", new BoaFunction(new RevisionProtoTuple(), new BoaType[] { new RevisionProtoTuple() }, ""));
-		globalFunctions.addFunction("current", new BoaFunction(new StatementProtoTuple(), new BoaType[] { new StatementProtoTuple() }, ""));
-		globalFunctions.addFunction("current", new BoaFunction(new TypeProtoTuple(), new BoaType[] { new TypeProtoTuple() }, ""));
-		globalFunctions.addFunction("current", new BoaFunction(new VariableProtoTuple(), new BoaType[] { new VariableProtoTuple() }, ""));
 
 		// proto to string
 		globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { new ASTRootProtoTuple() }, "com.googlecode.protobuf.format.JsonFormat.printToString(${0})"));
@@ -242,7 +219,7 @@ public class SymbolTable {
 		// bool to int
 		globalFunctions.addFunction("int", new BoaFunction("boa.functions.BoaCasts.booleanToLong", new BoaInt(), new BoaScalar[] { new BoaBool() }));
 		// float to int
-		globalFunctions.addFunction("int", new BoaFunction(new BoaInt(), new BoaScalar[] { new BoaFloat() }, "((long)${0})"));
+		globalFunctions.addFunction("int", new BoaFunction(new BoaInt(), new BoaScalar[] { new BoaFloat() }, "(long)${0}"));
 		// time to int
 		globalFunctions.addFunction("int", new BoaFunction(new BoaInt(), new BoaScalar[] { new BoaTime() }, "${0}"));
 		// string to int
@@ -251,39 +228,39 @@ public class SymbolTable {
 		globalFunctions.addFunction("int", new BoaFunction(new BoaInt(), new BoaScalar[] { new BoaString(), new BoaInt() }, "java.lang.Long.parseLong(${0}, (int)${1})"));
 
 		// hashing functions
-		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaScalar[] { new BoaString() }, "((long)${0}.hashCode())"));
-		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new ASTRootProtoTuple() }, "((long)${0}.hashCode())"));
-		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new AttachmentProtoTuple() }, "((long)${0}.hashCode())"));
-		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new ChangedFileProtoTuple() }, "((long)${0}.hashCode())"));
-		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new ChangeKindProtoMap() }, "((long)${0}.hashCode())"));
-		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new CodeRepositoryProtoTuple() }, "((long)${0}.hashCode())"));
-		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new CommentKindProtoMap() }, "((long)${0}.hashCode())"));
-		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new CommentProtoTuple() }, "((long)${0}.hashCode())"));
-		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new CommentsRootProtoTuple() }, "((long)${0}.hashCode())"));
-		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new DeclarationProtoTuple() }, "((long)${0}.hashCode())"));
-		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new ExpressionKindProtoMap() }, "((long)${0}.hashCode())"));
-		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new ExpressionProtoTuple() }, "((long)${0}.hashCode())"));
-		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new FileKindProtoMap() }, "((long)${0}.hashCode())"));
-		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new ForgeKindProtoMap() }, "((long)${0}.hashCode())"));
-		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new IssueProtoTuple() }, "((long)${0}.hashCode())"));
-		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new IssueCommentProtoTuple() }, "((long)${0}.hashCode())"));
-		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new IssueKindProtoMap() }, "((long)${0}.hashCode())"));
-		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new IssueRepositoryProtoTuple() }, "((long)${0}.hashCode())"));
-		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new IssuesRootProtoTuple() }, "((long)${0}.hashCode())"));
-		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new MethodProtoTuple() }, "((long)${0}.hashCode())"));
-		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new ModifierKindProtoMap() }, "((long)${0}.hashCode())"));
-		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new ModifierProtoTuple() }, "((long)${0}.hashCode())"));
-		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new NamespaceProtoTuple() }, "((long)${0}.hashCode())"));
-		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new PersonProtoTuple() }, "((long)${0}.hashCode())"));
-		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new ProjectProtoTuple() }, "((long)${0}.hashCode())"));
-		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new RepositoryKindProtoMap() }, "((long)${0}.hashCode())"));
-		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new RevisionProtoTuple() }, "((long)${0}.hashCode())"));
-		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new StatementKindProtoMap() }, "((long)${0}.hashCode())"));
-		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new StatementProtoTuple() }, "((long)${0}.hashCode())"));
-		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new TypeKindProtoMap() }, "((long)${0}.hashCode())"));
-		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new TypeProtoTuple() }, "((long)${0}.hashCode())"));
-		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new VariableProtoTuple() }, "((long)${0}.hashCode())"));
-		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new VisibilityProtoMap() }, "((long)${0}.hashCode())"));
+		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaScalar[] { new BoaString() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new ASTRootProtoTuple() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new AttachmentProtoTuple() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new ChangedFileProtoTuple() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new ChangeKindProtoMap() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new CodeRepositoryProtoTuple() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new CommentKindProtoMap() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new CommentProtoTuple() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new CommentsRootProtoTuple() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new DeclarationProtoTuple() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new ExpressionKindProtoMap() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new ExpressionProtoTuple() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new FileKindProtoMap() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new ForgeKindProtoMap() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new IssueProtoTuple() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new IssueCommentProtoTuple() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new IssueKindProtoMap() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new IssueRepositoryProtoTuple() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new IssuesRootProtoTuple() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new MethodProtoTuple() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new ModifierKindProtoMap() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new ModifierProtoTuple() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new NamespaceProtoTuple() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new PersonProtoTuple() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new ProjectProtoTuple() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new RepositoryKindProtoMap() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new RevisionProtoTuple() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new StatementKindProtoMap() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new StatementProtoTuple() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new TypeKindProtoMap() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new TypeProtoTuple() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new VariableProtoTuple() }, "${0}.hashCode()"));
+		globalFunctions.addFunction("hash", new BoaFunction(new BoaInt(), new BoaType[] { new VisibilityProtoMap() }, "${0}.hashCode()"));
 
 		// int to float
 		globalFunctions.addFunction("float", new BoaFunction(new BoaFloat(), new BoaScalar[] { new BoaInt() }, "(double)${0}"));

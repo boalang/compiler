@@ -123,18 +123,25 @@ new <type>()
 }
 >>
 
-TupleType(name, fields, types) ::= <<
-private class <name>
+EnumType(ename, fields, values, fname) ::= <<
+private enum <ename>
 {
-	<fields,types:{field,type|<type> ___<field>}; separator="; ">;
-	<name>( <fields,types:{field,type|<type> ___<field>}; separator=", "> ){
-		<fields,types:{field,type|this.___<field> = ___<field>}; separator="; ">;
+	<fields,values:{field,value|<field>(<value>)}; separator=", ">;
+
+	private <fname> value;
+	private <ename> (<fname> value) {
+		this.value = value;
 	}
 
+	public Object getValue() {
+		return this.value;
+	}
+
+	public String toString() {
+		return this.value + "";
+	}
 }<\n>
 >>
-
-Tuple(name, exprlist) ::= "new <name>(<exprlist>) <\n>"
 
 Visitor(staticDeclarations, body) ::= <<
 new boa.runtime.BoaAbstractVisitor()
@@ -144,12 +151,13 @@ new boa.runtime.BoaAbstractVisitor()
 	<endif>
 	<body:{s | <s><\n>}>}
 >>
-VisitClause(ret, name, arg, type, body) ::= <<
-<if(arg)>
+VisitClause(ret, name, args, types, body) ::= <<
+<if(args)>
+<args,types:{arg,type|
 @Override
 protected <ret> <name>(final <type> <arg>) throws Exception
 {
-	<body>\}
+	<body>\}}>
 <else>
 @Override
 protected <ret> <name>() throws Exception

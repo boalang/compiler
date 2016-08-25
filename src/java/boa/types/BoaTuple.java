@@ -30,8 +30,6 @@ public class BoaTuple extends BoaScalar {
 	protected final List<BoaType> members;
 	protected final Map<String, Integer> names;
 
-	private static final Map<String, String> tupleNames = new HashMap<String, String>();
-
 	public BoaTuple(final List<BoaType> members) {
 		this.members = members;
 		this.names = new HashMap<String, Integer>();
@@ -126,21 +124,7 @@ public class BoaTuple extends BoaScalar {
 
 	@Override
 	public String toJavaType() {
-		String s = "";
-		for (final BoaType t : this.members)
-			s += "_" + cleanType(t.toJavaType());
-		// use numbers for each unique type, to avoid generating really long filenames
-		if (!tupleNames.containsKey(s))
-			tupleNames.put(s, "BoaTup_" + tupleNames.size());
-
-		return tupleNames.get(s);
-	}
-
-	private String cleanType(String s) {
-		final String s2 = s.replace('<', '_').replace('>', '_').replaceAll(",\\s+", "_").replaceAll("\\[\\]", "Array");
-		if (!s2.contains("."))
-			return s2;
-		return s2.substring(s2.lastIndexOf(".") + 1);
+		return "Object[]";
 	}
 
 	private int hash = 0;

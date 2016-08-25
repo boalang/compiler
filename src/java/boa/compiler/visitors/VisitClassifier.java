@@ -17,12 +17,9 @@
 package boa.compiler.visitors;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import boa.compiler.ast.expressions.VisitorExpression;
-import boa.compiler.ast.Identifier;
 import boa.compiler.ast.statements.VisitStatement;
 
 /**
@@ -32,25 +29,25 @@ import boa.compiler.ast.statements.VisitStatement;
  * @author rdyer
  */
 public class VisitClassifier extends AbstractVisitorNoArg {
+	protected VisitStatement defaultBeforeVisit;
+	protected VisitStatement defaultAfterVisit;
 	protected List<VisitStatement> befores = new ArrayList<VisitStatement>();
 	protected List<VisitStatement> afters = new ArrayList<VisitStatement>();
-	protected Map<String,VisitStatement> beforeMap = new HashMap<String,VisitStatement>();
-	protected Map<String,VisitStatement> afterMap = new HashMap<String,VisitStatement>();
 
 	public boolean hasDefaultBefore() {
-		return beforeMap.containsKey("_");
+		return defaultBeforeVisit != null;
 	}
 
 	public VisitStatement getDefaultBefore() {
-		return beforeMap.get("_");
+		return defaultBeforeVisit;
 	}
 
 	public boolean hasDefaultAfter() {
-		return afterMap.containsKey("_");
+		return defaultAfterVisit != null;
 	}
 
 	public VisitStatement getDefaultAfter() {
-		return afterMap.get("_");
+		return defaultAfterVisit;
 	}
 
 	public List<VisitStatement> getAfters() {
@@ -61,21 +58,13 @@ public class VisitClassifier extends AbstractVisitorNoArg {
 		return befores;
 	}
 
-	public Map<String,VisitStatement> getAfterMap() {
-		return afterMap;
-	}
-
-	public Map<String,VisitStatement> getBeforeMap() {
-		return beforeMap;
-	}
-
 	/** @{inheritDoc} */
 	@Override
 	protected void initialize() {
+		defaultBeforeVisit = null;
+		defaultAfterVisit = null;
 		befores.clear();
 		afters.clear();
-		beforeMap.clear();
-		afterMap.clear();
 	}
 
 	/** @{inheritDoc} */
@@ -89,22 +78,12 @@ public class VisitClassifier extends AbstractVisitorNoArg {
 	public void visit(VisitStatement n) {
 		if (n.isBefore()) {
 			if (n.hasWildcard())
-				beforeMap.put("_", n);
-			else if (n.hasComponent())
-				beforeMap.put(((Identifier)n.getComponent().getType()).getToken(), n);
-			else
-				for (final Identifier id : n.getIdList())
-					beforeMap.put(id.getToken(), n);
+				defaultBeforeVisit = n;
 			befores.add(n);
 		} else {
 			if (n.hasWildcard())
-				afterMap.put("_", n);
-			else if (n.hasComponent())
-				afterMap.put(((Identifier)n.getComponent().getType()).getToken(), n);
-			else
-				for (final Identifier id : n.getIdList())
-					afterMap.put(id.getToken(), n);
-			afters.add(n);
+				defaultAfterVisit = n;
+				afters.add(n);
 		}
 	}
 }

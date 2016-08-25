@@ -56,7 +56,7 @@ public class BoaMathIntrinsics {
 		if (n < 1)
 			throw new IllegalArgumentException("n must be greater than zero");
 
-		return (long) (BoaMathIntrinsics.random.nextDouble() * n);
+		return BoaMathIntrinsics.random.nextLong() % n;
 	}
 
 	/**

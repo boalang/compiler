@@ -1,7 +1,6 @@
 /*
- * Copyright 2016, Hridesh Rajan, Robert Dyer, Neha Bhide
- *                 Iowa State University of Science and Technology
- *                 and Bowling Green State University
+ * Copyright 2014, Hridesh Rajan, Robert Dyer, 
+ *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,7 +56,6 @@ import org.stringtemplate.v4.ST;
 import boa.compiler.SymbolTable;
 import boa.compiler.ast.Start;
 import boa.compiler.transforms.LocalAggregationTransformer;
-import boa.compiler.transforms.InheritedAttributeTransformer;
 import boa.compiler.transforms.VisitorOptimizingTransformer;
 import boa.compiler.visitors.AbstractCodeGeneratingVisitor;
 import boa.compiler.visitors.CodeGeneratingVisitor;
@@ -69,7 +67,6 @@ import boa.parser.BoaParser.StartContext;
 
 /**
  * @author rdyer
- * @author nbhide
  */
 public abstract class BaseTest {
 	protected static boolean DEBUG = false;
@@ -210,15 +207,15 @@ public abstract class BaseTest {
 	// type checking
 	//
 
-	protected StartContext typecheck(final String input) throws IOException {
-		return typecheck(input, null);
+	protected void typecheck(final String input) throws IOException {
+		typecheck(input, null);
 	}
 
-	protected StartContext typecheck(final String input, final String error) throws IOException {
-		final StartContext ctx = parse(input);
+	protected void typecheck(final String input, final String error) throws IOException {
+		final Start p = parse(input).ast;
 
 		try {
-			new TypeCheckingVisitor().start(ctx.ast, new SymbolTable());
+			new TypeCheckingVisitor().start(p, new SymbolTable());
 			if (error != null)
 				fail("expected error: " + error);
 		} catch (final Exception e) {
@@ -227,8 +224,6 @@ public abstract class BaseTest {
 			else
 				assertEquals(error, e.getMessage());
 		}
-
-		return ctx;
 	}
 
 	
@@ -236,11 +231,13 @@ public abstract class BaseTest {
 	// code generation
 	//
 
-	protected StartContext codegen(final String input) throws IOException {
-		return codegen(input, null);
+	protected void codegen(final String input) throws IOException {
+		codegen(input, null);
 	}
 
-	protected StartContext codegen(final String input, final String error) throws IOException {
+	protected void codegen(final String input, final String error) throws IOException {
+		final Start p = parse(input).ast;
+
 		final File outputRoot = new File(new File(System.getProperty("java.io.tmpdir")), UUID.randomUUID().toString());
 		final File outputSrcDir = new File(outputRoot, "boa");
 		if (!outputSrcDir.mkdirs())
@@ -253,11 +250,8 @@ public abstract class BaseTest {
 		final List<String> jobnames = new ArrayList<String>();
 		final List<String> jobs = new ArrayList<String>();
 
-		final StartContext ctx = typecheck(input);
-		final Start p = ctx.ast;
-
 		try {
-			new InheritedAttributeTransformer().start(p);
+			new TypeCheckingVisitor().start(p, new SymbolTable());
 			new LocalAggregationTransformer().start(p);
 			new VisitorOptimizingTransformer().start(p);
 
@@ -306,8 +300,6 @@ public abstract class BaseTest {
 		}
 
 		delete(outputSrcDir);
-
-		return ctx;
 	}
 
 
