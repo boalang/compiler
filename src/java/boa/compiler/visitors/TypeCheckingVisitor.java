@@ -35,6 +35,7 @@ import boa.types.*;
  * 
  * @author anthonyu
  * @author rdyer
+ * @author ankuraga
  */
 public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	/**
@@ -469,7 +470,12 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			type = ((BoaTuple) type).getMember(selector);
 			if (type instanceof BoaName)
 				type = ((BoaName) type).getType();
-		} else {
+		} else if (type instanceof BoaEnum) {
+			if (!((BoaEnum) type).hasMember(selector))
+				throw new TypeCheckException(n.getId(), "'" + type + "' has no member named '" + selector + "'");
+			type = ((BoaEnum) type).getMember(selector);
+		}
+		else {
 			throw new TypeCheckException(n, "invalid operand type '" + type + "' for member selection");
 		}
 
@@ -806,7 +812,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 
 		n.getCondition().accept(this, st);
 		final BoaType expr = n.getCondition().type;
-		if (!(expr instanceof BoaInt) && !(expr instanceof BoaProtoMap))
+		if (!(expr instanceof BoaInt) && !(expr instanceof BoaProtoMap) && !(expr instanceof BoaEnum))
 			throw new TypeCheckException(n.getCondition(), "incompatible types for switch expression: required 'int' or 'enum', found: " + expr);
 
 		for (final SwitchCase sc : n.getCases()) {
@@ -1216,6 +1222,37 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		}
 
 		n.type = new BoaTuple(types);
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final EnumType n, final SymbolTable env) {
+		n.env = env;
+
+		final List<BoaEnum> types = new ArrayList<BoaEnum>();
+		final List<String> names = new ArrayList<String>();
+		final List<String> values = new ArrayList<String>();
+		BoaType fieldType = null;
+
+		for (final EnumBodyDeclaration c : n.getMembers()) {
+			names.add(c.getIdentifier().getToken());
+
+			Factor f = c.getExp().getLhs().getLhs().getLhs().getLhs().getLhs();
+			if(f.getOperand() instanceof ILiteral) {
+				if(f.getOperand() instanceof StringLiteral)
+					fieldType = new BoaString();
+				else if(f.getOperand() instanceof IntegerLiteral)
+					fieldType = new BoaInt();
+				else if(f.getOperand() instanceof FloatLiteral)
+					fieldType = new BoaFloat();
+				else if(f.getOperand() instanceof TimeLiteral)
+					fieldType = new BoaTime();
+				values.add(((ILiteral)(f.getOperand())).getLiteral());
+				types.add(new BoaEnum(c.getIdentifier().getToken(),((ILiteral)(f.getOperand())).getLiteral(),fieldType));
+			}
+		}
+
+		n.type = new BoaEnum(types, names, values, fieldType);
 	}
 
 	/** {@inheritDoc} */
