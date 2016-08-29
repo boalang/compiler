@@ -88,8 +88,10 @@ public class LocalGitSequenceGenerator {
 		projBuilder.setId(path);
 		projBuilder.setProjectUrl(path);
 		projBuilder.setKind(ForgeKind.OTHER);
-
-		try (final AbstractConnector conn = new GitConnector(gitDir.getAbsolutePath())) {
+		
+		AbstractConnector conn = null;
+		try {
+			conn = new GitConnector(gitDir.getAbsolutePath());
 			final CodeRepository.Builder repoBuilder = CodeRepository.newBuilder();
 			repoBuilder.setUrl(path);
 			repoBuilder.setKind(RepositoryKind.GIT);
@@ -101,6 +103,13 @@ public class LocalGitSequenceGenerator {
 			projBuilder.addCodeRepositories(repoBuilder);
 		} catch (final Exception e) {
 			e.printStackTrace();
+		} finally {
+			if (conn != null)
+				try {
+					conn.close();
+				} catch (final Exception e) {
+					e.printStackTrace();
+				}
 		}
 		Project project = projBuilder.build();
 		// System.out.println(project);

@@ -27,15 +27,22 @@ public class RepositoryCloner {
         if(!localPath.exists())
         	localPath.mkdir();
         // then clone
-        try (Git result = Git.cloneRepository()
+        Git result = null;
+        try {
+        	result = Git.cloneRepository()
                 .setURI(REMOTE_URL)
                 .setDirectory(localPath)
-                .call()) {
+                .call();
 	        // Note: the call() returns an opened repository already which needs to be closed to avoid file handle leaks!
 
             // workaround for https://bugs.eclipse.org/bugs/show_bug.cgi?id=474093
 	        result.getRepository().close();
-        }
+        } catch (Exception e) {
+        	e.printStackTrace();
+		} finally {
+			if (result != null && result.getRepository() != null)
+				result.getRepository().close();
+		}
     }
     
     public static void main(String[] args) throws IOException, InvalidRemoteException, TransportException, GitAPIException {
@@ -47,14 +54,21 @@ public class RepositoryCloner {
         if(!localPath.exists())
         	localPath.mkdir();
         // then clone
-        try (Git result = Git.cloneRepository()
+        Git result = null;
+        try {
+        	result = Git.cloneRepository()
                 .setURI(REMOTE_URL)
                 .setDirectory(localPath)
-                .call()) {
+                .call();
 	        // Note: the call() returns an opened repository already which needs to be closed to avoid file handle leaks!
 
             // workaround for https://bugs.eclipse.org/bugs/show_bug.cgi?id=474093
 	        result.getRepository().close();
-        }
+        } catch (Exception e) {
+        	e.printStackTrace();
+		} finally {
+			if (result != null && result.getRepository() != null)
+				result.getRepository().close();
+		}
     }
 }

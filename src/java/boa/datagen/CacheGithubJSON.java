@@ -15,7 +15,7 @@ public class CacheGithubJSON {
 	
 	public static void main(String[] args) {
 		final long startTime = System.currentTimeMillis();
-		HashMap<String, byte[]> repos = new HashMap<>();
+		HashMap<String, byte[]> repos = new HashMap<String, byte[]>();
 		File dir = new File(jsonPath + "/repos");
 		for (File file : dir.listFiles()) {
 			if (file.getName().endsWith(".json")) {
