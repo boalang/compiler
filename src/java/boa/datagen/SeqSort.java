@@ -37,6 +37,7 @@ import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
 import boa.datagen.util.FileIO;
+import boa.datagen.util.Properties;
 
 /**
  * @author hoan
@@ -125,19 +126,20 @@ public class SeqSort<K,V> extends Configured implements Tool {
 
 	public static void main(String[] args) throws IOException {
 		Configuration conf = new Configuration();
-		String base = "hdfs://boa-njt/";
-		conf.set("fs.default.name", base);
+//		String base = "hdfs://boa-njt/";
+//		conf.set("fs.default.name", base);
+		String base = Properties.getProperty("gh.json.cache.path", DefaultProperties.GH_JSON_CACHE_PATH);
 		FileSystem fs = FileSystem.get(conf);
 		
-		String inPath = "/tmprepcache/2015-07/";
+		String inPath = "/tmprepcache/";
 		StringBuilder sb = new StringBuilder();
-		FileStatus[] files = fs.listStatus(new Path(base + inPath));
+		FileStatus[] files = fs.listStatus(new Path(base));
 		for (int i = 0; i < files.length; i++) {
 			FileStatus file = files[i];
 			String name = file.getPath().getName();
 			if (name.startsWith("ast-") && name.endsWith(".seq")) {
 				try {
-					//ToolRunner.run(new Configuration(), new SeqSort(inPath + name, "/tmprepcache/2015-07-sorted/" + name), null);
+//					ToolRunner.run(new Configuration(), new SeqSort(inPath + name, "/tmprepcache/2015-07-sorted/" + name), null);
 					sb.append(name + "\n");
 				} catch (Throwable t) {
 					t.printStackTrace();

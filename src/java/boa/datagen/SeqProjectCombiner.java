@@ -31,6 +31,7 @@ import org.apache.hadoop.io.Text;
 
 import com.google.protobuf.CodedInputStream;
 
+import boa.datagen.util.Properties;
 import boa.types.Toplevel.Project;
 
 /**
@@ -41,13 +42,15 @@ public class SeqProjectCombiner {
 
 	public static void main(String[] args) throws IOException {
 		Configuration conf = new Configuration();
-		conf.set("fs.default.name", "hdfs://boa-njt/");
+//		conf.set("fs.default.name", "hdfs://boa-njt/");
 		FileSystem fileSystem = FileSystem.get(conf);
-		String base = conf.get("fs.default.name", "");
+//		String base = conf.get("fs.default.name", "");
+		String base = Properties.getProperty("gh.json.cache.path", DefaultProperties.GH_JSON_CACHE_PATH);
+		
 		
 		HashMap<String, String> sources = new HashMap<String, String>();
 		HashSet<String> marks = new HashSet<String>();
-		FileStatus[] files = fileSystem.listStatus(new Path(base + "tmprepcache/2015-07"));
+		FileStatus[] files = fileSystem.listStatus(new Path(base + "tmprepcache"));
 		for (int i = 0; i < files.length; i++) {
 			FileStatus file = files[i];
 			String name = file.getPath().getName();
@@ -72,7 +75,7 @@ public class SeqProjectCombiner {
 				r.close();
 			}
 		}
-		SequenceFile.Writer w = SequenceFile.createWriter(fileSystem, conf, new Path(base + "repcache/2015-07/projects.seq"), Text.class, BytesWritable.class);
+		SequenceFile.Writer w = SequenceFile.createWriter(fileSystem, conf, new Path(base+ "/projects.seq"), Text.class, BytesWritable.class);
 		for (int i = 0; i < files.length; i++) {
 			FileStatus file = files[i];
 			String name = file.getPath().getName();
