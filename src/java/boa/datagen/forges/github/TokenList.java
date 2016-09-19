@@ -31,8 +31,10 @@ public class TokenList {
             System.out.println("Trying token: "+ tokenNumber);
             mc = new MetadataCacher(url, token.getUserName(), token.getToken());
             if(mc.authenticate()) {
-                this.lastUsedToken = tokenNumber;
-                System.out.print("Returning Token: "+ tokenNumber);
+                if(this.lastUsedToken != tokenNumber){
+                    this.lastUsedToken = tokenNumber;
+                    System.out.print("now using token: "+ tokenNumber);
+                }
                 return token;
             }
             tokenNumber++;
@@ -44,15 +46,46 @@ public class TokenList {
     public MetadataCacher getAuthenticCacher(String url) {
         MetadataCacher mc = null;
         int tokenNumber = 0;
-
         for(Token token: tokens){
+            System.out.println("Trying token: "+ tokenNumber);
             mc = new MetadataCacher(url, token.getUserName(), token.getToken());
-            tokenNumber++;
             if(mc.authenticate()) {
-                System.out.print("Last used token: "+ tokenNumber);
+                if(this.lastUsedToken != tokenNumber){
+                    this.lastUsedToken = tokenNumber;
+                    System.out.print("now using token: "+ tokenNumber);
+                }
                 return mc;
             }
+            tokenNumber++;
         }
+        throw new IllegalArgumentException();
+    }
+
+    public MetadataLangCacher getAuthenticLangCacher(String url) throws  IllegalArgumentException{
+        MetadataLangCacher mc = null;
+        int tokenNumber = 0;
+        for(Token token: tokens){
+            System.out.println("trying: "+ tokenNumber);
+            mc = new MetadataLangCacher(url, token.getUserName(), token.getToken());
+            int result = mc.authenticate();
+            int response = mc.getResponseCode();
+            mc.getResponse();
+           // System.out.println(mc.getContent());
+            if(response == 403 || response == 404){
+                // error in url
+            	System.out.println(url + ": is not valid");
+                return null;
+            }else if(response/100 == 2) {
+            	// successful
+                    if(this.lastUsedToken != tokenNumber){
+                        System.out.println("Now using Token: "+ tokenNumber);
+                        this.lastUsedToken = tokenNumber;
+                    }
+                    return mc;
+                }
+            tokenNumber++;
+        }
+        // none of the tokens authenticated
         throw new IllegalArgumentException();
     }
 }
