@@ -1,17 +1,15 @@
 package boa.datagen.forges.github;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Scanner;
-
+import boa.datagen.util.FileIO;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONException;
 import net.sf.json.JSONSerializer;
-import boa.datagen.util.FileIO;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Scanner;
 
 public class GetGithubRepoLanguagesMulti {
 	private static final int WINDOW = 1000000;

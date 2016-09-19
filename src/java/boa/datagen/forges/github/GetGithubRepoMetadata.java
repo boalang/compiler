@@ -1,9 +1,9 @@
 package boa.datagen.forges.github;
 
+import boa.datagen.util.FileIO;
+
 import java.io.File;
 import java.util.Scanner;
-
-import boa.datagen.util.FileIO;
 
 public class GetGithubRepoMetadata {
 

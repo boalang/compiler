@@ -1,10 +1,10 @@
 package boa.datagen.forges.github;
 
+import boa.datagen.util.FileIO;
+
 import java.io.File;
 import java.util.Arrays;
 import java.util.Comparator;
-
-import boa.datagen.util.FileIO;
 
 
 /**

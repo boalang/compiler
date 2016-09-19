@@ -1,10 +1,15 @@
 package boa.datagen.forges.github;
 
 import boa.datagen.util.FileIO;
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import org.json.JSONArray;
+
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.concurrent.Callable;
 
 /**
  * Created by nmtiwari on 9/15/16. This class reads repository names from a
@@ -12,9 +17,10 @@ import java.io.FileNotFoundException;
  * directory. Point to note here is that repository names are read from github's
  * repository metadata json files.
  */
-public class GithubRepositoryLanguageDownloader {
+public class LanguageDownloadWorker implements Runnable{
 	private TokenList tokens;
 	private String repository_location;
+	private final String output;
 	JSONArray javarepos;
 	JSONArray jsrepos;
 	JSONArray phprepos;
@@ -27,50 +33,34 @@ public class GithubRepositoryLanguageDownloader {
 	int scalaCounter = 1;
 	int other = 0;
 	final static int RECORDS_PER_FILE = 100;
+	final int startFileNumber;
+	final int endFileNumber;
 
-	public GithubRepositoryLanguageDownloader(String repoPath, String tokenFile) {
-		this.tokens = new TokenList(tokenFile);
+	public LanguageDownloadWorker(String repoPath, String output,  TokenList tokenList, int start, int end) {
+		this.output = output;
+		this.tokens = tokenList;
 		this.repository_location = repoPath;
 		this.javarepos = new JSONArray();
 		this.jsrepos = new JSONArray();
 		this.phprepos = new JSONArray();
 		this.scalarepos = new JSONArray();
+		this.startFileNumber = start;
+		this.endFileNumber = end;
 	}
 
-	public static void main(String[] args) {
-		if (args.length < 3) {
-			throw new IllegalArgumentException();
-		}
-		File outputDir = new File(args[1] + "/java");
-		if (!outputDir.exists()) {
-			outputDir.mkdirs();
-		}
-		outputDir = new File(args[1] + "/js");
-		if (!outputDir.exists()) {
-			outputDir.mkdirs();
-		}
-		outputDir = new File(args[1] + "/php");
-		if (!outputDir.exists()) {
-			outputDir.mkdirs();
-		}
-		outputDir = new File(args[1] + "/scala");
-		if (!outputDir.exists()) {
-			outputDir.mkdirs();
-		}
 
-		if (args.length == 4) {
-			GithubRepositoryLanguageDownloader downloader = new GithubRepositoryLanguageDownloader(args[0], args[3]);
-			downloader.downloadLangForRepoIn(args[0], args[1], Integer.parseInt(args[2]));
-		} else {
-			GithubRepositoryLanguageDownloader downloader = new GithubRepositoryLanguageDownloader(args[0], args[4]);
-			try {
-				downloader.downloadLangForRepoIn(args[0], args[1], Integer.parseInt(args[2]),
-						Integer.parseInt(args[3]));
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			}
-		}
+	public LanguageDownloadWorker(String repoPath, String output, TokenList tokenList, int start) {
+		this.output = output;
+		this.tokens = tokenList;
+		this.repository_location = repoPath;
+		this.javarepos = new JSONArray();
+		this.jsrepos = new JSONArray();
+		this.phprepos = new JSONArray();
+		this.scalarepos = new JSONArray();
+		this.startFileNumber = start;
+		this.endFileNumber = -1;
 	}
+
 
 	/**
 	 *
@@ -124,44 +114,49 @@ public class GithubRepositoryLanguageDownloader {
 		}
 	}
 
-	public void downloadLangForRepoIn(String path, String output, int from, int to) throws FileNotFoundException {
-		System.out.println("Responsible for processing: " + from + " and " + to);
-		String fileHeader = path + "/page-";
+	public void downloadLangForRepoIn(int from, int to) throws FileNotFoundException {
+		System.out.println(Thread.currentThread().getId() + " Responsible for processing: " + from + " and " + to);
+		String fileHeader = this.repository_location + "/page-";
 		String fileFooter = ".json";
 		int pageNumber = from;
+		Token tok = this.tokens.getAuthenticatedToken(Thread.currentThread().getId());
 		while (pageNumber <= to) {
 			File repoFile = new File(fileHeader + pageNumber + fileFooter);
 			String content = FileIO.readFileContents(repoFile);
 			Gson parser = new Gson();
 			JsonArray repos = parser.fromJson(content, JsonElement.class).getAsJsonArray();
-			MetadataLangCacher mc = null;
+			MetadataCacher mc = null;
 			int size = repos.size();
 			for (int i = 0; i < size; i++) {
 				JsonObject repo = repos.get(i).getAsJsonObject();
-				try {
-					String detail = repo.get("full_name").getAsString();
-					mc = this.tokens
-							.getAuthenticLangCacher(this.language_url_header + detail + this.language_url_footer);
-				} catch (IllegalArgumentException e) {
-					System.out.println(" All Token Exhausted and code is stopping for page: " + pageNumber);
-					e.printStackTrace();
-					this.writeRemainingRepos(output);
-					return;
+				String langurl = this.language_url_header + repo.get("full_name").getAsString() + this.language_url_footer;
+				if(tok.getNumberOfRemainingLimit() <= 0){
+					System.out.print(Thread.currentThread().getId() + " freeing : " + tok.getId());
+					tok.reset(this.tokens);
+					tok = this.tokens.getAuthenticatedToken(Thread.currentThread().getId());
 				}
-				if (mc == null) {
-					System.out.println(repo.get("full_name").getAsString() + " is not a valid url");
-					continue;
+				mc = new MetadataCacher(langurl, tok.getUserName(), tok.getToken());
+				boolean authnticationResult = mc.authenticate();
+				if(authnticationResult){
+					mc.getResponse();
+					String pageContent = mc.getContent();
+					repo.addProperty("language_list", pageContent);
+					addRepoInReleventLangList(pageContent, output, repo);
+					tok.setLastResponseCode(mc.getResponseCode());
+					tok.setnumberOfRemainingLimit(mc.getNumberOfRemainingLimit());
+					tok.setResetTime(mc.getLimitResetTime());
+				}else{
+					final int responsecode = mc.getResponseCode();
+					if(responsecode/100 == 4){
+						continue;
+					}
 				}
-				//mc.getResponseJson();
-				String pageContent = mc.getContent();
-				repo.addProperty("language_list", pageContent);
-				addRepoInReleventLangList(pageContent, output, repo);
 			}
 			pageNumber++;
-			System.out.println("processing: " + pageNumber);
+			System.out.println(Thread.currentThread().getId() + " processing: " + pageNumber);
 		}
 		this.writeRemainingRepos(output);
-		System.out.print("others: " + this.other);
+		System.out.print(Thread.currentThread().getId() + "others: " + this.other);
 	}
 
 
@@ -170,33 +165,33 @@ public class GithubRepositoryLanguageDownloader {
 		if (pageContent.contains("\"Java\":")) {
 			this.javarepos.put(this.javarepos.length(), repo);
 			if (this.javarepos.length() % RECORDS_PER_FILE == 0) {
-				fileToWriteJson = new File(output + "/java/page-" + javaCounter + ".json");
+				fileToWriteJson = new File(output + "/java/Thread- "+ Thread.currentThread().getId() + "-page-" + javaCounter + ".json");
 				FileIO.writeFileContents(fileToWriteJson, this.javarepos.toString());
-				System.out.println("java " + javaCounter++);
+				System.out.println(Thread.currentThread().getId() + " java " + javaCounter++);
                 this.javarepos = new JSONArray();
 			}
 		} else if (pageContent.contains("\"JavaScript\":")) {
 			this.jsrepos.put(this.jsrepos.length(), repo);
 			if (this.jsrepos.length() % RECORDS_PER_FILE == 0) {
-				fileToWriteJson = new File(output + "/js/page-" + jsCounter + ".json");
+				fileToWriteJson = new File(output + "/js/Thread- "+ Thread.currentThread().getId() + "-page-" + jsCounter + ".json");
 				FileIO.writeFileContents(fileToWriteJson, this.jsrepos.toString());
-				System.out.println("js " + jsCounter++);
+				System.out.println(Thread.currentThread().getId() + " js " + jsCounter++);
                 this.jsrepos = new JSONArray();
 			}
 		} else if (pageContent.contains("\"PhP\":")) {
 			this.phprepos.put(this.phprepos.length(), repo);
 			if (this.phprepos.length() % RECORDS_PER_FILE == 0) {
-				fileToWriteJson = new File(output + "/php/page-" + phpCounter + ".json");
+				fileToWriteJson = new File(output + "/php/Thread- "+ Thread.currentThread().getId() + "-page-"  + phpCounter + ".json");
 				FileIO.writeFileContents(fileToWriteJson, this.phprepos.toString());
-				System.out.println("php " + phpCounter++);
+				System.out.println(Thread.currentThread().getId() + " php " + phpCounter++);
                 this.phprepos = new JSONArray();
 			}
 		} else if (pageContent.contains("\"Scala\":")) {
 			this.scalarepos.put(this.scalarepos.length(), repo);
 			if (this.scalarepos.length() % RECORDS_PER_FILE == 0) {
-				fileToWriteJson = new File(output + "/scala/page-" + scalaCounter + ".json");
+				fileToWriteJson = new File(output + "/scala/Thread- "+ Thread.currentThread().getId() + "-page-"  + scalaCounter + ".json");
 				FileIO.writeFileContents(fileToWriteJson, this.scalarepos.toString());
-				System.out.println(" scala: " + scalaCounter++);
+				System.out.println(Thread.currentThread().getId() + " scala: " + scalaCounter++);
                 this.scalarepos = new JSONArray();
 			}
 		} else {
@@ -207,25 +202,34 @@ public class GithubRepositoryLanguageDownloader {
 	public void writeRemainingRepos(String output) {
 		File fileToWriteJson = null;
 		if (this.javarepos.length() > 0) {
-			fileToWriteJson = new File(output + "/java/page-" + javaCounter + ".json");
+			fileToWriteJson = new File(output + "/java/Thread- "+ Thread.currentThread().getId() + "-page-" + javaCounter + ".json");
 			FileIO.writeFileContents(fileToWriteJson, this.javarepos.toString());
-			System.out.println("java " + javaCounter++);
+			System.out.println(Thread.currentThread().getId() + " java " + javaCounter++);
 		}
 		if (this.jsrepos.length() > 0) {
-			fileToWriteJson = new File(output + "/js/page-" + jsCounter + ".json");
+			fileToWriteJson = new File(output + "/js/Thread- "+ Thread.currentThread().getId() + "-page-" + jsCounter + ".json");
 			FileIO.writeFileContents(fileToWriteJson, this.jsrepos.toString());
-			System.out.println("js " + jsCounter++);
+			System.out.println(Thread.currentThread().getId() + " js " + jsCounter++);
 		}
 		if (this.phprepos.length() > 0) {
-			fileToWriteJson = new File(output + "/php/page-" + phpCounter + ".json");
+			fileToWriteJson = new File(output + "/php/Thread- "+ Thread.currentThread().getId() + "-page-" + phpCounter + ".json");
 			FileIO.writeFileContents(fileToWriteJson, this.phprepos.toString());
-			System.out.println("php " + phpCounter++);
+			System.out.println(Thread.currentThread().getId() + " php " + phpCounter++);
 		}
 		if (this.scalarepos.length() > 0) {
-			fileToWriteJson = new File(output + "/scala/page-" + scalaCounter + ".json");
+			fileToWriteJson = new File(output + "/scala/Thread- "+ Thread.currentThread().getId() + "-page-" + scalaCounter + ".json");
 			FileIO.writeFileContents(fileToWriteJson, this.scalarepos.toString());
-			System.out.println(" scala:  " + scalaCounter++);
+			System.out.println(Thread.currentThread().getId() + " scala:  " + scalaCounter++);
 		}
-		System.out.print("others: " + this.other);
+		System.out.println("Thread- "+ Thread.currentThread().getId() + " others: " + this.other);
+	}
+
+	@Override
+	public void run(){
+		try {
+			this.downloadLangForRepoIn(this.startFileNumber, this.endFileNumber);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 }
