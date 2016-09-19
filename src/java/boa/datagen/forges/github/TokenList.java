@@ -12,7 +12,7 @@ import java.util.TimerTask;
 public class TokenList {
     //    private ArrayList<Token> tokens = new ArrayList();
     private int lastUsedToken = 0;
-    public PriorityQueue<Token> tokens = new PriorityQueue<>();
+    public PriorityQueue<Token> tokens = new PriorityQueue<Token>();
 
     public TokenList(String path) {
         String tokenDetails = FileIO.readFileContents(new File(path));
