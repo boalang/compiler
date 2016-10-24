@@ -1,0 +1,5 @@
+o: output sum of int;
+o << 0;
+
+s: stack of int;
+push(s, s);
