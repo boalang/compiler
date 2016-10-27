@@ -1,0 +1,19 @@
+package boa.types;
+
+option optimize_for = SPEED;
+
+message Traversal {
+	enum Direction {
+		BACKWARD = 1; 
+		FORWARD = 2;
+	}
+	enum TraversalKind {
+		DEEP_ITERATIVE = 3;
+		SHALLOW_ITERATIVE = 4;  
+		MIX = 5;  
+		DFS = 6;
+		POSTORDER = 7;
+		WORKLIST = 8;
+		HYBRID = 9;
+	}
+}

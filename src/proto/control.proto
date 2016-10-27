@@ -1,0 +1,36 @@
+package boa.types;
+
+import "ast.proto";
+
+option optimize_for = SPEED;
+
+message CFG {
+	repeated CFGNode nodes = 1;
+	repeated CFGEdge edges = 2; // n x n matrix stored as 1D-array
+}
+
+message CFGNode {
+	// nodetypes are intended to characterize analyses
+	enum CFGNodeType {
+		ENTRY = 1; // indicates start and end nodes
+		OTHER = 2; // sequential
+		METHOD = 3; // method calls, leading to external cfg
+		CONTROL = 4; // evaluates predicate
+	}
+	required int32 id = 1;
+	required CFGNodeType kind = 2;
+	optional Statement statement = 3; // nodes are created for statements and their expressions as well
+  	optional Expression expression = 4; // optional because these fields will not be stored.
+}
+
+message CFGEdge {
+	enum CFGEdgeLabel {
+		NIL = 1; // no edge
+		DEFAULT = 2; // sequential
+		TRUE = 3; // true branch
+		FALSE = 4; // false branch
+		BACKEDGE = 5; // loop backedge
+		EXITEDGE = 6; // loop exitedge
+	}
+	required CFGEdgeLabel label = 1;
+}
