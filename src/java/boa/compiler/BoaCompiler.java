@@ -1,6 +1,7 @@
 /*
- * Copyright 2015, Anthony Urso, Hridesh Rajan, Robert Dyer,
- *                 and Iowa State University of Science and Technology
+ * Copyright 2016, Anthony Urso, Hridesh Rajan, Robert Dyer, Neha Bhide
+ *                 Iowa State University of Science and Technology
+ *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,13 +48,19 @@ import org.scannotation.ClasspathUrlFinder;
 
 import boa.compiler.ast.Program;
 import boa.compiler.ast.Start;
+import boa.compiler.transforms.InheritedAttributeTransformer;
 import boa.compiler.transforms.LocalAggregationTransformer;
 import boa.compiler.transforms.VisitorMergingTransformer;
 import boa.compiler.transforms.VisitorOptimizingTransformer;
 import boa.compiler.visitors.AbstractCodeGeneratingVisitor;
+import boa.compiler.visitors.ASTPrintingVisitor;
 import boa.compiler.visitors.CodeGeneratingVisitor;
+import boa.compiler.visitors.PrettyPrintVisitor;
 import boa.compiler.visitors.TaskClassifyingVisitor;
 import boa.compiler.visitors.TypeCheckingVisitor;
+import boa.compiler.listeners.BoaErrorListener;
+import boa.compiler.listeners.LexerErrorListener;
+import boa.compiler.listeners.ParserErrorListener;
 
 import org.antlr.v4.runtime.ANTLRFileStream;
 import org.antlr.v4.runtime.BaseErrorListener;
@@ -73,129 +80,19 @@ import boa.parser.BoaLexer;
  *
  * @author anthonyu
  * @author rdyer
+ * @author nbhide
  */
 public class BoaCompiler {
+	
 	private static Logger LOG = Logger.getLogger(BoaCompiler.class);
-
-	public abstract static class BoaErrorListener extends BaseErrorListener {
-		public boolean hasError = false;
-
-		public void error(final String kind, final TokenSource tokens, final Object offendingSymbol, final int line, final int charPositionInLine, final int length, final String msg, final Exception e) {
-			hasError = true;
-
-			final String filename = tokens.getSourceName();
-
-			System.err.print(filename.substring(filename.lastIndexOf(File.separator) + 1) + ": compilation failed: ");
-			System.err.print("Encountered " + kind + " error ");
-			if (offendingSymbol != null)
-				System.err.print("\"" + offendingSymbol + "\" ");
-			System.err.println("at line " + line + ", column " + charPositionInLine + ". " + msg);
-
-			underlineError(tokens, (Token)offendingSymbol, line, charPositionInLine, length);
-
-			if (e != null)
-				for (final StackTraceElement st : e.getStackTrace())
-					System.err.println("\tat " + st);
-			else
-				System.err.println("\tat unknown stack");
-		}
-		private void underlineError(final TokenSource tokens, final Token offendingToken, final int line, final int charPositionInLine, final int length) {
-			final String input = tokens.getInputStream().toString() + "\n ";
-			final String[] lines = input.split("\n");
-			final String errorLine = lines[line - 1];
-			System.err.println(errorLine.replaceAll("\t", "    "));
-
-			int stop = Math.min(charPositionInLine, errorLine.length());
-			for (int i = 0; i < stop; i++)
-				if (errorLine.charAt(i) == '\t')
-					System.err.print("    ");
-				else
-					System.err.print(" ");
-
-			int stop2 = Math.min(stop + length, errorLine.length());
-			for (int i = stop; i < stop2; i++)
-				if (errorLine.charAt(i) == '\t')
-					System.err.print("^^^^");
-				else
-					System.err.print("^");
-
-			System.err.println();
-		}
-	}
-
-	public static class LexerErrorListener extends BoaErrorListener {
-		@Override
-		public void syntaxError(final Recognizer<?, ?> recognizer, final Object offendingSymbol, final int line, final int charPositionInLine, final String msg, final RecognitionException e) {
-			error("lexer", (BoaLexer)recognizer, offendingSymbol, line, charPositionInLine, 1, msg, e);
-		}
-	}
-
-	public static class ParseErrorListener extends BoaErrorListener {
-		@Override
-		public void syntaxError(final Recognizer<?, ?> recognizer, final Object offendingSymbol, final int line, final int charPositionInLine, final String msg, final RecognitionException e) {
-			final Token offendingToken = (Token)offendingSymbol;
-			error("parser", ((CommonTokenStream)recognizer.getInputStream()).getTokenSource(), offendingSymbol, line, charPositionInLine, offendingToken.getStopIndex() - offendingToken.getStartIndex() + 1, msg, e);
-		}
-	}
-
+	
 	public static void main(final String[] args) throws IOException {
-		// parse the command line options
-		final Options options = new Options();
-		options.addOption("l", "libs", true, "extra jars (functions/aggregators) to be compiled in");
-		options.addOption("i", "in", true, "file(s) to be compiled (comma-separated list)");
-		options.addOption("o", "out", true, "the name of the resulting jar");
-		options.addOption("nv", "no-visitor-fusion", false, "disable visitor fusion");
-		options.addOption("v", "visitors-fused", true, "number of visitors to fuse");
-		options.addOption("n", "name", true, "the name of the generated main class");
-
-		final CommandLine cl;
-		try {
-			cl = new PosixParser().parse(options, args);
-		} catch (final org.apache.commons.cli.ParseException e) {
-			System.err.println(e.getMessage());
-			new HelpFormatter().printHelp("BoaCompiler", options);
-
-			return;
-		}
-
-		// get the filename of the program we will be compiling
-		final ArrayList<File> inputFiles = new ArrayList<File>();
-		if (cl.hasOption('i')) {
-			final String[] inputPaths = cl.getOptionValue('i').split(",");
-
-			for (final String s : inputPaths) {
-				final File f = new File(s);
-				if (!f.exists())
-					System.err.println("File '" + s + "' does not exist, skipping");
-				else
-					inputFiles.add(new File(s));
-			}
-		}
-
-		if (inputFiles.size() == 0) {
-			System.err.println("no valid input files found - did you use the --in option?");
-			new HelpFormatter().printHelp("BoaCompiler", options);
-
-			return;
-		}
-
+		CommandLine cl = processCommandLineOptions(args);
+		if(cl==null) return;
+		final ArrayList<File> inputFiles = BoaCompiler.inputFiles;
 
 		// get the name of the generated class
-		final String className;
-		if (cl.hasOption('n')) {
-			className = cl.getOptionValue('n');
-		} else {
-			String s = "";
-			for (final File f : inputFiles) {
-				if (s.length() != 0)
-					s += "_";
-				if (f.getName().indexOf('.') != -1)
-					s += f.getName().substring(0, f.getName().lastIndexOf('.'));
-				else
-					s += f.getName();
-			}
-			className = pascalCase(s);
-		}
+		final String className = getGeneratedClass(cl);
 
 		// get the filename of the jar we will be writing
 		final String jarName;
@@ -244,30 +141,14 @@ public class BoaCompiler {
 						}
 					});
 
-					final BoaErrorListener parseErrorListener = new ParseErrorListener();
-
-					parser.setBuildParseTree(false);
-					parser.getInterpreter().setPredictionMode(PredictionMode.SLL);
-
-					Start p;
-					try {
-						p = parser.start().ast;
-					} catch (final ParseCancellationException e) {
-						// fall-back to LL mode parsing if SLL fails
-						tokens.reset();
-						parser.reset();
-
-						parser.removeErrorListeners();
-						parser.addErrorListener(parseErrorListener);
-						parser.getInterpreter().setPredictionMode(PredictionMode.LL);
-
-						p = parser.start().ast;
-					}
+					final BoaErrorListener parserErrorListener = new ParserErrorListener();
+					final Start p = parse(tokens, parser, parserErrorListener);
+					if (cl.hasOption("ast")) new ASTPrintingVisitor().start(p);
 
 					final String jobName = "" + i;
 
 					try {
-						if (!parseErrorListener.hasError) {
+						if (!parserErrorListener.hasError) {
 							new TypeCheckingVisitor().start(p, new SymbolTable());
 
 							final TaskClassifyingVisitor simpleVisitor = new TaskClassifyingVisitor();
@@ -275,6 +156,8 @@ public class BoaCompiler {
 
 							LOG.info(f.getName() + ": task complexity: " + (!simpleVisitor.isComplex() ? "simple" : "complex"));
 							isSimple &= !simpleVisitor.isComplex();
+							
+							new InheritedAttributeTransformer().start(p);
 
 							new LocalAggregationTransformer().start(p);
 
@@ -283,6 +166,8 @@ public class BoaCompiler {
 							if (!simpleVisitor.isComplex() || cl.hasOption("nv") || inputFiles.size() == 1) {
 								new VisitorOptimizingTransformer().start(p);
 
+								if (cl.hasOption("pp")) new PrettyPrintVisitor().start(p);
+								if (cl.hasOption("ast")) new ASTPrintingVisitor().start(p);
 								final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(jobName);
 								cg.start(p);
 								jobs.add(cg.getCode());
@@ -296,7 +181,7 @@ public class BoaCompiler {
 							}
 						}
 					} catch (final TypeCheckException e) {
-						parseErrorListener.error("typecheck", lexer, null, e.n.beginLine, e.n.beginColumn, e.n2.endColumn - e.n.beginColumn + 1, e.getMessage(), e);
+						parserErrorListener.error("typecheck", lexer, null, e.n.beginLine, e.n.beginColumn, e.n2.endColumn - e.n.beginColumn + 1, e.getMessage(), e);
 					}
 				} catch (final Exception e) {
 					System.err.print(f.getName() + ": compilation failed: ");
@@ -315,6 +200,8 @@ public class BoaCompiler {
 					for (final Program p : new VisitorMergingTransformer().mergePrograms(visitorPrograms, maxVisitors)) {
 						new VisitorOptimizingTransformer().start(p);
 
+						if (cl.hasOption("pp")) new PrettyPrintVisitor().start(p);
+						if (cl.hasOption("ast")) new ASTPrintingVisitor().start(p);
 						final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(p.jobName);
 						cg.start(p);
 						jobs.add(cg.getCode());
@@ -328,6 +215,8 @@ public class BoaCompiler {
 					for (final Program p : visitorPrograms) {
 						new VisitorOptimizingTransformer().start(p);
 
+						if (cl.hasOption("pp")) new PrettyPrintVisitor().start(p);
+						if (cl.hasOption("ast")) new ASTPrintingVisitor().start(p);
 						final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(p.jobName);
 						cg.start(p);
 						jobs.add(cg.getCode());
@@ -354,20 +243,141 @@ public class BoaCompiler {
 			o.close();
 		}
 
+		compileGeneratedSrc(cl, jarName, outputRoot, outputFile);
+	}
+	
+	public static void parseOnly(final String[] args) throws IOException {
+		CommandLine cl = processParseCommandLineOptions(args);
+		if(cl==null) return;
+		final ArrayList<File> inputFiles = BoaCompiler.inputFiles;
+
+		// find custom libs to load
+		final List<URL> libs = new ArrayList<URL>();
+		if (cl.hasOption('l'))
+			for (final String lib : cl.getOptionValues('l'))
+				libs.add(new File(lib).toURI().toURL());
+
+		final List<String> jobnames = new ArrayList<String>();
+		final List<String> jobs = new ArrayList<String>();
+		boolean isSimple = true;
+
+		final List<Program> visitorPrograms = new ArrayList<Program>();
+
+		SymbolTable.initialize(libs);
+
+		for (int i = 0; i < inputFiles.size(); i++) {
+			final File f = inputFiles.get(i);
+			try {
+				final BoaLexer lexer = new BoaLexer(new ANTLRFileStream(f.getAbsolutePath()));
+				lexer.removeErrorListeners();
+				lexer.addErrorListener(new LexerErrorListener());
+
+				final CommonTokenStream tokens = new CommonTokenStream(lexer);
+				final BoaParser parser = new BoaParser(tokens);
+				parser.removeErrorListeners();
+				parser.addErrorListener(new BaseErrorListener() {
+					@Override
+					public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine, String msg, RecognitionException e) throws ParseCancellationException {
+						throw new ParseCancellationException(e);
+					}
+				});
+
+				final BoaErrorListener parserErrorListener = new ParserErrorListener();
+				final Start p = parse(tokens, parser, parserErrorListener);
+				if (cl.hasOption("ast")) new ASTPrintingVisitor().start(p);
+
+				final String jobName = "" + i;
+
+				try {
+					if (!parserErrorListener.hasError) {
+						new TypeCheckingVisitor().start(p, new SymbolTable());
+
+						final TaskClassifyingVisitor simpleVisitor = new TaskClassifyingVisitor();
+						simpleVisitor.start(p);
+
+						LOG.info(f.getName() + ": task complexity: " + (!simpleVisitor.isComplex() ? "simple" : "complex"));
+						isSimple &= !simpleVisitor.isComplex();
+
+						new InheritedAttributeTransformer().start(p);
+
+						new LocalAggregationTransformer().start(p);
+
+						// if a job has no visitor, let it have its own method
+						// also let jobs have own methods if visitor merging is disabled
+						if (!simpleVisitor.isComplex() || cl.hasOption("nv") || inputFiles.size() == 1) {
+							new VisitorOptimizingTransformer().start(p);
+
+							if (cl.hasOption("pp")) new PrettyPrintVisitor().start(p);
+							if (cl.hasOption("ast")) new ASTPrintingVisitor().start(p);
+							final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(jobName);
+							cg.start(p);
+							jobs.add(cg.getCode());
+
+							jobnames.add(jobName);
+						}
+						// if a job has visitors, fuse them all together into a single program
+						else {
+							p.getProgram().jobName = jobName;
+							visitorPrograms.add(p.getProgram());
+						}
+					}
+				} catch (final TypeCheckException e) {
+					parserErrorListener.error("typecheck", lexer, null, e.n.beginLine, e.n.beginColumn, e.n2.endColumn - e.n.beginColumn + 1, e.getMessage(), e);
+				}
+			} catch (final Exception e) {
+				System.err.print(f.getName() + ": parsing failed: ");
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	private static Start parse(final CommonTokenStream tokens,
+			final BoaParser parser,
+			final BoaErrorListener parserErrorListener) {
+
+		parser.setBuildParseTree(false);
+		parser.getInterpreter().setPredictionMode(PredictionMode.SLL);
+
+		try {
+			return parser.start().ast;
+		} catch (final ParseCancellationException e) {
+			// fall-back to LL mode parsing if SLL fails
+			tokens.reset();
+			parser.reset();
+
+			parser.removeErrorListeners();
+			parser.addErrorListener(parserErrorListener);
+			parser.getInterpreter().setPredictionMode(PredictionMode.LL);
+
+			return parser.start().ast;
+		}
+	}
+
+	private static void compileGeneratedSrc(final CommandLine cl,
+			final String jarName, final File outputRoot, final File outputFile)
+					throws RuntimeException, IOException, FileNotFoundException {
 		// compile the generated .java file
 		final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+		if (compiler == null)
+			throw new RuntimeException("Could not get javac - are you running the Boa compiler with a JDK or a JRE?");
 		LOG.info("compiling: " + outputFile);
 		LOG.info("classpath: " + System.getProperty("java.class.path"));
 		if (compiler.run(null, null, null, "-source", "5", "-target", "5", "-cp", System.getProperty("java.class.path"), outputFile.toString()) != 0)
 			throw new RuntimeException("compile failed");
 
-		// find the location of the jar this class is in
-		final String path = ClasspathUrlFinder.findClassBase(BoaCompiler.class).getPath();
-		// find the location of the compiler distribution
-		final File root = new File(path.substring(path.indexOf(':') + 1, path.indexOf('!'))).getParentFile();
-
 		final List<File> libJars = new ArrayList<File>();
-		libJars.add(new File(root, "boa-runtime.jar"));
+
+		if (cl.hasOption('j')) {
+			libJars.add(new File(cl.getOptionValue('j')));
+		} else {
+			// find the location of the jar this class is in
+			final String path = ClasspathUrlFinder.findClassBase(BoaCompiler.class).getPath();
+			// find the location of the compiler distribution
+			final File root = new File(path.substring(path.indexOf(':') + 1, path.indexOf('!'))).getParentFile();
+	
+			libJars.add(new File(root, "boa-runtime.jar"));
+		}
+
 		if (cl.hasOption('l'))
 			for (final String s : Arrays.asList(cl.getOptionValues('l')))
 				libJars.add(new File(s));
@@ -377,6 +387,112 @@ public class BoaCompiler {
 		delete(outputRoot);
 	}
 
+	static ArrayList<File> inputFiles = null; 
+	private static CommandLine processCommandLineOptions(final String[] args) {
+		// parse the command line options
+		final Options options = new Options();
+		options.addOption("l", "libs", true, "extra jars (functions/aggregators) to be compiled in");
+		options.addOption("i", "in", true, "file(s) to be compiled (comma-separated list)");
+		options.addOption("o", "out", true, "the name of the resulting jar");
+		options.addOption("j", "rtjar", true, "the path to the Boa runtime jar");
+		options.addOption("nv", "no-visitor-fusion", false, "disable visitor fusion");
+		options.addOption("v", "visitors-fused", true, "number of visitors to fuse");
+		options.addOption("n", "name", true, "the name of the generated main class");
+		options.addOption("ast", "ast-debug", false, "print the AST after parsing and before code generation (debug)");
+		options.addOption("pp", "pretty-print", false, "pretty print the AST before code generation (debug)");
+
+		final CommandLine cl;
+		try {
+			cl = new PosixParser().parse(options, args);
+		} catch (final org.apache.commons.cli.ParseException e) {
+			System.err.println(e.getMessage());
+			new HelpFormatter().printHelp("Boa Compiler", options);
+			return null;
+		}
+		
+		// get the filename of the program we will be compiling
+		inputFiles = new ArrayList<File>();
+		if (cl.hasOption('i')) {
+			final String[] inputPaths = cl.getOptionValue('i').split(",");
+
+			for (final String s : inputPaths) {
+				final File f = new File(s);
+				if (!f.exists())
+					System.err.println("File '" + s + "' does not exist, skipping");
+				else
+					inputFiles.add(new File(s));
+			}
+		}
+
+		if (inputFiles.size() == 0) {
+			System.err.println("no valid input files found - did you use the --in option?");
+			//new HelpFormatter().printHelp("BoaCompiler", options);
+			new HelpFormatter().printHelp("Boa Compiler", options);
+			return null;
+		}
+		
+		return cl;
+	}
+
+	private static CommandLine processParseCommandLineOptions(final String[] args) {
+		// parse the command line options
+		final Options options = new Options();
+		options.addOption("l", "libs", true, "extra jars (functions/aggregators) to be compiled in");
+		options.addOption("i", "in", true, "file(s) to be parsed (comma-separated list)");
+
+		final CommandLine cl;
+		try {
+			cl = new PosixParser().parse(options, args);
+		} catch (final org.apache.commons.cli.ParseException e) {
+			System.err.println(e.getMessage());
+			new HelpFormatter().printHelp("Boa Parser", options);
+			return null;
+		}
+		
+		// get the filename of the program we will be compiling
+		inputFiles = new ArrayList<File>();
+		if (cl.hasOption('i')) {
+			final String[] inputPaths = cl.getOptionValue('i').split(",");
+
+			for (final String s : inputPaths) {
+				final File f = new File(s);
+				if (!f.exists())
+					System.err.println("File '" + s + "' does not exist, skipping");
+				else
+					inputFiles.add(new File(s));
+			}
+		}
+
+		if (inputFiles.size() == 0) {
+			System.err.println("no valid input files found - did you use the --in option?");
+			//new HelpFormatter().printHelp("BoaCompiler", options);
+			new HelpFormatter().printHelp("Boa Parser", options);
+			return null;
+		}
+		
+		return cl;
+	}
+	
+	private static final String getGeneratedClass(final CommandLine cl) {
+		// get the name of the generated class
+		final String className;
+		if (cl.hasOption('n')) {
+			className = cl.getOptionValue('n');
+		} else {
+			String s = "";
+			for (final File f : inputFiles) {
+				if (s.length() != 0)
+					s += "_";
+				if (f.getName().indexOf('.') != -1)
+					s += f.getName().substring(0, f.getName().lastIndexOf('.'));
+				else
+					s += f.getName();
+			}
+			className = pascalCase(s);
+		}
+		return className;
+	}
+	
 	private static final void delete(final File f) throws IOException {
 		if (f.isDirectory())
 			for (final File g : f.listFiles())
