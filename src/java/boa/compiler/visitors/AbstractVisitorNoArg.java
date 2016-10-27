@@ -21,6 +21,7 @@ import boa.compiler.ast.expressions.*;
 import boa.compiler.ast.literals.*;
 import boa.compiler.ast.statements.*;
 import boa.compiler.ast.types.*;
+import boa.types.*;
 
 /**
  * An abstract visitor class that passes no arguments during the visit.
@@ -237,6 +238,36 @@ public abstract class AbstractVisitorNoArg {
 		n.getBody().accept(this);
 	}
 
+	public void visit(final TraverseStatement n) {
+		if (n.hasComponent())
+			n.getComponent().accept(this);
+		for (final Identifier id : n.getIdList())
+			id.accept(this);
+		if (n.hasCondition())
+			n.getCondition().accept(this);
+		if(n.getReturnType()!=null) {
+			n.getReturnType().accept(this);
+		}
+		for (final IfStatement ifStatement : n.getIfStatements())
+			ifStatement.accept(this);
+		if(n.hasBody())
+		n.getBody().accept(this);
+	}
+
+	public void visit(final FixPStatement n) {
+		n.getParam1().accept(this);
+		n.getParam2().accept(this);
+		for (final Identifier id : n.getIdList())
+			id.accept(this);
+		if (n.hasCondition())
+			n.getCondition().accept(this);
+		if(n.getReturnType()!=null) {
+			n.getReturnType().accept(this);
+		}
+		if(n.hasBody())
+		n.getBody().accept(this);
+	}
+	
 	public void visit(final WhileStatement n) {
 		n.getCondition().accept(this);
 		n.getBody().accept(this);
@@ -271,6 +302,16 @@ public abstract class AbstractVisitorNoArg {
 		n.getBody().accept(this);
 	}
 
+	public void visit(final TraversalExpression n) {
+		n.getType().accept(this);
+		n.getBody().accept(this);
+	}
+
+	public void visit(final FixPExpression n) {
+		n.getType().accept(this);
+		n.getBody().accept(this);
+	}
+	
 	//
 	// literals
 	//
@@ -338,5 +379,13 @@ public abstract class AbstractVisitorNoArg {
 	}
 
 	public void visit(final VisitorType n) {
+	}
+	
+	public void visit(final TraversalType n) {
+		if(n.getIndex()!=null)
+			n.getIndex().accept(this);
+	}
+
+	public void visit(final FixPType n) {
 	}
 }

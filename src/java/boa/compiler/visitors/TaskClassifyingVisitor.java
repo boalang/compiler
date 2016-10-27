@@ -23,7 +23,9 @@ import boa.compiler.ast.Call;
 import boa.compiler.ast.Factor;
 import boa.compiler.ast.Identifier;
 import boa.compiler.ast.expressions.VisitorExpression;
+import boa.compiler.ast.expressions.TraversalExpression;
 import boa.compiler.ast.statements.VisitStatement;
+import boa.compiler.ast.statements.TraverseStatement;
 
 import boa.types.BoaType;
 import boa.types.proto.ASTRootProtoTuple;
@@ -92,5 +94,29 @@ public class TaskClassifyingVisitor extends AbstractVisitorNoArg {
 		types.retainAll(astTypes);
 		if (!types.isEmpty())
 			complex = true;
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final TraversalExpression n) {
+		super.visit(n);
+
+		types.retainAll(astTypes);
+		if (!types.isEmpty())
+			complex = true;
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final TraverseStatement n) {
+		super.visit(n);
+
+		if (n.hasWildcard())
+			complex = true;
+		else if (n.hasComponent())
+			types.add(n.getComponent().getType().type.getClass());
+		else
+			for (final Identifier id : n.getIdList())
+				types.add(id.type.getClass());
 	}
 }
