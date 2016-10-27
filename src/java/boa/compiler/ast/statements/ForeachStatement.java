@@ -32,9 +32,18 @@ public class ForeachStatement extends Statement {
 	protected Component var;
 	protected Expression condition;
 	protected Block body;
+	protected boolean isEnhancedForEach = false;
 
 	public Component getVar() {
 		return var;
+	}
+
+	public void setIsEnhancedForEach(boolean isEnhancedForEach) {
+		this.isEnhancedForEach = isEnhancedForEach;
+	}
+
+	public boolean getIsEnhancedForEach() {
+		return this.isEnhancedForEach;
 	}
 
 	public Expression getCondition() {
@@ -86,6 +95,7 @@ public class ForeachStatement extends Statement {
 
 	public ForeachStatement clone() {
 		final ForeachStatement s = new ForeachStatement(var.clone(), condition.clone(), body.clone());
+		s.isEnhancedForEach = this.isEnhancedForEach;
 		copyFieldsTo(s);
 		return s;
 	}

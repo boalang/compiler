@@ -52,6 +52,14 @@ public class Block extends Statement {
 		return this;
 	}
 
+	public Block addStatement(final int index, final Statement s) {
+		if (s != null) {
+			s.setParent(this);
+			statements.add(index, s);
+		}
+		return this;
+	}
+	
 	/** {@inheritDoc} */
 	@Override
 	public <T,A> T accept(final AbstractVisitor<T,A> v, A arg) {

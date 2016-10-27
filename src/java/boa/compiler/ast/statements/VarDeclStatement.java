@@ -33,9 +33,18 @@ public class VarDeclStatement extends Statement {
 	protected Identifier identifier;
 	protected AbstractType t;
 	protected Expression initializer;
+	protected boolean init = false;
 
 	public boolean isStatic() {
 		return isStatic;
+	}
+
+	public void setInit(final boolean init) {
+		this.init = init;
+	}
+
+	public boolean getInit() {
+		return init;
 	}
 
 	public void setStatic(final boolean isStatic) {
