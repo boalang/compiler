@@ -20,6 +20,12 @@ ArrayType(type) ::= "new <type>[]"
 MapType(key, value) ::= "new java.util.HashMap\<<key>, <value>>()"
 StackType(value) ::= "new java.util.Stack\<<value>>()"
 SetType(value) ::= "new java.util.HashSet\<<value>>()"
+
+nested_ArrayType(type) ::= "<type>[]"
+nested_SetType(value) ::= "java.util.HashSet\<<value>>"
+nested_MapType(key, value) ::= "java.util.HashMap\<<key>, <value>>"
+nested_StackType(value) ::= "java.util.Stack\<<value>>"
+
 Block(statements) ::= <<
 {
 	<statements:{s | <s>}>}
@@ -38,7 +44,7 @@ else
 <elseStatement>
 <endif>
 >>
-WhenStatement(all, some, len, type, index, expression, statement) ::= <<
+WhenStatement(all, enhanced, some, len, type, index, expression, statement) ::= <<
 <if(all)>
 {
 	boolean _satisfied_<index> = true;
@@ -53,6 +59,7 @@ WhenStatement(all, some, len, type, index, expression, statement) ::= <<
 }
 
 <else>
+<if(!enhanced)>
 for (<type> ___<index> = 0; ___<index> \< <len>; ___<index>++)
 {
 	<if(some)>
@@ -69,7 +76,12 @@ for (<type> ___<index> = 0; ___<index> \< <len>; ___<index>++)
 	if (_stop_<index>) break;
 	<endif>
 }
-
+<else>
+for (<type> ___<index> : <expression>)
+{
+	<statement>
+}
+<endif>
 <endif>
 >>
 Expression(lhs, operators, operands) ::= "<lhs><operators,operands:{operator,operand|<\ ><operator> <operand>}>"
@@ -107,9 +119,9 @@ while (<condition>)
 
 >>
 FunctionType(name, ret, args, types) ::= <<
-private interface <name>
+private abstract class <name>
 {
-	<ret> invoke(<args,types:{arg,type|final <type> ___<arg>}; separator=", ">) throws Exception;
+	abstract <ret> invoke(<args,types:{arg,type|final <type> ___<arg>}; separator=", ">) throws Exception;
 }<\n>
 
 >>
@@ -122,6 +134,25 @@ new <type>()
 	<body>
 }
 >>
+
+TupleType(name, fields, types) ::= <<
+private class <name>
+{
+	<fields,types:{field,type|<type> ___<field>}; separator="; ">;
+	<name>( <fields,types:{field,type|<type> ___<field>}; separator=", "> ){
+		<fields,types:{field,type|this.___<field> = new <type>(___<field>)}; separator="; ">;
+	}
+	<name>( <name> tmp){
+		<fields,types:{field,type|this.___<field> = new <type>(tmp.___<field>)}; separator="; ">;
+	}
+	public <name> clone() {
+    		return new <name>(this);
+	}
+}<\n>
+>>
+
+Tuple(name, exprlist) ::= "new <name>(<exprlist>) <\n>"
+
 Visitor(staticDeclarations, body) ::= <<
 new boa.runtime.BoaAbstractVisitor()
 {
@@ -130,6 +161,24 @@ new boa.runtime.BoaAbstractVisitor()
 	<endif>
 	<body:{s | <s><\n>}>}
 >>
+Traversal(staticDeclarations, body, T) ::= "
+new boa.runtime.BoaAbstractTraversal\<<T>>()
+{
+	<if(staticDeclarations)>
+	<staticDeclarations>
+	<endif>
+	<body:{s | <s><\n>}>}
+"
+
+FixP(staticDeclarations, body, T) ::= "
+new boa.runtime.BoaAbstractFixP()
+{
+	<if(staticDeclarations)>
+	<staticDeclarations>
+	<endif>
+	<body:{s | <s><\n>}>}
+"
+
 VisitClause(ret, name, args, types, body) ::= <<
 <if(args)>
 <args,types:{arg,type|
@@ -144,3 +193,42 @@ protected <ret> <name>() throws Exception
 	<body>}<endif>
 >>
 Return(expr) ::= "return<if(expr)> <expr><endif>;<\n>"
+
+TraverseClause(ret, name, args, types, body) ::= <<
+<if(ret)>
+protected <ret> <name>(final <types> <args>) throws Exception
+{
+	<body>\}
+<else>
+protected void <name>(final <types> <args>) throws Exception
+{
+	<body>\}
+<endif>
+<if(ret)>
+@Override
+public void traverse(final boa.graphs.cfg.CFGNode node, boolean flag) throws Exception {
+		if(flag) {
+			currentResult = new <ret>(preTraverse(node));
+			outputMapObj.put(node.getId(), new <ret>(currentResult));
+		}
+		else
+			outputMapObj.put(node.getId(), new <ret>(preTraverse(node)));
+}
+<else>
+@Override
+public void traverse(final boa.graphs.cfg.CFGNode node, boolean flag) throws Exception {
+		preTraverse(node);
+}
+<endif>
+>>
+
+FixPClause(arg1, arg2, type, body) ::= "
+public boolean invoke1(final <type> <arg1>, final <type> <arg2>) throws Exception {
+		<body>
+}
+
+@Override
+public boolean invoke(Object <arg1>, Object <arg2>) throws Exception{
+		return invoke1((<type>)<arg1>, (<type>)<arg2>);
+}
+"
