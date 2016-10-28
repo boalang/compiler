@@ -131,8 +131,7 @@ public class SymbolTable {
 		globalFunctions = new FunctionTrie();
 
 		globalFunctions.addFunction("currentTime", new BoaFunction(new BoaInt(), new BoaType[] { }, "System.nanoTime()"));
-globalFunctions.addFunction("divide", new BoaFunction(new BoaFloat(), new BoaType[] { new BoaFloat(), new BoaFloat()}, "${0}/${1}"));
-globalFunctions.addFunction("currentNanoTime", new BoaFunction(new BoaFloat(), new BoaType[] { }, "System.currentTimeMillis()"));
+		globalFunctions.addFunction("divide", new BoaFunction(new BoaFloat(), new BoaType[] { new BoaFloat(), new BoaFloat()}, "${0}/${1}"));
 		globalFunctions.addFunction("ceil", new BoaFunction(new BoaInt(), new BoaType[] { new BoaInt() }, "(long)java.lang.Math.ceil(${0})"));
 		
 		// these generic functions require more finagling than can currently be
