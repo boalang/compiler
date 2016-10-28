@@ -176,8 +176,8 @@ public class SymbolTable {
 		globalFunctions.addFunction("ast_len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaAny() }, "boa.functions.BoaAstIntrinsics.lenVisitor.getCount(${0})"));
 		
 		//traversal
-		globalFunctions.addFunction("traverse", new BoaFunction(new BoaAny(), new BoaType[] { new BoaScalar(), new TraversalKindProtoMap(), new BoaTraversal()}, "${2}.traverse(${0},${1})"));
-		globalFunctions.addFunction("traverse", new BoaFunction(new BoaBool(), new BoaType[] { new BoaScalar(), new TraversalKindProtoMap(), new BoaTraversal(), new BoaFixP() }, "${2}.traverse(${0},${1},${3})"));
+		globalFunctions.addFunction("traverse", new BoaFunction(new BoaAny(), new BoaType[] { new BoaScalar(), new TraversalDirectionProtoMap(), new TraversalKindProtoMap(), new BoaTraversal()}, "${3}.traverse(${0},${1},${2})"));
+		globalFunctions.addFunction("traverse", new BoaFunction(new BoaBool(), new BoaType[] { new BoaScalar(), new TraversalDirectionProtoMap(), new TraversalKindProtoMap(), new BoaTraversal(), new BoaFixP() }, "${3}.traverse(${0},${1},${2},${4})"));
 		globalFunctions.addFunction("traverse", new BoaFunction(new BoaBool(), new BoaType[] { new BoaScalar(), new BoaTraversal() }, "${1}.traverse(${0})"));
 		globalFunctions.addFunction("traverse", new BoaFunction(new BoaAny(), new BoaType[] { new BoaScalar(), new TraversalKindProtoMap() }, "traverse(${0},${1})"));
 		globalFunctions.addFunction("traverse", new BoaFunction(new BoaAny(), new BoaType[] { new BoaScalar() }, "traverse(${0})"));
