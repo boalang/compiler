@@ -235,7 +235,7 @@ public abstract class BoaAbstractTraversal<T1> {
 		}
 	}
 
-	public final void traverse(final boa.graphs.cfg.CFG cfg, final Traversal.TraversalDirection direction, final Traversal.TraversalKind kind, final BoaAbstractFixP fixp) throws Exception {
+	public final void traverse(final boa.graphs.cfg.CFG cfg, final Traversal.TraversalKind kind, final BoaAbstractFixP fixp) throws Exception {
 		if(outputMapObj==null) {
 				outputMapObj = new java.util.HashMap<Integer,T1>();
 		}
@@ -271,7 +271,7 @@ public abstract class BoaAbstractTraversal<T1> {
 		}
 	}
 
-	public final void traverseWithFixp(final CFG cfg, final Traversal.TraversalDirection direction, final Traversal.TraversalKind kind, final BoaAbstractFixP fixp) throws Exception {
+	public final void traverseWithFixp(final CFG cfg, final Traversal.TraversalKind kind, final BoaAbstractFixP fixp) throws Exception {
 		if (preTraverse(cfg)) {			
 			if(outputMapObj==null) {
 				outputMapObj = new java.util.HashMap<Integer,T1>();
@@ -380,7 +380,7 @@ public abstract class BoaAbstractTraversal<T1> {
 		}
 	}
 
-	public final void traverse(final boa.graphs.cfg.CFG cfg,final Traversal.TraversalKind kind) throws Exception {
+	public final void traverse(final boa.graphs.cfg.CFG cfg, final Traversal.TraversalKind kind) throws Exception {
 		if (preTraverse(cfg)) {			
 			if(outputMapObj==null) {
 				outputMapObj = new java.util.HashMap<Integer,T1>();

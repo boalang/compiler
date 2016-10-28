@@ -101,9 +101,9 @@ public final class Graph {
     }
 
     /**
-     * Protobuf enum {@code boa.types.Traversal.Direction}
+     * Protobuf enum {@code boa.types.Traversal.TraversalDirection}
      */
-    public enum Direction
+    public enum TraversalDirection
         implements com.google.protobuf.ProtocolMessageEnum {
       /**
        * <code>BACKWARD = 1;</code>
@@ -127,7 +127,7 @@ public final class Graph {
 
       public final int getNumber() { return value; }
 
-      public static Direction valueOf(int value) {
+      public static TraversalDirection valueOf(int value) {
         switch (value) {
           case 1: return BACKWARD;
           case 2: return FORWARD;
@@ -135,15 +135,15 @@ public final class Graph {
         }
       }
 
-      public static com.google.protobuf.Internal.EnumLiteMap<Direction>
+      public static com.google.protobuf.Internal.EnumLiteMap<TraversalDirection>
           internalGetValueMap() {
         return internalValueMap;
       }
-      private static com.google.protobuf.Internal.EnumLiteMap<Direction>
+      private static com.google.protobuf.Internal.EnumLiteMap<TraversalDirection>
           internalValueMap =
-            new com.google.protobuf.Internal.EnumLiteMap<Direction>() {
-              public Direction findValueByNumber(int number) {
-                return Direction.valueOf(number);
+            new com.google.protobuf.Internal.EnumLiteMap<TraversalDirection>() {
+              public TraversalDirection findValueByNumber(int number) {
+                return TraversalDirection.valueOf(number);
               }
             };
 
@@ -160,9 +160,9 @@ public final class Graph {
         return boa.types.Graph.Traversal.getDescriptor().getEnumTypes().get(0);
       }
 
-      private static final Direction[] VALUES = values();
+      private static final TraversalDirection[] VALUES = values();
 
-      public static Direction valueOf(
+      public static TraversalDirection valueOf(
           com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
         if (desc.getType() != getDescriptor()) {
           throw new java.lang.IllegalArgumentException(
@@ -174,12 +174,12 @@ public final class Graph {
       private final int index;
       private final int value;
 
-      private Direction(int index, int value) {
+      private TraversalDirection(int index, int value) {
         this.index = index;
         this.value = value;
       }
 
-      // @@protoc_insertion_point(enum_scope:boa.types.Traversal.Direction)
+      // @@protoc_insertion_point(enum_scope:boa.types.Traversal.TraversalDirection)
     }
 
     /**
@@ -540,12 +540,12 @@ public final class Graph {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\013graph.proto\022\tboa.types\"\252\001\n\tTraversal\"&" +
-      "\n\tDirection\022\014\n\010BACKWARD\020\001\022\013\n\007FORWARD\020\002\"u" +
-      "\n\rTraversalKind\022\022\n\016DEEP_ITERATIVE\020\003\022\025\n\021S" +
-      "HALLOW_ITERATIVE\020\004\022\007\n\003MIX\020\005\022\007\n\003DFS\020\006\022\r\n\t" +
-      "POSTORDER\020\007\022\014\n\010WORKLIST\020\010\022\n\n\006HYBRID\020\tB\002H" +
-      "\001"
+      "\n\013graph.proto\022\tboa.types\"\263\001\n\tTraversal\"/" +
+      "\n\022TraversalDirection\022\014\n\010BACKWARD\020\001\022\013\n\007FO" +
+      "RWARD\020\002\"u\n\rTraversalKind\022\022\n\016DEEP_ITERATI" +
+      "VE\020\003\022\025\n\021SHALLOW_ITERATIVE\020\004\022\007\n\003MIX\020\005\022\007\n\003" +
+      "DFS\020\006\022\r\n\tPOSTORDER\020\007\022\014\n\010WORKLIST\020\010\022\n\n\006HY" +
+      "BRID\020\tB\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
