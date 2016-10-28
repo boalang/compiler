@@ -79,4 +79,10 @@ public class BoaScalar extends BoaType {
 	public String toString() {
 		return "scalar";
 	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public String toJavaType() {
+		return "Object";
+	}
 }
