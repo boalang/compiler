@@ -71,6 +71,8 @@
 				<uptodate srcfile="src/proto/issues.proto" targetfile="src/compiled-proto/boa/types/Issues.java" />
 				<uptodate srcfile="src/proto/shared.proto" targetfile="src/compiled-proto/boa/types/Shared.java" />
 				<uptodate srcfile="src/proto/toplevel.proto" targetfile="src/compiled-proto/boa/types/Toplevel.java" />
+				<uptodate srcfile="src/proto/control.proto" targetfile="src/compiled-proto/boa/types/Control.java" />
+				<uptodate srcfile="src/proto/graph.proto" targetfile="src/compiled-proto/boa/types/Graph.java" />
 			</and>
 		</condition>
 	</target>
