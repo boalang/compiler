@@ -272,7 +272,6 @@ public class BoaCompiler {
 
 				final BoaErrorListener parserErrorListener = new ParserErrorListener();
 				final Start p = parse(tokens, parser, parserErrorListener);
-				if (cl.hasOption("ast")) new ASTPrintingVisitor().start(p);
 
 				final String jobName = "" + i;
 
