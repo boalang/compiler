@@ -196,25 +196,21 @@ public final class Graph {
        */
       SHALLOW_ITERATIVE(1, 4),
       /**
-       * <code>MIX = 5;</code>
-       */
-      MIX(2, 5),
-      /**
        * <code>DFS = 6;</code>
        */
-      DFS(3, 6),
+      DFS(2, 6),
       /**
        * <code>POSTORDER = 7;</code>
        */
-      POSTORDER(4, 7),
+      POSTORDER(3, 7),
       /**
        * <code>WORKLIST = 8;</code>
        */
-      WORKLIST(5, 8),
+      WORKLIST(4, 8),
       /**
        * <code>HYBRID = 9;</code>
        */
-      HYBRID(6, 9),
+      HYBRID(5, 9),
       ;
 
       /**
@@ -225,10 +221,6 @@ public final class Graph {
        * <code>SHALLOW_ITERATIVE = 4;</code>
        */
       public static final int SHALLOW_ITERATIVE_VALUE = 4;
-      /**
-       * <code>MIX = 5;</code>
-       */
-      public static final int MIX_VALUE = 5;
       /**
        * <code>DFS = 6;</code>
        */
@@ -253,7 +245,6 @@ public final class Graph {
         switch (value) {
           case 3: return DEEP_ITERATIVE;
           case 4: return SHALLOW_ITERATIVE;
-          case 5: return MIX;
           case 6: return DFS;
           case 7: return POSTORDER;
           case 8: return WORKLIST;
@@ -540,12 +531,12 @@ public final class Graph {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\013graph.proto\022\tboa.types\"\263\001\n\tTraversal\"/" +
+      "\n\013graph.proto\022\tboa.types\"\252\001\n\tTraversal\"/" +
       "\n\022TraversalDirection\022\014\n\010BACKWARD\020\001\022\013\n\007FO" +
-      "RWARD\020\002\"u\n\rTraversalKind\022\022\n\016DEEP_ITERATI" +
-      "VE\020\003\022\025\n\021SHALLOW_ITERATIVE\020\004\022\007\n\003MIX\020\005\022\007\n\003" +
-      "DFS\020\006\022\r\n\tPOSTORDER\020\007\022\014\n\010WORKLIST\020\010\022\n\n\006HY" +
-      "BRID\020\tB\002H\001"
+      "RWARD\020\002\"l\n\rTraversalKind\022\022\n\016DEEP_ITERATI" +
+      "VE\020\003\022\025\n\021SHALLOW_ITERATIVE\020\004\022\007\n\003DFS\020\006\022\r\n\t" +
+      "POSTORDER\020\007\022\014\n\010WORKLIST\020\010\022\n\n\006HYBRID\020\tB\002H" +
+      "\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
