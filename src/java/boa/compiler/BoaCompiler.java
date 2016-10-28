@@ -48,14 +48,11 @@ import org.scannotation.ClasspathUrlFinder;
 
 import boa.compiler.ast.Program;
 import boa.compiler.ast.Start;
-import boa.compiler.transforms.InheritedAttributeTransformer;
 import boa.compiler.transforms.LocalAggregationTransformer;
 import boa.compiler.transforms.VisitorMergingTransformer;
 import boa.compiler.transforms.VisitorOptimizingTransformer;
 import boa.compiler.visitors.AbstractCodeGeneratingVisitor;
-import boa.compiler.visitors.ASTPrintingVisitor;
 import boa.compiler.visitors.CodeGeneratingVisitor;
-import boa.compiler.visitors.PrettyPrintVisitor;
 import boa.compiler.visitors.TaskClassifyingVisitor;
 import boa.compiler.visitors.TypeCheckingVisitor;
 import boa.compiler.listeners.BoaErrorListener;
@@ -143,7 +140,6 @@ public class BoaCompiler {
 
 					final BoaErrorListener parserErrorListener = new ParserErrorListener();
 					final Start p = parse(tokens, parser, parserErrorListener);
-					if (cl.hasOption("ast")) new ASTPrintingVisitor().start(p);
 
 					final String jobName = "" + i;
 
@@ -156,8 +152,6 @@ public class BoaCompiler {
 
 							LOG.info(f.getName() + ": task complexity: " + (!simpleVisitor.isComplex() ? "simple" : "complex"));
 							isSimple &= !simpleVisitor.isComplex();
-							
-							new InheritedAttributeTransformer().start(p);
 
 							new LocalAggregationTransformer().start(p);
 
@@ -166,8 +160,6 @@ public class BoaCompiler {
 							if (!simpleVisitor.isComplex() || cl.hasOption("nv") || inputFiles.size() == 1) {
 								new VisitorOptimizingTransformer().start(p);
 
-								if (cl.hasOption("pp")) new PrettyPrintVisitor().start(p);
-								if (cl.hasOption("ast")) new ASTPrintingVisitor().start(p);
 								final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(jobName);
 								cg.start(p);
 								jobs.add(cg.getCode());
@@ -200,8 +192,6 @@ public class BoaCompiler {
 					for (final Program p : new VisitorMergingTransformer().mergePrograms(visitorPrograms, maxVisitors)) {
 						new VisitorOptimizingTransformer().start(p);
 
-						if (cl.hasOption("pp")) new PrettyPrintVisitor().start(p);
-						if (cl.hasOption("ast")) new ASTPrintingVisitor().start(p);
 						final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(p.jobName);
 						cg.start(p);
 						jobs.add(cg.getCode());
@@ -215,8 +205,6 @@ public class BoaCompiler {
 					for (final Program p : visitorPrograms) {
 						new VisitorOptimizingTransformer().start(p);
 
-						if (cl.hasOption("pp")) new PrettyPrintVisitor().start(p);
-						if (cl.hasOption("ast")) new ASTPrintingVisitor().start(p);
 						final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(p.jobName);
 						cg.start(p);
 						jobs.add(cg.getCode());
@@ -298,8 +286,6 @@ public class BoaCompiler {
 						LOG.info(f.getName() + ": task complexity: " + (!simpleVisitor.isComplex() ? "simple" : "complex"));
 						isSimple &= !simpleVisitor.isComplex();
 
-						new InheritedAttributeTransformer().start(p);
-
 						new LocalAggregationTransformer().start(p);
 
 						// if a job has no visitor, let it have its own method
@@ -307,8 +293,6 @@ public class BoaCompiler {
 						if (!simpleVisitor.isComplex() || cl.hasOption("nv") || inputFiles.size() == 1) {
 							new VisitorOptimizingTransformer().start(p);
 
-							if (cl.hasOption("pp")) new PrettyPrintVisitor().start(p);
-							if (cl.hasOption("ast")) new ASTPrintingVisitor().start(p);
 							final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(jobName);
 							cg.start(p);
 							jobs.add(cg.getCode());
@@ -358,26 +342,18 @@ public class BoaCompiler {
 					throws RuntimeException, IOException, FileNotFoundException {
 		// compile the generated .java file
 		final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-		if (compiler == null)
-			throw new RuntimeException("Could not get javac - are you running the Boa compiler with a JDK or a JRE?");
 		LOG.info("compiling: " + outputFile);
 		LOG.info("classpath: " + System.getProperty("java.class.path"));
 		if (compiler.run(null, null, null, "-source", "5", "-target", "5", "-cp", System.getProperty("java.class.path"), outputFile.toString()) != 0)
 			throw new RuntimeException("compile failed");
 
+		// find the location of the jar this class is in
+		final String path = ClasspathUrlFinder.findClassBase(BoaCompiler.class).getPath();
+		// find the location of the compiler distribution
+		final File root = new File(path.substring(path.indexOf(':') + 1, path.indexOf('!'))).getParentFile();
+
 		final List<File> libJars = new ArrayList<File>();
-
-		if (cl.hasOption('j')) {
-			libJars.add(new File(cl.getOptionValue('j')));
-		} else {
-			// find the location of the jar this class is in
-			final String path = ClasspathUrlFinder.findClassBase(BoaCompiler.class).getPath();
-			// find the location of the compiler distribution
-			final File root = new File(path.substring(path.indexOf(':') + 1, path.indexOf('!'))).getParentFile();
-	
-			libJars.add(new File(root, "boa-runtime.jar"));
-		}
-
+		libJars.add(new File(root, "boa-runtime.jar"));
 		if (cl.hasOption('l'))
 			for (final String s : Arrays.asList(cl.getOptionValues('l')))
 				libJars.add(new File(s));
