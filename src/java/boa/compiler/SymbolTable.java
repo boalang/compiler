@@ -53,6 +53,18 @@ public class SymbolTable {
 	private boolean needsBoxing;
 	private boolean isBeforeVisitor = false;
 
+	public Map<String, BoaType> getLocals() {
+		return locals;
+	}
+
+	public Map<String, BoaType> getGlobals() {
+		return globals;
+	}
+
+	public BoaType peekOperandType() {
+		return operandType.peek();
+	}
+
 	static {
 		aggregators = new HashMap<String, Class<?>>();
 
