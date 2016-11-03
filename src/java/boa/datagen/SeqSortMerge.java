@@ -28,10 +28,9 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.SequenceFile.Reader;
+import org.apache.hadoop.io.Text;
 
 import boa.datagen.util.Properties;
-
-import org.apache.hadoop.io.Text;
 
 /**
  * @author hoan

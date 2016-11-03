@@ -18,17 +18,31 @@
 
 package boa.datagen.scm;
 
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 import org.apache.hadoop.io.BytesWritable;
-import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.SequenceFile.Writer;
+import org.apache.hadoop.io.Text;
 import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.core.dom.*;
-import org.eclipse.wst.jsdt.core.JavaScriptCore;
+import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTParser;
+import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.wst.jsdt.core.dom.JavaScriptUnit;
 
+import boa.datagen.util.FileIO;
+import boa.datagen.util.Java7Visitor;
+import boa.datagen.util.Java8Visitor;
+import boa.datagen.util.JavaErrorCheckVisitor;
+import boa.datagen.util.JavaScriptErrorCheckVisitor;
+import boa.datagen.util.JavaScriptVisitor;
 import boa.types.Ast.ASTRoot;
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
@@ -36,13 +50,6 @@ import boa.types.Diff.ChangedFile.Builder;
 import boa.types.Diff.ChangedFile.FileKind;
 import boa.types.Shared.ChangeKind;
 import boa.types.Shared.Person;
-import boa.datagen.util.FileIO;
-import boa.datagen.util.JavaScriptErrorCheckVisitor;
-import boa.datagen.util.JavaScriptVisitor;
-import boa.datagen.util.Java7Visitor;
-import boa.datagen.util.Java8Visitor;
-import boa.datagen.util.JavaErrorCheckVisitor;
-import boa.datagen.util.Properties;
 
 /**
  * @author rdyer

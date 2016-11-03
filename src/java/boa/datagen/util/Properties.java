@@ -17,7 +17,8 @@
 
 package boa.datagen.util;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Loads properties and provides helper methods for using those properties.

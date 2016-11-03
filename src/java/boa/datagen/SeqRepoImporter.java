@@ -45,11 +45,11 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import boa.datagen.forges.github.RepositoryCloner;
 import boa.datagen.scm.AbstractConnector;
 import boa.datagen.scm.GitConnector;
+import boa.datagen.util.FileIO;
+import boa.datagen.util.Properties;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
 import boa.types.Toplevel.Project;
-import boa.datagen.util.FileIO;
-import boa.datagen.util.Properties;
 
 /**
  * @author hoan

@@ -1,19 +1,26 @@
 package boa.datagen.forges.sfnet;
 
-import java.io.*;
-import java.util.*;
-
-import boa.datagen.util.FileIO;
-import boa.types.Issues.IssueRepository;
-import boa.types.Code.CodeRepository;
-import boa.types.Code.CodeRepository.RepositoryKind;
-import boa.types.Shared.Person;
-import boa.types.Toplevel.Project;
-import boa.types.Toplevel.Project.ForgeKind;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
 
 import com.google.protobuf.CodedInputStream;
 
-import net.sf.json.*;
+import boa.datagen.util.FileIO;
+import boa.types.Code.CodeRepository;
+import boa.types.Code.CodeRepository.RepositoryKind;
+import boa.types.Issues.IssueRepository;
+import boa.types.Shared.Person;
+import boa.types.Toplevel.Project;
+import boa.types.Toplevel.Project.ForgeKind;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONException;
+import net.sf.json.JSONObject;
+import net.sf.json.JSONSerializer;
 
 /**
  * @author hoan

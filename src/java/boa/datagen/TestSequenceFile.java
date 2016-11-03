@@ -11,8 +11,7 @@ import org.apache.hadoop.io.Text;
 
 import com.google.protobuf.CodedInputStream;
 
-import boa.types.Ast.ASTRoot;
-import boa.types.Toplevel.Project;
+import boa.datascience.externalDataSources.DatagenProperties;
 
 public class TestSequenceFile {
 
@@ -31,13 +30,13 @@ public class TestSequenceFile {
 		
 		Text key = new Text();
 		BytesWritable val = new BytesWritable();
-		SequenceFile.Reader r = new SequenceFile.Reader(fileSystem, new Path("/Users/nmtiwari/nmt/githubCacheJSon/tmprepcache/ast-nmtiwari-0-1453911429.seq"), conf);
+		SequenceFile.Reader r = new SequenceFile.Reader(fileSystem, new Path(DatagenProperties.HADOOP_SEQ_FILE_LOCATION + "/" + DatagenProperties.HADOOP_SEQ_FILE_NAME), conf);
 		while (r.next(key, val)) {
 			System.out.println("next project");
 			byte[] bytes = val.getBytes();
 			System.out.print("Parse after writing to sequence file: ");
 			//System.out.println(ASTRoot.parseFrom(bytes).getImportsList());
-			System.out.println(ASTRoot.parseFrom(CodedInputStream.newInstance(bytes, 0, val.getLength())));
+			System.out.println(boa.datascience.externalDataSources.githubdata.Githubschema.Project.parseFrom(CodedInputStream.newInstance(bytes, 0, val.getLength())));
 		}
 		r.close();
 	}

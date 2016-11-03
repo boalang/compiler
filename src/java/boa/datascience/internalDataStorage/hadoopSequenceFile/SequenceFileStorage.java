@@ -66,9 +66,9 @@ public class SequenceFileStorage extends AbstractDataStorage {
 		FileSystem fileSystem;
 		try {
 			fileSystem = FileSystem.get(conf);
-			SequenceFile.Writer w = SequenceFile.createWriter(fileSystem, conf, new Path(seqPath), Text.class,
+			this.seqFileWriter = SequenceFile.createWriter(fileSystem, conf, new Path(seqPath), Text.class,
 					BytesWritable.class);
-			SequenceFile.Writer astWriter = SequenceFile.createWriter(fileSystem, conf, new Path(seqPath), Text.class,
+			this.seqFileWriter = SequenceFile.createWriter(fileSystem, conf, new Path(seqPath), Text.class,
 					BytesWritable.class);
 			return true;
 		} catch (IOException e) {
@@ -100,11 +100,12 @@ public class SequenceFileStorage extends AbstractDataStorage {
 	public void store(GeneratedMessage dataInstance) {
 		this.openWriter(DatagenProperties.HADOOP_SEQ_FILE_LOCATION + "/" + DatagenProperties.HADOOP_SEQ_FILE_NAME);
 		try {
-			this.seqFileWriter.append("data1", dataInstance);
+			this.seqFileWriter.append(new Text("data1"), new BytesWritable(dataInstance.toByteArray()));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		this.closeWrite();
 	}
 
 	@Override

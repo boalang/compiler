@@ -1,13 +1,15 @@
 package boa.datascience.externalDataSources;
 
-import boa.datagen.util.CandoiaProperties;
-import boa.datagen.util.FileIO;
-import com.google.protobuf.GeneratedMessage;
+import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.lang.reflect.InvocationTargetException;
+import com.google.protobuf.GeneratedMessage;
+
+import boa.datagen.util.CandoiaProperties;
+import boa.datagen.util.FileIO;
 
 /**
  * Created by nmtiwari on 11/2/16.
