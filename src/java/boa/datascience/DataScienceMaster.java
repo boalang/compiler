@@ -15,10 +15,15 @@ public class DataScienceMaster {
 		ArrayList<String> sources = new ArrayList<>();
 		sources.add(url);
 
-		Queue<GeneratedMessage> queue = new Queue<>(new LinkedBlockingQueue<GeneratedMessage>());
-		ExternalDataSources external = new ExternalDataSources(queue, sources);
-		InternalDataStorage storage = new InternalDataStorage(queue);
-		external.getDataInQueue();
-		storage.store();
+		Queue<GeneratedMessage> eSourceIStorage = new Queue<>(new LinkedBlockingQueue<GeneratedMessage>());
+		Queue<GeneratedMessage> iStorageEEngine = new Queue<>(new LinkedBlockingQueue<GeneratedMessage>());
+
+		ExternalDataSources external = new ExternalDataSources(sources);
+		InternalDataStorage storage = new InternalDataStorage();
+		external.getDataInQueue(eSourceIStorage);
+		storage.store(eSourceIStorage);
+		
+		
+		
 	}
 }

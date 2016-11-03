@@ -17,8 +17,7 @@ public class ExternalDataSources extends DataScienceComponent {
 	private static Logger LOG = Logger.getLogger(ExternalDataSources.class);
 	ArrayList<String> sources;
 
-	public ExternalDataSources(Queue<GeneratedMessage> queue, ArrayList<String> sources) {
-		super(queue);
+	public ExternalDataSources(ArrayList<String> sources) {
 		this.sources = sources;
 	}
 
@@ -28,12 +27,12 @@ public class ExternalDataSources extends DataScienceComponent {
 		return data;
 	}
 
-	public boolean getDataInQueue() {
-		if (this.queue == null || !this.queue.isOpen()) {
+	public boolean getDataInQueue(Queue<GeneratedMessage> queue) {
+		if (queue == null || !queue.isOpen()) {
 			throw new IllegalStateException("Your queue is not yet initialized");
 		}
-		sources.stream().forEach(source -> this.queue.offer(this.getProcessedDataFrom(source)));
-		this.queue.close();
+		sources.stream().forEach(source -> queue.offer(this.getProcessedDataFrom(source)));
+		queue.close();
 		return true;
 	}
 
