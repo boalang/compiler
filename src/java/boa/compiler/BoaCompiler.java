@@ -71,7 +71,7 @@ import org.antlr.v4.runtime.misc.ParseCancellationException;
 
 import boa.parser.BoaParser;
 import boa.parser.BoaLexer;
-
+import java.util.ArrayList;
 /**
  * The main entry point for the Boa compiler.
  *
@@ -87,7 +87,7 @@ public class BoaCompiler {
 		CommandLine cl = processCommandLineOptions(args);
 		if(cl==null) return;
 		final ArrayList<File> inputFiles = BoaCompiler.inputFiles;
-
+		ArrayList<Long> evalRuns = new ArrayList<Long>();
 		// get the name of the generated class
 		final String className = getGeneratedClass(cl);
 
@@ -159,10 +159,27 @@ public class BoaCompiler {
 							// also let jobs have own methods if visitor merging is disabled
 							if (!simpleVisitor.isComplex() || cl.hasOption("nv") || inputFiles.size() == 1) {
 								new VisitorOptimizingTransformer().start(p);
+								
 								long time = System.currentTimeMillis();
-								final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(jobName);
+								CodeGeneratingVisitor cg = new CodeGeneratingVisitor(jobName);
 								cg.start(p);
-								System.out.println(System.currentTimeMillis()-time);
+								evalRuns.add(System.currentTimeMillis()-time);
+								while(evalRuns.size()!=3) {
+									time = System.currentTimeMillis();
+									cg = new CodeGeneratingVisitor(jobName);
+									cg.start(p);
+									long currentEvalTime = System.currentTimeMillis()-time;
+									ArrayList<Long> copyEvalRuns = new ArrayList<Long>(evalRuns);
+									for(long eval : copyEvalRuns) {
+										if(eval > currentEvalTime) {
+											if(!(currentEvalTime / eval > 0.97)) {
+												evalRuns.remove(eval);
+											}
+										}
+									}
+									evalRuns.add(currentEvalTime);
+								}
+								System.out.println("---------done-----"+evalRuns);
 								jobs.add(cg.getCode());
 
 								jobnames.add(jobName);
