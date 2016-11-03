@@ -48,15 +48,8 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	 */
 	boolean nested_type;
 	String identifier="";
-	String traversalNodeIdentifier="";
 	String tupleId ="";
-	boolean isInsideTraversalBlock = false;
-	boolean isLoopSensitive = false;
-	boolean isOrderSensitive = false;
-	boolean isIntersectionPresent = false;
-	boolean isUnionPresent = false;
-	ArrayList<String> globalVariables = new ArrayList<String>();
-	String lastSeenGloabalVariable = null;
+	public CodeAnalysis codeAnalysis = new CodeAnalysis();
 
 	protected class AggregatorDescription {
 		protected String aggregator;
@@ -283,9 +276,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				}
 				types.add(c.getType().type.toBoxedJavaType());
 			}
-
-			System.out.println("tuple  "+tupType);
-			System.out.println("tuple type "+tupType.toJavaType());
 		
 			st.add("name", tupType.toJavaType());
 			st.add("fields", fields);
@@ -500,7 +490,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		this.tupleDeclarator.start(n);
 		String[] lines = this.varDecl.getCode().replaceAll(";","").split("\n");
 		for(String line : lines) {
-			globalVariables.add(line.split(" ")[1]);
+			codeAnalysis.globalVariables.add(line.split(" ")[1]);
 		}
 		if (this.functionDeclarator.hasCode())
 			st.add("staticDeclarations", this.varDecl.getCode() + "\n" + this.functionDeclarator.getCode());
@@ -568,26 +558,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		final String funcName = this.idFinder.getNames().toArray()[0].toString();
 		final BoaFunction f = n.env.getFunction(funcName, check(n));
 		n.env.setOperandType(f.getType());
-		if(funcName.equals("union")) {
-			if(isInsideTraversalBlock) {
-				isUnionPresent = true;
-			}
-		}
-		if(funcName.equals("intersection")) {
-			if(isInsideTraversalBlock) {
-				isIntersectionPresent = true;
-			}
-		}
-		if(funcName.equals("remove")) {
-			if(isInsideTraversalBlock && isIntersectionPresent) {
-				isLoopSensitive = true;
-			}
-		}
-		if(funcName.equals("add")) {
-			if(isInsideTraversalBlock && isUnionPresent) {
-				isLoopSensitive = true;
-			}
-		}
 		if (f.hasMacro()) {
 			final List<String> parts = new ArrayList<String>();
 			for (final Expression e : n.getArgs()) {
@@ -625,8 +595,9 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				st.add("parameters", code.removeLast());
 			}
 		}
-
-		code.add(st.render());
+		String str = st.render();
+		codeAnalysis.loopAnalysis(funcName, str);
+		code.add(str);
 	}
 
 	/** {@inheritDoc} */
@@ -787,33 +758,24 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				n.getOperand().accept(this);
 				n.env.setOperandType(n.getOperand().type);
 				accept = code.removeLast();
+				//System.out.println("-- "+accept);
 			}
 
 			for (int i = 0; !abortGeneration && i < n.getOpsSize(); i++) {
 				final Node o = n.getOp(i);
 				o.accept(this);
 				accept += code.removeLast();
-				if(isInsideTraversalBlock) {
-					if(lastSeenGloabalVariable!=null) {
-						if(accept.contains(traversalNodeIdentifier) && accept.contains(lastSeenGloabalVariable) && !accept.contains("getValue")) {
-							isOrderSensitive = true;
-						}
-					}
-				}
+				codeAnalysis.orderSensitivityDetection(accept);
 			}
-
+			if(accept.contains("getValue("+codeAnalysis.traversalNodeIdentifier+")")) {
+					codeAnalysis.variableMonitored.add(codeAnalysis.identifierStack.peek());
+			}
 			n.env.getOperandType();
 			code.add(accept);
 		} else {
 			n.getOperand().accept(this);
 			String tr = code.removeLast();
-			if(isInsideTraversalBlock) {
-				if(globalVariables.contains(tr)) {
-					if(n.getOperand().type.toString().contains("stack of") || n.getOperand().type.toString().contains("array of")) {
-						lastSeenGloabalVariable = tr;
-					}
-				}
-			}
+			codeAnalysis.monitorLastSeenGlobalVariable(tr, n.getOperand().type);
 			code.add(tr);
 		}
 	}
@@ -964,6 +926,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		n.getLhs().accept(this);
 		final String lhs = code.removeLast();
+		codeAnalysis.identifierStack.push(lhs);
 		n.getRhs().accept(this);
 		String rhs = code.removeLast();
 		
@@ -995,7 +958,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		st.add("lhs", lhs);
 		st.add("rhs", rhs);
-
+		codeAnalysis.aliasAnalysis(lhs,rhs);
 		code.add(st.render());
 	}
 
@@ -1247,7 +1210,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			n.getExpr().accept(this);
 			st.add("expr", code.removeLast());
 		}
-
+		codeAnalysis.loopSensitivityDetection(st.render());
 		code.add(st.render());
 	}
 
@@ -1309,7 +1272,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			return;
 		}
 		final BoaType type = n.env.get(n.getId().getToken());
-
+		codeAnalysis.identifierStack.push(n.getId().getToken());
 		final BoaType lhsType;
 		final ST st = stg.getInstanceOf("Assignment");
 		if (n.hasType()) {
@@ -1382,7 +1345,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		}
 
 		st.add("rhs", src);
-
 		code.add(st.render());
 	}
 
@@ -1483,21 +1445,21 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	@Override
 	public void visit(final TraverseStatement n) {
 		final ST st = stg.getInstanceOf("TraverseClause");
-		isInsideTraversalBlock = true;
+		codeAnalysis.isInsideTraversalBlock = true;
 		final boolean isBefore = n.isBefore();
 		final boolean isAfter = n.isAfter();
 
 		final BoaFunction funcType = ((BoaFunction) n.type);
 		final List<String> body = new ArrayList<String>();
 		String types = "";
-		traversalNodeIdentifier="";
+		codeAnalysis.traversalNodeIdentifier="";
 		if (n.hasWildcard()) {
 			st.add("name", isBefore ? "defaultPreTraverse" : isAfter? "defaultPostTraverse":"defaultWhen");
 		} else if (n.hasComponent()) {
 			final Component c = n.getComponent();
-			traversalNodeIdentifier = "___"+c.getIdentifier().getToken();
+			codeAnalysis.traversalNodeIdentifier = "___"+c.getIdentifier().getToken();
 
-			n.env.set(traversalNodeIdentifier, c.getType().type);
+			n.env.set(codeAnalysis.traversalNodeIdentifier, c.getType().type);
 			types = c.getType().type.toJavaType();
 
 			st.add("name", isBefore ? "preTraverse" : isAfter? "postTraverse":"when");
@@ -1520,11 +1482,18 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		st.add("body", body);
 
-		st.add("args", traversalNodeIdentifier);
+		st.add("args", codeAnalysis.traversalNodeIdentifier);
 		st.add("types", types);
 		
 		code.add(st.render());
-		isInsideTraversalBlock = false;
+		codeAnalysis.clear();
+		/*CFGBuildingVisitor cfgBuilder = new CFGBuildingVisitor();
+		n.accept(cfgBuilder);
+		java.util.HashMap<Integer,String> nodeVisitStatus = new	java.util.HashMap<Integer,String>();
+		for(int i=0;i<cfgBuilder.order.size()+1;i++) {
+			nodeVisitStatus.put(i, "unvisited");
+		}
+		cfgBuilder.dfsForward(cfgBuilder.currentStartNodes.get(0), nodeVisitStatus);*/
 	}
 	
 	/** {@inheritDoc} */
@@ -1694,17 +1663,14 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			body.add(code.removeLast());
 		}
 		st.add("body", body);
-		if(isLoopSensitive) {
-			st.add("isLoopSensitive",isLoopSensitive);
+		if(codeAnalysis.isLoopSensitive) {
+			st.add("isLoopSensitive",codeAnalysis.isLoopSensitive);
 		}
-		if(isOrderSensitive) {
-			st.add("isOrderSensitive",isOrderSensitive);
+		if(codeAnalysis.isOrderSensitive) {
+			st.add("isOrderSensitive",codeAnalysis.isOrderSensitive);
 		}
 		code.add(st.render());
-		isLoopSensitive = false;
-		isOrderSensitive = false;
-		isIntersectionPresent = false;
-		isUnionPresent = false;
+		codeAnalysis.reset();
 	}
 
 	/** {@inheritDoc} */

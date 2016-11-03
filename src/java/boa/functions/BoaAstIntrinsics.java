@@ -207,9 +207,10 @@ public class BoaAstIntrinsics {
 		final Configuration conf = new Configuration();
 		try {
 			final FileSystem fs = FileSystem.get(conf);
-			final Path p = new Path("hdfs://boa-njt/",
-								new Path(context.getConfiguration().get("boa.ast.dir", context.getConfiguration().get("boa.input.dir", "repcache/live")),
-								new Path("ast")));
+			//final Path p = new Path("hdfs://boa-njt/",
+			//					new Path(context.getConfiguration().get("boa.ast.dir", context.getConfiguration().get("boa.input.dir", "repcache/live")),
+			//					new Path("ast")));
+			final Path p = new Path("hdfs://localhost:54310/small");
 			map = new MapFile.Reader(fs, p.toString(), conf);
 		} catch (final Exception e) {
 			e.printStackTrace();
@@ -454,11 +455,11 @@ public class BoaAstIntrinsics {
 	private static class GenericsCollectingVisitor extends BoaCollectingVisitor<String,Long> {
 		@Override
 		protected boolean preVisit(Type node) {
-			try {
+			/*try {
 				parseGenericType(BoaAstIntrinsics.type_name(node.getName()).trim(), map);
 			} catch (final StackOverflowError e) {
 				System.err.println("STACK ERR: " + node.getName() + " -> " + BoaAstIntrinsics.type_name(node.getName()).trim());
-			}
+			}*/
 			return true;
 		}
 	}

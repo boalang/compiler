@@ -1,0 +1,104 @@
+m: output collection[string][string][int] of int;
+mt: output collection[int] of string;
+accuracy : output collection of int;
+mt1: output collection[string][int] of string;
+p: Project = input;
+
+# program analysis output
+type T_gen_kill= {gen: set of string, kill: string, dummy : int};
+type T_inout= {in: set of string, out: set of string};
+# cfg of the current method
+cfg: CFG;
+pcount := 0;
+# current visiting cfg node
+cur_cfg_node: CFGNode;
+
+genset : set of string;
+killset : set of string;
+totalTime : int;
+time1 : int;
+tottime := 0;
+t_ttime : int;
+t_ttime0 : int;
+t_ttime1 : int;
+t_ttime2 : int;
+t_ttime3 : int;
+no_fixp := 0;
+count :=0;
+project_name : string;
+
+# traversal that gets all variable uses in a method
+init := traversal(node: CFGNode): T_gen_kill {
+	cur_value : T_gen_kill;
+	cur_value = {node.useVariables, node.defVariables, 0};
+	return cur_value;
+};
+
+# cfg live variable analysis
+live := traversal(node: CFGNode): T_inout {
+	no_fixp = no_fixp + 1;
+	succs := node.successors;
+	in_set : set of string;
+	out_set : set of string;
+	cur_val : T_inout = {in_set, out_set};
+	if(def(getValue(node))) {
+		cur_val1 := getValue(node);
+		cur_val = clone(cur_val1);
+	}
+	foreach(succ_node:CFGNode=succs) {
+		succ := getValue(succ_node);
+		if(def(succ)) {
+			cur_val.out = union(cur_val.out,succ.in);
+		}
+	}
+	gen_kill := getValue(node, init);
+	if(def(gen_kill)) {
+	remove(cur_val.out, gen_kill.kill);
+	cur_val.in = union(gen_kill.gen, cur_val.out);
+	}
+	return cur_val;
+};
+
+
+# print results
+live_var_result := traversal(node: CFGNode) {
+	if(len(cfg.nodes)==1768) {
+		cur_value := getValue(node, live);
+		mt1["dfs"][node.id] << string(cur_value.in);
+	}
+};
+
+# user-defined fix point function that is used for analysis termination.
+fixp1 := fixp(curr, prev: T_inout) : bool {
+	if (difference(curr.in, prev.in) == 0)
+		return true;	
+	return false;
+};
+
+q_all := visitor {
+	#after node: Project -> {
+	#	m[project_name][count] << tottime;
+	#	count = 0;
+	#}
+	before node: CodeRepository -> {
+		snapshot := getsnapshot(node, "SOURCE_JAVA_JLS");
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+	before node: Method -> {
+			ttime := currentTime();
+
+		cfg = getcfg(node);
+		clear(init);clear(live);
+		no_fixp = 0;
+		t_ttime0 = currentTime() - ttime;
+		ttime = currentTime();
+		traverse(cfg, TraversalDirection.BACKWARD, TraversalKind.HYBRID, init);
+		traverse(cfg, TraversalDirection.BACKWARD, TraversalKind.HYBRID, live, fixp1);
+		t_ttime3 = currentTime() - ttime;
+		traverse(cfg, TraversalDirection.BACKWARD, TraversalKind.SHALLOW_ITERATIVE, live_var_result);
+	}
+};
+
+visit(p, q_all);

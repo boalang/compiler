@@ -16,6 +16,8 @@
  */
 package boa.compiler.ast;
 
+import java.util.List;
+
 import boa.compiler.SymbolTable;
 import boa.compiler.ast.statements.Statement;
 import boa.compiler.ast.statements.Block;
@@ -32,6 +34,23 @@ import boa.types.BoaType;
 public abstract class Node {
 	protected Node parent;
 
+	/* The following fields are added to represent the edges of
+     * the control flow graph. */
+    public List<Node> predecessors;
+	public List<Node> successors;
+
+	public List<Node> getSuccessors() { return successors; }
+
+	public List<Node> getPredecessors() { return predecessors; }
+
+	// The following fields are building the control flow graph.
+	public List<Node> startNodes;
+	public List<Node> endNodes;
+	public List<Node> exitNodes;
+	
+	// Used to print out the CFG for debug.
+	public int id;
+	
 	public Node getParent() {
 		return parent;
 	}
