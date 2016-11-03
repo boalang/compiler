@@ -1,0 +1,370 @@
+package boa.externalDataSources.githubdata;
+
+option optimize_for = SPEED;
+
+message Project {
+    required string id = 1;
+    required string name = 2;
+    required string project_url = 3;
+    optional string homepage_url = 4;
+    optional uint64 created_date = 5;
+    optional string description = 6;
+    repeated string operating_systems = 7;
+    repeated string programming_languages = 8;
+    repeated string databases = 9;
+    repeated string licenses = 10;
+    repeated string interfaces = 11;
+    repeated string audiences = 12;
+    repeated string topics = 13;
+    repeated string status = 14;
+    repeated string translations = 15;
+    optional bool donations = 16;
+    repeated Person maintainers = 17;
+    repeated Person developers = 18;
+    repeated CodeRepository code_repositories = 19;
+//    repeated IssueRepository issue_repositories = 20;
+    enum ForgeKind {
+        option allow_alias = true;
+        OTHER = 0;
+        SF = 1;
+        SOURCEFORGE = 1;
+        GITHUB = 2;
+        APACHE = 3;
+        QUALITAS = 4;
+    }
+    required ForgeKind kind = 20;
+}
+
+message Person {
+    required string username = 1;
+    required string real_name = 2;
+    required string email = 3;
+}
+
+enum ChangeKind {
+    option allow_alias = true;
+
+    ADDED = 1;
+
+    DELETED = 2;
+    REMOVED = 2;
+
+    MODIFIED = 3;
+    CHANGED = 3;
+
+    RENAMED = 4;
+    MOVED = 4;
+
+    COPIED = 5;
+}
+
+message ChangedFile {
+    enum FileKind {
+        option allow_alias = true;
+        OTHER = 0;
+
+        BINARY = 1;
+
+        TEXT = 2;
+        XML = 3;
+
+        SOURCE_JAVA_ERROR = 100;
+        SOURCE_JAVA_JLS2 = 101;
+        SOURCE_JAVA_JLS3 = 102;
+        SOURCE_JAVA_JLS4 = 103;
+        SOURCE_JAVA_JLS8 = 104;
+        JAVA_ERROR = 100;
+        JLS2 = 101;
+        JLS3 = 102;
+        JLS4 = 103;
+        JLS8 = 104;
+
+        SOURCE_CS_ERROR = 200;
+        SOURCE_CS_CS1 = 201;
+        SOURCE_CS_CS2 = 202;
+        SOURCE_CS_CS3 = 203;
+        SOURCE_CS_CS4 = 204;
+        SOURCE_CS_CS5 = 205;
+        CS_ERROR = 200;
+        CS1 = 201;
+        CS2 = 202;
+        CS3 = 203;
+        CS4 = 204;
+        CS5 = 205;
+    }
+    required ChangeKind change = 1;
+    required FileKind kind = 2;
+    required string name = 3;
+    required string key = 4;
+    optional ASTRoot ast = 5;
+    optional CommentsRoot comments = 6;
+    repeated ChangeKind changes = 7;
+    repeated int32 previous_versions = 8;
+    repeated int32 previous_index = 9;
+}
+message CodeRepository {
+    required string url = 1;
+    enum RepositoryKind {
+        option allow_alias = true;
+        OTHER = 0;
+        SVN = 1;
+        SUBVERSION = 1;
+        CVS = 2;
+        GIT = 3;
+        HG = 4;
+        MERCURIAL = 4;
+        BZR = 5;
+        BAZAAR = 5;
+    }
+    required RepositoryKind kind = 2;
+    repeated Revision revisions = 3;
+    repeated int32 branches = 4;
+    repeated string branch_names = 5;
+    repeated int32 tags = 6;
+    repeated string tag_names = 7;
+}
+
+message Revision {
+    required string id = 1;
+    required Person author = 2;
+    required Person committer = 3;
+    required uint64 commit_date = 4;
+    required string log = 5;
+    repeated ChangedFile files = 6;
+    repeated int32 parents = 7;
+    repeated int32 children = 8;
+}
+
+message CommentsRoot {
+    repeated Comment comments = 1;
+}
+
+message ASTRoot {
+    repeated Namespace namespaces = 1;
+    repeated string imports = 2;
+    repeated string names = 3;
+}
+
+message Namespace {
+    required string name = 1;
+    repeated Modifier modifiers = 2;
+    repeated Declaration declarations = 3;
+    //	required PositionInfo position = 4;
+}
+
+message Declaration {
+    required string name = 1;
+    required TypeKind kind = 2;
+    repeated Modifier modifiers = 3;
+    repeated Type generic_parameters = 4;
+    repeated Type parents = 5;
+    repeated Method methods = 6;
+    repeated Variable fields = 7;
+    repeated Declaration nested_declarations = 8;
+    repeated Comment comments = 9;
+    //	required PositionInfo position = 10;
+}
+
+enum TypeKind {
+    option allow_alias = true;
+    OTHER = 0;
+    CLASS = 1;
+    INTERFACE = 2;
+    ANONYMOUS = 3;
+    ANON = 3;
+    STRUCT = 4;
+    ENUM = 5;
+    ENUMERATION = 5;
+    ANNOTATION = 6;
+    DELEGATE = 7;
+    GENERIC = 8;
+}
+
+message Type {
+    required TypeKind kind = 1;
+    required int32 name = 2;
+    optional int32 qualified_name = 3;
+}
+
+message Method {
+    optional string name = 1;
+    repeated Modifier modifiers = 2;
+    required Type return_type = 3;
+    repeated Type generic_parameters = 4;
+    repeated Variable arguments = 5;
+    repeated Type exception_types = 6;
+    repeated Statement statements = 7;
+    repeated Comment comments = 8;
+    //	required PositionInfo position = 9;
+}
+
+message Variable {
+    required string name = 1;
+    required Type variable_type = 2;
+    repeated Modifier modifiers = 3;
+    optional Expression initializer = 4;
+    repeated Comment comments = 5;
+    //	required PositionInfo position = 6;
+}
+
+message Statement {
+    enum StatementKind {
+        option allow_alias = true;
+        OTHER = 0;
+        BLOCK = 1;
+        TYPEDECL = 2;
+        EXPRESSION = 3;
+        EXPR = 3;
+        SYNCHRONIZED = 4;
+        SYNC = 4;
+        RETURN = 5;
+        FOR = 6;
+        DO = 7;
+        WHILE = 8;
+        IF = 9;
+        ASSERT = 10;
+        BREAK = 11;
+        CONTINUE = 12;
+        LABEL = 13;
+        SWITCH = 14;
+        CASE = 15;
+        TRY = 16;
+        THROW = 17;
+        CATCH = 18;
+        EMPTY = 19;
+    }
+    required StatementKind kind = 1;
+    repeated Comment comments = 2;
+    repeated Statement statements = 3;
+    repeated Expression initializations = 4;
+    optional Expression condition = 5;
+    repeated Expression updates = 6;
+    optional Variable variable_declaration = 7;
+    optional Declaration type_declaration = 8;
+    optional Expression expression = 9;
+    //	required PositionInfo position = 10;
+}
+
+message Expression {
+    enum ExpressionKind {
+        OTHER = 0;
+        LITERAL = 1;
+        VARACCESS = 2;
+        VARDECL = 3;
+        METHODCALL = 4;
+        CAST = 5;
+        ARRAYINDEX = 6;
+        ARRAYINIT = 7;
+        TYPECOMPARE = 8;
+        NEW = 9;
+        NEWARRAY = 10;
+        OP_ADD = 11;
+        OP_SUB = 12;
+        OP_MULT = 13;
+        OP_DIV = 14;
+        OP_MOD = 15;
+        OP_INC = 16;
+        OP_DEC = 17;
+        BIT_LSHIFT = 18;
+        BIT_RSHIFT = 19;
+        BIT_UNSIGNEDRSHIFT = 20;
+        BIT_AND = 21;
+        BIT_OR = 22;
+        BIT_NOT = 23;
+        BIT_XOR = 24;
+        LOGICAL_NOT = 25;
+        LOGICAL_AND = 26;
+        LOGICAL_OR = 27;
+        EQ = 28;
+        NEQ = 29;
+        LT = 30;
+        GT = 31;
+        LTEQ = 32;
+        GTEQ = 33;
+        CONDITIONAL = 34;
+        NULLCOALESCE = 35;
+        ASSIGN = 36;
+        ASSIGN_ADD = 37;
+        ASSIGN_SUB = 38;
+        ASSIGN_MULT = 39;
+        ASSIGN_DIV = 40;
+        ASSIGN_MOD = 41;
+        ASSIGN_BITXOR = 42;
+        ASSIGN_BITAND = 43;
+        ASSIGN_BITOR = 44;
+        ASSIGN_LSHIFT = 45;
+        ASSIGN_RSHIFT = 46;
+        ASSIGN_UNSIGNEDRSHIFT = 47;
+        ANNOTATION = 48;
+        PAREN = 49;
+        METHOD_REFERENCE = 50;
+        LAMBDA = 51;
+        ANON_METHOD = 52;
+    }
+    required ExpressionKind kind = 1;
+    repeated Expression expressions = 2;
+    repeated Variable variable_decls = 3;
+    optional Type new_type = 4;
+    repeated Type generic_parameters = 5;
+    optional bool is_postfix = 6;
+    optional string literal = 7;
+    optional string variable = 8;
+    optional string method = 9;
+    repeated Expression method_args = 10;
+    optional Declaration anon_declaration = 11;
+    optional Modifier annotation = 12;
+    optional Method lambda = 13;
+    //	required PositionInfo position = 14;
+}
+
+message Modifier {
+    enum ModifierKind {
+        option allow_alias = true;
+        OTHER = 0;
+        VISIBILITY = 1;
+        ANNOTATION = 2;
+        FINAL = 3;
+        STATIC = 4;
+        SYNCHRONIZED = 5;
+        SYNC = 5;
+        ABSTRACT = 6;
+    }
+    enum Visibility {
+        PUBLIC = 1;
+        PRIVATE = 2;
+        PROTECTED = 3;
+        NAMESPACE = 4;
+    }
+    required ModifierKind kind = 1;
+    optional Visibility visibility = 2;
+    optional string annotation_name = 3;
+    repeated string annotation_members = 4;
+    repeated Expression annotation_values = 5;
+    optional string other = 6;
+    //	required PositionInfo position = 7;
+}
+
+message Comment {
+    enum CommentKind {
+        option allow_alias = true;
+        OTHER = 0;
+        LINE = 1;
+        BLOCK = 2;
+        DOC = 3;
+        DOCUMENTATION = 3;
+        SPEC = 4;
+        SPECIFICATION = 4;
+    }
+    required CommentKind kind = 1;
+    required string value = 2;
+    required PositionInfo position = 3;
+}
+
+message PositionInfo {
+    required int32 start_pos = 1;
+    required int32 length = 2;
+    required int32 start_line = 3;
+    required int32 start_col = 4;
+    required int32 end_line = 5;
+    required int32 end_col = 6;
+}
