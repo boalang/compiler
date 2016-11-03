@@ -1,4 +1,4 @@
-package boa.externalDataSources.httpdata;
+package boa.datascience.externalDataSources.httpdata;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -20,7 +20,7 @@ public class HttpDataReader {
 	private int responseCode = -1;
 	private String responseMessage;
 	private String content = "";
-	
+
 	public HttpDataReader(String url) {
 		setUrl(url);
 	}
@@ -30,7 +30,7 @@ public class HttpDataReader {
 		this.username = username;
 		this.password = password;
 	}
-	
+
 	public String getUrl() {
 		return url;
 	}
@@ -38,7 +38,7 @@ public class HttpDataReader {
 	public void setUrl(String url) {
 		this.url = url;
 		try {
-			connection  = (HttpURLConnection) new URL(url).openConnection();
+			connection = (HttpURLConnection) new URL(url).openConnection();
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -65,7 +65,7 @@ public class HttpDataReader {
 	public String getContent() {
 		return content;
 	}
-	
+
 	public boolean authenticate() {
 		return authenticate(this.username, this.password);
 	}
@@ -83,7 +83,7 @@ public class HttpDataReader {
 		}
 		return this.authenticated;
 	}
-	
+
 	public void getResponse() {
 		getHttpResponseCode();
 		getHttpResponseContent();
@@ -96,21 +96,20 @@ public class HttpDataReader {
 			BufferedInputStream in = new BufferedInputStream(response);
 			byte[] bytes = new byte[10000];
 			int len = in.read(bytes);
-			while (len != -1)
-			{
-				//System.out.println(len);
-				//System.out.println(new String(bytes, 0, len));
+			while (len != -1) {
+				// System.out.println(len);
+				// System.out.println(new String(bytes, 0, len));
 				sb.append(new String(bytes, 0, len));
-				//Thread.sleep(100);
+				// Thread.sleep(100);
 				len = in.read(bytes);
 			}
 			in.close();
-			//System.out.println(len);
-			//System.out.println(sb.toString());
+			// System.out.println(len);
+			// System.out.println(sb.toString());
 			this.content = sb.toString();
 			return;
 		} catch (IOException e) {
-			//e.printStackTrace();
+			// e.printStackTrace();
 			System.out.println(e.getMessage());
 		}
 		this.content = "";
@@ -124,7 +123,7 @@ public class HttpDataReader {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void getResponseJson() {
 		this.content = "";
 		getHttpResponseContent();
@@ -137,7 +136,7 @@ public class HttpDataReader {
 		System.err.println("Error: getting json response!");
 		this.content = "";
 	}
-	
+
 	public void showHeaderFields() {
 		Map<String, List<String>> map = this.connection.getHeaderFields();
 		for (String key : map.keySet()) {
@@ -148,15 +147,15 @@ public class HttpDataReader {
 	public Map<String, List<String>> getHeaderFields() {
 		return this.connection.getHeaderFields();
 	}
-	
+
 	public int getNumberOfMaxLimit() {
 		return Integer.parseInt(this.connection.getHeaderField("X-RateLimit-Limit"));
 	}
-	
+
 	public int getNumberOfRemainingLimit() {
 		return Integer.parseInt(this.connection.getHeaderField("X-RateLimit-Remaining"));
 	}
-	
+
 	public long getLimitResetTime() {
 		return Long.parseLong(this.connection.getHeaderField("X-RateLimit-Reset"));
 	}

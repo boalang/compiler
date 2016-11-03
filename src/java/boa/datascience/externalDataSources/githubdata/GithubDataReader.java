@@ -1,4 +1,4 @@
-package boa.externalDataSources.githubdata;
+package boa.datascience.externalDataSources.githubdata;
 
 import org.apache.commons.validator.routines.UrlValidator;
 import org.json.JSONArray;
@@ -6,13 +6,13 @@ import org.json.JSONObject;
 
 import com.google.protobuf.GeneratedMessage;
 
-import boa.externalDataSources.AbstractDataReader;
-import boa.externalDataSources.gitdata.GitDataReader;
-import boa.externalDataSources.githubdata.Githubschema.CodeRepository;
-import boa.externalDataSources.githubdata.Githubschema.Person;
-import boa.externalDataSources.githubdata.Githubschema.Project;
-import boa.externalDataSources.githubdata.Githubschema.Project.ForgeKind;
-import boa.externalDataSources.httpdata.HttpDataReader;
+import boa.datascience.externalDataSources.AbstractDataReader;
+import boa.datascience.externalDataSources.gitdata.GitDataReader;
+import boa.datascience.externalDataSources.githubdata.Githubschema.CodeRepository;
+import boa.datascience.externalDataSources.githubdata.Githubschema.Person;
+import boa.datascience.externalDataSources.githubdata.Githubschema.Project;
+import boa.datascience.externalDataSources.githubdata.Githubschema.Project.ForgeKind;
+import boa.datascience.externalDataSources.httpdata.HttpDataReader;
 
 /**
  * Created by nmtiwari on 11/2/16.
@@ -60,7 +60,7 @@ public class GithubDataReader extends AbstractDataReader {
 
 	public GeneratedMessage buildData(String data) {
 		JSONObject projectJ = new JSONObject(data);
-		boa.externalDataSources.githubdata.Githubschema.Project.Builder projectB = Project.newBuilder();
+		Githubschema.Project.Builder projectB = Project.newBuilder();
 		projectB.setId(projectJ.get("id").toString());
 		projectB.setName(projectJ.getString("name"));
 		projectB.setProjectUrl(projectJ.getString("html_url"));

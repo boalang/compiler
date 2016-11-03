@@ -1,4 +1,4 @@
-package boa.externalDataSources.gitdata;
+package boa.datascience.externalDataSources.gitdata;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,15 +32,15 @@ import org.eclipse.jgit.util.io.NullOutputStream;
 import com.google.protobuf.GeneratedMessage;
 
 import boa.datagen.util.DatagenUtil;
-import boa.externalDataSources.AbstractDataReader;
-import boa.externalDataSources.DatagenProperties;
-import boa.externalDataSources.githubdata.Githubschema.ChangeKind;
-import boa.externalDataSources.githubdata.Githubschema.ChangedFile;
-import boa.externalDataSources.githubdata.Githubschema.ChangedFile.FileKind;
-import boa.externalDataSources.githubdata.Githubschema.CodeRepository;
-import boa.externalDataSources.githubdata.Githubschema.CodeRepository.RepositoryKind;
-import boa.externalDataSources.githubdata.Githubschema.Person;
-import boa.externalDataSources.githubdata.Githubschema.Revision;
+import boa.datascience.externalDataSources.AbstractDataReader;
+import boa.datascience.externalDataSources.DatagenProperties;
+import boa.datascience.externalDataSources.githubdata.Githubschema.ChangeKind;
+import boa.datascience.externalDataSources.githubdata.Githubschema.ChangedFile;
+import boa.datascience.externalDataSources.githubdata.Githubschema.ChangedFile.FileKind;
+import boa.datascience.externalDataSources.githubdata.Githubschema.CodeRepository;
+import boa.datascience.externalDataSources.githubdata.Githubschema.CodeRepository.RepositoryKind;
+import boa.datascience.externalDataSources.githubdata.Githubschema.Person;
+import boa.datascience.externalDataSources.githubdata.Githubschema.Revision;;
 
 /**
  * Created by nmtiwari on 10/26/16.

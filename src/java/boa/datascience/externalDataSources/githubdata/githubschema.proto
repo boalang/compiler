@@ -1,4 +1,4 @@
-package boa.externalDataSources.githubdata;
+package boa.datascience.externalDataSources.githubdata;
 
 option optimize_for = SPEED;
 

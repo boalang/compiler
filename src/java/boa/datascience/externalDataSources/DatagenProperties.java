@@ -1,4 +1,4 @@
-package boa.externalDataSources;
+package boa.datascience.externalDataSources;
 
 public class DatagenProperties {
 	public static final boolean DEBUG = false;
@@ -34,5 +34,8 @@ public class DatagenProperties {
 	public static final String SETTINGS_JSON_FILE_NAME = "settings.json";
 	public static final String DATAREADER_FIELD_IN_JSON = "datareaders";
 	public static final int DATAREADER_FIELD_INDEX_JSON = 0;
+
+	public static final String HADOOP_SEQ_FILE_LOCATION = CANDOIA_OUTPUT_PATH;
+	public static final String HADOOP_SEQ_FILE_NAME = "projects.seq";
 
 }
