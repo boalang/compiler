@@ -57,6 +57,7 @@ public class GitDataReader extends AbstractDataReader {
 	private final int ADDEDFILES_LOCATION = 0;
 	private final int CHANGEDFILES_LOCATION = 1;
 	private final int REMOVEDFILES_LOCATION = 2;
+	private final String GITPARSERCLASS = "boa.datascience.externalDataSources.githubdata.Githubschema.CodeRepository";
 
 	public GitDataReader() {
 		super("gitschema.proto");
@@ -109,7 +110,8 @@ public class GitDataReader extends AbstractDataReader {
 	}
 
 	@Override
-	public GeneratedMessage getData() {
+	public List<GeneratedMessage> getData() {
+		List<GeneratedMessage> result = new ArrayList<GeneratedMessage>();
 		com.google.protobuf.GeneratedMessage data = null;
 		if (!alreadyCloned()) {
 			try {
@@ -128,7 +130,8 @@ public class GitDataReader extends AbstractDataReader {
 			e.printStackTrace();
 		}
 		data = buildData(getLocalPath());
-		return data;
+		result.add(data);
+		return result;
 	}
 
 	private com.google.protobuf.GeneratedMessage buildData(String path) {
@@ -370,6 +373,11 @@ public class GitDataReader extends AbstractDataReader {
 
 	protected void setParentIndices(final int[] parentList) {
 		parentIndices = parentList;
+	}
+
+	@Override
+	public String getParserClassName() {
+		return GITPARSERCLASS;
 	}
 
 }

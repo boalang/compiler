@@ -19,11 +19,11 @@ public class DataScienceMaster {
 		Queue<GeneratedMessage> iStorageEEngine = new Queue<>(new LinkedBlockingQueue<GeneratedMessage>());
 
 		ExternalDataSources external = new ExternalDataSources(sources);
-		InternalDataStorage storage = new InternalDataStorage();
+		InternalDataStorage storage = new InternalDataStorage(external.getProtoBufParser());
 		external.getDataInQueue(eSourceIStorage);
 		storage.store(eSourceIStorage);
-		
-		
-		
+//		List<GeneratedMessage> data = storage.getData();
+		storage.getDataInQueue(iStorageEEngine);
+		System.out.println(iStorageEEngine.get());
 	}
 }

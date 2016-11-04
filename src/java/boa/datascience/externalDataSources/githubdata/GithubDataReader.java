@@ -1,5 +1,8 @@
 package boa.datascience.externalDataSources.githubdata;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.validator.routines.UrlValidator;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -21,6 +24,7 @@ public class GithubDataReader extends AbstractDataReader {
 
 	// FIXME: This should be a pattern of github urls
 	private final String GITHUBURL = "https://github.com/";
+	private final String GITHUBPARSERCLASS = "boa.datascience.externalDataSources.githubdata.Githubschema.Project";
 
 	public GithubDataReader(String source) {
 		super(source);
@@ -39,7 +43,8 @@ public class GithubDataReader extends AbstractDataReader {
 	}
 
 	@Override
-	public GeneratedMessage getData() {
+	public List<GeneratedMessage> getData() {
+		List<GeneratedMessage> list = new ArrayList<GeneratedMessage>();
 		com.google.protobuf.GeneratedMessage data = null;
 		String[] details = this.dataSource.split("/");
 		String dataurl = "https://api.github.com/repos/" + details[details.length - 2] + "/"
@@ -55,7 +60,8 @@ public class GithubDataReader extends AbstractDataReader {
 			String response = httpDataCollector.getContent();
 			data = buildData(response);
 		}
-		return data;
+		list.add(data);
+		return list;
 	}
 
 	public GeneratedMessage buildData(String data) {
@@ -172,8 +178,9 @@ public class GithubDataReader extends AbstractDataReader {
 		}
 
 		if (projectJ.has("clone_url")) {
-			CodeRepository code = (CodeRepository) new GitDataReader(projectJ.getString("clone_url")).getData();
-			projectB.addCodeRepositories(code);
+			for (GeneratedMessage code : new GitDataReader(projectJ.getString("clone_url")).getData()) {
+				projectB.addCodeRepositories((CodeRepository) code);
+			}
 			// projectB.addCodeRepositories(projectJ.getString("clone_url").toString());
 		}
 		// if (projectJ.has("issues_url")) {
@@ -182,4 +189,8 @@ public class GithubDataReader extends AbstractDataReader {
 		return projectB.build();
 	}
 
+	@Override
+	public String getParserClassName() {
+		return GITHUBPARSERCLASS;
+	}
 }

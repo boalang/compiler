@@ -1,6 +1,10 @@
 package boa.datascience.internalDataStorage.hadoopSequenceFile;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
@@ -10,6 +14,7 @@ import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.util.ReflectionUtils;
 
+import com.aol.cyclops.data.async.Queue;
 import com.google.protobuf.GeneratedMessage;
 
 import boa.datascience.externalDataSources.DatagenProperties;
@@ -20,8 +25,8 @@ public class SequenceFileStorage extends AbstractDataStorage {
 	SequenceFile.Reader seqFileReader;
 	SequenceFile.Writer seqFileWriter;
 
-	public SequenceFileStorage(String location) {
-		super(location);
+	public SequenceFileStorage(String location, String parser) {
+		super(location, parser);
 		conf = new Configuration();
 	}
 
@@ -42,9 +47,54 @@ public class SequenceFileStorage extends AbstractDataStorage {
 	}
 
 	@Override
-	public GeneratedMessage getData(Class<?> type) {
+	public void store(List<GeneratedMessage> dataInstance) {
+		this.openWriter(DatagenProperties.HADOOP_SEQ_FILE_LOCATION + "/" + DatagenProperties.HADOOP_SEQ_FILE_NAME);
+		dataInstance.stream().forEach(data -> {
+			try {
+				this.seqFileWriter.append(new Text("data1"), new BytesWritable(data.toByteArray()));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		});
+		this.closeWrite();
+	}
+
+	@Override
+	public void storeAt(String location, GeneratedMessage dataInstance) {
+		throw new UnsupportedOperationException();
+	}
+
+	@Override
+	public List<GeneratedMessage> getData() {
+		return this.getData(this.parser);
+	}
+
+	@Override
+	public boolean getDataInQueue(Queue<GeneratedMessage> q) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	protected List<GeneratedMessage> getData(Method parser) {
 		this.openReader(DatagenProperties.HADOOP_SEQ_FILE_LOCATION + "/" + DatagenProperties.HADOOP_SEQ_FILE_NAME);
-		return null;
+		List<GeneratedMessage> data = new ArrayList<>();
+
+		org.apache.hadoop.io.Text key = (org.apache.hadoop.io.Text) ReflectionUtils
+				.newInstance(this.seqFileReader.getKeyClass(), conf);
+		org.apache.hadoop.io.BytesWritable keyValue = (org.apache.hadoop.io.BytesWritable) ReflectionUtils
+				.newInstance(this.seqFileReader.getValueClass(), conf);
+
+		try {
+			while (this.seqFileReader.next(key, keyValue)) {
+				data.add((GeneratedMessage) this.parser.invoke(null, com.google.protobuf.CodedInputStream
+						.newInstance(keyValue.getBytes(), 0, keyValue.getLength())));
+			}
+		} catch (IOException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return data;
 	}
 
 	private boolean openReader(String seqPath) {
@@ -62,7 +112,6 @@ public class SequenceFileStorage extends AbstractDataStorage {
 	}
 
 	private boolean openWriter(String seqPath) {
-		Path path = new Path(seqPath);
 		FileSystem fileSystem;
 		try {
 			fileSystem = FileSystem.get(conf);
@@ -72,7 +121,6 @@ public class SequenceFileStorage extends AbstractDataStorage {
 					BytesWritable.class);
 			return true;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
 		}
@@ -94,23 +142,6 @@ public class SequenceFileStorage extends AbstractDataStorage {
 		} catch (Exception ex) {
 			return false;
 		}
-	}
-
-	@Override
-	public void store(GeneratedMessage dataInstance) {
-		this.openWriter(DatagenProperties.HADOOP_SEQ_FILE_LOCATION + "/" + DatagenProperties.HADOOP_SEQ_FILE_NAME);
-		try {
-			this.seqFileWriter.append(new Text("data1"), new BytesWritable(dataInstance.toByteArray()));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		this.closeWrite();
-	}
-
-	@Override
-	public void storeAt(String location, GeneratedMessage dataInstance) {
-		// TODO Auto-generated method stub
 	}
 
 }

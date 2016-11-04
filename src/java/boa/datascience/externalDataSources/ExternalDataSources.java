@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import com.aol.cyclops.data.async.Queue;
 import com.google.protobuf.GeneratedMessage;
 
 import boa.datascience.DataScienceComponent;
@@ -21,27 +20,17 @@ public class ExternalDataSources extends DataScienceComponent {
 		this.sources = sources;
 	}
 
-	public GeneratedMessage getProcessedDataFrom(String source) {
-		AbstractDataReader reader = AbstractDataReader.getDataReaders(source);
-		GeneratedMessage data = reader.getData();
+	@Override
+	public List<GeneratedMessage> getData() {
+		ArrayList<GeneratedMessage> data = new ArrayList<>();
+		for (String source : this.sources) {
+			AbstractDataReader reader = AbstractDataReader.getDataReaders(source);
+			reader.getData().forEach(x -> data.add(x));
+		}
 		return data;
 	}
 
-	public boolean getDataInQueue(Queue<GeneratedMessage> queue) {
-		if (queue == null || !queue.isOpen()) {
-			throw new IllegalStateException("Your queue is not yet initialized");
-		}
-		sources.stream().forEach(source -> queue.offer(this.getProcessedDataFrom(source)));
-		queue.close();
-		return true;
+	public String getProtoBufParser() {
+		return AbstractDataReader.getDataReaders(this.sources.get(0)).getParserClassName();
 	}
-
-	/**
-	 * FIXME: Implement this method
-	 */
-	@Override
-	public List<GeneratedMessage> getData() {
-		throw new UnsupportedOperationException("Not yet implemented");
-	}
-
 }
