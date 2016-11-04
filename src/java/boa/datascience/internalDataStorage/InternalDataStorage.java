@@ -38,14 +38,14 @@ public class InternalDataStorage extends DataScienceComponent {
 		return this.storage.getData();
 	}
 
-	@Override
-	public boolean getDataInQueue(Queue<GeneratedMessage> queue) {
-		if (queue == null || !queue.isOpen()) {
-			throw new IllegalStateException("Queue is either null or has been closed");
-		}
-		getData().stream().forEach(data -> queue.offer(data));
-		queue.close();
-		return true;
-	}
+//	@Override
+//	public boolean getDataInQueue(Queue<GeneratedMessage> queue) {
+//		if (queue == null || !queue.isOpen()) {
+//			throw new IllegalStateException("Queue is either null or has been closed");
+//		}
+//		getData().stream().forEach(data -> queue.offer(data));
+//		queue.close();
+//		return true;
+//	}
 
 }

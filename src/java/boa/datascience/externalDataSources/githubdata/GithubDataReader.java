@@ -11,11 +11,16 @@ import com.google.protobuf.GeneratedMessage;
 
 import boa.datascience.externalDataSources.AbstractDataReader;
 import boa.datascience.externalDataSources.gitdata.GitDataReader;
-import boa.datascience.externalDataSources.githubdata.Githubschema.CodeRepository;
-import boa.datascience.externalDataSources.githubdata.Githubschema.Person;
-import boa.datascience.externalDataSources.githubdata.Githubschema.Project;
-import boa.datascience.externalDataSources.githubdata.Githubschema.Project.ForgeKind;
+//import boa.datascience.externalDataSources.gitdata.GitDataReader;
+//import boa.datascience.externalDataSources.githubdata.Githubschema.CodeRepository;
+//import boa.datascience.externalDataSources.githubdata.Githubschema.Person;
+//import boa.datascience.externalDataSources.githubdata.Githubschema.Project;
+//import boa.datascience.externalDataSources.githubdata.Githubschema.Project.ForgeKind;
 import boa.datascience.externalDataSources.httpdata.HttpDataReader;
+import boa.types.Code.CodeRepository;
+import boa.types.Shared.Person;
+import boa.types.Toplevel.Project;
+import boa.types.Toplevel.Project.ForgeKind;
 
 /**
  * Created by nmtiwari on 11/2/16.
@@ -24,7 +29,9 @@ public class GithubDataReader extends AbstractDataReader {
 
 	// FIXME: This should be a pattern of github urls
 	private final String GITHUBURL = "https://github.com/";
-	private final String GITHUBPARSERCLASS = "boa.datascience.externalDataSources.githubdata.Githubschema.Project";
+	// private final String GITHUBPARSERCLASS =
+	// "boa.datascience.externalDataSources.githubdata.Githubschema.Project";
+	private final String GITHUBPARSERCLASS = "boa.types.Toplevel.Project";
 
 	public GithubDataReader(String source) {
 		super(source);
@@ -50,8 +57,8 @@ public class GithubDataReader extends AbstractDataReader {
 		String dataurl = "https://api.github.com/repos/" + details[details.length - 2] + "/"
 				+ details[details.length - 1];
 		HttpDataReader httpDataCollector = new HttpDataReader(dataurl);
-		String username = "username";
-		String password = "password";
+		String username = "nmtiwari";
+		String password = "swanit*49912";
 		if ("password".equals(password)) {
 			throw new IllegalArgumentException("Your username password in file GithubDataReaser.java are not yet set");
 		}
@@ -66,7 +73,7 @@ public class GithubDataReader extends AbstractDataReader {
 
 	public GeneratedMessage buildData(String data) {
 		JSONObject projectJ = new JSONObject(data);
-		Githubschema.Project.Builder projectB = Project.newBuilder();
+		boa.types.Toplevel.Project.Builder projectB = Project.newBuilder();
 		projectB.setId(projectJ.get("id").toString());
 		projectB.setName(projectJ.getString("name"));
 		projectB.setProjectUrl(projectJ.getString("html_url"));

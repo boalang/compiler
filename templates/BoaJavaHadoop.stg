@@ -80,7 +80,7 @@ public class <name> extends boa.runtime.BoaRunner {
 
 		if (id > 0)
 			configuration.setInt("boa.hadoop.jobid", id);
-		jb.submit();
+		jb.waitForCompletion(false);
 		if (id > 0)
 			boa.io.BoaOutputCommitter.setJobID(jb.getJobID().toString(), id);
 		System.err.println("Job ID: " + jb.getJobID().toString());

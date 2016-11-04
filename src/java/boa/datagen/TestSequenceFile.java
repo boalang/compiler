@@ -36,7 +36,7 @@ public class TestSequenceFile {
 			byte[] bytes = val.getBytes();
 			System.out.print("Parse after writing to sequence file: ");
 			//System.out.println(ASTRoot.parseFrom(bytes).getImportsList());
-			System.out.println(boa.datascience.externalDataSources.githubdata.Githubschema.Project.parseFrom(CodedInputStream.newInstance(bytes, 0, val.getLength())));
+			System.out.println(boa.types.Toplevel.Project.parseFrom(CodedInputStream.newInstance(bytes, 0, val.getLength())));
 		}
 		r.close();
 	}

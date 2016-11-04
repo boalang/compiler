@@ -34,13 +34,20 @@ import com.google.protobuf.GeneratedMessage;
 import boa.datagen.util.DatagenUtil;
 import boa.datascience.externalDataSources.AbstractDataReader;
 import boa.datascience.externalDataSources.DatagenProperties;
-import boa.datascience.externalDataSources.githubdata.Githubschema.ChangeKind;
-import boa.datascience.externalDataSources.githubdata.Githubschema.ChangedFile;
-import boa.datascience.externalDataSources.githubdata.Githubschema.ChangedFile.FileKind;
-import boa.datascience.externalDataSources.githubdata.Githubschema.CodeRepository;
-import boa.datascience.externalDataSources.githubdata.Githubschema.CodeRepository.RepositoryKind;
-import boa.datascience.externalDataSources.githubdata.Githubschema.Person;
-import boa.datascience.externalDataSources.githubdata.Githubschema.Revision;;
+//import boa.datascience.externalDataSources.githubdata.Githubschema.ChangeKind;
+//import boa.datascience.externalDataSources.githubdata.Githubschema.ChangedFile;
+//import boa.datascience.externalDataSources.githubdata.Githubschema.ChangedFile.FileKind;
+//import boa.datascience.externalDataSources.githubdata.Githubschema.CodeRepository;
+//import boa.datascience.externalDataSources.githubdata.Githubschema.CodeRepository.RepositoryKind;
+//import boa.datascience.externalDataSources.githubdata.Githubschema.Person;
+//import boa.datascience.externalDataSources.githubdata.Githubschema.Revision;
+import boa.types.Code.CodeRepository;
+import boa.types.Code.CodeRepository.RepositoryKind;
+import boa.types.Code.Revision;
+import boa.types.Diff.ChangedFile;
+import boa.types.Diff.ChangedFile.FileKind;
+import boa.types.Shared.ChangeKind;
+import boa.types.Shared.Person;
 
 /**
  * Created by nmtiwari on 10/26/16.
