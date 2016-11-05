@@ -24,6 +24,8 @@ public abstract class AbstractDataStorage extends DataScienceComponent {
 	public abstract void store(List<GeneratedMessage> dataInstance);
 
 	public abstract void storeAt(String location, GeneratedMessage dataInstance);
+	
+	public abstract String getDataLocation();
 
 	private Method createParserFrom(String className) {
 		Class<?> clas;

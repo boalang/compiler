@@ -6,12 +6,15 @@ import java.util.concurrent.LinkedBlockingQueue;
 import com.aol.cyclops.data.async.Queue;
 import com.google.protobuf.GeneratedMessage;
 
+import boa.datascience.evaluationEngine.EvaluationEngine;
 import boa.datascience.externalDataSources.ExternalDataSources;
 import boa.datascience.internalDataStorage.InternalDataStorage;
 
 public class DataScienceMaster {
 	public static void main(String[] args) {
 		String url = "https://github.com/boalang/compiler";
+		String program = "/Users/nmtiwari/git/research/boa/compiler/pl.boa";
+		String output = "/Users/nmtiwari/Desktop/boaout";
 		ArrayList<String> sources = new ArrayList<>();
 		sources.add(url);
 
@@ -20,10 +23,15 @@ public class DataScienceMaster {
 
 		ExternalDataSources external = new ExternalDataSources(sources);
 		InternalDataStorage storage = new InternalDataStorage(external.getProtoBufParser());
+		EvaluationEngine engine = new EvaluationEngine(program, storage.getDataLocation(), output);
+
 		external.getDataInQueue(eSourceIStorage);
 		storage.store(eSourceIStorage);
-//		List<GeneratedMessage> data = storage.getData();
-		storage.getDataInQueue(iStorageEEngine);
-		System.out.println(iStorageEEngine.get());
+		engine.evaluate();
+		if (engine.isSuccess()) {
+			System.out.println(engine.getResult());
+		}
+		// storage.getDataInQueue(iStorageEEngine);
+		// System.out.println(iStorageEEngine.get());
 	}
 }

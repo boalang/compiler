@@ -18,10 +18,13 @@ package boa.evaluator;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
@@ -30,6 +33,7 @@ import com.google.protobuf.GeneratedMessage;
 
 //import boa.Example;
 import boa.compiler.BoaCompiler;
+import boa.datagen.util.FileIO;
 import boa.datascience.evaluationEngine.AbstractEvaluationEngine;
 import boa.datascience.externalDataSources.DatagenProperties;
 
@@ -41,9 +45,11 @@ import boa.datascience.externalDataSources.DatagenProperties;
  */
 public class BoaEvaluator extends AbstractEvaluationEngine {
 
+	private Optional<Boolean> result;
+
 	public BoaEvaluator(String prog, String data) {
 		super(prog, data);
-		// TODO Auto-generated constructor stub
+		this.result = Optional.ofNullable(null);
 	}
 
 	public BoaEvaluator(String prog, String data, String outputPath) {
@@ -75,6 +81,7 @@ public class BoaEvaluator extends AbstractEvaluationEngine {
 
 		clean(compilationRoot);
 		try {
+			delete(new File(DatagenProperties.BOA_OUT));
 			BoaCompiler.main(compilationArgs);
 		} catch (IOException e1) {
 			e1.printStackTrace();
@@ -90,8 +97,7 @@ public class BoaEvaluator extends AbstractEvaluationEngine {
 		while (genClassName.startsWith(".")) {
 			genClassName = genClassName.substring(1);
 		}
-		
-		
+
 		File srcDir = new File(compilationRoot);
 		try {
 			URL srcDirUrl = srcDir.toURI().toURL();
@@ -100,13 +106,14 @@ public class BoaEvaluator extends AbstractEvaluationEngine {
 			Class<?> cls = cl.loadClass(genClassName);
 			Method method = cls.getMethod("main", String[].class);
 			method.invoke(null, (Object) actualArgs);
-		} catch (Exception exc) {
+		} catch (MalformedURLException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException
+				| InvocationTargetException | NoSuchMethodException | SecurityException exc) {
 			exc.printStackTrace();
+			this.result = Optional.ofNullable(false);
+			return false;
 		}
-
-		System.out.println("Output:" + DatagenProperties.BOA_OUT);
+		this.result = Optional.ofNullable(true);
 		return true;
-
 	}
 
 	@Override
@@ -135,10 +142,10 @@ public class BoaEvaluator extends AbstractEvaluationEngine {
 		name = name.substring(0, 1).toUpperCase() + name.substring(1);
 		return name;
 	}
-	
-	private void clean(String path){
+
+	private void clean(String path) {
 		File f = new File(path);
-		for(File sf: f.listFiles()){
+		for (File sf : f.listFiles()) {
 			try {
 				delete(sf);
 			} catch (IOException e) {
@@ -147,7 +154,7 @@ public class BoaEvaluator extends AbstractEvaluationEngine {
 			}
 		}
 	}
-	
+
 	private static final void delete(final File f) throws IOException {
 		if (f.isDirectory())
 			for (final File g : f.listFiles())
@@ -155,5 +162,20 @@ public class BoaEvaluator extends AbstractEvaluationEngine {
 
 		if (!f.delete())
 			throw new IOException("unable to delete file " + f);
+	}
+
+	@Override
+	public String getResults() {
+		for (File f : new File(DatagenProperties.BOA_OUT).listFiles()) {
+			if (f.getName().startsWith("part")) {
+				return FileIO.readFileContents(f);
+			}
+		}
+		return "";
+	}
+
+	@Override
+	public boolean isSuccess() {
+		return this.result.isPresent() ? this.result.get() : false;
 	}
 }

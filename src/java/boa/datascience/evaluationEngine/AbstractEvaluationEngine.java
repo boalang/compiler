@@ -2,7 +2,7 @@ package boa.datascience.evaluationEngine;
 
 import boa.datascience.DataScienceComponent;
 
-public abstract class AbstractEvaluationEngine extends DataScienceComponent{
+public abstract class AbstractEvaluationEngine extends DataScienceComponent {
 	protected String inputProgram;
 	protected String inputData;
 
@@ -28,4 +28,8 @@ public abstract class AbstractEvaluationEngine extends DataScienceComponent{
 	}
 
 	public abstract boolean evaluate();
+
+	public abstract String getResults();
+	
+	public abstract boolean isSuccess();
 }

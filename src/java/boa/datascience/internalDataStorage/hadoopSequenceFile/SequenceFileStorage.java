@@ -144,4 +144,9 @@ public class SequenceFileStorage extends AbstractDataStorage {
 		}
 	}
 
+	@Override
+	public String getDataLocation() {
+		return DatagenProperties.HADOOP_SEQ_FILE_LOCATION;
+	}
+
 }
