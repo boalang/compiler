@@ -2,7 +2,6 @@ package boa.datascience.internalDataStorage;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 

@@ -18,13 +18,10 @@ package boa.evaluator;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.List;
-import java.util.Optional;
 
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
@@ -45,11 +42,11 @@ import boa.datascience.externalDataSources.DatagenProperties;
  */
 public class BoaEvaluator extends AbstractEvaluationEngine {
 
-	private Optional<Boolean> result;
+	private boolean result;
 
 	public BoaEvaluator(String prog, String data) {
 		super(prog, data);
-		this.result = Optional.ofNullable(null);
+		this.result = false;
 	}
 
 	public BoaEvaluator(String prog, String data, String outputPath) {
@@ -108,10 +105,10 @@ public class BoaEvaluator extends AbstractEvaluationEngine {
 			method.invoke(null, (Object) actualArgs);
 		} catch (Exception exc) {
 			exc.printStackTrace();
-			this.result = Optional.ofNullable(false);
+			this.result = false;
 			return false;
 		}
-		this.result = Optional.ofNullable(true);
+		this.result = true;
 		return true;
 	}
 
@@ -175,6 +172,6 @@ public class BoaEvaluator extends AbstractEvaluationEngine {
 
 	@Override
 	public boolean isSuccess() {
-		return this.result.isPresent() ? this.result.get() : false;
+		return this.result;
 	}
 }
