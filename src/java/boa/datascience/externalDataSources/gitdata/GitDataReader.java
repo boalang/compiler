@@ -64,7 +64,9 @@ public class GitDataReader extends AbstractDataReader {
 	private final int ADDEDFILES_LOCATION = 0;
 	private final int CHANGEDFILES_LOCATION = 1;
 	private final int REMOVEDFILES_LOCATION = 2;
-	private final String GITPARSERCLASS = "boa.datascience.externalDataSources.githubdata.Githubschema.CodeRepository";
+	// private final String GITPARSERCLASS =
+	// "boa.datascience.externalDataSources.githubdata.Githubschema.CodeRepository";
+	private final String GITPARSERCLASS = "boa.types.code.CodeRepository";
 
 	public GitDataReader() {
 		super("gitschema.proto");

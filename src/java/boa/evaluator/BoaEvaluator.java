@@ -18,20 +18,10 @@ package boa.evaluator;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
-import java.util.UUID;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
-
-import javax.tools.JavaCompiler;
-import javax.tools.ToolProvider;
 
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
@@ -83,6 +73,7 @@ public class BoaEvaluator extends AbstractEvaluationEngine {
 		compilationArgs[4] = "-gcd";
 		compilationArgs[5] = compilationRoot;
 
+		clean(compilationRoot);
 		try {
 			BoaCompiler.main(compilationArgs);
 		} catch (IOException e1) {
@@ -99,21 +90,14 @@ public class BoaEvaluator extends AbstractEvaluationEngine {
 		while (genClassName.startsWith(".")) {
 			genClassName = genClassName.substring(1);
 		}
-		String file = compilationRoot + "/";
-
-		/////
-
+		
+		
 		File srcDir = new File(compilationRoot);
-		System.out.println(srcDir.getAbsolutePath());
-		System.out.println("Checking is source folder path exists ? : " + srcDir.exists());
-		System.out.println("Source directory is a directory?: " + srcDir.isDirectory());
 		try {
 			URL srcDirUrl = srcDir.toURI().toURL();
 
-			URLClassLoader urlClassLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
 			ClassLoader cl = new URLClassLoader(new URL[] { srcDirUrl }, ClassLoader.getSystemClassLoader());
-			Class cls = cl.loadClass(genClassName);
-			// Class cls = Class.forName(genClassName);
+			Class<?> cls = cl.loadClass(genClassName);
 			Method method = cls.getMethod("main", String[].class);
 			method.invoke(null, (Object) actualArgs);
 		} catch (Exception exc) {
@@ -150,5 +134,26 @@ public class BoaEvaluator extends AbstractEvaluationEngine {
 		}
 		name = name.substring(0, 1).toUpperCase() + name.substring(1);
 		return name;
+	}
+	
+	private void clean(String path){
+		File f = new File(path);
+		for(File sf: f.listFiles()){
+			try {
+				delete(sf);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	private static final void delete(final File f) throws IOException {
+		if (f.isDirectory())
+			for (final File g : f.listFiles())
+				delete(g);
+
+		if (!f.delete())
+			throw new IOException("unable to delete file " + f);
 	}
 }
