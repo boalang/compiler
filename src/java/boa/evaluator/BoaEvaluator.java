@@ -18,6 +18,7 @@ package boa.evaluator;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -62,17 +63,17 @@ public class BoaEvaluator extends AbstractEvaluationEngine {
 	@Override
 	public boolean evaluate() {
 		String[] compilationArgs = new String[6];
-		final String compilationRoot = new File(new File(System.getProperty("java.io.tmpdir")), UUID.randomUUID().toString()).getAbsolutePath();
+		final String compilationRoot = new File(new File(System.getProperty("java.io.tmpdir")),
+				UUID.randomUUID().toString()).getAbsolutePath();
 		compilationArgs[0] = "-i";
 		compilationArgs[1] = this.inputProgram;
 		compilationArgs[2] = "-j";
 		compilationArgs[3] = "./dist/boa-runtime.jar";
 		compilationArgs[4] = "-gcd";
 		compilationArgs[5] = compilationRoot;
-		BoaCompiler compiler = new BoaCompiler();
 
 		try {
-			compiler.main(compilationArgs);
+			BoaCompiler.main(compilationArgs);
 		} catch (IOException e1) {
 			e1.printStackTrace();
 			return false;
@@ -80,22 +81,25 @@ public class BoaEvaluator extends AbstractEvaluationEngine {
 
 		String[] actualArgs = new String[2];
 		String genFileName = getClassNameForGeneratedJavaProg();
-		String genClassName = compilationRoot + "/boa." + genFileName;
+		String genClassName = "boa." + genFileName;
 		genClassName.replace("/", ".");
 		actualArgs[0] = this.inputData;
 		actualArgs[1] = DatagenProperties.BOA_OUT;
 		while (genClassName.startsWith(".")) {
 			genClassName = genClassName.substring(1);
 		}
-		String file = "file://"+compilationRoot+"/boa/" + genFileName;
-
+		String file = compilationRoot + "/";
 		try {
-			URLClassLoader urlClassLoader = URLClassLoader.newInstance(new URL[] { new URL(file) });
-			Class<?> clazz = Class.forName(genFileName+".class");
-			Method method = clazz.getMethod("main", String[].class);
-			method.invoke(null, actualArgs);
-		} catch (Exception e) {
-			e.printStackTrace();
+			URL url = new File(file).toURI().toURL();
+			URLClassLoader classLoader = URLClassLoader.newInstance(new URL[] { url });
+			Class<?> prog = Class.forName(genClassName, true, classLoader);
+			Method main = prog.getMethod("main", String[].class);
+			Object[] arguments = { actualArgs };
+			main.invoke(null, arguments);
+			System.out.println("Output:" + DatagenProperties.BOA_OUT);
+		} catch (IOException | ClassNotFoundException | NoSuchMethodException | SecurityException
+				| IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
+			e1.printStackTrace();
 		}
 		System.out.println("Output:" + DatagenProperties.BOA_OUT);
 		return true;
@@ -112,7 +116,7 @@ public class BoaEvaluator extends AbstractEvaluationEngine {
 		}
 		String program = args[0];
 		String data = args[1];
-		BoaEvaluator evaluator = new BoaEvaluator(program, "./");
+		BoaEvaluator evaluator = new BoaEvaluator(program, data);
 		evaluator.evaluate();
 	}
 
