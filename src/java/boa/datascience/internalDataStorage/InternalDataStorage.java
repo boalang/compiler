@@ -1,5 +1,6 @@
 package boa.datascience.internalDataStorage;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,7 +30,15 @@ public class InternalDataStorage extends DataScienceComponent {
 		if (queue == null) {
 			throw new UnsupportedOperationException();
 		}
-		this.storage.store(queue.stream().map(x -> x).collect(Collectors.toList()));
+		// this.storage.store(queue.stream().map(x ->
+		// x).collect(Collectors.toList()));
+
+		int totalMessages = queue.size();
+		ArrayList<GeneratedMessage> msg = new ArrayList<GeneratedMessage>();
+		for (int i = 0; i < totalMessages; i++) {
+			msg.add(queue.get());
+		}
+		this.storage.store(msg);
 
 	}
 
@@ -38,7 +47,7 @@ public class InternalDataStorage extends DataScienceComponent {
 		return this.storage.getData();
 	}
 
-	public String getDataLocation(){
+	public String getDataLocation() {
 		return this.storage.getDataLocation();
 	}
 

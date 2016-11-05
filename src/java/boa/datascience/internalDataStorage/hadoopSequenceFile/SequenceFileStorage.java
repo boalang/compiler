@@ -49,14 +49,23 @@ public class SequenceFileStorage extends AbstractDataStorage {
 	@Override
 	public void store(List<GeneratedMessage> dataInstance) {
 		this.openWriter(DatagenProperties.HADOOP_SEQ_FILE_LOCATION + "/" + DatagenProperties.HADOOP_SEQ_FILE_NAME);
-		dataInstance.stream().forEach(data -> {
+//		dataInstance.stream().forEach(data -> {
+//			try {
+//				this.seqFileWriter.append(new Text("data1"), new BytesWritable(data.toByteArray()));
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		});
+		
+		for(GeneratedMessage data: dataInstance){
 			try {
 				this.seqFileWriter.append(new Text("data1"), new BytesWritable(data.toByteArray()));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		});
+		}
 		this.closeWrite();
 	}
 
@@ -78,7 +87,7 @@ public class SequenceFileStorage extends AbstractDataStorage {
 
 	protected List<GeneratedMessage> getData(Method parser) {
 		this.openReader(DatagenProperties.HADOOP_SEQ_FILE_LOCATION + "/" + DatagenProperties.HADOOP_SEQ_FILE_NAME);
-		List<GeneratedMessage> data = new ArrayList<>();
+		List<GeneratedMessage> data = new ArrayList<GeneratedMessage>();
 
 		org.apache.hadoop.io.Text key = (org.apache.hadoop.io.Text) ReflectionUtils
 				.newInstance(this.seqFileReader.getKeyClass(), conf);
@@ -90,8 +99,13 @@ public class SequenceFileStorage extends AbstractDataStorage {
 				data.add((GeneratedMessage) this.parser.invoke(null, com.google.protobuf.CodedInputStream
 						.newInstance(keyValue.getBytes(), 0, keyValue.getLength())));
 			}
-		} catch (IOException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			// TODO Auto-generated catch block
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
 			e.printStackTrace();
 		}
 		return data;

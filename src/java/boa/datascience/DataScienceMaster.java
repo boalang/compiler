@@ -15,11 +15,11 @@ public class DataScienceMaster {
 		String url = "https://github.com/boalang/compiler";
 		String program = "/Users/nmtiwari/git/research/boa/compiler/pl.boa";
 		String output = "/Users/nmtiwari/Desktop/boaout";
-		ArrayList<String> sources = new ArrayList<>();
+		ArrayList<String> sources = new ArrayList<String>();
 		sources.add(url);
 
-		Queue<GeneratedMessage> eSourceIStorage = new Queue<>(new LinkedBlockingQueue<GeneratedMessage>());
-		Queue<GeneratedMessage> iStorageEEngine = new Queue<>(new LinkedBlockingQueue<GeneratedMessage>());
+		Queue<GeneratedMessage> eSourceIStorage = new Queue<GeneratedMessage>(new LinkedBlockingQueue<GeneratedMessage>());
+		Queue<GeneratedMessage> iStorageEEngine = new Queue<GeneratedMessage>(new LinkedBlockingQueue<GeneratedMessage>());
 
 		ExternalDataSources external = new ExternalDataSources(sources);
 		InternalDataStorage storage = new InternalDataStorage(external.getProtoBufParser());

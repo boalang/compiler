@@ -106,8 +106,7 @@ public class BoaEvaluator extends AbstractEvaluationEngine {
 			Class<?> cls = cl.loadClass(genClassName);
 			Method method = cls.getMethod("main", String[].class);
 			method.invoke(null, (Object) actualArgs);
-		} catch (MalformedURLException | ClassNotFoundException | IllegalAccessException | IllegalArgumentException
-				| InvocationTargetException | NoSuchMethodException | SecurityException exc) {
+		} catch (Exception exc) {
 			exc.printStackTrace();
 			this.result = Optional.ofNullable(false);
 			return false;

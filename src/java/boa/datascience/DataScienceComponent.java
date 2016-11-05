@@ -13,7 +13,10 @@ public abstract class DataScienceComponent {
 		if (queue == null || !queue.isOpen()) {
 			throw new IllegalStateException("Your queue is not yet initialized");
 		}
-		getData().forEach(data -> queue.offer(data));
+		// getData().forEach(data -> queue.offer(data));
+		for (GeneratedMessage message : getData()) {
+			queue.offer(message);
+		}
 		queue.close();
 		return true;
 	}

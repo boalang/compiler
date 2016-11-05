@@ -22,10 +22,13 @@ public class ExternalDataSources extends DataScienceComponent {
 
 	@Override
 	public List<GeneratedMessage> getData() {
-		ArrayList<GeneratedMessage> data = new ArrayList<>();
+		ArrayList<GeneratedMessage> data = new ArrayList<GeneratedMessage>();
 		for (String source : this.sources) {
 			AbstractDataReader reader = AbstractDataReader.getDataReaders(source);
-			reader.getData().forEach(x -> data.add(x));
+//			reader.getData().forEach(x -> data.add(x));
+			for(GeneratedMessage message: reader.getData()){
+				data.add(message);
+			}
 		}
 		return data;
 	}

@@ -55,7 +55,7 @@ import boa.types.Shared.Person;
 public class GitDataReader extends AbstractDataReader {
 	private Repository repository;
 	private RevWalk revwalk;
-	private List<RevCommit> revisions = new ArrayList<>();
+	private List<RevCommit> revisions = new ArrayList<RevCommit>();
 	private Git git;
 	private HashMap<String, ObjectId> filePathGitObjectIds;
 	private Map<String, Integer> revisionMap;
@@ -72,14 +72,14 @@ public class GitDataReader extends AbstractDataReader {
 		super("gitschema.proto");
 		this.revisionMap = new HashMap<String, Integer>();
 		this.filePathGitObjectIds = new HashMap<String, ObjectId>();
-		this.perRevisionChangedFiles = new HashMap<>();
+		this.perRevisionChangedFiles = new HashMap<String, ArrayList<ArrayList<String>>>();
 	}
 
 	public GitDataReader(String schemaFileName) {
 		super(schemaFileName);
 		this.revisionMap = new HashMap<String, Integer>();
 		this.filePathGitObjectIds = new HashMap<String, ObjectId>();
-		this.perRevisionChangedFiles = new HashMap<>();
+		this.perRevisionChangedFiles = new HashMap<String, ArrayList<ArrayList<String>>>();
 	}
 
 	/**
@@ -125,7 +125,9 @@ public class GitDataReader extends AbstractDataReader {
 		if (!alreadyCloned()) {
 			try {
 				clone(this.dataSource, getLocalPath());
-			} catch (IOException | GitAPIException e) {
+			} catch (IOException  e) {
+				e.printStackTrace();
+			}catch ( GitAPIException e) {
 				e.printStackTrace();
 			}
 		}
@@ -151,16 +153,16 @@ public class GitDataReader extends AbstractDataReader {
 		gitBuilder.setKind(RepositoryKind.GIT);
 
 		// branches
-		List<String> branches = new ArrayList<>();
-		this.getBranches(branches, new ArrayList<>());
+		List<String> branches = new ArrayList<String>();
+		this.getBranches(branches, new ArrayList<String>());
 		for (String branch : branches) {
 			gitBuilder.addBranchNames(branch);
 		}
 
 		gitBuilder.addBranches(branches.size());
 
-		List<String> tags = new ArrayList<>();
-		this.getTags(tags, new ArrayList<>());
+		List<String> tags = new ArrayList<String>();
+		this.getTags(tags, new ArrayList<String>());
 		for (String tag : tags) {
 			gitBuilder.addTagNames(tag);
 		}
@@ -307,9 +309,9 @@ public class GitDataReader extends AbstractDataReader {
 	}
 
 	public void getChangeFiles(Map<String, Integer> revisionMap, RevCommit rc) {
-		ArrayList<String> rChangedPaths = new ArrayList<>();
-		ArrayList<String> rRemovedPaths = new ArrayList<>();
-		ArrayList<String> rAddedPaths = new ArrayList<>();
+		ArrayList<String> rChangedPaths = new ArrayList<String>();
+		ArrayList<String> rRemovedPaths = new ArrayList<String>();
+		ArrayList<String> rAddedPaths = new ArrayList<String>();
 		if (rc.getParentCount() == 0)
 			getChangeFiles(null, rc, rChangedPaths, rRemovedPaths, rAddedPaths);
 		else {
@@ -331,7 +333,7 @@ public class GitDataReader extends AbstractDataReader {
 				rRemovedPaths.clear();
 			}
 		}
-		ArrayList<ArrayList<String>> files = new ArrayList<>();
+		ArrayList<ArrayList<String>> files = new ArrayList<ArrayList<String>>();
 		files.add(ADDEDFILES_LOCATION, rAddedPaths);
 		files.add(CHANGEDFILES_LOCATION, rChangedPaths);
 		files.add(REMOVEDFILES_LOCATION, rRemovedPaths);
