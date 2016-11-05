@@ -20,10 +20,18 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
 import java.util.UUID;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+
+import javax.tools.JavaCompiler;
+import javax.tools.ToolProvider;
 
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
@@ -63,8 +71,11 @@ public class BoaEvaluator extends AbstractEvaluationEngine {
 	@Override
 	public boolean evaluate() {
 		String[] compilationArgs = new String[6];
-		final String compilationRoot = new File(new File(System.getProperty("java.io.tmpdir")),
-				UUID.randomUUID().toString()).getAbsolutePath();
+		// final String compilationRoot = new File(new
+		// File(System.getProperty("java.io.tmpdir")),
+		// UUID.randomUUID().toString()).getAbsolutePath();
+		final String compilationRoot = "hadoopgen";
+
 		compilationArgs[0] = "-i";
 		compilationArgs[1] = this.inputProgram;
 		compilationArgs[2] = "-j";
@@ -89,20 +100,29 @@ public class BoaEvaluator extends AbstractEvaluationEngine {
 			genClassName = genClassName.substring(1);
 		}
 		String file = compilationRoot + "/";
+
+		/////
+
+		File srcDir = new File(compilationRoot);
+		System.out.println(srcDir.getAbsolutePath());
+		System.out.println("Checking is source folder path exists ? : " + srcDir.exists());
+		System.out.println("Source directory is a directory?: " + srcDir.isDirectory());
 		try {
-			URL url = new File(file).toURI().toURL();
-			URLClassLoader classLoader = URLClassLoader.newInstance(new URL[] { url });
-			Class<?> prog = Class.forName(genClassName, true, classLoader);
-			Method main = prog.getMethod("main", String[].class);
-			Object[] arguments = { actualArgs };
-			main.invoke(null, arguments);
-			System.out.println("Output:" + DatagenProperties.BOA_OUT);
-		} catch (IOException | ClassNotFoundException | NoSuchMethodException | SecurityException
-				| IllegalAccessException | IllegalArgumentException | InvocationTargetException e1) {
-			e1.printStackTrace();
+			URL srcDirUrl = srcDir.toURI().toURL();
+
+			URLClassLoader urlClassLoader = (URLClassLoader) ClassLoader.getSystemClassLoader();
+			ClassLoader cl = new URLClassLoader(new URL[] { srcDirUrl }, ClassLoader.getSystemClassLoader());
+			Class cls = cl.loadClass(genClassName);
+			// Class cls = Class.forName(genClassName);
+			Method method = cls.getMethod("main", String[].class);
+			method.invoke(null, (Object) actualArgs);
+		} catch (Exception exc) {
+			exc.printStackTrace();
 		}
+
 		System.out.println("Output:" + DatagenProperties.BOA_OUT);
 		return true;
+
 	}
 
 	@Override
