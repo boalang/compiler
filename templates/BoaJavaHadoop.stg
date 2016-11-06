@@ -29,7 +29,8 @@ public class <name> extends boa.runtime.BoaRunner {
 	}
 
 	public static void main(String[] args) throws Exception {
-		System.exit(org.apache.hadoop.util.ToolRunner.run(new <name>(), args));
+	org.apache.hadoop.util.ToolRunner.run(new <name>(), args);
+		//System.exit();
 	}
 
 	@Override

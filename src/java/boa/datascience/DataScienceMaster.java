@@ -36,6 +36,7 @@ public class DataScienceMaster {
 		storage.store(eSourceIStorage);
 		engine.evaluate();
 		if (engine.isSuccess()) {
+			System.out.println();
 			System.out.println(engine.getResult());
 		}
 		// storage.getDataInQueue(iStorageEEngine);

@@ -18,7 +18,6 @@ package boa.evaluator;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -65,10 +64,7 @@ public class BoaEvaluator extends AbstractEvaluationEngine {
 	@Override
 	public boolean evaluate() {
 		String[] compilationArgs = new String[6];
-		// final String compilationRoot = new File(new
-		// File(System.getProperty("java.io.tmpdir")),
-		// UUID.randomUUID().toString()).getAbsolutePath();
-		final String compilationRoot = "hadoopgen";
+		final String compilationRoot = DatagenProperties.BOA_COMPILE_DIR_NAME;
 
 		compilationArgs[0] = "-i";
 		compilationArgs[1] = this.inputProgram;
@@ -77,10 +73,12 @@ public class BoaEvaluator extends AbstractEvaluationEngine {
 		compilationArgs[4] = "-gcd";
 		compilationArgs[5] = compilationRoot;
 
-		clean(compilationRoot);
 		try {
 			delete(new File(DatagenProperties.BOA_OUT));
-			BoaCompiler.main(compilationArgs);
+			delete(new File(compilationRoot));
+			if (!BoaCompiler.compile(compilationArgs)) {
+				return false;
+			}
 		} catch (IOException e1) {
 			e1.printStackTrace();
 			return false;
@@ -105,13 +103,12 @@ public class BoaEvaluator extends AbstractEvaluationEngine {
 			final Method method = cls.getMethod("main", String[].class);
 			method.invoke(null, (Object) actualArgs);
 
-		} catch (Exception exc) {
+		} catch (Throwable exc) {
 			exc.printStackTrace();
-			this.result = false;
-			return false;
+//			this.result = false;
 		}
 		this.result = true;
-		return true;
+		return this.result;
 	}
 
 	@Override
@@ -139,20 +136,6 @@ public class BoaEvaluator extends AbstractEvaluationEngine {
 		}
 		name = name.substring(0, 1).toUpperCase() + name.substring(1);
 		return name;
-	}
-
-	private void clean(String path) {
-		File f = new File(path);
-		if (f.exists()) {
-			for (File sf : f.listFiles()) {
-				try {
-					delete(sf);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}
 	}
 
 	private static final void delete(final File f) throws IOException {

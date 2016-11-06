@@ -34,6 +34,8 @@ import com.google.protobuf.GeneratedMessage;
 import boa.datagen.util.DatagenUtil;
 import boa.datascience.externalDataSources.AbstractDataReader;
 import boa.datascience.externalDataSources.DatagenProperties;
+import boa.datascience.externalDataSources.javadata.JavaDataReader;
+import boa.types.Ast.ASTRoot;
 //import boa.datascience.externalDataSources.githubdata.Githubschema.ChangeKind;
 //import boa.datascience.externalDataSources.githubdata.Githubschema.ChangedFile;
 //import boa.datascience.externalDataSources.githubdata.Githubschema.ChangedFile.FileKind;
@@ -125,9 +127,9 @@ public class GitDataReader extends AbstractDataReader {
 		if (!alreadyCloned()) {
 			try {
 				clone(this.dataSource, getLocalPath());
-			} catch (IOException  e) {
+			} catch (IOException e) {
 				e.printStackTrace();
-			}catch ( GitAPIException e) {
+			} catch (GitAPIException e) {
 				e.printStackTrace();
 			}
 		}
@@ -190,6 +192,12 @@ public class GitDataReader extends AbstractDataReader {
 				file.setKey(changed);
 				file.setName(changed);
 				file.setKind(FileKind.JLS8);
+				JavaDataReader java = new JavaDataReader(changed);
+				ASTRoot content = (ASTRoot) java.getData().get(0);
+				if (content != null) {
+					file.setAst(content);
+					file.setKind(java.getKind());
+				}
 				rev.addFiles(file.build());
 			}
 			for (final String changed : perRevisionChangedFiles.get(commit.getName()).get(ADDEDFILES_LOCATION)) {
@@ -197,6 +205,12 @@ public class GitDataReader extends AbstractDataReader {
 				file.setKey(changed);
 				file.setName(changed);
 				file.setKind(FileKind.JLS8);
+				JavaDataReader java = new JavaDataReader(changed);
+				ASTRoot content = (ASTRoot) java.getData().get(0);
+				if (content != null) {
+					file.setAst(content);
+					file.setKind(java.getKind());
+				}
 				rev.addFiles(file.build());
 			}
 			for (final String changed : perRevisionChangedFiles.get(commit.getName()).get(REMOVEDFILES_LOCATION)) {
@@ -204,12 +218,15 @@ public class GitDataReader extends AbstractDataReader {
 				file.setKey(changed);
 				file.setName(changed);
 				file.setKind(FileKind.JLS8);
+				JavaDataReader java = new JavaDataReader(changed);
+				ASTRoot content = (ASTRoot) java.getData().get(0);
+				if (content != null) {
+					file.setAst(content);
+					file.setKind(java.getKind());
+				}
 				rev.addFiles(file.build());
 			}
 			gitBuilder.addRevisions(rev.build());
-			// this.changedPaths.clear();
-			// this.addedPaths.clear();
-			// this.removedPaths.clear();
 		}
 
 		return gitBuilder.build();

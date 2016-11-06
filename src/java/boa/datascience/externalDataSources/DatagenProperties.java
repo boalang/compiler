@@ -39,6 +39,7 @@ public class DatagenProperties {
 	public static final String HADOOP_SEQ_FILE_NAME = "projects.seq";
 
 	public static final String BOA_OUTPUT_DIR_NAME = "boaOutput";
+	public static final String BOA_COMPILE_DIR_NAME = "compile";
 	public static String BOA_OUTPUT_DIR_PATH = "./../";
 	public static String  BOA_OUT = DatagenProperties.BOA_OUTPUT_DIR_PATH + "/" + DatagenProperties.BOA_OUTPUT_DIR_NAME;
 
