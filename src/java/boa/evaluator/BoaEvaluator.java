@@ -18,6 +18,7 @@ package boa.evaluator;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -85,7 +86,7 @@ public class BoaEvaluator extends AbstractEvaluationEngine {
 			return false;
 		}
 
-		String[] actualArgs = new String[2];
+		final String[] actualArgs = new String[2];
 		String genFileName = getClassNameForGeneratedJavaProg();
 		String genClassName = "boa." + genFileName;
 		genClassName.replace("/", ".");
@@ -101,8 +102,9 @@ public class BoaEvaluator extends AbstractEvaluationEngine {
 
 			ClassLoader cl = new URLClassLoader(new URL[] { srcDirUrl }, ClassLoader.getSystemClassLoader());
 			Class<?> cls = cl.loadClass(genClassName);
-			Method method = cls.getMethod("main", String[].class);
+			final Method method = cls.getMethod("main", String[].class);
 			method.invoke(null, (Object) actualArgs);
+
 		} catch (Exception exc) {
 			exc.printStackTrace();
 			this.result = false;
@@ -141,23 +143,27 @@ public class BoaEvaluator extends AbstractEvaluationEngine {
 
 	private void clean(String path) {
 		File f = new File(path);
-		for (File sf : f.listFiles()) {
-			try {
-				delete(sf);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+		if (f.exists()) {
+			for (File sf : f.listFiles()) {
+				try {
+					delete(sf);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 	}
 
 	private static final void delete(final File f) throws IOException {
-		if (f.isDirectory())
-			for (final File g : f.listFiles())
-				delete(g);
+		if (f.exists()) {
+			if (f.isDirectory())
+				for (final File g : f.listFiles())
+					delete(g);
 
-		if (!f.delete())
-			throw new IOException("unable to delete file " + f);
+			if (!f.delete())
+				throw new IOException("unable to delete file " + f);
+		}
 	}
 
 	@Override

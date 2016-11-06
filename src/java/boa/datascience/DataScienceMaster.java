@@ -12,14 +12,21 @@ import boa.datascience.internalDataStorage.InternalDataStorage;
 
 public class DataScienceMaster {
 	public static void main(String[] args) {
-		String url = "https://github.com/boalang/compiler";
-		String program = "/Users/nmtiwari/git/research/boa/compiler/pl.boa";
-		String output = "/Users/nmtiwari/Desktop/boaout";
+		// String url = "https://github.com/boalang/compiler";
+		// String program =
+		// "/Users/nmtiwari/git/research/boa_platform/compiler/example.boa";
+		// String output = "/Users/nmtiwari/Desktop/boaout";
+
+		String url = args[0];
+		String program = args[1];
+		String output = args[2];
+
 		ArrayList<String> sources = new ArrayList<String>();
 		sources.add(url);
 
-		Queue<GeneratedMessage> eSourceIStorage = new Queue<GeneratedMessage>(new LinkedBlockingQueue<GeneratedMessage>());
-		Queue<GeneratedMessage> iStorageEEngine = new Queue<GeneratedMessage>(new LinkedBlockingQueue<GeneratedMessage>());
+		Queue<GeneratedMessage> eSourceIStorage = new Queue<GeneratedMessage>(
+				new LinkedBlockingQueue<GeneratedMessage>());
+
 
 		ExternalDataSources external = new ExternalDataSources(sources);
 		InternalDataStorage storage = new InternalDataStorage(external.getProtoBufParser());

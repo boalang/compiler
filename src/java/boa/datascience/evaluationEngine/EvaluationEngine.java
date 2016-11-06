@@ -1,14 +1,11 @@
 package boa.datascience.evaluationEngine;
 
-import java.util.List;
-
-import com.google.protobuf.GeneratedMessage;
-
 import boa.datascience.externalDataSources.DatagenProperties;
 import boa.evaluator.BoaEvaluator;
 
 public class EvaluationEngine {
 	private BoaEvaluator evaluator;
+	private boolean isSuccess;
 
 	public EvaluationEngine(String prog, String data, String output) {
 		evaluator = new BoaEvaluator(prog, data);
@@ -16,7 +13,8 @@ public class EvaluationEngine {
 	}
 
 	public boolean evaluate() {
-		return evaluator.evaluate();
+		 isSuccess = evaluator.evaluate();
+		 return isSuccess;
 	}
 
 	public String getResult() {
@@ -24,7 +22,7 @@ public class EvaluationEngine {
 	}
 	
 	public boolean isSuccess(){
-		return this.isSuccess();
+		return this.isSuccess;
 	}
 
 }
