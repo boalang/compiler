@@ -11,7 +11,7 @@ import org.apache.hadoop.io.Text;
 
 import com.google.protobuf.CodedInputStream;
 
-import boa.datascience.externalDataSources.DatagenProperties;
+import boa.dsi.dsource.DatagenProperties;
 
 public class TestSequenceFile {
 
