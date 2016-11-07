@@ -1,4 +1,4 @@
-package boa.datascience.internalDataStorage.hadoopSequenceFile;
+package boa.dsi.storage.sequencefile;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -17,8 +17,8 @@ import org.apache.hadoop.util.ReflectionUtils;
 import com.aol.cyclops.data.async.Queue;
 import com.google.protobuf.GeneratedMessage;
 
-import boa.datascience.externalDataSources.DatagenProperties;
-import boa.datascience.internalDataStorage.AbstractDataStorage;
+import boa.dsi.dsource.DatagenProperties;
+import boa.dsi.storage.AbstractDataStorage;
 
 public class SequenceFileStorage extends AbstractDataStorage {
 	private Configuration conf;

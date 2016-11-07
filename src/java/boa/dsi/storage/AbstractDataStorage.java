@@ -1,4 +1,4 @@
-package boa.datascience.internalDataStorage;
+package boa.dsi.storage;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -7,9 +7,9 @@ import org.apache.log4j.Logger;
 
 import com.google.protobuf.GeneratedMessage;
 
-import boa.datascience.DataScienceComponent;
+import boa.dsi.DSComponent;
 
-public abstract class AbstractDataStorage extends DataScienceComponent {
+public abstract class AbstractDataStorage extends DSComponent {
 	protected static Logger LOG = Logger.getLogger(AbstractDataStorage.class);
 	protected String location;
 	protected Method parser;

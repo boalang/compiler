@@ -1,4 +1,4 @@
-package boa.datascience.evaluationEngine;
+package boa.dsi.evaluator;
 
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;

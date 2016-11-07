@@ -1,8 +1,8 @@
-package boa.datascience.evaluationEngine;
+package boa.dsi.evaluator;
 
-import boa.datascience.DataScienceComponent;
+import boa.dsi.DSComponent;
 
-public abstract class AbstractEvaluationEngine extends DataScienceComponent {
+public abstract class AbstractEvaluationEngine extends DSComponent {
 	protected String inputProgram;
 	protected String inputData;
 

@@ -1,4 +1,4 @@
-package boa.datascience.externalDataSources.javadata;
+package boa.dsi.dsource.java;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import boa.datagen.util.FileIO;
 import boa.datagen.util.Java7Visitor;
 import boa.datagen.util.Java8Visitor;
 import boa.datagen.util.JavaErrorCheckVisitor;
-import boa.datascience.externalDataSources.AbstractDataReader;
+import boa.dsi.dsource.AbstractDataReader;
 import boa.types.Ast.ASTRoot;
 import boa.types.Diff.ChangedFile.FileKind;
 

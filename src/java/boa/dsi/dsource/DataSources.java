@@ -1,4 +1,4 @@
-package boa.datascience.externalDataSources;
+package boa.dsi.dsource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,16 +7,16 @@ import org.apache.log4j.Logger;
 
 import com.google.protobuf.GeneratedMessage;
 
-import boa.datascience.DataScienceComponent;
+import boa.dsi.DSComponent;
 
 /**
  * Created by nmtiwari on 11/2/16.
  */
-public class ExternalDataSources extends DataScienceComponent {
-	private static Logger LOG = Logger.getLogger(ExternalDataSources.class);
+public class DataSources extends DSComponent {
+	private static Logger LOG = Logger.getLogger(DataSources.class);
 	ArrayList<String> sources;
 
-	public ExternalDataSources(ArrayList<String> sources) {
+	public DataSources(ArrayList<String> sources) {
 		this.sources = sources;
 	}
 

@@ -1,6 +1,6 @@
-package boa.datascience.evaluationEngine;
+package boa.dsi.evaluator;
 
-import boa.datascience.externalDataSources.DatagenProperties;
+import boa.dsi.dsource.DatagenProperties;
 import boa.evaluator.BoaEvaluator;
 
 public class EvaluationEngine {

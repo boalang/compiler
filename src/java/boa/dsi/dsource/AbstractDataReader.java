@@ -1,4 +1,4 @@
-package boa.datascience.externalDataSources;
+package boa.dsi.dsource;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
@@ -11,19 +11,19 @@ import com.google.protobuf.GeneratedMessage;
 
 import boa.datagen.util.CandoiaProperties;
 import boa.datagen.util.FileIO;
-import boa.datascience.DataScienceComponent;
+import boa.dsi.DSComponent;
 
 /**
  * Created by nmtiwari on 11/2/16.
  */
-public abstract class DataReader extends DataScienceComponent{
+public abstract class AbstractDataReader extends DSComponent{
 	protected String dataSource;
 
-	public DataReader(String source) {
+	public AbstractDataReader(String source) {
 		this.dataSource = source;
 	}
 
-	public static final DataReader getDataReaders(String source) throws UnsupportedOperationException {
+	public static final AbstractDataReader getDataReaders(String source) throws UnsupportedOperationException {
 		File settingFile = new File(System.getProperty("user.dir") + "/" + CandoiaProperties.SETTINGS_JSON_FILE_PATH
 				+ CandoiaProperties.SETTINGS_JSON_FILE_NAME);
 		String setting = FileIO.readFileContents(settingFile);
@@ -34,8 +34,8 @@ public abstract class DataReader extends DataScienceComponent{
 		for (String name : names) {
 			try {
 				@SuppressWarnings("unchecked")
-				Class<DataReader> clas = (Class<DataReader>) Class.forName(name);
-				DataReader reader = clas.getConstructor(String.class).newInstance(source);
+				Class<AbstractDataReader> clas = (Class<AbstractDataReader>) Class.forName(name);
+				AbstractDataReader reader = clas.getConstructor(String.class).newInstance(source);
 				if (reader.isReadable(source)) {
 					return reader;
 				}
@@ -68,4 +68,6 @@ public abstract class DataReader extends DataScienceComponent{
 	public abstract boolean isReadable(String source);
 
 	public abstract List<GeneratedMessage> getData();
+	
+	public abstract String getParserClassName();
 }

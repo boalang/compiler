@@ -1,5 +1,0 @@
-[
-   {
-      "datareaders": "boa.datascience.externalDataSources.githubdata.GithubDataReader, boa.datascience.externalDataSources.gitdata.GitDataReader"
-   }
-]

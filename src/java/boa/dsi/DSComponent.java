@@ -1,11 +1,11 @@
-package boa.datascience;
+package boa.dsi;
 
 import java.util.List;
 
 import com.aol.cyclops.data.async.Queue;
 import com.google.protobuf.GeneratedMessage;
 
-public abstract class DataScienceComponent {
+public abstract class DSComponent {
 
 	public abstract List<GeneratedMessage> getData();
 

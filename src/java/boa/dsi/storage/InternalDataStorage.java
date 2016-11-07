@@ -1,4 +1,4 @@
-package boa.datascience.internalDataStorage;
+package boa.dsi.storage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,11 +8,11 @@ import org.apache.log4j.Logger;
 import com.aol.cyclops.data.async.Queue;
 import com.google.protobuf.GeneratedMessage;
 
-import boa.datascience.DataScienceComponent;
-import boa.datascience.externalDataSources.DatagenProperties;
-import boa.datascience.internalDataStorage.hadoopSequenceFile.SequenceFileStorage;
+import boa.dsi.DSComponent;
+import boa.dsi.dsource.DatagenProperties;
+import boa.dsi.storage.sequencefile.SequenceFileStorage;
 
-public class InternalDataStorage extends DataScienceComponent {
+public class InternalDataStorage extends DSComponent {
 	protected static Logger LOG = Logger.getLogger(InternalDataStorage.class);
 	private SequenceFileStorage storage;
 

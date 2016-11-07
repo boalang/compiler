@@ -1,4 +1,4 @@
-package boa.datascience.externalDataSources;
+package boa.dsi.dsource;
 
 public class DatagenProperties {
 	public static final boolean DEBUG = false;

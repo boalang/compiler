@@ -1,4 +1,4 @@
-package boa.datascience.externalDataSources.gitdata;
+package boa.dsi.dsource.git;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,17 +32,17 @@ import org.eclipse.jgit.util.io.NullOutputStream;
 import com.google.protobuf.GeneratedMessage;
 
 import boa.datagen.util.DatagenUtil;
-import boa.datascience.externalDataSources.AbstractDataReader;
-import boa.datascience.externalDataSources.DatagenProperties;
-import boa.datascience.externalDataSources.javadata.JavaDataReader;
+import boa.dsi.dsource.AbstractDataReader;
+import boa.dsi.dsource.DatagenProperties;
+import boa.dsi.dsource.java.JavaDataReader;
 import boa.types.Ast.ASTRoot;
-//import boa.datascience.externalDataSources.githubdata.Githubschema.ChangeKind;
-//import boa.datascience.externalDataSources.githubdata.Githubschema.ChangedFile;
-//import boa.datascience.externalDataSources.githubdata.Githubschema.ChangedFile.FileKind;
-//import boa.datascience.externalDataSources.githubdata.Githubschema.CodeRepository;
-//import boa.datascience.externalDataSources.githubdata.Githubschema.CodeRepository.RepositoryKind;
-//import boa.datascience.externalDataSources.githubdata.Githubschema.Person;
-//import boa.datascience.externalDataSources.githubdata.Githubschema.Revision;
+//import boa.dsi.dsource.github.Githubschema.ChangeKind;
+//import boa.dsi.dsource.github.Githubschema.ChangedFile;
+//import boa.dsi.dsource.github.Githubschema.ChangedFile.FileKind;
+//import boa.dsi.dsource.github.Githubschema.CodeRepository;
+//import boa.dsi.dsource.github.Githubschema.CodeRepository.RepositoryKind;
+//import boa.dsi.dsource.github.Githubschema.Person;
+//import boa.dsi.dsource.github.Githubschema.Revision;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.CodeRepository.RepositoryKind;
 import boa.types.Code.Revision;
@@ -67,7 +67,7 @@ public class GitDataReader extends AbstractDataReader {
 	private final int CHANGEDFILES_LOCATION = 1;
 	private final int REMOVEDFILES_LOCATION = 2;
 	// private final String GITPARSERCLASS =
-	// "boa.datascience.externalDataSources.githubdata.Githubschema.CodeRepository";
+	// "boa.dsi.dsource.github.Githubschema.CodeRepository";
 	private final String GITPARSERCLASS = "boa.types.code.CodeRepository";
 
 	public GitDataReader() {

@@ -1,4 +1,4 @@
-package boa.datascience.externalDataSources.githubdata;
+package boa.dsi.dsource.github;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,14 +9,9 @@ import org.json.JSONObject;
 
 import com.google.protobuf.GeneratedMessage;
 
-import boa.datascience.externalDataSources.AbstractDataReader;
-import boa.datascience.externalDataSources.gitdata.GitDataReader;
-//import boa.datascience.externalDataSources.gitdata.GitDataReader;
-//import boa.datascience.externalDataSources.githubdata.Githubschema.CodeRepository;
-//import boa.datascience.externalDataSources.githubdata.Githubschema.Person;
-//import boa.datascience.externalDataSources.githubdata.Githubschema.Project;
-//import boa.datascience.externalDataSources.githubdata.Githubschema.Project.ForgeKind;
-import boa.datascience.externalDataSources.httpdata.HttpDataReader;
+import boa.dsi.dsource.AbstractDataReader;
+import boa.dsi.dsource.git.GitDataReader;
+import boa.dsi.dsource.http.HttpDataReader;
 import boa.types.Code.CodeRepository;
 import boa.types.Shared.Person;
 import boa.types.Toplevel.Project;
@@ -30,7 +25,7 @@ public class GithubDataReader extends AbstractDataReader {
 	// FIXME: This should be a pattern of github urls
 	private final String GITHUBURL = "https://github.com/";
 	// private final String GITHUBPARSERCLASS =
-	// "boa.datascience.externalDataSources.githubdata.Githubschema.Project";
+	// "boa.dsi.dsource.github.Githubschema.Project";
 	private final String GITHUBPARSERCLASS = "boa.types.Toplevel.Project";
 
 	public GithubDataReader(String source) {
@@ -57,8 +52,8 @@ public class GithubDataReader extends AbstractDataReader {
 		String dataurl = "https://api.github.com/repos/" + details[details.length - 2] + "/"
 				+ details[details.length - 1];
 		HttpDataReader httpDataCollector = new HttpDataReader(dataurl);
-		String username = "nmtiwari";
-		String password = "swanit*49912";
+		String username = "username";
+		String password = "password";
 		if ("password".equals(password)) {
 			throw new IllegalArgumentException("Your username password in file GithubDataReaser.java are not yet set");
 		}

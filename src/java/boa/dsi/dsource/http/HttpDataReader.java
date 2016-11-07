@@ -1,4 +1,4 @@
-package boa.datascience.externalDataSources.httpdata;
+package boa.dsi.dsource.http;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
