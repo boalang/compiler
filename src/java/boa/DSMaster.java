@@ -28,7 +28,7 @@ public class DSMaster {
 				new LinkedBlockingQueue<GeneratedMessage>());
 
 		GithubReader external = new GithubReader(sources);
-		SequenceFileStorage storage = new SequenceFileStorage(external.getParserClassName());
+		SequenceFileStorage storage = new SequenceFileStorage(external);
 		EvaluationEngine engine = new EvaluationEngine(program, storage.getDataLocation(), output);
 
 //		 external.getDataInQueue(eSourceIStorage);

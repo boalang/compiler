@@ -1,6 +1,7 @@
 package boa.dsi.dsource.java;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,6 +12,7 @@ import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 
+import com.google.protobuf.CodedInputStream;
 import com.google.protobuf.GeneratedMessage;
 
 import boa.datagen.util.FileIO;
@@ -147,6 +149,11 @@ public class JavaReader extends AbstractSource {
 			e.printStackTrace();
 			return false;
 		}
+	}
+
+	@Override
+	public GeneratedMessage parseFrom(CodedInputStream stream) throws IOException {
+		return ASTRoot.parseFrom(stream);
 	}
 
 }

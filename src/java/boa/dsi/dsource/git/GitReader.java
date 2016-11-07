@@ -30,6 +30,7 @@ import org.eclipse.jgit.treewalk.EmptyTreeIterator;
 import org.eclipse.jgit.util.io.NullOutputStream;
 
 import com.aol.cyclops.data.async.Queue;
+import com.google.protobuf.CodedInputStream;
 import com.google.protobuf.GeneratedMessage;
 
 import boa.datagen.util.DatagenUtil;
@@ -415,6 +416,11 @@ public class GitReader extends AbstractSource {
 	public boolean getDataInQueue(Queue<GeneratedMessage> queue) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public GeneratedMessage parseFrom(CodedInputStream stream) throws IOException {
+		return CodeRepository.parseFrom(stream);
 	}
 
 }

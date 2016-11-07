@@ -18,7 +18,7 @@ import boa.dsi.DSComponent;
 /**
  * Created by nmtiwari on 11/2/16.
  */
-public abstract class AbstractSource implements DSComponent {
+public abstract class AbstractSource implements DSComponent, ProtobufParserI{
 	protected ArrayList<String> sources;
 
 	public AbstractSource(ArrayList<String> source) {

@@ -1,5 +1,6 @@
 package boa.dsi.dsource.github;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +8,7 @@ import org.apache.commons.validator.routines.UrlValidator;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.google.protobuf.CodedInputStream;
 import com.google.protobuf.GeneratedMessage;
 
 import boa.dsi.dsource.AbstractSource;
@@ -188,16 +190,17 @@ public class GithubReader extends AbstractSource {
 			for (GeneratedMessage code : new GitReader(coderepo).getData()) {
 				projectB.addCodeRepositories((CodeRepository) code);
 			}
-			// projectB.addCodeRepositories(projectJ.getString("clone_url").toString());
 		}
-		// if (projectJ.has("issues_url")) {
-		// projectB.addIssueRepositories(projectJ.getString("issues_url").toString());
-		// }
 		return projectB.build();
 	}
 
 	@Override
 	public String getParserClassName() {
 		return GITHUBPARSERCLASS;
+	}
+
+	@Override
+	public GeneratedMessage parseFrom(CodedInputStream stream) throws IOException {
+		return Project.parseFrom(stream);
 	}
 }

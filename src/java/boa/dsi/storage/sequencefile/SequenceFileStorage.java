@@ -18,6 +18,7 @@ import com.aol.cyclops.data.async.Queue;
 import com.google.protobuf.GeneratedMessage;
 
 import boa.dsi.DSIProperties;
+import boa.dsi.dsource.AbstractSource;
 import boa.dsi.storage.AbstractStorage;
 
 public class SequenceFileStorage extends AbstractStorage {
@@ -25,12 +26,12 @@ public class SequenceFileStorage extends AbstractStorage {
 	SequenceFile.Reader seqFileReader;
 	SequenceFile.Writer seqFileWriter;
 
-	public SequenceFileStorage(String location, String parser) {
+	public SequenceFileStorage(String location, AbstractSource parser) {
 		super(location, parser);
 		conf = new Configuration();
 	}
 
-	public SequenceFileStorage(String parser) {
+	public SequenceFileStorage(AbstractSource parser) {
 		super(DSIProperties.HADOOP_SEQ_FILE_LOCATION + "/" + DSIProperties.HADOOP_SEQ_FILE_NAME, parser);
 		conf = new Configuration();
 	}
@@ -54,16 +55,6 @@ public class SequenceFileStorage extends AbstractStorage {
 	@Override
 	public void store(List<GeneratedMessage> dataInstance) {
 		this.openWriter(DSIProperties.HADOOP_SEQ_FILE_LOCATION + "/" + DSIProperties.HADOOP_SEQ_FILE_NAME);
-		// dataInstance.stream().forEach(data -> {
-		// try {
-		// this.seqFileWriter.append(new Text("data1"), new
-		// BytesWritable(data.toByteArray()));
-		// } catch (IOException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-		// });
-
 		for (GeneratedMessage data : dataInstance) {
 			try {
 				this.seqFileWriter.append(new Text("data1"), new BytesWritable(data.toByteArray()));
@@ -81,17 +72,12 @@ public class SequenceFileStorage extends AbstractStorage {
 	}
 
 	@Override
-	public List<GeneratedMessage> getData() {
-		return this.getData(this.parser);
-	}
-
-	@Override
 	public boolean getDataInQueue(Queue<GeneratedMessage> q) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
-	protected List<GeneratedMessage> getData(Method parser) {
+	@Override
+	public List<GeneratedMessage> getData() {
 		this.openReader(DSIProperties.HADOOP_SEQ_FILE_LOCATION + "/" + DSIProperties.HADOOP_SEQ_FILE_NAME);
 		List<GeneratedMessage> data = new ArrayList<GeneratedMessage>();
 
@@ -102,16 +88,12 @@ public class SequenceFileStorage extends AbstractStorage {
 
 		try {
 			while (this.seqFileReader.next(key, keyValue)) {
-				data.add((GeneratedMessage) this.parser.invoke(null, com.google.protobuf.CodedInputStream
+				data.add(this.parserSource.parseFrom(com.google.protobuf.CodedInputStream
 						.newInstance(keyValue.getBytes(), 0, keyValue.getLength())));
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
 		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
 			e.printStackTrace();
 		}
 		return data;
