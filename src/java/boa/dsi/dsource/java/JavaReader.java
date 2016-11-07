@@ -17,25 +17,18 @@ import boa.datagen.util.FileIO;
 import boa.datagen.util.Java7Visitor;
 import boa.datagen.util.Java8Visitor;
 import boa.datagen.util.JavaErrorCheckVisitor;
-import boa.dsi.dsource.AbstractDataReader;
+import boa.dsi.dsource.AbstractSource;
 import boa.types.Ast.ASTRoot;
 import boa.types.Diff.ChangedFile.FileKind;
 
-public class JavaDataReader extends AbstractDataReader {
+public class JavaReader extends AbstractSource {
 	private final String JAVAPARSERCLASS = "boa.types.code.CodeRepository.ASTRoot";
 	private static final boolean debug = false;
-	private String content;
 	private ASTRoot.Builder ast;
 	private FileKind kind;
 
-	public JavaDataReader(String source, String content) {
-		super(source);
-		this.content = content;
-	}
-
-	public JavaDataReader(String source) {
-		super(source);
-		this.content = FileIO.readFileContents(new File(source));
+	public JavaReader(ArrayList<String> sources) {
+		super(sources);
 	}
 
 	@Override
@@ -46,7 +39,10 @@ public class JavaDataReader extends AbstractDataReader {
 	@Override
 	public List<GeneratedMessage> getData() {
 		ArrayList<GeneratedMessage> file = new ArrayList<GeneratedMessage>();
-		file.add(processChangeFile(this.dataSource, true));
+		for (String path : this.sources) {
+			String content = FileIO.readFileContents(new File(path));
+			file.add(processChangeFile(path, content, true));
+		}
 		return file;
 	}
 
@@ -63,7 +59,7 @@ public class JavaDataReader extends AbstractDataReader {
 		return this.JAVAPARSERCLASS;
 	}
 
-	private ASTRoot processChangeFile(String path, boolean parse) {
+	private ASTRoot processChangeFile(String path, String content, boolean parse) {
 		final String lowerPath = path.toLowerCase();
 		if (lowerPath.endsWith(".java") && parse) {
 			this.kind = FileKind.SOURCE_JAVA_JLS2;
@@ -96,7 +92,7 @@ public class JavaDataReader extends AbstractDataReader {
 			} else if (debug)
 				System.err.println("Accepted JLS2: revision " + ": file " + path);
 		}
-		return this.ast != null ? this.ast.build(): null;
+		return this.ast != null ? this.ast.build() : null;
 	}
 
 	private boolean parseJavaFile(final String path, final String content, final String compliance, final int astLevel,

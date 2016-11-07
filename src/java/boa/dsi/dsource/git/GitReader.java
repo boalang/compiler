@@ -29,12 +29,13 @@ import org.eclipse.jgit.treewalk.CanonicalTreeParser;
 import org.eclipse.jgit.treewalk.EmptyTreeIterator;
 import org.eclipse.jgit.util.io.NullOutputStream;
 
+import com.aol.cyclops.data.async.Queue;
 import com.google.protobuf.GeneratedMessage;
 
 import boa.datagen.util.DatagenUtil;
-import boa.dsi.dsource.AbstractDataReader;
-import boa.dsi.dsource.DatagenProperties;
-import boa.dsi.dsource.java.JavaDataReader;
+import boa.dsi.DSIProperties;
+import boa.dsi.dsource.AbstractSource;
+import boa.dsi.dsource.java.JavaReader;
 import boa.types.Ast.ASTRoot;
 //import boa.dsi.dsource.github.Githubschema.ChangeKind;
 //import boa.dsi.dsource.github.Githubschema.ChangedFile;
@@ -54,7 +55,7 @@ import boa.types.Shared.Person;
 /**
  * Created by nmtiwari on 10/26/16.
  */
-public class GitDataReader extends AbstractDataReader {
+public class GitReader extends AbstractSource {
 	private Repository repository;
 	private RevWalk revwalk;
 	private List<RevCommit> revisions = new ArrayList<RevCommit>();
@@ -63,22 +64,15 @@ public class GitDataReader extends AbstractDataReader {
 	private Map<String, Integer> revisionMap;
 	private Map<String, ArrayList<ArrayList<String>>> perRevisionChangedFiles;
 	private int[] parentIndices;
-	private final int ADDEDFILES_LOCATION = 0;
-	private final int CHANGEDFILES_LOCATION = 1;
-	private final int REMOVEDFILES_LOCATION = 2;
+	private final int ADDEDFILES = 0;
+	private final int CHANGEDFILES = 1;
+	private final int REMOVEDFILES = 2;
 	// private final String GITPARSERCLASS =
 	// "boa.dsi.dsource.github.Githubschema.CodeRepository";
 	private final String GITPARSERCLASS = "boa.types.code.CodeRepository";
 
-	public GitDataReader() {
-		super("gitschema.proto");
-		this.revisionMap = new HashMap<String, Integer>();
-		this.filePathGitObjectIds = new HashMap<String, ObjectId>();
-		this.perRevisionChangedFiles = new HashMap<String, ArrayList<ArrayList<String>>>();
-	}
-
-	public GitDataReader(String schemaFileName) {
-		super(schemaFileName);
+	public GitReader(ArrayList<String> source) {
+		super(source);
 		this.revisionMap = new HashMap<String, Integer>();
 		this.filePathGitObjectIds = new HashMap<String, ObjectId>();
 		this.perRevisionChangedFiles = new HashMap<String, ArrayList<ArrayList<String>>>();
@@ -124,25 +118,28 @@ public class GitDataReader extends AbstractDataReader {
 	public List<GeneratedMessage> getData() {
 		List<GeneratedMessage> result = new ArrayList<GeneratedMessage>();
 		com.google.protobuf.GeneratedMessage data = null;
-		if (!alreadyCloned()) {
+		for (String dataSource : this.sources) {
+			if (!alreadyCloned(dataSource)) {
+				try {
+					clone(dataSource, getLocalPath(dataSource));
+				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (GitAPIException e) {
+					e.printStackTrace();
+				}
+			}
+			// now build the data
 			try {
-				clone(this.dataSource, getLocalPath());
+				this.repository = new FileRepositoryBuilder().setGitDir(new File(getLocalPath(dataSource) + "/.git"))
+						.build();
+				this.revwalk = new RevWalk(this.repository);
+				this.git = new Git(this.repository);
 			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (GitAPIException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			data = buildData(getLocalPath(dataSource));
 		}
-		// now build the data
-		try {
-			this.repository = new FileRepositoryBuilder().setGitDir(new File(getLocalPath() + "/.git")).build();
-			this.revwalk = new RevWalk(this.repository);
-			this.git = new Git(this.repository);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		data = buildData(getLocalPath());
 		result.add(data);
 		return result;
 	}
@@ -151,7 +148,7 @@ public class GitDataReader extends AbstractDataReader {
 		this.revisions = this.getRevisions();
 
 		CodeRepository.Builder gitBuilder = CodeRepository.newBuilder();
-		gitBuilder.setUrl(this.dataSource);
+		gitBuilder.setUrl(path);
 		gitBuilder.setKind(RepositoryKind.GIT);
 
 		// branches
@@ -187,42 +184,48 @@ public class GitDataReader extends AbstractDataReader {
 			rev.addParents(commit.getParentCount());
 			rev.addChildren(0);
 			ChangedFile.Builder file = ChangedFile.newBuilder();
-			for (final String changed : perRevisionChangedFiles.get(commit.getName()).get(CHANGEDFILES_LOCATION)) {
+			for (final String changed : perRevisionChangedFiles.get(commit.getName()).get(CHANGEDFILES)) {
 				file.setChange(ChangeKind.CHANGED);
 				file.setKey(changed);
 				file.setName(changed);
 				file.setKind(FileKind.JLS8);
-				JavaDataReader java = new JavaDataReader(changed);
-				ASTRoot content = (ASTRoot) java.getData().get(0);
+				ArrayList<String> files = new ArrayList<String>();
+				files.add(changed);
+				JavaReader javaReader = new JavaReader(files);
+				ASTRoot content = (ASTRoot) javaReader.getData().get(0);
 				if (content != null) {
 					file.setAst(content);
-					file.setKind(java.getKind());
+					file.setKind(javaReader.getKind());
 				}
 				rev.addFiles(file.build());
 			}
-			for (final String changed : perRevisionChangedFiles.get(commit.getName()).get(ADDEDFILES_LOCATION)) {
+			for (final String changed : perRevisionChangedFiles.get(commit.getName()).get(ADDEDFILES)) {
 				file.setChange(ChangeKind.ADDED);
 				file.setKey(changed);
 				file.setName(changed);
 				file.setKind(FileKind.JLS8);
-				JavaDataReader java = new JavaDataReader(changed);
-				ASTRoot content = (ASTRoot) java.getData().get(0);
+				ArrayList<String> files = new ArrayList<String>();
+				files.add(changed);
+				JavaReader javaReader = new JavaReader(files);
+				ASTRoot content = (ASTRoot) javaReader.getData().get(0);
 				if (content != null) {
 					file.setAst(content);
-					file.setKind(java.getKind());
+					file.setKind(javaReader.getKind());
 				}
 				rev.addFiles(file.build());
 			}
-			for (final String changed : perRevisionChangedFiles.get(commit.getName()).get(REMOVEDFILES_LOCATION)) {
+			for (final String changed : perRevisionChangedFiles.get(commit.getName()).get(REMOVEDFILES)) {
 				file.setChange(ChangeKind.REMOVED);
 				file.setKey(changed);
 				file.setName(changed);
 				file.setKind(FileKind.JLS8);
-				JavaDataReader java = new JavaDataReader(changed);
-				ASTRoot content = (ASTRoot) java.getData().get(0);
+				ArrayList<String> files = new ArrayList<String>();
+				files.add(changed);
+				JavaReader javaReader = new JavaReader(files);
+				ASTRoot content = (ASTRoot) javaReader.getData().get(0);
 				if (content != null) {
 					file.setAst(content);
-					file.setKind(java.getKind());
+					file.setKind(javaReader.getKind());
 				}
 				rev.addFiles(file.build());
 			}
@@ -245,20 +248,20 @@ public class GitDataReader extends AbstractDataReader {
 		}
 	}
 
-	private String getLocalPath() {
+	private String getLocalPath(String dataSource) {
 		// Filter the reponame to remove .git
-		String[] details = this.dataSource.split("/");
+		String[] details = dataSource.split("/");
 		String username = details[details.length - 2];
 		String reponame = details[details.length - 1];
 		if (reponame.endsWith(".git")) {
 			reponame = reponame.substring(0, reponame.lastIndexOf("."));
 		}
-		return DatagenProperties.CANDOIA_TRASH_PATH + "/" + DatagenProperties.CANDOIA_DIR_NAME + "/" + "/" + username
-				+ "/" + reponame;
+		return DSIProperties.CANDOIA_TRASH_PATH + "/" + DSIProperties.CANDOIA_DIR_NAME + "/" + "/" + username + "/"
+				+ reponame;
 	}
 
-	private boolean alreadyCloned() {
-		return isReadable(getLocalPath());
+	private boolean alreadyCloned(String dataSource) {
+		return isReadable(getLocalPath(dataSource));
 	}
 
 	private void clone(String url, String local)
@@ -351,9 +354,9 @@ public class GitDataReader extends AbstractDataReader {
 			}
 		}
 		ArrayList<ArrayList<String>> files = new ArrayList<ArrayList<String>>();
-		files.add(ADDEDFILES_LOCATION, rAddedPaths);
-		files.add(CHANGEDFILES_LOCATION, rChangedPaths);
-		files.add(REMOVEDFILES_LOCATION, rRemovedPaths);
+		files.add(ADDEDFILES, rAddedPaths);
+		files.add(CHANGEDFILES, rChangedPaths);
+		files.add(REMOVEDFILES, rRemovedPaths);
 		perRevisionChangedFiles.put(rc.getName(), files);
 	}
 
@@ -406,6 +409,12 @@ public class GitDataReader extends AbstractDataReader {
 	@Override
 	public String getParserClassName() {
 		return GITPARSERCLASS;
+	}
+
+	@Override
+	public boolean getDataInQueue(Queue<GeneratedMessage> queue) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

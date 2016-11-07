@@ -26,12 +26,13 @@ import java.util.List;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 
+import com.aol.cyclops.data.async.Queue;
 import com.google.protobuf.GeneratedMessage;
 
 //import boa.Example;
 import boa.compiler.BoaCompiler;
 import boa.datagen.util.FileIO;
-import boa.dsi.dsource.DatagenProperties;
+import boa.dsi.DSIProperties;
 import boa.dsi.evaluator.AbstractEvaluationEngine;
 
 /**
@@ -51,7 +52,7 @@ public class BoaEvaluator extends AbstractEvaluationEngine {
 
 	public BoaEvaluator(String prog, String data, String outputPath) {
 		super(prog, data);
-		DatagenProperties.BOA_OUTPUT_DIR_PATH = outputPath;
+		DSIProperties.BOA_OUTPUT_DIR_PATH = outputPath;
 	}
 
 	private static final void printHelp(Options options, String message) {
@@ -64,7 +65,7 @@ public class BoaEvaluator extends AbstractEvaluationEngine {
 	@Override
 	public boolean evaluate() {
 		String[] compilationArgs = new String[6];
-		final String compilationRoot = DatagenProperties.BOA_COMPILE_DIR_NAME;
+		final String compilationRoot = DSIProperties.BOA_COMPILE_DIR_NAME;
 
 		compilationArgs[0] = "-i";
 		compilationArgs[1] = this.inputProgram;
@@ -74,7 +75,7 @@ public class BoaEvaluator extends AbstractEvaluationEngine {
 		compilationArgs[5] = compilationRoot;
 
 		try {
-			delete(new File(DatagenProperties.BOA_OUT));
+			delete(new File(DSIProperties.BOA_OUT));
 			delete(new File(compilationRoot));
 			if (!BoaCompiler.compile(compilationArgs)) {
 				return false;
@@ -89,7 +90,7 @@ public class BoaEvaluator extends AbstractEvaluationEngine {
 		String genClassName = "boa." + genFileName;
 		genClassName.replace("/", ".");
 		actualArgs[0] = this.inputData;
-		actualArgs[1] = DatagenProperties.BOA_OUT;
+		actualArgs[1] = DSIProperties.BOA_OUT;
 		while (genClassName.startsWith(".")) {
 			genClassName = genClassName.substring(1);
 		}
@@ -151,7 +152,7 @@ public class BoaEvaluator extends AbstractEvaluationEngine {
 
 	@Override
 	public String getResults() {
-		for (File f : new File(DatagenProperties.BOA_OUT).listFiles()) {
+		for (File f : new File(DSIProperties.BOA_OUT).listFiles()) {
 			if (f.getName().startsWith("part")) {
 				return FileIO.readFileContents(f);
 			}
@@ -162,5 +163,10 @@ public class BoaEvaluator extends AbstractEvaluationEngine {
 	@Override
 	public boolean isSuccess() {
 		return this.result;
+	}
+
+	@Override
+	public boolean getDataInQueue(Queue<GeneratedMessage> queue) {
+		throw new UnsupportedOperationException();
 	}
 }

@@ -11,7 +11,7 @@ import java.util.Map;
 
 import com.sun.org.apache.xml.internal.security.utils.Base64;
 
-public class HttpDataReader {
+public class HttpReader {
 	private String url;
 
 	private String username, password;
@@ -21,11 +21,11 @@ public class HttpDataReader {
 	private String responseMessage;
 	private String content = "";
 
-	public HttpDataReader(String url) {
+	public HttpReader(String url) {
 		setUrl(url);
 	}
 
-	public HttpDataReader(String url, String username, String password) {
+	public HttpReader(String url, String username, String password) {
 		this(url);
 		this.username = username;
 		this.password = password;

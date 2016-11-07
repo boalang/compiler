@@ -9,9 +9,9 @@ import org.json.JSONObject;
 
 import com.google.protobuf.GeneratedMessage;
 
-import boa.dsi.dsource.AbstractDataReader;
-import boa.dsi.dsource.git.GitDataReader;
-import boa.dsi.dsource.http.HttpDataReader;
+import boa.dsi.dsource.AbstractSource;
+import boa.dsi.dsource.git.GitReader;
+import boa.dsi.dsource.http.HttpReader;
 import boa.types.Code.CodeRepository;
 import boa.types.Shared.Person;
 import boa.types.Toplevel.Project;
@@ -20,7 +20,7 @@ import boa.types.Toplevel.Project.ForgeKind;
 /**
  * Created by nmtiwari on 11/2/16.
  */
-public class GithubDataReader extends AbstractDataReader {
+public class GithubReader extends AbstractSource {
 
 	// FIXME: This should be a pattern of github urls
 	private final String GITHUBURL = "https://github.com/";
@@ -28,7 +28,7 @@ public class GithubDataReader extends AbstractDataReader {
 	// "boa.dsi.dsource.github.Githubschema.Project";
 	private final String GITHUBPARSERCLASS = "boa.types.Toplevel.Project";
 
-	public GithubDataReader(String source) {
+	public GithubReader(ArrayList<String> source) {
 		super(source);
 	}
 
@@ -48,21 +48,24 @@ public class GithubDataReader extends AbstractDataReader {
 	public List<GeneratedMessage> getData() {
 		List<GeneratedMessage> list = new ArrayList<GeneratedMessage>();
 		com.google.protobuf.GeneratedMessage data = null;
-		String[] details = this.dataSource.split("/");
-		String dataurl = "https://api.github.com/repos/" + details[details.length - 2] + "/"
-				+ details[details.length - 1];
-		HttpDataReader httpDataCollector = new HttpDataReader(dataurl);
-		String username = "username";
-		String password = "password";
-		if ("password".equals(password)) {
-			throw new IllegalArgumentException("Your username password in file GithubDataReaser.java are not yet set");
+		for (String dataSource : this.sources) {
+			String[] details = dataSource.split("/");
+			String dataurl = "https://api.github.com/repos/" + details[details.length - 2] + "/"
+					+ details[details.length - 1];
+			HttpReader httpDataCollector = new HttpReader(dataurl);
+			String username = "username";
+			String password = "password";
+			if ("password".equals(password)) {
+				throw new IllegalArgumentException(
+						"Your username password in file GithubDataReaser.java are not yet set");
+			}
+			if (httpDataCollector.authenticate(username, password)) {
+				httpDataCollector.getResponseJson();
+				String response = httpDataCollector.getContent();
+				data = buildData(response);
+			}
+			list.add(data);
 		}
-		if (httpDataCollector.authenticate(username, password)) {
-			httpDataCollector.getResponseJson();
-			String response = httpDataCollector.getContent();
-			data = buildData(response);
-		}
-		list.add(data);
 		return list;
 	}
 
@@ -180,7 +183,9 @@ public class GithubDataReader extends AbstractDataReader {
 		}
 
 		if (projectJ.has("clone_url")) {
-			for (GeneratedMessage code : new GitDataReader(projectJ.getString("clone_url")).getData()) {
+			ArrayList<String> coderepo = new ArrayList<String>();
+			coderepo.add(projectJ.getString("clone_url"));
+			for (GeneratedMessage code : new GitReader(coderepo).getData()) {
 				projectB.addCodeRepositories((CodeRepository) code);
 			}
 			// projectB.addCodeRepositories(projectJ.getString("clone_url").toString());

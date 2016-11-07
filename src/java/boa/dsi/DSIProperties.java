@@ -1,6 +1,6 @@
-package boa.dsi.dsource;
+package boa.dsi;
 
-public class DatagenProperties {
+public class DSIProperties {
 	public static final boolean DEBUG = false;
 	public static final String NUM_THREADS = "1";
 	public static final String SEQ_PROJECTS_NAME = "projects.seq";
@@ -41,6 +41,6 @@ public class DatagenProperties {
 	public static final String BOA_OUTPUT_DIR_NAME = "boaOutput";
 	public static final String BOA_COMPILE_DIR_NAME = "compile";
 	public static String BOA_OUTPUT_DIR_PATH = "./../";
-	public static String  BOA_OUT = DatagenProperties.BOA_OUTPUT_DIR_PATH + "/" + DatagenProperties.BOA_OUTPUT_DIR_NAME;
+	public static String  BOA_OUT = DSIProperties.BOA_OUTPUT_DIR_PATH + "/" + DSIProperties.BOA_OUTPUT_DIR_NAME;
 
 }

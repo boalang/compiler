@@ -2,11 +2,13 @@ package boa.dsi.dsource;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.aol.cyclops.data.async.Queue;
 import com.google.protobuf.GeneratedMessage;
 
 import boa.datagen.util.CandoiaProperties;
@@ -16,14 +18,14 @@ import boa.dsi.DSComponent;
 /**
  * Created by nmtiwari on 11/2/16.
  */
-public abstract class AbstractDataReader extends DSComponent{
-	protected String dataSource;
+public abstract class AbstractSource implements DSComponent {
+	protected ArrayList<String> sources;
 
-	public AbstractDataReader(String source) {
-		this.dataSource = source;
+	public AbstractSource(ArrayList<String> source) {
+		this.sources = source;
 	}
 
-	public static final AbstractDataReader getDataReaders(String source) throws UnsupportedOperationException {
+	public static final AbstractSource getDataReaders(String source) throws UnsupportedOperationException {
 		File settingFile = new File(System.getProperty("user.dir") + "/" + CandoiaProperties.SETTINGS_JSON_FILE_PATH
 				+ CandoiaProperties.SETTINGS_JSON_FILE_NAME);
 		String setting = FileIO.readFileContents(settingFile);
@@ -34,8 +36,8 @@ public abstract class AbstractDataReader extends DSComponent{
 		for (String name : names) {
 			try {
 				@SuppressWarnings("unchecked")
-				Class<AbstractDataReader> clas = (Class<AbstractDataReader>) Class.forName(name);
-				AbstractDataReader reader = clas.getConstructor(String.class).newInstance(source);
+				Class<AbstractSource> clas = (Class<AbstractSource>) Class.forName(name);
+				AbstractSource reader = clas.getConstructor(String.class).newInstance(source);
 				if (reader.isReadable(source)) {
 					return reader;
 				}
@@ -68,6 +70,18 @@ public abstract class AbstractDataReader extends DSComponent{
 	public abstract boolean isReadable(String source);
 
 	public abstract List<GeneratedMessage> getData();
-	
+
 	public abstract String getParserClassName();
+
+	public boolean getDataInQueue(Queue<GeneratedMessage> queue) {
+		if (queue == null || !queue.isOpen()) {
+			throw new IllegalStateException("Your queue is not yet initialized");
+		}
+		// getData().forEach(data -> queue.offer(data));
+		for (GeneratedMessage message : getData()) {
+			queue.offer(message);
+		}
+		queue.close();
+		return true;
+	}
 }

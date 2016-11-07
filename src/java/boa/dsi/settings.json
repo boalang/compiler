@@ -1,5 +1,5 @@
 [
    {
-      "datareaders": "boa.dsi.dsource.github.GithubDataReader, boa.dsi.dsource.git.GitDataReader"
+      "datareaders": "boa.dsi.dsource.github.GithubReader, boa.dsi.dsource.git.GitReader"
    }
 ]

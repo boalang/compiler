@@ -2,7 +2,7 @@ package boa.dsi.evaluator;
 
 import boa.dsi.DSComponent;
 
-public abstract class AbstractEvaluationEngine extends DSComponent {
+public abstract class AbstractEvaluationEngine implements DSComponent {
 	protected String inputProgram;
 	protected String inputData;
 

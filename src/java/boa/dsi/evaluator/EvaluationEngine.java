@@ -1,6 +1,6 @@
 package boa.dsi.evaluator;
 
-import boa.dsi.dsource.DatagenProperties;
+import boa.dsi.DSIProperties;
 import boa.evaluator.BoaEvaluator;
 
 public class EvaluationEngine {
@@ -9,7 +9,7 @@ public class EvaluationEngine {
 
 	public EvaluationEngine(String prog, String data, String output) {
 		evaluator = new BoaEvaluator(prog, data);
-		DatagenProperties.BOA_OUT = output;
+		DSIProperties.BOA_OUT = output;
 	}
 
 	public boolean evaluate() {

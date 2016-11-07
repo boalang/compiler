@@ -11,7 +11,7 @@ import org.apache.hadoop.io.Text;
 
 import com.google.protobuf.CodedInputStream;
 
-import boa.dsi.dsource.DatagenProperties;
+import boa.dsi.DSIProperties;
 
 public class TestSequenceFile {
 
@@ -30,7 +30,7 @@ public class TestSequenceFile {
 		
 		Text key = new Text();
 		BytesWritable val = new BytesWritable();
-		SequenceFile.Reader r = new SequenceFile.Reader(fileSystem, new Path(DatagenProperties.HADOOP_SEQ_FILE_LOCATION + "/" + DatagenProperties.HADOOP_SEQ_FILE_NAME), conf);
+		SequenceFile.Reader r = new SequenceFile.Reader(fileSystem, new Path(DSIProperties.HADOOP_SEQ_FILE_LOCATION + "/" + DSIProperties.HADOOP_SEQ_FILE_NAME), conf);
 		while (r.next(key, val)) {
 			System.out.println("next project");
 			byte[] bytes = val.getBytes();

@@ -5,16 +5,17 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.aol.cyclops.data.async.Queue;
 import com.google.protobuf.GeneratedMessage;
 
 import boa.dsi.DSComponent;
 
-public abstract class AbstractDataStorage extends DSComponent {
-	protected static Logger LOG = Logger.getLogger(AbstractDataStorage.class);
+public abstract class AbstractStorage implements DSComponent {
+	protected static Logger LOG = Logger.getLogger(AbstractStorage.class);
 	protected String location;
 	protected Method parser;
 
-	public AbstractDataStorage(String location, String parserClassName) {
+	public AbstractStorage(String location, String parserClassName) {
 		this.location = location;
 		this.parser = createParserFrom(parserClassName);
 	}
@@ -23,8 +24,10 @@ public abstract class AbstractDataStorage extends DSComponent {
 
 	public abstract void store(List<GeneratedMessage> dataInstance);
 
+	public abstract void store(Queue<GeneratedMessage> queue);
+
 	public abstract void storeAt(String location, GeneratedMessage dataInstance);
-	
+
 	public abstract String getDataLocation();
 
 	private Method createParserFrom(String className) {
@@ -48,5 +51,17 @@ public abstract class AbstractDataStorage extends DSComponent {
 			e.printStackTrace();
 		}
 		throw new UnsupportedOperationException();
+	}
+
+	public boolean getDataInQueue(Queue<GeneratedMessage> queue) {
+		if (queue == null || !queue.isOpen()) {
+			throw new IllegalStateException("Your queue is not yet initialized");
+		}
+		// getData().forEach(data -> queue.offer(data));
+		for (GeneratedMessage message : getData()) {
+			queue.offer(message);
+		}
+		queue.close();
+		return true;
 	}
 }
