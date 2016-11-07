@@ -32,7 +32,7 @@ public class CandoiaProperties {
     public static final String TEMP_TRASH_WORK = TRASH + "/CANDOIA_TEMP_DATA";
 
 
-    public static final String SETTINGS_JSON_FILE_PATH = "/src/java/boa/datagen/settings/";
+    public static final String SETTINGS_JSON_FILE_PATH = "/src/java/boa/dsi/";
     public static final String SETTINGS_JSON_FILE_NAME = "settings.json";
     public static final String DATAREADER_FIELD_IN_JSON = "datareaders";
     public static final int DATAREADER_FIELD_INDEX_JSON = 0;

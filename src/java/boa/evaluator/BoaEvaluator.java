@@ -31,8 +31,8 @@ import com.google.protobuf.GeneratedMessage;
 //import boa.Example;
 import boa.compiler.BoaCompiler;
 import boa.datagen.util.FileIO;
-import boa.datascience.evaluationEngine.AbstractEvaluationEngine;
-import boa.datascience.externalDataSources.DatagenProperties;
+import boa.dsi.dsource.DatagenProperties;
+import boa.dsi.evaluator.AbstractEvaluationEngine;
 
 /**
  * The main entry point for Boa REPL.
