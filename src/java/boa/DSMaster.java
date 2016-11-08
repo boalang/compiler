@@ -8,7 +8,7 @@ import com.google.protobuf.GeneratedMessage;
 
 import boa.dsi.dsource.github.GithubReader;
 import boa.dsi.evaluator.EvaluationEngine;
-import boa.dsi.storage.sequencefile.SequenceFileStorage;
+import boa.dsi.storage.MSRDataStorage;
 
 public class DSMaster {
 	public static void main(String[] args) {
@@ -28,17 +28,17 @@ public class DSMaster {
 				new LinkedBlockingQueue<GeneratedMessage>());
 
 		GithubReader external = new GithubReader(sources);
-		SequenceFileStorage storage = new SequenceFileStorage(external);
+		MSRDataStorage storage = new MSRDataStorage(external);
 		EvaluationEngine engine = new EvaluationEngine(program, storage.getDataLocation(), output);
 
-//		 external.getDataInQueue(eSourceIStorage);
-//		 storage.store(eSourceIStorage);
+//		external.getDataInQueue(eSourceIStorage);
+//		storage.store(eSourceIStorage);
 		engine.evaluate();
 		if (engine.isSuccess()) {
 			System.out.println();
 			System.out.println(engine.getResult());
 		}
-		// storage.getDataInQueue(iStorageEEngine);
-		// System.out.println(iStorageEEngine.get());
+//		 storage.getDataInQueue(iStorageEEngine);
+//		 System.out.println(iStorageEEngine.get());
 	}
 }

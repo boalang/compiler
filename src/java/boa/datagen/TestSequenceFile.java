@@ -12,6 +12,7 @@ import org.apache.hadoop.io.Text;
 import com.google.protobuf.CodedInputStream;
 
 import boa.dsi.DSIProperties;
+import boa.types.Ast.ASTRoot;
 
 public class TestSequenceFile {
 
@@ -31,11 +32,16 @@ public class TestSequenceFile {
 		Text key = new Text();
 		BytesWritable val = new BytesWritable();
 		SequenceFile.Reader r = new SequenceFile.Reader(fileSystem, new Path(DSIProperties.HADOOP_SEQ_FILE_LOCATION + "/" + DSIProperties.HADOOP_SEQ_FILE_NAME), conf);
+		SequenceFile.Reader ast = new SequenceFile.Reader(fileSystem, new Path(DSIProperties.HADOOP_SEQ_FILE_LOCATION + "/" + "data"), conf);
 		while (r.next(key, val)) {
 			System.out.println("next project");
 			byte[] bytes = val.getBytes();
 			System.out.print("Parse after writing to sequence file: ");
 			System.out.println(boa.types.Toplevel.Project.parseFrom(CodedInputStream.newInstance(bytes, 0, val.getLength())));
+		}
+		while (ast.next(key, val)) {
+			byte[] bytes = val.getBytes();
+			System.out.println(ASTRoot.parseFrom(CodedInputStream.newInstance(bytes, 0, val.getLength())));
 		}
 		r.close();
 	}

@@ -1,8 +1,6 @@
 package boa.dsi.storage.sequencefile;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,9 +20,9 @@ import boa.dsi.dsource.AbstractSource;
 import boa.dsi.storage.AbstractStorage;
 
 public class SequenceFileStorage extends AbstractStorage {
-	private Configuration conf;
+	protected Configuration conf;
 	SequenceFile.Reader seqFileReader;
-	SequenceFile.Writer seqFileWriter;
+	protected SequenceFile.Writer seqFileWriter;
 
 	public SequenceFileStorage(String location, AbstractSource parser) {
 		super(location, parser);
@@ -113,14 +111,14 @@ public class SequenceFileStorage extends AbstractStorage {
 		}
 	}
 
-	private boolean openWriter(String seqPath) {
+	protected boolean openWriter(String seqPath) {
 		FileSystem fileSystem;
 		try {
 			fileSystem = FileSystem.get(conf);
 			this.seqFileWriter = SequenceFile.createWriter(fileSystem, conf, new Path(seqPath), Text.class,
 					BytesWritable.class);
-			this.seqFileWriter = SequenceFile.createWriter(fileSystem, conf, new Path(seqPath), Text.class,
-					BytesWritable.class);
+//			this.seqFileWriter = SequenceFile.createWriter(fileSystem, conf, new Path(seqPath), Text.class,
+//					BytesWritable.class);
 			return true;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -137,7 +135,7 @@ public class SequenceFileStorage extends AbstractStorage {
 		}
 	}
 
-	private boolean closeWrite() {
+	protected boolean closeWrite() {
 		try {
 			seqFileWriter.close();
 			return true;

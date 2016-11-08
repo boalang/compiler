@@ -187,7 +187,7 @@ public class GitReader extends AbstractSource {
 			ChangedFile.Builder file = ChangedFile.newBuilder();
 			for (final String changed : perRevisionChangedFiles.get(commit.getName()).get(CHANGEDFILES)) {
 				file.setChange(ChangeKind.CHANGED);
-				file.setKey(changed);
+				file.setKey(commit.getId() + "!!" + changed);
 				file.setName(changed);
 				file.setKind(FileKind.JLS8);
 				ArrayList<String> files = new ArrayList<String>();
@@ -202,7 +202,7 @@ public class GitReader extends AbstractSource {
 			}
 			for (final String changed : perRevisionChangedFiles.get(commit.getName()).get(ADDEDFILES)) {
 				file.setChange(ChangeKind.ADDED);
-				file.setKey(changed);
+				file.setKey(commit.getId() + "!!" + changed);
 				file.setName(changed);
 				file.setKind(FileKind.JLS8);
 				ArrayList<String> files = new ArrayList<String>();
@@ -217,7 +217,7 @@ public class GitReader extends AbstractSource {
 			}
 			for (final String changed : perRevisionChangedFiles.get(commit.getName()).get(REMOVEDFILES)) {
 				file.setChange(ChangeKind.REMOVED);
-				file.setKey(changed);
+				file.setKey(commit.getId() + "!!" + changed);
 				file.setName(changed);
 				file.setKind(FileKind.JLS8);
 				ArrayList<String> files = new ArrayList<String>();
