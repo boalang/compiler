@@ -1,0 +1,8 @@
+# Counting the 10 most used programming languages
+p: Crash = input;
+counts: output sum[int] of int;
+
+foreach(i:int; def(p. vehicle[i])){
+  counts[p. vehicle[i].OWNER] << 1;
+}
+

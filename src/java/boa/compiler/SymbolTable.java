@@ -30,6 +30,7 @@ import boa.types.*;
 import boa.types.proto.*;
 import boa.types.proto.enums.*;
 import boa.types.proto.transportation.AccidentProtoTuple;
+import boa.types.proto.transportation.StateProtoMap;
 import boa.compiler.ast.Operand;
 
 /**
@@ -130,6 +131,8 @@ public class SymbolTable {
 		
 		
 		idmap.put("Crash", new AccidentProtoTuple());
+		idmap.put("state", new StateProtoMap());
+		
 
 		globalFunctions = new FunctionTrie();
 

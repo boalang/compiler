@@ -1,19 +1,3 @@
-/*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package boa.types.proto.transportation;
 
 import java.util.ArrayList;
@@ -28,12 +12,7 @@ import boa.types.BoaString;
 import boa.types.BoaType;
 import boa.types.proto.enums.ForgeKindProtoMap;
 
-/**
- * A {@link BoaProtoTuple}.
- * 
- * @author rdyer
- */
-public class AccidentProtoTuple extends BoaProtoTuple {
+public class PersonProtoTuple extends BoaProtoTuple{
 	private final static List<BoaType> members = new ArrayList<BoaType>();
 	private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
@@ -46,25 +25,7 @@ public class AccidentProtoTuple extends BoaProtoTuple {
 		names.put("state_case", counter++);
 		members.add(new BoaInt());
 
-		names.put("ve_total", counter++);
-		members.add(new BoaInt());
-
-		names.put("ve_forms", counter++);
-		members.add(new BoaInt());
-
-		names.put("pvh_invl", counter++);
-		members.add(new BoaInt());
-
-		names.put("peds", counter++);
-		members.add(new BoaInt());
-
-		names.put("pernotmvit", counter++);
-		members.add(new BoaInt());
-
-		names.put("permvit", counter++);
-		members.add(new BoaInt());
-
-		names.put("persons", counter++);
+		names.put("AGE", counter++);
 		members.add(new BoaInt());
 
 		names.put("county", counter++);
@@ -91,36 +52,11 @@ public class AccidentProtoTuple extends BoaProtoTuple {
 		names.put("minute", counter++);
 		members.add(new BoaInt());
 
-
-		names.put("nhs", counter++);
-		members.add(new BoaInt());
-		
-		
-		names.put("rur_urb", counter++);
-		members.add(new BoaInt());
-		
-		names.put("func_sys", counter++);
-		members.add(new BoaInt());
-		names.put("rd_owner", counter++);
-		members.add(new BoaInt());
-		
-		names.put("ROUTE", counter++);
-		members.add(new BoaInt());
-		
-		names.put("LATITUDE", counter++);
-		members.add(new BoaInt());
-		
-		names.put("LONGITUD", counter++);
-		members.add(new BoaInt());
-		
 		names.put("COUNTY", counter++);
 		members.add(new BoaInt());
 		
 		names.put("persons", counter++);
-		members.add(new BoaProtoList(new PersonProtoTuple()));
-		
-		names.put("vehicle", counter++);
-		members.add(new BoaProtoList(new VehicleProtoTuple()));
+		members.add(new BoaProtoList(new BoaString()));
 		
 		
 		
@@ -143,13 +79,13 @@ public class AccidentProtoTuple extends BoaProtoTuple {
 	/**
 	 * Construct a ProjectProtoTuple.
 	 */
-	public AccidentProtoTuple() {
+	public PersonProtoTuple() {
 		super(members, names);
 	}
 
 	/** @{inheritDoc} */
 	@Override
 	public String toJavaType() {
-		return "boa.types.transportation.Accident.Crash";
+		return "boa.types.transportation.Individual.Person";
 	}
 }

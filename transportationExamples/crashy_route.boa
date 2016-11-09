@@ -1,0 +1,5 @@
+# Counting the 10 most used programming languages
+p: Crash = input;
+counts: output sum[int] of int;
+
+counts[p.ROUTE] << 1;
