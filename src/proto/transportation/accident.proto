@@ -1,0 +1,65 @@
+package boa.transportation.types;
+import "motor.proto";
+import "individual.proto";
+import "state.proto";
+
+option optimize_for = SPEED;
+
+message Crash
+{
+
+	required STATE state= 1;
+	required int32 ST_CASE = 2;
+	required int32 VE_TOTAL = 3;
+	required int32 VE_FORMS = 4;
+	required int32 PVH_INVL = 5;
+	required int32 PEDS = 6;
+	required int32 PERNOTMVIT = 7;
+	required int32 PERMVIT = 8;
+	required int32 PERSONS = 9;
+	required int32 COUNTY = 10;
+	required int32 CITY = 11;
+	required int32 DAY = 12;
+	required int32 MONTH = 13;
+	required int32 YEAR = 14;
+	required int32 DAY_WEEK = 15;
+	required int32 HOUR = 16;
+	required int32 MINUTE = 17;
+	required int32 NHS = 18;
+	required int32 RUR_URB = 19;
+	required int32 FUNC_SYS = 20;
+	required int32 RD_OWNER = 21;
+	required int32 ROUTE = 22;
+	required string TWAY_ID = 23;
+	optional string TWAY_ID2 = 24;
+	required int32 MILEPT = 25;
+	optional float LATITUDE = 26;
+	optional float LONGITUD = 27;
+	required int32 SP_JUR = 28;
+	required int32 HARM_EV = 29;
+	required int32 MAN_COLL = 30;
+	required int32 RELJCT1 = 31;
+	required int32 RELJCT2 = 32;
+	required int32 TYP_INT = 33;
+	required int32 WRK_ZONE = 34;
+	required int32 REL_ROAD = 35;
+	required int32 LGT_COND = 36;
+	required int32 WEATHER1 = 37;
+	required int32 WEATHER2 = 38;
+	required int32 WEATHER = 39;
+	required int32 SCH_BUS = 40;
+	required int32 RAIL = 41;
+	required int32 NOT_HOUR = 42;
+	required int32 NOT_MIN = 43;
+	required int32 ARR_HOUR = 44;
+	required int32 ARR_MIN = 45;
+	required int32 HOSP_HR = 46;
+	required int32 HOSP_MN = 47;
+	required int32 CF1 = 48;
+	required int32 CF2 = 49;
+	required int32 CF3 = 50;
+	required int32 FATALS = 51;
+	required int32 DRUNK_DR = 52;
+	repeated Person persons=53;
+	repeated Vehicle vehicle=54;
+}

@@ -1,0 +1,5 @@
+# Counting the 10 most used programming languages
+p: Crash = fars;
+counts: output sum of int;
+
+counts << 1;
