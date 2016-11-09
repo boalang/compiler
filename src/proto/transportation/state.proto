@@ -1,4 +1,4 @@
-package boa.transportation.types;
+package boa.types.transportation;
 enum STATE
 {
   Alabama = 1;

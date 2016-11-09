@@ -121,7 +121,7 @@ public class <name> extends boa.runtime.BoaRunner {
 	}
 
 	static interface BoaJob {
-		void map(final boa.types.transportation.Accident _input, final org.apache.hadoop.mapreduce.Mapper\<org.apache.hadoop.io.Text, org.apache.hadoop.io.BytesWritable, boa.io.EmitKey, boa.io.EmitValue>.Context context) throws Exception;
+		void map(final boa.types.transportation.Accident.Crash _input, final org.apache.hadoop.mapreduce.Mapper\<org.apache.hadoop.io.Text, org.apache.hadoop.io.BytesWritable, boa.io.EmitKey, boa.io.EmitValue>.Context context) throws Exception;
 	}
 	
 	static class <name>BoaMapper extends boa.runtime.BoaMapper {
@@ -129,14 +129,14 @@ public class <name> extends boa.runtime.BoaRunner {
 		@Override
 		protected void map(final org.apache.hadoop.io.Text key, final org.apache.hadoop.io.BytesWritable value, final org.apache.hadoop.mapreduce.Mapper\<org.apache.hadoop.io.Text, org.apache.hadoop.io.BytesWritable, boa.io.EmitKey, boa.io.EmitValue>.Context context) throws java.io.IOException {
 			try {
-				boa.types.Toplevel.Project _input = boa.types.Toplevel.Project.parseFrom(com.google.protobuf.CodedInputStream.newInstance(value.getBytes(), 0, value.getLength()));
+				boa.types.transportation.Accident.Crash _input = boa.types.transportation.Accident.Crash.parseFrom(com.google.protobuf.CodedInputStream.newInstance(value.getBytes(), 0, value.getLength()));
 				<jobnames:{n | runJob("Job<n>", _job_<n>, _input, context);<\n>}>			} catch (final Throwable e) {
 				boa.io.BoaOutputCommitter.lastSeenEx = e;
 				throw new java.io.IOException("map failure for key '" + key.toString() + "'", e);
 			}
 		}
 
-		private void runJob(final String name, final BoaJob job, final boa.types.Toplevel.Project input, final org.apache.hadoop.mapreduce.Mapper\<org.apache.hadoop.io.Text, org.apache.hadoop.io.BytesWritable, boa.io.EmitKey, boa.io.EmitValue>.Context context) throws Throwable {
+		private void runJob(final String name, final BoaJob job, final boa.types.transportation.Accident.Crash input, final org.apache.hadoop.mapreduce.Mapper\<org.apache.hadoop.io.Text, org.apache.hadoop.io.BytesWritable, boa.io.EmitKey, boa.io.EmitValue>.Context context) throws Throwable {
 			try {
 				job.map(input, context);
 			} catch (final Throwable e) {
@@ -201,7 +201,7 @@ private static class Job<name> implements BoaJob {
 	}
 	
 	<endif>
-	public void map(final boa.types.Toplevel.Project _input, final org.apache.hadoop.mapreduce.Mapper\<org.apache.hadoop.io.Text, org.apache.hadoop.io.BytesWritable, boa.io.EmitKey, boa.io.EmitValue>.Context context) throws Exception {
+	public void map(final boa.types.transportation.Accident.Crash _input, final org.apache.hadoop.mapreduce.Mapper\<org.apache.hadoop.io.Text, org.apache.hadoop.io.BytesWritable, boa.io.EmitKey, boa.io.EmitValue>.Context context) throws Exception {
 		<statements:{s | <s><\n>}>	}
 }
 private static BoaJob _job_<name> = new Job<name>();

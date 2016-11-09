@@ -1,4 +1,4 @@
-package boa.transportation.types;
+package boa.types.transportation;
 import "motor.proto";
 import "individual.proto";
 import "state.proto";
@@ -16,7 +16,7 @@ message Crash
 	required int32 PEDS = 6;
 	required int32 PERNOTMVIT = 7;
 	required int32 PERMVIT = 8;
-	required int32 PERSONS = 9;
+	required int32 person_count = 9;
 	required int32 COUNTY = 10;
 	required int32 CITY = 11;
 	required int32 DAY = 12;
@@ -48,7 +48,7 @@ message Crash
 	required int32 WEATHER2 = 38;
 	required int32 WEATHER = 39;
 	required int32 SCH_BUS = 40;
-	required int32 RAIL = 41;
+	required string RAIL = 41;
 	required int32 NOT_HOUR = 42;
 	required int32 NOT_MIN = 43;
 	required int32 ARR_HOUR = 44;

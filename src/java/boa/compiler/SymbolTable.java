@@ -69,7 +69,8 @@ public class SymbolTable {
 		// variables with a global scope
 		globals = new HashMap<String, BoaType>();
 
-		globals.put("input", new ProjectProtoTuple());
+//		globals.put("input", new ProjectProtoTuple());
+		globals.put("input", new AccidentProtoTuple());
 		globals.put("fars", new AccidentProtoTuple());
 		globals.put("true", new BoaBool());
 		globals.put("false", new BoaBool());

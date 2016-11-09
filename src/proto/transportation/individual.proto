@@ -1,4 +1,4 @@
-package boa.transportation.types;
+package boa.types.transportation;
 import "state.proto";
 option optimize_for = SPEED;
 

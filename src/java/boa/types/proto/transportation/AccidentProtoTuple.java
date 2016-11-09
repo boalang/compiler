@@ -133,6 +133,6 @@ public class AccidentProtoTuple extends BoaProtoTuple {
 	/** @{inheritDoc} */
 	@Override
 	public String toJavaType() {
-		return "boa.types.Toplevel.Project";
+		return "boa.types.transportation.Accident.Crash";
 	}
 }
