@@ -82,7 +82,7 @@ public abstract class BoaRunner extends Configured implements Tool {
 		// map output compression
 		configuration.setBoolean("mapred.compress.map.output", true);
 		configuration.set("mapred.map.output.compression.type", "BLOCK");
-		configuration.setClass("mapred.map.output.compression.codec", SnappyCodec.class, CompressionCodec.class);
+//		configuration.setClass("mapred.map.output.compression.codec", SnappyCodec.class, CompressionCodec.class);
 
 		configuration.setBoolean("mapred.map.tasks.speculative.execution", false);
 		configuration.setBoolean("mapred.reduce.tasks.speculative.execution", false);

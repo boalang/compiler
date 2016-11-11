@@ -29,7 +29,7 @@ public class <name> extends boa.runtime.BoaRunner {
 	}
 
 	public static void main(String[] args) throws Exception {
-		System.exit(org.apache.hadoop.util.ToolRunner.run(new <name>(), args));
+		org.apache.hadoop.util.ToolRunner.run(new <name>(), args);
 	}
 
 	@Override
@@ -80,7 +80,7 @@ public class <name> extends boa.runtime.BoaRunner {
 
 		if (id > 0)
 			configuration.setInt("boa.hadoop.jobid", id);
-		jb.submit();
+		jb.waitForCompletion(false);
 		if (id > 0)
 			boa.io.BoaOutputCommitter.setJobID(jb.getJobID().toString(), id);
 		System.err.println("Job ID: " + jb.getJobID().toString());

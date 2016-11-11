@@ -80,6 +80,7 @@ public abstract class BoaReducer extends Reducer<EmitKey, EmitValue, Text, NullW
 	protected void reduce(final EmitKey key, final Iterable<EmitValue> values, final Context context) throws IOException, InterruptedException {
 		// get the aggregator named by the emit key
 		final Aggregator a = this.aggregators.get(key.getKey());
+		boolean setVector = true;
 
 		a.setCombining(false);
 		a.start(key);
@@ -87,8 +88,17 @@ public abstract class BoaReducer extends Reducer<EmitKey, EmitValue, Text, NullW
 
 		for (final EmitValue value : values)
 			try {
-				for (final String s : value.getData())
-					a.aggregate(s, value.getMetadata());
+				if(value.getTuple() != null) {
+					a.aggregate(value.getTuple(), value.getMetadata());
+				}
+				else {
+					if(setVector && value.getData().length > 1) {
+						a.setVectorSize(value.getData().length);
+						setVector = false;
+					}
+					for (final String s : value.getData())
+						a.aggregate(s, value.getMetadata());
+				}
 			} catch (final FinishedException e) {
 				// we are done
 				return;

@@ -52,6 +52,7 @@ type
 	| stackType
 	| setType
 	| enumType
+	| modelType
 	| identifier
 	;
 
@@ -95,6 +96,10 @@ setType
 
 outputType
 	: OUTPUT (SET | identifier) (LPAREN expressionList RPAREN)? (LBRACKET component RBRACKET)* OF component (WEIGHT component)? (FORMAT LPAREN expressionList RPAREN)?
+	;
+
+modelType
+	: identifier OF component
 	;
 
 functionType

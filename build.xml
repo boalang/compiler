@@ -286,10 +286,11 @@
 					<exclude name="**/compiler/" />
 					<exclude name="**/parser/" />
 					<exclude name="**/boa/types/proto/" />
-					<exclude name="**/boa/types/Boa*" />
 				</patternset>
 			</fileset>
 		</jar>
+		<copy file="lib/weka.jar" todir="dist/"/>
+		<copy file="lib/latentSemanticAnalysis1.0.4.jar" todir="dist/"/>
 	</target>
 
 	<target name="package-compiler" depends="compile" description="Package the compiler JAR.">

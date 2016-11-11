@@ -330,6 +330,11 @@ public abstract class AbstractVisitorNoArg {
 			n.getWeight().accept(this);
 	}
 
+	public void visit(final ModelType n) {
+		n.getId().accept(this);
+		n.getType().accept(this);
+	}
+
 	public void visit(final StackType n) {
 		n.getValue().accept(this);
 	}

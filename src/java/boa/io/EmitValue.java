@@ -19,12 +19,19 @@ package boa.io;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.io.ByteArrayInputStream;
+import java.io.ObjectInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectOutputStream;
 import java.util.Arrays;
+import java.lang.reflect.Method;
 
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 
 import boa.functions.BoaCasts;
+import boa.BoaTup;
+import boa.BoaEnumInterface;
 
 /**
  * A {@link Writable} that contains a datum and an optional metadatum to be
@@ -32,10 +39,13 @@ import boa.functions.BoaCasts;
  * 
  * @author anthonyu
  * @author rdyer
+ * @author ankuraga
  */
 public class EmitValue implements Writable {
 	private String[] data;
 	private String metadata;
+	private String[] odata;
+	private BoaTup tdata;
 
 	/**
 	 * Construct an EmitValue.
@@ -233,6 +243,112 @@ public class EmitValue implements Writable {
 		this(new String[] { BoaCasts.doubleToString(data) }, BoaCasts.doubleToString(metadata));
 	}
 
+	/**
+	 * Construct an EmitValue.
+	 * 
+	 * @param data
+	 *            A {@link BoaTup} containing the data to be emitted
+	 * @param metadata
+	 *            A {@link String} containing the metadata to be emitted
+	 */
+	public EmitValue(final BoaTup data, final String metadata) {
+		this.tdata = data;
+	}
+	
+	/**
+	 * Construct an EmitValue.
+	 * 
+	 * @param data
+	 *            A {@link BoaTup} containing the data to be emitted
+	 */
+	public EmitValue(final BoaTup data) {
+		this(data, null);
+	}
+	
+	/**
+	 * Construct an EmitValue.
+	 * 
+	 * @param data
+	 *            An array of {@link BoaEnumInterface} containing the data to be emitted
+	 * @param metadata
+	 *            A {@link String} containing the metadata to be emitted
+	 */
+	public EmitValue(final BoaEnumInterface[] data, final String metadata) {
+		final String[] strings = new String[data.length];
+
+		for (int i = 0; i < data.length; i++)
+			strings[i] = data[i].toString(); 
+
+		this.data = strings;
+		this.metadata = metadata;
+	}
+	
+	/**
+	 * Construct an EmitValue.
+	 * 
+	 * @param data
+	 *            An array of {@link BoaEnumInterface} containing the data to be emitted
+	 */
+	public EmitValue(final BoaEnumInterface[] data) {
+		this(data, null);
+	}
+
+	/**
+	 * Construct an EmitValue.
+	 * 
+	 * @param data
+	 *            An array of {@link double} containing the data to be emitted
+	 * @param metadata
+	 *            A {@link String} containing the metadata to be emitted
+	 */
+	public EmitValue(final double[] data, final String metadata) {
+		final String[] strings = new String[data.length];
+
+		for (int i = 0; i < data.length; i++)
+			strings[i] = String.valueOf(data[i]);
+
+		this.data = strings;
+		this.metadata = metadata;
+	}
+
+	/**
+	 * Construct an EmitValue.
+	 * 
+	 * @param data
+	 *            An array of {@link double} containing the data to be emitted
+	 */
+	public EmitValue(final double[] data) {
+		this(data, null);
+	}
+
+	/**
+	 * Construct an EmitValue.
+	 * 
+	 * @param data
+	 *            An array of {@link long} containing the data to be emitted
+	 * @param metadata
+	 *            A {@link String} containing the metadata to be emitted
+	 */
+	public EmitValue(final long[] data, final String metadata) {
+		final String[] strings = new String[data.length];
+
+		for (int i = 0; i < data.length; i++)
+			strings[i] = String.valueOf(data[i]);
+
+		this.data = strings;
+		this.metadata = metadata;
+	}
+
+	/**
+	 * Construct an EmitValue.
+	 * 
+	 * @param data
+	 *            An array of {@link long} containing the data to be emitted
+	 */
+	public EmitValue(final long[] data) {
+		this(data, null);
+	}
+
 	/** {@inheritDoc} */
 	@Override
 	public void readFields(final DataInput in) throws IOException {
@@ -247,20 +363,46 @@ public class EmitValue implements Writable {
 			this.metadata = null;
 		else
 			this.metadata = metadata;
+		
+		final int length = in.readInt();
+		if(length > 0) {
+			byte[] bytes = new byte[length];
+			in.readFully(bytes, 0, length);			
+			ByteArrayInputStream bin = new ByteArrayInputStream(bytes);
+			ObjectInputStream dataIn = new ObjectInputStream(bin);
+			Object o = null;
+			try {
+				o = dataIn.readObject(); 
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+			this.tdata = (BoaTup)o;
+		}
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void write(final DataOutput out) throws IOException {
-		out.writeInt(this.data.length);
-
-		for (final String d : this.data)
-			Text.writeString(out, d);
+		if(this.data == null)
+			out.writeInt(0);
+		else {
+			out.writeInt(this.data.length);
+			for (final String d : this.data)
+				Text.writeString(out, d); 
+		}
 
 		if (this.metadata == null)
 			Text.writeString(out, "");
 		else
 			Text.writeString(out, this.metadata);
+		
+		if (this.tdata == null)
+			out.writeInt(0);
+		else {
+			byte[] serializedObject = this.tdata.serialize(this.tdata);
+			out.writeInt(serializedObject.length);
+			out.write(serializedObject); 
+		}
 	}
 
 	/**
@@ -283,6 +425,10 @@ public class EmitValue implements Writable {
 	 */
 	public String getMetadata() {
 		return this.metadata;
+	}
+
+	public BoaTup getTuple() {
+		return this.tdata;
 	}
 
 	/**

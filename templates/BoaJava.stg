@@ -124,20 +124,46 @@ new <type>()
 >>
 
 TupleType(name, fields, types) ::= <<
-private class <name>
+public static class <name> implements boa.BoaTup, java.io.Serializable
 {
-	<fields,types:{field,type|<type> ___<field>}; separator="; ">;
+	<name>(){}
+	
+	<fields,types:{field,type|public <type> ___<field>}; separator="; ">;
+	
 	<name>( <fields,types:{field,type|<type> ___<field>}; separator=", "> ){
 		<fields,types:{field,type|this.___<field> = ___<field>}; separator="; ">;
 	}
-
+	
+	public byte[] serialize(Object o) throws java.io.IOException { 
+		java.io.ByteArrayOutputStream byteOutStream = new java.io.ByteArrayOutputStream();
+		java.io.ObjectOutputStream objectOut = new java.io.ObjectOutputStream(byteOutStream);
+		objectOut.writeObject(o);
+		objectOut.close();
+		return byteOutStream.toByteArray();
+	}
+	
+	public String[] getValues() {
+		return new String[] {<fields:{field|String.valueOf(this.___<field>)}; separator=", "> };
+	}
+	
+	public String[] getFieldNames() { 
+		return new String[] {<fields:{field|"___<field>"}; separator=", "> };
+	}
+	
+	public Object getValue(String f) {
+		<fields:{field| 
+		if(f.equals("___<field>")) 
+			return ___<field>;
+		}; separator=" ">
+		return "empty";
+	}
 }<\n>
 >>
 
 Tuple(name, exprlist) ::= "new <name>(<exprlist>) <\n>"
 
 EnumType(ename, fields, values, fname) ::= <<
-private enum <ename>
+private enum <ename> implements boa.BoaEnumInterface
 {
 	<fields,values:{field,value|<field>(<value>)}; separator=", ">;
 

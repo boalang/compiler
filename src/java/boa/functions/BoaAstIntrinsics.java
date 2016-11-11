@@ -31,6 +31,7 @@ import org.apache.hadoop.mapreduce.Mapper.Context;
 import com.google.protobuf.CodedInputStream;
 import com.google.protobuf.InvalidProtocolBufferException;
 
+import boa.datagen.DefaultProperties;
 import boa.types.Ast.*;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
@@ -209,9 +210,7 @@ public class BoaAstIntrinsics {
 		final Configuration conf = new Configuration();
 		try {
 			final FileSystem fs = FileSystem.get(conf);
-			final Path p = new Path("hdfs://boa-njt/",
-								new Path(context.getConfiguration().get("boa.ast.dir", context.getConfiguration().get("boa.input.dir", "repcache/live")),
-								new Path("ast")));
+			final Path p = new Path(DefaultProperties.HADOOP_SEQ_FILE_LOCATION);
 			map = new MapFile.Reader(fs, p.toString(), conf);
 		} catch (final Exception e) {
 			e.printStackTrace();

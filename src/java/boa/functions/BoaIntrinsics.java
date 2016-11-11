@@ -21,16 +21,36 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.io.ByteArrayOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ObjectInputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Array;
+
+import org.apache.commons.lang.math.NumberUtils;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.FSDataInputStream;
 
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
 import boa.types.Toplevel.Project;
+import boa.types.ml.*;
+
+import weka.core.Attribute;
+import weka.core.Instance;
+import weka.core.DenseInstance;
+import weka.core.Instances;
+import weka.classifiers.Classifier;
 
 /**
  * Boa domain-specific functions.
  * 
  * @author rdyer
+ * @author ankuraga
  */
 public class BoaIntrinsics {
 	private final static String[] fixingRegex = {
@@ -129,6 +149,267 @@ public class BoaIntrinsics {
 	@FunctionSpec(name = "iskind", returnType = "bool", formalParameters = { "string", "FileKind" })
 	public static boolean iskind(final String s, final ChangedFile.FileKind kind) {
 		return kind.name().startsWith(s);
+	}
+
+	/**
+	 * Given the model URL, deserialize the model and return Model type
+	 *
+	 * @param Take URL for the model
+	 * @return Model type after deserializing
+	 */
+	@FunctionSpec(name = "load", returnType = "Model", formalParameters = {"string"})
+	public static BoaModel load(final String URL, final Object o) throws Exception {
+		Object unserializedObject = null;
+		FSDataInputStream in = null;
+		ObjectInputStream dataIn = null;
+		ByteArrayOutputStream bo = null;
+		try {
+			final Configuration conf = new Configuration();
+			final FileSystem fileSystem = FileSystem.get(conf);
+			final Path path = new Path("hdfs://master" + URL);
+			in = fileSystem.open(path);
+			
+			final byte[] b = new byte[(int)fileSystem.getLength(path) + 1];
+		    
+			int c = 0;
+			bo = new ByteArrayOutputStream();
+			while((c = in.read(b)) != -1){
+				bo.write(b, 0, c);
+			}
+			
+			ByteArrayInputStream bin = new ByteArrayInputStream(bo.toByteArray());
+			dataIn = new ObjectInputStream(bin);
+			unserializedObject = dataIn.readObject();
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		finally {
+			try {
+				if (in != null) in.close();
+				if (dataIn != null) dataIn.close();
+				if (bo != null) bo.close();
+			} catch (final Exception e) { e.printStackTrace(); }
+		}
+		
+		Classifier clr = (Classifier)unserializedObject;
+		BoaModel m = null;
+
+		if(clr.toString().contains("AdaBoostM1")){
+			m = new BoaAdaBoostM1(clr, o);
+		}
+		else if(clr.toString().contains("Additive Regression")){
+			m = new BoaAdditiveRegression(clr, o);
+		}
+		else if(clr.toString().contains("AttributeSelectedClassifier")){
+			m = new BoaAttributeSelectedClassifier(clr, o);
+		}
+		else if(clr.toString().contains("Bagging")){
+			m = new BoaBagging(clr, o);
+		}
+		else if(clr.toString().contains("Bayes Network Classifier")){
+			m = new BoaBayesNet(clr, o);
+		}
+		else if(clr.toString().contains("Classification via Regression")){
+			m = new BoaClassificationViaRegression(clr, o);
+		}
+		else if(clr.toString().contains("Cross-validated Parameter selection")){
+			m = new BoaCVParameterSelection(clr, o);
+		}
+		else if(clr.toString().contains("Decision Stump")){
+			m = new BoaDecisionStump(clr, o);
+		}
+		else if(clr.toString().contains("Decision Table")){
+			m = new BoaDecisionTable(clr, o);
+		}
+		else if(clr.toString().contains("FilteredClassifier")){
+			m = new BoaFilteredClassifier(clr, o);
+		}
+		else if(clr.toString().contains("Gaussian Processes")){
+			m = new BoaGaussianProcesses(clr, o);
+		}
+		else if(clr.toString().contains("NB adaptive")){
+			m = new BoaHoeffdingTree(clr, o);
+		}
+		else if(clr.toString().contains("IB1 instance-based classifier")){
+			m = new BoaIBk(clr, o);
+		}
+		else if(clr.toString().contains("InputMappedClassifier")){
+			m = new BoaInputMappedClassifier(clr, o);
+		}
+		else if(clr.toString().contains("LogitBoost: Base classifiers and their weights")){
+			m = new BoaIterativeClassifierOptimizer(clr, o);
+		}
+		else if(clr.toString().contains("J48")){
+			m = new BoaJ48(clr, o);
+		}
+		else if(clr.toString().contains("JRIP")){
+			m = new BoaJRip(clr, o);
+		}
+		else if(clr.toString().contains("KStar")){
+			m = new BoaKStar(clr, o);
+		}
+		else if(clr.toString().contains("Linear Regression")){
+			m = new BoaLinearRegression(clr, o);
+		}
+		else if(clr.toString().contains("Logistic model tree")){
+			m = new BoaLMT(clr, o);
+		}
+		else if(clr.toString().contains("Logistic Regression")){
+			m = new BoaLogisticRegression(clr, o);
+		}
+		else if(clr.toString().contains("LogitBoost")){
+			m = new BoaLogitBoost(clr, o);
+		}
+		else if(clr.toString().contains("Locally weighted learning")){
+			m = new BoaLWL(clr, o);
+		}
+		else if(clr.toString().contains("MultiClassClassifier")){
+			m = new BoaMultiClassClassifier(clr, o);
+		}
+		else if(clr.toString().contains("Sigmoid Node")){
+			m = new BoaMultilayerPerceptron(clr, o);
+		}
+		else if(clr.toString().contains("MultiScheme")){
+			m = new BoaMultiScheme(clr, o);
+		}
+		else if(clr.toString().contains("Naive Bayes Classifier")){
+			m = new BoaNaiveBayes(clr, o);
+		}
+		else if(clr.toString().contains("The independent probability")){
+			m = new BoaNaiveBayesMultinomial(clr, o);
+		}
+		else if(clr.toString().contains("The independent frequency")){
+			m = new BoaNaiveBayesMultinomialUpdateable(clr, o);
+		}
+		else if(clr.toString().contains("PART")){
+			m = new BoaPART(clr, o);
+		}
+		else if(clr.toString().contains("RandomForest")){
+			m = new BoaRandomForest(clr, o);
+		}
+		else if(clr.toString().contains("SMO")){
+			m = new BoaSMO(clr, o);
+		}
+		else if(clr.toString().contains("Vote")){
+			m = new BoaVote(clr, o);
+		}
+		else if(clr.toString().contains("ZeroR")){
+			m = new BoaZeroR(clr, o);
+		}
+		
+		return m;
+	}
+	
+	@FunctionSpec(name = "classify", returnType = "string", formalParameters = { "Model","tuple"})
+	public static String classify(final BoaModel model, final boa.BoaTup vector) throws Exception {
+		int NumOfAttributes = 0;
+		ArrayList<Attribute> fvAttributes = new ArrayList<Attribute>();
+		try {
+			String[] fieldNames = vector.getFieldNames();
+			int count = 0;
+			for(int i = 0; i < fieldNames.length; i++) {
+				if(vector.getValue(fieldNames[i]).getClass().isEnum()) {
+					ArrayList<String> fvNominalVal = new ArrayList<String>();
+					for(Object obj: vector.getValue(fieldNames[i]).getClass().getEnumConstants())
+						fvNominalVal.add(obj.toString());
+					fvAttributes.add(new Attribute("Nominal" + count, fvNominalVal));
+					count++;
+				}
+				else if(vector.getValue(fieldNames[i]).getClass().isArray()) {
+					int l = Array.getLength(vector.getValue(fieldNames[i])) - 1;
+					for(int j = 0; j <= l; j++) {
+						fvAttributes.add(new Attribute("Attribute" + count)); 
+						count++;
+					}
+				}
+				else {
+					fvAttributes.add(new Attribute("Attribute" + count)); 
+					count++;
+				}
+			}
+			
+			String[] fields = ((boa.BoaTup)model.getObject()).getFieldNames();
+			Field lastfield = model.getObject().getClass().getField(fields[fields.length - 1]);
+			if(lastfield.getType().isEnum()) {
+				ArrayList<String> fvNominalVal = new ArrayList<String>();
+				for(Object obj: lastfield.getType().getEnumConstants())
+					fvNominalVal.add(obj.toString());
+				fvAttributes.add(new Attribute("Nominal" + count, fvNominalVal));
+				count++;
+			}
+			else {
+				fvAttributes.add(new Attribute("Attribute" + count)); 
+				count++;
+			}
+				
+			NumOfAttributes = count;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		Instances testingSet = new Instances("Classifier", fvAttributes, 1);
+		testingSet.setClassIndex(NumOfAttributes-1);
+
+		Instance instance = new DenseInstance(NumOfAttributes);
+		
+		for(int i=0; i<NumOfAttributes-1; i++)
+			if(NumberUtils.isNumber(vector.getValues()[i]))
+				instance.setValue((Attribute)fvAttributes.get(i), Double.parseDouble(vector.getValues()[i]));
+			else
+				instance.setValue((Attribute)fvAttributes.get(i), vector.getValues()[i]);
+		testingSet.add(instance);
+		
+		Classifier classifier = (Classifier) model.getClassifier();
+		double predval = classifier.classifyInstance(testingSet.instance(0));
+		
+		if(testingSet.classAttribute().isNominal())
+			return testingSet.classAttribute().value((int) predval);
+		else
+			return predval + "";
+	}
+	
+	@FunctionSpec(name = "classify", returnType = "string", formalParameters = { "Model","array of int"})
+	public static String classify(final BoaModel model, final long[] vector) throws Exception {
+		int NumOfAttributes = vector.length + 1;
+		ArrayList<Attribute> fvAttributes = new ArrayList<Attribute>();
+		
+		for(int i=0; i < NumOfAttributes - 1; i++) {
+			fvAttributes.add(new Attribute("Attribute" + i));
+		}
+		
+		try {
+			String[] fields = ((boa.BoaTup)model.getObject()).getFieldNames();
+			Field lastfield = model.getObject().getClass().getField(fields[fields.length - 1]);
+			if(lastfield.getType().isEnum()) {
+				ArrayList<String> fvNominalVal = new ArrayList<String>();
+				for(Object obj: lastfield.getType().getEnumConstants())
+					fvNominalVal.add(obj.toString());
+				fvAttributes.add(new Attribute("Nominal" + (NumOfAttributes - 1), fvNominalVal));
+			} else
+				fvAttributes.add(new Attribute("Attribute" + (NumOfAttributes - 1))); 
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		Instances testingSet = new Instances("Classifier", fvAttributes, 1);
+		testingSet.setClassIndex(NumOfAttributes - 1);
+
+		Instance instance = new DenseInstance(NumOfAttributes);
+		for(int i=0; i<NumOfAttributes-1; i++) {
+			instance.setValue((Attribute)fvAttributes.get(i), vector[i]);
+		}
+		testingSet.add(instance);
+		
+		Classifier classifier = (Classifier) model.getClassifier();
+		double predval = classifier.classifyInstance(testingSet.instance(0));
+		
+		if(testingSet.classAttribute().isNominal())
+			return testingSet.classAttribute().value((int) predval);
+		else
+			return predval + "";
 	}
 
 	public static <T> T stack_pop(final java.util.Stack<T> s) {

@@ -18,6 +18,8 @@ package boa.compiler.visitors;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import boa.aggregators.AggregatorSpec;
 import boa.compiler.SymbolTable;
@@ -29,6 +31,7 @@ import boa.compiler.ast.statements.*;
 import boa.compiler.ast.types.*;
 import boa.compiler.transforms.VisitorDesugar;
 import boa.types.*;
+import boa.types.ml.*;
 
 /**
  * Prescan the program and check that all variables are consistently typed.
@@ -244,6 +247,24 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	public void visit(final Call n, final SymbolTable env) {
 		n.env = env;
 
+		List<BoaType> expr = this.check(n.getArgs(), env);
+		if(expr.size() > 1) {
+			if(expr.get(0) instanceof BoaModel && expr.get(1) instanceof BoaTuple) {
+				final BoaType t = ((BoaModel)expr.get(0)).getType();
+					if(t instanceof BoaTuple) {
+						final List<BoaType> mtypes = ((BoaTuple)t).getTypes();
+						final List<BoaType> vtypes = ((BoaTuple)expr.get(1)).getTypes();
+						if(mtypes.size() - 1 == vtypes.size()) {
+							for(int i=0; i < mtypes.size() - 1; i++)
+								if(!(mtypes.get(i).toString().equals(vtypes.get(i).toString())))
+										throw new TypeCheckException(n, "incompatible types for model:" + " required '" + mtypes.get(i) + "', found '" + vtypes.get(i) + "'");
+						}
+						else
+							throw new TypeCheckException(n, "'incorrect number of types for model classification '" + "': required " + (mtypes.size()-1) + ", found " + vtypes.size());
+					}
+			}
+		}
+		
 		if (n.getArgsSize() > 0)
 			n.type = new BoaTuple(this.check(n.getArgs(), env));
 		else
@@ -536,6 +557,26 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			if (!n.getLhs().type.assigns(n.getRhs().type))
 				throw new TypeCheckException(n.getRhs(), "incompatible types for assignment: required '" + n.getLhs().type + "', found '" + n.getRhs().type + "'");
 
+		if(n.getLhs().type instanceof BoaTuple && n.getRhs().type instanceof BoaTuple) {
+			if (((BoaTuple)n.getLhs().type).getSize() != ((BoaTuple)n.getRhs().type).getSize())
+				throw new TypeCheckException(n.getRhs(), "'incorrect number of types for assignment '" + "': required " + ((BoaTuple)n.getLhs().type).getSize() + ", found " + ((BoaTuple)n.getRhs().type).getSize());
+			
+			for (int i = 0; i < ((BoaTuple)n.getLhs().type).getSize(); i++) {
+				if (!( ((BoaTuple)n.getLhs().type).getMember(i).assigns(((BoaTuple)n.getRhs().type).getMember(i))))
+					throw new TypeCheckException(n.getRhs(), "incompatible types for assignment: required '" + n.getLhs().type + "', found '" + n.getRhs().type + "'");
+
+				if(((BoaTuple)n.getLhs().type).getMember(i) instanceof BoaEnum && ((BoaTuple)n.getRhs().type).getMember(i) instanceof BoaEnum)
+					if(!checkSameEnum(((BoaTuple)n.getLhs().type).getMember(i).toString(), ((BoaTuple)n.getRhs().type).getMember(i).toString()) )
+						throw new TypeCheckException(n.getRhs(), "incompatible type '" + ((BoaTuple)n.getRhs().type).getMember(i) + "' for assignment to '" + ((BoaTuple)n.getLhs().type).getMember(i) + "'");
+			
+				if(((BoaTuple)n.getLhs().type).getMember(i) instanceof BoaName)
+					if(((BoaName)(((BoaTuple)n.getLhs().type).getMember(i))).getType() instanceof BoaEnum && ((BoaTuple)n.getRhs().type).getMember(i) instanceof BoaEnum)
+						if(!checkSameEnum(((BoaName)(((BoaTuple)n.getLhs().type).getMember(i))).getType().toString(), ((BoaTuple)n.getRhs().type).getMember(i).toString()) )
+							throw new TypeCheckException(n.getRhs(), "incompatible type '" + ((BoaTuple)n.getRhs().type).getMember(i) + "' for assignment to '" + ((BoaName)(((BoaTuple)n.getLhs().type).getMember(i))).getType() + "'");
+
+			}
+		}
+
 		if (n.getLhs().getOperand().type instanceof BoaProtoTuple && n.getLhs().getOpsSize() > 0)
 			throw new TypeCheckException(n.getLhs(), "assignment not allowed to input-derived type '" + n.getLhs().getOperand().type + "'");
 
@@ -623,6 +664,25 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		n.getValue().accept(this, env);
 		if (!t.accepts(n.getValue().type))
 			throw new TypeCheckException(n.getValue(), "output variable '" + id + "': incompatible emit value types: required '" + t.getType() + "', found '" + n.getValue().type + "'");
+
+		if(n.getValue().type instanceof BoaTuple) {
+			if (((BoaTuple)n.getValue().type).getSize() != ((BoaTuple)t.getType()).getSize())
+				throw new TypeCheckException(n.getValue(), "output variable '" + id + "': incorrect number of types for '" + id + "': required " + ((BoaTuple)t.getType()).getSize() + ", found " + ((BoaTuple)n.getValue().type).getSize() );
+			
+			for (int i = 0; i < ((BoaTuple)n.getValue().type).getSize(); i++) {
+				if (!( ((BoaTuple)t.getType()).getMember(i).assigns(((BoaTuple)n.getValue().type).getMember(i))))
+					throw new TypeCheckException(n.getValue(), "output variable '" + id + "': incompatible emit value types: '" + i + "': required '" + ((BoaTuple)t.getType()).getMember(i) + "', found '" + ((BoaTuple)n.getValue().type).getMember(i) + "'");
+
+				if(((BoaTuple)t.getType()).getMember(i) instanceof BoaEnum && ((BoaTuple)n.getValue().type).getMember(i) instanceof BoaEnum)
+					if(!checkSameEnum(((BoaTuple)t.getType()).getMember(i).toString(), ((BoaTuple)n.getValue().type).getMember(i).toString()) )
+						throw new TypeCheckException(n.getValue(), "output variable '" + id + "': incompatible emit value types: required '" + ((BoaTuple)t.getType()).getMember(i) + "', found '" + ((BoaTuple)n.getValue().type).getMember(i) + "'");
+
+				if(((BoaTuple)t.getType()).getMember(i) instanceof BoaName)
+					if(((BoaName)(((BoaTuple)t.getType()).getMember(i))).getType() instanceof BoaEnum && ((BoaTuple)n.getValue().type).getMember(i) instanceof BoaEnum)
+						if(!checkSameEnum(((BoaName)(((BoaTuple)t.getType()).getMember(i))).getType().toString(), ((BoaTuple)n.getValue().type).getMember(i).toString()) )
+							throw new TypeCheckException(n.getValue(), "output variable '" + id + "': incompatible emit value types: required '" + ((BoaName)(((BoaTuple)t.getType()).getMember(i))).getType() + "', found '" + ((BoaTuple)n.getValue().type).getMember(i) + "'");
+			}
+		}
 
 		if (n.hasWeight()) {
 			if (t.getWeightType() == null)
@@ -866,6 +926,388 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 
 			if (lhs instanceof BoaArray && rhs instanceof BoaTuple)
 				rhs = new BoaArray(((BoaTuple)rhs).getMember(0));
+
+			if (lhs instanceof BoaTuple && rhs instanceof BoaArray) {
+				List<BoaType> types = ((BoaTuple)lhs).getTypes();
+				if(!(checkTupleArray(types) == true))
+					if(types.get(0).assigns(((BoaArray)rhs).getType())) {
+						rhs = new BoaTuple(types);
+						System.out.println(" insidieie " + rhs);
+					}
+			}
+
+			if(lhs instanceof BoaModel) {
+				final BoaType t = ((BoaModel)lhs).getType();
+				List<BoaType> types = new ArrayList<BoaType>();
+				
+				if(t instanceof BoaTuple)
+					types = ((BoaTuple)t).getTypes();
+				else if(t instanceof BoaArray)
+					types.add(((BoaArray)t).getType());
+				
+				if(lhs instanceof BoaAdaBoostM1) {
+					if(!(types.get(types.size() - 1) instanceof BoaEnum))
+						throw new TypeCheckException(n, "AdaBoostM1 required class to be nominal");
+					for(int i=0; i<types.size()-1; i++) {
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n, "AdaBoostM1 required attributes to be numeric, nominal or date");
+					}
+				} else if(lhs instanceof BoaAdditiveRegression) {
+					if(!(types.get(types.size() - 1) instanceof BoaInt || types.get(types.size() - 1) instanceof BoaFloat
+							|| types.get(types.size() - 1) instanceof BoaTime))
+						throw new TypeCheckException(n, "AdditiveRegression required class to be numeric or date");
+					for(int i=0; i<types.size()-1; i++) {
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n, "AdditiveRegression required attributes to be numeric, nominal or date");
+					}
+				} else if(lhs instanceof BoaApriori) {
+					if(!(types.get(types.size() - 1) instanceof BoaEnum))
+						throw new TypeCheckException(n, "Apriori required class to be nominal");
+					for(int i=0; i<types.size()-1; i++) {
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n, "Apriori required attributes to be nominal");
+					}
+				} else if(lhs instanceof BoaAttributeSelectedClassifier) {
+					if(!(types.get(types.size() - 1) instanceof BoaEnum || types.get(types.size() - 1) instanceof BoaInt
+							|| types.get(types.size() - 1) instanceof BoaFloat || types.get(types.size() - 1) instanceof BoaTime))
+						throw new TypeCheckException(n, "AttributeSelectedClassifier required class to be numeric, nominal or date");
+					for(int i=0; i<types.size()-1; i++) {
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n, "AttributeSelectedClassifier required attributes to be numeric, nominal or date");
+					}
+				} else if(lhs instanceof BoaBagging) {
+					if(!(types.get(types.size() - 1) instanceof BoaEnum || types.get(types.size() - 1) instanceof BoaInt
+							|| types.get(types.size() - 1) instanceof BoaFloat || types.get(types.size() - 1) instanceof BoaTime))
+						throw new TypeCheckException(n, "Bagging required class to be numeric, nominal or date");
+					for(int i=0; i<types.size()-1; i++) {
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n, "Bagging required attributes to be numeric, nominal or date");
+					}
+				} else if(lhs instanceof BoaBayesNetGenerator) {
+					if(!(types.get(types.size() - 1) instanceof BoaEnum))
+						throw new TypeCheckException(n, "BayesNetGenerator required class to be nominal");
+					for(int i=0; i<types.size()-1; i++) {
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n, "BayesNetGenerator required attributes to be numeric or nominal");
+					}
+				} else if(lhs instanceof BoaBayesNet) {
+					if(!(types.get(types.size() - 1) instanceof BoaEnum))
+						throw new TypeCheckException(n, "BayesNet required class to be nominal");
+					for(int i=0; i<types.size()-1; i++) {
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n, "BayesNet required attributes to be numeric or nominal");
+					}
+				} else if(lhs instanceof BoaClassificationViaRegression) {
+					if(!(types.get(types.size() - 1) instanceof BoaEnum))
+						throw new TypeCheckException(n, "ClassificationViaRegression required class to be nominal");
+					for(int i=0; i<types.size()-1; i++) {
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n, "ClassificationViaRegression required attributes to be numeric, nominal or date");
+					}
+				} else if(lhs instanceof BoaCVParameterSelection) {
+					if(!(types.get(types.size() - 1) instanceof BoaEnum || types.get(types.size() - 1) instanceof BoaInt
+							|| types.get(types.size() - 1) instanceof BoaFloat || types.get(types.size() - 1) instanceof BoaTime))
+						throw new TypeCheckException(n, "CVParameterSelection required class to be numeric, nominal or date");
+					for(int i=0; i<types.size()-1; i++) {
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaString || types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n, "CVParameterSelection required attributes to be numeric, nominal, date or string");
+					}
+				} else if(lhs instanceof BoaDecisionStump) {
+					if(!(types.get(types.size() - 1) instanceof BoaEnum || types.get(types.size() - 1) instanceof BoaInt
+							|| types.get(types.size() - 1) instanceof BoaFloat || types.get(types.size() - 1) instanceof BoaTime))
+						throw new TypeCheckException(n, "DecisionStump required class to be numeric, nominal or date");
+					for(int i=0; i<types.size()-1; i++) {
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n, "DecisionStump required attributes to be numeric, nominal or date");
+					}
+				} else if(lhs instanceof BoaDecisionTable) {
+					if(!(types.get(types.size() - 1) instanceof BoaEnum || types.get(types.size() - 1) instanceof BoaInt
+							|| types.get(types.size() - 1) instanceof BoaFloat || types.get(types.size() - 1) instanceof BoaTime))
+						throw new TypeCheckException(n, "DecisionTable required class to be numeric, nominal or date");
+					for(int i=0; i<types.size()-1; i++) {
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n, "DecisionTable required attributes to be numeric, nominal or date");
+					}
+				} else if(lhs instanceof BoaFilteredClassifier) {
+					if(!(types.get(types.size() - 1) instanceof BoaEnum))
+						throw new TypeCheckException(n, "FilteredClassifier required class to be nominal");
+					for(int i=0; i<types.size()-1; i++) {
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaString || types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n, "FilteredClassifier required attributes to be numeric, nominal, date or string");
+					}
+				} else if(lhs instanceof BoaGaussianProcesses) {
+					if(!(types.get(types.size() - 1) instanceof BoaInt || types.get(types.size() - 1) instanceof BoaTime
+							|| types.get(types.size() - 1) instanceof BoaFloat))
+						throw new TypeCheckException(n, "GaussianProcesses required class to be numeric or date");
+					for(int i=0; i<types.size()-1; i++) {
+						if(!(types.get(i) instanceof BoaFloat || types.get(i) instanceof BoaInt || types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n, "GaussianProcesses required attributes to be nominal or numeric");
+					}
+				} else if(lhs instanceof BoaHoeffdingTree) {
+					if(!(types.get(types.size() - 1) instanceof BoaEnum))
+						throw new TypeCheckException(n, "HoeffdingTree required class to be nominal");
+					for(int i=0; i<types.size()-1; i++) {
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n, "HoeffdingTree required attributes to be numeric, nominal or date");
+					}
+				} else if(lhs instanceof BoaIBk) {
+					if(!(types.get(types.size() - 1) instanceof BoaEnum || types.get(types.size() - 1) instanceof BoaInt
+							|| types.get(types.size() - 1) instanceof BoaFloat || types.get(types.size() - 1) instanceof BoaTime))
+						throw new TypeCheckException(n, "IBk required class to be numeric, nominal or date");
+					for(int i=0; i<types.size()-1; i++) {
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n, "IBk required attributes to be numeric, nominal or date");
+					}
+				} else if(lhs instanceof BoaInputMappedClassifier) {
+					if(!(types.get(types.size() - 1) instanceof BoaEnum || types.get(types.size() - 1) instanceof BoaInt
+							|| types.get(types.size() - 1) instanceof BoaFloat || types.get(types.size() - 1) instanceof BoaTime))
+						throw new TypeCheckException(n, "InputMappedClassifier required class to be numeric, nominal or date");
+					for(int i=0; i<types.size()-1; i++) {
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaString || types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n, "InputMappedClassifier required attributes to be numeric, nominal, date or string");
+					}
+				} else if(lhs instanceof BoaIterativeClassifierOptimizer) {
+					if(!(types.get(types.size() - 1) instanceof BoaEnum))
+						throw new TypeCheckException(n, "IterativeClassifierOptimizer required class to be nominal");
+					for(int i=0; i<types.size()-1; i++) {
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n, "IterativeClassifierOptimizer required attributes to be numeric, nominal or date");
+					}
+				} else if(lhs instanceof BoaJ48) {
+					if(!(types.get(types.size() - 1) instanceof BoaEnum))
+						throw new TypeCheckException(n, "J48 required class to be nominal");
+					for(int i=0; i<types.size()-1; i++) {
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n, "J48 required attributes to be numeric, nominal or date");
+					}
+				} else if(lhs instanceof BoaJRip) {
+					if(!(types.get(types.size() - 1) instanceof BoaEnum))
+						throw new TypeCheckException(n, "JRip required class to be nominal");
+					for(int i=0; i<types.size()-1; i++) {
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n, "JRip required attributes to be numeric, nominal or date");
+					}
+				} else if(lhs instanceof BoaKStar) {
+					if(!(types.get(types.size() - 1) instanceof BoaEnum || types.get(types.size() - 1) instanceof BoaInt
+							|| types.get(types.size() - 1) instanceof BoaFloat || types.get(types.size() - 1) instanceof BoaTime))
+						throw new TypeCheckException(n, "KStar required class to be numeric, nominal or date");
+					for(int i=0; i<types.size()-1; i++) {
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n, "KStar required attributes to be numeric, nominal or date");
+					}
+				} else if(lhs instanceof BoaLinearRegression) {
+					if(!(types.get(types.size() - 1) instanceof BoaInt
+							|| types.get(types.size() - 1) instanceof BoaFloat || types.get(types.size() - 1) instanceof BoaTime))
+						throw new TypeCheckException(n, "LinearRegression required class to be numeric or date");
+					for(int i=0; i<types.size()-1; i++) {
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n, "LinearRegression required attributes to be numeric, nominal or date");
+					}
+				} else if(lhs instanceof BoaLMT) {
+					if(!(types.get(types.size() - 1) instanceof BoaEnum))
+						throw new TypeCheckException(n, "LMT required class to be nominal");
+					for(int i=0; i<types.size()-1; i++) {
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n, "LMT required attributes to be numeric, nominal or date");
+					}
+				} else if(lhs instanceof BoaLogisticRegression) {
+					if(!(types.get(types.size() - 1) instanceof BoaEnum))
+						throw new TypeCheckException(n, "LogisticRegression required class to be nominal");
+					for(int i=0; i<types.size()-1; i++) {
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n, "LogisticRegression required attributes to be numeric, nominal or date");
+					}
+				} else if(lhs instanceof BoaLogitBoost) {
+					if(!(types.get(types.size() - 1) instanceof BoaEnum))
+						throw new TypeCheckException(n, "LogitBoost required class to be nominal");
+					for(int i=0; i<types.size()-1; i++) {
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n, "LogitBoost required attributes to be numeric, nominal or date");
+					}
+				} else if(lhs instanceof BoaLsa) {
+					if(!(types.get(types.size() - 1) instanceof BoaEnum || types.get(types.size() - 1) instanceof BoaInt
+							|| types.get(types.size() - 1) instanceof BoaFloat || types.get(types.size() - 1) instanceof BoaTime))
+						throw new TypeCheckException(n, "Lsa required class to be numeric, nominal or date");
+					for(int i=0; i<types.size()-1; i++) {
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n, "Lsa required attributes to be numeric, nominal or date");
+					}
+				} else if(lhs instanceof BoaLWL) {
+					if(!(types.get(types.size() - 1) instanceof BoaEnum || types.get(types.size() - 1) instanceof BoaInt
+							|| types.get(types.size() - 1) instanceof BoaFloat || types.get(types.size() - 1) instanceof BoaTime))
+						throw new TypeCheckException(n, "LWL required class to be numeric, nominal or date");
+					for(int i=0; i<types.size()-1; i++) {
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n, "LWL required attributes to be numeric, nominal or date");
+					}
+				} else if(lhs instanceof BoaMultiClassClassifier) {
+					if(!(types.get(types.size() - 1) instanceof BoaEnum))
+						throw new TypeCheckException(n, "MultiClassClassifier required class to be nominal");
+					for(int i=0; i<types.size()-1; i++) {
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n, "MultiClassClassifier required attributes to be numeric, nominal or date");
+					}
+				} else if(lhs instanceof BoaMultiClassClassifierUpdateable) {
+					if(!(types.get(types.size() - 1) instanceof BoaEnum))
+						throw new TypeCheckException(n, "MultiClassClassifierUpdateable required class to be nominal");
+					for(int i=0; i<types.size()-1; i++) {
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n, "MultiClassClassifierUpdateable required attributes to be numeric, nominal or date");
+					}
+				} else if(lhs instanceof BoaMultilayerPerceptron) {
+					if(!(types.get(types.size() - 1) instanceof BoaEnum || types.get(types.size() - 1) instanceof BoaInt
+							|| types.get(types.size() - 1) instanceof BoaFloat || types.get(types.size() - 1) instanceof BoaTime))
+						throw new TypeCheckException(n, "MultilayerPerceptron required class to be numeric, nominal or date");
+					for(int i=0; i<types.size()-1; i++) {
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n, "MultilayerPerceptron required attributes to be numeric, nominal or date");
+					}
+				} else if(lhs instanceof BoaMultiScheme) {
+					if(!(types.get(types.size() - 1) instanceof BoaEnum || types.get(types.size() - 1) instanceof BoaInt
+							|| types.get(types.size() - 1) instanceof BoaFloat || types.get(types.size() - 1) instanceof BoaTime))
+						throw new TypeCheckException(n, "MultiScheme required class to be numeric, nominal or date");
+					for(int i=0; i<types.size()-1; i++) {
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaString || types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n, "MultiScheme required attributes to be numeric, nominal, date or string");
+					}
+				} else if(lhs instanceof BoaNaiveBayes) {
+					if(!(types.get(types.size() - 1) instanceof BoaEnum))
+						throw new TypeCheckException(n, "NaiveBayes required class to be nominal");
+					for(int i=0; i<types.size()-1; i++) {
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n, "NaiveBayes required attributes to be numeric or nominal");
+					}
+				} else if(lhs instanceof BoaNaiveBayesMultinomial) {
+					if(!(types.get(types.size() - 1) instanceof BoaEnum))
+						throw new TypeCheckException(n, "NaiveBayesMultinomial required class to be nominal");
+					for(int i=0; i<types.size()-1; i++) {
+						if(!(types.get(i) instanceof BoaFloat || 
+								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n, "NaiveBayesMultinomial required attributes to be numeric");
+					}
+				} else if(lhs instanceof BoaNaiveBayesMultinomialUpdateable) {
+					if(!(types.get(types.size() - 1) instanceof BoaEnum))
+						throw new TypeCheckException(n, "NaiveBayesMultinomialUpdateable required class to be nominal");
+					for(int i=0; i<types.size()-1; i++) {
+						if(!(types.get(i) instanceof BoaFloat || 
+								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n, "NaiveBayesMultinomialUpdateable required attributes to be numeric");
+					}
+				} else if(lhs instanceof BoaOneR) {
+					if(!(types.get(types.size() - 1) instanceof BoaEnum))
+						throw new TypeCheckException(n, "OneR required class to be nominal");
+					for(int i=0; i<types.size()-1; i++) {
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n, "OneR required attributes to be numeric, nominal or date");
+					}
+				} else if(lhs instanceof BoaPART) {
+					if(!(types.get(types.size() - 1) instanceof BoaEnum))
+						throw new TypeCheckException(n, "PART required class to be nominal");
+					for(int i=0; i<types.size()-1; i++) {
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n, "PART required attributes to be numeric, nominal or date");
+					}
+				} else if(lhs instanceof BoaPrincipalComponents) {
+					if(!(types.get(types.size() - 1) instanceof BoaEnum || types.get(types.size() - 1) instanceof BoaInt
+							|| types.get(types.size() - 1) instanceof BoaFloat || types.get(types.size() - 1) instanceof BoaTime))
+						throw new TypeCheckException(n, "PrincipalComponents required class to be numeric, nominal or date");
+					for(int i=0; i<types.size()-1; i++) {
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n, "PrincipalComponents required attributes to be numeric, nominal or date");
+					}
+				} else if(lhs instanceof BoaRandomForest) {
+					if(!(types.get(types.size() - 1) instanceof BoaEnum || types.get(types.size() - 1) instanceof BoaInt
+							|| types.get(types.size() - 1) instanceof BoaFloat))
+						throw new TypeCheckException(n, "RandomForest required class to be numeric or nominal");
+					for(int i=0; i<types.size()-1; i++) {
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n, "RandomForest required attributes to be numeric, nominal or date");
+					}
+				} else if(lhs instanceof BoaSimpleKMeans) {
+					for(int i=0; i<types.size(); i++) {
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n, "SimpleKMeans required attributes to be numeric or nominal");
+					}
+				} else if(lhs instanceof BoaSMO) {
+					if(!(types.get(types.size() - 1) instanceof BoaEnum))
+						throw new TypeCheckException(n, "SMO required class to be nominal");
+					for(int i=0; i<types.size()-1; i++) {
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n, "SMO required attributes to be numeric or nominal");
+					}
+				} else if(lhs instanceof BoaVote) {
+					if(!(types.get(types.size() - 1) instanceof BoaEnum || types.get(types.size() - 1) instanceof BoaInt
+							|| types.get(types.size() - 1) instanceof BoaFloat || types.get(types.size() - 1) instanceof BoaTime))
+						throw new TypeCheckException(n, "Vote required class to be numeric, nominal or date");
+					for(int i=0; i<types.size()-1; i++) {
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaString || types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n, "Vote required attributes to be numeric, nominal, date or string");
+					}
+				} else if(lhs instanceof BoaZeroR) {
+					if(!(types.get(types.size() - 1) instanceof BoaEnum || types.get(types.size() - 1) instanceof BoaInt
+							|| types.get(types.size() - 1) instanceof BoaFloat || types.get(types.size() - 1) instanceof BoaTime))
+						throw new TypeCheckException(n, "ZeroR required class to be numeric, nominal or date");
+					for(int i=0; i<types.size()-1; i++) {
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaString || types.get(i) instanceof BoaArray))
+							throw new TypeCheckException(n, "ZeroR required attributes to be numeric, nominal, date or string");
+					}
+				}
+			}
+
+			if(n.getType().type instanceof BoaTuple && rhs != null && rhs instanceof BoaTuple) {
+				if (((BoaTuple)n.getType().type).getSize() != ((BoaTuple)rhs).getSize())
+					throw new TypeCheckException(n.getInitializer(), "' incorrect number of types for '" + id + "': required " + ((BoaTuple)n.getType().type).getSize() + ", found " + ((BoaTuple)rhs).getSize());
+				for (int i = 0; i < ((BoaTuple)n.getType().type).getSize(); i++) {
+					BoaType t1 = ((BoaTuple)n.getType().type).getMember(i);
+					BoaType t2 = ((BoaTuple)rhs).getMember(i);
+					if (!( ((BoaTuple)n.getType().type).getMember(i).assigns(((BoaTuple)rhs).getMember(i))))
+						throw new TypeCheckException(n.getInitializer(), "incompatible type '" + rhs + "' for assignment to '" + id + ": " + lhs + "'");
+					if(((BoaTuple)n.getType().type).getMember(i) instanceof BoaEnum && ((BoaTuple)rhs).getMember(i) instanceof BoaEnum)
+						if(!checkSameEnum(((BoaTuple)n.getType().type).getMember(i).toString(), ((BoaTuple)rhs).getMember(i).toString()) )
+							throw new TypeCheckException(n.getInitializer(), "incompatible type '" + ((BoaTuple)rhs).getMember(i) + "' for assignment to '" + id + ": " + ((BoaTuple)n.getType().type).getMember(i) + "'");
+					if(((BoaTuple)n.getType().type).getMember(i) instanceof BoaName)
+						if( ((BoaName)(((BoaTuple)n.getType().type).getMember(i))).getType() instanceof BoaEnum && ((BoaTuple)rhs).getMember(i) instanceof BoaEnum)
+							if(!checkSameEnum(((BoaName)(((BoaTuple)n.getType().type).getMember(i))).getType().toString(), ((BoaTuple)rhs).getMember(i).toString()) )
+								throw new TypeCheckException(n.getInitializer(), "incompatible type '" + ((BoaTuple)rhs).getMember(i) + "' for assignment to '" + id + ": " + ((BoaName)(((BoaTuple)n.getType().type).getMember(i))).getType() + "'");
+				}
+			}
 
 			if (rhs != null && !lhs.assigns(rhs) && !env.hasCast(rhs, lhs))
 				throw new TypeCheckException(n.getInitializer(), "incorrect type '" + rhs + "' for assignment to '" + id + ": " + lhs + "'");
@@ -1195,6 +1637,106 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 
 	/** {@inheritDoc} */
 	@Override
+	public void visit(final ModelType n, final SymbolTable env) {
+		n.env = env;
+		n.getType().accept(this, env);
+
+		if (env.hasType(n.getId().getToken()))
+			n.type = SymbolTable.getType(n.getId().getToken());
+		else
+			try {
+				n.type = env.get(n.getId().getToken());
+			} catch (final RuntimeException e) {
+				throw new TypeCheckException(n, "invalid identifier '" + n.getId().getToken() + "'", e);
+			}
+		
+		if(n.type instanceof BoaAdaBoostM1)
+			n.type = new BoaAdaBoostM1(n.getType().type);
+		else if(n.type instanceof BoaAdditiveRegression)
+			n.type = new BoaAdditiveRegression(n.getType().type);
+		else if(n.type instanceof BoaApriori)
+			n.type = new BoaApriori(n.getType().type);
+		else if(n.type instanceof BoaAttributeSelectedClassifier)
+			n.type = new BoaAttributeSelectedClassifier(n.getType().type);
+		else if(n.type instanceof BoaBagging)
+			n.type = new BoaBagging(n.getType().type);
+		else if(n.type instanceof BoaBayesNetGenerator)
+			n.type = new BoaBayesNetGenerator(n.getType().type);
+		else if(n.type instanceof BoaBayesNet)
+			n.type = new BoaBayesNet(n.getType().type);
+		else if(n.type instanceof BoaClassificationViaRegression)
+			n.type = new BoaClassificationViaRegression(n.getType().type);
+		else if(n.type instanceof BoaCVParameterSelection)
+			n.type = new BoaCVParameterSelection(n.getType().type);
+		else if(n.type instanceof BoaDecisionStump)
+			n.type = new BoaDecisionStump(n.getType().type);
+		else if(n.type instanceof BoaDecisionTable)
+			n.type = new BoaDecisionTable(n.getType().type);
+		else if(n.type instanceof BoaFilteredClassifier)
+			n.type = new BoaFilteredClassifier(n.getType().type);
+		else if(n.type instanceof BoaGaussianProcesses)
+			n.type = new BoaGaussianProcesses(n.getType().type);
+		else if(n.type instanceof BoaHoeffdingTree)
+			n.type = new BoaHoeffdingTree(n.getType().type);
+		else if(n.type instanceof BoaIBk)
+			n.type = new BoaIBk(n.getType().type);
+		else if(n.type instanceof BoaInputMappedClassifier)
+			n.type = new BoaInputMappedClassifier(n.getType().type);
+		else if(n.type instanceof BoaIterativeClassifierOptimizer)
+			n.type = new BoaIterativeClassifierOptimizer(n.getType().type);
+		else if(n.type instanceof BoaJ48)
+			n.type = new BoaJ48(n.getType().type);
+		else if(n.type instanceof BoaJRip)
+			n.type = new BoaJRip(n.getType().type);
+		else if(n.type instanceof BoaKStar)
+			n.type = new BoaKStar(n.getType().type);
+		else if(n.type instanceof BoaLinearRegression)
+			n.type = new BoaLinearRegression(n.getType().type);
+		else if(n.type instanceof BoaLMT)
+			n.type = new BoaLMT(n.getType().type);
+		else if(n.type instanceof BoaLogisticRegression)
+			n.type = new BoaLogisticRegression(n.getType().type);
+		else if(n.type instanceof BoaLogitBoost)
+			n.type = new BoaLogitBoost(n.getType().type);
+		else if(n.type instanceof BoaLsa)
+			n.type = new BoaLsa(n.getType().type);
+		else if(n.type instanceof BoaLWL)
+			n.type = new BoaLWL(n.getType().type);
+		else if(n.type instanceof BoaMultiClassClassifier)
+			n.type = new BoaMultiClassClassifier(n.getType().type);
+		else if(n.type instanceof BoaMultiClassClassifierUpdateable)
+			n.type = new BoaMultiClassClassifierUpdateable(n.getType().type);
+		else if(n.type instanceof BoaMultilayerPerceptron)
+			n.type = new BoaMultilayerPerceptron(n.getType().type);
+		else if(n.type instanceof BoaMultiScheme)
+			n.type = new BoaMultiScheme(n.getType().type);
+		else if(n.type instanceof BoaNaiveBayes)
+			n.type = new BoaNaiveBayes(n.getType().type);
+		else if(n.type instanceof BoaNaiveBayesMultinomial)
+			n.type = new BoaNaiveBayesMultinomial(n.getType().type);
+		else if(n.type instanceof BoaNaiveBayesMultinomialUpdateable)
+			n.type = new BoaNaiveBayesMultinomialUpdateable(n.getType().type);
+		else if(n.type instanceof BoaOneR)
+			n.type = new BoaOneR(n.getType().type);
+		else if(n.type instanceof BoaPART)
+			n.type = new BoaPART(n.getType().type);
+		else if(n.type instanceof BoaPrincipalComponents)
+			n.type = new BoaPrincipalComponents(n.getType().type);
+		else if(n.type instanceof BoaRandomForest)
+			n.type = new BoaRandomForest(n.getType().type);
+		else if(n.type instanceof BoaSimpleKMeans)
+			n.type = new BoaSimpleKMeans(n.getType().type);
+		else if(n.type instanceof BoaSMO)
+			n.type = new BoaSMO(n.getType().type);
+		else if(n.type instanceof BoaVote)
+			n.type = new BoaVote(n.getType().type);
+		else if(n.type instanceof BoaZeroR)
+			n.type = new BoaZeroR(n.getType().type);
+		
+	}
+
+	/** {@inheritDoc} */
+	@Override
 	public void visit(final StackType n, final SymbolTable env) {
 		n.env = env;
 		n.getValue().accept(this, env);
@@ -1300,7 +1842,8 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		type = types.get(0);
 		for (int i = 1; i < types.size(); i++) {
 			if((!(types.get(i).toBoxedJavaType() == type.toBoxedJavaType())) && tuple==false){
-				tuple = true;
+				if(!(types.get(i) instanceof BoaEnum && type instanceof BoaEnum))
+					tuple = true; 
 			}
 		}
 		return tuple;
@@ -1317,5 +1860,24 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		}
 
 		return boaMap;
+	}
+
+	protected boolean checkSameEnum(String s1, String s2) {
+		Pattern p = Pattern.compile("\"(.*?)\"");
+		Matcher m1 = p.matcher(s1);
+		Matcher m2 = p.matcher(s2);
+		String s3 = "";
+		String s4 = "";
+		if(m2.find()) {
+			s3 = m2.group(0);
+		}
+
+		while (m1.find()) {
+			s4 = s4 + m1.group(0);
+				if(s4.contains(s3)) {
+					return true;
+				}
+		}
+		return false;
 	}
 }

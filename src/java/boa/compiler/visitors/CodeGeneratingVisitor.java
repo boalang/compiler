@@ -35,6 +35,8 @@ import boa.compiler.ast.literals.*;
 import boa.compiler.ast.statements.*;
 import boa.compiler.ast.types.*;
 import boa.types.*;
+import boa.types.ml.BoaModel;
+import boa.compiler.BoaCompiler;
 
 /***
  * 
@@ -985,8 +987,15 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			return;
 		}
 
+		String typecast = "";
+		if (rhs.contains(".load(")) {
+			rhs = rhs.substring(0,rhs.length()-1) + ", new " +
+					((BoaModel)n.getLhs().type).getType().toJavaType() + "())";
+			typecast = "(" + (n.getLhs().type + "").split("\\/")[0] + ")";
+		}
+
 		st.add("lhs", lhs);
-		st.add("rhs", rhs);
+		st.add("rhs", typecast + rhs);
 
 		code.add(st.render());
 	}
@@ -1698,6 +1707,12 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		}
 
 		code.add("");
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final ModelType n) {
+		visit(n.getType());
 	}
 
 	/** {@inheritDoc} */
