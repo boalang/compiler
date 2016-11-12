@@ -28,12 +28,15 @@ import java.util.Map;
  * @author ankuraga
  */
 public class BoaEnum extends BoaScalar {
-	protected final List<BoaEnum> members;
-	protected final Map<String, Integer> names;
-	protected final List<String> values;
-	private BoaType fieldType = null;
+	private List<BoaEnum> members;
+	private Map<String, Integer> names;
+	private List<String> values;
+	private BoaType fieldType;
 	private static final Map<String, String> enumNames = new HashMap<String, String>();
 	
+	public BoaEnum() {
+	}
+
 	/**
 	 * Construct a BoaEnum.
 	 * 
@@ -115,6 +118,16 @@ public class BoaEnum extends BoaScalar {
 	 */
 	public BoaType getType() {
 		return this.fieldType;
+	}
+
+	/**
+	 * Return the infer type of the field.
+	 * 
+	 * @return A {@link BoaType} representing the infer type of the field
+	 * 
+	 */
+	public Map<String, String> getEnumMap() {
+		return this.enumNames;
 	}
 	
 	@Override

@@ -31,12 +31,15 @@ import boa.types.proto.*;
 import boa.types.proto.enums.*;
 import boa.types.proto.transportation.AccidentProtoTuple;
 import boa.types.proto.transportation.StateProtoMap;
+import boa.types.ml.*;
+
 import boa.compiler.ast.Operand;
 
 /**
  * @author anthonyu
  * @author rdyer
  * @author rramu
+ * @author ankuraga
  */
 public class SymbolTable {
 	private static HashMap<String, Class<?>> aggregators;
@@ -91,6 +94,51 @@ public class SymbolTable {
 		idmap.put("float", new BoaFloat());
 		idmap.put("time", new BoaTime());
 		idmap.put("string", new BoaString());
+		idmap.put("Model", new BoaModel());
+		idmap.put("enum", new BoaEnum());
+		idmap.put("tuple", new BoaTuple());
+
+		idmap.put("AdaBoostM1", new BoaAdaBoostM1());
+		idmap.put("AdditiveRegression", new BoaAdditiveRegression());
+		idmap.put("Apriori", new BoaApriori());
+		idmap.put("AttributeSelectedClassifier", new BoaAttributeSelectedClassifier());
+		idmap.put("Bagging", new BoaBagging());
+		idmap.put("BayesNetGenerator", new BoaBayesNetGenerator());
+		idmap.put("BayesNet", new BoaBayesNet());
+		idmap.put("ClassificationViaRegression", new BoaClassificationViaRegression());
+		idmap.put("CVParameterSelection", new BoaCVParameterSelection());
+		idmap.put("DecisionStump", new BoaDecisionStump());
+		idmap.put("DecisionTable", new BoaDecisionTable());
+		idmap.put("FilteredClassifier", new BoaFilteredClassifier());
+		idmap.put("GaussianProcesses", new BoaGaussianProcesses());
+		idmap.put("HoeffdingTree", new BoaHoeffdingTree());
+		idmap.put("IBk", new BoaIBk());
+		idmap.put("InputMappedClassifier", new BoaInputMappedClassifier());
+		idmap.put("IterativeClassifierOptimizer", new BoaIterativeClassifierOptimizer());
+		idmap.put("J48", new BoaJ48());
+		idmap.put("JRip", new BoaJRip());
+		idmap.put("KStar", new BoaKStar());
+		idmap.put("LinearRegression", new BoaLinearRegression());
+		idmap.put("LMT", new BoaLMT());
+		idmap.put("LogisticRegression", new BoaLogisticRegression());
+		idmap.put("LogitBoost", new BoaLogitBoost());
+		idmap.put("Lsa", new BoaLsa());
+		idmap.put("LWL", new BoaLWL());
+		idmap.put("MultiClassClassifier", new BoaMultiClassClassifier());
+		idmap.put("MultiClassClassifierUpdateable", new BoaMultiClassClassifierUpdateable());
+		idmap.put("MultilayerPerceptron", new BoaMultilayerPerceptron());
+		idmap.put("MultiScheme", new BoaMultiScheme());
+		idmap.put("NaiveBayes", new BoaNaiveBayes());
+		idmap.put("NaiveBayesMultinomial", new BoaNaiveBayesMultinomial());
+		idmap.put("NaiveBayesMultinomialUpdateable", new BoaNaiveBayesMultinomialUpdateable());
+		idmap.put("OneR", new BoaOneR());
+		idmap.put("PART", new BoaPART());
+		idmap.put("PrincipalComponents", new BoaPrincipalComponents());
+		idmap.put("RandomForest", new BoaRandomForest());
+		idmap.put("SimpleKMeans", new BoaSimpleKMeans());
+		idmap.put("SMO", new BoaSMO());
+		idmap.put("Vote", new BoaVote());
+		idmap.put("ZeroR", new BoaZeroR());
 
 		idmap.put("ASTRoot", new ASTRootProtoTuple());
 		idmap.put("Attachment", new AttachmentProtoTuple());
@@ -474,8 +522,9 @@ public class SymbolTable {
 		final List<Class<?>> aggregators = new ArrayList<Class<?>>();
 
 		if (type instanceof BoaTuple)
-			for (final BoaType subType : ((BoaTuple) type).getTypes())
-				aggregators.add(this.getAggregator(name, (BoaScalar) subType));
+			aggregators.add(this.getAggregator(name, (BoaScalar) type));
+		else if (type instanceof BoaArray)
+				aggregators.add(this.getAggregator(name, ((BoaArray)type).getType()));
 		else
 			aggregators.add(this.getAggregator(name, (BoaScalar) type));
 
@@ -564,6 +613,47 @@ public class SymbolTable {
 			boa.aggregators.TopAggregator.class,
 			boa.aggregators.UniqueAggregator.class,
 			boa.aggregators.VarianceAggregator.class,
+			boa.aggregators.ml.LinearRegressionAggregator.class,
+			boa.aggregators.ml.ZeroRAggregator.class,
+			boa.aggregators.ml.SimpleKMeansAggregator.class,
+			boa.aggregators.ml.LogisticRegressionAggregator.class,
+			boa.aggregators.ml.NaiveBayesAggregator.class,
+			boa.aggregators.ml.RandomForestAggregator.class,
+			boa.aggregators.ml.SMOAggregator.class,
+			boa.aggregators.ml.AprioriAggregator.class,
+			boa.aggregators.ml.VoteAggregator.class,
+			boa.aggregators.ml.OneRAggregator.class,
+			boa.aggregators.ml.J48Aggregator.class,
+			boa.aggregators.ml.BayesNetAggregator.class,
+			boa.aggregators.ml.NaiveBayesMultinomialUpdateableAggregator.class,
+			boa.aggregators.ml.KStarAggregator.class,
+			boa.aggregators.ml.AdaBoostM1Aggregator.class,
+			boa.aggregators.ml.AdditiveRegressionAggregator.class,
+			boa.aggregators.ml.AttributeSelectedClassifierAggregator.class,
+			boa.aggregators.ml.BaggingAggregator.class,
+			boa.aggregators.ml.BayesNetGeneratorAggregator.class,
+			boa.aggregators.ml.ClassificationViaRegressionAggregator.class,
+			boa.aggregators.ml.CVParameterSelectionAggregator.class,
+			boa.aggregators.ml.DecisionStumpAggregator.class,
+			boa.aggregators.ml.DecisionTableAggregator.class,
+			boa.aggregators.ml.FilteredClassifierAggregator.class,
+			boa.aggregators.ml.GaussianProcessesAggregator.class,
+			boa.aggregators.ml.HoeffdingTreeAggregator.class,
+			boa.aggregators.ml.IBkAggregator.class,
+			boa.aggregators.ml.InputMappedClassifierAggregator.class,
+			boa.aggregators.ml.IterativeClassifierOptimizerAggregator.class,
+			boa.aggregators.ml.JRipAggregator.class,
+			boa.aggregators.ml.LMTAggregator.class,
+			boa.aggregators.ml.LogitBoostAggregator.class,
+			boa.aggregators.ml.LWLAggregator.class,
+			boa.aggregators.ml.MultiClassClassifierAggregator.class,
+			boa.aggregators.ml.MultiClassClassifierUpdateableAggregator.class,
+			boa.aggregators.ml.MultilayerPerceptronAggregator.class,
+			boa.aggregators.ml.MultiSchemeAggregator.class,
+			boa.aggregators.ml.NaiveBayesMultinomialTextAggregator.class,
+			boa.aggregators.ml.PARTAggregator.class,
+			boa.aggregators.ml.PrincipalComponentsAggregator.class,
+			boa.aggregators.ml.LsaAggregator.class
 		};
 		for (final Class<?> c : builtinAggs)
 			importAggregator(c);

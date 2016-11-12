@@ -73,22 +73,22 @@ public class AccidentProtoTuple extends BoaProtoTuple {
 		names.put("city", counter++);
 		members.add(new BoaInt());
 
-		names.put("day", counter++);
+		names.put("DAY", counter++);
 		members.add(new BoaInt());
 
-		names.put("month", counter++);
+		names.put("MONTH", counter++);
 		members.add(new BoaInt());
 
-		names.put("year", counter++);
+		names.put("YEAR", counter++);
 		members.add(new BoaInt());
 
-		names.put("day_week", counter++);
+		names.put("DAY_WEEK", counter++);
 		members.add(new BoaInt());
 
-		names.put("hour", counter++);
+		names.put("HOUR", counter++);
 		members.add(new BoaInt());
 		
-		names.put("minute", counter++);
+		names.put("MINUTE", counter++);
 		members.add(new BoaInt());
 
 

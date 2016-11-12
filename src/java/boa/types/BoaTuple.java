@@ -19,6 +19,7 @@ package boa.types;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.ArrayList;
 
 /**
  * A {@link BoaScalar} representing a data structure with named members of
@@ -45,6 +46,11 @@ public class BoaTuple extends BoaScalar {
 	public BoaTuple(final List<BoaType> members, final Map<String, Integer> names) {
 		this.members = members;
 		this.names = names;
+	}
+
+	public BoaTuple() {
+		this.members = null;
+		this.names = null;
 	}
 
 	/** {@inheritDoc} */
@@ -121,7 +127,19 @@ public class BoaTuple extends BoaScalar {
 	}
 
 	public List<BoaType> getTypes() {
-		return this.members;
+		List<BoaType> types = new ArrayList<BoaType>();
+		for (final BoaType t : this.members)
+			if(t instanceof BoaName)
+				types.add(((BoaName)t).getType());
+			else
+				types.add(t);
+		return types;
+	}
+	
+	public int getSize() {
+		if(this.members != null)
+			return this.members.size();
+		return 0;
 	}
 
 	@Override
@@ -129,6 +147,7 @@ public class BoaTuple extends BoaScalar {
 		String s = "";
 		for (final BoaType t : this.members)
 			s += "_" + cleanType(t.toJavaType());
+		s = s.replaceAll("\\d+", "");
 		// use numbers for each unique type, to avoid generating really long filenames
 		if (!tupleNames.containsKey(s))
 			tupleNames.put(s, "BoaTup_" + tupleNames.size());

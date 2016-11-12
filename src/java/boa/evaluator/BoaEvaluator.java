@@ -21,19 +21,14 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.List;
 
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 
-import com.aol.cyclops.data.async.Queue;
-import com.google.protobuf.GeneratedMessage;
-
 //import boa.Example;
 import boa.compiler.BoaCompiler;
+import boa.datagen.DefaultProperties;
 import boa.datagen.util.FileIO;
-import boa.dsi.DSIProperties;
-import boa.dsi.evaluator.AbstractEvaluationEngine;
 
 /**
  * The main entry point for Boa REPL.
@@ -41,18 +36,29 @@ import boa.dsi.evaluator.AbstractEvaluationEngine;
  * @author hridesh
  * 
  */
-public class BoaEvaluator extends AbstractEvaluationEngine {
+public class BoaEvaluator {
 
+	private String progPath;
+	private String datapath;
+	private String outpath;
+	private String compilationpath = "./compile/";
 	private boolean result;
 
 	public BoaEvaluator(String prog, String data) {
-		super(prog, data);
 		this.result = false;
+		this.datapath = data;
+		this.progPath = prog;
 	}
 
 	public BoaEvaluator(String prog, String data, String outputPath) {
-		super(prog, data);
-		DSIProperties.BOA_OUTPUT_DIR_PATH = outputPath;
+		this(prog, data);
+		DefaultProperties.HADOOP_SEQ_FILE_LOCATION = data;
+		this.outpath = outputPath;
+	}
+
+	public BoaEvaluator(String prog, String data, String outputPath, String compilation) {
+		this(prog, data, outputPath);
+		this.compilationpath = compilation;
 	}
 
 	private static final void printHelp(Options options, String message) {
@@ -62,21 +68,18 @@ public class BoaEvaluator extends AbstractEvaluationEngine {
 		new HelpFormatter().printHelp("Boa", header, options, footer);
 	}
 
-	@Override
 	public boolean evaluate() {
 		String[] compilationArgs = new String[6];
-		final String compilationRoot = DSIProperties.BOA_COMPILE_DIR_NAME;
-
 		compilationArgs[0] = "-i";
-		compilationArgs[1] = this.inputProgram;
+		compilationArgs[1] = this.progPath;
 		compilationArgs[2] = "-j";
 		compilationArgs[3] = "./dist/boa-runtime.jar";
 		compilationArgs[4] = "-gcd";
-		compilationArgs[5] = compilationRoot;
+		compilationArgs[5] = this.compilationpath;
 
 		try {
-			delete(new File(DSIProperties.BOA_OUT));
-			delete(new File(compilationRoot));
+			delete(new File(this.outpath));
+			delete(new File(this.compilationpath));
 			if (!BoaCompiler.compile(compilationArgs)) {
 				return false;
 			}
@@ -89,13 +92,13 @@ public class BoaEvaluator extends AbstractEvaluationEngine {
 		String genFileName = getClassNameForGeneratedJavaProg();
 		String genClassName = "boa." + genFileName;
 		genClassName.replace("/", ".");
-		actualArgs[0] = this.inputData;
-		actualArgs[1] = DSIProperties.BOA_OUT;
+		actualArgs[0] = this.datapath;
+		actualArgs[1] = this.outpath;
 		while (genClassName.startsWith(".")) {
 			genClassName = genClassName.substring(1);
 		}
 
-		File srcDir = new File(compilationRoot);
+		File srcDir = new File(this.compilationpath);
 		try {
 			URL srcDirUrl = srcDir.toURI().toURL();
 
@@ -106,29 +109,24 @@ public class BoaEvaluator extends AbstractEvaluationEngine {
 
 		} catch (Throwable exc) {
 			exc.printStackTrace();
-//			this.result = false;
 		}
 		this.result = true;
 		return this.result;
 	}
 
-	@Override
-	public List<GeneratedMessage> getData() {
-		return null;
-	}
-
 	public static void main(final String[] args) {
-		if (args.length != 2) {
+		if (args.length != 3) {
 			throw new IllegalArgumentException();
 		}
 		String program = args[0];
 		String data = args[1];
-		BoaEvaluator evaluator = new BoaEvaluator(program, data);
+		String out = args[2];
+		BoaEvaluator evaluator = new BoaEvaluator(program, data, out);
 		evaluator.evaluate();
 	}
 
 	private String getClassNameForGeneratedJavaProg() {
-		String name = this.inputProgram;
+		String name = this.progPath;
 		if (name.contains("/")) {
 			name = name.substring(name.lastIndexOf('/') + 1);
 		}
@@ -150,9 +148,8 @@ public class BoaEvaluator extends AbstractEvaluationEngine {
 		}
 	}
 
-	@Override
 	public String getResults() {
-		for (File f : new File(DSIProperties.BOA_OUT).listFiles()) {
+		for (File f : new File(this.outpath).listFiles()) {
 			if (f.getName().startsWith("part")) {
 				return FileIO.readFileContents(f);
 			}
@@ -160,13 +157,7 @@ public class BoaEvaluator extends AbstractEvaluationEngine {
 		return "";
 	}
 
-	@Override
 	public boolean isSuccess() {
 		return this.result;
-	}
-
-	@Override
-	public boolean getDataInQueue(Queue<GeneratedMessage> queue) {
-		throw new UnsupportedOperationException();
 	}
 }

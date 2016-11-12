@@ -8,7 +8,7 @@ public class EvaluationEngine {
 	private boolean isSuccess;
 
 	public EvaluationEngine(String prog, String data, String output) {
-		evaluator = new BoaEvaluator(prog, data);
+		evaluator = new BoaEvaluator(prog, data, output);
 		DSIProperties.BOA_OUT = output;
 	}
 

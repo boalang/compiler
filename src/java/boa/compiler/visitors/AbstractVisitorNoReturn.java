@@ -333,6 +333,11 @@ public abstract class AbstractVisitorNoReturn<ArgType> {
 			n.getWeight().accept(this, arg);
 	}
 
+	public void visit(final ModelType n, final ArgType arg) {
+		n.getId().accept(this, arg);
+		n.getType().accept(this, arg);
+	}
+
 	public void visit(final StackType n, final ArgType arg) {
 		n.getValue().accept(this, arg);
 	}

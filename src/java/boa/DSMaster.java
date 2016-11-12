@@ -7,9 +7,7 @@ import com.aol.cyclops.data.async.Queue;
 import com.google.protobuf.GeneratedMessage;
 
 import boa.dsi.dsource.fars.FARS;
-import boa.dsi.dsource.github.GithubReader;
 import boa.dsi.evaluator.EvaluationEngine;
-import boa.dsi.storage.MSRDataStorage;
 import boa.dsi.storage.sequencefile.SequenceFileStorage;
 
 public class DSMaster {
@@ -39,8 +37,8 @@ public class DSMaster {
 		SequenceFileStorage storage = new SequenceFileStorage(external);
 		EvaluationEngine engine = new EvaluationEngine(program, storage.getDataLocation(), output);
 
-//		external.getDataInQueue(eSourceIStorage);
-//		storage.store(eSourceIStorage);
+		// external.getDataInQueue(eSourceIStorage);
+		// storage.store(eSourceIStorage);
 		engine.evaluate();
 		if (engine.isSuccess()) {
 			System.out.println();

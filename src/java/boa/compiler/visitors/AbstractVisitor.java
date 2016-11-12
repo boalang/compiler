@@ -382,6 +382,12 @@ public abstract class AbstractVisitor<ReturnType, ArgType> {
 			n.getWeight().accept(this, arg);
 		return null;
 	}
+	
+	public ReturnType visit(final ModelType n, final ArgType arg) {
+		n.getId().accept(this, arg);
+		n.getType().accept(this, arg);
+		return null;
+	}
 
 	public ReturnType visit(final StackType n, final ArgType arg) {
 		n.getValue().accept(this, arg);

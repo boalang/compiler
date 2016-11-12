@@ -26,18 +26,23 @@ import boa.functions.BoaCasts;
 import boa.io.EmitKey;
 import boa.io.EmitValue;
 
+import boa.BoaTup;
+
 /**
  * The base class for all Boa aggregators.
  * 
  * @author anthonyu
  * @author rdyer
+ * @author ankuraga
  */
 public abstract class Aggregator {
 	private long arg;
+	private String mlarg;
 	@SuppressWarnings("rawtypes")
 	private Context context;
 	private EmitKey key;
 	private boolean combining;
+	private int vectorSize;
 
 	/**
 	 * Construct an Aggregator.
@@ -58,6 +63,19 @@ public abstract class Aggregator {
 		this();
 
 		this.arg = arg;
+	}
+
+	/**
+	 * Construct an Aggregator.
+	 *
+	 * @param arg
+	 *            A String containing the argument to the table
+	 *
+	 */
+	public Aggregator(final String arg) {
+		this();
+		
+		this.mlarg = arg;
 	}
 
 	/**
@@ -91,6 +109,13 @@ public abstract class Aggregator {
 
 	public void aggregate(final double data) throws IOException, InterruptedException, FinishedException {
 		this.aggregate(BoaCasts.doubleToString(data), null);
+	}
+
+	public void aggregate(final BoaTup data, final String metadata) throws IOException, InterruptedException, FinishedException, IllegalAccessException {	
+	}
+
+	public void aggregate(final BoaTup data) throws IOException, InterruptedException, FinishedException, IllegalAccessException {
+		this.aggregate(data, null);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -156,5 +181,13 @@ public abstract class Aggregator {
 
 	public EmitKey getKey() {
 		return this.key;
+	}
+	
+	public int getVectorSize() {
+		return this.vectorSize;
+	}
+
+	public void setVectorSize(int vectorSize) {
+		this.vectorSize = vectorSize;
 	}
 }
