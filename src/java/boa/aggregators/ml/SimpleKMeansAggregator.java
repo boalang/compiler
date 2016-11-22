@@ -127,7 +127,7 @@ public class SimpleKMeansAggregator extends MLAggregator {
 			this.NumOfAttributes = count;
 			this.flag = true;
 			this.trainingSet = new Instances("SimpleKMeans", this.fvAttributes, 1);
-			this.trainingSet.setClassIndex(this.NumOfAttributes-1);
+//			this.trainingSet.setClassIndex(this.NumOfAttributes-1);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -143,7 +143,7 @@ public class SimpleKMeansAggregator extends MLAggregator {
 
 			this.flag = true;
 			this.trainingSet = new Instances("SimpleKMeans", this.fvAttributes, 1);
-			this.trainingSet.setClassIndex(this.NumOfAttributes-1);
+//			this.trainingSet.setClassIndex(this.NumOfAttributes-1);
 		}
 		catch (Exception e) {
 			e.printStackTrace();

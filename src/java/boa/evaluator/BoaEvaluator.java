@@ -53,6 +53,7 @@ public class BoaEvaluator {
 	public BoaEvaluator(String prog, String data, String outputPath) {
 		this(prog, data);
 		DefaultProperties.HADOOP_SEQ_FILE_LOCATION = data;
+		DefaultProperties.HADOOP_OUT_LOCATION = outputPath;
 		this.outpath = outputPath;
 	}
 
@@ -122,7 +123,15 @@ public class BoaEvaluator {
 		String data = args[1];
 		String out = args[2];
 		BoaEvaluator evaluator = new BoaEvaluator(program, data, out);
+		long start = System.currentTimeMillis();
 		evaluator.evaluate();
+		long end = System.currentTimeMillis();
+		System.out.println("Total Time Taken: "+ (end - start));
+		for (File f : new File(out).listFiles()) {
+			if (f.getName().startsWith("part")) {
+				System.out.println(FileIO.readFileContents(f));
+			}
+		}
 	}
 
 	private String getClassNameForGeneratedJavaProg() {
@@ -148,6 +157,7 @@ public class BoaEvaluator {
 		}
 	}
 
+	
 	public String getResults() {
 		for (File f : new File(this.outpath).listFiles()) {
 			if (f.getName().startsWith("part")) {

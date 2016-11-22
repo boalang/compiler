@@ -21,6 +21,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
 
 import boa.aggregators.Aggregator;
+import boa.datagen.DefaultProperties;
 
 import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
@@ -72,8 +73,8 @@ public abstract class MLAggregator extends Aggregator {
 			Path outputPath = FileOutputFormat.getOutputPath(job);
 			fileSystem = outputPath.getFileSystem(context.getConfiguration());
 
-			fileSystem.mkdirs(new Path("/boa/data", new Path("" + boaJobId)));
-			filePath = new Path("/boa/data", new Path("" + boaJobId, new Path(("" + getKey()).split("\\[")[0] + System.currentTimeMillis() + "data")));
+			fileSystem.mkdirs(new Path(DefaultProperties.HADOOP_OUT_LOCATION, new Path("" + boaJobId)));
+			filePath = new Path(DefaultProperties.HADOOP_OUT_LOCATION, new Path("" + boaJobId, new Path(("" + getKey()).split("\\[")[0] + System.currentTimeMillis() + "data")));
 			
 			if (fileSystem.exists(filePath))
 				return;
@@ -112,8 +113,8 @@ public abstract class MLAggregator extends Aggregator {
 			Path outputPath = FileOutputFormat.getOutputPath(job);
 			fileSystem = outputPath.getFileSystem(context.getConfiguration());
 
-			fileSystem.mkdirs(new Path("/boa/models", new Path("" + boaJobId)));
-			filePath = new Path("/boa/models", new Path("" + boaJobId, new Path(("" + getKey()).split("\\[")[0] + System.currentTimeMillis() + "ML.model")));
+			fileSystem.mkdirs(new Path(DefaultProperties.HADOOP_OUT_LOCATION, new Path("" + boaJobId)));
+			filePath = new Path(DefaultProperties.HADOOP_OUT_LOCATION, new Path("" + boaJobId, new Path(("" + getKey()).split("\\[")[0] + System.currentTimeMillis() + "ML.model")));
 			
 			if (fileSystem.exists(filePath))
 				return;

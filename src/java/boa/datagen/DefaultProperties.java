@@ -64,4 +64,5 @@ public class DefaultProperties {
 	
 	
 	public static String HADOOP_SEQ_FILE_LOCATION = "";
+	public static String HADOOP_OUT_LOCATION = "";
 }
