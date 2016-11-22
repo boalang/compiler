@@ -1,0 +1,27 @@
+o: output sum of int;
+o << 1;
+
+type stackType = stack of int;
+type mapType = map[string] of int;
+
+m: mapType;
+a: array of int;
+
+sa: stack of array of int;
+push(sa, a);
+
+s: stack of mapType;
+push(s, m);
+
+ms: map[string] of stackType;
+intS: stackType;
+ms["foo"] = intS;
+
+s2: set of stackType;
+add(s2, intS);
+
+m2: map[string] of mapType;
+m2["foo"] = m;
+
+m3: map[string] of map[string] of mapType;
+m3["foo"] = m2;
