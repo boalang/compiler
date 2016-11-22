@@ -16,10 +16,10 @@ identifierMap ::= [
 ]
 		
 VarDecl(isstatic, type, id) ::= "<if(isstatic)>static <endif><type> ___<id>;<\n>"
-ArrayType(type) ::= "new <type>[]"
-MapType(key, value) ::= "new java.util.HashMap\<<key>, <value>>()"
-StackType(value) ::= "new java.util.Stack\<<value>>()"
-SetType(value) ::= "new java.util.HashSet\<<value>>()"
+ArrayType(type) ::= "<type>[]"
+MapType(key, value) ::= "java.util.HashMap\<<key>, <value>>"
+StackType(value) ::= "java.util.Stack\<<value>>"
+SetType(value) ::= "java.util.HashSet\<<value>>"
 Block(statements) ::= <<
 {
 	<statements:{s | <s>}>}

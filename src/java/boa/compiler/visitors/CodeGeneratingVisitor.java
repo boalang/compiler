@@ -1178,10 +1178,8 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				return;
 			}
 
-			// FIXME rdyer if the type is a type identifier, n.getType() returns Identifier
-			// and maps/stacks/sets wind up not having the proper constructors here
 			n.getType().accept(this);
-			st.add("rhs", code.removeLast());
+			st.add("rhs", "new " + code.removeLast() + "()");
 			code.add(st.render());
 			return;
 		}
@@ -1488,7 +1486,12 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	public void visit(final ArrayType n) {
 		final ST st = stg.getInstanceOf("ArrayType");
 
+		// arrays dont need their component type boxed
+		boolean boxing = n.env.getNeedsBoxing();
+		n.env.setNeedsBoxing(false);
 		n.getValue().accept(this);
+		n.env.setNeedsBoxing(boxing);
+
 		st.add("type", code.removeLast());
 
 		code.add(st.render());
