@@ -1879,18 +1879,15 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	}
 
 	protected boolean checkTupleArray(final List<BoaType> types) {
-		BoaType type;
-		boolean tuple = false;
-
-		if(types == null)
+		if (types == null)
 			return false;
 
-		type = types.get(0);
-		for (int i = 1; i < types.size(); i++) {
-			if((!(types.get(i).toBoxedJavaType() == type.toBoxedJavaType())) && tuple==false){
-				tuple = true;
-			}
-		}
-		return tuple;
+		final String type = types.get(0).toBoxedJavaType();
+
+		for (int i = 1; i < types.size(); i++)
+			if (!type.equals(types.get(i).toBoxedJavaType()))
+				return true;
+
+		return false;
 	}
 }
