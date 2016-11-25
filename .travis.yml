@@ -1,0 +1,9 @@
+language: boa
+script: ant test
+notifications:
+  email:
+    recipients:
+      - hridesh@iastate.edu
+      - rdyer@iastate.edu
+    on_success: change
+    on_failure: always

@@ -164,6 +164,9 @@ message Expression {
 		ASSIGN_UNSIGNEDRSHIFT = 47;
 		ANNOTATION = 48;
 		PAREN = 49;
+		METHOD_REFERENCE = 50;
+		LAMBDA = 51;
+		ANON_METHOD = 52;
 	}
 	required ExpressionKind kind = 1;
 	repeated Expression expressions = 2;
@@ -177,7 +180,8 @@ message Expression {
 	repeated Expression method_args = 10;
 	optional Declaration anon_declaration = 11;
 	optional Modifier annotation = 12;
-//	required PositionInfo position = 13;
+	optional Method lambda = 13;
+//	required PositionInfo position = 14;
 }
 
 message Modifier {

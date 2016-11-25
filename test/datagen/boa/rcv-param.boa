@@ -1,0 +1,36 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "t",
+               "kind": "CLASS",
+               "methods": [
+                  {
+                     "name": "m",
+                     "return_type": {
+                        "kind": "OTHER",
+                        "name": 0
+                     },
+                     "arguments": [
+                        {
+                           "name": "this",
+                           "variable_type": {
+                              "kind": "OTHER",
+                              "name": 1
+                           }
+                        }
+                     ],
+                     "statements": [
+                        {
+                           "kind": "BLOCK"
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}

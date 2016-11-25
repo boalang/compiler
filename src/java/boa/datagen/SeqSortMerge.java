@@ -28,6 +28,9 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.SequenceFile.Reader;
+
+import boa.datagen.util.Properties;
+
 import org.apache.hadoop.io.Text;
 
 /**
@@ -35,17 +38,18 @@ import org.apache.hadoop.io.Text;
  * @author hridesh
  */
 public class SeqSortMerge {
-	private static String base = "hdfs://boa-njt/";
+//	private static String base = "hdfs://boa-njt/";
+	private static String base = Properties.getProperty("gh.json.cache.path", DefaultProperties.GH_JSON_CACHE_PATH);
 	private static Configuration conf = new Configuration();
 	private static final int NUM_FILES = 15;
 	
 	public static void main(String[] args) throws IOException {
-		conf.set("fs.default.name", base);
+//		conf.set("fs.default.name", base);
 		FileSystem fs = FileSystem.get(conf);
 		
-		String inPath = "/tmprepcache/2015-07-sorted/";
+		String inPath = "/tmprepcache/sorted";
 		while (true) {
-			FileStatus[] files = fs.listStatus(new Path(inPath));
+			FileStatus[] files = fs.listStatus(new Path(base + inPath));
 			if (files.length < 2) break;
 			Path path = new Path(inPath + System.currentTimeMillis());
 			fs.mkdirs(path);

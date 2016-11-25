@@ -1,0 +1,41 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "C",
+               "kind": "CLASS",
+               "modifiers": [
+                  {
+                     "kind": "ANNOTATION",
+                     "annotation_name": "Annot",
+                     "annotation_members": [
+                        "value"
+                     ],
+                     "annotation_values": [
+                        {
+                           "kind": "LITERAL",
+                           "literal": "1"
+                        }
+                     ]
+                  },
+                  {
+                     "kind": "ANNOTATION",
+                     "annotation_name": "Annot",
+                     "annotation_members": [
+                        "value"
+                     ],
+                     "annotation_values": [
+                        {
+                           "kind": "LITERAL",
+                           "literal": "2"
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}

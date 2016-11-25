@@ -16,10 +16,10 @@ identifierMap ::= [
 ]
 		
 VarDecl(isstatic, type, id) ::= "<if(isstatic)>static <endif><type> ___<id>;<\n>"
-ArrayType(type) ::= "new <type>[]"
-MapType(key, value) ::= "new java.util.HashMap\<<key>, <value>>()"
-StackType(value) ::= "new java.util.Stack\<<value>>()"
-SetType(value) ::= "new java.util.HashSet\<<value>>()"
+ArrayType(type) ::= "<type>[]"
+MapType(key, value) ::= "java.util.HashMap\<<key>, <value>>"
+StackType(value) ::= "java.util.Stack\<<value>>"
+SetType(value) ::= "java.util.HashSet\<<value>>"
 Block(statements) ::= <<
 {
 	<statements:{s | <s>}>}
@@ -122,6 +122,40 @@ new <type>()
 	<body>
 }
 >>
+
+TupleType(name, fields, types) ::= <<
+private class <name>
+{
+	<fields,types:{field,type|<type> ___<field>}; separator="; ">;
+	<name>( <fields,types:{field,type|<type> ___<field>}; separator=", "> ){
+		<fields,types:{field,type|this.___<field> = ___<field>}; separator="; ">;
+	}
+
+}<\n>
+>>
+
+Tuple(name, exprlist) ::= "new <name>(<exprlist>) <\n>"
+
+EnumType(ename, fields, values, fname) ::= <<
+private enum <ename>
+{
+	<fields,values:{field,value|<field>(<value>)}; separator=", ">;
+
+	private <fname> value;
+	private <ename> (<fname> value) {
+		this.value = value;
+	}
+
+	public Object getValue() {
+		return this.value;
+	}
+
+	public String toString() {
+		return this.value + "";
+	}
+}<\n>
+>>
+
 Visitor(staticDeclarations, body) ::= <<
 new boa.runtime.BoaAbstractVisitor()
 {
