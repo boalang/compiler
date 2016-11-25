@@ -102,4 +102,38 @@ public class ASTFactory {
 
 		return new ExprStatement(exp);
 	}
+
+	public static Expression createFactorExpr(final Operand op) {
+		return new Expression(
+			new Conjunction(
+				new Comparison(
+					new SimpleExpr(
+						new Term(
+							new Factor(op)
+						)
+					)
+				)
+			)
+		);
+	}
+
+	public static Expression createComparison(final Operand lhs, final String op, final Operand rhs) {
+		return new Expression(
+			new Conjunction(
+				new Comparison(
+					new SimpleExpr(
+						new Term(
+							new Factor(lhs)
+						)
+					),
+					op,
+					new SimpleExpr(
+						new Term(
+							new Factor(rhs)
+						)
+					)
+				)
+			)
+		);
+	}
 }

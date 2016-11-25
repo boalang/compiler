@@ -114,37 +114,11 @@ public class LocalAggregationTransformer extends AbstractVisitorNoArg {
 		final Identifier id = ASTFactory.createIdentifier(varPrefix + s, n.env);
 		n.getStatements().add(
 			new IfStatement(
-				new Expression(
-					new Conjunction(
-						new Comparison(
-							new SimpleExpr(
-								new Term(
-									new Factor(id)
-								)
-							),
-							"!=",
-							new SimpleExpr(
-								new Term(
-									new Factor(new IntegerLiteral("0"))
-								)
-							)
-						)
-					)
-				),
+				ASTFactory.createComparison(id, "!=", new IntegerLiteral("0")),
 				new Block().addStatement(
 					new EmitStatement(
 						ASTFactory.createIdentifier(s, n.env),
-						new Expression(
-							new Conjunction(
-								new Comparison(
-									new SimpleExpr(
-										new Term(
-											new Factor(id.clone())
-										)
-									)
-								)
-							)
-						)
+						ASTFactory.createFactorExpr(id.clone())
 					)
 				)
 			)
@@ -154,28 +128,11 @@ public class LocalAggregationTransformer extends AbstractVisitorNoArg {
 	protected void generateStoreValue(final EmitStatement n) {
 		final Identifier id = ASTFactory.createIdentifier(varPrefix + n.getId().getToken(), n.env);
 
-		final SimpleExpr e = new SimpleExpr(
-			new Term(
-				new Factor(
-					id
-				)
+		n.replaceStatement(n,
+			new AssignmentStatement(
+				new Factor(id.clone()),
+				ASTFactory.createComparison(id, "+", new ParenExpression(n.getValue().clone()))
 			)
 		);
-		e.addOp("+");
-		e.addRhs(new Term(
-			new Factor(
-				new ParenExpression(n.getValue().clone())
-			)
-		));
-
-		n.replaceStatement(n, new AssignmentStatement(
-				new Factor(
-					id.clone()
-				),
-				new Expression(
-					new Conjunction(
-						new Comparison(e)
-					)
-				)));
 	}
 }
