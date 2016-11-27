@@ -1,0 +1,65 @@
+Program(name, packagename, nestedtypes) ::= <<
+package <packagename>;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import boa.types.*;
+
+/**
+ * A {@link BoaProtoTuple}.
+ * 
+ * @author nmtiwari
+ */
+ public class <name>ProtoTuple extends BoaProtoTuple {
+	private final static List \< BoaType> members = new ArrayList\<BoaType>();
+	private final static Map \<String, Integer> names = new HashMap\<String, Integer>();
+
+	static {
+		int counter = 0;
+		
+		<nestedtypes>
+		}
+		
+	/**
+	 * Construct a <name>ProtoTuple
+	 */	
+	 
+	 public <name>ProtoTuple() {
+		super(members, names);
+	 }
+
+	/** @{inheritDoc} */
+	@Override
+	public String toJavaType() {
+		return "<packagename>.<name>";
+	}
+	 
+ }
+ >>
+ 
+ Enum(name, packagename, clasname) ::= <<
+package <packagename>;
+
+import com.google.protobuf.ProtocolMessageEnum;
+
+import boa.types.BoaProtoMap;
+
+import boa.types.*;
+
+/**
+ * A {@link ForgeKindProtoMap}.
+ * 
+ * @author nmtiwari
+ */
+public class <name>ProtoMap extends BoaProtoMap {
+	/** {@inheritDoc} */
+	@Override
+	protected Class\<? extends ProtocolMessageEnum> getEnumClass() {
+		return <clasname>;
+	}
+}
+
+ >>
