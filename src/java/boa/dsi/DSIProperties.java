@@ -43,5 +43,8 @@ public class DSIProperties {
 	public static final String BOA_COMPILE_DIR_NAME = "compile";
 	public static String BOA_OUTPUT_DIR_PATH = "./../";
 	public static String  BOA_OUT = DSIProperties.BOA_OUTPUT_DIR_PATH + "/" + DSIProperties.BOA_OUTPUT_DIR_NAME;
+	
+	
+	public static final String BOA_DOMAIN_TYPE_GEN_LOC = "./src/java/";
 
 }

@@ -4,21 +4,17 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import com.squareup.protoparser.ProtoFile;
-
 import boa.datagen.util.FileIO;
+import boa.dsi.DSIProperties;
 
-/*
- * BoaJavaHadoop.stg
- */
 public class BuildCompiler {
 	private SchemaBuilder schemaBuilder;
 
-	private BuildCompiler(String path) {
+	public BuildCompiler(String path) {
 		this.schemaBuilder = new SchemaBuilder(path);
 	}
 
-	public SchemaBuilder getSchemaReader() {
+	private SchemaBuilder getSchemaReader() {
 		return schemaBuilder;
 	}
 
@@ -29,22 +25,24 @@ public class BuildCompiler {
 			String pck = clas.getPckg().replace('.', '/');
 			qualifiedName.delete(0, qualifiedName.length());
 			qualifiedName.append(pck);
-			clasFile = new File("./src/java/" + qualifiedName.toString());
-			System.out.println("Dir path: " + clasFile.getAbsolutePath());
+			clasFile = new File(DSIProperties.BOA_DOMAIN_TYPE_GEN_LOC + qualifiedName.toString());
 			clasFile.mkdirs();
 			clasFile = new File(clasFile, clas.getName());
-			System.out.println("File path: " + clasFile.getAbsolutePath());
 			FileIO.writeFileContents(clasFile, clas.code);
 		}
 	}
 
-	public static void main(String[] args) throws IOException {
-		BuildCompiler builder = new BuildCompiler("/Users/nmtiwari/Desktop/test");
-		SchemaBuilder schema = builder.getSchemaReader();
-		ProtoFile schemaFile = schema.getSchema();
+	public void build() throws IOException {
+		DomainTypeGenerator gen = new DomainTypeGenerator(this.getSchemaReader().getSchema());
+		this.writeGeneratedCode(gen.generateCode());
+	}
 
-		DomainTypeGenerator gen = new DomainTypeGenerator(schemaFile, "Accident");
-		ArrayList<GeneratedDomainType> generatedtyps = gen.generateCode();
-		builder.writeGeneratedCode(generatedtyps);
+	public static void main(String[] args) {
+		BuildCompiler builder = new BuildCompiler("/Users/nmtiwari/Desktop/test");
+		try {
+			builder.build();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

@@ -23,11 +23,12 @@ public class DomainTypeGenerator {
 	private String schemaFileName;
 	public static STGroup stg;
 
-	public DomainTypeGenerator(ProtoFile file, String fileName) {
+	public DomainTypeGenerator(ProtoFile file) {
 		this.stg = new STGroupFile("templates/DomainType.stg");
 		this.memberbuilder = new StringBuilder();
 		this.schema = file;
-		this.schemaFileName = fileName;
+		String filename = file.filePath().substring(0, file.filePath().lastIndexOf('.'));
+		this.schemaFileName = filename.substring(0, 1).toUpperCase() + filename.substring(1);
 	}
 
 	private String getCodeForNestedTyp(String name, String type, boolean isList) {
