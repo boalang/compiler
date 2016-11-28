@@ -34,6 +34,7 @@ import boa.compiler.ast.expressions.*;
 import boa.compiler.ast.literals.*;
 import boa.compiler.ast.statements.*;
 import boa.compiler.ast.types.*;
+import boa.dsi.DSIProperties;
 import boa.types.*;
 import boa.types.ml.BoaModel;
 import boa.compiler.BoaCompiler;
@@ -567,7 +568,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				combineAggregatorStrings.add("this.aggregators.put(\"" + prefix + "::" + id + "\", " + src.toString().substring(2) + ");");
 			reduceAggregatorStrings.add("this.aggregators.put(\"" + prefix + "::" + id + "\", " + src.toString().substring(2) + ");");
 		}
-
+		st.add("toplevel", DSIProperties.BOA_TOPLEVEL);
 		code.add(st.render());
 	}
 

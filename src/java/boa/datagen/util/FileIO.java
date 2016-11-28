@@ -34,7 +34,8 @@ import java.io.ObjectOutputStream;
 public class FileIO {
 	public static void writeObjectToFile(Object object, String objectFile, boolean append) {
 		try {
-			ObjectOutputStream out = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(objectFile, append)));
+			ObjectOutputStream out = new ObjectOutputStream(
+					new BufferedOutputStream(new FileOutputStream(objectFile, append)));
 			out.writeObject(object);
 			out.flush();
 			out.close();
@@ -42,7 +43,7 @@ public class FileIO {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static Object readObjectFromFile(String objectFile) {
 		try {
 			ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(new FileInputStream(objectFile)));
@@ -62,8 +63,13 @@ public class FileIO {
 			in.close();
 			return new String(bytes);
 		} catch (Exception e) {
+			e.printStackTrace();
 			return "";
 		}
+	}
+
+	public static String readFileContents(String file) {
+		return readFileContents(new File(file));
 	}
 
 	public static void writeFileContents(File file, String s) {
@@ -74,6 +80,10 @@ public class FileIO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static void writeFileContents(String file, String s) {
+		writeFileContents(new File(file), s);
 	}
 
 	public static final void delete(final File f) throws IOException {

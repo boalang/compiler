@@ -32,6 +32,9 @@ public class DSIProperties {
 
 	public static final String SETTINGS_JSON_FILE_PATH = System.getProperty("user.dir") + "/" + "/src/java/boa/dsi/";
 	public static final String SETTINGS_JSON_FILE_NAME = "settings.json";
+	public static final String SETTINGS_JSON_FILE = SETTINGS_JSON_FILE_PATH + "/" + SETTINGS_JSON_FILE_NAME;
+	
+	
 	public static final String DATAREADER_FIELD_IN_JSON = "datareaders";
 	public static final int DATAREADER_FIELD_INDEX_JSON = 0;
 
@@ -45,5 +48,9 @@ public class DSIProperties {
 	public static String BOA_OUT = DSIProperties.BOA_OUTPUT_DIR_PATH + "/" + DSIProperties.BOA_OUTPUT_DIR_NAME;
 
 	public static final String BOA_DOMAIN_TYPE_GEN_LOC = "./src/java/";
+	
+	public static final String BOA_DOMAIN_TYP_FIELD = "DomainTypes";
+	
+	public static String BOA_TOPLEVEL = null;
 
 }

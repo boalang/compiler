@@ -43,7 +43,7 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
 import org.apache.log4j.Logger;
-
+import org.json.JSONObject;
 import org.scannotation.ClasspathUrlFinder;
 
 import boa.compiler.ast.Program;
@@ -58,6 +58,8 @@ import boa.compiler.visitors.CodeGeneratingVisitor;
 import boa.compiler.visitors.PrettyPrintVisitor;
 import boa.compiler.visitors.TaskClassifyingVisitor;
 import boa.compiler.visitors.TypeCheckingVisitor;
+import boa.datagen.util.FileIO;
+import boa.dsi.DSIProperties;
 import boa.compiler.listeners.BoaErrorListener;
 import boa.compiler.listeners.LexerErrorListener;
 import boa.compiler.listeners.ParserErrorListener;
@@ -73,6 +75,7 @@ import org.antlr.v4.runtime.atn.PredictionMode;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 
 import boa.parser.BoaParser;
+import net.sf.json.JSONArray;
 import boa.parser.BoaLexer;
 
 /**
@@ -265,6 +268,21 @@ public class BoaCompiler {
 		}
 
 		compileGeneratedSrc(cl, jarName, outputRoot, outputFile);
+	}
+
+	private static String getToplevelType(String boaTyp) {
+		String settings = FileIO.readFileContents(DSIProperties.SETTINGS_JSON_FILE);
+		System.out.println(settings);
+		JSONObject allSettings = new JSONObject(settings);
+		if (allSettings.has(DSIProperties.BOA_DOMAIN_TYP_FIELD)) {
+			for (Object domTyp : allSettings.getJSONArray(DSIProperties.BOA_DOMAIN_TYP_FIELD)) {
+				JSONObject typ = (JSONObject) domTyp;
+				if (typ.has(boaTyp)) {
+					return typ.getString(boaTyp);
+				}
+			}
+		}
+		return null;
 	}
 
 	public static void parseOnly(final String[] args) throws IOException {
@@ -638,6 +656,7 @@ public class BoaCompiler {
 			final List<Program> visitorPrograms = new ArrayList<Program>();
 
 			SymbolTable.initialize(libs);
+			String boaTypeInProg = null;
 
 			for (int i = 0; i < inputFiles.size(); i++) {
 				final File f = inputFiles.get(i);
@@ -660,6 +679,10 @@ public class BoaCompiler {
 
 					final BoaErrorListener parserErrorListener = new ParserErrorListener();
 					final Start p = parse(tokens, parser, parserErrorListener);
+					boaTypeInProg = tokens.get(2).getText();
+					String fullQualname = getToplevelType(boaTypeInProg);
+					DSIProperties.BOA_TOPLEVEL = fullQualname;
+					
 					if (cl.hasOption("ast"))
 						new ASTPrintingVisitor().start(p);
 
@@ -742,7 +765,7 @@ public class BoaCompiler {
 
 					for (final Program p : visitorPrograms) {
 						new VisitorOptimizingTransformer().start(p);
-
+						System.out.println(p.getStatement(0));
 						if (cl.hasOption("pp"))
 							new PrettyPrintVisitor().start(p);
 						if (cl.hasOption("ast"))
@@ -760,6 +783,12 @@ public class BoaCompiler {
 
 			final ST st = AbstractCodeGeneratingVisitor.stg.getInstanceOf("Program");
 
+
+			if (DSIProperties.BOA_TOPLEVEL == null) {
+				return false;
+			}
+			
+			st.add("toplevel", DSIProperties.BOA_TOPLEVEL);
 			st.add("name", className);
 			st.add("numreducers", inputFiles.size());
 			st.add("jobs", jobs);

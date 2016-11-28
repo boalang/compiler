@@ -117,15 +117,11 @@ public class DomainTypeGenerator {
 		// list containing all generated types
 		ArrayList<GeneratedDomainType> generatedtyps = new ArrayList<GeneratedDomainType>();
 
-		// List of all messages in the schema
-		List<TypeElement> messages = new ArrayList<TypeElement>();
-		messages.addAll(this.schema.typeElements());
-
 		// a map to generatedMessageType to actual BoaType
 		Map<String, String> messageTyp = new HashMap<String, String>();
 
 		// map all the messages to Boa Types
-		mapTypEleToBoaTyp(messageTyp, messages);
+		mapTypEleToBoaTyp(messageTyp, this.schema.typeElements());
 
 		/*
 		 * name of the package declared in the proto files FIXME: At present it
@@ -135,7 +131,7 @@ public class DomainTypeGenerator {
 
 		String fullyQualName = this.schema.packageName() + "." + this.schemaFileName;
 
-		for (TypeElement element : messages) {
+		for (TypeElement element : this.schema.typeElements()) {
 			generatedtyps.addAll(generateCode(element, messageTyp, fullyQualName));
 		}
 		return generatedtyps;

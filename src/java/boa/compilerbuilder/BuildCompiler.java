@@ -51,8 +51,8 @@ public class BuildCompiler {
 		JSONObject allSettings = new JSONObject(FileIO
 				.readFileContents(DSIProperties.SETTINGS_JSON_FILE_PATH + "/" + DSIProperties.SETTINGS_JSON_FILE_NAME));
 		JSONArray domains = null;
-		if (allSettings.has("DomainTypes")) {
-			domains = allSettings.getJSONArray("DomainTypes");
+		if (allSettings.has(DSIProperties.BOA_DOMAIN_TYP_FIELD)) {
+			domains = allSettings.getJSONArray(DSIProperties.BOA_DOMAIN_TYP_FIELD);
 		} else {
 			domains = new JSONArray();
 		}
@@ -65,8 +65,8 @@ public class BuildCompiler {
 		}
 
 		domains.put(new JSONObject().put(name, typename));
-		allSettings.remove("DomainTypes");
-		allSettings.put("DomainTypes", domains);
+		allSettings.remove(DSIProperties.BOA_DOMAIN_TYP_FIELD);
+		allSettings.put(DSIProperties.BOA_DOMAIN_TYP_FIELD, domains);
 		FileIO.writeFileContents(DSIProperties.SETTINGS_JSON_FILE_PATH + "/" + DSIProperties.SETTINGS_JSON_FILE_NAME,
 				allSettings.toString());
 	}
