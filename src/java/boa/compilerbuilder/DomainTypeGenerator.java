@@ -50,10 +50,10 @@ public class DomainTypeGenerator {
 		return this.memberbuilder.toString();
 	}
 
-	private String generateMemberCode(ArrayList<FieldElement> members, Map<String, String> messageTyp) {
+	private String generateMemberCode(List<FieldElement> list, Map<String, String> messageTyp) {
 		StringBuilder builder = new StringBuilder();
 
-		for (FieldElement ele : members) {
+		for (FieldElement ele : list) {
 			builder.append(getCodeForNestedTyp(ele.name(), getElementTyp(ele, messageTyp), isListType(ele)));
 			builder.append("\n");
 		}
@@ -71,12 +71,20 @@ public class DomainTypeGenerator {
 			return "BoaInt";
 		} else if ("int".equalsIgnoreCase(typ.toString())) {
 			return "BoaInt";
+		} else if ("uint32".equalsIgnoreCase(typ.toString())) {
+			return "BoaInt";
+		} else if ("uint64".equalsIgnoreCase(typ.toString())) {
+			return "BoaInt";
+		} else if ("uint".equalsIgnoreCase(typ.toString())) {
+			return "BoaInt";
 		} else if ("float".equalsIgnoreCase(typ.toString())) {
 			return "BoaFloat";
 		} else if ("double".equalsIgnoreCase(typ.toString())) {
 			return "BoaDouble";
 		} else if ("bool".equalsIgnoreCase(typ.toString())) {
 			return "BoaBool";
+		} else if ("bytes".equalsIgnoreCase(typ.toString())) {
+			return "BoaString";
 		} else {
 			return typ.toString() + messageTyp.get(typ.toString());
 		}
@@ -98,6 +106,7 @@ public class DomainTypeGenerator {
 			} else if (ele instanceof EnumElement) {
 				map.put(ele.name(), "ProtoMap");
 			}
+			mapTypEleToBoaTyp(map, ele.nestedElements());
 		}
 	}
 
@@ -109,7 +118,8 @@ public class DomainTypeGenerator {
 		ArrayList<GeneratedDomainType> generatedtyps = new ArrayList<GeneratedDomainType>();
 
 		// List of all messages in the schema
-		List<TypeElement> messages = this.schema.typeElements();
+		List<TypeElement> messages = new ArrayList<TypeElement>();
+		messages.addAll(this.schema.typeElements());
 
 		// a map to generatedMessageType to actual BoaType
 		Map<String, String> messageTyp = new HashMap<String, String>();
@@ -123,44 +133,75 @@ public class DomainTypeGenerator {
 		 * details
 		 */
 
-		String packageName = this.schema.packageName() + ".proto";
-
-		// an array for storing all the field elements of all messages. It is
-		// used for each messgetype hence defining out of loop
-		ArrayList<FieldElement> fieldEles = new ArrayList<FieldElement>();
+		String fullyQualName = this.schema.packageName() + "." + this.schemaFileName;
 
 		for (TypeElement element : messages) {
-			if (element instanceof MessageElement) {
-				// if type is message the it has fieldelements and it is of type
-				// BoaProtoTuple
-				MessageElement ele = (MessageElement) element;
-				fieldEles.clear();
-				for (FieldElement nested : ele.fields()) {
-					fieldEles.add(nested);
-				}
-				String code = generateMemberCode(fieldEles, messageTyp);
-				final ST st = stg.getInstanceOf("Program");
+			generatedtyps.addAll(generateCode(element, messageTyp, fullyQualName));
+		}
+		return generatedtyps;
+	}
 
-				st.add("name", ele.name());
-				st.add("packagename", packageName);
-				st.add("nestedtypes", code);
-				generatedtyps.add(new GeneratedDomainType(ele.name() + "ProtoTuple.java", packageName, st.render()));
-			} else if (element instanceof EnumElement) {
-				// if type is message the it has EnumElement and it is of type
-				// BoaProtoMap
-				EnumElement ele = (EnumElement) element;
-				final ST st = stg.getInstanceOf("Enum");
+	/**
+	 * 
+	 * @param element
+	 *            ProtoColBufferElement for which the code to be generated
+	 * @param messageTyp
+	 *            mapping from ElementType to BoaTypes
+	 * @param packageName
+	 *            Name of the package
+	 * @param fullyQualName
+	 *            FullyQUalified name to be used in generatedCode
+	 * @return A list of DomainTypes created
+	 */
+	ArrayList<GeneratedDomainType> generateCode(TypeElement element, Map<String, String> messageTyp,
+			String fullyQualName) {
+		// list of geenrated domain types
+		ArrayList<GeneratedDomainType> generatedtyps = new ArrayList<GeneratedDomainType>();
 
-				st.add("name", ele.name());
-				st.add("packagename", packageName);
-				String type = packageName.substring(0, packageName.lastIndexOf('.')) + "." + this.schemaFileName + "."
-						+ ele.name() + ".class";
-				st.add("clasname", type);
-				generatedtyps.add(new GeneratedDomainType(ele.name() + "ProtoMap.java", packageName, st.render()));
+		if (element instanceof MessageElement) {
+			MessageElement ele = (MessageElement) element;
 
+			// generate code for all fieldElements
+			String code = generateMemberCode(ele.fields(), messageTyp);
+
+			// fill template for DomainType code
+			final ST st = stg.getInstanceOf("Program");
+			st.add("name", ele.name());
+			st.add("packagename", this.schema.packageName() + ".proto");
+			st.add("nestedtypes", code);
+
+			// add generatedype in the list
+			generatedtyps.add(new GeneratedDomainType(ele.name() + "ProtoTuple.java",
+					this.schema.packageName() + ".proto", st.render()));
+
+			// generate code for every nested message
+			for (TypeElement nested : element.nestedElements()) {
+				generatedtyps.addAll(generateCode(nested, messageTyp, fullyQualName + "." + element.name()));
+			}
+
+		} else if (element instanceof EnumElement) {
+			EnumElement ele = (EnumElement) element;
+			final ST st = stg.getInstanceOf("Enum");
+
+			st.add("name", ele.name());
+			st.add("packagename", this.schema.packageName() + ".proto");
+			String type = fullyQualName + "." + ele.name() + ".class";
+			st.add("clasname", type);
+			generatedtyps.add(new GeneratedDomainType(ele.name() + "ProtoMap.java",
+					this.schema.packageName() + ".proto", st.render()));
+
+			for (TypeElement nested : element.nestedElements()) {
+				generatedtyps.addAll(generateCode(nested, messageTyp, fullyQualName + "." + element.name()));
 			}
 		}
 		return generatedtyps;
+	}
+
+	/**
+	 * @return the schemaFileName
+	 */
+	public String getSchemaFileName() {
+		return schemaFileName;
 	}
 }
 
