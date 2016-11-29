@@ -29,8 +29,6 @@ import boa.functions.FunctionSpec;
 import boa.types.*;
 import boa.types.proto.*;
 import boa.types.proto.enums.*;
-import boa.types.proto.transportation.AccidentProtoTuple;
-import boa.types.proto.transportation.StateProtoMap;
 import boa.types.ml.*;
 
 import boa.compiler.ast.Operand;
@@ -73,9 +71,7 @@ public class SymbolTable {
 		// variables with a global scope
 		globals = new HashMap<String, BoaType>();
 
-//		globals.put("input", new ProjectProtoTuple());
-		globals.put("input", new AccidentProtoTuple());
-		globals.put("fars", new AccidentProtoTuple());
+		globals.put("input", new ProjectProtoTuple());
 		globals.put("true", new BoaBool());
 		globals.put("false", new BoaBool());
 		globals.put("PI", new BoaFloat());
@@ -177,9 +173,6 @@ public class SymbolTable {
 		idmap.put("CFGEdge", new CFGEdgeProtoTuple());
 		
 		
-		
-		idmap.put("Crash", new AccidentProtoTuple());
-		idmap.put("state", new StateProtoMap());
 		
 
 		globalFunctions = new FunctionTrie();
