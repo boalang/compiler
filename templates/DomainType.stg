@@ -1,4 +1,4 @@
-Program(name, packagename, nestedtypes) ::= <<
+Program(name, packagename, nestedtypes, javatype) ::= <<
 package <packagename>;
 
 import java.util.ArrayList;
@@ -34,7 +34,7 @@ import boa.types.*;
 	/** @{inheritDoc} */
 	@Override
 	public String toJavaType() {
-		return "<packagename>.<name>";
+		return "<javatype>.<name>";
 	}
 	 
  }

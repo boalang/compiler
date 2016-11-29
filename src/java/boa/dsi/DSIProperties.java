@@ -50,6 +50,8 @@ public class DSIProperties {
 	public static final String BOA_DOMAIN_TYPE_GEN_LOC = "./src/java/";
 	
 	public static final String BOA_DOMAIN_TYP_FIELD = "DomainTypes";
+	public static final String BOA_SYMBOLTABLE = System.getProperty("user.dir") + "/" + "src/java/boa/compiler/SymbolTable.java";
+	
 	
 	public static String BOA_TOPLEVEL = null;
 

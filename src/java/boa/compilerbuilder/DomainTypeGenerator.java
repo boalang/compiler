@@ -165,9 +165,10 @@ public class DomainTypeGenerator {
 			st.add("name", ele.name());
 			st.add("packagename", this.schema.packageName() + ".proto");
 			st.add("nestedtypes", code);
+			st.add("javatype", this.schema.packageName() + "." + this.schemaFileName);
 
 			// add generatedype in the list
-			generatedtyps.add(new GeneratedDomainType(ele.name() + "ProtoTuple.java",
+			generatedtyps.add(new GeneratedDomainType(ele.name(), ele.name() + "ProtoTuple.java",
 					this.schema.packageName() + ".proto", st.render()));
 
 			// generate code for every nested message
@@ -183,7 +184,7 @@ public class DomainTypeGenerator {
 			st.add("packagename", this.schema.packageName() + ".proto");
 			String type = fullyQualName + "." + ele.name() + ".class";
 			st.add("clasname", type);
-			generatedtyps.add(new GeneratedDomainType(ele.name() + "ProtoMap.java",
+			generatedtyps.add(new GeneratedDomainType(ele.name(), ele.name() + "ProtoMap.java",
 					this.schema.packageName() + ".proto", st.render()));
 
 			for (TypeElement nested : element.nestedElements()) {
@@ -202,11 +203,13 @@ public class DomainTypeGenerator {
 }
 
 class GeneratedDomainType {
-	String name;
-	String pckg;
-	String code;
+	private String name;
+	private String pckg;
+	private String code;
+	private String typename;
 
-	GeneratedDomainType(String name, String pck, String code) {
+	GeneratedDomainType(String typename, String name, String pck, String code) {
+		this.typename = typename;
 		this.name = name;
 		this.pckg = pck;
 		this.code = code;
@@ -224,6 +227,14 @@ class GeneratedDomainType {
 	 */
 	public String getCode() {
 		return code;
+	}
+	
+	
+	/**
+	 * @return the code
+	 */
+	public String getType() {
+		return typename;
 	}
 
 	/**

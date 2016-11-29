@@ -1,6 +1,11 @@
 package boa.compilerbuilder;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -33,7 +38,69 @@ public class BuildCompiler {
 			clasFile = new File(DSIProperties.BOA_DOMAIN_TYPE_GEN_LOC + qualifiedName.toString());
 			clasFile.mkdirs();
 			clasFile = new File(clasFile, clas.getName());
-			FileIO.writeFileContents(clasFile, clas.code);
+			FileIO.writeFileContents(clasFile, clas.getCode());
+		}
+	}
+
+	private String generateSymbolTableCode(ArrayList<GeneratedDomainType> code, String ds) {
+		StringBuilder qualifiedName = new StringBuilder();
+		for (GeneratedDomainType gen : code) {
+			qualifiedName.append("		");
+			qualifiedName.append(ds);
+			qualifiedName.append(".put(\"");
+			qualifiedName.append(gen.getType());
+			qualifiedName.append("\", new ");
+			qualifiedName.append(gen.getName().substring(0, gen.getName().lastIndexOf('.')));
+			qualifiedName.append("());");
+			qualifiedName.append("\n");
+		}
+		qualifiedName.append("\n");
+
+		return qualifiedName.toString();
+	}
+
+	private void updateSymbolTable(String code) {
+		final long insertAt = 143;
+		try {
+			FileReader fileR = new FileReader(DSIProperties.BOA_SYMBOLTABLE);
+			BufferedReader fileReader = new BufferedReader(fileR);
+			// read starting insertAt lines
+			StringBuilder newcontent = new StringBuilder();
+			for (int i = 1; i < insertAt; i++) {
+				// append all lines to new content
+				newcontent.append(fileReader.readLine());
+				newcontent.append("\n");
+			}
+
+			newcontent.append("		");
+			newcontent.append("/** Automatically generated code start **/");
+			newcontent.append("\n");
+			newcontent.append(code);
+			newcontent.append("		");
+			newcontent.append("/** Automatically generated code ends **/");
+			newcontent.append("\n\n\n");
+
+			String line;
+			while ((line = fileReader.readLine()) != null) {
+				newcontent.append(line);
+				newcontent.append("\n");
+			}
+
+			fileReader.close();
+			fileR.close();
+
+			FileWriter fileW = new FileWriter(DSIProperties.BOA_SYMBOLTABLE);
+			BufferedWriter fileWriter = new BufferedWriter(fileW);
+			fileWriter.write(newcontent.toString());
+
+			fileWriter.flush();
+			fileWriter.close();
+			fileW.close();
+
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -75,7 +142,11 @@ public class BuildCompiler {
 		// Generating the relevent code
 		ProtoFile schema = this.getSchemaReader().getSchema();
 		DomainTypeGenerator gen = new DomainTypeGenerator(this.getSchemaReader().getSchema());
-		this.writeGeneratedCode(gen.generateCode());
+		ArrayList<GeneratedDomainType> gentypes = gen.generateCode();
+		this.writeGeneratedCode(gentypes);
+
+		// System.out.println(generateSymbolTableCode(gentypes, "idmap"));
+		updateSymbolTable(generateSymbolTableCode(gentypes, "idmap"));
 
 		// save the toplevel domain type name and its corresponding full type
 		String toplevel = schema.typeElements().get(0).name();
@@ -93,7 +164,7 @@ public class BuildCompiler {
 	}
 
 	public static void main(String[] args) {
-		BuildCompiler builder = new BuildCompiler("/Users/nmtiwari/Desktop/test/msr");
+		BuildCompiler builder = new BuildCompiler("/Users/nmtiwari/Desktop/msr/transport");
 		try {
 			builder.compileAndBuild();
 		} catch (IOException e) {

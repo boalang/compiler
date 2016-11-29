@@ -9,10 +9,10 @@ import com.google.protobuf.GeneratedMessage;
 
 import boa.dsi.dsource.AbstractSource;
 import boa.dsi.dsource.dbf.DBF;
-import boa.types.transportation.Accident.Crash;
-import boa.types.transportation.Individual.Person;
-import boa.types.transportation.Motor.Vehicle;
-import boa.types.transportation.State.STATE;
+import boa.types.Transport.Crash;
+import boa.types.Transport.Person;
+import boa.types.Transport.Vehicle;
+import boa.types.Transport.STATE;
 
 public class FARS extends AbstractSource {
 
