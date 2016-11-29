@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -16,6 +17,7 @@ import com.squareup.protoparser.ProtoFile;
 
 import boa.datagen.util.FileIO;
 import boa.dsi.DSIProperties;
+import boa.types.proto.ProjectProtoTuple;
 
 public class BuildCompiler {
 	private SchemaBuilder schemaBuilder;
@@ -42,25 +44,32 @@ public class BuildCompiler {
 		}
 	}
 
-	private String generateSymbolTableCode(ArrayList<GeneratedDomainType> code, String ds) {
+	private String generateSymbolTableCode(ArrayList<GeneratedDomainType> code, String ds, String toplevel) {
 		StringBuilder qualifiedName = new StringBuilder();
 		for (GeneratedDomainType gen : code) {
+			String name = gen.getName().substring(0, gen.getName().lastIndexOf('.'));
 			qualifiedName.append("		");
 			qualifiedName.append(ds);
 			qualifiedName.append(".put(\"");
 			qualifiedName.append(gen.getType());
 			qualifiedName.append("\", new ");
-			qualifiedName.append(gen.getName().substring(0, gen.getName().lastIndexOf('.')));
+			qualifiedName.append(name);
 			qualifiedName.append("());");
 			qualifiedName.append("\n");
+			if (toplevel.equalsIgnoreCase(gen.getType())) {
+				qualifiedName.append("		");
+				qualifiedName.append("globals.put(\"input\", new " + name + "());");
+				qualifiedName.append("\n");
+			}
 		}
 		qualifiedName.append("\n");
-
+		System.out.println("generated code \n\n\n" + qualifiedName.toString() + " and " + toplevel);
 		return qualifiedName.toString();
 	}
 
 	private void updateSymbolTable(String code) {
 		final long insertAt = 143;
+		String toBeReplaced = "		globals.put(\"input\", new ProjectProtoTuple());";
 		try {
 			FileReader fileR = new FileReader(DSIProperties.BOA_SYMBOLTABLE);
 			BufferedReader fileReader = new BufferedReader(fileR);
@@ -68,11 +77,14 @@ public class BuildCompiler {
 			StringBuilder newcontent = new StringBuilder();
 			for (int i = 1; i < insertAt; i++) {
 				// append all lines to new content
-				newcontent.append(fileReader.readLine());
+				String line = fileReader.readLine();
+				if(!line.equals(toBeReplaced)) {
+					newcontent.append(line);
+				}
 				newcontent.append("\n");
 			}
 
-			newcontent.append("		");
+			newcontent.append("		\n\n");
 			newcontent.append("/** Automatically generated code start **/");
 			newcontent.append("\n");
 			newcontent.append(code);
@@ -138,6 +150,10 @@ public class BuildCompiler {
 				allSettings.toString());
 	}
 
+	private String findTopLevelNode(ProtoFile schema) {
+		return schema.typeElements().get(0).name();
+	}
+
 	public void compileAndBuild() throws IOException {
 		// Generating the relevent code
 		ProtoFile schema = this.getSchemaReader().getSchema();
@@ -146,7 +162,7 @@ public class BuildCompiler {
 		this.writeGeneratedCode(gentypes);
 
 		// System.out.println(generateSymbolTableCode(gentypes, "idmap"));
-		updateSymbolTable(generateSymbolTableCode(gentypes, "idmap"));
+		updateSymbolTable(generateSymbolTableCode(gentypes, "idmap", findTopLevelNode(schema)));
 
 		// save the toplevel domain type name and its corresponding full type
 		String toplevel = schema.typeElements().get(0).name();
