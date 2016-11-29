@@ -271,7 +271,7 @@ public class BoaCompiler {
 	}
 
 	private static String getToplevelType(String boaTyp) {
-		String settings = FileIO.readFileContents(DSIProperties.SETTINGS_JSON_FILE);
+		String settings = new FileIO().readFileContents(DSIProperties.SETTINGS_JSON_FILE);
 		System.out.println(settings);
 		JSONObject allSettings = new JSONObject(settings);
 		if (allSettings.has(DSIProperties.BOA_DOMAIN_TYP_FIELD)) {

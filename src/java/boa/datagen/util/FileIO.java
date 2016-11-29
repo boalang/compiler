@@ -19,14 +19,20 @@ package boa.datagen.util;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.URL;
+
+import com.google.common.io.Resources;
 
 /**
  * @author hoan
@@ -68,8 +74,11 @@ public class FileIO {
 		}
 	}
 
-	public static String readFileContents(String file) {
-		return readFileContents(new File(file));
+	public String readFileContents(String path) {
+		 URL filePath = Resources.getResource(path);
+		 System.out.println(filePath);
+		File file = new File(filePath.toString());
+		return readFileContents(file);
 	}
 
 	public static void writeFileContents(File file, String s) {
@@ -81,7 +90,7 @@ public class FileIO {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static void writeFileContents(String file, String s) {
 		writeFileContents(new File(file), s);
 	}

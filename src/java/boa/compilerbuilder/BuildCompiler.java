@@ -127,8 +127,8 @@ public class BuildCompiler {
 	 *            running the Boa program.
 	 */
 	private void updateTypeNames(String name, String typename) {
-		JSONObject allSettings = new JSONObject(FileIO
-				.readFileContents(DSIProperties.SETTINGS_JSON_FILE_PATH + "/" + DSIProperties.SETTINGS_JSON_FILE_NAME));
+		JSONObject allSettings = new JSONObject(new FileIO()
+				.readFileContents(DSIProperties.SETTINGS_JSON_FILE));
 		JSONArray domains = null;
 		if (allSettings.has(DSIProperties.BOA_DOMAIN_TYP_FIELD)) {
 			domains = allSettings.getJSONArray(DSIProperties.BOA_DOMAIN_TYP_FIELD);

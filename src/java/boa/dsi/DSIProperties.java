@@ -30,7 +30,7 @@ public class DSIProperties {
 	public static final String TRASH = "trash";
 	public static final String TEMP_TRASH_WORK = TRASH + "/CANDOIA_TEMP_DATA";
 
-	public static final String SETTINGS_JSON_FILE_PATH = System.getProperty("user.dir") + "/" + "/src/java/boa/dsi/";
+	public static final String SETTINGS_JSON_FILE_PATH = "/src/java/boa/dsi/";
 	public static final String SETTINGS_JSON_FILE_NAME = "settings.json";
 	public static final String SETTINGS_JSON_FILE = SETTINGS_JSON_FILE_PATH + "/" + SETTINGS_JSON_FILE_NAME;
 	
@@ -50,7 +50,7 @@ public class DSIProperties {
 	public static final String BOA_DOMAIN_TYPE_GEN_LOC = "./src/java/";
 	
 	public static final String BOA_DOMAIN_TYP_FIELD = "DomainTypes";
-	public static final String BOA_SYMBOLTABLE = System.getProperty("user.dir") + "/" + "src/java/boa/compiler/SymbolTable.java";
+	public static final String BOA_SYMBOLTABLE = "src/java/boa/compiler/SymbolTable.java";
 	
 	
 	public static String BOA_TOPLEVEL = null;
