@@ -146,7 +146,7 @@ public class SequenceFileStorage extends AbstractStorage {
 
 	@Override
 	public String getDataLocation() {
-		return DSIProperties.HADOOP_SEQ_FILE_LOCATION;
+		return this.location;
 	}
 
 	@Override

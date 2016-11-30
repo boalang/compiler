@@ -197,12 +197,15 @@ public class BuildCompiler {
 		
 	}
 
-	public static void main(String[] args) {
-		BuildCompiler builder = new BuildCompiler("/Users/nmtiwari/Desktop/msr/transport");
+	public static void main(String[] args) {/*
+		 *  Compile and Build new Domain Data types
+		 */
+		BuildCompiler builder = new BuildCompiler(args[0]);
 		try {
 			builder.compileAndBuild();
 		} catch (IOException e) {
 			e.printStackTrace();
+			return; 
 		}
-	}
+		}
 }

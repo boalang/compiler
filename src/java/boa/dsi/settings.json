@@ -1,1 +1,1 @@
-{"datareaders":"boa.dsi.dsource.github.GithubReader, boa.dsi.dsource.git.GitReader","DomainTypes":[{"Crash":"boa.types.transportation.Accident.Crash"},{"Project":"boa.types.Msr.Project"}]}
+{"datareaders":"boa.dsi.dsource.github.GithubReader, boa.dsi.dsource.git.GitReader","DomainTypes":[{"Project":"boa.types.Toplevel.Project"},{"Crash":"boa.types.Transport.Crash"}]}

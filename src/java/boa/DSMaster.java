@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 
+
 import com.aol.cyclops.data.async.Queue;
 import com.google.protobuf.GeneratedMessage;
 
-import boa.compilerbuilder.BuildCompiler;
 import boa.dsi.dsource.fars.FARS;
 import boa.dsi.evaluator.EvaluationEngine;
 import boa.dsi.storage.sequencefile.SequenceFileStorage;
@@ -17,28 +17,35 @@ public class DSMaster {
 	public static void main(String[] args) {
 		
 		/*
-		 *  Compile and Build new Domain Data types
-		 */
-		BuildCompiler builder = new BuildCompiler("/Users/nmtiwari/Desktop/msr/transport");
-		try {
-			builder.compileAndBuild();
-		} catch (IOException e) {
-			e.printStackTrace();
-			return; 
-		}
-		
-		
-		/*
 		 * We have created a newer version of compiler to support the domain types specified for 
 		 * the builder above. Now we can trigger some queries as long as the schema of input data
 		 * matches the schema expressed in above given proto files.
 		 */
 		
 		
+		/*
+		 * Generic Inputs
+		 */
+//		String program = args[0]; // which boa program to run
+//		String inputlocation = args[1];  // where are the inputs stored
+//		String output = args[2]; // where should the output go
 		
-		String program = args[0]; // which boa program to run
-		String inputlocation = args[1];  // where are the inputs stored
-		String output = args[2]; // where should the output go
+		/*
+		 * MSR Input
+		 */
+//		String program = "/Users/nmtiwari/git/research/boa_platform/compiler/ast.boa"; // which boa program to run
+//		String inputlocation = "/Users/nmtiwari/git/research/boa_platform/msrdata/";  // where are the inputs stored
+//		String output = " /Users/nmtiwari/git/research/boa_platform /Users/nmtiwari/Desktop/new/out"; // where should the output go
+		
+		
+		/*
+		 * Transportation Input
+		 */
+		
+		String program = "/Users/nmtiwari/git/research/boa_platform/compiler/transportationExamples/ml.boa"; // which boa program to run
+		String inputlocation = "/Users/nmtiwari/git/research/boa_platform/transportationdata/";  // where are the inputs stored
+		String output = "/Users/nmtiwari/Desktop/new/out"; // where should the output go
+		
 
 		/*
 		 * In case we need to create the data from scratch, then what are the raw data sources
