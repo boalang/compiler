@@ -41,7 +41,7 @@ public class BoaEvaluator {
 	private String progPath;
 	private String datapath;
 	private String outpath;
-	private String compilationpath = "./compile/";
+	private String compilationpath;
 	private boolean result;
 
 	public BoaEvaluator(String prog, String data) {
@@ -54,6 +54,7 @@ public class BoaEvaluator {
 		this(prog, data);
 		DefaultProperties.HADOOP_SEQ_FILE_LOCATION = data;
 		this.outpath = outputPath;
+		this.compilationpath = "./compile/";
 	}
 
 	public BoaEvaluator(String prog, String data, String outputPath, String compilation) {

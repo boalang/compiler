@@ -75,9 +75,7 @@ public class FileIO {
 	}
 
 	public String readFileContents(String path) {
-		 URL filePath = Resources.getResource(path);
-		 System.out.println(filePath);
-		File file = new File(filePath.toString());
+		File file = new File(path);
 		return readFileContents(file);
 	}
 

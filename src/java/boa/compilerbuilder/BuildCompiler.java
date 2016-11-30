@@ -19,6 +19,11 @@ import boa.datagen.util.FileIO;
 import boa.dsi.DSIProperties;
 import boa.types.proto.ProjectProtoTuple;
 
+import org.apache.tools.ant.BuildException;
+import org.apache.tools.ant.DefaultLogger;
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.ProjectHelper;
+
 public class BuildCompiler {
 	private SchemaBuilder schemaBuilder;
 
@@ -169,14 +174,27 @@ public class BuildCompiler {
 		updateTypeNames(toplevel, schema.packageName() + "." + gen.getSchemaFileName() + "." + toplevel);
 
 		// // Building the code using ant
-		// File buildFile = new File("build.xml");
-		// Project p = new Project();
-		// p.setUserProperty("ant.file", buildFile.getAbsolutePath());
-		// p.init();
-		// ProjectHelper helper = ProjectHelper.getProjectHelper();
-		// p.addReference("ant.projectHelper", helper);
-		// helper.parse(p, buildFile);
-		// p.executeTarget(p.getDefaultTarget());
+		File buildFile = new File("build.xml");
+		Project p = new Project();
+		p.setUserProperty("ant.file", buildFile.getAbsolutePath());		
+		DefaultLogger consoleLogger = new DefaultLogger();
+		consoleLogger.setErrorPrintStream(System.err);
+		consoleLogger.setOutputPrintStream(System.out);
+		consoleLogger.setMessageOutputLevel(Project.MSG_INFO);
+		p.addBuildListener(consoleLogger);
+
+		try {
+			p.fireBuildStarted();
+			p.init();
+			ProjectHelper helper = ProjectHelper.getProjectHelper();
+			p.addReference("ant.projectHelper", helper);
+			helper.parse(p, buildFile);
+			p.executeTarget(p.getDefaultTarget());
+			p.fireBuildFinished(null);
+		} catch (BuildException e) {
+			p.fireBuildFinished(e);
+		}
+		
 	}
 
 	public static void main(String[] args) {
