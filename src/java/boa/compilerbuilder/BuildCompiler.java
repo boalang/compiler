@@ -64,7 +64,7 @@ public class BuildCompiler {
 			if (gen.getType().equals(this.schemaBuilder.getToplevel())) {
 				qualifiedName.append("\n");
 				qualifiedName.append("		");
-				qualifiedName.append("globals.put(\"input\", new " + qualifiedName.append(gen.getType()) + "());");
+				qualifiedName.append("globals.put(\"input\", new ").append(name).append("());");
 				qualifiedName.append("\n");
 			}
 		}
