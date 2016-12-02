@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -17,7 +18,6 @@ import com.squareup.protoparser.ProtoFile;
 
 import boa.datagen.util.FileIO;
 import boa.dsi.DSIProperties;
-import boa.types.proto.ProjectProtoTuple;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.DefaultLogger;
@@ -61,13 +61,13 @@ public class BuildCompiler {
 			qualifiedName.append(name);
 			qualifiedName.append("());");
 			qualifiedName.append("\n");
-			if (toplevel.equalsIgnoreCase(gen.getType())) {
+			if (name.equals(this.schemaBuilder.getToplevel())) {
+				qualifiedName.append("\n");
 				qualifiedName.append("		");
-				qualifiedName.append("globals.put(\"input\", new " + name + "());");
+				qualifiedName.append("globals.put(\"input\", new " + qualifiedName.append(gen.getType()) + "());");
 				qualifiedName.append("\n");
 			}
 		}
-		qualifiedName.append("\n");
 		System.out.println("generated code \n\n\n" + qualifiedName.toString() + " and " + toplevel);
 		return qualifiedName.toString();
 	}
@@ -83,7 +83,7 @@ public class BuildCompiler {
 			for (int i = 1; i < insertAt; i++) {
 				// append all lines to new content
 				String line = fileReader.readLine();
-				if(!line.equals(toBeReplaced)) {
+				if (!line.equals(toBeReplaced)) {
 					newcontent.append(line);
 				}
 				newcontent.append("\n");
@@ -132,8 +132,7 @@ public class BuildCompiler {
 	 *            running the Boa program.
 	 */
 	private void updateTypeNames(String name, String typename) {
-		JSONObject allSettings = new JSONObject(new FileIO()
-				.readFileContents(DSIProperties.SETTINGS_JSON_FILE));
+		JSONObject allSettings = new JSONObject(new FileIO().readFileContents(DSIProperties.SETTINGS_JSON_FILE));
 		JSONArray domains = null;
 		if (allSettings.has(DSIProperties.BOA_DOMAIN_TYP_FIELD)) {
 			domains = allSettings.getJSONArray(DSIProperties.BOA_DOMAIN_TYP_FIELD);
@@ -155,28 +154,26 @@ public class BuildCompiler {
 				allSettings.toString());
 	}
 
-	private String findTopLevelNode(ProtoFile schema) {
-		return schema.typeElements().get(0).name();
-	}
-
 	public void compileAndBuild() throws IOException {
 		// Generating the relevent code
-		ProtoFile schema = this.getSchemaReader().getSchema();
-		DomainTypeGenerator gen = new DomainTypeGenerator(this.getSchemaReader().getSchema());
+		List<ProtoFile> schema = this.getSchemaReader().getSchema();
+		DomainTypeGenerator gen = new DomainTypeGenerator(this.getSchemaReader().getSchema(),
+				this.getSchemaReader().getToplevel());
 		ArrayList<GeneratedDomainType> gentypes = gen.generateCode();
 		this.writeGeneratedCode(gentypes);
 
 		// System.out.println(generateSymbolTableCode(gentypes, "idmap"));
-		updateSymbolTable(generateSymbolTableCode(gentypes, "idmap", findTopLevelNode(schema)));
+		updateSymbolTable(generateSymbolTableCode(gentypes, "idmap", this.getSchemaReader().getToplevel()));
 
 		// save the toplevel domain type name and its corresponding full type
-		String toplevel = schema.typeElements().get(0).name();
-		updateTypeNames(toplevel, schema.packageName() + "." + gen.getSchemaFileName() + "." + toplevel);
+		String toplevel = this.getSchemaReader().getToplevel();
+		updateTypeNames(toplevel,
+				gen.getPackagename() + "." + this.getSchemaReader().getToplevelFileName() + "." + toplevel);
 
 		// // Building the code using ant
 		File buildFile = new File("build.xml");
 		Project p = new Project();
-		p.setUserProperty("ant.file", buildFile.getAbsolutePath());		
+		p.setUserProperty("ant.file", buildFile.getAbsolutePath());
 		DefaultLogger consoleLogger = new DefaultLogger();
 		consoleLogger.setErrorPrintStream(System.err);
 		consoleLogger.setOutputPrintStream(System.out);
@@ -194,18 +191,19 @@ public class BuildCompiler {
 		} catch (BuildException e) {
 			p.fireBuildFinished(e);
 		}
-		
+
 	}
 
-	public static void main(String[] args) {/*
-		 *  Compile and Build new Domain Data types
-		 */
+	public static void main(
+			String[] args) {/*
+							 * Compile and Build new Domain Data types
+							 */
 		BuildCompiler builder = new BuildCompiler(args[0]);
 		try {
 			builder.compileAndBuild();
 		} catch (IOException e) {
 			e.printStackTrace();
-			return; 
+			return;
 		}
-		}
+	}
 }

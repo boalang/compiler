@@ -19,16 +19,20 @@ import com.squareup.protoparser.TypeElement;
 
 public class DomainTypeGenerator {
 	private StringBuilder memberbuilder;
-	private ProtoFile schema;
-	private String schemaFileName;
+	private List<ProtoFile> schema;
+	private String toplevelName;
+	private String packagename;
 	public static STGroup stg;
 
-	public DomainTypeGenerator(ProtoFile file) {
+	public DomainTypeGenerator(List<ProtoFile> file, String toplevel) {
+		if (file.size() <= 0) {
+			throw new IllegalArgumentException();
+		}
 		this.stg = new STGroupFile("templates/DomainType.stg");
 		this.memberbuilder = new StringBuilder();
 		this.schema = file;
-		String filename = file.filePath().substring(0, file.filePath().lastIndexOf('.'));
-		this.schemaFileName = filename.substring(0, 1).toUpperCase() + filename.substring(1);
+		this.toplevelName = toplevel;
+		this.packagename = file.get(0).packageName();
 	}
 
 	private String getCodeForNestedTyp(String name, String type, boolean isList) {
@@ -110,6 +114,12 @@ public class DomainTypeGenerator {
 		}
 	}
 
+	private void mapTypEleToBoaTyp(Map<String, String> map) {
+		for (ProtoFile file : this.schema) {
+			mapTypEleToBoaTyp(map, file.typeElements());
+		}
+	}
+
 	/*
 	 * Generates the code the Java version of Domain types
 	 */
@@ -121,7 +131,7 @@ public class DomainTypeGenerator {
 		Map<String, String> messageTyp = new HashMap<String, String>();
 
 		// map all the messages to Boa Types
-		mapTypEleToBoaTyp(messageTyp, this.schema.typeElements());
+		mapTypEleToBoaTyp(messageTyp);
 
 		/*
 		 * name of the package declared in the proto files FIXME: At present it
@@ -129,10 +139,16 @@ public class DomainTypeGenerator {
 		 * details
 		 */
 
-		String fullyQualName = this.schema.packageName() + "." + this.schemaFileName;
-
-		for (TypeElement element : this.schema.typeElements()) {
-			generatedtyps.addAll(generateCode(element, messageTyp, fullyQualName));
+		StringBuilder qualifiedName = new StringBuilder();
+		for (ProtoFile file : this.schema) {
+			qualifiedName.delete(0, qualifiedName.length());
+			qualifiedName.append(file.packageName());
+			qualifiedName.append(".");
+			String name = file.filePath().substring(0, file.filePath().lastIndexOf('.'));
+			qualifiedName.append(name.substring(0, 1).toUpperCase() + name.substring(1));
+			for (TypeElement element : file.typeElements()) {
+				generatedtyps.addAll(generateCode(element, messageTyp, qualifiedName.toString()));
+			}
 		}
 		return generatedtyps;
 	}
@@ -163,13 +179,13 @@ public class DomainTypeGenerator {
 			// fill template for DomainType code
 			final ST st = stg.getInstanceOf("Program");
 			st.add("name", ele.name());
-			st.add("packagename", this.schema.packageName() + ".proto");
+			st.add("packagename", this.packagename + ".proto");
 			st.add("nestedtypes", code);
-			st.add("javatype", this.schema.packageName() + "." + this.schemaFileName);
+			st.add("javatype", this.packagename + "." + this.toplevelName);
 
 			// add generatedype in the list
 			generatedtyps.add(new GeneratedDomainType(ele.name(), ele.name() + "ProtoTuple.java",
-					this.schema.packageName() + ".proto", st.render()));
+					this.packagename + ".proto", st.render()));
 
 			// generate code for every nested message
 			for (TypeElement nested : element.nestedElements()) {
@@ -181,11 +197,11 @@ public class DomainTypeGenerator {
 			final ST st = stg.getInstanceOf("Enum");
 
 			st.add("name", ele.name());
-			st.add("packagename", this.schema.packageName() + ".proto");
+			st.add("packagename", this.packagename + ".proto");
 			String type = fullyQualName + "." + ele.name() + ".class";
 			st.add("clasname", type);
 			generatedtyps.add(new GeneratedDomainType(ele.name(), ele.name() + "ProtoMap.java",
-					this.schema.packageName() + ".proto", st.render()));
+					this.packagename + ".proto", st.render()));
 
 			for (TypeElement nested : element.nestedElements()) {
 				generatedtyps.addAll(generateCode(nested, messageTyp, fullyQualName + "." + element.name()));
@@ -197,8 +213,12 @@ public class DomainTypeGenerator {
 	/**
 	 * @return the schemaFileName
 	 */
-	public String getSchemaFileName() {
-		return schemaFileName;
+	public String getToplevelName() {
+		return toplevelName;
+	}
+
+	public String getPackagename() {
+		return this.packagename;
 	}
 }
 
@@ -228,8 +248,7 @@ class GeneratedDomainType {
 	public String getCode() {
 		return code;
 	}
-	
-	
+
 	/**
 	 * @return the code
 	 */

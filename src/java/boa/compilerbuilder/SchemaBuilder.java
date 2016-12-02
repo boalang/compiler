@@ -10,19 +10,30 @@ import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 
+import com.squareup.protoparser.FieldElement;
+import com.squareup.protoparser.MessageElement;
 import com.squareup.protoparser.ProtoFile;
 import com.squareup.protoparser.ProtoParser;
+import com.squareup.protoparser.TypeElement;
 
 public class SchemaBuilder {
 	private final Path ROOT;
+	private String toplevel;
+	private String toplevelFile;
 
 	public SchemaBuilder(String path) {
 		this.ROOT = new File(path).toPath();
 	}
 
-	public ProtoFile getSchema() throws IOException {
+	public List<ProtoFile> getSchema() throws IOException {
 		final ArrayList<ProtoFile> schema = new ArrayList<ProtoFile>();
 		final AtomicLong total = new AtomicLong();
 		final AtomicLong failed = new AtomicLong();
@@ -46,24 +57,60 @@ public class SchemaBuilder {
 		});
 
 		if (failed.get() == 0 || total.get() > 0) {
-			return mergeProtoFiles(schema);
+			setToplevelDetails(schema);
+			return schema;
 		}
 		return null;
 	}
 
-	private ProtoFile mergeProtoFiles(ArrayList<ProtoFile> protoFiles) {
-		switch (protoFiles.size()) {
-		case 0:
-			return null;
-		case 1:
-			return protoFiles.get(0);
-		default:
-			return mergeSchema(protoFiles);
+	private void setToplevelDetails(ArrayList<ProtoFile> protoFiles) {
+		Set<String> possibleToplevel = new HashSet<String>();
+		Set<String> notPossibleToplevel = new HashSet<String>();
+		Map<String, String> typToFileName = new HashMap<String, String>();
+
+		for (ProtoFile file : protoFiles) {
+			System.out.println("File: " + file.filePath());
+			for (TypeElement e : file.typeElements()) {
+				if (e instanceof MessageElement) {
+					MessageElement msg = (MessageElement) e;
+					System.out.println("Message: " + msg.name());
+					if (!notPossibleToplevel.contains(msg.name())) {
+						System.out.println("Adding to possible: " + msg.name());
+						possibleToplevel.add(e.name());
+					}
+					for (FieldElement field : msg.fields()) {
+						System.out.println("\t\tField: " + field.name() + " of type: " + field.type().toString());
+						String type = field.type().toString();
+						if (possibleToplevel.contains(type)) {
+							possibleToplevel.remove(type);
+						}
+						notPossibleToplevel.add(type);
+						System.out.println("removing from possible: " + type);
+					}
+				}
+			}
 		}
+		Iterator<String> iterator = possibleToplevel.iterator();
+		if (!iterator.hasNext()) {
+			throw new RuntimeException("No Toplevel node found in given schema");
+		}
+		String toplevel = iterator.next();
+		if (iterator.hasNext()) {
+			while (iterator.hasNext()) {
+				System.err.println(iterator.next());
+			}
+			throw new RuntimeException("More than one top level node found");
+		}
+		this.toplevelFile = typToFileName.get(toplevel);
+		this.toplevel = toplevel;
 	}
 
-	private ProtoFile mergeSchema(ArrayList<ProtoFile> protoFiles) {
-		throw new UnsupportedOperationException();
+	public String getToplevel() {
+		return this.toplevel;
+	}
+
+	public String getToplevelFileName() {
+		return this.toplevelFile;
 	}
 
 }
