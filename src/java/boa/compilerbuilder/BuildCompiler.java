@@ -131,7 +131,7 @@ public class BuildCompiler {
 	 *            "settings.json". This key value pair will be required while
 	 *            running the Boa program.
 	 */
-	private void updateTypeNames(String name, String typename) {
+	private void updateTypeInfoInSettings(String name, String typename) {
 		JSONObject allSettings = new JSONObject(new FileIO().readFileContents(DSIProperties.SETTINGS_JSON_FILE));
 		JSONArray domains = null;
 		if (allSettings.has(DSIProperties.BOA_DOMAIN_TYP_FIELD)) {
@@ -157,16 +157,20 @@ public class BuildCompiler {
 	public void compileAndBuild() throws IOException {
 		// Generating the relevent code
 		DomainTypeGenerator gen = new DomainTypeGenerator(this.getSchemaReader().getSchema(),
-				this.getSchemaReader().getToplevel());
+				this.getSchemaReader().getToplevel(), this.getSchemaReader().getToplevelPackage());
+
 		ArrayList<GeneratedDomainType> gentypes = gen.generateCode();
 		this.writeGeneratedCode(gentypes);
 
 		updateSymbolTable(generateSymbolTableCode(gentypes, "idmap", this.getSchemaReader().getToplevel()));
 
 		String toplevel = this.getSchemaReader().getToplevel();
-		updateTypeNames(toplevel,
-				gen.getPackagename() + "." + this.getSchemaReader().getToplevelFileName() + "." + toplevel);
+		updateTypeInfoInSettings(toplevel,
+				gen.getToplevelPackage() + "." + this.getSchemaReader().getToplevelFileName() + "." + toplevel);
+		build();
+	}
 
+	private void build() {
 		// // Building the code using ant
 		File buildFile = new File("build.xml");
 		Project p = new Project();
@@ -188,7 +192,6 @@ public class BuildCompiler {
 		} catch (BuildException e) {
 			p.fireBuildFinished(e);
 		}
-
 	}
 
 	public static void main(

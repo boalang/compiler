@@ -21,10 +21,10 @@ public class DomainTypeGenerator {
 	private StringBuilder memberbuilder;
 	private List<ProtoFile> schema;
 	private String toplevelName;
-	private String packagename;
-	public static STGroup stg;
+	private String toplevelpackage;
+	private static STGroup stg;
 
-	public DomainTypeGenerator(List<ProtoFile> file, String toplevel) {
+	public DomainTypeGenerator(List<ProtoFile> file, String toplevel, String toppackage) {
 		if (file.size() <= 0) {
 			throw new IllegalArgumentException();
 		}
@@ -32,7 +32,7 @@ public class DomainTypeGenerator {
 		this.memberbuilder = new StringBuilder();
 		this.schema = file;
 		this.toplevelName = toplevel;
-		this.packagename = file.get(0).packageName();
+		this.toplevelpackage = toppackage;
 	}
 
 	private String getCodeForNestedTyp(String name, String type, boolean isList) {
@@ -124,19 +124,15 @@ public class DomainTypeGenerator {
 	 * Generates the code the Java version of Domain types
 	 */
 	ArrayList<GeneratedDomainType> generateCode() {
-		// list containing all generated types
 		ArrayList<GeneratedDomainType> generatedtyps = new ArrayList<GeneratedDomainType>();
 
-		// a map to generatedMessageType to actual BoaType
 		Map<String, String> messageTyp = new HashMap<String, String>();
 
 		// map all the messages to Boa Types
 		mapTypEleToBoaTyp(messageTyp);
 
 		/*
-		 * name of the package declared in the proto files FIXME: At present it
-		 * is fixed to be boa.types.proto, fix it for any user specific package
-		 * details
+		 * name of the package declared in the proto files
 		 */
 
 		StringBuilder qualifiedName = new StringBuilder();
@@ -179,13 +175,14 @@ public class DomainTypeGenerator {
 			// fill template for DomainType code
 			final ST st = stg.getInstanceOf("Program");
 			st.add("name", ele.name());
-			st.add("packagename", this.packagename + ".proto");
+			st.add("packagename", toplevelpackage + ".proto");
 			st.add("nestedtypes", code);
-			st.add("javatype", this.packagename + "." + this.toplevelName);
+			System.out.println(fullyQualName + "." + ele.name());
+			st.add("javatype", fullyQualName);
 
 			// add generatedype in the list
 			generatedtyps.add(new GeneratedDomainType(ele.name(), ele.name() + "ProtoTuple.java",
-					this.packagename + ".proto", st.render()));
+					toplevelpackage + ".proto", st.render()));
 
 			// generate code for every nested message
 			for (TypeElement nested : element.nestedElements()) {
@@ -197,11 +194,11 @@ public class DomainTypeGenerator {
 			final ST st = stg.getInstanceOf("Enum");
 
 			st.add("name", ele.name());
-			st.add("packagename", this.packagename + ".proto");
+			st.add("packagename", toplevelpackage + ".proto");
 			String type = fullyQualName + "." + ele.name() + ".class";
 			st.add("clasname", type);
 			generatedtyps.add(new GeneratedDomainType(ele.name(), ele.name() + "ProtoMap.java",
-					this.packagename + ".proto", st.render()));
+					toplevelpackage + ".proto", st.render()));
 
 			for (TypeElement nested : element.nestedElements()) {
 				generatedtyps.addAll(generateCode(nested, messageTyp, fullyQualName + "." + element.name()));
@@ -217,8 +214,11 @@ public class DomainTypeGenerator {
 		return toplevelName;
 	}
 
-	public String getPackagename() {
-		return this.packagename;
+	/**
+	 * @return the ToplevelPackage
+	 */
+	public String getToplevelPackage() {
+		return toplevelpackage;
 	}
 }
 

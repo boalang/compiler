@@ -25,9 +25,17 @@ import com.squareup.protoparser.ProtoParser;
 import com.squareup.protoparser.TypeElement;
 
 public class SchemaBuilder {
+	/**
+	 * @return the toplevelPackage
+	 */
+	public String getToplevelPackage() {
+		return toplevelPackage;
+	}
+
 	private final Path ROOT;
 	private String toplevel;
 	private String toplevelFile;
+	private String toplevelPackage;
 
 	public SchemaBuilder(String path) {
 		this.ROOT = new File(path).toPath();
@@ -66,7 +74,7 @@ public class SchemaBuilder {
 	private void setToplevelDetails(ArrayList<ProtoFile> protoFiles) {
 		Set<String> possibleToplevel = new HashSet<String>();
 		Set<String> notPossibleToplevel = new HashSet<String>();
-		Map<String, String> typToFileName = new HashMap<String, String>();
+		Map<String, ProtoFile> typToFile = new HashMap<String, ProtoFile>();
 
 		for (ProtoFile file : protoFiles) {
 			System.out.println("File: " + file.filePath());
@@ -77,12 +85,14 @@ public class SchemaBuilder {
 					if (!notPossibleToplevel.contains(msg.name())) {
 						System.out.println("Adding to possible: " + msg.name());
 						possibleToplevel.add(e.name());
+						typToFile.put(e.name(), file);
 					}
 					for (FieldElement field : msg.fields()) {
 						System.out.println("\t\tField: " + field.name() + " of type: " + field.type().toString());
 						String type = field.type().toString();
 						if (possibleToplevel.contains(type)) {
 							possibleToplevel.remove(type);
+							typToFile.remove(type);
 						}
 						notPossibleToplevel.add(type);
 						System.out.println("removing from possible: " + type);
@@ -101,7 +111,10 @@ public class SchemaBuilder {
 			}
 			throw new RuntimeException("More than one top level node found");
 		}
-		this.toplevelFile = typToFileName.get(toplevel);
+		
+		String name = typToFile.get(toplevel).filePath();
+		setToplevelFileName(name.substring(0, name.lastIndexOf('.')));
+		this.toplevelPackage = typToFile.get(toplevel).packageName();
 		this.toplevel = toplevel;
 	}
 
@@ -112,5 +125,10 @@ public class SchemaBuilder {
 	public String getToplevelFileName() {
 		return this.toplevelFile;
 	}
+	
+	private void setToplevelFileName(String name) {
+		this.toplevelFile = name.substring(0, 1).toUpperCase() + name.substring(1);
+	}
+	
 
 }
