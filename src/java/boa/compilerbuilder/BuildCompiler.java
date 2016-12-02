@@ -61,7 +61,7 @@ public class BuildCompiler {
 			qualifiedName.append(name);
 			qualifiedName.append("());");
 			qualifiedName.append("\n");
-			if (name.equals(this.schemaBuilder.getToplevel())) {
+			if (gen.getType().equals(this.schemaBuilder.getToplevel())) {
 				qualifiedName.append("\n");
 				qualifiedName.append("		");
 				qualifiedName.append("globals.put(\"input\", new " + qualifiedName.append(gen.getType()) + "());");
@@ -156,16 +156,13 @@ public class BuildCompiler {
 
 	public void compileAndBuild() throws IOException {
 		// Generating the relevent code
-		List<ProtoFile> schema = this.getSchemaReader().getSchema();
 		DomainTypeGenerator gen = new DomainTypeGenerator(this.getSchemaReader().getSchema(),
 				this.getSchemaReader().getToplevel());
 		ArrayList<GeneratedDomainType> gentypes = gen.generateCode();
 		this.writeGeneratedCode(gentypes);
 
-		// System.out.println(generateSymbolTableCode(gentypes, "idmap"));
 		updateSymbolTable(generateSymbolTableCode(gentypes, "idmap", this.getSchemaReader().getToplevel()));
 
-		// save the toplevel domain type name and its corresponding full type
 		String toplevel = this.getSchemaReader().getToplevel();
 		updateTypeNames(toplevel,
 				gen.getPackagename() + "." + this.getSchemaReader().getToplevelFileName() + "." + toplevel);
