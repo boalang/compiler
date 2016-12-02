@@ -177,7 +177,6 @@ public class DomainTypeGenerator {
 			st.add("name", ele.name());
 			st.add("packagename", toplevelpackage + ".proto");
 			st.add("nestedtypes", code);
-			System.out.println(fullyQualName + "." + ele.name());
 			st.add("javatype", fullyQualName);
 
 			// add generatedype in the list

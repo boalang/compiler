@@ -68,7 +68,6 @@ public class BuildCompiler {
 				qualifiedName.append("\n");
 			}
 		}
-		System.out.println("generated code \n\n\n" + qualifiedName.toString() + " and " + toplevel);
 		return qualifiedName.toString();
 	}
 

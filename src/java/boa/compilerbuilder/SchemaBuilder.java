@@ -77,25 +77,20 @@ public class SchemaBuilder {
 		Map<String, ProtoFile> typToFile = new HashMap<String, ProtoFile>();
 
 		for (ProtoFile file : protoFiles) {
-			System.out.println("File: " + file.filePath());
 			for (TypeElement e : file.typeElements()) {
 				if (e instanceof MessageElement) {
 					MessageElement msg = (MessageElement) e;
-					System.out.println("Message: " + msg.name());
 					if (!notPossibleToplevel.contains(msg.name())) {
-						System.out.println("Adding to possible: " + msg.name());
 						possibleToplevel.add(e.name());
 						typToFile.put(e.name(), file);
 					}
 					for (FieldElement field : msg.fields()) {
-						System.out.println("\t\tField: " + field.name() + " of type: " + field.type().toString());
 						String type = field.type().toString();
 						if (possibleToplevel.contains(type)) {
 							possibleToplevel.remove(type);
 							typToFile.remove(type);
 						}
 						notPossibleToplevel.add(type);
-						System.out.println("removing from possible: " + type);
 					}
 				}
 			}
