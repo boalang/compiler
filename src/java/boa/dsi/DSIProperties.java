@@ -54,5 +54,6 @@ public class DSIProperties {
 	
 	
 	public static String BOA_TOPLEVEL = null;
+	public static final String BOA_GEN_SRC = "generatedsrc";
 
 }

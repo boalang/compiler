@@ -1,5 +1,5 @@
 Program(name, numreducers, jobs, jobnames, combineTables, reduceTables, splitsize, toplevel) ::= <<
-package boa;
+package generatedsrc.boa;
 
 public class <name> extends boa.runtime.BoaRunner {
 	/** {@inheritDoc} */

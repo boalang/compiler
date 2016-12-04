@@ -19,6 +19,7 @@ package boa.evaluator;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.net.DatagramSocketImpl;
 import java.net.URL;
 import java.net.URLClassLoader;
 
@@ -29,6 +30,7 @@ import org.apache.commons.cli.Options;
 import boa.compiler.BoaCompiler;
 import boa.datagen.DefaultProperties;
 import boa.datagen.util.FileIO;
+import boa.dsi.DSIProperties;
 
 /**
  * The main entry point for Boa REPL.
@@ -54,7 +56,7 @@ public class BoaEvaluator {
 		this(prog, data);
 		DefaultProperties.HADOOP_SEQ_FILE_LOCATION = data;
 		this.outpath = outputPath;
-		this.compilationpath = "./compile/";
+		this.compilationpath = "./" + DSIProperties.BOA_GEN_SRC + "/";
 	}
 
 	public BoaEvaluator(String prog, String data, String outputPath, String compilation) {
@@ -91,8 +93,8 @@ public class BoaEvaluator {
 
 		final String[] actualArgs = new String[2];
 		String genFileName = getClassNameForGeneratedJavaProg();
-		String genClassName = "boa." + genFileName;
-		genClassName.replace("/", ".");
+//		String genClassName = this.compilationpath.replace('/', '.').substring(1) + ".boa." + genFileName;
+		String genClassName = DSIProperties.BOA_GEN_SRC + ".boa." + genFileName;
 		actualArgs[0] = this.datapath;
 		actualArgs[1] = this.outpath;
 		while (genClassName.startsWith(".")) {
