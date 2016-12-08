@@ -26,6 +26,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
+import boa.test.compiler.BaseTest.Domain;
+
 /**
  * @author rdyer
  */
@@ -51,6 +53,9 @@ public class TestInhAttr extends BaseTest {
 	// test a bunch of known good files
 	@Test
 	public void knownGood() throws IOException {
-		codegen(load(fileName));
+		if(DOMAIN==Domain.MSR)
+		{
+			codegen(load(fileName));
+		}
 	}
 }

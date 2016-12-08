@@ -72,6 +72,13 @@ import boa.parser.BoaParser.StartContext;
  * @author nbhide
  */
 public abstract class BaseTest {
+	protected enum Domain
+	{
+		MSR,
+		TRANSPORTATION,
+		BIO
+	};
+	protected Domain DOMAIN=Domain.TRANSPORTATION;
 	protected static boolean DEBUG = false;
 
 	@BeforeClass

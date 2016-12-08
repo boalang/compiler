@@ -51,6 +51,9 @@ public class TestCodegenGood extends BaseTest {
 	// test a bunch of known good files
 	@Test
 	public void knownGood() throws IOException {
-		codegen(load(fileName));
+		if(DOMAIN==Domain.MSR)
+		{
+			codegen(load(fileName));
+		}
 	}
 }
