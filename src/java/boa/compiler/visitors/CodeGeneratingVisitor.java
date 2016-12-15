@@ -967,8 +967,8 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		// FIXME rdyer hack to fix assigning to maps
 		if (lhs.contains(".get(")) {
-			String s = lhs.replaceFirst(Pattern.quote(".get("), ".put(");
-			code.add(s.substring(0, s.lastIndexOf(')')) + ", " + rhs + s.substring(s.lastIndexOf(')')) + ";");
+			final int idx = lhs.lastIndexOf(".get(");
+			code.add(lhs.substring(0, idx) + ".put(" + lhs.substring(idx + 5, lhs.lastIndexOf(')')) + ", " + rhs + lhs.substring(lhs.lastIndexOf(')')) + ";");
 			return;
 		}
 
