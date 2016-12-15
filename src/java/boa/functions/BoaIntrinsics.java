@@ -279,4 +279,26 @@ public class BoaIntrinsics {
 		}
 		return result;
 	}
+
+	public static <T> java.util.HashSet<T> set_union(final java.util.Set<T> s1, final java.util.Set<T> s2) {
+		final java.util.HashSet<T> s = new java.util.HashSet<T>(s1);
+		s.addAll(s2);
+		return s;
+	}
+
+	public static <T> java.util.HashSet<T> set_intersect(final java.util.Set<T> s1, final java.util.Set<T> s2) {
+		final java.util.HashSet<T> s = new java.util.HashSet<T>(s1);
+		s.retainAll(s2);
+		return s;
+	}
+
+	public static <T> java.util.HashSet<T> set_difference(final java.util.Set<T> s1, final java.util.Set<T> s2) {
+		final java.util.HashSet<T> s = new java.util.HashSet<T>(s1);
+		s.removeAll(s2);
+		return s;
+	}
+
+	public static <T> java.util.HashSet<T> set_symdiff(final java.util.Set<T> s1, final java.util.Set<T> s2) {
+		return set_union(set_difference(s1, s2), set_difference(s2, s1));
+	}
 }

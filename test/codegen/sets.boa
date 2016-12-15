@@ -24,4 +24,4 @@ s5: set of int;
 s5 = symdiff(s, s2);
 
 s6: set of int;
-s6 = complement(s, s2);
+s6 = difference(s, s2);
