@@ -3,3 +3,5 @@ o << 1;
 
 m: map[int] of string;
 m[0] = "0";
+
+m2: map[int] of string = { 0 : "0", 1 : "1" };
