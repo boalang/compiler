@@ -26,7 +26,8 @@ m2["foo"] = m;
 m3: map[string] of map[string] of mapType;
 m3["foo"] = m2;
 
-m3["foo"]["foo"] = m;
+m3["foo1"]["foo2"] = m;
+m3["foo1"]["foo2"] = m3["foo3"]["foo4"];
 
 mm := m3["foo"];
 mm["foo"] = m;
