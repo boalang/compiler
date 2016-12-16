@@ -176,11 +176,6 @@ public class BoaCompiler {
 												evalRuns.remove(eval);
 											}
 										}
-										else {
-											if(!(eval / currentEvalTime > 0.97)) {
-												evalRuns.remove(eval);
-											}
-										}
 									}
 									evalRuns.add(currentEvalTime);
 								}
