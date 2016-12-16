@@ -1,0 +1,375 @@
+p: Project = input;
+m: output collection[string][int] of string;
+mt : output collection[int] of string;
+# program analysis output
+type T= {in: set of string, out: set of string};
+type T1= {gen: string, kill: string};
+# cfg of the current method
+cfg: CFG;
+t_ttime0 : int;
+
+time1 : int;
+tottime := 0;
+t_ttime : int;
+t_ttime1 : int;
+t_ttime2 : int;
+t_ttime3 : int;
+no_fixp := 0;
+pcount := 0;
+type Tloop = {start : int, end : int, use : set of string};
+type finiteLoop = {start : int, end : int};
+
+loops : set of Tloop;
+finiteloops : set of finiteLoop;
+codemotion : set of int;
+codemotion1 : set of int;
+codemotion2 : set of int;
+codemotion3 : set of int;
+flag := false;
+
+# traversal that accumulates generated values
+cfg_def := traversal(node: CFGNode) : T1 {
+	cur_val : T1 = {"",""};
+	if(node.defVariables!="") {
+		cur_val.gen = node.defVariables+"@"+string(node.id);
+		cur_val.kill = node.defVariables;
+	}
+	return cur_val;
+};
+
+# cfg reaching definition analysis
+cfg_reach_def := traversal(n: CFGNode): T {
+	no_fixp = no_fixp + 1;
+	preds := n.predecessors;
+	in_set : set of string;
+	out_set : set of string;
+	cur_val : T = {in_set, out_set};
+	if(def(getValue(n))) {
+		cur_val1 := getValue(n);
+		cur_val = clone(cur_val1);
+	}
+	foreach(pred_node:CFGNode=preds) {	
+		pred := getValue(pred_node);
+		if(def(pred))
+			cur_val.in = union(cur_val.in, pred.out);
+	}
+	cur_val.out = setClone(cur_val.in);
+	genkill := getValue(n, cfg_def);
+	if(genkill.kill!="") {
+		tmp_out:=setClone(cur_val.out);
+		foreach(tmp:string=tmp_out) {
+			tmp1:=stringClone(tmp);
+			str_array:=splitall(tmp1,"@");
+			if(str_array[0] == genkill.kill) {
+				remove(cur_val.out, tmp1);
+			}
+		}
+		add(cur_val.out, genkill.gen);
+	}
+	return cur_val;
+};
+
+# cfg reaching definition analysis
+cfg_reach_def1 := traversal(n: CFGNode): T {
+	no_fixp = no_fixp + 1;
+	preds := n.predecessors;
+	in_set : set of string;
+	out_set : set of string;
+	cur_val : T = {in_set, out_set};
+	if(def(getValue(n))) {
+		cur_val1 := getValue(n);
+		cur_val = clone(cur_val1);
+	}
+	foreach(pred_node:CFGNode=preds) {	
+		pred := getValue(pred_node);
+		if(def(pred))
+			cur_val.in = union(cur_val.in, pred.out);
+	}
+	cur_val.out = setClone(cur_val.in);
+	genkill := getValue(n, cfg_def);
+	if(genkill.kill!="") {
+		tmp_out:=setClone(cur_val.out);
+		foreach(tmp:string=tmp_out) {
+			tmp1:=stringClone(tmp);
+			str_array:=splitall(tmp1,"@");
+			if(str_array[0] == genkill.kill) {
+				remove(cur_val.out, tmp1);
+			}
+		}
+		add(cur_val.out, genkill.gen);
+	}
+	return cur_val;
+};
+
+# cfg reaching definition analysis
+cfg_reach_def2 := traversal(n: CFGNode): T {
+	#no_fixp = no_fixp + 1;
+	preds := n.predecessors;
+	in_set : set of string;
+	out_set : set of string;
+	cur_val : T = {in_set, out_set};
+	if(def(getValue(n))) {
+		cur_val1 := getValue(n);
+		cur_val = clone(cur_val1);
+	}
+	foreach(pred_node:CFGNode=preds) {	
+		pred := getValue(pred_node);
+		if(def(pred))
+			cur_val.in = union(cur_val.in, pred.out);
+	}
+	cur_val.out = setClone(cur_val.in);
+	genkill := getValue(n, cfg_def);
+	if(genkill.kill!="") {
+		tmp_out:=setClone(cur_val.out);
+		foreach(tmp:string=tmp_out) {
+			tmp1:=stringClone(tmp);
+			str_array:=splitall(tmp1,"@");
+			if(str_array[0] == genkill.kill) {
+				remove(cur_val.out, tmp1);
+			}
+		}
+		add(cur_val.out, genkill.gen);
+	}
+	return cur_val;
+};
+
+# cfg reaching definition analysis
+cfg_reach_def3 := traversal(n: CFGNode): T {
+	#no_fixp = no_fixp + 1;
+	preds := n.predecessors;
+	in_set : set of string;
+	out_set : set of string;
+	cur_val : T = {in_set, out_set};
+	if(def(getValue(n))) {
+		cur_val1 := getValue(n);
+		cur_val = clone(cur_val1);
+	}
+	foreach(pred_node:CFGNode=preds) {	
+		pred := getValue(pred_node);
+		if(def(pred))
+			cur_val.in = union(cur_val.in, pred.out);
+	}
+	cur_val.out = setClone(cur_val.in);
+	genkill := getValue(n, cfg_def);
+	if(genkill.kill!="") {
+		tmp_out:=setClone(cur_val.out);
+		foreach(tmp:string=tmp_out) {
+			tmp1:=stringClone(tmp);
+			str_array:=splitall(tmp1,"@");
+			if(str_array[0] == genkill.kill) {
+				remove(cur_val.out, tmp1);
+			}
+		}
+		add(cur_val.out, genkill.gen);
+	}
+	return cur_val;
+};
+
+# print results
+reach_def_result := traversal(n: CFGNode) {
+		cur_val := getValue(n, cfg_reach_def);
+		m["dfs"][n.id] << string(cur_val.out);
+};
+
+# user-defined fix point function that is used for analysis termination.
+fixp1 := fixp(curr, prev: T) : bool {
+	if (difference(curr.out, prev.out) == 0)
+		return true;	
+	return false;
+};
+
+# traversal that gets all variable uses in a method
+init := traversal(node: CFGNode){
+	init_set : set of string;
+	cur_val : Tloop = {-1, -1, init_set};
+	if(node.name == "WHILE" || node.name == "FOR") {
+		succs := node.successors;
+		foreach(succ:CFGNode=succs) {
+			if(succ.id > node.id + 1) {
+				cur_val.start= int(node.id);
+				cur_val.end= int(succ.id);
+				cur_val.use = node.useVariables;
+				add(loops, cur_val);
+			}		
+		}
+	}
+};
+
+# traversal that accumulates generated values
+loop_invariant := traversal(node: CFGNode) {
+	foreach(temp:Tloop=loops) {
+		flag = false;
+		if(node.id > temp.start && node.id < temp.end) {
+			if(len(node.useVariables)!=0) {
+				cur_val := getValue(node, cfg_reach_def);
+				if(def(cur_val)) {
+				foreach(use_str:string=node.useVariables) {
+					foreach(tmp_str:string=cur_val.out) {
+						str_array:=splitall(tmp_str,"@");
+						if(str_array[0]==use_str) {
+							if(int(str_array[1]) > temp.start) {
+								flag = true;
+								break;
+							}
+						}
+					}
+				}
+				}
+			}
+			if(!flag) {
+				add(codemotion, int(node.id));
+			}
+		}
+	}
+};
+
+# traversal that accumulates generated values
+loop_invariant1 := traversal(node: CFGNode) {
+	foreach(temp:Tloop=loops) {
+		flag = false;
+		if(node.id > temp.start && node.id < temp.end) {
+			if(len(node.useVariables)!=0) {
+				cur_val := getValue(node, cfg_reach_def1);
+				if(def(cur_val)) {
+				foreach(use_str:string=node.useVariables) {
+					foreach(tmp_str:string=cur_val.out) {
+						str_array:=splitall(tmp_str,"@");
+						if(str_array[0]==use_str) {
+							if(int(str_array[1]) > temp.start) {
+								flag = true;
+								break;
+							}
+						}
+					}
+				}
+				}
+			}
+			if(!flag) {
+				add(codemotion1, int(node.id));
+			}
+		}
+	}
+};
+# traversal that accumulates generated values
+loop_invariant2 := traversal(node: CFGNode) {
+	foreach(temp:Tloop=loops) {
+		flag = false;
+		if(node.id > temp.start && node.id < temp.end) {
+			if(len(node.useVariables)!=0) {
+				cur_val := getValue(node, cfg_reach_def2);
+				if(def(cur_val)) {
+				foreach(use_str:string=node.useVariables) {
+					foreach(tmp_str:string=cur_val.out) {
+						str_array:=splitall(tmp_str,"@");
+						if(str_array[0]==use_str) {
+							if(int(str_array[1]) > temp.start) {
+								flag = true;
+								break;
+							}
+						}
+					}
+				}
+				}
+			}
+			if(!flag) {
+				add(codemotion2, int(node.id));
+			}
+		}
+	}
+};
+# traversal that accumulates generated values
+loop_invariant3 := traversal(node: CFGNode) {
+	foreach(temp:Tloop=loops) {
+		flag = false;
+		if(node.id > temp.start && node.id < temp.end) {
+			if(len(node.useVariables)!=0) {
+				cur_val := getValue(node, cfg_reach_def3);
+				if(def(cur_val)) {
+				foreach(use_str:string=node.useVariables) {
+					foreach(tmp_str:string=cur_val.out) {
+						str_array:=splitall(tmp_str,"@");
+						if(str_array[0]==use_str) {
+							if(int(str_array[1]) > temp.start) {
+								flag = true;
+								break;
+							}
+						}
+					}
+				}
+				}
+			}
+			if(!flag) {
+				add(codemotion3, int(node.id));
+			}
+		}
+	}
+};
+reach_def := visitor {
+	before node: Project -> {
+		pcount = pcount + 1;
+		if(pcount > 601) {
+			stop;
+		}
+	}
+	before node: CodeRepository -> {
+		snapshot := getsnapshot(node, "SOURCE_JAVA_JLS");
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+	before node: Method -> {
+			ttime := currentTime();
+
+			cfg = getcfg(node);
+			clear(codemotion1);clear(codemotion2);clear(codemotion3);
+			clear(cfg_reach_def);clear(cfg_reach_def1);clear(cfg_reach_def2);clear(cfg_reach_def3);
+			no_fixp = 0;
+			clear(loops);clear(codemotion);clear(cfg_def);clear(init);clear(loop_invariant);
+			t_ttime0 = currentTime() - ttime;
+			ttime = currentTime();
+			traverse(cfg, TraversalKind.DFS, cfg_def);
+			traverse(cfg, TraversalKind.DFS, init);
+			traverse(cfg, TraversalKind.DFS, cfg_reach_def, fixp1);
+			traverse(cfg, TraversalKind.DFS, loop_invariant);
+			t_ttime = currentTime() - ttime;
+			clear(loops);clear(codemotion);clear(cfg_def);clear(init);clear(loop_invariant);
+			ttime = currentTime();
+			traverse(cfg, TraversalKind.POSTORDER, cfg_def);
+			traverse(cfg, TraversalKind.POSTORDER, init);
+			traverse(cfg, TraversalKind.POSTORDER, cfg_reach_def1, fixp1);
+			traverse(cfg, TraversalKind.POSTORDER, loop_invariant1);
+			t_ttime1 = currentTime() - ttime;
+			clear(loops);clear(codemotion);clear(cfg_def);clear(init);clear(loop_invariant);
+			ttime = currentTime();
+			traverse(cfg, TraversalKind.WORKLIST, cfg_def);
+			traverse(cfg, TraversalKind.WORKLIST, init);
+			traverse(cfg, TraversalKind.WORKLIST, cfg_reach_def2, fixp1);
+			traverse(cfg, TraversalKind.WORKLIST, loop_invariant2);
+			t_ttime2 = currentTime() - ttime;
+			clear(loops);clear(codemotion);clear(cfg_def);clear(init);clear(loop_invariant);
+			ttime = currentTime();
+			traverse(cfg, TraversalKind.SHALLOW_ITERATIVE, cfg_def);
+			traverse(cfg, TraversalKind.SHALLOW_ITERATIVE, init);
+			traverse(cfg, TraversalKind.MIX, cfg_reach_def3, fixp1);
+			traverse(cfg, TraversalKind.SHALLOW_ITERATIVE, loop_invariant3);
+			t_ttime3 = currentTime() - ttime;	
+			#traverse(cfg, TraversalKind.SHALLOW_ITERATIVE, reach_def_result);
+	}
+	after node: Method -> {
+		if(no_fixp!=0 && len(cfg.nodes)>2) {
+				if(cfg.isLoopPresent && len(cfg.nodes)<201) {
+					mt[len(cfg.nodes)] << "l,"+string(t_ttime0+t_ttime)+","+string(t_ttime0+t_ttime1)+","+string(t_ttime0+t_ttime2)+","+string(t_ttime0+t_ttime3);
+				}
+				else if(cfg.isBranchPresent) {
+					mt[len(cfg.nodes)] << "b,"+string(t_ttime0+t_ttime)+","+string(t_ttime0+t_ttime1)+","+string(t_ttime0+t_ttime2)+","+string(t_ttime0+t_ttime3);
+				}
+				else {
+					mt[len(cfg.nodes)] << "s,"+string(t_ttime0+t_ttime)+","+string(t_ttime0+t_ttime1)+","+string(t_ttime0+t_ttime2)+","+string(t_ttime0+t_ttime3);
+}
+				#tottime = tottime + time1;
+		}
+	}
+
+};
+
+visit(p, reach_def);

@@ -1,0 +1,424 @@
+p: Project = input;
+m: output collection[string][int] of string;
+mt : output collection[int] of string;
+# program analysis output
+type T= {in: set of string, out: set of string};
+
+# cfg of the current method
+cfg: CFG;
+t_ttime0 : int;
+
+# current visiting cfg node and its id
+cur_node_id: int;
+cur_cfg_node: CFGNode;
+
+# generated values set
+genset: set of string;
+
+# new value
+vardef: string;
+
+# killed values 
+killset: set of string;
+
+method_name : string;
+# 
+pcount := 0;
+time1 : int;
+tottime := 0;
+t_ttime : int;
+t_ttime1 : int;
+t_ttime2 : int;
+t_ttime3 : int;
+no_fixp := 0;
+count :=0;
+local : set of string;
+
+allVarTraversal := traversal(node: CFGNode) {
+	if(def(node.expr)) {
+		if(node.expr.kind == ExpressionKind.VARDECL) {
+			add(local, node.defVariables);	
+		}
+	}
+};
+
+# traversal that gets all variable uses in a method
+nullness := traversal(node: CFGNode) : T {
+	in_set : set of string;
+	out_set : set of string;
+	cur_val : T;
+	if(node.id==0)
+		cur_val = {in_set, out_set};
+	else
+		cur_val = {setClone(local), out_set};
+	preds := node.predecessors;
+	foreach(pred_node:CFGNode=preds) {	
+		pred := getValue(pred_node);
+		if(def(pred))
+			cur_val.in = intersection(cur_val.in, pred.out);
+	}
+	addAll(cur_val.out, cur_val.in);
+	if(def(node.expr)) {
+		if(node.expr.kind == ExpressionKind.VARDECL) {
+			if(contains(local, node.defVariables)) {
+				if(node.expr.variable_decls[0].initializer.kind == ExpressionKind.LITERAL) {
+					if(node.expr.variable_decls[0].initializer.literal == "null") {
+						remove(cur_val.out, node.defVariables);
+					}
+					else {
+						add(cur_val.out, node.defVariables);
+					}
+				}
+				else if(node.expr.variable_decls[0].initializer.kind == ExpressionKind.OTHER) {
+					remove(cur_val.out, node.defVariables);
+				}
+				else {
+					flag := false;
+					foreach(use:string=node.useVariables) {
+						if(contains(local, use)) {
+							if(!contains(cur_val.out, use)) {
+								flag = true;
+								remove(cur_val.out, node.defVariables);
+								break;
+							}
+						}
+					}
+					if(flag == false) {
+						add(cur_val.out, node.defVariables);
+					}
+				}
+			}
+		}
+		if(node.expr.kind == ExpressionKind.ASSIGN) {
+			if(contains(local, node.defVariables)) {
+				if(node.expr.expressions[1].kind == ExpressionKind.LITERAL) {
+					if(node.expr.expressions[1].literal == "null") {
+						remove(cur_val.out, node.defVariables);
+					}
+					else {
+						add(cur_val.out, node.defVariables);
+					}
+				}
+				else {
+					flag1 := false;
+					foreach(use:string=node.useVariables) {
+						if(contains(local, use)) {
+							if(!contains(cur_val.out, use)) {
+								flag1 = true;
+								remove(cur_val.out, node.defVariables);
+								break;
+							}
+						}
+					}
+					if(flag1 == false) {
+						add(cur_val.out, node.defVariables);
+					}
+				}
+			}
+		}
+	}
+	return cur_val;
+};
+
+# traversal that gets all variable uses in a method
+nullness1 := traversal(node: CFGNode) : T {
+	no_fixp = no_fixp + 1;
+	in_set : set of string;
+	out_set : set of string;
+	cur_val : T;
+	if(node.id==0)
+		cur_val = {in_set, out_set};
+	else
+		cur_val = {setClone(local), out_set};
+	preds := node.predecessors;
+	foreach(pred_node:CFGNode=preds) {	
+		pred := getValue(pred_node);
+		if(def(pred))
+			cur_val.in = intersection(cur_val.in, pred.out);
+	}
+	addAll(cur_val.out, cur_val.in);
+	if(def(node.expr)) {
+		if(node.expr.kind == ExpressionKind.VARDECL) {
+			if(contains(local, node.defVariables)) {
+				if(node.expr.variable_decls[0].initializer.kind == ExpressionKind.LITERAL) {
+					if(node.expr.variable_decls[0].initializer.literal == "null") {
+						remove(cur_val.out, node.defVariables);
+					}
+					else {
+						add(cur_val.out, node.defVariables);
+					}
+				}
+				else if(node.expr.variable_decls[0].initializer.kind == ExpressionKind.OTHER) {
+					remove(cur_val.out, node.defVariables);
+				}
+				else {
+					flag := false;
+					foreach(use:string=node.useVariables) {
+						if(contains(local, use)) {
+							if(!contains(cur_val.out, use)) {
+								flag = true;
+								remove(cur_val.out, node.defVariables);
+								break;
+							}
+						}
+					}
+					if(flag == false) {
+						add(cur_val.out, node.defVariables);
+					}
+				}
+			}
+		}
+		if(node.expr.kind == ExpressionKind.ASSIGN) {
+			if(contains(local, node.defVariables)) {
+				if(node.expr.expressions[1].kind == ExpressionKind.LITERAL) {
+					if(node.expr.expressions[1].literal == "null") {
+						remove(cur_val.out, node.defVariables);
+					}
+					else {
+						add(cur_val.out, node.defVariables);
+					}
+				}
+				else {
+					flag1 := false;
+					foreach(use:string=node.useVariables) {
+						if(contains(local, use)) {
+							if(!contains(cur_val.out, use)) {
+								flag1 = true;
+								remove(cur_val.out, node.defVariables);
+								break;
+							}
+						}
+					}
+					if(flag1 == false) {
+						add(cur_val.out, node.defVariables);
+					}
+				}
+			}
+		}
+	}
+	return cur_val;
+};
+
+# traversal that gets all variable uses in a method
+nullness2 := traversal(node: CFGNode) : T {
+	in_set : set of string;
+	out_set : set of string;
+	cur_val : T;
+	if(node.id==0)
+		cur_val = {in_set, out_set};
+	else
+		cur_val = {setClone(local), out_set};
+	preds := node.predecessors;
+	foreach(pred_node:CFGNode=preds) {	
+		pred := getValue(pred_node);
+		if(def(pred))
+			cur_val.in = intersection(cur_val.in, pred.out);
+	}
+	addAll(cur_val.out, cur_val.in);
+	if(def(node.expr)) {
+		if(node.expr.kind == ExpressionKind.VARDECL) {
+			if(contains(local, node.defVariables)) {
+				if(node.expr.variable_decls[0].initializer.kind == ExpressionKind.LITERAL) {
+					if(node.expr.variable_decls[0].initializer.literal == "null") {
+						remove(cur_val.out, node.defVariables);
+					}
+					else {
+						add(cur_val.out, node.defVariables);
+					}
+				}
+				else if(node.expr.variable_decls[0].initializer.kind == ExpressionKind.OTHER) {
+					remove(cur_val.out, node.defVariables);
+				}
+				else {
+					flag := false;
+					foreach(use:string=node.useVariables) {
+						if(contains(local, use)) {
+							if(!contains(cur_val.out, use)) {
+								flag = true;
+								remove(cur_val.out, node.defVariables);
+								break;
+							}
+						}
+					}
+					if(flag == false) {
+						add(cur_val.out, node.defVariables);
+					}
+				}
+			}
+		}
+		if(node.expr.kind == ExpressionKind.ASSIGN) {
+			if(contains(local, node.defVariables)) {
+				if(node.expr.expressions[1].kind == ExpressionKind.LITERAL) {
+					if(node.expr.expressions[1].literal == "null") {
+						remove(cur_val.out, node.defVariables);
+					}
+					else {
+						add(cur_val.out, node.defVariables);
+					}
+				}
+				else {
+					flag1 := false;
+					foreach(use:string=node.useVariables) {
+						if(contains(local, use)) {
+							if(!contains(cur_val.out, use)) {
+								flag1 = true;
+								remove(cur_val.out, node.defVariables);
+								break;
+							}
+						}
+					}
+					if(flag1 == false) {
+						add(cur_val.out, node.defVariables);
+					}
+				}
+			}
+		}
+	}
+	return cur_val;
+};
+
+# traversal that gets all variable uses in a method
+nullness3 := traversal(node: CFGNode) : T {
+	in_set : set of string;
+	out_set : set of string;
+	cur_val : T;
+	if(node.id==0)
+		cur_val = {in_set, out_set};
+	else
+		cur_val = {setClone(local), out_set};
+	preds := node.predecessors;
+	foreach(pred_node:CFGNode=preds) {	
+		pred := getValue(pred_node);
+		if(def(pred))
+			cur_val.in = intersection(cur_val.in, pred.out);
+	}
+	addAll(cur_val.out, cur_val.in);
+	if(def(node.expr)) {
+		if(node.expr.kind == ExpressionKind.VARDECL) {
+			if(contains(local, node.defVariables)) {
+				if(node.expr.variable_decls[0].initializer.kind == ExpressionKind.LITERAL) {
+					if(node.expr.variable_decls[0].initializer.literal == "null") {
+						remove(cur_val.out, node.defVariables);
+					}
+					else {
+						add(cur_val.out, node.defVariables);
+					}
+				}
+				else if(node.expr.variable_decls[0].initializer.kind == ExpressionKind.OTHER) {
+					remove(cur_val.out, node.defVariables);
+				}
+				else {
+					flag := false;
+					foreach(use:string=node.useVariables) {
+						if(contains(local, use)) {
+							if(!contains(cur_val.out, use)) {
+								flag = true;
+								remove(cur_val.out, node.defVariables);
+								break;
+							}
+						}
+					}
+					if(flag == false) {
+						add(cur_val.out, node.defVariables);
+					}
+				}
+			}
+		}
+		if(node.expr.kind == ExpressionKind.ASSIGN) {
+			if(contains(local, node.defVariables)) {
+				if(node.expr.expressions[1].kind == ExpressionKind.LITERAL) {
+					if(node.expr.expressions[1].literal == "null") {
+						remove(cur_val.out, node.defVariables);
+					}
+					else {
+						add(cur_val.out, node.defVariables);
+					}
+				}
+				else {
+					flag1 := false;
+					foreach(use:string=node.useVariables) {
+						if(contains(local, use)) {
+							if(!contains(cur_val.out, use)) {
+								flag1 = true;
+								remove(cur_val.out, node.defVariables);
+								break;
+							}
+						}
+					}
+					if(flag1 == false) {
+						add(cur_val.out, node.defVariables);
+					}
+				}
+			}
+		}
+	}
+	return cur_val;
+};
+
+# user-defined fix point function that is used for analysis termination.
+fixp1 := fixp(curr, prev: T) : bool {
+	if (difference(curr.out, prev.out) == 0)
+		return true;	
+	return false;
+};
+
+
+reach_def := visitor {
+	before node: Project -> {
+		pcount = pcount + 1;
+		if(pcount > 601) {
+			stop;
+		}
+	}
+	before node: CodeRepository -> {
+		snapshot := getsnapshot(node, "SOURCE_JAVA_JLS");
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+	before node: Method -> {
+			ttime := currentTime();
+
+		cfg = getcfg(node);
+		clear(nullness);clear(nullness1);clear(nullness2);clear(nullness3);clear(allVarTraversal);clear(local);
+		no_fixp = 0;
+			t_ttime0 = currentTime() - ttime;
+		ttime = currentTime();
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.DFS, allVarTraversal);
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.DFS, nullness, fixp1);
+		t_ttime = currentTime() - ttime;
+clear(allVarTraversal);clear(local);
+		ttime = currentTime();
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.POSTORDER, allVarTraversal);
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.POSTORDER, nullness1, fixp1);
+		t_ttime1 = currentTime() - ttime;
+clear(allVarTraversal);clear(local);
+		ttime = currentTime();
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.WORKLIST, allVarTraversal);
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.WORKLIST, nullness2, fixp1);
+		t_ttime2 = currentTime() - ttime;
+clear(allVarTraversal);clear(local);
+		ttime = currentTime();
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.SHALLOW_ITERATIVE, allVarTraversal);
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.HYBRID, nullness3, fixp1);
+		t_ttime3 = currentTime() - ttime;
+		#traverse(cfg, TraversalDirection.FORWARD, TraversalKind.SHALLOW_ITERATIVE, reach_def_result);
+	}
+	after node: Method -> {
+		if(no_fixp!=0 && len(cfg.nodes)>2) {
+				if(cfg.isLoopPresent && len(cfg.nodes)<201) {
+					mt[len(cfg.nodes)] << "l,"+string(t_ttime0+t_ttime)+","+string(t_ttime0+t_ttime1)+","+string(t_ttime0+t_ttime2)+","+string(t_ttime0+t_ttime3);
+				}
+				else if(cfg.isBranchPresent) {
+					mt[len(cfg.nodes)] << "b,"+string(t_ttime0+t_ttime)+","+string(t_ttime0+t_ttime1)+","+string(t_ttime0+t_ttime2)+","+string(t_ttime0+t_ttime3);
+				}
+				else {
+					mt[len(cfg.nodes)] << "s,"+string(t_ttime0+t_ttime)+","+string(t_ttime0+t_ttime1)+","+string(t_ttime0+t_ttime2)+","+string(t_ttime0+t_ttime3);
+}
+				#tottime = tottime + time1;
+		}
+	}
+
+};
+
+visit(p, reach_def);

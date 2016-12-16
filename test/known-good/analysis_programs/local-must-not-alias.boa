@@ -1,0 +1,301 @@
+m: output collection[string][int] of string;
+mt: output collection[int] of string;
+p: Project = input;
+
+type T= {gen : string, kill : string};
+type T1= {in : set of string, out : set of string};
+cfg : CFG;
+method_name : string;
+project_name : string;
+file_name : string;
+t_ttime0 : int;
+
+tottime := 0;
+t_ttime : int;
+t_ttime1 : int;
+t_ttime2 : int;
+t_ttime3 : int;
+no_fixp := 0;
+pcount := 0;
+local : set of string;
+
+init := traversal(node: CFGNode) : T {
+	cur_val : T = {"",""};
+	if(def(node.expr)) {
+		if(node.expr.kind == ExpressionKind.VARDECL) {
+			cur_val.kill = node.defVariables;
+			if(def(node.expr.variable_decls[0].initializer)) {
+				if(node.expr.variable_decls[0].initializer.kind == ExpressionKind.NEW) {
+					add(local, node.defVariables+"@"+node.expr.variable_decls[0].initializer.new_type.qualified_name);
+					cur_val.gen= node.defVariables+"@"+node.expr.variable_decls[0].initializer.new_type.qualified_name;
+				}
+				else if(node.expr.variable_decls[0].initializer.kind == ExpressionKind.VARACCESS) {
+					add(local, node.defVariables+"@var@"+node.expr.variable_decls[0].initializer.variable);
+					cur_val.gen= node.defVariables+"@var@"+node.expr.variable_decls[0].initializer.variable;
+				}
+				else {
+					add(local, node.defVariables+"@unknown");
+					cur_val.gen= node.defVariables+"@unknown";
+				}
+			}
+		}
+		else if (node.expr.kind == ExpressionKind.ASSIGN) {
+			cur_val.kill = node.defVariables;
+			if(node.expr.expressions[1].kind == ExpressionKind.NEW) {
+				add(local, node.defVariables+"@"+node.expr.expressions[1].new_type.qualified_name);
+				cur_val.gen= node.defVariables+"@"+node.expr.expressions[1].new_type.qualified_name;
+			}
+			else if(node.expr.expressions[1].kind == ExpressionKind.VARACCESS) {
+				add(local, node.defVariables+"@var@"+node.expr.expressions[1].variable);
+				cur_val.gen= node.defVariables+"@var@"+node.expr.expressions[1].variable;
+			}
+			else {
+				add(local, node.defVariables+"@unknown");
+				cur_val.gen= node.defVariables+"@unknown";
+			}
+		}
+	}
+	return cur_val;
+};
+
+# traversal that gets all variable uses in a method
+alias := traversal(node: CFGNode) : T1 {
+	no_fixp = no_fixp + 1;
+	in_set : set of string;
+	out_set : set of string;
+	cur_val : T1;
+	cur_val = {in_set, out_set};
+	preds := node.predecessors;
+	foreach(pred_node:CFGNode=preds) {	
+		pred := getValue(pred_node);
+		if(def(pred))
+			cur_val.in = union(cur_val.in, pred.out);
+	}
+	cur_val.out = setClone(cur_val.in);
+	genkill := getValue(node, init);
+	if(genkill.gen!="") {
+		str_array:=splitall(genkill.gen,"@");
+		if(str_array[1]!="var")
+			add(cur_val.out, genkill.gen);
+		else {
+			tmp_out:=setClone(cur_val.out);
+			foreach(tmp:string=tmp_out) {
+				tmp1:=stringClone(tmp);
+				str_array1:=splitall(tmp1,"@");
+				if(str_array1[0] == str_array[2]) {
+					add(cur_val.out, str_array[0]+"@"+str_array1[1]);
+				}
+			}
+		}
+	}
+	addAll(cur_val.out, cur_val.in);
+	return cur_val;
+};
+
+# traversal that gets all variable uses in a method
+alias1 := traversal(node: CFGNode) : T1 {
+	no_fixp = no_fixp + 1;
+	in_set : set of string;
+	out_set : set of string;
+	cur_val : T1;
+	cur_val = {in_set, out_set};
+	preds := node.predecessors;
+	foreach(pred_node:CFGNode=preds) {	
+		pred := getValue(pred_node);
+		if(def(pred))
+			cur_val.in = union(cur_val.in, pred.out);
+	}
+	cur_val.out = setClone(cur_val.in);
+	genkill := getValue(node, init);
+	if(genkill.gen!="") {
+		str_array:=splitall(genkill.gen,"@");
+		if(str_array[1]!="var")
+			add(cur_val.out, genkill.gen);
+		else {
+			tmp_out:=setClone(cur_val.out);
+			foreach(tmp:string=tmp_out) {
+				tmp1:=stringClone(tmp);
+				str_array1:=splitall(tmp1,"@");
+				if(str_array1[0] == str_array[2]) {
+					add(cur_val.out, str_array[0]+"@"+str_array1[1]);
+				}
+			}
+		}
+	}
+	addAll(cur_val.out, cur_val.in);
+	return cur_val;
+};
+
+# traversal that gets all variable uses in a method
+alias2 := traversal(node: CFGNode) : T1 {
+	#no_fixp = no_fixp + 1;
+	in_set : set of string;
+	out_set : set of string;
+	cur_val : T1;
+	cur_val = {in_set, out_set};
+	preds := node.predecessors;
+	foreach(pred_node:CFGNode=preds) {	
+		pred := getValue(pred_node);
+		if(def(pred))
+			cur_val.in = union(cur_val.in, pred.out);
+	}
+	cur_val.out = setClone(cur_val.in);
+	genkill := getValue(node, init);
+	if(genkill.gen!="") {
+		str_array:=splitall(genkill.gen,"@");
+		if(str_array[1]!="var")
+			add(cur_val.out, genkill.gen);
+		else {
+			tmp_out:=setClone(cur_val.out);
+			foreach(tmp:string=tmp_out) {
+				tmp1:=stringClone(tmp);
+				str_array1:=splitall(tmp1,"@");
+				if(str_array1[0] == str_array[2]) {
+					add(cur_val.out, str_array[0]+"@"+str_array1[1]);
+				}
+			}
+		}
+	}
+	addAll(cur_val.out, cur_val.in);
+	return cur_val;
+};
+
+# traversal that gets all variable uses in a method
+alias3 := traversal(node: CFGNode) : T1 {
+	#no_fixp = no_fixp + 1;
+	in_set : set of string;
+	out_set : set of string;
+	cur_val : T1;
+	cur_val = {in_set, out_set};
+	preds := node.predecessors;
+	foreach(pred_node:CFGNode=preds) {	
+		pred := getValue(pred_node);
+		if(def(pred))
+			cur_val.in = union(cur_val.in, pred.out);
+	}
+	cur_val.out = setClone(cur_val.in);
+	genkill := getValue(node, init);
+	if(genkill.gen!="") {
+		str_array:=splitall(genkill.gen,"@");
+		if(str_array[1]!="var")
+			add(cur_val.out, genkill.gen);
+		else {
+			tmp_out:=setClone(cur_val.out);
+			foreach(tmp:string=tmp_out) {
+				tmp1:=stringClone(tmp);
+				str_array1:=splitall(tmp1,"@");
+				if(str_array1[0] == str_array[2]) {
+					add(cur_val.out, str_array[0]+"@"+str_array1[1]);
+				}
+			}
+		}
+	}
+	addAll(cur_val.out, cur_val.in);
+	return cur_val;
+};
+
+# user-defined fix point function that is used for analysis termination.
+fixp1 := fixp(curr, prev: T1) : bool {
+	if (difference(curr.out, prev.out) == 0)
+		return true;	
+	return false;
+};
+
+# print results
+reach_def_result := traversal(n: CFGNode) {
+		cur_val := getValue(n, alias);
+		m["dfs"][n.id] << string(cur_val.out);
+		cur_val1 := getValue(n, alias1);
+		m["dfs"][n.id] << string(cur_val1.out);
+		cur_val2 := getValue(n, alias2);
+		m["dfs"][n.id] << string(cur_val2.out);
+		cur_val3 := getValue(n, alias3);
+		m["dfs"][n.id] << string(cur_val3.out);
+};
+
+q_all := visitor {
+	before node: Project -> {
+		pcount = pcount + 1;
+		if(pcount > 601) {
+			stop;
+		}
+	}
+	before node: ChangedFile -> {
+		file_name = node.name;
+	}
+	before node: CodeRepository -> {
+		snapshot := getsnapshot(node, "SOURCE_JAVA_JLS");
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+	before node: Method -> {
+			ttime := currentTime();
+
+		cfg = getcfg(node);
+		clear(local);clear(init);clear(alias);clear(alias1);clear(alias2);clear(alias3);
+			t_ttime0 = currentTime() - ttime;
+
+		no_fixp = 0;
+		ttime = currentTime();
+		if(def(node.arguments)) {
+			foreach(i:int;def(node.arguments[i])) {
+				add(local, node.arguments[i].name+"@argument"+string(i));
+			}
+		}
+
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.DFS, init);
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.DFS, alias, fixp1);
+		t_ttime = currentTime() - ttime;
+clear(local);clear(init);
+		ttime = currentTime();
+		if(def(node.arguments)) {
+			foreach(i:int;def(node.arguments[i])) {
+				add(local, node.arguments[i].name+"@argument"+string(i));
+			}
+		}
+
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.POSTORDER, init);
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.POSTORDER, alias1, fixp1);
+		t_ttime1 = currentTime() - ttime;
+clear(local);clear(init);
+		ttime = currentTime();
+		if(def(node.arguments)) {
+			foreach(i:int;def(node.arguments[i])) {
+				add(local, node.arguments[i].name+"@argument"+string(i));
+			}
+		}
+
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.WORKLIST, init);
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.WORKLIST, alias2, fixp1);
+		t_ttime2 = currentTime() - ttime;
+clear(local);clear(init);
+		ttime = currentTime();
+		if(def(node.arguments)) {
+			foreach(i:int;def(node.arguments[i])) {
+				add(local, node.arguments[i].name+"@argument"+string(i));
+			}
+		}
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.SHALLOW_ITERATIVE, init);
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.HYBRID, alias3, fixp1);
+		t_ttime3 = currentTime() - ttime;
+		#traverse(cfg, TraversalKind.SHALLOW_ITERATIVE, reach_def_result);
+	}
+	after node: Method -> {
+		if(no_fixp!=0 && len(cfg.nodes)>2) {
+				if(cfg.isLoopPresent && len(cfg.nodes)<201) {
+					mt[len(cfg.nodes)] << "l,"+string(t_ttime0+t_ttime)+","+string(t_ttime0+t_ttime1)+","+string(t_ttime0+t_ttime2)+","+string(t_ttime0+t_ttime3);
+				}
+				else if(cfg.isBranchPresent) {
+					mt[len(cfg.nodes)] << "b,"+string(t_ttime0+t_ttime)+","+string(t_ttime0+t_ttime1)+","+string(t_ttime0+t_ttime2)+","+string(t_ttime0+t_ttime3);
+				}
+				else {
+					mt[len(cfg.nodes)] << "s,"+string(t_ttime0+t_ttime)+","+string(t_ttime0+t_ttime1)+","+string(t_ttime0+t_ttime2)+","+string(t_ttime0+t_ttime3);
+}
+				#tottime = tottime + time1;
+		}
+	}
+
+};
+
+visit(p, q_all);

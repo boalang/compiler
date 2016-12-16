@@ -13,6 +13,5 @@ message Traversal {
 		DFS = 6;
 		POSTORDER = 7;
 		WORKLIST = 8;
-		HYBRID = 9;
 	}
 }

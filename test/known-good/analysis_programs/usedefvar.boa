@@ -1,0 +1,153 @@
+m: output collection[string][string][int] of int;
+mt: output collection[int] of string;
+accuracy : output collection of int;
+mt1: output collection[string][int] of string;
+p: Project = input;
+
+# program analysis output
+type T_gen_kill= {gen: set of string, kill: string};
+# cfg of the current method
+cfg: CFG;
+pcount := 0;
+# current visiting cfg node
+cur_cfg_node: CFGNode;
+t_ttime0 : int;
+
+genset : set of string;
+killset : string;
+totalTime : int;
+time1 : int;
+tottime := 0;
+t_ttime : int;
+t_ttime1 : int;
+t_ttime2 : int;
+t_ttime3 : int;
+no_fixp := 0;
+count :=0;
+
+project_name : string;
+
+# parse node expression to see if a variable is defined or redefined
+node_def := visitor {
+	before expr:Expression -> {
+		switch(expr.kind) {
+			case ExpressionKind.VARDECL: 
+				var_decls := cur_cfg_node.expr.variable_decls;
+				if(len(var_decls)!=0) {
+					killset = var_decls[0].name;
+				}				
+				break;
+			case ExpressionKind.ASSIGN: 
+				exprs := cur_cfg_node.expr.expressions;
+				if(len(exprs)!=0) {				
+					killset = exprs[0].variable;
+				}
+				break;
+			default:
+				break;
+		}
+	}
+};
+
+# parse node expression to see if a variable is used or not
+node_use := visitor {
+	before expr:Expression -> {
+		if(def(expr.variable)) {
+			add(genset, expr.variable);			
+		}
+	}
+};
+
+
+# traversal that gets all variable uses in a method
+init := traversal(node: CFGNode): T_gen_kill {
+	cur_value : T_gen_kill;
+	killset = "";
+	init_set1 : set of string;
+	genset = init_set1;
+	cur_cfg_node = node;
+	if(def(node.expr)) {
+		visit(node.expr, node_use);
+		visit(node.expr, node_def);
+	}
+	cur_value = {genset, killset};
+	return cur_value;
+};
+
+# traversal that gets all variable uses in a method
+init1 := traversal(node: CFGNode): T_gen_kill {
+	no_fixp=no_fixp+1;
+	cur_value : T_gen_kill;
+	killset = "";
+	init_set1 : set of string;
+	genset = init_set1;
+cur_cfg_node = node;
+	if(def(node.expr)) {
+		visit(node.expr, node_use);
+		visit(node.expr, node_def);
+	}
+	cur_value = {genset, killset};
+	return cur_value;
+};
+
+# traversal that gets all variable uses in a method
+init2 := traversal(node: CFGNode): T_gen_kill {
+	cur_value : T_gen_kill;
+	killset = "";
+	init_set1 : set of string;
+	genset = init_set1;
+cur_cfg_node = node;
+	if(def(node.expr)) {
+		visit(node.expr, node_use);
+		visit(node.expr, node_def);
+	}
+	cur_value = {genset, killset};
+	return cur_value;
+};
+
+# traversal that gets all variable uses in a method
+init3 := traversal(node: CFGNode): T_gen_kill {
+	cur_value : T_gen_kill;
+	killset = "";
+	init_set1 : set of string;
+	genset = init_set1;
+cur_cfg_node = node;
+	if(def(node.expr)) {
+		visit(node.expr, node_use);
+		visit(node.expr, node_def);
+	}
+	cur_value = {genset, killset};
+	return cur_value;
+};
+
+# user-defined fix point function that is used for analysis termination.
+fixp1 := fixp(curr, prev: T_gen_kill) : bool {
+	return true;
+};
+
+q_all := visitor {
+	before node: Project -> {
+		pcount = pcount + 1;
+		if(pcount > 601) {
+			stop;
+		}
+	}
+	before node: CodeRepository -> {
+		snapshot := getsnapshot(node, "SOURCE_JAVA_JLS");
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+	before node: Method -> {
+			ttime := currentTime();
+
+		cfg = getcfg(node);
+		clear(init);clear(init1);clear(init2);clear(init3);
+		no_fixp=0;
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.DFS, init3);
+	}
+	
+
+};
+
+visit(p, q_all);

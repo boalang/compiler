@@ -1,0 +1,154 @@
+m: output collection[string][string][int] of int;
+mt: output collection[int] of string;
+accuracy : output collection of int;
+mt1: output collection[string][int] of string;
+p: Project = input;
+
+# program analysis output
+type T_gen_kill= {gen: set of int, kill: int};
+# cfg of the current method
+cfg: CFG;
+pcount := 0;
+# current visiting cfg node
+cur_cfg_node: int;
+t_ttime0 : int;
+
+genset : set of int;
+killset : string;
+totalTime : int;
+time1 : int;
+tottime := 0;
+t_ttime : int;
+t_ttime1 : int;
+t_ttime2 : int;
+t_ttime3 : int;
+no_fixp := 0;
+count :=0;
+
+project_name : string;
+
+# parse node expression to see if a variable is defined or redefined
+node_def := visitor {
+	before expr:Expression -> {
+		switch(expr.kind) {
+			case ExpressionKind.VARDECL: 
+				var_decls := expr.variable_decls;
+				if(len(var_decls)!=0) {
+					if(!def(var_decls[0].initializer)) {
+						add(genset, cur_cfg_node);
+					}
+				}				
+				break;
+			default:
+				break;
+		}
+	}
+};
+
+# traversal that gets all variable uses in a method
+init := traversal(node: CFGNode): T_gen_kill {
+	cur_val :T_gen_kill;
+	init_set1 : set of int;
+	genset = init_set1;
+	cur_cfg_node = node.id;
+	if(def(node.expr)) {
+		visit(node.expr, node_def);
+	}
+	cur_val = {genset, 0};
+	return cur_val;
+};
+
+# traversal that gets all variable uses in a method
+init1 := traversal(node: CFGNode): T_gen_kill {
+	no_fixp = no_fixp + 1;
+	cur_val :T_gen_kill;
+	init_set1 : set of int;
+	genset = init_set1;
+	cur_cfg_node = node.id;
+	if(def(node.expr)) {
+		visit(node.expr, node_def);
+	}
+	cur_val = {genset, 0};
+	return cur_val;
+};
+# traversal that gets all variable uses in a method
+init2 := traversal(node: CFGNode): T_gen_kill {
+	cur_val :T_gen_kill;
+	init_set1 : set of int;
+	genset = init_set1;
+	cur_cfg_node = node.id;
+	if(def(node.expr)) {
+		visit(node.expr, node_def);
+	}
+	cur_val = {genset, 0};
+	return cur_val;
+};
+# traversal that gets all variable uses in a method
+init3 := traversal(node: CFGNode): T_gen_kill {
+	cur_val :T_gen_kill;
+	init_set1 : set of int;
+	genset = init_set1;
+	cur_cfg_node = node.id;
+	if(def(node.expr)) {
+		visit(node.expr, node_def);
+	}
+	cur_val = {genset, 0};
+	return cur_val;
+};
+# user-defined fix point function that is used for analysis termination.
+fixp1 := fixp(curr, prev: T_gen_kill) : bool {
+	return true;
+};
+
+q_all := visitor {
+	before node: Project -> {
+		pcount = pcount + 1;
+		if(pcount > 601) {
+			stop;
+		}
+	}
+	before node: CodeRepository -> {
+		snapshot := getsnapshot(node, "SOURCE_JAVA_JLS");
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+	before node: Method -> {
+			ttime := currentTime();
+
+		cfg = getcfg(node);
+		clear(init);clear(init1);clear(init2);clear(init3);
+		no_fixp=0;
+
+			t_ttime0 = currentTime() - ttime;
+		ttime = currentTime();			
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.DFS, init3);
+		t_ttime = currentTime() - ttime;
+		ttime = currentTime();			
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.POSTORDER, init1);
+		t_ttime1 = currentTime() - ttime;
+		ttime = currentTime();		
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.WORKLIST, init2, fixp1);
+		t_ttime2 = currentTime() - ttime;
+		ttime = currentTime();	
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.SHALLOW_ITERATIVE, init);
+		t_ttime3 = currentTime() - ttime;
+	}
+	after node: Method -> {
+		if(no_fixp!=0 && len(cfg.nodes)>2) {
+				if(cfg.isLoopPresent && len(cfg.nodes)<201) {
+					mt[len(cfg.nodes)] << "l,"+string(t_ttime0+t_ttime)+","+string(t_ttime0+t_ttime1)+","+string(t_ttime0+t_ttime2)+","+string(t_ttime0+t_ttime3);
+				}
+				else if(cfg.isBranchPresent) {
+					mt[len(cfg.nodes)] << "b,"+string(t_ttime0+t_ttime)+","+string(t_ttime0+t_ttime1)+","+string(t_ttime0+t_ttime2)+","+string(t_ttime0+t_ttime3);
+				}
+				else {
+					mt[len(cfg.nodes)] << "s,"+string(t_ttime0+t_ttime)+","+string(t_ttime0+t_ttime1)+","+string(t_ttime0+t_ttime2)+","+string(t_ttime0+t_ttime3);
+}
+				#tottime = tottime + time1;
+		}
+	}
+
+};
+
+visit(p, q_all);

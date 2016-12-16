@@ -1,0 +1,73 @@
+m: output collection[string][string][int] of int;
+mt: output collection[int] of string;
+accuracy : output collection of int;
+mt1: output collection[string][int] of string;
+p: Project = input;
+
+# program analysis output
+type Tloop = {start : int, end : int, use : set of string};
+type finiteLoop = {start : int, end : int};
+# cfg of the current method
+cfg: CFG;
+pcount := 0;
+# current visiting cfg node
+cur_cfg_node: CFGNode;
+t_ttime0 : int;
+
+genset : set of string;
+killset : set of string;
+totalTime : int;
+time1 : int;
+tottime := 0;
+t_ttime : int;
+t_ttime1 : int;
+t_ttime2 : int;
+t_ttime3 : int;
+no_fixp := 0;
+count :=0;
+stack_case : stack of int;
+project_name : string;
+useless_branch : set of int;
+endId : int;
+invalid : set of int;
+
+# traversal that gets all variable uses in a method
+init := traversal(node: CFGNode){
+	if(def(node.stmt)) {
+		if(node.stmt.kind == StatementKind.RETURN) {
+			if(def(node.stmt.expression)) {
+				if(node.stmt.expression.kind == ExpressionKind.OP_INC) {
+					add(invalid, int(node.id));
+				}
+			}
+		}
+	}
+};
+
+q_all := visitor {
+	before node: Project -> {
+		pcount = pcount + 1;
+		if(pcount > 601) {
+			stop;
+		}
+	}
+	before node: CodeRepository -> {
+		snapshot := getsnapshot(node, "SOURCE_JAVA_JLS");
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+	before node: Method -> {
+			ttime := currentTime();
+
+			cfg = getcfg(node);
+			clear(useless_branch);clear(invalid);
+			t_ttime0 = currentTime() - ttime;
+			traverse(cfg, TraversalDirection.FORWARD, TraversalKind.DFS, init);
+			t_ttime3 = currentTime() - ttime;
+	}
+
+
+};
+
+visit(p, q_all);

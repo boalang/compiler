@@ -52,45 +52,22 @@ public class BoaGraphIntrinsics {
 		return cfg;
 	}
 
-	@FunctionSpec(name = "union", returnType = "set of string", formalParameters = { "set of string","set of string" })
-	public static HashSet<String> union(final HashSet<String> set1,final HashSet<String> set2) {
-		HashSet<String> result_set=new HashSet<String>();
-		for(String i : set1) {
+	@FunctionSpec(name = "union", returnType = "set of any", formalParameters = { "set of any","set of any" })
+	public static <T> HashSet<T> union(final HashSet<T> set1, final HashSet<T> set2) {
+		HashSet<T> result_set=new HashSet<T>();
+		for(T i : set1) {
     			result_set.add(i);
 		}
-		for(String i : set2) {
-    			result_set.add(i);
-		}
-		return result_set;
-	}
-
-	@FunctionSpec(name = "union1", returnType = "set of set of string", formalParameters = { "set of set of string","set of set of string" })
-	public static HashSet<HashSet<String>> union1(final HashSet<HashSet<String>> set1,final HashSet<HashSet<String>> set2) {
-		HashSet<HashSet<String>> result_set=new HashSet<HashSet<String>>();
-		for(HashSet<String> i : set1) {
-    			result_set.add(i);
-		}
-		for(HashSet<String> i : set2) {
+		for(T i : set2) {
     			result_set.add(i);
 		}
 		return result_set;
 	}
 
-	@FunctionSpec(name = "intersection", returnType = "set of string", formalParameters = { "set of string","set of string" })
-	public static HashSet<String> intersection(final HashSet<String> set1,final HashSet<String> set2) {
-		HashSet<String> result_set=new HashSet<String>();		
-		for(String i : set2) {
-    			if(set1.contains(i)) {
-				result_set.add(i);
-			}
-		}
-		return result_set;
-	}
-
-	@FunctionSpec(name = "intersection1", returnType = "set of set of string", formalParameters = { "set of set of string","set of set of string" })
-	public static HashSet<HashSet<String>> intersection1(final HashSet<HashSet<String>> set1,final HashSet<HashSet<String>> set2) {
-		HashSet<HashSet<String>> result_set=new HashSet<HashSet<String>>();		
-		for(HashSet<String> i : set2) {
+	@FunctionSpec(name = "intersection", returnType = "set of any", formalParameters = { "set of any","set of any" })
+	public static <T> HashSet<T> intersection(final HashSet<T> set1, final HashSet<T> set2) {
+		HashSet<T> result_set=new HashSet<T>();		
+		for(T i : set2) {
     			if(set1.contains(i)) {
 				result_set.add(i);
 			}
@@ -104,18 +81,18 @@ public class BoaGraphIntrinsics {
 		return result_set;
 	}
 
-	@FunctionSpec(name = "setdifference", returnType = "set of string", formalParameters = { "set of string","set of string" })
-	public static HashSet<String> setdifference(final HashSet<String> set1,final HashSet<String> set2) {
-		HashSet<String> result_set1=new HashSet<String>(set1);
-		HashSet<String> result_set2=new HashSet<String>(set2);
-		for(String i : result_set2) {
+	@FunctionSpec(name = "setdifference", returnType = "set of any", formalParameters = { "set of any","set of any" })
+	public static <T> HashSet<T> setDifference(final HashSet<T> set1,final HashSet<T> set2) {
+		HashSet<T> result_set1=new HashSet<T>(set1);
+		HashSet<T> result_set2=new HashSet<T>(set2);
+		for(T i : result_set2) {
     			result_set1.remove(i);
 		}
 		return result_set1;
 	}
 
-	@FunctionSpec(name = "difference", returnType = "int", formalParameters = { "set of string","set of string" })
-	public static int difference(final HashSet<String> set1,final HashSet<String> set2) {
+	@FunctionSpec (name = "difference", returnType = "int", formalParameters = { "set of any","set of any" })
+	public static <T> int difference(final HashSet<T> set1,final HashSet<T> set2) {
 		if(set1.size()==set2.size()) {
 			if(set1.containsAll(set2)) {
 				return 0;
@@ -137,26 +114,6 @@ public class BoaGraphIntrinsics {
 			return true;		
 		}
 		return false;
-	}
-
-	@FunctionSpec(name = "difference2", returnType = "int", formalParameters = { "set of int","set of int" })
-	public static int difference2(final HashSet<Long> set1,final HashSet<Long> set2) {
-		if(set1.size()==set2.size()) {
-			if(set1.containsAll(set2)) {
-				return 0;
-			}		
-		}
-		return 1;
-	}
-
-	@FunctionSpec(name = "difference1", returnType = "int", formalParameters = { "set of set of string","set of set of string" })
-	public static int difference1(final HashSet<HashSet<String>> set1,final HashSet<HashSet<String>> set2) {
-		if(set1.size()==set2.size()) {
-			if(set1.containsAll(set2)) {
-				return 0;
-			}		
-		}
-		return 1;
 	}
 
 	@FunctionSpec(name = "getsize", returnType = "int", formalParameters = { "Method" })

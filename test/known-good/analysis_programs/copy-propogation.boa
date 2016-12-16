@@ -1,0 +1,290 @@
+p: Project = input;
+m: output collection[string][int] of string;
+mt : output collection[int] of string;
+# program analysis output
+type T= {in: set of string, out: set of string};
+type T1= {gen: string, kill: string};
+# cfg of the current method
+cfg: CFG;
+pcount := 0;
+# current visiting cfg node and its id
+cur_node_id: int;
+cur_cfg_node: CFGNode;
+t_ttime0 : int;
+
+# generated values set
+genset: set of string;
+
+# new value
+vardef: string;
+
+# killed values 
+killset: set of string;
+
+method_name : string;
+# 
+flag1 := 0;
+
+time1 : int;
+tottime := 0;
+t_ttime : int;
+t_ttime1 : int;
+t_ttime2 : int;
+t_ttime3 : int;
+no_fixp := 0;
+count :=0;
+
+# traversal that accumulates generated values
+cfg_def := traversal(node: CFGNode) : T1 {
+	cur_val : T1 = {"",""};
+	if(node.defVariables!="") {
+		cur_val.gen = node.defVariables+"@"+string(node.id);
+		cur_val.kill = node.defVariables;
+	}
+	return cur_val;
+};
+
+# cfg reaching definition analysis
+cfg_reach_def := traversal(n: CFGNode): T {
+	no_fixp = no_fixp + 1;
+	preds := n.predecessors;
+	in_set : set of string;
+	out_set : set of string;
+	cur_val : T = {in_set, out_set};
+	if(def(getValue(n))) {
+		cur_val1 := getValue(n);
+		cur_val = clone(cur_val1);
+	}
+	foreach(pred_node:CFGNode=preds) {	
+		pred := getValue(pred_node);
+		if(def(pred))
+			cur_val.in = union(cur_val.in, pred.out);
+	}
+	cur_val.out = setClone(cur_val.in);
+	genkill := getValue(n, cfg_def);
+	if(genkill.kill!="") {
+		tmp_out:=setClone(cur_val.out);
+		foreach(tmp:string=tmp_out) {
+			tmp1:=stringClone(tmp);
+			str_array:=splitall(tmp1,"@");
+			if(str_array[0] == genkill.kill) {
+				remove(cur_val.out, tmp1);
+			}
+		}
+		add(cur_val.out, genkill.gen);
+	}
+	return cur_val;
+};
+
+# cfg reaching definition analysis
+cfg_reach_def1 := traversal(n: CFGNode): T {
+	no_fixp = no_fixp + 1;
+	preds := n.predecessors;
+	in_set : set of string;
+	out_set : set of string;
+	cur_val : T = {in_set, out_set};
+	if(def(getValue(n))) {
+		cur_val1 := getValue(n);
+		cur_val = clone(cur_val1);
+	}
+	foreach(pred_node:CFGNode=preds) {	
+		pred := getValue(pred_node);
+		if(def(pred))
+			cur_val.in = union(cur_val.in, pred.out);
+	}
+	cur_val.out = setClone(cur_val.in);
+	genkill := getValue(n, cfg_def);
+	if(genkill.kill!="") {
+		tmp_out:=setClone(cur_val.out);
+		foreach(tmp:string=tmp_out) {
+			tmp1:=stringClone(tmp);
+			str_array:=splitall(tmp1,"@");
+			if(str_array[0] == genkill.kill) {
+				remove(cur_val.out, tmp1);
+			}
+		}
+		add(cur_val.out, genkill.gen);
+	}
+	return cur_val;
+};
+
+# cfg reaching definition analysis
+cfg_reach_def2 := traversal(n: CFGNode): T {
+	#no_fixp = no_fixp + 1;
+	preds := n.predecessors;
+	in_set : set of string;
+	out_set : set of string;
+	cur_val : T = {in_set, out_set};
+	if(def(getValue(n))) {
+		cur_val1 := getValue(n);
+		cur_val = clone(cur_val1);
+	}
+	foreach(pred_node:CFGNode=preds) {	
+		pred := getValue(pred_node);
+		if(def(pred))
+			cur_val.in = union(cur_val.in, pred.out);
+	}
+	cur_val.out = setClone(cur_val.in);
+	genkill := getValue(n, cfg_def);
+	if(genkill.kill!="") {
+		tmp_out:=setClone(cur_val.out);
+		foreach(tmp:string=tmp_out) {
+			tmp1:=stringClone(tmp);
+			str_array:=splitall(tmp1,"@");
+			if(str_array[0] == genkill.kill) {
+				remove(cur_val.out, tmp1);
+			}
+		}
+		add(cur_val.out, genkill.gen);
+	}
+	return cur_val;
+};
+
+# cfg reaching definition analysis
+cfg_reach_def3 := traversal(n: CFGNode): T {
+	#no_fixp = no_fixp + 1;
+	preds := n.predecessors;
+	in_set : set of string;
+	out_set : set of string;
+	cur_val : T = {in_set, out_set};
+	if(def(getValue(n))) {
+		cur_val1 := getValue(n);
+		cur_val = clone(cur_val1);
+	}
+	foreach(pred_node:CFGNode=preds) {	
+		pred := getValue(pred_node);
+		if(def(pred))
+			cur_val.in = union(cur_val.in, pred.out);
+	}
+	cur_val.out = setClone(cur_val.in);
+	genkill := getValue(n, cfg_def);
+	if(genkill.kill!="") {
+		tmp_out:=setClone(cur_val.out);
+		foreach(tmp:string=tmp_out) {
+			tmp1:=stringClone(tmp);
+			str_array:=splitall(tmp1,"@");
+			if(str_array[0] == genkill.kill) {
+				remove(cur_val.out, tmp1);
+			}
+		}
+		add(cur_val.out, genkill.gen);
+	}
+	return cur_val;
+};
+
+# cfg reaching definition analysis
+copy_prop := traversal(n: CFGNode) : set of T1 {
+	out1 : set of T1;
+	cur_val := getValue(n, cfg_reach_def);
+	if(def(cur_val)) {
+	foreach(use:string=n.useVariables) {
+		tmp_in:=setClone(cur_val.in);
+		foreach(tmp:string=tmp_in) {
+			str_array:=splitall(tmp,"@");
+			if(str_array[0] == use) {
+				val : T1 = {use, tmp};
+				add(out1, val);
+			}
+		}
+	}
+	}
+	return out1;
+};
+
+# cfg reaching definition analysis
+copy_prop1 := traversal(n: CFGNode) : set of T1 {
+	out1 : set of T1;
+	cur_val := getValue(n, cfg_reach_def1);
+	if(def(cur_val)) {
+	foreach(use:string=n.useVariables) {
+		tmp_in:=setClone(cur_val.in);
+		foreach(tmp:string=tmp_in) {
+			str_array:=splitall(tmp,"@");
+			if(str_array[0] == use) {
+				val : T1 = {use, tmp};
+				add(out1, val);
+			}
+		}
+	}
+	}
+	return out1;
+};
+
+# cfg reaching definition analysis
+copy_prop2 := traversal(n: CFGNode) : set of T1 {
+	out1 : set of T1;
+	cur_val := getValue(n, cfg_reach_def2);
+	if(def(cur_val)) {
+	foreach(use:string=n.useVariables) {
+		tmp_in:=setClone(cur_val.in);
+		foreach(tmp:string=tmp_in) {
+			str_array:=splitall(tmp,"@");
+			if(str_array[0] == use) {
+				val : T1 = {use, tmp};
+				add(out1, val);
+			}
+		}
+	}
+	}
+	return out1;
+};
+
+# cfg reaching definition analysis
+copy_prop3 := traversal(n: CFGNode) : set of T1 {
+	out1 : set of T1;
+	cur_val := getValue(n, cfg_reach_def3);
+	if(def(cur_val)) {
+	foreach(use:string=n.useVariables) {
+		tmp_in:=setClone(cur_val.in);
+		foreach(tmp:string=tmp_in) {
+			str_array:=splitall(tmp,"@");
+			if(str_array[0] == use) {
+				val : T1 = {use, tmp};
+				add(out1, val);
+			}
+		}
+	}
+	}
+	return out1;
+};
+
+# print results
+reach_def_result := traversal(n: CFGNode) {
+		cur_val := getValue(n, cfg_reach_def);
+		m["dfs"][n.id] << string(cur_val.out);
+};
+
+# user-defined fix point function that is used for analysis termination.
+fixp1 := fixp(curr, prev: T) : bool {
+	if (difference(curr.out, prev.out) == 0)
+		return true;	
+	return false;
+};
+
+reach_def := visitor {
+	before node: Project -> {
+		pcount = pcount + 1;
+		if(pcount > 601) {
+			stop;
+		}
+	}
+	before node: CodeRepository -> {
+		snapshot := getsnapshot(node, "SOURCE_JAVA_JLS");
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+	before node: Method -> {
+			ttime := currentTime();
+
+			cfg = getcfg(node);
+			clear(cfg_def);clear(cfg_reach_def);clear(cfg_reach_def1);clear(cfg_reach_def2);clear(cfg_reach_def3);
+			clear(copy_prop);clear(copy_prop1);clear(copy_prop2);clear(copy_prop3);
+			traverse(cfg, TraversalDirection.FORWARD, TraversalKind.DFS, cfg_def);
+			traverse(cfg, TraversalDirection.FORWARD, TraversalKind.DFS, cfg_reach_def, fixp1);
+			traverse(cfg, TraversalDirection.FORWARD, TraversalKind.DFS, copy_prop);
+	}
+
+};
+
+visit(p, reach_def);

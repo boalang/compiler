@@ -162,7 +162,26 @@ public class BoaCompiler {
 
 								final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(jobName);
 								cg.start(p);
-
+<<<<<<< HEAD
+=======
+								evalRuns.add(System.currentTimeMillis()-time);
+								while(evalRuns.size()!=3) {
+									time = System.currentTimeMillis();
+									cg = new CodeGeneratingVisitor(jobName);
+									cg.start(p);
+									long currentEvalTime = System.currentTimeMillis()-time;
+									ArrayList<Long> copyEvalRuns = new ArrayList<Long>(evalRuns);
+									for(long eval : copyEvalRuns) {
+										if(eval > currentEvalTime) {
+											if(!(currentEvalTime / eval > 0.97)) {
+												evalRuns.remove(eval);
+											}
+										}
+									}
+									evalRuns.add(currentEvalTime);
+								}
+								System.out.println("---------done-----"+evalRuns);
+>>>>>>> parent of 99e8891... minor change
 								jobs.add(cg.getCode());
 
 								jobnames.add(jobName);

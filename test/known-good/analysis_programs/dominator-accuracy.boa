@@ -1,0 +1,194 @@
+m: output collection[string][int] of string;
+mt: output collection of string;
+mt1: output sum of int;
+p: Project = input;
+
+# program analysis output
+type T= {dom: set of string, dummy : int};
+
+# cfg of the current method
+cfg: CFG;
+
+#set of all cfgnode ids
+cfgnode_ids:set of string;
+pcount := 0;
+method_name : string;
+t_ttime0 : int;
+
+t_ttime : int;
+t_ttime1 : int;
+t_ttime2 : int;
+t_ttime3 : int;
+t_ttime4 : int;
+no_fixp := 0;
+flag := true;
+# traversal to collect all cfgnode ids
+allnode_ids := traversal(node: CFGNode) : string{
+	add(cfgnode_ids, string(node.id));
+	return string(node.id);
+};
+
+# traversal that constructs dominator set of cfg node
+cfg_dom := traversal(node: CFGNode): T {
+	cur_value : T;
+	if(node.id==0) {
+			self_dom:set of string;
+			cur_value = {self_dom, 0};
+	}
+	else
+		cur_value = {setClone(cfgnode_ids), 0};
+	if(def(getValue(node))) {
+		cur_val1 := getValue(node);
+		cur_value = clone(cur_val1);
+	}
+	preds:=node.predecessors;
+	foreach(i:int;def(preds[i])) {
+		pred_value := getValue(preds[i]);
+		if(def(pred_value)) {
+			cur_value.dom = intersection(cur_value.dom,pred_value.dom);
+		}
+	}	
+	gen_kill := getValue(node, allnode_ids);
+	add(cur_value.dom, gen_kill);
+	return cur_value;
+};
+
+# traversal that constructs dominator set of cfg node
+cfg_dom1 := traversal(node: CFGNode): T {
+	cur_value : T;
+	if(node.id==0) {
+			self_dom:set of string;
+			cur_value = {self_dom, 0};
+	}
+	else
+		cur_value = {setClone(cfgnode_ids), 0};
+	if(def(getValue(node))) {
+		cur_val1 := getValue(node);
+		cur_value = clone(cur_val1);
+	}
+	preds:=node.predecessors;
+	foreach(i:int;def(preds[i])) {
+		pred_value := getValue(preds[i]);
+		if(def(pred_value)) {
+			cur_value.dom = intersection(cur_value.dom,pred_value.dom);
+		}
+	}	
+	gen_kill := getValue(node, allnode_ids);
+	add(cur_value.dom, gen_kill);
+	return cur_value;
+};
+
+# traversal that constructs dominator set of cfg node
+cfg_dom2 := traversal(node: CFGNode): T {
+	cur_value : T;
+	if(node.id==0) {
+			self_dom:set of string;
+			cur_value = {self_dom, 0};
+	}
+	else
+		cur_value = {setClone(cfgnode_ids), 0};
+	if(def(getValue(node))) {
+		cur_val1 := getValue(node);
+		cur_value = clone(cur_val1);
+	}
+	preds:=node.predecessors;
+	foreach(i:int;def(preds[i])) {
+		pred_value := getValue(preds[i]);
+		if(def(pred_value)) {
+			cur_value.dom = intersection(cur_value.dom,pred_value.dom);
+		}
+	}	
+	gen_kill := getValue(node, allnode_ids);
+	add(cur_value.dom, gen_kill);
+	return cur_value;
+};
+
+# traversal that constructs dominator set of cfg node
+cfg_dom3 := traversal(node: CFGNode): T {
+	cur_value : T;
+	if(node.id==0) {
+			self_dom:set of string;
+			cur_value = {self_dom, 0};
+	}
+	else
+		cur_value = {setClone(cfgnode_ids), 0};
+	if(def(getValue(node))) {
+		cur_val1 := getValue(node);
+		cur_value = clone(cur_val1);
+	}
+	preds:=node.predecessors;
+	foreach(i:int;def(preds[i])) {
+		pred_value := getValue(preds[i]);
+		if(def(pred_value)) {
+			cur_value.dom = intersection(cur_value.dom,pred_value.dom);
+		}
+	}	
+	gen_kill := getValue(node, allnode_ids);
+	add(cur_value.dom, gen_kill);
+	return cur_value;
+};
+
+# print results
+dom_result := traversal(node: CFGNode) {
+	cur_value := getValue(node, cfg_dom);
+	cur_value1 := getValue(node, cfg_dom1);
+	cur_value2 := getValue(node, cfg_dom2);
+	cur_value3 := getValue(node, cfg_dom3);
+	if(def(cur_value) && def(cur_value1)) {
+	 	if (!(difference(cur_value.dom, cur_value1.dom) == 0))
+	 		flag = false;	
+		if (!(difference(cur_value1.dom, cur_value2.dom) == 0))
+	 		flag = false;	
+		if (!(difference(cur_value2.dom, cur_value3.dom) == 0))
+	 		flag = false;	
+	}
+};
+
+# user-defined fix point function that is used for analysis termination.
+fixp1 := fixp(curr, prev: T) : bool {
+ 	if (difference(curr.dom, prev.dom) == 0)
+ 		return true;	
+ 	return false;
+};
+
+q_all := visitor {
+	before node: CodeRepository -> {
+		snapshot := getsnapshot(node, "SOURCE_JAVA_JLS");
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+	before node: Method -> {
+		ttime := currentTime();
+		clear(allnode_ids);clear(cfgnode_ids);clear(cfg_dom);clear(cfg_dom1);clear(cfg_dom2);clear(cfg_dom3);
+		cfg = getcfg(node);
+		no_fixp = 0;
+		if(len(cfg.nodes) > 2) {
+			ttime = currentTime();
+			traverse(cfg, TraversalDirection.FORWARD, TraversalKind.DFS, allnode_ids);
+			traverse(cfg, TraversalDirection.FORWARD, TraversalKind.DFS, cfg_dom, fixp1);
+			t_ttime1 = currentTime() - ttime;
+			clear(allnode_ids);clear(cfgnode_ids);
+			ttime = currentTime();
+			traverse(cfg, TraversalDirection.FORWARD, TraversalKind.POSTORDER, allnode_ids);
+			traverse(cfg, TraversalDirection.FORWARD, TraversalKind.POSTORDER, cfg_dom1, fixp1);
+			t_ttime2 = currentTime() - ttime;
+			clear(allnode_ids);clear(cfgnode_ids);
+			ttime = currentTime();
+			traverse(cfg, TraversalDirection.FORWARD, TraversalKind.WORKLIST, allnode_ids);
+			traverse(cfg, TraversalDirection.FORWARD, TraversalKind.WORKLIST, cfg_dom2, fixp1);
+			t_ttime3 = currentTime() - ttime;
+			clear(allnode_ids);clear(cfgnode_ids);
+			ttime = currentTime();
+			traverse(cfg, TraversalDirection.FORWARD, TraversalKind.HYBRID, allnode_ids);
+			traverse(cfg, TraversalDirection.FORWARD, TraversalKind.HYBRID, cfg_dom3, fixp1);
+			t_ttime4 = currentTime() - ttime;
+			traverse(cfg, TraversalDirection.FORWARD, TraversalKind.POSTORDER, dom_result);
+			if(flag==true)
+				mt << string(t_ttime1)+","+string(t_ttime2)+","+string(t_ttime3)+","+string(t_ttime4);
+			flag = true;
+		}
+	}
+};
+
+visit(p, q_all);

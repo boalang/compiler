@@ -1,0 +1,180 @@
+m: output collection[string][int] of string;
+mt: output collection[int] of string;
+p: Project = input;
+
+# program analysis output
+type T= {in: set of string, out : set of string};
+type T1= {gen: string, kill : string};
+# cfg of the current method
+cfg: CFG;
+t_ttime0 : int;
+
+#set of all cfgnode ids
+cfgnode_ids:set of string;
+pcount := 0;
+method_name : string;
+project_name : string;
+file_name : string;
+t_ttime : int;
+t_ttime1 : int;
+t_ttime2 : int;
+t_ttime3 : int;
+no_fixp := 0;
+genStr : string;
+killStr : string; 
+
+# expression visitor to generate new values
+evisitor := visitor {
+	before node:Expression -> {
+		switch(node.kind) {
+			case ExpressionKind.METHODCALL: 
+				if(node.method == "write" || node.method == "read" || node.method == "open") {
+					if(len(node.expressions)>0) {
+						genStr = node.expressions[0].variable;
+					}
+				}
+				else if(node.method == "close") {
+					if(len(node.expressions)>0) {
+						killStr = node.expressions[0].variable;
+					}
+				}
+  				break;
+			default: break;
+		}
+	}
+};
+
+# traversal that accumulates generated values
+track := traversal(node: CFGNode) : T1 {
+	cur_val : T1 = {"",""};
+	genStr = "";
+	killStr = "";
+	if (def(node.expr)) {
+		visit(node.expr, evisitor);
+		cur_val = {genStr, killStr};
+	}
+	return cur_val;
+};
+
+# traversal that accumulates generated values
+cfg_def := traversal(node: CFGNode) : T {
+	no_fixp = no_fixp + 1;
+	inset : set of string;
+	outset : set of string;
+	cur_val : T = {inset, outset};
+	preds := node.predecessors;
+	foreach(pred_node:CFGNode=preds) {
+		pred := getValue(pred_node);
+		if(def(pred))
+			cur_val.in = union(cur_val.in, pred.out);
+	}
+	track_val := getValue(node, track);
+	addAll(cur_val.out, cur_val.in);
+	if(track_val.gen != "")
+		add(cur_val.out, track_val.gen);
+	if(track_val.kill != "")
+		remove(cur_val.out, track_val.kill);
+	return cur_val;
+};
+
+# traversal that accumulates generated values
+cfg_def3 := traversal(node: CFGNode) : T {
+	no_fixp = no_fixp + 1;
+	inset : set of string;
+	outset : set of string;
+	cur_val : T = {inset, outset};
+	preds := node.predecessors;
+	foreach(pred_node:CFGNode=preds) {
+		pred := getValue(pred_node);
+		if(def(pred))
+			cur_val.in = union(cur_val.in, pred.out);
+	}
+	track_val := getValue(node, track);
+	addAll(cur_val.out, cur_val.in);
+	if(track_val.gen != "")
+		add(cur_val.out, track_val.gen);
+	if(track_val.kill != "")
+		remove(cur_val.out, track_val.kill);
+	return cur_val;
+};
+
+# traversal that accumulates generated values
+cfg_def1 := traversal(node: CFGNode) : T {
+	#no_fixp = no_fixp + 1;
+	inset : set of string;
+	outset : set of string;
+	cur_val : T = {inset, outset};
+	preds := node.predecessors;
+	foreach(pred_node:CFGNode=preds) {
+		pred := getValue(pred_node);
+		if(def(pred))
+			cur_val.in = union(cur_val.in, pred.out);
+	}
+	track_val := getValue(node, track);
+	addAll(cur_val.out, cur_val.in);
+	if(track_val.gen != "")
+		add(cur_val.out, track_val.gen);
+	if(track_val.kill != "")
+		remove(cur_val.out, track_val.kill);
+	return cur_val;
+};
+
+# traversal that accumulates generated values
+cfg_def2 := traversal(node: CFGNode) : T {
+	#no_fixp = no_fixp + 1;
+	inset : set of string;
+	outset : set of string;
+	cur_val : T = {inset, outset};
+	preds := node.predecessors;
+	foreach(pred_node:CFGNode=preds) {
+		pred := getValue(pred_node);
+		if(def(pred))
+			cur_val.in = union(cur_val.in, pred.out);
+	}
+	track_val := getValue(node, track);
+	addAll(cur_val.out, cur_val.in);
+	if(track_val.gen != "")
+		add(cur_val.out, track_val.gen);
+	if(track_val.kill != "")
+		remove(cur_val.out, track_val.kill);
+	return cur_val;
+};
+
+# print results
+reach_def_result := traversal(n: CFGNode) {
+	cur_val := getValue(n, cfg_def);
+	m["dfs"][n.id] << string(cur_val.out);
+	cur_val1 := getValue(n, cfg_def1);
+	m["dfs"][n.id] << string(cur_val1.out);
+	cur_val2 := getValue(n, cfg_def2);
+	m["dfs"][n.id] << string(cur_val2.out);
+	cur_val3 := getValue(n, cfg_def3);
+	m["dfs"][n.id] << string(cur_val3.out);
+};
+
+# user-defined fix point function that is used for analysis termination.
+fixp1 := fixp(curr, prev: T) : bool {
+	if (difference(curr.out, prev.out) == 0)
+		return true;	
+	return false;
+};
+
+q_all := visitor {
+	before node: ChangedFile -> {
+		file_name = node.name;
+	}
+	before node: CodeRepository -> {
+		snapshot := getsnapshot(node, "SOURCE_JAVA_JLS");
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+	before node: Method -> {
+		cfg = getcfg(node);
+		clear(track);
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.DFS, track);
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.DFS, cfg_def, fixp1);
+	}
+};
+
+visit(p, q_all);

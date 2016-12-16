@@ -44,10 +44,6 @@ public abstract class BoaAbstractTraversal<T1> {
 	public int noOfIterations = 0;
 	public T1 currentResult;
 	public T1 getValue(final CFGNode node) throws Exception {
-		//if(outputMapObj.get(node.getId())!=null)
-		//	return (T1) outputMapObj.get(node.getId()).getClass().getMethod("clone").invoke(outputMapObj.get(node.getId()));
-		//return null;
-		//return ((T1)outputMapObj.get(node.getId())).getClass().getMethod("clone").invoke(((T1)outputMapObj.get(node.getId())));
 		return (T1)outputMapObj.get(node.getId());
 	}
 	public void clear() {
@@ -204,20 +200,6 @@ public abstract class BoaAbstractTraversal<T1> {
 		while(!stack.isEmpty()) {
 				CFGNode node = stack.pop();
 				traverse(node, true);
-				boolean curFlag=true;
-				boolean fixp_flag = false;
-				if(curFlag) {
-					boolean prevFlag=true;
-					if(curFlag && prevFlag) { 
-						fixp_flag = true;
-					}
-				}
-				if(!fixp_flag) {
-					for (CFGNode succ : node.getSuccessorsList()) {
-						if(!stack.contains(succ))
-							stack.push(succ);
-					}
-				}
 				//prevOutputMapObj = new java.util.HashMap<Integer,T1>(outputMapObj);
 		}
 	}
@@ -226,20 +208,6 @@ public abstract class BoaAbstractTraversal<T1> {
 		while(!queue.isEmpty()) {
 				CFGNode node = queue.remove();
 				traverse(node, true);
-				boolean curFlag=true;
-				boolean fixp_flag = false;
-				if(curFlag) {
-					boolean prevFlag=true;
-					if(curFlag && prevFlag) { 
-						fixp_flag = true;
-					}
-				}
-				if(!fixp_flag) {
-					for (CFGNode pred : node.getPredecessorsList()) {
-						if(!queue.contains(pred))
-							queue.add(pred);
-					}
-				}
 				//prevOutputMapObj = new java.util.HashMap<Integer,T1>(outputMapObj);
 		}
 	}
@@ -295,79 +263,27 @@ public abstract class BoaAbstractTraversal<T1> {
 							}
 						}while(!fixp_flag);
 						break;
-					case 9:
 					case 8:
 						prevOutputMapObj = new java.util.HashMap<Integer,T1>();
-						traverseWithFixp(cfg, direction, kind, fixp);
+						java.util.HashMap<Integer,String> nodeVisitStatus=new java.util.HashMap<Integer,String>();
+						CFGNode[] nl = cfg.sortNodes();
+						for(int i=0;i<nl.length;i++) {
+							nodeVisitStatus.put(nl[i].getId(),"unvisited");
+						}
+						if(nl.length != 0) {
+							if(direction.getNumber()==2) {
+								Stack<CFGNode> stack1=new Stack<CFGNode>();
+								reversePostorderStack(cfg.getEntryNode(), nodeVisitStatus, stack1);
+								worklistStack(stack1, fixp, kind);
+							}
+							else {
+								Queue<CFGNode> queue=new LinkedList<CFGNode>();
+								postorderQueue(cfg.getEntryNode(), nodeVisitStatus, queue);
+								worklist(queue, fixp, kind);
+							}							
+						}		
 						break;
 					default : break;
-		}
-	}
-
-	public final void traverseWithFixp(final CFG cfg, final Traversal.TraversalDirection direction, final Traversal.TraversalKind kind, final BoaAbstractFixP fixp) throws Exception {
-		if (preTraverse(cfg)) {			
-			if(outputMapObj==null) {
-				outputMapObj = new java.util.HashMap<Integer,T1>();
-			}
-			java.util.HashMap<Integer,String> nodeVisitStatus=new java.util.HashMap<Integer,String>();
-			CFGNode[] nl = cfg.sortNodes();
-			for(int i=0;i<nl.length;i++) {
-				nodeVisitStatus.put(nl[i].getId(),"unvisited");
-			}
-			if(nl.length != 0) {
-				switch(kind.getNumber()) {
-					case 8:
-						if(direction.getNumber()==2) {
-							Stack<CFGNode> stack1=new Stack<CFGNode>();
-							reversePostorderStack(cfg.getEntryNode(), nodeVisitStatus, stack1);
-							worklistStack(stack1, fixp, kind);
-						}
-						else {
-							Queue<CFGNode> queue=new LinkedList<CFGNode>();
-							postorderQueue(cfg.getEntryNode(), nodeVisitStatus, queue);
-							worklist(queue, fixp, kind);
-						}
-						break;
-						//Forward
-					case 9:
-						if(direction.getNumber()==2) {
-							if(cfg.getIsLoopPresent()) {
-								Stack<CFGNode> stack=new Stack<CFGNode>();
-								reversePostorderStack(cfg.getEntryNode(), nodeVisitStatus, stack);
-								while(!stack.isEmpty()) {
-									traverse(stack.pop(), false);
-								}
-							}
-							else if(cfg.getIsBranchPresent()) {
-								postorderForward(cfg.getExitNode(), nodeVisitStatus);
-							}
-							else {
-								for(int i=0;i<nl.length;i++) {
-									traverse(nl[i], false);
-								}
-							}
-						}
-						else {
-							if(cfg.getIsLoopPresent()) {
-								Queue<CFGNode> queue1=new LinkedList<CFGNode>();
-								postorderQueue(cfg.getEntryNode(), nodeVisitStatus, queue1);
-								while(!queue1.isEmpty()) {
-									traverse(queue1.remove(), false);
-								}
-							}
-							else if(cfg.getIsBranchPresent()) {
-								postorderBackward(cfg.getEntryNode(), nodeVisitStatus);
-							}
-							else {
-								for(int i=nl.length-1;i>=0;i--) {
-									traverse(nl[i], false);
-								}
-							}
-						}
-						break;
-					default:break;
-				}
-			}		
 		}
 	}
 
@@ -449,30 +365,6 @@ public abstract class BoaAbstractTraversal<T1> {
 					else {
 						for(int i=nl.length-1;i>=0;i--) {
 							traverse(nl[i], false);					
-						}
-					}
-					break;
-				case 9:
-					if(nl.length!=0) {
-						if(direction.getNumber()==2) {
-							if(cfg.getIsBranchPresent() || cfg.getIsLoopPresent()) {
-								postorderForward(cfg.getExitNode(), nodeVisitStatus);
-							}
-							else {
-								for(int i=0;i<nl.length;i++) {
-									traverse(nl[i], false);
-								}
-							}
-						}
-						else {
-							if(cfg.getIsBranchPresent() || cfg.getIsLoopPresent()) {
-								postorderBackward(cfg.getExitNode(), nodeVisitStatus);
-							}
-							else {
-								for(int i=nl.length-1;i>=0;i--) {
-									traverse(nl[i], false);
-								}
-							}
 						}
 					}
 					break;
