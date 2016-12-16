@@ -37,4 +37,3 @@ message Revision {
 	repeated int32 parents = 7;
 	repeated int32 children = 8;
 }
-

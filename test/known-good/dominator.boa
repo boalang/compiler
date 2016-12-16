@@ -79,8 +79,8 @@ q_all := visitor {
 		no_fixp = 0;
 		t_ttime0 = currentTime() - ttime;
 		ttime = currentTime();
-		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.HYBRID, allnode_ids);
-		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.HYBRID, cfg_dom, fixp1);
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.DFS, allnode_ids);
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.DFS, cfg_dom, fixp1);
 		t_ttime = currentTime() - ttime;
 		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.SHALLOW_ITERATIVE, dom_result);
 	}

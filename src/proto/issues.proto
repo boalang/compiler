@@ -79,4 +79,3 @@ message IssueChange {
 	required string new_value = 6;
 	optional string description = 7;
 }
-

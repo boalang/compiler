@@ -159,10 +159,9 @@ public class BoaCompiler {
 							// also let jobs have own methods if visitor merging is disabled
 							if (!simpleVisitor.isComplex() || cl.hasOption("nv") || inputFiles.size() == 1) {
 								new VisitorOptimizingTransformer().start(p);
-								long time = System.currentTimeMillis();
+
 								final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(jobName);
 								cg.start(p);
-								System.out.println(System.currentTimeMillis()-time);
 								jobs.add(cg.getCode());
 
 								jobnames.add(jobName);
@@ -192,11 +191,11 @@ public class BoaCompiler {
 				try {
 					for (final Program p : new VisitorMergingTransformer().mergePrograms(visitorPrograms, maxVisitors)) {
 						new VisitorOptimizingTransformer().start(p);
-long time = System.currentTimeMillis();
+
 						final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(p.jobName);
 						cg.start(p);
 						jobs.add(cg.getCode());
-System.out.println(System.currentTimeMillis()-time);		
+		
 						jobnames.add(p.jobName);
 					}
 				} catch (final Exception e) {
@@ -205,7 +204,7 @@ System.out.println(System.currentTimeMillis()-time);
 
 					for (final Program p : visitorPrograms) {
 						new VisitorOptimizingTransformer().start(p);
-long time = System.currentTimeMillis();
+
 						final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(p.jobName);
 						cg.start(p);
 						jobs.add(cg.getCode());
@@ -213,6 +212,7 @@ long time = System.currentTimeMillis();
 						jobnames.add(p.jobName);
 					}
 				}
+
 			if (jobs.size() == 0)
 				throw new RuntimeException("no files compiled without error");
 
