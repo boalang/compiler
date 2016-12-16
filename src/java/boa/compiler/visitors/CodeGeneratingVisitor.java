@@ -46,18 +46,11 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	 * 
 	 * @author anthonyu
 	 */
-	boolean nested_type;
+	 boolean nested_type;
 	String identifier="";
 	String traversalNodeIdentifier="";
 	String tupleId ="";
-	boolean isInsideTraversalBlock = false;
-	boolean isLoopSensitive = false;
-	boolean isOrderSensitive = false;
-	boolean isIntersectionPresent = false;
-	boolean isUnionPresent = false;
-	ArrayList<String> globalVariables = new ArrayList<String>();
-	String lastSeenGloabalVariable = null;
-
+	
 	protected class AggregatorDescription {
 		protected String aggregator;
 		protected BoaType type;
@@ -498,10 +491,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		this.varDecl.start(n);
 		this.functionDeclarator.start(n);
 		this.tupleDeclarator.start(n);
-		String[] lines = this.varDecl.getCode().replaceAll(";","").split("\n");
-		for(String line : lines) {
-			globalVariables.add(line.split(" ")[1]);
-		}
 		if (this.functionDeclarator.hasCode())
 			st.add("staticDeclarations", this.varDecl.getCode() + "\n" + this.functionDeclarator.getCode());
 		else
@@ -568,26 +557,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		final String funcName = this.idFinder.getNames().toArray()[0].toString();
 		final BoaFunction f = n.env.getFunction(funcName, check(n));
 		n.env.setOperandType(f.getType());
-		if(funcName.equals("union")) {
-			if(isInsideTraversalBlock) {
-				isUnionPresent = true;
-			}
-		}
-		if(funcName.equals("intersection")) {
-			if(isInsideTraversalBlock) {
-				isIntersectionPresent = true;
-			}
-		}
-		if(funcName.equals("remove")) {
-			if(isInsideTraversalBlock && isIntersectionPresent) {
-				isLoopSensitive = true;
-			}
-		}
-		if(funcName.equals("add")) {
-			if(isInsideTraversalBlock && isUnionPresent) {
-				isLoopSensitive = true;
-			}
-		}
+
 		if (f.hasMacro()) {
 			final List<String> parts = new ArrayList<String>();
 			for (final Expression e : n.getArgs()) {
@@ -596,6 +566,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			}
 
 			final String s = expand(f.getMacro(), n.getArgs(), parts.toArray(new String[]{}));
+
 			// FIXME rdyer a hack, so that "def(pbuf.attr)" generates "pbuf.hasAttr()"
 			if (funcName.equals("def")) {
 				final Matcher m = Pattern.compile("\\((\\w+).get(\\w+)\\(\\) != null\\)").matcher(s);
@@ -791,30 +762,17 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 			for (int i = 0; !abortGeneration && i < n.getOpsSize(); i++) {
 				final Node o = n.getOp(i);
+
 				o.accept(this);
 				accept += code.removeLast();
-				if(isInsideTraversalBlock) {
-					if(lastSeenGloabalVariable!=null) {
-						if(accept.contains(traversalNodeIdentifier) && accept.contains(lastSeenGloabalVariable) && !accept.contains("getValue")) {
-							isOrderSensitive = true;
-						}
-					}
-				}
 			}
 
 			n.env.getOperandType();
+
 			code.add(accept);
 		} else {
 			n.getOperand().accept(this);
-			String tr = code.removeLast();
-			if(isInsideTraversalBlock) {
-				if(globalVariables.contains(tr)) {
-					if(n.getOperand().type.toString().contains("stack of") || n.getOperand().type.toString().contains("array of")) {
-						lastSeenGloabalVariable = tr;
-					}
-				}
-			}
-			code.add(tr);
+			code.add(code.removeLast());
 		}
 	}
 
@@ -1483,7 +1441,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	@Override
 	public void visit(final TraverseStatement n) {
 		final ST st = stg.getInstanceOf("TraverseClause");
-		isInsideTraversalBlock = true;
 		final boolean isBefore = n.isBefore();
 		final boolean isAfter = n.isAfter();
 
@@ -1524,7 +1481,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		st.add("types", types);
 		
 		code.add(st.render());
-		isInsideTraversalBlock = false;
 	}
 	
 	/** {@inheritDoc} */
@@ -1694,17 +1650,8 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			body.add(code.removeLast());
 		}
 		st.add("body", body);
-		if(isLoopSensitive) {
-			st.add("isLoopSensitive",isLoopSensitive);
-		}
-		if(isOrderSensitive) {
-			st.add("isOrderSensitive",isOrderSensitive);
-		}
+
 		code.add(st.render());
-		isLoopSensitive = false;
-		isOrderSensitive = false;
-		isIntersectionPresent = false;
-		isUnionPresent = false;
 	}
 
 	/** {@inheritDoc} */

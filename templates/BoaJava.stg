@@ -161,15 +161,9 @@ new boa.runtime.BoaAbstractVisitor()
 	<endif>
 	<body:{s | <s><\n>}>}
 >>
-Traversal(staticDeclarations, body, T, isLoopSensitive, isOrderSensitive) ::= "
+Traversal(staticDeclarations, body, T) ::= "
 new boa.runtime.BoaAbstractTraversal\<<T>>()
 {
-	<if(isLoopSensitive)>
-		boolean isLoopSensitive = true;
-	<endif>
-	<if(isOrderSensitive)>
-		boolean isOrderSensitive = true;
-	<endif>
 	<if(staticDeclarations)>
 	<staticDeclarations>
 	<endif>
