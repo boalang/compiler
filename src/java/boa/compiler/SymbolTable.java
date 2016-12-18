@@ -417,6 +417,12 @@ public class SymbolTable {
 		if (id.startsWith("array of "))
 			return new BoaArray(getType(id.substring("array of ".length()).trim()));
 
+		if (id.startsWith("stack of "))
+			return new BoaStack(getType(id.substring("stack of ".length()).trim()));
+
+		if (id.startsWith("set of "))
+			return new BoaSet(getType(id.substring("set of ".length()).trim()));
+
 		if (id.startsWith("map"))
 			return new BoaMap(getType(id.substring(id.indexOf(" of ") + " of ".length()).trim()),
 					getType(id.substring(id.indexOf("[") + 1, id.indexOf("]")).trim()));
