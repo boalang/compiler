@@ -310,7 +310,7 @@ public class BoaFunction extends BoaType {
 
 	private BoaType replaceVar(final String var, final List<BoaType> actual) {
 		for (int i = 0; i < formalParameters.length; i++) {
-			BoaType t = replaceVar(var, formalParameters[i], actual.get(i));
+			final BoaType t = replaceVar(var, formalParameters[i], actual.get(i));
 			if (t != null)
 				return t;
 		}
@@ -325,6 +325,8 @@ public class BoaFunction extends BoaType {
 		}
 		if (formal instanceof BoaArray)
 			return replaceVar(var, ((BoaArray)formal).getType(), ((BoaArray)actual).getType());
+		if (formal instanceof BoaSet)
+			return replaceVar(var, ((BoaSet)formal).getType(), ((BoaSet)actual).getType());
 		if (formal instanceof BoaStack)
 			return replaceVar(var, ((BoaStack)formal).getType(), ((BoaStack)actual).getType());
 		if (formal instanceof BoaMap) {

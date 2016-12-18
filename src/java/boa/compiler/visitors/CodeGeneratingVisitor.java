@@ -1789,10 +1789,19 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	protected static String expand(final String template, final List<Expression> args, final String... parameters) {
 		String replaced = template;
 
-		if (args.size() == 1 && args.get(0).type instanceof BoaMap) {
-			BoaMap m = (BoaMap)args.get(0).type;
-			replaced = replaced.replace("${K}", m.getIndexType().toBoxedJavaType());
-			replaced = replaced.replace("${V}", m.getType().toBoxedJavaType());
+		// FIXME rdyer probably we should check the type, find the typevar, and then pull accordingly...
+		if (replaced.contains("${K}") || replaced.contains("${V}")) {
+			if (args.size() == 1 && args.get(0).type instanceof BoaMap) {
+				final BoaMap m = (BoaMap)args.get(0).type;
+				replaced = replaced.replace("${K}", m.getIndexType().toBoxedJavaType());
+				replaced = replaced.replace("${V}", m.getType().toBoxedJavaType());
+			} else if (args.size() == 1 && args.get(0).type instanceof BoaStack) {
+				final BoaStack s = (BoaStack)args.get(0).type;
+				replaced = replaced.replace("${V}", s.getType().toBoxedJavaType());
+			} else if (args.size() == 1 && args.get(0).type instanceof BoaSet) {
+				final BoaSet s = (BoaSet)args.get(0).type;
+				replaced = replaced.replace("${V}", s.getType().toBoxedJavaType());
+			}
 		}
 
 		for (int i = 0; i < parameters.length; i++)

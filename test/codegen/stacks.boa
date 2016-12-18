@@ -1,0 +1,15 @@
+o: output sum of int;
+o << 1;
+
+# test declaring and using stacks
+s: stack of int;
+push(s, 3);
+push(s, 3);
+push(s, 4);
+i: int;
+i = peek(s);
+pop(s);
+clear(s);
+
+v: array of int;
+v = values(s);

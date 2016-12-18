@@ -9,3 +9,6 @@ add(s, 4);
 if (contains(s, 3))
 	remove(s, 3);
 clear(s);
+
+v: array of int;
+v = values(s);
