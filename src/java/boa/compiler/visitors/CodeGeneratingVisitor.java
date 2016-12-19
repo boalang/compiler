@@ -485,10 +485,14 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			final String s = expand(f.getMacro(), n.getArgs(), parts.toArray(new String[]{}));
 
 			// FIXME rdyer a hack, so that "def(pbuf.attr)" generates "pbuf.hasAttr()"
-			if (funcName.equals("def")) {
+			if (funcName.equals("def") && n.getArgsSize() == 1) {
 				final Matcher m = Pattern.compile("\\((\\w+).get(\\w+)\\(\\) != null\\)").matcher(s);
 				if (m.matches() && !m.group(2).endsWith("List"))
 					st.add("call", m.group(1) + ".has" + m.group(2) + "()");
+				// #68 - def(a[i]) was generating a[i] != null which fails for arrays of ints (or any nullable type)
+				// so instead, since they are always defined, replace with 'true'
+				else if (n.getArg(0).type instanceof BoaScalar && !(n.getArg(0).type instanceof BoaString) && !(n.getArg(0).type instanceof BoaTuple))
+					st.add("call", "true");
 				else
 					st.add("call", s);
 			} else {
