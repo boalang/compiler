@@ -829,8 +829,17 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		// FIXME rdyer hack to fix assigning to maps
 		if (lhs.contains(".get(")) {
-			final int idx = lhs.lastIndexOf(".get(");
-			code.add(lhs.substring(0, idx) + ".put(" + lhs.substring(idx + 5, lhs.lastIndexOf(')')) + ", " + rhs + lhs.substring(lhs.lastIndexOf(')')) + ";");
+			int idx = lhs.lastIndexOf(')') - 1;
+			int parens = 1;
+			for (; idx >= 0; idx--) {
+				if (lhs.charAt(idx) == '(')
+					parens--;
+				else if (lhs.charAt(idx) == ')')
+					parens++;
+				if (parens == 0) break;
+			}
+			idx += 1;
+			code.add(lhs.substring(0, idx - ".get(".length()) + ".put(" + lhs.substring(idx, lhs.lastIndexOf(')')) + ", " + rhs + lhs.substring(lhs.lastIndexOf(')')) + ";");
 			return;
 		}
 
