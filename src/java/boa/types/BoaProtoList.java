@@ -20,7 +20,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * A {@link BoaType} representing an array of scalar values that is a BoaProtoTuple member.
+ * A {@link BoaType} representing an array of values that is a BoaProtoTuple member.
  * 
  * @author rdyer
  */
@@ -102,21 +102,21 @@ public class BoaProtoList extends BoaType {
 	/**
 	 * Get the element type of this array.
 	 * 
-	 * @return A {@link BoaScalar} representing the element type of this
+	 * @return A {@link BoaType} representing the element type of this
 	 *         array
 	 */
-	public BoaScalar getType() {
-		return (BoaScalar) this.type;
+	public BoaType getType() {
+		return this.type;
 	}
 
 	/**
 	 * Set the element type of this array.
 	 * 
 	 * @param type
-	 *            A {@link BoaScalar} representing the element type of this
+	 *            A {@link BoaType} representing the element type of this
 	 *            array
 	 */
-	public void setType(final BoaScalar type) {
+	public void setType(final BoaType type) {
 		this.type = type;
 	}
 
