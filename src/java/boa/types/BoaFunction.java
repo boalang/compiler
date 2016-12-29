@@ -314,7 +314,7 @@ public class BoaFunction extends BoaType {
 
 	private BoaType replaceVar(final String var, final List<BoaType> actual) {
 		for (int i = 0; i < formalParameters.length; i++) {
-			BoaType t = replaceVar(var, formalParameters[i], actual.get(i));
+			final BoaType t = replaceVar(var, formalParameters[i], actual.get(i));
 			if (t != null)
 				return t;
 		}

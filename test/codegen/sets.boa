@@ -10,6 +10,9 @@ if (contains(s, 3))
 	remove(s, 3);
 clear(s);
 
+v: array of int;
+v = values(s);
+
 s2: set of int;
 add(s2, 3);
 add(s2, 5);

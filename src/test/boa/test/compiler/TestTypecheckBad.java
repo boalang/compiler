@@ -85,4 +85,19 @@ public class TestTypecheckBad extends BaseTest {
 	public void currentBadType() throws IOException {
 		typecheck(load(badDir + "current-badtype.boa"), "no such function current([int])");
 	}
+
+	@Test
+	public void complexArray1() throws IOException {
+		typecheck(load(badDir + "complex-arrays.boa"), "non-scalar/non-tuple type 'set of int' can not be used in arrays");
+	}
+
+	@Test
+	public void complexArray2() throws IOException {
+		typecheck(load(badDir + "complex-arrays2.boa"), "non-scalar/non-tuple type 'stack of int' can not be used in arrays");
+	}
+
+	@Test
+	public void complexArray3() throws IOException {
+		typecheck(load(badDir + "complex-arrays3.boa"), "non-scalar/non-tuple type 'map[string] of int' can not be used in arrays");
+	}
 }

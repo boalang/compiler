@@ -1,0 +1,14 @@
+o: output sum of int;
+
+a: array of int;
+
+s: array of Statement;
+
+foreach (i: int; s[i])
+	o << 1;
+
+foreach (i: int; input.programming_languages[i])
+	o << 1;
+
+foreach (i: int; a[i])
+    o << a[i];

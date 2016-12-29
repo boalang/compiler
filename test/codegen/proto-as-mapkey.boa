@@ -4,4 +4,4 @@ o << 1;
 committers: map[string] of bool;
 
 foreach (i: int; def(input.code_repositories[i]))
-	committers[input.code_repositories[i].url] = true;
+    committers[input.code_repositories[i].url] = true;

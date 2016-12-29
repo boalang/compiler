@@ -45,7 +45,7 @@ import boa.compiler.ast.types.StackType;
 import boa.compiler.SymbolTable;
 import boa.compiler.visitors.AbstractVisitorNoArg;
 import boa.compiler.visitors.VisitClassifier;
-import boa.types.BoaScalar;
+import boa.types.BoaTuple;
 import boa.types.BoaStack;
 
 /**
@@ -104,8 +104,8 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 	 * mapping from each type T found to a list of all uses in current(T).
 	 */
 	private class FindCurrentForVisitors extends AbstractVisitorNoArg{
-		protected final Set<BoaScalar> currents = new HashSet<BoaScalar>();
-		protected final Map<BoaScalar,List<Factor>> factorMap = new HashMap<BoaScalar,List<Factor>>();
+		protected final Set<BoaTuple> currents = new HashSet<BoaTuple>();
+		protected final Map<BoaTuple,List<Factor>> factorMap = new HashMap<BoaTuple,List<Factor>>();
 
 		/** @{inheritDoc} */
 		@Override
@@ -115,11 +115,11 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 			super.initialize();
 		}
 
-		public Set<BoaScalar> getCurrentTypes() {
+		public Set<BoaTuple> getCurrentTypes() {
 			return currents;
 		}
 
-		public Map<BoaScalar,List<Factor>> getFactorList() {
+		public Map<BoaTuple,List<Factor>> getFactorList() {
 			return factorMap;
 		}
 
@@ -139,7 +139,7 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 					final Call c = (Call)n.getOp(0);
 
 					if (c.getArgsSize() == 1) {
-						final BoaScalar t = (BoaScalar)c.getArg(0).type;
+						final BoaTuple t = (BoaTuple)c.getArg(0).type;
 						currents.add(t);
 
 						if (!factorMap.containsKey(t))
@@ -163,13 +163,13 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 		c.getArg(0).type = v.type;
 	}
 
-	private String getTypeName(final BoaScalar b) {
+	private String getTypeName(final BoaTuple b) {
 		// FIXME this is a bit of a hack
 		return b.toJavaType().substring(b.toJavaType().lastIndexOf('.') + 1);
 	}
 
 	// generate the push call
-	private ExprStatement generatePushExpStatement(final BoaScalar b, final String stackName, final String nodeName, final VisitorExpression e) {
+	private ExprStatement generatePushExpStatement(final BoaTuple b, final String stackName, final String nodeName, final VisitorExpression e) {
 		final Expression e1 = ASTFactory.createIdentifierExpr(stackName, e.env, new BoaStack(b));
 		final Expression e2 = ASTFactory.createIdentifierExpr(nodeName, e.env, b);
 
@@ -177,7 +177,7 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 	}
 
 	// generate the pop call
-	private ExprStatement generatePopExpStatement(final BoaScalar b, final String stackName, final VisitorExpression e) {
+	private ExprStatement generatePopExpStatement(final BoaTuple b, final String stackName, final VisitorExpression e) {
 		final Expression e1 = ASTFactory.createIdentifierExpr(stackName, e.env, new BoaStack(b));
 
 		return ASTFactory.createCall("pop", e.env, b, e1);
@@ -199,7 +199,7 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 			currentSet.start(e.getBody());
 
 			//    c) For each type T in the set from 1b:
-			for (final BoaScalar b: currentSet.getCurrentTypes()) {
+			for (final BoaTuple b: currentSet.getCurrentTypes()) {
 				env = e.env;
 
 				//       i)   Add a variable 's_T_#' of type 'stack of T' at the top-most scope of the AST
