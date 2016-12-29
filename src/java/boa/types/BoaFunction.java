@@ -301,9 +301,13 @@ public class BoaFunction extends BoaType {
 			t = ((BoaArray)t).getType();
 			if (t instanceof BoaTypeVar)
 				return new BoaArray(replaceVar(((BoaTypeVar)t).getName(), actualParameters));
-		}
-		else if (t instanceof BoaTypeVar)
+		} else if (t instanceof BoaSet) {
+			t = ((BoaSet)t).getType();
+			if (t instanceof BoaTypeVar)
+				return new BoaSet(replaceVar(((BoaTypeVar)t).getName(), actualParameters));
+		} else if (t instanceof BoaTypeVar) {
 			return replaceVar(((BoaTypeVar)t).getName(), actualParameters);
+		}
 
 		return type;
 	}

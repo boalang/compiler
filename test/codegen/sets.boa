@@ -12,3 +12,19 @@ clear(s);
 
 v: array of int;
 v = values(s);
+
+s2: set of int;
+add(s2, 3);
+add(s2, 5);
+
+s3: set of int;
+s3 = intersect(s, s2);
+
+s4: set of int;
+s4 = union(s, s2);
+
+s5: set of int;
+s5 = symdiff(s, s2);
+
+s6: set of int;
+s6 = difference(s, s2);
