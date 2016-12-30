@@ -17,14 +17,29 @@
  */
 package boa.compiler;
 
+import org.antlr.v4.runtime.ANTLRFileStream;
+import org.antlr.v4.runtime.BaseErrorListener;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.RecognitionException;
+import org.antlr.v4.runtime.Recognizer;
+import org.antlr.v4.runtime.atn.PredictionMode;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.PosixParser;
+import org.apache.log4j.Logger;
+import org.scannotation.ClasspathUrlFinder;
+import org.stringtemplate.v4.ST;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,44 +51,23 @@ import java.util.zip.ZipEntry;
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
 
-import org.stringtemplate.v4.ST;
-
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.PosixParser;
-import org.apache.log4j.Logger;
-
-import org.scannotation.ClasspathUrlFinder;
-
 import boa.compiler.ast.Program;
 import boa.compiler.ast.Start;
+import boa.compiler.listeners.BoaErrorListener;
+import boa.compiler.listeners.LexerErrorListener;
+import boa.compiler.listeners.ParserErrorListener;
 import boa.compiler.transforms.InheritedAttributeTransformer;
 import boa.compiler.transforms.LocalAggregationTransformer;
 import boa.compiler.transforms.VisitorMergingTransformer;
 import boa.compiler.transforms.VisitorOptimizingTransformer;
-import boa.compiler.visitors.AbstractCodeGeneratingVisitor;
 import boa.compiler.visitors.ASTPrintingVisitor;
+import boa.compiler.visitors.AbstractCodeGeneratingVisitor;
 import boa.compiler.visitors.CodeGeneratingVisitor;
 import boa.compiler.visitors.PrettyPrintVisitor;
 import boa.compiler.visitors.TaskClassifyingVisitor;
 import boa.compiler.visitors.TypeCheckingVisitor;
-import boa.compiler.listeners.BoaErrorListener;
-import boa.compiler.listeners.LexerErrorListener;
-import boa.compiler.listeners.ParserErrorListener;
-
-import org.antlr.v4.runtime.ANTLRFileStream;
-import org.antlr.v4.runtime.BaseErrorListener;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.Recognizer;
-import org.antlr.v4.runtime.RecognitionException;
-import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.TokenSource;
-import org.antlr.v4.runtime.atn.PredictionMode;
-import org.antlr.v4.runtime.misc.ParseCancellationException;
-
-import boa.parser.BoaParser;
 import boa.parser.BoaLexer;
+import boa.parser.BoaParser;
 
 /**
  * The main entry point for the Boa compiler.
@@ -103,15 +97,14 @@ public class BoaCompiler {
 			jarName = className + ".jar";
 
 		// make the output directory
-		File outputRoot = null;
+		File outputRoot;
 		if (cl.hasOption("gcd")) {
 			outputRoot = new File(cl.getOptionValue("gcd"));
 		} else {
 			outputRoot = new File(new File(System.getProperty("java.io.tmpdir")), UUID.randomUUID().toString());
 		}
 		final File outputSrcDir = new File(outputRoot, "boa");
-		if (!outputSrcDir.mkdirs())
-			throw new IOException("unable to mkdir " + outputSrcDir);
+		outputSrcDir.mkdirs();
 
 		// find custom libs to load
 		final List<URL> libs = new ArrayList<URL>();
@@ -403,7 +396,7 @@ public class BoaCompiler {
 			// find the location of the jar this class is in
 			final String path = ClasspathUrlFinder.findClassBase(BoaCompiler.class).getPath();
 			// find the location of the compiler distribution
-			final File root = new File(path.substring(path.indexOf(':') + 1, path.indexOf('!'))).getParentFile();
+			final File root = new File(path.substring(path.indexOf(':') + 1)).getParentFile();
 
 			libJars.add(new File(root, "boa-runtime.jar"));
 		}

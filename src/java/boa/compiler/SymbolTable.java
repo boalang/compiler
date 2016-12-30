@@ -16,22 +16,122 @@
  */
 package boa.compiler;
 
+import org.scannotation.AnnotationDB;
+
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
-
-import org.scannotation.AnnotationDB;
+import java.util.Set;
+import java.util.Stack;
 
 import boa.aggregators.AggregatorSpec;
-import boa.functions.FunctionSpec;
-import boa.types.*;
-import boa.types.proto.*;
-import boa.types.proto.enums.*;
-import boa.types.ml.*;
-
+import boa.aggregators.UserDefinedAggregator;
 import boa.compiler.ast.Operand;
+import boa.functions.FunctionSpec;
+import boa.types.BoaAny;
+import boa.types.BoaArray;
+import boa.types.BoaBool;
+import boa.types.BoaEnum;
+import boa.types.BoaFloat;
+import boa.types.BoaFunction;
+import boa.types.BoaInt;
+import boa.types.BoaMap;
+import boa.types.BoaName;
+import boa.types.BoaProtoList;
+import boa.types.BoaProtoMap;
+import boa.types.BoaScalar;
+import boa.types.BoaSet;
+import boa.types.BoaStack;
+import boa.types.BoaString;
+import boa.types.BoaTime;
+import boa.types.BoaTuple;
+import boa.types.BoaType;
+import boa.types.BoaTypeVar;
+import boa.types.BoaVarargs;
+import boa.types.BoaVisitor;
+import boa.types.ml.BoaAdaBoostM1;
+import boa.types.ml.BoaAdditiveRegression;
+import boa.types.ml.BoaApriori;
+import boa.types.ml.BoaAttributeSelectedClassifier;
+import boa.types.ml.BoaBagging;
+import boa.types.ml.BoaBayesNet;
+import boa.types.ml.BoaBayesNetGenerator;
+import boa.types.ml.BoaCVParameterSelection;
+import boa.types.ml.BoaClassificationViaRegression;
+import boa.types.ml.BoaDecisionStump;
+import boa.types.ml.BoaDecisionTable;
+import boa.types.ml.BoaFilteredClassifier;
+import boa.types.ml.BoaGaussianProcesses;
+import boa.types.ml.BoaHoeffdingTree;
+import boa.types.ml.BoaIBk;
+import boa.types.ml.BoaInputMappedClassifier;
+import boa.types.ml.BoaIterativeClassifierOptimizer;
+import boa.types.ml.BoaJ48;
+import boa.types.ml.BoaJRip;
+import boa.types.ml.BoaKStar;
+import boa.types.ml.BoaLMT;
+import boa.types.ml.BoaLWL;
+import boa.types.ml.BoaLinearRegression;
+import boa.types.ml.BoaLogisticRegression;
+import boa.types.ml.BoaLogitBoost;
+import boa.types.ml.BoaLsa;
+import boa.types.ml.BoaModel;
+import boa.types.ml.BoaMultiClassClassifier;
+import boa.types.ml.BoaMultiClassClassifierUpdateable;
+import boa.types.ml.BoaMultiScheme;
+import boa.types.ml.BoaMultilayerPerceptron;
+import boa.types.ml.BoaNaiveBayes;
+import boa.types.ml.BoaNaiveBayesMultinomial;
+import boa.types.ml.BoaNaiveBayesMultinomialUpdateable;
+import boa.types.ml.BoaOneR;
+import boa.types.ml.BoaPART;
+import boa.types.ml.BoaPrincipalComponents;
+import boa.types.ml.BoaRandomForest;
+import boa.types.ml.BoaSMO;
+import boa.types.ml.BoaSimpleKMeans;
+import boa.types.ml.BoaVote;
+import boa.types.ml.BoaZeroR;
+import boa.types.proto.ASTRootProtoTuple;
+import boa.types.proto.AttachmentProtoTuple;
+import boa.types.proto.CFGEdgeProtoTuple;
+import boa.types.proto.CFGNodeProtoTuple;
+import boa.types.proto.CFGProtoTuple;
+import boa.types.proto.ChangedFileProtoTuple;
+import boa.types.proto.CodeRepositoryProtoTuple;
+import boa.types.proto.CommentProtoTuple;
+import boa.types.proto.CommentsRootProtoTuple;
+import boa.types.proto.DeclarationProtoTuple;
+import boa.types.proto.ExpressionProtoTuple;
+import boa.types.proto.IssueCommentProtoTuple;
+import boa.types.proto.IssueProtoTuple;
+import boa.types.proto.IssueRepositoryProtoTuple;
+import boa.types.proto.IssuesRootProtoTuple;
+import boa.types.proto.MethodProtoTuple;
+import boa.types.proto.ModifierProtoTuple;
+import boa.types.proto.NamespaceProtoTuple;
+import boa.types.proto.PersonProtoTuple;
+import boa.types.proto.ProjectProtoTuple;
+import boa.types.proto.RevisionProtoTuple;
+import boa.types.proto.StatementProtoTuple;
+import boa.types.proto.TypeProtoTuple;
+import boa.types.proto.VariableProtoTuple;
+import boa.types.proto.enums.ChangeKindProtoMap;
+import boa.types.proto.enums.CommentKindProtoMap;
+import boa.types.proto.enums.ExpressionKindProtoMap;
+import boa.types.proto.enums.FileKindProtoMap;
+import boa.types.proto.enums.ForgeKindProtoMap;
+import boa.types.proto.enums.IssueKindProtoMap;
+import boa.types.proto.enums.ModifierKindProtoMap;
+import boa.types.proto.enums.RepositoryKindProtoMap;
+import boa.types.proto.enums.StatementKindProtoMap;
+import boa.types.proto.enums.TypeKindProtoMap;
+import boa.types.proto.enums.VisibilityProtoMap;
 
 /**
  * @author anthonyu
@@ -509,16 +609,18 @@ public class SymbolTable {
 	}
 
 	public List<Class<?>> getAggregators(final String name, final BoaType type) {
-		final List<Class<?>> aggregators = new ArrayList<Class<?>>();
-
-		if (type instanceof BoaTuple)
-			aggregators.add(this.getAggregator(name, (BoaScalar) type));
-		else if (type instanceof BoaArray)
-				aggregators.add(this.getAggregator(name, ((BoaArray)type).getType()));
-		else
-			aggregators.add(this.getAggregator(name, (BoaScalar) type));
-
-		return aggregators;
+		final List<Class<?>> searchResult = new ArrayList<Class<?>>();
+		if(aggregators.containsKey(name) || aggregators.containsKey(name + ":" + type)){
+			if (type instanceof BoaTuple)
+				searchResult.add(this.getAggregator(name, (BoaScalar) type));
+			else if (type instanceof BoaArray)
+				searchResult.add(this.getAggregator(name, ((BoaArray)type).getType()));
+			else
+				searchResult.add(this.getAggregator(name, (BoaScalar) type));
+		}else if(this.functions.hasFunction(name)){
+			searchResult.add(UserDefinedAggregator.class);
+		}
+		return searchResult;
 	}
 
 	private static void importFunction(final Method m) {

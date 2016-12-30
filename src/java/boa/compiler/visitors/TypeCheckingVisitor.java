@@ -17,21 +17,139 @@
 package boa.compiler.visitors;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import boa.aggregators.AggregatorSpec;
 import boa.compiler.SymbolTable;
 import boa.compiler.TypeCheckException;
-import boa.compiler.ast.*;
-import boa.compiler.ast.expressions.*;
-import boa.compiler.ast.literals.*;
-import boa.compiler.ast.statements.*;
-import boa.compiler.ast.types.*;
+import boa.compiler.ast.Call;
+import boa.compiler.ast.Comparison;
+import boa.compiler.ast.Component;
+import boa.compiler.ast.Composite;
+import boa.compiler.ast.Conjunction;
+import boa.compiler.ast.EnumBodyDeclaration;
+import boa.compiler.ast.Factor;
+import boa.compiler.ast.Identifier;
+import boa.compiler.ast.Index;
+import boa.compiler.ast.Node;
+import boa.compiler.ast.Pair;
+import boa.compiler.ast.Program;
+import boa.compiler.ast.Selector;
+import boa.compiler.ast.Start;
+import boa.compiler.ast.Term;
+import boa.compiler.ast.UnaryFactor;
+import boa.compiler.ast.expressions.Expression;
+import boa.compiler.ast.expressions.FunctionExpression;
+import boa.compiler.ast.expressions.ParenExpression;
+import boa.compiler.ast.expressions.SimpleExpr;
+import boa.compiler.ast.expressions.VisitorExpression;
+import boa.compiler.ast.literals.CharLiteral;
+import boa.compiler.ast.literals.FloatLiteral;
+import boa.compiler.ast.literals.ILiteral;
+import boa.compiler.ast.literals.IntegerLiteral;
+import boa.compiler.ast.literals.StringLiteral;
+import boa.compiler.ast.literals.TimeLiteral;
+import boa.compiler.ast.statements.AssignmentStatement;
+import boa.compiler.ast.statements.Block;
+import boa.compiler.ast.statements.BreakStatement;
+import boa.compiler.ast.statements.ContinueStatement;
+import boa.compiler.ast.statements.DoStatement;
+import boa.compiler.ast.statements.EmitStatement;
+import boa.compiler.ast.statements.ExistsStatement;
+import boa.compiler.ast.statements.ExprStatement;
+import boa.compiler.ast.statements.ForStatement;
+import boa.compiler.ast.statements.ForeachStatement;
+import boa.compiler.ast.statements.IfAllStatement;
+import boa.compiler.ast.statements.IfStatement;
+import boa.compiler.ast.statements.PostfixStatement;
+import boa.compiler.ast.statements.ReturnStatement;
+import boa.compiler.ast.statements.Statement;
+import boa.compiler.ast.statements.StopStatement;
+import boa.compiler.ast.statements.SwitchCase;
+import boa.compiler.ast.statements.SwitchStatement;
+import boa.compiler.ast.statements.TypeDecl;
+import boa.compiler.ast.statements.VarDeclStatement;
+import boa.compiler.ast.statements.VisitStatement;
+import boa.compiler.ast.statements.WhileStatement;
+import boa.compiler.ast.types.ArrayType;
+import boa.compiler.ast.types.EnumType;
+import boa.compiler.ast.types.FunctionType;
+import boa.compiler.ast.types.MapType;
+import boa.compiler.ast.types.ModelType;
+import boa.compiler.ast.types.OutputType;
+import boa.compiler.ast.types.SetType;
+import boa.compiler.ast.types.StackType;
+import boa.compiler.ast.types.TupleType;
+import boa.compiler.ast.types.VisitorType;
 import boa.compiler.transforms.VisitorDesugar;
-import boa.types.*;
-import boa.types.ml.*;
+import boa.types.BoaAny;
+import boa.types.BoaArray;
+import boa.types.BoaBool;
+import boa.types.BoaEnum;
+import boa.types.BoaFloat;
+import boa.types.BoaFunction;
+import boa.types.BoaInt;
+import boa.types.BoaMap;
+import boa.types.BoaName;
+import boa.types.BoaProtoList;
+import boa.types.BoaProtoMap;
+import boa.types.BoaProtoTuple;
+import boa.types.BoaScalar;
+import boa.types.BoaSet;
+import boa.types.BoaStack;
+import boa.types.BoaString;
+import boa.types.BoaTable;
+import boa.types.BoaTime;
+import boa.types.BoaTuple;
+import boa.types.BoaType;
+import boa.types.BoaVisitor;
+import boa.types.ml.BoaAdaBoostM1;
+import boa.types.ml.BoaAdditiveRegression;
+import boa.types.ml.BoaApriori;
+import boa.types.ml.BoaAttributeSelectedClassifier;
+import boa.types.ml.BoaBagging;
+import boa.types.ml.BoaBayesNet;
+import boa.types.ml.BoaBayesNetGenerator;
+import boa.types.ml.BoaCVParameterSelection;
+import boa.types.ml.BoaClassificationViaRegression;
+import boa.types.ml.BoaDecisionStump;
+import boa.types.ml.BoaDecisionTable;
+import boa.types.ml.BoaFilteredClassifier;
+import boa.types.ml.BoaGaussianProcesses;
+import boa.types.ml.BoaHoeffdingTree;
+import boa.types.ml.BoaIBk;
+import boa.types.ml.BoaInputMappedClassifier;
+import boa.types.ml.BoaIterativeClassifierOptimizer;
+import boa.types.ml.BoaJ48;
+import boa.types.ml.BoaJRip;
+import boa.types.ml.BoaKStar;
+import boa.types.ml.BoaLMT;
+import boa.types.ml.BoaLWL;
+import boa.types.ml.BoaLinearRegression;
+import boa.types.ml.BoaLogisticRegression;
+import boa.types.ml.BoaLogitBoost;
+import boa.types.ml.BoaLsa;
+import boa.types.ml.BoaModel;
+import boa.types.ml.BoaMultiClassClassifier;
+import boa.types.ml.BoaMultiClassClassifierUpdateable;
+import boa.types.ml.BoaMultiScheme;
+import boa.types.ml.BoaMultilayerPerceptron;
+import boa.types.ml.BoaNaiveBayes;
+import boa.types.ml.BoaNaiveBayesMultinomial;
+import boa.types.ml.BoaNaiveBayesMultinomialUpdateable;
+import boa.types.ml.BoaOneR;
+import boa.types.ml.BoaPART;
+import boa.types.ml.BoaPrincipalComponents;
+import boa.types.ml.BoaRandomForest;
+import boa.types.ml.BoaSMO;
+import boa.types.ml.BoaSimpleKMeans;
+import boa.types.ml.BoaVote;
+import boa.types.ml.BoaZeroR;
 
 /**
  * Prescan the program and check that all variables are consistently typed.
@@ -173,39 +291,6 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		@Override
 		public void visit(final Call n) {
 			isCall = true;
-		}
-	}
-
-	/**
-	 * 
-	 * @author rdyer
-	 */
-	protected class FunctionFindingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
-		protected BoaFunction func;
-		protected final List<BoaType> formalParameters;
-
-		public boolean hasFunction() {
-			return func != null;
-		}
-
-		public BoaFunction getFunction() {
-			return func;
-		}
-
-		public FunctionFindingVisitor(final List<BoaType> formalParameters) {
-			this.formalParameters = formalParameters;
-		}
-
-		/** {@inheritDoc} */
-		@Override
-		protected void initialize(SymbolTable arg) {
-			func = null;
-		}
-
-		/** {@inheritDoc} */
-		@Override
-		public void visit(final Identifier n, final SymbolTable arg) {
-			func = arg.getFunction(n.getToken(), this.formalParameters);
 		}
 	}
 
