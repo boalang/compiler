@@ -17,7 +17,9 @@
 package boa.aggregators;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
+import boa.UsrDfndReduceFunc;
 import boa.io.EmitKey;
 
 /**
@@ -29,6 +31,11 @@ import boa.io.EmitKey;
 @AggregatorSpec(name = "userDefinedAggregator", type = "UserDefined", canCombine = true)
 public class UserDefinedAggregator extends Aggregator {
     private long sum;
+    private UsrDfndReduceFunc function;
+    private ArrayList<Object> values;
+    public UserDefinedAggregator(UsrDfndReduceFunc function) {
+        this.function = function;
+    }
 
     /** {@inheritDoc} */
     @Override
@@ -50,15 +57,13 @@ public class UserDefinedAggregator extends Aggregator {
         this.sum += data;
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public void aggregate(final double data, final String metadata) throws IOException, InterruptedException, FinishedException {
-        this.aggregate(Double.valueOf(data).longValue(), metadata);
+    public void aggregate(final Object data, final String metadata) throws IOException, InterruptedException, FinishedException {
+        this.values.add(data);
     }
 
     /** {@inheritDoc} */
     @Override
     public void finish() throws IOException, InterruptedException {
-        this.collect(this.sum);
+        this.collect(this.function.invoke(this.values));
     }
 }

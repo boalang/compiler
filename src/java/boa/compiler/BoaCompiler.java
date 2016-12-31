@@ -249,6 +249,7 @@ public class BoaCompiler {
 			st.add("jobs", jobs);
 			st.add("jobnames", jobnames);
 			st.add("combineTables", CodeGeneratingVisitor.combineAggregatorStrings);
+			st.add("reduceDeclarations", CodeGeneratingVisitor.reduceAggregatorDeclStrings);
 			st.add("reduceTables", CodeGeneratingVisitor.reduceAggregatorStrings);
 			st.add("splitsize", isSimple ? 64 * 1024 * 1024 : 10 * 1024 * 1024);
 
@@ -758,6 +759,7 @@ public class BoaCompiler {
 			st.add("jobs", jobs);
 			st.add("jobnames", jobnames);
 			st.add("combineTables", CodeGeneratingVisitor.combineAggregatorStrings);
+			st.add("reduceDeclarations", CodeGeneratingVisitor.reduceAggregatorDeclStrings);
 			st.add("reduceTables", CodeGeneratingVisitor.reduceAggregatorStrings);
 			st.add("splitsize", isSimple ? 64 * 1024 * 1024 : 10 * 1024 * 1024);
 

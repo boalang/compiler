@@ -16,17 +16,18 @@
  */
 package boa.aggregators;
 
-import java.io.IOException;
-
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer.Context;
 
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
+
+import boa.BoaTup;
 import boa.functions.BoaCasts;
 import boa.io.EmitKey;
 import boa.io.EmitValue;
-
-import boa.BoaTup;
 
 /**
  * The base class for all Boa aggregators.
@@ -43,6 +44,21 @@ public abstract class Aggregator {
 	private EmitKey key;
 	private boolean combining;
 	private int vectorSize;
+	private final static Set<String> inBuiltAggs = new HashSet<String>();
+
+	static {
+		inBuiltAggs.add("sum");
+		inBuiltAggs.add("top");
+		inBuiltAggs.add("max");
+		inBuiltAggs.add("min");
+		inBuiltAggs.add("collection");
+		inBuiltAggs.add("mean");
+		inBuiltAggs.add("stDev");
+		inBuiltAggs.add("quantile");
+		inBuiltAggs.add("kurtosis");
+		inBuiltAggs.add("histogram");
+		inBuiltAggs.add("graphCSV");
+	}
 
 	/**
 	 * Construct an Aggregator.
@@ -132,6 +148,10 @@ public abstract class Aggregator {
 		this.collect(data, null);
 	}
 
+	protected void collect(final Object data) throws IOException, InterruptedException {
+		this.collect(data.toString(), null);
+	}
+
 	@SuppressWarnings("unchecked")
 	protected void collect(final long data, final String metadata) throws IOException, InterruptedException {
 		this.collect(BoaCasts.longToString(data), metadata);
@@ -189,5 +209,9 @@ public abstract class Aggregator {
 
 	public void setVectorSize(int vectorSize) {
 		this.vectorSize = vectorSize;
+	}
+
+	public final static boolean isUserDefinedAggregator(String name) {
+		return !Aggregator.inBuiltAggs.contains(name);
 	}
 }

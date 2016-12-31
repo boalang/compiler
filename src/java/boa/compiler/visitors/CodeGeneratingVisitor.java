@@ -16,27 +16,102 @@
  */
 package boa.compiler.visitors;
 
+import org.stringtemplate.v4.ST;
+
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.stringtemplate.v4.ST;
-
+import boa.aggregators.Aggregator;
 import boa.aggregators.AggregatorSpec;
 import boa.compiler.SymbolTable;
 import boa.compiler.TypeCheckException;
-import boa.compiler.ast.*;
-import boa.compiler.ast.expressions.*;
-import boa.compiler.ast.literals.*;
-import boa.compiler.ast.statements.*;
-import boa.compiler.ast.types.*;
-import boa.types.*;
+import boa.compiler.ast.Call;
+import boa.compiler.ast.Comparison;
+import boa.compiler.ast.Component;
+import boa.compiler.ast.Composite;
+import boa.compiler.ast.Conjunction;
+import boa.compiler.ast.EnumBodyDeclaration;
+import boa.compiler.ast.Factor;
+import boa.compiler.ast.Identifier;
+import boa.compiler.ast.Index;
+import boa.compiler.ast.Node;
+import boa.compiler.ast.Operand;
+import boa.compiler.ast.Pair;
+import boa.compiler.ast.Program;
+import boa.compiler.ast.Selector;
+import boa.compiler.ast.Term;
+import boa.compiler.ast.UnaryFactor;
+import boa.compiler.ast.expressions.Expression;
+import boa.compiler.ast.expressions.FunctionExpression;
+import boa.compiler.ast.expressions.ParenExpression;
+import boa.compiler.ast.expressions.SimpleExpr;
+import boa.compiler.ast.expressions.VisitorExpression;
+import boa.compiler.ast.literals.CharLiteral;
+import boa.compiler.ast.literals.FloatLiteral;
+import boa.compiler.ast.literals.ILiteral;
+import boa.compiler.ast.literals.IntegerLiteral;
+import boa.compiler.ast.literals.StringLiteral;
+import boa.compiler.ast.literals.TimeLiteral;
+import boa.compiler.ast.statements.AssignmentStatement;
+import boa.compiler.ast.statements.Block;
+import boa.compiler.ast.statements.BreakStatement;
+import boa.compiler.ast.statements.ContinueStatement;
+import boa.compiler.ast.statements.DoStatement;
+import boa.compiler.ast.statements.EmitStatement;
+import boa.compiler.ast.statements.ExistsStatement;
+import boa.compiler.ast.statements.ExprStatement;
+import boa.compiler.ast.statements.ForStatement;
+import boa.compiler.ast.statements.ForeachStatement;
+import boa.compiler.ast.statements.IfAllStatement;
+import boa.compiler.ast.statements.IfStatement;
+import boa.compiler.ast.statements.PostfixStatement;
+import boa.compiler.ast.statements.ReturnStatement;
+import boa.compiler.ast.statements.Statement;
+import boa.compiler.ast.statements.StopStatement;
+import boa.compiler.ast.statements.SwitchCase;
+import boa.compiler.ast.statements.SwitchStatement;
+import boa.compiler.ast.statements.TypeDecl;
+import boa.compiler.ast.statements.VarDeclStatement;
+import boa.compiler.ast.statements.VisitStatement;
+import boa.compiler.ast.statements.WhileStatement;
+import boa.compiler.ast.types.ArrayType;
+import boa.compiler.ast.types.EnumType;
+import boa.compiler.ast.types.FunctionType;
+import boa.compiler.ast.types.MapType;
+import boa.compiler.ast.types.ModelType;
+import boa.compiler.ast.types.OutputType;
+import boa.compiler.ast.types.SetType;
+import boa.compiler.ast.types.StackType;
+import boa.compiler.ast.types.TupleType;
+import boa.types.BoaAny;
+import boa.types.BoaArray;
+import boa.types.BoaEnum;
+import boa.types.BoaFunction;
+import boa.types.BoaInt;
+import boa.types.BoaMap;
+import boa.types.BoaName;
+import boa.types.BoaProtoList;
+import boa.types.BoaProtoMap;
+import boa.types.BoaProtoTuple;
+import boa.types.BoaSet;
+import boa.types.BoaStack;
+import boa.types.BoaString;
+import boa.types.BoaTable;
+import boa.types.BoaTuple;
+import boa.types.BoaType;
 import boa.types.ml.BoaModel;
-import boa.compiler.BoaCompiler;
 
 /***
  * 
@@ -110,6 +185,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		}
 	}
 
+
 	/**
 	 * Scan the program and generate code for any variable declarations.
 	 * 
@@ -166,6 +242,9 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			if (n.isStatic())
 				st.add("isstatic", true);
 
+			if(n.type instanceof BoaFunction) {
+				UserFuncitonList.addUserFunction(new UserFunctionDetails(n.getId().getToken(), st.render()));
+			}
 			code.add(st.render());
 		}
 	}
@@ -195,14 +274,18 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				throw new TypeCheckException(n ,"type " + n.type + " is not a function type");
 
 			final BoaFunction funcType = ((BoaFunction) n.type);
+			UserFunctionDetails function = UserFuncitonList.getNextUnProcessedFunction();
+			function.setCompilerGenName(name);
 
 			final List<Component> params = n.getArgs();
 			final List<String> args = new ArrayList<String>();
 			final List<String> types = new ArrayList<String>();
+			final List<String> reducerType = new ArrayList<String>();
 
 			for (final Component c : params) {
 				args.add(c.getIdentifier().getToken());
 				types.add(c.getType().type.toJavaType());
+				function.addTupleParam(c.getType().type.toJavaType());
 			}
 
 			st.add("name", funcType.toJavaType());
@@ -212,7 +295,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				st.add("ret", funcType.getType().toBoxedJavaType());
 			st.add("args", args);
 			st.add("types", types);
-
+			function.setCode(st.render());
 			code.add(st.render());
 		}
 	}
@@ -260,8 +343,12 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			st.add("name", tupType.toJavaType());
 			st.add("fields", fields);
 			st.add("types", types);
-
 			code.add(st.render());
+			for(UserFunctionDetails function: UserFuncitonList.getAllFunction()) {
+                if(function.isParam(name)){
+				     function.addTupleDecl(st.render());
+				}
+			}
 		}
 	}
 
@@ -489,6 +576,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 	final public static List<String> combineAggregatorStrings = new ArrayList<String>();
 	final public static List<String> reduceAggregatorStrings = new ArrayList<String>();
+	final public static List<String> reduceAggregatorDeclStrings = new ArrayList<String>();
 
 	public CodeGeneratingVisitor(final String name) throws IOException {
 		this.name = name;
@@ -521,6 +609,10 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			st.add("staticDeclarations", "\n" + this.tupleDeclarator.getCode());
 		if (this.enumDeclarator.hasCode())
 			st.add("staticDeclarations", "\n" + this.enumDeclarator.getCode());
+
+		for(UserFunctionDetails function: UserFuncitonList.getAllFunction()) {
+			System.out.println(function.getCompilerGenName());
+		}
 
 		this.staticInitialization.start(n);
 		if (this.staticInitialization.hasCode())
@@ -565,7 +657,20 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			}
 			if (combines)
 				combineAggregatorStrings.add("this.aggregators.put(\"" + prefix + "::" + id + "\", " + src.toString().substring(2) + ");");
-			reduceAggregatorStrings.add("this.aggregators.put(\"" + prefix + "::" + id + "\", " + src.toString().substring(2) + ");");
+			if(Aggregator.isUserDefinedAggregator(entry.getValue().getAggregator())) {
+				UserFunctionDetails function = UserFuncitonList.findByUserGivenName(entry.getValue().getAggregator());
+				this.reduceAggregatorDeclStrings.add(function.getFunctionDeclCode());
+				for(String param: function.getParamCode()) {
+					this.reduceAggregatorDeclStrings.add(param);
+				}
+				this.reduceAggregatorDeclStrings.add(function.getReducerCode());
+				StringBuffer aggParams = new StringBuffer("this.aggregators.put(\"" + prefix + "::" + id + "\", " + src.toString().substring(2) + ");");
+				String funcName = function.getFunctionDeclCode().split(" ")[1].split(";")[0];
+				aggParams.insert(aggParams.length()-3, funcName);
+				reduceAggregatorStrings.add(aggParams.toString());
+			}else {
+				reduceAggregatorStrings.add("this.aggregators.put(\"" + prefix + "::" + id + "\", " + src.toString().substring(2) + ");");
+			}
 		}
 
 		code.add(st.render());
