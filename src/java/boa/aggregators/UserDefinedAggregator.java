@@ -18,6 +18,7 @@ package boa.aggregators;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import boa.UsrDfndReduceFunc;
 import boa.io.EmitKey;
@@ -32,9 +33,10 @@ import boa.io.EmitKey;
 public class UserDefinedAggregator extends Aggregator {
     private long sum;
     private UsrDfndReduceFunc function;
-    private ArrayList<Object> values;
+    private List<Object> values;
     public UserDefinedAggregator(UsrDfndReduceFunc function) {
         this.function = function;
+        this.values = new ArrayList<Object>();
     }
 
     /** {@inheritDoc} */

@@ -655,22 +655,25 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 					throw new TypeCheckException(n, e.getMessage(), e);
 				}
 			}
-			if (combines)
-				combineAggregatorStrings.add("this.aggregators.put(\"" + prefix + "::" + id + "\", " + src.toString().substring(2) + ");");
+
+			StringBuffer reducerCombinerEntry = new StringBuffer("this.aggregators.put(\"" + prefix + "::" + id + "\", " + src.toString().substring(2) + ");");
 			if(Aggregator.isUserDefinedAggregator(entry.getValue().getAggregator())) {
 				UserFunctionDetails function = UserFuncitonList.findByUserGivenName(entry.getValue().getAggregator());
+
+				//  update the reducer, combiner entry
+				String funcName = function.getFunctionDeclCode().split(" ")[1].split(";")[0];
+				reducerCombinerEntry.insert(reducerCombinerEntry.length()-3, funcName);
+
+				// update the declarations inside the reducers
 				this.reduceAggregatorDeclStrings.add(function.getFunctionDeclCode());
 				for(String param: function.getParamCode()) {
 					this.reduceAggregatorDeclStrings.add(param);
 				}
 				this.reduceAggregatorDeclStrings.add(function.getReducerCode());
-				StringBuffer aggParams = new StringBuffer("this.aggregators.put(\"" + prefix + "::" + id + "\", " + src.toString().substring(2) + ");");
-				String funcName = function.getFunctionDeclCode().split(" ")[1].split(";")[0];
-				aggParams.insert(aggParams.length()-3, funcName);
-				reduceAggregatorStrings.add(aggParams.toString());
-			}else {
-				reduceAggregatorStrings.add("this.aggregators.put(\"" + prefix + "::" + id + "\", " + src.toString().substring(2) + ");");
 			}
+			reduceAggregatorStrings.add(reducerCombinerEntry.toString());
+			if (combines)
+				combineAggregatorStrings.add(reducerCombinerEntry.toString());
 		}
 
 		code.add(st.render());
