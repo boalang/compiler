@@ -280,12 +280,12 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			final List<Component> params = n.getArgs();
 			final List<String> args = new ArrayList<String>();
 			final List<String> types = new ArrayList<String>();
-			final List<String> reducerType = new ArrayList<String>();
 
 			for (final Component c : params) {
 				args.add(c.getIdentifier().getToken());
 				types.add(c.getType().type.toJavaType());
-				function.addTupleParam(c.getType().type.toJavaType());
+				function.addCompilerGenParams(c.getType().type.toJavaType());
+				function.addParam(c.getIdentifier().getToken());
 			}
 
 			st.add("name", funcType.toJavaType());
@@ -295,7 +295,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				st.add("ret", funcType.getType().toBoxedJavaType());
 			st.add("args", args);
 			st.add("types", types);
-			function.setCode(st.render());
+			function.setInterfaceDecl(st.render());
 			code.add(st.render());
 		}
 	}
@@ -346,7 +346,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			code.add(st.render());
 			for(UserFunctionDetails function: UserFuncitonList.getAllFunction()) {
                 if(function.isParam(name)){
-				     function.addTupleDecl(st.render());
+				     function.addParameterGenCode(st.render());
 				}
 			}
 		}
@@ -577,6 +577,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	final public static List<String> combineAggregatorStrings = new ArrayList<String>();
 	final public static List<String> reduceAggregatorStrings = new ArrayList<String>();
 	final public static List<String> reduceAggregatorDeclStrings = new ArrayList<String>();
+	final public static List<String> reduceAggregatorInitStrings = new ArrayList<String>();
 
 	public CodeGeneratingVisitor(final String name) throws IOException {
 		this.name = name;
@@ -665,8 +666,10 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				reducerCombinerEntry.insert(reducerCombinerEntry.length()-3, funcName);
 
 				// update the declarations inside the reducers
+				this.reduceAggregatorDeclStrings.add(function.getInterfaceDecl());
 				this.reduceAggregatorDeclStrings.add(function.getFunctionDeclCode());
-				for(String param: function.getParamCode()) {
+				this.reduceAggregatorInitStrings.add(funcName + " = " + function.getInterfaceDecl() + ";");
+				for(String param: function.getParameterGenCode()) {
 					this.reduceAggregatorDeclStrings.add(param);
 				}
 				this.reduceAggregatorDeclStrings.add(function.getReducerCode());
@@ -1419,6 +1422,11 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		}
 
 		if (type instanceof BoaTable) {
+			UserFunctionDetails function = UserFuncitonList.findByUserGivenName(n.getId().getToken());
+			if(function != null) {
+				n.getInitializer().accept(this);
+				function.setFuncInitCode(code.removeLast());
+			}
 			code.add("");
 			return;
 		}
@@ -1454,6 +1462,11 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		n.getInitializer().accept(this);
 		String src = code.removeLast();
+
+		if(t instanceof  BoaFunction) {
+			UserFunctionDetails functionDetails = UserFuncitonList.findByUserGivenName(n.getId().getToken());
+			functionDetails.setInterfaceDecl(src);
+		}
 
 		if(lhsType instanceof BoaTuple && t instanceof BoaArray) {
 			Operand op = n.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
