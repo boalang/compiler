@@ -42,88 +42,114 @@ public class UserFuncitonList {
          return functions;
      }
 }
+
+
+
  class UserFunctionDetails {
-    private String userGivenName;
-    private String compilerGenName;
-    private String functionDeclCode;
-    private String code;
-    private String reducerCode;
-    private String returntype;
-    private final List<String> compilerGenParams;
-    private final List<String> paramCode;
+     private String userGivenName;
+     private String compilerGenName;
+     private String functionDeclCode;
+     private String funcInitCode;
+     private String reducerCode;
+     private String returntype;
+     private String interfaceDecl;
+     private final List<String> params;  // user given param names
+     private final List<String> compilerGenParams; // name of the compiler generated params
+     private final List<String> parameterGenCode; //  code generated for tuples
 
-    public UserFunctionDetails() {
-        this.compilerGenParams = new ArrayList<String>();
-        this.paramCode = new ArrayList<String>();
-    }
+     public UserFunctionDetails() {
+         this.params = new ArrayList<String>();
+         this.compilerGenParams = new ArrayList<String>();
+         this.parameterGenCode = new ArrayList<String>();
+     }
 
-    public UserFunctionDetails(String name) {
-        this();
-        this.userGivenName = name;
-    }
+     public UserFunctionDetails(String name, String functionDeclCode) {
+         this();
+         this.userGivenName = name;
+         this.functionDeclCode = functionDeclCode;
+     }
 
-    public UserFunctionDetails(String name, String code) {
-        this(name);
-        this.functionDeclCode = code;
-    }
+     public List<String> getParameterGenCode() {
+         return parameterGenCode;
+     }
 
-    public String getUserGivenName() {
-        return this.userGivenName;
-    }
+     public boolean addParam(String name) {
+         return this.params.add(name);
+     }
 
-    public void setCode(String code) {
-        this.code = code;
-        this.reducerCode = getAsReducerFunction(code);
-    }
+     public boolean addCompilerGenParams(String name) {
+         return this.compilerGenParams.add(name);
+     }
 
-    public String getCode() {
-        return this.code;
-    }
+     public boolean addParameterGenCode(String name) {
+         return this.parameterGenCode.add(name);
+     }
 
-    public String getCompilerGenName() {
-        return this.compilerGenName;
-    }
+     public String getUserGivenName() {
+         return userGivenName;
+     }
 
-    public void setCompilerGenName(String name) {
-        this.compilerGenName = name;
-    }
+     public void setUserGivenName(String userGivenName) {
+         this.userGivenName = userGivenName;
+     }
 
-    public List<String> getParamCode() {
-        return this.paramCode;
-    }
+     public String getCompilerGenName() {
+         return compilerGenName;
+     }
 
-    public boolean addTupleParam(String name) {
-        return this.compilerGenParams.add(name);
-    }
+     public void setCompilerGenName(String compilerGenName) {
+         this.compilerGenName = compilerGenName;
+     }
 
-    public boolean addTupleDecl(String code) {
-        return this.paramCode.add(code);
-    }
+     public String getFunctionDeclCode() {
+         return functionDeclCode;
+     }
 
-    public boolean isParam(String name) {
+     public void setFunctionDeclCode(String functionDeclCode) {
+         this.functionDeclCode = functionDeclCode;
+     }
+
+     public String getFuncInitCode() {
+         return funcInitCode;
+     }
+
+     public void setFuncInitCode(String funcInitCode) {
+         this.funcInitCode = funcInitCode;
+     }
+
+     public String getReducerCode() {
+         return reducerCode;
+     }
+
+     public void setReducerCode(String reducerCode) {
+         this.reducerCode = reducerCode;
+     }
+
+     public String getReturntype() {
+         return returntype;
+     }
+
+     public void setReturntype(String returntype) {
+         this.returntype = returntype;
+     }
+
+     public boolean isParam(String name) {
         return this.compilerGenParams.contains(name) || this.compilerGenParams.contains(name + "[]");
     }
 
-    public String getFunctionDeclCode() {
-        return this.functionDeclCode;
-    }
-
-    public void setReturntype(String type) {
-        this.returntype = type;
-    }
-
-    public String getReturntype() {
-        return this.returntype;
-    }
-
-    private String getAsReducerFunction(String code) {
+    public String getAsReducerIFunctionDecl(String code) {
         StringBuffer codegen = new StringBuffer(code);
         codegen.insert(code.indexOf('\n') , " extends UsrDfndReduceFunc");
         return codegen.toString();
     }
 
-    public String getReducerCode() {
-        return this.reducerCode;
-    }
+     public String getInterfaceDecl() {
+         return interfaceDecl;
+     }
+
+     public void setInterfaceDecl(String interfaceDecl) {
+         this.interfaceDecl = interfaceDecl;
+     }
+
 }
 
