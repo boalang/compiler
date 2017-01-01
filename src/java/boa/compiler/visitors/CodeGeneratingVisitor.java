@@ -668,7 +668,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				// update the declarations inside the reducers
 				this.reduceAggregatorDeclStrings.add(function.getAsReducerIFunctionDecl(function.getInterfaceDecl()));
 				this.reduceAggregatorDeclStrings.add(function.getFunctionDeclCode());
-				this.reduceAggregatorInitStrings.add(funcName + " = " + function.getFuncInitCode() + ";");
+				this.reduceAggregatorInitStrings.add(funcName + " = " + function.getFuncInitCode());
 				for(String param: function.getParameterGenCode()) {
 					this.reduceAggregatorDeclStrings.add(param);
 				}

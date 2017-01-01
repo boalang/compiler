@@ -110,7 +110,37 @@ public class UserFuncitonList {
      }
 
      public String getFuncInitCode() {
-         return funcInitCode;
+         return getFuncInitCode(funcInitCode);
+     }
+
+     private String getFuncInitCode(String code) {
+          StringBuffer gencode = new StringBuffer();
+          gencode.append(";\n")
+                 .append("@Override\n public Object invoke(");
+
+         for(int i = 0; i < this.params.size(); i++) {
+             gencode.append("Object ")
+                     .append(params.get(i))
+                     .append(",");
+         }
+          gencode.deleteCharAt(gencode.length() - 1);
+          gencode.append(") throws Exception {\n\t")
+                  .append("return invoke(");
+
+         for(int i = 0; i < this.params.size(); i++) {
+             gencode.append("( " + compilerGenParams.get(i))
+                     .append(") " )
+                     .append(params.get(i))
+                     .append(",");
+         }
+         gencode.deleteCharAt(gencode.length() - 1)
+                 .append(");\n");
+
+          gencode.append("\t}");
+         StringBuffer result = new StringBuffer(code);
+         System.out.print(code);
+         result.insert(result.length()-2, gencode.toString()).append(";");
+         return result.toString();
      }
 
      public void setFuncInitCode(String funcInitCode) {

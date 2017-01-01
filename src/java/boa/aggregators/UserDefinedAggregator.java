@@ -66,6 +66,10 @@ public class UserDefinedAggregator extends Aggregator {
     /** {@inheritDoc} */
     @Override
     public void finish() throws IOException, InterruptedException {
-        this.collect(this.function.invoke(this.values));
+        try{
+            this.collect(this.function.invoke(this.values));
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 }
