@@ -47,16 +47,9 @@ public class UserDefinedAggregator extends Aggregator {
         this.sum = 0;
     }
 
-    /** {@inheritDoc} */
     @Override
-    public void aggregate(final String data, final String metadata) throws IOException, InterruptedException, FinishedException {
-        this.aggregate(Double.valueOf(data).longValue(), metadata);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public void aggregate(final long data, final String metadata) {
-        this.sum += data;
+    public void aggregate(String data, String metadata) throws IOException, InterruptedException, FinishedException {
+//        this.values.add(data);
     }
 
     public void aggregate(final Object data, final String metadata) throws IOException, InterruptedException, FinishedException {

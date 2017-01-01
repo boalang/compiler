@@ -119,7 +119,7 @@ public class UserFuncitonList {
                  .append("@Override\n public Object invoke(");
 
          for(int i = 0; i < this.params.size(); i++) {
-             gencode.append("Object ")
+             gencode.append("java.util.List<Object> ")
                      .append(params.get(i))
                      .append(",");
          }
@@ -128,9 +128,18 @@ public class UserFuncitonList {
                   .append("return invoke(");
 
          for(int i = 0; i < this.params.size(); i++) {
-             gencode.append("( " + compilerGenParams.get(i))
-                     .append(") " )
+             gencode
+//                     .append("( " + compilerGenParams.get(i))
+//                     .append(") " )
                      .append(params.get(i))
+                     .append(".toArray(")
+                     .append("new ")
+                     .append(compilerGenParams.get(i))
+//                     .append("[")
+//                     .append(params.get(i))
+                     .insert(gencode.length() - 1, params.get(i) + ".size()")
+//                     .append("]")
+                     .append(")")
                      .append(",");
          }
          gencode.deleteCharAt(gencode.length() - 1)
