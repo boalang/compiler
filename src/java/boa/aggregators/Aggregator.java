@@ -49,15 +49,23 @@ public abstract class Aggregator {
 	static {
 		inBuiltAggs.add("sum");
 		inBuiltAggs.add("top");
+		inBuiltAggs.add("maximum");
+		inBuiltAggs.add("minimum");
 		inBuiltAggs.add("max");
 		inBuiltAggs.add("min");
 		inBuiltAggs.add("collection");
 		inBuiltAggs.add("mean");
-		inBuiltAggs.add("stDev");
+		inBuiltAggs.add("median");
+		inBuiltAggs.add("stdev");
 		inBuiltAggs.add("quantile");
 		inBuiltAggs.add("kurtosis");
 		inBuiltAggs.add("histogram");
 		inBuiltAggs.add("graphCSV");
+		inBuiltAggs.add("set");
+		inBuiltAggs.add("bottom");
+		inBuiltAggs.add("skewness");
+		inBuiltAggs.add("confidence");
+		inBuiltAggs.add("variance");
 	}
 
 	/**

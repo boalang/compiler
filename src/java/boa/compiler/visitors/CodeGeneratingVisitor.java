@@ -275,7 +275,9 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 			final BoaFunction funcType = ((BoaFunction) n.type);
 			UserFunctionDetails function = UserFuncitonList.getNextUnProcessedFunction();
-			function.setCompilerGenName(name);
+			if(function != null) {
+				function.setCompilerGenName(name);
+			}
 
 			final List<Component> params = n.getArgs();
 			final List<String> args = new ArrayList<String>();
@@ -284,8 +286,10 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			for (final Component c : params) {
 				args.add(c.getIdentifier().getToken());
 				types.add(c.getType().type.toJavaType());
-				function.addCompilerGenParams(c.getType().type.toJavaType());
-				function.addParam(c.getIdentifier().getToken());
+				if(function != null) {
+					function.addCompilerGenParams(c.getType().type.toJavaType());
+					function.addParam(c.getIdentifier().getToken());
+				}
 			}
 
 			st.add("name", funcType.toJavaType());
@@ -295,7 +299,9 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				st.add("ret", funcType.getType().toBoxedJavaType());
 			st.add("args", args);
 			st.add("types", types);
-			function.setInterfaceDecl(st.render());
+			if(function != null) {
+				function.setInterfaceDecl(st.render());
+			}
 			code.add(st.render());
 		}
 	}
@@ -611,10 +617,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		if (this.enumDeclarator.hasCode())
 			st.add("staticDeclarations", "\n" + this.enumDeclarator.getCode());
 
-		for(UserFunctionDetails function: UserFuncitonList.getAllFunction()) {
-			System.out.println(function.getCompilerGenName());
-		}
-
 		this.staticInitialization.start(n);
 		if (this.staticInitialization.hasCode())
 			st.add("staticStatements", this.staticInitialization.getCode());
@@ -660,7 +662,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			StringBuffer reducerCombinerEntry = new StringBuffer("this.aggregators.put(\"" + prefix + "::" + id + "\", " + src.toString().substring(2) + ");");
 			if(Aggregator.isUserDefinedAggregator(entry.getValue().getAggregator())) {
 				UserFunctionDetails function = UserFuncitonList.findByUserGivenName(entry.getValue().getAggregator());
-
 				//  update the reducer, combiner entry
 				String funcName = function.getFunctionDeclCode().split(" ")[1].split(";")[0];
 				reducerCombinerEntry.insert(reducerCombinerEntry.length()-3, funcName);

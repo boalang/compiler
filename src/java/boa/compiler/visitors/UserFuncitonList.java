@@ -35,7 +35,10 @@ public class UserFuncitonList {
      }
 
      public static UserFunctionDetails getNextUnProcessedFunction() {
-          return functions.get(nextUnProcessedFunctionIndex++);
+          if(nextUnProcessedFunctionIndex < functions.size()) {
+              return functions.get(nextUnProcessedFunctionIndex++);
+          }
+          return null;
      }
 
      public static List<UserFunctionDetails> getAllFunction() {
