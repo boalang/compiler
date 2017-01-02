@@ -149,7 +149,7 @@ public class UserFuncitonList {
          StringBuffer result = new StringBuffer(code);
          System.out.print(code);
          result.insert(result.length()-2, gencode.toString()).append(";");
-         return result.toString();
+         return result.toString().replace("long[", "Long[");
      }
 
      public void setFuncInitCode(String funcInitCode) {
@@ -187,7 +187,7 @@ public class UserFuncitonList {
      }
 
      public void setInterfaceDecl(String interfaceDecl) {
-         this.interfaceDecl = interfaceDecl;
+         this.interfaceDecl = interfaceDecl.replace("long[]", "Long[]");
      }
 
 }
