@@ -16,14 +16,14 @@
  */
 package boa.runtime;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.hadoop.conf.Configurable;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.log4j.Logger;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import boa.aggregators.Aggregator;
 import boa.aggregators.FinishedException;
@@ -95,8 +95,12 @@ public abstract class BoaCombiner extends Reducer<EmitKey, EmitValue, EmitKey, E
 
 		for (final EmitValue value : values)
 			try {
-				for (final String s : value.getData())
-					a.aggregate(s, value.getMetadata());
+				if(value.getTuple() != null) {
+					a.aggregate(value.getTuple(), value.getMetadata());
+				} else {
+					for (final String s : value.getData())
+						a.aggregate(s, value.getMetadata());
+				}
 			} catch (final FinishedException e) {
 				// we are done
 				return;

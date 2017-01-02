@@ -661,6 +661,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 			StringBuffer reducerCombinerEntry = new StringBuffer("this.aggregators.put(\"" + prefix + "::" + id + "\", " + src.toString().substring(2) + ");");
 			if(Aggregator.isUserDefinedAggregator(entry.getValue().getAggregator())) {
+				combines = false;
 				UserFunctionDetails function = UserFuncitonList.findByUserGivenName(entry.getValue().getAggregator());
 				//  update the reducer, combiner entry
 				String funcName = function.getFunctionDeclCode().split(" ")[1].split(";")[0];

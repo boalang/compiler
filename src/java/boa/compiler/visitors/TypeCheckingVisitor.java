@@ -1017,7 +1017,6 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 				if(!(checkTupleArray(types) == true))
 					if(types.get(0).assigns(((BoaArray)rhs).getType())) {
 						rhs = new BoaTuple(types);
-						System.out.println(" insidieie " + rhs);
 					}
 			}
 

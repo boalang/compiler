@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import boa.BoaTup;
 import boa.UsrDfndReduceFunc;
 import boa.io.EmitKey;
 
@@ -33,10 +34,31 @@ import boa.io.EmitKey;
 public class UserDefinedAggregator extends Aggregator {
     private long sum;
     private UsrDfndReduceFunc function;
-    private List<Object> values;
+    private List<BoaTup> tupleValues;
+    private List<Long> longValues;
+    private List<String> stringValues;
+    private List<Double> doubleValues;
     public UserDefinedAggregator(UsrDfndReduceFunc function) {
         this.function = function;
-        this.values = new ArrayList<Object>();
+        this.tupleValues = new ArrayList<BoaTup>();
+        this.longValues = new ArrayList<Long>();
+        this.doubleValues = new ArrayList<Double>();
+        this.stringValues = new ArrayList<String>();
+    }
+
+    @Override
+    public void aggregate(String data, String metadata) throws IOException, InterruptedException, FinishedException {
+        this.stringValues.add(data);
+    }
+
+    @Override
+    public void aggregate(long data, String metadata) throws IOException, InterruptedException, FinishedException {
+        this.longValues.add(data);
+    }
+
+    @Override
+    public void aggregate(double data, String metadata) throws IOException, InterruptedException, FinishedException {
+        this.doubleValues.add(data);
     }
 
     /** {@inheritDoc} */
@@ -47,22 +69,35 @@ public class UserDefinedAggregator extends Aggregator {
         this.sum = 0;
     }
 
-    @Override
-    public void aggregate(String data, String metadata) throws IOException, InterruptedException, FinishedException {
-//        this.values.add(data);
-    }
-
-    public void aggregate(final Object data, final String metadata) throws IOException, InterruptedException, FinishedException {
-        this.values.add(data);
+    public void aggregate(final BoaTup data, final String metadata) throws IOException, InterruptedException, FinishedException {
+        this.tupleValues.add(data);
     }
 
     /** {@inheritDoc} */
     @Override
     public void finish() throws IOException, InterruptedException {
         try{
-            this.collect(this.function.invoke(this.values));
+            List<Object> values = new ArrayList<Object>();
+            if(!longValues.isEmpty()) {
+                values = getAsObjectArray(this.longValues);
+            }else if(!stringValues.isEmpty()) {
+                values = getAsObjectArray(this.stringValues);
+            }else if(!doubleValues.isEmpty()) {
+                values = getAsObjectArray(this.doubleValues);
+            }else if(!tupleValues.isEmpty()) {
+                values = getAsObjectArray(this.tupleValues);
+            }
+            this.collect(this.function.invoke(values));
         }catch(Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private static<T> List<Object> getAsObjectArray(List<T> input) {
+        List<Object> result = new ArrayList<Object>();
+        for(T o: input) {
+            result.add(o);
+        }
+        return result;
     }
 }

@@ -10,11 +10,22 @@ import java.util.List;
 public class UserFuncitonList {
     private static List<UserFunctionDetails> functions = new ArrayList<UserFunctionDetails>();
     private static int nextUnProcessedFunctionIndex = 0;
+    private static String fileName = "";
 
 
     public static boolean addUserFunction(UserFunctionDetails function) {
         return functions.add(function);
     }
+
+    public static String getFileName() {
+        return fileName;
+    }
+
+    public static void setFileName(String fileName) {
+        fileName = fileName.substring(0, fileName.indexOf('.'));
+        UserFuncitonList.fileName = fileName.substring(0, 1).toUpperCase() + fileName.substring(1);
+    }
+
 
      public static UserFunctionDetails findByUserGivenName(String name) {
          for(UserFunctionDetails function : functions) {
@@ -44,6 +55,12 @@ public class UserFuncitonList {
      public static List<UserFunctionDetails> getAllFunction() {
          return functions;
      }
+
+    public static void clear() {
+        fileName = "";
+        nextUnProcessedFunctionIndex = 0;
+        functions = new ArrayList<UserFunctionDetails>();
+    }
 }
 
 
@@ -128,34 +145,42 @@ public class UserFuncitonList {
          }
           gencode.deleteCharAt(gencode.length() - 1);
           gencode.append(") throws Exception {\n\t")
-                  .append("return invoke(");
+                  .append(getCastingOfType())
+                  .append(compilerGenParams.get(0))
+                  .append(" __temp$Data$Convert = new ")
+                  .append(getCastingOfType())
+                  .append(compilerGenParams.get(0))
+                  .deleteCharAt(gencode.length() - 1)
+                  .append(params.get(0))
+                  .append(".size()];\n\t")
+                  .append("for(")
+                  .append("int _$iter = 0; _$iter < ")
+                  .append(params.get(0))
+                  .append(".size(); _$iter++")
+                  .append(" ) {\n\t\t")
+                  .append("__temp$Data$Convert[_$iter] = (")
+                  .append(getCastingOfType())
+                  .append(compilerGenParams.get(0))
+                  .deleteCharAt(gencode.length() - 1)
+                  .deleteCharAt(gencode.length() - 1)
+                  .append(")")
+                  .append(params.get(0))
+                  .append(".get(_$iter);\n")
+                  .append("}\n\t\t")
+                  .append("return invoke(")
+                  .append("__temp$Data$Convert")
+                  .append(");\n")
+                  .append("\t}");
 
-         for(int i = 0; i < this.params.size(); i++) {
-             gencode
-//                     .append("( " + compilerGenParams.get(i))
-//                     .append(") " )
-                     .append(params.get(i))
-                     .append(".toArray(")
-                     .append("new ")
-                     .append(compilerGenParams.get(i))
-//                     .append("[")
-//                     .append(params.get(i))
-                     .insert(gencode.length() - 1, params.get(i) + ".size()")
-//                     .append("]")
-                     .append(")")
-                     .append(",");
-         }
-         gencode.deleteCharAt(gencode.length() - 1)
-                 .append(");\n");
-
-          gencode.append("\t}");
          StringBuffer result = new StringBuffer(code);
-         System.out.print(code);
          result.insert(result.length()-2, gencode.toString()).append(";");
          return result.toString().replace("long[", "Long[");
      }
 
      public void setFuncInitCode(String funcInitCode) {
+         for(String param : this.compilerGenParams) {
+             funcInitCode = funcInitCode.replace(param, getCastingOfType()+param);
+         }
          this.funcInitCode = funcInitCode;
      }
 
@@ -190,8 +215,17 @@ public class UserFuncitonList {
      }
 
      public void setInterfaceDecl(String interfaceDecl) {
+         for(String param: this.compilerGenParams) {
+             interfaceDecl = interfaceDecl.replace(param, this.getCastingOfType() + param);
+         }
          this.interfaceDecl = interfaceDecl.replace("long[]", "Long[]");
      }
 
+     private String getCastingOfType() {
+         StringBuffer code = new StringBuffer();
+         code.append(UserFuncitonList.getFileName())
+                 .append("BoaMapper.Job0.");
+         return code.toString();
+     }
 }
 

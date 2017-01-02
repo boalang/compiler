@@ -66,6 +66,7 @@ import boa.compiler.visitors.CodeGeneratingVisitor;
 import boa.compiler.visitors.PrettyPrintVisitor;
 import boa.compiler.visitors.TaskClassifyingVisitor;
 import boa.compiler.visitors.TypeCheckingVisitor;
+import boa.compiler.visitors.UserFuncitonList;
 import boa.parser.BoaLexer;
 import boa.parser.BoaParser;
 
@@ -125,6 +126,8 @@ public class BoaCompiler {
 
 			for (int i = 0; i < inputFiles.size(); i++) {
 				final File f = inputFiles.get(i);
+                UserFuncitonList.clear();
+                UserFuncitonList.setFileName(f.getName());
 				try {
 					final BoaLexer lexer = new BoaLexer(new ANTLRFileStream(f.getAbsolutePath()));
 					lexer.removeErrorListeners();
@@ -636,6 +639,8 @@ public class BoaCompiler {
 
 			for (int i = 0; i < inputFiles.size(); i++) {
 				final File f = inputFiles.get(i);
+                UserFuncitonList.clear();
+                UserFuncitonList.setFileName(f.getName());
 				try {
 					final BoaLexer lexer = new BoaLexer(new ANTLRFileStream(f.getAbsolutePath()));
 					lexer.removeErrorListeners();
