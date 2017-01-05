@@ -131,7 +131,7 @@ public class UserFuncitonList {
      private String getFuncInitCode(String code) {
          StringBuffer result = new StringBuffer(code);
          result.append(";");
-         return result.toString().replace("long[", "Long[").replace("\n", "\n\t");
+         return autoBoxPrimitives(result.toString()).replace("\n", "\n\t");
      }
 
      public void setFuncInitCode(String funcInitCode) {
@@ -143,7 +143,16 @@ public class UserFuncitonList {
     }
 
      public void setInterfaceDecl(String interfaceDecl) {
-         this.interfaceDecl = "\t" + interfaceDecl.replace("long[]", "Long[]");
+         this.interfaceDecl = "\t" + autoBoxPrimitives(interfaceDecl);
+     }
+
+     private String autoBoxPrimitives(String code) {
+         return code.replace("long[]", "Long[]")
+                 .replace("double[", "Double[")
+                 .replace("float[", "Float[")
+                 .replace("char[", "Char[")
+                 .replace("byte[", "Byte[")
+                 .replace("boolean[", "Boolean[");
      }
 
      public String getUserAggClass() {
@@ -237,7 +246,7 @@ public class UserFuncitonList {
                  || "double".equalsIgnoreCase(typeName)
                  || "float[]".equalsIgnoreCase(typeName)
                  || "double[]".equalsIgnoreCase(typeName)) {
-             result = "Double.parseLong";
+             result = "Double.parseDouble";
          } else if("boolean".equalsIgnoreCase(typeName)
                  || "boolean[]".equalsIgnoreCase(typeName)
                  || "bool".equalsIgnoreCase(typeName)
@@ -253,7 +262,6 @@ public class UserFuncitonList {
          } else {
              result = typeName + ".deSerialize";
          }
-         System.out.println(typeName + "   parser: " + result);
          return result;
      }
 
