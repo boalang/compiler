@@ -126,8 +126,6 @@ public class BoaCompiler {
 
 			for (int i = 0; i < inputFiles.size(); i++) {
 				final File f = inputFiles.get(i);
-                UserFuncitonList.clear();
-                UserFuncitonList.setFileName(f.getName());
 				try {
 					final BoaLexer lexer = new BoaLexer(new ANTLRFileStream(f.getAbsolutePath()));
 					lexer.removeErrorListeners();
@@ -154,6 +152,8 @@ public class BoaCompiler {
 
 					try {
 						if (!parserErrorListener.hasError) {
+							UserFuncitonList.setFileName(f.getName().split(" ")[0]);
+							UserFuncitonList.setJobName(jobName);
 							new TypeCheckingVisitor().start(p, new SymbolTable());
 
 							final TaskClassifyingVisitor simpleVisitor = new TaskClassifyingVisitor();
@@ -252,7 +252,7 @@ public class BoaCompiler {
 			st.add("jobs", jobs);
 			st.add("jobnames", jobnames);
 			st.add("combineTables", CodeGeneratingVisitor.combineAggregatorStrings);
-			st.add("reduceDeclarations", CodeGeneratingVisitor.reduceAggregatorDeclStrings);
+			st.add("userDeclAgg", CodeGeneratingVisitor.userAggregatorDeclStrings);
 			st.add("reduceInit", CodeGeneratingVisitor.reduceAggregatorInitStrings);
 			st.add("reduceTables", CodeGeneratingVisitor.reduceAggregatorStrings);
 			st.add("splitsize", isSimple ? 64 * 1024 * 1024 : 10 * 1024 * 1024);
@@ -639,8 +639,6 @@ public class BoaCompiler {
 
 			for (int i = 0; i < inputFiles.size(); i++) {
 				final File f = inputFiles.get(i);
-                UserFuncitonList.clear();
-                UserFuncitonList.setFileName(f.getName());
 				try {
 					final BoaLexer lexer = new BoaLexer(new ANTLRFileStream(f.getAbsolutePath()));
 					lexer.removeErrorListeners();
@@ -667,6 +665,8 @@ public class BoaCompiler {
 
 					try {
 						if (!parserErrorListener.hasError) {
+							UserFuncitonList.setFileName(f.getName());
+							UserFuncitonList.setJobName("Job" + jobName);
 							new TypeCheckingVisitor().start(p, new SymbolTable());
 
 							final TaskClassifyingVisitor simpleVisitor = new TaskClassifyingVisitor();
@@ -765,7 +765,7 @@ public class BoaCompiler {
 			st.add("jobs", jobs);
 			st.add("jobnames", jobnames);
 			st.add("combineTables", CodeGeneratingVisitor.combineAggregatorStrings);
-			st.add("reduceDeclarations", CodeGeneratingVisitor.reduceAggregatorDeclStrings);
+			st.add("userDeclAgg", CodeGeneratingVisitor.userAggregatorDeclStrings);
 			st.add("reduceInit", CodeGeneratingVisitor.reduceAggregatorInitStrings);
 			st.add("reduceTables", CodeGeneratingVisitor.reduceAggregatorStrings);
 			st.add("splitsize", isSimple ? 64 * 1024 * 1024 : 10 * 1024 * 1024);

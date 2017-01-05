@@ -16,16 +16,16 @@
  */
 package boa.runtime;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.hadoop.conf.Configurable;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.log4j.Logger;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import boa.aggregators.Aggregator;
 import boa.aggregators.FinishedException;
@@ -86,7 +86,7 @@ public abstract class BoaReducer extends Reducer<EmitKey, EmitValue, Text, NullW
 		a.start(key);
 		a.setContext(context);
 
-		for (final EmitValue value : values)
+		for (final EmitValue value : values) {
 			try {
 				if(value.getTuple() != null) {
 					a.aggregate(value.getTuple(), value.getMetadata());
@@ -105,6 +105,7 @@ public abstract class BoaReducer extends Reducer<EmitKey, EmitValue, Text, NullW
 			} catch (final Throwable e) {
 				throw new RuntimeException(e);
 			}
+		}
 
 		a.finish();
 	}

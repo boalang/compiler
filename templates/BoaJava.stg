@@ -124,7 +124,7 @@ new <type>()
 >>
 
 TupleType(name, fields, types) ::= <<
-public static class <name> implements boa.BoaTup, java.io.Serializable
+public static class <name>  implements boa.BoaTup, java.io.Serializable
 {
 	<name>(){}
 	
@@ -141,6 +141,29 @@ public static class <name> implements boa.BoaTup, java.io.Serializable
 		objectOut.close();
 		return byteOutStream.toByteArray();
 	}
+
+	public static <name> deSerialize(String serializedObject) throws java.io.IOException {
+	    <name> obj = null;
+	    try {
+           byte b[] = serializedObject.getBytes();
+           java.io.ByteArrayInputStream bi = new java.io.ByteArrayInputStream(b);
+           java.io.ObjectInputStream si = new java.io.ObjectInputStream(bi);
+           obj = (<name>) si.readObject();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return obj;
+    }
+
+    @Override
+    public String toString() {
+        StringBuffer result = new StringBuffer();
+        for(String str: getValues()) {
+          result.append(str).append(", ");
+        }
+        result.deleteCharAt(result.length() - 1);
+        return result.toString();
+    }
 	
 	public String[] getValues() {
 		return new String[] {<fields:{field|String.valueOf(this.___<field>)}; separator=", "> };

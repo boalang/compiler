@@ -153,7 +153,7 @@ import boa.types.ml.BoaZeroR;
 
 /**
  * Prescan the program and check that all variables are consistently typed.
- * 
+ *
  * @author anthonyu
  * @author rdyer
  * @author ankuraga
@@ -161,7 +161,7 @@ import boa.types.ml.BoaZeroR;
 public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	/**
 	 * This verifies visitors have at most 1 before/after for a type.
-	 * 
+	 *
 	 * @author rdyer
 	 */
 	protected class VisitorCheckingVisitor extends AbstractVisitorNoArg {
@@ -212,7 +212,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	/**
 	 * This does type checking of function bodies to ensure the
 	 * returns are the correct type.
-	 * 
+	 *
 	 * @author rdyer
 	 */
 	protected class ReturnCheckingVisitor extends AbstractVisitorNoArg {
@@ -220,7 +220,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 
 		/**
 		 * Initialize the visitor with the function's return type.
-		 * 
+		 *
 		 * @param retType the function's return type
 		 */
 		public void initialize(final BoaType retType) {
@@ -261,7 +261,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 
 	/**
 	 * Finds if the expression is a Call.
-	 * 
+	 *
 	 * @author rdyer
 	 */
 	protected class CallFindingVisitor extends AbstractVisitorNoArg {
@@ -336,20 +336,20 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		if(expr.size() > 1) {
 			if(expr.get(0) instanceof BoaModel && expr.get(1) instanceof BoaTuple) {
 				final BoaType t = ((BoaModel)expr.get(0)).getType();
-					if(t instanceof BoaTuple) {
-						final List<BoaType> mtypes = ((BoaTuple)t).getTypes();
-						final List<BoaType> vtypes = ((BoaTuple)expr.get(1)).getTypes();
-						if(mtypes.size() - 1 == vtypes.size()) {
-							for(int i=0; i < mtypes.size() - 1; i++)
-								if(!(mtypes.get(i).toString().equals(vtypes.get(i).toString())))
-										throw new TypeCheckException(n, "incompatible types for model:" + " required '" + mtypes.get(i) + "', found '" + vtypes.get(i) + "'");
-						}
-						else
-							throw new TypeCheckException(n, "'incorrect number of types for model classification '" + "': required " + (mtypes.size()-1) + ", found " + vtypes.size());
+				if(t instanceof BoaTuple) {
+					final List<BoaType> mtypes = ((BoaTuple)t).getTypes();
+					final List<BoaType> vtypes = ((BoaTuple)expr.get(1)).getTypes();
+					if(mtypes.size() - 1 == vtypes.size()) {
+						for(int i=0; i < mtypes.size() - 1; i++)
+							if(!(mtypes.get(i).toString().equals(vtypes.get(i).toString())))
+								throw new TypeCheckException(n, "incompatible types for model:" + " required '" + mtypes.get(i) + "', found '" + vtypes.get(i) + "'");
 					}
+					else
+						throw new TypeCheckException(n, "'incorrect number of types for model classification '" + "': required " + (mtypes.size()-1) + ", found " + vtypes.size());
+				}
 			}
 		}
-		
+
 		if (n.getArgsSize() > 0)
 			n.type = new BoaTuple(this.check(n.getArgs(), env));
 		else
@@ -645,7 +645,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		if(n.getLhs().type instanceof BoaTuple && n.getRhs().type instanceof BoaTuple) {
 			if (((BoaTuple)n.getLhs().type).getSize() != ((BoaTuple)n.getRhs().type).getSize())
 				throw new TypeCheckException(n.getRhs(), "'incorrect number of types for assignment '" + "': required " + ((BoaTuple)n.getLhs().type).getSize() + ", found " + ((BoaTuple)n.getRhs().type).getSize());
-			
+
 			for (int i = 0; i < ((BoaTuple)n.getLhs().type).getSize(); i++) {
 				if (!( ((BoaTuple)n.getLhs().type).getMember(i).assigns(((BoaTuple)n.getRhs().type).getMember(i))))
 					throw new TypeCheckException(n.getRhs(), "incompatible types for assignment: required '" + n.getLhs().type + "', found '" + n.getRhs().type + "'");
@@ -653,7 +653,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 				if(((BoaTuple)n.getLhs().type).getMember(i) instanceof BoaEnum && ((BoaTuple)n.getRhs().type).getMember(i) instanceof BoaEnum)
 					if(!checkSameEnum(((BoaTuple)n.getLhs().type).getMember(i).toString(), ((BoaTuple)n.getRhs().type).getMember(i).toString()) )
 						throw new TypeCheckException(n.getRhs(), "incompatible type '" + ((BoaTuple)n.getRhs().type).getMember(i) + "' for assignment to '" + ((BoaTuple)n.getLhs().type).getMember(i) + "'");
-			
+
 				if(((BoaTuple)n.getLhs().type).getMember(i) instanceof BoaName)
 					if(((BoaName)(((BoaTuple)n.getLhs().type).getMember(i))).getType() instanceof BoaEnum && ((BoaTuple)n.getRhs().type).getMember(i) instanceof BoaEnum)
 						if(!checkSameEnum(((BoaName)(((BoaTuple)n.getLhs().type).getMember(i))).getType().toString(), ((BoaTuple)n.getRhs().type).getMember(i).toString()) )
@@ -753,7 +753,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		if(n.getValue().type instanceof BoaTuple) {
 			if (((BoaTuple)n.getValue().type).getSize() != ((BoaTuple)t.getType()).getSize())
 				throw new TypeCheckException(n.getValue(), "output variable '" + id + "': incorrect number of types for '" + id + "': required " + ((BoaTuple)t.getType()).getSize() + ", found " + ((BoaTuple)n.getValue().type).getSize() );
-			
+
 			for (int i = 0; i < ((BoaTuple)n.getValue().type).getSize(); i++) {
 				if (!( ((BoaTuple)t.getType()).getMember(i).assigns(((BoaTuple)n.getValue().type).getMember(i))))
 					throw new TypeCheckException(n.getValue(), "output variable '" + id + "': incompatible emit value types: '" + i + "': required '" + ((BoaTuple)t.getType()).getMember(i) + "', found '" + ((BoaTuple)n.getValue().type).getMember(i) + "'");
@@ -831,17 +831,17 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		if (!(e.type instanceof BoaBool)) {
 			e = new Expression(
 					new Conjunction(
-						new Comparison(
-							new SimpleExpr(
-								new Term(
-									new Factor(
-										new Identifier("def")
-									).addOp(new Call().addArg(e.clone()))
-								)
+							new Comparison(
+									new SimpleExpr(
+											new Term(
+													new Factor(
+															new Identifier("def")
+													).addOp(new Call().addArg(e.clone()))
+											)
+									)
 							)
-						)
 					)
-				);
+			);
 			e.accept(this, st);
 		}
 
@@ -1023,17 +1023,17 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			if(lhs instanceof BoaModel) {
 				final BoaType t = ((BoaModel)lhs).getType();
 				List<BoaType> types = new ArrayList<BoaType>();
-				
+
 				if(t instanceof BoaTuple)
 					types = ((BoaTuple)t).getTypes();
 				else if(t instanceof BoaArray)
 					types.add(((BoaArray)t).getType());
-				
+
 				if(lhs instanceof BoaAdaBoostM1) {
 					if(!(types.get(types.size() - 1) instanceof BoaEnum))
 						throw new TypeCheckException(n, "AdaBoostM1 required class to be nominal");
 					for(int i=0; i<types.size()-1; i++) {
-						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat ||
 								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
 							throw new TypeCheckException(n, "AdaBoostM1 required attributes to be numeric, nominal or date");
 					}
@@ -1042,7 +1042,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 							|| types.get(types.size() - 1) instanceof BoaTime))
 						throw new TypeCheckException(n, "AdditiveRegression required class to be numeric or date");
 					for(int i=0; i<types.size()-1; i++) {
-						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat ||
 								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
 							throw new TypeCheckException(n, "AdditiveRegression required attributes to be numeric, nominal or date");
 					}
@@ -1058,7 +1058,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 							|| types.get(types.size() - 1) instanceof BoaFloat || types.get(types.size() - 1) instanceof BoaTime))
 						throw new TypeCheckException(n, "AttributeSelectedClassifier required class to be numeric, nominal or date");
 					for(int i=0; i<types.size()-1; i++) {
-						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat ||
 								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
 							throw new TypeCheckException(n, "AttributeSelectedClassifier required attributes to be numeric, nominal or date");
 					}
@@ -1067,7 +1067,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 							|| types.get(types.size() - 1) instanceof BoaFloat || types.get(types.size() - 1) instanceof BoaTime))
 						throw new TypeCheckException(n, "Bagging required class to be numeric, nominal or date");
 					for(int i=0; i<types.size()-1; i++) {
-						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat ||
 								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
 							throw new TypeCheckException(n, "Bagging required attributes to be numeric, nominal or date");
 					}
@@ -1075,7 +1075,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 					if(!(types.get(types.size() - 1) instanceof BoaEnum))
 						throw new TypeCheckException(n, "BayesNetGenerator required class to be nominal");
 					for(int i=0; i<types.size()-1; i++) {
-						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat ||
 								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaArray))
 							throw new TypeCheckException(n, "BayesNetGenerator required attributes to be numeric or nominal");
 					}
@@ -1083,7 +1083,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 					if(!(types.get(types.size() - 1) instanceof BoaEnum))
 						throw new TypeCheckException(n, "BayesNet required class to be nominal");
 					for(int i=0; i<types.size()-1; i++) {
-						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat ||
 								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaArray))
 							throw new TypeCheckException(n, "BayesNet required attributes to be numeric or nominal");
 					}
@@ -1091,7 +1091,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 					if(!(types.get(types.size() - 1) instanceof BoaEnum))
 						throw new TypeCheckException(n, "ClassificationViaRegression required class to be nominal");
 					for(int i=0; i<types.size()-1; i++) {
-						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat ||
 								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
 							throw new TypeCheckException(n, "ClassificationViaRegression required attributes to be numeric, nominal or date");
 					}
@@ -1100,7 +1100,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 							|| types.get(types.size() - 1) instanceof BoaFloat || types.get(types.size() - 1) instanceof BoaTime))
 						throw new TypeCheckException(n, "CVParameterSelection required class to be numeric, nominal or date");
 					for(int i=0; i<types.size()-1; i++) {
-						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat ||
 								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaString || types.get(i) instanceof BoaArray))
 							throw new TypeCheckException(n, "CVParameterSelection required attributes to be numeric, nominal, date or string");
 					}
@@ -1109,7 +1109,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 							|| types.get(types.size() - 1) instanceof BoaFloat || types.get(types.size() - 1) instanceof BoaTime))
 						throw new TypeCheckException(n, "DecisionStump required class to be numeric, nominal or date");
 					for(int i=0; i<types.size()-1; i++) {
-						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat ||
 								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
 							throw new TypeCheckException(n, "DecisionStump required attributes to be numeric, nominal or date");
 					}
@@ -1118,7 +1118,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 							|| types.get(types.size() - 1) instanceof BoaFloat || types.get(types.size() - 1) instanceof BoaTime))
 						throw new TypeCheckException(n, "DecisionTable required class to be numeric, nominal or date");
 					for(int i=0; i<types.size()-1; i++) {
-						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat ||
 								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
 							throw new TypeCheckException(n, "DecisionTable required attributes to be numeric, nominal or date");
 					}
@@ -1126,7 +1126,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 					if(!(types.get(types.size() - 1) instanceof BoaEnum))
 						throw new TypeCheckException(n, "FilteredClassifier required class to be nominal");
 					for(int i=0; i<types.size()-1; i++) {
-						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat ||
 								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaString || types.get(i) instanceof BoaArray))
 							throw new TypeCheckException(n, "FilteredClassifier required attributes to be numeric, nominal, date or string");
 					}
@@ -1142,7 +1142,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 					if(!(types.get(types.size() - 1) instanceof BoaEnum))
 						throw new TypeCheckException(n, "HoeffdingTree required class to be nominal");
 					for(int i=0; i<types.size()-1; i++) {
-						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat ||
 								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
 							throw new TypeCheckException(n, "HoeffdingTree required attributes to be numeric, nominal or date");
 					}
@@ -1151,7 +1151,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 							|| types.get(types.size() - 1) instanceof BoaFloat || types.get(types.size() - 1) instanceof BoaTime))
 						throw new TypeCheckException(n, "IBk required class to be numeric, nominal or date");
 					for(int i=0; i<types.size()-1; i++) {
-						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat ||
 								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
 							throw new TypeCheckException(n, "IBk required attributes to be numeric, nominal or date");
 					}
@@ -1160,7 +1160,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 							|| types.get(types.size() - 1) instanceof BoaFloat || types.get(types.size() - 1) instanceof BoaTime))
 						throw new TypeCheckException(n, "InputMappedClassifier required class to be numeric, nominal or date");
 					for(int i=0; i<types.size()-1; i++) {
-						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat ||
 								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaString || types.get(i) instanceof BoaArray))
 							throw new TypeCheckException(n, "InputMappedClassifier required attributes to be numeric, nominal, date or string");
 					}
@@ -1168,7 +1168,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 					if(!(types.get(types.size() - 1) instanceof BoaEnum))
 						throw new TypeCheckException(n, "IterativeClassifierOptimizer required class to be nominal");
 					for(int i=0; i<types.size()-1; i++) {
-						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat ||
 								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
 							throw new TypeCheckException(n, "IterativeClassifierOptimizer required attributes to be numeric, nominal or date");
 					}
@@ -1176,7 +1176,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 					if(!(types.get(types.size() - 1) instanceof BoaEnum))
 						throw new TypeCheckException(n, "J48 required class to be nominal");
 					for(int i=0; i<types.size()-1; i++) {
-						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat ||
 								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
 							throw new TypeCheckException(n, "J48 required attributes to be numeric, nominal or date");
 					}
@@ -1184,7 +1184,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 					if(!(types.get(types.size() - 1) instanceof BoaEnum))
 						throw new TypeCheckException(n, "JRip required class to be nominal");
 					for(int i=0; i<types.size()-1; i++) {
-						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat ||
 								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
 							throw new TypeCheckException(n, "JRip required attributes to be numeric, nominal or date");
 					}
@@ -1193,7 +1193,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 							|| types.get(types.size() - 1) instanceof BoaFloat || types.get(types.size() - 1) instanceof BoaTime))
 						throw new TypeCheckException(n, "KStar required class to be numeric, nominal or date");
 					for(int i=0; i<types.size()-1; i++) {
-						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat ||
 								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
 							throw new TypeCheckException(n, "KStar required attributes to be numeric, nominal or date");
 					}
@@ -1202,7 +1202,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 							|| types.get(types.size() - 1) instanceof BoaFloat || types.get(types.size() - 1) instanceof BoaTime))
 						throw new TypeCheckException(n, "LinearRegression required class to be numeric or date");
 					for(int i=0; i<types.size()-1; i++) {
-						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat ||
 								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
 							throw new TypeCheckException(n, "LinearRegression required attributes to be numeric, nominal or date");
 					}
@@ -1210,7 +1210,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 					if(!(types.get(types.size() - 1) instanceof BoaEnum))
 						throw new TypeCheckException(n, "LMT required class to be nominal");
 					for(int i=0; i<types.size()-1; i++) {
-						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat ||
 								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
 							throw new TypeCheckException(n, "LMT required attributes to be numeric, nominal or date");
 					}
@@ -1218,7 +1218,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 					if(!(types.get(types.size() - 1) instanceof BoaEnum))
 						throw new TypeCheckException(n, "LogisticRegression required class to be nominal");
 					for(int i=0; i<types.size()-1; i++) {
-						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat ||
 								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
 							throw new TypeCheckException(n, "LogisticRegression required attributes to be numeric, nominal or date");
 					}
@@ -1226,7 +1226,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 					if(!(types.get(types.size() - 1) instanceof BoaEnum))
 						throw new TypeCheckException(n, "LogitBoost required class to be nominal");
 					for(int i=0; i<types.size()-1; i++) {
-						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat ||
 								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
 							throw new TypeCheckException(n, "LogitBoost required attributes to be numeric, nominal or date");
 					}
@@ -1235,7 +1235,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 							|| types.get(types.size() - 1) instanceof BoaFloat || types.get(types.size() - 1) instanceof BoaTime))
 						throw new TypeCheckException(n, "Lsa required class to be numeric, nominal or date");
 					for(int i=0; i<types.size()-1; i++) {
-						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat ||
 								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
 							throw new TypeCheckException(n, "Lsa required attributes to be numeric, nominal or date");
 					}
@@ -1244,7 +1244,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 							|| types.get(types.size() - 1) instanceof BoaFloat || types.get(types.size() - 1) instanceof BoaTime))
 						throw new TypeCheckException(n, "LWL required class to be numeric, nominal or date");
 					for(int i=0; i<types.size()-1; i++) {
-						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat ||
 								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
 							throw new TypeCheckException(n, "LWL required attributes to be numeric, nominal or date");
 					}
@@ -1252,7 +1252,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 					if(!(types.get(types.size() - 1) instanceof BoaEnum))
 						throw new TypeCheckException(n, "MultiClassClassifier required class to be nominal");
 					for(int i=0; i<types.size()-1; i++) {
-						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat ||
 								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
 							throw new TypeCheckException(n, "MultiClassClassifier required attributes to be numeric, nominal or date");
 					}
@@ -1260,7 +1260,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 					if(!(types.get(types.size() - 1) instanceof BoaEnum))
 						throw new TypeCheckException(n, "MultiClassClassifierUpdateable required class to be nominal");
 					for(int i=0; i<types.size()-1; i++) {
-						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat ||
 								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
 							throw new TypeCheckException(n, "MultiClassClassifierUpdateable required attributes to be numeric, nominal or date");
 					}
@@ -1269,7 +1269,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 							|| types.get(types.size() - 1) instanceof BoaFloat || types.get(types.size() - 1) instanceof BoaTime))
 						throw new TypeCheckException(n, "MultilayerPerceptron required class to be numeric, nominal or date");
 					for(int i=0; i<types.size()-1; i++) {
-						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat ||
 								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
 							throw new TypeCheckException(n, "MultilayerPerceptron required attributes to be numeric, nominal or date");
 					}
@@ -1278,7 +1278,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 							|| types.get(types.size() - 1) instanceof BoaFloat || types.get(types.size() - 1) instanceof BoaTime))
 						throw new TypeCheckException(n, "MultiScheme required class to be numeric, nominal or date");
 					for(int i=0; i<types.size()-1; i++) {
-						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat ||
 								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaString || types.get(i) instanceof BoaArray))
 							throw new TypeCheckException(n, "MultiScheme required attributes to be numeric, nominal, date or string");
 					}
@@ -1286,7 +1286,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 					if(!(types.get(types.size() - 1) instanceof BoaEnum))
 						throw new TypeCheckException(n, "NaiveBayes required class to be nominal");
 					for(int i=0; i<types.size()-1; i++) {
-						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat ||
 								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaArray))
 							throw new TypeCheckException(n, "NaiveBayes required attributes to be numeric or nominal");
 					}
@@ -1294,7 +1294,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 					if(!(types.get(types.size() - 1) instanceof BoaEnum))
 						throw new TypeCheckException(n, "NaiveBayesMultinomial required class to be nominal");
 					for(int i=0; i<types.size()-1; i++) {
-						if(!(types.get(i) instanceof BoaFloat || 
+						if(!(types.get(i) instanceof BoaFloat ||
 								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaArray))
 							throw new TypeCheckException(n, "NaiveBayesMultinomial required attributes to be numeric");
 					}
@@ -1302,7 +1302,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 					if(!(types.get(types.size() - 1) instanceof BoaEnum))
 						throw new TypeCheckException(n, "NaiveBayesMultinomialUpdateable required class to be nominal");
 					for(int i=0; i<types.size()-1; i++) {
-						if(!(types.get(i) instanceof BoaFloat || 
+						if(!(types.get(i) instanceof BoaFloat ||
 								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaArray))
 							throw new TypeCheckException(n, "NaiveBayesMultinomialUpdateable required attributes to be numeric");
 					}
@@ -1310,7 +1310,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 					if(!(types.get(types.size() - 1) instanceof BoaEnum))
 						throw new TypeCheckException(n, "OneR required class to be nominal");
 					for(int i=0; i<types.size()-1; i++) {
-						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat ||
 								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
 							throw new TypeCheckException(n, "OneR required attributes to be numeric, nominal or date");
 					}
@@ -1318,7 +1318,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 					if(!(types.get(types.size() - 1) instanceof BoaEnum))
 						throw new TypeCheckException(n, "PART required class to be nominal");
 					for(int i=0; i<types.size()-1; i++) {
-						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat ||
 								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
 							throw new TypeCheckException(n, "PART required attributes to be numeric, nominal or date");
 					}
@@ -1327,7 +1327,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 							|| types.get(types.size() - 1) instanceof BoaFloat || types.get(types.size() - 1) instanceof BoaTime))
 						throw new TypeCheckException(n, "PrincipalComponents required class to be numeric, nominal or date");
 					for(int i=0; i<types.size()-1; i++) {
-						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat ||
 								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
 							throw new TypeCheckException(n, "PrincipalComponents required attributes to be numeric, nominal or date");
 					}
@@ -1336,13 +1336,13 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 							|| types.get(types.size() - 1) instanceof BoaFloat))
 						throw new TypeCheckException(n, "RandomForest required class to be numeric or nominal");
 					for(int i=0; i<types.size()-1; i++) {
-						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat ||
 								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaArray))
 							throw new TypeCheckException(n, "RandomForest required attributes to be numeric, nominal or date");
 					}
 				} else if(lhs instanceof BoaSimpleKMeans) {
 					for(int i=0; i<types.size(); i++) {
-						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat ||
 								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaArray))
 							throw new TypeCheckException(n, "SimpleKMeans required attributes to be numeric or nominal");
 					}
@@ -1350,7 +1350,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 					if(!(types.get(types.size() - 1) instanceof BoaEnum))
 						throw new TypeCheckException(n, "SMO required class to be nominal");
 					for(int i=0; i<types.size()-1; i++) {
-						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat ||
 								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaArray))
 							throw new TypeCheckException(n, "SMO required attributes to be numeric or nominal");
 					}
@@ -1359,7 +1359,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 							|| types.get(types.size() - 1) instanceof BoaFloat || types.get(types.size() - 1) instanceof BoaTime))
 						throw new TypeCheckException(n, "Vote required class to be numeric, nominal or date");
 					for(int i=0; i<types.size()-1; i++) {
-						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat ||
 								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaString || types.get(i) instanceof BoaArray))
 							throw new TypeCheckException(n, "Vote required attributes to be numeric, nominal, date or string");
 					}
@@ -1368,7 +1368,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 							|| types.get(types.size() - 1) instanceof BoaFloat || types.get(types.size() - 1) instanceof BoaTime))
 						throw new TypeCheckException(n, "ZeroR required class to be numeric, nominal or date");
 					for(int i=0; i<types.size()-1; i++) {
-						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat || 
+						if(!(types.get(i) instanceof BoaEnum || types.get(i) instanceof BoaFloat ||
 								types.get(i) instanceof BoaInt || types.get(i) instanceof BoaTime || types.get(i) instanceof BoaString || types.get(i) instanceof BoaArray))
 							throw new TypeCheckException(n, "ZeroR required attributes to be numeric, nominal, date or string");
 					}
@@ -1535,7 +1535,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 				if (!(t.type instanceof BoaArray) || !valType.assigns(((BoaArray)t.type).getType()))
 					throw new TypeCheckException(t, "invalid array concatenation, found: " + t.type + " expected: " + type);
 			}
-		// only allow '+' (concat) on strings
+			// only allow '+' (concat) on strings
 		} else if (type instanceof BoaString) {
 			for (final String s : n.getOps())
 				if (!s.equals("+"))
@@ -1733,7 +1733,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			} catch (final RuntimeException e) {
 				throw new TypeCheckException(n, "invalid identifier '" + n.getId().getToken() + "'", e);
 			}
-		
+
 		if(n.type instanceof BoaAdaBoostM1)
 			n.type = new BoaAdaBoostM1(n.getType().type);
 		else if(n.type instanceof BoaAdditiveRegression)
@@ -1816,7 +1816,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			n.type = new BoaVote(n.getType().type);
 		else if(n.type instanceof BoaZeroR)
 			n.type = new BoaZeroR(n.getType().type);
-		
+
 	}
 
 	/** {@inheritDoc} */
@@ -1927,7 +1927,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		for (int i = 1; i < types.size(); i++) {
 			if((!(types.get(i).toBoxedJavaType() == type.toBoxedJavaType())) && tuple==false){
 				if(!(types.get(i) instanceof BoaEnum && type instanceof BoaEnum))
-					tuple = true; 
+					tuple = true;
 			}
 		}
 		return tuple;
@@ -1958,9 +1958,9 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 
 		while (m1.find()) {
 			s4 = s4 + m1.group(0);
-				if(s4.contains(s3)) {
-					return true;
-				}
+			if(s4.contains(s3)) {
+				return true;
+			}
 		}
 		return false;
 	}

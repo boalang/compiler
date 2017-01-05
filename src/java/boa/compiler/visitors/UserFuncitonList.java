@@ -11,21 +11,30 @@ public class UserFuncitonList {
     private static List<UserFunctionDetails> functions = new ArrayList<UserFunctionDetails>();
     private static int nextUnProcessedFunctionIndex = 0;
     private static String fileName = "";
+    private static String jobName = "Job0";
+
+    public static void setJobName(String name) {
+        UserFuncitonList.jobName = name;
+    }
+
+    public static String getJobName() {
+        return UserFuncitonList.jobName;
+    }
+
+    public static void setFileName(String name) {
+        name = name.substring(0, name.indexOf('.'));
+        name = name.substring(0, 1).toUpperCase() + name.substring(1);
+        UserFuncitonList.fileName = name.substring(0, 1).toUpperCase() + name.substring(1);
+    }
+
+    public static String getFileName() {
+        return UserFuncitonList.fileName;
+    }
 
 
     public static boolean addUserFunction(UserFunctionDetails function) {
         return functions.add(function);
     }
-
-    public static String getFileName() {
-        return fileName;
-    }
-
-    public static void setFileName(String fileName) {
-        fileName = fileName.substring(0, fileName.indexOf('.'));
-        UserFuncitonList.fileName = fileName.substring(0, 1).toUpperCase() + fileName.substring(1);
-    }
-
 
      public static UserFunctionDetails findByUserGivenName(String name) {
          for(UserFunctionDetails function : functions) {
@@ -55,12 +64,6 @@ public class UserFuncitonList {
      public static List<UserFunctionDetails> getAllFunction() {
          return functions;
      }
-
-    public static void clear() {
-        fileName = "";
-        nextUnProcessedFunctionIndex = 0;
-        functions = new ArrayList<UserFunctionDetails>();
-    }
 }
 
 
@@ -73,6 +76,7 @@ public class UserFuncitonList {
      private String reducerCode;
      private String returntype;
      private String interfaceDecl;
+     private String aggClassName;
      private final List<String> params;  // user given param names
      private final List<String> compilerGenParams; // name of the compiler generated params
      private final List<String> parameterGenCode; //  code generated for tuples
@@ -86,7 +90,12 @@ public class UserFuncitonList {
      public UserFunctionDetails(String name, String functionDeclCode) {
          this();
          this.userGivenName = name;
-         this.functionDeclCode = functionDeclCode;
+         this.functionDeclCode = "\t" + functionDeclCode;
+         this.aggClassName = "userDefined$" + this.userGivenName;
+     }
+
+     public String getAggClassName() {
+         return aggClassName;
      }
 
      public List<String> getParameterGenCode() {
@@ -134,53 +143,12 @@ public class UserFuncitonList {
      }
 
      private String getFuncInitCode(String code) {
-          StringBuffer gencode = new StringBuffer();
-          gencode.append(";\n")
-                 .append("@Override\n public Object invoke(");
-
-         for(int i = 0; i < this.params.size(); i++) {
-             gencode.append("java.util.List<Object> ")
-                     .append(params.get(i))
-                     .append(",");
-         }
-          gencode.deleteCharAt(gencode.length() - 1);
-          gencode.append(") throws Exception {\n\t")
-                  .append(getCastingOfType())
-                  .append(compilerGenParams.get(0))
-                  .append(" __temp$Data$Convert = new ")
-                  .append(getCastingOfType())
-                  .append(compilerGenParams.get(0))
-                  .deleteCharAt(gencode.length() - 1)
-                  .append(params.get(0))
-                  .append(".size()];\n\t")
-                  .append("for(")
-                  .append("int _$iter = 0; _$iter < ")
-                  .append(params.get(0))
-                  .append(".size(); _$iter++")
-                  .append(" ) {\n\t\t")
-                  .append("__temp$Data$Convert[_$iter] = (")
-                  .append(getCastingOfType())
-                  .append(compilerGenParams.get(0))
-                  .deleteCharAt(gencode.length() - 1)
-                  .deleteCharAt(gencode.length() - 1)
-                  .append(")")
-                  .append(params.get(0))
-                  .append(".get(_$iter);\n")
-                  .append("}\n\t\t")
-                  .append("return invoke(")
-                  .append("__temp$Data$Convert")
-                  .append(");\n")
-                  .append("\t}");
-
          StringBuffer result = new StringBuffer(code);
-         result.insert(result.length()-2, gencode.toString()).append(";");
-         return result.toString().replace("long[", "Long[");
+         result.append(";");
+         return result.toString().replace("long[", "Long[").replace("\n", "\n\t");
      }
 
      public void setFuncInitCode(String funcInitCode) {
-         for(String param : this.compilerGenParams) {
-             funcInitCode = funcInitCode.replace(param, getCastingOfType()+param);
-         }
          this.funcInitCode = funcInitCode;
      }
 
@@ -215,17 +183,73 @@ public class UserFuncitonList {
      }
 
      public void setInterfaceDecl(String interfaceDecl) {
-         for(String param: this.compilerGenParams) {
-             interfaceDecl = interfaceDecl.replace(param, this.getCastingOfType() + param);
-         }
-         this.interfaceDecl = interfaceDecl.replace("long[]", "Long[]");
+         this.interfaceDecl = "\t" + interfaceDecl.replace("long[]", "Long[]");
      }
 
-     private String getCastingOfType() {
+     public String getUserAggClass() {
+         String mapperType  = "boa." + UserFuncitonList.getFileName() + "."
+                 + UserFuncitonList.getFileName()
+                 + "BoaMapper."
+                 + UserFuncitonList.getJobName()
+                 + "."
+                 + this.compilerGenParams.get(0).substring(0, this.compilerGenParams.get(0).length() - 2);
+
          StringBuffer code = new StringBuffer();
-         code.append(UserFuncitonList.getFileName())
-                 .append("BoaMapper.Job0.");
-         return code.toString();
+         code.append("class ")
+                 .append(this.aggClassName)
+                 .append(" extends boa.aggregators.UserDefinedAggregator {\n")
+                 .append("\t java.util.List<")
+                 .append(this.compilerGenParams.get(0).substring(0, this.compilerGenParams.get(0).length() - 2))
+                 .append("> _$values = new java.util.ArrayList<")
+                 .append(this.compilerGenParams.get(0).substring(0, this.compilerGenParams.get(0).length() - 2))
+                 .append(">();\n")
+                 .append(this.getFunctionDeclCode())
+                 .append(this.interfaceDecl.replace("\n", "\n\t"))
+                 .append("public userDefined$")
+                 .append(this.userGivenName)
+                 .append("() {\n\t\t")
+                 .append(this.getFunctionDeclCode().replace("\n", "\n\t").split(" ")[1])
+                 .delete(code.length() - 3, code.length() - 1)
+                 .append(" = " + getFuncInitCode().replace("\n", "\n\t"))
+                 .deleteCharAt(code.length() - 1)
+                 .append(";\n")
+                 .append("\t}")
+                 .append(getOverridingMethods())
+                 .append("\n }");
+         return code.toString().replace(this.compilerGenParams.get(0).substring(0, this.compilerGenParams.get(0).length() - 2), mapperType);
      }
+
+     private String getOverridingMethods() {
+         StringBuffer methods = new StringBuffer();
+         String name = this.functionDeclCode.split(" ")[1];
+         methods.append("\n    @Override\n")
+                 .append("    public void aggregate(String data, String metadata) throws java.io.IOException, ")
+                 .append("java.lang.InterruptedException, boa.aggregators.FinishedException {\n")
+                 .append("        this._$values.add(")
+                 .append(this.compilerGenParams.get(0).substring(0, this.compilerGenParams.get(0).length() - 2))
+                 .append(".deSerialize(data));\n    }\n\n\t@Override\n    public void finish() throws java.io.IOException, java.lang.InterruptedException {\n")
+                 .append("        try{\n")
+                 .append("            this.collect(this.")
+                 .append(name.substring(0, name.length() - 2))
+                 .append(".invoke(this._$values.toArray")
+                 .append("( new ")
+                 .append(this.compilerGenParams.get(0).substring(0, this.compilerGenParams.get(0).length() - 2))
+                 .append("[")
+                 .append("this._$values.size()")
+                 .append("]")
+                 .append(")")
+                 .append("));\n        }catch(Exception e) {\n            e.printStackTrace();\n        }\n    }")
+                 .append("\n  @Override  \n")
+                 .append("    public void aggregate(")
+                 .append("BoaTup data, String metadata) throws java.io.IOException, ")
+                 .append("java.lang.InterruptedException, boa.aggregators.FinishedException {\n")
+                 .append("        this._$values.add(")
+                 .append("(")
+                 .append(this.compilerGenParams.get(0).substring(0, this.compilerGenParams.get(0).length() - 2))
+                 .append(")data);\n\t}");
+
+         return methods.toString();
+     }
+
 }
 

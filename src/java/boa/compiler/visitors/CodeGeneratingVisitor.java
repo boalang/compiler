@@ -582,7 +582,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 	final public static List<String> combineAggregatorStrings = new ArrayList<String>();
 	final public static List<String> reduceAggregatorStrings = new ArrayList<String>();
-	final public static List<String> reduceAggregatorDeclStrings = new ArrayList<String>();
+	final public static List<String> userAggregatorDeclStrings = new ArrayList<String>();
 	final public static List<String> reduceAggregatorInitStrings = new ArrayList<String>();
 
 	public CodeGeneratingVisitor(final String name) throws IOException {
@@ -659,22 +659,14 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				}
 			}
 
-			StringBuffer reducerCombinerEntry = new StringBuffer("this.aggregators.put(\"" + prefix + "::" + id + "\", " + src.toString().substring(2) + ");");
+			StringBuffer reducerCombinerEntry = new StringBuffer();
 			if(Aggregator.isUserDefinedAggregator(entry.getValue().getAggregator())) {
-				combines = false;
 				UserFunctionDetails function = UserFuncitonList.findByUserGivenName(entry.getValue().getAggregator());
-				//  update the reducer, combiner entry
-				String funcName = function.getFunctionDeclCode().split(" ")[1].split(";")[0];
-				reducerCombinerEntry.insert(reducerCombinerEntry.length()-3, funcName);
-
-				// update the declarations inside the reducers
-				this.reduceAggregatorDeclStrings.add(function.getAsReducerIFunctionDecl(function.getInterfaceDecl()));
-				this.reduceAggregatorDeclStrings.add(function.getFunctionDeclCode());
-				this.reduceAggregatorInitStrings.add(funcName + " = " + function.getFuncInitCode());
-				for(String param: function.getParameterGenCode()) {
-					this.reduceAggregatorDeclStrings.add(param);
-				}
-				this.reduceAggregatorDeclStrings.add(function.getReducerCode());
+				userAggregatorDeclStrings.add(function.getUserAggClass());
+				reducerCombinerEntry.append("this.aggregators.put(\"" + prefix + "::" + id + "\",  new " +  function.getAggClassName() + "());");
+				combines = false;
+			}else {
+				reducerCombinerEntry.append("this.aggregators.put(\"" + prefix + "::" + id + "\", " + src.toString().substring(2) + ");");
 			}
 			reduceAggregatorStrings.add(reducerCombinerEntry.toString());
 			if (combines)
