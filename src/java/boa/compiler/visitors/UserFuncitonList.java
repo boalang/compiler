@@ -73,8 +73,6 @@ public class UserFuncitonList {
      private String compilerGenName;
      private String functionDeclCode;
      private String funcInitCode;
-     private String reducerCode;
-     private String returntype;
      private String interfaceDecl;
      private String aggClassName;
      private final List<String> params;  // user given param names
@@ -98,10 +96,6 @@ public class UserFuncitonList {
          return aggClassName;
      }
 
-     public List<String> getParameterGenCode() {
-         return parameterGenCode;
-     }
-
      public boolean addParam(String name) {
          return this.params.add(name);
      }
@@ -118,10 +112,6 @@ public class UserFuncitonList {
          return userGivenName;
      }
 
-     public void setUserGivenName(String userGivenName) {
-         this.userGivenName = userGivenName;
-     }
-
      public String getCompilerGenName() {
          return compilerGenName;
      }
@@ -132,10 +122,6 @@ public class UserFuncitonList {
 
      public String getFunctionDeclCode() {
          return functionDeclCode;
-     }
-
-     public void setFunctionDeclCode(String functionDeclCode) {
-         this.functionDeclCode = functionDeclCode;
      }
 
      public String getFuncInitCode() {
@@ -152,57 +138,33 @@ public class UserFuncitonList {
          this.funcInitCode = funcInitCode;
      }
 
-     public String getReducerCode() {
-         return reducerCode;
-     }
-
-     public void setReducerCode(String reducerCode) {
-         this.reducerCode = reducerCode;
-     }
-
-     public String getReturntype() {
-         return returntype;
-     }
-
-     public void setReturntype(String returntype) {
-         this.returntype = returntype;
-     }
-
      public boolean isParam(String name) {
         return this.compilerGenParams.contains(name) || this.compilerGenParams.contains(name + "[]");
     }
-
-    public String getAsReducerIFunctionDecl(String code) {
-        StringBuffer codegen = new StringBuffer(code);
-        codegen.insert(code.indexOf('\n') , " extends UsrDfndReduceFunc");
-        return codegen.toString();
-    }
-
-     public String getInterfaceDecl() {
-         return interfaceDecl;
-     }
 
      public void setInterfaceDecl(String interfaceDecl) {
          this.interfaceDecl = "\t" + interfaceDecl.replace("long[]", "Long[]");
      }
 
      public String getUserAggClass() {
-         String mapperType  = "boa." + UserFuncitonList.getFileName() + "."
+         String typename = this.compilerGenParams.get(0).substring(0, this.compilerGenParams.get(0).length() - 2);
+         typename = typename.substring(0, 1).toUpperCase() + typename.substring(1);
+         String mapperType  = "";
+         mapperType = isPrimitive(typename) ? typename : "boa." + UserFuncitonList.getFileName() + "."
                  + UserFuncitonList.getFileName()
                  + "BoaMapper."
                  + UserFuncitonList.getJobName()
                  + "."
-                 + this.compilerGenParams.get(0).substring(0, this.compilerGenParams.get(0).length() - 2);
+                 + typename;
 
          StringBuffer code = new StringBuffer();
          code.append("class ")
                  .append(this.aggClassName)
                  .append(" extends boa.aggregators.UserDefinedAggregator {\n")
                  .append("\t java.util.List<")
-                 .append(this.compilerGenParams.get(0).substring(0, this.compilerGenParams.get(0).length() - 2))
-                 .append("> _$values = new java.util.ArrayList<")
-                 .append(this.compilerGenParams.get(0).substring(0, this.compilerGenParams.get(0).length() - 2))
-                 .append(">();\n")
+                 .append(typename)
+                 .append("> _$values")
+                 .append(";\n")
                  .append(this.getFunctionDeclCode())
                  .append(this.interfaceDecl.replace("\n", "\n\t"))
                  .append("public userDefined$")
@@ -216,39 +178,106 @@ public class UserFuncitonList {
                  .append("\t}")
                  .append(getOverridingMethods())
                  .append("\n }");
-         return code.toString().replace(this.compilerGenParams.get(0).substring(0, this.compilerGenParams.get(0).length() - 2), mapperType);
+         return code.toString().replace(typename, mapperType);
      }
 
      private String getOverridingMethods() {
+         String typeName = this.compilerGenParams.get(0).substring(0, this.compilerGenParams.get(0).length() - 2);
+         typeName = typeName.substring(0, 1).toUpperCase() + typeName.substring(1);
          StringBuffer methods = new StringBuffer();
          String name = this.functionDeclCode.split(" ")[1];
          methods.append("\n    @Override\n")
                  .append("    public void aggregate(String data, String metadata) throws java.io.IOException, ")
                  .append("java.lang.InterruptedException, boa.aggregators.FinishedException {\n")
                  .append("        this._$values.add(")
-                 .append(this.compilerGenParams.get(0).substring(0, this.compilerGenParams.get(0).length() - 2))
-                 .append(".deSerialize(data));\n    }\n\n\t@Override\n    public void finish() throws java.io.IOException, java.lang.InterruptedException {\n")
+                 .append(typeParser(typeName));
+
+         methods.append("(data));\n    }\n\n\t@Override\n    public void finish() throws java.io.IOException, java.lang.InterruptedException {\n")
                  .append("        try{\n")
                  .append("            this.collect(this.")
                  .append(name.substring(0, name.length() - 2))
                  .append(".invoke(this._$values.toArray")
                  .append("( new ")
-                 .append(this.compilerGenParams.get(0).substring(0, this.compilerGenParams.get(0).length() - 2))
+                 .append(typeName)
                  .append("[")
                  .append("this._$values.size()")
                  .append("]")
                  .append(")")
-                 .append("));\n        }catch(Exception e) {\n            e.printStackTrace();\n        }\n    }")
-                 .append("\n  @Override  \n")
-                 .append("    public void aggregate(")
-                 .append("BoaTup data, String metadata) throws java.io.IOException, ")
-                 .append("java.lang.InterruptedException, boa.aggregators.FinishedException {\n")
-                 .append("        this._$values.add(")
-                 .append("(")
-                 .append(this.compilerGenParams.get(0).substring(0, this.compilerGenParams.get(0).length() - 2))
-                 .append(")data);\n\t}");
+                 .append("));\n        }catch(Exception e) {\n            e.printStackTrace();\n        }\n    }\n")
+                 .append("\t@Override\n \t public void start(final boa.io.EmitKey key) {\n\t\t")
+                 .append("_$values = new java.util.ArrayList<")
+                 .append(typeName)
+                 .append(">();\n")
+                 .append("        super.start(key);\n    }");
+
+         if (!isPrimitive(typeName)) {
+            methods.append("\n  @Override  \n")
+                     .append("    public void aggregate(")
+                     .append("BoaTup data, String metadata) throws java.io.IOException, ")
+                     .append("java.lang.InterruptedException, boa.aggregators.FinishedException {\n")
+                     .append("        this._$values.add(")
+                     .append("(")
+                     .append(typeName)
+                     .append(")data);\n\t}");
+         }
 
          return methods.toString();
+     }
+
+     private String typeParser(String typeName) {
+         String result = "";
+         if ("long".equalsIgnoreCase(typeName)
+                 || "int".equalsIgnoreCase(typeName)
+                 || "long[]".equalsIgnoreCase(typeName)
+                 || "int[]".equalsIgnoreCase(typeName)
+                 || "integer[]".equalsIgnoreCase(typeName)
+                 || "integer".equalsIgnoreCase(typeName)) {
+             result = "Long.parseLong";
+         } else if("float".equalsIgnoreCase(typeName)
+                 || "double".equalsIgnoreCase(typeName)
+                 || "float[]".equalsIgnoreCase(typeName)
+                 || "double[]".equalsIgnoreCase(typeName)) {
+             result = "Double.parseLong";
+         } else if("boolean".equalsIgnoreCase(typeName)
+                 || "boolean[]".equalsIgnoreCase(typeName)
+                 || "bool".equalsIgnoreCase(typeName)
+                 || "bool[]".equalsIgnoreCase(typeName)) {
+             result = "Boolean.valueOf";
+         } else if("string".equalsIgnoreCase(typeName)
+                 || "string[]".equalsIgnoreCase(typeName)
+                 || "char".equalsIgnoreCase(typeName)
+                 || "char[]".equalsIgnoreCase(typeName)
+                 || "Byte[]".equalsIgnoreCase(typeName)
+                 || "byte[]".equalsIgnoreCase(typeName)) {
+             result = "";
+         } else {
+             result = typeName + ".deSerialize";
+         }
+         System.out.println(typeName + "   parser: " + result);
+         return result;
+     }
+
+     private boolean isPrimitive(String typeName) {
+         return "long".equalsIgnoreCase(typeName)
+                 || "int".equalsIgnoreCase(typeName)
+                 || "long[]".equalsIgnoreCase(typeName)
+                 || "int[]".equalsIgnoreCase(typeName)
+                 || "integer[]".equalsIgnoreCase(typeName)
+                 || "integer".equalsIgnoreCase(typeName)
+                 || "float".equalsIgnoreCase(typeName)
+                 || "double".equalsIgnoreCase(typeName)
+                 || "float[]".equalsIgnoreCase(typeName)
+                 || "double[]".equalsIgnoreCase(typeName)
+                 || "boolean".equalsIgnoreCase(typeName)
+                 || "boolean[]".equalsIgnoreCase(typeName)
+                 || "bool".equalsIgnoreCase(typeName)
+                 || "bool[]".equalsIgnoreCase(typeName)
+                 || "String[]".equalsIgnoreCase(typeName)
+                 || "String".equalsIgnoreCase(typeName)
+                 || "byte".equalsIgnoreCase(typeName)
+                 || "byte[]".equalsIgnoreCase(typeName)
+                 || "char[]".equalsIgnoreCase(typeName)
+                 || "char".equalsIgnoreCase(typeName);
      }
 
 }

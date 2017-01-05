@@ -16,8 +16,6 @@
  */
 package boa.aggregators;
 
-import boa.io.EmitKey;
-
 /**
  * A Boa aggregator to calculate the sum of the values in a dataset.
  *
@@ -26,10 +24,5 @@ import boa.io.EmitKey;
  */
 @AggregatorSpec(name = "userDefinedAggregator", type = "UserDefined", canCombine = true)
 public abstract class UserDefinedAggregator extends Aggregator {
-    /** {@inheritDoc} */
-    @Override
-    public void start(final EmitKey key) {
-        super.start(key);
 
-    }
 }
