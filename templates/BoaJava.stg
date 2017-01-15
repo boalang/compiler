@@ -158,10 +158,13 @@ public static class <name>  implements boa.BoaTup, java.io.Serializable
     @Override
     public String toString() {
         StringBuffer result = new StringBuffer();
+        result.append("{");
         for(String str: getValues()) {
           result.append(str).append(", ");
         }
         result.deleteCharAt(result.length() - 1);
+        result.deleteCharAt(result.length() - 1);
+        result.append("}");
         return result.toString();
     }
 	

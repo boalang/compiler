@@ -135,7 +135,21 @@ public class UserFuncitonList {
      }
 
      public void setFuncInitCode(String funcInitCode) {
-         this.funcInitCode = funcInitCode;
+         StringBuffer code = new StringBuffer(funcInitCode);
+         int retIndexStart = code.indexOf("public ") + "public ".length();
+         int retIndexEnd = code.indexOf("invoke");
+         String returnT = code.substring(retIndexStart, retIndexEnd);
+         if (returnT.endsWith("[] ")) {
+             int startIndexofRetStmt = code.indexOf("return ") + "return ".length();
+             String retStmt = code.substring(startIndexofRetStmt);
+             int endIndexofRetStmt = startIndexofRetStmt + retStmt.indexOf(';');
+             retStmt = code.substring(startIndexofRetStmt, endIndexofRetStmt);
+
+             // replace code from the return type and return statement
+             code.replace(startIndexofRetStmt, endIndexofRetStmt, "java.util.Arrays.toString(" + retStmt + ")");
+             code.replace(retIndexStart, retIndexEnd, "String ");
+         }
+         this.funcInitCode = code.toString();
      }
 
      public boolean isParam(String name) {
@@ -143,6 +157,15 @@ public class UserFuncitonList {
     }
 
      public void setInterfaceDecl(String interfaceDecl) {
+         StringBuffer code = new StringBuffer(interfaceDecl);
+         int retIndexStart = code.indexOf("{") + 1;
+         int retIndexEnd = code.indexOf(" invoke");
+         String returnT = code.substring(retIndexStart, retIndexEnd);
+         if (returnT.endsWith("[]")) {
+             // replace code from the return type and return statement
+             code.replace(retIndexStart, retIndexEnd, "\n\tString ");
+         }
+         interfaceDecl = code.toString();
          this.interfaceDecl = "\t" + autoBoxPrimitives(interfaceDecl);
      }
 
