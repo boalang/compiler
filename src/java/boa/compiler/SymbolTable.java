@@ -599,7 +599,7 @@ public class SymbolTable {
 		}
 	}
 
-	public Class<?> getAggregator(final String name, final BoaScalar type) {
+	public Class<?> getAggregator(final String name, final BoaType type) {
 		if (aggregators.containsKey(name + ":" + type))
 			return aggregators.get(name + ":" + type);
 		if (aggregators.containsKey(name))
