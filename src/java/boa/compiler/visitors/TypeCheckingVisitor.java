@@ -1917,9 +1917,6 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	}
 
 	protected boolean checkTupleArray(final List<BoaType> types) {
-		BoaType type;
-		boolean tuple = false;
-
 		if (types == null)
 			return false;
 
