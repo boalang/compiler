@@ -52,6 +52,7 @@ public class SymbolTable {
 	private Stack<BoaType> operandType = new Stack<BoaType>();
 	private boolean needsBoxing;
 	private boolean isBeforeVisitor = false;
+	private boolean shadowing = false;
 
 	static {
 		aggregators = new HashMap<String, Class<?>>();
@@ -308,6 +309,7 @@ public class SymbolTable {
 		st.functions = this.functions;
 		st.locals = new HashMap<String, BoaType>(this.locals);
 		st.isBeforeVisitor = this.isBeforeVisitor;
+		st.shadowing = this.shadowing;
 
 		return st;
 	}
@@ -614,6 +616,14 @@ public class SymbolTable {
 
 	public boolean getIsBeforeVisitor() {
 		return this.isBeforeVisitor;
+	}
+
+	public void setShadowing(final boolean shadowing) {
+		this.shadowing = shadowing;
+	}
+
+	public boolean getShadowing() {
+		return this.shadowing;
 	}
 
 	@Override

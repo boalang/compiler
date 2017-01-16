@@ -56,9 +56,9 @@ public class TestTypecheckBad extends BaseTest {
 		typecheck(load(badDir + "re-decl-var.boa"), "variable 'f' already declared as 'function[]: any'");
 	}
 
-	//@Test
+	@Test
 	public void reDeclVar2() throws IOException {
-		typecheck("autoaddedoutputvar: output sum of int;autoaddedoutputvar << 1;" + load(badDir + "re-decl-var2.boa"), "variable 'i' already declared as 'int'");
+		typecheck(load(badDir + "re-decl-var2.boa"), "variable 'i' already declared as 'int'");
 	}
 
 	@Test

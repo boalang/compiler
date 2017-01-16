@@ -280,6 +280,15 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		n.getType().accept(this, env);
 
 		if (n.hasIdentifier()) {
+			final String id = n.getIdentifier().getToken();
+
+			if (!env.getShadowing()) {
+				if (env.hasGlobal(id))
+					throw new TypeCheckException(n.getIdentifier(), "name conflict: constant '" + id + "' already exists");
+				if (env.hasLocal(id))
+					throw new TypeCheckException(n.getIdentifier(), "variable '" + id + "' already declared as '" + env.get(id) + "'");
+			}
+
 			n.type = new BoaName(n.getType().type, n.getIdentifier().getToken());
 			env.set(n.getIdentifier().getToken(), n.getType().type);
 			n.getIdentifier().accept(this, env);
@@ -903,9 +912,11 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		n.env = st;
 
 		if (n.hasComponent()) {
+			st.setShadowing(true);
 			n.getComponent().accept(this, st);
 			if (n.getComponent().type instanceof BoaName)
 				n.getComponent().type = n.getComponent().getType().type;
+			st.setShadowing(false);
 		}
 		else if (!n.hasWildcard())
 			for (final Identifier id : n.getIdList()) {
@@ -1125,12 +1136,12 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		final BoaType[] params = new BoaType[n.getArgsSize()];
 		if (n.getArgsSize() > 0) {
 			int i = 0;
+			env.setShadowing(true);
 			for (final Component c : n.getArgs()) {
-				c.getType().accept(this, env);
+				c.accept(this, env);
 				params[i++] = new BoaName(c.getType().type, c.getIdentifier().getToken());
-				env.set(c.getIdentifier().getToken(), c.getType().type);
-				c.getIdentifier().accept(this, env);
 			}
+			env.setShadowing(false);
 		}
 
 		BoaType ret = new BoaAny();
