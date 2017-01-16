@@ -54,15 +54,14 @@ public class DefaultProperties {
 	public static final String SF_JSON_CACHE_PATH = "json_cache";
 	public static final String SF_SVN_PATH = "svn";
 	public static final String SF_TICKETS_PATH = "tickets";
-	
+
 	// GitHub paths
 	public static  String GH_JSON_PATH = "repos-metadata-Boa-upto1213";
 	public static  String GH_JSON_CACHE_PATH = "json_cache";
 //	public static final String GH_GIT_PATH = "github/repositories";
 	public static String GH_GIT_PATH = "/Users/nmtiwari/nmt/githubCacheJSon/github";
 	public static final String GH_TICKETS_PATH = "tickets";
-	
-	
+
 	public static String HADOOP_SEQ_FILE_LOCATION = "";
 	public static String HADOOP_OUT_LOCATION = "";
 }

@@ -602,24 +602,25 @@ public class SymbolTable {
 	public Class<?> getAggregator(final String name, final BoaScalar type) {
 		if (aggregators.containsKey(name + ":" + type))
 			return aggregators.get(name + ":" + type);
-		else if (aggregators.containsKey(name))
+		if (aggregators.containsKey(name))
 			return aggregators.get(name);
-		else
-			throw new RuntimeException("no such aggregator " + name + " of " + type);
+		throw new RuntimeException("no such aggregator " + name + " of " + type);
 	}
 
 	public List<Class<?>> getAggregators(final String name, final BoaType type) {
 		final List<Class<?>> searchResult = new ArrayList<Class<?>>();
-		if(aggregators.containsKey(name) || aggregators.containsKey(name + ":" + type)){
+
+		if (aggregators.containsKey(name) || aggregators.containsKey(name + ":" + type)) {
 			if (type instanceof BoaTuple)
-				searchResult.add(this.getAggregator(name, (BoaScalar) type));
+				searchResult.add(this.getAggregator(name, type));
 			else if (type instanceof BoaArray)
 				searchResult.add(this.getAggregator(name, ((BoaArray)type).getType()));
 			else
-				searchResult.add(this.getAggregator(name, (BoaScalar) type));
-		}else if(this.functions.hasFunction(name)){
+				searchResult.add(this.getAggregator(name, type));
+		} else if (this.functions.hasFunction(name)) {
 			searchResult.add(UserDefinedAggregator.class);
 		}
+
 		return searchResult;
 	}
 

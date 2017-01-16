@@ -1920,17 +1920,18 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		BoaType type;
 		boolean tuple = false;
 
-		if(types == null)
+		if (types == null)
 			return false;
 
-		type = types.get(0);
-		for (int i = 1; i < types.size(); i++) {
-			if((!(types.get(i).toBoxedJavaType() == type.toBoxedJavaType())) && tuple==false){
-				if(!(types.get(i) instanceof BoaEnum && type instanceof BoaEnum))
-					tuple = true;
-			}
-		}
-		return tuple;
+		final String type = types.get(0).toBoxedJavaType();
+		final boolean isEnum = types.get(0) instanceof BoaEnum;
+
+		for (int i = 1; i < types.size(); i++)
+			if (!type.equals(types.get(i).toBoxedJavaType()))
+				if (!(types.get(i) instanceof BoaEnum && isEnum))
+					return true;
+
+		return false;
 	}
 
 	protected BoaType checkPairs(final List<Pair> pl, final SymbolTable env) {
