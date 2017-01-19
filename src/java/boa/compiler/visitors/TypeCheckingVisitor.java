@@ -280,6 +280,15 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		n.getType().accept(this, env);
 
 		if (n.hasIdentifier()) {
+			final String id = n.getIdentifier().getToken();
+
+			if (!env.getShadowing()) {
+				if (env.hasGlobal(id))
+					throw new TypeCheckException(n.getIdentifier(), "name conflict: constant '" + id + "' already exists");
+				if (env.hasLocal(id))
+					throw new TypeCheckException(n.getIdentifier(), "variable '" + id + "' already declared as '" + env.get(id) + "'");
+			}
+
 			n.type = new BoaName(n.getType().type, n.getIdentifier().getToken());
 			env.set(n.getIdentifier().getToken(), n.getType().type);
 			n.getIdentifier().accept(this, env);
@@ -298,8 +307,13 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		else if (n.getExprsSize() > 0) {
 			List<BoaType> types = check(n.getExprs(), env);
 
-			if(!(checkTupleArray(types) == true))
-				n.type = new BoaArray(types.get(0));
+			if(!(checkTupleArray(types) == true)) {
+				final BoaType t = types.get(0);
+				if (!(t instanceof BoaScalar))
+					if (!(t instanceof BoaTuple))
+						throw new TypeCheckException(n.getExprs(), "non-scalar/non-tuple type '" + t + "' can not be used in arrays");
+				n.type = new BoaArray(t);
+			}
 			else
 				n.type = new BoaTuple(types);
 		}
@@ -898,9 +912,11 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		n.env = st;
 
 		if (n.hasComponent()) {
+			st.setShadowing(true);
 			n.getComponent().accept(this, st);
 			if (n.getComponent().type instanceof BoaName)
 				n.getComponent().type = n.getComponent().getType().type;
+			st.setShadowing(false);
 		}
 		else if (!n.hasWildcard())
 			for (final Identifier id : n.getIdList()) {
@@ -1105,7 +1121,11 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	public void visit(final ArrayType n, final SymbolTable env) {
 		n.env = env;
 		n.getValue().accept(this, env);
-		n.type = new BoaArray(n.getValue().type);
+		final BoaType t = n.getValue().type;
+		if (!(t instanceof BoaScalar))
+			if (!(t instanceof BoaTuple))
+				throw new TypeCheckException(n.getValue(), "non-scalar/non-tuple type '" + t + "' can not be used in arrays");
+		n.type = new BoaArray(t);
 	}
 
 	/** {@inheritDoc} */
@@ -1116,12 +1136,12 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		final BoaType[] params = new BoaType[n.getArgsSize()];
 		if (n.getArgsSize() > 0) {
 			int i = 0;
+			env.setShadowing(true);
 			for (final Component c : n.getArgs()) {
-				c.getType().accept(this, env);
+				c.accept(this, env);
 				params[i++] = new BoaName(c.getType().type, c.getIdentifier().getToken());
-				env.set(c.getIdentifier().getToken(), c.getType().type);
-				c.getIdentifier().accept(this, env);
 			}
+			env.setShadowing(false);
 		}
 
 		BoaType ret = new BoaAny();
@@ -1291,19 +1311,16 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	}
 
 	protected boolean checkTupleArray(final List<BoaType> types) {
-		BoaType type;
-		boolean tuple = false;
-
-		if(types == null)
+		if (types == null)
 			return false;
 
-		type = types.get(0);
-		for (int i = 1; i < types.size(); i++) {
-			if((!(types.get(i).toBoxedJavaType() == type.toBoxedJavaType())) && tuple==false){
-				tuple = true;
-			}
-		}
-		return tuple;
+		final String type = types.get(0).toBoxedJavaType();
+
+		for (int i = 1; i < types.size(); i++)
+			if (!type.equals(types.get(i).toBoxedJavaType()))
+				return true;
+
+		return false;
 	}
 
 	protected BoaType checkPairs(final List<Pair> pl, final SymbolTable env) {

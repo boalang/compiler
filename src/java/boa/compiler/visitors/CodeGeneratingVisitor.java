@@ -328,11 +328,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 			st.add("map", n.env.getId());
 			st.add("value", code.removeLast());
-			// FIXME rdyer this is a bit of a hack to fix maps with int keys
-			String key = code.removeLast();
-			if (key.startsWith("(int)("))
-				key = key.substring(5, key.length() - 1);
-			st.add("key", key);
+			st.add("key", code.removeLast());
 
 			code.add(st.render());
 		}
@@ -589,10 +585,14 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			final String s = expand(f.getMacro(), n.getArgs(), parts.toArray(new String[]{}));
 
 			// FIXME rdyer a hack, so that "def(pbuf.attr)" generates "pbuf.hasAttr()"
-			if (funcName.equals("def")) {
+			if (funcName.equals("def") && n.getArgsSize() == 1) {
 				final Matcher m = Pattern.compile("\\((\\w+).get(\\w+)\\(\\) != null\\)").matcher(s);
 				if (m.matches() && !m.group(2).endsWith("List"))
 					st.add("call", m.group(1) + ".has" + m.group(2) + "()");
+				// #68 - def(a[i]) was generating a[i] != null which fails for arrays of ints (or any nullable type)
+				// so instead, since they are always defined, replace with 'true'
+				else if (n.getArg(0).type instanceof BoaScalar && !(n.getArg(0).type instanceof BoaString) && !(n.getArg(0).type instanceof BoaTuple))
+					st.add("call", "true");
 				else
 					st.add("call", s);
 			} else {
@@ -737,11 +737,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		st.add("map", n.env.getId());
 		st.add("value", code.removeLast());
-		// FIXME rdyer this is a bit of a hack to fix maps with int keys
-		String key = code.removeLast();
-		if (key.startsWith("(int)("))
-			key = key.substring(5, key.length() - 1);
-		st.add("key", key);
+		st.add("key", code.removeLast());
 
 		code.add(st.render());
 	}
@@ -847,9 +843,9 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		st.add("operand", "");
 
-		BoaType indexType = n.getStart().type;
+		final BoaType indexType = n.getStart().type;
 		n.getStart().accept(this);
-		if (indexType instanceof BoaInt)
+		if (indexType instanceof BoaInt && !(t instanceof BoaMap))
 			st.add("index", "(int)(" + code.removeLast() + ")");
 		else
 			st.add("index", code.removeLast());
@@ -975,13 +971,17 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		// FIXME rdyer hack to fix assigning to maps
 		if (lhs.contains(".get(")) {
-			String s = lhs.replaceFirst(Pattern.quote(".get("), ".put(");
-			// FIXME rdyer this is a bit of a hack to fix maps with int keys
-			if (s.contains("(int)(")) {
-				s = s.replaceFirst(Pattern.quote("(int)("), "");
-				s = s.substring(0, s.lastIndexOf(')'));
+			int idx = lhs.lastIndexOf(')') - 1;
+			int parens = 1;
+			for (; idx >= 0; idx--) {
+				if (lhs.charAt(idx) == '(')
+					parens--;
+				else if (lhs.charAt(idx) == ')')
+					parens++;
+				if (parens == 0) break;
 			}
-			code.add(s.substring(0, s.lastIndexOf(')')) + ", " + rhs + s.substring(s.lastIndexOf(')')) + ";");
+			idx += 1;
+			code.add(lhs.substring(0, idx - ".get(".length()) + ".put(" + lhs.substring(idx, lhs.lastIndexOf(')')) + ", " + rhs + lhs.substring(lhs.lastIndexOf(')')) + ";");
 			return;
 		}
 
@@ -1316,10 +1316,8 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				return;
 			}
 
-			// FIXME rdyer if the type is a type identifier, n.getType() returns Identifier
-			// and maps/stacks/sets wind up not having the proper constructors here
 			n.getType().accept(this);
-			st.add("rhs", code.removeLast());
+			st.add("rhs", "new " + code.removeLast() + "()");
 			code.add(st.render());
 			return;
 		}
@@ -1627,7 +1625,12 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	public void visit(final ArrayType n) {
 		final ST st = stg.getInstanceOf("ArrayType");
 
+		// arrays dont need their component type boxed
+		boolean boxing = n.env.getNeedsBoxing();
+		n.env.setNeedsBoxing(false);
 		n.getValue().accept(this);
+		n.env.setNeedsBoxing(boxing);
+
 		st.add("type", code.removeLast());
 
 		code.add(st.render());
@@ -1799,10 +1802,19 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	protected static String expand(final String template, final List<Expression> args, final String... parameters) {
 		String replaced = template;
 
-		if (args.size() == 1 && args.get(0).type instanceof BoaMap) {
-			BoaMap m = (BoaMap)args.get(0).type;
-			replaced = replaced.replace("${K}", m.getIndexType().toBoxedJavaType());
-			replaced = replaced.replace("${V}", m.getType().toBoxedJavaType());
+		// FIXME rdyer probably we should check the type, find the typevar, and then pull accordingly...
+		if (replaced.contains("${K}") || replaced.contains("${V}")) {
+			if (args.size() == 1 && args.get(0).type instanceof BoaMap) {
+				final BoaMap m = (BoaMap)args.get(0).type;
+				replaced = replaced.replace("${K}", m.getIndexType().toBoxedJavaType());
+				replaced = replaced.replace("${V}", m.getType().toBoxedJavaType());
+			} else if (args.size() == 1 && args.get(0).type instanceof BoaStack) {
+				final BoaStack s = (BoaStack)args.get(0).type;
+				replaced = replaced.replace("${V}", s.getType().toBoxedJavaType());
+			} else if (args.size() == 1 && args.get(0).type instanceof BoaSet) {
+				final BoaSet s = (BoaSet)args.get(0).type;
+				replaced = replaced.replace("${V}", s.getType().toBoxedJavaType());
+			}
 		}
 
 		for (int i = 0; i < parameters.length; i++)
@@ -1879,18 +1891,15 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	}
 
 	protected boolean checkTupleArray(final List<BoaType> types) {
-		BoaType type;
-		boolean tuple = false;
-
-		if(types == null)
+		if (types == null)
 			return false;
 
-		type = types.get(0);
-		for (int i = 1; i < types.size(); i++) {
-			if((!(types.get(i).toBoxedJavaType() == type.toBoxedJavaType())) && tuple==false){
-				tuple = true;
-			}
-		}
-		return tuple;
+		final String type = types.get(0).toBoxedJavaType();
+
+		for (int i = 1; i < types.size(); i++)
+			if (!type.equals(types.get(i).toBoxedJavaType()))
+				return true;
+
+		return false;
 	}
 }
