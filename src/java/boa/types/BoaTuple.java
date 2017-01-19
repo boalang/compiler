@@ -21,12 +21,12 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * A {@link BoaScalar} representing a data structure with named members of
+ * A {@link BoaType} representing a data structure with named members of
  * arbitrary type.
  * 
  * @author anthonyu
  */
-public class BoaTuple extends BoaScalar {
+public class BoaTuple extends BoaType {
 	protected final List<BoaType> members;
 	protected final Map<String, Integer> names;
 
