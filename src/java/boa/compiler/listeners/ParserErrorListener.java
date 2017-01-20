@@ -17,10 +17,17 @@
 
 package boa.compiler.listeners;
 
+import java.io.File;
+import org.antlr.v4.runtime.ANTLRFileStream;
+import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
+import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.TokenSource;
+import org.antlr.v4.runtime.atn.PredictionMode;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
+import boa.parser.BoaLexer;
 
 public class ParserErrorListener extends BoaErrorListener {
 	@Override

@@ -49,10 +49,9 @@ import boa.compiler.visitors.VisitClassifier;
 import boa.types.BoaProtoTuple;
 
 /**
- * Finds all visitors and converts the stop statements into a counter
- * functions.  This makes the visitor's side effects the same while
- * changing the semantics so it doesn't actually stop the visit (and
- * thus will visit all nodes).
+ * Finds all visitors and converts the stop statements into counter functions.
+ * This makes the visitor's side effects the same while changing the semantics
+ * so it doesn't actually stop the visit (and thus will visit all nodes).
  * 
  * General algorithm:
  * 
@@ -149,20 +148,14 @@ public class StopStatementTransformer extends AbstractVisitorNoArg {
 			final ReturnStatement ret = new ReturnStatement();
 			n.getParent().replaceStatement(n, ret);
 
-			ret.insertStatementBefore(new PostfixStatement(
-					new Expression(
-						new Conjunction(
-							new Comparison(
-								new SimpleExpr(
-									new Term(
-										new Factor(
-											new Identifier(varCounterName)
-										)
-									)
-								)
-							)
-						)
-					), "++"));
+			ret.insertStatementBefore(
+				new PostfixStatement(
+					ASTFactory.createFactorExpr(
+						ASTFactory.createIdentifier(varCounterName, n.env)
+					),
+					"++"
+				)
+			);
 		}
 	}
 
@@ -186,19 +179,7 @@ public class StopStatementTransformer extends AbstractVisitorNoArg {
 				if (id.getToken().equals("visit")) {
 					final Call c = (Call)n.getOp(0);
 					if (c.getArgsSize() == 1) {
-						c.addArg(new Expression(
-									new Conjunction(
-											new Comparison(
-												new SimpleExpr(
-													new Term(
-														new Factor(
-															original.clone()
-														)
-													)
-												)
-											)
-										)
-									));
+						c.addArg(ASTFactory.createFactorExpr(original.clone()));
 						return;
 					}
 				}
@@ -241,21 +222,13 @@ public class StopStatementTransformer extends AbstractVisitorNoArg {
 		//
 		// 2) add a long var declaration to the enclosing scope
 		//
-		n.insertStatementBefore(new VarDeclStatement(new Identifier(varCounterName), new Identifier("int"),
-				new Expression(
-					new Conjunction(
-							new Comparison(
-								new SimpleExpr(
-									new Term(
-										new Factor(
-											new IntegerLiteral("0")
-										)
-									)
-								)
-							)
-						)
-					)
-				));
+		n.insertStatementBefore(
+			new VarDeclStatement(
+				new Identifier(varCounterName),
+				new Identifier("int"),
+				ASTFactory.createFactorExpr(new IntegerLiteral("0"))
+			)
+		);
 
 		//
 		// 3) find all visit statements containing stop statements, for each one:
@@ -276,19 +249,7 @@ public class StopStatementTransformer extends AbstractVisitorNoArg {
 			final Block funcBody = v.getBody().clone();
 			final VarDeclStatement var = new VarDeclStatement(
 					new Identifier(funcName),
-					new Expression(
-						new Conjunction(
-							new Comparison(
-								new SimpleExpr(
-									new Term(
-										new Factor(
-											new FunctionExpression(funcType, funcBody)
-										)
-									)
-								)
-							)
-						)
-					)
+					ASTFactory.createFactorExpr(new FunctionExpression(funcType, funcBody))
 				);
 			n.insertStatementBefore(var);
 
@@ -303,19 +264,7 @@ public class StopStatementTransformer extends AbstractVisitorNoArg {
 			//
 			final Call c2 = new Call();
 			if (funcType.getArgsSize() > 0)
-				c2.addArg(new Expression(
-							new Conjunction(
-								new Comparison(
-									new SimpleExpr(
-										new Term(
-											new Factor(
-												funcType.getArg(0).getIdentifier().clone()
-											)
-										)
-									)
-								)
-							)
-						));
+				c2.addArg(ASTFactory.createFactorExpr(funcType.getArg(0).getIdentifier().clone()));
 			final Factor f2 = new Factor(new Identifier(funcName));
 			f2.addOp(c2);
 			v.setBody(new Block().addStatement(new ExprStatement(
@@ -436,111 +385,53 @@ public class StopStatementTransformer extends AbstractVisitorNoArg {
 
 		//    c) add code "if (stop > 0) stop++;" to the START of the new body
 		for (final VisitStatement v : bodyMap.keySet())
-			v.getBody().getStatements().add(0, new IfStatement(
-					new Expression(
-						new Conjunction(
-							new Comparison(
-								new SimpleExpr(
-									new Term(
-										new Factor(
-											new Identifier(varCounterName)
-										)
-									)
-								),
-								">",
-								new SimpleExpr(
-									new Term(
-										new Factor(
-											new IntegerLiteral("0")
-										)
-									)
-								)
-							)
-						)
+			v.getBody().getStatements().add(0,
+				new IfStatement(
+					ASTFactory.createComparison(
+						new Identifier(varCounterName),
+						">",
+						new IntegerLiteral("0")
 					),
 					new Block().addStatement(
 						new PostfixStatement(
-							new Expression(
-								new Conjunction(
-									new Comparison(
-										new SimpleExpr(
-											new Term(
-												new Factor(
-													new Identifier(varCounterName)
-												)
-											)
-										)
-									)
-								)
-							), "++"))
-				));
+							ASTFactory.createFactorExpr(new Identifier(varCounterName)),
+							"++"
+						)
+					)
+				)
+			);
 	}
 
 	protected void addGuard(final VisitStatement v) {
 		final Block body = new Block();
-		body.addStatement(new IfStatement(
-				new Expression(
-					new Conjunction(
-						new Comparison(
-							new SimpleExpr(
-								new Term(
-									new Factor(
-										new Identifier(varCounterName)
-									)
-								)
-							),
-							"==",
-							new SimpleExpr(
-								new Term(
-									new Factor(
-										new IntegerLiteral("0")
-									)
-								)
-							)
-						)
-					)
-				), v.getBody().clone()));
+		body.addStatement(
+			new IfStatement(
+				ASTFactory.createComparison(
+					new Identifier(varCounterName),
+					"==",
+					new IntegerLiteral("0")
+				),
+				v.getBody().clone()
+			)
+		);
 		v.setBody(body);
 	}
 
 	protected void createReset(final Block body) {
-		body.addStatement(new IfStatement(
-				new Expression(
-					new Conjunction(
-						new Comparison(
-							new SimpleExpr(
-								new Term(
-									new Factor(
-										new Identifier(varCounterName)
-									)
-								)
-							),
-							">",
-							new SimpleExpr(
-								new Term(
-									new Factor(
-										new IntegerLiteral("0")
-									)
-								)
-							)
-						)
-					)
+		body.addStatement(
+			new IfStatement(
+				ASTFactory.createComparison(
+					new Identifier(varCounterName),
+					">",
+					new IntegerLiteral("0")
 				),
 				new Block().addStatement(
 					new PostfixStatement(
-						new Expression(
-							new Conjunction(
-								new Comparison(
-									new SimpleExpr(
-										new Term(
-											new Factor(
-												new Identifier(varCounterName)
-											)
-										)
-									)
-								)
-							)
-						), "--"))
-			));
+						ASTFactory.createFactorExpr(new Identifier(varCounterName)),
+						"--"
+					)
+				)
+			)
+		);
 	}
 }
