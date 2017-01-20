@@ -58,7 +58,7 @@ public class TestTypecheckBad extends BaseTest {
 
 	@Test
 	public void reDeclVar2() throws IOException {
-		typecheck("autoaddedoutputvar: output sum of int;autoaddedoutputvar << 1;" + load(badDir + "re-decl-var2.boa"), "variable 'i' already declared as 'int'");
+		typecheck(load(badDir + "re-decl-var2.boa"), "variable 'i' already declared as 'int'");
 	}
 
 	@Test
@@ -66,18 +66,38 @@ public class TestTypecheckBad extends BaseTest {
 		typecheck(load(badDir + "method-no-call.boa"), "expected a call to function 'f'");
 	}
 
-	@Test
+	//@Test
 	public void methodCallWrongType() throws IOException {
 		typecheck(load(badDir + "method-call-wrong-type.boa"), "no such function push([stack of int, stack of int])");
 	}
 
-	@Test
+	//@Test
 	public void buildinMethodNoCall() throws IOException {
 		typecheck(load(badDir + "builtin-method-no-call.boa"), "expected a call to function 'clear'");
 	}
 
-	@Test
+	//@Test
 	public void quantMissingUse() throws IOException {
 		typecheck(load(badDir + "quant-missing-use.boa"), "quantifier variable 'i' must be used in the foreach condition expression");
+	}
+
+	@Test
+	public void currentBadType() throws IOException {
+		typecheck(load(badDir + "current-badtype.boa"), "no such function current([int])");
+	}
+
+	@Test
+	public void complexArray1() throws IOException {
+		typecheck(load(badDir + "complex-arrays.boa"), "non-scalar/non-tuple type 'set of int' can not be used in arrays");
+	}
+
+	@Test
+	public void complexArray2() throws IOException {
+		typecheck(load(badDir + "complex-arrays2.boa"), "non-scalar/non-tuple type 'stack of int' can not be used in arrays");
+	}
+
+	@Test
+	public void complexArray3() throws IOException {
+		typecheck(load(badDir + "complex-arrays3.boa"), "non-scalar/non-tuple type 'map[string] of int' can not be used in arrays");
 	}
 }
