@@ -1,12 +1,8 @@
 package boa.datagen.forges.github;
 
-import boa.datagen.scm.AbstractConnector;
-import boa.datagen.scm.GitConnector;
-import boa.types.Code.CodeRepository;
-import boa.types.Code.CodeRepository.RepositoryKind;
-import boa.types.Code.Revision;
-import boa.types.Toplevel.Project;
-import boa.types.Toplevel.Project.ForgeKind;
+import java.io.File;
+import java.io.IOException;
+
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -14,8 +10,13 @@ import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.Text;
 
-import java.io.File;
-import java.io.IOException;
+import boa.types.Code.CodeRepository;
+import boa.types.Code.Revision;
+import boa.types.Code.CodeRepository.RepositoryKind;
+import boa.types.Toplevel.Project;
+import boa.types.Toplevel.Project.ForgeKind;
+import boa.datagen.scm.AbstractConnector;
+import boa.datagen.scm.GitConnector;
 
 public class LocalGitSequenceGenerator {
 

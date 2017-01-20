@@ -1,7 +1,5 @@
 package boa.datagen.forges.github;
 
-import com.sun.org.apache.xml.internal.security.utils.Base64;
-
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,6 +8,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 import java.util.Map;
+
+import com.sun.org.apache.xml.internal.security.utils.Base64;
 
 public class MetadataCacher {
 	private String url;

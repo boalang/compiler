@@ -1,14 +1,14 @@
 package boa.datagen.forges.github;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+
 import boa.datagen.util.FileIO;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 import net.sf.json.JSONSerializer;
-
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 
 public class GetGitHubRepoNames {
 

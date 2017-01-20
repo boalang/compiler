@@ -1,10 +1,10 @@
 package boa.datagen.forges.github;
 
-import boa.datagen.util.FileIO;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+
+import boa.datagen.util.FileIO;
 
 public class GetGithubRepoByUser {
 
