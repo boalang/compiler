@@ -17,7 +17,7 @@
 package boa.types;
 
 /**
- * A {@link BoaType} representing an array of scalar values.
+ * A {@link BoaType} representing an array of values.
  * 
  * @author anthonyu
  */
@@ -99,24 +99,21 @@ public class BoaArray extends BoaType {
 	/**
 	 * Get the element type of this array.
 	 * 
-	 * @return A {@link BoaScalar} representing the element type of this
+	 * @return A {@link BoaType} representing the element type of this
 	 *         array
 	 */
-	public BoaScalar getType() {
-		if (this.type instanceof BoaScalar)
-			return (BoaScalar) this.type;
-
-		throw new RuntimeException("this shouldn't happen");
+	public BoaType getType() {
+		return this.type;
 	}
 
 	/**
 	 * Set the element type of this array.
 	 * 
 	 * @param type
-	 *            A {@link BoaScalar} representing the element type of this
+	 *            A {@link BoaType} representing the element type of this
 	 *            array
 	 */
-	public void setType(final BoaScalar type) {
+	public void setType(final BoaType type) {
 		this.type = type;
 	}
 
