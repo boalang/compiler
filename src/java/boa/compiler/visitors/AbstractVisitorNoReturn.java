@@ -28,6 +28,7 @@ import boa.types.*;
  * 
  * @author hridesh
  * @author rdyer
+ * @author ankuraga
  *
  * @param <ArgType> the type of the argument to pass down the tree while visiting
  */
@@ -71,6 +72,11 @@ public abstract class AbstractVisitorNoReturn<ArgType> {
 		if (n.hasIdentifier())
 			n.getIdentifier().accept(this, arg);
 		n.getType().accept(this, arg);
+	}
+
+	public void visit(final EnumBodyDeclaration n, final ArgType arg) {
+		n.getIdentifier().accept(this, arg);
+		n.getExp().accept(this, arg);
 	}
 
 	public void visit(final Composite n, final ArgType arg) {
@@ -270,7 +276,7 @@ public abstract class AbstractVisitorNoReturn<ArgType> {
 		if(n.hasBody())
 		n.getBody().accept(this, arg);
 	}
-	
+
 	public void visit(final WhileStatement n, final ArgType arg) {
 		n.getCondition().accept(this, arg);
 		n.getBody().accept(this, arg);
@@ -314,7 +320,7 @@ public abstract class AbstractVisitorNoReturn<ArgType> {
 		n.getType().accept(this, arg);
 		n.getBody().accept(this, arg);
 	}
-	
+
 	//
 	// literals
 	//
@@ -381,9 +387,14 @@ public abstract class AbstractVisitorNoReturn<ArgType> {
 			c.accept(this, arg);
 	}
 
+	public void visit(final EnumType n, final ArgType arg) {
+		for (final EnumBodyDeclaration c : n.getMembers())
+			c.accept(this, arg);
+	}
+
 	public void visit(final VisitorType n, final ArgType arg) {
 	}
-	
+
 	public void visit(final TraversalType n, final ArgType arg) {
 		if(n.getIndex()!=null)
 			n.getIndex().accept(this, arg);

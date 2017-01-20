@@ -27,6 +27,7 @@ import boa.types.*;
  * An abstract visitor class that passes no arguments during the visit.
  * 
  * @author rdyer
+ * @author ankuraga
  */
 public abstract class AbstractVisitorNoArg {
 	protected void initialize() { }
@@ -68,6 +69,11 @@ public abstract class AbstractVisitorNoArg {
 		if (n.hasIdentifier())
 			n.getIdentifier().accept(this);
 		n.getType().accept(this);
+	}
+
+	public void visit(final EnumBodyDeclaration n) {
+		n.getIdentifier().accept(this);
+		n.getExp().accept(this);
 	}
 
 	public void visit(final Composite n) {
@@ -267,7 +273,7 @@ public abstract class AbstractVisitorNoArg {
 		if(n.hasBody())
 		n.getBody().accept(this);
 	}
-	
+
 	public void visit(final WhileStatement n) {
 		n.getCondition().accept(this);
 		n.getBody().accept(this);
@@ -311,7 +317,7 @@ public abstract class AbstractVisitorNoArg {
 		n.getType().accept(this);
 		n.getBody().accept(this);
 	}
-	
+
 	//
 	// literals
 	//
@@ -378,9 +384,15 @@ public abstract class AbstractVisitorNoArg {
 			c.accept(this);
 	}
 
+	public void visit(final EnumType n) {
+		for (final EnumBodyDeclaration c : n.getMembers()){
+			c.accept(this);
+		}
+	}
+
 	public void visit(final VisitorType n) {
 	}
-	
+
 	public void visit(final TraversalType n) {
 		if(n.getIndex()!=null)
 			n.getIndex().accept(this);
