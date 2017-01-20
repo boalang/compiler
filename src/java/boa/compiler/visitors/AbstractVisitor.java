@@ -27,6 +27,7 @@ import boa.compiler.ast.types.*;
  * 
  * @author rdyer
  * @author hridesh
+ * @author ankuraga
  *
  * @param <RetType> the return type to pass up the tree while visiting
  * @param <ArgType> the type of the argument to pass down the tree while visiting
@@ -74,6 +75,12 @@ public abstract class AbstractVisitor<ReturnType, ArgType> {
 		if (n.hasIdentifier())
 			n.getIdentifier().accept(this, arg);
 		n.getType().accept(this, arg);
+		return null;
+	}
+
+	public ReturnType visit(final EnumBodyDeclaration n, final ArgType arg) {
+		n.getIdentifier().accept(this, arg);
+		n.getExp().accept(this, arg);
 		return null;
 	}
 
@@ -272,7 +279,7 @@ public abstract class AbstractVisitor<ReturnType, ArgType> {
 		n.getBody().accept(this, arg);
 		return null;
 	}
-	
+
 	public ReturnType visit(final TraverseStatement n, final ArgType arg) {
 		if (n.hasComponent())
 			n.getComponent().accept(this, arg);
@@ -356,7 +363,7 @@ public abstract class AbstractVisitor<ReturnType, ArgType> {
 		n.getBody().accept(this, arg);
 		return null;
 	}
-	
+
 	//
 	// literals
 	//
@@ -436,10 +443,16 @@ public abstract class AbstractVisitor<ReturnType, ArgType> {
 		return null;
 	}
 
+	public ReturnType visit(final EnumType n, final ArgType arg) {
+		for (final EnumBodyDeclaration c : n.getMembers())
+			c.accept(this, arg);
+		return null;
+	}
+
 	public ReturnType visit(final VisitorType n, final ArgType arg) {
 		return null;
 	}
-	
+
 	public ReturnType visit(final TraversalType n, final ArgType arg) {
 		if(n.getIndex()!=null)
 			n.getIndex().accept(this, arg);
