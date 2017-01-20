@@ -54,9 +54,7 @@ public class CFG {
 	private boolean isLoopPresent = false;
 	private boolean isBranchPresent = false;
 	private boolean nestedBranchPresent = false;
-	private int branchCount = 0;
 	private boolean inLoop = false;
-	private int branchNodes = 0;
 	private CFGNode[] orderedNodes;
 	int count = 0;
 	public CFG(Method method) {
@@ -123,14 +121,6 @@ public class CFG {
 
 	public CFGNode getExitNode() {
 		return exitNode;
-	}
-
-	public int getBranchCount() {
-		return branchCount;
-	}
-
-	public int getBranchNodes() {
-		return branchNodes;
 	}
 
 	public void addNode(CFGNode node) {
@@ -202,7 +192,6 @@ public class CFG {
 	}
 
 	public void mergeSeq(CFGNode branch) {
-		//System.out.println("KIND "+branch.getNodeKind());
 		this.addNode(branch);
 		/*
 		 * branch will not be considered ins node except the input graph is size
@@ -210,9 +199,6 @@ public class CFG {
 		 */
 		ins.remove(branch);
 		for (CFGNode aNode : outs) {
-			//if(endFlag) {
-			//	System.out.println("end "+aNode.getId());
-			//}
 			if (!aNode.equals(branch)) {
 				createNewEdge(aNode, branch);
 			}
@@ -338,8 +324,6 @@ public class CFG {
 		if (md.getStatementsCount() > 0) {
 			CFGNode startNode = new CFGNode("START", CFGNode.TYPE_ENTRY,
 					"START", "START");
-			branchCount = 0;
-			branchNodes = 0;
 			this.inLoop = false;
 			mergeSeq(startNode);
 			mergeSeq(traverse(startNode, md.getStatementsList().get(0)));
@@ -443,7 +427,6 @@ public class CFG {
 			 */
 			CFGNode bNode = new CFGNode(root.getKind().name(),
 					CFGNode.TYPE_OTHER, "", root.getKind().name());
-			//System.out.println(root.getKind().name());
 			bNode.setAstNode(root);
 			graph.mergeSeq(bNode);
 			return graph;
@@ -619,26 +602,18 @@ public class CFG {
 				+ cfgNode.getId() + ".");
 		graph.mergeSeq(branch);
 		boolean trueNotEmpty = false, falseNotEmpty = false;
-		//System.out.println("size "+root.getStatementsCount());
 		if (root.getStatementsCount() > 0) { // Then
 			CFG trueBranch = traverse(branch, root.getStatements(0));
-			//System.out.println("before "+trueBranch.getOuts());
 			graph.mergeABranch(trueBranch, branch, "T");
-			//System.out.println("after "+graph.getOuts());
 			trueNotEmpty = true;
 		}
 		if (root.getStatementsCount() > 1) { // Else
 			CFG falseBranch = traverse(branch, root.getStatements(1));
-			//System.out.println("before "+falseBranch.getOuts());
 			graph.mergeABranch(falseBranch, branch, "F");
-			//System.out.println("after "+graph.getOuts());
 			falseNotEmpty = true;
 		}
 		if (trueNotEmpty && falseNotEmpty)
 			graph.getOuts().remove(branch);
-		if(this.inLoop) {
-			this.branchNodes = Math.max(this.branchNodes, graph.getNodes().size());
-		}
 		return graph;
 	}
 
@@ -690,7 +665,6 @@ public class CFG {
 		CFG subgraph = null;
 		Statement sc = null;
 		CFG breakBranch = null;
-		//System.out.println("size "+root.getKind());
 		for (int i = 0; i < root.getStatementsCount(); i++) {
 			Statement s = root.getStatements(i);
 			if (s.getKind() == StatementKind.CASE) {
@@ -716,9 +690,6 @@ public class CFG {
 			} else {
 				breakBranch = traverse(node, s);
 				subgraph.mergeSeq(breakBranch);
-				if(s.getKind() == StatementKind.BREAK) {
-					System.out.println(breakBranch.getOuts());
-				}
 			}
 		}
 		if (subgraph != null) {
@@ -731,12 +702,6 @@ public class CFG {
 		if (sc != null && (sc.getExpression() == null) && !subgraph.isEmpty()) 
 			graph.getOuts().remove(node);
 		graph.adjustBreakNodes("");
-		if(this.branchCount < currentCount) {
-			this.branchCount = currentCount;
-		}
-		if(this.inLoop) {
-			this.branchNodes = Math.max(this.branchNodes, graph.getNodes().size());
-		}
 		return graph;
 	}
 
@@ -761,7 +726,6 @@ public class CFG {
 			Expression e = root.getVariableDeclaration().getInitializer();
 			//graph.mergeSeq(traverse(cfgNode, root.getVariableDeclaration()));
 			if (e != null) {
-				System.out.println(e.toString());
 				graph.mergeSeq(traverse(cfgNode, e));
 			}
 		}
@@ -932,7 +896,6 @@ public class CFG {
 	private CFG traverse_sync(CFGNode cfgNode, Statement root) {
 		CFG graph = new CFG();
 		CFGNode aNode = new CFGNode();
-		//System.out.println("************************************synchronised"+root.getExpression());
 		aNode.setAstNode(root.getExpression());
 		aNode.setPid((cfgNode == null) ? "." : cfgNode.getPid()
 				+ cfgNode.getId() + ".");

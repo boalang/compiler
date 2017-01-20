@@ -72,7 +72,6 @@ public class CFGNode implements Comparable {
 	public CFGNode() {
 		// TODO Auto-generated constructor stub
 		this.id = ++numOfNodes;
-		//System.out.println("node with id "+id);
 	}
 
 	public CFGNode(CFGNode tmp) {

@@ -55,12 +55,6 @@ public class CFGProtoTuple extends BoaProtoTuple {
 		names.put("nestedBranchPresent", counter++);
 		members.add(new BoaBool());
 
-		names.put("branchCount", counter++);
-		members.add(new BoaInt());
-
-		names.put("branchNodes", counter++);
-		members.add(new BoaInt());
-
 		names.put("md", counter++);
 		members.add(new MethodProtoTuple());
 
