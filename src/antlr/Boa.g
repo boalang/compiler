@@ -97,6 +97,7 @@ type returns [AbstractType ast]
 	| tr=traversalType  { $ast = $tr.ast; }
 	| s=stackType    { $ast = $s.ast; }
 	| set=setType    { $ast = $set.ast; }
+	| e=enumType     { $ast = $e.ast; }
 	| id=identifier  { $ast = $id.ast; }
 	;
 
@@ -108,6 +109,15 @@ component returns [Component ast]
 	}
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
 	: (id=identifier COLON { $ast.setIdentifier($id.ast); })? t=type { $ast.setType($t.ast); }
+	;
+
+enumBodyDeclaration returns [EnumBodyDeclaration ast]
+	locals [int l, int c]
+	@init {
+		$l = getStartLine(); $c = getStartColumn();
+	}
+	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
+	: id=identifier EQUALS e=expression { $ast = new EnumBodyDeclaration($id.ast, $e.ast); }
 	;
 
 arrayType returns [ArrayType ast]
@@ -125,6 +135,16 @@ tupleType returns [TupleType ast]
 	}
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
 	: LBRACE (m=member { $ast.addMember($m.ast); } (COMMA m=member { $ast.addMember($m.ast); })* COMMA?)? RBRACE
+	;
+
+enumType returns [EnumType ast]
+	locals [int l, int c]
+	@init {
+		$l = getStartLine(); $c = getStartColumn();
+		$ast = new EnumType();
+	}
+	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
+	: ENUM LBRACE (m=enumBodyDeclaration { $ast.addMember($m.ast); } (COMMA m=enumBodyDeclaration { $ast.addMember($m.ast); })* COMMA?)? RBRACE
 	;
 
 member returns [Component ast]
@@ -285,7 +305,7 @@ forVariableDeclaration returns [VarDeclStatement ast]
 	locals [int l, int c]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: id=identifier COLON { $ast = new VarDeclStatement($id.ast); } (t=type { $ast.setType($t.ast); })? (EQUALS e=expression { $ast.setInitializer($e.ast); })?
+	: id=identifier COLON { $ast = new VarDeclStatement($id.ast); } (t=type { $ast.setType($t.ast); })? (EQUALS ({ notifyErrorListeners("error: output variable declarations should not include '='"); } ot=outputType { $ast.setType($ot.ast); } | e=expression { $ast.setInitializer($e.ast); }))?
 	;
 
 forExpressionStatement returns [Statement ast]
@@ -675,6 +695,7 @@ TRAVERSAL  : 'traversal';
 BEFORE   : 'before';
 AFTER    : 'after';
 STOP     : 'stop';
+ENUM	 : 'enum';
 
 //
 // separators
@@ -735,9 +756,9 @@ RIGHT_ARROW : '->';
 //
 
 IntegerLiteral
-	: [-]? DecimalNumeral
-	| [-]? HexNumeral 
-	| [-]? OctalNumeral 
+	: DecimalNumeral
+	| HexNumeral 
+	| OctalNumeral 
 	| BinaryNumeral 
 	;
 
@@ -773,9 +794,9 @@ BinaryNumeral
 	;
 
 FloatingPointLiteral
-	: [-]? Digit+ DOT Digit* ExponentPart?
-	| [-]? DOT Digit+ ExponentPart?
-	| [-]? Digit+ ExponentPart
+	: Digit+ DOT Digit* ExponentPart?
+	| DOT Digit+ ExponentPart?
+	| Digit+ ExponentPart
 	;
 
 fragment
