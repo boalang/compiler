@@ -27,6 +27,7 @@ import boa.compiler.ast.expressions.*;
 import boa.compiler.ast.literals.*;
 import boa.compiler.ast.statements.*;
 import boa.compiler.ast.types.*;
+import boa.compiler.transforms.VisitorDesugar;
 import boa.types.*;
 
 /**
@@ -34,6 +35,7 @@ import boa.types.*;
  * 
  * @author anthonyu
  * @author rdyer
+ * @author ankuraga
  */
 public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	BoaType lastRetType;
@@ -366,6 +368,15 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		n.getType().accept(this, env);
 
 		if (n.hasIdentifier()) {
+			final String id = n.getIdentifier().getToken();
+
+			if (!env.getShadowing()) {
+				if (env.hasGlobal(id))
+					throw new TypeCheckException(n.getIdentifier(), "name conflict: constant '" + id + "' already exists");
+				if (env.hasLocal(id))
+					throw new TypeCheckException(n.getIdentifier(), "variable '" + id + "' already declared as '" + env.get(id) + "'");
+			}
+
 			n.type = new BoaName(n.getType().type, n.getIdentifier().getToken());
 			env.set(n.getIdentifier().getToken(), n.getType().type);
 			n.getIdentifier().accept(this, env);
@@ -383,8 +394,14 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			n.type = checkPairs(n.getPairs(), env);
 		else if (n.getExprsSize() > 0)	{
 			List<BoaType> types = check(n.getExprs(), env);
-			if(!(checkTupleArray(types) == true))
-				n.type = new BoaArray(types.get(0));
+
+			if(!(checkTupleArray(types) == true)) {
+				final BoaType t = types.get(0);
+				if (!(t instanceof BoaScalar))
+					if (!(t instanceof BoaTuple))
+						throw new TypeCheckException(n.getExprs(), "non-scalar/non-tuple type '" + t + "' can not be used in arrays");
+				n.type = new BoaArray(t);
+			}
 			else
 				n.type = new BoaTuple(types);
 		}
@@ -566,7 +583,12 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			type = ((BoaTuple) type).getMember(selector);
 			if (type instanceof BoaName)
 				type = ((BoaName) type).getType();
-		} else {
+		} else if (type instanceof BoaEnum) {
+			if (!((BoaEnum) type).hasMember(selector))
+				throw new TypeCheckException(n.getId(), "'" + type + "' has no member named '" + selector + "'");
+			type = ((BoaEnum) type).getMember(selector);
+		}
+		else {
 			throw new TypeCheckException(n, "invalid operand type '" + type + "' for member selection");
 		}
 
@@ -856,8 +878,8 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final ReturnStatement n, final SymbolTable env) {
-		//if (env.getIsBeforeVisitor())
-		//	throw new TypeCheckException(n, "return statement not allowed inside visitors");
+		if (env.getIsBeforeVisitor())
+			throw new TypeCheckException(n, "return statement not allowed inside visitors");
 
 		n.env = env;
 
@@ -874,8 +896,8 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	public void visit(final StopStatement n, final SymbolTable env) {
 		n.env = env;
 
-		//if (!env.getIsBeforeVisitor())
-		//	throw new TypeCheckException(n, "Stop statement only allowed inside 'before' visits");
+		if (!env.getIsBeforeVisitor())
+			throw new TypeCheckException(n, "Stop statement only allowed inside 'before' visits");
 	}
 
 	/** {@inheritDoc} */
@@ -903,7 +925,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 
 		n.getCondition().accept(this, st);
 		final BoaType expr = n.getCondition().type;
-		if (!(expr instanceof BoaInt) && !(expr instanceof BoaProtoMap))
+		if (!(expr instanceof BoaInt) && !(expr instanceof BoaProtoMap) && !(expr instanceof BoaEnum))
 			throw new TypeCheckException(n.getCondition(), "incompatible types for switch expression: required 'int' or 'enum', found: " + expr);
 
 		for (final SwitchCase sc : n.getCases()) {
@@ -989,9 +1011,11 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		n.env = st;
 
 		if (n.hasComponent()) {
+			st.setShadowing(true);
 			n.getComponent().accept(this, st);
 			if (n.getComponent().type instanceof BoaName)
 				n.getComponent().type = n.getComponent().getType().type;
+			st.setShadowing(false);
 		}
 		else if (!n.hasWildcard())
 			for (final Identifier id : n.getIdList()) {
@@ -1217,6 +1241,8 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		visitorChecker.start(n);
 		n.getBody().accept(this, env);
 		n.type = n.getType().type;
+		final VisitorDesugar desugar = new VisitorDesugar();
+		desugar.start(n);
 	}
 
 	/** {@inheritDoc} */
@@ -1302,7 +1328,11 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	public void visit(final ArrayType n, final SymbolTable env) {
 		n.env = env;
 		n.getValue().accept(this, env);
-		n.type = new BoaArray(n.getValue().type);
+		final BoaType t = n.getValue().type;
+		if (!(t instanceof BoaScalar))
+			if (!(t instanceof BoaTuple))
+				throw new TypeCheckException(n.getValue(), "non-scalar/non-tuple type '" + t + "' can not be used in arrays");
+		n.type = new BoaArray(t);
 	}
 
 	/** {@inheritDoc} */
@@ -1313,12 +1343,12 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		final BoaType[] params = new BoaType[n.getArgsSize()];
 		if (n.getArgsSize() > 0) {
 			int i = 0;
+			env.setShadowing(true);
 			for (final Component c : n.getArgs()) {
-				c.getType().accept(this, env);
+				c.accept(this, env);
 				params[i++] = new BoaName(c.getType().type, c.getIdentifier().getToken());
-				env.set(c.getIdentifier().getToken(), c.getType().type);
-				c.getIdentifier().accept(this, env);
 			}
+			env.setShadowing(false);
 		}
 
 		BoaType ret = new BoaAny();
@@ -1423,6 +1453,37 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 
 	/** {@inheritDoc} */
 	@Override
+	public void visit(final EnumType n, final SymbolTable env) {
+		n.env = env;
+
+		final List<BoaEnum> types = new ArrayList<BoaEnum>();
+		final List<String> names = new ArrayList<String>();
+		final List<String> values = new ArrayList<String>();
+		BoaType fieldType = null;
+
+		for (final EnumBodyDeclaration c : n.getMembers()) {
+			names.add(c.getIdentifier().getToken());
+
+			Factor f = c.getExp().getLhs().getLhs().getLhs().getLhs().getLhs();
+			if(f.getOperand() instanceof ILiteral) {
+				if(f.getOperand() instanceof StringLiteral)
+					fieldType = new BoaString();
+				else if(f.getOperand() instanceof IntegerLiteral)
+					fieldType = new BoaInt();
+				else if(f.getOperand() instanceof FloatLiteral)
+					fieldType = new BoaFloat();
+				else if(f.getOperand() instanceof TimeLiteral)
+					fieldType = new BoaTime();
+				values.add(((ILiteral)(f.getOperand())).getLiteral());
+				types.add(new BoaEnum(c.getIdentifier().getToken(),((ILiteral)(f.getOperand())).getLiteral(),fieldType));
+			}
+		}
+
+		n.type = new BoaEnum(types, names, values, fieldType);
+	}
+
+	/** {@inheritDoc} */
+	@Override
 	public void visit(final VisitorType n, final SymbolTable env) {
 		n.env = env;
 		n.type = new BoaVisitor();
@@ -1476,19 +1537,18 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	}
 
 	protected boolean checkTupleArray(final List<BoaType> types) {
-		BoaType type;
-		boolean tuple = false;
-		if(types == null)
+		if (types == null)
 			return false;
-		type = types.get(0);
-		for (int i = 1; i < types.size(); i++) {
-			if((!(types.get(i).toBoxedJavaType() == type.toBoxedJavaType())) && tuple==false){
-				tuple = true;
-			}
-		}
-		return tuple;
+
+		final String type = types.get(0).toBoxedJavaType();
+
+		for (int i = 1; i < types.size(); i++)
+			if (!type.equals(types.get(i).toBoxedJavaType()))
+				return true;
+
+		return false;
 	}
-	
+
 	protected BoaType checkPairs(final List<Pair> pl, final SymbolTable env) {
 		pl.get(0).accept(this, env);
 		final BoaMap boaMap = (BoaMap) pl.get(0).type;
