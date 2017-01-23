@@ -236,6 +236,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			code.add(st.render());
 		}
 	}
+
 	/***
 	 * Finds the set of all tuple types and generates classes for each unique tuple type.
 	 *
@@ -277,9 +278,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				types.add(c.getType().type.toBoxedJavaType());
 			}
 
-			System.out.println("tuple  "+tupType);
-			System.out.println("tuple type "+tupType.toJavaType());
-		
 			st.add("name", tupType.toJavaType());
 			st.add("fields", fields);
 			st.add("types", types);
@@ -288,6 +286,46 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		}
 	}
 	
+	/***
+	 * Finds the set of all enum types and generates classes for each enum type.
+	 *
+	 * @author ankuraga
+	 */
+	protected class EnumDeclaratorCodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
+
+		/** {@inheritDoc} */
+		@Override
+		public void visit(final EnumType n) {
+			final ST st = stg.getInstanceOf("EnumType");
+
+			if (!(n.type instanceof BoaEnum))
+				throw new TypeCheckException(n ,"type " + n.type + " is not a enum type");
+
+			final BoaEnum enumType = ((BoaEnum) n.type);
+			final BoaType fieldType = enumType.getType();
+			final List<String> fields = new ArrayList<String>();
+			final List<String> values = new ArrayList<String>();
+
+			for (final EnumBodyDeclaration c : n.getMembers()) {
+				Factor f = c.getExp().getLhs().getLhs().getLhs().getLhs().getLhs();
+
+				if(f.getOperand() instanceof ILiteral) {
+					code.add(((ILiteral)(f.getOperand())).getLiteral());
+					fields.add(c.getIdentifier().getToken());
+					values.add(code.removeLast());
+				}
+			}
+
+			st.add("ename", enumType.toJavaType());
+			st.add("fields", fields);
+			st.add("values", values);
+			st.add("fname", fieldType.toJavaType());
+
+			code.add(st.render());
+		}
+	}
+
+
 	/**
 	 * 
 	 * @author rdyer
@@ -313,11 +351,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 			st.add("map", n.env.getId());
 			st.add("value", code.removeLast());
-			// FIXME rdyer this is a bit of a hack to fix maps with int keys
-			String key = code.removeLast();
-			if (key.startsWith("(int)("))
-				key = key.substring(5, key.length() - 1);
-			st.add("key", key);
+			st.add("key", code.removeLast());
 
 			code.add(st.render());
 		}
@@ -461,7 +495,8 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	protected final StaticInitializationCodeGeneratingVisitor staticInitialization;
 	protected final FunctionDeclaratorCodeGeneratingVisitor functionDeclarator;
 	protected final TupleDeclaratorCodeGeneratingVisitor tupleDeclarator;
-	
+	protected final EnumDeclaratorCodeGeneratingVisitor enumDeclarator;
+
 	protected final HashMap<String, AggregatorDescription> aggregators = new HashMap<String, AggregatorDescription>();
 
 	protected final String name;
@@ -477,8 +512,9 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		varDecl = new VarDeclCodeGeneratingVisitor();
 		staticInitialization = new StaticInitializationCodeGeneratingVisitor();
-		functionDeclarator = new FunctionDeclaratorCodeGeneratingVisitor();	
+		functionDeclarator = new FunctionDeclaratorCodeGeneratingVisitor();
 		tupleDeclarator = new TupleDeclaratorCodeGeneratingVisitor();
+		enumDeclarator = new EnumDeclaratorCodeGeneratingVisitor();
 	}
 
 	/** {@inheritDoc} */
@@ -491,13 +527,18 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		this.varDecl.start(n);
 		this.functionDeclarator.start(n);
 		this.tupleDeclarator.start(n);
+		this.enumDeclarator.start(n);
+
 		if (this.functionDeclarator.hasCode())
 			st.add("staticDeclarations", this.varDecl.getCode() + "\n" + this.functionDeclarator.getCode());
 		else
 			st.add("staticDeclarations", this.varDecl.getCode());
-		
+
 		if (this.tupleDeclarator.hasCode())
 			st.add("staticDeclarations", "\n" + this.tupleDeclarator.getCode());
+		if (this.enumDeclarator.hasCode())
+			st.add("staticDeclarations", "\n" + this.enumDeclarator.getCode());
+
 		this.staticInitialization.start(n);
 		if (this.staticInitialization.hasCode())
 			st.add("staticStatements", this.staticInitialization.getCode());
@@ -539,7 +580,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 					throw new TypeCheckException(n, e.getMessage(), e);
 				}
 			}
-
 			if (combines)
 				combineAggregatorStrings.add("this.aggregators.put(\"" + prefix + "::" + id + "\", " + src.toString().substring(2) + ");");
 			reduceAggregatorStrings.add("this.aggregators.put(\"" + prefix + "::" + id + "\", " + src.toString().substring(2) + ");");
@@ -556,7 +596,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		this.idFinder.start(n.env.getOperand());
 		final String funcName = this.idFinder.getNames().toArray()[0].toString();
 		final BoaFunction f = n.env.getFunction(funcName, check(n));
-		n.env.setOperandType(f.getType());
+		n.env.setOperandType(n.type);
 
 		if (f.hasMacro()) {
 			final List<String> parts = new ArrayList<String>();
@@ -568,10 +608,14 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			final String s = expand(f.getMacro(), n.getArgs(), parts.toArray(new String[]{}));
 
 			// FIXME rdyer a hack, so that "def(pbuf.attr)" generates "pbuf.hasAttr()"
-			if (funcName.equals("def")) {
+			if (funcName.equals("def") && n.getArgsSize() == 1) {
 				final Matcher m = Pattern.compile("\\((\\w+).get(\\w+)\\(\\) != null\\)").matcher(s);
 				if (m.matches() && !m.group(2).endsWith("List"))
 					st.add("call", m.group(1) + ".has" + m.group(2) + "()");
+				// #68 - def(a[i]) was generating a[i] != null which fails for arrays of ints (or any nullable type)
+				// so instead, since they are always defined, replace with 'true'
+				else if (n.getArg(0).type instanceof BoaScalar && !(n.getArg(0).type instanceof BoaString) && !(n.getArg(0).type instanceof BoaTuple))
+					st.add("call", "true");
 				else
 					st.add("call", s);
 			} else {
@@ -684,6 +728,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		} else if (n.getExprsSize() > 0) {
 			// FIXME rdyer
 			BoaType t = n.type;
+//			BoaType t = ((ExprList) nodeChoice.choice).type;
 
 			if(t instanceof BoaTuple) {
 				final ST stup = stg.getInstanceOf("Tuple");
@@ -695,6 +740,16 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			}
 
 			visit(n.getExprs());
+
+			if(t instanceof BoaArray) {
+				if(((BoaArray)t).getType() instanceof BoaEnum) {
+					st.add("exprlist", code.removeLast());
+					st.add("type", "Object[] ");
+					code.add(st.render());
+					return;
+				}
+			}
+			
 			st.add("exprlist", code.removeLast());
 			st.add("type", t.toJavaType());
 		}
@@ -711,11 +766,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		st.add("map", n.env.getId());
 		st.add("value", code.removeLast());
-		// FIXME rdyer this is a bit of a hack to fix maps with int keys
-		String key = code.removeLast();
-		if (key.startsWith("(int)("))
-			key = key.substring(5, key.length() - 1);
-		st.add("key", key);
+		st.add("key", code.removeLast());
 
 		code.add(st.render());
 	}
@@ -780,7 +831,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	@Override
 	public void visit(final Identifier n) {
 		final String id = n.getToken();
-
 		if (n.env.hasType(id)) {
 			if (n.env.getNeedsBoxing())
 				code.add(SymbolTable.getType(id).toBoxedJavaType());
@@ -822,9 +872,9 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		st.add("operand", "");
 
-		BoaType indexType = n.getStart().type;
+		final BoaType indexType = n.getStart().type;
 		n.getStart().accept(this);
-		if (indexType instanceof BoaInt)
+		if (indexType instanceof BoaInt && !(t instanceof BoaMap))
 			st.add("index", "(int)(" + code.removeLast() + ")");
 		else
 			st.add("index", code.removeLast());
@@ -870,6 +920,14 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				final BoaTuple tuple = (BoaTuple) opType;
 				n.env.setOperandType(tuple.getMember(member));
 				code.add(".___" + member);
+				return;
+			}
+
+			// operand is a enum
+			if (opType instanceof BoaEnum) {
+				final BoaEnum tenum = (BoaEnum) opType;
+				n.env.setOperandType(tenum.getMember(member));
+				code.add("." + member);
 				return;
 			}
 
@@ -922,6 +980,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		n.getLhs().accept(this);
 		final String lhs = code.removeLast();
+
 		n.getRhs().accept(this);
 		String rhs = code.removeLast();
 		
@@ -941,13 +1000,17 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		// FIXME rdyer hack to fix assigning to maps
 		if (lhs.contains(".get(")) {
-			String s = lhs.replaceFirst(Pattern.quote(".get("), ".put(");
-			// FIXME rdyer this is a bit of a hack to fix maps with int keys
-			if (s.contains("(int)(")) {
-				s = s.replaceFirst(Pattern.quote("(int)("), "");
-				s = s.substring(0, s.lastIndexOf(')'));
+			int idx = lhs.lastIndexOf(')') - 1;
+			int parens = 1;
+			for (; idx >= 0; idx--) {
+				if (lhs.charAt(idx) == '(')
+					parens--;
+				else if (lhs.charAt(idx) == ')')
+					parens++;
+				if (parens == 0) break;
 			}
-			code.add(s.substring(0, s.lastIndexOf(')')) + ", " + rhs + s.substring(s.lastIndexOf(')')) + ";");
+			idx += 1;
+			code.add(lhs.substring(0, idx - ".get(".length()) + ".put(" + lhs.substring(idx, lhs.lastIndexOf(')')) + ", " + rhs + lhs.substring(lhs.lastIndexOf(')')) + ";");
 			return;
 		}
 
@@ -1224,7 +1287,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		for (final Expression expr : n.getCases()) {
 			expr.accept(this);
 			String s = code.removeLast();
-			if (expr.type instanceof BoaProtoMap)
+			if (expr.type instanceof BoaProtoMap || expr.type instanceof BoaEnum)
 				s = s.substring(s.lastIndexOf(".") + 1);
 			cases.add(s);
 		}
@@ -1299,12 +1362,13 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			// FIXME rdyer if the type is a type identifier, n.getType() returns Identifier
 			// and maps/stacks/sets wind up not having the proper constructors here
 			n.getType().accept(this);
-			st.add("rhs", code.removeLast());
+			st.add("rhs", "new " + code.removeLast() + "()");
 			code.add(st.render());
 			return;
 		}
 
 		n.env.setOperandType(type);
+
 		BoaType t = n.getInitializer().type;
 
 		if (t instanceof BoaFunction) {
@@ -1330,6 +1394,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				}
 			}
 		}
+
 		if (!type.assigns(t)) {
 			final BoaFunction f = n.env.getCast(t, type);
 
@@ -1746,14 +1811,14 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final ArrayType n) {
-		final ST st;
-		if(nested_type) {
-			st = stg.getInstanceOf("nested_ArrayType");
-		}
-		else {
-			st = stg.getInstanceOf("ArrayType");
-		}
+		final ST st = stg.getInstanceOf("ArrayType");
+
+		// arrays dont need their component type boxed
+		boolean boxing = n.env.getNeedsBoxing();
+		n.env.setNeedsBoxing(false);
 		n.getValue().accept(this);
+		n.env.setNeedsBoxing(boxing);
+
 		st.add("type", code.removeLast());
 
 		code.add(st.render());
@@ -1810,22 +1875,19 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final MapType n) {
-
 		final ST st = stg.getInstanceOf("MapType");
-		nested_type=true;
+
 		n.env.setNeedsBoxing(true);
 
 		n.getIndex().accept(this);
 		st.add("key", code.removeLast());
-		n.env.setNeedsBoxing(true);
+
 		n.getValue().accept(this);
-		String s=code.removeLast();
-		st.add("value", s);
+		st.add("value", code.removeLast());
 
 		n.env.setNeedsBoxing(false);
 
 		code.add(st.render());
-		nested_type=false;
 	}
 
 	/** {@inheritDoc} */
@@ -1850,13 +1912,8 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final StackType n) {
-		final ST st;
-		if(nested_type) {
-			st = stg.getInstanceOf("nested_StackType");
-		}
-		else {
-			st = stg.getInstanceOf("StackType");
-		}
+		final ST st = stg.getInstanceOf("StackType");
+
 		n.env.setNeedsBoxing(true);
 
 		n.getValue().accept(this);
@@ -1867,18 +1924,11 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		code.add(st.render());
 	}
 
-
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final SetType n) {
-		final ST st;		
-		if(nested_type) {
-			st = stg.getInstanceOf("nested_SetType");
-		}
-		else {
-			st = stg.getInstanceOf("SetType");
-		}
-		nested_type=true;
+		final ST st = stg.getInstanceOf("SetType");
+
 		n.env.setNeedsBoxing(true);
 
 		n.getValue().accept(this);
@@ -1887,7 +1937,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		n.env.setNeedsBoxing(false);
 
 		code.add(st.render());
-		nested_type=false;
 	}
 
 	/** {@inheritDoc} */
@@ -1916,6 +1965,37 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		code.add(st.render());
 	}
 
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final EnumType n) {
+		final ST st = stg.getInstanceOf("EnumType");
+
+		if (!(n.type instanceof BoaEnum))
+			throw new TypeCheckException(n ,"type " + n.type + " is not a enum type");
+
+		final BoaEnum enumType = ((BoaEnum) n.type);
+		final BoaType fieldType = enumType.getType();
+		final List<String> fields = new ArrayList<String>();
+		final List<String> values = new ArrayList<String>();
+
+		for (final EnumBodyDeclaration c : n.getMembers()) {
+			Factor f = c.getExp().getLhs().getLhs().getLhs().getLhs().getLhs();
+
+			if(f.getOperand() instanceof ILiteral) {
+				code.add(((ILiteral)(f.getOperand())).getLiteral());
+				fields.add(c.getIdentifier().getToken());
+				values.add(code.removeLast());
+			}
+		}
+
+		st.add("ename", enumType.toJavaType());
+		st.add("fields", fields);
+		st.add("values", values);
+		st.add("fname", fieldType.toJavaType());
+
+		code.add(st.render());
+	}
+
 	protected static String expand(final String template, final String... parameters) {
 		return expand(template, new ArrayList<Expression>(), parameters);
 	}
@@ -1923,10 +2003,19 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	protected static String expand(final String template, final List<Expression> args, final String... parameters) {
 		String replaced = template;
 
-		if (args.size() == 1 && args.get(0).type instanceof BoaMap) {
-			BoaMap m = (BoaMap)args.get(0).type;
-			replaced = replaced.replace("${K}", m.getIndexType().toBoxedJavaType());
-			replaced = replaced.replace("${V}", m.getType().toBoxedJavaType());
+		// FIXME rdyer probably we should check the type, find the typevar, and then pull accordingly...
+		if (replaced.contains("${K}") || replaced.contains("${V}")) {
+			if (args.size() == 1 && args.get(0).type instanceof BoaMap) {
+				final BoaMap m = (BoaMap)args.get(0).type;
+				replaced = replaced.replace("${K}", m.getIndexType().toBoxedJavaType());
+				replaced = replaced.replace("${V}", m.getType().toBoxedJavaType());
+			} else if (args.size() == 1 && args.get(0).type instanceof BoaStack) {
+				final BoaStack s = (BoaStack)args.get(0).type;
+				replaced = replaced.replace("${V}", s.getType().toBoxedJavaType());
+			} else if (args.size() == 1 && args.get(0).type instanceof BoaSet) {
+				final BoaSet s = (BoaSet)args.get(0).type;
+				replaced = replaced.replace("${V}", s.getType().toBoxedJavaType());
+			}
 		}
 
 		for (int i = 0; i < parameters.length; i++)
@@ -1961,10 +2050,17 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		if (s instanceof StopStatement)
 			return true;
 
-		if (s instanceof Block)
-			for (final Node n : ((Block)s).getStatements())
-				if (n instanceof StopStatement)
-					return true;
+		if (s instanceof IfStatement) {
+			final IfStatement ifs = (IfStatement)s;
+			if (ifs.hasElse())
+				return lastStatementIsStop(ifs.getElse());
+		}
+
+		if (s instanceof Block) {
+			final List<Statement> stmts = ((Block)s).getStatements();
+			if (stmts.size() > 0)
+				return lastStatementIsStop(stmts.get(stmts.size() - 1));
+		}
 
 		return false;
 	}
@@ -1999,7 +2095,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		BoaType type;
 		boolean tuple = false;
 		if(types == null)
-		return false;
+			return false;
 		type = types.get(0);
 		for (int i = 1; i < types.size(); i++) {
 			if((!(types.get(i).toBoxedJavaType() == type.toBoxedJavaType())) && tuple==false){
