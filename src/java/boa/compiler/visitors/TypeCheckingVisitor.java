@@ -124,13 +124,13 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 				final Identifier id = (Identifier)n.getComponent().getType();
 				final String token = id.getToken();
 				if (s.contains(token))
-					throw new TypeCheckException(id, "The type '" + token + "' already has a '" + (n.isBefore() ? "before" : n.isAfter() ? "after" : "when") + "' traverse statement");
+					throw new TypeCheckException(id, "The type '" + token + "' already has a traverse statement");
 				s.add(token);
 			} else if (n.getIdListSize() > 0) {
 				for (final Identifier id : n.getIdList()) {
 					final String token = id.getToken();
 					if (s.contains(token))
-						throw new TypeCheckException(id, "The type '" + token + "' already has a '" + (n.isBefore() ? "before" : n.isAfter() ? "after" : "when") + "' traverse statement");
+						throw new TypeCheckException(id, "The type '" + token + "' already has a traverse statement");
 					s.add(token);
 				}
 			}
