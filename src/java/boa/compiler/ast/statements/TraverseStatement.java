@@ -34,8 +34,6 @@ import boa.compiler.ast.types.AbstractType;
  * @author hridesh
  */
 public class TraverseStatement extends Statement {
-	protected boolean before;
-	protected boolean after;
 	protected boolean wildcard = false;
 	protected Component node;
 	protected final List<Identifier> ids = new ArrayList<Identifier>();
@@ -56,14 +54,6 @@ public class TraverseStatement extends Statement {
 
 	public List<IfStatement> getIfStatements() {
 		return ifStatements;
-	}
-
-	public boolean isBefore() {
-		return before;
-	}
-
-	public boolean isAfter() {
-		return after;
 	}
 
 	public Expression getCondition() {
@@ -138,30 +128,26 @@ public class TraverseStatement extends Statement {
 		this.body = body;
 	}
 
-	public TraverseStatement(final boolean before,final boolean after) {
-		this.before = before;
-		this.after = after;
+	public TraverseStatement() {
 	}
 
-	public TraverseStatement(final boolean before, final boolean after, final boolean wildcard) {
-		this(before, after, null, null, null);
+	public TraverseStatement(final boolean wildcard) {
+		this(null, null, null);
 		this.wildcard = wildcard;
 	}
 
-	public TraverseStatement(final boolean before, final boolean after, final boolean wildcard, final Block body, final Expression condition) {
-		this(before, after, null, body, condition);
+	public TraverseStatement(final boolean wildcard, final Block body, final Expression condition) {
+		this(null, body, condition);
 		this.wildcard = wildcard;
 	}
 
-	public TraverseStatement(final boolean before, final boolean after, final Component node, final Block body, final Expression condition) {
+	public TraverseStatement(final Component node, final Block body, final Expression condition) {
 		if (node != null)
 			node.setParent(this);
 		if (body != null)
 			body.setParent(this);
 		if (condition != null)
 			condition.setParent(this);
-		this.before = before;
-		this.after = after;
 		this.node = node;
 		this.body = body;
 		this.condition=condition;
@@ -186,7 +172,7 @@ public class TraverseStatement extends Statement {
 	}
 
 	public TraverseStatement clone() {
-		final TraverseStatement v = new TraverseStatement(before, after, wildcard);
+		final TraverseStatement v = new TraverseStatement(wildcard);
 		if(hasBody()) 
 			v.body=body.clone();
 		if (hasComponent())

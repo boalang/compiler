@@ -1492,15 +1492,13 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	@Override
 	public void visit(final TraverseStatement n) {
 		final ST st = stg.getInstanceOf("TraverseClause");
-		final boolean isBefore = n.isBefore();
-		final boolean isAfter = n.isAfter();
 
 		final BoaFunction funcType = ((BoaFunction) n.type);
 		final List<String> body = new ArrayList<String>();
 		String types = "";
 		traversalNodeIdentifier="";
 		if (n.hasWildcard()) {
-			st.add("name", isBefore ? "defaultPreTraverse" : isAfter? "defaultPostTraverse":"defaultWhen");
+			st.add("name", "defaultPreTraverse");
 		} else if (n.hasComponent()) {
 			final Component c = n.getComponent();
 			traversalNodeIdentifier = "___"+c.getIdentifier().getToken();
@@ -1508,7 +1506,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			n.env.set(traversalNodeIdentifier, c.getType().type);
 			types = c.getType().type.toJavaType();
 
-			st.add("name", isBefore ? "preTraverse" : isAfter? "postTraverse":"when");
+			st.add("name", "preTraverse");
 		}
 		int count=0;
 		if (!(funcType.getType() instanceof BoaAny))

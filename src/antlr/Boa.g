@@ -402,7 +402,7 @@ traverseStatement returns [TraverseStatement ast]
 	locals [int l, int c]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: (LPAREN id=identifier COLON t=identifier RPAREN { $ast = new TraverseStatement(true,false); $ast.setComponent(new Component($id.ast, $t.ast));} (COLON rt=type {$ast.setReturnType($rt.ast);})? (s=programStatement { $ast.setBody($s.ast); }))
+	: (LPAREN id=identifier COLON t=identifier RPAREN { $ast = new TraverseStatement(); $ast.setComponent(new Component($id.ast, $t.ast));} (COLON rt=type {$ast.setReturnType($rt.ast);})? (s=programStatement { $ast.setBody($s.ast); }))
 	;
 
 fixpStatement returns [FixPStatement ast]
@@ -537,7 +537,7 @@ fixpExpression returns [FixPExpression ast]
 	locals [Block b, int l, int c]
 	@init { $b = new Block(); $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: t=fixpType (s=fixpStatement {$b.addStatement($s.ast);} programStatement) { $ast = new FixPExpression($t.ast, $b); }
+	: t=fixpType (s=fixpStatement {$b.addStatement($s.ast);} | programStatement) { $ast = new FixPExpression($t.ast, $b); }
 	;
 
 visitorExpression returns [VisitorExpression ast]
@@ -551,7 +551,7 @@ traversalExpression returns [TraversalExpression ast]
 	locals [Block b, int l, int c]
 	@init { $b = new Block(); $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: t=traversalType (s=traverseStatement {$b.addStatement($s.ast);} programStatement) { if($s.ast.getReturnType()!=null) {$t.ast.setIndex(new Component($s.ast.getReturnType()));} $ast = new TraversalExpression($t.ast, $b); }
+	: t=traversalType (s=traverseStatement {$b.addStatement($s.ast);} | programStatement) { if($s.ast.getReturnType()!=null) {$t.ast.setIndex(new Component($s.ast.getReturnType()));} $ast = new TraversalExpression($t.ast, $b); }
 	;
 
 composite returns [Composite ast]

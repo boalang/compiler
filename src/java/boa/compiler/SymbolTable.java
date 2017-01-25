@@ -52,6 +52,7 @@ public class SymbolTable {
 	private Stack<BoaType> operandType = new Stack<BoaType>();
 	private boolean needsBoxing;
 	private boolean isBeforeVisitor = false;
+	private boolean isTraverse = false;
 	private boolean shadowing = false;
 
 	static {
@@ -189,11 +190,11 @@ public class SymbolTable {
 		globalFunctions.addFunction("_cur_visitor", new BoaFunction(new BoaVisitor(), new BoaType[] { }, "this"));
 		
 		//traversal
-		globalFunctions.addFunction("traverse", new BoaFunction(new BoaAny(), new BoaType[] { new BoaScalar(), new TraversalDirectionProtoMap(), new TraversalKindProtoMap(), new BoaTraversal()}, "${3}.traverse(${0},${1},${2})"));
-		globalFunctions.addFunction("traverse", new BoaFunction(new BoaBool(), new BoaType[] { new BoaScalar(), new TraversalDirectionProtoMap(), new TraversalKindProtoMap(), new BoaTraversal(), new BoaFixP() }, "${3}.traverse(${0},${1},${2},${4})"));
-		globalFunctions.addFunction("traverse", new BoaFunction(new BoaBool(), new BoaType[] { new BoaScalar(), new BoaTraversal() }, "${1}.traverse(${0})"));
-		globalFunctions.addFunction("traverse", new BoaFunction(new BoaAny(), new BoaType[] { new BoaScalar(), new TraversalDirectionProtoMap(), new TraversalKindProtoMap() }, "traverse(${0},${1},${2})"));
-		globalFunctions.addFunction("traverse", new BoaFunction(new BoaAny(), new BoaType[] { new BoaScalar() }, "traverse(${0})"));
+		globalFunctions.addFunction("traverse", new BoaFunction(new BoaAny(), new BoaType[] { new CFGProtoTuple(), new TraversalDirectionProtoMap(), new TraversalKindProtoMap(), new BoaTraversal()}, "${3}.traverse(${0},${1},${2})"));
+		globalFunctions.addFunction("traverse", new BoaFunction(new BoaBool(), new BoaType[] { new CFGProtoTuple(), new TraversalDirectionProtoMap(), new TraversalKindProtoMap(), new BoaTraversal(), new BoaFixP() }, "${3}.traverse(${0},${1},${2},${4})"));
+		globalFunctions.addFunction("traverse", new BoaFunction(new BoaBool(), new BoaType[] { new CFGProtoTuple(), new BoaTraversal() }, "${1}.traverse(${0})"));
+		globalFunctions.addFunction("traverse", new BoaFunction(new BoaAny(), new BoaType[] { new CFGProtoTuple(), new TraversalDirectionProtoMap(), new TraversalKindProtoMap() }, "traverse(${0},${1},${2})"));
+		globalFunctions.addFunction("traverse", new BoaFunction(new BoaAny(), new BoaType[] { new CFGProtoTuple() }, "traverse(${0})"));
 
 		// stack functions
 		globalFunctions.addFunction("push", new BoaFunction(new BoaAny(), new BoaType[] { new BoaStack(new BoaTypeVar("V")), new BoaTypeVar("V") }, "${0}.push(${1})"));
@@ -649,6 +650,14 @@ public class SymbolTable {
 
 	public boolean getNeedsBoxing() {
 		return this.needsBoxing;
+	}
+
+	public void setIsTraverse(final boolean isTraverse) {
+		this.isTraverse = isTraverse;
+	}
+
+	public boolean getIsTraverse() {
+		return this.isTraverse;
 	}
 
 	public void setIsBeforeVisitor(final boolean isBeforeVisitor) {
