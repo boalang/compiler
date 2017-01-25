@@ -1,6 +1,7 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ *                 Iowa State University of Science and Technology
+ *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +17,7 @@
  */
 package boa.types;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,12 +27,18 @@ import java.util.Map;
  * arbitrary type.
  * 
  * @author anthonyu
+ * @author rdyer
  */
 public class BoaTuple extends BoaType {
 	protected final List<BoaType> members;
 	protected final Map<String, Integer> names;
 
 	private static final Map<String, String> tupleNames = new HashMap<String, String>();
+
+	public BoaTuple() {
+		members = new ArrayList<BoaType>();
+		names = new HashMap<String, Integer>();
+	}
 
 	public BoaTuple(final List<BoaType> members) {
 		this.members = members;

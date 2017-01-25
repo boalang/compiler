@@ -15,15 +15,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package boa.compiler.transforms;
+package boa.types;
 
-import boa.compiler.visitors.AbstractVisitorNoArg;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * Converts a tree using shadow types into a tree without shadow types.
- *
+ * A shadow type.
+ * 
  * @author rdyer
  * @author kaushin
  */
-public class ShadowTypeEraser extends AbstractVisitorNoArg {
+public class BoaShadowType extends BoaTuple {
+	private final Map<String, String> codegen = new HashMap<String, String>();
+
+	/**
+	 * Construct a {@link BoaShadowType}.
+	 */
+	public BoaShadowType() { }
+
+	public void addShadow(final String name, final BoaType t, final String codegen) {
+		names.put(name, members.size());
+		members.add(t);
+		this.codegen.put(name, codegen);
+	}
 }

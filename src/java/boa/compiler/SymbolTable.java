@@ -136,6 +136,17 @@ public class SymbolTable {
 		for (final BoaType t : dslMapTypes)
 			idmap.put(t.toString(), t);
 
+		// TODO add shadow types
+		BoaShadowType shadow = new BoaShadowType();
+		shadow.addShadow("condition", new ExpressionProtoTuple(), "${0}.expressions[0]");
+		shadow.addShadow("true_branch", new StatementProtoTuple(), "${0}.statements[0]");
+		shadow.addShadow("false_branch", new StatementProtoTuple(), "(len(${0}.statements) > 1 ? null : ${0}.statements[1])");
+		idmap.put("IfStatement", shadow);
+
+		shadow = new BoaShadowType();
+		shadow.addShadow("body", new StatementProtoTuple(), "s.statements[0]");
+		idmap.put("ForStatement", shadow);
+
 		globalFunctions = new FunctionTrie();
 
 		// these generic functions require more finagling than can currently be

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, Anthony Urso, Hridesh Rajan, Robert Dyer, Neha Bhide
+ * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer, Neha Bhide, Kaushik Nimmala
  *                 Iowa State University of Science and Technology
  *                 and Bowling Green State University
  *
@@ -82,6 +82,7 @@ import boa.parser.BoaLexer;
  * @author anthonyu
  * @author rdyer
  * @author nbhide
+ * @author kaushin
  */
 public class BoaCompiler {
 	
