@@ -118,7 +118,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		/** {@inheritDoc} */
 		@Override
 		public void visit(final TraverseStatement n) {
-			final Set<String> s = n.isBefore() ? befores : n.isAfter() ? afters:whens;
+			final Set<String> s = befores;
 			
 			if (n.hasComponent()) {
 				final Identifier id = (Identifier)n.getComponent().getType();
