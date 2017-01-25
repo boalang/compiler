@@ -56,8 +56,9 @@ import org.stringtemplate.v4.ST;
 
 import boa.compiler.SymbolTable;
 import boa.compiler.ast.Start;
-import boa.compiler.transforms.LocalAggregationTransformer;
 import boa.compiler.transforms.InheritedAttributeTransformer;
+import boa.compiler.transforms.LocalAggregationTransformer;
+import boa.compiler.transforms.ShadowTypeEraser;
 import boa.compiler.transforms.VisitorOptimizingTransformer;
 import boa.compiler.visitors.AbstractCodeGeneratingVisitor;
 import boa.compiler.visitors.CodeGeneratingVisitor;
@@ -257,6 +258,7 @@ public abstract class BaseTest {
 		final Start p = ctx.ast;
 
 		try {
+			new ShadowTypeEraser().start(p);
 			new InheritedAttributeTransformer().start(p);
 			new LocalAggregationTransformer().start(p);
 			new VisitorOptimizingTransformer().start(p);
