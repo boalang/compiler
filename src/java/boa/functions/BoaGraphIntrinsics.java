@@ -29,10 +29,10 @@ import boa.types.Ast.Method;
 public class BoaGraphIntrinsics {
 
 	@FunctionSpec(name = "getcfg", returnType = "CFG", formalParameters = { "Method" })
-	public static boa.types.Control.CFG getcfg(final Method method) {
+	public static CFG getcfg(final Method method) {
 		CFG cfg = new CFG(method);
-		cfg.astToCFG();
-		return cfg.newBuilder().build();
+		cfg.astToCFG();	
+		return cfg;
 	}
 
 }
