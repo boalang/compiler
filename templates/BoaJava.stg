@@ -165,23 +165,23 @@ new boa.runtime.BoaAbstractVisitor()
 	<body:{s | <s><\n>}>}
 >>
 
-Traversal(staticDeclarations, body, T) ::= "
-new boa.runtime.BoaAbstractTraversal\<<T>>()
+Traversal(staticDeclarations, body, T) ::= <<
+new boa.runtime.BoaAbstractTraversal\<<T>\>()
 {
 	<if(staticDeclarations)>
 	<staticDeclarations>
 	<endif>
 	<body:{s | <s><\n>}>}
-"
+>>
 
-FixP(staticDeclarations, body, T) ::= "
+FixP(staticDeclarations, body, T) ::= <<
 new boa.runtime.BoaAbstractFixP()
 {
 	<if(staticDeclarations)>
 	<staticDeclarations>
 	<endif>
 	<body:{s | <s><\n>}>}
-"
+>>
 
 VisitClause(ret, name, arg, type, body) ::= <<
 <if(arg)>
@@ -225,7 +225,7 @@ public void traverse(final boa.graphs.cfg.CFGNode node, boolean flag) throws Exc
 <endif>
 >>
 
-FixPClause(arg1, arg2, type, body) ::= "
+FixPClause(arg1, arg2, type, body) ::= <<
 public boolean invoke1(final <type> <arg1>, final <type> <arg2>) throws Exception {
 		<body>
 }
@@ -234,4 +234,4 @@ public boolean invoke1(final <type> <arg1>, final <type> <arg2>) throws Exceptio
 public boolean invoke(Object <arg1>, Object <arg2>) throws Exception{
 		return invoke1((<type>)<arg1>, (<type>)<arg2>);
 }
-"
+>>
