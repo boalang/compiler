@@ -91,16 +91,12 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 
 	protected class TraversalCheckingVisitor extends AbstractVisitorNoArg {
 		protected Set<String> befores = new HashSet<String>();
-		protected Set<String> afters = new HashSet<String>();
-		protected Set<String> whens = new HashSet<String>();
 		protected boolean nested = false;
 
 		/** {@inheritDoc} */
 		@Override
 		public void initialize() {
 			befores.clear();
-			afters.clear();
-			whens.clear();
 			nested = false;
 		}
 
@@ -117,20 +113,18 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		/** {@inheritDoc} */
 		@Override
 		public void visit(final TraverseStatement n) {
-			final Set<String> s = befores;
-			
 			if (n.hasComponent()) {
 				final Identifier id = (Identifier)n.getComponent().getType();
 				final String token = id.getToken();
-				if (s.contains(token))
+				if (befores.contains(token))
 					throw new TypeCheckException(id, "The type '" + token + "' already has a traverse statement");
-				s.add(token);
+				befores.add(token);
 			} else if (n.getIdListSize() > 0) {
 				for (final Identifier id : n.getIdList()) {
 					final String token = id.getToken();
-					if (s.contains(token))
+					if (befores.contains(token))
 						throw new TypeCheckException(id, "The type '" + token + "' already has a traverse statement");
-					s.add(token);
+					befores.add(token);
 				}
 			}
 		}
@@ -161,14 +155,13 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		/** {@inheritDoc} */
 		@Override
 		public void visit(final FixPStatement n) {
-			final Set<String> s = befores;
 			final Identifier id = (Identifier)n.getParam1().getType();
 			final String token = id.getToken();
-			s.add(token);
+			befores.add(token);
 
 			final Identifier id1 = (Identifier)n.getParam2().getType();
 			final String token1 = id1.getToken();
-			s.add(token1);
+			befores.add(token1);
 		}
 
 	}
@@ -1252,9 +1245,6 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	public void visit(final FixPExpression n, final SymbolTable env) {
 		n.env = env;
 		n.getType().accept(this, env);
-		for (final Statement s : n.getBody().getStatements())
-			if (!(s instanceof FixPStatement))
-				throw new TypeCheckException(s, "only FixP statements are allowed inside fix point bodies");
 		fixPChecker.start(n);
 		n.getBody().accept(this, env);
 		n.type = n.getType().type;

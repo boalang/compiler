@@ -1818,9 +1818,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final FixPType n) {
-		if (!(n.type instanceof BoaFunction))
-			throw new TypeCheckException(n ,"type " + n.type + " is not a function type");
-
 		final BoaFunction funcType = ((BoaFunction) n.type);
 
 		final BoaType[] paramTypes = funcType.getFormalParameters();

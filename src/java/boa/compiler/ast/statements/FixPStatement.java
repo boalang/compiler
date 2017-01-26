@@ -39,7 +39,6 @@ public class FixPStatement extends Statement {
 	protected Block body;
 	protected Expression condition;
 	public AbstractType returnType;
-	protected final List<Component> args = new ArrayList<Component>();
 
 	public AbstractType getReturnType() {
 		return returnType;

@@ -534,7 +534,7 @@ fixpExpression returns [FixPExpression ast]
 	locals [Block b, int l, int c]
 	@init { $b = new Block(); $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: t=fixpType (s=fixpStatement {$b.addStatement($s.ast);} | programStatement) { $ast = new FixPExpression($t.ast, $b); }
+	: t=fixpType (s=fixpStatement {$b.addStatement($s.ast);} | { notifyErrorListeners("error: only fixpoint statement allowed inside fixpoint expression"); } programStatement) { $ast = new FixPExpression($t.ast, $b); }
 	;
 
 visitorExpression returns [VisitorExpression ast]
@@ -548,7 +548,7 @@ traversalExpression returns [TraversalExpression ast]
 	locals [Block b, int l, int c]
 	@init { $b = new Block(); $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: t=traversalType (s=traverseStatement {$b.addStatement($s.ast);} | programStatement) { if($s.ast.getReturnType()!=null) {$t.ast.setIndex(new Component($s.ast.getReturnType()));} $ast = new TraversalExpression($t.ast, $b); }
+	: t=traversalType (s=traverseStatement {$b.addStatement($s.ast);} | { notifyErrorListeners("error: only traverse statements allowed inside traversal bodies"); } programStatement) { if($s.ast.getReturnType()!=null) {$t.ast.setIndex(new Component($s.ast.getReturnType()));} $ast = new TraversalExpression($t.ast, $b); }
 	;
 
 composite returns [Composite ast]

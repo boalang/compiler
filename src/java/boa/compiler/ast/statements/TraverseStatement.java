@@ -40,7 +40,6 @@ public class TraverseStatement extends Statement {
 	protected Expression condition;
 	protected List<IfStatement> ifStatements = new ArrayList<IfStatement>();
 	public AbstractType returnType;
-	protected final List<Component> args = new ArrayList<Component>();
 
 	public void addIfStatement(IfStatement ifStatement) {
 		ifStatement.setParent(this);

@@ -118,6 +118,8 @@ public class SymbolTable {
 			new VariableProtoTuple(),
 		};
 		final BoaProtoMap[] dslMapTypes = {
+			new CFGNodeTypeProtoMap(),
+			new CFGEdgeLabelProtoMap(),
 			new ChangeKindProtoMap(),
 			new CommentKindProtoMap(),
 			new ExpressionKindProtoMap(),
@@ -127,12 +129,10 @@ public class SymbolTable {
 			new ModifierKindProtoMap(),
 			new RepositoryKindProtoMap(),
 			new StatementKindProtoMap(),
-			new TypeKindProtoMap(),
-			new VisibilityProtoMap(),
-			new CFGNodeTypeProtoMap(),
-			new CFGEdgeLabelProtoMap(),
 			new TraversalKindProtoMap(),
 			new TraversalDirectionProtoMap(),
+			new TypeKindProtoMap(),
+			new VisibilityProtoMap(),
 		};
 
 		for (final BoaType t : dslTupleTypes)
