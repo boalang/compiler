@@ -57,7 +57,7 @@ public class TestParserBad extends BaseTest {
 				"3,1: error: ';' expected",
 				"4,9: no viable alternative at input '+id:'",
 				"4,5: error: ';' expected",
-				"4,9: mismatched input ':' expecting {<EOF>, 'of', 'if', 'do', 'map', 'stack', 'set', 'for', 'foreach', 'ifall', 'exists', 'not', 'type', 'else', 'case', 'output', 'format', 'while', 'break', 'array', 'static', 'switch', 'return', 'weight', 'default', 'continue', 'function', 'visitor', 'before', 'after', 'stop', ';', '.', '{', '(', '[', 'or', '|', '||', 'and', '&', '&&', '+', '-', '^', '*', '/', '%', '>>', '~', '!', '$', '<<', IntegerLiteral, FloatingPointLiteral, CharacterLiteral, RegexLiteral, StringLiteral, TimeLiteral, Identifier}",
+				"4,9: mismatched input ':' expecting {<EOF>, 'of', 'if', 'do', 'map', 'stack', 'set', 'for', 'foreach', 'ifall', 'exists', 'not', 'type', 'else', 'case', 'output', 'format', 'while', 'break', 'array', 'static', 'switch', 'return', 'weight', 'default', 'continue', 'function', 'fixp', 'visitor', 'traversal', 'before', 'after', 'stop', ';', '.', '{', '(', '[', 'or', '|', '||', 'and', '&', '&&', '+', '-', '^', '*', '/', '%', '>>', '~', '!', '$', '<<', IntegerLiteral, FloatingPointLiteral, CharacterLiteral, RegexLiteral, StringLiteral, TimeLiteral, Identifier}",
 				"4,12: error: ';' expected"
 			});
 	}
