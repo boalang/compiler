@@ -53,10 +53,9 @@ public class CFG {
 	private CFGNode exitNode ;
 	private boolean isLoopPresent = false;
 	private boolean isBranchPresent = false;
-	private boolean nestedBranchPresent = false;
-	private boolean inLoop = false;
 	private CFGNode[] orderedNodes;
 	int count = 0;
+
 	public CFG(Method method) {
 		this.md = method;
 		this.class_name = "this";
@@ -85,10 +84,6 @@ public class CFG {
 
 	public boolean getIsBranchPresent() {
 		return isBranchPresent;
-	}
-
-	public boolean getNestedBranchPresent() {
-		return nestedBranchPresent;
 	}
 
 	public void setIsLoopPresent(boolean isLoopPresent) {
@@ -324,7 +319,6 @@ public class CFG {
 		if (md.getStatementsCount() > 0) {
 			CFGNode startNode = new CFGNode("START", CFGNode.TYPE_ENTRY,
 					"START", "START");
-			this.inLoop = false;
 			mergeSeq(startNode);
 			mergeSeq(traverse(startNode, md.getStatementsList().get(0)));
 			if (getNodes().size() >= CFG.minSize) {
@@ -584,9 +578,6 @@ public class CFG {
 	}
 
 	private CFG traverse_if(CFGNode cfgNode, Statement root) {
-		if(this.inLoop) {
-			this.nestedBranchPresent = true;		
-		}
 		this.isBranchPresent = true;
 		CFG graph = new CFG();
 		/*
@@ -650,9 +641,6 @@ public class CFG {
 	}
 
 	private CFG traverse_switch(CFGNode cfgNode, Statement root) {
-		if(this.inLoop) {
-			this.nestedBranchPresent = true;		
-		}
 		this.isBranchPresent = true;
 		CFG graph = new CFG();
 		graph.mergeSeq(traverse(cfgNode, root.getExpression()));
@@ -704,7 +692,6 @@ public class CFG {
 
 	private CFG traverse_for(CFGNode cfgNode, Statement root) {
 		this.isLoopPresent = true;
-		this.inLoop = true;
 		CFG graph = new CFG();
 		for (Iterator it = root.getInitializationsList().iterator(); it
 				.hasNext();) {
@@ -741,13 +728,11 @@ public class CFG {
 		graph.addBackEdges(branch, control, "B");
 
 		graph.adjustBreakNodes("");
-		this.inLoop = false;
 		return graph;
 	}
 
 	private CFG traverse_while(CFGNode cfgNode, Statement root) {
 		this.isLoopPresent = true;
-		this.inLoop = true;
 		CFG graph = new CFG();
 		if (root.getExpression() != null) {
 			graph.mergeSeq(traverse(cfgNode, root.getExpression()));
@@ -764,13 +749,11 @@ public class CFG {
 		graph.addBackEdges(branch, control, "B");
 
 		graph.adjustBreakNodes("");
-		this.inLoop = false;
 		return graph;
 	}
 
 	private CFG traverse_do(CFGNode cfgNode, Statement root) {
 		this.isLoopPresent = true;
-		this.inLoop = true;
 		CFG graph = new CFG();
 		if (root.getExpression() != null)
 			graph.mergeSeq(traverse(cfgNode, root.getExpression()));
@@ -786,7 +769,6 @@ public class CFG {
 		graph.addBackEdges(branch, control, "B");
 
 		graph.adjustBreakNodes("");
-		this.inLoop = false;
 		return graph;
 	}
 
