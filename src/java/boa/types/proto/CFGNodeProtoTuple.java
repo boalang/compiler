@@ -22,9 +22,11 @@ import java.util.List;
 import java.util.Map;
 
 import boa.types.BoaProtoTuple;
+import boa.types.BoaProtoList;
 import boa.types.BoaString;
 import boa.types.BoaType;
 import boa.types.BoaInt;
+import boa.types.BoaSet;
 import boa.types.proto.enums.CFGNodeTypeProtoMap;
 import boa.types.proto.enums.FileKindProtoMap;
 
@@ -40,12 +42,38 @@ public class CFGNodeProtoTuple extends BoaProtoTuple {
 	static {
 		int counter = 0;
 
-		names.put("type", counter++);
+		names.put("kind", counter++);
 		members.add(new CFGNodeTypeProtoMap());
 
 		names.put("id", counter++);
 		members.add(new BoaInt());
 
+		names.put("name", counter++);
+		members.add(new BoaString());
+
+		names.put("stmt", counter++);
+		members.add(new StatementProtoTuple());
+
+		names.put("expr", counter++);
+		members.add(new ExpressionProtoTuple());
+
+		names.put("rhs", counter++);
+		members.add(new ExpressionProtoTuple());
+
+		names.put("useVariables", counter++);
+		members.add(new BoaSet(new BoaString()));
+
+		names.put("defVariables", counter++);
+		members.add(new BoaString());
+
+		names.put("defUse", counter++);
+		members.add(new BoaSet(new BoaString()));
+
+		names.put("predecessors", counter++);
+		members.add(new BoaProtoList(new CFGNodeProtoTuple()));
+
+		names.put("successors", counter++);
+		members.add(new BoaProtoList(new CFGNodeProtoTuple()));
 	}
 
 	/**
@@ -58,6 +86,6 @@ public class CFGNodeProtoTuple extends BoaProtoTuple {
 	/** @{inheritDoc} */
 	@Override
 	public String toJavaType() {
-		return "boa.types.Control.CFGNode";
+		return "boa.graphs.cfg.CFGNode";
 	}
 }

@@ -1193,15 +1193,15 @@ public final class Control {
      */
     int getId();
 
-    // required .boa.types.CFGNode.CFGNodeType type = 2;
+    // required .boa.types.CFGNode.CFGNodeType kind = 2;
     /**
-     * <code>required .boa.types.CFGNode.CFGNodeType type = 2;</code>
+     * <code>required .boa.types.CFGNode.CFGNodeType kind = 2;</code>
      */
-    boolean hasType();
+    boolean hasKind();
     /**
-     * <code>required .boa.types.CFGNode.CFGNodeType type = 2;</code>
+     * <code>required .boa.types.CFGNode.CFGNodeType kind = 2;</code>
      */
-    boa.types.Control.CFGNode.CFGNodeType getType();
+    boa.types.Control.CFGNode.CFGNodeType getKind();
 
     // optional .boa.types.Statement statement = 3;
     /**
@@ -1318,7 +1318,7 @@ public final class Control {
                 unknownFields.mergeVarintField(2, rawValue);
               } else {
                 bitField0_ |= 0x00000002;
-                type_ = value;
+                kind_ = value;
               }
               break;
             }
@@ -1540,20 +1540,20 @@ public final class Control {
       return id_;
     }
 
-    // required .boa.types.CFGNode.CFGNodeType type = 2;
-    public static final int TYPE_FIELD_NUMBER = 2;
-    private boa.types.Control.CFGNode.CFGNodeType type_;
+    // required .boa.types.CFGNode.CFGNodeType kind = 2;
+    public static final int KIND_FIELD_NUMBER = 2;
+    private boa.types.Control.CFGNode.CFGNodeType kind_;
     /**
-     * <code>required .boa.types.CFGNode.CFGNodeType type = 2;</code>
+     * <code>required .boa.types.CFGNode.CFGNodeType kind = 2;</code>
      */
-    public boolean hasType() {
+    public boolean hasKind() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
-     * <code>required .boa.types.CFGNode.CFGNodeType type = 2;</code>
+     * <code>required .boa.types.CFGNode.CFGNodeType kind = 2;</code>
      */
-    public boa.types.Control.CFGNode.CFGNodeType getType() {
-      return type_;
+    public boa.types.Control.CFGNode.CFGNodeType getKind() {
+      return kind_;
     }
 
     // optional .boa.types.Statement statement = 3;
@@ -1626,7 +1626,7 @@ public final class Control {
 
     private void initFields() {
       id_ = 0;
-      type_ = boa.types.Control.CFGNode.CFGNodeType.ENTRY;
+      kind_ = boa.types.Control.CFGNode.CFGNodeType.ENTRY;
       statement_ = boa.types.Ast.Statement.getDefaultInstance();
       expression_ = boa.types.Ast.Expression.getDefaultInstance();
     }
@@ -1639,7 +1639,7 @@ public final class Control {
         memoizedIsInitialized = 0;
         return false;
       }
-      if (!hasType()) {
+      if (!hasKind()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -1666,7 +1666,7 @@ public final class Control {
         output.writeInt32(1, id_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeEnum(2, type_.getNumber());
+        output.writeEnum(2, kind_.getNumber());
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeMessage(3, statement_);
@@ -1689,7 +1689,7 @@ public final class Control {
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(2, type_.getNumber());
+          .computeEnumSize(2, kind_.getNumber());
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
@@ -1819,7 +1819,7 @@ public final class Control {
         super.clear();
         id_ = 0;
         bitField0_ = (bitField0_ & ~0x00000001);
-        type_ = boa.types.Control.CFGNode.CFGNodeType.ENTRY;
+        kind_ = boa.types.Control.CFGNode.CFGNodeType.ENTRY;
         bitField0_ = (bitField0_ & ~0x00000002);
         if (statementBuilder_ == null) {
           statement_ = boa.types.Ast.Statement.getDefaultInstance();
@@ -1868,7 +1868,7 @@ public final class Control {
         if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
           to_bitField0_ |= 0x00000002;
         }
-        result.type_ = type_;
+        result.kind_ = kind_;
         if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
           to_bitField0_ |= 0x00000004;
         }
@@ -1904,8 +1904,8 @@ public final class Control {
         if (other.hasId()) {
           setId(other.getId());
         }
-        if (other.hasType()) {
-          setType(other.getType());
+        if (other.hasKind()) {
+          setKind(other.getKind());
         }
         if (other.hasStatement()) {
           mergeStatement(other.getStatement());
@@ -1922,7 +1922,7 @@ public final class Control {
           
           return false;
         }
-        if (!hasType()) {
+        if (!hasKind()) {
           
           return false;
         }
@@ -1993,38 +1993,38 @@ public final class Control {
         return this;
       }
 
-      // required .boa.types.CFGNode.CFGNodeType type = 2;
-      private boa.types.Control.CFGNode.CFGNodeType type_ = boa.types.Control.CFGNode.CFGNodeType.ENTRY;
+      // required .boa.types.CFGNode.CFGNodeType kind = 2;
+      private boa.types.Control.CFGNode.CFGNodeType kind_ = boa.types.Control.CFGNode.CFGNodeType.ENTRY;
       /**
-       * <code>required .boa.types.CFGNode.CFGNodeType type = 2;</code>
+       * <code>required .boa.types.CFGNode.CFGNodeType kind = 2;</code>
        */
-      public boolean hasType() {
+      public boolean hasKind() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
-       * <code>required .boa.types.CFGNode.CFGNodeType type = 2;</code>
+       * <code>required .boa.types.CFGNode.CFGNodeType kind = 2;</code>
        */
-      public boa.types.Control.CFGNode.CFGNodeType getType() {
-        return type_;
+      public boa.types.Control.CFGNode.CFGNodeType getKind() {
+        return kind_;
       }
       /**
-       * <code>required .boa.types.CFGNode.CFGNodeType type = 2;</code>
+       * <code>required .boa.types.CFGNode.CFGNodeType kind = 2;</code>
        */
-      public Builder setType(boa.types.Control.CFGNode.CFGNodeType value) {
+      public Builder setKind(boa.types.Control.CFGNode.CFGNodeType value) {
         if (value == null) {
           throw new NullPointerException();
         }
         bitField0_ |= 0x00000002;
-        type_ = value;
+        kind_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required .boa.types.CFGNode.CFGNodeType type = 2;</code>
+       * <code>required .boa.types.CFGNode.CFGNodeType kind = 2;</code>
        */
-      public Builder clearType() {
+      public Builder clearKind() {
         bitField0_ = (bitField0_ & ~0x00000002);
-        type_ = boa.types.Control.CFGNode.CFGNodeType.ENTRY;
+        kind_ = boa.types.Control.CFGNode.CFGNodeType.ENTRY;
         onChanged();
         return this;
       }
@@ -2952,7 +2952,7 @@ public final class Control {
       "\n\rcontrol.proto\022\tboa.types\032\tast.proto\"K\n" +
       "\003CFG\022!\n\005nodes\030\001 \003(\0132\022.boa.types.CFGNode\022" +
       "!\n\005edges\030\002 \003(\0132\022.boa.types.CFGEdge\"\325\001\n\007C" +
-      "FGNode\022\n\n\002id\030\001 \002(\005\022,\n\004type\030\002 \002(\0162\036.boa.t" +
+      "FGNode\022\n\n\002id\030\001 \002(\005\022,\n\004kind\030\002 \002(\0162\036.boa.t" +
       "ypes.CFGNode.CFGNodeType\022\'\n\tstatement\030\003 " +
       "\001(\0132\024.boa.types.Statement\022)\n\nexpression\030" +
       "\004 \001(\0132\025.boa.types.Expression\"<\n\013CFGNodeT" +
@@ -2979,7 +2979,7 @@ public final class Control {
           internal_static_boa_types_CFGNode_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_CFGNode_descriptor,
-              new java.lang.String[] { "Id", "Type", "Statement", "Expression", });
+              new java.lang.String[] { "Id", "Kind", "Statement", "Expression", });
           internal_static_boa_types_CFGEdge_descriptor =
             getDescriptor().getMessageTypes().get(2);
           internal_static_boa_types_CFGEdge_fieldAccessorTable = new

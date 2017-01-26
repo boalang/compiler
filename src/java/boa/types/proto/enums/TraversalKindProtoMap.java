@@ -14,25 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package boa.functions;
+package boa.types.proto.enums;
 
-import boa.graphs.cfg.CFG;
-import boa.types.Ast.Method;
+import com.google.protobuf.ProtocolMessageEnum;
+
+import boa.types.BoaProtoMap;
 
 /**
- * Boa functions for working with control flow graphs.
+ * A {@link TraversalKindProtoMap}.
  * 
- * @author ganeshau
  * @author rramu
- *
  */
-public class BoaGraphIntrinsics {
-
-	@FunctionSpec(name = "getcfg", returnType = "CFG", formalParameters = { "Method" })
-	public static CFG getcfg(final Method method) {
-		CFG cfg = new CFG(method);
-		cfg.astToCFG();	
-		return cfg;
+public class TraversalKindProtoMap extends BoaProtoMap {
+	/** {@inheritDoc} */
+	@Override
+	protected Class<? extends ProtocolMessageEnum> getEnumClass() {
+		return boa.types.Graph.Traversal.TraversalKind.class;
 	}
-
 }
