@@ -155,6 +155,11 @@ public class SymbolTable {
 		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaSet(new BoaTypeVar("V")) }, "((long)${0}.size())"));
 		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaString() }, "((long)${0}.length())"));
 
+		//traversal functions
+		globalFunctions.addFunction("getValue", new BoaFunction(new BoaAny(), new BoaType[] { new CFGNodeProtoTuple(), new BoaTraversal()},"${1}.getValue(${0})"));
+		globalFunctions.addFunction("getValue", new BoaFunction(new BoaAny(), new BoaType[] { new CFGNodeProtoTuple()},"getValue(${0})"));
+		globalFunctions.addFunction("clear", new BoaFunction(new BoaAny(), new BoaType[] { new BoaTraversal()},"${0}.clear()"));
+
 		// map functions
 		globalFunctions.addFunction("haskey", new BoaFunction(new BoaBool(), new BoaType[] { new BoaMap(new BoaTypeVar("V"), new BoaTypeVar("K")), new BoaTypeVar("K") }, "${0}.containsKey(${1})"));
 		globalFunctions.addFunction("keys", new BoaFunction(new BoaArray(new BoaTypeVar("K")), new BoaType[] { new BoaMap(new BoaTypeVar("V"), new BoaTypeVar("K")) }, "boa.functions.BoaIntrinsics.basic_array(${0}.keySet().toArray(new ${K}[0]))"));
@@ -377,6 +382,9 @@ public class SymbolTable {
 
 		if (id.startsWith("set of "))
 			return new BoaSet(getType(id.substring("set of ".length()).trim()));
+
+		if (id.startsWith("stack of "))
+			return new BoaStack(getType(id.substring("stack of ".length()).trim()));
 
 		if (id.startsWith("map"))
 			return new BoaMap(getType(id.substring(id.indexOf(" of ") + " of ".length()).trim()),

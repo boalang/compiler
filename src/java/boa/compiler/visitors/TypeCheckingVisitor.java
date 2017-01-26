@@ -39,6 +39,8 @@ import boa.types.*;
  * @author rramu
  */
 public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
+	BoaType lastRetType;
+
 	/**
 	 * This verifies visitors have at most 1 before/after for a type.
 	 * 
@@ -487,6 +489,17 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 						throw new TypeCheckException(n.getOperand(), e.getMessage(), e);
 					}
 					type = v.getFunction().erase(formalParameters);
+					if(((Identifier)n.getOperand()).getToken().equals("getValue")) {
+						if(formalParameters.size()==1) {
+							type = lastRetType;
+						}
+						else {
+							for(BoaType tt:formalParameters) {
+								if(tt instanceof BoaTraversal)
+									type=((BoaTraversal)tt).getIndex();
+							}
+						}					
+					}
 				}
 				node.type = type;
 			}
@@ -1027,7 +1040,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			//System.out.println("type   "+ret);
 		}
 		n.type = new BoaFunction(ret, new BoaType[]{});
-		//System.out.println(st.locals);
+		lastRetType = ret;
 		n.env = st;
 
 		if (n.hasComponent()) {
