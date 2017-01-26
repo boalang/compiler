@@ -466,7 +466,7 @@ public class CFG {
 		case StatementKind.LABEL_VALUE:
 			return traverse_labeled(cfgNode, root);
 		case StatementKind.SWITCH_VALUE:
-			return traverse_switch(cfgNode, root, 0);
+			return traverse_switch(cfgNode, root);
 			/*
 			 * case StatementKind.CASE_VALUE: return traverse_;
 			 */
