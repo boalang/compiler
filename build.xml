@@ -280,6 +280,7 @@
 	<target name="checkstyle">
 		<checkstyle config="checkstyle.xml">
 			<fileset dir="src/java" includes="**/*.java"/>
+			<fileset dir="src/test" includes="**/*.java"/>
 			<formatter type="plain"/>
 		</checkstyle>
 	</target>
