@@ -9,6 +9,7 @@ cfgnode_ids:set of string;
 
 # traversal to collect all cfgnode ids
 allnode_ids := traversal(node: CFGNode) : string {
+	add(cfgnode_ids, string(node.id));
 	return string(node.id);
 };
 
