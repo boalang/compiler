@@ -13,6 +13,9 @@
         <!-- Checks that the outer type name and the file name match. For example, the class Foo must be in a file named Foo.java.
              See http://checkstyle.sourceforge.net/config_misc.html#OuterTypeFilename -->
         <module name="OuterTypeFilename"/>
+		<!-- Checks that each top-level class, interface or enum resides in a source file of its own.
+		     See http://checkstyle.sourceforge.net/config_design.html#OneTopLevelClass -->
+        <module name="OneTopLevelClass"/>
     </module>
 
     <!--========
