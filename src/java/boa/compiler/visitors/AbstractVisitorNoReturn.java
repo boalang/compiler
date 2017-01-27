@@ -21,6 +21,7 @@ import boa.compiler.ast.expressions.*;
 import boa.compiler.ast.literals.*;
 import boa.compiler.ast.statements.*;
 import boa.compiler.ast.types.*;
+import boa.types.*;
 
 /**
  * A specialization of the Visitor that doesn't pass up a return value.
@@ -28,6 +29,7 @@ import boa.compiler.ast.types.*;
  * @author hridesh
  * @author rdyer
  * @author ankuraga
+ * @author rramu
  *
  * @param <ArgType> the type of the argument to pass down the tree while visiting
  */
@@ -246,6 +248,36 @@ public abstract class AbstractVisitorNoReturn<ArgType> {
 		n.getBody().accept(this, arg);
 	}
 
+	public void visit(final TraverseStatement n, final ArgType arg) {
+		if (n.hasComponent())
+			n.getComponent().accept(this, arg);
+		for (final Identifier id : n.getIdList())
+			id.accept(this, arg);
+		if (n.hasCondition())
+			n.getCondition().accept(this,arg);
+		if(n.getReturnType()!=null) {
+			n.getReturnType().accept(this, arg);
+		}
+		for (final IfStatement ifStatement : n.getIfStatements())
+			ifStatement.accept(this, arg);
+		if(n.hasBody())
+		n.getBody().accept(this, arg);
+	}
+
+	public void visit(final FixPStatement n, final ArgType arg) {
+		n.getParam1().accept(this, arg);
+		n.getParam2().accept(this, arg);
+		for (final Identifier id : n.getIdList())
+			id.accept(this, arg);
+		if (n.hasCondition())
+			n.getCondition().accept(this,arg);
+		if(n.getReturnType()!=null) {
+			n.getReturnType().accept(this, arg);
+		}
+		if(n.hasBody())
+		n.getBody().accept(this, arg);
+	}
+
 	public void visit(final WhileStatement n, final ArgType arg) {
 		n.getCondition().accept(this, arg);
 		n.getBody().accept(this, arg);
@@ -276,6 +308,16 @@ public abstract class AbstractVisitorNoReturn<ArgType> {
 	}
 
 	public void visit(final VisitorExpression n, final ArgType arg) {
+		n.getType().accept(this, arg);
+		n.getBody().accept(this, arg);
+	}
+
+	public void visit(final TraversalExpression n, final ArgType arg) {
+		n.getType().accept(this, arg);
+		n.getBody().accept(this, arg);
+	}
+
+	public void visit(final FixPExpression n, final ArgType arg) {
 		n.getType().accept(this, arg);
 		n.getBody().accept(this, arg);
 	}
@@ -352,5 +394,13 @@ public abstract class AbstractVisitorNoReturn<ArgType> {
 	}
 
 	public void visit(final VisitorType n, final ArgType arg) {
+	}
+
+	public void visit(final TraversalType n, final ArgType arg) {
+		if(n.getIndex()!=null)
+			n.getIndex().accept(this, arg);
+	}
+
+	public void visit(final FixPType n, final ArgType arg) {
 	}
 }
