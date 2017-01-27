@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, Hridesh Rajan, Robert Dyer, Neha Bhide
+ * Copyright 2017, Hridesh Rajan, Robert Dyer, Neha Bhide, Kaushik Nimmala
  *                 Iowa State University of Science and Technology
  *                 and Bowling Green State University
  *
@@ -71,6 +71,7 @@ import boa.parser.BoaParser.StartContext;
 /**
  * @author rdyer
  * @author nbhide
+ * @author kaushin
  */
 public abstract class BaseTest {
 	protected static boolean DEBUG = false;
