@@ -582,7 +582,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 	final public static List<String> combineAggregatorStrings = new ArrayList<String>();
 	final public static List<String> reduceAggregatorStrings = new ArrayList<String>();
-	final public static List<String> userAggregatorDeclStrings = new ArrayList<String>();
+	final public static Set<String> userAggregatorDeclStrings = new HashSet<String>();
 	final public static List<String> reduceAggregatorInitStrings = new ArrayList<String>();
 
 	public CodeGeneratingVisitor(final String name) throws IOException {
@@ -662,7 +662,10 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			StringBuffer reducerCombinerEntry = new StringBuffer();
 			if(Aggregator.isUserDefinedAggregator(entry.getValue().getAggregator())) {
 				UserFunctionDetails function = UserFuncitonList.findByUserGivenName(entry.getValue().getAggregator());
-				userAggregatorDeclStrings.add(function.getUserAggClass());
+				String gencode = function.getUserAggClass();
+				if(!userAggregatorDeclStrings.contains(gencode)) {
+					userAggregatorDeclStrings.add(gencode);
+				}
 				reducerCombinerEntry.append("this.aggregators.put(\"" + prefix + "::" + id + "\",  new " +  function.getAggClassName() + "());");
 				combines = false;
 			}else {

@@ -98,7 +98,7 @@ public class BoaCompiler {
 			jarName = className + ".jar";
 
 		// make the output directory
-		File outputRoot;
+		File outputRoot = null;
 		if (cl.hasOption("gcd")) {
 			outputRoot = new File(cl.getOptionValue("gcd"));
 		} else {
@@ -152,8 +152,8 @@ public class BoaCompiler {
 
 					try {
 						if (!parserErrorListener.hasError) {
-							UserFuncitonList.setFileName(f.getName().split(" ")[0]);
-							UserFuncitonList.setJobName(jobName);
+							UserFuncitonList.setFileName(f.getName());
+							UserFuncitonList.setJobName("Job" + jobName);
 							new TypeCheckingVisitor().start(p, new SymbolTable());
 
 							final TaskClassifyingVisitor simpleVisitor = new TaskClassifyingVisitor();
@@ -591,191 +591,5 @@ public class BoaCompiler {
 			}
 
 		return pascalized.toString();
-	}
-
-	public static boolean compile(final String[] args) throws IOException {
-		CommandLine cl = processCommandLineOptions(args);
-		if (cl == null)
-			return false;
-		final ArrayList<File> inputFiles = BoaCompiler.inputFiles;
-
-		// get the name of the generated class
-		final String className = getGeneratedClass(cl);
-
-		// get the filename of the jar we will be writing
-		final String jarName;
-		if (cl.hasOption('o'))
-			jarName = cl.getOptionValue('o');
-		else
-			jarName = className + ".jar";
-
-		// make the output directory
-		File outputRoot = null;
-		if (cl.hasOption("gcd")) {
-			outputRoot = new File(cl.getOptionValue("gcd"));
-		} else {
-			outputRoot = new File(new File(System.getProperty("java.io.tmpdir")), UUID.randomUUID().toString());
-		}
-		final File outputSrcDir = new File(outputRoot, "boa");
-		if (!outputSrcDir.mkdirs())
-			throw new IOException("unable to mkdir " + outputSrcDir);
-
-		// find custom libs to load
-		final List<URL> libs = new ArrayList<URL>();
-		if (cl.hasOption('l'))
-			for (final String lib : cl.getOptionValues('l'))
-				libs.add(new File(lib).toURI().toURL());
-
-		final File outputFile = new File(outputSrcDir, className + ".java");
-		final BufferedOutputStream o = new BufferedOutputStream(new FileOutputStream(outputFile));
-		try {
-			final List<String> jobnames = new ArrayList<String>();
-			final List<String> jobs = new ArrayList<String>();
-			boolean isSimple = true;
-
-			final List<Program> visitorPrograms = new ArrayList<Program>();
-
-			SymbolTable.initialize(libs);
-
-			for (int i = 0; i < inputFiles.size(); i++) {
-				final File f = inputFiles.get(i);
-				try {
-					final BoaLexer lexer = new BoaLexer(new ANTLRFileStream(f.getAbsolutePath()));
-					lexer.removeErrorListeners();
-					lexer.addErrorListener(new LexerErrorListener());
-
-					final CommonTokenStream tokens = new CommonTokenStream(lexer);
-					final BoaParser parser = new BoaParser(tokens);
-					parser.removeErrorListeners();
-					parser.addErrorListener(new BaseErrorListener() {
-						@Override
-						public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line,
-								int charPositionInLine, String msg, RecognitionException e)
-								throws ParseCancellationException {
-							throw new ParseCancellationException(e);
-						}
-					});
-
-					final BoaErrorListener parserErrorListener = new ParserErrorListener();
-					final Start p = parse(tokens, parser, parserErrorListener);
-					if (cl.hasOption("ast"))
-						new ASTPrintingVisitor().start(p);
-
-					final String jobName = "" + i;
-
-					try {
-						if (!parserErrorListener.hasError) {
-							UserFuncitonList.setFileName(f.getName());
-							UserFuncitonList.setJobName("Job" + jobName);
-							new TypeCheckingVisitor().start(p, new SymbolTable());
-
-							final TaskClassifyingVisitor simpleVisitor = new TaskClassifyingVisitor();
-							simpleVisitor.start(p);
-
-							LOG.info(f.getName() + ": task complexity: "
-									+ (!simpleVisitor.isComplex() ? "simple" : "complex"));
-							isSimple &= !simpleVisitor.isComplex();
-
-							new InheritedAttributeTransformer().start(p);
-
-							new LocalAggregationTransformer().start(p);
-
-							// if a job has no visitor, let it have its own
-							// method
-							// also let jobs have own methods if visitor merging
-							// is disabled
-							if (!simpleVisitor.isComplex() || cl.hasOption("nv") || inputFiles.size() == 1) {
-								new VisitorOptimizingTransformer().start(p);
-
-								if (cl.hasOption("pp"))
-									new PrettyPrintVisitor().start(p);
-								if (cl.hasOption("ast"))
-									new ASTPrintingVisitor().start(p);
-								final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(jobName);
-								cg.start(p);
-								jobs.add(cg.getCode());
-
-								jobnames.add(jobName);
-							}
-							// if a job has visitors, fuse them all together
-							// into a single program
-							else {
-								p.getProgram().jobName = jobName;
-								visitorPrograms.add(p.getProgram());
-							}
-						}
-					} catch (final TypeCheckException e) {
-						parserErrorListener.error("typecheck", lexer, null, e.n.beginLine, e.n.beginColumn,
-								e.n2.endColumn - e.n.beginColumn + 1, e.getMessage(), e);
-					}
-				} catch (final Exception e) {
-					System.err.print(f.getName() + ": compilation failed: ");
-					e.printStackTrace();
-				}
-			}
-
-			final int maxVisitors;
-			if (cl.hasOption('v'))
-				maxVisitors = Integer.parseInt(cl.getOptionValue('v'));
-			else
-				maxVisitors = Integer.MAX_VALUE;
-
-			if (!visitorPrograms.isEmpty())
-				try {
-					for (final Program p : new VisitorMergingTransformer().mergePrograms(visitorPrograms,
-							maxVisitors)) {
-						new VisitorOptimizingTransformer().start(p);
-
-						if (cl.hasOption("pp"))
-							new PrettyPrintVisitor().start(p);
-						if (cl.hasOption("ast"))
-							new ASTPrintingVisitor().start(p);
-						final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(p.jobName);
-						cg.start(p);
-						jobs.add(cg.getCode());
-
-						jobnames.add(p.jobName);
-					}
-				} catch (final Exception e) {
-					System.err.println("error fusing visitors - falling back: " + e);
-					e.printStackTrace();
-
-					for (final Program p : visitorPrograms) {
-						new VisitorOptimizingTransformer().start(p);
-
-						if (cl.hasOption("pp"))
-							new PrettyPrintVisitor().start(p);
-						if (cl.hasOption("ast"))
-							new ASTPrintingVisitor().start(p);
-						final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(p.jobName);
-						cg.start(p);
-						jobs.add(cg.getCode());
-
-						jobnames.add(p.jobName);
-					}
-				}
-
-			if (jobs.size() == 0)
-				throw new RuntimeException("no files compiled without error");
-
-			final ST st = AbstractCodeGeneratingVisitor.stg.getInstanceOf("Program");
-
-			st.add("name", className);
-			st.add("numreducers", inputFiles.size());
-			st.add("jobs", jobs);
-			st.add("jobnames", jobnames);
-			st.add("combineTables", CodeGeneratingVisitor.combineAggregatorStrings);
-			st.add("userDeclAgg", CodeGeneratingVisitor.userAggregatorDeclStrings);
-			st.add("reduceInit", CodeGeneratingVisitor.reduceAggregatorInitStrings);
-			st.add("reduceTables", CodeGeneratingVisitor.reduceAggregatorStrings);
-			st.add("splitsize", isSimple ? 64 * 1024 * 1024 : 10 * 1024 * 1024);
-
-			o.write(st.render().getBytes());
-		} finally {
-			o.close();
-		}
-
-		compileGeneratedSrc(cl, jarName, outputRoot, outputFile);
-		return true;
 	}
 }

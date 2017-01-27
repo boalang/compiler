@@ -81,7 +81,7 @@ public class BoaEvaluator {
 		try {
 			delete(new File(this.outpath));
 			delete(new File(this.compilationpath));
-			if (!BoaCompiler.compile(compilationArgs)) {
+			if (!compile(compilationArgs)) {
 				return false;
 			}
 		} catch (IOException e1) {
@@ -169,5 +169,18 @@ public class BoaEvaluator {
 
 	public boolean isSuccess() {
 		return this.result;
+	}
+
+	private boolean compile(String[] args) {
+		if(args == null) {
+			return false;
+		}
+		try{
+			BoaCompiler.main(args);
+		}catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 }
