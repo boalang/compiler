@@ -493,12 +493,6 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 						if(formalParameters.size()==1) {
 							type = lastRetType;
 						}
-						else {
-							for(BoaType tt:formalParameters) {
-								if(tt instanceof BoaTraversal)
-									type=((BoaTraversal)tt).getIndex();
-							}
-						}					
 					}
 				}
 				node.type = type;

@@ -30,6 +30,10 @@ public class BoaTraversal extends BoaType {
 	public BoaTraversal() {
 	}
 
+	public BoaTraversal(BoaType index) {
+		this.index = index;
+	}
+
 	public void setIndex(BoaType index) {
 		this.index = index;
 	}
