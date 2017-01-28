@@ -1,0 +1,18 @@
+m: output collection of int;
+
+p: Project = input;
+
+cfgnode_ids:set of string;
+
+# traversal with return type
+allnode_ids := traversal(node: CFGNode) : string {
+	add(cfgnode_ids, string(node.id));
+	return string(node.id);
+};
+
+# traversal with no return type
+dom_result := traversal(node: CFGNode) {
+	m << node.id;
+	remove(cfgnode_ids, string(node.id));
+};
+

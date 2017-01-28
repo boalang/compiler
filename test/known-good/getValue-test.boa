@@ -1,0 +1,27 @@
+m: output collection[int] of string;
+
+p: Project = input;
+
+type T= {dom: set of string, dummy : int};
+
+#set of all cfgnode ids
+cfgnode_ids:set of string;
+
+# traversal to collect all cfgnode ids
+allnode_ids := traversal(node: CFGNode) : string {
+	add(cfgnode_ids, string(node.id));
+	return string(node.id);
+};
+
+# print results
+dom_result := traversal(node: CFGNode) : string {
+	#getvalue from other traversal
+	other_value := getValue(node, allnode_ids);
+
+	#getvalue from current traversal
+	cur_value := getValue(node);
+	
+	if(def(cur_value))
+		m[node.id] << string(other_value);
+	return string(node.id);
+};
