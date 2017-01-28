@@ -38,6 +38,7 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.util.Tool;
 
+import boa.datagen.DefaultProperties;
 import boa.io.BoaOutputFormat;
 import boa.io.EmitKey;
 import boa.io.EmitValue;
@@ -82,7 +83,9 @@ public abstract class BoaRunner extends Configured implements Tool {
 		// map output compression
 		configuration.setBoolean("mapred.compress.map.output", true);
 		configuration.set("mapred.map.output.compression.type", "BLOCK");
-		configuration.setClass("mapred.map.output.compression.codec", SnappyCodec.class, CompressionCodec.class);
+		if(DefaultProperties.localDataPath == null) {
+			configuration.setClass("mapred.map.output.compression.codec", SnappyCodec.class, CompressionCodec.class);
+		}
 
 		configuration.setBoolean("mapred.map.tasks.speculative.execution", false);
 		configuration.setBoolean("mapred.reduce.tasks.speculative.execution", false);
