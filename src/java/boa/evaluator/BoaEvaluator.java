@@ -81,11 +81,15 @@ public class BoaEvaluator {
 	}
 
 	public static void main(final String[] args) {
-
+		BoaEvaluator evaluator;
 		if (args.length < 2 || args.length > 3) {
 			throw new IllegalArgumentException();
+		}else if(args.length == 2) {
+			evaluator = new BoaEvaluator(args[0], args[1]);
+		}else { // out dir is given
+			evaluator = new BoaEvaluator(args[0], args[1], args[2]);
 		}
-		BoaEvaluator evaluator = (args.length == 2) ? new BoaEvaluator(args[0], args[1]) : new BoaEvaluator(args[0], args[1], args[2]);
+
 		long start = System.currentTimeMillis();
 		if(!evaluator.compile()) {
 			System.err.println("Compilation Failed");
@@ -142,9 +146,10 @@ public class BoaEvaluator {
 	}
 
 	private String[] createHadoopProgramArguments() {
-		final String[] actualArgs = new String[2];
+		final String[] actualArgs = new String[3];
 		actualArgs[0] = this.DATA_PATH;
 		actualArgs[1] = this.OUTPUT_DIR;
+		actualArgs[2] = "-b"; // blocking call
 		return actualArgs;
 	}
 

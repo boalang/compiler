@@ -15,6 +15,9 @@ public class <name> extends boa.runtime.BoaRunner {
 		<if(combineTables)>
 		job.setCombinerClass(<name>BoaCombiner.class);
 		<endif>
+		<if(isLocal)>
+        job.getConfiguration().setClass("mapred.map.output.compression.codec", org.apache.hadoop.io.compress.DefaultCodec.class, org.apache.hadoop.io.compress.CompressionCodec.class);
+        <endif>
 		job.setReducerClass(<name>BoaReducer.class);
 
 		return job;
@@ -82,9 +85,9 @@ public class <name> extends boa.runtime.BoaRunner {
 
 		if (id > 0)
 			configuration.setInt("boa.hadoop.jobid", id);
-        <if(isLocal)>jb.waitForCompletion(false);
-		<else> jb.submit();
-	    <endif>
+
+		jb.submit();
+
 
 		if (id > 0)
 			boa.io.BoaOutputCommitter.setJobID(jb.getJobID().toString(), id);

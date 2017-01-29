@@ -59,7 +59,7 @@ public class DefaultProperties {
 	public static  String GH_JSON_PATH = "repos-metadata-Boa-upto1213";
 	public static  String GH_JSON_CACHE_PATH = "json_cache";
 //	public static final String GH_GIT_PATH = "github/repositories";
-	public static String GH_GIT_PATH = "/Users/nmtiwari/nmt/githubCacheJSon/github";
+	public static String GH_GIT_PATH = "";
 	public static final String GH_TICKETS_PATH = "tickets";
 
 	public static String localDataPath = null;
