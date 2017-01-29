@@ -243,6 +243,9 @@ public class BoaCompiler {
 			st.add("combineTables", CodeGeneratingVisitor.combineAggregatorStrings);
 			st.add("reduceTables", CodeGeneratingVisitor.reduceAggregatorStrings);
 			st.add("splitsize", isSimple ? 64 * 1024 * 1024 : 10 * 1024 * 1024);
+			if(DefaultProperties.localDataPath != null) {
+				st.add("isLocal", true);
+			}
 
 			o.write(st.render().getBytes());
 		} finally {

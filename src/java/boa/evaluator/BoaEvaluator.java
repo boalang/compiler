@@ -94,7 +94,7 @@ public class BoaEvaluator {
 		evaluator.evaluate();
 		long end = System.currentTimeMillis();
 		System.out.println("Total Time Taken: "+ (end - start));
-		evaluator.getResults();
+		System.out.println(evaluator.getResults());
 	}
 
 	private String getClassNameForGeneratedJavaProg() {
