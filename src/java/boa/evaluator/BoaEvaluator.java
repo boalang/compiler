@@ -82,12 +82,12 @@ public class BoaEvaluator {
 
 	public static void main(final String[] args) {
 		BoaEvaluator evaluator;
-		if (args.length < 2 || args.length > 3) {
-			throw new IllegalArgumentException();
-		}else if(args.length == 2) {
+		if (args.length == 2) {
 			evaluator = new BoaEvaluator(args[0], args[1]);
-		}else { // out dir is given
+		}else if (args.length == 3){ // out dir is given
 			evaluator = new BoaEvaluator(args[0], args[1], args[2]);
+		}else {
+			throw new IllegalArgumentException();
 		}
 
 		long start = System.currentTimeMillis();
