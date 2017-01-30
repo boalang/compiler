@@ -3,7 +3,7 @@ p: Project = input;
 
 # program analysis output
 type T_gen_kill= {gen: set of string, kill: string, dummy : int};
-type T_inout= {in: set of string, out: set of string};
+type T_inout= {in: set of string, out: set of string, str : string};
 
 # cfg of the current method
 cfg: CFG;
@@ -21,7 +21,7 @@ live := traversal(node: CFGNode): T_inout {
 	in_set : set of string;
 	out_set : set of string;
 	cur_val : T_inout;
-	cur_val = {in_set, out_set};
+	cur_val = {in_set, out_set, ""};
 	if(def(getvalue(node))) {
 		cur_val = getvalue(node);
 	}
