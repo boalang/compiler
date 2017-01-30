@@ -1,9 +1,0 @@
-m: output collection of int;
-
-# print results
-dom_result := traversal(node: CFGNode) {
-	#getvalue from current traversal
-	cur_value := getvalue(node);
-};
-
-m << 1;

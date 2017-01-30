@@ -6,5 +6,3 @@ q_all := visitor {
 			m << len(cfg.nodes);
 	}
 };
-
-visit(p, q_all);
