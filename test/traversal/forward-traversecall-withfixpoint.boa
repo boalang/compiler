@@ -1,4 +1,4 @@
-m: output collection[int] of string;
+m: output collection of int;
 
 p: Project = input;
 
@@ -37,13 +37,6 @@ cfg_dom := traversal(node: CFGNode): T {
 	return cur_value;
 };
 
-# print results
-dom_result := traversal(node: CFGNode) {
-	cur_value := getValue(node, cfg_dom);
-	if(def(cur_value))
-		m[node.id] << string(cur_value.dom);
-};
-
 # user-defined fix point function that is used for analysis termination.
 fixp1 := fixp(curr, prev: T) : bool {
  	if (len(difference(curr.dom, prev.dom)) == 0)
@@ -70,15 +63,9 @@ q_all := visitor {
 		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.WORKLIST_REVERSEPOSTORDER, cfg_dom, fixp1);
 		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.ITERATIVE, cfg_dom, fixp1);
 		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.RANDOM, cfg_dom, fixp1);
-
-		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.DFS, dom_result);
-		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.POSTORDER, dom_result);
-		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.REVERSEPOSTORDER, dom_result);
-		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.WORKLIST_POSTORDER, dom_result);
-		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.WORKLIST_REVERSEPOSTORDER, dom_result);
-		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.ITERATIVE, dom_result);
-		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.RANDOM, dom_result);
 	}
 };
 
 visit(p, q_all);
+
+m << 1;
