@@ -489,7 +489,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 						throw new TypeCheckException(n.getOperand(), e.getMessage(), e);
 					}
 					type = v.getFunction().erase(formalParameters);
-					if(((Identifier)n.getOperand()).getToken().equals("getValue")) {
+					if(((Identifier)n.getOperand()).getToken().equals("getvalue")) {
 						if(formalParameters.size()==1) {
 							type = lastRetType;
 						}
