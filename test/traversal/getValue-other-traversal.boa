@@ -1,0 +1,15 @@
+m: output collection of int;
+
+# traversal to collect all cfgnode ids
+allnode_ids := traversal(node: CFGNode) : string {
+	return string(node.id);
+};
+
+# print results
+dom_result := traversal(node: CFGNode) : string {
+	#getvalue from other traversal
+	other_value := getvalue(node, allnode_ids);
+	return other_value;
+};
+
+m << 1;
