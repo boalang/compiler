@@ -8,7 +8,7 @@ allnode_ids := traversal(node: CFGNode) : string {
 # print results
 dom_result := traversal(node: CFGNode) : string {
 	#getvalue from other traversal
-	other_value := getValue(node, allnode_ids);
+	other_value := getvalue(node, allnode_ids);
 	return other_value;
 };
 

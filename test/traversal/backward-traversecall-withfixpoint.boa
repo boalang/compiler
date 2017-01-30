@@ -22,16 +22,16 @@ live := traversal(node: CFGNode): T_inout {
 	out_set : set of string;
 	cur_val : T_inout;
 	cur_val = {in_set, out_set};
-	if(def(getValue(node))) {
-		cur_val = getValue(node);
+	if(def(getvalue(node))) {
+		cur_val = getvalue(node);
 	}
 	foreach(i : int; def(succs[i])) {
-		succ := getValue(succs[i]);
+		succ := getvalue(succs[i]);
 		if(def(succ)) {
 			cur_val.out = union(cur_val.out,succ.in);
 		}
 	}
-	gen_kill := getValue(node, init);
+	gen_kill := getvalue(node, init);
 	if(def(gen_kill)) {
 		remove(cur_val.out, gen_kill.kill);
 		cur_val.in = union(gen_kill.gen, cur_val.out);

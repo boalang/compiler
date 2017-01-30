@@ -22,17 +22,17 @@ cfg_dom := traversal(node: CFGNode): T {
 	}
 	else
 		cur_value = {cfgnode_ids, 0};
-	if(def(getValue(node))) {
-		cur_val1 := getValue(node);
+	if(def(getvalue(node))) {
+		cur_val1 := getvalue(node);
 	}
 	preds:=node.predecessors;
 	foreach(i:int;def(preds[i])) {
-		pred_value := getValue(preds[i]);
+		pred_value := getvalue(preds[i]);
 		if(def(pred_value)) {
 			cur_value.dom = intersect(cur_value.dom, pred_value.dom);
 		}
 	}	
-	gen_kill := getValue(node, allnode_ids);
+	gen_kill := getvalue(node, allnode_ids);
 	add(cur_value.dom, gen_kill);
 	return cur_value;
 };
