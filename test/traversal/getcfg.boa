@@ -1,13 +1,8 @@
 m: output median of int;
 
-p: Project = input;
-cls_name : stack of string;
-
 q_all := visitor {
 	before method: Method -> {
 			cfg := getcfg(method);
 			m << len(cfg.nodes);
 	}
 };
-
-visit(p, q_all);

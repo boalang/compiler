@@ -1,0 +1,14 @@
+m: output collection of int;
+
+p: Project = input;
+
+type T= {dom: set of string, dummy : int};
+
+# user-defined fix point function that is used for analysis termination.
+fixp1 := fixp(curr, prev: T) : bool {
+ 	if (len(difference(curr.dom, prev.dom)) == 0)
+ 		return true;	
+ 	return false;
+};
+
+m << 1;
