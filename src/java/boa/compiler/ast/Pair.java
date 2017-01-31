@@ -39,7 +39,7 @@ public class Pair extends Node {
 		return e2;
 	}
 
-	public Pair (final Expression e1, final Expression e2) {
+	public Pair(final Expression e1, final Expression e2) {
 		e1.setParent(this);
 		e2.setParent(this);
 		this.e1 = e1;

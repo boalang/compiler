@@ -76,11 +76,11 @@ public class Composite extends Operand {
 		exprs.add(e);
 	}
 
-	public Composite () {
+	public Composite() {
 		this(false);
 	}
 
-	public Composite (final List<Expression> exprs) {
+	public Composite(final List<Expression> exprs) {
 		if (exprs != null)
 			for (final Expression e : exprs) {
 				e.setParent(this);
@@ -88,7 +88,7 @@ public class Composite extends Operand {
 			}
 	}
 
-	public Composite (final boolean empty) {
+	public Composite(final boolean empty) {
 		this.empty = empty;
 	}
 

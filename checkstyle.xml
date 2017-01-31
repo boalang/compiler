@@ -97,11 +97,35 @@
 		http://checkstyle.sourceforge.net/config_naming.html
 		=================================================-->
 
+		<!-- Validates identifiers for class type parameters.
+		     See http://checkstyle.sourceforge.net/config_naming.html#ClassTypeParameterName -->
+        <module name="ClassTypeParameterName">
+            <property name="format" value="(^[A-Z][0-9]?)$|([A-Z][a-zA-Z0-9]*[T]$)"/>
+            <message key="name.invalidPattern" value="Class type name ''{0}'' must match pattern ''{1}''."/>
+        </module>
+		<!-- Validates identifiers for interface type parameters.
+		     See http://checkstyle.sourceforge.net/config_naming.html#InterfaceTypeParameterName -->
+        <module name="InterfaceTypeParameterName">
+            <property name="format" value="(^[A-Z][0-9]?)$|([A-Z][a-zA-Z0-9]*[T]$)"/>
+            <message key="name.invalidPattern" value="Interface type name ''{0}'' must match pattern ''{1}''."/>
+        </module>
+		<!-- Validates identifiers for non-static fields.
+		     See http://checkstyle.sourceforge.net/config_naming.html#MemberName -->
+        <module name="MemberName">
+            <property name="format" value="^[a-z][a-z0-9][a-zA-Z0-9]*$"/>
+            <message key="name.invalidPattern" value="Member name ''{0}'' must match pattern ''{1}''."/>
+        </module>
 		<!-- Validates identifiers for methods.
 		     See http://checkstyle.sourceforge.net/config_naming.html#MethodName -->
         <module name="MethodName">
             <property name="format" value="^[a-z][a-z0-9][a-zA-Z0-9_]*$"/>
             <message key="name.invalidPattern" value="Method name ''{0}'' must match pattern ''{1}''."/>
+        </module>
+		<!-- Validates identifiers for method type parameters.
+		     See http://checkstyle.sourceforge.net/config_naming.html#MethodTypeParameterName -->
+        <module name="MethodTypeParameterName">
+            <property name="format" value="(^[A-Z][0-9]?)$|([A-Z][a-zA-Z0-9]*[T]$)"/>
+            <message key="name.invalidPattern" value="Method type name ''{0}'' must match pattern ''{1}''."/>
         </module>
 		<!-- Validates identifiers for packages.
 		     See http://checkstyle.sourceforge.net/config_naming.html#PackageName -->
@@ -114,5 +138,20 @@
         <module name="TypeName">
             <message key="name.invalidPattern" value="Type name ''{0}'' must match pattern ''{1}''."/>
         </module>
+
+		<!--====================================================
+                               Whitespace
+		http://checkstyle.sourceforge.net/config_whitespace.html
+		=====================================================-->
+
+		<!-- Checks that the whitespace around the Generic tokens (angle brackets) "<" and ">" are correct to the typical convention.
+		     See http://checkstyle.sourceforge.net/config_whitespace.html#GenericWhitespace -->
+        <module name="GenericWhitespace">
+			<message key="ws.followed" value="GenericWhitespace ''{0}'' is followed by whitespace."/>
+			<message key="ws.preceded" value="GenericWhitespace ''{0}'' is preceded with whitespace."/>
+			<message key="ws.illegalFollow" value="GenericWhitespace ''{0}'' should followed by whitespace."/>
+			<message key="ws.notPreceded" value="GenericWhitespace ''{0}'' is not preceded with whitespace."/>
+        </module>
+        <module name="MethodParamPad"/>
     </module>
 </module>

@@ -60,11 +60,11 @@ public class Expression extends Node {
 		rhs.add(c);
 	}
 
-	public Expression () {
+	public Expression() {
 		this(null);
 	}
 
-	public Expression (final Conjunction lhs) {
+	public Expression(final Conjunction lhs) {
 		if (lhs != null)
 			lhs.setParent(this);
 		this.lhs = lhs;

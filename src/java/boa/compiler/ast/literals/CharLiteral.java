@@ -33,7 +33,7 @@ public class CharLiteral extends Operand implements ILiteral {
 		return literal;
 	}
 
-	public CharLiteral (final String literal) {
+	public CharLiteral(final String literal) {
 		this.literal = literal;
 	}
 

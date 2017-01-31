@@ -70,7 +70,7 @@ public class Term extends Node {
 		rhs.add(f);
 	}
 
-	public Term (final Factor lhs) {
+	public Term(final Factor lhs) {
 		if (lhs != null)
 			lhs.setParent(this);
 		this.lhs = lhs;

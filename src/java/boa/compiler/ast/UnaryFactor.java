@@ -37,7 +37,7 @@ public class UnaryFactor extends Operand {
 		return f;
 	}
 
-	public UnaryFactor (final String op, final Factor f) {
+	public UnaryFactor(final String op, final Factor f) {
 		if (f != null)
 			f.setParent(this);
 		this.op = op;

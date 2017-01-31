@@ -72,35 +72,35 @@ public class VarDeclStatement extends Statement {
 		this.initializer = initializer;
 	}
 
-	public VarDeclStatement (final Identifier identifier) {
+	public VarDeclStatement(final Identifier identifier) {
 		this(false, identifier, null, null);
 	}
 
-	public VarDeclStatement (final Identifier identifier, final AbstractType t) {
+	public VarDeclStatement(final Identifier identifier, final AbstractType t) {
 		this(false, identifier, t, null);
 	}
 
-	public VarDeclStatement (final Identifier identifier, final Expression initializer) {
+	public VarDeclStatement(final Identifier identifier, final Expression initializer) {
 		this(false, identifier, null, initializer);
 	}
 
-	public VarDeclStatement (final Identifier identifier, final AbstractType t, final Expression initializer) {
+	public VarDeclStatement(final Identifier identifier, final AbstractType t, final Expression initializer) {
 		this(false, identifier, t, initializer);
 	}
 
-	public VarDeclStatement (final boolean isStatic, final Identifier identifier) {
+	public VarDeclStatement(final boolean isStatic, final Identifier identifier) {
 		this(isStatic, identifier, null, null);
 	}
 
-	public VarDeclStatement (final boolean isStatic, final Identifier identifier, final AbstractType t) {
+	public VarDeclStatement(final boolean isStatic, final Identifier identifier, final AbstractType t) {
 		this(isStatic, identifier, t, null);
 	}
 
-	public VarDeclStatement (final boolean isStatic, final Identifier identifier, final Expression initializer) {
+	public VarDeclStatement(final boolean isStatic, final Identifier identifier, final Expression initializer) {
 		this(isStatic, identifier, null, initializer);
 	}
 
-	public VarDeclStatement (final boolean isStatic, final Identifier identifier, final AbstractType t, final Expression initializer) {
+	public VarDeclStatement(final boolean isStatic, final Identifier identifier, final AbstractType t, final Expression initializer) {
 		if (identifier != null)
 			identifier.setParent(this);
 		if (t != null)

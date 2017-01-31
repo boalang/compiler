@@ -52,11 +52,11 @@ public class Index extends Node {
 		this.end = end;
 	}
 
-	public Index (final Expression start) {
+	public Index(final Expression start) {
 		this(start, null);
 	}
 
-	public Index (final Expression start, final Expression end) {
+	public Index(final Expression start, final Expression end) {
 		if (start != null)
 			start.setParent(this);
 		if (end != null)

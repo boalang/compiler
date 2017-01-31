@@ -33,7 +33,7 @@ public class SetType extends AbstractType {
 		return value;
 	}
 
-	public SetType (final Component value) {
+	public SetType(final Component value) {
 		if (value != null)
 			value.setParent(this);
 		this.value = value;

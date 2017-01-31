@@ -33,7 +33,7 @@ public class TimeLiteral extends Operand implements ILiteral {
 		return literal;
 	}
 
-	public TimeLiteral (final String literal) {
+	public TimeLiteral(final String literal) {
 		this.literal = literal;
 	}
 

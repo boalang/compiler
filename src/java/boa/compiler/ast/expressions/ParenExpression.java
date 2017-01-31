@@ -33,7 +33,7 @@ public class ParenExpression extends Operand {
 		return e;
 	}
 
-	public ParenExpression (final Expression e) {
+	public ParenExpression(final Expression e) {
 		if (e != null)
 			e.setParent(this);
 		this.e = e;

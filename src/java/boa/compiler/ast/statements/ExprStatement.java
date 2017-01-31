@@ -33,7 +33,7 @@ public class ExprStatement extends Statement {
 		return e;
 	}
 
-	public ExprStatement (final Expression e) {
+	public ExprStatement(final Expression e) {
 		if (e != null)
 			e.setParent(this);
 		this.e = e;

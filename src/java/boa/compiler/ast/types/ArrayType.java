@@ -33,7 +33,7 @@ public class ArrayType extends AbstractType {
 		return value;
 	}
 
-	public ArrayType (final Component value) {
+	public ArrayType(final Component value) {
 		if (value != null)
 			value.setParent(this);
 		this.value = value;

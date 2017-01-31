@@ -52,11 +52,11 @@ public class Comparison extends Node {
 		return rhs;
 	}
 
-	public Comparison (final SimpleExpr lhs) {
+	public Comparison(final SimpleExpr lhs) {
 		this(lhs, null, null);
 	}
 
-	public Comparison (final SimpleExpr lhs, final String op, final SimpleExpr rhs) {
+	public Comparison(final SimpleExpr lhs, final String op, final SimpleExpr rhs) {
 		if (lhs != null)
 			lhs.setParent(this);
 		if (rhs != null)

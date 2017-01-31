@@ -40,7 +40,7 @@ public class VisitorExpression extends Operand {
 		return body;
 	}
 
-	public VisitorExpression (final VisitorType t, final Block body) {
+	public VisitorExpression(final VisitorType t, final Block body) {
 		if (t != null)
 			t.setParent(this);
 		if (body != null)

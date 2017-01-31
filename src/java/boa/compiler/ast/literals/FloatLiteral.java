@@ -33,7 +33,7 @@ public class FloatLiteral extends Operand implements ILiteral {
 		return literal;
 	}
 
-	public FloatLiteral (final String literal) {
+	public FloatLiteral(final String literal) {
 		this.literal = literal;
 	}
 

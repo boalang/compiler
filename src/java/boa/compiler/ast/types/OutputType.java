@@ -111,15 +111,15 @@ public class OutputType extends AbstractType {
 		this.weight = weight;
 	}
 
-	public OutputType (final Identifier id) {
+	public OutputType(final Identifier id) {
 		this(id, null, null);
 	}
 
-	public OutputType (final Identifier id, final Component t) {
+	public OutputType(final Identifier id, final Component t) {
 		this(id, t, null);
 	}
 
-	public OutputType (final Identifier id, final Component t, final Component weight) {
+	public OutputType(final Identifier id, final Component t, final Component weight) {
 		if (id != null)
 			id.setParent(this);
 		if (t != null)

@@ -28,7 +28,7 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
  */
 public class Component extends AbstractType {
 	protected Identifier id;
-	protected AbstractType t;
+	protected AbstractType typeNode;
 
 	public boolean hasIdentifier() {
 		return id != null;
@@ -44,28 +44,28 @@ public class Component extends AbstractType {
 	}
 
 	public AbstractType getType() {
-		return t;
+		return typeNode;
 	}
 
-	public void setType(final AbstractType t) {
-		t.setParent(this);
-		this.t = t;
+	public void setType(final AbstractType typeNode) {
+		typeNode.setParent(this);
+		this.typeNode = typeNode;
 	}
 
-	public Component () {
+	public Component() {
 	}
 
-	public Component (final AbstractType t) {
-		this(null, t);
+	public Component(final AbstractType typeNode) {
+		this(null, typeNode);
 	}
 
-	public Component (final Identifier id, final AbstractType t) {
+	public Component(final Identifier id, final AbstractType typeNode) {
 		if (id != null)
 			id.setParent(this);
-		if (t != null)
-			t.setParent(this);
+		if (typeNode != null)
+			typeNode.setParent(this);
 		this.id = id;
-		this.t = t;
+		this.typeNode = typeNode;
 	}
 
 	/** {@inheritDoc} */
@@ -87,7 +87,7 @@ public class Component extends AbstractType {
 	}
 
 	public Component clone() {
-		final Component c = new Component(id.clone(), t.clone());
+		final Component c = new Component(id.clone(), typeNode.clone());
 		copyFieldsTo(c);
 		return c;
 	}

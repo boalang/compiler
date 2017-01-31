@@ -101,7 +101,7 @@ public abstract class BaseTest {
 		final List<String> foundErr = new ArrayList<String>();
 		final BoaLexer lexer = new BoaLexer(new ANTLRInputStream(new StringReader(input)));
 		lexer.removeErrorListeners();
-		lexer.addErrorListener(new BaseErrorListener () {
+		lexer.addErrorListener(new BaseErrorListener() {
 			@Override
 			public void syntaxError(final Recognizer<?, ?> recognizer, final Object offendingSymbol, final int line, final int charPositionInLine, final String msg, final RecognitionException e) {
 				foundErr.add(line + "," + charPositionInLine + ": " + msg);
@@ -182,7 +182,7 @@ public abstract class BaseTest {
 			parser.reset();
 
 			parser.removeErrorListeners();
-			parser.addErrorListener(new BaseErrorListener () {
+			parser.addErrorListener(new BaseErrorListener() {
 				@Override
 				public void syntaxError(final Recognizer<?, ?> recognizer, final Object offendingSymbol, final int line, final int charPositionInLine, final String msg, final RecognitionException e) {
 					foundErr.add(line + "," + charPositionInLine + ": " + msg);

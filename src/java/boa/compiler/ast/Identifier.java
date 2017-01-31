@@ -37,7 +37,7 @@ public class Identifier extends AbstractType {
 		this.token = token;
 	}
 
-	public Identifier (final String token) {
+	public Identifier(final String token) {
 		this.token = token;
 	}
 

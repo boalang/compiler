@@ -39,7 +39,7 @@ public class TraversalExpression extends Operand {
 		return body;
 	}
 
-	public TraversalExpression (final TraversalType t, final Block body) {
+	public TraversalExpression(final TraversalType t, final Block body) {
 		if (t != null)
 			t.setParent(this);
 		if (body != null)

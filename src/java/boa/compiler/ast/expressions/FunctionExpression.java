@@ -40,7 +40,7 @@ public class FunctionExpression extends Operand {
 		return body;
 	}
 
-	public FunctionExpression (final AbstractType t, final Block body) {
+	public FunctionExpression(final AbstractType t, final Block body) {
 		if (t != null)
 			t.setParent(this);
 		if (body != null)

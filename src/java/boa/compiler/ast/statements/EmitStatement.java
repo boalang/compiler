@@ -79,15 +79,15 @@ public class EmitStatement extends Statement {
 		this.weight = weight;
 	}
 
-	public EmitStatement (final Identifier id) {
+	public EmitStatement(final Identifier id) {
 		this(id, null, null);
 	}
 
-	public EmitStatement (final Identifier id, final Expression value) {
+	public EmitStatement(final Identifier id, final Expression value) {
 		this(id, value, null);
 	}
 
-	public EmitStatement (final Identifier id, final Expression value, final Expression weight) {
+	public EmitStatement(final Identifier id, final Expression value, final Expression weight) {
 		if (id != null)
 			id.setParent(this);
 		if (value != null)

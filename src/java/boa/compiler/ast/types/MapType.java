@@ -38,7 +38,7 @@ public class MapType extends AbstractType {
 		return value;
 	}
 
-	public MapType (final Component index, final Component value) {
+	public MapType(final Component index, final Component value) {
 		if (index != null)
 			index.setParent(this);
 		if (value != null)

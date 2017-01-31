@@ -76,11 +76,11 @@ public class Conjunction extends Node {
 		rhs.add(c);
 	}
 
-	public Conjunction () {
+	public Conjunction() {
 		this(null);
 	}
 
-	public Conjunction (final Comparison lhs) {
+	public Conjunction(final Comparison lhs) {
 		if (lhs != null)
 			lhs.setParent(this);
 		this.lhs = lhs;

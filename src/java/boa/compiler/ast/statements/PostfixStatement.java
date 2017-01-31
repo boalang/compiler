@@ -38,7 +38,7 @@ public class PostfixStatement extends Statement {
 		return op;
 	}
 
-	public PostfixStatement (final Expression e, final String op) {
+	public PostfixStatement(final Expression e, final String op) {
 		if (e != null)
 			e.setParent(this);
 		this.e = e;

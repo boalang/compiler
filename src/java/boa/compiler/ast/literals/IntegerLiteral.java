@@ -33,7 +33,7 @@ public class IntegerLiteral extends Operand implements ILiteral {
 		return literal;
 	}
 
-	public IntegerLiteral (final String literal) {
+	public IntegerLiteral(final String literal) {
 		this.literal = literal;
 	}
 

@@ -32,7 +32,7 @@ public class BoaEvaluator {
 	public static void main(final String[] args) throws IOException {
 	    System.out.println("TODO: integrate existing evaluator code here.");
 	}	
-	private static final void printHelp (Options options, String message) {
+	private static final void printHelp(Options options, String message) {
 	    	String header = "The most commonly used Boa options are:";
 	    	String footer = "\nPlease report issues at http://www.github.com/boalang/";
 	    	System.err.println(message);
