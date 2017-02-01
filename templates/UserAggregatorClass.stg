@@ -1,0 +1,65 @@
+AggregatorClass(funcName, funcArg, lambdaType, lambdaName, interface, lambdaInit, methods) ::= <<
+class UserDefined$<funcName>  extends boa.aggregators.UserDefinedAggregator {
+    java.util.List\<<funcArg>\> _$values;
+	<lambdaType> <lambdaName>;
+	<interface>
+
+    public UserDefined$<funcName>() {
+        <lambdaName> = <lambdaInit>;
+    }
+    <methods>
+}
+>>
+
+OverridenMethods(name, type, nonPrimitive, parser, javaPrimitiveType) ::= <<
+    @Override
+    public void aggregate(String data, String metadata) throws java.io.IOException,java.lang.InterruptedException, boa.aggregators.FinishedException {
+        System.out.println("<name> string");
+        <if(nonPrimitive)>
+        this._$values.add(<type>.deSerialize(data));
+        <else>
+        this._$values.add(<parser>(data));
+        <endif>
+    }
+
+
+    <if(javaPrimitiveType)>
+        @Override
+        public void aggregate(<javaPrimitiveType> data, String metadata) throws java.io.IOException,java.lang.InterruptedException, boa.aggregators.FinishedException {
+            System.out.println("<name> <type>");
+            <if(nonPrimitive)>
+            this._$values.add(<type>.deSerialize(data));
+            <else>
+            this._$values.add((data));
+            <endif>
+        }
+    <endif>
+
+    @Override
+    public void finish() throws java.io.IOException, java.lang.InterruptedException {
+    System.out.println("<name> fin");
+        try{
+         <if(nonPrimitive)>
+         this.collect(<name>.invoke(this._$values.toArray(new <type>[this._$values.size()])));
+         <else>
+         this.collect(<name>.invoke(org.apache.commons.lang.ArrayUtils.toPrimitive(this._$values.toArray(new <type>[this._$values.size()]))));
+         <endif>
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void start(final boa.io.EmitKey key) {
+             _$values = new java.util.ArrayList\<<type>\>();
+            super.start(key);
+     }
+
+    <if(nonPrimitive)>
+        @Override
+        public void aggregate(BoaTup data, String metadata) throws java.io.IOException, java.lang.InterruptedException, boa.aggregators.FinishedException {
+            System.out.println("<name> tuple");
+           this._$values.add((<type>)data);
+        }
+    <endif>
+>>

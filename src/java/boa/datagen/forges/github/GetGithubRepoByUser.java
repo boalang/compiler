@@ -33,7 +33,7 @@ public class GetGithubRepoByUser {
 //		Arrays.sort(files, new Comparator<File>() {
 //			@Override
 //			public int compare(File f1, File f2) {
-//				int n1 = getNumber(f1.getName()), n2 = getNumber(f2.getName());
+//				int n1 = getNumber(f1.getFuncVarName()), n2 = getNumber(f2.getFuncVarName());
 //				return n1 - n2;
 //			}
 //

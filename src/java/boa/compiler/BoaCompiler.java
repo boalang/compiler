@@ -155,6 +155,8 @@ public class BoaCompiler {
 
 					try {
 						if (!parserErrorListener.hasError) {
+							UserDefinedAggregators.setFileName(f.getName());
+							UserDefinedAggregators.setJobName("Job" + jobName);
 							new TypeCheckingVisitor().start(p, new SymbolTable());
 
 							final TaskClassifyingVisitor simpleVisitor = new TaskClassifyingVisitor();
@@ -241,6 +243,7 @@ public class BoaCompiler {
 			st.add("jobs", jobs);
 			st.add("jobnames", jobnames);
 			st.add("combineTables", CodeGeneratingVisitor.combineAggregatorStrings);
+			st.add("userDeclAgg", CodeGeneratingVisitor.userAggregatorDeclStrings);
 			st.add("reduceTables", CodeGeneratingVisitor.reduceAggregatorStrings);
 			st.add("splitsize", isSimple ? 64 * 1024 * 1024 : 10 * 1024 * 1024);
 			if(DefaultProperties.localDataPath != null) {
