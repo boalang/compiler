@@ -33,6 +33,8 @@ public class UserDefinedAgg {
         private String lambdaInterface;
         private String userGivenFuncArg = null;  // user given param names
         private String funcArgType = null; // funcVarName of the compiler generated userGivenParams
+        private boolean isAggregator = false;
+        private String assignedToVar;
 
         public UserDefinedAgg build(){
             return new UserDefinedAgg(this.funcVarName, this.generateCode());
@@ -53,6 +55,15 @@ public class UserDefinedAgg {
         public Builder lambdaInit(String init) {
             this.lambdaInit = init;
             return this;
+        }
+
+        public boolean isAggregator() {
+            return this.isAggregator;
+        }
+
+        public boolean isAggregator(boolean flag) {
+            this.isAggregator = flag;
+            return this.isAggregator;
         }
 
         public Builder lambdaInterface(String decl) {

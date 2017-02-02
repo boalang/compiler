@@ -7,12 +7,20 @@ import java.util.List;
 import boa.compiler.UserDefinedAgg.Builder;
 
 public class UserDefinedAggregators {
-    private static List<Builder> allFunctions = new ArrayList<Builder>();
+    private final static List<Builder> allFunctions = new ArrayList<Builder>();
     private static String jobName;
     private static String fileName;
 
     public static void setJobName(String jobName) {
         UserDefinedAggregators.jobName = jobName;
+    }
+
+    public static void filterAggregatorFunctions() {
+        for(int i = 0; i < allFunctions.size(); i++) {
+            if(!allFunctions.get(i).isAggregator()) {
+                allFunctions.remove(i);
+            }
+        }
     }
 
     public static void setFileName(String fileName) {

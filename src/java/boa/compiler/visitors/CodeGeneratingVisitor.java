@@ -178,8 +178,14 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		/** {@inheritDoc} */
 		@Override
 		public void visit(final VarDeclStatement n) {
-			if (n.type instanceof BoaTable)
+			if (n.type instanceof BoaTable) {
+				UserDefinedAgg.Builder function = UserDefinedAggregators.findByUserGivenName(((OutputType)n.getType()).getId().getToken());
+				if(function != null) {
+					function.isAggregator(true);
+				}
 				return;
+			}
+
 
 			final ST st = stg.getInstanceOf("VarDecl");
 
@@ -229,7 +235,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			final List<String> args = new ArrayList<String>();
 			final List<String> types = new ArrayList<String>();
 
-			final List<UserDefinedAgg.Builder> functionList = UserDefinedAggregators.getAllFunctions();
 			UserDefinedAgg.Builder functionBuilder = UserDefinedAggregators.findByLambdaType(name);
 
 			for (final Component c : params) {
@@ -544,6 +549,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		st.add("name", this.name);
 
 		this.varDecl.start(n);
+		UserDefinedAggregators.filterAggregatorFunctions();
 		this.functionDeclarator.start(n);
 		this.tupleDeclarator.start(n);
 		this.enumDeclarator.start(n);
@@ -1400,7 +1406,9 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		if(t instanceof  BoaFunction) {
 			UserDefinedAgg.Builder functionDetails = UserDefinedAggregators.findByUserGivenName(n.getId().getToken());
-			functionDetails.lambdaInterface(src);
+			if(functionDetails != null) {
+				functionDetails.lambdaInterface(src);
+			}
 		}
 
 		if(lhsType instanceof BoaTuple && t instanceof BoaArray) {
