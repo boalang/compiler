@@ -300,13 +300,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			st.add("name", tupType.toJavaType());
 			st.add("fields", fields);
 			st.add("types", types);
-
-			for(UserDefinedAgg.Builder function: UserDefinedAggregators.getAllFunctions()) {
-				if(function.isParam(name)){
-					function.compilerGenParamCode(st.render());
-				}
-			}
-
 			code.add(st.render());
 		}
 	}

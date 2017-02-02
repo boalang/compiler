@@ -27,12 +27,14 @@ OverridenMethods(name, type, nonPrimitive, parser, javaPrimitiveType) ::= <<
         @Override
         public void aggregate(<javaPrimitiveType> data, String metadata) throws java.io.IOException,java.lang.InterruptedException, boa.aggregators.FinishedException {
             System.out.println("<name> <type>");
-            <if(nonPrimitive)>
-            this._$values.add(<type>.deSerialize(data));
-            <else>
             this._$values.add((data));
-            <endif>
         }
+
+        @Override
+        public void aggregate(<javaPrimitiveType> data) throws java.io.IOException,java.lang.InterruptedException, boa.aggregators.FinishedException {
+            System.out.println("<name> <type>");
+            aggregate(data);
+         }
     <endif>
 
     @Override

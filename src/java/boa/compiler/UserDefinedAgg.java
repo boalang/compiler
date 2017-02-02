@@ -33,7 +33,6 @@ public class UserDefinedAgg {
         private String lambdaInterface;
         private String userGivenFuncArg = null;  // user given param names
         private String funcArgType = null; // funcVarName of the compiler generated userGivenParams
-        private String compilerGenParamCode = null; //  code generated for tuples
 
         public UserDefinedAgg build(){
             return new UserDefinedAgg(this.funcVarName, this.generateCode());
@@ -66,15 +65,6 @@ public class UserDefinedAgg {
                 StringBuffer typeNameBuilder = new StringBuffer(param.substring(0, param.length() - 2));
                 typeNameBuilder.setCharAt(0, Character.toUpperCase(typeNameBuilder.charAt(0)));
                 this.funcArgType = typeNameBuilder.toString();
-            } else {
-                throw new RuntimeException("Aggregator function can not have more than one arguments");
-            }
-            return this;
-        }
-
-        public Builder compilerGenParamCode(String param) {
-            if(this.compilerGenParamCode == null) {
-                this.compilerGenParamCode = param;
             } else {
                 throw new RuntimeException("Aggregator function can not have more than one arguments");
             }
