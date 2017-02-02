@@ -124,14 +124,17 @@ new <type>()
 >>
 
 TupleType(name, fields, types) ::= <<
-public static class <name>  implements boa.BoaTup, java.io.Serializable
+ static class <name>  implements boa.BoaTup, java.io.Serializable
 {
-	<name>(){}
-
-	<fields,types:{field,type|public <type> ___<field>}; separator="; ">;
-
+	<fields,types:{field,type|<type> ___<field>}; separator="; ">;
 	<name>( <fields,types:{field,type|<type> ___<field>}; separator=", "> ){
-		<fields,types:{field,type|this.___<field> = ___<field>}; separator="; ">;
+		<fields,types:{field,type|this.___<field> = new <type>(___<field>)}; separator="; ">;
+	}
+	<name>( <name> tmp){
+		<fields,types:{field,type|this.___<field> = new <type>(tmp.___<field>)}; separator="; ">;
+	}
+	public <name> clone() {
+    		return new <name>(this);
 	}
 
 	public byte[] serialize(Object o) throws java.io.IOException {
@@ -183,6 +186,7 @@ public static class <name>  implements boa.BoaTup, java.io.Serializable
 		}; separator=" ">
 		return "empty";
 	}
+
 }<\n>
 >>
 
