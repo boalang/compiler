@@ -60,4 +60,10 @@ this repository.
 
 
 ##DataSet
-1. You can start experimenting with the small dataset, available in "dataset" directory under root.
+1. You can start experimenting with the small dataset, available in "dataset" directory under root.  
+The complete dataset comprises of 3 files:
+1. **index:** map to look into data stored in data file
+2. **data:** Abstract syntax tree of each project 
+3. **projects.seq:** metadata information
+
+**This dataset contain 2 projects, [Boa](https://github.com/boalang/compiler) and [Panini](https://github.com/hridesh/panc).**
