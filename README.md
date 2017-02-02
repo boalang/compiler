@@ -9,7 +9,7 @@ this repository.
 1. **Cloning Boa Repository:** You can follow this step from 
     [Official IntelliJ Page](https://www.jetbrains.com/help/idea/2016.3/cloning-a-repository-from-github.html) 
     or
-    1.  Open IntelliIdea and click on "Checkout from Version Control" option from IntelliJ Idea Startup menu  
+    1.  Open IntelliJ Idea IDE and click on "Checkout from Version Control" option from IntelliJ Idea Startup menu  
     2.  Choose Github as version control (You may be asked for you Github credentials)  
     2.  From the Repository drop-down list, select the source repository to clone the 
         data from.     
@@ -27,11 +27,13 @@ this repository.
     2. IntelliJ will automatically import the libs and modules available in project.  
        (**Hit Next** for all the steps, until project is imported.)   
     3. You have successfully imported the project into IDE.
-    4. You need a directory for compiling your Boa program to Java program. So,
-       create a directory named "compile" (Please note that the name of the directory must exactly 
-       match "compile", this is in order to load your compiled Java program and run it using reflections) and add that to dependencies of the project. Please see [Official IntelliJ Page 
-       for managing dependencies](https://www.jetbrains.com/help/idea/2016.3/configuring-module-dependencies-and-libraries.html)  
-    5. Now you are all set to run your Boa program locally. Add your Boa program and path to local directory into BoaEvaluator class
+    4. You need to direct evaluator where to place the generated Java Programs. This is important step as the compile Java
+       program will be run using reflections and Hadoop stand alone mode. So, create a directory named "compile" (Please note that the name of the directory must exactly 
+       match "compile", this is in order to add the generated Java files in programs classpath) and add that to dependencies of the project. Please see [Official IntelliJ Page 
+       for managing dependencies](https://www.jetbrains.com/help/idea/2016.3/configuring-module-dependencies-and-libraries.html) for
+       handling dependencies.       
+    5. Now you are all set to run your Boa program locally. Make sure that module dependencies includes "compile", rtlib and lib directories. 
+    6. Add your Boa program and path to local directory into BoaEvaluator class
          and hit run. Please note that you can also provide output directory path to direct evaluator to write output.
         
 
@@ -48,9 +50,14 @@ this repository.
     1. After cloning the project, import your program as simple Java program. You can follow instructions from [here](http://agile.csc.ncsu.edu/SEMaterials/tutorials/import_export/).       
     2. Once you have imported the program as Java program, you need a directory for compiling Boa program to Java program.       
     3. You have successfully imported the project into IDE.
-    4. You need a directory for compiling your Boa program to Java program. So,
-       create a directory named "compile" (Please note that the name of the directory must exactly 
-       match "compile", this is in order to load your compiled Java program and run it using reflections) and add that to dependencies of the project. Please see [Official Eclipse Page 
-       for managing dependencies](http://www.oxfordmathcenter.com/drupal7/node/44)  
-    5. Now you are all set to run your Boa program locally. Add your Boa program and path to local directory into BoaEvaluator class
+    4. You need to direct evaluator where to place the generated Java Programs. This is important step as the compile Java
+              program will be run using reflections and Hadoop stand alone mode. So, create a directory named "compile" (Please note that the name of the directory must exactly 
+              match "compile", this is in order to add the generated Java files in programs classpath) and add that to dependencies of the project. Please see [Official Eclipse Page 
+       for managing dependencies](http://www.oxfordmathcenter.com/drupal7/node/44)for handling dependencies.       
+    5. Now you are all set to run your Boa program locally. Make sure that module dependencies includes "compile", rtlib and lib directories. 
+    6. Add your Boa program and path to local directory into BoaEvaluator class
          and hit run. Please note that you can also provide output directory path to direct evaluator to write output.
+
+
+##DataSet
+1. You can start experimenting with the small dataset, available in "dataset" directory under root.
