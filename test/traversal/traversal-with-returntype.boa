@@ -1,0 +1,10 @@
+m: output collection of int;
+
+p: Project = input;
+
+# traversal with return type
+allnode_ids := traversal(node: CFGNode) : string {
+	return string(node.id);
+};
+
+m << 1;

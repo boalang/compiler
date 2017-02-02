@@ -1,0 +1,71 @@
+m: output collection of int;
+
+p: Project = input;
+
+type T= {dom: set of string, dummy : int};
+
+#set of all cfgnode ids
+cfgnode_ids:set of string;
+
+# traversal to collect all cfgnode ids
+allnode_ids := traversal(node: CFGNode) : string {
+	add(cfgnode_ids, string(node.id));
+	return string(node.id);
+};
+
+# traversal that constructs dominator set of cfg node
+cfg_dom := traversal(node: CFGNode): T {
+	cur_value : T;
+	if(node.id==0) {
+		self_dom:set of string;
+		cur_value = {self_dom, 0};
+	}
+	else
+		cur_value = {cfgnode_ids, 0};
+	if(def(getvalue(node))) {
+		cur_val1 := getvalue(node);
+	}
+	preds:=node.predecessors;
+	foreach(i:int;def(preds[i])) {
+		pred_value := getvalue(preds[i]);
+		if(def(pred_value)) {
+			cur_value.dom = intersect(cur_value.dom, pred_value.dom);
+		}
+	}	
+	gen_kill := getvalue(node, allnode_ids);
+	add(cur_value.dom, gen_kill);
+	return cur_value;
+};
+
+# user-defined fix point function that is used for analysis termination.
+fixp1 := fixp(curr, prev: T) : bool {
+ 	if (len(difference(curr.dom, prev.dom)) == 0)
+ 		return true;	
+ 	return false;
+};
+
+q_all := visitor {
+	before method: Method -> {
+		cfg := getcfg(method);
+
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.DFS, allnode_ids);
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.POSTORDER, allnode_ids);
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.REVERSEPOSTORDER, allnode_ids);
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.WORKLIST_POSTORDER, allnode_ids);
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.WORKLIST_REVERSEPOSTORDER, allnode_ids);
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.ITERATIVE, allnode_ids);
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.RANDOM, allnode_ids);
+
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.DFS, cfg_dom, fixp1);
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.POSTORDER, cfg_dom, fixp1);
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.REVERSEPOSTORDER, cfg_dom, fixp1);
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.WORKLIST_POSTORDER, cfg_dom, fixp1);
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.WORKLIST_REVERSEPOSTORDER, cfg_dom, fixp1);
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.ITERATIVE, cfg_dom, fixp1);
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.RANDOM, cfg_dom, fixp1);
+	}
+};
+
+visit(p, q_all);
+
+m << 1;

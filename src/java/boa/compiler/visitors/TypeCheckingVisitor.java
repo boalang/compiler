@@ -489,7 +489,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 						throw new TypeCheckException(n.getOperand(), e.getMessage(), e);
 					}
 					type = v.getFunction().erase(formalParameters);
-					if(((Identifier)n.getOperand()).getToken().equals("getValue")) {
+					if(((Identifier)n.getOperand()).getToken().equals("getvalue")) {
 						if(formalParameters.size()==1) {
 							type = lastRetType;
 						}
@@ -884,8 +884,8 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	public void visit(final StopStatement n, final SymbolTable env) {
 		n.env = env;
 
-		if (!env.getIsBeforeVisitor() && !env.getIsTraverse())
-			throw new TypeCheckException(n, "Stop statement only allowed inside 'before' visits or traverse");
+		if (!env.getIsBeforeVisitor())
+			throw new TypeCheckException(n, "Stop statement only allowed inside 'before' visits");
 	}
 
 	/** {@inheritDoc} */
