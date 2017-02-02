@@ -14,7 +14,6 @@ class UserDefined$<funcName>  extends boa.aggregators.UserDefinedAggregator {
 OverridenMethods(name, type, nonPrimitive, parser, javaPrimitiveType) ::= <<
     @Override
     public void aggregate(String data, String metadata) throws java.io.IOException,java.lang.InterruptedException, boa.aggregators.FinishedException {
-        System.out.println("<name> string");
         <if(nonPrimitive)>
         this._$values.add(<type>.deSerialize(data));
         <else>
@@ -26,20 +25,17 @@ OverridenMethods(name, type, nonPrimitive, parser, javaPrimitiveType) ::= <<
     <if(javaPrimitiveType)>
         @Override
         public void aggregate(<javaPrimitiveType> data, String metadata) throws java.io.IOException,java.lang.InterruptedException, boa.aggregators.FinishedException {
-            System.out.println("<name> <type>");
             this._$values.add((data));
         }
 
         @Override
         public void aggregate(<javaPrimitiveType> data) throws java.io.IOException,java.lang.InterruptedException, boa.aggregators.FinishedException {
-            System.out.println("<name> <type>");
             aggregate(data);
          }
     <endif>
 
     @Override
     public void finish() throws java.io.IOException, java.lang.InterruptedException {
-    System.out.println("<name> fin");
         try{
          <if(nonPrimitive)>
          this.collect(<name>.invoke(this._$values.toArray(new <type>[this._$values.size()])));
@@ -60,7 +56,6 @@ OverridenMethods(name, type, nonPrimitive, parser, javaPrimitiveType) ::= <<
     <if(nonPrimitive)>
         @Override
         public void aggregate(BoaTup data, String metadata) throws java.io.IOException, java.lang.InterruptedException, boa.aggregators.FinishedException {
-            System.out.println("<name> tuple");
            this._$values.add((<type>)data);
         }
     <endif>
