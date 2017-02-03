@@ -139,12 +139,12 @@ public class InformationAnalysis extends AbstractVisitorNoArg {
 				intersectionFound = false;
 			}
 			satisfiedNodes = 0;
-			if(funcName.equals("add") || funcName.equals("addall")) {
+			if(funcName.equals("add") || funcName.equals("union")) {
 				addFound = true;
 				visit(n.getArgs());
 				addFound = false;
 			}
-			if(funcName.equals("remove") || funcName.equals("removeall")) {
+			if(funcName.equals("remove") || funcName.equals("difference")) {
 				removeFound = true;
 				visit(n.getArgs());
 				removeFound = false;
