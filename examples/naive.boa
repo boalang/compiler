@@ -1,0 +1,172 @@
+p: Project = input;
+type fv = {a:int, b:int, c:int, d:int};
+type stats = {a_stat:float, b_stat:float, c_stat:float};
+type complete_stat = {avg: stats, dev: stats};
+type Data = {training: fv, testing: fv};
+splitRatio : float = 0.67;
+
+naive := function(vals : array of Data) : float {
+   train : array of fv;
+   test : array of fv;
+
+    spearated: map[int] of array of fv; # classified per value
+    summaries : map[int] of complete_stat;
+
+   # separate the training and testing datasets
+    foreach(i:int; def(vals[i])) {
+        if(def(train)) {
+           train = train + {vals[i].training};
+        } else {
+           train = {vals[i].training};
+        }
+        if(def(test)) {
+           test = test+ {vals[i].testing};
+        } else {
+           test =  {vals[i].testing};
+        }
+
+    }
+
+
+    # classify training datasets
+    foreach(i:int; def(train[i])) {
+        temp : array of fv = {train[i]};
+        if(!haskey(spearated, train[i].d)) {
+          spearated[train[i].d] = temp;
+        } else {
+          spearated[train[i].d] = spearated[train[i].d] + temp;
+        }
+    }
+
+    # all the classes
+    classes : array of int = keys(spearated);
+
+    # summarize data from training dataset
+    foreach(i:int; def(classes[i])) {
+          # calculate mean
+          feature_mean : stats = {0.0, 0.0, 0.0};
+          foreach(j:int; def(spearated[classes[i]][j])) {
+              feature_mean.a_stat = feature_mean.a_stat + spearated[classes[i]][j].a;
+              feature_mean.b_stat = feature_mean.b_stat + spearated[classes[i]][j].b;
+              feature_mean.c_stat = feature_mean.c_stat + spearated[classes[i]][j].c;
+          }
+          feature_mean.a_stat = feature_mean.a_stat / len(spearated[classes[i]]);
+          feature_mean.b_stat = feature_mean.b_stat / len(spearated[classes[i]]);
+          feature_mean.c_stat = feature_mean.c_stat / len(spearated[classes[i]]);
+
+
+          # calculate sd
+          feature_sd : stats = {0.0, 0.0, 0.0};
+          foreach(j:int; def(spearated[classes[i]][j])) {
+             feature_sd.a_stat = feature_sd.a_stat + (spearated[classes[i]][j].a - feature_mean.a_stat);
+             feature_sd.b_stat = feature_sd.b_stat + (spearated[classes[i]][j].b - feature_mean.b_stat);
+             feature_sd.c_stat = feature_sd.c_stat + (spearated[classes[i]][j].c - feature_mean.c_stat);
+          }
+          feature_sd.a_stat = sqrt(feature_sd.a_stat / len(spearated[classes[i]]));
+          feature_sd.b_stat = sqrt(feature_sd.b_stat / len(spearated[classes[i]]));
+          feature_sd.c_stat = sqrt(feature_sd.c_stat / len(spearated[classes[i]]));
+
+          # summarized a class
+          summaries[classes[i]] = {feature_mean, feature_sd};
+    }
+
+
+    predictions: array of int;
+    predictions = new(predictions, len(test), -1);
+
+    # predict for each test data
+    foreach(i:int; def(test[i])) {
+        probabilities : map[int] of float;
+        foreach(j: int; def(classes[j])) {
+          probabilities[classes[j]] = 1.0;
+          mean := summaries[classes[j]].avg;
+          deviation := summaries[classes[j]].dev;
+          probabilities[classes[j]] = probabilities[classes[j]] * (1/ (sqrt(2 * 3.14) * deviation.a_stat)) * (exp(-1 * ((pow((1.0 * test[i].a) - mean.a_stat, 2))/(2 * pow(deviation.a_stat, 2)))));
+          probabilities[classes[j]] = probabilities[classes[j]] * (1/ (sqrt(2 * 3.14) * deviation.a_stat)) * (exp(-1 * ((pow((1.0 * test[i].b) - mean.b_stat, 2))/(2 * pow(deviation.b_stat, 2)))));
+          probabilities[classes[j]] = probabilities[classes[j]] * (1/ (sqrt(2 * 3.14) * deviation.a_stat)) * (exp(-1 * ((pow((1.0 * test[i].c) - mean.c_stat, 2))/(2 * pow(deviation.c_stat, 2)))));
+       }
+
+        bestProb : float = 0;
+        bestLab : int = -1;
+        foreach(j: int; def(classes[j])) {
+          if ((bestLab == -1) || (bestProb < probabilities[classes[j]])) {
+            bestProb = probabilities[classes[j]];
+            bestLab = classes[j];
+          }
+        }
+        predictions[i] = bestLab;
+    }
+
+    correct : float = 0.0;
+    foreach(i:int; def(test[i])) {
+        if(predictions[i] == test[i].d) {
+          correct = correct + 1.0;
+        }
+    }
+    return correct/len(test) * 100;
+};
+
+scale := function(ast: int, method: int, class: int) : int {
+    total : int = 0;
+    if(ast > 1000) {
+       total++;
+    } if(method > 500) {
+        total++;
+    } if(class > 50) {
+      total++;
+    }
+    return total;
+};
+
+
+naive_bayes : output naive of Data;
+
+# count ast nodes
+
+astCount := 0;
+classCount := 0;
+methodCount := 0;
+visit(p, visitor {
+	# only look at the latest snapshot
+	before n: CodeRepository -> {
+		snapshot := getsnapshot(n);
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+	before node: Declaration -> {
+		if (node.kind == TypeKind.CLASS) {
+            classCount++;
+            foreach (i: int; node.methods[i]) {
+                methodCount++;
+            }
+		}
+	}
+	# by default, count all visited nodes
+	before _ -> astCount++;
+	# these nodes are not part of the AST, so do nothing when visiting
+	before Project, ChangedFile -> ;
+});
+
+
+
+dummy : fv = {0, 0, 0, 0};
+nondummy : fv = {astCount, methodCount, classCount, scale(astCount, methodCount, classCount)};
+data1: Data = {nondummy, dummy};
+data2: Data = {dummy, nondummy};
+if(rand() > splitRatio)
+    naive_bayes << data1;
+else
+    naive_bayes << data2;
+
+
+if(rand() > splitRatio)
+    naive_bayes << data1;
+else
+    naive_bayes << data2;
+
+
+if(rand() > splitRatio)
+    naive_bayes << data1;
+else
+    naive_bayes << data2;
