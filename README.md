@@ -22,7 +22,8 @@ Reflections and Hadoop libraries. To enable this within the Eclipse IDE
        2. **Path of the local dataset**  
        3. **Path of the output directory**.   
        Your "Arguments" tab should be look like: ![](doc/dev/img/eclipse_runconfig_arguments.png)
-    8. Hit apply and Run, this will run your Boa program on local data.   
+    8. Hit apply and Run, this will run your Boa program on local data.  Once your BoaEvaluator finishes with the execution
+      of the query, your "Console" will look similar to this: ![]( doc/dev/img/boa_evaluator_output.png )
 
 ##DataSet
 1. A small data set is provided to start experiments. You can access the dataset under "dataset" directory in root.    
