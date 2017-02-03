@@ -33,7 +33,7 @@ public class BottomAggregator extends BottomOrTopAggregator {
 	public BottomAggregator(final long n) {
 		super(n);
 
-		DefaultValue = Double.MAX_VALUE;
+		this.defaultValue = Double.MAX_VALUE;
 	}
 
 	/** {@inheritDoc} */

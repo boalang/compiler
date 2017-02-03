@@ -68,6 +68,7 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 		for (final TaskCompletionEvent event : job.getTaskCompletionEvents(0))
 			switch (event.getTaskStatus()) {
 				case SUCCEEDED:
+				default:
 					break;
 				case FAILED:
 				case KILLED:

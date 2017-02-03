@@ -532,6 +532,7 @@ public class BoaAstIntrinsics {
 			case '.':
 			case '\t':
 				lastStart = i + 1;
+				break;
 			default:
 				break;
 			}

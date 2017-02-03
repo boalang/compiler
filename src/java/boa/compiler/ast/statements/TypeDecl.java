@@ -29,27 +29,27 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
  */
 public class TypeDecl extends Statement {
 	protected Identifier identifier;
-	protected AbstractType t;
+	protected AbstractType typeNode;
 
 	public Identifier getId() {
 		return identifier;
 	}
 
 	public boolean hasType() {
-		return t != null;
+		return typeNode != null;
 	}
 
 	public AbstractType getType() {
-		return t;
+		return typeNode;
 	}
 
-	public TypeDecl(final Identifier identifier, final AbstractType t) {
+	public TypeDecl(final Identifier identifier, final AbstractType typeNode) {
 		if (identifier != null)
 			identifier.setParent(this);
-		if (t != null)
-			t.setParent(this);
+		if (typeNode != null)
+			typeNode.setParent(this);
 		this.identifier = identifier;
-		this.t = t;
+		this.typeNode = typeNode;
 	}
 
 	/** {@inheritDoc} */
@@ -71,7 +71,7 @@ public class TypeDecl extends Statement {
 	}
 
 	public TypeDecl clone() {
-		final TypeDecl d = new TypeDecl(identifier.clone(), t.clone());
+		final TypeDecl d = new TypeDecl(identifier.clone(), typeNode.clone());
 		copyFieldsTo(d);
 		return d;
 	}

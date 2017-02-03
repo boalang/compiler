@@ -27,16 +27,16 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
  * @author hridesh
  */
 public class ExprStatement extends Statement {
-	protected Expression e;
+	protected Expression expr;
 
 	public Expression getExpr() {
-		return e;
+		return expr;
 	}
 
-	public ExprStatement(final Expression e) {
-		if (e != null)
-			e.setParent(this);
-		this.e = e;
+	public ExprStatement(final Expression expr) {
+		if (expr != null)
+			expr.setParent(this);
+		this.expr = expr;
 	}
 
 	/** {@inheritDoc} */
@@ -58,7 +58,7 @@ public class ExprStatement extends Statement {
 	}
 
 	public ExprStatement clone() {
-		final ExprStatement s = new ExprStatement(e.clone());
+		final ExprStatement s = new ExprStatement(expr.clone());
 		copyFieldsTo(s);
 		return s;
 	}

@@ -34,7 +34,7 @@ public class Java7Visitor extends ASTVisitor {
 	protected PositionInfo.Builder pos = null;
 	protected String src = null;
 
-	protected Namespace.Builder b = Namespace.newBuilder();
+	protected Namespace.Builder builder = Namespace.newBuilder();
 	protected List<boa.types.Ast.Comment> comments = new ArrayList<boa.types.Ast.Comment>();
 	protected List<String> imports = new ArrayList<String>();
 	protected Stack<List<boa.types.Ast.Declaration>> declarations = new Stack<List<boa.types.Ast.Declaration>>();
@@ -53,7 +53,7 @@ public class Java7Visitor extends ASTVisitor {
 	public Namespace getNamespaces(CompilationUnit node) {
 		root = node;
 		node.accept(this);
-		return b.build();
+		return builder.build();
 	}
 
 	public List<boa.types.Ast.Comment> getComments() {
@@ -84,15 +84,15 @@ public class Java7Visitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(CompilationUnit node) {
-//		b.setPosition(pos.build());
+//		builder.setPosition(pos.build());
 		PackageDeclaration pkg = node.getPackage();
 		if (pkg == null) {
-			b.setName("");
+			builder.setName("");
 		} else {
-			b.setName(pkg.getName().getFullyQualifiedName());
+			builder.setName(pkg.getName().getFullyQualifiedName());
 			for (Object a : pkg.annotations()) {
 				((Annotation)a).accept(this);
-				b.addModifiers(modifiers.pop());
+				builder.addModifiers(modifiers.pop());
 			}
 		}
 		for (Object i : node.imports()) {
@@ -109,7 +109,7 @@ public class Java7Visitor extends ASTVisitor {
 			declarations.push(new ArrayList<boa.types.Ast.Declaration>());
 			((AbstractTypeDeclaration)t).accept(this);
 			for (boa.types.Ast.Declaration d : declarations.pop())
-				b.addDeclarations(d);
+				builder.addDeclarations(d);
 		}
 		for (Object c : node.getCommentList())
 			((org.eclipse.jdt.core.dom.Comment)c).accept(this);

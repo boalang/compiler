@@ -29,23 +29,23 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
  * @author hridesh
  */
 public class VisitorExpression extends Operand {
-	protected VisitorType t;
+	protected VisitorType typeNode;
 	protected Block body;
 
 	public VisitorType getType() {
-		return t;
+		return typeNode;
 	}
 
 	public Block getBody() {
 		return body;
 	}
 
-	public VisitorExpression(final VisitorType t, final Block body) {
-		if (t != null)
-			t.setParent(this);
+	public VisitorExpression(final VisitorType typeNode, final Block body) {
+		if (typeNode != null)
+			typeNode.setParent(this);
 		if (body != null)
 			body.setParent(this);
-		this.t = t;
+		this.typeNode = typeNode;
 		this.body = body;
 	}
 
@@ -68,7 +68,7 @@ public class VisitorExpression extends Operand {
 	}
 
 	public VisitorExpression clone() {
-		final VisitorExpression e = new VisitorExpression(t.clone(), body.clone());
+		final VisitorExpression e = new VisitorExpression(typeNode.clone(), body.clone());
 		copyFieldsTo(e);
 		return e;
 	}

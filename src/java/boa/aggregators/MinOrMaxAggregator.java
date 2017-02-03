@@ -30,7 +30,7 @@ import boa.io.EmitKey;
 abstract class MinOrMaxAggregator extends Aggregator {
 	protected final WeightedString[] list;
 	private final int last;
-	protected double DefaultWeight;
+	protected double defaultWeight;
 
 	/**
 	 * Construct a {@link MinOrMaxAggregator}.
@@ -55,7 +55,7 @@ abstract class MinOrMaxAggregator extends Aggregator {
 
 		// clear out the list
 		for (int i = 0; i < this.getArg(); i++)
-			this.list[i] = new WeightedString("", DefaultWeight);
+			this.list[i] = new WeightedString("", this.defaultWeight);
 	}
 
 	/** {@inheritDoc} */

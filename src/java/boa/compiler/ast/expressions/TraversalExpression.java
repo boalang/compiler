@@ -28,23 +28,23 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
  * @author rramu
  */
 public class TraversalExpression extends Operand {
-	protected TraversalType t;
+	protected TraversalType typeNode;
 	protected Block body;
 
 	public TraversalType getType() {
-		return t;
+		return typeNode;
 	}
 
 	public Block getBody() {
 		return body;
 	}
 
-	public TraversalExpression(final TraversalType t, final Block body) {
-		if (t != null)
-			t.setParent(this);
+	public TraversalExpression(final TraversalType typeNode, final Block body) {
+		if (typeNode != null)
+			typeNode.setParent(this);
 		if (body != null)
 			body.setParent(this);
-		this.t = t;
+		this.typeNode = typeNode;
 		this.body = body;
 	}
 
@@ -67,7 +67,7 @@ public class TraversalExpression extends Operand {
 	}
 
 	public TraversalExpression clone() {
-		final TraversalExpression e = new TraversalExpression(t.clone(), body.clone());
+		final TraversalExpression e = new TraversalExpression(typeNode.clone(), body.clone());
 		copyFieldsTo(e);
 		return e;
 	}

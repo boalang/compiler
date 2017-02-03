@@ -31,7 +31,7 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
  */
 public class FunctionType extends AbstractType {
 	protected final List<Component> args = new ArrayList<Component>();
-	protected AbstractType t;
+	protected AbstractType typeNode;
 
 	public List<Component> getArgs() {
 		return args;
@@ -51,25 +51,25 @@ public class FunctionType extends AbstractType {
 	}
 
 	public boolean hasType() {
-		return t != null;
+		return typeNode != null;
 	}
 
 	public AbstractType getType() {
-		return t;
+		return typeNode;
 	}
 
-	public void setType(final AbstractType t) {
-		t.setParent(this);
-		this.t = t;
+	public void setType(final AbstractType typeNode) {
+		typeNode.setParent(this);
+		this.typeNode = typeNode;
 	}
 
 	public FunctionType() {
 	}
 
-	public FunctionType(final AbstractType t) {
-		if (t != null)
-			t.setParent(this);
-		this.t = t;
+	public FunctionType(final AbstractType typeNode) {
+		if (typeNode != null)
+			typeNode.setParent(this);
+		this.typeNode = typeNode;
 	}
 
 	/** {@inheritDoc} */
@@ -93,7 +93,7 @@ public class FunctionType extends AbstractType {
 	public FunctionType clone() {
 		final FunctionType f;
 		if (hasType())
-			f = new FunctionType(t.clone());
+			f = new FunctionType(typeNode.clone());
 		else
 			f = new FunctionType();
 		for (final Component c : args)

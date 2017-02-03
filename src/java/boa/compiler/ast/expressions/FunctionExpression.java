@@ -29,23 +29,23 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
  * @author hridesh
  */
 public class FunctionExpression extends Operand {
-	protected AbstractType t;
+	protected AbstractType typeNode;
 	protected Block body;
 
 	public AbstractType getType() {
-		return t;
+		return typeNode;
 	}
 
 	public Block getBody() {
 		return body;
 	}
 
-	public FunctionExpression(final AbstractType t, final Block body) {
-		if (t != null)
-			t.setParent(this);
+	public FunctionExpression(final AbstractType typeNode, final Block body) {
+		if (typeNode != null)
+			typeNode.setParent(this);
 		if (body != null)
 			body.setParent(this);
-		this.t = t;
+		this.typeNode = typeNode;
 		this.body = body;
 	}
 
@@ -68,7 +68,7 @@ public class FunctionExpression extends Operand {
 	}
 
 	public FunctionExpression clone() {
-		final FunctionExpression e = new FunctionExpression(t.clone(), body.clone());
+		final FunctionExpression e = new FunctionExpression(typeNode.clone(), body.clone());
 		copyFieldsTo(e);
 		return e;
 	}

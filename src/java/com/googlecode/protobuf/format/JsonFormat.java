@@ -189,6 +189,8 @@ public class JsonFormat {
 
     private static void printFieldValue(FieldDescriptor field, Object value, JsonGenerator generator) throws IOException {
         switch (field.getType()) {
+			default:
+				break;
             case INT32:
             case INT64:
             case SINT32:

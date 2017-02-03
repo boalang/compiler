@@ -27,21 +27,21 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
  */
 public class UnaryFactor extends Operand {
 	protected String op;
-	protected Factor f;
+	protected Factor factor;
 
 	public String getOp() {
 		return op;
 	}
 
 	public Factor getFactor() {
-		return f;
+		return factor;
 	}
 
-	public UnaryFactor(final String op, final Factor f) {
-		if (f != null)
-			f.setParent(this);
+	public UnaryFactor(final String op, final Factor factor) {
+		if (factor != null)
+			factor.setParent(this);
 		this.op = op;
-		this.f = f;
+		this.factor = factor;
 	}
 
 	/** {@inheritDoc} */
@@ -63,7 +63,7 @@ public class UnaryFactor extends Operand {
 	}
 
 	public UnaryFactor clone() {
-		final UnaryFactor uf = new UnaryFactor(op, f.clone());
+		final UnaryFactor uf = new UnaryFactor(op, factor.clone());
 		copyFieldsTo(uf);
 		return uf;
 	}

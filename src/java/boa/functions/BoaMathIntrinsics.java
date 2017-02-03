@@ -52,7 +52,7 @@ public class BoaMathIntrinsics {
 	 *             When n < 1
 	 */
 	@FunctionSpec(name = "nrand", returnType = "int", formalParameters = { "int" })
-	public static long nRand(final long n) {
+	public static long randN(final long n) {
 		if (n < 1)
 			throw new IllegalArgumentException("n must be greater than zero");
 

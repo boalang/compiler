@@ -28,23 +28,23 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
  * @author rramu
  */
 public class FixPExpression extends Operand {
-	protected FixPType t;
+	protected FixPType typeNode;
 	protected Block body;
 
 	public FixPType getType() {
-		return t;
+		return typeNode;
 	}
 
 	public Block getBody() {
 		return body;
 	}
 
-	public FixPExpression(final FixPType t, final Block body) {
-		if (t != null)
-			t.setParent(this);
+	public FixPExpression(final FixPType typeNode, final Block body) {
+		if (typeNode != null)
+			typeNode.setParent(this);
 		if (body != null)
 			body.setParent(this);
-		this.t = t;
+		this.typeNode = typeNode;
 		this.body = body;
 	}
 
@@ -67,7 +67,7 @@ public class FixPExpression extends Operand {
 	}
 
 	public FixPExpression clone() {
-		final FixPExpression e = new FixPExpression(t.clone(), body.clone());
+		final FixPExpression e = new FixPExpression(typeNode.clone(), body.clone());
 		copyFieldsTo(e);
 		return e;
 	}

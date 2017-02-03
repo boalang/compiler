@@ -181,7 +181,7 @@ public class BoaCompiler {
 							}
 						}
 					} catch (final TypeCheckException e) {
-						parserErrorListener.error("typecheck", lexer, null, e.n.beginLine, e.n.beginColumn, e.n2.endColumn - e.n.beginColumn + 1, e.getMessage(), e);
+						parserErrorListener.error("typecheck", lexer, null, e.startNode.beginLine, e.startNode.beginColumn, e.endNode.endColumn - e.startNode.beginColumn + 1, e.getMessage(), e);
 					}
 				} catch (final Exception e) {
 					System.err.print(f.getName() + ": compilation failed: ");
@@ -322,7 +322,7 @@ public class BoaCompiler {
 						}
 					}
 				} catch (final TypeCheckException e) {
-					parserErrorListener.error("typecheck", lexer, null, e.n.beginLine, e.n.beginColumn, e.n2.endColumn - e.n.beginColumn + 1, e.getMessage(), e);
+					parserErrorListener.error("typecheck", lexer, null, e.startNode.beginLine, e.startNode.beginColumn, e.endNode.endColumn - e.startNode.beginColumn + 1, e.getMessage(), e);
 				}
 			} catch (final Exception e) {
 				System.err.print(f.getName() + ": parsing failed: ");

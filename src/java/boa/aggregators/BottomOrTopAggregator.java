@@ -35,7 +35,7 @@ public abstract class BottomOrTopAggregator extends Aggregator {
 	protected final WeightedString[] list;
 	protected final int last;
 
-	protected double DefaultValue;
+	protected double defaultValue;
 
 	/**
 	 * Construct a {@link BottomOrTopAggregator}.
@@ -59,7 +59,7 @@ public abstract class BottomOrTopAggregator extends Aggregator {
 		// clear out the data
 		this.set.clear();
 
-		final WeightedString defaultItem = new WeightedString(null, this.DefaultValue);
+		final WeightedString defaultItem = new WeightedString(null, this.defaultValue);
 		for (int i = 0; i <= this.last; i++)
 			this.list[i] = defaultItem;
 	}

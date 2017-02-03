@@ -27,16 +27,16 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
  * @author hridesh
  */
 public class ParenExpression extends Operand {
-	protected Expression e;
+	protected Expression exp;
 
 	public Expression getExpression() {
-		return e;
+		return exp;
 	}
 
-	public ParenExpression(final Expression e) {
-		if (e != null)
-			e.setParent(this);
-		this.e = e;
+	public ParenExpression(final Expression exp) {
+		if (exp != null)
+			exp.setParent(this);
+		this.exp = exp;
 	}
 
 	/** {@inheritDoc} */
@@ -58,7 +58,7 @@ public class ParenExpression extends Operand {
 	}
 
 	public ParenExpression clone() {
-		final ParenExpression p = new ParenExpression(e.clone());
+		final ParenExpression p = new ParenExpression(exp.clone());
 		copyFieldsTo(p);
 		return p;
 	}

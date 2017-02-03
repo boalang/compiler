@@ -27,21 +27,21 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
  * @author hridesh
  */
 public class PostfixStatement extends Statement {
-	protected Expression e;
+	protected Expression expr;
 	protected String op;
 
 	public Expression getExpr() {
-		return e;
+		return expr;
 	}
 
 	public String getOp() {
 		return op;
 	}
 
-	public PostfixStatement(final Expression e, final String op) {
-		if (e != null)
-			e.setParent(this);
-		this.e = e;
+	public PostfixStatement(final Expression expr, final String op) {
+		if (expr != null)
+			expr.setParent(this);
+		this.expr = expr;
 		this.op = op;
 	}
 
@@ -64,7 +64,7 @@ public class PostfixStatement extends Statement {
 	}
 
 	public PostfixStatement clone() {
-		final PostfixStatement s = new PostfixStatement(e.clone(), op);
+		final PostfixStatement s = new PostfixStatement(expr.clone(), op);
 		copyFieldsTo(s);
 		return s;
 	}

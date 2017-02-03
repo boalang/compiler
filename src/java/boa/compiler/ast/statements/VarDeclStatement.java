@@ -31,7 +31,7 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
 public class VarDeclStatement extends Statement {
 	protected boolean isStatic;
 	protected Identifier identifier;
-	protected AbstractType t;
+	protected AbstractType typeNode;
 	protected Expression initializer;
 
 	public boolean isStatic() {
@@ -47,16 +47,16 @@ public class VarDeclStatement extends Statement {
 	}
 
 	public boolean hasType() {
-		return t != null;
+		return typeNode != null;
 	}
 
 	public AbstractType getType() {
-		return t;
+		return typeNode;
 	}
 
-	public void setType(final AbstractType t) {
-		t.setParent(this);
-		this.t = t;
+	public void setType(final AbstractType typeNode) {
+		typeNode.setParent(this);
+		this.typeNode = typeNode;
 	}
 
 	public boolean hasInitializer() {
@@ -76,40 +76,40 @@ public class VarDeclStatement extends Statement {
 		this(false, identifier, null, null);
 	}
 
-	public VarDeclStatement(final Identifier identifier, final AbstractType t) {
-		this(false, identifier, t, null);
+	public VarDeclStatement(final Identifier identifier, final AbstractType typeNode) {
+		this(false, identifier, typeNode, null);
 	}
 
 	public VarDeclStatement(final Identifier identifier, final Expression initializer) {
 		this(false, identifier, null, initializer);
 	}
 
-	public VarDeclStatement(final Identifier identifier, final AbstractType t, final Expression initializer) {
-		this(false, identifier, t, initializer);
+	public VarDeclStatement(final Identifier identifier, final AbstractType typeNode, final Expression initializer) {
+		this(false, identifier, typeNode, initializer);
 	}
 
 	public VarDeclStatement(final boolean isStatic, final Identifier identifier) {
 		this(isStatic, identifier, null, null);
 	}
 
-	public VarDeclStatement(final boolean isStatic, final Identifier identifier, final AbstractType t) {
-		this(isStatic, identifier, t, null);
+	public VarDeclStatement(final boolean isStatic, final Identifier identifier, final AbstractType typeNode) {
+		this(isStatic, identifier, typeNode, null);
 	}
 
 	public VarDeclStatement(final boolean isStatic, final Identifier identifier, final Expression initializer) {
 		this(isStatic, identifier, null, initializer);
 	}
 
-	public VarDeclStatement(final boolean isStatic, final Identifier identifier, final AbstractType t, final Expression initializer) {
+	public VarDeclStatement(final boolean isStatic, final Identifier identifier, final AbstractType typeNode, final Expression initializer) {
 		if (identifier != null)
 			identifier.setParent(this);
-		if (t != null)
-			t.setParent(this);
+		if (typeNode != null)
+			typeNode.setParent(this);
 		if (initializer != null)
 			initializer.setParent(this);
 		this.isStatic = isStatic;
 		this.identifier = identifier;
-		this.t = t;
+		this.typeNode = typeNode;
 		this.initializer = initializer;
 	}
 
@@ -134,7 +134,7 @@ public class VarDeclStatement extends Statement {
 	public VarDeclStatement clone() {
 		final VarDeclStatement v = new VarDeclStatement(isStatic, identifier.clone());
 		if (hasType())
-			v.t = t.clone();
+			v.typeNode = typeNode.clone();
 		if (hasInitializer())
 			v.initializer = initializer.clone();
 		copyFieldsTo(v);

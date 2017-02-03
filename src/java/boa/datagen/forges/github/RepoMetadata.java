@@ -27,7 +27,7 @@ public class RepoMetadata {
 	private static final String SHORT_DESCRIPTION = "shortdesc";
 	private static final String HOME_PAGE = "homepage";
 	private static final String SUMMARY_PAGE = "summary-page";
-	private static final String CREATED_TIMESTAMP = "created_timestamp";
+	private static final String CREATED_TIMESTAMP = "createdTimestamp";
 	private static final String DESCRIPTION = "description";
 	private static final String OS = "os";
 	private static final String PROGRAMMING_LANGUAGES = "programming-languages";
@@ -87,7 +87,7 @@ public class RepoMetadata {
 	private String shortDescription;
 	private String homepage;
 	private String summaryPage;
-	private long created_timestamp = -1;
+	private long createdTimestamp = -1;
 	private String description;
 	private String os;
 	private String[] programmingLanguages;
@@ -154,7 +154,7 @@ public class RepoMetadata {
 		}
 		if (jsonProject.has(GIT_CREATE)) {
 			String time = jsonProject.getString(GIT_CREATE);
-			this.created_timestamp = getTimeStamp(time); // project.setCreatedDate(timestamp
+			this.createdTimestamp = getTimeStamp(time); // project.setCreatedDate(timestamp
 															// * 1000000);
 		}
 		if (jsonProject.has(GIT_DESCRIPTION))
@@ -308,7 +308,7 @@ public class RepoMetadata {
 		JSONObject jsonRepo = new JSONObject();
 		jsonRepo.put(ID, id);
 		jsonRepo.put(NAME, name);
-		jsonRepo.put(CREATED_TIMESTAMP, created_timestamp);
+		jsonRepo.put(CREATED_TIMESTAMP, createdTimestamp);
 		jsonRepo.put(SUMMARY_PAGE, summaryPage);
 		jsonRepo.put(HOME_PAGE, homepage);
 		jsonRepo.put(DESCRIPTION, description);
@@ -334,7 +334,7 @@ public class RepoMetadata {
 		project.setKind(ForgeKind.GITHUB);
 		project.setId(id);
 		project.setName(name);
-		project.setCreatedDate(created_timestamp);
+		project.setCreatedDate(createdTimestamp);
 		project.setProjectUrl(summaryPage);
 		project.setHomepageUrl(homepage);
 		project.setDescription(description);
@@ -360,7 +360,7 @@ public class RepoMetadata {
 		project.setKind(ForgeKind.GITHUB);
 		project.setId("local");
 		project.setName("local");
-		project.setCreatedDate(created_timestamp);
+		project.setCreatedDate(createdTimestamp);
 		project.setProjectUrl("no summary");
 		project.setHomepageUrl("no homepage");
 		project.setDescription("no description");

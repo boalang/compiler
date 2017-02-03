@@ -35,7 +35,7 @@ public class OutputType extends AbstractType {
 	protected Identifier id;
 	protected final List<Expression> args = new ArrayList<Expression>();
 	protected final List<Component> indices = new ArrayList<Component>();
-	protected Component t;
+	protected Component typeNode;
 	protected Component weight;
 
 	public Identifier getId() {
@@ -90,12 +90,12 @@ public class OutputType extends AbstractType {
 	}
 
 	public Component getType() {
-		return t;
+		return typeNode;
 	}
 
-	public void setType(final Component t) {
-		t.setParent(this);
-		this.t = t;
+	public void setType(final Component typeNode) {
+		typeNode.setParent(this);
+		this.typeNode = typeNode;
 	}
 
 	public boolean hasWeight() {
@@ -115,19 +115,19 @@ public class OutputType extends AbstractType {
 		this(id, null, null);
 	}
 
-	public OutputType(final Identifier id, final Component t) {
-		this(id, t, null);
+	public OutputType(final Identifier id, final Component typeNode) {
+		this(id, typeNode, null);
 	}
 
-	public OutputType(final Identifier id, final Component t, final Component weight) {
+	public OutputType(final Identifier id, final Component typeNode, final Component weight) {
 		if (id != null)
 			id.setParent(this);
-		if (t != null)
-			t.setParent(this);
+		if (typeNode != null)
+			typeNode.setParent(this);
 		if (weight != null)
 			weight.setParent(this);
 		this.id = id;
-		this.t = t;
+		this.typeNode = typeNode;
 		this.weight = weight;
 	}
 
@@ -152,9 +152,9 @@ public class OutputType extends AbstractType {
 	public OutputType clone() {
 		final OutputType o;
 		if (hasWeight())
-			o = new OutputType(id.clone(), t.clone(), weight.clone());
+			o = new OutputType(id.clone(), typeNode.clone(), weight.clone());
 		else
-			o = new OutputType(id.clone(), t.clone());
+			o = new OutputType(id.clone(), typeNode.clone());
 		for (final Expression e : args)
 			o.addArg(e.clone());
 		for (final Component c : indices)

@@ -26,15 +26,15 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
  * @author hridesh
  */
 public class Start extends Node {
-	protected Program p;
+	protected Program program;
 
 	public Program getProgram() {
-		return p;
+		return program;
 	}
 
-	public Start(final Program p) {
-		p.setParent(this);
-		this.p = p;
+	public Start(final Program program) {
+		program.setParent(this);
+		this.program = program;
 	}
 
 	/** {@inheritDoc} */
@@ -56,7 +56,7 @@ public class Start extends Node {
 	}
 
 	public Start clone() {
-		final Start s = new Start(p.clone());
+		final Start s = new Start(program.clone());
 		copyFieldsTo(s);
 		return s;
 	}

@@ -41,7 +41,7 @@ public class CFG {
 	public static final int minSize = -1;
 
 	public Method md;
-	public String class_name;
+	public String className;
 	static boolean endFlag = false;
 	static boolean switchFlag=false;
 	protected HashSet<CFGNode> nodes = new HashSet<CFGNode>();
@@ -58,12 +58,12 @@ public class CFG {
 
 	public CFG(Method method) {
 		this.md = method;
-		this.class_name = "this";
+		this.className = "this";
 	}
 
 	public CFG(Method method, String cls_name) {
 		this.md = method;
-		this.class_name = cls_name;
+		this.className = cls_name;
 	}
 
 	public CFG() {
@@ -94,8 +94,8 @@ public class CFG {
 		this.isBranchPresent = isBranchPresent;
 	}
 
-	public String getClass_name() {
-		return class_name;
+	public String getclassName() {
+		return className;
 	}
 
 	public HashSet<CFGNode> getNodes() {
@@ -354,6 +354,8 @@ public class CFG {
 	private CFG traverse(CFGNode cfgNode, Expression root) {
 		CFG graph = new CFG();
 		switch (root.getKind().getNumber()) {
+		default:
+			break;
 		case ExpressionKind.CONDITIONAL_VALUE:
 			return traverse_conditional(cfgNode, root);
 		case ExpressionKind.METHODCALL_VALUE:
@@ -526,7 +528,7 @@ public class CFG {
 
 	private CFG traverse_clinit(CFGNode cfgNode, Expression root) {
 		CFG graph = new CFG();
-		CFGNode aNode = new CFGNode("<init>", CFGNode.TYPE_METHOD, class_name,
+		CFGNode aNode = new CFGNode("<init>", CFGNode.TYPE_METHOD, className,
 				"super", root.getExpressionsCount());
 		aNode.setAstNode(root);
 		aNode.setPid((cfgNode == null) ? "." : cfgNode.getPid()
@@ -537,7 +539,7 @@ public class CFG {
 
 	private CFG traverse_init(CFGNode cfgNode, Expression root) {
 		CFG graph = new CFG();
-		CFGNode aNode = new CFGNode("<init>", CFGNode.TYPE_METHOD, class_name,
+		CFGNode aNode = new CFGNode("<init>", CFGNode.TYPE_METHOD, className,
 				"this", root.getExpressionsCount());
 		aNode.setAstNode(root);
 		aNode.setPid((cfgNode == null) ? "." : cfgNode.getPid()
@@ -550,12 +552,12 @@ public class CFG {
 		CFG graph = new CFG();
 		String type_str;
 		if (root.getExpressionsCount() == 0) {
-			type_str = class_name;
+			type_str = className;
 		} else {
 			type_str = "<>";
 		}
 		CFGNode aNode = null;
-		aNode = new CFGNode(root.getMethod(), CFGNode.TYPE_METHOD, class_name,
+		aNode = new CFGNode(root.getMethod(), CFGNode.TYPE_METHOD, className,
 				"this", root.getExpressionsCount());
 		aNode.setAstNode(root);
 		aNode.setPid((cfgNode == null) ? "." : cfgNode.getPid()
@@ -568,7 +570,7 @@ public class CFG {
 		CFG graph = new CFG();
 		CFGNode aNode = null;
 		Expression mcall = root;
-		aNode = new CFGNode(mcall.getMethod(), CFGNode.TYPE_METHOD, class_name,
+		aNode = new CFGNode(mcall.getMethod(), CFGNode.TYPE_METHOD, className,
 				"super", mcall.getExpressionsCount());
 		aNode.setAstNode(root);
 		aNode.setPid((cfgNode == null) ? "." : cfgNode.getPid()

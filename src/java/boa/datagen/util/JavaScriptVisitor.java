@@ -125,7 +125,7 @@ public class JavaScriptVisitor extends ASTVisitor {
 	private PositionInfo.Builder pos = null;
 	private String src = null;
 
-	private Namespace.Builder b = Namespace.newBuilder();
+	private Namespace.Builder builder = Namespace.newBuilder();
 	private List<boa.types.Ast.Comment> comments = new ArrayList<boa.types.Ast.Comment>();
 	private List<String> imports = new ArrayList<String>();
 	private Stack<List<boa.types.Ast.Declaration>> declarations = new Stack<List<boa.types.Ast.Declaration>>();
@@ -143,7 +143,7 @@ public class JavaScriptVisitor extends ASTVisitor {
 	public Namespace getNamespaces(JavaScriptUnit node) {
 		root = node;
 		node.accept(this);
-		return b.build();
+		return builder.build();
 	}
 
 	public List<boa.types.Ast.Comment> getComments() {
@@ -177,9 +177,9 @@ public class JavaScriptVisitor extends ASTVisitor {
 //		b.setPosition(pos.build());
 		PackageDeclaration pkg = node.getPackage();
 		if (pkg == null) {
-			b.setName("");
+			builder.setName("");
 		} else {
-			b.setName(pkg.getName().getFullyQualifiedName());
+			builder.setName(pkg.getName().getFullyQualifiedName());
 		}
 		for (Object i : node.imports()) {
 			ImportDeclaration id = (ImportDeclaration)i;
@@ -195,7 +195,7 @@ public class JavaScriptVisitor extends ASTVisitor {
 			declarations.push(new ArrayList<boa.types.Ast.Declaration>());
 			((AbstractTypeDeclaration)t).accept(this);
 			for (boa.types.Ast.Declaration d : declarations.pop())
-				b.addDeclarations(d);
+				builder.addDeclarations(d);
 		}
 		for (Object c : node.getCommentList())
 			((org.eclipse.wst.jsdt.core.dom.Comment)c).accept(this);
@@ -225,7 +225,7 @@ public class JavaScriptVisitor extends ASTVisitor {
 				}
 			}
 			db.addMethods(mb);
-			b.addDeclarations(db);
+			builder.addDeclarations(db);
 		}
 		return false;
 	}
@@ -1267,7 +1267,7 @@ public class JavaScriptVisitor extends ASTVisitor {
 		//TODO: Expressions are missing 
 //		node.getExpression().accept(this);
 //		b.addExpressions(expressions.pop());
-		b.addDeclarations(db);
+		builder.addDeclarations(db);
 		expressions.push(bui.build());
 		return false;
 	}
