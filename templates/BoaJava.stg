@@ -170,8 +170,8 @@ new boa.runtime.BoaAbstractVisitor()
 	<body:{s | <s><\n>}>}
 >>
 
-Traversal(staticDeclarations, body, T) ::= <<
-new boa.runtime.BoaAbstractTraversal\<<T>\>()
+Traversal(staticDeclarations, body, T, loopSensitive, flowSensitive) ::= <<
+new boa.runtime.BoaAbstractTraversal\<<T>\>(<flowSensitive>, <loopSensitive>)
 {
 	<if(staticDeclarations)>
 	<staticDeclarations>

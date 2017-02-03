@@ -35,6 +35,7 @@ import boa.compiler.ast.literals.*;
 import boa.compiler.ast.statements.*;
 import boa.compiler.ast.types.*;
 import boa.types.*;
+import boa.compiler.visitors.analysis.*;
 
 /***
  * 
@@ -50,6 +51,11 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	 */
 	String identifier="";
 	String traversalNodeIdentifier="";
+	LocalMayAliasAnalysis localMayAliasAnalysis = new LocalMayAliasAnalysis();
+	DataFlowSensitivityAnalysis dataFlowSensitivityAnalysis = new DataFlowSensitivityAnalysis();
+	LoopSensitivityAnalysis loopSensitivityAnalysis = new LoopSensitivityAnalysis();
+	boolean flowSensitive = false;
+	boolean loopSensitive = false;
 
 	protected class AggregatorDescription {
 		protected String aggregator;
@@ -1474,12 +1480,14 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		final List<String> body = new ArrayList<String>();
 		String types = "";
 		traversalNodeIdentifier="";
+		Identifier traversalId = null;
+
 		if (n.hasWildcard()) {
 			st.add("name", "defaultPreTraverse");
 		} else if (n.hasComponent()) {
 			final Component c = n.getComponent();
 			traversalNodeIdentifier = "___"+c.getIdentifier().getToken();
-
+			traversalId = c.getIdentifier();
 			n.env.set(traversalNodeIdentifier, c.getType().type);
 			types = c.getType().type.toJavaType();
 
@@ -1500,6 +1508,23 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				body.add(code.removeLast());
 			}
 		}
+
+		CFGBuildingVisitor cfgBuilder = new CFGBuildingVisitor();
+	        n.accept(cfgBuilder);
+		CreateNodeId createNodeId = new CreateNodeId();
+		createNodeId.start(cfgBuilder);
+
+		localMayAliasAnalysis = new LocalMayAliasAnalysis();
+		HashSet<Identifier> aliastSet = localMayAliasAnalysis.start(cfgBuilder, traversalId);
+		
+		dataFlowSensitivityAnalysis = new DataFlowSensitivityAnalysis();
+		dataFlowSensitivityAnalysis.start(cfgBuilder, aliastSet);
+
+		loopSensitivityAnalysis = new LoopSensitivityAnalysis();
+		loopSensitivityAnalysis.start(cfgBuilder, aliastSet);
+
+		flowSensitive = dataFlowSensitivityAnalysis.isFlowSensitive();
+		loopSensitive = loopSensitivityAnalysis.isLoopSensitive();
 
 		st.add("body", body);
 
@@ -1676,6 +1701,8 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			body.add(code.removeLast());
 		}
 		st.add("body", body);
+		st.add("flowSensitive", flowSensitive);
+		st.add("loopSensitive", loopSensitive);
 
 		code.add(st.render());
 	}

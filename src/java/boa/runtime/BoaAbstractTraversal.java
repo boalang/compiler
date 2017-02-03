@@ -43,6 +43,14 @@ public abstract class BoaAbstractTraversal<T1> {
 	public java.util.HashMap<Integer,T1> prevOutputMapObj;
 	public T1 currentResult;
 
+	boolean isLoopSensitive = false;
+	boolean isFlowSensitive = false;
+
+	public BoaAbstractTraversal(boolean isFlowSensitive, boolean isLoopSensitive) {
+		this.isFlowSensitive = isFlowSensitive;
+		this.isLoopSensitive = isLoopSensitive;
+	}
+
 	public T1 getValue(final CFGNode node) throws Exception {
 		return (T1)outputMapObj.get(node.getId());
 	}
@@ -271,39 +279,126 @@ public abstract class BoaAbstractTraversal<T1> {
 				outputMapObj = new java.util.HashMap<Integer,T1>();
 		}	
 		switch(kind.getNumber()) {
-					case 1 :
-					case 2 :
-					case 3 :
-					case 6 :
-					case 7 :
-						boolean fixpFlag;
-						do {
-							prevOutputMapObj = new java.util.HashMap<Integer,T1>(outputMapObj);
-							traverse(cfg, direction, kind);
-							fixpFlag=true;
-							java.util.HashSet<CFGNode> nl=cfg.getNodes();
-							for(CFGNode node : nl) {
-								boolean curFlag=outputMapObj.containsKey(node.getId());
-								boolean prevFlag=prevOutputMapObj.containsKey(node.getId());
-								if(curFlag) {
-									if(outputMapObj.containsKey(node.getId()) && prevOutputMapObj.containsKey(node.getId())) { 
-										fixpFlag = fixpFlag && fixp.invoke((T1)outputMapObj.get(node.getId()),(T1)prevOutputMapObj.get(node.getId()));
-									} else {
-										fixpFlag = false; break;
-									}
+				case 1 :
+				case 2 :
+				case 3 :
+				case 6 :
+				case 7 :
+					boolean fixpFlag;
+					do {
+						prevOutputMapObj = new java.util.HashMap<Integer,T1>(outputMapObj);
+						traverse(cfg, direction, kind);
+						fixpFlag=true;
+						java.util.HashSet<CFGNode> nl=cfg.getNodes();
+						for(CFGNode node : nl) {
+							boolean curFlag=outputMapObj.containsKey(node.getId());
+							boolean prevFlag=prevOutputMapObj.containsKey(node.getId());
+							if(curFlag) {
+								if(outputMapObj.containsKey(node.getId()) && prevOutputMapObj.containsKey(node.getId())) { 
+									fixpFlag = fixpFlag && fixp.invoke((T1)outputMapObj.get(node.getId()),(T1)prevOutputMapObj.get(node.getId()));
+								} else {
+									fixpFlag = false; break;
 								}
 							}
-						}while(!fixpFlag);
-						break;
-					case 4:
-					case 5:
-						prevOutputMapObj = new java.util.HashMap<Integer,T1>();
-						traverseWithFixp(cfg, direction, kind, fixp);
-						break;
-					default : break;
-		}
-		} catch(Exception e) {return;}
+						}
+					}while(!fixpFlag);
+					break;
+				case 4:
+				case 5:
+					prevOutputMapObj = new java.util.HashMap<Integer,T1>();
+					traverseWithFixp(cfg, direction, kind, fixp);
+					break;
+				case 8:
+					prevOutputMapObj = new java.util.HashMap<Integer,T1>();
+					java.util.HashMap<Integer,String> nodeVisitStatus=new java.util.HashMap<Integer,String>();
+					CFGNode[] nl = cfg.sortNodes();
+					for(int i=0;i<nl.length;i++) {
+						nodeVisitStatus.put(nl[i].getId(),"unvisited");
+					}
+					if(nl.length!=0) {
+						if(this.isFlowSensitive) {
+							if(this.isLoopSensitive) {
+								switch(direction.getNumber()) {
+									case 1 :
+										if(cfg.getIsLoopPresent()) {
+											Queue<CFGNode> queue=new LinkedList<CFGNode>();
+											populateWithPostorder(cfg.getEntryNode(), nodeVisitStatus, queue);
+											worklistPostorderBackward(queue, fixp, kind);
+										}
+										else if(cfg.getIsBranchPresent()) {
+											postorderBackward(cfg.getEntryNode(), nodeVisitStatus);
+										}
+										else {
+											for(int i=nl.length-1;i>=0;i--) {
+												traverse(nl[i], false);
+											}
+										}
+										break;
+									case 2 :
+										if(cfg.getIsLoopPresent()) {
+											Stack<CFGNode> stack=new Stack<CFGNode>();
+											populateWithReversePostorder(cfg.getEntryNode(), nodeVisitStatus, stack);
+											worklistReversePostorderForward(stack, fixp, kind);
 
+										}
+										else if(cfg.getIsBranchPresent()) {
+											postorderForward(cfg.getExitNode(), nodeVisitStatus);
+										}
+										else {
+											for(int i=0;i<nl.length;i++) {
+												traverse(nl[i], false);
+											}
+										}
+										break;
+
+									default : break;
+								}
+							}
+							else {
+								switch(direction.getNumber()) {
+									case 1 :
+										if(cfg.getIsLoopPresent()) {
+											Queue<CFGNode> queue=new LinkedList<CFGNode>();
+											populateWithPostorder(cfg.getEntryNode(), nodeVisitStatus, queue);
+											while(!queue.isEmpty()) {
+												traverse(queue.remove(), false);
+											}
+										}
+										else if(cfg.getIsBranchPresent()) {
+											postorderBackward(cfg.getEntryNode(), nodeVisitStatus);
+										}
+										else {
+											for(int i=nl.length-1;i>=0;i--) {
+												traverse(nl[i], false);
+											}
+										}
+										break;
+									case 2 :
+										if(cfg.getIsLoopPresent()) {
+											Stack<CFGNode> stack=new Stack<CFGNode>();
+											populateWithReversePostorder(cfg.getEntryNode(), nodeVisitStatus, stack);
+											while(!stack.isEmpty()) {
+												traverse(stack.pop(), false);
+											}
+										}
+										else if(cfg.getIsBranchPresent()) {
+											postorderForward(cfg.getExitNode(), nodeVisitStatus);
+										}
+										else {
+											for(int i=0;i<nl.length;i++) {
+												traverse(nl[i], false);
+											}
+										}
+										break;
+									default : break;
+								}
+							}
+						}
+					}
+					break;
+				default : break;
+			}
+		} catch(Exception e) {return;}
 	}
 
 	public final void traverseWithFixp(final CFG cfg, final Traversal.TraversalDirection direction, final Traversal.TraversalKind kind, final BoaAbstractFixP fixp) throws Exception {
@@ -417,6 +512,11 @@ public abstract class BoaAbstractTraversal<T1> {
 						case 7:
 							for(CFGNode n : cfg.getNodes()) {
 								traverse(n, false);					
+							}
+							break;
+						case 8:
+							for(int i=0;i<nl.length;i++) {
+								traverse(nl[i], false);					
 							}
 							break;
 						default:break;
