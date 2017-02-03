@@ -88,12 +88,12 @@ public abstract class BottomOrTopAggregator extends Aggregator {
 			// Programming, 2002.
 
 			for (final Entry<String, Double> e : this.set.getEntries())
-				if (shouldInsert(e.getValue(), this.list[this.last].getWeight()) ||
-						(e.getValue() == this.list[this.last].getWeight() && this.list[this.last].getString().compareTo(e.getKey()) > 0))
+				if (shouldInsert(e.getValue(), this.list[this.last].getWeight())
+						|| (e.getValue() == this.list[this.last].getWeight() && this.list[this.last].getString().compareTo(e.getKey()) > 0))
 					// find this new item's position within the list
 					for (int i = 0; i <= this.last; i++)
-						if (shouldInsert(e.getValue(), this.list[i].getWeight()) ||
-								(e.getValue() == this.list[i].getWeight() && this.list[i].getString().compareTo(e.getKey()) > 0)) {
+						if (shouldInsert(e.getValue(), this.list[i].getWeight())
+								|| (e.getValue() == this.list[i].getWeight() && this.list[i].getString().compareTo(e.getKey()) > 0)) {
 							// here it is. move all subsequent items down one
 							for (int j = this.last - 1; j >= i; j--)
 								this.list[j + 1] = this.list[j];

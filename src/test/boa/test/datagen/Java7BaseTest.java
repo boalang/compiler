@@ -78,36 +78,36 @@ public class Java7BaseTest extends BaseTest {
 
 	public static void testWrapped(final String java, final String expected) {
 		assertEquals(
-			"{\n" +
-			"   \"namespaces\": [\n" +
-			"      {\n" +
-			"         \"name\": \"\",\n" +
-			"         \"declarations\": [\n" +
-			"            {\n" +
-			"               \"name\": \"t\",\n" +
-			"               \"kind\": \"CLASS\",\n" +
-			"               \"methods\": [\n" +
-			"                  {\n" +
-			"                     \"name\": \"m\",\n" +
-			"                     \"return_type\": {\n" +
-			"                        \"kind\": \"OTHER\",\n" +
-			"                        \"name\": 0\n" +
-			"                     },\n" +
-			"                     \"statements\": [\n" +
-			"                        {\n" +
-			"                           \"kind\": \"BLOCK\",\n" +
-			"                           \"statements\": [\n" +
-			"                              " + expected.replaceAll("\n", "\n                              ") + "\n" +
-			"                           ]\n" +
-			"                        }\n" +
-			"                     ]\n" +
-			"                  }\n" +
-			"               ]\n" +
-			"            }\n" +
-			"         ]\n" +
-			"      }\n" +
-			"   ]\n" +
-			"}",
+			"{\n"
+			+ "   \"namespaces\": [\n"
+			+ "      {\n"
+			+ "         \"name\": \"\",\n"
+			+ "         \"declarations\": [\n"
+			+ "            {\n"
+			+ "               \"name\": \"t\",\n"
+			+ "               \"kind\": \"CLASS\",\n"
+			+ "               \"methods\": [\n"
+			+ "                  {\n"
+			+ "                     \"name\": \"m\",\n"
+			+ "                     \"return_type\": {\n"
+			+ "                        \"kind\": \"OTHER\",\n"
+			+ "                        \"name\": 0\n"
+			+ "                     },\n"
+			+ "                     \"statements\": [\n"
+			+ "                        {\n"
+			+ "                           \"kind\": \"BLOCK\",\n"
+			+ "                           \"statements\": [\n"
+			+ "                              " + expected.replaceAll("\n", "\n                              ") + "\n"
+			+ "                           ]\n"
+			+ "                        }\n"
+			+ "                     ]\n"
+			+ "                  }\n"
+			+ "               ]\n"
+			+ "            }\n"
+			+ "         ]\n"
+			+ "      }\n"
+			+ "   ]\n"
+			+ "}",
 			parseWrapped(java)
 		);
 	}

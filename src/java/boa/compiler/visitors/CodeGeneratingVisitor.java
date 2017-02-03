@@ -1332,8 +1332,8 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		st.add("lhs", "___" + n.getId().getToken());
 
 		if (!n.hasInitializer()) {
-			if (lhsType instanceof BoaProtoMap ||
-					!(lhsType instanceof BoaMap || lhsType instanceof BoaStack || lhsType instanceof BoaSet)) {
+			if (lhsType instanceof BoaProtoMap
+					|| !(lhsType instanceof BoaMap || lhsType instanceof BoaStack || lhsType instanceof BoaSet)) {
 				code.add("");
 				return;
 			}

@@ -53,13 +53,13 @@ public class SeqSort<K,V> extends Configured implements Tool {
 	}
 
 	static int printUsage() {
-		System.out.println("sort [-m <maps>] [-r <reduces>] " +
-				"[-inFormat <input format class>] " +
-				"[-outFormat <output format class>] " + 
-				"[-outKey <output key class>] " +
-				"[-outValue <output value class>] " +
-				"[-totalOrder <pcnt> <num samples> <max splits>] " +
-				"<input> <output>");
+		System.out.println("sort [-m <maps>] [-r <reduces>] "
+				+ "[-inFormat <input format class>] "
+				+ "[-outFormat <output format class>] "
+				+ "[-outKey <output key class>] "
+				+ "[-outValue <output value class>] "
+				+ "[-totalOrder <pcnt> <num samples> <max splits>] "
+				+ "<input> <output>");
 		ToolRunner.printGenericCommandUsage(System.out);
 		return -1;
 	}
@@ -84,10 +84,8 @@ public class SeqSort<K,V> extends Configured implements Tool {
 		ClusterStatus cluster = client.getClusterStatus();
 		int num_reduces = (int) (cluster.getMaxReduceTasks() * 0.9);
 		String sort_reduces = jobConf.get("test.sort.reduces_per_host");
-		if (sort_reduces != null) {
-			num_reduces = cluster.getTaskTrackers() * 
-					Integer.parseInt(sort_reduces);
-		}
+		if (sort_reduces != null)
+			num_reduces = cluster.getTaskTrackers() * Integer.parseInt(sort_reduces);
 
 		// Set user-supplied (possibly default) job configs
 		jobConf.setNumReduceTasks(num_reduces);
@@ -106,19 +104,18 @@ public class SeqSort<K,V> extends Configured implements Tool {
 		FileInputFormat.setInputPaths(jobConf, inPath);
 		FileOutputFormat.setOutputPath(jobConf, new Path(outPath));
 		
-		System.out.println("Running on " +
-				cluster.getTaskTrackers() +
-				" nodes to sort from " + 
-				FileInputFormat.getInputPaths(jobConf)[0] + " into " +
-				FileOutputFormat.getOutputPath(jobConf) +
-				" with " + num_reduces + " reduces.");
+		System.out.println("Running on "
+				+ cluster.getTaskTrackers()
+				+ " nodes to sort from "
+				+ FileInputFormat.getInputPaths(jobConf)[0] + " into "
+				+ FileOutputFormat.getOutputPath(jobConf)
+				+ " with " + num_reduces + " reduces.");
 		Date startTime = new Date();
 		System.out.println("Job started: " + startTime);
 		jobResult = JobClient.runJob(jobConf);
 		Date end_time = new Date();
 		System.out.println("Job ended: " + end_time);
-		System.out.println("The job took " + 
-				(end_time.getTime() - startTime.getTime()) /1000 + " seconds.");
+		System.out.println("The job took " + (end_time.getTime() - startTime.getTime()) /1000 + " seconds.");
 		return 0;
 	}
 

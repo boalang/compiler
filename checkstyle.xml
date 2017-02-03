@@ -75,9 +75,11 @@
             <property name="format" value="\\u00(08|09|0(a|A)|0(c|C)|0(d|D)|22|27|5(C|c))|\\(0(10|11|12|14|15|42|47)|134)"/>
             <property name="message" value="Avoid using corresponding octal or Unicode escape."/>
         </module>
+
         <!-- Checks that switch statement has a "default" clause.
              See http://checkstyle.sourceforge.net/config_coding.html#MissingSwitchDefault -->
         <module name="MissingSwitchDefault"/>
+
         <!-- Checks for fall-through in switch statements. Finds locations where a case lacks a break, return, throw or continue statement.
              See http://checkstyle.sourceforge.net/config_coding.html#FallThrough -->
         <module name="FallThrough"/>
@@ -103,36 +105,42 @@
             <property name="format" value="(^[A-Z][0-9]?)$|([A-Z][a-zA-Z0-9]*[T]$)"/>
             <message key="name.invalidPattern" value="Class type name ''{0}'' must match pattern ''{1}''."/>
         </module>
+
 		<!-- Validates identifiers for interface type parameters.
 		     See http://checkstyle.sourceforge.net/config_naming.html#InterfaceTypeParameterName -->
         <module name="InterfaceTypeParameterName">
             <property name="format" value="(^[A-Z][0-9]?)$|([A-Z][a-zA-Z0-9]*[T]$)"/>
             <message key="name.invalidPattern" value="Interface type name ''{0}'' must match pattern ''{1}''."/>
         </module>
+
 		<!-- Validates identifiers for non-static fields.
 		     See http://checkstyle.sourceforge.net/config_naming.html#MemberName -->
         <module name="MemberName">
             <property name="format" value="^[a-z][a-z0-9][a-zA-Z0-9]*$"/>
             <message key="name.invalidPattern" value="Member name ''{0}'' must match pattern ''{1}''."/>
         </module>
+
 		<!-- Validates identifiers for methods.
 		     See http://checkstyle.sourceforge.net/config_naming.html#MethodName -->
         <module name="MethodName">
             <property name="format" value="^[a-z][a-z0-9][a-zA-Z0-9_]*$"/>
             <message key="name.invalidPattern" value="Method name ''{0}'' must match pattern ''{1}''."/>
         </module>
+
 		<!-- Validates identifiers for method type parameters.
 		     See http://checkstyle.sourceforge.net/config_naming.html#MethodTypeParameterName -->
         <module name="MethodTypeParameterName">
             <property name="format" value="(^[A-Z][0-9]?)$|([A-Z][a-zA-Z0-9]*[T]$)"/>
             <message key="name.invalidPattern" value="Method type name ''{0}'' must match pattern ''{1}''."/>
         </module>
+
 		<!-- Validates identifiers for packages.
 		     See http://checkstyle.sourceforge.net/config_naming.html#PackageName -->
         <module name="PackageName">
             <property name="format" value="^[a-z]+(\.[a-z][a-z0-9]*)*$"/>
             <message key="name.invalidPattern" value="Package name ''{0}'' must match pattern ''{1}''."/>
         </module>
+
 		<!-- Validates identifiers for types.
 		     See http://checkstyle.sourceforge.net/config_naming.html#TypeName -->
         <module name="TypeName">
@@ -152,6 +160,16 @@
 			<message key="ws.illegalFollow" value="GenericWhitespace ''{0}'' should followed by whitespace."/>
 			<message key="ws.notPreceded" value="GenericWhitespace ''{0}'' is not preceded with whitespace."/>
         </module>
+
+		<!-- Checks the padding between the identifier of a method definition, constructor definition, method call, or constructor invocation; and the left parenthesis of the parameter list.
+		     See http://checkstyle.sourceforge.net/config_whitespace.html#MethodParamPad -->
         <module name="MethodParamPad"/>
+
+		<!-- Checks the policy on how to wrap lines on operators.
+		     See http://checkstyle.sourceforge.net/config_whitespace.html#OperatorWrap -->
+        <module name="OperatorWrap">
+            <property name="option" value="NL"/>
+            <property name="tokens" value="BAND, BOR, BSR, BXOR, DIV, EQUAL, GE, GT, LAND, LE, LITERAL_INSTANCEOF, LOR, LT, MINUS, MOD, NOT_EQUAL, PLUS, QUESTION, SL, SR, STAR "/>
+        </module>
     </module>
 </module>
