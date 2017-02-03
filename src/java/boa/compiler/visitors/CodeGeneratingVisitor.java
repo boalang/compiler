@@ -240,7 +240,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			for (final Component c : params) {
 				args.add(c.getIdentifier().getToken());
 				types.add(c.getType().type.toJavaType());
-				if(functionBuilder != null) {
+				if(functionBuilder != null && functionBuilder.isAggregator()) {
 					functionBuilder.argTypeName(c.getType().type.toJavaType());
 					functionBuilder.userGivenFuncArg(c.getIdentifier().getToken());
 				}

@@ -138,10 +138,7 @@ public class UserDefinedAgg {
         }
 
 
-        private String fulQualifiedNameGne(String name) {
-            if(isPrimitive(funcArgType)) {
-                return name;
-            } else {
+        private String fulQualifiedNameGne(String str) {
                 StringBuffer qualifiedName = new StringBuffer();
                 qualifiedName
                         .append("boa.")
@@ -151,10 +148,8 @@ public class UserDefinedAgg {
                         .append("BoaMapper")
                         .append(".")
                         .append(UserDefinedAggregators.getJobName())
-                        .append(".")
-                        .append(funcArgType);
-                return  name.replace(funcArgType, qualifiedName.toString());
-            }
+                        .append(".BoaTup_");
+                return  str.replace("BoaTup_", qualifiedName.toString());
         }
 
         private boolean isPrimitive(String typeName) {
