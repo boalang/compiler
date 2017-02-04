@@ -66,9 +66,9 @@ libraries. To enable this within the IntelliJ IDE
 1. A small data set is provided to test the compiler and your modifications. 
 You can access this dataset under the "dataset" directory located in the root directory.    
 The complete dataset consists of 3 files:
-1. **index:** this is a map file (See xyz for format of this file)
+1. **index:** this is a map file (See [official doc](http://hadoop.apache.org/docs/r2.6.2/api/org/apache/hadoop/io/MapFile.html) for format of this file)
 2. **data:** this file stores the abstract syntax tree (AST) 
-   of each project as a sequence file (See xyz for format of this file)
+   of each project as a sequence file (See [official doc](http://hadoop.apache.org/docs/r2.6.2/api/org/apache/hadoop/io/MapFile.html) for format of this file)
 3. **projects.seq:** this file stores the metadata for each 
    project e.g. commit logs, authors, etc. as a sequence file.
 

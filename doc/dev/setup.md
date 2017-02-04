@@ -70,7 +70,8 @@ perform the build, trigger `ant` targets, and to edit  the project's source fi
     - From the newly-created `boa` project's "Properties > Compiler”, select the "Source" tab.     
     - Use “Add Content Root“ to add “build” directory located under root directory.     
     - After adding “build” directory, your "Source" tab should look something like this: ![](img/intellij_source_tab_final.png)     
-    - Your project sidebar should now look something like this: ![](img/intellij_project_explorer_final.png)	
+    - Your project sidebar should now look something like this:   
+    ![](img/intellij_project_explorer_final.png)	
     - Hit “OK”.
  
 
