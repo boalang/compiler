@@ -48,7 +48,7 @@ public class BoaEvaluator {
 	public BoaEvaluator(String prog, String data) {
 		this.PROG_PATH = prog;
 		this.DATA_PATH = data;
-		this.COMPILATION_DIR = "./compile";
+		this.COMPILATION_DIR = "./compile"; // can not customize to be user defined because of classpath issues
 		this.OUTPUT_DIR =  System.getProperty("java.io.tmpdir");
 		setup();
 	}
@@ -84,7 +84,7 @@ public class BoaEvaluator {
 
 	public static void main(final String[] args) {
 		final Options options = new Options();
-		options.addOption("i", "input",  true, "input Boa Program");
+		options.addOption("i", "input",  true, "input Boa program");
 		options.addOption("d", "data", true, "path to local data");
 		options.addOption("o", "out", true, "output directory");
 
