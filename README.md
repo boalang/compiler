@@ -30,7 +30,7 @@ libraries. To enable this within the Eclipse IDE
       Note that depending on your Boa program, the data set, and the capabilities of your local computer the 
       execution may take some time.
     9. Problems with the Boa compiler, and questions regarding Boa programming can be asked at 
-      the Boa [user forum](http://boa.cs.iastate.edu/forum.php). 
+      the [Boa user forum](http://boa.cs.iastate.edu/forum.php). 
 
 ###Using IntelliJ IDEA
 1. Setup your development environment by following the instruction from 
@@ -60,7 +60,7 @@ libraries. To enable this within the IntelliJ IDE
       Note that depending on your Boa program, the data set, and the capabilities of your local computer the 
       execution may take some time.
     10. Problems with the Boa compiler, and questions regarding Boa programming can be asked at 
-      the Boa [user forum](http://boa.cs.iastate.edu/forum.php). 
+      the [Boa user forum](http://boa.cs.iastate.edu/forum.php). 
 
 ##DataSet
 1. A small data set is provided to test the compiler and your modifications. 
