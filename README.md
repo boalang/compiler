@@ -5,7 +5,7 @@ http://boa.cs.iastate.edu uses the same code, but that execution would use a Had
 
 ##Using Eclipse
 1. Setup your development environment by following the instruction from 
-[Development Setup page](https://github.com/boalang/compiler/blob/master/doc/dev/setup.md).  
+[Development Setup page](doc/dev/setup.md).  
 After following the instructions above, you would have successfully imported 
 the project into your Eclipse IDE. You should also be able to trigger ant builds 
 and edit project source files within your Eclipse installation. 
@@ -34,7 +34,7 @@ libraries. To enable this within the Eclipse IDE
 
 ###Using IntelliJ IDEA
 1. Setup your development environment by following the instruction from 
-[Development Setup page](https://github.com/boalang/compiler/blob/master/doc/dev/setup.md).  
+[Development Setup page](doc/dev/setup.md).  
 After following the instructions above, you would have successfully imported 
 the project into your Eclipse IDE. You should also be able to trigger ant builds 
 and edit project source files within your Eclipse installation. 
