@@ -81,8 +81,7 @@ public class GetGithubRepos {
 						continue;
 					numOfRemainingRequests = mc.getNumberOfRemainingLimit();;
 					time = mc.getLimitResetTime();
-				}
-				else if (numOfRemainingRequests <= 0) {
+				} else if (numOfRemainingRequests <= 0) {
 					System.out.println("Waiting " + (1 - diff) + " seconds for resetting limit");
 					try {
 						Thread.sleep((1 - diff) * 1000);
@@ -96,15 +95,13 @@ public class GetGithubRepos {
 						continue;
 					numOfRemainingRequests = mc.getNumberOfRemainingLimit();;
 					time = mc.getLimitResetTime();
-				}
-				else {
+				} else {
 					mc = new MetadataCacher(url + "?since=" + id, username, password);
 					if (mc.authenticate())
 						System.out.println("Authentication successful!");
 				}
 			}
-		}
-		else {
+		} else {
 			System.out.println("Authentication failed!");
 		}
 	}

@@ -185,15 +185,13 @@ public class GitCommit extends AbstractCommit {
 						rChangedPaths.put(path, diff.getOldPath());
 						filePathGitObjectIds.put(path, diff.getNewId().toObjectId());
 					}
-				}
-				else if (diff.getChangeType() == ChangeType.ADD) {
+				} else if (diff.getChangeType() == ChangeType.ADD) {
 					if (diff.getNewMode().getObjectType() == Constants.OBJ_BLOB) {
 						String path = diff.getNewPath();
 						rAddedPaths.put(path, null);
 						filePathGitObjectIds.put(path, diff.getNewId().toObjectId());
 					}
-				}
-				else if (diff.getChangeType() == ChangeType.DELETE) {
+				} else if (diff.getChangeType() == ChangeType.DELETE) {
 					if (diff.getOldMode().getObjectType() == Constants.OBJ_BLOB) {
 						rRemovedPaths.put(diff.getOldPath(), diff.getOldPath());
 					}

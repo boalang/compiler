@@ -395,12 +395,12 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 					if (!(t instanceof BoaTuple))
 						throw new TypeCheckException(n.getExprs(), "non-scalar/non-tuple type '" + t + "' can not be used in arrays");
 				n.type = new BoaArray(t);
-			}
-			else
+			} else {
 				n.type = new BoaTuple(types);
-		}
-		else
+			}
+		} else {
 			n.type = new BoaMap(new BoaAny(), new BoaAny());
+		}
 	}
 
 	/** {@inheritDoc} */
@@ -572,8 +572,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			if (!((BoaEnum) type).hasMember(selector))
 				throw new TypeCheckException(n.getId(), "'" + type + "' has no member named '" + selector + "'");
 			type = ((BoaEnum) type).getMember(selector);
-		}
-		else {
+		} else {
 			throw new TypeCheckException(n, "invalid operand type '" + type + "' for member selection");
 		}
 
@@ -1001,13 +1000,13 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			if (n.getComponent().type instanceof BoaName)
 				n.getComponent().type = n.getComponent().getType().type;
 			st.setShadowing(false);
-		}
-		else if (!n.hasWildcard())
+		} else if (!n.hasWildcard()) {
 			for (final Identifier id : n.getIdList()) {
 				if (SymbolTable.getType(id.getToken()) == null)
 					throw new TypeCheckException(id, "Invalid type '" + id.getToken() + "'");
 				id.accept(this, st);
 			}
+		}
 
 		n.getBody().accept(this, st);
 	}
@@ -1038,23 +1037,20 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			n.getComponent().accept(this, st);
 			if (n.getComponent().type instanceof BoaName)
 				n.getComponent().type = n.getComponent().getType().type;
-		}
-		else if (!n.hasWildcard())
+		} else if (!n.hasWildcard()) {
 			for (final Identifier id : n.getIdList()) {
 				if (SymbolTable.getType(id.getToken()) == null)
 					throw new TypeCheckException(id, "Invalid type '" + id.getToken() + "'");
 				id.accept(this, st);
 			}
+		}
 
-		for (final IfStatement ifStatement : n.getIfStatements()) {
-				ifStatement.accept(this, st);
-		}
-		if (n.hasCondition()) {
+		for (final IfStatement ifStatement : n.getIfStatements())
+			ifStatement.accept(this, st);
+		if (n.hasCondition())
 			n.getCondition().accept(this, st);
-		}
-		if (n.hasBody()) {
+		if (n.hasBody())
 			n.getBody().accept(this, st);
-		}
 	}
 
 	/** {@inheritDoc} */

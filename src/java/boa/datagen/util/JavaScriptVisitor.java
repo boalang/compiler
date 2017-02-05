@@ -216,8 +216,7 @@ public class JavaScriptVisitor extends ASTVisitor {
 					((FunctionDeclaration) s).accept(this);
 					for (boa.types.Ast.Method m : methods.pop())
 						db.addMethods(m);
-				}
-				else {
+				} else {
 					statements.push(new ArrayList<boa.types.Ast.Statement>());
 					((Statement)s).accept(this);
 					for (boa.types.Ast.Statement d : statements.pop())

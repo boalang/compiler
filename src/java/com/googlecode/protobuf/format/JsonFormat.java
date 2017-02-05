@@ -264,8 +264,7 @@ public class JsonFormat {
             for (long value : field.getVarintList()) {
                 if (firstValue) {
 					firstValue = false;
-				}
-                else {
+				} else {
 					generator.print(", ");
 				}
                 generator.print(unsignedToString(value));
@@ -273,8 +272,7 @@ public class JsonFormat {
             for (int value : field.getFixed32List()) {
                 if (firstValue) {
 					firstValue = false;
-				}
-                else {
+				} else {
 					generator.print(", ");
 				}
                 generator.print(String.format((Locale) null, "0x%08x", value));
@@ -282,8 +280,7 @@ public class JsonFormat {
             for (long value : field.getFixed64List()) {
                 if (firstValue) {
 					firstValue = false;
-				}
-                else {
+				} else {
 					generator.print(", ");
 				}
                 generator.print(String.format((Locale) null, "0x%016x", value));
@@ -291,8 +288,7 @@ public class JsonFormat {
             for (ByteString value : field.getLengthDelimitedList()) {
                 if (firstValue) {
 					firstValue = false;
-				}
-                else {
+				} else {
 					generator.print(", ");
 				}
                 generator.print("\"");
@@ -302,8 +298,7 @@ public class JsonFormat {
             for (UnknownFieldSet value : field.getGroupList()) {
                 if (firstValue) {
 					firstValue = false;
-				}
-                else {
+				} else {
 					generator.print(", ");
 				}
                 generator.print("{\n");

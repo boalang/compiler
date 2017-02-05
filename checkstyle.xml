@@ -77,6 +77,14 @@
             <property name="maxLineLength" value="100"/>
         </module>
 
+		<!-- Checks the placement of right curly braces ('}') for code blocks.
+		     See http://checkstyle.sourceforge.net/config_blocks.html#RightCurly -->
+        <module name="RightCurly"/>
+        <module name="RightCurly">
+            <property name="option" value="alone"/>
+            <property name="tokens" value="CLASS_DEF, METHOD_DEF, CTOR_DEF, LITERAL_FOR, LITERAL_WHILE, LITERAL_DO, STATIC_INIT, INSTANCE_INIT"/>
+        </module>
+
         <!--================================================
                               Coding
         http://checkstyle.sourceforge.net/config_coding.html

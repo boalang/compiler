@@ -133,16 +133,13 @@ public class GetGithubRepoLanguagesMulti {
 			if (status == 0 && content.charAt(i) == '\"') {
 				status = 1;
 				s = i + 1;
-			}
-			else if (status == 1 && content.charAt(i) == '\"') {
+			} else if (status == 1 && content.charAt(i) == '\"') {
 				status = 2;
 				name = content.substring(s, i);
-			}
-			else if (status == 2 && content.charAt(i) == ':') {
+			} else if (status == 2 && content.charAt(i) == ':') {
 				status = 3;
 				s = i + 1;
-			}
-			else if (status == 3 && !Character.isDigit(content.charAt(i))) {
+			} else if (status == 3 && !Character.isDigit(content.charAt(i))) {
 				status = 0;
 				count = content.substring(s, i);
 				languages.add(new GithubLanguage(name, count));

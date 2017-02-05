@@ -34,6 +34,7 @@ import boa.datagen.util.Properties;
 public class MapFileGen {
 	// private final static String SEQ_FILE_PATH = Properties.getProperty("seq.file.path", "");
 	private final static String SEQ_FILE_PATH = Properties.getProperty("gh.json.cache.path", DefaultProperties.GH_JSON_CACHE_PATH);
+
 	public static void main(String[] args) throws Exception {
 		System.out.println("generating data and index file");
 		if (SEQ_FILE_PATH.isEmpty()) {
@@ -49,8 +50,7 @@ public class MapFileGen {
 		if (fs.isFile(path)) {
 			if (path.getName().equals(MapFile.DATA_FILE_NAME)) {
 				MapFile.fix(fs, path.getParent(), Text.class, BytesWritable.class, false, conf);
-			}
-			else {
+			} else {
 				Path dataFile = new Path(path.getParent(), MapFile.DATA_FILE_NAME);
 				fs.rename(path, dataFile);
 				Path dir = new Path(path.getParent(), name);
@@ -58,10 +58,9 @@ public class MapFileGen {
 				fs.rename(dataFile, new Path(dir, dataFile.getName()));
 				MapFile.fix(fs, dir, Text.class, BytesWritable.class, false, conf);
 			}
-		}
-		else {
+		} else {
 			FileStatus[] files = fs.listStatus(path);
-			for (FileStatus file : files) {
+			for (final FileStatus file : files) {
 				path = file.getPath();
 				if (fs.isFile(path)) {
 					Path dataFile = new Path(path.getParent(), MapFile.DATA_FILE_NAME);
@@ -74,5 +73,4 @@ public class MapFileGen {
 		}
 		fs.close();
 	}
-
 }

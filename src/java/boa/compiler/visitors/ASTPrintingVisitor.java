@@ -502,7 +502,8 @@ public class ASTPrintingVisitor extends AbstractVisitorNoArg {
 		System.out.println("TypeDecl");
 		indent++;
 		super.visit(n);
-		indent--;		}
+		indent--;
+	}
 
 	/** {@inheritDoc} */
 	@Override

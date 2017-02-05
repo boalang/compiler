@@ -54,11 +54,9 @@ public class BoaGraphIntrinsics {
 		if (node.getExpression() != null) {
 			if (node.getExpression().getKind().toString().equals("VARDECL")) {
 				vardef = node.getExpression().getVariableDeclsList().get(0).getName();
-			}
-			else if (node.getExpression().getKind().toString().equals("ASSIGN")) {
+			} else if (node.getExpression().getKind().toString().equals("ASSIGN")) {
 				vardef = node.getExpression().getExpressionsList().get(0).getVariable();
-			}
-			else {
+			} else {
 				return varkilled;
 			}
 			for (final boa.types.Control.CFGNode tnode:cfg.getNodesList()) {
@@ -66,8 +64,7 @@ public class BoaGraphIntrinsics {
 					if (tnode.getExpression().getKind().toString().equals("VARDECL")) {
 						if (tnode.getExpression().getVariableDeclsList().get(0).getName().equals(vardef))
 							varkilled.add(String.valueOf(tnode.getId()));
-					}
-					else if (tnode.getExpression().getKind().toString().equals("ASSIGN")) {
+					} else if (tnode.getExpression().getKind().toString().equals("ASSIGN")) {
 						if (tnode.getExpression().getExpressionsList().get(0).getVariable().equals(vardef))
 							varkilled.add(String.valueOf(tnode.getId()));
 					}

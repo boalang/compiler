@@ -23,8 +23,7 @@ public class GetGitHubRepoNames {
 					in.read(bytes);
 					in.close();
 					jsonTxt = new String(bytes);
-				}
-				catch (Exception e) {
+				} catch (final Exception e) {
 					System.err.println("Error reading file " + file.getAbsolutePath());
 					continue;
 				}

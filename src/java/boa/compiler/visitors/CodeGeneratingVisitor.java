@@ -646,8 +646,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			final List<String> operands = new ArrayList<String>();
 
 			if (n.getOp().equals("==") || n.getOp().equals("!=")) {
-				// special case string (in)equality
-				if (n.getLhs().type instanceof BoaString) {
+				if (n.getLhs().type instanceof BoaString) { // special case string (in)equality
 					n.getRhs().accept(this);
 					n.getLhs().accept(this);
 					final String expr = code.removeLast() + ".equals(" + code.removeLast() + ")";
@@ -656,9 +655,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 						st.add("lhs", "!" + expr);
 					else
 						st.add("lhs", expr);
-				}
-				// special case AST (in)equality
-				else if (n.getLhs().type instanceof BoaProtoTuple) {
+				} else if (n.getLhs().type instanceof BoaProtoTuple) { // special case AST (in)equality
 					n.getLhs().accept(this);
 					st.add("lhs", code.removeLast() + ".hashCode()");
 
@@ -1665,8 +1662,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			if (node instanceof TraverseStatement) {
 				if (!(((BoaFunction) node.type).getType() instanceof BoaAny)) {
 					st.add("T", ((BoaFunction) node.type).getType().toBoxedJavaType());
-				}
-				else {
+				} else {
 					st.add("T", "Object");
 				}
 			}

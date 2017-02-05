@@ -173,9 +173,8 @@ public class BoaCompiler {
 								jobs.add(cg.getCode());
 
 								jobnames.add(jobName);
-							}
-							// if a job has visitors, fuse them all together into a single program
-							else {
+							} else {
+								// if a job has visitors, fuse them all together into a single program
 								p.getProgram().jobName = jobName;
 								visitorPrograms.add(p.getProgram());
 							}
@@ -314,9 +313,8 @@ public class BoaCompiler {
 							jobs.add(cg.getCode());
 
 							jobnames.add(jobName);
-						}
-						// if a job has visitors, fuse them all together into a single program
-						else {
+						} else {
+							// if a job has visitors, fuse them all together into a single program
 							p.getProgram().jobName = jobName;
 							visitorPrograms.add(p.getProgram());
 						}

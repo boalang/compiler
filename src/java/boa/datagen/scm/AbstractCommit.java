@@ -430,10 +430,10 @@ public abstract class AbstractCommit {
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
-				}
-				else
+				} else {
 					fb.setAst(ast);
 					//fb.setComments(comments);
+				}
 			}
 
 			return !errorCheck.hasError;

@@ -60,12 +60,10 @@ public class GetGithubRepoLanguages {
 							//System.exit(1);
 							userId = (++userId) % 10;
 							username = usernames[userId];
-						}
-						else {
+						} else {
 							pageContent = null;
 						}
-					}
-					else {
+					} else {
 						mc.getResponseJson();
 						pageContent = mc.getContent();
 					}
