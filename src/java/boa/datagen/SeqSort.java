@@ -44,7 +44,8 @@ import boa.datagen.util.Properties;
  * 
  */
 public class SeqSort<K, V> extends Configured implements Tool {
-	private String inPath = "", outPath = "";
+	private String inPath = "";
+	private String outPath = "";
 	private RunningJob jobResult = null;
 
 	public SeqSort(String inPath, String outPath) {

@@ -92,13 +92,14 @@
              See http://checkstyle.sourceforge.net/config_coding.html#MissingSwitchDefault -->
         <module name="MissingSwitchDefault"/>
 
+		<!-- Checks that each variable declaration is in its own statement and on its own line.
+		     See http://checkstyle.sourceforge.net/config_coding.html#MultipleVariableDeclarations -->
+        <module name="MultipleVariableDeclarations"/>
+
 		<!-- Verifies there are no finalize() methods defined in a class.
 		     See http://checkstyle.sourceforge.net/config_coding.html#NoFinalizer -->
         <module name="NoFinalizer"/>
 
-		<!-- 
-		     See -->
-        <module name="ArrayTypeStyle"/>
 		<!-- Checks the distance between declaration of variable and its first usage.
 		     See http://checkstyle.sourceforge.net/config_coding.html#VariableDeclarationUsageDistance -->
         <module name="VariableDeclarationUsageDistance"/>
@@ -108,13 +109,18 @@
         http://checkstyle.sourceforge.net/config_misc.html
         ===============================================-->
 
+		<!-- Checks the style of array type definitions.
+		     See http://checkstyle.sourceforge.net/config_misc.html#ArrayTypeStyle -->
+        <module name="ArrayTypeStyle"/>
+
+		<!-- Controls the indentation between comments and surrounding code.
+		     See http://checkstyle.sourceforge.net/config_misc.html#CommentsIndentation -->
+        <module name="CommentsIndentation"/>
+
         <!-- Checks that long constants are defined with an upper ell.
              That is ' L' and not 'l'. The capital L looks a lot like 1.
              See http://checkstyle.sourceforge.net/config_misc.html#UpperEll -->
         <module name="UpperEll"/>
-		<!-- Controls the indentation between comments and surrounding code.
-		     See http://checkstyle.sourceforge.net/config_misc.html#CommentsIndentation -->
-        <module name="CommentsIndentation"/>
 
         <!--================================================
                           Naming Conventions

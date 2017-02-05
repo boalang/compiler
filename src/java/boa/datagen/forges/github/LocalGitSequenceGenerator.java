@@ -20,7 +20,8 @@ import boa.datagen.scm.GitConnector;
 
 public class LocalGitSequenceGenerator {
 
-	private static SequenceFile.Writer projectWriter, astWriter;
+	private static SequenceFile.Writer projectWriter;
+	private static SequenceFile.Writer astWriter;
 	private static Configuration conf = null;
 	private static FileSystem fileSystem = null;
 	private final static String keyDelim = "!!";

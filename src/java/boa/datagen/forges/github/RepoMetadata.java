@@ -281,7 +281,8 @@ public class RepoMetadata {
 
 	private static ArrayList<String> getLanguages(String content) {
 		ArrayList<String> languages = new ArrayList<String>();
-		int status = 0, s = 0;
+		int status = 0;
+		int s = 0;
 		String name = null;
 		for (int i = 0; i < content.length(); i++) {
 			if (status == 0 && content.charAt(i) == '\"') {

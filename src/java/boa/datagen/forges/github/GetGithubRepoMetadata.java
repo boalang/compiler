@@ -12,7 +12,8 @@ public class GetGithubRepoMetadata {
 	 */
 	public static void main(String[] args) {
 		String outDir = "C:/github";
-		int getterId = 1, listId = 1;
+		int getterId = 1;
+		int listId = 1;
 		if (args != null && args.length > 0) {
 			outDir = args[0];
 			if (args.length > 2) {

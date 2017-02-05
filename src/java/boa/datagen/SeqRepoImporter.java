@@ -172,7 +172,8 @@ public class SeqRepoImporter {
 		private static final int MAX_COUNTER = 10000;
 		private int id;
 		private int counter = 0;
-		SequenceFile.Writer projectWriter, astWriter;
+		SequenceFile.Writer projectWriter;
+		SequenceFile.Writer astWriter;
 
 		public ImportTask(int id) throws IOException {
 			this.id = id;

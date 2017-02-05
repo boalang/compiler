@@ -17,7 +17,8 @@ public class GetGithubRepoLanguagesMulti {
 	private static final int WINDOW = 1000000;
 
 	private static class GithubLanguage {
-		String name, count;
+		String name;
+		String count;
 
 		public GithubLanguage(String name, String count) {
 			this.name = name;
@@ -124,8 +125,10 @@ public class GetGithubRepoLanguagesMulti {
         	System.err.println("Error parsing file\n" + content);
 			return languages;
         }
-		int status = 0, s = 0;
-		String name = null, count;
+		int status = 0;
+		int s = 0;
+		String name = null;
+		String count;
 		for (int i = 0; i < content.length(); i++) {
 			if (status == 0 && content.charAt(i) == '\"') {
 				status = 1;

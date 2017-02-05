@@ -49,7 +49,9 @@ import boa.types.Toplevel.Project;
 public class BoaAstIntrinsics {
 	@SuppressWarnings("rawtypes")
 	private static Context context;
-	private static MapFile.Reader map, commentsMap, issuesMap;
+	private static MapFile.Reader map;
+	private static MapFile.Reader commentsMap;
+	private static MapFile.Reader issuesMap;
 
 	public static enum AstCounter {
 		GETS_ATTEMPTED,

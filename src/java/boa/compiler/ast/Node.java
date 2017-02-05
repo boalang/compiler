@@ -40,8 +40,10 @@ public abstract class Node {
 		this.parent = parent;
 	}
 
-	public int beginLine, beginColumn;
-	public int endLine, endColumn;
+	public int beginLine;
+	public int beginColumn;
+	public int endLine;
+	public int endColumn;
 
 	public Node setPositions(final int beginLine, final int beginColumn, final int endLine, final int endColumn) {
 		this.beginLine = beginLine;

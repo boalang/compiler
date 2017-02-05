@@ -592,7 +592,8 @@ public class CFG {
 		branch.setPid((cfgNode == null) ? "." : cfgNode.getPid()
 				+ cfgNode.getId() + ".");
 		graph.mergeSeq(branch);
-		boolean trueNotEmpty = false, falseNotEmpty = false;
+		boolean trueNotEmpty = false;
+		boolean falseNotEmpty = false;
 		if (root.getStatementsCount() > 0) { // Then
 			CFG trueBranch = traverse(branch, root.getStatements(0));
 			graph.mergeABranch(trueBranch, branch, "T");
@@ -623,7 +624,8 @@ public class CFG {
 				+ cfgNode.getId() + ".");
 		graph.mergeSeq(branch); // TODO: check if the expressions index is right
 
-		boolean trueNotEmpty = false, falseNotEmpty = false;
+		boolean trueNotEmpty = false;
+		boolean falseNotEmpty = false;
 		if (root.getExpressionsCount() > 0) { // Then
 			CFG trueBranch = traverse(branch, root.getExpressions(0));
 			graph.mergeABranch(trueBranch, branch, "T");
