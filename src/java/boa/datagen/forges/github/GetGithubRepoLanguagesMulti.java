@@ -26,7 +26,8 @@ public class GetGithubRepoLanguagesMulti {
 	}
 
 	public static void main(String[] args) throws FileNotFoundException {
-		int nid = 0, nusers[] = {0};
+		int nid = 0;
+		int[] nusers = {0};
 		if (args != null && args.length > 0) {
 			Config.githubRepoLanguagesDir = args[0];
 			if (args.length > 2) {

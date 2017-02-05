@@ -15,7 +15,8 @@ public class GetGithubRepoMetadataMulti {
 	 */
 	public static void main(String[] args) {
 		String outDir = "/remote/rs/tien/github";
-		int nid = -1, nusers[] = null;
+		int nid = -1;
+		int[] nusers = null;
 		if (args != null && args.length > 0) {
 			outDir = args[0];
 			if (args.length > 2) {
