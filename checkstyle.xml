@@ -82,13 +82,17 @@
             <property name="message" value="Avoid using corresponding octal or Unicode escape."/>
         </module>
 
+        <!-- Checks for fall-through in switch statements. Finds locations where a case lacks a break, return, throw or continue statement.
+             See http://checkstyle.sourceforge.net/config_coding.html#FallThrough -->
+        <module name="FallThrough"/>
+
         <!-- Checks that switch statement has a "default" clause.
              See http://checkstyle.sourceforge.net/config_coding.html#MissingSwitchDefault -->
         <module name="MissingSwitchDefault"/>
 
-        <!-- Checks for fall-through in switch statements. Finds locations where a case lacks a break, return, throw or continue statement.
-             See http://checkstyle.sourceforge.net/config_coding.html#FallThrough -->
-        <module name="FallThrough"/>
+		<!-- Verifies there are no finalize() methods defined in a class.
+		     See http://checkstyle.sourceforge.net/config_coding.html#NoFinalizer -->
+        <module name="NoFinalizer"/>
 
         <!--==============================================
                            Miscellaneous
