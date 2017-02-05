@@ -17,8 +17,8 @@
 package boa.compiler.ast;
 
 import boa.compiler.SymbolTable;
-import boa.compiler.ast.statements.Statement;
 import boa.compiler.ast.statements.Block;
+import boa.compiler.ast.statements.Statement;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
 import boa.compiler.visitors.AbstractVisitorNoReturn;

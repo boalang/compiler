@@ -20,6 +20,8 @@ package boa.test.datagen;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.junit.Assert.assertEquals;
+
 import com.googlecode.protobuf.format.JsonFormat;
 
 import org.eclipse.jdt.core.JavaCore;
@@ -27,13 +29,9 @@ import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 
-import static org.junit.Assert.assertEquals;
-
-import boa.types.Ast.ASTRoot;
-
 import boa.datagen.util.Java7Visitor;
-
 import boa.test.compiler.BaseTest;
+import boa.types.Ast.ASTRoot;
 
 /*
  * @author rdyer

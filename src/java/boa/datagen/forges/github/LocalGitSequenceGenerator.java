@@ -10,13 +10,14 @@ import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.Text;
 
-import boa.types.Code.CodeRepository;
-import boa.types.Code.Revision;
-import boa.types.Code.CodeRepository.RepositoryKind;
-import boa.types.Toplevel.Project;
-import boa.types.Toplevel.Project.ForgeKind;
 import boa.datagen.scm.AbstractConnector;
 import boa.datagen.scm.GitConnector;
+
+import boa.types.Code.CodeRepository;
+import boa.types.Code.CodeRepository.RepositoryKind;
+import boa.types.Code.Revision;
+import boa.types.Toplevel.Project;
+import boa.types.Toplevel.Project.ForgeKind;
 
 public class LocalGitSequenceGenerator {
 

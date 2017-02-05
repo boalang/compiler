@@ -19,8 +19,8 @@ package boa.compiler.ast.expressions;
 import java.util.ArrayList;
 import java.util.List;
 
-import boa.compiler.ast.Node;
 import boa.compiler.ast.Conjunction;
+import boa.compiler.ast.Node;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
 import boa.compiler.visitors.AbstractVisitorNoReturn;

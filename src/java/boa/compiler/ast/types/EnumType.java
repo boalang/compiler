@@ -19,8 +19,8 @@ package boa.compiler.ast.types;
 import java.util.ArrayList;
 import java.util.List;
 
-import boa.compiler.ast.Identifier;
 import boa.compiler.ast.EnumBodyDeclaration;
+import boa.compiler.ast.Identifier;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
 import boa.compiler.visitors.AbstractVisitorNoReturn;

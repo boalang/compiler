@@ -27,6 +27,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.google.protobuf.InvalidProtocolBufferException;
+
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
@@ -34,22 +36,22 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.Text;
+
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.InvalidRemoteException;
 import org.eclipse.jgit.api.errors.TransportException;
 import org.eclipse.jgit.lib.RepositoryCache;
 import org.eclipse.jgit.util.FS;
 
-import com.google.protobuf.InvalidProtocolBufferException;
-
 import boa.datagen.forges.github.RepositoryCloner;
 import boa.datagen.scm.AbstractConnector;
 import boa.datagen.scm.GitConnector;
+import boa.datagen.util.FileIO;
+import boa.datagen.util.Properties;
+
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
 import boa.types.Toplevel.Project;
-import boa.datagen.util.FileIO;
-import boa.datagen.util.Properties;
 
 /**
  * @author hoan

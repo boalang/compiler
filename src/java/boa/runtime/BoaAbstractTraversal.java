@@ -16,20 +16,21 @@
  */
 package boa.runtime;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-import java.util.LinkedList;
 import java.util.Stack;
 
 import boa.functions.BoaAstIntrinsics;
 
+import boa.graphs.cfg.*;
+
 import boa.types.Ast.*;
 import boa.types.Ast.Expression.*;
-import boa.types.Graph.*;
-import boa.graphs.cfg.*;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
+import boa.types.Graph.*;
 import boa.types.Shared.Person;
 import boa.types.Toplevel.Project;
 

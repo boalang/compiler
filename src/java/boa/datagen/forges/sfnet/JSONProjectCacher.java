@@ -3,17 +3,18 @@ package boa.datagen.forges.sfnet;
 import java.io.*;
 import java.util.*;
 
-import boa.datagen.util.FileIO;
-import boa.types.Issues.IssueRepository;
-import boa.types.Code.CodeRepository;
-import boa.types.Code.CodeRepository.RepositoryKind;
-import boa.types.Shared.Person;
-import boa.types.Toplevel.Project;
-import boa.types.Toplevel.Project.ForgeKind;
-
 import com.google.protobuf.CodedInputStream;
 
 import net.sf.json.*;
+
+import boa.datagen.util.FileIO;
+
+import boa.types.Code.CodeRepository;
+import boa.types.Code.CodeRepository.RepositoryKind;
+import boa.types.Issues.IssueRepository;
+import boa.types.Shared.Person;
+import boa.types.Toplevel.Project;
+import boa.types.Toplevel.Project.ForgeKind;
 
 /**
  * @author hoan

@@ -16,8 +16,8 @@
  */
 package boa.aggregators;
 
-import java.util.*;
 import java.io.IOException;
+import java.util.*;
 
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;

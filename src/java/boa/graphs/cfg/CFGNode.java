@@ -16,6 +16,7 @@
  */
 package boa.graphs.cfg;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -23,7 +24,6 @@ import boa.types.Ast.Expression;
 import boa.types.Ast.Statement;
 import boa.types.Control.CFGNode.Builder;
 import boa.types.Control.CFGNode.CFGNodeType;
-import java.util.Collections;
 
 /**
  * Control flow graph builder node

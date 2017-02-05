@@ -16,9 +16,10 @@
  */
 package boa.functions;
 
+import java.util.*;
+
 import boa.graphs.cfg.CFG;
 import boa.types.Ast.Method;
-import java.util.*;
 
 /**
  * Boa functions for working with control flow graphs.

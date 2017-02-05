@@ -16,10 +16,10 @@
  */
 package boa.compiler.ast.types;
 
+import boa.compiler.ast.Component;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
 import boa.compiler.visitors.AbstractVisitorNoReturn;
-import boa.compiler.ast.Component;
 
 /**
  * 

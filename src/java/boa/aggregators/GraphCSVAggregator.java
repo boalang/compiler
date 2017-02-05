@@ -16,9 +16,8 @@
  */
 package boa.aggregators;
 
-import java.util.*;
 import java.io.IOException;
-
+import java.util.*;
 
 /**
  * A Boa aggregator to output graph data in CSV format as an adjacency list.

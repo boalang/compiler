@@ -24,29 +24,29 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import boa.compiler.ast.types.AbstractType;
+import boa.compiler.SymbolTable;
 import boa.compiler.ast.Call;
 import boa.compiler.ast.Comparison;
 import boa.compiler.ast.Component;
 import boa.compiler.ast.Conjunction;
-import boa.compiler.ast.expressions.Expression;
-import boa.compiler.ast.expressions.SimpleExpr;
-import boa.compiler.ast.expressions.VisitorExpression;
 import boa.compiler.ast.Factor;
 import boa.compiler.ast.Identifier;
 import boa.compiler.ast.Program;
+import boa.compiler.ast.Term;
+import boa.compiler.ast.expressions.Expression;
+import boa.compiler.ast.expressions.SimpleExpr;
+import boa.compiler.ast.expressions.VisitorExpression;
 import boa.compiler.ast.statements.Block;
 import boa.compiler.ast.statements.ExprStatement;
 import boa.compiler.ast.statements.Statement;
 import boa.compiler.ast.statements.VarDeclStatement;
 import boa.compiler.ast.statements.VisitStatement;
-import boa.compiler.ast.Term;
+import boa.compiler.ast.types.AbstractType;
 import boa.compiler.ast.types.StackType;
-import boa.compiler.SymbolTable;
 import boa.compiler.visitors.AbstractVisitorNoArg;
 import boa.compiler.visitors.VisitClassifier;
-import boa.types.BoaTuple;
 import boa.types.BoaStack;
+import boa.types.BoaTuple;
 
 /**
  * Converts use of current(T) inherited attributes in visitors into stack variables.

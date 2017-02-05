@@ -21,8 +21,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import boa.compiler.ast.expressions.VisitorExpression;
 import boa.compiler.ast.Identifier;
+import boa.compiler.ast.expressions.VisitorExpression;
 import boa.compiler.ast.statements.VisitStatement;
 
 /**

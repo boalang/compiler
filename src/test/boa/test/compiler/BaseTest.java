@@ -17,9 +17,6 @@
  */
 package boa.test.compiler;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -33,12 +30,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-import javax.tools.ToolProvider;
-import javax.tools.JavaCompiler;
-import javax.tools.JavaFileObject;
 import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;
+import javax.tools.JavaCompiler;
+import javax.tools.JavaFileObject;
 import javax.tools.StandardJavaFileManager;
+import javax.tools.ToolProvider;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.BaseErrorListener;
@@ -56,8 +56,8 @@ import org.stringtemplate.v4.ST;
 
 import boa.compiler.SymbolTable;
 import boa.compiler.ast.Start;
-import boa.compiler.transforms.LocalAggregationTransformer;
 import boa.compiler.transforms.InheritedAttributeTransformer;
+import boa.compiler.transforms.LocalAggregationTransformer;
 import boa.compiler.transforms.VisitorOptimizingTransformer;
 import boa.compiler.visitors.AbstractCodeGeneratingVisitor;
 import boa.compiler.visitors.CodeGeneratingVisitor;

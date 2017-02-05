@@ -2,14 +2,14 @@ package boa.datagen;
 
 import java.io.IOException;
 
+import com.google.protobuf.CodedInputStream;
+
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.Text;
-
-import com.google.protobuf.CodedInputStream;
 
 import boa.types.Ast.ASTRoot;
 import boa.types.Toplevel.Project;

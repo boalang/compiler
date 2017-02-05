@@ -21,12 +21,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import boa.types.BoaProtoTuple;
+import boa.types.BoaInt;
 import boa.types.BoaProtoList;
+import boa.types.BoaProtoTuple;
+import boa.types.BoaSet;
 import boa.types.BoaString;
 import boa.types.BoaType;
-import boa.types.BoaInt;
-import boa.types.BoaSet;
 import boa.types.proto.enums.CFGNodeTypeProtoMap;
 import boa.types.proto.enums.FileKindProtoMap;
 

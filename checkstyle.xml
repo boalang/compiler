@@ -119,6 +119,19 @@
         <module name="VariableDeclarationUsageDistance"/>
 
         <!--=================================================
+                              Imports
+        http://checkstyle.sourceforge.net/config_imports.html
+        ==================================================-->
+
+		<!-- Checks that the groups of import declarations appear in the order specified by the user.
+		     See http://checkstyle.sourceforge.net/config_imports.html#CustomImportOrder -->
+        <module name="CustomImportOrder">
+            <property name="specialImportsRegExp" value="boa"/>
+            <property name="sortImportsInGroupAlphabetically" value="true"/>
+            <property name="customImportOrderRules" value="STANDARD_JAVA_PACKAGE###STATIC###THIRD_PARTY_PACKAGE###SPECIAL_IMPORTS"/>
+        </module>
+
+        <!--=================================================
                               JavaDoc
         http://checkstyle.sourceforge.net/config_javadoc.html
         ==================================================-->
@@ -130,13 +143,17 @@
             <property name="target" value="CLASS_DEF, INTERFACE_DEF, ENUM_DEF, METHOD_DEF, CTOR_DEF, VARIABLE_DEF"/>
         </module>
 
-		<!-- Checks that the at-clause tag is followed by description.
-		     See http://checkstyle.sourceforge.net/config_javadoc.html#NonEmptyAtclauseDescription -->
-        <module name="NonEmptyAtclauseDescription"/>
 		<!-- Checks paragraphs.
 		     See http://checkstyle.sourceforge.net/config_javadoc.html#JavadocParagraph -->
         <module name="JavadocParagraph"/>
 
+		<!-- Checks the indentation of the continuation lines in at-clauses.
+		     See http://checkstyle.sourceforge.net/config_javadoc.html#JavadocTagContinuationIndentation -->
+        <module name="JavadocTagContinuationIndentation"/>
+
+		<!-- Checks that the at-clause tag is followed by description.
+		     See http://checkstyle.sourceforge.net/config_javadoc.html#NonEmptyAtclauseDescription -->
+        <module name="NonEmptyAtclauseDescription"/>
 
         <!--==============================================
                            Miscellaneous

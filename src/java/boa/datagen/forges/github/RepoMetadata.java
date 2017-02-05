@@ -11,15 +11,17 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import boa.datagen.util.FileIO;
-import boa.types.Code.CodeRepository;
-import boa.types.Code.CodeRepository.RepositoryKind;
-import boa.types.Toplevel.Project;
-import boa.types.Toplevel.Project.ForgeKind;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 import net.sf.json.JSONSerializer;
+
+import boa.datagen.util.FileIO;
+
+import boa.types.Code.CodeRepository;
+import boa.types.Code.CodeRepository.RepositoryKind;
+import boa.types.Toplevel.Project;
+import boa.types.Toplevel.Project.ForgeKind;
 
 public class RepoMetadata {
 	private static final String ID = "id";

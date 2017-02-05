@@ -21,15 +21,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import boa.types.BoaBool;
+import boa.types.BoaInt;
 import boa.types.BoaProtoTuple;
-import boa.types.BoaString;
 import boa.types.BoaSet;
+import boa.types.BoaString;
 import boa.types.BoaType;
 import boa.types.proto.enums.ChangeKindProtoMap;
 import boa.types.proto.enums.FileKindProtoMap;
-import boa.types.BoaSet;
-import boa.types.BoaBool;
-import boa.types.BoaInt;
 
 /**
  * A {@link CFGProtoTuple}.

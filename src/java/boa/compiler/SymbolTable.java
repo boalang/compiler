@@ -25,12 +25,11 @@ import java.util.Map.Entry;
 import org.scannotation.AnnotationDB;
 
 import boa.aggregators.AggregatorSpec;
+import boa.compiler.ast.Operand;
 import boa.functions.FunctionSpec;
 import boa.types.*;
 import boa.types.proto.*;
 import boa.types.proto.enums.*;
-
-import boa.compiler.ast.Operand;
 
 /**
  * @author anthonyu

@@ -17,19 +17,19 @@
  */
 package boa.compiler.transforms;
 
-import boa.compiler.ast.types.AbstractType;
+import boa.compiler.SymbolTable;
 import boa.compiler.ast.Call;
 import boa.compiler.ast.Comparison;
 import boa.compiler.ast.Conjunction;
-import boa.compiler.ast.expressions.Expression;
-import boa.compiler.ast.expressions.SimpleExpr;
 import boa.compiler.ast.Factor;
 import boa.compiler.ast.Identifier;
 import boa.compiler.ast.Operand;
+import boa.compiler.ast.Term;
+import boa.compiler.ast.expressions.Expression;
+import boa.compiler.ast.expressions.SimpleExpr;
 import boa.compiler.ast.statements.ExprStatement;
 import boa.compiler.ast.statements.VarDeclStatement;
-import boa.compiler.ast.Term;
-import boa.compiler.SymbolTable;
+import boa.compiler.ast.types.AbstractType;
 import boa.types.BoaType;
 
 /**

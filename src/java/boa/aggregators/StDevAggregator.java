@@ -17,8 +17,8 @@
 package boa.aggregators;
 
 import java.io.IOException;
-import java.util.TreeMap;
 import java.util.SortedMap;
+import java.util.TreeMap;
 
 import org.apache.commons.math.stat.descriptive.SummaryStatistics;
 

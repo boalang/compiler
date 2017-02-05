@@ -22,12 +22,21 @@ import java.io.*;
 import java.util.*;
 
 import org.apache.hadoop.io.BytesWritable;
-import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.SequenceFile.Writer;
+import org.apache.hadoop.io.Text;
+
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.*;
 import org.eclipse.wst.jsdt.core.JavaScriptCore;
 import org.eclipse.wst.jsdt.core.dom.JavaScriptUnit;
+
+import boa.datagen.util.FileIO;
+import boa.datagen.util.Java7Visitor;
+import boa.datagen.util.Java8Visitor;
+import boa.datagen.util.JavaErrorCheckVisitor;
+import boa.datagen.util.JavaScriptErrorCheckVisitor;
+import boa.datagen.util.JavaScriptVisitor;
+import boa.datagen.util.Properties;
 
 import boa.types.Ast.ASTRoot;
 import boa.types.Code.Revision;
@@ -36,13 +45,6 @@ import boa.types.Diff.ChangedFile.Builder;
 import boa.types.Diff.ChangedFile.FileKind;
 import boa.types.Shared.ChangeKind;
 import boa.types.Shared.Person;
-import boa.datagen.util.FileIO;
-import boa.datagen.util.JavaScriptErrorCheckVisitor;
-import boa.datagen.util.JavaScriptVisitor;
-import boa.datagen.util.Java7Visitor;
-import boa.datagen.util.Java8Visitor;
-import boa.datagen.util.JavaErrorCheckVisitor;
-import boa.datagen.util.Properties;
 
 /**
  * @author rdyer
