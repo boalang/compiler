@@ -15,19 +15,20 @@ import boa.types.Ast.ASTRoot;
 import boa.types.Toplevel.Project;
 
 public class TestSequenceFile {
-
 	public static void main(String[] args) throws IOException {
 		Configuration conf = new Configuration();
 		FileSystem fileSystem = FileSystem.get(conf);
-//		
-//		SequenceFile.Writer w = SequenceFile.createWriter(fileSystem, conf, new Path("seq"), Text.class, BytesWritable.class);
-//		for (int i = 0; i < 1; i++) {
-//			ASTRoot.Builder ast = ASTRoot.newBuilder();
-//			ast.addImports("a.b.C");
-//			w.append(new Text(i + ""), new BytesWritable(ast.build().toByteArray()));
-//			System.out.println("Parse before writing to sequence file: " + ASTRoot.parseFrom(ast.build().toByteArray()).getImportsList());
-//		}
-//		w.close();
+
+		/*
+		SequenceFile.Writer w = SequenceFile.createWriter(fileSystem, conf, new Path("seq"), Text.class, BytesWritable.class);
+		for (int i = 0; i < 1; i++) {
+			ASTRoot.Builder ast = ASTRoot.newBuilder();
+			ast.addImports("a.b.C");
+			w.append(new Text(i + ""), new BytesWritable(ast.build().toByteArray()));
+			System.out.println("Parse before writing to sequence file: " + ASTRoot.parseFrom(ast.build().toByteArray()).getImportsList());
+		}
+		w.close();
+		*/
 		
 		Text key = new Text();
 		BytesWritable val = new BytesWritable();
@@ -41,5 +42,4 @@ public class TestSequenceFile {
 		}
 		r.close();
 	}
-
 }

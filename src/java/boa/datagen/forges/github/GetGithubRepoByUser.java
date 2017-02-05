@@ -14,7 +14,7 @@ public class GetGithubRepoByUser {
 	public static void main(String[] args) {
 
 		if (args == null || args.length < 5) {
-//			System.out.println("Command line arguments are not correct");
+			// System.out.println("Command line arguments are not correct");
 			return;
 		}
 		String outDir = args[0];
@@ -30,18 +30,20 @@ public class GetGithubRepoByUser {
 		if (!dir.exists())
 			dir.mkdirs();
 		File[] files = dir.listFiles();
-//		Arrays.sort(files, new Comparator<File>() {
-//			@Override
-//			public int compare(File f1, File f2) {
-//				int n1 = getNumber(f1.getName()), n2 = getNumber(f2.getName());
-//				return n1 - n2;
-//			}
-//
-//			private int getNumber(String name) {
-//				String s = name.substring(5, name.length());
-//				return Integer.valueOf(s);
-//			}
-//		});
+		/*
+		Arrays.sort(files, new Comparator<File>() {
+			@Override
+			public int compare(File f1, File f2) {
+				int n1 = getNumber(f1.getName()), n2 = getNumber(f2.getName());
+				return n1 - n2;
+			}
+
+			private int getNumber(String name) {
+				String s = name.substring(5, name.length());
+				return Integer.valueOf(s);
+			}
+		});
+		*/
 		pageNumber = files.length;
 		if (pageNumber > 0)
 			pageContent = FileIO.readFileContents(files[pageNumber - 1]);
@@ -84,7 +86,7 @@ public class GetGithubRepoByUser {
 		}
 		
 		mc = new MetadataCacher(url + "/" + args[3] + "/" + args[4] + "/languages", username, password);
-//		System.out.println(mc.getUrl());
+		// System.out.println(mc.getUrl());
 		if (mc.authenticate()) {
 			while (true) {
 				mc.getResponseJson();

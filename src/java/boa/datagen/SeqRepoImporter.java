@@ -123,7 +123,7 @@ public class SeqRepoImporter {
 				}
 			}
 		}
-//		System.out.println("Got processed projects: " + processedProjectIds.size());
+		// System.out.println("Got processed projects: " + processedProjectIds.size());
 	}
 
 	private static void buildCacheOfProjects() {
@@ -151,7 +151,7 @@ public class SeqRepoImporter {
 				repos.clear();
 			}
 		}
-//		System.out.println("Got cached projects: " + cacheOfProjects.size());
+		// System.out.println("Got cached projects: " + cacheOfProjects.size());
 	}
 
 	@SuppressWarnings("unused")
@@ -189,7 +189,7 @@ public class SeqRepoImporter {
 					e.printStackTrace();
 				}
 			}
-//			String suffix = hostname + "-" + id + "-" + time + ".seq";
+			// String suffix = hostname + "-" + id + "-" + time + ".seq";
 			String suffix = ".seq";
 			while (true) {
 				try {

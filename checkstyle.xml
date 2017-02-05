@@ -93,6 +93,7 @@
              That is ' L' and not 'l'. The capital L looks a lot like 1.
              See http://checkstyle.sourceforge.net/config_misc.html#UpperEll -->
         <module name="UpperEll"/>
+        <module name="CommentsIndentation"/>
 
         <!--================================================
                           Naming Conventions

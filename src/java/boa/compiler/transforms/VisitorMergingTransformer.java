@@ -59,7 +59,7 @@ public class VisitorMergingTransformer {
 				final Program p = programs.get(pos);
 				preProcessProgram(p);
 				mergePrograms(current, p);
-//				merged.add(p);
+				// merged.add(p);
 			}
 
 			stop += maxMerged;

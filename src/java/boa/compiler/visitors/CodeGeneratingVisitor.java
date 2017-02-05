@@ -720,7 +720,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		} else if (n.getExprsSize() > 0) {
 			// FIXME rdyer
 			BoaType t = n.type;
-//			BoaType t = ((ExprList) nodeChoice.choice).type;
+			// BoaType t = ((ExprList) nodeChoice.choice).type;
 
 			if (t instanceof BoaTuple) {
 				final ST stup = stg.getInstanceOf("Tuple");

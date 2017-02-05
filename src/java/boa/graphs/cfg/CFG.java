@@ -165,8 +165,8 @@ public class CFG {
 
 		// keep only outs of right most child iff the child has outs
 		//if (target.getOuts().size() != 0) {
-			outs.clear();
-			outs.addAll(target.outs);
+		outs.clear();
+		outs.addAll(target.outs);
 		//}
 		breaks.addAll(target.breaks);
 		returns.addAll(target.returns);
@@ -494,8 +494,7 @@ public class CFG {
 		CFG graph = new CFG();
 		String nObjectname;
 		if (root.getVariable() != null && !root.getVariable().equals("")) {
-			Variable pNode = root.getVariableDecls(0); // TODO:check for
-														// multiple var_decls
+			Variable pNode = root.getVariableDecls(0); // TODO:check for multiple var_decls
 			nObjectname = pNode.getName().toString();
 		} else if ((root.getExpressionsCount() > 0)
 				&& root.getExpressions(0).getKind() == ExpressionKind.ASSIGN) {

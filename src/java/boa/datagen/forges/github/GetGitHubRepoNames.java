@@ -11,7 +11,6 @@ import net.sf.json.JSONObject;
 import net.sf.json.JSONSerializer;
 
 public class GetGitHubRepoNames {
-
 	public static void main(String[] args) {
 		File inDir = new File(Config.githubRepoListDir);
 		StringBuilder sb = new StringBuilder();
@@ -33,9 +32,9 @@ public class GetGitHubRepoNames {
 		        	System.err.println("File is empty " + file.getAbsolutePath());
 		        	continue;
 				}
-				//System.out.println(jsonTxt);
-		        
-		        JSONArray repos = null;
+				// System.out.println(jsonTxt);
+
+				JSONArray repos = null;
 		        try {
 		        	repos = (JSONArray) JSONSerializer.toJSON(jsonTxt);
 		        } catch (JSONException e) {
@@ -57,5 +56,4 @@ public class GetGitHubRepoNames {
 		}
 		FileIO.writeFileContents(new File(inDir.getParentFile().getAbsolutePath() + "/list.csv"), sb.toString());
 	}
-
 }

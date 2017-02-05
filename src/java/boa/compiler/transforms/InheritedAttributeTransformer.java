@@ -223,7 +223,7 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 					final Statement pushToStack = generatePushExpStatement(b, v.getId().getToken(), vs.getComponent().getIdentifier().getToken(), e);
 					vs.getBody().getStatements().add(0, pushToStack);
 				} else {
-				//            b) Otherwise, add a 'before T' clause with a 's_t_#.push(node)'
+					//        b) Otherwise, add a 'before T' clause with a 's_t_#.push(node)'
 					final Block blk;
 					final Statement pushToStack = generatePushExpStatement(b, v.getId().getToken(), "node", e);
 
@@ -248,7 +248,7 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 					final Statement popFromStack = generatePopExpStatement(b, v.getId().getToken(), e);
 					vs.getBody().getStatements().add(popFromStack);
 				} else {
-				//            b) Otherwise, add a 'after T' clause with a 's_t_#.pop()'
+					//        b) Otherwise, add a 'after T' clause with a 's_t_#.pop()'
 					final Block blk;
 					final Statement popFromStack = generatePopExpStatement(b, v.getId().getToken(), e);
 

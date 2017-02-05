@@ -165,8 +165,7 @@ public class JsonFormat {
             generator.print("\"");
         }
 
-        // Done with the name, on to the value
-
+		// Done with the name, on to the value
 		generator.print(": ");
 
         if (field.isRepeated()) {

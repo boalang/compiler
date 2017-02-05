@@ -32,7 +32,7 @@ import boa.datagen.util.Properties;
  * @author hridesh
  */
 public class MapFileGen {
-//	private final static String SEQ_FILE_PATH = Properties.getProperty("seq.file.path", "");
+	// private final static String SEQ_FILE_PATH = Properties.getProperty("seq.file.path", "");
 	private final static String SEQ_FILE_PATH = Properties.getProperty("gh.json.cache.path", DefaultProperties.GH_JSON_CACHE_PATH);
 	public static void main(String[] args) throws Exception {
 		System.out.println("generating data and index file");
@@ -42,7 +42,7 @@ public class MapFileGen {
 		}
 		String base = "hdfs://boa-njt/";
 		Configuration conf = new Configuration();
-//		conf.set("fs.default.name", base);
+		// conf.set("fs.default.name", base);
 		FileSystem fs = FileSystem.get(conf);
 		Path path = new Path(SEQ_FILE_PATH);
 		String name = path.getName();

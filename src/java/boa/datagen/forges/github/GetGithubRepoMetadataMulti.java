@@ -50,7 +50,7 @@ public class GetGithubRepoMetadataMulti {
 			String line = sc.nextLine();
 			String[] parts = line.split(",");
 			//if (parts.length > 3)
-				ids.add(parts[0]);
+			ids.add(parts[0]);
 		}
 		sc.close();
 		long[] times = {System.currentTimeMillis() / 1000};

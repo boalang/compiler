@@ -38,13 +38,13 @@ import org.apache.hadoop.io.Text;
  * @author hridesh
  */
 public class SeqSortMerge {
-//	private static String base = "hdfs://boa-njt/";
+	// private static String base = "hdfs://boa-njt/";
 	private static String base = Properties.getProperty("gh.json.cache.path", DefaultProperties.GH_JSON_CACHE_PATH);
 	private static Configuration conf = new Configuration();
 	private static final int NUM_FILES = 15;
 	
 	public static void main(String[] args) throws IOException {
-//		conf.set("fs.default.name", base);
+		// conf.set("fs.default.name", base);
 		FileSystem fs = FileSystem.get(conf);
 		
 		String inPath = "/tmprepcache/sorted";

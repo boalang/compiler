@@ -245,7 +245,7 @@ public abstract class AbstractCommit {
 
 				if (astWriter != null) {
 					try {
-					//	System.out.println("writing=" + count + "\t" + path);
+						// System.out.println("writing=" + count + "\t" + path);
 						astWriter.append(new Text(key), new BytesWritable(ast
 								.build().toByteArray()));
 					} catch (IOException e) {
@@ -253,7 +253,7 @@ public abstract class AbstractCommit {
 					}
 				} else
 					fb.setAst(ast);
-				// fb.setComments(comments);
+					// fb.setComments(comments);
 			}
 
 			return !errorCheck.hasError;
@@ -417,7 +417,7 @@ public abstract class AbstractCommit {
 				}
 				else
 					fb.setAst(ast);
-				//fb.setComments(comments);
+					//fb.setComments(comments);
 			}
 
 			return !errorCheck.hasError;

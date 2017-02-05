@@ -49,12 +49,9 @@ public class RepoMetadata {
 	private static final String GIT_HOME_PAGE = "homepage";
 	private static final String GIT_SUMMARY_PAGE = "html_url";
 	// private static final String GIT_CREATED_TIMESTAMP = null;
-	private static final String GIT_CREATE = "created_at"; // "created_at":
-															// "2007-10-29T14:37:16Z",
-	private static final String GIT_UPDATE = "updated_at"; // "updated_at":
-															// "2015-06-15T11:40:32Z",
-	private static final String GIT_PUSH = "pushed_at"; // "pushed_at":
-														// "2014-02-03T19:33:59Z",
+	private static final String GIT_CREATE = "created_at"; // "created_at": "2007-10-29T14:37:16Z",
+	private static final String GIT_UPDATE = "updated_at"; // "updated_at": "2015-06-15T11:40:32Z",
+	private static final String GIT_PUSH = "pushed_at"; // "pushed_at": "2014-02-03T19:33:59Z",
 	private static final String GIT_DESCRIPTION = "description";
 	private static final String GIT_OS = "os";
 	private static final String GIT_PROGRAMMING_LANGUAGES = "language";
@@ -154,8 +151,7 @@ public class RepoMetadata {
 		}
 		if (jsonProject.has(GIT_CREATE)) {
 			String time = jsonProject.getString(GIT_CREATE);
-			this.createdTimestamp = getTimeStamp(time); // project.setCreatedDate(timestamp
-															// * 1000000);
+			this.createdTimestamp = getTimeStamp(time); // project.setCreatedDate(timestamp * 1000000);
 		}
 		if (jsonProject.has(GIT_DESCRIPTION))
 			this.description = jsonProject.getString(GIT_DESCRIPTION);

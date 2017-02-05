@@ -39,7 +39,7 @@ public class Java8Visitor extends Java7Visitor {
 	public boolean visit(MethodDeclaration node) {
 		List<boa.types.Ast.Method> list = methods.peek();
 		Method.Builder b = Method.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		if (node.isConstructor())
 			b.setName("<init>");
 		else
@@ -82,7 +82,7 @@ public class Java8Visitor extends Java7Visitor {
 		}
 		if (node.getReceiverType() != null) {
 			Variable.Builder vb = Variable.newBuilder();
-//			vb.setPosition(pos.build()); // FIXME
+			// vb.setPosition(pos.build()); // FIXME
 			vb.setName("this");
 			boa.types.Ast.Type.Builder tp = boa.types.Ast.Type.newBuilder();
 			String name = typeName(node.getReceiverType());
@@ -95,7 +95,7 @@ public class Java8Visitor extends Java7Visitor {
 		for (Object o : node.parameters()) {
 			SingleVariableDeclaration ex = (SingleVariableDeclaration)o;
 			Variable.Builder vb = Variable.newBuilder();
-//			vb.setPosition(pos.build()); // FIXME
+			// vb.setPosition(pos.build()); // FIXME
 			vb.setName(ex.getName().getFullyQualifiedName());
 			for (Object m : ex.modifiers()) {
 				if (((IExtendedModifier)m).isAnnotation())

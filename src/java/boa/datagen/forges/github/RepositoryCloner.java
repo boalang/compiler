@@ -15,12 +15,11 @@ import org.eclipse.jgit.api.errors.TransportException;
  * @author dominik.stadler at gmx.at
  */
 public class RepositoryCloner {
-
     private static  String REMOTE_URL = "";
 
     public static void clone(String[] args) throws IOException, InvalidRemoteException, TransportException, GitAPIException {
-        // prepare a new folder for the cloned repository
-    	String localpaths = args[1];
+		// prepare a new folder for the cloned repository
+		String localpaths = args[1];
     	String url = args[0];
     	REMOTE_URL = url;
         File localPath = new File(localpaths);
@@ -33,10 +32,10 @@ public class RepositoryCloner {
                 .setURI(REMOTE_URL)
                 .setDirectory(localPath)
                 .call();
-	        // Note: the call() returns an opened repository already which needs to be closed to avoid file handle leaks!
+			// Note: the call() returns an opened repository already which needs to be closed to avoid file handle leaks!
 
-            // workaround for https://bugs.eclipse.org/bugs/show_bug.cgi?id=474093
-	        result.getRepository().close();
+			// workaround for https://bugs.eclipse.org/bugs/show_bug.cgi?id=474093
+			result.getRepository().close();
         } catch (Exception e) {
         	e.printStackTrace();
 		} finally {
@@ -46,24 +45,24 @@ public class RepositoryCloner {
     }
     
     public static void main(String[] args) throws IOException, InvalidRemoteException, TransportException, GitAPIException {
-        // prepare a new folder for the cloned repository
-    	String localpath = args[1];
+		// prepare a new folder for the cloned repository
+		String localpath = args[1];
     	String url = args[0];
     	REMOTE_URL = url;
         File localPath = new File(localpath);
         if (!localPath.exists())
         	localPath.mkdir();
-        // then clone
-        Git result = null;
+		// then clone
+		Git result = null;
         try {
         	result = Git.cloneRepository()
                 .setURI(REMOTE_URL)
                 .setDirectory(localPath)
                 .call();
-	        // Note: the call() returns an opened repository already which needs to be closed to avoid file handle leaks!
+			// Note: the call() returns an opened repository already which needs to be closed to avoid file handle leaks!
 
-            // workaround for https://bugs.eclipse.org/bugs/show_bug.cgi?id=474093
-	        result.getRepository().close();
+			// workaround for https://bugs.eclipse.org/bugs/show_bug.cgi?id=474093
+			result.getRepository().close();
         } catch (Exception e) {
         	e.printStackTrace();
 		} finally {

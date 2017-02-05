@@ -525,7 +525,7 @@ public class SymbolTable {
 			final AnnotationDB db = new AnnotationDB();
 			db.setScanMethodAnnotations(true);
 			db.setScanClassAnnotations(true);
-//			db.setScanPackages(new String[] {"boa.aggregators", "boa.functions"});
+			// db.setScanPackages(new String[] {"boa.aggregators", "boa.functions"});
 
 			for (final URL url : urls)
 				db.scanArchives(url);

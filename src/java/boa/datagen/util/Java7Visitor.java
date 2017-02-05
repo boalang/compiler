@@ -64,11 +64,11 @@ public class Java7Visitor extends ASTVisitor {
 		return imports;
 	}
 
-/*
+	/*
 	public void preVisit(ASTNode node) {
 		buildPosition(node);
 	}
-*/
+	*/
 
 	protected void buildPosition(final ASTNode node) {
 		pos = PositionInfo.newBuilder();
@@ -84,7 +84,7 @@ public class Java7Visitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(CompilationUnit node) {
-//		builder.setPosition(pos.build());
+		// builder.setPosition(pos.build());
 		PackageDeclaration pkg = node.getPackage();
 		if (pkg == null) {
 			builder.setName("");
@@ -155,7 +155,7 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(TypeDeclaration node) {
 		boa.types.Ast.Declaration.Builder b = boa.types.Ast.Declaration.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		b.setName(node.getName().getFullyQualifiedName());
 		if (node.isInterface())
 			b.setKind(boa.types.Ast.TypeKind.INTERFACE);
@@ -228,7 +228,7 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(AnonymousClassDeclaration node) {
 		boa.types.Ast.Declaration.Builder b = boa.types.Ast.Declaration.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		b.setName("");
 		b.setKind(boa.types.Ast.TypeKind.ANONYMOUS);
 		for (Object d : node.bodyDeclarations()) {
@@ -261,7 +261,7 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(EnumDeclaration node) {
 		boa.types.Ast.Declaration.Builder b = boa.types.Ast.Declaration.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		b.setName(node.getName().getFullyQualifiedName());
 		b.setKind(boa.types.Ast.TypeKind.ENUM);
 		// TODO
@@ -272,7 +272,7 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(AnnotationTypeDeclaration node) {
 		boa.types.Ast.Declaration.Builder b = boa.types.Ast.Declaration.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		b.setName(node.getName().getFullyQualifiedName());
 		b.setKind(boa.types.Ast.TypeKind.ANNOTATION);
 		// TODO
@@ -287,7 +287,7 @@ public class Java7Visitor extends ASTVisitor {
 	public boolean visit(MethodDeclaration node) {
 		List<boa.types.Ast.Method> list = methods.peek();
 		Method.Builder b = Method.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		if (node.isConstructor())
 			b.setName("<init>");
 		else
@@ -330,7 +330,7 @@ public class Java7Visitor extends ASTVisitor {
 		for (Object o : node.parameters()) {
 			SingleVariableDeclaration ex = (SingleVariableDeclaration)o;
 			Variable.Builder vb = Variable.newBuilder();
-//			vb.setPosition(pos.build()); // FIXME
+			// vb.setPosition(pos.build()); // FIXME
 			vb.setName(ex.getName().getFullyQualifiedName());
 			for (Object m : ex.modifiers()) {
 				if (((IExtendedModifier)m).isAnnotation())
@@ -374,7 +374,7 @@ public class Java7Visitor extends ASTVisitor {
 	public boolean visit(AnnotationTypeMemberDeclaration node) {
 		List<boa.types.Ast.Method> list = methods.peek();
 		Method.Builder b = Method.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		b.setName(node.getName().getFullyQualifiedName());
 		for (Object m : node.modifiers()) {
 			if (((IExtendedModifier)m).isAnnotation())
@@ -389,7 +389,7 @@ public class Java7Visitor extends ASTVisitor {
 		b.setReturnType(tb.build());
 		if (node.getDefault() != null) {
 			boa.types.Ast.Statement.Builder sb = boa.types.Ast.Statement.newBuilder();
-	//		sb.setPosition(pos.build());
+			// sb.setPosition(pos.build());
 			sb.setKind(boa.types.Ast.Statement.StatementKind.EXPRESSION);
 			node.getDefault().accept(this);
 			sb.setExpression(expressions.pop());
@@ -405,7 +405,7 @@ public class Java7Visitor extends ASTVisitor {
 		for (Object o : node.fragments()) {
 			VariableDeclarationFragment f = (VariableDeclarationFragment)o;
 			Variable.Builder b = Variable.newBuilder();
-//			b.setPosition(pos.build()); // FIXME
+			// b.setPosition(pos.build()); // FIXME
 			b.setName(f.getName().getFullyQualifiedName());
 			for (Object m : node.modifiers()) {
 				if (((IExtendedModifier)m).isAnnotation())
@@ -435,7 +435,7 @@ public class Java7Visitor extends ASTVisitor {
 
 	protected boa.types.Ast.Modifier.Builder getAnnotationBuilder(Annotation node) {
 		boa.types.Ast.Modifier.Builder b = boa.types.Ast.Modifier.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		b.setKind(boa.types.Ast.Modifier.ModifierKind.ANNOTATION);
 		b.setAnnotationName(node.getTypeName().getFullyQualifiedName());
 		return b;
@@ -453,7 +453,7 @@ public class Java7Visitor extends ASTVisitor {
 		node.getValue().accept(this);
 		if (expressions.empty()) {
 			boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
-//			eb.setPosition(pos.build()); // FIXME
+			// eb.setPosition(pos.build()); // FIXME
 			eb.setKind(boa.types.Ast.Expression.ExpressionKind.ANNOTATION);
 			eb.setAnnotation(modifiers.pop());
 			b.addAnnotationMembers("value");
@@ -474,7 +474,7 @@ public class Java7Visitor extends ASTVisitor {
 			pair.getValue().accept(this);
 			if (expressions.empty()) {
 				boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
-	//			eb.setPosition(pos.build()); // FIXME
+				// eb.setPosition(pos.build()); // FIXME
 				eb.setKind(boa.types.Ast.Expression.ExpressionKind.ANNOTATION);
 				eb.setAnnotation(modifiers.pop());
 				b.addAnnotationMembers(pair.getName().getFullyQualifiedName());
@@ -491,7 +491,7 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(org.eclipse.jdt.core.dom.Modifier node) {
 		boa.types.Ast.Modifier.Builder b = boa.types.Ast.Modifier.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		if (node.isFinal())
 			b.setKind(boa.types.Ast.Modifier.ModifierKind.FINAL);
 		else if (node.isAbstract())
@@ -523,7 +523,7 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(AssertStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.ASSERT);
 		node.getExpression().accept(this);
@@ -539,7 +539,7 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(Block node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.BLOCK);
 		for (Object s : node.statements()) {
@@ -555,12 +555,12 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(BreakStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.BREAK);
 		if (node.getLabel() != null) {
 			boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
-//			eb.setPosition(pos.build()); // FIXME
+			// eb.setPosition(pos.build()); // FIXME
 			eb.setLiteral(node.getLabel().getFullyQualifiedName());
 			eb.setKind(boa.types.Ast.Expression.ExpressionKind.LITERAL);
 			b.setExpression(eb.build());
@@ -572,12 +572,12 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(CatchClause node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.CATCH);
 		SingleVariableDeclaration ex = node.getException();
 		Variable.Builder vb = Variable.newBuilder();
-//		vb.setPosition(pos.build());// FIXME
+		// vb.setPosition(pos.build());// FIXME
 		vb.setName(ex.getName().getFullyQualifiedName());
 		for (Object m : ex.modifiers()) {
 			if (((IExtendedModifier)m).isAnnotation())
@@ -610,11 +610,11 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(ConstructorInvocation node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.EXPRESSION);
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
-//		eb.setPosition(pos.build());//FIXME
+		// eb.setPosition(pos.build());//FIXME
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.METHODCALL);
 		eb.setMethod("<init>");
 		for (Object a : node.arguments()) {
@@ -635,12 +635,12 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(ContinueStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.CONTINUE);
 		if (node.getLabel() != null) {
 			boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
-//			eb.setPosition(pos.build());//FIXME
+			// eb.setPosition(pos.build());//FIXME
 			eb.setLiteral(node.getLabel().getFullyQualifiedName());
 			eb.setKind(boa.types.Ast.Expression.ExpressionKind.LITERAL);
 			b.setExpression(eb.build());
@@ -652,7 +652,7 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(DoStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.DO);
 		node.getExpression().accept(this);
@@ -668,7 +668,7 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(EmptyStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.EMPTY);
 		list.add(b.build());
@@ -678,12 +678,12 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(EnhancedForStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.FOR);
 		SingleVariableDeclaration ex = node.getParameter();
 		Variable.Builder vb = Variable.newBuilder();
-//		vb.setPosition(pos.build());//FIXME
+		// vb.setPosition(pos.build());//FIXME
 		vb.setName(ex.getName().getFullyQualifiedName());
 		for (Object m : ex.modifiers()) {
 			if (((IExtendedModifier)m).isAnnotation())
@@ -717,7 +717,7 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(ExpressionStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.EXPRESSION);
 		node.getExpression().accept(this);
@@ -729,7 +729,7 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(ForStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.FOR);
 		for (Object e : node.initializers()) {
@@ -755,7 +755,7 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(IfStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.IF);
 		node.getExpression().accept(this);
@@ -779,7 +779,7 @@ public class Java7Visitor extends ASTVisitor {
 	public boolean visit(Initializer node) {
 		List<boa.types.Ast.Method> list = methods.peek();
 		Method.Builder b = Method.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		b.setName("<clinit>");
 		for (Object m : node.modifiers()) {
 			if (((IExtendedModifier)m).isAnnotation())
@@ -805,7 +805,7 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(LabeledStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.LABEL);
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
@@ -813,7 +813,7 @@ public class Java7Visitor extends ASTVisitor {
 		for (boa.types.Ast.Statement s : statements.pop())
 			b.addStatements(s);
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
-//		eb.setPosition(pos.build());//FIXME
+		// eb.setPosition(pos.build());//FIXME
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.LITERAL);
 		eb.setLiteral(node.getLabel().getFullyQualifiedName());
 		b.setExpression(eb.build());
@@ -824,7 +824,7 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(ReturnStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.RETURN);
 		if (node.getExpression() != null) {
@@ -838,11 +838,11 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(SuperConstructorInvocation node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.EXPRESSION);
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
-//		eb.setPosition(pos.build());//FIXME
+		// eb.setPosition(pos.build());//FIXME
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.METHODCALL);
 		eb.setMethod("super");
 		if (node.getExpression() != null) {
@@ -867,7 +867,7 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(SwitchCase node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.CASE);
 		if (node.getExpression() != null) {
@@ -881,7 +881,7 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(SwitchStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.SWITCH);
 		node.getExpression().accept(this);
@@ -898,7 +898,7 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(SynchronizedStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.SYNCHRONIZED);
 		node.getExpression().accept(this);
@@ -915,7 +915,7 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(ThrowStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.THROW);
 		node.getExpression().accept(this);
@@ -927,7 +927,7 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(TryStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.TRY);
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
@@ -950,7 +950,7 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(TypeDeclarationStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.TYPEDECL);
 		declarations.push(new ArrayList<boa.types.Ast.Declaration>());
@@ -964,16 +964,16 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(VariableDeclarationStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.EXPRESSION);
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
-//		eb.setPosition(pos.build());//FIXME
+		// eb.setPosition(pos.build());//FIXME
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.VARDECL);
 		for (Object o : node.fragments()) {
 			VariableDeclarationFragment f = (VariableDeclarationFragment)o;
 			Variable.Builder vb = Variable.newBuilder();
-//			vb.setPosition(pos.build());//FIXME
+			// vb.setPosition(pos.build());//FIXME
 			vb.setName(f.getName().getFullyQualifiedName());
 			for (Object m : node.modifiers()) {
 				if (((IExtendedModifier)m).isAnnotation())
@@ -1003,7 +1003,7 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(WhileStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.WHILE);
 		node.getExpression().accept(this);
@@ -1022,7 +1022,7 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(ArrayAccess node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.ARRAYINDEX);
 		node.getArray().accept(this);
 		b.addExpressions(expressions.pop());
@@ -1035,7 +1035,7 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(ArrayCreation node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.NEWARRAY);
 		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 		tb.setName(getIndex(typeName(node.getType())));
@@ -1057,13 +1057,13 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(ArrayInitializer node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.ARRAYINIT);
 		for (Object e : node.expressions()) {
 			((org.eclipse.jdt.core.dom.Expression)e).accept(this);
 			if (expressions.empty()) {
 				boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
-	//			eb.setPosition(pos.build()); // FIXME
+				// eb.setPosition(pos.build()); // FIXME
 				eb.setKind(boa.types.Ast.Expression.ExpressionKind.ANNOTATION);
 				eb.setAnnotation(modifiers.pop());
 				b.addExpressions(eb.build());
@@ -1078,7 +1078,7 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(Assignment node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		node.getLeftHandSide().accept(this);
 		b.addExpressions(expressions.pop());
 		node.getRightHandSide().accept(this);
@@ -1114,7 +1114,7 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(BooleanLiteral node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.LITERAL);
 		if (node.booleanValue())
 			b.setLiteral("true");
@@ -1127,7 +1127,7 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(CastExpression node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.CAST);
 		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 		tb.setName(getIndex(typeName(node.getType())));
@@ -1142,7 +1142,7 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(CharacterLiteral node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.LITERAL);
 		b.setLiteral(node.getEscapedValue());
 		expressions.push(b.build());
@@ -1152,7 +1152,7 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(ClassInstanceCreation node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.NEW);
 		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 		tb.setName(getIndex(typeName(node.getType())));
@@ -1185,7 +1185,7 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(ConditionalExpression node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.CONDITIONAL);
 		node.getExpression().accept(this);
 		b.addExpressions(expressions.pop());
@@ -1200,7 +1200,7 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(FieldAccess node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.VARACCESS);
 		node.getExpression().accept(this);
 		b.addExpressions(expressions.pop());
@@ -1212,7 +1212,7 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(SimpleName node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.VARACCESS);
 		b.setVariable(node.getFullyQualifiedName());
 		expressions.push(b.build());
@@ -1222,7 +1222,7 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(QualifiedName node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.VARACCESS);
 		b.setVariable(node.getFullyQualifiedName());
 		expressions.push(b.build());
@@ -1232,7 +1232,7 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(InfixExpression node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		if (node.getOperator() == InfixExpression.Operator.AND)
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.BIT_AND);
 		else if (node.getOperator() == InfixExpression.Operator.CONDITIONAL_AND)
@@ -1286,7 +1286,7 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(InstanceofExpression node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.TYPECOMPARE);
 		node.getLeftOperand().accept(this);
 		b.addExpressions(expressions.pop());
@@ -1301,7 +1301,7 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(MethodInvocation node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.METHODCALL);
 		b.setMethod(node.getName().getFullyQualifiedName());
 		if (node.getExpression() != null) {
@@ -1325,7 +1325,7 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(NullLiteral node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.LITERAL);
 		b.setLiteral("null");
 		expressions.push(b.build());
@@ -1335,7 +1335,7 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(NumberLiteral node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.LITERAL);
 		b.setLiteral(node.getToken());
 		expressions.push(b.build());
@@ -1345,7 +1345,7 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(ParenthesizedExpression node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.PAREN);
 		node.getExpression().accept(this);
 		b.addExpressions(expressions.pop());
@@ -1356,7 +1356,7 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(PostfixExpression node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		if (node.getOperator() == PostfixExpression.Operator.DECREMENT)
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.OP_DEC);
 		else if (node.getOperator() == PostfixExpression.Operator.INCREMENT)
@@ -1371,7 +1371,7 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(PrefixExpression node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		if (node.getOperator() == PrefixExpression.Operator.DECREMENT)
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.OP_DEC);
 		else if (node.getOperator() == PrefixExpression.Operator.INCREMENT)
@@ -1393,7 +1393,7 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(StringLiteral node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.LITERAL);
 		b.setLiteral(node.getEscapedValue());
 		expressions.push(b.build());
@@ -1403,7 +1403,7 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(SuperFieldAccess node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.VARACCESS);
 		String name = "super." + node.getName().getFullyQualifiedName();
 		if (node.getQualifier() != null)
@@ -1416,7 +1416,7 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(SuperMethodInvocation node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.METHODCALL);
 		String name = "super." + node.getName().getFullyQualifiedName();
 		if (node.getQualifier() != null)
@@ -1439,7 +1439,7 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(ThisExpression node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		String name = "";
 		if (node.getQualifier() != null)
 			name += node.getQualifier().getFullyQualifiedName() + ".";
@@ -1452,7 +1452,7 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(TypeLiteral node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
-//		b.setPosition(pos.build());
+		// b.setPosition(pos.build());
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.LITERAL);
 		b.setLiteral(typeName(node.getType()) + ".class");
 		expressions.push(b.build());
@@ -1462,12 +1462,12 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(VariableDeclarationExpression node) {
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
-//		eb.setPosition(pos.build());
+		// eb.setPosition(pos.build());
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.VARDECL);
 		for (Object o : node.fragments()) {
 			VariableDeclarationFragment f = (VariableDeclarationFragment)o;
 			Variable.Builder b = Variable.newBuilder();
-//			b.setPosition(pos.build());//FIXME
+			// b.setPosition(pos.build());//FIXME
 			b.setName(f.getName().getFullyQualifiedName());
 			for (Object m : node.modifiers()) {
 				if (((IExtendedModifier)m).isAnnotation())
