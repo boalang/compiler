@@ -218,9 +218,9 @@ public class BoaStringIntrinsics {
 	}
 
 	/**
-	 * Search for a match of the regular expression <em>r</em> within <em>s</em>
-	 * , and return a boolean value indicating whether a match was found. (The
-	 * regular expression syntax is that of PCRE. <http://www.pcre.org/>)
+	 * Search for a match of the regular expression <em>r</em> within <em>s</em>,
+	 * and return a boolean value indicating whether a match was found. (The
+	 * regular expression syntax is that of PCRE. http://www.pcre.org/)
 	 * 
 	 * @param r
 	 *            A {@link String} containing a regular expression
