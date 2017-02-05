@@ -56,28 +56,44 @@ public abstract class AbstractCommit {
 	}
 	
 	protected String id = null;
-	public void setId(final String id) { this.id = id; }
+	public void setId(final String id) {
+		this.id = id;
+	}
 
 	protected String author;
-	public void setAuthor(final String author) { this.author = author; }
+	public void setAuthor(final String author) {
+		this.author = author;
+	}
 
 	protected String committer;
-	public void setCommitter(final String committer) { this.committer = committer; }
+	public void setCommitter(final String committer) {
+		this.committer = committer;
+	}
 
 	protected String message;
-	public void setMessage(final String message) { this.message = message; }
+	public void setMessage(final String message) {
+		this.message = message;
+	}
 
 	protected Date date;
-	public void setDate(final Date date) { this.date = date; }
+	public void setDate(final Date date) {
+		this.date = date;
+	}
 
 	private Map<String, String> changedPaths = new HashMap<String, String>();
-	public void setChangedPaths(final Map<String, String> changedPaths) { this.changedPaths = changedPaths; }
+	public void setChangedPaths(final Map<String, String> changedPaths) {
+		this.changedPaths = changedPaths;
+	}
 
 	private Map<String, String> addedPaths = new HashMap<String, String>();
-	public void setAddedPaths(final Map<String, String> addedPaths) { this.addedPaths = addedPaths; }
+	public void setAddedPaths(final Map<String, String> addedPaths) {
+		this.addedPaths = addedPaths;
+	}
 
 	private Map<String, String> removedPaths = new HashMap<String, String>();
-	public void setRemovedPaths(final Map<String, String> removedPaths) { this.removedPaths = removedPaths; }
+	public void setRemovedPaths(final Map<String, String> removedPaths) {
+		this.removedPaths = removedPaths;
+	}
 
 	protected int[] parentIndices;
 

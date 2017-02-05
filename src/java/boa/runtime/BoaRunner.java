@@ -130,7 +130,9 @@ public abstract class BoaRunner extends Configured implements Tool {
 										.create("c"));
 	}
 
-	protected static Options getOptions() { return options; }
+	protected static Options getOptions() {
+		return options;
+	}
 
 	public static CommandLine parseArgs(String[] args, String usage) {
 		CommandLine line = null;

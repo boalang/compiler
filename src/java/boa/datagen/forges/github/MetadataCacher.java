@@ -96,8 +96,7 @@ public class MetadataCacher {
 			BufferedInputStream in = new BufferedInputStream(response);
 			byte[] bytes = new byte[10000];
 			int len = in.read(bytes);
-			while (len != -1)
-			{
+			while (len != -1) {
 				//System.out.println(len);
 				//System.out.println(new String(bytes, 0, len));
 				sb.append(new String(bytes, 0, len));

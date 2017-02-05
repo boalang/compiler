@@ -71,6 +71,12 @@
             <property name="exceptionVariableName" value="expected"/>
         </module>
 
+		<!-- Checks for the placement of left curly braces ('{') for code blocks.
+		     See http://checkstyle.sourceforge.net/config_blocks.html#LeftCurly -->
+        <module name="LeftCurly">
+            <property name="maxLineLength" value="100"/>
+        </module>
+
         <!--================================================
                               Coding
         http://checkstyle.sourceforge.net/config_coding.html
@@ -108,6 +114,14 @@
                            Miscellaneous
         http://checkstyle.sourceforge.net/config_misc.html
         ===============================================-->
+
+		<!-- Restrict using Unicode escapes (e.g. \u221e).
+		     See http://checkstyle.sourceforge.net/config_misc.html#AvoidEscapedUnicodeCharacters -->
+        <module name="AvoidEscapedUnicodeCharacters">
+            <property name="allowEscapesForControlCharacters" value="true"/>
+            <property name="allowByTailComment" value="true"/>
+            <property name="allowNonPrintableEscapes" value="true"/>
+        </module>
 
 		<!-- Checks the style of array type definitions.
 		     See http://checkstyle.sourceforge.net/config_misc.html#ArrayTypeStyle -->
