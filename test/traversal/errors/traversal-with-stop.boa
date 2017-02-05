@@ -1,0 +1,11 @@
+m: output collection of int;
+
+p: Project = input;
+
+# traversal with no return type
+dom_result := traversal(node: CFGNode) {
+	stop;
+};
+
+m << 1;
+

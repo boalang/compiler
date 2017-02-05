@@ -273,7 +273,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 					fields.add(c.getIdentifier().getToken());
 				else
 					fields.add("field" + fieldCount++);
-				types.add(c.getType().type.toJavaType());
+				types.add(c.getType().type.toBoxedJavaType());
 			}
 
 			st.add("name", tupType.toJavaType());
@@ -1922,7 +1922,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			types.add(c.getType().type.toJavaType());
 		}
 
-		st.add("name", tupType.toJavaType());
+		st.add("name", tupType.toBoxedJavaType());
 		st.add("fields", fields);
 		st.add("types", types);
 

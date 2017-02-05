@@ -248,6 +248,18 @@
 		</junit>
 		<delete file="SecurityAuth.audit" />
 	</target>
+	<target name="test-traversal" depends="-compile-tests" description="Run traversal unit tests.">
+		<junit fork="yes" haltonfailure="no">
+			<classpath refid="test.class.path" />
+			<test name="boa.test.compiler.TestTraversalGood">
+				<formatter type="plain" usefile="false" />
+			</test>
+			<test name="boa.test.compiler.TestTraversalBad">
+				<formatter type="plain" usefile="false" />
+			</test>
+		</junit>
+		<delete file="SecurityAuth.audit" />
+	</target>
 	<target name="test-knowngood" depends="-compile-tests" description="Run known good tests.">
 		<junit fork="yes" haltonfailure="no">
 			<classpath refid="test.class.path" />

@@ -1,0 +1,73 @@
+m: output collection of int;
+p: Project = input;
+
+# program analysis output
+type T_gen_kill= {gen: set of string, kill: string, dummy : int};
+type T_inout= {in: set of string, out: set of string, str : string};
+
+# cfg of the current method
+cfg: CFG;
+
+# traversal that gets all variable uses in a method
+init := traversal(node: CFGNode): T_gen_kill {
+	cur_value : T_gen_kill;
+	cur_value = {node.useVariables, node.defVariables, 0};
+	return cur_value;
+};
+
+# cfg live variable analysis
+live := traversal(node: CFGNode): T_inout {
+	succs := node.successors;
+	in_set : set of string;
+	out_set : set of string;
+	cur_val : T_inout;
+	cur_val = {in_set, out_set, ""};
+	if(def(getvalue(node))) {
+		cur_val = getvalue(node);
+	}
+	foreach(i : int; def(succs[i])) {
+		succ := getvalue(succs[i]);
+		if(def(succ)) {
+			cur_val.out = union(cur_val.out,succ.in);
+		}
+	}
+	gen_kill := getvalue(node, init);
+	if(def(gen_kill)) {
+		remove(cur_val.out, gen_kill.kill);
+		cur_val.in = union(gen_kill.gen, cur_val.out);
+	}
+	return cur_val;
+};
+
+# user-defined fix point function that is used for analysis termination.
+fixp1 := fixp(curr, prev: T_inout) : bool {
+	if (len(difference(curr.in, prev.in)) == 0)
+		return true;	
+	return false;
+};
+
+q_all := visitor {
+	before node: Method -> {
+		cfg = getcfg(node);
+
+		traverse(cfg, TraversalDirection.BACKWARD, TraversalKind.DFS, init);
+		traverse(cfg, TraversalDirection.BACKWARD, TraversalKind.POSTORDER, init);
+		traverse(cfg, TraversalDirection.BACKWARD, TraversalKind.REVERSEPOSTORDER, init);
+		traverse(cfg, TraversalDirection.BACKWARD, TraversalKind.WORKLIST_POSTORDER, init);
+		traverse(cfg, TraversalDirection.BACKWARD, TraversalKind.WORKLIST_REVERSEPOSTORDER, init);
+		traverse(cfg, TraversalDirection.BACKWARD, TraversalKind.ITERATIVE, init);
+		traverse(cfg, TraversalDirection.BACKWARD, TraversalKind.RANDOM, init);
+
+		traverse(cfg, TraversalDirection.BACKWARD, TraversalKind.DFS, live, fixp1);
+		traverse(cfg, TraversalDirection.BACKWARD, TraversalKind.POSTORDER, live, fixp1);
+		traverse(cfg, TraversalDirection.BACKWARD, TraversalKind.REVERSEPOSTORDER, live, fixp1);
+		traverse(cfg, TraversalDirection.BACKWARD, TraversalKind.WORKLIST_POSTORDER, live, fixp1);
+		traverse(cfg, TraversalDirection.BACKWARD, TraversalKind.WORKLIST_REVERSEPOSTORDER, live, fixp1);
+		traverse(cfg, TraversalDirection.BACKWARD, TraversalKind.ITERATIVE, live, fixp1);
+		traverse(cfg, TraversalDirection.BACKWARD, TraversalKind.RANDOM, live, fixp1);
+	}
+};
+
+visit(p, q_all);
+
+m << 1;
