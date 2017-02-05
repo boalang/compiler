@@ -62,7 +62,7 @@
 	</target>
 
 	<!-- Protocol Buffers schemas -->
-	<target name="-check-protobuf" depends="-init">
+	<target name="-check-protobuf">
 		<condition property="protobuf.uptodate">
 			<and>
 				<uptodate srcfile="src/proto/ast.proto" targetfile="src/compiled-proto/boa/types/Ast.java" />
@@ -85,7 +85,7 @@
 		</apply>
 	</target>
 
-	<target name="compile-protobuf" depends="-translate-protobuf,-check-deps" description="Compiles the generated protobuf code.">
+	<target name="compile-protobuf" depends="-init,-translate-protobuf,-check-deps" description="Compiles the generated protobuf code.">
 		<javac includeantruntime="true" srcdir="src/compiled-proto" destdir="build/classes" debug="${debug.enabled}" debuglevel="${debug.level}">
 			<classpath refid="project.class.path" />
 		</javac>
