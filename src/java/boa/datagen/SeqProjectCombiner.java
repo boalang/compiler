@@ -75,7 +75,7 @@ public class SeqProjectCombiner {
 				r.close();
 			}
 		}
-		SequenceFile.Writer w = SequenceFile.createWriter(fileSystem, conf, new Path(base+ "/projects.seq"), Text.class, BytesWritable.class);
+		SequenceFile.Writer w = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/projects.seq"), Text.class, BytesWritable.class);
 		for (int i = 0; i < files.length; i++) {
 			FileStatus file = files[i];
 			String name = file.getPath().getName();

@@ -20,8 +20,8 @@ public class GetGithubRepos {
 			if (args.length > 2) {
 				for (int i = 1; i < args.length; i++) {
 					 if (args[i].equals("-a")) {
-						 username = args[i+1];
-						 password = args[i+2];
+						 username = args[i + 1];
+						 password = args[i + 2];
 					 }
 				}
 			}
@@ -51,7 +51,7 @@ public class GetGithubRepos {
 		});
 		pageNumber = files.length;
 		if (pageNumber > 0)
-			pageContent = FileIO.readFileContents(files[pageNumber-1]);
+			pageContent = FileIO.readFileContents(files[pageNumber - 1]);
 		mc = new MetadataCacher(url + "?since=" + getLastId(pageContent), username, password);
 		System.out.println(mc.getUrl());
 		if (mc.authenticate()) {
@@ -71,7 +71,7 @@ public class GetGithubRepos {
 					id = getLastId(pageContent);
 				}
 				numOfRemainingRequests--;
-				int diff = (int) (System.currentTimeMillis()/1000 - time);
+				int diff = (int) (System.currentTimeMillis() / 1000 - time);
 				if (diff > 0) {
 					mc = new MetadataCacher(url + "?since=" + id, username, password);
 					if (mc.authenticate())
@@ -82,7 +82,7 @@ public class GetGithubRepos {
 					time = mc.getLimitResetTime();
 				}
 				else if (numOfRemainingRequests <= 0) {
-					System.out.println("Waiting " + (1-diff) + " seconds for resetting limit");
+					System.out.println("Waiting " + (1 - diff) + " seconds for resetting limit");
 					try {
 						Thread.sleep((1 - diff) * 1000);
 					} catch (InterruptedException e) {

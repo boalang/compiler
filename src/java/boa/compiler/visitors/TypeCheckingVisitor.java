@@ -387,7 +387,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		else if (n.getExprsSize() > 0) {
 			List<BoaType> types = check(n.getExprs(), env);
 
-			if(!(checkTupleArray(types) == true)) {
+			if (!(checkTupleArray(types) == true)) {
 				final BoaType t = types.get(0);
 				if (!(t instanceof BoaScalar))
 					if (!(t instanceof BoaTuple))
@@ -1021,7 +1021,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		st.setIsTraverse(true);
 
 		BoaType ret = new BoaAny();
-		if(n.getReturnType()!=null) {
+		if (n.getReturnType() != null) {
 			n.getReturnType().accept(this, env);
 			ret = n.getReturnType().type;
 			//System.out.println("type   "+ret);
@@ -1048,7 +1048,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		if (n.hasCondition()) {
 			n.getCondition().accept(this, st);
 		}
-		if(n.hasBody()) {
+		if (n.hasBody()) {
 			n.getBody().accept(this, st);
 		}
 	}
@@ -1064,7 +1064,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		}
 
 		BoaType ret = new BoaAny();
-		if(n.getReturnType()!=null) {
+		if (n.getReturnType() != null) {
 			n.getReturnType().accept(this, env);
 			ret = n.getReturnType().type;
 		}
@@ -1084,7 +1084,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		if (n.hasCondition()) {
 			n.getCondition().accept(this, st);
 		}
-		if(n.hasBody()) {
+		if (n.hasBody()) {
 			n.getBody().accept(this, st);
 		}
 	}
@@ -1231,7 +1231,6 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	public void visit(final TraversalExpression n, final SymbolTable env) {
 		n.env = env;
 		n.getType().accept(this, env);
-		//n.getBody.addStatement(,0);
 		for (final Statement s : n.getBody().getStatements())
 			if (!(s instanceof TraverseStatement))
 				throw new TypeCheckException(s, "only traverse statements are allowed inside traversal bodies");
@@ -1443,17 +1442,17 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			names.add(c.getIdentifier().getToken());
 
 			Factor f = c.getExp().getLhs().getLhs().getLhs().getLhs().getLhs();
-			if(f.getOperand() instanceof ILiteral) {
-				if(f.getOperand() instanceof StringLiteral)
+			if (f.getOperand() instanceof ILiteral) {
+				if (f.getOperand() instanceof StringLiteral)
 					fieldType = new BoaString();
-				else if(f.getOperand() instanceof IntegerLiteral)
+				else if (f.getOperand() instanceof IntegerLiteral)
 					fieldType = new BoaInt();
-				else if(f.getOperand() instanceof FloatLiteral)
+				else if (f.getOperand() instanceof FloatLiteral)
 					fieldType = new BoaFloat();
-				else if(f.getOperand() instanceof TimeLiteral)
+				else if (f.getOperand() instanceof TimeLiteral)
 					fieldType = new BoaTime();
 				values.add(((ILiteral)(f.getOperand())).getLiteral());
-				types.add(new BoaEnum(c.getIdentifier().getToken(),((ILiteral)(f.getOperand())).getLiteral(),fieldType));
+				types.add(new BoaEnum(c.getIdentifier().getToken(), ((ILiteral)(f.getOperand())).getLiteral(), fieldType));
 			}
 		}
 
@@ -1472,7 +1471,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	public void visit(final TraversalType n, final SymbolTable env) {
 		n.env = env;
 		BoaTraversal tr = new BoaTraversal();
-		if(n.getIndex()!=null) {
+		if (n.getIndex() != null) {
 			n.getIndex().accept(this, env);
 			tr.setIndex(n.getIndex().type);
 		}

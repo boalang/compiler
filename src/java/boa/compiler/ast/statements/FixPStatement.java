@@ -50,11 +50,11 @@ public class FixPStatement extends Statement {
 
 	public void setCondition(final Expression condition) {
 		condition.setParent(this);
-		this.condition=condition;
+		this.condition = condition;
 	}
 
 	public void setReturnType(final AbstractType returnType) {
-		this.returnType=returnType;
+		this.returnType = returnType;
 	}
 
 	public boolean hasBody() {
@@ -128,12 +128,12 @@ public class FixPStatement extends Statement {
 		this.param1 = param1;
 		this.param2 = param2;
 		this.body = body;
-		this.condition=condition;
+		this.condition = condition;
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public <T,A> T accept(AbstractVisitor<T,A> v, A arg) {
+	public <T, A> T accept(AbstractVisitor<T, A> v, A arg) {
 		return v.visit(this, arg);
 	}
 
@@ -151,13 +151,13 @@ public class FixPStatement extends Statement {
 
 	public FixPStatement clone() {
 		final FixPStatement v = new FixPStatement();
-		if(hasBody()) 
-			v.body=body.clone();
+		if (hasBody()) 
+			v.body = body.clone();
 		v.param1 = param1.clone();
 		v.param2 = param2.clone();
 		if (hasCondition())
 			v.condition = condition.clone();
-		if (returnType!=null)
+		if (returnType != null)
 			v.returnType = this.returnType;
 		for (final Identifier id : ids)
 			v.addId(id.clone());

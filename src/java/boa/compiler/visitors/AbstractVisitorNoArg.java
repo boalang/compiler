@@ -252,12 +252,12 @@ public abstract class AbstractVisitorNoArg {
 			id.accept(this);
 		if (n.hasCondition())
 			n.getCondition().accept(this);
-		if(n.getReturnType()!=null) {
+		if (n.getReturnType() != null) {
 			n.getReturnType().accept(this);
 		}
 		for (final IfStatement ifStatement : n.getIfStatements())
 			ifStatement.accept(this);
-		if(n.hasBody())
+		if (n.hasBody())
 		n.getBody().accept(this);
 	}
 
@@ -268,10 +268,10 @@ public abstract class AbstractVisitorNoArg {
 			id.accept(this);
 		if (n.hasCondition())
 			n.getCondition().accept(this);
-		if(n.getReturnType()!=null) {
+		if (n.getReturnType() != null) {
 			n.getReturnType().accept(this);
 		}
-		if(n.hasBody())
+		if (n.hasBody())
 		n.getBody().accept(this);
 	}
 
@@ -386,16 +386,15 @@ public abstract class AbstractVisitorNoArg {
 	}
 
 	public void visit(final EnumType n) {
-		for (final EnumBodyDeclaration c : n.getMembers()){
+		for (final EnumBodyDeclaration c : n.getMembers())
 			c.accept(this);
-		}
 	}
 
 	public void visit(final VisitorType n) {
 	}
 
 	public void visit(final TraversalType n) {
-		if(n.getIndex()!=null)
+		if (n.getIndex() != null)
 			n.getIndex().accept(this);
 	}
 

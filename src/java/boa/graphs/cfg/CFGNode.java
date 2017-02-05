@@ -65,7 +65,7 @@ public class CFGNode implements Comparable {
 	
 	@Override
 	public int compareTo(Object node) {
-		int nodeId=((CFGNode)node).id;
+		int nodeId = ((CFGNode)node).id;
 		return nodeId - id;
 	}
 
@@ -129,14 +129,14 @@ public class CFGNode implements Comparable {
 	}
 
 	public boolean hasStmt() {
-		if(this.stmt!=null) {
+		if (this.stmt != null) {
 			return true;
 		}
 		return false;
 	}
 
 	public boolean hasDefVariables() {
-		if(this.defVariables!=null) {
+		if (this.defVariables != null) {
 			return true;
 		}
 		return false;
@@ -155,17 +155,11 @@ public class CFGNode implements Comparable {
 	}
 
 	public boolean hasExpr() {
-		if(this.expr!=null) {
-			return true;
-		}
-		return false;
+		return this.expr != null;
 	}
 
 	public boolean hasRhs() {
-		if(this.rhs!=null) {
-			return true;
-		}
-		return false;
+		return this.rhs != null;
 	}
 
 	public static int convertLabel(String label) {
@@ -361,76 +355,63 @@ public class CFGNode implements Comparable {
 	}
 
 	public String processDef() {
-		String defVar="";
-		if(this.expr!=null) {
-			if(this.expr.getKind().toString().equals("VARDECL")) {
+		String defVar = "";
+		if (this.expr != null) {
+			if (this.expr.getKind().toString().equals("VARDECL")) {
 				String[] strComponents = this.expr.getVariableDeclsList().get(0).getName().split("\\.");
-				if(strComponents.length > 1) {
+				if (strComponents.length > 1)
 					defVar = strComponents[strComponents.length - 2];
-				}
-				else {
+				else
 					defVar = strComponents[0];
-				}
 			}
-			if(this.expr.getKind().toString().equals("ASSIGN")) {
+			if (this.expr.getKind().toString().equals("ASSIGN")) {
 				String[] strComponents = this.expr.getExpressionsList().get(0).getVariable().split("\\.");
-				if(strComponents.length > 1) {
+				if (strComponents.length > 1)
 					defVar = strComponents[strComponents.length - 2];
-				}
-				else {
+				else
 					defVar = strComponents[0];
-				}
 			}
 		}
 		return defVar;
 	}
 
 	public HashSet<String> processUse() {
-		HashSet<String> useVar= new HashSet<String>();
-		if(this.expr!=null) {
-			if(this.expr.getKind().toString().equals("ASSIGN")) {
+		HashSet<String> useVar = new HashSet<String>();
+		if (this.expr != null) {
+			if (this.expr.getKind().toString().equals("ASSIGN"))
 				traverseExpr(useVar, this.rhs);
-			}
-			else {
+			else
 				traverseExpr(useVar, this.expr);
-			}
 		}
 		return useVar;
 	}
 
 	public static void traverseExpr(HashSet<String> useVar, final boa.types.Ast.Expression expr) {		
-		if(expr.hasVariable()) {
-			if(expr.getExpressionsList().size()!=0) {
+		if (expr.hasVariable()) {
+			if (expr.getExpressionsList().size() != 0) {
 				useVar.add("this");
-			}
-			else {
+			} else {
 				String[] strComponents = expr.getVariable().split("\\.");
-				if(strComponents.length > 1) {
+				if (strComponents.length > 1)
 					useVar.add(strComponents[strComponents.length - 2]);
-				}
-				else {
+				else
 					useVar.add(strComponents[0]);
-				}	
 			}		
 		}
-		for(boa.types.Ast.Expression exprs:expr.getExpressionsList()) {
+		for (boa.types.Ast.Expression exprs:expr.getExpressionsList())
 			traverseExpr(useVar, exprs);
-		}
-		for(boa.types.Ast.Variable vardecls:expr.getVariableDeclsList()) {
+		for (boa.types.Ast.Variable vardecls:expr.getVariableDeclsList())
 			traverseVarDecls(useVar, vardecls);
-		}
-		for(boa.types.Ast.Expression methodexpr:expr.getMethodArgsList()) {
+		for (boa.types.Ast.Expression methodexpr:expr.getMethodArgsList())
 			traverseExpr(useVar, methodexpr);
-		}
 	}
 
 	public static void traverseVarDecls(HashSet<String> useVar, final boa.types.Ast.Variable vardecls) {		
-		if(vardecls.hasInitializer()) {
+		if (vardecls.hasInitializer())
 			traverseExpr(useVar, vardecls.getInitializer());			
-		}
 	}
 
 	public String toString() {
-		return ""+getId();
+		return "" + getId();
 	}
 }

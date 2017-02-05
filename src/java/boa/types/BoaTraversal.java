@@ -56,8 +56,8 @@ public class BoaTraversal extends BoaType {
 	/** {@inheritDoc} */
 	@Override
 	public String toJavaType() {
-		if(this.index!=null)
-			return "boa.runtime.BoaAbstractTraversal<"+this.index.toBoxedJavaType()+">";
+		if (this.index != null)
+			return "boa.runtime.BoaAbstractTraversal<" + this.index.toBoxedJavaType() + ">";
 		return "boa.runtime.BoaAbstractTraversal";
 	}
 

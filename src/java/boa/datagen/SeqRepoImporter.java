@@ -90,17 +90,14 @@ public class SeqRepoImporter {
 		getProcessedProjects();
 
 		Thread [] workers = new Thread[poolSize];
-		for (int i = 0; i < poolSize; i++){
-			workers[i] =new Thread(new ImportTask(i));
+		for (int i = 0; i < poolSize; i++) {
+			workers[i] = new Thread(new ImportTask(i));
 			workers[i].start();
 		}
 		
-		for(Thread t :workers){
-			while(t.isAlive()){
+		for (Thread t :workers)
+			while (t.isAlive())
 				Thread.sleep(1000);
-			}
-		}
-			
 	}
 
 	private static void getProcessedProjects() throws IOException {
@@ -290,11 +287,12 @@ public class SeqRepoImporter {
 
 			final String name = project.getName();
 			File gitDir = null;
-			if(BoaGenerator.localCloning){
+			if (BoaGenerator.localCloning) {
 				String path = gitRootPath.getAbsolutePath();
 				gitDir = new File(path);
-			}else	
+			} else {
 				gitDir = new File(gitRootPath + "/" + name);
+			}
 
 			// make sure the given directory exists else create a new one
 			if (!gitDir.exists()) {
@@ -317,7 +315,7 @@ public class SeqRepoImporter {
 				} catch (GitAPIException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				}catch (org.eclipse.jgit.api.errors.JGitInternalException e) {
+				} catch (org.eclipse.jgit.api.errors.JGitInternalException e) {
 					//e.printStackTrace();
 				}
 

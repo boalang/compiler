@@ -34,8 +34,8 @@ import boa.compiler.ast.statements.VisitStatement;
 public class VisitClassifier extends AbstractVisitorNoArg {
 	protected List<VisitStatement> befores = new ArrayList<VisitStatement>();
 	protected List<VisitStatement> afters = new ArrayList<VisitStatement>();
-	protected Map<String,VisitStatement> beforeMap = new HashMap<String,VisitStatement>();
-	protected Map<String,VisitStatement> afterMap = new HashMap<String,VisitStatement>();
+	protected Map<String, VisitStatement> beforeMap = new HashMap<String, VisitStatement>();
+	protected Map<String, VisitStatement> afterMap = new HashMap<String, VisitStatement>();
 
 	public boolean hasDefaultBefore() {
 		return beforeMap.containsKey("_");
@@ -61,11 +61,11 @@ public class VisitClassifier extends AbstractVisitorNoArg {
 		return befores;
 	}
 
-	public Map<String,VisitStatement> getAfterMap() {
+	public Map<String, VisitStatement> getAfterMap() {
 		return afterMap;
 	}
 
-	public Map<String,VisitStatement> getBeforeMap() {
+	public Map<String, VisitStatement> getBeforeMap() {
 		return beforeMap;
 	}
 

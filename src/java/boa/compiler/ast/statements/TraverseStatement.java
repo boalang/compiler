@@ -60,11 +60,11 @@ public class TraverseStatement extends Statement {
 
 	public void setCondition(final Expression condition) {
 		condition.setParent(this);
-		this.condition=condition;
+		this.condition = condition;
 	}
 
 	public void setReturnType(final AbstractType returnType) {
-		this.returnType=returnType;
+		this.returnType = returnType;
 	}
 
 	public boolean hasWildcard() {
@@ -148,12 +148,12 @@ public class TraverseStatement extends Statement {
 			condition.setParent(this);
 		this.node = node;
 		this.body = body;
-		this.condition=condition;
+		this.condition = condition;
 	}
 
 	/** {@inheritDoc} */
 	@Override
-	public <T,A> T accept(AbstractVisitor<T,A> v, A arg) {
+	public <T, A> T accept(AbstractVisitor<T, A> v, A arg) {
 		return v.visit(this, arg);
 	}
 
@@ -171,13 +171,13 @@ public class TraverseStatement extends Statement {
 
 	public TraverseStatement clone() {
 		final TraverseStatement v = new TraverseStatement(wildcard);
-		if(hasBody()) 
-			v.body=body.clone();
+		if (hasBody()) 
+			v.body = body.clone();
 		if (hasComponent())
 			v.node = node.clone();
 		if (hasCondition())
 			v.condition = condition.clone();
-		if (returnType!=null)
+		if (returnType != null)
 			v.returnType = this.returnType;
 		for (final Identifier id : ids)
 			v.addId(id.clone());

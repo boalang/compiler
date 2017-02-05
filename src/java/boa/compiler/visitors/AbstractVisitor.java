@@ -290,10 +290,10 @@ public abstract class AbstractVisitor<ReturnTypeT, ArgTypeT> {
 			n.getCondition().accept(this, arg);
 		for (final IfStatement ifStatement : n.getIfStatements())
 			ifStatement.accept(this, arg);
-		if(n.getReturnType()!=null) {
+		if (n.getReturnType() != null) {
 			n.getReturnType().accept(this, arg);
 		}
-		if(n.hasBody())
+		if (n.hasBody())
 		n.getBody().accept(this, arg);
 		return null;
 	}
@@ -305,10 +305,10 @@ public abstract class AbstractVisitor<ReturnTypeT, ArgTypeT> {
 			id.accept(this, arg);
 		if (n.hasCondition())
 			n.getCondition().accept(this, arg);
-		if(n.getReturnType()!=null) {
+		if (n.getReturnType() != null) {
 			n.getReturnType().accept(this, arg);
 		}
-		if(n.hasBody())
+		if (n.hasBody())
 		n.getBody().accept(this, arg);
 		return null;
 	}
@@ -455,7 +455,7 @@ public abstract class AbstractVisitor<ReturnTypeT, ArgTypeT> {
 	}
 
 	public ReturnTypeT visit(final TraversalType n, final ArgTypeT arg) {
-		if(n.getIndex()!=null)
+		if (n.getIndex() != null)
 			n.getIndex().accept(this, arg);
 		return null;
 	}

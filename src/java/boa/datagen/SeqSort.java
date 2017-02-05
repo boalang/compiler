@@ -43,7 +43,7 @@ import boa.datagen.util.Properties;
  * @author hoan
  * 
  */
-public class SeqSort<K,V> extends Configured implements Tool {
+public class SeqSort<K, V> extends Configured implements Tool {
 	private String inPath = "", outPath = "";
 	private RunningJob jobResult = null;
 
@@ -115,7 +115,7 @@ public class SeqSort<K,V> extends Configured implements Tool {
 		jobResult = JobClient.runJob(jobConf);
 		Date end_time = new Date();
 		System.out.println("Job ended: " + end_time);
-		System.out.println("The job took " + (end_time.getTime() - startTime.getTime()) /1000 + " seconds.");
+		System.out.println("The job took " + (end_time.getTime() - startTime.getTime()) / 1000 + " seconds.");
 		return 0;
 	}
 

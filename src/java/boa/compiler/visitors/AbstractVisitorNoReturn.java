@@ -254,13 +254,13 @@ public abstract class AbstractVisitorNoReturn<ArgTypeT> {
 		for (final Identifier id : n.getIdList())
 			id.accept(this, arg);
 		if (n.hasCondition())
-			n.getCondition().accept(this,arg);
-		if(n.getReturnType()!=null) {
+			n.getCondition().accept(this, arg);
+		if (n.getReturnType() != null) {
 			n.getReturnType().accept(this, arg);
 		}
 		for (final IfStatement ifStatement : n.getIfStatements())
 			ifStatement.accept(this, arg);
-		if(n.hasBody())
+		if (n.hasBody())
 		n.getBody().accept(this, arg);
 	}
 
@@ -270,11 +270,11 @@ public abstract class AbstractVisitorNoReturn<ArgTypeT> {
 		for (final Identifier id : n.getIdList())
 			id.accept(this, arg);
 		if (n.hasCondition())
-			n.getCondition().accept(this,arg);
-		if(n.getReturnType()!=null) {
+			n.getCondition().accept(this, arg);
+		if (n.getReturnType() != null) {
 			n.getReturnType().accept(this, arg);
 		}
-		if(n.hasBody())
+		if (n.hasBody())
 		n.getBody().accept(this, arg);
 	}
 
@@ -397,7 +397,7 @@ public abstract class AbstractVisitorNoReturn<ArgTypeT> {
 	}
 
 	public void visit(final TraversalType n, final ArgTypeT arg) {
-		if(n.getIndex()!=null)
+		if (n.getIndex() != null)
 			n.getIndex().accept(this, arg);
 	}
 

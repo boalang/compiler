@@ -430,7 +430,7 @@ public class BoaAstIntrinsics {
 	// Collect Annotations Used //
 	//////////////////////////////
 
-	private static class AnnotationCollectingVisitor extends BoaCollectingVisitor<String,Long> {
+	private static class AnnotationCollectingVisitor extends BoaCollectingVisitor<String, Long> {
 		@Override
 		protected boolean preVisit(Modifier node) {
 			if (node.getKind() == Modifier.ModifierKind.ANNOTATION) {
@@ -444,7 +444,7 @@ public class BoaAstIntrinsics {
 	private static AnnotationCollectingVisitor annotationCollectingVisitor = new AnnotationCollectingVisitor();
 
 	@FunctionSpec(name = "collect_annotations", returnType = "map[string] of int", formalParameters = { "ASTRoot", "map[string] of int" })
-	public static HashMap<String,Long> collect_annotations(final ASTRoot f, final HashMap<String,Long> map) throws Exception {
+	public static HashMap<String, Long> collect_annotations(final ASTRoot f, final HashMap<String, Long> map) throws Exception {
 		annotationCollectingVisitor.initialize(map).visit(f);
 		return annotationCollectingVisitor.map;
 	}
@@ -453,7 +453,7 @@ public class BoaAstIntrinsics {
 	// Collect Generics Used //
 	///////////////////////////
 
-	private static class GenericsCollectingVisitor extends BoaCollectingVisitor<String,Long> {
+	private static class GenericsCollectingVisitor extends BoaCollectingVisitor<String, Long> {
 		@Override
 		protected boolean preVisit(Type node) {
 			// FIXME
@@ -470,12 +470,12 @@ public class BoaAstIntrinsics {
 	private static GenericsCollectingVisitor genericsCollectingVisitor = new GenericsCollectingVisitor();
 
 	@FunctionSpec(name = "collect_generic_types", returnType = "map[string] of int", formalParameters = { "ASTRoot", "map[string] of int" })
-	public static HashMap<String,Long> collect_generic_types(final ASTRoot f, final HashMap<String,Long> map) throws Exception {
+	public static HashMap<String, Long> collect_generic_types(final ASTRoot f, final HashMap<String, Long> map) throws Exception {
 		genericsCollectingVisitor.initialize(map).visit(f);
 		return genericsCollectingVisitor.map;
 	}
 
-	private static void parseGenericType(final String name, final HashMap<String,Long> counts) {
+	private static void parseGenericType(final String name, final HashMap<String, Long> counts) {
 		if (!name.contains("<") || name.startsWith("<"))
 			return;
 
@@ -538,7 +538,7 @@ public class BoaAstIntrinsics {
 			}
 	}
 
-	private static void foundType(final String name, final HashMap<String,Long> counts) {
+	private static void foundType(final String name, final HashMap<String, Long> counts) {
 		final String type = name.endsWith("...") ? name.substring(0, name.length() - 3).trim() : name.trim();
 		final long count = counts.containsKey(type) ? counts.get(type) : 0;
 		counts.put(type, count + 1);

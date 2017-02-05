@@ -21,9 +21,8 @@ public class GetGithubRepoLanguages {
 						 username = args[i+1];
 						 password = args[i+2];
 					 }*/
-					 if (args[i].equals("-g")) {
-						 getterId = Integer.parseInt(args[i+1]);
-					 }
+					 if (args[i].equals("-g"))
+						 getterId = Integer.parseInt(args[i + 1]);
 				}
 			}
 		}
@@ -54,7 +53,7 @@ public class GetGithubRepoLanguages {
 				String[] parts = line.split(",");
 				int l = parts[1].length();
 				while (true) {
-					mc = new MetadataCacher(url + "/repos/" + parts[1].substring(1, l-1) + "/languages", username, password);
+					mc = new MetadataCacher(url + "/repos/" + parts[1].substring(1, l - 1) + "/languages", username, password);
 					if (!mc.authenticate()) {
 						homeMc = new MetadataCacher(url, username, password);
 						if (!homeMc.authenticate()) {

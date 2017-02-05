@@ -152,7 +152,7 @@ public abstract class BoaRunner extends Configured implements Tool {
 
 	public abstract String getUsage();
 
-	public abstract Mapper<?,?,?,?> getMapper();
+	public abstract Mapper<?, ?, ?, ?> getMapper();
 
 	public abstract BoaCombiner getCombiner();
 

@@ -20,11 +20,11 @@ public class RepositoryCloner {
 
     public static void clone(String[] args) throws IOException, InvalidRemoteException, TransportException, GitAPIException {
         // prepare a new folder for the cloned repository
-    	String localpaths=args[1];
-    	String url=args[0];
-    	REMOTE_URL=url;
+    	String localpaths = args[1];
+    	String url = args[0];
+    	REMOTE_URL = url;
         File localPath = new File(localpaths);
-        if(!localPath.exists())
+        if (!localPath.exists())
         	localPath.mkdir();
         // then clone
         Git result = null;
@@ -47,11 +47,11 @@ public class RepositoryCloner {
     
     public static void main(String[] args) throws IOException, InvalidRemoteException, TransportException, GitAPIException {
         // prepare a new folder for the cloned repository
-    	String localpath=args[1];
-    	String url=args[0];
-    	REMOTE_URL=url;
+    	String localpath = args[1];
+    	String url = args[0];
+    	REMOTE_URL = url;
         File localPath = new File(localpath);
-        if(!localPath.exists())
+        if (!localPath.exists())
         	localPath.mkdir();
         // then clone
         Git result = null;

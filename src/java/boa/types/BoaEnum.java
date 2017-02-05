@@ -123,7 +123,7 @@ public class BoaEnum extends BoaScalar {
 		int k = 0;
 		
 		for (final BoaType t : this.members)
-			s += "_" + cleanType(t.toJavaType()) + this.values.get(k++).replaceAll("\"","");
+			s += "_" + cleanType(t.toJavaType()) + this.values.get(k++).replaceAll("\"", "");
 
 		if (!enumNames.containsKey(s))
 			enumNames.put(s, "BoaEnum_" + enumNames.size());

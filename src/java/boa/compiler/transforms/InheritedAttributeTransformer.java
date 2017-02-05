@@ -103,9 +103,9 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 	 * Generates a set of all distinct types T in calls current(T) and also a
 	 * mapping from each type T found to a list of all uses in current(T).
 	 */
-	private class FindCurrentForVisitors extends AbstractVisitorNoArg{
+	private class FindCurrentForVisitors extends AbstractVisitorNoArg {
 		protected final Set<BoaTuple> currents = new HashSet<BoaTuple>();
-		protected final Map<BoaTuple,List<Factor>> factorMap = new HashMap<BoaTuple,List<Factor>>();
+		protected final Map<BoaTuple, List<Factor>> factorMap = new HashMap<BoaTuple, List<Factor>>();
 
 		/** @{inheritDoc} */
 		@Override
@@ -119,7 +119,7 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 			return currents;
 		}
 
-		public Map<BoaTuple,List<Factor>> getFactorList() {
+		public Map<BoaTuple, List<Factor>> getFactorList() {
 			return factorMap;
 		}
 
@@ -245,12 +245,12 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 				//            a) If the visitor has a 'after T' clause, add 's_t_#.pop()' as the first statement
 				if (getVS.getAfterMap().containsKey(typeToFind)) {
 					final VisitStatement vs = getVS.getAfterMap().get(typeToFind);
-					final Statement popFromStack = generatePopExpStatement(b, v.getId().getToken(),e);
+					final Statement popFromStack = generatePopExpStatement(b, v.getId().getToken(), e);
 					vs.getBody().getStatements().add(popFromStack);
 				} else {
 				//            b) Otherwise, add a 'after T' clause with a 's_t_#.pop()'
 					final Block blk;
-					final Statement popFromStack = generatePopExpStatement(b, v.getId().getToken(),e);
+					final Statement popFromStack = generatePopExpStatement(b, v.getId().getToken(), e);
 
 					if (getVS.getAfterMap().containsKey("_")) {
 						blk = getVS.getAfterMap().get("_").getBody().clone();

@@ -250,8 +250,8 @@ public class JsonFormat {
         for (Map.Entry<Integer, UnknownFieldSet.Field> entry : unknownFields.asMap().entrySet()) {
             UnknownFieldSet.Field field = entry.getValue();
 
-            if (firstField) {firstField = false;}
-            else {generator.print(", ");}
+            if (firstField) { firstField = false; }
+            else { generator.print(", "); }
 
             generator.print("\"");
             generator.print(entry.getKey().toString());
@@ -260,30 +260,30 @@ public class JsonFormat {
 
             boolean firstValue = true;
             for (long value : field.getVarintList()) {
-                if (firstValue) {firstValue = false;}
-                else {generator.print(", ");}
+                if (firstValue) { firstValue = false; }
+                else { generator.print(", "); }
                 generator.print(unsignedToString(value));
             }
             for (int value : field.getFixed32List()) {
-                if (firstValue) {firstValue = false;}
-                else {generator.print(", ");}
+                if (firstValue) { firstValue = false; }
+                else { generator.print(", "); }
                 generator.print(String.format((Locale) null, "0x%08x", value));
             }
             for (long value : field.getFixed64List()) {
-                if (firstValue) {firstValue = false;}
-                else {generator.print(", ");}
+                if (firstValue) { firstValue = false; }
+                else { generator.print(", "); }
                 generator.print(String.format((Locale) null, "0x%016x", value));
             }
             for (ByteString value : field.getLengthDelimitedList()) {
-                if (firstValue) {firstValue = false;}
-                else {generator.print(", ");}
+                if (firstValue) { firstValue = false; }
+                else { generator.print(", "); }
                 generator.print("\"");
                 generator.print(escapeBytes(value));
                 generator.print("\"");
             }
             for (UnknownFieldSet value : field.getGroupList()) {
-                if (firstValue) {firstValue = false;}
-                else {generator.print(", ");}
+                if (firstValue) { firstValue = false; }
+                else { generator.print(", "); }
                 generator.print("{\n");
                 printUnknownFields(value, generator);
                 generator.print("}\n");
@@ -464,8 +464,8 @@ public class JsonFormat {
     static String escapeText(String input) {
         StringBuilder builder = new StringBuilder(input.length());
         CharacterIterator iter = new StringCharacterIterator(input);
-        for(char c = iter.first(); c != CharacterIterator.DONE; c = iter.next()) {
-            switch(c) {
+        for (char c = iter.first(); c != CharacterIterator.DONE; c = iter.next()) {
+            switch (c) {
                 case '\b':
                   builder.append("\\b");
                   break;
@@ -489,13 +489,13 @@ public class JsonFormat {
                   break;
                 default:
                   // Check for other control characters
-                  if(c >= 0x0000 && c <= 0x001F) {
+                  if (c >= 0x0000 && c <= 0x001F) {
                       appendEscapedUnicode(builder, c);
-                  } else if(Character.isHighSurrogate(c)) {
+                  } else if (Character.isHighSurrogate(c)) {
                       // Encode the surrogate pair using 2 six-character sequence (\\uXXXX\\uXXXX)
                       appendEscapedUnicode(builder, c);
                       c = iter.next();
-                      if(c == CharacterIterator.DONE) throw new IllegalArgumentException("invalid unicode string: unexpected high surrogate pair value without corresponding low value.");
+                      if (c == CharacterIterator.DONE) throw new IllegalArgumentException("invalid unicode string: unexpected high surrogate pair value without corresponding low value.");
                       appendEscapedUnicode(builder, c);
                   } else {
                       // Anything else can be printed as-is
@@ -509,11 +509,11 @@ public class JsonFormat {
 
     static void appendEscapedUnicode(StringBuilder builder, char ch) {
       String prefix = "\\u";
-      if(ch < 0x10) {
+      if (ch < 0x10) {
         prefix = "\\u000";
-      } else if(ch < 0x100) {
+      } else if (ch < 0x100) {
         prefix = "\\u00";
-      } else if(ch < 0x1000) {
+      } else if (ch < 0x1000) {
         prefix = "\\u0";
       }
       builder.append(prefix).append(Integer.toHexString(ch));

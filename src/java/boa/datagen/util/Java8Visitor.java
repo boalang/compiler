@@ -240,7 +240,7 @@ public class Java8Visitor extends Java7Visitor {
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.METHOD_REFERENCE);
 		
 		if (node.getQualifier() != null)
-			eb.setLiteral((node.getQualifier()) +".super"); 
+			eb.setLiteral((node.getQualifier()) + ".super"); 
 		else
 			eb.setLiteral("super");
 		
@@ -269,7 +269,7 @@ public class Java8Visitor extends Java7Visitor {
 			eb.addGenericParameters(tb.build());
 		}
 
-		eb.setMethod(getIndex(typeName(node.getType()))+"::"+node.getName().getIdentifier());
+		eb.setMethod(getIndex(typeName(node.getType())) + "::" + node.getName().getIdentifier());
 		expressions.push(eb.build());
 
 		return false;

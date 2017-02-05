@@ -71,7 +71,7 @@ public abstract class Node {
 		newNode.endColumn = endColumn;
 	}
 
-	public abstract <T,A> T accept(final AbstractVisitor<T,A> v, final A arg);
+	public abstract <T, A> T accept(final AbstractVisitor<T, A> v, final A arg);
 	public abstract <A> void accept(final AbstractVisitorNoReturn<A> v, final A arg);
 	public abstract void accept(final AbstractVisitorNoArg v);
 

@@ -22,10 +22,10 @@ public class GetGithubRepoMetadata {
 						 password = args[i+2];
 					 }*/
 					 if (args[i].equals("-g")) {
-						 getterId = Integer.parseInt(args[i+1]);
+						 getterId = Integer.parseInt(args[i + 1]);
 					 }
 					 if (args[i].equals("-l")) {
-						 listId = Integer.parseInt(args[i+1]);
+						 listId = Integer.parseInt(args[i + 1]);
 					 }
 				}
 			}
@@ -57,7 +57,7 @@ public class GetGithubRepoMetadata {
 				String[] parts = line.split(",");
 				int l = parts[1].length();
 				while (true) {
-					mc = new MetadataCacher(url + "/repos/" + parts[1].substring(1, l-1), username, password);
+					mc = new MetadataCacher(url + "/repos/" + parts[1].substring(1, l - 1), username, password);
 					if (!mc.authenticate()) {
 						homeMc = new MetadataCacher(url, username, password);
 						if (!homeMc.authenticate()) {

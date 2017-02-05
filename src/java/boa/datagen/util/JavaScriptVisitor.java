@@ -210,7 +210,7 @@ public class JavaScriptVisitor extends ASTVisitor {
 			tb.setKind(TypeKind.CLASS);
 			tb.setName(getIndex("Default"));
 			mb.setReturnType(tb);
-			for(Object s:node.statements()){
+			for (Object s:node.statements()) {
 				if (s instanceof FunctionDeclaration) {
 					methods.push(new ArrayList<boa.types.Ast.Method>());
 					((FunctionDeclaration) s).accept(this);
@@ -457,12 +457,12 @@ public class JavaScriptVisitor extends ASTVisitor {
 		for (Object s : node.statements()) {
 
 			//TODO: NonJava
-			if(s instanceof FunctionDeclaration){
+			if (s instanceof FunctionDeclaration) {
 				methods.push(new ArrayList<boa.types.Ast.Method>());
 				((FunctionDeclaration)s).accept(this);
 				b.setKind(StatementKind.OTHER);
 				
-			}else{
+			} else {
 				statements.push(new ArrayList<boa.types.Ast.Statement>());
 				((org.eclipse.wst.jsdt.core.dom.Statement)s).accept(this);
 				for (boa.types.Ast.Statement st : statements.pop())
@@ -633,7 +633,7 @@ public class JavaScriptVisitor extends ASTVisitor {
 
 	
 	@Override
-	public boolean visit(ForInStatement node){
+	public boolean visit(ForInStatement node) {
 		boa.types.Ast.Statement.Builder s = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
 		s.setKind(boa.types.Ast.Statement.StatementKind.FOR);
@@ -659,7 +659,7 @@ public class JavaScriptVisitor extends ASTVisitor {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 //		b.setPosition(pos.build());
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.METHODCALL);
-		if(node.getName() != null)
+		if (node.getName() != null)
 		b.setMethod(node.getName().getFullyQualifiedName());
 		if (node.getExpression() != null) {
 			node.getExpression().accept(this);
@@ -681,7 +681,7 @@ public class JavaScriptVisitor extends ASTVisitor {
 	}
 	
 	@Override
-	public boolean visit(ListExpression node){
+	public boolean visit(ListExpression node) {
 		boa.types.Ast.Expression.Builder bui = boa.types.Ast.Expression.newBuilder();
 //		b.setPosition(pos.build());
 		bui.setKind(boa.types.Ast.Expression.ExpressionKind.OTHER);		
@@ -693,7 +693,7 @@ public class JavaScriptVisitor extends ASTVisitor {
 		return false;
 	}
 	
-	public boolean visit(Name node){
+	public boolean visit(Name node) {
 		boa.types.Ast.Expression.Builder bui = boa.types.Ast.Expression.newBuilder();
 //		b.setPosition(pos.build());
 		bui.setVariable(node.getFullyQualifiedName());
@@ -846,10 +846,10 @@ public class JavaScriptVisitor extends ASTVisitor {
 		List<boa.types.Ast.Method> list = methods.peek();
 		Method.Builder b = Method.newBuilder();
 //		b.setPosition(pos.build());
-		if (node.isConstructor())
+		if (node.isConstructor()) {
 			b.setName("<init>");
-		else{
-			if(node.getName() != null)
+		} else {
+			if (node.getName() != null)
 			b.setName(node.getName().getFullyQualifiedName());
 		}
 		for (Object m : node.modifiers()) {
@@ -1049,7 +1049,7 @@ public class JavaScriptVisitor extends ASTVisitor {
 				vb.addModifiers(modifiers.pop());
 			}
 			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
-			if(node.getType() != null){
+			if (node.getType() != null) {
 				String name = typeName(node.getType());
 				for (int i = 0; i < f.getExtraDimensions(); i++)
 					name += "[]";
@@ -1586,7 +1586,7 @@ public class JavaScriptVisitor extends ASTVisitor {
 	// Utility methods
 
 	private String typeName(org.eclipse.wst.jsdt.core.dom.Type t) {
-		if(t == null)
+		if (t == null)
 				return "other";
 		if (t.isArrayType())
 			return typeName(((ArrayType)t).getComponentType()) + "[]";
@@ -1595,7 +1595,7 @@ public class JavaScriptVisitor extends ASTVisitor {
 			return ((PrimitiveType)t).getPrimitiveTypeCode().toString();
 		if (t.isQualifiedType())
 			return typeName(((QualifiedType)t).getQualifier()) + "." + ((QualifiedType)t).getName().getFullyQualifiedName();
-		if(t.isInferred())
+		if (t.isInferred())
 			return (((InferredType)t).getType()) + "." + ((InferredType)t).getType();
 		
 		return ((SimpleType)t).getName().getFullyQualifiedName();

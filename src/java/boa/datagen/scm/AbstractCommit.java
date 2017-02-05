@@ -212,9 +212,9 @@ public abstract class AbstractCommit {
 			parser.setCompilerOptions(options);
 
 			JavaScriptUnit cu;
-			try{
+			try {
 				cu = (JavaScriptUnit) parser.createAST(null);
-			}catch(java.lang.IllegalArgumentException ex){
+			} catch (java.lang.IllegalArgumentException ex) {
 				return false;
 			}
 
@@ -304,8 +304,8 @@ public abstract class AbstractCommit {
 		return revision.build();
 	}
 
-	public Map<String,String> getLOC() {
-		final Map<String,String> l = new HashMap<String,String>();
+	public Map<String, String> getLOC() {
+		final Map<String, String> l = new HashMap<String, String>();
 
 		for (final String path : changedPaths.keySet())
 			l.put(path, processLOC(path));

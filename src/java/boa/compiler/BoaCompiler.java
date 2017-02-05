@@ -88,7 +88,7 @@ public class BoaCompiler {
 	
 	public static void main(final String[] args) throws IOException {
 		CommandLine cl = processCommandLineOptions(args);
-		if(cl==null) return;
+		if (cl == null) return;
 		final ArrayList<File> inputFiles = BoaCompiler.inputFiles;
 
 		// get the name of the generated class
@@ -248,7 +248,7 @@ public class BoaCompiler {
 	
 	public static void parseOnly(final String[] args) throws IOException {
 		CommandLine cl = processParseCommandLineOptions(args);
-		if(cl==null) return;
+		if (cl == null) return;
 		final ArrayList<File> inputFiles = BoaCompiler.inputFiles;
 
 		// find custom libs to load

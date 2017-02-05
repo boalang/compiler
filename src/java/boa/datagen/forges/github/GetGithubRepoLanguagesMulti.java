@@ -31,15 +31,13 @@ public class GetGithubRepoLanguagesMulti {
 			Config.githubRepoLanguagesDir = args[0];
 			if (args.length > 2) {
 				for (int i = 1; i < args.length; i++) {
-					 if (args[i].equals("-nid")) {
-						 nid = Integer.parseInt(args[i+1]);
-					 }
+					 if (args[i].equals("-nid"))
+						 nid = Integer.parseInt(args[i + 1]);
 					 if (args[i].equals("-nuser")) {
-						 String arg = args[i+1];
+						 String arg = args[i + 1];
 						 nusers = new int[arg.length()];
-						 for (int j = 0; j < arg.length(); j++) {
-							 nusers[j] = Integer.parseInt(arg.substring(j, j+1));
-						 }
+						 for (int j = 0; j < arg.length(); j++)
+							 nusers[j] = Integer.parseInt(arg.substring(j, j + 1));
 					 }
 				}
 			}
@@ -80,7 +78,7 @@ public class GetGithubRepoLanguagesMulti {
 			int l = parts[1].length();
 			int trial = 0;
 			while (trial < 3) {
-				MetadataCacher mc = new MetadataCacher(url + "/" + parts[1].substring(1, l-1) + "/languages", usernames[userid], Config.githubPassword);
+				MetadataCacher mc = new MetadataCacher(url + "/" + parts[1].substring(1, l - 1) + "/languages", usernames[userid], Config.githubPassword);
 				System.out.println(mc.getUrl());
 				mc.authenticate();
 				mc.getResponseJson();

@@ -40,7 +40,7 @@ public class TraversalType extends AbstractType {
 
 	/** {@inheritDoc} */
 	@Override
-	public <T,A> T accept(final AbstractVisitor<T,A> v, A arg) {
+	public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
 		return v.visit(this, arg);
 	}
 
@@ -58,7 +58,7 @@ public class TraversalType extends AbstractType {
 
 	public TraversalType clone() {
 		final TraversalType t = new TraversalType();
-		if(index!=null)
+		if (index != null)
 			t.setIndex(index.clone());
 		copyFieldsTo(t);
 		return t;

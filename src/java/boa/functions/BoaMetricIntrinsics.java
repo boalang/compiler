@@ -108,7 +108,7 @@ public class BoaMetricIntrinsics {
 	// Number of Children (NOC) //
 	////////////////////////////////
 
-	private static class BoaNOCVisitor extends BoaCollectingVisitor<String,Long> {
+	private static class BoaNOCVisitor extends BoaCollectingVisitor<String, Long> {
 		private String ns;
 		@Override
 		protected boolean preVisit(Namespace node) throws Exception {
@@ -134,8 +134,8 @@ public class BoaMetricIntrinsics {
 	 * @return a map containing partial computation of the NOC metric
 	 */
 	@FunctionSpec(name = "get_metric_noc", returnType = "map[string] of int", formalParameters = { "ASTRoot" })
-	public static HashMap<String,Long> getMetricNOC(final ASTRoot node) throws Exception {
-		nocVisitor.initialize(new HashMap<String,Long>()).visit(node);
+	public static HashMap<String, Long> getMetricNOC(final ASTRoot node) throws Exception {
+		nocVisitor.initialize(new HashMap<String, Long>()).visit(node);
 		return nocVisitor.map;
 	}
 

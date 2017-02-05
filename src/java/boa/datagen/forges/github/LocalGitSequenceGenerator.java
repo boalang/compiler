@@ -46,10 +46,10 @@ public class LocalGitSequenceGenerator {
 		while (true) {
 			try {
 				projectWriter = SequenceFile.createWriter(fileSystem, conf,
-						new Path(outputPath+"/projects.seq"), Text.class,
+						new Path(outputPath + "/projects.seq"), Text.class,
 						BytesWritable.class);
 				astWriter = SequenceFile.createWriter(fileSystem, conf,
-						new Path(outputPath+"/ast.seq"), Text.class, BytesWritable.class);
+						new Path(outputPath + "/ast.seq"), Text.class, BytesWritable.class);
 				break;
 			} catch (Throwable t) {
 				t.printStackTrace();
