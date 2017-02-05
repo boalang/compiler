@@ -491,7 +491,7 @@ public class CFG {
 	}
 
 	private CFG traverse_instance(CFGNode cfgNode, Expression root) {
-		CFG graph = new CFG();
+		final CFG graph = new CFG();
 		String nObjectname;
 		if (root.getVariable() != null && !root.getVariable().equals("")) {
 			Variable pNode = root.getVariableDecls(0); // TODO:check for multiple var_decls
@@ -548,7 +548,7 @@ public class CFG {
 	}
 
 	private CFG traverse_call(CFGNode cfgNode, Expression root) {
-		CFG graph = new CFG();
+		final CFG graph = new CFG();
 		String type_str;
 		if (root.getExpressionsCount() == 0) {
 			type_str = className;
@@ -566,7 +566,7 @@ public class CFG {
 	}
 
 	private CFG traverse_super(CFGNode cfgNode, Expression root) {
-		CFG graph = new CFG();
+		final CFG graph = new CFG();
 		CFGNode aNode = null;
 		Expression mcall = root;
 		aNode = new CFGNode(mcall.getMethod(), CFGNode.TYPE_METHOD, className,

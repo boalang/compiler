@@ -247,7 +247,7 @@ public class JsonFormat {
     protected static void printUnknownFields(UnknownFieldSet unknownFields, JsonGenerator generator) throws IOException {
         boolean firstField = true;
         for (Map.Entry<Integer, UnknownFieldSet.Field> entry : unknownFields.asMap().entrySet()) {
-            UnknownFieldSet.Field field = entry.getValue();
+            final UnknownFieldSet.Field field = entry.getValue();
 
             if (firstField) { firstField = false; }
             else { generator.print(", "); }

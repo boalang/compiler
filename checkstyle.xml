@@ -3,6 +3,8 @@
           "-//Puppy Crawl//DTD Check Configuration 1.3//EN"
           "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
 
+<!-- the checks in this file are based off the Google Style Guide for Java -->
+<!-- See https://google.github.io/styleguide/javaguide.html -->
 <module name = "Checker">
     <!--======
     = ERRORS =
@@ -94,6 +96,10 @@
 		     See http://checkstyle.sourceforge.net/config_coding.html#NoFinalizer -->
         <module name="NoFinalizer"/>
 
+		<!-- Checks the distance between declaration of variable and its first usage.
+		     See http://checkstyle.sourceforge.net/config_coding.html#VariableDeclarationUsageDistance -->
+        <module name="VariableDeclarationUsageDistance"/>
+
         <!--==============================================
                            Miscellaneous
         http://checkstyle.sourceforge.net/config_misc.html
@@ -177,6 +183,10 @@
         <!-- Checks the padding between the identifier of a method definition, constructor definition, method call, or constructor invocation; and the left parenthesis of the parameter list.
              See http://checkstyle.sourceforge.net/config_whitespace.html#MethodParamPad -->
         <module name="MethodParamPad"/>
+
+		<!-- Checks that chosen statements are not line-wrapped.
+		     See http://checkstyle.sourceforge.net/config_whitespace.html#NoLineWrap -->
+        <module name="NoLineWrap"/>
 
         <!-- Checks the policy on how to wrap lines on operators.
              See http://checkstyle.sourceforge.net/config_whitespace.html#OperatorWrap -->

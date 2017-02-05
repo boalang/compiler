@@ -18,12 +18,8 @@ public class GetGithubRepoByUser {
 			return;
 		}
 		String outDir = args[0];
-		String username = args[1];
-		String password = args[2];
 
-		String url = "https://api.github.com/repos";
 		String pageContent = "";
-		MetadataCacher mc = new MetadataCacher(url, username, password);
 		int pageNumber = 0;
 		String id = "";
 		File dir = new File(outDir);
@@ -47,7 +43,10 @@ public class GetGithubRepoByUser {
 		pageNumber = files.length;
 		if (pageNumber > 0)
 			pageContent = FileIO.readFileContents(files[pageNumber - 1]);
-		mc = new MetadataCacher(url + "/" + args[3] + "/" + args[4], username, password);
+		String url = "https://api.github.com/repos";
+		String username = args[1];
+		String password = args[2];
+		MetadataCacher mc = new MetadataCacher(url + "/" + args[3] + "/" + args[4], username, password);
 		System.out.println(mc.getUrl());
 		if (mc.authenticate()) {
 			while (true) {

@@ -37,7 +37,7 @@ public class Java8Visitor extends Java7Visitor {
 
 	@Override
 	public boolean visit(MethodDeclaration node) {
-		List<boa.types.Ast.Method> list = methods.peek();
+		final List<boa.types.Ast.Method> list = methods.peek();
 		Method.Builder b = Method.newBuilder();
 		// b.setPosition(pos.build());
 		if (node.isConstructor())

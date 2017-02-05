@@ -26,11 +26,7 @@ public class GetGithubRepos {
 				}
 			}
 		}
-		String url = "https://api.github.com/repositories";
-		//System.out.println(url);
 		String pageContent = "";
-		//MetadataCacher mc = new MetadataCacher(url + "?since=532681", username , password);
-		MetadataCacher mc = new MetadataCacher(url, username, password);
 		int pageNumber = 0;
 		String id = "";
 		File dir = new File(outDir);
@@ -52,7 +48,11 @@ public class GetGithubRepos {
 		pageNumber = files.length;
 		if (pageNumber > 0)
 			pageContent = FileIO.readFileContents(files[pageNumber - 1]);
-		mc = new MetadataCacher(url + "?since=" + getLastId(pageContent), username, password);
+		String url = "https://api.github.com/repositories";
+		//System.out.println(url);
+		//MetadataCacher mc = new MetadataCacher(url + "?since=532681", username , password);
+		//MetadataCacher mc = new MetadataCacher(url, username, password);
+		MetadataCacher mc = new MetadataCacher(url + "?since=" + getLastId(pageContent), username, password);
 		System.out.println(mc.getUrl());
 		if (mc.authenticate()) {
 			System.out.println("Authentication successful!");

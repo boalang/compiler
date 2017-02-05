@@ -494,7 +494,7 @@ public class JavaScriptVisitor extends ASTVisitor {
 	public boolean visit(CatchClause node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		// b.setPosition(pos.build());
-		List<boa.types.Ast.Statement> list = statements.peek();
+		final List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.CATCH);
 		org.eclipse.wst.jsdt.core.dom.SingleVariableDeclaration ex = node.getException();
 		Variable.Builder vb = Variable.newBuilder();
@@ -530,7 +530,7 @@ public class JavaScriptVisitor extends ASTVisitor {
 	public boolean visit(ConstructorInvocation node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		// b.setPosition(pos.build());
-		List<boa.types.Ast.Statement> list = statements.peek();
+		final List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.EXPRESSION);
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		// eb.setPosition(pos.build());//FIXME
@@ -555,7 +555,7 @@ public class JavaScriptVisitor extends ASTVisitor {
 	public boolean visit(ContinueStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		// b.setPosition(pos.build());
-		List<boa.types.Ast.Statement> list = statements.peek();
+		final List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.CONTINUE);
 		if (node.getLabel() != null) {
 			boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
@@ -572,7 +572,7 @@ public class JavaScriptVisitor extends ASTVisitor {
 	public boolean visit(DoStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		// b.setPosition(pos.build());
-		List<boa.types.Ast.Statement> list = statements.peek();
+		final List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.DO);
 		node.getExpression().accept(this);
 		b.setExpression(expressions.pop());
@@ -588,7 +588,7 @@ public class JavaScriptVisitor extends ASTVisitor {
 	public boolean visit(EmptyStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		// b.setPosition(pos.build());
-		List<boa.types.Ast.Statement> list = statements.peek();
+		final List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.EMPTY);
 		list.add(b.build());
 		return false;
@@ -598,7 +598,7 @@ public class JavaScriptVisitor extends ASTVisitor {
 	public boolean visit(EnhancedForStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		// b.setPosition(pos.build());
-		List<boa.types.Ast.Statement> list = statements.peek();
+		final List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.FOR);
 		org.eclipse.wst.jsdt.core.dom.SingleVariableDeclaration ex = node.getParameter();
 		Variable.Builder vb = Variable.newBuilder();
@@ -635,7 +635,7 @@ public class JavaScriptVisitor extends ASTVisitor {
 	@Override
 	public boolean visit(ForInStatement node) {
 		boa.types.Ast.Statement.Builder s = boa.types.Ast.Statement.newBuilder();
-		List<boa.types.Ast.Statement> list = statements.peek();
+		final List<boa.types.Ast.Statement> list = statements.peek();
 		s.setKind(boa.types.Ast.Statement.StatementKind.FOR);
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
 		node.getBody().accept(this);
@@ -708,7 +708,7 @@ public class JavaScriptVisitor extends ASTVisitor {
 	public boolean visit(ExpressionStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		// b.setPosition(pos.build());
-		List<boa.types.Ast.Statement> list = statements.peek();
+		final List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.EXPRESSION);
 		node.getExpression().accept(this);
 		b.setExpression(expressions.pop());
@@ -720,7 +720,7 @@ public class JavaScriptVisitor extends ASTVisitor {
 	public boolean visit(WithStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		// b.setPosition(pos.build());
-		List<boa.types.Ast.Statement> list = statements.peek();
+		final List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.OTHER);
 		node.getExpression().accept(this);
 		b.setExpression(expressions.pop());
@@ -747,7 +747,7 @@ public class JavaScriptVisitor extends ASTVisitor {
 	public boolean visit(ForStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		// b.setPosition(pos.build());
-		List<boa.types.Ast.Statement> list = statements.peek();
+		final List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.FOR);
 		for (Object e : node.initializers()) {
 			((org.eclipse.wst.jsdt.core.dom.Expression)e).accept(this);
@@ -775,7 +775,7 @@ public class JavaScriptVisitor extends ASTVisitor {
 	public boolean visit(IfStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		// b.setPosition(pos.build());
-		List<boa.types.Ast.Statement> list = statements.peek();
+		final List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.IF);
 		node.getExpression().accept(this);
 		b.setExpression(expressions.pop());
@@ -796,7 +796,7 @@ public class JavaScriptVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(Initializer node) {
-		List<boa.types.Ast.Method> list = methods.peek();
+		final List<boa.types.Ast.Method> list = methods.peek();
 		Method.Builder b = Method.newBuilder();
 		// b.setPosition(pos.build());
 		b.setName("<clinit>");
@@ -825,7 +825,7 @@ public class JavaScriptVisitor extends ASTVisitor {
 	public boolean visit(LabeledStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		// b.setPosition(pos.build());
-		List<boa.types.Ast.Statement> list = statements.peek();
+		final List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.LABEL);
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
 		node.getBody().accept(this);
@@ -843,7 +843,7 @@ public class JavaScriptVisitor extends ASTVisitor {
 	
 	@Override
 	public boolean visit(FunctionDeclaration node) {
-		List<boa.types.Ast.Method> list = methods.peek();
+		final List<boa.types.Ast.Method> list = methods.peek();
 		Method.Builder b = Method.newBuilder();
 		// b.setPosition(pos.build());
 		if (node.isConstructor()) {
@@ -914,7 +914,7 @@ public class JavaScriptVisitor extends ASTVisitor {
 	public boolean visit(ReturnStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		// b.setPosition(pos.build());
-		List<boa.types.Ast.Statement> list = statements.peek();
+		final List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.RETURN);
 		if (node.getExpression() != null) {
 			node.getExpression().accept(this);
@@ -928,7 +928,7 @@ public class JavaScriptVisitor extends ASTVisitor {
 	public boolean visit(SuperConstructorInvocation node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		// b.setPosition(pos.build());
-		List<boa.types.Ast.Statement> list = statements.peek();
+		final List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.EXPRESSION);
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		// eb.setPosition(pos.build());//FIXME
@@ -957,7 +957,7 @@ public class JavaScriptVisitor extends ASTVisitor {
 	public boolean visit(SwitchCase node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		// b.setPosition(pos.build());
-		List<boa.types.Ast.Statement> list = statements.peek();
+		final List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.CASE);
 		if (node.getExpression() != null) {
 			node.getExpression().accept(this);
@@ -971,7 +971,7 @@ public class JavaScriptVisitor extends ASTVisitor {
 	public boolean visit(SwitchStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		// b.setPosition(pos.build());
-		List<boa.types.Ast.Statement> list = statements.peek();
+		final List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.SWITCH);
 		node.getExpression().accept(this);
 		b.setExpression(expressions.pop());
@@ -989,7 +989,7 @@ public class JavaScriptVisitor extends ASTVisitor {
 	public boolean visit(ThrowStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		// b.setPosition(pos.build());
-		List<boa.types.Ast.Statement> list = statements.peek();
+		final List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.THROW);
 		node.getExpression().accept(this);
 		b.setExpression(expressions.pop());
@@ -1001,7 +1001,7 @@ public class JavaScriptVisitor extends ASTVisitor {
 	public boolean visit(TryStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		// b.setPosition(pos.build());
-		List<boa.types.Ast.Statement> list = statements.peek();
+		final List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.TRY);
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
 		node.getBody().accept(this);
@@ -1020,7 +1020,7 @@ public class JavaScriptVisitor extends ASTVisitor {
 	public boolean visit(TypeDeclarationStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		// b.setPosition(pos.build());
-		List<boa.types.Ast.Statement> list = statements.peek();
+		final List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.TYPEDECL);
 		declarations.push(new ArrayList<boa.types.Ast.Declaration>());
 		node.getDeclaration().accept(this);
@@ -1034,7 +1034,7 @@ public class JavaScriptVisitor extends ASTVisitor {
 	public boolean visit(VariableDeclarationStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		// b.setPosition(pos.build());
-		List<boa.types.Ast.Statement> list = statements.peek();
+		final List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.EXPRESSION);
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		// eb.setPosition(pos.build());//FIXME
@@ -1073,7 +1073,7 @@ public class JavaScriptVisitor extends ASTVisitor {
 	public boolean visit(WhileStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		// b.setPosition(pos.build());
-		List<boa.types.Ast.Statement> list = statements.peek();
+		final List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.WHILE);
 		node.getExpression().accept(this);
 		b.setExpression(expressions.pop());
