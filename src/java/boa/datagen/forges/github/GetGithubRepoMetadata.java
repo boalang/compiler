@@ -6,9 +6,8 @@ import java.util.Scanner;
 import boa.datagen.util.FileIO;
 
 public class GetGithubRepoMetadata {
-
 	/**
-	 * @param args
+	 * @param args command line arguments
 	 */
 	public static void main(String[] args) {
 		String outDir = "C:/github";

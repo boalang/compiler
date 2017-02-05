@@ -11,7 +11,7 @@ import boa.datagen.util.FileIO;
 
 public class GetGithubRepoMetadataMulti {
 	/**
-	 * @param args
+	 * @param args command line arguments
 	 */
 	public static void main(String[] args) {
 		String outDir = "/remote/rs/tien/github";

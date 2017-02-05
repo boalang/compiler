@@ -7,9 +7,8 @@ import java.util.Comparator;
 import boa.datagen.util.FileIO;
 
 public class GetGithubRepos {
-
 	/**
-	 * @param args
+	 * @param args command line arguments
 	 */
 	public static void main(String[] args) {
 		String outDir = Config.githubRepoListDir;

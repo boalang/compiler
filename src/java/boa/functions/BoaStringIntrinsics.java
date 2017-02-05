@@ -115,8 +115,8 @@ public class BoaStringIntrinsics {
 	/**
 	 * Returns the substring of <em>str</em> from <em>start</em> to the end.
 	 * 
-	 * @param str
-	 * @param start
+	 * @param str the string to substring
+	 * @param start the starting index, inclusive
 	 * 
 	 * @return the substring of <em>str</em>
 	 */
@@ -128,9 +128,9 @@ public class BoaStringIntrinsics {
 	/**
 	 * Returns the substring of <em>str</em> from <em>start</em> inclusive to <em>end</em> exclusive.
 	 * 
-	 * @param str
-	 * @param start
-	 * @param end
+	 * @param str the string to substring
+	 * @param start the starting index, inclusive
+	 * @param end the ending index, exclusive
 	 * 
 	 * @return the substring of <em>str</em>
 	 */
@@ -142,8 +142,8 @@ public class BoaStringIntrinsics {
 	/**
 	 * Splits a string into an array of strings using the given regex.
 	 * 
-	 * @param str
-	 * @param regex
+	 * @param str the string to split
+	 * @param regex the regex to use to split
 	 * 
 	 * @return the substrings of <em>str</em>, split once by <em>regex</em>
 	 */
@@ -155,9 +155,9 @@ public class BoaStringIntrinsics {
 	/**
 	 * Splits a string into an array of strings using the given regex.
 	 * 
-	 * @param str
-	 * @param regex
-	 * @param n
+	 * @param str the string to split
+	 * @param regex the regex to use to split
+	 * @param n maximum number of splits
 	 * 
 	 * @return the substrings of <em>str</em>, split at most <em>n</em> times by <em>regex</em>
 	 */
@@ -169,8 +169,8 @@ public class BoaStringIntrinsics {
 	/**
 	 * Splits a string into an array of strings using the given regex.
 	 * 
-	 * @param str
-	 * @param regex
+	 * @param str the string to split
+	 * @param regex the regex to use to split
 	 * 
 	 * @return the substrings of <em>str</em>, split entirely by <em>regex</em>
 	 */

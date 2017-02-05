@@ -63,7 +63,7 @@ public abstract class BoaRunner extends Configured implements Tool {
 	 *            exceptions
 	 * 
 	 * @return A {@link Job} describing the work to be done by this Boa job
-	 * @throws IOException
+	 * @throws IOException if the job fails or is stopped
 	 */
 	public Job job(final Path[] ins, final Path out, final boolean robust) throws IOException {
 		final Configuration configuration = getConf();

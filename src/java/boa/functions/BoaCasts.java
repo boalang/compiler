@@ -65,12 +65,11 @@ public class BoaCasts {
 	/**
 	 * Parse a time string.
 	 * 
-	 * @param s
-	 *            A {@link String} containing a time
+	 * @param s A {@link String} containing a time
 	 * 
 	 * @return A long containing the time represented by <em>s</em>.
 	 * 
-	 * @throws ParseException
+	 * @throws ParseException if the string is not a valid datetime
 	 */
 	public static long stringToTime(final String s, final String tz) throws ParseException {
 		final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE MMM d HH:mm:ss z yyyy");
@@ -83,12 +82,11 @@ public class BoaCasts {
 	/**
 	 * Parse a time string.
 	 * 
-	 * @param s
-	 *            A {@link String} containing a time
+	 * @param s A {@link String} containing a time
 	 * 
 	 * @return A long containing the time represented by <em>s</em>.
 	 * 
-	 * @throws ParseException
+	 * @throws ParseException if the string is not a valid datetime
 	 */
 	public static long stringToTime(final String s) throws ParseException {
 		return BoaCasts.stringToTime(s, "PST8PDT");
@@ -99,8 +97,7 @@ public class BoaCasts {
 	/**
 	 * Format a double into a {@link String}.
 	 * 
-	 * @param d
-	 *            A double
+	 * @param d A double
 	 * 
 	 * @return A {@link String} containing the number <em>d</em>
 	 */
