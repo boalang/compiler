@@ -134,6 +134,7 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 				ps = con.prepareStatement("INSERT INTO boa_output (id, length) VALUES (" + jobId + ", 0)");
 				ps.executeUpdate();
 			} catch (final Exception e) {
+				// ignored
 			} finally {
 				try { if (ps != null) ps.close(); } catch (final Exception e) { e.printStackTrace(); }
 			}

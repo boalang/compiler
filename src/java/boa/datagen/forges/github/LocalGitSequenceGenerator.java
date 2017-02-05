@@ -55,7 +55,8 @@ public class LocalGitSequenceGenerator {
 				t.printStackTrace();
 				try {
 					Thread.sleep(1000);
-				} catch (InterruptedException e) {
+				} catch (final InterruptedException e) {
+					// ignored
 				}
 			}
 		}
@@ -68,14 +69,16 @@ public class LocalGitSequenceGenerator {
 				astWriter.close();
 				try {
 					Thread.sleep(1000);
-				} catch (InterruptedException e) {
+				} catch (final InterruptedException e) {
+					// ignored
 				}
 				break;
 			} catch (Throwable t) {
 				t.printStackTrace();
 				try {
 					Thread.sleep(1000);
-				} catch (InterruptedException e) {
+				} catch (final InterruptedException e) {
+					// ignored
 				}
 			}
 		}

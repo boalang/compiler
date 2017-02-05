@@ -130,7 +130,8 @@ public class RepoMetadata {
 		JSONObject json = null;
 		try {
 			json = (JSONObject) JSONSerializer.toJSON(jsonTxt);
-		} catch (JSONException e) {
+		} catch (final JSONException e) {
+			// ignored
 		}
 		if (json == null) {
 			System.err.println("Error parsing file " + metadataFile.getAbsolutePath());

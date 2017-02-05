@@ -29,7 +29,9 @@ public class JSONProjectCacher {
 				in.close();
 				System.err.println("using cache: " + cache.getName());
 				return Project.parseFrom(CodedInputStream.newInstance(bytes, 0, bytes.length));
-			} catch (IOException e) { }
+			} catch (final IOException e) {
+				// ignored
+			}
 
 		System.err.println("parsing: " + file.getName());
 
@@ -41,7 +43,9 @@ public class JSONProjectCacher {
 		JSONObject json = null;
 		try {
 			json = (JSONObject) JSONSerializer.toJSON(jsonTxt);
-		} catch (JSONException e) { }
+		} catch (final JSONException e) {
+			// ignored
+		}
 
 		if (json == null) {
 			return null;
@@ -252,7 +256,9 @@ public class JSONProjectCacher {
 				BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(cache));
 				out.write(prj.toByteArray());
 				out.close();
-			} catch (IOException e) { }
+			} catch (final IOException e) {
+				// ignored
+			}
 
 		return prj;
 	}

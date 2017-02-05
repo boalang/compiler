@@ -1737,7 +1737,9 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				final DateFormat df = new SimpleDateFormat("EEE MMM dd kk:mm:ss zzz yyyy");
 				code.add(formatDate(df.parse(s)));
 				return;
-			} catch (Exception e) { }
+			} catch (final Exception e) {
+				// ignored
+			}
 
 			// then try every possible combination of built in formats
 			final int [] formats = new int[] {DateFormat.DEFAULT, DateFormat.FULL, DateFormat.SHORT, DateFormat.LONG, DateFormat.MEDIUM};
@@ -1747,7 +1749,9 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 						final DateFormat df = DateFormat.getDateTimeInstance(f, f2);
 						code.add(formatDate(df.parse(s)));
 						return;
-					} catch (Exception e) { }
+					} catch (final Exception e) {
+						// ignored
+					}
 
 			throw new TypeCheckException(n, "Invalid time literal '" + s + "'");
 		}

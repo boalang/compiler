@@ -63,6 +63,12 @@
             <property name="tokens" value="LITERAL_TRY, LITERAL_FINALLY, LITERAL_IF, LITERAL_ELSE, LITERAL_SWITCH"/>
         </module>
 
+		<!-- Checks for empty catch blocks.
+		     See http://checkstyle.sourceforge.net/config_blocks.html#EmptyCatchBlock -->
+        <module name="EmptyCatchBlock">
+            <property name="exceptionVariableName" value="expected"/>
+        </module>
+
         <!--================================================
                               Coding
         http://checkstyle.sourceforge.net/config_coding.html
@@ -93,6 +99,8 @@
              That is ' L' and not 'l'. The capital L looks a lot like 1.
              See http://checkstyle.sourceforge.net/config_misc.html#UpperEll -->
         <module name="UpperEll"/>
+		<!-- Controls the indentation between comments and surrounding code.
+		     See http://checkstyle.sourceforge.net/config_misc.html#CommentsIndentation -->
         <module name="CommentsIndentation"/>
 
         <!--================================================

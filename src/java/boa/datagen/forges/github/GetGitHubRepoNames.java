@@ -37,8 +37,9 @@ public class GetGitHubRepoNames {
 				JSONArray repos = null;
 		        try {
 		        	repos = (JSONArray) JSONSerializer.toJSON(jsonTxt);
-		        } catch (JSONException e) {
-		        }
+		        } catch (final JSONException e) {
+					// ignored
+				}
 		        if (repos == null) {
 		        	System.err.println("Error parsing file " + file.getAbsolutePath());
 					continue;

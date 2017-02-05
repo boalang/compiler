@@ -113,6 +113,7 @@ public class ConfidenceIntervalAggregator extends Aggregator {
 	
 			this.collect(a * summaryStatistics.getStandardDeviation() / Math.sqrt(summaryStatistics.getN()));
 		} catch (final MathException e) {
+			// ignored
 		}
 	}
 }

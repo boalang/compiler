@@ -28,7 +28,9 @@ public class CacheJSON {
 		pool.shutdown();
 		try {
 			pool.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
-		} catch (InterruptedException e) { }
+		} catch (final InterruptedException e) {
+			// ignored
+		}
 
 		System.out.println("Time: " + (System.currentTimeMillis() - startTime) / 1000);
 	}

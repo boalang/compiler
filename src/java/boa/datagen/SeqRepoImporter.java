@@ -202,7 +202,8 @@ public class SeqRepoImporter {
 					t.printStackTrace();
 					try {
 						Thread.sleep(1000);
-					} catch (InterruptedException e) {
+					} catch (final InterruptedException e) {
+						// ignored
 					}
 				}
 			}
@@ -215,14 +216,16 @@ public class SeqRepoImporter {
 					astWriter.close();
 					try {
 						Thread.sleep(1000);
-					} catch (InterruptedException e) {
+					} catch (final InterruptedException e) {
+						// ignored
 					}
 					break;
 				} catch (Throwable t) {
 					t.printStackTrace();
 					try {
 						Thread.sleep(1000);
-					} catch (InterruptedException e) {
+					} catch (final InterruptedException e) {
+						// ignored
 					}
 				}
 			}

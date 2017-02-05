@@ -116,8 +116,9 @@ public class GetGithubRepoLanguagesMulti {
 		JSONArray repos = null;
         try {
         	repos = (JSONArray) JSONSerializer.toJSON(content);
-        } catch (JSONException e) {
-        }
+        } catch (final JSONException e) {
+			// ignored
+		}
         if (repos == null) {
         	System.err.println("Error parsing file\n" + content);
 			return languages;

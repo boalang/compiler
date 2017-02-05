@@ -137,6 +137,7 @@ public class StatisticsAggregator extends Aggregator {
 			final double a = tDist.inverseCumulativeProbability(1.0 - 0.025);
 			ci = a * summaryStatistics.getStandardDeviation() / Math.sqrt(summaryStatistics.getN());
 		} catch (final MathException e) {
+			// ignored
 		}
 
 		this.collect(s1 + ", " + mean + ", " + median + ", " + stdev + ", " + var + ", " + kurtosis + ", " + skewness + ", " + ci);
