@@ -96,6 +96,9 @@
 		     See http://checkstyle.sourceforge.net/config_coding.html#NoFinalizer -->
         <module name="NoFinalizer"/>
 
+		<!-- 
+		     See -->
+        <module name="ArrayTypeStyle"/>
 		<!-- Checks the distance between declaration of variable and its first usage.
 		     See http://checkstyle.sourceforge.net/config_coding.html#VariableDeclarationUsageDistance -->
         <module name="VariableDeclarationUsageDistance"/>
