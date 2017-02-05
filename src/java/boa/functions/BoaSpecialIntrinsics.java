@@ -24,7 +24,7 @@ import java.util.Map;
 /**
  * Special Functions
  * 
- * These functions have special properties, such as variable types, variable
+ * <p>These functions have special properties, such as variable types, variable
  * numbers of parameters, or parameters that are types rather than values. Some
  * of the syntax used to describe them, e.g. "...", default arguments and
  * overloading, is not part of the Sawzall language.

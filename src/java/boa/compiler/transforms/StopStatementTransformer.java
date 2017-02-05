@@ -53,9 +53,9 @@ import boa.types.BoaProtoTuple;
  * This makes the visitor's side effects the same while changing the semantics
  * so it doesn't actually stop the visit (and thus will visit all nodes).
  * 
- * General algorithm:
+ * <p>General algorithm:
  * 
- * 1) convert all self-visit() calls to pass in copy of the original visitor
+ * <p>1) convert all self-visit() calls to pass in copy of the original visitor
  * 2) add a long var declaration to the enclosing scope
  * 3) find all visit statements containing stop statements, for each one:
  *    a) lift the body into a new function in the surrounding scope

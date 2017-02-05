@@ -51,9 +51,9 @@ import boa.types.BoaStack;
 /**
  * Converts use of current(T) inherited attributes in visitors into stack variables.
  *
- * General algorithm:
+ * <p>General algorithm:
  *
- * 1) Find each instance of VisitorExpression, then for each:
+ * <p>1) Find each instance of VisitorExpression, then for each:
  *    a) Find all instances of "current(T)" in the visitor
  *    b) Collect set of all unique types T found in 1a
  *    c) For each type T in the set from 1b:

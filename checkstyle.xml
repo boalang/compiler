@@ -133,6 +133,10 @@
 		<!-- Checks that the at-clause tag is followed by description.
 		     See http://checkstyle.sourceforge.net/config_javadoc.html#NonEmptyAtclauseDescription -->
         <module name="NonEmptyAtclauseDescription"/>
+		<!-- Checks paragraphs.
+		     See http://checkstyle.sourceforge.net/config_javadoc.html#JavadocParagraph -->
+        <module name="JavadocParagraph"/>
+
 
         <!--==============================================
                            Miscellaneous

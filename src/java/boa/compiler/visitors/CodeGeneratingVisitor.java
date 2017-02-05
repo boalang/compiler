@@ -190,7 +190,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		}
 	}
 
-	/***
+	/**
 	 * Finds the set of all function types and generates classes for each unique type.
 	 * 
 	 * @author rdyer
@@ -237,7 +237,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		}
 	}
 
-	/***
+	/**
 	 * Finds the set of all tuple types and generates classes for each unique tuple type.
 	 *
 	 * @author ankuraga
@@ -284,7 +284,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		}
 	}
 
-	/***
+	/**
 	 * Finds the set of all enum types and generates classes for each enum type.
 	 *
 	 * @author ankuraga

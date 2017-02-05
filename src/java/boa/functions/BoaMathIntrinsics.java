@@ -22,7 +22,7 @@ import java.util.Random;
  * The Boa implementations of the Sawzall math intrinsics that are not in the
  * Java Math class.
  * 
- * The intrinsics that are implemented by the Java Math class are specified in
+ * <p>The intrinsics that are implemented by the Java Math class are specified in
  * {@link SymbolTable}.
  * 
  * @author anthonyu
