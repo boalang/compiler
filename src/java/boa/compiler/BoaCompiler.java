@@ -118,6 +118,7 @@ public class BoaCompiler {
 		try {
 			final List<String> jobnames = new ArrayList<String>();
 			final List<String> jobs = new ArrayList<String>();
+                       final List<Integer> seedList =new ArrayList<Integer>();
 			boolean isSimple = true;
 
 			final List<Program> visitorPrograms = new ArrayList<Program>();
@@ -128,6 +129,7 @@ public class BoaCompiler {
 				final File f = inputFiles.get(i);
 				try {
 					final BoaLexer lexer = new BoaLexer(new ANTLRFileStream(f.getAbsolutePath()));
+                                       seedList.add(lexer._input.hashCode());
 					lexer.removeErrorListeners();
 					lexer.addErrorListener(new LexerErrorListener());
 
@@ -237,6 +239,7 @@ public class BoaCompiler {
 			st.add("combineTables", CodeGeneratingVisitor.combineAggregatorStrings);
 			st.add("reduceTables", CodeGeneratingVisitor.reduceAggregatorStrings);
 			st.add("splitsize", isSimple ? 64 * 1024 * 1024 : 10 * 1024 * 1024);
+                       st.add("seedList", seedList);
 
 			o.write(st.render().getBytes());
 		} finally {
