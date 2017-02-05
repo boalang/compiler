@@ -263,6 +263,17 @@
             <property name="tokens" value="BAND, BOR, BSR, BXOR, DIV, EQUAL, GE, GT, LAND, LE, LITERAL_INSTANCEOF, LOR, LT, MINUS, MOD, NOT_EQUAL, PLUS, QUESTION, SL, SR, STAR"/>
         </module>
 
+		<!-- Checks line wrapping with separators.
+		     See http://checkstyle.sourceforge.net/config_whitespace.html#SeparatorWrap -->
+        <module name="SeparatorWrap">
+            <property name="tokens" value="DOT"/>
+            <property name="option" value="nl"/>
+        </module>
+        <module name="SeparatorWrap">
+            <property name="tokens" value="COMMA"/>
+            <property name="option" value="EOL"/>
+        </module>
+
 		<!-- Checks that a token is followed by whitespace.
 		     See http://checkstyle.sourceforge.net/config_whitespace.html#WhitespaceAfter -->
 		<!-- NOTE: not part of Google style guidelines -->
