@@ -197,6 +197,15 @@
         http://checkstyle.sourceforge.net/config_naming.html
         =================================================-->
 
+        <!-- The Check validate abbreviations (consecutive capital letters) length in identifier name, it also allows to enforce camel case naming.
+             See http://checkstyle.sourceforge.net/config_naming.html#AbbreviationAsWordInName -->
+		<!-- NOTE: differs from the Google style guide -->
+        <module name="AbbreviationAsWordInName">
+            <property name="ignoreFinal" value="true"/> <!-- changed from false -->
+            <property name="allowedAbbreviations" value="JSON, LCOO"/> <!-- added -->
+            <property name="allowedAbbreviationLength" value="3"/> <!-- changed from 1 -->
+        </module>
+
         <!-- Validates identifiers for class type parameters.
              See http://checkstyle.sourceforge.net/config_naming.html#ClassTypeParameterName -->
         <module name="ClassTypeParameterName">

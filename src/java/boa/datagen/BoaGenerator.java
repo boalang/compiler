@@ -136,7 +136,7 @@ public class BoaGenerator {
             try {
                 // because there is no input directory in this case, we need to
                 // create one
-                String GH_JSON_PATH = new java.io.File(".").getCanonicalPath();
+                final String GH_JSON_PATH = new java.io.File(".").getCanonicalPath();
                 DefaultProperties.GH_JSON_PATH = GH_JSON_PATH + "/input";
                 getGithubMetadata(DefaultProperties.GH_JSON_PATH, cl.getOptionValue("user"),
                         cl.getOptionValue("password"), cl.getOptionValue("targetUser"),
