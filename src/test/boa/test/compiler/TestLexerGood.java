@@ -64,7 +64,7 @@ public class TestLexerGood extends BaseTest {
     public void charLiterals() throws IOException {
         lex(load(rootDir + "char-lit.boa"),
             new int[] { BoaLexer.CharacterLiteral, BoaLexer.CharacterLiteral, BoaLexer.CharacterLiteral, BoaLexer.CharacterLiteral, BoaLexer.CharacterLiteral, BoaLexer.CharacterLiteral, BoaLexer.CharacterLiteral, BoaLexer.CharacterLiteral, BoaLexer.CharacterLiteral, BoaLexer.CharacterLiteral, BoaLexer.CharacterLiteral, BoaLexer.CharacterLiteral, BoaLexer.CharacterLiteral, BoaLexer.CharacterLiteral, BoaLexer.CharacterLiteral, BoaLexer.EOF },
-            new String[] { "'a'", "'\\n'", "'\\r'", "'\\t'", "'\\b'", "'\\f'", "'	'", "' '", "'\\\\'", "'\\''", "'\"'", "'\\\"'", "'\\0'", "'\\00'", "'\\000'", "<EOF>" });
+            new String[] { "'a'", "'\\n'", "'\\r'", "'\\t'", "'\\b'", "'\\f'", "'\t'", "' '", "'\\\\'", "'\\''", "'\"'", "'\\\"'", "'\\0'", "'\\00'", "'\\000'", "<EOF>" });
     }
 
     @Test
@@ -72,14 +72,14 @@ public class TestLexerGood extends BaseTest {
 
         lex(load(rootDir + "string-lit.boa"),
             new int[] { BoaLexer.StringLiteral, BoaLexer.StringLiteral, BoaLexer.StringLiteral, BoaLexer.StringLiteral, BoaLexer.StringLiteral, BoaLexer.StringLiteral, BoaLexer.StringLiteral, BoaLexer.StringLiteral, BoaLexer.StringLiteral, BoaLexer.StringLiteral, BoaLexer.StringLiteral, BoaLexer.StringLiteral, BoaLexer.StringLiteral, BoaLexer.EOF },
-            new String[] { "\"\"", "\"	 !@#$%^&*()-_=+[]{};:',.<>/?|`~1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ\"", "\"\\r\"", "\"\\n\"", "\"\\b\"", "\"\\t\"", "\"\\f\"", "\"\\\"\"", "\"\\'\"", "\"\\\\\"", "\"\\7\"", "\"\\77\"", "\"\\77\"", "<EOF>" });
+            new String[] { "\"\"", "\"\t !@#$%^&*()-_=+[]{};:',.<>/?|`~1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ\"", "\"\\r\"", "\"\\n\"", "\"\\b\"", "\"\\t\"", "\"\\f\"", "\"\\\"\"", "\"\\'\"", "\"\\\\\"", "\"\\7\"", "\"\\77\"", "\"\\77\"", "<EOF>" });
     }
 
     @Test
     public void regexLiterals() throws IOException {
         lex(load(rootDir + "regex-lit.boa"),
             new int[] { BoaLexer.RegexLiteral, BoaLexer.RegexLiteral, BoaLexer.EOF },
-            new String[] { "``", "`\\n\"\\r\\\\\\	 !@#$%^&*()-_=+[]{};:',.<>/?|~1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ`", "<EOF>" });
+            new String[] { "``", "`\\n\"\\r\\\\\\\t !@#$%^&*()-_=+[]{};:',.<>/?|~1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ`", "<EOF>" });
     }
 
     @Test
