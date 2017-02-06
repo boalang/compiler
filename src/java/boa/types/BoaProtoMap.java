@@ -24,56 +24,56 @@ import com.google.protobuf.ProtocolMessageEnum;
  * @author rdyer
  */
 public class BoaProtoMap extends BoaMap {
-	/**
-	 * Construct a {@link BoaProtoMap}.
-	 */
-	public BoaProtoMap() {
-		super(new BoaInt(), new BoaString());
-	}
+    /**
+     * Construct a {@link BoaProtoMap}.
+     */
+    public BoaProtoMap() {
+        super(new BoaInt(), new BoaString());
+    }
 
-	/**
-	 * Returns the {@link Class} representing the Java enumeration of this type.
-	 */
-	protected Class<? extends ProtocolMessageEnum> getEnumClass() {
-		return null;
-	}
+    /**
+     * Returns the {@link Class} representing the Java enumeration of this type.
+     */
+    protected Class<? extends ProtocolMessageEnum> getEnumClass() {
+        return null;
+    }
 
-	/**
-	 * Returns if this protobuf enum has the specified attribute.
-	 * 
-	 * @param s the attribute to check for
-	 * @return true if it has the attribute s
-	 */
-	public boolean hasAttribute(final String s) {
-		try {
-			return getEnumClass().getDeclaredField(s).getType() == getEnumClass();
-		} catch (final Exception e) {
-			return false;
-		}
-	}
+    /**
+     * Returns if this protobuf enum has the specified attribute.
+     * 
+     * @param s the attribute to check for
+     * @return true if it has the attribute s
+     */
+    public boolean hasAttribute(final String s) {
+        try {
+            return getEnumClass().getDeclaredField(s).getType() == getEnumClass();
+        } catch (final Exception e) {
+            return false;
+        }
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public boolean assigns(BoaType obj) {
-		return this.getClass() == obj.getClass();
-	}
+    /** {@inheritDoc} */
+    @Override
+    public boolean assigns(BoaType obj) {
+        return this.getClass() == obj.getClass();
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public boolean compares(BoaType obj) {
-		return this.getClass() == obj.getClass();
-	}
+    /** {@inheritDoc} */
+    @Override
+    public boolean compares(BoaType obj) {
+        return this.getClass() == obj.getClass();
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public String toJavaType() {
-		return getEnumClass().getName().replace('$', '.');
-	}
+    /** {@inheritDoc} */
+    @Override
+    public String toJavaType() {
+        return getEnumClass().getName().replace('$', '.');
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public String toString() {
-		final String s = getEnumClass().getName();
-		return s.substring(s.lastIndexOf("$") + 1);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public String toString() {
+        final String s = getEnumClass().getName();
+        return s.substring(s.lastIndexOf("$") + 1);
+    }
 }

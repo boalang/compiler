@@ -21,6 +21,6 @@ package boa.compiler.ast.literals;
  * @author rdyer
  */
 public interface ILiteral {
-	String getLiteral();
-	ILiteral clone();
+    String getLiteral();
+    ILiteral clone();
 }

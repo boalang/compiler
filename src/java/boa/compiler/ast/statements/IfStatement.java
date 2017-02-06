@@ -28,92 +28,92 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
  * @author hridesh
  */
 public class IfStatement extends Statement {
-	protected Expression condition;
-	protected Block body;
-	protected Block elseBody;
+    protected Expression condition;
+    protected Block body;
+    protected Block elseBody;
 
-	public Expression getCondition() {
-		return condition;
-	}
+    public Expression getCondition() {
+        return condition;
+    }
 
-	public Block getBody() {
-		return body;
-	}
+    public Block getBody() {
+        return body;
+    }
 
-	public boolean hasElse() {
-		return elseBody != null;
-	}
+    public boolean hasElse() {
+        return elseBody != null;
+    }
 
-	public Block getElse() {
-		return elseBody;
-	}
+    public Block getElse() {
+        return elseBody;
+    }
 
-	public void setElse(final Statement elseBody) {
-		setElse(Node.ensureBlock(elseBody));
-	}
+    public void setElse(final Statement elseBody) {
+        setElse(Node.ensureBlock(elseBody));
+    }
 
-	public void setElse(final Block elseBody) {
-		elseBody.setParent(this);
-		this.elseBody = elseBody;
-	}
+    public void setElse(final Block elseBody) {
+        elseBody.setParent(this);
+        this.elseBody = elseBody;
+    }
 
-	public IfStatement(final Expression condition, final Statement s) {
-		this(condition, Node.ensureBlock(s));
-	}
+    public IfStatement(final Expression condition, final Statement s) {
+        this(condition, Node.ensureBlock(s));
+    }
 
-	public IfStatement(final Expression condition, final Block body) {
-		this(condition, body, null);
-	}
+    public IfStatement(final Expression condition, final Block body) {
+        this(condition, body, null);
+    }
 
-	public IfStatement(final Expression condition, final Block body, final Statement s2) {
-		this(condition, body, Node.ensureBlock(s2));
-	}
+    public IfStatement(final Expression condition, final Block body, final Statement s2) {
+        this(condition, body, Node.ensureBlock(s2));
+    }
 
-	public IfStatement(final Expression condition, final Statement s, final Block elseBody) {
-		this(condition, Node.ensureBlock(s), elseBody);
-	}
+    public IfStatement(final Expression condition, final Statement s, final Block elseBody) {
+        this(condition, Node.ensureBlock(s), elseBody);
+    }
 
-	public IfStatement(final Expression condition, final Statement s, final Statement s2) {
-		this(condition, Node.ensureBlock(s), Node.ensureBlock(s2));
-	}
+    public IfStatement(final Expression condition, final Statement s, final Statement s2) {
+        this(condition, Node.ensureBlock(s), Node.ensureBlock(s2));
+    }
 
-	public IfStatement(final Expression condition, final Block body, final Block elseBody) {
-		if (condition != null)
-			condition.setParent(this);
-		if (body != null)
-			body.setParent(this);
-		if (elseBody != null)
-			elseBody.setParent(this);
-		this.condition = condition;
-		this.body = body;
-		this.elseBody = elseBody;
-	}
+    public IfStatement(final Expression condition, final Block body, final Block elseBody) {
+        if (condition != null)
+            condition.setParent(this);
+        if (body != null)
+            body.setParent(this);
+        if (elseBody != null)
+            elseBody.setParent(this);
+        this.condition = condition;
+        this.body = body;
+        this.elseBody = elseBody;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
-		return v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
+        return v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
-		v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
+        v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void accept(final AbstractVisitorNoArg v) {
-		v.visit(this);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void accept(final AbstractVisitorNoArg v) {
+        v.visit(this);
+    }
 
-	public IfStatement clone() {
-		final IfStatement s;
-		if (hasElse())
-			s = new IfStatement(condition.clone(), body.clone(), elseBody.clone());
-		else
-			s = new IfStatement(condition.clone(), body.clone());
-		copyFieldsTo(s);
-		return s;
-	}
+    public IfStatement clone() {
+        final IfStatement s;
+        if (hasElse())
+            s = new IfStatement(condition.clone(), body.clone(), elseBody.clone());
+        else
+            s = new IfStatement(condition.clone(), body.clone());
+        copyFieldsTo(s);
+        return s;
+    }
 }

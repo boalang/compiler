@@ -26,9 +26,9 @@ import boa.types.BoaProtoMap;
  * @author rramu
  */
 public class CFGNodeTypeProtoMap extends BoaProtoMap {
-	/** {@inheritDoc} */
-	@Override
-	protected Class<? extends ProtocolMessageEnum> getEnumClass() {
-		return boa.types.Control.CFGNode.CFGNodeType.class;
-	}
+    /** {@inheritDoc} */
+    @Override
+    protected Class<? extends ProtocolMessageEnum> getEnumClass() {
+        return boa.types.Control.CFGNode.CFGNodeType.class;
+    }
 }

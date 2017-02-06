@@ -34,44 +34,44 @@ import boa.types.proto.enums.RepositoryKindProtoMap;
  * @author rdyer
  */
 public class CodeRepositoryProtoTuple extends BoaProtoTuple {
-	private final static List<BoaType> members = new ArrayList<BoaType>();
-	private final static Map<String, Integer> names = new HashMap<String, Integer>();
+    private final static List<BoaType> members = new ArrayList<BoaType>();
+    private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
-	static {
-		int counter = 0;
+    static {
+        int counter = 0;
 
-		names.put("url", counter++);
-		members.add(new BoaString());
+        names.put("url", counter++);
+        members.add(new BoaString());
 
-		names.put("kind", counter++);
-		members.add(new RepositoryKindProtoMap());
+        names.put("kind", counter++);
+        members.add(new RepositoryKindProtoMap());
 
-		names.put("revisions", counter++);
-		members.add(new BoaProtoList(new RevisionProtoTuple()));
+        names.put("revisions", counter++);
+        members.add(new BoaProtoList(new RevisionProtoTuple()));
 
-		names.put("branches", counter++);
-		members.add(new BoaProtoList(new BoaInt()));
+        names.put("branches", counter++);
+        members.add(new BoaProtoList(new BoaInt()));
 
-		names.put("branch_names", counter++);
-		members.add(new BoaProtoList(new BoaString()));
+        names.put("branch_names", counter++);
+        members.add(new BoaProtoList(new BoaString()));
 
-		names.put("tags", counter++);
-		members.add(new BoaProtoList(new BoaInt()));
+        names.put("tags", counter++);
+        members.add(new BoaProtoList(new BoaInt()));
 
-		names.put("tag_names", counter++);
-		members.add(new BoaProtoList(new BoaString()));
-	}
+        names.put("tag_names", counter++);
+        members.add(new BoaProtoList(new BoaString()));
+    }
 
-	/**
-	 * Construct a ProjectProtoTuple.
-	 */
-	public CodeRepositoryProtoTuple() {
-		super(members, names);
-	}
+    /**
+     * Construct a ProjectProtoTuple.
+     */
+    public CodeRepositoryProtoTuple() {
+        super(members, names);
+    }
 
-	/** @{inheritDoc} */
-	@Override
-	public String toJavaType() {
-		return "boa.types.Code.CodeRepository";
-	}
+    /** @{inheritDoc} */
+    @Override
+    public String toJavaType() {
+        return "boa.types.Code.CodeRepository";
+    }
 }

@@ -29,60 +29,60 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
  * @author hridesh
  */
 public class Factor extends Node {
-	protected Operand op;
-	protected final List<Node> ops = new ArrayList<Node>();
+    protected Operand op;
+    protected final List<Node> ops = new ArrayList<Node>();
 
-	public Operand getOperand() {
-		return op;
-	}
+    public Operand getOperand() {
+        return op;
+    }
 
-	public List<Node> getOps() {
-		return ops;
-	}
+    public List<Node> getOps() {
+        return ops;
+    }
 
-	public int getOpsSize() {
-		return ops.size();
-	}
+    public int getOpsSize() {
+        return ops.size();
+    }
 
-	public Node getOp(final int index) {
-		return ops.get(index);
-	}
+    public Node getOp(final int index) {
+        return ops.get(index);
+    }
 
-	public Factor addOp(final Node op) {
-		op.setParent(this);
-		ops.add(op);
-		return this;
-	}
+    public Factor addOp(final Node op) {
+        op.setParent(this);
+        ops.add(op);
+        return this;
+    }
 
-	public Factor(final Operand op) {
-		if (op != null)
-			op.setParent(this);
-		this.op = op;
-	}
+    public Factor(final Operand op) {
+        if (op != null)
+            op.setParent(this);
+        this.op = op;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
-		return v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
+        return v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
-		v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
+        v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void accept(final AbstractVisitorNoArg v) {
-		v.visit(this);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void accept(final AbstractVisitorNoArg v) {
+        v.visit(this);
+    }
 
-	public Factor clone() {
-		final Factor f = new Factor(op.clone());
-		for (final Node n : ops)
-			f.addOp(n.clone());
-		copyFieldsTo(f);
-		return f;
-	}
+    public Factor clone() {
+        final Factor f = new Factor(op.clone());
+        for (final Node n : ops)
+            f.addOp(n.clone());
+        copyFieldsTo(f);
+        return f;
+    }
 }

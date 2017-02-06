@@ -30,43 +30,43 @@ import boa.types.Code.Revision;
  * @author rdyer
  */
 public abstract class AbstractConnector implements AutoCloseable {
-	protected List<AbstractCommit> revisions = null;
-	protected HashMap<String, Integer> nameIndices = new HashMap<String, Integer>();
+    protected List<AbstractCommit> revisions = null;
+    protected HashMap<String, Integer> nameIndices = new HashMap<String, Integer>();
 
-	public abstract String getLastCommitId();
-	public abstract void setLastSeenCommitId(final String id);
+    public abstract String getLastCommitId();
+    public abstract void setLastSeenCommitId(final String id);
 
-	public List<Revision> getCommits(final boolean parse) {
-		if (revisions == null) {
-			revisions = new ArrayList<AbstractCommit>();
-			setRevisions();
-		}
-		final List<Revision> revs = new ArrayList<Revision>();
-		for (final AbstractCommit rev : revisions)
-			revs.add(rev.asProtobuf(parse));
+    public List<Revision> getCommits(final boolean parse) {
+        if (revisions == null) {
+            revisions = new ArrayList<AbstractCommit>();
+            setRevisions();
+        }
+        final List<Revision> revs = new ArrayList<Revision>();
+        for (final AbstractCommit rev : revisions)
+            revs.add(rev.asProtobuf(parse));
 
-		return revs;
-	}
+        return revs;
+    }
 
-	protected abstract void setRevisions();
+    protected abstract void setRevisions();
 
-	public abstract void getTags(final List<String> names, final List<String> commits);
+    public abstract void getTags(final List<String> names, final List<String> commits);
 
-	public abstract void getBranches(final List<String> names, final List<String> commits);
+    public abstract void getBranches(final List<String> names, final List<String> commits);
 
-	protected Map<String, Integer> revisionMap;
+    protected Map<String, Integer> revisionMap;
 
-	public List<Revision> getCommits(final boolean parse, final Writer astWriter, final String repoKey, final String keyDelim) {
-		if (revisions == null) {
-			revisions = new ArrayList<AbstractCommit>();
-			setRevisions();
-		}
-		final List<Revision> revs = new ArrayList<Revision>();
-		int i = 0;
-		for (final AbstractCommit rev : revisions)
-			revs.add(rev.asProtobuf(parse, astWriter, repoKey + keyDelim + (++i), keyDelim));
+    public List<Revision> getCommits(final boolean parse, final Writer astWriter, final String repoKey, final String keyDelim) {
+        if (revisions == null) {
+            revisions = new ArrayList<AbstractCommit>();
+            setRevisions();
+        }
+        final List<Revision> revs = new ArrayList<Revision>();
+        int i = 0;
+        for (final AbstractCommit rev : revisions)
+            revs.add(rev.asProtobuf(parse, astWriter, repoKey + keyDelim + (++i), keyDelim));
 
-		return revs;
-	}
+        return revs;
+    }
 
 }

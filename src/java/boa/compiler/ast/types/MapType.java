@@ -27,47 +27,47 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
  * @author hridesh
  */
 public class MapType extends AbstractType {
-	protected Component index;
-	protected Component value;
+    protected Component index;
+    protected Component value;
 
-	public Component getIndex() {
-		return index;
-	}
+    public Component getIndex() {
+        return index;
+    }
 
-	public Component getValue() {
-		return value;
-	}
+    public Component getValue() {
+        return value;
+    }
 
-	public MapType(final Component index, final Component value) {
-		if (index != null)
-			index.setParent(this);
-		if (value != null)
-			value.setParent(this);
-		this.index = index;
-		this.value = value;
-	}
+    public MapType(final Component index, final Component value) {
+        if (index != null)
+            index.setParent(this);
+        if (value != null)
+            value.setParent(this);
+        this.index = index;
+        this.value = value;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
-		return v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
+        return v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
-		v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
+        v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void accept(final AbstractVisitorNoArg v) {
-		v.visit(this);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void accept(final AbstractVisitorNoArg v) {
+        v.visit(this);
+    }
 
-	public MapType clone() {
-		final MapType t = new MapType(index.clone(), value.clone());
-		copyFieldsTo(t);
-		return t;
-	}
+    public MapType clone() {
+        final MapType t = new MapType(index.clone(), value.clone());
+        copyFieldsTo(t);
+        return t;
+    }
 }

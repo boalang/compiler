@@ -24,11 +24,11 @@ import org.eclipse.wst.jsdt.core.dom.ASTVisitor;
  * @author rdyer
  */
 public class JavaScriptErrorCheckVisitor extends ASTVisitor {
-	public boolean hasError = false;
+    public boolean hasError = false;
 
-	public boolean preVisit2(ASTNode node) {
-		if ((node.getFlags() & ASTNode.MALFORMED) != 0)
-			hasError = true;
-		return !hasError;
-	}
+    public boolean preVisit2(ASTNode node) {
+        if ((node.getFlags() & ASTNode.MALFORMED) != 0)
+            hasError = true;
+        return !hasError;
+    }
 }

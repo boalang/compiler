@@ -26,11 +26,11 @@ import boa.runtime.BoaAbstractVisitor;
  * @author rdyer
  */
 public class BoaCollectingVisitor<K, V> extends BoaAbstractVisitor {
-	public HashMap<K, V> map;
+    public HashMap<K, V> map;
 
-	public BoaCollectingVisitor<K, V> initialize(final HashMap<K, V> map) {
-		initialize();
-		this.map = map;
-		return this;
-	}
+    public BoaCollectingVisitor<K, V> initialize(final HashMap<K, V> map) {
+        initialize();
+        this.map = map;
+        return this;
+    }
 }

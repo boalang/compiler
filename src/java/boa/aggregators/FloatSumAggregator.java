@@ -29,37 +29,37 @@ import boa.io.EmitValue;
  */
 @AggregatorSpec(name = "sum", type = "float", canCombine = true)
 public class FloatSumAggregator extends Aggregator {
-	private double sum;
+    private double sum;
 
-	/** {@inheritDoc} */
-	@Override
-	public void start(final EmitKey key) {
-		super.start(key);
+    /** {@inheritDoc} */
+    @Override
+    public void start(final EmitKey key) {
+        super.start(key);
 
-		this.sum = 0;
-	}
+        this.sum = 0;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void aggregate(final String data, final String metadata) throws IOException, InterruptedException, FinishedException {
-		this.aggregate(Double.parseDouble(data), metadata);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void aggregate(final String data, final String metadata) throws IOException, InterruptedException, FinishedException {
+        this.aggregate(Double.parseDouble(data), metadata);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void aggregate(final long data, final String metadata) {
-		this.aggregate(Long.valueOf(data).doubleValue(), metadata);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void aggregate(final long data, final String metadata) {
+        this.aggregate(Long.valueOf(data).doubleValue(), metadata);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void aggregate(final double data, final String metadata) {
-		this.sum += data;
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void aggregate(final double data, final String metadata) {
+        this.sum += data;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void finish() throws IOException, InterruptedException {
-		this.collect(this.sum);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void finish() throws IOException, InterruptedException {
+        this.collect(this.sum);
+    }
 }

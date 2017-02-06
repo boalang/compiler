@@ -26,59 +26,59 @@ import org.junit.Test;
  * @author sfarheen
  */
 public class TestLambda extends Java8BaseTest {
-	@Test
-	public void lambda() throws IOException {
-		testWrapped(
-			load("test/datagen/java/lambda.java").trim(),
-			load("test/datagen/boa/lambda.boa").trim()
-		);
-	}
+    @Test
+    public void lambda() throws IOException {
+        testWrapped(
+            load("test/datagen/java/lambda.java").trim(),
+            load("test/datagen/boa/lambda.boa").trim()
+        );
+    }
 
-	@Test
-	public void lambda2() throws IOException {
-		testWrapped(
-			load("test/datagen/java/lambda2.java").trim(),
-			load("test/datagen/boa/lambda2.boa").trim()
-		);
-	}
+    @Test
+    public void lambda2() throws IOException {
+        testWrapped(
+            load("test/datagen/java/lambda2.java").trim(),
+            load("test/datagen/boa/lambda2.boa").trim()
+        );
+    }
 
-	@Test
-	public void lambdaWithReturn() throws IOException {
-		testWrapped(
-			load("test/datagen/java/lambda-ret.java").trim(),
-			load("test/datagen/boa/lambda-ret.boa").trim()
-		);
-	}
+    @Test
+    public void lambdaWithReturn() throws IOException {
+        testWrapped(
+            load("test/datagen/java/lambda-ret.java").trim(),
+            load("test/datagen/boa/lambda-ret.boa").trim()
+        );
+    }
 
-	@Test
-	public void lambdaWithTypeDecl() throws IOException {
-		testWrapped(
-			load("test/datagen/java/lambda-withtype.java").trim(),
-			load("test/datagen/boa/lambda-withtype.boa").trim()
-		);
-	}
+    @Test
+    public void lambdaWithTypeDecl() throws IOException {
+        testWrapped(
+            load("test/datagen/java/lambda-withtype.java").trim(),
+            load("test/datagen/boa/lambda-withtype.boa").trim()
+        );
+    }
 
-	@Test
-	public void lambdaNoArg() throws IOException {
-		testWrapped(
-			load("test/datagen/java/lambda-noarg.java").trim(),
-			load("test/datagen/boa/lambda-noarg.boa").trim()
-		);
-	}
+    @Test
+    public void lambdaNoArg() throws IOException {
+        testWrapped(
+            load("test/datagen/java/lambda-noarg.java").trim(),
+            load("test/datagen/boa/lambda-noarg.boa").trim()
+        );
+    }
 
-	@Test
-	public void lambdaNoReturn() throws IOException {
-		testWrapped(
-			load("test/datagen/java/lambda-noret.java").trim(),
-			load("test/datagen/boa/lambda-noret.boa").trim()
-		);
-	}
+    @Test
+    public void lambdaNoReturn() throws IOException {
+        testWrapped(
+            load("test/datagen/java/lambda-noret.java").trim(),
+            load("test/datagen/boa/lambda-noret.boa").trim()
+        );
+    }
 
-	@Test
-	public void lambdaNoTypeDecl() throws IOException {
-		testWrapped(
-			load("test/datagen/java/lambda-notype.java").trim(),
-			load("test/datagen/boa/lambda-notype.boa").trim()
-		);
-	}
+    @Test
+    public void lambdaNoTypeDecl() throws IOException {
+        testWrapped(
+            load("test/datagen/java/lambda-notype.java").trim(),
+            load("test/datagen/boa/lambda-notype.boa").trim()
+        );
+    }
 }

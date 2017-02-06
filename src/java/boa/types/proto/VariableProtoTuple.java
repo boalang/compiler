@@ -32,38 +32,38 @@ import boa.types.BoaType;
  * @author rdyer
  */
 public class VariableProtoTuple extends BoaProtoTuple {
-	private final static List<BoaType> members = new ArrayList<BoaType>();
-	private final static Map<String, Integer> names = new HashMap<String, Integer>();
+    private final static List<BoaType> members = new ArrayList<BoaType>();
+    private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
-	static {
-		int counter = 0;
+    static {
+        int counter = 0;
 
-		names.put("name", counter++);
-		members.add(new BoaString());
+        names.put("name", counter++);
+        members.add(new BoaString());
 
-		names.put("variable_type", counter++);
-		members.add(new TypeProtoTuple());
+        names.put("variable_type", counter++);
+        members.add(new TypeProtoTuple());
 
-		names.put("modifiers", counter++);
-		members.add(new BoaProtoList(new ModifierProtoTuple()));
+        names.put("modifiers", counter++);
+        members.add(new BoaProtoList(new ModifierProtoTuple()));
 
-		names.put("initializer", counter++);
-		members.add(new ExpressionProtoTuple());
+        names.put("initializer", counter++);
+        members.add(new ExpressionProtoTuple());
 
-		names.put("comments", counter++);
-		members.add(new BoaProtoList(new CommentProtoTuple()));
-	}
+        names.put("comments", counter++);
+        members.add(new BoaProtoList(new CommentProtoTuple()));
+    }
 
-	/**
-	 * Construct a {@link VariableProtoTuple}.
-	 */
-	public VariableProtoTuple() {
-		super(members, names);
-	}
+    /**
+     * Construct a {@link VariableProtoTuple}.
+     */
+    public VariableProtoTuple() {
+        super(members, names);
+    }
 
-	/** @{inheritDoc} */
-	@Override
-	public String toJavaType() {
-		return "boa.types.Ast.Variable";
-	}
+    /** @{inheritDoc} */
+    @Override
+    public String toJavaType() {
+        return "boa.types.Ast.Variable";
+    }
 }

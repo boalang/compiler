@@ -48,91 +48,91 @@ import boa.types.BoaInt;
  * @author rdyer
  */
 public class LocalAggregationTransformer extends AbstractVisitorNoArg {
-	/**
-	 * Finds all output variables using a 'sum' {@link Aggregator}.
-	 * 
-	 * @author rdyer
-	 */
-	protected class SumAggregatorFindingVisitor extends AbstractVisitorNoArg {
-		private final List<String> vars = new ArrayList<String>();
+    /**
+     * Finds all output variables using a 'sum' {@link Aggregator}.
+     * 
+     * @author rdyer
+     */
+    protected class SumAggregatorFindingVisitor extends AbstractVisitorNoArg {
+        private final List<String> vars = new ArrayList<String>();
 
-		public List<String> getVars() {
-			return vars;
-		}
+        public List<String> getVars() {
+            return vars;
+        }
 
-		/** {@inheritDoc} */
-		@Override
-		protected void initialize() {
-			vars.clear();
-		}
+        /** {@inheritDoc} */
+        @Override
+        protected void initialize() {
+            vars.clear();
+        }
 
-		/** {@inheritDoc} */
-		@Override
-		public void visit(final VarDeclStatement n) {
-			if (n.hasType() && n.getType() instanceof OutputType) {
-				final OutputType t = (OutputType) n.getType();
-				if ("sum".equals(t.getId().getToken()) && t.getIndicesSize() == 0 && t.getType().getType() instanceof Identifier && ((Identifier)t.getType().getType()).getToken().equals("int"))
-					vars.add(n.getId().getToken());
-			}
-		}
-	}
+        /** {@inheritDoc} */
+        @Override
+        public void visit(final VarDeclStatement n) {
+            if (n.hasType() && n.getType() instanceof OutputType) {
+                final OutputType t = (OutputType) n.getType();
+                if ("sum".equals(t.getId().getToken()) && t.getIndicesSize() == 0 && t.getType().getType() instanceof Identifier && ((Identifier)t.getType().getType()).getToken().equals("int"))
+                    vars.add(n.getId().getToken());
+            }
+        }
+    }
 
-	protected final SumAggregatorFindingVisitor sumAggregatorFinder = new SumAggregatorFindingVisitor();
+    protected final SumAggregatorFindingVisitor sumAggregatorFinder = new SumAggregatorFindingVisitor();
 
-	protected final String varPrefix = "_local_aggregator_";
+    protected final String varPrefix = "_local_aggregator_";
 
-	/** {@inheritDoc} */
-	@Override
-	public void visit(final Program n) {
-		sumAggregatorFinder.start(n);
+    /** {@inheritDoc} */
+    @Override
+    public void visit(final Program n) {
+        sumAggregatorFinder.start(n);
 
-		for (final String s : sumAggregatorFinder.getVars())
-			generateCacheVariable(n, s);
+        for (final String s : sumAggregatorFinder.getVars())
+            generateCacheVariable(n, s);
 
-		super.visit(n);
+        super.visit(n);
 
-		for (final String s : sumAggregatorFinder.getVars())
-			generateCacheOutput(n, s);
-	}
+        for (final String s : sumAggregatorFinder.getVars())
+            generateCacheOutput(n, s);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void visit(final EmitStatement n) {
-		if (!sumAggregatorFinder.getVars().contains(n.getId().getToken()))
-			return;
+    /** {@inheritDoc} */
+    @Override
+    public void visit(final EmitStatement n) {
+        if (!sumAggregatorFinder.getVars().contains(n.getId().getToken()))
+            return;
 
-		generateStoreValue(n);
-	}
+        generateStoreValue(n);
+    }
 
-	protected void generateCacheVariable(final Program n, final String s) {
-		final VarDeclStatement var = ASTFactory.createVarDecl(varPrefix + s, new IntegerLiteral("0"), new BoaInt(), n.env);
-		n.env.set(varPrefix + s, new BoaInt());
-		n.getStatements().add(0, var);
-	}
+    protected void generateCacheVariable(final Program n, final String s) {
+        final VarDeclStatement var = ASTFactory.createVarDecl(varPrefix + s, new IntegerLiteral("0"), new BoaInt(), n.env);
+        n.env.set(varPrefix + s, new BoaInt());
+        n.getStatements().add(0, var);
+    }
 
-	protected void generateCacheOutput(final Program n, String s) {
-		final Identifier id = ASTFactory.createIdentifier(varPrefix + s, n.env);
-		n.getStatements().add(
-			new IfStatement(
-				ASTFactory.createComparison(id, "!=", new IntegerLiteral("0")),
-				new Block().addStatement(
-					new EmitStatement(
-						ASTFactory.createIdentifier(s, n.env),
-						ASTFactory.createFactorExpr(id.clone())
-					)
-				)
-			)
-		);
-	}
+    protected void generateCacheOutput(final Program n, String s) {
+        final Identifier id = ASTFactory.createIdentifier(varPrefix + s, n.env);
+        n.getStatements().add(
+            new IfStatement(
+                ASTFactory.createComparison(id, "!=", new IntegerLiteral("0")),
+                new Block().addStatement(
+                    new EmitStatement(
+                        ASTFactory.createIdentifier(s, n.env),
+                        ASTFactory.createFactorExpr(id.clone())
+                    )
+                )
+            )
+        );
+    }
 
-	protected void generateStoreValue(final EmitStatement n) {
-		final Identifier id = ASTFactory.createIdentifier(varPrefix + n.getId().getToken(), n.env);
+    protected void generateStoreValue(final EmitStatement n) {
+        final Identifier id = ASTFactory.createIdentifier(varPrefix + n.getId().getToken(), n.env);
 
-		n.replaceStatement(n,
-			new AssignmentStatement(
-				new Factor(id.clone()),
-				ASTFactory.createComparison(id, "+", new ParenExpression(n.getValue().clone()))
-			)
-		);
-	}
+        n.replaceStatement(n,
+            new AssignmentStatement(
+                new Factor(id.clone()),
+                ASTFactory.createComparison(id, "+", new ParenExpression(n.getValue().clone()))
+            )
+        );
+    }
 }

@@ -26,9 +26,9 @@ import boa.types.BoaProtoMap;
  * @author rdyer
  */
 public class StatementKindProtoMap extends BoaProtoMap {
-	/** {@inheritDoc} */
-	@Override
-	protected Class<? extends ProtocolMessageEnum> getEnumClass() {
-		return boa.types.Ast.Statement.StatementKind.class;
-	}
+    /** {@inheritDoc} */
+    @Override
+    protected Class<? extends ProtocolMessageEnum> getEnumClass() {
+        return boa.types.Ast.Statement.StatementKind.class;
+    }
 }

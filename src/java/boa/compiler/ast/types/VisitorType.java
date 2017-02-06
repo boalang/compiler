@@ -26,27 +26,27 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
  * @author hridesh
  */
 public class VisitorType extends AbstractType {
-	/** {@inheritDoc} */
-	@Override
-	public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
-		return v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
+        return v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
-		v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
+        v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void accept(final AbstractVisitorNoArg v) {
-		v.visit(this);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void accept(final AbstractVisitorNoArg v) {
+        v.visit(this);
+    }
 
-	public VisitorType clone() {
-		final VisitorType t = new VisitorType();
-		copyFieldsTo(t);
-		return t;
-	}
+    public VisitorType clone() {
+        final VisitorType t = new VisitorType();
+        copyFieldsTo(t);
+        return t;
+    }
 }

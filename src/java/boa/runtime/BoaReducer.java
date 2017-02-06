@@ -40,62 +40,62 @@ import boa.io.EmitValue;
  * @author rdyer
  */
 public abstract class BoaReducer extends Reducer<EmitKey, EmitValue, Text, NullWritable> implements Configurable {
-	/**
-	 * A {@link Logger} that log entries can be written to.
-	 * 
-	 */
-	protected static final Logger LOG = Logger.getLogger(BoaReducer.class);
+    /**
+     * A {@link Logger} that log entries can be written to.
+     * 
+     */
+    protected static final Logger LOG = Logger.getLogger(BoaReducer.class);
 
-	/**
-	 * A {@link Map} from {@link String} to {@link Aggregator} indexing instantiated
-	 * aggregators to their Boa identifiers.
-	 */
-	protected Map<String, Aggregator> aggregators;
+    /**
+     * A {@link Map} from {@link String} to {@link Aggregator} indexing instantiated
+     * aggregators to their Boa identifiers.
+     */
+    protected Map<String, Aggregator> aggregators;
 
-	private Configuration conf;
-	private boolean robust;
+    private Configuration conf;
+    private boolean robust;
 
-	/**
-	 * Construct a {@link BoaReducer}.
-	 */
-	protected BoaReducer() {
-		this.aggregators = new HashMap<String, Aggregator>();
-	}
+    /**
+     * Construct a {@link BoaReducer}.
+     */
+    protected BoaReducer() {
+        this.aggregators = new HashMap<String, Aggregator>();
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public Configuration getConf() {
-		return this.conf;
-	}
+    /** {@inheritDoc} */
+    @Override
+    public Configuration getConf() {
+        return this.conf;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void setConf(final Configuration conf) {
-		this.conf = conf;
-		this.robust = conf.getBoolean("boa.runtime.robust", false);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void setConf(final Configuration conf) {
+        this.conf = conf;
+        this.robust = conf.getBoolean("boa.runtime.robust", false);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	protected void reduce(final EmitKey key, final Iterable<EmitValue> values, final Context context) throws IOException, InterruptedException {
-		// get the aggregator named by the emit key
-		final Aggregator a = this.aggregators.get(key.getKey());
+    /** {@inheritDoc} */
+    @Override
+    protected void reduce(final EmitKey key, final Iterable<EmitValue> values, final Context context) throws IOException, InterruptedException {
+        // get the aggregator named by the emit key
+        final Aggregator a = this.aggregators.get(key.getKey());
 
-		a.setCombining(false);
-		a.start(key);
-		a.setContext(context);
+        a.setCombining(false);
+        a.start(key);
+        a.setContext(context);
 
-		for (final EmitValue value : values)
-			try {
-				for (final String s : value.getData())
-					a.aggregate(s, value.getMetadata());
-			} catch (final FinishedException e) {
-				// we are done
-				return;
-			} catch (final Throwable e) {
-				throw new RuntimeException(e);
-			}
+        for (final EmitValue value : values)
+            try {
+                for (final String s : value.getData())
+                    a.aggregate(s, value.getMetadata());
+            } catch (final FinishedException e) {
+                // we are done
+                return;
+            } catch (final Throwable e) {
+                throw new RuntimeException(e);
+            }
 
-		a.finish();
-	}
+        a.finish();
+    }
 }

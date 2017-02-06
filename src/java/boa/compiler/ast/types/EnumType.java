@@ -30,48 +30,48 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
  * @author ankuraga
  */
 public class EnumType extends AbstractType {
-	protected final List<EnumBodyDeclaration> members = new ArrayList<EnumBodyDeclaration>();
-	
-	public List<EnumBodyDeclaration> getMembers() {
-		return members;
-	}
+    protected final List<EnumBodyDeclaration> members = new ArrayList<EnumBodyDeclaration>();
+    
+    public List<EnumBodyDeclaration> getMembers() {
+        return members;
+    }
 
-	public int getMembersSize() {
-		return members.size();
-	}
+    public int getMembersSize() {
+        return members.size();
+    }
 
-	public EnumBodyDeclaration getMember(final int index) {
-		return members.get(index);
-	}
+    public EnumBodyDeclaration getMember(final int index) {
+        return members.get(index);
+    }
 
-	public void addMember(final EnumBodyDeclaration c) {
-		c.setParent(this);
-		members.add(c);
-	}
+    public void addMember(final EnumBodyDeclaration c) {
+        c.setParent(this);
+        members.add(c);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
-		return v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
+        return v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
-		v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
+        v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void accept(final AbstractVisitorNoArg v) {
-		v.visit(this);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void accept(final AbstractVisitorNoArg v) {
+        v.visit(this);
+    }
 
-	public EnumType clone() {
-		final EnumType t = new EnumType();
-		for (final EnumBodyDeclaration c : members)
-			t.addMember(c.clone());
-		copyFieldsTo(t);
-		return t;
-	}
+    public EnumType clone() {
+        final EnumType t = new EnumType();
+        for (final EnumBodyDeclaration c : members)
+            t.addMember(c.clone());
+        copyFieldsTo(t);
+        return t;
+    }
 }

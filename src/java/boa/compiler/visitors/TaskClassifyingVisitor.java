@@ -34,63 +34,63 @@ import boa.types.proto.ASTRootProtoTuple;
  * @author rdyer
  */
 public class TaskClassifyingVisitor extends AbstractVisitorNoArg {
-	protected final static Set<Class<? extends BoaType>> astTypes = new HashSet<Class<? extends BoaType>>();
+    protected final static Set<Class<? extends BoaType>> astTypes = new HashSet<Class<? extends BoaType>>();
 
-	static {
-		astTypes.addAll(new ASTRootProtoTuple().reachableTypes());
-	}
+    static {
+        astTypes.addAll(new ASTRootProtoTuple().reachableTypes());
+    }
 
-	protected final Set<Class<? extends BoaType>> types = new HashSet<Class<? extends BoaType>>();
+    protected final Set<Class<? extends BoaType>> types = new HashSet<Class<? extends BoaType>>();
 
-	private boolean complex = false;
+    private boolean complex = false;
 
-	public boolean isComplex() {
-		return complex;
-	}
+    public boolean isComplex() {
+        return complex;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	protected void initialize() {
-		complex = false;
-		types.clear();
-	}
+    /** {@inheritDoc} */
+    @Override
+    protected void initialize() {
+        complex = false;
+        types.clear();
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void visit(Factor n) {
-		if (n.getOperand() instanceof Identifier) {
-			final String id = ((Identifier)n.getOperand()).getToken();
-			if ("getast".equals(id) || "getcomments".equals(id))
-				if (n.getOpsSize() > 0 && n.getOp(0) instanceof Call) {
-					complex = true;
-					return;
-				}
-		}
+    /** {@inheritDoc} */
+    @Override
+    public void visit(Factor n) {
+        if (n.getOperand() instanceof Identifier) {
+            final String id = ((Identifier)n.getOperand()).getToken();
+            if ("getast".equals(id) || "getcomments".equals(id))
+                if (n.getOpsSize() > 0 && n.getOp(0) instanceof Call) {
+                    complex = true;
+                    return;
+                }
+        }
 
-		super.visit(n);
-	}
+        super.visit(n);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void visit(final VisitStatement n) {
-		super.visit(n);
+    /** {@inheritDoc} */
+    @Override
+    public void visit(final VisitStatement n) {
+        super.visit(n);
 
-		if (n.hasWildcard())
-			complex = true;
-		else if (n.hasComponent())
-			types.add(n.getComponent().getType().type.getClass());
-		else
-			for (final Identifier id : n.getIdList())
-				types.add(id.type.getClass());
-	}
+        if (n.hasWildcard())
+            complex = true;
+        else if (n.hasComponent())
+            types.add(n.getComponent().getType().type.getClass());
+        else
+            for (final Identifier id : n.getIdList())
+                types.add(id.type.getClass());
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void visit(final VisitorExpression n) {
-		super.visit(n);
+    /** {@inheritDoc} */
+    @Override
+    public void visit(final VisitorExpression n) {
+        super.visit(n);
 
-		types.retainAll(astTypes);
-		if (!types.isEmpty())
-			complex = true;
-	}
+        types.retainAll(astTypes);
+        if (!types.isEmpty())
+            complex = true;
+    }
 }

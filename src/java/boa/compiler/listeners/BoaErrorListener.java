@@ -30,47 +30,47 @@ import org.antlr.v4.runtime.atn.PredictionMode;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 
 public abstract class BoaErrorListener extends BaseErrorListener {
-	public boolean hasError = false;
+    public boolean hasError = false;
 
-	public void error(final String kind, final TokenSource tokens, final Object offendingSymbol, final int line, final int charPositionInLine, final int length, final String msg, final Exception e) {
-		hasError = true;
+    public void error(final String kind, final TokenSource tokens, final Object offendingSymbol, final int line, final int charPositionInLine, final int length, final String msg, final Exception e) {
+        hasError = true;
 
-		final String filename = tokens.getSourceName();
+        final String filename = tokens.getSourceName();
 
-		System.err.print(filename.substring(filename.lastIndexOf(File.separator) + 1) + ": compilation failed: ");
-		System.err.print("Encountered " + kind + " error ");
-		if (offendingSymbol != null)
-			System.err.print("\"" + offendingSymbol + "\" ");
-		System.err.println("at line " + line + ", column " + charPositionInLine + ". " + msg);
+        System.err.print(filename.substring(filename.lastIndexOf(File.separator) + 1) + ": compilation failed: ");
+        System.err.print("Encountered " + kind + " error ");
+        if (offendingSymbol != null)
+            System.err.print("\"" + offendingSymbol + "\" ");
+        System.err.println("at line " + line + ", column " + charPositionInLine + ". " + msg);
 
-		underlineError(tokens, (Token)offendingSymbol, line, charPositionInLine, length);
+        underlineError(tokens, (Token)offendingSymbol, line, charPositionInLine, length);
 
-		if (e != null)
-			for (final StackTraceElement st : e.getStackTrace())
-				System.err.println("\tat " + st);
-		else
-			System.err.println("\tat unknown stack");
-	}
-	private void underlineError(final TokenSource tokens, final Token offendingToken, final int line, final int charPositionInLine, final int length) {
-		final String input = tokens.getInputStream().toString() + "\n ";
-		final String[] lines = input.split("\n");
-		final String errorLine = lines[line - 1];
-		System.err.println(errorLine.replaceAll("\t", "    "));
+        if (e != null)
+            for (final StackTraceElement st : e.getStackTrace())
+                System.err.println("\tat " + st);
+        else
+            System.err.println("\tat unknown stack");
+    }
+    private void underlineError(final TokenSource tokens, final Token offendingToken, final int line, final int charPositionInLine, final int length) {
+        final String input = tokens.getInputStream().toString() + "\n ";
+        final String[] lines = input.split("\n");
+        final String errorLine = lines[line - 1];
+        System.err.println(errorLine.replaceAll("\t", "    "));
 
-		int stop = Math.min(charPositionInLine, errorLine.length());
-		for (int i = 0; i < stop; i++)
-			if (errorLine.charAt(i) == '\t')
-				System.err.print("    ");
-			else
-				System.err.print(" ");
+        int stop = Math.min(charPositionInLine, errorLine.length());
+        for (int i = 0; i < stop; i++)
+            if (errorLine.charAt(i) == '\t')
+                System.err.print("    ");
+            else
+                System.err.print(" ");
 
-		int stop2 = Math.min(stop + length, errorLine.length());
-		for (int i = stop; i < stop2; i++)
-			if (errorLine.charAt(i) == '\t')
-				System.err.print("^^^^");
-			else
-				System.err.print("^");
+        int stop2 = Math.min(stop + length, errorLine.length());
+        for (int i = stop; i < stop2; i++)
+            if (errorLine.charAt(i) == '\t')
+                System.err.print("^^^^");
+            else
+                System.err.print("^");
 
-		System.err.println();
-	}
+        System.err.println();
+    }
 }

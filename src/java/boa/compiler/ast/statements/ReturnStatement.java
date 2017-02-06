@@ -27,56 +27,56 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
  * @author hridesh
  */
 public class ReturnStatement extends Statement {
-	protected Expression expr;
+    protected Expression expr;
 
-	public boolean hasExpr() {
-		return expr != null;
-	}
+    public boolean hasExpr() {
+        return expr != null;
+    }
 
-	public Expression getExpr() {
-		return expr;
-	}
+    public Expression getExpr() {
+        return expr;
+    }
 
-	public void setExpr(final Expression expr) {
-		expr.setParent(this);
-		this.expr = expr;
-	}
+    public void setExpr(final Expression expr) {
+        expr.setParent(this);
+        this.expr = expr;
+    }
 
-	public ReturnStatement() {
-		this(null);
-	}
+    public ReturnStatement() {
+        this(null);
+    }
 
-	public ReturnStatement(final Expression expr) {
-		if (expr != null)
-			expr.setParent(this);
-		this.expr = expr;
-	}
+    public ReturnStatement(final Expression expr) {
+        if (expr != null)
+            expr.setParent(this);
+        this.expr = expr;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
-		return v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
+        return v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
-		v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
+        v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void accept(final AbstractVisitorNoArg v) {
-		v.visit(this);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void accept(final AbstractVisitorNoArg v) {
+        v.visit(this);
+    }
 
-	public ReturnStatement clone() {
-		final ReturnStatement s;
-		if (hasExpr())
-			s = new ReturnStatement(expr.clone());
-		else
-			s = new ReturnStatement();
-		copyFieldsTo(s);
-		return s;
-	}
+    public ReturnStatement clone() {
+        final ReturnStatement s;
+        if (hasExpr())
+            s = new ReturnStatement(expr.clone());
+        else
+            s = new ReturnStatement();
+        copyFieldsTo(s);
+        return s;
+    }
 }

@@ -22,25 +22,25 @@ package boa.types;
  * @author rdyer
  */
 public class BoaTypeVar extends BoaScalar {
-	private String name;
+    private String name;
 
-	public BoaTypeVar(String name) {
-		this.name = name;
-	}
+    public BoaTypeVar(String name) {
+        this.name = name;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public boolean accepts(BoaType that) {
-		return true;
-	}
+    /** {@inheritDoc} */
+    @Override
+    public boolean accepts(BoaType that) {
+        return true;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public String toString() {
-		return "TypeVar " + name;
-	}
+    /** {@inheritDoc} */
+    @Override
+    public String toString() {
+        return "TypeVar " + name;
+    }
 }

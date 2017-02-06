@@ -32,29 +32,29 @@ import boa.types.BoaType;
  * @author rdyer
  */
 public class ASTRootProtoTuple extends BoaProtoTuple {
-	private final static List<BoaType> members = new ArrayList<BoaType>();
-	private final static Map<String, Integer> names = new HashMap<String, Integer>();
+    private final static List<BoaType> members = new ArrayList<BoaType>();
+    private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
-	static {
-		int counter = 0;
+    static {
+        int counter = 0;
 
-		names.put("namespaces", counter++);
-		members.add(new BoaProtoList(new NamespaceProtoTuple()));
+        names.put("namespaces", counter++);
+        members.add(new BoaProtoList(new NamespaceProtoTuple()));
 
-		names.put("imports", counter++);
-		members.add(new BoaProtoList(new BoaString()));
-	}
+        names.put("imports", counter++);
+        members.add(new BoaProtoList(new BoaString()));
+    }
 
-	/**
-	 * Construct a {@link ASTRootProtoTuple}.
-	 */
-	public ASTRootProtoTuple() {
-		super(members, names);
-	}
+    /**
+     * Construct a {@link ASTRootProtoTuple}.
+     */
+    public ASTRootProtoTuple() {
+        super(members, names);
+    }
 
-	/** @{inheritDoc} */
-	@Override
-	public String toJavaType() {
-		return "boa.types.Ast.ASTRoot";
-	}
+    /** @{inheritDoc} */
+    @Override
+    public String toJavaType() {
+        return "boa.types.Ast.ASTRoot";
+    }
 }

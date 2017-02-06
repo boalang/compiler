@@ -26,45 +26,45 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
  * @author hridesh
  */
 public class UnaryFactor extends Operand {
-	protected String op;
-	protected Factor factor;
+    protected String op;
+    protected Factor factor;
 
-	public String getOp() {
-		return op;
-	}
+    public String getOp() {
+        return op;
+    }
 
-	public Factor getFactor() {
-		return factor;
-	}
+    public Factor getFactor() {
+        return factor;
+    }
 
-	public UnaryFactor(final String op, final Factor factor) {
-		if (factor != null)
-			factor.setParent(this);
-		this.op = op;
-		this.factor = factor;
-	}
+    public UnaryFactor(final String op, final Factor factor) {
+        if (factor != null)
+            factor.setParent(this);
+        this.op = op;
+        this.factor = factor;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
-		return v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
+        return v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
-		v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
+        v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void accept(final AbstractVisitorNoArg v) {
-		v.visit(this);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void accept(final AbstractVisitorNoArg v) {
+        v.visit(this);
+    }
 
-	public UnaryFactor clone() {
-		final UnaryFactor uf = new UnaryFactor(op, factor.clone());
-		copyFieldsTo(uf);
-		return uf;
-	}
+    public UnaryFactor clone() {
+        final UnaryFactor uf = new UnaryFactor(op, factor.clone());
+        copyFieldsTo(uf);
+        return uf;
+    }
 }

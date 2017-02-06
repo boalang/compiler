@@ -28,7 +28,7 @@ import boa.io.EmitValue;
  * @author rdyer
  */
 public class BoaPartitioner extends Partitioner<EmitKey, EmitValue> {
-	public int getPartition(final EmitKey key, final EmitValue value, final int num) {
-		return key.getId() % num;
-	}
+    public int getPartition(final EmitKey key, final EmitValue value, final int num) {
+        return key.getId() % num;
+    }
 }

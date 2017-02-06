@@ -26,10 +26,10 @@ import java.io.IOException;
  */
 @AggregatorSpec(name = "collection")
 public class CollectionAggregator extends Aggregator {
-	/** {@inheritDoc} */
-	@Override
-	public void aggregate(final String data, final String metadata) throws IOException, InterruptedException {
-		// just pass it through
-		this.collect(data);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void aggregate(final String data, final String metadata) throws IOException, InterruptedException {
+        // just pass it through
+        this.collect(data);
+    }
 }

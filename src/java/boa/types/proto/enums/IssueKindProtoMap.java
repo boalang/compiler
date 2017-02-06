@@ -26,9 +26,9 @@ import boa.types.BoaProtoMap;
  * @author rdyer
  */
 public class IssueKindProtoMap extends BoaProtoMap {
-	/** {@inheritDoc} */
-	@Override
-	protected Class<? extends ProtocolMessageEnum> getEnumClass() {
-		return boa.types.Issues.IssueRepository.IssueKind.class;
-	}
+    /** {@inheritDoc} */
+    @Override
+    protected Class<? extends ProtocolMessageEnum> getEnumClass() {
+        return boa.types.Issues.IssueRepository.IssueKind.class;
+    }
 }

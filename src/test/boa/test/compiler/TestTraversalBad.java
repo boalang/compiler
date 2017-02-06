@@ -27,16 +27,16 @@ import org.junit.runners.JUnit4;
  */
 @RunWith(JUnit4.class)
 public class TestTraversalBad extends BaseTest {
-	final private static String rootDir = "test/traversal/";
-	final private static String badDir = rootDir + "errors/";
+    final private static String rootDir = "test/traversal/";
+    final private static String badDir = rootDir + "errors/";
 
-	@Test
-	public void traversalWithStop() throws IOException {
-		typecheck(load(badDir + "traversal-with-stop.boa"), "Stop statement only allowed inside 'before' visits");
-	}
+    @Test
+    public void traversalWithStop() throws IOException {
+        typecheck(load(badDir + "traversal-with-stop.boa"), "Stop statement only allowed inside 'before' visits");
+    }
 
-	@Test
-	public void traversalWithNoReturn() throws IOException {
-		codegen(load(badDir + "traverse-with-no-return-statement.boa"), "Error on line 131: missing return statement");
-	}
+    @Test
+    public void traversalWithNoReturn() throws IOException {
+        codegen(load(badDir + "traverse-with-no-return-statement.boa"), "Error on line 131: missing return statement");
+    }
 }

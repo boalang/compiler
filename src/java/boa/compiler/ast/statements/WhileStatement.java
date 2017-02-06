@@ -28,51 +28,51 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
  * @author hridesh
  */
 public class WhileStatement extends Statement {
-	protected Expression condition;
-	protected Block body;
+    protected Expression condition;
+    protected Block body;
 
-	public Expression getCondition() {
-		return condition;
-	}
+    public Expression getCondition() {
+        return condition;
+    }
 
-	public Block getBody() {
-		return body;
-	}
+    public Block getBody() {
+        return body;
+    }
 
-	public WhileStatement(final Expression condition, final Statement s) {
-		this(condition, Node.ensureBlock(s));
-	}
+    public WhileStatement(final Expression condition, final Statement s) {
+        this(condition, Node.ensureBlock(s));
+    }
 
-	public WhileStatement(final Expression condition, final Block body) {
-		if (condition != null)
-			condition.setParent(this);
-		if (body != null)
-			body.setParent(this);
-		this.condition = condition;
-		this.body = body;
-	}
+    public WhileStatement(final Expression condition, final Block body) {
+        if (condition != null)
+            condition.setParent(this);
+        if (body != null)
+            body.setParent(this);
+        this.condition = condition;
+        this.body = body;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
-		return v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
+        return v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
-		v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
+        v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void accept(final AbstractVisitorNoArg v) {
-		v.visit(this);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void accept(final AbstractVisitorNoArg v) {
+        v.visit(this);
+    }
 
-	public WhileStatement clone() {
-		final WhileStatement s = new WhileStatement(condition.clone(), body.clone());
-		copyFieldsTo(s);
-		return s;
-	}
+    public WhileStatement clone() {
+        final WhileStatement s = new WhileStatement(condition.clone(), body.clone());
+        copyFieldsTo(s);
+        return s;
+    }
 }

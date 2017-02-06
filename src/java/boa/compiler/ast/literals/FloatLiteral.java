@@ -27,37 +27,37 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
  * @author hridesh
  */
 public class FloatLiteral extends Operand implements ILiteral {
-	protected String literal;
-	
-	public String getLiteral() {
-		return literal;
-	}
+    protected String literal;
+    
+    public String getLiteral() {
+        return literal;
+    }
 
-	public FloatLiteral(final String literal) {
-		this.literal = literal;
-	}
+    public FloatLiteral(final String literal) {
+        this.literal = literal;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
-		return v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
+        return v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
-		v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
+        v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void accept(final AbstractVisitorNoArg v) {
-		v.visit(this);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void accept(final AbstractVisitorNoArg v) {
+        v.visit(this);
+    }
 
-	public FloatLiteral clone() {
-		final FloatLiteral l = new FloatLiteral(literal);
-		copyFieldsTo(l);
-		return l;
-	}
+    public FloatLiteral clone() {
+        final FloatLiteral l = new FloatLiteral(literal);
+        copyFieldsTo(l);
+        return l;
+    }
 }

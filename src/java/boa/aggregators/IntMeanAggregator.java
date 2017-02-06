@@ -28,44 +28,44 @@ import boa.io.EmitKey;
  */
 @AggregatorSpec(name = "mean", type = "int", canCombine = true)
 public class IntMeanAggregator extends MeanAggregator {
-	private long sum;
+    private long sum;
 
-	/** {@inheritDoc} */
-	@Override
-	public void start(final EmitKey key) {
-		super.start(key);
+    /** {@inheritDoc} */
+    @Override
+    public void start(final EmitKey key) {
+        super.start(key);
 
-		this.sum = 0;
-	}
+        this.sum = 0;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void aggregate(final String data, final String metadata) throws IOException, InterruptedException {
-		this.aggregate(Double.valueOf(data).longValue(), metadata);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void aggregate(final String data, final String metadata) throws IOException, InterruptedException {
+        this.aggregate(Double.valueOf(data).longValue(), metadata);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void aggregate(final long data, final String metadata) {
-		this.sum += data;
+    /** {@inheritDoc} */
+    @Override
+    public void aggregate(final long data, final String metadata) {
+        this.sum += data;
 
-		super.count(metadata);
-	}
+        super.count(metadata);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void aggregate(final double data, final String metadata) {
-		this.aggregate(Double.valueOf(data).longValue(), metadata);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void aggregate(final double data, final String metadata) {
+        this.aggregate(Double.valueOf(data).longValue(), metadata);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void finish() throws IOException, InterruptedException {
-		// if we are in the combiner, output the sum and the count
-		if (this.isCombining())
-			this.collect(this.sum, BoaCasts.longToString(this.getCount()));
-		// otherwise, output the final answer
-		else
-			this.collect(this.sum / (double) this.getCount());
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void finish() throws IOException, InterruptedException {
+        // if we are in the combiner, output the sum and the count
+        if (this.isCombining())
+            this.collect(this.sum, BoaCasts.longToString(this.getCount()));
+        // otherwise, output the final answer
+        else
+            this.collect(this.sum / (double) this.getCount());
+    }
 }

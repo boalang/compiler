@@ -30,12 +30,12 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
  * @param <V> the type of values
  */
 public class BoaOutputFormat<K, V> extends TextOutputFormat<K, V> {
-	private FileOutputCommitter committer = null;
+    private FileOutputCommitter committer = null;
 
-	@Override
-	public synchronized OutputCommitter getOutputCommitter(TaskAttemptContext context) throws java.io.IOException {
-		if (committer == null)
-			committer = new BoaOutputCommitter(getOutputPath(context), context);
-		return committer;
-	}
+    @Override
+    public synchronized OutputCommitter getOutputCommitter(TaskAttemptContext context) throws java.io.IOException {
+        if (committer == null)
+            committer = new BoaOutputCommitter(getOutputPath(context), context);
+        return committer;
+    }
 }

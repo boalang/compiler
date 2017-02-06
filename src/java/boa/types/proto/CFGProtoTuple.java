@@ -36,41 +36,41 @@ import boa.types.proto.enums.FileKindProtoMap;
  * @author rramu
  */
 public class CFGProtoTuple extends BoaProtoTuple {
-	private final static List<BoaType> members = new ArrayList<BoaType>();
-	private final static Map<String, Integer> names = new HashMap<String, Integer>();
+    private final static List<BoaType> members = new ArrayList<BoaType>();
+    private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
-	static {
-		int counter = 0;
+    static {
+        int counter = 0;
 
-		names.put("nodes", counter++);
-		members.add(new BoaSet(new CFGNodeProtoTuple()));
+        names.put("nodes", counter++);
+        members.add(new BoaSet(new CFGNodeProtoTuple()));
 
-		names.put("isBranchPresent", counter++);
-		members.add(new BoaBool());
+        names.put("isBranchPresent", counter++);
+        members.add(new BoaBool());
 
-		names.put("isLoopPresent", counter++);
-		members.add(new BoaBool());
+        names.put("isLoopPresent", counter++);
+        members.add(new BoaBool());
 
-		names.put("nestedBranchPresent", counter++);
-		members.add(new BoaBool());
+        names.put("nestedBranchPresent", counter++);
+        members.add(new BoaBool());
 
-		names.put("md", counter++);
-		members.add(new MethodProtoTuple());
+        names.put("md", counter++);
+        members.add(new MethodProtoTuple());
 
-		names.put("class_name", counter++);
-		members.add(new BoaString());
-	}
+        names.put("class_name", counter++);
+        members.add(new BoaString());
+    }
 
-	/**
-	 * Construct a {@link CFGhProtoTuple}.
-	 */
-	public CFGProtoTuple() {
-		super(members, names);
-	}
+    /**
+     * Construct a {@link CFGhProtoTuple}.
+     */
+    public CFGProtoTuple() {
+        super(members, names);
+    }
 
-	/** @{inheritDoc} */
-	@Override
-	public String toJavaType() {
-		return "boa.graphs.cfg.CFG";
-	}
+    /** @{inheritDoc} */
+    @Override
+    public String toJavaType() {
+        return "boa.graphs.cfg.CFG";
+    }
 }

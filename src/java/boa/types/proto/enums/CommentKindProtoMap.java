@@ -26,9 +26,9 @@ import boa.types.BoaProtoMap;
  * @author rdyer
  */
 public class CommentKindProtoMap extends BoaProtoMap {
-	/** {@inheritDoc} */
-	@Override
-	protected Class<? extends ProtocolMessageEnum> getEnumClass() {
-		return boa.types.Ast.Comment.CommentKind.class;
-	}
+    /** {@inheritDoc} */
+    @Override
+    protected Class<? extends ProtocolMessageEnum> getEnumClass() {
+        return boa.types.Ast.Comment.CommentKind.class;
+    }
 }

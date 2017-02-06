@@ -24,78 +24,78 @@ import boa.functions.BoaCasts;
  * @author anthonyu
  */
 class WeightedString {
-	private final String string;
-	private final double weight;
+    private final String string;
+    private final double weight;
 
-	/**
-	 * Construct a WeightedString.
-	 * 
-	 * @param string
-	 *            A {@link String} containing the string part of the tuple
-	 * 
-	 * @param weight
-	 *            A double representing the weight part of the tuple
-	 */
-	public WeightedString(final String string, final double weight) {
-		this.string = string;
-		this.weight = weight;
-	}
+    /**
+     * Construct a WeightedString.
+     * 
+     * @param string
+     *            A {@link String} containing the string part of the tuple
+     * 
+     * @param weight
+     *            A double representing the weight part of the tuple
+     */
+    public WeightedString(final String string, final double weight) {
+        this.string = string;
+        this.weight = weight;
+    }
 
-	/**
-	 * Get the string part of the tuple.
-	 * 
-	 * @return A {@link String} containing the string part of the tuple
-	 */
-	public String getString() {
-		return this.string;
-	}
+    /**
+     * Get the string part of the tuple.
+     * 
+     * @return A {@link String} containing the string part of the tuple
+     */
+    public String getString() {
+        return this.string;
+    }
 
-	/**
-	 * Get the weight part of the tuple.
-	 * 
-	 * @return A double containing the weight part of the tuple
-	 */
-	public double getWeight() {
-		return this.weight;
-	}
+    /**
+     * Get the weight part of the tuple.
+     * 
+     * @return A double containing the weight part of the tuple
+     */
+    public double getWeight() {
+        return this.weight;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + (this.string == null ? 0 : this.string.hashCode());
-		final long temp = Double.doubleToLongBits(this.weight);
-		result = prime * result + (int) (temp ^ temp >>> 32);
-		return result;
-	}
+    /** {@inheritDoc} */
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + (this.string == null ? 0 : this.string.hashCode());
+        final long temp = Double.doubleToLongBits(this.weight);
+        result = prime * result + (int) (temp ^ temp >>> 32);
+        return result;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public boolean equals(final Object obj) {
-		if (this == obj)
-			return true;
+    /** {@inheritDoc} */
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj)
+            return true;
 
-		if (obj == null || this.getClass() != obj.getClass())
-			return false;
+        if (obj == null || this.getClass() != obj.getClass())
+            return false;
 
-		final WeightedString other = (WeightedString) obj;
+        final WeightedString other = (WeightedString) obj;
 
-		if (this.string == null && other.string != null)
-				return false;
+        if (this.string == null && other.string != null)
+                return false;
 
-		if (this.string != null && !this.string.equals(other.string))
-			return false;
+        if (this.string != null && !this.string.equals(other.string))
+            return false;
 
-		if (Double.doubleToLongBits(this.weight) != Double.doubleToLongBits(other.weight))
-			return false;
+        if (Double.doubleToLongBits(this.weight) != Double.doubleToLongBits(other.weight))
+            return false;
 
-		return true;
-	}
+        return true;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public String toString() {
-		return this.string + ", " + BoaCasts.doubleToString(this.weight);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public String toString() {
+        return this.string + ", " + BoaCasts.doubleToString(this.weight);
+    }
 }

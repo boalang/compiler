@@ -27,51 +27,51 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
  * @author ankuraga
  */
 public class EnumBodyDeclaration extends AbstractType {
-	protected Identifier id;
-	protected Expression exp;
+    protected Identifier id;
+    protected Expression exp;
 
-	public boolean hasIdentifier() {
-		return id != null;
-	}
+    public boolean hasIdentifier() {
+        return id != null;
+    }
 
-	public Identifier getIdentifier() {
-		return id;
-	}
-	
-	public Expression getExp() {
-		return exp;
-	}
-	
-	public EnumBodyDeclaration(final Identifier id, final Expression exp) {
-		if (id != null)
-			id.setParent(this);
-		if (exp != null)
-			exp.setParent(this);
-		this.id = id;
-		this.exp = exp;
-	}
+    public Identifier getIdentifier() {
+        return id;
+    }
+    
+    public Expression getExp() {
+        return exp;
+    }
+    
+    public EnumBodyDeclaration(final Identifier id, final Expression exp) {
+        if (id != null)
+            id.setParent(this);
+        if (exp != null)
+            exp.setParent(this);
+        this.id = id;
+        this.exp = exp;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
-		return v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
+        return v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
-		v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
+        v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void accept(final AbstractVisitorNoArg v) {
-		v.visit(this);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void accept(final AbstractVisitorNoArg v) {
+        v.visit(this);
+    }
 
-	public EnumBodyDeclaration clone() {
-		final EnumBodyDeclaration c = new EnumBodyDeclaration(id.clone(), exp.clone());
-		copyFieldsTo(c);
-		return c;
-	}
+    public EnumBodyDeclaration clone() {
+        final EnumBodyDeclaration c = new EnumBodyDeclaration(id.clone(), exp.clone());
+        copyFieldsTo(c);
+        return c;
+    }
 }

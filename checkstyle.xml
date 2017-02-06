@@ -35,6 +35,13 @@
     = WARNINGS =
     =========-->
 
+	<!-- Enforces using spaces instead of tabs
+		 See http://checkstyle.sourceforge.net/config_whitespace.html#FileTabCharacter -->
+	<module name="FileTabCharacter">
+		<property name="eachLine" value="true"/>
+		<property name="severity" value="warning"/>
+	</module>
+
     <module name="TreeWalker">
         <property name="severity" value="warning"/>
 
@@ -65,20 +72,20 @@
             <property name="tokens" value="LITERAL_TRY, LITERAL_FINALLY, LITERAL_IF, LITERAL_ELSE, LITERAL_SWITCH"/>
         </module>
 
-		<!-- Checks for empty catch blocks.
-		     See http://checkstyle.sourceforge.net/config_blocks.html#EmptyCatchBlock -->
+        <!-- Checks for empty catch blocks.
+             See http://checkstyle.sourceforge.net/config_blocks.html#EmptyCatchBlock -->
         <module name="EmptyCatchBlock">
             <property name="exceptionVariableName" value="expected"/>
         </module>
 
-		<!-- Checks for the placement of left curly braces ('{') for code blocks.
-		     See http://checkstyle.sourceforge.net/config_blocks.html#LeftCurly -->
+        <!-- Checks for the placement of left curly braces ('{') for code blocks.
+             See http://checkstyle.sourceforge.net/config_blocks.html#LeftCurly -->
         <module name="LeftCurly">
             <property name="maxLineLength" value="100"/>
         </module>
 
-		<!-- Checks the placement of right curly braces ('}') for code blocks.
-		     See http://checkstyle.sourceforge.net/config_blocks.html#RightCurly -->
+        <!-- Checks the placement of right curly braces ('}') for code blocks.
+             See http://checkstyle.sourceforge.net/config_blocks.html#RightCurly -->
         <module name="RightCurly"/>
         <module name="RightCurly">
             <property name="option" value="alone"/>
@@ -106,16 +113,20 @@
              See http://checkstyle.sourceforge.net/config_coding.html#MissingSwitchDefault -->
         <module name="MissingSwitchDefault"/>
 
-		<!-- Checks that each variable declaration is in its own statement and on its own line.
-		     See http://checkstyle.sourceforge.net/config_coding.html#MultipleVariableDeclarations -->
+        <!-- Checks that each variable declaration is in its own statement and on its own line.
+             See http://checkstyle.sourceforge.net/config_coding.html#MultipleVariableDeclarations -->
         <module name="MultipleVariableDeclarations"/>
 
-		<!-- Verifies there are no finalize() methods defined in a class.
-		     See http://checkstyle.sourceforge.net/config_coding.html#NoFinalizer -->
+        <!-- Verifies there are no finalize() methods defined in a class.
+             See http://checkstyle.sourceforge.net/config_coding.html#NoFinalizer -->
         <module name="NoFinalizer"/>
 
-		<!-- Checks the distance between declaration of variable and its first usage.
-		     See http://checkstyle.sourceforge.net/config_coding.html#VariableDeclarationUsageDistance -->
+        <!-- Checks that there is only one statement per line.
+             See http://checkstyle.sourceforge.net/config_coding.html#OneStatementPerLine -->
+        <module name="OneStatementPerLine"/>
+
+        <!-- Checks the distance between declaration of variable and its first usage.
+             See http://checkstyle.sourceforge.net/config_coding.html#VariableDeclarationUsageDistance -->
         <module name="VariableDeclarationUsageDistance"/>
 
         <!--=================================================
@@ -123,8 +134,8 @@
         http://checkstyle.sourceforge.net/config_imports.html
         ==================================================-->
 
-		<!-- Checks that the groups of import declarations appear in the order specified by the user.
-		     See http://checkstyle.sourceforge.net/config_imports.html#CustomImportOrder -->
+        <!-- Checks that the groups of import declarations appear in the order specified by the user.
+             See http://checkstyle.sourceforge.net/config_imports.html#CustomImportOrder -->
         <module name="CustomImportOrder">
             <property name="specialImportsRegExp" value="boa"/>
             <property name="sortImportsInGroupAlphabetically" value="true"/>
@@ -136,23 +147,23 @@
         http://checkstyle.sourceforge.net/config_javadoc.html
         ==================================================-->
 
-		<!-- Checks the order of at-clauses.
-		     See http://checkstyle.sourceforge.net/config_javadoc.html#AtclauseOrder -->
+        <!-- Checks the order of at-clauses.
+             See http://checkstyle.sourceforge.net/config_javadoc.html#AtclauseOrder -->
         <module name="AtclauseOrder">
             <property name="tagOrder" value="@param, @return, @throws, @deprecated"/>
             <property name="target" value="CLASS_DEF, INTERFACE_DEF, ENUM_DEF, METHOD_DEF, CTOR_DEF, VARIABLE_DEF"/>
         </module>
 
-		<!-- Checks paragraphs.
-		     See http://checkstyle.sourceforge.net/config_javadoc.html#JavadocParagraph -->
+        <!-- Checks paragraphs.
+             See http://checkstyle.sourceforge.net/config_javadoc.html#JavadocParagraph -->
         <module name="JavadocParagraph"/>
 
-		<!-- Checks the indentation of the continuation lines in at-clauses.
-		     See http://checkstyle.sourceforge.net/config_javadoc.html#JavadocTagContinuationIndentation -->
+        <!-- Checks the indentation of the continuation lines in at-clauses.
+             See http://checkstyle.sourceforge.net/config_javadoc.html#JavadocTagContinuationIndentation -->
         <module name="JavadocTagContinuationIndentation"/>
 
-		<!-- Checks that the at-clause tag is followed by description.
-		     See http://checkstyle.sourceforge.net/config_javadoc.html#NonEmptyAtclauseDescription -->
+        <!-- Checks that the at-clause tag is followed by description.
+             See http://checkstyle.sourceforge.net/config_javadoc.html#NonEmptyAtclauseDescription -->
         <module name="NonEmptyAtclauseDescription"/>
 
         <!--==============================================
@@ -160,20 +171,20 @@
         http://checkstyle.sourceforge.net/config_misc.html
         ===============================================-->
 
-		<!-- Restrict using Unicode escapes (e.g. \u221e).
-		     See http://checkstyle.sourceforge.net/config_misc.html#AvoidEscapedUnicodeCharacters -->
+        <!-- Restrict using Unicode escapes (e.g. \u221e).
+             See http://checkstyle.sourceforge.net/config_misc.html#AvoidEscapedUnicodeCharacters -->
         <module name="AvoidEscapedUnicodeCharacters">
             <property name="allowEscapesForControlCharacters" value="true"/>
             <property name="allowByTailComment" value="true"/>
             <property name="allowNonPrintableEscapes" value="true"/>
         </module>
 
-		<!-- Checks the style of array type definitions.
-		     See http://checkstyle.sourceforge.net/config_misc.html#ArrayTypeStyle -->
+        <!-- Checks the style of array type definitions.
+             See http://checkstyle.sourceforge.net/config_misc.html#ArrayTypeStyle -->
         <module name="ArrayTypeStyle"/>
 
-		<!-- Controls the indentation between comments and surrounding code.
-		     See http://checkstyle.sourceforge.net/config_misc.html#CommentsIndentation -->
+        <!-- Controls the indentation between comments and surrounding code.
+             See http://checkstyle.sourceforge.net/config_misc.html#CommentsIndentation -->
         <module name="CommentsIndentation"/>
 
         <!-- Checks that long constants are defined with an upper ell.
@@ -252,8 +263,8 @@
              See http://checkstyle.sourceforge.net/config_whitespace.html#MethodParamPad -->
         <module name="MethodParamPad"/>
 
-		<!-- Checks that chosen statements are not line-wrapped.
-		     See http://checkstyle.sourceforge.net/config_whitespace.html#NoLineWrap -->
+        <!-- Checks that chosen statements are not line-wrapped.
+             See http://checkstyle.sourceforge.net/config_whitespace.html#NoLineWrap -->
         <module name="NoLineWrap"/>
 
         <!-- Checks the policy on how to wrap lines on operators.
@@ -263,8 +274,8 @@
             <property name="tokens" value="BAND, BOR, BSR, BXOR, DIV, EQUAL, GE, GT, LAND, LE, LITERAL_INSTANCEOF, LOR, LT, MINUS, MOD, NOT_EQUAL, PLUS, QUESTION, SL, SR, STAR"/>
         </module>
 
-		<!-- Checks line wrapping with separators.
-		     See http://checkstyle.sourceforge.net/config_whitespace.html#SeparatorWrap -->
+        <!-- Checks line wrapping with separators.
+             See http://checkstyle.sourceforge.net/config_whitespace.html#SeparatorWrap -->
         <module name="SeparatorWrap">
             <property name="tokens" value="DOT"/>
             <property name="option" value="nl"/>
@@ -274,16 +285,16 @@
             <property name="option" value="EOL"/>
         </module>
 
-		<!-- Checks that a token is followed by whitespace.
-		     See http://checkstyle.sourceforge.net/config_whitespace.html#WhitespaceAfter -->
-		<!-- NOTE: not part of Google style guidelines -->
-		<module name="WhitespaceAfter">
-			<!-- dont enforce on TYPECAST -->
-			<property name="tokens" value="COMMA, SEMI"/>
-		</module>
+        <!-- Checks that a token is followed by whitespace.
+             See http://checkstyle.sourceforge.net/config_whitespace.html#WhitespaceAfter -->
+        <!-- NOTE: not part of Google style guidelines -->
+        <module name="WhitespaceAfter">
+            <!-- dont enforce on TYPECAST -->
+            <property name="tokens" value="COMMA, SEMI"/>
+        </module>
 
-		<!-- Checks that a token is surrounded by whitespace.
-		     See http://checkstyle.sourceforge.net/config_whitespace.html#WhitespaceAround -->
+        <!-- Checks that a token is surrounded by whitespace.
+             See http://checkstyle.sourceforge.net/config_whitespace.html#WhitespaceAround -->
         <module name="WhitespaceAround">
             <property name="allowEmptyConstructors" value="true"/>
             <property name="allowEmptyMethods" value="true"/>

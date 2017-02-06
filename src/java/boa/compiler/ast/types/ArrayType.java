@@ -27,39 +27,39 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
  * @author hridesh
  */
 public class ArrayType extends AbstractType {
-	protected Component value;
+    protected Component value;
 
-	public Component getValue() {
-		return value;
-	}
+    public Component getValue() {
+        return value;
+    }
 
-	public ArrayType(final Component value) {
-		if (value != null)
-			value.setParent(this);
-		this.value = value;
-	}
+    public ArrayType(final Component value) {
+        if (value != null)
+            value.setParent(this);
+        this.value = value;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
-		return v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
+        return v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
-		v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
+        v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void accept(final AbstractVisitorNoArg v) {
-		v.visit(this);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void accept(final AbstractVisitorNoArg v) {
+        v.visit(this);
+    }
 
-	public ArrayType clone() {
-		final ArrayType t = new ArrayType(value.clone());
-		copyFieldsTo(t);
-		return t;
-	}
+    public ArrayType clone() {
+        final ArrayType t = new ArrayType(value.clone());
+        copyFieldsTo(t);
+        return t;
+    }
 }

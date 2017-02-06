@@ -27,45 +27,45 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
  * @author hridesh
  */
 public class Identifier extends AbstractType {
-	protected String token;
+    protected String token;
 
-	public String getToken() {
-		return token;
-	}
+    public String getToken() {
+        return token;
+    }
 
-	public void setToken(final String token) {
-		this.token = token;
-	}
+    public void setToken(final String token) {
+        this.token = token;
+    }
 
-	public Identifier(final String token) {
-		this.token = token;
-	}
+    public Identifier(final String token) {
+        this.token = token;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
-		return v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
+        return v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
-		v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
+        v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void accept(final AbstractVisitorNoArg v) {
-		v.visit(this);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void accept(final AbstractVisitorNoArg v) {
+        v.visit(this);
+    }
 
-	public Identifier clone() {
-		final Identifier id = new Identifier(token);
-		copyFieldsTo(id);
-		return id;
-	}
+    public Identifier clone() {
+        final Identifier id = new Identifier(token);
+        copyFieldsTo(id);
+        return id;
+    }
 
-	public String toString() {
-		return token;
-	}
+    public String toString() {
+        return token;
+    }
 }

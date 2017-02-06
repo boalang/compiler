@@ -39,105 +39,105 @@ import boa.types.proto.*;
  * @author rdyer
  */
 public class VisitorOptimizingTransformer extends AbstractVisitorNoArg {
-	protected final static Set<Class<? extends BoaType>> astTypes = new HashSet<Class<? extends BoaType>>();
+    protected final static Set<Class<? extends BoaType>> astTypes = new HashSet<Class<? extends BoaType>>();
 
-	static {
-		astTypes.addAll(new ASTRootProtoTuple().reachableTypes());
-	}
+    static {
+        astTypes.addAll(new ASTRootProtoTuple().reachableTypes());
+    }
 
-	protected final static VariableRenameTransformer renamer = new VariableRenameTransformer();
+    protected final static VariableRenameTransformer renamer = new VariableRenameTransformer();
 
-	protected Set<Class<? extends BoaType>> types;
-	protected final Stack<Set<Class<? extends BoaType>>> typeStack = new Stack<Set<Class<? extends BoaType>>>();
+    protected Set<Class<? extends BoaType>> types;
+    protected final Stack<Set<Class<? extends BoaType>>> typeStack = new Stack<Set<Class<? extends BoaType>>>();
 
-	protected VisitStatement beforeChangedFile;
-	protected final Stack<VisitStatement> beforeStack = new Stack<VisitStatement>();
+    protected VisitStatement beforeChangedFile;
+    protected final Stack<VisitStatement> beforeStack = new Stack<VisitStatement>();
 
-	protected VisitStatement afterChangedFile;
-	protected final Stack<VisitStatement> afterStack = new Stack<VisitStatement>();
+    protected VisitStatement afterChangedFile;
+    protected final Stack<VisitStatement> afterStack = new Stack<VisitStatement>();
 
-	/** {@inheritDoc} */
-	@Override
-	protected void initialize() {
-		types = new HashSet<Class<? extends BoaType>>();
-		beforeChangedFile = afterChangedFile = null;
+    /** {@inheritDoc} */
+    @Override
+    protected void initialize() {
+        types = new HashSet<Class<? extends BoaType>>();
+        beforeChangedFile = afterChangedFile = null;
 
-		typeStack.clear();
-		beforeStack.clear();
-		afterStack.clear();
-	}
+        typeStack.clear();
+        beforeStack.clear();
+        afterStack.clear();
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void visit(final VisitorExpression n) {
-		typeStack.push(types);
-		beforeStack.push(beforeChangedFile);
-		afterStack.push(afterChangedFile);
+    /** {@inheritDoc} */
+    @Override
+    public void visit(final VisitorExpression n) {
+        typeStack.push(types);
+        beforeStack.push(beforeChangedFile);
+        afterStack.push(afterChangedFile);
 
-		types = new HashSet<Class<? extends BoaType>>();
-		beforeChangedFile = afterChangedFile = null;
+        types = new HashSet<Class<? extends BoaType>>();
+        beforeChangedFile = afterChangedFile = null;
 
-		n.getBody().accept(this);
+        n.getBody().accept(this);
 
-		// if the visitor doesnt use an AST type, we can enforce
-		// a stop at the lowest level visited
-		types.retainAll(astTypes);
-		if (types.isEmpty()) {
-			if (beforeChangedFile == null) {
-				final String id;
-				if (afterChangedFile != null && afterChangedFile.hasComponent())
-					id = afterChangedFile.getComponent().getIdentifier().getToken();
-				else
-					id = "_n";
+        // if the visitor doesnt use an AST type, we can enforce
+        // a stop at the lowest level visited
+        types.retainAll(astTypes);
+        if (types.isEmpty()) {
+            if (beforeChangedFile == null) {
+                final String id;
+                if (afterChangedFile != null && afterChangedFile.hasComponent())
+                    id = afterChangedFile.getComponent().getIdentifier().getToken();
+                else
+                    id = "_n";
 
-				beforeChangedFile = new VisitStatement(true, new Component(new Identifier(id), new Identifier("ChangedFile")), new Block());
-				beforeChangedFile.env = n.env;
-				beforeChangedFile.getComponent().env = n.env;
-				beforeChangedFile.getComponent().getType().type = new ChangedFileProtoTuple();
+                beforeChangedFile = new VisitStatement(true, new Component(new Identifier(id), new Identifier("ChangedFile")), new Block());
+                beforeChangedFile.env = n.env;
+                beforeChangedFile.getComponent().env = n.env;
+                beforeChangedFile.getComponent().getType().type = new ChangedFileProtoTuple();
 
-				n.getBody().addStatement(beforeChangedFile);
-			} else if (afterChangedFile != null) {
-				renamer.start(beforeChangedFile);
-				renamer.start(afterChangedFile);
-			}
+                n.getBody().addStatement(beforeChangedFile);
+            } else if (afterChangedFile != null) {
+                renamer.start(beforeChangedFile);
+                renamer.start(afterChangedFile);
+            }
 
-			// if the before's last statement isnt a stop, merge in the after and add a stop
-			if (beforeChangedFile.getBody().getStatementsSize() == 0 || !(beforeChangedFile.getBody().getStatement(beforeChangedFile.getBody().getStatementsSize() - 1) instanceof StopStatement)) {
-				if (afterChangedFile != null)
-					for (final Statement s : afterChangedFile.getBody().getStatements())
-						beforeChangedFile.getBody().addStatement(s.clone());
+            // if the before's last statement isnt a stop, merge in the after and add a stop
+            if (beforeChangedFile.getBody().getStatementsSize() == 0 || !(beforeChangedFile.getBody().getStatement(beforeChangedFile.getBody().getStatementsSize() - 1) instanceof StopStatement)) {
+                if (afterChangedFile != null)
+                    for (final Statement s : afterChangedFile.getBody().getStatements())
+                        beforeChangedFile.getBody().addStatement(s.clone());
 
-				beforeChangedFile.getBody().addStatement(new StopStatement());
-			}
-		}
+                beforeChangedFile.getBody().addStatement(new StopStatement());
+            }
+        }
 
-		types = typeStack.pop();
-		beforeChangedFile = beforeStack.pop();
-		afterChangedFile = afterStack.pop();
-	}
+        types = typeStack.pop();
+        beforeChangedFile = beforeStack.pop();
+        afterChangedFile = afterStack.pop();
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void visit(final VisitStatement n) {
-		if (n.hasWildcard())
-			logType(n, new ASTRootProtoTuple());
-		else if (n.hasComponent())
-			logType(n, n.getComponent().getType().type);
-		else
-			for (final Identifier id : n.getIdList())
-				logType(n, id.type);
+    /** {@inheritDoc} */
+    @Override
+    public void visit(final VisitStatement n) {
+        if (n.hasWildcard())
+            logType(n, new ASTRootProtoTuple());
+        else if (n.hasComponent())
+            logType(n, n.getComponent().getType().type);
+        else
+            for (final Identifier id : n.getIdList())
+                logType(n, id.type);
 
-		super.visit(n);
-	}
+        super.visit(n);
+    }
 
-	protected void logType(final VisitStatement n, final BoaType t) {
-		types.add(t.getClass());
+    protected void logType(final VisitStatement n, final BoaType t) {
+        types.add(t.getClass());
 
-		if (t instanceof ChangedFileProtoTuple) {
-			if (n.isBefore())
-				beforeChangedFile = n;
-			else
-				afterChangedFile = n;
-		}
-	}
+        if (t instanceof ChangedFileProtoTuple) {
+            if (n.isBefore())
+                beforeChangedFile = n;
+            else
+                afterChangedFile = n;
+        }
+    }
 }

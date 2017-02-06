@@ -31,43 +31,43 @@ import boa.compiler.ast.Node;
  * @author rdyer
  */
 public abstract class AbstractCodeGeneratingVisitor extends AbstractVisitorNoArg {
-	public static STGroup stg = new STGroupFile("templates/BoaJavaHadoop.stg");
-	static {
-		stg.importTemplates(new STGroupFile("templates/BoaJava.stg"));
-	}
+    public static STGroup stg = new STGroupFile("templates/BoaJavaHadoop.stg");
+    static {
+        stg.importTemplates(new STGroupFile("templates/BoaJava.stg"));
+    }
 
-	protected final LinkedList<String> code = new LinkedList<String>();
+    protected final LinkedList<String> code = new LinkedList<String>();
 
-	public String getCode() {
-		String str = "";
-		for (final String s : code)
-			str += s;
-		return str;
-	}
+    public String getCode() {
+        String str = "";
+        for (final String s : code)
+            str += s;
+        return str;
+    }
 
-	public boolean hasCode() {
-		for (final String s : code)
-			if (s.length() > 0)
-				return true;
-		return false;
-	}
+    public boolean hasCode() {
+        for (final String s : code)
+            if (s.length() > 0)
+                return true;
+        return false;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	protected void initialize() {
-		code.clear();
-	}
+    /** {@inheritDoc} */
+    @Override
+    protected void initialize() {
+        code.clear();
+    }
 
-	protected void visit(final List<? extends Node> nl) {
-		String s = "";
+    protected void visit(final List<? extends Node> nl) {
+        String s = "";
 
-		for (final Node n : nl) {
-			n.accept(this);
-			if (s.length() > 0)
-				s += ", ";
-			s += code.removeLast();
-		}
+        for (final Node n : nl) {
+            n.accept(this);
+            if (s.length() > 0)
+                s += ", ";
+            s += code.removeLast();
+        }
 
-		code.add(s);
-	}
+        code.add(s);
+    }
 }

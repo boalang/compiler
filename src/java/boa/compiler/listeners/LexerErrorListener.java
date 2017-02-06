@@ -32,8 +32,8 @@ import org.antlr.v4.runtime.misc.ParseCancellationException;
 import boa.parser.BoaLexer;
 
 public class LexerErrorListener extends BoaErrorListener {
-	@Override
-	public void syntaxError(final Recognizer<?, ?> recognizer, final Object offendingSymbol, final int line, final int charPositionInLine, final String msg, final RecognitionException e) {
-		error("lexer", (BoaLexer)recognizer, offendingSymbol, line, charPositionInLine, 1, msg, e);
-	}
+    @Override
+    public void syntaxError(final Recognizer<?, ?> recognizer, final Object offendingSymbol, final int line, final int charPositionInLine, final String msg, final RecognitionException e) {
+        error("lexer", (BoaLexer)recognizer, offendingSymbol, line, charPositionInLine, 1, msg, e);
+    }
 }

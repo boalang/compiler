@@ -37,43 +37,43 @@ import boa.types.proto.*;
  * @author rdyer
  */
 public class VisitorDesugar extends AbstractVisitorNoArg {
-	/** {@inheritDoc} */
-	@Override
-	public void visit(final VisitorExpression n) {
-		final List<VisitStatement> todo = new ArrayList<VisitStatement>();
-		final Block b = n.getBody();
+    /** {@inheritDoc} */
+    @Override
+    public void visit(final VisitorExpression n) {
+        final List<VisitStatement> todo = new ArrayList<VisitStatement>();
+        final Block b = n.getBody();
 
-		for (final Statement s : b.getStatements()) {
-			final VisitStatement vs = (VisitStatement)s;
-			if (vs.getIdListSize() > 0)
-				todo.add(vs);
-		}
+        for (final Statement s : b.getStatements()) {
+            final VisitStatement vs = (VisitStatement)s;
+            if (vs.getIdListSize() > 0)
+                todo.add(vs);
+        }
 
-		for (final VisitStatement vs : todo) {
-			final List<Identifier> ids = vs.getIdList();
+        for (final VisitStatement vs : todo) {
+            final List<Identifier> ids = vs.getIdList();
 
-			while (!ids.isEmpty()) {
-				final VisitStatement newVs = createVisit(vs, ids.remove(0));
+            while (!ids.isEmpty()) {
+                final VisitStatement newVs = createVisit(vs, ids.remove(0));
 
-				if (ids.isEmpty())
-					b.replaceStatement(vs, newVs);
-				else
-					vs.insertStatementAfter(newVs);
-			}
-		}
-	}
+                if (ids.isEmpty())
+                    b.replaceStatement(vs, newVs);
+                else
+                    vs.insertStatementAfter(newVs);
+            }
+        }
+    }
 
-	private VisitStatement createVisit(final VisitStatement old, final Identifier id) {
-		final VisitStatement v = new VisitStatement(old.isBefore(), new Component(new Identifier("_UNUSED"), id.clone()), old.getBody().clone());
+    private VisitStatement createVisit(final VisitStatement old, final Identifier id) {
+        final VisitStatement v = new VisitStatement(old.isBefore(), new Component(new Identifier("_UNUSED"), id.clone()), old.getBody().clone());
 
-		v.type = old.type;
-		v.env = old.env;
+        v.type = old.type;
+        v.env = old.env;
 
-		v.beginLine = old.beginLine;
-		v.beginColumn = old.beginColumn;
-		v.endLine = old.endLine;
-		v.endColumn = old.endColumn;
+        v.beginLine = old.beginLine;
+        v.beginColumn = old.beginColumn;
+        v.endLine = old.endLine;
+        v.endColumn = old.endColumn;
 
-		return v;
-	}
+        return v;
+    }
 }

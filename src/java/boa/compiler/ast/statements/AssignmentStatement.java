@@ -28,47 +28,47 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
  * @author hridesh
  */
 public class AssignmentStatement extends Statement {
-	protected Factor lhs;
-	protected Expression rhs;
+    protected Factor lhs;
+    protected Expression rhs;
 
-	public Factor getLhs() {
-		return lhs;
-	}
+    public Factor getLhs() {
+        return lhs;
+    }
 
-	public Expression getRhs() {
-		return rhs;
-	}
+    public Expression getRhs() {
+        return rhs;
+    }
 
-	public AssignmentStatement(final Factor lhs, final Expression rhs) {
-		if (lhs != null)
-			lhs.setParent(this);
-		if (rhs != null)
-			rhs.setParent(this);
-		this.lhs = lhs;
-		this.rhs = rhs;
-	}
+    public AssignmentStatement(final Factor lhs, final Expression rhs) {
+        if (lhs != null)
+            lhs.setParent(this);
+        if (rhs != null)
+            rhs.setParent(this);
+        this.lhs = lhs;
+        this.rhs = rhs;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
-		return v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
+        return v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
-		v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
+        v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void accept(final AbstractVisitorNoArg v) {
-		v.visit(this);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void accept(final AbstractVisitorNoArg v) {
+        v.visit(this);
+    }
 
-	public AssignmentStatement clone() {
-		final AssignmentStatement s = new AssignmentStatement(lhs.clone(), rhs.clone());
-		copyFieldsTo(s);
-		return s;
-	}
+    public AssignmentStatement clone() {
+        final AssignmentStatement s = new AssignmentStatement(lhs.clone(), rhs.clone());
+        copyFieldsTo(s);
+        return s;
+    }
 }

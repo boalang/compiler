@@ -29,47 +29,47 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
  * @author hridesh
  */
 public class VisitorExpression extends Operand {
-	protected VisitorType typeNode;
-	protected Block body;
+    protected VisitorType typeNode;
+    protected Block body;
 
-	public VisitorType getType() {
-		return typeNode;
-	}
+    public VisitorType getType() {
+        return typeNode;
+    }
 
-	public Block getBody() {
-		return body;
-	}
+    public Block getBody() {
+        return body;
+    }
 
-	public VisitorExpression(final VisitorType typeNode, final Block body) {
-		if (typeNode != null)
-			typeNode.setParent(this);
-		if (body != null)
-			body.setParent(this);
-		this.typeNode = typeNode;
-		this.body = body;
-	}
+    public VisitorExpression(final VisitorType typeNode, final Block body) {
+        if (typeNode != null)
+            typeNode.setParent(this);
+        if (body != null)
+            body.setParent(this);
+        this.typeNode = typeNode;
+        this.body = body;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
-		return v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
+        return v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
-		v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
+        v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void accept(final AbstractVisitorNoArg v) {
-		v.visit(this);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void accept(final AbstractVisitorNoArg v) {
+        v.visit(this);
+    }
 
-	public VisitorExpression clone() {
-		final VisitorExpression e = new VisitorExpression(typeNode.clone(), body.clone());
-		copyFieldsTo(e);
-		return e;
-	}
+    public VisitorExpression clone() {
+        final VisitorExpression e = new VisitorExpression(typeNode.clone(), body.clone());
+        copyFieldsTo(e);
+        return e;
+    }
 }

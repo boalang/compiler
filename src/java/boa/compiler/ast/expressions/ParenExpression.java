@@ -27,39 +27,39 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
  * @author hridesh
  */
 public class ParenExpression extends Operand {
-	protected Expression exp;
+    protected Expression exp;
 
-	public Expression getExpression() {
-		return exp;
-	}
+    public Expression getExpression() {
+        return exp;
+    }
 
-	public ParenExpression(final Expression exp) {
-		if (exp != null)
-			exp.setParent(this);
-		this.exp = exp;
-	}
+    public ParenExpression(final Expression exp) {
+        if (exp != null)
+            exp.setParent(this);
+        this.exp = exp;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
-		return v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
+        return v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
-		v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
+        v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void accept(final AbstractVisitorNoArg v) {
-		v.visit(this);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void accept(final AbstractVisitorNoArg v) {
+        v.visit(this);
+    }
 
-	public ParenExpression clone() {
-		final ParenExpression p = new ParenExpression(exp.clone());
-		copyFieldsTo(p);
-		return p;
-	}
+    public ParenExpression clone() {
+        final ParenExpression p = new ParenExpression(exp.clone());
+        copyFieldsTo(p);
+        return p;
+    }
 }

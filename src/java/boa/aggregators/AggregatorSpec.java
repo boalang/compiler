@@ -30,36 +30,36 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface AggregatorSpec {
-	/**
-	 * The name of the aggregator.
-	 */
-	String name();
+    /**
+     * The name of the aggregator.
+     */
+    String name();
 
-	/**
-	 * The Boa types of each of its formal parameters.
-	 */
-	String[] formalParameters() default {};
+    /**
+     * The Boa types of each of its formal parameters.
+     */
+    String[] formalParameters() default {};
 
-	/**
-	 * The Boa type to be emitted to this aggregator. Defaults to "any",
-	 * meaning it accepts all types.
-	 */
-	String type() default "any";
+    /**
+     * The Boa type to be emitted to this aggregator. Defaults to "any",
+     * meaning it accepts all types.
+     */
+    String type() default "any";
 
-	/**
-	 * The Boa type that emits to this table will be weighted by. Defaults to
-	 * "none", meaning that it accepts no weights.
-	 */
-	String weightType() default "none";
+    /**
+     * The Boa type that emits to this table will be weighted by. Defaults to
+     * "none", meaning that it accepts no weights.
+     */
+    String weightType() default "none";
 
-	/**
-	 * If the aggregator declares a weight type, can emits omit a value.
-	 * If true, the aggregator should handle such a case (providing a default weight).
-	 */
-	boolean canOmitWeight() default false;
+    /**
+     * If the aggregator declares a weight type, can emits omit a value.
+     * If true, the aggregator should handle such a case (providing a default weight).
+     */
+    boolean canOmitWeight() default false;
 
-	/**
-	 * Can this aggregator combine?
-	 */
-	boolean canCombine() default false;
+    /**
+     * Can this aggregator combine?
+     */
+    boolean canCombine() default false;
 }

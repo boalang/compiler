@@ -29,15 +29,15 @@ import boa.parser.BoaLexer;
  */
 @RunWith(JUnit4.class)
 public class TestLexerBad extends BaseTest {
-	final private static String rootDir = "test/lexing/";
-	final private static String badDir = rootDir + "errors/";
+    final private static String rootDir = "test/lexing/";
+    final private static String badDir = rootDir + "errors/";
 
 
-	@Test
-	public void badComment() throws IOException {
-		lex(load(badDir + "bad-comment.boa"),
-			new int[] { BoaLexer.Identifier, BoaLexer.Identifier, BoaLexer.EOF },
-			new String[] { "bad", "comment", "<EOF>" },
-			new String[] { "1,0: token recognition error at: '@'" });
-	}
+    @Test
+    public void badComment() throws IOException {
+        lex(load(badDir + "bad-comment.boa"),
+            new int[] { BoaLexer.Identifier, BoaLexer.Identifier, BoaLexer.EOF },
+            new String[] { "bad", "comment", "<EOF>" },
+            new String[] { "1,0: token recognition error at: '@'" });
+    }
 }

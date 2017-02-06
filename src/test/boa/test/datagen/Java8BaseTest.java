@@ -28,24 +28,24 @@ import boa.datagen.util.Java8Visitor;
  * @author rdyer
  */
 public class Java8BaseTest extends Java7BaseTest {
-	private static void setJava8() {
-		astLevel = AST.JLS8;
-		javaVersion = JavaCore.VERSION_1_8;
-		visitor = new Java8Visitor("", new HashMap<String, Integer>());
-	}
+    private static void setJava8() {
+        astLevel = AST.JLS8;
+        javaVersion = JavaCore.VERSION_1_8;
+        visitor = new Java8Visitor("", new HashMap<String, Integer>());
+    }
 
-	public static String parseJava(final String content) {
-		setJava8();
-		return Java7BaseTest.parseJava(content);
-	}
+    public static String parseJava(final String content) {
+        setJava8();
+        return Java7BaseTest.parseJava(content);
+    }
 
-	public static void testWrapped(final String java, final String expected) {
-		setJava8();
-		Java7BaseTest.testWrapped(java, expected);
-	}
+    public static void testWrapped(final String java, final String expected) {
+        setJava8();
+        Java7BaseTest.testWrapped(java, expected);
+    }
 
-	protected static String parseWrapped(final String content) {
-		setJava8();
-		return Java7BaseTest.parseWrapped(content);
-	}
+    protected static String parseWrapped(final String content) {
+        setJava8();
+        return Java7BaseTest.parseWrapped(content);
+    }
 }

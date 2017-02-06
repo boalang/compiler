@@ -22,42 +22,42 @@ package boa.types;
  * @author rramu
  */
 public class BoaFixP extends BoaType {
-	/**
-	 * Construct a {@link BoaFixP}.
-	 */
-	public BoaFixP() {
-	}
+    /**
+     * Construct a {@link BoaFixP}.
+     */
+    public BoaFixP() {
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public boolean assigns(final BoaType that) {
-		if (!(that instanceof BoaFixP))
-			return false;
+    /** {@inheritDoc} */
+    @Override
+    public boolean assigns(final BoaType that) {
+        if (!(that instanceof BoaFixP))
+            return false;
 
-		return true;
-	}
+        return true;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public String toString() {
-		return "fixp";
-	}
+    /** {@inheritDoc} */
+    @Override
+    public String toString() {
+        return "fixp";
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public String toJavaType() {
-		return "boa.runtime.BoaAbstractFixP";
-	}
+    /** {@inheritDoc} */
+    @Override
+    public String toJavaType() {
+        return "boa.runtime.BoaAbstractFixP";
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public boolean equals(final Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (this.getClass() != obj.getClass())
-			return false;
-		return true;
-	}
+    /** {@inheritDoc} */
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj)
+            return true;
+        if (!super.equals(obj))
+            return false;
+        if (this.getClass() != obj.getClass())
+            return false;
+        return true;
+    }
 }

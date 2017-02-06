@@ -34,30 +34,30 @@ import boa.io.EmitValue;
  * @author anthonyu
  */
 public abstract class BoaMapper extends Mapper<Text, BytesWritable, EmitKey, EmitValue> implements Configurable {
-	protected static final Logger LOG = Logger.getLogger(BoaMapper.class);
+    protected static final Logger LOG = Logger.getLogger(BoaMapper.class);
 
-	private Configuration conf;
-	protected Context context;
-	protected boolean robust;
+    private Configuration conf;
+    protected Context context;
+    protected boolean robust;
 
-	/** {@inheritDoc} */
-	@Override
-	public Configuration getConf() {
-		return this.conf;
-	}
+    /** {@inheritDoc} */
+    @Override
+    public Configuration getConf() {
+        return this.conf;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void setConf(final Configuration conf) {
-		this.conf = conf;
-		this.robust = conf.getBoolean("boa.runtime.robust", false);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void setConf(final Configuration conf) {
+        this.conf = conf;
+        this.robust = conf.getBoolean("boa.runtime.robust", false);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	protected void setup(final Mapper<Text, BytesWritable, EmitKey, EmitValue>.Context context) throws IOException, InterruptedException {
-		super.setup(context);
+    /** {@inheritDoc} */
+    @Override
+    protected void setup(final Mapper<Text, BytesWritable, EmitKey, EmitValue>.Context context) throws IOException, InterruptedException {
+        super.setup(context);
 
-		this.context = context;
-	}
+        this.context = context;
+    }
 }

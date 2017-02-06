@@ -28,47 +28,47 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
  * @author rramu
  */
 public class FixPExpression extends Operand {
-	protected FixPType typeNode;
-	protected Block body;
+    protected FixPType typeNode;
+    protected Block body;
 
-	public FixPType getType() {
-		return typeNode;
-	}
+    public FixPType getType() {
+        return typeNode;
+    }
 
-	public Block getBody() {
-		return body;
-	}
+    public Block getBody() {
+        return body;
+    }
 
-	public FixPExpression(final FixPType typeNode, final Block body) {
-		if (typeNode != null)
-			typeNode.setParent(this);
-		if (body != null)
-			body.setParent(this);
-		this.typeNode = typeNode;
-		this.body = body;
-	}
+    public FixPExpression(final FixPType typeNode, final Block body) {
+        if (typeNode != null)
+            typeNode.setParent(this);
+        if (body != null)
+            body.setParent(this);
+        this.typeNode = typeNode;
+        this.body = body;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
-		return v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
+        return v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
-		v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
+        v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void accept(final AbstractVisitorNoArg v) {
-		v.visit(this);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void accept(final AbstractVisitorNoArg v) {
+        v.visit(this);
+    }
 
-	public FixPExpression clone() {
-		final FixPExpression e = new FixPExpression(typeNode.clone(), body.clone());
-		copyFieldsTo(e);
-		return e;
-	}
+    public FixPExpression clone() {
+        final FixPExpression e = new FixPExpression(typeNode.clone(), body.clone());
+        copyFieldsTo(e);
+        return e;
+    }
 }

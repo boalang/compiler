@@ -33,29 +33,29 @@ import boa.types.proto.enums.IssueKindProtoMap;
  * @author rdyer
  */
 public class IssueRepositoryProtoTuple extends BoaProtoTuple {
-	private final static List<BoaType> members = new ArrayList<BoaType>();
-	private final static Map<String, Integer> names = new HashMap<String, Integer>();
+    private final static List<BoaType> members = new ArrayList<BoaType>();
+    private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
-	static {
-		int counter = 0;
+    static {
+        int counter = 0;
 
-		names.put("url", counter++);
-		members.add(new BoaString());
+        names.put("url", counter++);
+        members.add(new BoaString());
 
-		names.put("kind", counter++);
-		members.add(new IssueKindProtoMap());
-	}
+        names.put("kind", counter++);
+        members.add(new IssueKindProtoMap());
+    }
 
-	/**
-	 * Construct a IssueRepositoryProtoTuple.
-	 */
-	public IssueRepositoryProtoTuple() {
-		super(members, names);
-	}
+    /**
+     * Construct a IssueRepositoryProtoTuple.
+     */
+    public IssueRepositoryProtoTuple() {
+        super(members, names);
+    }
 
-	/** @{inheritDoc} */
-	@Override
-	public String toJavaType() {
-		return "boa.types.Issues.IssueRepository";
-	}
+    /** @{inheritDoc} */
+    @Override
+    public String toJavaType() {
+        return "boa.types.Issues.IssueRepository";
+    }
 }

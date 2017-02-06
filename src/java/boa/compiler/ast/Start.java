@@ -26,38 +26,38 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
  * @author hridesh
  */
 public class Start extends Node {
-	protected Program program;
+    protected Program program;
 
-	public Program getProgram() {
-		return program;
-	}
+    public Program getProgram() {
+        return program;
+    }
 
-	public Start(final Program program) {
-		program.setParent(this);
-		this.program = program;
-	}
+    public Start(final Program program) {
+        program.setParent(this);
+        this.program = program;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
-		return v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
+        return v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
-		v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
+        v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void accept(final AbstractVisitorNoArg v) {
-		v.visit(this);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void accept(final AbstractVisitorNoArg v) {
+        v.visit(this);
+    }
 
-	public Start clone() {
-		final Start s = new Start(program.clone());
-		copyFieldsTo(s);
-		return s;
-	}
+    public Start clone() {
+        final Start s = new Start(program.clone());
+        copyFieldsTo(s);
+        return s;
+    }
 }

@@ -30,48 +30,48 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
  * @author hridesh
  */
 public class TupleType extends AbstractType {
-	protected final List<Component> members = new ArrayList<Component>();
+    protected final List<Component> members = new ArrayList<Component>();
 
-	public List<Component> getMembers() {
-		return members;
-	}
+    public List<Component> getMembers() {
+        return members;
+    }
 
-	public int getMembersSize() {
-		return members.size();
-	}
+    public int getMembersSize() {
+        return members.size();
+    }
 
-	public Component getMember(final int index) {
-		return members.get(index);
-	}
+    public Component getMember(final int index) {
+        return members.get(index);
+    }
 
-	public void addMember(final Component c) {
-		c.setParent(this);
-		members.add(c);
-	}
+    public void addMember(final Component c) {
+        c.setParent(this);
+        members.add(c);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
-		return v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
+        return v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
-		v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
+        v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void accept(final AbstractVisitorNoArg v) {
-		v.visit(this);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void accept(final AbstractVisitorNoArg v) {
+        v.visit(this);
+    }
 
-	public TupleType clone() {
-		final TupleType t = new TupleType();
-		for (final Component c : members)
-			t.addMember(c.clone());
-		copyFieldsTo(t);
-		return t;
-	}
+    public TupleType clone() {
+        final TupleType t = new TupleType();
+        for (final Component c : members)
+            t.addMember(c.clone());
+        copyFieldsTo(t);
+        return t;
+    }
 }

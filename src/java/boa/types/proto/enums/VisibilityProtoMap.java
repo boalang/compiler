@@ -26,9 +26,9 @@ import boa.types.BoaProtoMap;
  * @author rdyer
  */
 public class VisibilityProtoMap extends BoaProtoMap {
-	/** {@inheritDoc} */
-	@Override
-	protected Class<? extends ProtocolMessageEnum> getEnumClass() {
-		return boa.types.Ast.Modifier.Visibility.class;
-	}
+    /** {@inheritDoc} */
+    @Override
+    protected Class<? extends ProtocolMessageEnum> getEnumClass() {
+        return boa.types.Ast.Modifier.Visibility.class;
+    }
 }

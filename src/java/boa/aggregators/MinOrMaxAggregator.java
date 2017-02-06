@@ -28,87 +28,87 @@ import boa.io.EmitKey;
  * @author anthonyu
  */
 abstract class MinOrMaxAggregator extends Aggregator {
-	protected final WeightedString[] list;
-	private final int last;
-	protected double defaultWeight;
+    protected final WeightedString[] list;
+    private final int last;
+    protected double defaultWeight;
 
-	/**
-	 * Construct a {@link MinOrMaxAggregator}.
-	 * 
-	 * @param n
-	 *            A long representing the number of values to return
-	 */
-	public MinOrMaxAggregator(final long n) {
-		super(n);
+    /**
+     * Construct a {@link MinOrMaxAggregator}.
+     * 
+     * @param n
+     *            A long representing the number of values to return
+     */
+    public MinOrMaxAggregator(final long n) {
+        super(n);
 
-		// an array of weighted string of length n
-		this.list = new WeightedString[(int) this.getArg()];
+        // an array of weighted string of length n
+        this.list = new WeightedString[(int) this.getArg()];
 
-		// the index of the last entry in the list
-		this.last = (int) (this.getArg() - 1);
-	}
+        // the index of the last entry in the list
+        this.last = (int) (this.getArg() - 1);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void start(final EmitKey key) {
-		super.start(key);
+    /** {@inheritDoc} */
+    @Override
+    public void start(final EmitKey key) {
+        super.start(key);
 
-		// clear out the list
-		for (int i = 0; i < this.getArg(); i++)
-			this.list[i] = new WeightedString("", this.defaultWeight);
-	}
+        // clear out the list
+        for (int i = 0; i < this.getArg(); i++)
+            this.list[i] = new WeightedString("", this.defaultWeight);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void aggregate(final String data, final String metadata) {
-		double weight;
+    /** {@inheritDoc} */
+    @Override
+    public void aggregate(final String data, final String metadata) {
+        double weight;
 
-		if (metadata == null)
-			weight = 1.0;
-		else
-			weight = Double.parseDouble(metadata);
+        if (metadata == null)
+            weight = 1.0;
+        else
+            weight = Double.parseDouble(metadata);
 
-		final WeightedString s = new WeightedString(data, weight);
+        final WeightedString s = new WeightedString(data, weight);
 
-		if (this.compare(s, this.list[this.last]) > 0)
-			// find this new item's position within the list
-			for (int i = 0; i < this.getArg(); i++)
-				if (this.compare(s, this.list[i]) > 0) {
-					// we found it. move all subsequent items down one spot
-					for (int j = (int) (this.getArg() - 2); j >= i; j--)
-						this.list[j + 1] = this.list[j];
+        if (this.compare(s, this.list[this.last]) > 0)
+            // find this new item's position within the list
+            for (int i = 0; i < this.getArg(); i++)
+                if (this.compare(s, this.list[i]) > 0) {
+                    // we found it. move all subsequent items down one spot
+                    for (int j = (int) (this.getArg() - 2); j >= i; j--)
+                        this.list[j + 1] = this.list[j];
 
-					// insert the item where it belongs
-					this.list[i] = s;
+                    // insert the item where it belongs
+                    this.list[i] = s;
 
-					break;
-				}
-	}
+                    break;
+                }
+    }
 
-	/**
-	 * Compare two weighted strings.
-	 * 
-	 * @param a
-	 *            A {@link WeightedString} containing a {@link String} and its
-	 *            weight.
-	 * 
-	 * @param b
-	 *            A {@link WeightedString} containing a {@link String} and its
-	 *            weight.
-	 * 
-	 * @return A positive integer if <em>a</em> is smaller than <em>b</em>, zero
-	 *         if they are equal, and a negative integer if <em>a</em> is larger
-	 *         than <em>b</em>.
-	 */
-	abstract protected int compare(WeightedString a, WeightedString b);
+    /**
+     * Compare two weighted strings.
+     * 
+     * @param a
+     *            A {@link WeightedString} containing a {@link String} and its
+     *            weight.
+     * 
+     * @param b
+     *            A {@link WeightedString} containing a {@link String} and its
+     *            weight.
+     * 
+     * @return A positive integer if <em>a</em> is smaller than <em>b</em>, zero
+     *         if they are equal, and a negative integer if <em>a</em> is larger
+     *         than <em>b</em>.
+     */
+    abstract protected int compare(WeightedString a, WeightedString b);
 
-	/** {@inheritDoc} */
-	@Override
-	public void finish() throws IOException, InterruptedException {
-		for (int i = 0; i < this.getArg(); i++)
-			if (this.isCombining())
-				this.collect(this.list[i].getString(), BoaCasts.doubleToString(this.list[i].getWeight()));
-			else
-				this.collect(this.list[i].toString());
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void finish() throws IOException, InterruptedException {
+        for (int i = 0; i < this.getArg(); i++)
+            if (this.isCombining())
+                this.collect(this.list[i].getString(), BoaCasts.doubleToString(this.list[i].getWeight()));
+            else
+                this.collect(this.list[i].toString());
+    }
 }

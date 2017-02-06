@@ -33,32 +33,32 @@ import boa.types.proto.enums.CommentKindProtoMap;
  * @author rdyer
  */
 public class CommentProtoTuple extends BoaProtoTuple {
-	private final static List<BoaType> members = new ArrayList<BoaType>();
-	private final static Map<String, Integer> names = new HashMap<String, Integer>();
+    private final static List<BoaType> members = new ArrayList<BoaType>();
+    private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
-	static {
-		int count = 0;
+    static {
+        int count = 0;
 
-		names.put("kind", count++);
-		members.add(new CommentKindProtoMap());
+        names.put("kind", count++);
+        members.add(new CommentKindProtoMap());
 
-		names.put("value", count++);
-		members.add(new BoaString());
+        names.put("value", count++);
+        members.add(new BoaString());
 
-		names.put("start_line", count++);
-		members.add(new BoaInt());
-	}
+        names.put("start_line", count++);
+        members.add(new BoaInt());
+    }
 
-	/**
-	 * Construct a {@link CommentProtoTuple}.
-	 */
-	public CommentProtoTuple() {
-		super(members, names);
-	}
+    /**
+     * Construct a {@link CommentProtoTuple}.
+     */
+    public CommentProtoTuple() {
+        super(members, names);
+    }
 
-	/** @{inheritDoc} */
-	@Override
-	public String toJavaType() {
-		return "boa.types.Ast.Comment";
-	}
+    /** @{inheritDoc} */
+    @Override
+    public String toJavaType() {
+        return "boa.types.Ast.Comment";
+    }
 }

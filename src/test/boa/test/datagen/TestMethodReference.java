@@ -26,43 +26,43 @@ import org.junit.Test;
  * @author rdyer
  */
 public class TestMethodReference extends Java8BaseTest {
-	@Test
-	public void staticMethodReference() throws IOException {
-		testWrapped(
-			load("test/datagen/java/static-meth-ref.java").trim(),
-			load("test/datagen/boa/static-meth-ref.boa").trim()
-		);
-	}
+    @Test
+    public void staticMethodReference() throws IOException {
+        testWrapped(
+            load("test/datagen/java/static-meth-ref.java").trim(),
+            load("test/datagen/boa/static-meth-ref.boa").trim()
+        );
+    }
 
-	@Test
-	public void instanceMethodReference() throws IOException {
-		testWrapped(
-			load("test/datagen/java/inst-meth-ref.java").trim(),
-			load("test/datagen/boa/inst-meth-ref.boa").trim()
-		);
-	}
+    @Test
+    public void instanceMethodReference() throws IOException {
+        testWrapped(
+            load("test/datagen/java/inst-meth-ref.java").trim(),
+            load("test/datagen/boa/inst-meth-ref.boa").trim()
+        );
+    }
 
-	@Test
-	public void arbitraryObjectMethodReference() throws IOException {
-		testWrapped(
-			load("test/datagen/java/obj-meth-ref.java").trim(),
-			load("test/datagen/boa/obj-meth-ref.boa").trim()
-		);
-	}
+    @Test
+    public void arbitraryObjectMethodReference() throws IOException {
+        testWrapped(
+            load("test/datagen/java/obj-meth-ref.java").trim(),
+            load("test/datagen/boa/obj-meth-ref.boa").trim()
+        );
+    }
 
-	@Test
-	public void constructorMethodReference() throws IOException {
-		testWrapped(
-			load("test/datagen/java/new-meth-ref.java").trim(),
-			load("test/datagen/boa/new-meth-ref.boa").trim()
-		);
-	}
-	
-	@Test
-	public void superMethodReference() throws IOException {
-		testWrapped(
-			load("test/datagen/java/super-meth-ref.java").trim(),
-			load("test/datagen/boa/super-meth-ref.boa").trim()
-		);
-	}
+    @Test
+    public void constructorMethodReference() throws IOException {
+        testWrapped(
+            load("test/datagen/java/new-meth-ref.java").trim(),
+            load("test/datagen/boa/new-meth-ref.boa").trim()
+        );
+    }
+    
+    @Test
+    public void superMethodReference() throws IOException {
+        testWrapped(
+            load("test/datagen/java/super-meth-ref.java").trim(),
+            load("test/datagen/boa/super-meth-ref.boa").trim()
+        );
+    }
 }

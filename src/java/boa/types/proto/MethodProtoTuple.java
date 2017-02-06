@@ -32,47 +32,47 @@ import boa.types.BoaType;
  * @author rdyer
  */
 public class MethodProtoTuple extends BoaProtoTuple {
-	private final static List<BoaType> members = new ArrayList<BoaType>();
-	private final static Map<String, Integer> names = new HashMap<String, Integer>();
+    private final static List<BoaType> members = new ArrayList<BoaType>();
+    private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
-	static {
-		int counter = 0;
+    static {
+        int counter = 0;
 
-		names.put("name", counter++);
-		members.add(new BoaString());
+        names.put("name", counter++);
+        members.add(new BoaString());
 
-		names.put("modifiers", counter++);
-		members.add(new BoaProtoList(new ModifierProtoTuple()));
+        names.put("modifiers", counter++);
+        members.add(new BoaProtoList(new ModifierProtoTuple()));
 
-		names.put("return_type", counter++);
-		members.add(new TypeProtoTuple());
+        names.put("return_type", counter++);
+        members.add(new TypeProtoTuple());
 
-		names.put("generic_parameters", counter++);
-		members.add(new BoaProtoList(new TypeProtoTuple()));
+        names.put("generic_parameters", counter++);
+        members.add(new BoaProtoList(new TypeProtoTuple()));
 
-		names.put("arguments", counter++);
-		members.add(new BoaProtoList(new VariableProtoTuple()));
+        names.put("arguments", counter++);
+        members.add(new BoaProtoList(new VariableProtoTuple()));
 
-		names.put("exception_types", counter++);
-		members.add(new BoaProtoList(new TypeProtoTuple()));
+        names.put("exception_types", counter++);
+        members.add(new BoaProtoList(new TypeProtoTuple()));
 
-		names.put("statements", counter++);
-		members.add(new BoaProtoList(new StatementProtoTuple()));
+        names.put("statements", counter++);
+        members.add(new BoaProtoList(new StatementProtoTuple()));
 
-		names.put("comments", counter++);
-		members.add(new BoaProtoList(new CommentProtoTuple()));
-	}
+        names.put("comments", counter++);
+        members.add(new BoaProtoList(new CommentProtoTuple()));
+    }
 
-	/**
-	 * Construct a {@link MethodProtoTuple}.
-	 */
-	public MethodProtoTuple() {
-		super(members, names);
-	}
+    /**
+     * Construct a {@link MethodProtoTuple}.
+     */
+    public MethodProtoTuple() {
+        super(members, names);
+    }
 
-	/** @{inheritDoc} */
-	@Override
-	public String toJavaType() {
-		return "boa.types.Ast.Method";
-	}
+    /** @{inheritDoc} */
+    @Override
+    public String toJavaType() {
+        return "boa.types.Ast.Method";
+    }
 }

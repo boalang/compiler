@@ -22,58 +22,58 @@ package boa.types;
  * @author rdyer
  */
 public class BoaTraversal extends BoaType {
-	private BoaType index;
+    private BoaType index;
 
-	/**
-	 * Construct a {@link BoaCFGVisitor}.
-	 */
-	public BoaTraversal() {
-	}
+    /**
+     * Construct a {@link BoaCFGVisitor}.
+     */
+    public BoaTraversal() {
+    }
 
-	public BoaTraversal(BoaType index) {
-		this.index = index;
-	}
+    public BoaTraversal(BoaType index) {
+        this.index = index;
+    }
 
-	public void setIndex(BoaType index) {
-		this.index = index;
-	}
+    public void setIndex(BoaType index) {
+        this.index = index;
+    }
 
-	public BoaType getIndex() {
-		return this.index;
-	}
+    public BoaType getIndex() {
+        return this.index;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public boolean assigns(final BoaType that) {
-		if (!(that instanceof BoaTraversal))
-			return false;
+    /** {@inheritDoc} */
+    @Override
+    public boolean assigns(final BoaType that) {
+        if (!(that instanceof BoaTraversal))
+            return false;
 
-		return true;
-	}
+        return true;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public String toString() {
-		return "traversal";
-	}
+    /** {@inheritDoc} */
+    @Override
+    public String toString() {
+        return "traversal";
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public String toJavaType() {
-		if (this.index != null)
-			return "boa.runtime.BoaAbstractTraversal<" + this.index.toBoxedJavaType() + ">";
-		return "boa.runtime.BoaAbstractTraversal";
-	}
+    /** {@inheritDoc} */
+    @Override
+    public String toJavaType() {
+        if (this.index != null)
+            return "boa.runtime.BoaAbstractTraversal<" + this.index.toBoxedJavaType() + ">";
+        return "boa.runtime.BoaAbstractTraversal";
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public boolean equals(final Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (this.getClass() != obj.getClass())
-			return false;
-		return true;
-	}
+    /** {@inheritDoc} */
+    @Override
+    public boolean equals(final Object obj) {
+        if (this == obj)
+            return true;
+        if (!super.equals(obj))
+            return false;
+        if (this.getClass() != obj.getClass())
+            return false;
+        return true;
+    }
 }

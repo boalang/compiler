@@ -37,11 +37,11 @@ import boa.types.Toplevel.Project;
  * @author rramu
  */
 public abstract class BoaAbstractFixP {
-	public boolean invoke(Object curr, Object prev) throws Exception {
-		return true;
-	}
+    public boolean invoke(Object curr, Object prev) throws Exception {
+        return true;
+    }
 
-	public BoaAbstractFixP initialize() {
-		return this;
-	}
+    public BoaAbstractFixP initialize() {
+        return this;
+    }
 }

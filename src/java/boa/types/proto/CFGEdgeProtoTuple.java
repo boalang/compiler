@@ -33,27 +33,27 @@ import boa.types.proto.enums.FileKindProtoMap;
  * @author rramu
  */
 public class CFGEdgeProtoTuple extends BoaProtoTuple {
-	private final static List<BoaType> members = new ArrayList<BoaType>();
-	private final static Map<String, Integer> names = new HashMap<String, Integer>();
+    private final static List<BoaType> members = new ArrayList<BoaType>();
+    private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
-	static {
-		int counter = 0;
+    static {
+        int counter = 0;
 
-		names.put("label", counter++);
-		members.add(new CFGEdgeLabelProtoMap());
+        names.put("label", counter++);
+        members.add(new CFGEdgeLabelProtoMap());
 
-	}
+    }
 
-	/**
-	 * Construct a {@link CFGEdgeProtoTuple}.
-	 */
-	public CFGEdgeProtoTuple() {
-		super(members, names);
-	}
+    /**
+     * Construct a {@link CFGEdgeProtoTuple}.
+     */
+    public CFGEdgeProtoTuple() {
+        super(members, names);
+    }
 
-	/** @{inheritDoc} */
-	@Override
-	public String toJavaType() {
-		return "boa.types.Control.CFGEdge";
-	}
+    /** @{inheritDoc} */
+    @Override
+    public String toJavaType() {
+        return "boa.types.Control.CFGEdge";
+    }
 }

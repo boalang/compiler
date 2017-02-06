@@ -27,39 +27,39 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
  * @author hridesh
  */
 public class ExprStatement extends Statement {
-	protected Expression expr;
+    protected Expression expr;
 
-	public Expression getExpr() {
-		return expr;
-	}
+    public Expression getExpr() {
+        return expr;
+    }
 
-	public ExprStatement(final Expression expr) {
-		if (expr != null)
-			expr.setParent(this);
-		this.expr = expr;
-	}
+    public ExprStatement(final Expression expr) {
+        if (expr != null)
+            expr.setParent(this);
+        this.expr = expr;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
-		return v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
+        return v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
-		v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
+        v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void accept(final AbstractVisitorNoArg v) {
-		v.visit(this);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void accept(final AbstractVisitorNoArg v) {
+        v.visit(this);
+    }
 
-	public ExprStatement clone() {
-		final ExprStatement s = new ExprStatement(expr.clone());
-		copyFieldsTo(s);
-		return s;
-	}
+    public ExprStatement clone() {
+        final ExprStatement s = new ExprStatement(expr.clone());
+        copyFieldsTo(s);
+        return s;
+    }
 }

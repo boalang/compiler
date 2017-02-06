@@ -29,41 +29,41 @@ import org.apache.commons.cli.PosixParser;
  * @author hridesh
  * 
  */
-public class BoaMain {	
-	public static void main(final String[] args) throws IOException {
-		// parse the top-level command line options
-		final Options options = new Options();
-		options.addOption("p", "parse", false, "check a Boa program (parse & semantic check)");
-		options.addOption("c", "compile", false, "compile a Boa program");
-		options.addOption("e", "execute", false, "execute a Boa program");
-		options.addOption("g", "generate", false, "generate a Boa dataset");
+public class BoaMain {    
+    public static void main(final String[] args) throws IOException {
+        // parse the top-level command line options
+        final Options options = new Options();
+        options.addOption("p", "parse", false, "check a Boa program (parse & semantic check)");
+        options.addOption("c", "compile", false, "compile a Boa program");
+        options.addOption("e", "execute", false, "execute a Boa program");
+        options.addOption("g", "generate", false, "generate a Boa dataset");
 
-		final CommandLine cl;
-		try {
-		    	if (args.length == 0) {
-		    	    printHelp(options, ""); 
-		    	    return;
-		    	} else {
-		    	    cl = new PosixParser().parse(options, new String[] { args[0] });
-		    	    String[] tempargs = new String[args.length - 1];
-		    	    System.arraycopy(args, 1, tempargs, 0, args.length - 1);
-		    	    if (cl.hasOption("c"))
-						boa.compiler.BoaCompiler.main(tempargs);
-		    	    else if (cl.hasOption("p"))
-						boa.compiler.BoaCompiler.parseOnly(tempargs);
-		    	    else if (cl.hasOption("e"))
-						boa.evaluator.BoaEvaluator.main(tempargs);
-		    	    else if (cl.hasOption("g"))
-						boa.datagen.BoaGenerator.main(tempargs);
-		    	}
-		} catch (final org.apache.commons.cli.ParseException e) {
-			printHelp(options, e.getMessage());
-		}
-	}	
-	private static final void printHelp(Options options, String message) {
-	    	String header = "The most commonly used Boa options are:";
-	    	String footer = "\nPlease report issues at http://www.github.com/boalang/";
-	    	System.err.println(message);
-		new HelpFormatter().printHelp("Boa", header, options, footer);
-	}
+        final CommandLine cl;
+        try {
+                if (args.length == 0) {
+                    printHelp(options, ""); 
+                    return;
+                } else {
+                    cl = new PosixParser().parse(options, new String[] { args[0] });
+                    String[] tempargs = new String[args.length - 1];
+                    System.arraycopy(args, 1, tempargs, 0, args.length - 1);
+                    if (cl.hasOption("c"))
+                        boa.compiler.BoaCompiler.main(tempargs);
+                    else if (cl.hasOption("p"))
+                        boa.compiler.BoaCompiler.parseOnly(tempargs);
+                    else if (cl.hasOption("e"))
+                        boa.evaluator.BoaEvaluator.main(tempargs);
+                    else if (cl.hasOption("g"))
+                        boa.datagen.BoaGenerator.main(tempargs);
+                }
+        } catch (final org.apache.commons.cli.ParseException e) {
+            printHelp(options, e.getMessage());
+        }
+    }    
+    private static final void printHelp(Options options, String message) {
+            String header = "The most commonly used Boa options are:";
+            String footer = "\nPlease report issues at http://www.github.com/boalang/";
+            System.err.println(message);
+        new HelpFormatter().printHelp("Boa", header, options, footer);
+    }
 }

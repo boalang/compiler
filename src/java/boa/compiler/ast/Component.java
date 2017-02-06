@@ -27,68 +27,68 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
  * @author hridesh
  */
 public class Component extends AbstractType {
-	protected Identifier id;
-	protected AbstractType typeNode;
+    protected Identifier id;
+    protected AbstractType typeNode;
 
-	public boolean hasIdentifier() {
-		return id != null;
-	}
+    public boolean hasIdentifier() {
+        return id != null;
+    }
 
-	public Identifier getIdentifier() {
-		return id;
-	}
+    public Identifier getIdentifier() {
+        return id;
+    }
 
-	public void setIdentifier(final Identifier id) {
-		id.setParent(this);
-		this.id = id;
-	}
+    public void setIdentifier(final Identifier id) {
+        id.setParent(this);
+        this.id = id;
+    }
 
-	public AbstractType getType() {
-		return typeNode;
-	}
+    public AbstractType getType() {
+        return typeNode;
+    }
 
-	public void setType(final AbstractType typeNode) {
-		typeNode.setParent(this);
-		this.typeNode = typeNode;
-	}
+    public void setType(final AbstractType typeNode) {
+        typeNode.setParent(this);
+        this.typeNode = typeNode;
+    }
 
-	public Component() {
-	}
+    public Component() {
+    }
 
-	public Component(final AbstractType typeNode) {
-		this(null, typeNode);
-	}
+    public Component(final AbstractType typeNode) {
+        this(null, typeNode);
+    }
 
-	public Component(final Identifier id, final AbstractType typeNode) {
-		if (id != null)
-			id.setParent(this);
-		if (typeNode != null)
-			typeNode.setParent(this);
-		this.id = id;
-		this.typeNode = typeNode;
-	}
+    public Component(final Identifier id, final AbstractType typeNode) {
+        if (id != null)
+            id.setParent(this);
+        if (typeNode != null)
+            typeNode.setParent(this);
+        this.id = id;
+        this.typeNode = typeNode;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
-		return v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
+        return v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
-		v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
+        v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void accept(final AbstractVisitorNoArg v) {
-		v.visit(this);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void accept(final AbstractVisitorNoArg v) {
+        v.visit(this);
+    }
 
-	public Component clone() {
-		final Component c = new Component(id.clone(), typeNode.clone());
-		copyFieldsTo(c);
-		return c;
-	}
+    public Component clone() {
+        final Component c = new Component(id.clone(), typeNode.clone());
+        copyFieldsTo(c);
+        return c;
+    }
 }

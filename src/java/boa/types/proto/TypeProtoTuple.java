@@ -32,32 +32,32 @@ import boa.types.proto.enums.TypeKindProtoMap;
  * @author rdyer
  */
 public class TypeProtoTuple extends BoaProtoTuple {
-	private final static List<BoaType> members = new ArrayList<BoaType>();
-	private final static Map<String, Integer> names = new HashMap<String, Integer>();
+    private final static List<BoaType> members = new ArrayList<BoaType>();
+    private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
-	static {
-		int counter = 0;
+    static {
+        int counter = 0;
 
-		names.put("name", counter++);
-		members.add(new BoaString());
+        names.put("name", counter++);
+        members.add(new BoaString());
 
-		names.put("kind", counter++);
-		members.add(new TypeKindProtoMap());
+        names.put("kind", counter++);
+        members.add(new TypeKindProtoMap());
 
-		names.put("qualified_name", counter++);
-		members.add(new BoaString());
-	}
+        names.put("qualified_name", counter++);
+        members.add(new BoaString());
+    }
 
-	/**
-	 * Construct a {@link TypeProtoTuple}.
-	 */
-	public TypeProtoTuple() {
-		super(members, names);
-	}
+    /**
+     * Construct a {@link TypeProtoTuple}.
+     */
+    public TypeProtoTuple() {
+        super(members, names);
+    }
 
-	/** @{inheritDoc} */
-	@Override
-	public String toJavaType() {
-		return "boa.types.Ast.Type";
-	}
+    /** @{inheritDoc} */
+    @Override
+    public String toJavaType() {
+        return "boa.types.Ast.Type";
+    }
 }

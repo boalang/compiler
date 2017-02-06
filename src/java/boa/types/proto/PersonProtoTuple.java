@@ -31,32 +31,32 @@ import boa.types.BoaType;
  * @author rdyer
  */
 public class PersonProtoTuple extends BoaProtoTuple {
-	private final static List<BoaType> members = new ArrayList<BoaType>();
-	private final static Map<String, Integer> names = new HashMap<String, Integer>();
+    private final static List<BoaType> members = new ArrayList<BoaType>();
+    private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
-	static {
-		int counter = 0;
+    static {
+        int counter = 0;
 
-		names.put("username", counter++);
-		members.add(new BoaString());
+        names.put("username", counter++);
+        members.add(new BoaString());
 
-		names.put("real_name", counter++);
-		members.add(new BoaString());
+        names.put("real_name", counter++);
+        members.add(new BoaString());
 
-		names.put("email", counter++);
-		members.add(new BoaString());
-	}
+        names.put("email", counter++);
+        members.add(new BoaString());
+    }
 
-	/**
-	 * Construct a ProjectProtoTuple.
-	 */
-	public PersonProtoTuple() {
-		super(members, names);
-	}
+    /**
+     * Construct a ProjectProtoTuple.
+     */
+    public PersonProtoTuple() {
+        super(members, names);
+    }
 
-	/** @{inheritDoc} */
-	@Override
-	public String toJavaType() {
-		return "boa.types.Shared.Person";
-	}
+    /** @{inheritDoc} */
+    @Override
+    public String toJavaType() {
+        return "boa.types.Shared.Person";
+    }
 }

@@ -38,102 +38,102 @@ import boa.types.BoaType;
  * @author rdyer
  */
 public class ASTFactory {
-	public static VarDeclStatement createVarDecl(final String name, final AbstractType type, final BoaType t, final SymbolTable env) {
-		final VarDeclStatement var = new VarDeclStatement(
-				ASTFactory.createIdentifier(name, env),
-				type
-			);
-		var.type = t;
-		return var;
-	}
+    public static VarDeclStatement createVarDecl(final String name, final AbstractType type, final BoaType t, final SymbolTable env) {
+        final VarDeclStatement var = new VarDeclStatement(
+                ASTFactory.createIdentifier(name, env),
+                type
+            );
+        var.type = t;
+        return var;
+    }
 
-	public static VarDeclStatement createVarDecl(final String name, final Operand init, final BoaType t, final SymbolTable env) {
-		final VarDeclStatement var = new VarDeclStatement(
-				new Identifier(name),
-				new Expression(
-					new Conjunction(
-						new Comparison(
-							new SimpleExpr(
-								new Term(
-									new Factor(init)
-								)
-							)
-						)
-					)
-				)
-			);
-		var.type = var.getInitializer().type = t;
-		var.env = env;
-		return var;
-	}
+    public static VarDeclStatement createVarDecl(final String name, final Operand init, final BoaType t, final SymbolTable env) {
+        final VarDeclStatement var = new VarDeclStatement(
+                new Identifier(name),
+                new Expression(
+                    new Conjunction(
+                        new Comparison(
+                            new SimpleExpr(
+                                new Term(
+                                    new Factor(init)
+                                )
+                            )
+                        )
+                    )
+                )
+            );
+        var.type = var.getInitializer().type = t;
+        var.env = env;
+        return var;
+    }
 
-	public static Identifier createIdentifier(final String name, final SymbolTable env) {
-		final Identifier id = new Identifier(name);
-		id.env = env;
-		return id;
-	}
+    public static Identifier createIdentifier(final String name, final SymbolTable env) {
+        final Identifier id = new Identifier(name);
+        id.env = env;
+        return id;
+    }
 
-	public static Expression createIdentifierExpr(final String name, final SymbolTable env, BoaType t) {
-		final Factor f = new Factor(ASTFactory.createIdentifier(name, env));
-		f.env = env;
+    public static Expression createIdentifierExpr(final String name, final SymbolTable env, BoaType t) {
+        final Factor f = new Factor(ASTFactory.createIdentifier(name, env));
+        f.env = env;
 
-		final Expression exp = new Expression(
-			new Conjunction(
-				new Comparison(
-					new SimpleExpr(
-						new Term(f)
-					)
-				)
-			)
-		);
-		exp.type = t;
-		return exp;
-	}
+        final Expression exp = new Expression(
+            new Conjunction(
+                new Comparison(
+                    new SimpleExpr(
+                        new Term(f)
+                    )
+                )
+            )
+        );
+        exp.type = t;
+        return exp;
+    }
 
-	public static ExprStatement createCall(final String name, final SymbolTable env, final BoaType retType, final Expression... args) {
-		final Expression exp = ASTFactory.createIdentifierExpr(name, env, retType);
+    public static ExprStatement createCall(final String name, final SymbolTable env, final BoaType retType, final Expression... args) {
+        final Expression exp = ASTFactory.createIdentifierExpr(name, env, retType);
 
-		final Call c = new Call();
-		for (final Expression e : args)
-			c.addArg(e);
-		c.env = env;
+        final Call c = new Call();
+        for (final Expression e : args)
+            c.addArg(e);
+        c.env = env;
 
-		exp.getLhs().getLhs().getLhs().getLhs().getLhs().addOp(c);
+        exp.getLhs().getLhs().getLhs().getLhs().getLhs().addOp(c);
 
-		return new ExprStatement(exp);
-	}
+        return new ExprStatement(exp);
+    }
 
-	public static Expression createFactorExpr(final Operand op) {
-		return new Expression(
-			new Conjunction(
-				new Comparison(
-					new SimpleExpr(
-						new Term(
-							new Factor(op)
-						)
-					)
-				)
-			)
-		);
-	}
+    public static Expression createFactorExpr(final Operand op) {
+        return new Expression(
+            new Conjunction(
+                new Comparison(
+                    new SimpleExpr(
+                        new Term(
+                            new Factor(op)
+                        )
+                    )
+                )
+            )
+        );
+    }
 
-	public static Expression createComparison(final Operand lhs, final String op, final Operand rhs) {
-		return new Expression(
-			new Conjunction(
-				new Comparison(
-					new SimpleExpr(
-						new Term(
-							new Factor(lhs)
-						)
-					),
-					op,
-					new SimpleExpr(
-						new Term(
-							new Factor(rhs)
-						)
-					)
-				)
-			)
-		);
-	}
+    public static Expression createComparison(final Operand lhs, final String op, final Operand rhs) {
+        return new Expression(
+            new Conjunction(
+                new Comparison(
+                    new SimpleExpr(
+                        new Term(
+                            new Factor(lhs)
+                        )
+                    ),
+                    op,
+                    new SimpleExpr(
+                        new Term(
+                            new Factor(rhs)
+                        )
+                    )
+                )
+            )
+        );
+    }
 }

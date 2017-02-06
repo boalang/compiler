@@ -35,45 +35,45 @@ import boa.types.proto.enums.FileKindProtoMap;
  * @author rdyer
  */
 public class ChangedFileProtoTuple extends BoaProtoTuple {
-	private final static List<BoaType> members = new ArrayList<BoaType>();
-	private final static Map<String, Integer> names = new HashMap<String, Integer>();
+    private final static List<BoaType> members = new ArrayList<BoaType>();
+    private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
-	static {
-		int counter = 0;
+    static {
+        int counter = 0;
 
-		names.put("change", counter++);
-		members.add(new ChangeKindProtoMap());
+        names.put("change", counter++);
+        members.add(new ChangeKindProtoMap());
 
-		names.put("kind", counter++);
-		members.add(new FileKindProtoMap());
+        names.put("kind", counter++);
+        members.add(new FileKindProtoMap());
 
-		names.put("name", counter++);
-		members.add(new BoaString());
+        names.put("name", counter++);
+        members.add(new BoaString());
 
-		// NOTE: this is here to make reachableTypes() work properly
-		names.put("_placeholder_", counter++);
-		members.add(new ASTRootProtoTuple());
+        // NOTE: this is here to make reachableTypes() work properly
+        names.put("_placeholder_", counter++);
+        members.add(new ASTRootProtoTuple());
 
-		names.put("changes", counter++);
-		members.add(new BoaProtoList(new ChangeKindProtoMap()));
+        names.put("changes", counter++);
+        members.add(new BoaProtoList(new ChangeKindProtoMap()));
 
-		names.put("previous_versions", counter++);
-		members.add(new BoaProtoList(new BoaInt()));
+        names.put("previous_versions", counter++);
+        members.add(new BoaProtoList(new BoaInt()));
 
-		names.put("previous_index", counter++);
-		members.add(new BoaProtoList(new BoaInt()));
-	}
+        names.put("previous_index", counter++);
+        members.add(new BoaProtoList(new BoaInt()));
+    }
 
-	/**
-	 * Construct a {@link ChangedFileProtoTuple}.
-	 */
-	public ChangedFileProtoTuple() {
-		super(members, names);
-	}
+    /**
+     * Construct a {@link ChangedFileProtoTuple}.
+     */
+    public ChangedFileProtoTuple() {
+        super(members, names);
+    }
 
-	/** @{inheritDoc} */
-	@Override
-	public String toJavaType() {
-		return "boa.types.Diff.ChangedFile";
-	}
+    /** @{inheritDoc} */
+    @Override
+    public String toJavaType() {
+        return "boa.types.Diff.ChangedFile";
+    }
 }

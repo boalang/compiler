@@ -44,114 +44,114 @@ import boa.datagen.util.Properties;
  * 
  */
 public class SeqSort<K, V> extends Configured implements Tool {
-	private String inPath = "";
-	private String outPath = "";
-	private RunningJob jobResult = null;
+    private String inPath = "";
+    private String outPath = "";
+    private RunningJob jobResult = null;
 
-	public SeqSort(String inPath, String outPath) {
-		this.inPath = inPath;
-		this.outPath = outPath;
-	}
+    public SeqSort(String inPath, String outPath) {
+        this.inPath = inPath;
+        this.outPath = outPath;
+    }
 
-	static int printUsage() {
-		System.out.println("sort [-m <maps>] [-r <reduces>] "
-				+ "[-inFormat <input format class>] "
-				+ "[-outFormat <output format class>] "
-				+ "[-outKey <output key class>] "
-				+ "[-outValue <output value class>] "
-				+ "[-totalOrder <pcnt> <num samples> <max splits>] "
-				+ "<input> <output>");
-		ToolRunner.printGenericCommandUsage(System.out);
-		return -1;
-	}
+    static int printUsage() {
+        System.out.println("sort [-m <maps>] [-r <reduces>] "
+                + "[-inFormat <input format class>] "
+                + "[-outFormat <output format class>] "
+                + "[-outKey <output key class>] "
+                + "[-outValue <output value class>] "
+                + "[-totalOrder <pcnt> <num samples> <max splits>] "
+                + "<input> <output>");
+        ToolRunner.printGenericCommandUsage(System.out);
+        return -1;
+    }
 
-	/**
-	 * The main driver for sort program.
-	 * Invoke this method to submit the map/reduce job.
-	 * @throws IOException When there is communication problems with the 
-	 *                     job tracker.
-	 */
-	@Override
-	public int run(String[] args) throws Exception {
-		System.out.println(inPath);
+    /**
+     * The main driver for sort program.
+     * Invoke this method to submit the map/reduce job.
+     * @throws IOException When there is communication problems with the 
+     *                     job tracker.
+     */
+    @Override
+    public int run(String[] args) throws Exception {
+        System.out.println(inPath);
 
-		JobConf jobConf = new JobConf(getConf(), SeqSort.class);
-		jobConf.setJobName("sorter");
+        JobConf jobConf = new JobConf(getConf(), SeqSort.class);
+        jobConf.setJobName("sorter");
 
-		jobConf.setMapperClass(IdentityMapper.class);        
-		jobConf.setReducerClass(IdentityReducer.class);
+        jobConf.setMapperClass(IdentityMapper.class);        
+        jobConf.setReducerClass(IdentityReducer.class);
 
-		JobClient client = new JobClient(jobConf);
-		ClusterStatus cluster = client.getClusterStatus();
-		int num_reduces = (int) (cluster.getMaxReduceTasks() * 0.9);
-		String sort_reduces = jobConf.get("test.sort.reduces_per_host");
-		if (sort_reduces != null)
-			num_reduces = cluster.getTaskTrackers() * Integer.parseInt(sort_reduces);
+        JobClient client = new JobClient(jobConf);
+        ClusterStatus cluster = client.getClusterStatus();
+        int num_reduces = (int) (cluster.getMaxReduceTasks() * 0.9);
+        String sort_reduces = jobConf.get("test.sort.reduces_per_host");
+        if (sort_reduces != null)
+            num_reduces = cluster.getTaskTrackers() * Integer.parseInt(sort_reduces);
 
-		// Set user-supplied (possibly default) job configs
-		jobConf.setNumReduceTasks(num_reduces);
+        // Set user-supplied (possibly default) job configs
+        jobConf.setNumReduceTasks(num_reduces);
 
-		jobConf.setInputFormat(SequenceFileInputFormat.class);
-		jobConf.setOutputFormat(SequenceFileOutputFormat.class);
+        jobConf.setInputFormat(SequenceFileInputFormat.class);
+        jobConf.setOutputFormat(SequenceFileOutputFormat.class);
 
-		jobConf.setOutputKeyClass(Text.class);
-		jobConf.setOutputValueClass(BytesWritable.class);
-		
-		SequenceFileOutputFormat.setCompressOutput(jobConf, true);
-		SequenceFileOutputFormat.setOutputCompressorClass(jobConf, SnappyCodec.class);
-		SequenceFileOutputFormat.setOutputCompressionType(jobConf, CompressionType.BLOCK);
-		
-		// Make sure there are exactly 2 parameters left.
-		FileInputFormat.setInputPaths(jobConf, inPath);
-		FileOutputFormat.setOutputPath(jobConf, new Path(outPath));
-		
-		System.out.println("Running on "
-				+ cluster.getTaskTrackers()
-				+ " nodes to sort from "
-				+ FileInputFormat.getInputPaths(jobConf)[0] + " into "
-				+ FileOutputFormat.getOutputPath(jobConf)
-				+ " with " + num_reduces + " reduces.");
-		Date startTime = new Date();
-		System.out.println("Job started: " + startTime);
-		jobResult = JobClient.runJob(jobConf);
-		Date end_time = new Date();
-		System.out.println("Job ended: " + end_time);
-		System.out.println("The job took " + (end_time.getTime() - startTime.getTime()) / 1000 + " seconds.");
-		return 0;
-	}
+        jobConf.setOutputKeyClass(Text.class);
+        jobConf.setOutputValueClass(BytesWritable.class);
+        
+        SequenceFileOutputFormat.setCompressOutput(jobConf, true);
+        SequenceFileOutputFormat.setOutputCompressorClass(jobConf, SnappyCodec.class);
+        SequenceFileOutputFormat.setOutputCompressionType(jobConf, CompressionType.BLOCK);
+        
+        // Make sure there are exactly 2 parameters left.
+        FileInputFormat.setInputPaths(jobConf, inPath);
+        FileOutputFormat.setOutputPath(jobConf, new Path(outPath));
+        
+        System.out.println("Running on "
+                + cluster.getTaskTrackers()
+                + " nodes to sort from "
+                + FileInputFormat.getInputPaths(jobConf)[0] + " into "
+                + FileOutputFormat.getOutputPath(jobConf)
+                + " with " + num_reduces + " reduces.");
+        Date startTime = new Date();
+        System.out.println("Job started: " + startTime);
+        jobResult = JobClient.runJob(jobConf);
+        Date end_time = new Date();
+        System.out.println("Job ended: " + end_time);
+        System.out.println("The job took " + (end_time.getTime() - startTime.getTime()) / 1000 + " seconds.");
+        return 0;
+    }
 
 
 
-	public static void main(String[] args) throws IOException {
-		Configuration conf = new Configuration();
-		// String base = "hdfs://boa-njt/";
-		// conf.set("fs.default.name", base);
-		String base = Properties.getProperty("gh.json.cache.path", DefaultProperties.GH_JSON_CACHE_PATH);
-		FileSystem fs = FileSystem.get(conf);
-		
-		String inPath = "/tmprepcache/";
-		StringBuilder sb = new StringBuilder();
-		FileStatus[] files = fs.listStatus(new Path(base));
-		for (int i = 0; i < files.length; i++) {
-			FileStatus file = files[i];
-			String name = file.getPath().getName();
-			if (name.startsWith("ast-") && name.endsWith(".seq")) {
-				try {
-					// ToolRunner.run(new Configuration(), new SeqSort(inPath + name, "/tmprepcache/2015-07-sorted/" + name), null);
-					sb.append(name + "\n");
-				} catch (Throwable t) {
-					t.printStackTrace();
-				}
-			}
-		}
-		FileIO.writeFileContents(new File("files2sort.txt"), sb.toString());
-	}
+    public static void main(String[] args) throws IOException {
+        Configuration conf = new Configuration();
+        // String base = "hdfs://boa-njt/";
+        // conf.set("fs.default.name", base);
+        String base = Properties.getProperty("gh.json.cache.path", DefaultProperties.GH_JSON_CACHE_PATH);
+        FileSystem fs = FileSystem.get(conf);
+        
+        String inPath = "/tmprepcache/";
+        StringBuilder sb = new StringBuilder();
+        FileStatus[] files = fs.listStatus(new Path(base));
+        for (int i = 0; i < files.length; i++) {
+            FileStatus file = files[i];
+            String name = file.getPath().getName();
+            if (name.startsWith("ast-") && name.endsWith(".seq")) {
+                try {
+                    // ToolRunner.run(new Configuration(), new SeqSort(inPath + name, "/tmprepcache/2015-07-sorted/" + name), null);
+                    sb.append(name + "\n");
+                } catch (Throwable t) {
+                    t.printStackTrace();
+                }
+            }
+        }
+        FileIO.writeFileContents(new File("files2sort.txt"), sb.toString());
+    }
 
-	/**
-	 * Get the last job that was run using this instance.
-	 * @return the results of the last job that was run
-	 */
-	public RunningJob getResult() {
-		return jobResult;
-	}
+    /**
+     * Get the last job that was run using this instance.
+     * @return the results of the last job that was run
+     */
+    public RunningJob getResult() {
+        return jobResult;
+    }
 }

@@ -29,47 +29,47 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
  * @author hridesh
  */
 public class FunctionExpression extends Operand {
-	protected AbstractType typeNode;
-	protected Block body;
+    protected AbstractType typeNode;
+    protected Block body;
 
-	public AbstractType getType() {
-		return typeNode;
-	}
+    public AbstractType getType() {
+        return typeNode;
+    }
 
-	public Block getBody() {
-		return body;
-	}
+    public Block getBody() {
+        return body;
+    }
 
-	public FunctionExpression(final AbstractType typeNode, final Block body) {
-		if (typeNode != null)
-			typeNode.setParent(this);
-		if (body != null)
-			body.setParent(this);
-		this.typeNode = typeNode;
-		this.body = body;
-	}
+    public FunctionExpression(final AbstractType typeNode, final Block body) {
+        if (typeNode != null)
+            typeNode.setParent(this);
+        if (body != null)
+            body.setParent(this);
+        this.typeNode = typeNode;
+        this.body = body;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
-		return v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
+        return v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
-		v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
+        v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void accept(final AbstractVisitorNoArg v) {
-		v.visit(this);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void accept(final AbstractVisitorNoArg v) {
+        v.visit(this);
+    }
 
-	public FunctionExpression clone() {
-		final FunctionExpression e = new FunctionExpression(typeNode.clone(), body.clone());
-		copyFieldsTo(e);
-		return e;
-	}
+    public FunctionExpression clone() {
+        final FunctionExpression e = new FunctionExpression(typeNode.clone(), body.clone());
+        copyFieldsTo(e);
+        return e;
+    }
 }

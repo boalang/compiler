@@ -29,28 +29,28 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
 public @interface FunctionSpec {
-	/**
-	 * The name of the function.
-	 * 
-	 */
-	String name();
+    /**
+     * The name of the function.
+     * 
+     */
+    String name();
 
-	/**
-	 * The Boa type of its return value.
-	 * 
-	 */
-	String returnType() default "none";
+    /**
+     * The Boa type of its return value.
+     * 
+     */
+    String returnType() default "none";
 
-	/**
-	 * The Boa types of each of its formal parameters.
-	 * 
-	 */
-	String[] formalParameters() default {};
+    /**
+     * The Boa types of each of its formal parameters.
+     * 
+     */
+    String[] formalParameters() default {};
 
-	/**
-	 * Any type dependencies that need to be handled prior to importing this
-	 * function.
-	 * 
-	 */
-	String[] typeDependencies() default {};
+    /**
+     * Any type dependencies that need to be handled prior to importing this
+     * function.
+     * 
+     */
+    String[] typeDependencies() default {};
 }

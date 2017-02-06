@@ -28,48 +28,48 @@ import boa.compiler.ast.Node;
  * 
  */
 public class TypeCheckException extends RuntimeException {
-	private static final long serialVersionUID = -5838752670934187621L;
-	public Node startNode;
-	public Node endNode;
+    private static final long serialVersionUID = -5838752670934187621L;
+    public Node startNode;
+    public Node endNode;
 
-	/**
-	 * Construct a TypeCheckException.
-	 * 
-	 * @param startNode
-	 *            The {@link Node} where the error occurred
-	 * @param text
-	 *            A {@link String} containing the description of the error
-	 */
-	public TypeCheckException(final Node startNode, final String text) {
-		super(text);
-		this.startNode = startNode;
-		this.endNode = startNode;
-	}
-	public TypeCheckException(final List<? extends Node> nodes, final String text) {
-		super(text);
-		this.startNode = nodes.get(0);
-		this.endNode = nodes.get(nodes.size() - 1);
-	}
+    /**
+     * Construct a TypeCheckException.
+     * 
+     * @param startNode
+     *            The {@link Node} where the error occurred
+     * @param text
+     *            A {@link String} containing the description of the error
+     */
+    public TypeCheckException(final Node startNode, final String text) {
+        super(text);
+        this.startNode = startNode;
+        this.endNode = startNode;
+    }
+    public TypeCheckException(final List<? extends Node> nodes, final String text) {
+        super(text);
+        this.startNode = nodes.get(0);
+        this.endNode = nodes.get(nodes.size() - 1);
+    }
 
-	/**
-	 * Construct a TypeCheckException caused by another exception.
-	 * 
-	 * @param startNode 
-	 *            The {@link Node} where the error occurred
-	 * @param text
-	 *            A {@link String} containing the description of the error
-	 * @param e
-	 *            A {@link Throwable} representing the cause of this type
-	 *            exception
-	 */
-	public TypeCheckException(final Node startNode, final String text, final Throwable e) {
-		super(text, e);
-		this.startNode = startNode;
-		this.endNode = startNode;
-	}
-	public TypeCheckException(final List<? extends Node> nodes, final String text, final Throwable e) {
-		super(text, e);
-		this.startNode = nodes.get(0);
-		this.endNode = nodes.get(nodes.size() - 1);
-	}
+    /**
+     * Construct a TypeCheckException caused by another exception.
+     * 
+     * @param startNode 
+     *            The {@link Node} where the error occurred
+     * @param text
+     *            A {@link String} containing the description of the error
+     * @param e
+     *            A {@link Throwable} representing the cause of this type
+     *            exception
+     */
+    public TypeCheckException(final Node startNode, final String text, final Throwable e) {
+        super(text, e);
+        this.startNode = startNode;
+        this.endNode = startNode;
+    }
+    public TypeCheckException(final List<? extends Node> nodes, final String text, final Throwable e) {
+        super(text, e);
+        this.startNode = nodes.get(0);
+        this.endNode = nodes.get(nodes.size() - 1);
+    }
 }

@@ -24,29 +24,29 @@ import boa.io.EmitKey;
  * @author anthonyu
  */
 abstract class MeanAggregator extends Aggregator {
-	private long count;
+    private long count;
 
-	public void count(final String metadata) {
-		if (metadata == null)
-			this.count++;
-		else
-			this.count += Long.parseLong(metadata);
-	}
+    public void count(final String metadata) {
+        if (metadata == null)
+            this.count++;
+        else
+            this.count += Long.parseLong(metadata);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void start(final EmitKey key) {
-		super.start(key);
+    /** {@inheritDoc} */
+    @Override
+    public void start(final EmitKey key) {
+        super.start(key);
 
-		this.count = 0;
-	}
+        this.count = 0;
+    }
 
-	/**
-	 * Return the count of the values in the dataset.
-	 * 
-	 * @return A long representing the cardinality of the dataset
-	 */
-	protected long getCount() {
-		return this.count;
-	}
+    /**
+     * Return the count of the values in the dataset.
+     * 
+     * @return A long representing the cardinality of the dataset
+     */
+    protected long getCount() {
+        return this.count;
+    }
 }

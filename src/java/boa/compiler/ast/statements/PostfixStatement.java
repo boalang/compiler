@@ -27,45 +27,45 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
  * @author hridesh
  */
 public class PostfixStatement extends Statement {
-	protected Expression expr;
-	protected String op;
+    protected Expression expr;
+    protected String op;
 
-	public Expression getExpr() {
-		return expr;
-	}
+    public Expression getExpr() {
+        return expr;
+    }
 
-	public String getOp() {
-		return op;
-	}
+    public String getOp() {
+        return op;
+    }
 
-	public PostfixStatement(final Expression expr, final String op) {
-		if (expr != null)
-			expr.setParent(this);
-		this.expr = expr;
-		this.op = op;
-	}
+    public PostfixStatement(final Expression expr, final String op) {
+        if (expr != null)
+            expr.setParent(this);
+        this.expr = expr;
+        this.op = op;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
-		return v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
+        return v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
-		v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
+        v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void accept(final AbstractVisitorNoArg v) {
-		v.visit(this);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void accept(final AbstractVisitorNoArg v) {
+        v.visit(this);
+    }
 
-	public PostfixStatement clone() {
-		final PostfixStatement s = new PostfixStatement(expr.clone(), op);
-		copyFieldsTo(s);
-		return s;
-	}
+    public PostfixStatement clone() {
+        final PostfixStatement s = new PostfixStatement(expr.clone(), op);
+        copyFieldsTo(s);
+        return s;
+    }
 }

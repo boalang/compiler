@@ -30,39 +30,39 @@ import java.util.Set;
  * @param <T> The type of value that will be inserted into the set
  */
 class CountingSet<T> {
-	private Map<T, Double> map;
+    private Map<T, Double> map;
 
-	/**
-	 * Construct a {@link CountingSet}.
-	 */
-	public CountingSet() {
-		this.map = new HashMap<T, Double>();
-	}
+    /**
+     * Construct a {@link CountingSet}.
+     */
+    public CountingSet() {
+        this.map = new HashMap<T, Double>();
+    }
 
-	/**
-	 * Add a value and its cardinality to the set.
-	 * 
-	 * @param t The value to be added
-	 * @param n The cardinality of the value
-	 */
-	public void add(final T t, final double n) {
-		// if the map already has this key, add n to the current cardiality and reinsert
-		if (this.map.containsKey(t))
-			this.map.put(t, this.map.get(t) + n);
-		else
-			this.map.put(t, n);
-	}
+    /**
+     * Add a value and its cardinality to the set.
+     * 
+     * @param t The value to be added
+     * @param n The cardinality of the value
+     */
+    public void add(final T t, final double n) {
+        // if the map already has this key, add n to the current cardiality and reinsert
+        if (this.map.containsKey(t))
+            this.map.put(t, this.map.get(t) + n);
+        else
+            this.map.put(t, n);
+    }
 
-	public void clear() {
-		this.map.clear();
-	}
+    public void clear() {
+        this.map.clear();
+    }
 
-	/**
-	 * Get the entries in this set.
-	 * 
-	 * @return A {@link Set} of T containing the entries in this set
-	 */
-	public Set<Entry<T, Double>> getEntries() {
-		return this.map.entrySet();
-	}
+    /**
+     * Get the entries in this set.
+     * 
+     * @return A {@link Set} of T containing the entries in this set
+     */
+    public Set<Entry<T, Double>> getEntries() {
+        return this.map.entrySet();
+    }
 }

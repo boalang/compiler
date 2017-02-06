@@ -37,76 +37,76 @@ import boa.types.Ast.ASTRoot;
  * @author rdyer
  */
 public class Java7BaseTest extends BaseTest {
-	protected static int astLevel = AST.JLS4;
-	protected static String javaVersion = JavaCore.VERSION_1_7;
-	protected static Java7Visitor visitor = new Java7Visitor("", new HashMap<String, Integer>());
+    protected static int astLevel = AST.JLS4;
+    protected static String javaVersion = JavaCore.VERSION_1_7;
+    protected static Java7Visitor visitor = new Java7Visitor("", new HashMap<String, Integer>());
 
-	protected static String parseJava(final String content) {
-		final ASTParser parser = ASTParser.newParser(astLevel);
-		parser.setKind(ASTParser.K_COMPILATION_UNIT);
-		parser.setSource(content.toCharArray());
+    protected static String parseJava(final String content) {
+        final ASTParser parser = ASTParser.newParser(astLevel);
+        parser.setKind(ASTParser.K_COMPILATION_UNIT);
+        parser.setSource(content.toCharArray());
 
-		final Map options = JavaCore.getOptions();
-		JavaCore.setComplianceOptions(javaVersion, options);
-		parser.setCompilerOptions(options);
+        final Map options = JavaCore.getOptions();
+        JavaCore.setComplianceOptions(javaVersion, options);
+        parser.setCompilerOptions(options);
 
-		final CompilationUnit cu = (CompilationUnit) parser.createAST(null);
+        final CompilationUnit cu = (CompilationUnit) parser.createAST(null);
 
-		final ASTRoot.Builder ast = ASTRoot.newBuilder();
-		try {
-			ast.addNamespaces(visitor.getNamespaces(cu));
-			for (final String s : visitor.getImports())
-				ast.addImports(s);
-		} catch (final Exception e) {
-			System.err.println(e);
-			e.printStackTrace();
-			return "";
-		}
+        final ASTRoot.Builder ast = ASTRoot.newBuilder();
+        try {
+            ast.addNamespaces(visitor.getNamespaces(cu));
+            for (final String s : visitor.getImports())
+                ast.addImports(s);
+        } catch (final Exception e) {
+            System.err.println(e);
+            e.printStackTrace();
+            return "";
+        }
 
-		return JsonFormat.printToString(ast.build());
-	}
+        return JsonFormat.printToString(ast.build());
+    }
 
-	protected static String parseWrapped(final String content) {
-		String s = "class t {\n   void m() {\n      " + content.replaceAll("\n", "\n      ");
-		if (!content.endsWith(";") && !content.endsWith(";\n"))
-			s += ";";
-		s += "\n   }\n}";
-		return parseJava(s);
-	}
+    protected static String parseWrapped(final String content) {
+        String s = "class t {\n   void m() {\n      " + content.replaceAll("\n", "\n      ");
+        if (!content.endsWith(";") && !content.endsWith(";\n"))
+            s += ";";
+        s += "\n   }\n}";
+        return parseJava(s);
+    }
 
-	public static void testWrapped(final String java, final String expected) {
-		assertEquals(
-			"{\n"
-			+ "   \"namespaces\": [\n"
-			+ "      {\n"
-			+ "         \"name\": \"\",\n"
-			+ "         \"declarations\": [\n"
-			+ "            {\n"
-			+ "               \"name\": \"t\",\n"
-			+ "               \"kind\": \"CLASS\",\n"
-			+ "               \"methods\": [\n"
-			+ "                  {\n"
-			+ "                     \"name\": \"m\",\n"
-			+ "                     \"return_type\": {\n"
-			+ "                        \"kind\": \"OTHER\",\n"
-			+ "                        \"name\": 0\n"
-			+ "                     },\n"
-			+ "                     \"statements\": [\n"
-			+ "                        {\n"
-			+ "                           \"kind\": \"BLOCK\",\n"
-			+ "                           \"statements\": [\n"
-			+ "                              " + expected.replaceAll("\n", "\n                              ") + "\n"
-			+ "                           ]\n"
-			+ "                        }\n"
-			+ "                     ]\n"
-			+ "                  }\n"
-			+ "               ]\n"
-			+ "            }\n"
-			+ "         ]\n"
-			+ "      }\n"
-			+ "   ]\n"
-			+ "}",
-			parseWrapped(java)
-		);
-	}
+    public static void testWrapped(final String java, final String expected) {
+        assertEquals(
+            "{\n"
+            + "   \"namespaces\": [\n"
+            + "      {\n"
+            + "         \"name\": \"\",\n"
+            + "         \"declarations\": [\n"
+            + "            {\n"
+            + "               \"name\": \"t\",\n"
+            + "               \"kind\": \"CLASS\",\n"
+            + "               \"methods\": [\n"
+            + "                  {\n"
+            + "                     \"name\": \"m\",\n"
+            + "                     \"return_type\": {\n"
+            + "                        \"kind\": \"OTHER\",\n"
+            + "                        \"name\": 0\n"
+            + "                     },\n"
+            + "                     \"statements\": [\n"
+            + "                        {\n"
+            + "                           \"kind\": \"BLOCK\",\n"
+            + "                           \"statements\": [\n"
+            + "                              " + expected.replaceAll("\n", "\n                              ") + "\n"
+            + "                           ]\n"
+            + "                        }\n"
+            + "                     ]\n"
+            + "                  }\n"
+            + "               ]\n"
+            + "            }\n"
+            + "         ]\n"
+            + "      }\n"
+            + "   ]\n"
+            + "}",
+            parseWrapped(java)
+        );
+    }
 }

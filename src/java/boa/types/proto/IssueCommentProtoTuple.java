@@ -34,38 +34,38 @@ import boa.types.BoaType;
  * @author rdyer
  */
 public class IssueCommentProtoTuple extends BoaProtoTuple {
-	private final static List<BoaType> members = new ArrayList<BoaType>();
-	private final static Map<String, Integer> names = new HashMap<String, Integer>();
+    private final static List<BoaType> members = new ArrayList<BoaType>();
+    private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
-	static {
-		int counter = 0;
+    static {
+        int counter = 0;
 
-		names.put("id", counter++);
-		members.add(new BoaString());
+        names.put("id", counter++);
+        members.add(new BoaString());
 
-		names.put("date", counter++);
-		members.add(new BoaTime());
+        names.put("date", counter++);
+        members.add(new BoaTime());
 
-		names.put("author", counter++);
-		members.add(new PersonProtoTuple());
+        names.put("author", counter++);
+        members.add(new PersonProtoTuple());
 
-		names.put("description", counter++);
-		members.add(new BoaString());
+        names.put("description", counter++);
+        members.add(new BoaString());
 
-		names.put("files", counter++);
-		members.add(new BoaProtoList(new AttachmentProtoTuple()));
-	}
+        names.put("files", counter++);
+        members.add(new BoaProtoList(new AttachmentProtoTuple()));
+    }
 
-	/**
-	 * Construct a IssueCommentProtoTuple.
-	 */
-	public IssueCommentProtoTuple() {
-		super(members, names);
-	}
+    /**
+     * Construct a IssueCommentProtoTuple.
+     */
+    public IssueCommentProtoTuple() {
+        super(members, names);
+    }
 
-	/** @{inheritDoc} */
-	@Override
-	public String toJavaType() {
-		return "boa.types.Issues.IssueComment";
-	}
+    /** @{inheritDoc} */
+    @Override
+    public String toJavaType() {
+        return "boa.types.Issues.IssueComment";
+    }
 }

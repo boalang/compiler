@@ -28,11 +28,11 @@ import org.junit.Test;
  * @author rdyer
  */
 public class TestRepeatingAnnotations extends Java8BaseTest {
-	@Test
-	public void repeatedAnnotation() throws IOException {
-		assertEquals(
-			load("test/datagen/boa/repeating-annot.boa").trim(),
-			parseJava(load("test/datagen/java/repeating-annot.java")).trim()
-		);
-	}
+    @Test
+    public void repeatedAnnotation() throws IOException {
+        assertEquals(
+            load("test/datagen/boa/repeating-annot.boa").trim(),
+            parseJava(load("test/datagen/java/repeating-annot.java")).trim()
+        );
+    }
 }

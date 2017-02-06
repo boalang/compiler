@@ -28,51 +28,51 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
  * @author hridesh
  */
 public class TypeDecl extends Statement {
-	protected Identifier identifier;
-	protected AbstractType typeNode;
+    protected Identifier identifier;
+    protected AbstractType typeNode;
 
-	public Identifier getId() {
-		return identifier;
-	}
+    public Identifier getId() {
+        return identifier;
+    }
 
-	public boolean hasType() {
-		return typeNode != null;
-	}
+    public boolean hasType() {
+        return typeNode != null;
+    }
 
-	public AbstractType getType() {
-		return typeNode;
-	}
+    public AbstractType getType() {
+        return typeNode;
+    }
 
-	public TypeDecl(final Identifier identifier, final AbstractType typeNode) {
-		if (identifier != null)
-			identifier.setParent(this);
-		if (typeNode != null)
-			typeNode.setParent(this);
-		this.identifier = identifier;
-		this.typeNode = typeNode;
-	}
+    public TypeDecl(final Identifier identifier, final AbstractType typeNode) {
+        if (identifier != null)
+            identifier.setParent(this);
+        if (typeNode != null)
+            typeNode.setParent(this);
+        this.identifier = identifier;
+        this.typeNode = typeNode;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
-		return v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
+        return v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
-		v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
+        v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void accept(final AbstractVisitorNoArg v) {
-		v.visit(this);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void accept(final AbstractVisitorNoArg v) {
+        v.visit(this);
+    }
 
-	public TypeDecl clone() {
-		final TypeDecl d = new TypeDecl(identifier.clone(), typeNode.clone());
-		copyFieldsTo(d);
-		return d;
-	}
+    public TypeDecl clone() {
+        final TypeDecl d = new TypeDecl(identifier.clone(), typeNode.clone());
+        copyFieldsTo(d);
+        return d;
+    }
 }

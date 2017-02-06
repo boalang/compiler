@@ -26,9 +26,9 @@ import boa.types.BoaProtoMap;
  * @author rramu
  */
 public class TraversalDirectionProtoMap extends BoaProtoMap {
-	/** {@inheritDoc} */
-	@Override
-	protected Class<? extends ProtocolMessageEnum> getEnumClass() {
-		return boa.types.Graph.Traversal.TraversalDirection.class;
-	}
+    /** {@inheritDoc} */
+    @Override
+    protected Class<? extends ProtocolMessageEnum> getEnumClass() {
+        return boa.types.Graph.Traversal.TraversalDirection.class;
+    }
 }

@@ -34,65 +34,65 @@ import boa.types.BoaType;
  * @author rdyer
  */
 public class IssueProtoTuple extends BoaProtoTuple {
-	private final static List<BoaType> members = new ArrayList<BoaType>();
-	private final static Map<String, Integer> names = new HashMap<String, Integer>();
+    private final static List<BoaType> members = new ArrayList<BoaType>();
+    private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
-	static {
-		int counter = 0;
+    static {
+        int counter = 0;
 
-		names.put("id", counter++);
-		members.add(new BoaString());
+        names.put("id", counter++);
+        members.add(new BoaString());
 
-		names.put("status", counter++);
-		members.add(new BoaString());
+        names.put("status", counter++);
+        members.add(new BoaString());
 
-		names.put("author", counter++);
-		members.add(new PersonProtoTuple());
+        names.put("author", counter++);
+        members.add(new PersonProtoTuple());
 
-		names.put("assignee", counter++);
-		members.add(new PersonProtoTuple());
+        names.put("assignee", counter++);
+        members.add(new PersonProtoTuple());
 
-		names.put("summary", counter++);
-		members.add(new BoaString());
+        names.put("summary", counter++);
+        members.add(new BoaString());
 
-		names.put("description", counter++);
-		members.add(new BoaString());
+        names.put("description", counter++);
+        members.add(new BoaString());
 
-		names.put("created_date", counter++);
-		members.add(new BoaTime());
+        names.put("created_date", counter++);
+        members.add(new BoaTime());
 
-		names.put("modified_date", counter++);
-		members.add(new BoaTime());
+        names.put("modified_date", counter++);
+        members.add(new BoaTime());
 
-		names.put("completed_date", counter++);
-		members.add(new BoaTime());
+        names.put("completed_date", counter++);
+        members.add(new BoaTime());
 
-		names.put("keywords", counter++);
-		members.add(new BoaProtoList(new BoaString()));
+        names.put("keywords", counter++);
+        members.add(new BoaProtoList(new BoaString()));
 
-		names.put("vote", counter++);
-		members.add(new BoaInt());
+        names.put("vote", counter++);
+        members.add(new BoaInt());
 
-		names.put("priority", counter++);
-		members.add(new BoaString());
+        names.put("priority", counter++);
+        members.add(new BoaString());
 
-		names.put("files", counter++);
-		members.add(new BoaProtoList(new AttachmentProtoTuple()));
+        names.put("files", counter++);
+        members.add(new BoaProtoList(new AttachmentProtoTuple()));
 
-		names.put("comments", counter++);
-		members.add(new BoaProtoList(new IssueCommentProtoTuple()));
-	}
+        names.put("comments", counter++);
+        members.add(new BoaProtoList(new IssueCommentProtoTuple()));
+    }
 
-	/**
-	 * Construct a IssueProtoTuple.
-	 */
-	public IssueProtoTuple() {
-		super(members, names);
-	}
+    /**
+     * Construct a IssueProtoTuple.
+     */
+    public IssueProtoTuple() {
+        super(members, names);
+    }
 
-	/** @{inheritDoc} */
-	@Override
-	public String toJavaType() {
-		return "boa.types.Issues.Issue";
-	}
+    /** @{inheritDoc} */
+    @Override
+    public String toJavaType() {
+        return "boa.types.Issues.Issue";
+    }
 }

@@ -32,134 +32,134 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
  * @author hridesh
  */
 public class OutputType extends AbstractType {
-	protected Identifier id;
-	protected final List<Expression> args = new ArrayList<Expression>();
-	protected final List<Component> indices = new ArrayList<Component>();
-	protected Component typeNode;
-	protected Component weight;
+    protected Identifier id;
+    protected final List<Expression> args = new ArrayList<Expression>();
+    protected final List<Component> indices = new ArrayList<Component>();
+    protected Component typeNode;
+    protected Component weight;
 
-	public Identifier getId() {
-		return id;
-	}
+    public Identifier getId() {
+        return id;
+    }
 
-	public void setId(final Identifier id) {
-		id.setParent(this);
-		this.id = id;
-	}
+    public void setId(final Identifier id) {
+        id.setParent(this);
+        this.id = id;
+    }
 
-	public List<Expression> getArgs() {
-		return args;
-	}
+    public List<Expression> getArgs() {
+        return args;
+    }
 
-	public int getArgsSize() {
-		return args.size();
-	}
+    public int getArgsSize() {
+        return args.size();
+    }
 
-	public Expression getArg(final int index) {
-		return args.get(index);
-	}
+    public Expression getArg(final int index) {
+        return args.get(index);
+    }
 
-	public void addArg(final Expression e) {
-		e.setParent(this);
-		args.add(e);
-	}
+    public void addArg(final Expression e) {
+        e.setParent(this);
+        args.add(e);
+    }
 
-	public void setArgs(final List<Expression> args) {
-		this.args.clear();
-		for (final Expression e : args) {
-			e.setParent(this);
-			this.args.add(e);
-		}
-	}
+    public void setArgs(final List<Expression> args) {
+        this.args.clear();
+        for (final Expression e : args) {
+            e.setParent(this);
+            this.args.add(e);
+        }
+    }
 
-	public List<Component> getIndices() {
-		return indices;
-	}
+    public List<Component> getIndices() {
+        return indices;
+    }
 
-	public int getIndicesSize() {
-		return indices.size();
-	}
+    public int getIndicesSize() {
+        return indices.size();
+    }
 
-	public Component getIndice(final int index) {
-		return indices.get(index);
-	}
+    public Component getIndice(final int index) {
+        return indices.get(index);
+    }
 
-	public void addIndice(final Component c) {
-		c.setParent(this);
-		indices.add(c);
-	}
+    public void addIndice(final Component c) {
+        c.setParent(this);
+        indices.add(c);
+    }
 
-	public Component getType() {
-		return typeNode;
-	}
+    public Component getType() {
+        return typeNode;
+    }
 
-	public void setType(final Component typeNode) {
-		typeNode.setParent(this);
-		this.typeNode = typeNode;
-	}
+    public void setType(final Component typeNode) {
+        typeNode.setParent(this);
+        this.typeNode = typeNode;
+    }
 
-	public boolean hasWeight() {
-		return weight != null;
-	}
+    public boolean hasWeight() {
+        return weight != null;
+    }
 
-	public Component getWeight() {
-		return weight;
-	}
+    public Component getWeight() {
+        return weight;
+    }
 
-	public void setWeight(final Component weight) {
-		weight.setParent(this);
-		this.weight = weight;
-	}
+    public void setWeight(final Component weight) {
+        weight.setParent(this);
+        this.weight = weight;
+    }
 
-	public OutputType(final Identifier id) {
-		this(id, null, null);
-	}
+    public OutputType(final Identifier id) {
+        this(id, null, null);
+    }
 
-	public OutputType(final Identifier id, final Component typeNode) {
-		this(id, typeNode, null);
-	}
+    public OutputType(final Identifier id, final Component typeNode) {
+        this(id, typeNode, null);
+    }
 
-	public OutputType(final Identifier id, final Component typeNode, final Component weight) {
-		if (id != null)
-			id.setParent(this);
-		if (typeNode != null)
-			typeNode.setParent(this);
-		if (weight != null)
-			weight.setParent(this);
-		this.id = id;
-		this.typeNode = typeNode;
-		this.weight = weight;
-	}
+    public OutputType(final Identifier id, final Component typeNode, final Component weight) {
+        if (id != null)
+            id.setParent(this);
+        if (typeNode != null)
+            typeNode.setParent(this);
+        if (weight != null)
+            weight.setParent(this);
+        this.id = id;
+        this.typeNode = typeNode;
+        this.weight = weight;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
-		return v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
+        return v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
-		v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
+        v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void accept(final AbstractVisitorNoArg v) {
-		v.visit(this);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void accept(final AbstractVisitorNoArg v) {
+        v.visit(this);
+    }
 
-	public OutputType clone() {
-		final OutputType o;
-		if (hasWeight())
-			o = new OutputType(id.clone(), typeNode.clone(), weight.clone());
-		else
-			o = new OutputType(id.clone(), typeNode.clone());
-		for (final Expression e : args)
-			o.addArg(e.clone());
-		for (final Component c : indices)
-			o.addIndice(c.clone());
-		copyFieldsTo(o);
-		return o;
-	}
+    public OutputType clone() {
+        final OutputType o;
+        if (hasWeight())
+            o = new OutputType(id.clone(), typeNode.clone(), weight.clone());
+        else
+            o = new OutputType(id.clone(), typeNode.clone());
+        for (final Expression e : args)
+            o.addArg(e.clone());
+        for (final Component c : indices)
+            o.addIndice(c.clone());
+        copyFieldsTo(o);
+        return o;
+    }
 }

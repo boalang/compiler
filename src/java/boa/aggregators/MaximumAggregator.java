@@ -24,27 +24,27 @@ package boa.aggregators;
  */
 @AggregatorSpec(name = "maximum", formalParameters = { "int" }, weightType = "float", canOmitWeight = true, canCombine = true)
 public class MaximumAggregator extends MinOrMaxAggregator {
-	/**
-	 * Construct a {@link MaximumAggregator}.
-	 * 
-	 * @param n A long representing the number of values to return
-	 */
-	public MaximumAggregator(final long n) {
-		super(n);
+    /**
+     * Construct a {@link MaximumAggregator}.
+     * 
+     * @param n A long representing the number of values to return
+     */
+    public MaximumAggregator(final long n) {
+        super(n);
 
-		this.defaultWeight = Double.MIN_VALUE;
-	}
+        this.defaultWeight = Double.MIN_VALUE;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public int compare(final WeightedString a, final WeightedString b) {
-		final double delta = a.getWeight() - b.getWeight();
+    /** {@inheritDoc} */
+    @Override
+    public int compare(final WeightedString a, final WeightedString b) {
+        final double delta = a.getWeight() - b.getWeight();
 
-		// if the weights are different, return the difference
-		if (Math.abs(delta) > 0)
-			return (int) Math.ceil(delta);
+        // if the weights are different, return the difference
+        if (Math.abs(delta) > 0)
+            return (int) Math.ceil(delta);
 
-		// otherwise compare the strings
-		return b.getString().compareTo(a.getString());
-	}
+        // otherwise compare the strings
+        return b.getString().compareTo(a.getString());
+    }
 }

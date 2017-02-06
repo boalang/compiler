@@ -27,37 +27,37 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
  * @author hridesh
  */
 public class IntegerLiteral extends Operand implements ILiteral {
-	protected String literal;
-	
-	public String getLiteral() {
-		return literal;
-	}
+    protected String literal;
+    
+    public String getLiteral() {
+        return literal;
+    }
 
-	public IntegerLiteral(final String literal) {
-		this.literal = literal;
-	}
+    public IntegerLiteral(final String literal) {
+        this.literal = literal;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
-		return v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
+        return v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
-		v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
+        v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void accept(final AbstractVisitorNoArg v) {
-		v.visit(this);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void accept(final AbstractVisitorNoArg v) {
+        v.visit(this);
+    }
 
-	public IntegerLiteral clone() {
-		final IntegerLiteral l = new IntegerLiteral(literal);
-		copyFieldsTo(l);
-		return l;
-	}
+    public IntegerLiteral clone() {
+        final IntegerLiteral l = new IntegerLiteral(literal);
+        copyFieldsTo(l);
+        return l;
+    }
 }

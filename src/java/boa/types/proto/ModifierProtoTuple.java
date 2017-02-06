@@ -34,41 +34,41 @@ import boa.types.proto.enums.VisibilityProtoMap;
  * @author rdyer
  */
 public class ModifierProtoTuple extends BoaProtoTuple {
-	private final static List<BoaType> members = new ArrayList<BoaType>();
-	private final static Map<String, Integer> names = new HashMap<String, Integer>();
+    private final static List<BoaType> members = new ArrayList<BoaType>();
+    private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
-	static {
-		int counter = 0;
+    static {
+        int counter = 0;
 
-		names.put("kind", counter++);
-		members.add(new ModifierKindProtoMap());
+        names.put("kind", counter++);
+        members.add(new ModifierKindProtoMap());
 
-		names.put("visibility", counter++);
-		members.add(new VisibilityProtoMap());
+        names.put("visibility", counter++);
+        members.add(new VisibilityProtoMap());
 
-		names.put("annotation_name", counter++);
-		members.add(new BoaString());
+        names.put("annotation_name", counter++);
+        members.add(new BoaString());
 
-		names.put("annotation_members", counter++);
-		members.add(new BoaProtoList(new BoaString()));
+        names.put("annotation_members", counter++);
+        members.add(new BoaProtoList(new BoaString()));
 
-		names.put("annotation_values", counter++);
-		members.add(new BoaProtoList(new ExpressionProtoTuple()));
+        names.put("annotation_values", counter++);
+        members.add(new BoaProtoList(new ExpressionProtoTuple()));
 
-		names.put("other", counter++);
-		members.add(new BoaString());
-	}
+        names.put("other", counter++);
+        members.add(new BoaString());
+    }
 
-	/**
-	 * Construct a {@link ModifierProtoTuple}.
-	 */
-	public ModifierProtoTuple() {
-		super(members, names);
-	}
+    /**
+     * Construct a {@link ModifierProtoTuple}.
+     */
+    public ModifierProtoTuple() {
+        super(members, names);
+    }
 
-	/** @{inheritDoc} */
-	@Override
-	public String toJavaType() {
-		return "boa.types.Ast.Modifier";
-	}
+    /** @{inheritDoc} */
+    @Override
+    public String toJavaType() {
+        return "boa.types.Ast.Modifier";
+    }
 }

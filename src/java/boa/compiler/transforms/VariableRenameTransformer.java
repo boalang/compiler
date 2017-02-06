@@ -33,81 +33,81 @@ import boa.compiler.visitors.AbstractVisitorNoArg;
  * @author rdyer
  */
 public class VariableRenameTransformer extends AbstractVisitorNoArg {
-	protected String prefix = "_";
-	protected final String visitArgName = "_n";
+    protected String prefix = "_";
+    protected final String visitArgName = "_n";
 
-	/**
-	 * Starts a variable renaming transformation with a given prefix.
-	 * 
-	 * @param n the node to start transform at
-	 * @param prefix the prefix to add to the start of names
-	 */
-	public void start(Node n, String prefix) {
-		this.prefix = prefix + "_";
-		start(n);
-	}
+    /**
+     * Starts a variable renaming transformation with a given prefix.
+     * 
+     * @param n the node to start transform at
+     * @param prefix the prefix to add to the start of names
+     */
+    public void start(Node n, String prefix) {
+        this.prefix = prefix + "_";
+        start(n);
+    }
 
-	protected String oldVisitArgName;
-	protected final Stack<String> oldVisitArgNames = new Stack<String>();
+    protected String oldVisitArgName;
+    protected final Stack<String> oldVisitArgNames = new Stack<String>();
 
-	/** {@inheritDoc} */
-	@Override
-	protected void initialize() {
-		oldVisitArgName = null;
-		oldVisitArgNames.clear();
-	}
+    /** {@inheritDoc} */
+    @Override
+    protected void initialize() {
+        oldVisitArgName = null;
+        oldVisitArgNames.clear();
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void visit(VisitStatement n) {
-		// special case variable renaming for visit statements that name
-		// their argument - this allows merging two visit statements from
-		// different programs together, ensuring they use the same arg name
-		if (n.hasComponent()) {
-			oldVisitArgNames.push(oldVisitArgName);
-			oldVisitArgName = n.getComponent().getIdentifier().getToken();
-			n.getComponent().accept(this);
-			n.getBody().accept(this);
-			oldVisitArgName = oldVisitArgNames.pop();
-			return;
-		}
-		super.visit(n);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void visit(VisitStatement n) {
+        // special case variable renaming for visit statements that name
+        // their argument - this allows merging two visit statements from
+        // different programs together, ensuring they use the same arg name
+        if (n.hasComponent()) {
+            oldVisitArgNames.push(oldVisitArgName);
+            oldVisitArgName = n.getComponent().getIdentifier().getToken();
+            n.getComponent().accept(this);
+            n.getBody().accept(this);
+            oldVisitArgName = oldVisitArgNames.pop();
+            return;
+        }
+        super.visit(n);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void visit(VarDeclStatement n) {
-		final String oldId = n.getId().getToken();
+    /** {@inheritDoc} */
+    @Override
+    public void visit(VarDeclStatement n) {
+        final String oldId = n.getId().getToken();
 
-		final String newId;
-		if (n.getId().getToken().equals(oldVisitArgName))
-			newId = visitArgName;
-		else
-			newId = prefix + oldId;
-		n.env.set(newId, n.env.get(oldId));
+        final String newId;
+        if (n.getId().getToken().equals(oldVisitArgName))
+            newId = visitArgName;
+        else
+            newId = prefix + oldId;
+        n.env.set(newId, n.env.get(oldId));
 
-		n.getId().accept(this);
-		if (n.hasInitializer())
-			n.getInitializer().accept(this);
-	}
+        n.getId().accept(this);
+        if (n.hasInitializer())
+            n.getInitializer().accept(this);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void visit(Selector n) {
-		// do nothing, we dont want to rename the selector's identifier
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void visit(Selector n) {
+        // do nothing, we dont want to rename the selector's identifier
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void visit(Identifier n) {
-		final String oldId = n.getToken();
+    /** {@inheritDoc} */
+    @Override
+    public void visit(Identifier n) {
+        final String oldId = n.getToken();
 
-		if (n.env.hasType(oldId) || n.env.hasGlobal(oldId) || n.env.hasGlobalFunction(oldId))
-			return;
+        if (n.env.hasType(oldId) || n.env.hasGlobal(oldId) || n.env.hasGlobalFunction(oldId))
+            return;
 
-		if (oldId.equals(oldVisitArgName))
-			n.setToken(visitArgName);
-		else
-			n.setToken(prefix + oldId);
-	}
+        if (oldId.equals(oldVisitArgName))
+            n.setToken(visitArgName);
+        else
+            n.setToken(prefix + oldId);
+    }
 }

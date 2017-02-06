@@ -25,20 +25,20 @@ package boa.aggregators;
  */
 @AggregatorSpec(name = "top", formalParameters = { "int" }, weightType = "float", canOmitWeight = true, canCombine = true)
 public class TopAggregator extends BottomOrTopAggregator {
-	/**
-	 * Construct a {@link TopAggregator}.
-	 * 
-	 * @param n A long representing the number of values to return
-	 */
-	public TopAggregator(final long n) {
-		super(n);
+    /**
+     * Construct a {@link TopAggregator}.
+     * 
+     * @param n A long representing the number of values to return
+     */
+    public TopAggregator(final long n) {
+        super(n);
 
-		this.defaultValue = Double.MIN_VALUE;
-	}
+        this.defaultValue = Double.MIN_VALUE;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	protected boolean shouldInsert(final double a, final double b) {
-		return a > b;
-	}
+    /** {@inheritDoc} */
+    @Override
+    protected boolean shouldInsert(final double a, final double b) {
+        return a > b;
+    }
 }

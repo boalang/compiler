@@ -32,37 +32,37 @@ import boa.io.EmitValue;
  * @author rdyer
  */
 public abstract class GraphAggregator extends Aggregator {
-	protected Set<String> neighbors;
-	protected Map<String, String> weights;
+    protected Set<String> neighbors;
+    protected Map<String, String> weights;
 
-	/** {@inheritDoc} */
-	@Override
-	public void start(final EmitKey key) {
-		super.start(key);
+    /** {@inheritDoc} */
+    @Override
+    public void start(final EmitKey key) {
+        super.start(key);
 
-		this.neighbors = new HashSet<String>();
-		this.weights = new HashMap<String, String>();
-	}
+        this.neighbors = new HashSet<String>();
+        this.weights = new HashMap<String, String>();
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void aggregate(final String data, final String metadata) throws IOException, InterruptedException, FinishedException {
-		final String neighbor = data.startsWith("\"") ? data : "\"" + data + "\"";
-		this.neighbors.add(neighbor);
-		final String weight = metadata == null ? null : (metadata.startsWith("\"") ? metadata : "\"" + metadata + "\"");
-		this.weights.put(neighbor, weight);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void aggregate(final String data, final String metadata) throws IOException, InterruptedException, FinishedException {
+        final String neighbor = data.startsWith("\"") ? data : "\"" + data + "\"";
+        this.neighbors.add(neighbor);
+        final String weight = metadata == null ? null : (metadata.startsWith("\"") ? metadata : "\"" + metadata + "\"");
+        this.weights.put(neighbor, weight);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	@SuppressWarnings("unchecked")
-	protected void collect(final String data, final String metadata) throws IOException, InterruptedException {
-		if (this.isCombining()) {
-			this.getContext().write(this.getKey(), new EmitValue(data, metadata));
-			return;
-		}
-		this.getContext().write(new Text(format(this.getKey().getIndex(), data, metadata)), NullWritable.get());
-	}
+    /** {@inheritDoc} */
+    @Override
+    @SuppressWarnings("unchecked")
+    protected void collect(final String data, final String metadata) throws IOException, InterruptedException {
+        if (this.isCombining()) {
+            this.getContext().write(this.getKey(), new EmitValue(data, metadata));
+            return;
+        }
+        this.getContext().write(new Text(format(this.getKey().getIndex(), data, metadata)), NullWritable.get());
+    }
 
-	protected abstract String format(final String idx, final String data, final String metadata);
+    protected abstract String format(final String idx, final String data, final String metadata);
 }

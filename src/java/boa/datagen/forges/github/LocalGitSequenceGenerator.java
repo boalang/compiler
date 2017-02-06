@@ -21,103 +21,103 @@ import boa.types.Toplevel.Project.ForgeKind;
 
 public class LocalGitSequenceGenerator {
 
-	private static SequenceFile.Writer projectWriter;
-	private static SequenceFile.Writer astWriter;
-	private static Configuration conf = null;
-	private static FileSystem fileSystem = null;
-	private final static String keyDelim = "!!";
+    private static SequenceFile.Writer projectWriter;
+    private static SequenceFile.Writer astWriter;
+    private static Configuration conf = null;
+    private static FileSystem fileSystem = null;
+    private final static String keyDelim = "!!";
 
-	public LocalGitSequenceGenerator() {
-		// TODO Auto-generated constructor stub
-	}
+    public LocalGitSequenceGenerator() {
+        // TODO Auto-generated constructor stub
+    }
 
-	public static void localGitSequenceGenerate(String path, String outputPath) throws IOException {
-		conf = new Configuration();
+    public static void localGitSequenceGenerate(String path, String outputPath) throws IOException {
+        conf = new Configuration();
         fileSystem = FileSystem.get(conf);
-		openWriters(outputPath);
-		try {
-			storeRepo(path);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		closeWriters();
-	}
+        openWriters(outputPath);
+        try {
+            storeRepo(path);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        closeWriters();
+    }
 
-	private static void openWriters(String outputPath) {
-		while (true) {
-			try {
-				projectWriter = SequenceFile.createWriter(fileSystem, conf,
-						new Path(outputPath + "/projects.seq"), Text.class,
-						BytesWritable.class);
-				astWriter = SequenceFile.createWriter(fileSystem, conf,
-						new Path(outputPath + "/ast.seq"), Text.class, BytesWritable.class);
-				break;
-			} catch (Throwable t) {
-				t.printStackTrace();
-				try {
-					Thread.sleep(1000);
-				} catch (final InterruptedException e) {
-					// ignored
-				}
-			}
-		}
-	}
+    private static void openWriters(String outputPath) {
+        while (true) {
+            try {
+                projectWriter = SequenceFile.createWriter(fileSystem, conf,
+                        new Path(outputPath + "/projects.seq"), Text.class,
+                        BytesWritable.class);
+                astWriter = SequenceFile.createWriter(fileSystem, conf,
+                        new Path(outputPath + "/ast.seq"), Text.class, BytesWritable.class);
+                break;
+            } catch (Throwable t) {
+                t.printStackTrace();
+                try {
+                    Thread.sleep(1000);
+                } catch (final InterruptedException e) {
+                    // ignored
+                }
+            }
+        }
+    }
 
-	private static void closeWriters() {
-		while (true) {
-			try {
-				projectWriter.close();
-				astWriter.close();
-				try {
-					Thread.sleep(1000);
-				} catch (final InterruptedException e) {
-					// ignored
-				}
-				break;
-			} catch (Throwable t) {
-				t.printStackTrace();
-				try {
-					Thread.sleep(1000);
-				} catch (final InterruptedException e) {
-					// ignored
-				}
-			}
-		}
-	}
+    private static void closeWriters() {
+        while (true) {
+            try {
+                projectWriter.close();
+                astWriter.close();
+                try {
+                    Thread.sleep(1000);
+                } catch (final InterruptedException e) {
+                    // ignored
+                }
+                break;
+            } catch (Throwable t) {
+                t.printStackTrace();
+                try {
+                    Thread.sleep(1000);
+                } catch (final InterruptedException e) {
+                    // ignored
+                }
+            }
+        }
+    }
 
-	private static void storeRepo(String path) throws IOException {
-		final Project.Builder projBuilder = Project.newBuilder();
-		final File gitDir = new File(path);
-		projBuilder.setName(gitDir.getName());
-		projBuilder.setId(path);
-		projBuilder.setProjectUrl(path);
-		projBuilder.setKind(ForgeKind.OTHER);
-		
-		AbstractConnector conn = null;
-		try {
-			conn = new GitConnector(gitDir.getAbsolutePath());
-			final CodeRepository.Builder repoBuilder = CodeRepository.newBuilder();
-			repoBuilder.setUrl(path);
-			repoBuilder.setKind(RepositoryKind.GIT);
-			final String repoKey = "g:" + path + keyDelim + path;
-			for (final Revision rev : conn.getCommits(true, astWriter, repoKey, keyDelim)) {
-				final Revision.Builder revBuilder = Revision.newBuilder(rev);
-				repoBuilder.addRevisions(revBuilder);
-			}
-			projBuilder.addCodeRepositories(repoBuilder);
-		} catch (final Exception e) {
-			e.printStackTrace();
-		} finally {
-			if (conn != null)
-				try {
-					conn.close();
-				} catch (final Exception e) {
-					e.printStackTrace();
-				}
-		}
-		Project project = projBuilder.build();
-		// System.out.println(project);
-		projectWriter.append(new Text(project.getId()), new BytesWritable(project.toByteArray()));
-	}
+    private static void storeRepo(String path) throws IOException {
+        final Project.Builder projBuilder = Project.newBuilder();
+        final File gitDir = new File(path);
+        projBuilder.setName(gitDir.getName());
+        projBuilder.setId(path);
+        projBuilder.setProjectUrl(path);
+        projBuilder.setKind(ForgeKind.OTHER);
+        
+        AbstractConnector conn = null;
+        try {
+            conn = new GitConnector(gitDir.getAbsolutePath());
+            final CodeRepository.Builder repoBuilder = CodeRepository.newBuilder();
+            repoBuilder.setUrl(path);
+            repoBuilder.setKind(RepositoryKind.GIT);
+            final String repoKey = "g:" + path + keyDelim + path;
+            for (final Revision rev : conn.getCommits(true, astWriter, repoKey, keyDelim)) {
+                final Revision.Builder revBuilder = Revision.newBuilder(rev);
+                repoBuilder.addRevisions(revBuilder);
+            }
+            projBuilder.addCodeRepositories(repoBuilder);
+        } catch (final Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (conn != null)
+                try {
+                    conn.close();
+                } catch (final Exception e) {
+                    e.printStackTrace();
+                }
+        }
+        Project project = projBuilder.build();
+        // System.out.println(project);
+        projectWriter.append(new Text(project.getId()), new BytesWritable(project.toByteArray()));
+    }
 }

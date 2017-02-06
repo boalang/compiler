@@ -28,88 +28,88 @@ import boa.io.EmitKey;
  * @author anthonyu
  */
 abstract class QuantileAggregator extends Aggregator {
-	private int total;
+    private int total;
 
-	/**
-	 * Construct a QuantileAggregator.
-	 * 
-	 * @param n
-	 *            A long representing the number of quantiles to calculate
-	 */
-	public QuantileAggregator(final long n) {
-		super(n);
-	}
+    /**
+     * Construct a QuantileAggregator.
+     * 
+     * @param n
+     *            A long representing the number of quantiles to calculate
+     */
+    public QuantileAggregator(final long n) {
+        super(n);
+    }
 
-	/**
-	 * Parse a string as long and add it to the running total.
-	 * 
-	 * @param metadata
-	 *            A {@link String} containing the number of values, or null
-	 * 
-	 * @return A long representing the value in metadata
-	 */
-	public long count(final String metadata) {
-		final long count;
+    /**
+     * Parse a string as long and add it to the running total.
+     * 
+     * @param metadata
+     *            A {@link String} containing the number of values, or null
+     * 
+     * @return A long representing the value in metadata
+     */
+    public long count(final String metadata) {
+        final long count;
 
-		if (metadata == null)
-			count = 1;
-		else
-			count = Long.parseLong(metadata);
+        if (metadata == null)
+            count = 1;
+        else
+            count = Long.parseLong(metadata);
 
-		this.total += count;
+        this.total += count;
 
-		return count;
-	}
+        return count;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void start(final EmitKey key) {
-		super.start(key);
+    /** {@inheritDoc} */
+    @Override
+    public void start(final EmitKey key) {
+        super.start(key);
 
-		this.total = 0;
-	}
+        this.total = 0;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public abstract void aggregate(final String data, final String metadata) throws IOException;
+    /** {@inheritDoc} */
+    @Override
+    public abstract void aggregate(final String data, final String metadata) throws IOException;
 
-	/** {@inheritDoc} */
-	@Override
-	public void finish() throws IOException, InterruptedException {
-		// if we're in the combiner, just output the compressed data
-		if (this.isCombining()) {
-			for (final Pair<String, Long> e : this.getTuples())
-				this.collect(e.getFirst(), e.getSecond().toString());
-		} else {
-			// otherwise, set up the quantiles
-			final int n = (int) (this.getArg() - 1);
-			final String[] quantiles = new String[n];
-			final double step = this.total / (double) n;
+    /** {@inheritDoc} */
+    @Override
+    public void finish() throws IOException, InterruptedException {
+        // if we're in the combiner, just output the compressed data
+        if (this.isCombining()) {
+            for (final Pair<String, Long> e : this.getTuples())
+                this.collect(e.getFirst(), e.getSecond().toString());
+        } else {
+            // otherwise, set up the quantiles
+            final int n = (int) (this.getArg() - 1);
+            final String[] quantiles = new String[n];
+            final double step = this.total / (double) n;
 
-			long last = 0;
-			long q = 0;
-			for (final Pair<String, Long> e : this.getTuples()) {
-				q += e.getSecond();
+            long last = 0;
+            long q = 0;
+            for (final Pair<String, Long> e : this.getTuples()) {
+                q += e.getSecond();
 
-				final int curr = (int) (q / step);
+                final int curr = (int) (q / step);
 
-				if (curr == last)
-					continue;
+                if (curr == last)
+                    continue;
 
-				last = curr;
+                last = curr;
 
-				quantiles[curr - 1] = e.getFirst();
-			}
+                quantiles[curr - 1] = e.getFirst();
+            }
 
-			this.collect(Arrays.toString(quantiles));
-		}
-	}
+            this.collect(Arrays.toString(quantiles));
+        }
+    }
 
-	/**
-	 * Return the data points from the dataset in pairs.
-	 * 
-	 * @return A {@link List} of {@link Pair}&lt{@link Number}, {@link Long}&gt;
-	 *         containing the data points from the dataset
-	 */
-	public abstract List<Pair<String, Long>> getTuples();
+    /**
+     * Return the data points from the dataset in pairs.
+     * 
+     * @return A {@link List} of {@link Pair}&lt{@link Number}, {@link Long}&gt;
+     *         containing the data points from the dataset
+     */
+    public abstract List<Pair<String, Long>> getTuples();
 }

@@ -32,50 +32,50 @@ import boa.types.proto.enums.StatementKindProtoMap;
  * @author rdyer
  */
 public class StatementProtoTuple extends BoaProtoTuple {
-	private final static List<BoaType> members = new ArrayList<BoaType>();
-	private final static Map<String, Integer> names = new HashMap<String, Integer>();
+    private final static List<BoaType> members = new ArrayList<BoaType>();
+    private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
-	static {
-		int counter = 0;
+    static {
+        int counter = 0;
 
-		names.put("kind", counter++);
-		members.add(new StatementKindProtoMap());
+        names.put("kind", counter++);
+        members.add(new StatementKindProtoMap());
 
-		names.put("comments", counter++);
-		members.add(new BoaProtoList(new CommentProtoTuple()));
+        names.put("comments", counter++);
+        members.add(new BoaProtoList(new CommentProtoTuple()));
 
-		names.put("statements", counter++);
-		members.add(new BoaProtoList(new StatementProtoTuple()));
+        names.put("statements", counter++);
+        members.add(new BoaProtoList(new StatementProtoTuple()));
 
-		names.put("initializations", counter++);
-		members.add(new BoaProtoList(new ExpressionProtoTuple()));
+        names.put("initializations", counter++);
+        members.add(new BoaProtoList(new ExpressionProtoTuple()));
 
-		names.put("condition", counter++);
-		members.add(new ExpressionProtoTuple());
+        names.put("condition", counter++);
+        members.add(new ExpressionProtoTuple());
 
-		names.put("updates", counter++);
-		members.add(new BoaProtoList(new ExpressionProtoTuple()));
+        names.put("updates", counter++);
+        members.add(new BoaProtoList(new ExpressionProtoTuple()));
 
-		names.put("variable_declaration", counter++);
-		members.add(new VariableProtoTuple());
+        names.put("variable_declaration", counter++);
+        members.add(new VariableProtoTuple());
 
-		names.put("type_declaration", counter++);
-		members.add(new DeclarationProtoTuple());
+        names.put("type_declaration", counter++);
+        members.add(new DeclarationProtoTuple());
 
-		names.put("expression", counter++);
-		members.add(new ExpressionProtoTuple());
-	}
+        names.put("expression", counter++);
+        members.add(new ExpressionProtoTuple());
+    }
 
-	/**
-	 * Construct a {@link StatementProtoTuple}.
-	 */
-	public StatementProtoTuple() {
-		super(members, names);
-	}
+    /**
+     * Construct a {@link StatementProtoTuple}.
+     */
+    public StatementProtoTuple() {
+        super(members, names);
+    }
 
-	/** @{inheritDoc} */
-	@Override
-	public String toJavaType() {
-		return "boa.types.Ast.Statement";
-	}
+    /** @{inheritDoc} */
+    @Override
+    public String toJavaType() {
+        return "boa.types.Ast.Statement";
+    }
 }

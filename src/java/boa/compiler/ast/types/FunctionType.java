@@ -30,75 +30,75 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
  * @author hridesh
  */
 public class FunctionType extends AbstractType {
-	protected final List<Component> args = new ArrayList<Component>();
-	protected AbstractType typeNode;
+    protected final List<Component> args = new ArrayList<Component>();
+    protected AbstractType typeNode;
 
-	public List<Component> getArgs() {
-		return args;
-	}
+    public List<Component> getArgs() {
+        return args;
+    }
 
-	public int getArgsSize() {
-		return args.size();
-	}
+    public int getArgsSize() {
+        return args.size();
+    }
 
-	public Component getArg(final int index) {
-		return args.get(index);
-	}
+    public Component getArg(final int index) {
+        return args.get(index);
+    }
 
-	public void addArg(final Component c) {
-		c.setParent(this);
-		args.add(c);
-	}
+    public void addArg(final Component c) {
+        c.setParent(this);
+        args.add(c);
+    }
 
-	public boolean hasType() {
-		return typeNode != null;
-	}
+    public boolean hasType() {
+        return typeNode != null;
+    }
 
-	public AbstractType getType() {
-		return typeNode;
-	}
+    public AbstractType getType() {
+        return typeNode;
+    }
 
-	public void setType(final AbstractType typeNode) {
-		typeNode.setParent(this);
-		this.typeNode = typeNode;
-	}
+    public void setType(final AbstractType typeNode) {
+        typeNode.setParent(this);
+        this.typeNode = typeNode;
+    }
 
-	public FunctionType() {
-	}
+    public FunctionType() {
+    }
 
-	public FunctionType(final AbstractType typeNode) {
-		if (typeNode != null)
-			typeNode.setParent(this);
-		this.typeNode = typeNode;
-	}
+    public FunctionType(final AbstractType typeNode) {
+        if (typeNode != null)
+            typeNode.setParent(this);
+        this.typeNode = typeNode;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
-		return v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
+        return v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
-		v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
+        v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void accept(final AbstractVisitorNoArg v) {
-		v.visit(this);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void accept(final AbstractVisitorNoArg v) {
+        v.visit(this);
+    }
 
-	public FunctionType clone() {
-		final FunctionType f;
-		if (hasType())
-			f = new FunctionType(typeNode.clone());
-		else
-			f = new FunctionType();
-		for (final Component c : args)
-			f.addArg(c.clone());
-		copyFieldsTo(f);
-		return f;
-	}
+    public FunctionType clone() {
+        final FunctionType f;
+        if (hasType())
+            f = new FunctionType(typeNode.clone());
+        else
+            f = new FunctionType();
+        for (final Component c : args)
+            f.addArg(c.clone());
+        copyFieldsTo(f);
+        return f;
+    }
 }

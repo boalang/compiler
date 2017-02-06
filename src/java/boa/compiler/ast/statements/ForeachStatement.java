@@ -29,64 +29,64 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
  * @author hridesh
  */
 public class ForeachStatement extends Statement {
-	protected Component var;
-	protected Expression condition;
-	protected Block body;
+    protected Component var;
+    protected Expression condition;
+    protected Block body;
 
-	public Component getVar() {
-		return var;
-	}
+    public Component getVar() {
+        return var;
+    }
 
-	public Expression getCondition() {
-		return condition;
-	}
+    public Expression getCondition() {
+        return condition;
+    }
 
-	public void setCondition(final Expression condition) {
-		condition.setParent(this);
-		this.condition = condition;
-	}
+    public void setCondition(final Expression condition) {
+        condition.setParent(this);
+        this.condition = condition;
+    }
 
-	public Block getBody() {
-		return body;
-	}
+    public Block getBody() {
+        return body;
+    }
 
-	public ForeachStatement(final Component var, final Expression condition, final Statement s) {
-		this(var, condition, Node.ensureBlock(s));
-	}
+    public ForeachStatement(final Component var, final Expression condition, final Statement s) {
+        this(var, condition, Node.ensureBlock(s));
+    }
 
-	public ForeachStatement(final Component var, final Expression condition, final Block body) {
-		if (var != null)
-			var.setParent(this);
-		if (condition != null)
-			condition.setParent(this);
-		if (body != null)
-			body.setParent(this);
-		this.var = var;
-		this.condition = condition;
-		this.body = body;
-	}
+    public ForeachStatement(final Component var, final Expression condition, final Block body) {
+        if (var != null)
+            var.setParent(this);
+        if (condition != null)
+            condition.setParent(this);
+        if (body != null)
+            body.setParent(this);
+        this.var = var;
+        this.condition = condition;
+        this.body = body;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
-		return v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
+        return v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
-		v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
+        v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void accept(final AbstractVisitorNoArg v) {
-		v.visit(this);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void accept(final AbstractVisitorNoArg v) {
+        v.visit(this);
+    }
 
-	public ForeachStatement clone() {
-		final ForeachStatement s = new ForeachStatement(var.clone(), condition.clone(), body.clone());
-		copyFieldsTo(s);
-		return s;
-	}
+    public ForeachStatement clone() {
+        final ForeachStatement s = new ForeachStatement(var.clone(), condition.clone(), body.clone());
+        copyFieldsTo(s);
+        return s;
+    }
 }

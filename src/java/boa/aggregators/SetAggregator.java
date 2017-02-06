@@ -28,54 +28,54 @@ import boa.io.EmitKey;
  */
 @AggregatorSpec(name = "set", canCombine = true)
 public class SetAggregator extends Aggregator {
-	private HashSet<String> set;
-	private final long max;
+    private HashSet<String> set;
+    private final long max;
 
-	/**
-	 * Construct a SetAggregator.
-	 */
-	public SetAggregator() {
-		super();
+    /**
+     * Construct a SetAggregator.
+     */
+    public SetAggregator() {
+        super();
 
-		// allow all values
-		this.max = Long.MAX_VALUE;
-	}
+        // allow all values
+        this.max = Long.MAX_VALUE;
+    }
 
-	/**
-	 * Construct a SetAggregator.
-	 * 
-	 * @param n
-	 *            A long representing the number of values to return
-	 */
-	public SetAggregator(final long n) {
-		super(n);
+    /**
+     * Construct a SetAggregator.
+     * 
+     * @param n
+     *            A long representing the number of values to return
+     */
+    public SetAggregator(final long n) {
+        super(n);
 
-		// the maximum size we will pass through
-		this.max = n;
-	}
+        // the maximum size we will pass through
+        this.max = n;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void start(final EmitKey key) {
-		super.start(key);
+    /** {@inheritDoc} */
+    @Override
+    public void start(final EmitKey key) {
+        super.start(key);
 
-		// the set of data to be collected
-		this.set = new HashSet<String>();
-	}
+        // the set of data to be collected
+        this.set = new HashSet<String>();
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void aggregate(final String data, final String metadata) throws IOException, InterruptedException, FinishedException {
-		if (this.set.size() >= this.max)
-			throw new FinishedException();
+    /** {@inheritDoc} */
+    @Override
+    public void aggregate(final String data, final String metadata) throws IOException, InterruptedException, FinishedException {
+        if (this.set.size() >= this.max)
+            throw new FinishedException();
 
-		this.set.add(data);
-	}
+        this.set.add(data);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void finish() throws IOException, InterruptedException {
-		for (final String s : this.set)
-			this.collect(s);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void finish() throws IOException, InterruptedException {
+        for (final String s : this.set)
+            this.collect(s);
+    }
 }

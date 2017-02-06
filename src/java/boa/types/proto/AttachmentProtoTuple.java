@@ -33,41 +33,41 @@ import boa.types.BoaType;
  * @author rdyer
  */
 public class AttachmentProtoTuple extends BoaProtoTuple {
-	private final static List<BoaType> members = new ArrayList<BoaType>();
-	private final static Map<String, Integer> names = new HashMap<String, Integer>();
+    private final static List<BoaType> members = new ArrayList<BoaType>();
+    private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
-	static {
-		int counter = 0;
+    static {
+        int counter = 0;
 
-		names.put("url", counter++);
-		members.add(new BoaString());
+        names.put("url", counter++);
+        members.add(new BoaString());
 
-		names.put("filename", counter++);
-		members.add(new BoaString());
+        names.put("filename", counter++);
+        members.add(new BoaString());
 
-		names.put("size", counter++);
-		members.add(new BoaInt());
+        names.put("size", counter++);
+        members.add(new BoaInt());
 
-		names.put("date", counter++);
-		members.add(new BoaTime());
+        names.put("date", counter++);
+        members.add(new BoaTime());
 
-		names.put("author", counter++);
-		members.add(new PersonProtoTuple());
+        names.put("author", counter++);
+        members.add(new PersonProtoTuple());
 
-		names.put("description", counter++);
-		members.add(new BoaString());
-	}
+        names.put("description", counter++);
+        members.add(new BoaString());
+    }
 
-	/**
-	 * Construct a AttachmentProtoTuple.
-	 */
-	public AttachmentProtoTuple() {
-		super(members, names);
-	}
+    /**
+     * Construct a AttachmentProtoTuple.
+     */
+    public AttachmentProtoTuple() {
+        super(members, names);
+    }
 
-	/** @{inheritDoc} */
-	@Override
-	public String toJavaType() {
-		return "boa.types.Issues.Attachment";
-	}
+    /** @{inheritDoc} */
+    @Override
+    public String toJavaType() {
+        return "boa.types.Issues.Attachment";
+    }
 }

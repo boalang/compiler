@@ -27,40 +27,40 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
  * @author hridesh
  */
 public class TraversalType extends AbstractType {
-	protected Component index;
+    protected Component index;
 
-	public Component getIndex() {
-		return index;
-	}
+    public Component getIndex() {
+        return index;
+    }
 
-	public void setIndex(Component index) {
-		index.setParent(this);
-		this.index = index;
-	}
+    public void setIndex(Component index) {
+        index.setParent(this);
+        this.index = index;
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
-		return v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <T, A> T accept(final AbstractVisitor<T, A> v, A arg) {
+        return v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
-		v.visit(this, arg);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public <A> void accept(final AbstractVisitorNoReturn<A> v, A arg) {
+        v.visit(this, arg);
+    }
 
-	/** {@inheritDoc} */
-	@Override
-	public void accept(final AbstractVisitorNoArg v) {
-		v.visit(this);
-	}
+    /** {@inheritDoc} */
+    @Override
+    public void accept(final AbstractVisitorNoArg v) {
+        v.visit(this);
+    }
 
-	public TraversalType clone() {
-		final TraversalType t = new TraversalType();
-		if (index != null)
-			t.setIndex(index.clone());
-		copyFieldsTo(t);
-		return t;
-	}
+    public TraversalType clone() {
+        final TraversalType t = new TraversalType();
+        if (index != null)
+            t.setIndex(index.clone());
+        copyFieldsTo(t);
+        return t;
+    }
 }

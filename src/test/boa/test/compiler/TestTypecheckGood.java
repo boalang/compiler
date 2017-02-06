@@ -31,26 +31,26 @@ import org.junit.runners.Parameterized.Parameters;
  */
 @RunWith(Parameterized.class)
 public class TestTypecheckGood extends BaseTest {
-	final private static String rootDir = "test/typecheck/";
+    final private static String rootDir = "test/typecheck/";
 
-	@Parameters(name = "{0}")
-	public static List<String[]> data() {
-		final List<String[]> files = new ArrayList<String[]>();
-		for (final File f : new File(rootDir).listFiles())
-			if (!f.isDirectory() && f.getName().endsWith(".boa"))
-				files.add(new String[] { f.getPath(), null });
-		return files;
-	}
+    @Parameters(name = "{0}")
+    public static List<String[]> data() {
+        final List<String[]> files = new ArrayList<String[]>();
+        for (final File f : new File(rootDir).listFiles())
+            if (!f.isDirectory() && f.getName().endsWith(".boa"))
+                files.add(new String[] { f.getPath(), null });
+        return files;
+    }
 
-	private String fileName;
-	public TestTypecheckGood(final String fileName, final String ignored) {
-		this.fileName = fileName;
-	}
+    private String fileName;
+    public TestTypecheckGood(final String fileName, final String ignored) {
+        this.fileName = fileName;
+    }
 
 
-	// test a bunch of known good files
-	@Test
-	public void knownGood() throws IOException {
-		typecheck("autoaddedoutputvar: output sum of int;autoaddedoutputvar << 1;" + load(fileName));
-	}
+    // test a bunch of known good files
+    @Test
+    public void knownGood() throws IOException {
+        typecheck("autoaddedoutputvar: output sum of int;autoaddedoutputvar << 1;" + load(fileName));
+    }
 }
