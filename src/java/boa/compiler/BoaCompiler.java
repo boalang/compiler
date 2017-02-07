@@ -72,6 +72,7 @@ import org.antlr.v4.runtime.TokenSource;
 import org.antlr.v4.runtime.atn.PredictionMode;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 
+import boa.datagen.DefaultProperties;
 import boa.parser.BoaParser;
 import boa.parser.BoaLexer;
 
@@ -102,7 +103,12 @@ public class BoaCompiler {
 			jarName = className + ".jar";
 
 		// make the output directory
-		final File outputRoot = new File(new File(System.getProperty("java.io.tmpdir")), UUID.randomUUID().toString());
+		File outputRoot = null;
+		if (cl.hasOption("cd")) {
+			outputRoot = new File(cl.getOptionValue("cd"));
+		} else {
+			outputRoot = new File(new File(System.getProperty("java.io.tmpdir")), UUID.randomUUID().toString());
+		}
 		final File outputSrcDir = new File(outputRoot, "boa");
 		if (!outputSrcDir.mkdirs())
 			throw new IOException("unable to mkdir " + outputSrcDir);
@@ -237,6 +243,9 @@ public class BoaCompiler {
 			st.add("combineTables", CodeGeneratingVisitor.combineAggregatorStrings);
 			st.add("reduceTables", CodeGeneratingVisitor.reduceAggregatorStrings);
 			st.add("splitsize", isSimple ? 64 * 1024 * 1024 : 10 * 1024 * 1024);
+			if(DefaultProperties.localDataPath != null) {
+				st.add("isLocal", true);
+			}
 
 			o.write(st.render().getBytes());
 		} finally {
@@ -384,7 +393,9 @@ public class BoaCompiler {
 
 		generateJar(jarName, outputRoot, libJars);
 
-		delete(outputRoot);
+		if(DefaultProperties.localDataPath == null) {
+			delete(outputRoot);
+		}
 	}
 
 	static ArrayList<File> inputFiles = null; 
@@ -400,6 +411,7 @@ public class BoaCompiler {
 		options.addOption("n", "name", true, "the name of the generated main class");
 		options.addOption("ast", "ast-debug", false, "print the AST after parsing and before code generation (debug)");
 		options.addOption("pp", "pretty-print", false, "pretty print the AST before code generation (debug)");
+		options.addOption("cd", "compilation-dir", true, "All generated Files live here");
 
 		final CommandLine cl;
 		try {

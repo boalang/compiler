@@ -43,3 +43,35 @@ Once we have performed this configuration, Eclipse will be able to perform the b
     - Select or create an "Ant Build" launch configuration on the left (e.g. `boa build.xml`).
     - Set its "Base Directory" to be the root of the Boa compiler's repository.
     - Click "Apply".
+
+
+Set Up IntelliJ Development From a Git Repository
+------------------------------------------------
+
+Below we describe how to create an Eclipse project, stored on your file system within your IntelliJ environment. 
+This  project is linked to your remote copy of the Git.  Once we have performed this configuration, IntelliJ will be able to 
+perform the build, trigger `ant` targets, and to edit  the project's source files.  
+
+1. Import the a remote Git repo: 
+    - Select “Checkout from version control > Github”. This may prompt you to provide your Github username and password to access your account.     
+    - Provide “https://github.com/boalang/compiler.git” in the field for “Git Repository URL”.     
+    - Provide local path to clone the project.     
+    - After this step your clone repository window should look like: ![](img/intellij_clone_repo.png)	
+    - Hit clone to start the cloning process.   
+
+2. Complete the import by selecting “next > next > next > Finish ”. You have imported the project successfully.
+  
+
+3. Use a CLI to compile the project. (You can also use “Terminal” available in the IDE itself.) :
+    - cd` to the repo's root.     
+    - ant`.    
+
+4. Make sure that the IntelliJ project has linked to all the repo's source directories: 
+    - From the newly-created `boa` project's "Properties > Compiler”, select the "Source" tab.     
+    - Use “Add Content Root“ to add “build” directory located under root directory.     
+    - After adding “build” directory, your "Source" tab should look something like this: ![](img/intellij_source_tab_final.png)     
+    - Your project sidebar should now look something like this:   
+    ![](img/intellij_project_explorer_final.png)	
+    - Hit “OK”.
+ 
+
