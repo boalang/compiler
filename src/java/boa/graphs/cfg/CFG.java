@@ -285,7 +285,7 @@ public class CFG {
 	}
 
 	public void addReturnNode() {
-		CFGNode node = new CFGNode("END", CFGNode.TYPE_OTHER, "<GOTO>", "END");
+		CFGNode node = new CFGNode("END[return]", CFGNode.TYPE_OTHER, "END[return]", "END[return]");
 		this.mergeSeq(node);
 		this.outs.remove(node);
 		this.returns.add(node);
@@ -583,9 +583,6 @@ public class CFG {
 		/*
 		 * assumption node 0 is conditional node
 		 */
-		if (root.getExpression() != null) {
-			graph.mergeSeq(traverse(cfgNode, root.getExpression()));
-		}
 
 		CFGNode branch = new CFGNode("IF", CFGNode.TYPE_CONTROL, "IF", "IF");
 		branch.setAstNode(root.getExpression());
@@ -611,12 +608,6 @@ public class CFG {
 	private CFG traverse_conditional(CFGNode cfgNode, Expression root) {
 		this.isBranchPresent = true;
 		CFG graph = new CFG();
-		/*
-		 * assumption node 0 is conditional node
-		 */
-		if (root.getExpressionsCount() == 3) {
-			graph.mergeSeq(traverse(cfgNode, root.getExpressions(0)));
-		}
 
 		CFGNode branch = new CFGNode("IF", CFGNode.TYPE_CONTROL, "IF", "IF");
 		branch.setAstNode(root);
@@ -643,7 +634,6 @@ public class CFG {
 	private CFG traverse_switch(CFGNode cfgNode, Statement root) {
 		this.isBranchPresent = true;
 		CFG graph = new CFG();
-		graph.mergeSeq(traverse(cfgNode, root.getExpression()));
 		CFGNode node = new CFGNode(root.getExpression().toString(),
 				CFGNode.TYPE_CONTROL, "SWITCH", "SWITCH");
 		node.setAstNode(root.getExpression());
@@ -707,14 +697,6 @@ public class CFG {
 				bNode.setAstNode(eb.build());
 				graph.mergeSeq(bNode);
 			}
-			Expression e = root.getVariableDeclaration().getInitializer();
-			//graph.mergeSeq(traverse(cfgNode, root.getVariableDeclaration()));
-			if (e != null) {
-				graph.mergeSeq(traverse(cfgNode, e));
-			}
-		}
-		if (root.getExpression() != null) {
-			graph.mergeSeq(traverse(cfgNode, root.getExpression()));
 		}
 
 		CFGNode control = new CFGNode("FOR", CFGNode.TYPE_CONTROL, "FOR", "FOR");
@@ -724,19 +706,25 @@ public class CFG {
 
 		graph.mergeSeq(control);
 		CFG branch = traverse(control, root.getStatements(0));
+		for (Iterator it = root.getUpdatesList().iterator(); it
+				.hasNext();) {
+			Expression e = (Expression) it.next();
+			branch.mergeSeq(traverse(cfgNode, e));
+		}
 		graph.mergeABranch(branch, control, "T");
 		graph.addBackEdges(branch, control, "B");
 
 		graph.adjustBreakNodes("");
+
+		graph.getOuts().clear();
+		graph.getOuts().add(control);
+
 		return graph;
 	}
 
 	private CFG traverse_while(CFGNode cfgNode, Statement root) {
 		this.isLoopPresent = true;
 		CFG graph = new CFG();
-		if (root.getExpression() != null) {
-			graph.mergeSeq(traverse(cfgNode, root.getExpression()));
-		}
 		CFGNode control = new CFGNode("WHILE", CFGNode.TYPE_CONTROL, "WHILE",
 				"WHILE");
 		control.setAstNode(root.getExpression());
@@ -749,14 +737,16 @@ public class CFG {
 		graph.addBackEdges(branch, control, "B");
 
 		graph.adjustBreakNodes("");
+
+		graph.getOuts().clear();
+		graph.getOuts().add(control);
+
 		return graph;
 	}
 
 	private CFG traverse_do(CFGNode cfgNode, Statement root) {
 		this.isLoopPresent = true;
 		CFG graph = new CFG();
-		if (root.getExpression() != null)
-			graph.mergeSeq(traverse(cfgNode, root.getExpression()));
 
 		CFGNode control = new CFGNode("DO", CFGNode.TYPE_CONTROL, "DO", "DO");
 		control.setAstNode(root.getExpression());
@@ -769,6 +759,9 @@ public class CFG {
 		graph.addBackEdges(branch, control, "B");
 
 		graph.adjustBreakNodes("");
+		graph.getOuts().clear();
+		graph.getOuts().add(control);
+
 		return graph;
 	}
 
@@ -825,10 +818,11 @@ public class CFG {
 	private CFG traverse_throw(CFGNode cfgNode, Statement root) {
 		this.isBranchPresent = true;
 		CFG graph = new CFG();
-		if (root.getExpression() != null)
+		/*if (root.getExpression() != null)
 			graph.mergeSeq(traverse(cfgNode, root.getExpression()));
-		CFGNode node = new CFGNode("END[throw]", CFGNode.TYPE_OTHER, "<GOTO>",
-				"END");
+		*/
+		CFGNode node = new CFGNode("END[throw]", CFGNode.TYPE_OTHER, "END[throw]",
+				"END[throw]");
 		node.setAstNode(root);
 		graph.addReturnNode(node);
 		return graph;
@@ -836,10 +830,11 @@ public class CFG {
 
 	private CFG traverse_return(CFGNode cfgNode, Statement root) {
 		CFG graph = new CFG();
-		if (root.getExpression() != null)
+		/*if (root.getExpression() != null)
 			graph.mergeSeq(traverse(cfgNode, root.getExpression()));
-		CFGNode node = new CFGNode("END[return]", CFGNode.TYPE_OTHER, "<GOTO>",
-				"END");
+		*/
+		CFGNode node = new CFGNode("END[return]", CFGNode.TYPE_OTHER, "END[return]",
+				"END[return]");
 		node.setAstNode(root);
 		graph.addReturnNode(node);
 		return graph;
@@ -852,11 +847,20 @@ public class CFG {
 		branch.setPid((cfgNode == null) ? "." : cfgNode.getPid()
 				+ cfgNode.getId() + ".");
 		graph.mergeSeq(branch);
-		graph.mergeABranch(traverse(branch, root.getStatements(0)), branch, "T");
+		boolean trueNotEmpty = false, falseNotEmpty = false;
+		if (root.getStatementsCount() > 0) {
+			graph.mergeABranch(traverse(branch, root.getStatements(0)), branch, "T");
+			trueNotEmpty = true;
+		}
 		// All catch statements are considered false branches.
 		for (int i = 1; i < root.getStatementsCount(); i++) {
 			graph.mergeABranch(traverse(branch, root.getStatements(i)), branch,
 					"F");
+			falseNotEmpty = true;
+		}
+		if (trueNotEmpty && falseNotEmpty) {
+			//System.out.println("[after] OutNodes: " + graph.getOuts().size());
+			graph.getOuts().remove(branch);
 		}
 		return graph;
 	}
@@ -867,18 +871,19 @@ public class CFG {
 				"CATCH");
 		aNode.setAstNode(root);
 		graph.mergeSeq(aNode);
-		if (root.getStatementsCount() > 0)
-			graph.mergeSeq(traverse(cfgNode, root.getStatements(0)));
+		for (int i = 0; i < root.getStatementsCount(); i++)
+			graph.mergeSeq(traverse(cfgNode, root.getStatements(i)));
 		return graph;
 	}
 
 	private CFG traverse_sync(CFGNode cfgNode, Statement root) {
 		CFG graph = new CFG();
 		CFGNode aNode = new CFGNode();
+		//System.out.println("************************************synchronised"+root.getExpression());
 		aNode.setAstNode(root.getExpression());
 		aNode.setPid((cfgNode == null) ? "." : cfgNode.getPid()
 				+ cfgNode.getId() + ".");
-		graph.mergeSeq(traverse(cfgNode, root.getExpression()));
+		//graph.mergeSeq(traverse(cfgNode, root.getExpression()));
 		graph.mergeSeq(aNode);
 		for (int i = 0; i < root.getStatementsCount(); i++)
 			graph.mergeSeq(traverse(aNode, root.getStatements(i)));

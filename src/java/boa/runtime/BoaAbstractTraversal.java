@@ -96,7 +96,7 @@ public abstract class BoaAbstractTraversal<T1> {
 				dfsForward(succ, nodeVisitStatus);
 			    }
 			}
-		} catch(Exception e) {
+		} catch(java.lang.StackOverflowError e) {
 			return;
 		}
 	}
@@ -398,7 +398,7 @@ public abstract class BoaAbstractTraversal<T1> {
 					break;
 				default : break;
 			}
-		} catch(Exception e) {return;}
+		} catch(java.lang.StackOverflowError e) {return;}
 	}
 
 	public final void traverseWithFixp(final CFG cfg, final Traversal.TraversalDirection direction, final Traversal.TraversalKind kind, final BoaAbstractFixP fixp) throws Exception {
@@ -523,7 +523,7 @@ public abstract class BoaAbstractTraversal<T1> {
 					}
 				}
 			}
-		} catch(Exception e) {return;}
+		} catch(java.lang.StackOverflowError e) {return;}
 	}
 
 	public void traverse(final CFGNode node, boolean flag) throws Exception {
