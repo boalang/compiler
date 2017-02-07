@@ -1,5 +1,5 @@
 #Getting Started with Boa Development
-This file describes how you might set up your development environment to view, edit and test
+This document describes how you might set up your development environment to view, edit and test
 the Boa compiler's source code on your local computer. The Boa infrastructure hosted at 
 http://boa.cs.iastate.edu uses the same code, but that execution would use a Hadoop cluster.
 
@@ -64,9 +64,8 @@ libraries. To enable this within the IntelliJ IDE
 
 ##Sample Data Set
 A small data set is provided within the Boa repository to test the compiler and your modifications. 
-You can access this data under the "dataset" directory located in the root directory.    
-The organization of this dataset is identical to that used by the Boa infrastructure. 
-A complete Boa dataset consists of 3 files:
+You can access this data under the "dataset" directory located in the root directory. The organization of this dataset is identical to that used by the Boa infrastructure. A complete Boa dataset consists of 3 files:
+
 1. **index:** this is a map file that stores a mapping from project index to the 
    data location in the AST sequence file (see below). For more on the map file format 
    see its [documentation](http://hadoop.apache.org/docs/r2.6.2/api/org/apache/hadoop/io/MapFile.html).
