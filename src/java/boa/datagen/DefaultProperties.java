@@ -63,4 +63,6 @@ public class DefaultProperties {
 	public static final String GH_TICKETS_PATH = "tickets";
 
 	public static String localDataPath = null;
+	public static String localIssuePath = null;
+	public static String localCommentPath = null;
 }
