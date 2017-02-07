@@ -56,6 +56,8 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	LoopSensitivityAnalysis loopSensitivityAnalysis = new LoopSensitivityAnalysis();
 	boolean flowSensitive = false;
 	boolean loopSensitive = false;
+	HashMap<String, Boolean> traversalMap = new HashMap<String, Boolean>();
+	String lastVarDecl;
 
 	protected class AggregatorDescription {
 		protected String aggregator;
@@ -608,6 +610,11 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			for (final Expression e : n.getArgs()) {
 				e.accept(this);
 				parts.add(code.removeLast());
+			}
+
+			if(funcName.equals("traverse")) {
+				if(parts.get(2).equals("boa.types.Graph.Traversal.TraversalKind.HYBRID") && !traversalMap.get(parts.get(3)))
+					parts.set(2, "boa.types.Graph.Traversal.TraversalKind.RANDOM");
 			}
 
 			final String s = expand(f.getMacro(), n.getArgs(), parts.toArray(new String[]{}));
@@ -1336,6 +1343,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		final ST st = stg.getInstanceOf("Assignment");
 		st.add("lhs", "___" + n.getId().getToken());
+		lastVarDecl = "___" + n.getId().getToken();	
 
 		if (!n.hasInitializer()) {
 			if (lhsType instanceof BoaProtoMap ||
@@ -1474,6 +1482,8 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final TraverseStatement n) {
+		String traverseVar = lastVarDecl;
+
 		final ST st = stg.getInstanceOf("TraverseClause");
 
 		final BoaFunction funcType = ((BoaFunction) n.type);
@@ -1519,12 +1529,14 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		
 		dataFlowSensitivityAnalysis = new DataFlowSensitivityAnalysis();
 		dataFlowSensitivityAnalysis.start(cfgBuilder, aliastSet);
-
-		loopSensitivityAnalysis = new LoopSensitivityAnalysis();
-		loopSensitivityAnalysis.start(cfgBuilder, aliastSet);
-
 		flowSensitive = dataFlowSensitivityAnalysis.isFlowSensitive();
-		loopSensitive = loopSensitivityAnalysis.isLoopSensitive();
+		if(flowSensitive) {
+			loopSensitivityAnalysis = new LoopSensitivityAnalysis();
+			loopSensitivityAnalysis.start(cfgBuilder, aliastSet);
+			loopSensitive = loopSensitivityAnalysis.isLoopSensitive();
+		}
+
+		traversalMap.put(traverseVar, flowSensitive);
 
 		st.add("body", body);
 
