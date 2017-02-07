@@ -62,17 +62,21 @@ libraries. To enable this within the IntelliJ IDE
     10. Problems with the Boa compiler, and questions regarding Boa programming can be asked at 
       the [Boa user forum](http://boa.cs.iastate.edu/forum.php). 
 
-##DataSet
-1. A small data set is provided to test the compiler and your modifications. 
-You can access this dataset under the "dataset" directory located in the root directory.    
-The complete dataset consists of 3 files:
-1. **index:** this is a map file (See [official doc](http://hadoop.apache.org/docs/r2.6.2/api/org/apache/hadoop/io/MapFile.html) for format of this file)
+##Sample Data Set
+A small data set is provided within the Boa repository to test the compiler and your modifications. 
+You can access this data under the "dataset" directory located in the root directory.    
+The organization of this dataset is identical to that used by the Boa infrastructure. 
+A complete Boa dataset consists of 3 files:
+1. **index:** this is a map file that stores a mapping from project index to the 
+   data location in the AST sequence file (see below). For more on the map file format 
+   see its [documentation](http://hadoop.apache.org/docs/r2.6.2/api/org/apache/hadoop/io/MapFile.html).
 2. **data:** this file stores the abstract syntax tree (AST) 
-   of each project as a sequence file (See [official doc](http://hadoop.apache.org/docs/r2.6.2/api/org/apache/hadoop/io/MapFile.html) for format of this file)
+   of each project as a sequence file. See the [documentation](http://hadoop.apache.org/docs/r2.6.2/api/org/apache/hadoop/io/MapFile.html) 
+   for more information on the sequence file format.
 3. **projects.seq:** this file stores the metadata for each 
    project e.g. commit logs, authors, etc. as a sequence file.
 
-**This dataset contain 3 projects, 
+The sample dataset contain only three projects to keep the download size small: 
   [Boa](https://github.com/boalang/compiler),
   [PaniniJ](https://github.com/paninij/paninij),
-  and [Panini](https://github.com/hridesh/panc).**
+  and [Panini](https://github.com/hridesh/panc).
