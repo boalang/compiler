@@ -269,7 +269,7 @@ public class Java8Visitor extends Java7Visitor {
 			eb.addGenericParameters(tb.build());
 		}
 
-		eb.setMethod(getIndex(typeName(node.getType()))+"::"+node.getName().getIdentifier());
+		eb.setMethod(typeName(node.getType())+"::"+node.getName().getIdentifier());
 		expressions.push(eb.build());
 
 		return false;

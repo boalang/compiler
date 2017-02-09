@@ -1566,16 +1566,6 @@ public class Java7Visitor extends ASTVisitor {
 		return t.getName().getFullyQualifiedName();
 	}
 
-	protected int getIndex(final String name) {
-		Integer index = this.nameIndices.get(name);
-		if (index == null) {
-			index = this.nameIndices.size();
-			this.nameIndices.put(name, index);
-		}
-		return index;
-	}
-
-
 	//////////////////////////////////////////////////////////////
 	// Unused node types
 	
