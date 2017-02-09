@@ -71,7 +71,7 @@ public class SymbolTable {
 		// variables with a global scope
 		globals = new HashMap<String, BoaType>();
 
-		globals.put("input", new ProjectProtoTuple());
+
 		globals.put("true", new BoaBool());
 		globals.put("false", new BoaBool());
 		globals.put("PI", new BoaFloat());
@@ -140,6 +140,54 @@ public class SymbolTable {
 		idmap.put("Attachment", new AttachmentProtoTuple());
 		idmap.put("ChangedFile", new ChangedFileProtoTuple());
 		idmap.put("ChangeKind", new ChangeKindProtoMap());
+		
+
+/** Automatically generated code start **/
+		idmap.put("Crash", new CrashProtoTuple());
+
+		globals.put("input", new CrashProtoTuple());
+		idmap.put("Person", new PersonProtoTuple());
+		idmap.put("Vehicle", new VehicleProtoTuple());
+		idmap.put("STATE", new STATEProtoMap());
+		/** Automatically generated code ends **/
+
+
+		
+
+/** Automatically generated code start **/
+		idmap.put("Crash", new CrashProtoTuple());
+
+		globals.put("input", new CrashProtoTuple());
+		idmap.put("Person", new PersonProtoTuple());
+		idmap.put("Vehicle", new VehicleProtoTuple());
+		idmap.put("STATE", new STATEProtoMap());
+		/** Automatically generated code ends **/
+
+
+		
+
+/** Automatically generated code start **/
+		idmap.put("Crash", new CrashProtoTuple());
+
+		globals.put("input", new CrashProtoTuple());
+		idmap.put("Person", new PersonProtoTuple());
+		idmap.put("Vehicle", new VehicleProtoTuple());
+		idmap.put("STATE", new STATEProtoMap());
+		/** Automatically generated code ends **/
+
+
+		
+
+/** Automatically generated code start **/
+		idmap.put("Crash", new CrashProtoTuple());
+
+		globals.put("input", new CrashProtoTuple());
+		idmap.put("Person", new PersonProtoTuple());
+		idmap.put("Vehicle", new VehicleProtoTuple());
+		idmap.put("STATE", new STATEProtoMap());
+		/** Automatically generated code ends **/
+
+
 		idmap.put("CodeRepository", new CodeRepositoryProtoTuple());
 		idmap.put("CommentKind", new CommentKindProtoMap());
 		idmap.put("Comment", new CommentProtoTuple());
@@ -396,6 +444,10 @@ public class SymbolTable {
 
 		globalFunctions.addFunction("max", new BoaFunction(new BoaString(), new BoaScalar[] { new BoaString(), new BoaString() }, "(${0}.compareTo(${1}) > 0 ? ${0} : ${1})"));
 		globalFunctions.addFunction("min", new BoaFunction(new BoaString(), new BoaScalar[] { new BoaString(), new BoaString() }, "(${0}.compareTo(${1}) < 0 ? ${0} : ${1})"));
+		
+		//Matrix methods added by Johir
+		globalFunctions.addFunction("matrix", new BoaFunction(new BoaTuple(),new BoaScalar []{new BoaTuple(),new BoaInt()},"boa.tuplefunctions.TupleOps.matrix(${0},${1})"));
+		//globalFunctions.addFunction("", boaFunction);
 	}
 
 	public SymbolTable() {

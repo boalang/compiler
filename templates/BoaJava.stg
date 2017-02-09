@@ -129,10 +129,11 @@ public static class <name> implements boa.BoaTup, java.io.Serializable
 	<name>(){}
 	
 	<fields,types:{field,type|public <type> ___<field>}; separator="; ">;
-	
 	<name>( <fields,types:{field,type|<type> ___<field>}; separator=", "> ){
 		<fields,types:{field,type|this.___<field> = ___<field>}; separator="; ">;
+		
 	}
+	
 	
 	public byte[] serialize(Object o) throws java.io.IOException { 
 		java.io.ByteArrayOutputStream byteOutStream = new java.io.ByteArrayOutputStream();
@@ -145,7 +146,36 @@ public static class <name> implements boa.BoaTup, java.io.Serializable
 	public String[] getValues() {
 		return new String[] {<fields:{field|String.valueOf(this.___<field>)}; separator=", "> };
 	}
+	//Add By Johir
+	public String[] addTuple(boa.BoaTup other) {
+	    String [] values=other.getValues();
+	    String [] types=other.getTypes();
+	    int len=values.length;
+	    String [] thisValues=this.getValues();
+	    String [] thisTypes=this.getTypes();
+	    int thislen=thisValues.length;
+	    if(len!=thislen)
+	    {
+	    throw new IllegalStateException("The lenghts of two tuples are not equal");
+	    }
+	    String [] retValues=new String [len];
+	    for(int i=0;i \< len;i++)
+	    {
+	    // For now considering only double
+	    double a=Double.parseDouble(values[i]);
+	    double b=Double.parseDouble(thisValues[i]);
+	    double c=a+b;
+	    retValues[i]=String.valueOf(c);
+	    }
+	    return retValues;
+	}
 	
+	public String[] getTypes(){
+	return new String[] {<types:{type|"<type>"}; separator=", "> };
+	}
+	
+	
+	//End Added By Johir
 	public String[] getFieldNames() { 
 		return new String[] {<fields:{field|"___<field>"}; separator=", "> };
 	}

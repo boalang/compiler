@@ -98,6 +98,7 @@ type returns [AbstractType ast]
 	| e=enumType     { $ast = $e.ast; }
 	| model=modelType { $ast = $model.ast; }
 	| id=identifier  { $ast = $id.ast; }
+	//| matrix= matrixType {$ast = $matrix.ast;}
 	;
 
 component returns [Component ast]
@@ -109,7 +110,7 @@ component returns [Component ast]
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
 	: (id=identifier COLON { $ast.setIdentifier($id.ast); })? t=type { $ast.setType($t.ast); }
 	;
-	
+
 enumBodyDeclaration returns [EnumBodyDeclaration ast]
 	locals [int l, int c]
 	@init {
@@ -135,7 +136,17 @@ tupleType returns [TupleType ast]
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
 	: LBRACE (m=member { $ast.addMember($m.ast); } (COMMA m=member { $ast.addMember($m.ast); })* COMMA?)? RBRACE
 	;
-	
+	//Added By Johir
+/*matrixType returns [MatrixType ast]
+	locals [int l,int c]
+	@init {
+		$l=getStartLine();$c=getStartColumn();
+		$ast=new MatrixType();
+	}
+	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
+	: MATRIX LBRACE (m=tupleType { $ast.addMember($m.ast); } (COMMA m=tupleType { $ast.addMember($m.ast); })* COMMA?)? RBRACE
+	;*/
+
 enumType returns [EnumType ast]
 	locals [int l, int c]
 	@init {
@@ -713,14 +724,14 @@ RIGHT_ARROW : '->';
 
 IntegerLiteral
 	: DecimalNumeral
-	| HexNumeral 
-	| OctalNumeral 
-	| BinaryNumeral 
+	| HexNumeral
+	| OctalNumeral
+	| BinaryNumeral
 	;
 
 fragment
 DecimalNumeral
-	: NonZeroDigit Digit* 
+	: NonZeroDigit Digit*
 	;
 
 fragment

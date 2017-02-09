@@ -347,6 +347,17 @@ public abstract class AbstractVisitorNoArg {
 		for (final Component c : n.getMembers())
 			c.accept(this);
 	}
+	// Visitor for MatrixType
+		public void visit(final MatrixType n)
+		{
+			for(int i=0;i<n.getMembersRowSize();i++)
+			{
+				for(int j=0;j<n.getMembersColSize();j++)
+				{
+					n.getMembers()[i][j].accept(this);
+				}
+			}
+		}
 
 	public void visit(final EnumType n) {
 		for (final EnumBodyDeclaration c : n.getMembers()){

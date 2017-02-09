@@ -26,6 +26,8 @@ import java.util.regex.Pattern;
 
 import org.stringtemplate.v4.ST;
 
+import com.sun.tools.classfile.StackMapTable_attribute.chop_frame;
+
 import boa.aggregators.AggregatorSpec;
 import boa.compiler.SymbolTable;
 import boa.compiler.TypeCheckException;
@@ -238,7 +240,9 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			tuples.add(name);
 
 			final ST st = stg.getInstanceOf("TupleType");
-
+			for (String string : tuples) {
+				System.out.println(string);
+			}
 			if (!(n.type instanceof BoaTuple))
 				throw new TypeCheckException(n ,"type " + n.type + " is not a tuple type");
 
@@ -253,14 +257,18 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				if(c.hasIdentifier()){
 					fields.add(c.getIdentifier().getToken());
 				} else {
+					System.out.println(c.beginColumn);
 					fields.add("field" + fieldCount++);
 				}
 				types.add(c.getType().type.toJavaType());
 			}
 
+			
 			st.add("name", tupType.toJavaType());
+			System.out.println("Line 262 "+fields.toString());
 			st.add("fields", fields);
 			st.add("types", types);
+			
 
 			code.add(st.render());
 		}
@@ -297,6 +305,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			}
 
 			st.add("ename", enumType.toJavaType());
+			System.out.println("Line 301 "+fields.toString());
 			st.add("fields", fields);
 			st.add("values", values);
 			st.add("fname", fieldType.toJavaType());
@@ -964,6 +973,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		if(n.getLhs().type instanceof BoaTuple && n.getRhs().type instanceof BoaArray) {
 			Operand op = n.getRhs().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
+			System.out.println("Line: 975 : "+op);
 			if(op instanceof Composite) {
 				List<Expression> exps = ((Composite)op).getExprs();
 				if(checkTupleArray(this.check(exps)) == false) {
@@ -1350,11 +1360,14 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		if(lhsType instanceof BoaTuple && t instanceof BoaArray) {
 			Operand op = n.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
+			
 			if(op instanceof Composite) {
 				List<Expression> exps = ((Composite)op).getExprs();
+				
 				if(checkTupleArray(this.check(exps)) == false) {
 					final ST stup = stg.getInstanceOf("Tuple");
 					stup.add("name", lhsType.toJavaType());
+					System.out.println("CGV Line 1369: "+lhsType.toJavaType());
 					visit(exps);
 					stup.add("exprlist", code.removeLast());
 					src = stup.render();
@@ -1771,6 +1784,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		}
 
 		st.add("name", tupType.toJavaType());
+		System.out.println("Line 1776 "+fields.toString());
 		st.add("fields", fields);
 		st.add("types", types);
 
@@ -1801,6 +1815,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		}
 
 		st.add("ename", enumType.toJavaType());
+		System.out.println("Line 1807 "+fields.toString());
 		st.add("fields", fields);
 		st.add("values", values);
 		st.add("fname", fieldType.toJavaType());

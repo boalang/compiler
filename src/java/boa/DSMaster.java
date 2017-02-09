@@ -42,9 +42,9 @@ public class DSMaster {
 		 * Transportation Input
 		 */
 		
-		String program = "/Users/nmtiwari/git/research/boa_platform/compiler/transportationExamples/ml.boa"; // which boa program to run
-		String inputlocation = "/Users/nmtiwari/git/research/boa_platform/transportationdata/";  // where are the inputs stored
-		String output = "/Users/nmtiwari/Desktop/new/out"; // where should the output go
+		String program = "/Users/mislam/Desktop/datascienceInf/compiler/transportationExamples/ml.boa"; // which boa program to run
+		String inputlocation = "/Users/mislam/Desktop/datascienceInf";  // where are the inputs stored
+		String output = "/Users/mislam/Desktop/new/out"; // where should the output go
 		
 
 		/*

@@ -404,6 +404,19 @@ public abstract class AbstractVisitor<ReturnType, ArgType> {
 			c.accept(this, arg);
 		return null;
 	}
+	
+	// Visitor for MatrixType
+	public ReturnType visit(final MatrixType n,final ArgType arg)
+	{
+		for(int i=0;i<n.getMembersRowSize();i++)
+		{
+			for(int j=0;j<n.getMembersColSize();j++)
+			{
+				n.getMembers()[i][j].accept(this, arg);
+			}
+		}
+		return null;
+	}
 
 	public ReturnType visit(final EnumType n, final ArgType arg) {
 		for (final EnumBodyDeclaration c : n.getMembers())

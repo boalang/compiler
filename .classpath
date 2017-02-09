@@ -3,12 +3,6 @@
 	<classpathentry kind="src" path="build/java"/>
 	<classpathentry kind="src" path="src/compiled-proto"/>
 	<classpathentry kind="src" path="src/java"/>
-	<classpathentry kind="src" path="src/test"/>
-	<classpathentry kind="src" path="test/datagen/java"/>
-	<classpathentry kind="lib" path="dist/boa-compiler.jar"/>
-	<classpathentry kind="lib" path="dist/boa-runtime.jar"/>
-	<classpathentry kind="lib" path="dist/latentSemanticAnalysis1.0.4.jar"/>
-	<classpathentry kind="lib" path="dist/weka.jar"/>
 	<classpathentry kind="lib" path="lib/antlr-4.5-complete.jar"/>
 	<classpathentry kind="lib" path="lib/apache-ant-1.9.7/ant-launcher.jar"/>
 	<classpathentry kind="lib" path="lib/apache-ant-1.9.7/ant.jar"/>
@@ -79,5 +73,6 @@
 	<classpathentry kind="lib" path="rtlib/scannotation-1.0.3.jar"/>
 	<classpathentry kind="lib" path="rtlib/ST-4.0.8.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/Jama-1.0.3.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

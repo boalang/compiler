@@ -1,7 +1,11 @@
 p: Crash = input;
 type Time = {int, int, int, int, int, int};
+type Time2 = {int, int, int , int, int, int};
 train : output simplekmeans("-init 1 -N 30 -O ") of Time;
 data: output sum[int] of int;
 data[p.HOUR] << 1; 
 timing: Time = {p.DAY, p.MONTH, p.YEAR, p.DAY_WEEK, p.HOUR, p.MINUTE}; 
+timing2: Time2 = {p.DAY, p.MONTH, p.YEAR, p.DAY_WEEK, p.HOUR,p.MINUTE}; 
+max(5,3);
+matrix(timing,3);
 train << timing;
