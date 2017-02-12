@@ -187,6 +187,13 @@ TupleType(name, fields, types) ::= <<
 		return "empty";
 	}
 
+	@Override
+    public \<T> T[] asArray(T[] type) {
+        java.util.List\<T> _temp = new java.util.ArrayList\<T>();
+        <fields:{field|_temp.add((T)___<field>);}; separator="\n">
+        return _temp.toArray(type);
+    }
+
 }<\n>
 >>
 

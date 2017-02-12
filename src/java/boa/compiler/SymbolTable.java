@@ -43,7 +43,7 @@ public class SymbolTable {
 	private static final Map<Class<?>, BoaType> protomap;
 	private static Map<String, BoaType> idmap;
 	private static final Map<String, BoaType> globals;
-	private static FunctionTrie globalFunctions;
+	private static FunctionTrie  globalFunctions;
 
 	private FunctionTrie functions;
 	private Map<String, BoaType> locals;
@@ -91,6 +91,7 @@ public class SymbolTable {
 		idmap.put("float", new BoaFloat());
 		idmap.put("time", new BoaTime());
 		idmap.put("string", new BoaString());
+		idmap.put("tuple", new BoaTuple(new ArrayList<BoaType>()));
 
 		final BoaProtoTuple[] dslTupleTypes = {
 			new ASTRootProtoTuple(),
@@ -509,7 +510,8 @@ public class SymbolTable {
 			boa.functions.BoaSortIntrinsics.class,
 			boa.functions.BoaSpecialIntrinsics.class,
 			boa.functions.BoaStringIntrinsics.class,
-			boa.functions.BoaTimeIntrinsics.class
+			boa.functions.BoaTimeIntrinsics.class,
+			boa.functions.BoaMatrixIntrinsics.class
 		};
 		for (final Class<?> c : builtinFuncs)
 			importFunctions(c);

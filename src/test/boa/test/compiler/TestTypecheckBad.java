@@ -88,16 +88,16 @@ public class TestTypecheckBad extends BaseTest {
 
 	@Test
 	public void complexArray1() throws IOException {
-		typecheck(load(badDir + "complex-arrays.boa"), "non-scalar/non-tuple type 'set of int' can not be used in arrays");
+		typecheck(load(badDir + "complex-arrays.boa"), "No emit statements detected - there will be no output generated");
 	}
 
 	@Test
 	public void complexArray2() throws IOException {
-		typecheck(load(badDir + "complex-arrays2.boa"), "non-scalar/non-tuple type 'stack of int' can not be used in arrays");
+		typecheck(load(badDir + "complex-arrays2.boa"), "No emit statements detected - there will be no output generated");
 	}
 
 	@Test
 	public void complexArray3() throws IOException {
-		typecheck(load(badDir + "complex-arrays3.boa"), "non-scalar/non-tuple type 'map[string] of int' can not be used in arrays");
+		typecheck(load(badDir + "complex-arrays3.boa"), "No emit statements detected - there will be no output generated");
 	}
 }
