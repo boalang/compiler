@@ -1,0 +1,116 @@
+m: output collection[int] of string;
+p: Project = input;
+
+type T= {gen : string, kill : string};
+type T1= {in : set of set of string, out : set of set of string, dummy : int};
+cfg : CFG;
+
+
+#initial phase that initializes output value for each node. initially all variables only alias themselves.
+initPhase := traversal(node: CFGNode) : T {
+	# lhs and rhs of nodes that has definition statements
+	cur_val : T = {"", ""};
+	if(node.defVariables!="")
+		cur_val.kill = node.defVariables;
+	if(def(node.expr)) {
+		if(node.expr.kind == ExpressionKind.VARDECL || node.expr.kind == ExpressionKind.ASSIGN) {
+			if(def(node.rhs)) {
+				if(node.rhs.kind == ExpressionKind.VARACCESS) {
+					cur_val.gen = node.rhs.variable;
+				}
+			}
+		}
+	}
+	return cur_val;
+};
+
+#analysis phase
+analysisPhase := traversal(node: CFGNode) : T1 {
+	inset : set of set of string;
+	outset : set of set of string;
+	cur_val : T1;
+	cur_val = {inset, outset, 0};
+	if(def(getvalue(node))) {
+		cur_val = getvalue(node);
+	}	
+	preds := node.predecessors;
+	foreach(i:int;def(preds[i])) {
+		pred := getvalue(preds[i]);
+		if(def(pred))
+			cur_val.in = union(cur_val.in, pred.out);
+	}
+	cur_val.out = clone(cur_val.in);
+	genkill := getvalue(node, initPhase);
+	if(genkill.kill != "") {
+		aa:=values(cur_val.in);
+		foreach(i:int;def(aa[i])) {
+			if(contains(aa[i], genkill.kill)) {
+				tmp2:=clone(aa[i]);
+				remove(cur_val.out, tmp2);
+				remove(tmp2, genkill.kill);
+				if(len(tmp2)!=0) {
+					add(cur_val.out, tmp2);
+				}
+			}
+		}
+		if(genkill.gen != "") {
+			flag := false;
+			tmpSet := values(cur_val.out);
+			foreach(i:int;def(tmpSet[i])) {
+				if(contains(tmpSet[i], genkill.gen)) {
+					tmp3:=clone(tmpSet[i]);
+					flag = true;
+					remove(cur_val.out, tmp3);
+					add(tmp3, genkill.kill);
+					add(cur_val.out, tmp3);
+				}
+			}
+			if(flag == false) {
+				tmp1 : set of string;
+				add(tmp1, genkill.gen);add(tmp1, genkill.kill);
+				add(cur_val.out, clone(tmp1));
+			}
+		}
+		else {
+				tmp4 : set of string;
+				add(tmp4, genkill.kill);
+				add(cur_val.out, clone(tmp4));
+		}
+	}
+	return cur_val;
+};
+
+result := traversal(node: CFGNode) {
+	r:= getvalue(node, analysisPhase);
+	if(def(r)) {
+		m[node.id] << string(r.out);
+	}
+};
+
+# user-defined fix point function that is used for analysis termination.
+fixp1 := fixp(curr, prev: T1) : bool {
+	if (len(difference(curr.out, prev.out)) == 0)
+		return true;	
+	return false;
+};
+
+q_all := visitor {
+	before node: CodeRepository -> {
+		snapshot := getsnapshot(node, "SOURCE_JAVA_JLS");
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+	before node: Method -> {
+		if(node.name == "alias") {
+		clear(initPhase);clear(analysisPhase);
+
+		cfg = getcfg(node);
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.HYBRID, initPhase);
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.HYBRID, analysisPhase, fixp1);
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.HYBRID, result);
+		}
+	}
+};
+
+visit(p, q_all);

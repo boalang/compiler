@@ -347,7 +347,6 @@ public class CFG {
 				node.setSuccessors(node.getOutNodes());
 				node.setPredecessors(node.getInNodes());
 			}
-			this.orderedNodes = order();
 		}
 	}
 

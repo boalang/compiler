@@ -1101,15 +1101,7 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArg {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final EmitStatement n) {
-		singleton(n);
-		List<Expression> exprs = n.getIndices();
-		exprs.add(n.getValue());
-		exprs.add(n.getWeight());
-		if (exprs.size() > 0) {
-			visitStatements(exprs);
-			addNode(n);
-			visitList(exprs);
-		}
+		
 	}
 
 	/** {@inheritDoc} */

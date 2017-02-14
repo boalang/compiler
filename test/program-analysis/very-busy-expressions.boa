@@ -1,0 +1,159 @@
+m: output collection[int] of string;
+
+p: Project = input;
+
+# program analysis output
+type T1 = {in: set of set of string, out: set of set of string, dummy : int};
+
+#all expression set
+allExprset: set of set of string;
+
+# cfg of the current method
+cfg: CFG;
+
+exitId : int;
+str: set of string;
+
+node_expr := visitor {
+	before node: Expression -> {
+		switch (node.kind) {
+			case ExpressionKind.LT,ExpressionKind.OP_ADD, ExpressionKind.OP_SUB, ExpressionKind.OP_INC, ExpressionKind.OP_MULT, ExpressionKind.OP_DIV, ExpressionKind.OP_MOD, ExpressionKind.OP_DEC, ExpressionKind.GT, ExpressionKind.EQ, ExpressionKind.NEQ, ExpressionKind.LTEQ, ExpressionKind.GTEQ, ExpressionKind.LOGICAL_NOT, ExpressionKind.LOGICAL_AND, ExpressionKind.LOGICAL_OR, ExpressionKind.BIT_AND, ExpressionKind.BIT_OR, ExpressionKind.BIT_NOT, ExpressionKind.BIT_XOR, ExpressionKind.BIT_LSHIFT, ExpressionKind.BIT_RSHIFT, ExpressionKind.BIT_UNSIGNEDRSHIFT:
+				add(str, string(node.kind)); 
+				foreach(j:int;def(node.expressions[j])) {
+					visit(node.expressions[j]);
+				}
+				break;
+			case ExpressionKind.ASSIGN:
+				foreach(j:int;def(node.expressions[j])) {
+					if(j!=0) {
+						visit(node.expressions[j]);
+					}
+				}
+				break;
+			case ExpressionKind.VARACCESS:
+				add(str, node.variable);
+				break;
+			case ExpressionKind.VARDECL:
+				visit(node.variable_decls[0].initializer);
+				break;
+			case ExpressionKind.LITERAL:
+				add(str, node.literal);
+				break;
+			case ExpressionKind.METHODCALL:
+				clear(str);
+				stop;
+			default:break;
+		}
+		stop;
+	}
+};
+
+allExprTraversal := traversal(node: CFGNode): set of string {
+	init_set : set of string;
+	str = init_set;
+	genset : set of string;
+	if(def(node.expr)) {
+		visit(node.expr, node_expr);
+		if(len(str)!=0) {
+			add(allExprset, clone(str));
+			genset = str;
+		}
+	}
+	if(def(node.stmt)) {
+		if(def(node.stmt.expression)) {
+			visit(node.stmt.expression, node_expr);
+			if(len(str)!=0) {
+				add(allExprset, clone(str));
+				genset = str;
+			}
+		}
+		if(def(node.stmt.initializations)) {
+			foreach(i:int;def(node.stmt.initializations[i])) {
+				visit(node.stmt.initializations[i], node_expr);
+				if(len(str)!=0) {
+					add(allExprset, clone(str));
+					genset = str;
+				}
+			}
+		}
+	}
+	return genset;
+};
+
+collectKillTraversal := traversal(node: CFGNode): set of set of string {
+	init_set : set of set of string;
+	killset : set of set of string;
+	killset = init_set;
+	if(def(node.defVariables)) {
+		aa := values(allExprset);
+		foreach(i:int;def(aa[i])) {
+			if(contains(aa[i], node.defVariables))
+				add(killset, aa[i]);
+		}
+	}
+	return clone(killset);
+};
+
+avail_expr := traversal(node: CFGNode): T1 {
+	in_set : set of set of string;
+	out_set : set of set of string;
+	cur_val : T1;
+	if(node.id == exitId)
+		cur_val = {in_set, out_set, 0};
+	else
+		cur_val = {in_set, clone(allExprset), 0};
+
+	if(def(getvalue(node))) {
+		cur_val1 := getvalue(node);
+		cur_val = cur_val1;
+	}
+	succs := node.successors;
+	cur_gen := getvalue(node, allExprTraversal);
+	cur_kill := getvalue(node, collectKillTraversal);
+	foreach(i:int;def(succs[i])) {
+		succ := getvalue(succs[i]);
+		if(def(succ))
+			cur_val.out = intersect(cur_val.out, succ.in);
+	}
+	cur_val.in = clone(cur_val.out);
+	cur_val.in = difference(cur_val.in, cur_kill);
+	if(len(cur_gen)!=0)
+		add(cur_val.in, cur_gen);
+	return cur_val;
+};
+
+result := traversal(node: CFGNode) {
+	r:= getvalue(node, avail_expr);
+	if(def(r)) {
+		m[node.id] << string(r.in);
+	}
+};
+
+# user-defined fix point function that is used for analysis termination.
+fixp1 := fixp(curr, prev: T1) : bool {
+	if (len(difference(curr.in, prev.in)) == 0)
+		return true;	
+	return false;
+};
+
+def := visitor {
+	before node: CodeRepository -> {
+		snapshot := getsnapshot(node, "SOURCE_JAVA_JLS");
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+	before node: Method -> {
+		clear(allExprTraversal);clear(avail_expr);clear(collectKillTraversal);clear(allExprset);
+
+		cfg = getcfg(node);
+		exitId = len(cfg.nodes) - 1;
+
+		traverse(cfg, TraversalDirection.BACKWARD, TraversalKind.HYBRID, allExprTraversal);
+		traverse(cfg, TraversalDirection.BACKWARD, TraversalKind.HYBRID, collectKillTraversal);
+		traverse(cfg, TraversalDirection.BACKWARD, TraversalKind.HYBRID, avail_expr, fixp1);
+		traverse(cfg, TraversalDirection.BACKWARD, TraversalKind.HYBRID, result);			
+	}
+};
+
+visit(p, def);

@@ -1,0 +1,146 @@
+p: Project = input;
+m: output collection[int] of string;
+
+# program analysis output
+type T= {in: set of string, out: set of string, dummy : int};
+
+# cfg of the current method
+cfg: CFG;
+# current visiting cfg node and its id
+cur_node_id: int;
+cur_cfg_node: CFGNode;
+
+# generated values set
+genset: set of string;
+
+# new value
+vardef: string;
+
+# killed values 
+killset: set of string;
+
+local : set of string;
+
+allVarTraversal := traversal(node: CFGNode) {
+	if(def(node.expr)) {
+		if(node.expr.kind == ExpressionKind.VARDECL) {
+			add(local, node.defVariables);	
+		}
+	}
+};
+
+nullness := traversal(node: CFGNode) : T {
+	in_set : set of string;
+	out_set : set of string;
+	cur_val : T;
+	cur_val = getvalue(node);
+	if(node.id==0)
+		cur_val = {in_set, out_set, 0};
+	else
+		cur_val = {clone(local), out_set, 0};
+	preds := node.predecessors;
+	foreach(i:int;def(preds[i])) {	
+		pred := getvalue(preds[i]);
+		if(def(pred))
+			cur_val.in = intersect(cur_val.in, pred.out);
+	}
+	cur_val.out = union(cur_val.out, cur_val.in);
+	if(def(node.expr)) {
+		if(node.expr.kind == ExpressionKind.VARDECL) {
+			if(contains(local, node.defVariables)) {
+				if(node.expr.variable_decls[0].initializer.kind == ExpressionKind.LITERAL) {
+					if(node.expr.variable_decls[0].initializer.literal == "null") {
+						remove(cur_val.out, node.defVariables);
+					}
+					else {
+						add(cur_val.out, node.defVariables);
+					}
+				}
+				else if(node.expr.variable_decls[0].initializer.kind == ExpressionKind.OTHER) {
+					remove(cur_val.out, node.defVariables);
+				}
+				else {
+					flag := false;
+					uv := values(node.useVariables);
+					foreach(i:int;def(uv[i])) {
+						if(contains(local, uv[i])) {
+							if(!contains(cur_val.out, uv[i])) {
+								flag = true;
+								remove(cur_val.out, node.defVariables);
+								break;
+							}
+						}
+					}
+					if(flag == false) {
+						add(cur_val.out, node.defVariables);
+					}
+				}
+			}
+		}
+		if(node.expr.kind == ExpressionKind.ASSIGN) {
+			if(contains(local, node.defVariables)) {
+				if(node.expr.expressions[1].kind == ExpressionKind.LITERAL) {
+					if(node.expr.expressions[1].literal == "null") {
+						remove(cur_val.out, node.defVariables);
+					}
+					else {
+						add(cur_val.out, node.defVariables);
+					}
+				}
+				else {
+					flag1 := false;
+					uv1 := values(node.useVariables);
+					foreach(i:int;def(uv1[i])) {
+						if(contains(local, uv1[i])) {
+							if(!contains(cur_val.out, uv1[i])) {
+								flag1 = true;
+								remove(cur_val.out, node.defVariables);
+								break;
+							}
+						}
+					}
+					if(flag1 == false) {
+						add(cur_val.out, node.defVariables);
+					}
+				}
+			}
+		}
+	}
+	return cur_val;
+};
+
+result := traversal(node: CFGNode) {
+	r:= getvalue(node, nullness);
+	if(def(r)) {
+		m[node.id] << string(r.out);
+	}
+};
+
+# user-defined fix point function that is used for analysis termination.
+fixp1 := fixp(curr, prev: T) : bool {
+	if (len(difference(curr.out, prev.out)) == 0)
+		return true;	
+	return false;
+};
+
+
+reach_def := visitor {
+	before node: CodeRepository -> {
+		snapshot := getsnapshot(node, "SOURCE_JAVA_JLS");
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+	before node: Method -> {
+		if(node.name=="dead2") {
+		clear(allVarTraversal);clear(nullness);clear(local);
+
+		cfg = getcfg(node);
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.HYBRID, allVarTraversal);
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.HYBRID, nullness, fixp1);
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.HYBRID, result);			
+		}
+	}
+};
+
+visit(p, reach_def);
