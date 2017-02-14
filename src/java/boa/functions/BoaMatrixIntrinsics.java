@@ -300,6 +300,53 @@ public class BoaMatrixIntrinsics {
         return result;
     }
 
+
+    /**
+     * Returns the matrix version of an array. Only scalar values can be sorted.
+     * Values will be arranged in increasing order. (An optional comparison
+     * function, which takes two elements and returns int {-,0,+}, is accepted
+     * as a second argument, but it is curently ignored.)
+     *
+     * @param a
+     *            An array of long
+     *
+     * @return A sorted copy of <em>a</em>
+     */
+    @FunctionSpec(name = "flatten", returnType = "array of float", formalParameters = { "array of array of float" })
+    public static double[] flatten(final double[][] a) {
+        final double[] flattenedTuples = new double[a.length * a[0].length];
+        int counter = 0;
+        for(int i = 0; i< a.length; i++) {
+            for (int j = 0; j < a[i].length; j++) {
+                flattenedTuples[counter++] = a[i][j];
+            }
+        }
+        return flattenedTuples;
+    }
+
+    /**
+     * Returns the matrix version of an array. Only scalar values can be sorted.
+     * Values will be arranged in increasing order. (An optional comparison
+     * function, which takes two elements and returns int {-,0,+}, is accepted
+     * as a second argument, but it is curently ignored.)
+     *
+     * @param a
+     *            An array of long
+     *
+     * @return A sorted copy of <em>a</em>
+     */
+    @FunctionSpec(name = "flatten", returnType = "array of int", formalParameters = { "array of array of int" })
+    public static long[] flatten(final long[][] a) {
+        final long[] flattenedTuples = new long[a.length * a[0].length];
+        int counter = 0;
+        for(int i = 0; i< a.length; i++) {
+            for (int j = 0; j < a[i].length; j++) {
+                flattenedTuples[counter++] = a[i][j];
+            }
+        }
+        return flattenedTuples;
+    }
+
     /**
      * Returns the matrix version of an array. Only scalar values can be sorted.
      * Values will be arranged in increasing order. (An optional comparison
@@ -316,6 +363,27 @@ public class BoaMatrixIntrinsics {
         Matrix matrix = new Matrix(a);
         matrix = matrix.transpose();
         return matrix.getArray();
+    }
+
+    /**
+     * Returns the matrix version of an array. Only scalar values can be sorted.
+     * Values will be arranged in increasing order. (An optional comparison
+     * function, which takes two elements and returns int {-,0,+}, is accepted
+     * as a second argument, but it is curently ignored.)
+     *
+     * @param a
+     *            An array of long
+     *
+     * @return A sorted copy of <em>a</em>
+     */
+    @FunctionSpec(name = "transpose", returnType = "array of array of float", formalParameters = { "array of float" })
+    public static double[][] transpose(final double[] a) {
+        double[][] data = new double[a.length][];
+        for(int i = 0; i < a.length; i++){
+            double[] __temp = {a[i]};
+            data[i] = __temp;
+        }
+        return data;
     }
 
     /**
@@ -356,6 +424,122 @@ public class BoaMatrixIntrinsics {
         Matrix matrix = new Matrix(data);
         matrix = matrix.inverse();
         return matrix.getArray();
+    }
+
+    /**
+     * Returns the matrix version of an array.
+     *
+     * @param a
+     *            An array of array of int
+     *
+     * @return A sub matrix from Matrix <em>a</em>
+     */
+    @FunctionSpec(name = "submatrix", returnType = "array of array of int", formalParameters = { "array of array of int", "int", "int", "int", "int"  })
+    public static long[][] submatrix(final long[][] a, final long r_start, final long r_end, final long c_start, final long c_end) {
+        double[][] data = new double[a.length][];
+        for(int i = 0; i< data.length; i++){
+            data[i] = Doubles.toArray(Longs.asList(a[i]));
+        }
+        Matrix matrix = new Matrix(data);
+        matrix = matrix.getMatrix((int)r_start, (int)r_end, (int)c_start, (int)c_end);
+        data = matrix.getArray();
+        long[][] result = new long[a.length][];
+        for(int i = 0; i< data.length; i++){
+            result[i] = Longs.toArray(Doubles.asList(data[i]));
+        }
+        return result;
+    }
+
+    /**
+     * Returns the matrix version of an array.
+     *
+     * @param a
+     *            An array of array of int
+     *
+     * @return A sub matrix from Matrix <em>a</em>
+     */
+    @FunctionSpec(name = "submatrix", returnType = "array of array of float", formalParameters = { "array of array of float", "int", "int", "int", "int" })
+    public static double[][] submatrix(final double[][] a, final long r_start, final long r_end, final long c_start, final long c_end) {
+        Matrix matrix = new Matrix(a);
+        matrix = matrix.getMatrix((int)r_start, (int)r_end, (int)c_start, (int)c_end);
+        return matrix.getArray();
+    }
+
+    /**
+     * Returns the matrix version of an array.
+     *
+     * @param a
+     *            An array of array of int
+     *
+     * @return A sub matrix from Matrix <em>a</em>
+     */
+    @FunctionSpec(name = "identity", returnType = "array of array of float", formalParameters = { "int", "int" })
+    public static double[][] identity(final int row, final int col) {
+        Matrix matrix = Matrix.identity(row, col);
+        return matrix.getArray();
+    }
+
+    /**
+     * Returns the matrix version of an array.
+     *
+     * @param a
+     *            An array of array of int
+     *
+     * @return A sub matrix from Matrix <em>a</em>
+     */
+    @FunctionSpec(name = "getCol", returnType = "array of float", formalParameters = { "array of array of float", "int" })
+    public static double[] getCol(final double[][] data, final long col) {
+        Matrix matrix = new Matrix(data);
+        double[] result = new double[matrix.getRowDimension()];
+        for(int i = 0;  i < matrix.getColumnDimension(); i++ ) {
+            result[i] = data[i][(int)col];
+        }
+        return result;
+    }
+
+
+    /**
+     * Returns the matrix version of an array.
+     *
+     * @param a
+     *            An array of array of int
+     *
+     * @return A sub matrix from Matrix <em>a</em>
+     */
+    @FunctionSpec(name = "getRow", returnType = "array of float", formalParameters = { "array of array of float", "int" })
+    public static double[] getRow(final double[][] data, final long row) {
+        return data[(int)row];
+    }
+
+    /**
+     * Returns the matrix version of an array.
+     *
+     * @param a
+     *            An array of array of int
+     *
+     * @return A sub matrix from Matrix <em>a</em>
+     */
+    @FunctionSpec(name = "getCol", returnType = "array of int", formalParameters = { "array of array of int", "int" })
+    public static long[] getCol(final long[][] data, final long col) {
+        long[] result = new long[data[0].length];
+        for(int i = 0;  i < data[0].length; i++ ) {
+            result[i] = data[i][(int)col];
+        }
+        return result;
+    }
+
+
+    /**
+     * Returns the matrix version of an array.
+     *
+     * @param a
+     *            An array of array of int
+     *
+     * @return A sub matrix from Matrix <em>a</em>
+     */
+    @FunctionSpec(name = "getRow", returnType = "array of int", formalParameters = { "array of array of int", "int" })
+    public static long[] getRow(final long[][] data, final int row) {
+        return data[row];
     }
 
 }
