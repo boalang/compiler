@@ -38,18 +38,11 @@ public abstract class Node {
     	public List<Node> predecessors;
 	public List<Node> successors;
 
-	public List<Node> getSuccessors() { return successors; }
-
-	public List<Node> getPredecessors() { return predecessors; }
-
 	// The following fields are building the control flow graph.
 	public List<Node> startNodes;
 	public List<Node> endNodes;
 	public List<Node> exitNodes;
-	
-	// Used to print out the CFG for debug.
-	public int id;
-	
+		
 	public Node getParent() {
 		return parent;
 	}
