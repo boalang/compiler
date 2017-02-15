@@ -279,25 +279,39 @@ public class BoaMatrixIntrinsics {
      *
      * @return A sorted copy of <em>a</em>
      */
-    @FunctionSpec(name = "flattenedMatrix", returnType = "array of array of float", formalParameters = { "array of tuple", "int" })
-    public static double[][] flattenedMatrix(final BoaTup[] a, final long colsize) {
-        final List<Double> flattenedTuples = new ArrayList<Double>();
+    @FunctionSpec(name = "flatten", returnType = "array of float", formalParameters = { "array of array of float" })
+    public static double[] flatten(final double[][] a) {
+        final double[] flattenedTuples = new double[a.length * a[0].length];
+        int counter = 0;
         for(int i = 0; i< a.length; i++) {
-            for(Double ele: a[i].<Double>asArray(new Double[1])){
-                flattenedTuples.add(ele);
+            for (int j = 0; j < a[i].length; j++) {
+                flattenedTuples[counter++] = a[i][j];
             }
         }
+        return flattenedTuples;
+    }
 
-        final int cols = (int)colsize;
-        final int rows = flattenedTuples.size()/cols;
-        final double[][] result = new double[rows][cols];
-
-        for(int i = 0; i< rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                result[i][j] = flattenedTuples.get(i * cols + j);
+    /**
+     * Returns the matrix version of an array. Only scalar values can be sorted.
+     * Values will be arranged in increasing order. (An optional comparison
+     * function, which takes two elements and returns int {-,0,+}, is accepted
+     * as a second argument, but it is curently ignored.)
+     *
+     * @param a
+     *            An array of long
+     *
+     * @return A sorted copy of <em>a</em>
+     */
+    @FunctionSpec(name = "flatten", returnType = "array of tuple", formalParameters = { "array of array of tuple" })
+    public static BoaTup[] flatten(final BoaTup[][] a) {
+        final BoaTup[] flattenedTuples = new BoaTup[a.length * a[0].length];
+        int counter = 0;
+        for(int i = 0; i< a.length; i++) {
+            for (int j = 0; j < a[i].length; j++) {
+                flattenedTuples[counter++] = a[i][j];
             }
         }
-        return result;
+        return flattenedTuples;
     }
 
 
@@ -312,16 +326,21 @@ public class BoaMatrixIntrinsics {
      *
      * @return A sorted copy of <em>a</em>
      */
-    @FunctionSpec(name = "flatten", returnType = "array of float", formalParameters = { "array of array of float" })
-    public static double[] flatten(final double[][] a) {
-        final double[] flattenedTuples = new double[a.length * a[0].length];
-        int counter = 0;
+    @FunctionSpec(name = "flattenedMatrix", returnType = "array of array of float", formalParameters = { "array of tuple", "int" })
+    public static double[][] flattenedMatrix(final BoaTup[] a, final long colsize) {
+        System.out.println("flatnnedmatrix");
+        final List<Double> flattenedTuples = new ArrayList<Double>();
         for(int i = 0; i< a.length; i++) {
-            for (int j = 0; j < a[i].length; j++) {
-                flattenedTuples[counter++] = a[i][j];
+            for(Double ele: a[i].<Double>asArray(new Double[1])){
+                flattenedTuples.add(ele);
             }
         }
-        return flattenedTuples;
+
+        final int cols = (int)colsize;
+        final int rows = flattenedTuples.size()/cols;
+        final double[][] result = new double[rows][cols];
+
+        return result;
     }
 
     /**
@@ -489,9 +508,8 @@ public class BoaMatrixIntrinsics {
      */
     @FunctionSpec(name = "getCol", returnType = "array of float", formalParameters = { "array of array of float", "int" })
     public static double[] getCol(final double[][] data, final long col) {
-        Matrix matrix = new Matrix(data);
-        double[] result = new double[matrix.getRowDimension()];
-        for(int i = 0;  i < matrix.getColumnDimension(); i++ ) {
+        double[] result = new double[data.length];
+        for(int i = 0;  i < result.length; i++ ) {
             result[i] = data[i][(int)col];
         }
         return result;
