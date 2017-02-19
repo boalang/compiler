@@ -328,7 +328,6 @@ public class BoaMatrixIntrinsics {
      */
     @FunctionSpec(name = "flattenedMatrix", returnType = "array of array of float", formalParameters = { "array of tuple", "int" })
     public static double[][] flattenedMatrix(final BoaTup[] a, final long colsize) {
-        System.out.println("flatnnedmatrix");
         final List<Double> flattenedTuples = new ArrayList<Double>();
         for(int i = 0; i< a.length; i++) {
             for(Double ele: a[i].<Double>asArray(new Double[1])){
@@ -340,6 +339,11 @@ public class BoaMatrixIntrinsics {
         final int rows = flattenedTuples.size()/cols;
         final double[][] result = new double[rows][cols];
 
+        for(int i = 0; i< rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                result[i][j] = flattenedTuples.get(i * cols + j);
+            }
+        }
         return result;
     }
 

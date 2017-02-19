@@ -16,6 +16,8 @@
  */
 package boa.functions;
 
+import boa.BoaTup;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
@@ -139,6 +141,38 @@ public class BoaSpecialIntrinsics {
 		for (int i = 0; i < size; i++)
 			arr[i] = val;
 		return arr;
+	}
+
+	@FunctionSpec(name = "new", returnType = "array of array of float", formalParameters = { "array of array of float", "int", "array of float" })
+	public static double[][] newTuple(double[][] a, long size, double[] val) {
+		double[][] arr = new double[(int)size][];
+		for (int i = 0; i < size; i++)
+			arr[i] = val;
+		return arr;
+	}
+
+	@FunctionSpec(name = "new", returnType = "array of tuple", formalParameters = { "array of tuple", "int" })
+	public static <T>  T[] newTuple(T[] a, long size) {
+		Object[] arr = new Object[(int)size];
+		for (int i = 0; i < size; i++)
+			arr[i] = null;
+		return (T[]) arr;
+	}
+
+
+	@FunctionSpec(name = "print", returnType = "bool", formalParameters = { "any"})
+	public static boolean print(HashMap a) {
+		System.out.println("nitin: " + a.size());
+		for (Object k: a.keySet()) {
+			System.out.println(k);
+		}
+		return true;
+	}
+
+	@FunctionSpec(name = "printany", returnType = "int", formalParameters = { "any"})
+	public static boolean print(Object a) {
+		System.out.println("nitin: " + a);
+		return true;
 	}
 
 	public static String regex(final String type, final long base) {
