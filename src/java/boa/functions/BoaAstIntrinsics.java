@@ -230,7 +230,7 @@ public class BoaAstIntrinsics {
 								new Path(context.getConfiguration().get("boa.comments.dir", context.getConfiguration().get("boa.input.dir", "repcache/live")),
 								new Path("comments")));
 			if(DefaultProperties.localDataPath != null) {
-				p = new Path(DefaultProperties.localDataPath);
+				p = new Path(DefaultProperties.localCommentPath);
 			}
 			commentsMap = new MapFile.Reader(fs, p.toString(), conf);
 		} catch (final Exception e) {
@@ -246,7 +246,7 @@ public class BoaAstIntrinsics {
 								new Path(context.getConfiguration().get("boa.issues.dir", context.getConfiguration().get("boa.input.dir", "repcache/live")),
 								new Path("issues")));
 			if(DefaultProperties.localDataPath != null) {
-				p = new Path(DefaultProperties.localDataPath);
+				p = new Path(DefaultProperties.localIssuePath);
 			}
 			issuesMap = new MapFile.Reader(fs, p.toString(), conf);
 		} catch (final Exception e) {

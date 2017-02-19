@@ -38,7 +38,6 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.util.Tool;
 
-import boa.datagen.DefaultProperties;
 import boa.io.BoaOutputFormat;
 import boa.io.EmitKey;
 import boa.io.EmitValue;

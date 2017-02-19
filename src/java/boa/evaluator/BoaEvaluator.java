@@ -22,8 +22,10 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 
+import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
+import org.apache.commons.cli.PosixParser;
 import org.apache.commons.io.FileUtils;
 
 import boa.compiler.BoaCompiler;
@@ -46,7 +48,7 @@ public class BoaEvaluator {
 	public BoaEvaluator(String prog, String data) {
 		this.PROG_PATH = prog;
 		this.DATA_PATH = data;
-		this.COMPILATION_DIR = "./compile";
+		this.COMPILATION_DIR = "./compile"; // can not customize to be user defined because of classpath issues
 		this.OUTPUT_DIR =  System.getProperty("java.io.tmpdir");
 		setup();
 	}
@@ -81,24 +83,43 @@ public class BoaEvaluator {
 	}
 
 	public static void main(final String[] args) {
-		BoaEvaluator evaluator;
-		if (args.length == 2) {
-			evaluator = new BoaEvaluator(args[0], args[1]);
-		}else if (args.length == 3){ // out dir is given
-			evaluator = new BoaEvaluator(args[0], args[1], args[2]);
-		}else {
-			throw new IllegalArgumentException();
+		final Options options = new Options();
+		options.addOption("i", "input",  true, "input Boa program");
+		options.addOption("d", "data", true, "path to local data");
+		options.addOption("o", "out", true, "output directory");
+
+		final CommandLine cl;
+		try{
+			if(args.length == 0) {
+				printHelp(options, "");
+				return;
+			} else {
+				cl = new PosixParser().parse(options, args);
+				if (cl.hasOption('i') && cl.hasOption('d')) {
+					BoaEvaluator evaluator;
+					if(cl.hasOption('o')) {
+						evaluator = new BoaEvaluator(cl.getOptionValue('i'), cl.getOptionValue('d'), cl.getOptionValue('o'));
+					} else{
+						evaluator = new BoaEvaluator(cl.getOptionValue('i'), cl.getOptionValue('d'));
+					}
+					long start = System.currentTimeMillis();
+					if(!evaluator.compile()) {
+						System.err.println("Compilation Failed");
+						return;
+					}
+					evaluator.evaluate();
+					long end = System.currentTimeMillis();
+					System.out.println("Total Time Taken: "+ (end - start));
+					System.out.println(evaluator.getResults());
+				}else {
+					printHelp(options, "");
+					return;
+				}
+			}
+		} catch (final org.apache.commons.cli.ParseException e) {
+			printHelp(options, e.getMessage());
 		}
 
-		long start = System.currentTimeMillis();
-		if(!evaluator.compile()) {
-			System.err.println("Compilation Failed");
-			return;
-		}
-		evaluator.evaluate();
-		long end = System.currentTimeMillis();
-		System.out.println("Total Time Taken: "+ (end - start));
-		System.out.println(evaluator.getResults());
 	}
 
 	private String getClassNameForGeneratedJavaProg() {
@@ -162,7 +183,9 @@ public class BoaEvaluator {
 		File compilationDir =  new File(this.COMPILATION_DIR);
 		// output directory does not already exists
 		try {
-			FileUtils.deleteDirectory(new File(this.OUTPUT_DIR));
+			if(this.OUTPUT_DIR != null) {
+				FileUtils.deleteDirectory(new File(this.OUTPUT_DIR));
+			}
 			FileUtils.deleteDirectory(compilationDir);
 		} catch (IOException e) {
 			e.printStackTrace();
