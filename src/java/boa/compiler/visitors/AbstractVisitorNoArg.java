@@ -33,6 +33,23 @@ import boa.types.*;
 public abstract class AbstractVisitorNoArg {
 	protected void initialize() { }
 
+	public Node currentNode = null;
+
+	public void dfs(final Node node, java.util.HashMap<Integer,String> nodeVisitStatus) {
+		currentNode = node;
+		nodeVisitStatus.put(node.nodeId,"visited");
+		cfgAnalysis(node);
+		for (Node succ : node.successors) {
+		    if (nodeVisitStatus.get(succ.nodeId).equals("unvisited")) {
+			dfs(succ, nodeVisitStatus);
+		    }
+		}
+	}
+
+	public void cfgAnalysis(final Node node) {
+		node.accept(this);
+	}
+
 	public void start(final Node n) {
 		initialize();
 		n.accept(this);

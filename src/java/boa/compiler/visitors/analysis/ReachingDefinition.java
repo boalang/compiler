@@ -49,8 +49,7 @@ public class ReachingDefinition extends AbstractVisitorNoArg {
 	ReachingDefinitionKill reachingDefinitionKill;
 	int id = 0;
 
-	public final void dfs(final Node node, java.util.HashMap<Integer,String> nodeVisitStatus) {
-		nodeVisitStatus.put(node.nodeId,"visited");
+	public void cfgAnalysis(final Node node) {
 		HashSet<Integer> current_in = new HashSet<Integer>();
 		for(Node pred : node.predecessors) {
 			if(out.containsKey(pred.nodeId)) {
@@ -67,11 +66,6 @@ public class ReachingDefinition extends AbstractVisitorNoArg {
 			current_in.add(cur_gen);
 		}
 		out.put(node.nodeId, (HashSet<Integer>)current_in.clone());
-		for (Node succ : node.successors) {
-		    if (nodeVisitStatus.get(succ.nodeId).equals("unvisited")) {
-			dfs(succ, nodeVisitStatus);
-		    }
-		}
 	}
 
 	public final void createNodeIds(final Node node, java.util.HashMap<Node,String> nodeVisitStatus) {

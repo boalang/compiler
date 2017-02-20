@@ -51,19 +51,7 @@ public class ReachingDefinitionGen extends AbstractVisitorNoArg {
 	HashMap<Integer,Integer> gen = new HashMap<Integer,Integer>();
 	HashMap<String,HashSet<Integer>> defs = new HashMap<String,HashSet<Integer>>();
 
-	Node currentNode = null;
 	boolean killFlag = false, genFlag = false;
-
-	public final void dfs(final Node node, java.util.HashMap<Integer,String> nodeVisitStatus) {
-		currentNode = node;
-		node.accept(this);
-		nodeVisitStatus.put(node.nodeId,"visited");
-		for (Node succ : node.successors) {
-		    if (nodeVisitStatus.get(succ.nodeId).equals("unvisited")) {
-			dfs(succ, nodeVisitStatus);
-		    }
-		}
-	}
 
 	public void start(CFGBuildingVisitor cfgBuilder) {
 		java.util.HashMap<Integer,String> nodeVisitStatus = new java.util.HashMap<Integer,String>();

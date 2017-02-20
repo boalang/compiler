@@ -44,22 +44,11 @@ import boa.compiler.visitors.*;
 public class ReachingDefinitionKill extends AbstractVisitorNoArg {
 	HashMap<Integer,HashSet<Integer>> kill = new HashMap<Integer,HashSet<Integer>>();
 	HashMap<String,HashSet<Integer>> defs = new HashMap<String,HashSet<Integer>>();
-	Node currentNode = null;
 	boolean killFlag = false;
 
 	public ReachingDefinitionKill(HashMap<String,HashSet<Integer>> defs) {
 		super();
 		this.defs = defs;	
-	}
-	public final void dfs(final Node node, java.util.HashMap<Integer,String> nodeVisitStatus) {
-		currentNode = node;
-		node.accept(this);
-		nodeVisitStatus.put(node.nodeId,"visited");
-		for (Node succ : node.successors) {
-		    if (nodeVisitStatus.get(succ.nodeId).equals("unvisited")) {
-			dfs(succ, nodeVisitStatus);
-		    }
-		}
 	}
 
 	public void start(CFGBuildingVisitor cfgBuilder) {

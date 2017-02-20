@@ -103,16 +103,6 @@ public class DataFlowSensitivityAnalysis extends AbstractVisitorNoArg {
 		return flowSensitive;
 	}
 
-	public final void dfs(final Node node, java.util.HashMap<Integer,String> nodeVisitStatus) {
-		nodeVisitStatus.put(node.nodeId,"visited");
-		node.accept(this);
-		for (Node succ : node.successors) {
-		    if (nodeVisitStatus.get(succ.nodeId).equals("unvisited")) {
-			dfs(succ, nodeVisitStatus);
-		    }
-		}
-	}
-
 	public void start(CFGBuildingVisitor cfgBuilder, HashSet<Identifier> aliastSet) {
 		java.util.HashMap<Integer,String> nodeVisitStatus = new java.util.HashMap<Integer,String>();
 		for(Node subnode : cfgBuilder.order) {

@@ -111,17 +111,6 @@ public class LoopSensitivityAnalysis extends AbstractVisitorNoArg {
 		return loopSensitive;
 	}
 
-	public final void dfs(final Node node, java.util.HashMap<Integer,String> nodeVisitStatus) {
-		nodeVisitStatus.put(node.nodeId,"visited");
-		node.accept(this);
-		
-		for (Node succ : node.successors) {
-		    if (nodeVisitStatus.get(succ.nodeId).equals("unvisited")) {
-			dfs(succ, nodeVisitStatus);
-		    }
-		}
-	}
-
 	public void start(CFGBuildingVisitor cfgBuilder, HashSet<Identifier> aliastSet) {
 		this.aliastSet = aliastSet;
 		this.cfgBuilder = cfgBuilder;

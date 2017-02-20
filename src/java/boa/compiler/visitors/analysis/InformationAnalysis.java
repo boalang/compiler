@@ -107,17 +107,6 @@ public class InformationAnalysis extends AbstractVisitorNoArg {
 		}
 	}
 
-	public final void dfs(final Node node, java.util.HashMap<Integer,String> nodeVisitStatus) {
-		nodeVisitStatus.put(node.nodeId,"visited");
-		node.accept(this);
-		
-		for (Node succ : node.successors) {
-		    if (nodeVisitStatus.get(succ.nodeId).equals("unvisited")) {
-			dfs(succ, nodeVisitStatus);
-		    }
-		}
-	}
-
 	public void start(CFGBuildingVisitor cfgBuilder, HashSet<Identifier> getValueNodesAlias, HashSet<Identifier> totalGetValueNodes) {
 		this.getValueNodesAlias = getValueNodesAlias;
 		this.totalGetValueNodes = totalGetValueNodes;

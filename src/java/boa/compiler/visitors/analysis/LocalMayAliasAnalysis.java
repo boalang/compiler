@@ -98,17 +98,6 @@ public class LocalMayAliasAnalysis extends AbstractVisitorNoArg {
 		}
 	}
 
-	public final void dfs(final Node node, java.util.HashMap<Integer,String> nodeVisitStatus) {
-		//if(node instanceof AssignmentStatement || node instanceof VarDeclStatement || node instanceof Call)
-			node.accept(this);
-		nodeVisitStatus.put(node.nodeId,"visited");
-		for (Node succ : node.successors) {
-		    if (nodeVisitStatus.get(succ.nodeId).equals("unvisited")) {
-			dfs(succ, nodeVisitStatus);
-		    }
-		}
-	}
-
 	public HashSet<Identifier> start(CFGBuildingVisitor cfgBuilder, Identifier id) {
 		aliastSet.add(id);
 		java.util.HashMap<Integer,String> nodeVisitStatus = new java.util.HashMap<Integer,String>();
