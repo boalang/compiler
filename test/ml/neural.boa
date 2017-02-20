@@ -32,6 +32,7 @@ nueralNetworks := function(vals : array of emitvals) :float {
 
      neuronRecorder[id_counter] = biasNeuron;
      id_counter = id_counter + 1;
+     epsilon : float = 0.00000000001;
 
 
      for(i :int = 1; i < totalLayers; i++) {
@@ -146,6 +147,58 @@ nueralNetworks := function(vals : array of emitvals) :float {
                    err : float = pow(outputR[l]- vals[n].expected[l], 2);
                    error = error + err;
                }
+
+               # back propogration fpr expectations
+               #update output layer
+               outNodeCounter : int = 0;
+               foreach(o: int; def(outputLayer[o])) {
+                  foreach(connNo: int; def(outputLayer[o].inConnection[connNo])) {
+                        nodeConnection : Connection = outputLayer[o].inConnection[connNo];
+                        ak: float = outputLayer[o].outputVal;
+                        temp : Neuron = neuronRecorder[nodeConnection.leftNeuron];
+                        ai: float = temp.outputVal;
+                        desiredOut: float = expectations[outNodeCounter];
+                        partialDerivative : float = (-1 * ak) * (1 - ak) * ai * (desiredOut - ak);
+                        deltaWeightNew : float = (-1 * learningRate) * partialDerivative;
+                        newWeight: float = nodeConnection.cweight + deltaWeightNew;
+                        nodeConnection.deltaWeight = deltaWeightNew;
+                        nodeConnection.cweight = newWeight + momentum * nodeConnection.prevDeltaWeight;
+                  }
+                  outNodeCounter = outNodeCounter + 1;
+               }
+
+
+               #update hidden layer
+                foreach(h: int; def(hiddenLayer[h])) {
+                  hiddenconnections : array of Connection = hiddenLayer[h].inConnection;
+                  foreach(connNo: int; def(hiddenconnections[connNo])) {
+                        aj: float = hiddenLayer[h].outputVal;
+                        targetNeuron : Neuron = neuronRecorder[hiddenconnections[connNo].leftNeuron];
+                        aih: float = targetNeuron.outputVal;
+                        sumKoutputs : float = 0.0;
+                        jindex : int = 0;
+                        foreach(o: int; def(outputLayer[o])) {
+                           wjk : float = 0.0;
+                           allInConns: array of Connection = outputLayer[o].inConnection;
+                           foreach(conid: int; def(allInConns[conid])) {
+                                if(allInConns[conid].leftNeuron == hiddenLayer[h].id) {
+                                    wjk = allInConns[conid].cweight;
+                                }
+                           }
+                           desiredOutput: float = expectations[jindex];
+                           akh:float = outputLayer[o].outputVal;
+                           jindex = jindex + 1;
+                           sumKoutputs = sumKoutputs + (-1 * (desiredOutput - akh) * akh * (1 - akh) * wjk);
+                        }
+                        partialDerivative_: float = aj * (1 - aj) * aih * sumKoutputs;
+                        dWeight: float = (-1 * learningRate)  * partialDerivative_;
+                        newWeight1: float = hiddenconnections[connNo].cweight + dWeight;
+                        hiddenconnections[connNo].deltaWeight = dWeight;
+                        hiddenconnections[connNo].cweight = newWeight1+ momentum * hiddenconnections[connNo].prevDeltaWeight;
+                  }
+                  outNodeCounter = outNodeCounter + 1;
+               }
+
           }
     }
     return outputLayer[0].outputVal;
