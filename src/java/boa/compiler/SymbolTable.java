@@ -149,18 +149,28 @@ public class SymbolTable {
 		// TODO add shadow types
 		BoaShadowType shadow = new BoaShadowType();
 		shadow.addShadow("condition", new ExpressionProtoTuple(),
-			new Factor(
-				new Identifier("${0}")
-			).addOp(
-				new Selector(new Identifier("expressions"))
-			).addOp(
-				new Index(
-					new Expression(
-						new Conjunction(
-							new Comparison(
-								new SimpleExpr(
-									new Term(
-										new Factor(new IntegerLiteral("0"))
+			new Expression(
+				new Conjunction(
+					new Comparison(
+						new SimpleExpr(
+							new Term(
+								new Factor(
+									new Identifier("${0}")
+								).addOp(
+									new Selector(new Identifier("expressions"))
+								).addOp(
+									new Index(
+										new Expression(
+											new Conjunction(
+												new Comparison(
+													new SimpleExpr(
+														new Term(
+															new Factor(new IntegerLiteral("0"))
+														)
+													)
+												)
+											)
+										)
 									)
 								)
 							)
