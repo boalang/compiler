@@ -1,0 +1,71 @@
+# Counting the 10 most used programming languages
+p: Project = input;
+counts: output top(10) of string weight int;
+astCount: int = 0;
+type fv = {a:float, b:float, c:float, d:float};
+
+
+pca:= function(vals: array of fv): fv {
+     meanarray: array of float = means(vals);
+     dataset : array of array of float = meanScaling(flattenedMatrix(vals, 4), meanarray);
+     meanvector: array of array of float = vector(meanarray);
+     parta := multiply(transpose(dataset), dataset);
+     meansResults := multiply(meanvector, meanarray);
+     cov := matrixsubstract(parta, meansResults);
+     eigens: array of float = eigenvalsReal(cov);
+     result : fv = {eigens[0], eigens[1], eigens[2], eigens[3]};
+     return result;
+};
+
+pcsAgg: output pca of fv;
+
+visit(p, visitor {
+	# only look at the latest snapshot
+	before n: CodeRepository -> {
+		snapshot := getsnapshot(n);
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+	before node: Declaration -> {
+		if (node.kind == TypeKind.CLASS) {
+			public_ele : float = 0.0;
+			protected_ele : float = 0.0;
+			private_ele : float = 0.0;
+			other: float = 0.0;
+			foreach (i: int; def(node.methods[i])) {
+			    if(has_modifier_public(node.methods[i])) {
+                    public_ele = public_ele + 1;
+			    } else if(has_modifier_private(node.methods[i])) {
+                    private_ele = private_ele + 1;
+                } else if(has_modifier_protected(node.methods[i])) {
+                    protected_ele = protected_ele + 1;
+                } else {
+                   other = other + 1;
+                }
+			}
+
+			foreach (i: int; def(node.fields[i])) {
+			    if(has_modifier_public(node.fields[i])) {
+                    public_ele = public_ele + 1;
+			    } else if(has_modifier_private(node.fields[i])) {
+                    private_ele = private_ele + 1;
+                } else if(has_modifier_protected(node.fields[i])) {
+                    protected_ele = protected_ele + 1;
+                }else {
+                    other = other + 1;
+                }
+			}
+
+			feature1 : fv = {public_ele, private_ele, protected_ele, other};
+			pcsAgg << feature1;
+			pcsAgg << feature1;
+			pcsAgg << feature1;
+			pcsAgg << feature1;
+			pcsAgg << feature1;
+			pcsAgg << feature1;
+			pcsAgg << feature1;
+			pcsAgg << feature1;
+		}
+	}
+});
