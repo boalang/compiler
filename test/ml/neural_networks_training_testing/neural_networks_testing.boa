@@ -1,0 +1,11 @@
+p: Project = input;
+type fv = {inp:array of float, expected: array of float};
+model : neuralNetworks of fv = model(path to the serialized model);
+
+results : output of collection of float;
+
+inps: array of float = {1.0, 1.0};
+out: array of float = {0.0};
+
+testdata: fv = {inps, out};
+results << classify(model, testdata);
