@@ -39,6 +39,7 @@ public class UserDefinedAgg {
         private String lambdaInterface;
         private String userGivenFuncArg = null;  // user given param names
         private String funcArgType = null; // funcVarName of the compiler generated userGivenParams
+        private String returnType;
         private boolean isAggregator = false;
         private List<String> aggregatorOptionParamId = new ArrayList<String>();
         private List<String> aggregatorOptionParamInitializer = new ArrayList<String>();
@@ -81,6 +82,11 @@ public class UserDefinedAgg {
 
         public Builder lambdaInit(String init) {
             this.lambdaInit = init;
+            return this;
+        }
+
+        public Builder returnType(String type) {
+            this.returnType = type;
             return this;
         }
 
@@ -137,6 +143,7 @@ public class UserDefinedAgg {
 
             st.add("name", this.lambdaName);
             st.add("type", funcArgType.toString());
+            st.add("returnType", this.returnType);
             if(parser.isEmpty()){
                 st.add("nonPrimitive", true);
             }else {

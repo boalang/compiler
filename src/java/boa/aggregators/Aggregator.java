@@ -23,6 +23,7 @@ import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer.Context;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -143,6 +144,18 @@ public abstract class Aggregator {
 
 	protected void collect(final BoaTup data) throws IOException, InterruptedException {
 		this.collect(data.toString(), null);
+	}
+
+	protected void collect(final BoaTup[] data) throws IOException, InterruptedException {
+		this.collect(Arrays.toString(data), null);
+	}
+
+	protected void collect(final double[] data) throws IOException, InterruptedException {
+		this.collect(Arrays.toString(data), null);
+	}
+
+	protected void collect(final long[] data) throws IOException, InterruptedException {
+		this.collect(Arrays.toString(data), null);
 	}
 
 	@SuppressWarnings("unchecked")

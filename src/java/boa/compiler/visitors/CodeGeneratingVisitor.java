@@ -201,6 +201,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			if(n.type instanceof BoaFunction) {
 				UserDefinedAgg.Builder funcTionBuilder = UserDefinedAgg.builder();
 				funcTionBuilder.userGivenName(n.getId().getToken()).setLambdaNameAndType(st.render());
+				funcTionBuilder.returnType(((BoaFunction)n.type).getType().toJavaType());
 				UserDefinedAggregators.addNewUserFunction(funcTionBuilder);
 			}
 		}

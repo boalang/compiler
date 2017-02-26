@@ -12,7 +12,7 @@ class UserDefined$<funcName>  extends boa.aggregators.UserDefinedAggregator {
 }
 >>
 
-OverridenMethods(name, type, nonPrimitive, parser, javaPrimitiveType) ::= <<
+OverridenMethods(name, type, nonPrimitive, parser, javaPrimitiveType, returnType) ::= <<
     @Override
     public void aggregate(String data, String metadata) throws java.io.IOException,java.lang.InterruptedException, boa.aggregators.FinishedException {
         <if(nonPrimitive)>
@@ -39,10 +39,12 @@ OverridenMethods(name, type, nonPrimitive, parser, javaPrimitiveType) ::= <<
     public void finish() throws java.io.IOException, java.lang.InterruptedException {
         try{
          <if(nonPrimitive)>
-         this.collect(<name>.invoke(this._$values.toArray(new <type>[this._$values.size()])));
+         <returnType> result = <name>.invoke(this._$values.toArray(new <type>[this._$values.size()]));
          <else>
-         this.collect(<name>.invoke(org.apache.commons.lang.ArrayUtils.toPrimitive(this._$values.toArray(new <type>[this._$values.size()]))));
+         <returnType> result = <name>.invoke(org.apache.commons.lang.ArrayUtils.toPrimitive(this._$values.toArray(new <type>[this._$values.size()])));
          <endif>
+         this.collect(result);
+         super.store(result);
         }catch(Exception e){
             e.printStackTrace();
         }
