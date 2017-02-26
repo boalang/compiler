@@ -182,6 +182,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				UserDefinedAgg.Builder function = UserDefinedAggregators.findByUserGivenName(((OutputType)n.getType()).getId().getToken());
 				if(function != null) {
 					function.isAggregator(true);
+					function.setAggregatorOptionParamType(((OutputType)n.getType()).getParams());
 				}
 				return;
 			}
@@ -839,6 +840,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			String accept = "";
 			abortGeneration = false;
 
+			n.env.setOperandType(n.getOperand().type);
 			if (!(n.getOp(0) instanceof Call)) {
 				n.getOperand().accept(this);
 				n.env.setOperandType(n.getOperand().type);
@@ -1369,6 +1371,18 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			if(function != null) {
 				n.getInitializer().accept(this);
 				function.lambdaInit(code.removeLast());
+			}
+			if(n.getType() instanceof OutputType) {
+				function = UserDefinedAggregators.findByUserGivenName(((OutputType) n.getType()).getId().getToken());
+				if(function != null) {
+					int counter = 0;
+					for(VarDeclStatement stmt: ((OutputType) n.getType()).getParams()) {
+						stmt.accept(this);
+						String[] argCode = code.removeLast().split("=");
+						function.addAggregatorOptionParamId(argCode[0], counter++);
+						function.addAggregatorOptionParamInitializer(argCode[1]);
+					}
+				}
 			}
 			code.add("");
 			return;

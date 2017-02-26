@@ -1,8 +1,14 @@
 package boa.compiler;
 
+
+import boa.compiler.ast.statements.VarDeclStatement;
+import boa.compiler.ast.types.AbstractType;
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroup;
 import org.stringtemplate.v4.STGroupFile;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserDefinedAgg {
     private final String userGivenName;
@@ -34,7 +40,28 @@ public class UserDefinedAgg {
         private String userGivenFuncArg = null;  // user given param names
         private String funcArgType = null; // funcVarName of the compiler generated userGivenParams
         private boolean isAggregator = false;
-        private String assignedToVar;
+        private List<String> aggregatorOptionParamId = new ArrayList<String>();
+        private List<String> aggregatorOptionParamInitializer = new ArrayList<String>();
+        private List<AbstractType> aggregatorOutputParamTypes = new ArrayList<AbstractType>();
+        
+
+        public List<String> getAggregatorOptionParamId() {
+            return aggregatorOptionParamId;
+        }
+
+        public boolean addAggregatorOptionParamId(String code, int index) {
+            return this.aggregatorOptionParamId.add(aggregatorOutputParamTypes.get(index).type.toJavaType() + " " + code + ";\n");
+        }
+
+        public boolean addAggregatorOptionParamInitializer(String initializer) {
+            return this.aggregatorOptionParamInitializer.add(initializer);
+        }
+
+        public void setAggregatorOptionParamType(List<VarDeclStatement> params) {
+            for(VarDeclStatement stmt: params) {
+                this.aggregatorOutputParamTypes.add(stmt.getType());
+            }
+        }
 
         public UserDefinedAgg build(){
             return new UserDefinedAgg(this.funcVarName, this.generateCode());
@@ -129,6 +156,7 @@ public class UserDefinedAgg {
             st.add("lambdaType", this.lambdaType);
             st.add("lambdaName", this.lambdaName);
             st.add("interface", fulQualifiedNameGne(this.lambdaInterface));
+            st.add("aggParams", getAggregatorOptionParamId());
             if(this.funcArgType != null) {
                 st.add("funcArg", fulQualifiedNameGne(funcArgType));
             }else {
@@ -197,5 +225,6 @@ public class UserDefinedAgg {
             }
             return result;
         }
+
     }
 }

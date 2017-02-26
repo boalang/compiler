@@ -5,11 +5,11 @@ import boa.BoaTup;
 
 import com.google.common.primitives.Doubles;
 import com.google.common.primitives.Longs;
+import org.apache.commons.lang.ArrayUtils;
 
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.lang.reflect.Array;
+import java.util.*;
 
 /**
  * Created by nmtiwari on 2/11/17.
@@ -144,6 +144,57 @@ public class BoaMatrixIntrinsics {
         return result_long;
     }
 
+    /**
+     * Returns the matrix version of an array. Only scalar values can be sorted.
+     * Values will be arranged in increasing order. (An optional comparison
+     * function, which takes two elements and returns int {-,0,+}, is accepted
+     * as a second argument, but it is curently ignored.)
+     *
+     * @param a
+     *            An array of long
+     *
+     * @return A sorted copy of <em>a</em>
+     */
+    @FunctionSpec(name = "multiply", returnType = "array of array of int", formalParameters = { "array of array of int", "int" })
+    public static long[][] multiply(final long[][] a, final long b) {
+        double[][] a_double = new double[a.length][];
+
+        for(int i = 0; i< a.length; i++){
+            a_double[i] = Doubles.toArray(Longs.asList(a[i]));
+        }
+
+        Matrix a_matrix = new Matrix(a_double);
+        double[][] result = a_matrix.times(b).getArray();
+        long[][]result_long = new long[result.length][];
+        for(int i = 0; i< result.length; i++){
+            result_long[i] = Longs.toArray(Doubles.asList(result[i]));
+        }
+        return result_long;
+    }
+
+    /**
+     * Returns the matrix version of an array. Only scalar values can be sorted.
+     * Values will be arranged in increasing order. (An optional comparison
+     * function, which takes two elements and returns int {-,0,+}, is accepted
+     * as a second argument, but it is curently ignored.)
+     *
+     * @param a
+     *            An array of long
+     *
+     * @return A sorted copy of <em>a</em>
+     */
+    @FunctionSpec(name = "multiply", returnType = "array of array of int", formalParameters = { "array of array of int", "float" })
+    public static double[][] multiply(final long[][] a, final float b) {
+        double[][] a_double = new double[a.length][];
+
+        for(int i = 0; i< a.length; i++){
+            a_double[i] = Doubles.toArray(Longs.asList(a[i]));
+        }
+
+        Matrix a_matrix = new Matrix(a_double);
+        return a_matrix.times(b).getArray();
+    }
+
 
 
     /**
@@ -241,11 +292,139 @@ public class BoaMatrixIntrinsics {
      *
      * @return A sorted copy of <em>a</em>
      */
+    @FunctionSpec(name = "multiply", returnType = "array of array of float", formalParameters = { "array of array of float", "float" })
+    public static double[][] multiply(final double[][] a, final double b) {
+        Matrix a_matrix = new Matrix(a);
+        return a_matrix.times(b).getArray();
+    }
+
+    /**
+     * Returns the matrix version of an array. Only scalar values can be sorted.
+     * Values will be arranged in increasing order. (An optional comparison
+     * function, which takes two elements and returns int {-,0,+}, is accepted
+     * as a second argument, but it is curently ignored.)
+     *
+     * @param a
+     *            An array of long
+     *
+     * @return A sorted copy of <em>a</em>
+     */
+    @FunctionSpec(name = "multiply", returnType = "array of array of float", formalParameters = { "array of array of float", "int" })
+    public static double[][] multiply(final double[][] a, final long b) {
+        Matrix a_matrix = new Matrix(a);
+        return a_matrix.times(b).getArray();
+    }
+
+    /**
+     * Returns the matrix version of an array. Only scalar values can be sorted.
+     * Values will be arranged in increasing order. (An optional comparison
+     * function, which takes two elements and returns int {-,0,+}, is accepted
+     * as a second argument, but it is curently ignored.)
+     *
+     * @param a
+     *            An array of long
+     *
+     * @return A sorted copy of <em>a</em>
+     */
+    @FunctionSpec(name = "multiply", returnType = "array of array of float", formalParameters = { "array of float", "array of array of float" })
+    public static double[][] multiply(final double[] a, final double[][] b) {
+        Matrix a_matrix = new Matrix(a, 1);
+        Matrix b_matrix = new Matrix(b);
+        return a_matrix.times(b_matrix).getArray();
+    }
+
+    /**
+     * Returns the matrix version of an array. Only scalar values can be sorted.
+     * Values will be arranged in increasing order. (An optional comparison
+     * function, which takes two elements and returns int {-,0,+}, is accepted
+     * as a second argument, but it is curently ignored.)
+     *
+     * @param a
+     *            An array of long
+     *
+     * @return A sorted copy of <em>a</em>
+     */
+    @FunctionSpec(name = "multiply", returnType = "array of float", formalParameters = { "array of float", "float" })
+    public static double[] multiply(final double[] a, final double b) {
+        Matrix a_matrix = new Matrix(a, a.length);
+        return a_matrix.times(b).getArray()[0];
+    }
+
+    /**
+     * Returns the matrix version of an array. Only scalar values can be sorted.
+     * Values will be arranged in increasing order. (An optional comparison
+     * function, which takes two elements and returns int {-,0,+}, is accepted
+     * as a second argument, but it is curently ignored.)
+     *
+     * @param a
+     *            An array of long
+     *
+     * @return A sorted copy of <em>a</em>
+     */
+    @FunctionSpec(name = "multiply", returnType = "array of float", formalParameters = { "array of float", "int" })
+    public static double[] multiply(final double[] a, final long b) {
+        Matrix a_matrix = new Matrix(a, 1);
+        double[][] temp = a_matrix.times(b).getArray();;
+        return temp[0];
+    }
+
+    /**
+     * Returns the matrix version of an array. Only scalar values can be sorted.
+     * Values will be arranged in increasing order. (An optional comparison
+     * function, which takes two elements and returns int {-,0,+}, is accepted
+     * as a second argument, but it is curently ignored.)
+     *
+     * @param a
+     *            An array of long
+     *
+     * @return A sorted copy of <em>a</em>
+     */
+    @FunctionSpec(name = "multiply", returnType = "array of array of float", formalParameters = { "array of array of float", "array of float" })
+    public static double[][] multiply(final double[][] a, final double[] b) {
+        Matrix a_matrix = new Matrix(a);
+        Matrix b_matrix = new Matrix(b, 1);
+        return a_matrix.times(b_matrix).getArray();
+    }
+
+    /**
+     * Returns the matrix version of an array. Only scalar values can be sorted.
+     * Values will be arranged in increasing order. (An optional comparison
+     * function, which takes two elements and returns int {-,0,+}, is accepted
+     * as a second argument, but it is curently ignored.)
+     *
+     * @param a
+     *            An array of long
+     *
+     * @return A sorted copy of <em>a</em>
+     */
     @FunctionSpec(name = "matrixsum", returnType = "array of array of float", formalParameters = { "array of array of float", "array of array of float" })
     public static double[][] matrixsum(final double[][] a, final double[][] b) {
         Matrix a_matrix = new Matrix(a);
         Matrix b_matrix = new Matrix(b);
         return a_matrix.plus(b_matrix).getArray();
+    }
+
+    /**
+     * Returns the matrix version of an array. Only scalar values can be sorted.
+     * Values will be arranged in increasing order. (An optional comparison
+     * function, which takes two elements and returns int {-,0,+}, is accepted
+     * as a second argument, but it is curently ignored.)
+     *
+     * @param a
+     *            An array of long
+     *
+     * @return A sorted copy of <em>a</em>
+     */
+    @FunctionSpec(name = "matrixsum", returnType = "array of float", formalParameters = { "array of float", "array of float" })
+    public static double[] matrixsum(final double[] a, final double[] b) {
+        if(a.length != b.length) {
+            throw new IllegalArgumentException("Argument lengths are not equal");
+        }
+        double[] result = new double[a.length];
+        for(int i =0 ; i < a.length; i++) {
+            result[i] = a[i] + b[i];
+        }
+        return result;
     }
 
     /**
@@ -314,6 +493,28 @@ public class BoaMatrixIntrinsics {
         return flattenedTuples;
     }
 
+    /**
+     * Returns the matrix version of an array. Only scalar values can be sorted.
+     * Values will be arranged in increasing order. (An optional comparison
+     * function, which takes two elements and returns int {-,0,+}, is accepted
+     * as a second argument, but it is curently ignored.)
+     *
+     * @param a
+     *            An array of long
+     *
+     * @return A sorted copy of <em>a</em>
+     */
+    @FunctionSpec(name = "flatten", returnType = "array of float", formalParameters = { "tuple" })
+    public static double[] flatten(final BoaTup a) {
+        final int size = tupleLength(a);
+        final double[] results = new double[size];
+        int i = 0;
+        for(Double ele: a.<Double>asArray(new Double[1])){
+            results[i] = ele;
+        }
+        return results;
+    }
+
 
     /**
      * Returns the matrix version of an array. Only scalar values can be sorted.
@@ -346,6 +547,109 @@ public class BoaMatrixIntrinsics {
         }
         return result;
     }
+
+    /**
+     * Returns the matrix version of an array. Only scalar values can be sorted.
+     * Values will be arranged in increasing order. (An optional comparison
+     * function, which takes two elements and returns int {-,0,+}, is accepted
+     * as a second argument, but it is curently ignored.)
+     *
+     * @param a
+     *            An array of long
+     *
+     * @return A sorted copy of <em>a</em>
+     */
+    @FunctionSpec(name = "tupleLength", returnType = "int", formalParameters = { "tuple" })
+    public static int tupleLength(final BoaTup a) {
+        final int sizeOfTuple = a.<Double>asArray(new Double[1]).length;
+        return sizeOfTuple;
+    }
+
+    /**
+     * Returns the matrix version of an array. Only scalar values can be sorted.
+     * Values will be arranged in increasing order. (An optional comparison
+     * function, which takes two elements and returns int {-,0,+}, is accepted
+     * as a second argument, but it is curently ignored.)
+     *
+     * @param a
+     *            An array of long
+     *
+     * @return A sorted copy of <em>a</em>
+     */
+    @FunctionSpec(name = "means", returnType = "array of float", formalParameters = { "array of tuple"})
+    public static double[] means(final BoaTup[] a) {
+        final int sizeOfTuple = a[0].<Double>asArray(new Double[1]).length;
+        final double[] means = new double[sizeOfTuple];
+
+        for(int i = 0; i< a.length; i++) {
+            Double[] tupAsArr = a[i].<Double>asArray(new Double[1]);
+            for (int index = 0; index < sizeOfTuple; index++) {
+                means[index] = means[index] + tupAsArr[index];
+            }
+        }
+
+        for (int index = 0; index < sizeOfTuple; index++) {
+            means[index] = means[index] / a.length;
+        }
+        return means;
+    }
+
+    /**
+     * Returns the matrix version of an array. Only scalar values can be sorted.
+     * Values will be arranged in increasing order. (An optional comparison
+     * function, which takes two elements and returns int {-,0,+}, is accepted
+     * as a second argument, but it is curently ignored.)
+     *
+     * @param a
+     *            An array of long
+     *
+     * @return A sorted copy of <em>a</em>
+     */
+    @FunctionSpec(name = "sum", returnType = "array of float", formalParameters = { "array of tuple"})
+    public static double[] sum(final BoaTup[] a) {
+        final int sizeOfTuple = a[0].<Double>asArray(new Double[1]).length;
+        final double[] sum = new double[sizeOfTuple];
+
+        for(int i = 0; i< a.length; i++) {
+            Double[] tupAsArr = a[i].<Double>asArray(new Double[1]);
+            for (int index = 0; index < sizeOfTuple; index++) {
+                sum[index] = sum[index] + tupAsArr[index];
+            }
+        }
+
+        return sum;
+    }
+
+
+    /**
+     * Returns the matrix version of an array. Only scalar values can be sorted.
+     * Values will be arranged in increasing order. (An optional comparison
+     * function, which takes two elements and returns int {-,0,+}, is accepted
+     * as a second argument, but it is curently ignored.)
+     *
+     * @param a
+     *            An array of long
+     *
+     * @return A sorted copy of <em>a</em>
+     */
+    @FunctionSpec(name = "sum", returnType = "array of float", formalParameters = { "tuple", "tuple"})
+    public static double[] sum(final BoaTup a, final BoaTup b) {
+        final int sizeOfTupleA = a.<Double>asArray(new Double[1]).length;
+        final int sizeOfTupleB = b.<Double>asArray(new Double[1]).length;
+        if(sizeOfTupleA != sizeOfTupleB) {
+            throw new IllegalArgumentException("Dissimilar sttributes in Tuples");
+        }
+        final double[] sum = new double[sizeOfTupleA];
+        for(int i = 0; i< sizeOfTupleA; i++) {
+            Double[] tupAsArrA = a.<Double>asArray(new Double[1]);
+            Double[] tupAsArrB = a.<Double>asArray(new Double[1]);
+            for (int index = 0; index < sizeOfTupleA; index++) {
+                sum[index] = tupAsArrB[index] + tupAsArrA[index];
+            }
+        }
+        return sum;
+    }
+
 
     /**
      * Returns the matrix version of an array. Only scalar values can be sorted.
@@ -401,6 +705,79 @@ public class BoaMatrixIntrinsics {
      */
     @FunctionSpec(name = "transpose", returnType = "array of array of float", formalParameters = { "array of float" })
     public static double[][] transpose(final double[] a) {
+        double[][] data = new double[a.length][];
+        for(int i = 0; i < a.length; i++){
+            double[] __temp = {a[i]};
+            data[i] = __temp;
+        }
+        return data;
+    }
+
+    /**
+     * Returns the matrix version of an array. Only scalar values can be sorted.
+     * Values will be arranged in increasing order. (An optional comparison
+     * function, which takes two elements and returns int {-,0,+}, is accepted
+     * as a second argument, but it is curently ignored.)
+     *
+     * @param a
+     *            An array of long
+     *
+     * @return A sorted copy of <em>a</em>
+     */
+    @FunctionSpec(name = "eigenvalsReal", returnType = "array of float", formalParameters = { "array of array of float" })
+    public static double[] eigenvalsReal(final double[][] a) {
+        Matrix matrix = new Matrix(a);
+        double[] temp = matrix.eig().getRealEigenvalues();
+        return matrix.eig().getRealEigenvalues();
+    }
+
+    /**
+     * Returns the matrix version of an array. Only scalar values can be sorted.
+     * Values will be arranged in increasing order. (An optional comparison
+     * function, which takes two elements and returns int {-,0,+}, is accepted
+     * as a second argument, but it is curently ignored.)
+     *
+     * @param a
+     *            An array of long
+     *
+     * @return A sorted copy of <em>a</em>
+     */
+    @FunctionSpec(name = "eigenvalsImg", returnType = "array of float", formalParameters = { "array of array of float" })
+    public static double[] eigenvalsImg(final double[][] a) {
+        Matrix matrix = new Matrix(a);
+        return matrix.eig().getImagEigenvalues();
+    }
+
+    /**
+     * Returns the matrix version of an array. Only scalar values can be sorted.
+     * Values will be arranged in increasing order. (An optional comparison
+     * function, which takes two elements and returns int {-,0,+}, is accepted
+     * as a second argument, but it is curently ignored.)
+     *
+     * @param a
+     *            An array of long
+     *
+     * @return A sorted copy of <em>a</em>
+     */
+    @FunctionSpec(name = "eigenvectors", returnType = "array of array of float", formalParameters = { "array of array of float" })
+    public static double[][] eigenvectors(final double[][] a) {
+        Matrix matrix = new Matrix(a);
+        return matrix.eig().getV().getArray();
+    }
+
+    /**
+     * Returns the matrix version of an array. Only scalar values can be sorted.
+     * Values will be arranged in increasing order. (An optional comparison
+     * function, which takes two elements and returns int {-,0,+}, is accepted
+     * as a second argument, but it is curently ignored.)
+     *
+     * @param a
+     *            An array of long
+     *
+     * @return A sorted copy of <em>a</em>
+     */
+    @FunctionSpec(name = "vector", returnType = "array of array of float", formalParameters = { "array of float" })
+    public static double[][] vector(final double[] a) {
         double[][] data = new double[a.length][];
         for(int i = 0; i < a.length; i++){
             double[] __temp = {a[i]};
@@ -519,6 +896,40 @@ public class BoaMatrixIntrinsics {
         return result;
     }
 
+    /**
+     * Returns the matrix version of an array.
+     *
+     * @param a
+     *            An array of array of int
+     *
+     * @return A sub matrix from Matrix <em>a</em>
+     */
+    @FunctionSpec(name = "unique", returnType = "array of float", formalParameters = { "array of float" })
+    public static double[] unique(final double[] data) {
+        Set<Double> set = new HashSet<Double>(Doubles.asList(data));
+        final double[] result = new double[set.size()];
+        int i = 0;
+        for(Double d: set) {
+            result[i++] = d;
+        }
+        return result;
+    }
+
+
+    /**
+     * Returns the matrix version of an array.
+     *
+     * @param a
+     *            An array of array of int
+     *
+     * @return A sub matrix from Matrix <em>a</em>
+     */
+    @FunctionSpec(name = "unique", returnType = "array of int", formalParameters = { "array of int" })
+    public static long[] unique(final long[] data) {
+        Set<Long> set = new HashSet<Long>(Longs.asList(data));
+        final Long[] result = set.toArray(new Long[data.length]);
+        return ArrayUtils.toPrimitive(result);
+    }
 
     /**
      * Returns the matrix version of an array.
@@ -563,5 +974,30 @@ public class BoaMatrixIntrinsics {
     public static long[] getRow(final long[][] data, final int row) {
         return data[row];
     }
+
+
+    /**
+     * Returns the matrix version of an array. Only scalar values can be sorted.
+     * Values will be arranged in increasing order. (An optional comparison
+     * function, which takes two elements and returns int {-,0,+}, is accepted
+     * as a second argument, but it is curently ignored.)
+     *
+     * @param a
+     *            An array of long
+     *
+     * @return A sorted copy of <em>a</em>
+     */
+    @FunctionSpec(name = "meanScaling", returnType = "array of array of float", formalParameters = { "array of array of float", "array of float" })
+    public static double[][] meanScaling(final double[][] a, final double[] b) {
+        for(int i = 0; i < a.length; i++) {
+            for(int j = 0; j < a[i].length; j++) {
+                a[i][j] = a[i][j] - b[j];
+            }
+        }
+        Matrix a_matrix = new Matrix(a);
+        return a_matrix.getArray();
+    }
+
+
 
 }

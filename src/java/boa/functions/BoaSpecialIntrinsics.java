@@ -159,10 +159,17 @@ public class BoaSpecialIntrinsics {
 		return (T[]) arr;
 	}
 
+	@FunctionSpec(name = "new", returnType = "array of array of array of float", formalParameters = { "array of array of array of float", "int", "array of array of float" })
+	public static double[][][] newTuple(double[][][] a, long size, double[][] val) {
+		double[][][] arr = new double[(int)size][][];
+		for (int i = 0; i < size; i++)
+			arr[i] = val;
+		return arr;
+	}
+
 
 	@FunctionSpec(name = "print", returnType = "bool", formalParameters = { "any"})
 	public static boolean print(HashMap a) {
-		System.out.println("nitin: " + a.size());
 		for (Object k: a.keySet()) {
 			System.out.println(k);
 		}
@@ -187,5 +194,19 @@ public class BoaSpecialIntrinsics {
 			return BoaSpecialIntrinsics.regexMap.get(type);
 		else
 			throw new RuntimeException("unimplemented");
+	}
+
+	@FunctionSpec(name = "convertFloatArrayToInt", returnType = "array of int", formalParameters = { "array of float" })
+	public static long[] convertFloatArrayToInt(final double[] inp) {
+		long[] converted = new long[inp.length];
+		for(int i = 0; i < inp.length; i++) {
+			converted[i] = Math.round(inp[i]);
+		}
+		return converted;
+	}
+
+	@FunctionSpec(name = "roundToLong", returnType = "int", formalParameters = { "float" })
+	public static long roundToLong(final double inp) {
+		return Math.round(inp);
 	}
 }

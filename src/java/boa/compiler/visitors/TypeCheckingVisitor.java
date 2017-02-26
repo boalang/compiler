@@ -1400,6 +1400,10 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		if (n.getArgsSize() > 0 && annotation.formalParameters().length == 0)
 			throw new TypeCheckException(n.getArgs(), "output aggregator '" + n.getId().getToken() + "' takes no arguments");
 
+		for(VarDeclStatement stmt: n.getParams()) {
+			stmt.accept(this, env);
+		}
+
 		n.type = new BoaTable(type, indexTypes, tweight, annotation.canOmitWeight());
 		env.set(n.getId().getToken(), n.type);
 		n.getId().accept(this, env);

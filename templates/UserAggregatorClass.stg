@@ -1,6 +1,7 @@
-AggregatorClass(funcName, funcArg, lambdaType, lambdaName, interface, lambdaInit, methods) ::= <<
+AggregatorClass(funcName, funcArg, lambdaType, lambdaName, interface, lambdaInit, methods, aggParams) ::= <<
 class UserDefined$<funcName>  extends boa.aggregators.UserDefinedAggregator {
     java.util.List\<<funcArg>\> _$values;
+    <aggParams:{s | <s>}>
 	<lambdaType> <lambdaName>;
 	<interface>
 

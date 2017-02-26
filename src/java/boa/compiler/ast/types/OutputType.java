@@ -22,6 +22,7 @@ import java.util.List;
 import boa.compiler.ast.Component;
 import boa.compiler.ast.Identifier;
 import boa.compiler.ast.expressions.Expression;
+import boa.compiler.ast.statements.VarDeclStatement;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
 import boa.compiler.visitors.AbstractVisitorNoReturn;
@@ -35,6 +36,7 @@ public class OutputType extends AbstractType {
 	protected Identifier id;
 	protected final List<Expression> args = new ArrayList<Expression>();
 	protected final List<Component> indices = new ArrayList<Component>();
+	protected final List<VarDeclStatement> params = new ArrayList<VarDeclStatement>();
 	protected Component t;
 	protected Component weight;
 
@@ -70,6 +72,18 @@ public class OutputType extends AbstractType {
 			e.setParent(this);
 			this.args.add(e);
 		}
+	}
+
+	public void setParams(final List<VarDeclStatement> params) {
+		this.params.clear();
+		for (final VarDeclStatement e : params) {
+			e.setParent(this);
+			this.params.add(e);
+		}
+	}
+
+	public List<VarDeclStatement> getParams() {
+		return params;
 	}
 
 	public List<Component> getIndices() {
