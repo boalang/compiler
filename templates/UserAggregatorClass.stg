@@ -44,7 +44,7 @@ OverridenMethods(name, type, nonPrimitive, parser, javaPrimitiveType, returnType
          <returnType> result = <name>.invoke(org.apache.commons.lang.ArrayUtils.toPrimitive(this._$values.toArray(new <type>[this._$values.size()])));
          <endif>
          this.collect(result);
-         super.store(result);
+         super.store(result, "<returnType>");
         }catch(Exception e){
             e.printStackTrace();
         }
