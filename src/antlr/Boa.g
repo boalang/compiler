@@ -179,7 +179,7 @@ outputType returns [OutputType ast]
 	locals [int l, int c]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: OUTPUT (tk=SET { $ast = new OutputType(new Identifier($tk.text)); } | id=identifier { $ast = new OutputType($id.ast); }) (LPAREN el=expressionList RPAREN { $ast.setArgs($el.list); })? (LBRACKET m=component RBRACKET { $ast.addIndice($m.ast); })* OF m=component { $ast.setType($m.ast); } (WEIGHT m=component { $ast.setWeight($m.ast); })? (FORMAT LPAREN el=expressionList RPAREN)?
+	: OUTPUT (tk=SET { $ast = new OutputType(new Identifier($tk.text)); } | id=identifier { $ast = new OutputType($id.ast); })  (LPAREN vl=vardeclList RPAREN { $ast.setParams($vl.list); })? (LPAREN el=expressionList RPAREN { $ast.setArgs($el.list); })? (LBRACKET m=component RBRACKET { $ast.addIndice($m.ast); })* OF m=component { $ast.setType($m.ast); } (WEIGHT m=component { $ast.setWeight($m.ast); })? (FORMAT LPAREN el=expressionList RPAREN)?
 	;
 
 functionType returns [FunctionType ast]
@@ -427,6 +427,20 @@ expressionList returns [ArrayList<Expression> list]
 	@init { $list = new ArrayList<Expression>(); }
 	: e=expression { $list.add($e.ast); } (COMMA e=expression   { $list.add($e.ast); })*
 	| e=expression { $list.add($e.ast); } ({ notifyErrorListeners("error: ',' expected"); } e=expression { $list.add($e.ast); } | COMMA e=expression { $list.add($e.ast); })*
+	;
+
+
+useraggParamDeclaration returns [VarDeclStatement ast]
+	locals [int l, int c]
+	@init { $l = getStartLine(); $c = getStartColumn(); }
+	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
+	: v=forVariableDeclaration  { $ast = $v.ast; }
+	;
+
+vardeclList returns [ArrayList<VarDeclStatement> list]
+	@init { $list = new ArrayList<VarDeclStatement>(); }
+	: e=useraggParamDeclaration { $list.add($e.ast); } (COMMA e=useraggParamDeclaration   { $list.add($e.ast); })*
+	| e=useraggParamDeclaration { $list.add($e.ast); } ({ notifyErrorListeners("error: ',' expected"); } e=useraggParamDeclaration { $list.add($e.ast); } | COMMA e=useraggParamDeclaration { $list.add($e.ast); })*
 	;
 
 conjunction returns [Conjunction ast]

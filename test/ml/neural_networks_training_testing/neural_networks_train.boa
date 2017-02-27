@@ -3,12 +3,12 @@ testing : output sum of int;
 
 type Connection = {cweight : float, prevDeltaWeight : float, deltaWeight : float, leftNeuron : int, rightNeuron : int};
 type Neuron = {id: int, bias : float , outputVal : float, biasConnection : Connection, inConnection : array of Connection};
-type fv = {inp:array of float, expected: array of float};
+type emitvals = {inp:array of float, expected: array of float};
 
+type Model = {inputL: array of Neuron, hiddenL: array of Neuron, outputL: array of Neuron};
 
-nueralNetworks := function(vals : array of fv) :Model {
+nueralNetworks := function(vals : array of emitvals) : Model {
      runs : int = 500;
-     thresholdError := 0.001;
      id_counter : int = 0;
 
      dummyConnection: Connection = {-1.0, -1.0, -1.0, -1, -1};
@@ -90,7 +90,7 @@ nueralNetworks := function(vals : array of fv) :Model {
      for(m: int = 0; m < runs; m++) {
           error = 0;
           foreach(n : int; def(vals[n])) {
-              valueEmitted: fv = vals[n];
+              valueEmitted: emitvals = vals[n];
               # set the input variables for jth value from values
               foreach(k: int; def(inputLayer[k])) {
                   # there is one to one mapping in input neurons and number of features in each value
@@ -197,62 +197,18 @@ nueralNetworks := function(vals : array of fv) :Model {
 
           }
     }
-    return Model(inputLayer, hiddenLayer, outputLayer, neuronRecorder);
     #return outputLayer[0].outputVal;
+    model : Model = {inputLayer, hiddenLayer, outputLayer};
+    return model;
  };
 
 
-classification:= function(model: Model, inp: fv) : float {
-# set the input variables for jth value from values
-    foreach(k: int; def(model.inputLayer[k])) {
-        # there is one to one mapping in input neurons and number of features in each value
-        model.inputLayer[k].outputVal = inp[k];
-    }
-
-    # activate the neurons for the forward propagation
-    # calculate the output of each hiddenLayer Neuron
-    foreach(k : int; def(model.hiddenLayer[k])) {
-        node2: Neuron = model.hiddenLayer[k];
-        intermediateResult : float = 0.0;
-        connections :array of Connection = node2.inConnection;
-        foreach(l: int; def(connections[l])) {
-            left: Neuron = model.neuronRecorder[connections[l].leftNeuron];
-            connweight : float = connections[l].cweight;
-            intermediateResult = intermediateResult + (connweight * left.outputVal);
-        }
-        intermediateResult = intermediateResult + (node2.biasConnection.cweight * node2.bias);
-        node2.outputVal = 1.0 / (1.0 + exp(intermediateResult));
-     }
-     # calculate the output of each outputLayer Neuron
-     foreach(k : int; def(model.outputLayer[k])) {
-        node3:Neuron = model.outputLayer[k];
-        intermediateResult1 : float = 0.0;
-        connections1 :array of Connection = node3.inConnection;
-        foreach(l: int; def(connections1[l])) {
-            left1: Neuron = model.neuronRecorder[connections1[l].leftNeuron];
-            connweight1 : float = connections1[l].cweight;
-            intermediateResult1 = intermediateResult1 + (connweight1 * left1.outputVal);
-        }
-        intermediateResult1 = intermediateResult1 + (node3.biasConnection.cweight * node3.bias);
-        node3.outputVal = 1.0 / (1.0 + exp(intermediateResult1));
-     }
-
-     # output results of each loop
-     outputR : array of float;
-     outputR = new(outputR, len(outputLayer), 0);
-     foreach(l: int; def(outputLayer[l])) {
-        outputR[l] = outputLayer[l].outputVal;
-     }
-     return outputLayer[0].outputVal;
-}
-
-
-neuralNetwork : output nueralNetworks(classification) of fv;
+neuralNetwork : output nueralNetworks(thresholdError : float = 0.001) of emitvals;
 
 inps: array of float = {1.0, 1.0};
 out: array of float = {0.0};
 
-result: fv = {inps, out};
+result: emitvals = {inps, out};
 neuralNetwork << result;
 neuralNetwork << result;
 neuralNetwork << result;

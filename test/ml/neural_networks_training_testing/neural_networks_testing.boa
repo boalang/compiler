@@ -1,11 +1,37 @@
+# What are the 5 largest projects, in terms of AST nodes?
+# Output is in Millions of AST nodes.
 p: Project = input;
-type fv = {inp:array of float, expected: array of float};
-model : neuralNetworks of fv = model(path to the serialized model);
+counter: output sum of int;
 
-results : output of collection of float;
 
-inps: array of float = {1.0, 1.0};
-out: array of float = {0.0};
+type Connection = {cweight : float, prevDeltaWeight : float, deltaWeight : float, leftNeuron : int, rightNeuron : int};
+type Neuron = {id: int, bias : float , outputVal : float, biasConnection : Connection, inConnection : array of Connection};
+type emitvals = {inp:array of float, expected: array of float};
+type Model = {inputL: array of Neuron, hiddenL: array of Neuron, outputL: array of Neuron};
 
-testdata: fv = {inps, out};
-results << classify(model, testdata);
+
+############### dummy information about the model ###################
+
+dummyConnection: Connection = {-1.0, -1.0, -1.0, -1, -1};
+dummyConnArray : array of Connection = {dummyConnection};
+dummyNeuron : Neuron = {0, 0.0, 0.0, dummyConnection, dummyConnArray};
+dummyLayer : array of Neuron = {dummyNeuron};
+dummyModel : Model = {dummyLayer, dummyLayer, dummyLayer};
+
+############### dummy information ends ##############################
+
+results: output collection[string] of float;
+
+
+#loadedModel: Model = load("Neural.model", dummyModel);
+loadedModel: Model = load("./Neural/Neural.model", dummyModel);
+
+classification := function(model: Model,  testData: array of float): float {
+    outNeuron: Neuron = model.outputL[0];
+    return outNeuron.outputVal;
+};
+
+#testInput : emitVals = {{0.0}, {1.1}};
+
+#results[p.id] << classification(loadedModel, testInput);
+results[p.id] << classification(loadedModel, {0.0, 0.0});
