@@ -8,6 +8,8 @@ import org.stringtemplate.v4.STGroup;
 import org.stringtemplate.v4.STGroupFile;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class UserDefinedAgg {
@@ -44,6 +46,7 @@ public class UserDefinedAgg {
         private List<String> aggregatorOptionParamId = new ArrayList<String>();
         private List<String> aggregatorOptionParamInitializer = new ArrayList<String>();
         private List<AbstractType> aggregatorOutputParamTypes = new ArrayList<AbstractType>();
+        private List<String> userAggOptionVariables = new ArrayList<String>();;
         
 
         public List<String> getAggregatorOptionParamId() {
@@ -81,7 +84,7 @@ public class UserDefinedAgg {
         }
 
         public Builder lambdaInit(String init) {
-            this.lambdaInit = init;
+            this.lambdaInit = getInterfaceInitCode(init);
             return this;
         }
 
@@ -100,26 +103,24 @@ public class UserDefinedAgg {
         }
 
         public Builder lambdaInterface(String decl) {
-            this.lambdaInterface = decl;
+            this.lambdaInterface = updatedInterDeclAndGetOptionVars(decl);
             return this;
         }
 
+        //FIXME: This currently just handles only one argument in the user defined aggregators
         public Builder argTypeName(String param) {
             if(this.funcArgType == null) {
                 StringBuffer typeNameBuilder = new StringBuffer(param.substring(0, param.length() - 2));
                 typeNameBuilder.setCharAt(0, Character.toUpperCase(typeNameBuilder.charAt(0)));
                 this.funcArgType = typeNameBuilder.toString();
-            } else {
-                throw new RuntimeException("Aggregator function can not have more than one arguments");
             }
             return this;
         }
 
+        //FIXME: This currently just handles only one argument in the user defined aggregators
         public Builder userGivenFuncArg(String param) {
             if(this.userGivenFuncArg == null) {
                 this.userGivenFuncArg = param;
-            } else {
-                throw new RuntimeException("Aggregator function can not have more than one arguments");
             }
             return this;
         }
@@ -163,12 +164,17 @@ public class UserDefinedAgg {
             st.add("lambdaType", this.lambdaType);
             st.add("lambdaName", this.lambdaName);
             st.add("interface", fulQualifiedNameGne(this.lambdaInterface));
-            st.add("aggParams", getAggregatorOptionParamId());
+            st.add("aggParams", removeFinal());
             if(this.funcArgType != null) {
                 st.add("funcArg", fulQualifiedNameGne(funcArgType));
             }else {
                 st.add("funcArg", this.userGivenFuncArg);
             }
+
+            String constructor = getAggregatorOptionalVarInit(userAggOptionVariables);
+            if(!constructor.isEmpty())
+                st.add("constcode", constructor);
+
             return st.render();
         }
 
@@ -231,6 +237,82 @@ public class UserDefinedAgg {
                 result = "Boolean.valueOf";
             }
             return result;
+        }
+
+        private String updatedInterDeclAndGetOptionVars(String lambdaInterfaceDecl) {
+            final int startindex = lambdaInterfaceDecl.indexOf('(');
+            final int endIndex = lambdaInterfaceDecl.indexOf(')');
+            String allVargs = lambdaInterfaceDecl.substring(startindex + 1, endIndex);
+            String vars[] = allVargs.split(",");
+            if(vars.length > 0) {
+                if(!isArrayArgument(vars[0])) {
+                    throw new RuntimeException("First argument of userDefinedAggregator must be array of values");
+                }
+                // update the interface declaration code with removing all of the arguments with just one
+                if(userAggOptionVariables.size() <= 0) {
+                    String tmp = vars.length > 1 ? flattenArrayWithSeperator(Arrays.copyOfRange(vars, 1, vars.length), ',') : "";
+                    Collections.addAll(userAggOptionVariables, tmp.split(","));
+                }
+                return lambdaInterfaceDecl.replace(allVargs, vars[0]);
+            } else {
+                throw new RuntimeException("Userdefined aggregators must have atleast one argument, which is array of values");
+            }
+        }
+
+        private boolean isArrayArgument(String arg) {
+            return arg.matches("final\\s+.*\\[]\\s+_*.*");
+        }
+
+        private String flattenArrayWithSeperator(final String[] vars, final char seperator) {
+            final StringBuffer flattened = new StringBuffer();
+            for(final String s: vars) {
+                if(s.startsWith("final")) {
+                    flattened.append(s.substring(5)).append(seperator);
+                } else {
+                    flattened.append(s).append(seperator);
+                }
+            }
+            flattened.deleteCharAt(flattened.length() - 1);
+            return flattened.toString();
+        }
+
+        private String getInterfaceInitCode(String lambdaInterfaceDecl) {
+            final StringBuffer codegenerator = new StringBuffer(lambdaInterfaceDecl);
+            //FIXME: this is an hack in the generated code
+            final int startindex = lambdaInterfaceDecl.indexOf("invoke") + "invoke".length();
+            final int endIndex = lambdaInterfaceDecl.indexOf(" throws"); // space is important here
+            String allVargs = lambdaInterfaceDecl.substring(startindex + 1, endIndex - 1);
+            System.out.println(allVargs);
+            String vars[] = allVargs.split(",");
+            if(vars.length > 0) {
+                return lambdaInterfaceDecl.replace(allVargs, vars[0]);
+            } else {
+                throw new RuntimeException("Userdefined aggregators must have atleast one argument, which is array of values");
+            }
+        }
+
+        private String getAggregatorOptionalVarInit(final List<String> args) {
+            if(args.size() <= 0) {
+                return "";
+            }
+            StringBuffer code = new StringBuffer();
+            StringBuffer param = new StringBuffer();
+            param.append("( ");
+            for(String s: args) {
+                String[] tmp = s.split(" ");
+                code.append("\t\tthis.").append(tmp[tmp.length - 1]).append(" = ").append(tmp[tmp.length - 1]).append(";\n");
+                param.append(s).append(", ");
+            }
+            param.deleteCharAt(param.length() - 2);
+            param.append(" ) {").append("\n\t").append("this();\n\t").append(code.toString()).append("\n}");
+            return param.toString();
+        }
+
+        private List<String> removeFinal() {
+            for(int i = 0; i < userAggOptionVariables.size(); i++) {
+                userAggOptionVariables.set(i, userAggOptionVariables.get(i).substring(7));
+            }
+            return userAggOptionVariables;
         }
 
     }

@@ -7,7 +7,7 @@ import com.google.gson.Gson;
 
 import java.io.*;
 
-@AggregatorSpec(name = "UserDefinedAgg", type = "UserDefined", canCombine = false)
+@AggregatorSpec(name = "UserDefinedAgg", formalParameters = { "any", "any" }, type = "UserDefined", canCombine = false)
 public abstract class UserDefinedAggregator extends Aggregator {
 
 	public void store(Object object) {

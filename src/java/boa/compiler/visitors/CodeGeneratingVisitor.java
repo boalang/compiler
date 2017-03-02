@@ -616,7 +616,13 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				if(!userAggregatorDeclStrings.contains(gencode)) {
 					userAggregatorDeclStrings.add(gencode);
 				}
-				reduceAggregatorStrings.add("this.aggregators.put(\"" + prefix + "::" + id + "\", new " + function.getAggClassName() + "());");
+				StringBuffer params = new StringBuffer();
+				for(String param: entry.getValue().getParameters()) {
+					params.append(param).append(", ");
+				}
+				params.deleteCharAt(params.length() - 2);
+
+				reduceAggregatorStrings.add("this.aggregators.put(\"" + prefix + "::" + id + "\", new " + function.getAggClassName() + "(" + params.toString() + "));");
 				combines = false;
 			} else {
 				reduceAggregatorStrings.add("this.aggregators.put(\"" + prefix + "::" + id + "\", " + src.toString().substring(2) + ");");
@@ -1926,8 +1932,12 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		final BoaTable t = (BoaTable) n.env.get(id);
 
 		if (n.getArgsSize() > 0) {
-			n.getArg(0).accept(this);
-			this.aggregators.put(id, new AggregatorDescription(aggregator, t.getType(), Arrays.asList(code.removeLast())));
+			List<String> codegen = new ArrayList<String>();
+			for(Expression e: n.getArgs()) {
+				e.accept(this);
+				codegen.add(code.removeLast());
+			}
+			this.aggregators.put(id, new AggregatorDescription(aggregator, t.getType(), codegen));
 		} else {
 			this.aggregators.put(id, new AggregatorDescription(aggregator, t.getType()));
 		}
