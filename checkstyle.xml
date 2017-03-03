@@ -1,0 +1,215 @@
+<?xml version="1.0"?>
+<!DOCTYPE module PUBLIC
+          "-//Puppy Crawl//DTD Check Configuration 1.3//EN"
+          "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
+
+<!-- the checks in this file are based off the Google Style Guide for Java -->
+<!-- See https://google.github.io/styleguide/javaguide.html -->
+<module name = "Checker">
+    <!--======
+    = ERRORS =
+    =======-->
+    <property name="charset" value="UTF-8"/>
+
+    <module name="TreeWalker">
+        <!--================================================
+                            Class Design
+        http://checkstyle.sourceforge.net/config_design.html
+        =================================================-->
+
+        <!-- Checks that each top-level class, interface or enum resides in a source file of its own.
+             See http://checkstyle.sourceforge.net/config_design.html#OneTopLevelClass -->
+        <module name="OneTopLevelClass"/>
+
+        <!--==============================================
+                           Miscellaneous
+        http://checkstyle.sourceforge.net/config_misc.html
+        ===============================================-->
+
+        <!-- Checks that the outer type name and the file name match. For example, the class Foo must be in a file named Foo.java.
+             See http://checkstyle.sourceforge.net/config_misc.html#OuterTypeFilename -->
+        <module name="OuterTypeFilename"/>
+    </module>
+
+    <!--========
+    = WARNINGS =
+    =========-->
+
+    <module name="TreeWalker">
+        <property name="severity" value="warning"/>
+
+        <!--====================================================
+                              Annotations
+        http://checkstyle.sourceforge.net/config_annotation.html
+        =====================================================-->
+
+        <!-- Check location of annotation on language elements.
+             See http://checkstyle.sourceforge.net/config_annotation.html#AnnotationLocation -->
+        <module name="AnnotationLocation">
+            <property name="tokens" value="CLASS_DEF, INTERFACE_DEF, ENUM_DEF, METHOD_DEF, CTOR_DEF"/>
+        </module>
+        <module name="AnnotationLocation">
+            <property name="tokens" value="VARIABLE_DEF"/>
+            <property name="allowSamelineMultipleAnnotations" value="true"/>
+        </module>
+
+        <!--================================================
+                               Blocks
+        http://checkstyle.sourceforge.net/config_blocks.html
+        =================================================-->
+
+        <!-- Checks for empty blocks.
+             See http://checkstyle.sourceforge.net/config_blocks.html#EmptyBlock -->
+        <module name="EmptyBlock">
+            <property name="option" value="TEXT"/>
+            <property name="tokens" value="LITERAL_TRY, LITERAL_FINALLY, LITERAL_IF, LITERAL_ELSE, LITERAL_SWITCH"/>
+        </module>
+
+        <!--================================================
+                              Coding
+        http://checkstyle.sourceforge.net/config_coding.html
+        =================================================-->
+
+        <!-- Checks for illegal token text.
+             See http://checkstyle.sourceforge.net/config_coding.html#IllegalTokenText -->
+        <module name="IllegalTokenText">
+            <property name="tokens" value="STRING_LITERAL, CHAR_LITERAL"/>
+            <property name="format" value="\\u00(08|09|0(a|A)|0(c|C)|0(d|D)|22|27|5(C|c))|\\(0(10|11|12|14|15|42|47)|134)"/>
+            <property name="message" value="Avoid using corresponding octal or Unicode escape."/>
+        </module>
+
+        <!-- Checks for fall-through in switch statements. Finds locations where a case lacks a break, return, throw or continue statement.
+             See http://checkstyle.sourceforge.net/config_coding.html#FallThrough -->
+        <module name="FallThrough"/>
+
+        <!-- Checks that switch statement has a "default" clause.
+             See http://checkstyle.sourceforge.net/config_coding.html#MissingSwitchDefault -->
+        <module name="MissingSwitchDefault"/>
+
+        <!-- Verifies there are no finalize() methods defined in a class.
+             See http://checkstyle.sourceforge.net/config_coding.html#NoFinalizer -->
+        <module name="NoFinalizer"/>
+
+        <!--=================================================
+                              JavaDoc
+        http://checkstyle.sourceforge.net/config_javadoc.html
+        ==================================================-->
+
+        <!-- Checks the order of at-clauses.
+             See http://checkstyle.sourceforge.net/config_javadoc.html#AtclauseOrder -->
+        <module name="AtclauseOrder">
+            <property name="tagOrder" value="@param, @return, @throws, @deprecated"/>
+            <property name="target" value="CLASS_DEF, INTERFACE_DEF, ENUM_DEF, METHOD_DEF, CTOR_DEF, VARIABLE_DEF"/>
+        </module>
+
+        <!-- Checks the indentation of the continuation lines in at-clauses.
+             See http://checkstyle.sourceforge.net/config_javadoc.html#JavadocTagContinuationIndentation -->
+        <module name="JavadocTagContinuationIndentation"/>
+
+        <!--==============================================
+                           Miscellaneous
+        http://checkstyle.sourceforge.net/config_misc.html
+        ===============================================-->
+
+        <!-- Restrict using Unicode escapes (e.g. \u221e).
+             See http://checkstyle.sourceforge.net/config_misc.html#AvoidEscapedUnicodeCharacters -->
+        <module name="AvoidEscapedUnicodeCharacters">
+            <property name="allowEscapesForControlCharacters" value="true"/>
+            <property name="allowByTailComment" value="true"/>
+            <property name="allowNonPrintableEscapes" value="true"/>
+        </module>
+
+        <!-- Checks the style of array type definitions.
+             See http://checkstyle.sourceforge.net/config_misc.html#ArrayTypeStyle -->
+        <module name="ArrayTypeStyle"/>
+
+        <!-- Checks that long constants are defined with an upper ell.
+             That is ' L' and not 'l'. The capital L looks a lot like 1.
+             See http://checkstyle.sourceforge.net/config_misc.html#UpperEll -->
+        <module name="UpperEll"/>
+
+        <!--================================================
+                          Naming Conventions
+        http://checkstyle.sourceforge.net/config_naming.html
+        =================================================-->
+
+        <!-- The Check validate abbreviations (consecutive capital letters) length in identifier name, it also allows to enforce camel case naming.
+             See http://checkstyle.sourceforge.net/config_naming.html#AbbreviationAsWordInName -->
+		<!-- NOTE: differs from the Google style guide -->
+        <module name="AbbreviationAsWordInName">
+            <property name="ignoreFinal" value="true"/> <!-- changed from false -->
+            <property name="allowedAbbreviations" value="JSON, LCOO"/> <!-- added -->
+            <property name="allowedAbbreviationLength" value="3"/> <!-- changed from 1 -->
+        </module>
+
+        <!-- Validates identifiers for class type parameters.
+             See http://checkstyle.sourceforge.net/config_naming.html#ClassTypeParameterName -->
+        <module name="ClassTypeParameterName">
+            <property name="format" value="(^[A-Z][0-9]?)$|([A-Z][a-zA-Z0-9]*[T]$)"/>
+            <message key="name.invalidPattern" value="Class type name ''{0}'' must match pattern ''{1}''."/>
+        </module>
+
+        <!-- Validates identifiers for interface type parameters.
+             See http://checkstyle.sourceforge.net/config_naming.html#InterfaceTypeParameterName -->
+        <module name="InterfaceTypeParameterName">
+            <property name="format" value="(^[A-Z][0-9]?)$|([A-Z][a-zA-Z0-9]*[T]$)"/>
+            <message key="name.invalidPattern" value="Interface type name ''{0}'' must match pattern ''{1}''."/>
+        </module>
+
+        <!-- Validates identifiers for methods.
+             See http://checkstyle.sourceforge.net/config_naming.html#MethodName -->
+        <module name="MethodName">
+            <property name="format" value="^[a-z][a-z0-9][a-zA-Z0-9_]*$"/>
+            <message key="name.invalidPattern" value="Method name ''{0}'' must match pattern ''{1}''."/>
+        </module>
+
+        <!-- Validates identifiers for method type parameters.
+             See http://checkstyle.sourceforge.net/config_naming.html#MethodTypeParameterName -->
+        <module name="MethodTypeParameterName">
+            <property name="format" value="(^[A-Z][0-9]?)$|([A-Z][a-zA-Z0-9]*[T]$)"/>
+            <message key="name.invalidPattern" value="Method type name ''{0}'' must match pattern ''{1}''."/>
+        </module>
+
+        <!-- Validates identifiers for packages.
+             See http://checkstyle.sourceforge.net/config_naming.html#PackageName -->
+        <module name="PackageName">
+            <property name="format" value="^[a-z]+(\.[a-z][a-z0-9]*)*$"/>
+            <message key="name.invalidPattern" value="Package name ''{0}'' must match pattern ''{1}''."/>
+        </module>
+
+        <!-- Validates identifiers for types.
+             See http://checkstyle.sourceforge.net/config_naming.html#TypeName -->
+        <module name="TypeName">
+            <message key="name.invalidPattern" value="Type name ''{0}'' must match pattern ''{1}''."/>
+        </module>
+
+        <!--====================================================
+                               Whitespace
+        http://checkstyle.sourceforge.net/config_whitespace.html
+        =====================================================-->
+
+        <!-- Checks that the whitespace around the Generic tokens (angle brackets) "<" and ">" are correct to the typical convention.
+             See http://checkstyle.sourceforge.net/config_whitespace.html#GenericWhitespace -->
+        <module name="GenericWhitespace">
+            <message key="ws.followed" value="GenericWhitespace ''{0}'' is followed by whitespace."/>
+            <message key="ws.preceded" value="GenericWhitespace ''{0}'' is preceded with whitespace."/>
+            <message key="ws.illegalFollow" value="GenericWhitespace ''{0}'' should followed by whitespace."/>
+            <message key="ws.notPreceded" value="GenericWhitespace ''{0}'' is not preceded with whitespace."/>
+        </module>
+
+        <!-- Checks that chosen statements are not line-wrapped.
+             See http://checkstyle.sourceforge.net/config_whitespace.html#NoLineWrap -->
+        <module name="NoLineWrap"/>
+
+        <!-- Checks line wrapping with separators.
+             See http://checkstyle.sourceforge.net/config_whitespace.html#SeparatorWrap -->
+        <module name="SeparatorWrap">
+            <property name="tokens" value="DOT"/>
+            <property name="option" value="nl"/>
+        </module>
+        <module name="SeparatorWrap">
+            <property name="tokens" value="COMMA"/>
+            <property name="option" value="EOL"/>
+        </module>
+    </module>
+</module>

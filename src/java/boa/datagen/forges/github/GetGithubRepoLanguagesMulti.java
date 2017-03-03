@@ -16,6 +16,15 @@ import boa.datagen.util.FileIO;
 public class GetGithubRepoLanguagesMulti {
 	private static final int WINDOW = 1000000;
 
+	static class GithubLanguage {
+		String name, count;
+		
+		public GithubLanguage(String name, String count) {
+			this.name = name;
+			this.count = count;
+		}
+	}
+
 	public static void main(String[] args) throws FileNotFoundException {
 		int nid = 0, nusers[] = {0};
 		if (args != null && args.length > 0) {
@@ -137,14 +146,5 @@ public class GetGithubRepoLanguagesMulti {
 			}
 		}
 		return languages;
-	}
-}
-
-class GithubLanguage {
-	String name, count;
-	
-	public GithubLanguage(String name, String count) {
-		this.name = name;
-		this.count = count;
 	}
 }
