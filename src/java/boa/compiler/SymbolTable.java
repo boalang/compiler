@@ -41,6 +41,7 @@ import boa.compiler.ast.literals.IntegerLiteral;
 import boa.compiler.ast.Operand;
 import boa.compiler.ast.Selector;
 import boa.compiler.ast.Term;
+import boa.compiler.transforms.ASTFactory;
 
 /**
  * @author anthonyu
@@ -159,19 +160,7 @@ public class SymbolTable {
 								).addOp(
 									new Selector(new Identifier("expressions"))
 								).addOp(
-									new Index(
-										new Expression(
-											new Conjunction(
-												new Comparison(
-													new SimpleExpr(
-														new Term(
-															new Factor(new IntegerLiteral("0"))
-														)
-													)
-												)
-											)
-										)
-									)
+									new Index(ASTFactory.createFactorExpr(new IntegerLiteral("0")))
 								)
 							)
 						)

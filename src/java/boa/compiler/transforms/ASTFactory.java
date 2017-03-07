@@ -50,17 +50,7 @@ public class ASTFactory {
 	public static VarDeclStatement createVarDecl(final String name, final Operand init, final BoaType t, final SymbolTable env) {
 		final VarDeclStatement var = new VarDeclStatement(
 				new Identifier(name),
-				new Expression(
-					new Conjunction(
-						new Comparison(
-							new SimpleExpr(
-								new Term(
-									new Factor(init)
-								)
-							)
-						)
-					)
-				)
+				ASTFactory.createFactorExpr(init)
 			);
 		var.type = var.getInitializer().type = t;
 		var.env = env;
