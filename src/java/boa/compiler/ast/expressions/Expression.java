@@ -88,6 +88,7 @@ public class Expression extends Node {
 		v.visit(this);
 	}
 
+
 	public Expression clone() {
 		final Expression e = new Expression(lhs.clone());
 		for (final Conjunction c : rhs)

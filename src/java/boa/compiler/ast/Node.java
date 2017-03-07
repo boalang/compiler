@@ -94,4 +94,8 @@ public abstract class Node {
 	public void replaceStatement(final Statement oldStmt, final Statement newStmt) {
 		parent.replaceStatement(oldStmt, newStmt);
 	}
+
+	public void replaceExpression(final Node oldExp,final Node newExp) {
+		parent.replaceExpression(oldExp, newExp);
+	}
 }

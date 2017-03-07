@@ -87,6 +87,18 @@ public class Call extends Node {
 		v.visit(this);
 	}
 
+	@Override
+	public void replaceExpression(final Node oldExp,final Node newExp) {
+		
+		for(Expression exp : args){
+			if(oldExp == exp ){
+				exp = (Expression)newExp;
+				exp.setParent(this);
+				System.out.println("TEST");
+			}
+		}
+	}
+
 	public Call clone() {
 		final Call c = new Call();
 		for (final Expression e : args)
