@@ -117,10 +117,12 @@ public class ShadowTypeEraser extends AbstractVisitorNoArg {
 		super.visit(n);
 		if(n.type instanceof BoaShadowType){
 			//Change the Identifier in the ast
-			BoaShadowType typeUsed = (BoaShadowType)env.get(n.getType().toString());
+			BoaShadowType typeUsed = (BoaShadowType)n.type;
 			Identifier temp = (Identifier)n.getType();
 			System.out.println("Shadow Type Before/After Found = "+ temp.getToken());
 			temp.setToken(typeUsed.getDeclarationIdentifierEraser);		
+			n.type = n.getType().type = typeUsed.getDeclarationSymbolTableEraser;
+			n.env.set(n.getIdentifier().getToken(), n.type);
 		}
 	}
 	// Changing type of variable used in before or after statement to type Statement
