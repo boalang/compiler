@@ -11,6 +11,10 @@
 	<!-- ANTLR version -->
 	<property name="antlr.version" value="4.5" />
 
+	<!-- CheckStyle path -->
+	<taskdef resource="com/puppycrawl/tools/checkstyle/ant/checkstyle-ant-task.properties"
+		classpath="lib/checkstyle-6.19-all.jar"/>
+
 	<!-- debug properties -->
 	<property name="debug.enabled" value="on" />
 	<property name="debug.level" value="lines,vars,source" />
@@ -62,7 +66,7 @@
 	</target>
 
 	<!-- Protocol Buffers schemas -->
-	<target name="-check-protobuf" depends="-init">
+	<target name="-check-protobuf">
 		<condition property="protobuf.uptodate">
 			<and>
 				<uptodate srcfile="src/proto/ast.proto" targetfile="src/compiled-proto/boa/types/Ast.java" />
@@ -85,7 +89,7 @@
 		</apply>
 	</target>
 
-	<target name="compile-protobuf" depends="-translate-protobuf,-check-deps" description="Compiles the generated protobuf code.">
+	<target name="compile-protobuf" depends="-init,-translate-protobuf,-check-deps" description="Compiles the generated protobuf code.">
 		<javac includeantruntime="true" srcdir="src/compiled-proto" destdir="build/classes" debug="${debug.enabled}" debuglevel="${debug.level}">
 			<classpath refid="project.class.path" />
 		</javac>
@@ -246,6 +250,18 @@
 		</junit>
 		<delete file="SecurityAuth.audit" />
 	</target>
+	<target name="test-traversal" depends="-compile-tests" description="Run traversal unit tests.">
+		<junit fork="yes" haltonfailure="no">
+			<classpath refid="test.class.path" />
+			<test name="boa.test.compiler.TestTraversalGood">
+				<formatter type="plain" usefile="false" />
+			</test>
+			<test name="boa.test.compiler.TestTraversalBad">
+				<formatter type="plain" usefile="false" />
+			</test>
+		</junit>
+		<delete file="SecurityAuth.audit" />
+	</target>
 	<target name="test-knowngood" depends="-compile-tests" description="Run known good tests.">
 		<junit fork="yes" haltonfailure="no">
 			<classpath refid="test.class.path" />
@@ -271,6 +287,16 @@
 			<classpath refid="test.class.path" />
 			<arg value="${java.code}" />
 		</java>
+	</target>
+
+
+	<!-- style checking -->
+	<target name="checkstyle">
+		<checkstyle config="checkstyle.xml">
+			<fileset dir="src/java/boa" includes="**/*.java"/>
+			<fileset dir="src/test" includes="**/*.java"/>
+			<formatter type="plain"/>
+		</checkstyle>
 	</target>
 
 

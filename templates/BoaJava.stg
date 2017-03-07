@@ -128,9 +128,14 @@ private class <name>
 {
 	<fields,types:{field,type|<type> ___<field>}; separator="; ">;
 	<name>( <fields,types:{field,type|<type> ___<field>}; separator=", "> ){
-		<fields,types:{field,type|this.___<field> = ___<field>}; separator="; ">;
+		<fields,types:{field,type|this.___<field> = new <type>(___<field>)}; separator="; ">;
 	}
-
+	<name>( <name> tmp){
+		<fields,types:{field,type|this.___<field> = new <type>(tmp.___<field>)}; separator="; ">;
+	}
+	public <name> clone() {
+    		return new <name>(this);
+	}
 }<\n>
 >>
 
@@ -164,6 +169,25 @@ new boa.runtime.BoaAbstractVisitor()
 	<endif>
 	<body:{s | <s><\n>}>}
 >>
+
+Traversal(staticDeclarations, body, T) ::= <<
+new boa.runtime.BoaAbstractTraversal\<<T>\>()
+{
+	<if(staticDeclarations)>
+	<staticDeclarations>
+	<endif>
+	<body:{s | <s><\n>}>}
+>>
+
+FixP(staticDeclarations, body, T) ::= <<
+new boa.runtime.BoaAbstractFixP()
+{
+	<if(staticDeclarations)>
+	<staticDeclarations>
+	<endif>
+	<body:{s | <s><\n>}>}
+>>
+
 VisitClause(ret, name, arg, type, body) ::= <<
 <if(arg)>
 @Override
@@ -177,3 +201,42 @@ protected <ret> <name>() throws Exception
 	<body>}<endif>
 >>
 Return(expr) ::= "return<if(expr)> <expr><endif>;<\n>"
+
+TraverseClause(ret, name, args, types, body) ::= <<
+<if(ret)>
+protected <ret> <name>(final <types> <args>) throws Exception
+{
+	<body>\}
+<else>
+protected void <name>(final <types> <args>) throws Exception
+{
+	<body>\}
+<endif>
+<if(ret)>
+@Override
+public void traverse(final boa.graphs.cfg.CFGNode node, boolean flag) throws Exception {
+		if(flag) {
+			currentResult = new <ret>(preTraverse(node));
+			outputMapObj.put(node.getId(), new <ret>(currentResult));
+		}
+		else
+			outputMapObj.put(node.getId(), new <ret>(preTraverse(node)));
+}
+<else>
+@Override
+public void traverse(final boa.graphs.cfg.CFGNode node, boolean flag) throws Exception {
+		preTraverse(node);
+}
+<endif>
+>>
+
+FixPClause(arg1, arg2, type, body) ::= <<
+public boolean invoke1(final <type> <arg1>, final <type> <arg2>) throws Exception {
+		<body>
+}
+
+@Override
+public boolean invoke(Object <arg1>, Object <arg2>) throws Exception{
+		return invoke1((<type>)<arg1>, (<type>)<arg2>);
+}
+>>

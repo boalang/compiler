@@ -1,5 +1,5 @@
 language: boa
-script: ant test
+script: ant -Dprotobuf.uptodate=true test checkstyle
 notifications:
   email:
     recipients:

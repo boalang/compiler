@@ -1,4 +1,4 @@
-Program(name, numreducers, jobs, jobnames, combineTables, reduceTables, splitsize) ::= <<
+Program(name, numreducers, jobs, jobnames, combineTables, reduceTables, splitsize, isLocal) ::= <<
 package boa;
 
 public class <name> extends boa.runtime.BoaRunner {
@@ -15,6 +15,9 @@ public class <name> extends boa.runtime.BoaRunner {
 		<if(combineTables)>
 		job.setCombinerClass(<name>BoaCombiner.class);
 		<endif>
+		<if(isLocal)>
+        job.getConfiguration().setClass("mapred.map.output.compression.codec", org.apache.hadoop.io.compress.DefaultCodec.class, org.apache.hadoop.io.compress.CompressionCodec.class);
+        <endif>
 		job.setReducerClass(<name>BoaReducer.class);
 
 		return job;
@@ -29,7 +32,9 @@ public class <name> extends boa.runtime.BoaRunner {
 	}
 
 	public static void main(String[] args) throws Exception {
-		System.exit(org.apache.hadoop.util.ToolRunner.run(new <name>(), args));
+		<if(isLocal)>org.apache.hadoop.util.ToolRunner.run(new <name>(), args);
+		<else> System.exit(org.apache.hadoop.util.ToolRunner.run(new <name>(), args));
+	    <endif>
 	}
 
 	@Override
@@ -80,7 +85,10 @@ public class <name> extends boa.runtime.BoaRunner {
 
 		if (id > 0)
 			configuration.setInt("boa.hadoop.jobid", id);
+
 		jb.submit();
+
+
 		if (id > 0)
 			boa.io.BoaOutputCommitter.setJobID(jb.getJobID().toString(), id);
 		System.err.println("Job ID: " + jb.getJobID().toString());

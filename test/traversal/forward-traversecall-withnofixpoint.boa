@@ -1,0 +1,25 @@
+m: output collection of int;
+
+# cfg of the current method
+cfg: CFG;
+
+# traversal that gets all variable uses in a method
+init := traversal(node: CFGNode): string {
+	return string(node.id);
+};
+
+q_all := visitor {
+	before node: Method -> {
+		cfg = getcfg(node);
+
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.DFS, init);
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.POSTORDER, init);
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.REVERSEPOSTORDER, init);
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.WORKLIST_POSTORDER, init);
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.WORKLIST_REVERSEPOSTORDER, init);
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.ITERATIVE, init);
+		traverse(cfg, TraversalDirection.FORWARD, TraversalKind.RANDOM, init);
+	}
+};
+
+m << 1;

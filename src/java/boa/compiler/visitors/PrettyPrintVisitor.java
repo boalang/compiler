@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, Hridesh Rajan, Robert Dyer
+ * Copyright 2017, Hridesh Rajan, Robert Dyer
  *                 Iowa State University of Science and Technology
  *                 and Bowling Green State University
  *
@@ -34,6 +34,19 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArg {
 	private void indent() {
 		for (int i = 0; i < indent; i++)
 			System.out.print("    ");
+	}
+
+	// dont actually indent blocks
+	// but many places a block can appear, statements could also appear
+	// and we want to indent statements
+	public void indentBlock(final Node n) {
+		if (!(n instanceof Block))
+			indent++;
+	}
+
+	public void outdentBlock(final Node n) {
+		if (!(n instanceof Block))
+			indent--;
 	}
 
 	/** {@inheritDoc} */
@@ -180,7 +193,6 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArg {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Block n) {
-		indent();
 		System.out.println("{");
 		indent++;
 		super.visit(n);
@@ -243,10 +255,10 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArg {
 		n.getVar().accept(this);
 		System.out.print("; ");
 		n.getCondition().accept(this);
-		System.out.println(")");
-		indent++;
+		System.out.print(") ");
+		indentBlock(n.getBody());
 		n.getBody().accept(this);
-		indent--;
+		outdentBlock(n.getBody());
 	}
 
 	/** {@inheritDoc} */
@@ -265,10 +277,10 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArg {
 		n.getVar().accept(this);
 		System.out.print("; ");
 		n.getCondition().accept(this);
-		System.out.println(")");
-		indent++;
+		System.out.print(") ");
+		indentBlock(n.getBody());
 		n.getBody().accept(this);
-		indent--;
+		outdentBlock(n.getBody());
 	}
 
 	/** {@inheritDoc} */
@@ -283,10 +295,10 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArg {
 		else System.out.print(";");
 		System.out.print(" ");
 		if (n.hasUpdate()) n.getUpdate().accept(this);
-		System.out.println(")");
-		indent++;
+		System.out.print(") ");
+		indentBlock(n.getBody());
 		n.getBody().accept(this);
-		indent--;
+		outdentBlock(n.getBody());
 	}
 
 	/** {@inheritDoc} */
@@ -297,10 +309,10 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArg {
 		n.getVar().accept(this);
 		System.out.print("; ");
 		n.getCondition().accept(this);
-		System.out.println(")");
-		indent++;
+		System.out.print(") ");
+		indentBlock(n.getBody());
 		n.getBody().accept(this);
-		indent--;
+		outdentBlock(n.getBody());
 	}
 
 	/** {@inheritDoc} */
@@ -309,17 +321,19 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArg {
 		indent();
 		System.out.print("if (");
 		n.getCondition().accept(this);
-		System.out.println(")");
-		indent++;
+		System.out.print(") ");
+		indentBlock(n.getBody());
 		n.getBody().accept(this);
 		if (n.hasElse()) {
-			indent--;
+			outdentBlock(n.getBody());
 			indent();
-			System.out.println("else");
-			indent++;
+			System.out.println("else ");
+			indentBlock(n.getElse());
 			n.getElse().accept(this);
+			outdentBlock(n.getElse());
+		} else {
+			outdentBlock(n.getBody());
 		}
-		indent--;
 	}
 
 	/** {@inheritDoc} */
@@ -355,7 +369,7 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArg {
 	public void visit(final SwitchCase n) {
 		indent();
 		if (n.isDefault())
-			System.out.println("default:");
+			System.out.print("default: ");
 		else {
 			boolean seen = false;
 			for (final Expression e : n.getCases()) {
@@ -363,11 +377,11 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArg {
 				else seen = true;
 				e.accept(this);
 			}
-			System.out.println(":");
+			System.out.print(": ");
 		}
-		indent++;
+		indentBlock(n.getBody());
 		n.getBody().accept(this);
-		indent--;
+		outdentBlock(n.getBody());
 	}
 
 	/** {@inheritDoc} */
@@ -382,6 +396,7 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArg {
 			sc.accept(this);
 		n.getDefault().accept(this);
 		indent--;
+		indent();
 		System.out.println("}");
 	}
 
@@ -431,10 +446,8 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArg {
 				id.accept(this);
 			}
 		}
-		System.out.println(" -> ");
-		indent++;
+		System.out.print(" -> ");
 		n.getBody().accept(this);
-		indent--;
 	}
 
 	/** {@inheritDoc} */
@@ -569,7 +582,7 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArg {
 			else seen = true;
 			c.accept(this);
 		}
-		System.out.print("}");
+		System.out.print(" }");
 	}
 
 	/** {@inheritDoc} */

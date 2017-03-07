@@ -31,6 +31,7 @@ import org.apache.hadoop.mapreduce.Mapper.Context;
 import com.google.protobuf.CodedInputStream;
 import com.google.protobuf.InvalidProtocolBufferException;
 
+import boa.datagen.DefaultProperties;
 import boa.types.Ast.*;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
@@ -209,9 +210,12 @@ public class BoaAstIntrinsics {
 		final Configuration conf = new Configuration();
 		try {
 			final FileSystem fs = FileSystem.get(conf);
-			final Path p = new Path("hdfs://boa-njt/",
+			Path p = new Path("hdfs://boa-njt/",
 								new Path(context.getConfiguration().get("boa.ast.dir", context.getConfiguration().get("boa.input.dir", "repcache/live")),
 								new Path("ast")));
+			if(DefaultProperties.localDataPath != null) {
+				p = new Path(DefaultProperties.localDataPath);
+			}
 			map = new MapFile.Reader(fs, p.toString(), conf);
 		} catch (final Exception e) {
 			e.printStackTrace();
@@ -222,9 +226,12 @@ public class BoaAstIntrinsics {
 		final Configuration conf = new Configuration();
 		try {
 			final FileSystem fs = FileSystem.get(conf);
-			final Path p = new Path("hdfs://boa-njt/",
+			Path p = new Path("hdfs://boa-njt/",
 								new Path(context.getConfiguration().get("boa.comments.dir", context.getConfiguration().get("boa.input.dir", "repcache/live")),
 								new Path("comments")));
+			if(DefaultProperties.localDataPath != null) {
+				p = new Path(DefaultProperties.localCommentPath);
+			}
 			commentsMap = new MapFile.Reader(fs, p.toString(), conf);
 		} catch (final Exception e) {
 			e.printStackTrace();
@@ -235,9 +242,12 @@ public class BoaAstIntrinsics {
 		final Configuration conf = new Configuration();
 		try {
 			final FileSystem fs = FileSystem.get(conf);
-			final Path p = new Path("hdfs://boa-njt/",
+			Path p = new Path("hdfs://boa-njt/",
 								new Path(context.getConfiguration().get("boa.issues.dir", context.getConfiguration().get("boa.input.dir", "repcache/live")),
 								new Path("issues")));
+			if(DefaultProperties.localDataPath != null) {
+				p = new Path(DefaultProperties.localIssuePath);
+			}
 			issuesMap = new MapFile.Reader(fs, p.toString(), conf);
 		} catch (final Exception e) {
 			e.printStackTrace();

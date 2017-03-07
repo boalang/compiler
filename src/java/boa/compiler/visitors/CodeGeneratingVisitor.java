@@ -41,12 +41,16 @@ import boa.types.*;
  * @author anthonyu
  * @author rdyer
  * @author ankuraga
+ * @author rramu
  */
 public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/**
 	 * 
 	 * @author anthonyu
 	 */
+	String identifier="";
+	String traversalNodeIdentifier="";
+
 	protected class AggregatorDescription {
 		protected String aggregator;
 		protected BoaType type;
@@ -144,6 +148,24 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		/** {@inheritDoc} */
 		@Override
 		public void visit(final VisitorExpression n) {
+			if (!nest) return;
+
+			nest = false;
+			super.visit(n);
+		}
+
+		/** {@inheritDoc} */
+		@Override
+		public void visit(final TraversalExpression n) {
+			if (!nest) return;
+
+			nest = false;
+			super.visit(n);
+		}
+
+		/** {@inheritDoc} */
+		@Override
+		public void visit(final FixPExpression n) {
 			if (!nest) return;
 
 			nest = false;
@@ -252,7 +274,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				} else {
 					fields.add("field" + fieldCount++);
 				}
-				types.add(c.getType().type.toJavaType());
+				types.add(c.getType().type.toBoxedJavaType());
 			}
 
 			st.add("name", tupType.toJavaType());
@@ -1406,6 +1428,89 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 	/** {@inheritDoc} */
 	@Override
+	public void visit(final FixPStatement n) {
+		final ST st = stg.getInstanceOf("FixPClause");
+
+		final BoaFunction funcType = ((BoaFunction) n.type);
+		final List<String> body = new ArrayList<String>();
+		String types = "";
+		Component c = n.getParam1();
+
+		n.env.set("___"+c.getIdentifier().getToken(), c.getType().type);
+		types = c.getType().type.toJavaType();
+		st.add("arg1", "___"+c.getIdentifier().getToken());
+		c = n.getParam2();
+
+		n.env.set("___"+c.getIdentifier().getToken(), c.getType().type);
+		types = c.getType().type.toJavaType();
+		st.add("arg2", "___"+c.getIdentifier().getToken());
+
+		if(n.hasBody()) {
+			if (n.getBody() instanceof Block) {
+				
+				for (final Node b : ((Block)n.getBody()).getStatements()) {
+					b.accept(this);
+					body.add(code.removeLast());
+				}
+			} else {
+				n.getBody().accept(this);
+				body.add(code.removeLast());
+			}
+		}
+
+		st.add("body", body);
+
+		st.add("type", types);
+		
+		code.add(st.render());
+	}
+	
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final TraverseStatement n) {
+		final ST st = stg.getInstanceOf("TraverseClause");
+
+		final BoaFunction funcType = ((BoaFunction) n.type);
+		final List<String> body = new ArrayList<String>();
+		String types = "";
+		traversalNodeIdentifier="";
+		if (n.hasWildcard()) {
+			st.add("name", "defaultPreTraverse");
+		} else if (n.hasComponent()) {
+			final Component c = n.getComponent();
+			traversalNodeIdentifier = "___"+c.getIdentifier().getToken();
+
+			n.env.set(traversalNodeIdentifier, c.getType().type);
+			types = c.getType().type.toJavaType();
+
+			st.add("name", "preTraverse");
+		}
+		int count=0;
+		if (!(funcType.getType() instanceof BoaAny))
+			st.add("ret", funcType.getType().toBoxedJavaType());
+
+		if(n.hasBody()) {
+			if (n.getBody() instanceof Block) {
+				for (final Node b : ((Block)n.getBody()).getStatements()) {
+					b.accept(this);
+					body.add(code.removeLast());
+				}
+			} else {
+				n.getBody().accept(this);
+				body.add(code.removeLast());
+			}
+		}
+
+		st.add("body", body);
+
+		st.add("args", traversalNodeIdentifier);
+		st.add("types", types);
+		
+		code.add(st.render());
+	}
+
+	/** {@inheritDoc} */
+	@Override
 	public void visit(final WhileStatement n) {
 		final ST st = stg.getInstanceOf("While");
 
@@ -1549,6 +1654,50 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		code.add(st.render());
 	}
 
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final TraversalExpression n) {
+		final ST st = stg.getInstanceOf("Traversal");
+
+		this.varDecl.start(n);
+		st.add("staticDeclarations", this.varDecl.getCode());
+
+		final List<String> body = new ArrayList<String>();
+		for (final Node node : n.getBody().getStatements()) {
+			if(node instanceof TraverseStatement) {
+				if (!(((BoaFunction) node.type).getType() instanceof BoaAny)) {
+					st.add("T", ((BoaFunction) node.type).getType().toBoxedJavaType());
+				}
+				else {
+					st.add("T", "Object");
+				}
+			}
+			node.accept(this);
+			body.add(code.removeLast());
+		}
+		st.add("body", body);
+
+		code.add(st.render());
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final FixPExpression n) {
+		final ST st = stg.getInstanceOf("FixP");
+
+		this.varDecl.start(n);
+		st.add("staticDeclarations", this.varDecl.getCode());
+
+		final List<String> body = new ArrayList<String>();
+		for (final Node node : n.getBody().getStatements()) {
+			node.accept(this);
+			body.add(code.removeLast());
+		}
+		st.add("body", body);
+
+		code.add(st.render());
+	}
+
 	//
 	// literals
 	//
@@ -1668,6 +1817,21 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 	/** {@inheritDoc} */
 	@Override
+	public void visit(final FixPType n) {
+		final BoaFunction funcType = ((BoaFunction) n.type);
+
+		final BoaType[] paramTypes = funcType.getFormalParameters();
+		final List<String> args = new ArrayList<String>();
+		final List<String> types = new ArrayList<String>();
+
+		for (int i = 0; i < paramTypes.length; i++) {
+			args.add(((BoaName) paramTypes[i]).getId());
+			types.add(paramTypes[i].toJavaType());
+		}
+	}
+
+	/** {@inheritDoc} */
+	@Override
 	public void visit(final MapType n) {
 		final ST st = stg.getInstanceOf("MapType");
 
@@ -1757,7 +1921,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			types.add(c.getType().type.toJavaType());
 		}
 
-		st.add("name", tupType.toJavaType());
+		st.add("name", tupType.toBoxedJavaType());
 		st.add("fields", fields);
 		st.add("types", types);
 

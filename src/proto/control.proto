@@ -18,9 +18,9 @@ message CFGNode {
 		CONTROL = 4; // evaluates predicate
 	}
 	required int32 id = 1;
-	required CFGNodeType type = 2;
+	required CFGNodeType kind = 2;
 	optional Statement statement = 3; // nodes are created for statements and their expressions as well
-  optional Expression expression = 4; // optional because these fields will not be stored.
+  	optional Expression expression = 4; // optional because these fields will not be stored.
 }
 
 message CFGEdge {
