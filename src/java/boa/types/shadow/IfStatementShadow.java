@@ -56,21 +56,36 @@ public class IfStatementShadow extends BoaShadowType  {
 	}
 
 	public Node lookupCodegen(final String name, final SymbolTable env) {
+		final Identifier id = ASTFactory.createIdentifier("${0}", env);
+		id.type = new StatementProtoTuple();
+
 		if ("condition".equals(name)) {
 			// ${0}.expression
 			final Selector s = new Selector(ASTFactory.createIdentifier("expression", env));
-			final Identifier id = ASTFactory.createIdentifier("${0}", env);
 			final Factor f = new Factor(id).addOp(s);
 			final Expression tree = ASTFactory.createFactorExpr(f);
+
 			s.env = f.env = env;
-			id.type = new StatementProtoTuple();
+
 			s.type = f.type = tree.type = new ExpressionProtoTuple();
+
 			return tree;
 		}
 
 		if ("true_branch".equals(name)) {
 			// ${0}.statements[0]
-			// TODO
+			final Selector s = new Selector(ASTFactory.createIdentifier("statements", env));
+			final Index idx = new Index(ASTFactory.createFactorExpr(new IntegerLiteral("0")));
+			final Factor f = new Factor(id).addOp(s).addOp(idx);
+			final Expression tree = ASTFactory.createFactorExpr(f);
+
+			s.env = f.env = idx.env = env;
+
+			idx.getStart().type = new BoaInt();
+			s.type = new BoaProtoList(new StatementProtoTuple());
+			f.type = tree.type = new StatementProtoTuple();
+
+			return tree;
 		}
 
 		if ("false_branch".equals(name)) {
