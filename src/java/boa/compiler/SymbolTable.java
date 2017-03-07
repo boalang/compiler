@@ -25,23 +25,12 @@ import java.util.Map.Entry;
 import org.scannotation.AnnotationDB;
 
 import boa.aggregators.AggregatorSpec;
+import boa.compiler.ast.Operand;
 import boa.functions.FunctionSpec;
 import boa.types.*;
 import boa.types.proto.*;
 import boa.types.proto.enums.*;
-
-import boa.compiler.ast.Conjunction;
-import boa.compiler.ast.Comparison;
-import boa.compiler.ast.expressions.Expression;
-import boa.compiler.ast.expressions.SimpleExpr;
-import boa.compiler.ast.Factor;
-import boa.compiler.ast.Identifier;
-import boa.compiler.ast.Index;
-import boa.compiler.ast.literals.IntegerLiteral;
-import boa.compiler.ast.Operand;
-import boa.compiler.ast.Selector;
-import boa.compiler.ast.Term;
-import boa.compiler.transforms.ASTFactory;
+import boa.types.shadow.*;
 
 /**
  * @author anthonyu
@@ -153,32 +142,7 @@ public class SymbolTable {
 			idmap.put(t.toString(), t);
 
 		// TODO add shadow types
-		BoaShadowType shadow = new BoaShadowType();
-		shadow.addShadow("condition", new ExpressionProtoTuple(),
-			new Expression(
-				new Conjunction(
-					new Comparison(
-						new SimpleExpr(
-							new Term(
-								new Factor(
-									new Identifier("${0}")
-								).addOp(
-									new Selector(new Identifier("expressions"))
-								).addOp(
-									new Index(ASTFactory.createFactorExpr(new IntegerLiteral("0")))
-								)
-							)
-						)
-					)
-				)
-			));
-		//shadow.addShadow("true_branch", new StatementProtoTuple(), "${0}.statements[0]");
-		//shadow.addShadow("false_branch", new StatementProtoTuple(), "(len(${0}.statements) > 1 ? null : ${0}.statements[1])");
-		idmap.put("IfStatement", shadow);
-
-		//shadow = new BoaShadowType();
-		//shadow.addShadow("body", new StatementProtoTuple(), "s.statements[0]");
-		//idmap.put("ForStatement", shadow);
+		idmap.put("IfStatement", new IfStatementShadow());
 
 		globalFunctions = new FunctionTrie();
 

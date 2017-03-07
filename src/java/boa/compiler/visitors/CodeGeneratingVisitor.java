@@ -924,7 +924,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				return;
 			}
 			
-			throw new RuntimeException("unimplemented");
+			throw new RuntimeException("unimplemented operand type: " + opType.getClass());
 		} catch (final TypeCheckException e) {
 			throw new RuntimeException("unimplemented");
 		}

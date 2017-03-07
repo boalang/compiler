@@ -17,11 +17,8 @@
  */
 package boa.types;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import boa.compiler.ast.Node;
-import boa.types.proto.StatementProtoTuple;
+import boa.compiler.SymbolTable;
 
 /**
  * A shadow type.
@@ -29,26 +26,22 @@ import boa.types.proto.StatementProtoTuple;
  * @author rdyer
  * @author kaushin
  */
-public class BoaShadowType extends BoaTuple {
-	private final Map<String, Node> codegen = new HashMap<String, Node>();
+public abstract class BoaShadowType extends BoaTuple {
 	public String getDeclarationIdentifierEraser;
 	public BoaTuple getDeclarationSymbolTableEraser;
 
 	/**
 	 * Construct a {@link BoaShadowType}.
 	 */
-	public BoaShadowType() {
-		getDeclarationIdentifierEraser = "Statement";
-		getDeclarationSymbolTableEraser = new StatementProtoTuple();
+	public BoaShadowType(final String id, final BoaTuple t) {
+		this.getDeclarationIdentifierEraser = id;
+		this.getDeclarationSymbolTableEraser = t;
 	}
 
-	public void addShadow(final String name, final BoaType t, final Node codegen) {
+	protected void addShadow(final String name, final BoaType t) {
 		names.put(name, members.size());
 		members.add(t);
-		this.codegen.put(name, codegen);
 	}
 
-	public Node lookupCodegen(final String name) {
-		return codegen.get(name);
-	}
+	public abstract Node lookupCodegen(final String name, final SymbolTable env);
 }

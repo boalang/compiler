@@ -67,15 +67,7 @@ public class ASTFactory {
 		final Factor f = new Factor(ASTFactory.createIdentifier(name, env));
 		f.env = env;
 
-		final Expression exp = new Expression(
-			new Conjunction(
-				new Comparison(
-					new SimpleExpr(
-						new Term(f)
-					)
-				)
-			)
-		);
+		final Expression exp = ASTFactory.createFactorExpr(f);
 		exp.type = t;
 		return exp;
 	}
@@ -94,13 +86,15 @@ public class ASTFactory {
 	}
 
 	public static Expression createFactorExpr(final Operand op) {
+		return ASTFactory.createFactorExpr(new Factor(op));
+	}
+
+	public static Expression createFactorExpr(final Factor f) {
 		return new Expression(
 			new Conjunction(
 				new Comparison(
 					new SimpleExpr(
-						new Term(
-							new Factor(op)
-						)
+						new Term(f)
 					)
 				)
 			)

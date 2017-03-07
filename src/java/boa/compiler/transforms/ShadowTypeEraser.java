@@ -99,7 +99,7 @@ public class ShadowTypeEraser extends AbstractVisitorNoArg {
 			Identifier id = (Identifier)test.getOperand();
 			System.out.println(id.getToken());
 			BoaShadowType typeUsed = (BoaShadowType)env.get(id.getToken());	
-			Expression replacement = (Expression)typeUsed.lookupCodegen(n.getId().getToken()).clone();
+			Expression replacement = (Expression)typeUsed.lookupCodegen(n.getId().getToken(), parentExp.env).clone();
 
 			//working through to all identifiers to replace required identitiers!!
 			Replace rep = new Replace();
