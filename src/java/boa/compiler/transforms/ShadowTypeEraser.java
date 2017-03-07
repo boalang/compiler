@@ -51,31 +51,6 @@ public class ShadowTypeEraser extends AbstractVisitorNoArg {
 	private SymbolTable env;
 	private LinkedList<Expression> expressionStack = new LinkedList<Expression>();
 
-	// Class to help walkthrough replacement sub-trees to make nessasary changes
-	private class Replace extends AbstractVisitorNoArg{
-		
-		protected String CallingVariableName ;
-	
-		protected void initialize() { 
-		}
-
-		public void start(final Node n, String CallingVariableName) {
-			initialize();
-			this.CallingVariableName = CallingVariableName;
-			n.accept(this);
-		}
-
-		public void visit(final Identifier n) {
-			super.visit(n);
-		
-			System.out.println("---->"+n.getToken() + " string: " + CallingVariableName);
-			if(n.getToken().equals("${0}")){
-				System.out.println("----->"+n.getToken() + " string: " + CallingVariableName);
-				n.setToken(CallingVariableName);		
-			}	
-		}
-	}
-
 	// Populating Stack of expressions for later use
 	public void visit(final Expression n) {
 		expressionStack.push(n);
@@ -99,11 +74,7 @@ public class ShadowTypeEraser extends AbstractVisitorNoArg {
 			Identifier id = (Identifier)test.getOperand();
 			System.out.println(id.getToken());
 			BoaShadowType typeUsed = (BoaShadowType)env.get(id.getToken());	
-			Expression replacement = (Expression)typeUsed.lookupCodegen(n.getId().getToken(), parentExp.env).clone();
-
-			//working through to all identifiers to replace required identitiers!!
-			Replace rep = new Replace();
-			rep.start(replacement,id.getToken());
+			Expression replacement = (Expression)typeUsed.lookupCodegen(n.getId().getToken(), id.getToken(), parentExp.env).clone();
 
 			//use replaceStatement or the like of expression node
 			parentExp.replaceExpression(parentExp,replacement);

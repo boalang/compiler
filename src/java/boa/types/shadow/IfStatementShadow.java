@@ -55,8 +55,8 @@ public class IfStatementShadow extends BoaShadowType  {
 		addShadow("false_branch", new StatementProtoTuple());
 	}
 
-	public Node lookupCodegen(final String name, final SymbolTable env) {
-		final Identifier id = ASTFactory.createIdentifier("${0}", env);
+	public Node lookupCodegen(final String name, final String nodeId, final SymbolTable env) {
+		final Identifier id = ASTFactory.createIdentifier(nodeId, env);
 		id.type = new StatementProtoTuple();
 
 		if ("condition".equals(name)) {

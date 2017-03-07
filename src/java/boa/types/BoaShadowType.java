@@ -43,5 +43,5 @@ public abstract class BoaShadowType extends BoaTuple {
 		members.add(t);
 	}
 
-	public abstract Node lookupCodegen(final String name, final SymbolTable env);
+	public abstract Node lookupCodegen(final String name, final String nodeId, final SymbolTable env);
 }
