@@ -21,11 +21,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import boa.compiler.ast.Node;
-
-<<<<<<< HEAD
 import boa.types.proto.StatementProtoTuple;
-=======
->>>>>>> 22d7f39eb27357274d0889753803d8c387a59f31
+
 /**
  * A shadow type.
  * 
@@ -34,12 +31,9 @@ import boa.types.proto.StatementProtoTuple;
  */
 public class BoaShadowType extends BoaTuple {
 	private final Map<String, Node> codegen = new HashMap<String, Node>();
-<<<<<<< HEAD
 	public String getDeclarationIdentifierEraser;
 	public BoaTuple getDeclarationSymbolTableEraser;
-=======
 
->>>>>>> 22d7f39eb27357274d0889753803d8c387a59f31
 	/**
 	 * Construct a {@link BoaShadowType}.
 	 */
@@ -57,8 +51,4 @@ public class BoaShadowType extends BoaTuple {
 	public Node lookupCodegen(final String name) {
 		return codegen.get(name);
 	}
-<<<<<<< HEAD
-	
-=======
->>>>>>> 22d7f39eb27357274d0889753803d8c387a59f31
 }

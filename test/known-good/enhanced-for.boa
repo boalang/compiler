@@ -16,7 +16,7 @@ enhanced_for := visitor {
 	}
 	before node: Revision -> commit_date = node.commit_date;
 	before node: Statement ->
-		if (node.kind == StatementKind.IF && def(node.variable_declaration))
+		if (node.kind == StatementKind.FOR && def(node.variable_declaration))
 			USES[project_url][file_name][commit_date] << 1;
 };
 

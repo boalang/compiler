@@ -41,11 +41,6 @@ import boa.compiler.ast.literals.IntegerLiteral;
 import boa.compiler.ast.Operand;
 import boa.compiler.ast.Selector;
 import boa.compiler.ast.Term;
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 22d7f39eb27357274d0889753803d8c387a59f31
 
 /**
  * @author anthonyu
@@ -190,32 +185,6 @@ public class SymbolTable {
 		//shadow = new BoaShadowType();
 		//shadow.addShadow("body", new StatementProtoTuple(), "s.statements[0]");
 		//idmap.put("ForStatement", shadow);
-<<<<<<< HEAD
-
-		shadow = new BoaShadowType();
-			shadow.addShadow("body", new ExpressionProtoTuple(),
-			new Factor(
-				new Identifier("${0}")
-			).addOp(
-				new Selector(new Identifier("expressions"))
-			).addOp(
-				new Index(
-					new Expression(
-						new Conjunction(
-							new Comparison(
-								new SimpleExpr(
-									new Term(
-										new Factor(new IntegerLiteral("0"))
-									)
-								)
-							)
-						)
-					)
-				)
-			));
-		idmap.put("ForStatement", shadow);
-=======
->>>>>>> 22d7f39eb27357274d0889753803d8c387a59f31
 
 		globalFunctions = new FunctionTrie();
 
