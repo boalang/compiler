@@ -28,6 +28,7 @@ import boa.compiler.visitors.AbstractVisitorNoArg;
 import boa.compiler.visitors.AbstractVisitorNoReturn;
 import boa.compiler.ast.types.AbstractType;
 
+import boa.compiler.ast.Node;
 /**
  * 
  * @author rramu
@@ -148,6 +149,17 @@ public class FixPStatement extends Statement {
 	public void accept(AbstractVisitorNoArg v) {
 		v.visit(this);
 	}
+
+	@Override
+	public void replaceExpression(final Node oldExp,final Node newExp) {
+		if(oldExp == condition){
+			newExp.setParent(this);
+			condition = (Expression)newExp;
+			System.out.println("TEST");
+		}
+		
+	}
+
 
 	public FixPStatement clone() {
 		final FixPStatement v = new FixPStatement();

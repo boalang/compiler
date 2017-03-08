@@ -83,6 +83,23 @@ public class Index extends Node {
 		v.visit(this);
 	}
 
+	@Override
+	public void replaceExpression(final Node oldExp,final Node newExp) {
+		
+		
+		if(oldExp == start){
+			newExp.setParent(this);
+			start =  (Expression)newExp;
+			System.out.println("TEST");
+		} else if (oldExp == end){
+			newExp.setParent(this);
+			end =  (Expression)newExp;
+			System.out.println("TEST");
+
+		}
+		
+	}
+
 	public Index clone() {
 		final Index i;
 		if (hasEnd())

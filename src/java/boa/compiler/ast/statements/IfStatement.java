@@ -107,6 +107,16 @@ public class IfStatement extends Statement {
 		v.visit(this);
 	}
 
+	@Override
+	public void replaceExpression(final Node oldExp,final Node newExp) {
+		if(oldExp == condition){
+			newExp.setParent(this);
+			condition = (Expression)newExp;
+			System.out.println("TEST");
+		}
+		
+	}
+
 	public IfStatement clone() {
 		final IfStatement s;
 		if (hasElse())

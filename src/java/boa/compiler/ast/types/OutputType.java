@@ -26,6 +26,7 @@ import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
 import boa.compiler.visitors.AbstractVisitorNoReturn;
 
+import boa.compiler.ast.Node;
 /**
  * 
  * @author rdyer
@@ -147,6 +148,18 @@ public class OutputType extends AbstractType {
 	@Override
 	public void accept(final AbstractVisitorNoArg v) {
 		v.visit(this);
+	}
+
+		@Override
+	public void replaceExpression(final Node oldExp,final Node newExp) {
+		
+		for (int i = 0; i < args.size(); i++) {
+			if(oldExp == args.get(i)){
+				newExp.setParent(this);
+				args.set(i, (Expression)newExp);
+				System.out.println("TEST");
+			}
+		}
 	}
 
 	public OutputType clone() {

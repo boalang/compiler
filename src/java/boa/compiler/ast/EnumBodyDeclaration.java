@@ -69,6 +69,17 @@ public class EnumBodyDeclaration extends AbstractType {
 		v.visit(this);
 	}
 
+	@Override
+	public void replaceExpression(final Node oldExp,final Node newExp) {
+		
+			if(oldExp == exp){
+				newExp.setParent(this);
+				exp =  (Expression)newExp;
+				System.out.println("TEST");
+			}
+		
+	}
+
 	public EnumBodyDeclaration clone() {
 		final EnumBodyDeclaration c = new EnumBodyDeclaration(id.clone(), exp.clone());
 		copyFieldsTo(c);

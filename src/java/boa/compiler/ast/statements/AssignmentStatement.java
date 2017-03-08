@@ -22,6 +22,7 @@ import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArg;
 import boa.compiler.visitors.AbstractVisitorNoReturn;
 
+import boa.compiler.ast.Node;
 /**
  * 
  * @author rdyer
@@ -66,6 +67,15 @@ public class AssignmentStatement extends Statement {
 		v.visit(this);
 	}
 
+	@Override
+	public void replaceExpression(final Node oldExp,final Node newExp) {
+		if(oldExp == rhs){
+			newExp.setParent(this);
+			rhs = (Expression)newExp;
+			System.out.println("TEST");
+		}
+		
+	}
 	public AssignmentStatement clone() {
 		final AssignmentStatement s = new AssignmentStatement(lhs.clone(), rhs.clone());
 		copyFieldsTo(s);

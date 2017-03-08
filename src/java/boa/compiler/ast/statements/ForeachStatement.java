@@ -84,6 +84,16 @@ public class ForeachStatement extends Statement {
 		v.visit(this);
 	}
 
+	@Override
+	public void replaceExpression(final Node oldExp,final Node newExp) {
+		if(oldExp == condition){
+			newExp.setParent(this);
+			condition = (Expression)newExp;
+			System.out.println("TEST");
+		}
+		
+	}
+
 	public ForeachStatement clone() {
 		final ForeachStatement s = new ForeachStatement(var.clone(), condition.clone(), body.clone());
 		copyFieldsTo(s);

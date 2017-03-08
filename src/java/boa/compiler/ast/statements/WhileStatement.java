@@ -70,6 +70,16 @@ public class WhileStatement extends Statement {
 		v.visit(this);
 	}
 
+	@Override
+	public void replaceExpression(final Node oldExp,final Node newExp) {
+		if(oldExp == condition){
+			newExp.setParent(this);
+			condition = (Expression)newExp;
+			System.out.println("TEST");
+		}
+		
+	}
+	
 	public WhileStatement clone() {
 		final WhileStatement s = new WhileStatement(condition.clone(), body.clone());
 		copyFieldsTo(s);
