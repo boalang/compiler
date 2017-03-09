@@ -68,10 +68,10 @@ public class AssignmentStatement extends Statement {
 	}
 
 	@Override
-	public void replaceExpression(final Node oldExp, final Node newExp) {
+	public void replaceExpression(final Expression oldExp, final Expression newExp) {
 		if (oldExp == rhs) {
 			newExp.setParent(this);
-			rhs = (Expression)newExp;
+			rhs = newExp;
 		}
 	}
 

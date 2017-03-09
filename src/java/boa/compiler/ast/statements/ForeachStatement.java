@@ -85,10 +85,10 @@ public class ForeachStatement extends Statement {
 	}
 
 	@Override
-	public void replaceExpression(final Node oldExp, final Node newExp) {
+	public void replaceExpression(final Expression oldExp, final Expression newExp) {
 		if (oldExp == condition) {
 			newExp.setParent(this);
-			condition = (Expression)newExp;
+			condition = newExp;
 		}
 	}
 

@@ -17,6 +17,7 @@
 package boa.compiler.ast;
 
 import boa.compiler.SymbolTable;
+import boa.compiler.ast.expressions.Expression;
 import boa.compiler.ast.statements.Statement;
 import boa.compiler.ast.statements.Block;
 import boa.compiler.visitors.AbstractVisitor;
@@ -95,7 +96,7 @@ public abstract class Node {
 		parent.replaceStatement(oldStmt, newStmt);
 	}
 
-	public void replaceExpression(final Node oldExp,final Node newExp) {
+	public void replaceExpression(final Expression oldExp, final Expression newExp) {
 		parent.replaceExpression(oldExp, newExp);
 	}
 }

@@ -95,11 +95,11 @@ public class SwitchCase extends Statement {
 	}
 
 	@Override
-	public void replaceExpression(final Node oldExp, final Node newExp) {
+	public void replaceExpression(final Expression oldExp, final Expression newExp) {
 		for (int i = 0; i < cases.size(); i++) {
 			if (oldExp == cases.get(i)) {
 				newExp.setParent(this);
-				cases.set(i, (Expression)newExp);
+				cases.set(i, newExp);
 			}
 		}
 	}

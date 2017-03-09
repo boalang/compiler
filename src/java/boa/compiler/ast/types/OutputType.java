@@ -151,11 +151,11 @@ public class OutputType extends AbstractType {
 	}
 
 		@Override
-	public void replaceExpression(final Node oldExp, final Node newExp) {
+	public void replaceExpression(final Expression oldExp, final Expression newExp) {
 		for (int i = 0; i < args.size(); i++) {
 			if (oldExp == args.get(i)) {
 				newExp.setParent(this);
-				args.set(i, (Expression)newExp);
+				args.set(i, newExp);
 			}
 		}
 	}

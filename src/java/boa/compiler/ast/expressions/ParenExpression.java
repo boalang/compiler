@@ -59,10 +59,10 @@ public class ParenExpression extends Operand {
 	}
 
 	@Override
-	public void replaceExpression(final Node oldExp, final Node newExp) {
+	public void replaceExpression(final Expression oldExp, final Expression newExp) {
 		if (oldExp == e) {
 			newExp.setParent(this);
-			e = (Expression)newExp;
+			e = newExp;
 		}
 	}
 

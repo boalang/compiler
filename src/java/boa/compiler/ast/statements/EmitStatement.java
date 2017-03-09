@@ -119,21 +119,21 @@ public class EmitStatement extends Statement {
 	}
 
 	@Override
-	public void replaceExpression(final Node oldExp, final Node newExp) {
+	public void replaceExpression(final Expression oldExp, final Expression newExp) {
 		if (oldExp == value) {
 			newExp.setParent(this);
-			value = (Expression)newExp;
+			value = newExp;
 		}
 
 		if (oldExp == weight) {
 			newExp.setParent(this);
-			weight = (Expression)newExp;
+			weight = newExp;
 		}
 
 		for (int i = 0; i < indices.size(); i++) {
 			if (oldExp == indices.get(i)) {
 				newExp.setParent(this);
-				indices.set(i, (Expression)newExp);
+				indices.set(i, newExp);
 			}
 		}
 	}

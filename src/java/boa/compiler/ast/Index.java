@@ -84,13 +84,13 @@ public class Index extends Node {
 	}
 
 	@Override
-	public void replaceExpression(final Node oldExp, final Node newExp) {
+	public void replaceExpression(final Expression oldExp, final Expression newExp) {
 		if (oldExp == start) {
 			newExp.setParent(this);
-			start = (Expression)newExp;
+			start = newExp;
 		} else if (oldExp == end) {
 			newExp.setParent(this);
-			end = (Expression)newExp;
+			end = newExp;
 		}
 	}
 

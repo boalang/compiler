@@ -133,10 +133,10 @@ public class VarDeclStatement extends Statement {
 	}
 
 	@Override
-	public void replaceExpression(final Node oldExp, final Node newExp) {
+	public void replaceExpression(final Expression oldExp, final Expression newExp) {
 		if (oldExp == initializer) {
 			newExp.setParent(this);
-			initializer = (Expression)newExp;
+			initializer = newExp;
 		}
 	}
 
