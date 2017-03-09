@@ -111,17 +111,14 @@ public class Composite extends Operand {
 	}
 
 	@Override
-	public void replaceExpression(final Node oldExp,final Node newExp) {
-		
+	public void replaceExpression(final Node oldExp, final Node newExp) {
 		for (int i = 0; i < exprs.size(); i++) {
-			if(oldExp == exprs.get(i)){
+			if (oldExp == exprs.get(i)) {
 				newExp.setParent(this);
 				exprs.set(i, (Expression)newExp);
-				System.out.println("TEST");
 			}
 		}
 	}
-	
 
 	public Composite clone() {
 		final Composite c = new Composite(empty);

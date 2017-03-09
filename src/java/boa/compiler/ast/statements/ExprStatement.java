@@ -59,13 +59,11 @@ public class ExprStatement extends Statement {
 	}
 
 	@Override
-	public void replaceExpression(final Node oldExp,final Node newExp) {
-		if(oldExp == e){
+	public void replaceExpression(final Node oldExp, final Node newExp) {
+		if (oldExp == e) {
 			newExp.setParent(this);
 			e = (Expression)newExp;
-			System.out.println("TEST");
 		}
-		
 	}
 
 	public ExprStatement clone() {

@@ -68,14 +68,13 @@ public class AssignmentStatement extends Statement {
 	}
 
 	@Override
-	public void replaceExpression(final Node oldExp,final Node newExp) {
-		if(oldExp == rhs){
+	public void replaceExpression(final Node oldExp, final Node newExp) {
+		if (oldExp == rhs) {
 			newExp.setParent(this);
 			rhs = (Expression)newExp;
-			System.out.println("TEST");
 		}
-		
 	}
+
 	public AssignmentStatement clone() {
 		final AssignmentStatement s = new AssignmentStatement(lhs.clone(), rhs.clone());
 		copyFieldsTo(s);

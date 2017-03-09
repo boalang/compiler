@@ -84,20 +84,14 @@ public class Index extends Node {
 	}
 
 	@Override
-	public void replaceExpression(final Node oldExp,final Node newExp) {
-		
-		
-		if(oldExp == start){
+	public void replaceExpression(final Node oldExp, final Node newExp) {
+		if (oldExp == start) {
 			newExp.setParent(this);
-			start =  (Expression)newExp;
-			System.out.println("TEST");
-		} else if (oldExp == end){
+			start = (Expression)newExp;
+		} else if (oldExp == end) {
 			newExp.setParent(this);
-			end =  (Expression)newExp;
-			System.out.println("TEST");
-
+			end = (Expression)newExp;
 		}
-		
 	}
 
 	public Index clone() {

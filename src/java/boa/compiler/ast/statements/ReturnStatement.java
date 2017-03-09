@@ -72,13 +72,11 @@ public class ReturnStatement extends Statement {
 	}
 
 	@Override
-	public void replaceExpression(final Node oldExp,final Node newExp) {
-		if(oldExp == expr){
+	public void replaceExpression(final Node oldExp, final Node newExp) {
+		if (oldExp == expr) {
 			newExp.setParent(this);
 			expr = (Expression)newExp;
-			System.out.println("TEST");
 		}
-		
 	}
 
 	public ReturnStatement clone() {

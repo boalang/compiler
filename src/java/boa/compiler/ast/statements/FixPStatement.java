@@ -151,15 +151,12 @@ public class FixPStatement extends Statement {
 	}
 
 	@Override
-	public void replaceExpression(final Node oldExp,final Node newExp) {
-		if(oldExp == condition){
+	public void replaceExpression(final Node oldExp, final Node newExp) {
+		if (oldExp == condition) {
 			newExp.setParent(this);
 			condition = (Expression)newExp;
-			System.out.println("TEST");
 		}
-		
 	}
-
 
 	public FixPStatement clone() {
 		final FixPStatement v = new FixPStatement();

@@ -70,14 +70,11 @@ public class EnumBodyDeclaration extends AbstractType {
 	}
 
 	@Override
-	public void replaceExpression(final Node oldExp,final Node newExp) {
-		
-			if(oldExp == exp){
-				newExp.setParent(this);
-				exp =  (Expression)newExp;
-				System.out.println("TEST");
-			}
-		
+	public void replaceExpression(final Node oldExp, final Node newExp) {
+		if (oldExp == exp) {
+			newExp.setParent(this);
+			exp = (Expression)newExp;
+		}
 	}
 
 	public EnumBodyDeclaration clone() {

@@ -66,9 +66,6 @@ public class FixPExpression extends Operand {
 		v.visit(this);
 	}
 
-	
-
-
 	public FixPExpression clone() {
 		final FixPExpression e = new FixPExpression(t.clone(), body.clone());
 		copyFieldsTo(e);
