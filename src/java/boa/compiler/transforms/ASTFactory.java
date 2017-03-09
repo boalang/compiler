@@ -72,7 +72,7 @@ public class ASTFactory {
 		return exp;
 	}
 
-	public static ExprStatement createCall(final String name, final SymbolTable env, final BoaType retType, final Expression... args) {
+	public static Expression createCallExpr(final String name, final SymbolTable env, final BoaType retType, final Expression... args) {
 		final Expression exp = ASTFactory.createIdentifierExpr(name, env, retType);
 
 		final Call c = new Call();
@@ -82,7 +82,11 @@ public class ASTFactory {
 
 		exp.getLhs().getLhs().getLhs().getLhs().getLhs().addOp(c);
 
-		return new ExprStatement(exp);
+		return exp;
+	}
+
+	public static ExprStatement createCall(final String name, final SymbolTable env, final BoaType retType, final Expression... args) {
+		return new ExprStatement(ASTFactory.createCallExpr(name, env, retType, args));
 	}
 
 	public static Expression createFactorExpr(final Operand op) {

@@ -17,8 +17,9 @@
  */
 package boa.types.shadow;
 
-import boa.compiler.ast.Conjunction;
+import boa.compiler.ast.Call;
 import boa.compiler.ast.Comparison;
+import boa.compiler.ast.Conjunction;
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.ast.expressions.SimpleExpr;
 import boa.compiler.ast.Factor;
@@ -90,7 +91,16 @@ public class IfStatementShadow extends BoaShadowType  {
 
 		if ("false_branch".equals(name)) {
 			// (len(${0}.statements) > 1 ? null : ${0}.statements[1])
-			// TODO
+			final Selector s = new Selector(ASTFactory.createIdentifier("statements", env));
+			final Factor f = new Factor(id).addOp(s);
+			final Expression tree = ASTFactory.createFactorExpr(f);
+			final Expression c = ASTFactory.createCallExpr("trinary", env, new StatementProtoTuple(), tree);
+
+			s.env = f.env = env;
+
+			s.type = f.type = tree.type = new BoaProtoList(new StatementProtoTuple());
+
+			return c;
 		}
 
 		throw new RuntimeException("invalid shadow field: " + name);
