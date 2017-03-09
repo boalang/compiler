@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ "$#" -eq 0 ]; then
-	echo "Usage: $0 file.boa [options]"
+	echo "Usage: $0 path/to/input.boa output-dir/ [options]"
 fi
 
 BASEDIR=$(dirname "$0")
