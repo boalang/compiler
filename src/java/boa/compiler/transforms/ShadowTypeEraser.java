@@ -44,12 +44,21 @@ import boa.types.proto.StatementProtoTuple;
  */
 public class ShadowTypeEraser extends AbstractVisitorNoArg {
 	private LinkedList<Expression> expressionStack = new LinkedList<Expression>();
+	private boolean flag = false;
+	private List<Node> ops = null;
 
 	// track nearest Expression node
 	public void visit(final Expression n) {
 		expressionStack.push(n);
 		super.visit(n);
 		expressionStack.pop();
+	}
+
+	@Override
+	public void visit(final Factor n) {
+		flag = false;
+		ops = n.getOps();
+		super.visit(n);
 	}
 
 	// replacing shadow type selectors
@@ -59,7 +68,9 @@ public class ShadowTypeEraser extends AbstractVisitorNoArg {
 
 		final Factor fact = (Factor)n.getParent();
 
-		if (fact.getOperand().type instanceof BoaShadowType) {
+		if (!flag && fact.getOperand().type instanceof BoaShadowType) {
+			// avoid replacing past the first selector
+			flag = true;
 			final Expression parentExp = expressionStack.peek();
 
 			// get shadow type used
@@ -67,10 +78,20 @@ public class ShadowTypeEraser extends AbstractVisitorNoArg {
 			final BoaShadowType shadow = (BoaShadowType)fact.getOperand().type;
 
 			// replace the selector
-			// TODO I dont think this works for the cases like "ifstmt.true_branch.statements[0]"
-			// i.e., anything where the selector is part of a more complex Factor with more ops after the selector
 			final Expression replacement = (Expression)shadow.lookupCodegen(n.getId().getToken(), id.getToken(), parentExp.env);
-			parentExp.replaceExpression(parentExp, replacement);
+			final ParenExpression paren = new ParenExpression(replacement);
+			final Factor newFact = new Factor(paren);
+			final Expression newExp = ASTFactory.createFactorExpr(newFact);
+
+			if (ops != null)
+				for (int i = 1; i < ops.size(); i++)
+					newFact.addOp(ops.get(i));
+
+			newFact.env = parentExp.env;
+			paren.type = replacement.type;
+			newExp.type = paren.type;
+
+			parentExp.replaceExpression(parentExp, newExp);
 		}
 	}
 
