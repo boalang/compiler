@@ -34,6 +34,6 @@ public class TestShadowBad extends BaseTest {
 
 	@Test
 	public void wrongField() throws IOException {
-		typecheck(load(badDir + "wrong-field.boa"), "'tuple [Expression, Statement, Statement]' has no member named 'statements'");
+		typecheck(load(badDir + "wrong-field.boa"), "'IfStatement' has no member named 'statements'");
 	}
 }

@@ -105,4 +105,10 @@ public class IfStatementShadow extends BoaShadowType  {
 
 		throw new RuntimeException("invalid shadow field: " + name);
 	}
+
+	/** {@inheritDoc} */
+	@Override
+	public String toString() {
+		return "IfStatement";
+	}
 }
