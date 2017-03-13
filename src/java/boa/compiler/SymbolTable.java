@@ -278,7 +278,6 @@ public class SymbolTable {
 
 		// self casts
 		globalFunctions.addFunction("bool", new BoaFunction(new BoaBool(), new BoaType[] { new BoaBool() }, "${0}"));
-		globalFunctions.addFunction("int", new BoaFunction(new BoaInt(), new BoaType[] { new BoaInt() }, "(long)${0}"));
 		globalFunctions.addFunction("float", new BoaFunction(new BoaFloat(), new BoaType[] { new BoaFloat() }, "${0}"));
 		globalFunctions.addFunction("time", new BoaFunction(new BoaTime(), new BoaType[] { new BoaTime() }, "${0}"));
 		globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { new BoaString() }, "${0}"));
