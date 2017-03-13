@@ -49,7 +49,7 @@ public class IfStatementShadow extends BoaShadowType  {
 	 * Construct a {@link IfStatementShadow}.
 	 */
 	public IfStatementShadow() {
-		super("Statement", new StatementProtoTuple());
+		super(new StatementProtoTuple());
 
 		addShadow("condition", new ExpressionProtoTuple());
 		addShadow("true_branch", new StatementProtoTuple());

@@ -27,15 +27,17 @@ import boa.compiler.SymbolTable;
  * @author kaushin
  */
 public abstract class BoaShadowType extends BoaTuple {
-	public String getDeclarationIdentifierEraser;
-	public BoaTuple getDeclarationSymbolTableEraser;
+	public BoaProtoTuple shadowedType;
 
 	/**
 	 * Construct a {@link BoaShadowType}.
 	 */
-	public BoaShadowType(final String id, final BoaTuple t) {
-		this.getDeclarationIdentifierEraser = id;
-		this.getDeclarationSymbolTableEraser = t;
+	public BoaShadowType(final BoaProtoTuple t) {
+		this.shadowedType = t;
+	}
+
+	public String shadowedName() {
+		return shadowedType.toString();
 	}
 
 	protected void addShadow(final String name, final BoaType t) {

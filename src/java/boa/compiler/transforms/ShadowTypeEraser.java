@@ -105,10 +105,10 @@ public class ShadowTypeEraser extends AbstractVisitorNoArg {
 
 			// change the identifier
 			final Identifier id = (Identifier)n.getType();
-			id.setToken(shadow.getDeclarationIdentifierEraser);
+			id.setToken(shadow.shadowedName());
 
 			// update types
-			n.type = n.getType().type = shadow.getDeclarationSymbolTableEraser;
+			n.type = n.getType().type = shadow.shadowedType;
 			n.env.set(n.getIdentifier().getToken(), n.type);
 		}
 	}
@@ -124,11 +124,11 @@ public class ShadowTypeEraser extends AbstractVisitorNoArg {
 
 				// change the identifier
 				final Identifier id = (Identifier)n.getType();
-				id.setToken(shadow.getDeclarationIdentifierEraser);
+				id.setToken(shadow.shadowedName());
 
 				// update types
-				n.type = shadow.getDeclarationSymbolTableEraser;
-				n.env.setType(n.getId().getToken(), shadow.getDeclarationSymbolTableEraser);
+				n.type = shadow.shadowedType;
+				n.env.setType(n.getId().getToken(), shadow.shadowedType);
 			}
 		}
 	}
