@@ -35,6 +35,7 @@ import boa.compiler.transforms.ASTFactory;
 import boa.types.BoaInt;
 import boa.types.BoaProtoList;
 import boa.types.BoaShadowType;
+import boa.types.proto.enums.StatementKindProtoMap;
 import boa.types.proto.ExpressionProtoTuple;
 import boa.types.proto.StatementProtoTuple;
 
@@ -56,6 +57,8 @@ public class IfStatementShadow extends BoaShadowType  {
 		addShadow("false_branch", new StatementProtoTuple());
 	}
 
+	/** {@inheritDoc} */
+	@Override
 	public Node lookupCodegen(final String name, final String nodeId, final SymbolTable env) {
 		final Identifier id = ASTFactory.createIdentifier(nodeId, env);
 		id.type = new StatementProtoTuple();
@@ -104,6 +107,12 @@ public class IfStatementShadow extends BoaShadowType  {
 		}
 
 		throw new RuntimeException("invalid shadow field: " + name);
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public Expression getKindExpression(final SymbolTable env) {
+		return getKindExpression("StatementKind", "IF", new StatementKindProtoMap(), env);
 	}
 
 	/** {@inheritDoc} */
