@@ -19,5 +19,6 @@ test-inhattr
 test-knowngood
 test-lexer
 test-parser
+test-shadow
 test-traversal
 test-typecheck

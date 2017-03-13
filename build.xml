@@ -232,6 +232,18 @@
 		</junit>
 		<delete file="SecurityAuth.audit" />
 	</target>
+	<target name="test-shadow" depends="-compile-tests" description="Run shadow types unit tests.">
+		<junit fork="yes" haltonfailure="no">
+			<classpath refid="test.class.path" />
+			<test name="boa.test.compiler.TestShadowBad">
+				<formatter type="plain" usefile="false" />
+			</test>
+			<test name="boa.test.compiler.TestShadowGood">
+				<formatter type="plain" usefile="false" />
+			</test>
+		</junit>
+		<delete file="SecurityAuth.audit" />
+	</target>
 	<target name="test-inhattr" depends="-compile-tests" description="Run inherited attribute unit tests.">
 		<junit fork="yes" haltonfailure="no">
 			<classpath refid="test.class.path" />

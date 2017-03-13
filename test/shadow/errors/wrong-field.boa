@@ -1,0 +1,6 @@
+o: output sum of int;
+
+s: IfStatement;
+
+if (def(s.statements[0]))
+	o << 1;
