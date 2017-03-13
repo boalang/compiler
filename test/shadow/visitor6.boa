@@ -1,0 +1,7 @@
+o: output sum of int;
+
+visit(input, visitor {
+	before n: IfStatement -> o << 0;
+	before Statement, Expression -> o << 1;
+	before _ -> o << 2;
+});
