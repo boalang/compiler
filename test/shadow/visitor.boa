@@ -1,0 +1,11 @@
+o: output sum of int;
+
+visit(input, visitor {
+	before n: IfStatement -> {
+		if (!def(n.false_branch))
+			stop;
+		if (def(n.true_branch.statements[0]))
+			stop;
+	}
+	after IfStatement, Expression -> o << 1;
+});
