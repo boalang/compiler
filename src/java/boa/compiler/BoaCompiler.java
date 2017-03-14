@@ -173,7 +173,7 @@ public class BoaCompiler {
 								new VisitorOptimizingTransformer().start(p);
 
 								if (cl.hasOption("pp")) new PrettyPrintVisitor().start(p);
-								if (cl.hasOption("ast")) new ASTPrintingVisitor().start(p);
+								if (cl.hasOption("ast2")) new ASTPrintingVisitor().start(p);
 								final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(jobName);
 								cg.start(p);
 								jobs.add(cg.getCode());
@@ -207,7 +207,7 @@ public class BoaCompiler {
 						new VisitorOptimizingTransformer().start(p);
 
 						if (cl.hasOption("pp")) new PrettyPrintVisitor().start(p);
-						if (cl.hasOption("ast")) new ASTPrintingVisitor().start(p);
+						if (cl.hasOption("ast2")) new ASTPrintingVisitor().start(p);
 						final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(p.jobName);
 						cg.start(p);
 						jobs.add(cg.getCode());
@@ -222,7 +222,7 @@ public class BoaCompiler {
 						new VisitorOptimizingTransformer().start(p);
 
 						if (cl.hasOption("pp")) new PrettyPrintVisitor().start(p);
-						if (cl.hasOption("ast")) new ASTPrintingVisitor().start(p);
+						if (cl.hasOption("ast2")) new ASTPrintingVisitor().start(p);
 						final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(p.jobName);
 						cg.start(p);
 						jobs.add(cg.getCode());
@@ -317,7 +317,7 @@ public class BoaCompiler {
 							new VisitorOptimizingTransformer().start(p);
 
 							if (cl.hasOption("pp")) new PrettyPrintVisitor().start(p);
-							if (cl.hasOption("ast")) new ASTPrintingVisitor().start(p);
+							if (cl.hasOption("ast2")) new ASTPrintingVisitor().start(p);
 							final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(jobName);
 							cg.start(p);
 							jobs.add(cg.getCode());
@@ -409,7 +409,8 @@ public class BoaCompiler {
 		options.addOption("nv", "no-visitor-fusion", false, "disable visitor fusion");
 		options.addOption("v", "visitors-fused", true, "number of visitors to fuse");
 		options.addOption("n", "name", true, "the name of the generated main class");
-		options.addOption("ast", "ast-debug", false, "print the AST after parsing and before code generation (debug)");
+		options.addOption("ast", "ast-parsed", false, "print the AST immediately after parsing (debug)");
+		options.addOption("ast2", "ast-transformed", false, "print the AST after transformations, before code generation (debug)");
 		options.addOption("pp", "pretty-print", false, "pretty print the AST before code generation (debug)");
 		options.addOption("cd", "compilation-dir", true, "All generated Files live here");
 
