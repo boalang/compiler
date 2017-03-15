@@ -22,10 +22,12 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 
+import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
+import org.apache.commons.cli.PosixParser;
+import org.apache.commons.io.FileUtils;
 
-//import boa.Example;
 import boa.compiler.BoaCompiler;
 import boa.datagen.DefaultProperties;
 import boa.datagen.util.FileIO;
@@ -34,32 +36,27 @@ import boa.datagen.util.FileIO;
  * The main entry point for Boa REPL.
  *
  * @author hridesh
- * 
+ *
  */
 public class BoaEvaluator {
 
-	private String progPath;
-	private String datapath;
-	private String outpath;
-	private String compilationpath = "./compile/";
-	private boolean result;
+	private final String PROG_PATH;
+	private final String DATA_PATH;
+	private final String COMPILATION_DIR;
+	private  String OUTPUT_DIR;
 
 	public BoaEvaluator(String prog, String data) {
-		this.result = false;
-		this.datapath = data;
-		this.progPath = prog;
+		this.PROG_PATH = prog;
+		this.DATA_PATH = data;
+		this.COMPILATION_DIR = "./compile"; // can not customize to be user defined because of classpath issues
+		setup();
+		this.OUTPUT_DIR =  System.getProperty("java.io.tmpdir");
 	}
 
-	public BoaEvaluator(String prog, String data, String outputPath) {
+	public BoaEvaluator(String prog, String data, String outDir){
 		this(prog, data);
-		DefaultProperties.HADOOP_SEQ_FILE_LOCATION = data;
-		DefaultProperties.HADOOP_OUT_LOCATION = outputPath;
-		this.outpath = outputPath;
-	}
-
-	public BoaEvaluator(String prog, String data, String outputPath, String compilation) {
-		this(prog, data, outputPath);
-		this.compilationpath = compilation;
+		this.OUTPUT_DIR = outDir;
+		setup();
 	}
 
 	private static final void printHelp(Options options, String message) {
@@ -69,97 +66,77 @@ public class BoaEvaluator {
 		new HelpFormatter().printHelp("Boa", header, options, footer);
 	}
 
-	public boolean evaluate() {
-		String[] compilationArgs = new String[6];
-		compilationArgs[0] = "-i";
-		compilationArgs[1] = this.progPath;
-		compilationArgs[2] = "-j";
-		compilationArgs[3] = "./dist/boa-runtime.jar";
-		compilationArgs[4] = "-gcd";
-		compilationArgs[5] = this.compilationpath;
-
-		try {
-			delete(new File(this.outpath));
-			delete(new File(this.compilationpath));
-			if (!BoaCompiler.compile(compilationArgs)) {
-				return false;
-			}
-		} catch (IOException e1) {
-			e1.printStackTrace();
-			return false;
-		}
-
-		final String[] actualArgs = new String[2];
-		String genFileName = getClassNameForGeneratedJavaProg();
-		String genClassName = "boa." + genFileName;
-		genClassName.replace("/", ".");
-		actualArgs[0] = this.datapath;
-		actualArgs[1] = this.outpath;
-		while (genClassName.startsWith(".")) {
-			genClassName = genClassName.substring(1);
-		}
-
-		File srcDir = new File(this.compilationpath);
+	public void evaluate() {
+		final String[] actualArgs = createHadoopProgramArguments();
+		File srcDir = new File(this.COMPILATION_DIR);
 		try {
 			URL srcDirUrl = srcDir.toURI().toURL();
 
 			ClassLoader cl = new URLClassLoader(new URL[] { srcDirUrl }, ClassLoader.getSystemClassLoader());
-			Class<?> cls = cl.loadClass(genClassName);
+			Class<?> cls = cl.loadClass(getClassNameForGeneratedJavaProg());
 			final Method method = cls.getMethod("main", String[].class);
 			method.invoke(null, (Object) actualArgs);
 
 		} catch (Throwable exc) {
 			exc.printStackTrace();
 		}
-		this.result = true;
-		return this.result;
 	}
 
 	public static void main(final String[] args) {
-		if (args.length != 3) {
-			throw new IllegalArgumentException();
-		}
-		String program = args[0];
-		String data = args[1];
-		String out = args[2];
-		BoaEvaluator evaluator = new BoaEvaluator(program, data, out);
-		long start = System.currentTimeMillis();
-		evaluator.evaluate();
-		long end = System.currentTimeMillis();
-		System.out.println("Total Time Taken: "+ (end - start));
-		for (File f : new File(out).listFiles()) {
-			if (f.getName().startsWith("part")) {
-				System.out.println(FileIO.readFileContents(f));
+		final Options options = new Options();
+		options.addOption("i", "input",  true, "input Boa program");
+		options.addOption("d", "data", true, "path to local data");
+		options.addOption("o", "out", true, "output directory");
+
+		final CommandLine cl;
+		try{
+			if(args.length == 0) {
+				printHelp(options, "");
+				return;
+			} else {
+				cl = new PosixParser().parse(options, args);
+				if (cl.hasOption('i') && cl.hasOption('d')) {
+					BoaEvaluator evaluator;
+					if(cl.hasOption('o')) {
+						evaluator = new BoaEvaluator(cl.getOptionValue('i'), cl.getOptionValue('d'), cl.getOptionValue('o'));
+					} else{
+						evaluator = new BoaEvaluator(cl.getOptionValue('i'), cl.getOptionValue('d'));
+					}
+					long start = System.currentTimeMillis();
+					if(!evaluator.compile()) {
+						System.err.println("Compilation Failed");
+						return;
+					}
+					evaluator.evaluate();
+					long end = System.currentTimeMillis();
+					System.out.println("Total Time Taken: "+ (end - start));
+					System.out.println(evaluator.getResults());
+				}else {
+					printHelp(options, "");
+					return;
+				}
 			}
+		} catch (final org.apache.commons.cli.ParseException e) {
+			printHelp(options, e.getMessage());
 		}
+
 	}
 
 	private String getClassNameForGeneratedJavaProg() {
-		String name = this.progPath;
-		if (name.contains("/")) {
-			name = name.substring(name.lastIndexOf('/') + 1);
+		StringBuffer progName = new StringBuffer(this.PROG_PATH);
+		while (progName.charAt(0) == '.' || progName.charAt(0) == '/') {
+			progName.deleteCharAt(0);
 		}
-		if (name.contains(".")) {
-			name = name.substring(0, name.lastIndexOf('.'));
-		}
-		name = name.substring(0, 1).toUpperCase() + name.substring(1);
-		return name;
+		progName.delete(progName.lastIndexOf(".boa"), progName.length());
+		progName.delete(0, progName.lastIndexOf("/") + 1);
+		progName.setCharAt(0, Character.toUpperCase(progName.charAt(0)));
+		progName.insert(0, "boa.");
+		progName = new StringBuffer(progName.toString().replace("/", "."));
+		return progName.toString();
 	}
 
-	private static final void delete(final File f) throws IOException {
-		if (f.exists()) {
-			if (f.isDirectory())
-				for (final File g : f.listFiles())
-					delete(g);
-
-			if (!f.delete())
-				throw new IOException("unable to delete file " + f);
-		}
-	}
-
-	
 	public String getResults() {
-		for (File f : new File(this.outpath).listFiles()) {
+		for (File f : new File(this.OUTPUT_DIR).listFiles()) {
 			if (f.getName().startsWith("part")) {
 				return FileIO.readFileContents(f);
 			}
@@ -167,7 +144,60 @@ public class BoaEvaluator {
 		return "";
 	}
 
-	public boolean isSuccess() {
-		return this.result;
+	private boolean compile() {
+		final String[] compilationArgs = createCompilerArguments();
+		try{
+			BoaCompiler.main(compilationArgs);
+		}catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
+
+	private String[] createCompilerArguments() {
+		final String[] compilationArgs = new String[6];
+		compilationArgs[0] = "-i";
+		compilationArgs[1] = this.PROG_PATH;
+		compilationArgs[2] = "-j";
+		compilationArgs[3] = "./dist/boa-runtime.jar";
+		compilationArgs[4] = "-cd";
+		compilationArgs[5] = this.COMPILATION_DIR;
+		return compilationArgs;
+	}
+
+	private String[] createHadoopProgramArguments() {
+		final String[] actualArgs = new String[3];
+		actualArgs[0] = this.DATA_PATH;
+		actualArgs[1] = this.OUTPUT_DIR;
+		actualArgs[2] = "-b"; // blocking call
+		return actualArgs;
+	}
+
+	/**
+	 * Performs some initial setup steps like
+	 * 1. makes sure that output sirectory does not already exists
+	 * 2. makes sure that compilation directory does exists
+	 */
+	private void setup() {
+		File compilationDir =  new File(this.COMPILATION_DIR);
+		// output directory does not already exists
+		try {
+			if(this.OUTPUT_DIR != null) {
+				FileUtils.deleteDirectory(new File(this.OUTPUT_DIR));
+			}
+			FileUtils.deleteDirectory(compilationDir);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		// compilation directory must exist
+		// for now only absolute paths are supported
+		//TODO: support for relative path directory support
+		compilationDir.mkdirs();
+
+		// set localData path in Defaultproperties
+		DefaultProperties.localDataPath = this.DATA_PATH;
+		DefaultProperties.localOutput = this.OUTPUT_DIR;
 	}
 }
