@@ -48,9 +48,9 @@ enum TypeKind {
 }
 
 message Type {
-	required TypeKind kind = 1;
-	required int32 name = 2;
-	optional int32 qualified_name = 3;
+	required string name = 1;
+	required TypeKind kind = 2;
+	optional string id = 4;
 }
 
 message Method {
@@ -164,9 +164,6 @@ message Expression {
 		ASSIGN_UNSIGNEDRSHIFT = 47;
 		ANNOTATION = 48;
 		PAREN = 49;
-		METHOD_REFERENCE = 50;
-		LAMBDA = 51;
-		ANON_METHOD = 52;
 	}
 	required ExpressionKind kind = 1;
 	repeated Expression expressions = 2;
@@ -180,8 +177,7 @@ message Expression {
 	repeated Expression method_args = 10;
 	optional Declaration anon_declaration = 11;
 	optional Modifier annotation = 12;
-	optional Method lambda = 13;
-//	required PositionInfo position = 14;
+//	required PositionInfo position = 13;
 }
 
 message Modifier {
