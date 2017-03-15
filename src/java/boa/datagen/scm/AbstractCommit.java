@@ -166,7 +166,7 @@ public abstract class AbstractCommit {
 						if (debug)
 							System.err.println("Found JLS4 parse error in: revision " + id + ": file " + path);
 
-						fb.setKind(FileKind.SOURCE_JAVA_JLS8);
+						fb.setKind(FileKind.SOURCE_JAVA_JLS5);
 						if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_8, AST.JLS8, false, astWriter, revKey + keyDelim + path)) {
 							if (debug)
 								System.err.println("Found JLS8 parse error in: revision " + id + ": file " + path);
@@ -345,7 +345,7 @@ public abstract class AbstractCommit {
 						if (debug)
 							System.err.println("Found JLS4 parse error in: revision " + id + ": file " + path);
 
-						fb.setKind(FileKind.SOURCE_JAVA_JLS8);
+						fb.setKind(FileKind.SOURCE_JAVA_JLS5);
 						if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_8, AST.JLS8, false, null, null)) {
 							if (debug)
 								System.err.println("Found JLS8 parse error in: revision " + id + ": file " + path);

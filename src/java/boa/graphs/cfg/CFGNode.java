@@ -235,7 +235,7 @@ public class CFGNode {
 	public Builder newBuilder() {
 		Builder b = boa.types.Control.CFGNode.newBuilder();
 		b.setId(id);
-		b.setType(getNodeType());
+//		b.setType(getNodeType());
 		if (this.stmt != null)
 			b.setStatement(stmt);
 		else if (this.expr != null)
