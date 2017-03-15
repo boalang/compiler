@@ -394,7 +394,7 @@ public class BoaCompiler {
 		generateJar(jarName, outputRoot, libJars);
 
 		if(DefaultProperties.localDataPath == null) {
-			delete(outputRoot);
+//			delete(outputRoot);
 		}
 	}
 

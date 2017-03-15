@@ -18,6 +18,7 @@ package boa.functions;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.Stack;
 
 import org.apache.hadoop.conf.Configuration;
@@ -44,7 +45,7 @@ import boa.types.Toplevel.Project;
 
 /**
  * Boa functions for working with ASTs.
- * 
+ *
  * @author rdyer
  */
 public class BoaAstIntrinsics {
@@ -59,9 +60,11 @@ public class BoaAstIntrinsics {
 		GETS_FAIL_MISSING,
 		GETS_FAIL_BADPROTOBUF,
 		GETS_FAIL_BADLOC,
-	};
+	}
 
-	@FunctionSpec(name = "url", returnType = "string", formalParameters = { "ChangedFile" })
+	;
+
+	@FunctionSpec(name = "url", returnType = "string", formalParameters = {"ChangedFile"})
 	public static String changedfileToString(final ChangedFile f) {
 		return f.getKey() + "!!" + f.getName();
 	}
@@ -72,12 +75,12 @@ public class BoaAstIntrinsics {
 
 	/**
 	 * Given a ChangedFile, return the AST for that file at that revision.
-	 * 
+	 *
 	 * @param f the ChangedFile to get a snapshot of the AST for
 	 * @return the AST, or an empty AST on any sort of error
 	 */
 	@SuppressWarnings("unchecked")
-	@FunctionSpec(name = "getast", returnType = "ASTRoot", formalParameters = { "ChangedFile" })
+	@FunctionSpec(name = "getast", returnType = "ASTRoot", formalParameters = {"ChangedFile"})
 	public static ASTRoot getast(final ChangedFile f) {
 		// since we know only certain kinds have ASTs, filter before looking up
 		final ChangedFile.FileKind kind = f.getKind();
@@ -128,11 +131,11 @@ public class BoaAstIntrinsics {
 
 	/**
 	 * Given a ChangedFile, return the comments for that file at that revision.
-	 * 
+	 *
 	 * @param f the ChangedFile to get a snapshot of the comments for
 	 * @return the comments list, or an empty list on any sort of error
 	 */
-	@FunctionSpec(name = "getcomments", returnType = "CommentsRoot", formalParameters = { "ChangedFile" })
+	@FunctionSpec(name = "getcomments", returnType = "CommentsRoot", formalParameters = {"ChangedFile"})
 	public static CommentsRoot getcomments(final ChangedFile f) {
 		// since we know only certain kinds have comments, filter before looking up
 		final ChangedFile.FileKind kind = f.getKind();
@@ -171,11 +174,11 @@ public class BoaAstIntrinsics {
 
 	/**
 	 * Given an IssueRepository, return the issues.
-	 * 
+	 *
 	 * @param f the IssueRepository to get issues for
 	 * @return the issues list, or an empty list on any sort of error
 	 */
-	@FunctionSpec(name = "getissues", returnType = "IssuesRoot", formalParameters = { "IssueRepository" })
+	@FunctionSpec(name = "getissues", returnType = "IssuesRoot", formalParameters = {"IssueRepository"})
 	public static IssuesRoot getissues(final IssueRepository f) {
 		if (issuesMap == null)
 			openIssuesMap();
@@ -210,7 +213,12 @@ public class BoaAstIntrinsics {
 		final Configuration conf = new Configuration();
 		try {
 			final FileSystem fs = FileSystem.get(conf);
-			final Path p = new Path(DefaultProperties.localDataPath);
+			Path p = new Path("hdfs://boa-njt/",
+								new Path(context.getConfiguration().get("boa.input.dir", "repcache/live"),
+								new Path("ast")));
+			if(DefaultProperties.localDataPath != null) {
+				p = new Path(DefaultProperties.localDataPath);
+			}
 			map = new MapFile.Reader(fs, p.toString(), conf);
 		} catch (final Exception e) {
 			e.printStackTrace();
@@ -221,9 +229,12 @@ public class BoaAstIntrinsics {
 		final Configuration conf = new Configuration();
 		try {
 			final FileSystem fs = FileSystem.get(conf);
-			final Path p = new Path("hdfs://boa-njt/",
+			Path p = new Path("hdfs://boa-njt/",
 								new Path(context.getConfiguration().get("boa.comments.dir", context.getConfiguration().get("boa.input.dir", "repcache/live")),
 								new Path("comments")));
+			if(DefaultProperties.localDataPath != null) {
+				p = new Path(DefaultProperties.localCommentPath);
+			}
 			commentsMap = new MapFile.Reader(fs, p.toString(), conf);
 		} catch (final Exception e) {
 			e.printStackTrace();
@@ -234,9 +245,12 @@ public class BoaAstIntrinsics {
 		final Configuration conf = new Configuration();
 		try {
 			final FileSystem fs = FileSystem.get(conf);
-			final Path p = new Path("hdfs://boa-njt/",
+			Path p = new Path("hdfs://boa-njt/",
 								new Path(context.getConfiguration().get("boa.issues.dir", context.getConfiguration().get("boa.input.dir", "repcache/live")),
 								new Path("issues")));
+			if(DefaultProperties.localDataPath != null) {
+				p = new Path(DefaultProperties.localIssuePath);
+			}
 			issuesMap = new MapFile.Reader(fs, p.toString(), conf);
 		} catch (final Exception e) {
 			e.printStackTrace();
@@ -280,14 +294,14 @@ public class BoaAstIntrinsics {
 		issuesMap = null;
 	}
 
-	@FunctionSpec(name = "type_name", returnType = "string", formalParameters = { "string" })
+	@FunctionSpec(name = "type_name", returnType = "string", formalParameters = {"string"})
 	public static String type_name(final String s) {
 		// first, normalize the string
 		final String t = s.replaceAll("<\\s+", "<")
-			.replaceAll(",\\s+", ", ")
-			.replaceAll("\\s*>\\s*", ">")
-			.replaceAll("\\s*&\\s*", " & ")
-			.replaceAll("\\s*\\|\\s*", " | ");
+				.replaceAll(",\\s+", ", ")
+				.replaceAll("\\s*>\\s*", ">")
+				.replaceAll("\\s*&\\s*", " & ")
+				.replaceAll("\\s*\\|\\s*", " | ");
 
 		if (!t.contains("."))
 			return t;
@@ -319,31 +333,37 @@ public class BoaAstIntrinsics {
 			count++;
 			return true;
 		}
+
 		/** {@inheritDoc} */
 		@Override
 		protected boolean preVisit(final Project node) throws Exception {
 			return true;
 		}
+
 		/** {@inheritDoc} */
 		@Override
 		protected boolean preVisit(final CodeRepository node) throws Exception {
 			return true;
 		}
+
 		/** {@inheritDoc} */
 		@Override
 		protected boolean preVisit(final Revision node) throws Exception {
 			return true;
 		}
+
 		/** {@inheritDoc} */
 		@Override
 		protected boolean preVisit(final ChangedFile node) throws Exception {
 			return true;
 		}
+
 		/** {@inheritDoc} */
 		@Override
 		protected boolean preVisit(final ASTRoot node) throws Exception {
 			return true;
 		}
+
 		/** {@inheritDoc} */
 		@Override
 		protected boolean preVisit(final Person node) throws Exception {
@@ -352,7 +372,7 @@ public class BoaAstIntrinsics {
 	};
 
 	/**
-	 * 
+	 *
 	 */
 	public static class SnapshotVisitor extends BoaCollectingVisitor<String, ChangedFile> {
 		private long timestamp;
@@ -365,13 +385,17 @@ public class BoaAstIntrinsics {
 			return this;
 		}
 
-		/** {@inheritDoc} */
+		/**
+		 * {@inheritDoc}
+		 */
 		@Override
 		protected boolean preVisit(final Revision node) throws Exception {
 			return node.getCommitDate() <= timestamp;
 		}
 
-		/** {@inheritDoc} */
+		/**
+		 * {@inheritDoc}
+		 */
 		@Override
 		protected boolean preVisit(final ChangedFile node) throws Exception {
 			if (node.getChange() == ChangeKind.DELETED) {
@@ -399,28 +423,28 @@ public class BoaAstIntrinsics {
 
 	public final static SnapshotVisitor snapshot = new SnapshotVisitor();
 
-	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "time", "string..." })
+	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = {"CodeRepository", "time", "string..."})
 	public static ChangedFile[] getSnapshot(final CodeRepository cr, final long timestamp, final String... kinds) throws Exception {
 		snapshot.initialize(timestamp, kinds).visit(cr);
 		return snapshot.map.values().toArray(new ChangedFile[0]);
 	}
 
-	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "string..." })
+	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = {"CodeRepository", "string..."})
 	public static ChangedFile[] getSnapshot(final CodeRepository cr, final String... kinds) throws Exception {
 		return getSnapshot(cr, Long.MAX_VALUE, kinds);
 	}
 
-	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository", "time" })
+	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = {"CodeRepository", "time"})
 	public static ChangedFile[] getSnapshot(final CodeRepository cr, final long timestamp) throws Exception {
 		return getSnapshot(cr, timestamp, new String[0]);
 	}
 
-	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = { "CodeRepository" })
+	@FunctionSpec(name = "getsnapshot", returnType = "array of ChangedFile", formalParameters = {"CodeRepository"})
 	public static ChangedFile[] getSnapshot(final CodeRepository cr) throws Exception {
 		return getSnapshot(cr, Long.MAX_VALUE, new String[0]);
 	}
 
-	@FunctionSpec(name = "isliteral", returnType = "bool", formalParameters = { "Expression", "string" })
+	@FunctionSpec(name = "isliteral", returnType = "bool", formalParameters = {"Expression", "string"})
 	public static boolean isLiteral(final Expression e, final String lit) throws Exception {
 		return e.getKind() == Expression.ExpressionKind.LITERAL && e.hasLiteral() && e.getLiteral().equals(lit);
 	}
@@ -429,7 +453,7 @@ public class BoaAstIntrinsics {
 	// Collect Annotations Used //
 	//////////////////////////////
 
-	private static class AnnotationCollectingVisitor extends BoaCollectingVisitor<String,Long> {
+	private static class AnnotationCollectingVisitor extends BoaCollectingVisitor<String, Long> {
 		@Override
 		protected boolean preVisit(Modifier node) {
 			if (node.getKind() == Modifier.ModifierKind.ANNOTATION) {
@@ -440,10 +464,11 @@ public class BoaAstIntrinsics {
 			return true;
 		}
 	}
+
 	private static AnnotationCollectingVisitor annotationCollectingVisitor = new AnnotationCollectingVisitor();
 
-	@FunctionSpec(name = "collect_annotations", returnType = "map[string] of int", formalParameters = { "ASTRoot", "map[string] of int" })
-	public static HashMap<String,Long> collect_annotations(final ASTRoot f, final HashMap<String,Long> map) throws Exception {
+	@FunctionSpec(name = "collect_annotations", returnType = "map[string] of int", formalParameters = {"ASTRoot", "map[string] of int"})
+	public static HashMap<String, Long> collect_annotations(final ASTRoot f, final HashMap<String, Long> map) throws Exception {
 		annotationCollectingVisitor.initialize(map).visit(f);
 		return annotationCollectingVisitor.map;
 	}
@@ -452,7 +477,7 @@ public class BoaAstIntrinsics {
 	// Collect Generics Used //
 	///////////////////////////
 
-	private static class GenericsCollectingVisitor extends BoaCollectingVisitor<String,Long> {
+	private static class GenericsCollectingVisitor extends BoaCollectingVisitor<String, Long> {
 		@Override
 		protected boolean preVisit(Type node) {
 			// FIXME
@@ -462,19 +487,20 @@ public class BoaAstIntrinsics {
 			} catch (final StackOverflowError e) {
 				System.err.println("STACK ERR: " + node.getName() + " -> " + BoaAstIntrinsics.type_name(node.getName()).trim());
 			}
-			*/ 
+			*/
 			return true;
 		}
 	}
+
 	private static GenericsCollectingVisitor genericsCollectingVisitor = new GenericsCollectingVisitor();
 
-	@FunctionSpec(name = "collect_generic_types", returnType = "map[string] of int", formalParameters = { "ASTRoot", "map[string] of int" })
-	public static HashMap<String,Long> collect_generic_types(final ASTRoot f, final HashMap<String,Long> map) throws Exception {
+	@FunctionSpec(name = "collect_generic_types", returnType = "map[string] of int", formalParameters = {"ASTRoot", "map[string] of int"})
+	public static HashMap<String, Long> collect_generic_types(final ASTRoot f, final HashMap<String, Long> map) throws Exception {
 		genericsCollectingVisitor.initialize(map).visit(f);
 		return genericsCollectingVisitor.map;
 	}
 
-	private static void parseGenericType(final String name, final HashMap<String,Long> counts) {
+	private static void parseGenericType(final String name, final HashMap<String, Long> counts) {
 		if (!name.contains("<") || name.startsWith("<"))
 			return;
 
@@ -489,20 +515,20 @@ public class BoaAstIntrinsics {
 			int last = 0;
 			for (int i = 0; i < name.length(); i++)
 				switch (name.charAt(i)) {
-				case '<':
-					count++;
-					break;
-				case '>':
-					count--;
-					break;
-				case '&':
-					if (count == 0) {
-						parseGenericType(name.substring(last, i).trim(), counts);
-						last = i + 1;
-					}
-					break;
-				default:
-					break;
+					case '<':
+						count++;
+						break;
+					case '>':
+						count--;
+						break;
+					case '&':
+						if (count == 0) {
+							parseGenericType(name.substring(last, i).trim(), counts);
+							last = i + 1;
+						}
+						break;
+					default:
+						break;
 				}
 			parseGenericType(name.substring(last).trim(), counts);
 			return;
@@ -516,27 +542,27 @@ public class BoaAstIntrinsics {
 		int lastStart = start + 1;
 		for (int i = lastStart; i < name.lastIndexOf(">"); i++)
 			switch (name.charAt(i)) {
-			case '<':
-				starts.push(lastStart);
-				lastStart = i + 1;
-				break;
-			case '>':
-				if (!starts.empty())
-					foundType(name.substring(starts.pop(), i + 1).trim(), counts);
-				break;
-			case '&':
-			case '|':
-			case ',':
-			case ' ':
-			case '.':
-			case '\t':
-				lastStart = i + 1;
-			default:
-				break;
+				case '<':
+					starts.push(lastStart);
+					lastStart = i + 1;
+					break;
+				case '>':
+					if (!starts.empty())
+						foundType(name.substring(starts.pop(), i + 1).trim(), counts);
+					break;
+				case '&':
+				case '|':
+				case ',':
+				case ' ':
+				case '.':
+				case '\t':
+					lastStart = i + 1;
+				default:
+					break;
 			}
 	}
 
-	private static void foundType(final String name, final HashMap<String,Long> counts) {
+	private static void foundType(final String name, final HashMap<String, Long> counts) {
 		final String type = name.endsWith("...") ? name.substring(0, name.length() - 3).trim() : name.trim();
 		final long count = counts.containsKey(type) ? counts.get(type) : 0;
 		counts.put(type, count + 1);

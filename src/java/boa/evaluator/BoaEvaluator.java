@@ -95,10 +95,10 @@ public class BoaEvaluator {
 				return;
 			} else {
 				cl = new PosixParser().parse(options, args);
-				if (cl.hasOption('i') && cl.hasOption('d')) {
+				if (cl.hasOption('d')) {
 					BoaEvaluator evaluator;
 					if(cl.hasOption('o')) {
-						evaluator = new BoaEvaluator(cl.getOptionValue('i'), cl.getOptionValue('d'), cl.getOptionValue('o'));
+						evaluator = new BoaEvaluator("program/programs-measured/linear-regression/classesatrevision/classesAtRevisionTrain.boa", cl.getOptionValue('d'), cl.getOptionValue('o'));
 					} else{
 						evaluator = new BoaEvaluator(cl.getOptionValue('i'), cl.getOptionValue('d'));
 					}
