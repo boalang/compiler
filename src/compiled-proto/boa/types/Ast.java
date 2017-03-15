@@ -15128,13 +15128,13 @@ public final class Ast {
   public interface ExpressionOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
-    // optional .boa.types.Expression.ExpressionKind kind = 1;
+    // required .boa.types.Expression.ExpressionKind kind = 1;
     /**
-     * <code>optional .boa.types.Expression.ExpressionKind kind = 1;</code>
+     * <code>required .boa.types.Expression.ExpressionKind kind = 1;</code>
      */
     boolean hasKind();
     /**
-     * <code>optional .boa.types.Expression.ExpressionKind kind = 1;</code>
+     * <code>required .boa.types.Expression.ExpressionKind kind = 1;</code>
      */
     boa.types.Ast.Expression.ExpressionKind getKind();
 
@@ -16066,17 +16066,17 @@ public final class Ast {
     }
 
     private int bitField0_;
-    // optional .boa.types.Expression.ExpressionKind kind = 1;
+    // required .boa.types.Expression.ExpressionKind kind = 1;
     public static final int KIND_FIELD_NUMBER = 1;
     private boa.types.Ast.Expression.ExpressionKind kind_;
     /**
-     * <code>optional .boa.types.Expression.ExpressionKind kind = 1;</code>
+     * <code>required .boa.types.Expression.ExpressionKind kind = 1;</code>
      */
     public boolean hasKind() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
-     * <code>optional .boa.types.Expression.ExpressionKind kind = 1;</code>
+     * <code>required .boa.types.Expression.ExpressionKind kind = 1;</code>
      */
     public boa.types.Ast.Expression.ExpressionKind getKind() {
       return kind_;
@@ -16468,6 +16468,10 @@ public final class Ast {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized != -1) return isInitialized == 1;
 
+      if (!hasKind()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
       for (int i = 0; i < getExpressionsCount(); i++) {
         if (!getExpressions(i).isInitialized()) {
           memoizedIsInitialized = 0;
@@ -17048,6 +17052,10 @@ public final class Ast {
       }
 
       public final boolean isInitialized() {
+        if (!hasKind()) {
+          
+          return false;
+        }
         for (int i = 0; i < getExpressionsCount(); i++) {
           if (!getExpressions(i).isInitialized()) {
             
@@ -17112,22 +17120,22 @@ public final class Ast {
       }
       private int bitField0_;
 
-      // optional .boa.types.Expression.ExpressionKind kind = 1;
+      // required .boa.types.Expression.ExpressionKind kind = 1;
       private boa.types.Ast.Expression.ExpressionKind kind_ = boa.types.Ast.Expression.ExpressionKind.OTHER;
       /**
-       * <code>optional .boa.types.Expression.ExpressionKind kind = 1;</code>
+       * <code>required .boa.types.Expression.ExpressionKind kind = 1;</code>
        */
       public boolean hasKind() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
-       * <code>optional .boa.types.Expression.ExpressionKind kind = 1;</code>
+       * <code>required .boa.types.Expression.ExpressionKind kind = 1;</code>
        */
       public boa.types.Ast.Expression.ExpressionKind getKind() {
         return kind_;
       }
       /**
-       * <code>optional .boa.types.Expression.ExpressionKind kind = 1;</code>
+       * <code>required .boa.types.Expression.ExpressionKind kind = 1;</code>
        */
       public Builder setKind(boa.types.Ast.Expression.ExpressionKind value) {
         if (value == null) {
@@ -17139,7 +17147,7 @@ public final class Ast {
         return this;
       }
       /**
-       * <code>optional .boa.types.Expression.ExpressionKind kind = 1;</code>
+       * <code>required .boa.types.Expression.ExpressionKind kind = 1;</code>
        */
       public Builder clearKind() {
         bitField0_ = (bitField0_ & ~0x00000001);
@@ -22297,7 +22305,7 @@ public final class Ast {
       "IF\020\t\022\n\n\006ASSERT\020\n\022\t\n\005BREAK\020\013\022\014\n\010CONTINUE\020" +
       "\014\022\t\n\005LABEL\020\r\022\n\n\006SWITCH\020\016\022\010\n\004CASE\020\017\022\007\n\003TR" +
       "Y\020\020\022\t\n\005THROW\020\021\022\t\n\005CATCH\020\022\022\t\n\005EMPTY\020\023\032\002\020\001" +
-      "\"\232\t\n\nExpression\0222\n\004kind\030\001 \001(\0162$.boa.type" +
+      "\"\232\t\n\nExpression\0222\n\004kind\030\001 \002(\0162$.boa.type" +
       "s.Expression.ExpressionKind\022*\n\013expressio" +
       "ns\030\002 \003(\0132\025.boa.types.Expression\022+\n\016varia",
       "ble_decls\030\003 \003(\0132\023.boa.types.Variable\022!\n\010" +
