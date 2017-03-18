@@ -18,7 +18,6 @@ package boa.functions;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Objects;
 import java.util.Stack;
 
 import org.apache.hadoop.conf.Configuration;
@@ -60,11 +59,9 @@ public class BoaAstIntrinsics {
 		GETS_FAIL_MISSING,
 		GETS_FAIL_BADPROTOBUF,
 		GETS_FAIL_BADLOC,
-	}
+	};
 
-	;
-
-	@FunctionSpec(name = "url", returnType = "string", formalParameters = {"ChangedFile"})
+	@FunctionSpec(name = "url", returnType = "string", formalParameters = { "ChangedFile" })
 	public static String changedfileToString(final ChangedFile f) {
 		return f.getKey() + "!!" + f.getName();
 	}
@@ -80,7 +77,7 @@ public class BoaAstIntrinsics {
 	 * @return the AST, or an empty AST on any sort of error
 	 */
 	@SuppressWarnings("unchecked")
-	@FunctionSpec(name = "getast", returnType = "ASTRoot", formalParameters = {"ChangedFile"})
+	@FunctionSpec(name = "getast", returnType = "ASTRoot", formalParameters = { "ChangedFile" })
 	public static ASTRoot getast(final ChangedFile f) {
 		// since we know only certain kinds have ASTs, filter before looking up
 		final ChangedFile.FileKind kind = f.getKind();
@@ -213,9 +210,7 @@ public class BoaAstIntrinsics {
 		final Configuration conf = new Configuration();
 		try {
 			final FileSystem fs = FileSystem.get(conf);
-			Path p = new Path("hdfs://boa-njt/",
-								new Path(context.getConfiguration().get("boa.input.dir", "repcache/live"),
-								new Path("ast")));
+			Path p = new Path("hdfs://master-link-1/input-gh/ast");
 			if(DefaultProperties.localDataPath != null) {
 				p = new Path(DefaultProperties.localDataPath);
 			}

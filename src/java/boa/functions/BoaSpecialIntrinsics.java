@@ -16,6 +16,9 @@
  */
 package boa.functions;
 
+import boa.BoaEnumInterface;
+import boa.types.BoaEnum;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
@@ -140,6 +143,14 @@ public class BoaSpecialIntrinsics {
 			arr[i] = val;
 		return arr;
 	}
+	@FunctionSpec(name = "new", returnType = "array of any", formalParameters = { "array of any", "int", "any" })
+	public static <T> T[] newAny(T[] a, long size, T val) {
+		T[] arr = (T[])new Object[(int)size];
+		for (int i = 0; i < size; i++)
+			arr[i] = (T)val;
+		return arr;
+	}
+
 
 	public static String regex(final String type, final long base) {
 		if (BoaSpecialIntrinsics.regexMap.containsKey(type + "," + base))

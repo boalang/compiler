@@ -98,7 +98,7 @@ public class BoaEvaluator {
 				if (cl.hasOption('d')) {
 					BoaEvaluator evaluator;
 					if(cl.hasOption('o')) {
-						evaluator = new BoaEvaluator("program/programs-measured/linear-regression/classesatrevision/classesAtRevisionTrain.boa", cl.getOptionValue('d'), cl.getOptionValue('o'));
+						evaluator = new BoaEvaluator("program/programs-measured/linear-regression/classesatrevision/classesAtRevisionTrainModified.boa", cl.getOptionValue('d'), cl.getOptionValue('o'));
 					} else{
 						evaluator = new BoaEvaluator(cl.getOptionValue('i'), cl.getOptionValue('d'));
 					}
