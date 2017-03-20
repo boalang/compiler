@@ -1,6 +1,7 @@
 /*
- * Copyright 2015, Hridesh Rajan, Robert Dyer,
- *                 and Iowa State University of Science and Technology
+ * Copyright 2017, Hridesh Rajan, Robert Dyer,
+ *                 Iowa State University of Science and Technology
+ *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +22,7 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.UUID;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.HelpFormatter;
@@ -36,10 +38,9 @@ import boa.datagen.util.FileIO;
  * The main entry point for Boa REPL.
  *
  * @author hridesh
- *
+ * @author rdyer
  */
 public class BoaEvaluator {
-
 	private final String PROG_PATH;
 	private final String DATA_PATH;
 	private final String COMPILATION_DIR;
@@ -49,7 +50,7 @@ public class BoaEvaluator {
 		this.PROG_PATH = prog;
 		this.DATA_PATH = data;
 		this.COMPILATION_DIR = "./compile"; // can not customize to be user defined because of classpath issues
-		this.OUTPUT_DIR =  System.getProperty("java.io.tmpdir");
+		this.OUTPUT_DIR = System.getProperty("java.io.tmpdir") + File.separator + UUID.randomUUID().toString();
 		setup();
 	}
 
