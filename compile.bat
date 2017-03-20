@@ -1,3 +1,13 @@
 @ECHO OFF
  
-"%JAVA_HOME%"\bin\java -cp .;"%~dp0dist\boa-compiler.jar";"%~dp0lib\*" boa.BoaMain -c -i %*
+IF "%1" == "" (
+    ECHO "Usage: %0 file.boa [options]"
+    EXIT 1
+)
+
+IF NOT EXIST "%1" (
+    ECHO "input '%1' is not a file"
+    EXIT 2
+)
+
+"%~dp0\boa.bat" -c -i %*
