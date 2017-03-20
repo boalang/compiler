@@ -7,8 +7,8 @@ IF "%1" == "" (
     )
 )
 
-input="%1"
-output="%2"
+SET input=%1
+SET output=%2
 
 SHIFT
 SHIFT
