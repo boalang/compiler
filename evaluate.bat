@@ -1,8 +1,10 @@
 @ECHO OFF
 
-IF "%1" == "" && "%2" == "" (
-    ECHO "Usage: %0 path\to\input.boa output-dir [options]"
-    EXIT 1
+IF "%1" == "" (
+    IF "%2" == "" (
+        ECHO "Usage: %0 path\to\input.boa output-dir [options]"
+        EXIT 1
+    )
 )
 
 input="%1"
