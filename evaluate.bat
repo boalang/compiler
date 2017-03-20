@@ -3,7 +3,7 @@
 IF "%1" == "" (
     IF "%2" == "" (
         ECHO "Usage: %0 path\to\input.boa output-dir [options]"
-        EXIT 1
+        EXIT /B 1
     )
 )
 
@@ -15,21 +15,21 @@ SHIFT
 
 IF NOT EXIST "%input%" (
     ECHO "input '%input%' is not a file"
-    EXIT 2
+    EXIT /B 2
 )
 
 REM need to convert this to batch script
 REM if [ -d $2 ]; then
 REM     read -n 1 -p "output directory '$2' exists - delete? [Y/n] " yn
-REM     echo ""
+REM     ECHO ""
 REM
 REM     yn=`echo $yn | tr '[:upper:]' '[:lower:]'`
 REM
 REM     if [[ $yn =~ ^(y| ) ]] | [ -z $yn ]; then
 REM         rm -Rf $2
 REM     else
-REM         echo "Please remove or provide a different output directory."
-REM         exit -3
+REM         ECHO "Please remove or provide a different output directory."
+REM         EXIT /B 3
 REM     fi
 REM fi
 
