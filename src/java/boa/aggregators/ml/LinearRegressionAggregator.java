@@ -19,6 +19,7 @@ package boa.aggregators.ml;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Set;
 
 import org.apache.commons.lang.math.NumberUtils;
 
@@ -31,6 +32,9 @@ import weka.core.Instance;
 import weka.core.DenseInstance;
 import weka.core.Instances;
 import weka.core.Utils;
+import weka.filters.Filter;
+import weka.filters.supervised.attribute.NominalToBinary;
+import weka.filters.unsupervised.attribute.ReplaceMissingValues;
 
 /**
  * A Boa aggregator for training the model using LinearRegression.
@@ -48,13 +52,14 @@ public class LinearRegressionAggregator extends MLAggregator {
 	private ArrayList<Attribute> fvAttributes;
 	private Instances trainingSet;
 	private boolean flag;
-	
+	private final LinearRegression regression = new LinearRegression();
+
 	public LinearRegressionAggregator() {
 	}
 	
 	public LinearRegressionAggregator(final String s) {
 		super(s);
-		
+
 		try {
 			options = Utils.splitOptions(s);
 		} catch (Exception e) {
@@ -86,6 +91,7 @@ public class LinearRegressionAggregator extends MLAggregator {
 	/** {@inheritDoc} */
 	@Override
 	public void finish() throws IOException, InterruptedException {
+		System.out.println("Linearregression working now with: " + this.trainingSet.numInstances());
 		try {
 			this.model = new LinearRegression();
 			this.model.setOptions(options);
@@ -128,6 +134,9 @@ public class LinearRegressionAggregator extends MLAggregator {
 			this.flag = true;
 			this.trainingSet = new Instances("LinearRegression", this.fvAttributes, 1);
 			this.trainingSet.setClassIndex(this.NumOfAttributes-1);
+
+			this.unFilteredInstances = new Instances("LinearRegression", this.fvAttributes, 1);
+			this.unFilteredInstances.setClassIndex(this.NumOfAttributes-1);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -144,6 +153,9 @@ public class LinearRegressionAggregator extends MLAggregator {
 			this.flag = true;
 			this.trainingSet = new Instances("LinearRegression", this.fvAttributes, 1);
 			this.trainingSet.setClassIndex(this.NumOfAttributes-1);
+
+			this.unFilteredInstances = new Instances("LinearRegression", this.fvAttributes, 1);
+			this.unFilteredInstances.setClassIndex(this.NumOfAttributes-1);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -176,7 +188,7 @@ public class LinearRegressionAggregator extends MLAggregator {
 					count++;
 				}
 			}
-			this.trainingSet.add(instance);
+			handleDataInstances(instance);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -188,10 +200,25 @@ public class LinearRegressionAggregator extends MLAggregator {
 			Instance instance = new DenseInstance(this.NumOfAttributes);
 			for(int i=0; i < this.NumOfAttributes; i++)
 				instance.setValue((Attribute)this.fvAttributes.get(i), Double.parseDouble(data.get(i)));
-			this.trainingSet.add(instance);
+			handleDataInstances(instance);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	private void handleDataInstances(Instance instance) throws Exception {
+		if(unFilteredInstances.size() < maxUnfilteredThreshold) {
+			unFilteredInstances.add(instance);
+		} else {
+			regression.getCapabilities().testWithFail(unFilteredInstances);
+			Filter filter = new NominalToBinary();
+			filter.setInputFormat(unFilteredInstances);
+			applyFilterToUnfilteredInstances(filter);
+
+			filter = new ReplaceMissingValues();
+			filter.setInputFormat(unFilteredInstances);
+			applyFilterToUnfilteredInstances(filter, trainingSet);
 		}
 	}
 }

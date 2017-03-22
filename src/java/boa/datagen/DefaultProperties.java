@@ -66,4 +66,7 @@ public class DefaultProperties {
 	public static String localIssuePath = null;
 	public static String localCommentPath = null;
 	public static String localOutput = null;
+
+	public static String HADOOP_SEQ_FILE_LOCATION = "hdfs://master-link-1/outputModel";
+	public static String HADOOP_OUT_LOCATION = "hdfs://master-link-1/outputModel";
 }

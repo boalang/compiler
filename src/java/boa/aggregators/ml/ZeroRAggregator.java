@@ -194,4 +194,14 @@ public class ZeroRAggregator extends MLAggregator {
 			e.printStackTrace();
 		}
 	}
+
+	private void handleDataInstances(Instance instance) throws Exception {
+		if(unFilteredInstances.size() < maxUnfilteredThreshold) {
+			unFilteredInstances.add(instance);
+		} else {
+			model.getCapabilities().testWithFail(unFilteredInstances);
+			unFilteredInstances.deleteWithMissingClass();
+			moveFromUnFilteredToFiltered(trainingSet);
+		}
+	}
 }

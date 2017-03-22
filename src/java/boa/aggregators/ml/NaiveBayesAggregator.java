@@ -16,21 +16,15 @@
  */
 package boa.aggregators.ml;
 
+import boa.BoaTup;
+import boa.aggregators.AggregatorSpec;
+import org.apache.commons.lang.math.NumberUtils;
+import weka.classifiers.bayes.NaiveBayes;
+import weka.core.*;
+
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
-
-import org.apache.commons.lang.math.NumberUtils;
-
-import boa.BoaTup;
-import boa.aggregators.AggregatorSpec;
-
-import weka.classifiers.bayes.NaiveBayes;
-import weka.core.Attribute;
-import weka.core.Instance;
-import weka.core.DenseInstance;
-import weka.core.Instances;
-import weka.core.Utils;
 
 /**
  * A Boa aggregator for training the model using NaiveBayes.
@@ -50,11 +44,17 @@ public class NaiveBayesAggregator extends MLAggregator {
 	private boolean flag;
 
 	public NaiveBayesAggregator() {
+		this.model = new NaiveBayes();
 	}
 
 	public NaiveBayesAggregator(final String s) {
 		super(s);
-
+		this.model = new NaiveBayes();
+		try{
+			this.model.setOptions(options);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		try {
 			options = Utils.splitOptions(s);
 		} catch (Exception e) {
@@ -87,8 +87,6 @@ public class NaiveBayesAggregator extends MLAggregator {
 	@Override
 	public void finish() throws IOException, InterruptedException {
 		try {
-			this.model = new NaiveBayes();
-			this.model.setOptions(options);
 			this.model.buildClassifier(this.trainingSet);
 		} catch(Exception e) {
 			e.printStackTrace();
@@ -176,7 +174,7 @@ public class NaiveBayesAggregator extends MLAggregator {
 					count++;
 				}
 			}
-			this.trainingSet.add(instance);
+			handleDataInstances(instance);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -188,10 +186,20 @@ public class NaiveBayesAggregator extends MLAggregator {
 			Instance instance = new DenseInstance(this.NumOfAttributes);
 			for(int i=0; i < this.NumOfAttributes; i++)
 				instance.setValue((Attribute)this.fvAttributes.get(i), Double.parseDouble(data.get(i)));
-			this.trainingSet.add(instance);
+			handleDataInstances(instance);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	private void handleDataInstances(Instance instance) throws Exception {
+		if(unFilteredInstances.size() < maxUnfilteredThreshold) {
+			unFilteredInstances.add(instance);
+		} else {
+			model.getCapabilities().testWithFail(unFilteredInstances);
+			unFilteredInstances.deleteWithMissingClass();
+			moveFromUnFilteredToFiltered(trainingSet);
 		}
 	}
 }

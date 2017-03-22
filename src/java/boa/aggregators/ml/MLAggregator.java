@@ -19,6 +19,8 @@ package boa.aggregators.ml;
 import java.io.IOException;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
+import java.util.HashSet;
+import java.util.Set;
 
 import boa.aggregators.Aggregator;
 import boa.datagen.DefaultProperties;
@@ -33,33 +35,37 @@ import org.apache.hadoop.mapred.FileOutputFormat;
 
 import weka.classifiers.Evaluation;
 import weka.classifiers.Classifier;
+import weka.core.Instance;
 import weka.core.Instances;
+import weka.filters.Filter;
+import weka.filters.unsupervised.attribute.ReplaceMissingValues;
 
 /**
  * A Boa ML aggregator to train models.
- * 
+ *
  * @author ankuraga
  */
 public abstract class MLAggregator extends Aggregator {
-	
+	protected Instances unFilteredInstances;
+	protected final static int maxUnfilteredThreshold = 0;
+
 	public MLAggregator() {
 	}
-	
+
 	public MLAggregator(final String s) {
 		super(s);
 	}
-	
+
 	public void evaluate(Classifier model, Instances trainingSet) {
 		try {
-		 Evaluation evaluation = new Evaluation(trainingSet);
-		 evaluation.evaluateModel(model, trainingSet);
-		 this.collect("  Training set evaluation \n " + evaluation.toSummaryString()); 
-		}
-		catch (Exception e) {
+			Evaluation evaluation = new Evaluation(trainingSet);
+			evaluation.evaluateModel(model, trainingSet);
+			this.collect("  Training set evaluation \n " + evaluation.toSummaryString());
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void saveTrainingSet(Object trainingSet) {
 		FSDataOutputStream out = null;
 		FileSystem fileSystem = null;
@@ -73,33 +79,40 @@ public abstract class MLAggregator extends Aggregator {
 			Path outputPath = FileOutputFormat.getOutputPath(job);
 			fileSystem = outputPath.getFileSystem(context.getConfiguration());
 
-			fileSystem.mkdirs(new Path(DefaultProperties.localOutput, new Path("" + boaJobId)));
-			filePath = new Path(DefaultProperties.localOutput, new Path("" + boaJobId, new Path(("" + getKey()).split("\\[")[0] + System.currentTimeMillis() + "data")));
-			
+			if (DefaultProperties.localOutput != null) {
+				fileSystem.mkdirs(new Path(DefaultProperties.localOutput, new Path("" + boaJobId)));
+				filePath = new Path(DefaultProperties.localOutput, new Path("" + boaJobId, new Path(("" + getKey()).split("\\[")[0] + System.currentTimeMillis() + "data")));
+			} else {
+				fileSystem.mkdirs(new Path(DefaultProperties.HADOOP_OUT_LOCATION, new Path("" + boaJobId)));
+				filePath = new Path(DefaultProperties.HADOOP_OUT_LOCATION, new Path("" + boaJobId, new Path(("" + getKey()).split("\\[")[0] + System.currentTimeMillis() + "data")));
+			}
+
 			if (fileSystem.exists(filePath))
 				return;
 
 			out = fileSystem.create(filePath);
-			
+
 			ByteArrayOutputStream byteOutStream = new ByteArrayOutputStream();
 			objectOut = new ObjectOutputStream(byteOutStream);
 			objectOut.writeObject(trainingSet);
 			byte[] serializedObject = byteOutStream.toByteArray();
-			
+
 			out.write(serializedObject);
-			
+
 			this.collect(filePath.toString());
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			try { 
+			try {
 				if (out != null) out.close();
 				if (objectOut != null) objectOut.close();
-			} catch (final Exception e) { e.printStackTrace(); }
+			} catch (final Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
-	
+
 	public void saveModel(Object model) {
 		FSDataOutputStream out = null;
 		FileSystem fileSystem = null;
@@ -113,35 +126,62 @@ public abstract class MLAggregator extends Aggregator {
 			Path outputPath = FileOutputFormat.getOutputPath(job);
 			fileSystem = outputPath.getFileSystem(context.getConfiguration());
 
-			fileSystem.mkdirs(new Path(DefaultProperties.localOutput, new Path("" + boaJobId)));
-			filePath = new Path(DefaultProperties.localOutput, new Path("" + boaJobId, new Path(("" + getKey()).split("\\[")[0] + System.currentTimeMillis() + "ML.model")));
-			
+			if (DefaultProperties.localOutput != null) {
+				fileSystem.mkdirs(new Path(DefaultProperties.localOutput, new Path("" + boaJobId)));
+				filePath = new Path(DefaultProperties.localOutput, new Path("" + boaJobId, new Path(("" + getKey()).split("\\[")[0] + System.currentTimeMillis() + "ML.model")));
+			} else {
+				fileSystem.mkdirs(new Path(DefaultProperties.HADOOP_OUT_LOCATION, new Path("" + boaJobId)));
+				filePath = new Path(DefaultProperties.HADOOP_OUT_LOCATION, new Path("" + boaJobId, new Path(("" + getKey()).split("\\[")[0] + System.currentTimeMillis() + "ML.model")));
+			}
+
+
 			if (fileSystem.exists(filePath))
 				return;
 
 			out = fileSystem.create(filePath);
-			
+
 			ByteArrayOutputStream byteOutStream = new ByteArrayOutputStream();
 			objectOut = new ObjectOutputStream(byteOutStream);
 			objectOut.writeObject(model);
 			byte[] serializedObject = byteOutStream.toByteArray();
-			
+
 			out.write(serializedObject);
-			
+
 			this.collect(filePath.toString());
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			try { 
+			try {
 				if (out != null) out.close();
 				if (objectOut != null) objectOut.close();
-			} catch (final Exception e) { e.printStackTrace(); }
+			} catch (final Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
-	
-	/** {@inheritDoc} */
+
+	protected void applyFilterToUnfilteredInstances(Filter filter) throws Exception {
+		unFilteredInstances = Filter.useFilter(unFilteredInstances, filter);
+	}
+
+	protected void applyFilterToUnfilteredInstances(Filter filter, Instances filteredInstances) throws Exception {
+		unFilteredInstances = Filter.useFilter(unFilteredInstances, filter);
+		moveFromUnFilteredToFiltered(filteredInstances);
+	}
+
+	protected void moveFromUnFilteredToFiltered(Instances filteredInstances) {
+		int totalUnfilteredInstances = unFilteredInstances.numInstances();
+		filteredInstances.addAll(unFilteredInstances.subList(0, totalUnfilteredInstances));
+		while(totalUnfilteredInstances-- > 0) {
+			unFilteredInstances.remove(0);
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public abstract void aggregate(final String data, final String metadata) throws NumberFormatException, IOException, InterruptedException;
-	
+
 }

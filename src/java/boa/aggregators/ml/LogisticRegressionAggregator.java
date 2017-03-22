@@ -31,6 +31,9 @@ import weka.core.Instance;
 import weka.core.DenseInstance;
 import weka.core.Instances;
 import weka.core.Utils;
+import weka.filters.Filter;
+import weka.filters.supervised.attribute.NominalToBinary;
+import weka.filters.unsupervised.attribute.ReplaceMissingValues;
 
 /**
  * A Boa aggregator for training the model using Logistic.
@@ -128,6 +131,9 @@ public class LogisticRegressionAggregator extends MLAggregator {
 			this.flag = true;
 			this.trainingSet = new Instances("Logistic", this.fvAttributes, 1);
 			this.trainingSet.setClassIndex(this.NumOfAttributes-1);
+
+			this.unFilteredInstances = new Instances("LinearRegression", this.fvAttributes, 1);
+			this.unFilteredInstances.setClassIndex(this.NumOfAttributes-1);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -144,6 +150,9 @@ public class LogisticRegressionAggregator extends MLAggregator {
 			this.flag = true;
 			this.trainingSet = new Instances("Logistic", this.fvAttributes, 1);
 			this.trainingSet.setClassIndex(this.NumOfAttributes-1);
+
+			this.unFilteredInstances = new Instances("LinearRegression", this.fvAttributes, 1);
+			this.unFilteredInstances.setClassIndex(this.NumOfAttributes-1);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -176,7 +185,7 @@ public class LogisticRegressionAggregator extends MLAggregator {
 					count++;
 				}
 			}
-			this.trainingSet.add(instance);
+			handleDataInstances(instance);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -188,10 +197,26 @@ public class LogisticRegressionAggregator extends MLAggregator {
 			Instance instance = new DenseInstance(this.NumOfAttributes);
 			for(int i=0; i < this.NumOfAttributes; i++)
 				instance.setValue((Attribute)this.fvAttributes.get(i), Double.parseDouble(data.get(i)));
-			this.trainingSet.add(instance);
+
+			handleDataInstances(instance);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	private void handleDataInstances(Instance instance) throws Exception {
+		if(unFilteredInstances.size() < maxUnfilteredThreshold) {
+			unFilteredInstances.add(instance);
+		} else {
+			model.getCapabilities().testWithFail(unFilteredInstances);
+			Filter filter = new NominalToBinary();
+			filter.setInputFormat(unFilteredInstances);
+			applyFilterToUnfilteredInstances(filter);
+
+			filter = new ReplaceMissingValues();
+			filter.setInputFormat(unFilteredInstances);
+			applyFilterToUnfilteredInstances(filter, trainingSet);
 		}
 	}
 }

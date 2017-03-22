@@ -1,2 +1,6 @@
 build/
 dist/
+.class
+.idea/
+out/
+compile
