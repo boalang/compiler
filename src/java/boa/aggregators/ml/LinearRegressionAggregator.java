@@ -16,209 +16,179 @@
  */
 package boa.aggregators.ml;
 
+import boa.BoaTup;
+import boa.aggregators.AggregatorSpec;
+import org.apache.commons.lang.math.NumberUtils;
+import weka.classifiers.functions.LinearRegression;
+import weka.core.*;
+
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Set;
-
-import org.apache.commons.lang.math.NumberUtils;
-
-import boa.BoaTup;
-import boa.aggregators.AggregatorSpec;
-
-import weka.classifiers.functions.LinearRegression;
-import weka.core.Attribute;
-import weka.core.Instance;
-import weka.core.DenseInstance;
-import weka.core.Instances;
-import weka.core.Utils;
-import weka.filters.Filter;
-import weka.filters.supervised.attribute.NominalToBinary;
-import weka.filters.unsupervised.attribute.ReplaceMissingValues;
 
 /**
  * A Boa aggregator for training the model using LinearRegression.
- * 
+ *
  * @author ankuraga
  */
 @AggregatorSpec(name = "linearregression", formalParameters = {"string"})
 public class LinearRegressionAggregator extends MLAggregator {
-	private ArrayList<String> vector = new ArrayList<String>();
-	private ArrayList<BoaTup> tuples = new ArrayList<BoaTup>();
-	private String[] options;
-	private int count = 0;
-	private LinearRegression model;
-	private int NumOfAttributes;
-	private ArrayList<Attribute> fvAttributes;
-	private Instances trainingSet;
-	private boolean flag;
-	private final LinearRegression regression = new LinearRegression();
+    private ArrayList<String> vector = new ArrayList<String>();
+    private ArrayList<BoaTup> tuples = new ArrayList<BoaTup>();
+    private String[] options;
+    private int count = 0;
+    private LinearRegression model;
+    private int NumOfAttributes;
+    private ArrayList<Attribute> fvAttributes;
+    private Instances trainingSet;
+    private boolean flag;
+    private final LinearRegression regression = new LinearRegression();
 
-	public LinearRegressionAggregator() {
-	}
-	
-	public LinearRegressionAggregator(final String s) {
-		super(s);
+    public LinearRegressionAggregator() {
+        this.model = new LinearRegression();
+    }
 
-		try {
-			options = Utils.splitOptions(s);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+    public LinearRegressionAggregator(final String s) {
+        super(s);
 
-	public void aggregate(final String data, final String metadata) throws IOException, InterruptedException {
-		if(this.count != this.getVectorSize()) {
-			this.vector.add(data);
-			this.count++;
-		}
+        try {
+            options = Utils.splitOptions(s);
+            this.model = new LinearRegression();
+            this.model.setOptions(options);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-		if(this.count == this.getVectorSize()) {
-			if(this.flag != true)
-				attributeCreation();
-			instanceCreation(this.vector);
-			this.vector = new ArrayList<String>();
-			this.count = 0;
-		}
-	}
-	
-	public void aggregate(final BoaTup data, final String metadata) throws IOException, InterruptedException {
-		if(this.flag != true)
-			attributeCreation(data);
-		instanceCreation(data);	
-	}
+    public void aggregate(final String data, final String metadata) throws IOException, InterruptedException {
+        if (this.count != this.getVectorSize()) {
+            this.vector.add(data);
+            this.count++;
+        }
 
-	/** {@inheritDoc} */
-	@Override
-	public void finish() throws IOException, InterruptedException {
-		System.out.println("Linearregression working now with: " + this.trainingSet.numInstances());
-		try {
-			this.model = new LinearRegression();
-			this.model.setOptions(options);
-			this.model.buildClassifier(this.trainingSet);
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
+        if (this.count == this.getVectorSize()) {
+            if (this.flag != true)
+                attributeCreation();
+            instanceCreation(this.vector);
+            this.vector = new ArrayList<String>();
+            this.count = 0;
+        }
+    }
 
-		this.saveModel(this.model);
-		this.saveTrainingSet(this.trainingSet);
-		this.collect(this.model.toString());
-	}
-	
-	public void attributeCreation(BoaTup data) {
-		this.fvAttributes = new ArrayList<Attribute>();
-		try {
-			String[] fieldNames = data.getFieldNames();
-			int count = 0;
-			for(int i = 0; i < fieldNames.length; i++) {
-				if(data.getValue(fieldNames[i]).getClass().isEnum()) {
-					ArrayList<String> fvNominalVal = new ArrayList<String>();
-					for(Object obj: data.getValue(fieldNames[i]).getClass().getEnumConstants())
-						fvNominalVal.add(obj.toString());
-					this.fvAttributes.add(new Attribute("Nominal" + count, fvNominalVal));
-					count++;
-				}
-				else if(data.getValue(fieldNames[i]).getClass().isArray()) {
-					int l = Array.getLength(data.getValue(fieldNames[i])) - 1;
-					for(int j = 0; j <= l; j++) {
-						this.fvAttributes.add(new Attribute("Attribute" + count)); 
-						count++;
-					}
-				}
-				else {
-					this.fvAttributes.add(new Attribute("Attribute" + count)); 
-					count++;
-				}
-			}
-			this.NumOfAttributes = count;
-			this.flag = true;
-			this.trainingSet = new Instances("LinearRegression", this.fvAttributes, 1);
-			this.trainingSet.setClassIndex(this.NumOfAttributes-1);
+    public void aggregate(final BoaTup data, final String metadata) throws IOException, InterruptedException {
+        if (this.flag != true)
+            attributeCreation(data);
+        instanceCreation(data);
+    }
 
-			this.unFilteredInstances = new Instances("LinearRegression", this.fvAttributes, 1);
-			this.unFilteredInstances.setClassIndex(this.NumOfAttributes-1);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public void attributeCreation() {
-		this.fvAttributes = new ArrayList<Attribute>();
-		this.NumOfAttributes = this.getVectorSize();
-		try {
-			for(int i = 0; i < this.NumOfAttributes; i++)
-				this.fvAttributes.add(new Attribute("Attribute" + i));
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void finish() throws IOException, InterruptedException {
+        try {
+            System.out.println("Linearregression working now with: " + this.trainingSet.numInstances());
+            this.model.buildClassifier(this.trainingSet);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("modeling done");
+        this.saveModel(this.model);
+//		this.saveTrainingSet(this.trainingSet);
+        this.collect(this.model.toString());
+    }
 
-			this.flag = true;
-			this.trainingSet = new Instances("LinearRegression", this.fvAttributes, 1);
-			this.trainingSet.setClassIndex(this.NumOfAttributes-1);
+    public void attributeCreation(BoaTup data) {
+        this.fvAttributes = new ArrayList<Attribute>();
+        try {
+            String[] fieldNames = data.getFieldNames();
+            int count = 0;
+            for (int i = 0; i < fieldNames.length; i++) {
+                if (data.getValue(fieldNames[i]).getClass().isEnum()) {
+                    ArrayList<String> fvNominalVal = new ArrayList<String>();
+                    for (Object obj : data.getValue(fieldNames[i]).getClass().getEnumConstants())
+                        fvNominalVal.add(obj.toString());
+                    this.fvAttributes.add(new Attribute("Nominal" + count, fvNominalVal));
+                    count++;
+                } else if (data.getValue(fieldNames[i]).getClass().isArray()) {
+                    int l = Array.getLength(data.getValue(fieldNames[i])) - 1;
+                    for (int j = 0; j <= l; j++) {
+                        this.fvAttributes.add(new Attribute("Attribute" + count));
+                        count++;
+                    }
+                } else {
+                    this.fvAttributes.add(new Attribute("Attribute" + count));
+                    count++;
+                }
+            }
+            this.NumOfAttributes = count;
+            this.flag = true;
+            this.trainingSet = new Instances("LinearRegression", this.fvAttributes, 1);
+            this.trainingSet.setClassIndex(this.NumOfAttributes - 1);
 
-			this.unFilteredInstances = new Instances("LinearRegression", this.fvAttributes, 1);
-			this.unFilteredInstances.setClassIndex(this.NumOfAttributes-1);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public void instanceCreation(BoaTup data){
-		try {
-			int count=0;
-			Instance instance = new DenseInstance(this.NumOfAttributes);
-			String[] fieldNames = data.getFieldNames();
-			for(int i = 0; i < fieldNames.length; i++) {
-				if(data.getValue(fieldNames[i]).getClass().isEnum()) {
-					instance.setValue((Attribute)this.fvAttributes.get(count), String.valueOf(data.getValue(fieldNames[i])));
-					count++;
-				}
-				else if(data.getValue(fieldNames[i]).getClass().isArray()) {
-					int x = Array.getLength(data.getValue(fieldNames[i])) - 1;
-					Object o = data.getValue(fieldNames[i]);
-					for(int j = 0; j <= x; j++) {
-						instance.setValue((Attribute)this.fvAttributes.get(count), Double.parseDouble(String.valueOf(Array.get(o, j))));
-						count++;
-					}
-				}
-				else {
-					if(NumberUtils.isNumber(String.valueOf(data.getValue(fieldNames[i]))))
-						instance.setValue((Attribute)this.fvAttributes.get(count),  Double.parseDouble(String.valueOf(data.getValue(fieldNames[i]))));
-					else
-						instance.setValue((Attribute)this.fvAttributes.get(count),  String.valueOf(data.getValue(fieldNames[i])));
-					count++;
-				}
-			}
-			handleDataInstances(instance);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public void instanceCreation(ArrayList<String> data){
-		try {
-			Instance instance = new DenseInstance(this.NumOfAttributes);
-			for(int i=0; i < this.NumOfAttributes; i++)
-				instance.setValue((Attribute)this.fvAttributes.get(i), Double.parseDouble(data.get(i)));
-			handleDataInstances(instance);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+            this.unFilteredInstances = new Instances("LinearRegression", this.fvAttributes, 1);
+            this.unFilteredInstances.setClassIndex(this.NumOfAttributes - 1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-	private void handleDataInstances(Instance instance) throws Exception {
-		if(unFilteredInstances.size() < maxUnfilteredThreshold) {
-			unFilteredInstances.add(instance);
-		} else {
-			regression.getCapabilities().testWithFail(unFilteredInstances);
-			Filter filter = new NominalToBinary();
-			filter.setInputFormat(unFilteredInstances);
-			applyFilterToUnfilteredInstances(filter);
+    public void attributeCreation() {
+        this.fvAttributes = new ArrayList<Attribute>();
+        this.NumOfAttributes = this.getVectorSize();
+        try {
+            for (int i = 0; i < this.NumOfAttributes; i++)
+                this.fvAttributes.add(new Attribute("Attribute" + i));
 
-			filter = new ReplaceMissingValues();
-			filter.setInputFormat(unFilteredInstances);
-			applyFilterToUnfilteredInstances(filter, trainingSet);
-		}
-	}
+            this.flag = true;
+            this.trainingSet = new Instances("LinearRegression", this.fvAttributes, 1);
+            this.trainingSet.setClassIndex(this.NumOfAttributes - 1);
+
+            this.unFilteredInstances = new Instances("LinearRegression", this.fvAttributes, 1);
+            this.unFilteredInstances.setClassIndex(this.NumOfAttributes - 1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void instanceCreation(BoaTup data) {
+        try {
+            int count = 0;
+            Instance instance = new DenseInstance(this.NumOfAttributes);
+            String[] fieldNames = data.getFieldNames();
+            for (int i = 0; i < fieldNames.length; i++) {
+                if (data.getValue(fieldNames[i]).getClass().isEnum()) {
+                    instance.setValue((Attribute) this.fvAttributes.get(count), String.valueOf(data.getValue(fieldNames[i])));
+                    count++;
+                } else if (data.getValue(fieldNames[i]).getClass().isArray()) {
+                    int x = Array.getLength(data.getValue(fieldNames[i])) - 1;
+                    Object o = data.getValue(fieldNames[i]);
+                    for (int j = 0; j <= x; j++) {
+                        instance.setValue((Attribute) this.fvAttributes.get(count), Double.parseDouble(String.valueOf(Array.get(o, j))));
+                        count++;
+                    }
+                } else {
+                    if (NumberUtils.isNumber(String.valueOf(data.getValue(fieldNames[i]))))
+                        instance.setValue((Attribute) this.fvAttributes.get(count), Double.parseDouble(String.valueOf(data.getValue(fieldNames[i]))));
+                    else
+                        instance.setValue((Attribute) this.fvAttributes.get(count), String.valueOf(data.getValue(fieldNames[i])));
+                    count++;
+                }
+            }
+            trainingSet.add(instance);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void instanceCreation(ArrayList<String> data) {
+        try {
+            Instance instance = new DenseInstance(this.NumOfAttributes);
+            for (int i = 0; i < this.NumOfAttributes; i++)
+                instance.setValue((Attribute) this.fvAttributes.get(i), Double.parseDouble(data.get(i)));
+            trainingSet.add(instance);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
