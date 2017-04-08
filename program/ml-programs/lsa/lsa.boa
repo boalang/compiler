@@ -1,0 +1,74 @@
+p: Project = input;
+stopwords : array of string = {"","a","about","above","after","again","against","all","am","an","and","any","are","arent","as","at","be","because","been","before","being","below","between","both","but","by","cant","cannot","could","couldnt","did","didnt","do","does","doesnt","doing","dont","down","during","each","few","for","from","further","had","hadnt","has","hasnt","have","havent","having","he","hed","hell","hes","her","here","heres","hers","herself","him","himself","his","how","hows","i","id","ill","im","ive","if","in","into","is","isnt","it","its","its","itself","lets","me","more","most","mustnt","my","myself","no","nor","not","of","off","on","once","only","or","other","ought","our","ours"
+,"ourselves","out","over","own","same","shant","she","shed","shell","shes","should","shouldnt","so","some","such","than","that","thats","the","their","theirs","them","themselves","then","there","theres","these","they","theyd","theyll","theyre","theyve","this","those","through","to","too","under","until","up","very","was","wasnt","we","wed","well","were","weve","were","werent","what","whats","when","whens","where","wheres","which","while","who","whos","whom","why","whys","with","wont","would","wouldnt","you","youd","youll","youre","youve","your","yours","yourself","yourselves"};
+
+terms : array of string = {"AST","Abstract","Aggregation","Aggregator","Annotation","Arg","Argu","Array","Assignment","Ast","Attached","Attachment","Bad","Base","Block","Boa","Bool","Bottom","Break","Bug","Builder","Bytes","CA","CBC","CFG","COUNTER","CSV","Call","Case","Casts","Cfg","Change","Changed","Char","Check","Checking","Class","Classifier","Classifying","Code","Codegen","Collecting","Collection","Combiner","Comment","Comments","Commit","Committer","Comparison","Compiler","Component","Composite","Confidence","Conjunction","Connector","Content","Continue","Control","Converter","Counted","Counting","Creator","Credentials","Custom","DIT","Debugger","Decl","Declaration","Declarator","Default","Description","Details","Dev","Dialog","Diff","Distinct","Doubles","Edge","Emit","Encoding","Error","Escape","Evaluator","Exception","Exists","Expr","Expression","Factor","Fetch","File","Finding","Fingerprint","Finished","Float","Foreach","Forge","Format","Function","Functions","Gen","Generating","Generator","Generics","Git","Good","Graph","Graphviz","HBASE","Halaman","Handler","Histogram","IO","Identifier","Impl","Import","Importer","Index","Indexee","Info","Initialization","Input","Int","Integer","Interval","Intrinsics","Ints","Invalid","Invocation","Issue","Issues","Java","Job","Jobs","Json","Key","Kind","Kurtosis","LCOO","LONG","Label","Lexer","List","Listener","Literal","Loader","Local","Location","Log","Main","Make","Manager","Map","Mapper","Math","Max","Maximum","Mean","Median","Merge","Merging","Method","Metric","Min","Minimum","Modifier","Module","Mrcounter","NOA","NOC","NOO","NPM","Name","Namespace","New","Node","Normal","Object","One","Open","Operand","Optimizing","Output","Page","Pair","Paren","Parse","Parser","Partitioner","Password","Person","Position","Postfix","Program","Project","Properties","Proto","Provider","Quantile","Quartile","REGEX","RFC","Random","Reducer","Rename","Repo","Repository","Result","Return","Revision","Root","Runner","Runtime","Save","Scalar","Script","Selection","Selector","Self","Seq","Sequence","Service","Set","Setup","Shared","Simple","Sizzle","Skewness","Snapshot","Sort","Sorted","Sorter","Spec","Special","St","Stack","Standalone","Start","Statement","Static","Statistics","Stop","Store","String","Submit","Sum","Switch","Symbol","TIME","Table","Task","Ten","Term","Test","Text","Time","Tokenizer","Top","Toplevel","Transformer","Trie","Tuple","Type","Typecheck","Ui","Unary","Unique","Update","Validation","Value","Var","Varargs","Variable","Variance","View","Visibility","Visit","Visitor","Weighted","Wizard","_",
+"total"};
+authors: array of string = {"Hridesh Rajan","RamIowaStateUniversity","Robert Dyer","Sambhav P. Srirama","Sambhav Srirama","ankuraga1508","ganeshrvce","gupadhyaya","ssrirama","subhanshuja"};
+
+size:= len(terms)-1;
+sauthors := len(authors)-1;
+collect: output sum[string] of int;
+filename : string;
+s:string;
+a : array of string; 
+a = new(a, size + 1, "");
+
+model : output lsa of array of string;
+
+stopword := function(str: string) : bool {
+		if(match("[0-9]+", str))
+			return true;
+
+		l := len(stopwords)-1;
+		while(l>=0) {
+			if(stopwords[l] == str)
+				return true;
+		l--;
+		}
+		return false;
+};
+
+keyword := function(str: string) {
+	arr := splitall(str, format("%s|%s|%s",
+         "(?<=[A-Z])(?=[A-Z][a-z])",
+         "(?<=[^A-Z])(?=[A-Z])",
+         "(?<=[A-Za-z])(?=[^A-Za-z])"));
+
+	length := len(arr)-1;
+	while(length >=0) {
+		s = arr[length];
+		if(!stopword(lowercase(s))) {
+			e := size;
+			while(e >=0) {
+				if(terms[e] == s){
+					a[e] = s;
+					
+				}
+				e--;			
+			}
+					
+		}	
+		length--;
+	}
+};
+
+visit(p, visitor {
+	before n: CodeRepository -> {
+		snapshot := getsnapshot(n);
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+
+	before node:ChangedFile -> {
+		model << a;
+		a = new(a, size+1, "");
+		filename =  node.name;
+	}
+
+	before node: Declaration -> keyword(node.name);
+
+});
+
+

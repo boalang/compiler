@@ -1,0 +1,60 @@
+p: Project = input;
+
+more_fixing_set : array of string = {"update issue proto types","minor changes to the issues proto types","better error handling when accessing hbase to get an AST","refactoring the runtime exceptions so in the future we can easily list location of type errors","add debug message on hbase errors","improve the accuracy of the typecheck error messages","remove stdout/stderr tables and add error message if no output is defined","add error when no emit statements exist","better error message","give an error if a non-visit statement is used inside a visitor","updating the AST nodes based on work being done on the new parser and to make them a bit more robust to construction errors","better error messages for arithmetic errors","initial work on parser error recovery","better error messages for output variable decls","trap a type error","better error message","support line numbers in errors","support lexer error messages similar to parser errors","use same error reporting for typecheck errors","better error messages","properly report errors when using operands on types that dont support them","better error messages when using a keyword where you shouldnt","special-case parse error for function where arguments are missing their identifier","reword codegen test so javac errors are trapped and can be validated","trap a parse error where an emit statement has no expression before the weight expression","update data schema to add ForgeKind to Project and add initial support for Issues","add test for allowing recursive functions (currently a bug)","add a testcase for a bug","add test for another bug","add failing test for bug","add regression test for bug 44","add testcase for last bug","make error log list which node error was on","add new test case for bug 29","add testcase for bug where sum of double caused codegen failure","add test case for parser error"};
+
+terms : array of string = {"refactor","the","error","with","fix","ast","allow","other","protobuf","visitor","simplify","compile","table","file","initial","are","for","test","functions","input","that","so","minor","to","variable","string","hbase","data","we","cleanup","in","it","is","if","was","add","from","this","statement","when","more","files","merge","dont","on","only","of","no","an","as","at","types","better","and","be","by","before","missing","visit","using","maps","issue","refactoring","parser","output","visitors","function","cfg","bug","compiler","remove","some","not","unused","avoid","case","java8","messages","use","also","codegen","proto","into","added","where","type","method","master","tests","build","branch","support","errors","adding","java","inside","which","statements","update","make","code","change","boa","new","a","parse","1","bit","generation"};
+
+words : map[string] of int;
+print: output collection of string;
+
+vector : array of int;
+vector = new(vector, len(terms), 0);
+
+type T = enum {fix = "fix", notfix = "notfix"};
+training : output smo of {array of int, T};
+
+correct_label := function(logs: string) : bool {
+		l:=len(more_fixing_set) - 1;
+		while(l >= 0) {
+			if(trim(logs) == more_fixing_set[l]) {
+				return false;
+			}
+		l--;
+		}
+	return true;
+};
+
+visit(p, visitor {
+	before node: Revision -> {
+	if(yearof(node.commit_date) > 2012) {
+		splitwords := splitall(node.log, "[^0-9a-zA-Z]+");
+		k := len(splitwords) - 1;
+		str : string;
+		while(k >= 0) {
+			str = lowercase(splitwords[k]);
+			l := len(terms) - 1;
+			while(l >= 0) {
+				if(str == terms[l])
+					vector[l] = 1;
+	
+			l--;
+			}
+		k--;	
+		}
+
+		if(isfixingrevision(node.log)) {
+			if(correct_label(node.log) == true)
+				training << {vector, T.fix};
+			else
+				training << {vector, T.notfix}; 
+		}
+		else
+			training << {vector, T.notfix}; 
+
+		vector = new(vector, len(terms), 0); 
+	}	
+	}
+	
+});
+
+

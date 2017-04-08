@@ -1,0 +1,154 @@
+p: Project = input;
+
+print : output collection[string][int][int][int][int][int][int][int][int][int][int][int][string] of int;
+print1 : output collection[string] of string;
+
+type T1 = enum {buggy = "buggy", notbuggy = "notbuggy"};
+
+type T = {totalloc:int, maxloc: int, countloc: int, totalclass: int, maxclass: int, countclass:int, totalinterface:int, maxinterface:int, countinterface:int, totalanonymous: int, maxanonymous: int,  countanonymous: int, totalmcall:int, countmcall:int, maxmcall:int, totalmlines : int, maxmlines : int, countmlines:int, totalparam:int, maxparam:int, totalfields:int, totalsfields:int, totalsmethods:int, class: T1};
+
+package : map[string] of T;
+bugs : map[string] of T1;
+
+train_package_level : output logistic of {int, int,int,int,int,int,int, int, int, int, int, T1};
+
+visit(p, visitor {
+    before node: Revision -> {
+	str: string;
+	if(isfixingrevision(node.log)) {
+		foreach (i: int; def(node.files[i])) {
+			str = node.files[i].name;
+			bugs[str] = T1.buggy;
+			
+		}
+	}
+}
+	
+});
+
+visit(p, visitor {
+	before node: CodeRepository -> {
+		snapshot := getsnapshot(node, "SOURCE_JAVA_JLS");
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+		
+	before node: ChangedFile -> {
+		Totalloc := 0;
+		Totalmcall := 0;
+		Totalclass := 0;
+		Totalinterface := 0;
+		Totalanonymous := 0;
+		Countmcall := 1;
+		Maxmcall := 0;
+		Totalmlines :=0;
+		Maxmlines :=0;
+		Totalmparam :=0;
+		Maxparam :=0;
+		Totalfields :=0;
+		Totalsfields :=0;
+		Totalsmethods :=0;
+		visit(getast(node), visitor {
+        		before node: Statement ->
+            			Totalloc = Totalloc + 1;
+			
+			before node: Method -> {
+				Countmcall++;
+				Totalmparam = Totalmparam + len(node.generic_parameters);
+				visit(node, visitor {
+					before node: Statement ->
+            					Totalmlines = Totalmlines + 1;
+
+					before node: Expression ->
+						if (node.kind == ExpressionKind.METHODCALL)
+							Totalmcall++;
+				});
+				if(Maxmcall < Totalmcall)
+					Maxmcall = Totalmcall;
+				if(Maxmlines < Totalmlines)
+					Maxmlines = Totalmlines;
+				if(Maxparam < Totalmparam)
+					Maxparam = Totalmparam;
+			}
+			
+			before node: Declaration -> {
+				Totalfields = Totalfields + len(node.fields);
+
+				foreach(i:int; node.fields[i]) {
+					foreach(j:int; node.fields[i].modifiers[j]) {
+						if(node.fields[i].modifiers[j].kind == ModifierKind.STATIC)				
+							Totalsfields = Totalsfields + 1;	
+					}	
+				}
+
+				foreach(i:int; node.methods[i]) {
+					foreach(j:int; node.methods[i].modifiers[j]) {
+						if(node.methods[i].modifiers[j].kind == ModifierKind.STATIC)				
+							Totalsmethods = Totalsmethods + 1;	
+					}	
+				}
+	
+				if(node.kind == TypeKind.CLASS)
+					Totalclass++; 
+				if(node.kind == TypeKind.INTERFACE)
+					Totalinterface++; 
+				if(node.kind == TypeKind.ANONYMOUS)
+					Totalanonymous++;
+			}
+			
+    		});
+		str : string = node.name;
+		if(!haskey(package, node.name))
+			package[str] = {Totalloc, Totalloc, 1, Totalclass,Totalclass,1,Totalinterface,Totalinterface,1,Totalanonymous,Totalanonymous,1, Totalmcall, Countmcall,Maxmcall,Totalmlines,Maxmlines,Countmcall,Totalmparam,Maxparam, Totalfields, Totalsfields,Totalsmethods, T1.notbuggy};	
+		else {	
+			package[str] = {package[str].totalloc + Totalloc, package[str].maxloc, package[str].countloc + 1, package[str].totalclass + Totalclass, package[str].maxclass, package[str].countclass + 1, package[str].totalinterface + Totalinterface, package[str].maxinterface, package[str].countinterface + 1, package[str].totalanonymous + Totalanonymous, package[str].maxanonymous, package[str].countanonymous + 1, package[str].totalmcall + Totalmcall, package[str].countmcall + Countmcall,  package[str].maxmcall, package[str].totalmlines + Totalmlines, package[str].maxmlines, package[str].countmlines + Countmcall, package[str].totalparam + Totalmparam,package[str].maxparam, package[str].totalfields + Totalfields , package[str].totalsfields + Totalsfields, package[str].totalsmethods + Totalsmethods, T1.notbuggy};
+
+			if(package[str].maxloc < Totalloc)
+				package[str] = {package[str].totalloc, Totalloc, package[str].countloc, package[str].totalclass, package[str].maxclass, package[str].countclass, package[str].totalinterface, package[str].maxinterface, package[str].countinterface, package[str].totalanonymous, package[str].maxanonymous, package[str].countanonymous, package[str].totalmcall, package[str].countmcall, package[str].maxmcall,package[str].totalmlines, package[str].maxmlines,package[str].countmlines,package[str].totalparam,package[str].maxparam, package[str].totalfields, package[str].totalsfields, package[str].totalsmethods, T1.notbuggy};
+
+			if(package[str].maxclass < Totalclass)
+				package[str] = {package[str].totalloc, package[str].maxloc, package[str].countloc , package[str].totalclass, Totalclass, package[str].countclass, package[str].totalinterface, package[str].maxinterface, package[str].countinterface, package[str].totalanonymous, package[str].maxanonymous, package[str].countanonymous, package[str].totalmcall, package[str].countmcall, package[str].maxmcall,package[str].totalmlines, package[str].maxmlines, package[str].countmlines, package[str].totalparam,package[str].maxparam, package[str].totalfields, package[str].totalsfields, package[str].totalsmethods,T1.notbuggy};
+
+
+			if(package[str].maxinterface < Totalinterface)
+				package[str] = {package[str].totalloc, package[str].maxloc, package[str].countloc , package[str].totalclass, package[str].maxclass, package[str].countclass, package[str].totalinterface, Totalinterface, package[str].countinterface, package[str].totalanonymous, package[str].maxanonymous, package[str].countanonymous, package[str].totalmcall, package[str].countmcall,  package[str].maxmcall,package[str].totalmlines, package[str].maxmlines, package[str].countmlines, package[str].totalparam,package[str].maxparam, package[str].totalfields, package[str].totalsfields, package[str].totalsmethods,T1.notbuggy};
+	
+			if( package[str].maxanonymous < Totalanonymous)
+				package[str] = {package[str].totalloc, package[str].maxloc, package[str].countloc , package[str].totalclass, package[str].maxclass, package[str].countclass, package[str].totalinterface, package[str].maxinterface, package[str].countinterface, package[str].totalanonymous, Totalanonymous, package[str].countanonymous, package[str].totalmcall, package[str].countmcall,  package[str].maxmcall,package[str].totalmlines, package[str].maxmlines, package[str].countmlines, package[str].totalparam, package[str].maxparam, package[str].totalfields, package[str].totalsfields, package[str].totalsmethods,T1.notbuggy};
+
+			if( package[str].maxmcall < Maxmcall)
+				package[str] = {package[str].totalloc, package[str].maxloc, package[str].countloc , package[str].totalclass, package[str].maxclass, package[str].countclass, package[str].totalinterface, package[str].maxinterface, package[str].countinterface, package[str].totalanonymous, package[str].maxanonymous, package[str].countanonymous, package[str].totalmcall, package[str].countmcall, Maxmcall, package[str].totalmlines, package[str].maxmlines, package[str].countmlines, package[str].totalparam,package[str].maxparam, package[str].totalfields, package[str].totalsfields, package[str].totalsmethods,T1.notbuggy};
+
+			if( package[str].maxmlines < Maxmlines)
+				package[str] = {package[str].totalloc, package[str].maxloc, package[str].countloc , package[str].totalclass, package[str].maxclass, package[str].countclass, package[str].totalinterface, package[str].maxinterface, package[str].countinterface, package[str].totalanonymous, package[str].maxanonymous, package[str].countanonymous, package[str].totalmcall, package[str].countmcall, package[str].maxmcall ,package[str].totalmlines, Maxmlines, package[str].countmlines, package[str].totalparam, package[str].maxparam, package[str].totalfields, package[str].totalsfields, package[str].totalsmethods,T1.notbuggy};
+
+			if( package[str].maxparam < Maxparam)
+				package[str] = {package[str].totalloc, package[str].maxloc, package[str].countloc , package[str].totalclass, package[str].maxclass, package[str].countclass, package[str].totalinterface, package[str].maxinterface, package[str].countinterface, package[str].totalanonymous, package[str].maxanonymous, package[str].countanonymous, package[str].totalmcall, package[str].countmcall, package[str].maxmcall,package[str].totalmlines, package[str].maxmlines, package[str].countmlines, package[str].totalparam, Maxparam, package[str].totalfields, package[str].totalsfields, package[str].totalsmethods,T1.notbuggy};	
+		}
+
+		if(haskey(bugs, node.name))
+				package[str] = {package[str].totalloc, package[str].maxloc, package[str].countloc , package[str].totalclass, package[str].maxclass, package[str].countclass, package[str].totalinterface, package[str].maxinterface, package[str].countinterface, package[str].totalanonymous, package[str].maxanonymous, package[str].countanonymous, package[str].totalmcall, package[str].countmcall,  package[str].maxmcall,package[str].totalmlines, package[str].maxmlines, package[str].countmlines,package[str].totalparam,package[str].maxparam, package[str].totalfields, package[str].totalsfields, package[str].totalsmethods,T1.buggy};
+	}	
+});
+
+
+k := keys(package);
+l := len(k) - 1;
+while(l >= 0) {
+
+	train_package_level << {package[k[l]].totalloc, package[k[l]].totalclass, package[k[l]].totalinterface, package[k[l]].totalanonymous, package[k[l]].totalmcall, package[k[l]].totalmlines, package[k[l]].totalparam, package[k[l]].countmcall, package[k[l]].totalfields, package[k[l]].totalsfields, package[k[l]].totalsmethods, package[k[l]].class};
+
+	#t1 : T1 = package[k[l]].class;
+	#switch (t1) {
+ 	#	case T1.buggy : 
+ 	#		print[k[l]][package[k[l]].totalloc][package[k[l]].totalclass][package[k[l]].totalinterface][package[k[l]].totalanonymous][package[k[l]].totalmcall][ package[k[l]].totalmlines][package[k[l]].totalparam][package[k[l]].countmcall][package[k[l]].totalfields][package[k[l]].totalsfields][package[k[l]].totalsmethods]["defect"] << 1; break;
+ 	#	case T1.notbuggy :
+ 	#		print[k[l]][package[k[l]].totalloc][package[k[l]].totalclass][package[k[l]].totalinterface][package[k[l]].totalanonymous][package[k[l]].totalmcall][ package[k[l]].totalmlines][package[k[l]].totalparam][package[k[l]].countmcall][package[k[l]].totalfields][package[k[l]].totalsfields][package[k[l]].totalsmethods]["notdefect"] << 1; break;
+ 		
+ 	#	default: break;
+ 	#}	
+	
+	l--;
+}
+

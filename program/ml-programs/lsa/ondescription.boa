@@ -1,0 +1,49 @@
+p: Project = input;
+stopwords : array of string = {"","a","about","above","after","again","against","all","am","an","and","any","are","arent","as","at","be","because","been","before","being","below","between","both","but","by","cant","cannot","could","couldnt","did","didnt","do","does","doesnt","doing","dont","down","during","each","few","for","from","further","had","hadnt","has","hasnt","have","havent","having","he","hed","hell","hes","her","here","heres","hers","herself","him","himself","his","how","hows","i","id","ill","im","ive","if","in","into","is","isnt","it","its","its","itself","lets","me","more","most","mustnt","my","myself","no","nor","not","of","off","on","once","only","or","other","ought","our","ours"
+,"ourselves","out","over","own","same","shant","she","shed","shell","shes","should","shouldnt","so","some","such","than","that","thats","the","their","theirs","them","themselves","then","there","theres","these","they","theyd","theyll","theyre","theyve","this","those","through","to","too","under","until","up","very","was","wasnt","we","wed","well","were","weve","were","werent","what","whats","when","whens","where","wheres","which","while","who","whos","whom","why","whys","with","wont","would","wouldnt","you","youd","youll","youre","youve","your","yours","yourself","yourselves"};
+
+terms : array of string = {"fix","make","ors","startup","reliability","fruit","hunt","monitor","usage","news","wannabe","camera","normal","project","focus","java","ease","gnucash","development","imsicatcher","scroller","attempt","im","containing","naives","habit","region","mirror","simple","sure","iptables","version","dailyguokr","statistics","process","layouts","hummingbirdme","best","keepass","personal","implementing","modern","scientificxinhuanet","flym","new","recordorganizeand","solitaire","use","done","reddit","expense","snake","wrapper","practices","based","made","example","antbased","hardware","strong","matching","going","companion","contact","money","tool","wanikanicom","oozie","centralized","mvp","appsandroidwikipedia","create","base","latest","rss","memo","see","puzzlemania","light","store","material","sparse","several","sample","experiment","board","duplicates","advanced","hacker","earthview","app","real","help","npo","lection","language","jiangxi","share","love","deeply","heart","hosted","aimsicd","speed","second","created","standalone","pixelart","them","way","implementation","traditional","apache","without","engine","different","trends","actual","patterns","works","antitheft","cpu","time","discussfrom","educational","software","httpswwwmediawikiorgwikideveloperaccess","accounting","games","easer","qiitanium","required","design","augmented","androidiphoneubuntufirefoxos","code","notes","pedometer","monitors","using","long","handling","used","application","afwall","awesome","whatsapp","conways","rootcommands","around","kanji","anime","nice","step","can","amaze","api","bitcoin","languages","popular","top","bither","binding","ad","fight","bad","hope","zhihu","documented","funfilled","sahayak","beta","including","backend","layer","nearby","secure","fast","tidy","synchronization","gives","contributing","tracker","unit","snappy","ago","gdg","website","its","puzzle","remindly","product","concept","mahjong","leeco","people","read","picker","library","memory","iphone","written","save","comments","person","stingray","records","include","cards","multiview","blocker","gerrit","users","fastergps","images","testing","open","select","download","firewall","device","qiita","access","find","compiler","hosts","weirdly","friendly","server","game","github","silent","show","status","bitocle","zookeeper","solutions","unlock","dash","coins","view","adaway","lexis","capture","leisure","perfect","delete","mobile","acquire","gsoc","free","manager","android","devices","clean","wall","douban","node","really","ntpsync","members","platform","focusing","lightweight","leetcode","acdisplay","reminders","beautiful","rich","mvvm","book","aimed","mocking","crowdfunding","client","simplified","yet","sages","talk","life","business","battery","hubbles","ex","color","notifications","well","bruteforce","githot","graphics","provide","usability","bar","another","work","tempest","file","gps","reference","feed","reality","sensor","basic","update","interface","learning","please","world","cocoin","programmeroriented","commands","implemented","play","plus","allows","official","fling","cool","showcase","list","roguelike","todo","notetaking","root","tictactoe","materialdesign","will","ntp","port","books","fun","unofficial","available","reader","","slider","materialup","prey","themes","boa","tracking","adblock","note","player","framework","ui","arcadestyle","direction","taking","purposes","tests","data","source","minimax","market","knowledge","screenshots","google","rate","stats","problems","wallet","university","kids","addictive","effectiveandroidui","user","gltron","getting","sms","plays"};
+
+model : output lsa of array of int;
+url : output collection of string;
+
+if(rand() > 0.9) {
+
+size:= len(terms)-1;
+a : array of int; 
+a = new(a, size + 1, 0);
+
+stopword := function(str: string) : bool {
+		if(match("[0-9]+", str))
+			return true;
+
+		l := len(stopwords)-1;
+		while(l>=0) {
+			if(stopwords[l] == str)
+				return true;
+		l--;
+		}
+		return false;
+};
+
+keyword := function(str: string) {
+	if(!stopword(lowercase(str))) {
+		e := size;
+		while(e >=0) {
+			if(lowercase(terms[e]) == lowercase(str)){
+				a[e] = 1;
+			}
+			e--;			
+		}			
+	}
+};
+
+des := splitall(p.description, " ");
+l := len(des)-1;
+while(l>=0){
+	keyword(des[l]);
+	l--;	
+}
+url << p.project_url;
+model << a;
+}

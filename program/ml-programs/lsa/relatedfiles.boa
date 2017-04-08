@@ -1,0 +1,86 @@
+p: Project = input;
+stopwords : array of string = {"","a","about","above","after","again","against","all","am","an","and","any","are","arent","as","at","be","because","been","before","being","below","between","both","but","by","cant","cannot","could","couldnt","did","didnt","do","does","doesnt","doing","dont","down","during","each","few","for","from","further","had","hadnt","has","hasnt","have","havent","having","he","hed","hell","hes","her","here","heres","hers","herself","him","himself","his","how","hows","i","id","ill","im","ive","if","in","into","is","isnt","it","its","its","itself","lets","me","more","most","mustnt","my","myself","no","nor","not","of","off","on","once","only","or","other","ought","our","ours"
+,"ourselves","out","over","own","same","shant","she","shed","shell","shes","should","shouldnt","so","some","such","than","that","thats","the","their","theirs","them","themselves","then","there","theres","these","they","theyd","theyll","theyre","theyve","this","those","through","to","too","under","until","up","very","was","wasnt","we","wed","well","were","weve","were","werent","what","whats","when","whens","where","wheres","which","while","who","whos","whom","why","whys","with","wont","would","wouldnt","you","youd","youll","youre","youve","your","yours","yourself","yourselves"};
+
+terms : array of string = {"kind","builder","final","listener","selected","usage","focus","or","pager","bind","simple","unbinder","int","views","action","optional","example","processor","editor","base","utils","invalid","changed","page","app","change","adapter","lection","unable","resource","things","touch","array","exception","attr","integer","string","method","detector","var","field","bitmap","mode","long","immutable","anim","binding","item","finder","nullable","shadow","checked","drawable","holder","text","find","bool","view","support","class","bindings","binder","click","activity","annotations","lint","outside","injector","edit","parameter","debouncing","setter","suppression","reset","knife","list","registry","inject","test","dimen","butter","scanner","injectable"};
+
+s:string;
+size:int;
+check:bool = false;
+l := len(terms)-1;
+
+model : output lsa of array of int;
+
+visit(p, visitor {
+	before n: CodeRepository -> {
+		snapshot := getsnapshot(n);
+		count:=0;
+		foreach (i: int; def(snapshot[i]))
+			count++;
+		size = count;		
+		stop;
+	}
+});
+
+a : array of int; 
+a = new(a, size + 1, 0);
+
+stopword := function(str: string) : bool {
+		if(len(str) < 2)
+			return true;
+
+		if(match("[0-9]+", str))
+			return true;
+
+			k := len(stopwords)-1;
+			while(k>=0) {
+				if(stopwords[k] == str)
+					return true;
+			k--;
+			}
+		return false;
+};
+
+keyword := function(str: string) : bool {
+	arr := splitall(str, format("%s|%s|%s",
+         "(?<=[A-Z])(?=[A-Z][a-z])",
+         "(?<=[^A-Z])(?=[A-Z])",
+         "(?<=[A-Za-z])(?=[^A-Za-z])"));
+
+	length := len(arr)-1;
+	while(length >=0) {
+		s = arr[length];
+		if(!stopword(lowercase(s))) {
+			if(lowercase(s) == lowercase(terms[l]))	{
+				check = true;
+				return true;	
+			}		
+		}	
+		length--;
+	}
+
+	return false;
+
+};
+
+visit(p, visitor {
+	before n: CodeRepository -> {
+		snapshot := getsnapshot(n);
+		while(l>=0) {
+			foreach (i: int; def(snapshot[i])) {
+				visit(snapshot[i]);
+				if(check == true)
+					a[i] = a[i] + 1;
+				check = false;			
+			}
+			model << a;
+			a = new(a, size+1, 0); 
+			l--;
+		}
+		stop;
+	}
+
+	before node: Declaration -> keyword(node.name);
+
+});
+

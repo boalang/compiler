@@ -1,0 +1,9 @@
+p: Project = input;
+
+type T = enum {fix = "fix", notfix = "notfix"};
+
+
+a :array of T = {T.fix,T.notfix};
+
+collect : output j48 of array of T;
+collect << {T.fix,T.notfix};

@@ -1,0 +1,84 @@
+p: Project = input;
+stopwords : array of string = {"","a","about","above","after","again","against","all","am","an","and","any","are","arent","as","at","be","because","been","before","being","below","between","both","but","by","cant","cannot","could","couldnt","did","didnt","do","does","doesnt","doing","dont","down","during","each","few","for","from","further","had","hadnt","has","hasnt","have","havent","having","he","hed","hell","hes","her","here","heres","hers","herself","him","himself","his","how","hows","i","id","ill","im","ive","if","in","into","is","isnt","it","its","its","itself","lets","me","more","most","mustnt","my","myself","no","nor","not","of","off","on","once","only","or","other","ought","our","ours"
+,"ourselves","out","over","own","same","shant","she","shed","shell","shes","should","shouldnt","so","some","such","than","that","thats","the","their","theirs","them","themselves","then","there","theres","these","they","theyd","theyll","theyre","theyve","this","those","through","to","too","under","until","up","very","was","wasnt","we","wed","well","were","weve","were","werent","what","whats","when","whens","where","wheres","which","while","who","whos","whom","why","whys","with","wont","would","wouldnt","you","youd","youll","youre","youve","your","yours","yourself","yourselves","0_","1","2","3","4","64","7","8",">", "_"};
+
+terms : array of string = {
+"validator", "make", "flood", "builder", "fill", "water", "service", "harvest", "elements", "sprite", "io", "messages", "listener", "target", "entities", "range", "constraints", "destroy", "transaction", "ftp", "identity", "writer", "epr", "citation", "win", "sheet", "provider", "block", "decorations", "sql", "bean", "delegate", "train", "single", "archer", "attribute", "publication", "metodos", "semaphore", "or", "parse", "part", "auxiliar", "menu", "tipo", "navigation", "repair", "archers", "adaptive", "link", "chave", "towers", "wizard", "defensive", "anything", "export", "window", "content", "new", "oro", "mouse", "filter", "use", "union", "accept", "float", "observer", "experimenter", "chooser", "assistant", "except", "section", "move", "action", "line", "mine", "grass", "random", "example", "rush", "compartment", "stand", "inheritance", "matching", "bloco", "transferrer", "trace", "enabler", "visitor", "editor", "defense", "tool", "upgrade", "validate", "creation", "closest", "query", "types", "callback", "build", "create", "blacksmith", "base", "blocking", "principal", "split", "utils", "store", "invalid", "tester", "fire", "meek", "messaging", "updater", "reorient", "d", "space", "resultado", "get", "changed", "strategy", "uri", "page", "app", "virtual", "non", "scrip", "adapter", "input", "catapult", "canonical", "crosscut", "control", "resource", "semantic", "composite", "properties", "advice", "impl", "instruction", "button", "empty", "lazy", "exception", "role", "neutral", "implementation", "needed", "container", "stable", "peasant", "boundary", "drag", "killed", "pointcut", "method", "units", "delay", "selection", "plugin", "cost", "general", "instantation", "funcao", "group", "troop", "field", "mapping", "database", "buildable", "intersect", "repeat", "goal", "application", "rulers", "scalar", "enum", "desktop", "bc", "physical", "listagem", "tank", "preference", "request", "load", "variaveis", "janela", "found", "attacked", "vector", "context", "cashe", "tree", "locator", "name", "controller", "command", "reverse", "introduction", "edicao", "pair", "backend", "panel", "layer", "wo", "item", "attack", "path", "comparator", "unit", "state", "number", "coast", "abstract", "shortcuts", "function", "reg", "document", "procedure", "event", "shot", "memory", "authorization", "delta", "subject", "gold", "introductions", "j", "key", "ground", "cell", "follower", "farm", "place", "footman", "text", "appearance", "aspect", "ai", "barracks", "complete", "open", "actions", "mill", "tabela", "inter", "initializer", "wood", "set", "initial", "building", "validators", "workbench", "grid", "server", "script", "game", "format", "outline", "palavras", "status", "package", "dispacher", "reachable", "bullet", "tile", "label", "result", "advisor", "view", "knight", "synchronizer", "generator", "delete", "return", "dialog", "manager", "modelos", "aodm", "wall", "http", "remote", "figure", "node", "util", "xml", "entry", "factory", "exists", "converter", "element", "global", "city", "execution", "config", "login", "greedy", "area", "perspective", "fortress", "location", "generic", "disappeared", "literals", "printing", "operations", "bco", "policy", "hud", "ok", "mini", "t", "construction", "lumber", "weaving", "parser", "edit", "instrucoes", "initializers", "trim", "shortcut", "switch", "bar", "message", "enemy", "s", "work", "info", "tinter", "file", "property", "modelagem", "ahead", "contributor", "citely", "parameter", "param", "star", "validation", "entity", "enemies", "mvbo", "navigator", "knights", "coordinates", "paths", "drop", "sensor", "contains", "update", "creator", "init", "value", "object", "interface", "persistence", "stop", "battle", "modeling", "implemented", "activator", "main", "footmen", "decorator", "interfaces", "list", "handler", "diagram", "root", "mock", "modelo", "modification", "registry", "reader", "frame", "helper", "townhall", "test", "condition", "player", "visual", "track", "model", "w", "sorter", "type", "connections", "tests", "next", "map", "dir", "descriptor", "hint", "files", "tower", "marker", "relationship", "scanner", "domain", "attributes", "duplicate", "palette", "icon", "matcher", "resizable"};
+
+check : bool = false;
+type T = enum{research = "research", se = "social bookmarking", sb = "scientific/engineering", dc = "dynamic content", cg = "code generators", ge = "games/entertainment", networking = "networking", ftp = "file transfer protocol (ftp)"};
+
+a : array of int; 
+a = new(a, len(terms), 0);
+
+model : output smo of {array of int, T};
+
+stopword := function(str: string) : bool {
+			l := len(stopwords)-1;
+			while(l>=0) {
+				if(stopwords[l] == str)
+					return true;
+			l--;
+			}
+		return false;
+};
+
+keyword := function(str: string) {
+	arr := splitall(str, format("%s|%s|%s",
+         "(?<=[A-Z])(?=[A-Z][a-z])",
+         "(?<=[^A-Z])(?=[A-Z])",
+         "(?<=[A-Za-z])(?=[^A-Za-z])"));
+
+	length := len(arr)-1;
+	s :string;
+	while(length >=0) {
+		s = lowercase(arr[length]);
+		if(!stopword(s)) {
+			e := len(terms) - 1;
+			while(e >=0) {
+				if(terms[e] == s){
+					a[e] = 1;
+				}
+				e--;			
+			}		
+		}	
+		length--;
+	}
+};
+
+
+if(!(p.project_url == "http://sourceforge.net/projects/citaceprava" || p.project_url == "http://sourceforge.net/projects/libeglx" || p.project_url == "http://sourceforge.net/projects/oslash" || p.project_url == "http://sourceforge.net/projects/web-epoch")) {	 
+
+
+visit(p, visitor {
+	before n: CodeRepository -> {
+		snapshot := getsnapshot(n);
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+
+	before node: Declaration -> keyword(node.name);
+});
+
+	foreach (i: int; def(p.topics[i])) {
+		if(lowercase(p.topics[i]) == "research") {
+			model << {a, T.research};
+		}else if(lowercase(p.topics[i]) == "social bookmarking") {
+			model << {a, T.se};
+		}else if(lowercase(p.topics[i]) == "scientific/engineering") {
+			model << {a, T.sb};
+		}else if(lowercase(p.topics[i]) == "dynamic content") {
+			model << {a, T.dc};
+		}else if(lowercase(p.topics[i]) == "code generators") {
+			model << {a, T.cg};
+		}else if(lowercase(p.topics[i]) == "games/entertainment") {
+			model << {a, T.ge};
+		}else if(lowercase(p.topics[i]) == "networking") {
+			model << {a, T.networking};
+		}else if(lowercase(p.topics[i]) == "file transfer protocol (ftp)") {
+			model << {a, T.ftp};
+		}
+	}
+
+}

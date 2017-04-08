@@ -1,0 +1,173 @@
+p: Project = input;
+
+arrStr : array of string = {"kind","reflect","in","make","fusion","graph","cherry","inherited","setpos","visitors","continuous","some","traversal","java","attribute","travis","parse","hierarchy","hand","asts","hridesh","during","refactoring","protobuf","bit","new","no","dev","rename","use","done","cleanup","optimization","move","based","made","example","removing","visitor","pick","types","add","see","httpsgithubcomboalangcompiler","returns","folder","d","old","preserving","tested","accidentally","adapter","refactor","also","from","e","if","wish","merging","sizzle","moved","combiner","remove","embedding","branch","f","methods","them","cases","over","we","any","upstream","other","ast","general","required","design","override","reviewed","ci","code","extraneous","a","being","antlr","trimming","hadoop","for","know","cleaned","request","the","aggregators","can","b","warnings","tree","top","c","lexing","convert","pull","converting","gen","switching","libs","errors","into","compile","cleanups","temporary","moment","failing","handled","remotes","written","few","merge","directory","hbase","updating","more","cfg","reworking","output","headers","i","set","initial","minor","compiler","support","adding","limited","semantics","remote","with","of","each","dont","annotations","to","up","parsing","nodes","small","instead","construction","parser","eec","at","grammars","by","another","work","added","separate","yml","introduce","refs","license","basic","update","value","current","are","boalang","plus","allows","me","root","robust","that","integration","graphs","ported","vars","test","boa","tracking","framework","and","type","tests","data","source","dir","on","changes","files","master","attributes","which","considerably","how","combine"};
+
+vector : array of int;
+vector = new(vector, len(arrStr), 0);
+count : array of int = {0,0,0,0};
+parr : array of string = {"package","reorganized","refactoring","refactor","cleanup","cleanups","cleaned","removed","remove","removing","moved","directory","major"};
+carr : array of string = {"bug","bugs","fix","fixed","fixes","fixing", "incorrect", "correct"};
+aarr : array of string = {"add","added","adding","new", "modify","modifying", "update","updated","javadoc","java-doc","translation","build","docs"};
+larr : array of string = {"license", "copy-right","copyright","copyrights"};
+
+words : map[string] of int;
+files : map[Revision] of int;
+inc:=0;
+type T = enum{p = "perfective", c = "corrective", a = "adaptive", l = "legal", u = "undefined"};
+type fy = {arr: array of int, class: T};
+
+#collect : output collection[string] of int;
+
+model1 : output j48 of fy;
+model2 : output naivebayes of fy;
+model3 : output smo of fy;
+model4 : output kstar of fy;
+model5 : output ibk of fy;
+model6 : output jrip of fy;
+model7 : output zeror of fy;
+
+frequency := function(s : string) { 
+	l:= len(arrStr)-1;
+	while(l>=0) {
+		if(lowercase(s) == lowercase(arrStr[l]));	
+			vector[l] = vector[l] + 1;
+		l--;	
+	}
+	
+};
+
+checkclass := function(s : string) { 
+	l:= len(parr)-1;
+	while(l>=0) {
+		if(lowercase(s) == lowercase(parr[l]))	
+			count[0] = count[0] + 1;       
+		l--;	
+	}
+
+	l1:= len(carr)-1;
+	while(l1>=0) {
+		if(lowercase(s) == lowercase(carr[l1]))	
+			count[1] = count[1] + 1;
+		l1--;	
+	}
+
+	l2:= len(aarr)-1;
+	while(l2>=0) {
+		if(lowercase(s) == lowercase(aarr[l2]))	
+			count[2] = count[2] + 1;
+		l2--;	
+	}
+
+	l3:= len(larr)-1;
+	while(l3>=0) {
+		if(lowercase(s) == lowercase(larr[l3]))	
+			count[3] = count[3] + 1;
+		l3--;	
+	}
+	
+};
+
+visit(p, visitor {
+	before node: Revision -> {
+		total :=0;
+		foreach(i:int; def(node.files[i]))
+			total ++;	
+		files[node] = total;
+	}
+});
+
+visit(p, visitor {
+	before node: Revision -> {
+		if(len(node.files) > 10) {
+			x := splitall(node.log, "[^a-zA-Z]+");
+			l := len(x) - 1 ;
+			s : string;
+			while(l >= 0) {
+				s = x[l];
+				frequency(s);
+				checkclass(s);
+				if(!haskey(words, x[l]))
+					words[s] = 1;
+				else
+					words[s] = words[s] + 1;
+				l--;
+			}
+		k:=1;
+		max := count[0];
+		index :=0;
+		while(k<4) {
+			if(count[k] > max) {
+				max = count[k]; 
+				index = k;
+			}
+			k++;
+		}
+		if(max == 0) {
+			model1 << {vector, T.u};
+			model2 << {vector, T.u}; 
+			model3 << {vector, T.u};
+			model4 << {vector, T.u}; 
+			model5 << {vector, T.u};
+			model6 << {vector, T.u}; 
+			model7 << {vector, T.u};  
+		}
+		else {
+			if(index == 0)	{
+				model1 << {vector, T.p};
+				model2 << {vector, T.p}; 
+				model3 << {vector, T.p};
+				model4 << {vector, T.p};
+				model5 << {vector, T.p};
+				model6 << {vector, T.p};
+				model7 << {vector, T.p};
+			}
+			else if(index == 1) {
+				model1 << {vector, T.c};
+				model2 << {vector, T.c};
+				model3 << {vector, T.c};
+				model4 << {vector, T.c};
+				model5 << {vector, T.c};
+				model6 << {vector, T.c};
+				model7 << {vector, T.c};
+			}
+			else if(index == 2) {
+				model1 << {vector, T.a};
+				model2 << {vector, T.a};
+				model3 << {vector, T.a};
+				model4 << {vector, T.a}; 
+				model5 << {vector, T.a};
+				model6 << {vector, T.a}; 
+				model7 << {vector, T.a};  
+			}
+			else if(index == 3) {
+				model1 << {vector, T.l};	
+				model2 << {vector, T.l};
+				model3 << {vector, T.l};	
+				model4 << {vector, T.l};
+				model5 << {vector, T.l};	
+				model6 << {vector, T.l};
+				model7 << {vector, T.l};	
+			}
+		}
+			count = {0,0,0,0};
+			vector = new(vector, len(arrStr), 0);
+			inc++;
+		}	
+	}
+});
+
+k1 := keys(files);
+l1 := len(k1) - 1;
+while(l1 >=0) {
+	#collect[k1[l1].log] << files[k1[l1]];
+	l1--;
+}
+
+k := keys(words);
+l := len(k) - 1;
+while(l >=0) {
+	#collect[k[l]] << words[k[l]];
+	l--;
+}
+
+# collect[p.project_url] << inc;

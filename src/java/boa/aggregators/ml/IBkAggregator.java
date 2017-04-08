@@ -16,195 +16,54 @@
  */
 package boa.aggregators.ml;
 
-import java.io.IOException;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-
-import org.apache.commons.lang.math.NumberUtils;
-
 import boa.BoaTup;
 import boa.aggregators.AggregatorSpec;
-
+import boa.aggregators.FinishedException;
 import weka.classifiers.lazy.IBk;
-import weka.core.Attribute;
-import weka.core.Instance;
-import weka.core.DenseInstance;
-import weka.core.Instances;
-import weka.core.Utils;
-import weka.filters.Filter;
-import weka.filters.supervised.attribute.NominalToBinary;
-import weka.filters.unsupervised.attribute.ReplaceMissingValues;
+
+import java.io.IOException;
 
 /**
  * A Boa aggregator for training the model using IBk.
- * 
+ *
  * @author ankuraga
  */
 @AggregatorSpec(name = "ibk", formalParameters = {"string"})
 public class IBkAggregator extends MLAggregator {
-	private ArrayList<String> vector = new ArrayList<String>();
-	private ArrayList<BoaTup> tuples = new ArrayList<BoaTup>();
-	private String[] options;
-	private int count = 0;
-	private IBk model;
-	private int NumOfAttributes;
-	private ArrayList<Attribute> fvAttributes;
-	private Instances trainingSet;
-	private boolean flag;
+    private int count = 0;
+    private IBk model;
 
-	public IBkAggregator() {
-	}
+    public IBkAggregator() {
+    }
 
-	public IBkAggregator(final String s) {
-		super(s);
+    public IBkAggregator(final String s) {
+        super(s);
+    }
 
-		try {
-			options = Utils.splitOptions(s);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+    @Override
+    public void aggregate(String data, String metadata) throws NumberFormatException, IOException, InterruptedException {
+        aggregate(data, metadata, "IBK");
+    }
 
-	public void aggregate(final String data, final String metadata) throws IOException, InterruptedException {
-		if(this.count != this.getVectorSize()) {
-			this.vector.add(data);
-			this.count++;
-		}
+    public void aggregate(final BoaTup data, final String metadata) throws IOException, InterruptedException, FinishedException, IllegalAccessException {
+        aggregate(data, metadata, "IBK");
+    }
 
-		if(this.count == this.getVectorSize()) {
-			if(this.flag != true)
-				attributeCreation();
-			instanceCreation(this.vector);
-			this.vector = new ArrayList<String>();
-			this.count = 0;
-		}
-	}
-
-	public void aggregate(final BoaTup data, final String metadata) throws IOException, InterruptedException {
-		if(this.flag != true)
-			attributeCreation(data);
-		instanceCreation(data);
-	}
-
-	/** {@inheritDoc} */
-	@Override
-	public void finish() throws IOException, InterruptedException {
-		try {
-			this.model = new IBk();
-			this.model.setOptions(options);
-			this.model.buildClassifier(this.trainingSet);
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-
-		this.saveModel(this.model);
-		this.saveTrainingSet(this.trainingSet);
-		this.collect(this.model.toString());
-	}
-
-	public void attributeCreation(BoaTup data) {
-		this.fvAttributes = new ArrayList<Attribute>();
-		try {
-			String[] fieldNames = data.getFieldNames();
-			int count = 0;
-			for(int i = 0; i < fieldNames.length; i++) {
-				if(data.getValue(fieldNames[i]).getClass().isEnum()) {
-					ArrayList<String> fvNominalVal = new ArrayList<String>();
-					for(Object obj: data.getValue(fieldNames[i]).getClass().getEnumConstants())
-						fvNominalVal.add(obj.toString());
-					this.fvAttributes.add(new Attribute("Nominal" + count, fvNominalVal));
-					count++;
-				}
-				else if(data.getValue(fieldNames[i]).getClass().isArray()) {
-					int l = Array.getLength(data.getValue(fieldNames[i])) - 1;
-					for(int j = 0; j <= l; j++) {
-						this.fvAttributes.add(new Attribute("Attribute" + count));
-						count++;
-					}
-				}
-				else {
-					this.fvAttributes.add(new Attribute("Attribute" + count));
-					count++;
-				}
-			}
-			this.NumOfAttributes = count;
-			this.flag = true;
-			this.trainingSet = new Instances("IBk", this.fvAttributes, 1);
-			this.trainingSet.setClassIndex(this.NumOfAttributes-1);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void attributeCreation() {
-		this.fvAttributes = new ArrayList<Attribute>();
-		this.NumOfAttributes = this.getVectorSize();
-		try {
-			for(int i = 0; i < this.NumOfAttributes; i++)
-				this.fvAttributes.add(new Attribute("Attribute" + i));
-
-			this.flag = true;
-			this.trainingSet = new Instances("IBk", this.fvAttributes, 1);
-			this.trainingSet.setClassIndex(this.NumOfAttributes-1);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void instanceCreation(BoaTup data){
-		try {
-			int count=0;
-			Instance instance = new DenseInstance(this.NumOfAttributes);
-			String[] fieldNames = data.getFieldNames();
-			for(int i = 0; i < fieldNames.length; i++) {
-				if(data.getValue(fieldNames[i]).getClass().isEnum()) {
-					instance.setValue((Attribute)this.fvAttributes.get(count), String.valueOf(data.getValue(fieldNames[i])));
-					count++;
-				}
-				else if(data.getValue(fieldNames[i]).getClass().isArray()) {
-					int x = Array.getLength(data.getValue(fieldNames[i])) - 1;
-					Object o = data.getValue(fieldNames[i]);
-					for(int j = 0; j <= x; j++) {
-						instance.setValue((Attribute)this.fvAttributes.get(count), Double.parseDouble(String.valueOf(Array.get(o, j))));
-						count++;
-					}
-				}
-				else {
-					if(NumberUtils.isNumber(String.valueOf(data.getValue(fieldNames[i]))))
-						instance.setValue((Attribute)this.fvAttributes.get(count),  Double.parseDouble(String.valueOf(data.getValue(fieldNames[i]))));
-					else
-						instance.setValue((Attribute)this.fvAttributes.get(count),  String.valueOf(data.getValue(fieldNames[i])));
-					count++;
-				}
-			}
-			handleDataInstances(instance);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void instanceCreation(ArrayList<String> data){
-		try {
-			Instance instance = new DenseInstance(this.NumOfAttributes);
-			for(int i=0; i < this.NumOfAttributes; i++)
-				instance.setValue((Attribute)this.fvAttributes.get(i), Double.parseDouble(data.get(i)));
-			handleDataInstances(instance);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	private void handleDataInstances(Instance instance) throws Exception {
-		if(unFilteredInstances.size() < maxUnfilteredThreshold) {
-			unFilteredInstances.add(instance);
-		} else {
-			model.getCapabilities().testWithFail(unFilteredInstances);
-			unFilteredInstances.deleteWithMissingClass();
-			moveFromUnFilteredToFiltered(trainingSet);
-		}
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void finish() throws IOException, InterruptedException {
+        try {
+            this.model = new IBk();
+            this.model.setOptions(options);
+            this.model.buildClassifier(trainingSet);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        System.out.println("ibk modeling done");
+//        this.saveModel(this.model);
+//        this.saveTrainingSet(this.trainingSet);
+        this.collect(this.model.toString());
+    }
 }

@@ -1,0 +1,8 @@
+collect : output collection of string;
+type T = enum {A = "true", B = "false"};
+
+model: RandomForest of {int, float, T};
+model = load("logistic.model");
+
+feature : {int, float} = {1,2.3};
+collect << classify(model, feature);

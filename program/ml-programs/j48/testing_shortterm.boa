@@ -1,0 +1,153 @@
+p: Project = input;
+
+type T = {node: ChangedFile, added: int, deleted: int, modified: int, authors: string, author_count: int, first_commit_date: time,  latest_commit_date: time,  cochanged: int, cochangednew: int};
+files: map[string] of T;
+defect: map[string] of bool;
+logs : string;
+result : output collection[string][string] of string;
+print : output collection[string][int][int][int][int][int][int][int] of int;
+
+type T1 = enum {defect = "defect", notdefect = "notdefect"};
+
+type Ty = {float, float, float, int, int, int, float, T1};
+type fy = {float, float, float, int, int, int, float};
+feature : fy;
+model: J48 of Ty;
+model = load("/boa/models/0/training_model1469567753271ML.model");
+
+age := function(t1: time, t2: time) : int {
+	return 1 + ((yearof(t2) - yearof(t1)) * 12) + int(abs(monthof(t2) - monthof(t1)));
+};
+
+totalloc := function(node: ChangedFile) {
+	if(haskey(files, node.name)) {
+		count := 1;
+		visit(getast(node), visitor {
+        		before node: Statement ->
+            			count = count + 1;
+    		});
+	
+		months := age(files[node.name].first_commit_date, files[node.name].latest_commit_date);
+		linesActivityRate : float = count/months;
+
+		#print[node.name][count][files[node.name].added][files[node.name].deleted][files[node.name].modified][files	[node.name].author_count][files[node.name].cochanged][files[node.name].cochangednew] << linesActivityRate;
+	
+		radded : float = (files[node.name].added)/count;
+		rdeleted : float = (files[node.name].deleted)/count;
+		rmodified : float = (files[node.name].modified)/count;
+
+		
+	if(haskey(defect, node.name))
+		result[node.name]["defect"] << classify(model, {radded, rdeleted, rmodified, files[node.name].author_count, files[node.name].cochanged, files[node.name].cochangednew, linesActivityRate});
+	else
+		result[node.name]["notdefect"] << classify(model,{radded, rdeleted, rmodified,files[node.name].author_count, files[node.name].cochanged, files[node.name].cochangednew, linesActivityRate});
+
+}	
+};
+
+changedloc := function(node: ChangedFile, author: string, rev_time : time) {
+	diff := 0;
+	count := 0;
+	last := 0;
+    	if (haskey(files, node.name)) {
+		visit(getast(files[node.name].node), visitor {
+        		before node: Statement ->
+            			count = count + 1;
+    		});
+
+		last = count;
+		count = 0;
+		visit(getast(node), visitor {
+        		before node: Statement ->
+            			count = count + 1;
+    		});
+
+	    	diff = count - last;
+		
+		if(strfind(author, files[node.name].authors) == -1)
+			files[node.name] = {node,files[node.name].added, files[node.name].deleted, files[node.name].modified, files[node.name].authors + "," + author, files[node.name].author_count, files[node.name].first_commit_date, rev_time,files[node.name].cochanged, files[node.name].cochangednew}; 
+			else 
+				files[node.name] = {node,files[node.name].added, files[node.name].deleted, files[node.name].modified, files[node.name].authors, files[node.name].author_count + 1, files[node.name].first_commit_date, rev_time,files[node.name].cochanged, files[node.name].cochangednew}; 
+
+		if(diff > 0)
+			files[node.name] = {node,files[node.name].added + diff,files[node.name].deleted, files[node.name].modified, files[node.name].authors, files[node.name].author_count, files[node.name].first_commit_date, files[node.name].latest_commit_date,files[node.name].cochanged, files[node.name].cochangednew};
+		else if(diff < 0)
+			files[node.name] = {node,files[node.name].added, files[node.name].deleted + int(abs(diff)),files[node.name].modified, files[node.name].authors, files[node.name].author_count, files[node.name].first_commit_date, files[node.name].latest_commit_date,files[node.name].cochanged, files[node.name].cochangednew};
+		else
+			files[node.name] = {node,files[node.name].added, files[node.name].deleted,files[node.name].modified + 1, files[node.name].authors, files[node.name].author_count, files[node.name].first_commit_date, files[node.name].latest_commit_date, files[node.name].cochanged, files[node.name].cochangednew};
+	}
+	else {
+		files[node.name] = {node,0,0,0,author,1, rev_time, rev_time, 0, 0};
+	}
+
+	if (node.change == ChangeKind.DELETED)
+		remove(files, node.name);
+};
+
+coChangedNew := function(node: ChangedFile, rev: Revision) {
+	num := 0;
+	if(haskey(files, node.name)) {	
+		foreach (i: int; def(rev.files[i])) { 
+			if(!(haskey(files, rev.files[i].name)))
+				num++;
+				
+		}	
+	}
+	if (haskey(files, node.name))
+		files[node.name] = {files[node.name].node, files[node.name].added, files[node.name].deleted,files[node.name].modified, files[node.name].authors, files[node.name].author_count, files[node.name].first_commit_date, files[node.name].latest_commit_date, files[node.name].cochanged, files[node.name].cochangednew + num};
+
+};
+
+cochangedfiles := function(node: ChangedFile, rev: Revision) {
+	num:=0;
+	foreach (i: int; def(rev.files[i])) { 
+		num++;
+	}
+	if (haskey(files, node.name))
+		files[node.name] = {files[node.name].node,files[node.name].added, files[node.name].deleted,files[node.name].modified, files[node.name].authors, files[node.name].author_count, files[node.name].first_commit_date, files[node.name].latest_commit_date, num +  files[node.name].cochanged, files[node.name].cochangednew};
+	
+};
+
+visit(p, visitor {
+    	before node: Revision -> {
+		cf : ChangedFile;
+		if(yearof(node.commit_date) == 2014 && monthof(node.commit_date) > 3 && monthof(node.commit_date) < 8) {
+		if(isfixingrevision(node.log)) {
+			foreach (i: int; def(node.files[i])) {
+				cf = node.files[i];
+				changedloc(cf, node.committer.username, node.commit_date); 
+				cochangedfiles(cf,node); 
+				coChangedNew(cf, node);	
+				defect[cf.name] = true;
+				
+			} 
+		}
+		else {
+			foreach (i: int; def(node.files[i])) {
+				cf = node.files[i];
+				changedloc(cf, node.committer.username, node.commit_date); 
+				cochangedfiles(cf,node);
+				coChangedNew(cf, node);
+			}
+		} 
+		}
+	}	
+});
+
+visit(p, visitor {
+    	before node: CodeRepository -> {
+		snapshot := getsnapshot(node);
+		tchangedfiles :=0;
+		foreach (i: int; def(snapshot[i])) {
+			tchangedfiles++;
+			visit(snapshot[i]); 
+		} 
+		stop;
+	}	
+
+	before node: ChangedFile -> {
+		 totalloc(node); 
+	}
+});
+
+

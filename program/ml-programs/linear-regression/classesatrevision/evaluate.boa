@@ -1,0 +1,14 @@
+p: Project = input;
+collect: output collection of string;
+
+model: LinearRegression of {int,int};
+model = load("/boa/models/0/train1467816045935ML.model");
+
+traindata : Dataset;
+traindata = loaddataset("/boa/data/0/train1467816047191data");
+	
+testdata : Dataset;
+testdata = loaddataset("/boa/data/0/train1467815807852data");
+
+if(p.project_url == "https://github.com/ADC-UIN-Jakarta/MyThirdApp-Week3")
+	collect << evaluate(model, traindata, testdata);

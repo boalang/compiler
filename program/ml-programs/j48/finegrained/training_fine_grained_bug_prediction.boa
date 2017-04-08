@@ -1,0 +1,390 @@
+p: Project = input;
+
+type T = {node: ChangedFile, added: int, deleted: int, modified: int, cdecl : int, ostate:int, func:int, method:int, stmt:int, elsestmt:int, rev: int};
+files: map[string] of T;
+defect: map[string] of bool;
+logs : string;
+
+print : output collection[string][float][float][float][int][int][int] of int;
+print1 : output collection[string] of string;
+
+type T1 = enum {buggy = "buggy" , notbuggy = "notbuggy"};
+
+training_model : output j48 of {float, float, float, int, int, int, int, int, T1};
+
+#training_model1 : output j48 of {float, float, float, int, T1};
+
+totalloc := function(node: ChangedFile) {
+	if(haskey(files, node.name)) {
+		count := 1;
+		visit(getast(node), visitor {
+        		before node: Statement ->
+            			count = count + 1;
+    		});
+		radded : float = (files[node.name].added);
+		rdeleted : float = (files[node.name].deleted);
+		rmodified : float = (files[node.name].modified);
+
+		#print[node.name][radded][rdeleted][rmodified][files[node.name].func][files[node.name].method][files[node.name].stmt] << files[node.name].elsestmt;
+		
+	if(haskey(defect, node.name))
+			training_model << {radded, rdeleted, rmodified, files[node.name].func, files[node.name].method, files[node.name].stmt, files[node.name].elsestmt, files[node.name].rev, T1.buggy};
+	else
+		training_model << {radded, rdeleted, rmodified, files[node.name].func, files[node.name].method, files[node.name].stmt, files[node.name].elsestmt, files[node.name].rev, T1.notbuggy};
+
+
+	#if(haskey(defect, node.name))
+	#		training_model1 << {radded, rdeleted, rmodified, files[node.name].stmt,T1.buggy};
+	#else
+	#		training_model1 << {radded, rdeleted, rmodified, files[node.name].stmt,T1.notbuggy};
+
+}	
+};
+
+classdeclaration := function(old: ChangedFile, current: ChangedFile) : int {
+	ctotal := 0;
+	cn1 : map[string] of int;
+	cn2 : map[string] of int;
+		
+	visit(getast(old), visitor {
+        	before node: Declaration -> {
+			if(node.kind == TypeKind.CLASS || node.kind == TypeKind.INTERFACE) {
+				decl : Declaration = node;
+				if(haskey(cn1,node.name))				
+					cn1[node.name] = cn1[node.name] + 1;
+				else
+					cn1[node.name] = 1;
+			
+			parent := node.parents;
+
+			visit(getast(current), visitor {
+        			before node: Declaration -> {
+		
+					if(decl.name == node.name){
+						foreach(i:int; node.parents[i]){
+						flag1:=false;
+						parent1 := node.parents;
+						if(len(parent1) == len(parent)) {
+							foreach(j:int; parent[j]){
+								if(parent1[i] == parent[j])
+									flag1 = true;
+							} 
+						}
+							if(flag1 == false) { ctotal++;
+								print1[node.name] << decl.name;	 
+							}				
+						}
+					}
+
+					if(decl.name == node.name) {
+					foreach(i:int; node.modifiers[i]){
+						flag:=false;
+						if(len(node.modifiers) == len(decl.modifiers)) {
+							foreach(j:int; decl.modifiers[j]){
+								if(node.modifiers[i].kind == decl.modifiers[j].kind)
+									flag = true;
+							} 
+						}
+							if(flag == false) { ctotal++;
+								print1[node.name] << decl.name + "second";	
+							}				
+					}
+						
+					}
+				}
+    			});
+			
+			}
+		}
+    	});
+
+
+	visit(getast(current), visitor {
+        	before node: Declaration -> {
+			if(node.kind == TypeKind.CLASS || node.kind == TypeKind.INTERFACE) {
+				if(haskey(cn2,node.name))				
+					cn2[node.name] = cn2[node.name] + 1;
+				else
+					cn2[node.name] = 1;
+			}
+		}
+    	});
+
+	arr1 := keys(cn1);
+	l1 := len(arr1) - 1;
+	arr2 := keys(cn2);
+	l2 := len(arr2) - 1;
+	while(l1>=0){
+		flag : bool = false;
+		while(l2>=0) {
+			if(arr1[l1] == arr2[l2]) {
+				flag = true; 
+				break;
+			}
+			l2--;
+		}
+		if(!(flag==true))
+			ctotal++;
+		flag = false;
+		l1--;
+	}
+
+	return ctotal;
+
+};
+
+
+fieldsdeclaration := function(old: ChangedFile, current: ChangedFile) : int {
+	ctotal := 0;
+	cn1 : map[string] of int;
+	cn2 : map[string] of int;
+	decl : Declaration;
+	visit(getast(old), visitor {
+        	before node: Declaration -> {
+			decl = node;
+			#if(node.kind == TypeKind.CLASS || node.kind == TypeKind.INTERFACE) {
+				foreach(i:int; node.fields[i]) {
+				str := 	node.fields[i].name;			
+				if(haskey(cn1, str))				
+					cn1[str] = cn1[str] + 1;
+				else
+					cn1[ str] = 1; 
+				}
+			
+			#}
+			visit(getast(current), visitor {
+        			before node: Declaration -> {
+					if(node.name == decl.name) {
+						#if(node.kind == TypeKind.CLASS || node.kind == TypeKind.INTERFACE) {
+						foreach(i:int; node.fields[i]) {
+							str := 	node.fields[i].name;				
+							if(!haskey(cn1, str))				
+								ctotal++;
+						}
+						#} 
+					}
+				}
+    			});
+
+		}
+    	});
+
+	return ctotal;
+
+};
+
+
+fieldsdeclaration1 := function(old: ChangedFile, current: ChangedFile) : int {
+	c1:=0;
+	c2:=0;
+	visit(getast(old), visitor {
+        	before node: Declaration -> {
+			c1 = c1 + len(node.fields);
+		}
+    	});
+
+	visit(getast(current), visitor {
+        	before node: Declaration -> {
+			c2 = c2 + len(node.fields);			
+		}
+    	});
+
+	return int(abs(c1-c2));
+
+};
+
+
+funcs := function(old: ChangedFile, current: ChangedFile) : int {
+	c1 := 0;
+	c2:=0;
+	visit(getast(old), visitor {
+        	before node: Declaration -> {
+			c1 = c1 + len(node.methods);
+		}
+    	});
+
+	visit(getast(current), visitor {
+        	before node: Declaration -> {
+			c2 = c2 + len(node.methods);
+		}
+    	});
+
+	return int(abs(c1-c2));
+
+};
+
+methods := function(old: ChangedFile, current: ChangedFile) : int {
+	ctotal := 0;
+	cn1 : map[string] of int;
+	cn2 : map[string] of int;
+	decl : Method;
+	visit(getast(old), visitor {
+        	before node: Method -> {
+			decl = node;
+			visit(getast(current), visitor {
+        			before node: Method -> {
+					if(node.name == decl.name) {
+						if(len(node.arguments) != len(decl.arguments))
+							ctotal = ctotal + int(abs(len(node.arguments) - len(decl.arguments))); 
+						if(len(node.exception_types) != len(decl.exception_types))
+							ctotal = ctotal + int(abs(len(node.exception_types) - len(decl.exception_types)));
+						if(len(node.generic_parameters) != len(decl.generic_parameters))
+							ctotal = ctotal + int(abs(len(node.generic_parameters) - len(decl.generic_parameters)));
+						if(len(node.modifiers) != len(decl.modifiers))
+							ctotal = ctotal + int(abs(len(node.modifiers) - len(decl.modifiers)));
+						 
+					}
+				}
+    			});
+
+		}
+    	});
+
+	return ctotal;
+
+};
+
+methods1 := function(old: ChangedFile, current: ChangedFile) : int {
+	c1 := 0;
+	c2 := 0;
+	visit(getast(old), visitor {
+        	before node: Method -> {
+			c1 = c1 + len(node.arguments) + len(node.exception_types) + len(node.generic_parameters) + len(node.modifiers);
+		}
+    	});
+
+	visit(getast(current), visitor {
+        	before node: Method -> {
+			c2 = c2 + len(node.arguments) + len(node.exception_types) + len(node.generic_parameters) + len(node.modifiers);
+			
+		}
+    	});
+
+	return int(abs(c1-c2));
+
+};
+
+
+elsestmts := function(old: ChangedFile, current: ChangedFile) : int {
+	c1 := 0;
+	c2:=0;
+	visit(getast(old), visitor {
+        	before node: Statement -> {
+			if(node.kind == StatementKind.IF)
+				c1++;
+		}
+    	});
+
+	visit(getast(current), visitor {
+        			before node: Statement -> {
+					if(node.kind == StatementKind.IF)
+						c2++;
+				}
+    			});
+
+	return int(abs(c1-c2));
+
+};
+
+changedloc := function(node: ChangedFile) {
+	diff := 0;
+	count := 0;
+	last := 0;
+    	if (haskey(files, node.name)) {
+		visit(getast(files[node.name].node), visitor {
+        		before node: Statement ->
+            			count = count + 1;
+    		});
+
+		last = count;
+		count = 0;
+		visit(getast(node), visitor {
+        		before node: Statement ->
+            			count = count + 1;
+    		});
+
+	    	diff = count - last;
+
+		if(diff > 0)
+			files[node.name] = {node,files[node.name].added + diff,files[node.name].deleted, files[node.name].modified, files[node.name].cdecl, files[node.name].ostate, files[node.name].func, files[node.name].method, files[node.name].stmt, files[node.name].elsestmt, files[node.name].rev + 1};
+		else if(diff < 0)
+			files[node.name] = {node,files[node.name].added, files[node.name].deleted + int(abs(diff)),files[node.name].modified, files[node.name].cdecl, files[node.name].ostate, files[node.name].func, files[node.name].method, files[node.name].stmt, files[node.name].elsestmt, files[node.name].rev + 1};
+		else
+			files[node.name] = {node,files[node.name].added, files[node.name].deleted,files[node.name].modified + 1, files[node.name].cdecl, files[node.name].ostate, files[node.name].func, files[node.name].method, files[node.name].stmt, files[node.name].elsestmt, files[node.name].rev + 1};
+
+	
+		#files[node.name] = {node,files[node.name].added, files[node.name].deleted, files[node.name].modified, files[node.name].cdecl + classdeclaration(files[node.name].node, node),files[node.name].ostate, files[node.name].func, files[node.name].elsestmt, files[node.name].rev};
+
+		files[node.name] = {node,files[node.name].added, files[node.name].deleted, files[node.name].modified, files[node.name].cdecl, files[node.name].ostate + fieldsdeclaration1(files[node.name].node, node), files[node.name].func, files[node.name].method, files[node.name].stmt, files[node.name].elsestmt, files[node.name].rev};
+
+		files[node.name] = {node,files[node.name].added, files[node.name].deleted, files[node.name].modified, files[node.name].cdecl, files[node.name].ostate, files[node.name].func + funcs(files[node.name].node, node), files[node.name].method, files[node.name].stmt, files[node.name].elsestmt, files[node.name].rev};
+		files[node.name] = {node,files[node.name].added, files[node.name].deleted, files[node.name].modified, files[node.name].cdecl, files[node.name].ostate, files[node.name].func, files[node.name].method + methods1(files[node.name].node, node), files[node.name].stmt, files[node.name].elsestmt, files[node.name].rev};
+		files[node.name] = {node,files[node.name].added, files[node.name].deleted, files[node.name].modified, files[node.name].cdecl, files[node.name].ostate, files[node.name].func, files[node.name].method, files[node.name].stmt + int(abs(diff)), files[node.name].elsestmt, files[node.name].rev};
+		files[node.name] = {node,files[node.name].added, files[node.name].deleted, files[node.name].modified, files[node.name].cdecl, files[node.name].ostate, files[node.name].func, files[node.name].method, files[node.name].stmt, files[node.name].elsestmt + elsestmts(files[node.name].node, node), files[node.name].rev};
+		
+	}
+	else {
+		files[node.name] = {node,0,0,0,0,0,0,0,0,0,0};
+	}
+
+	if (node.change == ChangeKind.DELETED)
+		remove(files, node.name);
+};
+
+javafile := function(name : string) : bool {
+	arr := splitall(name, "/");
+	if(len(arr) - 1 >=0) {
+		arr1 := splitall(arr[len(arr)-1],"\\.");
+		if(len(arr1) > 1 && arr1[1] == "java")
+			return true; 
+	}
+	else {
+		arr2 := splitall(name,"\\.");
+		if(len(arr2) > 1 && arr2[1] == "java")
+			return true; 
+	}
+	return false;
+};
+
+visit(p, visitor {
+    	before node: Revision -> {
+		cf : ChangedFile;
+		if(yearof(node.commit_date) > 2013) {
+		if(isfixingrevision(node.log)) {
+			foreach (i: int; def(node.files[i])) {
+				cf = node.files[i];
+				if(javafile(cf.name)) {
+					defect[cf.name] = true;
+					changedloc(cf); 
+				}
+				
+			} 
+		}
+		else {
+			foreach (i: int; def(node.files[i])) {
+				cf = node.files[i];
+				if(javafile(cf.name)) {
+					changedloc(cf); 
+				}
+			}
+		} 
+		}
+	}	
+});
+
+visit(p, visitor {
+    	before node: CodeRepository -> {
+		snapshot := getsnapshot(node);
+		foreach (i: int; def(snapshot[i])) { 
+			if(javafile(snapshot[i].name))
+				visit(snapshot[i]); 
+		} 
+		stop;
+	}	
+
+	before node: ChangedFile -> {
+		 totalloc(node); 
+	}
+});
+
+

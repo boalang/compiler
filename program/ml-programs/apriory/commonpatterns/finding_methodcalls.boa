@@ -1,0 +1,42 @@
+p: Project = input;
+AddedNullCheck: output sum of int;
+
+isfixing := false;
+count := 0;
+files: map[string] of ChangedFile;
+
+print : output sum[string] of int;
+
+visit(p, visitor {
+	before node: Revision -> {
+		foreach(i:int; node.files[i]) {
+			visit(node.files[i]);
+		}
+	}
+
+	before node: ChangedFile -> {
+		if (haskey(files, node.name)) {
+			count = 0;
+			visit(getast(files[node.name]));
+			last := count;
+
+			
+			count = 0;
+			visit(getast(node));
+		}
+		else {
+			files[node.name] = node;
+		}
+		if (node.change == ChangeKind.DELETED)
+			remove(files, node.name);
+		stop;
+	}
+
+	before node: Statement ->
+			visit(node.expression, visitor {
+				before node: Expression ->
+					if (node.kind == ExpressionKind.METHODCALL)
+						print[node.method] << 1;
+			});
+	
+});

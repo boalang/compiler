@@ -1,0 +1,86 @@
+p: Project = input;
+total:=0;
+files: map[string] of int;
+lfiles: map[string] of ChangedFile;
+Time: time;
+s: stack of string;
+length:=0;
+H:float;
+lines_of_code_changed := 0;
+collect : output collection[string][string][string] of string;
+
+type T = enum {fix = "FIX", notfix = "NOTFIX"};
+type Ty = {int, int, float, T};
+type fy = {int, int, float};
+feature : fy;
+model: RandomForest of Ty;
+model = load("/boa/0/train1467407688385ML.model");
+ 	
+lloc := function(node: ChangedFile) : int {
+	diff := 0 ;
+	count := 0;
+	last := 0;
+    	if (haskey(lfiles, node.name)) {
+		visit(getast(lfiles[node.name]), visitor {
+        		before node: Statement ->
+            			if (node.kind != StatementKind.BLOCK)
+               				count = count + 1;
+    		});
+		last = count;
+		count = 0;
+		visit(getast(node), visitor {
+        		before node: Statement ->
+            			if (node.kind != StatementKind.BLOCK)
+               				count = count + 1;
+    		});
+
+	    	diff = count - last;
+	}
+	if (node.change == ChangeKind.DELETED)
+		remove(lfiles, node.name);
+	else
+		lfiles[node.name] = node;
+	
+	return int(abs(diff));
+};
+
+visit(p, visitor {
+
+    before node: Revision -> {
+        Time = node.commit_date;
+    }
+	
+    after node: Revision -> {
+	while(length!=0) {
+            a:= pop(s);
+	    H = H + (float((files[a])/total) * log(float((files[a])/total)));
+            length--;
+        }
+	feature = {total, lines_of_code_changed, -H};
+	if(isfixingrevision(node.log))
+		collect[p.project_url][node.id]["fix"] << classify(model, feature);
+	else
+		collect[p.project_url][node.id]["notfix"] <<  classify(model, feature);
+
+	lines_of_code_changed = 0;
+	clear(files);
+	H = 0;
+	length = 0;
+	total = 0;
+    }
+	
+    before node: ChangedFile -> {
+        if(!haskey(files, node.name)) {
+            files[node.name] = 0;
+            push(s, node.name);
+            length++;
+        }
+
+	if(haskey(files, node.name)) {
+		files[node.name] = files[node.name] + 1;	
+	}
+	lines_of_code_changed = lines_of_code_changed + lloc(node);
+	total++;
+   }
+	
+});

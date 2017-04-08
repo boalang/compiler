@@ -1,0 +1,180 @@
+p: Project = input;
+
+files : map[ChangedFile] of int;
+filename : string = "";
+type T = enum {f = "false", t = "true"};
+type T1 = enum {rel = "relevance", nonrel = "nonrelevance"};
+
+type fy = {a:int, b: T, c: T, d: int, e: int, f: T};
+vector : fy = {0,T.f,T.f,0,0,T.f};
+predict : output collection[string][string][bool] of string;
+
+type Ty = {a:int, b: T, c: T, d: int, e: int, f: T, h:T1};
+model: J48 of Ty;
+model = load("/boa/models/0/decisiontree1468621057649ML.model");
+
+findSharedfile := function(f1 : ChangedFile, f2 : ChangedFile) {
+	ast1 := getast(f1);
+	ast2 := getast(f2);
+	str1 : string;
+	str2 : string;
+	bool1 : T = T.f;
+	bool2 : T = T.f;
+	num := 0;
+
+	foreach (i: int; def(ast1.imports[i])) {
+		str1 = ast1.imports[i];
+		foreach (j: int; def(ast2.imports[j])) {
+			str2 = ast2.imports[j];
+			
+			if(strfind(str1,str2) != -1 || strfind(str2,str1) != -1)			
+				num ++;
+			if(strfind(str1,f2.name) != -1)		
+				bool2 = T.t;
+			if(strfind(str2,f1.name) != -1)		
+				bool1 = T.t;
+			#if(match("[*]", str1) || match("[*]", str2))			
+				#	collect[str1] << str2;			
+			
+		}	
+	}
+
+	vector = {num, bool1, bool2, vector.d, vector.e, vector.f};
+};
+
+routinesreferred := function(f1 : ChangedFile, f2 : ChangedFile) {
+	map1 : map[string] of int;
+	map2 : map[string] of int;
+	map3 : map[string] of int;
+	map4 : map[string] of int;
+	c1:=0;
+	c2:=0;
+	visit(f1, visitor {
+
+		before node: Method -> {
+			if(!haskey(map1, node.name)) {			
+				map1[node.name] = 1; 
+			}
+		}
+
+		before node: Expression ->
+			if(node.kind == ExpressionKind.METHODCALL) {
+				if(!haskey(map3, node.method)) {				
+					map3[node.method] = 1; 
+				}
+			}
+	});
+
+	visit(f2, visitor {
+
+		before node: Method -> {
+			if(!haskey(map2, node.name)){
+				map2[node.name] = 1;
+			}
+		}
+
+		before node: Expression ->
+			if(node.kind == ExpressionKind.METHODCALL) {
+				if(!haskey(map4, node.method))	 {
+					map4[node.method] = 1; 
+				}
+			}
+	});
+	
+	k := keys(map1);
+	l := len(k) - 1;
+	while(l>=0) {
+		if(haskey(map4, k[l])) 
+			c1++;
+		l--;
+	}
+
+	k1 := keys(map2);
+	l1 := len(k1) - 1;
+	while(l1>=0) {
+		if(haskey(map3, k1[l1])) 
+			c2++;
+		l1--;
+	}
+
+	vector = {vector.a, vector.b, vector.c, c1, c2, vector.f};
+};
+
+filenamefunc := function(f1 : ChangedFile, f2 : ChangedFile) { 
+	x1 := splitall(f1.name, "/");
+	y1 := splitall(x1[len(x1)-1], "\\.");
+	x2 := splitall(f2.name, "/");
+	y2 := splitall(x2[len(x2)-1], "\\.");
+	bool1 : T = T.f;
+	bool2 : T = T.f;
+	if(len(y1)>1 && len(y2)>1) {
+		if(y1[0] == y2[0])
+			bool1 = T.t;
+		if(y1[1] == y2[1])
+			bool2 = T.t;	
+	}
+	vector = {vector.a, vector.b, vector.c, vector.d, vector.e, bool1};
+};
+
+javafiles := function(f1 : ChangedFile, f2 : ChangedFile) : bool { 
+	x1 := splitall(f1.name, "/");
+	y1 := splitall(x1[len(x1)-1], "\\.");
+	x2 := splitall(f2.name, "/");
+	y2 := splitall(x2[len(x2)-1], "\\.");
+	if(len(y1) == 2 && len(y2) == 2)
+		if(y1[1] == y2[1] && y1[1] == "java")
+			return true;	
+	return false;
+};
+
+relevant := function(f1 : ChangedFile, f2 : ChangedFile) : bool { 
+	bool1 : bool = false;
+	bool2 : bool = false;
+	s : bool = false;
+	visit(p, visitor { 
+		before node:Revision -> {
+			foreach (i: int; def(node.files[i])) { 
+				if(node.files[i].name == f1.name)
+					bool1 = true;
+				if(node.files[i].name == f2.name)
+					bool2 = true;
+			}
+			if(bool1 == true && bool2 == true) 
+				s = true;
+			else {
+				bool1 = false;
+				bool2 = false; 
+			}
+		}
+	});
+	if(s == true)
+		return true;
+	return false;
+};
+
+visit(p, visitor {
+	before n: CodeRepository -> {
+		snapshot := getsnapshot(n);
+		t:=0;
+		f1:ChangedFile;
+		foreach (i: int; def(snapshot[i])) {
+			f1 = snapshot[i];
+			#files[changedfile] = 1;
+			foreach (j: int; def(snapshot[j])) {
+				if(i!=j && j>=i)
+					if(t > 13 && t< 18 && javafiles(f1,snapshot[j])){
+						filenamefunc(f1,snapshot[j]);		
+						findSharedfile(f1,snapshot[j]); 
+						routinesreferred(f1,snapshot[j]);
+						re := relevant(f1,snapshot[j]);
+						predict[f1.name][snapshot[j].name][re] << classify(model,vector);
+						vector = {0,T.f,T.f,0,0,T.f};
+					}
+			}
+			t++;
+		}
+		stop;
+	}	
+});
+
+#collect[f1.name][snapshot[j].name][vector.a][vector.b][vector.c][vector.d][vector.e][vector.f][vector.g] << 1;

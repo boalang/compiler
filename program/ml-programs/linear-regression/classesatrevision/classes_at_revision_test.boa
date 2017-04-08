@@ -1,0 +1,42 @@
+p: Project = input;
+
+filename : string;
+totalClass:=0;
+totalMethod:=0;
+totalloc:=0;
+collect : output collection[string][int] of string;
+
+model: LinearRegression of {int,int};
+model = load("/boa/models/0/train1470160778567ML.model");
+
+lloc := function(node: ASTRoot) : int {
+    count := 0;
+
+    visit(node, visitor {
+        before node: Statement ->
+            if (node.kind != StatementKind.BLOCK)
+                count = count + 1;
+    });
+
+    return count;
+};
+
+visit(p, visitor {
+	before n: CodeRepository -> {
+		snapshot := getsnapshot(n);
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+
+	before node: Declaration -> {
+		if (node.kind == TypeKind.CLASS)
+			totalClass++;
+		#foreach (i: int; def(node.methods[i]))
+		#	totalmethod++;
+	}
+
+	before node: ASTRoot -> totalloc = totalloc + lloc(node);
+});
+
+collect[p.project_url][totalloc] << classify(model,{totalClass});

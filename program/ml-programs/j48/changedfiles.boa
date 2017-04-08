@@ -1,0 +1,41 @@
+# co-changed files
+
+p: Project = input;
+filename: string;
+files: output collection[string] of string;
+
+arr: array of string = {"compiler/src/java/boa/compiler/BoaCompiler.java","compiler/src/java/boa/compiler/SymbolTable.java","compiler/src/java/boa/compiler/visitors/AbstractVisitor.java","compiler/src/java/boa/compiler/visitors/AbstractVisitorNoArg.java","compiler/src/java/boa/compiler/visitors/AbstractVisitorNoReturn.java","compiler/src/java/boa/compiler/visitors/CodeGeneratingVisitor.java","compiler/src/java/boa/compiler/visitors/TypeCheckingVisitor.java"};
+
+type T = enum {t = "true", f = "false"};
+vector: array of T;
+vector = {T.f,T.f,T.f,T.f,T.f,T.f,T.f};
+
+train : output j48 of {array of int, T};
+
+a : array of int;
+a = new(a, 100, 10);
+
+train << {a,T.f};
+
+visit(p, visitor {
+	before node: Revision -> {
+		count:=0;
+		vector = {T.f,T.f,T.f,T.f,T.f,T.f,T.f};
+		foreach (i: int; def(node.files[i])) {
+			k:=len(arr)-1;
+			filename = node.files[i].name;
+			while(k >= 0) {
+				if(arr[k] == filename) {
+					vector[k] = T.t; 
+					count++;
+				}
+				k--;			
+			}
+			
+			if(count>1) {
+				#train << vector;
+			}
+		}
+	}
+});
+

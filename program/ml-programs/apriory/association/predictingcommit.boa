@@ -1,0 +1,32 @@
+p: Project = input;
+type T = enum {t = "1", f = "0"};
+rev :=0;
+matrix : array of T;
+train : output apriori("-T 1 -N 10") of array of T;
+t:string = "#";
+
+visit(p, visitor {
+	before node: CodeRepository -> {
+		matrix = {T.f,T.f,T.f,T.f,T.f,T.f,T.f,T.f,T.f,T.f,T.f,T.f,T.f,T.f,T.f,T.f,T.f,T.f,T.f,T.f,T.f,T.f}; # 22 instances
+		foreach (i: int; def(node.revisions[i])) {
+		date := node.revisions[i].commit_date;
+		if(rev < 21) {
+			if(t == "#")
+				t = (string(yearof(date)) + "" + string(monthof(date)) + "" + string(dayofmonth(date)));
+			if(t == (string(yearof(date)) + "" + string(monthof(date)) + "" + string(dayofmonth(date))))
+			{
+				matrix[i] = T.t;
+			}
+			else {
+				train << matrix;
+				matrix = {T.f,T.f,T.f,T.f,T.f,T.f,T.f,T.f,T.f,T.f,T.f,T.f,T.f,T.f,T.f,T.f,T.f,T.f,T.f,T.f,T.f,T.f};
+				matrix[i] = T.t;
+				t = (string(yearof(date)) + "" + string(monthof(date)) + "" + string(dayofmonth(date)));		
+			}
+			rev++; 
+		}
+	
+	}
+   }
+});
+

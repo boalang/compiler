@@ -16,142 +16,50 @@
  */
 package boa.aggregators.ml;
 
-import java.io.IOException;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-
-import org.apache.commons.lang.math.NumberUtils;
-
 import boa.BoaTup;
 import boa.aggregators.AggregatorSpec;
-
 import weka.associations.Apriori;
-import weka.core.Attribute;
-import weka.core.Instance;
-import weka.core.DenseInstance;
-import weka.core.Instances;
-import weka.core.Utils;
+
+import java.io.IOException;
 
 /**
  * A Boa aggregator for training the model using Apriori.
- * 
+ *
  * @author ankuraga
  */
 @AggregatorSpec(name = "apriori", formalParameters = {"string"})
 public class AprioriAggregator extends MLAggregator {
-	private ArrayList<String> vector = new ArrayList<String>();
-	private ArrayList<BoaTup> tuples = new ArrayList<BoaTup>();
-	private String[] options;
-	private int count = 0;
-	private Apriori model;
-	private int NumOfAttributes;
-	private ArrayList<Attribute> fvAttributes;
-	private Instances trainingSet;
-	private boolean flag;
+    private Apriori model;
 
-	public AprioriAggregator() {
-	}
+    public AprioriAggregator() {
+    }
 
-	public AprioriAggregator(final String s) {
-		super(s);
+    public AprioriAggregator(final String s) {
+        super(s);
+    }
 
-		try {
-			options = Utils.splitOptions(s);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+    public void aggregate(final String data, final String metadata) throws IOException, InterruptedException {
+    }
 
-	public void aggregate(final String data, final String metadata) throws IOException, InterruptedException {
-	}
+    public void aggregate(final BoaTup data, final String metadata) throws IOException, InterruptedException {
+        aggregate(data, metadata, "Apriori");
+    }
 
-	public void aggregate(final BoaTup data, final String metadata) throws IOException, InterruptedException {
-		if(this.flag != true)
-			attributeCreation(data);
-		instanceCreation(data);
-	}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void finish() throws IOException, InterruptedException {
+        try {
+            this.model = new Apriori();
+            this.model.setOptions(options);
+            this.model.buildAssociations(this.trainingSet);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-	/** {@inheritDoc} */
-	@Override
-	public void finish() throws IOException, InterruptedException {
-		try {
-			this.model = new Apriori();
-			this.model.setOptions(options);
-			this.model.buildAssociations(this.trainingSet);
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-
-		this.saveModel(this.model);
-		this.saveTrainingSet(this.trainingSet);
-		this.collect(this.model.toString());
-	}
-
-	public void attributeCreation(BoaTup data) {
-		this.fvAttributes = new ArrayList<Attribute>();
-		try {
-			String[] fieldNames = data.getFieldNames();
-			int count = 0;
-			for(int i = 0; i < fieldNames.length; i++) {
-				if(data.getValue(fieldNames[i]).getClass().isEnum()) {
-					ArrayList<String> fvNominalVal = new ArrayList<String>();
-					for(Object obj: data.getValue(fieldNames[i]).getClass().getEnumConstants())
-						fvNominalVal.add(obj.toString());
-					this.fvAttributes.add(new Attribute("Nominal" + count, fvNominalVal));
-					count++;
-				}
-				else if(data.getValue(fieldNames[i]).getClass().isArray()) {
-					int l = Array.getLength(data.getValue(fieldNames[i])) - 1;
-					for(int j = 0; j <= l; j++) {
-						this.fvAttributes.add(new Attribute("Attribute" + count));
-						count++;
-					}
-				}
-				else {
-					this.fvAttributes.add(new Attribute("Attribute" + count));
-					count++;
-				}
-			}
-			this.NumOfAttributes = count;
-			this.flag = true;
-			this.trainingSet = new Instances("Apriori", this.fvAttributes, 1);
-			this.trainingSet.setClassIndex(this.NumOfAttributes-1);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void instanceCreation(BoaTup data){
-		try {
-			int count=0;
-			Instance instance = new DenseInstance(this.NumOfAttributes);
-			String[] fieldNames = data.getFieldNames();
-			for(int i = 0; i < fieldNames.length; i++) {
-				if(data.getValue(fieldNames[i]).getClass().isEnum()) {
-					instance.setValue((Attribute)this.fvAttributes.get(count), String.valueOf(data.getValue(fieldNames[i])));
-					count++;
-				}
-				else if(data.getValue(fieldNames[i]).getClass().isArray()) {
-					int x = Array.getLength(data.getValue(fieldNames[i])) - 1;
-					Object o = data.getValue(fieldNames[i]);
-					for(int j = 0; j <= x; j++) {
-						instance.setValue((Attribute)this.fvAttributes.get(count), Double.parseDouble(String.valueOf(Array.get(o, j))));
-						count++;
-					}
-				}
-				else {
-					if(NumberUtils.isNumber(String.valueOf(data.getValue(fieldNames[i]))))
-						instance.setValue((Attribute)this.fvAttributes.get(count),  Double.parseDouble(String.valueOf(data.getValue(fieldNames[i]))));
-					else
-						instance.setValue((Attribute)this.fvAttributes.get(count),  String.valueOf(data.getValue(fieldNames[i])));
-					count++;
-				}
-			}
-			this.trainingSet.add(instance);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+//		this.saveModel(this.model);
+//		this.saveTrainingSet(this.trainingSet);
+        this.collect(this.model.toString());
+    }
 }

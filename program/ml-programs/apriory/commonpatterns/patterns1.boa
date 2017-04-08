@@ -1,0 +1,58 @@
+# co-changed method calls
+
+p: Project = input;
+
+arr: array of string = {"iterator","hasNext","next"};
+l := len(arr) - 1;
+files: map[string] of ChangedFile;
+type T = enum {t = "true", f = "false"};
+vector: array of T;
+vector = {T.f,T.f,T.f};
+num:int;
+count:int;
+st : string = "";
+methodcall : map[string] of int;
+map1 : map[string] of int;
+
+iter:=0;
+
+print2 : output collection[int][string] of string;
+print1 : output collection of string;
+print : output sum[string] of int;
+train : output apriori("-T 1 -N 1000") of array of T;
+
+visit(p, visitor {
+
+	before node: CodeRepository -> {
+		snapshot := getsnapshot(node);
+		foreach (i: int; def(snapshot[i])) {
+			num = 0;
+			visit(snapshot[i]);
+			if(num>=0) {
+				train << vector; 
+			}
+			vector = {T.f,T.f,T.f}; 
+		}
+		stop;
+	}
+
+	before node: ChangedFile -> {
+		visit(getast(node));	
+	}
+
+	before node: Statement ->
+		visit(node.expression, visitor {
+			before node: Expression ->
+				if (node.kind == ExpressionKind.METHODCALL) {
+						l = len(arr) - 1;
+						while(l>=0) {
+							if(node.method == arr[l]) {
+								vector[l] = T.t;
+								num++; 
+							}
+						l--;
+						}
+				}
+			});
+});
+

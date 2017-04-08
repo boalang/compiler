@@ -1,0 +1,18 @@
+p: Project = input;
+collect: output collection of string;
+
+type T = enum {fix = "FIX", notfix = "NOTFIX"};
+type Ty = {float, float, int, int, float, T};
+type fy = {float, float, int, int, float};
+
+feature : fy;
+model: RandomForest of Ty;
+
+traindata : Dataset;
+traindata = loaddataset("/boa/data/0/1467654801022data");
+
+testdata : Dataset;
+testdata = loaddataset("/boa/data/0/1467654801022data");
+
+collect << crossvalidate(model, traindata);
+collect << evaluate(model, traindata, testdata);

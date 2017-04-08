@@ -1,0 +1,146 @@
+# co-changed method calls
+
+p: Project = input;
+
+arr: array of string = {"iterator","hasNext","next"};
+l0 := len(arr) - 1;
+files: map[string] of ChangedFile;
+type T = enum {t = "true", f = "false"};
+vector: array of T;
+vector = {T.f,T.f,T.f};
+num:int;
+count:int;
+st : string = "";
+methodcall : map[string] of int;
+map1 : map[string] of int;
+
+iter:=0;
+
+print2 : output collection[int][string] of string;
+print1 : output collection of string;
+print : output sum[string] of int;
+train : output apriori("-T 1 -N 1000") of array of T;
+
+
+visit(p, visitor {
+	before node: Revision -> {
+		
+		foreach (i: int; def(node.files[i])) {
+			visit(node.files[i]);
+			if(num >= 1)
+				train << vector;
+			vector = {T.f,T.f,T.f};
+			iter++;
+			num=0;
+			#print1 << st;
+			st = "";
+		}
+	}
+
+	before node: ChangedFile -> {
+		if (haskey(files, node.name)) {
+			
+			visit(getast(files[node.name]));
+			k1 := keys(methodcall);
+			l1 := len(k1) - 1;
+			clear(methodcall);
+
+			visit(getast(node));
+			k2 := keys(methodcall);
+			l2 := len(k2) - 1;
+			clear(methodcall);
+
+			flag:bool = false;
+			while(l1 >=0) {
+				while(l2 >= 0) {
+					if(k1[l1] == k2[l2])
+						flag = true;
+					l2--;
+				}
+
+				if(flag == false) {
+					str := k1[l1];
+					map1[str] = 1;
+				} else {
+					flag = false;				
+				}
+
+				l1--;
+			}
+
+			flag = false;
+			l1 = len(k1) - 1;
+			l2 = len(k2) - 1;
+			while(l2 >=0) {
+				while(l1 >= 0) {
+					if(k2[l2] == k1[l1])
+						flag = true;
+					l1--;
+				}
+
+				if(flag == false) {
+					str1 := k2[l2];
+					map1[str1] = 1;
+				} else {
+					flag = false;				
+				}
+
+				l2--;
+			}
+
+			l3 := len(arr) - 1;
+			k4 := keys(map1);		
+			l4 := len(k4) - 1;
+			while(l4 >=0) {
+				st = st + "," + k4[l4];
+				while(l3>=0) {
+					if(arr[l3] == k4[l4]) {
+						print2[iter]["change"] << k4[l4];
+						vector[l3] = T.t;  num++;
+					} 
+				l3--;
+				}
+			l4--;						
+			} 
+			clear(map1);
+		}
+		else {
+			visit(getast(node));
+	
+			if(def(methodcall)) {
+			k5 := keys(methodcall);
+			l5 := len(k5) - 1;
+
+			l6 := len(arr) - 1;
+			while(l5 >=0) {
+				st = st + "," + k5[l5];
+				while(l6>=0) {
+					if(arr[l6] == k5[l5]) {
+						print2[iter]["new"] << k5[l5];
+						vector[l6] = T.t;  num++;
+					} 
+				l6--;
+				}
+			l5--;						
+			} 
+			}
+			clear(methodcall); 
+		}
+		if (node.change == ChangeKind.DELETED)
+			remove(files, node.name);
+		else
+			files[node.name] = node;
+		stop;
+	}
+
+	before node: Statement ->
+		visit(node.expression, visitor {
+				before node: Expression ->
+					if (node.kind == ExpressionKind.METHODCALL) {
+						methodcall[node.method] = 1;
+						
+						#print[node.method] << 1;
+					}
+			});
+});
+

@@ -1,0 +1,98 @@
+p: Project = input;
+stopwords : array of string = {"","a","about","above","after","again","against","all","am","an","and","any","are","arent","as","at","be","because","been","before","being","below","between","both","but","by","cant","cannot","could","couldnt","did","didnt","do","does","doesnt","doing","dont","down","during","each","few","for","from","further","had","hadnt","has","hasnt","have","havent","having","he","hed","hell","hes","her","here","heres","hers","herself","him","himself","his","how","hows","i","id","ill","im","ive","if","in","into","is","isnt","it","its","its","itself","lets","me","more","most","mustnt","my","myself","no","nor","not","of","off","on","once","only","or","other","ought","our","ours"
+,"ourselves","out","over","own","same","shant","she","shed","shell","shes","should","shouldnt","so","some","such","than","that","thats","the","their","theirs","them","themselves","then","there","theres","these","they","theyd","theyll","theyre","theyve","this","those","through","to","too","under","until","up","very","was","wasnt","we","wed","well","were","weve","were","werent","what","whats","when","whens","where","wheres","which","while","who","whos","whom","why","whys","with","wont","would","wouldnt","you","youd","youll","youre","youve","your","yours","yourself","yourselves","0_","1","2","3","4","64","7","8",">", "_"};
+
+classes : array of string = {
+"uniqueaggregator", "switchcase", "testdefaultmethods", "builder", "logaggregator", "variable", "statementexpr", "boametricintrinsics", "sizzlevarargs", "floatmeansizzlereducer", "foreachstatement", "visitorfindingvisitor", "stopfindingvisitor", "declaration", "skewnessaggregator", "sizzletimeintrinsics", "javascripterrorcheckvisitor", "boaname", "changekindprotomap", "boareducer", "existsstatement", "switchstatement", "collectionaggregator", "testintsumaggregator", "sizzlestringintrinsics", "sizzlerunner", "changedtype", "codegeneratingvisitor", "forgekindprotomap", "maximumaggregator", "abstractvisitornoreturn", "bottomaggregator", "postfixstatement", "boastring", "block", "visitormergingtransformer", "defaultvisitornoargu", "sizzlecasts", "project", "mrcountersizzlereducer", "minimumsizzlecombiner", "issuesrootprototuple", "commentprototuple", "boanoavisitor", "methodprototuple", "maximumsizzlereducerten", "variableprototuple", "boacompiler", "coderepository", "boafunction", "vardeclstatement", "seqrepoimporter", "emitstatement", "textaggregator", "dostatement", "changedexpression", "changedastroot", "testfunctiontrie", "boarunner", "sizzlefileintrinsics", "collectionsizzlereducer", "sizzlebytes", "seqsort", "testtopaggregator", "sizzleencodingintrinsics", "seqsortmerge", "modifier", "boaprototuple", "issueprototuple", "gitconnector", "inthistogramaggregator", "comparison", "parenexpression", "sizzletablemapper", "intquartilesizzlecombiner", "bugrepositoryprototuple", "boamain", "selfvisittransformer", "changednamespace", "snapshotvisitor", "sizzlename", "medianaggregator", "cfgnodeprototuple", "boabool", "boatable", "tupletype", "aggregator", "simpleexpr", "boaevaluator", "seqprojectcombiner", "boacollectingvisitor", "localaggregationtransformer", "testtypecheck", "statementprototuple", "changedvariable", "importtask", "stopstatement", "repositorykindprotomap", "textsizzlecombiner", "term", "changedstatement", "mapfilegen", "boatablemapper", "typedecl", "expressionkindprotomap", "cfgprototuple", "functiondeclaratorvisitor", "boatypevar", "statementkindprotomap", "visibilityprotomap", "symboltable", "settype", "setaggregator", "intsumaggregator", "prettyprintvisitor", "namespace", "meanaggregator", "sizzlesortintrinsics", "graphaggregator", "typecheckexception", "issuekindprotomap", "boatimeintrinsics", "inthistogramsizzlereducer", "intmeansizzlereducer", "table", "changedcomment", "visitoroptimizingtransformer", "parsererrorlistener", "uniquesizzlecombiner", "testsizzlecasts", "charsequencecompiler", "sizzlereducer", "boacasts", "toplevel", "control", "visitstatement", "sortedcountingset", "identifier", "stdevaggregator", "boaint", "testfloatsumaggregator", "varianceaggregator", "composite", "properties", "floatliteral", "boamap", "floatquartilesizzlereducer", "basetest", "mrcounteraggregator", "floathistogramsizzlecombiner", "issue", "maximumsizzlereducerone", "sizzletype", "visitcallfindingvisitor", "abstractvisitor", "sizzleoutputformat", "boaprotomap", "countingset", "testintquantileaggregator", "ifallstatement", "testcodegeneratingvisitor", "filemanagerimpl", "stringliteral", "method", "visitorexpression", "genericscollectingvisitor", "floatsumsizzlereducer", "boaset", "ast", "boaany", "namespaceprototuple", "testsetaggregator", "jsonformat", "resultstatement", "topsizzlereducerten", "index", "abstractcodegeneratingvisitor", "testcodegen", "forstatement", "code", "kurtosisaggregator", "intquartilesizzlereducer", "javaerrorcheckvisitor", "testuniqueaggregator", "astroot", "sizzletable", "annotationcollectingvisitor", "nodetypeprotomap", "topaggregator", "sizzlevisitor", "minimumaggregator", "textsizzlereducer", "comment", "floatquantileaggregator", "java8basetest", "continuestatement", "sizzletestfunctions", "exprstatement", "boacavisitor", "visitorcheckingvisitor", "testmrcounteraggregator", "intsumsizzlereducer", "boaarray", "boaintrinsics", "testfloatmeanaggregator", "weightedstring", "java7basetest", "boamodifierintrinsics", "vardeclcodegeneratingvisitor", "attachment", "emitvalue", "graphvizaggregator", "testtextaggregator", "testcollectionaggregator", "testreceiverparameter", "c", "issuerepositoryprototuple", "commentsroot", "pair", "expression", "start", "isfunctionvisitor", "statisticsaggregator", "defaultproperties", "changedfile", "collectionsizzlecombiner", "testinhattr", "mrcountersizzlecombiner", "testmethodreference", "modifierprototuple", "inheritedattributetransformer", "sizzlecombiner", "sizzletypevar", "testsizzlespecialintrinsics", "testsortedcountingset", "fileprototuple", "attachedfile", "issuerepository", "javavisitor", "boascalar", "abstractvisitornoarg", "boamathintrinsics", "factor", "sizzletuple", "aggregatordescription", "boafingerprint", "boastack", "testtypecheckingvisitor", "functiontype", "boamapper", "diff", "lexererrorlistener", "boavarargs", "boaspecialintrinsics", "boaditvisitor", "issues", "edgeprototuple", "distinctsizzlecombiner", "changedfileprototuple", "identifierfindingvisitor", "findvisitorexpressions", "testsizzlestringintrinsics", "person", "stacktype", "testtypecheckbad", "functionexpression", "testlambda", "testsizzletimeintrinsics", "expressionprototuple", "functiondeclaratorcodegeneratingvisitor", "cfg", "sizzlebool", "bottomortopaggregator", "java8visitor", "javascriptvisitor", "bugprototuple", "unaryfactor", "charliteral", "filekindprotomap", "topsizzlecombiner", "boanoovisitor", "issuecommentprototuple", "cfgnodetypeprotomap", "floatsumsizzlecombiner", "boanpmvisitor", "conjunction", "typeprototuple", "cfgedgelabelprotomap", "boavisitor", "testparsergood", "changedmethod", "graphprototuple", "returnstatement", "setsizzlecombiner", "abstracttype", "finishedexception", "testtypecheckgood", "boacbcvisitor", "outputtype", "nodeprototuple", "floatmeansizzlecombiner", "intmeanaggregator", "issuesroot", "modifierkindprotomap", "attachmentprototuple", "cfggraphprototuple", "operand", "testminimumaggregator", "testlexergood", "floatmeanaggregator", "positioninfo", "sumaggregatorfindingvisitor", "sizzlefingerprint", "visitordesugar", "astprintingvisitor", "minimumsizzlereducerone", "testcodegengood", "floathistogramsizzlereducer", "typecheckingvisitor", "node", "component", "boaprotolist", "classloaderimpl", "topsizzlereducerone", "shared", "charsequencecompilerexception", "issuecomment", "intmeansizzlecombiner", "fileio", "intquantileaggregator", "functionfindingvisitor", "boanocvisitor", "boarfcvisitor", "functiontrie", "testfloathistogramaggregator", "timeliteral", "boaabstractvisitor", "commentkindprotomap", "countedstring", "uniquesizzlereducer", "declarationprototuple", "confidenceintervalaggregator", "boacountingvisitor", "testparserbad", "testlexer", "makerandomints", "boatuple", "taskclassifyingvisitor", "selector", "maptype", "boaerrorlistener", "testparser", "floathistogramaggregator", "breakstatement", "emitkey", "boalcoovisitor", "boapartitioner", "cfgedge", "quantileaggregator", "abstractcommit", "visitortype", "coderepositoryprototuple", "graphcsvaggregator", "testintmeanaggregator", "inthistogramsizzlecombiner", "variablerenametransformer", "jsongenerator", "revision", "testfloatquantileaggregator", "minimumsizzlereducerten", "changeddeclaration", "makenormaldoubles", "indexeefindingvisitor", "makerandomdoubles", "boaoutputcommitter", "intsumsizzlecombiner", "testrepeatingannotations", "sizzlemathintrinsics", "typekindprotomap", "commentsrootprototuple", "boastringintrinsics", "boagenerator", "integerliteral", "staticinitializationcodegeneratingvisitor", "setsizzlereducer", "minormaxaggregator", "stoptransformer", "boaastintrinsics", "locationinfo", "issuechange", "distinctsizzlereducer", "testgood", "testdistinctaggregator", "boafloat", "call", "tabledescription", "assignmentstatement", "gitcommit", "boacombiner", "statement", "boaoutputformat", "distinctaggregator", "arraytype", "javafileobjectimpl", "boagraphintrinsics", "personprototuple", "returncheckingvisitor", "callfindingvisitor", "floatquartilesizzlecombiner", "histogramaggregator", "testinthistogramaggregator", "visitclassifier", "revisionprototuple", "maximumsizzlecombiner", "program", "javatoboa", "changedmodifier", "type", "astrootprototuple", "testmaximumaggregator", "whilestatement", "abstractconnector", "cfgedgeprototuple", "floatsumaggregator", "ifstatement", "stopstatementtransformer", "findcurrentforvisitors", "testlexerbad", "projectprototuple", "boatime", "boatype", "cfgnode", "boasortintrinsics", "defaultvisitor", "repository", "java7visitor"};
+
+terms : array of string = {"kind", "env", "metric", "fs", "make", "graph", "good", "afters", "builder", "_labeled", "variable", "final", "disable", "dollar", "byte", "pairs", "original", "strings", "char", "bug", "hour", "declaration", "double", "io", "inherited", "spec", "variance", "expr", "listener", "_static", "fno", "evaluator", "visitors", "usage", "splitn", "password", "namespaces", "os", "initialized", "children", "writer", "eo", "synchronized", "quartiles", "_name", "visit", "ns", "bottom", "stmt", "block", "azzert", "confidence", "normal", "project", "programs", "arg", "minimum", "overloaded", "java", "single", "cache", "mapper", "attribute", "protolist", "substring", "translations", "parse", "part", "svn", "indexees", "identifiers", "_boa", "candidates", "counted", "bytes", "trie", "underline", "funcs", "simple", "partition", "_instance", "ten", "version", "checker", "statistics", "_", "ca", "filtered", "process", "boolean", "family", "interval", "check", "protobuf", "wrong", "bit", "commutative", "int", "arguments", "content", "new", "append", "reduce", "dev", "modifier", "rename", "delimited", "noa", "filter", "use", "run", "accept", "float", "special", "graphviz", "comparison", "cleanup", "needs", "proto", "exprs", "classifying", "maps", "unique", "num", "line", "getissues", "random", "counting", "accessor", "example", "member", "classifier", "declared", "_clinit", "aggregator", "expressions", "mutable", "systems", "filename", "visitor", "camel", "acosh", "getcomments", "qualified", "compress", "parameters", "parents", "memoized", "previous", "tickets", "delim", "query", "types", "partial", "_types", "topics", "build", "term", "_array", "create", "base", "decls", "split", "noc", "symbols", "min", "repeated", "add", "_return", "finite", "castable", "system", "donations", "modifiers", "store", "collection", "_do", "generating", "pagerank", "floats", "returns", "json", "namespace", "wrapped", "d", "uppercase", "import", "old", "updates", "get", "assignable", "job", "changed", "month", "uri", "median", "change", "non", "repo", "assignment", "real", "partitioner", "metadata", "help", "objects", "codegenerator", "maximum", "programming", "table", "input", "email", "tags", "exp", "len", "generation", "e", "threads", "encoding", "stream", "toplevel", "processed", "control", "author", "cast", "merging", "identifier", "assignee", "resource", "sizzle", "codegen", "uid", "_try", "getenv", "indice", "initialization", "composite", "commit", "combiner", "properties", "_init", "regex", "replace", "remove", "branch", "impl", "distinct", "f", "second", "args", "hash", "empty", "created", "operating", "self", "_super", "entries", "unsupported", "array", "methods", "exception", "sort", "missing", "fixed", "attr", "writers", "pool", "integer", "sorted", "npm", "runner", "issue", "g", "cases", "_peek", "uncompress", "instance", "description", "concat", "string", "logger", "delimiter", "paren", "parsed", "unknown", "noo", "anon", "method", "url", "options", "lhs", "upper", "var", "close", "time", "seen", "force", "combining", "symbol", "left", "one", "ins", "projects", "argu", "ast", "position", "initializations", "group", "eol", "isfixingrevision", "field", "_sizzle", "finding", "ret", "unnamed", "nested", "declarations", "_catch", "index", "visits", "hello", "code", "_conditional", "day", "unary", "cur", "aggregation", "else", "assign", "long", "branches", "clone", "pretty", "pid", "edges", "licenses", "scalar", "enum", "ints", "postfix", "currents", "kurtosis", "comment", "df", "binary", "collecting", "rhs", "load", "sum", "wildcard", "weighted", "static", "audiences", "aggregators", "milestone", "can", "b", "false", "lexer", "found", "statements", "debug", "blocked", "internal", "<init", "st", "vector", "context", "lambda", "boxing", "local", "languages", "inistinct", "minute", "attachment", "referers", "aggregate", "ensure", "name", "casts", "top", "body", "known", "declarator", "imports", "col", "c", "command", "adjust", "convert", "_call", "named", "big", "traverse", "bad", "guard", "gen", "keyword", "formal", "finish", "atanh", "libs", "pair", "generics", "expression", "start", "unzip", "buildin", "reducer", "conf", "summary", "globals", "matchers", "na", "changedfile", "skewness", "path", "dit", "back", "total", "attached", "generate", "parent", "number", "infer", "compile", "word", "conversion", "locals", "re", "receiver", "subcomponent", "finder", "indices", "counter", "quartile", "serialized", "abstract", "factor", "function", "<clinit", "read", "diff", "default", "lex", "maybe", "lect", "issues", "accepts", "gh", "fingerprint", "end", "visibility", "_field", "generated", "clear", "comments", "person", "compare", "merge", "modified", "abort", "tag", "hasfile", "strftime", "key", "asinh", "buckets", "arbitrary", "stg", "cbc", "sawzall", "text", "tuples", "optimizing", "hbase", "size", "weight", "dfault", "typecheck", "histogram", "insert", "cfg", "open", "prefix", "infinite", "quantile", "output", "stops", "befores", "seq", "git", "initializer", "implicit", "inh", "length", "pascal", "p", "set", "literal", "level", "_break", "repositories", "unexpected", "escape", "conjunction", "find", "erase", "src", "loc", "compiler", "quantifier", "rand", "stat", "script", "descriptors", "revwalk", "bool", "completed", "format", "boxed", "short", "_annotations", "status", "sf", "reachable", "emit", "label", "scrabble", "result", "put", "iterator", "equals", "generator", "break", "snapshot", "error", "indexee", "unsorted", "operand", "delete", "edge", "ops", "return", "unicode", "extensions", "class", "compound", "n", "names", "_throw", "manager", "commits", "clean", "kinds", "_while", "username", "task", "_generic", "versions", "idmap", "max", "begin", "csv", "node", "component", "entry", "members", "last", "shared", "platform", "exists", "tables", "removed", "dest", "maintainers", "global", "initialize", "_descriptor", "buffer", "lower", "revisions", "expand", "now", "math", "breaks", "finished", "annotations", "getast", "first", "intrinsics", "vote", "location", "m", "generic", "arithmetics", "fixing", "_continue", "databases", "literals", "printing", "contents", "rfc", "classes", "quant", "truncate", "mean", "t", "copy", "func", "nodes", "register", "ex", "compares", "selector", "parser", "desugar", "trim", "_if", "log", "switch", "multilevel", "neighbors", "transformer", "less", "checking", "message", "complex", "stack", "doubles", "zlib", "added", "pre", "ids", "assigns", "info", "multi", "file", "property", "write", "quick", "right", "omit", "saw", "parameter", "values", "iskind", "nest", "revision", "pop", "loader", "timestamp", "equal", "ugly", "reference", "paths", "cursor", "setup", "duplicated", "varargs", "basic", "weights", "update", "escaped", "_sync", "continue", "init", "indent", "value", "match", "object", "sequence", "floating", "stop", "current", "depends", "tuple", "print", "getcfg", "zip", "decl", "protected", "main", "protomap", "_pop", "repeating", "positions", "jar", "week", "reset", "priority", "private", "cout", "interfaces", "diagnostics", "splitall", "foreach", "case", "post", "list", "push", "forge", "year", "root", "robust", "committer", "super", "call", "factors", "constructor", "token", "op", "transform", "functions", "syntax", "statement", "serial", "outs", "date", "mrcounter", "extension", "vars", "pos", "column", "test", "boa", "condition", "homepage", "macro", "unsigned", "importer", "skip", "resolution", "trunc", "program", "type", "next", "public", "renamer", "map", "data", "fields", "source", "developers", "outdent", "dir", "descriptor", "changes", "files", "rate", "stats", "_for", "domain", "count", "connector", "md", "lcoo", "keywords", "repository", "duplicate", "user", "associative", "_switch", "switched", "indistinct", "matcher", "secrecy", "combine", "annotation"};
+
+x:= len(terms)-1;
+filename : string;
+s:string;
+check : bool = false;
+z:=0;
+st:string;
+mapping : map[Declaration] of int;
+
+collect: output collection[int][string] of int;
+model : output lsa of array of int;
+
+stopword := function(str: string) : bool {
+			l := len(stopwords)-1;
+			while(l>=0) {
+				if(stopwords[l] == str)
+					return true;
+			l--;
+			}
+		return false;
+};
+
+keyword := function(str: string) {
+	arr := splitall(str, format("%s|%s|%s",
+         "(?<=[A-Z])(?=[A-Z][a-z])",
+         "(?<=[^A-Z])(?=[A-Z])",
+         "(?<=[A-Za-z])(?=[^A-Za-z])"));
+
+	length := len(arr)-1;
+	while(length >=0) {
+		s = arr[length];
+		if(!stopword(lowercase(s))) {
+			if(lowercase(s) == lowercase(st)){
+				check = true;
+			}		
+		}	
+		length--;
+	}
+};
+
+y := 3000;
+visit(p, visitor {
+	before n: CodeRepository -> {
+		snapshot := getsnapshot(n);
+		foreach (i: int; def(snapshot[i])) {
+			visit(snapshot[i]);		
+		}
+		stop;
+	}
+	
+	before node: Declaration -> { 
+		if(!haskey(mapping, node) && node.name != "") {
+			collect[y][node.name] << z;
+			y++;
+			mapping[node] = z; 
+			z++; 
+		}	
+	} 
+});
+
+size:= len(keys(mapping))-1;
+a : array of int; 
+a = new(a, size + 1, 0);
+
+visit(p, visitor {
+	before n: CodeRepository -> {
+		snapshot := getsnapshot(n);
+		while(x>=0) {
+			st = terms[x];
+			arr := keys(mapping);
+			l := len(arr) - 1;
+			while(l>=0) {
+				keyword(arr[l].name);
+ 				if(check == true) {
+					j := mapping[arr[l]];
+					a[j] = 1;
+					check = false;
+				}
+				l--;
+			}
+			model << a;
+			a = new(a, size+1, 0); 
+			x--;
+		}
+		stop;
+	}
+
+});
+
+

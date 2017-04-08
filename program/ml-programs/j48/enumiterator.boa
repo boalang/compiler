@@ -1,0 +1,14 @@
+p: Project = input;
+print : output collection of string;
+
+type T = enum{a1 = "artificial intelligence", a2 = "anti-virus", a3 = "administration", a4 = "Systems Administration", a5 = "Social Networking", a6 = "Molecular Mechanics", a7 = "Mathematics", a8 = "Home Automation", a9 = "Genetic Algorithms", a10 = "Embedded systems"};
+
+vals: array of T;
+id : T;
+vals = enumvalues(id);
+
+model : output j48 of {array of int, T};
+
+foreach (i: int; def(p.topics[i])) {
+	print << "";
+}

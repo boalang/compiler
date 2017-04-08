@@ -1,0 +1,101 @@
+p: Project = input;
+lfiles: map[string] of ChangedFile;
+cname : string;
+type T1 = {dev:int, dname:string, nchanges:int};
+dfiles: map[string] of T1;
+
+collect : output collection[string][string][string] of string;
+type T = enum {fix = "FIX", notfix = "NOTFIX"};
+type Ty = {int, int, float, int, int, T};
+type fy = {int, int, float, int, int};
+
+feature : fy;
+model: RandomForest of Ty;
+model = load("/boa/0/train1467574748820ML.model");
+
+lloc := function(node: ChangedFile) : int {
+	diff := 0 ;
+	count := 0;
+	last := 0;
+    	if (haskey(lfiles, node.name)) {
+		visit(getast(lfiles[node.name]), visitor {
+        		before node: Statement ->
+            			if (node.kind != StatementKind.BLOCK)
+               				count = count + 1;
+    		});
+		last = count;
+		count = 0;
+		visit(getast(node), visitor {
+        		before node: Statement ->
+            			if (node.kind != StatementKind.BLOCK)
+               				count = count + 1;
+    		});
+
+	    	diff = count - last;
+	}
+	if (node.change == ChangeKind.DELETED)
+		remove(lfiles, node.name);
+	else
+		lfiles[node.name] = node;
+	
+	return int(abs(diff));
+};
+
+visit(p, visitor {
+
+    before node: Revision -> {
+	H : float = 0.0;
+	lines_of_code_changed := 0;
+        Time : time = node.commit_date;
+	total := 0;
+	filename : string;
+	arr : array of string;	
+	str: string = "";
+	ntimes_file_changed:=0;
+	cname = node.committer.username;
+
+	foreach (i: int; def(node.files[i])) {
+		filename =  node.files[i].name;
+
+		if(!haskey(dfiles, filename))
+            		dfiles[filename] = {1 , cname, 1}; 		
+		else
+			if(strfind(cname, dfiles[filename].dname) == -1)
+				dfiles[filename] = {dfiles[filename].dev + 1, dfiles[filename].dname + "," + cname, dfiles[filename].nchanges}; 
+			else 
+				dfiles[filename] =  {dfiles[filename].dev, dfiles[filename].dname, dfiles[filename].nchanges + 1};		
+
+		if(str == "")
+			str = dfiles[filename].dname;
+		else {
+			arr = splitall(dfiles[filename].dname, ",");
+			l:=len(arr);
+			while(l != 0) {
+				if(strfind(arr[l-1], str) == -1)
+					str = str + "," + arr[l-1];	
+				l--;		
+			}		
+		}
+
+		ntimes_file_changed = ntimes_file_changed + dfiles[filename].nchanges;
+		lines_of_code_changed = lines_of_code_changed + lloc(node.files[i]);
+		total++;
+	}
+	
+	len := len(node.files);
+	while(len != 0) {
+	    H = H + ( float(1/total) * log(float(1/total)) );
+            len--;
+        }
+
+	ndev:= len(splitall(str, ","));
+
+	feature = {total, lines_of_code_changed, -H, ndev, ntimes_file_changed};
+	if(isfixingrevision(node.log))
+		collect[p.project_url][node.id]["fix"] << classify(model, feature);
+	else
+		collect[p.project_url][node.id]["notfix"] <<  classify(model, feature);
+
+    }
+	
+});

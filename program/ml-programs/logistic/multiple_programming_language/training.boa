@@ -1,0 +1,3 @@
+type T = enum {A = "true", B = "false"};
+train_package_level : output logistic of {int,float,T};
+train_package_level << {1,1.0,T.A};
