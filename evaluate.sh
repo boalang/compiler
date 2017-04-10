@@ -6,7 +6,8 @@ if [ "$#" -lt 2 ]; then
 fi
 
 if [ ! -f $1 ]; then
-    echo "input '$1' is not a file"
+    echo "Error: input '$1' is not a file"
+    echo "Usage: $0 path/to/input.boa output-dir/ [options]"
     exit -2
 fi
 
@@ -24,6 +25,4 @@ if [ -d $2 ]; then
     fi
 fi
 
-BASEDIR=$(dirname "$0")
-
-$BASEDIR/boa.sh -e -d dataset/ -i $1 -o $2 $*
+$(dirname "$0")/boa.sh -e -d dataset/ -i $1 -o $2 $*
