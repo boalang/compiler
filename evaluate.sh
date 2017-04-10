@@ -17,7 +17,7 @@ if [ -d $2 ]; then
 
     yn=`echo $yn | tr '[:upper:]' '[:lower:]'`
 
-    if [[ $yn =~ ^(y| ) ]] | [ -z $yn ]; then
+    if [ "$yn" == "y" ] || [ "$yn" == "" ]; then
         rm -Rf $2
     else
         echo "Please remove or provide a different output directory."
