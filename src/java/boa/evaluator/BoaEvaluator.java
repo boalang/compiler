@@ -119,7 +119,7 @@ public class BoaEvaluator extends BoaMain {
 			final URL srcDirUrl = srcDir.toURI().toURL();
 
 			final ClassLoader cl = new URLClassLoader(new URL[] { srcDirUrl }, ClassLoader.getSystemClassLoader());
-			final Class<?> cls = cl.loadClass(getClassNameForGeneratedJavaProg());
+			final Class<?> cls = cl.loadClass(getGeneratedClass(this.PROG_PATH));
 			final Method method = cls.getMethod("main", String[].class);
 
 			method.invoke(null, (Object)actualArgs);
@@ -128,19 +128,12 @@ public class BoaEvaluator extends BoaMain {
 		}
 	}
 
-	private String getClassNameForGeneratedJavaProg() {
-		final StringBuffer progName = new StringBuffer(this.PROG_PATH);
-
-		while (progName.charAt(0) == '.' || progName.charAt(0) == '/') {
-			progName.deleteCharAt(0);
-		}
-
-		progName.delete(progName.lastIndexOf(".boa"), progName.length());
-		progName.delete(0, progName.lastIndexOf("/") + 1);
-		progName.setCharAt(0, Character.toUpperCase(progName.charAt(0)));
-		progName.insert(0, "boa.");
-
-		return progName.toString().replace("/", ".");
+	private String getGeneratedClass(final String path) {
+		final File f = new File(path);
+		String s = f.getName();
+		if (s.indexOf('.') != -1)
+			s = s.substring(0, s.lastIndexOf('.'));
+		return "boa." + pascalCase(s);
 	}
 
 	public String getResults() {

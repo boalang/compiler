@@ -75,4 +75,22 @@ public class BoaMain {
 		help.printWrapped(pw, HelpFormatter.DEFAULT_WIDTH, "\nPlease report issues at http://www.github.com/boalang/compiler");
 		pw.flush();
     }
+
+	protected static String pascalCase(final String string) {
+		final StringBuilder pascalized = new StringBuilder();
+
+		boolean upper = true;
+		for (final char c : string.toCharArray())
+			if (Character.isDigit(c) || c == '_') {
+				pascalized.append(c);
+				upper = true;
+			} else if (!Character.isDigit(c) && !Character.isLetter(c)) {
+				upper = true;
+			} else if (Character.isLetter(c)) {
+				pascalized.append(upper ? Character.toUpperCase(c) : c);
+				upper = false;
+			}
+
+		return pascalized.toString();
+	}
 }
