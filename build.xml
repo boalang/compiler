@@ -321,7 +321,7 @@
 	<target name="package-compiler" depends="compile" description="Package the compiler JAR.">
 		<jar destfile="dist/boa-compiler.jar">
 			<manifest>
-				<attribute name="Main-Class" value="boa.compiler.BoaCompiler" />
+				<attribute name="Main-Class" value="boa.BoaMain" />
 			</manifest>
 			<fileset dir="build/classes" />
 			<fileset dir="conf" />
