@@ -24,9 +24,11 @@ import boa.compiler.ast.expressions.Expression;
 import boa.compiler.ast.expressions.SimpleExpr;
 import boa.compiler.ast.Factor;
 import boa.compiler.ast.Identifier;
+import boa.compiler.ast.Index;
 import boa.compiler.ast.literals.IntegerLiteral;
 import boa.compiler.ast.literals.StringLiteral;
 import boa.compiler.ast.Operand;
+import boa.compiler.ast.Selector;
 import boa.compiler.ast.statements.ExprStatement;
 import boa.compiler.ast.statements.VarDeclStatement;
 import boa.compiler.ast.Term;
@@ -139,5 +141,28 @@ public class ASTFactory {
 				)
 			)
 		);
+	}
+
+	public static Expression createSelector(final Identifier id, final String selector, final BoaType selectorType, final BoaType factorType, final SymbolTable env) {
+		final Selector s = new Selector(ASTFactory.createIdentifier(selector, env));
+		final Factor f = new Factor(id).addOp(s);
+		final Expression tree = ASTFactory.createFactorExpr(f);
+
+		s.env = f.env = env;
+
+		s.type = selectorType;
+		f.type = tree.type = factorType;
+
+		return tree;
+	}
+
+	public static Index createIndex(final Expression idx, final SymbolTable env) {
+		final Index i = new Index(idx);
+		i.env = env;
+		return i;
+	}
+
+	public static Factor getFactorFromExp(final Expression exp) {
+		return exp.getLhs().getLhs().getLhs().getLhs().getLhs();
 	}
 }

@@ -18,17 +18,10 @@
 package boa.types.shadow;
 
 import boa.compiler.ast.Call;
-import boa.compiler.ast.Comparison;
-import boa.compiler.ast.Conjunction;
 import boa.compiler.ast.expressions.Expression;
-import boa.compiler.ast.expressions.SimpleExpr;
 import boa.compiler.ast.Factor;
 import boa.compiler.ast.Identifier;
-import boa.compiler.ast.Index;
 import boa.compiler.ast.Node;
-import boa.compiler.ast.Operand;
-import boa.compiler.ast.Selector;
-import boa.compiler.ast.Term;
 import boa.compiler.SymbolTable;
 import boa.compiler.transforms.ASTFactory;
 import boa.types.BoaInt;
@@ -64,44 +57,24 @@ public class IfStatementShadow extends BoaShadowType  {
 
 		if ("condition".equals(name)) {
 			// ${0}.expression
-			final Selector s = new Selector(ASTFactory.createIdentifier("expression", env));
-			final Factor f = new Factor(id).addOp(s);
-			final Expression tree = ASTFactory.createFactorExpr(f);
-
-			s.env = f.env = env;
-
-			s.type = f.type = tree.type = new ExpressionProtoTuple();
-
-			return tree;
+			return ASTFactory.createSelector(id, "expression", new ExpressionProtoTuple(), new ExpressionProtoTuple(), env);
 		}
 
 		if ("true_branch".equals(name)) {
+			// ${0}.statements
+			final Expression tree = ASTFactory.createSelector(id, "statements", new BoaProtoList(new StatementProtoTuple()), new StatementProtoTuple(), env);
 			// ${0}.statements[0]
-			final Selector s = new Selector(ASTFactory.createIdentifier("statements", env));
-			final Index idx = new Index(ASTFactory.createIntLiteral(0));
-			final Factor f = new Factor(id).addOp(s).addOp(idx);
-			final Expression tree = ASTFactory.createFactorExpr(f);
-
-			s.env = f.env = idx.env = env;
-
-			s.type = new BoaProtoList(new StatementProtoTuple());
-			f.type = tree.type = new StatementProtoTuple();
+			ASTFactory.getFactorFromExp(tree).addOp(ASTFactory.createIndex(ASTFactory.createIntLiteral(0), env));
 
 			return tree;
 		}
 
 		if ("false_branch".equals(name)) {
-			// (len(${0}.statements) <= 1 ? null : ${0}.statements[1])
-			final Selector s = new Selector(ASTFactory.createIdentifier("statements", env));
-			final Factor f = new Factor(id).addOp(s);
-			final Expression tree = ASTFactory.createFactorExpr(f);
-			final Expression c = ASTFactory.createCallExpr("safeget", env, new StatementProtoTuple(), tree, ASTFactory.createIntLiteral(1), ASTFactory.createStringLiteral("boa.types.Ast.Statement"));
+			// ${0}.statements
+			final Expression tree = ASTFactory.createSelector(id, "statements", new BoaProtoList(new StatementProtoTuple()), new BoaProtoList(new StatementProtoTuple()), env);
 
-			s.env = f.env = env;
-
-			s.type = f.type = tree.type = new BoaProtoList(new StatementProtoTuple());
-
-			return c;
+			// (${0}.statements.size() <= 1 ? (boa.types.Ast.Statement)null : ${0}.statements[1])
+			return ASTFactory.createCallExpr("safeget", env, new StatementProtoTuple(), tree, ASTFactory.createIntLiteral(1), ASTFactory.createStringLiteral("boa.types.Ast.Statement"));
 		}
 
 		throw new RuntimeException("invalid shadow field: " + name);
