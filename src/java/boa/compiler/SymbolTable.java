@@ -151,7 +151,7 @@ public class SymbolTable {
 
 		// helper for shadow type codegen
 		for (final BoaType t : dslTupleTypes)
-			globalFunctions.addFunction("trinary", new BoaFunction(t, new BoaType[] { new BoaProtoList(t) }, "(${0}.size() == 0 ? null : ${0}.get(1))"));
+			globalFunctions.addFunction("safeget", new BoaFunction(t, new BoaType[] { new BoaProtoList(t), new BoaInt(), new BoaString() }, "(${0}.size() <= ${1} ? (${2})null : ${0}.get((int)${1}))"));
 
 		// FIXME rdyer - def(protolist[i]) should generate "i < protolist.size()"
 		globalFunctions.addFunction("def", new BoaFunction(new BoaBool(), new BoaType[] { new BoaAny() }, "(${0} != null)"));

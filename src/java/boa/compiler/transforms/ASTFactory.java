@@ -17,7 +17,6 @@
  */
 package boa.compiler.transforms;
 
-import boa.compiler.ast.types.AbstractType;
 import boa.compiler.ast.Call;
 import boa.compiler.ast.Comparison;
 import boa.compiler.ast.Conjunction;
@@ -25,11 +24,16 @@ import boa.compiler.ast.expressions.Expression;
 import boa.compiler.ast.expressions.SimpleExpr;
 import boa.compiler.ast.Factor;
 import boa.compiler.ast.Identifier;
+import boa.compiler.ast.literals.IntegerLiteral;
+import boa.compiler.ast.literals.StringLiteral;
 import boa.compiler.ast.Operand;
 import boa.compiler.ast.statements.ExprStatement;
 import boa.compiler.ast.statements.VarDeclStatement;
 import boa.compiler.ast.Term;
+import boa.compiler.ast.types.AbstractType;
 import boa.compiler.SymbolTable;
+import boa.types.BoaInt;
+import boa.types.BoaString;
 import boa.types.BoaType;
 
 /**
@@ -69,6 +73,18 @@ public class ASTFactory {
 
 		final Expression exp = ASTFactory.createFactorExpr(f);
 		exp.type = t;
+		return exp;
+	}
+
+	public static Expression createIntLiteral(final long value) {
+		final Expression exp = ASTFactory.createFactorExpr(new IntegerLiteral("" + value));
+		exp.type = new BoaInt();
+		return exp;
+	}
+
+	public static Expression createStringLiteral(final String value) {
+		final Expression exp = ASTFactory.createFactorExpr(new StringLiteral(value));
+		exp.type = new BoaString();
 		return exp;
 	}
 

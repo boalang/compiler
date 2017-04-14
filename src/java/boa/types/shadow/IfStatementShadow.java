@@ -25,7 +25,6 @@ import boa.compiler.ast.expressions.SimpleExpr;
 import boa.compiler.ast.Factor;
 import boa.compiler.ast.Identifier;
 import boa.compiler.ast.Index;
-import boa.compiler.ast.literals.IntegerLiteral;
 import boa.compiler.ast.Node;
 import boa.compiler.ast.Operand;
 import boa.compiler.ast.Selector;
@@ -79,13 +78,12 @@ public class IfStatementShadow extends BoaShadowType  {
 		if ("true_branch".equals(name)) {
 			// ${0}.statements[0]
 			final Selector s = new Selector(ASTFactory.createIdentifier("statements", env));
-			final Index idx = new Index(ASTFactory.createFactorExpr(new IntegerLiteral("0")));
+			final Index idx = new Index(ASTFactory.createIntLiteral(0));
 			final Factor f = new Factor(id).addOp(s).addOp(idx);
 			final Expression tree = ASTFactory.createFactorExpr(f);
 
 			s.env = f.env = idx.env = env;
 
-			idx.getStart().type = new BoaInt();
 			s.type = new BoaProtoList(new StatementProtoTuple());
 			f.type = tree.type = new StatementProtoTuple();
 
@@ -93,11 +91,11 @@ public class IfStatementShadow extends BoaShadowType  {
 		}
 
 		if ("false_branch".equals(name)) {
-			// (len(${0}.statements) > 1 ? null : ${0}.statements[1])
+			// (len(${0}.statements) <= 1 ? null : ${0}.statements[1])
 			final Selector s = new Selector(ASTFactory.createIdentifier("statements", env));
 			final Factor f = new Factor(id).addOp(s);
 			final Expression tree = ASTFactory.createFactorExpr(f);
-			final Expression c = ASTFactory.createCallExpr("trinary", env, new StatementProtoTuple(), tree);
+			final Expression c = ASTFactory.createCallExpr("safeget", env, new StatementProtoTuple(), tree, ASTFactory.createIntLiteral(1), ASTFactory.createStringLiteral("boa.types.Ast.Statement"));
 
 			s.env = f.env = env;
 
