@@ -64,14 +64,15 @@ import boa.compiler.listeners.LexerErrorListener;
 import boa.compiler.listeners.ParserErrorListener;
 
 import org.antlr.v4.runtime.ANTLRFileStream;
+import org.antlr.v4.runtime.atn.PredictionMode;
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.misc.Interval;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenSource;
-import org.antlr.v4.runtime.atn.PredictionMode;
-import org.antlr.v4.runtime.misc.ParseCancellationException;
 
 import boa.datagen.DefaultProperties;
 import boa.parser.BoaParser;
@@ -125,6 +126,7 @@ public class BoaCompiler extends BoaMain {
 		try {
 			final List<String> jobnames = new ArrayList<String>();
 			final List<String> jobs = new ArrayList<String>();
+			final List<Integer> seeds = new ArrayList<Integer>();
 			boolean isSimple = true;
 
 			final List<Program> visitorPrograms = new ArrayList<Program>();
@@ -141,6 +143,8 @@ public class BoaCompiler extends BoaMain {
 				final File f = inputFiles.get(i);
 				try {
 					final BoaLexer lexer = new BoaLexer(new ANTLRFileStream(f.getAbsolutePath()));
+					// use the whole input string to seed the RNG
+					seeds.add(lexer._input.getText(new Interval(0, lexer._input.size())).hashCode());
 					lexer.removeErrorListeners();
 					lexer.addErrorListener(new LexerErrorListener());
 
@@ -244,6 +248,7 @@ public class BoaCompiler extends BoaMain {
 			st.add("combineTables", CodeGeneratingVisitor.combineAggregatorStrings);
 			st.add("reduceTables", CodeGeneratingVisitor.reduceAggregatorStrings);
 			st.add("splitsize", isSimple ? 64 * 1024 * 1024 : 10 * 1024 * 1024);
+			st.add("seeds", seeds);
 			if (DefaultProperties.localDataPath != null) {
 				st.add("isLocal", true);
 			}
