@@ -94,6 +94,12 @@ public class BoaMap extends BoaType {
 		return true;
 	}
 
+	/** {@inheritDoc} */
+	@Override
+	public boolean hasTypeVar() {
+		return this.indexType.hasTypeVar() || this.valueType.hasTypeVar();
+	}
+
 	/**
 	 * Get the valueType of the values of this map.
 	 * 

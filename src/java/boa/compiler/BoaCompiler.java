@@ -46,6 +46,7 @@ import org.apache.log4j.Logger;
 
 import org.scannotation.ClasspathUrlFinder;
 
+import boa.BoaMain;
 import boa.compiler.ast.Program;
 import boa.compiler.ast.Start;
 import boa.compiler.transforms.InheritedAttributeTransformer;
@@ -85,13 +86,13 @@ import boa.parser.BoaLexer;
  * @author nbhide
  * @author kaushin
  */
-public class BoaCompiler {
+public class BoaCompiler extends BoaMain {
 	
 	private static Logger LOG = Logger.getLogger(BoaCompiler.class);
 	
 	public static void main(final String[] args) throws IOException {
 		CommandLine cl = processCommandLineOptions(args);
-		if(cl==null) return;
+		if (cl == null) return;
 		final ArrayList<File> inputFiles = BoaCompiler.inputFiles;
 
 		// get the name of the generated class
@@ -131,6 +132,12 @@ public class BoaCompiler {
 			final List<Program> visitorPrograms = new ArrayList<Program>();
 
 			SymbolTable.initialize(libs);
+
+			final int maxVisitors;
+			if (cl.hasOption('v'))
+				maxVisitors = Integer.parseInt(cl.getOptionValue('v'));
+			else
+				maxVisitors = Integer.MAX_VALUE;
 
 			for (int i = 0; i < inputFiles.size(); i++) {
 				final File f = inputFiles.get(i);
@@ -172,7 +179,7 @@ public class BoaCompiler {
 
 							// if a job has no visitor, let it have its own method
 							// also let jobs have own methods if visitor merging is disabled
-							if (!simpleVisitor.isComplex() || cl.hasOption("nv") || inputFiles.size() == 1) {
+							if (!simpleVisitor.isComplex() || maxVisitors < 2 || inputFiles.size() == 1) {
 								new VisitorOptimizingTransformer().start(p);
 
 								if (cl.hasOption("pp")) new PrettyPrintVisitor().start(p);
@@ -197,12 +204,6 @@ public class BoaCompiler {
 					e.printStackTrace();
 				}
 			}
-
-			final int maxVisitors;
-			if (cl.hasOption('v'))
-				maxVisitors = Integer.parseInt(cl.getOptionValue('v'));
-			else
-				maxVisitors = Integer.MAX_VALUE;
 
 			if (!visitorPrograms.isEmpty())
 				try {
@@ -246,7 +247,7 @@ public class BoaCompiler {
 			st.add("combineTables", CodeGeneratingVisitor.combineAggregatorStrings);
 			st.add("reduceTables", CodeGeneratingVisitor.reduceAggregatorStrings);
 			st.add("splitsize", isSimple ? 64 * 1024 * 1024 : 10 * 1024 * 1024);
-			if(DefaultProperties.localDataPath != null) {
+			if (DefaultProperties.localDataPath != null) {
 				st.add("isLocal", true);
 			}
 
@@ -259,8 +260,8 @@ public class BoaCompiler {
 	}
 	
 	public static void parseOnly(final String[] args) throws IOException {
-		CommandLine cl = processParseCommandLineOptions(args);
-		if(cl==null) return;
+		final CommandLine cl = processParseCommandLineOptions(args);
+		if (cl == null) return;
 		final ArrayList<File> inputFiles = BoaCompiler.inputFiles;
 
 		// find custom libs to load
@@ -269,13 +270,13 @@ public class BoaCompiler {
 			for (final String lib : cl.getOptionValues('l'))
 				libs.add(new File(lib).toURI().toURL());
 
-		final List<String> jobnames = new ArrayList<String>();
-		final List<String> jobs = new ArrayList<String>();
-		boolean isSimple = true;
-
-		final List<Program> visitorPrograms = new ArrayList<Program>();
-
 		SymbolTable.initialize(libs);
+
+		final int maxVisitors;
+		if (cl.hasOption('v'))
+			maxVisitors = Integer.parseInt(cl.getOptionValue('v'));
+		else
+			maxVisitors = Integer.MAX_VALUE;
 
 		for (int i = 0; i < inputFiles.size(); i++) {
 			final File f = inputFiles.get(i);
@@ -296,9 +297,6 @@ public class BoaCompiler {
 
 				final BoaErrorListener parserErrorListener = new ParserErrorListener();
 				final Start p = parse(tokens, parser, parserErrorListener);
-				if (cl.hasOption("ast")) new ASTPrintingVisitor().start(p);
-
-				final String jobName = "" + i;
 
 				try {
 					if (!parserErrorListener.hasError) {
@@ -308,31 +306,6 @@ public class BoaCompiler {
 						simpleVisitor.start(p);
 
 						LOG.info(f.getName() + ": task complexity: " + (!simpleVisitor.isComplex() ? "simple" : "complex"));
-						isSimple &= !simpleVisitor.isComplex();
-
-						new ShadowTypeEraser().start(p);
-						new InheritedAttributeTransformer().start(p);
-
-						new LocalAggregationTransformer().start(p);
-
-						// if a job has no visitor, let it have its own method
-						// also let jobs have own methods if visitor merging is disabled
-						if (!simpleVisitor.isComplex() || cl.hasOption("nv") || inputFiles.size() == 1) {
-							new VisitorOptimizingTransformer().start(p);
-
-							if (cl.hasOption("pp")) new PrettyPrintVisitor().start(p);
-							if (cl.hasOption("ast2")) new ASTPrintingVisitor().start(p);
-							final CodeGeneratingVisitor cg = new CodeGeneratingVisitor(jobName);
-							cg.start(p);
-							jobs.add(cg.getCode());
-
-							jobnames.add(jobName);
-						}
-						// if a job has visitors, fuse them all together into a single program
-						else {
-							p.getProgram().jobName = jobName;
-							visitorPrograms.add(p.getProgram());
-						}
 					}
 				} catch (final TypeCheckException e) {
 					parserErrorListener.error("typecheck", lexer, null, e.n.beginLine, e.n.beginColumn, e.n2.endColumn - e.n.beginColumn + 1, e.getMessage(), e);
@@ -344,10 +317,7 @@ public class BoaCompiler {
 		}
 	}
 	
-	private static Start parse(final CommonTokenStream tokens,
-			final BoaParser parser,
-			final BoaErrorListener parserErrorListener) {
-
+	private static Start parse(final CommonTokenStream tokens, final BoaParser parser, final BoaErrorListener parserErrorListener) {
 		parser.setBuildParseTree(false);
 		parser.getInterpreter().setPredictionMode(PredictionMode.SLL);
 
@@ -366,9 +336,8 @@ public class BoaCompiler {
 		}
 	}
 
-	private static void compileGeneratedSrc(final CommandLine cl,
-			final String jarName, final File outputRoot, final File outputFile)
-					throws RuntimeException, IOException, FileNotFoundException {
+	private static void compileGeneratedSrc(final CommandLine cl, final String jarName, final File outputRoot, final File outputFile)
+			throws RuntimeException, IOException, FileNotFoundException {
 		// compile the generated .java file
 		final JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
 		if (compiler == null)
@@ -397,12 +366,13 @@ public class BoaCompiler {
 
 		generateJar(jarName, outputRoot, libJars);
 
-		if(DefaultProperties.localDataPath == null) {
+		if (DefaultProperties.localDataPath == null) {
 			delete(outputRoot);
 		}
 	}
 
 	static ArrayList<File> inputFiles = null; 
+
 	private static CommandLine processCommandLineOptions(final String[] args) {
 		// parse the command line options
 		final Options options = new Options();
@@ -410,13 +380,12 @@ public class BoaCompiler {
 		options.addOption("i", "in", true, "file(s) to be compiled (comma-separated list)");
 		options.addOption("o", "out", true, "the name of the resulting jar");
 		options.addOption("j", "rtjar", true, "the path to the Boa runtime jar");
-		options.addOption("nv", "no-visitor-fusion", false, "disable visitor fusion");
 		options.addOption("v", "visitors-fused", true, "number of visitors to fuse");
 		options.addOption("n", "name", true, "the name of the generated main class");
 		options.addOption("ast", "ast-parsed", false, "print the AST immediately after parsing (debug)");
 		options.addOption("ast2", "ast-transformed", false, "print the AST after transformations, before code generation (debug)");
 		options.addOption("pp", "pretty-print", false, "pretty print the AST before code generation (debug)");
-		options.addOption("cd", "compilation-dir", true, "All generated Files live here");
+		options.addOption("cd", "compilation-dir", true, "directory to store all generated files");
 
 		final CommandLine cl;
 		try {
@@ -461,8 +430,7 @@ public class BoaCompiler {
 		try {
 			cl = new PosixParser().parse(options, args);
 		} catch (final org.apache.commons.cli.ParseException e) {
-			System.err.println(e.getMessage());
-			new HelpFormatter().printHelp("Boa Parser", options);
+            printHelp(options, e.getMessage());
 			return null;
 		}
 		
@@ -481,31 +449,25 @@ public class BoaCompiler {
 		}
 
 		if (inputFiles.size() == 0) {
-			System.err.println("no valid input files found - did you use the --in option?");
-			//new HelpFormatter().printHelp("BoaCompiler", options);
-			new HelpFormatter().printHelp("Boa Parser", options);
+            printHelp(options, "no valid input files found - did you use the --in option?");
 			return null;
 		}
 		
 		return cl;
 	}
 	
+	// get the name of the generated class
 	private static final String getGeneratedClass(final CommandLine cl) {
-		// get the name of the generated class
-		final String className;
+		String className;
 		if (cl.hasOption('n')) {
 			className = cl.getOptionValue('n');
 		} else {
-			String s = "";
+			className = "";
 			for (final File f : inputFiles) {
-				if (s.length() != 0)
-					s += "_";
-				if (f.getName().indexOf('.') != -1)
-					s += f.getName().substring(0, f.getName().lastIndexOf('.'));
-				else
-					s += f.getName();
+				if (className.length() != 0)
+					className += "_";
+				className += jarToClassname(f);
 			}
-			className = pascalCase(s);
 		}
 		return className;
 	}
@@ -520,10 +482,11 @@ public class BoaCompiler {
 	}
 
 	private static void generateJar(final String jarName, final File dir, final List<File> libJars) throws IOException, FileNotFoundException {
-		final int offset = dir.toString().length() + 1;
-
 		final JarOutputStream jar = new JarOutputStream(new BufferedOutputStream(new FileOutputStream(new File(jarName))));
+
 		try {
+			final int offset = dir.toString().length() + 1;
+
 			for (final File f : findFiles(dir, new ArrayList<File>()))
 				putJarEntry(jar, f, f.getPath().substring(offset));
 
@@ -558,23 +521,5 @@ public class BoaCompiler {
 		}
 
 		jar.closeEntry();
-	}
-
-	private static String pascalCase(final String string) {
-		final StringBuilder pascalized = new StringBuilder();
-
-		boolean upper = true;
-		for (final char c : string.toCharArray())
-			if (Character.isDigit(c) || c == '_') {
-				pascalized.append(c);
-				upper = true;
-			} else if (!Character.isDigit(c) && !Character.isLetter(c)) {
-				upper = true;
-			} else if (Character.isLetter(c)) {
-				pascalized.append(upper ? Character.toUpperCase(c) : c);
-				upper = false;
-			}
-
-		return pascalized.toString();
 	}
 }

@@ -1,0 +1,7 @@
+o: output sum of int;
+
+values: array of int;
+keys: array of int;
+
+o << len(values);
+o << len(keys);

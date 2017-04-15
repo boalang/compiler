@@ -34,6 +34,12 @@ public class BoaTypeVar extends BoaScalar {
 
 	/** {@inheritDoc} */
 	@Override
+	public boolean hasTypeVar() {
+		return true;
+	}
+
+	/** {@inheritDoc} */
+	@Override
 	public boolean accepts(BoaType that) {
 		return true;
 	}

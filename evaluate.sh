@@ -1,9 +1,9 @@
 #!/bin/bash
 
-if [ "$#" -eq 0 ]; then
-	echo "Usage: $0 file.boa [options]"
+if [ "$#" -lt 2 ]; then
+    echo "Usage: $0 file.boa output-dir/ [options]"
+    $(dirname "$0")/boa.sh -e
+    exit -1
 fi
 
-BASEDIR=$(dirname "$0")
-
-java -cp ".:$BASEDIR/dist/boa-compiler.jar:$BASEDIR/lib/*:$BASEDIR/lib/evaluator/*:$BASEDIR/compile" boa.BoaMain -e -d dataset/ -i $1 -o $2 $*
+$(dirname "$0")/boa.sh -e -d dataset/ -i $1 -o $2 $*

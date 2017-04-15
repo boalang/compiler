@@ -74,6 +74,15 @@ public abstract class BoaType {
 	}
 
 	/**
+	 * Returns if this type contains a {@link BoaTypeVar} somewhere in it.
+	 *
+	 * @return true if this type has a {@link BoaTypeVar} in it
+	 */
+	public boolean hasTypeVar() {
+		return false;
+	}
+
+	/**
 	 * Returns a string representation of the Java equivalent of this Boa
 	 * type.
 	 * 

@@ -1,6 +1,7 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ *                 Iowa State University of Science and Technology,
+ *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,10 +19,16 @@ package boa.compiler;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 
+import boa.types.BoaArray;
 import boa.types.BoaFunction;
+import boa.types.BoaMap;
 import boa.types.BoaName;
+import boa.types.BoaSet;
+import boa.types.BoaStack;
 import boa.types.BoaType;
+import boa.types.BoaTypeVar;
 import boa.types.BoaVarargs;
 
 
@@ -38,22 +45,67 @@ public class FunctionTrie {
 		this.trie = new HashMap();
 	}
 
-	private BoaFunction getFunction(final Object[] ids) {
+	private BoaType replaceVar(final BoaType formal, final BoaType actual, final Map<String, BoaType> typeVars) {
+		BoaType t = formal;
+		BoaType t2 = actual;
+
+		if (t instanceof BoaArray && t2 instanceof BoaArray) {
+			t = ((BoaArray)t).getType();
+			t2 = ((BoaArray)t2).getType();
+			if (t instanceof BoaTypeVar)
+				return new BoaArray(replaceVar(t, t2, typeVars));
+		} else if (t instanceof BoaMap && t2 instanceof BoaMap) {
+			final BoaType i = ((BoaMap)t).getIndexType();
+			final BoaType i2 = ((BoaMap)t2).getIndexType();
+			t = ((BoaMap)t).getType();
+			t2 = ((BoaMap)t2).getType();
+			if (t instanceof BoaTypeVar || i instanceof BoaTypeVar)
+				return new BoaMap(replaceVar(t, t2, typeVars), replaceVar(i, i2, typeVars));
+		} else if (t instanceof BoaStack && t2 instanceof BoaStack) {
+			t = ((BoaStack)t).getType();
+			t2 = ((BoaStack)t2).getType();
+			if (t instanceof BoaTypeVar)
+				return new BoaStack(replaceVar(t, t2, typeVars));
+		} else if (t instanceof BoaSet && t2 instanceof BoaSet) {
+			t = ((BoaSet)t).getType();
+			t2 = ((BoaSet)t2).getType();
+			if (t instanceof BoaTypeVar)
+				return new BoaSet(replaceVar(t, t2, typeVars));
+		} else if (t instanceof BoaTypeVar) {
+			final String name = ((BoaTypeVar)t).getName();
+			if (typeVars.containsKey(name))
+				return typeVars.get(name);
+			typeVars.put(name, t2);
+			return t2;
+		}
+
+		return t;
+	}
+
+	private BoaFunction getFunction(final Object[] ids, final Map<String, BoaType> typeVars) {
 		if (this.trie.containsKey(ids[0])) {
 			if (ids[0].equals(""))
 				return getFunction();
 			else
-				return ((FunctionTrie) this.trie.get(ids[0])).getFunction(Arrays.copyOfRange(ids, 1, ids.length));
+				return ((FunctionTrie) this.trie.get(ids[0])).getFunction(Arrays.copyOfRange(ids, 1, ids.length), typeVars);
 		} else {
 			for (final Object o : this.trie.keySet()) {
 				if (o instanceof BoaVarargs && ((BoaVarargs) o).accepts((BoaType) ids[0]))
 					return ((FunctionTrie) this.trie.get(o)).getFunction();
 
-				if (o instanceof BoaType && !(ids[0] instanceof String) && ((BoaType) o).accepts((BoaType) ids[0])) {
-					final BoaFunction function = ((FunctionTrie) this.trie.get(o)).getFunction(Arrays.copyOfRange(ids, 1, ids.length));
+				if (o instanceof BoaType && !(ids[0] instanceof String)) {
+					BoaType o2 = (BoaType)o;
 
-					if (function != null)
-						return function;
+					// if the function argument has a type var, bind a mapping to the actual param's type
+					if (o2.hasTypeVar())
+						o2 = replaceVar(o2, (BoaType)ids[0], typeVars);
+
+					if (((BoaType) o2).accepts((BoaType) ids[0])) {
+						final BoaFunction function = ((FunctionTrie) this.trie.get(o)).getFunction(Arrays.copyOfRange(ids, 1, ids.length), typeVars);
+
+						if (function != null && !((BoaType) o2).hasTypeVar())
+							return function;
+					}
 				}
 			}
 		}
@@ -79,7 +131,7 @@ public class FunctionTrie {
 
 		ids[ids.length - 1] = "";
 
-		return this.getFunction(ids);
+		return this.getFunction(ids, new HashMap<String, BoaType>());
 	}
 
 	@SuppressWarnings("unchecked")
