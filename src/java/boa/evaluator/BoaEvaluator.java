@@ -119,21 +119,13 @@ public class BoaEvaluator extends BoaMain {
 			final URL srcDirUrl = srcDir.toURI().toURL();
 
 			final ClassLoader cl = new URLClassLoader(new URL[] { srcDirUrl }, ClassLoader.getSystemClassLoader());
-			final Class<?> cls = cl.loadClass(getGeneratedClass(this.PROG_PATH));
+			final Class<?> cls = cl.loadClass("boa." + jarToClassname(this.PROG_PATH));
 			final Method method = cls.getMethod("main", String[].class);
 
 			method.invoke(null, (Object)actualArgs);
 		} catch (final Throwable e) {
 			System.err.print(e);
 		}
-	}
-
-	private String getGeneratedClass(final String path) {
-		final File f = new File(path);
-		String s = f.getName();
-		if (s.indexOf('.') != -1)
-			s = s.substring(0, s.lastIndexOf('.'));
-		return "boa." + pascalCase(s);
 	}
 
 	public String getResults() {

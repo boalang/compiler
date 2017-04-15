@@ -17,6 +17,7 @@
  */
 package boa;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 
@@ -92,5 +93,16 @@ public class BoaMain {
 			}
 
 		return pascalized.toString();
+	}
+
+	protected static String jarToClassname(final String path) {
+		return jarToClassname(new File(path));
+	}
+
+	protected static String jarToClassname(final File f) {
+		String s = f.getName();
+		if (s.indexOf('.') != -1)
+			s = s.substring(0, s.lastIndexOf('.'));
+		return pascalCase(s);
 	}
 }

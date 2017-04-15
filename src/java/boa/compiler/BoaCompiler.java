@@ -46,6 +46,7 @@ import org.apache.log4j.Logger;
 
 import org.scannotation.ClasspathUrlFinder;
 
+import boa.BoaMain;
 import boa.compiler.ast.Program;
 import boa.compiler.ast.Start;
 import boa.compiler.transforms.InheritedAttributeTransformer;
@@ -83,7 +84,7 @@ import boa.parser.BoaLexer;
  * @author rdyer
  * @author nbhide
  */
-public class BoaCompiler {
+public class BoaCompiler extends BoaMain {
 	
 	private static Logger LOG = Logger.getLogger(BoaCompiler.class);
 	
@@ -266,12 +267,6 @@ public class BoaCompiler {
 			for (final String lib : cl.getOptionValues('l'))
 				libs.add(new File(lib).toURI().toURL());
 
-		final List<String> jobnames = new ArrayList<String>();
-		final List<String> jobs = new ArrayList<String>();
-		boolean isSimple = true;
-
-		final List<Program> visitorPrograms = new ArrayList<Program>();
-
 		SymbolTable.initialize(libs);
 
 		final int maxVisitors;
@@ -299,9 +294,6 @@ public class BoaCompiler {
 
 				final BoaErrorListener parserErrorListener = new ParserErrorListener();
 				final Start p = parse(tokens, parser, parserErrorListener);
-				if (cl.hasOption("ast")) new ASTPrintingVisitor().start(p);
-
-				final String jobName = "" + i;
 
 				try {
 					if (!parserErrorListener.hasError) {
@@ -459,8 +451,7 @@ public class BoaCompiler {
 		try {
 			cl = new PosixParser().parse(options, args);
 		} catch (final org.apache.commons.cli.ParseException e) {
-			System.err.println(e.getMessage());
-			new HelpFormatter().printHelp("Boa Parser", options);
+            printHelp(options, e.getMessage());
 			return null;
 		}
 		
@@ -479,9 +470,7 @@ public class BoaCompiler {
 		}
 
 		if (inputFiles.size() == 0) {
-			System.err.println("no valid input files found - did you use the --in option?");
-			//new HelpFormatter().printHelp("BoaCompiler", options);
-			new HelpFormatter().printHelp("Boa Parser", options);
+            printHelp(options, "no valid input files found - did you use the --in option?");
 			return null;
 		}
 		
@@ -490,21 +479,16 @@ public class BoaCompiler {
 	
 	// get the name of the generated class
 	private static final String getGeneratedClass(final CommandLine cl) {
-		// get the name of the generated class
-		final String className;
+		String className;
 		if (cl.hasOption('n')) {
 			className = cl.getOptionValue('n');
 		} else {
-			String s = "";
+			className = "";
 			for (final File f : inputFiles) {
-				if (s.length() != 0)
-					s += "_";
-				if (f.getName().indexOf('.') != -1)
-					s += f.getName().substring(0, f.getName().lastIndexOf('.'));
-				else
-					s += f.getName();
+				if (className.length() != 0)
+					className += "_";
+				className += jarToClassname(f);
 			}
-			className = pascalCase(s);
 		}
 		return className;
 	}
@@ -558,23 +542,5 @@ public class BoaCompiler {
 		}
 
 		jar.closeEntry();
-	}
-
-	private static String pascalCase(final String string) {
-		final StringBuilder pascalized = new StringBuilder();
-
-		boolean upper = true;
-		for (final char c : string.toCharArray())
-			if (Character.isDigit(c) || c == '_') {
-				pascalized.append(c);
-				upper = true;
-			} else if (!Character.isDigit(c) && !Character.isLetter(c)) {
-				upper = true;
-			} else if (Character.isLetter(c)) {
-				pascalized.append(upper ? Character.toUpperCase(c) : c);
-				upper = false;
-			}
-
-		return pascalized.toString();
 	}
 }
