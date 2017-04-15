@@ -1,6 +1,7 @@
 /*
- * Copyright 2015, Hridesh Rajan, Robert Dyer,
- *                 and Iowa State University of Science and Technology
+ * Copyright 2017, Hridesh Rajan, Robert Dyer,
+ *                 Iowa State University of Science and Technology
+ *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +25,7 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.PosixParser;
 
+import boa.BoaMain;
 import boa.datagen.forges.github.GetGithubRepoByUser;
 import boa.datagen.forges.github.LocalGitSequenceGenerator;
 
@@ -31,9 +33,9 @@ import boa.datagen.forges.github.LocalGitSequenceGenerator;
  * The main entry point for Boa tools for generating datasets.
  *
  * @author hridesh
- * 
+ * @author rdyer
  */
-public class BoaGenerator {
+public class BoaGenerator extends BoaMain {
 	public static boolean jsonAvailable = true;
 	public static boolean localCloning = false;
 
@@ -45,8 +47,7 @@ public class BoaGenerator {
 		try {
 			cl = new PosixParser().parse(options, args);
 		} catch (final org.apache.commons.cli.ParseException e) {
-			System.err.println(e.getMessage());
-			new HelpFormatter().printHelp("BoaCompiler", options);
+			printHelp(options, e.getMessage());
 			return;
 		}
 		BoaGenerator.handleCmdOptions(cl, options, args);
@@ -90,29 +91,15 @@ public class BoaGenerator {
 			clear(false);
 	}
 
-	private static final void printHelp(Options options, String message) {
-		String header = "The most commonly used Boa options are:";
-		String footer = "\nPlease report issues at http://www.github.com/boalang/";
-		System.err.println(message);
-		new HelpFormatter().printHelp("boa", header, options, footer);
-	}
-
-	private static final void printHelp(Options options) {
-		String header = "The most commonly used Boa options are:";
-		String footer = "\nPlease report issues at http://www.github.com/boalang/";
-		new HelpFormatter().printHelp("boa", header, options, footer);
-	}
-
 	private static void addOptions(Options options) {
-		options.addOption("inputJson", "json", true, ".json files for metadata");
-		options.addOption("inputRepo", "json", true, "cloned repo path");
-		options.addOption("output", "json", true, "directory where output is desired");
-		options.addOption("user", "json", true, "github username to authenticate");
-		options.addOption("password", "json", true, "github password to authenticate.");
-		options.addOption("targetUser", "json", true, "username of target repository");
-		options.addOption("targetRepo", "json", true, "name of the target repository");
-		options.addOption("cache", "json", false, "enable if you want to delete the cloned code for user.");
-		options.addOption("help", "help", true, "help");
+		options.addOption("ij", "inputJson", true, ".json files for metadata");
+		options.addOption("ir", "inputRepo", true, "cloned repo path");
+		options.addOption("o", "output", true, "directory where output is desired");
+		options.addOption("u", "user", true, "github username to authenticate");
+		options.addOption("p", "password", true, "github password to authenticate.");
+		options.addOption("tu", "targetUser", true, "username of target repository");
+		options.addOption("tr", "targetRepo", true, "name of the target repository");
+		options.addOption("c", "cache", false, "enable if you want to delete the cloned code for user.");
 	}
 
 	private static void handleCmdOptions(CommandLine cl, Options options, final String[] args) {
@@ -150,29 +137,24 @@ public class BoaGenerator {
 				e.printStackTrace();
 			}
 		} else if (cl.hasOption("help")) {
-			String message = cl.getOptionValue("help");
-			printHelp(options, message);
+			printHelp(options, cl.getOptionValue("help"));
 		} else {
-			System.err.println("User must specify the path of the repository. Please see --remote and --local options");
-			printHelp(options);
+			printHelp(options, "User must specify the path of the repository. Please see --remote and --local options");
 		}
 	}
 
-	//
 	private static void clear(boolean cache) {
 		if (!cache) {
-			File clonedCode = new File(DefaultProperties.GH_GIT_PATH);
+			final File clonedCode = new File(DefaultProperties.GH_GIT_PATH);
 			if (clonedCode.exists())
 				org.apache.commons.io.FileUtils.deleteQuietly(clonedCode);
 		}
-		File inputDirectory = new File(DefaultProperties.GH_JSON_CACHE_PATH + "/buf-map");
+		final File inputDirectory = new File(DefaultProperties.GH_JSON_CACHE_PATH + "/buf-map");
 		if (inputDirectory.exists())
 			org.apache.commons.io.FileUtils.deleteQuietly(inputDirectory);
 	}
 
-	private static void getGithubMetadata(String inputPath, String username, String password, String targetUser,
-			String targetRepo) {
-		String[] args = { inputPath, username, password, targetUser, targetRepo };
-		GetGithubRepoByUser.main(args);
+	private static void getGithubMetadata(String inputPath, String username, String password, String targetUser, String targetRepo) {
+		GetGithubRepoByUser.main(new String[] { inputPath, username, password, targetUser, targetRepo });
 	}
 }
