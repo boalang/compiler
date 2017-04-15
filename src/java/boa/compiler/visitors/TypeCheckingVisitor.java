@@ -391,9 +391,9 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 
 			if(!(checkTupleArray(types) == true)) {
 				final BoaType t = types.get(0);
-				if (!(t instanceof BoaScalar))
-					if (!(t instanceof BoaTuple))
-						throw new TypeCheckException(n.getExprs(), "non-scalar/non-tuple type '" + t + "' can not be used in arrays");
+//				if (!(t instanceof BoaScalar))
+//					if (!(t instanceof BoaTuple))
+//						throw new TypeCheckException(n.getExprs(), "non-scalar/non-tuple type '" + t + "' can not be used in arrays");
 				n.type = new BoaArray(t);
 			}
 			else
@@ -1314,9 +1314,9 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		n.env = env;
 		n.getValue().accept(this, env);
 		final BoaType t = n.getValue().type;
-		if (!(t instanceof BoaScalar))
-			if (!(t instanceof BoaTuple))
-				throw new TypeCheckException(n.getValue(), "non-scalar/non-tuple type '" + t + "' can not be used in arrays");
+//		if (!(t instanceof BoaScalar))
+//			if (!(t instanceof BoaTuple))
+//				throw new TypeCheckException(n.getValue(), "non-scalar/non-tuple type '" + t + "' can not be used in arrays");
 		n.type = new BoaArray(t);
 	}
 
@@ -1399,6 +1399,10 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 
 		if (n.getArgsSize() > 0 && annotation.formalParameters().length == 0)
 			throw new TypeCheckException(n.getArgs(), "output aggregator '" + n.getId().getToken() + "' takes no arguments");
+
+		for(VarDeclStatement stmt: n.getParams()) {
+			stmt.accept(this, env);
+		}
 
 		n.type = new BoaTable(type, indexTypes, tweight, annotation.canOmitWeight());
 		env.set(n.getId().getToken(), n.type);

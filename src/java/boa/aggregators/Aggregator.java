@@ -18,9 +18,14 @@ package boa.aggregators;
 
 import java.io.IOException;
 
+import boa.BoaTup;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Reducer.Context;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import boa.functions.BoaCasts;
 import boa.io.EmitKey;
@@ -38,6 +43,29 @@ public abstract class Aggregator {
 	private Context context;
 	private EmitKey key;
 	private boolean combining;
+	private final static Set<String> inBuiltAggs = new HashSet<String>();
+
+	static {
+		inBuiltAggs.add("sum");
+		inBuiltAggs.add("top");
+		inBuiltAggs.add("maximum");
+		inBuiltAggs.add("minimum");
+		inBuiltAggs.add("max");
+		inBuiltAggs.add("min");
+		inBuiltAggs.add("collection");
+		inBuiltAggs.add("mean");
+		inBuiltAggs.add("median");
+		inBuiltAggs.add("stdev");
+		inBuiltAggs.add("quantile");
+		inBuiltAggs.add("kurtosis");
+		inBuiltAggs.add("histogram");
+		inBuiltAggs.add("graphCSV");
+		inBuiltAggs.add("set");
+		inBuiltAggs.add("bottom");
+		inBuiltAggs.add("skewness");
+		inBuiltAggs.add("confidence");
+		inBuiltAggs.add("variance");
+	}
 
 	/**
 	 * Construct an Aggregator.
@@ -93,6 +121,13 @@ public abstract class Aggregator {
 		this.aggregate(BoaCasts.doubleToString(data), null);
 	}
 
+	public void aggregate(final BoaTup data, final String metadata) throws IOException, InterruptedException, FinishedException {
+	}
+
+	public void aggregate(final BoaTup data) throws IOException, InterruptedException, FinishedException {
+		this.aggregate(data, null);
+	}
+
 	@SuppressWarnings("unchecked")
 	protected void collect(final String data, final String metadata) throws IOException, InterruptedException {
 		if (this.combining)
@@ -105,6 +140,22 @@ public abstract class Aggregator {
 
 	protected void collect(final String data) throws IOException, InterruptedException {
 		this.collect(data, null);
+	}
+
+	protected void collect(final BoaTup data) throws IOException, InterruptedException {
+		this.collect(data.toString(), null);
+	}
+
+	protected void collect(final BoaTup[] data) throws IOException, InterruptedException {
+		this.collect(Arrays.toString(data), null);
+	}
+
+	protected void collect(final double[] data) throws IOException, InterruptedException {
+		this.collect(Arrays.toString(data), null);
+	}
+
+	protected void collect(final long[] data) throws IOException, InterruptedException {
+		this.collect(Arrays.toString(data), null);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -156,5 +207,9 @@ public abstract class Aggregator {
 
 	public EmitKey getKey() {
 		return this.key;
+	}
+
+	public final static boolean isUserDefinedAggregator(String name) {
+		return !Aggregator.inBuiltAggs.contains(name);
 	}
 }

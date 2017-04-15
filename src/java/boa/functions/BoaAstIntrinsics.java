@@ -469,9 +469,9 @@ public class BoaAstIntrinsics {
 			// FIXME
 			/*
 			try {
-				parseGenericType(BoaAstIntrinsics.type_name(node.getName()).trim(), map);
+				parseGenericType(BoaAstIntrinsics.type_name(node.getFuncVarName()).trim(), map);
 			} catch (final StackOverflowError e) {
-				System.err.println("STACK ERR: " + node.getName() + " -> " + BoaAstIntrinsics.type_name(node.getName()).trim());
+				System.err.println("STACK ERR: " + node.getFuncVarName() + " -> " + BoaAstIntrinsics.type_name(node.getFuncVarName()).trim());
 			}
 			*/ 
 			return true;

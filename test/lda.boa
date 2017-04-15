@@ -1,0 +1,152 @@
+# Counting the 10 most used programming languages
+p: Project = input;
+counts: output top(10) of string weight int;
+astCount: int = 0;
+type fv = {a:float, b:float, c:float, d:float};
+type sol = {eigenvals: array of float, eigenvectors: array of array of float};
+
+
+lda:= function(vals: array of fv): array of float {
+     dataset : array of array of float = submatrix(flattenedMatrix(vals, 4), 0, len(vals) -1, 0, 2);
+     labels: array of float = getCol(flattenedMatrix(vals, 4), 3);
+     uniqueLables: array of int = convertFloatArrayToInt(unique(labels));
+
+
+     dummy: array of array of float = {{0.0, 0.0, 0.0}};
+     classified: array of array of array of float; #
+     classified = new(classified, len(uniqueLables), dummy);
+     foreach(i:int; abs(uniqueLables[i])) {
+        if(def(classified) && def(classified[roundToLong(labels[i])])) {
+           classified[roundToLong(labels[i])] = classified[roundToLong(labels[i])] + {dataset[i]};
+        } else if(def(classified)) {
+           classified[roundToLong(labels[i])] = {dataset[i]};
+        }
+     }
+
+
+     # calculate group mean
+     groupmeans : array of array of float;
+     groupmeans = new(groupmeans, len(uniqueLables), {0.0, 0.0, 0.0});
+     foreach(i: int; groupmeans[i]) {
+          foreach(j:int; def(classified[i][j])) {
+              groupmeans[i][0] = classified[i][j][0];
+              groupmeans[i][1] = classified[i][j][1];
+              groupmeans[i][2] = classified[i][j][2];
+          }
+          size : int = len(classified[i]);;
+          groupmeans[i][0] = groupmeans[i][0] / size;
+          groupmeans[i][1] = groupmeans[i][1] / size;
+          groupmeans[i][2] = groupmeans[i][2] / size;
+     }
+
+     # calculate global means
+     globalMean : array of float;
+     globalMean = new(globalMean, 3, 0.0);
+     foreach(j : int; dataset[j]) {
+        globalMean[0] = globalMean[0] + dataset[j][0];
+        globalMean[1] = globalMean[1] + dataset[j][1];
+        globalMean[2] = globalMean[2] + dataset[j][2];
+     }
+
+        globalMean[0] = globalMean[0] / len(dataset);
+        globalMean[1] = globalMean[1] / len(dataset);
+        globalMean[2] = globalMean[2] / len(dataset);
+
+
+     # correct subset data
+     foreach(i:int; def(classified[i])) {
+         foreach(j:int; classified[i][j]) {
+             classified[i][j][0] = classified[i][j][0] - globalMean[0];
+             classified[i][j][1] = classified[i][j][1] - globalMean[1];
+             classified[i][j][2] = classified[i][j][2] - globalMean[2];
+         }
+     }
+
+     # calculate covariance
+     covariance : array of array of array of float;
+     covariance = new(covariance, len(uniqueLables), {{0.0,0.0,0.0}, {0.0,0.0,0.0}, {0.0,0.0,0.0}});
+     foreach(i:int; uniqueLables[i]) {
+         foreach(j:int; covariance[i][j]) {
+             foreach(l:int; classified[l]) {
+                covariance[i][j][0] = covariance[i][j][0] + classified[i][l][j] * classified[i][l][0];
+                covariance[i][j][1] = covariance[i][j][1] + classified[i][l][j] * classified[i][l][1];
+                covariance[i][j][2] = covariance[i][j][2] + classified[i][l][j] * classified[i][l][2];
+             }
+                covariance[i][j][0] = covariance[i][j][0] / len(classified[i]);
+                covariance[i][j][1] = covariance[i][j][1] / len(classified[i]);
+                covariance[i][j][2] = covariance[i][j][2] / len(classified[i]);
+         }
+     }
+
+     # calculate pooled within group covariance matrix and invert it
+     pooledInverseCovariance : array of array of float;
+     pooledInverseCovariance = new(pooledInverseCovariance, len(uniqueLables), {0.0,0.0,0.0});
+     totalData: int = len(dataset);
+     foreach(j:int; pooledInverseCovariance[j]){
+         foreach(l:int; uniqueLables[l]) {
+            pooledInverseCovariance[j][0] = pooledInverseCovariance[j][0] + len(classified[l]) / totalData * covariance[l][j][0];
+            pooledInverseCovariance[j][1] = pooledInverseCovariance[j][1] + len(classified[l]) / totalData * covariance[l][j][1];
+            pooledInverseCovariance[j][2] = pooledInverseCovariance[j][2] + len(classified[l]) / totalData * covariance[l][j][2];
+         }
+     }
+
+     #TODO inverse the pooledInverseCovariance
+
+     probability: array of float;
+     probability = new(probability, len(uniqueLables), 0.0);
+
+     return probability;
+};
+
+ldaAgg: output lda of fv;
+
+visit(p, visitor {
+	# only look at the latest snapshot
+	before n: CodeRepository -> {
+		snapshot := getsnapshot(n);
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+	before node: Declaration -> {
+		if (node.kind == TypeKind.CLASS) {
+			public_ele : float = 0.0;
+			protected_ele : float = 0.0;
+			private_ele : float = 0.0;
+			other: float = 0.0;
+			foreach (i: int; def(node.methods[i])) {
+			    if(has_modifier_public(node.methods[i])) {
+                    public_ele = public_ele + 1;
+			    } else if(has_modifier_private(node.methods[i])) {
+                    private_ele = private_ele + 1;
+                } else if(has_modifier_protected(node.methods[i])) {
+                    protected_ele = protected_ele + 1;
+                } else {
+                   other = other + 1;
+                }
+			}
+
+			foreach (i: int; def(node.fields[i])) {
+			    if(has_modifier_public(node.fields[i])) {
+                    public_ele = public_ele + 1;
+			    } else if(has_modifier_private(node.fields[i])) {
+                    private_ele = private_ele + 1;
+                } else if(has_modifier_protected(node.fields[i])) {
+                    protected_ele = protected_ele + 1;
+                }else {
+                    other = other + 1;
+                }
+			}
+
+			feature1 : fv = {public_ele, private_ele, protected_ele, other};
+			ldaAgg << feature1;
+			ldaAgg << feature1;
+			ldaAgg << feature1;
+			ldaAgg << feature1;
+			ldaAgg << feature1;
+			ldaAgg << feature1;
+			ldaAgg << feature1;
+			ldaAgg << feature1;
+		}
+	}
+});

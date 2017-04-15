@@ -1,5 +1,7 @@
-Program(name, numreducers, jobs, jobnames, combineTables, reduceTables, splitsize, isLocal) ::= <<
+Program(name, numreducers, jobs, jobnames, combineTables, reduceTables, splitsize, isLocal, userDeclAgg) ::= <<
 package boa;
+
+<userDeclAgg:{t | <t><\n>}>
 
 public class <name> extends boa.runtime.BoaRunner {
 	/** {@inheritDoc} */
@@ -171,14 +173,14 @@ public class <name> extends boa.runtime.BoaRunner {
 	static class <name>BoaCombiner extends boa.runtime.BoaCombiner {
 		public <name>BoaCombiner() {
 			super();
-			
+			<reduceInit:{t | <t><\n>}>
 			<combineTables:{t | <t><\n>}>		}
 	}
 	
 	static class <name>BoaReducer extends boa.runtime.BoaReducer {
 		public <name>BoaReducer() {
 			super();
-
+			<reduceInit:{t | <t><\n>}>
 			<reduceTables:{t | <t><\n>}>		}
 	}
 	
@@ -200,7 +202,7 @@ public class <name> extends boa.runtime.BoaRunner {
 >>
 
 Job(name, staticDeclarations, staticStatements, statements) ::= <<
-private static class Job<name> implements BoaJob {
+ static class Job<name> implements BoaJob {
 	<staticDeclarations>
 	<if(staticStatements)>
 	{

@@ -87,8 +87,13 @@ public abstract class BoaReducer extends Reducer<EmitKey, EmitValue, Text, NullW
 
 		for (final EmitValue value : values)
 			try {
-				for (final String s : value.getData())
-					a.aggregate(s, value.getMetadata());
+				if(value.getTuple() != null) {
+					a.aggregate(value.getTuple(), value.getMetadata());
+				}else{
+					for (final String s : value.getData())
+						a.aggregate(s, value.getMetadata());
+				}
+
 			} catch (final FinishedException e) {
 				// we are done
 				return;

@@ -1,0 +1,93 @@
+# What are the 5 largest projects, in terms of AST nodes?
+# Output is in Millions of AST nodes.
+p: Project = input;
+counter: output sum[string][int] of int;
+collect3: output sum[int][int] of float;
+collect2: output sum[int][int] of float;
+collect4: output sum[int][int] of float;
+
+
+type fv = {pub:float, pri:float, pro:float, total:float};
+type sol = {pub_coff:float, pri_coff:float, pro_coff:float};
+
+
+
+lr := function(vals: array of fv): sol {
+    dataset : array of array of float = flattenedMatrix(vals, 4);
+    X : array of array of float = submatrix(dataset, 0, len(dataset)-1, 0, 2);
+    Y : array of array of float = transpose(getCol(dataset, 3));
+    X_trans : array of array of float = transpose(X);
+    A := inverse(multiply(X_trans, X));
+    B := multiply(X_trans, Y);
+    calculated : array of float = flatten(transpose(multiply(A, B)));
+    result : sol = {calculated[0], calculated[1], calculated[2]};
+    #result : sol = {len(X_trans)+0.0, len(X_trans[0])+ 0.0, len(Y) + 0.0};
+    return result;
+};
+
+lr_agg : output lr of fv;
+
+
+visit(p, visitor {
+	# only look at the latest snapshot
+	before n: CodeRepository -> {
+		snapshot := getsnapshot(n);
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+	before node: Declaration -> {
+		if (node.kind == TypeKind.CLASS) {
+			public_ele : int = 0;
+			protected_ele : int = 0;
+			private_ele : int = 0;
+			foreach (i: int; def(node.methods[i])) {
+			    if(has_modifier_public(node.methods[i])) {
+                    public_ele = public_ele + 1;
+			    } else if(has_modifier_private(node.methods[i])) {
+                    private_ele = public_ele + 1;
+                } else {
+                    protected_ele = protected_ele + 1;
+                }
+			}
+
+			foreach (i: int; def(node.fields[i])) {
+			    if(has_modifier_public(node.fields[i])) {
+                    public_ele = public_ele + 1;
+			    } else if(has_modifier_private(node.fields[i])) {
+                    private_ele = public_ele + 1;
+                } else {
+                    protected_ele = protected_ele + 1;
+                }
+			}
+
+			feature1 : fv = {public_ele + 0.0, private_ele + 0.0, protected_ele + 0.0, (public_ele + 0.0 + private_ele + protected_ele)};
+			lr_agg << feature1;
+			lr_agg << feature1;
+			lr_agg << feature1;
+			lr_agg << feature1;
+			lr_agg << feature1;
+			lr_agg << feature1;
+			lr_agg << feature1;
+			lr_agg << feature1;
+			lr_agg << feature1;
+			lr_agg << feature1;
+			lr_agg << feature1;
+			lr_agg << feature1;
+			lr_agg << feature1;
+			lr_agg << feature1;
+			lr_agg << feature1;
+			lr_agg << feature1;
+            lr_agg << feature1;
+			lr_agg << feature1;
+			lr_agg << feature1;
+			lr_agg << feature1;
+			lr_agg << feature1;
+			lr_agg << feature1;
+			lr_agg << feature1;
+			lr_agg << feature1;
+			lr_agg << feature1;
+		}
+	}
+});
+

@@ -1,0 +1,76 @@
+# What are the 5 largest projects, in terms of AST nodes?
+# Output is in Millions of AST nodes.
+p: Project = input;
+counter: output sum of int;
+
+
+type Connection = {cweight : float, prevDeltaWeight : float, deltaWeight : float, leftNeuron : int, rightNeuron : int};
+type Neuron = {id: int, bias : float , outputVal : float, biasConnection : Connection, inConnection : array of Connection};
+type emitvals = {inp:array of float, expected: array of float};
+type Model = {inputL: array of Neuron, hiddenL: array of Neuron, outputL: array of Neuron, neuronMap : map[int] of Neuron};
+
+
+############### dummy information about the model ###################
+
+dummyConnection: Connection = {-1.0, -1.0, -1.0, -1, -1};
+dummyConnArray : array of Connection = {dummyConnection};
+dummyNeuron : Neuron = {0, 0.0, 0.0, dummyConnection, dummyConnArray};
+dummyLayer : array of Neuron = {dummyNeuron};
+dummyMap: map[int] of Neuron;
+dummyModel : Model = {dummyLayer, dummyLayer, dummyLayer, dummyMap};
+
+############### dummy information ends ##############################
+
+results: output collection[string] of float;
+
+
+#loadedModel: Model = load("Neural.model", dummyModel);
+loadedModel: Model = load("./Neural/Neural.model", dummyModel);
+
+classification := function(model: Model,  vals: array of float): float {
+    neuronRecorder : map[int] of Neuron = model.neuronMap;
+    # set the input variables for jth value from values
+    inputLayer := model.inputL;
+    outputLayer := model.outputL;
+    hiddenLayer := model.hiddenL;
+    foreach(k: int; def(inputLayer[k])) {
+        d: float = vals[k];
+        inputLayer[k].outputVal = d;
+    }
+
+# activate the neurons for the forward propagation
+    # calculate the output of each hiddenLayer Neuron
+    foreach(k : int; hiddenLayer[k]) {
+        node2: Neuron = hiddenLayer[k];
+        intermediateResult : float = 0.0;
+        connections :array of Connection = node2.inConnection;
+        foreach(l: int; def(connections[l])) {
+            left: Neuron = neuronRecorder[connections[l].leftNeuron];
+            connweight : float = connections[l].cweight;
+            intermediateResult = intermediateResult + (connweight * left.outputVal);
+        }
+        intermediateResult = intermediateResult + (node2.biasConnection.cweight * node2.bias);
+        node2.outputVal = 1.0 / (1.0 + exp(intermediateResult));
+        #calculateOutput(hiddenL[i]);
+    }
+    # calculate the output of each outputLayer Neuron
+    foreach(k : int; outputLayer[k]) {
+        node3:Neuron = outputLayer[k];
+        intermediateResult1 : float = 0.0;
+        connections1 :array of Connection = node3.inConnection;
+        foreach(l: int; def(connections1[l])) {
+            left1: Neuron = neuronRecorder[connections1[l].leftNeuron];
+            connweight1 : float = connections1[l].cweight;
+            intermediateResult1 = intermediateResult1 + (connweight1 * left1.outputVal);
+        }
+        intermediateResult1 = intermediateResult1 + (node3.biasConnection.cweight * node3.bias);
+        node3.outputVal = 1.0 / (1.0 + exp(intermediateResult1));
+        #calculateOutput(outputL[i]);
+    }
+    return outputLayer[0].outputVal;
+};
+
+#testInput : emitVals = {{0.0}, {1.1}};
+
+#results[p.id] << classification(loadedModel, testInput);
+results[p.id] << classification(loadedModel, {3.0, 0.3});

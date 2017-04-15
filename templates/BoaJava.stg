@@ -125,25 +125,83 @@ new <type>()
 >>
 
 TupleType(name, fields, types) ::= <<
-private class <name>
+ static class <name>  implements boa.BoaTup, java.io.Serializable
 {
 	<fields,types:{field,type|<type> ___<field>}; separator="; ">;
 	<name>( <fields,types:{field,type|<type> ___<field>}; separator=", "> ){
-		<fields,types:{field,type|this.___<field> = new <type>(___<field>)}; separator="; ">;
+		<fields,types:{field,type|this.___<field> = (___<field>)}; separator="; ">;
 	}
 	<name>( <name> tmp){
-		<fields,types:{field,type|this.___<field> = new <type>(tmp.___<field>)}; separator="; ">;
+		<fields,types:{field,type|this.___<field> = (tmp.___<field>)}; separator="; ">;
 	}
 	public <name> clone() {
     		return new <name>(this);
 	}
+
+	public byte[] serialize(Object o) throws java.io.IOException {
+		java.io.ByteArrayOutputStream byteOutStream = new java.io.ByteArrayOutputStream();
+		java.io.ObjectOutputStream objectOut = new java.io.ObjectOutputStream(byteOutStream);
+		objectOut.writeObject(o);
+		objectOut.close();
+		return byteOutStream.toByteArray();
+	}
+
+	public static <name> deSerialize(String serializedObject) throws java.io.IOException {
+	    <name> obj = null;
+	    try {
+           byte b[] = serializedObject.getBytes();
+           java.io.ByteArrayInputStream bi = new java.io.ByteArrayInputStream(b);
+           java.io.ObjectInputStream si = new java.io.ObjectInputStream(bi);
+           obj = (<name>) si.readObject();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        return obj;
+    }
+
+    @Override
+    public String toString() {
+        StringBuffer result = new StringBuffer();
+        result.append("{");
+        for(String str: getValues()) {
+          result.append(str).append(", ");
+        }
+        result.deleteCharAt(result.length() - 1);
+        result.deleteCharAt(result.length() - 1);
+        result.append("}");
+        return result.toString();
+    }
+
+	public String[] getValues() {
+		return new String[] {<fields:{field|String.valueOf(this.___<field>)}; separator=", "> };
+	}
+
+	public String[] getFieldNames() {
+		return new String[] {<fields:{field|"___<field>"}; separator=", "> };
+	}
+
+	public Object getValue(String f) {
+		<fields:{field|
+		if(f.equals("___<field>"))
+			return ___<field>;
+		}; separator=" ">
+		return "empty";
+	}
+
+	@Override
+    public \<T> T[] asArray(T[] type) {
+        java.util.List\<T> _temp = new java.util.ArrayList\<T>();
+        <fields:{field|_temp.add((T)___<field>);}; separator="\n">
+        return _temp.toArray(type);
+    }
+
 }<\n>
 >>
 
 Tuple(name, exprlist) ::= "new <name>(<exprlist>) <\n>"
 
 EnumType(ename, fields, values, fname) ::= <<
-private enum <ename>
+private enum <ename> implements boa.BoaEnumInterface
 {
 	<fields,values:{field,value|<field>(<value>)}; separator=", ">;
 

@@ -16,6 +16,8 @@
  */
 package boa.functions;
 
+import boa.BoaTup;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
@@ -141,6 +143,45 @@ public class BoaSpecialIntrinsics {
 		return arr;
 	}
 
+	@FunctionSpec(name = "new", returnType = "array of array of float", formalParameters = { "array of array of float", "int", "array of float" })
+	public static double[][] newTuple(double[][] a, long size, double[] val) {
+		double[][] arr = new double[(int)size][];
+		for (int i = 0; i < size; i++)
+			arr[i] = val;
+		return arr;
+	}
+
+	@FunctionSpec(name = "new", returnType = "array of tuple", formalParameters = { "array of tuple", "int" })
+	public static <T>  T[] newTuple(T[] a, long size) {
+		Object[] arr = new Object[(int)size];
+		for (int i = 0; i < size; i++)
+			arr[i] = null;
+		return (T[]) arr;
+	}
+
+	@FunctionSpec(name = "new", returnType = "array of array of array of float", formalParameters = { "array of array of array of float", "int", "array of array of float" })
+	public static double[][][] newTuple(double[][][] a, long size, double[][] val) {
+		double[][][] arr = new double[(int)size][][];
+		for (int i = 0; i < size; i++)
+			arr[i] = val;
+		return arr;
+	}
+
+
+	@FunctionSpec(name = "print", returnType = "bool", formalParameters = { "any"})
+	public static boolean print(HashMap a) {
+		for (Object k: a.keySet()) {
+			System.out.println(k);
+		}
+		return true;
+	}
+
+	@FunctionSpec(name = "printany", returnType = "int", formalParameters = { "any"})
+	public static boolean print(Object a) {
+		System.out.println("nitin: " + a);
+		return true;
+	}
+
 	public static String regex(final String type, final long base) {
 		if (BoaSpecialIntrinsics.regexMap.containsKey(type + "," + base))
 			return BoaSpecialIntrinsics.regexMap.get(type + "," + base);
@@ -153,5 +194,19 @@ public class BoaSpecialIntrinsics {
 			return BoaSpecialIntrinsics.regexMap.get(type);
 		else
 			throw new RuntimeException("unimplemented");
+	}
+
+	@FunctionSpec(name = "convertFloatArrayToInt", returnType = "array of int", formalParameters = { "array of float" })
+	public static long[] convertFloatArrayToInt(final double[] inp) {
+		long[] converted = new long[inp.length];
+		for(int i = 0; i < inp.length; i++) {
+			converted[i] = Math.round(inp[i]);
+		}
+		return converted;
+	}
+
+	@FunctionSpec(name = "roundToLong", returnType = "int", formalParameters = { "float" })
+	public static long roundToLong(final double inp) {
+		return Math.round(inp);
 	}
 }

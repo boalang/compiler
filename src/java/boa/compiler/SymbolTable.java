@@ -22,6 +22,7 @@ import java.net.URL;
 import java.util.*;
 import java.util.Map.Entry;
 
+import boa.aggregators.UserDefinedAggregator;
 import org.scannotation.AnnotationDB;
 
 import boa.aggregators.AggregatorSpec;
@@ -42,7 +43,7 @@ public class SymbolTable {
 	private static final Map<Class<?>, BoaType> protomap;
 	private static Map<String, BoaType> idmap;
 	private static final Map<String, BoaType> globals;
-	private static FunctionTrie globalFunctions;
+	private static FunctionTrie  globalFunctions;
 
 	private FunctionTrie functions;
 	private Map<String, BoaType> locals;
@@ -90,6 +91,7 @@ public class SymbolTable {
 		idmap.put("float", new BoaFloat());
 		idmap.put("time", new BoaTime());
 		idmap.put("string", new BoaString());
+		idmap.put("tuple", new BoaTuple(new ArrayList<BoaType>()));
 
 		final BoaProtoTuple[] dslTupleTypes = {
 			new ASTRootProtoTuple(),
@@ -435,15 +437,28 @@ public class SymbolTable {
 	}
 
 	public List<Class<?>> getAggregators(final String name, final BoaType type) {
-		final List<Class<?>> aggregators = new ArrayList<Class<?>>();
+		final List<Class<?>> searchResult = new ArrayList<Class<?>>();
+		if (possibleInBuiltAgg(name)) {
+			if (type instanceof BoaTuple)
+				searchResult.add(this.getAggregator(name, type));
+			else if (type instanceof BoaArray)
+				searchResult.add(this.getAggregator(name, ((BoaArray)type).getType()));
+			else
+				searchResult.add(this.getAggregator(name, type));
+		} else if (this.functions.hasFunction(name)) {
+			searchResult.add(UserDefinedAggregator.class);
+		}
+		return searchResult;
+	}
 
-		if (type instanceof BoaTuple)
-			for (final BoaType subType : ((BoaTuple) type).getTypes())
-				aggregators.add(this.getAggregator(name, subType));
-		else
-			aggregators.add(this.getAggregator(name, type));
-
-		return aggregators;
+	private boolean possibleInBuiltAgg(String name) {
+		Set<String> names = aggregators.keySet();
+		for (final String entry: names) {
+			if(entry.contains(name)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private static void importFunction(final Method m) {
@@ -495,7 +510,9 @@ public class SymbolTable {
 			boa.functions.BoaSortIntrinsics.class,
 			boa.functions.BoaSpecialIntrinsics.class,
 			boa.functions.BoaStringIntrinsics.class,
-			boa.functions.BoaTimeIntrinsics.class
+			boa.functions.BoaTimeIntrinsics.class,
+			boa.functions.BoaMatrixIntrinsics.class,
+			boa.functions.BoaMLIntrinsics.class
 		};
 		for (final Class<?> c : builtinFuncs)
 			importFunctions(c);

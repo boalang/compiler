@@ -1,0 +1,74 @@
+AggregatorClass(funcName, funcArg, lambdaType, lambdaName, interface, lambdaInit, methods, aggParams, constcode) ::= <<
+class UserDefined$<funcName>  extends boa.aggregators.UserDefinedAggregator {
+    java.util.List\<<funcArg>\> _$values;
+    <aggParams:{j | <j><";">}>
+	<lambdaType> <lambdaName>;
+	<interface>
+
+    <if(constcode)>
+    private
+    <else>
+    public
+    <endif>
+    UserDefined$<funcName>() {
+        <lambdaName> = <lambdaInit>;
+    }
+
+    <if(constcode)>
+    public UserDefined$<funcName><constcode>
+    <endif>
+    <methods>
+}
+>>
+
+OverridenMethods(name, type, nonPrimitive, parser, javaPrimitiveType, returnType) ::= <<
+    @Override
+    public void aggregate(String data, String metadata) throws java.io.IOException,java.lang.InterruptedException, boa.aggregators.FinishedException {
+        <if(nonPrimitive)>
+        this._$values.add(<type>.deSerialize(data));
+        <else>
+        this._$values.add(<parser>(data));
+        <endif>
+    }
+
+
+    <if(javaPrimitiveType)>
+        @Override
+        public void aggregate(<javaPrimitiveType> data, String metadata) throws java.io.IOException,java.lang.InterruptedException, boa.aggregators.FinishedException {
+            this._$values.add((data));
+        }
+
+        @Override
+        public void aggregate(<javaPrimitiveType> data) throws java.io.IOException,java.lang.InterruptedException, boa.aggregators.FinishedException {
+            aggregate(data);
+         }
+    <endif>
+
+    @Override
+    public void finish() throws java.io.IOException, java.lang.InterruptedException {
+        try{
+         <if(nonPrimitive)>
+         <returnType> result = <name>.invoke(this._$values.toArray(new <type>[this._$values.size()]));
+         <else>
+         <returnType> result = <name>.invoke(org.apache.commons.lang.ArrayUtils.toPrimitive(this._$values.toArray(new <type>[this._$values.size()])));
+         <endif>
+         this.collect(result);
+         super.store(result);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void start(final boa.io.EmitKey key) {
+             _$values = new java.util.ArrayList\<<type>\>();
+            super.start(key);
+     }
+
+    <if(nonPrimitive)>
+        @Override
+        public void aggregate(BoaTup data, String metadata) throws java.io.IOException, java.lang.InterruptedException, boa.aggregators.FinishedException {
+           this._$values.add((<type>)data);
+        }
+    <endif>
+>>

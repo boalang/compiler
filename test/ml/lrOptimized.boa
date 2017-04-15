@@ -1,0 +1,86 @@
+# What are the 5 largest projects, in terms of AST nodes?
+# Output is in Millions of AST nodes.
+p: Project = input;
+counter: output sum of int;
+
+
+type fv = {pub:float, pri:float, pro:float};
+type mapped = {a: array of array of float, b: array of array of float};
+type sol = {pub_coff:float, pri_coff:float, pro_coff:float};
+
+
+
+lr := function(vals: array of mapped): sol {
+    result : sol;
+    #if (len(vals) > 0) {
+        vals_a :array of array of float = vals[0].a;
+        vals_b :array of array of float = vals[0].b;
+        foreach(i: int; def(vals[i])) {
+            vals_a = matrixsum(vals[i].a, vals_a);
+            vals_b = matrixsum(vals[i].b, vals_b);
+        }
+           vals_a = matrixsubstract(vals_a, vals[0].a);
+           vals_b = matrixsubstract(vals_b, vals[0].b);
+           calculated : array of float = flatten(transpose(multiply(inverse(vals_a), vals_b)));
+           result = {calculated[0], calculated[1], calculated[2]};
+    #}
+    return result;
+};
+
+lr_agg : output lr of fv;
+
+
+visit(p, visitor {
+	# only look at the latest snapshot
+	before n: CodeRepository -> {
+		snapshot := getsnapshot(n);
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+	before node: Declaration -> {
+		if (node.kind == TypeKind.CLASS) {
+			public_ele : int = 0;
+			protected_ele : int = 0;
+			private_ele : int = 0;
+			foreach (i: int; def(node.methods[i])) {
+			    if(has_modifier_public(node.methods[i])) {
+                    public_ele = public_ele + 1;
+			    } else if(has_modifier_private(node.methods[i])) {
+                    private_ele = public_ele + 1;
+                } else {
+                    protected_ele = protected_ele + 1;
+                }
+			}
+
+			foreach (i: int; def(node.fields[i])) {
+			    if(has_modifier_public(node.fields[i])) {
+                    public_ele = public_ele + 1;
+			    } else if(has_modifier_private(node.fields[i])) {
+                    private_ele = public_ele + 1;
+                } else {
+                    protected_ele = protected_ele + 1;
+                }
+			}
+
+			#feature1 : fv = {public_ele + 0.0, private_ele + 0.0, protected_ele + 0.0, (public_ele + 0.0 + private_ele + protected_ele)};
+			features : array of float = {public_ele + 0.0, private_ele + 0.0, protected_ele + 0.0};
+			label : array of float = {public_ele + 0.0 + private_ele + protected_ele};
+			X := {features};
+			Y := {label};
+			XTp := transpose(X);
+			cal1 : array of array of float = multiply(XTp, X);
+			cal2 : array of array of float = multiply(XTp, Y);
+			toEmit : mapped = {cal1, cal2};
+			count := 40;
+			while(count > 0) {
+                toEmit.a = matrixsum(toEmit.a, cal1);
+                toEmit.b = matrixsum(toEmit.b, cal2);
+                count = count - 1;
+			}
+            lr_agg << toEmit;
+			counter << 1;
+		}
+	}
+});
+

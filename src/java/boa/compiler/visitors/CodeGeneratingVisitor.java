@@ -24,11 +24,14 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import boa.compiler.UserDefinedAgg;
 import org.stringtemplate.v4.ST;
 
+import boa.aggregators.Aggregator;
 import boa.aggregators.AggregatorSpec;
 import boa.compiler.SymbolTable;
 import boa.compiler.TypeCheckException;
+import boa.compiler.UserDefinedAggregators;
 import boa.compiler.ast.*;
 import boa.compiler.ast.expressions.*;
 import boa.compiler.ast.literals.*;
@@ -175,8 +178,15 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		/** {@inheritDoc} */
 		@Override
 		public void visit(final VarDeclStatement n) {
-			if (n.type instanceof BoaTable)
+			if (n.type instanceof BoaTable) {
+				UserDefinedAgg.Builder function = UserDefinedAggregators.findByUserGivenName(((OutputType)n.getType()).getId().getToken());
+				if(function != null) {
+					function.isAggregator(true);
+					function.setAggregatorOptionParamType(((OutputType)n.getType()).getParams());
+				}
 				return;
+			}
+
 
 			final ST st = stg.getInstanceOf("VarDecl");
 
@@ -187,6 +197,13 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				st.add("isstatic", true);
 
 			code.add(st.render());
+
+			if(n.type instanceof BoaFunction) {
+				UserDefinedAgg.Builder funcTionBuilder = UserDefinedAgg.builder();
+				funcTionBuilder.userGivenName(n.getId().getToken()).setLambdaNameAndType(st.render());
+				funcTionBuilder.returnType(((BoaFunction)n.type).getType().toJavaType());
+				UserDefinedAggregators.addNewUserFunction(funcTionBuilder);
+			}
 		}
 	}
 
@@ -220,9 +237,15 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			final List<String> args = new ArrayList<String>();
 			final List<String> types = new ArrayList<String>();
 
+			UserDefinedAgg.Builder functionBuilder = UserDefinedAggregators.findByLambdaType(name);
+
 			for (final Component c : params) {
 				args.add(c.getIdentifier().getToken());
 				types.add(c.getType().type.toJavaType());
+				if(functionBuilder != null && functionBuilder.isAggregator()) {
+					functionBuilder.argTypeName(c.getType().type.toJavaType());
+					functionBuilder.userGivenFuncArg(c.getIdentifier().getToken());
+				}
 			}
 
 			st.add("name", funcType.toJavaType());
@@ -232,6 +255,10 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				st.add("ret", funcType.getType().toBoxedJavaType());
 			st.add("args", args);
 			st.add("types", types);
+
+			if(functionBuilder != null) {
+				functionBuilder.lambdaInterface(st.render());
+			}
 
 			code.add(st.render());
 		}
@@ -280,7 +307,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			st.add("name", tupType.toJavaType());
 			st.add("fields", fields);
 			st.add("types", types);
-
 			code.add(st.render());
 		}
 	}
@@ -505,6 +531,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 	final public static List<String> combineAggregatorStrings = new ArrayList<String>();
 	final public static List<String> reduceAggregatorStrings = new ArrayList<String>();
+	final public static Set<String> userAggregatorDeclStrings = new HashSet<String>();
 
 	public CodeGeneratingVisitor(final String name) throws IOException {
 		this.name = name;
@@ -524,6 +551,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		st.add("name", this.name);
 
 		this.varDecl.start(n);
+		UserDefinedAggregators.filterAggregatorFunctions();
 		this.functionDeclarator.start(n);
 		this.tupleDeclarator.start(n);
 		this.enumDeclarator.start(n);
@@ -579,9 +607,30 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 					throw new TypeCheckException(n, e.getMessage(), e);
 				}
 			}
+
+			if(Aggregator.isUserDefinedAggregator(entry.getValue().getAggregator())) {
+				UserDefinedAgg function = UserDefinedAggregators
+						.findByUserGivenName(entry.getValue().getAggregator())
+						.build();
+				String gencode = function.getCode();
+				if(!userAggregatorDeclStrings.contains(gencode)) {
+					userAggregatorDeclStrings.add(gencode);
+				}
+				StringBuffer params = new StringBuffer();
+				for(String param: entry.getValue().getParameters()) {
+					params.append(param).append(", ");
+				}
+				params.deleteCharAt(params.length() - 2);
+
+				reduceAggregatorStrings.add("this.aggregators.put(\"" + prefix + "::" + id + "\", new " + function.getAggClassName() + "(" + params.toString() + "));");
+				combines = false;
+			} else {
+				reduceAggregatorStrings.add("this.aggregators.put(\"" + prefix + "::" + id + "\", " + src.toString().substring(2) + ");");
+			}
+
 			if (combines)
 				combineAggregatorStrings.add("this.aggregators.put(\"" + prefix + "::" + id + "\", " + src.toString().substring(2) + ");");
-			reduceAggregatorStrings.add("this.aggregators.put(\"" + prefix + "::" + id + "\", " + src.toString().substring(2) + ");");
+
 		}
 
 		code.add(st.render());
@@ -798,6 +847,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			String accept = "";
 			abortGeneration = false;
 
+			n.env.setOperandType(n.getOperand().type);
 			if (!(n.getOp(0) instanceof Call)) {
 				n.getOperand().accept(this);
 				n.env.setOperandType(n.getOperand().type);
@@ -1324,6 +1374,23 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		}
 
 		if (type instanceof BoaTable) {
+			UserDefinedAgg.Builder function = UserDefinedAggregators.findByUserGivenName(n.getId().getToken());
+			if(function != null) {
+				n.getInitializer().accept(this);
+				function.lambdaInit(code.removeLast());
+			}
+			if(n.getType() instanceof OutputType) {
+				function = UserDefinedAggregators.findByUserGivenName(((OutputType) n.getType()).getId().getToken());
+				if(function != null) {
+					int counter = 0;
+					for(VarDeclStatement stmt: ((OutputType) n.getType()).getParams()) {
+						stmt.accept(this);
+						String[] argCode = code.removeLast().split("=");
+						function.addAggregatorOptionParamId(argCode[0], counter++);
+						function.addAggregatorOptionParamInitializer(argCode[1]);
+					}
+				}
+			}
 			code.add("");
 			return;
 		}
@@ -1357,6 +1424,13 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		n.getInitializer().accept(this);
 		String src = code.removeLast();
+
+		if(t instanceof  BoaFunction) {
+			UserDefinedAgg.Builder functionDetails = UserDefinedAggregators.findByUserGivenName(n.getId().getToken());
+			if(functionDetails != null) {
+				functionDetails.lambdaInterface(src);
+			}
+		}
 
 		if(lhsType instanceof BoaTuple && t instanceof BoaArray) {
 			Operand op = n.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand();
@@ -1858,8 +1932,12 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		final BoaTable t = (BoaTable) n.env.get(id);
 
 		if (n.getArgsSize() > 0) {
-			n.getArg(0).accept(this);
-			this.aggregators.put(id, new AggregatorDescription(aggregator, t.getType(), Arrays.asList(code.removeLast())));
+			List<String> codegen = new ArrayList<String>();
+			for(Expression e: n.getArgs()) {
+				e.accept(this);
+				codegen.add(code.removeLast());
+			}
+			this.aggregators.put(id, new AggregatorDescription(aggregator, t.getType(), codegen));
 		} else {
 			this.aggregators.put(id, new AggregatorDescription(aggregator, t.getType()));
 		}
