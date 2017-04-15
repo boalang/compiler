@@ -96,6 +96,12 @@ public class BoaArray extends BoaType {
 		return false;
 	}
 
+	/** {@inheritDoc} */
+	@Override
+	public boolean hasTypeVar() {
+		return this.type.hasTypeVar();
+	}
+
 	/**
 	 * Get the element type of this array.
 	 * 

@@ -80,6 +80,12 @@ public class BoaSet extends BoaType {
 		return true;
 	}
 
+	/** {@inheritDoc} */
+	@Override
+	public boolean hasTypeVar() {
+		return this.type.hasTypeVar();
+	}
+
 	/**
 	 * Get the type of the values of this set.
 	 * 

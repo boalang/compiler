@@ -66,7 +66,7 @@ public class TestTypecheckBad extends BaseTest {
 		typecheck(load(badDir + "method-no-call.boa"), "expected a call to function 'f'");
 	}
 
-	//@Test
+	@Test
 	public void methodCallWrongType() throws IOException {
 		typecheck(load(badDir + "method-call-wrong-type.boa"), "no such function push([stack of int, stack of int])");
 	}
