@@ -372,6 +372,7 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArg {
 			System.out.print("default: ");
 		else {
 			boolean seen = false;
+			System.out.print("case ");
 			for (final Expression e : n.getCases()) {
 				if (seen) System.out.print(", ");
 				else seen = true;
