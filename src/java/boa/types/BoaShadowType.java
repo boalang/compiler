@@ -98,7 +98,7 @@ public abstract class BoaShadowType extends BoaTuple {
 
 		s.env = f.env = env;
 
-		s.type = f.type = tree.type = t;
+		s.type = f.type = f.getOperand().type = tree.type = t;
 
 		return tree;
 	}
