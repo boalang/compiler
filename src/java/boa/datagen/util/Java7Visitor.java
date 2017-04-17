@@ -527,7 +527,7 @@ public class Java7Visitor extends ASTVisitor {
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.ASSERT);
 		node.getExpression().accept(this);
-		b.setExpression(expressions.pop());
+		b.setCondition(expressions.pop());
 		if (node.getMessage() != null) {
 			node.getMessage().accept(this);
 			b.setExpression(expressions.pop());
