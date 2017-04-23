@@ -235,7 +235,8 @@ public class ShadowTypeEraser extends AbstractVisitorNoArg {
                         SwitchCase sc;
                         if(visit.getComponent().type.toString().equals(shadowedType.toString())){
                             // Setting Default if present
-                            defaultSc.getBody().getStatements().addAll(b.getStatements());
+							for (final Statement s : b.getStatements())
+								defaultSc.getBody().addStatement(s.clone());
                         }else{
                             LinkedList<Expression> listExp = new LinkedList<Expression>();
                             listExp.add(((BoaShadowType)visit.getComponent().type).getKindExpression(n.env));
@@ -251,7 +252,8 @@ public class ShadowTypeEraser extends AbstractVisitorNoArg {
                    
                     if( wildcardBlock != null){
                         // trying to add wildcard to default
-                        defaultSc.getBody().getStatements().addAll(wildcardBlock.getStatements());
+						for (final Statement s : wildcardBlock.getStatements())
+							defaultSc.getBody().addStatement(s.clone());
                     }
                     if(defaultSc.getBody().getStatementsSize() == 0 ){
                         // Setting Default to a break statement if no default is present
