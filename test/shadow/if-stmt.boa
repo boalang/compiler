@@ -2,7 +2,7 @@ o: output sum of int;
 
 s: IfStatement;
 
-if (def(s.false_branch))
+if (def(s.else_statement))
 	o << 1;
-else if (def(s.true_branch))
+else if (def(s.then_statement))
 	o << 2;

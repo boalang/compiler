@@ -44,9 +44,9 @@ public class IfStatementShadow extends BoaShadowType  {
 	public IfStatementShadow() {
 		super(new StatementProtoTuple());
 
-		addShadow("condition", new ExpressionProtoTuple());
-		addShadow("true_branch", new StatementProtoTuple());
-		addShadow("false_branch", new StatementProtoTuple());
+		addShadow("expression", new ExpressionProtoTuple());
+		addShadow("then_statement", new StatementProtoTuple());
+		addShadow("else_statement", new StatementProtoTuple());
 	}
 
 	/** {@inheritDoc} */
@@ -55,12 +55,12 @@ public class IfStatementShadow extends BoaShadowType  {
 		final Identifier id = ASTFactory.createIdentifier(nodeId, env);
 		id.type = new StatementProtoTuple();
 
-		if ("condition".equals(name)) {
+		if ("expression".equals(name)) {
 			// ${0}.expression
 			return ASTFactory.createSelector(id, "expression", new ExpressionProtoTuple(), new ExpressionProtoTuple(), env);
 		}
 
-		if ("true_branch".equals(name)) {
+		if ("then_statement".equals(name)) {
 			// ${0}.statements
 			final Expression tree = ASTFactory.createSelector(id, "statements", new BoaProtoList(new StatementProtoTuple()), new StatementProtoTuple(), env);
 			// ${0}.statements[0]
@@ -69,7 +69,7 @@ public class IfStatementShadow extends BoaShadowType  {
 			return tree;
 		}
 
-		if ("false_branch".equals(name)) {
+		if ("else_statement".equals(name)) {
 			// ${0}.statements
 			final Expression tree = ASTFactory.createSelector(id, "statements", new BoaProtoList(new StatementProtoTuple()), new BoaProtoList(new StatementProtoTuple()), env);
 
