@@ -52,6 +52,6 @@ public class TestShadowGood extends BaseTest {
 	// test a bunch of known good files
 	@Test
 	public void knownGood() throws IOException {
-		typecheck("autoaddedoutputvar: output sum of int;autoaddedoutputvar << 1;" + load(fileName));
+		codegen("autoaddedoutputvar: output sum of int;autoaddedoutputvar << 1;" + load(fileName));
 	}
 }
