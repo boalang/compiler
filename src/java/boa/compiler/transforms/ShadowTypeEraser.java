@@ -250,7 +250,7 @@ public class ShadowTypeEraser extends AbstractVisitorNoArg {
                     }
 
                    
-                    if( wildcardBlock != null){
+                    if(defaultSc.getBody().getStatementsSize() == 0 && wildcardBlock != null){
                         // trying to add wildcard to default
 						for (final Statement s : wildcardBlock.getStatements())
 							defaultSc.getBody().addStatement(s.clone());
