@@ -315,13 +315,15 @@ public class ShadowTypeEraser extends AbstractVisitorNoArg {
                 final Factor newFact = new Factor(paren);
                 final Expression newExp = ASTFactory.createFactorExpr(newFact);
 
-                if (ops != null)
-                    for (int i = 1; i < ops.size(); i++)
-                        newFact.addOp(ops.get(i));
-
                 newFact.env = parentExp.env;
                 paren.type = replacement.type;
                 newExp.type = paren.type;
+
+                if (ops != null)
+                    for (int i = 1; i < ops.size(); i++) {
+                        newFact.addOp(ops.get(i));
+						newExp.type = ops.get(i).type;
+					}
 
                 parentExp.replaceExpression(parentExp, newExp);
             }
