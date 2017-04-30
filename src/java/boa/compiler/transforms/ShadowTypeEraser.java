@@ -288,9 +288,11 @@ public class ShadowTypeEraser extends AbstractVisitorNoArg {
 
         @Override
         public void visit(final Factor n) {
+            ops = null;
             flag = false;
             ops = n.getOps();
             super.visit(n);
+
         }
 
         // replacing shadow type selectors
@@ -336,6 +338,7 @@ public class ShadowTypeEraser extends AbstractVisitorNoArg {
            
             if (n.type instanceof BoaShadowType) {
                 final BoaShadowType shadow = (BoaShadowType)n.type;
+
                 // change the identifier
                 final Identifier id = (Identifier)n.getType();
                 id.setToken(shadow.shadowedName());
@@ -350,10 +353,9 @@ public class ShadowTypeEraser extends AbstractVisitorNoArg {
         @Override
         public void visit(final VarDeclStatement n) {
             super.visit(n);
-
             if (n.hasType()) {
                 if (n.type instanceof BoaShadowType) {
-                    final BoaShadowType shadow = (BoaShadowType)n.env.get(n.getType().toString());
+                    final BoaShadowType shadow = (BoaShadowType)n.type;
 
                     // change the identifier
                     final Identifier id = (Identifier)n.getType();
@@ -361,7 +363,7 @@ public class ShadowTypeEraser extends AbstractVisitorNoArg {
 
                     // update types
                     n.type = shadow.shadowedType;
-                    n.env.setType(n.getId().getToken(), shadow.shadowedType);
+                    n.env.set(n.getId().getToken(), shadow.shadowedType);
                 }
             }
         }
