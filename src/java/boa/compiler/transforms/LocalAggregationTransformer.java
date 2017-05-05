@@ -36,7 +36,7 @@ import boa.compiler.ast.statements.EmitStatement;
 import boa.compiler.ast.statements.IfStatement;
 import boa.compiler.ast.statements.VarDeclStatement;
 import boa.compiler.ast.types.OutputType;
-import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.compiler.visitors.AbstractVisitorNoArgNoRet;
 import boa.types.BoaInt;
 
 /**
@@ -47,13 +47,13 @@ import boa.types.BoaInt;
  * 
  * @author rdyer
  */
-public class LocalAggregationTransformer extends AbstractVisitorNoArg {
+public class LocalAggregationTransformer extends AbstractVisitorNoArgNoRet {
 	/**
 	 * Finds all output variables using a 'sum' {@link Aggregator}.
 	 * 
 	 * @author rdyer
 	 */
-	protected class SumAggregatorFindingVisitor extends AbstractVisitorNoArg {
+	protected class SumAggregatorFindingVisitor extends AbstractVisitorNoArgNoRet {
 		private final List<String> vars = new ArrayList<String>();
 
 		public List<String> getVars() {

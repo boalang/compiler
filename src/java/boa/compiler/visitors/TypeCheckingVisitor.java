@@ -46,7 +46,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	 * 
 	 * @author rdyer
 	 */
-	protected class VisitorCheckingVisitor extends AbstractVisitorNoArg {
+	protected class VisitorCheckingVisitor extends AbstractVisitorNoArgNoRet {
 		protected Set<String> befores = new HashSet<String>();
 		protected Set<String> afters = new HashSet<String>();
 		protected boolean nested = false;
@@ -91,7 +91,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		}
 	}
 
-	protected class TraversalCheckingVisitor extends AbstractVisitorNoArg {
+	protected class TraversalCheckingVisitor extends AbstractVisitorNoArgNoRet {
 		protected Set<String> befores = new HashSet<String>();
 		protected boolean nested = false;
 
@@ -133,7 +133,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 
 	}
 
-	protected class FixPCheckingVisitor extends AbstractVisitorNoArg {
+	protected class FixPCheckingVisitor extends AbstractVisitorNoArgNoRet {
 		protected Set<String> befores = new HashSet<String>();
 		protected boolean nested = false;
 
@@ -174,7 +174,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	 * 
 	 * @author rdyer
 	 */
-	protected class ReturnCheckingVisitor extends AbstractVisitorNoArg {
+	protected class ReturnCheckingVisitor extends AbstractVisitorNoArgNoRet {
 		protected BoaType retType;
 
 		/**
@@ -223,7 +223,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	 * 
 	 * @author rdyer
 	 */
-	protected class CallFindingVisitor extends AbstractVisitorNoArg {
+	protected class CallFindingVisitor extends AbstractVisitorNoArgNoRet {
 		protected boolean isCall;
 
 		public boolean isCall() {

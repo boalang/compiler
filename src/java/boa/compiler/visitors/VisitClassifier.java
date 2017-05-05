@@ -31,7 +31,7 @@ import boa.compiler.ast.statements.VisitStatement;
  * 
  * @author rdyer
  */
-public class VisitClassifier extends AbstractVisitorNoArg {
+public class VisitClassifier extends AbstractVisitorNoArgNoRet {
 	protected List<VisitStatement> befores = new ArrayList<VisitStatement>();
 	protected List<VisitStatement> afters = new ArrayList<VisitStatement>();
 	protected Map<String,VisitStatement> beforeMap = new HashMap<String,VisitStatement>();

@@ -378,7 +378,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	 * 
 	 * @author rdyer
 	 */
-	protected class IdentifierFindingVisitor extends AbstractVisitorNoArg {
+	protected class IdentifierFindingVisitor extends AbstractVisitorNoArgNoRet {
 		protected final Set<String> names = new HashSet<String>();
 
 		public Set<String> getNames() {
@@ -456,7 +456,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	 * 
 	 * @author rdyer
 	 */
-	protected class CallFindingVisitor extends AbstractVisitorNoArg {
+	protected class CallFindingVisitor extends AbstractVisitorNoArgNoRet {
 		protected boolean isCall;
 
 		public boolean isCall() {

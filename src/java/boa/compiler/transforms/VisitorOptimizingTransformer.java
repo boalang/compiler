@@ -27,7 +27,7 @@ import boa.compiler.ast.statements.Block;
 import boa.compiler.ast.statements.Statement;
 import boa.compiler.ast.statements.StopStatement;
 import boa.compiler.ast.statements.VisitStatement;
-import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.compiler.visitors.AbstractVisitorNoArgNoRet;
 import boa.types.BoaType;
 import boa.types.proto.*;
 
@@ -38,7 +38,7 @@ import boa.types.proto.*;
  * 
  * @author rdyer
  */
-public class VisitorOptimizingTransformer extends AbstractVisitorNoArg {
+public class VisitorOptimizingTransformer extends AbstractVisitorNoArgNoRet {
 	protected final static Set<Class<? extends BoaType>> astTypes = new HashSet<Class<? extends BoaType>>();
 
 	static {

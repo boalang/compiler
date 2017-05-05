@@ -23,7 +23,7 @@ import boa.compiler.ast.expressions.FunctionExpression;
  * 
  * @author rdyer
  */
-public class IsFunctionVisitor extends AbstractVisitorNoArg {
+public class IsFunctionVisitor extends AbstractVisitorNoArgNoRet {
 	private boolean isFunction;
 
 	public boolean isFunction() {

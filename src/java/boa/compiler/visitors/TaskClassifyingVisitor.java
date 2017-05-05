@@ -33,7 +33,7 @@ import boa.types.proto.ASTRootProtoTuple;
  * 
  * @author rdyer
  */
-public class TaskClassifyingVisitor extends AbstractVisitorNoArg {
+public class TaskClassifyingVisitor extends AbstractVisitorNoArgNoRet {
 	protected final static Set<Class<? extends BoaType>> astTypes = new HashSet<Class<? extends BoaType>>();
 
 	static {
