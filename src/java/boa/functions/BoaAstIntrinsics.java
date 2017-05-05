@@ -207,14 +207,22 @@ public class BoaAstIntrinsics {
 	}
 
 	private static void openMap() {
-		final Configuration conf = new Configuration();
 		try {
-			final FileSystem fs = FileSystem.get(conf);
-			Path p = new Path("hdfs://boa-njt/",
-								new Path(context.getConfiguration().get("boa.ast.dir", context.getConfiguration().get("boa.input.dir", "repcache/live")),
-								new Path("ast")));
-			if(DefaultProperties.localDataPath != null) {
+			final Configuration conf = context.getConfiguration();
+			final FileSystem fs;
+			final Path p;
+			if (DefaultProperties.localDataPath != null) {
 				p = new Path(DefaultProperties.localDataPath);
+				fs = FileSystem.getLocal(conf);
+			} else {
+				p = new Path(
+					"hdfs://boa-njt/",
+					new Path(
+						conf.get("boa.ast.dir", conf.get("boa.input.dir", "repcache/live")),
+						new Path("ast")
+					)
+				);
+				fs = FileSystem.get(conf);
 			}
 			map = new MapFile.Reader(fs, p.toString(), conf);
 		} catch (final Exception e) {
@@ -223,14 +231,22 @@ public class BoaAstIntrinsics {
 	}
 
 	private static void openCommentMap() {
-		final Configuration conf = new Configuration();
 		try {
-			final FileSystem fs = FileSystem.get(conf);
-			Path p = new Path("hdfs://boa-njt/",
-								new Path(context.getConfiguration().get("boa.comments.dir", context.getConfiguration().get("boa.input.dir", "repcache/live")),
-								new Path("comments")));
-			if(DefaultProperties.localDataPath != null) {
+			final Configuration conf = context.getConfiguration();
+			final FileSystem fs;
+			final Path p;
+			if (DefaultProperties.localDataPath != null) {
 				p = new Path(DefaultProperties.localCommentPath);
+				fs = FileSystem.getLocal(conf);
+			} else {
+				p = new Path(
+					"hdfs://boa-njt/",
+					new Path(
+						conf.get("boa.comments.dir", conf.get("boa.input.dir", "repcache/live")),
+						new Path("comments")
+					)
+				);
+				fs = FileSystem.get(conf);
 			}
 			commentsMap = new MapFile.Reader(fs, p.toString(), conf);
 		} catch (final Exception e) {
@@ -239,14 +255,22 @@ public class BoaAstIntrinsics {
 	}
 
 	private static void openIssuesMap() {
-		final Configuration conf = new Configuration();
 		try {
-			final FileSystem fs = FileSystem.get(conf);
-			Path p = new Path("hdfs://boa-njt/",
-								new Path(context.getConfiguration().get("boa.issues.dir", context.getConfiguration().get("boa.input.dir", "repcache/live")),
-								new Path("issues")));
-			if(DefaultProperties.localDataPath != null) {
+			final Configuration conf = context.getConfiguration();
+			final FileSystem fs;
+			final Path p;
+			if (DefaultProperties.localDataPath != null) {
 				p = new Path(DefaultProperties.localIssuePath);
+				fs = FileSystem.getLocal(conf);
+			} else {
+				p = new Path(
+					"hdfs://boa-njt/",
+					new Path(
+						conf.get("boa.issues.dir", conf.get("boa.input.dir", "repcache/live")),
+						new Path("issues")
+					)
+				);
+				fs = FileSystem.get(conf);
 			}
 			issuesMap = new MapFile.Reader(fs, p.toString(), conf);
 		} catch (final Exception e) {
