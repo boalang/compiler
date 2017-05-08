@@ -10,15 +10,15 @@
                   {
                      "name": "m",
                      "return_type": {
-                        "kind": "OTHER",
-                        "name": 0
+                        "name": "void",
+                        "kind": "OTHER"
                      },
                      "arguments": [
                         {
                            "name": "this",
                            "variable_type": {
-                              "kind": "OTHER",
-                              "name": 1
+                              "name": "Test",
+                              "kind": "OTHER"
                            }
                         }
                      ],
