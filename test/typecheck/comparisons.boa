@@ -35,3 +35,39 @@ if (a == a2 || a != a2)
     o << 1;
 if (f3() == a2 || a != f3() || f3() == f3())
     o << 1;
+
+# allow comparisons on sets
+s: set of int;
+add(s, 1);
+add(s, 2);
+f4 := function() : set of int {
+    return s;
+};
+
+if (s == s || s != s)
+    o << 1;
+if (f4() == s || s != f4() || f4() == f4())
+    o << 1;
+
+# allow comparisons on maps
+m: map[string] of int = { "one" : 1 };
+f5 := function() : map[string] of int {
+    return m;
+};
+
+if (m == m || m != m)
+    o << 1;
+if (f5() == m || m != f5() || f5() == f5())
+    o << 1;
+
+# allow comparisons on stacks
+st: stack of int;
+push(st, 1);
+f6 := function() : stack of int {
+    return st;
+};
+
+if (st == st || st != st)
+    o << 1;
+if (f6() == st || st != f6() || f6() == f6())
+    o << 1;

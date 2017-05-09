@@ -346,7 +346,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			if (!n.getRhs().type.compares(n.type))
 				throw new TypeCheckException(n.getRhs(), "incompatible types for comparison: required '" + n.type + "', found '" + n.getRhs().type + "'");
 
-			if (n.type instanceof BoaString || n.type instanceof BoaProtoTuple)
+			if (n.type instanceof BoaString || n.type instanceof BoaMap || n.type instanceof BoaSet || n.type instanceof BoaStack || !(n.type instanceof BoaScalar))
 				if (!n.getOp().equals("==") && !n.getOp().equals("!="))
 					throw new TypeCheckException(n.getLhs(), "invalid comparison operator '" + n.getOp() + "' for type '" + n.type + "'");
 
