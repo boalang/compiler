@@ -646,8 +646,8 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			final List<String> operators = new ArrayList<String>();
 			final List<String> operands = new ArrayList<String>();
 
-			n.getRhs().accept(this);
 			n.getLhs().accept(this);
+			n.getRhs().accept(this);
 			operators.add(n.getOp());
 
 			if (n.getOp().equals("==") || n.getOp().equals("!=")) {
