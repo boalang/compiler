@@ -20,6 +20,7 @@ package boa.types.shadow;
 import boa.compiler.ast.Call;
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.ast.Factor;
+import boa.compiler.ast.Selector;
 import boa.compiler.ast.Identifier;
 import boa.compiler.ast.Node;
 import boa.compiler.SymbolTable;
@@ -30,6 +31,9 @@ import boa.types.BoaShadowType;
 import boa.types.proto.enums.StatementKindProtoMap;
 import boa.types.proto.ExpressionProtoTuple;
 import boa.types.proto.StatementProtoTuple;
+import boa.types.proto.VariableProtoTuple;
+import boa.types.proto.ModifierProtoTuple;
+import boa.types.proto.TypeProtoTuple;
 
 /**
  * A shadow type for VariableDeclarationStatement.
@@ -45,9 +49,9 @@ public class VariableDeclarationStatementShadow extends BoaShadowType  {
         super(new StatementProtoTuple());
 
         
-        addShadow("body", new StatementProtoTuple());
-        addShadow("finallyblock", new StatementProtoTuple());
-        addShadow("catchclauses", new StatementProtoTuple());
+        addShadow("fragments",new BoaProtoList(new VariableProtoTuple()));
+        addShadow("modifiers", new BoaProtoList(new ModifierProtoTuple()));
+        addShadow("type", new TypeProtoTuple());
     }
 
     /** {@inheritDoc} */
@@ -56,6 +60,78 @@ public class VariableDeclarationStatementShadow extends BoaShadowType  {
         final Identifier id = ASTFactory.createIdentifier(nodeId, env);
         id.type = new StatementProtoTuple();
 
+      
+        if ("fragments".equals(name)) {
+            // ${0}. $0.expression.variable_decls
+            
+            final Selector s1 = new Selector(ASTFactory.createIdentifier("expression", env));
+            final Selector s2 = new Selector(ASTFactory.createIdentifier("variable_decls", env));
+            final Factor f = new Factor(id).addOp(s1);
+            f.addOp(s2);
+            final Expression tree = ASTFactory.createFactorExpr(f);
+
+            s1.env = s2.env  = f.env = env;
+
+           // s1.type = new ExpressionProtoTuple();
+            //s2.type = new VariableProtoTuple();
+            s1.type = new BoaProtoList(new VariableProtoTuple());
+            s2.type = new BoaProtoList(new VariableProtoTuple());
+           
+            f.type = tree.type = new BoaProtoList(new VariableProtoTuple());
+
+            return tree;
+
+
+        }                            
+                      
+        if ("modifiers".equals(name)) {
+            // ${0}.expression.variable_decls[0].modifiers 
+            
+            final Selector s1 = new Selector(ASTFactory.createIdentifier("expression", env));
+            final Selector s2 = new Selector(ASTFactory.createIdentifier("variable_decls", env));
+            final Selector s3 = new Selector(ASTFactory.createIdentifier("modifiers", env));
+            final Factor f = new Factor(id).addOp(s1);
+            f.addOp(s2);
+            f.addOp(ASTFactory.createIndex(ASTFactory.createIntLiteral(0), env));
+            f.addOp(s3);
+            final Expression tree = ASTFactory.createFactorExpr(f);
+
+            s1.env = s2.env = s3.env = f.env = env;
+
+           // s1.type = new ExpressionProtoTuple();
+           // s2.type = new VariableProtoTuple();
+           // s3.type = new ModifierProtoTuple()
+            s1.type = new BoaProtoList(new ModifierProtoTuple());
+            s2.type = new BoaProtoList(new ModifierProtoTuple());
+            s3.type = new BoaProtoList(new ModifierProtoTuple());
+            
+            f.type = tree.type = new BoaProtoList(new ModifierProtoTuple());
+
+            return tree;
+        }
+           
+        if ("type".equals(name)) {
+            // ${0}.$0.expression.variable_decls[0].variable_type
+           
+
+            final Selector s1 = new Selector(ASTFactory.createIdentifier("expression", env));
+            final Selector s2 = new Selector(ASTFactory.createIdentifier("variable_decls", env));
+            final Selector s3 = new Selector(ASTFactory.createIdentifier("variable_type", env));
+            final Factor f = new Factor(id).addOp(s1);
+            f.addOp(s2);
+            f.addOp(ASTFactory.createIndex(ASTFactory.createIntLiteral(0), env));
+            f.addOp(s3);
+            final Expression tree = ASTFactory.createFactorExpr(f);
+
+            s1.env = s2.env = s3.env = f.env = env;
+
+            s1.type = new TypeProtoTuple();
+            s2.type = new TypeProtoTuple();
+            s3.type = new TypeProtoTuple();
+            
+            f.type = tree.type = new TypeProtoTuple();
+
+        }
 
         throw new RuntimeException("invalid shadow field: " + name);
     }

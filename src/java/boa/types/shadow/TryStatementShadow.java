@@ -56,6 +56,20 @@ public class TryStatementShadow extends BoaShadowType  {
         final Identifier id = ASTFactory.createIdentifier(nodeId, env);
         id.type = new StatementProtoTuple();
 
+        if ("catchclauses".equals(name)) {
+            // TODO ${0}.initializations
+            return ASTFactory.createSelector(id, "initializations", new BoaProtoList(new ExpressionProtoTuple()), new BoaProtoList(new ExpressionProtoTuple()), env);
+        }
+
+        if ("body".equals(name)) {
+            // ${0}.statements
+            final Expression tree = ASTFactory.createSelector(id, "statements", new BoaProtoList(new StatementProtoTuple()), new StatementProtoTuple(), env);
+            // ${0}.statements[0]
+            ASTFactory.getFactorFromExp(tree).addOp(ASTFactory.createIndex(ASTFactory.createIntLiteral(0), env));
+
+            return tree;
+        }
+
 
         throw new RuntimeException("invalid shadow field: " + name);
     }

@@ -56,8 +56,8 @@ public class EnhancedForStatementShadow extends BoaShadowType  {
         id.type = new StatementProtoTuple();
 
         if ("parameter".equals(name)) {
-            // ${0}.parameter
-            return ASTFactory.createSelector(id, "initializations", new BoaProtoList(new ExpressionProtoTuple()), new BoaProtoList(new ExpressionProtoTuple()), env);
+            // TODO ? ${0}.variable_declaration
+            return ASTFactory.createSelector(id, "variable_declaration", new BoaProtoList(new ExpressionProtoTuple()), new BoaProtoList(new ExpressionProtoTuple()), env);
         }
 
         if ("expression".equals(name)) {
@@ -80,7 +80,7 @@ public class EnhancedForStatementShadow extends BoaShadowType  {
     /** {@inheritDoc} */
     @Override
     public Expression getKindExpression(final SymbolTable env) {
-        return getKindExpression("StatementKind", "ENHANCEDFOR", new StatementKindProtoMap(), env);
+        return getKindExpression("StatementKind", "FOR", new StatementKindProtoMap(), env);
     }
 
     /** {@inheritDoc} */

@@ -20,6 +20,7 @@ package boa.types.shadow;
 import boa.compiler.ast.Call;
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.ast.Factor;
+import boa.compiler.ast.Selector;
 import boa.compiler.ast.Identifier;
 import boa.compiler.ast.Node;
 import boa.compiler.SymbolTable;
@@ -55,8 +56,24 @@ public class ConstructorInvocationShadow extends BoaShadowType  {
         id.type = new StatementProtoTuple();
 
         if ("arguments".equals(name)) {
-            // ${0}.arguments
-            return ASTFactory.createSelector(id, "initializations", new BoaProtoList(new ExpressionProtoTuple()), new BoaProtoList(new ExpressionProtoTuple()), env);
+            // TODO ${0}.expression.method_args
+            
+
+            final Selector s1 = new Selector(ASTFactory.createIdentifier("expression", env));
+            final Selector s2 = new Selector(ASTFactory.createIdentifier("method_args", env));
+            final Factor f = new Factor(id).addOp(s1);
+            f.addOp(s2);
+            final Expression tree = ASTFactory.createFactorExpr(f);
+
+            s1.env=s2.env = f.env = env;
+
+            s1.type = new ExpressionProtoTuple();
+            s2.type = new ExpressionProtoTuple();
+            f.type = tree.type = new ExpressionProtoTuple();
+
+            return tree;
+
+
         }
 
         
@@ -67,7 +84,7 @@ public class ConstructorInvocationShadow extends BoaShadowType  {
     /** {@inheritDoc} */
     @Override
     public Expression getKindExpression(final SymbolTable env) {
-        return getKindExpression("StatementKind", "CONSTRUCTORINVOCATION", new StatementKindProtoMap(), env);
+        return getKindExpression("StatementKind", "EXPRESSION", new StatementKindProtoMap(), env);
     }
 
     /** {@inheritDoc} */

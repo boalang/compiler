@@ -63,8 +63,12 @@ public class SwitchCaseShadow extends BoaShadowType  {
         }
 
         if ("isdefault".equals(name)) {
-            // ${0}.expression
-            return ASTFactory.createSelector(id, "expression", new ExpressionProtoTuple(), new ExpressionProtoTuple(), env);
+            // def(${0}.expression)
+           
+            final Expression tree = ASTFactory.createSelector(id, "expression", new ExpressionProtoTuple(), new ExpressionProtoTuple(), env);
+
+            return ASTFactory.createCallExpr("def", env, new ExpressionProtoTuple(), tree);
+        
         }
 
         

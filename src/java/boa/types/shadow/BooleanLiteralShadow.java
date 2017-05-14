@@ -20,7 +20,6 @@ package boa.types.shadow;
 import boa.compiler.ast.Call;
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.ast.Factor;
-import boa.compiler.ast.Selector;
 import boa.compiler.ast.Identifier;
 import boa.compiler.ast.Node;
 import boa.compiler.SymbolTable;
@@ -31,23 +30,21 @@ import boa.types.BoaShadowType;
 import boa.types.proto.enums.StatementKindProtoMap;
 import boa.types.proto.ExpressionProtoTuple;
 import boa.types.proto.StatementProtoTuple;
-import boa.types.proto.DeclarationProtoTuple;
 
 /**
- * A shadow type for TypeDeclarationStatement.
+ * A shadow type for BooleanLiteral.
  * 
  * @author rdyer
  * @author kaushin
  */
-public class TypeDeclarationStatementShadow extends BoaShadowType  {
+public class BooleanLiteralShadow extends BoaShadowType  {
     /**
-     * Construct a {@link TypeDeclarationStatementShadow}.
+     * Construct a {@link BooleanLiteralShadow}.
      */
-    public TypeDeclarationStatementShadow() {
-        super(new StatementProtoTuple());
+    public BooleanLiteralShadow() {
+        super(new ExpressionProtoTuple());
 
-        
-        addShadow("declaration", new DeclarationProtoTuple());
+        addShadow("value", new ExpressionProtoTuple());
         
     }
 
@@ -56,9 +53,11 @@ public class TypeDeclarationStatementShadow extends BoaShadowType  {
     public Node lookupCodegen(final String name, final String nodeId, final SymbolTable env) {
         final Identifier id = ASTFactory.createIdentifier(nodeId, env);
         id.type = new StatementProtoTuple();
-        if ("declaration".equals(name)) {
-            // TODO ${0}.type_declaration ?
-            return ASTFactory.createSelector(id, "type_declaration",  new DeclarationProtoTuple(),  new DeclarationProtoTuple(), env);
+
+        if ("value".equals(name)) {
+            // ${0}.literal
+
+            return ASTFactory.createSelector(id, "literal", new ExpressionProtoTuple(), new ExpressionProtoTuple(), env);     
         }
 
 
@@ -68,12 +67,12 @@ public class TypeDeclarationStatementShadow extends BoaShadowType  {
     /** {@inheritDoc} */
     @Override
     public Expression getKindExpression(final SymbolTable env) {
-        return getKindExpression("StatementKind", "TYPEDECL", new StatementKindProtoMap(), env);
+        return getKindExpression("ExpressionKind", "LITERAL", new StatementKindProtoMap(), env);
     }
 
     /** {@inheritDoc} */
     @Override
     public String toString() {
-        return "TypeDeclarationStatement";
+        return "BooleanLiteral";
     }
 }

@@ -20,7 +20,6 @@ package boa.types.shadow;
 import boa.compiler.ast.Call;
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.ast.Factor;
-import boa.compiler.ast.Selector;
 import boa.compiler.ast.Identifier;
 import boa.compiler.ast.Node;
 import boa.compiler.SymbolTable;
@@ -31,23 +30,25 @@ import boa.types.BoaShadowType;
 import boa.types.proto.enums.StatementKindProtoMap;
 import boa.types.proto.ExpressionProtoTuple;
 import boa.types.proto.StatementProtoTuple;
-
+import boa.types.proto.TypeProtoTuple;
 /**
- * A shadow type for SuperConstructorInvocation.
+ * A shadow type for ClassInstanceCreation.
  * 
  * @author rdyer
  * @author kaushin
  */
-public class SuperConstructorInvocationShadow extends BoaShadowType  {
+public class ClassInstanceCreationShadow extends BoaShadowType  {
     /**
-     * Construct a {@link SuperConstructorInvocationShadow}.
+     * Construct a {@link ClassInstanceCreationShadow}.
      */
-    public SuperConstructorInvocationShadow() {
-        super(new StatementProtoTuple());
+    public ClassInstanceCreationShadow() {
+        super(new ExpressionProtoTuple());
 
-        addShadow("arguments", new BoaProtoList(new ExpressionProtoTuple()));
+
         addShadow("expression", new ExpressionProtoTuple());
-        
+        addShadow("arguments",  new BoaProtoList(new ExpressionProtoTuple()));
+        addShadow("anonymous_class_declaration", new ExpressionProtoTuple());
+        addShadow("Type", new TypeProtoTuple());
     }
 
     /** {@inheritDoc} */
@@ -56,32 +57,38 @@ public class SuperConstructorInvocationShadow extends BoaShadowType  {
         final Identifier id = ASTFactory.createIdentifier(nodeId, env);
         id.type = new StatementProtoTuple();
 
-        if ("arguments".equals(name)) {
-            // TODO ${0}.expression.method_args
-           
+        if ("expression".equals(name)) {
+            // ${0}.expressions[0]
 
-            final Selector s1 = new Selector(ASTFactory.createIdentifier("expression", env));
-            final Selector s2 = new Selector(ASTFactory.createIdentifier("method_args", env));
-            final Factor f = new Factor(id).addOp(s1);
-            f.addOp(s2);
-            final Expression tree = ASTFactory.createFactorExpr(f);
-
-            s1.env = s2.env = f.env = env;
-
-            s1.type = new ExpressionProtoTuple();
-            s2.type = new ExpressionProtoTuple();
-            f.type = tree.type = new ExpressionProtoTuple();
+            // ${0}.expressions
+            final Expression tree = ASTFactory.createSelector(id, "expressions", new ExpressionProtoTuple(), new ExpressionProtoTuple(), env);
+            // ${0}.expressions[0]
+            ASTFactory.getFactorFromExp(tree).addOp(ASTFactory.createIndex(ASTFactory.createIntLiteral(0), env));
 
             return tree;
-
-
         }
 
-        if ("expression".equals(name)) {
-            // ${0}.expression
-            return ASTFactory.createSelector(id, "expression", new ExpressionProtoTuple(), new ExpressionProtoTuple(), env);
+        if ("arguments".equals(name)) {
+            // ${0}.expressions[1]
+           
+            // ${0}.expressions
+            final Expression tree = ASTFactory.createSelector(id, "expressions", new ExpressionProtoTuple(), new ExpressionProtoTuple(), env);
+            // ${0}.expressions[1]
+            ASTFactory.getFactorFromExp(tree).addOp(ASTFactory.createIndex(ASTFactory.createIntLiteral(1), env));
+
+            return tree;
         }
-        
+
+        if ("anonymous_class_declaration".equals(name)) {
+            // ${0}.anon_declaration
+           
+             return ASTFactory.createSelector(id, "anon_declaration", new ExpressionProtoTuple(), new ExpressionProtoTuple(), env);
+        }
+
+        if ("type".equals(name)) {
+            // ${0}.new_type
+            return ASTFactory.createSelector(id, "new_type", new TypeProtoTuple(), new TypeProtoTuple(), env);
+        }
 
         throw new RuntimeException("invalid shadow field: " + name);
     }
@@ -89,12 +96,12 @@ public class SuperConstructorInvocationShadow extends BoaShadowType  {
     /** {@inheritDoc} */
     @Override
     public Expression getKindExpression(final SymbolTable env) {
-        return getKindExpression("StatementKind", "EXPRESSION", new StatementKindProtoMap(), env);
+        return getKindExpression("ExpressionKind", "NEW", new StatementKindProtoMap(), env);
     }
 
     /** {@inheritDoc} */
     @Override
     public String toString() {
-        return "SuperConstructorInvocation";
+        return "ClassInstanceCreation";
     }
 }

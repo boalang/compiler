@@ -20,7 +20,6 @@ package boa.types.shadow;
 import boa.compiler.ast.Call;
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.ast.Factor;
-import boa.compiler.ast.Selector;
 import boa.compiler.ast.Identifier;
 import boa.compiler.ast.Node;
 import boa.compiler.SymbolTable;
@@ -31,23 +30,23 @@ import boa.types.BoaShadowType;
 import boa.types.proto.enums.StatementKindProtoMap;
 import boa.types.proto.ExpressionProtoTuple;
 import boa.types.proto.StatementProtoTuple;
-import boa.types.proto.DeclarationProtoTuple;
-
+import boa.types.proto.TypeProtoTuple;
 /**
- * A shadow type for TypeDeclarationStatement.
+ * A shadow type for Assignment.
  * 
  * @author rdyer
  * @author kaushin
  */
-public class TypeDeclarationStatementShadow extends BoaShadowType  {
+public class AssignmentShadow extends BoaShadowType  {
     /**
-     * Construct a {@link TypeDeclarationStatementShadow}.
+     * Construct a {@link AssignmentShadow}.
      */
-    public TypeDeclarationStatementShadow() {
-        super(new StatementProtoTuple());
+    public AssignmentShadow() {
+        super(new ExpressionProtoTuple());
 
-        
-        addShadow("declaration", new DeclarationProtoTuple());
+        addShadow("lefthandside", new ExpressionProtoTuple());
+        addShadow("righthandside", new ExpressionProtoTuple());
+        addShadow("operator", new TypeProtoTuple());
         
     }
 
@@ -56,11 +55,33 @@ public class TypeDeclarationStatementShadow extends BoaShadowType  {
     public Node lookupCodegen(final String name, final String nodeId, final SymbolTable env) {
         final Identifier id = ASTFactory.createIdentifier(nodeId, env);
         id.type = new StatementProtoTuple();
-        if ("declaration".equals(name)) {
-            // TODO ${0}.type_declaration ?
-            return ASTFactory.createSelector(id, "type_declaration",  new DeclarationProtoTuple(),  new DeclarationProtoTuple(), env);
+
+        if ("lefthandside".equals(name)) {
+            // ${0}.expressions[0]
+
+            // ${0}.expressions
+            final Expression tree = ASTFactory.createSelector(id, "expressions", new ExpressionProtoTuple(), new ExpressionProtoTuple(), env);
+            // ${0}.expressions[0]
+            ASTFactory.getFactorFromExp(tree).addOp(ASTFactory.createIndex(ASTFactory.createIntLiteral(0), env));
+
+            return tree;
         }
 
+        if ("righthandside".equals(name)) {
+            // ${0}.expressions[1]
+           
+            // ${0}.expressions
+            final Expression tree = ASTFactory.createSelector(id, "expressions", new ExpressionProtoTuple(), new ExpressionProtoTuple(), env);
+            // ${0}.expressions[1]
+            ASTFactory.getFactorFromExp(tree).addOp(ASTFactory.createIndex(ASTFactory.createIntLiteral(1), env));
+
+            return tree;
+        }
+
+        if ("operator".equals(name)) {
+            // TODO : Assignment Operator
+            return null;
+        }
 
         throw new RuntimeException("invalid shadow field: " + name);
     }
@@ -68,12 +89,12 @@ public class TypeDeclarationStatementShadow extends BoaShadowType  {
     /** {@inheritDoc} */
     @Override
     public Expression getKindExpression(final SymbolTable env) {
-        return getKindExpression("StatementKind", "TYPEDECL", new StatementKindProtoMap(), env);
+        return getKindExpression("ExpressionKind", "ASSIGN", new StatementKindProtoMap(), env);
     }
 
     /** {@inheritDoc} */
     @Override
     public String toString() {
-        return "TypeDeclarationStatement";
+        return "Assignment";
     }
 }

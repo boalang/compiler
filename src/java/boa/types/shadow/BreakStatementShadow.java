@@ -56,7 +56,7 @@ public class BreakStatementShadow extends BoaShadowType  {
 
         if ("label".equals(name)) {
             // ${0}.expression
-            return ASTFactory.createSelector(id, "label", new ExpressionProtoTuple(), new ExpressionProtoTuple(), env);
+            return ASTFactory.createSelector(id, "expression", new ExpressionProtoTuple(), new ExpressionProtoTuple(), env);
         }
         
 

@@ -60,7 +60,7 @@ public class AssertStatementShadow extends BoaShadowType  {
         }
 
         if ("message".equals(name)) {
-            // ${0}.expression
+            // TODO ? ${0}.expression
             return ASTFactory.createSelector(id, "expression", new ExpressionProtoTuple(), new ExpressionProtoTuple(), env);
         }
 
