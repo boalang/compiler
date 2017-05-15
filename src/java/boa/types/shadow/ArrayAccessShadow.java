@@ -33,7 +33,7 @@ import boa.types.proto.StatementProtoTuple;
 
 /**
  * A shadow type for ArrayAccess.
- * 
+ *
  * @author rdyer
  * @author kaushin
  */
@@ -46,7 +46,6 @@ public class ArrayAccessShadow extends BoaShadowType  {
 
         addShadow("array", new ExpressionProtoTuple());
         addShadow("index", new ExpressionProtoTuple());
-        
     }
 
     /** {@inheritDoc} */
@@ -56,10 +55,8 @@ public class ArrayAccessShadow extends BoaShadowType  {
         id.type = new StatementProtoTuple();
 
         if ("array".equals(name)) {
-            // ${0}.expressions[0]
-
             // ${0}.expressions
-            final Expression tree = ASTFactory.createSelector(id, "expressions", new ExpressionProtoTuple(), new ExpressionProtoTuple(), env);
+            final Expression tree = ASTFactory.createSelector(id, "expressions", new BoaProtoList(new ExpressionProtoTuple()), new ExpressionProtoTuple(), env);
             // ${0}.expressions[0]
             ASTFactory.getFactorFromExp(tree).addOp(ASTFactory.createIndex(ASTFactory.createIntLiteral(0), env));
 
@@ -67,10 +64,8 @@ public class ArrayAccessShadow extends BoaShadowType  {
         }
 
         if ("index".equals(name)) {
-            // ${0}.expressions[1]
-           
             // ${0}.expressions
-            final Expression tree = ASTFactory.createSelector(id, "expressions", new ExpressionProtoTuple(), new ExpressionProtoTuple(), env);
+            final Expression tree = ASTFactory.createSelector(id, "expressions", new BoaProtoList(new ExpressionProtoTuple()), new ExpressionProtoTuple(), env);
             // ${0}.expressions[1]
             ASTFactory.getFactorFromExp(tree).addOp(ASTFactory.createIndex(ASTFactory.createIntLiteral(1), env));
 
@@ -83,7 +78,7 @@ public class ArrayAccessShadow extends BoaShadowType  {
     /** {@inheritDoc} */
     @Override
     public Expression getKindExpression(final SymbolTable env) {
-        return getKindExpression("ExpressionKind", "ARRAYINDEX", new StatementKindProtoMap(), env);
+        return getKindExpression("ExpressionKind", "ARRAYINDEX", new ExpressionKindProtoMap(), env);
     }
 
     /** {@inheritDoc} */

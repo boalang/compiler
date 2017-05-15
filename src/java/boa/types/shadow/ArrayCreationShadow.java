@@ -34,7 +34,7 @@ import boa.types.proto.TypeProtoTuple;
 
 /**
  * A shadow type for ArrayCreation.
- * 
+ *
  * @author rdyer
  * @author kaushin
  */
@@ -48,7 +48,6 @@ public class ArrayCreationShadow extends BoaShadowType  {
         addShadow("dimensions", new ExpressionProtoTuple());
         addShadow("initializer", new ExpressionProtoTuple());
         addShadow("type", new TypeProtoTuple());
-        
     }
 
     /** {@inheritDoc} */
@@ -58,10 +57,8 @@ public class ArrayCreationShadow extends BoaShadowType  {
         id.type = new StatementProtoTuple();
 
         if ("dimensions".equals(name)) {
-            // ${0}.expressions[0]
-
             // ${0}.expressions
-            final Expression tree = ASTFactory.createSelector(id, "expressions", new ExpressionProtoTuple(), new ExpressionProtoTuple(), env);
+            final Expression tree = ASTFactory.createSelector(id, "expressions", new BoaProtoList(new ExpressionProtoTuple()), new ExpressionProtoTuple(), env);
             // ${0}.expressions[0]
             ASTFactory.getFactorFromExp(tree).addOp(ASTFactory.createIndex(ASTFactory.createIntLiteral(0), env));
 
@@ -69,10 +66,8 @@ public class ArrayCreationShadow extends BoaShadowType  {
         }
 
         if ("initializer".equals(name)) {
-            // ${0}.expressions[1]
-           
             // ${0}.expressions
-            final Expression tree = ASTFactory.createSelector(id, "expressions", new ExpressionProtoTuple(), new ExpressionProtoTuple(), env);
+            final Expression tree = ASTFactory.createSelector(id, "expressions", new BoaProtoList(new ExpressionProtoTuple()), new ExpressionProtoTuple(), env);
             // ${0}.expressions[1]
             ASTFactory.getFactorFromExp(tree).addOp(ASTFactory.createIndex(ASTFactory.createIntLiteral(1), env));
 
@@ -90,7 +85,7 @@ public class ArrayCreationShadow extends BoaShadowType  {
     /** {@inheritDoc} */
     @Override
     public Expression getKindExpression(final SymbolTable env) {
-        return getKindExpression("ExpressionKind", "NEWARRAY", new StatementKindProtoMap(), env);
+        return getKindExpression("ExpressionKind", "NEWARRAY", new ExpressionKindProtoMap(), env);
     }
 
     /** {@inheritDoc} */
