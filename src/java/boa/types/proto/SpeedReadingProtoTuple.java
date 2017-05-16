@@ -66,7 +66,7 @@ import boa.types.*;
 	/** @{inheritDoc} */
 	@Override
 	public String toJavaType() {
-		return "boa.types.NewSchema.SpeedReading";
+		return "boa.types.TransportationSchema.SpeedReading";
 	}
 
  }

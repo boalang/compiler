@@ -29,7 +29,7 @@ import boa.types.*;
 		members.add(new BoaString());
 
 		names.put("weather", counter++);
-		members.add(new WeatherRecordProtoTuple());
+		members.add(new BoaProtoList(new WeatherRecordProtoTuple()));
 
 
 		}
@@ -45,7 +45,7 @@ import boa.types.*;
 	/** @{inheritDoc} */
 	@Override
 	public String toJavaType() {
-		return "boa.types.NewSchema.WeatherRoot";
+		return "boa.types.TransportationSchema.WeatherRoot";
 	}
 
  }

@@ -41,10 +41,15 @@ public class DSMaster {
 		/*
 		 * Transportation Input
 		 */
-		
-		String program = "/Users/nmtiwari/git/research/boa_platform/compiler/transportationExamples/ml.boa"; // which boa program to run
-		String inputlocation = "/Users/nmtiwari/git/research/boa_platform/transportationdata/";  // where are the inputs stored
-		String output = "/Users/nmtiwari/Desktop/new/out"; // where should the output go
+		//Weather Effect On Speed /Users/mislam/Desktop/datascienceInf/compiler/transportationExamples/weatherEffectOnSpeed.boa
+		// weatherEffectInCounty, weatherEffectOnSpeed, avgSpeedAtDifferentTimesinCounty,avgSpeedAtDifferentTimesinCounty,gridinfo,
+		//weatherEffectonAvgSpeed,locationsWithHigherSpeed,weatherEffectonAvgSpeed,avgSpeedAtDifferentTimesinCounty,
+		//higherSpeedAtBadWeather,weatherSpeed
+		args = new String[2];
+		args[0] ="/Users/mislam/Desktop/boa/compiler/transportationExamples/locationsWithHigherSpeed.boa";
+		String program = args[0]; // which boa program to run
+		String inputlocation = "/Users/mislam/Desktop/boa";  // where are the inputs stored
+		String output = "/Users/mislam/Desktop/new/out"; // where should the output go
 		
 
 		/*
@@ -52,9 +57,9 @@ public class DSMaster {
 		 */
 		ArrayList<String> sources = new ArrayList<String>();
 		
-		String accident = "/Users/nmtiwari/git/research/boa_platform/trans_data/accident.dbf";
-		String person = "/Users/nmtiwari/git/research/boa_platform/trans_data/person.dbf";
-		String vehicle = "/Users/nmtiwari/git/research/boa_platform/trans_data/vehicle.dbf";
+		String accident = "/Users/mislam/Desktop/Traffic Shared Data/FARS/2015/FARS2015NationalDBF/accident.dbf";
+		String person = "/Users/mislam/Desktop/Traffic Shared Data/FARS/2015/FARS2015NationalDBF/person.dbf";
+		String vehicle = "/Users/mislam/Desktop/Traffic Shared Data/FARS/2015/FARS2015NationalDBF/vehicle.dbf";
 		sources.add(accident);
 		sources.add(person);
 		sources.add(vehicle);
@@ -82,11 +87,31 @@ public class DSMaster {
 		 * and evaluate the queries over stored data.
 		 */
 		
-		/* 
-		 * Queue<GeneratedMessage> eSourceIStorage = new Queue<GeneratedMessage>(new LinkedBlockingQueue<GeneratedMessage>());
-		 * external.getDataInQueue(eSourceIStorage);
-		 * storage.store(eSourceIStorage);
+		 
+		/**
+		 * Generate Sequence File for Top level
 		 */
+//		  Queue<GeneratedMessage> toplevel = new Queue<GeneratedMessage>(new LinkedBlockingQueue<GeneratedMessage>());
+//		  external.getDataInQueue(toplevel);
+//		  storage.store(toplevel);
+		  
+		  
+		  /**
+		   * Generate Sequence file for Speed
+		   */
+//		  Queue<GeneratedMessage> speed = new Queue<GeneratedMessage>(new LinkedBlockingQueue<GeneratedMessage>());
+//		  external.getSpeedInQueue(speed);
+//		  storage.storeSpeed(speed);
+		  
+		  
+		  /**
+		   * Generate Sequence file for weather
+		   */
+		  
+		  Queue<GeneratedMessage> weather = new Queue<GeneratedMessage>(new LinkedBlockingQueue<GeneratedMessage>());
+//		  external.getWeatherInQueue(weather);
+//		  storage.storeWeather(weather);
+//		 
 		
 		
 		// evaluate the queries using engine 

@@ -188,7 +188,7 @@ public class BoaGridIntrinsics {
 		final Configuration conf = new Configuration();
 		try {
 			final FileSystem fs = FileSystem.get(conf);
-			String pathloc= "/Users/mislam/Desktop/datascienceInf/transData/speed.seq";
+			String pathloc= "/Users/mislam/Desktop/boa/transData/speed.seq";
 			final Path p = new Path(pathloc);
 			speedMap = new MapFile.Reader(fs, p.toString(), conf);
 		} catch (final Exception e) {
@@ -200,7 +200,7 @@ public class BoaGridIntrinsics {
 		final Configuration conf = new Configuration();
 		try {
 			final FileSystem fs = FileSystem.get(conf);
-			String pathloc= "/Users/mislam/Desktop/datascienceInf/transData/weather.seq";
+			String pathloc= "/Users/mislam/Desktop/boa/transData/weather.seq";
 			final Path p = new Path(pathloc);
 			weatherMap = new MapFile.Reader(fs, p.toString(), conf);
 			//final BytesWritable value = new BytesWritable();

@@ -45,7 +45,7 @@ import boa.types.*;
 	/** @{inheritDoc} */
 	@Override
 	public String toJavaType() {
-		return "boa.types.NewSchema.Grid";
+		return "boa.types.TransportationSchema.Grid";
 	}
 
  }

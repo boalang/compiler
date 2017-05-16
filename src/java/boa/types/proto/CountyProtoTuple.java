@@ -26,7 +26,7 @@ import boa.types.*;
 		members.add(new BoaString());
 
 		names.put("grid", counter++);
-		members.add(new GridProtoTuple());
+		members.add(new BoaProtoList(new GridProtoTuple()));
 
 
 		}
@@ -42,7 +42,7 @@ import boa.types.*;
 	/** @{inheritDoc} */
 	@Override
 	public String toJavaType() {
-		return "boa.types.NewSchema.County";
+		return "boa.types.TransportationSchema.County";
 	}
 
  }

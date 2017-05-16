@@ -29,7 +29,7 @@ import boa.types.*;
 		members.add(new BoaString());
 
 		names.put("speeds", counter++);
-		members.add(new SpeedReadingProtoTuple());
+		members.add(new BoaProtoList(new SpeedReadingProtoTuple()));
 
 
 		}
@@ -45,7 +45,7 @@ import boa.types.*;
 	/** @{inheritDoc} */
 	@Override
 	public String toJavaType() {
-		return "boa.types.NewSchema.SpeedRoot";
+		return "boa.types.TransportationSchema.SpeedRoot";
 	}
 
  }

@@ -39,7 +39,7 @@ import boa.types.*;
 	/** @{inheritDoc} */
 	@Override
 	public String toJavaType() {
-		return "boa.types.NewSchema.Location";
+		return "boa.types.TransportationSchema.Location";
 	}
 
  }

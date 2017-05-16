@@ -157,47 +157,7 @@ public class SymbolTable {
 
 		
 
-/** Automatically generated code start **/
-		idmap.put("County", new CountyProtoTuple());
 
-		globals.put("input", new CountyProtoTuple());
-		idmap.put("Grid", new GridProtoTuple());
-		idmap.put("WeatherRoot", new WeatherRootProtoTuple());
-		idmap.put("SpeedRoot", new SpeedRootProtoTuple());
-		idmap.put("WeatherRecord", new WeatherRecordProtoTuple());
-		idmap.put("Location", new LocationProtoTuple());
-		idmap.put("SpeedReading", new SpeedReadingProtoTuple());
-		/** Automatically generated code ends **/
-
-
-		
-
-/** Automatically generated code start **/
-		idmap.put("County", new CountyProtoTuple());
-
-		globals.put("input", new CountyProtoTuple());
-		idmap.put("Grid", new GridProtoTuple());
-		idmap.put("WeatherRoot", new WeatherRootProtoTuple());
-		idmap.put("SpeedRoot", new SpeedRootProtoTuple());
-		idmap.put("WeatherRecord", new WeatherRecordProtoTuple());
-		idmap.put("Location", new LocationProtoTuple());
-		idmap.put("SpeedReading", new SpeedReadingProtoTuple());
-		/** Automatically generated code ends **/
-
-
-		
-
-/** Automatically generated code start **/
-		idmap.put("County", new CountyProtoTuple());
-
-		globals.put("input", new CountyProtoTuple());
-		idmap.put("Grid", new GridProtoTuple());
-		idmap.put("WeatherRoot", new WeatherRootProtoTuple());
-		idmap.put("SpeedRoot", new SpeedRootProtoTuple());
-		idmap.put("WeatherRecord", new WeatherRecordProtoTuple());
-		idmap.put("Location", new LocationProtoTuple());
-		idmap.put("SpeedReading", new SpeedReadingProtoTuple());
-		/** Automatically generated code ends **/
 
 
 		idmap.put("CodeRepository", new CodeRepositoryProtoTuple());
@@ -456,6 +416,10 @@ public class SymbolTable {
 
 		globalFunctions.addFunction("max", new BoaFunction(new BoaString(), new BoaScalar[] { new BoaString(), new BoaString() }, "(${0}.compareTo(${1}) > 0 ? ${0} : ${1})"));
 		globalFunctions.addFunction("min", new BoaFunction(new BoaString(), new BoaScalar[] { new BoaString(), new BoaString() }, "(${0}.compareTo(${1}) < 0 ? ${0} : ${1})"));
+		
+		//Matrix methods added by Johir
+		globalFunctions.addFunction("matrix", new BoaFunction(new BoaTuple(),new BoaScalar []{new BoaTuple(),new BoaInt()},"boa.tuplefunctions.TupleOps.matrix(${0},${1})"));
+		//globalFunctions.addFunction("", boaFunction);
 	}
 
 	public SymbolTable() {
@@ -633,7 +597,8 @@ public class SymbolTable {
 			boa.functions.BoaSortIntrinsics.class,
 			boa.functions.BoaSpecialIntrinsics.class,
 			boa.functions.BoaStringIntrinsics.class,
-			boa.functions.BoaTimeIntrinsics.class
+			boa.functions.BoaTimeIntrinsics.class,
+			boa.functions.BoaGridIntrinsics.class
 		};
 		for (final Class<?> c : builtinFuncs)
 			importFunctions(c);
