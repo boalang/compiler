@@ -69,7 +69,7 @@ public class ConstructorInvocationShadow extends BoaShadowType  {
 
             s1.type = new ExpressionProtoTuple();
             s2.type = new ExpressionProtoTuple();
-            f.type = tree.type = new ExpressionProtoTuple();
+            f.type = tree.type = new BoaProtoList(new ExpressionProtoTuple());
 
             return tree;
 

@@ -61,7 +61,7 @@ public class ConditionalExpressionShadow extends BoaShadowType  {
             // ${0}.expressions[0]
 
             // ${0}.expressions
-            final Expression tree = ASTFactory.createSelector(id, "expressions", new ExpressionProtoTuple(), new ExpressionProtoTuple(), env);
+            final Expression tree = ASTFactory.createSelector(id, "expressions", new BoaProtoList(new ExpressionProtoTuple()), new ExpressionProtoTuple(), env);
             // ${0}.expressions[0]
             ASTFactory.getFactorFromExp(tree).addOp(ASTFactory.createIndex(ASTFactory.createIntLiteral(0), env));
 
@@ -72,7 +72,7 @@ public class ConditionalExpressionShadow extends BoaShadowType  {
             // ${0}.expressions[1]
            
             // ${0}.expressions
-            final Expression tree = ASTFactory.createSelector(id, "expressions", new ExpressionProtoTuple(), new ExpressionProtoTuple(), env);
+            final Expression tree = ASTFactory.createSelector(id, "expressions", new BoaProtoList(new ExpressionProtoTuple()), new ExpressionProtoTuple(), env);
             // ${0}.expressions[1]
             ASTFactory.getFactorFromExp(tree).addOp(ASTFactory.createIndex(ASTFactory.createIntLiteral(1), env));
 
@@ -83,7 +83,7 @@ public class ConditionalExpressionShadow extends BoaShadowType  {
             // ${0}.expressions[2]
            
             // ${0}.expressions
-            final Expression tree = ASTFactory.createSelector(id, "expressions", new ExpressionProtoTuple(), new ExpressionProtoTuple(), env);
+            final Expression tree = ASTFactory.createSelector(id, "expressions", new BoaProtoList(new ExpressionProtoTuple()), new ExpressionProtoTuple(), env);
             // ${0}.expressions[2]
             ASTFactory.getFactorFromExp(tree).addOp(ASTFactory.createIndex(ASTFactory.createIntLiteral(2), env));
 
