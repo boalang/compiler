@@ -1,0 +1,10 @@
+p: County = input;
+counts: output sum[string][float][float][float][float][float][float] of int;
+
+foreach(i : int; def(p.grid[i])){
+	weatherRoot := getweather(p.grid[i]);
+	foreach(j : int; def(weatherRoot.weather[j])){
+	   counts[p.countyName][weatherRoot.weather[j].latlon.lat][weatherRoot.weather[j].latlon.lon]
+	   [weatherRoot.weather[j].pcpn][weatherRoot.weather[j].roadtmpc][weatherRoot.weather[j].smps][weatherRoot.weather[j].dwpc]<<1;
+		}
+}

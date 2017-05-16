@@ -32,8 +32,8 @@ import boa.datagen.util.Properties;
  * @author hridesh
  */
 public class MapFileGen {
-//	private final static String SEQ_FILE_PATH = Properties.getProperty("seq.file.path", "");
-	private final static String SEQ_FILE_PATH = Properties.getProperty("gh.json.cache.path", DefaultProperties.GH_JSON_CACHE_PATH);
+	private final static String SEQ_FILE_PATH = Properties.getProperty("seq.file.path", "/Users/mislam/Desktop/boa/transData/speed.seq");
+	//private final static String SEQ_FILE_PATH = Properties.getProperty("gh.json.cache.path", DefaultProperties.GH_JSON_CACHE_PATH);
 	public static void main(String[] args) throws Exception {
 		System.out.println("generating data and index file");
 		if (SEQ_FILE_PATH.isEmpty()) {

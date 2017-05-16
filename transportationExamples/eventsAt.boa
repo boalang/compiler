@@ -1,0 +1,14 @@
+# Output the records that have speed greater than 70 at different locations
+p: WeatherSpeed = input;
+counts: output sum[float][float] of int;
+foreach(i: int;p.speeds[i])
+{
+	foreach(j:int;p.speeds[i].lanes[j])
+	{
+		if(p.speeds[i].lanes[j].speed>70)
+			{
+				counts[p.latlon.lat][p.latlon.lon]<<1;
+			}
+	}
+}
+

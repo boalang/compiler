@@ -84,7 +84,7 @@ public class DomainTypeGenerator {
 		} else if ("float".equalsIgnoreCase(typ.toString())) {
 			return "BoaFloat";
 		} else if ("double".equalsIgnoreCase(typ.toString())) {
-			return "BoaDouble";
+			return "BoaFloat";
 		} else if ("bool".equalsIgnoreCase(typ.toString())) {
 			return "BoaBool";
 		} else if ("bytes".equalsIgnoreCase(typ.toString())) {

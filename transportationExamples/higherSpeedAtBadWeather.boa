@@ -1,0 +1,21 @@
+p: County = input;
+counts: output sum[string][float][float][float][int][int] of int;
+
+if(equals(p.countyName,"Story County")){
+foreach(i : int; def(p.grid[i])){
+	weatherRoot := getweather(p.grid[i]);
+	speedRoot := getspeed(p.grid[i]);
+	foreach(j : int; def(weatherRoot.weather[j])){
+	   foreach(s: int;def(speedRoot.speeds[s])){
+	   		if(weatherRoot.weather[j].pcpn>0 && speedRoot.speeds[s].speed>50){
+	   		counts[p.countyName][speedRoot.speeds[s].latlon.lat]
+	   		   [speedRoot.speeds[s].latlon.lon]
+	   		   [weatherRoot.weather[j].pcpn]
+	   		   [weatherRoot.weather[j].time]
+	   		   [speedRoot.speeds[s].speed]<<1;
+	   		}
+	   		   
+	   }
+		}
+	}
+}

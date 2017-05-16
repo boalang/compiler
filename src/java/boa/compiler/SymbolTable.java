@@ -71,7 +71,7 @@ public class SymbolTable {
 		// variables with a global scope
 		globals = new HashMap<String, BoaType>();
 
-		globals.put("input", new ProjectProtoTuple());
+
 		globals.put("true", new BoaBool());
 		globals.put("false", new BoaBool());
 		globals.put("PI", new BoaFloat());
@@ -140,6 +140,66 @@ public class SymbolTable {
 		idmap.put("Attachment", new AttachmentProtoTuple());
 		idmap.put("ChangedFile", new ChangedFileProtoTuple());
 		idmap.put("ChangeKind", new ChangeKindProtoMap());
+		
+
+/** Automatically generated code start **/
+		idmap.put("County", new CountyProtoTuple());
+
+		globals.put("input", new CountyProtoTuple());
+		idmap.put("Grid", new GridProtoTuple());
+		idmap.put("WeatherRoot", new WeatherRootProtoTuple());
+		idmap.put("SpeedRoot", new SpeedRootProtoTuple());
+		idmap.put("WeatherRecord", new WeatherRecordProtoTuple());
+		idmap.put("Location", new LocationProtoTuple());
+		idmap.put("SpeedReading", new SpeedReadingProtoTuple());
+		/** Automatically generated code ends **/
+
+
+		
+
+/** Automatically generated code start **/
+		idmap.put("County", new CountyProtoTuple());
+
+		globals.put("input", new CountyProtoTuple());
+		idmap.put("Grid", new GridProtoTuple());
+		idmap.put("WeatherRoot", new WeatherRootProtoTuple());
+		idmap.put("SpeedRoot", new SpeedRootProtoTuple());
+		idmap.put("WeatherRecord", new WeatherRecordProtoTuple());
+		idmap.put("Location", new LocationProtoTuple());
+		idmap.put("SpeedReading", new SpeedReadingProtoTuple());
+		/** Automatically generated code ends **/
+
+
+		
+
+/** Automatically generated code start **/
+		idmap.put("County", new CountyProtoTuple());
+
+		globals.put("input", new CountyProtoTuple());
+		idmap.put("Grid", new GridProtoTuple());
+		idmap.put("WeatherRoot", new WeatherRootProtoTuple());
+		idmap.put("SpeedRoot", new SpeedRootProtoTuple());
+		idmap.put("WeatherRecord", new WeatherRecordProtoTuple());
+		idmap.put("Location", new LocationProtoTuple());
+		idmap.put("SpeedReading", new SpeedReadingProtoTuple());
+		/** Automatically generated code ends **/
+
+
+		
+
+/** Automatically generated code start **/
+		idmap.put("County", new CountyProtoTuple());
+
+		globals.put("input", new CountyProtoTuple());
+		idmap.put("Grid", new GridProtoTuple());
+		idmap.put("WeatherRoot", new WeatherRootProtoTuple());
+		idmap.put("SpeedRoot", new SpeedRootProtoTuple());
+		idmap.put("WeatherRecord", new WeatherRecordProtoTuple());
+		idmap.put("Location", new LocationProtoTuple());
+		idmap.put("SpeedReading", new SpeedReadingProtoTuple());
+		/** Automatically generated code ends **/
+
+
 		idmap.put("CodeRepository", new CodeRepositoryProtoTuple());
 		idmap.put("CommentKind", new CommentKindProtoMap());
 		idmap.put("Comment", new CommentProtoTuple());

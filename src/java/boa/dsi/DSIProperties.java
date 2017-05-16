@@ -40,6 +40,8 @@ public class DSIProperties {
 
 	public static final String HADOOP_SEQ_FILE_LOCATION = CANDOIA_OUTPUT_PATH;
 	public static final String HADOOP_SEQ_FILE_NAME = "projects.seq";
+	public static final String HADOOP_WEATHER_FILE_NAME = "weather.seq";
+	public static final String HADOOP_SPEED_FILE_NAME = "speed.seq";
 	public static final String HADOOP_AST_FILE_NAME = "ast.seq";
 
 	public static final String BOA_OUTPUT_DIR_NAME = "boaOutput";

@@ -1,0 +1,4 @@
+p: WeatherSpeed = input;
+counts: output sum[int] of int;
+
+counts[len(p.weather)]<<1;

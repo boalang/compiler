@@ -1,0 +1,14 @@
+p: County = input;
+counts: output mean[float][float][int][int] of int;
+
+weatherRoot := getweather(100163);
+speedRoot:= getspeed(100163);
+foreach(i: int; def(weatherRoot.weather[i])){
+	foreach(s: int;def(speedRoot.speeds[s])){
+	counts[weatherRoot.weather[i].roadtmpc]
+	[weatherRoot.weather[i].pcpn][weatherRoot.weather[i].time]
+	[speedRoot.speeds[s].speed]<< 1;
+	
+	}
+	
+}

@@ -1,0 +1,14 @@
+#Snow Effect on speed
+# Output the records that have speed greater than 70 at different precipitation
+p: WeatherSpeed = input;
+counts: output sum[float][float] of int;
+foreach(i: int;p.weather[i])
+{
+	foreach(j:int;p.weather[i].data[j])
+	{
+		if(p.weather[i].data[j].speed>70)
+			{
+				counts[p.latlon.lat][p.latlon.lon]<<1;
+			}
+	}
+}

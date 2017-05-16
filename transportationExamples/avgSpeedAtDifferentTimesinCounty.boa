@@ -1,0 +1,13 @@
+p: County = input;
+story: output mean[string][int][float][float] of int;
+if(equals(p.countyName,"Story County")){
+foreach(i : int; def(p.grid[i])){
+	speedRoot := getspeed(p.grid[i]);
+	foreach(s : int; def(speedRoot.speeds[s])){
+	story[p.countyName]
+	[speedRoot.speeds[s].time]
+	[speedRoot.speeds[s].latlon.lat]
+	[speedRoot.speeds[s].latlon.lon] << speedRoot.speeds[s].speed;
+}
+}
+}

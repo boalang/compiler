@@ -1,0 +1,18 @@
+p: County = input;
+speed: output mean[string][float][float][int] of int;
+weather: output sum[string][float][float][float][int] of int;
+if(equals(p.countyName,"Story County")){
+foreach(i : int; def(p.grid[i])){
+	weatherRoot := getweather(p.grid[i]);
+	speedRoot := getspeed(p.grid[i]);
+	foreach(s: int;def(speedRoot.speeds[s])){
+	   speed[p.countyName][speedRoot.speeds[s].latlon.lat][speedRoot.speeds[s].latlon.lon]
+	   [speedRoot.speeds[s].time]<<speedRoot.speeds[s].speed;
+		}
+		
+	foreach(j : int; def(weatherRoot.weather[j])){
+	   weather[p.countyName][weatherRoot.weather[j].latlon.lat][weatherRoot.weather[j].latlon.lon][weatherRoot.weather[j].roadtmpc]
+	   [weatherRoot.weather[j].time]<<1;
+		}
+	}
+}

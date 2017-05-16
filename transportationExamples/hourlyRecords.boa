@@ -1,0 +1,4 @@
+p: County = input;
+counts: output sum[string] of int;
+
+counts[p.countyName] << 1;

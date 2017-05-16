@@ -1,0 +1,13 @@
+p: County = input;
+counts: output sum[string][float][float][int][int] of int;
+
+foreach(i : int; def(p.grid[i])){
+	speedRoot := getspeed(p.grid[i]);
+	foreach(s: int;def(speedRoot.speeds[s])){
+		if(speedRoot.speeds[s].speed>70){
+			 counts[p.countyName][speedRoot.speeds[s].latlon.lat]
+	   		   [speedRoot.speeds[s].latlon.lon][speedRoot.speeds[s].speed]
+	   		   [speedRoot.speeds[s].time]<<1;
+		}
+	   }
+}

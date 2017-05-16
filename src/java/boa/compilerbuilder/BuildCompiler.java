@@ -197,7 +197,8 @@ public class BuildCompiler {
 			String[] args) {/*
 							 * Compile and Build new Domain Data types
 							 */
-		BuildCompiler builder = new BuildCompiler(args[0]);
+		String url = "/Users/mislam/Desktop/boa/protos/newSchema.proto";
+		BuildCompiler builder = new BuildCompiler(url);
 		try {
 			builder.compileAndBuild();
 		} catch (IOException e) {
