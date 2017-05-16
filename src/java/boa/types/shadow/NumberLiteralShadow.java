@@ -33,20 +33,19 @@ import boa.types.proto.ExpressionProtoTuple;
 import boa.types.proto.StatementProtoTuple;
 
 /**
- * A shadow type for CharacterLiteral.
+ * A shadow type for NumberLiteral.
  * 
  * @author rdyer
  * @author kaushin
  */
-public class CharacterLiteralShadow extends BoaShadowType  {
+public class NumberLiteralShadow extends BoaShadowType  {
     /**
-     * Construct a {@link CharacterLiteralShadow}.
+     * Construct a {@link NumberLiteralShadow}.
      */
-    public CharacterLiteralShadow() {
+    public NumberLiteralShadow() {
         super(new ExpressionProtoTuple());
 
-        addShadow("charvalue", new BoaString());
-        addShadow("escapedvalue", new BoaString());
+        addShadow("token", new BoaString());
         
     }
 
@@ -56,17 +55,13 @@ public class CharacterLiteralShadow extends BoaShadowType  {
         final Identifier id = ASTFactory.createIdentifier(nodeId, env);
         id.type = new StatementProtoTuple();
 
-         if ("charvalue".equals(name)) {
-            // TODO ${0}.literal
-
-            return null;     
-        }
-       
-        if ("escapedvalue".equals(name)) {
+        if ("token".equals(name)) {
             // ${0}.literal
 
             return ASTFactory.createSelector(id, "literal", new BoaString(), new BoaString(), env);     
         }
+
+
         throw new RuntimeException("invalid shadow field: " + name);
     }
 
@@ -79,6 +74,6 @@ public class CharacterLiteralShadow extends BoaShadowType  {
     /** {@inheritDoc} */
     @Override
     public String toString() {
-        return "CharacterLiteral";
+        return "NumberLiteral";
     }
 }

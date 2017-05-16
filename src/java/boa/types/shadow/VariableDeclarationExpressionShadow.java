@@ -28,7 +28,7 @@ import boa.compiler.transforms.ASTFactory;
 import boa.types.BoaInt;
 import boa.types.BoaProtoList;
 import boa.types.BoaShadowType;
-import boa.types.proto.enums.StatementKindProtoMap;
+import boa.types.proto.enums.ExpressionKindProtoMap;
 import boa.types.proto.ExpressionProtoTuple;
 import boa.types.proto.StatementProtoTuple;
 import boa.types.proto.VariableProtoTuple;
@@ -36,17 +36,17 @@ import boa.types.proto.ModifierProtoTuple;
 import boa.types.proto.TypeProtoTuple;
 
 /**
- * A shadow type for VariableDeclarationStatement.
+ * A shadow type for VariableDeclarationExpression.
  * 
  * @author rdyer
  * @author kaushin
  */
-public class VariableDeclarationStatementShadow extends BoaShadowType  {
+public class VariableDeclarationExpressionShadow extends BoaShadowType  {
     /**
-     * Construct a {@link VariableDeclarationStatementShadow}.
+     * Construct a {@link VariableDeclarationExpressionShadow}.
      */
-    public VariableDeclarationStatementShadow() {
-        super(new StatementProtoTuple());
+    public VariableDeclarationExpressionShadow() {
+        super(new ExpressionProtoTuple());
 
         
         addShadow("fragments",new BoaProtoList(new VariableProtoTuple()));
@@ -139,12 +139,12 @@ public class VariableDeclarationStatementShadow extends BoaShadowType  {
     /** {@inheritDoc} */
     @Override
     public Expression getKindExpression(final SymbolTable env) {
-        return getKindExpression("StatementKind", "EXPRESSION", new StatementKindProtoMap(), env);
+        return getKindExpression("ExpressionKind", "VARDECL", new ExpressionKindProtoMap(), env);
     }
 
     /** {@inheritDoc} */
     @Override
     public String toString() {
-        return "VariableDeclarationStatement";
+        return "VariableDeclarationExpression";
     }
 }

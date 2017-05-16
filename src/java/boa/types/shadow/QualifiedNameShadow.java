@@ -31,23 +31,23 @@ import boa.types.BoaShadowType;
 import boa.types.proto.enums.ExpressionKindProtoMap;
 import boa.types.proto.ExpressionProtoTuple;
 import boa.types.proto.StatementProtoTuple;
-
+import boa.types.proto.TypeProtoTuple;
 /**
- * A shadow type for CharacterLiteral.
+ * A shadow type for QualifiedName.
  * 
  * @author rdyer
  * @author kaushin
  */
-public class CharacterLiteralShadow extends BoaShadowType  {
+public class QualifiedNameShadow extends BoaShadowType  {
     /**
-     * Construct a {@link CharacterLiteralShadow}.
+     * Construct a {@link QualifiedNameShadow}.
      */
-    public CharacterLiteralShadow() {
+    public QualifiedNameShadow() {
         super(new ExpressionProtoTuple());
 
-        addShadow("charvalue", new BoaString());
-        addShadow("escapedvalue", new BoaString());
-        
+
+        addShadow("qualifier",  new BoaProtoList(new ExpressionProtoTuple()));
+        addShadow("name", new BoaString());
     }
 
     /** {@inheritDoc} */
@@ -56,29 +56,29 @@ public class CharacterLiteralShadow extends BoaShadowType  {
         final Identifier id = ASTFactory.createIdentifier(nodeId, env);
         id.type = new StatementProtoTuple();
 
-         if ("charvalue".equals(name)) {
-            // TODO ${0}.literal
-
-            return null;     
+        if ("qualifier".equals(name)) {
+            // TODO
+            return null;
         }
-       
-        if ("escapedvalue".equals(name)) {
-            // ${0}.literal
 
-            return ASTFactory.createSelector(id, "literal", new BoaString(), new BoaString(), env);     
+
+         if ("name".equals(name)) {
+            // ${0}.variable
+            return ASTFactory.createSelector(id, "variable", new BoaString(), new BoaString(), env);
         }
+
         throw new RuntimeException("invalid shadow field: " + name);
     }
 
     /** {@inheritDoc} */
     @Override
     public Expression getKindExpression(final SymbolTable env) {
-        return getKindExpression("ExpressionKind", "LITERAL", new ExpressionKindProtoMap(), env);
+        return getKindExpression("ExpressionKind", "VARACCESS", new ExpressionKindProtoMap(), env);
     }
 
     /** {@inheritDoc} */
     @Override
     public String toString() {
-        return "CharacterLiteral";
+        return "QualifiedName";
     }
 }

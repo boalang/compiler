@@ -27,7 +27,7 @@ import boa.compiler.transforms.ASTFactory;
 import boa.types.BoaInt;
 import boa.types.BoaProtoList;
 import boa.types.BoaShadowType;
-import boa.types.proto.enums.StatementKindProtoMap;
+import boa.types.proto.enums.ExpressionKindProtoMap;
 import boa.types.proto.ExpressionProtoTuple;
 import boa.types.proto.StatementProtoTuple;
 import boa.types.proto.TypeProtoTuple;
@@ -97,7 +97,7 @@ public class ConditionalExpressionShadow extends BoaShadowType  {
     /** {@inheritDoc} */
     @Override
     public Expression getKindExpression(final SymbolTable env) {
-        return getKindExpression("ExpressionKind", "CONDITIONAL", new StatementKindProtoMap(), env);
+        return getKindExpression("ExpressionKind", "CONDITIONAL", new ExpressionKindProtoMap(), env);
     }
 
     /** {@inheritDoc} */

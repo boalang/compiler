@@ -30,22 +30,24 @@ import boa.types.BoaShadowType;
 import boa.types.proto.enums.ExpressionKindProtoMap;
 import boa.types.proto.ExpressionProtoTuple;
 import boa.types.proto.StatementProtoTuple;
-
+import boa.types.proto.TypeProtoTuple;
 /**
- * A shadow type for ArrayAccess.
- *
+ * A shadow type for InfixExpression.
+ * 
  * @author rdyer
  * @author kaushin
  */
-public class ArrayAccessShadow extends BoaShadowType  {
+public class InfixExpressionShadow extends BoaShadowType  {
     /**
-     * Construct a {@link ArrayAccessShadow}.
+     * Construct a {@link InfixExpressionShadow}.
      */
-    public ArrayAccessShadow() {
+    public InfixExpressionShadow() {
         super(new ExpressionProtoTuple());
 
-        addShadow("array", new ExpressionProtoTuple());
-        addShadow("index", new ExpressionProtoTuple());
+        addShadow("left_operand", new ExpressionProtoTuple());
+        addShadow("right_operand", new ExpressionProtoTuple());
+        addShadow("extended_operands", new ExpressionProtoTuple());
+        addShadow("operator", new TypeProtoTuple());
     }
 
     /** {@inheritDoc} */
@@ -54,16 +56,20 @@ public class ArrayAccessShadow extends BoaShadowType  {
         final Identifier id = ASTFactory.createIdentifier(nodeId, env);
         id.type = new StatementProtoTuple();
 
-        if ("array".equals(name)) {
+        if ("left_operand".equals(name)) {
+            // ${0}.expressions[0]
+
             // ${0}.expressions
-            final Expression tree = ASTFactory.createSelector(id, "expressions", new BoaProtoList(new ExpressionProtoTuple()), new ExpressionProtoTuple(), env);
+            final Expression tree = ASTFactory.createSelector(id, "expressions",new BoaProtoList(new ExpressionProtoTuple()), new ExpressionProtoTuple(), env);
             // ${0}.expressions[0]
             ASTFactory.getFactorFromExp(tree).addOp(ASTFactory.createIndex(ASTFactory.createIntLiteral(0), env));
 
             return tree;
         }
 
-        if ("index".equals(name)) {
+        if ("right_operand".equals(name)) {
+            // ${0}.expressions[1]
+           
             // ${0}.expressions
             final Expression tree = ASTFactory.createSelector(id, "expressions", new BoaProtoList(new ExpressionProtoTuple()), new ExpressionProtoTuple(), env);
             // ${0}.expressions[1]
@@ -72,18 +78,35 @@ public class ArrayAccessShadow extends BoaShadowType  {
             return tree;
         }
 
+        if ("extended_operands".equals(name)) {
+            // ${0}.expressions[2]
+           
+            // ${0}.expressions
+            final Expression tree = ASTFactory.createSelector(id, "expressions", new BoaProtoList(new ExpressionProtoTuple()), new ExpressionProtoTuple(), env);
+            // ${0}.expressions[2]
+            ASTFactory.getFactorFromExp(tree).addOp(ASTFactory.createIndex(ASTFactory.createIntLiteral(2), env));
+
+            return tree;
+        }
+
+        if ("operator".equals(name)) {
+            // TODO : InFix Operator
+            return null;
+        }
+       
+
         throw new RuntimeException("invalid shadow field: " + name);
     }
 
     /** {@inheritDoc} */
     @Override
     public Expression getKindExpression(final SymbolTable env) {
-        return getKindExpression("ExpressionKind", "ARRAYINDEX", new ExpressionKindProtoMap(), env);
+        return getKindExpression("ExpressionKind", "BIT_XOR", new ExpressionKindProtoMap(), env);
     }
 
     /** {@inheritDoc} */
     @Override
     public String toString() {
-        return "ArrayAccess";
+        return "InfixExpression";
     }
 }

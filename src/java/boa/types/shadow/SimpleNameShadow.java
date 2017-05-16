@@ -25,29 +25,28 @@ import boa.compiler.ast.Node;
 import boa.compiler.SymbolTable;
 import boa.compiler.transforms.ASTFactory;
 import boa.types.BoaInt;
-import boa.types.BoaString;
 import boa.types.BoaProtoList;
 import boa.types.BoaShadowType;
 import boa.types.proto.enums.ExpressionKindProtoMap;
 import boa.types.proto.ExpressionProtoTuple;
 import boa.types.proto.StatementProtoTuple;
-
+import boa.types.proto.TypeProtoTuple;
 /**
- * A shadow type for CharacterLiteral.
+ * A shadow type for SimpleName.
  * 
  * @author rdyer
  * @author kaushin
  */
-public class CharacterLiteralShadow extends BoaShadowType  {
+public class SimpleNameShadow extends BoaShadowType  {
     /**
-     * Construct a {@link CharacterLiteralShadow}.
+     * Construct a {@link SimpleNameShadow}.
      */
-    public CharacterLiteralShadow() {
+    public SimpleNameShadow() {
         super(new ExpressionProtoTuple());
 
-        addShadow("charvalue", new BoaString());
-        addShadow("escapedvalue", new BoaString());
-        
+
+        addShadow("identifier",  new BoaProtoList(new ExpressionProtoTuple()));
+        addShadow("is_declaration", new TypeProtoTuple());
     }
 
     /** {@inheritDoc} */
@@ -56,29 +55,35 @@ public class CharacterLiteralShadow extends BoaShadowType  {
         final Identifier id = ASTFactory.createIdentifier(nodeId, env);
         id.type = new StatementProtoTuple();
 
-         if ("charvalue".equals(name)) {
-            // TODO ${0}.literal
+        if ("identifier".equals(name)) {
+            // ${0}.expressions[0]
 
-            return null;     
-        }
-       
-        if ("escapedvalue".equals(name)) {
-            // ${0}.literal
+            // ${0}.expressions
+            final Expression tree = ASTFactory.createSelector(id, "expressions", new ExpressionProtoTuple(), new ExpressionProtoTuple(), env);
+            // ${0}.expressions[0]
+            ASTFactory.getFactorFromExp(tree).addOp(ASTFactory.createIndex(ASTFactory.createIntLiteral(0), env));
 
-            return ASTFactory.createSelector(id, "literal", new BoaString(), new BoaString(), env);     
+            return tree;
         }
+
+
+        if ("is_declaration".equals(name)) {
+            //TODO
+            return null;
+        }
+
         throw new RuntimeException("invalid shadow field: " + name);
     }
 
     /** {@inheritDoc} */
     @Override
     public Expression getKindExpression(final SymbolTable env) {
-        return getKindExpression("ExpressionKind", "LITERAL", new ExpressionKindProtoMap(), env);
+        return getKindExpression("ExpressionKind", "VARACCESS", new ExpressionKindProtoMap(), env);
     }
 
     /** {@inheritDoc} */
     @Override
     public String toString() {
-        return "CharacterLiteral";
+        return "SimpleName";
     }
 }
