@@ -55,12 +55,12 @@ public class AssertStatementShadow extends BoaShadowType  {
         id.type = new StatementProtoTuple();
 
         if ("expression".equals(name)) {
-            // ${0}.expression
-            return ASTFactory.createSelector(id, "expression", new ExpressionProtoTuple(), new ExpressionProtoTuple(), env);
+            // ${0}.condition
+            return ASTFactory.createSelector(id, "condition", new ExpressionProtoTuple(), new ExpressionProtoTuple(), env);
         }
 
         if ("message".equals(name)) {
-            // TODO ? ${0}.expression
+            // ${0}.expression
             return ASTFactory.createSelector(id, "expression", new ExpressionProtoTuple(), new ExpressionProtoTuple(), env);
         }
 
