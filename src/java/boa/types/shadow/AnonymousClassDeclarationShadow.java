@@ -25,40 +25,39 @@ import boa.compiler.ast.Node;
 import boa.compiler.SymbolTable;
 import boa.compiler.transforms.ASTFactory;
 import boa.types.BoaInt;
+import boa.types.BoaString;
 import boa.types.BoaProtoList;
 import boa.types.BoaShadowType;
-import boa.types.proto.enums.ExpressionKindProtoMap;
-import boa.types.proto.ExpressionProtoTuple;
+import boa.types.proto.enums.TypeKindProtoMap;
+import boa.types.proto.DeclarationProtoTuple;
 import boa.types.proto.StatementProtoTuple;
 
 /**
- * A shadow type for ArrayInitializer.
+ * A shadow type for AnonymousClassDeclaration.
  * 
  * @author rdyer
  * @author kaushin
  */
-public class ArrayInitializerShadow extends BoaShadowType  {
+public class AnonymousClassDeclarationShadow extends BoaShadowType  {
     /**
-     * Construct a {@link ArrayInitializerShadow}.
+     * Construct a {@link AnonymousClassDeclarationShadow}.
      */
-    public ArrayInitializerShadow() {
-        super(new ExpressionProtoTuple());
+    public AnonymousClassDeclarationShadow() {
+        super(new DeclarationProtoTuple());
 
-        addShadow("expressions",new BoaProtoList( new ExpressionProtoTuple()));
-       
+       addShadow("body_declarations", new BoaProtoList(new  DeclarationProtoTuple()));
+        
     }
 
     /** {@inheritDoc} */
     @Override
     public Node lookupCodegen(final String name, final String nodeId, final SymbolTable env) {
         final Identifier id = ASTFactory.createIdentifier(nodeId, env);
-        id.type = new ExpressionProtoTuple();
+        id.type = new DeclarationProtoTuple();
 
-        if ("expressions".equals(name)) {
-            // ${0}.expressions
-            return ASTFactory.createSelector(id, "expressions",new BoaProtoList( new ExpressionProtoTuple()), new BoaProtoList( new ExpressionProtoTuple()), env);
-            
-            
+       if ("body_declarations".equals(name)) {
+            // ${0}.methods
+            return ASTFactory.createSelector(id, "methods", new BoaProtoList(new DeclarationProtoTuple()), new DeclarationProtoTuple(), env);
         }
 
 
@@ -68,12 +67,12 @@ public class ArrayInitializerShadow extends BoaShadowType  {
     /** {@inheritDoc} */
     @Override
     public Expression getKindExpression(final SymbolTable env) {
-        return getKindExpression("ExpressionKind", "ARRAYINIT", new ExpressionKindProtoMap(), env);
+        return getKindExpression("TypeKind", "ANONYMOUS", new TypeKindProtoMap(), env);
     }
 
     /** {@inheritDoc} */
     @Override
     public String toString() {
-        return "ArrayInitializer";
+        return "AnonymousClassDeclaration";
     }
 }

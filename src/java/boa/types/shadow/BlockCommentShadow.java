@@ -25,41 +25,37 @@ import boa.compiler.ast.Node;
 import boa.compiler.SymbolTable;
 import boa.compiler.transforms.ASTFactory;
 import boa.types.BoaInt;
+import boa.types.BoaString;
 import boa.types.BoaProtoList;
 import boa.types.BoaShadowType;
-import boa.types.proto.enums.ExpressionKindProtoMap;
-import boa.types.proto.ExpressionProtoTuple;
+import boa.types.proto.enums.CommentKindProtoMap;
+import boa.types.proto.CommentProtoTuple;
 import boa.types.proto.StatementProtoTuple;
 
 /**
- * A shadow type for ArrayInitializer.
+ * A shadow type for BlockComment.
  * 
  * @author rdyer
  * @author kaushin
  */
-public class ArrayInitializerShadow extends BoaShadowType  {
+public class BlockCommentShadow extends BoaShadowType  {
     /**
-     * Construct a {@link ArrayInitializerShadow}.
+     * Construct a {@link BlockCommentShadow}.
      */
-    public ArrayInitializerShadow() {
-        super(new ExpressionProtoTuple());
+    public BlockCommentShadow() {
+        super(new CommentProtoTuple());
 
-        addShadow("expressions",new BoaProtoList( new ExpressionProtoTuple()));
        
+        
     }
 
     /** {@inheritDoc} */
     @Override
     public Node lookupCodegen(final String name, final String nodeId, final SymbolTable env) {
         final Identifier id = ASTFactory.createIdentifier(nodeId, env);
-        id.type = new ExpressionProtoTuple();
+        id.type = new CommentProtoTuple();
 
-        if ("expressions".equals(name)) {
-            // ${0}.expressions
-            return ASTFactory.createSelector(id, "expressions",new BoaProtoList( new ExpressionProtoTuple()), new BoaProtoList( new ExpressionProtoTuple()), env);
-            
-            
-        }
+       
 
 
         throw new RuntimeException("invalid shadow field: " + name);
@@ -68,12 +64,12 @@ public class ArrayInitializerShadow extends BoaShadowType  {
     /** {@inheritDoc} */
     @Override
     public Expression getKindExpression(final SymbolTable env) {
-        return getKindExpression("ExpressionKind", "ARRAYINIT", new ExpressionKindProtoMap(), env);
+        return getKindExpression("CommentKind", "BLOCK", new CommentKindProtoMap(), env);
     }
 
     /** {@inheritDoc} */
     @Override
     public String toString() {
-        return "ArrayInitializer";
+        return "BlockComment";
     }
 }

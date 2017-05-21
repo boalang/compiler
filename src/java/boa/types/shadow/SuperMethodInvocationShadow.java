@@ -56,8 +56,7 @@ public class SuperMethodInvocationShadow extends BoaShadowType  {
     @Override
     public Node lookupCodegen(final String name, final String nodeId, final SymbolTable env) {
         final Identifier id = ASTFactory.createIdentifier(nodeId, env);
-        id.type = new StatementProtoTuple();
-
+        id.type = new ExpressionProtoTuple();
         if ("qualifier".equals(name)) {
             // TODO
             return null;

@@ -56,7 +56,7 @@ public class MethodInvocationShadow extends BoaShadowType  {
     @Override
     public Node lookupCodegen(final String name, final String nodeId, final SymbolTable env) {
         final Identifier id = ASTFactory.createIdentifier(nodeId, env);
-        id.type = new StatementProtoTuple();
+        id.type = new ExpressionProtoTuple();
 
         if ("expression".equals(name)) {
             // ${0}.expressions[0]
