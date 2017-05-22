@@ -57,8 +57,13 @@ public class TryStatementShadow extends BoaShadowType  {
         id.type = new StatementProtoTuple();
 
         if ("catchclauses".equals(name)) {
-            // TODO ${0}.initializations
-            return ASTFactory.createSelector(id, "initializations", new BoaProtoList(new ExpressionProtoTuple()), new BoaProtoList(new ExpressionProtoTuple()), env);
+            // TODO splice(${0}.statements, 1, ...)
+            return null;
+        }
+
+        if ("finallyblock".equals(name)) {
+            // TODO len(${0}.statements) > 1 ? (${0}.statements[len(${0}.statements) - 1].kind == StatementKind.CATCH ? ${0}.statements[len(${0}.statements) - 1] : null) : null
+            return null;
         }
 
         if ("body".equals(name)) {
