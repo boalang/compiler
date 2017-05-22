@@ -289,6 +289,13 @@
 		</java>
 	</target>
 
+	<target name="dump-java" depends="-compile-tests" description="Parse and dump Java AST.">
+		<java classname="boa.test.datagen.DumpJava" fork="true" failonerror="true">
+			<classpath refid="test.class.path" />
+			<arg value="${java.code}" />
+		</java>
+	</target>
+
 
 	<!-- style checking -->
 	<target name="checkstyle">
