@@ -2016,7 +2016,8 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		if (s instanceof IfStatement) {
 			final IfStatement ifs = (IfStatement)s;
 			if (ifs.hasElse())
-				return lastStatementIsStop(ifs.getElse());
+				return lastStatementIsStop(ifs.getBody()) && lastStatementIsStop(ifs.getElse());
+			return false;
 		}
 
 		if (s instanceof Block) {
