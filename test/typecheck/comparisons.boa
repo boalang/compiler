@@ -1,5 +1,18 @@
 o: output sum of int;
 
+# allow comparisons on proto types
+st1: Statement;
+st2: Statement;
+f0 := function() : Statement {
+    st3: Statement;
+    return st3;
+};
+
+if (st1 == st2 || st1 != st2)
+    o << 1;
+if (f0() == st2 || st1 != f0() || f0() == f0())
+    o << 1;
+
 # allow comparisons on proto maps
 k := StatementKind.EXPRESSION;
 k2 := StatementKind.EXPRESSION;
