@@ -51,7 +51,7 @@ public class SymbolTable {
 	private Operand operand;
 	private Stack<BoaType> operandType = new Stack<BoaType>();
 	private boolean needsBoxing;
-	private boolean isBeforeVisitor = false;
+	private Stack<Boolean> isVisitor = new Stack<Boolean>();
 	private boolean isTraverse = false;
 	private boolean shadowing = false;
 
@@ -326,7 +326,7 @@ public class SymbolTable {
 
 		st.functions = this.functions;
 		st.locals = new HashMap<String, BoaType>(this.locals);
-		st.isBeforeVisitor = this.isBeforeVisitor;
+		st.isVisitor = this.isVisitor;
 		st.shadowing = this.shadowing;
 
 		return st;
@@ -639,12 +639,16 @@ public class SymbolTable {
 		return this.isTraverse;
 	}
 
-	public void setIsBeforeVisitor(final boolean isBeforeVisitor) {
-		this.isBeforeVisitor = isBeforeVisitor;
+	public void setIsVisitor(final boolean isVisitor) {
+		this.isVisitor.push(isVisitor);
 	}
 
-	public boolean getIsBeforeVisitor() {
-		return this.isBeforeVisitor;
+	public void unsetIsVisitor() {
+		this.isVisitor.pop();
+    }
+
+	public boolean getIsVisitor() {
+		return this.isVisitor.peek();
 	}
 
 	public void setShadowing(final boolean shadowing) {
