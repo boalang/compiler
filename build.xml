@@ -271,6 +271,19 @@
 		</junit>
 		<delete file="SecurityAuth.audit" />
 	</target>
+	<target name="test-functions" depends="-compile-tests" description="Run intrinsic functions tests.">
+		<junit fork="yes" haltonfailure="no">
+			<classpath refid="test.class.path" />
+			<batchtest>
+				<formatter type="plain" usefile="false" />
+				<fileset dir="build/tests">
+					<include name="boa/test/functions/Test*.class" />
+					<exclude name="**/*$*.class" />
+				</fileset>
+			</batchtest>
+		</junit>
+		<delete file="SecurityAuth.audit" />
+	</target>
 
 	<target name="-compile-tests" depends="compile,-check-deps">
 		<javac includeantruntime="true" srcdir="src/test" destdir="build/tests" debug="${debug.enabled}" debuglevel="${debug.level}">

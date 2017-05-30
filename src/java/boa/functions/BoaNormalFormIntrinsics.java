@@ -219,7 +219,8 @@ public class BoaNormalFormIntrinsics {
 	 * @param e the expression to simplify
 	 * @return a simplified version of the expression
 	 */
-	private static Expression simplify(final Expression e) {
+	@FunctionSpec(name = "simplify", returnType = "Expression", formalParameters = { "Expression" })
+	public static Expression simplify(final Expression e) {
 		switch (e.getKind()) {
 			case LOGICAL_AND:
 			case LOGICAL_OR:
