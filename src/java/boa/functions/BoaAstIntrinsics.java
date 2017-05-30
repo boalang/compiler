@@ -18,6 +18,7 @@ package boa.functions;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Stack;
 
 import org.apache.hadoop.conf.Configuration;
@@ -581,5 +582,103 @@ public class BoaAstIntrinsics {
 			rawType += type.substring(type.lastIndexOf(">") + 1).trim();
 		final long rawCount = counts.containsKey(rawType) ? counts.get(rawType) : 0;
 		counts.put(rawType, rawCount + 1);
+	}
+
+	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "Expression" })
+	public static String prettyprint(final Expression e) {
+		String s = "";
+
+		switch (e.getKind()) {
+			case OP_ADD:
+				if (e.getExpressionsCount() == 1)
+					return ppPrefix("+", e);
+				return ppInfix("+", e.getExpressionsList());
+			case OP_SUB:
+				if (e.getExpressionsCount() == 1)
+					return ppInfix("-", e.getExpressionsList());
+				return ppPrefix("-", e);
+
+			case LOGICAL_AND:           return "(" + ppInfix("&&",   e.getExpressionsList()) + ")";
+			case LOGICAL_OR:            return "(" + ppInfix("||",   e.getExpressionsList()) + ")";
+			case EQ:                    return ppInfix("==",   e.getExpressionsList());
+			case NEQ:                   return ppInfix("!=",   e.getExpressionsList());
+			case LT:                    return ppInfix("<",    e.getExpressionsList());
+			case GT:                    return ppInfix(">",    e.getExpressionsList());
+			case LTEQ:                  return ppInfix("<=",   e.getExpressionsList());
+			case GTEQ:                  return ppInfix(">=",   e.getExpressionsList());
+			case OP_DIV:                return ppInfix("/",    e.getExpressionsList());
+			case OP_MULT:               return ppInfix("*",    e.getExpressionsList());
+			case OP_MOD:                return ppInfix("%",    e.getExpressionsList());
+			case BIT_AND:               return ppInfix("&",    e.getExpressionsList());
+			case BIT_OR:                return ppInfix("|",    e.getExpressionsList());
+			case BIT_XOR:               return ppInfix("^",    e.getExpressionsList());
+			case BIT_LSHIFT:            return ppInfix("<<",   e.getExpressionsList());
+			case BIT_RSHIFT:            return ppInfix(">>",   e.getExpressionsList());
+			case BIT_UNSIGNEDRSHIFT:    return ppInfix(">>>",  e.getExpressionsList());
+			case ASSIGN:                return ppInfix("=",    e.getExpressionsList());
+			case ASSIGN_ADD:            return ppInfix("+=",   e.getExpressionsList());
+			case ASSIGN_SUB:            return ppInfix("-=",   e.getExpressionsList());
+			case ASSIGN_MULT:           return ppInfix("*=",   e.getExpressionsList());
+			case ASSIGN_DIV:            return ppInfix("/=",   e.getExpressionsList());
+			case ASSIGN_MOD:            return ppInfix("%=",   e.getExpressionsList());
+			case ASSIGN_BITXOR:         return ppInfix("^=",   e.getExpressionsList());
+			case ASSIGN_BITAND:         return ppInfix("&=",   e.getExpressionsList());
+			case ASSIGN_BITOR:          return ppInfix("|=",   e.getExpressionsList());
+			case ASSIGN_LSHIFT:         return ppInfix("<<=",  e.getExpressionsList());
+			case ASSIGN_RSHIFT:         return ppInfix(">>=",  e.getExpressionsList());
+			case ASSIGN_UNSIGNEDRSHIFT: return ppInfix(">>>=", e.getExpressionsList());
+
+			case LOGICAL_NOT: return ppPrefix("!",  e);
+			case OP_DEC:      return ppPrefix("--", e);
+			case OP_INC:      return ppPrefix("++", e);
+			case BIT_NOT:     return ppPrefix("~",  e);
+
+			case PAREN: return "(" + prettyprint(e.getExpressions(0)) + ")";
+			case LITERAL: return e.getLiteral();
+			case VARACCESS:
+				for (int i = 0; i < e.getExpressionsCount(); i++)
+					s += prettyprint(e.getExpressions(i)) + ".";
+				s += e.getVariable();
+				return s;
+			case CAST: return "(" + e.getNewType().getName() + ")" + prettyprint(e.getExpressions(0));
+			case CONDITIONAL: return prettyprint(e.getExpressions(0)) + " ? " + prettyprint(e.getExpressions(0)) + " : " + prettyprint(e.getExpressions(2));
+			case NULLCOALESCE: return prettyprint(e.getExpressions(0)) + " ?? " + prettyprint(e.getExpressions(1));
+
+			// TODO
+			case VARDECL:
+			case METHODCALL:
+			case ARRAYINDEX:
+			case ARRAYINIT:
+			case TYPECOMPARE:
+			case NEW:
+			case NEWARRAY:
+			case ANNOTATION:
+			case METHOD_REFERENCE:
+			case LAMBDA:
+			case ANON_METHOD:
+			default: return s;
+		}
+	}
+
+	private static String ppPrefix(final String op, final Expression e) {
+		return op + prettyprint(e.getExpressions(0));
+	}
+
+	private static String ppPostfix(final String op, final Expression e) {
+		return prettyprint(e.getExpressions(0)) + op;
+	}
+
+	private static String ppInfix(final String op, final List<Expression> exps) {
+		StringBuilder s = new StringBuilder();
+
+		s.append(prettyprint(exps.get(0)));
+		for (int i = 1; i < exps.size(); i++) {
+			s.append(" ");
+			s.append(op);
+			s.append(" ");
+			s.append(prettyprint(exps.get(i)));
+		}
+
+		return s.toString();
 	}
 }
