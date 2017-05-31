@@ -2,87 +2,146 @@ package boa.types;
 
 option optimize_for = SPEED;
 
+/** @exclude TODO */
 message CommentsRoot {
 	repeated Comment comments = 1;
 }
 
+/** Container class that holds a file's parsed AST */
 message ASTRoot {
+	/** The top-level namespaces in the file */
 	repeated Namespace namespaces = 1;
+	/** The imported namespaces and types */
 	repeated string imports = 2;
+	/** @exclude */
 	repeated string names = 3;
 }
 
+/** A namespace (aka, package) in a source file */
 message Namespace {
+	/** The name of the namespace */
 	required string name = 1;
+	/** Any modifiers/annotations on the namespace */
 	repeated Modifier modifiers = 2;
+	/** Declarations contained in this namespace */
 	repeated Declaration declarations = 3;
 //	required PositionInfo position = 4;
 }
 
+/** A type declaration, such as a class or interface */
 message Declaration {
+	/** The name of this declaration */
 	required string name = 1;
+	/** The kind of this declaration */
 	required TypeKind kind = 2;
+	/** The modifiers/annotations on this declaration */
 	repeated Modifier modifiers = 3;
+	/** Any generic parameters to this declaration */
 	repeated Type generic_parameters = 4;
+	/** The explicitly named parent type(s) of this declaration */
 	repeated Type parents = 5;
+	/** The methods in the declaration */
 	repeated Method methods = 6;
+	/** The fields in the declaration */
 	repeated Variable fields = 7;
+	/** Any nested declarations */
 	repeated Declaration nested_declarations = 8;
+	/** @exclude TODO */
 	repeated Comment comments = 9;
 //	required PositionInfo position = 10;
 }
 
+/** The kinds of types in an AST */
 enum TypeKind {
 	option allow_alias = true;
+	/** Any other kind of Type */
 	OTHER = 0;
+	/** A class type */
 	CLASS = 1;
+	/** An interface type */
 	INTERFACE = 2;
+	/** An anonymous type */
 	ANONYMOUS = 3;
+	/** @exclude */
 	ANON = 3;
+	/** A C-style struct */
 	STRUCT = 4;
+	/** An enumerated type */
 	ENUM = 5;
+	/** @exclude */
 	ENUMERATION = 5;
+	/** An annotation type */
 	ANNOTATION = 6;
+	/** A delegate type */
 	DELEGATE = 7;
+	/** A generic type */
 	GENERIC = 8;
 }
 
+/** A type in an AST */
 message Type {
+	/** The name of the type */
 	required string name = 1;
+	/** The kind of the type */
 	required TypeKind kind = 2;
+	/** @exclude */
 	optional string id = 4;
 }
 
+/** A method declaration */
 message Method {
+	/** The name of the method */
 	optional string name = 1;
+	/** A list of all modifiers on the variable */
 	repeated Modifier modifiers = 2;
+	/** The type returned from the method; if the method returns nothing, this type will be void */
 	required Type return_type = 3;
+	/** The list of generic parameters for this method */
 	repeated Type generic_parameters = 4;
+	/** The arguments the method takes */
 	repeated Variable arguments = 5;
+	/** The list of exceptions thrown by this method */
 	repeated Type exception_types = 6;
+    /**
+	  * The statements in the method body. Note that most methods (in C-like
+	  * languages, such as Java) contain a single statement of type BLOCK, which
+	  * contains the list of statements within it!
+      */
 	repeated Statement statements = 7;
+	/** @exclude TODO */
 	repeated Comment comments = 8;
 //	required PositionInfo position = 9;
 }
 
+/** A variable declaration - can be a field, local, parameter, etc */
 message Variable {
+	/** The name of the variable */
 	required string name = 1;
+	/** The type of the variable */
 	required Type variable_type = 2;
+	/** A list of all modifiers on the variable */
 	repeated Modifier modifiers = 3;
+	/** If the variable has an initial assignment, the expression is stored here */
 	optional Expression initializer = 4;
+	/** @exclude TODO */
 	repeated Comment comments = 5;
 //	required PositionInfo position = 6;
 }
 
+/** A single statement */
 message Statement {
+	/** The kind of statement */
 	enum StatementKind {
 		option allow_alias = true;
+		/** Any other statement */
 		OTHER = 0;
 		BLOCK = 1;
 		TYPEDECL = 2;
 		EXPRESSION = 3;
+		/** @exclude */
 		EXPR = 3;
 		SYNCHRONIZED = 4;
+		/** @exclude */
 		SYNC = 4;
 		RETURN = 5;
 		FOR = 6;
@@ -100,7 +159,9 @@ message Statement {
 		CATCH = 18;
 		EMPTY = 19;
 	}
+	/** The kind of statement */
 	required StatementKind kind = 1;
+	/** @exclude TODO */
 	repeated Comment comments = 2;
 	repeated Statement statements = 3;
 	repeated Expression initializations = 4;
@@ -112,8 +173,11 @@ message Statement {
 //	required PositionInfo position = 10;
 }
 
+/** A single expression */
 message Expression {
+	/** The kind of expression */
 	enum ExpressionKind {
+		/** Any other expression */
 		OTHER = 0;
 		LITERAL = 1;
 		VARACCESS = 2;
@@ -164,10 +228,14 @@ message Expression {
 		ASSIGN_UNSIGNEDRSHIFT = 47;
 		ANNOTATION = 48;
 		PAREN = 49;
+		/** @exclude TODO */
 		METHOD_REFERENCE = 50;
+		/** @exclude TODO */
 		LAMBDA = 51;
+		/** @exclude TODO */
 		ANON_METHOD = 52;
 	}
+	/** The kind of expression */
 	required ExpressionKind kind = 1;
 	repeated Expression expressions = 2;
 	repeated Variable variable_decls = 3;
@@ -180,38 +248,67 @@ message Expression {
 	repeated Expression method_args = 10;
 	optional Declaration anon_declaration = 11;
 	optional Modifier annotation = 12;
+	/** @exclude */
 	optional Method lambda = 13;
 //	required PositionInfo position = 14;
 }
 
+/** A single modifier */
 message Modifier {
+	/** The kind of modifier */
 	enum ModifierKind {
 		option allow_alias = true;
+		/** Any other modifier - the value is in the <a href="#Modifier">Modifier</a>'s <code>other</code> attribute */
 		OTHER = 0;
+		/** A <a href="#Visibility">Visibility</a> modifier - the value is in the <a href="#Modifier">Modifier</a>'s <code>visibility</code> attribute */
 		VISIBILITY = 1;
+		/** An annotation modifier */
 		ANNOTATION = 2;
+		/** A final modifier */
 		FINAL = 3;
+		/** A static modifier */
 		STATIC = 4;
+		/** A synchronized modifier */
 		SYNCHRONIZED = 5;
+		/** @exclude */
 		SYNC = 5;
+		/** An abstract modifier */
 		ABSTRACT = 6;
 	}
+	/** A visibility modifier */
 	enum Visibility {
+		option allow_alias = true;
+		/** A public modifier */
 		PUBLIC = 1;
+		/** A private modifier */
 		PRIVATE = 2;
+		/** A protected modifier */
 		PROTECTED = 3;
+		/** A namespace (aka, default, aka package) visibility modifier */
 		NAMESPACE = 4;
+		/** @exclude */
+		PACKAGE = 4;
+		/** @exclude */
+		DEFAULT = 4;
 	}
+	/** The kind of modifier */
 	required ModifierKind kind = 1;
+	/** A kind of visibility modifier */
 	optional Visibility visibility = 2;
+	/** If the <code>kind</code> is <code>ANNOTATION</code>, then the name of the annotation */
 	optional string annotation_name = 3;
+	/** If the <code>kind</code> is <code>ANNOTATION</code>, then a list of all members explicitly assigned values */
 	repeated string annotation_members = 4;
+	/** If the <code>kind</code> is <code>ANNOTATION</code>, then a list of all values that were assigned to members */
 	repeated Expression annotation_values = 5;
+	/** If the <code>kind</code> is <code>OTHER</code>, the modifier string from the source code */
 	optional string other = 6;
 //	required PositionInfo position = 7;
 }
 
+/** @exclude */
 message Comment {
+	/** @exclude */
 	enum CommentKind {
 		option allow_alias = true;
 		OTHER = 0;
@@ -227,6 +324,7 @@ message Comment {
 	required PositionInfo position = 3;
 }
 
+/** @exclude */
 message PositionInfo {
 	required int32 start_pos = 1;
 	required int32 length = 2;
