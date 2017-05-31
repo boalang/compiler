@@ -681,4 +681,39 @@ public class BoaAstIntrinsics {
 
 		return s.toString();
 	}
+
+	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "Modifier" })
+	public static String prettyprint(final Modifier m) {
+		String s = "";
+
+		switch (m.getKind()) {
+		    case OTHER: return m.getOther();
+
+		    case VISIBILITY:
+                switch (m.getVisibility()) {
+                    case PUBLIC:    return "public";
+                    case PRIVATE:   return "private";
+                    case PROTECTED: return "protected";
+                    case NAMESPACE: return "namespace";
+                    default: return s;
+                }
+
+		    case ANNOTATION:
+                s = "@" + m.getAnnotationName();
+                if (m.getAnnotationMembersCount() > 0) s += "(";
+                for (int i = 0; i < m.getAnnotationMembersCount(); i++) {
+                    if (i > 0) s += ", ";
+                    s += m.getAnnotationMembers(i) + " = " + m.getAnnotationValues(i);
+                }
+                if (m.getAnnotationMembersCount() > 0) s += ")";
+                return s;
+
+		    case FINAL:        return "final";
+		    case STATIC:       return "static";
+		    case SYNCHRONIZED: return "synchronized";
+		    case ABSTRACT:     return "abstract";
+
+            default: return s;
+        }
+    }
 }
