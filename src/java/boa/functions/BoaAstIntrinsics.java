@@ -584,6 +584,46 @@ public class BoaAstIntrinsics {
 		counts.put(rawType, rawCount + 1);
 	}
 
+	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "Declaration" })
+	public static String prettyprint(final Declaration d) {
+		String s = "";
+
+        // TODO
+        return s;
+    }
+
+	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "Type" })
+	public static String prettyprint(final Type t) {
+        return t.getName();
+    }
+
+	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "Method" })
+	public static String prettyprint(final Method m) {
+		String s = "";
+
+        // TODO
+        return s;
+    }
+
+	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "Variable" })
+	public static String prettyprint(final Variable v) {
+        String s = prettyprint(v.getModifiersList()) + prettyprint(v.getVariableType()) + " " + v.getName();
+
+        if (v.hasInitializer())
+            s += " = " + prettyprint(v.getInitializer());
+
+        return s;
+    }
+
+	private static String prettyprint(final List<Modifier> mods) {
+        String s = "";
+
+        for (final Modifier m : mods)
+            s += prettyprint(m) + " ";
+
+        return s;
+    }
+
 	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "Expression" })
 	public static String prettyprint(final Expression e) {
 		String s = "";
