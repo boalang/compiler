@@ -1,8 +1,0 @@
-o: output sum of int;
-
-visit(input, visitor {
-
-	before IfStatement -> o << 0;
-
-	before n : InfixExpression -> n.right_operand;
-});
