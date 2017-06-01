@@ -43,6 +43,29 @@ public class Java7BaseTest extends BaseTest {
 	protected static String javaVersion = JavaCore.VERSION_1_7;
 	protected static Java7Visitor visitor = new Java7Visitor("", new HashMap<String, Integer>());
 
+	protected static void dumpJavaWrapped(final String content) {
+        dumpJava(getWrapped(content));
+    }
+
+	protected static void dumpJava(final String content) {
+		final ASTParser parser = ASTParser.newParser(astLevel);
+		parser.setKind(ASTParser.K_COMPILATION_UNIT);
+		parser.setSource(content.toCharArray());
+
+		final Map options = JavaCore.getOptions();
+		JavaCore.setComplianceOptions(javaVersion, options);
+		parser.setCompilerOptions(options);
+
+		final CompilationUnit cu = (CompilationUnit) parser.createAST(null);
+
+        try {
+            final UglyMathCommentsExtractor cex = new UglyMathCommentsExtractor(cu, content);
+            final ASTDumper dumper = new ASTDumper(cex);
+            dumper.dump(cu);
+            cex.close();
+        } catch (final Exception e) {}
+    }
+
 	protected static String parseJava(final String content) {
 		final ASTParser parser = ASTParser.newParser(astLevel);
 		parser.setKind(ASTParser.K_COMPILATION_UNIT);
@@ -68,13 +91,17 @@ public class Java7BaseTest extends BaseTest {
 		return JsonFormat.printToString(ast.build());
 	}
 
-	protected static String parseWrapped(final String content) {
+	protected static String getWrapped(final String content) {
 		String s = "class t {\n   void m() {\n      " + content.replaceAll("\n", "\n      ");
 		if (!content.endsWith(";") && !content.endsWith(";\n"))
 			s += ";";
 		s += "\n   }\n}";
-		return parseJava(s);
+        return s;
 	}
+
+	protected static String parseWrapped(final String content) {
+		return parseJava(getWrapped(content));
+    }
 
 	public static void testWrapped(final String java, final String expected) {
 		assertEquals(
@@ -90,8 +117,8 @@ public class Java7BaseTest extends BaseTest {
 			"                  {\n" +
 			"                     \"name\": \"m\",\n" +
 			"                     \"return_type\": {\n" +
-			"                        \"kind\": \"OTHER\",\n" +
-			"                        \"name\": 0\n" +
+			"                        \"name\": \"void\",\n" +
+			"                        \"kind\": \"OTHER\"\n" +
 			"                     },\n" +
 			"                     \"statements\": [\n" +
 			"                        {\n" +

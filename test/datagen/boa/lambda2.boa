@@ -12,15 +12,15 @@
             "lambda": {
                "name": "",
                "return_type": {
-                  "kind": "OTHER",
-                  "name": 1
+                  "name": "",
+                  "kind": "OTHER"
                },
                "arguments": [
                   {
                      "name": "x",
                      "variable_type": {
-                        "kind": "OTHER",
-                        "name": 2
+                        "name": "int",
+                        "kind": "OTHER"
                      }
                   }
                ],

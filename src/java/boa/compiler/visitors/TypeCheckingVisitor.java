@@ -46,7 +46,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	 * 
 	 * @author rdyer
 	 */
-	protected class VisitorCheckingVisitor extends AbstractVisitorNoArg {
+	protected class VisitorCheckingVisitor extends AbstractVisitorNoArgNoRet {
 		protected Set<String> befores = new HashSet<String>();
 		protected Set<String> afters = new HashSet<String>();
 		protected boolean nested = false;
@@ -91,7 +91,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		}
 	}
 
-	protected class TraversalCheckingVisitor extends AbstractVisitorNoArg {
+	protected class TraversalCheckingVisitor extends AbstractVisitorNoArgNoRet {
 		protected Set<String> befores = new HashSet<String>();
 		protected boolean nested = false;
 
@@ -133,7 +133,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 
 	}
 
-	protected class FixPCheckingVisitor extends AbstractVisitorNoArg {
+	protected class FixPCheckingVisitor extends AbstractVisitorNoArgNoRet {
 		protected Set<String> befores = new HashSet<String>();
 		protected boolean nested = false;
 
@@ -174,7 +174,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	 * 
 	 * @author rdyer
 	 */
-	protected class ReturnCheckingVisitor extends AbstractVisitorNoArg {
+	protected class ReturnCheckingVisitor extends AbstractVisitorNoArgNoRet {
 		protected BoaType retType;
 
 		/**
@@ -223,7 +223,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	 * 
 	 * @author rdyer
 	 */
-	protected class CallFindingVisitor extends AbstractVisitorNoArg {
+	protected class CallFindingVisitor extends AbstractVisitorNoArgNoRet {
 		protected boolean isCall;
 
 		public boolean isCall() {
@@ -346,7 +346,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			if (!n.getRhs().type.compares(n.type))
 				throw new TypeCheckException(n.getRhs(), "incompatible types for comparison: required '" + n.type + "', found '" + n.getRhs().type + "'");
 
-			if (n.type instanceof BoaString || n.type instanceof BoaProtoTuple)
+			if (n.type instanceof BoaString || n.type instanceof BoaMap || n.type instanceof BoaSet || n.type instanceof BoaStack || !(n.type instanceof BoaScalar))
 				if (!n.getOp().equals("==") && !n.getOp().equals("!="))
 					throw new TypeCheckException(n.getLhs(), "invalid comparison operator '" + n.getOp() + "' for type '" + n.type + "'");
 
@@ -866,7 +866,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final ReturnStatement n, final SymbolTable env) {
-		if (env.getIsBeforeVisitor())
+		if (env.getIsVisitor())
 			throw new TypeCheckException(n, "return statement not allowed inside visitors");
 
 		n.env = env;
@@ -884,7 +884,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	public void visit(final StopStatement n, final SymbolTable env) {
 		n.env = env;
 
-		if (!env.getIsBeforeVisitor())
+		if (!env.getIsVisitor())
 			throw new TypeCheckException(n, "Stop statement only allowed inside 'before' visits");
 	}
 
@@ -995,7 +995,6 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			throw new RuntimeException(e.getClass().getSimpleName() + " caught", e);
 		}
 
-		st.setIsBeforeVisitor(n.isBefore());
 		n.env = st;
 
 		if (n.hasComponent()) {
@@ -1012,7 +1011,9 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 				id.accept(this, st);
 			}
 
+		st.setIsVisitor(true);
 		n.getBody().accept(this, st);
+		st.unsetIsVisitor();
 	}
 
 	/** {@inheritDoc} */
@@ -1028,7 +1029,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		st.setIsTraverse(true);
 
 		BoaType ret = new BoaAny();
-		if(n.getReturnType()!=null) {
+		if (n.getReturnType()!=null) {
 			n.getReturnType().accept(this, env);
 			ret = n.getReturnType().type;
 			//System.out.println("type   "+ret);
@@ -1050,13 +1051,15 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			}
 
 		for (final IfStatement ifStatement : n.getIfStatements()) {
-				ifStatement.accept(this, st);
+            ifStatement.accept(this, st);
 		}
 		if (n.hasCondition()) {
 			n.getCondition().accept(this, st);
 		}
-		if(n.hasBody()) {
+		if (n.hasBody()) {
+			st.setIsVisitor(false);
 			n.getBody().accept(this, st);
+			st.unsetIsVisitor();
 		}
 	}
 
@@ -1071,7 +1074,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		}
 
 		BoaType ret = new BoaAny();
-		if(n.getReturnType()!=null) {
+		if (n.getReturnType()!=null) {
 			n.getReturnType().accept(this, env);
 			ret = n.getReturnType().type;
 		}
@@ -1091,8 +1094,10 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		if (n.hasCondition()) {
 			n.getCondition().accept(this, st);
 		}
-		if(n.hasBody()) {
+		if (n.hasBody()) {
+			st.setIsVisitor(false);
 			n.getBody().accept(this, st);
+			st.unsetIsVisitor();
 		}
 	}
 
@@ -1157,7 +1162,10 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		final BoaFunction t = (BoaFunction)n.getType().type;
 		n.type = t;
 
+		st.setIsVisitor(false);
 		n.getBody().accept(this, st);
+		st.unsetIsVisitor();
+
 		returnFinder.initialize(t.getType());
 		returnFinder.start(n.getBody());
 		if (!(t.getType() instanceof BoaAny)

@@ -193,6 +193,32 @@ public class BoaIntrinsics {
 		return s;
 	}
 
+	public static <T> boolean deepEquals(final T[] arr, final T[] arr2) {
+		return java.util.Arrays.deepEquals(arr, arr2);
+	}
+
+	public static boolean deepEquals(final long[] arr, final long[] arr2) {
+		if (arr.length != arr2.length) return false;
+		for (int i = 0; i < arr.length; i++)
+			if (arr2[i] != arr[i]) return false;
+		return true;
+	}
+
+	public static boolean deepEquals(final double[] arr, final double[] arr2) {
+		if (arr.length != arr2.length) return false;
+		for (int i = 0; i < arr.length; i++)
+			if (arr2[i] != arr[i]) return false;
+		return true;
+	}
+
+	public static boolean deepEquals(final boolean[] arr, final boolean[] arr2) {
+		if (arr.length != arr2.length) return false;
+		for (int i = 0; i < arr.length; i++)
+			if (arr2[i] != arr[i]) return false;
+		return true;
+	}
+
+
 	public static <T> T[] basic_array(final T[] arr) {
 		return arr;
 	}

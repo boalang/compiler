@@ -22,7 +22,7 @@ import java.util.List;
 import boa.compiler.ast.Identifier;
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.visitors.AbstractVisitor;
-import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.compiler.visitors.AbstractVisitorNoArgNoRet;
 import boa.compiler.visitors.AbstractVisitorNoReturn;
 
 import boa.compiler.ast.Node;
@@ -114,7 +114,7 @@ public class EmitStatement extends Statement {
 
 	/** {@inheritDoc} */
 	@Override
-	public void accept(final AbstractVisitorNoArg v) {
+	public void accept(final AbstractVisitorNoArgNoRet v) {
 		v.visit(this);
 	}
 

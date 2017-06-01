@@ -18,7 +18,7 @@ package boa.compiler.ast.expressions;
 
 import boa.compiler.ast.Operand;
 import boa.compiler.visitors.AbstractVisitor;
-import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.compiler.visitors.AbstractVisitorNoArgNoRet;
 import boa.compiler.visitors.AbstractVisitorNoReturn;
 
 import boa.compiler.ast.Node;
@@ -54,7 +54,7 @@ public class ParenExpression extends Operand {
 
 	/** {@inheritDoc} */
 	@Override
-	public void accept(final AbstractVisitorNoArg v) {
+	public void accept(final AbstractVisitorNoArgNoRet v) {
 		v.visit(this);
 	}
 

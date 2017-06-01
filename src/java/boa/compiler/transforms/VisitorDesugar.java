@@ -26,7 +26,7 @@ import boa.compiler.ast.expressions.VisitorExpression;
 import boa.compiler.ast.statements.Block;
 import boa.compiler.ast.statements.Statement;
 import boa.compiler.ast.statements.VisitStatement;
-import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.compiler.visitors.AbstractVisitorNoArgNoRet;
 import boa.types.BoaType;
 import boa.types.proto.*;
 
@@ -36,7 +36,7 @@ import boa.types.proto.*;
  * 
  * @author rdyer
  */
-public class VisitorDesugar extends AbstractVisitorNoArg {
+public class VisitorDesugar extends AbstractVisitorNoArgNoRet {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final VisitorExpression n) {

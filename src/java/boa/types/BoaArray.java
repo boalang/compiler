@@ -87,6 +87,10 @@ public class BoaArray extends BoaType {
 	/** {@inheritDoc} */
 	@Override
 	public boolean compares(final BoaType that) {
+		// if that is a function, check the return type
+		if (that instanceof BoaFunction)
+			return this.compares(((BoaFunction) that).getType());
+
 		// if that is an array..
 		if (that instanceof BoaArray)
 			// check against the element types of these arrays

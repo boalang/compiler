@@ -16,8 +16,8 @@
                         }
                      ],
                      "return_type": {
-                        "kind": "OTHER",
-                        "name": 0
+                        "name": "String",
+                        "kind": "OTHER"
                      },
                      "statements": [
                         {

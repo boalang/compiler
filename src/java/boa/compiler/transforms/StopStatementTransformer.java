@@ -44,7 +44,7 @@ import boa.compiler.ast.statements.StopStatement;
 import boa.compiler.ast.statements.VarDeclStatement;
 import boa.compiler.ast.statements.VisitStatement;
 import boa.compiler.ast.types.FunctionType;
-import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.compiler.visitors.AbstractVisitorNoArgNoRet;
 import boa.compiler.visitors.VisitClassifier;
 import boa.types.BoaProtoTuple;
 
@@ -74,7 +74,7 @@ import boa.types.BoaProtoTuple;
  * 
  * @author rdyer
  */
-public class StopStatementTransformer extends AbstractVisitorNoArg {
+public class StopStatementTransformer extends AbstractVisitorNoArgNoRet {
 	protected static final String funcId = "_hasStop";
 	public static final String funcWithVisitorId = funcId + "WithVisitor";
 	public static final String funcCurVisitorId = "_curVisitor_";
@@ -87,7 +87,7 @@ public class StopStatementTransformer extends AbstractVisitorNoArg {
 	 * 
 	 * @author rdyer
 	 */
-	private class StopFindingVisitor extends AbstractVisitorNoArg {
+	private class StopFindingVisitor extends AbstractVisitorNoArgNoRet {
 		protected VisitStatement lastVisit;
 		protected final Set<VisitStatement> stops = new HashSet<VisitStatement>();
 
@@ -135,7 +135,7 @@ public class StopStatementTransformer extends AbstractVisitorNoArg {
 	 * 
 	 * @author rdyer
 	 */
-	private class StopTransformer extends AbstractVisitorNoArg {
+	private class StopTransformer extends AbstractVisitorNoArgNoRet {
 		/** @{inheritDoc} */
 		@Override
 		public void visit(final VisitorExpression n) {
@@ -164,7 +164,7 @@ public class StopStatementTransformer extends AbstractVisitorNoArg {
 	 * 
 	 * @author rdyer
 	 */
-	private class SelfVisitTransformer extends AbstractVisitorNoArg {
+	private class SelfVisitTransformer extends AbstractVisitorNoArgNoRet {
 		/** @{inheritDoc} */
 		@Override
 		public void visit(final VisitorExpression n) {

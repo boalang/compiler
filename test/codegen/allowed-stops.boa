@@ -15,4 +15,14 @@ visit(input, visitor {
 		else
 			stop;
 	before s: Statement -> stop;
+	before n: CodeRepository->
+		if (len(n.revisions) == 0)
+			o << 1;
+		else
+			stop;
+	before n: Revision->
+		if (len(n.log) == 0)
+			stop;
+		else
+			o << 1;
 });

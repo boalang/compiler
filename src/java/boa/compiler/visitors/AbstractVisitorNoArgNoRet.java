@@ -24,13 +24,13 @@ import boa.compiler.ast.types.*;
 import boa.types.*;
 
 /**
- * An abstract visitor class that passes no arguments during the visit.
+ * An abstract visitor class that passes no arguments during the visit and returns nothing.
  * 
  * @author rdyer
  * @author ankuraga
  * @author rramu
  */
-public abstract class AbstractVisitorNoArg {
+public abstract class AbstractVisitorNoArgNoRet {
 	protected void initialize() { }
 
 	public void start(final Node n) {

@@ -28,7 +28,7 @@ import boa.compiler.ast.types.*;
  *
  * @author rdyer
  */
-public class PrettyPrintVisitor extends AbstractVisitorNoArg {
+public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 	private int indent = 0;
 
 	private void indent() {

@@ -21,7 +21,7 @@ import boa.compiler.ast.expressions.Expression;
 import boa.compiler.ast.statements.Statement;
 import boa.compiler.ast.statements.Block;
 import boa.compiler.visitors.AbstractVisitor;
-import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.compiler.visitors.AbstractVisitorNoArgNoRet;
 import boa.compiler.visitors.AbstractVisitorNoReturn;
 import boa.types.BoaType;
 
@@ -74,7 +74,7 @@ public abstract class Node {
 
 	public abstract <T,A> T accept(final AbstractVisitor<T,A> v, final A arg);
 	public abstract <A> void accept(final AbstractVisitorNoReturn<A> v, final A arg);
-	public abstract void accept(final AbstractVisitorNoArg v);
+	public abstract void accept(final AbstractVisitorNoArgNoRet v);
 
 	public Node insertStatementBefore(final Statement s) {
 		return insertStatementBefore(s, this);

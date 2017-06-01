@@ -183,10 +183,12 @@ public class Java8Visitor extends Java7Visitor {
 			for (boa.types.Ast.Statement s : statements.pop())
 				b.addStatements(s);
 		}
+
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.LAMBDA);
 		eb.setLambda(b.build());
 		expressions.push(eb.build());
+
 		return false;
 	}
 	
@@ -208,8 +210,8 @@ public class Java8Visitor extends Java7Visitor {
 		}
 
 		eb.setMethod("new");
-		
 		expressions.push(eb.build());
+
 		return false;
 	}
 	
@@ -217,6 +219,7 @@ public class Java8Visitor extends Java7Visitor {
 	public boolean visit(ExpressionMethodReference node) {
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.METHOD_REFERENCE);
+
 		node.getExpression().accept(this);
 		eb.addExpressions(expressions.pop());
 
@@ -228,7 +231,6 @@ public class Java8Visitor extends Java7Visitor {
 		}
 
 		eb.setMethod(node.getName().getIdentifier());
-		
 		expressions.push(eb.build());
 
 		return false;
@@ -262,6 +264,11 @@ public class Java8Visitor extends Java7Visitor {
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.METHOD_REFERENCE);
 		
+		boa.types.Ast.Type.Builder tb1 = boa.types.Ast.Type.newBuilder();
+		tb1.setName(typeName(node.getType()));
+		tb1.setKind(boa.types.Ast.TypeKind.OTHER);
+		eb.setNewType(tb1.build());
+
 		for (Object t : node.typeArguments()) {
 			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 			tb.setName(typeName((org.eclipse.jdt.core.dom.Type)t));
@@ -269,7 +276,7 @@ public class Java8Visitor extends Java7Visitor {
 			eb.addGenericParameters(tb.build());
 		}
 
-		eb.setMethod(typeName(node.getType())+"::"+node.getName().getIdentifier());
+		eb.setMethod(node.getName().getIdentifier());
 		expressions.push(eb.build());
 
 		return false;

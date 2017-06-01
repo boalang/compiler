@@ -8,6 +8,7 @@ clean-tests
 compile
 compile-parser
 compile-protobuf
+dump-java
 java-to-boa
 package
 package-compiler

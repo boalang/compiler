@@ -30,7 +30,7 @@ import boa.compiler.ast.Node;
  * 
  * @author rdyer
  */
-public abstract class AbstractCodeGeneratingVisitor extends AbstractVisitorNoArg {
+public abstract class AbstractCodeGeneratingVisitor extends AbstractVisitorNoArgNoRet {
 	public static STGroup stg = new STGroupFile("templates/BoaJavaHadoop.stg");
 	static {
 		stg.importTemplates(new STGroupFile("templates/BoaJava.stg"));

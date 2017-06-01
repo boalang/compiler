@@ -31,7 +31,7 @@ import boa.compiler.ast.expressions.VisitorExpression;
 import boa.compiler.ast.statements.Block;
 import boa.compiler.ast.statements.Statement;
 import boa.compiler.ast.statements.VisitStatement;
-import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.compiler.visitors.AbstractVisitorNoArgNoRet;
 import boa.compiler.visitors.TypeCheckingVisitor;
 import boa.compiler.visitors.VisitClassifier;
 import boa.types.BoaProtoTuple;
@@ -74,7 +74,7 @@ public class VisitorMergingTransformer {
 	 * 
 	 * @author rdyer
 	 */
-	protected class VisitorFindingVisitor extends AbstractVisitorNoArg {
+	protected class VisitorFindingVisitor extends AbstractVisitorNoArgNoRet {
 		protected VisitorExpression visitor;
 
 		public boolean hasVisitor() {
@@ -109,7 +109,7 @@ public class VisitorMergingTransformer {
 	 * 
 	 * @author rdyer
 	 */
-	protected class VisitCallFindingVisitor extends AbstractVisitorNoArg {
+	protected class VisitCallFindingVisitor extends AbstractVisitorNoArgNoRet {
 		protected boolean hasVisitCall;
 
 		public boolean hasVisitCall() {
