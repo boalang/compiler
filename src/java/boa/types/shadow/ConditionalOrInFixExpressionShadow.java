@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, Hridesh Rajan, Robert Dyer, Kaushik Nimmala
+ * Copyright 2017, Hridesh Rajan, Robert Dyer, Kaushik Nimmaladivi
  *                 Iowa State University of Science and Technology
  *                 and Bowling Green State University
  *
@@ -31,7 +31,6 @@ import boa.types.proto.enums.ExpressionKindProtoMap;
 import boa.types.proto.ExpressionProtoTuple;
 import boa.types.proto.StatementProtoTuple;
 import boa.types.proto.TypeProtoTuple;
-import boa.types.shadow.InfixExpressionShadow;
 /**
  * A shadow type for ConditionalOrInfixExpression.
  * 

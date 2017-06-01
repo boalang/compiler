@@ -32,26 +32,26 @@ import boa.types.proto.ExpressionProtoTuple;
 import boa.types.proto.StatementProtoTuple;
 import boa.types.proto.TypeProtoTuple;
 /**
- * A shadow type for AndInfixExpression.
+ * A shadow type for DecrementPostfixExpression.
  * 
  * @author rdyer
  * @author kaushin
  */
-public class AndInFixExpressionShadow extends InfixExpressionShadow  {
+public class DecrementPostFixExpressionShadow extends InfixExpressionShadow  {
     /**
-     * Construct a {@link AndInfixExpressionShadow}.
+     * Construct a {@link DecrementPostfixExpressionShadow}.
      */
 
     
     /** {@inheritDoc} */
     @Override
     public Expression getKindExpression(final SymbolTable env) {
-        return getKindExpression("ExpressionKind", "BIT_AND", new ExpressionKindProtoMap(), env);
+        return getKindExpression("ExpressionKind", "OP_DEC", new ExpressionKindProtoMap(), env);
     }
 
     /** {@inheritDoc} */
     @Override
     public String toString() {
-        return "AndInfixExpression";
+        return "DecrementPostfixExpression";
     }
 }

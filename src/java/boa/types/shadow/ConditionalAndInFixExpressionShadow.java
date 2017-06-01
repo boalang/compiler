@@ -31,7 +31,6 @@ import boa.types.proto.enums.ExpressionKindProtoMap;
 import boa.types.proto.ExpressionProtoTuple;
 import boa.types.proto.StatementProtoTuple;
 import boa.types.proto.TypeProtoTuple;
-import boa.types.shadow.InfixExpressionShadow;
 /**
  * A shadow type for ConditionalAndInfixExpression.
  * 

@@ -32,26 +32,26 @@ import boa.types.proto.ExpressionProtoTuple;
 import boa.types.proto.StatementProtoTuple;
 import boa.types.proto.TypeProtoTuple;
 /**
- * A shadow type for AndInfixExpression.
+ * A shadow type for NotEqualInfixExpression.
  * 
  * @author rdyer
  * @author kaushin
  */
-public class AndInFixExpressionShadow extends InfixExpressionShadow  {
+public class NotEqualInFixExpressionShadow extends InfixExpressionShadow  {
     /**
-     * Construct a {@link AndInfixExpressionShadow}.
+     * Construct a {@link NotEqualInfixExpressionShadow}.
      */
 
     
     /** {@inheritDoc} */
     @Override
     public Expression getKindExpression(final SymbolTable env) {
-        return getKindExpression("ExpressionKind", "BIT_AND", new ExpressionKindProtoMap(), env);
+        return getKindExpression("ExpressionKind", "NEQ", new ExpressionKindProtoMap(), env);
     }
 
     /** {@inheritDoc} */
     @Override
     public String toString() {
-        return "AndInfixExpression";
+        return "NotEqualInfixExpression";
     }
 }
