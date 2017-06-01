@@ -37,7 +37,7 @@ import boa.compiler.ast.statements.SwitchStatement;
 import boa.compiler.ast.statements.SwitchCase;
 import boa.compiler.ast.statements.BreakStatement;
 import boa.compiler.SymbolTable;
-import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.compiler.visitors.AbstractVisitorNoArgNoRet;
 import boa.types.BoaShadowType;
 import boa.types.BoaTuple;
 import boa.types.BoaProtoTuple;
@@ -65,7 +65,7 @@ import boa.compiler.transforms.ASTFactory;
  * @author rdyer
  * @author kaushin
  */
-public class ShadowTypeEraser extends AbstractVisitorNoArg {
+public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
         
     @Override
     public void start(final Node n) {
@@ -79,7 +79,7 @@ public class ShadowTypeEraser extends AbstractVisitorNoArg {
     }
 
 
-    public class VisitorReplace  extends AbstractVisitorNoArg{
+    public class VisitorReplace  extends AbstractVisitorNoArgNoRet {
 
         private LinkedList<VisitStatement> visitStack = new LinkedList<VisitStatement>();
         private LinkedList<VisitStatement> shadowVisitStack = new LinkedList<VisitStatement>();
@@ -94,7 +94,7 @@ public class ShadowTypeEraser extends AbstractVisitorNoArg {
 
 
 
-        public class VisitTransfrom  extends AbstractVisitorNoArg{
+        public class VisitTransfrom  extends AbstractVisitorNoArgNoRet {
             String oldId = null;
             String newId = null;
 
@@ -308,7 +308,7 @@ public class ShadowTypeEraser extends AbstractVisitorNoArg {
         }
     }
 
-    public class SubtreeEraser extends AbstractVisitorNoArg{
+    public class SubtreeEraser extends AbstractVisitorNoArgNoRet {
         private LinkedList<Expression> expressionStack = new LinkedList<Expression>();
         private boolean flag = false;
         private List<Node> ops = null;
