@@ -25,7 +25,6 @@ message Namespace {
 	repeated Modifier modifiers = 2;
 	/** Declarations contained in this namespace */
 	repeated Declaration declarations = 3;
-//	required PositionInfo position = 4;
 }
 
 /** A type declaration, such as a class or interface */
@@ -48,7 +47,6 @@ message Declaration {
 	repeated Declaration nested_declarations = 8;
 	/** @exclude TODO */
 	repeated Comment comments = 9;
-//	required PositionInfo position = 10;
 }
 
 /** The kinds of types in an AST */
@@ -110,7 +108,6 @@ message Method {
 	repeated Statement statements = 7;
 	/** @exclude TODO */
 	repeated Comment comments = 8;
-//	required PositionInfo position = 9;
 }
 
 /** A variable declaration - can be a field, local, parameter, etc */
@@ -125,7 +122,6 @@ message Variable {
 	optional Expression initializer = 4;
 	/** @exclude TODO */
 	repeated Comment comments = 5;
-//	required PositionInfo position = 6;
 }
 
 /** A single statement */
@@ -170,7 +166,6 @@ message Statement {
 	optional Variable variable_declaration = 7;
 	optional Declaration type_declaration = 8;
 	optional Expression expression = 9;
-//	required PositionInfo position = 10;
 }
 
 /** A single expression */
@@ -250,7 +245,6 @@ message Expression {
 	optional Modifier annotation = 12;
 	/** @exclude */
 	optional Method lambda = 13;
-//	required PositionInfo position = 14;
 }
 
 /** A single modifier */
@@ -303,7 +297,6 @@ message Modifier {
 	repeated Expression annotation_values = 5;
 	/** If the <code>kind</code> is <code>OTHER</code>, the modifier string from the source code */
 	optional string other = 6;
-//	required PositionInfo position = 7;
 }
 
 /** @exclude */
