@@ -46,7 +46,7 @@ public class OrInFixExpressionShadow extends InfixExpressionShadow  {
     /** {@inheritDoc} */
     @Override
     public Expression getKindExpression(final SymbolTable env) {
-        return getKindExpression("ExpressionKind", "OR", new ExpressionKindProtoMap(), env);
+        return getKindExpression("ExpressionKind", "BIT_OR", new ExpressionKindProtoMap(), env);
     }
 
     /** {@inheritDoc} */

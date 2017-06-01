@@ -144,6 +144,7 @@ public class SymbolTable {
 		// TODO add shadow types
 		idmap.put("IfStatement", new IfStatementShadow());
 		idmap.put("ForStatement", new ForStatementShadow());
+		idmap.put("InfixExpression", new InfixExpressionShadow());
 
 		globalFunctions = new FunctionTrie();
 

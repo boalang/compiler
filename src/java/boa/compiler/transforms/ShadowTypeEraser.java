@@ -45,6 +45,7 @@ import boa.types.BoaType;
 import boa.types.proto.StatementProtoTuple;
 import boa.types.proto.ExpressionProtoTuple;
 import boa.types.proto.enums.StatementKindProtoMap;
+import boa.types.shadow.*;
 
 import boa.compiler.transforms.ASTFactory;
 
@@ -83,12 +84,15 @@ public class ShadowTypeEraser extends AbstractVisitorNoArg {
         private LinkedList<VisitStatement> visitStack = new LinkedList<VisitStatement>();
         private LinkedList<VisitStatement> shadowVisitStack = new LinkedList<VisitStatement>();
         private LinkedList<VisitorExpression> visitorExpStack = new LinkedList<VisitorExpression>();
+        private LinkedList<BoaShadowType> inFixList = new LinkedList<BoaShadowType>();
         
         private HashMap<BoaProtoTuple,LinkedList<VisitStatement>> beforeShadowedMap = new HashMap<BoaProtoTuple,LinkedList<VisitStatement>>();
         private HashMap<BoaProtoTuple,LinkedList<VisitStatement>> afterShadowedMap = new HashMap<BoaProtoTuple,LinkedList<VisitStatement>>();
         private HashMap<BoaProtoTuple,LinkedList<VisitStatement>> shadowedMap = new HashMap<BoaProtoTuple,LinkedList<VisitStatement>>();
         private Block wildcardBlock = null;
         private boolean shadowedTypePresent = false;
+
+
 
         public class VisitTransfrom  extends AbstractVisitorNoArg{
             String oldId = null;
@@ -200,7 +204,27 @@ public class ShadowTypeEraser extends AbstractVisitorNoArg {
         }
 
         public void transformVisitor (VisitorExpression n, HashMap<BoaProtoTuple,LinkedList<VisitStatement>> shadowedMap,boolean beforeBool,Block wildcardBlock){
+                
                             //TODO : Create a Visit Statement of the shadowed type and attach the block to it
+                inFixList.push(new AndInFixExpressionShadow());
+                inFixList.push(new OrInFixExpressionShadow());
+                inFixList.push(new ConditionalAndInFixExpressionShadow());
+                inFixList.push(new DivideInFixExpressionShadow());
+                inFixList.push(new EqualsInFixExpressionShadow());
+                inFixList.push(new GreaterEqualsInFixExpressionShadow());
+                inFixList.push(new LeftShiftInFixExpressionShadow());
+                inFixList.push(new LessEqualsInFixExpressionShadow());
+                inFixList.push(new LessInFixExpressionShadow());
+                inFixList.push(new MinusInFixExpressionShadow());
+                inFixList.push(new NotEqualInFixExpressionShadow());
+                inFixList.push(new PlusInFixExpressionShadow());
+                inFixList.push(new RemainderInFixExpressionShadow());
+                inFixList.push(new RightShiftSignedInFixExpressionShadow());
+                inFixList.push(new RightShiftUnSignedInFixExpressionShadow());
+                inFixList.push(new TimesInFixExpressionShadow());
+                inFixList.push(new XorInFixExpressionShadow());
+                                                                
+
                 for (Map.Entry<BoaProtoTuple, LinkedList<VisitStatement>> entry : shadowedMap.entrySet()) {
                     Block afterTransformation = new Block();
 
@@ -210,9 +234,7 @@ public class ShadowTypeEraser extends AbstractVisitorNoArg {
 
                     Factor f = new Factor(ASTFactory.createIdentifier("node", n.env));//here i am just assuming a new identifier "node"
                     f.env = n.env;
-                    //TODO : Extend to other types
-                    //if(shadowedType.equals("Statement"))
-                    f.getOperand().type = shadowedType; // need to add support for other types
+                    f.getOperand().type = shadowedType;
                     
 
                     Selector selec = new Selector(ASTFactory.createIdentifier("kind", n.env));
@@ -220,7 +242,6 @@ public class ShadowTypeEraser extends AbstractVisitorNoArg {
                     f.addOp(selec);
 
                     Expression exp = ASTFactory.createFactorExpr(f);
-                    //TODO : Extend to other types
                     exp.type = shadowedType.getMember("kind");
                     exp.env = n.env;
 
@@ -239,10 +260,23 @@ public class ShadowTypeEraser extends AbstractVisitorNoArg {
 								defaultSc.getBody().addStatement(s.clone());
                         }else{
                             LinkedList<Expression> listExp = new LinkedList<Expression>();
+                            if(((BoaShadowType)visit.getComponent().type).toString().equals("InfixExpression"))
+                            {   
+                                b.getStatements().add(new BreakStatement());
+                                for (BoaShadowType sty : inFixList ) {
+                                    
+                                    listExp = new LinkedList<Expression>();
+                                    listExp.add(sty.getKindExpression(n.env));
+                                    sc = new SwitchCase(false,b,listExp);
+                                    switchS.addCase(sc);                                
+                                }
+
+                            }else{
                             listExp.add(((BoaShadowType)visit.getComponent().type).getKindExpression(n.env));
                             sc = new SwitchCase(false,b,listExp);
                             sc.getBody().getStatements().add(new BreakStatement());
                             switchS.addCase(sc);
+                            }
                         }
 
                         //Transfroming sub tree by replacing the identifiers and type
