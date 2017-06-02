@@ -462,8 +462,8 @@ public class BoaAstIntrinsics {
 	///////////////////////////////
 
 	/**
-     * Returns <code>true</code> if the expression <code>e</code> is of kind
-     * <code>LITERAL</code> and is an integer literal.
+	 * Returns <code>true</code> if the expression <code>e</code> is of kind
+	 * <code>LITERAL</code> and is an integer literal.
 	 *
 	 * The test is a simplified grammar, based on the one from:
 	 * https://docs.oracle.com/javase/specs/jls/se8/html/jls-3.html#jls-3.10
@@ -482,8 +482,8 @@ public class BoaAstIntrinsics {
 	 * BinaryNumeral:
 	 * 	0 [bB] [01] ([01_]* [01])? [lL]?
 	 *
-     * If any of these match, it returns <code>true</code>.  Otherwise it
-     * returns <code>false</code>.
+	 * If any of these match, it returns <code>true</code>.  Otherwise it
+	 * returns <code>false</code>.
 	 *
 	 * @param e the expression to test
 	 * @return true if the expression is an integer literal, otherwise false
@@ -501,8 +501,8 @@ public class BoaAstIntrinsics {
 	}
 
 	/**
-     * Returns <code>true</code> if the expression <code>e</code> is of kind
-     * <code>LITERAL</code> and is a float literal.
+	 * Returns <code>true</code> if the expression <code>e</code> is of kind
+	 * <code>LITERAL</code> and is a float literal.
 	 *
 	 * The test is a simplified grammar, based on the one from:
 	 * https://docs.oracle.com/javase/specs/jls/se8/html/jls-3.html#jls-3.10
@@ -533,8 +533,8 @@ public class BoaAstIntrinsics {
 	}
 
 	/**
-     * Returns <code>true</code> if the expression <code>e</code> is of kind
-     * <code>LITERAL</code> and is a char literal.
+	 * Returns <code>true</code> if the expression <code>e</code> is of kind
+	 * <code>LITERAL</code> and is a char literal.
 	 *
 	 * @param e the expression to test
 	 * @return true if the expression is a char literal, otherwise false
@@ -547,8 +547,8 @@ public class BoaAstIntrinsics {
 	}
 
 	/**
-     * Returns <code>true</code> if the expression <code>e</code> is of kind
-     * <code>LITERAL</code> and is a string literal.
+	 * Returns <code>true</code> if the expression <code>e</code> is of kind
+	 * <code>LITERAL</code> and is a string literal.
 	 *
 	 * @param e the expression to test
 	 * @return true if the expression is a string literal, otherwise false
@@ -561,8 +561,8 @@ public class BoaAstIntrinsics {
 	}
 
 	/**
-     * Returns <code>true</code> if the expression <code>e</code> is of kind
-     * <code>LITERAL</code> and is a type literal.
+	 * Returns <code>true</code> if the expression <code>e</code> is of kind
+	 * <code>LITERAL</code> and is a type literal.
 	 *
 	 * @param e the expression to test
 	 * @return true if the expression is a type literal, otherwise false
@@ -575,8 +575,8 @@ public class BoaAstIntrinsics {
 	}
 
 	/**
-     * Returns <code>true</code> if the expression <code>e</code> is of kind
-     * <code>LITERAL</code> and is a bool literal.
+	 * Returns <code>true</code> if the expression <code>e</code> is of kind
+	 * <code>LITERAL</code> and is a bool literal.
 	 *
 	 * @param e the expression to test
 	 * @return true if the expression is a bool literal, otherwise false
@@ -589,8 +589,8 @@ public class BoaAstIntrinsics {
 	}
 
 	/**
-     * Returns <code>true</code> if the expression <code>e</code> is of kind
-     * <code>LITERAL</code> and is a null literal.
+	 * Returns <code>true</code> if the expression <code>e</code> is of kind
+	 * <code>LITERAL</code> and is a null literal.
 	 *
 	 * @param e the expression to test
 	 * @return true if the expression is a null literal, otherwise false
@@ -603,8 +603,8 @@ public class BoaAstIntrinsics {
 	}
 
 	/**
-     * Returns <code>true</code> if the expression <code>e</code> is of kind
-     * <code>LITERAL</code> and the literal matches the string <code>lit</code>.
+	 * Returns <code>true</code> if the expression <code>e</code> is of kind
+	 * <code>LITERAL</code> and the literal matches the string <code>lit</code>.
 	 *
 	 * @param e the expression to test
 	 * @return true if the expression is a string literal, otherwise false
