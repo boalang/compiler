@@ -14732,26 +14732,14 @@ public final class Ast {
     // optional .boa.types.Expression expression = 9;
     /**
      * <code>optional .boa.types.Expression expression = 9;</code>
-     *
-     * <pre>
-     *	required PositionInfo position = 10;
-     * </pre>
      */
     boolean hasExpression();
     /**
      * <code>optional .boa.types.Expression expression = 9;</code>
-     *
-     * <pre>
-     *	required PositionInfo position = 10;
-     * </pre>
      */
     boa.types.Ast.Expression getExpression();
     /**
      * <code>optional .boa.types.Expression expression = 9;</code>
-     *
-     * <pre>
-     *	required PositionInfo position = 10;
-     * </pre>
      */
     boa.types.Ast.ExpressionOrBuilder getExpressionOrBuilder();
   }
@@ -15506,30 +15494,18 @@ public final class Ast {
     private boa.types.Ast.Expression expression_;
     /**
      * <code>optional .boa.types.Expression expression = 9;</code>
-     *
-     * <pre>
-     *	required PositionInfo position = 10;
-     * </pre>
      */
     public boolean hasExpression() {
       return ((bitField0_ & 0x00000010) == 0x00000010);
     }
     /**
      * <code>optional .boa.types.Expression expression = 9;</code>
-     *
-     * <pre>
-     *	required PositionInfo position = 10;
-     * </pre>
      */
     public boa.types.Ast.Expression getExpression() {
       return expression_;
     }
     /**
      * <code>optional .boa.types.Expression expression = 9;</code>
-     *
-     * <pre>
-     *	required PositionInfo position = 10;
-     * </pre>
      */
     public boa.types.Ast.ExpressionOrBuilder getExpressionOrBuilder() {
       return expression_;
@@ -17615,20 +17591,12 @@ public final class Ast {
           boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder> expressionBuilder_;
       /**
        * <code>optional .boa.types.Expression expression = 9;</code>
-       *
-       * <pre>
-       *	required PositionInfo position = 10;
-       * </pre>
        */
       public boolean hasExpression() {
         return ((bitField0_ & 0x00000100) == 0x00000100);
       }
       /**
        * <code>optional .boa.types.Expression expression = 9;</code>
-       *
-       * <pre>
-       *	required PositionInfo position = 10;
-       * </pre>
        */
       public boa.types.Ast.Expression getExpression() {
         if (expressionBuilder_ == null) {
@@ -17639,10 +17607,6 @@ public final class Ast {
       }
       /**
        * <code>optional .boa.types.Expression expression = 9;</code>
-       *
-       * <pre>
-       *	required PositionInfo position = 10;
-       * </pre>
        */
       public Builder setExpression(boa.types.Ast.Expression value) {
         if (expressionBuilder_ == null) {
@@ -17659,10 +17623,6 @@ public final class Ast {
       }
       /**
        * <code>optional .boa.types.Expression expression = 9;</code>
-       *
-       * <pre>
-       *	required PositionInfo position = 10;
-       * </pre>
        */
       public Builder setExpression(
           boa.types.Ast.Expression.Builder builderForValue) {
@@ -17677,10 +17637,6 @@ public final class Ast {
       }
       /**
        * <code>optional .boa.types.Expression expression = 9;</code>
-       *
-       * <pre>
-       *	required PositionInfo position = 10;
-       * </pre>
        */
       public Builder mergeExpression(boa.types.Ast.Expression value) {
         if (expressionBuilder_ == null) {
@@ -17700,10 +17656,6 @@ public final class Ast {
       }
       /**
        * <code>optional .boa.types.Expression expression = 9;</code>
-       *
-       * <pre>
-       *	required PositionInfo position = 10;
-       * </pre>
        */
       public Builder clearExpression() {
         if (expressionBuilder_ == null) {
@@ -17717,10 +17669,6 @@ public final class Ast {
       }
       /**
        * <code>optional .boa.types.Expression expression = 9;</code>
-       *
-       * <pre>
-       *	required PositionInfo position = 10;
-       * </pre>
        */
       public boa.types.Ast.Expression.Builder getExpressionBuilder() {
         bitField0_ |= 0x00000100;
@@ -17729,10 +17677,6 @@ public final class Ast {
       }
       /**
        * <code>optional .boa.types.Expression expression = 9;</code>
-       *
-       * <pre>
-       *	required PositionInfo position = 10;
-       * </pre>
        */
       public boa.types.Ast.ExpressionOrBuilder getExpressionOrBuilder() {
         if (expressionBuilder_ != null) {
@@ -17743,10 +17687,6 @@ public final class Ast {
       }
       /**
        * <code>optional .boa.types.Expression expression = 9;</code>
-       *
-       * <pre>
-       *	required PositionInfo position = 10;
-       * </pre>
        */
       private com.google.protobuf.SingleFieldBuilder<
           boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder> 
