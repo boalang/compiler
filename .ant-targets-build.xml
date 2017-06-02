@@ -16,6 +16,7 @@ package-runtime
 test
 test-codegen
 test-datagen
+test-functions
 test-inhattr
 test-knowngood
 test-lexer
