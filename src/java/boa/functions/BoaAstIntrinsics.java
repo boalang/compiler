@@ -1,6 +1,7 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2017, Hridesh Rajan, Robert Dyer,
+ *                 Iowa State University of Science and Technology
+ *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,7 +46,7 @@ import boa.types.Toplevel.Project;
 
 /**
  * Boa functions for working with ASTs.
- * 
+ *
  * @author rdyer
  */
 public class BoaAstIntrinsics {
@@ -73,7 +74,7 @@ public class BoaAstIntrinsics {
 
 	/**
 	 * Given a ChangedFile, return the AST for that file at that revision.
-	 * 
+	 *
 	 * @param f the ChangedFile to get a snapshot of the AST for
 	 * @return the AST, or an empty AST on any sort of error
 	 */
@@ -129,7 +130,7 @@ public class BoaAstIntrinsics {
 
 	/**
 	 * Given a ChangedFile, return the comments for that file at that revision.
-	 * 
+	 *
 	 * @param f the ChangedFile to get a snapshot of the comments for
 	 * @return the comments list, or an empty list on any sort of error
 	 */
@@ -172,7 +173,7 @@ public class BoaAstIntrinsics {
 
 	/**
 	 * Given an IssueRepository, return the issues.
-	 * 
+	 *
 	 * @param f the IssueRepository to get issues for
 	 * @return the issues list, or an empty list on any sort of error
 	 */
@@ -330,7 +331,7 @@ public class BoaAstIntrinsics {
 
 		/*
 		 * Remove qualifiers from anywhere in the string...
-		 * 
+		 *
 		 * SomeType                               =>  SomeType
 		 * foo.SomeType                           =>  SomeType
 		 * foo.bar.SomeType                       =>  SomeType
@@ -388,7 +389,7 @@ public class BoaAstIntrinsics {
 	};
 
 	/**
-	 * 
+	 *
 	 */
 	public static class SnapshotVisitor extends BoaCollectingVisitor<String, ChangedFile> {
 		private long timestamp;
@@ -456,6 +457,158 @@ public class BoaAstIntrinsics {
 		return getSnapshot(cr, Long.MAX_VALUE, new String[0]);
 	}
 
+	///////////////////////////////
+	// Literal testing functions */
+	///////////////////////////////
+
+	/**
+     * Returns <code>true</code> if the expression <code>e</code> is of kind
+     * <code>LITERAL</code> and is an integer literal.
+	 *
+	 * The test is a simplified grammar, based on the one from:
+	 * https://docs.oracle.com/javase/specs/jls/se8/html/jls-3.html#jls-3.10
+	 *
+	 * DecimalNumeral:
+	 * 	[0-9] [lL]?
+	 * 	[1-9] [0-9] ([0-9_]* [0-9])? [lL]?
+	 * 	[1-9] [_]+ [0-9] ([0-9_]* [0-9])? [lL]?
+	 *
+	 * HexNumeral:
+	 * 	0 [xX] [0-9a-fA-F] ([0-9a-fA-F_]* [0-9a-fA-F])? [lL]?
+	 *
+	 * OctalNumeral:
+	 * 	0 [_]* [0-7] ([0-7_]* [0-7])? [lL]?
+	 *
+	 * BinaryNumeral:
+	 * 	0 [bB] [01] ([01_]* [01])? [lL]?
+	 *
+     * If any of these match, it returns <code>true</code>.  Otherwise it
+     * returns <code>false</code>.
+	 *
+	 * @param e the expression to test
+	 * @return true if the expression is an integer literal, otherwise false
+	 */
+	@FunctionSpec(name = "isintlit", returnType = "bool", formalParameters = { "Expression" })
+	public static boolean isIntLit(final Expression e) throws Exception {
+		if (e.getKind() != Expression.ExpressionKind.LITERAL) return false;
+		if (!e.hasLiteral()) return false;
+		if (e.getLiteral().matches("^[0-9][lL]?$")) return true;
+		if (e.getLiteral().matches("^[1-9][0-9]([0-9_]*[0-9])?[lL]?$")) return true;
+		if (e.getLiteral().matches("^[1-9][_]+[0-9]([0-9_]*[0-9])?[lL]?$")) return true;
+		if (e.getLiteral().matches("^0[xX][0-9a-fA-F]([0-9a-fA-F_]*[0-9a-fA-F])?[lL]?$")) return true;
+		if (e.getLiteral().matches("^0[_]*[0-7]([0-7_]*[0-7])?[lL]?$")) return true;
+		return e.getLiteral().matches("^0[bB][01]([01_]*[01])?[lL]?$");
+	}
+
+	/**
+     * Returns <code>true</code> if the expression <code>e</code> is of kind
+     * <code>LITERAL</code> and is a float literal.
+	 *
+	 * The test is a simplified grammar, based on the one from:
+	 * https://docs.oracle.com/javase/specs/jls/se8/html/jls-3.html#jls-3.10
+	 *
+	 * DecimalFloatingPointLiteral:
+	 *  [0-9] ([0-9_]* [0-9])? \\. ([0-9] ([0-9_]* [0-9])?)? ([eE] [+-]? [0-9] ([0-9_]* [0-9])?)? [fFdD]?
+	 *  \\. [0-9] ([0-9_]* [0-9])? ([eE] [+-]? [0-9] ([0-9_]* [0-9])?)? [fFdD]?
+	 *  [0-9] ([0-9_]* [0-9])? [eE] [+-]? [0-9] ([0-9_]* [0-9])? [fFdD]?
+	 *  [0-9] ([0-9_]* [0-9])? ([eE] [+-]? [0-9] ([0-9_]* [0-9])?)? [fFdD]
+	 *
+	 * HexadecimalFloatingPointLiteral:
+	 *  0 [Xx] [0-9a-fA-F] ([0-9a-fA-F_]* [0-9a-fA-F])? \\.? [pP] [+-]? [0-9] ([0-9_]* [0-9])? [fFdD]?
+	 *  0 [Xx] ([0-9a-fA-F] ([0-9a-fA-F_]* [0-9a-fA-F])?)? \\. [0-9a-fA-F] ([0-9a-fA-F_]* [0-9a-fA-F])? [pP] [+-]? [0-9] ([0-9_]* [0-9])? [fFdD]?
+	 *
+	 * @param e the expression to test
+	 * @return true if the expression is a char literal, otherwise false
+	 */
+	@FunctionSpec(name = "isfloatlit", returnType = "bool", formalParameters = { "Expression" })
+	public static boolean isFloatLit(final Expression e) throws Exception {
+		if (e.getKind() != Expression.ExpressionKind.LITERAL) return false;
+		if (!e.hasLiteral()) return false;
+		if (e.getLiteral().matches("^[0-9]([0-9_]*[0-9])?\\.([0-9]([0-9_]*[0-9])?)?([eE][+-]?[0-9]([0-9_]*[0-9])?)?[fFdD]?$")) return true;
+		if (e.getLiteral().matches("^\\.[0-9]([0-9_]*[0-9])?([eE][+-]?[0-9]([0-9_]*[0-9])?)?[fFdD]?$")) return true;
+		if (e.getLiteral().matches("^[0-9]([0-9_]*[0-9])?[eE][+-]?[0-9]([0-9_]*[0-9])?[fFdD]?$")) return true;
+		if (e.getLiteral().matches("^[0-9]([0-9_]*[0-9])?([eE][+-]?[0-9]([0-9_]*[0-9])?)?[fFdD]$")) return true;
+		if (e.getLiteral().matches("^0[Xx][0-9a-fA-F]([0-9a-fA-F_]*[0-9a-fA-F])?\\.?[pP][+-]?[0-9]([0-9_]*[0-9])?[fFdD]?$")) return true;
+		return e.getLiteral().matches("^0[Xx]([0-9a-fA-F]([0-9a-fA-F_]*[0-9a-fA-F])?)?\\.[0-9a-fA-F]([0-9a-fA-F_]*[0-9a-fA-F])?[pP][+-]?[0-9]([0-9_]*[0-9])?[fFdD]?$");
+	}
+
+	/**
+     * Returns <code>true</code> if the expression <code>e</code> is of kind
+     * <code>LITERAL</code> and is a char literal.
+	 *
+	 * @param e the expression to test
+	 * @return true if the expression is a char literal, otherwise false
+	 */
+	@FunctionSpec(name = "ischarlit", returnType = "bool", formalParameters = { "Expression" })
+	public static boolean isCharLit(final Expression e) throws Exception {
+		if (e.getKind() != Expression.ExpressionKind.LITERAL) return false;
+		if (!e.hasLiteral()) return false;
+		return e.getLiteral().startsWith("'");
+	}
+
+	/**
+     * Returns <code>true</code> if the expression <code>e</code> is of kind
+     * <code>LITERAL</code> and is a string literal.
+	 *
+	 * @param e the expression to test
+	 * @return true if the expression is a string literal, otherwise false
+	 */
+	@FunctionSpec(name = "isstringlit", returnType = "bool", formalParameters = { "Expression" })
+	public static boolean isStringLit(final Expression e) throws Exception {
+		if (e.getKind() != Expression.ExpressionKind.LITERAL) return false;
+		if (!e.hasLiteral()) return false;
+		return e.getLiteral().startsWith("\"");
+	}
+
+	/**
+     * Returns <code>true</code> if the expression <code>e</code> is of kind
+     * <code>LITERAL</code> and is a type literal.
+	 *
+	 * @param e the expression to test
+	 * @return true if the expression is a type literal, otherwise false
+	 */
+	@FunctionSpec(name = "istypelit", returnType = "bool", formalParameters = { "Expression" })
+	public static boolean isTypeLit(final Expression e) throws Exception {
+		if (e.getKind() != Expression.ExpressionKind.LITERAL) return false;
+		if (!e.hasLiteral()) return false;
+		return e.getLiteral().endsWith(".class");
+	}
+
+	/**
+     * Returns <code>true</code> if the expression <code>e</code> is of kind
+     * <code>LITERAL</code> and is a bool literal.
+	 *
+	 * @param e the expression to test
+	 * @return true if the expression is a bool literal, otherwise false
+	 */
+	@FunctionSpec(name = "isboollit", returnType = "bool", formalParameters = { "Expression" })
+	public static boolean isBoolLit(final Expression e) throws Exception {
+		if (e.getKind() != Expression.ExpressionKind.LITERAL) return false;
+		if (!e.hasLiteral()) return false;
+		return e.getLiteral().equals("true") || e.getLiteral().equals("false");
+	}
+
+	/**
+     * Returns <code>true</code> if the expression <code>e</code> is of kind
+     * <code>LITERAL</code> and is a null literal.
+	 *
+	 * @param e the expression to test
+	 * @return true if the expression is a null literal, otherwise false
+	 */
+	@FunctionSpec(name = "isnulllit", returnType = "bool", formalParameters = { "Expression" })
+	public static boolean isNullLit(final Expression e) throws Exception {
+		if (e.getKind() != Expression.ExpressionKind.LITERAL) return false;
+		if (!e.hasLiteral()) return false;
+		return e.getLiteral().equals("null");
+	}
+
+	/**
+     * Returns <code>true</code> if the expression <code>e</code> is of kind
+     * <code>LITERAL</code> and the literal matches the string <code>lit</code>.
+	 *
+	 * @param e the expression to test
+	 * @return true if the expression is a string literal, otherwise false
+	 */
 	@FunctionSpec(name = "isliteral", returnType = "bool", formalParameters = { "Expression", "string" })
 	public static boolean isLiteral(final Expression e, final String lit) throws Exception {
 		return e.getKind() == Expression.ExpressionKind.LITERAL && e.hasLiteral() && e.getLiteral().equals(lit);
@@ -498,7 +651,7 @@ public class BoaAstIntrinsics {
 			} catch (final StackOverflowError e) {
 				System.err.println("STACK ERR: " + node.getName() + " -> " + BoaAstIntrinsics.type_name(node.getName()).trim());
 			}
-			*/ 
+			*/
 			return true;
 		}
 	}
