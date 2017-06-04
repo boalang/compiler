@@ -102,4 +102,14 @@ public abstract class BoaShadowType extends BoaTuple {
 
 		return tree;
 	}
+
+    /**
+     * Converts a shadow type message into a concrete type message.
+     *
+     * @param m the shadow type message
+     * @return the concrete message
+     */
+    public com.google.protobuf.GeneratedMessage flattenMessage(final com.google.protobuf.GeneratedMessage m) {
+        return m;
+    }
 }
