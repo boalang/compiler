@@ -158,17 +158,14 @@ public class BoaNormalFormIntrinsics {
 				for (final Object o : results) {
 					if (o instanceof Expression) {
 						results2.add(o);
-					} else if (o instanceof Double) {
+					} else {
 						if (first) {
-							dval += ((Double)o).doubleValue();
+							results2.add(o);
 						} else {
-							dval -= ((Double)o).doubleValue();
-						}
-					} else if (o instanceof Long) {
-						if (first) {
-							ival += ((Long)o).longValue();
-						} else {
-							ival -= ((Long)o).longValue();
+							if (o instanceof Double)
+								dval += ((Double)o).doubleValue();
+							else
+								ival += ((Long)o).longValue();
 						}
 					}
 					first = false;
@@ -180,11 +177,25 @@ public class BoaNormalFormIntrinsics {
 					ival = 0L;
 				}
 
-				// after merging, add the one that remains to results
-				if (dval != 0.0) {
-					results2.add(0, dval);
+				// if the first term is a number, perform subtraction on it
+				if (results2.get(0) instanceof Number) {
+					if (results2.get(0) instanceof Double) {
+						if (dval != 0.0)
+							results2.set(0, (Double)results2.get(0) - dval);
+						else
+							results2.set(0, (Double)results2.get(0) - ival);
+					} else {
+						if (dval != 0.0)
+							results2.set(0, (double)(Long)results2.get(0) - dval);
+						else
+							results2.set(0, (Long)results2.get(0) - ival);
+					}
 				} else {
-					results2.add(0, ival);
+					// after merging, add the one that remains to results
+					if (dval != 0.0)
+						results2.add(dval);
+					else if (ival != 0L)
+						results2.add(ival);
 				}
 
 				// if it reduced to a single term, return just the term otherwise return the whole expression
@@ -292,7 +303,7 @@ public class BoaNormalFormIntrinsics {
 
 				b.clearMethodArgs();
 				for (final Expression sub : e.getMethodArgsList())
-					b.addMethodArgs((Expression)reduce_internal(sub));
+					b.addMethodArgs((Expression)reduce(sub));
 
 				return b.build();
 
