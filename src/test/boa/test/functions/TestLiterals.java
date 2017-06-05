@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, Robert Dyer, 
+ * Copyright 2017, Robert Dyer,
  *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -39,100 +39,124 @@ import boa.types.Ast.Expression.ExpressionKind;
  */
 @RunWith(Parameterized.class)
 public class TestLiterals {
-    private Expression e = null;
-    private Integer k = -1;
+	private Expression e = null;
+	private Integer k = -1;
 
-    @Parameters
-    public static Collection literals() {
-        return Arrays.asList(new Object[][] {
-            // integers
-            { "5", 1 },
-            { "5L", 1 },
-            { "5l", 1 },
-            { "0x7fff_ffff", 1 },
-            { "0177_7777_7777", 1 },
-            { "0b0111_1111_1111_1111_1111_1111_1111_1111", 1 },
-            { "0x8000_0000", 1 },
-            { "0200_0000_0000", 1 },
-            { "0b1000_0000_0000_0000_0000_0000_0000_0000", 1 },
-            { "0xffff_ffff", 1 },
-            { "0377_7777_7777", 1 },
-            { "0b1111_1111_1111_1111_1111_1111_1111_1111", 1 },
-            { "0x7fff_ffff_ffff_ffffL", 1 },
-            { "07_7777_7777_7777_7777_7777L", 1 },
-            { "0b0111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111L", 1 },
-            { "0x8000_0000_0000_0000L", 1 },
-            { "010_0000_0000_0000_0000_0000L", 1 },
-            { "0b1000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000L", 1 },
-            { "0xffff_ffff_ffff_ffffL", 1 },
-            { "017_7777_7777_7777_7777_7777L", 1 },
-            { "0b1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111L", 1 },
+	@Parameters(name = "{index}: {0}")
+	public static Collection literals() {
+		return Arrays.asList(new Object[][] {
+			// integers
+			{ "5", 1 },
+			{ "5L", 1 },
+			{ "5l", 1 },
+			{ "0x7fff_ffff", 1 },
+			{ "0177_7777_7777", 1 },
+			{ "0b0111_1111_1111_1111_1111_1111_1111_1111", 1 },
+			{ "0x8000_0000", 1 },
+			{ "0200_0000_0000", 1 },
+			{ "0b1000_0000_0000_0000_0000_0000_0000_0000", 1 },
+			{ "0xffff_ffff", 1 },
+			{ "0377_7777_7777", 1 },
+			{ "0b1111_1111_1111_1111_1111_1111_1111_1111", 1 },
+			{ "0x7fff_ffff_ffff_ffffL", 1 },
+			{ "07_7777_7777_7777_7777_7777L", 1 },
+			{ "0b0111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111L", 1 },
+			{ "0x8000_0000_0000_0000L", 1 },
+			{ "010_0000_0000_0000_0000_0000L", 1 },
+			{ "0b1000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000_0000L", 1 },
+			{ "0xffff_ffff_ffff_ffffL", 1 },
+			{ "017_7777_7777_7777_7777_7777L", 1 },
+			{ "0b1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111_1111L", 1 },
 
-            // floats
-            { "1.0", 2 },
-            { "1e1f", 2 },
-            { "2.f", 2 },
-            { ".3f", 2 },
-            { "0f", 2 },
-            { "3.14f", 2 },
-            { "6.022137e+23f", 2 },
-            { "1e1", 2 },
-            { "2.", 2 },
-            { ".3", 2 },
-            { "0.0", 2 },
-            { "3.14", 2 },
-            { "1e-9d", 2 },
-            { "1e137", 2 },
+			// floats
+			{ "1.0", 2 },
+			{ "1e1f", 2 },
+			{ "2.f", 2 },
+			{ ".3f", 2 },
+			{ "0f", 2 },
+			{ "3.14f", 2 },
+			{ "6.022137e+23f", 2 },
+			{ "1e1", 2 },
+			{ "2.", 2 },
+			{ ".3", 2 },
+			{ "0.0", 2 },
+			{ "3.14", 2 },
+			{ "1e-9d", 2 },
+			{ "1e137", 2 },
 
-            // characters
-            { "'a'", 3 },
-            { "'%'", 3 },
-            { "'\t'", 3 },
-            { "'\\n'", 3 },
-            { "'\\'", 3 },
-            { "'\\''", 3 },
-            { "'\"'", 3 },
-            { "'\u03a9'", 3 },
-            { "'\uFFFF'", 3 },
-            { "'\177'", 3 },
-            { "'™'", 3 },
+			// characters
+			{ "'a'", 3 },
+			{ "'%'", 3 },
+			{ "'\t'", 3 },
+			{ "'\\n'", 3 },
+			{ "'\\'", 3 },
+			{ "'\\''", 3 },
+			{ "'\"'", 3 },
+			{ "'\u03a9'", 3 },
+			{ "'\uFFFF'", 3 },
+			{ "'\177'", 3 },
+			{ "'™'", 3 },
 
-            // strings
-            { "\"\"", 4 },
-            { "\"\"\"", 4 },
-            { "\"\\\"\"", 4 },
-            { "\"test\"", 4 },
-            { "\"test string \"with quotes\"\"", 4 },
+			// strings
+			{ "\"\"", 4 },
+			{ "\"\"\"", 4 },
+			{ "\"\\\"\"", 4 },
+			{ "\"test\"", 4 },
+			{ "\"test string \"with quotes\"\"", 4 },
 
-            // types
-            { "C.class", 5 },
-            { "A.B.C.class", 5 },
+			// types
+			{ "C.class", 5 },
+			{ "A.B.C.class", 5 },
 
-            // boolean
-            { "true", 6 },
-            { "false", 6 },
+			// boolean
+			{ "true", 6 },
+			{ "false", 6 },
 
-            // null
-            { "null", 7 },
-        });
-    }
+			// null
+			{ "null", 7 },
+		});
+	}
 
-    public TestLiterals(final String s, final Integer kind) {
+	public TestLiterals(final String s, final Integer kind) {
 		final Expression.Builder b = Expression.newBuilder();
 		b.setKind(ExpressionKind.LITERAL);
-        b.setLiteral(s);
+		b.setLiteral(s);
 		this.e = b.build();
-        this.k = kind;
-    }
+		this.k = kind;
+	}
 
 	@Test
-	public void testLiteral() throws Exception {
+	public void testIntLiteral() throws Exception {
 		assertEquals(k == 1, BoaAstIntrinsics.isIntLit(e));
+	}
+
+	@Test
+	public void testFloatLiteral() throws Exception {
 		assertEquals(k == 2, BoaAstIntrinsics.isFloatLit(e));
+	}
+
+	@Test
+	public void testCharLiteral() throws Exception {
 		assertEquals(k == 3, BoaAstIntrinsics.isCharLit(e));
+	}
+
+	@Test
+	public void testStringLiteral() throws Exception {
 		assertEquals(k == 4, BoaAstIntrinsics.isStringLit(e));
+	}
+
+	@Test
+	public void testTypeLiteral() throws Exception {
 		assertEquals(k == 5, BoaAstIntrinsics.isTypeLit(e));
+	}
+
+	@Test
+	public void testBoolLiteral() throws Exception {
 		assertEquals(k == 6, BoaAstIntrinsics.isBoolLit(e));
+	}
+
+	@Test
+	public void testNullLiteral() throws Exception {
 		assertEquals(k == 7, BoaAstIntrinsics.isNullLit(e));
 	}
 }
