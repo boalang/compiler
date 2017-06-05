@@ -46,7 +46,7 @@ public class BoaNormalFormIntrinsics {
 	 * @return the AST representation of the string
 	 */
 	@FunctionSpec(name = "parseexpression", returnType = "Expression", formalParameters = { "string" })
-	private static Expression parseexpression(final String s) {
+	public static Expression parseexpression(final String s) {
 		final ASTParser parser = ASTParser.newParser(AST.JLS8);
 		parser.setKind(ASTParser.K_EXPRESSION);
 		parser.setSource(s.toCharArray());
