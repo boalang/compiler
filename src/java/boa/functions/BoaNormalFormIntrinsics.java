@@ -301,6 +301,13 @@ public class BoaNormalFormIntrinsics {
 						results2.add(ival);
 				}
 
+				// check for identity
+				if (results2.size() > 1)
+					for (int i = 1; i < results2.size(); i++)
+						if ((results2.get(i) instanceof Double && (Double)results2.get(i) == 1.0)
+							|| (results2.get(i) instanceof Long && (Long)results2.get(i) == 1L))
+							results2.remove(i);
+
 				// if it reduced to a single term, return just the term otherwise return the whole expression
 				if (results2.size() == 1)
 					return results2.get(0);

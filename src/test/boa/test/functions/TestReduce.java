@@ -89,6 +89,9 @@ public class TestReduce {
 			{ "x * (3 - 2)", "x" },
 			{ "(3 - 2) * x", "x" },
 
+			{ "x / 1", "x" },
+			{ "x / 1 / 1 / 1", "x" },
+
 			// with methods 
 			{ "foo(x + 3, 2 + 1)", "foo(3 + x, 3)" },
 			{ "3 + foo(2 + 1) - 1", "3 + foo(3) - 1" }, // FIXME should be 2 + foo(3)
