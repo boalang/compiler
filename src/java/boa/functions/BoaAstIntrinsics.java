@@ -747,35 +747,35 @@ public class BoaAstIntrinsics {
 
 	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "Type" })
 	public static String prettyprint(final Type t) {
-        return t.getName();
-    }
+		return t.getName();
+	}
 
 	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "Method" })
 	public static String prettyprint(final Method m) {
 		String s = "";
 
-        // TODO
-        return s;
-    }
+		// TODO
+		return s;
+	}
 
 	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "Variable" })
 	public static String prettyprint(final Variable v) {
-        String s = prettyprint(v.getModifiersList()) + prettyprint(v.getVariableType()) + " " + v.getName();
+		String s = prettyprint(v.getModifiersList()) + prettyprint(v.getVariableType()) + " " + v.getName();
 
-        if (v.hasInitializer())
-            s += " = " + prettyprint(v.getInitializer());
+		if (v.hasInitializer())
+			s += " = " + prettyprint(v.getInitializer());
 
-        return s;
-    }
+		return s;
+	}
 
 	private static String prettyprint(final List<Modifier> mods) {
-        String s = "";
+		String s = "";
 
-        for (final Modifier m : mods)
-            s += prettyprint(m) + " ";
+		for (final Modifier m : mods)
+			s += prettyprint(m) + " ";
 
-        return s;
-    }
+		return s;
+	}
 
 	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "Expression" })
 	public static String prettyprint(final Expression e) {
@@ -880,33 +880,33 @@ public class BoaAstIntrinsics {
 		String s = "";
 
 		switch (m.getKind()) {
-		    case OTHER: return m.getOther();
+			case OTHER: return m.getOther();
 
-		    case VISIBILITY:
-                switch (m.getVisibility()) {
-                    case PUBLIC:    return "public";
-                    case PRIVATE:   return "private";
-                    case PROTECTED: return "protected";
-                    case NAMESPACE: return "namespace";
-                    default: return s;
-                }
+			case VISIBILITY:
+				switch (m.getVisibility()) {
+					case PUBLIC:    return "public";
+					case PRIVATE:   return "private";
+					case PROTECTED: return "protected";
+					case NAMESPACE: return "namespace";
+					default: return s;
+				}
 
-		    case ANNOTATION:
-                s = "@" + m.getAnnotationName();
-                if (m.getAnnotationMembersCount() > 0) s += "(";
-                for (int i = 0; i < m.getAnnotationMembersCount(); i++) {
-                    if (i > 0) s += ", ";
-                    s += m.getAnnotationMembers(i) + " = " + m.getAnnotationValues(i);
-                }
-                if (m.getAnnotationMembersCount() > 0) s += ")";
-                return s;
+			case ANNOTATION:
+				s = "@" + m.getAnnotationName();
+				if (m.getAnnotationMembersCount() > 0) s += "(";
+				for (int i = 0; i < m.getAnnotationMembersCount(); i++) {
+					if (i > 0) s += ", ";
+					s += m.getAnnotationMembers(i) + " = " + m.getAnnotationValues(i);
+				}
+				if (m.getAnnotationMembersCount() > 0) s += ")";
+				return s;
 
-		    case FINAL:        return "final";
-		    case STATIC:       return "static";
-		    case SYNCHRONIZED: return "synchronized";
-		    case ABSTRACT:     return "abstract";
+			case FINAL:        return "final";
+			case STATIC:       return "static";
+			case SYNCHRONIZED: return "synchronized";
+			case ABSTRACT:     return "abstract";
 
-            default: return s;
-        }
-    }
+			default: return s;
+		}
+	}
 }
