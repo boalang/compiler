@@ -128,14 +128,14 @@ public class BoaNormalFormIntrinsics {
 
 				if (dval != 0.0)
 				// after merging, add the one that remains to results
-					results2.add(0, createLiteral(dval.toString()));
+					results2.add(0, dval);
 				else
-					results2.add(0, createLiteral(ival.toString()));
+					results2.add(0, ival);
 
 				// if it reduced to a single term, return just the term otherwise return the whole expression
 				if (results2.size() == 1)
 					return results2.get(0);
-				return createExpression(e.getKind(), results2.toArray(new Expression[results2.size()]));
+				return createExpression(e.getKind(), convertArray(results2));
 
 			case OP_SUB:
 				// handle cases like '-x' or '-3'
@@ -176,15 +176,15 @@ public class BoaNormalFormIntrinsics {
 
 				// after merging, add the one that remains to results
 				if (dval != 0.0) {
-					results2.add(0, createLiteral(dval.toString()));
+					results2.add(0, dval);
 				} else {
-					results2.add(0, createLiteral(ival.toString()));
+					results2.add(0, ival);
 				}
 
 				// if it reduced to a single term, return just the term otherwise return the whole expression
 				if (results2.size() == 1)
 					return results2.get(0);
-				return createExpression(e.getKind(), results2.toArray(new Expression[results2.size()]));
+				return createExpression(e.getKind(), convertArray(results2));
 
 			case OP_MULT:
 				dval = 1.0;
@@ -208,14 +208,14 @@ public class BoaNormalFormIntrinsics {
 
 				// after merging, add the one that remains to results
 				if (dval != 1.0)
-					results2.add(0, createLiteral(dval.toString()));
+					results2.add(0, dval);
 				else
-					results2.add(0, createLiteral(ival.toString()));
+					results2.add(0, ival);
 
 				// if it reduced to a single term, return just the term otherwise return the whole expression
 				if (results2.size() == 1)
 					return results2.get(0);
-				return createExpression(e.getKind(), results2.toArray(new Expression[results2.size()]));
+				return createExpression(e.getKind(), convertArray(results2));
 
 			case OP_DIV:
 				dval = 1.0;
@@ -228,7 +228,7 @@ public class BoaNormalFormIntrinsics {
 						results2.add(o);
 					} else {
 						if (first) {
-							results2.add(createLiteral(o.toString()));
+							results2.add(o);
 						} else {
 							if (o instanceof Double)
 								dval *= ((Double)o).doubleValue();
@@ -245,32 +245,32 @@ public class BoaNormalFormIntrinsics {
 					ival = 1L;
 				}
 
-				final Object numerator = reduce_internal((Expression)results2.get(0));
+				final Object numerator = results2.get(0);
 				// if the numerator is a number, try to do the actual division
 				if (numerator instanceof Number) {
 					if (dval != 1.0) {
 						if (numerator instanceof Double)
-							results2.set(0, createLiteral(div(((Double)numerator).doubleValue(), dval, true)));
+							results2.set(0, div(((Double)numerator).doubleValue(), dval, true));
 						else
-							results2.set(0, createLiteral(div((double)((Long)numerator).longValue(), dval, true)));
+							results2.set(0, div((double)((Long)numerator).longValue(), dval, true));
 					} else {
 						if (numerator instanceof Double)
-							results2.set(0, createLiteral(div(((Double)numerator).doubleValue(), (double)ival, true)));
+							results2.set(0, div(((Double)numerator).doubleValue(), (double)ival, true));
 						else
-							results2.set(0, createLiteral(div((double)((Long)numerator).longValue(), (double)ival, false)));
+							results2.set(0, div((double)((Long)numerator).longValue(), (double)ival, false));
 					}
 				} else {
 					// otherwise just add the new denominator
 					if (dval != 1.0)
-						results2.add(createLiteral(dval.toString()));
+						results2.add(dval);
 					else
-						results2.add(createLiteral(ival.toString()));
+						results2.add(ival);
 				}
 
 				// if it reduced to a single term, return just the term otherwise return the whole expression
 				if (results2.size() == 1)
 					return results2.get(0);
-				return createExpression(e.getKind(), results2.toArray(new Expression[results2.size()]));
+				return createExpression(e.getKind(), convertArray(results2));
 
 			// literals are converted to numbers, if possible
 			case LITERAL:
@@ -301,11 +301,18 @@ public class BoaNormalFormIntrinsics {
 		}
 	}
 
-	private static String div(final double num, final double denom, final boolean force) {
+	private static Expression[] convertArray(final List<Object> arr) {
+		for (int i = 0; i < arr.size(); i++)
+			if (arr.get(i) instanceof Number)
+				arr.set(i, createLiteral(arr.get(i).toString()));
+		return arr.toArray(new Expression[arr.size()]);
+	}
+
+	private static Object div(final double num, final double denom, final boolean force) {
 		final double result = num / denom;
 		if (!force && result * denom == num)
-			return "" + (long)result;
-		return "" + result;
+			return (long)result;
+		return result;
 	}
 
 	/**

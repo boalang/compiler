@@ -41,19 +41,36 @@ public class TestReduce {
 	@Parameters(name = "{index}: {0}")
 	public static Collection expressions() {
 		return Arrays.asList(new Object[][] {
+			// literals
+			{ "5", "5" },
+			{ "8.0", "8.0" },
+			{ "-8.0", "-8.0" },
+			{ "+2", "2" },
+
+			// add operator
 			{ "5 + 2 + 1", "8" },
 			{ "5.0 + 2 + 1", "8.0" },
 			{ "5.0 + x + 1", "6.0 + x" },
+
+			// subtract operator
 			{ "2 - -5 - 1", "6" },
 			{ "5.0 - 2 - 1", "2.0" },
 			{ "5.0 - x - 1", "4.0 - x" },
 			{ "1 - x - 5", "-4 - x" },
+
+			// multiply operator
 			{ "2 * 5 * 1", "10" },
 			{ "5.0 * 2 * 1", "10.0" },
 			{ "5.0 * x * 1", "5.0 * x" },
+
+			// divide operator
 			{ "12 / 2 / 3", "2" },
 			{ "10.0 / 2 / 1", "5.0" },
 			{ "5.0 / x / 5", "1.0 / x" },
+
+			// complex expressions
+			{ "5 - 3 + 2", "4" },
+			{ "5 - (3 + 2)", "0" },
 		});
 	}
 
