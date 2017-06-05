@@ -138,6 +138,11 @@ public class BoaNormalFormIntrinsics {
 				else
 					results2.add(0, ival);
 
+				// check for identity
+				if (results2.size() > 1 && ((results2.get(0) instanceof Double && (Double)results2.get(0) == 0.0)
+					|| (results2.get(0) instanceof Long && (Long)results2.get(0) == 0L)))
+					results2.remove(0);
+
 				// if it reduced to a single term, return just the term otherwise return the whole expression
 				if (results2.size() == 1)
 					return results2.get(0);
@@ -198,6 +203,13 @@ public class BoaNormalFormIntrinsics {
 						results2.add(ival);
 				}
 
+				// check for identity
+				if (results2.size() > 1 && ((results2.get(0) instanceof Double && (Double)results2.get(0) == 0.0)
+					|| (results2.get(0) instanceof Long && (Long)results2.get(0) == 0L))) {
+					results2.remove(0);
+					results2.set(0, createExpression(ExpressionKind.OP_SUB, (Expression)results2.get(0)));
+				}
+
 				// if it reduced to a single term, return just the term otherwise return the whole expression
 				if (results2.size() == 1)
 					return results2.get(0);
@@ -228,6 +240,11 @@ public class BoaNormalFormIntrinsics {
 					results2.add(0, dval);
 				else
 					results2.add(0, ival);
+
+				// check for identity
+				if (results2.size() > 1 && ((results2.get(0) instanceof Double && (Double)results2.get(0) == 1.0)
+					|| (results2.get(0) instanceof Long && (Long)results2.get(0) == 1L)))
+					results2.remove(0);
 
 				// if it reduced to a single term, return just the term otherwise return the whole expression
 				if (results2.size() == 1)

@@ -29,10 +29,9 @@ import org.junit.runners.Parameterized.Parameters;
 
 import boa.functions.BoaNormalFormIntrinsics;
 import boa.types.Ast.Expression;
-import boa.types.Ast.Expression.ExpressionKind;
 
 /**
- * Test the expression reducer.
+ * Test expression reduction.
  *
  * @author rdyer
  */
@@ -48,30 +47,56 @@ public class TestReduce {
 			{ "+2", "2" },
 
 			// add operator
+			{ "1 + 2", "3" },
 			{ "5 + 2 + 1", "8" },
 			{ "5.0 + 2 + 1", "8.0" },
-			{ "5.0 + x + 1", "6.0 + x" },
 
 			// subtract operator
+			{ "2 - 1", "1" },
 			{ "2 - -5 - 1", "6" },
 			{ "5.0 - 2 - 1", "2.0" },
-			{ "5.0 - x - 1", "4.0 - x" },
-			{ "1 - x - 5", "-4 - x" },
+			{ "5 - (3 - 2)", "4" },
+			{ "(5 - 3) - 2", "0" },
 
 			// multiply operator
 			{ "2 * 5 * 1", "10" },
 			{ "5.0 * 2 * 1", "10.0" },
-			{ "5.0 * x * 1", "5.0 * x" },
 
 			// divide operator
 			{ "12 / 2 / 3", "2" },
 			{ "10.0 / 2 / 1", "5.0" },
+
+			// with variables
+			{ "5.0 + x + 1", "6.0 + x" },
+			{ "5.0 - x - 1", "4.0 - x" },
+			{ "1 - x - 5", "-4 - x" },
+			{ "5.0 * x * 1", "5.0 * x" },
 			{ "5.0 / x / 5", "1.0 / x" },
 
-			// complex expressions
+			// identities
+			{ "0 + x", "x" },
+			{ "x + 0", "x" },
+			{ "x + (3 - 3)", "x" },
+			{ "(3 - 3) + x", "x" },
+
+			{ "0 - x", "-x" },
+			{ "x - 0", "x" },
+			{ "x - (3 - 3)", "x" },
+			{ "(3 - 3) - x", "-x" },
+
+			{ "1 * x", "x" },
+			{ "x * 1", "x" },
+			{ "x * (3 - 2)", "x" },
+			{ "(3 - 2) * x", "x" },
+
+			// with methods 
+			{ "foo(x + 3, 2 + 1)", "foo(3 + x, 3)" },
+			{ "3 + foo(2 + 1) - 1", "3 + foo(3) - 1" }, // FIXME should be 2 + foo(3)
+
+			// complex expressions, multiple operators etc
 			{ "5 - 3 + 2", "4" },
 			{ "5 - (3 + 2)", "0" },
-			{ "5.0 / x / 5 * 10.0 * x", "1 * (10.0 * (1.0 / x)) * x" }, // FIXME should be 10
+			{ "5.0 / x / 5 * 10.0 * x", "(10.0 * (1.0 / x)) * x" }, // FIXME should be 10
 		});
 	}
 

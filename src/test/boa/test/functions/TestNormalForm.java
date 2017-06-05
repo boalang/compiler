@@ -29,7 +29,6 @@ import org.junit.runners.Parameterized.Parameters;
 
 import boa.functions.BoaNormalFormIntrinsics;
 import boa.types.Ast.Expression;
-import boa.types.Ast.Expression.ExpressionKind;
 
 /**
  * Test the expression simplifying and normal form functions (NNF/CNF/DNF).
