@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, Robert Dyer, 
+ * Copyright 2017, Robert Dyer,
  *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,234 +19,74 @@ package boa.test.functions;
 import static org.junit.Assert.assertEquals;
 import static boa.functions.BoaNormalFormIntrinsics.parseexpression;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import boa.functions.BoaNormalFormIntrinsics;
 import boa.types.Ast.Expression;
 import boa.types.Ast.Expression.ExpressionKind;
 
 /**
+ * Test the expression simplifying and normal form functions (NNF/CNF/DNF).
+ *
  * @author rdyer
  */
-@RunWith(JUnit4.class)
+@RunWith(Parameterized.class)
 public class TestNormalForm {
-	private static Expression exp1 = parseexpression("((a < b || !b) || (a < b && a) || !b || !a) && a < b");
-	@Test
-	public void testExp1simple() {
-		assertEquals(parseexpression("a < b"), BoaNormalFormIntrinsics.simplify(exp1));
-	}
-	@Test
-	public void testExp1nnf() {
-		assertEquals(parseexpression("a < b"), BoaNormalFormIntrinsics.NNF(exp1));
-	}
-	@Test
-	public void testExp1cnf() {
-		assertEquals(parseexpression("a < b"), BoaNormalFormIntrinsics.CNF(exp1));
-	}
-	@Test
-	public void testExp1dnf() {
-		assertEquals(parseexpression("a < b"), BoaNormalFormIntrinsics.DNF(exp1));
-	}
-
-    ///////////////////
-
-	private static Expression exp2 = parseexpression("(!a || b) && a");
-	@Test
-	public void testExp2simple() {
-		assertEquals(parseexpression("a && b"), BoaNormalFormIntrinsics.simplify(exp2));
-	}
-	@Test
-	public void testExp2nnf() {
-		assertEquals(parseexpression("a && b"), BoaNormalFormIntrinsics.NNF(exp2));
-	}
-	@Test
-	public void testExp2cnf() {
-		assertEquals(parseexpression("a && b"), BoaNormalFormIntrinsics.CNF(exp2));
-	}
-	@Test
-	public void testExp2dnf() {
-		assertEquals(parseexpression("a && b"), BoaNormalFormIntrinsics.DNF(exp2));
+	@Parameters
+	public static Collection literals() {
+		return Arrays.asList(new Object[][] {
+			{ "((a < b || !b) || (a < b && a) || !b || !a) && a < b", "a < b", "a < b", "a < b", "a < b" },
+			{ "(!a || b) && a", "a && b", "a && b", "a && b", "a && b" },
+			{ "!(!a)", "!(!a)", "a", "a", "a" },
+			{ "(!a && a) || a", "a", "a", "a", "a" },
+			{ "a", "a", "a", "a", "a" },
+			{ "(!a && b) || a", "a || b", "a || b", "a || b", "a || b" },
+			// FIXME seems the JDT parser only puts 2 operands per operator?
+			//{ "(a < b && b) && a", "a && a < b && b", "a && a < b && b", "a && a < b && b", "a && a < b && b" },
+			{ "(!(a < b) || b) && a", "(!(a < b) || b) && a", "(a >= b || b) && a", "(a >= b || b) && a", "(a && a >= b) || (a && b)" },
+			{ "!(!(a < b) || b)", "!(!(a < b) || b)", "!b && a < b", "!b && a < b", "!b && a < b" },
+			{ "(!(a < b) && b) || a", "(!(a < b) && b) || a", "(a >= b && b) || a", "(a || a >= b) && (a || b)", "(a >= b && b) || a" },
+			{ "!(a < b) || b", "!(a < b) || b", "a >= b || b", "a >= b || b", "a >= b || b" }
+		});
 	}
 
-    ///////////////////
+	private Expression e = null;
+	private Expression simple = null;
+	private Expression nnf = null;
+	private Expression cnf = null;
+	private Expression dnf = null;
 
-	private static Expression exp3 = parseexpression("!(!a)");
-	@Test
-	public void testExp3simple() {
-		assertEquals(exp3, BoaNormalFormIntrinsics.simplify(exp3));
-	}
-	@Test
-	public void testExp3nnf() {
-		assertEquals(parseexpression("a"), BoaNormalFormIntrinsics.NNF(exp3));
-	}
-	@Test
-	public void testExp3cnf() {
-		assertEquals(parseexpression("a"), BoaNormalFormIntrinsics.CNF(exp3));
-	}
-	@Test
-	public void testExp3dnf() {
-		assertEquals(parseexpression("a"), BoaNormalFormIntrinsics.DNF(exp3));
+	public TestNormalForm(final String e, final String simple, final String nnf, final String cnf, final String dnf) {
+		this.e = parseexpression(e);
+		this.simple = parseexpression(simple);
+		this.nnf = parseexpression(nnf);
+		this.cnf = parseexpression(cnf);
+		this.dnf = parseexpression(dnf);
 	}
 
-    ///////////////////
-
-	private static Expression exp4 = parseexpression("(!a && a) || a");
 	@Test
-	public void testExp4simple() {
-		assertEquals(parseexpression("a"), BoaNormalFormIntrinsics.simplify(exp4));
-	}
-	@Test
-	public void testExp4nnf() {
-		assertEquals(parseexpression("a"), BoaNormalFormIntrinsics.NNF(exp4));
-	}
-	@Test
-	public void testExp4cnf() {
-		assertEquals(parseexpression("a"), BoaNormalFormIntrinsics.CNF(exp4));
-	}
-	@Test
-	public void testExp4dnf() {
-		assertEquals(parseexpression("a"), BoaNormalFormIntrinsics.DNF(exp4));
+	public void testSimplify() throws Exception {
+		assertEquals(simple, BoaNormalFormIntrinsics.simplify(e));
 	}
 
-    ///////////////////
-
-	private static Expression exp5 = parseexpression("a");
 	@Test
-	public void testExp5simple() {
-		assertEquals(parseexpression("a"), BoaNormalFormIntrinsics.simplify(exp5));
-	}
-	@Test
-	public void testExp5nnf() {
-		assertEquals(parseexpression("a"), BoaNormalFormIntrinsics.NNF(exp5));
-	}
-	@Test
-	public void testExp5cnf() {
-		assertEquals(parseexpression("a"), BoaNormalFormIntrinsics.CNF(exp5));
-	}
-	@Test
-	public void testExp5dnf() {
-		assertEquals(parseexpression("a"), BoaNormalFormIntrinsics.DNF(exp5));
+	public void testNNF() throws Exception {
+		assertEquals(nnf, BoaNormalFormIntrinsics.NNF(e));
 	}
 
-    ///////////////////
-
-	private static Expression exp6 = parseexpression("(!a && b) || a");
 	@Test
-	public void testExp6simple() {
-		assertEquals(parseexpression("a || b"), BoaNormalFormIntrinsics.simplify(exp6));
-	}
-	@Test
-	public void testExp6nnf() {
-		assertEquals(parseexpression("a || b"), BoaNormalFormIntrinsics.NNF(exp6));
-	}
-	@Test
-	public void testExp6cnf() {
-		assertEquals(parseexpression("a || b"), BoaNormalFormIntrinsics.CNF(exp6));
-	}
-	@Test
-	public void testExp6dnf() {
-		assertEquals(parseexpression("a || b"), BoaNormalFormIntrinsics.DNF(exp6));
+	public void testCNF() throws Exception {
+		assertEquals(cnf, BoaNormalFormIntrinsics.CNF(e));
 	}
 
-    ///////////////////
-
-	private static Expression exp7 = parseexpression("(a < b && b) && a");
 	@Test
-	public void testExp7simple() {
-		assertEquals(BoaNormalFormIntrinsics.simplify(parseexpression("a && a < b && b")), BoaNormalFormIntrinsics.simplify(exp7));
-	}
-	@Test
-	public void testExp7nnf() {
-		assertEquals(BoaNormalFormIntrinsics.simplify(parseexpression("a && a < b && b")), BoaNormalFormIntrinsics.NNF(exp7));
-	}
-	@Test
-	public void testExp7cnf() {
-		assertEquals(BoaNormalFormIntrinsics.simplify(parseexpression("a && a < b && b")), BoaNormalFormIntrinsics.CNF(exp7));
-	}
-	@Test
-	public void testExp7dnf() {
-		assertEquals(BoaNormalFormIntrinsics.simplify(parseexpression("a && a < b && b")), BoaNormalFormIntrinsics.DNF(exp7));
-	}
-
-    ///////////////////
-
-	private static Expression exp8 = parseexpression("(!(a < b) || b) && a");
-	@Test
-	public void testExp8simple() {
-		assertEquals(exp8, BoaNormalFormIntrinsics.simplify(exp8));
-	}
-	@Test
-	public void testExp8nnf() {
-		assertEquals(parseexpression("(a >= b || b) && a"), BoaNormalFormIntrinsics.NNF(exp8));
-	}
-	@Test
-	public void testExp8cnf() {
-		assertEquals(parseexpression("(a >= b || b) && a"), BoaNormalFormIntrinsics.CNF(exp8));
-	}
-	@Test
-	public void testExp8dnf() {
-		assertEquals(parseexpression("(a && a >= b) || (a && b)"), BoaNormalFormIntrinsics.DNF(exp8));
-	}
-
-    ///////////////////
-
-	private static Expression exp9 = parseexpression("!(!(a < b) || b)");
-	@Test
-	public void testExp9simple() {
-		assertEquals(exp9, BoaNormalFormIntrinsics.simplify(exp9));
-	}
-	@Test
-	public void testExp9nnf() {
-		assertEquals(parseexpression("!b && a < b"), BoaNormalFormIntrinsics.NNF(exp9));
-	}
-	@Test
-	public void testExp9cnf() {
-		assertEquals(parseexpression("!b && a < b"), BoaNormalFormIntrinsics.CNF(exp9));
-	}
-	@Test
-	public void testExp9dnf() {
-		assertEquals(parseexpression("!b && a < b"), BoaNormalFormIntrinsics.DNF(exp9));
-	}
-
-    ///////////////////
-
-	private static Expression exp10 = parseexpression("(!(a < b) && b) || a");
-	@Test
-	public void testExp10simple() {
-		assertEquals(exp10, BoaNormalFormIntrinsics.simplify(exp10));
-	}
-	@Test
-	public void testExp10nnf() {
-		assertEquals(parseexpression("(a >= b && b) || a"), BoaNormalFormIntrinsics.NNF(exp10));
-	}
-	@Test
-	public void testExp10cnf() {
-		assertEquals(parseexpression("(a || a >= b) && (a || b)"), BoaNormalFormIntrinsics.CNF(exp10));
-	}
-	@Test
-	public void testExp10dnf() {
-		assertEquals(parseexpression("(a >= b && b) || a"), BoaNormalFormIntrinsics.DNF(exp10));
-	}
-
-    ///////////////////
-
-	private static Expression exp11 = parseexpression("!(a < b) || b");
-	@Test
-	public void testExp11simple() {
-		assertEquals(exp11, BoaNormalFormIntrinsics.simplify(exp11));
-	}
-	@Test
-	public void testExp11nnf() {
-		assertEquals(parseexpression("a >= b || b"), BoaNormalFormIntrinsics.NNF(exp11));
-	}
-	@Test
-	public void testExp11cnf() {
-		assertEquals(parseexpression("a >= b || b"), BoaNormalFormIntrinsics.CNF(exp11));
-	}
-	@Test
-	public void testExp11dnf() {
-		assertEquals(parseexpression("a >= b || b"), BoaNormalFormIntrinsics.DNF(exp11));
+	public void testDNF() throws Exception {
+		assertEquals(dnf, BoaNormalFormIntrinsics.DNF(e));
 	}
 }
