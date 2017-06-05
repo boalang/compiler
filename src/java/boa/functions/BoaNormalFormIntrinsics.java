@@ -66,7 +66,7 @@ public class BoaNormalFormIntrinsics {
 	}
 
 	/**
-	 * Attempts to reduce an expression, simplifying whereever possible.
+	 * Attempts to reduce an expression, simplifying wherever possible.
 	 *
 	 * @param e the expression to reduce
 	 * @return the reduced form of the expression
@@ -79,6 +79,12 @@ public class BoaNormalFormIntrinsics {
 		return createLiteral(o.toString());
 	}
 
+	/**
+	 * Attempts to reduce an expression, simplifying wherever possible.
+	 *
+	 * @param e the expression to reduce
+	 * @return the reduced form of the expression, either as a Number or a complex Expression
+	 */
 	private static Object reduce_internal(final Expression e) throws Exception {
 		final List<Object> results = new ArrayList<Object>();
 		for (final Expression sub : e.getExpressionsList())
