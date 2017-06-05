@@ -483,13 +483,13 @@ public class BoaNormalFormIntrinsics {
 	 * @return the new expression
 	 */
 	private static Expression createExpression(final ExpressionKind kind, final Expression... exps) {
-		final Expression.Builder exp = Expression.newBuilder();
+		final Expression.Builder b = Expression.newBuilder();
 
-		exp.setKind(kind);
+		b.setKind(kind);
 		for (final Expression e : exps)
-			exp.addExpressions(Expression.newBuilder(e).build());
+			b.addExpressions(Expression.newBuilder(e).build());
 
-		return exp.build();
+		return b.build();
 	}
 
 	/**
@@ -499,11 +499,15 @@ public class BoaNormalFormIntrinsics {
 	 * @return a new literal expression
 	 */
 	private static Expression createLiteral(final String lit) {
-		final Expression.Builder exp = Expression.newBuilder();
+		// handle negative number literals properly
+		if (lit.startsWith("-"))
+			return createExpression(ExpressionKind.OP_SUB, createLiteral(lit.substring(1)));
 
-		exp.setKind(ExpressionKind.LITERAL);
-		exp.setLiteral(lit);
+		final Expression.Builder b = Expression.newBuilder();
 
-		return exp.build();
+		b.setKind(ExpressionKind.LITERAL);
+		b.setLiteral(lit);
+
+		return b.build();
 	}
 }
