@@ -17,6 +17,7 @@
 package boa.test.functions;
 
 import static org.junit.Assert.assertEquals;
+import static boa.functions.BoaNormalFormIntrinsics.parseexpression;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,344 +32,221 @@ import boa.types.Ast.Expression.ExpressionKind;
  */
 @RunWith(JUnit4.class)
 public class TestNormalForm {
-	private static Expression var(final String var) {
-		final Expression.Builder b = Expression.newBuilder();
-		b.setKind(ExpressionKind.VARACCESS);
-		b.setVariable(var);
-		return b.build();
-	}
-
-	private static Expression paren(final Expression e) {
-		final Expression.Builder b = Expression.newBuilder();
-		b.setKind(ExpressionKind.PAREN);
-		b.addExpressions(e);
-		return b.build();
-	}
-
-	private static Expression not(final Expression e) {
-		final Expression.Builder b = Expression.newBuilder();
-		b.setKind(ExpressionKind.LOGICAL_NOT);
-		b.addExpressions(e);
-		return b.build();
-	}
-
-	private static Expression and(final Expression... exps) {
-		final Expression.Builder b = Expression.newBuilder();
-		b.setKind(ExpressionKind.LOGICAL_AND);
-		for (final Expression e : exps)
-			b.addExpressions(e);
-		return b.build();
-	}
-
-	private static Expression or(final Expression... exps) {
-		final Expression.Builder b = Expression.newBuilder();
-		b.setKind(ExpressionKind.LOGICAL_OR);
-		for (final Expression e : exps)
-			b.addExpressions(e);
-		return b.build();
-	}
-
-	private static Expression lt(final Expression lhs, final Expression rhs) {
-		final Expression.Builder b = Expression.newBuilder();
-		b.setKind(ExpressionKind.LT);
-		b.addExpressions(lhs);
-		b.addExpressions(rhs);
-		return b.build();
-	}
-
-	private static Expression gte(final Expression lhs, final Expression rhs) {
-		final Expression.Builder b = Expression.newBuilder();
-		b.setKind(ExpressionKind.GTEQ);
-		b.addExpressions(lhs);
-		b.addExpressions(rhs);
-		return b.build();
-	}
-
-	// ((a < b || !b) || (a < b && a) || !b || !a) && a < b
-	private static Expression exp1 =
-		and(
-			or(
-				or(
-					or(
-						or(
-							lt(var("a"), var("b")),
-							not(var("b"))
-						),
-						and(
-							lt(var("a"), var("b")),
-							var("a")
-						)
-					),
-					not(var("b"))
-				),
-				not(var("a"))
-			),
-			lt(var("a"), var("b"))
-		);
+	private static Expression exp1 = parseexpression("((a < b || !b) || (a < b && a) || !b || !a) && a < b");
 	@Test
 	public void testExp1simple() {
-		assertEquals(lt(var("a"), var("b")), BoaNormalFormIntrinsics.simplify(exp1));
+		assertEquals(parseexpression("a < b"), BoaNormalFormIntrinsics.simplify(exp1));
 	}
 	@Test
 	public void testExp1nnf() {
-		assertEquals(lt(var("a"), var("b")), BoaNormalFormIntrinsics.NNF(exp1));
+		assertEquals(parseexpression("a < b"), BoaNormalFormIntrinsics.NNF(exp1));
 	}
 	@Test
 	public void testExp1cnf() {
-		assertEquals(lt(var("a"), var("b")), BoaNormalFormIntrinsics.CNF(exp1));
+		assertEquals(parseexpression("a < b"), BoaNormalFormIntrinsics.CNF(exp1));
 	}
 	@Test
 	public void testExp1dnf() {
-		assertEquals(lt(var("a"), var("b")), BoaNormalFormIntrinsics.DNF(exp1));
+		assertEquals(parseexpression("a < b"), BoaNormalFormIntrinsics.DNF(exp1));
 	}
 
-	// (!a || b) && a
-	private static Expression exp2 =
-		and(
-			or(
-				not(var("a")),
-				var("b")
-			),
-			var("a")
-		);
+    ///////////////////
+
+	private static Expression exp2 = parseexpression("(!a || b) && a");
 	@Test
 	public void testExp2simple() {
-		assertEquals(and(var("a"), var("b")), BoaNormalFormIntrinsics.simplify(exp2));
+		assertEquals(parseexpression("a && b"), BoaNormalFormIntrinsics.simplify(exp2));
 	}
 	@Test
 	public void testExp2nnf() {
-		assertEquals(and(var("a"), var("b")), BoaNormalFormIntrinsics.NNF(exp2));
+		assertEquals(parseexpression("a && b"), BoaNormalFormIntrinsics.NNF(exp2));
 	}
 	@Test
 	public void testExp2cnf() {
-		assertEquals(and(var("a"), var("b")), BoaNormalFormIntrinsics.CNF(exp2));
+		assertEquals(parseexpression("a && b"), BoaNormalFormIntrinsics.CNF(exp2));
 	}
 	@Test
 	public void testExp2dnf() {
-		assertEquals(and(var("a"), var("b")), BoaNormalFormIntrinsics.DNF(exp2));
+		assertEquals(parseexpression("a && b"), BoaNormalFormIntrinsics.DNF(exp2));
 	}
 
-	// !(!a)
-	private static Expression exp3 = not(paren(not(var("a"))));
+    ///////////////////
+
+	private static Expression exp3 = parseexpression("!(!a)");
 	@Test
 	public void testExp3simple() {
 		assertEquals(exp3, BoaNormalFormIntrinsics.simplify(exp3));
 	}
 	@Test
 	public void testExp3nnf() {
-		assertEquals(var("a"), BoaNormalFormIntrinsics.NNF(exp3));
+		assertEquals(parseexpression("a"), BoaNormalFormIntrinsics.NNF(exp3));
 	}
 	@Test
 	public void testExp3cnf() {
-		assertEquals(var("a"), BoaNormalFormIntrinsics.CNF(exp3));
+		assertEquals(parseexpression("a"), BoaNormalFormIntrinsics.CNF(exp3));
 	}
 	@Test
 	public void testExp3dnf() {
-		assertEquals(var("a"), BoaNormalFormIntrinsics.DNF(exp3));
+		assertEquals(parseexpression("a"), BoaNormalFormIntrinsics.DNF(exp3));
 	}
 
-	// (!a && a) || a
-	private static Expression exp4 =
-		or(
-			and(
-				not(var("a")),
-				var("a")
-			),
-			var("a")
-		);
+    ///////////////////
+
+	private static Expression exp4 = parseexpression("(!a && a) || a");
 	@Test
 	public void testExp4simple() {
-		assertEquals(var("a"), BoaNormalFormIntrinsics.simplify(exp4));
+		assertEquals(parseexpression("a"), BoaNormalFormIntrinsics.simplify(exp4));
 	}
 	@Test
 	public void testExp4nnf() {
-		assertEquals(var("a"), BoaNormalFormIntrinsics.NNF(exp4));
+		assertEquals(parseexpression("a"), BoaNormalFormIntrinsics.NNF(exp4));
 	}
 	@Test
 	public void testExp4cnf() {
-		assertEquals(var("a"), BoaNormalFormIntrinsics.CNF(exp4));
+		assertEquals(parseexpression("a"), BoaNormalFormIntrinsics.CNF(exp4));
 	}
 	@Test
 	public void testExp4dnf() {
-		assertEquals(var("a"), BoaNormalFormIntrinsics.DNF(exp4));
+		assertEquals(parseexpression("a"), BoaNormalFormIntrinsics.DNF(exp4));
 	}
 
-	// a
-	private static Expression exp5 = var("a");
+    ///////////////////
+
+	private static Expression exp5 = parseexpression("a");
 	@Test
 	public void testExp5simple() {
-		assertEquals(var("a"), BoaNormalFormIntrinsics.simplify(exp5));
+		assertEquals(parseexpression("a"), BoaNormalFormIntrinsics.simplify(exp5));
 	}
 	@Test
 	public void testExp5nnf() {
-		assertEquals(var("a"), BoaNormalFormIntrinsics.NNF(exp5));
+		assertEquals(parseexpression("a"), BoaNormalFormIntrinsics.NNF(exp5));
 	}
 	@Test
 	public void testExp5cnf() {
-		assertEquals(var("a"), BoaNormalFormIntrinsics.CNF(exp5));
+		assertEquals(parseexpression("a"), BoaNormalFormIntrinsics.CNF(exp5));
 	}
 	@Test
 	public void testExp5dnf() {
-		assertEquals(var("a"), BoaNormalFormIntrinsics.DNF(exp5));
+		assertEquals(parseexpression("a"), BoaNormalFormIntrinsics.DNF(exp5));
 	}
 
-	// (!a && b) || a
-	private static Expression exp6 =
-		or(
-			and(
-				not(var("a")),
-				var("b")
-			),
-			var("a")
-		);
+    ///////////////////
+
+	private static Expression exp6 = parseexpression("(!a && b) || a");
 	@Test
 	public void testExp6simple() {
-		assertEquals(or(var("a"), var("b")), BoaNormalFormIntrinsics.simplify(exp6));
+		assertEquals(parseexpression("a || b"), BoaNormalFormIntrinsics.simplify(exp6));
 	}
 	@Test
 	public void testExp6nnf() {
-		assertEquals(or(var("a"), var("b")), BoaNormalFormIntrinsics.NNF(exp6));
+		assertEquals(parseexpression("a || b"), BoaNormalFormIntrinsics.NNF(exp6));
 	}
 	@Test
 	public void testExp6cnf() {
-		assertEquals(or(var("a"), var("b")), BoaNormalFormIntrinsics.CNF(exp6));
+		assertEquals(parseexpression("a || b"), BoaNormalFormIntrinsics.CNF(exp6));
 	}
 	@Test
 	public void testExp6dnf() {
-		assertEquals(or(var("a"), var("b")), BoaNormalFormIntrinsics.DNF(exp6));
+		assertEquals(parseexpression("a || b"), BoaNormalFormIntrinsics.DNF(exp6));
 	}
 
-	// (a < b && b) && a
-	private static Expression exp7 =
-		and(
-			and(
-				lt(var("a"), var("b")),
-				var("b")
-			),
-			var("a")
-		);
+    ///////////////////
+
+	private static Expression exp7 = parseexpression("(a < b && b) && a");
 	@Test
 	public void testExp7simple() {
-		assertEquals(and(var("a"), lt(var("a"), var("b")), var("b")), BoaNormalFormIntrinsics.simplify(exp7));
+		assertEquals(BoaNormalFormIntrinsics.simplify(parseexpression("a && a < b && b")), BoaNormalFormIntrinsics.simplify(exp7));
 	}
 	@Test
 	public void testExp7nnf() {
-		assertEquals(and(var("a"), lt(var("a"), var("b")), var("b")), BoaNormalFormIntrinsics.NNF(exp7));
+		assertEquals(BoaNormalFormIntrinsics.simplify(parseexpression("a && a < b && b")), BoaNormalFormIntrinsics.NNF(exp7));
 	}
 	@Test
 	public void testExp7cnf() {
-		assertEquals(and(var("a"), lt(var("a"), var("b")), var("b")), BoaNormalFormIntrinsics.CNF(exp7));
+		assertEquals(BoaNormalFormIntrinsics.simplify(parseexpression("a && a < b && b")), BoaNormalFormIntrinsics.CNF(exp7));
 	}
 	@Test
 	public void testExp7dnf() {
-		assertEquals(and(var("a"), lt(var("a"), var("b")), var("b")), BoaNormalFormIntrinsics.DNF(exp7));
+		assertEquals(BoaNormalFormIntrinsics.simplify(parseexpression("a && a < b && b")), BoaNormalFormIntrinsics.DNF(exp7));
 	}
 
-	// (!(a < b) || b) && a
-	private static Expression exp8 =
-		and(
-			or(
-				not(
-					lt(var("a"), var("b"))
-				),
-				var("b")
-			),
-			var("a")
-		);
+    ///////////////////
+
+	private static Expression exp8 = parseexpression("(!(a < b) || b) && a");
 	@Test
 	public void testExp8simple() {
 		assertEquals(exp8, BoaNormalFormIntrinsics.simplify(exp8));
 	}
 	@Test
 	public void testExp8nnf() {
-		assertEquals(and(or(gte(var("a"), var("b")), var("b")), var("a")), BoaNormalFormIntrinsics.NNF(exp8));
+		assertEquals(parseexpression("(a >= b || b) && a"), BoaNormalFormIntrinsics.NNF(exp8));
 	}
 	@Test
 	public void testExp8cnf() {
-		assertEquals(and(or(gte(var("a"), var("b")), var("b")), var("a")), BoaNormalFormIntrinsics.CNF(exp8));
+		assertEquals(parseexpression("(a >= b || b) && a"), BoaNormalFormIntrinsics.CNF(exp8));
 	}
 	@Test
 	public void testExp8dnf() {
-		assertEquals(or(and(var("a"), gte(var("a"), var("b"))), and(var("a"), var("b"))), BoaNormalFormIntrinsics.DNF(exp8));
+		assertEquals(parseexpression("(a && a >= b) || (a && b)"), BoaNormalFormIntrinsics.DNF(exp8));
 	}
 
-	// !(!(a < b) || b)
-	private static Expression exp9 =
-		not(
-			or(
-				not(
-					lt(var("a"), var("b"))
-				),
-				var("b")
-			)
-		);
+    ///////////////////
+
+	private static Expression exp9 = parseexpression("!(!(a < b) || b)");
 	@Test
 	public void testExp9simple() {
 		assertEquals(exp9, BoaNormalFormIntrinsics.simplify(exp9));
 	}
 	@Test
 	public void testExp9nnf() {
-		assertEquals(and(not(var("b")), lt(var("a"), var("b"))), BoaNormalFormIntrinsics.NNF(exp9));
+		assertEquals(parseexpression("!b && a < b"), BoaNormalFormIntrinsics.NNF(exp9));
 	}
 	@Test
 	public void testExp9cnf() {
-		assertEquals(and(not(var("b")), lt(var("a"), var("b"))), BoaNormalFormIntrinsics.CNF(exp9));
+		assertEquals(parseexpression("!b && a < b"), BoaNormalFormIntrinsics.CNF(exp9));
 	}
 	@Test
 	public void testExp9dnf() {
-		assertEquals(and(not(var("b")), lt(var("a"), var("b"))), BoaNormalFormIntrinsics.DNF(exp9));
+		assertEquals(parseexpression("!b && a < b"), BoaNormalFormIntrinsics.DNF(exp9));
 	}
 
-	// (!(a < b) && b) || a
-	private static Expression exp10 =
-		or(
-			and(
-				not(
-					lt(var("a"), var("b"))
-				),
-				var("b")
-			),
-			var("a")
-		);
+    ///////////////////
+
+	private static Expression exp10 = parseexpression("(!(a < b) && b) || a");
 	@Test
 	public void testExp10simple() {
 		assertEquals(exp10, BoaNormalFormIntrinsics.simplify(exp10));
 	}
 	@Test
 	public void testExp10nnf() {
-		assertEquals(or(and(gte(var("a"), var("b")), var("b")), var("a")), BoaNormalFormIntrinsics.NNF(exp10));
+		assertEquals(parseexpression("(a >= b && b) || a"), BoaNormalFormIntrinsics.NNF(exp10));
 	}
 	@Test
 	public void testExp10cnf() {
-		assertEquals(and(or(var("a"), gte(var("a"), var("b"))), or(var("a"), var("b"))), BoaNormalFormIntrinsics.CNF(exp10));
+		assertEquals(parseexpression("(a || a >= b) && (a || b)"), BoaNormalFormIntrinsics.CNF(exp10));
 	}
 	@Test
 	public void testExp10dnf() {
-		assertEquals(or(and(gte(var("a"), var("b")), var("b")), var("a")), BoaNormalFormIntrinsics.DNF(exp10));
+		assertEquals(parseexpression("(a >= b && b) || a"), BoaNormalFormIntrinsics.DNF(exp10));
 	}
 
-	// !(a < b) || b
-	private static Expression exp11 =
-		or(
-			not(
-				lt(var("a"), var("b"))
-			),
-			var("b")
-		);
+    ///////////////////
+
+	private static Expression exp11 = parseexpression("!(a < b) || b");
 	@Test
 	public void testExp11simple() {
 		assertEquals(exp11, BoaNormalFormIntrinsics.simplify(exp11));
 	}
 	@Test
 	public void testExp11nnf() {
-		assertEquals(or(gte(var("a"), var("b")), var("b")), BoaNormalFormIntrinsics.NNF(exp11));
+		assertEquals(parseexpression("a >= b || b"), BoaNormalFormIntrinsics.NNF(exp11));
 	}
 	@Test
 	public void testExp11cnf() {
-		assertEquals(or(gte(var("a"), var("b")), var("b")), BoaNormalFormIntrinsics.CNF(exp11));
+		assertEquals(parseexpression("a >= b || b"), BoaNormalFormIntrinsics.CNF(exp11));
 	}
 	@Test
 	public void testExp11dnf() {
-		assertEquals(or(gte(var("a"), var("b")), var("b")), BoaNormalFormIntrinsics.DNF(exp11));
+		assertEquals(parseexpression("a >= b || b"), BoaNormalFormIntrinsics.DNF(exp11));
 	}
 }
