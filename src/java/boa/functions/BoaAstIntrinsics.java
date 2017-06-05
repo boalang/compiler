@@ -737,6 +737,22 @@ public class BoaAstIntrinsics {
 		counts.put(rawType, rawCount + 1);
 	}
 
+	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "ASTRoot" })
+	public static String prettyprint(final ASTRoot r) {
+		String s = "";
+
+		// TODO
+		return s;
+	}
+
+	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "Namespace" })
+	public static String prettyprint(final Namespace n) {
+		String s = "";
+
+		// TODO
+		return s;
+	}
+
 	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "Declaration" })
 	public static String prettyprint(final Declaration d) {
 		String s = "";
