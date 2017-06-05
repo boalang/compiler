@@ -777,6 +777,14 @@ public class BoaAstIntrinsics {
 		return s;
 	}
 
+	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "Statement" })
+	public static String prettyprint(final Statement stmt) {
+		String s = "";
+
+		// TODO
+		return s;
+	}
+
 	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "Expression" })
 	public static String prettyprint(final Expression e) {
 		String s = "";
