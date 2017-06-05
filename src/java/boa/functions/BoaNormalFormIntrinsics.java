@@ -86,6 +86,7 @@ public class BoaNormalFormIntrinsics {
 	 * @return the reduced form of the expression, either as a Number or a complex Expression
 	 */
 	private static Object reduce_internal(final Expression e) throws Exception {
+        final Expression.Builder b;
 		final List<Object> results = new ArrayList<Object>();
 		for (final Expression sub : e.getExpressionsList())
 			results.add(reduce_internal(sub));
@@ -242,9 +243,17 @@ public class BoaNormalFormIntrinsics {
 					results2.add(0, ival);
 
 				// check for identity
-				if (results2.size() > 1 && ((results2.get(0) instanceof Double && (Double)results2.get(0) == 1.0)
-					|| (results2.get(0) instanceof Long && (Long)results2.get(0) == 1L)))
-					results2.remove(0);
+				if (results2.size() > 1) {
+					if ((results2.get(0) instanceof Double && (Double)results2.get(0) == 1.0)
+						|| (results2.get(0) instanceof Long && (Long)results2.get(0) == 1L))
+						results2.remove(0);
+
+					// check for elimination
+					if (results2.get(0) instanceof Double && (Double)results2.get(0) == 0.0)
+						return 0.0;
+					else if (results2.get(0) instanceof Long && (Long)results2.get(0) == 0L)
+						return 0L;
+				}
 
 				// if it reduced to a single term, return just the term otherwise return the whole expression
 				if (results2.size() == 1)
@@ -284,14 +293,14 @@ public class BoaNormalFormIntrinsics {
 				if (numerator instanceof Number) {
 					if (dval != 1.0) {
 						if (numerator instanceof Double)
-							results2.set(0, div(((Double)numerator).doubleValue(), dval, true));
+							results2.set(0, ((Double)numerator).doubleValue() / dval);
 						else
-							results2.set(0, div((double)((Long)numerator).longValue(), dval, true));
+							results2.set(0, (double)((Long)numerator).longValue() / dval);
 					} else {
 						if (numerator instanceof Double)
-							results2.set(0, div(((Double)numerator).doubleValue(), (double)ival, true));
+							results2.set(0, ((Double)numerator).doubleValue() / (double)ival);
 						else
-							results2.set(0, div((double)((Long)numerator).longValue(), (double)ival, false));
+							results2.set(0, div((double)((Long)numerator).longValue(), (double)ival));
 					}
 				} else {
 					// otherwise just add the new denominator
@@ -323,7 +332,7 @@ public class BoaNormalFormIntrinsics {
 
 			// return method call, but with each argument reduced
 			case METHODCALL:
-				final Expression.Builder b = Expression.newBuilder(e);
+				b = Expression.newBuilder(e);
 
 				b.clearMethodArgs();
 				for (final Expression sub : e.getMethodArgsList())
@@ -335,8 +344,16 @@ public class BoaNormalFormIntrinsics {
 			case PAREN:
 				return results.get(0);
 
-			// vars are returned as is
+			// vars may be a field access, so reduce the qualifiers
 			case VARACCESS:
+				b = Expression.newBuilder(e);
+
+				b.clearExpressions();
+				for (final Object o : results)
+                    b.addExpressions((Expression)o);
+
+				return b.build();
+
 			default:
 				return e;
 		}
@@ -349,9 +366,9 @@ public class BoaNormalFormIntrinsics {
 		return arr.toArray(new Expression[arr.size()]);
 	}
 
-	private static Object div(final double num, final double denom, final boolean force) {
+	private static Object div(final double num, final double denom) {
 		final double result = num / denom;
-		if (!force && result * denom == num)
+		if (result == (long)result)
 			return (long)result;
 		return result;
 	}
