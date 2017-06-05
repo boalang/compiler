@@ -55,11 +55,14 @@ public class BoaNormalFormIntrinsics {
 		JavaCore.setComplianceOptions(JavaCore.VERSION_1_8, options);
 		parser.setCompilerOptions(options);
 
-		final org.eclipse.jdt.core.dom.Expression e = (org.eclipse.jdt.core.dom.Expression) parser.createAST(null);
-		final Java8Visitor visitor = new Java8Visitor(s, null);
-		e.accept(visitor);
-
-		return visitor.getExpression();
+		try {
+			final org.eclipse.jdt.core.dom.Expression e = (org.eclipse.jdt.core.dom.Expression) parser.createAST(null);
+			final Java8Visitor visitor = new Java8Visitor(s, null);
+			e.accept(visitor);
+			return visitor.getExpression();
+		} catch (final Exception e) {
+			return null;
+		}
 	}
 
 	/**
