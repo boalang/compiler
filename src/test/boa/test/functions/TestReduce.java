@@ -38,7 +38,7 @@ import boa.types.Ast.Expression.ExpressionKind;
  */
 @RunWith(Parameterized.class)
 public class TestReduce {
-	@Parameters(name = "{index}: {0}")
+	@Parameters(name = "{index}][{0}")
 	public static Collection expressions() {
 		return Arrays.asList(new Object[][] {
 			// literals
@@ -71,6 +71,7 @@ public class TestReduce {
 			// complex expressions
 			{ "5 - 3 + 2", "4" },
 			{ "5 - (3 + 2)", "0" },
+			{ "5.0 / x / 5 * 10.0 * x", "1 * (10.0 * (1.0 / x)) * x" }, // FIXME should be 10
 		});
 	}
 

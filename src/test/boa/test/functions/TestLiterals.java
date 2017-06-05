@@ -42,7 +42,7 @@ public class TestLiterals {
 	private Expression e = null;
 	private Integer k = -1;
 
-	@Parameters(name = "{index}: {0}")
+	@Parameters(name = "{index}][{0}")
 	public static Collection literals() {
 		return Arrays.asList(new Object[][] {
 			// integers
