@@ -66,6 +66,249 @@ public class BoaNormalFormIntrinsics {
 	}
 
 	/**
+	 * Attempts to reduce an expression, simplifying whereever possible.
+	 *
+	 * @param e the expression to reduce
+	 * @return the reduced form of the expression
+	 */
+	@FunctionSpec(name = "reduce", returnType = "Expression", formalParameters = { "Expression" })
+	public static Expression reduce(final Expression e) throws Exception {
+		final Object o = reduce_internal(e);
+		if (o instanceof Expression)
+			return (Expression)o;
+		return createLiteral(o.toString());
+	}
+
+	private static Object reduce_internal(final Expression e) throws Exception {
+		final List<Object> results = new ArrayList<Object>();
+		for (final Expression sub : e.getExpressionsList())
+			results.add(reduce_internal(sub));
+
+		final List<Object> results2 = new ArrayList<Object>();
+		Double dval = 0.0;
+		Long ival = 0L;
+		boolean first = true;
+
+		switch (e.getKind()) {
+			// reduce both sides of the comparison
+			case EQ:
+			case NEQ:
+			case GT:
+			case LT:
+			case GTEQ:
+			case LTEQ:
+				return createExpression(e.getKind(), results.toArray(new Expression[results.size()]));
+
+			case OP_ADD:
+				// handle cases like '+x' or '+3'
+				if (results.size() == 1) {
+					final Object o = results.get(0);
+					if (o instanceof Expression)
+						return e;
+					if (o instanceof Double)
+						return ((Double)o).doubleValue();
+					return ((Long)o).longValue();
+				}
+
+				// if multiple arguments, try to add them all together
+				for (final Object o : results) {
+					if (o instanceof Expression)
+						results2.add(o);
+					else if (o instanceof Double)
+						dval += ((Double)o).doubleValue();
+					else if (o instanceof Long)
+						ival += ((Long)o).longValue();
+				}
+
+				// both float and integer results, so merge them into float
+				if (dval != 0.0 && ival != 0L) {
+					dval += ival;
+					ival = 0L;
+				}
+
+				if (dval != 0.0)
+				// after merging, add the one that remains to results
+					results2.add(0, createLiteral(dval.toString()));
+				else
+					results2.add(0, createLiteral(ival.toString()));
+
+				// if it reduced to a single term, return just the term otherwise return the whole expression
+				if (results2.size() == 1)
+					return results2.get(0);
+				return createExpression(e.getKind(), results2.toArray(new Expression[results2.size()]));
+
+			case OP_SUB:
+				// handle cases like '-x' or '-3'
+				if (results.size() == 1) {
+					final Object o = results.get(0);
+					if (o instanceof Expression)
+						return e;
+					if (o instanceof Double)
+						return -((Double)o).doubleValue();
+					return -((Long)o).longValue();
+				}
+
+				// if multiple arguments, try to subtract them all together
+				for (final Object o : results) {
+					if (o instanceof Expression) {
+						results2.add(o);
+					} else if (o instanceof Double) {
+						if (first) {
+							dval += ((Double)o).doubleValue();
+						} else {
+							dval -= ((Double)o).doubleValue();
+						}
+					} else if (o instanceof Long) {
+						if (first) {
+							ival += ((Long)o).longValue();
+						} else {
+							ival -= ((Long)o).longValue();
+						}
+					}
+					first = false;
+				}
+
+				// both float and integer results, so merge them into float
+				if (dval != 0.0 && ival != 0L) {
+					dval += ival;
+					ival = 0L;
+				}
+
+				// after merging, add the one that remains to results
+				if (dval != 0.0) {
+					results2.add(0, createLiteral(dval.toString()));
+				} else {
+					results2.add(0, createLiteral(ival.toString()));
+				}
+
+				// if it reduced to a single term, return just the term otherwise return the whole expression
+				if (results2.size() == 1)
+					return results2.get(0);
+				return createExpression(e.getKind(), results2.toArray(new Expression[results2.size()]));
+
+			case OP_MULT:
+				dval = 1.0;
+				ival = 1L;
+
+				// if multiple arguments, try to multiply them all together
+				for (final Object o : results) {
+					if (o instanceof Expression)
+						results2.add(o);
+					else if (o instanceof Double)
+						dval *= ((Double)o).doubleValue();
+					else if (o instanceof Long)
+						ival *= ((Long)o).longValue();
+				}
+
+				// both float and integer results, so merge them into float
+				if (dval != 1.0 && ival != 1L) {
+					dval *= ival;
+					ival = 1L;
+				}
+
+				// after merging, add the one that remains to results
+				if (dval != 1.0)
+					results2.add(0, createLiteral(dval.toString()));
+				else
+					results2.add(0, createLiteral(ival.toString()));
+
+				// if it reduced to a single term, return just the term otherwise return the whole expression
+				if (results2.size() == 1)
+					return results2.get(0);
+				return createExpression(e.getKind(), results2.toArray(new Expression[results2.size()]));
+
+			case OP_DIV:
+				dval = 1.0;
+				ival = 1L;
+
+				// if multiple arguments, try to divide them all together
+				// in thise case, all of the denominators get multiplied together
+				for (final Object o : results) {
+					if (o instanceof Expression) {
+						results2.add(o);
+					} else {
+						if (first) {
+							results2.add(createLiteral(o.toString()));
+						} else {
+							if (o instanceof Double)
+								dval *= ((Double)o).doubleValue();
+							else if (o instanceof Long)
+								ival *= ((Long)o).longValue();
+						}
+					}
+					first = false;
+				}
+
+				// both float and integer results, so merge them into float
+				if (dval != 1.0 && ival != 1L) {
+					dval *= ival;
+					ival = 1L;
+				}
+
+				final Object numerator = reduce_internal((Expression)results2.get(0));
+				// if the numerator is a number, try to do the actual division
+				if (numerator instanceof Number) {
+					if (dval != 1.0) {
+						if (numerator instanceof Double)
+							results2.set(0, createLiteral(div(((Double)numerator).doubleValue(), dval, true)));
+						else
+							results2.set(0, createLiteral(div((double)((Long)numerator).longValue(), dval, true)));
+					} else {
+						if (numerator instanceof Double)
+							results2.set(0, createLiteral(div(((Double)numerator).doubleValue(), (double)ival, true)));
+						else
+							results2.set(0, createLiteral(div((double)((Long)numerator).longValue(), (double)ival, false)));
+					}
+				} else {
+					// otherwise just add the new denominator
+					if (dval != 1.0)
+						results2.add(createLiteral(dval.toString()));
+					else
+						results2.add(createLiteral(ival.toString()));
+				}
+
+				// if it reduced to a single term, return just the term otherwise return the whole expression
+				if (results2.size() == 1)
+					return results2.get(0);
+				return createExpression(e.getKind(), results2.toArray(new Expression[results2.size()]));
+
+			// literals are converted to numbers, if possible
+			case LITERAL:
+				if (BoaAstIntrinsics.isIntLit(e))
+					return Long.parseLong(e.getLiteral());
+				if (BoaAstIntrinsics.isFloatLit(e))
+					return Double.parseDouble(e.getLiteral());
+				return e;
+
+			// return method call, but with each argument reduced
+			case METHODCALL:
+				final Expression.Builder b = Expression.newBuilder(e);
+
+				b.clearMethodArgs();
+				for (final Expression sub : e.getMethodArgsList())
+					b.addMethodArgs((Expression)reduce_internal(sub));
+
+				return b.build();
+
+			// remove parens
+			case PAREN:
+				return results.get(0);
+
+			// vars are returned as is
+			case VARACCESS:
+			default:
+				return e;
+		}
+	}
+
+	private static String div(final double num, final double denom, final boolean force) {
+		final double result = num / denom;
+		if (!force && result * denom == num)
+			return "" + (long)result;
+		return "" + result;
+	}
+
+	/**
 	 * A comparator for Expression types.
 	 * Uses pretty printing and string comparison.
 	 *
