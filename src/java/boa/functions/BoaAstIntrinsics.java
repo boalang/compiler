@@ -788,8 +788,8 @@ public class BoaAstIntrinsics {
 				return ppInfix("+", e.getExpressionsList());
 			case OP_SUB:
 				if (e.getExpressionsCount() == 1)
-					return ppInfix("-", e.getExpressionsList());
-				return ppPrefix("-", e);
+		            return ppPrefix("-", e);
+	            return ppInfix("-", e.getExpressionsList());
 
 			case LOGICAL_AND:           return "(" + ppInfix("&&",   e.getExpressionsList()) + ")";
 			case LOGICAL_OR:            return "(" + ppInfix("||",   e.getExpressionsList()) + ")";
