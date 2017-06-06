@@ -30,7 +30,7 @@ message Namespace {
 	/** Methods contained in this namespace */
 	repeated Method methods = 5;
 	/** Expressions contained in this namespace */
-	repeated Expression espresions = 6;
+	repeated Expression expressions = 6;
 }
 
 /** A type declaration, such as a class or interface */
