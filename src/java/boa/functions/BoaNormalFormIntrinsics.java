@@ -111,7 +111,7 @@ public class BoaNormalFormIntrinsics {
 				if (results.size() == 1) {
 					final Object o = results.get(0);
 					if (o instanceof Expression)
-						return e;
+						return reduce_internal(e.getExpressions(0));
 					if (o instanceof Double)
 						return ((Double)o).doubleValue();
 					return ((Long)o).longValue();
@@ -204,11 +204,24 @@ public class BoaNormalFormIntrinsics {
 						results2.add(ival);
 				}
 
-				// check for identity
-				if (results2.size() > 1 && ((results2.get(0) instanceof Double && (Double)results2.get(0) == 0.0)
-					|| (results2.get(0) instanceof Long && (Long)results2.get(0) == 0L))) {
-					results2.remove(0);
-					results2.set(0, createExpression(ExpressionKind.OP_SUB, (Expression)results2.get(0)));
+				if (results2.size() > 1) {
+					final Object lhs = results2.get(0);
+
+					// check for elimination
+					if (lhs instanceof Expression) {
+						int idx = results2.lastIndexOf(lhs);
+						if (idx > 0) {
+							results2.remove(idx);
+							results2.set(0, 0L);
+						}
+					}
+
+					// check for identity
+					if ((lhs instanceof Double && (Double)lhs == 0.0)
+						|| (lhs instanceof Long && (Long)lhs == 0L)) {
+						results2.remove(0);
+						results2.set(0, createExpression(ExpressionKind.OP_SUB, (Expression)results2.get(0)));
+					}
 				}
 
 				// if it reduced to a single term, return just the term otherwise return the whole expression
@@ -311,11 +324,21 @@ public class BoaNormalFormIntrinsics {
 				}
 
 				// check for identity
-				if (results2.size() > 1)
+				if (results2.size() > 1) {
+					// check for elimination
+					if (results2.get(0) instanceof Expression) {
+						int idx = results2.lastIndexOf(results2.get(0));
+						if (idx > 0) {
+							results2.remove(idx);
+							results2.set(0, 1L);
+						}
+					}
+
 					for (int i = 1; i < results2.size(); i++)
 						if ((results2.get(i) instanceof Double && (Double)results2.get(i) == 1.0)
 							|| (results2.get(i) instanceof Long && (Long)results2.get(i) == 1L))
 							results2.remove(i);
+				}
 
 				// if it reduced to a single term, return just the term otherwise return the whole expression
 				if (results2.size() == 1)
@@ -344,8 +367,52 @@ public class BoaNormalFormIntrinsics {
 			case PAREN:
 				return results.get(0);
 
-			// vars may be a field access, so reduce the qualifiers
+			// these have sub-expressions we must reduce
 			case VARACCESS:
+			case OP_INC:
+			case OP_DEC:
+			case LOGICAL_NOT:
+			case LOGICAL_AND:
+			case LOGICAL_OR:
+			case OP_MOD:
+			case BIT_LSHIFT:
+			case BIT_RSHIFT:
+			case BIT_UNSIGNEDRSHIFT:
+			case BIT_AND:
+			case BIT_OR:
+			case BIT_NOT:
+			case BIT_XOR:
+			case CAST:
+/*
+VARDECL
+ARRAYINDEX
+ARRAYINIT
+TYPECOMPARE
+NEW
+NEWARRAY
+CONDITIONAL
+NULLCOALESCE
+ASSIGN
+ASSIGN_ADD
+ASSIGN_SUB
+ASSIGN_MULT
+ASSIGN_DIV
+ASSIGN_MOD
+ASSIGN_BITXOR
+ASSIGN_BITAND
+ASSIGN_BITOR
+ASSIGN_LSHIFT
+ASSIGN_RSHIFT
+ASSIGN_UNSIGNEDRSHIFT
+ANNOTATION
+METHOD_REFERENCE
+LAMBDA
+*/
+			default:
+				if (results.size() == 0)
+					return e;
+
+				// want the same message, but with new sub-expressions
 				b = Expression.newBuilder(e);
 
 				b.clearExpressions();
@@ -354,8 +421,8 @@ public class BoaNormalFormIntrinsics {
 
 				return b.build();
 
-			default:
-				return e;
+			// for these we do nothing
+				//return e;
 		}
 	}
 
