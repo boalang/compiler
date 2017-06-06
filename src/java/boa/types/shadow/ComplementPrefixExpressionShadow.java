@@ -32,26 +32,26 @@ import boa.types.proto.ExpressionProtoTuple;
 import boa.types.proto.StatementProtoTuple;
 import boa.types.proto.TypeProtoTuple;
 /**
- * A shadow type for DecrementPostfixExpression.
+ * A shadow type for ComplementPrefixExpression.
  * 
  * @author rdyer
  * @author kaushin
  */
-public class DecrementPostFixExpressionShadow extends PostfixExpressionShadow  {
+public class ComplementPrefixExpressionShadow extends PrefixExpressionShadow  {
     /**
-     * Construct a {@link DecrementPostfixExpressionShadow}.
+     * Construct a {@link ComplementPrefixExpressionShadow}.
      */
 
     
     /** {@inheritDoc} */
     @Override
     public Expression getKindExpression(final SymbolTable env) {
-        return getKindExpression("ExpressionKind", "OP_DEC", new ExpressionKindProtoMap(), env);
+        return getKindExpression("ExpressionKind", "BIT_NOT", new ExpressionKindProtoMap(), env);
     }
 
     /** {@inheritDoc} */
     @Override
     public String toString() {
-        return "DecrementPostfixExpression";
+        return "ComplementPrefixExpression";
     }
 }

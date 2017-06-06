@@ -32,14 +32,14 @@ import boa.types.proto.ExpressionProtoTuple;
 import boa.types.proto.StatementProtoTuple;
 import boa.types.proto.TypeProtoTuple;
 /**
- * A shadow type for DecrementPostfixExpression.
+ * A shadow type for DecrementPrefixExpression.
  * 
  * @author rdyer
  * @author kaushin
  */
-public class DecrementPostFixExpressionShadow extends PostfixExpressionShadow  {
+public class DecrementPrefixExpressionShadow extends PrefixExpressionShadow  {
     /**
-     * Construct a {@link DecrementPostfixExpressionShadow}.
+     * Construct a {@link DecrementPrefixExpressionShadow}.
      */
 
     
@@ -52,6 +52,6 @@ public class DecrementPostFixExpressionShadow extends PostfixExpressionShadow  {
     /** {@inheritDoc} */
     @Override
     public String toString() {
-        return "DecrementPostfixExpression";
+        return "DecrementPrefixExpression";
     }
 }

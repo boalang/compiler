@@ -37,7 +37,7 @@ import boa.types.proto.TypeProtoTuple;
  * @author rdyer
  * @author kaushin
  */
-public class IncrementPostFixExpressionShadow extends InfixExpressionShadow  {
+public class IncrementPostFixExpressionShadow extends PostfixExpressionShadow  {
     /**
      * Construct a {@link IncrementPostfixExpressionShadow}.
      */

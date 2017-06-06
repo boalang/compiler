@@ -45,7 +45,6 @@ public class PrefixExpressionShadow extends BoaShadowType  {
         super(new ExpressionProtoTuple());
 
         addShadow("operand", new ExpressionProtoTuple());
-        addShadow("operator", new TypeProtoTuple());
     }
 
     /** {@inheritDoc} */
@@ -65,12 +64,6 @@ public class PrefixExpressionShadow extends BoaShadowType  {
             return tree;
         }
 
-
-        if ("operator".equals(name)) {
-            // TODO : InFix Operator
-            return null;
-        }
-       
 
         throw new RuntimeException("invalid shadow field: " + name);
     }

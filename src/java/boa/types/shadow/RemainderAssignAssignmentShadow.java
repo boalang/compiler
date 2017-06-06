@@ -32,26 +32,22 @@ import boa.types.proto.ExpressionProtoTuple;
 import boa.types.proto.StatementProtoTuple;
 import boa.types.proto.TypeProtoTuple;
 /**
- * A shadow type for DecrementPostfixExpression.
+ * A shadow type for RemainderAssignAssignment.
  * 
  * @author rdyer
  * @author kaushin
  */
-public class DecrementPostFixExpressionShadow extends PostfixExpressionShadow  {
-    /**
-     * Construct a {@link DecrementPostfixExpressionShadow}.
-     */
-
+public class RemainderAssignAssignmentShadow extends AssignmentShadow  {
     
     /** {@inheritDoc} */
     @Override
     public Expression getKindExpression(final SymbolTable env) {
-        return getKindExpression("ExpressionKind", "OP_DEC", new ExpressionKindProtoMap(), env);
+        return getKindExpression("ExpressionKind", "ASSIGN_MOD", new ExpressionKindProtoMap(), env);
     }
 
     /** {@inheritDoc} */
     @Override
     public String toString() {
-        return "DecrementPostfixExpression";
+        return "RemainderAssignAssignment";
     }
 }

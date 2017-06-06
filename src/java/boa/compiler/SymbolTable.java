@@ -145,6 +145,10 @@ public class SymbolTable {
 		idmap.put("IfStatement", new IfStatementShadow());
 		idmap.put("ForStatement", new ForStatementShadow());
 		idmap.put("InfixExpression", new InfixExpressionShadow());
+		idmap.put("PostfixExpression", new PostfixExpressionShadow());
+		idmap.put("PrefixExpression", new PrefixExpressionShadow());
+		idmap.put("Assignment", new AssignmentShadow());
+				
 
 		globalFunctions = new FunctionTrie();
 
