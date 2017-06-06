@@ -37,7 +37,7 @@ import boa.types.Ast.Expression;
  */
 @RunWith(Parameterized.class)
 public class TestReduce {
-	@Parameters(name = "{index}][{0}")
+	@Parameters(name = "{index}][{0} = {1}")
 	public static Collection expressions() {
 		return Arrays.asList(new Object[][] {
 			// literals
@@ -55,9 +55,11 @@ public class TestReduce {
 			{ "1 + 2", "3" },
 			{ "5 + 2 + 1", "8" },
 			{ "5.0 + 2 + 1", "8.0" },
+			{ "-1 + -2", "-3" },
 
 			// subtract operator
 			{ "2 - 1", "1" },
+			{ "1 - 2 - 3", "-4" },
 			{ "2 - -5 - 1", "6" },
 			{ "5.0 - 2 - 1", "2.0" },
 			{ "5 - (3 - 2)", "4" },
@@ -85,7 +87,8 @@ public class TestReduce {
 
 			// identities
 			{ "0 + x", "x" },
-			{ "x + 0", "x" },
+			{ "x + 0.0", "x" },
+			{ "x + (1 - 1.0)", "x" },
 			{ "x + (3 - 3)", "x" },
 			{ "(3 - 3) + x", "x" },
 
@@ -126,12 +129,12 @@ public class TestReduce {
 			{ "-6 / -3 + -5 * -3", "17" },
 			{ "-6 / -3 + (-5 * -3)", "17" },
 			{ "-2 / (-3 + -5) * -3", "-0.75" },
+			{ "5.0 + 3.5 - 2 * a.length", "8.5 - 2 * a.length" },
+			{ "5.0 + a.length * (3.5 - 2)", "5.0 + 1.5 * a.length" },
+			{ "5 + x + 3 + x", "8 + 2 * x" },
 /*
-			{ "5.0 + 3.5 - -2 * a.length", "" },
-			{ "5.0 + 3.5 - (-2 * a.length)", "" },
 			{ "5.0 + +3.5 - -2 * a.length", "" },
 			{ "(5.0 + 3.5) - -2 * a.length", "" },
-			{ "5.0 + (3.5 - -2) * a.length", "" },
 			{ "5.0 + 3.5 - -2 * a.length + x", "" },
 			{ "5.0 + 3.5 - (-2 * a.length + x)", "" },
 			{ "5.0 + 3.5 - -2 * (a.length + x)", "" },

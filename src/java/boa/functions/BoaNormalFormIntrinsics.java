@@ -140,6 +140,22 @@ public class BoaNormalFormIntrinsics {
 					results2.add(0, ival);
 
 				if (results2.size() > 1) {
+					// group common terms
+					for (int i = 0; i < results2.size(); i++) {
+						int count = 1;
+
+						for (int j = i + 1; j < results2.size(); j++)
+							if (results2.get(i).equals(results2.get(j)))
+								count++;
+
+						if (count > 1) {
+							final Expression commonTerm = (Expression)results2.get(i);
+							while (results2.remove(commonTerm))
+								;
+							results2.add(i, createExpression(ExpressionKind.OP_MULT, createLiteral("" + count), commonTerm));
+						}
+					}
+
 					// check for identity
 					if (results2.get(0) instanceof Number && ((Number)results2.get(0)).doubleValue() == 0.0)
 						results2.remove(0);
