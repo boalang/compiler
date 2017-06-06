@@ -49,6 +49,15 @@ public class NamespaceProtoTuple extends BoaProtoTuple {
 
 		names.put("comments", counter++);
 		members.add(new BoaProtoList(new CommentProtoTuple()));
+		
+		names.put("Statments", counter++);
+		members.add(new BoaProtoList(new StatementProtoTuple()));
+		
+		names.put("Methods", counter++);
+		members.add(new BoaProtoList(new MethodProtoTuple()));
+		
+		names.put("Expressions", counter++);
+		members.add(new BoaProtoList(new ExpressionProtoTuple()));
 	}
 
 	/**
