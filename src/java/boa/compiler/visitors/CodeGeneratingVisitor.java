@@ -646,44 +646,44 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			final List<String> operators = new ArrayList<String>();
 			final List<String> operands = new ArrayList<String>();
 
+			n.getLhs().accept(this);
+			n.getRhs().accept(this);
+			operators.add(n.getOp());
+
 			if (n.getOp().equals("==") || n.getOp().equals("!=")) {
-				// special case string (in)equality
-				if (n.getLhs().type instanceof BoaString) {
-					n.getRhs().accept(this);
-					n.getLhs().accept(this);
+				// special case string/stack/set/map (in)equality
+				if (n.getLhs().type instanceof BoaString || n.getLhs().type instanceof BoaStack || n.getLhs().type instanceof BoaSet || n.getLhs().type instanceof BoaMap) {
 					final String expr = code.removeLast() + ".equals(" + code.removeLast() + ")";
 
 					if (n.getOp().equals("!="))
 						st.add("lhs", "!" + expr);
 					else
 						st.add("lhs", expr);
+
+					operators.clear();
+				}
+				// special case arrays
+				else if (n.getLhs().type instanceof BoaArray) {
+					final String expr = "boa.functions.BoaIntrinsics.deepEquals(" + code.removeLast() + ", " + code.removeLast() + ")";
+
+					if (n.getOp().equals("!="))
+						st.add("lhs", "!" + expr);
+					else
+						st.add("lhs", expr);
+
+					operators.clear();
 				}
 				// special case AST (in)equality
 				else if (n.getLhs().type instanceof BoaProtoTuple) {
-					n.getLhs().accept(this);
-					st.add("lhs", code.removeLast() + ".hashCode()");
-
-					n.getRhs().accept(this);
 					operands.add(code.removeLast() + ".hashCode()");
-
-					operators.add(n.getOp());
+					st.add("lhs", code.removeLast() + ".hashCode()");
 				} else {
-					n.getLhs().accept(this);
-					st.add("lhs", code.removeLast());
-
-					n.getRhs().accept(this);
 					operands.add(code.removeLast());
-
-					operators.add(n.getOp());
+					st.add("lhs", code.removeLast());
 				}
 			} else {
-				n.getLhs().accept(this);
-				st.add("lhs", code.removeLast());
-
-				n.getRhs().accept(this);
 				operands.add(code.removeLast());
-
-				operators.add(n.getOp());
+				st.add("lhs", code.removeLast());
 			}
 
 			st.add("operators", operators);
@@ -2016,7 +2016,8 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		if (s instanceof IfStatement) {
 			final IfStatement ifs = (IfStatement)s;
 			if (ifs.hasElse())
-				return lastStatementIsStop(ifs.getElse());
+				return lastStatementIsStop(ifs.getBody()) && lastStatementIsStop(ifs.getElse());
+			return false;
 		}
 
 		if (s instanceof Block) {

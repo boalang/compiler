@@ -2,25 +2,38 @@ package boa.types;
 
 option optimize_for = SPEED;
 
+/** A unique person's information */
 message Person {
+	/** The person's username */
 	required string username = 1;
+	/** The person's real name, if known, otherwise the same as username */
 	required string real_name = 2;
+	/** The person's email address, if known */
 	required string email = 3;
 }
 
+/** Describes the kind of change for the file */
 enum ChangeKind {
 	option allow_alias = true;
 
+	/** The file did not already exist and was added */
 	ADDED = 1;
 
+	/** The file was deleted */
 	DELETED = 2;
+	/** @exclude */
 	REMOVED = 2;
 
+	/** The file already existed and was modified */
 	MODIFIED = 3;
+	/** @exclude */
 	CHANGED = 3;
 
+	/** @exclude */
 	RENAMED = 4;
+	/** @exclude */
 	MOVED = 4;
 
+	/** @exclude */
 	COPIED = 5;
 }

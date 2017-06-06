@@ -60,8 +60,12 @@ public class BoaProtoMap extends BoaMap {
 
 	/** {@inheritDoc} */
 	@Override
-	public boolean compares(BoaType obj) {
-		return this.getClass() == obj.getClass();
+	public boolean compares(BoaType that) {
+		// if that is a function, check the return type
+		if (that instanceof BoaFunction)
+			return this.compares(((BoaFunction) that).getType());
+
+		return this.getClass() == that.getClass();
 	}
 
 	/** {@inheritDoc} */

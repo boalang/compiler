@@ -10,97 +10,189 @@ public final class Ast {
   }
   /**
    * Protobuf enum {@code boa.types.TypeKind}
+   *
+   * <pre>
+   ** The kinds of types in an AST 
+   * </pre>
    */
   public enum TypeKind
       implements com.google.protobuf.ProtocolMessageEnum {
     /**
      * <code>OTHER = 0;</code>
+     *
+     * <pre>
+     ** Any other kind of Type 
+     * </pre>
      */
     OTHER(0, 0),
     /**
      * <code>CLASS = 1;</code>
+     *
+     * <pre>
+     ** A class type 
+     * </pre>
      */
     CLASS(1, 1),
     /**
      * <code>INTERFACE = 2;</code>
+     *
+     * <pre>
+     ** An interface type 
+     * </pre>
      */
     INTERFACE(2, 2),
     /**
      * <code>ANONYMOUS = 3;</code>
+     *
+     * <pre>
+     ** An anonymous type 
+     * </pre>
      */
     ANONYMOUS(3, 3),
     /**
      * <code>STRUCT = 4;</code>
+     *
+     * <pre>
+     ** A C-style struct 
+     * </pre>
      */
     STRUCT(5, 4),
     /**
      * <code>ENUM = 5;</code>
+     *
+     * <pre>
+     ** An enumerated type 
+     * </pre>
      */
     ENUM(6, 5),
     /**
      * <code>ANNOTATION = 6;</code>
+     *
+     * <pre>
+     ** An annotation type 
+     * </pre>
      */
     ANNOTATION(8, 6),
     /**
      * <code>DELEGATE = 7;</code>
+     *
+     * <pre>
+     ** A delegate type 
+     * </pre>
      */
     DELEGATE(9, 7),
     /**
      * <code>GENERIC = 8;</code>
+     *
+     * <pre>
+     ** A generic type 
+     * </pre>
      */
     GENERIC(10, 8),
     ;
 
     /**
      * <code>ANON = 3;</code>
+     *
+     * <pre>
+     ** @exclude 
+     * </pre>
      */
     public static final TypeKind ANON = ANONYMOUS;
     /**
      * <code>ENUMERATION = 5;</code>
+     *
+     * <pre>
+     ** @exclude 
+     * </pre>
      */
     public static final TypeKind ENUMERATION = ENUM;
     /**
      * <code>OTHER = 0;</code>
+     *
+     * <pre>
+     ** Any other kind of Type 
+     * </pre>
      */
     public static final int OTHER_VALUE = 0;
     /**
      * <code>CLASS = 1;</code>
+     *
+     * <pre>
+     ** A class type 
+     * </pre>
      */
     public static final int CLASS_VALUE = 1;
     /**
      * <code>INTERFACE = 2;</code>
+     *
+     * <pre>
+     ** An interface type 
+     * </pre>
      */
     public static final int INTERFACE_VALUE = 2;
     /**
      * <code>ANONYMOUS = 3;</code>
+     *
+     * <pre>
+     ** An anonymous type 
+     * </pre>
      */
     public static final int ANONYMOUS_VALUE = 3;
     /**
      * <code>ANON = 3;</code>
+     *
+     * <pre>
+     ** @exclude 
+     * </pre>
      */
     public static final int ANON_VALUE = 3;
     /**
      * <code>STRUCT = 4;</code>
+     *
+     * <pre>
+     ** A C-style struct 
+     * </pre>
      */
     public static final int STRUCT_VALUE = 4;
     /**
      * <code>ENUM = 5;</code>
+     *
+     * <pre>
+     ** An enumerated type 
+     * </pre>
      */
     public static final int ENUM_VALUE = 5;
     /**
      * <code>ENUMERATION = 5;</code>
+     *
+     * <pre>
+     ** @exclude 
+     * </pre>
      */
     public static final int ENUMERATION_VALUE = 5;
     /**
      * <code>ANNOTATION = 6;</code>
+     *
+     * <pre>
+     ** An annotation type 
+     * </pre>
      */
     public static final int ANNOTATION_VALUE = 6;
     /**
      * <code>DELEGATE = 7;</code>
+     *
+     * <pre>
+     ** A delegate type 
+     * </pre>
      */
     public static final int DELEGATE_VALUE = 7;
     /**
      * <code>GENERIC = 8;</code>
+     *
+     * <pre>
+     ** A generic type 
+     * </pre>
      */
     public static final int GENERIC_VALUE = 8;
 
@@ -201,6 +293,10 @@ public final class Ast {
   }
   /**
    * Protobuf type {@code boa.types.CommentsRoot}
+   *
+   * <pre>
+   ** @exclude TODO 
+   * </pre>
    */
   public static final class CommentsRoot extends
       com.google.protobuf.GeneratedMessage
@@ -453,6 +549,10 @@ public final class Ast {
     }
     /**
      * Protobuf type {@code boa.types.CommentsRoot}
+     *
+     * <pre>
+     ** @exclude TODO 
+     * </pre>
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
@@ -863,24 +963,44 @@ public final class Ast {
     // repeated .boa.types.Namespace namespaces = 1;
     /**
      * <code>repeated .boa.types.Namespace namespaces = 1;</code>
+     *
+     * <pre>
+     ** The top-level namespaces in the file 
+     * </pre>
      */
     java.util.List<boa.types.Ast.Namespace> 
         getNamespacesList();
     /**
      * <code>repeated .boa.types.Namespace namespaces = 1;</code>
+     *
+     * <pre>
+     ** The top-level namespaces in the file 
+     * </pre>
      */
     boa.types.Ast.Namespace getNamespaces(int index);
     /**
      * <code>repeated .boa.types.Namespace namespaces = 1;</code>
+     *
+     * <pre>
+     ** The top-level namespaces in the file 
+     * </pre>
      */
     int getNamespacesCount();
     /**
      * <code>repeated .boa.types.Namespace namespaces = 1;</code>
+     *
+     * <pre>
+     ** The top-level namespaces in the file 
+     * </pre>
      */
     java.util.List<? extends boa.types.Ast.NamespaceOrBuilder> 
         getNamespacesOrBuilderList();
     /**
      * <code>repeated .boa.types.Namespace namespaces = 1;</code>
+     *
+     * <pre>
+     ** The top-level namespaces in the file 
+     * </pre>
      */
     boa.types.Ast.NamespaceOrBuilder getNamespacesOrBuilder(
         int index);
@@ -888,19 +1008,35 @@ public final class Ast {
     // repeated string imports = 2;
     /**
      * <code>repeated string imports = 2;</code>
+     *
+     * <pre>
+     ** The imported namespaces and types 
+     * </pre>
      */
     java.util.List<java.lang.String>
     getImportsList();
     /**
      * <code>repeated string imports = 2;</code>
+     *
+     * <pre>
+     ** The imported namespaces and types 
+     * </pre>
      */
     int getImportsCount();
     /**
      * <code>repeated string imports = 2;</code>
+     *
+     * <pre>
+     ** The imported namespaces and types 
+     * </pre>
      */
     java.lang.String getImports(int index);
     /**
      * <code>repeated string imports = 2;</code>
+     *
+     * <pre>
+     ** The imported namespaces and types 
+     * </pre>
      */
     com.google.protobuf.ByteString
         getImportsBytes(int index);
@@ -908,25 +1044,45 @@ public final class Ast {
     // repeated string names = 3;
     /**
      * <code>repeated string names = 3;</code>
+     *
+     * <pre>
+     ** @exclude 
+     * </pre>
      */
     java.util.List<java.lang.String>
     getNamesList();
     /**
      * <code>repeated string names = 3;</code>
+     *
+     * <pre>
+     ** @exclude 
+     * </pre>
      */
     int getNamesCount();
     /**
      * <code>repeated string names = 3;</code>
+     *
+     * <pre>
+     ** @exclude 
+     * </pre>
      */
     java.lang.String getNames(int index);
     /**
      * <code>repeated string names = 3;</code>
+     *
+     * <pre>
+     ** @exclude 
+     * </pre>
      */
     com.google.protobuf.ByteString
         getNamesBytes(int index);
   }
   /**
    * Protobuf type {@code boa.types.ASTRoot}
+   *
+   * <pre>
+   ** Container class that holds a file's parsed AST 
+   * </pre>
    */
   public static final class ASTRoot extends
       com.google.protobuf.GeneratedMessage
@@ -1053,12 +1209,20 @@ public final class Ast {
     private java.util.List<boa.types.Ast.Namespace> namespaces_;
     /**
      * <code>repeated .boa.types.Namespace namespaces = 1;</code>
+     *
+     * <pre>
+     ** The top-level namespaces in the file 
+     * </pre>
      */
     public java.util.List<boa.types.Ast.Namespace> getNamespacesList() {
       return namespaces_;
     }
     /**
      * <code>repeated .boa.types.Namespace namespaces = 1;</code>
+     *
+     * <pre>
+     ** The top-level namespaces in the file 
+     * </pre>
      */
     public java.util.List<? extends boa.types.Ast.NamespaceOrBuilder> 
         getNamespacesOrBuilderList() {
@@ -1066,18 +1230,30 @@ public final class Ast {
     }
     /**
      * <code>repeated .boa.types.Namespace namespaces = 1;</code>
+     *
+     * <pre>
+     ** The top-level namespaces in the file 
+     * </pre>
      */
     public int getNamespacesCount() {
       return namespaces_.size();
     }
     /**
      * <code>repeated .boa.types.Namespace namespaces = 1;</code>
+     *
+     * <pre>
+     ** The top-level namespaces in the file 
+     * </pre>
      */
     public boa.types.Ast.Namespace getNamespaces(int index) {
       return namespaces_.get(index);
     }
     /**
      * <code>repeated .boa.types.Namespace namespaces = 1;</code>
+     *
+     * <pre>
+     ** The top-level namespaces in the file 
+     * </pre>
      */
     public boa.types.Ast.NamespaceOrBuilder getNamespacesOrBuilder(
         int index) {
@@ -1089,6 +1265,10 @@ public final class Ast {
     private com.google.protobuf.LazyStringList imports_;
     /**
      * <code>repeated string imports = 2;</code>
+     *
+     * <pre>
+     ** The imported namespaces and types 
+     * </pre>
      */
     public java.util.List<java.lang.String>
         getImportsList() {
@@ -1096,18 +1276,30 @@ public final class Ast {
     }
     /**
      * <code>repeated string imports = 2;</code>
+     *
+     * <pre>
+     ** The imported namespaces and types 
+     * </pre>
      */
     public int getImportsCount() {
       return imports_.size();
     }
     /**
      * <code>repeated string imports = 2;</code>
+     *
+     * <pre>
+     ** The imported namespaces and types 
+     * </pre>
      */
     public java.lang.String getImports(int index) {
       return imports_.get(index);
     }
     /**
      * <code>repeated string imports = 2;</code>
+     *
+     * <pre>
+     ** The imported namespaces and types 
+     * </pre>
      */
     public com.google.protobuf.ByteString
         getImportsBytes(int index) {
@@ -1119,6 +1311,10 @@ public final class Ast {
     private com.google.protobuf.LazyStringList names_;
     /**
      * <code>repeated string names = 3;</code>
+     *
+     * <pre>
+     ** @exclude 
+     * </pre>
      */
     public java.util.List<java.lang.String>
         getNamesList() {
@@ -1126,18 +1322,30 @@ public final class Ast {
     }
     /**
      * <code>repeated string names = 3;</code>
+     *
+     * <pre>
+     ** @exclude 
+     * </pre>
      */
     public int getNamesCount() {
       return names_.size();
     }
     /**
      * <code>repeated string names = 3;</code>
+     *
+     * <pre>
+     ** @exclude 
+     * </pre>
      */
     public java.lang.String getNames(int index) {
       return names_.get(index);
     }
     /**
      * <code>repeated string names = 3;</code>
+     *
+     * <pre>
+     ** @exclude 
+     * </pre>
      */
     public com.google.protobuf.ByteString
         getNamesBytes(int index) {
@@ -1287,6 +1495,10 @@ public final class Ast {
     }
     /**
      * Protobuf type {@code boa.types.ASTRoot}
+     *
+     * <pre>
+     ** Container class that holds a file's parsed AST 
+     * </pre>
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
@@ -1491,6 +1703,10 @@ public final class Ast {
 
       /**
        * <code>repeated .boa.types.Namespace namespaces = 1;</code>
+       *
+       * <pre>
+       ** The top-level namespaces in the file 
+       * </pre>
        */
       public java.util.List<boa.types.Ast.Namespace> getNamespacesList() {
         if (namespacesBuilder_ == null) {
@@ -1501,6 +1717,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Namespace namespaces = 1;</code>
+       *
+       * <pre>
+       ** The top-level namespaces in the file 
+       * </pre>
        */
       public int getNamespacesCount() {
         if (namespacesBuilder_ == null) {
@@ -1511,6 +1731,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Namespace namespaces = 1;</code>
+       *
+       * <pre>
+       ** The top-level namespaces in the file 
+       * </pre>
        */
       public boa.types.Ast.Namespace getNamespaces(int index) {
         if (namespacesBuilder_ == null) {
@@ -1521,6 +1745,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Namespace namespaces = 1;</code>
+       *
+       * <pre>
+       ** The top-level namespaces in the file 
+       * </pre>
        */
       public Builder setNamespaces(
           int index, boa.types.Ast.Namespace value) {
@@ -1538,6 +1766,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Namespace namespaces = 1;</code>
+       *
+       * <pre>
+       ** The top-level namespaces in the file 
+       * </pre>
        */
       public Builder setNamespaces(
           int index, boa.types.Ast.Namespace.Builder builderForValue) {
@@ -1552,6 +1784,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Namespace namespaces = 1;</code>
+       *
+       * <pre>
+       ** The top-level namespaces in the file 
+       * </pre>
        */
       public Builder addNamespaces(boa.types.Ast.Namespace value) {
         if (namespacesBuilder_ == null) {
@@ -1568,6 +1804,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Namespace namespaces = 1;</code>
+       *
+       * <pre>
+       ** The top-level namespaces in the file 
+       * </pre>
        */
       public Builder addNamespaces(
           int index, boa.types.Ast.Namespace value) {
@@ -1585,6 +1825,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Namespace namespaces = 1;</code>
+       *
+       * <pre>
+       ** The top-level namespaces in the file 
+       * </pre>
        */
       public Builder addNamespaces(
           boa.types.Ast.Namespace.Builder builderForValue) {
@@ -1599,6 +1843,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Namespace namespaces = 1;</code>
+       *
+       * <pre>
+       ** The top-level namespaces in the file 
+       * </pre>
        */
       public Builder addNamespaces(
           int index, boa.types.Ast.Namespace.Builder builderForValue) {
@@ -1613,6 +1861,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Namespace namespaces = 1;</code>
+       *
+       * <pre>
+       ** The top-level namespaces in the file 
+       * </pre>
        */
       public Builder addAllNamespaces(
           java.lang.Iterable<? extends boa.types.Ast.Namespace> values) {
@@ -1627,6 +1879,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Namespace namespaces = 1;</code>
+       *
+       * <pre>
+       ** The top-level namespaces in the file 
+       * </pre>
        */
       public Builder clearNamespaces() {
         if (namespacesBuilder_ == null) {
@@ -1640,6 +1896,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Namespace namespaces = 1;</code>
+       *
+       * <pre>
+       ** The top-level namespaces in the file 
+       * </pre>
        */
       public Builder removeNamespaces(int index) {
         if (namespacesBuilder_ == null) {
@@ -1653,6 +1913,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Namespace namespaces = 1;</code>
+       *
+       * <pre>
+       ** The top-level namespaces in the file 
+       * </pre>
        */
       public boa.types.Ast.Namespace.Builder getNamespacesBuilder(
           int index) {
@@ -1660,6 +1924,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Namespace namespaces = 1;</code>
+       *
+       * <pre>
+       ** The top-level namespaces in the file 
+       * </pre>
        */
       public boa.types.Ast.NamespaceOrBuilder getNamespacesOrBuilder(
           int index) {
@@ -1670,6 +1938,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Namespace namespaces = 1;</code>
+       *
+       * <pre>
+       ** The top-level namespaces in the file 
+       * </pre>
        */
       public java.util.List<? extends boa.types.Ast.NamespaceOrBuilder> 
            getNamespacesOrBuilderList() {
@@ -1681,6 +1953,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Namespace namespaces = 1;</code>
+       *
+       * <pre>
+       ** The top-level namespaces in the file 
+       * </pre>
        */
       public boa.types.Ast.Namespace.Builder addNamespacesBuilder() {
         return getNamespacesFieldBuilder().addBuilder(
@@ -1688,6 +1964,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Namespace namespaces = 1;</code>
+       *
+       * <pre>
+       ** The top-level namespaces in the file 
+       * </pre>
        */
       public boa.types.Ast.Namespace.Builder addNamespacesBuilder(
           int index) {
@@ -1696,6 +1976,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Namespace namespaces = 1;</code>
+       *
+       * <pre>
+       ** The top-level namespaces in the file 
+       * </pre>
        */
       public java.util.List<boa.types.Ast.Namespace.Builder> 
            getNamespacesBuilderList() {
@@ -1726,6 +2010,10 @@ public final class Ast {
       }
       /**
        * <code>repeated string imports = 2;</code>
+       *
+       * <pre>
+       ** The imported namespaces and types 
+       * </pre>
        */
       public java.util.List<java.lang.String>
           getImportsList() {
@@ -1733,18 +2021,30 @@ public final class Ast {
       }
       /**
        * <code>repeated string imports = 2;</code>
+       *
+       * <pre>
+       ** The imported namespaces and types 
+       * </pre>
        */
       public int getImportsCount() {
         return imports_.size();
       }
       /**
        * <code>repeated string imports = 2;</code>
+       *
+       * <pre>
+       ** The imported namespaces and types 
+       * </pre>
        */
       public java.lang.String getImports(int index) {
         return imports_.get(index);
       }
       /**
        * <code>repeated string imports = 2;</code>
+       *
+       * <pre>
+       ** The imported namespaces and types 
+       * </pre>
        */
       public com.google.protobuf.ByteString
           getImportsBytes(int index) {
@@ -1752,6 +2052,10 @@ public final class Ast {
       }
       /**
        * <code>repeated string imports = 2;</code>
+       *
+       * <pre>
+       ** The imported namespaces and types 
+       * </pre>
        */
       public Builder setImports(
           int index, java.lang.String value) {
@@ -1765,6 +2069,10 @@ public final class Ast {
       }
       /**
        * <code>repeated string imports = 2;</code>
+       *
+       * <pre>
+       ** The imported namespaces and types 
+       * </pre>
        */
       public Builder addImports(
           java.lang.String value) {
@@ -1778,6 +2086,10 @@ public final class Ast {
       }
       /**
        * <code>repeated string imports = 2;</code>
+       *
+       * <pre>
+       ** The imported namespaces and types 
+       * </pre>
        */
       public Builder addAllImports(
           java.lang.Iterable<java.lang.String> values) {
@@ -1788,6 +2100,10 @@ public final class Ast {
       }
       /**
        * <code>repeated string imports = 2;</code>
+       *
+       * <pre>
+       ** The imported namespaces and types 
+       * </pre>
        */
       public Builder clearImports() {
         imports_ = com.google.protobuf.LazyStringArrayList.EMPTY;
@@ -1797,6 +2113,10 @@ public final class Ast {
       }
       /**
        * <code>repeated string imports = 2;</code>
+       *
+       * <pre>
+       ** The imported namespaces and types 
+       * </pre>
        */
       public Builder addImportsBytes(
           com.google.protobuf.ByteString value) {
@@ -1819,6 +2139,10 @@ public final class Ast {
       }
       /**
        * <code>repeated string names = 3;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
        */
       public java.util.List<java.lang.String>
           getNamesList() {
@@ -1826,18 +2150,30 @@ public final class Ast {
       }
       /**
        * <code>repeated string names = 3;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
        */
       public int getNamesCount() {
         return names_.size();
       }
       /**
        * <code>repeated string names = 3;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
        */
       public java.lang.String getNames(int index) {
         return names_.get(index);
       }
       /**
        * <code>repeated string names = 3;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
        */
       public com.google.protobuf.ByteString
           getNamesBytes(int index) {
@@ -1845,6 +2181,10 @@ public final class Ast {
       }
       /**
        * <code>repeated string names = 3;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
        */
       public Builder setNames(
           int index, java.lang.String value) {
@@ -1858,6 +2198,10 @@ public final class Ast {
       }
       /**
        * <code>repeated string names = 3;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
        */
       public Builder addNames(
           java.lang.String value) {
@@ -1871,6 +2215,10 @@ public final class Ast {
       }
       /**
        * <code>repeated string names = 3;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
        */
       public Builder addAllNames(
           java.lang.Iterable<java.lang.String> values) {
@@ -1881,6 +2229,10 @@ public final class Ast {
       }
       /**
        * <code>repeated string names = 3;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
        */
       public Builder clearNames() {
         names_ = com.google.protobuf.LazyStringArrayList.EMPTY;
@@ -1890,6 +2242,10 @@ public final class Ast {
       }
       /**
        * <code>repeated string names = 3;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
        */
       public Builder addNamesBytes(
           com.google.protobuf.ByteString value) {
@@ -1919,14 +2275,26 @@ public final class Ast {
     // required string name = 1;
     /**
      * <code>required string name = 1;</code>
+     *
+     * <pre>
+     ** The name of the namespace 
+     * </pre>
      */
     boolean hasName();
     /**
      * <code>required string name = 1;</code>
+     *
+     * <pre>
+     ** The name of the namespace 
+     * </pre>
      */
     java.lang.String getName();
     /**
      * <code>required string name = 1;</code>
+     *
+     * <pre>
+     ** The name of the namespace 
+     * </pre>
      */
     com.google.protobuf.ByteString
         getNameBytes();
@@ -1934,24 +2302,44 @@ public final class Ast {
     // repeated .boa.types.Modifier modifiers = 2;
     /**
      * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+     *
+     * <pre>
+     ** Any modifiers/annotations on the namespace 
+     * </pre>
      */
     java.util.List<boa.types.Ast.Modifier> 
         getModifiersList();
     /**
      * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+     *
+     * <pre>
+     ** Any modifiers/annotations on the namespace 
+     * </pre>
      */
     boa.types.Ast.Modifier getModifiers(int index);
     /**
      * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+     *
+     * <pre>
+     ** Any modifiers/annotations on the namespace 
+     * </pre>
      */
     int getModifiersCount();
     /**
      * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+     *
+     * <pre>
+     ** Any modifiers/annotations on the namespace 
+     * </pre>
      */
     java.util.List<? extends boa.types.Ast.ModifierOrBuilder> 
         getModifiersOrBuilderList();
     /**
      * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+     *
+     * <pre>
+     ** Any modifiers/annotations on the namespace 
+     * </pre>
      */
     boa.types.Ast.ModifierOrBuilder getModifiersOrBuilder(
         int index);
@@ -1961,7 +2349,7 @@ public final class Ast {
      * <code>repeated .boa.types.Declaration declarations = 3;</code>
      *
      * <pre>
-     *	required PositionInfo position = 4;
+     ** Declarations contained in this namespace 
      * </pre>
      */
     java.util.List<boa.types.Ast.Declaration> 
@@ -1970,7 +2358,7 @@ public final class Ast {
      * <code>repeated .boa.types.Declaration declarations = 3;</code>
      *
      * <pre>
-     *	required PositionInfo position = 4;
+     ** Declarations contained in this namespace 
      * </pre>
      */
     boa.types.Ast.Declaration getDeclarations(int index);
@@ -1978,7 +2366,7 @@ public final class Ast {
      * <code>repeated .boa.types.Declaration declarations = 3;</code>
      *
      * <pre>
-     *	required PositionInfo position = 4;
+     ** Declarations contained in this namespace 
      * </pre>
      */
     int getDeclarationsCount();
@@ -1986,7 +2374,7 @@ public final class Ast {
      * <code>repeated .boa.types.Declaration declarations = 3;</code>
      *
      * <pre>
-     *	required PositionInfo position = 4;
+     ** Declarations contained in this namespace 
      * </pre>
      */
     java.util.List<? extends boa.types.Ast.DeclarationOrBuilder> 
@@ -1995,7 +2383,7 @@ public final class Ast {
      * <code>repeated .boa.types.Declaration declarations = 3;</code>
      *
      * <pre>
-     *	required PositionInfo position = 4;
+     ** Declarations contained in this namespace 
      * </pre>
      */
     boa.types.Ast.DeclarationOrBuilder getDeclarationsOrBuilder(
@@ -2003,6 +2391,10 @@ public final class Ast {
   }
   /**
    * Protobuf type {@code boa.types.Namespace}
+   *
+   * <pre>
+   ** A namespace (aka, package) in a source file 
+   * </pre>
    */
   public static final class Namespace extends
       com.google.protobuf.GeneratedMessage
@@ -2124,12 +2516,20 @@ public final class Ast {
     private java.lang.Object name_;
     /**
      * <code>required string name = 1;</code>
+     *
+     * <pre>
+     ** The name of the namespace 
+     * </pre>
      */
     public boolean hasName() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
      * <code>required string name = 1;</code>
+     *
+     * <pre>
+     ** The name of the namespace 
+     * </pre>
      */
     public java.lang.String getName() {
       java.lang.Object ref = name_;
@@ -2147,6 +2547,10 @@ public final class Ast {
     }
     /**
      * <code>required string name = 1;</code>
+     *
+     * <pre>
+     ** The name of the namespace 
+     * </pre>
      */
     public com.google.protobuf.ByteString
         getNameBytes() {
@@ -2167,12 +2571,20 @@ public final class Ast {
     private java.util.List<boa.types.Ast.Modifier> modifiers_;
     /**
      * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+     *
+     * <pre>
+     ** Any modifiers/annotations on the namespace 
+     * </pre>
      */
     public java.util.List<boa.types.Ast.Modifier> getModifiersList() {
       return modifiers_;
     }
     /**
      * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+     *
+     * <pre>
+     ** Any modifiers/annotations on the namespace 
+     * </pre>
      */
     public java.util.List<? extends boa.types.Ast.ModifierOrBuilder> 
         getModifiersOrBuilderList() {
@@ -2180,18 +2592,30 @@ public final class Ast {
     }
     /**
      * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+     *
+     * <pre>
+     ** Any modifiers/annotations on the namespace 
+     * </pre>
      */
     public int getModifiersCount() {
       return modifiers_.size();
     }
     /**
      * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+     *
+     * <pre>
+     ** Any modifiers/annotations on the namespace 
+     * </pre>
      */
     public boa.types.Ast.Modifier getModifiers(int index) {
       return modifiers_.get(index);
     }
     /**
      * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+     *
+     * <pre>
+     ** Any modifiers/annotations on the namespace 
+     * </pre>
      */
     public boa.types.Ast.ModifierOrBuilder getModifiersOrBuilder(
         int index) {
@@ -2205,7 +2629,7 @@ public final class Ast {
      * <code>repeated .boa.types.Declaration declarations = 3;</code>
      *
      * <pre>
-     *	required PositionInfo position = 4;
+     ** Declarations contained in this namespace 
      * </pre>
      */
     public java.util.List<boa.types.Ast.Declaration> getDeclarationsList() {
@@ -2215,7 +2639,7 @@ public final class Ast {
      * <code>repeated .boa.types.Declaration declarations = 3;</code>
      *
      * <pre>
-     *	required PositionInfo position = 4;
+     ** Declarations contained in this namespace 
      * </pre>
      */
     public java.util.List<? extends boa.types.Ast.DeclarationOrBuilder> 
@@ -2226,7 +2650,7 @@ public final class Ast {
      * <code>repeated .boa.types.Declaration declarations = 3;</code>
      *
      * <pre>
-     *	required PositionInfo position = 4;
+     ** Declarations contained in this namespace 
      * </pre>
      */
     public int getDeclarationsCount() {
@@ -2236,7 +2660,7 @@ public final class Ast {
      * <code>repeated .boa.types.Declaration declarations = 3;</code>
      *
      * <pre>
-     *	required PositionInfo position = 4;
+     ** Declarations contained in this namespace 
      * </pre>
      */
     public boa.types.Ast.Declaration getDeclarations(int index) {
@@ -2246,7 +2670,7 @@ public final class Ast {
      * <code>repeated .boa.types.Declaration declarations = 3;</code>
      *
      * <pre>
-     *	required PositionInfo position = 4;
+     ** Declarations contained in this namespace 
      * </pre>
      */
     public boa.types.Ast.DeclarationOrBuilder getDeclarationsOrBuilder(
@@ -2397,6 +2821,10 @@ public final class Ast {
     }
     /**
      * Protobuf type {@code boa.types.Namespace}
+     *
+     * <pre>
+     ** A namespace (aka, package) in a source file 
+     * </pre>
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
@@ -2619,12 +3047,20 @@ public final class Ast {
       private java.lang.Object name_ = "";
       /**
        * <code>required string name = 1;</code>
+       *
+       * <pre>
+       ** The name of the namespace 
+       * </pre>
        */
       public boolean hasName() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
        * <code>required string name = 1;</code>
+       *
+       * <pre>
+       ** The name of the namespace 
+       * </pre>
        */
       public java.lang.String getName() {
         java.lang.Object ref = name_;
@@ -2639,6 +3075,10 @@ public final class Ast {
       }
       /**
        * <code>required string name = 1;</code>
+       *
+       * <pre>
+       ** The name of the namespace 
+       * </pre>
        */
       public com.google.protobuf.ByteString
           getNameBytes() {
@@ -2655,6 +3095,10 @@ public final class Ast {
       }
       /**
        * <code>required string name = 1;</code>
+       *
+       * <pre>
+       ** The name of the namespace 
+       * </pre>
        */
       public Builder setName(
           java.lang.String value) {
@@ -2668,6 +3112,10 @@ public final class Ast {
       }
       /**
        * <code>required string name = 1;</code>
+       *
+       * <pre>
+       ** The name of the namespace 
+       * </pre>
        */
       public Builder clearName() {
         bitField0_ = (bitField0_ & ~0x00000001);
@@ -2677,6 +3125,10 @@ public final class Ast {
       }
       /**
        * <code>required string name = 1;</code>
+       *
+       * <pre>
+       ** The name of the namespace 
+       * </pre>
        */
       public Builder setNameBytes(
           com.google.protobuf.ByteString value) {
@@ -2704,6 +3156,10 @@ public final class Ast {
 
       /**
        * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+       *
+       * <pre>
+       ** Any modifiers/annotations on the namespace 
+       * </pre>
        */
       public java.util.List<boa.types.Ast.Modifier> getModifiersList() {
         if (modifiersBuilder_ == null) {
@@ -2714,6 +3170,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+       *
+       * <pre>
+       ** Any modifiers/annotations on the namespace 
+       * </pre>
        */
       public int getModifiersCount() {
         if (modifiersBuilder_ == null) {
@@ -2724,6 +3184,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+       *
+       * <pre>
+       ** Any modifiers/annotations on the namespace 
+       * </pre>
        */
       public boa.types.Ast.Modifier getModifiers(int index) {
         if (modifiersBuilder_ == null) {
@@ -2734,6 +3198,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+       *
+       * <pre>
+       ** Any modifiers/annotations on the namespace 
+       * </pre>
        */
       public Builder setModifiers(
           int index, boa.types.Ast.Modifier value) {
@@ -2751,6 +3219,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+       *
+       * <pre>
+       ** Any modifiers/annotations on the namespace 
+       * </pre>
        */
       public Builder setModifiers(
           int index, boa.types.Ast.Modifier.Builder builderForValue) {
@@ -2765,6 +3237,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+       *
+       * <pre>
+       ** Any modifiers/annotations on the namespace 
+       * </pre>
        */
       public Builder addModifiers(boa.types.Ast.Modifier value) {
         if (modifiersBuilder_ == null) {
@@ -2781,6 +3257,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+       *
+       * <pre>
+       ** Any modifiers/annotations on the namespace 
+       * </pre>
        */
       public Builder addModifiers(
           int index, boa.types.Ast.Modifier value) {
@@ -2798,6 +3278,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+       *
+       * <pre>
+       ** Any modifiers/annotations on the namespace 
+       * </pre>
        */
       public Builder addModifiers(
           boa.types.Ast.Modifier.Builder builderForValue) {
@@ -2812,6 +3296,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+       *
+       * <pre>
+       ** Any modifiers/annotations on the namespace 
+       * </pre>
        */
       public Builder addModifiers(
           int index, boa.types.Ast.Modifier.Builder builderForValue) {
@@ -2826,6 +3314,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+       *
+       * <pre>
+       ** Any modifiers/annotations on the namespace 
+       * </pre>
        */
       public Builder addAllModifiers(
           java.lang.Iterable<? extends boa.types.Ast.Modifier> values) {
@@ -2840,6 +3332,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+       *
+       * <pre>
+       ** Any modifiers/annotations on the namespace 
+       * </pre>
        */
       public Builder clearModifiers() {
         if (modifiersBuilder_ == null) {
@@ -2853,6 +3349,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+       *
+       * <pre>
+       ** Any modifiers/annotations on the namespace 
+       * </pre>
        */
       public Builder removeModifiers(int index) {
         if (modifiersBuilder_ == null) {
@@ -2866,6 +3366,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+       *
+       * <pre>
+       ** Any modifiers/annotations on the namespace 
+       * </pre>
        */
       public boa.types.Ast.Modifier.Builder getModifiersBuilder(
           int index) {
@@ -2873,6 +3377,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+       *
+       * <pre>
+       ** Any modifiers/annotations on the namespace 
+       * </pre>
        */
       public boa.types.Ast.ModifierOrBuilder getModifiersOrBuilder(
           int index) {
@@ -2883,6 +3391,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+       *
+       * <pre>
+       ** Any modifiers/annotations on the namespace 
+       * </pre>
        */
       public java.util.List<? extends boa.types.Ast.ModifierOrBuilder> 
            getModifiersOrBuilderList() {
@@ -2894,6 +3406,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+       *
+       * <pre>
+       ** Any modifiers/annotations on the namespace 
+       * </pre>
        */
       public boa.types.Ast.Modifier.Builder addModifiersBuilder() {
         return getModifiersFieldBuilder().addBuilder(
@@ -2901,6 +3417,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+       *
+       * <pre>
+       ** Any modifiers/annotations on the namespace 
+       * </pre>
        */
       public boa.types.Ast.Modifier.Builder addModifiersBuilder(
           int index) {
@@ -2909,6 +3429,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+       *
+       * <pre>
+       ** Any modifiers/annotations on the namespace 
+       * </pre>
        */
       public java.util.List<boa.types.Ast.Modifier.Builder> 
            getModifiersBuilderList() {
@@ -2946,7 +3470,7 @@ public final class Ast {
        * <code>repeated .boa.types.Declaration declarations = 3;</code>
        *
        * <pre>
-       *	required PositionInfo position = 4;
+       ** Declarations contained in this namespace 
        * </pre>
        */
       public java.util.List<boa.types.Ast.Declaration> getDeclarationsList() {
@@ -2960,7 +3484,7 @@ public final class Ast {
        * <code>repeated .boa.types.Declaration declarations = 3;</code>
        *
        * <pre>
-       *	required PositionInfo position = 4;
+       ** Declarations contained in this namespace 
        * </pre>
        */
       public int getDeclarationsCount() {
@@ -2974,7 +3498,7 @@ public final class Ast {
        * <code>repeated .boa.types.Declaration declarations = 3;</code>
        *
        * <pre>
-       *	required PositionInfo position = 4;
+       ** Declarations contained in this namespace 
        * </pre>
        */
       public boa.types.Ast.Declaration getDeclarations(int index) {
@@ -2988,7 +3512,7 @@ public final class Ast {
        * <code>repeated .boa.types.Declaration declarations = 3;</code>
        *
        * <pre>
-       *	required PositionInfo position = 4;
+       ** Declarations contained in this namespace 
        * </pre>
        */
       public Builder setDeclarations(
@@ -3009,7 +3533,7 @@ public final class Ast {
        * <code>repeated .boa.types.Declaration declarations = 3;</code>
        *
        * <pre>
-       *	required PositionInfo position = 4;
+       ** Declarations contained in this namespace 
        * </pre>
        */
       public Builder setDeclarations(
@@ -3027,7 +3551,7 @@ public final class Ast {
        * <code>repeated .boa.types.Declaration declarations = 3;</code>
        *
        * <pre>
-       *	required PositionInfo position = 4;
+       ** Declarations contained in this namespace 
        * </pre>
        */
       public Builder addDeclarations(boa.types.Ast.Declaration value) {
@@ -3047,7 +3571,7 @@ public final class Ast {
        * <code>repeated .boa.types.Declaration declarations = 3;</code>
        *
        * <pre>
-       *	required PositionInfo position = 4;
+       ** Declarations contained in this namespace 
        * </pre>
        */
       public Builder addDeclarations(
@@ -3068,7 +3592,7 @@ public final class Ast {
        * <code>repeated .boa.types.Declaration declarations = 3;</code>
        *
        * <pre>
-       *	required PositionInfo position = 4;
+       ** Declarations contained in this namespace 
        * </pre>
        */
       public Builder addDeclarations(
@@ -3086,7 +3610,7 @@ public final class Ast {
        * <code>repeated .boa.types.Declaration declarations = 3;</code>
        *
        * <pre>
-       *	required PositionInfo position = 4;
+       ** Declarations contained in this namespace 
        * </pre>
        */
       public Builder addDeclarations(
@@ -3104,7 +3628,7 @@ public final class Ast {
        * <code>repeated .boa.types.Declaration declarations = 3;</code>
        *
        * <pre>
-       *	required PositionInfo position = 4;
+       ** Declarations contained in this namespace 
        * </pre>
        */
       public Builder addAllDeclarations(
@@ -3122,7 +3646,7 @@ public final class Ast {
        * <code>repeated .boa.types.Declaration declarations = 3;</code>
        *
        * <pre>
-       *	required PositionInfo position = 4;
+       ** Declarations contained in this namespace 
        * </pre>
        */
       public Builder clearDeclarations() {
@@ -3139,7 +3663,7 @@ public final class Ast {
        * <code>repeated .boa.types.Declaration declarations = 3;</code>
        *
        * <pre>
-       *	required PositionInfo position = 4;
+       ** Declarations contained in this namespace 
        * </pre>
        */
       public Builder removeDeclarations(int index) {
@@ -3156,7 +3680,7 @@ public final class Ast {
        * <code>repeated .boa.types.Declaration declarations = 3;</code>
        *
        * <pre>
-       *	required PositionInfo position = 4;
+       ** Declarations contained in this namespace 
        * </pre>
        */
       public boa.types.Ast.Declaration.Builder getDeclarationsBuilder(
@@ -3167,7 +3691,7 @@ public final class Ast {
        * <code>repeated .boa.types.Declaration declarations = 3;</code>
        *
        * <pre>
-       *	required PositionInfo position = 4;
+       ** Declarations contained in this namespace 
        * </pre>
        */
       public boa.types.Ast.DeclarationOrBuilder getDeclarationsOrBuilder(
@@ -3181,7 +3705,7 @@ public final class Ast {
        * <code>repeated .boa.types.Declaration declarations = 3;</code>
        *
        * <pre>
-       *	required PositionInfo position = 4;
+       ** Declarations contained in this namespace 
        * </pre>
        */
       public java.util.List<? extends boa.types.Ast.DeclarationOrBuilder> 
@@ -3196,7 +3720,7 @@ public final class Ast {
        * <code>repeated .boa.types.Declaration declarations = 3;</code>
        *
        * <pre>
-       *	required PositionInfo position = 4;
+       ** Declarations contained in this namespace 
        * </pre>
        */
       public boa.types.Ast.Declaration.Builder addDeclarationsBuilder() {
@@ -3207,7 +3731,7 @@ public final class Ast {
        * <code>repeated .boa.types.Declaration declarations = 3;</code>
        *
        * <pre>
-       *	required PositionInfo position = 4;
+       ** Declarations contained in this namespace 
        * </pre>
        */
       public boa.types.Ast.Declaration.Builder addDeclarationsBuilder(
@@ -3219,7 +3743,7 @@ public final class Ast {
        * <code>repeated .boa.types.Declaration declarations = 3;</code>
        *
        * <pre>
-       *	required PositionInfo position = 4;
+       ** Declarations contained in this namespace 
        * </pre>
        */
       public java.util.List<boa.types.Ast.Declaration.Builder> 
@@ -3258,14 +3782,26 @@ public final class Ast {
     // required string name = 1;
     /**
      * <code>required string name = 1;</code>
+     *
+     * <pre>
+     ** The name of this declaration 
+     * </pre>
      */
     boolean hasName();
     /**
      * <code>required string name = 1;</code>
+     *
+     * <pre>
+     ** The name of this declaration 
+     * </pre>
      */
     java.lang.String getName();
     /**
      * <code>required string name = 1;</code>
+     *
+     * <pre>
+     ** The name of this declaration 
+     * </pre>
      */
     com.google.protobuf.ByteString
         getNameBytes();
@@ -3273,34 +3809,62 @@ public final class Ast {
     // required .boa.types.TypeKind kind = 2;
     /**
      * <code>required .boa.types.TypeKind kind = 2;</code>
+     *
+     * <pre>
+     ** The kind of this declaration 
+     * </pre>
      */
     boolean hasKind();
     /**
      * <code>required .boa.types.TypeKind kind = 2;</code>
+     *
+     * <pre>
+     ** The kind of this declaration 
+     * </pre>
      */
     boa.types.Ast.TypeKind getKind();
 
     // repeated .boa.types.Modifier modifiers = 3;
     /**
      * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+     *
+     * <pre>
+     ** The modifiers/annotations on this declaration 
+     * </pre>
      */
     java.util.List<boa.types.Ast.Modifier> 
         getModifiersList();
     /**
      * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+     *
+     * <pre>
+     ** The modifiers/annotations on this declaration 
+     * </pre>
      */
     boa.types.Ast.Modifier getModifiers(int index);
     /**
      * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+     *
+     * <pre>
+     ** The modifiers/annotations on this declaration 
+     * </pre>
      */
     int getModifiersCount();
     /**
      * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+     *
+     * <pre>
+     ** The modifiers/annotations on this declaration 
+     * </pre>
      */
     java.util.List<? extends boa.types.Ast.ModifierOrBuilder> 
         getModifiersOrBuilderList();
     /**
      * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+     *
+     * <pre>
+     ** The modifiers/annotations on this declaration 
+     * </pre>
      */
     boa.types.Ast.ModifierOrBuilder getModifiersOrBuilder(
         int index);
@@ -3308,24 +3872,44 @@ public final class Ast {
     // repeated .boa.types.Type generic_parameters = 4;
     /**
      * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+     *
+     * <pre>
+     ** Any generic parameters to this declaration 
+     * </pre>
      */
     java.util.List<boa.types.Ast.Type> 
         getGenericParametersList();
     /**
      * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+     *
+     * <pre>
+     ** Any generic parameters to this declaration 
+     * </pre>
      */
     boa.types.Ast.Type getGenericParameters(int index);
     /**
      * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+     *
+     * <pre>
+     ** Any generic parameters to this declaration 
+     * </pre>
      */
     int getGenericParametersCount();
     /**
      * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+     *
+     * <pre>
+     ** Any generic parameters to this declaration 
+     * </pre>
      */
     java.util.List<? extends boa.types.Ast.TypeOrBuilder> 
         getGenericParametersOrBuilderList();
     /**
      * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+     *
+     * <pre>
+     ** Any generic parameters to this declaration 
+     * </pre>
      */
     boa.types.Ast.TypeOrBuilder getGenericParametersOrBuilder(
         int index);
@@ -3333,24 +3917,44 @@ public final class Ast {
     // repeated .boa.types.Type parents = 5;
     /**
      * <code>repeated .boa.types.Type parents = 5;</code>
+     *
+     * <pre>
+     ** The explicitly named parent type(s) of this declaration 
+     * </pre>
      */
     java.util.List<boa.types.Ast.Type> 
         getParentsList();
     /**
      * <code>repeated .boa.types.Type parents = 5;</code>
+     *
+     * <pre>
+     ** The explicitly named parent type(s) of this declaration 
+     * </pre>
      */
     boa.types.Ast.Type getParents(int index);
     /**
      * <code>repeated .boa.types.Type parents = 5;</code>
+     *
+     * <pre>
+     ** The explicitly named parent type(s) of this declaration 
+     * </pre>
      */
     int getParentsCount();
     /**
      * <code>repeated .boa.types.Type parents = 5;</code>
+     *
+     * <pre>
+     ** The explicitly named parent type(s) of this declaration 
+     * </pre>
      */
     java.util.List<? extends boa.types.Ast.TypeOrBuilder> 
         getParentsOrBuilderList();
     /**
      * <code>repeated .boa.types.Type parents = 5;</code>
+     *
+     * <pre>
+     ** The explicitly named parent type(s) of this declaration 
+     * </pre>
      */
     boa.types.Ast.TypeOrBuilder getParentsOrBuilder(
         int index);
@@ -3358,24 +3962,44 @@ public final class Ast {
     // repeated .boa.types.Method methods = 6;
     /**
      * <code>repeated .boa.types.Method methods = 6;</code>
+     *
+     * <pre>
+     ** The methods in the declaration 
+     * </pre>
      */
     java.util.List<boa.types.Ast.Method> 
         getMethodsList();
     /**
      * <code>repeated .boa.types.Method methods = 6;</code>
+     *
+     * <pre>
+     ** The methods in the declaration 
+     * </pre>
      */
     boa.types.Ast.Method getMethods(int index);
     /**
      * <code>repeated .boa.types.Method methods = 6;</code>
+     *
+     * <pre>
+     ** The methods in the declaration 
+     * </pre>
      */
     int getMethodsCount();
     /**
      * <code>repeated .boa.types.Method methods = 6;</code>
+     *
+     * <pre>
+     ** The methods in the declaration 
+     * </pre>
      */
     java.util.List<? extends boa.types.Ast.MethodOrBuilder> 
         getMethodsOrBuilderList();
     /**
      * <code>repeated .boa.types.Method methods = 6;</code>
+     *
+     * <pre>
+     ** The methods in the declaration 
+     * </pre>
      */
     boa.types.Ast.MethodOrBuilder getMethodsOrBuilder(
         int index);
@@ -3383,24 +4007,44 @@ public final class Ast {
     // repeated .boa.types.Variable fields = 7;
     /**
      * <code>repeated .boa.types.Variable fields = 7;</code>
+     *
+     * <pre>
+     ** The fields in the declaration 
+     * </pre>
      */
     java.util.List<boa.types.Ast.Variable> 
         getFieldsList();
     /**
      * <code>repeated .boa.types.Variable fields = 7;</code>
+     *
+     * <pre>
+     ** The fields in the declaration 
+     * </pre>
      */
     boa.types.Ast.Variable getFields(int index);
     /**
      * <code>repeated .boa.types.Variable fields = 7;</code>
+     *
+     * <pre>
+     ** The fields in the declaration 
+     * </pre>
      */
     int getFieldsCount();
     /**
      * <code>repeated .boa.types.Variable fields = 7;</code>
+     *
+     * <pre>
+     ** The fields in the declaration 
+     * </pre>
      */
     java.util.List<? extends boa.types.Ast.VariableOrBuilder> 
         getFieldsOrBuilderList();
     /**
      * <code>repeated .boa.types.Variable fields = 7;</code>
+     *
+     * <pre>
+     ** The fields in the declaration 
+     * </pre>
      */
     boa.types.Ast.VariableOrBuilder getFieldsOrBuilder(
         int index);
@@ -3408,24 +4052,44 @@ public final class Ast {
     // repeated .boa.types.Declaration nested_declarations = 8;
     /**
      * <code>repeated .boa.types.Declaration nested_declarations = 8;</code>
+     *
+     * <pre>
+     ** Any nested declarations 
+     * </pre>
      */
     java.util.List<boa.types.Ast.Declaration> 
         getNestedDeclarationsList();
     /**
      * <code>repeated .boa.types.Declaration nested_declarations = 8;</code>
+     *
+     * <pre>
+     ** Any nested declarations 
+     * </pre>
      */
     boa.types.Ast.Declaration getNestedDeclarations(int index);
     /**
      * <code>repeated .boa.types.Declaration nested_declarations = 8;</code>
+     *
+     * <pre>
+     ** Any nested declarations 
+     * </pre>
      */
     int getNestedDeclarationsCount();
     /**
      * <code>repeated .boa.types.Declaration nested_declarations = 8;</code>
+     *
+     * <pre>
+     ** Any nested declarations 
+     * </pre>
      */
     java.util.List<? extends boa.types.Ast.DeclarationOrBuilder> 
         getNestedDeclarationsOrBuilderList();
     /**
      * <code>repeated .boa.types.Declaration nested_declarations = 8;</code>
+     *
+     * <pre>
+     ** Any nested declarations 
+     * </pre>
      */
     boa.types.Ast.DeclarationOrBuilder getNestedDeclarationsOrBuilder(
         int index);
@@ -3435,7 +4099,7 @@ public final class Ast {
      * <code>repeated .boa.types.Comment comments = 9;</code>
      *
      * <pre>
-     *	required PositionInfo position = 10;
+     ** @exclude TODO 
      * </pre>
      */
     java.util.List<boa.types.Ast.Comment> 
@@ -3444,7 +4108,7 @@ public final class Ast {
      * <code>repeated .boa.types.Comment comments = 9;</code>
      *
      * <pre>
-     *	required PositionInfo position = 10;
+     ** @exclude TODO 
      * </pre>
      */
     boa.types.Ast.Comment getComments(int index);
@@ -3452,7 +4116,7 @@ public final class Ast {
      * <code>repeated .boa.types.Comment comments = 9;</code>
      *
      * <pre>
-     *	required PositionInfo position = 10;
+     ** @exclude TODO 
      * </pre>
      */
     int getCommentsCount();
@@ -3460,7 +4124,7 @@ public final class Ast {
      * <code>repeated .boa.types.Comment comments = 9;</code>
      *
      * <pre>
-     *	required PositionInfo position = 10;
+     ** @exclude TODO 
      * </pre>
      */
     java.util.List<? extends boa.types.Ast.CommentOrBuilder> 
@@ -3469,7 +4133,7 @@ public final class Ast {
      * <code>repeated .boa.types.Comment comments = 9;</code>
      *
      * <pre>
-     *	required PositionInfo position = 10;
+     ** @exclude TODO 
      * </pre>
      */
     boa.types.Ast.CommentOrBuilder getCommentsOrBuilder(
@@ -3477,6 +4141,10 @@ public final class Ast {
   }
   /**
    * Protobuf type {@code boa.types.Declaration}
+   *
+   * <pre>
+   ** A type declaration, such as a class or interface 
+   * </pre>
    */
   public static final class Declaration extends
       com.google.protobuf.GeneratedMessage
@@ -3664,12 +4332,20 @@ public final class Ast {
     private java.lang.Object name_;
     /**
      * <code>required string name = 1;</code>
+     *
+     * <pre>
+     ** The name of this declaration 
+     * </pre>
      */
     public boolean hasName() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
      * <code>required string name = 1;</code>
+     *
+     * <pre>
+     ** The name of this declaration 
+     * </pre>
      */
     public java.lang.String getName() {
       java.lang.Object ref = name_;
@@ -3687,6 +4363,10 @@ public final class Ast {
     }
     /**
      * <code>required string name = 1;</code>
+     *
+     * <pre>
+     ** The name of this declaration 
+     * </pre>
      */
     public com.google.protobuf.ByteString
         getNameBytes() {
@@ -3707,12 +4387,20 @@ public final class Ast {
     private boa.types.Ast.TypeKind kind_;
     /**
      * <code>required .boa.types.TypeKind kind = 2;</code>
+     *
+     * <pre>
+     ** The kind of this declaration 
+     * </pre>
      */
     public boolean hasKind() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
      * <code>required .boa.types.TypeKind kind = 2;</code>
+     *
+     * <pre>
+     ** The kind of this declaration 
+     * </pre>
      */
     public boa.types.Ast.TypeKind getKind() {
       return kind_;
@@ -3723,12 +4411,20 @@ public final class Ast {
     private java.util.List<boa.types.Ast.Modifier> modifiers_;
     /**
      * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+     *
+     * <pre>
+     ** The modifiers/annotations on this declaration 
+     * </pre>
      */
     public java.util.List<boa.types.Ast.Modifier> getModifiersList() {
       return modifiers_;
     }
     /**
      * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+     *
+     * <pre>
+     ** The modifiers/annotations on this declaration 
+     * </pre>
      */
     public java.util.List<? extends boa.types.Ast.ModifierOrBuilder> 
         getModifiersOrBuilderList() {
@@ -3736,18 +4432,30 @@ public final class Ast {
     }
     /**
      * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+     *
+     * <pre>
+     ** The modifiers/annotations on this declaration 
+     * </pre>
      */
     public int getModifiersCount() {
       return modifiers_.size();
     }
     /**
      * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+     *
+     * <pre>
+     ** The modifiers/annotations on this declaration 
+     * </pre>
      */
     public boa.types.Ast.Modifier getModifiers(int index) {
       return modifiers_.get(index);
     }
     /**
      * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+     *
+     * <pre>
+     ** The modifiers/annotations on this declaration 
+     * </pre>
      */
     public boa.types.Ast.ModifierOrBuilder getModifiersOrBuilder(
         int index) {
@@ -3759,12 +4467,20 @@ public final class Ast {
     private java.util.List<boa.types.Ast.Type> genericParameters_;
     /**
      * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+     *
+     * <pre>
+     ** Any generic parameters to this declaration 
+     * </pre>
      */
     public java.util.List<boa.types.Ast.Type> getGenericParametersList() {
       return genericParameters_;
     }
     /**
      * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+     *
+     * <pre>
+     ** Any generic parameters to this declaration 
+     * </pre>
      */
     public java.util.List<? extends boa.types.Ast.TypeOrBuilder> 
         getGenericParametersOrBuilderList() {
@@ -3772,18 +4488,30 @@ public final class Ast {
     }
     /**
      * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+     *
+     * <pre>
+     ** Any generic parameters to this declaration 
+     * </pre>
      */
     public int getGenericParametersCount() {
       return genericParameters_.size();
     }
     /**
      * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+     *
+     * <pre>
+     ** Any generic parameters to this declaration 
+     * </pre>
      */
     public boa.types.Ast.Type getGenericParameters(int index) {
       return genericParameters_.get(index);
     }
     /**
      * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+     *
+     * <pre>
+     ** Any generic parameters to this declaration 
+     * </pre>
      */
     public boa.types.Ast.TypeOrBuilder getGenericParametersOrBuilder(
         int index) {
@@ -3795,12 +4523,20 @@ public final class Ast {
     private java.util.List<boa.types.Ast.Type> parents_;
     /**
      * <code>repeated .boa.types.Type parents = 5;</code>
+     *
+     * <pre>
+     ** The explicitly named parent type(s) of this declaration 
+     * </pre>
      */
     public java.util.List<boa.types.Ast.Type> getParentsList() {
       return parents_;
     }
     /**
      * <code>repeated .boa.types.Type parents = 5;</code>
+     *
+     * <pre>
+     ** The explicitly named parent type(s) of this declaration 
+     * </pre>
      */
     public java.util.List<? extends boa.types.Ast.TypeOrBuilder> 
         getParentsOrBuilderList() {
@@ -3808,18 +4544,30 @@ public final class Ast {
     }
     /**
      * <code>repeated .boa.types.Type parents = 5;</code>
+     *
+     * <pre>
+     ** The explicitly named parent type(s) of this declaration 
+     * </pre>
      */
     public int getParentsCount() {
       return parents_.size();
     }
     /**
      * <code>repeated .boa.types.Type parents = 5;</code>
+     *
+     * <pre>
+     ** The explicitly named parent type(s) of this declaration 
+     * </pre>
      */
     public boa.types.Ast.Type getParents(int index) {
       return parents_.get(index);
     }
     /**
      * <code>repeated .boa.types.Type parents = 5;</code>
+     *
+     * <pre>
+     ** The explicitly named parent type(s) of this declaration 
+     * </pre>
      */
     public boa.types.Ast.TypeOrBuilder getParentsOrBuilder(
         int index) {
@@ -3831,12 +4579,20 @@ public final class Ast {
     private java.util.List<boa.types.Ast.Method> methods_;
     /**
      * <code>repeated .boa.types.Method methods = 6;</code>
+     *
+     * <pre>
+     ** The methods in the declaration 
+     * </pre>
      */
     public java.util.List<boa.types.Ast.Method> getMethodsList() {
       return methods_;
     }
     /**
      * <code>repeated .boa.types.Method methods = 6;</code>
+     *
+     * <pre>
+     ** The methods in the declaration 
+     * </pre>
      */
     public java.util.List<? extends boa.types.Ast.MethodOrBuilder> 
         getMethodsOrBuilderList() {
@@ -3844,18 +4600,30 @@ public final class Ast {
     }
     /**
      * <code>repeated .boa.types.Method methods = 6;</code>
+     *
+     * <pre>
+     ** The methods in the declaration 
+     * </pre>
      */
     public int getMethodsCount() {
       return methods_.size();
     }
     /**
      * <code>repeated .boa.types.Method methods = 6;</code>
+     *
+     * <pre>
+     ** The methods in the declaration 
+     * </pre>
      */
     public boa.types.Ast.Method getMethods(int index) {
       return methods_.get(index);
     }
     /**
      * <code>repeated .boa.types.Method methods = 6;</code>
+     *
+     * <pre>
+     ** The methods in the declaration 
+     * </pre>
      */
     public boa.types.Ast.MethodOrBuilder getMethodsOrBuilder(
         int index) {
@@ -3867,12 +4635,20 @@ public final class Ast {
     private java.util.List<boa.types.Ast.Variable> fields_;
     /**
      * <code>repeated .boa.types.Variable fields = 7;</code>
+     *
+     * <pre>
+     ** The fields in the declaration 
+     * </pre>
      */
     public java.util.List<boa.types.Ast.Variable> getFieldsList() {
       return fields_;
     }
     /**
      * <code>repeated .boa.types.Variable fields = 7;</code>
+     *
+     * <pre>
+     ** The fields in the declaration 
+     * </pre>
      */
     public java.util.List<? extends boa.types.Ast.VariableOrBuilder> 
         getFieldsOrBuilderList() {
@@ -3880,18 +4656,30 @@ public final class Ast {
     }
     /**
      * <code>repeated .boa.types.Variable fields = 7;</code>
+     *
+     * <pre>
+     ** The fields in the declaration 
+     * </pre>
      */
     public int getFieldsCount() {
       return fields_.size();
     }
     /**
      * <code>repeated .boa.types.Variable fields = 7;</code>
+     *
+     * <pre>
+     ** The fields in the declaration 
+     * </pre>
      */
     public boa.types.Ast.Variable getFields(int index) {
       return fields_.get(index);
     }
     /**
      * <code>repeated .boa.types.Variable fields = 7;</code>
+     *
+     * <pre>
+     ** The fields in the declaration 
+     * </pre>
      */
     public boa.types.Ast.VariableOrBuilder getFieldsOrBuilder(
         int index) {
@@ -3903,12 +4691,20 @@ public final class Ast {
     private java.util.List<boa.types.Ast.Declaration> nestedDeclarations_;
     /**
      * <code>repeated .boa.types.Declaration nested_declarations = 8;</code>
+     *
+     * <pre>
+     ** Any nested declarations 
+     * </pre>
      */
     public java.util.List<boa.types.Ast.Declaration> getNestedDeclarationsList() {
       return nestedDeclarations_;
     }
     /**
      * <code>repeated .boa.types.Declaration nested_declarations = 8;</code>
+     *
+     * <pre>
+     ** Any nested declarations 
+     * </pre>
      */
     public java.util.List<? extends boa.types.Ast.DeclarationOrBuilder> 
         getNestedDeclarationsOrBuilderList() {
@@ -3916,18 +4712,30 @@ public final class Ast {
     }
     /**
      * <code>repeated .boa.types.Declaration nested_declarations = 8;</code>
+     *
+     * <pre>
+     ** Any nested declarations 
+     * </pre>
      */
     public int getNestedDeclarationsCount() {
       return nestedDeclarations_.size();
     }
     /**
      * <code>repeated .boa.types.Declaration nested_declarations = 8;</code>
+     *
+     * <pre>
+     ** Any nested declarations 
+     * </pre>
      */
     public boa.types.Ast.Declaration getNestedDeclarations(int index) {
       return nestedDeclarations_.get(index);
     }
     /**
      * <code>repeated .boa.types.Declaration nested_declarations = 8;</code>
+     *
+     * <pre>
+     ** Any nested declarations 
+     * </pre>
      */
     public boa.types.Ast.DeclarationOrBuilder getNestedDeclarationsOrBuilder(
         int index) {
@@ -3941,7 +4749,7 @@ public final class Ast {
      * <code>repeated .boa.types.Comment comments = 9;</code>
      *
      * <pre>
-     *	required PositionInfo position = 10;
+     ** @exclude TODO 
      * </pre>
      */
     public java.util.List<boa.types.Ast.Comment> getCommentsList() {
@@ -3951,7 +4759,7 @@ public final class Ast {
      * <code>repeated .boa.types.Comment comments = 9;</code>
      *
      * <pre>
-     *	required PositionInfo position = 10;
+     ** @exclude TODO 
      * </pre>
      */
     public java.util.List<? extends boa.types.Ast.CommentOrBuilder> 
@@ -3962,7 +4770,7 @@ public final class Ast {
      * <code>repeated .boa.types.Comment comments = 9;</code>
      *
      * <pre>
-     *	required PositionInfo position = 10;
+     ** @exclude TODO 
      * </pre>
      */
     public int getCommentsCount() {
@@ -3972,7 +4780,7 @@ public final class Ast {
      * <code>repeated .boa.types.Comment comments = 9;</code>
      *
      * <pre>
-     *	required PositionInfo position = 10;
+     ** @exclude TODO 
      * </pre>
      */
     public boa.types.Ast.Comment getComments(int index) {
@@ -3982,7 +4790,7 @@ public final class Ast {
      * <code>repeated .boa.types.Comment comments = 9;</code>
      *
      * <pre>
-     *	required PositionInfo position = 10;
+     ** @exclude TODO 
      * </pre>
      */
     public boa.types.Ast.CommentOrBuilder getCommentsOrBuilder(
@@ -4215,6 +5023,10 @@ public final class Ast {
     }
     /**
      * Protobuf type {@code boa.types.Declaration}
+     *
+     * <pre>
+     ** A type declaration, such as a class or interface 
+     * </pre>
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
@@ -4690,12 +5502,20 @@ public final class Ast {
       private java.lang.Object name_ = "";
       /**
        * <code>required string name = 1;</code>
+       *
+       * <pre>
+       ** The name of this declaration 
+       * </pre>
        */
       public boolean hasName() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
        * <code>required string name = 1;</code>
+       *
+       * <pre>
+       ** The name of this declaration 
+       * </pre>
        */
       public java.lang.String getName() {
         java.lang.Object ref = name_;
@@ -4710,6 +5530,10 @@ public final class Ast {
       }
       /**
        * <code>required string name = 1;</code>
+       *
+       * <pre>
+       ** The name of this declaration 
+       * </pre>
        */
       public com.google.protobuf.ByteString
           getNameBytes() {
@@ -4726,6 +5550,10 @@ public final class Ast {
       }
       /**
        * <code>required string name = 1;</code>
+       *
+       * <pre>
+       ** The name of this declaration 
+       * </pre>
        */
       public Builder setName(
           java.lang.String value) {
@@ -4739,6 +5567,10 @@ public final class Ast {
       }
       /**
        * <code>required string name = 1;</code>
+       *
+       * <pre>
+       ** The name of this declaration 
+       * </pre>
        */
       public Builder clearName() {
         bitField0_ = (bitField0_ & ~0x00000001);
@@ -4748,6 +5580,10 @@ public final class Ast {
       }
       /**
        * <code>required string name = 1;</code>
+       *
+       * <pre>
+       ** The name of this declaration 
+       * </pre>
        */
       public Builder setNameBytes(
           com.google.protobuf.ByteString value) {
@@ -4764,18 +5600,30 @@ public final class Ast {
       private boa.types.Ast.TypeKind kind_ = boa.types.Ast.TypeKind.OTHER;
       /**
        * <code>required .boa.types.TypeKind kind = 2;</code>
+       *
+       * <pre>
+       ** The kind of this declaration 
+       * </pre>
        */
       public boolean hasKind() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
        * <code>required .boa.types.TypeKind kind = 2;</code>
+       *
+       * <pre>
+       ** The kind of this declaration 
+       * </pre>
        */
       public boa.types.Ast.TypeKind getKind() {
         return kind_;
       }
       /**
        * <code>required .boa.types.TypeKind kind = 2;</code>
+       *
+       * <pre>
+       ** The kind of this declaration 
+       * </pre>
        */
       public Builder setKind(boa.types.Ast.TypeKind value) {
         if (value == null) {
@@ -4788,6 +5636,10 @@ public final class Ast {
       }
       /**
        * <code>required .boa.types.TypeKind kind = 2;</code>
+       *
+       * <pre>
+       ** The kind of this declaration 
+       * </pre>
        */
       public Builder clearKind() {
         bitField0_ = (bitField0_ & ~0x00000002);
@@ -4811,6 +5663,10 @@ public final class Ast {
 
       /**
        * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+       *
+       * <pre>
+       ** The modifiers/annotations on this declaration 
+       * </pre>
        */
       public java.util.List<boa.types.Ast.Modifier> getModifiersList() {
         if (modifiersBuilder_ == null) {
@@ -4821,6 +5677,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+       *
+       * <pre>
+       ** The modifiers/annotations on this declaration 
+       * </pre>
        */
       public int getModifiersCount() {
         if (modifiersBuilder_ == null) {
@@ -4831,6 +5691,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+       *
+       * <pre>
+       ** The modifiers/annotations on this declaration 
+       * </pre>
        */
       public boa.types.Ast.Modifier getModifiers(int index) {
         if (modifiersBuilder_ == null) {
@@ -4841,6 +5705,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+       *
+       * <pre>
+       ** The modifiers/annotations on this declaration 
+       * </pre>
        */
       public Builder setModifiers(
           int index, boa.types.Ast.Modifier value) {
@@ -4858,6 +5726,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+       *
+       * <pre>
+       ** The modifiers/annotations on this declaration 
+       * </pre>
        */
       public Builder setModifiers(
           int index, boa.types.Ast.Modifier.Builder builderForValue) {
@@ -4872,6 +5744,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+       *
+       * <pre>
+       ** The modifiers/annotations on this declaration 
+       * </pre>
        */
       public Builder addModifiers(boa.types.Ast.Modifier value) {
         if (modifiersBuilder_ == null) {
@@ -4888,6 +5764,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+       *
+       * <pre>
+       ** The modifiers/annotations on this declaration 
+       * </pre>
        */
       public Builder addModifiers(
           int index, boa.types.Ast.Modifier value) {
@@ -4905,6 +5785,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+       *
+       * <pre>
+       ** The modifiers/annotations on this declaration 
+       * </pre>
        */
       public Builder addModifiers(
           boa.types.Ast.Modifier.Builder builderForValue) {
@@ -4919,6 +5803,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+       *
+       * <pre>
+       ** The modifiers/annotations on this declaration 
+       * </pre>
        */
       public Builder addModifiers(
           int index, boa.types.Ast.Modifier.Builder builderForValue) {
@@ -4933,6 +5821,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+       *
+       * <pre>
+       ** The modifiers/annotations on this declaration 
+       * </pre>
        */
       public Builder addAllModifiers(
           java.lang.Iterable<? extends boa.types.Ast.Modifier> values) {
@@ -4947,6 +5839,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+       *
+       * <pre>
+       ** The modifiers/annotations on this declaration 
+       * </pre>
        */
       public Builder clearModifiers() {
         if (modifiersBuilder_ == null) {
@@ -4960,6 +5856,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+       *
+       * <pre>
+       ** The modifiers/annotations on this declaration 
+       * </pre>
        */
       public Builder removeModifiers(int index) {
         if (modifiersBuilder_ == null) {
@@ -4973,6 +5873,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+       *
+       * <pre>
+       ** The modifiers/annotations on this declaration 
+       * </pre>
        */
       public boa.types.Ast.Modifier.Builder getModifiersBuilder(
           int index) {
@@ -4980,6 +5884,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+       *
+       * <pre>
+       ** The modifiers/annotations on this declaration 
+       * </pre>
        */
       public boa.types.Ast.ModifierOrBuilder getModifiersOrBuilder(
           int index) {
@@ -4990,6 +5898,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+       *
+       * <pre>
+       ** The modifiers/annotations on this declaration 
+       * </pre>
        */
       public java.util.List<? extends boa.types.Ast.ModifierOrBuilder> 
            getModifiersOrBuilderList() {
@@ -5001,6 +5913,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+       *
+       * <pre>
+       ** The modifiers/annotations on this declaration 
+       * </pre>
        */
       public boa.types.Ast.Modifier.Builder addModifiersBuilder() {
         return getModifiersFieldBuilder().addBuilder(
@@ -5008,6 +5924,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+       *
+       * <pre>
+       ** The modifiers/annotations on this declaration 
+       * </pre>
        */
       public boa.types.Ast.Modifier.Builder addModifiersBuilder(
           int index) {
@@ -5016,6 +5936,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+       *
+       * <pre>
+       ** The modifiers/annotations on this declaration 
+       * </pre>
        */
       public java.util.List<boa.types.Ast.Modifier.Builder> 
            getModifiersBuilderList() {
@@ -5051,6 +5975,10 @@ public final class Ast {
 
       /**
        * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+       *
+       * <pre>
+       ** Any generic parameters to this declaration 
+       * </pre>
        */
       public java.util.List<boa.types.Ast.Type> getGenericParametersList() {
         if (genericParametersBuilder_ == null) {
@@ -5061,6 +5989,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+       *
+       * <pre>
+       ** Any generic parameters to this declaration 
+       * </pre>
        */
       public int getGenericParametersCount() {
         if (genericParametersBuilder_ == null) {
@@ -5071,6 +6003,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+       *
+       * <pre>
+       ** Any generic parameters to this declaration 
+       * </pre>
        */
       public boa.types.Ast.Type getGenericParameters(int index) {
         if (genericParametersBuilder_ == null) {
@@ -5081,6 +6017,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+       *
+       * <pre>
+       ** Any generic parameters to this declaration 
+       * </pre>
        */
       public Builder setGenericParameters(
           int index, boa.types.Ast.Type value) {
@@ -5098,6 +6038,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+       *
+       * <pre>
+       ** Any generic parameters to this declaration 
+       * </pre>
        */
       public Builder setGenericParameters(
           int index, boa.types.Ast.Type.Builder builderForValue) {
@@ -5112,6 +6056,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+       *
+       * <pre>
+       ** Any generic parameters to this declaration 
+       * </pre>
        */
       public Builder addGenericParameters(boa.types.Ast.Type value) {
         if (genericParametersBuilder_ == null) {
@@ -5128,6 +6076,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+       *
+       * <pre>
+       ** Any generic parameters to this declaration 
+       * </pre>
        */
       public Builder addGenericParameters(
           int index, boa.types.Ast.Type value) {
@@ -5145,6 +6097,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+       *
+       * <pre>
+       ** Any generic parameters to this declaration 
+       * </pre>
        */
       public Builder addGenericParameters(
           boa.types.Ast.Type.Builder builderForValue) {
@@ -5159,6 +6115,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+       *
+       * <pre>
+       ** Any generic parameters to this declaration 
+       * </pre>
        */
       public Builder addGenericParameters(
           int index, boa.types.Ast.Type.Builder builderForValue) {
@@ -5173,6 +6133,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+       *
+       * <pre>
+       ** Any generic parameters to this declaration 
+       * </pre>
        */
       public Builder addAllGenericParameters(
           java.lang.Iterable<? extends boa.types.Ast.Type> values) {
@@ -5187,6 +6151,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+       *
+       * <pre>
+       ** Any generic parameters to this declaration 
+       * </pre>
        */
       public Builder clearGenericParameters() {
         if (genericParametersBuilder_ == null) {
@@ -5200,6 +6168,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+       *
+       * <pre>
+       ** Any generic parameters to this declaration 
+       * </pre>
        */
       public Builder removeGenericParameters(int index) {
         if (genericParametersBuilder_ == null) {
@@ -5213,6 +6185,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+       *
+       * <pre>
+       ** Any generic parameters to this declaration 
+       * </pre>
        */
       public boa.types.Ast.Type.Builder getGenericParametersBuilder(
           int index) {
@@ -5220,6 +6196,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+       *
+       * <pre>
+       ** Any generic parameters to this declaration 
+       * </pre>
        */
       public boa.types.Ast.TypeOrBuilder getGenericParametersOrBuilder(
           int index) {
@@ -5230,6 +6210,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+       *
+       * <pre>
+       ** Any generic parameters to this declaration 
+       * </pre>
        */
       public java.util.List<? extends boa.types.Ast.TypeOrBuilder> 
            getGenericParametersOrBuilderList() {
@@ -5241,6 +6225,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+       *
+       * <pre>
+       ** Any generic parameters to this declaration 
+       * </pre>
        */
       public boa.types.Ast.Type.Builder addGenericParametersBuilder() {
         return getGenericParametersFieldBuilder().addBuilder(
@@ -5248,6 +6236,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+       *
+       * <pre>
+       ** Any generic parameters to this declaration 
+       * </pre>
        */
       public boa.types.Ast.Type.Builder addGenericParametersBuilder(
           int index) {
@@ -5256,6 +6248,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+       *
+       * <pre>
+       ** Any generic parameters to this declaration 
+       * </pre>
        */
       public java.util.List<boa.types.Ast.Type.Builder> 
            getGenericParametersBuilderList() {
@@ -5291,6 +6287,10 @@ public final class Ast {
 
       /**
        * <code>repeated .boa.types.Type parents = 5;</code>
+       *
+       * <pre>
+       ** The explicitly named parent type(s) of this declaration 
+       * </pre>
        */
       public java.util.List<boa.types.Ast.Type> getParentsList() {
         if (parentsBuilder_ == null) {
@@ -5301,6 +6301,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type parents = 5;</code>
+       *
+       * <pre>
+       ** The explicitly named parent type(s) of this declaration 
+       * </pre>
        */
       public int getParentsCount() {
         if (parentsBuilder_ == null) {
@@ -5311,6 +6315,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type parents = 5;</code>
+       *
+       * <pre>
+       ** The explicitly named parent type(s) of this declaration 
+       * </pre>
        */
       public boa.types.Ast.Type getParents(int index) {
         if (parentsBuilder_ == null) {
@@ -5321,6 +6329,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type parents = 5;</code>
+       *
+       * <pre>
+       ** The explicitly named parent type(s) of this declaration 
+       * </pre>
        */
       public Builder setParents(
           int index, boa.types.Ast.Type value) {
@@ -5338,6 +6350,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type parents = 5;</code>
+       *
+       * <pre>
+       ** The explicitly named parent type(s) of this declaration 
+       * </pre>
        */
       public Builder setParents(
           int index, boa.types.Ast.Type.Builder builderForValue) {
@@ -5352,6 +6368,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type parents = 5;</code>
+       *
+       * <pre>
+       ** The explicitly named parent type(s) of this declaration 
+       * </pre>
        */
       public Builder addParents(boa.types.Ast.Type value) {
         if (parentsBuilder_ == null) {
@@ -5368,6 +6388,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type parents = 5;</code>
+       *
+       * <pre>
+       ** The explicitly named parent type(s) of this declaration 
+       * </pre>
        */
       public Builder addParents(
           int index, boa.types.Ast.Type value) {
@@ -5385,6 +6409,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type parents = 5;</code>
+       *
+       * <pre>
+       ** The explicitly named parent type(s) of this declaration 
+       * </pre>
        */
       public Builder addParents(
           boa.types.Ast.Type.Builder builderForValue) {
@@ -5399,6 +6427,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type parents = 5;</code>
+       *
+       * <pre>
+       ** The explicitly named parent type(s) of this declaration 
+       * </pre>
        */
       public Builder addParents(
           int index, boa.types.Ast.Type.Builder builderForValue) {
@@ -5413,6 +6445,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type parents = 5;</code>
+       *
+       * <pre>
+       ** The explicitly named parent type(s) of this declaration 
+       * </pre>
        */
       public Builder addAllParents(
           java.lang.Iterable<? extends boa.types.Ast.Type> values) {
@@ -5427,6 +6463,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type parents = 5;</code>
+       *
+       * <pre>
+       ** The explicitly named parent type(s) of this declaration 
+       * </pre>
        */
       public Builder clearParents() {
         if (parentsBuilder_ == null) {
@@ -5440,6 +6480,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type parents = 5;</code>
+       *
+       * <pre>
+       ** The explicitly named parent type(s) of this declaration 
+       * </pre>
        */
       public Builder removeParents(int index) {
         if (parentsBuilder_ == null) {
@@ -5453,6 +6497,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type parents = 5;</code>
+       *
+       * <pre>
+       ** The explicitly named parent type(s) of this declaration 
+       * </pre>
        */
       public boa.types.Ast.Type.Builder getParentsBuilder(
           int index) {
@@ -5460,6 +6508,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type parents = 5;</code>
+       *
+       * <pre>
+       ** The explicitly named parent type(s) of this declaration 
+       * </pre>
        */
       public boa.types.Ast.TypeOrBuilder getParentsOrBuilder(
           int index) {
@@ -5470,6 +6522,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type parents = 5;</code>
+       *
+       * <pre>
+       ** The explicitly named parent type(s) of this declaration 
+       * </pre>
        */
       public java.util.List<? extends boa.types.Ast.TypeOrBuilder> 
            getParentsOrBuilderList() {
@@ -5481,6 +6537,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type parents = 5;</code>
+       *
+       * <pre>
+       ** The explicitly named parent type(s) of this declaration 
+       * </pre>
        */
       public boa.types.Ast.Type.Builder addParentsBuilder() {
         return getParentsFieldBuilder().addBuilder(
@@ -5488,6 +6548,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type parents = 5;</code>
+       *
+       * <pre>
+       ** The explicitly named parent type(s) of this declaration 
+       * </pre>
        */
       public boa.types.Ast.Type.Builder addParentsBuilder(
           int index) {
@@ -5496,6 +6560,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type parents = 5;</code>
+       *
+       * <pre>
+       ** The explicitly named parent type(s) of this declaration 
+       * </pre>
        */
       public java.util.List<boa.types.Ast.Type.Builder> 
            getParentsBuilderList() {
@@ -5531,6 +6599,10 @@ public final class Ast {
 
       /**
        * <code>repeated .boa.types.Method methods = 6;</code>
+       *
+       * <pre>
+       ** The methods in the declaration 
+       * </pre>
        */
       public java.util.List<boa.types.Ast.Method> getMethodsList() {
         if (methodsBuilder_ == null) {
@@ -5541,6 +6613,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Method methods = 6;</code>
+       *
+       * <pre>
+       ** The methods in the declaration 
+       * </pre>
        */
       public int getMethodsCount() {
         if (methodsBuilder_ == null) {
@@ -5551,6 +6627,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Method methods = 6;</code>
+       *
+       * <pre>
+       ** The methods in the declaration 
+       * </pre>
        */
       public boa.types.Ast.Method getMethods(int index) {
         if (methodsBuilder_ == null) {
@@ -5561,6 +6641,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Method methods = 6;</code>
+       *
+       * <pre>
+       ** The methods in the declaration 
+       * </pre>
        */
       public Builder setMethods(
           int index, boa.types.Ast.Method value) {
@@ -5578,6 +6662,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Method methods = 6;</code>
+       *
+       * <pre>
+       ** The methods in the declaration 
+       * </pre>
        */
       public Builder setMethods(
           int index, boa.types.Ast.Method.Builder builderForValue) {
@@ -5592,6 +6680,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Method methods = 6;</code>
+       *
+       * <pre>
+       ** The methods in the declaration 
+       * </pre>
        */
       public Builder addMethods(boa.types.Ast.Method value) {
         if (methodsBuilder_ == null) {
@@ -5608,6 +6700,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Method methods = 6;</code>
+       *
+       * <pre>
+       ** The methods in the declaration 
+       * </pre>
        */
       public Builder addMethods(
           int index, boa.types.Ast.Method value) {
@@ -5625,6 +6721,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Method methods = 6;</code>
+       *
+       * <pre>
+       ** The methods in the declaration 
+       * </pre>
        */
       public Builder addMethods(
           boa.types.Ast.Method.Builder builderForValue) {
@@ -5639,6 +6739,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Method methods = 6;</code>
+       *
+       * <pre>
+       ** The methods in the declaration 
+       * </pre>
        */
       public Builder addMethods(
           int index, boa.types.Ast.Method.Builder builderForValue) {
@@ -5653,6 +6757,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Method methods = 6;</code>
+       *
+       * <pre>
+       ** The methods in the declaration 
+       * </pre>
        */
       public Builder addAllMethods(
           java.lang.Iterable<? extends boa.types.Ast.Method> values) {
@@ -5667,6 +6775,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Method methods = 6;</code>
+       *
+       * <pre>
+       ** The methods in the declaration 
+       * </pre>
        */
       public Builder clearMethods() {
         if (methodsBuilder_ == null) {
@@ -5680,6 +6792,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Method methods = 6;</code>
+       *
+       * <pre>
+       ** The methods in the declaration 
+       * </pre>
        */
       public Builder removeMethods(int index) {
         if (methodsBuilder_ == null) {
@@ -5693,6 +6809,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Method methods = 6;</code>
+       *
+       * <pre>
+       ** The methods in the declaration 
+       * </pre>
        */
       public boa.types.Ast.Method.Builder getMethodsBuilder(
           int index) {
@@ -5700,6 +6820,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Method methods = 6;</code>
+       *
+       * <pre>
+       ** The methods in the declaration 
+       * </pre>
        */
       public boa.types.Ast.MethodOrBuilder getMethodsOrBuilder(
           int index) {
@@ -5710,6 +6834,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Method methods = 6;</code>
+       *
+       * <pre>
+       ** The methods in the declaration 
+       * </pre>
        */
       public java.util.List<? extends boa.types.Ast.MethodOrBuilder> 
            getMethodsOrBuilderList() {
@@ -5721,6 +6849,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Method methods = 6;</code>
+       *
+       * <pre>
+       ** The methods in the declaration 
+       * </pre>
        */
       public boa.types.Ast.Method.Builder addMethodsBuilder() {
         return getMethodsFieldBuilder().addBuilder(
@@ -5728,6 +6860,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Method methods = 6;</code>
+       *
+       * <pre>
+       ** The methods in the declaration 
+       * </pre>
        */
       public boa.types.Ast.Method.Builder addMethodsBuilder(
           int index) {
@@ -5736,6 +6872,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Method methods = 6;</code>
+       *
+       * <pre>
+       ** The methods in the declaration 
+       * </pre>
        */
       public java.util.List<boa.types.Ast.Method.Builder> 
            getMethodsBuilderList() {
@@ -5771,6 +6911,10 @@ public final class Ast {
 
       /**
        * <code>repeated .boa.types.Variable fields = 7;</code>
+       *
+       * <pre>
+       ** The fields in the declaration 
+       * </pre>
        */
       public java.util.List<boa.types.Ast.Variable> getFieldsList() {
         if (fieldsBuilder_ == null) {
@@ -5781,6 +6925,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Variable fields = 7;</code>
+       *
+       * <pre>
+       ** The fields in the declaration 
+       * </pre>
        */
       public int getFieldsCount() {
         if (fieldsBuilder_ == null) {
@@ -5791,6 +6939,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Variable fields = 7;</code>
+       *
+       * <pre>
+       ** The fields in the declaration 
+       * </pre>
        */
       public boa.types.Ast.Variable getFields(int index) {
         if (fieldsBuilder_ == null) {
@@ -5801,6 +6953,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Variable fields = 7;</code>
+       *
+       * <pre>
+       ** The fields in the declaration 
+       * </pre>
        */
       public Builder setFields(
           int index, boa.types.Ast.Variable value) {
@@ -5818,6 +6974,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Variable fields = 7;</code>
+       *
+       * <pre>
+       ** The fields in the declaration 
+       * </pre>
        */
       public Builder setFields(
           int index, boa.types.Ast.Variable.Builder builderForValue) {
@@ -5832,6 +6992,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Variable fields = 7;</code>
+       *
+       * <pre>
+       ** The fields in the declaration 
+       * </pre>
        */
       public Builder addFields(boa.types.Ast.Variable value) {
         if (fieldsBuilder_ == null) {
@@ -5848,6 +7012,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Variable fields = 7;</code>
+       *
+       * <pre>
+       ** The fields in the declaration 
+       * </pre>
        */
       public Builder addFields(
           int index, boa.types.Ast.Variable value) {
@@ -5865,6 +7033,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Variable fields = 7;</code>
+       *
+       * <pre>
+       ** The fields in the declaration 
+       * </pre>
        */
       public Builder addFields(
           boa.types.Ast.Variable.Builder builderForValue) {
@@ -5879,6 +7051,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Variable fields = 7;</code>
+       *
+       * <pre>
+       ** The fields in the declaration 
+       * </pre>
        */
       public Builder addFields(
           int index, boa.types.Ast.Variable.Builder builderForValue) {
@@ -5893,6 +7069,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Variable fields = 7;</code>
+       *
+       * <pre>
+       ** The fields in the declaration 
+       * </pre>
        */
       public Builder addAllFields(
           java.lang.Iterable<? extends boa.types.Ast.Variable> values) {
@@ -5907,6 +7087,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Variable fields = 7;</code>
+       *
+       * <pre>
+       ** The fields in the declaration 
+       * </pre>
        */
       public Builder clearFields() {
         if (fieldsBuilder_ == null) {
@@ -5920,6 +7104,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Variable fields = 7;</code>
+       *
+       * <pre>
+       ** The fields in the declaration 
+       * </pre>
        */
       public Builder removeFields(int index) {
         if (fieldsBuilder_ == null) {
@@ -5933,6 +7121,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Variable fields = 7;</code>
+       *
+       * <pre>
+       ** The fields in the declaration 
+       * </pre>
        */
       public boa.types.Ast.Variable.Builder getFieldsBuilder(
           int index) {
@@ -5940,6 +7132,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Variable fields = 7;</code>
+       *
+       * <pre>
+       ** The fields in the declaration 
+       * </pre>
        */
       public boa.types.Ast.VariableOrBuilder getFieldsOrBuilder(
           int index) {
@@ -5950,6 +7146,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Variable fields = 7;</code>
+       *
+       * <pre>
+       ** The fields in the declaration 
+       * </pre>
        */
       public java.util.List<? extends boa.types.Ast.VariableOrBuilder> 
            getFieldsOrBuilderList() {
@@ -5961,6 +7161,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Variable fields = 7;</code>
+       *
+       * <pre>
+       ** The fields in the declaration 
+       * </pre>
        */
       public boa.types.Ast.Variable.Builder addFieldsBuilder() {
         return getFieldsFieldBuilder().addBuilder(
@@ -5968,6 +7172,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Variable fields = 7;</code>
+       *
+       * <pre>
+       ** The fields in the declaration 
+       * </pre>
        */
       public boa.types.Ast.Variable.Builder addFieldsBuilder(
           int index) {
@@ -5976,6 +7184,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Variable fields = 7;</code>
+       *
+       * <pre>
+       ** The fields in the declaration 
+       * </pre>
        */
       public java.util.List<boa.types.Ast.Variable.Builder> 
            getFieldsBuilderList() {
@@ -6011,6 +7223,10 @@ public final class Ast {
 
       /**
        * <code>repeated .boa.types.Declaration nested_declarations = 8;</code>
+       *
+       * <pre>
+       ** Any nested declarations 
+       * </pre>
        */
       public java.util.List<boa.types.Ast.Declaration> getNestedDeclarationsList() {
         if (nestedDeclarationsBuilder_ == null) {
@@ -6021,6 +7237,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Declaration nested_declarations = 8;</code>
+       *
+       * <pre>
+       ** Any nested declarations 
+       * </pre>
        */
       public int getNestedDeclarationsCount() {
         if (nestedDeclarationsBuilder_ == null) {
@@ -6031,6 +7251,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Declaration nested_declarations = 8;</code>
+       *
+       * <pre>
+       ** Any nested declarations 
+       * </pre>
        */
       public boa.types.Ast.Declaration getNestedDeclarations(int index) {
         if (nestedDeclarationsBuilder_ == null) {
@@ -6041,6 +7265,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Declaration nested_declarations = 8;</code>
+       *
+       * <pre>
+       ** Any nested declarations 
+       * </pre>
        */
       public Builder setNestedDeclarations(
           int index, boa.types.Ast.Declaration value) {
@@ -6058,6 +7286,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Declaration nested_declarations = 8;</code>
+       *
+       * <pre>
+       ** Any nested declarations 
+       * </pre>
        */
       public Builder setNestedDeclarations(
           int index, boa.types.Ast.Declaration.Builder builderForValue) {
@@ -6072,6 +7304,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Declaration nested_declarations = 8;</code>
+       *
+       * <pre>
+       ** Any nested declarations 
+       * </pre>
        */
       public Builder addNestedDeclarations(boa.types.Ast.Declaration value) {
         if (nestedDeclarationsBuilder_ == null) {
@@ -6088,6 +7324,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Declaration nested_declarations = 8;</code>
+       *
+       * <pre>
+       ** Any nested declarations 
+       * </pre>
        */
       public Builder addNestedDeclarations(
           int index, boa.types.Ast.Declaration value) {
@@ -6105,6 +7345,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Declaration nested_declarations = 8;</code>
+       *
+       * <pre>
+       ** Any nested declarations 
+       * </pre>
        */
       public Builder addNestedDeclarations(
           boa.types.Ast.Declaration.Builder builderForValue) {
@@ -6119,6 +7363,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Declaration nested_declarations = 8;</code>
+       *
+       * <pre>
+       ** Any nested declarations 
+       * </pre>
        */
       public Builder addNestedDeclarations(
           int index, boa.types.Ast.Declaration.Builder builderForValue) {
@@ -6133,6 +7381,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Declaration nested_declarations = 8;</code>
+       *
+       * <pre>
+       ** Any nested declarations 
+       * </pre>
        */
       public Builder addAllNestedDeclarations(
           java.lang.Iterable<? extends boa.types.Ast.Declaration> values) {
@@ -6147,6 +7399,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Declaration nested_declarations = 8;</code>
+       *
+       * <pre>
+       ** Any nested declarations 
+       * </pre>
        */
       public Builder clearNestedDeclarations() {
         if (nestedDeclarationsBuilder_ == null) {
@@ -6160,6 +7416,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Declaration nested_declarations = 8;</code>
+       *
+       * <pre>
+       ** Any nested declarations 
+       * </pre>
        */
       public Builder removeNestedDeclarations(int index) {
         if (nestedDeclarationsBuilder_ == null) {
@@ -6173,6 +7433,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Declaration nested_declarations = 8;</code>
+       *
+       * <pre>
+       ** Any nested declarations 
+       * </pre>
        */
       public boa.types.Ast.Declaration.Builder getNestedDeclarationsBuilder(
           int index) {
@@ -6180,6 +7444,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Declaration nested_declarations = 8;</code>
+       *
+       * <pre>
+       ** Any nested declarations 
+       * </pre>
        */
       public boa.types.Ast.DeclarationOrBuilder getNestedDeclarationsOrBuilder(
           int index) {
@@ -6190,6 +7458,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Declaration nested_declarations = 8;</code>
+       *
+       * <pre>
+       ** Any nested declarations 
+       * </pre>
        */
       public java.util.List<? extends boa.types.Ast.DeclarationOrBuilder> 
            getNestedDeclarationsOrBuilderList() {
@@ -6201,6 +7473,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Declaration nested_declarations = 8;</code>
+       *
+       * <pre>
+       ** Any nested declarations 
+       * </pre>
        */
       public boa.types.Ast.Declaration.Builder addNestedDeclarationsBuilder() {
         return getNestedDeclarationsFieldBuilder().addBuilder(
@@ -6208,6 +7484,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Declaration nested_declarations = 8;</code>
+       *
+       * <pre>
+       ** Any nested declarations 
+       * </pre>
        */
       public boa.types.Ast.Declaration.Builder addNestedDeclarationsBuilder(
           int index) {
@@ -6216,6 +7496,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Declaration nested_declarations = 8;</code>
+       *
+       * <pre>
+       ** Any nested declarations 
+       * </pre>
        */
       public java.util.List<boa.types.Ast.Declaration.Builder> 
            getNestedDeclarationsBuilderList() {
@@ -6253,7 +7537,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 9;</code>
        *
        * <pre>
-       *	required PositionInfo position = 10;
+       ** @exclude TODO 
        * </pre>
        */
       public java.util.List<boa.types.Ast.Comment> getCommentsList() {
@@ -6267,7 +7551,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 9;</code>
        *
        * <pre>
-       *	required PositionInfo position = 10;
+       ** @exclude TODO 
        * </pre>
        */
       public int getCommentsCount() {
@@ -6281,7 +7565,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 9;</code>
        *
        * <pre>
-       *	required PositionInfo position = 10;
+       ** @exclude TODO 
        * </pre>
        */
       public boa.types.Ast.Comment getComments(int index) {
@@ -6295,7 +7579,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 9;</code>
        *
        * <pre>
-       *	required PositionInfo position = 10;
+       ** @exclude TODO 
        * </pre>
        */
       public Builder setComments(
@@ -6316,7 +7600,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 9;</code>
        *
        * <pre>
-       *	required PositionInfo position = 10;
+       ** @exclude TODO 
        * </pre>
        */
       public Builder setComments(
@@ -6334,7 +7618,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 9;</code>
        *
        * <pre>
-       *	required PositionInfo position = 10;
+       ** @exclude TODO 
        * </pre>
        */
       public Builder addComments(boa.types.Ast.Comment value) {
@@ -6354,7 +7638,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 9;</code>
        *
        * <pre>
-       *	required PositionInfo position = 10;
+       ** @exclude TODO 
        * </pre>
        */
       public Builder addComments(
@@ -6375,7 +7659,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 9;</code>
        *
        * <pre>
-       *	required PositionInfo position = 10;
+       ** @exclude TODO 
        * </pre>
        */
       public Builder addComments(
@@ -6393,7 +7677,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 9;</code>
        *
        * <pre>
-       *	required PositionInfo position = 10;
+       ** @exclude TODO 
        * </pre>
        */
       public Builder addComments(
@@ -6411,7 +7695,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 9;</code>
        *
        * <pre>
-       *	required PositionInfo position = 10;
+       ** @exclude TODO 
        * </pre>
        */
       public Builder addAllComments(
@@ -6429,7 +7713,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 9;</code>
        *
        * <pre>
-       *	required PositionInfo position = 10;
+       ** @exclude TODO 
        * </pre>
        */
       public Builder clearComments() {
@@ -6446,7 +7730,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 9;</code>
        *
        * <pre>
-       *	required PositionInfo position = 10;
+       ** @exclude TODO 
        * </pre>
        */
       public Builder removeComments(int index) {
@@ -6463,7 +7747,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 9;</code>
        *
        * <pre>
-       *	required PositionInfo position = 10;
+       ** @exclude TODO 
        * </pre>
        */
       public boa.types.Ast.Comment.Builder getCommentsBuilder(
@@ -6474,7 +7758,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 9;</code>
        *
        * <pre>
-       *	required PositionInfo position = 10;
+       ** @exclude TODO 
        * </pre>
        */
       public boa.types.Ast.CommentOrBuilder getCommentsOrBuilder(
@@ -6488,7 +7772,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 9;</code>
        *
        * <pre>
-       *	required PositionInfo position = 10;
+       ** @exclude TODO 
        * </pre>
        */
       public java.util.List<? extends boa.types.Ast.CommentOrBuilder> 
@@ -6503,7 +7787,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 9;</code>
        *
        * <pre>
-       *	required PositionInfo position = 10;
+       ** @exclude TODO 
        * </pre>
        */
       public boa.types.Ast.Comment.Builder addCommentsBuilder() {
@@ -6514,7 +7798,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 9;</code>
        *
        * <pre>
-       *	required PositionInfo position = 10;
+       ** @exclude TODO 
        * </pre>
        */
       public boa.types.Ast.Comment.Builder addCommentsBuilder(
@@ -6526,7 +7810,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 9;</code>
        *
        * <pre>
-       *	required PositionInfo position = 10;
+       ** @exclude TODO 
        * </pre>
        */
       public java.util.List<boa.types.Ast.Comment.Builder> 
@@ -6565,14 +7849,26 @@ public final class Ast {
     // required string name = 1;
     /**
      * <code>required string name = 1;</code>
+     *
+     * <pre>
+     ** The name of the type 
+     * </pre>
      */
     boolean hasName();
     /**
      * <code>required string name = 1;</code>
+     *
+     * <pre>
+     ** The name of the type 
+     * </pre>
      */
     java.lang.String getName();
     /**
      * <code>required string name = 1;</code>
+     *
+     * <pre>
+     ** The name of the type 
+     * </pre>
      */
     com.google.protobuf.ByteString
         getNameBytes();
@@ -6580,30 +7876,54 @@ public final class Ast {
     // required .boa.types.TypeKind kind = 2;
     /**
      * <code>required .boa.types.TypeKind kind = 2;</code>
+     *
+     * <pre>
+     ** The kind of the type 
+     * </pre>
      */
     boolean hasKind();
     /**
      * <code>required .boa.types.TypeKind kind = 2;</code>
+     *
+     * <pre>
+     ** The kind of the type 
+     * </pre>
      */
     boa.types.Ast.TypeKind getKind();
 
     // optional string id = 4;
     /**
      * <code>optional string id = 4;</code>
+     *
+     * <pre>
+     ** @exclude 
+     * </pre>
      */
     boolean hasId();
     /**
      * <code>optional string id = 4;</code>
+     *
+     * <pre>
+     ** @exclude 
+     * </pre>
      */
     java.lang.String getId();
     /**
      * <code>optional string id = 4;</code>
+     *
+     * <pre>
+     ** @exclude 
+     * </pre>
      */
     com.google.protobuf.ByteString
         getIdBytes();
   }
   /**
    * Protobuf type {@code boa.types.Type}
+   *
+   * <pre>
+   ** A type in an AST 
+   * </pre>
    */
   public static final class Type extends
       com.google.protobuf.GeneratedMessage
@@ -6719,12 +8039,20 @@ public final class Ast {
     private java.lang.Object name_;
     /**
      * <code>required string name = 1;</code>
+     *
+     * <pre>
+     ** The name of the type 
+     * </pre>
      */
     public boolean hasName() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
      * <code>required string name = 1;</code>
+     *
+     * <pre>
+     ** The name of the type 
+     * </pre>
      */
     public java.lang.String getName() {
       java.lang.Object ref = name_;
@@ -6742,6 +8070,10 @@ public final class Ast {
     }
     /**
      * <code>required string name = 1;</code>
+     *
+     * <pre>
+     ** The name of the type 
+     * </pre>
      */
     public com.google.protobuf.ByteString
         getNameBytes() {
@@ -6762,12 +8094,20 @@ public final class Ast {
     private boa.types.Ast.TypeKind kind_;
     /**
      * <code>required .boa.types.TypeKind kind = 2;</code>
+     *
+     * <pre>
+     ** The kind of the type 
+     * </pre>
      */
     public boolean hasKind() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
      * <code>required .boa.types.TypeKind kind = 2;</code>
+     *
+     * <pre>
+     ** The kind of the type 
+     * </pre>
      */
     public boa.types.Ast.TypeKind getKind() {
       return kind_;
@@ -6778,12 +8118,20 @@ public final class Ast {
     private java.lang.Object id_;
     /**
      * <code>optional string id = 4;</code>
+     *
+     * <pre>
+     ** @exclude 
+     * </pre>
      */
     public boolean hasId() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
      * <code>optional string id = 4;</code>
+     *
+     * <pre>
+     ** @exclude 
+     * </pre>
      */
     public java.lang.String getId() {
       java.lang.Object ref = id_;
@@ -6801,6 +8149,10 @@ public final class Ast {
     }
     /**
      * <code>optional string id = 4;</code>
+     *
+     * <pre>
+     ** @exclude 
+     * </pre>
      */
     public com.google.protobuf.ByteString
         getIdBytes() {
@@ -6951,6 +8303,10 @@ public final class Ast {
     }
     /**
      * Protobuf type {@code boa.types.Type}
+     *
+     * <pre>
+     ** A type in an AST 
+     * </pre>
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
@@ -7101,12 +8457,20 @@ public final class Ast {
       private java.lang.Object name_ = "";
       /**
        * <code>required string name = 1;</code>
+       *
+       * <pre>
+       ** The name of the type 
+       * </pre>
        */
       public boolean hasName() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
        * <code>required string name = 1;</code>
+       *
+       * <pre>
+       ** The name of the type 
+       * </pre>
        */
       public java.lang.String getName() {
         java.lang.Object ref = name_;
@@ -7121,6 +8485,10 @@ public final class Ast {
       }
       /**
        * <code>required string name = 1;</code>
+       *
+       * <pre>
+       ** The name of the type 
+       * </pre>
        */
       public com.google.protobuf.ByteString
           getNameBytes() {
@@ -7137,6 +8505,10 @@ public final class Ast {
       }
       /**
        * <code>required string name = 1;</code>
+       *
+       * <pre>
+       ** The name of the type 
+       * </pre>
        */
       public Builder setName(
           java.lang.String value) {
@@ -7150,6 +8522,10 @@ public final class Ast {
       }
       /**
        * <code>required string name = 1;</code>
+       *
+       * <pre>
+       ** The name of the type 
+       * </pre>
        */
       public Builder clearName() {
         bitField0_ = (bitField0_ & ~0x00000001);
@@ -7159,6 +8535,10 @@ public final class Ast {
       }
       /**
        * <code>required string name = 1;</code>
+       *
+       * <pre>
+       ** The name of the type 
+       * </pre>
        */
       public Builder setNameBytes(
           com.google.protobuf.ByteString value) {
@@ -7175,18 +8555,30 @@ public final class Ast {
       private boa.types.Ast.TypeKind kind_ = boa.types.Ast.TypeKind.OTHER;
       /**
        * <code>required .boa.types.TypeKind kind = 2;</code>
+       *
+       * <pre>
+       ** The kind of the type 
+       * </pre>
        */
       public boolean hasKind() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
        * <code>required .boa.types.TypeKind kind = 2;</code>
+       *
+       * <pre>
+       ** The kind of the type 
+       * </pre>
        */
       public boa.types.Ast.TypeKind getKind() {
         return kind_;
       }
       /**
        * <code>required .boa.types.TypeKind kind = 2;</code>
+       *
+       * <pre>
+       ** The kind of the type 
+       * </pre>
        */
       public Builder setKind(boa.types.Ast.TypeKind value) {
         if (value == null) {
@@ -7199,6 +8591,10 @@ public final class Ast {
       }
       /**
        * <code>required .boa.types.TypeKind kind = 2;</code>
+       *
+       * <pre>
+       ** The kind of the type 
+       * </pre>
        */
       public Builder clearKind() {
         bitField0_ = (bitField0_ & ~0x00000002);
@@ -7211,12 +8607,20 @@ public final class Ast {
       private java.lang.Object id_ = "";
       /**
        * <code>optional string id = 4;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
        */
       public boolean hasId() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
        * <code>optional string id = 4;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
        */
       public java.lang.String getId() {
         java.lang.Object ref = id_;
@@ -7231,6 +8635,10 @@ public final class Ast {
       }
       /**
        * <code>optional string id = 4;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
        */
       public com.google.protobuf.ByteString
           getIdBytes() {
@@ -7247,6 +8655,10 @@ public final class Ast {
       }
       /**
        * <code>optional string id = 4;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
        */
       public Builder setId(
           java.lang.String value) {
@@ -7260,6 +8672,10 @@ public final class Ast {
       }
       /**
        * <code>optional string id = 4;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
        */
       public Builder clearId() {
         bitField0_ = (bitField0_ & ~0x00000004);
@@ -7269,6 +8685,10 @@ public final class Ast {
       }
       /**
        * <code>optional string id = 4;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
        */
       public Builder setIdBytes(
           com.google.protobuf.ByteString value) {
@@ -7298,14 +8718,26 @@ public final class Ast {
     // optional string name = 1;
     /**
      * <code>optional string name = 1;</code>
+     *
+     * <pre>
+     ** The name of the method 
+     * </pre>
      */
     boolean hasName();
     /**
      * <code>optional string name = 1;</code>
+     *
+     * <pre>
+     ** The name of the method 
+     * </pre>
      */
     java.lang.String getName();
     /**
      * <code>optional string name = 1;</code>
+     *
+     * <pre>
+     ** The name of the method 
+     * </pre>
      */
     com.google.protobuf.ByteString
         getNameBytes();
@@ -7313,24 +8745,44 @@ public final class Ast {
     // repeated .boa.types.Modifier modifiers = 2;
     /**
      * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+     *
+     * <pre>
+     ** A list of all modifiers on the variable 
+     * </pre>
      */
     java.util.List<boa.types.Ast.Modifier> 
         getModifiersList();
     /**
      * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+     *
+     * <pre>
+     ** A list of all modifiers on the variable 
+     * </pre>
      */
     boa.types.Ast.Modifier getModifiers(int index);
     /**
      * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+     *
+     * <pre>
+     ** A list of all modifiers on the variable 
+     * </pre>
      */
     int getModifiersCount();
     /**
      * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+     *
+     * <pre>
+     ** A list of all modifiers on the variable 
+     * </pre>
      */
     java.util.List<? extends boa.types.Ast.ModifierOrBuilder> 
         getModifiersOrBuilderList();
     /**
      * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+     *
+     * <pre>
+     ** A list of all modifiers on the variable 
+     * </pre>
      */
     boa.types.Ast.ModifierOrBuilder getModifiersOrBuilder(
         int index);
@@ -7338,38 +8790,70 @@ public final class Ast {
     // required .boa.types.Type return_type = 3;
     /**
      * <code>required .boa.types.Type return_type = 3;</code>
+     *
+     * <pre>
+     ** The type returned from the method; if the method returns nothing, this type will be void 
+     * </pre>
      */
     boolean hasReturnType();
     /**
      * <code>required .boa.types.Type return_type = 3;</code>
+     *
+     * <pre>
+     ** The type returned from the method; if the method returns nothing, this type will be void 
+     * </pre>
      */
     boa.types.Ast.Type getReturnType();
     /**
      * <code>required .boa.types.Type return_type = 3;</code>
+     *
+     * <pre>
+     ** The type returned from the method; if the method returns nothing, this type will be void 
+     * </pre>
      */
     boa.types.Ast.TypeOrBuilder getReturnTypeOrBuilder();
 
     // repeated .boa.types.Type generic_parameters = 4;
     /**
      * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+     *
+     * <pre>
+     ** The list of generic parameters for this method 
+     * </pre>
      */
     java.util.List<boa.types.Ast.Type> 
         getGenericParametersList();
     /**
      * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+     *
+     * <pre>
+     ** The list of generic parameters for this method 
+     * </pre>
      */
     boa.types.Ast.Type getGenericParameters(int index);
     /**
      * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+     *
+     * <pre>
+     ** The list of generic parameters for this method 
+     * </pre>
      */
     int getGenericParametersCount();
     /**
      * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+     *
+     * <pre>
+     ** The list of generic parameters for this method 
+     * </pre>
      */
     java.util.List<? extends boa.types.Ast.TypeOrBuilder> 
         getGenericParametersOrBuilderList();
     /**
      * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+     *
+     * <pre>
+     ** The list of generic parameters for this method 
+     * </pre>
      */
     boa.types.Ast.TypeOrBuilder getGenericParametersOrBuilder(
         int index);
@@ -7377,24 +8861,44 @@ public final class Ast {
     // repeated .boa.types.Variable arguments = 5;
     /**
      * <code>repeated .boa.types.Variable arguments = 5;</code>
+     *
+     * <pre>
+     ** The arguments the method takes 
+     * </pre>
      */
     java.util.List<boa.types.Ast.Variable> 
         getArgumentsList();
     /**
      * <code>repeated .boa.types.Variable arguments = 5;</code>
+     *
+     * <pre>
+     ** The arguments the method takes 
+     * </pre>
      */
     boa.types.Ast.Variable getArguments(int index);
     /**
      * <code>repeated .boa.types.Variable arguments = 5;</code>
+     *
+     * <pre>
+     ** The arguments the method takes 
+     * </pre>
      */
     int getArgumentsCount();
     /**
      * <code>repeated .boa.types.Variable arguments = 5;</code>
+     *
+     * <pre>
+     ** The arguments the method takes 
+     * </pre>
      */
     java.util.List<? extends boa.types.Ast.VariableOrBuilder> 
         getArgumentsOrBuilderList();
     /**
      * <code>repeated .boa.types.Variable arguments = 5;</code>
+     *
+     * <pre>
+     ** The arguments the method takes 
+     * </pre>
      */
     boa.types.Ast.VariableOrBuilder getArgumentsOrBuilder(
         int index);
@@ -7402,24 +8906,44 @@ public final class Ast {
     // repeated .boa.types.Type exception_types = 6;
     /**
      * <code>repeated .boa.types.Type exception_types = 6;</code>
+     *
+     * <pre>
+     ** The list of exceptions thrown by this method 
+     * </pre>
      */
     java.util.List<boa.types.Ast.Type> 
         getExceptionTypesList();
     /**
      * <code>repeated .boa.types.Type exception_types = 6;</code>
+     *
+     * <pre>
+     ** The list of exceptions thrown by this method 
+     * </pre>
      */
     boa.types.Ast.Type getExceptionTypes(int index);
     /**
      * <code>repeated .boa.types.Type exception_types = 6;</code>
+     *
+     * <pre>
+     ** The list of exceptions thrown by this method 
+     * </pre>
      */
     int getExceptionTypesCount();
     /**
      * <code>repeated .boa.types.Type exception_types = 6;</code>
+     *
+     * <pre>
+     ** The list of exceptions thrown by this method 
+     * </pre>
      */
     java.util.List<? extends boa.types.Ast.TypeOrBuilder> 
         getExceptionTypesOrBuilderList();
     /**
      * <code>repeated .boa.types.Type exception_types = 6;</code>
+     *
+     * <pre>
+     ** The list of exceptions thrown by this method 
+     * </pre>
      */
     boa.types.Ast.TypeOrBuilder getExceptionTypesOrBuilder(
         int index);
@@ -7427,24 +8951,59 @@ public final class Ast {
     // repeated .boa.types.Statement statements = 7;
     /**
      * <code>repeated .boa.types.Statement statements = 7;</code>
+     *
+     * <pre>
+     **
+     * The statements in the method body. Note that most methods (in C-like
+     * languages, such as Java) contain a single statement of type BLOCK, which
+     * contains the list of statements within it!
+     * </pre>
      */
     java.util.List<boa.types.Ast.Statement> 
         getStatementsList();
     /**
      * <code>repeated .boa.types.Statement statements = 7;</code>
+     *
+     * <pre>
+     **
+     * The statements in the method body. Note that most methods (in C-like
+     * languages, such as Java) contain a single statement of type BLOCK, which
+     * contains the list of statements within it!
+     * </pre>
      */
     boa.types.Ast.Statement getStatements(int index);
     /**
      * <code>repeated .boa.types.Statement statements = 7;</code>
+     *
+     * <pre>
+     **
+     * The statements in the method body. Note that most methods (in C-like
+     * languages, such as Java) contain a single statement of type BLOCK, which
+     * contains the list of statements within it!
+     * </pre>
      */
     int getStatementsCount();
     /**
      * <code>repeated .boa.types.Statement statements = 7;</code>
+     *
+     * <pre>
+     **
+     * The statements in the method body. Note that most methods (in C-like
+     * languages, such as Java) contain a single statement of type BLOCK, which
+     * contains the list of statements within it!
+     * </pre>
      */
     java.util.List<? extends boa.types.Ast.StatementOrBuilder> 
         getStatementsOrBuilderList();
     /**
      * <code>repeated .boa.types.Statement statements = 7;</code>
+     *
+     * <pre>
+     **
+     * The statements in the method body. Note that most methods (in C-like
+     * languages, such as Java) contain a single statement of type BLOCK, which
+     * contains the list of statements within it!
+     * </pre>
      */
     boa.types.Ast.StatementOrBuilder getStatementsOrBuilder(
         int index);
@@ -7454,7 +9013,7 @@ public final class Ast {
      * <code>repeated .boa.types.Comment comments = 8;</code>
      *
      * <pre>
-     *	required PositionInfo position = 9;
+     ** @exclude TODO 
      * </pre>
      */
     java.util.List<boa.types.Ast.Comment> 
@@ -7463,7 +9022,7 @@ public final class Ast {
      * <code>repeated .boa.types.Comment comments = 8;</code>
      *
      * <pre>
-     *	required PositionInfo position = 9;
+     ** @exclude TODO 
      * </pre>
      */
     boa.types.Ast.Comment getComments(int index);
@@ -7471,7 +9030,7 @@ public final class Ast {
      * <code>repeated .boa.types.Comment comments = 8;</code>
      *
      * <pre>
-     *	required PositionInfo position = 9;
+     ** @exclude TODO 
      * </pre>
      */
     int getCommentsCount();
@@ -7479,7 +9038,7 @@ public final class Ast {
      * <code>repeated .boa.types.Comment comments = 8;</code>
      *
      * <pre>
-     *	required PositionInfo position = 9;
+     ** @exclude TODO 
      * </pre>
      */
     java.util.List<? extends boa.types.Ast.CommentOrBuilder> 
@@ -7488,7 +9047,7 @@ public final class Ast {
      * <code>repeated .boa.types.Comment comments = 8;</code>
      *
      * <pre>
-     *	required PositionInfo position = 9;
+     ** @exclude TODO 
      * </pre>
      */
     boa.types.Ast.CommentOrBuilder getCommentsOrBuilder(
@@ -7496,6 +9055,10 @@ public final class Ast {
   }
   /**
    * Protobuf type {@code boa.types.Method}
+   *
+   * <pre>
+   ** A method declaration 
+   * </pre>
    */
   public static final class Method extends
       com.google.protobuf.GeneratedMessage
@@ -7674,12 +9237,20 @@ public final class Ast {
     private java.lang.Object name_;
     /**
      * <code>optional string name = 1;</code>
+     *
+     * <pre>
+     ** The name of the method 
+     * </pre>
      */
     public boolean hasName() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
      * <code>optional string name = 1;</code>
+     *
+     * <pre>
+     ** The name of the method 
+     * </pre>
      */
     public java.lang.String getName() {
       java.lang.Object ref = name_;
@@ -7697,6 +9268,10 @@ public final class Ast {
     }
     /**
      * <code>optional string name = 1;</code>
+     *
+     * <pre>
+     ** The name of the method 
+     * </pre>
      */
     public com.google.protobuf.ByteString
         getNameBytes() {
@@ -7717,12 +9292,20 @@ public final class Ast {
     private java.util.List<boa.types.Ast.Modifier> modifiers_;
     /**
      * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+     *
+     * <pre>
+     ** A list of all modifiers on the variable 
+     * </pre>
      */
     public java.util.List<boa.types.Ast.Modifier> getModifiersList() {
       return modifiers_;
     }
     /**
      * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+     *
+     * <pre>
+     ** A list of all modifiers on the variable 
+     * </pre>
      */
     public java.util.List<? extends boa.types.Ast.ModifierOrBuilder> 
         getModifiersOrBuilderList() {
@@ -7730,18 +9313,30 @@ public final class Ast {
     }
     /**
      * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+     *
+     * <pre>
+     ** A list of all modifiers on the variable 
+     * </pre>
      */
     public int getModifiersCount() {
       return modifiers_.size();
     }
     /**
      * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+     *
+     * <pre>
+     ** A list of all modifiers on the variable 
+     * </pre>
      */
     public boa.types.Ast.Modifier getModifiers(int index) {
       return modifiers_.get(index);
     }
     /**
      * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+     *
+     * <pre>
+     ** A list of all modifiers on the variable 
+     * </pre>
      */
     public boa.types.Ast.ModifierOrBuilder getModifiersOrBuilder(
         int index) {
@@ -7753,18 +9348,30 @@ public final class Ast {
     private boa.types.Ast.Type returnType_;
     /**
      * <code>required .boa.types.Type return_type = 3;</code>
+     *
+     * <pre>
+     ** The type returned from the method; if the method returns nothing, this type will be void 
+     * </pre>
      */
     public boolean hasReturnType() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
      * <code>required .boa.types.Type return_type = 3;</code>
+     *
+     * <pre>
+     ** The type returned from the method; if the method returns nothing, this type will be void 
+     * </pre>
      */
     public boa.types.Ast.Type getReturnType() {
       return returnType_;
     }
     /**
      * <code>required .boa.types.Type return_type = 3;</code>
+     *
+     * <pre>
+     ** The type returned from the method; if the method returns nothing, this type will be void 
+     * </pre>
      */
     public boa.types.Ast.TypeOrBuilder getReturnTypeOrBuilder() {
       return returnType_;
@@ -7775,12 +9382,20 @@ public final class Ast {
     private java.util.List<boa.types.Ast.Type> genericParameters_;
     /**
      * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+     *
+     * <pre>
+     ** The list of generic parameters for this method 
+     * </pre>
      */
     public java.util.List<boa.types.Ast.Type> getGenericParametersList() {
       return genericParameters_;
     }
     /**
      * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+     *
+     * <pre>
+     ** The list of generic parameters for this method 
+     * </pre>
      */
     public java.util.List<? extends boa.types.Ast.TypeOrBuilder> 
         getGenericParametersOrBuilderList() {
@@ -7788,18 +9403,30 @@ public final class Ast {
     }
     /**
      * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+     *
+     * <pre>
+     ** The list of generic parameters for this method 
+     * </pre>
      */
     public int getGenericParametersCount() {
       return genericParameters_.size();
     }
     /**
      * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+     *
+     * <pre>
+     ** The list of generic parameters for this method 
+     * </pre>
      */
     public boa.types.Ast.Type getGenericParameters(int index) {
       return genericParameters_.get(index);
     }
     /**
      * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+     *
+     * <pre>
+     ** The list of generic parameters for this method 
+     * </pre>
      */
     public boa.types.Ast.TypeOrBuilder getGenericParametersOrBuilder(
         int index) {
@@ -7811,12 +9438,20 @@ public final class Ast {
     private java.util.List<boa.types.Ast.Variable> arguments_;
     /**
      * <code>repeated .boa.types.Variable arguments = 5;</code>
+     *
+     * <pre>
+     ** The arguments the method takes 
+     * </pre>
      */
     public java.util.List<boa.types.Ast.Variable> getArgumentsList() {
       return arguments_;
     }
     /**
      * <code>repeated .boa.types.Variable arguments = 5;</code>
+     *
+     * <pre>
+     ** The arguments the method takes 
+     * </pre>
      */
     public java.util.List<? extends boa.types.Ast.VariableOrBuilder> 
         getArgumentsOrBuilderList() {
@@ -7824,18 +9459,30 @@ public final class Ast {
     }
     /**
      * <code>repeated .boa.types.Variable arguments = 5;</code>
+     *
+     * <pre>
+     ** The arguments the method takes 
+     * </pre>
      */
     public int getArgumentsCount() {
       return arguments_.size();
     }
     /**
      * <code>repeated .boa.types.Variable arguments = 5;</code>
+     *
+     * <pre>
+     ** The arguments the method takes 
+     * </pre>
      */
     public boa.types.Ast.Variable getArguments(int index) {
       return arguments_.get(index);
     }
     /**
      * <code>repeated .boa.types.Variable arguments = 5;</code>
+     *
+     * <pre>
+     ** The arguments the method takes 
+     * </pre>
      */
     public boa.types.Ast.VariableOrBuilder getArgumentsOrBuilder(
         int index) {
@@ -7847,12 +9494,20 @@ public final class Ast {
     private java.util.List<boa.types.Ast.Type> exceptionTypes_;
     /**
      * <code>repeated .boa.types.Type exception_types = 6;</code>
+     *
+     * <pre>
+     ** The list of exceptions thrown by this method 
+     * </pre>
      */
     public java.util.List<boa.types.Ast.Type> getExceptionTypesList() {
       return exceptionTypes_;
     }
     /**
      * <code>repeated .boa.types.Type exception_types = 6;</code>
+     *
+     * <pre>
+     ** The list of exceptions thrown by this method 
+     * </pre>
      */
     public java.util.List<? extends boa.types.Ast.TypeOrBuilder> 
         getExceptionTypesOrBuilderList() {
@@ -7860,18 +9515,30 @@ public final class Ast {
     }
     /**
      * <code>repeated .boa.types.Type exception_types = 6;</code>
+     *
+     * <pre>
+     ** The list of exceptions thrown by this method 
+     * </pre>
      */
     public int getExceptionTypesCount() {
       return exceptionTypes_.size();
     }
     /**
      * <code>repeated .boa.types.Type exception_types = 6;</code>
+     *
+     * <pre>
+     ** The list of exceptions thrown by this method 
+     * </pre>
      */
     public boa.types.Ast.Type getExceptionTypes(int index) {
       return exceptionTypes_.get(index);
     }
     /**
      * <code>repeated .boa.types.Type exception_types = 6;</code>
+     *
+     * <pre>
+     ** The list of exceptions thrown by this method 
+     * </pre>
      */
     public boa.types.Ast.TypeOrBuilder getExceptionTypesOrBuilder(
         int index) {
@@ -7883,12 +9550,26 @@ public final class Ast {
     private java.util.List<boa.types.Ast.Statement> statements_;
     /**
      * <code>repeated .boa.types.Statement statements = 7;</code>
+     *
+     * <pre>
+     **
+     * The statements in the method body. Note that most methods (in C-like
+     * languages, such as Java) contain a single statement of type BLOCK, which
+     * contains the list of statements within it!
+     * </pre>
      */
     public java.util.List<boa.types.Ast.Statement> getStatementsList() {
       return statements_;
     }
     /**
      * <code>repeated .boa.types.Statement statements = 7;</code>
+     *
+     * <pre>
+     **
+     * The statements in the method body. Note that most methods (in C-like
+     * languages, such as Java) contain a single statement of type BLOCK, which
+     * contains the list of statements within it!
+     * </pre>
      */
     public java.util.List<? extends boa.types.Ast.StatementOrBuilder> 
         getStatementsOrBuilderList() {
@@ -7896,18 +9577,39 @@ public final class Ast {
     }
     /**
      * <code>repeated .boa.types.Statement statements = 7;</code>
+     *
+     * <pre>
+     **
+     * The statements in the method body. Note that most methods (in C-like
+     * languages, such as Java) contain a single statement of type BLOCK, which
+     * contains the list of statements within it!
+     * </pre>
      */
     public int getStatementsCount() {
       return statements_.size();
     }
     /**
      * <code>repeated .boa.types.Statement statements = 7;</code>
+     *
+     * <pre>
+     **
+     * The statements in the method body. Note that most methods (in C-like
+     * languages, such as Java) contain a single statement of type BLOCK, which
+     * contains the list of statements within it!
+     * </pre>
      */
     public boa.types.Ast.Statement getStatements(int index) {
       return statements_.get(index);
     }
     /**
      * <code>repeated .boa.types.Statement statements = 7;</code>
+     *
+     * <pre>
+     **
+     * The statements in the method body. Note that most methods (in C-like
+     * languages, such as Java) contain a single statement of type BLOCK, which
+     * contains the list of statements within it!
+     * </pre>
      */
     public boa.types.Ast.StatementOrBuilder getStatementsOrBuilder(
         int index) {
@@ -7921,7 +9623,7 @@ public final class Ast {
      * <code>repeated .boa.types.Comment comments = 8;</code>
      *
      * <pre>
-     *	required PositionInfo position = 9;
+     ** @exclude TODO 
      * </pre>
      */
     public java.util.List<boa.types.Ast.Comment> getCommentsList() {
@@ -7931,7 +9633,7 @@ public final class Ast {
      * <code>repeated .boa.types.Comment comments = 8;</code>
      *
      * <pre>
-     *	required PositionInfo position = 9;
+     ** @exclude TODO 
      * </pre>
      */
     public java.util.List<? extends boa.types.Ast.CommentOrBuilder> 
@@ -7942,7 +9644,7 @@ public final class Ast {
      * <code>repeated .boa.types.Comment comments = 8;</code>
      *
      * <pre>
-     *	required PositionInfo position = 9;
+     ** @exclude TODO 
      * </pre>
      */
     public int getCommentsCount() {
@@ -7952,7 +9654,7 @@ public final class Ast {
      * <code>repeated .boa.types.Comment comments = 8;</code>
      *
      * <pre>
-     *	required PositionInfo position = 9;
+     ** @exclude TODO 
      * </pre>
      */
     public boa.types.Ast.Comment getComments(int index) {
@@ -7962,7 +9664,7 @@ public final class Ast {
      * <code>repeated .boa.types.Comment comments = 8;</code>
      *
      * <pre>
-     *	required PositionInfo position = 9;
+     ** @exclude TODO 
      * </pre>
      */
     public boa.types.Ast.CommentOrBuilder getCommentsOrBuilder(
@@ -8181,6 +9883,10 @@ public final class Ast {
     }
     /**
      * Protobuf type {@code boa.types.Method}
+     *
+     * <pre>
+     ** A method declaration 
+     * </pre>
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
@@ -8617,12 +10323,20 @@ public final class Ast {
       private java.lang.Object name_ = "";
       /**
        * <code>optional string name = 1;</code>
+       *
+       * <pre>
+       ** The name of the method 
+       * </pre>
        */
       public boolean hasName() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
        * <code>optional string name = 1;</code>
+       *
+       * <pre>
+       ** The name of the method 
+       * </pre>
        */
       public java.lang.String getName() {
         java.lang.Object ref = name_;
@@ -8637,6 +10351,10 @@ public final class Ast {
       }
       /**
        * <code>optional string name = 1;</code>
+       *
+       * <pre>
+       ** The name of the method 
+       * </pre>
        */
       public com.google.protobuf.ByteString
           getNameBytes() {
@@ -8653,6 +10371,10 @@ public final class Ast {
       }
       /**
        * <code>optional string name = 1;</code>
+       *
+       * <pre>
+       ** The name of the method 
+       * </pre>
        */
       public Builder setName(
           java.lang.String value) {
@@ -8666,6 +10388,10 @@ public final class Ast {
       }
       /**
        * <code>optional string name = 1;</code>
+       *
+       * <pre>
+       ** The name of the method 
+       * </pre>
        */
       public Builder clearName() {
         bitField0_ = (bitField0_ & ~0x00000001);
@@ -8675,6 +10401,10 @@ public final class Ast {
       }
       /**
        * <code>optional string name = 1;</code>
+       *
+       * <pre>
+       ** The name of the method 
+       * </pre>
        */
       public Builder setNameBytes(
           com.google.protobuf.ByteString value) {
@@ -8702,6 +10432,10 @@ public final class Ast {
 
       /**
        * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+       *
+       * <pre>
+       ** A list of all modifiers on the variable 
+       * </pre>
        */
       public java.util.List<boa.types.Ast.Modifier> getModifiersList() {
         if (modifiersBuilder_ == null) {
@@ -8712,6 +10446,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+       *
+       * <pre>
+       ** A list of all modifiers on the variable 
+       * </pre>
        */
       public int getModifiersCount() {
         if (modifiersBuilder_ == null) {
@@ -8722,6 +10460,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+       *
+       * <pre>
+       ** A list of all modifiers on the variable 
+       * </pre>
        */
       public boa.types.Ast.Modifier getModifiers(int index) {
         if (modifiersBuilder_ == null) {
@@ -8732,6 +10474,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+       *
+       * <pre>
+       ** A list of all modifiers on the variable 
+       * </pre>
        */
       public Builder setModifiers(
           int index, boa.types.Ast.Modifier value) {
@@ -8749,6 +10495,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+       *
+       * <pre>
+       ** A list of all modifiers on the variable 
+       * </pre>
        */
       public Builder setModifiers(
           int index, boa.types.Ast.Modifier.Builder builderForValue) {
@@ -8763,6 +10513,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+       *
+       * <pre>
+       ** A list of all modifiers on the variable 
+       * </pre>
        */
       public Builder addModifiers(boa.types.Ast.Modifier value) {
         if (modifiersBuilder_ == null) {
@@ -8779,6 +10533,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+       *
+       * <pre>
+       ** A list of all modifiers on the variable 
+       * </pre>
        */
       public Builder addModifiers(
           int index, boa.types.Ast.Modifier value) {
@@ -8796,6 +10554,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+       *
+       * <pre>
+       ** A list of all modifiers on the variable 
+       * </pre>
        */
       public Builder addModifiers(
           boa.types.Ast.Modifier.Builder builderForValue) {
@@ -8810,6 +10572,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+       *
+       * <pre>
+       ** A list of all modifiers on the variable 
+       * </pre>
        */
       public Builder addModifiers(
           int index, boa.types.Ast.Modifier.Builder builderForValue) {
@@ -8824,6 +10590,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+       *
+       * <pre>
+       ** A list of all modifiers on the variable 
+       * </pre>
        */
       public Builder addAllModifiers(
           java.lang.Iterable<? extends boa.types.Ast.Modifier> values) {
@@ -8838,6 +10608,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+       *
+       * <pre>
+       ** A list of all modifiers on the variable 
+       * </pre>
        */
       public Builder clearModifiers() {
         if (modifiersBuilder_ == null) {
@@ -8851,6 +10625,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+       *
+       * <pre>
+       ** A list of all modifiers on the variable 
+       * </pre>
        */
       public Builder removeModifiers(int index) {
         if (modifiersBuilder_ == null) {
@@ -8864,6 +10642,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+       *
+       * <pre>
+       ** A list of all modifiers on the variable 
+       * </pre>
        */
       public boa.types.Ast.Modifier.Builder getModifiersBuilder(
           int index) {
@@ -8871,6 +10653,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+       *
+       * <pre>
+       ** A list of all modifiers on the variable 
+       * </pre>
        */
       public boa.types.Ast.ModifierOrBuilder getModifiersOrBuilder(
           int index) {
@@ -8881,6 +10667,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+       *
+       * <pre>
+       ** A list of all modifiers on the variable 
+       * </pre>
        */
       public java.util.List<? extends boa.types.Ast.ModifierOrBuilder> 
            getModifiersOrBuilderList() {
@@ -8892,6 +10682,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+       *
+       * <pre>
+       ** A list of all modifiers on the variable 
+       * </pre>
        */
       public boa.types.Ast.Modifier.Builder addModifiersBuilder() {
         return getModifiersFieldBuilder().addBuilder(
@@ -8899,6 +10693,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+       *
+       * <pre>
+       ** A list of all modifiers on the variable 
+       * </pre>
        */
       public boa.types.Ast.Modifier.Builder addModifiersBuilder(
           int index) {
@@ -8907,6 +10705,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 2;</code>
+       *
+       * <pre>
+       ** A list of all modifiers on the variable 
+       * </pre>
        */
       public java.util.List<boa.types.Ast.Modifier.Builder> 
            getModifiersBuilderList() {
@@ -8933,12 +10735,20 @@ public final class Ast {
           boa.types.Ast.Type, boa.types.Ast.Type.Builder, boa.types.Ast.TypeOrBuilder> returnTypeBuilder_;
       /**
        * <code>required .boa.types.Type return_type = 3;</code>
+       *
+       * <pre>
+       ** The type returned from the method; if the method returns nothing, this type will be void 
+       * </pre>
        */
       public boolean hasReturnType() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
        * <code>required .boa.types.Type return_type = 3;</code>
+       *
+       * <pre>
+       ** The type returned from the method; if the method returns nothing, this type will be void 
+       * </pre>
        */
       public boa.types.Ast.Type getReturnType() {
         if (returnTypeBuilder_ == null) {
@@ -8949,6 +10759,10 @@ public final class Ast {
       }
       /**
        * <code>required .boa.types.Type return_type = 3;</code>
+       *
+       * <pre>
+       ** The type returned from the method; if the method returns nothing, this type will be void 
+       * </pre>
        */
       public Builder setReturnType(boa.types.Ast.Type value) {
         if (returnTypeBuilder_ == null) {
@@ -8965,6 +10779,10 @@ public final class Ast {
       }
       /**
        * <code>required .boa.types.Type return_type = 3;</code>
+       *
+       * <pre>
+       ** The type returned from the method; if the method returns nothing, this type will be void 
+       * </pre>
        */
       public Builder setReturnType(
           boa.types.Ast.Type.Builder builderForValue) {
@@ -8979,6 +10797,10 @@ public final class Ast {
       }
       /**
        * <code>required .boa.types.Type return_type = 3;</code>
+       *
+       * <pre>
+       ** The type returned from the method; if the method returns nothing, this type will be void 
+       * </pre>
        */
       public Builder mergeReturnType(boa.types.Ast.Type value) {
         if (returnTypeBuilder_ == null) {
@@ -8998,6 +10820,10 @@ public final class Ast {
       }
       /**
        * <code>required .boa.types.Type return_type = 3;</code>
+       *
+       * <pre>
+       ** The type returned from the method; if the method returns nothing, this type will be void 
+       * </pre>
        */
       public Builder clearReturnType() {
         if (returnTypeBuilder_ == null) {
@@ -9011,6 +10837,10 @@ public final class Ast {
       }
       /**
        * <code>required .boa.types.Type return_type = 3;</code>
+       *
+       * <pre>
+       ** The type returned from the method; if the method returns nothing, this type will be void 
+       * </pre>
        */
       public boa.types.Ast.Type.Builder getReturnTypeBuilder() {
         bitField0_ |= 0x00000004;
@@ -9019,6 +10849,10 @@ public final class Ast {
       }
       /**
        * <code>required .boa.types.Type return_type = 3;</code>
+       *
+       * <pre>
+       ** The type returned from the method; if the method returns nothing, this type will be void 
+       * </pre>
        */
       public boa.types.Ast.TypeOrBuilder getReturnTypeOrBuilder() {
         if (returnTypeBuilder_ != null) {
@@ -9029,6 +10863,10 @@ public final class Ast {
       }
       /**
        * <code>required .boa.types.Type return_type = 3;</code>
+       *
+       * <pre>
+       ** The type returned from the method; if the method returns nothing, this type will be void 
+       * </pre>
        */
       private com.google.protobuf.SingleFieldBuilder<
           boa.types.Ast.Type, boa.types.Ast.Type.Builder, boa.types.Ast.TypeOrBuilder> 
@@ -9059,6 +10897,10 @@ public final class Ast {
 
       /**
        * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+       *
+       * <pre>
+       ** The list of generic parameters for this method 
+       * </pre>
        */
       public java.util.List<boa.types.Ast.Type> getGenericParametersList() {
         if (genericParametersBuilder_ == null) {
@@ -9069,6 +10911,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+       *
+       * <pre>
+       ** The list of generic parameters for this method 
+       * </pre>
        */
       public int getGenericParametersCount() {
         if (genericParametersBuilder_ == null) {
@@ -9079,6 +10925,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+       *
+       * <pre>
+       ** The list of generic parameters for this method 
+       * </pre>
        */
       public boa.types.Ast.Type getGenericParameters(int index) {
         if (genericParametersBuilder_ == null) {
@@ -9089,6 +10939,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+       *
+       * <pre>
+       ** The list of generic parameters for this method 
+       * </pre>
        */
       public Builder setGenericParameters(
           int index, boa.types.Ast.Type value) {
@@ -9106,6 +10960,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+       *
+       * <pre>
+       ** The list of generic parameters for this method 
+       * </pre>
        */
       public Builder setGenericParameters(
           int index, boa.types.Ast.Type.Builder builderForValue) {
@@ -9120,6 +10978,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+       *
+       * <pre>
+       ** The list of generic parameters for this method 
+       * </pre>
        */
       public Builder addGenericParameters(boa.types.Ast.Type value) {
         if (genericParametersBuilder_ == null) {
@@ -9136,6 +10998,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+       *
+       * <pre>
+       ** The list of generic parameters for this method 
+       * </pre>
        */
       public Builder addGenericParameters(
           int index, boa.types.Ast.Type value) {
@@ -9153,6 +11019,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+       *
+       * <pre>
+       ** The list of generic parameters for this method 
+       * </pre>
        */
       public Builder addGenericParameters(
           boa.types.Ast.Type.Builder builderForValue) {
@@ -9167,6 +11037,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+       *
+       * <pre>
+       ** The list of generic parameters for this method 
+       * </pre>
        */
       public Builder addGenericParameters(
           int index, boa.types.Ast.Type.Builder builderForValue) {
@@ -9181,6 +11055,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+       *
+       * <pre>
+       ** The list of generic parameters for this method 
+       * </pre>
        */
       public Builder addAllGenericParameters(
           java.lang.Iterable<? extends boa.types.Ast.Type> values) {
@@ -9195,6 +11073,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+       *
+       * <pre>
+       ** The list of generic parameters for this method 
+       * </pre>
        */
       public Builder clearGenericParameters() {
         if (genericParametersBuilder_ == null) {
@@ -9208,6 +11090,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+       *
+       * <pre>
+       ** The list of generic parameters for this method 
+       * </pre>
        */
       public Builder removeGenericParameters(int index) {
         if (genericParametersBuilder_ == null) {
@@ -9221,6 +11107,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+       *
+       * <pre>
+       ** The list of generic parameters for this method 
+       * </pre>
        */
       public boa.types.Ast.Type.Builder getGenericParametersBuilder(
           int index) {
@@ -9228,6 +11118,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+       *
+       * <pre>
+       ** The list of generic parameters for this method 
+       * </pre>
        */
       public boa.types.Ast.TypeOrBuilder getGenericParametersOrBuilder(
           int index) {
@@ -9238,6 +11132,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+       *
+       * <pre>
+       ** The list of generic parameters for this method 
+       * </pre>
        */
       public java.util.List<? extends boa.types.Ast.TypeOrBuilder> 
            getGenericParametersOrBuilderList() {
@@ -9249,6 +11147,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+       *
+       * <pre>
+       ** The list of generic parameters for this method 
+       * </pre>
        */
       public boa.types.Ast.Type.Builder addGenericParametersBuilder() {
         return getGenericParametersFieldBuilder().addBuilder(
@@ -9256,6 +11158,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+       *
+       * <pre>
+       ** The list of generic parameters for this method 
+       * </pre>
        */
       public boa.types.Ast.Type.Builder addGenericParametersBuilder(
           int index) {
@@ -9264,6 +11170,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type generic_parameters = 4;</code>
+       *
+       * <pre>
+       ** The list of generic parameters for this method 
+       * </pre>
        */
       public java.util.List<boa.types.Ast.Type.Builder> 
            getGenericParametersBuilderList() {
@@ -9299,6 +11209,10 @@ public final class Ast {
 
       /**
        * <code>repeated .boa.types.Variable arguments = 5;</code>
+       *
+       * <pre>
+       ** The arguments the method takes 
+       * </pre>
        */
       public java.util.List<boa.types.Ast.Variable> getArgumentsList() {
         if (argumentsBuilder_ == null) {
@@ -9309,6 +11223,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Variable arguments = 5;</code>
+       *
+       * <pre>
+       ** The arguments the method takes 
+       * </pre>
        */
       public int getArgumentsCount() {
         if (argumentsBuilder_ == null) {
@@ -9319,6 +11237,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Variable arguments = 5;</code>
+       *
+       * <pre>
+       ** The arguments the method takes 
+       * </pre>
        */
       public boa.types.Ast.Variable getArguments(int index) {
         if (argumentsBuilder_ == null) {
@@ -9329,6 +11251,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Variable arguments = 5;</code>
+       *
+       * <pre>
+       ** The arguments the method takes 
+       * </pre>
        */
       public Builder setArguments(
           int index, boa.types.Ast.Variable value) {
@@ -9346,6 +11272,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Variable arguments = 5;</code>
+       *
+       * <pre>
+       ** The arguments the method takes 
+       * </pre>
        */
       public Builder setArguments(
           int index, boa.types.Ast.Variable.Builder builderForValue) {
@@ -9360,6 +11290,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Variable arguments = 5;</code>
+       *
+       * <pre>
+       ** The arguments the method takes 
+       * </pre>
        */
       public Builder addArguments(boa.types.Ast.Variable value) {
         if (argumentsBuilder_ == null) {
@@ -9376,6 +11310,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Variable arguments = 5;</code>
+       *
+       * <pre>
+       ** The arguments the method takes 
+       * </pre>
        */
       public Builder addArguments(
           int index, boa.types.Ast.Variable value) {
@@ -9393,6 +11331,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Variable arguments = 5;</code>
+       *
+       * <pre>
+       ** The arguments the method takes 
+       * </pre>
        */
       public Builder addArguments(
           boa.types.Ast.Variable.Builder builderForValue) {
@@ -9407,6 +11349,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Variable arguments = 5;</code>
+       *
+       * <pre>
+       ** The arguments the method takes 
+       * </pre>
        */
       public Builder addArguments(
           int index, boa.types.Ast.Variable.Builder builderForValue) {
@@ -9421,6 +11367,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Variable arguments = 5;</code>
+       *
+       * <pre>
+       ** The arguments the method takes 
+       * </pre>
        */
       public Builder addAllArguments(
           java.lang.Iterable<? extends boa.types.Ast.Variable> values) {
@@ -9435,6 +11385,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Variable arguments = 5;</code>
+       *
+       * <pre>
+       ** The arguments the method takes 
+       * </pre>
        */
       public Builder clearArguments() {
         if (argumentsBuilder_ == null) {
@@ -9448,6 +11402,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Variable arguments = 5;</code>
+       *
+       * <pre>
+       ** The arguments the method takes 
+       * </pre>
        */
       public Builder removeArguments(int index) {
         if (argumentsBuilder_ == null) {
@@ -9461,6 +11419,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Variable arguments = 5;</code>
+       *
+       * <pre>
+       ** The arguments the method takes 
+       * </pre>
        */
       public boa.types.Ast.Variable.Builder getArgumentsBuilder(
           int index) {
@@ -9468,6 +11430,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Variable arguments = 5;</code>
+       *
+       * <pre>
+       ** The arguments the method takes 
+       * </pre>
        */
       public boa.types.Ast.VariableOrBuilder getArgumentsOrBuilder(
           int index) {
@@ -9478,6 +11444,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Variable arguments = 5;</code>
+       *
+       * <pre>
+       ** The arguments the method takes 
+       * </pre>
        */
       public java.util.List<? extends boa.types.Ast.VariableOrBuilder> 
            getArgumentsOrBuilderList() {
@@ -9489,6 +11459,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Variable arguments = 5;</code>
+       *
+       * <pre>
+       ** The arguments the method takes 
+       * </pre>
        */
       public boa.types.Ast.Variable.Builder addArgumentsBuilder() {
         return getArgumentsFieldBuilder().addBuilder(
@@ -9496,6 +11470,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Variable arguments = 5;</code>
+       *
+       * <pre>
+       ** The arguments the method takes 
+       * </pre>
        */
       public boa.types.Ast.Variable.Builder addArgumentsBuilder(
           int index) {
@@ -9504,6 +11482,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Variable arguments = 5;</code>
+       *
+       * <pre>
+       ** The arguments the method takes 
+       * </pre>
        */
       public java.util.List<boa.types.Ast.Variable.Builder> 
            getArgumentsBuilderList() {
@@ -9539,6 +11521,10 @@ public final class Ast {
 
       /**
        * <code>repeated .boa.types.Type exception_types = 6;</code>
+       *
+       * <pre>
+       ** The list of exceptions thrown by this method 
+       * </pre>
        */
       public java.util.List<boa.types.Ast.Type> getExceptionTypesList() {
         if (exceptionTypesBuilder_ == null) {
@@ -9549,6 +11535,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type exception_types = 6;</code>
+       *
+       * <pre>
+       ** The list of exceptions thrown by this method 
+       * </pre>
        */
       public int getExceptionTypesCount() {
         if (exceptionTypesBuilder_ == null) {
@@ -9559,6 +11549,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type exception_types = 6;</code>
+       *
+       * <pre>
+       ** The list of exceptions thrown by this method 
+       * </pre>
        */
       public boa.types.Ast.Type getExceptionTypes(int index) {
         if (exceptionTypesBuilder_ == null) {
@@ -9569,6 +11563,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type exception_types = 6;</code>
+       *
+       * <pre>
+       ** The list of exceptions thrown by this method 
+       * </pre>
        */
       public Builder setExceptionTypes(
           int index, boa.types.Ast.Type value) {
@@ -9586,6 +11584,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type exception_types = 6;</code>
+       *
+       * <pre>
+       ** The list of exceptions thrown by this method 
+       * </pre>
        */
       public Builder setExceptionTypes(
           int index, boa.types.Ast.Type.Builder builderForValue) {
@@ -9600,6 +11602,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type exception_types = 6;</code>
+       *
+       * <pre>
+       ** The list of exceptions thrown by this method 
+       * </pre>
        */
       public Builder addExceptionTypes(boa.types.Ast.Type value) {
         if (exceptionTypesBuilder_ == null) {
@@ -9616,6 +11622,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type exception_types = 6;</code>
+       *
+       * <pre>
+       ** The list of exceptions thrown by this method 
+       * </pre>
        */
       public Builder addExceptionTypes(
           int index, boa.types.Ast.Type value) {
@@ -9633,6 +11643,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type exception_types = 6;</code>
+       *
+       * <pre>
+       ** The list of exceptions thrown by this method 
+       * </pre>
        */
       public Builder addExceptionTypes(
           boa.types.Ast.Type.Builder builderForValue) {
@@ -9647,6 +11661,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type exception_types = 6;</code>
+       *
+       * <pre>
+       ** The list of exceptions thrown by this method 
+       * </pre>
        */
       public Builder addExceptionTypes(
           int index, boa.types.Ast.Type.Builder builderForValue) {
@@ -9661,6 +11679,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type exception_types = 6;</code>
+       *
+       * <pre>
+       ** The list of exceptions thrown by this method 
+       * </pre>
        */
       public Builder addAllExceptionTypes(
           java.lang.Iterable<? extends boa.types.Ast.Type> values) {
@@ -9675,6 +11697,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type exception_types = 6;</code>
+       *
+       * <pre>
+       ** The list of exceptions thrown by this method 
+       * </pre>
        */
       public Builder clearExceptionTypes() {
         if (exceptionTypesBuilder_ == null) {
@@ -9688,6 +11714,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type exception_types = 6;</code>
+       *
+       * <pre>
+       ** The list of exceptions thrown by this method 
+       * </pre>
        */
       public Builder removeExceptionTypes(int index) {
         if (exceptionTypesBuilder_ == null) {
@@ -9701,6 +11731,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type exception_types = 6;</code>
+       *
+       * <pre>
+       ** The list of exceptions thrown by this method 
+       * </pre>
        */
       public boa.types.Ast.Type.Builder getExceptionTypesBuilder(
           int index) {
@@ -9708,6 +11742,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type exception_types = 6;</code>
+       *
+       * <pre>
+       ** The list of exceptions thrown by this method 
+       * </pre>
        */
       public boa.types.Ast.TypeOrBuilder getExceptionTypesOrBuilder(
           int index) {
@@ -9718,6 +11756,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type exception_types = 6;</code>
+       *
+       * <pre>
+       ** The list of exceptions thrown by this method 
+       * </pre>
        */
       public java.util.List<? extends boa.types.Ast.TypeOrBuilder> 
            getExceptionTypesOrBuilderList() {
@@ -9729,6 +11771,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type exception_types = 6;</code>
+       *
+       * <pre>
+       ** The list of exceptions thrown by this method 
+       * </pre>
        */
       public boa.types.Ast.Type.Builder addExceptionTypesBuilder() {
         return getExceptionTypesFieldBuilder().addBuilder(
@@ -9736,6 +11782,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type exception_types = 6;</code>
+       *
+       * <pre>
+       ** The list of exceptions thrown by this method 
+       * </pre>
        */
       public boa.types.Ast.Type.Builder addExceptionTypesBuilder(
           int index) {
@@ -9744,6 +11794,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Type exception_types = 6;</code>
+       *
+       * <pre>
+       ** The list of exceptions thrown by this method 
+       * </pre>
        */
       public java.util.List<boa.types.Ast.Type.Builder> 
            getExceptionTypesBuilderList() {
@@ -9779,6 +11833,13 @@ public final class Ast {
 
       /**
        * <code>repeated .boa.types.Statement statements = 7;</code>
+       *
+       * <pre>
+       **
+       * The statements in the method body. Note that most methods (in C-like
+       * languages, such as Java) contain a single statement of type BLOCK, which
+       * contains the list of statements within it!
+       * </pre>
        */
       public java.util.List<boa.types.Ast.Statement> getStatementsList() {
         if (statementsBuilder_ == null) {
@@ -9789,6 +11850,13 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Statement statements = 7;</code>
+       *
+       * <pre>
+       **
+       * The statements in the method body. Note that most methods (in C-like
+       * languages, such as Java) contain a single statement of type BLOCK, which
+       * contains the list of statements within it!
+       * </pre>
        */
       public int getStatementsCount() {
         if (statementsBuilder_ == null) {
@@ -9799,6 +11867,13 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Statement statements = 7;</code>
+       *
+       * <pre>
+       **
+       * The statements in the method body. Note that most methods (in C-like
+       * languages, such as Java) contain a single statement of type BLOCK, which
+       * contains the list of statements within it!
+       * </pre>
        */
       public boa.types.Ast.Statement getStatements(int index) {
         if (statementsBuilder_ == null) {
@@ -9809,6 +11884,13 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Statement statements = 7;</code>
+       *
+       * <pre>
+       **
+       * The statements in the method body. Note that most methods (in C-like
+       * languages, such as Java) contain a single statement of type BLOCK, which
+       * contains the list of statements within it!
+       * </pre>
        */
       public Builder setStatements(
           int index, boa.types.Ast.Statement value) {
@@ -9826,6 +11908,13 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Statement statements = 7;</code>
+       *
+       * <pre>
+       **
+       * The statements in the method body. Note that most methods (in C-like
+       * languages, such as Java) contain a single statement of type BLOCK, which
+       * contains the list of statements within it!
+       * </pre>
        */
       public Builder setStatements(
           int index, boa.types.Ast.Statement.Builder builderForValue) {
@@ -9840,6 +11929,13 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Statement statements = 7;</code>
+       *
+       * <pre>
+       **
+       * The statements in the method body. Note that most methods (in C-like
+       * languages, such as Java) contain a single statement of type BLOCK, which
+       * contains the list of statements within it!
+       * </pre>
        */
       public Builder addStatements(boa.types.Ast.Statement value) {
         if (statementsBuilder_ == null) {
@@ -9856,6 +11952,13 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Statement statements = 7;</code>
+       *
+       * <pre>
+       **
+       * The statements in the method body. Note that most methods (in C-like
+       * languages, such as Java) contain a single statement of type BLOCK, which
+       * contains the list of statements within it!
+       * </pre>
        */
       public Builder addStatements(
           int index, boa.types.Ast.Statement value) {
@@ -9873,6 +11976,13 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Statement statements = 7;</code>
+       *
+       * <pre>
+       **
+       * The statements in the method body. Note that most methods (in C-like
+       * languages, such as Java) contain a single statement of type BLOCK, which
+       * contains the list of statements within it!
+       * </pre>
        */
       public Builder addStatements(
           boa.types.Ast.Statement.Builder builderForValue) {
@@ -9887,6 +11997,13 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Statement statements = 7;</code>
+       *
+       * <pre>
+       **
+       * The statements in the method body. Note that most methods (in C-like
+       * languages, such as Java) contain a single statement of type BLOCK, which
+       * contains the list of statements within it!
+       * </pre>
        */
       public Builder addStatements(
           int index, boa.types.Ast.Statement.Builder builderForValue) {
@@ -9901,6 +12018,13 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Statement statements = 7;</code>
+       *
+       * <pre>
+       **
+       * The statements in the method body. Note that most methods (in C-like
+       * languages, such as Java) contain a single statement of type BLOCK, which
+       * contains the list of statements within it!
+       * </pre>
        */
       public Builder addAllStatements(
           java.lang.Iterable<? extends boa.types.Ast.Statement> values) {
@@ -9915,6 +12039,13 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Statement statements = 7;</code>
+       *
+       * <pre>
+       **
+       * The statements in the method body. Note that most methods (in C-like
+       * languages, such as Java) contain a single statement of type BLOCK, which
+       * contains the list of statements within it!
+       * </pre>
        */
       public Builder clearStatements() {
         if (statementsBuilder_ == null) {
@@ -9928,6 +12059,13 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Statement statements = 7;</code>
+       *
+       * <pre>
+       **
+       * The statements in the method body. Note that most methods (in C-like
+       * languages, such as Java) contain a single statement of type BLOCK, which
+       * contains the list of statements within it!
+       * </pre>
        */
       public Builder removeStatements(int index) {
         if (statementsBuilder_ == null) {
@@ -9941,6 +12079,13 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Statement statements = 7;</code>
+       *
+       * <pre>
+       **
+       * The statements in the method body. Note that most methods (in C-like
+       * languages, such as Java) contain a single statement of type BLOCK, which
+       * contains the list of statements within it!
+       * </pre>
        */
       public boa.types.Ast.Statement.Builder getStatementsBuilder(
           int index) {
@@ -9948,6 +12093,13 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Statement statements = 7;</code>
+       *
+       * <pre>
+       **
+       * The statements in the method body. Note that most methods (in C-like
+       * languages, such as Java) contain a single statement of type BLOCK, which
+       * contains the list of statements within it!
+       * </pre>
        */
       public boa.types.Ast.StatementOrBuilder getStatementsOrBuilder(
           int index) {
@@ -9958,6 +12110,13 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Statement statements = 7;</code>
+       *
+       * <pre>
+       **
+       * The statements in the method body. Note that most methods (in C-like
+       * languages, such as Java) contain a single statement of type BLOCK, which
+       * contains the list of statements within it!
+       * </pre>
        */
       public java.util.List<? extends boa.types.Ast.StatementOrBuilder> 
            getStatementsOrBuilderList() {
@@ -9969,6 +12128,13 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Statement statements = 7;</code>
+       *
+       * <pre>
+       **
+       * The statements in the method body. Note that most methods (in C-like
+       * languages, such as Java) contain a single statement of type BLOCK, which
+       * contains the list of statements within it!
+       * </pre>
        */
       public boa.types.Ast.Statement.Builder addStatementsBuilder() {
         return getStatementsFieldBuilder().addBuilder(
@@ -9976,6 +12142,13 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Statement statements = 7;</code>
+       *
+       * <pre>
+       **
+       * The statements in the method body. Note that most methods (in C-like
+       * languages, such as Java) contain a single statement of type BLOCK, which
+       * contains the list of statements within it!
+       * </pre>
        */
       public boa.types.Ast.Statement.Builder addStatementsBuilder(
           int index) {
@@ -9984,6 +12157,13 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Statement statements = 7;</code>
+       *
+       * <pre>
+       **
+       * The statements in the method body. Note that most methods (in C-like
+       * languages, such as Java) contain a single statement of type BLOCK, which
+       * contains the list of statements within it!
+       * </pre>
        */
       public java.util.List<boa.types.Ast.Statement.Builder> 
            getStatementsBuilderList() {
@@ -10021,7 +12201,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 8;</code>
        *
        * <pre>
-       *	required PositionInfo position = 9;
+       ** @exclude TODO 
        * </pre>
        */
       public java.util.List<boa.types.Ast.Comment> getCommentsList() {
@@ -10035,7 +12215,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 8;</code>
        *
        * <pre>
-       *	required PositionInfo position = 9;
+       ** @exclude TODO 
        * </pre>
        */
       public int getCommentsCount() {
@@ -10049,7 +12229,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 8;</code>
        *
        * <pre>
-       *	required PositionInfo position = 9;
+       ** @exclude TODO 
        * </pre>
        */
       public boa.types.Ast.Comment getComments(int index) {
@@ -10063,7 +12243,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 8;</code>
        *
        * <pre>
-       *	required PositionInfo position = 9;
+       ** @exclude TODO 
        * </pre>
        */
       public Builder setComments(
@@ -10084,7 +12264,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 8;</code>
        *
        * <pre>
-       *	required PositionInfo position = 9;
+       ** @exclude TODO 
        * </pre>
        */
       public Builder setComments(
@@ -10102,7 +12282,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 8;</code>
        *
        * <pre>
-       *	required PositionInfo position = 9;
+       ** @exclude TODO 
        * </pre>
        */
       public Builder addComments(boa.types.Ast.Comment value) {
@@ -10122,7 +12302,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 8;</code>
        *
        * <pre>
-       *	required PositionInfo position = 9;
+       ** @exclude TODO 
        * </pre>
        */
       public Builder addComments(
@@ -10143,7 +12323,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 8;</code>
        *
        * <pre>
-       *	required PositionInfo position = 9;
+       ** @exclude TODO 
        * </pre>
        */
       public Builder addComments(
@@ -10161,7 +12341,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 8;</code>
        *
        * <pre>
-       *	required PositionInfo position = 9;
+       ** @exclude TODO 
        * </pre>
        */
       public Builder addComments(
@@ -10179,7 +12359,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 8;</code>
        *
        * <pre>
-       *	required PositionInfo position = 9;
+       ** @exclude TODO 
        * </pre>
        */
       public Builder addAllComments(
@@ -10197,7 +12377,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 8;</code>
        *
        * <pre>
-       *	required PositionInfo position = 9;
+       ** @exclude TODO 
        * </pre>
        */
       public Builder clearComments() {
@@ -10214,7 +12394,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 8;</code>
        *
        * <pre>
-       *	required PositionInfo position = 9;
+       ** @exclude TODO 
        * </pre>
        */
       public Builder removeComments(int index) {
@@ -10231,7 +12411,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 8;</code>
        *
        * <pre>
-       *	required PositionInfo position = 9;
+       ** @exclude TODO 
        * </pre>
        */
       public boa.types.Ast.Comment.Builder getCommentsBuilder(
@@ -10242,7 +12422,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 8;</code>
        *
        * <pre>
-       *	required PositionInfo position = 9;
+       ** @exclude TODO 
        * </pre>
        */
       public boa.types.Ast.CommentOrBuilder getCommentsOrBuilder(
@@ -10256,7 +12436,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 8;</code>
        *
        * <pre>
-       *	required PositionInfo position = 9;
+       ** @exclude TODO 
        * </pre>
        */
       public java.util.List<? extends boa.types.Ast.CommentOrBuilder> 
@@ -10271,7 +12451,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 8;</code>
        *
        * <pre>
-       *	required PositionInfo position = 9;
+       ** @exclude TODO 
        * </pre>
        */
       public boa.types.Ast.Comment.Builder addCommentsBuilder() {
@@ -10282,7 +12462,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 8;</code>
        *
        * <pre>
-       *	required PositionInfo position = 9;
+       ** @exclude TODO 
        * </pre>
        */
       public boa.types.Ast.Comment.Builder addCommentsBuilder(
@@ -10294,7 +12474,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 8;</code>
        *
        * <pre>
-       *	required PositionInfo position = 9;
+       ** @exclude TODO 
        * </pre>
        */
       public java.util.List<boa.types.Ast.Comment.Builder> 
@@ -10333,14 +12513,26 @@ public final class Ast {
     // required string name = 1;
     /**
      * <code>required string name = 1;</code>
+     *
+     * <pre>
+     ** The name of the variable 
+     * </pre>
      */
     boolean hasName();
     /**
      * <code>required string name = 1;</code>
+     *
+     * <pre>
+     ** The name of the variable 
+     * </pre>
      */
     java.lang.String getName();
     /**
      * <code>required string name = 1;</code>
+     *
+     * <pre>
+     ** The name of the variable 
+     * </pre>
      */
     com.google.protobuf.ByteString
         getNameBytes();
@@ -10348,38 +12540,70 @@ public final class Ast {
     // required .boa.types.Type variable_type = 2;
     /**
      * <code>required .boa.types.Type variable_type = 2;</code>
+     *
+     * <pre>
+     ** The type of the variable 
+     * </pre>
      */
     boolean hasVariableType();
     /**
      * <code>required .boa.types.Type variable_type = 2;</code>
+     *
+     * <pre>
+     ** The type of the variable 
+     * </pre>
      */
     boa.types.Ast.Type getVariableType();
     /**
      * <code>required .boa.types.Type variable_type = 2;</code>
+     *
+     * <pre>
+     ** The type of the variable 
+     * </pre>
      */
     boa.types.Ast.TypeOrBuilder getVariableTypeOrBuilder();
 
     // repeated .boa.types.Modifier modifiers = 3;
     /**
      * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+     *
+     * <pre>
+     ** A list of all modifiers on the variable 
+     * </pre>
      */
     java.util.List<boa.types.Ast.Modifier> 
         getModifiersList();
     /**
      * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+     *
+     * <pre>
+     ** A list of all modifiers on the variable 
+     * </pre>
      */
     boa.types.Ast.Modifier getModifiers(int index);
     /**
      * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+     *
+     * <pre>
+     ** A list of all modifiers on the variable 
+     * </pre>
      */
     int getModifiersCount();
     /**
      * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+     *
+     * <pre>
+     ** A list of all modifiers on the variable 
+     * </pre>
      */
     java.util.List<? extends boa.types.Ast.ModifierOrBuilder> 
         getModifiersOrBuilderList();
     /**
      * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+     *
+     * <pre>
+     ** A list of all modifiers on the variable 
+     * </pre>
      */
     boa.types.Ast.ModifierOrBuilder getModifiersOrBuilder(
         int index);
@@ -10387,14 +12611,26 @@ public final class Ast {
     // optional .boa.types.Expression initializer = 4;
     /**
      * <code>optional .boa.types.Expression initializer = 4;</code>
+     *
+     * <pre>
+     ** If the variable has an initial assignment, the expression is stored here 
+     * </pre>
      */
     boolean hasInitializer();
     /**
      * <code>optional .boa.types.Expression initializer = 4;</code>
+     *
+     * <pre>
+     ** If the variable has an initial assignment, the expression is stored here 
+     * </pre>
      */
     boa.types.Ast.Expression getInitializer();
     /**
      * <code>optional .boa.types.Expression initializer = 4;</code>
+     *
+     * <pre>
+     ** If the variable has an initial assignment, the expression is stored here 
+     * </pre>
      */
     boa.types.Ast.ExpressionOrBuilder getInitializerOrBuilder();
 
@@ -10403,7 +12639,7 @@ public final class Ast {
      * <code>repeated .boa.types.Comment comments = 5;</code>
      *
      * <pre>
-     *	required PositionInfo position = 6;
+     ** @exclude TODO 
      * </pre>
      */
     java.util.List<boa.types.Ast.Comment> 
@@ -10412,7 +12648,7 @@ public final class Ast {
      * <code>repeated .boa.types.Comment comments = 5;</code>
      *
      * <pre>
-     *	required PositionInfo position = 6;
+     ** @exclude TODO 
      * </pre>
      */
     boa.types.Ast.Comment getComments(int index);
@@ -10420,7 +12656,7 @@ public final class Ast {
      * <code>repeated .boa.types.Comment comments = 5;</code>
      *
      * <pre>
-     *	required PositionInfo position = 6;
+     ** @exclude TODO 
      * </pre>
      */
     int getCommentsCount();
@@ -10428,7 +12664,7 @@ public final class Ast {
      * <code>repeated .boa.types.Comment comments = 5;</code>
      *
      * <pre>
-     *	required PositionInfo position = 6;
+     ** @exclude TODO 
      * </pre>
      */
     java.util.List<? extends boa.types.Ast.CommentOrBuilder> 
@@ -10437,7 +12673,7 @@ public final class Ast {
      * <code>repeated .boa.types.Comment comments = 5;</code>
      *
      * <pre>
-     *	required PositionInfo position = 6;
+     ** @exclude TODO 
      * </pre>
      */
     boa.types.Ast.CommentOrBuilder getCommentsOrBuilder(
@@ -10445,6 +12681,10 @@ public final class Ast {
   }
   /**
    * Protobuf type {@code boa.types.Variable}
+   *
+   * <pre>
+   ** A variable declaration - can be a field, local, parameter, etc 
+   * </pre>
    */
   public static final class Variable extends
       com.google.protobuf.GeneratedMessage
@@ -10592,12 +12832,20 @@ public final class Ast {
     private java.lang.Object name_;
     /**
      * <code>required string name = 1;</code>
+     *
+     * <pre>
+     ** The name of the variable 
+     * </pre>
      */
     public boolean hasName() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
      * <code>required string name = 1;</code>
+     *
+     * <pre>
+     ** The name of the variable 
+     * </pre>
      */
     public java.lang.String getName() {
       java.lang.Object ref = name_;
@@ -10615,6 +12863,10 @@ public final class Ast {
     }
     /**
      * <code>required string name = 1;</code>
+     *
+     * <pre>
+     ** The name of the variable 
+     * </pre>
      */
     public com.google.protobuf.ByteString
         getNameBytes() {
@@ -10635,18 +12887,30 @@ public final class Ast {
     private boa.types.Ast.Type variableType_;
     /**
      * <code>required .boa.types.Type variable_type = 2;</code>
+     *
+     * <pre>
+     ** The type of the variable 
+     * </pre>
      */
     public boolean hasVariableType() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
      * <code>required .boa.types.Type variable_type = 2;</code>
+     *
+     * <pre>
+     ** The type of the variable 
+     * </pre>
      */
     public boa.types.Ast.Type getVariableType() {
       return variableType_;
     }
     /**
      * <code>required .boa.types.Type variable_type = 2;</code>
+     *
+     * <pre>
+     ** The type of the variable 
+     * </pre>
      */
     public boa.types.Ast.TypeOrBuilder getVariableTypeOrBuilder() {
       return variableType_;
@@ -10657,12 +12921,20 @@ public final class Ast {
     private java.util.List<boa.types.Ast.Modifier> modifiers_;
     /**
      * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+     *
+     * <pre>
+     ** A list of all modifiers on the variable 
+     * </pre>
      */
     public java.util.List<boa.types.Ast.Modifier> getModifiersList() {
       return modifiers_;
     }
     /**
      * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+     *
+     * <pre>
+     ** A list of all modifiers on the variable 
+     * </pre>
      */
     public java.util.List<? extends boa.types.Ast.ModifierOrBuilder> 
         getModifiersOrBuilderList() {
@@ -10670,18 +12942,30 @@ public final class Ast {
     }
     /**
      * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+     *
+     * <pre>
+     ** A list of all modifiers on the variable 
+     * </pre>
      */
     public int getModifiersCount() {
       return modifiers_.size();
     }
     /**
      * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+     *
+     * <pre>
+     ** A list of all modifiers on the variable 
+     * </pre>
      */
     public boa.types.Ast.Modifier getModifiers(int index) {
       return modifiers_.get(index);
     }
     /**
      * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+     *
+     * <pre>
+     ** A list of all modifiers on the variable 
+     * </pre>
      */
     public boa.types.Ast.ModifierOrBuilder getModifiersOrBuilder(
         int index) {
@@ -10693,18 +12977,30 @@ public final class Ast {
     private boa.types.Ast.Expression initializer_;
     /**
      * <code>optional .boa.types.Expression initializer = 4;</code>
+     *
+     * <pre>
+     ** If the variable has an initial assignment, the expression is stored here 
+     * </pre>
      */
     public boolean hasInitializer() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
      * <code>optional .boa.types.Expression initializer = 4;</code>
+     *
+     * <pre>
+     ** If the variable has an initial assignment, the expression is stored here 
+     * </pre>
      */
     public boa.types.Ast.Expression getInitializer() {
       return initializer_;
     }
     /**
      * <code>optional .boa.types.Expression initializer = 4;</code>
+     *
+     * <pre>
+     ** If the variable has an initial assignment, the expression is stored here 
+     * </pre>
      */
     public boa.types.Ast.ExpressionOrBuilder getInitializerOrBuilder() {
       return initializer_;
@@ -10717,7 +13013,7 @@ public final class Ast {
      * <code>repeated .boa.types.Comment comments = 5;</code>
      *
      * <pre>
-     *	required PositionInfo position = 6;
+     ** @exclude TODO 
      * </pre>
      */
     public java.util.List<boa.types.Ast.Comment> getCommentsList() {
@@ -10727,7 +13023,7 @@ public final class Ast {
      * <code>repeated .boa.types.Comment comments = 5;</code>
      *
      * <pre>
-     *	required PositionInfo position = 6;
+     ** @exclude TODO 
      * </pre>
      */
     public java.util.List<? extends boa.types.Ast.CommentOrBuilder> 
@@ -10738,7 +13034,7 @@ public final class Ast {
      * <code>repeated .boa.types.Comment comments = 5;</code>
      *
      * <pre>
-     *	required PositionInfo position = 6;
+     ** @exclude TODO 
      * </pre>
      */
     public int getCommentsCount() {
@@ -10748,7 +13044,7 @@ public final class Ast {
      * <code>repeated .boa.types.Comment comments = 5;</code>
      *
      * <pre>
-     *	required PositionInfo position = 6;
+     ** @exclude TODO 
      * </pre>
      */
     public boa.types.Ast.Comment getComments(int index) {
@@ -10758,7 +13054,7 @@ public final class Ast {
      * <code>repeated .boa.types.Comment comments = 5;</code>
      *
      * <pre>
-     *	required PositionInfo position = 6;
+     ** @exclude TODO 
      * </pre>
      */
     public boa.types.Ast.CommentOrBuilder getCommentsOrBuilder(
@@ -10939,6 +13235,10 @@ public final class Ast {
     }
     /**
      * Protobuf type {@code boa.types.Variable}
+     *
+     * <pre>
+     ** A variable declaration - can be a field, local, parameter, etc 
+     * </pre>
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
@@ -11211,12 +13511,20 @@ public final class Ast {
       private java.lang.Object name_ = "";
       /**
        * <code>required string name = 1;</code>
+       *
+       * <pre>
+       ** The name of the variable 
+       * </pre>
        */
       public boolean hasName() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
        * <code>required string name = 1;</code>
+       *
+       * <pre>
+       ** The name of the variable 
+       * </pre>
        */
       public java.lang.String getName() {
         java.lang.Object ref = name_;
@@ -11231,6 +13539,10 @@ public final class Ast {
       }
       /**
        * <code>required string name = 1;</code>
+       *
+       * <pre>
+       ** The name of the variable 
+       * </pre>
        */
       public com.google.protobuf.ByteString
           getNameBytes() {
@@ -11247,6 +13559,10 @@ public final class Ast {
       }
       /**
        * <code>required string name = 1;</code>
+       *
+       * <pre>
+       ** The name of the variable 
+       * </pre>
        */
       public Builder setName(
           java.lang.String value) {
@@ -11260,6 +13576,10 @@ public final class Ast {
       }
       /**
        * <code>required string name = 1;</code>
+       *
+       * <pre>
+       ** The name of the variable 
+       * </pre>
        */
       public Builder clearName() {
         bitField0_ = (bitField0_ & ~0x00000001);
@@ -11269,6 +13589,10 @@ public final class Ast {
       }
       /**
        * <code>required string name = 1;</code>
+       *
+       * <pre>
+       ** The name of the variable 
+       * </pre>
        */
       public Builder setNameBytes(
           com.google.protobuf.ByteString value) {
@@ -11287,12 +13611,20 @@ public final class Ast {
           boa.types.Ast.Type, boa.types.Ast.Type.Builder, boa.types.Ast.TypeOrBuilder> variableTypeBuilder_;
       /**
        * <code>required .boa.types.Type variable_type = 2;</code>
+       *
+       * <pre>
+       ** The type of the variable 
+       * </pre>
        */
       public boolean hasVariableType() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
        * <code>required .boa.types.Type variable_type = 2;</code>
+       *
+       * <pre>
+       ** The type of the variable 
+       * </pre>
        */
       public boa.types.Ast.Type getVariableType() {
         if (variableTypeBuilder_ == null) {
@@ -11303,6 +13635,10 @@ public final class Ast {
       }
       /**
        * <code>required .boa.types.Type variable_type = 2;</code>
+       *
+       * <pre>
+       ** The type of the variable 
+       * </pre>
        */
       public Builder setVariableType(boa.types.Ast.Type value) {
         if (variableTypeBuilder_ == null) {
@@ -11319,6 +13655,10 @@ public final class Ast {
       }
       /**
        * <code>required .boa.types.Type variable_type = 2;</code>
+       *
+       * <pre>
+       ** The type of the variable 
+       * </pre>
        */
       public Builder setVariableType(
           boa.types.Ast.Type.Builder builderForValue) {
@@ -11333,6 +13673,10 @@ public final class Ast {
       }
       /**
        * <code>required .boa.types.Type variable_type = 2;</code>
+       *
+       * <pre>
+       ** The type of the variable 
+       * </pre>
        */
       public Builder mergeVariableType(boa.types.Ast.Type value) {
         if (variableTypeBuilder_ == null) {
@@ -11352,6 +13696,10 @@ public final class Ast {
       }
       /**
        * <code>required .boa.types.Type variable_type = 2;</code>
+       *
+       * <pre>
+       ** The type of the variable 
+       * </pre>
        */
       public Builder clearVariableType() {
         if (variableTypeBuilder_ == null) {
@@ -11365,6 +13713,10 @@ public final class Ast {
       }
       /**
        * <code>required .boa.types.Type variable_type = 2;</code>
+       *
+       * <pre>
+       ** The type of the variable 
+       * </pre>
        */
       public boa.types.Ast.Type.Builder getVariableTypeBuilder() {
         bitField0_ |= 0x00000002;
@@ -11373,6 +13725,10 @@ public final class Ast {
       }
       /**
        * <code>required .boa.types.Type variable_type = 2;</code>
+       *
+       * <pre>
+       ** The type of the variable 
+       * </pre>
        */
       public boa.types.Ast.TypeOrBuilder getVariableTypeOrBuilder() {
         if (variableTypeBuilder_ != null) {
@@ -11383,6 +13739,10 @@ public final class Ast {
       }
       /**
        * <code>required .boa.types.Type variable_type = 2;</code>
+       *
+       * <pre>
+       ** The type of the variable 
+       * </pre>
        */
       private com.google.protobuf.SingleFieldBuilder<
           boa.types.Ast.Type, boa.types.Ast.Type.Builder, boa.types.Ast.TypeOrBuilder> 
@@ -11413,6 +13773,10 @@ public final class Ast {
 
       /**
        * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+       *
+       * <pre>
+       ** A list of all modifiers on the variable 
+       * </pre>
        */
       public java.util.List<boa.types.Ast.Modifier> getModifiersList() {
         if (modifiersBuilder_ == null) {
@@ -11423,6 +13787,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+       *
+       * <pre>
+       ** A list of all modifiers on the variable 
+       * </pre>
        */
       public int getModifiersCount() {
         if (modifiersBuilder_ == null) {
@@ -11433,6 +13801,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+       *
+       * <pre>
+       ** A list of all modifiers on the variable 
+       * </pre>
        */
       public boa.types.Ast.Modifier getModifiers(int index) {
         if (modifiersBuilder_ == null) {
@@ -11443,6 +13815,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+       *
+       * <pre>
+       ** A list of all modifiers on the variable 
+       * </pre>
        */
       public Builder setModifiers(
           int index, boa.types.Ast.Modifier value) {
@@ -11460,6 +13836,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+       *
+       * <pre>
+       ** A list of all modifiers on the variable 
+       * </pre>
        */
       public Builder setModifiers(
           int index, boa.types.Ast.Modifier.Builder builderForValue) {
@@ -11474,6 +13854,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+       *
+       * <pre>
+       ** A list of all modifiers on the variable 
+       * </pre>
        */
       public Builder addModifiers(boa.types.Ast.Modifier value) {
         if (modifiersBuilder_ == null) {
@@ -11490,6 +13874,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+       *
+       * <pre>
+       ** A list of all modifiers on the variable 
+       * </pre>
        */
       public Builder addModifiers(
           int index, boa.types.Ast.Modifier value) {
@@ -11507,6 +13895,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+       *
+       * <pre>
+       ** A list of all modifiers on the variable 
+       * </pre>
        */
       public Builder addModifiers(
           boa.types.Ast.Modifier.Builder builderForValue) {
@@ -11521,6 +13913,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+       *
+       * <pre>
+       ** A list of all modifiers on the variable 
+       * </pre>
        */
       public Builder addModifiers(
           int index, boa.types.Ast.Modifier.Builder builderForValue) {
@@ -11535,6 +13931,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+       *
+       * <pre>
+       ** A list of all modifiers on the variable 
+       * </pre>
        */
       public Builder addAllModifiers(
           java.lang.Iterable<? extends boa.types.Ast.Modifier> values) {
@@ -11549,6 +13949,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+       *
+       * <pre>
+       ** A list of all modifiers on the variable 
+       * </pre>
        */
       public Builder clearModifiers() {
         if (modifiersBuilder_ == null) {
@@ -11562,6 +13966,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+       *
+       * <pre>
+       ** A list of all modifiers on the variable 
+       * </pre>
        */
       public Builder removeModifiers(int index) {
         if (modifiersBuilder_ == null) {
@@ -11575,6 +13983,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+       *
+       * <pre>
+       ** A list of all modifiers on the variable 
+       * </pre>
        */
       public boa.types.Ast.Modifier.Builder getModifiersBuilder(
           int index) {
@@ -11582,6 +13994,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+       *
+       * <pre>
+       ** A list of all modifiers on the variable 
+       * </pre>
        */
       public boa.types.Ast.ModifierOrBuilder getModifiersOrBuilder(
           int index) {
@@ -11592,6 +14008,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+       *
+       * <pre>
+       ** A list of all modifiers on the variable 
+       * </pre>
        */
       public java.util.List<? extends boa.types.Ast.ModifierOrBuilder> 
            getModifiersOrBuilderList() {
@@ -11603,6 +14023,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+       *
+       * <pre>
+       ** A list of all modifiers on the variable 
+       * </pre>
        */
       public boa.types.Ast.Modifier.Builder addModifiersBuilder() {
         return getModifiersFieldBuilder().addBuilder(
@@ -11610,6 +14034,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+       *
+       * <pre>
+       ** A list of all modifiers on the variable 
+       * </pre>
        */
       public boa.types.Ast.Modifier.Builder addModifiersBuilder(
           int index) {
@@ -11618,6 +14046,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Modifier modifiers = 3;</code>
+       *
+       * <pre>
+       ** A list of all modifiers on the variable 
+       * </pre>
        */
       public java.util.List<boa.types.Ast.Modifier.Builder> 
            getModifiersBuilderList() {
@@ -11644,12 +14076,20 @@ public final class Ast {
           boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder> initializerBuilder_;
       /**
        * <code>optional .boa.types.Expression initializer = 4;</code>
+       *
+       * <pre>
+       ** If the variable has an initial assignment, the expression is stored here 
+       * </pre>
        */
       public boolean hasInitializer() {
         return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       /**
        * <code>optional .boa.types.Expression initializer = 4;</code>
+       *
+       * <pre>
+       ** If the variable has an initial assignment, the expression is stored here 
+       * </pre>
        */
       public boa.types.Ast.Expression getInitializer() {
         if (initializerBuilder_ == null) {
@@ -11660,6 +14100,10 @@ public final class Ast {
       }
       /**
        * <code>optional .boa.types.Expression initializer = 4;</code>
+       *
+       * <pre>
+       ** If the variable has an initial assignment, the expression is stored here 
+       * </pre>
        */
       public Builder setInitializer(boa.types.Ast.Expression value) {
         if (initializerBuilder_ == null) {
@@ -11676,6 +14120,10 @@ public final class Ast {
       }
       /**
        * <code>optional .boa.types.Expression initializer = 4;</code>
+       *
+       * <pre>
+       ** If the variable has an initial assignment, the expression is stored here 
+       * </pre>
        */
       public Builder setInitializer(
           boa.types.Ast.Expression.Builder builderForValue) {
@@ -11690,6 +14138,10 @@ public final class Ast {
       }
       /**
        * <code>optional .boa.types.Expression initializer = 4;</code>
+       *
+       * <pre>
+       ** If the variable has an initial assignment, the expression is stored here 
+       * </pre>
        */
       public Builder mergeInitializer(boa.types.Ast.Expression value) {
         if (initializerBuilder_ == null) {
@@ -11709,6 +14161,10 @@ public final class Ast {
       }
       /**
        * <code>optional .boa.types.Expression initializer = 4;</code>
+       *
+       * <pre>
+       ** If the variable has an initial assignment, the expression is stored here 
+       * </pre>
        */
       public Builder clearInitializer() {
         if (initializerBuilder_ == null) {
@@ -11722,6 +14178,10 @@ public final class Ast {
       }
       /**
        * <code>optional .boa.types.Expression initializer = 4;</code>
+       *
+       * <pre>
+       ** If the variable has an initial assignment, the expression is stored here 
+       * </pre>
        */
       public boa.types.Ast.Expression.Builder getInitializerBuilder() {
         bitField0_ |= 0x00000008;
@@ -11730,6 +14190,10 @@ public final class Ast {
       }
       /**
        * <code>optional .boa.types.Expression initializer = 4;</code>
+       *
+       * <pre>
+       ** If the variable has an initial assignment, the expression is stored here 
+       * </pre>
        */
       public boa.types.Ast.ExpressionOrBuilder getInitializerOrBuilder() {
         if (initializerBuilder_ != null) {
@@ -11740,6 +14204,10 @@ public final class Ast {
       }
       /**
        * <code>optional .boa.types.Expression initializer = 4;</code>
+       *
+       * <pre>
+       ** If the variable has an initial assignment, the expression is stored here 
+       * </pre>
        */
       private com.google.protobuf.SingleFieldBuilder<
           boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder> 
@@ -11772,7 +14240,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 5;</code>
        *
        * <pre>
-       *	required PositionInfo position = 6;
+       ** @exclude TODO 
        * </pre>
        */
       public java.util.List<boa.types.Ast.Comment> getCommentsList() {
@@ -11786,7 +14254,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 5;</code>
        *
        * <pre>
-       *	required PositionInfo position = 6;
+       ** @exclude TODO 
        * </pre>
        */
       public int getCommentsCount() {
@@ -11800,7 +14268,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 5;</code>
        *
        * <pre>
-       *	required PositionInfo position = 6;
+       ** @exclude TODO 
        * </pre>
        */
       public boa.types.Ast.Comment getComments(int index) {
@@ -11814,7 +14282,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 5;</code>
        *
        * <pre>
-       *	required PositionInfo position = 6;
+       ** @exclude TODO 
        * </pre>
        */
       public Builder setComments(
@@ -11835,7 +14303,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 5;</code>
        *
        * <pre>
-       *	required PositionInfo position = 6;
+       ** @exclude TODO 
        * </pre>
        */
       public Builder setComments(
@@ -11853,7 +14321,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 5;</code>
        *
        * <pre>
-       *	required PositionInfo position = 6;
+       ** @exclude TODO 
        * </pre>
        */
       public Builder addComments(boa.types.Ast.Comment value) {
@@ -11873,7 +14341,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 5;</code>
        *
        * <pre>
-       *	required PositionInfo position = 6;
+       ** @exclude TODO 
        * </pre>
        */
       public Builder addComments(
@@ -11894,7 +14362,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 5;</code>
        *
        * <pre>
-       *	required PositionInfo position = 6;
+       ** @exclude TODO 
        * </pre>
        */
       public Builder addComments(
@@ -11912,7 +14380,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 5;</code>
        *
        * <pre>
-       *	required PositionInfo position = 6;
+       ** @exclude TODO 
        * </pre>
        */
       public Builder addComments(
@@ -11930,7 +14398,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 5;</code>
        *
        * <pre>
-       *	required PositionInfo position = 6;
+       ** @exclude TODO 
        * </pre>
        */
       public Builder addAllComments(
@@ -11948,7 +14416,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 5;</code>
        *
        * <pre>
-       *	required PositionInfo position = 6;
+       ** @exclude TODO 
        * </pre>
        */
       public Builder clearComments() {
@@ -11965,7 +14433,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 5;</code>
        *
        * <pre>
-       *	required PositionInfo position = 6;
+       ** @exclude TODO 
        * </pre>
        */
       public Builder removeComments(int index) {
@@ -11982,7 +14450,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 5;</code>
        *
        * <pre>
-       *	required PositionInfo position = 6;
+       ** @exclude TODO 
        * </pre>
        */
       public boa.types.Ast.Comment.Builder getCommentsBuilder(
@@ -11993,7 +14461,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 5;</code>
        *
        * <pre>
-       *	required PositionInfo position = 6;
+       ** @exclude TODO 
        * </pre>
        */
       public boa.types.Ast.CommentOrBuilder getCommentsOrBuilder(
@@ -12007,7 +14475,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 5;</code>
        *
        * <pre>
-       *	required PositionInfo position = 6;
+       ** @exclude TODO 
        * </pre>
        */
       public java.util.List<? extends boa.types.Ast.CommentOrBuilder> 
@@ -12022,7 +14490,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 5;</code>
        *
        * <pre>
-       *	required PositionInfo position = 6;
+       ** @exclude TODO 
        * </pre>
        */
       public boa.types.Ast.Comment.Builder addCommentsBuilder() {
@@ -12033,7 +14501,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 5;</code>
        *
        * <pre>
-       *	required PositionInfo position = 6;
+       ** @exclude TODO 
        * </pre>
        */
       public boa.types.Ast.Comment.Builder addCommentsBuilder(
@@ -12045,7 +14513,7 @@ public final class Ast {
        * <code>repeated .boa.types.Comment comments = 5;</code>
        *
        * <pre>
-       *	required PositionInfo position = 6;
+       ** @exclude TODO 
        * </pre>
        */
       public java.util.List<boa.types.Ast.Comment.Builder> 
@@ -12084,34 +14552,62 @@ public final class Ast {
     // required .boa.types.Statement.StatementKind kind = 1;
     /**
      * <code>required .boa.types.Statement.StatementKind kind = 1;</code>
+     *
+     * <pre>
+     ** The kind of statement 
+     * </pre>
      */
     boolean hasKind();
     /**
      * <code>required .boa.types.Statement.StatementKind kind = 1;</code>
+     *
+     * <pre>
+     ** The kind of statement 
+     * </pre>
      */
     boa.types.Ast.Statement.StatementKind getKind();
 
     // repeated .boa.types.Comment comments = 2;
     /**
      * <code>repeated .boa.types.Comment comments = 2;</code>
+     *
+     * <pre>
+     ** @exclude TODO 
+     * </pre>
      */
     java.util.List<boa.types.Ast.Comment> 
         getCommentsList();
     /**
      * <code>repeated .boa.types.Comment comments = 2;</code>
+     *
+     * <pre>
+     ** @exclude TODO 
+     * </pre>
      */
     boa.types.Ast.Comment getComments(int index);
     /**
      * <code>repeated .boa.types.Comment comments = 2;</code>
+     *
+     * <pre>
+     ** @exclude TODO 
+     * </pre>
      */
     int getCommentsCount();
     /**
      * <code>repeated .boa.types.Comment comments = 2;</code>
+     *
+     * <pre>
+     ** @exclude TODO 
+     * </pre>
      */
     java.util.List<? extends boa.types.Ast.CommentOrBuilder> 
         getCommentsOrBuilderList();
     /**
      * <code>repeated .boa.types.Comment comments = 2;</code>
+     *
+     * <pre>
+     ** @exclude TODO 
+     * </pre>
      */
     boa.types.Ast.CommentOrBuilder getCommentsOrBuilder(
         int index);
@@ -12236,31 +14732,23 @@ public final class Ast {
     // optional .boa.types.Expression expression = 9;
     /**
      * <code>optional .boa.types.Expression expression = 9;</code>
-     *
-     * <pre>
-     *	required PositionInfo position = 10;
-     * </pre>
      */
     boolean hasExpression();
     /**
      * <code>optional .boa.types.Expression expression = 9;</code>
-     *
-     * <pre>
-     *	required PositionInfo position = 10;
-     * </pre>
      */
     boa.types.Ast.Expression getExpression();
     /**
      * <code>optional .boa.types.Expression expression = 9;</code>
-     *
-     * <pre>
-     *	required PositionInfo position = 10;
-     * </pre>
      */
     boa.types.Ast.ExpressionOrBuilder getExpressionOrBuilder();
   }
   /**
    * Protobuf type {@code boa.types.Statement}
+   *
+   * <pre>
+   ** A single statement 
+   * </pre>
    */
   public static final class Statement extends
       com.google.protobuf.GeneratedMessage
@@ -12458,11 +14946,19 @@ public final class Ast {
 
     /**
      * Protobuf enum {@code boa.types.Statement.StatementKind}
+     *
+     * <pre>
+     ** The kind of statement 
+     * </pre>
      */
     public enum StatementKind
         implements com.google.protobuf.ProtocolMessageEnum {
       /**
        * <code>OTHER = 0;</code>
+       *
+       * <pre>
+       ** Any other statement 
+       * </pre>
        */
       OTHER(0, 0),
       /**
@@ -12545,14 +15041,26 @@ public final class Ast {
 
       /**
        * <code>EXPR = 3;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
        */
       public static final StatementKind EXPR = EXPRESSION;
       /**
        * <code>SYNC = 4;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
        */
       public static final StatementKind SYNC = SYNCHRONIZED;
       /**
        * <code>OTHER = 0;</code>
+       *
+       * <pre>
+       ** Any other statement 
+       * </pre>
        */
       public static final int OTHER_VALUE = 0;
       /**
@@ -12569,6 +15077,10 @@ public final class Ast {
       public static final int EXPRESSION_VALUE = 3;
       /**
        * <code>EXPR = 3;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
        */
       public static final int EXPR_VALUE = 3;
       /**
@@ -12577,6 +15089,10 @@ public final class Ast {
       public static final int SYNCHRONIZED_VALUE = 4;
       /**
        * <code>SYNC = 4;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
        */
       public static final int SYNC_VALUE = 4;
       /**
@@ -12724,12 +15240,20 @@ public final class Ast {
     private boa.types.Ast.Statement.StatementKind kind_;
     /**
      * <code>required .boa.types.Statement.StatementKind kind = 1;</code>
+     *
+     * <pre>
+     ** The kind of statement 
+     * </pre>
      */
     public boolean hasKind() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
      * <code>required .boa.types.Statement.StatementKind kind = 1;</code>
+     *
+     * <pre>
+     ** The kind of statement 
+     * </pre>
      */
     public boa.types.Ast.Statement.StatementKind getKind() {
       return kind_;
@@ -12740,12 +15264,20 @@ public final class Ast {
     private java.util.List<boa.types.Ast.Comment> comments_;
     /**
      * <code>repeated .boa.types.Comment comments = 2;</code>
+     *
+     * <pre>
+     ** @exclude TODO 
+     * </pre>
      */
     public java.util.List<boa.types.Ast.Comment> getCommentsList() {
       return comments_;
     }
     /**
      * <code>repeated .boa.types.Comment comments = 2;</code>
+     *
+     * <pre>
+     ** @exclude TODO 
+     * </pre>
      */
     public java.util.List<? extends boa.types.Ast.CommentOrBuilder> 
         getCommentsOrBuilderList() {
@@ -12753,18 +15285,30 @@ public final class Ast {
     }
     /**
      * <code>repeated .boa.types.Comment comments = 2;</code>
+     *
+     * <pre>
+     ** @exclude TODO 
+     * </pre>
      */
     public int getCommentsCount() {
       return comments_.size();
     }
     /**
      * <code>repeated .boa.types.Comment comments = 2;</code>
+     *
+     * <pre>
+     ** @exclude TODO 
+     * </pre>
      */
     public boa.types.Ast.Comment getComments(int index) {
       return comments_.get(index);
     }
     /**
      * <code>repeated .boa.types.Comment comments = 2;</code>
+     *
+     * <pre>
+     ** @exclude TODO 
+     * </pre>
      */
     public boa.types.Ast.CommentOrBuilder getCommentsOrBuilder(
         int index) {
@@ -12950,30 +15494,18 @@ public final class Ast {
     private boa.types.Ast.Expression expression_;
     /**
      * <code>optional .boa.types.Expression expression = 9;</code>
-     *
-     * <pre>
-     *	required PositionInfo position = 10;
-     * </pre>
      */
     public boolean hasExpression() {
       return ((bitField0_ & 0x00000010) == 0x00000010);
     }
     /**
      * <code>optional .boa.types.Expression expression = 9;</code>
-     *
-     * <pre>
-     *	required PositionInfo position = 10;
-     * </pre>
      */
     public boa.types.Ast.Expression getExpression() {
       return expression_;
     }
     /**
      * <code>optional .boa.types.Expression expression = 9;</code>
-     *
-     * <pre>
-     *	required PositionInfo position = 10;
-     * </pre>
      */
     public boa.types.Ast.ExpressionOrBuilder getExpressionOrBuilder() {
       return expression_;
@@ -13206,6 +15738,10 @@ public final class Ast {
     }
     /**
      * Protobuf type {@code boa.types.Statement}
+     *
+     * <pre>
+     ** A single statement 
+     * </pre>
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
@@ -13618,18 +16154,30 @@ public final class Ast {
       private boa.types.Ast.Statement.StatementKind kind_ = boa.types.Ast.Statement.StatementKind.OTHER;
       /**
        * <code>required .boa.types.Statement.StatementKind kind = 1;</code>
+       *
+       * <pre>
+       ** The kind of statement 
+       * </pre>
        */
       public boolean hasKind() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
        * <code>required .boa.types.Statement.StatementKind kind = 1;</code>
+       *
+       * <pre>
+       ** The kind of statement 
+       * </pre>
        */
       public boa.types.Ast.Statement.StatementKind getKind() {
         return kind_;
       }
       /**
        * <code>required .boa.types.Statement.StatementKind kind = 1;</code>
+       *
+       * <pre>
+       ** The kind of statement 
+       * </pre>
        */
       public Builder setKind(boa.types.Ast.Statement.StatementKind value) {
         if (value == null) {
@@ -13642,6 +16190,10 @@ public final class Ast {
       }
       /**
        * <code>required .boa.types.Statement.StatementKind kind = 1;</code>
+       *
+       * <pre>
+       ** The kind of statement 
+       * </pre>
        */
       public Builder clearKind() {
         bitField0_ = (bitField0_ & ~0x00000001);
@@ -13665,6 +16217,10 @@ public final class Ast {
 
       /**
        * <code>repeated .boa.types.Comment comments = 2;</code>
+       *
+       * <pre>
+       ** @exclude TODO 
+       * </pre>
        */
       public java.util.List<boa.types.Ast.Comment> getCommentsList() {
         if (commentsBuilder_ == null) {
@@ -13675,6 +16231,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Comment comments = 2;</code>
+       *
+       * <pre>
+       ** @exclude TODO 
+       * </pre>
        */
       public int getCommentsCount() {
         if (commentsBuilder_ == null) {
@@ -13685,6 +16245,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Comment comments = 2;</code>
+       *
+       * <pre>
+       ** @exclude TODO 
+       * </pre>
        */
       public boa.types.Ast.Comment getComments(int index) {
         if (commentsBuilder_ == null) {
@@ -13695,6 +16259,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Comment comments = 2;</code>
+       *
+       * <pre>
+       ** @exclude TODO 
+       * </pre>
        */
       public Builder setComments(
           int index, boa.types.Ast.Comment value) {
@@ -13712,6 +16280,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Comment comments = 2;</code>
+       *
+       * <pre>
+       ** @exclude TODO 
+       * </pre>
        */
       public Builder setComments(
           int index, boa.types.Ast.Comment.Builder builderForValue) {
@@ -13726,6 +16298,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Comment comments = 2;</code>
+       *
+       * <pre>
+       ** @exclude TODO 
+       * </pre>
        */
       public Builder addComments(boa.types.Ast.Comment value) {
         if (commentsBuilder_ == null) {
@@ -13742,6 +16318,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Comment comments = 2;</code>
+       *
+       * <pre>
+       ** @exclude TODO 
+       * </pre>
        */
       public Builder addComments(
           int index, boa.types.Ast.Comment value) {
@@ -13759,6 +16339,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Comment comments = 2;</code>
+       *
+       * <pre>
+       ** @exclude TODO 
+       * </pre>
        */
       public Builder addComments(
           boa.types.Ast.Comment.Builder builderForValue) {
@@ -13773,6 +16357,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Comment comments = 2;</code>
+       *
+       * <pre>
+       ** @exclude TODO 
+       * </pre>
        */
       public Builder addComments(
           int index, boa.types.Ast.Comment.Builder builderForValue) {
@@ -13787,6 +16375,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Comment comments = 2;</code>
+       *
+       * <pre>
+       ** @exclude TODO 
+       * </pre>
        */
       public Builder addAllComments(
           java.lang.Iterable<? extends boa.types.Ast.Comment> values) {
@@ -13801,6 +16393,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Comment comments = 2;</code>
+       *
+       * <pre>
+       ** @exclude TODO 
+       * </pre>
        */
       public Builder clearComments() {
         if (commentsBuilder_ == null) {
@@ -13814,6 +16410,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Comment comments = 2;</code>
+       *
+       * <pre>
+       ** @exclude TODO 
+       * </pre>
        */
       public Builder removeComments(int index) {
         if (commentsBuilder_ == null) {
@@ -13827,6 +16427,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Comment comments = 2;</code>
+       *
+       * <pre>
+       ** @exclude TODO 
+       * </pre>
        */
       public boa.types.Ast.Comment.Builder getCommentsBuilder(
           int index) {
@@ -13834,6 +16438,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Comment comments = 2;</code>
+       *
+       * <pre>
+       ** @exclude TODO 
+       * </pre>
        */
       public boa.types.Ast.CommentOrBuilder getCommentsOrBuilder(
           int index) {
@@ -13844,6 +16452,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Comment comments = 2;</code>
+       *
+       * <pre>
+       ** @exclude TODO 
+       * </pre>
        */
       public java.util.List<? extends boa.types.Ast.CommentOrBuilder> 
            getCommentsOrBuilderList() {
@@ -13855,6 +16467,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Comment comments = 2;</code>
+       *
+       * <pre>
+       ** @exclude TODO 
+       * </pre>
        */
       public boa.types.Ast.Comment.Builder addCommentsBuilder() {
         return getCommentsFieldBuilder().addBuilder(
@@ -13862,6 +16478,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Comment comments = 2;</code>
+       *
+       * <pre>
+       ** @exclude TODO 
+       * </pre>
        */
       public boa.types.Ast.Comment.Builder addCommentsBuilder(
           int index) {
@@ -13870,6 +16490,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Comment comments = 2;</code>
+       *
+       * <pre>
+       ** @exclude TODO 
+       * </pre>
        */
       public java.util.List<boa.types.Ast.Comment.Builder> 
            getCommentsBuilderList() {
@@ -14967,20 +17591,12 @@ public final class Ast {
           boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder> expressionBuilder_;
       /**
        * <code>optional .boa.types.Expression expression = 9;</code>
-       *
-       * <pre>
-       *	required PositionInfo position = 10;
-       * </pre>
        */
       public boolean hasExpression() {
         return ((bitField0_ & 0x00000100) == 0x00000100);
       }
       /**
        * <code>optional .boa.types.Expression expression = 9;</code>
-       *
-       * <pre>
-       *	required PositionInfo position = 10;
-       * </pre>
        */
       public boa.types.Ast.Expression getExpression() {
         if (expressionBuilder_ == null) {
@@ -14991,10 +17607,6 @@ public final class Ast {
       }
       /**
        * <code>optional .boa.types.Expression expression = 9;</code>
-       *
-       * <pre>
-       *	required PositionInfo position = 10;
-       * </pre>
        */
       public Builder setExpression(boa.types.Ast.Expression value) {
         if (expressionBuilder_ == null) {
@@ -15011,10 +17623,6 @@ public final class Ast {
       }
       /**
        * <code>optional .boa.types.Expression expression = 9;</code>
-       *
-       * <pre>
-       *	required PositionInfo position = 10;
-       * </pre>
        */
       public Builder setExpression(
           boa.types.Ast.Expression.Builder builderForValue) {
@@ -15029,10 +17637,6 @@ public final class Ast {
       }
       /**
        * <code>optional .boa.types.Expression expression = 9;</code>
-       *
-       * <pre>
-       *	required PositionInfo position = 10;
-       * </pre>
        */
       public Builder mergeExpression(boa.types.Ast.Expression value) {
         if (expressionBuilder_ == null) {
@@ -15052,10 +17656,6 @@ public final class Ast {
       }
       /**
        * <code>optional .boa.types.Expression expression = 9;</code>
-       *
-       * <pre>
-       *	required PositionInfo position = 10;
-       * </pre>
        */
       public Builder clearExpression() {
         if (expressionBuilder_ == null) {
@@ -15069,10 +17669,6 @@ public final class Ast {
       }
       /**
        * <code>optional .boa.types.Expression expression = 9;</code>
-       *
-       * <pre>
-       *	required PositionInfo position = 10;
-       * </pre>
        */
       public boa.types.Ast.Expression.Builder getExpressionBuilder() {
         bitField0_ |= 0x00000100;
@@ -15081,10 +17677,6 @@ public final class Ast {
       }
       /**
        * <code>optional .boa.types.Expression expression = 9;</code>
-       *
-       * <pre>
-       *	required PositionInfo position = 10;
-       * </pre>
        */
       public boa.types.Ast.ExpressionOrBuilder getExpressionOrBuilder() {
         if (expressionBuilder_ != null) {
@@ -15095,10 +17687,6 @@ public final class Ast {
       }
       /**
        * <code>optional .boa.types.Expression expression = 9;</code>
-       *
-       * <pre>
-       *	required PositionInfo position = 10;
-       * </pre>
        */
       private com.google.protobuf.SingleFieldBuilder<
           boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder> 
@@ -15131,10 +17719,18 @@ public final class Ast {
     // required .boa.types.Expression.ExpressionKind kind = 1;
     /**
      * <code>required .boa.types.Expression.ExpressionKind kind = 1;</code>
+     *
+     * <pre>
+     ** The kind of expression 
+     * </pre>
      */
     boolean hasKind();
     /**
      * <code>required .boa.types.Expression.ExpressionKind kind = 1;</code>
+     *
+     * <pre>
+     ** The kind of expression 
+     * </pre>
      */
     boa.types.Ast.Expression.ExpressionKind getKind();
 
@@ -15340,7 +17936,7 @@ public final class Ast {
      * <code>optional .boa.types.Method lambda = 13;</code>
      *
      * <pre>
-     *	required PositionInfo position = 14;
+     ** @exclude 
      * </pre>
      */
     boolean hasLambda();
@@ -15348,7 +17944,7 @@ public final class Ast {
      * <code>optional .boa.types.Method lambda = 13;</code>
      *
      * <pre>
-     *	required PositionInfo position = 14;
+     ** @exclude 
      * </pre>
      */
     boa.types.Ast.Method getLambda();
@@ -15356,13 +17952,17 @@ public final class Ast {
      * <code>optional .boa.types.Method lambda = 13;</code>
      *
      * <pre>
-     *	required PositionInfo position = 14;
+     ** @exclude 
      * </pre>
      */
     boa.types.Ast.MethodOrBuilder getLambdaOrBuilder();
   }
   /**
    * Protobuf type {@code boa.types.Expression}
+   *
+   * <pre>
+   ** A single expression 
+   * </pre>
    */
   public static final class Expression extends
       com.google.protobuf.GeneratedMessage
@@ -15580,11 +18180,19 @@ public final class Ast {
 
     /**
      * Protobuf enum {@code boa.types.Expression.ExpressionKind}
+     *
+     * <pre>
+     ** The kind of expression 
+     * </pre>
      */
     public enum ExpressionKind
         implements com.google.protobuf.ProtocolMessageEnum {
       /**
        * <code>OTHER = 0;</code>
+       *
+       * <pre>
+       ** Any other expression 
+       * </pre>
        */
       OTHER(0, 0),
       /**
@@ -15785,20 +18393,36 @@ public final class Ast {
       PAREN(49, 49),
       /**
        * <code>METHOD_REFERENCE = 50;</code>
+       *
+       * <pre>
+       ** @exclude TODO 
+       * </pre>
        */
       METHOD_REFERENCE(50, 50),
       /**
        * <code>LAMBDA = 51;</code>
+       *
+       * <pre>
+       ** @exclude TODO 
+       * </pre>
        */
       LAMBDA(51, 51),
       /**
        * <code>ANON_METHOD = 52;</code>
+       *
+       * <pre>
+       ** @exclude TODO 
+       * </pre>
        */
       ANON_METHOD(52, 52),
       ;
 
       /**
        * <code>OTHER = 0;</code>
+       *
+       * <pre>
+       ** Any other expression 
+       * </pre>
        */
       public static final int OTHER_VALUE = 0;
       /**
@@ -15999,14 +18623,26 @@ public final class Ast {
       public static final int PAREN_VALUE = 49;
       /**
        * <code>METHOD_REFERENCE = 50;</code>
+       *
+       * <pre>
+       ** @exclude TODO 
+       * </pre>
        */
       public static final int METHOD_REFERENCE_VALUE = 50;
       /**
        * <code>LAMBDA = 51;</code>
+       *
+       * <pre>
+       ** @exclude TODO 
+       * </pre>
        */
       public static final int LAMBDA_VALUE = 51;
       /**
        * <code>ANON_METHOD = 52;</code>
+       *
+       * <pre>
+       ** @exclude TODO 
+       * </pre>
        */
       public static final int ANON_METHOD_VALUE = 52;
 
@@ -16125,12 +18761,20 @@ public final class Ast {
     private boa.types.Ast.Expression.ExpressionKind kind_;
     /**
      * <code>required .boa.types.Expression.ExpressionKind kind = 1;</code>
+     *
+     * <pre>
+     ** The kind of expression 
+     * </pre>
      */
     public boolean hasKind() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
      * <code>required .boa.types.Expression.ExpressionKind kind = 1;</code>
+     *
+     * <pre>
+     ** The kind of expression 
+     * </pre>
      */
     public boa.types.Ast.Expression.ExpressionKind getKind() {
       return kind_;
@@ -16498,7 +19142,7 @@ public final class Ast {
      * <code>optional .boa.types.Method lambda = 13;</code>
      *
      * <pre>
-     *	required PositionInfo position = 14;
+     ** @exclude 
      * </pre>
      */
     public boolean hasLambda() {
@@ -16508,7 +19152,7 @@ public final class Ast {
      * <code>optional .boa.types.Method lambda = 13;</code>
      *
      * <pre>
-     *	required PositionInfo position = 14;
+     ** @exclude 
      * </pre>
      */
     public boa.types.Ast.Method getLambda() {
@@ -16518,7 +19162,7 @@ public final class Ast {
      * <code>optional .boa.types.Method lambda = 13;</code>
      *
      * <pre>
-     *	required PositionInfo position = 14;
+     ** @exclude 
      * </pre>
      */
     public boa.types.Ast.MethodOrBuilder getLambdaOrBuilder() {
@@ -16784,6 +19428,10 @@ public final class Ast {
     }
     /**
      * Protobuf type {@code boa.types.Expression}
+     *
+     * <pre>
+     ** A single expression 
+     * </pre>
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
@@ -17238,18 +19886,30 @@ public final class Ast {
       private boa.types.Ast.Expression.ExpressionKind kind_ = boa.types.Ast.Expression.ExpressionKind.OTHER;
       /**
        * <code>required .boa.types.Expression.ExpressionKind kind = 1;</code>
+       *
+       * <pre>
+       ** The kind of expression 
+       * </pre>
        */
       public boolean hasKind() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
        * <code>required .boa.types.Expression.ExpressionKind kind = 1;</code>
+       *
+       * <pre>
+       ** The kind of expression 
+       * </pre>
        */
       public boa.types.Ast.Expression.ExpressionKind getKind() {
         return kind_;
       }
       /**
        * <code>required .boa.types.Expression.ExpressionKind kind = 1;</code>
+       *
+       * <pre>
+       ** The kind of expression 
+       * </pre>
        */
       public Builder setKind(boa.types.Ast.Expression.ExpressionKind value) {
         if (value == null) {
@@ -17262,6 +19922,10 @@ public final class Ast {
       }
       /**
        * <code>required .boa.types.Expression.ExpressionKind kind = 1;</code>
+       *
+       * <pre>
+       ** The kind of expression 
+       * </pre>
        */
       public Builder clearKind() {
         bitField0_ = (bitField0_ & ~0x00000001);
@@ -18844,7 +21508,7 @@ public final class Ast {
        * <code>optional .boa.types.Method lambda = 13;</code>
        *
        * <pre>
-       *	required PositionInfo position = 14;
+       ** @exclude 
        * </pre>
        */
       public boolean hasLambda() {
@@ -18854,7 +21518,7 @@ public final class Ast {
        * <code>optional .boa.types.Method lambda = 13;</code>
        *
        * <pre>
-       *	required PositionInfo position = 14;
+       ** @exclude 
        * </pre>
        */
       public boa.types.Ast.Method getLambda() {
@@ -18868,7 +21532,7 @@ public final class Ast {
        * <code>optional .boa.types.Method lambda = 13;</code>
        *
        * <pre>
-       *	required PositionInfo position = 14;
+       ** @exclude 
        * </pre>
        */
       public Builder setLambda(boa.types.Ast.Method value) {
@@ -18888,7 +21552,7 @@ public final class Ast {
        * <code>optional .boa.types.Method lambda = 13;</code>
        *
        * <pre>
-       *	required PositionInfo position = 14;
+       ** @exclude 
        * </pre>
        */
       public Builder setLambda(
@@ -18906,7 +21570,7 @@ public final class Ast {
        * <code>optional .boa.types.Method lambda = 13;</code>
        *
        * <pre>
-       *	required PositionInfo position = 14;
+       ** @exclude 
        * </pre>
        */
       public Builder mergeLambda(boa.types.Ast.Method value) {
@@ -18929,7 +21593,7 @@ public final class Ast {
        * <code>optional .boa.types.Method lambda = 13;</code>
        *
        * <pre>
-       *	required PositionInfo position = 14;
+       ** @exclude 
        * </pre>
        */
       public Builder clearLambda() {
@@ -18946,7 +21610,7 @@ public final class Ast {
        * <code>optional .boa.types.Method lambda = 13;</code>
        *
        * <pre>
-       *	required PositionInfo position = 14;
+       ** @exclude 
        * </pre>
        */
       public boa.types.Ast.Method.Builder getLambdaBuilder() {
@@ -18958,7 +21622,7 @@ public final class Ast {
        * <code>optional .boa.types.Method lambda = 13;</code>
        *
        * <pre>
-       *	required PositionInfo position = 14;
+       ** @exclude 
        * </pre>
        */
       public boa.types.Ast.MethodOrBuilder getLambdaOrBuilder() {
@@ -18972,7 +21636,7 @@ public final class Ast {
        * <code>optional .boa.types.Method lambda = 13;</code>
        *
        * <pre>
-       *	required PositionInfo position = 14;
+       ** @exclude 
        * </pre>
        */
       private com.google.protobuf.SingleFieldBuilder<
@@ -19006,34 +21670,62 @@ public final class Ast {
     // required .boa.types.Modifier.ModifierKind kind = 1;
     /**
      * <code>required .boa.types.Modifier.ModifierKind kind = 1;</code>
+     *
+     * <pre>
+     ** The kind of modifier 
+     * </pre>
      */
     boolean hasKind();
     /**
      * <code>required .boa.types.Modifier.ModifierKind kind = 1;</code>
+     *
+     * <pre>
+     ** The kind of modifier 
+     * </pre>
      */
     boa.types.Ast.Modifier.ModifierKind getKind();
 
     // optional .boa.types.Modifier.Visibility visibility = 2;
     /**
      * <code>optional .boa.types.Modifier.Visibility visibility = 2;</code>
+     *
+     * <pre>
+     ** A kind of visibility modifier 
+     * </pre>
      */
     boolean hasVisibility();
     /**
      * <code>optional .boa.types.Modifier.Visibility visibility = 2;</code>
+     *
+     * <pre>
+     ** A kind of visibility modifier 
+     * </pre>
      */
     boa.types.Ast.Modifier.Visibility getVisibility();
 
     // optional string annotation_name = 3;
     /**
      * <code>optional string annotation_name = 3;</code>
+     *
+     * <pre>
+     ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then the name of the annotation 
+     * </pre>
      */
     boolean hasAnnotationName();
     /**
      * <code>optional string annotation_name = 3;</code>
+     *
+     * <pre>
+     ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then the name of the annotation 
+     * </pre>
      */
     java.lang.String getAnnotationName();
     /**
      * <code>optional string annotation_name = 3;</code>
+     *
+     * <pre>
+     ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then the name of the annotation 
+     * </pre>
      */
     com.google.protobuf.ByteString
         getAnnotationNameBytes();
@@ -19041,19 +21733,35 @@ public final class Ast {
     // repeated string annotation_members = 4;
     /**
      * <code>repeated string annotation_members = 4;</code>
+     *
+     * <pre>
+     ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then a list of all members explicitly assigned values 
+     * </pre>
      */
     java.util.List<java.lang.String>
     getAnnotationMembersList();
     /**
      * <code>repeated string annotation_members = 4;</code>
+     *
+     * <pre>
+     ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then a list of all members explicitly assigned values 
+     * </pre>
      */
     int getAnnotationMembersCount();
     /**
      * <code>repeated string annotation_members = 4;</code>
+     *
+     * <pre>
+     ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then a list of all members explicitly assigned values 
+     * </pre>
      */
     java.lang.String getAnnotationMembers(int index);
     /**
      * <code>repeated string annotation_members = 4;</code>
+     *
+     * <pre>
+     ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then a list of all members explicitly assigned values 
+     * </pre>
      */
     com.google.protobuf.ByteString
         getAnnotationMembersBytes(int index);
@@ -19061,24 +21769,44 @@ public final class Ast {
     // repeated .boa.types.Expression annotation_values = 5;
     /**
      * <code>repeated .boa.types.Expression annotation_values = 5;</code>
+     *
+     * <pre>
+     ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then a list of all values that were assigned to members 
+     * </pre>
      */
     java.util.List<boa.types.Ast.Expression> 
         getAnnotationValuesList();
     /**
      * <code>repeated .boa.types.Expression annotation_values = 5;</code>
+     *
+     * <pre>
+     ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then a list of all values that were assigned to members 
+     * </pre>
      */
     boa.types.Ast.Expression getAnnotationValues(int index);
     /**
      * <code>repeated .boa.types.Expression annotation_values = 5;</code>
+     *
+     * <pre>
+     ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then a list of all values that were assigned to members 
+     * </pre>
      */
     int getAnnotationValuesCount();
     /**
      * <code>repeated .boa.types.Expression annotation_values = 5;</code>
+     *
+     * <pre>
+     ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then a list of all values that were assigned to members 
+     * </pre>
      */
     java.util.List<? extends boa.types.Ast.ExpressionOrBuilder> 
         getAnnotationValuesOrBuilderList();
     /**
      * <code>repeated .boa.types.Expression annotation_values = 5;</code>
+     *
+     * <pre>
+     ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then a list of all values that were assigned to members 
+     * </pre>
      */
     boa.types.Ast.ExpressionOrBuilder getAnnotationValuesOrBuilder(
         int index);
@@ -19088,7 +21816,7 @@ public final class Ast {
      * <code>optional string other = 6;</code>
      *
      * <pre>
-     *	required PositionInfo position = 7;
+     ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;OTHER&lt;/code&gt;, the modifier string from the source code 
      * </pre>
      */
     boolean hasOther();
@@ -19096,7 +21824,7 @@ public final class Ast {
      * <code>optional string other = 6;</code>
      *
      * <pre>
-     *	required PositionInfo position = 7;
+     ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;OTHER&lt;/code&gt;, the modifier string from the source code 
      * </pre>
      */
     java.lang.String getOther();
@@ -19104,7 +21832,7 @@ public final class Ast {
      * <code>optional string other = 6;</code>
      *
      * <pre>
-     *	required PositionInfo position = 7;
+     ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;OTHER&lt;/code&gt;, the modifier string from the source code 
      * </pre>
      */
     com.google.protobuf.ByteString
@@ -19112,6 +21840,10 @@ public final class Ast {
   }
   /**
    * Protobuf type {@code boa.types.Modifier}
+   *
+   * <pre>
+   ** A single modifier 
+   * </pre>
    */
   public static final class Modifier extends
       com.google.protobuf.GeneratedMessage
@@ -19256,73 +21988,141 @@ public final class Ast {
 
     /**
      * Protobuf enum {@code boa.types.Modifier.ModifierKind}
+     *
+     * <pre>
+     ** The kind of modifier 
+     * </pre>
      */
     public enum ModifierKind
         implements com.google.protobuf.ProtocolMessageEnum {
       /**
        * <code>OTHER = 0;</code>
+       *
+       * <pre>
+       ** Any other modifier - the value is in the &lt;a href="#Modifier"&gt;Modifier&lt;/a&gt;'s &lt;code&gt;other&lt;/code&gt; attribute 
+       * </pre>
        */
       OTHER(0, 0),
       /**
        * <code>VISIBILITY = 1;</code>
+       *
+       * <pre>
+       ** A &lt;a href="#Visibility"&gt;Visibility&lt;/a&gt; modifier - the value is in the &lt;a href="#Modifier"&gt;Modifier&lt;/a&gt;'s &lt;code&gt;visibility&lt;/code&gt; attribute 
+       * </pre>
        */
       VISIBILITY(1, 1),
       /**
        * <code>ANNOTATION = 2;</code>
+       *
+       * <pre>
+       ** An annotation modifier 
+       * </pre>
        */
       ANNOTATION(2, 2),
       /**
        * <code>FINAL = 3;</code>
+       *
+       * <pre>
+       ** A final modifier 
+       * </pre>
        */
       FINAL(3, 3),
       /**
        * <code>STATIC = 4;</code>
+       *
+       * <pre>
+       ** A static modifier 
+       * </pre>
        */
       STATIC(4, 4),
       /**
        * <code>SYNCHRONIZED = 5;</code>
+       *
+       * <pre>
+       ** A synchronized modifier 
+       * </pre>
        */
       SYNCHRONIZED(5, 5),
       /**
        * <code>ABSTRACT = 6;</code>
+       *
+       * <pre>
+       ** An abstract modifier 
+       * </pre>
        */
       ABSTRACT(7, 6),
       ;
 
       /**
        * <code>SYNC = 5;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
        */
       public static final ModifierKind SYNC = SYNCHRONIZED;
       /**
        * <code>OTHER = 0;</code>
+       *
+       * <pre>
+       ** Any other modifier - the value is in the &lt;a href="#Modifier"&gt;Modifier&lt;/a&gt;'s &lt;code&gt;other&lt;/code&gt; attribute 
+       * </pre>
        */
       public static final int OTHER_VALUE = 0;
       /**
        * <code>VISIBILITY = 1;</code>
+       *
+       * <pre>
+       ** A &lt;a href="#Visibility"&gt;Visibility&lt;/a&gt; modifier - the value is in the &lt;a href="#Modifier"&gt;Modifier&lt;/a&gt;'s &lt;code&gt;visibility&lt;/code&gt; attribute 
+       * </pre>
        */
       public static final int VISIBILITY_VALUE = 1;
       /**
        * <code>ANNOTATION = 2;</code>
+       *
+       * <pre>
+       ** An annotation modifier 
+       * </pre>
        */
       public static final int ANNOTATION_VALUE = 2;
       /**
        * <code>FINAL = 3;</code>
+       *
+       * <pre>
+       ** A final modifier 
+       * </pre>
        */
       public static final int FINAL_VALUE = 3;
       /**
        * <code>STATIC = 4;</code>
+       *
+       * <pre>
+       ** A static modifier 
+       * </pre>
        */
       public static final int STATIC_VALUE = 4;
       /**
        * <code>SYNCHRONIZED = 5;</code>
+       *
+       * <pre>
+       ** A synchronized modifier 
+       * </pre>
        */
       public static final int SYNCHRONIZED_VALUE = 5;
       /**
        * <code>SYNC = 5;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
        */
       public static final int SYNC_VALUE = 5;
       /**
        * <code>ABSTRACT = 6;</code>
+       *
+       * <pre>
+       ** An abstract modifier 
+       * </pre>
        */
       public static final int ABSTRACT_VALUE = 6;
 
@@ -19393,43 +22193,111 @@ public final class Ast {
 
     /**
      * Protobuf enum {@code boa.types.Modifier.Visibility}
+     *
+     * <pre>
+     ** A visibility modifier 
+     * </pre>
      */
     public enum Visibility
         implements com.google.protobuf.ProtocolMessageEnum {
       /**
        * <code>PUBLIC = 1;</code>
+       *
+       * <pre>
+       ** A public modifier 
+       * </pre>
        */
       PUBLIC(0, 1),
       /**
        * <code>PRIVATE = 2;</code>
+       *
+       * <pre>
+       ** A private modifier 
+       * </pre>
        */
       PRIVATE(1, 2),
       /**
        * <code>PROTECTED = 3;</code>
+       *
+       * <pre>
+       ** A protected modifier 
+       * </pre>
        */
       PROTECTED(2, 3),
       /**
        * <code>NAMESPACE = 4;</code>
+       *
+       * <pre>
+       ** A namespace (aka, default, aka package) visibility modifier 
+       * </pre>
        */
       NAMESPACE(3, 4),
       ;
 
       /**
+       * <code>PACKAGE = 4;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
+       */
+      public static final Visibility PACKAGE = NAMESPACE;
+      /**
+       * <code>DEFAULT = 4;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
+       */
+      public static final Visibility DEFAULT = NAMESPACE;
+      /**
        * <code>PUBLIC = 1;</code>
+       *
+       * <pre>
+       ** A public modifier 
+       * </pre>
        */
       public static final int PUBLIC_VALUE = 1;
       /**
        * <code>PRIVATE = 2;</code>
+       *
+       * <pre>
+       ** A private modifier 
+       * </pre>
        */
       public static final int PRIVATE_VALUE = 2;
       /**
        * <code>PROTECTED = 3;</code>
+       *
+       * <pre>
+       ** A protected modifier 
+       * </pre>
        */
       public static final int PROTECTED_VALUE = 3;
       /**
        * <code>NAMESPACE = 4;</code>
+       *
+       * <pre>
+       ** A namespace (aka, default, aka package) visibility modifier 
+       * </pre>
        */
       public static final int NAMESPACE_VALUE = 4;
+      /**
+       * <code>PACKAGE = 4;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
+       */
+      public static final int PACKAGE_VALUE = 4;
+      /**
+       * <code>DEFAULT = 4;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
+       */
+      public static final int DEFAULT_VALUE = 4;
 
 
       public final int getNumber() { return value; }
@@ -19469,7 +22337,9 @@ public final class Ast {
         return boa.types.Ast.Modifier.getDescriptor().getEnumTypes().get(1);
       }
 
-      private static final Visibility[] VALUES = values();
+      private static final Visibility[] VALUES = {
+        PUBLIC, PRIVATE, PROTECTED, NAMESPACE, PACKAGE, DEFAULT, 
+      };
 
       public static Visibility valueOf(
           com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
@@ -19497,12 +22367,20 @@ public final class Ast {
     private boa.types.Ast.Modifier.ModifierKind kind_;
     /**
      * <code>required .boa.types.Modifier.ModifierKind kind = 1;</code>
+     *
+     * <pre>
+     ** The kind of modifier 
+     * </pre>
      */
     public boolean hasKind() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
      * <code>required .boa.types.Modifier.ModifierKind kind = 1;</code>
+     *
+     * <pre>
+     ** The kind of modifier 
+     * </pre>
      */
     public boa.types.Ast.Modifier.ModifierKind getKind() {
       return kind_;
@@ -19513,12 +22391,20 @@ public final class Ast {
     private boa.types.Ast.Modifier.Visibility visibility_;
     /**
      * <code>optional .boa.types.Modifier.Visibility visibility = 2;</code>
+     *
+     * <pre>
+     ** A kind of visibility modifier 
+     * </pre>
      */
     public boolean hasVisibility() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
      * <code>optional .boa.types.Modifier.Visibility visibility = 2;</code>
+     *
+     * <pre>
+     ** A kind of visibility modifier 
+     * </pre>
      */
     public boa.types.Ast.Modifier.Visibility getVisibility() {
       return visibility_;
@@ -19529,12 +22415,20 @@ public final class Ast {
     private java.lang.Object annotationName_;
     /**
      * <code>optional string annotation_name = 3;</code>
+     *
+     * <pre>
+     ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then the name of the annotation 
+     * </pre>
      */
     public boolean hasAnnotationName() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
      * <code>optional string annotation_name = 3;</code>
+     *
+     * <pre>
+     ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then the name of the annotation 
+     * </pre>
      */
     public java.lang.String getAnnotationName() {
       java.lang.Object ref = annotationName_;
@@ -19552,6 +22446,10 @@ public final class Ast {
     }
     /**
      * <code>optional string annotation_name = 3;</code>
+     *
+     * <pre>
+     ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then the name of the annotation 
+     * </pre>
      */
     public com.google.protobuf.ByteString
         getAnnotationNameBytes() {
@@ -19572,6 +22470,10 @@ public final class Ast {
     private com.google.protobuf.LazyStringList annotationMembers_;
     /**
      * <code>repeated string annotation_members = 4;</code>
+     *
+     * <pre>
+     ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then a list of all members explicitly assigned values 
+     * </pre>
      */
     public java.util.List<java.lang.String>
         getAnnotationMembersList() {
@@ -19579,18 +22481,30 @@ public final class Ast {
     }
     /**
      * <code>repeated string annotation_members = 4;</code>
+     *
+     * <pre>
+     ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then a list of all members explicitly assigned values 
+     * </pre>
      */
     public int getAnnotationMembersCount() {
       return annotationMembers_.size();
     }
     /**
      * <code>repeated string annotation_members = 4;</code>
+     *
+     * <pre>
+     ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then a list of all members explicitly assigned values 
+     * </pre>
      */
     public java.lang.String getAnnotationMembers(int index) {
       return annotationMembers_.get(index);
     }
     /**
      * <code>repeated string annotation_members = 4;</code>
+     *
+     * <pre>
+     ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then a list of all members explicitly assigned values 
+     * </pre>
      */
     public com.google.protobuf.ByteString
         getAnnotationMembersBytes(int index) {
@@ -19602,12 +22516,20 @@ public final class Ast {
     private java.util.List<boa.types.Ast.Expression> annotationValues_;
     /**
      * <code>repeated .boa.types.Expression annotation_values = 5;</code>
+     *
+     * <pre>
+     ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then a list of all values that were assigned to members 
+     * </pre>
      */
     public java.util.List<boa.types.Ast.Expression> getAnnotationValuesList() {
       return annotationValues_;
     }
     /**
      * <code>repeated .boa.types.Expression annotation_values = 5;</code>
+     *
+     * <pre>
+     ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then a list of all values that were assigned to members 
+     * </pre>
      */
     public java.util.List<? extends boa.types.Ast.ExpressionOrBuilder> 
         getAnnotationValuesOrBuilderList() {
@@ -19615,18 +22537,30 @@ public final class Ast {
     }
     /**
      * <code>repeated .boa.types.Expression annotation_values = 5;</code>
+     *
+     * <pre>
+     ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then a list of all values that were assigned to members 
+     * </pre>
      */
     public int getAnnotationValuesCount() {
       return annotationValues_.size();
     }
     /**
      * <code>repeated .boa.types.Expression annotation_values = 5;</code>
+     *
+     * <pre>
+     ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then a list of all values that were assigned to members 
+     * </pre>
      */
     public boa.types.Ast.Expression getAnnotationValues(int index) {
       return annotationValues_.get(index);
     }
     /**
      * <code>repeated .boa.types.Expression annotation_values = 5;</code>
+     *
+     * <pre>
+     ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then a list of all values that were assigned to members 
+     * </pre>
      */
     public boa.types.Ast.ExpressionOrBuilder getAnnotationValuesOrBuilder(
         int index) {
@@ -19640,7 +22574,7 @@ public final class Ast {
      * <code>optional string other = 6;</code>
      *
      * <pre>
-     *	required PositionInfo position = 7;
+     ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;OTHER&lt;/code&gt;, the modifier string from the source code 
      * </pre>
      */
     public boolean hasOther() {
@@ -19650,7 +22584,7 @@ public final class Ast {
      * <code>optional string other = 6;</code>
      *
      * <pre>
-     *	required PositionInfo position = 7;
+     ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;OTHER&lt;/code&gt;, the modifier string from the source code 
      * </pre>
      */
     public java.lang.String getOther() {
@@ -19671,7 +22605,7 @@ public final class Ast {
      * <code>optional string other = 6;</code>
      *
      * <pre>
-     *	required PositionInfo position = 7;
+     ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;OTHER&lt;/code&gt;, the modifier string from the source code 
      * </pre>
      */
     public com.google.protobuf.ByteString
@@ -19854,6 +22788,10 @@ public final class Ast {
     }
     /**
      * Protobuf type {@code boa.types.Modifier}
+     *
+     * <pre>
+     ** A single modifier 
+     * </pre>
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
@@ -20075,18 +23013,30 @@ public final class Ast {
       private boa.types.Ast.Modifier.ModifierKind kind_ = boa.types.Ast.Modifier.ModifierKind.OTHER;
       /**
        * <code>required .boa.types.Modifier.ModifierKind kind = 1;</code>
+       *
+       * <pre>
+       ** The kind of modifier 
+       * </pre>
        */
       public boolean hasKind() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
        * <code>required .boa.types.Modifier.ModifierKind kind = 1;</code>
+       *
+       * <pre>
+       ** The kind of modifier 
+       * </pre>
        */
       public boa.types.Ast.Modifier.ModifierKind getKind() {
         return kind_;
       }
       /**
        * <code>required .boa.types.Modifier.ModifierKind kind = 1;</code>
+       *
+       * <pre>
+       ** The kind of modifier 
+       * </pre>
        */
       public Builder setKind(boa.types.Ast.Modifier.ModifierKind value) {
         if (value == null) {
@@ -20099,6 +23049,10 @@ public final class Ast {
       }
       /**
        * <code>required .boa.types.Modifier.ModifierKind kind = 1;</code>
+       *
+       * <pre>
+       ** The kind of modifier 
+       * </pre>
        */
       public Builder clearKind() {
         bitField0_ = (bitField0_ & ~0x00000001);
@@ -20111,18 +23065,30 @@ public final class Ast {
       private boa.types.Ast.Modifier.Visibility visibility_ = boa.types.Ast.Modifier.Visibility.PUBLIC;
       /**
        * <code>optional .boa.types.Modifier.Visibility visibility = 2;</code>
+       *
+       * <pre>
+       ** A kind of visibility modifier 
+       * </pre>
        */
       public boolean hasVisibility() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
        * <code>optional .boa.types.Modifier.Visibility visibility = 2;</code>
+       *
+       * <pre>
+       ** A kind of visibility modifier 
+       * </pre>
        */
       public boa.types.Ast.Modifier.Visibility getVisibility() {
         return visibility_;
       }
       /**
        * <code>optional .boa.types.Modifier.Visibility visibility = 2;</code>
+       *
+       * <pre>
+       ** A kind of visibility modifier 
+       * </pre>
        */
       public Builder setVisibility(boa.types.Ast.Modifier.Visibility value) {
         if (value == null) {
@@ -20135,6 +23101,10 @@ public final class Ast {
       }
       /**
        * <code>optional .boa.types.Modifier.Visibility visibility = 2;</code>
+       *
+       * <pre>
+       ** A kind of visibility modifier 
+       * </pre>
        */
       public Builder clearVisibility() {
         bitField0_ = (bitField0_ & ~0x00000002);
@@ -20147,12 +23117,20 @@ public final class Ast {
       private java.lang.Object annotationName_ = "";
       /**
        * <code>optional string annotation_name = 3;</code>
+       *
+       * <pre>
+       ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then the name of the annotation 
+       * </pre>
        */
       public boolean hasAnnotationName() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
        * <code>optional string annotation_name = 3;</code>
+       *
+       * <pre>
+       ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then the name of the annotation 
+       * </pre>
        */
       public java.lang.String getAnnotationName() {
         java.lang.Object ref = annotationName_;
@@ -20167,6 +23145,10 @@ public final class Ast {
       }
       /**
        * <code>optional string annotation_name = 3;</code>
+       *
+       * <pre>
+       ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then the name of the annotation 
+       * </pre>
        */
       public com.google.protobuf.ByteString
           getAnnotationNameBytes() {
@@ -20183,6 +23165,10 @@ public final class Ast {
       }
       /**
        * <code>optional string annotation_name = 3;</code>
+       *
+       * <pre>
+       ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then the name of the annotation 
+       * </pre>
        */
       public Builder setAnnotationName(
           java.lang.String value) {
@@ -20196,6 +23182,10 @@ public final class Ast {
       }
       /**
        * <code>optional string annotation_name = 3;</code>
+       *
+       * <pre>
+       ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then the name of the annotation 
+       * </pre>
        */
       public Builder clearAnnotationName() {
         bitField0_ = (bitField0_ & ~0x00000004);
@@ -20205,6 +23195,10 @@ public final class Ast {
       }
       /**
        * <code>optional string annotation_name = 3;</code>
+       *
+       * <pre>
+       ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then the name of the annotation 
+       * </pre>
        */
       public Builder setAnnotationNameBytes(
           com.google.protobuf.ByteString value) {
@@ -20227,6 +23221,10 @@ public final class Ast {
       }
       /**
        * <code>repeated string annotation_members = 4;</code>
+       *
+       * <pre>
+       ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then a list of all members explicitly assigned values 
+       * </pre>
        */
       public java.util.List<java.lang.String>
           getAnnotationMembersList() {
@@ -20234,18 +23232,30 @@ public final class Ast {
       }
       /**
        * <code>repeated string annotation_members = 4;</code>
+       *
+       * <pre>
+       ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then a list of all members explicitly assigned values 
+       * </pre>
        */
       public int getAnnotationMembersCount() {
         return annotationMembers_.size();
       }
       /**
        * <code>repeated string annotation_members = 4;</code>
+       *
+       * <pre>
+       ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then a list of all members explicitly assigned values 
+       * </pre>
        */
       public java.lang.String getAnnotationMembers(int index) {
         return annotationMembers_.get(index);
       }
       /**
        * <code>repeated string annotation_members = 4;</code>
+       *
+       * <pre>
+       ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then a list of all members explicitly assigned values 
+       * </pre>
        */
       public com.google.protobuf.ByteString
           getAnnotationMembersBytes(int index) {
@@ -20253,6 +23263,10 @@ public final class Ast {
       }
       /**
        * <code>repeated string annotation_members = 4;</code>
+       *
+       * <pre>
+       ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then a list of all members explicitly assigned values 
+       * </pre>
        */
       public Builder setAnnotationMembers(
           int index, java.lang.String value) {
@@ -20266,6 +23280,10 @@ public final class Ast {
       }
       /**
        * <code>repeated string annotation_members = 4;</code>
+       *
+       * <pre>
+       ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then a list of all members explicitly assigned values 
+       * </pre>
        */
       public Builder addAnnotationMembers(
           java.lang.String value) {
@@ -20279,6 +23297,10 @@ public final class Ast {
       }
       /**
        * <code>repeated string annotation_members = 4;</code>
+       *
+       * <pre>
+       ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then a list of all members explicitly assigned values 
+       * </pre>
        */
       public Builder addAllAnnotationMembers(
           java.lang.Iterable<java.lang.String> values) {
@@ -20289,6 +23311,10 @@ public final class Ast {
       }
       /**
        * <code>repeated string annotation_members = 4;</code>
+       *
+       * <pre>
+       ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then a list of all members explicitly assigned values 
+       * </pre>
        */
       public Builder clearAnnotationMembers() {
         annotationMembers_ = com.google.protobuf.LazyStringArrayList.EMPTY;
@@ -20298,6 +23324,10 @@ public final class Ast {
       }
       /**
        * <code>repeated string annotation_members = 4;</code>
+       *
+       * <pre>
+       ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then a list of all members explicitly assigned values 
+       * </pre>
        */
       public Builder addAnnotationMembersBytes(
           com.google.protobuf.ByteString value) {
@@ -20325,6 +23355,10 @@ public final class Ast {
 
       /**
        * <code>repeated .boa.types.Expression annotation_values = 5;</code>
+       *
+       * <pre>
+       ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then a list of all values that were assigned to members 
+       * </pre>
        */
       public java.util.List<boa.types.Ast.Expression> getAnnotationValuesList() {
         if (annotationValuesBuilder_ == null) {
@@ -20335,6 +23369,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Expression annotation_values = 5;</code>
+       *
+       * <pre>
+       ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then a list of all values that were assigned to members 
+       * </pre>
        */
       public int getAnnotationValuesCount() {
         if (annotationValuesBuilder_ == null) {
@@ -20345,6 +23383,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Expression annotation_values = 5;</code>
+       *
+       * <pre>
+       ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then a list of all values that were assigned to members 
+       * </pre>
        */
       public boa.types.Ast.Expression getAnnotationValues(int index) {
         if (annotationValuesBuilder_ == null) {
@@ -20355,6 +23397,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Expression annotation_values = 5;</code>
+       *
+       * <pre>
+       ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then a list of all values that were assigned to members 
+       * </pre>
        */
       public Builder setAnnotationValues(
           int index, boa.types.Ast.Expression value) {
@@ -20372,6 +23418,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Expression annotation_values = 5;</code>
+       *
+       * <pre>
+       ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then a list of all values that were assigned to members 
+       * </pre>
        */
       public Builder setAnnotationValues(
           int index, boa.types.Ast.Expression.Builder builderForValue) {
@@ -20386,6 +23436,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Expression annotation_values = 5;</code>
+       *
+       * <pre>
+       ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then a list of all values that were assigned to members 
+       * </pre>
        */
       public Builder addAnnotationValues(boa.types.Ast.Expression value) {
         if (annotationValuesBuilder_ == null) {
@@ -20402,6 +23456,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Expression annotation_values = 5;</code>
+       *
+       * <pre>
+       ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then a list of all values that were assigned to members 
+       * </pre>
        */
       public Builder addAnnotationValues(
           int index, boa.types.Ast.Expression value) {
@@ -20419,6 +23477,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Expression annotation_values = 5;</code>
+       *
+       * <pre>
+       ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then a list of all values that were assigned to members 
+       * </pre>
        */
       public Builder addAnnotationValues(
           boa.types.Ast.Expression.Builder builderForValue) {
@@ -20433,6 +23495,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Expression annotation_values = 5;</code>
+       *
+       * <pre>
+       ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then a list of all values that were assigned to members 
+       * </pre>
        */
       public Builder addAnnotationValues(
           int index, boa.types.Ast.Expression.Builder builderForValue) {
@@ -20447,6 +23513,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Expression annotation_values = 5;</code>
+       *
+       * <pre>
+       ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then a list of all values that were assigned to members 
+       * </pre>
        */
       public Builder addAllAnnotationValues(
           java.lang.Iterable<? extends boa.types.Ast.Expression> values) {
@@ -20461,6 +23531,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Expression annotation_values = 5;</code>
+       *
+       * <pre>
+       ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then a list of all values that were assigned to members 
+       * </pre>
        */
       public Builder clearAnnotationValues() {
         if (annotationValuesBuilder_ == null) {
@@ -20474,6 +23548,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Expression annotation_values = 5;</code>
+       *
+       * <pre>
+       ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then a list of all values that were assigned to members 
+       * </pre>
        */
       public Builder removeAnnotationValues(int index) {
         if (annotationValuesBuilder_ == null) {
@@ -20487,6 +23565,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Expression annotation_values = 5;</code>
+       *
+       * <pre>
+       ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then a list of all values that were assigned to members 
+       * </pre>
        */
       public boa.types.Ast.Expression.Builder getAnnotationValuesBuilder(
           int index) {
@@ -20494,6 +23576,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Expression annotation_values = 5;</code>
+       *
+       * <pre>
+       ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then a list of all values that were assigned to members 
+       * </pre>
        */
       public boa.types.Ast.ExpressionOrBuilder getAnnotationValuesOrBuilder(
           int index) {
@@ -20504,6 +23590,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Expression annotation_values = 5;</code>
+       *
+       * <pre>
+       ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then a list of all values that were assigned to members 
+       * </pre>
        */
       public java.util.List<? extends boa.types.Ast.ExpressionOrBuilder> 
            getAnnotationValuesOrBuilderList() {
@@ -20515,6 +23605,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Expression annotation_values = 5;</code>
+       *
+       * <pre>
+       ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then a list of all values that were assigned to members 
+       * </pre>
        */
       public boa.types.Ast.Expression.Builder addAnnotationValuesBuilder() {
         return getAnnotationValuesFieldBuilder().addBuilder(
@@ -20522,6 +23616,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Expression annotation_values = 5;</code>
+       *
+       * <pre>
+       ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then a list of all values that were assigned to members 
+       * </pre>
        */
       public boa.types.Ast.Expression.Builder addAnnotationValuesBuilder(
           int index) {
@@ -20530,6 +23628,10 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Expression annotation_values = 5;</code>
+       *
+       * <pre>
+       ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;ANNOTATION&lt;/code&gt;, then a list of all values that were assigned to members 
+       * </pre>
        */
       public java.util.List<boa.types.Ast.Expression.Builder> 
            getAnnotationValuesBuilderList() {
@@ -20556,7 +23658,7 @@ public final class Ast {
        * <code>optional string other = 6;</code>
        *
        * <pre>
-       *	required PositionInfo position = 7;
+       ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;OTHER&lt;/code&gt;, the modifier string from the source code 
        * </pre>
        */
       public boolean hasOther() {
@@ -20566,7 +23668,7 @@ public final class Ast {
        * <code>optional string other = 6;</code>
        *
        * <pre>
-       *	required PositionInfo position = 7;
+       ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;OTHER&lt;/code&gt;, the modifier string from the source code 
        * </pre>
        */
       public java.lang.String getOther() {
@@ -20584,7 +23686,7 @@ public final class Ast {
        * <code>optional string other = 6;</code>
        *
        * <pre>
-       *	required PositionInfo position = 7;
+       ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;OTHER&lt;/code&gt;, the modifier string from the source code 
        * </pre>
        */
       public com.google.protobuf.ByteString
@@ -20604,7 +23706,7 @@ public final class Ast {
        * <code>optional string other = 6;</code>
        *
        * <pre>
-       *	required PositionInfo position = 7;
+       ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;OTHER&lt;/code&gt;, the modifier string from the source code 
        * </pre>
        */
       public Builder setOther(
@@ -20621,7 +23723,7 @@ public final class Ast {
        * <code>optional string other = 6;</code>
        *
        * <pre>
-       *	required PositionInfo position = 7;
+       ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;OTHER&lt;/code&gt;, the modifier string from the source code 
        * </pre>
        */
       public Builder clearOther() {
@@ -20634,7 +23736,7 @@ public final class Ast {
        * <code>optional string other = 6;</code>
        *
        * <pre>
-       *	required PositionInfo position = 7;
+       ** If the &lt;code&gt;kind&lt;/code&gt; is &lt;code&gt;OTHER&lt;/code&gt;, the modifier string from the source code 
        * </pre>
        */
       public Builder setOtherBytes(
@@ -20703,6 +23805,10 @@ public final class Ast {
   }
   /**
    * Protobuf type {@code boa.types.Comment}
+   *
+   * <pre>
+   ** @exclude 
+   * </pre>
    */
   public static final class Comment extends
       com.google.protobuf.GeneratedMessage
@@ -20822,6 +23928,10 @@ public final class Ast {
 
     /**
      * Protobuf enum {@code boa.types.Comment.CommentKind}
+     *
+     * <pre>
+     ** @exclude 
+     * </pre>
      */
     public enum CommentKind
         implements com.google.protobuf.ProtocolMessageEnum {
@@ -21172,6 +24282,10 @@ public final class Ast {
     }
     /**
      * Protobuf type {@code boa.types.Comment}
+     *
+     * <pre>
+     ** @exclude 
+     * </pre>
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
@@ -21636,6 +24750,10 @@ public final class Ast {
   }
   /**
    * Protobuf type {@code boa.types.PositionInfo}
+   *
+   * <pre>
+   ** @exclude 
+   * </pre>
    */
   public static final class PositionInfo extends
       com.google.protobuf.GeneratedMessage
@@ -22026,6 +25144,10 @@ public final class Ast {
     }
     /**
      * Protobuf type {@code boa.types.PositionInfo}
+     *
+     * <pre>
+     ** @exclude 
+     * </pre>
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
@@ -22567,7 +25689,7 @@ public final class Ast {
       "OR\020,\022\021\n\rASSIGN_LSHIFT\020-\022\021\n\rASSIGN_RSHIFT" +
       "\020.\022\031\n\025ASSIGN_UNSIGNEDRSHIFT\020/\022\016\n\nANNOTAT" +
       "ION\0200\022\t\n\005PAREN\0201\022\024\n\020METHOD_REFERENCE\0202\022\n" +
-      "\n\006LAMBDA\0203\022\017\n\013ANON_METHOD\0204\"\251\003\n\010Modifier" +
+      "\n\006LAMBDA\0203\022\017\n\013ANON_METHOD\0204\"\307\003\n\010Modifier" +
       "\022.\n\004kind\030\001 \002(\0162 .boa.types.Modifier.Modi",
       "fierKind\0222\n\nvisibility\030\002 \001(\0162\036.boa.types" +
       ".Modifier.Visibility\022\027\n\017annotation_name\030" +
@@ -22576,22 +25698,22 @@ public final class Ast {
       "ion\022\r\n\005other\030\006 \001(\t\"~\n\014ModifierKind\022\t\n\005OT" +
       "HER\020\000\022\016\n\nVISIBILITY\020\001\022\016\n\nANNOTATION\020\002\022\t\n" +
       "\005FINAL\020\003\022\n\n\006STATIC\020\004\022\020\n\014SYNCHRONIZED\020\005\022\010" +
-      "\n\004SYNC\020\005\022\014\n\010ABSTRACT\020\006\032\002\020\001\"C\n\nVisibility" +
+      "\n\004SYNC\020\005\022\014\n\010ABSTRACT\020\006\032\002\020\001\"a\n\nVisibility" +
       "\022\n\n\006PUBLIC\020\001\022\013\n\007PRIVATE\020\002\022\r\n\tPROTECTED\020\003" +
-      "\022\r\n\tNAMESPACE\020\004\"\335\001\n\007Comment\022,\n\004kind\030\001 \002(",
-      "\0162\036.boa.types.Comment.CommentKind\022\r\n\005val" +
-      "ue\030\002 \002(\t\022)\n\010position\030\003 \002(\0132\027.boa.types.P" +
-      "ositionInfo\"j\n\013CommentKind\022\t\n\005OTHER\020\000\022\010\n" +
-      "\004LINE\020\001\022\t\n\005BLOCK\020\002\022\007\n\003DOC\020\003\022\021\n\rDOCUMENTA" +
-      "TION\020\003\022\010\n\004SPEC\020\004\022\021\n\rSPECIFICATION\020\004\032\002\020\001\"" +
-      "{\n\014PositionInfo\022\021\n\tstart_pos\030\001 \002(\005\022\016\n\006le" +
-      "ngth\030\002 \002(\005\022\022\n\nstart_line\030\003 \002(\005\022\021\n\tstart_" +
-      "col\030\004 \002(\005\022\020\n\010end_line\030\005 \002(\005\022\017\n\007end_col\030\006" +
-      " \002(\005*\236\001\n\010TypeKind\022\t\n\005OTHER\020\000\022\t\n\005CLASS\020\001\022" +
-      "\r\n\tINTERFACE\020\002\022\r\n\tANONYMOUS\020\003\022\010\n\004ANON\020\003\022",
-      "\n\n\006STRUCT\020\004\022\010\n\004ENUM\020\005\022\017\n\013ENUMERATION\020\005\022\016" +
-      "\n\nANNOTATION\020\006\022\014\n\010DELEGATE\020\007\022\013\n\007GENERIC\020" +
-      "\010\032\002\020\001B\002H\001"
+      "\022\r\n\tNAMESPACE\020\004\022\013\n\007PACKAGE\020\004\022\013\n\007DEFAULT\020",
+      "\004\032\002\020\001\"\335\001\n\007Comment\022,\n\004kind\030\001 \002(\0162\036.boa.ty" +
+      "pes.Comment.CommentKind\022\r\n\005value\030\002 \002(\t\022)" +
+      "\n\010position\030\003 \002(\0132\027.boa.types.PositionInf" +
+      "o\"j\n\013CommentKind\022\t\n\005OTHER\020\000\022\010\n\004LINE\020\001\022\t\n" +
+      "\005BLOCK\020\002\022\007\n\003DOC\020\003\022\021\n\rDOCUMENTATION\020\003\022\010\n\004" +
+      "SPEC\020\004\022\021\n\rSPECIFICATION\020\004\032\002\020\001\"{\n\014Positio" +
+      "nInfo\022\021\n\tstart_pos\030\001 \002(\005\022\016\n\006length\030\002 \002(\005" +
+      "\022\022\n\nstart_line\030\003 \002(\005\022\021\n\tstart_col\030\004 \002(\005\022" +
+      "\020\n\010end_line\030\005 \002(\005\022\017\n\007end_col\030\006 \002(\005*\236\001\n\010T" +
+      "ypeKind\022\t\n\005OTHER\020\000\022\t\n\005CLASS\020\001\022\r\n\tINTERFA",
+      "CE\020\002\022\r\n\tANONYMOUS\020\003\022\010\n\004ANON\020\003\022\n\n\006STRUCT\020" +
+      "\004\022\010\n\004ENUM\020\005\022\017\n\013ENUMERATION\020\005\022\016\n\nANNOTATI" +
+      "ON\020\006\022\014\n\010DELEGATE\020\007\022\013\n\007GENERIC\020\010\032\002\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

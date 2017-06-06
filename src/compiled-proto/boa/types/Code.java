@@ -14,14 +14,26 @@ public final class Code {
     // required string url = 1;
     /**
      * <code>required string url = 1;</code>
+     *
+     * <pre>
+     ** The URL to access the code repository 
+     * </pre>
      */
     boolean hasUrl();
     /**
      * <code>required string url = 1;</code>
+     *
+     * <pre>
+     ** The URL to access the code repository 
+     * </pre>
      */
     java.lang.String getUrl();
     /**
      * <code>required string url = 1;</code>
+     *
+     * <pre>
+     ** The URL to access the code repository 
+     * </pre>
      */
     com.google.protobuf.ByteString
         getUrlBytes();
@@ -29,34 +41,62 @@ public final class Code {
     // required .boa.types.CodeRepository.RepositoryKind kind = 2;
     /**
      * <code>required .boa.types.CodeRepository.RepositoryKind kind = 2;</code>
+     *
+     * <pre>
+     ** The kind of code repository (SVN, GIT, etc) 
+     * </pre>
      */
     boolean hasKind();
     /**
      * <code>required .boa.types.CodeRepository.RepositoryKind kind = 2;</code>
+     *
+     * <pre>
+     ** The kind of code repository (SVN, GIT, etc) 
+     * </pre>
      */
     boa.types.Code.CodeRepository.RepositoryKind getKind();
 
     // repeated .boa.types.Revision revisions = 3;
     /**
      * <code>repeated .boa.types.Revision revisions = 3;</code>
+     *
+     * <pre>
+     ** All of the revisions contained in the code repository 
+     * </pre>
      */
     java.util.List<boa.types.Code.Revision> 
         getRevisionsList();
     /**
      * <code>repeated .boa.types.Revision revisions = 3;</code>
+     *
+     * <pre>
+     ** All of the revisions contained in the code repository 
+     * </pre>
      */
     boa.types.Code.Revision getRevisions(int index);
     /**
      * <code>repeated .boa.types.Revision revisions = 3;</code>
+     *
+     * <pre>
+     ** All of the revisions contained in the code repository 
+     * </pre>
      */
     int getRevisionsCount();
     /**
      * <code>repeated .boa.types.Revision revisions = 3;</code>
+     *
+     * <pre>
+     ** All of the revisions contained in the code repository 
+     * </pre>
      */
     java.util.List<? extends boa.types.Code.RevisionOrBuilder> 
         getRevisionsOrBuilderList();
     /**
      * <code>repeated .boa.types.Revision revisions = 3;</code>
+     *
+     * <pre>
+     ** All of the revisions contained in the code repository 
+     * </pre>
      */
     boa.types.Code.RevisionOrBuilder getRevisionsOrBuilder(
         int index);
@@ -64,33 +104,61 @@ public final class Code {
     // repeated int32 branches = 4;
     /**
      * <code>repeated int32 branches = 4;</code>
+     *
+     * <pre>
+     ** @exclude The offsets of the branch commits 
+     * </pre>
      */
     java.util.List<java.lang.Integer> getBranchesList();
     /**
      * <code>repeated int32 branches = 4;</code>
+     *
+     * <pre>
+     ** @exclude The offsets of the branch commits 
+     * </pre>
      */
     int getBranchesCount();
     /**
      * <code>repeated int32 branches = 4;</code>
+     *
+     * <pre>
+     ** @exclude The offsets of the branch commits 
+     * </pre>
      */
     int getBranches(int index);
 
     // repeated string branch_names = 5;
     /**
      * <code>repeated string branch_names = 5;</code>
+     *
+     * <pre>
+     ** @exclude The names of all branches 
+     * </pre>
      */
     java.util.List<java.lang.String>
     getBranchNamesList();
     /**
      * <code>repeated string branch_names = 5;</code>
+     *
+     * <pre>
+     ** @exclude The names of all branches 
+     * </pre>
      */
     int getBranchNamesCount();
     /**
      * <code>repeated string branch_names = 5;</code>
+     *
+     * <pre>
+     ** @exclude The names of all branches 
+     * </pre>
      */
     java.lang.String getBranchNames(int index);
     /**
      * <code>repeated string branch_names = 5;</code>
+     *
+     * <pre>
+     ** @exclude The names of all branches 
+     * </pre>
      */
     com.google.protobuf.ByteString
         getBranchNamesBytes(int index);
@@ -98,39 +166,71 @@ public final class Code {
     // repeated int32 tags = 6;
     /**
      * <code>repeated int32 tags = 6;</code>
+     *
+     * <pre>
+     ** @exclude The offsets of the tag commits 
+     * </pre>
      */
     java.util.List<java.lang.Integer> getTagsList();
     /**
      * <code>repeated int32 tags = 6;</code>
+     *
+     * <pre>
+     ** @exclude The offsets of the tag commits 
+     * </pre>
      */
     int getTagsCount();
     /**
      * <code>repeated int32 tags = 6;</code>
+     *
+     * <pre>
+     ** @exclude The offsets of the tag commits 
+     * </pre>
      */
     int getTags(int index);
 
     // repeated string tag_names = 7;
     /**
      * <code>repeated string tag_names = 7;</code>
+     *
+     * <pre>
+     ** @exclude The names of all tags 
+     * </pre>
      */
     java.util.List<java.lang.String>
     getTagNamesList();
     /**
      * <code>repeated string tag_names = 7;</code>
+     *
+     * <pre>
+     ** @exclude The names of all tags 
+     * </pre>
      */
     int getTagNamesCount();
     /**
      * <code>repeated string tag_names = 7;</code>
+     *
+     * <pre>
+     ** @exclude The names of all tags 
+     * </pre>
      */
     java.lang.String getTagNames(int index);
     /**
      * <code>repeated string tag_names = 7;</code>
+     *
+     * <pre>
+     ** @exclude The names of all tags 
+     * </pre>
      */
     com.google.protobuf.ByteString
         getTagNamesBytes(int index);
   }
   /**
    * Protobuf type {@code boa.types.CodeRepository}
+   *
+   * <pre>
+   ** A source code repository (SVN, CVS, Git, etc) 
+   * </pre>
    */
   public static final class CodeRepository extends
       com.google.protobuf.GeneratedMessage
@@ -318,81 +418,157 @@ public final class Code {
 
     /**
      * Protobuf enum {@code boa.types.CodeRepository.RepositoryKind}
+     *
+     * <pre>
+     ** Describes the kind of code repository 
+     * </pre>
      */
     public enum RepositoryKind
         implements com.google.protobuf.ProtocolMessageEnum {
       /**
        * <code>OTHER = 0;</code>
+       *
+       * <pre>
+       ** Any other code repository 
+       * </pre>
        */
       OTHER(0, 0),
       /**
        * <code>SVN = 1;</code>
+       *
+       * <pre>
+       ** For Subversion code repositories 
+       * </pre>
        */
       SVN(1, 1),
       /**
        * <code>CVS = 2;</code>
+       *
+       * <pre>
+       ** For CVS code repositories 
+       * </pre>
        */
       CVS(3, 2),
       /**
        * <code>GIT = 3;</code>
+       *
+       * <pre>
+       ** For Git code repositories 
+       * </pre>
        */
       GIT(4, 3),
       /**
        * <code>HG = 4;</code>
+       *
+       * <pre>
+       ** For Mercurial code repositories 
+       * </pre>
        */
       HG(5, 4),
       /**
        * <code>BZR = 5;</code>
+       *
+       * <pre>
+       ** For Bazaar code repositories 
+       * </pre>
        */
       BZR(7, 5),
       ;
 
       /**
        * <code>SUBVERSION = 1;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
        */
       public static final RepositoryKind SUBVERSION = SVN;
       /**
        * <code>MERCURIAL = 4;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
        */
       public static final RepositoryKind MERCURIAL = HG;
       /**
        * <code>BAZAAR = 5;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
        */
       public static final RepositoryKind BAZAAR = BZR;
       /**
        * <code>OTHER = 0;</code>
+       *
+       * <pre>
+       ** Any other code repository 
+       * </pre>
        */
       public static final int OTHER_VALUE = 0;
       /**
        * <code>SVN = 1;</code>
+       *
+       * <pre>
+       ** For Subversion code repositories 
+       * </pre>
        */
       public static final int SVN_VALUE = 1;
       /**
        * <code>SUBVERSION = 1;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
        */
       public static final int SUBVERSION_VALUE = 1;
       /**
        * <code>CVS = 2;</code>
+       *
+       * <pre>
+       ** For CVS code repositories 
+       * </pre>
        */
       public static final int CVS_VALUE = 2;
       /**
        * <code>GIT = 3;</code>
+       *
+       * <pre>
+       ** For Git code repositories 
+       * </pre>
        */
       public static final int GIT_VALUE = 3;
       /**
        * <code>HG = 4;</code>
+       *
+       * <pre>
+       ** For Mercurial code repositories 
+       * </pre>
        */
       public static final int HG_VALUE = 4;
       /**
        * <code>MERCURIAL = 4;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
        */
       public static final int MERCURIAL_VALUE = 4;
       /**
        * <code>BZR = 5;</code>
+       *
+       * <pre>
+       ** For Bazaar code repositories 
+       * </pre>
        */
       public static final int BZR_VALUE = 5;
       /**
        * <code>BAZAAR = 5;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
        */
       public static final int BAZAAR_VALUE = 5;
 
@@ -466,12 +642,20 @@ public final class Code {
     private java.lang.Object url_;
     /**
      * <code>required string url = 1;</code>
+     *
+     * <pre>
+     ** The URL to access the code repository 
+     * </pre>
      */
     public boolean hasUrl() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
      * <code>required string url = 1;</code>
+     *
+     * <pre>
+     ** The URL to access the code repository 
+     * </pre>
      */
     public java.lang.String getUrl() {
       java.lang.Object ref = url_;
@@ -489,6 +673,10 @@ public final class Code {
     }
     /**
      * <code>required string url = 1;</code>
+     *
+     * <pre>
+     ** The URL to access the code repository 
+     * </pre>
      */
     public com.google.protobuf.ByteString
         getUrlBytes() {
@@ -509,12 +697,20 @@ public final class Code {
     private boa.types.Code.CodeRepository.RepositoryKind kind_;
     /**
      * <code>required .boa.types.CodeRepository.RepositoryKind kind = 2;</code>
+     *
+     * <pre>
+     ** The kind of code repository (SVN, GIT, etc) 
+     * </pre>
      */
     public boolean hasKind() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
      * <code>required .boa.types.CodeRepository.RepositoryKind kind = 2;</code>
+     *
+     * <pre>
+     ** The kind of code repository (SVN, GIT, etc) 
+     * </pre>
      */
     public boa.types.Code.CodeRepository.RepositoryKind getKind() {
       return kind_;
@@ -525,12 +721,20 @@ public final class Code {
     private java.util.List<boa.types.Code.Revision> revisions_;
     /**
      * <code>repeated .boa.types.Revision revisions = 3;</code>
+     *
+     * <pre>
+     ** All of the revisions contained in the code repository 
+     * </pre>
      */
     public java.util.List<boa.types.Code.Revision> getRevisionsList() {
       return revisions_;
     }
     /**
      * <code>repeated .boa.types.Revision revisions = 3;</code>
+     *
+     * <pre>
+     ** All of the revisions contained in the code repository 
+     * </pre>
      */
     public java.util.List<? extends boa.types.Code.RevisionOrBuilder> 
         getRevisionsOrBuilderList() {
@@ -538,18 +742,30 @@ public final class Code {
     }
     /**
      * <code>repeated .boa.types.Revision revisions = 3;</code>
+     *
+     * <pre>
+     ** All of the revisions contained in the code repository 
+     * </pre>
      */
     public int getRevisionsCount() {
       return revisions_.size();
     }
     /**
      * <code>repeated .boa.types.Revision revisions = 3;</code>
+     *
+     * <pre>
+     ** All of the revisions contained in the code repository 
+     * </pre>
      */
     public boa.types.Code.Revision getRevisions(int index) {
       return revisions_.get(index);
     }
     /**
      * <code>repeated .boa.types.Revision revisions = 3;</code>
+     *
+     * <pre>
+     ** All of the revisions contained in the code repository 
+     * </pre>
      */
     public boa.types.Code.RevisionOrBuilder getRevisionsOrBuilder(
         int index) {
@@ -561,6 +777,10 @@ public final class Code {
     private java.util.List<java.lang.Integer> branches_;
     /**
      * <code>repeated int32 branches = 4;</code>
+     *
+     * <pre>
+     ** @exclude The offsets of the branch commits 
+     * </pre>
      */
     public java.util.List<java.lang.Integer>
         getBranchesList() {
@@ -568,12 +788,20 @@ public final class Code {
     }
     /**
      * <code>repeated int32 branches = 4;</code>
+     *
+     * <pre>
+     ** @exclude The offsets of the branch commits 
+     * </pre>
      */
     public int getBranchesCount() {
       return branches_.size();
     }
     /**
      * <code>repeated int32 branches = 4;</code>
+     *
+     * <pre>
+     ** @exclude The offsets of the branch commits 
+     * </pre>
      */
     public int getBranches(int index) {
       return branches_.get(index);
@@ -584,6 +812,10 @@ public final class Code {
     private com.google.protobuf.LazyStringList branchNames_;
     /**
      * <code>repeated string branch_names = 5;</code>
+     *
+     * <pre>
+     ** @exclude The names of all branches 
+     * </pre>
      */
     public java.util.List<java.lang.String>
         getBranchNamesList() {
@@ -591,18 +823,30 @@ public final class Code {
     }
     /**
      * <code>repeated string branch_names = 5;</code>
+     *
+     * <pre>
+     ** @exclude The names of all branches 
+     * </pre>
      */
     public int getBranchNamesCount() {
       return branchNames_.size();
     }
     /**
      * <code>repeated string branch_names = 5;</code>
+     *
+     * <pre>
+     ** @exclude The names of all branches 
+     * </pre>
      */
     public java.lang.String getBranchNames(int index) {
       return branchNames_.get(index);
     }
     /**
      * <code>repeated string branch_names = 5;</code>
+     *
+     * <pre>
+     ** @exclude The names of all branches 
+     * </pre>
      */
     public com.google.protobuf.ByteString
         getBranchNamesBytes(int index) {
@@ -614,6 +858,10 @@ public final class Code {
     private java.util.List<java.lang.Integer> tags_;
     /**
      * <code>repeated int32 tags = 6;</code>
+     *
+     * <pre>
+     ** @exclude The offsets of the tag commits 
+     * </pre>
      */
     public java.util.List<java.lang.Integer>
         getTagsList() {
@@ -621,12 +869,20 @@ public final class Code {
     }
     /**
      * <code>repeated int32 tags = 6;</code>
+     *
+     * <pre>
+     ** @exclude The offsets of the tag commits 
+     * </pre>
      */
     public int getTagsCount() {
       return tags_.size();
     }
     /**
      * <code>repeated int32 tags = 6;</code>
+     *
+     * <pre>
+     ** @exclude The offsets of the tag commits 
+     * </pre>
      */
     public int getTags(int index) {
       return tags_.get(index);
@@ -637,6 +893,10 @@ public final class Code {
     private com.google.protobuf.LazyStringList tagNames_;
     /**
      * <code>repeated string tag_names = 7;</code>
+     *
+     * <pre>
+     ** @exclude The names of all tags 
+     * </pre>
      */
     public java.util.List<java.lang.String>
         getTagNamesList() {
@@ -644,18 +904,30 @@ public final class Code {
     }
     /**
      * <code>repeated string tag_names = 7;</code>
+     *
+     * <pre>
+     ** @exclude The names of all tags 
+     * </pre>
      */
     public int getTagNamesCount() {
       return tagNames_.size();
     }
     /**
      * <code>repeated string tag_names = 7;</code>
+     *
+     * <pre>
+     ** @exclude The names of all tags 
+     * </pre>
      */
     public java.lang.String getTagNames(int index) {
       return tagNames_.get(index);
     }
     /**
      * <code>repeated string tag_names = 7;</code>
+     *
+     * <pre>
+     ** @exclude The names of all tags 
+     * </pre>
      */
     public com.google.protobuf.ByteString
         getTagNamesBytes(int index) {
@@ -855,6 +1127,10 @@ public final class Code {
     }
     /**
      * Protobuf type {@code boa.types.CodeRepository}
+     *
+     * <pre>
+     ** A source code repository (SVN, CVS, Git, etc) 
+     * </pre>
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
@@ -1112,12 +1388,20 @@ public final class Code {
       private java.lang.Object url_ = "";
       /**
        * <code>required string url = 1;</code>
+       *
+       * <pre>
+       ** The URL to access the code repository 
+       * </pre>
        */
       public boolean hasUrl() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
        * <code>required string url = 1;</code>
+       *
+       * <pre>
+       ** The URL to access the code repository 
+       * </pre>
        */
       public java.lang.String getUrl() {
         java.lang.Object ref = url_;
@@ -1132,6 +1416,10 @@ public final class Code {
       }
       /**
        * <code>required string url = 1;</code>
+       *
+       * <pre>
+       ** The URL to access the code repository 
+       * </pre>
        */
       public com.google.protobuf.ByteString
           getUrlBytes() {
@@ -1148,6 +1436,10 @@ public final class Code {
       }
       /**
        * <code>required string url = 1;</code>
+       *
+       * <pre>
+       ** The URL to access the code repository 
+       * </pre>
        */
       public Builder setUrl(
           java.lang.String value) {
@@ -1161,6 +1453,10 @@ public final class Code {
       }
       /**
        * <code>required string url = 1;</code>
+       *
+       * <pre>
+       ** The URL to access the code repository 
+       * </pre>
        */
       public Builder clearUrl() {
         bitField0_ = (bitField0_ & ~0x00000001);
@@ -1170,6 +1466,10 @@ public final class Code {
       }
       /**
        * <code>required string url = 1;</code>
+       *
+       * <pre>
+       ** The URL to access the code repository 
+       * </pre>
        */
       public Builder setUrlBytes(
           com.google.protobuf.ByteString value) {
@@ -1186,18 +1486,30 @@ public final class Code {
       private boa.types.Code.CodeRepository.RepositoryKind kind_ = boa.types.Code.CodeRepository.RepositoryKind.OTHER;
       /**
        * <code>required .boa.types.CodeRepository.RepositoryKind kind = 2;</code>
+       *
+       * <pre>
+       ** The kind of code repository (SVN, GIT, etc) 
+       * </pre>
        */
       public boolean hasKind() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
        * <code>required .boa.types.CodeRepository.RepositoryKind kind = 2;</code>
+       *
+       * <pre>
+       ** The kind of code repository (SVN, GIT, etc) 
+       * </pre>
        */
       public boa.types.Code.CodeRepository.RepositoryKind getKind() {
         return kind_;
       }
       /**
        * <code>required .boa.types.CodeRepository.RepositoryKind kind = 2;</code>
+       *
+       * <pre>
+       ** The kind of code repository (SVN, GIT, etc) 
+       * </pre>
        */
       public Builder setKind(boa.types.Code.CodeRepository.RepositoryKind value) {
         if (value == null) {
@@ -1210,6 +1522,10 @@ public final class Code {
       }
       /**
        * <code>required .boa.types.CodeRepository.RepositoryKind kind = 2;</code>
+       *
+       * <pre>
+       ** The kind of code repository (SVN, GIT, etc) 
+       * </pre>
        */
       public Builder clearKind() {
         bitField0_ = (bitField0_ & ~0x00000002);
@@ -1233,6 +1549,10 @@ public final class Code {
 
       /**
        * <code>repeated .boa.types.Revision revisions = 3;</code>
+       *
+       * <pre>
+       ** All of the revisions contained in the code repository 
+       * </pre>
        */
       public java.util.List<boa.types.Code.Revision> getRevisionsList() {
         if (revisionsBuilder_ == null) {
@@ -1243,6 +1563,10 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.Revision revisions = 3;</code>
+       *
+       * <pre>
+       ** All of the revisions contained in the code repository 
+       * </pre>
        */
       public int getRevisionsCount() {
         if (revisionsBuilder_ == null) {
@@ -1253,6 +1577,10 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.Revision revisions = 3;</code>
+       *
+       * <pre>
+       ** All of the revisions contained in the code repository 
+       * </pre>
        */
       public boa.types.Code.Revision getRevisions(int index) {
         if (revisionsBuilder_ == null) {
@@ -1263,6 +1591,10 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.Revision revisions = 3;</code>
+       *
+       * <pre>
+       ** All of the revisions contained in the code repository 
+       * </pre>
        */
       public Builder setRevisions(
           int index, boa.types.Code.Revision value) {
@@ -1280,6 +1612,10 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.Revision revisions = 3;</code>
+       *
+       * <pre>
+       ** All of the revisions contained in the code repository 
+       * </pre>
        */
       public Builder setRevisions(
           int index, boa.types.Code.Revision.Builder builderForValue) {
@@ -1294,6 +1630,10 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.Revision revisions = 3;</code>
+       *
+       * <pre>
+       ** All of the revisions contained in the code repository 
+       * </pre>
        */
       public Builder addRevisions(boa.types.Code.Revision value) {
         if (revisionsBuilder_ == null) {
@@ -1310,6 +1650,10 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.Revision revisions = 3;</code>
+       *
+       * <pre>
+       ** All of the revisions contained in the code repository 
+       * </pre>
        */
       public Builder addRevisions(
           int index, boa.types.Code.Revision value) {
@@ -1327,6 +1671,10 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.Revision revisions = 3;</code>
+       *
+       * <pre>
+       ** All of the revisions contained in the code repository 
+       * </pre>
        */
       public Builder addRevisions(
           boa.types.Code.Revision.Builder builderForValue) {
@@ -1341,6 +1689,10 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.Revision revisions = 3;</code>
+       *
+       * <pre>
+       ** All of the revisions contained in the code repository 
+       * </pre>
        */
       public Builder addRevisions(
           int index, boa.types.Code.Revision.Builder builderForValue) {
@@ -1355,6 +1707,10 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.Revision revisions = 3;</code>
+       *
+       * <pre>
+       ** All of the revisions contained in the code repository 
+       * </pre>
        */
       public Builder addAllRevisions(
           java.lang.Iterable<? extends boa.types.Code.Revision> values) {
@@ -1369,6 +1725,10 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.Revision revisions = 3;</code>
+       *
+       * <pre>
+       ** All of the revisions contained in the code repository 
+       * </pre>
        */
       public Builder clearRevisions() {
         if (revisionsBuilder_ == null) {
@@ -1382,6 +1742,10 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.Revision revisions = 3;</code>
+       *
+       * <pre>
+       ** All of the revisions contained in the code repository 
+       * </pre>
        */
       public Builder removeRevisions(int index) {
         if (revisionsBuilder_ == null) {
@@ -1395,6 +1759,10 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.Revision revisions = 3;</code>
+       *
+       * <pre>
+       ** All of the revisions contained in the code repository 
+       * </pre>
        */
       public boa.types.Code.Revision.Builder getRevisionsBuilder(
           int index) {
@@ -1402,6 +1770,10 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.Revision revisions = 3;</code>
+       *
+       * <pre>
+       ** All of the revisions contained in the code repository 
+       * </pre>
        */
       public boa.types.Code.RevisionOrBuilder getRevisionsOrBuilder(
           int index) {
@@ -1412,6 +1784,10 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.Revision revisions = 3;</code>
+       *
+       * <pre>
+       ** All of the revisions contained in the code repository 
+       * </pre>
        */
       public java.util.List<? extends boa.types.Code.RevisionOrBuilder> 
            getRevisionsOrBuilderList() {
@@ -1423,6 +1799,10 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.Revision revisions = 3;</code>
+       *
+       * <pre>
+       ** All of the revisions contained in the code repository 
+       * </pre>
        */
       public boa.types.Code.Revision.Builder addRevisionsBuilder() {
         return getRevisionsFieldBuilder().addBuilder(
@@ -1430,6 +1810,10 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.Revision revisions = 3;</code>
+       *
+       * <pre>
+       ** All of the revisions contained in the code repository 
+       * </pre>
        */
       public boa.types.Code.Revision.Builder addRevisionsBuilder(
           int index) {
@@ -1438,6 +1822,10 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.Revision revisions = 3;</code>
+       *
+       * <pre>
+       ** All of the revisions contained in the code repository 
+       * </pre>
        */
       public java.util.List<boa.types.Code.Revision.Builder> 
            getRevisionsBuilderList() {
@@ -1468,6 +1856,10 @@ public final class Code {
       }
       /**
        * <code>repeated int32 branches = 4;</code>
+       *
+       * <pre>
+       ** @exclude The offsets of the branch commits 
+       * </pre>
        */
       public java.util.List<java.lang.Integer>
           getBranchesList() {
@@ -1475,18 +1867,30 @@ public final class Code {
       }
       /**
        * <code>repeated int32 branches = 4;</code>
+       *
+       * <pre>
+       ** @exclude The offsets of the branch commits 
+       * </pre>
        */
       public int getBranchesCount() {
         return branches_.size();
       }
       /**
        * <code>repeated int32 branches = 4;</code>
+       *
+       * <pre>
+       ** @exclude The offsets of the branch commits 
+       * </pre>
        */
       public int getBranches(int index) {
         return branches_.get(index);
       }
       /**
        * <code>repeated int32 branches = 4;</code>
+       *
+       * <pre>
+       ** @exclude The offsets of the branch commits 
+       * </pre>
        */
       public Builder setBranches(
           int index, int value) {
@@ -1497,6 +1901,10 @@ public final class Code {
       }
       /**
        * <code>repeated int32 branches = 4;</code>
+       *
+       * <pre>
+       ** @exclude The offsets of the branch commits 
+       * </pre>
        */
       public Builder addBranches(int value) {
         ensureBranchesIsMutable();
@@ -1506,6 +1914,10 @@ public final class Code {
       }
       /**
        * <code>repeated int32 branches = 4;</code>
+       *
+       * <pre>
+       ** @exclude The offsets of the branch commits 
+       * </pre>
        */
       public Builder addAllBranches(
           java.lang.Iterable<? extends java.lang.Integer> values) {
@@ -1516,6 +1928,10 @@ public final class Code {
       }
       /**
        * <code>repeated int32 branches = 4;</code>
+       *
+       * <pre>
+       ** @exclude The offsets of the branch commits 
+       * </pre>
        */
       public Builder clearBranches() {
         branches_ = java.util.Collections.emptyList();
@@ -1534,6 +1950,10 @@ public final class Code {
       }
       /**
        * <code>repeated string branch_names = 5;</code>
+       *
+       * <pre>
+       ** @exclude The names of all branches 
+       * </pre>
        */
       public java.util.List<java.lang.String>
           getBranchNamesList() {
@@ -1541,18 +1961,30 @@ public final class Code {
       }
       /**
        * <code>repeated string branch_names = 5;</code>
+       *
+       * <pre>
+       ** @exclude The names of all branches 
+       * </pre>
        */
       public int getBranchNamesCount() {
         return branchNames_.size();
       }
       /**
        * <code>repeated string branch_names = 5;</code>
+       *
+       * <pre>
+       ** @exclude The names of all branches 
+       * </pre>
        */
       public java.lang.String getBranchNames(int index) {
         return branchNames_.get(index);
       }
       /**
        * <code>repeated string branch_names = 5;</code>
+       *
+       * <pre>
+       ** @exclude The names of all branches 
+       * </pre>
        */
       public com.google.protobuf.ByteString
           getBranchNamesBytes(int index) {
@@ -1560,6 +1992,10 @@ public final class Code {
       }
       /**
        * <code>repeated string branch_names = 5;</code>
+       *
+       * <pre>
+       ** @exclude The names of all branches 
+       * </pre>
        */
       public Builder setBranchNames(
           int index, java.lang.String value) {
@@ -1573,6 +2009,10 @@ public final class Code {
       }
       /**
        * <code>repeated string branch_names = 5;</code>
+       *
+       * <pre>
+       ** @exclude The names of all branches 
+       * </pre>
        */
       public Builder addBranchNames(
           java.lang.String value) {
@@ -1586,6 +2026,10 @@ public final class Code {
       }
       /**
        * <code>repeated string branch_names = 5;</code>
+       *
+       * <pre>
+       ** @exclude The names of all branches 
+       * </pre>
        */
       public Builder addAllBranchNames(
           java.lang.Iterable<java.lang.String> values) {
@@ -1596,6 +2040,10 @@ public final class Code {
       }
       /**
        * <code>repeated string branch_names = 5;</code>
+       *
+       * <pre>
+       ** @exclude The names of all branches 
+       * </pre>
        */
       public Builder clearBranchNames() {
         branchNames_ = com.google.protobuf.LazyStringArrayList.EMPTY;
@@ -1605,6 +2053,10 @@ public final class Code {
       }
       /**
        * <code>repeated string branch_names = 5;</code>
+       *
+       * <pre>
+       ** @exclude The names of all branches 
+       * </pre>
        */
       public Builder addBranchNamesBytes(
           com.google.protobuf.ByteString value) {
@@ -1627,6 +2079,10 @@ public final class Code {
       }
       /**
        * <code>repeated int32 tags = 6;</code>
+       *
+       * <pre>
+       ** @exclude The offsets of the tag commits 
+       * </pre>
        */
       public java.util.List<java.lang.Integer>
           getTagsList() {
@@ -1634,18 +2090,30 @@ public final class Code {
       }
       /**
        * <code>repeated int32 tags = 6;</code>
+       *
+       * <pre>
+       ** @exclude The offsets of the tag commits 
+       * </pre>
        */
       public int getTagsCount() {
         return tags_.size();
       }
       /**
        * <code>repeated int32 tags = 6;</code>
+       *
+       * <pre>
+       ** @exclude The offsets of the tag commits 
+       * </pre>
        */
       public int getTags(int index) {
         return tags_.get(index);
       }
       /**
        * <code>repeated int32 tags = 6;</code>
+       *
+       * <pre>
+       ** @exclude The offsets of the tag commits 
+       * </pre>
        */
       public Builder setTags(
           int index, int value) {
@@ -1656,6 +2124,10 @@ public final class Code {
       }
       /**
        * <code>repeated int32 tags = 6;</code>
+       *
+       * <pre>
+       ** @exclude The offsets of the tag commits 
+       * </pre>
        */
       public Builder addTags(int value) {
         ensureTagsIsMutable();
@@ -1665,6 +2137,10 @@ public final class Code {
       }
       /**
        * <code>repeated int32 tags = 6;</code>
+       *
+       * <pre>
+       ** @exclude The offsets of the tag commits 
+       * </pre>
        */
       public Builder addAllTags(
           java.lang.Iterable<? extends java.lang.Integer> values) {
@@ -1675,6 +2151,10 @@ public final class Code {
       }
       /**
        * <code>repeated int32 tags = 6;</code>
+       *
+       * <pre>
+       ** @exclude The offsets of the tag commits 
+       * </pre>
        */
       public Builder clearTags() {
         tags_ = java.util.Collections.emptyList();
@@ -1693,6 +2173,10 @@ public final class Code {
       }
       /**
        * <code>repeated string tag_names = 7;</code>
+       *
+       * <pre>
+       ** @exclude The names of all tags 
+       * </pre>
        */
       public java.util.List<java.lang.String>
           getTagNamesList() {
@@ -1700,18 +2184,30 @@ public final class Code {
       }
       /**
        * <code>repeated string tag_names = 7;</code>
+       *
+       * <pre>
+       ** @exclude The names of all tags 
+       * </pre>
        */
       public int getTagNamesCount() {
         return tagNames_.size();
       }
       /**
        * <code>repeated string tag_names = 7;</code>
+       *
+       * <pre>
+       ** @exclude The names of all tags 
+       * </pre>
        */
       public java.lang.String getTagNames(int index) {
         return tagNames_.get(index);
       }
       /**
        * <code>repeated string tag_names = 7;</code>
+       *
+       * <pre>
+       ** @exclude The names of all tags 
+       * </pre>
        */
       public com.google.protobuf.ByteString
           getTagNamesBytes(int index) {
@@ -1719,6 +2215,10 @@ public final class Code {
       }
       /**
        * <code>repeated string tag_names = 7;</code>
+       *
+       * <pre>
+       ** @exclude The names of all tags 
+       * </pre>
        */
       public Builder setTagNames(
           int index, java.lang.String value) {
@@ -1732,6 +2232,10 @@ public final class Code {
       }
       /**
        * <code>repeated string tag_names = 7;</code>
+       *
+       * <pre>
+       ** @exclude The names of all tags 
+       * </pre>
        */
       public Builder addTagNames(
           java.lang.String value) {
@@ -1745,6 +2249,10 @@ public final class Code {
       }
       /**
        * <code>repeated string tag_names = 7;</code>
+       *
+       * <pre>
+       ** @exclude The names of all tags 
+       * </pre>
        */
       public Builder addAllTagNames(
           java.lang.Iterable<java.lang.String> values) {
@@ -1755,6 +2263,10 @@ public final class Code {
       }
       /**
        * <code>repeated string tag_names = 7;</code>
+       *
+       * <pre>
+       ** @exclude The names of all tags 
+       * </pre>
        */
       public Builder clearTagNames() {
         tagNames_ = com.google.protobuf.LazyStringArrayList.EMPTY;
@@ -1764,6 +2276,10 @@ public final class Code {
       }
       /**
        * <code>repeated string tag_names = 7;</code>
+       *
+       * <pre>
+       ** @exclude The names of all tags 
+       * </pre>
        */
       public Builder addTagNamesBytes(
           com.google.protobuf.ByteString value) {
@@ -1793,14 +2309,26 @@ public final class Code {
     // required string id = 1;
     /**
      * <code>required string id = 1;</code>
+     *
+     * <pre>
+     ** A unique identifier for the revision 
+     * </pre>
      */
     boolean hasId();
     /**
      * <code>required string id = 1;</code>
+     *
+     * <pre>
+     ** A unique identifier for the revision 
+     * </pre>
      */
     java.lang.String getId();
     /**
      * <code>required string id = 1;</code>
+     *
+     * <pre>
+     ** A unique identifier for the revision 
+     * </pre>
      */
     com.google.protobuf.ByteString
         getIdBytes();
@@ -1808,52 +2336,96 @@ public final class Code {
     // required .boa.types.Person author = 2;
     /**
      * <code>required .boa.types.Person author = 2;</code>
+     *
+     * <pre>
+     ** The person who authored the revision, if known, otherwise the same as committer 
+     * </pre>
      */
     boolean hasAuthor();
     /**
      * <code>required .boa.types.Person author = 2;</code>
+     *
+     * <pre>
+     ** The person who authored the revision, if known, otherwise the same as committer 
+     * </pre>
      */
     boa.types.Shared.Person getAuthor();
     /**
      * <code>required .boa.types.Person author = 2;</code>
+     *
+     * <pre>
+     ** The person who authored the revision, if known, otherwise the same as committer 
+     * </pre>
      */
     boa.types.Shared.PersonOrBuilder getAuthorOrBuilder();
 
     // required .boa.types.Person committer = 3;
     /**
      * <code>required .boa.types.Person committer = 3;</code>
+     *
+     * <pre>
+     ** The person who committed the revision 
+     * </pre>
      */
     boolean hasCommitter();
     /**
      * <code>required .boa.types.Person committer = 3;</code>
+     *
+     * <pre>
+     ** The person who committed the revision 
+     * </pre>
      */
     boa.types.Shared.Person getCommitter();
     /**
      * <code>required .boa.types.Person committer = 3;</code>
+     *
+     * <pre>
+     ** The person who committed the revision 
+     * </pre>
      */
     boa.types.Shared.PersonOrBuilder getCommitterOrBuilder();
 
     // required uint64 commit_date = 4;
     /**
      * <code>required uint64 commit_date = 4;</code>
+     *
+     * <pre>
+     ** The time the revision was committed 
+     * </pre>
      */
     boolean hasCommitDate();
     /**
      * <code>required uint64 commit_date = 4;</code>
+     *
+     * <pre>
+     ** The time the revision was committed 
+     * </pre>
      */
     long getCommitDate();
 
     // required string log = 5;
     /**
      * <code>required string log = 5;</code>
+     *
+     * <pre>
+     ** The log message attached to the revision 
+     * </pre>
      */
     boolean hasLog();
     /**
      * <code>required string log = 5;</code>
+     *
+     * <pre>
+     ** The log message attached to the revision 
+     * </pre>
      */
     java.lang.String getLog();
     /**
      * <code>required string log = 5;</code>
+     *
+     * <pre>
+     ** The log message attached to the revision 
+     * </pre>
      */
     com.google.protobuf.ByteString
         getLogBytes();
@@ -1861,24 +2433,44 @@ public final class Code {
     // repeated .boa.types.ChangedFile files = 6;
     /**
      * <code>repeated .boa.types.ChangedFile files = 6;</code>
+     *
+     * <pre>
+     ** A list of all files committed in the revision 
+     * </pre>
      */
     java.util.List<boa.types.Diff.ChangedFile> 
         getFilesList();
     /**
      * <code>repeated .boa.types.ChangedFile files = 6;</code>
+     *
+     * <pre>
+     ** A list of all files committed in the revision 
+     * </pre>
      */
     boa.types.Diff.ChangedFile getFiles(int index);
     /**
      * <code>repeated .boa.types.ChangedFile files = 6;</code>
+     *
+     * <pre>
+     ** A list of all files committed in the revision 
+     * </pre>
      */
     int getFilesCount();
     /**
      * <code>repeated .boa.types.ChangedFile files = 6;</code>
+     *
+     * <pre>
+     ** A list of all files committed in the revision 
+     * </pre>
      */
     java.util.List<? extends boa.types.Diff.ChangedFileOrBuilder> 
         getFilesOrBuilderList();
     /**
      * <code>repeated .boa.types.ChangedFile files = 6;</code>
+     *
+     * <pre>
+     ** A list of all files committed in the revision 
+     * </pre>
      */
     boa.types.Diff.ChangedFileOrBuilder getFilesOrBuilder(
         int index);
@@ -1886,33 +2478,61 @@ public final class Code {
     // repeated int32 parents = 7;
     /**
      * <code>repeated int32 parents = 7;</code>
+     *
+     * <pre>
+     ** @exclude The offsets of any parent commits 
+     * </pre>
      */
     java.util.List<java.lang.Integer> getParentsList();
     /**
      * <code>repeated int32 parents = 7;</code>
+     *
+     * <pre>
+     ** @exclude The offsets of any parent commits 
+     * </pre>
      */
     int getParentsCount();
     /**
      * <code>repeated int32 parents = 7;</code>
+     *
+     * <pre>
+     ** @exclude The offsets of any parent commits 
+     * </pre>
      */
     int getParents(int index);
 
     // repeated int32 children = 8;
     /**
      * <code>repeated int32 children = 8;</code>
+     *
+     * <pre>
+     ** @exclude The offsets of any child commits 
+     * </pre>
      */
     java.util.List<java.lang.Integer> getChildrenList();
     /**
      * <code>repeated int32 children = 8;</code>
+     *
+     * <pre>
+     ** @exclude The offsets of any child commits 
+     * </pre>
      */
     int getChildrenCount();
     /**
      * <code>repeated int32 children = 8;</code>
+     *
+     * <pre>
+     ** @exclude The offsets of any child commits 
+     * </pre>
      */
     int getChildren(int index);
   }
   /**
    * Protobuf type {@code boa.types.Revision}
+   *
+   * <pre>
+   ** A single revision inside a CodeRepository 
+   * </pre>
    */
   public static final class Revision extends
       com.google.protobuf.GeneratedMessage
@@ -2107,12 +2727,20 @@ public final class Code {
     private java.lang.Object id_;
     /**
      * <code>required string id = 1;</code>
+     *
+     * <pre>
+     ** A unique identifier for the revision 
+     * </pre>
      */
     public boolean hasId() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
      * <code>required string id = 1;</code>
+     *
+     * <pre>
+     ** A unique identifier for the revision 
+     * </pre>
      */
     public java.lang.String getId() {
       java.lang.Object ref = id_;
@@ -2130,6 +2758,10 @@ public final class Code {
     }
     /**
      * <code>required string id = 1;</code>
+     *
+     * <pre>
+     ** A unique identifier for the revision 
+     * </pre>
      */
     public com.google.protobuf.ByteString
         getIdBytes() {
@@ -2150,18 +2782,30 @@ public final class Code {
     private boa.types.Shared.Person author_;
     /**
      * <code>required .boa.types.Person author = 2;</code>
+     *
+     * <pre>
+     ** The person who authored the revision, if known, otherwise the same as committer 
+     * </pre>
      */
     public boolean hasAuthor() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
      * <code>required .boa.types.Person author = 2;</code>
+     *
+     * <pre>
+     ** The person who authored the revision, if known, otherwise the same as committer 
+     * </pre>
      */
     public boa.types.Shared.Person getAuthor() {
       return author_;
     }
     /**
      * <code>required .boa.types.Person author = 2;</code>
+     *
+     * <pre>
+     ** The person who authored the revision, if known, otherwise the same as committer 
+     * </pre>
      */
     public boa.types.Shared.PersonOrBuilder getAuthorOrBuilder() {
       return author_;
@@ -2172,18 +2816,30 @@ public final class Code {
     private boa.types.Shared.Person committer_;
     /**
      * <code>required .boa.types.Person committer = 3;</code>
+     *
+     * <pre>
+     ** The person who committed the revision 
+     * </pre>
      */
     public boolean hasCommitter() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
      * <code>required .boa.types.Person committer = 3;</code>
+     *
+     * <pre>
+     ** The person who committed the revision 
+     * </pre>
      */
     public boa.types.Shared.Person getCommitter() {
       return committer_;
     }
     /**
      * <code>required .boa.types.Person committer = 3;</code>
+     *
+     * <pre>
+     ** The person who committed the revision 
+     * </pre>
      */
     public boa.types.Shared.PersonOrBuilder getCommitterOrBuilder() {
       return committer_;
@@ -2194,12 +2850,20 @@ public final class Code {
     private long commitDate_;
     /**
      * <code>required uint64 commit_date = 4;</code>
+     *
+     * <pre>
+     ** The time the revision was committed 
+     * </pre>
      */
     public boolean hasCommitDate() {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
      * <code>required uint64 commit_date = 4;</code>
+     *
+     * <pre>
+     ** The time the revision was committed 
+     * </pre>
      */
     public long getCommitDate() {
       return commitDate_;
@@ -2210,12 +2874,20 @@ public final class Code {
     private java.lang.Object log_;
     /**
      * <code>required string log = 5;</code>
+     *
+     * <pre>
+     ** The log message attached to the revision 
+     * </pre>
      */
     public boolean hasLog() {
       return ((bitField0_ & 0x00000010) == 0x00000010);
     }
     /**
      * <code>required string log = 5;</code>
+     *
+     * <pre>
+     ** The log message attached to the revision 
+     * </pre>
      */
     public java.lang.String getLog() {
       java.lang.Object ref = log_;
@@ -2233,6 +2905,10 @@ public final class Code {
     }
     /**
      * <code>required string log = 5;</code>
+     *
+     * <pre>
+     ** The log message attached to the revision 
+     * </pre>
      */
     public com.google.protobuf.ByteString
         getLogBytes() {
@@ -2253,12 +2929,20 @@ public final class Code {
     private java.util.List<boa.types.Diff.ChangedFile> files_;
     /**
      * <code>repeated .boa.types.ChangedFile files = 6;</code>
+     *
+     * <pre>
+     ** A list of all files committed in the revision 
+     * </pre>
      */
     public java.util.List<boa.types.Diff.ChangedFile> getFilesList() {
       return files_;
     }
     /**
      * <code>repeated .boa.types.ChangedFile files = 6;</code>
+     *
+     * <pre>
+     ** A list of all files committed in the revision 
+     * </pre>
      */
     public java.util.List<? extends boa.types.Diff.ChangedFileOrBuilder> 
         getFilesOrBuilderList() {
@@ -2266,18 +2950,30 @@ public final class Code {
     }
     /**
      * <code>repeated .boa.types.ChangedFile files = 6;</code>
+     *
+     * <pre>
+     ** A list of all files committed in the revision 
+     * </pre>
      */
     public int getFilesCount() {
       return files_.size();
     }
     /**
      * <code>repeated .boa.types.ChangedFile files = 6;</code>
+     *
+     * <pre>
+     ** A list of all files committed in the revision 
+     * </pre>
      */
     public boa.types.Diff.ChangedFile getFiles(int index) {
       return files_.get(index);
     }
     /**
      * <code>repeated .boa.types.ChangedFile files = 6;</code>
+     *
+     * <pre>
+     ** A list of all files committed in the revision 
+     * </pre>
      */
     public boa.types.Diff.ChangedFileOrBuilder getFilesOrBuilder(
         int index) {
@@ -2289,6 +2985,10 @@ public final class Code {
     private java.util.List<java.lang.Integer> parents_;
     /**
      * <code>repeated int32 parents = 7;</code>
+     *
+     * <pre>
+     ** @exclude The offsets of any parent commits 
+     * </pre>
      */
     public java.util.List<java.lang.Integer>
         getParentsList() {
@@ -2296,12 +2996,20 @@ public final class Code {
     }
     /**
      * <code>repeated int32 parents = 7;</code>
+     *
+     * <pre>
+     ** @exclude The offsets of any parent commits 
+     * </pre>
      */
     public int getParentsCount() {
       return parents_.size();
     }
     /**
      * <code>repeated int32 parents = 7;</code>
+     *
+     * <pre>
+     ** @exclude The offsets of any parent commits 
+     * </pre>
      */
     public int getParents(int index) {
       return parents_.get(index);
@@ -2312,6 +3020,10 @@ public final class Code {
     private java.util.List<java.lang.Integer> children_;
     /**
      * <code>repeated int32 children = 8;</code>
+     *
+     * <pre>
+     ** @exclude The offsets of any child commits 
+     * </pre>
      */
     public java.util.List<java.lang.Integer>
         getChildrenList() {
@@ -2319,12 +3031,20 @@ public final class Code {
     }
     /**
      * <code>repeated int32 children = 8;</code>
+     *
+     * <pre>
+     ** @exclude The offsets of any child commits 
+     * </pre>
      */
     public int getChildrenCount() {
       return children_.size();
     }
     /**
      * <code>repeated int32 children = 8;</code>
+     *
+     * <pre>
+     ** @exclude The offsets of any child commits 
+     * </pre>
      */
     public int getChildren(int index) {
       return children_.get(index);
@@ -2541,6 +3261,10 @@ public final class Code {
     }
     /**
      * Protobuf type {@code boa.types.Revision}
+     *
+     * <pre>
+     ** A single revision inside a CodeRepository 
+     * </pre>
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
@@ -2829,12 +3553,20 @@ public final class Code {
       private java.lang.Object id_ = "";
       /**
        * <code>required string id = 1;</code>
+       *
+       * <pre>
+       ** A unique identifier for the revision 
+       * </pre>
        */
       public boolean hasId() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
        * <code>required string id = 1;</code>
+       *
+       * <pre>
+       ** A unique identifier for the revision 
+       * </pre>
        */
       public java.lang.String getId() {
         java.lang.Object ref = id_;
@@ -2849,6 +3581,10 @@ public final class Code {
       }
       /**
        * <code>required string id = 1;</code>
+       *
+       * <pre>
+       ** A unique identifier for the revision 
+       * </pre>
        */
       public com.google.protobuf.ByteString
           getIdBytes() {
@@ -2865,6 +3601,10 @@ public final class Code {
       }
       /**
        * <code>required string id = 1;</code>
+       *
+       * <pre>
+       ** A unique identifier for the revision 
+       * </pre>
        */
       public Builder setId(
           java.lang.String value) {
@@ -2878,6 +3618,10 @@ public final class Code {
       }
       /**
        * <code>required string id = 1;</code>
+       *
+       * <pre>
+       ** A unique identifier for the revision 
+       * </pre>
        */
       public Builder clearId() {
         bitField0_ = (bitField0_ & ~0x00000001);
@@ -2887,6 +3631,10 @@ public final class Code {
       }
       /**
        * <code>required string id = 1;</code>
+       *
+       * <pre>
+       ** A unique identifier for the revision 
+       * </pre>
        */
       public Builder setIdBytes(
           com.google.protobuf.ByteString value) {
@@ -2905,12 +3653,20 @@ public final class Code {
           boa.types.Shared.Person, boa.types.Shared.Person.Builder, boa.types.Shared.PersonOrBuilder> authorBuilder_;
       /**
        * <code>required .boa.types.Person author = 2;</code>
+       *
+       * <pre>
+       ** The person who authored the revision, if known, otherwise the same as committer 
+       * </pre>
        */
       public boolean hasAuthor() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
        * <code>required .boa.types.Person author = 2;</code>
+       *
+       * <pre>
+       ** The person who authored the revision, if known, otherwise the same as committer 
+       * </pre>
        */
       public boa.types.Shared.Person getAuthor() {
         if (authorBuilder_ == null) {
@@ -2921,6 +3677,10 @@ public final class Code {
       }
       /**
        * <code>required .boa.types.Person author = 2;</code>
+       *
+       * <pre>
+       ** The person who authored the revision, if known, otherwise the same as committer 
+       * </pre>
        */
       public Builder setAuthor(boa.types.Shared.Person value) {
         if (authorBuilder_ == null) {
@@ -2937,6 +3697,10 @@ public final class Code {
       }
       /**
        * <code>required .boa.types.Person author = 2;</code>
+       *
+       * <pre>
+       ** The person who authored the revision, if known, otherwise the same as committer 
+       * </pre>
        */
       public Builder setAuthor(
           boa.types.Shared.Person.Builder builderForValue) {
@@ -2951,6 +3715,10 @@ public final class Code {
       }
       /**
        * <code>required .boa.types.Person author = 2;</code>
+       *
+       * <pre>
+       ** The person who authored the revision, if known, otherwise the same as committer 
+       * </pre>
        */
       public Builder mergeAuthor(boa.types.Shared.Person value) {
         if (authorBuilder_ == null) {
@@ -2970,6 +3738,10 @@ public final class Code {
       }
       /**
        * <code>required .boa.types.Person author = 2;</code>
+       *
+       * <pre>
+       ** The person who authored the revision, if known, otherwise the same as committer 
+       * </pre>
        */
       public Builder clearAuthor() {
         if (authorBuilder_ == null) {
@@ -2983,6 +3755,10 @@ public final class Code {
       }
       /**
        * <code>required .boa.types.Person author = 2;</code>
+       *
+       * <pre>
+       ** The person who authored the revision, if known, otherwise the same as committer 
+       * </pre>
        */
       public boa.types.Shared.Person.Builder getAuthorBuilder() {
         bitField0_ |= 0x00000002;
@@ -2991,6 +3767,10 @@ public final class Code {
       }
       /**
        * <code>required .boa.types.Person author = 2;</code>
+       *
+       * <pre>
+       ** The person who authored the revision, if known, otherwise the same as committer 
+       * </pre>
        */
       public boa.types.Shared.PersonOrBuilder getAuthorOrBuilder() {
         if (authorBuilder_ != null) {
@@ -3001,6 +3781,10 @@ public final class Code {
       }
       /**
        * <code>required .boa.types.Person author = 2;</code>
+       *
+       * <pre>
+       ** The person who authored the revision, if known, otherwise the same as committer 
+       * </pre>
        */
       private com.google.protobuf.SingleFieldBuilder<
           boa.types.Shared.Person, boa.types.Shared.Person.Builder, boa.types.Shared.PersonOrBuilder> 
@@ -3022,12 +3806,20 @@ public final class Code {
           boa.types.Shared.Person, boa.types.Shared.Person.Builder, boa.types.Shared.PersonOrBuilder> committerBuilder_;
       /**
        * <code>required .boa.types.Person committer = 3;</code>
+       *
+       * <pre>
+       ** The person who committed the revision 
+       * </pre>
        */
       public boolean hasCommitter() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
        * <code>required .boa.types.Person committer = 3;</code>
+       *
+       * <pre>
+       ** The person who committed the revision 
+       * </pre>
        */
       public boa.types.Shared.Person getCommitter() {
         if (committerBuilder_ == null) {
@@ -3038,6 +3830,10 @@ public final class Code {
       }
       /**
        * <code>required .boa.types.Person committer = 3;</code>
+       *
+       * <pre>
+       ** The person who committed the revision 
+       * </pre>
        */
       public Builder setCommitter(boa.types.Shared.Person value) {
         if (committerBuilder_ == null) {
@@ -3054,6 +3850,10 @@ public final class Code {
       }
       /**
        * <code>required .boa.types.Person committer = 3;</code>
+       *
+       * <pre>
+       ** The person who committed the revision 
+       * </pre>
        */
       public Builder setCommitter(
           boa.types.Shared.Person.Builder builderForValue) {
@@ -3068,6 +3868,10 @@ public final class Code {
       }
       /**
        * <code>required .boa.types.Person committer = 3;</code>
+       *
+       * <pre>
+       ** The person who committed the revision 
+       * </pre>
        */
       public Builder mergeCommitter(boa.types.Shared.Person value) {
         if (committerBuilder_ == null) {
@@ -3087,6 +3891,10 @@ public final class Code {
       }
       /**
        * <code>required .boa.types.Person committer = 3;</code>
+       *
+       * <pre>
+       ** The person who committed the revision 
+       * </pre>
        */
       public Builder clearCommitter() {
         if (committerBuilder_ == null) {
@@ -3100,6 +3908,10 @@ public final class Code {
       }
       /**
        * <code>required .boa.types.Person committer = 3;</code>
+       *
+       * <pre>
+       ** The person who committed the revision 
+       * </pre>
        */
       public boa.types.Shared.Person.Builder getCommitterBuilder() {
         bitField0_ |= 0x00000004;
@@ -3108,6 +3920,10 @@ public final class Code {
       }
       /**
        * <code>required .boa.types.Person committer = 3;</code>
+       *
+       * <pre>
+       ** The person who committed the revision 
+       * </pre>
        */
       public boa.types.Shared.PersonOrBuilder getCommitterOrBuilder() {
         if (committerBuilder_ != null) {
@@ -3118,6 +3934,10 @@ public final class Code {
       }
       /**
        * <code>required .boa.types.Person committer = 3;</code>
+       *
+       * <pre>
+       ** The person who committed the revision 
+       * </pre>
        */
       private com.google.protobuf.SingleFieldBuilder<
           boa.types.Shared.Person, boa.types.Shared.Person.Builder, boa.types.Shared.PersonOrBuilder> 
@@ -3137,18 +3957,30 @@ public final class Code {
       private long commitDate_ ;
       /**
        * <code>required uint64 commit_date = 4;</code>
+       *
+       * <pre>
+       ** The time the revision was committed 
+       * </pre>
        */
       public boolean hasCommitDate() {
         return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       /**
        * <code>required uint64 commit_date = 4;</code>
+       *
+       * <pre>
+       ** The time the revision was committed 
+       * </pre>
        */
       public long getCommitDate() {
         return commitDate_;
       }
       /**
        * <code>required uint64 commit_date = 4;</code>
+       *
+       * <pre>
+       ** The time the revision was committed 
+       * </pre>
        */
       public Builder setCommitDate(long value) {
         bitField0_ |= 0x00000008;
@@ -3158,6 +3990,10 @@ public final class Code {
       }
       /**
        * <code>required uint64 commit_date = 4;</code>
+       *
+       * <pre>
+       ** The time the revision was committed 
+       * </pre>
        */
       public Builder clearCommitDate() {
         bitField0_ = (bitField0_ & ~0x00000008);
@@ -3170,12 +4006,20 @@ public final class Code {
       private java.lang.Object log_ = "";
       /**
        * <code>required string log = 5;</code>
+       *
+       * <pre>
+       ** The log message attached to the revision 
+       * </pre>
        */
       public boolean hasLog() {
         return ((bitField0_ & 0x00000010) == 0x00000010);
       }
       /**
        * <code>required string log = 5;</code>
+       *
+       * <pre>
+       ** The log message attached to the revision 
+       * </pre>
        */
       public java.lang.String getLog() {
         java.lang.Object ref = log_;
@@ -3190,6 +4034,10 @@ public final class Code {
       }
       /**
        * <code>required string log = 5;</code>
+       *
+       * <pre>
+       ** The log message attached to the revision 
+       * </pre>
        */
       public com.google.protobuf.ByteString
           getLogBytes() {
@@ -3206,6 +4054,10 @@ public final class Code {
       }
       /**
        * <code>required string log = 5;</code>
+       *
+       * <pre>
+       ** The log message attached to the revision 
+       * </pre>
        */
       public Builder setLog(
           java.lang.String value) {
@@ -3219,6 +4071,10 @@ public final class Code {
       }
       /**
        * <code>required string log = 5;</code>
+       *
+       * <pre>
+       ** The log message attached to the revision 
+       * </pre>
        */
       public Builder clearLog() {
         bitField0_ = (bitField0_ & ~0x00000010);
@@ -3228,6 +4084,10 @@ public final class Code {
       }
       /**
        * <code>required string log = 5;</code>
+       *
+       * <pre>
+       ** The log message attached to the revision 
+       * </pre>
        */
       public Builder setLogBytes(
           com.google.protobuf.ByteString value) {
@@ -3255,6 +4115,10 @@ public final class Code {
 
       /**
        * <code>repeated .boa.types.ChangedFile files = 6;</code>
+       *
+       * <pre>
+       ** A list of all files committed in the revision 
+       * </pre>
        */
       public java.util.List<boa.types.Diff.ChangedFile> getFilesList() {
         if (filesBuilder_ == null) {
@@ -3265,6 +4129,10 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.ChangedFile files = 6;</code>
+       *
+       * <pre>
+       ** A list of all files committed in the revision 
+       * </pre>
        */
       public int getFilesCount() {
         if (filesBuilder_ == null) {
@@ -3275,6 +4143,10 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.ChangedFile files = 6;</code>
+       *
+       * <pre>
+       ** A list of all files committed in the revision 
+       * </pre>
        */
       public boa.types.Diff.ChangedFile getFiles(int index) {
         if (filesBuilder_ == null) {
@@ -3285,6 +4157,10 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.ChangedFile files = 6;</code>
+       *
+       * <pre>
+       ** A list of all files committed in the revision 
+       * </pre>
        */
       public Builder setFiles(
           int index, boa.types.Diff.ChangedFile value) {
@@ -3302,6 +4178,10 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.ChangedFile files = 6;</code>
+       *
+       * <pre>
+       ** A list of all files committed in the revision 
+       * </pre>
        */
       public Builder setFiles(
           int index, boa.types.Diff.ChangedFile.Builder builderForValue) {
@@ -3316,6 +4196,10 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.ChangedFile files = 6;</code>
+       *
+       * <pre>
+       ** A list of all files committed in the revision 
+       * </pre>
        */
       public Builder addFiles(boa.types.Diff.ChangedFile value) {
         if (filesBuilder_ == null) {
@@ -3332,6 +4216,10 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.ChangedFile files = 6;</code>
+       *
+       * <pre>
+       ** A list of all files committed in the revision 
+       * </pre>
        */
       public Builder addFiles(
           int index, boa.types.Diff.ChangedFile value) {
@@ -3349,6 +4237,10 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.ChangedFile files = 6;</code>
+       *
+       * <pre>
+       ** A list of all files committed in the revision 
+       * </pre>
        */
       public Builder addFiles(
           boa.types.Diff.ChangedFile.Builder builderForValue) {
@@ -3363,6 +4255,10 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.ChangedFile files = 6;</code>
+       *
+       * <pre>
+       ** A list of all files committed in the revision 
+       * </pre>
        */
       public Builder addFiles(
           int index, boa.types.Diff.ChangedFile.Builder builderForValue) {
@@ -3377,6 +4273,10 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.ChangedFile files = 6;</code>
+       *
+       * <pre>
+       ** A list of all files committed in the revision 
+       * </pre>
        */
       public Builder addAllFiles(
           java.lang.Iterable<? extends boa.types.Diff.ChangedFile> values) {
@@ -3391,6 +4291,10 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.ChangedFile files = 6;</code>
+       *
+       * <pre>
+       ** A list of all files committed in the revision 
+       * </pre>
        */
       public Builder clearFiles() {
         if (filesBuilder_ == null) {
@@ -3404,6 +4308,10 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.ChangedFile files = 6;</code>
+       *
+       * <pre>
+       ** A list of all files committed in the revision 
+       * </pre>
        */
       public Builder removeFiles(int index) {
         if (filesBuilder_ == null) {
@@ -3417,6 +4325,10 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.ChangedFile files = 6;</code>
+       *
+       * <pre>
+       ** A list of all files committed in the revision 
+       * </pre>
        */
       public boa.types.Diff.ChangedFile.Builder getFilesBuilder(
           int index) {
@@ -3424,6 +4336,10 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.ChangedFile files = 6;</code>
+       *
+       * <pre>
+       ** A list of all files committed in the revision 
+       * </pre>
        */
       public boa.types.Diff.ChangedFileOrBuilder getFilesOrBuilder(
           int index) {
@@ -3434,6 +4350,10 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.ChangedFile files = 6;</code>
+       *
+       * <pre>
+       ** A list of all files committed in the revision 
+       * </pre>
        */
       public java.util.List<? extends boa.types.Diff.ChangedFileOrBuilder> 
            getFilesOrBuilderList() {
@@ -3445,6 +4365,10 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.ChangedFile files = 6;</code>
+       *
+       * <pre>
+       ** A list of all files committed in the revision 
+       * </pre>
        */
       public boa.types.Diff.ChangedFile.Builder addFilesBuilder() {
         return getFilesFieldBuilder().addBuilder(
@@ -3452,6 +4376,10 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.ChangedFile files = 6;</code>
+       *
+       * <pre>
+       ** A list of all files committed in the revision 
+       * </pre>
        */
       public boa.types.Diff.ChangedFile.Builder addFilesBuilder(
           int index) {
@@ -3460,6 +4388,10 @@ public final class Code {
       }
       /**
        * <code>repeated .boa.types.ChangedFile files = 6;</code>
+       *
+       * <pre>
+       ** A list of all files committed in the revision 
+       * </pre>
        */
       public java.util.List<boa.types.Diff.ChangedFile.Builder> 
            getFilesBuilderList() {
@@ -3490,6 +4422,10 @@ public final class Code {
       }
       /**
        * <code>repeated int32 parents = 7;</code>
+       *
+       * <pre>
+       ** @exclude The offsets of any parent commits 
+       * </pre>
        */
       public java.util.List<java.lang.Integer>
           getParentsList() {
@@ -3497,18 +4433,30 @@ public final class Code {
       }
       /**
        * <code>repeated int32 parents = 7;</code>
+       *
+       * <pre>
+       ** @exclude The offsets of any parent commits 
+       * </pre>
        */
       public int getParentsCount() {
         return parents_.size();
       }
       /**
        * <code>repeated int32 parents = 7;</code>
+       *
+       * <pre>
+       ** @exclude The offsets of any parent commits 
+       * </pre>
        */
       public int getParents(int index) {
         return parents_.get(index);
       }
       /**
        * <code>repeated int32 parents = 7;</code>
+       *
+       * <pre>
+       ** @exclude The offsets of any parent commits 
+       * </pre>
        */
       public Builder setParents(
           int index, int value) {
@@ -3519,6 +4467,10 @@ public final class Code {
       }
       /**
        * <code>repeated int32 parents = 7;</code>
+       *
+       * <pre>
+       ** @exclude The offsets of any parent commits 
+       * </pre>
        */
       public Builder addParents(int value) {
         ensureParentsIsMutable();
@@ -3528,6 +4480,10 @@ public final class Code {
       }
       /**
        * <code>repeated int32 parents = 7;</code>
+       *
+       * <pre>
+       ** @exclude The offsets of any parent commits 
+       * </pre>
        */
       public Builder addAllParents(
           java.lang.Iterable<? extends java.lang.Integer> values) {
@@ -3538,6 +4494,10 @@ public final class Code {
       }
       /**
        * <code>repeated int32 parents = 7;</code>
+       *
+       * <pre>
+       ** @exclude The offsets of any parent commits 
+       * </pre>
        */
       public Builder clearParents() {
         parents_ = java.util.Collections.emptyList();
@@ -3556,6 +4516,10 @@ public final class Code {
       }
       /**
        * <code>repeated int32 children = 8;</code>
+       *
+       * <pre>
+       ** @exclude The offsets of any child commits 
+       * </pre>
        */
       public java.util.List<java.lang.Integer>
           getChildrenList() {
@@ -3563,18 +4527,30 @@ public final class Code {
       }
       /**
        * <code>repeated int32 children = 8;</code>
+       *
+       * <pre>
+       ** @exclude The offsets of any child commits 
+       * </pre>
        */
       public int getChildrenCount() {
         return children_.size();
       }
       /**
        * <code>repeated int32 children = 8;</code>
+       *
+       * <pre>
+       ** @exclude The offsets of any child commits 
+       * </pre>
        */
       public int getChildren(int index) {
         return children_.get(index);
       }
       /**
        * <code>repeated int32 children = 8;</code>
+       *
+       * <pre>
+       ** @exclude The offsets of any child commits 
+       * </pre>
        */
       public Builder setChildren(
           int index, int value) {
@@ -3585,6 +4561,10 @@ public final class Code {
       }
       /**
        * <code>repeated int32 children = 8;</code>
+       *
+       * <pre>
+       ** @exclude The offsets of any child commits 
+       * </pre>
        */
       public Builder addChildren(int value) {
         ensureChildrenIsMutable();
@@ -3594,6 +4574,10 @@ public final class Code {
       }
       /**
        * <code>repeated int32 children = 8;</code>
+       *
+       * <pre>
+       ** @exclude The offsets of any child commits 
+       * </pre>
        */
       public Builder addAllChildren(
           java.lang.Iterable<? extends java.lang.Integer> values) {
@@ -3604,6 +4588,10 @@ public final class Code {
       }
       /**
        * <code>repeated int32 children = 8;</code>
+       *
+       * <pre>
+       ** @exclude The offsets of any child commits 
+       * </pre>
        */
       public Builder clearChildren() {
         children_ = java.util.Collections.emptyList();

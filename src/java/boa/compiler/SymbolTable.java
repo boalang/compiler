@@ -51,7 +51,7 @@ public class SymbolTable {
 	private Operand operand;
 	private Stack<BoaType> operandType = new Stack<BoaType>();
 	private boolean needsBoxing;
-	private boolean isBeforeVisitor = false;
+	private Stack<Boolean> isVisitor = new Stack<Boolean>();
 	private boolean isTraverse = false;
 	private boolean shadowing = false;
 
@@ -155,7 +155,7 @@ public class SymbolTable {
 		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaSet(new BoaTypeVar("V")) }, "((long)${0}.size())"));
 		globalFunctions.addFunction("len", new BoaFunction(new BoaInt(), new BoaType[] { new BoaString() }, "((long)${0}.length())"));
 
-		//traversal functions
+		// traversal functions
 		globalFunctions.addFunction("getvalue", new BoaFunction(new BoaTypeVar("K"), new BoaType[] { new CFGNodeProtoTuple(), new BoaTraversal(new BoaTypeVar("K"))},"${1}.getValue(${0})"));
 		globalFunctions.addFunction("getvalue", new BoaFunction(new BoaAny(), new BoaType[] { new CFGNodeProtoTuple()},"getValue(${0})"));
 		globalFunctions.addFunction("clear", new BoaFunction(new BoaAny(), new BoaType[] { new BoaTraversal()},"${0}.clear()"));
@@ -179,7 +179,7 @@ public class SymbolTable {
 		}
 		globalFunctions.addFunction("_cur_visitor", new BoaFunction(new BoaVisitor(), new BoaType[] { }, "this"));
 
-		//traversal
+		// traversal
 		globalFunctions.addFunction("traverse", new BoaFunction(new BoaAny(), new BoaType[] { new CFGProtoTuple(), new TraversalDirectionProtoMap(), new TraversalKindProtoMap(), new BoaTraversal()}, "${3}.traverse(${0},${1},${2})"));
 		globalFunctions.addFunction("traverse", new BoaFunction(new BoaBool(), new BoaType[] { new CFGProtoTuple(), new TraversalDirectionProtoMap(), new TraversalKindProtoMap(), new BoaTraversal(), new BoaFixP() }, "${3}.traverse(${0},${1},${2},${4})"));
 
@@ -209,7 +209,7 @@ public class SymbolTable {
 		// arrays to string
 		globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { new BoaArray(new BoaAny()) }, "boa.functions.BoaIntrinsics.arrayToString(${0})"));
 
-		//set to string
+		// set to string
 		globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { new BoaSet(new BoaTypeVar("V")) }, "${0}.toString()"));
 
 		// current() function inside visits
@@ -219,10 +219,6 @@ public class SymbolTable {
 		// proto to string
 		for (final BoaType t : dslTupleTypes)
 			globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { t }, "com.googlecode.protobuf.format.JsonFormat.printToString(${0})"));
-
-		// FIXME the json library doesnt support enums
-		//for (final BoaType t : dslMapTypes)
-		//	globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { t }, "com.googlecode.protobuf.format.JsonFormat.printToString(${0})"));
 
 		// FIXME the json library doesnt support lists
 		//globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { new BoaProtoList(new BoaAny()) }, "com.googlecode.protobuf.format.JsonFormat.printToString(${0})"));
@@ -326,7 +322,7 @@ public class SymbolTable {
 
 		st.functions = this.functions;
 		st.locals = new HashMap<String, BoaType>(this.locals);
-		st.isBeforeVisitor = this.isBeforeVisitor;
+		st.isVisitor = this.isVisitor;
 		st.shadowing = this.shadowing;
 
 		return st;
@@ -639,12 +635,16 @@ public class SymbolTable {
 		return this.isTraverse;
 	}
 
-	public void setIsBeforeVisitor(final boolean isBeforeVisitor) {
-		this.isBeforeVisitor = isBeforeVisitor;
+	public void setIsVisitor(final boolean isVisitor) {
+		this.isVisitor.push(isVisitor);
 	}
 
-	public boolean getIsBeforeVisitor() {
-		return this.isBeforeVisitor;
+	public void unsetIsVisitor() {
+		this.isVisitor.pop();
+    }
+
+	public boolean getIsVisitor() {
+		return this.isVisitor.peek();
 	}
 
 	public void setShadowing(final boolean shadowing) {

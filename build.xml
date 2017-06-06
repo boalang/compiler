@@ -176,6 +176,8 @@
 				<formatter type="plain" usefile="false" />
 				<fileset dir="build/tests">
 					<include name="boa/test/compiler/Test*.class" />
+					<include name="boa/test/functions/Test*.class" />
+					<include name="boa/test/datagen/Test*.class" />
 					<exclude name="**/*$*.class" />
 				</fileset>
 			</batchtest>
@@ -271,6 +273,20 @@
 		</junit>
 		<delete file="SecurityAuth.audit" />
 	</target>
+	<target name="test-functions" depends="-compile-tests" description="Run intrinsic functions tests.">
+		<junit fork="yes" haltonfailure="no">
+			<classpath refid="test.class.path" />
+			<batchtest>
+				<formatter type="plain" usefile="false" />
+				<fileset dir="build/tests">
+					<include name="boa/test/functions/Test*.class" />
+					<exclude name="**/*$*.class" />
+				</fileset>
+			</batchtest>
+		</junit>
+		<delete file="SecurityAuth.audit" />
+	</target>
+
 
 	<target name="-compile-tests" depends="compile,-check-deps">
 		<javac includeantruntime="true" srcdir="src/test" destdir="build/tests" debug="${debug.enabled}" debuglevel="${debug.level}">
@@ -284,6 +300,13 @@
 
 	<target name="java-to-boa" depends="-compile-tests" description="Convert Java code to Boa AST.">
 		<java classname="boa.test.datagen.JavaToBoa" fork="true" failonerror="true">
+			<classpath refid="test.class.path" />
+			<arg value="${java.code}" />
+		</java>
+	</target>
+
+	<target name="dump-java" depends="-compile-tests" description="Parse and dump Java AST.">
+		<java classname="boa.test.datagen.DumpJava" fork="true" failonerror="true">
 			<classpath refid="test.class.path" />
 			<arg value="${java.code}" />
 		</java>
