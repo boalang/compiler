@@ -139,10 +139,11 @@ public class BoaNormalFormIntrinsics {
 				else
 					results2.add(0, ival);
 
-				// check for identity
-				if (results2.size() > 1 && ((results2.get(0) instanceof Double && (Double)results2.get(0) == 0.0)
-					|| (results2.get(0) instanceof Long && (Long)results2.get(0) == 0L)))
-					results2.remove(0);
+				if (results2.size() > 1) {
+					// check for identity
+					if (results2.get(0) instanceof Number && ((Number)results2.get(0)).doubleValue() == 0.0)
+						results2.remove(0);
+				}
 
 				// if it reduced to a single term, return just the term otherwise return the whole expression
 				if (results2.size() == 1)
@@ -217,8 +218,7 @@ public class BoaNormalFormIntrinsics {
 					}
 
 					// check for identity
-					if ((lhs instanceof Double && (Double)lhs == 0.0)
-						|| (lhs instanceof Long && (Long)lhs == 0L)) {
+					if (lhs instanceof Number && ((Number)lhs).doubleValue() == 0.0) {
 						results2.remove(0);
 						results2.set(0, createExpression(ExpressionKind.OP_SUB, (Expression)results2.get(0)));
 					}
@@ -255,10 +255,9 @@ public class BoaNormalFormIntrinsics {
 				else
 					results2.add(0, ival);
 
-				// check for identity
 				if (results2.size() > 1) {
-					if ((results2.get(0) instanceof Double && (Double)results2.get(0) == 1.0)
-						|| (results2.get(0) instanceof Long && (Long)results2.get(0) == 1L))
+					// check for identity
+					if (results2.get(0) instanceof Number && ((Number)results2.get(0)).doubleValue() == 1.0)
 						results2.remove(0);
 
 					// check for elimination
@@ -323,7 +322,6 @@ public class BoaNormalFormIntrinsics {
 						results2.add(ival);
 				}
 
-				// check for identity
 				if (results2.size() > 1) {
 					// check for elimination
 					if (results2.get(0) instanceof Expression) {
@@ -334,9 +332,9 @@ public class BoaNormalFormIntrinsics {
 						}
 					}
 
+					// check for identity
 					for (int i = 1; i < results2.size(); i++)
-						if ((results2.get(i) instanceof Double && (Double)results2.get(i) == 1.0)
-							|| (results2.get(i) instanceof Long && (Long)results2.get(i) == 1L))
+						if (results2.get(i) instanceof Number && ((Number)results2.get(i)).doubleValue() == 1.0)
 							results2.remove(i);
 				}
 
