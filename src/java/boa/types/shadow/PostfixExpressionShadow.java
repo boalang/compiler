@@ -17,6 +17,8 @@
  */
 package boa.types.shadow;
 
+import java.util.*;
+
 import boa.compiler.ast.Call;
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.ast.Factor;
@@ -79,6 +81,17 @@ public class PostfixExpressionShadow extends BoaShadowType  {
     @Override
     public Expression getKindExpression(final SymbolTable env) {
         return getKindExpression("ExpressionKind", "BIT_XOR", new ExpressionKindProtoMap(), env);
+    }
+
+        /** {@inheritDoc} */
+    @Override
+    public LinkedList<Expression> getKindExpressionsOneToMany(final SymbolTable env) {
+        LinkedList<Expression> postfixList = new LinkedList<Expression>(); 
+        
+        postfixList.add(getKindExpression("ExpressionKind", "OP_DEC", new ExpressionKindProtoMap(), env));
+        postfixList.add(getKindExpression("ExpressionKind", "OP_INC", new ExpressionKindProtoMap(), env));
+        
+        return postfixList;  
     }
 
     /** {@inheritDoc} */

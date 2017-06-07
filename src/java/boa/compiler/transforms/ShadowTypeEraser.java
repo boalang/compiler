@@ -85,11 +85,7 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
         private LinkedList<VisitStatement> shadowVisitStack = new LinkedList<VisitStatement>();
         private LinkedList<VisitorExpression> visitorExpStack = new LinkedList<VisitorExpression>();
 
-        private LinkedList<BoaShadowType> inFixList = new LinkedList<BoaShadowType>();
-        private LinkedList<BoaShadowType> postFixList = new LinkedList<BoaShadowType>();
-        private LinkedList<BoaShadowType> preFixList = new LinkedList<BoaShadowType>();
-        private LinkedList<BoaShadowType> assignList = new LinkedList<BoaShadowType>();
-
+        
         private HashMap<BoaProtoTuple,LinkedList<VisitStatement>> beforeShadowedMap = new HashMap<BoaProtoTuple,LinkedList<VisitStatement>>();
         private HashMap<BoaProtoTuple,LinkedList<VisitStatement>> afterShadowedMap = new HashMap<BoaProtoTuple,LinkedList<VisitStatement>>();
         private HashMap<BoaProtoTuple,LinkedList<VisitStatement>> shadowedMap = new HashMap<BoaProtoTuple,LinkedList<VisitStatement>>();
@@ -209,47 +205,7 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
 
         public void transformVisitor (VisitorExpression n, HashMap<BoaProtoTuple,LinkedList<VisitStatement>> shadowedMap,boolean beforeBool,Block wildcardBlock){
                 
-                            //TODO : Create a Visit Statement of the shadowed type and attach the block to it
-                inFixList.push(new AndInFixExpressionShadow());
-                inFixList.push(new OrInFixExpressionShadow());
-                inFixList.push(new ConditionalAndInFixExpressionShadow());
-                inFixList.push(new DivideInFixExpressionShadow());
-                inFixList.push(new EqualsInFixExpressionShadow());
-                inFixList.push(new GreaterEqualsInFixExpressionShadow());
-                inFixList.push(new LeftShiftInFixExpressionShadow());
-                inFixList.push(new LessEqualsInFixExpressionShadow());
-                inFixList.push(new LessInFixExpressionShadow());
-                inFixList.push(new MinusInFixExpressionShadow());
-                inFixList.push(new NotEqualInFixExpressionShadow());
-                inFixList.push(new PlusInFixExpressionShadow());
-                inFixList.push(new RemainderInFixExpressionShadow());
-                inFixList.push(new RightShiftSignedInFixExpressionShadow());
-                inFixList.push(new RightShiftUnSignedInFixExpressionShadow());
-                inFixList.push(new TimesInFixExpressionShadow());
-                inFixList.push(new XorInFixExpressionShadow());
-                
-                postFixList.push(new DecrementPostFixExpressionShadow());
-                postFixList.push(new IncrementPostFixExpressionShadow());
-                
-                preFixList.push(new ComplementPrefixExpressionShadow());
-                preFixList.push(new DecrementPrefixExpressionShadow());
-                preFixList.push(new IncrementPrefixExpressionShadow());
-                preFixList.push(new MinusPrefixExpressionShadow());
-                preFixList.push(new NotPrefixExpressionShadow());
-                preFixList.push(new PlusPrefixExpressionShadow());
-                                
-                assignList.push(new AssignAssignmentShadow());
-                assignList.push(new BitAndAssignAssignmentShadow());
-                assignList.push(new BitOrAssignAssignmentShadow());
-                assignList.push(new DivideAssignAssignmentShadow());
-                assignList.push(new LeftShiftAssignAssignmentShadow());
-                assignList.push(new MinusAssignAssignmentShadow());
-                assignList.push(new PlusAssignAssignmentShadow());
-                assignList.push(new RemainderAssignAssignmentShadow());
-                assignList.push(new RightShiftSignedAssignAssignmentShadow());
-                assignList.push(new RightShiftUnSignedAssignAssignmentShadow());
-                assignList.push(new TimesAssignAssignmentShadow());
-                
+                            
                 
 
                 for (Map.Entry<BoaProtoTuple, LinkedList<VisitStatement>> entry : shadowedMap.entrySet()) {
@@ -287,35 +243,25 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
 								defaultSc.getBody().addStatement(s.clone());
                         }else{
                             LinkedList<Expression> listExp = new LinkedList<Expression>();
-                            String manyToOne = visit.getComponent().type.toString();                            
-                            LinkedList<BoaShadowType> iterList = null ;
-                            // Hndling one-Many mapping
-                            if(manyToOne.equals("InfixExpression"))                            {   
-                                iterList = inFixList;
-                            }else if(manyToOne.equals("PostfixExpression")){
-                                iterList = postFixList;
-                            }else if(manyToOne.equals("PrefixExpression")){
-                                iterList = preFixList;
-                            }else if(manyToOne.equals("Assignment")){
-                                iterList = assignList;
-                            }
                             
-                            if(iterList != null){
+                            // Checking if shadow has a one-Many mapping
+                            if((((BoaShadowType)visit.getComponent().type).getKindExpressionsOneToMany(n.env)) == null){
+                                listExp.add(((BoaShadowType)visit.getComponent().type).getKindExpression(n.env));
+                                sc = new SwitchCase(false,b,listExp);
+                                sc.getBody().getStatements().add(new BreakStatement());
+                                switchS.addCase(sc);
+                            } else{
 
                                 b.getStatements().add(new BreakStatement());
                                 
-                                for (BoaShadowType sty : iterList ) {
+                                for (Expression styKind : (((BoaShadowType)visit.getComponent().type).getKindExpressionsOneToMany(n.env)) ) {
                                     
                                     listExp = new LinkedList<Expression>();
-                                    listExp.add(sty.getKindExpression(n.env));
+                                    listExp.add(styKind);
                                     sc = new SwitchCase(false,b,listExp);
                                     switchS.addCase(sc);                                
-                                }
-                            }else{
-                            listExp.add(((BoaShadowType)visit.getComponent().type).getKindExpression(n.env));
-                            sc = new SwitchCase(false,b,listExp);
-                            sc.getBody().getStatements().add(new BreakStatement());
-                            switchS.addCase(sc);
+                                }                                
+
                             }
                         }
 

@@ -17,6 +17,8 @@
  */
 package boa.types.shadow;
 
+import java.util.*;
+
 import boa.compiler.ast.Call;
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.ast.Factor;
@@ -91,6 +93,29 @@ public class AssignmentShadow extends BoaShadowType  {
     public Expression getKindExpression(final SymbolTable env) {
         return getKindExpression("ExpressionKind", "ASSIGN", new ExpressionKindProtoMap(), env);
     }
+
+    /** {@inheritDoc} */
+    @Override
+    public LinkedList<Expression> getKindExpressionsOneToMany(final SymbolTable env) {
+        LinkedList<Expression> assignList = new LinkedList<Expression>(); 
+        
+        assignList.add(getKindExpression("ExpressionKind", "ASSIGN", new ExpressionKindProtoMap(), env));
+        assignList.add(getKindExpression("ExpressionKind", "ASSIGN_BITAND", new ExpressionKindProtoMap(), env));
+        assignList.add(getKindExpression("ExpressionKind", "ASSIGN_BITXOR", new ExpressionKindProtoMap(), env));
+        assignList.add(getKindExpression("ExpressionKind", "ASSIGN_BITOR", new ExpressionKindProtoMap(), env));
+        assignList.add(getKindExpression("ExpressionKind", "ASSIGN_DIV", new ExpressionKindProtoMap(), env));
+        assignList.add(getKindExpression("ExpressionKind", "ASSIGN_LSHIFT", new ExpressionKindProtoMap(), env));
+        assignList.add(getKindExpression("ExpressionKind", "ASSIGN_SUB", new ExpressionKindProtoMap(), env));
+        assignList.add(getKindExpression("ExpressionKind", "ASSIGN_ADD", new ExpressionKindProtoMap(), env));
+        assignList.add(getKindExpression("ExpressionKind", "ASSIGN_MOD", new ExpressionKindProtoMap(), env));
+        assignList.add(getKindExpression("ExpressionKind", "ASSIGN_RSHIFT", new ExpressionKindProtoMap(), env));
+        assignList.add(getKindExpression("ExpressionKind", "ASSIGN_UNSIGNEDRSHIFT", new ExpressionKindProtoMap(), env));
+        assignList.add(getKindExpression("ExpressionKind", "ASSIGN_MULT", new ExpressionKindProtoMap(), env));
+        
+
+        return assignList;  
+    }
+
 
     /** {@inheritDoc} */
     @Override

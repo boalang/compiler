@@ -17,6 +17,8 @@
  */
 package boa.types.shadow;
 
+import java.util.*;
+
 import boa.compiler.ast.Call;
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.ast.Factor;
@@ -72,6 +74,25 @@ public class PrefixExpressionShadow extends BoaShadowType  {
     @Override
     public Expression getKindExpression(final SymbolTable env) {
         return getKindExpression("ExpressionKind", "BIT_XOR", new ExpressionKindProtoMap(), env);
+    }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public LinkedList<Expression> getKindExpressionsOneToMany(final SymbolTable env) {
+        LinkedList<Expression> prefixList = new LinkedList<Expression>(); 
+        
+
+        prefixList.add(getKindExpression("ExpressionKind", "OP_DEC", new ExpressionKindProtoMap(), env));
+        prefixList.add(getKindExpression("ExpressionKind", "OP_INC", new ExpressionKindProtoMap(), env));
+        prefixList.add(getKindExpression("ExpressionKind", "OP_ADD", new ExpressionKindProtoMap(), env));
+        prefixList.add(getKindExpression("ExpressionKind", "OP_SUB", new ExpressionKindProtoMap(), env));
+        prefixList.add(getKindExpression("ExpressionKind", "LOGICAL_NOT", new ExpressionKindProtoMap(), env));
+        prefixList.add(getKindExpression("ExpressionKind", "BIT_NOT", new ExpressionKindProtoMap(), env));
+
+
+                
+        return prefixList;  
     }
 
     /** {@inheritDoc} */

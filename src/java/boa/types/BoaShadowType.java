@@ -17,6 +17,8 @@
  */
 package boa.types;
 
+import java.util.*;
+
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.ast.Factor;
 import boa.compiler.ast.Node;
@@ -102,6 +104,13 @@ public abstract class BoaShadowType extends BoaTuple {
 
 		return tree;
 	}
+
+
+    public LinkedList<Expression> getKindExpressionsOneToMany(final SymbolTable env) {
+        
+        return null;  
+    }
+
 
     /**
      * Converts a shadow type message into a concrete type message.

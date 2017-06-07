@@ -17,6 +17,8 @@
  */
 package boa.types.shadow;
 
+import java.util.*;
+
 import boa.compiler.ast.Call;
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.ast.Factor;
@@ -101,8 +103,42 @@ public class InfixExpressionShadow extends BoaShadowType  {
     /** {@inheritDoc} */
     @Override
     public Expression getKindExpression(final SymbolTable env) {
-        return getKindExpression("ExpressionKind", "BIT_XOR", new ExpressionKindProtoMap(), env);
+        
+        return getKindExpression("ExpressionKind", "BIT_XOR", new ExpressionKindProtoMap(), env);  
     }
+
+
+    /** {@inheritDoc} */
+    @Override
+    public LinkedList<Expression> getKindExpressionsOneToMany(final SymbolTable env) {
+        LinkedList<Expression> infixList = new LinkedList<Expression>(); 
+        
+        infixList.add(getKindExpression("ExpressionKind", "BIT_XOR", new ExpressionKindProtoMap(), env));
+        infixList.add(getKindExpression("ExpressionKind", "BIT_AND", new ExpressionKindProtoMap(), env));
+        infixList.add(getKindExpression("ExpressionKind", "LOGICAL_AND", new ExpressionKindProtoMap(), env));
+        infixList.add(getKindExpression("ExpressionKind", "LOGICAL_OR", new ExpressionKindProtoMap(), env));
+        infixList.add(getKindExpression("ExpressionKind", "OP_DIV", new ExpressionKindProtoMap(), env));
+        infixList.add(getKindExpression("ExpressionKind", "EQ", new ExpressionKindProtoMap(), env));
+        infixList.add(getKindExpression("ExpressionKind", "GT", new ExpressionKindProtoMap(), env));
+        infixList.add(getKindExpression("ExpressionKind", "GTEQ", new ExpressionKindProtoMap(), env));
+        infixList.add(getKindExpression("ExpressionKind", "BIT_LSHIFT", new ExpressionKindProtoMap(), env));
+        infixList.add(getKindExpression("ExpressionKind", "LT", new ExpressionKindProtoMap(), env));
+        infixList.add(getKindExpression("ExpressionKind", "LTEQ", new ExpressionKindProtoMap(), env));
+        infixList.add(getKindExpression("ExpressionKind", "OP_SUB", new ExpressionKindProtoMap(), env));
+        infixList.add(getKindExpression("ExpressionKind", "NEQ", new ExpressionKindProtoMap(), env));
+        infixList.add(getKindExpression("ExpressionKind", "BIT_OR", new ExpressionKindProtoMap(), env));
+        infixList.add(getKindExpression("ExpressionKind", "OP_ADD", new ExpressionKindProtoMap(), env));
+        infixList.add(getKindExpression("ExpressionKind", "OP_MOD", new ExpressionKindProtoMap(), env));
+        infixList.add(getKindExpression("ExpressionKind", "BIT_RSHIFT", new ExpressionKindProtoMap(), env));
+        infixList.add(getKindExpression("ExpressionKind", "BIT_UNSIGNEDRSHIFT", new ExpressionKindProtoMap(), env));
+        infixList.add(getKindExpression("ExpressionKind", "OP_MULT", new ExpressionKindProtoMap(), env));
+                
+        return infixList;  
+    }
+
+
+
+
 
     /** {@inheritDoc} */
     @Override
