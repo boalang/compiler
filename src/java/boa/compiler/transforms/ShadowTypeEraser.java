@@ -224,7 +224,6 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                         // setting default if present
                         for (final Statement s : b.getStatements())
                             defaultSc.getBody().addStatement(s.clone());
-                        defaultSc.getBody().addStatement(new BreakStatement());
                     } else {
                         // checking if shadow has a one-many mapping
                         if ((((BoaShadowType)visit.getComponent().type).getKindExpressionsOneToMany(n.env)) == null) {
@@ -270,13 +269,13 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
     }
 
     public class SubtreeEraser extends AbstractVisitorNoArgNoRet {
-        private Deque<Expression> expressionStack = new ArrayDeque<Expression>();
+        private Stack<Expression> expressionStack = new Stack<Expression>();
 
         private boolean flag = false;
-        private Deque<Boolean> flagStack = new ArrayDeque<Boolean>();
+        private Stack<Boolean> flagStack = new Stack<Boolean>();
 
         private List<Node> ops = null;
-        private Deque<List<Node>> opsStack = new ArrayDeque<List<Node>>();
+        private Stack<List<Node>> opsStack = new Stack<List<Node>>();
 
         // track nearest Expression node
         public void visit(final Expression n) {
