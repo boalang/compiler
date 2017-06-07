@@ -1,6 +1,7 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2017, Hridesh Rajan, Robert Dyer, Kaushik Nimmala
+ *                 Iowa State University of Science and Technology
+ *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +28,7 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
  * 
  * @author rdyer
  * @author hridesh
+ * @author kaushin
  */
 public class IfAllStatement extends Statement {
 	protected Component var;
