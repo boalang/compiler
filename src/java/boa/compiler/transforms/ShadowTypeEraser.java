@@ -241,6 +241,7 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                             // Setting Default if present
 							for (final Statement s : b.getStatements())
 								defaultSc.getBody().addStatement(s.clone());
+                            defaultSc.getBody().addStatement(new BreakStatement());
                         }else{
                             LinkedList<Expression> listExp = new LinkedList<Expression>();
                             
@@ -271,14 +272,13 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
 
                    
                     if(defaultSc.getBody().getStatementsSize() == 0 && wildcardBlock != null){
-                        // trying to add wildcard to default
-						for (final Statement s : wildcardBlock.getStatements())
-							defaultSc.getBody().addStatement(s.clone());
+                        if(wildcardBlock != null){
+                            // trying to add wildcard to default
+                            for (final Statement s : wildcardBlock.getStatements())
+                                defaultSc.getBody().addStatement(s.clone());
+                        }
+                        defaultSc.getBody().addStatement(new BreakStatement());
                     }
-                    if(defaultSc.getBody().getStatementsSize() == 0 ){
-                        // Setting Default to a break statement if no default is present
-                        defaultSc.getBody().getStatements().add(new BreakStatement());
-                    } 
 
                     afterTransformation.addStatement(switchS);
 
