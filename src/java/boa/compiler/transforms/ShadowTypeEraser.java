@@ -184,6 +184,7 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                 transformVisitor(n,afterShadowedMap,false,wildcardBlock);
 
             }
+
             // just clearing out variables
             shadowVisitStack = new LinkedList<VisitStatement>();
             shadowedTypePresent = false;
@@ -272,9 +273,13 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
     }
 
     public class SubtreeEraser extends AbstractVisitorNoArgNoRet {
-        private LinkedList<Expression> expressionStack = new LinkedList<Expression>();
+        private Deque<Expression> expressionStack = new ArrayDeque<Expression>();
+
         private boolean flag = false;
+        private Deque<Boolean> flagStack = new ArrayDeque<Boolean>();
+
         private List<Node> ops = null;
+        private Deque<List<Node>> opsStack = new ArrayDeque<List<Node>>();
 
         // track nearest Expression node
         public void visit(final Expression n) {
@@ -285,11 +290,16 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
 
         @Override
         public void visit(final Factor n) {
-            ops = null;
+            flagStack.push(flag);
+            opsStack.push(ops);
+
             flag = false;
             ops = n.getOps();
 
             super.visit(n);
+
+            ops = opsStack.pop();
+            flag = flagStack.pop();
         }
 
         // replacing shadow type selectors
@@ -300,9 +310,10 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
             final Factor fact = (Factor)n.getParent();
 
             if (!flag && fact.getOperand().type instanceof BoaShadowType) {
+                final Expression parentExp = expressionStack.peek();
+
                 // avoid replacing past the first selector
                 flag = true;
-                final Expression parentExp = expressionStack.peek();
 
                 // get shadow type used
                 final Identifier id = (Identifier)fact.getOperand();
