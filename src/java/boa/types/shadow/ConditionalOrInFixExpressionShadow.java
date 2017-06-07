@@ -1,6 +1,5 @@
 /*
- * Copyright 2017, Hridesh Rajan, Robert Dyer, Kaushik Nimmaladivi
- *                 Iowa State University of Science and Technology
+ * Copyright 2017, Robert Dyer, Kaushik Nimmala
  *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
