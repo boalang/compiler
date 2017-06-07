@@ -75,52 +75,52 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
         new SubtreeEraser().start(n);
     }
 
-    public class VisitorReplace extends AbstractVisitorNoArgNoRet {
-        private LinkedList<VisitStatement> visitStack = new LinkedList<VisitStatement>();
-        private LinkedList<VisitStatement> shadowVisitStack = new LinkedList<VisitStatement>();
-        private LinkedList<VisitorExpression> visitorExpStack = new LinkedList<VisitorExpression>();
+    protected class VisitTransform extends AbstractVisitorNoArgNoRet {
+        String oldId;
+        String newId;
 
-        private HashMap<BoaProtoTuple,LinkedList<VisitStatement>> beforeShadowedMap = new HashMap<BoaProtoTuple,LinkedList<VisitStatement>>();
-        private HashMap<BoaProtoTuple,LinkedList<VisitStatement>> afterShadowedMap = new HashMap<BoaProtoTuple,LinkedList<VisitStatement>>();
-        private HashMap<BoaProtoTuple,LinkedList<VisitStatement>> shadowedMap = new HashMap<BoaProtoTuple,LinkedList<VisitStatement>>();
+        public void start(final Node n, final String oldId, final String newId) {
+            this.oldId = oldId;
+            this.newId = newId;
+            n.accept(this);
+        }
+
+        @Override
+        public void visit(final Identifier n) {
+            if (n.getToken().equals(oldId)) {
+                n.setToken(newId);
+            }
+        }
+
+        @Override
+        public void visit(final Component n) {
+            super.visit(n);
+
+            if (n.type instanceof BoaShadowType) {
+                final BoaShadowType shadow = (BoaShadowType)n.type;
+
+                // change the identifier
+                final Identifier id = (Identifier)n.getType();
+                id.setToken(shadow.shadowedName());
+
+                // update types
+                n.type = n.getType().type = shadow.shadowedType;
+                n.env.set(n.getIdentifier().getToken(), n.type);
+            }
+        }
+    }
+
+    protected class VisitorReplace extends AbstractVisitorNoArgNoRet {
+        private Deque<VisitStatement> visitStack = new ArrayDeque<VisitStatement>();
+        private Deque<VisitStatement> shadowVisitStack = new ArrayDeque<VisitStatement>();
+        private Deque<VisitorExpression> visitorExpStack = new ArrayDeque<VisitorExpression>();
+
+        private HashMap<BoaProtoTuple, LinkedList<VisitStatement>> beforeShadowedMap = new HashMap<BoaProtoTuple, LinkedList<VisitStatement>>();
+        private HashMap<BoaProtoTuple, LinkedList<VisitStatement>> afterShadowedMap = new HashMap<BoaProtoTuple, LinkedList<VisitStatement>>();
+        private HashMap<BoaProtoTuple, LinkedList<VisitStatement>> shadowedMap = new HashMap<BoaProtoTuple, LinkedList<VisitStatement>>();
 
         private Block wildcardBlock = null;
         private boolean shadowedTypePresent = false;
-
-        public class VisitTransform extends AbstractVisitorNoArgNoRet {
-            String oldId;
-            String newId;
-
-            public void start(final Node n, final String oldId, final String newId) {
-                this.oldId = oldId;
-                this.newId = newId;
-                n.accept(this);
-            }
-
-            @Override
-            public void visit(final Identifier n) {
-                if (n.getToken().equals(oldId)) {
-                    n.setToken(newId);
-                }
-            }
-
-            @Override
-            public void visit(final Component n) {
-                super.visit(n);
-
-                if (n.type instanceof BoaShadowType) {
-                    final BoaShadowType shadow = (BoaShadowType)n.type;
-
-                    // change the identifier
-                    final Identifier id = (Identifier)n.getType();
-                    id.setToken(shadow.shadowedName());
-
-                    // update types
-                    n.type = n.getType().type = shadow.shadowedType;
-                    n.env.set(n.getIdentifier().getToken(), n.type);
-                }
-            }
-        }
 
         @Override
         public void visit(final VisitStatement n) {
@@ -156,12 +156,12 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
 
                 if (parentVisit.isBefore()) {
                     if (!beforeShadowedMap.containsKey(key)) {
-                        beforeShadowedMap.put(key,new LinkedList<VisitStatement>());
+                        beforeShadowedMap.put(key, new LinkedList<VisitStatement>());
                     }
                     beforeShadowedMap.get(key).add(parentVisit);
                 } else {
                     if (!afterShadowedMap.containsKey(key)) {
-                        afterShadowedMap.put(key,new LinkedList<VisitStatement>());
+                        afterShadowedMap.put(key, new LinkedList<VisitStatement>());
                     }
                     afterShadowedMap.get(key).add(parentVisit);
                 }
@@ -182,8 +182,8 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                     }
                 }
 
-                transformVisitor(n,beforeShadowedMap,true,wildcardBlock);
-                transformVisitor(n,afterShadowedMap,false,wildcardBlock);
+                transformVisitor(n, beforeShadowedMap, true, wildcardBlock);
+                transformVisitor(n, afterShadowedMap, false, wildcardBlock);
             }
 
             // just clearing out variables
@@ -257,7 +257,7 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                 afterTransformation.addStatement(switchS);
 
                 // create a new VisitStatement and add everything to it
-                final VisitStatement shadowedTypeVisit = new VisitStatement(beforeBool, new Component(new Identifier("node"),new Identifier(shadowedType.toString())), afterTransformation);
+                final VisitStatement shadowedTypeVisit = new VisitStatement(beforeBool, new Component(new Identifier("node"), new Identifier(shadowedType.toString())), afterTransformation);
 
                 shadowedTypeVisit.env = n.env;
                 shadowedTypeVisit.getComponent().env = n.env;
@@ -268,14 +268,14 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
         }
     }
 
-    public class SubtreeEraser extends AbstractVisitorNoArgNoRet {
-        private Stack<Expression> expressionStack = new Stack<Expression>();
+    protected class SubtreeEraser extends AbstractVisitorNoArgNoRet {
+        private Deque<Expression> expressionStack = new ArrayDeque<Expression>();
 
         private boolean flag = false;
-        private Stack<Boolean> flagStack = new Stack<Boolean>();
+        private Deque<Boolean> flagStack = new ArrayDeque<Boolean>();
 
-        private List<Node> ops = null;
-        private Stack<List<Node>> opsStack = new Stack<List<Node>>();
+        private List<Node> ops = new ArrayList<Node>();
+        private Deque<List<Node>> opsStack = new ArrayDeque<List<Node>>();
 
         // track nearest Expression node
         public void visit(final Expression n) {
