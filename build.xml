@@ -84,7 +84,6 @@
 		<apply executable="protoc" parallel="true">
 			<arg value="--proto_path=${src.proto}" />
 			<arg value="--java_out=src/compiled-proto" />
-			<srcfile />
 			<fileset dir="${src.proto}" includes="*.proto" />
 		</apply>
 	</target>
