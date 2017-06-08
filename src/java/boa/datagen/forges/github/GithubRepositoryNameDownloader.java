@@ -6,12 +6,17 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Comparator;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
 
 /**
  * author: Nitin Mukesh Tiwari
  * GithubRepositoryNameDownloader: This class downloads all the repository names from github.com.
  * Pre-requisite: Class depends of github authentication tokens, which are provided from TokenList
- * Last used: This class was last used for september 2016 dataset creation
+ * Last used: This class was last used for May 2017 dataset creation
  */
 public class GithubRepositoryNameDownloader {
     public static void main(String[] args) {
@@ -65,37 +70,40 @@ public class GithubRepositoryNameDownloader {
             int numOfRemainingRequests = mc.getNumberOfRemainingLimit();
             long time = mc.getLimitResetTime();
             while (true) {
+    			Gson parser = new Gson();
                 mc.getResponseJson();
                 pageContent = mc.getContent();
                 if (pageContent.equals("[]"))
                     break;
                 if (!pageContent.isEmpty()) {
                     pageNumber++;
-                    FileIO.writeFileContents(new File(outDir + "/page-" + pageNumber + ".json"), pageContent);
+                    JsonArray repos = parser.fromJson(pageContent, JsonElement.class).getAsJsonArray();
+                    JsonArray reducedRepos = new JsonArray();
+                    for(int i = 0; i< repos.size(); i++){
+                    	JsonObject repo = repos.get(i).getAsJsonObject();
+                    	String name = repo.get("full_name").getAsString();
+                    	String idNum = repo.get("id").getAsString();
+                    	repo = new JsonObject();
+                    	repo.addProperty("id", idNum);
+                    	repo.addProperty("full_name", name);
+                    	reducedRepos.add(repo);
+                    }
+                    FileIO.writeFileContents(new File(outDir + "/page-" + pageNumber + ".json"), reducedRepos.getAsString());
                     id = getLastId(pageContent);
                 }
                 numOfRemainingRequests--;
                 int diff = (int) (System.currentTimeMillis()/1000 - time);
                 if (diff > 0) {
                     mc = new MetadataCacher(url + "?since=" + id, tok.getUserName(), tok.getToken());
-//                    if (mc.authenticate())
-//                        System.out.println("Authentication successful!");
-//                    else
-//                        continue;
                     if (!mc.authenticate())
                         continue;
                     numOfRemainingRequests = mc.getNumberOfRemainingLimit();;
                     time = mc.getLimitResetTime();
                 }
                 else if (numOfRemainingRequests <= 0) {
-//                    System.out.println("Waiting " + (1-diff) + " seconds for resetting limit");
                 	System.out.println("Current token got exhausted, going for next token");
                     tok = tokens.getNextAuthenticToken(url + "?since=" + id);
                     mc = new MetadataCacher(url + "?since=" + id, tok.getUserName(), tok.getToken());
-//                    if (mc.authenticate())
-//                        System.out.println("Authentication successful!");
-//                    else
-//                        continue;
                     if (!mc.authenticate())
                         continue;
                     numOfRemainingRequests = mc.getNumberOfRemainingLimit();;
@@ -103,8 +111,6 @@ public class GithubRepositoryNameDownloader {
                 }
                 else {
                     mc = new MetadataCacher(url + "?since=" + id, tok.getUserName(), tok.getToken());
-//                    if (mc.authenticate())
-//                        System.out.println("Authentication successful!");
                     if (!mc.authenticate())
                         System.out.println("Authentication Failed!");
                 }
