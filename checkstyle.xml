@@ -1,11 +1,15 @@
 <?xml version="1.0"?>
 <!DOCTYPE module PUBLIC
-          "-//Puppy Crawl//DTD Check Configuration 1.3//EN"
-          "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
+    "-//Puppy Crawl//DTD Check Configuration 1.3//EN"
+    "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
 
 <!-- the checks in this file are based off the Google Style Guide for Java -->
 <!-- See https://google.github.io/styleguide/javaguide.html -->
 <module name = "Checker">
+    <module name="SuppressionFilter">
+        <property name="file" value="checkstyle-suppress.xml" />
+    </module>
+
     <!--======
     = ERRORS =
     =======-->
@@ -132,15 +136,6 @@
                           Naming Conventions
         http://checkstyle.sourceforge.net/config_naming.html
         =================================================-->
-
-        <!-- The Check validate abbreviations (consecutive capital letters) length in identifier name, it also allows to enforce camel case naming.
-             See http://checkstyle.sourceforge.net/config_naming.html#AbbreviationAsWordInName -->
-		<!-- NOTE: differs from the Google style guide -->
-        <module name="AbbreviationAsWordInName">
-            <property name="ignoreFinal" value="true"/> <!-- changed from false -->
-            <property name="allowedAbbreviations" value="JSON, LCOO"/> <!-- added -->
-            <property name="allowedAbbreviationLength" value="3"/> <!-- changed from 1 -->
-        </module>
 
         <!-- Validates identifiers for class type parameters.
              See http://checkstyle.sourceforge.net/config_naming.html#ClassTypeParameterName -->
