@@ -955,6 +955,9 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 				if (!v.isFunction())
 					rhs = ((BoaFunction)rhs).getType();
 			}
+
+			if (rhs instanceof BoaAny)
+				throw new TypeCheckException(n.getInitializer(), "functions without a return type can not be used as initializers");
 		}
 
 		BoaType lhs;
