@@ -1,6 +1,7 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2017, Hridesh Rajan, Robert Dyer, 
+ *                 Iowa State University of Science and Technology
+ *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -108,6 +109,15 @@ public class Block extends Statement {
 			newStmt.setParent(this);
 			statements.set(index, newStmt);
 		}
+	}
+
+	public Block setPositions() {
+		this.beginLine = statements.get(0).beginLine;
+		this.beginColumn = statements.get(0).beginColumn;
+		this.endLine = statements.get(statements.size() - 1).endLine;
+		this.endColumn = statements.get(statements.size() - 1).endColumn;
+
+		return this;
 	}
 
 	public Block clone() {
