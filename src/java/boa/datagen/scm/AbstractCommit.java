@@ -189,16 +189,16 @@ public abstract class AbstractCommit {
 			} else
 				if (debug)
 					System.err.println("Accepted JLS2: revision " + id + ": file " + path);
-		}else if(lowerPath.endsWith(".java") && parse){
+		}else if(lowerPath.endsWith(".js") && parse){
 			final String content = getFileContents(path);
 
 			fb.setKind(FileKind.SOURCE_JS_JLS2);
-			if (!parseJavaScriptFile(path, fb, content, JavaScriptCore.VERSION_1_4, org.eclipse.wst.jsdt.core.dom.AST.JLS2, false, astWriter, revKey + keyDelim + path)) {
+			if (!parseJavaScriptFile(path, fb, content, JavaScriptCore.VERSION_1_2, org.eclipse.wst.jsdt.core.dom.AST.JLS2, false, astWriter, revKey + keyDelim + path)) {
 				if (debug)
 					System.err.println("Found JLS2 parse error in: revision " + id + ": file " + path);
 
 				fb.setKind(FileKind.SOURCE_JS_JLS3);
-				if (!parseJavaScriptFile(path, fb, content, JavaScriptCore.VERSION_1_5, org.eclipse.wst.jsdt.core.dom.AST.JLS3, false, astWriter, revKey + keyDelim + path)) {
+				if (!parseJavaScriptFile(path, fb, content, JavaScriptCore.VERSION_1_3, org.eclipse.wst.jsdt.core.dom.AST.JLS3, false, astWriter, revKey + keyDelim + path)) {
 					if (debug)
 						System.err.println("Found JLS3 parse error in: revision " + id + ": file " + path);
 
@@ -233,7 +233,7 @@ public abstract class AbstractCommit {
 			parser.setSource(content.toCharArray());
 
 			final Map options = JavaCore.getOptions();
-			JavaCore.setComplianceOptions(compliance, options);
+			JavaScriptCore.setComplianceOptions(compliance, options);
 			parser.setCompilerOptions(options);
 
 			JavaScriptUnit cu;
