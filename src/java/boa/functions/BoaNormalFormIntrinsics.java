@@ -73,7 +73,7 @@ public class BoaNormalFormIntrinsics {
 	 */
 	@FunctionSpec(name = "reduce", returnType = "Expression", formalParameters = { "Expression" })
 	public static Expression reduce(final Expression e) throws Exception {
-		final Object o = reduce_internal(e);
+		final Object o = internalReduce(e);
 		if (o instanceof Expression)
 			return (Expression)o;
 		return createLiteral(o.toString());
@@ -85,11 +85,11 @@ public class BoaNormalFormIntrinsics {
 	 * @param e the expression to reduce
 	 * @return the reduced form of the expression, either as a Number or a complex Expression
 	 */
-	private static Object reduce_internal(final Expression e) throws Exception {
-        final Expression.Builder b;
+	private static Object internalReduce(final Expression e) throws Exception {
+		final Expression.Builder b;
 		final List<Object> results = new ArrayList<Object>();
 		for (final Expression sub : e.getExpressionsList())
-			results.add(reduce_internal(sub));
+			results.add(internalReduce(sub));
 
 		final List<Object> results2 = new ArrayList<Object>();
 		Double dval = 0.0;
@@ -111,11 +111,20 @@ public class BoaNormalFormIntrinsics {
 				if (results.size() == 1) {
 					final Object o = results.get(0);
 					if (o instanceof Expression)
-						return reduce_internal(e.getExpressions(0));
+						return internalReduce(e.getExpressions(0));
 					if (o instanceof Double)
 						return ((Double)o).doubleValue();
 					return ((Long)o).longValue();
 				}
+
+				// bring children up if the child node is an add
+				for (int i = 0; i < results.size(); i++)
+					if (results.get(i) instanceof Expression && ((Expression)results.get(i)).getKind() == ExpressionKind.OP_ADD) {
+						final Expression subExp = (Expression)results.get(i);
+						results.remove(i);
+						for (int j = 0; j < subExp.getExpressionsCount(); j++)
+							results.add(i + j, internalReduce(subExp.getExpressions(j)));
+					}
 
 				// if multiple arguments, try to add them all together
 				for (final Object o : results) {
@@ -157,7 +166,7 @@ public class BoaNormalFormIntrinsics {
 					}
 
 					// check for identity
-					if (results2.get(0) instanceof Number && ((Number)results2.get(0)).doubleValue() == 0.0)
+					if (results2.get(0) instanceof Number && ((Number)results2.get(0)).doubleValue() == 0.0 && results2.size() > 1)
 						results2.remove(0);
 				}
 
@@ -176,6 +185,20 @@ public class BoaNormalFormIntrinsics {
 						return -((Double)o).doubleValue();
 					return -((Long)o).longValue();
 				}
+
+				// bring children up if the child node is an add
+				for (int i = 0; i < results.size(); i++)
+					if (results.get(i) instanceof Expression && ((Expression)results.get(i)).getKind() == ExpressionKind.OP_SUB) {
+						final Expression subExp = (Expression)results.get(i);
+						if (subExp.getExpressionsCount() > 1) {
+							results.remove(i);
+							for (int j = 0; j < subExp.getExpressionsCount(); j++)
+								if (i == 0 || j == 0)
+									results.add(i + j, internalReduce(subExp.getExpressions(j)));
+								else
+									results.add(i + j, negate(internalReduce(subExp.getExpressions(j))));
+						}
+					}
 
 				// if multiple arguments, try to subtract them all together
 				for (final Object o : results) {
@@ -222,7 +245,7 @@ public class BoaNormalFormIntrinsics {
 				}
 
 				if (results2.size() > 1) {
-					final Object lhs = results2.get(0);
+					Object lhs = results2.get(0);
 
 					// check for elimination
 					if (lhs instanceof Expression) {
@@ -230,13 +253,32 @@ public class BoaNormalFormIntrinsics {
 						if (idx > 0) {
 							results2.remove(idx);
 							results2.set(0, 0L);
+							lhs = results2.get(0);
 						}
 					}
 
+					// group common terms
+					for (int i = 0; i < results2.size(); i++) {
+						int count = 1;
+
+						for (int j = i + 1; j < results2.size(); j++)
+							if (results2.get(i).equals(results2.get(j)))
+								count++;
+
+						if (count > 1) {
+							lhs = results2.get(i);
+							while (results2.remove(lhs))
+								;
+							results2.add(i, createExpression(ExpressionKind.OP_MULT, createLiteral("" + count), (Expression)lhs));
+						}
+
+                        lhs = results2.get(0);
+					}
+
 					// check for identity
-					if (lhs instanceof Number && ((Number)lhs).doubleValue() == 0.0) {
+					if (lhs instanceof Number && ((Number)lhs).doubleValue() == 0.0 && results2.size() > 1) {
 						results2.remove(0);
-						results2.set(0, createExpression(ExpressionKind.OP_SUB, (Expression)results2.get(0)));
+						results2.set(0, negate(results2.get(0)));
 					}
 				}
 
@@ -431,7 +473,7 @@ LAMBDA
 
 				b.clearExpressions();
 				for (final Object o : results)
-                    b.addExpressions((Expression)o);
+					b.addExpressions((Expression)o);
 
 				return b.build();
 
@@ -452,6 +494,18 @@ LAMBDA
 		if (result == (long)result)
 			return (long)result;
 		return result;
+	}
+
+	private static Object negate(final Object o) {
+		if (o instanceof Double)
+			return - ((Double)o).doubleValue();
+		if (o instanceof Long)
+			return - ((Long)o).longValue();
+
+		final Expression e = (Expression)o;
+		if (e.getKind() == ExpressionKind.OP_SUB && e.getExpressionsCount() == 1)
+			return e.getExpressions(0);
+		return createExpression(ExpressionKind.OP_SUB, e);
 	}
 
 	/**
