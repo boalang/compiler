@@ -132,6 +132,8 @@
 
 	<target name="compile-parser" depends="-parser,-check-deps" description="Compile the parser.">
 		<javac includeantruntime="true" srcdir="${src.parser.paths}" destdir="build/classes" debug="${debug.enabled}" debuglevel="${debug.level}">
+			<compilerarg value="-Xlint:unchecked"/>
+			<compilerarg value="-Xlint:deprecation"/>
 			<classpath refid="project.class.path" />
 		</javac>
 	</target>
@@ -145,6 +147,8 @@
 	<!-- main compilation targets -->
 	<target name="compile" depends="compile-protobuf,compile-parser,-check-deps" description="Compile the compiler.">
 		<javac includeantruntime="true" srcdir="${src.paths}" destdir="build/classes" debug="${debug.enabled}" debuglevel="${debug.level}">
+			<compilerarg value="-Xlint:unchecked"/>
+			<compilerarg value="-Xlint:deprecation"/>
 			<classpath refid="project.class.path" />
 		</javac>
 	</target>
@@ -290,6 +294,8 @@
 
 	<target name="-compile-tests" depends="compile,-check-deps">
 		<javac includeantruntime="true" srcdir="src/test" destdir="build/tests" debug="${debug.enabled}" debuglevel="${debug.level}">
+			<compilerarg value="-Xlint:unchecked"/>
+			<compilerarg value="-Xlint:deprecation"/>
 			<classpath refid="project.class.path" />
 		</javac>
 	</target>
