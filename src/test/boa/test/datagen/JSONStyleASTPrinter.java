@@ -90,6 +90,7 @@ public class JSONStyleASTPrinter extends Indenter implements IASTPrinter {
         }
     }
 
+    @SuppressWarnings("unchecked")
     private static final Set<Class<? extends Object>> JSON_ALLOWED_WRAPPER_TYPES = new HashSet<Class<? extends Object>>(
             Arrays.asList(Boolean.class, Byte.class, Short.class, Integer.class, Long.class, Float.class, Double.class,
                     ArrayList.class));
