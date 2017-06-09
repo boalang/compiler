@@ -547,10 +547,8 @@ LAMBDA
 	 *
 	 * @author rdyer
 	 */
-	public static class ExpressionComparator implements Comparator {
-		public int compare(final Object o1, final Object o2) {
-			final Expression e1 = (Expression)o1;
-			final Expression e2 = (Expression)o2;
+	public static class ExpressionComparator implements Comparator<Expression> {
+		public int compare(final Expression e1, final Expression e2) {
 			return BoaAstIntrinsics.prettyprint(e1).compareTo(BoaAstIntrinsics.prettyprint(e2));
 		}
 	}
@@ -771,11 +769,11 @@ LAMBDA
 							if (i == j || exp2.getKind() != exp.getKind())
 								continue;
 
-							final TreeSet<Expression> s1 = new TreeSet(comparator);
+							final TreeSet<Expression> s1 = new TreeSet<Expression>(comparator);
 							s1.addAll(exp.getExpressionsList());
 							s1.removeAll(exp2.getExpressionsList());
 
-							final TreeSet<Expression> s2 = new TreeSet(comparator);
+							final TreeSet<Expression> s2 = new TreeSet<Expression>(comparator);
 							s2.addAll(exp2.getExpressionsList());
 							s2.removeAll(exp.getExpressionsList());
 
