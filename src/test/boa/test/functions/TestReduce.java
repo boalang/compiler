@@ -84,9 +84,9 @@ public class TestReduce {
 			{ "+ + + +x", "x" },
 
 			{ "-x", "-x" },
-			{ "- -x", "- -x" }, // FIXME should be x
-			{ "- - -x", "- - -x" }, // FIXME should be -x
-			{ "- - - -x", "- - - -x" }, // FIXME should be x
+			{ "- -x", "x" },
+			{ "- - -x", "-x" },
+			{ "- - - -x", "x" },
 
 			{ "5.0 + x + 1", "6.0 + x" },
 			{ "5.0 - x - 1", "4.0 - x" },

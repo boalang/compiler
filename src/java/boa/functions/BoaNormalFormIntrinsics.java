@@ -179,8 +179,17 @@ public class BoaNormalFormIntrinsics {
 				// handle cases like '-x' or '-3'
 				if (results.size() == 1) {
 					final Object o = results.get(0);
+
+					// double negatives
+					if (isNegative(o)) {
+						final Object neg = negate(o);
+						if (neg instanceof Expression)
+							return internalReduce((Expression)neg);
+						return neg;
+					}
+
 					if (o instanceof Expression)
-						return e;
+						return negate(o);
 					if (o instanceof Double)
 						return -((Double)o).doubleValue();
 					return -((Long)o).longValue();
