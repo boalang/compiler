@@ -54,7 +54,7 @@ public class BoaAstIntrinsics {
 	private static Context context;
 	private static MapFile.Reader map, commentsMap, issuesMap;
 
-	public static enum AST_COUNTER {
+	public static enum ASTCOUNTER {
 		GETS_ATTEMPTED,
 		GETS_SUCCEED,
 		GETS_FAILED,
@@ -90,7 +90,7 @@ public class BoaAstIntrinsics {
 				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS8)
 			return emptyAst;
 
-		context.getCounter(AST_COUNTER.GETS_ATTEMPTED).increment(1);
+		context.getCounter(ASTCOUNTER.GETS_ATTEMPTED).increment(1);
 
 		final String rowName = f.getKey() + "!!" + f.getName();
 
@@ -100,31 +100,31 @@ public class BoaAstIntrinsics {
 		try {
 			final BytesWritable value = new BytesWritable();
 			if (map.get(new Text(rowName), value) == null) {
-				context.getCounter(AST_COUNTER.GETS_FAIL_MISSING).increment(1);
+				context.getCounter(ASTCOUNTER.GETS_FAIL_MISSING).increment(1);
 			} else {
 				final CodedInputStream _stream = CodedInputStream.newInstance(value.getBytes(), 0, value.getLength());
 				// defaults to 64, really big ASTs require more
 				_stream.setRecursionLimit(Integer.MAX_VALUE);
 				final ASTRoot root = ASTRoot.parseFrom(_stream);
-				context.getCounter(AST_COUNTER.GETS_SUCCEED).increment(1);
+				context.getCounter(ASTCOUNTER.GETS_SUCCEED).increment(1);
 				return root;
 			}
 		} catch (final InvalidProtocolBufferException e) {
 			e.printStackTrace();
-			context.getCounter(AST_COUNTER.GETS_FAIL_BADPROTOBUF).increment(1);
+			context.getCounter(ASTCOUNTER.GETS_FAIL_BADPROTOBUF).increment(1);
 		} catch (final IOException e) {
 			e.printStackTrace();
-			context.getCounter(AST_COUNTER.GETS_FAIL_MISSING).increment(1);
+			context.getCounter(ASTCOUNTER.GETS_FAIL_MISSING).increment(1);
 		} catch (final RuntimeException e) {
 			e.printStackTrace();
-			context.getCounter(AST_COUNTER.GETS_FAIL_MISSING).increment(1);
+			context.getCounter(ASTCOUNTER.GETS_FAIL_MISSING).increment(1);
 		} catch (final Error e) {
 			e.printStackTrace();
-			context.getCounter(AST_COUNTER.GETS_FAIL_BADPROTOBUF).increment(1);
+			context.getCounter(ASTCOUNTER.GETS_FAIL_BADPROTOBUF).increment(1);
 		}
 
 		System.err.println("error with ast: " + rowName);
-		context.getCounter(AST_COUNTER.GETS_FAILED).increment(1);
+		context.getCounter(ASTCOUNTER.GETS_FAILED).increment(1);
 		return emptyAst;
 	}
 
@@ -720,6 +720,7 @@ public class BoaAstIntrinsics {
 			case '.':
 			case '\t':
 				lastStart = i + 1;
+				break;
 			default:
 				break;
 			}

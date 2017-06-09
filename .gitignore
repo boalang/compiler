@@ -3,3 +3,6 @@ dist/
 compile/
 output/
 .idea/
+/bin/
+/.classpath
+/.project

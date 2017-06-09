@@ -1,6 +1,7 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ *                 Iowa State University of Science and Technology
+ *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,10 +27,9 @@ import java.util.Map;
  * formal parameters.
  * 
  * @author anthonyu
+ * @author rdyer
  */
 public class BoaFunction extends BoaType {
-	private static final Map<String, String> funcNames = new HashMap<String, String>();
-
 	private BoaType type;
 	private BoaType[] formalParameters;
 	private String name;
@@ -243,19 +243,11 @@ public class BoaFunction extends BoaType {
 	@Override
 	public String toJavaType() {
 		String s = cleanType(type.toJavaType()) + "_";
+
 		for (final BoaType t : this.formalParameters)
 			s += "_" + cleanType(t.toJavaType());
-		// use numbers for each unique type, to avoid generating really long filenames
-		if (!funcNames.containsKey(s))
-			funcNames.put(s, "BoaFunc_" + funcNames.size());
-		return funcNames.get(s);
-	}
 
-	private String cleanType(String s) {
-		final String s2 = s.replace('<', '_').replace('>', '_').replaceAll(",\\s+", "_").replaceAll("\\[\\]", "Array");
-		if (!s2.contains("."))
-			return s2;
-		return s2.substring(s2.lastIndexOf(".") + 1);
+		return shortenedType(s, "BoaFunc");
 	}
 
 	/** {@inheritDoc} */

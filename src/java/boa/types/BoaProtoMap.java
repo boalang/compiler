@@ -1,6 +1,7 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2017, Hridesh Rajan, Robert Dyer, 
+ *                 Iowa State University of Science and Technology
+ *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -77,6 +78,8 @@ public class BoaProtoMap extends BoaMap {
 	/** {@inheritDoc} */
 	@Override
 	public String toString() {
+		if (getEnumClass() == null)
+			return "BoaProtoMap";
 		final String s = getEnumClass().getName();
 		return s.substring(s.lastIndexOf("$") + 1);
 	}

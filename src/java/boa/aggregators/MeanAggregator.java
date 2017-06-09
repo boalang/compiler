@@ -28,9 +28,17 @@ abstract class MeanAggregator extends Aggregator {
 
 	public void count(final String metadata) {
 		if (metadata == null)
+		{
 			this.count++;
+		}			
 		else
-			this.count += Long.parseLong(metadata);
+		{
+			try {
+				this.count += Long.parseLong(metadata);
+			} catch (NumberFormatException e) {
+				this.count += (long)Double.parseDouble(metadata);
+			}
+		}
 	}
 
 	/** {@inheritDoc} */

@@ -35,7 +35,6 @@ public class BoaStringIntrinsics {
 	 *            A {@link String} to remove whitespace
 	 * 
 	 * @return A copy of <i>s</i> with all leading and trailing whitespace removed.
-	 * 
 	 */
 	@FunctionSpec(name = "trim", returnType = "string", formalParameters = { "string" })
 	public static String trim(final String s) {
@@ -50,7 +49,6 @@ public class BoaStringIntrinsics {
 	 * 
 	 * @return A copy of <i>s</i> with all characters converted to lower case,
 	 *         as defined by Unicode.
-	 * 
 	 */
 	@FunctionSpec(name = "lowercase", returnType = "string", formalParameters = { "string" })
 	public static String lowerCase(final String s) {
@@ -65,7 +63,6 @@ public class BoaStringIntrinsics {
 	 * 
 	 * @return A copy of <i>s</i> with all characters converted to upper case,
 	 *         as defined by Unicode.
-	 * 
 	 */
 	@FunctionSpec(name = "uppercase", returnType = "string", formalParameters = { "string" })
 	public static String upperCase(final String s) {
@@ -218,9 +215,9 @@ public class BoaStringIntrinsics {
 	}
 
 	/**
-	 * Search for a match of the regular expression <em>r</em> within <em>s</em>
-	 * , and return a boolean value indicating whether a match was found. (The
-	 * regular expression syntax is that of PCRE. <http://www.pcre.org/>)
+	 * Search for a match of the regular expression <em>r</em> within <em>s</em>,
+	 * and return a boolean value indicating whether a match was found. (The
+	 * regular expression syntax is that of <a href="http://www.pcre.org/">PCRE</a>.)
 	 * 
 	 * @param r
 	 *            A {@link String} containing a regular expression
@@ -238,8 +235,8 @@ public class BoaStringIntrinsics {
 	}
 
 	/**
-	 * Search for a match of the regular expression <em>r</em> within <em>s</em>
-	 * , and return an array consisting of character positions within <em>s</em>
+	 * Search for a match of the regular expression <em>r</em> within <em>s</em>,
+	 * and return an array consisting of character positions within <em>s</em>
 	 * defined by the match. Positions 0 and 1 of the array report the location
 	 * of the match of the entire expression, subsequent pairs report the
 	 * location of matches of successive parenthesized subexpressions.
@@ -273,13 +270,12 @@ public class BoaStringIntrinsics {
 	}
 
 	/**
-	 * Search for a match of the regular expression <em>r</em> within <em>s</em>
-	 * , and return . The 0th string is the entire match; following elements of
+	 * Search for a match of the regular expression <em>r</em> within <em>s</em>,
+	 * and return . The 0th string is the entire match; following elements of
 	 * the array hold matches of successive parenthesized subexpressions. This
 	 * function is equivalent to using matchposns to find successive locations
 	 * of matches and created array slices of <em>s</em> with the indices
 	 * returned.
-	 * 
 	 * 
 	 * @param r
 	 *            A {@link String} containing a regular expression

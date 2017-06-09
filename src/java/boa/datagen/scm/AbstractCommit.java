@@ -136,6 +136,7 @@ public abstract class AbstractCommit {
 		return revision.build();
 	}
 
+	@SuppressWarnings("deprecation")
 	private Builder processChangeFile(String path, boolean parse, Writer astWriter, String revKey, String keyDelim) {
 		final ChangedFile.Builder fb = ChangedFile.newBuilder();
 		fb.setName(path);
@@ -315,6 +316,7 @@ public abstract class AbstractCommit {
 		return l;
 	}
 
+	@SuppressWarnings("deprecation")
 	protected ChangedFile.Builder processChangeFile(final String path, final boolean attemptParse) {
 		final ChangedFile.Builder fb = ChangedFile.newBuilder();
 		fb.setName(path);

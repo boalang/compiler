@@ -424,8 +424,9 @@ public class CFG {
 			bNode.setAstNode(root);
 			graph.mergeSeq(bNode);
 			return graph;
+        default:
+			return graph;
 		}
-		return graph;
 	}
 
 	private CFG traverse(CFGNode cfgNode, Statement root) {
