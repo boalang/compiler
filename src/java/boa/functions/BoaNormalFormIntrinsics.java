@@ -525,8 +525,17 @@ LAMBDA
 			return ((Double)o).doubleValue() < 0.0;
 		if (o instanceof Long)
 			return ((Long)o).longValue() < 0L;
+
 		final Expression e = (Expression)o;
-		return e.getKind() == ExpressionKind.OP_SUB && e.getExpressionsCount() == 1;
+		if (e.getKind() == ExpressionKind.OP_SUB && e.getExpressionsCount() == 1)
+			return true;
+
+		if (e.getKind() == ExpressionKind.OP_MULT)
+			for (int i = 0; i < e.getExpressionsCount(); i++)
+				if (isNegative(e.getExpressions(i)))
+					return true;
+
+		return false;
 	}
 
 	private static Object negate(final Object o) {
@@ -538,6 +547,19 @@ LAMBDA
 		final Expression e = (Expression)o;
 		if (e.getKind() == ExpressionKind.OP_SUB && e.getExpressionsCount() == 1)
 			return e.getExpressions(0);
+
+		if (e.getKind() == ExpressionKind.OP_MULT)
+			for (int i = 0; i < e.getExpressionsCount(); i++)
+				if (isNegative(e.getExpressions(i))) {
+					final Expression.Builder b = Expression.newBuilder(e);
+					final Object neg = negate(e.getExpressions(i));
+					if (neg instanceof Expression)
+						b.setExpressions(i, (Expression)neg);
+					else
+						b.setExpressions(i, createLiteral("" + neg));
+					return b.build();
+				}
+
 		return createExpression(ExpressionKind.OP_SUB, e);
 	}
 
