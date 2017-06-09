@@ -200,21 +200,27 @@ public class BoaNormalFormIntrinsics {
 						}
 					}
 
+				final List<Object> adds = new ArrayList<Object>();
+
 				// if multiple arguments, try to subtract them all together
 				for (final Object o : results) {
-					if (o instanceof Expression) {
-						results2.add(o);
+					if (!first && isNegative(o)) {
+						adds.add(negate(o));
 					} else {
-						if (first) {
+						if (o instanceof Expression) {
 							results2.add(o);
 						} else {
-							if (o instanceof Double)
-								dval += ((Double)o).doubleValue();
-							else
-								ival += ((Long)o).longValue();
+							if (first) {
+								results2.add(o);
+							} else {
+								if (o instanceof Double)
+									dval += ((Double)o).doubleValue();
+								else
+									ival += ((Long)o).longValue();
+							}
 						}
+						first = false;
 					}
-					first = false;
 				}
 
 				// both float and integer results, so merge them into float
@@ -272,7 +278,7 @@ public class BoaNormalFormIntrinsics {
 							results2.add(i, createExpression(ExpressionKind.OP_MULT, createLiteral("" + count), (Expression)lhs));
 						}
 
-                        lhs = results2.get(0);
+						lhs = results2.get(0);
 					}
 
 					// check for identity
@@ -283,9 +289,18 @@ public class BoaNormalFormIntrinsics {
 				}
 
 				// if it reduced to a single term, return just the term otherwise return the whole expression
+				Object result;
 				if (results2.size() == 1)
-					return results2.get(0);
-				return createExpression(e.getKind(), convertArray(results2));
+					result = results2.get(0);
+				else
+					result = createExpression(e.getKind(), convertArray(results2));
+
+				if (adds.size() > 0) {
+					adds.add(0, result);
+					result = internalReduce(createExpression(ExpressionKind.OP_ADD, convertArray(adds)));
+				}
+
+				return result;
 
 			case OP_MULT:
 				dval = 1.0;
@@ -494,6 +509,15 @@ LAMBDA
 		if (result == (long)result)
 			return (long)result;
 		return result;
+	}
+
+	private static boolean isNegative(final Object o) {
+		if (o instanceof Double)
+			return ((Double)o).doubleValue() < 0.0;
+		if (o instanceof Long)
+			return ((Long)o).longValue() < 0L;
+		final Expression e = (Expression)o;
+		return e.getKind() == ExpressionKind.OP_SUB && e.getExpressionsCount() == 1;
 	}
 
 	private static Object negate(final Object o) {
