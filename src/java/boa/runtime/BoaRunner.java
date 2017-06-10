@@ -47,7 +47,6 @@ import boa.io.EmitValue;
  * @author anthonyu
  * @author rdyer
  */
-@SuppressWarnings("static-access")
 public abstract class BoaRunner extends Configured implements Tool {
 	/**
 	 * Create a {@link Job} describing the work to be done by this Boa job.
@@ -59,17 +58,11 @@ public abstract class BoaRunner extends Configured implements Tool {
 	 * @param out
 	 *            A {@link Path} containing the location of the output file
 	 * 
-	 * @param robust
-	 *            A boolean representing whether the job should ignore most
-	 *            exceptions
-	 * 
 	 * @return A {@link Job} describing the work to be done by this Boa job
 	 * @throws IOException
 	 */
-	public Job job(final Path[] ins, final Path out, final boolean robust) throws IOException {
+	public Job job(final Path[] ins, final Path out) throws IOException {
 		final Configuration configuration = getConf();
-
-		configuration.setBoolean("boa.runtime.robust", robust);
 
 		// faster local reads
 		configuration.setBoolean("dfs.client.read.shortcircuit", true);
@@ -112,7 +105,6 @@ public abstract class BoaRunner extends Configured implements Tool {
 
 	static {
 		options.addOption("p", "profile", false, "if true, profiles the execution of 1 map task");
-		options.addOption("r", "robust", false, "if true, logs non-IO exceptions and continues");
 		options.addOption("b", "block", false, "if true, wait for job to finish and show status");
 		options.addOption(Option.builder("j").longOpt("job")
 										.desc("sets the MySql ID to update with this job's status")

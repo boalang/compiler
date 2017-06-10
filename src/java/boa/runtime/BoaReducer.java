@@ -53,7 +53,6 @@ public abstract class BoaReducer extends Reducer<EmitKey, EmitValue, Text, NullW
 	protected Map<String, Aggregator> aggregators;
 
 	private Configuration conf;
-	private boolean robust;
 
 	/**
 	 * Construct a {@link BoaReducer}.
@@ -72,7 +71,6 @@ public abstract class BoaReducer extends Reducer<EmitKey, EmitValue, Text, NullW
 	@Override
 	public void setConf(final Configuration conf) {
 		this.conf = conf;
-		this.robust = conf.getBoolean("boa.runtime.robust", false);
 	}
 
 	/** {@inheritDoc} */

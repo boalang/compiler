@@ -52,7 +52,6 @@ public abstract class BoaCombiner extends Reducer<EmitKey, EmitValue, EmitKey, E
 	protected Map<String, Aggregator> aggregators;
 
 	private Configuration conf;
-	private boolean robust;
 
 	/**
 	 * Construct a {@link BoaCombiner}.
@@ -71,7 +70,6 @@ public abstract class BoaCombiner extends Reducer<EmitKey, EmitValue, EmitKey, E
 	@Override
 	public void setConf(final Configuration conf) {
 		this.conf = conf;
-		this.robust = conf.getBoolean("boa.runtime.robust", false);
 	}
 
 	/** {@inheritDoc} */

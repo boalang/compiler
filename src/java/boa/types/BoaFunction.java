@@ -18,9 +18,7 @@
 package boa.types;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * A {@link BoaType} that represents a function, its return value, and its

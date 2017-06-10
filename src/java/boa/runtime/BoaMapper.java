@@ -38,7 +38,6 @@ public abstract class BoaMapper extends Mapper<Text, BytesWritable, EmitKey, Emi
 
 	private Configuration conf;
 	protected Context context;
-	protected boolean robust;
 
 	/** {@inheritDoc} */
 	@Override
@@ -50,7 +49,6 @@ public abstract class BoaMapper extends Mapper<Text, BytesWritable, EmitKey, Emi
 	@Override
 	public void setConf(final Configuration conf) {
 		this.conf = conf;
-		this.robust = conf.getBoolean("boa.runtime.robust", false);
 	}
 
 	/** {@inheritDoc} */

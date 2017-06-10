@@ -21,7 +21,6 @@ import boa.compiler.ast.expressions.*;
 import boa.compiler.ast.literals.*;
 import boa.compiler.ast.statements.*;
 import boa.compiler.ast.types.*;
-import boa.types.*;
 
 /**
  * A specialization of the Visitor that doesn't pass up a return value.
