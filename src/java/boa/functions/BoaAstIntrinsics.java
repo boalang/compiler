@@ -867,9 +867,16 @@ public class BoaAstIntrinsics {
 			case ASSIGN_UNSIGNEDRSHIFT: return ppInfix(">>>=", e.getExpressionsList());
 
 			case LOGICAL_NOT: return ppPrefix("!",  e);
-			case OP_DEC:      return ppPrefix("--", e);
-			case OP_INC:      return ppPrefix("++", e);
 			case BIT_NOT:     return ppPrefix("~",  e);
+
+			case OP_DEC:
+				if (e.getIsPostfix())
+					return ppPostfix("--", e);
+				return ppPrefix("--", e);
+			case OP_INC:
+				if (e.getIsPostfix())
+					return ppPostfix("++", e);
+				return ppPrefix("++", e);
 
 			case PAREN: return "(" + prettyprint(e.getExpressions(0)) + ")";
 			case LITERAL: return e.getLiteral();
