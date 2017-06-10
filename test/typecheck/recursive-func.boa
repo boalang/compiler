@@ -1,0 +1,14 @@
+o: output sum of int;
+
+f := function(i: int) {
+	if (i > 0)
+		f(i - 1);
+};
+
+f2 := function(i: int) : int {
+	if (i > 0)
+		return f2(i - 1);
+    return i;
+};
+
+o << f2(5);

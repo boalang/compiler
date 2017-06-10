@@ -1,6 +1,7 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ *                 Iowa State University of Science and Technology
+ *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +23,7 @@ import java.util.List;
  * A {@link BoaType} representing an aggregator that can be emitted to.
  * 
  * @author anthonyu
+ * @author rdyer
  */
 public class BoaTable extends BoaType {
 	private BoaType type;
@@ -257,6 +259,11 @@ public class BoaTable extends BoaType {
 	/** {@inheritDoc} */
 	@Override
 	public String toString() {
-		return this.getType() + "/" + this.indexTypes + "/" + this.weightType;
+		String s = "output " + this.getType();
+		if (this.indexTypes != null)
+			s += this.indexTypes.toString();
+		if (this.weightType != null)
+			s += " weight " + this.weightType;
+		return s;
 	}
 }

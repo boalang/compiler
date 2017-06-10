@@ -23,14 +23,13 @@ import boa.types.Ast.Expression;
 import boa.types.Ast.Statement;
 import boa.types.Control.CFGNode.Builder;
 import boa.types.Control.CFGNode.CFGNodeType;
-import java.util.Collections;
 
 /**
  * Control flow graph builder node
  * @author ganeshau
  *
  */
-public class CFGNode implements Comparable {
+public class CFGNode implements Comparable<CFGNode> {
 	public static final int TYPE_METHOD = 1;
 	public static final int TYPE_CONTROL = 2;
 	public static final int TYPE_ENTRY = 3;
@@ -38,7 +37,6 @@ public class CFGNode implements Comparable {
 	public static int numOfNodes = -1;
 
 	private int id;
-	private String label;
 	private int methodId;
 	private int objectNameId;
 	private int classNameId;
@@ -64,9 +62,8 @@ public class CFGNode implements Comparable {
 	public String defVariables;
 	
 	@Override
-	public int compareTo(Object node) {
-		int nodeId=((CFGNode)node).id;
-		return nodeId - id;
+	public int compareTo(CFGNode node) {
+		return node.id - id;
 	}
 
 	public CFGNode() {
@@ -75,11 +72,6 @@ public class CFGNode implements Comparable {
 	}
 
 	public CFGNode(CFGNode tmp) {
-	}
-
-	public CFGNode(String label) {
-		this.id = ++numOfNodes;
-		this.label = label;
 	}
 
 	public CFGNode(String methodName, int kind, String className,

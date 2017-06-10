@@ -244,7 +244,7 @@ public class BoaIntrinsics {
 		return arr2;
 	}
 
-	public static <T> T[] concat(final T[] first, @SuppressWarnings("unchecked") final T[]... rest) {
+	public static <T> T[] concat(final T[] first, final T[]... rest) {
 		int totalLength = first.length;
 		for (T[] array : rest)
 			totalLength += array.length;

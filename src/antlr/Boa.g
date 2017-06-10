@@ -11,21 +11,34 @@ import boa.compiler.ast.types.*;
 }
 
 @parser::members {
+protected int getStartLine(final Token t) {
+	return t.getLine();
+}
+protected int getStartColumn(final Token t) {
+	return t.getCharPositionInLine();
+}
+protected int getEndLine(final Token t) {
+	return t.getLine();
+}
+protected int getEndColumn(final Token t) {
+	return t.getCharPositionInLine() + t.getText().length() - 1;
+}
+
 protected int getStartLine() {
-	return getCurrentToken().getLine();
+	return getStartLine(getCurrentToken());
 }
 protected int getStartColumn() {
-	return getCurrentToken().getCharPositionInLine();
+	return getStartColumn(getCurrentToken());
 }
 protected int getEndLine() {
 	Token t = _input.LT(-1);
 	if (t == null) t = getCurrentToken();
-	return t.getLine();
+	return getEndLine(t);
 }
 protected int getEndColumn() {
 	Token t = _input.LT(-1);
 	if (t == null) t = getCurrentToken();
-	return t.getCharPositionInLine() + t.getText().length() - 1;
+	return getEndColumn(t);
 }
 protected void isSemicolon() {
 	if (!getCurrentToken().getText().equals(";")) {
@@ -179,7 +192,7 @@ outputType returns [OutputType ast]
 	locals [int l, int c]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: OUTPUT (tk=SET { $ast = new OutputType(new Identifier($tk.text)); } | id=identifier { $ast = new OutputType($id.ast); }) (LPAREN el=expressionList RPAREN { $ast.setArgs($el.list); })? (LBRACKET m=component RBRACKET { $ast.addIndice($m.ast); })* OF m=component { $ast.setType($m.ast); } (WEIGHT m=component { $ast.setWeight($m.ast); })? (FORMAT LPAREN el=expressionList RPAREN)?
+	: OUTPUT (tk=SET { $ast = new OutputType((Identifier)new Identifier($tk.text).setPositions(getStartLine($tk), getStartColumn($tk), getEndLine($tk), getEndColumn($tk))); } | id=identifier { $ast = new OutputType($id.ast); }) (LPAREN el=expressionList RPAREN { $ast.setArgs($el.list); })? (LBRACKET m=component RBRACKET { $ast.addIndice($m.ast); })* OF m=component { $ast.setType($m.ast); } (WEIGHT m=component { $ast.setWeight($m.ast); })? (FORMAT LPAREN el=expressionList RPAREN)?
 	;
 
 functionType returns [FunctionType ast]
@@ -189,8 +202,8 @@ functionType returns [FunctionType ast]
 		$ast = new FunctionType();
 	}
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: FUNCTION LPAREN (id=identifier COLON t=type { $ast.addArg(new Component($id.ast, $t.ast)); } (COMMA id=identifier COLON t=type { $ast.addArg(new Component($id.ast, $t.ast)); })*)? RPAREN (COLON t=type { $ast.setType($t.ast); })?
-	| FUNCTION LPAREN ((id=identifier COLON t=type { $ast.addArg(new Component($id.ast, $t.ast)); } | identifier { notifyErrorListeners("function arguments require an identifier and type"); }) (COMMA id=identifier COLON t=type { $ast.addArg(new Component($id.ast, $t.ast)); } | COMMA identifier { notifyErrorListeners("function arguments require an identifier and type"); })*)? RPAREN (COLON t=type { $ast.setType($t.ast); })?
+	: FUNCTION LPAREN (id=identifier COLON t=type { $ast.addArg((Component)new Component($id.ast, $t.ast).setPositions($id.ast.beginLine, $id.ast.beginColumn, $t.ast.endLine, $t.ast.endColumn)); } (COMMA id=identifier COLON t=type { $ast.addArg((Component)new Component($id.ast, $t.ast).setPositions($id.ast.beginLine, $id.ast.beginColumn, $t.ast.endLine, $t.ast.endColumn)); })*)? RPAREN (COLON t=type { $ast.setType($t.ast); })?
+	| FUNCTION LPAREN ((id=identifier COLON t=type { $ast.addArg((Component)new Component($id.ast, $t.ast).setPositions($id.ast.beginLine, $id.ast.beginColumn, $t.ast.endLine, $t.ast.endColumn)); } | identifier { notifyErrorListeners("function arguments require an identifier and type"); }) (COMMA id=identifier COLON t=type { $ast.addArg((Component)new Component($id.ast, $t.ast).setPositions($id.ast.beginLine, $id.ast.beginColumn, $t.ast.endLine, $t.ast.endColumn)); } | COMMA identifier { notifyErrorListeners("function arguments require an identifier and type"); })*)? RPAREN (COLON t=type { $ast.setType($t.ast); })?
 	;
 fixpType returns [FixPType ast]
 	locals [int l, int c]
@@ -344,13 +357,13 @@ switchStatement returns [SwitchStatement ast]
 	: SWITCH
 		LPAREN e=expression RPAREN { $ast = new SwitchStatement($e.ast); }
 		LBRACE (sc=switchCase { $ast.addCase($sc.ast); })*
-		DEFAULT COLON (s=programStatement { $b.addStatement($s.ast); })+ RBRACE { $ast.setDefault(new SwitchCase(true, $b)); }
+		DEFAULT COLON (s=programStatement { $b.addStatement($s.ast); })+ RBRACE { $ast.setDefault((SwitchCase)new SwitchCase(true, $b).setPositions(getStartLine($DEFAULT), getStartColumn($DEFAULT), $s.ast.endLine, $s.ast.endColumn)); }
 	;
 
 switchCase returns [SwitchCase ast]
 	locals [Block b, int l, int c]
 	@init { $b = new Block(); $l = getStartLine(); $c = getStartColumn(); }
-	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
+	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); $b.setPositions(); }
 	: CASE el=expressionList { $ast = new SwitchCase(false, $b, $el.list); } COLON (s=programStatement { $b.addStatement($s.ast); })+
 	;
 
@@ -358,21 +371,21 @@ foreachStatement returns [ForeachStatement ast]
 	locals [int l, int c]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: FOREACH LPAREN id=identifier COLON t=type SEMICOLON e=expression RPAREN s=programStatement { $ast = new ForeachStatement(new Component($id.ast, $t.ast), $e.ast, $s.ast);}
+	: FOREACH LPAREN id=identifier COLON t=type SEMICOLON e=expression RPAREN s=programStatement { $ast = new ForeachStatement((Component)new Component($id.ast, $t.ast).setPositions($id.ast.beginLine, $id.ast.beginColumn, $t.ast.endLine, $t.ast.endColumn), $e.ast, $s.ast);}
 	;
 
 existsStatement returns [ExistsStatement ast]
 	locals [int l, int c]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: EXISTS LPAREN id=identifier COLON t=type SEMICOLON e=expression RPAREN s=programStatement { $ast = new ExistsStatement(new Component($id.ast, $t.ast), $e.ast, $s.ast); }
+	: EXISTS LPAREN id=identifier COLON t=type SEMICOLON e=expression RPAREN s=programStatement { $ast = new ExistsStatement((Component)new Component($id.ast, $t.ast).setPositions($id.ast.beginLine, $id.ast.beginColumn, $t.ast.endLine, $t.ast.endColumn), $e.ast, $s.ast); }
 	;
 
 ifallStatement returns [IfAllStatement ast]
 	locals [int l, int c]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: IFALL LPAREN id=identifier COLON t=type SEMICOLON e=expression RPAREN s=programStatement { $ast = new IfAllStatement(new Component($id.ast, $t.ast), $e.ast, $s.ast); }
+	: IFALL LPAREN id=identifier COLON t=type SEMICOLON e=expression RPAREN s=programStatement { $ast = new IfAllStatement((Component)new Component($id.ast, $t.ast).setPositions($id.ast.beginLine, $id.ast.beginColumn, $t.ast.endLine, $t.ast.endColumn), $e.ast, $s.ast); }
 	;
 
 whileStatement returns [WhileStatement ast]
@@ -389,7 +402,7 @@ visitStatement returns [VisitStatement ast]
 	: (b=BEFORE | AFTER | { notifyErrorListeners("error: visit statements must start with 'before' or 'after'"); }) { $ast = new VisitStatement($b != null); }
 		(
 			  WILDCARD { $ast.setWildcard(true); }
-			| id=identifier COLON t=identifier { $ast.setComponent(new Component($id.ast, $t.ast)); }
+			| id=identifier COLON t=identifier { $ast.setComponent((Component)new Component($id.ast, $t.ast).setPositions($id.ast.beginLine, $id.ast.beginColumn, $t.ast.endLine, $t.ast.endColumn)); }
 			| id=identifier { $ast.addId($id.ast); } (COMMA id=identifier { $ast.addId($id.ast); })*
 		)
 		RIGHT_ARROW (s=programStatement { $ast.setBody($s.ast); })
@@ -399,14 +412,14 @@ traverseStatement returns [TraverseStatement ast]
 	locals [int l, int c]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: (LPAREN id=identifier COLON t=identifier RPAREN { $ast = new TraverseStatement(); $ast.setComponent(new Component($id.ast, $t.ast));} (COLON rt=type {$ast.setReturnType($rt.ast);})? (s=programStatement { $ast.setBody($s.ast); }))
+	: (LPAREN id=identifier COLON t=identifier RPAREN { $ast = new TraverseStatement(); $ast.setComponent((Component)new Component($id.ast, $t.ast).setPositions($id.ast.beginLine, $id.ast.beginColumn, $t.ast.endLine, $t.ast.endColumn));} (COLON rt=type {$ast.setReturnType($rt.ast);})? (s=programStatement { $ast.setBody($s.ast); }))
 	;
 
 fixpStatement returns [FixPStatement ast]
 	locals [int l, int c]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: (LPAREN id1=identifier COMMA id2=identifier COLON t=identifier RPAREN { $ast = new FixPStatement(); $ast.setParam1(new Component($id1.ast, $t.ast));$ast.setParam2(new Component($id2.ast, $t.ast));} (COLON rt=type {$ast.setReturnType($rt.ast);}) (s=programStatement { $ast.setBody($s.ast); }))
+	: (LPAREN id1=identifier COMMA id2=identifier COLON t=identifier RPAREN { $ast = new FixPStatement(); $ast.setParam1((Component)new Component($id1.ast, $t.ast).setPositions($id1.ast.beginLine, $id1.ast.beginColumn, $t.ast.endLine, $t.ast.endColumn));$ast.setParam2((Component)new Component($id2.ast, $t.ast).setPositions($id2.ast.beginLine, $id2.ast.beginColumn, $t.ast.endLine, $t.ast.endColumn));} (COLON rt=type {$ast.setReturnType($rt.ast);}) (s=programStatement { $ast.setBody($s.ast); }))
 	;
 	
 stopStatement returns [StopStatement ast]
@@ -533,22 +546,22 @@ functionExpression returns [FunctionExpression ast]
 fixpExpression returns [FixPExpression ast]
 	locals [Block b, int l, int c]
 	@init { $b = new Block(); $l = getStartLine(); $c = getStartColumn(); }
-	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
+	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); $b.setPositions(); }
 	: t=fixpType (s=fixpStatement {$b.addStatement($s.ast);} | { notifyErrorListeners("error: only fixpoint statement allowed inside fixpoint expression"); } programStatement) { $ast = new FixPExpression($t.ast, $b); }
 	;
 
 visitorExpression returns [VisitorExpression ast]
 	locals [Block b, int l, int c]
 	@init { $b = new Block(); $l = getStartLine(); $c = getStartColumn(); }
-	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
+	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); $b.setPositions(); }
 	: t=visitorType LBRACE (s=visitStatement { $b.addStatement($s.ast); } | { notifyErrorListeners("error: only 'before' and 'after' visit statements allowed inside visitor bodies"); } programStatement)+ RBRACE { $ast = new VisitorExpression($t.ast, $b); }
 	;
 
 traversalExpression returns [TraversalExpression ast]
 	locals [Block b, int l, int c]
 	@init { $b = new Block(); $l = getStartLine(); $c = getStartColumn(); }
-	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
-	: t=traversalType (s=traverseStatement {$b.addStatement($s.ast);} | { notifyErrorListeners("error: only traverse statements allowed inside traversal bodies"); } programStatement) { if($s.ast.getReturnType()!=null) {$t.ast.setIndex(new Component($s.ast.getReturnType()));} $ast = new TraversalExpression($t.ast, $b); }
+	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); $b.setPositions(); }
+	: t=traversalType (s=traverseStatement {$b.addStatement($s.ast);} | { notifyErrorListeners("error: only traverse statements allowed inside traversal bodies"); } programStatement) { if($s.ast.getReturnType()!=null) {$t.ast.setIndex((Component)new Component($s.ast.getReturnType()).setPositions($s.ast.beginLine, $s.ast.beginColumn, $s.ast.endLine, $s.ast.endColumn));} $ast = new TraversalExpression($t.ast, $b); }
 	;
 
 composite returns [Composite ast]

@@ -115,4 +115,9 @@ public class TestTypecheckBad extends BaseTest {
 	public void nestedReturn() throws IOException {
 		typecheck(load(badDir + "nested-return.boa"), "return statement not allowed inside visitors");
 	}
+
+	@Test
+	public void assignFuncNoRet() throws IOException {
+		typecheck(load(badDir + "assign-func-no-ret.boa"), "functions without a return type can not be used as initializers");
+	}
 }

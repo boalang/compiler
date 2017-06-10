@@ -39,9 +39,9 @@ import javax.tools.ToolProvider;
 import org.stringtemplate.v4.ST;
 
 import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
-import org.apache.commons.cli.PosixParser;
 import org.apache.log4j.Logger;
 
 import org.scannotation.ClasspathUrlFinder;
@@ -72,8 +72,6 @@ import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.RecognitionException;
-import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.TokenSource;
 
 import boa.datagen.DefaultProperties;
 import boa.parser.BoaParser;
@@ -277,12 +275,6 @@ public class BoaCompiler extends BoaMain {
 
 		SymbolTable.initialize(libs);
 
-		final int maxVisitors;
-		if (cl.hasOption('v'))
-			maxVisitors = Integer.parseInt(cl.getOptionValue('v'));
-		else
-			maxVisitors = Integer.MAX_VALUE;
-
 		for (int i = 0; i < inputFiles.size(); i++) {
 			final File f = inputFiles.get(i);
 			try {
@@ -394,7 +386,7 @@ public class BoaCompiler extends BoaMain {
 
 		final CommandLine cl;
 		try {
-			cl = new PosixParser().parse(options, args);
+			cl = new DefaultParser().parse(options, args);
 		} catch (final org.apache.commons.cli.ParseException e) {
 			System.err.println(e.getMessage());
 			new HelpFormatter().printHelp("Boa Compiler", options);
@@ -433,7 +425,7 @@ public class BoaCompiler extends BoaMain {
 
 		final CommandLine cl;
 		try {
-			cl = new PosixParser().parse(options, args);
+			cl = new DefaultParser().parse(options, args);
 		} catch (final org.apache.commons.cli.ParseException e) {
             printHelp(options, e.getMessage());
 			return null;

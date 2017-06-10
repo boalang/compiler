@@ -1,6 +1,7 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ *                 Iowa State University of Science and Technology
+ *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -331,9 +332,9 @@ public class SymbolTable {
 	}
 
 	public SymbolTable cloneNonLocals() throws IOException {
-		SymbolTable st = new SymbolTable();
+		final SymbolTable st = new SymbolTable();
 
-		st.functions = this.functions;
+		st.functions = new FunctionTrie(this.functions);
 		st.locals = new HashMap<String, BoaType>(this.locals);
 		st.isVisitor = this.isVisitor;
 		st.shadowing = this.shadowing;
@@ -349,8 +350,12 @@ public class SymbolTable {
 		if (idmap.containsKey(id))
 			throw new RuntimeException(id + " already declared as type " + idmap.get(id));
 
-		if (type instanceof BoaFunction)
-			this.setFunction(id, (BoaFunction) type);
+		if (type instanceof BoaFunction) {
+			if (global)
+				globalFunctions.addFunction(id, (BoaFunction) type);
+			else
+				this.setFunction(id, (BoaFunction) type);
+		}
 
 		if (global)
 			globals.put(id, type);
@@ -654,7 +659,7 @@ public class SymbolTable {
 
 	public void unsetIsVisitor() {
 		this.isVisitor.pop();
-    }
+	}
 
 	public boolean getIsVisitor() {
 		return this.isVisitor.peek();

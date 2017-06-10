@@ -19,7 +19,6 @@ package boa.compiler.ast.statements;
 
 import java.util.ArrayList;
 import java.util.List;
-import boa.types.BoaTuple;
 
 import boa.compiler.ast.Component;
 import boa.compiler.ast.Identifier;
