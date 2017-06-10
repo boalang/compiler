@@ -340,17 +340,19 @@ public class BoaNormalFormIntrinsics {
 						results2.remove(0);
 						results2.set(0, negate(results2.get(0)));
 					}
-int lastNeg = -1;
-for (int i = results2.size() - 1; i >= 0; i--)
-if (isNegative(results2.get(i))) {
-if (lastNeg != -1) {
-results2.set(lastNeg, negate(results2.get(lastNeg)));
-results2.set(i, negate(results2.get(i)));
-lastNeg = -1;
-} else {
-lastNeg = i;
-}
-}
+
+					// only at most 1 term should remain negative
+					int lastNeg = -1;
+					for (int i = results2.size() - 1; i >= 0; i--)
+						if (isNegative(results2.get(i))) {
+							if (lastNeg != -1) {
+								results2.set(lastNeg, negate(results2.get(lastNeg)));
+								results2.set(i, negate(results2.get(i)));
+								lastNeg = -1;
+							} else {
+								lastNeg = i;
+							}
+						}
 
 					// check for elimination
 					if (results2.get(0) instanceof Double && (Double)results2.get(0) == 0.0)
