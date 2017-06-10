@@ -738,19 +738,39 @@ public class BoaAstIntrinsics {
 		counts.put(rawType, rawCount + 1);
 	}
 
+	static int indent = 0;
+	private static String indent() {
+		String s = "";
+		for (int i = 0; i < indent; i++)
+			s += "\t";
+		return s;
+	}
+
 	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "ASTRoot" })
 	public static String prettyprint(final ASTRoot r) {
 		String s = "";
 
-		// TODO
+		for (final String i : r.getImportsList())
+			s += indent() + "import " + i + "\n";
+		for (final Namespace n : r.getNamespacesList())
+			s += prettyprint(n);
+
 		return s;
 	}
 
 	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "Namespace" })
 	public static String prettyprint(final Namespace n) {
-		String s = "";
+		String s = indent();
 
-		// TODO
+		if (n.getName().length() > 0) {
+			if (n.getModifiersCount() > 0)
+				s += prettyprint(n.getModifiersList()) + " ";
+			s += "package " + n.getName() + ";\n";
+		}
+
+		for (final Declaration d : n.getDeclarationsList())
+			s += prettyprint(d);
+
 		return s;
 	}
 
