@@ -20,15 +20,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import boa.aggregators.Aggregator;
-import boa.compiler.ast.Comparison;
-import boa.compiler.ast.Conjunction;
 import boa.compiler.ast.Factor;
 import boa.compiler.ast.Identifier;
 import boa.compiler.ast.Program;
-import boa.compiler.ast.Term;
-import boa.compiler.ast.expressions.Expression;
 import boa.compiler.ast.expressions.ParenExpression;
-import boa.compiler.ast.expressions.SimpleExpr;
 import boa.compiler.ast.literals.IntegerLiteral;
 import boa.compiler.ast.statements.AssignmentStatement;
 import boa.compiler.ast.statements.Block;

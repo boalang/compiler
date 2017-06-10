@@ -27,8 +27,6 @@ import boa.compiler.ast.statements.Block;
 import boa.compiler.ast.statements.Statement;
 import boa.compiler.ast.statements.VisitStatement;
 import boa.compiler.visitors.AbstractVisitorNoArgNoRet;
-import boa.types.BoaType;
-import boa.types.proto.*;
 
 /**
  * De-sugars visitors, by taking VisitStatements with lists and turning them

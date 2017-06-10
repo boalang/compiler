@@ -28,7 +28,6 @@ import boa.types.BoaType;
 import boa.types.BoaInt;
 import boa.types.BoaSet;
 import boa.types.proto.enums.CFGNodeTypeProtoMap;
-import boa.types.proto.enums.FileKindProtoMap;
 
 /**
  * A {@link CFGNodeProtoTuple}.

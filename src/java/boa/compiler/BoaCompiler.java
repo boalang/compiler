@@ -71,8 +71,6 @@ import org.antlr.v4.runtime.misc.Interval;
 import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.RecognitionException;
-import org.antlr.v4.runtime.Token;
-import org.antlr.v4.runtime.TokenSource;
 
 import boa.datagen.DefaultProperties;
 import boa.parser.BoaParser;
@@ -273,12 +271,6 @@ public class BoaCompiler extends BoaMain {
 				libs.add(new File(lib).toURI().toURL());
 
 		SymbolTable.initialize(libs);
-
-		final int maxVisitors;
-		if (cl.hasOption('v'))
-			maxVisitors = Integer.parseInt(cl.getOptionValue('v'));
-		else
-			maxVisitors = Integer.MAX_VALUE;
 
 		for (int i = 0; i < inputFiles.size(); i++) {
 			final File f = inputFiles.get(i);

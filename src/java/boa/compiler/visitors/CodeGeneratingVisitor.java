@@ -1426,7 +1426,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	public void visit(final FixPStatement n) {
 		final ST st = stg.getInstanceOf("FixPClause");
 
-		final BoaFunction funcType = ((BoaFunction) n.type);
 		final List<String> body = new ArrayList<String>();
 		String types = "";
 		Component c = n.getParam1();
@@ -1479,7 +1478,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 			st.add("name", "preTraverse");
 		}
-		int count=0;
 		if (!(funcType.getType() instanceof BoaAny))
 			st.add("ret", funcType.getType().toBoxedJavaType());
 

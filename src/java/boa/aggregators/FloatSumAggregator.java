@@ -19,7 +19,6 @@ package boa.aggregators;
 import java.io.IOException;
 
 import boa.io.EmitKey;
-import boa.io.EmitValue;
 
 /**
  * A Boa aggregator to calculate the sum of the values in a dataset.
