@@ -38,8 +38,8 @@ import boa.types.Ast.Expression;
 @RunWith(Parameterized.class)
 public class TestReduce {
 	@Parameters(name = "{index}][{0} = {1}")
-	public static Collection expressions() {
-		return Arrays.asList(new Object[][] {
+	public static Collection<String[]> expressions() {
+		return Arrays.asList(new String[][] {
 			// literals
 			{ "5", "5" },
 			{ "8.0", "8.0" },
@@ -110,6 +110,8 @@ public class TestReduce {
 			{ "x * 1", "x" },
 			{ "x * (3 - 2)", "x" },
 			{ "(3 - 2) * x", "x" },
+			{ "-1 * x", "-x" },
+			{ "x * -1", "-x" },
 
 			{ "x / 1", "x" },
 			{ "x / 1 / 1 / 1", "x" },
@@ -127,6 +129,9 @@ public class TestReduce {
 			{ "3 + foo(2 + 1) - 1", "3 + foo(3) - 1" }, // FIXME should be 2 + foo(3)
 
 			// complex expressions, multiple operators etc
+			{ "-5 * -x", "5 * x" },
+			{ "-y * -5 * -x", "-5 * y * x" },
+			{ "-2 * -y * -5 * -x", "10 * y * x" },
 			{ "5 - 3 + 2", "4" },
 			{ "5 - (3 + 2)", "0" },
 			{ "5.0 / x / 5 * 10.0 * x", "(10.0 * (1.0 / x)) * x" }, // FIXME should be 10

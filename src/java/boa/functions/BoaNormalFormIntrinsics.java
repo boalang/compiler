@@ -17,20 +17,14 @@
 package boa.functions;
 
 import java.util.*;
-import java.lang.IllegalArgumentException;
 
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.JavaCore;
 
 import boa.types.Ast.Expression.ExpressionKind;
-import boa.compiler.ast.*;
-import boa.compiler.ast.expressions.*;
 import boa.datagen.util.Java8Visitor;
 import boa.types.Ast.Expression;
-import boa.compiler.ast.types.*;
-import boa.types.*;
-import boa.types.Ast.*;
 
 /**
  * Boa functions for converting Expressions into various normal forms.
@@ -51,6 +45,7 @@ public class BoaNormalFormIntrinsics {
 		parser.setKind(ASTParser.K_EXPRESSION);
 		parser.setSource(s.toCharArray());
 
+		@SuppressWarnings("rawtypes")
 		final Map options = JavaCore.getOptions();
 		JavaCore.setComplianceOptions(JavaCore.VERSION_1_8, options);
 		parser.setCompilerOptions(options);
@@ -316,7 +311,7 @@ public class BoaNormalFormIntrinsics {
 				ival = 1L;
 
 				// if multiple arguments, try to multiply them all together
-				for (final Object o : results) {
+				for (Object o : results) {
 					if (o instanceof Expression)
 						results2.add(o);
 					else if (o instanceof Double)
@@ -341,6 +336,21 @@ public class BoaNormalFormIntrinsics {
 					// check for identity
 					if (results2.get(0) instanceof Number && ((Number)results2.get(0)).doubleValue() == 1.0)
 						results2.remove(0);
+					else if (results2.get(0) instanceof Number && ((Number)results2.get(0)).doubleValue() == -1.0) {
+						results2.remove(0);
+						results2.set(0, negate(results2.get(0)));
+					}
+int lastNeg = -1;
+for (int i = results2.size() - 1; i >= 0; i--)
+if (isNegative(results2.get(i))) {
+if (lastNeg != -1) {
+results2.set(lastNeg, negate(results2.get(lastNeg)));
+results2.set(i, negate(results2.get(i)));
+lastNeg = -1;
+} else {
+lastNeg = i;
+}
+}
 
 					// check for elimination
 					if (results2.get(0) instanceof Double && (Double)results2.get(0) == 0.0)
