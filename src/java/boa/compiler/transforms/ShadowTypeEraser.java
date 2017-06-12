@@ -229,8 +229,29 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                         if ((((BoaShadowType)visit.getComponent().type).getKindExpressionsOneToMany(n.env)) == null) {
                             final LinkedList<Expression> listExp = new LinkedList<Expression>();
                             listExp.add(((BoaShadowType)visit.getComponent().type).getKindExpression(n.env));
+                            //checking for many-one mapping
+                            if(((BoaShadowType)visit.getComponent().type).getManytoOne(n.env,b) == null){
 
-                            switchS.addCase(new SwitchCase(false, b, listExp));
+                                switchS.addCase(new SwitchCase(false, b, listExp));
+                            
+                            }else {
+                                boolean flg = false;
+                                //checking to see presence of kind in cases
+                                for(SwitchCase sCase : switchS.getCases()){
+                                   Selector s = (Selector)(sCase.getCase(0).getLhs().getLhs().getLhs().getLhs().getLhs().getOp(0));
+                                    Identifier i =  s.getId();
+                                    if(visit.getComponent().type.toString().toLowerCase().equals(i.getToken().toLowerCase())){
+                                        flg = true;
+                                        sCase.getBody().addStatement(((BoaShadowType)visit.getComponent().type).getManytoOne(n.env,b));
+                                    }
+
+                                }
+                                if(!flg){
+                                    Block manyToOneBlock = new Block();
+                                    manyToOneBlock.addStatement(((BoaShadowType)visit.getComponent().type).getManytoOne(n.env,b));
+                                    switchS.addCase(new SwitchCase(false, manyToOneBlock, listExp));
+                                }
+                            }
                         } else {
                             for (final Expression styKind : (((BoaShadowType)visit.getComponent().type).getKindExpressionsOneToMany(n.env))) {
                                 final LinkedList<Expression> listExp = new LinkedList<Expression>();

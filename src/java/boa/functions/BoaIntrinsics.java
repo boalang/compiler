@@ -16,6 +16,7 @@
  */
 package boa.functions;
 
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -26,6 +27,9 @@ import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
 import boa.types.Toplevel.Project;
+
+import boa.types.Ast.*;
+
 
 /**
  * Boa domain-specific functions.
@@ -126,9 +130,26 @@ public class BoaIntrinsics {
 	 * @param kind the FileKind to match
 	 * @return true if the string matches the given kind
 	 */
-	@FunctionSpec(name = "iskind", returnType = "bool", formalParameters = { "string", "FileKind" })
+	@FunctionSpec(name = "iskind", returnType = "bool", formalParameters = { "string", "FileKind" }) 
 	public static boolean iskind(final String s, final ChangedFile.FileKind kind) {
 		return kind.name().startsWith(s);
+	}
+
+
+	/**
+	 * Returns <code>true</code> if the expression <code>e</code> is of kind
+	 * <code>LITERAL</code> and the literal matches the string <code>lit</code>.
+	 *
+	 * @param e the expression to test
+	 * @return true if the expression is a string literal, otherwise false
+	 */
+	@FunctionSpec(name = "subList", returnType = "Statement", formalParameters = { "Statement", "int", "int" })
+	public static List subList(final List e, final int starte, final int ende) throws Exception {
+		
+		List sube = e.subList( starte, ende);
+
+		return sube;
+		
 	}
 
 	public static <T> T stack_pop(final java.util.Stack<T> s) {

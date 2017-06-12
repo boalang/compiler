@@ -144,12 +144,13 @@ public class SymbolTable {
 
 		// TODO add shadow types
 		idmap.put("IfStatement", new IfStatementShadow());
+		idmap.put("TryStatement", new TryStatementShadow());
 		idmap.put("ForStatement", new ForStatementShadow());
 		idmap.put("InfixExpression", new InfixExpressionShadow());
 		idmap.put("PostfixExpression", new PostfixExpressionShadow());
 		idmap.put("PrefixExpression", new PrefixExpressionShadow());
 		idmap.put("Assignment", new AssignmentShadow());
-				
+		idmap.put("BooleanLiteral", new BooleanLiteralShadow());		
 
 		globalFunctions = new FunctionTrie();
 

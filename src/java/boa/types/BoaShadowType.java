@@ -25,6 +25,9 @@ import boa.compiler.ast.Selector;
 import boa.compiler.SymbolTable;
 import boa.compiler.transforms.ASTFactory;
 
+import boa.compiler.ast.statements.IfStatement;
+import boa.compiler.ast.statements.Block;
+
 /**
  * A shadow type.
  * 
@@ -106,10 +109,12 @@ public abstract class BoaShadowType extends BoaTuple {
 
 
     public LinkedList<Expression> getKindExpressionsOneToMany(final SymbolTable env) {
-        
         return null;  
     }
 
+    public IfStatement getManytoOne(final SymbolTable env, Block b) {
+        return null;
+    }
 
     /**
      * Converts a shadow type message into a concrete type message.

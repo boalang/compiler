@@ -31,14 +31,24 @@ import boa.types.proto.enums.ExpressionKindProtoMap;
 import boa.types.proto.ExpressionProtoTuple;
 import boa.types.proto.StatementProtoTuple;
 
+import boa.compiler.ast.statements.IfStatement;
+import boa.compiler.ast.statements.Block;
 /**
- * A shadow type for BooleanLiteral.
+ * A shadow type for Literal.
  * 
  * @author rdyer
  * @author kaushin
  */
-public class BooleanLiteralShadow extends LiteralShadow  {
-    
+public class LiteralShadow extends BoaShadowType  {
+    /**
+     * Construct a {@link LiteralShadow}.
+     */
+    public LiteralShadow() {
+        super(new ExpressionProtoTuple());
+
+        addShadow("value", new BoaString());
+        
+    }
 
     /** {@inheritDoc} */
     @Override
@@ -52,22 +62,13 @@ public class BooleanLiteralShadow extends LiteralShadow  {
             return ASTFactory.createSelector(id, "literal", new BoaString(), new BoaString(), env);     
         }
 
+        
+
+
         throw new RuntimeException("invalid shadow field: " + name);
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public IfStatement getManytoOne(final SymbolTable env ,Block b) {
-       
-        // if(isboollit(${0})) b;
-
-        final Expression tree = ASTFactory.createIdentifierExpr("node", env, new ExpressionProtoTuple());
-
-        IfStatement ifstmt = new IfStatement(ASTFactory.createCallExpr("isboollit", env, new ExpressionProtoTuple(), tree),b);
-        return ifstmt ;
-        
-        
-    }
+    
 
     /** {@inheritDoc} */
     @Override
@@ -75,5 +76,9 @@ public class BooleanLiteralShadow extends LiteralShadow  {
         return getKindExpression("ExpressionKind", "LITERAL", new ExpressionKindProtoMap(), env);
     }
 
-   
+    /** {@inheritDoc} */
+    @Override
+    public String toString() {
+        return "Literal";
+    }
 }
