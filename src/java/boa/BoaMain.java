@@ -24,7 +24,7 @@ import java.io.PrintWriter;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
-import org.apache.commons.cli.PosixParser;
+import org.apache.commons.cli.DefaultParser;
 
 /**
  * The main entry point for Boa-related tools.
@@ -46,7 +46,7 @@ public class BoaMain {
                 printHelp(options, null);
                 return;
             } else {
-                final CommandLine cl = new PosixParser().parse(options, new String[] { args[0] });
+                final CommandLine cl = new DefaultParser().parse(options, new String[] { args[0] });
                 final String[] tempargs = new String[args.length - 1];
                 System.arraycopy(args, 1, tempargs, 0, args.length - 1);
 

@@ -1,6 +1,7 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ *                 Iowa State University of Science and Technology
+ *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -253,39 +254,6 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		}
 	}
 
-	/**
-	 * 
-	 * @author rdyer
-	 */
-	protected class FunctionFindingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
-		protected BoaFunction func;
-		protected final List<BoaType> formalParameters;
-
-		public boolean hasFunction() {
-			return func != null;
-		}
-
-		public BoaFunction getFunction() {
-			return func;
-		}
-
-		public FunctionFindingVisitor(final List<BoaType> formalParameters) {
-			this.formalParameters = formalParameters;
-		}
-
-		/** {@inheritDoc} */
-		@Override
-		protected void initialize(SymbolTable arg) {
-			func = null;
-		}
-
-		/** {@inheritDoc} */
-		@Override
-		public void visit(final Identifier n, final SymbolTable arg) {
-			func = arg.getFunction(n.getToken(), this.formalParameters);
-		}
-	}
-
 	protected final VisitorCheckingVisitor visitorChecker = new VisitorCheckingVisitor();
 	protected final TraversalCheckingVisitor traversalChecker = new TraversalCheckingVisitor();
 	protected final FixPCheckingVisitor fixPChecker = new FixPCheckingVisitor();
@@ -372,7 +340,11 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			}
 
 			n.type = new BoaName(n.getType().type, n.getIdentifier().getToken());
-			env.set(n.getIdentifier().getToken(), n.getType().type);
+			try {
+				env.set(n.getIdentifier().getToken(), n.getType().type);
+			} catch (final Exception e) {
+				throw new TypeCheckException(n, e.getMessage(), e);
+			}
 			n.getIdentifier().accept(this, env);
 		} else {
 			n.type = n.getType().type;
@@ -480,19 +452,16 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 
 					final List<BoaType> formalParameters = this.check((Call) node, env);
 
-					final FunctionFindingVisitor v = new FunctionFindingVisitor(formalParameters);
 					try {
-						v.start((Identifier)n.getOperand(), env);
+						type = env.getFunction(((Identifier)n.getOperand()).getToken(), formalParameters).erase(formalParameters);
 					} catch (final ClassCastException e) {
 						throw new TypeCheckException(n.getOperand(), "Function declarations must be assigned to a variable and can not be used anonymously", e);
 					} catch (final RuntimeException e) {
 						throw new TypeCheckException(n.getOperand(), e.getMessage(), e);
 					}
-					type = v.getFunction().erase(formalParameters);
-					if(((Identifier)n.getOperand()).getToken().equals("getvalue")) {
-						if(formalParameters.size()==1) {
-							type = lastRetType;
-						}
+
+					if (formalParameters.size() == 1 && ((Identifier)n.getOperand()).getToken().equals("getvalue")) {
+						type = lastRetType;
 					}
 				}
 				node.type = type;
@@ -940,10 +909,30 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 
 		BoaType rhs = null;
 		if (n.hasInitializer()) {
+			final Factor f = n.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs();
+
+			if (f.getOperand() instanceof FunctionExpression) {
+				SymbolTable st;
+				try {
+					st = env.cloneNonLocals();
+				} catch (final IOException e) {
+					throw new RuntimeException(e.getClass().getSimpleName() + " caught", e);
+				}
+
+				((FunctionExpression)f.getOperand()).getType().accept(this, st);
+
+				if (env.hasGlobalFunction(id) || env.hasLocalFunction(id))
+					throw new TypeCheckException(n.getId(), "name conflict: a function '" + id + "' already exists");
+
+				env.set(id, ((FunctionExpression)f.getOperand()).getType().type);
+			}
+
 			n.getInitializer().accept(this, env);
 			rhs = n.getInitializer().type;
 
-			final Factor f = n.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs();
+			if (rhs instanceof BoaAny)
+				throw new TypeCheckException(n.getInitializer(), "functions without a return type can not be used as initializers");
+
 			if (f.getOperand() instanceof Identifier && f.getOpsSize() == 0 && env.hasType(((Identifier)f.getOperand()).getToken()))
 				throw new TypeCheckException(n.getInitializer(), "type '" + f.getOperand().type + "' is not a value and can not be assigned");
 
@@ -977,10 +966,8 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			lhs = rhs;
 		}
 
-		if (lhs instanceof BoaFunction && (env.hasGlobalFunction(id) || env.hasLocalFunction(id)))
-			throw new TypeCheckException(n.getId(), "name conflict: a function '" + id + "' already exists");
-
-		env.set(id, lhs);
+		if (!(rhs instanceof BoaFunction))
+			env.set(id, lhs);
 		n.type = lhs;
 		n.getId().accept(this, env);
 	}
@@ -1032,7 +1019,6 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		if (n.getReturnType()!=null) {
 			n.getReturnType().accept(this, env);
 			ret = n.getReturnType().type;
-			//System.out.println("type   "+ret);
 		}
 		n.type = new BoaFunction(ret, new BoaType[]{});
 		lastRetType = ret;
@@ -1051,7 +1037,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			}
 
 		for (final IfStatement ifStatement : n.getIfStatements()) {
-            ifStatement.accept(this, st);
+			ifStatement.accept(this, st);
 		}
 		if (n.hasCondition()) {
 			n.getCondition().accept(this, st);
@@ -1080,7 +1066,6 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		}
 		n.type = new BoaFunction(ret, new BoaType[]{});
 
-		//System.out.println(st.locals);
 		n.env = st;
 
 		n.getParam1().accept(this, st);

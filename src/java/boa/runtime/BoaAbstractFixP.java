@@ -16,29 +16,13 @@
  */
 package boa.runtime;
 
-import java.util.List;
-import java.util.Queue;
-import java.util.LinkedList;
-
-import boa.functions.BoaAstIntrinsics;
-
-import boa.types.Ast.*;
-import boa.types.Ast.Expression.*;
-import boa.types.Control.*;
-import boa.types.Graph.*;
-import boa.types.Code.CodeRepository;
-import boa.types.Code.Revision;
-import boa.types.Diff.ChangedFile;
-import boa.types.Shared.Person;
-import boa.types.Toplevel.Project;
-
 /**
  * Boa abstract FixP.
+ *
  * @author rramu
  */
 public abstract class BoaAbstractFixP {
-	
-	public boolean invoke(Object curr, Object prev) throws Exception{
+	public boolean invoke(Object curr, Object prev) throws Exception {
 		return true;
 	}
 

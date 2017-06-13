@@ -25,9 +25,8 @@ import java.net.URLClassLoader;
 import java.util.UUID;
 
 import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Options;
-import org.apache.commons.cli.PosixParser;
 import org.apache.commons.io.FileUtils;
 
 import boa.BoaMain;
@@ -75,7 +74,7 @@ public class BoaEvaluator extends BoaMain {
 				printHelp(options, null);
 				return;
 			} else {
-				final CommandLine cl = new PosixParser().parse(options, args);
+				final CommandLine cl = new DefaultParser().parse(options, args);
 
 				if (cl.hasOption('i') && cl.hasOption('d')) {
 					final BoaEvaluator evaluator;
@@ -115,16 +114,22 @@ public class BoaEvaluator extends BoaMain {
 		final String[] actualArgs = createHadoopProgramArguments();
 		final File srcDir = new File(this.COMPILATION_DIR);
 
+		URLClassLoader cl = null;
 		try {
 			final URL srcDirUrl = srcDir.toURI().toURL();
 
-			final ClassLoader cl = new URLClassLoader(new URL[] { srcDirUrl }, ClassLoader.getSystemClassLoader());
+			cl = new URLClassLoader(new URL[] { srcDirUrl }, ClassLoader.getSystemClassLoader());
 			final Class<?> cls = cl.loadClass("boa." + jarToClassname(this.PROG_PATH));
 			final Method method = cls.getMethod("main", String[].class);
 
 			method.invoke(null, (Object)actualArgs);
 		} catch (final Throwable e) {
 			System.err.print(e);
+		} finally {
+			if (cl != null)
+				try {
+					cl.close();
+				} catch (final IOException e) { }
 		}
 	}
 

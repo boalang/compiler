@@ -25,11 +25,7 @@ import boa.types.BoaProtoTuple;
 import boa.types.BoaString;
 import boa.types.BoaSet;
 import boa.types.BoaType;
-import boa.types.proto.enums.ChangeKindProtoMap;
-import boa.types.proto.enums.FileKindProtoMap;
-import boa.types.BoaSet;
 import boa.types.BoaBool;
-import boa.types.BoaInt;
 
 /**
  * A {@link CFGProtoTuple}.

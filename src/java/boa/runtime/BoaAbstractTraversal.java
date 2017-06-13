@@ -16,25 +16,16 @@
  */
 package boa.runtime;
 
-import java.util.List;
 import java.util.Queue;
 import java.util.LinkedList;
 import java.util.Stack;
 
-import boa.functions.BoaAstIntrinsics;
-
-import boa.types.Ast.*;
-import boa.types.Ast.Expression.*;
 import boa.types.Graph.*;
 import boa.graphs.cfg.*;
-import boa.types.Code.CodeRepository;
-import boa.types.Code.Revision;
-import boa.types.Diff.ChangedFile;
-import boa.types.Shared.Person;
-import boa.types.Toplevel.Project;
 
 /**
  * Boa abstract graph traversal.
+ *
  * @author rramu
  */
 
@@ -53,7 +44,7 @@ public abstract class BoaAbstractTraversal<T1> {
 			prevOutputMapObj.clear();
 	}
 
-	public BoaAbstractTraversal initialize() {
+	public BoaAbstractTraversal<T1> initialize() {
 		return this;
 	}
 
@@ -189,15 +180,15 @@ public abstract class BoaAbstractTraversal<T1> {
 			prevOutputMapObj.put(node.getId(), currentResult);
 		}
 	}
+
 	public final void worklistReversePostorderWithoutFixp(Stack<CFGNode> stack, final Traversal.TraversalKind kind) throws Exception {
-		while(!stack.isEmpty()) {
+		while (!stack.isEmpty()) {
 			CFGNode node = stack.pop();
 			traverse(node, true);
-			boolean curFlag=true;
 			boolean fixpFlag = true;
-			if(!fixpFlag) {
+			if (!fixpFlag) {
 				for (CFGNode succ : node.getSuccessorsList()) {
-					if(!stack.contains(succ))
+					if (!stack.contains(succ))
 						stack.push(succ);
 				}
 			}
@@ -205,14 +196,13 @@ public abstract class BoaAbstractTraversal<T1> {
 	}
 
 	public final void worklistPostorderWithoutFixp(Queue<CFGNode> queue, final Traversal.TraversalKind kind) throws Exception {
-		while(!queue.isEmpty()) {
+		while (!queue.isEmpty()) {
 			CFGNode node = queue.remove();
 			traverse(node, true);
-			boolean curFlag=true;
 			boolean fixpFlag = true;
-			if(!fixpFlag) {
+			if (!fixpFlag) {
 				for (CFGNode pred : node.getPredecessorsList()) {
-					if(!queue.contains(pred))
+					if (!queue.contains(pred))
 						queue.add(pred);
 				}
 			}
@@ -220,20 +210,20 @@ public abstract class BoaAbstractTraversal<T1> {
 	}
 
 	public final void worklistPostorderBackward(Queue<CFGNode> queue, final BoaAbstractFixP fixp, final Traversal.TraversalKind kind) throws Exception {
-		while(!queue.isEmpty()) {
+		while (!queue.isEmpty()) {
 				CFGNode node = queue.remove();
 				traverse(node, true);
 				boolean curFlag=outputMapObj.containsKey(node.getId());
 				boolean fixpFlag = false;
-				if(curFlag) {
+				if (curFlag) {
 					boolean prevFlag=prevOutputMapObj.containsKey(node.getId());
-					if(curFlag && prevFlag) { 
+					if (curFlag && prevFlag) { 
 						fixpFlag = fixp.invoke((T1)outputMapObj.get(node.getId()),(T1)prevOutputMapObj.get(node.getId()));
 					}
 				}
-				if(!fixpFlag) {
+				if (!fixpFlag) {
 					for (CFGNode pred : node.getPredecessorsList()) {
-						if(!queue.contains(pred))
+						if (!queue.contains(pred))
 							queue.add(pred);
 					}
 				}
@@ -243,20 +233,20 @@ public abstract class BoaAbstractTraversal<T1> {
 	}
 
 	public final void worklistPostorderForward(Queue<CFGNode> queue, final BoaAbstractFixP fixp, final Traversal.TraversalKind kind) throws Exception {
-		while(!queue.isEmpty()) {
+		while (!queue.isEmpty()) {
 				CFGNode node = queue.remove();
 				traverse(node, true);
 				boolean curFlag=outputMapObj.containsKey(node.getId());
 				boolean fixpFlag = false;
-				if(curFlag) {
+				if (curFlag) {
 					boolean prevFlag=prevOutputMapObj.containsKey(node.getId());
-					if(curFlag && prevFlag) { 
+					if (curFlag && prevFlag) { 
 						fixpFlag = fixp.invoke((T1)outputMapObj.get(node.getId()),(T1)prevOutputMapObj.get(node.getId()));
 					}
 				}
-				if(!fixpFlag) {
+				if (!fixpFlag) {
 					for (CFGNode pred : node.getSuccessorsList()) {
-						if(!queue.contains(pred))
+						if (!queue.contains(pred))
 							queue.add(pred);
 					}
 				}
@@ -267,43 +257,41 @@ public abstract class BoaAbstractTraversal<T1> {
 
 	public final void traverse(final boa.graphs.cfg.CFG cfg, final Traversal.TraversalDirection direction, final Traversal.TraversalKind kind, final BoaAbstractFixP fixp) throws Exception {
 		try {
-		if(outputMapObj==null) {
+			if (outputMapObj==null) {
 				outputMapObj = new java.util.HashMap<Integer,T1>();
-		}	
-		switch(kind.getNumber()) {
-					case 1 :
-					case 2 :
-					case 3 :
-					case 6 :
-					case 7 :
-						boolean fixpFlag;
-						do {
-							prevOutputMapObj = new java.util.HashMap<Integer,T1>(outputMapObj);
-							traverse(cfg, direction, kind);
-							fixpFlag=true;
-							java.util.HashSet<CFGNode> nl=cfg.getNodes();
-							for(CFGNode node : nl) {
-								boolean curFlag=outputMapObj.containsKey(node.getId());
-								boolean prevFlag=prevOutputMapObj.containsKey(node.getId());
-								if(curFlag) {
-									if(outputMapObj.containsKey(node.getId()) && prevOutputMapObj.containsKey(node.getId())) { 
-										fixpFlag = fixpFlag && fixp.invoke((T1)outputMapObj.get(node.getId()),(T1)prevOutputMapObj.get(node.getId()));
-									} else {
-										fixpFlag = false; break;
-									}
+			}
+			switch(kind.getNumber()) {
+				case 1 :
+				case 2 :
+				case 3 :
+				case 6 :
+				case 7 :
+					boolean fixpFlag;
+					do {
+						prevOutputMapObj = new java.util.HashMap<Integer,T1>(outputMapObj);
+						traverse(cfg, direction, kind);
+						fixpFlag=true;
+						java.util.HashSet<CFGNode> nl=cfg.getNodes();
+						for (CFGNode node : nl) {
+							boolean curFlag=outputMapObj.containsKey(node.getId());
+							if (curFlag) {
+								if (outputMapObj.containsKey(node.getId()) && prevOutputMapObj.containsKey(node.getId())) { 
+									fixpFlag = fixpFlag && fixp.invoke((T1)outputMapObj.get(node.getId()),(T1)prevOutputMapObj.get(node.getId()));
+								} else {
+									fixpFlag = false; break;
 								}
 							}
-						}while(!fixpFlag);
-						break;
-					case 4:
-					case 5:
-						prevOutputMapObj = new java.util.HashMap<Integer,T1>();
-						traverseWithFixp(cfg, direction, kind, fixp);
-						break;
-					default : break;
-		}
+						}
+					} while(!fixpFlag);
+					break;
+				case 4:
+				case 5:
+					prevOutputMapObj = new java.util.HashMap<Integer,T1>();
+					traverseWithFixp(cfg, direction, kind, fixp);
+					break;
+				default : break;
+			}
 		} catch(Exception e) {return;}
-
 	}
 
 	public final void traverseWithFixp(final CFG cfg, final Traversal.TraversalDirection direction, final Traversal.TraversalKind kind, final BoaAbstractFixP fixp) throws Exception {

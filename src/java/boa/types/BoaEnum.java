@@ -1,6 +1,7 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ *                 Iowa State University of Science and Technology
+ *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,13 +27,13 @@ import java.util.Map;
  * enum type.
  * 
  * @author ankuraga
+ * @author rdyer
  */
 public class BoaEnum extends BoaScalar {
 	protected final List<BoaEnum> members;
 	protected final Map<String, Integer> names;
 	protected final List<String> values;
 	private BoaType fieldType = null;
-	private static final Map<String, String> enumNames = new HashMap<String, String>();
 	
 	/**
 	 * Construct a BoaEnum.
@@ -125,17 +126,7 @@ public class BoaEnum extends BoaScalar {
 		for (final BoaType t : this.members)
 			s += "_" + cleanType(t.toJavaType()) + this.values.get(k++).replaceAll("\"","");
 
-		if (!enumNames.containsKey(s))
-			enumNames.put(s, "BoaEnum_" + enumNames.size());
-
-		return enumNames.get(s);
-	}
-
-	private String cleanType(String s) {
-		final String s2 = s.replace('<', '_').replace('>', '_').replaceAll(",\\s+", "_").replaceAll("\\[\\]", "Array");
-		if (!s2.contains("."))
-			return s2;
-		return s2.substring(s2.lastIndexOf(".") + 1);
+		return shortenedType(s, "BoaEnum");
 	}
 	
 	/** {@inheritDoc} */
