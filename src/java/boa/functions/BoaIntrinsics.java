@@ -135,23 +135,6 @@ public class BoaIntrinsics {
 		return kind.name().startsWith(s);
 	}
 
-
-	/**
-	 * Returns <code>true</code> if the expression <code>e</code> is of kind
-	 * <code>LITERAL</code> and the literal matches the string <code>lit</code>.
-	 *
-	 * @param e the expression to test
-	 * @return true if the expression is a string literal, otherwise false
-	 */
-	@FunctionSpec(name = "subList", returnType = "Statement", formalParameters = { "Statement", "int", "int" })
-	public static List subList(final List e, final int starte, final int ende) throws Exception {
-		
-		List sube = e.subList( starte, ende);
-
-		return sube;
-		
-	}
-
 	public static <T> T stack_pop(final java.util.Stack<T> s) {
 		if (s.empty())
 			return null;
