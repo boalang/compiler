@@ -70,9 +70,9 @@ message ChangedFile {
 		/** The file represents a JavaScript source file that had a parse error */
 		SOURCE_JS_ERROR = 300;
 		/** The file represents a JavaScript source file that parsed without error as JLS2 */
-		SOURCE_JS_JLS2 = 301;
+		SOURCE_JS_ECMA2 = 301;
 		/** The file represents a JavaScript source file that parsed without error as JLS3 */
-		SOURCE_JS_JLS3 = 302;
+		SOURCE_JS_ECMA3 = 302;
 		/** @exclude */
 		JS_ERROR = 300;
 	}
