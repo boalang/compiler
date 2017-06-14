@@ -35,7 +35,6 @@ public class RepositoryClonerWorker implements Runnable{
 		    String urlHeader = "https://github.com/";
 		    String urlFooter = ".git";
 		    String outFilePath = "";
-		    String name = "";
 		    File dir = new File(inPath);
 		    File[] files = dir.listFiles();
 		    for(int i = from ; i < to  ; i++){
@@ -48,9 +47,11 @@ public class RepositoryClonerWorker implements Runnable{
 				JsonArray repos = parser.fromJson(content, JsonElement.class).getAsJsonArray();
 				for(int j = 0; j < repos.size(); j++){
 					JsonObject repo = repos.get(j).getAsJsonObject();
-					name = repo.get("full_name").getAsString();
+					String name = repo.get("full_name").getAsString();
+					boolean forked = repo.get("fork").getAsBoolean();
+					if(forked)
+						continue;
 					outFilePath = outPath + "/" + name ; 
-	    			System.out.println("Thread-" + Thread.currentThread().getId() + "handling :" + "url: "+ urlHeader + name + urlFooter);
 	    			String[] args = { urlHeader + name + urlFooter, outFilePath};
 	    			RepositoryCloner.clone(args);
 					}

@@ -83,9 +83,11 @@ public class GithubRepositoryNameDownloader {
                     	JsonObject repo = repos.get(i).getAsJsonObject();
                     	String name = repo.get("full_name").getAsString();
                     	String idNum = repo.get("id").getAsString();
+                    	String fork = repo.get("fork").getAsString();
                     	repo = new JsonObject();
                     	repo.addProperty("id", idNum);
                     	repo.addProperty("full_name", name);
+                    	repo.addProperty("fork", fork);
                     	reducedRepos.add(repo);
                     }
                     FileIO.writeFileContents(new File(outDir + "/page-" + pageNumber + ".json"), reducedRepos.getAsString());

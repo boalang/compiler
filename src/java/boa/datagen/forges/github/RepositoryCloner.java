@@ -23,7 +23,6 @@ public class RepositoryCloner {
     private static  String REMOTE_URL = "";
   //  private HttpURLConnection connection = null;
 
-    
     public static void clone(String[] args) throws IOException, InvalidRemoteException, TransportException, GitAPIException {
     	// prepare a new folder for the cloned repository
     	String localpaths=args[1];
@@ -37,10 +36,10 @@ public class RepositoryCloner {
         try {
         	result = Git.cloneRepository()
                 .setURI(REMOTE_URL)
+                .setBare(true)
                 .setDirectory(localPath)
                 .call();
 	        // Note: the call() returns an opened repository already which needs to be closed to avoid file handle leaks!
-
             // workaround for https://bugs.eclipse.org/bugs/show_bug.cgi?id=474093
 	        result.getRepository().close();
         } catch (Exception e) {
@@ -54,12 +53,9 @@ public class RepositoryCloner {
     public static void main(String[] args) throws IOException, InvalidRemoteException, TransportException, GitAPIException {
       String input = args[0];
       String output= args[1];
-      String tf = args[2];
-      
-      
-      int totalFiles = Integer.parseInt(tf);
-      final int MAX_NUM_THREADS = 3;
-      
+      File dir = new File(input);
+      int totalFiles = dir.listFiles().length;
+      final int MAX_NUM_THREADS = 4;
       int shareSize = totalFiles/MAX_NUM_THREADS;
       int start = 0;
       int end = 0;
@@ -74,5 +70,4 @@ public class RepositoryCloner {
       RepositoryClonerWorker worker = new RepositoryClonerWorker(output, input, start, end);
       new Thread(worker).start();
     }
-    
 }
