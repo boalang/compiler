@@ -11,9 +11,9 @@ public final class Diff {
   public interface ChangedFileOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
-    // required .boa.types.ChangeKind change = 1;
+    // required .boa.types.ChangedFile.ChangeKind change = 1;
     /**
-     * <code>required .boa.types.ChangeKind change = 1;</code>
+     * <code>required .boa.types.ChangedFile.ChangeKind change = 1;</code>
      *
      * <pre>
      ** The kind of change for this file 
@@ -21,13 +21,13 @@ public final class Diff {
      */
     boolean hasChange();
     /**
-     * <code>required .boa.types.ChangeKind change = 1;</code>
+     * <code>required .boa.types.ChangedFile.ChangeKind change = 1;</code>
      *
      * <pre>
      ** The kind of change for this file 
      * </pre>
      */
-    boa.types.Shared.ChangeKind getChange();
+    boa.types.Diff.ChangedFile.ChangeKind getChange();
 
     // required .boa.types.ChangedFile.FileKind kind = 2;
     /**
@@ -153,17 +153,17 @@ public final class Diff {
      */
     boa.types.Ast.CommentsRootOrBuilder getCommentsOrBuilder();
 
-    // repeated .boa.types.ChangeKind changes = 7;
+    // repeated .boa.types.ChangedFile.ChangeKind changes = 7;
     /**
-     * <code>repeated .boa.types.ChangeKind changes = 7;</code>
+     * <code>repeated .boa.types.ChangedFile.ChangeKind changes = 7;</code>
      *
      * <pre>
      ** @exclude TODO 
      * </pre>
      */
-    java.util.List<boa.types.Shared.ChangeKind> getChangesList();
+    java.util.List<boa.types.Diff.ChangedFile.ChangeKind> getChangesList();
     /**
-     * <code>repeated .boa.types.ChangeKind changes = 7;</code>
+     * <code>repeated .boa.types.ChangedFile.ChangeKind changes = 7;</code>
      *
      * <pre>
      ** @exclude TODO 
@@ -171,13 +171,13 @@ public final class Diff {
      */
     int getChangesCount();
     /**
-     * <code>repeated .boa.types.ChangeKind changes = 7;</code>
+     * <code>repeated .boa.types.ChangedFile.ChangeKind changes = 7;</code>
      *
      * <pre>
      ** @exclude TODO 
      * </pre>
      */
-    boa.types.Shared.ChangeKind getChanges(int index);
+    boa.types.Diff.ChangedFile.ChangeKind getChanges(int index);
 
     // repeated int32 previous_versions = 8;
     /**
@@ -288,7 +288,7 @@ public final class Diff {
             }
             case 8: {
               int rawValue = input.readEnum();
-              boa.types.Shared.ChangeKind value = boa.types.Shared.ChangeKind.valueOf(rawValue);
+              boa.types.Diff.ChangedFile.ChangeKind value = boa.types.Diff.ChangedFile.ChangeKind.valueOf(rawValue);
               if (value == null) {
                 unknownFields.mergeVarintField(1, rawValue);
               } else {
@@ -346,12 +346,12 @@ public final class Diff {
             }
             case 56: {
               int rawValue = input.readEnum();
-              boa.types.Shared.ChangeKind value = boa.types.Shared.ChangeKind.valueOf(rawValue);
+              boa.types.Diff.ChangedFile.ChangeKind value = boa.types.Diff.ChangedFile.ChangeKind.valueOf(rawValue);
               if (value == null) {
                 unknownFields.mergeVarintField(7, rawValue);
               } else {
                 if (!((mutable_bitField0_ & 0x00000040) == 0x00000040)) {
-                  changes_ = new java.util.ArrayList<boa.types.Shared.ChangeKind>();
+                  changes_ = new java.util.ArrayList<boa.types.Diff.ChangedFile.ChangeKind>();
                   mutable_bitField0_ |= 0x00000040;
                 }
                 changes_.add(value);
@@ -363,12 +363,12 @@ public final class Diff {
               int oldLimit = input.pushLimit(length);
               while(input.getBytesUntilLimit() > 0) {
                 int rawValue = input.readEnum();
-                boa.types.Shared.ChangeKind value = boa.types.Shared.ChangeKind.valueOf(rawValue);
+                boa.types.Diff.ChangedFile.ChangeKind value = boa.types.Diff.ChangedFile.ChangeKind.valueOf(rawValue);
                 if (value == null) {
                   unknownFields.mergeVarintField(7, rawValue);
                 } else {
                   if (!((mutable_bitField0_ & 0x00000040) == 0x00000040)) {
-                    changes_ = new java.util.ArrayList<boa.types.Shared.ChangeKind>();
+                    changes_ = new java.util.ArrayList<boa.types.Diff.ChangedFile.ChangeKind>();
                     mutable_bitField0_ |= 0x00000040;
                   }
                   changes_.add(value);
@@ -465,6 +465,209 @@ public final class Diff {
     @java.lang.Override
     public com.google.protobuf.Parser<ChangedFile> getParserForType() {
       return PARSER;
+    }
+
+    /**
+     * Protobuf enum {@code boa.types.ChangedFile.ChangeKind}
+     *
+     * <pre>
+     ** Describes the kind of change for the file 
+     * </pre>
+     */
+    public enum ChangeKind
+        implements com.google.protobuf.ProtocolMessageEnum {
+      /**
+       * <code>ADDED = 1;</code>
+       *
+       * <pre>
+       ** The file did not already exist and was added 
+       * </pre>
+       */
+      ADDED(0, 1),
+      /**
+       * <code>DELETED = 2;</code>
+       *
+       * <pre>
+       ** The file was deleted 
+       * </pre>
+       */
+      DELETED(1, 2),
+      /**
+       * <code>MODIFIED = 3;</code>
+       *
+       * <pre>
+       ** The file already existed and was modified 
+       * </pre>
+       */
+      MODIFIED(3, 3),
+      /**
+       * <code>RENAMED = 4;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
+       */
+      RENAMED(5, 4),
+      /**
+       * <code>COPIED = 5;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
+       */
+      COPIED(7, 5),
+      ;
+
+      /**
+       * <code>REMOVED = 2;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
+       */
+      public static final ChangeKind REMOVED = DELETED;
+      /**
+       * <code>CHANGED = 3;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
+       */
+      public static final ChangeKind CHANGED = MODIFIED;
+      /**
+       * <code>MOVED = 4;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
+       */
+      public static final ChangeKind MOVED = RENAMED;
+      /**
+       * <code>ADDED = 1;</code>
+       *
+       * <pre>
+       ** The file did not already exist and was added 
+       * </pre>
+       */
+      public static final int ADDED_VALUE = 1;
+      /**
+       * <code>DELETED = 2;</code>
+       *
+       * <pre>
+       ** The file was deleted 
+       * </pre>
+       */
+      public static final int DELETED_VALUE = 2;
+      /**
+       * <code>REMOVED = 2;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
+       */
+      public static final int REMOVED_VALUE = 2;
+      /**
+       * <code>MODIFIED = 3;</code>
+       *
+       * <pre>
+       ** The file already existed and was modified 
+       * </pre>
+       */
+      public static final int MODIFIED_VALUE = 3;
+      /**
+       * <code>CHANGED = 3;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
+       */
+      public static final int CHANGED_VALUE = 3;
+      /**
+       * <code>RENAMED = 4;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
+       */
+      public static final int RENAMED_VALUE = 4;
+      /**
+       * <code>MOVED = 4;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
+       */
+      public static final int MOVED_VALUE = 4;
+      /**
+       * <code>COPIED = 5;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
+       */
+      public static final int COPIED_VALUE = 5;
+
+
+      public final int getNumber() { return value; }
+
+      public static ChangeKind valueOf(int value) {
+        switch (value) {
+          case 1: return ADDED;
+          case 2: return DELETED;
+          case 3: return MODIFIED;
+          case 4: return RENAMED;
+          case 5: return COPIED;
+          default: return null;
+        }
+      }
+
+      public static com.google.protobuf.Internal.EnumLiteMap<ChangeKind>
+          internalGetValueMap() {
+        return internalValueMap;
+      }
+      private static com.google.protobuf.Internal.EnumLiteMap<ChangeKind>
+          internalValueMap =
+            new com.google.protobuf.Internal.EnumLiteMap<ChangeKind>() {
+              public ChangeKind findValueByNumber(int number) {
+                return ChangeKind.valueOf(number);
+              }
+            };
+
+      public final com.google.protobuf.Descriptors.EnumValueDescriptor
+          getValueDescriptor() {
+        return getDescriptor().getValues().get(index);
+      }
+      public final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptorForType() {
+        return getDescriptor();
+      }
+      public static final com.google.protobuf.Descriptors.EnumDescriptor
+          getDescriptor() {
+        return boa.types.Diff.ChangedFile.getDescriptor().getEnumTypes().get(0);
+      }
+
+      private static final ChangeKind[] VALUES = {
+        ADDED, DELETED, REMOVED, MODIFIED, CHANGED, RENAMED, MOVED, COPIED, 
+      };
+
+      public static ChangeKind valueOf(
+          com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+        if (desc.getType() != getDescriptor()) {
+          throw new java.lang.IllegalArgumentException(
+            "EnumValueDescriptor is not for this type.");
+        }
+        return VALUES[desc.getIndex()];
+      }
+
+      private final int index;
+      private final int value;
+
+      private ChangeKind(int index, int value) {
+        this.index = index;
+        this.value = value;
+      }
+
+      // @@protoc_insertion_point(enum_scope:boa.types.ChangedFile.ChangeKind)
     }
 
     /**
@@ -941,7 +1144,7 @@ public final class Diff {
       }
       public static final com.google.protobuf.Descriptors.EnumDescriptor
           getDescriptor() {
-        return boa.types.Diff.ChangedFile.getDescriptor().getEnumTypes().get(0);
+        return boa.types.Diff.ChangedFile.getDescriptor().getEnumTypes().get(1);
       }
 
       private static final FileKind[] VALUES = {
@@ -969,11 +1172,11 @@ public final class Diff {
     }
 
     private int bitField0_;
-    // required .boa.types.ChangeKind change = 1;
+    // required .boa.types.ChangedFile.ChangeKind change = 1;
     public static final int CHANGE_FIELD_NUMBER = 1;
-    private boa.types.Shared.ChangeKind change_;
+    private boa.types.Diff.ChangedFile.ChangeKind change_;
     /**
-     * <code>required .boa.types.ChangeKind change = 1;</code>
+     * <code>required .boa.types.ChangedFile.ChangeKind change = 1;</code>
      *
      * <pre>
      ** The kind of change for this file 
@@ -983,13 +1186,13 @@ public final class Diff {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
-     * <code>required .boa.types.ChangeKind change = 1;</code>
+     * <code>required .boa.types.ChangedFile.ChangeKind change = 1;</code>
      *
      * <pre>
      ** The kind of change for this file 
      * </pre>
      */
-    public boa.types.Shared.ChangeKind getChange() {
+    public boa.types.Diff.ChangedFile.ChangeKind getChange() {
       return change_;
     }
 
@@ -1195,21 +1398,21 @@ public final class Diff {
       return comments_;
     }
 
-    // repeated .boa.types.ChangeKind changes = 7;
+    // repeated .boa.types.ChangedFile.ChangeKind changes = 7;
     public static final int CHANGES_FIELD_NUMBER = 7;
-    private java.util.List<boa.types.Shared.ChangeKind> changes_;
+    private java.util.List<boa.types.Diff.ChangedFile.ChangeKind> changes_;
     /**
-     * <code>repeated .boa.types.ChangeKind changes = 7;</code>
+     * <code>repeated .boa.types.ChangedFile.ChangeKind changes = 7;</code>
      *
      * <pre>
      ** @exclude TODO 
      * </pre>
      */
-    public java.util.List<boa.types.Shared.ChangeKind> getChangesList() {
+    public java.util.List<boa.types.Diff.ChangedFile.ChangeKind> getChangesList() {
       return changes_;
     }
     /**
-     * <code>repeated .boa.types.ChangeKind changes = 7;</code>
+     * <code>repeated .boa.types.ChangedFile.ChangeKind changes = 7;</code>
      *
      * <pre>
      ** @exclude TODO 
@@ -1219,13 +1422,13 @@ public final class Diff {
       return changes_.size();
     }
     /**
-     * <code>repeated .boa.types.ChangeKind changes = 7;</code>
+     * <code>repeated .boa.types.ChangedFile.ChangeKind changes = 7;</code>
      *
      * <pre>
      ** @exclude TODO 
      * </pre>
      */
-    public boa.types.Shared.ChangeKind getChanges(int index) {
+    public boa.types.Diff.ChangedFile.ChangeKind getChanges(int index) {
       return changes_.get(index);
     }
 
@@ -1300,7 +1503,7 @@ public final class Diff {
     }
 
     private void initFields() {
-      change_ = boa.types.Shared.ChangeKind.ADDED;
+      change_ = boa.types.Diff.ChangedFile.ChangeKind.ADDED;
       kind_ = boa.types.Diff.ChangedFile.FileKind.OTHER;
       name_ = "";
       key_ = "";
@@ -1559,7 +1762,7 @@ public final class Diff {
 
       public Builder clear() {
         super.clear();
-        change_ = boa.types.Shared.ChangeKind.ADDED;
+        change_ = boa.types.Diff.ChangedFile.ChangeKind.ADDED;
         bitField0_ = (bitField0_ & ~0x00000001);
         kind_ = boa.types.Diff.ChangedFile.FileKind.OTHER;
         bitField0_ = (bitField0_ & ~0x00000002);
@@ -1783,10 +1986,10 @@ public final class Diff {
       }
       private int bitField0_;
 
-      // required .boa.types.ChangeKind change = 1;
-      private boa.types.Shared.ChangeKind change_ = boa.types.Shared.ChangeKind.ADDED;
+      // required .boa.types.ChangedFile.ChangeKind change = 1;
+      private boa.types.Diff.ChangedFile.ChangeKind change_ = boa.types.Diff.ChangedFile.ChangeKind.ADDED;
       /**
-       * <code>required .boa.types.ChangeKind change = 1;</code>
+       * <code>required .boa.types.ChangedFile.ChangeKind change = 1;</code>
        *
        * <pre>
        ** The kind of change for this file 
@@ -1796,23 +1999,23 @@ public final class Diff {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
-       * <code>required .boa.types.ChangeKind change = 1;</code>
+       * <code>required .boa.types.ChangedFile.ChangeKind change = 1;</code>
        *
        * <pre>
        ** The kind of change for this file 
        * </pre>
        */
-      public boa.types.Shared.ChangeKind getChange() {
+      public boa.types.Diff.ChangedFile.ChangeKind getChange() {
         return change_;
       }
       /**
-       * <code>required .boa.types.ChangeKind change = 1;</code>
+       * <code>required .boa.types.ChangedFile.ChangeKind change = 1;</code>
        *
        * <pre>
        ** The kind of change for this file 
        * </pre>
        */
-      public Builder setChange(boa.types.Shared.ChangeKind value) {
+      public Builder setChange(boa.types.Diff.ChangedFile.ChangeKind value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -1822,7 +2025,7 @@ public final class Diff {
         return this;
       }
       /**
-       * <code>required .boa.types.ChangeKind change = 1;</code>
+       * <code>required .boa.types.ChangedFile.ChangeKind change = 1;</code>
        *
        * <pre>
        ** The kind of change for this file 
@@ -1830,7 +2033,7 @@ public final class Diff {
        */
       public Builder clearChange() {
         bitField0_ = (bitField0_ & ~0x00000001);
-        change_ = boa.types.Shared.ChangeKind.ADDED;
+        change_ = boa.types.Diff.ChangedFile.ChangeKind.ADDED;
         onChanged();
         return this;
       }
@@ -2389,27 +2592,27 @@ public final class Diff {
         return commentsBuilder_;
       }
 
-      // repeated .boa.types.ChangeKind changes = 7;
-      private java.util.List<boa.types.Shared.ChangeKind> changes_ =
+      // repeated .boa.types.ChangedFile.ChangeKind changes = 7;
+      private java.util.List<boa.types.Diff.ChangedFile.ChangeKind> changes_ =
         java.util.Collections.emptyList();
       private void ensureChangesIsMutable() {
         if (!((bitField0_ & 0x00000040) == 0x00000040)) {
-          changes_ = new java.util.ArrayList<boa.types.Shared.ChangeKind>(changes_);
+          changes_ = new java.util.ArrayList<boa.types.Diff.ChangedFile.ChangeKind>(changes_);
           bitField0_ |= 0x00000040;
         }
       }
       /**
-       * <code>repeated .boa.types.ChangeKind changes = 7;</code>
+       * <code>repeated .boa.types.ChangedFile.ChangeKind changes = 7;</code>
        *
        * <pre>
        ** @exclude TODO 
        * </pre>
        */
-      public java.util.List<boa.types.Shared.ChangeKind> getChangesList() {
+      public java.util.List<boa.types.Diff.ChangedFile.ChangeKind> getChangesList() {
         return java.util.Collections.unmodifiableList(changes_);
       }
       /**
-       * <code>repeated .boa.types.ChangeKind changes = 7;</code>
+       * <code>repeated .boa.types.ChangedFile.ChangeKind changes = 7;</code>
        *
        * <pre>
        ** @exclude TODO 
@@ -2419,24 +2622,24 @@ public final class Diff {
         return changes_.size();
       }
       /**
-       * <code>repeated .boa.types.ChangeKind changes = 7;</code>
+       * <code>repeated .boa.types.ChangedFile.ChangeKind changes = 7;</code>
        *
        * <pre>
        ** @exclude TODO 
        * </pre>
        */
-      public boa.types.Shared.ChangeKind getChanges(int index) {
+      public boa.types.Diff.ChangedFile.ChangeKind getChanges(int index) {
         return changes_.get(index);
       }
       /**
-       * <code>repeated .boa.types.ChangeKind changes = 7;</code>
+       * <code>repeated .boa.types.ChangedFile.ChangeKind changes = 7;</code>
        *
        * <pre>
        ** @exclude TODO 
        * </pre>
        */
       public Builder setChanges(
-          int index, boa.types.Shared.ChangeKind value) {
+          int index, boa.types.Diff.ChangedFile.ChangeKind value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -2446,13 +2649,13 @@ public final class Diff {
         return this;
       }
       /**
-       * <code>repeated .boa.types.ChangeKind changes = 7;</code>
+       * <code>repeated .boa.types.ChangedFile.ChangeKind changes = 7;</code>
        *
        * <pre>
        ** @exclude TODO 
        * </pre>
        */
-      public Builder addChanges(boa.types.Shared.ChangeKind value) {
+      public Builder addChanges(boa.types.Diff.ChangedFile.ChangeKind value) {
         if (value == null) {
           throw new NullPointerException();
         }
@@ -2462,21 +2665,21 @@ public final class Diff {
         return this;
       }
       /**
-       * <code>repeated .boa.types.ChangeKind changes = 7;</code>
+       * <code>repeated .boa.types.ChangedFile.ChangeKind changes = 7;</code>
        *
        * <pre>
        ** @exclude TODO 
        * </pre>
        */
       public Builder addAllChanges(
-          java.lang.Iterable<? extends boa.types.Shared.ChangeKind> values) {
+          java.lang.Iterable<? extends boa.types.Diff.ChangedFile.ChangeKind> values) {
         ensureChangesIsMutable();
         super.addAll(values, changes_);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated .boa.types.ChangeKind changes = 7;</code>
+       * <code>repeated .boa.types.ChangedFile.ChangeKind changes = 7;</code>
        *
        * <pre>
        ** @exclude TODO 
@@ -2702,26 +2905,29 @@ public final class Diff {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\ndiff.proto\022\tboa.types\032\014shared.proto\032\ta" +
-      "st.proto\"\302\005\n\013ChangedFile\022%\n\006change\030\001 \002(\016" +
-      "2\025.boa.types.ChangeKind\022-\n\004kind\030\002 \002(\0162\037." +
-      "boa.types.ChangedFile.FileKind\022\014\n\004name\030\003" +
-      " \002(\t\022\013\n\003key\030\004 \002(\t\022\037\n\003ast\030\005 \001(\0132\022.boa.typ" +
-      "es.ASTRoot\022)\n\010comments\030\006 \001(\0132\027.boa.types" +
-      ".CommentsRoot\022&\n\007changes\030\007 \003(\0162\025.boa.typ" +
-      "es.ChangeKind\022\031\n\021previous_versions\030\010 \003(\005" +
-      "\022\026\n\016previous_index\030\t \003(\005\"\232\003\n\010FileKind\022\t\n" +
-      "\005OTHER\020\000\022\n\n\006BINARY\020\001\022\010\n\004TEXT\020\002\022\007\n\003XML\020\003\022",
-      "\025\n\021SOURCE_JAVA_ERROR\020d\022\024\n\020SOURCE_JAVA_JL" +
-      "S2\020e\022\024\n\020SOURCE_JAVA_JLS3\020f\022\024\n\020SOURCE_JAV" +
-      "A_JLS4\020g\022\024\n\020SOURCE_JAVA_JLS8\020h\022\016\n\nJAVA_E" +
-      "RROR\020d\022\010\n\004JLS2\020e\022\010\n\004JLS3\020f\022\010\n\004JLS4\020g\022\010\n\004" +
-      "JLS8\020h\022\024\n\017SOURCE_CS_ERROR\020\310\001\022\022\n\rSOURCE_C" +
-      "S_CS1\020\311\001\022\022\n\rSOURCE_CS_CS2\020\312\001\022\022\n\rSOURCE_C" +
-      "S_CS3\020\313\001\022\022\n\rSOURCE_CS_CS4\020\314\001\022\022\n\rSOURCE_C" +
-      "S_CS5\020\315\001\022\r\n\010CS_ERROR\020\310\001\022\010\n\003CS1\020\311\001\022\010\n\003CS2" +
-      "\020\312\001\022\010\n\003CS3\020\313\001\022\010\n\003CS4\020\314\001\022\010\n\003CS5\020\315\001\032\002\020\001B\002H" +
-      "\001"
+      "\n\ndiff.proto\022\tboa.types\032\tast.proto\"\320\006\n\013C" +
+      "hangedFile\0221\n\006change\030\001 \002(\0162!.boa.types.C" +
+      "hangedFile.ChangeKind\022-\n\004kind\030\002 \002(\0162\037.bo" +
+      "a.types.ChangedFile.FileKind\022\014\n\004name\030\003 \002" +
+      "(\t\022\013\n\003key\030\004 \002(\t\022\037\n\003ast\030\005 \001(\0132\022.boa.types" +
+      ".ASTRoot\022)\n\010comments\030\006 \001(\0132\027.boa.types.C" +
+      "ommentsRoot\0222\n\007changes\030\007 \003(\0162!.boa.types" +
+      ".ChangedFile.ChangeKind\022\031\n\021previous_vers" +
+      "ions\030\010 \003(\005\022\026\n\016previous_index\030\t \003(\005\"t\n\nCh" +
+      "angeKind\022\t\n\005ADDED\020\001\022\013\n\007DELETED\020\002\022\013\n\007REMO",
+      "VED\020\002\022\014\n\010MODIFIED\020\003\022\013\n\007CHANGED\020\003\022\013\n\007RENA" +
+      "MED\020\004\022\t\n\005MOVED\020\004\022\n\n\006COPIED\020\005\032\002\020\001\"\232\003\n\010Fil" +
+      "eKind\022\t\n\005OTHER\020\000\022\n\n\006BINARY\020\001\022\010\n\004TEXT\020\002\022\007" +
+      "\n\003XML\020\003\022\025\n\021SOURCE_JAVA_ERROR\020d\022\024\n\020SOURCE" +
+      "_JAVA_JLS2\020e\022\024\n\020SOURCE_JAVA_JLS3\020f\022\024\n\020SO" +
+      "URCE_JAVA_JLS4\020g\022\024\n\020SOURCE_JAVA_JLS8\020h\022\016" +
+      "\n\nJAVA_ERROR\020d\022\010\n\004JLS2\020e\022\010\n\004JLS3\020f\022\010\n\004JL" +
+      "S4\020g\022\010\n\004JLS8\020h\022\024\n\017SOURCE_CS_ERROR\020\310\001\022\022\n\r" +
+      "SOURCE_CS_CS1\020\311\001\022\022\n\rSOURCE_CS_CS2\020\312\001\022\022\n\r" +
+      "SOURCE_CS_CS3\020\313\001\022\022\n\rSOURCE_CS_CS4\020\314\001\022\022\n\r",
+      "SOURCE_CS_CS5\020\315\001\022\r\n\010CS_ERROR\020\310\001\022\010\n\003CS1\020\311" +
+      "\001\022\010\n\003CS2\020\312\001\022\010\n\003CS3\020\313\001\022\010\n\003CS4\020\314\001\022\010\n\003CS5\020\315" +
+      "\001\032\002\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -2740,7 +2946,6 @@ public final class Diff {
     com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
-          boa.types.Shared.getDescriptor(),
           boa.types.Ast.getDescriptor(),
         }, assigner);
   }

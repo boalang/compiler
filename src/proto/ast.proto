@@ -2,7 +2,7 @@ package boa.types;
 
 option optimize_for = SPEED;
 
-/** @exclude TODO */
+/** @exclude Container class that holds all comments for a file */
 message CommentsRoot {
 	repeated Comment comments = 1;
 }
@@ -100,11 +100,11 @@ message Method {
 	repeated Variable arguments = 5;
 	/** The list of exceptions thrown by this method */
 	repeated Type exception_types = 6;
-    /**
+	/**
 	  * The statements in the method body. Note that most methods (in C-like
 	  * languages, such as Java) contain a single statement of type BLOCK, which
 	  * contains the list of statements within it!
-      */
+	  */
 	repeated Statement statements = 7;
 	/** @exclude TODO */
 	repeated Comment comments = 8;
@@ -299,30 +299,50 @@ message Modifier {
 	optional string other = 6;
 }
 
-/** @exclude */
+/** @exclude A single comment */
 message Comment {
-	/** @exclude */
+	/** @exclude The kind of comment */
 	enum CommentKind {
 		option allow_alias = true;
+		/** Any other kind of comment */
 		OTHER = 0;
+
+		/** A line comment */
 		LINE = 1;
+		/** A block comment */
 		BLOCK = 2;
+		/** A documentation comment */
 		DOC = 3;
+		/** @exclude */
 		DOCUMENTATION = 3;
+		/** A specification comment */
 		SPEC = 4;
+		/** @exclude */
 		SPECIFICATION = 4;
 	}
+	/** The kind of comment */
 	required CommentKind kind = 1;
+	/** The value of the comment */
 	required string value = 2;
+	/** Position information for the comment */
 	required PositionInfo position = 3;
 }
 
-/** @exclude */
+/** @exclude Position information for a node */
 message PositionInfo {
-	required int32 start_pos = 1;
-	required int32 length = 2;
+	/** The starting position of the element, in characters from the start of the file */
+	required int32 start_pos  = 1;
+
+	/** The length of the element, in characters */
+	required int32 length     = 2;
+
+	/** The starting line of the element, in lines from the start of the file */
 	required int32 start_line = 3;
-	required int32 start_col = 4;
-	required int32 end_line = 5;
-	required int32 end_col = 6;
+	/** The starting column of the element, in characters from the start of the line */
+	required int32 start_col  = 4;
+
+	/** The ending line of the element, in lines from the start of the file */
+	required int32 end_line   = 5;
+	/** The ending column of the element, in characters from the start of the line */
+	required int32 end_col    = 6;
 }

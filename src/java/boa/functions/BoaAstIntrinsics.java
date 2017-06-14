@@ -37,9 +37,9 @@ import boa.types.Ast.*;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
+import boa.types.Diff.ChangedFile.ChangeKind;
 import boa.types.Issues.IssueRepository;
 import boa.types.Issues.IssuesRoot;
-import boa.types.Shared.ChangeKind;
 import boa.types.Shared.Person;
 import boa.types.Toplevel.Project;
 

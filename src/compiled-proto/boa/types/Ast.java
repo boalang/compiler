@@ -295,7 +295,7 @@ public final class Ast {
    * Protobuf type {@code boa.types.CommentsRoot}
    *
    * <pre>
-   ** @exclude TODO 
+   ** @exclude Container class that holds all comments for a file 
    * </pre>
    */
   public static final class CommentsRoot extends
@@ -551,7 +551,7 @@ public final class Ast {
      * Protobuf type {@code boa.types.CommentsRoot}
      *
      * <pre>
-     ** @exclude TODO 
+     ** @exclude Container class that holds all comments for a file 
      * </pre>
      */
     public static final class Builder extends
@@ -23767,24 +23767,44 @@ public final class Ast {
     // required .boa.types.Comment.CommentKind kind = 1;
     /**
      * <code>required .boa.types.Comment.CommentKind kind = 1;</code>
+     *
+     * <pre>
+     ** The kind of comment 
+     * </pre>
      */
     boolean hasKind();
     /**
      * <code>required .boa.types.Comment.CommentKind kind = 1;</code>
+     *
+     * <pre>
+     ** The kind of comment 
+     * </pre>
      */
     boa.types.Ast.Comment.CommentKind getKind();
 
     // required string value = 2;
     /**
      * <code>required string value = 2;</code>
+     *
+     * <pre>
+     ** The value of the comment 
+     * </pre>
      */
     boolean hasValue();
     /**
      * <code>required string value = 2;</code>
+     *
+     * <pre>
+     ** The value of the comment 
+     * </pre>
      */
     java.lang.String getValue();
     /**
      * <code>required string value = 2;</code>
+     *
+     * <pre>
+     ** The value of the comment 
+     * </pre>
      */
     com.google.protobuf.ByteString
         getValueBytes();
@@ -23792,14 +23812,26 @@ public final class Ast {
     // required .boa.types.PositionInfo position = 3;
     /**
      * <code>required .boa.types.PositionInfo position = 3;</code>
+     *
+     * <pre>
+     ** Position information for the comment 
+     * </pre>
      */
     boolean hasPosition();
     /**
      * <code>required .boa.types.PositionInfo position = 3;</code>
+     *
+     * <pre>
+     ** Position information for the comment 
+     * </pre>
      */
     boa.types.Ast.PositionInfo getPosition();
     /**
      * <code>required .boa.types.PositionInfo position = 3;</code>
+     *
+     * <pre>
+     ** Position information for the comment 
+     * </pre>
      */
     boa.types.Ast.PositionInfoOrBuilder getPositionOrBuilder();
   }
@@ -23807,7 +23839,7 @@ public final class Ast {
    * Protobuf type {@code boa.types.Comment}
    *
    * <pre>
-   ** @exclude 
+   ** @exclude A single comment 
    * </pre>
    */
   public static final class Comment extends
@@ -23930,67 +23962,123 @@ public final class Ast {
      * Protobuf enum {@code boa.types.Comment.CommentKind}
      *
      * <pre>
-     ** @exclude 
+     ** @exclude The kind of comment 
      * </pre>
      */
     public enum CommentKind
         implements com.google.protobuf.ProtocolMessageEnum {
       /**
        * <code>OTHER = 0;</code>
+       *
+       * <pre>
+       ** Any other kind of comment 
+       * </pre>
        */
       OTHER(0, 0),
       /**
        * <code>LINE = 1;</code>
+       *
+       * <pre>
+       ** A line comment 
+       * </pre>
        */
       LINE(1, 1),
       /**
        * <code>BLOCK = 2;</code>
+       *
+       * <pre>
+       ** A block comment 
+       * </pre>
        */
       BLOCK(2, 2),
       /**
        * <code>DOC = 3;</code>
+       *
+       * <pre>
+       ** A documentation comment 
+       * </pre>
        */
       DOC(3, 3),
       /**
        * <code>SPEC = 4;</code>
+       *
+       * <pre>
+       ** A specification comment 
+       * </pre>
        */
       SPEC(5, 4),
       ;
 
       /**
        * <code>DOCUMENTATION = 3;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
        */
       public static final CommentKind DOCUMENTATION = DOC;
       /**
        * <code>SPECIFICATION = 4;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
        */
       public static final CommentKind SPECIFICATION = SPEC;
       /**
        * <code>OTHER = 0;</code>
+       *
+       * <pre>
+       ** Any other kind of comment 
+       * </pre>
        */
       public static final int OTHER_VALUE = 0;
       /**
        * <code>LINE = 1;</code>
+       *
+       * <pre>
+       ** A line comment 
+       * </pre>
        */
       public static final int LINE_VALUE = 1;
       /**
        * <code>BLOCK = 2;</code>
+       *
+       * <pre>
+       ** A block comment 
+       * </pre>
        */
       public static final int BLOCK_VALUE = 2;
       /**
        * <code>DOC = 3;</code>
+       *
+       * <pre>
+       ** A documentation comment 
+       * </pre>
        */
       public static final int DOC_VALUE = 3;
       /**
        * <code>DOCUMENTATION = 3;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
        */
       public static final int DOCUMENTATION_VALUE = 3;
       /**
        * <code>SPEC = 4;</code>
+       *
+       * <pre>
+       ** A specification comment 
+       * </pre>
        */
       public static final int SPEC_VALUE = 4;
       /**
        * <code>SPECIFICATION = 4;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
        */
       public static final int SPECIFICATION_VALUE = 4;
 
@@ -24063,12 +24151,20 @@ public final class Ast {
     private boa.types.Ast.Comment.CommentKind kind_;
     /**
      * <code>required .boa.types.Comment.CommentKind kind = 1;</code>
+     *
+     * <pre>
+     ** The kind of comment 
+     * </pre>
      */
     public boolean hasKind() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
      * <code>required .boa.types.Comment.CommentKind kind = 1;</code>
+     *
+     * <pre>
+     ** The kind of comment 
+     * </pre>
      */
     public boa.types.Ast.Comment.CommentKind getKind() {
       return kind_;
@@ -24079,12 +24175,20 @@ public final class Ast {
     private java.lang.Object value_;
     /**
      * <code>required string value = 2;</code>
+     *
+     * <pre>
+     ** The value of the comment 
+     * </pre>
      */
     public boolean hasValue() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
      * <code>required string value = 2;</code>
+     *
+     * <pre>
+     ** The value of the comment 
+     * </pre>
      */
     public java.lang.String getValue() {
       java.lang.Object ref = value_;
@@ -24102,6 +24206,10 @@ public final class Ast {
     }
     /**
      * <code>required string value = 2;</code>
+     *
+     * <pre>
+     ** The value of the comment 
+     * </pre>
      */
     public com.google.protobuf.ByteString
         getValueBytes() {
@@ -24122,18 +24230,30 @@ public final class Ast {
     private boa.types.Ast.PositionInfo position_;
     /**
      * <code>required .boa.types.PositionInfo position = 3;</code>
+     *
+     * <pre>
+     ** Position information for the comment 
+     * </pre>
      */
     public boolean hasPosition() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
      * <code>required .boa.types.PositionInfo position = 3;</code>
+     *
+     * <pre>
+     ** Position information for the comment 
+     * </pre>
      */
     public boa.types.Ast.PositionInfo getPosition() {
       return position_;
     }
     /**
      * <code>required .boa.types.PositionInfo position = 3;</code>
+     *
+     * <pre>
+     ** Position information for the comment 
+     * </pre>
      */
     public boa.types.Ast.PositionInfoOrBuilder getPositionOrBuilder() {
       return position_;
@@ -24284,7 +24404,7 @@ public final class Ast {
      * Protobuf type {@code boa.types.Comment}
      *
      * <pre>
-     ** @exclude 
+     ** @exclude A single comment 
      * </pre>
      */
     public static final class Builder extends
@@ -24451,18 +24571,30 @@ public final class Ast {
       private boa.types.Ast.Comment.CommentKind kind_ = boa.types.Ast.Comment.CommentKind.OTHER;
       /**
        * <code>required .boa.types.Comment.CommentKind kind = 1;</code>
+       *
+       * <pre>
+       ** The kind of comment 
+       * </pre>
        */
       public boolean hasKind() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
        * <code>required .boa.types.Comment.CommentKind kind = 1;</code>
+       *
+       * <pre>
+       ** The kind of comment 
+       * </pre>
        */
       public boa.types.Ast.Comment.CommentKind getKind() {
         return kind_;
       }
       /**
        * <code>required .boa.types.Comment.CommentKind kind = 1;</code>
+       *
+       * <pre>
+       ** The kind of comment 
+       * </pre>
        */
       public Builder setKind(boa.types.Ast.Comment.CommentKind value) {
         if (value == null) {
@@ -24475,6 +24607,10 @@ public final class Ast {
       }
       /**
        * <code>required .boa.types.Comment.CommentKind kind = 1;</code>
+       *
+       * <pre>
+       ** The kind of comment 
+       * </pre>
        */
       public Builder clearKind() {
         bitField0_ = (bitField0_ & ~0x00000001);
@@ -24487,12 +24623,20 @@ public final class Ast {
       private java.lang.Object value_ = "";
       /**
        * <code>required string value = 2;</code>
+       *
+       * <pre>
+       ** The value of the comment 
+       * </pre>
        */
       public boolean hasValue() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
        * <code>required string value = 2;</code>
+       *
+       * <pre>
+       ** The value of the comment 
+       * </pre>
        */
       public java.lang.String getValue() {
         java.lang.Object ref = value_;
@@ -24507,6 +24651,10 @@ public final class Ast {
       }
       /**
        * <code>required string value = 2;</code>
+       *
+       * <pre>
+       ** The value of the comment 
+       * </pre>
        */
       public com.google.protobuf.ByteString
           getValueBytes() {
@@ -24523,6 +24671,10 @@ public final class Ast {
       }
       /**
        * <code>required string value = 2;</code>
+       *
+       * <pre>
+       ** The value of the comment 
+       * </pre>
        */
       public Builder setValue(
           java.lang.String value) {
@@ -24536,6 +24688,10 @@ public final class Ast {
       }
       /**
        * <code>required string value = 2;</code>
+       *
+       * <pre>
+       ** The value of the comment 
+       * </pre>
        */
       public Builder clearValue() {
         bitField0_ = (bitField0_ & ~0x00000002);
@@ -24545,6 +24701,10 @@ public final class Ast {
       }
       /**
        * <code>required string value = 2;</code>
+       *
+       * <pre>
+       ** The value of the comment 
+       * </pre>
        */
       public Builder setValueBytes(
           com.google.protobuf.ByteString value) {
@@ -24563,12 +24723,20 @@ public final class Ast {
           boa.types.Ast.PositionInfo, boa.types.Ast.PositionInfo.Builder, boa.types.Ast.PositionInfoOrBuilder> positionBuilder_;
       /**
        * <code>required .boa.types.PositionInfo position = 3;</code>
+       *
+       * <pre>
+       ** Position information for the comment 
+       * </pre>
        */
       public boolean hasPosition() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
        * <code>required .boa.types.PositionInfo position = 3;</code>
+       *
+       * <pre>
+       ** Position information for the comment 
+       * </pre>
        */
       public boa.types.Ast.PositionInfo getPosition() {
         if (positionBuilder_ == null) {
@@ -24579,6 +24747,10 @@ public final class Ast {
       }
       /**
        * <code>required .boa.types.PositionInfo position = 3;</code>
+       *
+       * <pre>
+       ** Position information for the comment 
+       * </pre>
        */
       public Builder setPosition(boa.types.Ast.PositionInfo value) {
         if (positionBuilder_ == null) {
@@ -24595,6 +24767,10 @@ public final class Ast {
       }
       /**
        * <code>required .boa.types.PositionInfo position = 3;</code>
+       *
+       * <pre>
+       ** Position information for the comment 
+       * </pre>
        */
       public Builder setPosition(
           boa.types.Ast.PositionInfo.Builder builderForValue) {
@@ -24609,6 +24785,10 @@ public final class Ast {
       }
       /**
        * <code>required .boa.types.PositionInfo position = 3;</code>
+       *
+       * <pre>
+       ** Position information for the comment 
+       * </pre>
        */
       public Builder mergePosition(boa.types.Ast.PositionInfo value) {
         if (positionBuilder_ == null) {
@@ -24628,6 +24808,10 @@ public final class Ast {
       }
       /**
        * <code>required .boa.types.PositionInfo position = 3;</code>
+       *
+       * <pre>
+       ** Position information for the comment 
+       * </pre>
        */
       public Builder clearPosition() {
         if (positionBuilder_ == null) {
@@ -24641,6 +24825,10 @@ public final class Ast {
       }
       /**
        * <code>required .boa.types.PositionInfo position = 3;</code>
+       *
+       * <pre>
+       ** Position information for the comment 
+       * </pre>
        */
       public boa.types.Ast.PositionInfo.Builder getPositionBuilder() {
         bitField0_ |= 0x00000004;
@@ -24649,6 +24837,10 @@ public final class Ast {
       }
       /**
        * <code>required .boa.types.PositionInfo position = 3;</code>
+       *
+       * <pre>
+       ** Position information for the comment 
+       * </pre>
        */
       public boa.types.Ast.PositionInfoOrBuilder getPositionOrBuilder() {
         if (positionBuilder_ != null) {
@@ -24659,6 +24851,10 @@ public final class Ast {
       }
       /**
        * <code>required .boa.types.PositionInfo position = 3;</code>
+       *
+       * <pre>
+       ** Position information for the comment 
+       * </pre>
        */
       private com.google.protobuf.SingleFieldBuilder<
           boa.types.Ast.PositionInfo, boa.types.Ast.PositionInfo.Builder, boa.types.Ast.PositionInfoOrBuilder> 
@@ -24691,60 +24887,108 @@ public final class Ast {
     // required int32 start_pos = 1;
     /**
      * <code>required int32 start_pos = 1;</code>
+     *
+     * <pre>
+     ** The starting position of the element, in characters from the start of the file 
+     * </pre>
      */
     boolean hasStartPos();
     /**
      * <code>required int32 start_pos = 1;</code>
+     *
+     * <pre>
+     ** The starting position of the element, in characters from the start of the file 
+     * </pre>
      */
     int getStartPos();
 
     // required int32 length = 2;
     /**
      * <code>required int32 length = 2;</code>
+     *
+     * <pre>
+     ** The length of the element, in characters 
+     * </pre>
      */
     boolean hasLength();
     /**
      * <code>required int32 length = 2;</code>
+     *
+     * <pre>
+     ** The length of the element, in characters 
+     * </pre>
      */
     int getLength();
 
     // required int32 start_line = 3;
     /**
      * <code>required int32 start_line = 3;</code>
+     *
+     * <pre>
+     ** The starting line of the element, in lines from the start of the file 
+     * </pre>
      */
     boolean hasStartLine();
     /**
      * <code>required int32 start_line = 3;</code>
+     *
+     * <pre>
+     ** The starting line of the element, in lines from the start of the file 
+     * </pre>
      */
     int getStartLine();
 
     // required int32 start_col = 4;
     /**
      * <code>required int32 start_col = 4;</code>
+     *
+     * <pre>
+     ** The starting column of the element, in characters from the start of the line 
+     * </pre>
      */
     boolean hasStartCol();
     /**
      * <code>required int32 start_col = 4;</code>
+     *
+     * <pre>
+     ** The starting column of the element, in characters from the start of the line 
+     * </pre>
      */
     int getStartCol();
 
     // required int32 end_line = 5;
     /**
      * <code>required int32 end_line = 5;</code>
+     *
+     * <pre>
+     ** The ending line of the element, in lines from the start of the file 
+     * </pre>
      */
     boolean hasEndLine();
     /**
      * <code>required int32 end_line = 5;</code>
+     *
+     * <pre>
+     ** The ending line of the element, in lines from the start of the file 
+     * </pre>
      */
     int getEndLine();
 
     // required int32 end_col = 6;
     /**
      * <code>required int32 end_col = 6;</code>
+     *
+     * <pre>
+     ** The ending column of the element, in characters from the start of the line 
+     * </pre>
      */
     boolean hasEndCol();
     /**
      * <code>required int32 end_col = 6;</code>
+     *
+     * <pre>
+     ** The ending column of the element, in characters from the start of the line 
+     * </pre>
      */
     int getEndCol();
   }
@@ -24752,7 +24996,7 @@ public final class Ast {
    * Protobuf type {@code boa.types.PositionInfo}
    *
    * <pre>
-   ** @exclude 
+   ** @exclude Position information for a node 
    * </pre>
    */
   public static final class PositionInfo extends
@@ -24878,12 +25122,20 @@ public final class Ast {
     private int startPos_;
     /**
      * <code>required int32 start_pos = 1;</code>
+     *
+     * <pre>
+     ** The starting position of the element, in characters from the start of the file 
+     * </pre>
      */
     public boolean hasStartPos() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
      * <code>required int32 start_pos = 1;</code>
+     *
+     * <pre>
+     ** The starting position of the element, in characters from the start of the file 
+     * </pre>
      */
     public int getStartPos() {
       return startPos_;
@@ -24894,12 +25146,20 @@ public final class Ast {
     private int length_;
     /**
      * <code>required int32 length = 2;</code>
+     *
+     * <pre>
+     ** The length of the element, in characters 
+     * </pre>
      */
     public boolean hasLength() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
      * <code>required int32 length = 2;</code>
+     *
+     * <pre>
+     ** The length of the element, in characters 
+     * </pre>
      */
     public int getLength() {
       return length_;
@@ -24910,12 +25170,20 @@ public final class Ast {
     private int startLine_;
     /**
      * <code>required int32 start_line = 3;</code>
+     *
+     * <pre>
+     ** The starting line of the element, in lines from the start of the file 
+     * </pre>
      */
     public boolean hasStartLine() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
      * <code>required int32 start_line = 3;</code>
+     *
+     * <pre>
+     ** The starting line of the element, in lines from the start of the file 
+     * </pre>
      */
     public int getStartLine() {
       return startLine_;
@@ -24926,12 +25194,20 @@ public final class Ast {
     private int startCol_;
     /**
      * <code>required int32 start_col = 4;</code>
+     *
+     * <pre>
+     ** The starting column of the element, in characters from the start of the line 
+     * </pre>
      */
     public boolean hasStartCol() {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
      * <code>required int32 start_col = 4;</code>
+     *
+     * <pre>
+     ** The starting column of the element, in characters from the start of the line 
+     * </pre>
      */
     public int getStartCol() {
       return startCol_;
@@ -24942,12 +25218,20 @@ public final class Ast {
     private int endLine_;
     /**
      * <code>required int32 end_line = 5;</code>
+     *
+     * <pre>
+     ** The ending line of the element, in lines from the start of the file 
+     * </pre>
      */
     public boolean hasEndLine() {
       return ((bitField0_ & 0x00000010) == 0x00000010);
     }
     /**
      * <code>required int32 end_line = 5;</code>
+     *
+     * <pre>
+     ** The ending line of the element, in lines from the start of the file 
+     * </pre>
      */
     public int getEndLine() {
       return endLine_;
@@ -24958,12 +25242,20 @@ public final class Ast {
     private int endCol_;
     /**
      * <code>required int32 end_col = 6;</code>
+     *
+     * <pre>
+     ** The ending column of the element, in characters from the start of the line 
+     * </pre>
      */
     public boolean hasEndCol() {
       return ((bitField0_ & 0x00000020) == 0x00000020);
     }
     /**
      * <code>required int32 end_col = 6;</code>
+     *
+     * <pre>
+     ** The ending column of the element, in characters from the start of the line 
+     * </pre>
      */
     public int getEndCol() {
       return endCol_;
@@ -25146,7 +25438,7 @@ public final class Ast {
      * Protobuf type {@code boa.types.PositionInfo}
      *
      * <pre>
-     ** @exclude 
+     ** @exclude Position information for a node 
      * </pre>
      */
     public static final class Builder extends
@@ -25337,18 +25629,30 @@ public final class Ast {
       private int startPos_ ;
       /**
        * <code>required int32 start_pos = 1;</code>
+       *
+       * <pre>
+       ** The starting position of the element, in characters from the start of the file 
+       * </pre>
        */
       public boolean hasStartPos() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
        * <code>required int32 start_pos = 1;</code>
+       *
+       * <pre>
+       ** The starting position of the element, in characters from the start of the file 
+       * </pre>
        */
       public int getStartPos() {
         return startPos_;
       }
       /**
        * <code>required int32 start_pos = 1;</code>
+       *
+       * <pre>
+       ** The starting position of the element, in characters from the start of the file 
+       * </pre>
        */
       public Builder setStartPos(int value) {
         bitField0_ |= 0x00000001;
@@ -25358,6 +25662,10 @@ public final class Ast {
       }
       /**
        * <code>required int32 start_pos = 1;</code>
+       *
+       * <pre>
+       ** The starting position of the element, in characters from the start of the file 
+       * </pre>
        */
       public Builder clearStartPos() {
         bitField0_ = (bitField0_ & ~0x00000001);
@@ -25370,18 +25678,30 @@ public final class Ast {
       private int length_ ;
       /**
        * <code>required int32 length = 2;</code>
+       *
+       * <pre>
+       ** The length of the element, in characters 
+       * </pre>
        */
       public boolean hasLength() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
        * <code>required int32 length = 2;</code>
+       *
+       * <pre>
+       ** The length of the element, in characters 
+       * </pre>
        */
       public int getLength() {
         return length_;
       }
       /**
        * <code>required int32 length = 2;</code>
+       *
+       * <pre>
+       ** The length of the element, in characters 
+       * </pre>
        */
       public Builder setLength(int value) {
         bitField0_ |= 0x00000002;
@@ -25391,6 +25711,10 @@ public final class Ast {
       }
       /**
        * <code>required int32 length = 2;</code>
+       *
+       * <pre>
+       ** The length of the element, in characters 
+       * </pre>
        */
       public Builder clearLength() {
         bitField0_ = (bitField0_ & ~0x00000002);
@@ -25403,18 +25727,30 @@ public final class Ast {
       private int startLine_ ;
       /**
        * <code>required int32 start_line = 3;</code>
+       *
+       * <pre>
+       ** The starting line of the element, in lines from the start of the file 
+       * </pre>
        */
       public boolean hasStartLine() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
        * <code>required int32 start_line = 3;</code>
+       *
+       * <pre>
+       ** The starting line of the element, in lines from the start of the file 
+       * </pre>
        */
       public int getStartLine() {
         return startLine_;
       }
       /**
        * <code>required int32 start_line = 3;</code>
+       *
+       * <pre>
+       ** The starting line of the element, in lines from the start of the file 
+       * </pre>
        */
       public Builder setStartLine(int value) {
         bitField0_ |= 0x00000004;
@@ -25424,6 +25760,10 @@ public final class Ast {
       }
       /**
        * <code>required int32 start_line = 3;</code>
+       *
+       * <pre>
+       ** The starting line of the element, in lines from the start of the file 
+       * </pre>
        */
       public Builder clearStartLine() {
         bitField0_ = (bitField0_ & ~0x00000004);
@@ -25436,18 +25776,30 @@ public final class Ast {
       private int startCol_ ;
       /**
        * <code>required int32 start_col = 4;</code>
+       *
+       * <pre>
+       ** The starting column of the element, in characters from the start of the line 
+       * </pre>
        */
       public boolean hasStartCol() {
         return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       /**
        * <code>required int32 start_col = 4;</code>
+       *
+       * <pre>
+       ** The starting column of the element, in characters from the start of the line 
+       * </pre>
        */
       public int getStartCol() {
         return startCol_;
       }
       /**
        * <code>required int32 start_col = 4;</code>
+       *
+       * <pre>
+       ** The starting column of the element, in characters from the start of the line 
+       * </pre>
        */
       public Builder setStartCol(int value) {
         bitField0_ |= 0x00000008;
@@ -25457,6 +25809,10 @@ public final class Ast {
       }
       /**
        * <code>required int32 start_col = 4;</code>
+       *
+       * <pre>
+       ** The starting column of the element, in characters from the start of the line 
+       * </pre>
        */
       public Builder clearStartCol() {
         bitField0_ = (bitField0_ & ~0x00000008);
@@ -25469,18 +25825,30 @@ public final class Ast {
       private int endLine_ ;
       /**
        * <code>required int32 end_line = 5;</code>
+       *
+       * <pre>
+       ** The ending line of the element, in lines from the start of the file 
+       * </pre>
        */
       public boolean hasEndLine() {
         return ((bitField0_ & 0x00000010) == 0x00000010);
       }
       /**
        * <code>required int32 end_line = 5;</code>
+       *
+       * <pre>
+       ** The ending line of the element, in lines from the start of the file 
+       * </pre>
        */
       public int getEndLine() {
         return endLine_;
       }
       /**
        * <code>required int32 end_line = 5;</code>
+       *
+       * <pre>
+       ** The ending line of the element, in lines from the start of the file 
+       * </pre>
        */
       public Builder setEndLine(int value) {
         bitField0_ |= 0x00000010;
@@ -25490,6 +25858,10 @@ public final class Ast {
       }
       /**
        * <code>required int32 end_line = 5;</code>
+       *
+       * <pre>
+       ** The ending line of the element, in lines from the start of the file 
+       * </pre>
        */
       public Builder clearEndLine() {
         bitField0_ = (bitField0_ & ~0x00000010);
@@ -25502,18 +25874,30 @@ public final class Ast {
       private int endCol_ ;
       /**
        * <code>required int32 end_col = 6;</code>
+       *
+       * <pre>
+       ** The ending column of the element, in characters from the start of the line 
+       * </pre>
        */
       public boolean hasEndCol() {
         return ((bitField0_ & 0x00000020) == 0x00000020);
       }
       /**
        * <code>required int32 end_col = 6;</code>
+       *
+       * <pre>
+       ** The ending column of the element, in characters from the start of the line 
+       * </pre>
        */
       public int getEndCol() {
         return endCol_;
       }
       /**
        * <code>required int32 end_col = 6;</code>
+       *
+       * <pre>
+       ** The ending column of the element, in characters from the start of the line 
+       * </pre>
        */
       public Builder setEndCol(int value) {
         bitField0_ |= 0x00000020;
@@ -25523,6 +25907,10 @@ public final class Ast {
       }
       /**
        * <code>required int32 end_col = 6;</code>
+       *
+       * <pre>
+       ** The ending column of the element, in characters from the start of the line 
+       * </pre>
        */
       public Builder clearEndCol() {
         bitField0_ = (bitField0_ & ~0x00000020);
