@@ -194,14 +194,14 @@ public abstract class AbstractCommit {
 			final String content = getFileContents(path);
 
 			fb.setKind(FileKind.SOURCE_JS_ES3);
-			if (!parseJavaScriptFile(path, fb, content, JavaScriptCore.VERSION_1_2, org.eclipse.wst.jsdt.core.dom.AST.JLS2, false, astWriter, revKey + keyDelim + path)) {
+			if (!parseJavaScriptFile(path, fb, content, JavaScriptCore.VERSION_1_3, org.eclipse.wst.jsdt.core.dom.AST.JLS2, false, astWriter, revKey + keyDelim + path)) {
 				if (debug)
-					System.err.println("Found JLS2 parse error in: revision " + id + ": file " + path);
+					System.err.println("Found ES3 parse error in: revision " + id + ": file " + path);
 
 				fb.setKind(FileKind.SOURCE_JS_ES4);
-				if (!parseJavaScriptFile(path, fb, content, JavaScriptCore.VERSION_1_3, org.eclipse.wst.jsdt.core.dom.AST.JLS3, false, astWriter, revKey + keyDelim + path)) {
+				if (!parseJavaScriptFile(path, fb, content, JavaScriptCore.VERSION_1_4, org.eclipse.wst.jsdt.core.dom.AST.JLS3, false, astWriter, revKey + keyDelim + path)) {
 					if (debug)
-						System.err.println("Found JLS3 parse error in: revision " + id + ": file " + path);
+						System.err.println("Found ES4 parse error in: revision " + id + ": file " + path);
 
 							fb.setKind(FileKind.SOURCE_JS_ERROR);
 							try {
