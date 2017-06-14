@@ -1,6 +1,7 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ *                 Iowa State University of Science and Technology
+ *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +17,18 @@
  */
 package boa.types;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Base class for the types in Boa.
  * 
  * @author anthonyu
+ * @author rdyer
  */
 public abstract class BoaType {
+	private static final Map<String, Map<String, String>> shortNamesMap = new HashMap<String, Map<String, String>>();
+
 	/**
 	 * Returns the type that results from an expression of this type and an
 	 * expression of that type in an arithmetic expression. (e.g. an int plus a
@@ -102,6 +109,37 @@ public abstract class BoaType {
 	 */
 	public String toBoxedJavaType() {
 		return toJavaType();
+	}
+
+	/**
+	 * Takes a type name and returns one suitable for use as an identifier.
+	 *
+	 * @param t the type name to clean
+	 * @return the cleaned type name
+	 */
+	protected String cleanType(final String t) {
+		final String s2 = t.replace('<', '_').replace('>', '_').replaceAll(",\\s+", "_").replaceAll("\\[\\]", "Array");
+		if (!s2.contains("."))
+			return s2;
+		return s2.substring(s2.lastIndexOf(".") + 1);
+	}
+
+	/**
+	 *
+	 *
+	 * @param t
+	 * @param kind
+	 * @return
+	 */
+	protected String shortenedType(final String t, final String kind) {
+		if (!shortNamesMap.containsKey(kind))
+			shortNamesMap.put(kind, new HashMap<String, String>());
+		final Map<String, String> names = shortNamesMap.get(kind);
+
+		if (!names.containsKey(t))
+			names.put(t, kind + "_" + names.size());
+
+		return names.get(t);
 	}
 
 	/** {@inheritDoc} */

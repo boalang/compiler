@@ -86,6 +86,7 @@ public class Properties {
 	 * @param name the name of the class to instantiate
 	 * @return the newly created instance
 	 */
+    @SuppressWarnings("unchecked")
 	public static <T> T newInstance(final String name) {
 		try {
 			return (T)(Class.forName(name).newInstance());

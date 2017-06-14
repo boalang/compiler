@@ -4,8 +4,8 @@ package boa;
 public class <name> extends boa.runtime.BoaRunner {
 	/** {@inheritDoc} */
 	@Override
-	public org.apache.hadoop.mapreduce.Job job(final org.apache.hadoop.fs.Path[] ins, final org.apache.hadoop.fs.Path out, final boolean robust) throws java.io.IOException {
-		final org.apache.hadoop.mapreduce.Job job = super.job(ins, out, robust);
+	public org.apache.hadoop.mapreduce.Job job(final org.apache.hadoop.fs.Path[] ins, final org.apache.hadoop.fs.Path out) throws java.io.IOException {
+		final org.apache.hadoop.mapreduce.Job job = super.job(ins, out);
 
 		job.setJobName("<name>: " + out);
 
@@ -46,7 +46,6 @@ public class <name> extends boa.runtime.BoaRunner {
 			printHelp(getUsage());
 		}
 
-		final boolean robust = line.hasOption("robust");
 		final int id;
 		if (line.hasOption("job"))
 			id = Integer.parseInt(line.getOptionValue("job"));
@@ -56,7 +55,7 @@ public class <name> extends boa.runtime.BoaRunner {
 		final org.apache.hadoop.fs.Path[] ins = new org.apache.hadoop.fs.Path[1];
 		ins[0] = new org.apache.hadoop.fs.Path(args[0] + "/projects.seq");
 		
-		final org.apache.hadoop.mapreduce.Job jb = job(ins, new org.apache.hadoop.fs.Path(args[1]), robust);
+		final org.apache.hadoop.mapreduce.Job jb = job(ins, new org.apache.hadoop.fs.Path(args[1]));
 
 		org.apache.hadoop.conf.Configuration configuration = jb.getConfiguration();
 

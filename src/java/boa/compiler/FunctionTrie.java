@@ -45,6 +45,11 @@ public class FunctionTrie {
 		this.trie = new HashMap();
 	}
 
+	@SuppressWarnings("unchecked")
+	public FunctionTrie(final FunctionTrie clone) {
+		this.trie = new HashMap(clone.trie);
+	}
+
 	private BoaType replaceVar(final BoaType formal, final BoaType actual, final Map<String, BoaType> typeVars) {
 		BoaType t = formal;
 		BoaType t2 = actual;
@@ -85,13 +90,12 @@ public class FunctionTrie {
 	private BoaFunction getFunction(final Object[] ids, final Map<String, BoaType> typeVars) {
 		if (this.trie.containsKey(ids[0])) {
 			if (ids[0].equals(""))
-				return getFunction();
-			else
-				return ((FunctionTrie) this.trie.get(ids[0])).getFunction(Arrays.copyOfRange(ids, 1, ids.length), typeVars);
+				return (BoaFunction) this.trie.get(ids[0]);
+			return ((FunctionTrie) this.trie.get(ids[0])).getFunction(Arrays.copyOfRange(ids, 1, ids.length), typeVars);
 		} else {
 			for (final Object o : this.trie.keySet()) {
 				if (o instanceof BoaVarargs && ((BoaVarargs) o).accepts((BoaType) ids[0]))
-					return ((FunctionTrie) this.trie.get(o)).getFunction();
+					return (BoaFunction) ((FunctionTrie) this.trie.get(o)).trie.get("");
 
 				if (o instanceof BoaType && !(ids[0] instanceof String)) {
 					BoaType o2 = (BoaType)o;
@@ -111,10 +115,6 @@ public class FunctionTrie {
 		}
 
 		return null;
-	}
-
-	private BoaFunction getFunction() {
-		return (BoaFunction) this.trie.get("");
 	}
 
 	public boolean hasFunction(final String name) {
@@ -138,7 +138,7 @@ public class FunctionTrie {
 	private void addFunction(final Object[] ids, final BoaFunction boaFunction) {
 		if (this.trie.containsKey(ids[0])) {
 			if (ids[0].equals("")) {
-				throw new RuntimeException("function " + boaFunction + " already defined");
+				throw new RuntimeException(boaFunction + " already defined");
 			} else {
 				((FunctionTrie) this.trie.get(ids[0])).addFunction(Arrays.copyOfRange(ids, 1, ids.length), boaFunction);
 			}
@@ -169,5 +169,10 @@ public class FunctionTrie {
 		ids[ids.length - 1] = "";
 
 		this.addFunction(ids, boaFunction);
+	}
+
+	@Override
+	public String toString() {
+		return trie.toString();
 	}
 }

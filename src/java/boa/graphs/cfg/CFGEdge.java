@@ -16,8 +16,6 @@
  */
 package boa.graphs.cfg;
 
-import boa.types.Control.CFGEdge.CFGEdgeLabel;
-
 /**
  * Control flow graph builder edge
  * @author ganeshau
@@ -94,22 +92,6 @@ public class CFGEdge {
 
 	public String label() {
 		return label;
-	}
-
-	private final CFGEdgeLabel getLabel() {
-		if (label.equals(".")) {
-			return CFGEdgeLabel.DEFAULT;
-		} else if (label.equals("T")) {
-			return CFGEdgeLabel.TRUE;
-		} else if (label.equals("F")) {
-			return CFGEdgeLabel.FALSE;
-		} else if (label.equals("B")) {
-			return CFGEdgeLabel.BACKEDGE;
-		} else if (label.equals("E")) {
-			return CFGEdgeLabel.EXITEDGE;
-		} else {
-			return CFGEdgeLabel.NIL;
-		}
 	}
 
 	public void setLabel(String label) {

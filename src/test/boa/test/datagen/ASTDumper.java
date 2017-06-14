@@ -169,6 +169,7 @@ public class ASTDumper {
                 }
             } else {
                 ChildListPropertyDescriptor list = (ChildListPropertyDescriptor) desciptor;
+                @SuppressWarnings("unchecked")
                 List<ASTNode> value = new ArrayList<ASTNode>((List<ASTNode>) node.getStructuralProperty(list));
                 if (value.size() > 0) {
                     printer.startElement(list.getId(), true);

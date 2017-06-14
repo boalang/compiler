@@ -36,8 +36,8 @@ import boa.compiler.ast.statements.*;
 import boa.compiler.ast.types.*;
 import boa.types.*;
 
-/***
- * 
+/**
+ *
  * @author anthonyu
  * @author rdyer
  * @author ankuraga
@@ -45,7 +45,7 @@ import boa.types.*;
  */
 public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/**
-	 * 
+	 *
 	 * @author anthonyu
 	 */
 	String identifier="";
@@ -114,7 +114,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 	/**
 	 * Scan the program and generate code for any variable declarations.
-	 * 
+	 *
 	 * @author rdyer
 	 */
 	protected class VarDeclCodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
@@ -190,9 +190,9 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		}
 	}
 
-	/***
+	/**
 	 * Finds the set of all function types and generates classes for each unique type.
-	 * 
+	 *
 	 * @author rdyer
 	 */
 	protected class FunctionDeclaratorCodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
@@ -237,7 +237,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		}
 	}
 
-	/***
+	/**
 	 * Finds the set of all tuple types and generates classes for each unique tuple type.
 	 *
 	 * @author ankuraga
@@ -285,13 +285,12 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		}
 	}
 
-	/***
+	/**
 	 * Finds the set of all enum types and generates classes for each enum type.
 	 *
 	 * @author ankuraga
 	 */
 	protected class EnumDeclaratorCodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
-
 		/** {@inheritDoc} */
 		@Override
 		public void visit(final EnumType n) {
@@ -306,9 +305,9 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			final List<String> values = new ArrayList<String>();
 
 			for (final EnumBodyDeclaration c : n.getMembers()) {
-				Factor f = c.getExp().getLhs().getLhs().getLhs().getLhs().getLhs();
+				final Factor f = c.getExp().getLhs().getLhs().getLhs().getLhs().getLhs();
 
-				if(f.getOperand() instanceof ILiteral) {
+				if (f.getOperand() instanceof ILiteral) {
 					code.add(((ILiteral)(f.getOperand())).getLiteral());
 					fields.add(c.getIdentifier().getToken());
 					values.add(code.removeLast());
@@ -326,7 +325,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 
 	/**
-	 * 
+	 *
 	 * @author rdyer
 	 */
 	protected class StaticInitializationCodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
@@ -375,7 +374,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	}
 
 	/**
-	 * 
+	 *
 	 * @author rdyer
 	 */
 	protected class IdentifierFindingVisitor extends AbstractVisitorNoArgNoRet {
@@ -399,7 +398,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	}
 
 	/**
-	 * 
+	 *
 	 * @author rdyer
 	 */
 	protected class IndexeeFindingVisitor extends AbstractVisitorNoReturn<String> {
@@ -453,7 +452,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 	/**
 	 * Finds if the expression is a Call.
-	 * 
+	 *
 	 * @author rdyer
 	 */
 	protected class CallFindingVisitor extends AbstractVisitorNoArgNoRet {
@@ -723,7 +722,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			BoaType t = n.type;
 //			BoaType t = ((ExprList) nodeChoice.choice).type;
 
-			if(t instanceof BoaTuple) {
+			if (t instanceof BoaTuple) {
 				final ST stup = stg.getInstanceOf("Tuple");
 				stup.add("name", t.toJavaType());
 				visit(n.getExprs());
@@ -734,17 +733,13 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 			visit(n.getExprs());
 
-			if(t instanceof BoaArray) {
-				if(((BoaArray)t).getType() instanceof BoaEnum) {
-					st.add("exprlist", code.removeLast());
-					st.add("type", "Object[] ");
-					code.add(st.render());
-					return;
-				}
-			}
-			
+			if (t instanceof BoaArray && ((BoaArray)t).getType() instanceof BoaEnum) {
+                st.add("type", "Object[] ");
+			} else {
+                st.add("type", t.toJavaType());
+            }
+
 			st.add("exprlist", code.removeLast());
-			st.add("type", t.toJavaType());
 		}
 
 		code.add(st.render());
@@ -915,7 +910,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				code.add(".___" + member);
 				return;
 			}
-			
+
 			// operand is a enum
 			if (opType instanceof BoaEnum) {
 				final BoaEnum tenum = (BoaEnum) opType;
@@ -923,7 +918,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				code.add("." + member);
 				return;
 			}
-			
+
 			throw new RuntimeException("unimplemented");
 		} catch (final TypeCheckException e) {
 			throw new RuntimeException("unimplemented");
@@ -1141,7 +1136,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		this.indexeeFinder.start(e, id);
 		final Set<Node> indexees = this.indexeeFinder.getIndexees();
-	
+
 		if (indexees.size() > 0) {
 			final List<Node> array = new ArrayList<Node>(indexees);
 			String src = "";
@@ -1431,7 +1426,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	public void visit(final FixPStatement n) {
 		final ST st = stg.getInstanceOf("FixPClause");
 
-		final BoaFunction funcType = ((BoaFunction) n.type);
 		final List<String> body = new ArrayList<String>();
 		String types = "";
 		Component c = n.getParam1();
@@ -1447,7 +1441,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		if(n.hasBody()) {
 			if (n.getBody() instanceof Block) {
-				
+
 				for (final Node b : ((Block)n.getBody()).getStatements()) {
 					b.accept(this);
 					body.add(code.removeLast());
@@ -1459,12 +1453,11 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		}
 
 		st.add("body", body);
-
 		st.add("type", types);
-		
+
 		code.add(st.render());
 	}
-	
+
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final TraverseStatement n) {
@@ -1485,7 +1478,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 			st.add("name", "preTraverse");
 		}
-		int count=0;
 		if (!(funcType.getType() instanceof BoaAny))
 			st.add("ret", funcType.getType().toBoxedJavaType());
 
@@ -1505,7 +1497,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		st.add("args", traversalNodeIdentifier);
 		st.add("types", types);
-		
+
 		code.add(st.render());
 	}
 
@@ -1619,15 +1611,15 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		} else {
 			n.getLhs().accept(this);
 			st.add("lhs", code.removeLast());
-	
+
 			if (n.getRhsSize() > 0) {
 				final List<String> operands = new ArrayList<String>();
-	
+
 				for (final Term t : n.getRhs()) {
 					t.accept(this);
 					operands.add(code.removeLast());
 				}
-	
+
 				st.add("operators", n.getOps());
 				st.add("operands", operands);
 			}
