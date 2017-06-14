@@ -32,6 +32,8 @@ public class RepositoryCloner {
 		File localPath = new File(localpaths);
 		if (!localPath.exists())
 			localPath.mkdir();
+		else 
+			return;
 		// then clone
 		Git result = null;
 		try {
@@ -63,12 +65,14 @@ public class RepositoryCloner {
 		for (i = 0; i < MAX_NUM_THREADS - 1; i++) {
 			start = end;
 			end = start + shareSize;
-			RepositoryClonerWorker worker = new RepositoryClonerWorker(output, input, start, end);
+			String recovery = output + "/revovery/" + i;
+			RepositoryClonerWorker worker = new RepositoryClonerWorker(output, input, recovery, start, end);
 			new Thread(worker).start();
 		}
 		start = end;
 		end = totalFiles;
-		RepositoryClonerWorker worker = new RepositoryClonerWorker(output, input, start, end);
+		String recovery = output + "/revovery/" + i;
+		RepositoryClonerWorker worker = new RepositoryClonerWorker(output, input, recovery, start, end);
 		new Thread(worker).start();
 	}
 }

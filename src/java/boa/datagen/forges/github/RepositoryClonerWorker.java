@@ -3,6 +3,7 @@ package boa.datagen.forges.github;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Scanner;
 
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -23,12 +24,22 @@ public class RepositoryClonerWorker implements Runnable {
 	private String outPath = "";
 	private String inPath = "";
 	private int from, to;
+	private File recovory;
+	private HashSet<String> names = new HashSet<String>();
+	
 
-	public RepositoryClonerWorker(String out, String in, int from, int to) {
+	public RepositoryClonerWorker(String out, String in, String recovory, int from, int to) throws FileNotFoundException {
 		this.outPath = out;
 		this.inPath = in;
 		this.from = from;
 		this.to = to;
+		this.recovory = new File(recovory);
+		if (this.recovory.exists()){
+			Scanner sc = new Scanner(this.recovory);
+			while (sc.hasNext())
+				names.add(sc.next());
+			sc.close();
+		}
 	}
 
 	public void clone(int from, int to)
@@ -53,8 +64,14 @@ public class RepositoryClonerWorker implements Runnable {
 				if (forked)
 					continue;
 				outFilePath = outPath + "/" + name;
+				//File file = new File(outFilePath);
+				if (names.contains(name)){
+					names.remove(name);
+					continue;
+				}
 				String[] args = { urlHeader + name + urlFooter, outFilePath };
 				RepositoryCloner.clone(args);
+				FileIO.writeFileContents(recovory, name + "/n" , true);
 			}
 		}
 	}
