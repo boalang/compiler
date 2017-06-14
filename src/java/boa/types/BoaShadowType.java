@@ -115,14 +115,4 @@ public abstract class BoaShadowType extends BoaTuple {
     public IfStatement getManytoOne(final SymbolTable env, Block b) {
         return null;
     }
-
-    /**
-     * Converts a shadow type message into a concrete type message.
-     *
-     * @param m the shadow type message
-     * @return the concrete message
-     */
-    public com.google.protobuf.GeneratedMessage flattenMessage(final com.google.protobuf.GeneratedMessage m) {
-        return m;
-    }
 }
