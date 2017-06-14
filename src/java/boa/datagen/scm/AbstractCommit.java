@@ -211,10 +211,10 @@ public abstract class AbstractCommit {
 							}
 				} else
 					if (debug)
-						System.err.println("Accepted JLS3: revision " + id + ": file " + path);
+						System.err.println("Accepted ES4: revision " + id + ": file " + path);
 			} else
 				if (debug)
-					System.err.println("Accepted JLS2: revision " + id + ": file " + path);
+					System.err.println("Accepted ES3: revision " + id + ": file " + path);
 		}
 		fb.setKey(revKey);
 
