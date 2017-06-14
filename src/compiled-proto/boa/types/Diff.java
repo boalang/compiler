@@ -608,7 +608,7 @@ public final class Diff {
        * <code>SOURCE_JS_ES3 = 301;</code>
        *
        * <pre>
-       ** The file represents a JavaScript source file that parsed without error as JLS3 
+       ** The file represents a JavaScript source file that parsed without error as ES3 
        * </pre>
        */
       SOURCE_JS_ES3(27, 301),
@@ -616,7 +616,7 @@ public final class Diff {
        * <code>SOURCE_JS_ES4 = 302;</code>
        *
        * <pre>
-       ** The file represents a JavaScript source file that parsed without error as JLS4 
+       ** The file represents a JavaScript source file that parsed without error as ES4 
        * </pre>
        */
       SOURCE_JS_ES4(28, 302),
@@ -938,7 +938,7 @@ public final class Diff {
        * <code>SOURCE_JS_ES3 = 301;</code>
        *
        * <pre>
-       ** The file represents a JavaScript source file that parsed without error as JLS3 
+       ** The file represents a JavaScript source file that parsed without error as ES3 
        * </pre>
        */
       public static final int SOURCE_JS_ES3_VALUE = 301;
@@ -946,7 +946,7 @@ public final class Diff {
        * <code>SOURCE_JS_ES4 = 302;</code>
        *
        * <pre>
-       ** The file represents a JavaScript source file that parsed without error as JLS4 
+       ** The file represents a JavaScript source file that parsed without error as ES4 
        * </pre>
        */
       public static final int SOURCE_JS_ES4_VALUE = 302;
