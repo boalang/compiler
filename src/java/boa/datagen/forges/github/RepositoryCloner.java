@@ -20,54 +20,55 @@ import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
  */
 public class RepositoryCloner {
 
-    private static  String REMOTE_URL = "";
-  //  private HttpURLConnection connection = null;
+	private static String REMOTE_URL = "";
+	// private HttpURLConnection connection = null;
 
-    public static void clone(String[] args) throws IOException, InvalidRemoteException, TransportException, GitAPIException {
-    	// prepare a new folder for the cloned repository
-    	String localpaths=args[1];
-    	String url=args[0];
-    	REMOTE_URL=url;
-        File localPath = new File(localpaths);
-        if(!localPath.exists())
-        	localPath.mkdir();
-        // then clone
-        Git result = null;
-        try {
-        	result = Git.cloneRepository()
-                .setURI(REMOTE_URL)
-                .setBare(true)
-                .setDirectory(localPath)
-                .call();
-	        // Note: the call() returns an opened repository already which needs to be closed to avoid file handle leaks!
-            // workaround for https://bugs.eclipse.org/bugs/show_bug.cgi?id=474093
-	        result.getRepository().close();
-        } catch (Exception e) {
-        	e.printStackTrace();
+	public static void clone(String[] args)
+			throws IOException, InvalidRemoteException, TransportException, GitAPIException {
+		// prepare a new folder for the cloned repository
+		String localpaths = args[1];
+		String url = args[0];
+		REMOTE_URL = url;
+		File localPath = new File(localpaths);
+		if (!localPath.exists())
+			localPath.mkdir();
+		// then clone
+		Git result = null;
+		try {
+			result = Git.cloneRepository().setURI(REMOTE_URL).setBare(true).setDirectory(localPath).call();
+			// Note: the call() returns an opened repository already which needs
+			// to be closed to avoid file handle leaks!
+			// workaround for
+			// https://bugs.eclipse.org/bugs/show_bug.cgi?id=474093
+			result.getRepository().close();
+		} catch (Exception e) {
+			e.printStackTrace();
 		} finally {
 			if (result != null && result.getRepository() != null)
 				result.getRepository().close();
 		}
-    }
-    
-    public static void main(String[] args) throws IOException, InvalidRemoteException, TransportException, GitAPIException {
-      String input = args[0];
-      String output= args[1];
-      File dir = new File(input);
-      int totalFiles = dir.listFiles().length;
-      final int MAX_NUM_THREADS = 4;
-      int shareSize = totalFiles/MAX_NUM_THREADS;
-      int start = 0;
-      int end = 0;
-      int i;
-      for(i = 0; i < MAX_NUM_THREADS-1; i++){
-          start = end;
-          end = start + shareSize;
-          RepositoryClonerWorker worker = new RepositoryClonerWorker(output, input, start, end);
-          new Thread(worker).start();
-      }
-      start = end; end = totalFiles;
-      RepositoryClonerWorker worker = new RepositoryClonerWorker(output, input, start, end);
-      new Thread(worker).start();
-    }
+	}
+
+	public static void main(String[] args)
+			throws IOException, InvalidRemoteException, TransportException, GitAPIException {
+		String input = args[0];
+		String output = args[1];
+		File dir = new File(input);
+		int totalFiles = dir.listFiles().length;
+		final int MAX_NUM_THREADS = 4;
+		int shareSize = totalFiles / MAX_NUM_THREADS;
+		int start = 0;
+		int end = 0;
+		int i;
+		for (i = 0; i < MAX_NUM_THREADS - 1; i++) {
+			start = end;
+			end = start + shareSize;
+			RepositoryClonerWorker worker = new RepositoryClonerWorker(output, input, start, end);
+			new Thread(worker).start();
+		}
+		start = end;
+		end = totalFiles;
+		RepositoryClonerWorker worker = new RepositoryClonerWorker(output, input, start, end);
+		new Thread(worker).start();
+	}
 }

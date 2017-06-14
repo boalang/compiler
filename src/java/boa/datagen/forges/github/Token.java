@@ -85,7 +85,6 @@ public class Token implements Comparable<Token> {
 
 		@Override
 		public void run() {
-			
 			list.addToken(this.token);
 			System.out.println("Token-" + token.getId() + " is available");
 		}

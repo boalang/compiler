@@ -228,11 +228,11 @@ public abstract class AbstractCommit {
 			//System.out.println("parsing=" + (++count) + "\t" + path);
 			final org.eclipse.wst.jsdt.core.dom.ASTParser parser = org.eclipse.wst.jsdt.core.dom.ASTParser
 					.newParser(astLevel);
-			parser.setKind(ASTParser.K_COMPILATION_UNIT);
+			parser.setKind(org.eclipse.wst.jsdt.core.dom.ASTParser.K_COMPILATION_UNIT);
 			parser.setResolveBindings(true);
 			parser.setSource(content.toCharArray());
 
-			final Map options = JavaCore.getOptions();
+			final Map options = JavaScriptCore.getOptions();
 			JavaScriptCore.setComplianceOptions(compliance, options);
 			parser.setCompilerOptions(options);
 
