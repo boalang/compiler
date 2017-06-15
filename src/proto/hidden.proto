@@ -2,12 +2,10 @@ package boa.types;
 
 import "google/protobuf/descriptor.proto";
 
-option optimize_for = SPEED;
-
 extend google.protobuf.FieldOptions {
-    optional bool hidden = 50000 [default = false];
+    optional bool hidden = 50000;
 }
 
 extend google.protobuf.MessageOptions {
-    optional string kind_func = 50001 [default = ""];
+    optional string kind_func = 50001;
 }

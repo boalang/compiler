@@ -42,10 +42,10 @@ public final class Hidden {
   static {
     java.lang.String[] descriptorData = {
       "\n\014hidden.proto\022\tboa.types\032 google/protob" +
-      "uf/descriptor.proto:6\n\006hidden\022\035.google.p" +
-      "rotobuf.FieldOptions\030\320\206\003 \001(\010:\005false:6\n\tk" +
-      "ind_func\022\037.google.protobuf.MessageOption" +
-      "s\030\321\206\003 \001(\t:\000B\002H\001"
+      "uf/descriptor.proto:/\n\006hidden\022\035.google.p" +
+      "rotobuf.FieldOptions\030\320\206\003 \001(\010:4\n\tkind_fun" +
+      "c\022\037.google.protobuf.MessageOptions\030\321\206\003 \001" +
+      "(\t"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
