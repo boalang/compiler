@@ -11,6 +11,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import boa.datagen.util.FileIO;
+import gnu.trove.set.hash.THashSet;
 
 /**
  * Created by nmtiwari on 9/19/16.
@@ -20,7 +21,7 @@ public class GithubLanguageDownloadMaster {
 	public final String langNameDir;
 	public final String tokenFile;
 	public final static int MAX_NUM_THREADS = 5;
-	public static HashSet<String> names = new HashSet<String>();
+	public static THashSet<byte[]> names = new THashSet<>();
 
 	public GithubLanguageDownloadMaster(String input, String output, String tokenFile) {
 		this.repoNameDir = input;
@@ -101,7 +102,7 @@ public class GithubLanguageDownloadMaster {
 			repos = parser.fromJson(content, JsonElement.class).getAsJsonArray();
 			for (JsonElement repoE : repos) {
 				repo = repoE.getAsJsonObject();
-				names.add(repo.get("full_name").getAsString());
+				names.add(repo.get("full_name").getAsString().getBytes());
 			}
 		}
 	}
