@@ -28,10 +28,8 @@ public class DataDownloadWorker implements Runnable {
 	final int startFileNumber;
 	final int endFileNumber;
 	HashSet<String> names = GithubLanguageDownloadMaster.names;
-	String namesFilePath = "";
 
-	public DataDownloadWorker(String repoPath, String output, TokenList tokenList, int start, int end, int index)
-			throws FileNotFoundException {
+	public DataDownloadWorker(String repoPath, String output, TokenList tokenList, int start, int end, int index) {
 		this.output = output;
 		this.tokens = tokenList;
 		this.repository_location = repoPath;
@@ -41,11 +39,10 @@ public class DataDownloadWorker implements Runnable {
 		this.index = index;
 	}
 
-	public void downloadLangForRepoIn(int from, int to) throws FileNotFoundException {
+	public void downloadRepoMetaDataForRepoIn(int from, int to) {
 		System.out.println(Thread.currentThread().getId() + " Responsible for processing: " + from + " and " + to);
 		int pageNumber = from;
 		Token tok = this.tokens.getNextAuthenticToken("https://api.github.com/repositories");
-		// File namesFile = new File(namesFilePath);
 		File inDir = new File(repository_location);
 		File[] files = inDir.listFiles();
 		while (pageNumber <= to) {
@@ -74,6 +71,9 @@ public class DataDownloadWorker implements Runnable {
 					JsonObject repository = parser.fromJson(pageContent, JsonElement.class).getAsJsonObject();
 					int stars = repository.getAsJsonPrimitive("stargazers_count").getAsInt();
 					if (stars <= 0)
+						continue;
+					boolean forked = repository.getAsJsonPrimitive("fork").getAsBoolean();
+					if(forked)
 						continue;
 					repo.addProperty("stargazers_count", stars);
 					String created = repository.getAsJsonPrimitive("created_at").getAsString();
@@ -106,14 +106,11 @@ public class DataDownloadWorker implements Runnable {
 		File fileToWriteJson = null;
 		this.javarepos.add(repo);
 		if (this.javarepos.size() % RECORDS_PER_FILE == 0) {
-			fileToWriteJson = new File(
-					output + "/java/Thread-" + Thread.currentThread().getId() + "-page-" + javaCounter + ".json");
+			fileToWriteJson = new File(output + "/java/Thread-" + Thread.currentThread().getId() + "-page-" + javaCounter + ".json");
 			while (fileToWriteJson.exists()) {
-				System.out.println("file java/thread-" + Thread.currentThread().getId() + "-page-" + javaCounter
-						+ " arleady exist");
+				System.out.println("file java/thread-" + Thread.currentThread().getId() + "-page-" + javaCounter + " arleady exist");
 				javaCounter++;
-				fileToWriteJson = new File(
-						output + "/java/Thread-" + Thread.currentThread().getId() + "-page-" + javaCounter + ".json");
+				fileToWriteJson = new File(output + "/java/Thread-" + Thread.currentThread().getId() + "-page-" + javaCounter + ".json");
 			}
 			FileIO.writeFileContents(fileToWriteJson, this.javarepos.toString());
 			System.out.println(Thread.currentThread().getId() + " java " + javaCounter++);
@@ -124,12 +121,10 @@ public class DataDownloadWorker implements Runnable {
 	public void writeRemainingRepos(String output) {
 		File fileToWriteJson = null;
 		if (this.javarepos.size() > 0) {
-			fileToWriteJson = new File(
-					output + "/java/Thread-" + Thread.currentThread().getId() + "-page-" + javaCounter + ".json");
+			fileToWriteJson = new File(output + "/java/Thread-" + Thread.currentThread().getId() + "-page-" + javaCounter + ".json");
 			while (fileToWriteJson.exists()) {
 				javaCounter++;
-				fileToWriteJson = new File(
-						output + "/java/Thread-" + Thread.currentThread().getId() + "-page-" + javaCounter + ".json");
+				fileToWriteJson = new File(output + "/java/Thread-" + Thread.currentThread().getId() + "-page-" + javaCounter + ".json");
 			}
 			FileIO.writeFileContents(fileToWriteJson, this.javarepos.toString());
 			System.out.println(Thread.currentThread().getId() + " java " + javaCounter++);
@@ -138,11 +133,7 @@ public class DataDownloadWorker implements Runnable {
 
 	@Override
 	public void run() {
-		try {
-			this.downloadLangForRepoIn(this.startFileNumber, this.endFileNumber);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
+			this.downloadRepoMetaDataForRepoIn(this.startFileNumber, this.endFileNumber);
 	}
 }
 

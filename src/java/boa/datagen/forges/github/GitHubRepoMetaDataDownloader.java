@@ -13,7 +13,7 @@ import boa.datagen.util.FileIO;
 
 
 
-public class GitHubRepoDataDownloader {
+public class GitHubRepoMetaDataDownloader {
 	
 	public final String repoNameDir;
 	public final String langNameDir;
@@ -21,7 +21,7 @@ public class GitHubRepoDataDownloader {
 	public final static int MAX_NUM_THREADS = 5;
 	public static HashSet<String> names = new HashSet<String>();
 	
-	public GitHubRepoDataDownloader(String input, String output, String tokenFile) {
+	public GitHubRepoMetaDataDownloader(String input, String output, String tokenFile) {
 		this.repoNameDir = input;
 		this.langNameDir = output;
 		this.tokenFile = tokenFile;
@@ -37,11 +37,12 @@ public class GitHubRepoDataDownloader {
 		if (args.length < 3) {
 			throw new IllegalArgumentException();
 		}
-		GitHubRepoDataDownloader master = new GitHubRepoDataDownloader(args[0], args[1], args[2]);
+		GitHubRepoMetaDataDownloader master = new GitHubRepoMetaDataDownloader(args[0], args[1], args[2]);
+		System.out.println(master.repoNameDir);
 		master.orchastrate(new File(master.repoNameDir).listFiles().length);
 	}
 
-	public void orchastrate(int totalFies) throws FileNotFoundException {
+	public void orchastrate(int totalFies) {
 		int shareSize = totalFies / MAX_NUM_THREADS;
 		int start = 0;
 		int end = 0;

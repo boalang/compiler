@@ -54,12 +54,12 @@ public class GithubLanguageDownloadMaster {
 		if (!outputDir.exists()) {
 			outputDir.mkdirs();
 		} else {
-			// addNames(output +"/other");
+			 addNames(output +"/other");
 		}
 	}
 
 	// when recovering use at least -Xmx4024m to increase heap size
-	public static void main(String[] args) throws FileNotFoundException {
+	public static void main(String[] args) {
 		if (args.length < 3) {
 			throw new IllegalArgumentException();
 		}
@@ -67,7 +67,7 @@ public class GithubLanguageDownloadMaster {
 		master.orchastrate(new File(master.repoNameDir).listFiles().length);
 	}
 
-	public void orchastrate(int totalFies) throws FileNotFoundException {
+	public void orchastrate(int totalFies) {
 		int shareSize = totalFies / MAX_NUM_THREADS;
 		int start = 0;
 		int end = 0;
