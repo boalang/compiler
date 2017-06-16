@@ -151,7 +151,7 @@ public abstract class AbstractCommit {
 			fb.setKind(FileKind.BINARY);
 		else if (lowerPath.endsWith(".java") && parse) {
 			final String content = getFileContents(path);
-
+			
 			fb.setKind(FileKind.SOURCE_JAVA_JLS2);
 			if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_4, AST.JLS2, false, astWriter, revKey + keyDelim + path)) {
 				if (debug)
@@ -190,6 +190,31 @@ public abstract class AbstractCommit {
 			} else
 				if (debug)
 					System.err.println("Accepted JLS2: revision " + id + ": file " + path);
+		}else if(lowerPath.endsWith(".js") && parse){
+			final String content = getFileContents(path);
+
+			fb.setKind(FileKind.SOURCE_JS_ES3);
+			if (!parseJavaScriptFile(path, fb, content, JavaScriptCore.VERSION_1_3, org.eclipse.wst.jsdt.core.dom.AST.JLS2, false, astWriter, revKey + keyDelim + path)) {
+				if (debug)
+					System.err.println("Found ES3 parse error in: revision " + id + ": file " + path);
+
+				fb.setKind(FileKind.SOURCE_JS_ES4);
+				if (!parseJavaScriptFile(path, fb, content, JavaScriptCore.VERSION_1_4, org.eclipse.wst.jsdt.core.dom.AST.JLS3, false, astWriter, revKey + keyDelim + path)) {
+					if (debug)
+						System.err.println("Found ES4 parse error in: revision " + id + ": file " + path);
+
+							fb.setKind(FileKind.SOURCE_JS_ERROR);
+							try {
+								astWriter.append(new Text(revKey + keyDelim + fb.getName()), new BytesWritable(ASTRoot.newBuilder().build().toByteArray()));
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+				} else
+					if (debug)
+						System.err.println("Accepted ES4: revision " + id + ": file " + path);
+			} else
+				if (debug)
+					System.err.println("Accepted ES3: revision " + id + ": file " + path);
 		}
 		fb.setKey(revKey);
 
@@ -204,12 +229,12 @@ public abstract class AbstractCommit {
 			//System.out.println("parsing=" + (++count) + "\t" + path);
 			final org.eclipse.wst.jsdt.core.dom.ASTParser parser = org.eclipse.wst.jsdt.core.dom.ASTParser
 					.newParser(astLevel);
-			parser.setKind(ASTParser.K_COMPILATION_UNIT);
+			parser.setKind(org.eclipse.wst.jsdt.core.dom.ASTParser.K_COMPILATION_UNIT);
 			parser.setResolveBindings(true);
 			parser.setSource(content.toCharArray());
 
-			final Map options = JavaCore.getOptions();
-			JavaCore.setComplianceOptions(compliance, options);
+			final Map options = JavaScriptCore.getOptions();
+			JavaScriptCore.setComplianceOptions(compliance, options);
 			parser.setCompilerOptions(options);
 
 			JavaScriptUnit cu;
