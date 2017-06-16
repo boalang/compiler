@@ -13,9 +13,8 @@ import boa.datagen.util.FileIO;
 
 public class ListSplitter {
 	public static void main(String[] args) {
-		final int NUM_OF_LISTS = 80;
+		final int NUM_OF_LISTS = 8;
 		ArrayList<String> names = new ArrayList<String>();
-		//ArrayList<String> sublist = new ArrayList<String>();
 		Random rand = new Random();
 		String in = args[0];
 		String out = args[1];
@@ -38,12 +37,9 @@ public class ListSplitter {
 		for(int i = 0; i < NUM_OF_LISTS; i++){
 			for(int j = 0; j < shareSize; j++){
 				int k = rand.nextInt(names.size());
-				FileIO.writeFileContents( new File(out + "/list-" + i) , names.get(k) +"/n", true);
-				//sublist.add(names.get(k));
+				FileIO.writeFileContents( new File(out + "/list-" + i) , names.get(k) + "\n", true);
 				names.remove(k);
 			}
-			//FileIO.writeFileContents( new File(out + "/list-" + i) ,sublist.toString());
-			//sublist = new ArrayList<String>();
 		}
 	}
 }
