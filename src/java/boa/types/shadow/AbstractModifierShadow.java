@@ -16,6 +16,8 @@
  */
 package boa.types.shadow;
 
+import java.util.*;
+
 import boa.compiler.ast.Call;
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.ast.Factor;
@@ -26,43 +28,32 @@ import boa.compiler.transforms.ASTFactory;
 import boa.types.BoaInt;
 import boa.types.BoaProtoList;
 import boa.types.BoaShadowType;
-import boa.types.proto.enums.ExpressionKindProtoMap;
-import boa.types.proto.ExpressionProtoTuple;
+import boa.types.proto.enums.ModifierKindProtoMap;
+import boa.types.proto.ModifierProtoTuple;
 import boa.types.proto.StatementProtoTuple;
 import boa.types.proto.TypeProtoTuple;
-
-import boa.compiler.ast.statements.IfStatement;
-import boa.compiler.ast.statements.Block;
 /**
- * A shadow type for MinusPrefixExpression.
+ * A shadow type for AbstractModifier.
  * 
  * @author rdyer
  * @author kaushin
  */
-public class MinusPrefixExpressionShadow extends PrefixExpressionShadow  {
+public class AbstractModifierShadow extends ModifierShadow  {
     /**
-     * Construct a {@link MinusPrefixExpressionShadow}.
+     * Construct a {@link AbstractModifierShadow}.
      */
-
-    
+       
     /** {@inheritDoc} */
     @Override
     public Expression getKindExpression(final SymbolTable env) {
-        return getKindExpression("ExpressionKind", "OP_SUB", new ExpressionKindProtoMap(), env);
+        
+        return getKindExpression("ModifierKind", "ABSTRACT", new ModifierKindProtoMap(), env);  
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public IfStatement getManytoOne(final SymbolTable env ,Block b) {
-       
-        // if(isboollit(${0})) b;
-        return getManytoOne( env , b, "isprefixexp");
-        
-    }
 
     /** {@inheritDoc} */
     @Override
     public String toString() {
-        return "MinusPrefixExpression";
+        return "AbstractModifier";
     }
 }

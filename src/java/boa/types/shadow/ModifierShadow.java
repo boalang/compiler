@@ -16,6 +16,8 @@
  */
 package boa.types.shadow;
 
+import java.util.*;
+
 import boa.compiler.ast.Call;
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.ast.Factor;
@@ -26,43 +28,60 @@ import boa.compiler.transforms.ASTFactory;
 import boa.types.BoaInt;
 import boa.types.BoaProtoList;
 import boa.types.BoaShadowType;
-import boa.types.proto.enums.ExpressionKindProtoMap;
-import boa.types.proto.ExpressionProtoTuple;
+import boa.types.proto.enums.ModifierKindProtoMap;
+import boa.types.proto.ModifierProtoTuple;
 import boa.types.proto.StatementProtoTuple;
 import boa.types.proto.TypeProtoTuple;
-
-import boa.compiler.ast.statements.IfStatement;
-import boa.compiler.ast.statements.Block;
 /**
- * A shadow type for MinusPrefixExpression.
+ * A shadow type for Modifier.
  * 
  * @author rdyer
  * @author kaushin
  */
-public class MinusPrefixExpressionShadow extends PrefixExpressionShadow  {
+public class ModifierShadow extends BoaShadowType  {
     /**
-     * Construct a {@link MinusPrefixExpressionShadow}.
+     * Construct a {@link ModifierShadow}.
      */
+    public ModifierShadow() {
+        super(new ModifierProtoTuple());
 
-    
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Node lookupCodegen(final String name, final String nodeId, final SymbolTable env) {
+       
+
+        throw new RuntimeException("invalid shadow field: " + name);
+    }
+
     /** {@inheritDoc} */
     @Override
     public Expression getKindExpression(final SymbolTable env) {
-        return getKindExpression("ExpressionKind", "OP_SUB", new ExpressionKindProtoMap(), env);
+        
+        return getKindExpression("ModifierKind", "FINAL", new ModifierKindProtoMap(), env);  
     }
+
 
     /** {@inheritDoc} */
     @Override
-    public IfStatement getManytoOne(final SymbolTable env ,Block b) {
-       
-        // if(isboollit(${0})) b;
-        return getManytoOne( env , b, "isprefixexp");
-        
+    public LinkedList<BoaShadowType> getOneToMany(final SymbolTable env) {
+        LinkedList<BoaShadowType> modList = new LinkedList<BoaShadowType>(); 
+
+        modList.add(new AbstractModifierShadow());
+        modList.add(new FinalModifierShadow());
+        modList.add(new OtherModifierShadow());
+        modList.add(new StaticModifierShadow());
+        modList.add(new SynchronizedModifierShadow());
+        modList.add(new VisibilityModifierShadow());
+    
+        return modList;  
     }
+
 
     /** {@inheritDoc} */
     @Override
     public String toString() {
-        return "MinusPrefixExpression";
+        return "Modifier";
     }
 }

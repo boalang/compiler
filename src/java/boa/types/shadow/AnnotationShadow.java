@@ -24,45 +24,61 @@ import boa.compiler.ast.Node;
 import boa.compiler.SymbolTable;
 import boa.compiler.transforms.ASTFactory;
 import boa.types.BoaInt;
+import boa.types.BoaString;
 import boa.types.BoaProtoList;
 import boa.types.BoaShadowType;
 import boa.types.proto.enums.ExpressionKindProtoMap;
 import boa.types.proto.ExpressionProtoTuple;
 import boa.types.proto.StatementProtoTuple;
-import boa.types.proto.TypeProtoTuple;
 
 import boa.compiler.ast.statements.IfStatement;
 import boa.compiler.ast.statements.Block;
+
 /**
- * A shadow type for MinusPrefixExpression.
+ * A shadow type for Annotation.
  * 
  * @author rdyer
  * @author kaushin
  */
-public class MinusPrefixExpressionShadow extends PrefixExpressionShadow  {
+public class AnnotationShadow extends BoaShadowType  {
     /**
-     * Construct a {@link MinusPrefixExpressionShadow}.
+     * Construct a {@link AnnotationShadow}.
      */
+    public AnnotationShadow() {
+        super(new ExpressionProtoTuple());
 
-    
-    /** {@inheritDoc} */
-    @Override
-    public Expression getKindExpression(final SymbolTable env) {
-        return getKindExpression("ExpressionKind", "OP_SUB", new ExpressionKindProtoMap(), env);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public IfStatement getManytoOne(final SymbolTable env ,Block b) {
-       
-        // if(isboollit(${0})) b;
-        return getManytoOne( env , b, "isprefixexp");
         
     }
 
     /** {@inheritDoc} */
     @Override
-    public String toString() {
-        return "MinusPrefixExpression";
+    public Node lookupCodegen(final String name, final String nodeId, final SymbolTable env) {
+       
+
+        throw new RuntimeException("invalid shadow field: " + name);
     }
+
+    /** {@inheritDoc} */
+    @Override
+    public Expression getKindExpression(final SymbolTable env) {
+        return getKindExpression("ExpressionKind", "LITERAL", new ExpressionKindProtoMap(), env);
+    }
+
+    
+    public IfStatement getManytoOne(final SymbolTable env ,Block b,String funcName) {
+       
+        // if(isboollit(${0})) b;
+
+        final Expression tree = ASTFactory.createIdentifierExpr("node", env, new ExpressionProtoTuple());
+
+        IfStatement ifstmt = new IfStatement(ASTFactory.createCallExpr(funcName, env, new ExpressionProtoTuple(), tree),b);
+        return ifstmt;
+    }
+
+     /** {@inheritDoc} */
+    @Override
+    public String toString() {
+        return "Annotation";
+    }
+    
 }

@@ -95,22 +95,23 @@ public class AssignmentShadow extends BoaShadowType  {
 
     /** {@inheritDoc} */
     @Override
-    public LinkedList<Expression> getKindExpressionsOneToMany(final SymbolTable env) {
-        LinkedList<Expression> assignList = new LinkedList<Expression>(); 
+    public LinkedList<BoaShadowType> getOneToMany(final SymbolTable env) {
+        LinkedList<BoaShadowType> assignList = new LinkedList<BoaShadowType>(); 
         
-        assignList.add(getKindExpression("ExpressionKind", "ASSIGN", new ExpressionKindProtoMap(), env));
-        assignList.add(getKindExpression("ExpressionKind", "ASSIGN_BITAND", new ExpressionKindProtoMap(), env));
-        assignList.add(getKindExpression("ExpressionKind", "ASSIGN_BITXOR", new ExpressionKindProtoMap(), env));
-        assignList.add(getKindExpression("ExpressionKind", "ASSIGN_BITOR", new ExpressionKindProtoMap(), env));
-        assignList.add(getKindExpression("ExpressionKind", "ASSIGN_DIV", new ExpressionKindProtoMap(), env));
-        assignList.add(getKindExpression("ExpressionKind", "ASSIGN_LSHIFT", new ExpressionKindProtoMap(), env));
-        assignList.add(getKindExpression("ExpressionKind", "ASSIGN_SUB", new ExpressionKindProtoMap(), env));
-        assignList.add(getKindExpression("ExpressionKind", "ASSIGN_ADD", new ExpressionKindProtoMap(), env));
-        assignList.add(getKindExpression("ExpressionKind", "ASSIGN_MOD", new ExpressionKindProtoMap(), env));
-        assignList.add(getKindExpression("ExpressionKind", "ASSIGN_RSHIFT", new ExpressionKindProtoMap(), env));
-        assignList.add(getKindExpression("ExpressionKind", "ASSIGN_UNSIGNEDRSHIFT", new ExpressionKindProtoMap(), env));
-        assignList.add(getKindExpression("ExpressionKind", "ASSIGN_MULT", new ExpressionKindProtoMap(), env));
-        
+      
+        assignList.add(new BitAndAssignAssignmentShadow());
+        assignList.add(new BitOrAssignAssignmentShadow());
+        assignList.add(new BitXorAssignAssignmentShadow());
+        assignList.add(new DivideAssignAssignmentShadow());
+        assignList.add(new LeftShiftAssignAssignmentShadow());
+        assignList.add(new MinusAssignAssignmentShadow());
+        assignList.add(new PlusAssignAssignmentShadow());
+        assignList.add(new RemainderAssignAssignmentShadow());
+        assignList.add(new RightShiftSignedAssignAssignmentShadow());
+        assignList.add(new RightShiftUnSignedAssignAssignmentShadow());
+        assignList.add(new TimesAssignAssignmentShadow());
+        assignList.add(new AssignAssignmentShadow());
+      
 
         return assignList;  
     }

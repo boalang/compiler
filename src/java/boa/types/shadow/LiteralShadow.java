@@ -46,29 +46,27 @@ public class LiteralShadow extends BoaShadowType  {
     public LiteralShadow() {
         super(new ExpressionProtoTuple());
 
-        addShadow("value", new BoaString());
         
     }
 
     /** {@inheritDoc} */
     @Override
     public Node lookupCodegen(final String name, final String nodeId, final SymbolTable env) {
-        final Identifier id = ASTFactory.createIdentifier(nodeId, env);
-        id.type = new ExpressionProtoTuple();
-
-        if ("value".equals(name)) {
-            // ${0}.literal
-
-            return ASTFactory.createSelector(id, "literal", new BoaString(), new BoaString(), env);     
-        }
-
-        
-
-
+       
         throw new RuntimeException("invalid shadow field: " + name);
     }
 
-    
+
+    public IfStatement getManytoOne(final SymbolTable env ,Block b,String funcName) {
+       
+        // if(isboollit(${0})) b;
+
+        final Expression tree = ASTFactory.createIdentifierExpr("node", env, new ExpressionProtoTuple());
+
+        IfStatement ifstmt = new IfStatement(ASTFactory.createCallExpr(funcName, env, new ExpressionProtoTuple(), tree),b);
+        return ifstmt ;   
+    }
+
 
     /** {@inheritDoc} */
     @Override

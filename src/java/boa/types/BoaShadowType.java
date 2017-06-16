@@ -108,7 +108,7 @@ public abstract class BoaShadowType extends BoaTuple {
 	}
 
 
-    public LinkedList<Expression> getKindExpressionsOneToMany(final SymbolTable env) {
+    public LinkedList<BoaShadowType> getOneToMany(final SymbolTable env) {
         return null;  
     }
 

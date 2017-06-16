@@ -44,7 +44,6 @@ public class AnnotationTypeDeclarationShadow extends BoaShadowType  {
     public AnnotationTypeDeclarationShadow() {
         super(new DeclarationProtoTuple());
 
-       
         
     }
 
@@ -55,15 +54,13 @@ public class AnnotationTypeDeclarationShadow extends BoaShadowType  {
         id.type = new DeclarationProtoTuple();
 
        
-
-
         throw new RuntimeException("invalid shadow field: " + name);
     }
 
     /** {@inheritDoc} */
     @Override
     public Expression getKindExpression(final SymbolTable env) {
-        return getKindExpression("TypeKind", "ANNOTATION", new TypeKindProtoMap(), env);
+        return getKindExpression("TypeKind", "OTHER", new TypeKindProtoMap(), env);
     }
 
     /** {@inheritDoc} */

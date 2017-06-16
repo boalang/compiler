@@ -32,21 +32,23 @@ import boa.types.proto.ExpressionProtoTuple;
 import boa.types.proto.StatementProtoTuple;
 
 import boa.compiler.ast.statements.IfStatement;
+import boa.compiler.ast.Selector;
 import boa.compiler.ast.statements.Block;
+
 /**
- * A shadow type for NullLiteral.
+ * A shadow type for SingleMemberAnnotation.
  * 
  * @author rdyer
  * @author kaushin
  */
-public class NullLiteralShadow extends LiteralShadow  {
+public class SingleMemberAnnotationShadow extends AnnotationShadow  {
     /**
-     * Construct a {@link NullLiteralShadow}.
+     * Construct a {@link SingleMemberAnnotationShadow}.
      */
-    public NullLiteralShadow() {
+    public SingleMemberAnnotationShadow() {
         super();
 
-       
+        addShadow("value", new BoaString());
         
     }
 
@@ -56,8 +58,31 @@ public class NullLiteralShadow extends LiteralShadow  {
         final Identifier id = ASTFactory.createIdentifier(nodeId, env);
         id.type = new ExpressionProtoTuple();
 
-       
+        if ("value".equals(name)) {
+            // ${0}.annotation.annotation_values[0]
 
+
+            final Selector s1 = new Selector(ASTFactory.createIdentifier("annotation", env));
+            final Selector s2 = new Selector(ASTFactory.createIdentifier("annotation_values", env));
+            final Factor f = new Factor(id).addOp(s1);
+            f.addOp(s2);
+            final Expression tree = ASTFactory.createFactorExpr(f);
+
+            s1.env=s2.env = f.env = env;
+
+            s1.type = new ExpressionProtoTuple();
+            s2.type = new ExpressionProtoTuple();
+            f.type = tree.type = new ExpressionProtoTuple();
+
+
+            // ${0}.annotation.annotation_values[0]
+            ASTFactory.getFactorFromExp(tree).addOp(ASTFactory.createIndex(ASTFactory.createIntLiteral(0), env));
+
+
+            return tree;     
+        }
+
+        
 
         throw new RuntimeException("invalid shadow field: " + name);
     }
@@ -65,15 +90,16 @@ public class NullLiteralShadow extends LiteralShadow  {
     /** {@inheritDoc} */
     @Override
     public Expression getKindExpression(final SymbolTable env) {
-        return getKindExpression("ExpressionKind", "LITERAL", new ExpressionKindProtoMap(), env);
+        return getKindExpression("ExpressionKind", "ANNOTATION", new ExpressionKindProtoMap(), env);
     }
 
-    /** {@inheritDoc} */
+     /** {@inheritDoc} */
     @Override
     public IfStatement getManytoOne(final SymbolTable env ,Block b) {
        
         // if(isboollit(${0})) b;
-        return getManytoOne( env , b, "isnulllit");
+        return getManytoOne( env , b, "isstringlit");
         
     }
+    
 }

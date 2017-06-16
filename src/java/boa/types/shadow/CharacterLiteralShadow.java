@@ -31,18 +31,20 @@ import boa.types.proto.enums.ExpressionKindProtoMap;
 import boa.types.proto.ExpressionProtoTuple;
 import boa.types.proto.StatementProtoTuple;
 
+import boa.compiler.ast.statements.IfStatement;
+import boa.compiler.ast.statements.Block;
 /**
  * A shadow type for CharacterLiteral.
  * 
  * @author rdyer
  * @author kaushin
  */
-public class CharacterLiteralShadow extends BoaShadowType  {
+public class CharacterLiteralShadow extends LiteralShadow  {
     /**
      * Construct a {@link CharacterLiteralShadow}.
      */
     public CharacterLiteralShadow() {
-        super(new ExpressionProtoTuple());
+        super();
 
         addShadow("charvalue", new BoaString());
         addShadow("escapedvalue", new BoaString());
@@ -69,15 +71,21 @@ public class CharacterLiteralShadow extends BoaShadowType  {
         throw new RuntimeException("invalid shadow field: " + name);
     }
 
+
+
     /** {@inheritDoc} */
     @Override
     public Expression getKindExpression(final SymbolTable env) {
         return getKindExpression("ExpressionKind", "LITERAL", new ExpressionKindProtoMap(), env);
     }
 
-    /** {@inheritDoc} */
+     /** {@inheritDoc} */
     @Override
-    public String toString() {
-        return "CharacterLiteral";
+    public IfStatement getManytoOne(final SymbolTable env ,Block b) {
+       
+        // if(isboollit(${0})) b;
+        return getManytoOne( env , b, "ischarlit");
+        
     }
+    
 }

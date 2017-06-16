@@ -32,6 +32,9 @@ import boa.types.proto.enums.ExpressionKindProtoMap;
 import boa.types.proto.ExpressionProtoTuple;
 import boa.types.proto.StatementProtoTuple;
 import boa.types.proto.TypeProtoTuple;
+
+import boa.compiler.ast.statements.IfStatement;
+import boa.compiler.ast.statements.Block;
 /**
  * A shadow type for InfixExpression.
  * 
@@ -107,34 +110,46 @@ public class InfixExpressionShadow extends BoaShadowType  {
     }
 
 
+    public IfStatement getManytoOne(final SymbolTable env ,Block b,String funcName) {
+       
+        // if(isboollit(${0})) b;
+
+        final Expression tree = ASTFactory.createIdentifierExpr("node", env, new ExpressionProtoTuple());
+
+        IfStatement ifstmt = new IfStatement(ASTFactory.createCallExpr(funcName, env, new ExpressionProtoTuple(), tree),b);
+        return ifstmt ;   
+    }
+
     /** {@inheritDoc} */
     @Override
-    public LinkedList<Expression> getKindExpressionsOneToMany(final SymbolTable env) {
-        LinkedList<Expression> infixList = new LinkedList<Expression>(); 
+    public LinkedList<BoaShadowType> getOneToMany(final SymbolTable env) {
+        LinkedList<BoaShadowType> infixList = new LinkedList<BoaShadowType>(); 
         
-        infixList.add(getKindExpression("ExpressionKind", "BIT_XOR", new ExpressionKindProtoMap(), env));
-        infixList.add(getKindExpression("ExpressionKind", "BIT_AND", new ExpressionKindProtoMap(), env));
-        infixList.add(getKindExpression("ExpressionKind", "LOGICAL_AND", new ExpressionKindProtoMap(), env));
-        infixList.add(getKindExpression("ExpressionKind", "LOGICAL_OR", new ExpressionKindProtoMap(), env));
-        infixList.add(getKindExpression("ExpressionKind", "OP_DIV", new ExpressionKindProtoMap(), env));
-        infixList.add(getKindExpression("ExpressionKind", "EQ", new ExpressionKindProtoMap(), env));
-        infixList.add(getKindExpression("ExpressionKind", "GT", new ExpressionKindProtoMap(), env));
-        infixList.add(getKindExpression("ExpressionKind", "GTEQ", new ExpressionKindProtoMap(), env));
-        infixList.add(getKindExpression("ExpressionKind", "BIT_LSHIFT", new ExpressionKindProtoMap(), env));
-        infixList.add(getKindExpression("ExpressionKind", "LT", new ExpressionKindProtoMap(), env));
-        infixList.add(getKindExpression("ExpressionKind", "LTEQ", new ExpressionKindProtoMap(), env));
-        infixList.add(getKindExpression("ExpressionKind", "OP_SUB", new ExpressionKindProtoMap(), env));
-        infixList.add(getKindExpression("ExpressionKind", "NEQ", new ExpressionKindProtoMap(), env));
-        infixList.add(getKindExpression("ExpressionKind", "BIT_OR", new ExpressionKindProtoMap(), env));
-        infixList.add(getKindExpression("ExpressionKind", "OP_ADD", new ExpressionKindProtoMap(), env));
-        infixList.add(getKindExpression("ExpressionKind", "OP_MOD", new ExpressionKindProtoMap(), env));
-        infixList.add(getKindExpression("ExpressionKind", "BIT_RSHIFT", new ExpressionKindProtoMap(), env));
-        infixList.add(getKindExpression("ExpressionKind", "BIT_UNSIGNEDRSHIFT", new ExpressionKindProtoMap(), env));
-        infixList.add(getKindExpression("ExpressionKind", "OP_MULT", new ExpressionKindProtoMap(), env));
+
+        infixList.add(new XorInFixExpressionShadow());
+        infixList.add(new TimesInFixExpressionShadow());
+        infixList.add(new RightShiftUnSignedInFixExpressionShadow());
+        infixList.add(new RightShiftSignedInFixExpressionShadow());
+        infixList.add(new RemainderInFixExpressionShadow());
+        infixList.add(new PlusInFixExpressionShadow());
+        infixList.add(new OrInFixExpressionShadow());
+        infixList.add(new NotEqualInFixExpressionShadow());
+        infixList.add(new MinusInFixExpressionShadow());
+        infixList.add(new LessInFixExpressionShadow());
+        infixList.add(new LessEqualsInFixExpressionShadow());
+        infixList.add(new LeftShiftInFixExpressionShadow());
+        infixList.add(new GreaterInFixExpressionShadow());
+        infixList.add(new GreaterEqualsInFixExpressionShadow());
+        infixList.add(new EqualsInFixExpressionShadow());
+        infixList.add(new DivideInFixExpressionShadow());
+        infixList.add(new ConditionalOrInFixExpressionShadow());
+        infixList.add(new ConditionalAndInFixExpressionShadow());
+        infixList.add(new AndInFixExpressionShadow());
+
+ 
                 
         return infixList;  
     }
-
 
 
 

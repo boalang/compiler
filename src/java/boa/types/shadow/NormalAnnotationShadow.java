@@ -24,45 +24,50 @@ import boa.compiler.ast.Node;
 import boa.compiler.SymbolTable;
 import boa.compiler.transforms.ASTFactory;
 import boa.types.BoaInt;
+import boa.types.BoaString;
 import boa.types.BoaProtoList;
 import boa.types.BoaShadowType;
 import boa.types.proto.enums.ExpressionKindProtoMap;
 import boa.types.proto.ExpressionProtoTuple;
 import boa.types.proto.StatementProtoTuple;
-import boa.types.proto.TypeProtoTuple;
 
 import boa.compiler.ast.statements.IfStatement;
 import boa.compiler.ast.statements.Block;
+
 /**
- * A shadow type for MinusPrefixExpression.
+ * A shadow type for NormalAnnotation.
  * 
  * @author rdyer
  * @author kaushin
  */
-public class MinusPrefixExpressionShadow extends PrefixExpressionShadow  {
+public class NormalAnnotationShadow extends AnnotationShadow  {
     /**
-     * Construct a {@link MinusPrefixExpressionShadow}.
+     * Construct a {@link NormalAnnotationShadow}.
      */
-
-    
-    /** {@inheritDoc} */
-    @Override
-    public Expression getKindExpression(final SymbolTable env) {
-        return getKindExpression("ExpressionKind", "OP_SUB", new ExpressionKindProtoMap(), env);
+    public NormalAnnotationShadow() {
+        super();
     }
 
     /** {@inheritDoc} */
+    @Override
+    public Node lookupCodegen(final String name, final String nodeId, final SymbolTable env) {
+       
+        throw new RuntimeException("invalid shadow field: " + name);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Expression getKindExpression(final SymbolTable env) {
+        return getKindExpression("ExpressionKind", "ANNOTATION", new ExpressionKindProtoMap(), env);
+    }
+
+     /** {@inheritDoc} */
     @Override
     public IfStatement getManytoOne(final SymbolTable env ,Block b) {
        
         // if(isboollit(${0})) b;
-        return getManytoOne( env , b, "isprefixexp");
+        return getManytoOne( env , b, "isstringlit");
         
     }
-
-    /** {@inheritDoc} */
-    @Override
-    public String toString() {
-        return "MinusPrefixExpression";
-    }
+    
 }

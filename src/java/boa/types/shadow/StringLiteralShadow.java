@@ -31,18 +31,21 @@ import boa.types.proto.enums.ExpressionKindProtoMap;
 import boa.types.proto.ExpressionProtoTuple;
 import boa.types.proto.StatementProtoTuple;
 
+import boa.compiler.ast.statements.IfStatement;
+import boa.compiler.ast.statements.Block;
+
 /**
  * A shadow type for StringLiteral.
  * 
  * @author rdyer
  * @author kaushin
  */
-public class StringLiteralShadow extends BoaShadowType  {
+public class StringLiteralShadow extends LiteralShadow  {
     /**
      * Construct a {@link StringLiteralShadow}.
      */
     public StringLiteralShadow() {
-        super(new ExpressionProtoTuple());
+        super();
 
         addShadow("escaped_value", new BoaString());
         addShadow("literal_value", new BoaString());
@@ -77,9 +80,13 @@ public class StringLiteralShadow extends BoaShadowType  {
         return getKindExpression("ExpressionKind", "LITERAL", new ExpressionKindProtoMap(), env);
     }
 
-    /** {@inheritDoc} */
+     /** {@inheritDoc} */
     @Override
-    public String toString() {
-        return "StringLiteral";
+    public IfStatement getManytoOne(final SymbolTable env ,Block b) {
+       
+        // if(isboollit(${0})) b;
+        return getManytoOne( env , b, "isstringlit");
+        
     }
+    
 }

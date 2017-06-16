@@ -226,7 +226,7 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                             defaultSc.getBody().addStatement(s.clone());
                     } else {
                         // checking if shadow has a one-many mapping
-                        if ((((BoaShadowType)visit.getComponent().type).getKindExpressionsOneToMany(n.env)) == null) {
+                        if ((((BoaShadowType)visit.getComponent().type).getOneToMany(n.env)) == null) {
                             final LinkedList<Expression> listExp = new LinkedList<Expression>();
                             listExp.add(((BoaShadowType)visit.getComponent().type).getKindExpression(n.env));
                             //checking for many-one mapping
@@ -253,10 +253,35 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                                 }
                             }
                         } else {
-                            for (final Expression styKind : (((BoaShadowType)visit.getComponent().type).getKindExpressionsOneToMany(n.env))) {
-                                final LinkedList<Expression> listExp = new LinkedList<Expression>();
-                                listExp.add(styKind);
-                                switchS.addCase(new SwitchCase(false, b, listExp));
+
+                            boolean flg = false;
+
+                            for (final BoaShadowType shadow : (((BoaShadowType)visit.getComponent().type).getOneToMany(n.env))) {
+                                Expression styKind = shadow.getKindExpression(n.env);
+                                Selector test = (Selector)styKind.getLhs().getLhs().getLhs().getLhs().getLhs().getOp(0);
+                                Identifier testi = test.getId();
+                               
+                                
+                                for(SwitchCase sCase : switchS.getCases()){
+                                   Selector s = (Selector)(sCase.getCase(0).getLhs().getLhs().getLhs().getLhs().getLhs().getOp(0));
+                                    Identifier i =  s.getId();
+                                    if(testi.getToken().toLowerCase().equals(i.getToken().toLowerCase())){
+                                        System.out.println(i.getToken());
+                                        flg = true;
+                                        Block temp = sCase.getBody();
+                                       // switchS.getCases().remove(sCase);
+                                        // TODO : resolve type from previous case kinds
+                                        sCase.getBody().addStatement(shadow.getManytoOne(n.env,b));
+                                        // FIXME : find solution to problem faced by getiing block from old case 
+                                       // sCase.getBody().addStatement(shadow.getManytoOne(n.env,temp));
+                                    }
+                                }
+
+                                if(!flg){
+                                    final LinkedList<Expression> listExp = new LinkedList<Expression>();
+                                    listExp.add(styKind);
+                                    switchS.addCase(new SwitchCase(false, b, listExp));
+                                }    
                             }
                         }
                     }

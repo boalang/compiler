@@ -62,12 +62,7 @@ public class BooleanLiteralShadow extends LiteralShadow  {
     public IfStatement getManytoOne(final SymbolTable env ,Block b) {
        
         // if(isboollit(${0})) b;
-
-        final Expression tree = ASTFactory.createIdentifierExpr("node", env, new ExpressionProtoTuple());
-
-        IfStatement ifstmt = new IfStatement(ASTFactory.createCallExpr("isboollit", env, new ExpressionProtoTuple(), tree),b);
-        return ifstmt ;
-        
+        return getManytoOne( env , b, "isboollit");
         
     }
 

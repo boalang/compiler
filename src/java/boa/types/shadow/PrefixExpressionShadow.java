@@ -32,6 +32,9 @@ import boa.types.proto.enums.ExpressionKindProtoMap;
 import boa.types.proto.ExpressionProtoTuple;
 import boa.types.proto.StatementProtoTuple;
 import boa.types.proto.TypeProtoTuple;
+
+import boa.compiler.ast.statements.IfStatement;
+import boa.compiler.ast.statements.Block;
 /**
  * A shadow type for PrefixExpression.
  * 
@@ -72,24 +75,31 @@ public class PrefixExpressionShadow extends BoaShadowType  {
     /** {@inheritDoc} */
     @Override
     public Expression getKindExpression(final SymbolTable env) {
-        return getKindExpression("ExpressionKind", "BIT_XOR", new ExpressionKindProtoMap(), env);
+        return getKindExpression("ExpressionKind", "IT_XOR", new ExpressionKindProtoMap(), env);
     }
 
+    public IfStatement getManytoOne(final SymbolTable env ,Block b,String funcName) {
+       
+        // if(isboollit(${0})) b;
+
+        final Expression tree = ASTFactory.createIdentifierExpr("node", env, new ExpressionProtoTuple());
+
+        IfStatement ifstmt = new IfStatement(ASTFactory.createCallExpr(funcName, env, new ExpressionProtoTuple(), tree),b);
+        return ifstmt ;   
+    }
 
     /** {@inheritDoc} */
     @Override
-    public LinkedList<Expression> getKindExpressionsOneToMany(final SymbolTable env) {
-        LinkedList<Expression> prefixList = new LinkedList<Expression>(); 
-        
-
-        prefixList.add(getKindExpression("ExpressionKind", "OP_DEC", new ExpressionKindProtoMap(), env));
-        prefixList.add(getKindExpression("ExpressionKind", "OP_INC", new ExpressionKindProtoMap(), env));
-        prefixList.add(getKindExpression("ExpressionKind", "OP_ADD", new ExpressionKindProtoMap(), env));
-        prefixList.add(getKindExpression("ExpressionKind", "OP_SUB", new ExpressionKindProtoMap(), env));
-        prefixList.add(getKindExpression("ExpressionKind", "LOGICAL_NOT", new ExpressionKindProtoMap(), env));
-        prefixList.add(getKindExpression("ExpressionKind", "BIT_NOT", new ExpressionKindProtoMap(), env));
-
-
+    public LinkedList<BoaShadowType> getOneToMany(final SymbolTable env) {
+        LinkedList<BoaShadowType> prefixList = new LinkedList<BoaShadowType>(); 
+               
+        prefixList.add(new ComplementPrefixExpressionShadow());
+        prefixList.add(new DecrementPrefixExpressionShadow());
+        prefixList.add(new IncrementPrefixExpressionShadow());
+        prefixList.add(new MinusPrefixExpressionShadow());
+        prefixList.add(new NotPrefixExpressionShadow());
+        prefixList.add(new PlusPrefixExpressionShadow());
+        prefixList.add(new PrefixExpressionShadow());
                 
         return prefixList;  
     }

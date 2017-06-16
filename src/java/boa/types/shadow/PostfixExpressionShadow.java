@@ -82,13 +82,15 @@ public class PostfixExpressionShadow extends BoaShadowType  {
         return getKindExpression("ExpressionKind", "BIT_XOR", new ExpressionKindProtoMap(), env);
     }
 
-        /** {@inheritDoc} */
+    /** {@inheritDoc} */
     @Override
-    public LinkedList<Expression> getKindExpressionsOneToMany(final SymbolTable env) {
-        LinkedList<Expression> postfixList = new LinkedList<Expression>(); 
+    public LinkedList<BoaShadowType> getOneToMany(final SymbolTable env) {
+        LinkedList<BoaShadowType> postfixList = new LinkedList<BoaShadowType>(); 
         
-        postfixList.add(getKindExpression("ExpressionKind", "OP_DEC", new ExpressionKindProtoMap(), env));
-        postfixList.add(getKindExpression("ExpressionKind", "OP_INC", new ExpressionKindProtoMap(), env));
+
+        postfixList.add(new DecrementPostFixExpressionShadow());
+        postfixList.add(new IncrementPostFixExpressionShadow());
+        
         
         return postfixList;  
     }

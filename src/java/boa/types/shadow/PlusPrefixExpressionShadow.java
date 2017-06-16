@@ -30,6 +30,9 @@ import boa.types.proto.enums.ExpressionKindProtoMap;
 import boa.types.proto.ExpressionProtoTuple;
 import boa.types.proto.StatementProtoTuple;
 import boa.types.proto.TypeProtoTuple;
+
+import boa.compiler.ast.statements.IfStatement;
+import boa.compiler.ast.statements.Block;
 /**
  * A shadow type for PlusPrefixExpression.
  * 
@@ -46,6 +49,15 @@ public class PlusPrefixExpressionShadow extends PrefixExpressionShadow  {
     @Override
     public Expression getKindExpression(final SymbolTable env) {
         return getKindExpression("ExpressionKind", "OP_ADD", new ExpressionKindProtoMap(), env);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public IfStatement getManytoOne(final SymbolTable env ,Block b) {
+       
+        // if(isboollit(${0})) b;
+        return getManytoOne( env , b, "isprefixexp");
+        
     }
 
     /** {@inheritDoc} */
