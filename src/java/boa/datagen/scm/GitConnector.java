@@ -23,6 +23,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.ListBranchCommand.ListMode;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.Ref;
@@ -135,7 +136,7 @@ public class GitConnector extends AbstractConnector {
 	@Override
 	public void getBranches(final List<String> names, final List<String> commits) {
 		try {
-			for (final Ref ref : git.branchList().call()) {
+			for (final Ref ref : git.branchList().setListMode(ListMode.REMOTE).call()) {
 				names.add(ref.getName());
 				commits.add(ref.getObjectId().getName());
 			}
