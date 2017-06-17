@@ -66,6 +66,15 @@ message ChangedFile {
 		CS4 = 204;
 		/** @exclude */
 		CS5 = 205;
+		
+		/** The file represents a JavaScript source file that had a parse error */
+		SOURCE_JS_ERROR = 300;
+		/** The file represents a JavaScript source file that parsed without error as ES3 */
+		SOURCE_JS_ES3 = 301;
+		/** The file represents a JavaScript source file that parsed without error as ES4 */
+		SOURCE_JS_ES4 = 302;
+		/** @exclude */
+		JS_ERROR = 300;
 	}
 	/** The kind of change for this file */
 	required ChangeKind change = 1;

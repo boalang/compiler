@@ -3,7 +3,6 @@ package boa.datagen.forges.github;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.HashSet;
-import java.util.Scanner;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -12,17 +11,17 @@ import com.google.gson.JsonObject;
 
 import boa.datagen.util.FileIO;
 
-/**
- * Created by nmtiwari on 9/19/16.
- */
-public class GithubLanguageDownloadMaster {
+
+
+public class GitHubRepoMetaDataDownloader {
+	
 	public final String repoNameDir;
 	public final String langNameDir;
 	public final String tokenFile;
 	public final static int MAX_NUM_THREADS = 5;
 	public static HashSet<String> names = new HashSet<String>();
-
-	public GithubLanguageDownloadMaster(String input, String output, String tokenFile) {
+	
+	public GitHubRepoMetaDataDownloader(String input, String output, String tokenFile) {
 		this.repoNameDir = input;
 		this.langNameDir = output;
 		this.tokenFile = tokenFile;
@@ -32,38 +31,14 @@ public class GithubLanguageDownloadMaster {
 		} else {
 			addNames(output + "/java");
 		}
-		outputDir = new File(output + "/js");
-		if (!outputDir.exists()) {
-			outputDir.mkdirs();
-		} else {
-			addNames(output + "/js");
-		}
-		outputDir = new File(output + "/php");
-		if (!outputDir.exists()) {
-			outputDir.mkdirs();
-		} else {
-			addNames(output + "/php");
-		}
-		outputDir = new File(output + "/scala");
-		if (!outputDir.exists()) {
-			outputDir.mkdirs();
-		} else {
-			addNames(output + "/scala");
-		}
-		outputDir = new File(output + "/other");
-		if (!outputDir.exists()) {
-			outputDir.mkdirs();
-		} else {
-			 addNames(output +"/other");
-		}
 	}
 
-	// when recovering use at least -Xmx4024m to increase heap size
-	public static void main(String[] args) {
+	public static void main(String[] args) throws FileNotFoundException {
 		if (args.length < 3) {
 			throw new IllegalArgumentException();
 		}
-		GithubLanguageDownloadMaster master = new GithubLanguageDownloadMaster(args[0], args[1], args[2]);
+		GitHubRepoMetaDataDownloader master = new GitHubRepoMetaDataDownloader(args[0], args[1], args[2]);
+		System.out.println(master.repoNameDir);
 		master.orchastrate(new File(master.repoNameDir).listFiles().length);
 	}
 
@@ -76,14 +51,12 @@ public class GithubLanguageDownloadMaster {
 		for (i = 0; i < MAX_NUM_THREADS - 1; i++) {
 			start = end + 1;
 			end = start + shareSize;
-			LanguageDownloadWorker worker = new LanguageDownloadWorker(this.repoNameDir, this.langNameDir, tokens,
-					start, end, i);
+			DataDownloadWorker worker = new DataDownloadWorker(this.repoNameDir, this.langNameDir, tokens, start, end, i);
 			new Thread(worker).start();
 		}
 		start = end + 1;
 		end = totalFies + shareSize;
-		LanguageDownloadWorker worker = new LanguageDownloadWorker(this.repoNameDir, this.langNameDir, tokens, start,
-				end, i);
+		DataDownloadWorker worker = new DataDownloadWorker(this.repoNameDir, this.langNameDir, tokens, start, end, i);
 		new Thread(worker).start();
 	}
 
