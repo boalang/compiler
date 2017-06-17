@@ -25,7 +25,7 @@ public class DataDownloadWorker implements Runnable {
 	final static int RECORDS_PER_FILE = 100;
 	final int startFileNumber;
 	final int endFileNumber;
-	THashSet<byte[]> names = GithubLanguageDownloadMaster.names;
+	THashSet<String> names = GithubLanguageDownloadMaster.names;
 
 	public DataDownloadWorker(String repoPath, String output, TokenList tokenList, int start, int end, int index) {
 		this.output = output;
@@ -53,9 +53,8 @@ public class DataDownloadWorker implements Runnable {
 			for (int i = 0; i < size; i++) {
 				JsonObject repo = repos.get(i).getAsJsonObject();
 				String name = repo.get("full_name").getAsString();
-				byte[] bsName = name.getBytes();
-				if (names.contains(bsName)) {
-					names.remove(bsName);
+				if (names.contains(name)) {
+					names.remove(name);
 					continue;
 				}
 				String repourl = this.repo_url_header + name;

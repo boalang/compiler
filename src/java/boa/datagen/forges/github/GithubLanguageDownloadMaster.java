@@ -1,10 +1,6 @@
 package boa.datagen.forges.github;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.HashSet;
-import java.util.Scanner;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -21,7 +17,7 @@ public class GithubLanguageDownloadMaster {
 	public final String langNameDir;
 	public final String tokenFile;
 	public final static int MAX_NUM_THREADS = 5;
-	public static THashSet<byte[]> names = new THashSet<>();
+	public static THashSet<String> names = new THashSet<String>();
 
 	public GithubLanguageDownloadMaster(String input, String output, String tokenFile) {
 		this.repoNameDir = input;
@@ -102,7 +98,7 @@ public class GithubLanguageDownloadMaster {
 			repos = parser.fromJson(content, JsonElement.class).getAsJsonArray();
 			for (JsonElement repoE : repos) {
 				repo = repoE.getAsJsonObject();
-				names.add(repo.get("full_name").getAsString().getBytes());
+				names.add(repo.get("full_name").getAsString());
 			}
 		}
 	}

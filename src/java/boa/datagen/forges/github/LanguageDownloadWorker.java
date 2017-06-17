@@ -9,10 +9,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Scanner;
 
 
 /**
@@ -42,7 +38,7 @@ public class LanguageDownloadWorker implements Runnable {
 	final static int RECORDS_PER_FILE = 100;
 	final int startFileNumber;
 	final int endFileNumber;
-	THashSet<byte[]> names = GithubLanguageDownloadMaster.names;
+	THashSet<String> names = GithubLanguageDownloadMaster.names;
 	String namesFilePath = "";
 
 	public LanguageDownloadWorker(String repoPath, String output, TokenList tokenList, int start, int end, int index) {
@@ -76,9 +72,8 @@ public class LanguageDownloadWorker implements Runnable {
 			for (int i = 0; i < size; i++) {
 				JsonObject repo = repos.get(i).getAsJsonObject();
 				String name = repo.get("full_name").getAsString();
-				byte[] bsName = name.getBytes();
-				if (names.contains(bsName)) {
-					names.remove(bsName);
+				if (names.contains(name)) {
+					names.remove(name);
 					continue;
 				}
 				String langurl = this.language_url_header + name + this.language_url_footer;
