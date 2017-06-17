@@ -1067,14 +1067,8 @@ public class Java7Visitor extends ASTVisitor {
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.ARRAYINIT);
 		for (Object e : node.expressions()) {
 			((org.eclipse.jdt.core.dom.Expression)e).accept(this);
-			if (expressions.empty()) {
-				boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
-				eb.setKind(boa.types.Ast.Expression.ExpressionKind.ANNOTATION);
-				eb.setAnnotation(modifiers.pop());
-				b.addExpressions(eb.build());
-			} else {
+			if (!expressions.empty())
 				b.addExpressions(expressions.pop());
-			}
 		}
 		expressions.push(b.build());
 		return false;
