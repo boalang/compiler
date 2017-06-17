@@ -79,8 +79,8 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
     }
 
     protected class VisitTransform extends AbstractVisitorNoArgNoRet {
-        String oldId;
-        String newId;
+        private String oldId;
+        private String newId;
 
         public void start(final Node n, final String oldId, final String newId) {
             this.oldId = oldId;
@@ -181,8 +181,8 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                     }
                 }
 
-                transformVisitor(n, beforeShadowedMap, true, wildcardBlock);
-                transformVisitor(n, afterShadowedMap, false, wildcardBlock);
+                transformVisitor(n, beforeShadowedMap, true);
+                transformVisitor(n, afterShadowedMap, false);
             }
 
             // just clearing out variables
@@ -191,7 +191,7 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
             wildcardBlock = null;
         }
 
-        public void transformVisitor (final VisitorExpression n, final HashMap<BoaProtoTuple, LinkedList<VisitStatement>> shadowedMap, final boolean isBefore, final Block wildcardBlock) {
+        public void transformVisitor (final VisitorExpression n, final HashMap<BoaProtoTuple, LinkedList<VisitStatement>> shadowedMap, final boolean isBefore) {
             for (final Map.Entry<BoaProtoTuple, LinkedList<VisitStatement>> entry : shadowedMap.entrySet()) {
                 final Block afterTransformation = new Block();
 
@@ -218,7 +218,7 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                 for (final VisitStatement visit : visits) {
                     final Block b = visit.getBody().clone();
 
-                    // transfroming subtree by replacing the identifiers and type
+                    // transforming subtree by replacing the identifiers and type
                     new VisitTransform().start(b, visit.getComponent().getIdentifier().getToken(), NODE_ID);
 
                     b.addStatement(new BreakStatement());
@@ -232,21 +232,24 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                         if ((((BoaShadowType)visit.getComponent().type).getOneToMany(n.env)) == null) {
                             final LinkedList<Expression> listExp = new LinkedList<Expression>();
                             listExp.add(((BoaShadowType)visit.getComponent().type).getKindExpression(n.env));
-                            //checking for many-one mapping
+
+                            // checking for many-one mapping
                             if (((BoaShadowType)visit.getComponent().type).getManytoOne(n.env, b) == null) {
                                 switchS.addCase(new SwitchCase(false, b, listExp));
                             } else {
                                 boolean flg = false;
-                                //checking to see presence of kind in cases
+
+                                // checking to see presence of kind in cases
                                 for (final SwitchCase sCase : switchS.getCases()) {
                                     final Selector s = (Selector)(sCase.getCase(0).getLhs().getLhs().getLhs().getLhs().getLhs().getOp(0));
                                     final Identifier i = s.getId();
+
                                     if (visit.getComponent().type.toString().toLowerCase().equals(i.getToken().toLowerCase())) {
                                         flg = true;
                                         sCase.getBody().addStatement(((BoaShadowType)visit.getComponent().type).getManytoOne(n.env, b));
                                     }
-
                                 }
+
                                 if (!flg) {
                                     final Block manyToOneBlock = new Block();
                                     manyToOneBlock.addStatement(((BoaShadowType)visit.getComponent().type).getManytoOne(n.env, b));
@@ -265,7 +268,7 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                                 final Selector test = (Selector)styKind.getLhs().getLhs().getLhs().getLhs().getLhs().getOp(0);
                                 final Identifier testi = test.getId();
 
-                                for (SwitchCase sCase : switchS.getCases()) {
+                                for (final SwitchCase sCase : switchS.getCases()) {
                                     final Selector s = (Selector)(sCase.getCase(0).getLhs().getLhs().getLhs().getLhs().getLhs().getOp(0));
                                     final Identifier i = s.getId();
 
@@ -274,7 +277,7 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                                         final Block temp = sCase.getBody();
                                         toRemove.add(sCase);
 
-                                        for (Map.Entry<BoaShadowType, BoaShadowType> iter : manytomanyMap.entrySet()) {
+                                        for (final Map.Entry<BoaShadowType, BoaShadowType> iter : manytomanyMap.entrySet()) {
                                             final BoaShadowType shadowty = iter.getKey();
 
                                             final Expression styKindOld = shadowty.getKindExpression(n.env);
@@ -342,7 +345,7 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
         private boolean flag = false;
         private List<Node> ops = new ArrayList<Node>();
 
-        private final Deque<Boolean> flagStack          = new ArrayDeque<Boolean>();
+        private final Deque<Boolean>    flagStack       = new ArrayDeque<Boolean>();
         private final Deque<List<Node>> opsStack        = new ArrayDeque<List<Node>>();
         private final Deque<Expression> expressionStack = new ArrayDeque<Expression>();
 
@@ -363,8 +366,8 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
 
             super.visit(n);
 
-            ops = opsStack.pop();
             flag = flagStack.pop();
+            ops = opsStack.pop();
         }
 
         // replacing shadow type selectors
@@ -394,11 +397,9 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                 paren.type = replacement.type;
                 newExp.type = paren.type;
 
-                if (ops != null) {
-                    for (int i = 1; i < ops.size(); i++) {
-                        newFact.addOp(ops.get(i));
-                        newExp.type = ops.get(i).type;
-                    }
+                for (int i = 1; i < ops.size(); i++) {
+                    newFact.addOp(ops.get(i));
+                    newExp.type = ops.get(i).type;
                 }
 
                 parentExp.replaceExpression(parentExp, newExp);
@@ -414,8 +415,7 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                 final BoaShadowType shadow = (BoaShadowType)n.type;
 
                 // change the identifier
-                final Identifier id = (Identifier)n.getType();
-                id.setToken(shadow.shadowedName());
+                ((Identifier)n.getType()).setToken(shadow.shadowedName());
 
                 // update types
                 n.type = n.getType().type = shadow.shadowedType();
@@ -428,18 +428,18 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
         public void visit(final VarDeclStatement n) {
             super.visit(n);
 
-            if (n.hasType()) {
-                if (n.type instanceof BoaShadowType) {
-                    final BoaShadowType shadow = (BoaShadowType)n.type;
+            if (n.type instanceof BoaShadowType) {
+                final BoaShadowType shadow = (BoaShadowType)n.type;
 
-                    // change the identifier
-                    final Identifier id = (Identifier)n.getType();
-                    id.setToken(shadow.shadowedName());
-
-                    // update types
-                    n.type = shadow.shadowedType();
-                    n.env.set(n.getId().getToken(), shadow.shadowedType());
+                // change the identifier
+                if (n.hasType()) {
+                    ((Identifier)n.getType()).setToken(shadow.shadowedName());
+                    n.getType().type = shadow.shadowedType();
                 }
+
+                // update types
+                n.type = shadow.shadowedType();
+                n.env.set(n.getId().getToken(), shadow.shadowedType());
             }
         }
     }
