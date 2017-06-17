@@ -119,6 +119,9 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
         private HashMap<BoaProtoTuple, LinkedList<VisitStatement>> afterShadowedMap = new HashMap<BoaProtoTuple, LinkedList<VisitStatement>>();
         private HashMap<BoaProtoTuple, LinkedList<VisitStatement>> shadowedMap = new HashMap<BoaProtoTuple, LinkedList<VisitStatement>>();
 
+        private HashMap<BoaShadowType,BoaShadowType> manytomanyMap = new HashMap< BoaShadowType,BoaShadowType>();
+        
+
         private Block wildcardBlock = null;
         private boolean shadowedTypePresent = false;
 
@@ -256,29 +259,65 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
 
                             boolean flg = false;
 
+
+
                             for (final BoaShadowType shadow : (((BoaShadowType)visit.getComponent().type).getOneToMany(n.env))) {
+                                final LinkedList<Expression> listExp = new LinkedList<Expression>();
+                                Block toCombine = new Block();
+                                List<SwitchCase> toRemove = new LinkedList<SwitchCase>();
+
                                 Expression styKind = shadow.getKindExpression(n.env);
                                 Selector test = (Selector)styKind.getLhs().getLhs().getLhs().getLhs().getLhs().getOp(0);
                                 Identifier testi = test.getId();
                                
-                                
+                                                           
+                               
+
                                 for(SwitchCase sCase : switchS.getCases()){
-                                   Selector s = (Selector)(sCase.getCase(0).getLhs().getLhs().getLhs().getLhs().getLhs().getOp(0));
+                                    Selector s = (Selector)(sCase.getCase(0).getLhs().getLhs().getLhs().getLhs().getLhs().getOp(0));
                                     Identifier i =  s.getId();
                                     if(testi.getToken().toLowerCase().equals(i.getToken().toLowerCase())){
-                                        System.out.println(i.getToken());
+                                       
                                         flg = true;
                                         Block temp = sCase.getBody();
-                                       // switchS.getCases().remove(sCase);
+                                        toRemove.add(sCase);
+
+                                        for(  Map.Entry<BoaShadowType,BoaShadowType> iter : manytomanyMap.entrySet() ){
+                                            BoaShadowType shadowty = iter.getKey();
+
+                                            Expression styKindOld = shadowty.getKindExpression(n.env);
+                                            Selector testOld = (Selector)styKindOld.getLhs().getLhs().getLhs().getLhs().getLhs().getOp(0);
+                                            Identifier testiOld = testOld.getId();
+                                            if(testiOld.getToken().toLowerCase().equals(i.getToken().toLowerCase())){
+                                                    toCombine.addStatement(shadowty.getManytoOne(n.env,temp));
+                                            }        
+
+                                           
+                                        }
+
+                                        //switchS.getCases().remove(sCase);
                                         // TODO : resolve type from previous case kinds
-                                        sCase.getBody().addStatement(shadow.getManytoOne(n.env,b));
+                                        //sCase.getBody().addStatement(shadow.getManytoOne(n.env,b));
+
+                                       
+
+                                        toCombine.addStatement(shadow.getManytoOne(n.env,b));
+
+                                        
+                                        
                                         // FIXME : find solution to problem faced by getiing block from old case 
                                        // sCase.getBody().addStatement(shadow.getManytoOne(n.env,temp));
                                     }
                                 }
-
+                                manytomanyMap.put(shadow,(BoaShadowType)visit.getComponent().type);
+                                if(toCombine.getStatementsSize() >0){
+                                    listExp.add(styKind);
+                                    switchS.getCases().removeAll(toRemove);
+                                    switchS.addCase(new SwitchCase(false, toCombine, listExp));
+                                }
+                                
                                 if(!flg){
-                                    final LinkedList<Expression> listExp = new LinkedList<Expression>();
+                                   
                                     listExp.add(styKind);
                                     switchS.addCase(new SwitchCase(false, b, listExp));
                                 }    
@@ -286,7 +325,7 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                         }
                     }
 
-                    // transfroming subtree by replacing the identifiers and type
+                    // transfroming subtree by replacing the identifiers and type 
                     new VisitTransform().start(visit, visit.getComponent().getIdentifier().getToken(), "node");
                 }
 
