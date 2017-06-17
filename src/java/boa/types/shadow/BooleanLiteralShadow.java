@@ -33,6 +33,7 @@ import boa.types.proto.StatementProtoTuple;
 
 import boa.compiler.ast.statements.IfStatement;
 import boa.compiler.ast.statements.Block;
+
 /**
  * A shadow type for BooleanLiteral.
  * 
@@ -40,7 +41,14 @@ import boa.compiler.ast.statements.Block;
  * @author kaushin
  */
 public class BooleanLiteralShadow extends LiteralShadow  {
-    
+	/**
+	 * Construct a {@link BooleanLiteralShadow}.
+	 */
+	public BooleanLiteralShadow() {
+		super();
+
+		addShadow("value", new BoaString());
+	}
 
     /** {@inheritDoc} */
     @Override
@@ -50,7 +58,6 @@ public class BooleanLiteralShadow extends LiteralShadow  {
 
         if ("value".equals(name)) {
             // ${0}.literal
-
             return ASTFactory.createSelector(id, "literal", new BoaString(), new BoaString(), env);     
         }
 
@@ -59,11 +66,9 @@ public class BooleanLiteralShadow extends LiteralShadow  {
 
     /** {@inheritDoc} */
     @Override
-    public IfStatement getManytoOne(final SymbolTable env ,Block b) {
-       
-        // if(isboollit(${0})) b;
-        return getManytoOne( env , b, "isboollit");
-        
+    public IfStatement getManytoOne(final SymbolTable env, final Block b) {
+        // if (isboollit(${0})) b;
+        return getManytoOne(env , b, "isboollit");
     }
 
     /** {@inheritDoc} */
@@ -72,5 +77,9 @@ public class BooleanLiteralShadow extends LiteralShadow  {
         return getKindExpression("ExpressionKind", "LITERAL", new ExpressionKindProtoMap(), env);
     }
 
-   
+	/** {@inheritDoc} */
+	@Override
+	public String toString() {
+		return "BooleanLiteral";
+	}
 }

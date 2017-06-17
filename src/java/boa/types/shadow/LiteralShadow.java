@@ -33,6 +33,7 @@ import boa.types.proto.StatementProtoTuple;
 
 import boa.compiler.ast.statements.IfStatement;
 import boa.compiler.ast.statements.Block;
+
 /**
  * A shadow type for Literal.
  * 
@@ -45,28 +46,20 @@ public class LiteralShadow extends BoaShadowType  {
      */
     public LiteralShadow() {
         super(new ExpressionProtoTuple());
-
-        
     }
 
     /** {@inheritDoc} */
     @Override
     public Node lookupCodegen(final String name, final String nodeId, final SymbolTable env) {
-       
         throw new RuntimeException("invalid shadow field: " + name);
     }
 
-
-    public IfStatement getManytoOne(final SymbolTable env ,Block b,String funcName) {
-       
-        // if(isboollit(${0})) b;
-
+    protected IfStatement getManytoOne(final SymbolTable env, final Block b, final String funcName) {
+        // if (funcName(${0})) b;
         final Expression tree = ASTFactory.createIdentifierExpr("node", env, new ExpressionProtoTuple());
 
-        IfStatement ifstmt = new IfStatement(ASTFactory.createCallExpr(funcName, env, new ExpressionProtoTuple(), tree),b);
-        return ifstmt ;   
+        return new IfStatement(ASTFactory.createCallExpr(funcName, env, new ExpressionProtoTuple(), tree), b);
     }
-
 
     /** {@inheritDoc} */
     @Override

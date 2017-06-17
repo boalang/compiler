@@ -66,6 +66,9 @@ import boa.compiler.transforms.ASTFactory;
  * @author kaushin
  */
 public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
+    /** The identifier used for visit() argument node */
+    private static final String NODE_ID = "node";
+
     @Override
     public void start(final Node n) {
         // first step to collect and transform all VisitStatements
@@ -82,7 +85,7 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
         public void start(final Node n, final String oldId, final String newId) {
             this.oldId = oldId;
             this.newId = newId;
-            n.accept(this);
+            start(n);
         }
 
         @Override
@@ -104,45 +107,38 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                 id.setToken(shadow.shadowedName());
 
                 // update types
-                n.type = n.getType().type = shadow.shadowedType;
+                n.type = n.getType().type = shadow.shadowedType();
                 n.env.set(n.getIdentifier().getToken(), n.type);
             }
         }
     }
 
     protected class VisitorReplace extends AbstractVisitorNoArgNoRet {
-        private Deque<VisitStatement> visitStack = new ArrayDeque<VisitStatement>();
-        private Deque<VisitStatement> shadowVisitStack = new ArrayDeque<VisitStatement>();
-        private Deque<VisitorExpression> visitorExpStack = new ArrayDeque<VisitorExpression>();
+        private final Deque<VisitStatement> shadowVisitStack   = new ArrayDeque<VisitStatement>();
+        private final Deque<VisitorExpression> visitorExpStack = new ArrayDeque<VisitorExpression>();
 
-        private HashMap<BoaProtoTuple, LinkedList<VisitStatement>> beforeShadowedMap = new HashMap<BoaProtoTuple, LinkedList<VisitStatement>>();
-        private HashMap<BoaProtoTuple, LinkedList<VisitStatement>> afterShadowedMap = new HashMap<BoaProtoTuple, LinkedList<VisitStatement>>();
-        private HashMap<BoaProtoTuple, LinkedList<VisitStatement>> shadowedMap = new HashMap<BoaProtoTuple, LinkedList<VisitStatement>>();
+        private final HashMap<BoaProtoTuple, LinkedList<VisitStatement>> beforeShadowedMap = new HashMap<BoaProtoTuple, LinkedList<VisitStatement>>();
+        private final HashMap<BoaProtoTuple, LinkedList<VisitStatement>> afterShadowedMap  = new HashMap<BoaProtoTuple, LinkedList<VisitStatement>>();
+        private final HashMap<BoaProtoTuple, LinkedList<VisitStatement>> shadowedMap       = new HashMap<BoaProtoTuple, LinkedList<VisitStatement>>();
 
-        private HashMap<BoaShadowType,BoaShadowType> manytomanyMap = new HashMap< BoaShadowType,BoaShadowType>();
-        
+        private final HashMap<BoaShadowType, BoaShadowType> manytomanyMap = new HashMap< BoaShadowType, BoaShadowType>();
 
         private Block wildcardBlock = null;
         private boolean shadowedTypePresent = false;
 
         @Override
         public void visit(final VisitStatement n) {
-            visitStack.push(n);
             if (n.hasComponent()) {
                 n.getComponent().accept(this);
             } else {
                 wildcardBlock = n.getBody();
             }
-            visitStack.pop();
         }
 
         @Override
         public void visit(final Component n) {
             if (n.getParent() instanceof VisitStatement) {
-                final VisitStatement parentVisit = visitStack.peek();
-                if (parentVisit == null) {
-                    return;
-                }
+                final VisitStatement parentVisit = (VisitStatement)n.getParent();
 
                 final BoaProtoTuple key;
 
@@ -150,7 +146,7 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                     shadowVisitStack.push(parentVisit);
                     final BoaShadowType shadow = (BoaShadowType)n.type;
 
-                    key = shadow.shadowedType;
+                    key = shadow.shadowedType();
                     shadowedTypePresent = true;
                 } else {
                     key = (BoaProtoTuple)n.type;
@@ -190,7 +186,7 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
             }
 
             // just clearing out variables
-            shadowVisitStack = new LinkedList<VisitStatement>();
+            shadowVisitStack.clear();
             shadowedTypePresent = false;
             wildcardBlock = null;
         }
@@ -202,7 +198,7 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                 final BoaProtoTuple shadowedType = entry.getKey();
                 LinkedList<VisitStatement> visits =  entry.getValue();
 
-                final Factor f = new Factor(ASTFactory.createIdentifier("node", n.env));// here i am just assuming a new identifier "node"
+                final Factor f = new Factor(ASTFactory.createIdentifier(NODE_ID, n.env));
                 f.env = n.env;
                 f.getOperand().type = shadowedType;
 
@@ -222,8 +218,8 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                 for (final VisitStatement visit : visits) {
                     final Block b = visit.getBody().clone();
 
-                    // transfroming subtree by replacing the identifiers and type 
-                    new VisitTransform().start(b, visit.getComponent().getIdentifier().getToken(), "node");
+                    // transfroming subtree by replacing the identifiers and type
+                    new VisitTransform().start(b, visit.getComponent().getIdentifier().getToken(), NODE_ID);
 
                     b.addStatement(new BreakStatement());
 
@@ -237,94 +233,82 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                             final LinkedList<Expression> listExp = new LinkedList<Expression>();
                             listExp.add(((BoaShadowType)visit.getComponent().type).getKindExpression(n.env));
                             //checking for many-one mapping
-                            if(((BoaShadowType)visit.getComponent().type).getManytoOne(n.env,b) == null){
-
+                            if (((BoaShadowType)visit.getComponent().type).getManytoOne(n.env, b) == null) {
                                 switchS.addCase(new SwitchCase(false, b, listExp));
-                            
-                            }else {
+                            } else {
                                 boolean flg = false;
                                 //checking to see presence of kind in cases
-                                for(SwitchCase sCase : switchS.getCases()){
-                                   Selector s = (Selector)(sCase.getCase(0).getLhs().getLhs().getLhs().getLhs().getLhs().getOp(0));
-                                    Identifier i =  s.getId();
-                                    if(visit.getComponent().type.toString().toLowerCase().equals(i.getToken().toLowerCase())){
+                                for (final SwitchCase sCase : switchS.getCases()) {
+                                    final Selector s = (Selector)(sCase.getCase(0).getLhs().getLhs().getLhs().getLhs().getLhs().getOp(0));
+                                    final Identifier i = s.getId();
+                                    if (visit.getComponent().type.toString().toLowerCase().equals(i.getToken().toLowerCase())) {
                                         flg = true;
-                                        sCase.getBody().addStatement(((BoaShadowType)visit.getComponent().type).getManytoOne(n.env,b));
+                                        sCase.getBody().addStatement(((BoaShadowType)visit.getComponent().type).getManytoOne(n.env, b));
                                     }
 
                                 }
-                                if(!flg){
-                                    Block manyToOneBlock = new Block();
-                                    manyToOneBlock.addStatement(((BoaShadowType)visit.getComponent().type).getManytoOne(n.env,b));
+                                if (!flg) {
+                                    final Block manyToOneBlock = new Block();
+                                    manyToOneBlock.addStatement(((BoaShadowType)visit.getComponent().type).getManytoOne(n.env, b));
                                     switchS.addCase(new SwitchCase(false, manyToOneBlock, listExp));
                                 }
                             }
                         } else {
-
                             boolean flg = false;
-
-
 
                             for (final BoaShadowType shadow : (((BoaShadowType)visit.getComponent().type).getOneToMany(n.env))) {
                                 final LinkedList<Expression> listExp = new LinkedList<Expression>();
-                                Block toCombine = new Block();
-                                List<SwitchCase> toRemove = new LinkedList<SwitchCase>();
+                                final Block toCombine = new Block();
+                                final List<SwitchCase> toRemove = new LinkedList<SwitchCase>();
 
-                                Expression styKind = shadow.getKindExpression(n.env);
-                                Selector test = (Selector)styKind.getLhs().getLhs().getLhs().getLhs().getLhs().getOp(0);
-                                Identifier testi = test.getId();
-                               
-                                                           
-                               
+                                final Expression styKind = shadow.getKindExpression(n.env);
+                                final Selector test = (Selector)styKind.getLhs().getLhs().getLhs().getLhs().getLhs().getOp(0);
+                                final Identifier testi = test.getId();
 
-                                for(SwitchCase sCase : switchS.getCases()){
-                                    Selector s = (Selector)(sCase.getCase(0).getLhs().getLhs().getLhs().getLhs().getLhs().getOp(0));
-                                    Identifier i =  s.getId();
-                                    if(testi.getToken().toLowerCase().equals(i.getToken().toLowerCase())){
-                                       
+                                for (SwitchCase sCase : switchS.getCases()) {
+                                    final Selector s = (Selector)(sCase.getCase(0).getLhs().getLhs().getLhs().getLhs().getLhs().getOp(0));
+                                    final Identifier i = s.getId();
+
+                                    if (testi.getToken().toLowerCase().equals(i.getToken().toLowerCase())) {
                                         flg = true;
-                                        Block temp = sCase.getBody();
+                                        final Block temp = sCase.getBody();
                                         toRemove.add(sCase);
 
-                                        for(  Map.Entry<BoaShadowType,BoaShadowType> iter : manytomanyMap.entrySet() ){
-                                            BoaShadowType shadowty = iter.getKey();
+                                        for (Map.Entry<BoaShadowType, BoaShadowType> iter : manytomanyMap.entrySet()) {
+                                            final BoaShadowType shadowty = iter.getKey();
 
-                                            Expression styKindOld = shadowty.getKindExpression(n.env);
-                                            Selector testOld = (Selector)styKindOld.getLhs().getLhs().getLhs().getLhs().getLhs().getOp(0);
-                                            Identifier testiOld = testOld.getId();
-                                            if(testiOld.getToken().toLowerCase().equals(i.getToken().toLowerCase())){
-                                                    toCombine.addStatement(shadowty.getManytoOne(n.env,temp));
-                                            }        
+                                            final Expression styKindOld = shadowty.getKindExpression(n.env);
+                                            final Selector testOld = (Selector)styKindOld.getLhs().getLhs().getLhs().getLhs().getLhs().getOp(0);
+                                            final Identifier testiOld = testOld.getId();
 
-                                           
+                                            if (testiOld.getToken().toLowerCase().equals(i.getToken().toLowerCase())) {
+                                                toCombine.addStatement(shadowty.getManytoOne(n.env, temp));
+                                            }
                                         }
 
                                         //switchS.getCases().remove(sCase);
                                         // TODO : resolve type from previous case kinds
-                                        //sCase.getBody().addStatement(shadow.getManytoOne(n.env,b));
+                                        //sCase.getBody().addStatement(shadow.getManytoOne(n.env, b));
 
-                                       
+                                        toCombine.addStatement(shadow.getManytoOne(n.env, b));
 
-                                        toCombine.addStatement(shadow.getManytoOne(n.env,b));
-
-                                        
-                                        
-                                        // FIXME : find solution to problem faced by getiing block from old case 
-                                       // sCase.getBody().addStatement(shadow.getManytoOne(n.env,temp));
+                                        // FIXME : find solution to problem faced by getiing block from old case
+                                        // sCase.getBody().addStatement(shadow.getManytoOne(n.env, temp));
                                     }
                                 }
-                                manytomanyMap.put(shadow,(BoaShadowType)visit.getComponent().type);
-                                if(toCombine.getStatementsSize() >0){
+
+                                manytomanyMap.put(shadow, (BoaShadowType)visit.getComponent().type);
+
+                                if (toCombine.getStatementsSize() > 0) {
                                     listExp.add(styKind);
                                     switchS.getCases().removeAll(toRemove);
                                     switchS.addCase(new SwitchCase(false, toCombine, listExp));
                                 }
-                                
-                                if(!flg){
-                                   
+
+                                if (!flg) {
                                     listExp.add(styKind);
                                     switchS.addCase(new SwitchCase(false, b, listExp));
-                                }    
+                                }
                             }
                         }
                     }
@@ -343,7 +327,7 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                 afterTransformation.addStatement(switchS);
 
                 // create a new VisitStatement and add everything to it
-                final VisitStatement shadowedTypeVisit = new VisitStatement(isBefore, new Component(new Identifier("node"), new Identifier(shadowedType.toString())), afterTransformation);
+                final VisitStatement shadowedTypeVisit = new VisitStatement(isBefore, new Component(new Identifier(NODE_ID), new Identifier(shadowedType.toString())), afterTransformation);
 
                 shadowedTypeVisit.env = n.env;
                 shadowedTypeVisit.getComponent().env = n.env;
@@ -355,13 +339,12 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
     }
 
     protected class SubtreeEraser extends AbstractVisitorNoArgNoRet {
-        private Deque<Expression> expressionStack = new ArrayDeque<Expression>();
-
         private boolean flag = false;
-        private Deque<Boolean> flagStack = new ArrayDeque<Boolean>();
-
         private List<Node> ops = new ArrayList<Node>();
-        private Deque<List<Node>> opsStack = new ArrayDeque<List<Node>>();
+
+        private final Deque<Boolean> flagStack          = new ArrayDeque<Boolean>();
+        private final Deque<List<Node>> opsStack        = new ArrayDeque<List<Node>>();
+        private final Deque<Expression> expressionStack = new ArrayDeque<Expression>();
 
         // track nearest Expression node
         public void visit(final Expression n) {
@@ -435,7 +418,7 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                 id.setToken(shadow.shadowedName());
 
                 // update types
-                n.type = n.getType().type = shadow.shadowedType;
+                n.type = n.getType().type = shadow.shadowedType();
                 n.env.set(n.getIdentifier().getToken(), n.type);
             }
         }
@@ -454,8 +437,8 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                     id.setToken(shadow.shadowedName());
 
                     // update types
-                    n.type = shadow.shadowedType;
-                    n.env.set(n.getId().getToken(), shadow.shadowedType);
+                    n.type = shadow.shadowedType();
+                    n.env.set(n.getId().getToken(), shadow.shadowedType());
                 }
             }
         }

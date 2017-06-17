@@ -35,84 +35,104 @@ import boa.compiler.ast.statements.Block;
  * @author kaushin
  */
 public abstract class BoaShadowType extends BoaTuple {
-	public final BoaProtoTuple shadowedType;
+    private final BoaProtoTuple shadowedType;
 
-	/**
-	 * Construct a {@link BoaShadowType}.
-	 *
-	 * @param t the type being shadowed
-	 */
-	public BoaShadowType(final BoaProtoTuple t) {
-		this.shadowedType = t;
-	}
+    /**
+     * Construct a {@link BoaShadowType}.
+     *
+     * @param shadowedType the type being shadowed
+     */
+    public BoaShadowType(final BoaProtoTuple shadowedType) {
+        this.shadowedType = shadowedType;
+    }
 
-	/**
-	 * Returns the name of the type being shadowed.
-	 *
-	 * @return the shadowed type's name
-	 */
-	public String shadowedName() {
-		return shadowedType.toString();
-	}
+    /**
+     * Returns the type being shadowed.
+     *
+     * @return the shadowed type
+     */
+    public BoaProtoTuple shadowedType() {
+        return shadowedType;
+    }
 
-	/**
-	 * Adds a shadowed attribute to this shadow type.
-	 *
-	 * @param name the name of the attribute to add to this shadow type
-	 * @param t the type of the attribute
-	 */
-	protected void addShadow(final String name, final BoaType t) {
-		names.put(name, members.size());
-		members.add(t);
-	}
+    /**
+     * Returns the name of the type being shadowed.
+     *
+     * @return the shadowed type's name
+     */
+    public String shadowedName() {
+        return shadowedType.toString();
+    }
 
-	/**
-	 * Looks up an attribute name and returns the replacement AST for that expression.
-	 *
-	 * @param name the name of the attribute to look up
-	 * @param nodeId the identifier token of the node we are trying to select on
-	 * @param env the current SymbolTable environment
-	 * @return a replacement AST for the attribute selector
-	 */
-	public abstract Node lookupCodegen(final String name, final String nodeId, final SymbolTable env);
+    /**
+     * Adds a shadowed attribute to this shadow type.
+     *
+     * @param attrName the name of the attribute to add to this shadow type
+     * @param attrType the type of the attribute
+     */
+    protected void addShadow(final String attrName, final BoaType attrType) {
+        names.put(attrName, members.size());
+        members.add(attrType);
+    }
 
-	/**
-	 * Returns an {@link boa.compiler.ast.expressions.Expression} representing
-	 * the Kind of the shadow type.
-	 *
-	 * @param env the current SymbolTable environment
-	 * @return an Expression to select a specific Kind for the shadow
-	 */
-	public abstract Expression getKindExpression(final SymbolTable env);
+    /**
+     * Looks up an attribute name and returns the replacement AST for that expression.
+     *
+     * @param attrName the name of the attribute to look up
+     * @param nodeId   the identifier token of the node we are trying to select on
+     * @param env      the current SymbolTable environment
+     * @return a replacement AST for the attribute selector
+     */
+    public abstract Node lookupCodegen(final String attrName, final String nodeId, final SymbolTable env);
 
-	/**
-	 * Returns an {@link boa.compiler.ast.expressions.Expression} representing
-	 * the Kind of the shadow type.
-	 *
-	 * @param kind the enum of kinds
-	 * @param attr the attribute to select the specific kind
-	 * @param t the compiler type for the kind
-	 * @param env the current SymbolTable environment
-	 * @return an Expression to select a specific Kind for the shadow
-	 */
-	protected Expression getKindExpression(final String kind, final String attr, final BoaProtoMap t, final SymbolTable env) {
-		final Selector s = new Selector(ASTFactory.createIdentifier(attr, env));
-		final Factor f = new Factor(ASTFactory.createIdentifier(kind, env)).addOp(s);
-		final Expression tree = ASTFactory.createFactorExpr(f);
+    /**
+     * Returns an {@link boa.compiler.ast.expressions.Expression} representing
+     * the Kind of the shadow type.
+     *
+     * @param env the current SymbolTable environment
+     * @return an Expression to select a specific Kind for the shadow
+     */
+    public abstract Expression getKindExpression(final SymbolTable env);
 
-		s.env = f.env = env;
+    /**
+     * Returns an {@link boa.compiler.ast.expressions.Expression} representing
+     * the Kind of the shadow type.
+     *
+     * @param kind     the name of the kinds enum
+     * @param attr     the attribute to select the specific kind
+     * @param kindType the compiler type for the kind
+     * @param env      the current SymbolTable environment
+     * @return an Expression to select a specific Kind for the shadow
+     */
+    protected Expression getKindExpression(final String kind, final String attr, final BoaProtoMap kindType, final SymbolTable env) {
+        final Selector s = new Selector(ASTFactory.createIdentifier(attr, env));
+        final Factor f = new Factor(ASTFactory.createIdentifier(kind, env)).addOp(s);
+        final Expression tree = ASTFactory.createFactorExpr(f);
 
-		s.type = f.type = f.getOperand().type = tree.type = t;
+        s.env = f.env = env;
 
-		return tree;
-	}
+        s.type = f.type = f.getOperand().type = tree.type = kindType;
 
+        return tree;
+    }
 
+    /**
+     * Returns a list of one-to-many types for this shadow, if any.
+     *
+     * @param env the current SymbolTable environment
+     * @return a list of shadow types, or null if this type is not in a one-to-many relationship
+     */
     public LinkedList<BoaShadowType> getOneToMany(final SymbolTable env) {
         return null;  
     }
 
-    public IfStatement getManytoOne(final SymbolTable env, Block b) {
+    /**
+     * Returns the many-to-one type for this shadow, if any.
+     *
+     * @param env the current SymbolTable environment
+     * @return the many-to-one type, or null if this type is not in a many-to-one relationship
+     */
+    public IfStatement getManytoOne(final SymbolTable env, final Block b) {
         return null;
     }
 }
