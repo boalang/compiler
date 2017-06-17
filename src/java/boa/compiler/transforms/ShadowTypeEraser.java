@@ -195,12 +195,12 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
             wildcardBlock = null;
         }
 
-        public void transformVisitor (final VisitorExpression n, final HashMap<BoaProtoTuple, LinkedList<VisitStatement>> shadowedMap, final boolean beforeBool, final Block wildcardBlock) {
+        public void transformVisitor (final VisitorExpression n, final HashMap<BoaProtoTuple, LinkedList<VisitStatement>> shadowedMap, final boolean isBefore, final Block wildcardBlock) {
             for (final Map.Entry<BoaProtoTuple, LinkedList<VisitStatement>> entry : shadowedMap.entrySet()) {
                 final Block afterTransformation = new Block();
 
                 final BoaProtoTuple shadowedType = entry.getKey();
-                LinkedList<VisitStatement> beforeVisits =  entry.getValue();
+                LinkedList<VisitStatement> visits =  entry.getValue();
 
                 final Factor f = new Factor(ASTFactory.createIdentifier("node", n.env));// here i am just assuming a new identifier "node"
                 f.env = n.env;
@@ -219,8 +219,12 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                 final SwitchCase defaultSc = new SwitchCase(true, new Block());
                 switchS.setDefault(defaultSc);
 
-                for (final VisitStatement visit : beforeVisits) {
+                for (final VisitStatement visit : visits) {
                     final Block b = visit.getBody().clone();
+
+                    // transfroming subtree by replacing the identifiers and type 
+                    new VisitTransform().start(b, visit.getComponent().getIdentifier().getToken(), "node");
+
                     b.addStatement(new BreakStatement());
 
                     if (visit.getComponent().type.toString().equals(shadowedType.toString())) {
@@ -324,9 +328,6 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                             }
                         }
                     }
-
-                    // transfroming subtree by replacing the identifiers and type 
-                    new VisitTransform().start(visit, visit.getComponent().getIdentifier().getToken(), "node");
                 }
 
                 if (defaultSc.getBody().getStatementsSize() == 0 && wildcardBlock != null) {
@@ -342,7 +343,7 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                 afterTransformation.addStatement(switchS);
 
                 // create a new VisitStatement and add everything to it
-                final VisitStatement shadowedTypeVisit = new VisitStatement(beforeBool, new Component(new Identifier("node"), new Identifier(shadowedType.toString())), afterTransformation);
+                final VisitStatement shadowedTypeVisit = new VisitStatement(isBefore, new Component(new Identifier("node"), new Identifier(shadowedType.toString())), afterTransformation);
 
                 shadowedTypeVisit.env = n.env;
                 shadowedTypeVisit.getComponent().env = n.env;
