@@ -8,6 +8,7 @@ public final class Hidden {
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistry registry) {
     registry.add(boa.types.Hidden.hidden);
+    registry.add(boa.types.Hidden.alias);
     registry.add(boa.types.Hidden.kindFunc);
   }
   public static final int HIDDEN_FIELD_NUMBER = 50000;
@@ -20,6 +21,17 @@ public final class Hidden {
       java.lang.Boolean> hidden = com.google.protobuf.GeneratedMessage
           .newFileScopedGeneratedExtension(
         java.lang.Boolean.class,
+        null);
+  public static final int ALIAS_FIELD_NUMBER = 50002;
+  /**
+   * <code>extend .google.protobuf.FieldOptions { ... }</code>
+   */
+  public static final
+    com.google.protobuf.GeneratedMessage.GeneratedExtension<
+      com.google.protobuf.DescriptorProtos.FieldOptions,
+      java.lang.String> alias = com.google.protobuf.GeneratedMessage
+          .newFileScopedGeneratedExtension(
+        java.lang.String.class,
         null);
   public static final int KIND_FUNC_FIELD_NUMBER = 50001;
   /**
@@ -43,9 +55,10 @@ public final class Hidden {
     java.lang.String[] descriptorData = {
       "\n\014hidden.proto\022\tboa.types\032 google/protob" +
       "uf/descriptor.proto:/\n\006hidden\022\035.google.p" +
-      "rotobuf.FieldOptions\030\320\206\003 \001(\010:4\n\tkind_fun" +
-      "c\022\037.google.protobuf.MessageOptions\030\321\206\003 \001" +
-      "(\t"
+      "rotobuf.FieldOptions\030\320\206\003 \001(\010:.\n\005alias\022\035." +
+      "google.protobuf.FieldOptions\030\322\206\003 \001(\t:4\n\t" +
+      "kind_func\022\037.google.protobuf.MessageOptio" +
+      "ns\030\321\206\003 \001(\t"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -53,7 +66,8 @@ public final class Hidden {
             com.google.protobuf.Descriptors.FileDescriptor root) {
           descriptor = root;
           hidden.internalInit(descriptor.getExtensions().get(0));
-          kindFunc.internalInit(descriptor.getExtensions().get(1));
+          alias.internalInit(descriptor.getExtensions().get(1));
+          kindFunc.internalInit(descriptor.getExtensions().get(2));
           return null;
         }
       };
