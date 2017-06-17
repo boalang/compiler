@@ -56,7 +56,7 @@ public class LiteralShadow extends BoaShadowType  {
 
     protected IfStatement getManytoOne(final SymbolTable env, final Block b, final String funcName) {
         // if (funcName(${0})) b;
-        final Expression tree = ASTFactory.createIdentifierExpr("node", env, new ExpressionProtoTuple());
+        final Expression tree = ASTFactory.createIdentifierExpr(boa.compiler.transforms.ShadowTypeEraser.NODE_ID, env, new ExpressionProtoTuple());
 
         return new IfStatement(ASTFactory.createCallExpr(funcName, env, new ExpressionProtoTuple(), tree), b);
     }

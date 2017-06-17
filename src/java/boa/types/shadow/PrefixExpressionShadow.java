@@ -82,7 +82,7 @@ public class PrefixExpressionShadow extends BoaShadowType  {
        
         // if(isboollit(${0})) b;
 
-        final Expression tree = ASTFactory.createIdentifierExpr("node", env, new ExpressionProtoTuple());
+        final Expression tree = ASTFactory.createIdentifierExpr(boa.compiler.transforms.ShadowTypeEraser.NODE_ID, env, new ExpressionProtoTuple());
 
         IfStatement ifstmt = new IfStatement(ASTFactory.createCallExpr(funcName, env, new ExpressionProtoTuple(), tree),b);
         return ifstmt ;   

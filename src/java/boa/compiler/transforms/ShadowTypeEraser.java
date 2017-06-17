@@ -67,7 +67,7 @@ import boa.compiler.transforms.ASTFactory;
  */
 public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
     /** The identifier used for visit() argument node */
-    private static final String NODE_ID = "node";
+    public static final String NODE_ID = "node";
 
     @Override
     public void start(final Node n) {
