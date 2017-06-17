@@ -2388,6 +2388,141 @@ public final class Ast {
      */
     boa.types.Ast.DeclarationOrBuilder getDeclarationsOrBuilder(
         int index);
+
+    // repeated .boa.types.Statement statements = 4;
+    /**
+     * <code>repeated .boa.types.Statement statements = 4;</code>
+     *
+     * <pre>
+     ** Statements contained in this namespace 
+     * </pre>
+     */
+    java.util.List<boa.types.Ast.Statement> 
+        getStatementsList();
+    /**
+     * <code>repeated .boa.types.Statement statements = 4;</code>
+     *
+     * <pre>
+     ** Statements contained in this namespace 
+     * </pre>
+     */
+    boa.types.Ast.Statement getStatements(int index);
+    /**
+     * <code>repeated .boa.types.Statement statements = 4;</code>
+     *
+     * <pre>
+     ** Statements contained in this namespace 
+     * </pre>
+     */
+    int getStatementsCount();
+    /**
+     * <code>repeated .boa.types.Statement statements = 4;</code>
+     *
+     * <pre>
+     ** Statements contained in this namespace 
+     * </pre>
+     */
+    java.util.List<? extends boa.types.Ast.StatementOrBuilder> 
+        getStatementsOrBuilderList();
+    /**
+     * <code>repeated .boa.types.Statement statements = 4;</code>
+     *
+     * <pre>
+     ** Statements contained in this namespace 
+     * </pre>
+     */
+    boa.types.Ast.StatementOrBuilder getStatementsOrBuilder(
+        int index);
+
+    // repeated .boa.types.Method methods = 5;
+    /**
+     * <code>repeated .boa.types.Method methods = 5;</code>
+     *
+     * <pre>
+     ** Methods contained in this namespace 
+     * </pre>
+     */
+    java.util.List<boa.types.Ast.Method> 
+        getMethodsList();
+    /**
+     * <code>repeated .boa.types.Method methods = 5;</code>
+     *
+     * <pre>
+     ** Methods contained in this namespace 
+     * </pre>
+     */
+    boa.types.Ast.Method getMethods(int index);
+    /**
+     * <code>repeated .boa.types.Method methods = 5;</code>
+     *
+     * <pre>
+     ** Methods contained in this namespace 
+     * </pre>
+     */
+    int getMethodsCount();
+    /**
+     * <code>repeated .boa.types.Method methods = 5;</code>
+     *
+     * <pre>
+     ** Methods contained in this namespace 
+     * </pre>
+     */
+    java.util.List<? extends boa.types.Ast.MethodOrBuilder> 
+        getMethodsOrBuilderList();
+    /**
+     * <code>repeated .boa.types.Method methods = 5;</code>
+     *
+     * <pre>
+     ** Methods contained in this namespace 
+     * </pre>
+     */
+    boa.types.Ast.MethodOrBuilder getMethodsOrBuilder(
+        int index);
+
+    // repeated .boa.types.Expression expressions = 6;
+    /**
+     * <code>repeated .boa.types.Expression expressions = 6;</code>
+     *
+     * <pre>
+     ** Expressions contained in this namespace 
+     * </pre>
+     */
+    java.util.List<boa.types.Ast.Expression> 
+        getExpressionsList();
+    /**
+     * <code>repeated .boa.types.Expression expressions = 6;</code>
+     *
+     * <pre>
+     ** Expressions contained in this namespace 
+     * </pre>
+     */
+    boa.types.Ast.Expression getExpressions(int index);
+    /**
+     * <code>repeated .boa.types.Expression expressions = 6;</code>
+     *
+     * <pre>
+     ** Expressions contained in this namespace 
+     * </pre>
+     */
+    int getExpressionsCount();
+    /**
+     * <code>repeated .boa.types.Expression expressions = 6;</code>
+     *
+     * <pre>
+     ** Expressions contained in this namespace 
+     * </pre>
+     */
+    java.util.List<? extends boa.types.Ast.ExpressionOrBuilder> 
+        getExpressionsOrBuilderList();
+    /**
+     * <code>repeated .boa.types.Expression expressions = 6;</code>
+     *
+     * <pre>
+     ** Expressions contained in this namespace 
+     * </pre>
+     */
+    boa.types.Ast.ExpressionOrBuilder getExpressionsOrBuilder(
+        int index);
   }
   /**
    * Protobuf type {@code boa.types.Namespace}
@@ -2465,6 +2600,30 @@ public final class Ast {
               declarations_.add(input.readMessage(boa.types.Ast.Declaration.PARSER, extensionRegistry));
               break;
             }
+            case 34: {
+              if (!((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
+                statements_ = new java.util.ArrayList<boa.types.Ast.Statement>();
+                mutable_bitField0_ |= 0x00000008;
+              }
+              statements_.add(input.readMessage(boa.types.Ast.Statement.PARSER, extensionRegistry));
+              break;
+            }
+            case 42: {
+              if (!((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
+                methods_ = new java.util.ArrayList<boa.types.Ast.Method>();
+                mutable_bitField0_ |= 0x00000010;
+              }
+              methods_.add(input.readMessage(boa.types.Ast.Method.PARSER, extensionRegistry));
+              break;
+            }
+            case 50: {
+              if (!((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
+                expressions_ = new java.util.ArrayList<boa.types.Ast.Expression>();
+                mutable_bitField0_ |= 0x00000020;
+              }
+              expressions_.add(input.readMessage(boa.types.Ast.Expression.PARSER, extensionRegistry));
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -2478,6 +2637,15 @@ public final class Ast {
         }
         if (((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
           declarations_ = java.util.Collections.unmodifiableList(declarations_);
+        }
+        if (((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
+          statements_ = java.util.Collections.unmodifiableList(statements_);
+        }
+        if (((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
+          methods_ = java.util.Collections.unmodifiableList(methods_);
+        }
+        if (((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
+          expressions_ = java.util.Collections.unmodifiableList(expressions_);
         }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -2678,10 +2846,181 @@ public final class Ast {
       return declarations_.get(index);
     }
 
+    // repeated .boa.types.Statement statements = 4;
+    public static final int STATEMENTS_FIELD_NUMBER = 4;
+    private java.util.List<boa.types.Ast.Statement> statements_;
+    /**
+     * <code>repeated .boa.types.Statement statements = 4;</code>
+     *
+     * <pre>
+     ** Statements contained in this namespace 
+     * </pre>
+     */
+    public java.util.List<boa.types.Ast.Statement> getStatementsList() {
+      return statements_;
+    }
+    /**
+     * <code>repeated .boa.types.Statement statements = 4;</code>
+     *
+     * <pre>
+     ** Statements contained in this namespace 
+     * </pre>
+     */
+    public java.util.List<? extends boa.types.Ast.StatementOrBuilder> 
+        getStatementsOrBuilderList() {
+      return statements_;
+    }
+    /**
+     * <code>repeated .boa.types.Statement statements = 4;</code>
+     *
+     * <pre>
+     ** Statements contained in this namespace 
+     * </pre>
+     */
+    public int getStatementsCount() {
+      return statements_.size();
+    }
+    /**
+     * <code>repeated .boa.types.Statement statements = 4;</code>
+     *
+     * <pre>
+     ** Statements contained in this namespace 
+     * </pre>
+     */
+    public boa.types.Ast.Statement getStatements(int index) {
+      return statements_.get(index);
+    }
+    /**
+     * <code>repeated .boa.types.Statement statements = 4;</code>
+     *
+     * <pre>
+     ** Statements contained in this namespace 
+     * </pre>
+     */
+    public boa.types.Ast.StatementOrBuilder getStatementsOrBuilder(
+        int index) {
+      return statements_.get(index);
+    }
+
+    // repeated .boa.types.Method methods = 5;
+    public static final int METHODS_FIELD_NUMBER = 5;
+    private java.util.List<boa.types.Ast.Method> methods_;
+    /**
+     * <code>repeated .boa.types.Method methods = 5;</code>
+     *
+     * <pre>
+     ** Methods contained in this namespace 
+     * </pre>
+     */
+    public java.util.List<boa.types.Ast.Method> getMethodsList() {
+      return methods_;
+    }
+    /**
+     * <code>repeated .boa.types.Method methods = 5;</code>
+     *
+     * <pre>
+     ** Methods contained in this namespace 
+     * </pre>
+     */
+    public java.util.List<? extends boa.types.Ast.MethodOrBuilder> 
+        getMethodsOrBuilderList() {
+      return methods_;
+    }
+    /**
+     * <code>repeated .boa.types.Method methods = 5;</code>
+     *
+     * <pre>
+     ** Methods contained in this namespace 
+     * </pre>
+     */
+    public int getMethodsCount() {
+      return methods_.size();
+    }
+    /**
+     * <code>repeated .boa.types.Method methods = 5;</code>
+     *
+     * <pre>
+     ** Methods contained in this namespace 
+     * </pre>
+     */
+    public boa.types.Ast.Method getMethods(int index) {
+      return methods_.get(index);
+    }
+    /**
+     * <code>repeated .boa.types.Method methods = 5;</code>
+     *
+     * <pre>
+     ** Methods contained in this namespace 
+     * </pre>
+     */
+    public boa.types.Ast.MethodOrBuilder getMethodsOrBuilder(
+        int index) {
+      return methods_.get(index);
+    }
+
+    // repeated .boa.types.Expression expressions = 6;
+    public static final int EXPRESSIONS_FIELD_NUMBER = 6;
+    private java.util.List<boa.types.Ast.Expression> expressions_;
+    /**
+     * <code>repeated .boa.types.Expression expressions = 6;</code>
+     *
+     * <pre>
+     ** Expressions contained in this namespace 
+     * </pre>
+     */
+    public java.util.List<boa.types.Ast.Expression> getExpressionsList() {
+      return expressions_;
+    }
+    /**
+     * <code>repeated .boa.types.Expression expressions = 6;</code>
+     *
+     * <pre>
+     ** Expressions contained in this namespace 
+     * </pre>
+     */
+    public java.util.List<? extends boa.types.Ast.ExpressionOrBuilder> 
+        getExpressionsOrBuilderList() {
+      return expressions_;
+    }
+    /**
+     * <code>repeated .boa.types.Expression expressions = 6;</code>
+     *
+     * <pre>
+     ** Expressions contained in this namespace 
+     * </pre>
+     */
+    public int getExpressionsCount() {
+      return expressions_.size();
+    }
+    /**
+     * <code>repeated .boa.types.Expression expressions = 6;</code>
+     *
+     * <pre>
+     ** Expressions contained in this namespace 
+     * </pre>
+     */
+    public boa.types.Ast.Expression getExpressions(int index) {
+      return expressions_.get(index);
+    }
+    /**
+     * <code>repeated .boa.types.Expression expressions = 6;</code>
+     *
+     * <pre>
+     ** Expressions contained in this namespace 
+     * </pre>
+     */
+    public boa.types.Ast.ExpressionOrBuilder getExpressionsOrBuilder(
+        int index) {
+      return expressions_.get(index);
+    }
+
     private void initFields() {
       name_ = "";
       modifiers_ = java.util.Collections.emptyList();
       declarations_ = java.util.Collections.emptyList();
+      statements_ = java.util.Collections.emptyList();
+      methods_ = java.util.Collections.emptyList();
+      expressions_ = java.util.Collections.emptyList();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -2704,6 +3043,24 @@ public final class Ast {
           return false;
         }
       }
+      for (int i = 0; i < getStatementsCount(); i++) {
+        if (!getStatements(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      for (int i = 0; i < getMethodsCount(); i++) {
+        if (!getMethods(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      for (int i = 0; i < getExpressionsCount(); i++) {
+        if (!getExpressions(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
       memoizedIsInitialized = 1;
       return true;
     }
@@ -2719,6 +3076,15 @@ public final class Ast {
       }
       for (int i = 0; i < declarations_.size(); i++) {
         output.writeMessage(3, declarations_.get(i));
+      }
+      for (int i = 0; i < statements_.size(); i++) {
+        output.writeMessage(4, statements_.get(i));
+      }
+      for (int i = 0; i < methods_.size(); i++) {
+        output.writeMessage(5, methods_.get(i));
+      }
+      for (int i = 0; i < expressions_.size(); i++) {
+        output.writeMessage(6, expressions_.get(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -2740,6 +3106,18 @@ public final class Ast {
       for (int i = 0; i < declarations_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(3, declarations_.get(i));
+      }
+      for (int i = 0; i < statements_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(4, statements_.get(i));
+      }
+      for (int i = 0; i < methods_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(5, methods_.get(i));
+      }
+      for (int i = 0; i < expressions_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(6, expressions_.get(i));
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -2855,6 +3233,9 @@ public final class Ast {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
           getModifiersFieldBuilder();
           getDeclarationsFieldBuilder();
+          getStatementsFieldBuilder();
+          getMethodsFieldBuilder();
+          getExpressionsFieldBuilder();
         }
       }
       private static Builder create() {
@@ -2876,6 +3257,24 @@ public final class Ast {
           bitField0_ = (bitField0_ & ~0x00000004);
         } else {
           declarationsBuilder_.clear();
+        }
+        if (statementsBuilder_ == null) {
+          statements_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000008);
+        } else {
+          statementsBuilder_.clear();
+        }
+        if (methodsBuilder_ == null) {
+          methods_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000010);
+        } else {
+          methodsBuilder_.clear();
+        }
+        if (expressionsBuilder_ == null) {
+          expressions_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000020);
+        } else {
+          expressionsBuilder_.clear();
         }
         return this;
       }
@@ -2926,6 +3325,33 @@ public final class Ast {
           result.declarations_ = declarations_;
         } else {
           result.declarations_ = declarationsBuilder_.build();
+        }
+        if (statementsBuilder_ == null) {
+          if (((bitField0_ & 0x00000008) == 0x00000008)) {
+            statements_ = java.util.Collections.unmodifiableList(statements_);
+            bitField0_ = (bitField0_ & ~0x00000008);
+          }
+          result.statements_ = statements_;
+        } else {
+          result.statements_ = statementsBuilder_.build();
+        }
+        if (methodsBuilder_ == null) {
+          if (((bitField0_ & 0x00000010) == 0x00000010)) {
+            methods_ = java.util.Collections.unmodifiableList(methods_);
+            bitField0_ = (bitField0_ & ~0x00000010);
+          }
+          result.methods_ = methods_;
+        } else {
+          result.methods_ = methodsBuilder_.build();
+        }
+        if (expressionsBuilder_ == null) {
+          if (((bitField0_ & 0x00000020) == 0x00000020)) {
+            expressions_ = java.util.Collections.unmodifiableList(expressions_);
+            bitField0_ = (bitField0_ & ~0x00000020);
+          }
+          result.expressions_ = expressions_;
+        } else {
+          result.expressions_ = expressionsBuilder_.build();
         }
         result.bitField0_ = to_bitField0_;
         onBuilt();
@@ -3000,6 +3426,84 @@ public final class Ast {
             }
           }
         }
+        if (statementsBuilder_ == null) {
+          if (!other.statements_.isEmpty()) {
+            if (statements_.isEmpty()) {
+              statements_ = other.statements_;
+              bitField0_ = (bitField0_ & ~0x00000008);
+            } else {
+              ensureStatementsIsMutable();
+              statements_.addAll(other.statements_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.statements_.isEmpty()) {
+            if (statementsBuilder_.isEmpty()) {
+              statementsBuilder_.dispose();
+              statementsBuilder_ = null;
+              statements_ = other.statements_;
+              bitField0_ = (bitField0_ & ~0x00000008);
+              statementsBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getStatementsFieldBuilder() : null;
+            } else {
+              statementsBuilder_.addAllMessages(other.statements_);
+            }
+          }
+        }
+        if (methodsBuilder_ == null) {
+          if (!other.methods_.isEmpty()) {
+            if (methods_.isEmpty()) {
+              methods_ = other.methods_;
+              bitField0_ = (bitField0_ & ~0x00000010);
+            } else {
+              ensureMethodsIsMutable();
+              methods_.addAll(other.methods_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.methods_.isEmpty()) {
+            if (methodsBuilder_.isEmpty()) {
+              methodsBuilder_.dispose();
+              methodsBuilder_ = null;
+              methods_ = other.methods_;
+              bitField0_ = (bitField0_ & ~0x00000010);
+              methodsBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getMethodsFieldBuilder() : null;
+            } else {
+              methodsBuilder_.addAllMessages(other.methods_);
+            }
+          }
+        }
+        if (expressionsBuilder_ == null) {
+          if (!other.expressions_.isEmpty()) {
+            if (expressions_.isEmpty()) {
+              expressions_ = other.expressions_;
+              bitField0_ = (bitField0_ & ~0x00000020);
+            } else {
+              ensureExpressionsIsMutable();
+              expressions_.addAll(other.expressions_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.expressions_.isEmpty()) {
+            if (expressionsBuilder_.isEmpty()) {
+              expressionsBuilder_.dispose();
+              expressionsBuilder_ = null;
+              expressions_ = other.expressions_;
+              bitField0_ = (bitField0_ & ~0x00000020);
+              expressionsBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getExpressionsFieldBuilder() : null;
+            } else {
+              expressionsBuilder_.addAllMessages(other.expressions_);
+            }
+          }
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -3017,6 +3521,24 @@ public final class Ast {
         }
         for (int i = 0; i < getDeclarationsCount(); i++) {
           if (!getDeclarations(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        for (int i = 0; i < getStatementsCount(); i++) {
+          if (!getStatements(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        for (int i = 0; i < getMethodsCount(); i++) {
+          if (!getMethods(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        for (int i = 0; i < getExpressionsCount(); i++) {
+          if (!getExpressions(i).isInitialized()) {
             
             return false;
           }
@@ -3763,6 +4285,942 @@ public final class Ast {
           declarations_ = null;
         }
         return declarationsBuilder_;
+      }
+
+      // repeated .boa.types.Statement statements = 4;
+      private java.util.List<boa.types.Ast.Statement> statements_ =
+        java.util.Collections.emptyList();
+      private void ensureStatementsIsMutable() {
+        if (!((bitField0_ & 0x00000008) == 0x00000008)) {
+          statements_ = new java.util.ArrayList<boa.types.Ast.Statement>(statements_);
+          bitField0_ |= 0x00000008;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Statement, boa.types.Ast.Statement.Builder, boa.types.Ast.StatementOrBuilder> statementsBuilder_;
+
+      /**
+       * <code>repeated .boa.types.Statement statements = 4;</code>
+       *
+       * <pre>
+       ** Statements contained in this namespace 
+       * </pre>
+       */
+      public java.util.List<boa.types.Ast.Statement> getStatementsList() {
+        if (statementsBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(statements_);
+        } else {
+          return statementsBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Statement statements = 4;</code>
+       *
+       * <pre>
+       ** Statements contained in this namespace 
+       * </pre>
+       */
+      public int getStatementsCount() {
+        if (statementsBuilder_ == null) {
+          return statements_.size();
+        } else {
+          return statementsBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Statement statements = 4;</code>
+       *
+       * <pre>
+       ** Statements contained in this namespace 
+       * </pre>
+       */
+      public boa.types.Ast.Statement getStatements(int index) {
+        if (statementsBuilder_ == null) {
+          return statements_.get(index);
+        } else {
+          return statementsBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Statement statements = 4;</code>
+       *
+       * <pre>
+       ** Statements contained in this namespace 
+       * </pre>
+       */
+      public Builder setStatements(
+          int index, boa.types.Ast.Statement value) {
+        if (statementsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureStatementsIsMutable();
+          statements_.set(index, value);
+          onChanged();
+        } else {
+          statementsBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Statement statements = 4;</code>
+       *
+       * <pre>
+       ** Statements contained in this namespace 
+       * </pre>
+       */
+      public Builder setStatements(
+          int index, boa.types.Ast.Statement.Builder builderForValue) {
+        if (statementsBuilder_ == null) {
+          ensureStatementsIsMutable();
+          statements_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          statementsBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Statement statements = 4;</code>
+       *
+       * <pre>
+       ** Statements contained in this namespace 
+       * </pre>
+       */
+      public Builder addStatements(boa.types.Ast.Statement value) {
+        if (statementsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureStatementsIsMutable();
+          statements_.add(value);
+          onChanged();
+        } else {
+          statementsBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Statement statements = 4;</code>
+       *
+       * <pre>
+       ** Statements contained in this namespace 
+       * </pre>
+       */
+      public Builder addStatements(
+          int index, boa.types.Ast.Statement value) {
+        if (statementsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureStatementsIsMutable();
+          statements_.add(index, value);
+          onChanged();
+        } else {
+          statementsBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Statement statements = 4;</code>
+       *
+       * <pre>
+       ** Statements contained in this namespace 
+       * </pre>
+       */
+      public Builder addStatements(
+          boa.types.Ast.Statement.Builder builderForValue) {
+        if (statementsBuilder_ == null) {
+          ensureStatementsIsMutable();
+          statements_.add(builderForValue.build());
+          onChanged();
+        } else {
+          statementsBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Statement statements = 4;</code>
+       *
+       * <pre>
+       ** Statements contained in this namespace 
+       * </pre>
+       */
+      public Builder addStatements(
+          int index, boa.types.Ast.Statement.Builder builderForValue) {
+        if (statementsBuilder_ == null) {
+          ensureStatementsIsMutable();
+          statements_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          statementsBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Statement statements = 4;</code>
+       *
+       * <pre>
+       ** Statements contained in this namespace 
+       * </pre>
+       */
+      public Builder addAllStatements(
+          java.lang.Iterable<? extends boa.types.Ast.Statement> values) {
+        if (statementsBuilder_ == null) {
+          ensureStatementsIsMutable();
+          super.addAll(values, statements_);
+          onChanged();
+        } else {
+          statementsBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Statement statements = 4;</code>
+       *
+       * <pre>
+       ** Statements contained in this namespace 
+       * </pre>
+       */
+      public Builder clearStatements() {
+        if (statementsBuilder_ == null) {
+          statements_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000008);
+          onChanged();
+        } else {
+          statementsBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Statement statements = 4;</code>
+       *
+       * <pre>
+       ** Statements contained in this namespace 
+       * </pre>
+       */
+      public Builder removeStatements(int index) {
+        if (statementsBuilder_ == null) {
+          ensureStatementsIsMutable();
+          statements_.remove(index);
+          onChanged();
+        } else {
+          statementsBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Statement statements = 4;</code>
+       *
+       * <pre>
+       ** Statements contained in this namespace 
+       * </pre>
+       */
+      public boa.types.Ast.Statement.Builder getStatementsBuilder(
+          int index) {
+        return getStatementsFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.Statement statements = 4;</code>
+       *
+       * <pre>
+       ** Statements contained in this namespace 
+       * </pre>
+       */
+      public boa.types.Ast.StatementOrBuilder getStatementsOrBuilder(
+          int index) {
+        if (statementsBuilder_ == null) {
+          return statements_.get(index);  } else {
+          return statementsBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Statement statements = 4;</code>
+       *
+       * <pre>
+       ** Statements contained in this namespace 
+       * </pre>
+       */
+      public java.util.List<? extends boa.types.Ast.StatementOrBuilder> 
+           getStatementsOrBuilderList() {
+        if (statementsBuilder_ != null) {
+          return statementsBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(statements_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Statement statements = 4;</code>
+       *
+       * <pre>
+       ** Statements contained in this namespace 
+       * </pre>
+       */
+      public boa.types.Ast.Statement.Builder addStatementsBuilder() {
+        return getStatementsFieldBuilder().addBuilder(
+            boa.types.Ast.Statement.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Statement statements = 4;</code>
+       *
+       * <pre>
+       ** Statements contained in this namespace 
+       * </pre>
+       */
+      public boa.types.Ast.Statement.Builder addStatementsBuilder(
+          int index) {
+        return getStatementsFieldBuilder().addBuilder(
+            index, boa.types.Ast.Statement.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Statement statements = 4;</code>
+       *
+       * <pre>
+       ** Statements contained in this namespace 
+       * </pre>
+       */
+      public java.util.List<boa.types.Ast.Statement.Builder> 
+           getStatementsBuilderList() {
+        return getStatementsFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Statement, boa.types.Ast.Statement.Builder, boa.types.Ast.StatementOrBuilder> 
+          getStatementsFieldBuilder() {
+        if (statementsBuilder_ == null) {
+          statementsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              boa.types.Ast.Statement, boa.types.Ast.Statement.Builder, boa.types.Ast.StatementOrBuilder>(
+                  statements_,
+                  ((bitField0_ & 0x00000008) == 0x00000008),
+                  getParentForChildren(),
+                  isClean());
+          statements_ = null;
+        }
+        return statementsBuilder_;
+      }
+
+      // repeated .boa.types.Method methods = 5;
+      private java.util.List<boa.types.Ast.Method> methods_ =
+        java.util.Collections.emptyList();
+      private void ensureMethodsIsMutable() {
+        if (!((bitField0_ & 0x00000010) == 0x00000010)) {
+          methods_ = new java.util.ArrayList<boa.types.Ast.Method>(methods_);
+          bitField0_ |= 0x00000010;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Method, boa.types.Ast.Method.Builder, boa.types.Ast.MethodOrBuilder> methodsBuilder_;
+
+      /**
+       * <code>repeated .boa.types.Method methods = 5;</code>
+       *
+       * <pre>
+       ** Methods contained in this namespace 
+       * </pre>
+       */
+      public java.util.List<boa.types.Ast.Method> getMethodsList() {
+        if (methodsBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(methods_);
+        } else {
+          return methodsBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Method methods = 5;</code>
+       *
+       * <pre>
+       ** Methods contained in this namespace 
+       * </pre>
+       */
+      public int getMethodsCount() {
+        if (methodsBuilder_ == null) {
+          return methods_.size();
+        } else {
+          return methodsBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Method methods = 5;</code>
+       *
+       * <pre>
+       ** Methods contained in this namespace 
+       * </pre>
+       */
+      public boa.types.Ast.Method getMethods(int index) {
+        if (methodsBuilder_ == null) {
+          return methods_.get(index);
+        } else {
+          return methodsBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Method methods = 5;</code>
+       *
+       * <pre>
+       ** Methods contained in this namespace 
+       * </pre>
+       */
+      public Builder setMethods(
+          int index, boa.types.Ast.Method value) {
+        if (methodsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureMethodsIsMutable();
+          methods_.set(index, value);
+          onChanged();
+        } else {
+          methodsBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Method methods = 5;</code>
+       *
+       * <pre>
+       ** Methods contained in this namespace 
+       * </pre>
+       */
+      public Builder setMethods(
+          int index, boa.types.Ast.Method.Builder builderForValue) {
+        if (methodsBuilder_ == null) {
+          ensureMethodsIsMutable();
+          methods_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          methodsBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Method methods = 5;</code>
+       *
+       * <pre>
+       ** Methods contained in this namespace 
+       * </pre>
+       */
+      public Builder addMethods(boa.types.Ast.Method value) {
+        if (methodsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureMethodsIsMutable();
+          methods_.add(value);
+          onChanged();
+        } else {
+          methodsBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Method methods = 5;</code>
+       *
+       * <pre>
+       ** Methods contained in this namespace 
+       * </pre>
+       */
+      public Builder addMethods(
+          int index, boa.types.Ast.Method value) {
+        if (methodsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureMethodsIsMutable();
+          methods_.add(index, value);
+          onChanged();
+        } else {
+          methodsBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Method methods = 5;</code>
+       *
+       * <pre>
+       ** Methods contained in this namespace 
+       * </pre>
+       */
+      public Builder addMethods(
+          boa.types.Ast.Method.Builder builderForValue) {
+        if (methodsBuilder_ == null) {
+          ensureMethodsIsMutable();
+          methods_.add(builderForValue.build());
+          onChanged();
+        } else {
+          methodsBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Method methods = 5;</code>
+       *
+       * <pre>
+       ** Methods contained in this namespace 
+       * </pre>
+       */
+      public Builder addMethods(
+          int index, boa.types.Ast.Method.Builder builderForValue) {
+        if (methodsBuilder_ == null) {
+          ensureMethodsIsMutable();
+          methods_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          methodsBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Method methods = 5;</code>
+       *
+       * <pre>
+       ** Methods contained in this namespace 
+       * </pre>
+       */
+      public Builder addAllMethods(
+          java.lang.Iterable<? extends boa.types.Ast.Method> values) {
+        if (methodsBuilder_ == null) {
+          ensureMethodsIsMutable();
+          super.addAll(values, methods_);
+          onChanged();
+        } else {
+          methodsBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Method methods = 5;</code>
+       *
+       * <pre>
+       ** Methods contained in this namespace 
+       * </pre>
+       */
+      public Builder clearMethods() {
+        if (methodsBuilder_ == null) {
+          methods_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000010);
+          onChanged();
+        } else {
+          methodsBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Method methods = 5;</code>
+       *
+       * <pre>
+       ** Methods contained in this namespace 
+       * </pre>
+       */
+      public Builder removeMethods(int index) {
+        if (methodsBuilder_ == null) {
+          ensureMethodsIsMutable();
+          methods_.remove(index);
+          onChanged();
+        } else {
+          methodsBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Method methods = 5;</code>
+       *
+       * <pre>
+       ** Methods contained in this namespace 
+       * </pre>
+       */
+      public boa.types.Ast.Method.Builder getMethodsBuilder(
+          int index) {
+        return getMethodsFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.Method methods = 5;</code>
+       *
+       * <pre>
+       ** Methods contained in this namespace 
+       * </pre>
+       */
+      public boa.types.Ast.MethodOrBuilder getMethodsOrBuilder(
+          int index) {
+        if (methodsBuilder_ == null) {
+          return methods_.get(index);  } else {
+          return methodsBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Method methods = 5;</code>
+       *
+       * <pre>
+       ** Methods contained in this namespace 
+       * </pre>
+       */
+      public java.util.List<? extends boa.types.Ast.MethodOrBuilder> 
+           getMethodsOrBuilderList() {
+        if (methodsBuilder_ != null) {
+          return methodsBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(methods_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Method methods = 5;</code>
+       *
+       * <pre>
+       ** Methods contained in this namespace 
+       * </pre>
+       */
+      public boa.types.Ast.Method.Builder addMethodsBuilder() {
+        return getMethodsFieldBuilder().addBuilder(
+            boa.types.Ast.Method.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Method methods = 5;</code>
+       *
+       * <pre>
+       ** Methods contained in this namespace 
+       * </pre>
+       */
+      public boa.types.Ast.Method.Builder addMethodsBuilder(
+          int index) {
+        return getMethodsFieldBuilder().addBuilder(
+            index, boa.types.Ast.Method.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Method methods = 5;</code>
+       *
+       * <pre>
+       ** Methods contained in this namespace 
+       * </pre>
+       */
+      public java.util.List<boa.types.Ast.Method.Builder> 
+           getMethodsBuilderList() {
+        return getMethodsFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Method, boa.types.Ast.Method.Builder, boa.types.Ast.MethodOrBuilder> 
+          getMethodsFieldBuilder() {
+        if (methodsBuilder_ == null) {
+          methodsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              boa.types.Ast.Method, boa.types.Ast.Method.Builder, boa.types.Ast.MethodOrBuilder>(
+                  methods_,
+                  ((bitField0_ & 0x00000010) == 0x00000010),
+                  getParentForChildren(),
+                  isClean());
+          methods_ = null;
+        }
+        return methodsBuilder_;
+      }
+
+      // repeated .boa.types.Expression expressions = 6;
+      private java.util.List<boa.types.Ast.Expression> expressions_ =
+        java.util.Collections.emptyList();
+      private void ensureExpressionsIsMutable() {
+        if (!((bitField0_ & 0x00000020) == 0x00000020)) {
+          expressions_ = new java.util.ArrayList<boa.types.Ast.Expression>(expressions_);
+          bitField0_ |= 0x00000020;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder> expressionsBuilder_;
+
+      /**
+       * <code>repeated .boa.types.Expression expressions = 6;</code>
+       *
+       * <pre>
+       ** Expressions contained in this namespace 
+       * </pre>
+       */
+      public java.util.List<boa.types.Ast.Expression> getExpressionsList() {
+        if (expressionsBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(expressions_);
+        } else {
+          return expressionsBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Expression expressions = 6;</code>
+       *
+       * <pre>
+       ** Expressions contained in this namespace 
+       * </pre>
+       */
+      public int getExpressionsCount() {
+        if (expressionsBuilder_ == null) {
+          return expressions_.size();
+        } else {
+          return expressionsBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Expression expressions = 6;</code>
+       *
+       * <pre>
+       ** Expressions contained in this namespace 
+       * </pre>
+       */
+      public boa.types.Ast.Expression getExpressions(int index) {
+        if (expressionsBuilder_ == null) {
+          return expressions_.get(index);
+        } else {
+          return expressionsBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Expression expressions = 6;</code>
+       *
+       * <pre>
+       ** Expressions contained in this namespace 
+       * </pre>
+       */
+      public Builder setExpressions(
+          int index, boa.types.Ast.Expression value) {
+        if (expressionsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureExpressionsIsMutable();
+          expressions_.set(index, value);
+          onChanged();
+        } else {
+          expressionsBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Expression expressions = 6;</code>
+       *
+       * <pre>
+       ** Expressions contained in this namespace 
+       * </pre>
+       */
+      public Builder setExpressions(
+          int index, boa.types.Ast.Expression.Builder builderForValue) {
+        if (expressionsBuilder_ == null) {
+          ensureExpressionsIsMutable();
+          expressions_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          expressionsBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Expression expressions = 6;</code>
+       *
+       * <pre>
+       ** Expressions contained in this namespace 
+       * </pre>
+       */
+      public Builder addExpressions(boa.types.Ast.Expression value) {
+        if (expressionsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureExpressionsIsMutable();
+          expressions_.add(value);
+          onChanged();
+        } else {
+          expressionsBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Expression expressions = 6;</code>
+       *
+       * <pre>
+       ** Expressions contained in this namespace 
+       * </pre>
+       */
+      public Builder addExpressions(
+          int index, boa.types.Ast.Expression value) {
+        if (expressionsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureExpressionsIsMutable();
+          expressions_.add(index, value);
+          onChanged();
+        } else {
+          expressionsBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Expression expressions = 6;</code>
+       *
+       * <pre>
+       ** Expressions contained in this namespace 
+       * </pre>
+       */
+      public Builder addExpressions(
+          boa.types.Ast.Expression.Builder builderForValue) {
+        if (expressionsBuilder_ == null) {
+          ensureExpressionsIsMutable();
+          expressions_.add(builderForValue.build());
+          onChanged();
+        } else {
+          expressionsBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Expression expressions = 6;</code>
+       *
+       * <pre>
+       ** Expressions contained in this namespace 
+       * </pre>
+       */
+      public Builder addExpressions(
+          int index, boa.types.Ast.Expression.Builder builderForValue) {
+        if (expressionsBuilder_ == null) {
+          ensureExpressionsIsMutable();
+          expressions_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          expressionsBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Expression expressions = 6;</code>
+       *
+       * <pre>
+       ** Expressions contained in this namespace 
+       * </pre>
+       */
+      public Builder addAllExpressions(
+          java.lang.Iterable<? extends boa.types.Ast.Expression> values) {
+        if (expressionsBuilder_ == null) {
+          ensureExpressionsIsMutable();
+          super.addAll(values, expressions_);
+          onChanged();
+        } else {
+          expressionsBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Expression expressions = 6;</code>
+       *
+       * <pre>
+       ** Expressions contained in this namespace 
+       * </pre>
+       */
+      public Builder clearExpressions() {
+        if (expressionsBuilder_ == null) {
+          expressions_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000020);
+          onChanged();
+        } else {
+          expressionsBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Expression expressions = 6;</code>
+       *
+       * <pre>
+       ** Expressions contained in this namespace 
+       * </pre>
+       */
+      public Builder removeExpressions(int index) {
+        if (expressionsBuilder_ == null) {
+          ensureExpressionsIsMutable();
+          expressions_.remove(index);
+          onChanged();
+        } else {
+          expressionsBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Expression expressions = 6;</code>
+       *
+       * <pre>
+       ** Expressions contained in this namespace 
+       * </pre>
+       */
+      public boa.types.Ast.Expression.Builder getExpressionsBuilder(
+          int index) {
+        return getExpressionsFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.Expression expressions = 6;</code>
+       *
+       * <pre>
+       ** Expressions contained in this namespace 
+       * </pre>
+       */
+      public boa.types.Ast.ExpressionOrBuilder getExpressionsOrBuilder(
+          int index) {
+        if (expressionsBuilder_ == null) {
+          return expressions_.get(index);  } else {
+          return expressionsBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Expression expressions = 6;</code>
+       *
+       * <pre>
+       ** Expressions contained in this namespace 
+       * </pre>
+       */
+      public java.util.List<? extends boa.types.Ast.ExpressionOrBuilder> 
+           getExpressionsOrBuilderList() {
+        if (expressionsBuilder_ != null) {
+          return expressionsBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(expressions_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Expression expressions = 6;</code>
+       *
+       * <pre>
+       ** Expressions contained in this namespace 
+       * </pre>
+       */
+      public boa.types.Ast.Expression.Builder addExpressionsBuilder() {
+        return getExpressionsFieldBuilder().addBuilder(
+            boa.types.Ast.Expression.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Expression expressions = 6;</code>
+       *
+       * <pre>
+       ** Expressions contained in this namespace 
+       * </pre>
+       */
+      public boa.types.Ast.Expression.Builder addExpressionsBuilder(
+          int index) {
+        return getExpressionsFieldBuilder().addBuilder(
+            index, boa.types.Ast.Expression.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Expression expressions = 6;</code>
+       *
+       * <pre>
+       ** Expressions contained in this namespace 
+       * </pre>
+       */
+      public java.util.List<boa.types.Ast.Expression.Builder> 
+           getExpressionsBuilderList() {
+        return getExpressionsFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder> 
+          getExpressionsFieldBuilder() {
+        if (expressionsBuilder_ == null) {
+          expressionsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder>(
+                  expressions_,
+                  ((bitField0_ & 0x00000020) == 0x00000020),
+                  getParentForChildren(),
+                  isClean());
+          expressions_ = null;
+        }
+        return expressionsBuilder_;
       }
 
       // @@protoc_insertion_point(builder_scope:boa.types.Namespace)
@@ -26003,105 +27461,109 @@ public final class Ast {
       "\n\010comments\030\001 \003(\0132\022.boa.types.Comment\"S\n\007" +
       "ASTRoot\022(\n\nnamespaces\030\001 \003(\0132\024.boa.types." +
       "Namespace\022\017\n\007imports\030\002 \003(\t\022\r\n\005names\030\003 \003(" +
-      "\t\"o\n\tNamespace\022\014\n\004name\030\001 \002(\t\022&\n\tmodifier" +
-      "s\030\002 \003(\0132\023.boa.types.Modifier\022,\n\014declarat" +
-      "ions\030\003 \003(\0132\026.boa.types.Declaration\"\331\002\n\013D" +
-      "eclaration\022\014\n\004name\030\001 \002(\t\022!\n\004kind\030\002 \002(\0162\023" +
-      ".boa.types.TypeKind\022&\n\tmodifiers\030\003 \003(\0132\023" +
-      ".boa.types.Modifier\022+\n\022generic_parameter",
-      "s\030\004 \003(\0132\017.boa.types.Type\022 \n\007parents\030\005 \003(" +
-      "\0132\017.boa.types.Type\022\"\n\007methods\030\006 \003(\0132\021.bo" +
-      "a.types.Method\022#\n\006fields\030\007 \003(\0132\023.boa.typ" +
-      "es.Variable\0223\n\023nested_declarations\030\010 \003(\013" +
-      "2\026.boa.types.Declaration\022$\n\010comments\030\t \003" +
-      "(\0132\022.boa.types.Comment\"C\n\004Type\022\014\n\004name\030\001" +
-      " \002(\t\022!\n\004kind\030\002 \002(\0162\023.boa.types.TypeKind\022" +
-      "\n\n\002id\030\004 \001(\t\"\263\002\n\006Method\022\014\n\004name\030\001 \001(\t\022&\n\t" +
-      "modifiers\030\002 \003(\0132\023.boa.types.Modifier\022$\n\013" +
-      "return_type\030\003 \002(\0132\017.boa.types.Type\022+\n\022ge",
-      "neric_parameters\030\004 \003(\0132\017.boa.types.Type\022" +
-      "&\n\targuments\030\005 \003(\0132\023.boa.types.Variable\022" +
-      "(\n\017exception_types\030\006 \003(\0132\017.boa.types.Typ" +
-      "e\022(\n\nstatements\030\007 \003(\0132\024.boa.types.Statem" +
-      "ent\022$\n\010comments\030\010 \003(\0132\022.boa.types.Commen" +
-      "t\"\272\001\n\010Variable\022\014\n\004name\030\001 \002(\t\022&\n\rvariable" +
-      "_type\030\002 \002(\0132\017.boa.types.Type\022&\n\tmodifier" +
-      "s\030\003 \003(\0132\023.boa.types.Modifier\022*\n\013initiali" +
-      "zer\030\004 \001(\0132\025.boa.types.Expression\022$\n\010comm" +
-      "ents\030\005 \003(\0132\022.boa.types.Comment\"\257\005\n\tState",
-      "ment\0220\n\004kind\030\001 \002(\0162\".boa.types.Statement" +
-      ".StatementKind\022$\n\010comments\030\002 \003(\0132\022.boa.t" +
-      "ypes.Comment\022(\n\nstatements\030\003 \003(\0132\024.boa.t" +
-      "ypes.Statement\022.\n\017initializations\030\004 \003(\0132" +
-      "\025.boa.types.Expression\022(\n\tcondition\030\005 \001(" +
-      "\0132\025.boa.types.Expression\022&\n\007updates\030\006 \003(" +
-      "\0132\025.boa.types.Expression\0221\n\024variable_dec" +
-      "laration\030\007 \001(\0132\023.boa.types.Variable\0220\n\020t" +
-      "ype_declaration\030\010 \001(\0132\026.boa.types.Declar" +
-      "ation\022)\n\nexpression\030\t \001(\0132\025.boa.types.Ex",
-      "pression\"\215\002\n\rStatementKind\022\t\n\005OTHER\020\000\022\t\n" +
-      "\005BLOCK\020\001\022\014\n\010TYPEDECL\020\002\022\016\n\nEXPRESSION\020\003\022\010" +
-      "\n\004EXPR\020\003\022\020\n\014SYNCHRONIZED\020\004\022\010\n\004SYNC\020\004\022\n\n\006" +
-      "RETURN\020\005\022\007\n\003FOR\020\006\022\006\n\002DO\020\007\022\t\n\005WHILE\020\010\022\006\n\002" +
-      "IF\020\t\022\n\n\006ASSERT\020\n\022\t\n\005BREAK\020\013\022\014\n\010CONTINUE\020" +
-      "\014\022\t\n\005LABEL\020\r\022\n\n\006SWITCH\020\016\022\010\n\004CASE\020\017\022\007\n\003TR" +
-      "Y\020\020\022\t\n\005THROW\020\021\022\t\n\005CATCH\020\022\022\t\n\005EMPTY\020\023\032\002\020\001" +
-      "\"\360\t\n\nExpression\0222\n\004kind\030\001 \002(\0162$.boa.type" +
-      "s.Expression.ExpressionKind\022*\n\013expressio" +
-      "ns\030\002 \003(\0132\025.boa.types.Expression\022+\n\016varia",
-      "ble_decls\030\003 \003(\0132\023.boa.types.Variable\022!\n\010" +
-      "new_type\030\004 \001(\0132\017.boa.types.Type\022+\n\022gener" +
-      "ic_parameters\030\005 \003(\0132\017.boa.types.Type\022\022\n\n" +
-      "is_postfix\030\006 \001(\010\022\017\n\007literal\030\007 \001(\t\022\020\n\010var" +
-      "iable\030\010 \001(\t\022\016\n\006method\030\t \001(\t\022*\n\013method_ar" +
-      "gs\030\n \003(\0132\025.boa.types.Expression\0220\n\020anon_" +
-      "declaration\030\013 \001(\0132\026.boa.types.Declaratio" +
-      "n\022\'\n\nannotation\030\014 \001(\0132\023.boa.types.Modifi" +
-      "er\022!\n\006lambda\030\r \001(\0132\021.boa.types.Method\"\223\006" +
-      "\n\016ExpressionKind\022\t\n\005OTHER\020\000\022\013\n\007LITERAL\020\001",
-      "\022\r\n\tVARACCESS\020\002\022\013\n\007VARDECL\020\003\022\016\n\nMETHODCA" +
-      "LL\020\004\022\010\n\004CAST\020\005\022\016\n\nARRAYINDEX\020\006\022\r\n\tARRAYI" +
-      "NIT\020\007\022\017\n\013TYPECOMPARE\020\010\022\007\n\003NEW\020\t\022\014\n\010NEWAR" +
-      "RAY\020\n\022\n\n\006OP_ADD\020\013\022\n\n\006OP_SUB\020\014\022\013\n\007OP_MULT" +
-      "\020\r\022\n\n\006OP_DIV\020\016\022\n\n\006OP_MOD\020\017\022\n\n\006OP_INC\020\020\022\n" +
-      "\n\006OP_DEC\020\021\022\016\n\nBIT_LSHIFT\020\022\022\016\n\nBIT_RSHIFT" +
-      "\020\023\022\026\n\022BIT_UNSIGNEDRSHIFT\020\024\022\013\n\007BIT_AND\020\025\022" +
-      "\n\n\006BIT_OR\020\026\022\013\n\007BIT_NOT\020\027\022\013\n\007BIT_XOR\020\030\022\017\n" +
-      "\013LOGICAL_NOT\020\031\022\017\n\013LOGICAL_AND\020\032\022\016\n\nLOGIC" +
-      "AL_OR\020\033\022\006\n\002EQ\020\034\022\007\n\003NEQ\020\035\022\006\n\002LT\020\036\022\006\n\002GT\020\037",
-      "\022\010\n\004LTEQ\020 \022\010\n\004GTEQ\020!\022\017\n\013CONDITIONAL\020\"\022\020\n" +
-      "\014NULLCOALESCE\020#\022\n\n\006ASSIGN\020$\022\016\n\nASSIGN_AD" +
-      "D\020%\022\016\n\nASSIGN_SUB\020&\022\017\n\013ASSIGN_MULT\020\'\022\016\n\n" +
-      "ASSIGN_DIV\020(\022\016\n\nASSIGN_MOD\020)\022\021\n\rASSIGN_B" +
-      "ITXOR\020*\022\021\n\rASSIGN_BITAND\020+\022\020\n\014ASSIGN_BIT" +
-      "OR\020,\022\021\n\rASSIGN_LSHIFT\020-\022\021\n\rASSIGN_RSHIFT" +
-      "\020.\022\031\n\025ASSIGN_UNSIGNEDRSHIFT\020/\022\016\n\nANNOTAT" +
-      "ION\0200\022\t\n\005PAREN\0201\022\024\n\020METHOD_REFERENCE\0202\022\n" +
-      "\n\006LAMBDA\0203\022\017\n\013ANON_METHOD\0204\"\307\003\n\010Modifier" +
-      "\022.\n\004kind\030\001 \002(\0162 .boa.types.Modifier.Modi",
-      "fierKind\0222\n\nvisibility\030\002 \001(\0162\036.boa.types" +
-      ".Modifier.Visibility\022\027\n\017annotation_name\030" +
-      "\003 \001(\t\022\032\n\022annotation_members\030\004 \003(\t\0220\n\021ann" +
-      "otation_values\030\005 \003(\0132\025.boa.types.Express" +
-      "ion\022\r\n\005other\030\006 \001(\t\"~\n\014ModifierKind\022\t\n\005OT" +
-      "HER\020\000\022\016\n\nVISIBILITY\020\001\022\016\n\nANNOTATION\020\002\022\t\n" +
-      "\005FINAL\020\003\022\n\n\006STATIC\020\004\022\020\n\014SYNCHRONIZED\020\005\022\010" +
-      "\n\004SYNC\020\005\022\014\n\010ABSTRACT\020\006\032\002\020\001\"a\n\nVisibility" +
-      "\022\n\n\006PUBLIC\020\001\022\013\n\007PRIVATE\020\002\022\r\n\tPROTECTED\020\003" +
-      "\022\r\n\tNAMESPACE\020\004\022\013\n\007PACKAGE\020\004\022\013\n\007DEFAULT\020",
-      "\004\032\002\020\001\"\335\001\n\007Comment\022,\n\004kind\030\001 \002(\0162\036.boa.ty" +
-      "pes.Comment.CommentKind\022\r\n\005value\030\002 \002(\t\022)" +
-      "\n\010position\030\003 \002(\0132\027.boa.types.PositionInf" +
-      "o\"j\n\013CommentKind\022\t\n\005OTHER\020\000\022\010\n\004LINE\020\001\022\t\n" +
-      "\005BLOCK\020\002\022\007\n\003DOC\020\003\022\021\n\rDOCUMENTATION\020\003\022\010\n\004" +
-      "SPEC\020\004\022\021\n\rSPECIFICATION\020\004\032\002\020\001\"{\n\014Positio" +
-      "nInfo\022\021\n\tstart_pos\030\001 \002(\005\022\016\n\006length\030\002 \002(\005" +
-      "\022\022\n\nstart_line\030\003 \002(\005\022\021\n\tstart_col\030\004 \002(\005\022" +
-      "\020\n\010end_line\030\005 \002(\005\022\017\n\007end_col\030\006 \002(\005*\236\001\n\010T" +
-      "ypeKind\022\t\n\005OTHER\020\000\022\t\n\005CLASS\020\001\022\r\n\tINTERFA",
-      "CE\020\002\022\r\n\tANONYMOUS\020\003\022\010\n\004ANON\020\003\022\n\n\006STRUCT\020" +
-      "\004\022\010\n\004ENUM\020\005\022\017\n\013ENUMERATION\020\005\022\016\n\nANNOTATI" +
-      "ON\020\006\022\014\n\010DELEGATE\020\007\022\013\n\007GENERIC\020\010\032\002\020\001B\002H\001"
+      "\t\"\351\001\n\tNamespace\022\014\n\004name\030\001 \002(\t\022&\n\tmodifie" +
+      "rs\030\002 \003(\0132\023.boa.types.Modifier\022,\n\014declara" +
+      "tions\030\003 \003(\0132\026.boa.types.Declaration\022(\n\ns" +
+      "tatements\030\004 \003(\0132\024.boa.types.Statement\022\"\n" +
+      "\007methods\030\005 \003(\0132\021.boa.types.Method\022*\n\013exp" +
+      "ressions\030\006 \003(\0132\025.boa.types.Expression\"\331\002",
+      "\n\013Declaration\022\014\n\004name\030\001 \002(\t\022!\n\004kind\030\002 \002(" +
+      "\0162\023.boa.types.TypeKind\022&\n\tmodifiers\030\003 \003(" +
+      "\0132\023.boa.types.Modifier\022+\n\022generic_parame" +
+      "ters\030\004 \003(\0132\017.boa.types.Type\022 \n\007parents\030\005" +
+      " \003(\0132\017.boa.types.Type\022\"\n\007methods\030\006 \003(\0132\021" +
+      ".boa.types.Method\022#\n\006fields\030\007 \003(\0132\023.boa." +
+      "types.Variable\0223\n\023nested_declarations\030\010 " +
+      "\003(\0132\026.boa.types.Declaration\022$\n\010comments\030" +
+      "\t \003(\0132\022.boa.types.Comment\"C\n\004Type\022\014\n\004nam" +
+      "e\030\001 \002(\t\022!\n\004kind\030\002 \002(\0162\023.boa.types.TypeKi",
+      "nd\022\n\n\002id\030\004 \001(\t\"\263\002\n\006Method\022\014\n\004name\030\001 \001(\t\022" +
+      "&\n\tmodifiers\030\002 \003(\0132\023.boa.types.Modifier\022" +
+      "$\n\013return_type\030\003 \002(\0132\017.boa.types.Type\022+\n" +
+      "\022generic_parameters\030\004 \003(\0132\017.boa.types.Ty" +
+      "pe\022&\n\targuments\030\005 \003(\0132\023.boa.types.Variab" +
+      "le\022(\n\017exception_types\030\006 \003(\0132\017.boa.types." +
+      "Type\022(\n\nstatements\030\007 \003(\0132\024.boa.types.Sta" +
+      "tement\022$\n\010comments\030\010 \003(\0132\022.boa.types.Com" +
+      "ment\"\272\001\n\010Variable\022\014\n\004name\030\001 \002(\t\022&\n\rvaria" +
+      "ble_type\030\002 \002(\0132\017.boa.types.Type\022&\n\tmodif",
+      "iers\030\003 \003(\0132\023.boa.types.Modifier\022*\n\013initi" +
+      "alizer\030\004 \001(\0132\025.boa.types.Expression\022$\n\010c" +
+      "omments\030\005 \003(\0132\022.boa.types.Comment\"\257\005\n\tSt" +
+      "atement\0220\n\004kind\030\001 \002(\0162\".boa.types.Statem" +
+      "ent.StatementKind\022$\n\010comments\030\002 \003(\0132\022.bo" +
+      "a.types.Comment\022(\n\nstatements\030\003 \003(\0132\024.bo" +
+      "a.types.Statement\022.\n\017initializations\030\004 \003" +
+      "(\0132\025.boa.types.Expression\022(\n\tcondition\030\005" +
+      " \001(\0132\025.boa.types.Expression\022&\n\007updates\030\006" +
+      " \003(\0132\025.boa.types.Expression\0221\n\024variable_",
+      "declaration\030\007 \001(\0132\023.boa.types.Variable\0220" +
+      "\n\020type_declaration\030\010 \001(\0132\026.boa.types.Dec" +
+      "laration\022)\n\nexpression\030\t \001(\0132\025.boa.types" +
+      ".Expression\"\215\002\n\rStatementKind\022\t\n\005OTHER\020\000" +
+      "\022\t\n\005BLOCK\020\001\022\014\n\010TYPEDECL\020\002\022\016\n\nEXPRESSION\020" +
+      "\003\022\010\n\004EXPR\020\003\022\020\n\014SYNCHRONIZED\020\004\022\010\n\004SYNC\020\004\022" +
+      "\n\n\006RETURN\020\005\022\007\n\003FOR\020\006\022\006\n\002DO\020\007\022\t\n\005WHILE\020\010\022" +
+      "\006\n\002IF\020\t\022\n\n\006ASSERT\020\n\022\t\n\005BREAK\020\013\022\014\n\010CONTIN" +
+      "UE\020\014\022\t\n\005LABEL\020\r\022\n\n\006SWITCH\020\016\022\010\n\004CASE\020\017\022\007\n" +
+      "\003TRY\020\020\022\t\n\005THROW\020\021\022\t\n\005CATCH\020\022\022\t\n\005EMPTY\020\023\032",
+      "\002\020\001\"\360\t\n\nExpression\0222\n\004kind\030\001 \002(\0162$.boa.t" +
+      "ypes.Expression.ExpressionKind\022*\n\013expres" +
+      "sions\030\002 \003(\0132\025.boa.types.Expression\022+\n\016va" +
+      "riable_decls\030\003 \003(\0132\023.boa.types.Variable\022" +
+      "!\n\010new_type\030\004 \001(\0132\017.boa.types.Type\022+\n\022ge" +
+      "neric_parameters\030\005 \003(\0132\017.boa.types.Type\022" +
+      "\022\n\nis_postfix\030\006 \001(\010\022\017\n\007literal\030\007 \001(\t\022\020\n\010" +
+      "variable\030\010 \001(\t\022\016\n\006method\030\t \001(\t\022*\n\013method" +
+      "_args\030\n \003(\0132\025.boa.types.Expression\0220\n\020an" +
+      "on_declaration\030\013 \001(\0132\026.boa.types.Declara",
+      "tion\022\'\n\nannotation\030\014 \001(\0132\023.boa.types.Mod" +
+      "ifier\022!\n\006lambda\030\r \001(\0132\021.boa.types.Method" +
+      "\"\223\006\n\016ExpressionKind\022\t\n\005OTHER\020\000\022\013\n\007LITERA" +
+      "L\020\001\022\r\n\tVARACCESS\020\002\022\013\n\007VARDECL\020\003\022\016\n\nMETHO" +
+      "DCALL\020\004\022\010\n\004CAST\020\005\022\016\n\nARRAYINDEX\020\006\022\r\n\tARR" +
+      "AYINIT\020\007\022\017\n\013TYPECOMPARE\020\010\022\007\n\003NEW\020\t\022\014\n\010NE" +
+      "WARRAY\020\n\022\n\n\006OP_ADD\020\013\022\n\n\006OP_SUB\020\014\022\013\n\007OP_M" +
+      "ULT\020\r\022\n\n\006OP_DIV\020\016\022\n\n\006OP_MOD\020\017\022\n\n\006OP_INC\020" +
+      "\020\022\n\n\006OP_DEC\020\021\022\016\n\nBIT_LSHIFT\020\022\022\016\n\nBIT_RSH" +
+      "IFT\020\023\022\026\n\022BIT_UNSIGNEDRSHIFT\020\024\022\013\n\007BIT_AND",
+      "\020\025\022\n\n\006BIT_OR\020\026\022\013\n\007BIT_NOT\020\027\022\013\n\007BIT_XOR\020\030" +
+      "\022\017\n\013LOGICAL_NOT\020\031\022\017\n\013LOGICAL_AND\020\032\022\016\n\nLO" +
+      "GICAL_OR\020\033\022\006\n\002EQ\020\034\022\007\n\003NEQ\020\035\022\006\n\002LT\020\036\022\006\n\002G" +
+      "T\020\037\022\010\n\004LTEQ\020 \022\010\n\004GTEQ\020!\022\017\n\013CONDITIONAL\020\"" +
+      "\022\020\n\014NULLCOALESCE\020#\022\n\n\006ASSIGN\020$\022\016\n\nASSIGN" +
+      "_ADD\020%\022\016\n\nASSIGN_SUB\020&\022\017\n\013ASSIGN_MULT\020\'\022" +
+      "\016\n\nASSIGN_DIV\020(\022\016\n\nASSIGN_MOD\020)\022\021\n\rASSIG" +
+      "N_BITXOR\020*\022\021\n\rASSIGN_BITAND\020+\022\020\n\014ASSIGN_" +
+      "BITOR\020,\022\021\n\rASSIGN_LSHIFT\020-\022\021\n\rASSIGN_RSH" +
+      "IFT\020.\022\031\n\025ASSIGN_UNSIGNEDRSHIFT\020/\022\016\n\nANNO",
+      "TATION\0200\022\t\n\005PAREN\0201\022\024\n\020METHOD_REFERENCE\020" +
+      "2\022\n\n\006LAMBDA\0203\022\017\n\013ANON_METHOD\0204\"\307\003\n\010Modif" +
+      "ier\022.\n\004kind\030\001 \002(\0162 .boa.types.Modifier.M" +
+      "odifierKind\0222\n\nvisibility\030\002 \001(\0162\036.boa.ty" +
+      "pes.Modifier.Visibility\022\027\n\017annotation_na" +
+      "me\030\003 \001(\t\022\032\n\022annotation_members\030\004 \003(\t\0220\n\021" +
+      "annotation_values\030\005 \003(\0132\025.boa.types.Expr" +
+      "ession\022\r\n\005other\030\006 \001(\t\"~\n\014ModifierKind\022\t\n" +
+      "\005OTHER\020\000\022\016\n\nVISIBILITY\020\001\022\016\n\nANNOTATION\020\002" +
+      "\022\t\n\005FINAL\020\003\022\n\n\006STATIC\020\004\022\020\n\014SYNCHRONIZED\020",
+      "\005\022\010\n\004SYNC\020\005\022\014\n\010ABSTRACT\020\006\032\002\020\001\"a\n\nVisibil" +
+      "ity\022\n\n\006PUBLIC\020\001\022\013\n\007PRIVATE\020\002\022\r\n\tPROTECTE" +
+      "D\020\003\022\r\n\tNAMESPACE\020\004\022\013\n\007PACKAGE\020\004\022\013\n\007DEFAU" +
+      "LT\020\004\032\002\020\001\"\335\001\n\007Comment\022,\n\004kind\030\001 \002(\0162\036.boa" +
+      ".types.Comment.CommentKind\022\r\n\005value\030\002 \002(" +
+      "\t\022)\n\010position\030\003 \002(\0132\027.boa.types.Position" +
+      "Info\"j\n\013CommentKind\022\t\n\005OTHER\020\000\022\010\n\004LINE\020\001" +
+      "\022\t\n\005BLOCK\020\002\022\007\n\003DOC\020\003\022\021\n\rDOCUMENTATION\020\003\022" +
+      "\010\n\004SPEC\020\004\022\021\n\rSPECIFICATION\020\004\032\002\020\001\"{\n\014Posi" +
+      "tionInfo\022\021\n\tstart_pos\030\001 \002(\005\022\016\n\006length\030\002 ",
+      "\002(\005\022\022\n\nstart_line\030\003 \002(\005\022\021\n\tstart_col\030\004 \002" +
+      "(\005\022\020\n\010end_line\030\005 \002(\005\022\017\n\007end_col\030\006 \002(\005*\236\001" +
+      "\n\010TypeKind\022\t\n\005OTHER\020\000\022\t\n\005CLASS\020\001\022\r\n\tINTE" +
+      "RFACE\020\002\022\r\n\tANONYMOUS\020\003\022\010\n\004ANON\020\003\022\n\n\006STRU" +
+      "CT\020\004\022\010\n\004ENUM\020\005\022\017\n\013ENUMERATION\020\005\022\016\n\nANNOT" +
+      "ATION\020\006\022\014\n\010DELEGATE\020\007\022\013\n\007GENERIC\020\010\032\002\020\001B\002" +
+      "H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -26125,7 +27587,7 @@ public final class Ast {
           internal_static_boa_types_Namespace_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Namespace_descriptor,
-              new java.lang.String[] { "Name", "Modifiers", "Declarations", });
+              new java.lang.String[] { "Name", "Modifiers", "Declarations", "Statements", "Methods", "Expressions", });
           internal_static_boa_types_Declaration_descriptor =
             getDescriptor().getMessageTypes().get(3);
           internal_static_boa_types_Declaration_fieldAccessorTable = new

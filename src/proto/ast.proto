@@ -25,6 +25,12 @@ message Namespace {
 	repeated Modifier modifiers = 2;
 	/** Declarations contained in this namespace */
 	repeated Declaration declarations = 3;
+	/** Statements contained in this namespace */
+	repeated Statement statements = 4;
+	/** Methods contained in this namespace */
+	repeated Method methods = 5;
+	/** Expressions contained in this namespace */
+	repeated Expression expressions = 6;
 }
 
 /** A type declaration, such as a class or interface */

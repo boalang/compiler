@@ -799,6 +799,30 @@ public final class Diff {
        * </pre>
        */
       SOURCE_CS_CS5(19, 205),
+      /**
+       * <code>SOURCE_JS_ERROR = 300;</code>
+       *
+       * <pre>
+       ** The file represents a JavaScript source file that had a parse error 
+       * </pre>
+       */
+      SOURCE_JS_ERROR(26, 300),
+      /**
+       * <code>SOURCE_JS_ES3 = 301;</code>
+       *
+       * <pre>
+       ** The file represents a JavaScript source file that parsed without error as ES3 
+       * </pre>
+       */
+      SOURCE_JS_ES3(27, 301),
+      /**
+       * <code>SOURCE_JS_ES4 = 302;</code>
+       *
+       * <pre>
+       ** The file represents a JavaScript source file that parsed without error as ES4 
+       * </pre>
+       */
+      SOURCE_JS_ES4(28, 302),
       ;
 
       /**
@@ -889,6 +913,14 @@ public final class Diff {
        * </pre>
        */
       public static final FileKind CS5 = SOURCE_CS_CS5;
+      /**
+       * <code>JS_ERROR = 300;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
+       */
+      public static final FileKind JS_ERROR = SOURCE_JS_ERROR;
       /**
        * <code>OTHER = 0;</code>
        *
@@ -1097,6 +1129,38 @@ public final class Diff {
        * </pre>
        */
       public static final int CS5_VALUE = 205;
+      /**
+       * <code>SOURCE_JS_ERROR = 300;</code>
+       *
+       * <pre>
+       ** The file represents a JavaScript source file that had a parse error 
+       * </pre>
+       */
+      public static final int SOURCE_JS_ERROR_VALUE = 300;
+      /**
+       * <code>SOURCE_JS_ES3 = 301;</code>
+       *
+       * <pre>
+       ** The file represents a JavaScript source file that parsed without error as ES3 
+       * </pre>
+       */
+      public static final int SOURCE_JS_ES3_VALUE = 301;
+      /**
+       * <code>SOURCE_JS_ES4 = 302;</code>
+       *
+       * <pre>
+       ** The file represents a JavaScript source file that parsed without error as ES4 
+       * </pre>
+       */
+      public static final int SOURCE_JS_ES4_VALUE = 302;
+      /**
+       * <code>JS_ERROR = 300;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
+       */
+      public static final int JS_ERROR_VALUE = 300;
 
 
       public final int getNumber() { return value; }
@@ -1118,6 +1182,9 @@ public final class Diff {
           case 203: return SOURCE_CS_CS3;
           case 204: return SOURCE_CS_CS4;
           case 205: return SOURCE_CS_CS5;
+          case 300: return SOURCE_JS_ERROR;
+          case 301: return SOURCE_JS_ES3;
+          case 302: return SOURCE_JS_ES4;
           default: return null;
         }
       }
@@ -1148,7 +1215,7 @@ public final class Diff {
       }
 
       private static final FileKind[] VALUES = {
-        OTHER, BINARY, TEXT, XML, SOURCE_JAVA_ERROR, SOURCE_JAVA_JLS2, SOURCE_JAVA_JLS3, SOURCE_JAVA_JLS4, SOURCE_JAVA_JLS8, JAVA_ERROR, JLS2, JLS3, JLS4, JLS8, SOURCE_CS_ERROR, SOURCE_CS_CS1, SOURCE_CS_CS2, SOURCE_CS_CS3, SOURCE_CS_CS4, SOURCE_CS_CS5, CS_ERROR, CS1, CS2, CS3, CS4, CS5, 
+        OTHER, BINARY, TEXT, XML, SOURCE_JAVA_ERROR, SOURCE_JAVA_JLS2, SOURCE_JAVA_JLS3, SOURCE_JAVA_JLS4, SOURCE_JAVA_JLS8, JAVA_ERROR, JLS2, JLS3, JLS4, JLS8, SOURCE_CS_ERROR, SOURCE_CS_CS1, SOURCE_CS_CS2, SOURCE_CS_CS3, SOURCE_CS_CS4, SOURCE_CS_CS5, CS_ERROR, CS1, CS2, CS3, CS4, CS5, SOURCE_JS_ERROR, SOURCE_JS_ES3, SOURCE_JS_ES4, JS_ERROR, 
       };
 
       public static FileKind valueOf(
@@ -2905,7 +2972,7 @@ public final class Diff {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\ndiff.proto\022\tboa.types\032\tast.proto\"\320\006\n\013C" +
+      "\n\ndiff.proto\022\tboa.types\032\tast.proto\"\235\007\n\013C" +
       "hangedFile\0221\n\006change\030\001 \002(\0162!.boa.types.C" +
       "hangedFile.ChangeKind\022-\n\004kind\030\002 \002(\0162\037.bo" +
       "a.types.ChangedFile.FileKind\022\014\n\004name\030\003 \002" +
@@ -2916,7 +2983,7 @@ public final class Diff {
       "ions\030\010 \003(\005\022\026\n\016previous_index\030\t \003(\005\"t\n\nCh" +
       "angeKind\022\t\n\005ADDED\020\001\022\013\n\007DELETED\020\002\022\013\n\007REMO",
       "VED\020\002\022\014\n\010MODIFIED\020\003\022\013\n\007CHANGED\020\003\022\013\n\007RENA" +
-      "MED\020\004\022\t\n\005MOVED\020\004\022\n\n\006COPIED\020\005\032\002\020\001\"\232\003\n\010Fil" +
+      "MED\020\004\022\t\n\005MOVED\020\004\022\n\n\006COPIED\020\005\032\002\020\001\"\347\003\n\010Fil" +
       "eKind\022\t\n\005OTHER\020\000\022\n\n\006BINARY\020\001\022\010\n\004TEXT\020\002\022\007" +
       "\n\003XML\020\003\022\025\n\021SOURCE_JAVA_ERROR\020d\022\024\n\020SOURCE" +
       "_JAVA_JLS2\020e\022\024\n\020SOURCE_JAVA_JLS3\020f\022\024\n\020SO" +
@@ -2927,7 +2994,9 @@ public final class Diff {
       "SOURCE_CS_CS3\020\313\001\022\022\n\rSOURCE_CS_CS4\020\314\001\022\022\n\r",
       "SOURCE_CS_CS5\020\315\001\022\r\n\010CS_ERROR\020\310\001\022\010\n\003CS1\020\311" +
       "\001\022\010\n\003CS2\020\312\001\022\010\n\003CS3\020\313\001\022\010\n\003CS4\020\314\001\022\010\n\003CS5\020\315" +
-      "\001\032\002\020\001B\002H\001"
+      "\001\022\024\n\017SOURCE_JS_ERROR\020\254\002\022\022\n\rSOURCE_JS_ES3" +
+      "\020\255\002\022\022\n\rSOURCE_JS_ES4\020\256\002\022\r\n\010JS_ERROR\020\254\002\032\002" +
+      "\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

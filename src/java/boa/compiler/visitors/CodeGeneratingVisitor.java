@@ -201,6 +201,13 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		/** {@inheritDoc} */
 		@Override
+		public void initialize() {
+			super.initialize();
+			funcs.clear();
+		}
+
+		/** {@inheritDoc} */
+		@Override
 		public void visit(final FunctionType n) {
 			final String name = ((BoaFunction)n.type).toJavaType();
 			if (funcs.contains(name))
@@ -248,6 +255,13 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		/** {@inheritDoc} */
 		@Override
+		public void initialize() {
+			super.initialize();
+			tuples.clear();
+		}
+
+		/** {@inheritDoc} */
+		@Override
 		public void visit(final TupleType n) {
 			final String name = ((BoaTuple)n.type).toJavaType();
 			if (tuples.contains(name))
@@ -270,11 +284,12 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 			int fieldCount = 0;
 			for (final Component c : members) {
-				if(c.hasIdentifier()){
+				if (c.hasIdentifier()) {
 					fields.add(c.getIdentifier().getToken());
 				} else {
-					fields.add("field" + fieldCount++);
+					fields.add("f" + fieldCount);
 				}
+				fieldCount++;
 				types.add(c.getType().type.toBoxedJavaType());
 			}
 
@@ -908,7 +923,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			if (opType instanceof BoaTuple) {
 				final BoaTuple tuple = (BoaTuple) opType;
 				n.env.setOperandType(tuple.getMember(member));
-				code.add(".___" + member);
+				code.add(".___" + tuple.getMemberName(member));
 				return;
 			}
 
@@ -1896,32 +1911,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final TupleType n) {
-		final ST st = stg.getInstanceOf("TupleType");
-
-		if (!(n.type instanceof BoaTuple))
-			throw new TypeCheckException(n ,"type " + n.type + " is not a tuple type");
-
-		final BoaTuple tupType = ((BoaTuple) n.type);
-
-		final List<Component> members = n.getMembers();
-		final List<String> fields = new ArrayList<String>();
-		final List<String> types = new ArrayList<String>();
-
-		int fieldCount = 0;
-		for (final Component c : members) {
-			if(c.hasIdentifier()){
-				fields.add(c.getIdentifier().getToken());
-			} else {
-				fields.add("id" + fieldCount++);
-			}
-			types.add(c.getType().type.toJavaType());
-		}
-
-		st.add("name", tupType.toBoxedJavaType());
-		st.add("fields", fields);
-		st.add("types", types);
-
-		code.add(st.render());
+		throw new RuntimeException("unexpected error");
 	}
 
 	/** {@inheritDoc} */
@@ -1938,9 +1928,9 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		final List<String> values = new ArrayList<String>();
 
 		for (final EnumBodyDeclaration c : n.getMembers()) {
-			Factor f = c.getExp().getLhs().getLhs().getLhs().getLhs().getLhs();
+			final Factor f = c.getExp().getLhs().getLhs().getLhs().getLhs().getLhs();
 
-			if(f.getOperand() instanceof ILiteral) {
+			if (f.getOperand() instanceof ILiteral) {
 				code.add(((ILiteral)(f.getOperand())).getLiteral());
 				fields.add(c.getIdentifier().getToken());
 				values.add(code.removeLast());
