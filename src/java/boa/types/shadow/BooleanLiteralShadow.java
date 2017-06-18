@@ -77,9 +77,5 @@ public class BooleanLiteralShadow extends LiteralShadow  {
         return getKindExpression("ExpressionKind", "LITERAL", new ExpressionKindProtoMap(), env);
     }
 
-	/** {@inheritDoc} */
-	@Override
-	public String toString() {
-		return "BooleanLiteral";
-	}
+	
 }

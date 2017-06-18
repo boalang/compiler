@@ -30,6 +30,9 @@ import boa.types.proto.enums.ExpressionKindProtoMap;
 import boa.types.proto.ExpressionProtoTuple;
 import boa.types.proto.StatementProtoTuple;
 import boa.types.proto.TypeProtoTuple;
+
+import boa.compiler.ast.statements.IfStatement;
+import boa.compiler.ast.statements.Block;
 /**
  * A shadow type for IncrementPostfixExpression.
  * 
@@ -47,6 +50,8 @@ public class IncrementPostFixExpressionShadow extends PostfixExpressionShadow  {
     public Expression getKindExpression(final SymbolTable env) {
         return getKindExpression("ExpressionKind", "OP_INC", new ExpressionKindProtoMap(), env);
     }
+
+   
 
     /** {@inheritDoc} */
     @Override

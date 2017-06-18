@@ -65,15 +65,15 @@ public class ModifierShadow extends BoaShadowType  {
 
     /** {@inheritDoc} */
     @Override
-    public LinkedList<BoaShadowType> getOneToMany(final SymbolTable env) {
-        LinkedList<BoaShadowType> modList = new LinkedList<BoaShadowType>(); 
+    public LinkedList<Expression> getOneToMany(final SymbolTable env) {
+        LinkedList<Expression> modList = new LinkedList<Expression>(); 
 
-        modList.add(new AbstractModifierShadow());
-        modList.add(new FinalModifierShadow());
-        modList.add(new OtherModifierShadow());
-        modList.add(new StaticModifierShadow());
-        modList.add(new SynchronizedModifierShadow());
-        modList.add(new VisibilityModifierShadow());
+        modList.add(getKindExpression("ModifierKind", "ABSTRACT", new ModifierKindProtoMap(), env));
+        modList.add(getKindExpression("ModifierKind", "FINAL", new ModifierKindProtoMap(), env));
+        modList.add(getKindExpression("ModifierKind", "OTHER", new ModifierKindProtoMap(), env));
+        modList.add(getKindExpression("ModifierKind", "STATIC", new ModifierKindProtoMap(), env));
+        modList.add(getKindExpression("ModifierKind", "SYNCHRONIZED", new ModifierKindProtoMap(), env));
+        modList.add(getKindExpression("ModifierKind", "VISIBILITY", new ModifierKindProtoMap(), env));
     
         return modList;  
     }

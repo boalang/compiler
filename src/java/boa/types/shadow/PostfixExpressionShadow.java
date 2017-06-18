@@ -32,6 +32,9 @@ import boa.types.proto.enums.ExpressionKindProtoMap;
 import boa.types.proto.ExpressionProtoTuple;
 import boa.types.proto.StatementProtoTuple;
 import boa.types.proto.TypeProtoTuple;
+
+import boa.compiler.ast.statements.IfStatement;
+import boa.compiler.ast.statements.Block;
 /**
  * A shadow type for PostfixExpression.
  * 
@@ -79,17 +82,29 @@ public class PostfixExpressionShadow extends BoaShadowType  {
     /** {@inheritDoc} */
     @Override
     public Expression getKindExpression(final SymbolTable env) {
-        return getKindExpression("ExpressionKind", "BIT_XOR", new ExpressionKindProtoMap(), env);
+        return getKindExpression("ExpressionKind", "dIT_XOR", new ExpressionKindProtoMap(), env);
     }
+
+
+    public IfStatement getManytoOne(final SymbolTable env ,Block b) {
+       
+        // if(isboollit(${0})) b;
+
+        final Expression tree = ASTFactory.createIdentifierExpr(boa.compiler.transforms.ShadowTypeEraser.NODE_ID, env, new ExpressionProtoTuple());
+
+        IfStatement ifstmt = new IfStatement(ASTFactory.createCallExpr("ispostfix", env, new ExpressionProtoTuple(), tree),b);
+        return ifstmt ;   
+    }
+
 
     /** {@inheritDoc} */
     @Override
-    public LinkedList<BoaShadowType> getOneToMany(final SymbolTable env) {
-        LinkedList<BoaShadowType> postfixList = new LinkedList<BoaShadowType>(); 
+    public LinkedList<Expression> getOneToMany(final SymbolTable env) {
+        LinkedList<Expression> postfixList = new LinkedList<Expression>(); 
         
 
-        postfixList.add(new DecrementPostFixExpressionShadow());
-        postfixList.add(new IncrementPostFixExpressionShadow());
+        postfixList.add(getKindExpression("ExpressionKind", "OP_DEC", new ExpressionKindProtoMap(), env));
+        postfixList.add(getKindExpression("ExpressionKind", "OP_INC", new ExpressionKindProtoMap(), env));
         
         
         return postfixList;  

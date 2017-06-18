@@ -150,7 +150,8 @@ public class SymbolTable {
 		idmap.put("PostfixExpression", new PostfixExpressionShadow());
 		idmap.put("PrefixExpression", new PrefixExpressionShadow());
 		idmap.put("Assignment", new AssignmentShadow());
-		idmap.put("BooleanLiteral", new BooleanLiteralShadow());		
+		idmap.put("BooleanLiteral", new BooleanLiteralShadow());
+		idmap.put("CharLiteral", new CharacterLiteralShadow());		
 
 		globalFunctions = new FunctionTrie();
 

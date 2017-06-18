@@ -78,28 +78,31 @@ public class PrefixExpressionShadow extends BoaShadowType  {
         return getKindExpression("ExpressionKind", "IT_XOR", new ExpressionKindProtoMap(), env);
     }
 
-    public IfStatement getManytoOne(final SymbolTable env ,Block b,String funcName) {
+    /** {@inheritDoc} */
+    @Override
+    public IfStatement getManytoOne(final SymbolTable env ,Block b) {
        
         // if(isboollit(${0})) b;
 
         final Expression tree = ASTFactory.createIdentifierExpr(boa.compiler.transforms.ShadowTypeEraser.NODE_ID, env, new ExpressionProtoTuple());
 
-        IfStatement ifstmt = new IfStatement(ASTFactory.createCallExpr(funcName, env, new ExpressionProtoTuple(), tree),b);
+        IfStatement ifstmt = new IfStatement(ASTFactory.createCallExpr("isprefix", env, new ExpressionProtoTuple(), tree),b);
         return ifstmt ;   
     }
 
+  
+
     /** {@inheritDoc} */
     @Override
-    public LinkedList<BoaShadowType> getOneToMany(final SymbolTable env) {
-        LinkedList<BoaShadowType> prefixList = new LinkedList<BoaShadowType>(); 
+    public LinkedList<Expression> getOneToMany(final SymbolTable env) {
+        LinkedList<Expression> prefixList = new LinkedList<Expression>(); 
                
-        prefixList.add(new ComplementPrefixExpressionShadow());
-        prefixList.add(new DecrementPrefixExpressionShadow());
-        prefixList.add(new IncrementPrefixExpressionShadow());
-        prefixList.add(new MinusPrefixExpressionShadow());
-        prefixList.add(new NotPrefixExpressionShadow());
-        prefixList.add(new PlusPrefixExpressionShadow());
-        prefixList.add(new PrefixExpressionShadow());
+        prefixList.add(getKindExpression("ExpressionKind", "BIT_NOT", new ExpressionKindProtoMap(), env));
+        prefixList.add(getKindExpression("ExpressionKind", "OP_DEC", new ExpressionKindProtoMap(), env));
+        prefixList.add(getKindExpression("ExpressionKind", "OP_INC", new ExpressionKindProtoMap(), env));
+        prefixList.add(getKindExpression("ExpressionKind", "OP_SUB", new ExpressionKindProtoMap(), env));
+        prefixList.add(getKindExpression("ExpressionKind", "LOGICAL_NOT", new ExpressionKindProtoMap(), env));
+        prefixList.add(getKindExpression("ExpressionKind", "OP_ADD", new ExpressionKindProtoMap(), env));
                 
         return prefixList;  
     }

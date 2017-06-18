@@ -71,7 +71,7 @@ public class CharacterLiteralShadow extends LiteralShadow  {
         throw new RuntimeException("invalid shadow field: " + name);
     }
 
-
+    
 
     /** {@inheritDoc} */
     @Override

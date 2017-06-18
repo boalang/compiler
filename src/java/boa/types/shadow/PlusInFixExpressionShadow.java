@@ -51,15 +51,7 @@ public class PlusInFixExpressionShadow extends InfixExpressionShadow  {
         return getKindExpression("ExpressionKind", "OP_ADD", new ExpressionKindProtoMap(), env);
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public IfStatement getManytoOne(final SymbolTable env ,Block b) {
-       
-        // if(isboollit(${0})) b;
-        return getManytoOne( env , b, "isinfixexp");
-        
-    }
-
+  
     /** {@inheritDoc} */
     @Override
     public String toString() {

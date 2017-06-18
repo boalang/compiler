@@ -122,7 +122,7 @@ public abstract class BoaShadowType extends BoaTuple {
      * @param env the current SymbolTable environment
      * @return a list of shadow types, or null if this type is not in a one-to-many relationship
      */
-    public LinkedList<BoaShadowType> getOneToMany(final SymbolTable env) {
+    public LinkedList<Expression> getOneToMany(final SymbolTable env) {
         return null;  
     }
 
