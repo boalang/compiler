@@ -462,6 +462,18 @@ public class BoaAstIntrinsics {
 
 	/**
 	 * Returns <code>true</code> if the expression <code>e</code> is of kind
+	 * <code>LITERAL</code> and is a number literal.
+	 *
+	 * @param e the expression to test
+	 * @return true if the expression is a number literal, otherwise false
+	 */
+	@FunctionSpec(name = "isnumberlit", returnType = "bool", formalParameters = { "Expression" })
+	public static boolean isNumberLit(final Expression e) throws Exception {
+		return isIntLit(e) || isFloatLit(e);
+	}
+
+	/**
+	 * Returns <code>true</code> if the expression <code>e</code> is of kind
 	 * <code>LITERAL</code> and is an integer literal.
 	 *
 	 * The test is a simplified grammar, based on the one from:
@@ -570,7 +582,7 @@ public class BoaAstIntrinsics {
 	public static boolean isTypeLit(final Expression e) throws Exception {
 		if (e.getKind() != Expression.ExpressionKind.LITERAL) return false;
 		if (!e.hasLiteral()) return false;
-		return e.getLiteral().endsWith(".class");
+		return e.getLiteral().toLowerCase().endsWith(".class");
 	}
 
 	/**
@@ -584,7 +596,7 @@ public class BoaAstIntrinsics {
 	public static boolean isBoolLit(final Expression e) throws Exception {
 		if (e.getKind() != Expression.ExpressionKind.LITERAL) return false;
 		if (!e.hasLiteral()) return false;
-		return e.getLiteral().equals("true") || e.getLiteral().equals("false");
+		return e.getLiteral().equalsIgnoreCase("true") || e.getLiteral().equalsIgnoreCase("false");
 	}
 
 	/**
@@ -598,7 +610,7 @@ public class BoaAstIntrinsics {
 	public static boolean isNullLit(final Expression e) throws Exception {
 		if (e.getKind() != Expression.ExpressionKind.LITERAL) return false;
 		if (!e.hasLiteral()) return false;
-		return e.getLiteral().equals("null");
+		return e.getLiteral().equalsIgnoreCase("null");
 	}
 
 	/**
