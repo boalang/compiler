@@ -221,7 +221,7 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                     // transforming subtree by replacing the identifiers and type
                     new VisitTransform().start(b, visit.getComponent().getIdentifier().getToken(), NODE_ID);
 
-                    b.addStatement(new BreakStatement());
+                   
 
                     if (visit.getComponent().type.toString().equals(shadowedType.toString())) {
                         // setting default if present
@@ -235,7 +235,7 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
 
                             // checking for many-one mapping
                             if (((BoaShadowType)visit.getComponent().type).getManytoOne(n.env, b) == null) {
-                                switchS.addCase(new SwitchCase(false, b, listExp));
+                                switchS.addCase(new SwitchCase(false, b.clone(), listExp));
                             } else {
                                 boolean flg = false;
 
@@ -253,7 +253,7 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                                 if (!flg) {
                                     final Block manyToOneBlock = new Block();
                                     manyToOneBlock.addStatement(((BoaShadowType)visit.getComponent().type).getManytoOne(n.env, b));
-                                    switchS.addCase(new SwitchCase(false, manyToOneBlock, listExp));
+                                    switchS.addCase(new SwitchCase(false, manyToOneBlock.clone(), listExp));
                                 }
                             }
                         } else {
@@ -298,12 +298,12 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                                 if (toCombine.getStatementsSize() > 0 && flg) {
                                     listExp.add(styKind);
                                     switchS.getCases().removeAll(toRemove);
-                                    switchS.addCase(new SwitchCase(false, toCombine, listExp));
+                                    switchS.addCase(new SwitchCase(false, toCombine.clone(), listExp));
                                 }
 
                                 if (!flg) {
                                     listExp.add(styKind);
-                                    switchS.addCase(new SwitchCase(false, b, listExp));
+                                    switchS.addCase(new SwitchCase(false, b.clone(), listExp));
                                 }
                             }
                         }
@@ -318,7 +318,16 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                         }
                     }
                     defaultSc.getBody().addStatement(new BreakStatement());
+                }else{
+                    defaultSc.getBody().addStatement(new BreakStatement());
                 }
+
+                //adding breaks
+                List<SwitchCase> listOfCases = switchS.getCases();
+                for(SwitchCase scase : listOfCases){
+                    scase.getBody().addStatement(new BreakStatement());   
+                }
+
 
                 afterTransformation.addStatement(switchS);
 
