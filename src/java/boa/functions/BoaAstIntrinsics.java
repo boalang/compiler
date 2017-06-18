@@ -456,6 +456,76 @@ public class BoaAstIntrinsics {
 		return getSnapshot(cr, Long.MAX_VALUE, new String[0]);
 	}
 
+	@FunctionSpec(name = "isannot", returnType = "bool", formalParameters = { "Expression" })
+	public static boolean isAnnot(final Expression e) throws Exception {
+        return true; // FIXME
+	}
+
+	@FunctionSpec(name = "ismarkerannot", returnType = "bool", formalParameters = { "Expression" })
+	public static boolean isMarkerAnnot(final Expression e) throws Exception {
+        return true; // FIXME
+	}
+
+	@FunctionSpec(name = "isnormalannot", returnType = "bool", formalParameters = { "Expression" })
+	public static boolean isNormalAnnot(final Expression e) throws Exception {
+        return true; // FIXME
+	}
+
+	@FunctionSpec(name = "issinglememberannot", returnType = "bool", formalParameters = { "Expression" })
+	public static boolean isSingleMemberAnnot(final Expression e) throws Exception {
+        return true; // FIXME
+	}
+
+	@FunctionSpec(name = "isinfix", returnType = "bool", formalParameters = { "Expression" })
+	public static boolean isInfix(final Expression e) throws Exception {
+        return true; // FIXME
+	}
+
+	@FunctionSpec(name = "isprefix", returnType = "bool", formalParameters = { "Expression" })
+	public static boolean isPrefix(final Expression e) throws Exception {
+        return true; // FIXME
+	}
+
+	@FunctionSpec(name = "ispostfix", returnType = "bool", formalParameters = { "Expression" })
+	public static boolean isPostfix(final Expression e) throws Exception {
+        return true; // FIXME
+	}
+
+	@FunctionSpec(name = "ismethod", returnType = "bool", formalParameters = { "Expression" })
+	public static boolean isMethod(final Expression e) throws Exception {
+        return true; // FIXME
+	}
+
+	@FunctionSpec(name = "issupermethod", returnType = "bool", formalParameters = { "Expression" })
+	public static boolean isSuperMethod(final Expression e) throws Exception {
+        return true; // FIXME
+	}
+
+	@FunctionSpec(name = "ismethodref", returnType = "bool", formalParameters = { "Expression" })
+	public static boolean isMethodRef(final Expression e) throws Exception {
+        return true; // FIXME
+	}
+
+	@FunctionSpec(name = "iscreationref", returnType = "bool", formalParameters = { "Expression" })
+	public static boolean isCreationRef(final Expression e) throws Exception {
+        return true; // FIXME
+	}
+
+	@FunctionSpec(name = "isexpref", returnType = "bool", formalParameters = { "Expression" })
+	public static boolean isExpRef(final Expression e) throws Exception {
+        return true; // FIXME
+	}
+
+	@FunctionSpec(name = "issuperref", returnType = "bool", formalParameters = { "Expression" })
+	public static boolean isSuperRef(final Expression e) throws Exception {
+        return true; // FIXME
+	}
+
+	@FunctionSpec(name = "istyperef", returnType = "bool", formalParameters = { "Expression" })
+	public static boolean isTypeRef(final Expression e) throws Exception {
+        return true; // FIXME
+	}
+
 	///////////////////////////////
 	// Literal testing functions */
 	///////////////////////////////
