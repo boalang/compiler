@@ -36,4 +36,7 @@ enum ChangeKind {
 
 	/** @exclude */
 	COPIED = 5;
+	
+	/** The file is merged */
+	MERGED = 6;
 }
