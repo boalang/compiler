@@ -10,6 +10,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import boa.datagen.util.FileIO;
+import gnu.trove.set.hash.THashSet;
 
 
 
@@ -19,7 +20,7 @@ public class GitHubRepoMetaDataDownloader {
 	public final String langNameDir;
 	public final String tokenFile;
 	public final static int MAX_NUM_THREADS = 5;
-	public static HashSet<String> names = new HashSet<String>();
+	public static THashSet<String> names = new THashSet<String>();
 	
 	public GitHubRepoMetaDataDownloader(String input, String output, String tokenFile) {
 		this.repoNameDir = input;

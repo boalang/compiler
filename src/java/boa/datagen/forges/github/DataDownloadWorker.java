@@ -43,8 +43,8 @@ public class DataDownloadWorker implements Runnable {
 		Token tok = this.tokens.getNextAuthenticToken("https://api.github.com/repositories");
 		File inDir = new File(repository_location);
 		File[] files = inDir.listFiles();
-		for (int i = from; i < to; i++) {
-			File repoFile = files[i];
+		while (pageNumber < to) {
+			File repoFile = files[pageNumber];
 			String content = FileIO.readFileContents(repoFile);
 			Gson parser = new Gson();
 			JsonArray repos = parser.fromJson(content, JsonElement.class).getAsJsonArray();

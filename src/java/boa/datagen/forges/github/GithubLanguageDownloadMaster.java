@@ -78,7 +78,7 @@ public class GithubLanguageDownloadMaster {
 			new Thread(worker).start();
 		}
 		start = end + 1;
-		end = totalFies + shareSize;
+		end = totalFies;
 		LanguageDownloadWorker worker = new LanguageDownloadWorker(this.repoNameDir, this.langNameDir, tokens, start,
 				end, i);
 		new Thread(worker).start();
