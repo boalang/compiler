@@ -45,15 +45,15 @@ public class DataDownloadWorker implements Runnable {
 		Token tok = this.tokens.getNextAuthenticToken("https://api.github.com/repositories");
 		File inDir = new File(repository_location);
 		File[] files = inDir.listFiles();
-		while (pageNumber <= to) {
-			File repoFile = files[0];
+		for (int i = from; i < to; i++) {
+			File repoFile = files[i];
 			String content = FileIO.readFileContents(repoFile);
 			Gson parser = new Gson();
 			JsonArray repos = parser.fromJson(content, JsonElement.class).getAsJsonArray();
 			MetadataCacher mc = null;
 			int size = repos.size();
-			for (int i = 0; i < size; i++) {
-				JsonObject repo = repos.get(i).getAsJsonObject();
+			for (int j = 0; j < size; j++) {
+				JsonObject repo = repos.get(j).getAsJsonObject();
 				String name = repo.get("full_name").getAsString();
 				if (names.contains(name)) {
 					names.remove(name);
@@ -91,7 +91,7 @@ public class DataDownloadWorker implements Runnable {
 					} else {
 						System.out.println("token: " + tok.getId() + " exhausted");
 						tok.setnumberOfRemainingLimit(0);
-						i--;
+						j--;
 					}
 				}
 			}

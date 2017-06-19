@@ -49,13 +49,13 @@ public class GitHubRepoMetaDataDownloader {
 		int i;
 		TokenList tokens = new TokenList(this.tokenFile);
 		for (i = 0; i < MAX_NUM_THREADS - 1; i++) {
-			start = end + 1;
+			start = end;
 			end = start + shareSize;
 			DataDownloadWorker worker = new DataDownloadWorker(this.repoNameDir, this.langNameDir, tokens, start, end, i);
 			new Thread(worker).start();
 		}
-		start = end + 1;
-		end = totalFies + shareSize;
+		start = end;
+		end = totalFies;
 		DataDownloadWorker worker = new DataDownloadWorker(this.repoNameDir, this.langNameDir, tokens, start, end, i);
 		new Thread(worker).start();
 	}
@@ -68,7 +68,11 @@ public class GitHubRepoMetaDataDownloader {
 		Gson parser = new Gson();
 		JsonArray repos;
 		JsonObject repo;
-		for (int i = 1; i < files.length; i++) {
+		for (int i = 0; i < files.length; i++) {
+			if(!(files[i].toString().contains(".json"))){
+				System.out.println("skipping " + files[i].toString());
+				continue;
+			}
 			System.out.println("proccessing page " + files[i].getName());
 			content = FileIO.readFileContents(files[i]);
 			repos = parser.fromJson(content, JsonElement.class).getAsJsonArray();
