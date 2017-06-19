@@ -210,7 +210,7 @@ public final class Diff {
      * <code>repeated int32 previous_index = 9;</code>
      *
      * <pre>
-     ** @exclude The indices of previous files in the list of changed files of the corresponding parent commits 
+     ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
      * </pre>
      */
     java.util.List<java.lang.Integer> getPreviousIndexList();
@@ -218,7 +218,7 @@ public final class Diff {
      * <code>repeated int32 previous_index = 9;</code>
      *
      * <pre>
-     ** @exclude The indices of previous files in the list of changed files of the corresponding parent commits 
+     ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
      * </pre>
      */
     int getPreviousIndexCount();
@@ -226,7 +226,7 @@ public final class Diff {
      * <code>repeated int32 previous_index = 9;</code>
      *
      * <pre>
-     ** @exclude The indices of previous files in the list of changed files of the corresponding parent commits 
+     ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
      * </pre>
      */
     int getPreviousIndex(int index);
@@ -1338,7 +1338,7 @@ public final class Diff {
      * <code>repeated int32 previous_index = 9;</code>
      *
      * <pre>
-     ** @exclude The indices of previous files in the list of changed files of the corresponding parent commits 
+     ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
      * </pre>
      */
     public java.util.List<java.lang.Integer>
@@ -1349,7 +1349,7 @@ public final class Diff {
      * <code>repeated int32 previous_index = 9;</code>
      *
      * <pre>
-     ** @exclude The indices of previous files in the list of changed files of the corresponding parent commits 
+     ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
      * </pre>
      */
     public int getPreviousIndexCount() {
@@ -1359,7 +1359,7 @@ public final class Diff {
      * <code>repeated int32 previous_index = 9;</code>
      *
      * <pre>
-     ** @exclude The indices of previous files in the list of changed files of the corresponding parent commits 
+     ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
      * </pre>
      */
     public int getPreviousIndex(int index) {
@@ -2662,7 +2662,7 @@ public final class Diff {
        * <code>repeated int32 previous_index = 9;</code>
        *
        * <pre>
-       ** @exclude The indices of previous files in the list of changed files of the corresponding parent commits 
+       ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
        * </pre>
        */
       public java.util.List<java.lang.Integer>
@@ -2673,7 +2673,7 @@ public final class Diff {
        * <code>repeated int32 previous_index = 9;</code>
        *
        * <pre>
-       ** @exclude The indices of previous files in the list of changed files of the corresponding parent commits 
+       ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
        * </pre>
        */
       public int getPreviousIndexCount() {
@@ -2683,7 +2683,7 @@ public final class Diff {
        * <code>repeated int32 previous_index = 9;</code>
        *
        * <pre>
-       ** @exclude The indices of previous files in the list of changed files of the corresponding parent commits 
+       ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
        * </pre>
        */
       public int getPreviousIndex(int index) {
@@ -2693,7 +2693,7 @@ public final class Diff {
        * <code>repeated int32 previous_index = 9;</code>
        *
        * <pre>
-       ** @exclude The indices of previous files in the list of changed files of the corresponding parent commits 
+       ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
        * </pre>
        */
       public Builder setPreviousIndex(
@@ -2707,7 +2707,7 @@ public final class Diff {
        * <code>repeated int32 previous_index = 9;</code>
        *
        * <pre>
-       ** @exclude The indices of previous files in the list of changed files of the corresponding parent commits 
+       ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
        * </pre>
        */
       public Builder addPreviousIndex(int value) {
@@ -2720,7 +2720,7 @@ public final class Diff {
        * <code>repeated int32 previous_index = 9;</code>
        *
        * <pre>
-       ** @exclude The indices of previous files in the list of changed files of the corresponding parent commits 
+       ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
        * </pre>
        */
       public Builder addAllPreviousIndex(
@@ -2734,7 +2734,7 @@ public final class Diff {
        * <code>repeated int32 previous_index = 9;</code>
        *
        * <pre>
-       ** @exclude The indices of previous files in the list of changed files of the corresponding parent commits 
+       ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
        * </pre>
        */
       public Builder clearPreviousIndex() {
