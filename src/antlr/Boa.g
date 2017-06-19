@@ -403,7 +403,7 @@ visitStatement returns [VisitStatement ast]
 		(
 			  WILDCARD { $ast.setWildcard(true); }
 			| id=identifier COLON t=identifier { $ast.setComponent((Component)new Component($id.ast, $t.ast).setPositions($id.ast.beginLine, $id.ast.beginColumn, $t.ast.endLine, $t.ast.endColumn)); }
-			| id=identifier { $ast.addId($id.ast); } (COMMA id=identifier { $ast.addId($id.ast); })*
+			| (id=identifier COLON { $ast.setListId($id.ast); })? id=identifier { $ast.addId($id.ast); } (COMMA id=identifier { $ast.addId($id.ast); })*
 		)
 		RIGHT_ARROW (s=programStatement { $ast.setBody($s.ast); })
 	;

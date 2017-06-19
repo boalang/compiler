@@ -51,7 +51,7 @@ public class VisitorDesugar extends AbstractVisitorNoArgNoRet {
 			final List<Identifier> ids = vs.getIdList();
 
 			while (!ids.isEmpty()) {
-				final VisitStatement newVs = createVisit(vs, ids.remove(0));
+				final VisitStatement newVs = createVisit(vs, vs.getListId(), ids.remove(0));
 
 				if (ids.isEmpty())
 					b.replaceStatement(vs, newVs);
@@ -61,8 +61,8 @@ public class VisitorDesugar extends AbstractVisitorNoArgNoRet {
 		}
 	}
 
-	private VisitStatement createVisit(final VisitStatement old, final Identifier id) {
-		final VisitStatement v = new VisitStatement(old.isBefore(), new Component(new Identifier("_UNUSED"), id.clone()), old.getBody().clone());
+	private VisitStatement createVisit(final VisitStatement old, final Identifier listId, final Identifier id) {
+		final VisitStatement v = new VisitStatement(old.isBefore(), new Component(listId == null ? new Identifier("_UNUSED") : listId, id.clone()), old.getBody().clone());
 
 		v.type = old.type;
 		v.env = old.env;

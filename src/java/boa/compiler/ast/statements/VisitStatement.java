@@ -35,6 +35,7 @@ public class VisitStatement extends Statement {
 	protected boolean wildcard = false;
 	protected Component node;
 	protected final List<Identifier> ids = new ArrayList<Identifier>();
+	protected Identifier listId;
 	protected Block body;
 
 	public boolean isBefore() {
@@ -60,6 +61,14 @@ public class VisitStatement extends Statement {
 	public void setComponent(final Component node) {
 		node.setParent(this);
 		this.node = node;
+	}
+
+	public void setListId(final Identifier listId) {
+		this.listId = listId;
+	}
+
+	public Identifier getListId() {
+		return this.listId;
 	}
 
 	public List<Identifier> getIdList() {

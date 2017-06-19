@@ -228,7 +228,7 @@ visitStatement
 		(
 			  WILDCARD
 			| identifier COLON identifier
-			| identifier (COMMA identifier)*
+			| (identifier COLON)? identifier (COMMA identifier)*
 		)
 		RIGHT_ARROW programStatement
 	;

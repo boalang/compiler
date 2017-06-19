@@ -990,12 +990,28 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 				n.getComponent().type = n.getComponent().getType().type;
 			st.setShadowing(false);
 		}
-		else if (!n.hasWildcard())
+		else if (!n.hasWildcard()) {
 			for (final Identifier id : n.getIdList()) {
 				if (SymbolTable.getType(id.getToken()) == null)
 					throw new TypeCheckException(id, "Invalid type '" + id.getToken() + "'");
 				id.accept(this, st);
 			}
+            if (n.getIdList() != null) {
+                final List<BoaTuple> types = new ArrayList<BoaTuple>();
+                for (final Identifier id : n.getIdList()) {
+                    types.add((BoaTuple)id.type);
+                }
+                try {
+                    st.set(n.getListId().getToken(), new BoaIntersection(types, n.getIdList().get(0).type));
+                    n.getListId().accept(this, st);
+                } catch (final Exception e) {
+                    throw new TypeCheckException(n, e.getMessage(), e);
+                }
+                for (final Identifier id : n.getIdList()) {
+                    id.accept(this, st);
+                }
+            }
+        }
 
 		st.setIsVisitor(true);
 		n.getBody().accept(this, st);
