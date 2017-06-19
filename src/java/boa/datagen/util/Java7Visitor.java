@@ -1055,7 +1055,6 @@ public class Java7Visitor extends ASTVisitor {
 		}
 		if (node.getInitializer() != null) {
 			node.getInitializer().accept(this);
-			// FIXME
 			b.addExpressions(expressions.pop());
 		}
 		expressions.push(b.build());
