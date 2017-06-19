@@ -94,33 +94,7 @@ public class GitCommit extends AbstractCommit {
 		return "";
 	}
 
-	@SuppressWarnings("unused")
-	private final static Matcher m = Pattern.compile("([^<]+)\\s+<([^>]+)>").matcher("");
-
-	@Override
-	/** {@inheritDoc} */
-	protected Person parsePerson(final String s) {
-		/*m.reset(s);
-
-		if (m.find()) {
-			final Person.Builder person = Person.newBuilder();
-			person.setUsername(m.group(1));
-			person.setRealName(m.group(1));
-			person.setEmail(m.group(2));
-			return person.build();
-		}*/
-		if (s != null) {
-			final Person.Builder person = Person.newBuilder();
-			person.setUsername(s);
-			person.setRealName(s);
-			person.setEmail(s);
-			return person.build();
-		}
-
-		return null;
-	}
-
-	protected Map<String, Integer> changedFileMap;
+	protected Map<String, Integer> fileNameIndices;
 
 	/**
 	 *
@@ -128,9 +102,9 @@ public class GitCommit extends AbstractCommit {
 	 * @return the index the file occurs in fileChanges
 	 */
 	protected int getFileIndex(final String path) {
-		if (!changedFileMap.containsKey(path))
+		if (!fileNameIndices.containsKey(path))
 			return -1;
-		return changedFileMap.get(path);
+		return fileNameIndices.get(path);
 	}
 
 	public void getChangeFiles(Map<String, Integer> revisionMap, RevCommit rc) {

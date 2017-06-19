@@ -26,6 +26,7 @@ import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.ListBranchCommand.ListMode;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Constants;
+import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
@@ -104,8 +105,11 @@ public class GitConnector extends AbstractConnector {
 				final GitCommit gc = new GitCommit(repository, this);
 
 				gc.setId(rc.getName());
-				gc.setAuthor(rc.getAuthorIdent().getName());
-				gc.setCommitter(rc.getCommitterIdent().getName());
+				PersonIdent author = rc.getAuthorIdent(), committer = rc.getCommitterIdent();
+				if (author == null)
+					author = committer;
+				gc.setAuthor(author.getName(), null, author.getEmailAddress());
+				gc.setCommitter(committer.getName(), null, committer.getEmailAddress());
 				gc.setDate(new Date(((long) rc.getCommitTime()) * 1000));
 				gc.setMessage(rc.getFullMessage());
 				
