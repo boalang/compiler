@@ -88,10 +88,10 @@ message ChangedFile {
 	optional ASTRoot ast = 5;
 	/** @exclude */
 	optional CommentsRoot comments = 6;
-	/** @exclude TODO */
+	/** @exclude The kinds of changes of this this compared to the corresponding parent commits */
 	repeated ChangeKind changes = 7;
-	/** @exclude TODO */
+	/** @exclude The list of id's of the corresponding parent commits */
 	repeated int32 previous_versions = 8;
-	/** @exclude TODO */
+	/** @exclude The list of id's of previous files in the corresponding parent commits */
 	repeated int32 previous_index = 9;
 }
