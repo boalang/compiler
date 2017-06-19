@@ -25,7 +25,7 @@ public class DataDownloadWorker implements Runnable {
 	final static int RECORDS_PER_FILE = 100;
 	final int startFileNumber;
 	final int endFileNumber;
-	THashSet<String> names = GithubLanguageDownloadMaster.names;
+	THashSet<String> names = GitHubRepoMetaDataDownloader.names;
 
 	public DataDownloadWorker(String repoPath, String output, TokenList tokenList, int start, int end, int index) {
 		this.output = output;
