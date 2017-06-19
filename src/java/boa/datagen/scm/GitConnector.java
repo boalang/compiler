@@ -91,6 +91,7 @@ public class GitConnector extends AbstractConnector {
 
 	@Override
 	protected void setRevisions() {
+		RevWalk temprevwalk = new RevWalk(repository);
 		try {
 			revwalk.reset();
 			revwalk.markStart(revwalk.parseCommit(repository.resolve(Constants.HEAD)));
@@ -100,9 +101,9 @@ public class GitConnector extends AbstractConnector {
 			
 			revisions.clear();
 			revisionMap = new HashMap<String, Integer>();
-
+			
 			for (final RevCommit rc: revwalk) {
-				final GitCommit gc = new GitCommit(repository, this);
+				final GitCommit gc = new GitCommit(this, repository, temprevwalk);
 
 				gc.setId(rc.getName());
 				PersonIdent author = rc.getAuthorIdent(), committer = rc.getCommitterIdent();
@@ -114,13 +115,16 @@ public class GitConnector extends AbstractConnector {
 				gc.setMessage(rc.getFullMessage());
 				
 				gc.getChangeFiles(this.revisionMap, rc);
-
+				
 				revisionMap.put(gc.id, revisions.size());
 				revisions.add(gc);
 			}
 		} catch (final IOException e) {
 			if (debug)
 				System.err.println("Git Error getting parsing HEAD commit for " + path + ". " + e.getMessage());
+		} finally {
+			temprevwalk.dispose();
+			temprevwalk.close();
 		}
 	}
 

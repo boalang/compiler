@@ -20,9 +20,6 @@ package boa.datagen.scm;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffFormatter;
 import org.eclipse.jgit.diff.RawTextComparator;
@@ -35,9 +32,8 @@ import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.treewalk.AbstractTreeIterator;
 import org.eclipse.jgit.treewalk.CanonicalTreeParser;
 import org.eclipse.jgit.treewalk.EmptyTreeIterator;
+import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.util.io.NullOutputStream;
-
-import boa.types.Shared.Person;
 
 /**
  * Concrete implementation of a commit for Git.
@@ -51,10 +47,10 @@ public class GitCommit extends AbstractCommit {
 	private RevWalk revwalk;
 	private HashMap<String, ObjectId> filePathGitObjectIds = new HashMap<String, ObjectId>();
 
-	public GitCommit(final Repository repository, GitConnector cnn) {
+	public GitCommit(final GitConnector cnn, final Repository repository, final RevWalk revwalk) {
 		super(cnn);
 		this.repository = repository;
-		this.revwalk = new RevWalk(repository);
+		this.revwalk = revwalk;
 	}
 
 	@Override
@@ -111,9 +107,23 @@ public class GitCommit extends AbstractCommit {
 		HashMap<String, String> rChangedPaths = new HashMap<String, String>();
 		HashMap<String, String> rRemovedPaths = new HashMap<String, String>();
 		HashMap<String, String> rAddedPaths = new HashMap<String, String>();
-		if (rc.getParentCount() == 0)
-			getChangeFiles(null, rc, rChangedPaths, rRemovedPaths, rAddedPaths);
-		else {
+		if (rc.getParentCount() == 0) {
+			TreeWalk tw = new TreeWalk(repository);
+			tw.reset();
+			try {
+				tw.addTree(rc.getTree());
+				tw.setRecursive(true);
+				while (tw.next()) {
+					if (!tw.isSubtree()) {
+						String path = tw.getPathString();
+						rAddedPaths.put(path, null);
+					}
+				}
+			} catch (IOException e) {
+				System.err.println(e.getMessage());
+			}
+			tw.close();
+		} else {
 			int[] parentList = new int[rc.getParentCount()];
 			for (int i = 0; i < rc.getParentCount(); i++) {
 				try {
@@ -153,14 +163,17 @@ public class GitCommit extends AbstractCommit {
 				parentIter = new CanonicalTreeParser(null, repository.newObjectReader(), parent.getTree());
 
 			for (final DiffEntry diff : df.scan(parentIter, new CanonicalTreeParser(null, repository.newObjectReader(), rc.getTree()))) {
-				if (diff.getChangeType() == ChangeType.MODIFY || diff.getChangeType() == ChangeType.COPY || diff.getChangeType() == ChangeType.RENAME) {
+				if (diff.getChangeType() == ChangeType.MODIFY) {
 					if (diff.getOldMode().getObjectType() == Constants.OBJ_BLOB && diff.getNewMode().getObjectType() == Constants.OBJ_BLOB) {
 						String path = diff.getNewPath();
 						rChangedPaths.put(path, diff.getOldPath());
 						filePathGitObjectIds.put(path, diff.getNewId().toObjectId());
 					}
-				}
-				else if (diff.getChangeType() == ChangeType.ADD) {
+				} else if (diff.getChangeType() == ChangeType.RENAME) {
+					
+				} else if (diff.getChangeType() == ChangeType.COPY) {
+					
+				} else if (diff.getChangeType() == ChangeType.ADD) {
 					if (diff.getNewMode().getObjectType() == Constants.OBJ_BLOB) {
 						String path = diff.getNewPath();
 						rAddedPaths.put(path, null);

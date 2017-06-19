@@ -42,7 +42,6 @@ import boa.datagen.util.JavaScriptVisitor;
 import boa.datagen.util.Java7Visitor;
 import boa.datagen.util.Java8Visitor;
 import boa.datagen.util.JavaErrorCheckVisitor;
-import boa.datagen.util.Properties;
 
 /**
  * @author rdyer
