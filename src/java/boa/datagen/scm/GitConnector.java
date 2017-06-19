@@ -65,6 +65,7 @@ public class GitConnector extends AbstractConnector {
 
 	@Override
 	public void close() {
+		revwalk.close();
 		repository.close();
 	}
 
