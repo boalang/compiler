@@ -1,0 +1,8 @@
+o: output sum of int;
+o << 1;
+
+visit(input, visitor {
+    before n: WhileStatement, ForStatement ->
+        if (def(n.initializations))
+            o << 1;
+});

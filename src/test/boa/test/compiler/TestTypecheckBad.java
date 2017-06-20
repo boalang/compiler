@@ -120,4 +120,14 @@ public class TestTypecheckBad extends BaseTest {
 	public void assignFuncNoRet() throws IOException {
 		typecheck(load(badDir + "assign-func-no-ret.boa"), "functions without a return type can not be used as initializers");
 	}
+
+	@Test
+	public void intersect() throws IOException {
+		typecheck(load(badDir + "intersect.boa"), "'WhileStatement, ForStatement' has no member named 'initializations'");
+	}
+
+	@Test
+	public void multVisits() throws IOException {
+		typecheck(load(badDir + "mult-visits.boa"), "The type 'Statement' already has a 'before' visit statement");
+	}
 }

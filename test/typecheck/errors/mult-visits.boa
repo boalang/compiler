@@ -1,0 +1,7 @@
+o: output sum of int;
+o << 1;
+
+visit(input, visitor {
+    before Expression, Statement -> o << 1;
+    before Statement -> o << 2;
+});
