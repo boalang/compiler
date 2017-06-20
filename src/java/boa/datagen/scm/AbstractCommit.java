@@ -108,9 +108,11 @@ public abstract class AbstractCommit {
 		final Revision.Builder revision = Revision.newBuilder();
 		revision.setId(id);
 
-		final Person author = Person.newBuilder(this.author).build();
+		if (this.author != null) {
+			final Person author = Person.newBuilder(this.author).build();
+			revision.setAuthor(author);
+		}
 		final Person committer = Person.newBuilder(this.committer).build();
-		revision.setAuthor(author == null ? committer : author);
 		revision.setCommitter(committer);
 
 		long time = -1;
@@ -302,9 +304,11 @@ public abstract class AbstractCommit {
 		final Revision.Builder revision = Revision.newBuilder();
 		revision.setId(id);
 
-		final Person author = Person.newBuilder(this.author).build();
+		if (this.author != null) {
+			final Person author = Person.newBuilder(this.author).build();
+			revision.setAuthor(author);
+		}
 		final Person committer = Person.newBuilder(this.committer).build();
-		revision.setAuthor(author == null ? committer : author);
 		revision.setCommitter(committer);
 
 		long time = -1;

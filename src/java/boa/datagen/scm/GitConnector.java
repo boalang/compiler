@@ -108,9 +108,8 @@ public class GitConnector extends AbstractConnector {
 
 				gc.setId(rc.getName());
 				PersonIdent author = rc.getAuthorIdent(), committer = rc.getCommitterIdent();
-				if (author == null)
-					author = committer;
-				gc.setAuthor(author.getName(), null, author.getEmailAddress());
+				if (author != null)
+					gc.setAuthor(author.getName(), null, author.getEmailAddress());
 				gc.setCommitter(committer.getName(), null, committer.getEmailAddress());
 				gc.setDate(new Date(((long) rc.getCommitTime()) * 1000));
 				gc.setMessage(rc.getFullMessage());
