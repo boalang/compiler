@@ -40,12 +40,12 @@ import boa.compiler.ast.statements.Block;
  * @author rdyer
  * @author kaushin
  */
-public class BooleanLiteralShadow extends LiteralShadow  {
+public class BooleanLiteralShadow extends BoaShadowType  {
 	/**
 	 * Construct a {@link BooleanLiteralShadow}.
 	 */
 	public BooleanLiteralShadow() {
-		super();
+		super(new ExpressionProtoTuple());
 
 		addShadow("value", new BoaString());
 	}
@@ -67,8 +67,10 @@ public class BooleanLiteralShadow extends LiteralShadow  {
     /** {@inheritDoc} */
     @Override
     public IfStatement getManytoOne(final SymbolTable env, final Block b) {
-        // if (isboollit(${0})) b;
-        return getManytoOne(env , b, "isboollit");
+        // if (funcName(${0})) b;
+        final Expression tree = ASTFactory.createIdentifierExpr(boa.compiler.transforms.ShadowTypeEraser.NODE_ID, env, new ExpressionProtoTuple());
+
+        return new IfStatement(ASTFactory.createCallExpr("isboollit", env, new ExpressionProtoTuple(), tree), b);
     }
 
     /** {@inheritDoc} */
@@ -77,5 +79,9 @@ public class BooleanLiteralShadow extends LiteralShadow  {
         return getKindExpression("ExpressionKind", "LITERAL", new ExpressionKindProtoMap(), env);
     }
 
-	
+	/** {@inheritDoc} */
+    @Override
+    public String toString() {
+        return "BooleanLiteral";
+    }
 }

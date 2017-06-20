@@ -229,7 +229,7 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                             defaultSc.getBody().addStatement(s.clone());
                     } else {
                         // checking if shadow has a one-many mapping
-                        if ((((BoaShadowType)visit.getComponent().type).getOneToMany(n.env)) == null) {
+                        if ((((BoaShadowType)visit.getComponent().type).getOneToMany(n.env)).size() == 0) {
                             final LinkedList<Expression> listExp = new LinkedList<Expression>();
                             listExp.add(((BoaShadowType)visit.getComponent().type).getKindExpression(n.env));
 
