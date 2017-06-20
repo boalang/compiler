@@ -996,7 +996,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 					throw new TypeCheckException(id, "Invalid type '" + id.getToken() + "'");
 				id.accept(this, st);
 			}
-            if (n.getIdList() != null) {
+            if (n.getListId() != null) {
                 final List<BoaTuple> types = new ArrayList<BoaTuple>();
                 for (final Identifier id : n.getIdList()) {
                     types.add((BoaTuple)id.type);
