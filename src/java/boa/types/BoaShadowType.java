@@ -46,6 +46,15 @@ public abstract class BoaShadowType extends BoaTuple {
         this.shadowedType = shadowedType;
     }
 
+	/** {@inheritDoc} */
+	@Override
+	public boolean assigns(final BoaType that) {
+		if (!super.assigns(that))
+			return false;
+
+		return this.getClass() == that.getClass();
+	}
+
     /**
      * Returns the type being shadowed.
      *

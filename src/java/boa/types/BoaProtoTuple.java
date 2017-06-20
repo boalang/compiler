@@ -34,6 +34,9 @@ public class BoaProtoTuple extends BoaTuple {
 	/** {@inheritDoc} */
 	@Override
 	public boolean assigns(final BoaType that) {
+        if (that instanceof BoaShadowType)
+            return assigns(((BoaShadowType)that).shadowedType());
+
 		if (!super.assigns(that))
 			return false;
 
