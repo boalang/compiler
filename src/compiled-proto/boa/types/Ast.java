@@ -1077,9 +1077,9 @@ public final class Ast {
     com.google.protobuf.ByteString
         getNamesBytes(int index);
 
-    // required .boa.types.ChangeKind structural_change_kind = 4;
+    // optional .boa.types.ChangeKind structural_change_kind = 4;
     /**
-     * <code>required .boa.types.ChangeKind structural_change_kind = 4;</code>
+     * <code>optional .boa.types.ChangeKind structural_change_kind = 4;</code>
      *
      * <pre>
      ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -1087,7 +1087,7 @@ public final class Ast {
      */
     boolean hasStructuralChangeKind();
     /**
-     * <code>required .boa.types.ChangeKind structural_change_kind = 4;</code>
+     * <code>optional .boa.types.ChangeKind structural_change_kind = 4;</code>
      *
      * <pre>
      ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -1095,9 +1095,9 @@ public final class Ast {
      */
     boa.types.Shared.ChangeKind getStructuralChangeKind();
 
-    // required .boa.types.ChangeKind label_change_kind = 5;
+    // optional .boa.types.ChangeKind label_change_kind = 5;
     /**
-     * <code>required .boa.types.ChangeKind label_change_kind = 5;</code>
+     * <code>optional .boa.types.ChangeKind label_change_kind = 5;</code>
      *
      * <pre>
      ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -1105,7 +1105,7 @@ public final class Ast {
      */
     boolean hasLabelChangeKind();
     /**
-     * <code>required .boa.types.ChangeKind label_change_kind = 5;</code>
+     * <code>optional .boa.types.ChangeKind label_change_kind = 5;</code>
      *
      * <pre>
      ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -1411,11 +1411,11 @@ public final class Ast {
       return names_.getByteString(index);
     }
 
-    // required .boa.types.ChangeKind structural_change_kind = 4;
+    // optional .boa.types.ChangeKind structural_change_kind = 4;
     public static final int STRUCTURAL_CHANGE_KIND_FIELD_NUMBER = 4;
     private boa.types.Shared.ChangeKind structuralChangeKind_;
     /**
-     * <code>required .boa.types.ChangeKind structural_change_kind = 4;</code>
+     * <code>optional .boa.types.ChangeKind structural_change_kind = 4;</code>
      *
      * <pre>
      ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -1425,7 +1425,7 @@ public final class Ast {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
-     * <code>required .boa.types.ChangeKind structural_change_kind = 4;</code>
+     * <code>optional .boa.types.ChangeKind structural_change_kind = 4;</code>
      *
      * <pre>
      ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -1435,11 +1435,11 @@ public final class Ast {
       return structuralChangeKind_;
     }
 
-    // required .boa.types.ChangeKind label_change_kind = 5;
+    // optional .boa.types.ChangeKind label_change_kind = 5;
     public static final int LABEL_CHANGE_KIND_FIELD_NUMBER = 5;
     private boa.types.Shared.ChangeKind labelChangeKind_;
     /**
-     * <code>required .boa.types.ChangeKind label_change_kind = 5;</code>
+     * <code>optional .boa.types.ChangeKind label_change_kind = 5;</code>
      *
      * <pre>
      ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -1449,7 +1449,7 @@ public final class Ast {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
-     * <code>required .boa.types.ChangeKind label_change_kind = 5;</code>
+     * <code>optional .boa.types.ChangeKind label_change_kind = 5;</code>
      *
      * <pre>
      ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -1471,14 +1471,6 @@ public final class Ast {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized != -1) return isInitialized == 1;
 
-      if (!hasStructuralChangeKind()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasLabelChangeKind()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
       for (int i = 0; i < getNamespacesCount(); i++) {
         if (!getNamespaces(i).isInitialized()) {
           memoizedIsInitialized = 0;
@@ -1811,14 +1803,6 @@ public final class Ast {
       }
 
       public final boolean isInitialized() {
-        if (!hasStructuralChangeKind()) {
-          
-          return false;
-        }
-        if (!hasLabelChangeKind()) {
-          
-          return false;
-        }
         for (int i = 0; i < getNamespacesCount(); i++) {
           if (!getNamespaces(i).isInitialized()) {
             
@@ -2417,10 +2401,10 @@ public final class Ast {
         return this;
       }
 
-      // required .boa.types.ChangeKind structural_change_kind = 4;
+      // optional .boa.types.ChangeKind structural_change_kind = 4;
       private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
       /**
-       * <code>required .boa.types.ChangeKind structural_change_kind = 4;</code>
+       * <code>optional .boa.types.ChangeKind structural_change_kind = 4;</code>
        *
        * <pre>
        ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -2430,7 +2414,7 @@ public final class Ast {
         return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       /**
-       * <code>required .boa.types.ChangeKind structural_change_kind = 4;</code>
+       * <code>optional .boa.types.ChangeKind structural_change_kind = 4;</code>
        *
        * <pre>
        ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -2440,7 +2424,7 @@ public final class Ast {
         return structuralChangeKind_;
       }
       /**
-       * <code>required .boa.types.ChangeKind structural_change_kind = 4;</code>
+       * <code>optional .boa.types.ChangeKind structural_change_kind = 4;</code>
        *
        * <pre>
        ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -2456,7 +2440,7 @@ public final class Ast {
         return this;
       }
       /**
-       * <code>required .boa.types.ChangeKind structural_change_kind = 4;</code>
+       * <code>optional .boa.types.ChangeKind structural_change_kind = 4;</code>
        *
        * <pre>
        ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -2469,10 +2453,10 @@ public final class Ast {
         return this;
       }
 
-      // required .boa.types.ChangeKind label_change_kind = 5;
+      // optional .boa.types.ChangeKind label_change_kind = 5;
       private boa.types.Shared.ChangeKind labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
       /**
-       * <code>required .boa.types.ChangeKind label_change_kind = 5;</code>
+       * <code>optional .boa.types.ChangeKind label_change_kind = 5;</code>
        *
        * <pre>
        ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -2482,7 +2466,7 @@ public final class Ast {
         return ((bitField0_ & 0x00000010) == 0x00000010);
       }
       /**
-       * <code>required .boa.types.ChangeKind label_change_kind = 5;</code>
+       * <code>optional .boa.types.ChangeKind label_change_kind = 5;</code>
        *
        * <pre>
        ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -2492,7 +2476,7 @@ public final class Ast {
         return labelChangeKind_;
       }
       /**
-       * <code>required .boa.types.ChangeKind label_change_kind = 5;</code>
+       * <code>optional .boa.types.ChangeKind label_change_kind = 5;</code>
        *
        * <pre>
        ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -2508,7 +2492,7 @@ public final class Ast {
         return this;
       }
       /**
-       * <code>required .boa.types.ChangeKind label_change_kind = 5;</code>
+       * <code>optional .boa.types.ChangeKind label_change_kind = 5;</code>
        *
        * <pre>
        ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -2787,9 +2771,9 @@ public final class Ast {
     boa.types.Ast.ExpressionOrBuilder getExpressionsOrBuilder(
         int index);
 
-    // required .boa.types.ChangeKind structural_change_kind = 7;
+    // optional .boa.types.ChangeKind structural_change_kind = 7;
     /**
-     * <code>required .boa.types.ChangeKind structural_change_kind = 7;</code>
+     * <code>optional .boa.types.ChangeKind structural_change_kind = 7;</code>
      *
      * <pre>
      ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -2797,7 +2781,7 @@ public final class Ast {
      */
     boolean hasStructuralChangeKind();
     /**
-     * <code>required .boa.types.ChangeKind structural_change_kind = 7;</code>
+     * <code>optional .boa.types.ChangeKind structural_change_kind = 7;</code>
      *
      * <pre>
      ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -2805,9 +2789,9 @@ public final class Ast {
      */
     boa.types.Shared.ChangeKind getStructuralChangeKind();
 
-    // required .boa.types.ChangeKind label_change_kind = 8;
+    // optional .boa.types.ChangeKind label_change_kind = 8;
     /**
-     * <code>required .boa.types.ChangeKind label_change_kind = 8;</code>
+     * <code>optional .boa.types.ChangeKind label_change_kind = 8;</code>
      *
      * <pre>
      ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -2815,7 +2799,7 @@ public final class Ast {
      */
     boolean hasLabelChangeKind();
     /**
-     * <code>required .boa.types.ChangeKind label_change_kind = 8;</code>
+     * <code>optional .boa.types.ChangeKind label_change_kind = 8;</code>
      *
      * <pre>
      ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -3335,11 +3319,11 @@ public final class Ast {
       return expressions_.get(index);
     }
 
-    // required .boa.types.ChangeKind structural_change_kind = 7;
+    // optional .boa.types.ChangeKind structural_change_kind = 7;
     public static final int STRUCTURAL_CHANGE_KIND_FIELD_NUMBER = 7;
     private boa.types.Shared.ChangeKind structuralChangeKind_;
     /**
-     * <code>required .boa.types.ChangeKind structural_change_kind = 7;</code>
+     * <code>optional .boa.types.ChangeKind structural_change_kind = 7;</code>
      *
      * <pre>
      ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -3349,7 +3333,7 @@ public final class Ast {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
-     * <code>required .boa.types.ChangeKind structural_change_kind = 7;</code>
+     * <code>optional .boa.types.ChangeKind structural_change_kind = 7;</code>
      *
      * <pre>
      ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -3359,11 +3343,11 @@ public final class Ast {
       return structuralChangeKind_;
     }
 
-    // required .boa.types.ChangeKind label_change_kind = 8;
+    // optional .boa.types.ChangeKind label_change_kind = 8;
     public static final int LABEL_CHANGE_KIND_FIELD_NUMBER = 8;
     private boa.types.Shared.ChangeKind labelChangeKind_;
     /**
-     * <code>required .boa.types.ChangeKind label_change_kind = 8;</code>
+     * <code>optional .boa.types.ChangeKind label_change_kind = 8;</code>
      *
      * <pre>
      ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -3373,7 +3357,7 @@ public final class Ast {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
-     * <code>required .boa.types.ChangeKind label_change_kind = 8;</code>
+     * <code>optional .boa.types.ChangeKind label_change_kind = 8;</code>
      *
      * <pre>
      ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -3399,14 +3383,6 @@ public final class Ast {
       if (isInitialized != -1) return isInitialized == 1;
 
       if (!hasName()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasStructuralChangeKind()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasLabelChangeKind()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -3921,14 +3897,6 @@ public final class Ast {
 
       public final boolean isInitialized() {
         if (!hasName()) {
-          
-          return false;
-        }
-        if (!hasStructuralChangeKind()) {
-          
-          return false;
-        }
-        if (!hasLabelChangeKind()) {
           
           return false;
         }
@@ -5642,10 +5610,10 @@ public final class Ast {
         return expressionsBuilder_;
       }
 
-      // required .boa.types.ChangeKind structural_change_kind = 7;
+      // optional .boa.types.ChangeKind structural_change_kind = 7;
       private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
       /**
-       * <code>required .boa.types.ChangeKind structural_change_kind = 7;</code>
+       * <code>optional .boa.types.ChangeKind structural_change_kind = 7;</code>
        *
        * <pre>
        ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -5655,7 +5623,7 @@ public final class Ast {
         return ((bitField0_ & 0x00000040) == 0x00000040);
       }
       /**
-       * <code>required .boa.types.ChangeKind structural_change_kind = 7;</code>
+       * <code>optional .boa.types.ChangeKind structural_change_kind = 7;</code>
        *
        * <pre>
        ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -5665,7 +5633,7 @@ public final class Ast {
         return structuralChangeKind_;
       }
       /**
-       * <code>required .boa.types.ChangeKind structural_change_kind = 7;</code>
+       * <code>optional .boa.types.ChangeKind structural_change_kind = 7;</code>
        *
        * <pre>
        ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -5681,7 +5649,7 @@ public final class Ast {
         return this;
       }
       /**
-       * <code>required .boa.types.ChangeKind structural_change_kind = 7;</code>
+       * <code>optional .boa.types.ChangeKind structural_change_kind = 7;</code>
        *
        * <pre>
        ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -5694,10 +5662,10 @@ public final class Ast {
         return this;
       }
 
-      // required .boa.types.ChangeKind label_change_kind = 8;
+      // optional .boa.types.ChangeKind label_change_kind = 8;
       private boa.types.Shared.ChangeKind labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
       /**
-       * <code>required .boa.types.ChangeKind label_change_kind = 8;</code>
+       * <code>optional .boa.types.ChangeKind label_change_kind = 8;</code>
        *
        * <pre>
        ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -5707,7 +5675,7 @@ public final class Ast {
         return ((bitField0_ & 0x00000080) == 0x00000080);
       }
       /**
-       * <code>required .boa.types.ChangeKind label_change_kind = 8;</code>
+       * <code>optional .boa.types.ChangeKind label_change_kind = 8;</code>
        *
        * <pre>
        ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -5717,7 +5685,7 @@ public final class Ast {
         return labelChangeKind_;
       }
       /**
-       * <code>required .boa.types.ChangeKind label_change_kind = 8;</code>
+       * <code>optional .boa.types.ChangeKind label_change_kind = 8;</code>
        *
        * <pre>
        ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -5733,7 +5701,7 @@ public final class Ast {
         return this;
       }
       /**
-       * <code>required .boa.types.ChangeKind label_change_kind = 8;</code>
+       * <code>optional .boa.types.ChangeKind label_change_kind = 8;</code>
        *
        * <pre>
        ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -6120,9 +6088,9 @@ public final class Ast {
     boa.types.Ast.CommentOrBuilder getCommentsOrBuilder(
         int index);
 
-    // required .boa.types.ChangeKind structural_change_kind = 10;
+    // optional .boa.types.ChangeKind structural_change_kind = 10;
     /**
-     * <code>required .boa.types.ChangeKind structural_change_kind = 10;</code>
+     * <code>optional .boa.types.ChangeKind structural_change_kind = 10;</code>
      *
      * <pre>
      ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -6130,7 +6098,7 @@ public final class Ast {
      */
     boolean hasStructuralChangeKind();
     /**
-     * <code>required .boa.types.ChangeKind structural_change_kind = 10;</code>
+     * <code>optional .boa.types.ChangeKind structural_change_kind = 10;</code>
      *
      * <pre>
      ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -6138,9 +6106,9 @@ public final class Ast {
      */
     boa.types.Shared.ChangeKind getStructuralChangeKind();
 
-    // required .boa.types.ChangeKind label_change_kind = 11;
+    // optional .boa.types.ChangeKind label_change_kind = 11;
     /**
-     * <code>required .boa.types.ChangeKind label_change_kind = 11;</code>
+     * <code>optional .boa.types.ChangeKind label_change_kind = 11;</code>
      *
      * <pre>
      ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -6148,7 +6116,7 @@ public final class Ast {
      */
     boolean hasLabelChangeKind();
     /**
-     * <code>required .boa.types.ChangeKind label_change_kind = 11;</code>
+     * <code>optional .boa.types.ChangeKind label_change_kind = 11;</code>
      *
      * <pre>
      ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -6837,11 +6805,11 @@ public final class Ast {
       return comments_.get(index);
     }
 
-    // required .boa.types.ChangeKind structural_change_kind = 10;
+    // optional .boa.types.ChangeKind structural_change_kind = 10;
     public static final int STRUCTURAL_CHANGE_KIND_FIELD_NUMBER = 10;
     private boa.types.Shared.ChangeKind structuralChangeKind_;
     /**
-     * <code>required .boa.types.ChangeKind structural_change_kind = 10;</code>
+     * <code>optional .boa.types.ChangeKind structural_change_kind = 10;</code>
      *
      * <pre>
      ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -6851,7 +6819,7 @@ public final class Ast {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
-     * <code>required .boa.types.ChangeKind structural_change_kind = 10;</code>
+     * <code>optional .boa.types.ChangeKind structural_change_kind = 10;</code>
      *
      * <pre>
      ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -6861,11 +6829,11 @@ public final class Ast {
       return structuralChangeKind_;
     }
 
-    // required .boa.types.ChangeKind label_change_kind = 11;
+    // optional .boa.types.ChangeKind label_change_kind = 11;
     public static final int LABEL_CHANGE_KIND_FIELD_NUMBER = 11;
     private boa.types.Shared.ChangeKind labelChangeKind_;
     /**
-     * <code>required .boa.types.ChangeKind label_change_kind = 11;</code>
+     * <code>optional .boa.types.ChangeKind label_change_kind = 11;</code>
      *
      * <pre>
      ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -6875,7 +6843,7 @@ public final class Ast {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
-     * <code>required .boa.types.ChangeKind label_change_kind = 11;</code>
+     * <code>optional .boa.types.ChangeKind label_change_kind = 11;</code>
      *
      * <pre>
      ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -6908,14 +6876,6 @@ public final class Ast {
         return false;
       }
       if (!hasKind()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasStructuralChangeKind()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasLabelChangeKind()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -7560,14 +7520,6 @@ public final class Ast {
           return false;
         }
         if (!hasKind()) {
-          
-          return false;
-        }
-        if (!hasStructuralChangeKind()) {
-          
-          return false;
-        }
-        if (!hasLabelChangeKind()) {
           
           return false;
         }
@@ -9969,10 +9921,10 @@ public final class Ast {
         return commentsBuilder_;
       }
 
-      // required .boa.types.ChangeKind structural_change_kind = 10;
+      // optional .boa.types.ChangeKind structural_change_kind = 10;
       private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
       /**
-       * <code>required .boa.types.ChangeKind structural_change_kind = 10;</code>
+       * <code>optional .boa.types.ChangeKind structural_change_kind = 10;</code>
        *
        * <pre>
        ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -9982,7 +9934,7 @@ public final class Ast {
         return ((bitField0_ & 0x00000200) == 0x00000200);
       }
       /**
-       * <code>required .boa.types.ChangeKind structural_change_kind = 10;</code>
+       * <code>optional .boa.types.ChangeKind structural_change_kind = 10;</code>
        *
        * <pre>
        ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -9992,7 +9944,7 @@ public final class Ast {
         return structuralChangeKind_;
       }
       /**
-       * <code>required .boa.types.ChangeKind structural_change_kind = 10;</code>
+       * <code>optional .boa.types.ChangeKind structural_change_kind = 10;</code>
        *
        * <pre>
        ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -10008,7 +9960,7 @@ public final class Ast {
         return this;
       }
       /**
-       * <code>required .boa.types.ChangeKind structural_change_kind = 10;</code>
+       * <code>optional .boa.types.ChangeKind structural_change_kind = 10;</code>
        *
        * <pre>
        ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -10021,10 +9973,10 @@ public final class Ast {
         return this;
       }
 
-      // required .boa.types.ChangeKind label_change_kind = 11;
+      // optional .boa.types.ChangeKind label_change_kind = 11;
       private boa.types.Shared.ChangeKind labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
       /**
-       * <code>required .boa.types.ChangeKind label_change_kind = 11;</code>
+       * <code>optional .boa.types.ChangeKind label_change_kind = 11;</code>
        *
        * <pre>
        ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -10034,7 +9986,7 @@ public final class Ast {
         return ((bitField0_ & 0x00000400) == 0x00000400);
       }
       /**
-       * <code>required .boa.types.ChangeKind label_change_kind = 11;</code>
+       * <code>optional .boa.types.ChangeKind label_change_kind = 11;</code>
        *
        * <pre>
        ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -10044,7 +9996,7 @@ public final class Ast {
         return labelChangeKind_;
       }
       /**
-       * <code>required .boa.types.ChangeKind label_change_kind = 11;</code>
+       * <code>optional .boa.types.ChangeKind label_change_kind = 11;</code>
        *
        * <pre>
        ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -10060,7 +10012,7 @@ public final class Ast {
         return this;
       }
       /**
-       * <code>required .boa.types.ChangeKind label_change_kind = 11;</code>
+       * <code>optional .boa.types.ChangeKind label_change_kind = 11;</code>
        *
        * <pre>
        ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -10159,9 +10111,9 @@ public final class Ast {
     com.google.protobuf.ByteString
         getIdBytes();
 
-    // required .boa.types.ChangeKind structural_change_kind = 5;
+    // optional .boa.types.ChangeKind structural_change_kind = 5;
     /**
-     * <code>required .boa.types.ChangeKind structural_change_kind = 5;</code>
+     * <code>optional .boa.types.ChangeKind structural_change_kind = 5;</code>
      *
      * <pre>
      ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -10169,7 +10121,7 @@ public final class Ast {
      */
     boolean hasStructuralChangeKind();
     /**
-     * <code>required .boa.types.ChangeKind structural_change_kind = 5;</code>
+     * <code>optional .boa.types.ChangeKind structural_change_kind = 5;</code>
      *
      * <pre>
      ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -10177,9 +10129,9 @@ public final class Ast {
      */
     boa.types.Shared.ChangeKind getStructuralChangeKind();
 
-    // required .boa.types.ChangeKind label_change_kind = 6;
+    // optional .boa.types.ChangeKind label_change_kind = 6;
     /**
-     * <code>required .boa.types.ChangeKind label_change_kind = 6;</code>
+     * <code>optional .boa.types.ChangeKind label_change_kind = 6;</code>
      *
      * <pre>
      ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -10187,7 +10139,7 @@ public final class Ast {
      */
     boolean hasLabelChangeKind();
     /**
-     * <code>required .boa.types.ChangeKind label_change_kind = 6;</code>
+     * <code>optional .boa.types.ChangeKind label_change_kind = 6;</code>
      *
      * <pre>
      ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -10467,11 +10419,11 @@ public final class Ast {
       }
     }
 
-    // required .boa.types.ChangeKind structural_change_kind = 5;
+    // optional .boa.types.ChangeKind structural_change_kind = 5;
     public static final int STRUCTURAL_CHANGE_KIND_FIELD_NUMBER = 5;
     private boa.types.Shared.ChangeKind structuralChangeKind_;
     /**
-     * <code>required .boa.types.ChangeKind structural_change_kind = 5;</code>
+     * <code>optional .boa.types.ChangeKind structural_change_kind = 5;</code>
      *
      * <pre>
      ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -10481,7 +10433,7 @@ public final class Ast {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
-     * <code>required .boa.types.ChangeKind structural_change_kind = 5;</code>
+     * <code>optional .boa.types.ChangeKind structural_change_kind = 5;</code>
      *
      * <pre>
      ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -10491,11 +10443,11 @@ public final class Ast {
       return structuralChangeKind_;
     }
 
-    // required .boa.types.ChangeKind label_change_kind = 6;
+    // optional .boa.types.ChangeKind label_change_kind = 6;
     public static final int LABEL_CHANGE_KIND_FIELD_NUMBER = 6;
     private boa.types.Shared.ChangeKind labelChangeKind_;
     /**
-     * <code>required .boa.types.ChangeKind label_change_kind = 6;</code>
+     * <code>optional .boa.types.ChangeKind label_change_kind = 6;</code>
      *
      * <pre>
      ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -10505,7 +10457,7 @@ public final class Ast {
       return ((bitField0_ & 0x00000010) == 0x00000010);
     }
     /**
-     * <code>required .boa.types.ChangeKind label_change_kind = 6;</code>
+     * <code>optional .boa.types.ChangeKind label_change_kind = 6;</code>
      *
      * <pre>
      ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -10532,14 +10484,6 @@ public final class Ast {
         return false;
       }
       if (!hasKind()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasStructuralChangeKind()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasLabelChangeKind()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -10820,14 +10764,6 @@ public final class Ast {
           
           return false;
         }
-        if (!hasStructuralChangeKind()) {
-          
-          return false;
-        }
-        if (!hasLabelChangeKind()) {
-          
-          return false;
-        }
         return true;
       }
 
@@ -11098,10 +11034,10 @@ public final class Ast {
         return this;
       }
 
-      // required .boa.types.ChangeKind structural_change_kind = 5;
+      // optional .boa.types.ChangeKind structural_change_kind = 5;
       private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
       /**
-       * <code>required .boa.types.ChangeKind structural_change_kind = 5;</code>
+       * <code>optional .boa.types.ChangeKind structural_change_kind = 5;</code>
        *
        * <pre>
        ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -11111,7 +11047,7 @@ public final class Ast {
         return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       /**
-       * <code>required .boa.types.ChangeKind structural_change_kind = 5;</code>
+       * <code>optional .boa.types.ChangeKind structural_change_kind = 5;</code>
        *
        * <pre>
        ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -11121,7 +11057,7 @@ public final class Ast {
         return structuralChangeKind_;
       }
       /**
-       * <code>required .boa.types.ChangeKind structural_change_kind = 5;</code>
+       * <code>optional .boa.types.ChangeKind structural_change_kind = 5;</code>
        *
        * <pre>
        ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -11137,7 +11073,7 @@ public final class Ast {
         return this;
       }
       /**
-       * <code>required .boa.types.ChangeKind structural_change_kind = 5;</code>
+       * <code>optional .boa.types.ChangeKind structural_change_kind = 5;</code>
        *
        * <pre>
        ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -11150,10 +11086,10 @@ public final class Ast {
         return this;
       }
 
-      // required .boa.types.ChangeKind label_change_kind = 6;
+      // optional .boa.types.ChangeKind label_change_kind = 6;
       private boa.types.Shared.ChangeKind labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
       /**
-       * <code>required .boa.types.ChangeKind label_change_kind = 6;</code>
+       * <code>optional .boa.types.ChangeKind label_change_kind = 6;</code>
        *
        * <pre>
        ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -11163,7 +11099,7 @@ public final class Ast {
         return ((bitField0_ & 0x00000010) == 0x00000010);
       }
       /**
-       * <code>required .boa.types.ChangeKind label_change_kind = 6;</code>
+       * <code>optional .boa.types.ChangeKind label_change_kind = 6;</code>
        *
        * <pre>
        ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -11173,7 +11109,7 @@ public final class Ast {
         return labelChangeKind_;
       }
       /**
-       * <code>required .boa.types.ChangeKind label_change_kind = 6;</code>
+       * <code>optional .boa.types.ChangeKind label_change_kind = 6;</code>
        *
        * <pre>
        ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -11189,7 +11125,7 @@ public final class Ast {
         return this;
       }
       /**
-       * <code>required .boa.types.ChangeKind label_change_kind = 6;</code>
+       * <code>optional .boa.types.ChangeKind label_change_kind = 6;</code>
        *
        * <pre>
        ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -11554,9 +11490,9 @@ public final class Ast {
     boa.types.Ast.CommentOrBuilder getCommentsOrBuilder(
         int index);
 
-    // required .boa.types.ChangeKind structural_change_kind = 9;
+    // optional .boa.types.ChangeKind structural_change_kind = 9;
     /**
-     * <code>required .boa.types.ChangeKind structural_change_kind = 9;</code>
+     * <code>optional .boa.types.ChangeKind structural_change_kind = 9;</code>
      *
      * <pre>
      ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -11564,7 +11500,7 @@ public final class Ast {
      */
     boolean hasStructuralChangeKind();
     /**
-     * <code>required .boa.types.ChangeKind structural_change_kind = 9;</code>
+     * <code>optional .boa.types.ChangeKind structural_change_kind = 9;</code>
      *
      * <pre>
      ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -11572,9 +11508,9 @@ public final class Ast {
      */
     boa.types.Shared.ChangeKind getStructuralChangeKind();
 
-    // required .boa.types.ChangeKind label_change_kind = 10;
+    // optional .boa.types.ChangeKind label_change_kind = 10;
     /**
-     * <code>required .boa.types.ChangeKind label_change_kind = 10;</code>
+     * <code>optional .boa.types.ChangeKind label_change_kind = 10;</code>
      *
      * <pre>
      ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -11582,7 +11518,7 @@ public final class Ast {
      */
     boolean hasLabelChangeKind();
     /**
-     * <code>required .boa.types.ChangeKind label_change_kind = 10;</code>
+     * <code>optional .boa.types.ChangeKind label_change_kind = 10;</code>
      *
      * <pre>
      ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -12231,11 +12167,11 @@ public final class Ast {
       return comments_.get(index);
     }
 
-    // required .boa.types.ChangeKind structural_change_kind = 9;
+    // optional .boa.types.ChangeKind structural_change_kind = 9;
     public static final int STRUCTURAL_CHANGE_KIND_FIELD_NUMBER = 9;
     private boa.types.Shared.ChangeKind structuralChangeKind_;
     /**
-     * <code>required .boa.types.ChangeKind structural_change_kind = 9;</code>
+     * <code>optional .boa.types.ChangeKind structural_change_kind = 9;</code>
      *
      * <pre>
      ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -12245,7 +12181,7 @@ public final class Ast {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
-     * <code>required .boa.types.ChangeKind structural_change_kind = 9;</code>
+     * <code>optional .boa.types.ChangeKind structural_change_kind = 9;</code>
      *
      * <pre>
      ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -12255,11 +12191,11 @@ public final class Ast {
       return structuralChangeKind_;
     }
 
-    // required .boa.types.ChangeKind label_change_kind = 10;
+    // optional .boa.types.ChangeKind label_change_kind = 10;
     public static final int LABEL_CHANGE_KIND_FIELD_NUMBER = 10;
     private boa.types.Shared.ChangeKind labelChangeKind_;
     /**
-     * <code>required .boa.types.ChangeKind label_change_kind = 10;</code>
+     * <code>optional .boa.types.ChangeKind label_change_kind = 10;</code>
      *
      * <pre>
      ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -12269,7 +12205,7 @@ public final class Ast {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
-     * <code>required .boa.types.ChangeKind label_change_kind = 10;</code>
+     * <code>optional .boa.types.ChangeKind label_change_kind = 10;</code>
      *
      * <pre>
      ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -12297,14 +12233,6 @@ public final class Ast {
       if (isInitialized != -1) return isInitialized == 1;
 
       if (!hasReturnType()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasStructuralChangeKind()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasLabelChangeKind()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -12903,14 +12831,6 @@ public final class Ast {
 
       public final boolean isInitialized() {
         if (!hasReturnType()) {
-          
-          return false;
-        }
-        if (!hasStructuralChangeKind()) {
-          
-          return false;
-        }
-        if (!hasLabelChangeKind()) {
           
           return false;
         }
@@ -15153,10 +15073,10 @@ public final class Ast {
         return commentsBuilder_;
       }
 
-      // required .boa.types.ChangeKind structural_change_kind = 9;
+      // optional .boa.types.ChangeKind structural_change_kind = 9;
       private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
       /**
-       * <code>required .boa.types.ChangeKind structural_change_kind = 9;</code>
+       * <code>optional .boa.types.ChangeKind structural_change_kind = 9;</code>
        *
        * <pre>
        ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -15166,7 +15086,7 @@ public final class Ast {
         return ((bitField0_ & 0x00000100) == 0x00000100);
       }
       /**
-       * <code>required .boa.types.ChangeKind structural_change_kind = 9;</code>
+       * <code>optional .boa.types.ChangeKind structural_change_kind = 9;</code>
        *
        * <pre>
        ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -15176,7 +15096,7 @@ public final class Ast {
         return structuralChangeKind_;
       }
       /**
-       * <code>required .boa.types.ChangeKind structural_change_kind = 9;</code>
+       * <code>optional .boa.types.ChangeKind structural_change_kind = 9;</code>
        *
        * <pre>
        ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -15192,7 +15112,7 @@ public final class Ast {
         return this;
       }
       /**
-       * <code>required .boa.types.ChangeKind structural_change_kind = 9;</code>
+       * <code>optional .boa.types.ChangeKind structural_change_kind = 9;</code>
        *
        * <pre>
        ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -15205,10 +15125,10 @@ public final class Ast {
         return this;
       }
 
-      // required .boa.types.ChangeKind label_change_kind = 10;
+      // optional .boa.types.ChangeKind label_change_kind = 10;
       private boa.types.Shared.ChangeKind labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
       /**
-       * <code>required .boa.types.ChangeKind label_change_kind = 10;</code>
+       * <code>optional .boa.types.ChangeKind label_change_kind = 10;</code>
        *
        * <pre>
        ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -15218,7 +15138,7 @@ public final class Ast {
         return ((bitField0_ & 0x00000200) == 0x00000200);
       }
       /**
-       * <code>required .boa.types.ChangeKind label_change_kind = 10;</code>
+       * <code>optional .boa.types.ChangeKind label_change_kind = 10;</code>
        *
        * <pre>
        ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -15228,7 +15148,7 @@ public final class Ast {
         return labelChangeKind_;
       }
       /**
-       * <code>required .boa.types.ChangeKind label_change_kind = 10;</code>
+       * <code>optional .boa.types.ChangeKind label_change_kind = 10;</code>
        *
        * <pre>
        ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -15244,7 +15164,7 @@ public final class Ast {
         return this;
       }
       /**
-       * <code>required .boa.types.ChangeKind label_change_kind = 10;</code>
+       * <code>optional .boa.types.ChangeKind label_change_kind = 10;</code>
        *
        * <pre>
        ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -15440,9 +15360,9 @@ public final class Ast {
     boa.types.Ast.CommentOrBuilder getCommentsOrBuilder(
         int index);
 
-    // required .boa.types.ChangeKind structural_change_kind = 6;
+    // optional .boa.types.ChangeKind structural_change_kind = 6;
     /**
-     * <code>required .boa.types.ChangeKind structural_change_kind = 6;</code>
+     * <code>optional .boa.types.ChangeKind structural_change_kind = 6;</code>
      *
      * <pre>
      ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -15450,7 +15370,7 @@ public final class Ast {
      */
     boolean hasStructuralChangeKind();
     /**
-     * <code>required .boa.types.ChangeKind structural_change_kind = 6;</code>
+     * <code>optional .boa.types.ChangeKind structural_change_kind = 6;</code>
      *
      * <pre>
      ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -15458,9 +15378,9 @@ public final class Ast {
      */
     boa.types.Shared.ChangeKind getStructuralChangeKind();
 
-    // required .boa.types.ChangeKind label_change_kind = 7;
+    // optional .boa.types.ChangeKind label_change_kind = 7;
     /**
-     * <code>required .boa.types.ChangeKind label_change_kind = 7;</code>
+     * <code>optional .boa.types.ChangeKind label_change_kind = 7;</code>
      *
      * <pre>
      ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -15468,7 +15388,7 @@ public final class Ast {
      */
     boolean hasLabelChangeKind();
     /**
-     * <code>required .boa.types.ChangeKind label_change_kind = 7;</code>
+     * <code>optional .boa.types.ChangeKind label_change_kind = 7;</code>
      *
      * <pre>
      ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -15881,11 +15801,11 @@ public final class Ast {
       return comments_.get(index);
     }
 
-    // required .boa.types.ChangeKind structural_change_kind = 6;
+    // optional .boa.types.ChangeKind structural_change_kind = 6;
     public static final int STRUCTURAL_CHANGE_KIND_FIELD_NUMBER = 6;
     private boa.types.Shared.ChangeKind structuralChangeKind_;
     /**
-     * <code>required .boa.types.ChangeKind structural_change_kind = 6;</code>
+     * <code>optional .boa.types.ChangeKind structural_change_kind = 6;</code>
      *
      * <pre>
      ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -15895,7 +15815,7 @@ public final class Ast {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
-     * <code>required .boa.types.ChangeKind structural_change_kind = 6;</code>
+     * <code>optional .boa.types.ChangeKind structural_change_kind = 6;</code>
      *
      * <pre>
      ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -15905,11 +15825,11 @@ public final class Ast {
       return structuralChangeKind_;
     }
 
-    // required .boa.types.ChangeKind label_change_kind = 7;
+    // optional .boa.types.ChangeKind label_change_kind = 7;
     public static final int LABEL_CHANGE_KIND_FIELD_NUMBER = 7;
     private boa.types.Shared.ChangeKind labelChangeKind_;
     /**
-     * <code>required .boa.types.ChangeKind label_change_kind = 7;</code>
+     * <code>optional .boa.types.ChangeKind label_change_kind = 7;</code>
      *
      * <pre>
      ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -15919,7 +15839,7 @@ public final class Ast {
       return ((bitField0_ & 0x00000010) == 0x00000010);
     }
     /**
-     * <code>required .boa.types.ChangeKind label_change_kind = 7;</code>
+     * <code>optional .boa.types.ChangeKind label_change_kind = 7;</code>
      *
      * <pre>
      ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -15948,14 +15868,6 @@ public final class Ast {
         return false;
       }
       if (!hasVariableType()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasStructuralChangeKind()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasLabelChangeKind()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -16369,14 +16281,6 @@ public final class Ast {
           return false;
         }
         if (!hasVariableType()) {
-          
-          return false;
-        }
-        if (!hasStructuralChangeKind()) {
-          
-          return false;
-        }
-        if (!hasLabelChangeKind()) {
           
           return false;
         }
@@ -17452,10 +17356,10 @@ public final class Ast {
         return commentsBuilder_;
       }
 
-      // required .boa.types.ChangeKind structural_change_kind = 6;
+      // optional .boa.types.ChangeKind structural_change_kind = 6;
       private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
       /**
-       * <code>required .boa.types.ChangeKind structural_change_kind = 6;</code>
+       * <code>optional .boa.types.ChangeKind structural_change_kind = 6;</code>
        *
        * <pre>
        ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -17465,7 +17369,7 @@ public final class Ast {
         return ((bitField0_ & 0x00000020) == 0x00000020);
       }
       /**
-       * <code>required .boa.types.ChangeKind structural_change_kind = 6;</code>
+       * <code>optional .boa.types.ChangeKind structural_change_kind = 6;</code>
        *
        * <pre>
        ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -17475,7 +17379,7 @@ public final class Ast {
         return structuralChangeKind_;
       }
       /**
-       * <code>required .boa.types.ChangeKind structural_change_kind = 6;</code>
+       * <code>optional .boa.types.ChangeKind structural_change_kind = 6;</code>
        *
        * <pre>
        ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -17491,7 +17395,7 @@ public final class Ast {
         return this;
       }
       /**
-       * <code>required .boa.types.ChangeKind structural_change_kind = 6;</code>
+       * <code>optional .boa.types.ChangeKind structural_change_kind = 6;</code>
        *
        * <pre>
        ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -17504,10 +17408,10 @@ public final class Ast {
         return this;
       }
 
-      // required .boa.types.ChangeKind label_change_kind = 7;
+      // optional .boa.types.ChangeKind label_change_kind = 7;
       private boa.types.Shared.ChangeKind labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
       /**
-       * <code>required .boa.types.ChangeKind label_change_kind = 7;</code>
+       * <code>optional .boa.types.ChangeKind label_change_kind = 7;</code>
        *
        * <pre>
        ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -17517,7 +17421,7 @@ public final class Ast {
         return ((bitField0_ & 0x00000040) == 0x00000040);
       }
       /**
-       * <code>required .boa.types.ChangeKind label_change_kind = 7;</code>
+       * <code>optional .boa.types.ChangeKind label_change_kind = 7;</code>
        *
        * <pre>
        ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -17527,7 +17431,7 @@ public final class Ast {
         return labelChangeKind_;
       }
       /**
-       * <code>required .boa.types.ChangeKind label_change_kind = 7;</code>
+       * <code>optional .boa.types.ChangeKind label_change_kind = 7;</code>
        *
        * <pre>
        ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -17543,7 +17447,7 @@ public final class Ast {
         return this;
       }
       /**
-       * <code>required .boa.types.ChangeKind label_change_kind = 7;</code>
+       * <code>optional .boa.types.ChangeKind label_change_kind = 7;</code>
        *
        * <pre>
        ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -17764,9 +17668,9 @@ public final class Ast {
      */
     boa.types.Ast.ExpressionOrBuilder getExpressionOrBuilder();
 
-    // required .boa.types.ChangeKind structural_change_kind = 10;
+    // optional .boa.types.ChangeKind structural_change_kind = 10;
     /**
-     * <code>required .boa.types.ChangeKind structural_change_kind = 10;</code>
+     * <code>optional .boa.types.ChangeKind structural_change_kind = 10;</code>
      *
      * <pre>
      ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -17774,7 +17678,7 @@ public final class Ast {
      */
     boolean hasStructuralChangeKind();
     /**
-     * <code>required .boa.types.ChangeKind structural_change_kind = 10;</code>
+     * <code>optional .boa.types.ChangeKind structural_change_kind = 10;</code>
      *
      * <pre>
      ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -17782,9 +17686,9 @@ public final class Ast {
      */
     boa.types.Shared.ChangeKind getStructuralChangeKind();
 
-    // required .boa.types.ChangeKind label_change_kind = 11;
+    // optional .boa.types.ChangeKind label_change_kind = 11;
     /**
-     * <code>required .boa.types.ChangeKind label_change_kind = 11;</code>
+     * <code>optional .boa.types.ChangeKind label_change_kind = 11;</code>
      *
      * <pre>
      ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -17792,7 +17696,7 @@ public final class Ast {
      */
     boolean hasLabelChangeKind();
     /**
-     * <code>required .boa.types.ChangeKind label_change_kind = 11;</code>
+     * <code>optional .boa.types.ChangeKind label_change_kind = 11;</code>
      *
      * <pre>
      ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -18590,11 +18494,11 @@ public final class Ast {
       return expression_;
     }
 
-    // required .boa.types.ChangeKind structural_change_kind = 10;
+    // optional .boa.types.ChangeKind structural_change_kind = 10;
     public static final int STRUCTURAL_CHANGE_KIND_FIELD_NUMBER = 10;
     private boa.types.Shared.ChangeKind structuralChangeKind_;
     /**
-     * <code>required .boa.types.ChangeKind structural_change_kind = 10;</code>
+     * <code>optional .boa.types.ChangeKind structural_change_kind = 10;</code>
      *
      * <pre>
      ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -18604,7 +18508,7 @@ public final class Ast {
       return ((bitField0_ & 0x00000020) == 0x00000020);
     }
     /**
-     * <code>required .boa.types.ChangeKind structural_change_kind = 10;</code>
+     * <code>optional .boa.types.ChangeKind structural_change_kind = 10;</code>
      *
      * <pre>
      ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -18614,11 +18518,11 @@ public final class Ast {
       return structuralChangeKind_;
     }
 
-    // required .boa.types.ChangeKind label_change_kind = 11;
+    // optional .boa.types.ChangeKind label_change_kind = 11;
     public static final int LABEL_CHANGE_KIND_FIELD_NUMBER = 11;
     private boa.types.Shared.ChangeKind labelChangeKind_;
     /**
-     * <code>required .boa.types.ChangeKind label_change_kind = 11;</code>
+     * <code>optional .boa.types.ChangeKind label_change_kind = 11;</code>
      *
      * <pre>
      ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -18628,7 +18532,7 @@ public final class Ast {
       return ((bitField0_ & 0x00000040) == 0x00000040);
     }
     /**
-     * <code>required .boa.types.ChangeKind label_change_kind = 11;</code>
+     * <code>optional .boa.types.ChangeKind label_change_kind = 11;</code>
      *
      * <pre>
      ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -18657,14 +18561,6 @@ public final class Ast {
       if (isInitialized != -1) return isInitialized == 1;
 
       if (!hasKind()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasStructuralChangeKind()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasLabelChangeKind()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -19246,14 +19142,6 @@ public final class Ast {
 
       public final boolean isInitialized() {
         if (!hasKind()) {
-          
-          return false;
-        }
-        if (!hasStructuralChangeKind()) {
-          
-          return false;
-        }
-        if (!hasLabelChangeKind()) {
           
           return false;
         }
@@ -20879,10 +20767,10 @@ public final class Ast {
         return expressionBuilder_;
       }
 
-      // required .boa.types.ChangeKind structural_change_kind = 10;
+      // optional .boa.types.ChangeKind structural_change_kind = 10;
       private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
       /**
-       * <code>required .boa.types.ChangeKind structural_change_kind = 10;</code>
+       * <code>optional .boa.types.ChangeKind structural_change_kind = 10;</code>
        *
        * <pre>
        ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -20892,7 +20780,7 @@ public final class Ast {
         return ((bitField0_ & 0x00000200) == 0x00000200);
       }
       /**
-       * <code>required .boa.types.ChangeKind structural_change_kind = 10;</code>
+       * <code>optional .boa.types.ChangeKind structural_change_kind = 10;</code>
        *
        * <pre>
        ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -20902,7 +20790,7 @@ public final class Ast {
         return structuralChangeKind_;
       }
       /**
-       * <code>required .boa.types.ChangeKind structural_change_kind = 10;</code>
+       * <code>optional .boa.types.ChangeKind structural_change_kind = 10;</code>
        *
        * <pre>
        ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -20918,7 +20806,7 @@ public final class Ast {
         return this;
       }
       /**
-       * <code>required .boa.types.ChangeKind structural_change_kind = 10;</code>
+       * <code>optional .boa.types.ChangeKind structural_change_kind = 10;</code>
        *
        * <pre>
        ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -20931,10 +20819,10 @@ public final class Ast {
         return this;
       }
 
-      // required .boa.types.ChangeKind label_change_kind = 11;
+      // optional .boa.types.ChangeKind label_change_kind = 11;
       private boa.types.Shared.ChangeKind labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
       /**
-       * <code>required .boa.types.ChangeKind label_change_kind = 11;</code>
+       * <code>optional .boa.types.ChangeKind label_change_kind = 11;</code>
        *
        * <pre>
        ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -20944,7 +20832,7 @@ public final class Ast {
         return ((bitField0_ & 0x00000400) == 0x00000400);
       }
       /**
-       * <code>required .boa.types.ChangeKind label_change_kind = 11;</code>
+       * <code>optional .boa.types.ChangeKind label_change_kind = 11;</code>
        *
        * <pre>
        ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -20954,7 +20842,7 @@ public final class Ast {
         return labelChangeKind_;
       }
       /**
-       * <code>required .boa.types.ChangeKind label_change_kind = 11;</code>
+       * <code>optional .boa.types.ChangeKind label_change_kind = 11;</code>
        *
        * <pre>
        ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -20970,7 +20858,7 @@ public final class Ast {
         return this;
       }
       /**
-       * <code>required .boa.types.ChangeKind label_change_kind = 11;</code>
+       * <code>optional .boa.types.ChangeKind label_change_kind = 11;</code>
        *
        * <pre>
        ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -21238,9 +21126,9 @@ public final class Ast {
      */
     boa.types.Ast.MethodOrBuilder getLambdaOrBuilder();
 
-    // required .boa.types.ChangeKind structural_change_kind = 14;
+    // optional .boa.types.ChangeKind structural_change_kind = 14;
     /**
-     * <code>required .boa.types.ChangeKind structural_change_kind = 14;</code>
+     * <code>optional .boa.types.ChangeKind structural_change_kind = 14;</code>
      *
      * <pre>
      ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -21248,7 +21136,7 @@ public final class Ast {
      */
     boolean hasStructuralChangeKind();
     /**
-     * <code>required .boa.types.ChangeKind structural_change_kind = 14;</code>
+     * <code>optional .boa.types.ChangeKind structural_change_kind = 14;</code>
      *
      * <pre>
      ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -21256,9 +21144,9 @@ public final class Ast {
      */
     boa.types.Shared.ChangeKind getStructuralChangeKind();
 
-    // required .boa.types.ChangeKind label_change_kind = 15;
+    // optional .boa.types.ChangeKind label_change_kind = 15;
     /**
-     * <code>required .boa.types.ChangeKind label_change_kind = 15;</code>
+     * <code>optional .boa.types.ChangeKind label_change_kind = 15;</code>
      *
      * <pre>
      ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -21266,7 +21154,7 @@ public final class Ast {
      */
     boolean hasLabelChangeKind();
     /**
-     * <code>required .boa.types.ChangeKind label_change_kind = 15;</code>
+     * <code>optional .boa.types.ChangeKind label_change_kind = 15;</code>
      *
      * <pre>
      ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -22508,11 +22396,11 @@ public final class Ast {
       return lambda_;
     }
 
-    // required .boa.types.ChangeKind structural_change_kind = 14;
+    // optional .boa.types.ChangeKind structural_change_kind = 14;
     public static final int STRUCTURAL_CHANGE_KIND_FIELD_NUMBER = 14;
     private boa.types.Shared.ChangeKind structuralChangeKind_;
     /**
-     * <code>required .boa.types.ChangeKind structural_change_kind = 14;</code>
+     * <code>optional .boa.types.ChangeKind structural_change_kind = 14;</code>
      *
      * <pre>
      ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -22522,7 +22410,7 @@ public final class Ast {
       return ((bitField0_ & 0x00000200) == 0x00000200);
     }
     /**
-     * <code>required .boa.types.ChangeKind structural_change_kind = 14;</code>
+     * <code>optional .boa.types.ChangeKind structural_change_kind = 14;</code>
      *
      * <pre>
      ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -22532,11 +22420,11 @@ public final class Ast {
       return structuralChangeKind_;
     }
 
-    // required .boa.types.ChangeKind label_change_kind = 15;
+    // optional .boa.types.ChangeKind label_change_kind = 15;
     public static final int LABEL_CHANGE_KIND_FIELD_NUMBER = 15;
     private boa.types.Shared.ChangeKind labelChangeKind_;
     /**
-     * <code>required .boa.types.ChangeKind label_change_kind = 15;</code>
+     * <code>optional .boa.types.ChangeKind label_change_kind = 15;</code>
      *
      * <pre>
      ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -22546,7 +22434,7 @@ public final class Ast {
       return ((bitField0_ & 0x00000400) == 0x00000400);
     }
     /**
-     * <code>required .boa.types.ChangeKind label_change_kind = 15;</code>
+     * <code>optional .boa.types.ChangeKind label_change_kind = 15;</code>
      *
      * <pre>
      ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -22579,14 +22467,6 @@ public final class Ast {
       if (isInitialized != -1) return isInitialized == 1;
 
       if (!hasKind()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasStructuralChangeKind()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasLabelChangeKind()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -23238,14 +23118,6 @@ public final class Ast {
 
       public final boolean isInitialized() {
         if (!hasKind()) {
-          
-          return false;
-        }
-        if (!hasStructuralChangeKind()) {
-          
-          return false;
-        }
-        if (!hasLabelChangeKind()) {
           
           return false;
         }
@@ -25090,10 +24962,10 @@ public final class Ast {
         return lambdaBuilder_;
       }
 
-      // required .boa.types.ChangeKind structural_change_kind = 14;
+      // optional .boa.types.ChangeKind structural_change_kind = 14;
       private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
       /**
-       * <code>required .boa.types.ChangeKind structural_change_kind = 14;</code>
+       * <code>optional .boa.types.ChangeKind structural_change_kind = 14;</code>
        *
        * <pre>
        ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -25103,7 +24975,7 @@ public final class Ast {
         return ((bitField0_ & 0x00002000) == 0x00002000);
       }
       /**
-       * <code>required .boa.types.ChangeKind structural_change_kind = 14;</code>
+       * <code>optional .boa.types.ChangeKind structural_change_kind = 14;</code>
        *
        * <pre>
        ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -25113,7 +24985,7 @@ public final class Ast {
         return structuralChangeKind_;
       }
       /**
-       * <code>required .boa.types.ChangeKind structural_change_kind = 14;</code>
+       * <code>optional .boa.types.ChangeKind structural_change_kind = 14;</code>
        *
        * <pre>
        ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -25129,7 +25001,7 @@ public final class Ast {
         return this;
       }
       /**
-       * <code>required .boa.types.ChangeKind structural_change_kind = 14;</code>
+       * <code>optional .boa.types.ChangeKind structural_change_kind = 14;</code>
        *
        * <pre>
        ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -25142,10 +25014,10 @@ public final class Ast {
         return this;
       }
 
-      // required .boa.types.ChangeKind label_change_kind = 15;
+      // optional .boa.types.ChangeKind label_change_kind = 15;
       private boa.types.Shared.ChangeKind labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
       /**
-       * <code>required .boa.types.ChangeKind label_change_kind = 15;</code>
+       * <code>optional .boa.types.ChangeKind label_change_kind = 15;</code>
        *
        * <pre>
        ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -25155,7 +25027,7 @@ public final class Ast {
         return ((bitField0_ & 0x00004000) == 0x00004000);
       }
       /**
-       * <code>required .boa.types.ChangeKind label_change_kind = 15;</code>
+       * <code>optional .boa.types.ChangeKind label_change_kind = 15;</code>
        *
        * <pre>
        ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -25165,7 +25037,7 @@ public final class Ast {
         return labelChangeKind_;
       }
       /**
-       * <code>required .boa.types.ChangeKind label_change_kind = 15;</code>
+       * <code>optional .boa.types.ChangeKind label_change_kind = 15;</code>
        *
        * <pre>
        ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -25181,7 +25053,7 @@ public final class Ast {
         return this;
       }
       /**
-       * <code>required .boa.types.ChangeKind label_change_kind = 15;</code>
+       * <code>optional .boa.types.ChangeKind label_change_kind = 15;</code>
        *
        * <pre>
        ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -25379,9 +25251,9 @@ public final class Ast {
     com.google.protobuf.ByteString
         getOtherBytes();
 
-    // required .boa.types.ChangeKind structural_change_kind = 7;
+    // optional .boa.types.ChangeKind structural_change_kind = 7;
     /**
-     * <code>required .boa.types.ChangeKind structural_change_kind = 7;</code>
+     * <code>optional .boa.types.ChangeKind structural_change_kind = 7;</code>
      *
      * <pre>
      ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -25389,7 +25261,7 @@ public final class Ast {
      */
     boolean hasStructuralChangeKind();
     /**
-     * <code>required .boa.types.ChangeKind structural_change_kind = 7;</code>
+     * <code>optional .boa.types.ChangeKind structural_change_kind = 7;</code>
      *
      * <pre>
      ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -25397,9 +25269,9 @@ public final class Ast {
      */
     boa.types.Shared.ChangeKind getStructuralChangeKind();
 
-    // required .boa.types.ChangeKind label_change_kind = 8;
+    // optional .boa.types.ChangeKind label_change_kind = 8;
     /**
-     * <code>required .boa.types.ChangeKind label_change_kind = 8;</code>
+     * <code>optional .boa.types.ChangeKind label_change_kind = 8;</code>
      *
      * <pre>
      ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -25407,7 +25279,7 @@ public final class Ast {
      */
     boolean hasLabelChangeKind();
     /**
-     * <code>required .boa.types.ChangeKind label_change_kind = 8;</code>
+     * <code>optional .boa.types.ChangeKind label_change_kind = 8;</code>
      *
      * <pre>
      ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -26221,11 +26093,11 @@ public final class Ast {
       }
     }
 
-    // required .boa.types.ChangeKind structural_change_kind = 7;
+    // optional .boa.types.ChangeKind structural_change_kind = 7;
     public static final int STRUCTURAL_CHANGE_KIND_FIELD_NUMBER = 7;
     private boa.types.Shared.ChangeKind structuralChangeKind_;
     /**
-     * <code>required .boa.types.ChangeKind structural_change_kind = 7;</code>
+     * <code>optional .boa.types.ChangeKind structural_change_kind = 7;</code>
      *
      * <pre>
      ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -26235,7 +26107,7 @@ public final class Ast {
       return ((bitField0_ & 0x00000010) == 0x00000010);
     }
     /**
-     * <code>required .boa.types.ChangeKind structural_change_kind = 7;</code>
+     * <code>optional .boa.types.ChangeKind structural_change_kind = 7;</code>
      *
      * <pre>
      ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -26245,11 +26117,11 @@ public final class Ast {
       return structuralChangeKind_;
     }
 
-    // required .boa.types.ChangeKind label_change_kind = 8;
+    // optional .boa.types.ChangeKind label_change_kind = 8;
     public static final int LABEL_CHANGE_KIND_FIELD_NUMBER = 8;
     private boa.types.Shared.ChangeKind labelChangeKind_;
     /**
-     * <code>required .boa.types.ChangeKind label_change_kind = 8;</code>
+     * <code>optional .boa.types.ChangeKind label_change_kind = 8;</code>
      *
      * <pre>
      ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -26259,7 +26131,7 @@ public final class Ast {
       return ((bitField0_ & 0x00000020) == 0x00000020);
     }
     /**
-     * <code>required .boa.types.ChangeKind label_change_kind = 8;</code>
+     * <code>optional .boa.types.ChangeKind label_change_kind = 8;</code>
      *
      * <pre>
      ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -26285,14 +26157,6 @@ public final class Ast {
       if (isInitialized != -1) return isInitialized == 1;
 
       if (!hasKind()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasStructuralChangeKind()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasLabelChangeKind()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -26667,14 +26531,6 @@ public final class Ast {
 
       public final boolean isInitialized() {
         if (!hasKind()) {
-          
-          return false;
-        }
-        if (!hasStructuralChangeKind()) {
-          
-          return false;
-        }
-        if (!hasLabelChangeKind()) {
           
           return false;
         }
@@ -27447,10 +27303,10 @@ public final class Ast {
         return this;
       }
 
-      // required .boa.types.ChangeKind structural_change_kind = 7;
+      // optional .boa.types.ChangeKind structural_change_kind = 7;
       private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
       /**
-       * <code>required .boa.types.ChangeKind structural_change_kind = 7;</code>
+       * <code>optional .boa.types.ChangeKind structural_change_kind = 7;</code>
        *
        * <pre>
        ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -27460,7 +27316,7 @@ public final class Ast {
         return ((bitField0_ & 0x00000040) == 0x00000040);
       }
       /**
-       * <code>required .boa.types.ChangeKind structural_change_kind = 7;</code>
+       * <code>optional .boa.types.ChangeKind structural_change_kind = 7;</code>
        *
        * <pre>
        ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -27470,7 +27326,7 @@ public final class Ast {
         return structuralChangeKind_;
       }
       /**
-       * <code>required .boa.types.ChangeKind structural_change_kind = 7;</code>
+       * <code>optional .boa.types.ChangeKind structural_change_kind = 7;</code>
        *
        * <pre>
        ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -27486,7 +27342,7 @@ public final class Ast {
         return this;
       }
       /**
-       * <code>required .boa.types.ChangeKind structural_change_kind = 7;</code>
+       * <code>optional .boa.types.ChangeKind structural_change_kind = 7;</code>
        *
        * <pre>
        ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -27499,10 +27355,10 @@ public final class Ast {
         return this;
       }
 
-      // required .boa.types.ChangeKind label_change_kind = 8;
+      // optional .boa.types.ChangeKind label_change_kind = 8;
       private boa.types.Shared.ChangeKind labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
       /**
-       * <code>required .boa.types.ChangeKind label_change_kind = 8;</code>
+       * <code>optional .boa.types.ChangeKind label_change_kind = 8;</code>
        *
        * <pre>
        ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -27512,7 +27368,7 @@ public final class Ast {
         return ((bitField0_ & 0x00000080) == 0x00000080);
       }
       /**
-       * <code>required .boa.types.ChangeKind label_change_kind = 8;</code>
+       * <code>optional .boa.types.ChangeKind label_change_kind = 8;</code>
        *
        * <pre>
        ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -27522,7 +27378,7 @@ public final class Ast {
         return labelChangeKind_;
       }
       /**
-       * <code>required .boa.types.ChangeKind label_change_kind = 8;</code>
+       * <code>optional .boa.types.ChangeKind label_change_kind = 8;</code>
        *
        * <pre>
        ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -27538,7 +27394,7 @@ public final class Ast {
         return this;
       }
       /**
-       * <code>required .boa.types.ChangeKind label_change_kind = 8;</code>
+       * <code>optional .boa.types.ChangeKind label_change_kind = 8;</code>
        *
        * <pre>
        ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -27604,9 +27460,9 @@ public final class Ast {
      */
     boa.types.Ast.PositionInfoOrBuilder getPositionOrBuilder();
 
-    // required .boa.types.ChangeKind structural_change_kind = 4;
+    // optional .boa.types.ChangeKind structural_change_kind = 4;
     /**
-     * <code>required .boa.types.ChangeKind structural_change_kind = 4;</code>
+     * <code>optional .boa.types.ChangeKind structural_change_kind = 4;</code>
      *
      * <pre>
      ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -27614,7 +27470,7 @@ public final class Ast {
      */
     boolean hasStructuralChangeKind();
     /**
-     * <code>required .boa.types.ChangeKind structural_change_kind = 4;</code>
+     * <code>optional .boa.types.ChangeKind structural_change_kind = 4;</code>
      *
      * <pre>
      ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -27622,9 +27478,9 @@ public final class Ast {
      */
     boa.types.Shared.ChangeKind getStructuralChangeKind();
 
-    // required .boa.types.ChangeKind label_change_kind = 5;
+    // optional .boa.types.ChangeKind label_change_kind = 5;
     /**
-     * <code>required .boa.types.ChangeKind label_change_kind = 5;</code>
+     * <code>optional .boa.types.ChangeKind label_change_kind = 5;</code>
      *
      * <pre>
      ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -27632,7 +27488,7 @@ public final class Ast {
      */
     boolean hasLabelChangeKind();
     /**
-     * <code>required .boa.types.ChangeKind label_change_kind = 5;</code>
+     * <code>optional .boa.types.ChangeKind label_change_kind = 5;</code>
      *
      * <pre>
      ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -27998,11 +27854,11 @@ public final class Ast {
       return position_;
     }
 
-    // required .boa.types.ChangeKind structural_change_kind = 4;
+    // optional .boa.types.ChangeKind structural_change_kind = 4;
     public static final int STRUCTURAL_CHANGE_KIND_FIELD_NUMBER = 4;
     private boa.types.Shared.ChangeKind structuralChangeKind_;
     /**
-     * <code>required .boa.types.ChangeKind structural_change_kind = 4;</code>
+     * <code>optional .boa.types.ChangeKind structural_change_kind = 4;</code>
      *
      * <pre>
      ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -28012,7 +27868,7 @@ public final class Ast {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
-     * <code>required .boa.types.ChangeKind structural_change_kind = 4;</code>
+     * <code>optional .boa.types.ChangeKind structural_change_kind = 4;</code>
      *
      * <pre>
      ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -28022,11 +27878,11 @@ public final class Ast {
       return structuralChangeKind_;
     }
 
-    // required .boa.types.ChangeKind label_change_kind = 5;
+    // optional .boa.types.ChangeKind label_change_kind = 5;
     public static final int LABEL_CHANGE_KIND_FIELD_NUMBER = 5;
     private boa.types.Shared.ChangeKind labelChangeKind_;
     /**
-     * <code>required .boa.types.ChangeKind label_change_kind = 5;</code>
+     * <code>optional .boa.types.ChangeKind label_change_kind = 5;</code>
      *
      * <pre>
      ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -28036,7 +27892,7 @@ public final class Ast {
       return ((bitField0_ & 0x00000010) == 0x00000010);
     }
     /**
-     * <code>required .boa.types.ChangeKind label_change_kind = 5;</code>
+     * <code>optional .boa.types.ChangeKind label_change_kind = 5;</code>
      *
      * <pre>
      ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -28067,14 +27923,6 @@ public final class Ast {
         return false;
       }
       if (!hasPosition()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasStructuralChangeKind()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasLabelChangeKind()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -28370,14 +28218,6 @@ public final class Ast {
           
           return false;
         }
-        if (!hasStructuralChangeKind()) {
-          
-          return false;
-        }
-        if (!hasLabelChangeKind()) {
-          
-          return false;
-        }
         if (!getPosition().isInitialized()) {
           
           return false;
@@ -28631,10 +28471,10 @@ public final class Ast {
         return positionBuilder_;
       }
 
-      // required .boa.types.ChangeKind structural_change_kind = 4;
+      // optional .boa.types.ChangeKind structural_change_kind = 4;
       private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
       /**
-       * <code>required .boa.types.ChangeKind structural_change_kind = 4;</code>
+       * <code>optional .boa.types.ChangeKind structural_change_kind = 4;</code>
        *
        * <pre>
        ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -28644,7 +28484,7 @@ public final class Ast {
         return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       /**
-       * <code>required .boa.types.ChangeKind structural_change_kind = 4;</code>
+       * <code>optional .boa.types.ChangeKind structural_change_kind = 4;</code>
        *
        * <pre>
        ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -28654,7 +28494,7 @@ public final class Ast {
         return structuralChangeKind_;
       }
       /**
-       * <code>required .boa.types.ChangeKind structural_change_kind = 4;</code>
+       * <code>optional .boa.types.ChangeKind structural_change_kind = 4;</code>
        *
        * <pre>
        ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -28670,7 +28510,7 @@ public final class Ast {
         return this;
       }
       /**
-       * <code>required .boa.types.ChangeKind structural_change_kind = 4;</code>
+       * <code>optional .boa.types.ChangeKind structural_change_kind = 4;</code>
        *
        * <pre>
        ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -28683,10 +28523,10 @@ public final class Ast {
         return this;
       }
 
-      // required .boa.types.ChangeKind label_change_kind = 5;
+      // optional .boa.types.ChangeKind label_change_kind = 5;
       private boa.types.Shared.ChangeKind labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
       /**
-       * <code>required .boa.types.ChangeKind label_change_kind = 5;</code>
+       * <code>optional .boa.types.ChangeKind label_change_kind = 5;</code>
        *
        * <pre>
        ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -28696,7 +28536,7 @@ public final class Ast {
         return ((bitField0_ & 0x00000010) == 0x00000010);
       }
       /**
-       * <code>required .boa.types.ChangeKind label_change_kind = 5;</code>
+       * <code>optional .boa.types.ChangeKind label_change_kind = 5;</code>
        *
        * <pre>
        ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -28706,7 +28546,7 @@ public final class Ast {
         return labelChangeKind_;
       }
       /**
-       * <code>required .boa.types.ChangeKind label_change_kind = 5;</code>
+       * <code>optional .boa.types.ChangeKind label_change_kind = 5;</code>
        *
        * <pre>
        ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -28722,7 +28562,7 @@ public final class Ast {
         return this;
       }
       /**
-       * <code>required .boa.types.ChangeKind label_change_kind = 5;</code>
+       * <code>optional .boa.types.ChangeKind label_change_kind = 5;</code>
        *
        * <pre>
        ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -29677,16 +29517,16 @@ public final class Ast {
       "es.Comment\"\274\001\n\007ASTRoot\022(\n\nnamespaces\030\001 \003" +
       "(\0132\024.boa.types.Namespace\022\017\n\007imports\030\002 \003(" +
       "\t\022\r\n\005names\030\003 \003(\t\0225\n\026structural_change_ki" +
-      "nd\030\004 \002(\0162\025.boa.types.ChangeKind\0220\n\021label" +
-      "_change_kind\030\005 \002(\0162\025.boa.types.ChangeKin" +
+      "nd\030\004 \001(\0162\025.boa.types.ChangeKind\0220\n\021label" +
+      "_change_kind\030\005 \001(\0162\025.boa.types.ChangeKin" +
       "d\"\322\002\n\tNamespace\022\014\n\004name\030\001 \002(\t\022&\n\tmodifie" +
       "rs\030\002 \003(\0132\023.boa.types.Modifier\022,\n\014declara" +
       "tions\030\003 \003(\0132\026.boa.types.Declaration\022(\n\ns",
       "tatements\030\004 \003(\0132\024.boa.types.Statement\022\"\n" +
       "\007methods\030\005 \003(\0132\021.boa.types.Method\022*\n\013exp" +
       "ressions\030\006 \003(\0132\025.boa.types.Expression\0225\n" +
-      "\026structural_change_kind\030\007 \002(\0162\025.boa.type" +
-      "s.ChangeKind\0220\n\021label_change_kind\030\010 \002(\0162" +
+      "\026structural_change_kind\030\007 \001(\0162\025.boa.type" +
+      "s.ChangeKind\0220\n\021label_change_kind\030\010 \001(\0162" +
       "\025.boa.types.ChangeKind\"\302\003\n\013Declaration\022\014" +
       "\n\004name\030\001 \002(\t\022!\n\004kind\030\002 \002(\0162\023.boa.types.T" +
       "ypeKind\022&\n\tmodifiers\030\003 \003(\0132\023.boa.types.M" +
@@ -29696,13 +29536,13 @@ public final class Ast {
       "od\022#\n\006fields\030\007 \003(\0132\023.boa.types.Variable\022" +
       "3\n\023nested_declarations\030\010 \003(\0132\026.boa.types" +
       ".Declaration\022$\n\010comments\030\t \003(\0132\022.boa.typ" +
-      "es.Comment\0225\n\026structural_change_kind\030\n \002" +
+      "es.Comment\0225\n\026structural_change_kind\030\n \001" +
       "(\0162\025.boa.types.ChangeKind\0220\n\021label_chang" +
-      "e_kind\030\013 \002(\0162\025.boa.types.ChangeKind\"\254\001\n\004" +
+      "e_kind\030\013 \001(\0162\025.boa.types.ChangeKind\"\254\001\n\004" +
       "Type\022\014\n\004name\030\001 \002(\t\022!\n\004kind\030\002 \002(\0162\023.boa.t" +
       "ypes.TypeKind\022\n\n\002id\030\004 \001(\t\0225\n\026structural_" +
-      "change_kind\030\005 \002(\0162\025.boa.types.ChangeKind",
-      "\0220\n\021label_change_kind\030\006 \002(\0162\025.boa.types." +
+      "change_kind\030\005 \001(\0162\025.boa.types.ChangeKind",
+      "\0220\n\021label_change_kind\030\006 \001(\0162\025.boa.types." +
       "ChangeKind\"\234\003\n\006Method\022\014\n\004name\030\001 \001(\t\022&\n\tm" +
       "odifiers\030\002 \003(\0132\023.boa.types.Modifier\022$\n\013r" +
       "eturn_type\030\003 \002(\0132\017.boa.types.Type\022+\n\022gen" +
@@ -29711,16 +29551,16 @@ public final class Ast {
       "\n\017exception_types\030\006 \003(\0132\017.boa.types.Type" +
       "\022(\n\nstatements\030\007 \003(\0132\024.boa.types.Stateme" +
       "nt\022$\n\010comments\030\010 \003(\0132\022.boa.types.Comment" +
-      "\0225\n\026structural_change_kind\030\t \002(\0162\025.boa.t",
-      "ypes.ChangeKind\0220\n\021label_change_kind\030\n \002" +
+      "\0225\n\026structural_change_kind\030\t \001(\0162\025.boa.t",
+      "ypes.ChangeKind\0220\n\021label_change_kind\030\n \001" +
       "(\0162\025.boa.types.ChangeKind\"\243\002\n\010Variable\022\014" +
       "\n\004name\030\001 \002(\t\022&\n\rvariable_type\030\002 \002(\0132\017.bo" +
       "a.types.Type\022&\n\tmodifiers\030\003 \003(\0132\023.boa.ty" +
       "pes.Modifier\022*\n\013initializer\030\004 \001(\0132\025.boa." +
       "types.Expression\022$\n\010comments\030\005 \003(\0132\022.boa" +
       ".types.Comment\0225\n\026structural_change_kind" +
-      "\030\006 \002(\0162\025.boa.types.ChangeKind\0220\n\021label_c" +
-      "hange_kind\030\007 \002(\0162\025.boa.types.ChangeKind\"" +
+      "\030\006 \001(\0162\025.boa.types.ChangeKind\0220\n\021label_c" +
+      "hange_kind\030\007 \001(\0162\025.boa.types.ChangeKind\"" +
       "\230\006\n\tStatement\0220\n\004kind\030\001 \002(\0162\".boa.types.",
       "Statement.StatementKind\022$\n\010comments\030\002 \003(" +
       "\0132\022.boa.types.Comment\022(\n\nstatements\030\003 \003(" +
@@ -29732,8 +29572,8 @@ public final class Ast {
       "able\0220\n\020type_declaration\030\010 \001(\0132\026.boa.typ" +
       "es.Declaration\022)\n\nexpression\030\t \001(\0132\025.boa" +
       ".types.Expression\0225\n\026structural_change_k",
-      "ind\030\n \002(\0162\025.boa.types.ChangeKind\0220\n\021labe" +
-      "l_change_kind\030\013 \002(\0162\025.boa.types.ChangeKi" +
+      "ind\030\n \001(\0162\025.boa.types.ChangeKind\0220\n\021labe" +
+      "l_change_kind\030\013 \001(\0162\025.boa.types.ChangeKi" +
       "nd\"\215\002\n\rStatementKind\022\t\n\005OTHER\020\000\022\t\n\005BLOCK" +
       "\020\001\022\014\n\010TYPEDECL\020\002\022\016\n\nEXPRESSION\020\003\022\010\n\004EXPR" +
       "\020\003\022\020\n\014SYNCHRONIZED\020\004\022\010\n\004SYNC\020\004\022\n\n\006RETURN" +
@@ -29753,8 +29593,8 @@ public final class Ast {
       "ation\030\013 \001(\0132\026.boa.types.Declaration\022\'\n\na" +
       "nnotation\030\014 \001(\0132\023.boa.types.Modifier\022!\n\006",
       "lambda\030\r \001(\0132\021.boa.types.Method\0225\n\026struc" +
-      "tural_change_kind\030\016 \002(\0162\025.boa.types.Chan" +
-      "geKind\0220\n\021label_change_kind\030\017 \002(\0162\025.boa." +
+      "tural_change_kind\030\016 \001(\0162\025.boa.types.Chan" +
+      "geKind\0220\n\021label_change_kind\030\017 \001(\0162\025.boa." +
       "types.ChangeKind\"\223\006\n\016ExpressionKind\022\t\n\005O" +
       "THER\020\000\022\013\n\007LITERAL\020\001\022\r\n\tVARACCESS\020\002\022\013\n\007VA" +
       "RDECL\020\003\022\016\n\nMETHODCALL\020\004\022\010\n\004CAST\020\005\022\016\n\nARR" +
@@ -29781,8 +29621,8 @@ public final class Ast {
       "\027\n\017annotation_name\030\003 \001(\t\022\032\n\022annotation_m" +
       "embers\030\004 \003(\t\0220\n\021annotation_values\030\005 \003(\0132" +
       "\025.boa.types.Expression\022\r\n\005other\030\006 \001(\t\0225\n" +
-      "\026structural_change_kind\030\007 \002(\0162\025.boa.type",
-      "s.ChangeKind\0220\n\021label_change_kind\030\010 \002(\0162" +
+      "\026structural_change_kind\030\007 \001(\0162\025.boa.type",
+      "s.ChangeKind\0220\n\021label_change_kind\030\010 \001(\0162" +
       "\025.boa.types.ChangeKind\"~\n\014ModifierKind\022\t" +
       "\n\005OTHER\020\000\022\016\n\nVISIBILITY\020\001\022\016\n\nANNOTATION\020" +
       "\002\022\t\n\005FINAL\020\003\022\n\n\006STATIC\020\004\022\020\n\014SYNCHRONIZED" +
@@ -29792,9 +29632,9 @@ public final class Ast {
       "ULT\020\004\032\002\020\001\"\306\002\n\007Comment\022,\n\004kind\030\001 \002(\0162\036.bo" +
       "a.types.Comment.CommentKind\022\r\n\005value\030\002 \002" +
       "(\t\022)\n\010position\030\003 \002(\0132\027.boa.types.Positio",
-      "nInfo\0225\n\026structural_change_kind\030\004 \002(\0162\025." +
+      "nInfo\0225\n\026structural_change_kind\030\004 \001(\0162\025." +
       "boa.types.ChangeKind\0220\n\021label_change_kin" +
-      "d\030\005 \002(\0162\025.boa.types.ChangeKind\"j\n\013Commen" +
+      "d\030\005 \001(\0162\025.boa.types.ChangeKind\"j\n\013Commen" +
       "tKind\022\t\n\005OTHER\020\000\022\010\n\004LINE\020\001\022\t\n\005BLOCK\020\002\022\007\n" +
       "\003DOC\020\003\022\021\n\rDOCUMENTATION\020\003\022\010\n\004SPEC\020\004\022\021\n\rS" +
       "PECIFICATION\020\004\032\002\020\001\"{\n\014PositionInfo\022\021\n\tst" +

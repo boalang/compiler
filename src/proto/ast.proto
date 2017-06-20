@@ -18,9 +18,9 @@ message ASTRoot {
 	/** @exclude */
 	repeated string names = 3;
 	/** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED */
-	required ChangeKind structural_change_kind = 4;
+	optional ChangeKind structural_change_kind = 4;
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
-	required ChangeKind label_change_kind = 5;
+	optional ChangeKind label_change_kind = 5;
 }
 
 /** A namespace (aka, package) in a source file */
@@ -38,9 +38,9 @@ message Namespace {
 	/** Expressions contained in this namespace */
 	repeated Expression expressions = 6;
 	/** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED */
-	required ChangeKind structural_change_kind = 7;
+	optional ChangeKind structural_change_kind = 7;
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
-	required ChangeKind label_change_kind = 8;
+	optional ChangeKind label_change_kind = 8;
 }
 
 /** A type declaration, such as a class or interface */
@@ -64,9 +64,9 @@ message Declaration {
 	/** @exclude TODO */
 	repeated Comment comments = 9;
 	/** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED */
-	required ChangeKind structural_change_kind = 10;
+	optional ChangeKind structural_change_kind = 10;
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
-	required ChangeKind label_change_kind = 11;
+	optional ChangeKind label_change_kind = 11;
 }
 
 /** The kinds of types in an AST */
@@ -105,9 +105,9 @@ message Type {
 	/** @exclude */
 	optional string id = 4;
 	/** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED */
-	required ChangeKind structural_change_kind = 5;
+	optional ChangeKind structural_change_kind = 5;
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
-	required ChangeKind label_change_kind = 6;
+	optional ChangeKind label_change_kind = 6;
 }
 
 /** A method declaration */
@@ -133,9 +133,9 @@ message Method {
 	/** @exclude TODO */
 	repeated Comment comments = 8;
 	/** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED */
-	required ChangeKind structural_change_kind = 9;
+	optional ChangeKind structural_change_kind = 9;
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
-	required ChangeKind label_change_kind = 10;
+	optional ChangeKind label_change_kind = 10;
 }
 
 /** A variable declaration - can be a field, local, parameter, etc */
@@ -151,9 +151,9 @@ message Variable {
 	/** @exclude TODO */
 	repeated Comment comments = 5;
 	/** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED */
-	required ChangeKind structural_change_kind = 6;
+	optional ChangeKind structural_change_kind = 6;
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
-	required ChangeKind label_change_kind = 7;
+	optional ChangeKind label_change_kind = 7;
 }
 
 /** A single statement */
@@ -199,9 +199,9 @@ message Statement {
 	optional Declaration type_declaration = 8;
 	optional Expression expression = 9;
 	/** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED */
-	required ChangeKind structural_change_kind = 10;
+	optional ChangeKind structural_change_kind = 10;
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
-	required ChangeKind label_change_kind = 11;
+	optional ChangeKind label_change_kind = 11;
 }
 
 /** A single expression */
@@ -282,9 +282,9 @@ message Expression {
 	/** @exclude */
 	optional Method lambda = 13;
 	/** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED */
-	required ChangeKind structural_change_kind = 14;
+	optional ChangeKind structural_change_kind = 14;
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
-	required ChangeKind label_change_kind = 15;
+	optional ChangeKind label_change_kind = 15;
 }
 
 /** A single modifier */
@@ -338,9 +338,9 @@ message Modifier {
 	/** If the <code>kind</code> is <code>OTHER</code>, the modifier string from the source code */
 	optional string other = 6;
 	/** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED */
-	required ChangeKind structural_change_kind = 7;
+	optional ChangeKind structural_change_kind = 7;
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
-	required ChangeKind label_change_kind = 8;
+	optional ChangeKind label_change_kind = 8;
 }
 
 /** @exclude */
@@ -360,9 +360,9 @@ message Comment {
 	required string value = 2;
 	required PositionInfo position = 3;
 	/** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED */
-	required ChangeKind structural_change_kind = 4;
+	optional ChangeKind structural_change_kind = 4;
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
-	required ChangeKind label_change_kind = 5;
+	optional ChangeKind label_change_kind = 5;
 }
 
 /** @exclude */
