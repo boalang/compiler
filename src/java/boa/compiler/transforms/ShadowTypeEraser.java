@@ -268,40 +268,50 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                                 final Selector test = (Selector)styKind.getLhs().getLhs().getLhs().getLhs().getLhs().getOp(0);
                                 final Identifier testi = test.getId();
                                 // for each switch case see if the kind expression matches
-                                for (final SwitchCase sCase : switchS.getCases()) {
-                                    final Selector s = (Selector)(sCase.getCase(0).getLhs().getLhs().getLhs().getLhs().getLhs().getOp(0));
-                                    final Identifier i = s.getId();
-                                    // for each switch case see if the kind expression matches
-                                    if (testi.getToken().toLowerCase().equals(i.getToken().toLowerCase())) {
-                                        flg = true;
-                                        final Block temp = sCase.getBody();
-                                        // add all cases that match to be removed later
-                                        toRemove.add(sCase);
-                                        // check if the kind is already there if so check the manytomanyMap for already existing cases
-                                        // and get the appropriate tranformantion (eg . if(isinfix))
-                                        for (final Map.Entry<String, BoaShadowType> iter : manytomanyMap.entrySet()) {
-                                            final String shadowtyKind = iter.getKey();
-                                            final BoaShadowType higherType = iter.getValue();
+                                if (((BoaShadowType)visit.getComponent().type).getManytoOne(n.env, b) != null) {
+                                    for (final SwitchCase sCase : switchS.getCases()) {
+                                        final Selector s = (Selector)(sCase.getCase(0).getLhs().getLhs().getLhs().getLhs().getLhs().getOp(0));
+                                        final Identifier i = s.getId();
+                                        // for each switch case see if the kind expression matches
+                                        if (testi.getToken().toLowerCase().equals(i.getToken().toLowerCase())) {
+                                            flg = true;
+                                            final Block temp = sCase.getBody();
+                                            // add all cases that match to be removed later
+                                            toRemove.add(sCase);
+                                            // check if the kind is already there if so check the manytomanyMap for already existing cases
+                                            // and get the appropriate tranformantion (eg . if(isinfix))
+                                            for (final Map.Entry<String, BoaShadowType> iter : manytomanyMap.entrySet()) {
+                                                final String shadowtyKind = iter.getKey();
+                                                final BoaShadowType higherType = iter.getValue();
 
-                                            if (shadowtyKind.toLowerCase().equals(i.getToken().toLowerCase())) {
-                                                toCombine.addStatement(higherType.getManytoOne(n.env, temp));
+                                                if (shadowtyKind.toLowerCase().equals(i.getToken().toLowerCase())) {
+                                                    toCombine.addStatement(higherType.getManytoOne(n.env, temp));
+                                                }
                                             }
+
+                                            toCombine.addStatement(((BoaShadowType)visit.getComponent().type).getManytoOne(n.env, b));
+
                                         }
+                                    }   
 
-                                        toCombine.addStatement(((BoaShadowType)visit.getComponent().type).getManytoOne(n.env, b));
-
+                                    if ( !flg) {
+                                            final Block manyToOneBlock = new Block();
+                                             listExp.add(styKind);
+                                            manyToOneBlock.addStatement(((BoaShadowType)visit.getComponent().type).getManytoOne(n.env, b));
+                                            switchS.addCase(new SwitchCase(false, manyToOneBlock.clone(), listExp));
                                     }
                                 }
                                 // add cases to a map so that we can resolve their origin type (eg . infix vs prefix)
                                 manytomanyMap.put(testi.getToken(), (BoaShadowType)visit.getComponent().type);
 
+                               
                                 if (toCombine.getStatementsSize() > 0 && flg) {
                                     listExp.add(styKind);
                                     switchS.getCases().removeAll(toRemove);
                                     switchS.addCase(new SwitchCase(false, toCombine.clone(), listExp));
                                 }
 
-                                if (!flg) {
+                                if (((BoaShadowType)visit.getComponent().type).getManytoOne(n.env, b) == null && !flg) {
                                     listExp.add(styKind);
                                     switchS.addCase(new SwitchCase(false, b.clone(), listExp));
                                 }
