@@ -2333,28 +2333,28 @@ public final class Code {
     com.google.protobuf.ByteString
         getIdBytes();
 
-    // required .boa.types.Person author = 2;
+    // optional .boa.types.Person author = 2;
     /**
-     * <code>required .boa.types.Person author = 2;</code>
+     * <code>optional .boa.types.Person author = 2;</code>
      *
      * <pre>
-     ** The person who authored the revision, if known, otherwise the same as committer 
+     ** The person who authored the revision, if known 
      * </pre>
      */
     boolean hasAuthor();
     /**
-     * <code>required .boa.types.Person author = 2;</code>
+     * <code>optional .boa.types.Person author = 2;</code>
      *
      * <pre>
-     ** The person who authored the revision, if known, otherwise the same as committer 
+     ** The person who authored the revision, if known 
      * </pre>
      */
     boa.types.Shared.Person getAuthor();
     /**
-     * <code>required .boa.types.Person author = 2;</code>
+     * <code>optional .boa.types.Person author = 2;</code>
      *
      * <pre>
-     ** The person who authored the revision, if known, otherwise the same as committer 
+     ** The person who authored the revision, if known 
      * </pre>
      */
     boa.types.Shared.PersonOrBuilder getAuthorOrBuilder();
@@ -2777,34 +2777,34 @@ public final class Code {
       }
     }
 
-    // required .boa.types.Person author = 2;
+    // optional .boa.types.Person author = 2;
     public static final int AUTHOR_FIELD_NUMBER = 2;
     private boa.types.Shared.Person author_;
     /**
-     * <code>required .boa.types.Person author = 2;</code>
+     * <code>optional .boa.types.Person author = 2;</code>
      *
      * <pre>
-     ** The person who authored the revision, if known, otherwise the same as committer 
+     ** The person who authored the revision, if known 
      * </pre>
      */
     public boolean hasAuthor() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
-     * <code>required .boa.types.Person author = 2;</code>
+     * <code>optional .boa.types.Person author = 2;</code>
      *
      * <pre>
-     ** The person who authored the revision, if known, otherwise the same as committer 
+     ** The person who authored the revision, if known 
      * </pre>
      */
     public boa.types.Shared.Person getAuthor() {
       return author_;
     }
     /**
-     * <code>required .boa.types.Person author = 2;</code>
+     * <code>optional .boa.types.Person author = 2;</code>
      *
      * <pre>
-     ** The person who authored the revision, if known, otherwise the same as committer 
+     ** The person who authored the revision, if known 
      * </pre>
      */
     public boa.types.Shared.PersonOrBuilder getAuthorOrBuilder() {
@@ -3069,10 +3069,6 @@ public final class Code {
         memoizedIsInitialized = 0;
         return false;
       }
-      if (!hasAuthor()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
       if (!hasCommitter()) {
         memoizedIsInitialized = 0;
         return false;
@@ -3085,9 +3081,11 @@ public final class Code {
         memoizedIsInitialized = 0;
         return false;
       }
-      if (!getAuthor().isInitialized()) {
-        memoizedIsInitialized = 0;
-        return false;
+      if (hasAuthor()) {
+        if (!getAuthor().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
       }
       if (!getCommitter().isInitialized()) {
         memoizedIsInitialized = 0;
@@ -3497,10 +3495,6 @@ public final class Code {
           
           return false;
         }
-        if (!hasAuthor()) {
-          
-          return false;
-        }
         if (!hasCommitter()) {
           
           return false;
@@ -3513,9 +3507,11 @@ public final class Code {
           
           return false;
         }
-        if (!getAuthor().isInitialized()) {
-          
-          return false;
+        if (hasAuthor()) {
+          if (!getAuthor().isInitialized()) {
+            
+            return false;
+          }
         }
         if (!getCommitter().isInitialized()) {
           
@@ -3647,25 +3643,25 @@ public final class Code {
         return this;
       }
 
-      // required .boa.types.Person author = 2;
+      // optional .boa.types.Person author = 2;
       private boa.types.Shared.Person author_ = boa.types.Shared.Person.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           boa.types.Shared.Person, boa.types.Shared.Person.Builder, boa.types.Shared.PersonOrBuilder> authorBuilder_;
       /**
-       * <code>required .boa.types.Person author = 2;</code>
+       * <code>optional .boa.types.Person author = 2;</code>
        *
        * <pre>
-       ** The person who authored the revision, if known, otherwise the same as committer 
+       ** The person who authored the revision, if known 
        * </pre>
        */
       public boolean hasAuthor() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
-       * <code>required .boa.types.Person author = 2;</code>
+       * <code>optional .boa.types.Person author = 2;</code>
        *
        * <pre>
-       ** The person who authored the revision, if known, otherwise the same as committer 
+       ** The person who authored the revision, if known 
        * </pre>
        */
       public boa.types.Shared.Person getAuthor() {
@@ -3676,10 +3672,10 @@ public final class Code {
         }
       }
       /**
-       * <code>required .boa.types.Person author = 2;</code>
+       * <code>optional .boa.types.Person author = 2;</code>
        *
        * <pre>
-       ** The person who authored the revision, if known, otherwise the same as committer 
+       ** The person who authored the revision, if known 
        * </pre>
        */
       public Builder setAuthor(boa.types.Shared.Person value) {
@@ -3696,10 +3692,10 @@ public final class Code {
         return this;
       }
       /**
-       * <code>required .boa.types.Person author = 2;</code>
+       * <code>optional .boa.types.Person author = 2;</code>
        *
        * <pre>
-       ** The person who authored the revision, if known, otherwise the same as committer 
+       ** The person who authored the revision, if known 
        * </pre>
        */
       public Builder setAuthor(
@@ -3714,10 +3710,10 @@ public final class Code {
         return this;
       }
       /**
-       * <code>required .boa.types.Person author = 2;</code>
+       * <code>optional .boa.types.Person author = 2;</code>
        *
        * <pre>
-       ** The person who authored the revision, if known, otherwise the same as committer 
+       ** The person who authored the revision, if known 
        * </pre>
        */
       public Builder mergeAuthor(boa.types.Shared.Person value) {
@@ -3737,10 +3733,10 @@ public final class Code {
         return this;
       }
       /**
-       * <code>required .boa.types.Person author = 2;</code>
+       * <code>optional .boa.types.Person author = 2;</code>
        *
        * <pre>
-       ** The person who authored the revision, if known, otherwise the same as committer 
+       ** The person who authored the revision, if known 
        * </pre>
        */
       public Builder clearAuthor() {
@@ -3754,10 +3750,10 @@ public final class Code {
         return this;
       }
       /**
-       * <code>required .boa.types.Person author = 2;</code>
+       * <code>optional .boa.types.Person author = 2;</code>
        *
        * <pre>
-       ** The person who authored the revision, if known, otherwise the same as committer 
+       ** The person who authored the revision, if known 
        * </pre>
        */
       public boa.types.Shared.Person.Builder getAuthorBuilder() {
@@ -3766,10 +3762,10 @@ public final class Code {
         return getAuthorFieldBuilder().getBuilder();
       }
       /**
-       * <code>required .boa.types.Person author = 2;</code>
+       * <code>optional .boa.types.Person author = 2;</code>
        *
        * <pre>
-       ** The person who authored the revision, if known, otherwise the same as committer 
+       ** The person who authored the revision, if known 
        * </pre>
        */
       public boa.types.Shared.PersonOrBuilder getAuthorOrBuilder() {
@@ -3780,10 +3776,10 @@ public final class Code {
         }
       }
       /**
-       * <code>required .boa.types.Person author = 2;</code>
+       * <code>optional .boa.types.Person author = 2;</code>
        *
        * <pre>
-       ** The person who authored the revision, if known, otherwise the same as committer 
+       ** The person who authored the revision, if known 
        * </pre>
        */
       private com.google.protobuf.SingleFieldBuilder<
@@ -4640,7 +4636,7 @@ public final class Code {
       "\007\n\003SVN\020\001\022\016\n\nSUBVERSION\020\001\022\007\n\003CVS\020\002\022\007\n\003GIT" +
       "\020\003\022\006\n\002HG\020\004\022\r\n\tMERCURIAL\020\004\022\007\n\003BZR\020\005\022\n\n\006BA" +
       "ZAAR\020\005\032\002\020\001\"\313\001\n\010Revision\022\n\n\002id\030\001 \002(\t\022!\n\006a",
-      "uthor\030\002 \002(\0132\021.boa.types.Person\022$\n\tcommit" +
+      "uthor\030\002 \001(\0132\021.boa.types.Person\022$\n\tcommit" +
       "ter\030\003 \002(\0132\021.boa.types.Person\022\023\n\013commit_d" +
       "ate\030\004 \002(\004\022\013\n\003log\030\005 \002(\t\022%\n\005files\030\006 \003(\0132\026." +
       "boa.types.ChangedFile\022\017\n\007parents\030\007 \003(\005\022\020" +

@@ -258,36 +258,36 @@ public final class Shared {
     com.google.protobuf.ByteString
         getUsernameBytes();
 
-    // required string real_name = 2;
+    // optional string real_name = 2;
     /**
-     * <code>required string real_name = 2;</code>
+     * <code>optional string real_name = 2;</code>
      *
      * <pre>
-     ** The person's real name, if known, otherwise the same as username 
+     ** The person's real name, if known 
      * </pre>
      */
     boolean hasRealName();
     /**
-     * <code>required string real_name = 2;</code>
+     * <code>optional string real_name = 2;</code>
      *
      * <pre>
-     ** The person's real name, if known, otherwise the same as username 
+     ** The person's real name, if known 
      * </pre>
      */
     java.lang.String getRealName();
     /**
-     * <code>required string real_name = 2;</code>
+     * <code>optional string real_name = 2;</code>
      *
      * <pre>
-     ** The person's real name, if known, otherwise the same as username 
+     ** The person's real name, if known 
      * </pre>
      */
     com.google.protobuf.ByteString
         getRealNameBytes();
 
-    // required string email = 3;
+    // optional string email = 3;
     /**
-     * <code>required string email = 3;</code>
+     * <code>optional string email = 3;</code>
      *
      * <pre>
      ** The person's email address, if known 
@@ -295,7 +295,7 @@ public final class Shared {
      */
     boolean hasEmail();
     /**
-     * <code>required string email = 3;</code>
+     * <code>optional string email = 3;</code>
      *
      * <pre>
      ** The person's email address, if known 
@@ -303,7 +303,7 @@ public final class Shared {
      */
     java.lang.String getEmail();
     /**
-     * <code>required string email = 3;</code>
+     * <code>optional string email = 3;</code>
      *
      * <pre>
      ** The person's email address, if known 
@@ -477,24 +477,24 @@ public final class Shared {
       }
     }
 
-    // required string real_name = 2;
+    // optional string real_name = 2;
     public static final int REAL_NAME_FIELD_NUMBER = 2;
     private java.lang.Object realName_;
     /**
-     * <code>required string real_name = 2;</code>
+     * <code>optional string real_name = 2;</code>
      *
      * <pre>
-     ** The person's real name, if known, otherwise the same as username 
+     ** The person's real name, if known 
      * </pre>
      */
     public boolean hasRealName() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
-     * <code>required string real_name = 2;</code>
+     * <code>optional string real_name = 2;</code>
      *
      * <pre>
-     ** The person's real name, if known, otherwise the same as username 
+     ** The person's real name, if known 
      * </pre>
      */
     public java.lang.String getRealName() {
@@ -512,10 +512,10 @@ public final class Shared {
       }
     }
     /**
-     * <code>required string real_name = 2;</code>
+     * <code>optional string real_name = 2;</code>
      *
      * <pre>
-     ** The person's real name, if known, otherwise the same as username 
+     ** The person's real name, if known 
      * </pre>
      */
     public com.google.protobuf.ByteString
@@ -532,11 +532,11 @@ public final class Shared {
       }
     }
 
-    // required string email = 3;
+    // optional string email = 3;
     public static final int EMAIL_FIELD_NUMBER = 3;
     private java.lang.Object email_;
     /**
-     * <code>required string email = 3;</code>
+     * <code>optional string email = 3;</code>
      *
      * <pre>
      ** The person's email address, if known 
@@ -546,7 +546,7 @@ public final class Shared {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
-     * <code>required string email = 3;</code>
+     * <code>optional string email = 3;</code>
      *
      * <pre>
      ** The person's email address, if known 
@@ -567,7 +567,7 @@ public final class Shared {
       }
     }
     /**
-     * <code>required string email = 3;</code>
+     * <code>optional string email = 3;</code>
      *
      * <pre>
      ** The person's email address, if known 
@@ -598,14 +598,6 @@ public final class Shared {
       if (isInitialized != -1) return isInitialized == 1;
 
       if (!hasUsername()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasRealName()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasEmail()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -852,14 +844,6 @@ public final class Shared {
           
           return false;
         }
-        if (!hasRealName()) {
-          
-          return false;
-        }
-        if (!hasEmail()) {
-          
-          return false;
-        }
         return true;
       }
 
@@ -980,23 +964,23 @@ public final class Shared {
         return this;
       }
 
-      // required string real_name = 2;
+      // optional string real_name = 2;
       private java.lang.Object realName_ = "";
       /**
-       * <code>required string real_name = 2;</code>
+       * <code>optional string real_name = 2;</code>
        *
        * <pre>
-       ** The person's real name, if known, otherwise the same as username 
+       ** The person's real name, if known 
        * </pre>
        */
       public boolean hasRealName() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
-       * <code>required string real_name = 2;</code>
+       * <code>optional string real_name = 2;</code>
        *
        * <pre>
-       ** The person's real name, if known, otherwise the same as username 
+       ** The person's real name, if known 
        * </pre>
        */
       public java.lang.String getRealName() {
@@ -1011,10 +995,10 @@ public final class Shared {
         }
       }
       /**
-       * <code>required string real_name = 2;</code>
+       * <code>optional string real_name = 2;</code>
        *
        * <pre>
-       ** The person's real name, if known, otherwise the same as username 
+       ** The person's real name, if known 
        * </pre>
        */
       public com.google.protobuf.ByteString
@@ -1031,10 +1015,10 @@ public final class Shared {
         }
       }
       /**
-       * <code>required string real_name = 2;</code>
+       * <code>optional string real_name = 2;</code>
        *
        * <pre>
-       ** The person's real name, if known, otherwise the same as username 
+       ** The person's real name, if known 
        * </pre>
        */
       public Builder setRealName(
@@ -1048,10 +1032,10 @@ public final class Shared {
         return this;
       }
       /**
-       * <code>required string real_name = 2;</code>
+       * <code>optional string real_name = 2;</code>
        *
        * <pre>
-       ** The person's real name, if known, otherwise the same as username 
+       ** The person's real name, if known 
        * </pre>
        */
       public Builder clearRealName() {
@@ -1061,10 +1045,10 @@ public final class Shared {
         return this;
       }
       /**
-       * <code>required string real_name = 2;</code>
+       * <code>optional string real_name = 2;</code>
        *
        * <pre>
-       ** The person's real name, if known, otherwise the same as username 
+       ** The person's real name, if known 
        * </pre>
        */
       public Builder setRealNameBytes(
@@ -1078,10 +1062,10 @@ public final class Shared {
         return this;
       }
 
-      // required string email = 3;
+      // optional string email = 3;
       private java.lang.Object email_ = "";
       /**
-       * <code>required string email = 3;</code>
+       * <code>optional string email = 3;</code>
        *
        * <pre>
        ** The person's email address, if known 
@@ -1091,7 +1075,7 @@ public final class Shared {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
-       * <code>required string email = 3;</code>
+       * <code>optional string email = 3;</code>
        *
        * <pre>
        ** The person's email address, if known 
@@ -1109,7 +1093,7 @@ public final class Shared {
         }
       }
       /**
-       * <code>required string email = 3;</code>
+       * <code>optional string email = 3;</code>
        *
        * <pre>
        ** The person's email address, if known 
@@ -1129,7 +1113,7 @@ public final class Shared {
         }
       }
       /**
-       * <code>required string email = 3;</code>
+       * <code>optional string email = 3;</code>
        *
        * <pre>
        ** The person's email address, if known 
@@ -1146,7 +1130,7 @@ public final class Shared {
         return this;
       }
       /**
-       * <code>required string email = 3;</code>
+       * <code>optional string email = 3;</code>
        *
        * <pre>
        ** The person's email address, if known 
@@ -1159,7 +1143,7 @@ public final class Shared {
         return this;
       }
       /**
-       * <code>required string email = 3;</code>
+       * <code>optional string email = 3;</code>
        *
        * <pre>
        ** The person's email address, if known 
@@ -1202,8 +1186,8 @@ public final class Shared {
   static {
     java.lang.String[] descriptorData = {
       "\n\014shared.proto\022\tboa.types\"<\n\006Person\022\020\n\010u" +
-      "sername\030\001 \002(\t\022\021\n\treal_name\030\002 \002(\t\022\r\n\005emai" +
-      "l\030\003 \002(\t*\200\001\n\nChangeKind\022\t\n\005ADDED\020\001\022\013\n\007DEL" +
+      "sername\030\001 \002(\t\022\021\n\treal_name\030\002 \001(\t\022\r\n\005emai" +
+      "l\030\003 \001(\t*\200\001\n\nChangeKind\022\t\n\005ADDED\020\001\022\013\n\007DEL" +
       "ETED\020\002\022\013\n\007REMOVED\020\002\022\014\n\010MODIFIED\020\003\022\013\n\007CHA" +
       "NGED\020\003\022\013\n\007RENAMED\020\004\022\t\n\005MOVED\020\004\022\n\n\006COPIED" +
       "\020\005\022\n\n\006MERGED\020\006\032\002\020\001B\002H\001"
