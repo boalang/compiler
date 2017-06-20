@@ -12,7 +12,7 @@ public final class Shared {
    * Protobuf enum {@code boa.types.ChangeKind}
    *
    * <pre>
-   ** Describes the kind of change for the file 
+   ** Describes the kind of change for an artifact or program entity/element 
    * </pre>
    */
   public enum ChangeKind
@@ -21,7 +21,7 @@ public final class Shared {
      * <code>ADDED = 1;</code>
      *
      * <pre>
-     ** The file did not already exist and was added 
+     ** The artifact or program entity/element did not already exist and was added 
      * </pre>
      */
     ADDED(0, 1),
@@ -29,7 +29,7 @@ public final class Shared {
      * <code>DELETED = 2;</code>
      *
      * <pre>
-     ** The file was deleted 
+     ** The artifact or program entity/element was deleted 
      * </pre>
      */
     DELETED(1, 2),
@@ -37,7 +37,7 @@ public final class Shared {
      * <code>MODIFIED = 3;</code>
      *
      * <pre>
-     ** The file already existed and was modified 
+     ** The artifact or program entity/element already existed and was modified 
      * </pre>
      */
     MODIFIED(3, 3),
@@ -45,7 +45,7 @@ public final class Shared {
      * <code>RENAMED = 4;</code>
      *
      * <pre>
-     ** @exclude 
+     ** The label of the artifact or program entity/element was renamed 
      * </pre>
      */
     RENAMED(5, 4),
@@ -53,7 +53,7 @@ public final class Shared {
      * <code>COPIED = 5;</code>
      *
      * <pre>
-     ** @exclude 
+     ** The artifact or program entity/element was copied from another one 
      * </pre>
      */
     COPIED(7, 5),
@@ -61,10 +61,18 @@ public final class Shared {
      * <code>MERGED = 6;</code>
      *
      * <pre>
-     ** The file is merged 
+     ** The artifact or program entity/element was merged 
      * </pre>
      */
     MERGED(8, 6),
+    /**
+     * <code>UNCHANGED = 7;</code>
+     *
+     * <pre>
+     ** The artifact or program entity/element was unchanged 
+     * </pre>
+     */
+    UNCHANGED(9, 7),
     ;
 
     /**
@@ -79,7 +87,7 @@ public final class Shared {
      * <code>CHANGED = 3;</code>
      *
      * <pre>
-     ** @exclude 
+     ** The artifact or program entity/element already existed and was changed 
      * </pre>
      */
     public static final ChangeKind CHANGED = MODIFIED;
@@ -87,7 +95,7 @@ public final class Shared {
      * <code>MOVED = 4;</code>
      *
      * <pre>
-     ** @exclude 
+     ** The artifact or program entity/element was moved to a different parent 
      * </pre>
      */
     public static final ChangeKind MOVED = RENAMED;
@@ -95,7 +103,7 @@ public final class Shared {
      * <code>ADDED = 1;</code>
      *
      * <pre>
-     ** The file did not already exist and was added 
+     ** The artifact or program entity/element did not already exist and was added 
      * </pre>
      */
     public static final int ADDED_VALUE = 1;
@@ -103,7 +111,7 @@ public final class Shared {
      * <code>DELETED = 2;</code>
      *
      * <pre>
-     ** The file was deleted 
+     ** The artifact or program entity/element was deleted 
      * </pre>
      */
     public static final int DELETED_VALUE = 2;
@@ -119,7 +127,7 @@ public final class Shared {
      * <code>MODIFIED = 3;</code>
      *
      * <pre>
-     ** The file already existed and was modified 
+     ** The artifact or program entity/element already existed and was modified 
      * </pre>
      */
     public static final int MODIFIED_VALUE = 3;
@@ -127,7 +135,7 @@ public final class Shared {
      * <code>CHANGED = 3;</code>
      *
      * <pre>
-     ** @exclude 
+     ** The artifact or program entity/element already existed and was changed 
      * </pre>
      */
     public static final int CHANGED_VALUE = 3;
@@ -135,7 +143,7 @@ public final class Shared {
      * <code>RENAMED = 4;</code>
      *
      * <pre>
-     ** @exclude 
+     ** The label of the artifact or program entity/element was renamed 
      * </pre>
      */
     public static final int RENAMED_VALUE = 4;
@@ -143,7 +151,7 @@ public final class Shared {
      * <code>MOVED = 4;</code>
      *
      * <pre>
-     ** @exclude 
+     ** The artifact or program entity/element was moved to a different parent 
      * </pre>
      */
     public static final int MOVED_VALUE = 4;
@@ -151,7 +159,7 @@ public final class Shared {
      * <code>COPIED = 5;</code>
      *
      * <pre>
-     ** @exclude 
+     ** The artifact or program entity/element was copied from another one 
      * </pre>
      */
     public static final int COPIED_VALUE = 5;
@@ -159,10 +167,18 @@ public final class Shared {
      * <code>MERGED = 6;</code>
      *
      * <pre>
-     ** The file is merged 
+     ** The artifact or program entity/element was merged 
      * </pre>
      */
     public static final int MERGED_VALUE = 6;
+    /**
+     * <code>UNCHANGED = 7;</code>
+     *
+     * <pre>
+     ** The artifact or program entity/element was unchanged 
+     * </pre>
+     */
+    public static final int UNCHANGED_VALUE = 7;
 
 
     public final int getNumber() { return value; }
@@ -175,6 +191,7 @@ public final class Shared {
         case 4: return RENAMED;
         case 5: return COPIED;
         case 6: return MERGED;
+        case 7: return UNCHANGED;
         default: return null;
       }
     }
@@ -205,7 +222,7 @@ public final class Shared {
     }
 
     private static final ChangeKind[] VALUES = {
-      ADDED, DELETED, REMOVED, MODIFIED, CHANGED, RENAMED, MOVED, COPIED, MERGED, 
+      ADDED, DELETED, REMOVED, MODIFIED, CHANGED, RENAMED, MOVED, COPIED, MERGED, UNCHANGED, 
     };
 
     public static ChangeKind valueOf(
@@ -1187,10 +1204,10 @@ public final class Shared {
     java.lang.String[] descriptorData = {
       "\n\014shared.proto\022\tboa.types\"<\n\006Person\022\020\n\010u" +
       "sername\030\001 \002(\t\022\021\n\treal_name\030\002 \001(\t\022\r\n\005emai" +
-      "l\030\003 \001(\t*\200\001\n\nChangeKind\022\t\n\005ADDED\020\001\022\013\n\007DEL" +
+      "l\030\003 \001(\t*\217\001\n\nChangeKind\022\t\n\005ADDED\020\001\022\013\n\007DEL" +
       "ETED\020\002\022\013\n\007REMOVED\020\002\022\014\n\010MODIFIED\020\003\022\013\n\007CHA" +
       "NGED\020\003\022\013\n\007RENAMED\020\004\022\t\n\005MOVED\020\004\022\n\n\006COPIED" +
-      "\020\005\022\n\n\006MERGED\020\006\032\002\020\001B\002H\001"
+      "\020\005\022\n\n\006MERGED\020\006\022\r\n\tUNCHANGED\020\007\032\002\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
