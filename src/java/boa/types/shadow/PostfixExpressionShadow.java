@@ -99,8 +99,8 @@ public class PostfixExpressionShadow extends BoaShadowType  {
 
     /** {@inheritDoc} */
     @Override
-    public LinkedList<Expression> getOneToMany(final SymbolTable env) {
-        LinkedList<Expression> postfixList = new LinkedList<Expression>(); 
+    public List<Expression> getOneToMany(final SymbolTable env) {
+        List<Expression> postfixList = new ArrayList<Expression>(); 
         
 
         postfixList.add(getKindExpression("ExpressionKind", "OP_DEC", new ExpressionKindProtoMap(), env));

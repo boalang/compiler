@@ -95,8 +95,8 @@ public class AssignmentShadow extends BoaShadowType  {
 
     // /** {@inheritDoc} */
     @Override
-    public LinkedList<Expression> getOneToMany(final SymbolTable env) {
-        LinkedList<Expression> assignList = new LinkedList<Expression>(); 
+    public List<Expression> getOneToMany(final SymbolTable env) {
+        List<Expression> assignList = new ArrayList<Expression>(); 
         
       
         assignList.add(getKindExpression("ExpressionKind", "ASSIGN_BITAND", new ExpressionKindProtoMap(), env));

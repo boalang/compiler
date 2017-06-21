@@ -94,8 +94,8 @@ public class PrefixExpressionShadow extends BoaShadowType  {
 
     /** {@inheritDoc} */
     @Override
-    public LinkedList<Expression> getOneToMany(final SymbolTable env) {
-        LinkedList<Expression> prefixList = new LinkedList<Expression>(); 
+    public List<Expression> getOneToMany(final SymbolTable env) {
+        List<Expression> prefixList = new ArrayList<Expression>(); 
                
         prefixList.add(getKindExpression("ExpressionKind", "BIT_NOT", new ExpressionKindProtoMap(), env));
         prefixList.add(getKindExpression("ExpressionKind", "OP_DEC", new ExpressionKindProtoMap(), env));

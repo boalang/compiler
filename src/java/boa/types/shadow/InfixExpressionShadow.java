@@ -126,8 +126,8 @@ public class InfixExpressionShadow extends BoaShadowType  {
 
     /** {@inheritDoc} */
     @Override
-    public LinkedList<Expression> getOneToMany(final SymbolTable env) {
-        LinkedList<Expression> infixList = new LinkedList<Expression>(); 
+    public List<Expression> getOneToMany(final SymbolTable env) {
+        List<Expression> infixList = new ArrayList<Expression>(); 
         
 
         infixList.add(getKindExpression("ExpressionKind", "BIT_XOR", new ExpressionKindProtoMap(), env));
