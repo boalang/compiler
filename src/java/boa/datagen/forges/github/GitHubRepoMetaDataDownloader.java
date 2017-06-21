@@ -19,7 +19,7 @@ public class GitHubRepoMetaDataDownloader {
 	public final String repoNameDir;
 	public final String langNameDir;
 	public final String tokenFile;
-	public final static int MAX_NUM_THREADS = 5;
+	public final static int MAX_NUM_THREADS = 10;
 	public static THashSet<String> names = new THashSet<String>();
 	
 	public GitHubRepoMetaDataDownloader(String input, String output, String tokenFile) {
