@@ -35,7 +35,7 @@ import boa.compiler.ast.statements.Block;
  * @author kaushin
  */
 public abstract class BoaShadowType extends BoaTuple {
-    private final BoaProtoTuple shadowedType;
+    protected final BoaProtoTuple shadowedType;
 
     /**
      * Construct a {@link BoaShadowType}.
