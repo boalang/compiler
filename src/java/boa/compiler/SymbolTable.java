@@ -152,6 +152,7 @@ public class SymbolTable {
 		idmap.put("Assignment", new AssignmentShadow());
 		idmap.put("BooleanLiteral", new BooleanLiteralShadow());
 		idmap.put("CharLiteral", new CharacterLiteralShadow());		
+		idmap.put("WhileStatement", new WhileStatementShadow());		
 
 		globalFunctions = new FunctionTrie();
 
