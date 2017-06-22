@@ -84,7 +84,7 @@ message Issue {
 	/** The issue's number */
 	required uint32 number = 30;
 	/** The issue's labels */
-	repeated IssueLabel labels = 31;
+	repeated string labels = 31;
 }
 
 message Attachment {
@@ -120,14 +120,3 @@ message IssueChange {
 	optional string description = 7;
 }
 
-/** An issue label */
-message IssueLabel {
-	/** The label's 'name' */
-	required string name = 1;
-	/** The label's id */
-	optional string id = 2;
-	/** The hexadecimal code for the label's color */
-	optional string color = 3;
-	/** Is the label a 'default' label */
-	optional string default = 4;
-}
