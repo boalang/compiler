@@ -5,27 +5,14 @@ import "shared.proto";
 option optimize_for = SPEED;
 
 message IssueRepository {
-	enum IssueKind {
-		OTHER = 0;
-		BUGS = 1;
-		FEATURES = 2;
-		SUPPORT = 3;
-		PATCHES = 4;
-		CONFIRMED = 5;
-		CRITICAL = 6;
-		DISCUSION = 7;
-		DOCUMENTATION = 8;
-		SUGGESTION = 9;
-		ENHANCMENT = 10;
-		
-	}
 	required string url = 1;
-	required IssueKind kind = 2;
+	required string name = 2;
 	required string key = 3;
 }
 
 message IssuesRoot {
 	repeated Issue issues = 1;
+	required IssueRepository issue_repository = 2;
 }
 
 /** An issue in the repository */
