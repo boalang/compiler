@@ -158,7 +158,7 @@ public final class Diff {
      * <code>repeated .boa.types.ChangeKind changes = 7;</code>
      *
      * <pre>
-     ** @exclude TODO 
+     ** @exclude The kinds of changes of this this compared to the corresponding parent commits 
      * </pre>
      */
     java.util.List<boa.types.Shared.ChangeKind> getChangesList();
@@ -166,7 +166,7 @@ public final class Diff {
      * <code>repeated .boa.types.ChangeKind changes = 7;</code>
      *
      * <pre>
-     ** @exclude TODO 
+     ** @exclude The kinds of changes of this this compared to the corresponding parent commits 
      * </pre>
      */
     int getChangesCount();
@@ -174,7 +174,7 @@ public final class Diff {
      * <code>repeated .boa.types.ChangeKind changes = 7;</code>
      *
      * <pre>
-     ** @exclude TODO 
+     ** @exclude The kinds of changes of this this compared to the corresponding parent commits 
      * </pre>
      */
     boa.types.Shared.ChangeKind getChanges(int index);
@@ -184,7 +184,7 @@ public final class Diff {
      * <code>repeated int32 previous_versions = 8;</code>
      *
      * <pre>
-     ** @exclude TODO 
+     ** @exclude The indices of the corresponding parent commits in the list of all commits 
      * </pre>
      */
     java.util.List<java.lang.Integer> getPreviousVersionsList();
@@ -192,7 +192,7 @@ public final class Diff {
      * <code>repeated int32 previous_versions = 8;</code>
      *
      * <pre>
-     ** @exclude TODO 
+     ** @exclude The indices of the corresponding parent commits in the list of all commits 
      * </pre>
      */
     int getPreviousVersionsCount();
@@ -200,7 +200,7 @@ public final class Diff {
      * <code>repeated int32 previous_versions = 8;</code>
      *
      * <pre>
-     ** @exclude TODO 
+     ** @exclude The indices of the corresponding parent commits in the list of all commits 
      * </pre>
      */
     int getPreviousVersions(int index);
@@ -210,7 +210,7 @@ public final class Diff {
      * <code>repeated int32 previous_index = 9;</code>
      *
      * <pre>
-     ** @exclude TODO 
+     ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
      * </pre>
      */
     java.util.List<java.lang.Integer> getPreviousIndexList();
@@ -218,7 +218,7 @@ public final class Diff {
      * <code>repeated int32 previous_index = 9;</code>
      *
      * <pre>
-     ** @exclude TODO 
+     ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
      * </pre>
      */
     int getPreviousIndexCount();
@@ -226,7 +226,7 @@ public final class Diff {
      * <code>repeated int32 previous_index = 9;</code>
      *
      * <pre>
-     ** @exclude TODO 
+     ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
      * </pre>
      */
     int getPreviousIndex(int index);
@@ -1269,7 +1269,7 @@ public final class Diff {
      * <code>repeated .boa.types.ChangeKind changes = 7;</code>
      *
      * <pre>
-     ** @exclude TODO 
+     ** @exclude The kinds of changes of this this compared to the corresponding parent commits 
      * </pre>
      */
     public java.util.List<boa.types.Shared.ChangeKind> getChangesList() {
@@ -1279,7 +1279,7 @@ public final class Diff {
      * <code>repeated .boa.types.ChangeKind changes = 7;</code>
      *
      * <pre>
-     ** @exclude TODO 
+     ** @exclude The kinds of changes of this this compared to the corresponding parent commits 
      * </pre>
      */
     public int getChangesCount() {
@@ -1289,7 +1289,7 @@ public final class Diff {
      * <code>repeated .boa.types.ChangeKind changes = 7;</code>
      *
      * <pre>
-     ** @exclude TODO 
+     ** @exclude The kinds of changes of this this compared to the corresponding parent commits 
      * </pre>
      */
     public boa.types.Shared.ChangeKind getChanges(int index) {
@@ -1303,7 +1303,7 @@ public final class Diff {
      * <code>repeated int32 previous_versions = 8;</code>
      *
      * <pre>
-     ** @exclude TODO 
+     ** @exclude The indices of the corresponding parent commits in the list of all commits 
      * </pre>
      */
     public java.util.List<java.lang.Integer>
@@ -1314,7 +1314,7 @@ public final class Diff {
      * <code>repeated int32 previous_versions = 8;</code>
      *
      * <pre>
-     ** @exclude TODO 
+     ** @exclude The indices of the corresponding parent commits in the list of all commits 
      * </pre>
      */
     public int getPreviousVersionsCount() {
@@ -1324,7 +1324,7 @@ public final class Diff {
      * <code>repeated int32 previous_versions = 8;</code>
      *
      * <pre>
-     ** @exclude TODO 
+     ** @exclude The indices of the corresponding parent commits in the list of all commits 
      * </pre>
      */
     public int getPreviousVersions(int index) {
@@ -1338,7 +1338,7 @@ public final class Diff {
      * <code>repeated int32 previous_index = 9;</code>
      *
      * <pre>
-     ** @exclude TODO 
+     ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
      * </pre>
      */
     public java.util.List<java.lang.Integer>
@@ -1349,7 +1349,7 @@ public final class Diff {
      * <code>repeated int32 previous_index = 9;</code>
      *
      * <pre>
-     ** @exclude TODO 
+     ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
      * </pre>
      */
     public int getPreviousIndexCount() {
@@ -1359,7 +1359,7 @@ public final class Diff {
      * <code>repeated int32 previous_index = 9;</code>
      *
      * <pre>
-     ** @exclude TODO 
+     ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
      * </pre>
      */
     public int getPreviousIndex(int index) {
@@ -2469,7 +2469,7 @@ public final class Diff {
        * <code>repeated .boa.types.ChangeKind changes = 7;</code>
        *
        * <pre>
-       ** @exclude TODO 
+       ** @exclude The kinds of changes of this this compared to the corresponding parent commits 
        * </pre>
        */
       public java.util.List<boa.types.Shared.ChangeKind> getChangesList() {
@@ -2479,7 +2479,7 @@ public final class Diff {
        * <code>repeated .boa.types.ChangeKind changes = 7;</code>
        *
        * <pre>
-       ** @exclude TODO 
+       ** @exclude The kinds of changes of this this compared to the corresponding parent commits 
        * </pre>
        */
       public int getChangesCount() {
@@ -2489,7 +2489,7 @@ public final class Diff {
        * <code>repeated .boa.types.ChangeKind changes = 7;</code>
        *
        * <pre>
-       ** @exclude TODO 
+       ** @exclude The kinds of changes of this this compared to the corresponding parent commits 
        * </pre>
        */
       public boa.types.Shared.ChangeKind getChanges(int index) {
@@ -2499,7 +2499,7 @@ public final class Diff {
        * <code>repeated .boa.types.ChangeKind changes = 7;</code>
        *
        * <pre>
-       ** @exclude TODO 
+       ** @exclude The kinds of changes of this this compared to the corresponding parent commits 
        * </pre>
        */
       public Builder setChanges(
@@ -2516,7 +2516,7 @@ public final class Diff {
        * <code>repeated .boa.types.ChangeKind changes = 7;</code>
        *
        * <pre>
-       ** @exclude TODO 
+       ** @exclude The kinds of changes of this this compared to the corresponding parent commits 
        * </pre>
        */
       public Builder addChanges(boa.types.Shared.ChangeKind value) {
@@ -2532,7 +2532,7 @@ public final class Diff {
        * <code>repeated .boa.types.ChangeKind changes = 7;</code>
        *
        * <pre>
-       ** @exclude TODO 
+       ** @exclude The kinds of changes of this this compared to the corresponding parent commits 
        * </pre>
        */
       public Builder addAllChanges(
@@ -2546,7 +2546,7 @@ public final class Diff {
        * <code>repeated .boa.types.ChangeKind changes = 7;</code>
        *
        * <pre>
-       ** @exclude TODO 
+       ** @exclude The kinds of changes of this this compared to the corresponding parent commits 
        * </pre>
        */
       public Builder clearChanges() {
@@ -2568,7 +2568,7 @@ public final class Diff {
        * <code>repeated int32 previous_versions = 8;</code>
        *
        * <pre>
-       ** @exclude TODO 
+       ** @exclude The indices of the corresponding parent commits in the list of all commits 
        * </pre>
        */
       public java.util.List<java.lang.Integer>
@@ -2579,7 +2579,7 @@ public final class Diff {
        * <code>repeated int32 previous_versions = 8;</code>
        *
        * <pre>
-       ** @exclude TODO 
+       ** @exclude The indices of the corresponding parent commits in the list of all commits 
        * </pre>
        */
       public int getPreviousVersionsCount() {
@@ -2589,7 +2589,7 @@ public final class Diff {
        * <code>repeated int32 previous_versions = 8;</code>
        *
        * <pre>
-       ** @exclude TODO 
+       ** @exclude The indices of the corresponding parent commits in the list of all commits 
        * </pre>
        */
       public int getPreviousVersions(int index) {
@@ -2599,7 +2599,7 @@ public final class Diff {
        * <code>repeated int32 previous_versions = 8;</code>
        *
        * <pre>
-       ** @exclude TODO 
+       ** @exclude The indices of the corresponding parent commits in the list of all commits 
        * </pre>
        */
       public Builder setPreviousVersions(
@@ -2613,7 +2613,7 @@ public final class Diff {
        * <code>repeated int32 previous_versions = 8;</code>
        *
        * <pre>
-       ** @exclude TODO 
+       ** @exclude The indices of the corresponding parent commits in the list of all commits 
        * </pre>
        */
       public Builder addPreviousVersions(int value) {
@@ -2626,7 +2626,7 @@ public final class Diff {
        * <code>repeated int32 previous_versions = 8;</code>
        *
        * <pre>
-       ** @exclude TODO 
+       ** @exclude The indices of the corresponding parent commits in the list of all commits 
        * </pre>
        */
       public Builder addAllPreviousVersions(
@@ -2640,7 +2640,7 @@ public final class Diff {
        * <code>repeated int32 previous_versions = 8;</code>
        *
        * <pre>
-       ** @exclude TODO 
+       ** @exclude The indices of the corresponding parent commits in the list of all commits 
        * </pre>
        */
       public Builder clearPreviousVersions() {
@@ -2662,7 +2662,7 @@ public final class Diff {
        * <code>repeated int32 previous_index = 9;</code>
        *
        * <pre>
-       ** @exclude TODO 
+       ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
        * </pre>
        */
       public java.util.List<java.lang.Integer>
@@ -2673,7 +2673,7 @@ public final class Diff {
        * <code>repeated int32 previous_index = 9;</code>
        *
        * <pre>
-       ** @exclude TODO 
+       ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
        * </pre>
        */
       public int getPreviousIndexCount() {
@@ -2683,7 +2683,7 @@ public final class Diff {
        * <code>repeated int32 previous_index = 9;</code>
        *
        * <pre>
-       ** @exclude TODO 
+       ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
        * </pre>
        */
       public int getPreviousIndex(int index) {
@@ -2693,7 +2693,7 @@ public final class Diff {
        * <code>repeated int32 previous_index = 9;</code>
        *
        * <pre>
-       ** @exclude TODO 
+       ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
        * </pre>
        */
       public Builder setPreviousIndex(
@@ -2707,7 +2707,7 @@ public final class Diff {
        * <code>repeated int32 previous_index = 9;</code>
        *
        * <pre>
-       ** @exclude TODO 
+       ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
        * </pre>
        */
       public Builder addPreviousIndex(int value) {
@@ -2720,7 +2720,7 @@ public final class Diff {
        * <code>repeated int32 previous_index = 9;</code>
        *
        * <pre>
-       ** @exclude TODO 
+       ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
        * </pre>
        */
       public Builder addAllPreviousIndex(
@@ -2734,7 +2734,7 @@ public final class Diff {
        * <code>repeated int32 previous_index = 9;</code>
        *
        * <pre>
-       ** @exclude TODO 
+       ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
        * </pre>
        */
       public Builder clearPreviousIndex() {

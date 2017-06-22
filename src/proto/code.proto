@@ -49,8 +49,8 @@ message CodeRepository {
 message Revision {
 	/** A unique identifier for the revision */
 	required string id = 1;
-	/** The person who authored the revision, if known, otherwise the same as committer */
-	required Person author = 2;
+	/** The person who authored the revision, if known */
+	optional Person author = 2;
 	/** The person who committed the revision */
 	required Person committer = 3;
 	/** The time the revision was committed */

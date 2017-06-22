@@ -11,6 +11,13 @@ message IssueRepository {
 		FEATURES = 2;
 		SUPPORT = 3;
 		PATCHES = 4;
+		CONFIRMED = 5;
+		CRITICAL = 6;
+		DISCUSION = 7;
+		DOCUMENTATION = 8;
+		SUGGESTION = 9;
+		ENHANCMENT = 10;
+		
 	}
 	required string url = 1;
 	required IssueKind kind = 2;
@@ -21,20 +28,35 @@ message IssuesRoot {
 	repeated Issue issues = 1;
 }
 
+/** An issue in the repository */
 message Issue {
+	/** The issue's id */
 	required string id = 1;
+	/** The issue' statues i.e open, closed etc.. */
 	required string status = 2;
+	/** The author of the issue */
 	required Person author = 3;
+	/** The primary assignee */
 	optional Person assignee = 4;
+	/** The summary and or title of the issue */
 	required string summary = 5;
+	/** The description and or body of the issue */
 	required string description = 6;
+	/** The created date */
 	required uint64 created_date = 7;
+	/** The last modified date, aka update date */
 	required uint64 modified_date = 8;
+	/** The closed date */
 	optional uint64 completed_date = 9;
+	/** Keywords */
 	repeated string keywords = 10;
+	/** Count of votes */
 	optional int32 vote = 11;
+	/** The issues priority */
 	optional string priority = 12;
+	/** Attachment files */
 	repeated Attachment files = 13;
+	/** The issue's comments */
 	repeated IssueComment comments = 14;
 	/*
 	optional string component = 15;
@@ -45,12 +67,24 @@ message Issue {
 	optional string version = 20;
 	optional string os = 21;
 	optional string platform = 22;
+	*/
+	/** The issues's associated milestone */
 	optional string milestone = 23;
-	optional string depends_on = 24;
+	//optional string depends_on = 24;
+	/** The issue's blocked or locked status */
 	optional string blocked = 25;
+	/*
 	optional string secrecy = 26;
 	repeated IssueChange changes = 27;
 	*/
+	/** The URL for the issue's associated pull request */
+	optional string pullUrl = 28;
+	/** List of assigned persons */
+	repeated Person assignees = 29;
+	/** The issue's number */
+	required uint32 number = 30;
+	/** The issue's labels */
+	repeated IssueLabel labels = 31;
 }
 
 message Attachment {
@@ -62,11 +96,17 @@ message Attachment {
 	optional string description = 6;
 }
 
+/** An issue comment */
 message IssueComment {
+	/** The comment's id */
 	required string id = 1;
+	/** The comment's creation date */
 	required uint64 date = 2;
+	/** The comment's author */
 	required Person author = 3;
+	/** The description or body of the comment */
 	required string description = 4;
+	/** A list of any attached files */
 	repeated Attachment files = 5;
 }
 
@@ -78,4 +118,16 @@ message IssueChange {
 	required string old_value = 5;
 	required string new_value = 6;
 	optional string description = 7;
+}
+
+/** An issue label */
+message IssueLabel {
+	/** The label's 'name' */
+	required string name = 1;
+	/** The label's id */
+	optional string id = 2;
+	/** The hexadecimal code for the label's color */
+	optional string color = 3;
+	/** Is the label a 'default' label */
+	optional string default = 4;
 }
