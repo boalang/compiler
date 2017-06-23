@@ -19414,6 +19414,24 @@ public final class Ast {
      * </pre>
      */
     boa.types.Ast.MethodOrBuilder getLambdaOrBuilder();
+
+    // optional bool no_parens = 14;
+    /**
+     * <code>optional bool no_parens = 14;</code>
+     *
+     * <pre>
+     ** @exclude 
+     * </pre>
+     */
+    boolean hasNoParens();
+    /**
+     * <code>optional bool no_parens = 14;</code>
+     *
+     * <pre>
+     ** @exclude 
+     * </pre>
+     */
+    boolean getNoParens();
   }
   /**
    * Protobuf type {@code boa.types.Expression}
@@ -19583,6 +19601,11 @@ public final class Ast {
                 lambda_ = subBuilder.buildPartial();
               }
               bitField0_ |= 0x00000100;
+              break;
+            }
+            case 112: {
+              bitField0_ |= 0x00000200;
+              noParens_ = input.readBool();
               break;
             }
           }
@@ -20627,6 +20650,30 @@ public final class Ast {
       return lambda_;
     }
 
+    // optional bool no_parens = 14;
+    public static final int NO_PARENS_FIELD_NUMBER = 14;
+    private boolean noParens_;
+    /**
+     * <code>optional bool no_parens = 14;</code>
+     *
+     * <pre>
+     ** @exclude 
+     * </pre>
+     */
+    public boolean hasNoParens() {
+      return ((bitField0_ & 0x00000200) == 0x00000200);
+    }
+    /**
+     * <code>optional bool no_parens = 14;</code>
+     *
+     * <pre>
+     ** @exclude 
+     * </pre>
+     */
+    public boolean getNoParens() {
+      return noParens_;
+    }
+
     private void initFields() {
       kind_ = boa.types.Ast.Expression.ExpressionKind.OTHER;
       expressions_ = java.util.Collections.emptyList();
@@ -20641,6 +20688,7 @@ public final class Ast {
       anonDeclaration_ = boa.types.Ast.Declaration.getDefaultInstance();
       annotation_ = boa.types.Ast.Modifier.getDefaultInstance();
       lambda_ = boa.types.Ast.Method.getDefaultInstance();
+      noParens_ = false;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -20745,6 +20793,9 @@ public final class Ast {
       if (((bitField0_ & 0x00000100) == 0x00000100)) {
         output.writeMessage(13, lambda_);
       }
+      if (((bitField0_ & 0x00000200) == 0x00000200)) {
+        output.writeBool(14, noParens_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -20805,6 +20856,10 @@ public final class Ast {
       if (((bitField0_ & 0x00000100) == 0x00000100)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(13, lambda_);
+      }
+      if (((bitField0_ & 0x00000200) == 0x00000200)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(14, noParens_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -20992,6 +21047,8 @@ public final class Ast {
           lambdaBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00001000);
+        noParens_ = false;
+        bitField0_ = (bitField0_ & ~0x00002000);
         return this;
       }
 
@@ -21108,6 +21165,10 @@ public final class Ast {
         } else {
           result.lambda_ = lambdaBuilder_.build();
         }
+        if (((from_bitField0_ & 0x00002000) == 0x00002000)) {
+          to_bitField0_ |= 0x00000200;
+        }
+        result.noParens_ = noParens_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -21260,6 +21321,9 @@ public final class Ast {
         }
         if (other.hasLambda()) {
           mergeLambda(other.getLambda());
+        }
+        if (other.hasNoParens()) {
+          setNoParens(other.getNoParens());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -23109,6 +23173,55 @@ public final class Ast {
           lambda_ = null;
         }
         return lambdaBuilder_;
+      }
+
+      // optional bool no_parens = 14;
+      private boolean noParens_ ;
+      /**
+       * <code>optional bool no_parens = 14;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
+       */
+      public boolean hasNoParens() {
+        return ((bitField0_ & 0x00002000) == 0x00002000);
+      }
+      /**
+       * <code>optional bool no_parens = 14;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
+       */
+      public boolean getNoParens() {
+        return noParens_;
+      }
+      /**
+       * <code>optional bool no_parens = 14;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
+       */
+      public Builder setNoParens(boolean value) {
+        bitField0_ |= 0x00002000;
+        noParens_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional bool no_parens = 14;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
+       */
+      public Builder clearNoParens() {
+        bitField0_ = (bitField0_ & ~0x00002000);
+        noParens_ = false;
+        onChanged();
+        return this;
       }
 
       // @@protoc_insertion_point(builder_scope:boa.types.Expression)
@@ -27507,7 +27620,7 @@ public final class Ast {
       "\006\n\002IF\020\t\022\n\n\006ASSERT\020\n\022\t\n\005BREAK\020\013\022\014\n\010CONTIN" +
       "UE\020\014\022\t\n\005LABEL\020\r\022\n\n\006SWITCH\020\016\022\010\n\004CASE\020\017\022\007\n" +
       "\003TRY\020\020\022\t\n\005THROW\020\021\022\t\n\005CATCH\020\022\022\t\n\005EMPTY\020\023\032",
-      "\002\020\001\"\360\t\n\nExpression\0222\n\004kind\030\001 \002(\0162$.boa.t" +
+      "\002\020\001\"\203\n\n\nExpression\0222\n\004kind\030\001 \002(\0162$.boa.t" +
       "ypes.Expression.ExpressionKind\022*\n\013expres" +
       "sions\030\002 \003(\0132\025.boa.types.Expression\022+\n\016va" +
       "riable_decls\030\003 \003(\0132\023.boa.types.Variable\022" +
@@ -27519,51 +27632,51 @@ public final class Ast {
       "on_declaration\030\013 \001(\0132\026.boa.types.Declara",
       "tion\022\'\n\nannotation\030\014 \001(\0132\023.boa.types.Mod" +
       "ifier\022!\n\006lambda\030\r \001(\0132\021.boa.types.Method" +
-      "\"\223\006\n\016ExpressionKind\022\t\n\005OTHER\020\000\022\013\n\007LITERA" +
-      "L\020\001\022\r\n\tVARACCESS\020\002\022\013\n\007VARDECL\020\003\022\016\n\nMETHO" +
-      "DCALL\020\004\022\010\n\004CAST\020\005\022\016\n\nARRAYINDEX\020\006\022\r\n\tARR" +
-      "AYINIT\020\007\022\017\n\013TYPECOMPARE\020\010\022\007\n\003NEW\020\t\022\014\n\010NE" +
-      "WARRAY\020\n\022\n\n\006OP_ADD\020\013\022\n\n\006OP_SUB\020\014\022\013\n\007OP_M" +
-      "ULT\020\r\022\n\n\006OP_DIV\020\016\022\n\n\006OP_MOD\020\017\022\n\n\006OP_INC\020" +
-      "\020\022\n\n\006OP_DEC\020\021\022\016\n\nBIT_LSHIFT\020\022\022\016\n\nBIT_RSH" +
-      "IFT\020\023\022\026\n\022BIT_UNSIGNEDRSHIFT\020\024\022\013\n\007BIT_AND",
-      "\020\025\022\n\n\006BIT_OR\020\026\022\013\n\007BIT_NOT\020\027\022\013\n\007BIT_XOR\020\030" +
-      "\022\017\n\013LOGICAL_NOT\020\031\022\017\n\013LOGICAL_AND\020\032\022\016\n\nLO" +
-      "GICAL_OR\020\033\022\006\n\002EQ\020\034\022\007\n\003NEQ\020\035\022\006\n\002LT\020\036\022\006\n\002G" +
-      "T\020\037\022\010\n\004LTEQ\020 \022\010\n\004GTEQ\020!\022\017\n\013CONDITIONAL\020\"" +
-      "\022\020\n\014NULLCOALESCE\020#\022\n\n\006ASSIGN\020$\022\016\n\nASSIGN" +
-      "_ADD\020%\022\016\n\nASSIGN_SUB\020&\022\017\n\013ASSIGN_MULT\020\'\022" +
-      "\016\n\nASSIGN_DIV\020(\022\016\n\nASSIGN_MOD\020)\022\021\n\rASSIG" +
-      "N_BITXOR\020*\022\021\n\rASSIGN_BITAND\020+\022\020\n\014ASSIGN_" +
-      "BITOR\020,\022\021\n\rASSIGN_LSHIFT\020-\022\021\n\rASSIGN_RSH" +
-      "IFT\020.\022\031\n\025ASSIGN_UNSIGNEDRSHIFT\020/\022\016\n\nANNO",
-      "TATION\0200\022\t\n\005PAREN\0201\022\024\n\020METHOD_REFERENCE\020" +
-      "2\022\n\n\006LAMBDA\0203\022\017\n\013ANON_METHOD\0204\"\307\003\n\010Modif" +
-      "ier\022.\n\004kind\030\001 \002(\0162 .boa.types.Modifier.M" +
-      "odifierKind\0222\n\nvisibility\030\002 \001(\0162\036.boa.ty" +
-      "pes.Modifier.Visibility\022\027\n\017annotation_na" +
-      "me\030\003 \001(\t\022\032\n\022annotation_members\030\004 \003(\t\0220\n\021" +
-      "annotation_values\030\005 \003(\0132\025.boa.types.Expr" +
-      "ession\022\r\n\005other\030\006 \001(\t\"~\n\014ModifierKind\022\t\n" +
-      "\005OTHER\020\000\022\016\n\nVISIBILITY\020\001\022\016\n\nANNOTATION\020\002" +
-      "\022\t\n\005FINAL\020\003\022\n\n\006STATIC\020\004\022\020\n\014SYNCHRONIZED\020",
-      "\005\022\010\n\004SYNC\020\005\022\014\n\010ABSTRACT\020\006\032\002\020\001\"a\n\nVisibil" +
-      "ity\022\n\n\006PUBLIC\020\001\022\013\n\007PRIVATE\020\002\022\r\n\tPROTECTE" +
-      "D\020\003\022\r\n\tNAMESPACE\020\004\022\013\n\007PACKAGE\020\004\022\013\n\007DEFAU" +
-      "LT\020\004\032\002\020\001\"\335\001\n\007Comment\022,\n\004kind\030\001 \002(\0162\036.boa" +
-      ".types.Comment.CommentKind\022\r\n\005value\030\002 \002(" +
-      "\t\022)\n\010position\030\003 \002(\0132\027.boa.types.Position" +
-      "Info\"j\n\013CommentKind\022\t\n\005OTHER\020\000\022\010\n\004LINE\020\001" +
-      "\022\t\n\005BLOCK\020\002\022\007\n\003DOC\020\003\022\021\n\rDOCUMENTATION\020\003\022" +
-      "\010\n\004SPEC\020\004\022\021\n\rSPECIFICATION\020\004\032\002\020\001\"{\n\014Posi" +
-      "tionInfo\022\021\n\tstart_pos\030\001 \002(\005\022\016\n\006length\030\002 ",
-      "\002(\005\022\022\n\nstart_line\030\003 \002(\005\022\021\n\tstart_col\030\004 \002" +
-      "(\005\022\020\n\010end_line\030\005 \002(\005\022\017\n\007end_col\030\006 \002(\005*\236\001" +
-      "\n\010TypeKind\022\t\n\005OTHER\020\000\022\t\n\005CLASS\020\001\022\r\n\tINTE" +
-      "RFACE\020\002\022\r\n\tANONYMOUS\020\003\022\010\n\004ANON\020\003\022\n\n\006STRU" +
-      "CT\020\004\022\010\n\004ENUM\020\005\022\017\n\013ENUMERATION\020\005\022\016\n\nANNOT" +
-      "ATION\020\006\022\014\n\010DELEGATE\020\007\022\013\n\007GENERIC\020\010\032\002\020\001B\002" +
-      "H\001"
+      "\022\021\n\tno_parens\030\016 \001(\010\"\223\006\n\016ExpressionKind\022\t" +
+      "\n\005OTHER\020\000\022\013\n\007LITERAL\020\001\022\r\n\tVARACCESS\020\002\022\013\n" +
+      "\007VARDECL\020\003\022\016\n\nMETHODCALL\020\004\022\010\n\004CAST\020\005\022\016\n\n" +
+      "ARRAYINDEX\020\006\022\r\n\tARRAYINIT\020\007\022\017\n\013TYPECOMPA" +
+      "RE\020\010\022\007\n\003NEW\020\t\022\014\n\010NEWARRAY\020\n\022\n\n\006OP_ADD\020\013\022" +
+      "\n\n\006OP_SUB\020\014\022\013\n\007OP_MULT\020\r\022\n\n\006OP_DIV\020\016\022\n\n\006" +
+      "OP_MOD\020\017\022\n\n\006OP_INC\020\020\022\n\n\006OP_DEC\020\021\022\016\n\nBIT_" +
+      "LSHIFT\020\022\022\016\n\nBIT_RSHIFT\020\023\022\026\n\022BIT_UNSIGNED",
+      "RSHIFT\020\024\022\013\n\007BIT_AND\020\025\022\n\n\006BIT_OR\020\026\022\013\n\007BIT" +
+      "_NOT\020\027\022\013\n\007BIT_XOR\020\030\022\017\n\013LOGICAL_NOT\020\031\022\017\n\013" +
+      "LOGICAL_AND\020\032\022\016\n\nLOGICAL_OR\020\033\022\006\n\002EQ\020\034\022\007\n" +
+      "\003NEQ\020\035\022\006\n\002LT\020\036\022\006\n\002GT\020\037\022\010\n\004LTEQ\020 \022\010\n\004GTEQ" +
+      "\020!\022\017\n\013CONDITIONAL\020\"\022\020\n\014NULLCOALESCE\020#\022\n\n" +
+      "\006ASSIGN\020$\022\016\n\nASSIGN_ADD\020%\022\016\n\nASSIGN_SUB\020" +
+      "&\022\017\n\013ASSIGN_MULT\020\'\022\016\n\nASSIGN_DIV\020(\022\016\n\nAS" +
+      "SIGN_MOD\020)\022\021\n\rASSIGN_BITXOR\020*\022\021\n\rASSIGN_" +
+      "BITAND\020+\022\020\n\014ASSIGN_BITOR\020,\022\021\n\rASSIGN_LSH" +
+      "IFT\020-\022\021\n\rASSIGN_RSHIFT\020.\022\031\n\025ASSIGN_UNSIG",
+      "NEDRSHIFT\020/\022\016\n\nANNOTATION\0200\022\t\n\005PAREN\0201\022\024" +
+      "\n\020METHOD_REFERENCE\0202\022\n\n\006LAMBDA\0203\022\017\n\013ANON" +
+      "_METHOD\0204\"\307\003\n\010Modifier\022.\n\004kind\030\001 \002(\0162 .b" +
+      "oa.types.Modifier.ModifierKind\0222\n\nvisibi" +
+      "lity\030\002 \001(\0162\036.boa.types.Modifier.Visibili" +
+      "ty\022\027\n\017annotation_name\030\003 \001(\t\022\032\n\022annotatio" +
+      "n_members\030\004 \003(\t\0220\n\021annotation_values\030\005 \003" +
+      "(\0132\025.boa.types.Expression\022\r\n\005other\030\006 \001(\t" +
+      "\"~\n\014ModifierKind\022\t\n\005OTHER\020\000\022\016\n\nVISIBILIT" +
+      "Y\020\001\022\016\n\nANNOTATION\020\002\022\t\n\005FINAL\020\003\022\n\n\006STATIC",
+      "\020\004\022\020\n\014SYNCHRONIZED\020\005\022\010\n\004SYNC\020\005\022\014\n\010ABSTRA" +
+      "CT\020\006\032\002\020\001\"a\n\nVisibility\022\n\n\006PUBLIC\020\001\022\013\n\007PR" +
+      "IVATE\020\002\022\r\n\tPROTECTED\020\003\022\r\n\tNAMESPACE\020\004\022\013\n" +
+      "\007PACKAGE\020\004\022\013\n\007DEFAULT\020\004\032\002\020\001\"\335\001\n\007Comment\022" +
+      ",\n\004kind\030\001 \002(\0162\036.boa.types.Comment.Commen" +
+      "tKind\022\r\n\005value\030\002 \002(\t\022)\n\010position\030\003 \002(\0132\027" +
+      ".boa.types.PositionInfo\"j\n\013CommentKind\022\t" +
+      "\n\005OTHER\020\000\022\010\n\004LINE\020\001\022\t\n\005BLOCK\020\002\022\007\n\003DOC\020\003\022" +
+      "\021\n\rDOCUMENTATION\020\003\022\010\n\004SPEC\020\004\022\021\n\rSPECIFIC" +
+      "ATION\020\004\032\002\020\001\"{\n\014PositionInfo\022\021\n\tstart_pos",
+      "\030\001 \002(\005\022\016\n\006length\030\002 \002(\005\022\022\n\nstart_line\030\003 \002" +
+      "(\005\022\021\n\tstart_col\030\004 \002(\005\022\020\n\010end_line\030\005 \002(\005\022" +
+      "\017\n\007end_col\030\006 \002(\005*\236\001\n\010TypeKind\022\t\n\005OTHER\020\000" +
+      "\022\t\n\005CLASS\020\001\022\r\n\tINTERFACE\020\002\022\r\n\tANONYMOUS\020" +
+      "\003\022\010\n\004ANON\020\003\022\n\n\006STRUCT\020\004\022\010\n\004ENUM\020\005\022\017\n\013ENU" +
+      "MERATION\020\005\022\016\n\nANNOTATION\020\006\022\014\n\010DELEGATE\020\007" +
+      "\022\013\n\007GENERIC\020\010\032\002\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -27623,7 +27736,7 @@ public final class Ast {
           internal_static_boa_types_Expression_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Expression_descriptor,
-              new java.lang.String[] { "Kind", "Expressions", "VariableDecls", "NewType", "GenericParameters", "IsPostfix", "Literal", "Variable", "Method", "MethodArgs", "AnonDeclaration", "Annotation", "Lambda", });
+              new java.lang.String[] { "Kind", "Expressions", "VariableDecls", "NewType", "GenericParameters", "IsPostfix", "Literal", "Variable", "Method", "MethodArgs", "AnonDeclaration", "Annotation", "Lambda", "NoParens", });
           internal_static_boa_types_Modifier_descriptor =
             getDescriptor().getMessageTypes().get(9);
           internal_static_boa_types_Modifier_fieldAccessorTable = new

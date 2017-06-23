@@ -12,7 +12,6 @@
             "initializer": {
                "kind": "LAMBDA",
                "lambda": {
-                  "name": "",
                   "return_type": {
                      "name": "",
                      "kind": "OTHER"
