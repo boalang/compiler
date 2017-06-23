@@ -81,4 +81,12 @@ public class TestLambda extends Java8BaseTest {
 			load("test/datagen/boa/lambda-notype.boa").trim()
 		);
 	}
+
+	@Test
+	public void lambdaNoParen() throws IOException {
+		testWrapped(
+			load("test/datagen/java/lambda-noparen.java").trim(),
+			load("test/datagen/boa/lambda-noparen.boa").trim()
+		);
+	}
 }

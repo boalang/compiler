@@ -251,6 +251,8 @@ message Expression {
 	optional Modifier annotation = 12;
 	/** @exclude */
 	optional Method lambda = 13;
+	/** @exclude */
+	optional bool no_parens = 14;
 }
 
 /** A single modifier */

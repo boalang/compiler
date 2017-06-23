@@ -183,6 +183,8 @@ public class Java8Visitor extends Java7Visitor {
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.LAMBDA);
 		eb.setLambda(b.build());
+        if (!node.hasParentheses())
+            eb.setNoParens(true);
 		expressions.push(eb.build());
 
 		return false;
