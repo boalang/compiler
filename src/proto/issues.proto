@@ -6,7 +6,7 @@ option optimize_for = SPEED;
 
 message IssueRepository {
 	required string url = 1;
-	required string name = 2;
+	optional string name = 2;
 	required string key = 3;
 }
 
@@ -19,7 +19,7 @@ message Issue {
 	/** Describes the kind/label of issue */
 	enum IssueLabel {
 		option allow_alias = true;
-		OTHER = 0;
+		OTHER_LABEL = 0;
 		BUG = 1;
 		ENHANCEMENT = 2;
 		PROPOSAL = 3;
@@ -35,7 +35,7 @@ message Issue {
 	/** Describes the priority of issue */
 	enum IssuePriority {
 		option allow_alias = true;
-		OTHER = 0;
+		OTHER_PRIORITY = 0;
 		TRIVIAL = 1;
 		MINOR = 2;
 		MAJOR = 3;
@@ -45,18 +45,18 @@ message Issue {
 	/** Describes the status of issue */
 	enum IssueStatus {
 		option allow_alias = true;
-		OTHER = 0;
+		OTHER_STATUS = 0;
 		NEW = 1;
 		OPEN = 2;
-		ONHOLD = 3;
+		ON_HOLD = 3;
 		RESOLVED = 4;
 		DUPLICATE = 5;
 		INVALID = 6;
-		WONTFIX = 7;
+		WONT_FIX = 7;
 		CLOSED = 8;
 		FIXED = 9;
-		NOTAPPLICABLE = 10;
-		NOTREPRODUCIBLE = 11;
+		NOT_APPLICABLE = 10;
+		NOT_REPRODUCIBLE = 11;
 		EXTERNAL = 12;
 		ANSWERED = 13;
 	}
