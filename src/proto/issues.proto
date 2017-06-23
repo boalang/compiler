@@ -12,7 +12,6 @@ message IssueRepository {
 
 message IssuesRoot {
 	repeated Issue issues = 1;
-	required IssueRepository issue_repository = 2;
 }
 
 /** An issue in the repository */
