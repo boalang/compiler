@@ -16,10 +16,54 @@ message IssuesRoot {
 
 /** An issue in the repository */
 message Issue {
+	/** Describes the kind/label of issue */
+	enum IssueLabel {
+		option allow_alias = true;
+		OTHER = 0;
+		BUG = 1;
+		ENHANCEMENT = 2;
+		PROPOSAL = 3;
+		TASK = 4;
+		FEATURE = 5;
+		SUPPORT = 6;		
+ 		DISCUSSION = 7;		
+ 		DOCUMENTATION = 8;		
+ 		SUGGESTION = 9;
+ 		QUESTION = 10;
+ 		TEST = 11;
+	}
+	/** Describes the priority of issue */
+	enum IssuePriority {
+		option allow_alias = true;
+		OTHER = 0;
+		TRIVIAL = 1;
+		MINOR = 2;
+		MAJOR = 3;
+		CRITICAL = 4;
+		BLOCKER = 5;
+	}
+	/** Describes the status of issue */
+	enum IssueStatus {
+		option allow_alias = true;
+		OTHER = 0;
+		NEW = 1;
+		OPEN = 2;
+		ONHOLD = 3;
+		RESOLVED = 4;
+		DUPLICATE = 5;
+		INVALID = 6;
+		WONTFIX = 7;
+		CLOSED = 8;
+		FIXED = 9;
+		NOTAPPLICABLE = 10;
+		NOTREPRODUCIBLE = 11;
+		EXTERNAL = 12;
+		ANSWERED = 13;
+	}
 	/** The issue's id */
 	required string id = 1;
-	/** The issue' statues i.e open, closed etc.. */
-	required string status = 2;
+	/** The issue' status i.e open, closed etc.. */
+	required IssueStatus status = 2;
 	/** The author of the issue */
 	required Person author = 3;
 	/** The primary assignee */
@@ -34,12 +78,12 @@ message Issue {
 	required uint64 modified_date = 8;
 	/** The closed date */
 	optional uint64 completed_date = 9;
-	/** Keywords */
+	/** Keywords/tags */
 	repeated string keywords = 10;
 	/** Count of votes */
 	optional int32 vote = 11;
-	/** The issues priority */
-	optional string priority = 12;
+	/** The issue's priority */
+	optional IssuePriority priority = 12;
 	/** Attachment files */
 	repeated Attachment files = 13;
 	/** The issue's comments */
@@ -70,7 +114,13 @@ message Issue {
 	/** The issue's number */
 	required uint32 number = 30;
 	/** The issue's labels */
-	repeated string labels = 31;
+	repeated IssueLabel labels = 31;
+	/** The issue' other status */
+	optional string other_status = 32;
+	/** The issue's other priority */
+	optional string other_priority = 33;
+	/** The issue's other labels */
+	repeated string other_labels = 34;
 }
 
 message Attachment {
