@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, Hridesh Rajan, Robert Dyer, Hoan Nguyen, Farheen Sultana
+ * Copyright 2017, Hridesh Rajan, Robert Dyer, Hoan Nguyen, Farheen Sultana
  *                 Iowa State University of Science and Technology
  *                 and Bowling Green State University
  *
@@ -65,7 +65,7 @@ public class Java7Visitor extends ASTVisitor {
 	}
 
 /*
-    // builds a Position message for every node and stores in the field pos
+	// builds a Position message for every node and stores in the field pos
 	public void preVisit(ASTNode node) {
 		buildPosition(node);
 	}
@@ -258,16 +258,16 @@ public class Java7Visitor extends ASTVisitor {
 		boa.types.Ast.Declaration.Builder b = boa.types.Ast.Declaration.newBuilder();
 		b.setName(node.getName().getFullyQualifiedName());
 		b.setKind(boa.types.Ast.TypeKind.ENUM);
-        for (Object c : node.enumConstants()) {
-            // TODO EnumConstantDeclaration
-        }
-        for (Object t : node.superInterfaceTypes()) {
+		for (Object c : node.enumConstants()) {
+			// TODO EnumConstantDeclaration
+		}
+		for (Object t : node.superInterfaceTypes()) {
 			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 			tb.setName(typeName((org.eclipse.jdt.core.dom.Type)t));
 			tb.setKind(boa.types.Ast.TypeKind.INTERFACE);
 			b.addParents(tb.build());
-        }
-        for (Object d : node.bodyDeclarations()) {
+		}
+		for (Object d : node.bodyDeclarations()) {
 			if (d instanceof FieldDeclaration) {
 				fields.push(new ArrayList<boa.types.Ast.Variable>());
 				((FieldDeclaration)d).accept(this);
@@ -289,7 +289,7 @@ public class Java7Visitor extends ASTVisitor {
 				for (boa.types.Ast.Declaration nd : declarations.pop())
 					b.addNestedDeclarations(nd);
 			}
-        }
+		}
 		declarations.peek().add(b.build());
 		return false;
 	}
@@ -1067,8 +1067,14 @@ public class Java7Visitor extends ASTVisitor {
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.ARRAYINIT);
 		for (Object e : node.expressions()) {
 			((org.eclipse.jdt.core.dom.Expression)e).accept(this);
-			if (!expressions.empty())
+			if (expressions.empty()) {
+				boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
+				eb.setKind(boa.types.Ast.Expression.ExpressionKind.ANNOTATION);
+				eb.setAnnotation(modifiers.pop());
+				b.addExpressions(eb.build());
+			} else {
 				b.addExpressions(expressions.pop());
+			}
 		}
 		expressions.push(b.build());
 		return false;
