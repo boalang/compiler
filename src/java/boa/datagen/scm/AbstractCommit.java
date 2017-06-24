@@ -42,7 +42,6 @@ import boa.datagen.util.JavaScriptVisitor;
 import boa.datagen.util.Java7Visitor;
 import boa.datagen.util.Java8Visitor;
 import boa.datagen.util.JavaErrorCheckVisitor;
-import boa.datagen.util.Properties;
 
 /**
  * @author rdyer
@@ -58,11 +57,23 @@ public abstract class AbstractCommit {
 	protected String id = null;
 	public void setId(final String id) { this.id = id; }
 
-	protected String author;
-	public void setAuthor(final String author) { this.author = author; }
+	protected Person author;
+	public void setAuthor(final String username, final String realname, final String email) {
+		final Person.Builder person = Person.newBuilder();
+		person.setUsername(username);
+		person.setRealName(realname);
+		person.setEmail(email);
+		author = person.build();
+	}
 
-	protected String committer;
-	public void setCommitter(final String committer) { this.committer = committer; }
+	protected Person committer;
+	public void setCommitter(final String username, final String realname, final String email) {
+		final Person.Builder person = Person.newBuilder();
+		person.setUsername(username);
+		person.setRealName(realname);
+		person.setEmail(email);
+		committer = person.build();
+	}
 
 	protected String message;
 	public void setMessage(final String message) { this.message = message; }
@@ -88,20 +99,20 @@ public abstract class AbstractCommit {
 	protected int[] getParentIndices() { 
 		return parentIndices;
 	}
-
+	
 	protected static final ByteArrayOutputStream buffer = new ByteArrayOutputStream(4096);
 
 	protected abstract String getFileContents(final String path);
-
-	protected abstract Person parsePerson(final String s);
 
 	public Revision asProtobuf(final boolean parse, final Writer astWriter, final String revKey, final String keyDelim) {
 		final Revision.Builder revision = Revision.newBuilder();
 		revision.setId(id);
 
-		final Person author = parsePerson(this.author);
-		final Person committer = parsePerson(this.committer);
-		revision.setAuthor(author == null ? committer : author);
+		if (this.author != null) {
+			final Person author = Person.newBuilder(this.author).build();
+			revision.setAuthor(author);
+		}
+		final Person committer = Person.newBuilder(this.committer).build();
 		revision.setCommitter(committer);
 
 		long time = -1;
@@ -293,9 +304,11 @@ public abstract class AbstractCommit {
 		final Revision.Builder revision = Revision.newBuilder();
 		revision.setId(id);
 
-		final Person author = parsePerson(this.author);
-		final Person committer = parsePerson(this.committer);
-		revision.setAuthor(author == null ? committer : author);
+		if (this.author != null) {
+			final Person author = Person.newBuilder(this.author).build();
+			revision.setAuthor(author);
+		}
+		final Person committer = Person.newBuilder(this.committer).build();
 		revision.setCommitter(committer);
 
 		long time = -1;

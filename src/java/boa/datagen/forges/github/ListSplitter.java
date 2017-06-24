@@ -13,19 +13,19 @@ import boa.datagen.util.FileIO;
 
 public class ListSplitter {
 	public static void main(String[] args) {
-		final int NUM_OF_LISTS = 80;
+		final int NUM_OF_LISTS = 22;
 		ArrayList<String> names = new ArrayList<String>();
-		//ArrayList<String> sublist = new ArrayList<String>();
 		Random rand = new Random();
 		String in = args[0];
 		String out = args[1];
 		int shareSize;
 		File inDir = new File(in);
 		File[] files = inDir.listFiles();
+		System.out.println(files.length + " files");
 		Gson parser = new Gson();
 		JsonArray repos;
 		JsonObject repo;
-		for (int i = 1; i < files.length; i++) {
+		for (int i = 0; i < files.length; i++) {
 			System.out.println("proccessing page " + files[i].getName());
 			String content = FileIO.readFileContents(files[i]);
 			repos = parser.fromJson(content, JsonElement.class).getAsJsonArray();
@@ -34,16 +34,24 @@ public class ListSplitter {
 				names.add(repo.get("full_name").getAsString());
 			}
 		}
-		shareSize = (names.size() - 1)/NUM_OF_LISTS;
-		for(int i = 0; i < NUM_OF_LISTS; i++){
-			for(int j = 0; j < shareSize; j++){
+		System.out.println(names.size() + " names");
+		shareSize = (names.size())/NUM_OF_LISTS;
+		System.out.println("share size = " + shareSize);
+		for (int i = 0; i < NUM_OF_LISTS; i++){
+			System.out.println("writting list " + i);
+			for (int j = 0; j < shareSize; j++){
 				int k = rand.nextInt(names.size());
-				FileIO.writeFileContents( new File(out + "/list-" + i) , names.get(k) +"/n", true);
-				//sublist.add(names.get(k));
-				names.remove(k);
+				String name = names.get(k);
+				FileIO.writeFileContents( new File(out + "/list-" + i) , name + "\n", true);
+				System.out.println(names.remove(name));
+				System.out.println(name + " removed " + !names.contains(name));
 			}
-			//FileIO.writeFileContents( new File(out + "/list-" + i) ,sublist.toString());
-			//sublist = new ArrayList<String>();
+		}
+		System.out.println("names remaning " + names.size());
+		while (!names.isEmpty()){
+			System.out.println("writting list " + 22);
+			FileIO.writeFileContents( new File(out + "/list-" + 22) , names.get(0) + "\n", true);
+			names.remove(0);
 		}
 	}
 }

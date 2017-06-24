@@ -1,5 +1,7 @@
 package boa.types;
 
+import "shared.proto";
+
 option optimize_for = SPEED;
 
 /** @exclude TODO */
@@ -15,6 +17,10 @@ message ASTRoot {
 	repeated string imports = 2;
 	/** @exclude */
 	repeated string names = 3;
+	/** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED */
+	optional ChangeKind structural_change_kind = 4;
+	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
+	optional ChangeKind label_change_kind = 5;
 }
 
 /** A namespace (aka, package) in a source file */
@@ -31,6 +37,10 @@ message Namespace {
 	repeated Method methods = 5;
 	/** Expressions contained in this namespace */
 	repeated Expression expressions = 6;
+	/** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED */
+	optional ChangeKind structural_change_kind = 7;
+	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
+	optional ChangeKind label_change_kind = 8;
 }
 
 /** A type declaration, such as a class or interface */
@@ -53,6 +63,10 @@ message Declaration {
 	repeated Declaration nested_declarations = 8;
 	/** @exclude TODO */
 	repeated Comment comments = 9;
+	/** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED */
+	optional ChangeKind structural_change_kind = 10;
+	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
+	optional ChangeKind label_change_kind = 11;
 }
 
 /** The kinds of types in an AST */
@@ -90,6 +104,10 @@ message Type {
 	required TypeKind kind = 2;
 	/** @exclude */
 	optional string id = 4;
+	/** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED */
+	optional ChangeKind structural_change_kind = 5;
+	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
+	optional ChangeKind label_change_kind = 6;
 }
 
 /** A method declaration */
@@ -114,6 +132,10 @@ message Method {
 	repeated Statement statements = 7;
 	/** @exclude TODO */
 	repeated Comment comments = 8;
+	/** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED */
+	optional ChangeKind structural_change_kind = 9;
+	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
+	optional ChangeKind label_change_kind = 10;
 }
 
 /** A variable declaration - can be a field, local, parameter, etc */
@@ -128,6 +150,10 @@ message Variable {
 	optional Expression initializer = 4;
 	/** @exclude TODO */
 	repeated Comment comments = 5;
+	/** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED */
+	optional ChangeKind structural_change_kind = 6;
+	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
+	optional ChangeKind label_change_kind = 7;
 }
 
 /** A single statement */
@@ -172,6 +198,10 @@ message Statement {
 	optional Variable variable_declaration = 7;
 	optional Declaration type_declaration = 8;
 	optional Expression expression = 9;
+	/** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED */
+	optional ChangeKind structural_change_kind = 10;
+	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
+	optional ChangeKind label_change_kind = 11;
 }
 
 /** A single expression */
@@ -253,6 +283,10 @@ message Expression {
 	optional Method lambda = 13;
 	/** @exclude */
 	optional bool no_parens = 14;
+	/** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED */
+	optional ChangeKind structural_change_kind = 15;
+	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
+	optional ChangeKind label_change_kind = 16;
 }
 
 /** A single modifier */
@@ -305,6 +339,10 @@ message Modifier {
 	repeated Expression annotation_values = 5;
 	/** If the <code>kind</code> is <code>OTHER</code>, the modifier string from the source code */
 	optional string other = 6;
+	/** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED */
+	optional ChangeKind structural_change_kind = 7;
+	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
+	optional ChangeKind label_change_kind = 8;
 }
 
 /** @exclude */
@@ -323,6 +361,10 @@ message Comment {
 	required CommentKind kind = 1;
 	required string value = 2;
 	required PositionInfo position = 3;
+	/** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED */
+	optional ChangeKind structural_change_kind = 4;
+	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
+	optional ChangeKind label_change_kind = 5;
 }
 
 /** @exclude */

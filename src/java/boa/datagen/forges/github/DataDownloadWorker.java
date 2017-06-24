@@ -1,15 +1,13 @@
 package boa.datagen.forges.github;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.HashSet;
-
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import boa.datagen.util.FileIO;
+import gnu.trove.set.hash.THashSet;
 
 public class DataDownloadWorker implements Runnable {
 	private TokenList tokens;
@@ -27,7 +25,7 @@ public class DataDownloadWorker implements Runnable {
 	final static int RECORDS_PER_FILE = 100;
 	final int startFileNumber;
 	final int endFileNumber;
-	HashSet<String> names = GithubLanguageDownloadMaster.names;
+	THashSet<String> names = GitHubRepoMetaDataDownloader.names;
 
 	public DataDownloadWorker(String repoPath, String output, TokenList tokenList, int start, int end, int index) {
 		this.output = output;
@@ -45,15 +43,15 @@ public class DataDownloadWorker implements Runnable {
 		Token tok = this.tokens.getNextAuthenticToken("https://api.github.com/repositories");
 		File inDir = new File(repository_location);
 		File[] files = inDir.listFiles();
-		while (pageNumber <= to) {
-			File repoFile = files[0];
+		while (pageNumber < to) {
+			File repoFile = files[pageNumber];
 			String content = FileIO.readFileContents(repoFile);
 			Gson parser = new Gson();
 			JsonArray repos = parser.fromJson(content, JsonElement.class).getAsJsonArray();
 			MetadataCacher mc = null;
 			int size = repos.size();
-			for (int i = 0; i < size; i++) {
-				JsonObject repo = repos.get(i).getAsJsonObject();
+			for (int j = 0; j < size; j++) {
+				JsonObject repo = repos.get(j).getAsJsonObject();
 				String name = repo.get("full_name").getAsString();
 				if (names.contains(name)) {
 					names.remove(name);
@@ -91,7 +89,7 @@ public class DataDownloadWorker implements Runnable {
 					} else {
 						System.out.println("token: " + tok.getId() + " exhausted");
 						tok.setnumberOfRemainingLimit(0);
-						i--;
+						j--;
 					}
 				}
 			}
