@@ -137,7 +137,6 @@ public class Java8Visitor extends Java7Visitor {
 	@Override
 	public boolean visit(LambdaExpression node) {
 		Method.Builder b = Method.newBuilder();
-		b.setName("");
 		boa.types.Ast.Type.Builder rt = boa.types.Ast.Type.newBuilder();
 		rt.setName("");
 		rt.setKind(boa.types.Ast.TypeKind.OTHER);
@@ -184,6 +183,8 @@ public class Java8Visitor extends Java7Visitor {
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.LAMBDA);
 		eb.setLambda(b.build());
+        if (!node.hasParentheses())
+            eb.setNoParens(true);
 		expressions.push(eb.build());
 
 		return false;
