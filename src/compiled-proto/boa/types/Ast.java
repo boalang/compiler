@@ -25075,38 +25075,6 @@ public final class Ast {
         return this;
       }
 
-      // @@protoc_insertion_point(builder_scope:boa.types.Expression)
-    }
-
-    static {
-      defaultInstance = new Expression(true);
-      defaultInstance.initFields();
-    }
-
-    // @@protoc_insertion_point(class_scope:boa.types.Expression)
-  }
-
-  public interface ModifierOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
-
-    // required .boa.types.Modifier.ModifierKind kind = 1;
-    /**
-     * <code>required .boa.types.Modifier.ModifierKind kind = 1;</code>
-     *
-     * <pre>
-     ** The kind of modifier 
-     * </pre>
-     */
-    boolean hasKind();
-    /**
-     * <code>required .boa.types.Modifier.ModifierKind kind = 1;</code>
-     *
-     * <pre>
-     ** The kind of modifier 
-     * </pre>
-     */
-    boa.types.Ast.Modifier.ModifierKind getKind();
-
       // optional .boa.types.ChangeKind structural_change_kind = 15;
       private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
       /**
