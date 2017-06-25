@@ -39,12 +39,12 @@ import boa.compiler.ast.statements.Block;
  * @author rdyer
  * @author kaushin
  */
-public class CharacterLiteralShadow extends LiteralShadow  {
+public class CharacterLiteralShadow extends BoaShadowType  {
     /**
      * Construct a {@link CharacterLiteralShadow}.
      */
     public CharacterLiteralShadow() {
-        super();
+        super(new ExpressionProtoTuple());
 
         addShadow("charvalue", new BoaString());
         addShadow("escapedvalue", new BoaString());
@@ -71,7 +71,14 @@ public class CharacterLiteralShadow extends LiteralShadow  {
         throw new RuntimeException("invalid shadow field: " + name);
     }
 
-    
+    /** {@inheritDoc} */
+    @Override
+    public IfStatement getManytoOne(final SymbolTable env, final Block b) {
+        // if (funcName(${0})) b;
+        final Expression tree = ASTFactory.createIdentifierExpr(boa.compiler.transforms.ShadowTypeEraser.NODE_ID, env, new ExpressionProtoTuple());
+
+        return new IfStatement(ASTFactory.createCallExpr("ischarlit", env, new ExpressionProtoTuple(), tree), b);
+    }    
 
     /** {@inheritDoc} */
     @Override
@@ -79,13 +86,10 @@ public class CharacterLiteralShadow extends LiteralShadow  {
         return getKindExpression("ExpressionKind", "LITERAL", new ExpressionKindProtoMap(), env);
     }
 
-     /** {@inheritDoc} */
+    /** {@inheritDoc} */
     @Override
-    public IfStatement getManytoOne(final SymbolTable env ,Block b) {
-       
-        // if(isboollit(${0})) b;
-        return getManytoOne( env , b, "ischarlit");
-        
+    public String toString() {
+        return "CharacterLiteral";
     }
     
 }
