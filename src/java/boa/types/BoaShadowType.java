@@ -135,6 +135,10 @@ public abstract class BoaShadowType extends BoaTuple {
         return new ArrayList<Expression>();  
     }
 
+    protected IfStatement getManytoOne(final SymbolTable env, final Block b, final String funcName, final BoaType t) {
+        return new IfStatement(ASTFactory.createCallExpr(funcName, env, t, ASTFactory.createIdentifierExpr(boa.compiler.transforms.ShadowTypeEraser.NODE_ID, env, t)), b);
+    }
+
     /**
      * Returns the many-to-one type for this shadow, if any.
      *
