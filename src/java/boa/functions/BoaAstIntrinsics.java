@@ -658,6 +658,20 @@ public class BoaAstIntrinsics {
 
 	/**
 	 * Returns <code>true</code> if the expression <code>e</code> is of kind
+	 * <code>LITERAL</code> and is a this literal.
+	 *
+	 * @param e the expression to test
+	 * @return true if the expression is a this literal, otherwise false
+	 */
+	@FunctionSpec(name = "isthislit", returnType = "bool", formalParameters = { "Expression" })
+	public static boolean isThisLit(final Expression e) throws Exception {
+		if (e.getKind() != ExpressionKind.LITERAL) return false;
+		if (!e.hasLiteral()) return false;
+		return e.getLiteral().equalsIgnoreCase("this") || e.getLiteral().toLowerCase().endsWith(".this");
+	}
+
+	/**
+	 * Returns <code>true</code> if the expression <code>e</code> is of kind
 	 * <code>LITERAL</code> and is a bool literal.
 	 *
 	 * @param e the expression to test
