@@ -73,7 +73,7 @@ public class LabeledStatementShadow extends BoaShadowType  {
     /** {@inheritDoc} */
     @Override
     public Expression getKindExpression(final SymbolTable env) {
-        return getKindExpression("StatementKind", "OTHER", new StatementKindProtoMap(), env);
+        return getKindExpression("StatementKind", "LABEL", new StatementKindProtoMap(), env);
     }
 
     /** {@inheritDoc} */
