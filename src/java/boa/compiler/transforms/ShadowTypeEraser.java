@@ -70,47 +70,19 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
     public static final String NODE_ID = "node";
 
     @Override
-    public void start(final Node n) {
+    public void visit(final VisitorExpression n) {
+        super.visit(n);
+
         // first step to collect and transform all VisitStatements
         new VisitorReplace().start(n);
+    }
+
+    @Override
+    public void start(final Node n) {
+        super.start(n);
 
         // second step to transform all the sub trees
         new SubtreeEraser().start(n);
-    }
-
-    protected class VisitTransform extends AbstractVisitorNoArgNoRet {
-        private String oldId;
-        private String newId;
-
-        public void start(final Node n, final String oldId, final String newId) {
-            this.oldId = oldId;
-            this.newId = newId;
-            start(n);
-        }
-
-        @Override
-        public void visit(final Identifier n) {
-            if (n.getToken().equals(oldId)) {
-                n.setToken(newId);
-            }
-        }
-
-        @Override
-        public void visit(final Component n) {
-            super.visit(n);
-
-            if (n.type instanceof BoaShadowType) {
-                final BoaShadowType shadow = (BoaShadowType)n.type;
-
-                // change the identifier
-                final Identifier id = (Identifier)n.getType();
-                id.setToken(shadow.shadowedName());
-
-                // update types
-                n.type = n.getType().type = shadow.shadowedType();
-                n.env.set(n.getIdentifier().getToken(), n.type);
-            }
-        }
     }
 
     protected class VisitorReplace extends AbstractVisitorNoArgNoRet {
@@ -125,6 +97,43 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
 
         private Block wildcardBlock = null;
         private boolean shadowedTypePresent = false;
+
+        protected class VisitTransform extends AbstractVisitorNoArgNoRet {
+            private String oldId;
+            private String newId;
+
+            public void start(final Node n, final String oldId, final String newId) {
+                this.oldId = oldId;
+                this.newId = newId;
+                start(n);
+            }
+
+            @Override
+            public void visit(final Identifier n) {
+                if (n.getToken().equals(oldId)) {
+                    n.setToken(newId);
+                }
+            }
+
+            @Override
+            public void visit(final Component n) {
+                super.visit(n);
+
+                if (n.type instanceof BoaShadowType) {
+                    final BoaShadowType shadow = (BoaShadowType)n.type;
+
+                    // change the identifier
+                    final Identifier id = (Identifier)n.getType();
+                    id.setToken(shadow.shadowedName());
+
+                    // update types
+                    n.type = n.getType().type = shadow.shadowedType();
+                    n.env.set(n.getIdentifier().getToken(), n.type);
+                }
+            }
+        }
+
+        private boolean nested = false;
 
         @Override
         public void visit(final VisitStatement n) {
@@ -169,6 +178,9 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
 
         @Override
         public void visit(final VisitorExpression n) {
+            if (nested) return;
+            nested = true;
+
             visitorExpStack.push(n);
             super.visit(n);
             visitorExpStack.pop();
@@ -198,6 +210,11 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                 final BoaProtoTuple shadowedType = entry.getKey();
                 LinkedList<VisitStatement> visits =  entry.getValue();
 
+                if (visits.size() == 1 && !(visits.get(0).getComponent().type instanceof BoaShadowType)) {
+                    n.getBody().addStatement(visits.get(0).clone());
+                    continue;
+                }
+
                 final Factor f = new Factor(ASTFactory.createIdentifier(NODE_ID, n.env));
                 f.env = n.env;
                 f.getOperand().type = shadowedType;
@@ -207,6 +224,7 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                 f.addOp(selec);
 
                 final Expression exp = ASTFactory.createFactorExpr(f);
+                System.out.println("type = " + shadowedType);
                 exp.type = shadowedType.getMember("kind");
                 exp.env = n.env;
 
@@ -220,8 +238,6 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
 
                     // transforming subtree by replacing the identifiers and type
                     new VisitTransform().start(b, visit.getComponent().getIdentifier().getToken(), NODE_ID);
-
-                   
 
                     if (visit.getComponent().type.toString().equals(shadowedType.toString())) {
                         // setting default if present
@@ -290,20 +306,19 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                                             }
 
                                             toCombine.addStatement(((BoaShadowType)visit.getComponent().type).getManytoOne(n.env, b));
-
                                         }
                                     }   
 
-                                    if ( !flg) {
-                                            final Block manyToOneBlock = new Block();
-                                             listExp.add(styKind);
-                                            manyToOneBlock.addStatement(((BoaShadowType)visit.getComponent().type).getManytoOne(n.env, b));
-                                            switchS.addCase(new SwitchCase(false, manyToOneBlock.clone(), listExp));
+                                    if (!flg) {
+                                        final Block manyToOneBlock = new Block();
+                                        listExp.add(styKind);
+                                        manyToOneBlock.addStatement(((BoaShadowType)visit.getComponent().type).getManytoOne(n.env, b));
+                                        switchS.addCase(new SwitchCase(false, manyToOneBlock.clone(), listExp));
                                     }
                                 }
+
                                 // add cases to a map so that we can resolve their origin type (eg . infix vs prefix)
                                 manytomanyMap.put(testi.getToken(), (BoaShadowType)visit.getComponent().type);
-
                                
                                 if (toCombine.getStatementsSize() > 0 && flg) {
                                     listExp.add(styKind);
@@ -328,16 +343,15 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                         }
                     }
                     defaultSc.getBody().addStatement(new BreakStatement());
-                }else{
+                } else {
                     defaultSc.getBody().addStatement(new BreakStatement());
                 }
 
                 //adding breaks
                 List<SwitchCase> listOfCases = switchS.getCases();
-                for(SwitchCase scase : listOfCases){
+                for (SwitchCase scase : listOfCases) {
                     scase.getBody().addStatement(new BreakStatement());   
                 }
-
 
                 afterTransformation.addStatement(switchS);
 
@@ -416,6 +430,20 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
 
                 parentExp.replaceExpression(parentExp, newExp);
             }
+        }
+
+        private boolean nested = false;
+
+        @Override
+        public void start(final Node n) {
+            nested = false;
+            super.start(n);
+        }
+
+        @Override
+        public void visit(final VisitorExpression n) {
+            if (nested) return;
+            nested = true;
         }
 
         // removing shadow types in before/after visit
