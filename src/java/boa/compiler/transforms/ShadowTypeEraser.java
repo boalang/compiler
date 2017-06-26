@@ -32,6 +32,8 @@ import boa.compiler.ast.statements.Statement;
 import boa.compiler.ast.statements.VisitStatement;
 import boa.compiler.ast.expressions.VisitorExpression;
 import boa.compiler.ast.statements.Block;
+import boa.compiler.ast.statements.IfStatement;
+import boa.compiler.ast.statements.StopStatement;
 import boa.compiler.ast.statements.SwitchStatement;
 import boa.compiler.ast.statements.SwitchCase;
 import boa.compiler.ast.statements.BreakStatement;
@@ -224,7 +226,6 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                 f.addOp(selec);
 
                 final Expression exp = ASTFactory.createFactorExpr(f);
-                System.out.println("type = " + shadowedType);
                 exp.type = shadowedType.getMember("kind");
                 exp.env = n.env;
 
@@ -342,15 +343,18 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                             defaultSc.getBody().addStatement(s.clone());
                         }
                     }
-                    defaultSc.getBody().addStatement(new BreakStatement());
-                } else {
+                }
+
+                // adding breaks
+                if (!lastStatementIsStop(defaultSc.getBody())) {
                     defaultSc.getBody().addStatement(new BreakStatement());
                 }
 
-                //adding breaks
-                List<SwitchCase> listOfCases = switchS.getCases();
-                for (SwitchCase scase : listOfCases) {
-                    scase.getBody().addStatement(new BreakStatement());   
+                final List<SwitchCase> listOfCases = switchS.getCases();
+                for (final SwitchCase scase : listOfCases) {
+                    if (!lastStatementIsStop(scase.getBody())) {
+                        scase.getBody().addStatement(new BreakStatement());   
+                    }
                 }
 
                 afterTransformation.addStatement(switchS);
@@ -364,6 +368,26 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
 
                 n.getBody().addStatement(shadowedTypeVisit);
             }
+        }
+
+        protected boolean lastStatementIsStop(final Statement s) {
+            if (s instanceof StopStatement)
+                return true;
+
+            if (s instanceof IfStatement) {
+                final IfStatement ifs = (IfStatement)s;
+                if (ifs.hasElse())
+                    return lastStatementIsStop(ifs.getBody()) && lastStatementIsStop(ifs.getElse());
+                return false;
+            }
+
+            if (s instanceof Block) {
+                final List<Statement> stmts = ((Block)s).getStatements();
+                if (stmts.size() > 0)
+                    return lastStatementIsStop(stmts.get(stmts.size() - 1));
+            }
+
+            return false;
         }
     }
 
@@ -430,22 +454,6 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
 
                 parentExp.replaceExpression(parentExp, newExp);
             }
-        }
-
-        private boolean nested = false;
-
-        @Override
-        public void start(final Node n) {
-            nested = false;
-            super.start(n);
-        }
-
-        @Override
-        public void visit(final VisitorExpression n) {
-           super.visit(n);
-            if (nested) return;
-            nested = true;
-
         }
 
         // removing shadow types in before/after visit
