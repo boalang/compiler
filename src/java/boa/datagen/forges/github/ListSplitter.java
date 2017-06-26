@@ -10,10 +10,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import boa.datagen.util.FileIO;
+import gnu.trove.set.hash.THashSet;
 
 public class ListSplitter {
 	public static void main(String[] args) {
-		final int NUM_OF_LISTS = 22;
+		int NUM_OF_LISTS = 125;
 		ArrayList<String> names = new ArrayList<String>();
 		Random rand = new Random();
 		String in = args[0];
@@ -25,32 +26,32 @@ public class ListSplitter {
 		Gson parser = new Gson();
 		JsonArray repos;
 		JsonObject repo;
-		for (int i = 0; i < files.length; i++) {
+		for (int i = 1; i < files.length; i++) {
 			System.out.println("proccessing page " + files[i].getName());
 			String content = FileIO.readFileContents(files[i]);
 			repos = parser.fromJson(content, JsonElement.class).getAsJsonArray();
 			for (JsonElement repoE : repos) {
 				repo = repoE.getAsJsonObject();
-				names.add(repo.get("full_name").getAsString());
+				String name = repo.get("full_name").getAsString();
+				names.add(name);
 			}
 		}
 		System.out.println(names.size() + " names");
 		shareSize = (names.size())/NUM_OF_LISTS;
 		System.out.println("share size = " + shareSize);
-		for (int i = 0; i < NUM_OF_LISTS; i++){
+		for (int i = 0; i < NUM_OF_LISTS -1; i++){
 			System.out.println("writting list " + i);
 			for (int j = 0; j < shareSize; j++){
 				int k = rand.nextInt(names.size());
-				String name = names.get(k);
-				FileIO.writeFileContents( new File(out + "/list-" + i) , name + "\n", true);
-				System.out.println(names.remove(name));
-				System.out.println(name + " removed " + !names.contains(name));
+				String name = names. get(k);
+				FileIO.writeFileContents(new File(out + "/list-" + i + ".txt") , name + "\n", true);
+				names.remove(k);
 			}
 		}
 		System.out.println("names remaning " + names.size());
 		while (!names.isEmpty()){
-			System.out.println("writting list " + 22);
-			FileIO.writeFileContents( new File(out + "/list-" + 22) , names.get(0) + "\n", true);
+			System.out.println("writting list " + (NUM_OF_LISTS -1));
+			FileIO.writeFileContents( new File(out + "/list-" + (NUM_OF_LISTS - 1)) , names.get(0) + "\n", true);
 			names.remove(0);
 		}
 	}
