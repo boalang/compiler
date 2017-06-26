@@ -5,7 +5,7 @@
       "expressions": [
          {
             "kind": "VARACCESS",
-            "variable": "x"
+            "variable": "y"
          },
          {
             "kind": "LAMBDA",
@@ -18,7 +18,7 @@
                   {
                      "name": "x",
                      "variable_type": {
-                        "name": "int",
+                        "name": "",
                         "kind": "OTHER"
                      }
                   }
@@ -41,7 +41,8 @@
                      }
                   }
                ]
-            }
+            },
+            "no_parens": true
          }
       ]
    }
