@@ -442,8 +442,10 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
 
         @Override
         public void visit(final VisitorExpression n) {
+           super.visit(n);
             if (nested) return;
             nested = true;
+
         }
 
         // removing shadow types in before/after visit
