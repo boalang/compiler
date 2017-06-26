@@ -146,13 +146,66 @@ public class SymbolTable {
 		idmap.put("IfStatement", new IfStatementShadow());
 		idmap.put("TryStatement", new TryStatementShadow());
 		idmap.put("ForStatement", new ForStatementShadow());
+		idmap.put("WhileStatement", new WhileStatementShadow());			
+		idmap.put("AssertStatement", new AssertStatementShadow());
+		idmap.put("BreakStatement", new BreakStatementShadow());
+		idmap.put("ContinueStatement", new ContinueStatementShadow());
+		idmap.put("DoStatement", new DoStatementShadow());
+		idmap.put("EmptyStatement", new EmptyStatementShadow());
+		idmap.put("EnhancedForStatement", new EnhancedForStatementShadow());
+		idmap.put("ExpressionStatement", new ExpressionStatementShadow());
+		idmap.put("LabeledStatement", new LabeledStatementShadow());
+		idmap.put("ReturnStatement", new ReturnStatementShadow());
+		idmap.put("SwitchStatement", new SwitchStatementShadow());
+		idmap.put("SynchronizedStatement", new SynchronizedStatementShadow());
+		idmap.put("ThrowStatement", new ThrowStatementShadow());
+		idmap.put("TypeDeclarationStatement", new TypeDeclarationStatementShadow());
+		idmap.put("VariableDeclarationStatement", new VariableDeclarationStatementShadow());
 		idmap.put("InfixExpression", new InfixExpressionShadow());
 		idmap.put("PostfixExpression", new PostfixExpressionShadow());
 		idmap.put("PrefixExpression", new PrefixExpressionShadow());
 		idmap.put("Assignment", new AssignmentShadow());
 		idmap.put("BooleanLiteral", new BooleanLiteralShadow());
-		idmap.put("CharLiteral", new CharacterLiteralShadow());		
-		idmap.put("WhileStatement", new WhileStatementShadow());		
+		idmap.put("CharLiteral", new CharacterLiteralShadow());
+		idmap.put("Annotation", new AnnotationShadow());		
+		idmap.put("AnnotationTypeDeclaration", new AnnotationTypeDeclarationShadow());
+		idmap.put("AnonymousClassDeclaration", new AnonymousClassDeclarationShadow());
+		idmap.put("ArrayAccess", new ArrayAccessShadow());
+		idmap.put("ArrayCreation", new ArrayCreationShadow());
+		idmap.put("ArrayInitializer", new ArrayInitializerShadow());
+		idmap.put("Assignment", new AssignmentShadow());
+		idmap.put("BlockComment", new BlockCommentShadow());
+		idmap.put("Block", new BlockShadow());
+		idmap.put("CastExpression", new CastExpressionShadow());
+		idmap.put("ClassInstanceCreation", new ClassInstanceCreationShadow());
+		idmap.put("ConditionalExpression", new ConditionalExpressionShadow());
+		idmap.put("ConstructorInvocation", new ConstructorInvocationShadow());
+		idmap.put("EnumDeclaration", new EnumDeclarationShadow());
+		idmap.put("FieldAccess", new FieldAccessShadow());
+		idmap.put("InstanceofExpression", new InstanceofExpressionShadow());
+		idmap.put("Javadoc", new JavadocShadow());
+		idmap.put("LineComment", new LineCommentShadow());
+		idmap.put("MarkerAnnotation", new MarkerAnnotationShadow());
+		idmap.put("MethodInvocation", new MethodInvocationShadow());
+		//idmap.put("Modifier", new ModifierShadow());// FIXME : This type cuases the teset suite to fail on modifier use
+		idmap.put("NormalAnnotation", new NormalAnnotationShadow());
+		idmap.put("NullLiteral", new NullLiteralShadow());
+		idmap.put("NumberLiteral", new NumberLiteralShadow());
+		idmap.put("ParenthesizedExpression", new ParenthesizedExpressionShadow());
+		idmap.put("QualifiedName", new QualifiedNameShadow());
+		idmap.put("SimpleName", new SimpleNameShadow());
+		idmap.put("SingleMemberAnnotation", new SingleMemberAnnotationShadow());
+		idmap.put("StringLiteral", new StringLiteralShadow());
+		idmap.put("SuperConstructorInvocation", new SuperConstructorInvocationShadow());
+		idmap.put("SuperFieldAccess", new SuperFieldAccessShadow());
+		idmap.put("SuperMethodInvocation", new SuperMethodInvocationShadow());
+		idmap.put("SwitchCase", new SwitchCaseShadow());
+		idmap.put("ThisExpression", new ThisExpressionShadow());
+		idmap.put("TypeLiteral", new TypeLiteralShadow());
+		idmap.put("VariableDeclarationExpression", new VariableDeclarationExpressionShadow());
+
+
+
 
 		globalFunctions = new FunctionTrie();
 

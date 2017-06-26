@@ -39,12 +39,12 @@ import boa.compiler.ast.statements.Block;
  * @author rdyer
  * @author kaushin
  */
-public class TypeLiteralShadow extends LiteralShadow  {
+public class TypeLiteralShadow extends BoaShadowType  {
     /**
      * Construct a {@link TypeLiteralShadow}.
      */
     public TypeLiteralShadow() {
-        super();
+        super(new ExpressionProtoTuple());
         addShadow("type", new BoaString());
         
     }
@@ -65,18 +65,24 @@ public class TypeLiteralShadow extends LiteralShadow  {
         throw new RuntimeException("invalid shadow field: " + name);
     }
 
+      /** {@inheritDoc} */
+    @Override
+    public IfStatement getManytoOne(final SymbolTable env, final Block b) {
+        // if (funcName(${0})) b;
+        final Expression tree = ASTFactory.createIdentifierExpr(boa.compiler.transforms.ShadowTypeEraser.NODE_ID, env, new ExpressionProtoTuple());
+
+        return new IfStatement(ASTFactory.createCallExpr("istypelit", env, new ExpressionProtoTuple(), tree), b);
+    }  
+
     /** {@inheritDoc} */
     @Override
     public Expression getKindExpression(final SymbolTable env) {
         return getKindExpression("ExpressionKind", "LITERAL", new ExpressionKindProtoMap(), env);
     }
 
-     /** {@inheritDoc} */
+    /** {@inheritDoc} */
     @Override
-    public IfStatement getManytoOne(final SymbolTable env ,Block b) {
-       
-        // if(isboollit(${0})) b;
-        return getManytoOne( env , b, "istypelit");
-        
+    public String toString() {
+        return "TypeLiteral";
     }
 }
