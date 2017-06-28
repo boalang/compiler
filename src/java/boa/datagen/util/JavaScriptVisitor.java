@@ -371,7 +371,6 @@ public class JavaScriptVisitor implements NodeVisitor{
 		node.getThenPart().visit(this);
 		for (boa.types.Ast.Statement s : statements.pop())
 			b.addStatements(s);
-		// FIXME
 		if (node.getElsePart() != null) {
 			statements.push(new ArrayList<boa.types.Ast.Statement>());
 			node.getElsePart().visit(this);
