@@ -25,8 +25,9 @@ import java.net.URLClassLoader;
 import java.util.UUID;
 
 import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
+import org.apache.commons.cli.PosixParser;
 import org.apache.commons.io.FileUtils;
 
 import boa.BoaMain;
@@ -74,7 +75,7 @@ public class BoaEvaluator extends BoaMain {
 				printHelp(options, null);
 				return;
 			} else {
-				final CommandLine cl = new DefaultParser().parse(options, args);
+				final CommandLine cl = new PosixParser().parse(options, args);
 
 				if (cl.hasOption('i') && cl.hasOption('d')) {
 					final BoaEvaluator evaluator;
