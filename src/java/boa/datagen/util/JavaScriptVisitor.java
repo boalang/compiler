@@ -23,6 +23,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Stack;
 
+import org.eclipse.jdt.core.dom.Annotation;
+import org.eclipse.jdt.core.dom.IExtendedModifier;
+import org.eclipse.jdt.core.dom.Name;
+import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
+import org.eclipse.jdt.core.dom.TypeParameter;
 //import org.eclipse.wst.jsdt.core.dom.*;
 import org.mozilla.javascript.*;
 import org.mozilla.javascript.ast.*;
@@ -36,6 +41,7 @@ import boa.types.Ast.Statement.StatementKind;
 import boa.types.Ast.Type;
 import boa.types.Ast.TypeKind;
 import boa.types.Ast.Variable;
+import boa.types.Ast.VariableOrBuilder;
 
 /**
  * @author rdyer
@@ -92,12 +98,8 @@ public class JavaScriptVisitor implements NodeVisitor{
 	}
 
 	public boolean visit(AstRoot node) {
-		Name pkg = (Name)node.getFirstChild(); // getPackage();
-		if (pkg == null) {
-			b.setName("");
-		} else {
-			b.setName(pkg.getIdentifier());//  .getFullyQualifiedName());
-		}
+		String pkg = node.getSourceName(); // getPackage();
+		b.setName(pkg);
 		for (Object c : node.getComments())
 				((Comment) c).visit(this);
 		if (!node.getStatements().isEmpty()) {
@@ -181,6 +183,38 @@ public class JavaScriptVisitor implements NodeVisitor{
 		return false;
 	}
 
+	public boolean visit(FunctionNode node){
+		List<boa.types.Ast.Method> list = methods.peek();
+		Method.Builder b = Method.newBuilder();
+		b.setName(node.getName());
+		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
+		
+		for (AstNode p : node.getParams()) {
+			Variable.Builder vb = Variable.newBuilder();
+			vb.setName(Token.typeToName(p.getType()));
+			boa.types.Ast.Type.Builder tp = boa.types.Ast.Type.newBuilder();
+			String name = p.toSource();
+			tp.setName(name);
+			tp.setKind(boa.types.Ast.TypeKind.OTHER);
+			vb.setVariableType(tp.build());
+			if (((VariableDeclaration) p).getVariables() != null) {
+				for (VariableInitializer v : ((VariableDeclaration) p).getVariables()) {
+					v.visit(this);
+					vb.setInitializer(expressions.pop());
+				}
+			}
+			b.addArguments(vb.build());
+		}
+		
+		if (node.getBody() != null) {
+			statements.push(new ArrayList<boa.types.Ast.Statement>());
+			node.getBody().visit(this);
+			for (boa.types.Ast.Statement s : statements.pop())
+				b.addStatements(s);
+		}
+		list.add(b.build());
+		return false;
+	}
 
 	//////////////////////////////////////////////////////////////
 	// Statements
@@ -318,7 +352,7 @@ public class JavaScriptVisitor implements NodeVisitor{
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.METHODCALL);
 		if (node.shortName() != null)
-			b.setMethod(node.shortName()); //. getFullyQualifiedName());
+			b.setMethod(node.shortName()); 
 		if (node.getTarget()  != null) {
 			node.getTarget().visit(this);
 			b.addExpressions(expressions.pop());
@@ -328,12 +362,6 @@ public class JavaScriptVisitor implements NodeVisitor{
 			((AstNode) a).visit(this);
 			b.addMethodArgs(expressions.pop());
 		}
-//		for (Object t : node.typeArguments()) {
-//			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
-//			tb.setName(typeName((org.eclipse.wst.jsdt.core.dom.Type) t));
-//			tb.setKind(boa.types.Ast.TypeKind.GENERIC);
-//			b.addGenericParameters(tb.build());
-//		}
 		expressions.push(b.build());
 		return false;
 	}
@@ -654,7 +682,7 @@ public class JavaScriptVisitor implements NodeVisitor{
 		return false;
 	}
 
-	public boolean visit(Name node) {
+	public boolean visit(org.mozilla.javascript.ast.Name node) {
 		boa.types.Ast.Expression.Builder bui = boa.types.Ast.Expression.newBuilder();
 		bui.setVariable(node.toSource());
 		bui.setKind(boa.types.Ast.Expression.ExpressionKind.OTHER);
