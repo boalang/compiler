@@ -21,6 +21,7 @@ import java.util.*;
 import boa.compiler.ast.Factor;
 import boa.compiler.ast.Selector;
 import boa.compiler.ast.Term;
+import boa.compiler.ast.Comparison;
 import boa.compiler.ast.Node;
 import boa.compiler.ast.Component;
 import boa.compiler.ast.Identifier;
@@ -400,6 +401,7 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
         private final Deque<Expression> expressionStack = new ArrayDeque<Expression>();
 
         // track nearest Expression node
+         @Override
         public void visit(final Expression n) {
             expressionStack.push(n);
             super.visit(n);
@@ -451,8 +453,9 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                     newFact.addOp(ops.get(i));
                     newExp.type = ops.get(i).type;
                 }
-
+                
                 parentExp.replaceExpression(parentExp, newExp);
+
             }
         }
 

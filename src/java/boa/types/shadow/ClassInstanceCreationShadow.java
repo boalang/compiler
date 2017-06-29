@@ -47,7 +47,7 @@ public class ClassInstanceCreationShadow extends BoaShadowType  {
         addShadow("expression", new ExpressionProtoTuple());
         addShadow("arguments",  new BoaProtoList(new ExpressionProtoTuple()));
         addShadow("anonymous_class_declaration", new ExpressionProtoTuple());
-        addShadow("type", new TypeProtoTuple());
+        addShadow("get_type", new TypeProtoTuple());
     }
 
     /** {@inheritDoc} */
@@ -84,7 +84,7 @@ public class ClassInstanceCreationShadow extends BoaShadowType  {
              return ASTFactory.createSelector(id, "anon_declaration", new ExpressionProtoTuple(), new ExpressionProtoTuple(), env);
         }
 
-        if ("type".equals(name)) {
+        if ("get_type".equals(name)) {
             // ${0}.new_type
             return ASTFactory.createSelector(id, "new_type", new TypeProtoTuple(), new TypeProtoTuple(), env);
         }

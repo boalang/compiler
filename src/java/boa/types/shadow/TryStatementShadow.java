@@ -45,7 +45,7 @@ public class TryStatementShadow extends BoaShadowType  {
         super(new StatementProtoTuple());
 
         
-        addShadow("body", new StatementProtoTuple());
+        addShadow("body", new BoaProtoList(new StatementProtoTuple()));
         addShadow("finallyblock", new StatementProtoTuple());
         addShadow("catchclauses", new StatementProtoTuple());
     }
@@ -72,9 +72,7 @@ public class TryStatementShadow extends BoaShadowType  {
         if ("body".equals(name)) {
             // ${0}.statements
             final Expression tree = ASTFactory.createSelector(id, "statements", new BoaProtoList(new StatementProtoTuple()), new StatementProtoTuple(), env);
-            // ${0}.statements[0]
-            ASTFactory.getFactorFromExp(tree).addOp(ASTFactory.createIndex(ASTFactory.createIntLiteral(0), env));
-
+            
             return tree;
         }
 

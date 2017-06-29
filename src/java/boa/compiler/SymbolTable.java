@@ -203,6 +203,7 @@ public class SymbolTable {
 		idmap.put("ThisExpression", new ThisExpressionShadow());
 		idmap.put("TypeLiteral", new TypeLiteralShadow());
 		idmap.put("VariableDeclarationExpression", new VariableDeclarationExpressionShadow());
+		idmap.put("CatchClause", new CatchClauseShadow());
 
 
 
