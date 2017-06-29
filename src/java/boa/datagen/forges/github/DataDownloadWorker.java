@@ -17,11 +17,6 @@ public class DataDownloadWorker implements Runnable {
 	private final String repo_url_header = "https://api.github.com/repos/";
 	String stateFile = "";
 	int javaCounter = 1;
-	int jsCounter = 1;
-	int phpCounter = 1;
-	int scalaCounter = 1;
-	int other = 1;
-	int index = 0;
 	final static int RECORDS_PER_FILE = 100;
 	final int startFileNumber;
 	final int endFileNumber;
@@ -34,7 +29,6 @@ public class DataDownloadWorker implements Runnable {
 		this.javarepos = new JsonArray();
 		this.startFileNumber = start;
 		this.endFileNumber = end;
-		this.index = index;
 	}
 
 	public void downloadRepoMetaDataForRepoIn(int from, int to) {
@@ -53,6 +47,9 @@ public class DataDownloadWorker implements Runnable {
 			for (int j = 0; j < size; j++) {
 				JsonObject repo = repos.get(j).getAsJsonObject();
 				String name = repo.get("full_name").getAsString();
+				boolean fork = repo.get("fork").getAsBoolean();
+				if (fork)
+					continue;
 				if (names.contains(name)) {
 					names.remove(name);
 					continue;
@@ -67,14 +64,11 @@ public class DataDownloadWorker implements Runnable {
 					mc.getResponse();
 					String pageContent = mc.getContent();
 					JsonObject repository = parser.fromJson(pageContent, JsonElement.class).getAsJsonObject();
-					int stars = repository.getAsJsonPrimitive("stargazers_count").getAsInt();
+					int stars = repository.get("stargazers_count").getAsInt();
 					if (stars <= 0)
 						continue;
-					boolean forked = repository.getAsJsonPrimitive("fork").getAsBoolean();
-					if(forked)
-						continue;
 					repo.addProperty("stargazers_count", stars);
-					String created = repository.getAsJsonPrimitive("created_at").getAsString();
+					String created = repository.get("created_at").getAsString();
 					repo.addProperty("created_at", created);
 					addRepo(output, repo);
 					tok.setLastResponseCode(mc.getResponseCode());
@@ -82,7 +76,7 @@ public class DataDownloadWorker implements Runnable {
 					tok.setResetTime(mc.getLimitResetTime());
 				} else {
 					final int responsecode = mc.getResponseCode();
-					System.err.println("authentication error " + responsecode);
+					System.err.println("authentication error " + responsecode + " " + name);
 					mc = new MetadataCacher("https://api.github.com/repositories", tok.getUserName(), tok.getToken());
 					if (mc.authenticate()) { 
 						tok.setnumberOfRemainingLimit(mc.getNumberOfRemainingLimit());

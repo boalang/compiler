@@ -21126,9 +21126,27 @@ public final class Ast {
      */
     boa.types.Ast.MethodOrBuilder getLambdaOrBuilder();
 
-    // optional .boa.types.ChangeKind structural_change_kind = 14;
+    // optional bool no_parens = 14;
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 14;</code>
+     * <code>optional bool no_parens = 14;</code>
+     *
+     * <pre>
+     ** @exclude 
+     * </pre>
+     */
+    boolean hasNoParens();
+    /**
+     * <code>optional bool no_parens = 14;</code>
+     *
+     * <pre>
+     ** @exclude 
+     * </pre>
+     */
+    boolean getNoParens();
+
+    // optional .boa.types.ChangeKind structural_change_kind = 15;
+    /**
+     * <code>optional .boa.types.ChangeKind structural_change_kind = 15;</code>
      *
      * <pre>
      ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -21136,7 +21154,7 @@ public final class Ast {
      */
     boolean hasStructuralChangeKind();
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 14;</code>
+     * <code>optional .boa.types.ChangeKind structural_change_kind = 15;</code>
      *
      * <pre>
      ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -21144,9 +21162,9 @@ public final class Ast {
      */
     boa.types.Shared.ChangeKind getStructuralChangeKind();
 
-    // optional .boa.types.ChangeKind label_change_kind = 15;
+    // optional .boa.types.ChangeKind label_change_kind = 16;
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 15;</code>
+     * <code>optional .boa.types.ChangeKind label_change_kind = 16;</code>
      *
      * <pre>
      ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -21154,7 +21172,7 @@ public final class Ast {
      */
     boolean hasLabelChangeKind();
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 15;</code>
+     * <code>optional .boa.types.ChangeKind label_change_kind = 16;</code>
      *
      * <pre>
      ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -21333,14 +21351,8 @@ public final class Ast {
               break;
             }
             case 112: {
-              int rawValue = input.readEnum();
-              boa.types.Shared.ChangeKind value = boa.types.Shared.ChangeKind.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(14, rawValue);
-              } else {
-                bitField0_ |= 0x00000200;
-                structuralChangeKind_ = value;
-              }
+              bitField0_ |= 0x00000200;
+              noParens_ = input.readBool();
               break;
             }
             case 120: {
@@ -21350,6 +21362,17 @@ public final class Ast {
                 unknownFields.mergeVarintField(15, rawValue);
               } else {
                 bitField0_ |= 0x00000400;
+                structuralChangeKind_ = value;
+              }
+              break;
+            }
+            case 128: {
+              int rawValue = input.readEnum();
+              boa.types.Shared.ChangeKind value = boa.types.Shared.ChangeKind.valueOf(rawValue);
+              if (value == null) {
+                unknownFields.mergeVarintField(16, rawValue);
+              } else {
+                bitField0_ |= 0x00000800;
                 labelChangeKind_ = value;
               }
               break;
@@ -22396,21 +22419,45 @@ public final class Ast {
       return lambda_;
     }
 
-    // optional .boa.types.ChangeKind structural_change_kind = 14;
-    public static final int STRUCTURAL_CHANGE_KIND_FIELD_NUMBER = 14;
+    // optional bool no_parens = 14;
+    public static final int NO_PARENS_FIELD_NUMBER = 14;
+    private boolean noParens_;
+    /**
+     * <code>optional bool no_parens = 14;</code>
+     *
+     * <pre>
+     ** @exclude 
+     * </pre>
+     */
+    public boolean hasNoParens() {
+      return ((bitField0_ & 0x00000200) == 0x00000200);
+    }
+    /**
+     * <code>optional bool no_parens = 14;</code>
+     *
+     * <pre>
+     ** @exclude 
+     * </pre>
+     */
+    public boolean getNoParens() {
+      return noParens_;
+    }
+
+    // optional .boa.types.ChangeKind structural_change_kind = 15;
+    public static final int STRUCTURAL_CHANGE_KIND_FIELD_NUMBER = 15;
     private boa.types.Shared.ChangeKind structuralChangeKind_;
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 14;</code>
+     * <code>optional .boa.types.ChangeKind structural_change_kind = 15;</code>
      *
      * <pre>
      ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
      * </pre>
      */
     public boolean hasStructuralChangeKind() {
-      return ((bitField0_ & 0x00000200) == 0x00000200);
+      return ((bitField0_ & 0x00000400) == 0x00000400);
     }
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 14;</code>
+     * <code>optional .boa.types.ChangeKind structural_change_kind = 15;</code>
      *
      * <pre>
      ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -22420,21 +22467,21 @@ public final class Ast {
       return structuralChangeKind_;
     }
 
-    // optional .boa.types.ChangeKind label_change_kind = 15;
-    public static final int LABEL_CHANGE_KIND_FIELD_NUMBER = 15;
+    // optional .boa.types.ChangeKind label_change_kind = 16;
+    public static final int LABEL_CHANGE_KIND_FIELD_NUMBER = 16;
     private boa.types.Shared.ChangeKind labelChangeKind_;
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 15;</code>
+     * <code>optional .boa.types.ChangeKind label_change_kind = 16;</code>
      *
      * <pre>
      ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
      * </pre>
      */
     public boolean hasLabelChangeKind() {
-      return ((bitField0_ & 0x00000400) == 0x00000400);
+      return ((bitField0_ & 0x00000800) == 0x00000800);
     }
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 15;</code>
+     * <code>optional .boa.types.ChangeKind label_change_kind = 16;</code>
      *
      * <pre>
      ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -22458,6 +22505,7 @@ public final class Ast {
       anonDeclaration_ = boa.types.Ast.Declaration.getDefaultInstance();
       annotation_ = boa.types.Ast.Modifier.getDefaultInstance();
       lambda_ = boa.types.Ast.Method.getDefaultInstance();
+      noParens_ = false;
       structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
       labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
     }
@@ -22565,10 +22613,13 @@ public final class Ast {
         output.writeMessage(13, lambda_);
       }
       if (((bitField0_ & 0x00000200) == 0x00000200)) {
-        output.writeEnum(14, structuralChangeKind_.getNumber());
+        output.writeBool(14, noParens_);
       }
       if (((bitField0_ & 0x00000400) == 0x00000400)) {
-        output.writeEnum(15, labelChangeKind_.getNumber());
+        output.writeEnum(15, structuralChangeKind_.getNumber());
+      }
+      if (((bitField0_ & 0x00000800) == 0x00000800)) {
+        output.writeEnum(16, labelChangeKind_.getNumber());
       }
       getUnknownFields().writeTo(output);
     }
@@ -22633,11 +22684,15 @@ public final class Ast {
       }
       if (((bitField0_ & 0x00000200) == 0x00000200)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(14, structuralChangeKind_.getNumber());
+          .computeBoolSize(14, noParens_);
       }
       if (((bitField0_ & 0x00000400) == 0x00000400)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(15, labelChangeKind_.getNumber());
+          .computeEnumSize(15, structuralChangeKind_.getNumber());
+      }
+      if (((bitField0_ & 0x00000800) == 0x00000800)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeEnumSize(16, labelChangeKind_.getNumber());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -22825,10 +22880,12 @@ public final class Ast {
           lambdaBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00001000);
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        noParens_ = false;
         bitField0_ = (bitField0_ & ~0x00002000);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
         bitField0_ = (bitField0_ & ~0x00004000);
+        labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        bitField0_ = (bitField0_ & ~0x00008000);
         return this;
       }
 
@@ -22948,9 +23005,13 @@ public final class Ast {
         if (((from_bitField0_ & 0x00002000) == 0x00002000)) {
           to_bitField0_ |= 0x00000200;
         }
-        result.structuralChangeKind_ = structuralChangeKind_;
+        result.noParens_ = noParens_;
         if (((from_bitField0_ & 0x00004000) == 0x00004000)) {
           to_bitField0_ |= 0x00000400;
+        }
+        result.structuralChangeKind_ = structuralChangeKind_;
+        if (((from_bitField0_ & 0x00008000) == 0x00008000)) {
+          to_bitField0_ |= 0x00000800;
         }
         result.labelChangeKind_ = labelChangeKind_;
         result.bitField0_ = to_bitField0_;
@@ -23105,6 +23166,9 @@ public final class Ast {
         }
         if (other.hasLambda()) {
           mergeLambda(other.getLambda());
+        }
+        if (other.hasNoParens()) {
+          setNoParens(other.getNoParens());
         }
         if (other.hasStructuralChangeKind()) {
           setStructuralChangeKind(other.getStructuralChangeKind());
@@ -24962,20 +25026,69 @@ public final class Ast {
         return lambdaBuilder_;
       }
 
-      // optional .boa.types.ChangeKind structural_change_kind = 14;
+      // optional bool no_parens = 14;
+      private boolean noParens_ ;
+      /**
+       * <code>optional bool no_parens = 14;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
+       */
+      public boolean hasNoParens() {
+        return ((bitField0_ & 0x00002000) == 0x00002000);
+      }
+      /**
+       * <code>optional bool no_parens = 14;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
+       */
+      public boolean getNoParens() {
+        return noParens_;
+      }
+      /**
+       * <code>optional bool no_parens = 14;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
+       */
+      public Builder setNoParens(boolean value) {
+        bitField0_ |= 0x00002000;
+        noParens_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional bool no_parens = 14;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
+       */
+      public Builder clearNoParens() {
+        bitField0_ = (bitField0_ & ~0x00002000);
+        noParens_ = false;
+        onChanged();
+        return this;
+      }
+
+      // optional .boa.types.ChangeKind structural_change_kind = 15;
       private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 14;</code>
+       * <code>optional .boa.types.ChangeKind structural_change_kind = 15;</code>
        *
        * <pre>
        ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
        * </pre>
        */
       public boolean hasStructuralChangeKind() {
-        return ((bitField0_ & 0x00002000) == 0x00002000);
+        return ((bitField0_ & 0x00004000) == 0x00004000);
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 14;</code>
+       * <code>optional .boa.types.ChangeKind structural_change_kind = 15;</code>
        *
        * <pre>
        ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -24985,7 +25098,7 @@ public final class Ast {
         return structuralChangeKind_;
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 14;</code>
+       * <code>optional .boa.types.ChangeKind structural_change_kind = 15;</code>
        *
        * <pre>
        ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
@@ -24995,39 +25108,39 @@ public final class Ast {
         if (value == null) {
           throw new NullPointerException();
         }
-        bitField0_ |= 0x00002000;
+        bitField0_ |= 0x00004000;
         structuralChangeKind_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 14;</code>
+       * <code>optional .boa.types.ChangeKind structural_change_kind = 15;</code>
        *
        * <pre>
        ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
        * </pre>
        */
       public Builder clearStructuralChangeKind() {
-        bitField0_ = (bitField0_ & ~0x00002000);
+        bitField0_ = (bitField0_ & ~0x00004000);
         structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
         onChanged();
         return this;
       }
 
-      // optional .boa.types.ChangeKind label_change_kind = 15;
+      // optional .boa.types.ChangeKind label_change_kind = 16;
       private boa.types.Shared.ChangeKind labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 15;</code>
+       * <code>optional .boa.types.ChangeKind label_change_kind = 16;</code>
        *
        * <pre>
        ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
        * </pre>
        */
       public boolean hasLabelChangeKind() {
-        return ((bitField0_ & 0x00004000) == 0x00004000);
+        return ((bitField0_ & 0x00008000) == 0x00008000);
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 15;</code>
+       * <code>optional .boa.types.ChangeKind label_change_kind = 16;</code>
        *
        * <pre>
        ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -25037,7 +25150,7 @@ public final class Ast {
         return labelChangeKind_;
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 15;</code>
+       * <code>optional .boa.types.ChangeKind label_change_kind = 16;</code>
        *
        * <pre>
        ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
@@ -25047,20 +25160,20 @@ public final class Ast {
         if (value == null) {
           throw new NullPointerException();
         }
-        bitField0_ |= 0x00004000;
+        bitField0_ |= 0x00008000;
         labelChangeKind_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 15;</code>
+       * <code>optional .boa.types.ChangeKind label_change_kind = 16;</code>
        *
        * <pre>
        ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
        * </pre>
        */
       public Builder clearLabelChangeKind() {
-        bitField0_ = (bitField0_ & ~0x00004000);
+        bitField0_ = (bitField0_ & ~0x00008000);
         labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
         onChanged();
         return this;
@@ -29580,7 +29693,7 @@ public final class Ast {
       "\020\005\022\007\n\003FOR\020\006\022\006\n\002DO\020\007\022\t\n\005WHILE\020\010\022\006\n\002IF\020\t\022\n" +
       "\n\006ASSERT\020\n\022\t\n\005BREAK\020\013\022\014\n\010CONTINUE\020\014\022\t\n\005L" +
       "ABEL\020\r\022\n\n\006SWITCH\020\016\022\010\n\004CASE\020\017\022\007\n\003TRY\020\020\022\t\n" +
-      "\005THROW\020\021\022\t\n\005CATCH\020\022\022\t\n\005EMPTY\020\023\032\002\020\001\"\331\n\n\nE" +
+      "\005THROW\020\021\022\t\n\005CATCH\020\022\022\t\n\005EMPTY\020\023\032\002\020\001\"\354\n\n\nE" +
       "xpression\0222\n\004kind\030\001 \002(\0162$.boa.types.Expr",
       "ession.ExpressionKind\022*\n\013expressions\030\002 \003" +
       "(\0132\025.boa.types.Expression\022+\n\016variable_de" +
@@ -29592,59 +29705,60 @@ public final class Ast {
       "(\0132\025.boa.types.Expression\0220\n\020anon_declar" +
       "ation\030\013 \001(\0132\026.boa.types.Declaration\022\'\n\na" +
       "nnotation\030\014 \001(\0132\023.boa.types.Modifier\022!\n\006",
-      "lambda\030\r \001(\0132\021.boa.types.Method\0225\n\026struc" +
-      "tural_change_kind\030\016 \001(\0162\025.boa.types.Chan" +
-      "geKind\0220\n\021label_change_kind\030\017 \001(\0162\025.boa." +
-      "types.ChangeKind\"\223\006\n\016ExpressionKind\022\t\n\005O" +
-      "THER\020\000\022\013\n\007LITERAL\020\001\022\r\n\tVARACCESS\020\002\022\013\n\007VA" +
-      "RDECL\020\003\022\016\n\nMETHODCALL\020\004\022\010\n\004CAST\020\005\022\016\n\nARR" +
-      "AYINDEX\020\006\022\r\n\tARRAYINIT\020\007\022\017\n\013TYPECOMPARE\020" +
-      "\010\022\007\n\003NEW\020\t\022\014\n\010NEWARRAY\020\n\022\n\n\006OP_ADD\020\013\022\n\n\006" +
-      "OP_SUB\020\014\022\013\n\007OP_MULT\020\r\022\n\n\006OP_DIV\020\016\022\n\n\006OP_" +
-      "MOD\020\017\022\n\n\006OP_INC\020\020\022\n\n\006OP_DEC\020\021\022\016\n\nBIT_LSH",
-      "IFT\020\022\022\016\n\nBIT_RSHIFT\020\023\022\026\n\022BIT_UNSIGNEDRSH" +
-      "IFT\020\024\022\013\n\007BIT_AND\020\025\022\n\n\006BIT_OR\020\026\022\013\n\007BIT_NO" +
-      "T\020\027\022\013\n\007BIT_XOR\020\030\022\017\n\013LOGICAL_NOT\020\031\022\017\n\013LOG" +
-      "ICAL_AND\020\032\022\016\n\nLOGICAL_OR\020\033\022\006\n\002EQ\020\034\022\007\n\003NE" +
-      "Q\020\035\022\006\n\002LT\020\036\022\006\n\002GT\020\037\022\010\n\004LTEQ\020 \022\010\n\004GTEQ\020!\022" +
-      "\017\n\013CONDITIONAL\020\"\022\020\n\014NULLCOALESCE\020#\022\n\n\006AS" +
-      "SIGN\020$\022\016\n\nASSIGN_ADD\020%\022\016\n\nASSIGN_SUB\020&\022\017" +
-      "\n\013ASSIGN_MULT\020\'\022\016\n\nASSIGN_DIV\020(\022\016\n\nASSIG" +
-      "N_MOD\020)\022\021\n\rASSIGN_BITXOR\020*\022\021\n\rASSIGN_BIT" +
-      "AND\020+\022\020\n\014ASSIGN_BITOR\020,\022\021\n\rASSIGN_LSHIFT",
-      "\020-\022\021\n\rASSIGN_RSHIFT\020.\022\031\n\025ASSIGN_UNSIGNED" +
-      "RSHIFT\020/\022\016\n\nANNOTATION\0200\022\t\n\005PAREN\0201\022\024\n\020M" +
-      "ETHOD_REFERENCE\0202\022\n\n\006LAMBDA\0203\022\017\n\013ANON_ME" +
-      "THOD\0204\"\260\004\n\010Modifier\022.\n\004kind\030\001 \002(\0162 .boa." +
-      "types.Modifier.ModifierKind\0222\n\nvisibilit" +
-      "y\030\002 \001(\0162\036.boa.types.Modifier.Visibility\022" +
-      "\027\n\017annotation_name\030\003 \001(\t\022\032\n\022annotation_m" +
-      "embers\030\004 \003(\t\0220\n\021annotation_values\030\005 \003(\0132" +
-      "\025.boa.types.Expression\022\r\n\005other\030\006 \001(\t\0225\n" +
-      "\026structural_change_kind\030\007 \001(\0162\025.boa.type",
-      "s.ChangeKind\0220\n\021label_change_kind\030\010 \001(\0162" +
-      "\025.boa.types.ChangeKind\"~\n\014ModifierKind\022\t" +
-      "\n\005OTHER\020\000\022\016\n\nVISIBILITY\020\001\022\016\n\nANNOTATION\020" +
-      "\002\022\t\n\005FINAL\020\003\022\n\n\006STATIC\020\004\022\020\n\014SYNCHRONIZED" +
-      "\020\005\022\010\n\004SYNC\020\005\022\014\n\010ABSTRACT\020\006\032\002\020\001\"a\n\nVisibi" +
-      "lity\022\n\n\006PUBLIC\020\001\022\013\n\007PRIVATE\020\002\022\r\n\tPROTECT" +
-      "ED\020\003\022\r\n\tNAMESPACE\020\004\022\013\n\007PACKAGE\020\004\022\013\n\007DEFA" +
-      "ULT\020\004\032\002\020\001\"\306\002\n\007Comment\022,\n\004kind\030\001 \002(\0162\036.bo" +
-      "a.types.Comment.CommentKind\022\r\n\005value\030\002 \002" +
-      "(\t\022)\n\010position\030\003 \002(\0132\027.boa.types.Positio",
-      "nInfo\0225\n\026structural_change_kind\030\004 \001(\0162\025." +
-      "boa.types.ChangeKind\0220\n\021label_change_kin" +
-      "d\030\005 \001(\0162\025.boa.types.ChangeKind\"j\n\013Commen" +
-      "tKind\022\t\n\005OTHER\020\000\022\010\n\004LINE\020\001\022\t\n\005BLOCK\020\002\022\007\n" +
-      "\003DOC\020\003\022\021\n\rDOCUMENTATION\020\003\022\010\n\004SPEC\020\004\022\021\n\rS" +
-      "PECIFICATION\020\004\032\002\020\001\"{\n\014PositionInfo\022\021\n\tst" +
-      "art_pos\030\001 \002(\005\022\016\n\006length\030\002 \002(\005\022\022\n\nstart_l" +
-      "ine\030\003 \002(\005\022\021\n\tstart_col\030\004 \002(\005\022\020\n\010end_line" +
-      "\030\005 \002(\005\022\017\n\007end_col\030\006 \002(\005*\236\001\n\010TypeKind\022\t\n\005" +
-      "OTHER\020\000\022\t\n\005CLASS\020\001\022\r\n\tINTERFACE\020\002\022\r\n\tANO",
-      "NYMOUS\020\003\022\010\n\004ANON\020\003\022\n\n\006STRUCT\020\004\022\010\n\004ENUM\020\005" +
-      "\022\017\n\013ENUMERATION\020\005\022\016\n\nANNOTATION\020\006\022\014\n\010DEL" +
-      "EGATE\020\007\022\013\n\007GENERIC\020\010\032\002\020\001B\002H\001"
+      "lambda\030\r \001(\0132\021.boa.types.Method\022\021\n\tno_pa" +
+      "rens\030\016 \001(\010\0225\n\026structural_change_kind\030\017 \001" +
+      "(\0162\025.boa.types.ChangeKind\0220\n\021label_chang" +
+      "e_kind\030\020 \001(\0162\025.boa.types.ChangeKind\"\223\006\n\016" +
+      "ExpressionKind\022\t\n\005OTHER\020\000\022\013\n\007LITERAL\020\001\022\r" +
+      "\n\tVARACCESS\020\002\022\013\n\007VARDECL\020\003\022\016\n\nMETHODCALL" +
+      "\020\004\022\010\n\004CAST\020\005\022\016\n\nARRAYINDEX\020\006\022\r\n\tARRAYINI" +
+      "T\020\007\022\017\n\013TYPECOMPARE\020\010\022\007\n\003NEW\020\t\022\014\n\010NEWARRA" +
+      "Y\020\n\022\n\n\006OP_ADD\020\013\022\n\n\006OP_SUB\020\014\022\013\n\007OP_MULT\020\r" +
+      "\022\n\n\006OP_DIV\020\016\022\n\n\006OP_MOD\020\017\022\n\n\006OP_INC\020\020\022\n\n\006",
+      "OP_DEC\020\021\022\016\n\nBIT_LSHIFT\020\022\022\016\n\nBIT_RSHIFT\020\023" +
+      "\022\026\n\022BIT_UNSIGNEDRSHIFT\020\024\022\013\n\007BIT_AND\020\025\022\n\n" +
+      "\006BIT_OR\020\026\022\013\n\007BIT_NOT\020\027\022\013\n\007BIT_XOR\020\030\022\017\n\013L" +
+      "OGICAL_NOT\020\031\022\017\n\013LOGICAL_AND\020\032\022\016\n\nLOGICAL" +
+      "_OR\020\033\022\006\n\002EQ\020\034\022\007\n\003NEQ\020\035\022\006\n\002LT\020\036\022\006\n\002GT\020\037\022\010" +
+      "\n\004LTEQ\020 \022\010\n\004GTEQ\020!\022\017\n\013CONDITIONAL\020\"\022\020\n\014N" +
+      "ULLCOALESCE\020#\022\n\n\006ASSIGN\020$\022\016\n\nASSIGN_ADD\020" +
+      "%\022\016\n\nASSIGN_SUB\020&\022\017\n\013ASSIGN_MULT\020\'\022\016\n\nAS" +
+      "SIGN_DIV\020(\022\016\n\nASSIGN_MOD\020)\022\021\n\rASSIGN_BIT" +
+      "XOR\020*\022\021\n\rASSIGN_BITAND\020+\022\020\n\014ASSIGN_BITOR",
+      "\020,\022\021\n\rASSIGN_LSHIFT\020-\022\021\n\rASSIGN_RSHIFT\020." +
+      "\022\031\n\025ASSIGN_UNSIGNEDRSHIFT\020/\022\016\n\nANNOTATIO" +
+      "N\0200\022\t\n\005PAREN\0201\022\024\n\020METHOD_REFERENCE\0202\022\n\n\006" +
+      "LAMBDA\0203\022\017\n\013ANON_METHOD\0204\"\260\004\n\010Modifier\022." +
+      "\n\004kind\030\001 \002(\0162 .boa.types.Modifier.Modifi" +
+      "erKind\0222\n\nvisibility\030\002 \001(\0162\036.boa.types.M" +
+      "odifier.Visibility\022\027\n\017annotation_name\030\003 " +
+      "\001(\t\022\032\n\022annotation_members\030\004 \003(\t\0220\n\021annot" +
+      "ation_values\030\005 \003(\0132\025.boa.types.Expressio" +
+      "n\022\r\n\005other\030\006 \001(\t\0225\n\026structural_change_ki",
+      "nd\030\007 \001(\0162\025.boa.types.ChangeKind\0220\n\021label" +
+      "_change_kind\030\010 \001(\0162\025.boa.types.ChangeKin" +
+      "d\"~\n\014ModifierKind\022\t\n\005OTHER\020\000\022\016\n\nVISIBILI" +
+      "TY\020\001\022\016\n\nANNOTATION\020\002\022\t\n\005FINAL\020\003\022\n\n\006STATI" +
+      "C\020\004\022\020\n\014SYNCHRONIZED\020\005\022\010\n\004SYNC\020\005\022\014\n\010ABSTR" +
+      "ACT\020\006\032\002\020\001\"a\n\nVisibility\022\n\n\006PUBLIC\020\001\022\013\n\007P" +
+      "RIVATE\020\002\022\r\n\tPROTECTED\020\003\022\r\n\tNAMESPACE\020\004\022\013" +
+      "\n\007PACKAGE\020\004\022\013\n\007DEFAULT\020\004\032\002\020\001\"\306\002\n\007Comment" +
+      "\022,\n\004kind\030\001 \002(\0162\036.boa.types.Comment.Comme" +
+      "ntKind\022\r\n\005value\030\002 \002(\t\022)\n\010position\030\003 \002(\0132",
+      "\027.boa.types.PositionInfo\0225\n\026structural_c" +
+      "hange_kind\030\004 \001(\0162\025.boa.types.ChangeKind\022" +
+      "0\n\021label_change_kind\030\005 \001(\0162\025.boa.types.C" +
+      "hangeKind\"j\n\013CommentKind\022\t\n\005OTHER\020\000\022\010\n\004L" +
+      "INE\020\001\022\t\n\005BLOCK\020\002\022\007\n\003DOC\020\003\022\021\n\rDOCUMENTATI" +
+      "ON\020\003\022\010\n\004SPEC\020\004\022\021\n\rSPECIFICATION\020\004\032\002\020\001\"{\n" +
+      "\014PositionInfo\022\021\n\tstart_pos\030\001 \002(\005\022\016\n\006leng" +
+      "th\030\002 \002(\005\022\022\n\nstart_line\030\003 \002(\005\022\021\n\tstart_co" +
+      "l\030\004 \002(\005\022\020\n\010end_line\030\005 \002(\005\022\017\n\007end_col\030\006 \002" +
+      "(\005*\236\001\n\010TypeKind\022\t\n\005OTHER\020\000\022\t\n\005CLASS\020\001\022\r\n",
+      "\tINTERFACE\020\002\022\r\n\tANONYMOUS\020\003\022\010\n\004ANON\020\003\022\n\n" +
+      "\006STRUCT\020\004\022\010\n\004ENUM\020\005\022\017\n\013ENUMERATION\020\005\022\016\n\n" +
+      "ANNOTATION\020\006\022\014\n\010DELEGATE\020\007\022\013\n\007GENERIC\020\010\032" +
+      "\002\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -29704,7 +29818,7 @@ public final class Ast {
           internal_static_boa_types_Expression_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Expression_descriptor,
-              new java.lang.String[] { "Kind", "Expressions", "VariableDecls", "NewType", "GenericParameters", "IsPostfix", "Literal", "Variable", "Method", "MethodArgs", "AnonDeclaration", "Annotation", "Lambda", "StructuralChangeKind", "LabelChangeKind", });
+              new java.lang.String[] { "Kind", "Expressions", "VariableDecls", "NewType", "GenericParameters", "IsPostfix", "Literal", "Variable", "Method", "MethodArgs", "AnonDeclaration", "Annotation", "Lambda", "NoParens", "StructuralChangeKind", "LabelChangeKind", });
           internal_static_boa_types_Modifier_descriptor =
             getDescriptor().getMessageTypes().get(9);
           internal_static_boa_types_Modifier_fieldAccessorTable = new
