@@ -1,7 +1,6 @@
 /*
- * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer, 
- *                 Iowa State University of Science and Technology
- *                 and Bowling Green State University
+ * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,11 +19,11 @@ package boa.runtime;
 import java.io.IOException;
 
 import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Option;
+import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.apache.commons.cli.PosixParser;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
@@ -106,21 +105,21 @@ public abstract class BoaRunner extends Configured implements Tool {
 	static {
 		options.addOption("p", "profile", false, "if true, profiles the execution of 1 map task");
 		options.addOption("b", "block", false, "if true, wait for job to finish and show status");
-		options.addOption(Option.builder("j").longOpt("job")
-										.desc("sets the MySql ID to update with this job's status")
+		options.addOption(OptionBuilder.withLongOpt("job")
+										.withDescription("sets the MySql ID to update with this job's status")
 										.hasArg()
-										.argName("ID")
-										.build());
-		options.addOption(Option.builder("a").longOpt("ast")
-										.desc("which INPUT to use for ASTs")
+										.withArgName("ID")
+										.create("j"));
+		options.addOption(org.apache.commons.cli.OptionBuilder.withLongOpt("ast")
+										.withDescription("which INPUT to use for ASTs")
 										.hasArg()
-										.argName("INPUT")
-										.build());
-		options.addOption(Option.builder("c").longOpt("comments")
-										.desc("which INPUT to use for comments")
+										.withArgName("INPUT")
+										.create("a"));
+		options.addOption(org.apache.commons.cli.OptionBuilder.withLongOpt("comments")
+										.withDescription("which INPUT to use for comments")
 										.hasArg()
-										.argName("INPUT")
-										.build());
+										.withArgName("INPUT")
+										.create("c"));
 	}
 
 	protected static Options getOptions() { return options; }
@@ -129,7 +128,7 @@ public abstract class BoaRunner extends Configured implements Tool {
 		CommandLine line = null;
 
 		try {
-			line = new DefaultParser().parse(options, args);
+			line = new PosixParser().parse(options, args);
 		} catch (ParseException exp) {
 			System.err.println(exp.getMessage());
 			printHelp(usage);
