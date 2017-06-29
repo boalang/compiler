@@ -21,6 +21,8 @@ import java.util.*;
 import boa.compiler.ast.Factor;
 import boa.compiler.ast.Selector;
 import boa.compiler.ast.Term;
+import boa.compiler.ast.Comparison;
+import boa.compiler.ast.expressions.SimpleExpr;
 import boa.compiler.ast.Node;
 import boa.compiler.ast.Component;
 import boa.compiler.ast.Identifier;
@@ -400,6 +402,7 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
         private final Deque<Expression> expressionStack = new ArrayDeque<Expression>();
 
         // track nearest Expression node
+         @Override
         public void visit(final Expression n) {
             expressionStack.push(n);
             super.visit(n);
@@ -426,10 +429,14 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
             super.visit(n);
 
             final Factor fact = (Factor)n.getParent();
+            
 
             if (!flag && fact.getOperand().type instanceof BoaShadowType) {
                 final Expression parentExp = expressionStack.peek();
 
+                Comparison parentComp = (Comparison)parentExp.getLhs().getLhs();
+
+                
                 // avoid replacing past the first selector
                 flag = true;
 
@@ -441,7 +448,45 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                 final Expression replacement = (Expression)shadow.lookupCodegen(n.getId().getToken(), id.getToken(), parentExp.env);
                 final ParenExpression paren = new ParenExpression(replacement);
                 final Factor newFact = new Factor(paren);
-                final Expression newExp = ASTFactory.createFactorExpr(newFact);
+                Expression newExp = new Expression(
+                                                    new Conjunction(
+                                                        new Comparison(
+                                                            new SimpleExpr(
+                                                                new Term(newFact)
+                                                            )
+                                                        )
+                                                    )
+                                                );
+                if(parentComp.hasOp()){
+                    SimpleExpr simpLhs = (SimpleExpr)parentComp.getLhs();
+                    SimpleExpr simpRhs = (SimpleExpr)parentComp.getRhs();
+                    
+
+                    if(fact == (Factor)simpLhs.getLhs().getLhs() ){
+                         newExp = new Expression(
+                                                    new Conjunction(
+                                                        new Comparison(
+                                                            new SimpleExpr(
+                                                                new Term(newFact)
+                                                            )
+                                                        ,parentComp.getOp(),simpRhs)
+                                                    )
+                                                );
+                    }else {
+                         newExp = new Expression(
+                                                    new Conjunction(
+                                                        new Comparison(
+                                                          simpLhs,
+                                                          parentComp.getOp(),
+                                                            new SimpleExpr(
+                                                                new Term(newFact)
+                                                            )
+                                                        )
+                                                    )
+                                                );
+                    }
+                }
+                
 
                 newFact.env = parentExp.env;
                 paren.type = replacement.type;
@@ -451,8 +496,11 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                     newFact.addOp(ops.get(i));
                     newExp.type = ops.get(i).type;
                 }
+                
+                
 
                 parentExp.replaceExpression(parentExp, newExp);
+
             }
         }
 

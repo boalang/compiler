@@ -69,12 +69,11 @@ public class MethodInvocationShadow extends BoaShadowType  {
         }
 
         if ("arguments".equals(name)) {
-            // ${0}.expressions[1]
+            
            
-            // ${0}.expressions
-            final Expression tree = ASTFactory.createSelector(id, "expressions", new BoaProtoList(new ExpressionProtoTuple()), new ExpressionProtoTuple(), env);
-            // ${0}.expressions[1]
-            ASTFactory.getFactorFromExp(tree).addOp(ASTFactory.createIndex(ASTFactory.createIntLiteral(1), env));
+            // ${0}.method_args
+            final Expression tree = ASTFactory.createSelector(id, "method_args", new BoaProtoList(new ExpressionProtoTuple()), new ExpressionProtoTuple(), env);
+            
 
             return tree;
         }
