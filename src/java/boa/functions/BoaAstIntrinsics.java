@@ -217,7 +217,7 @@ public class BoaAstIntrinsics {
 				fs = FileSystem.getLocal(conf);
 			} else {
 				p = new Path(
-					"hdfs://boa-njt/",
+					context.getConfiguration().get("fs.default.name", "hdfs://boa-njt/"),
 					new Path(
 						conf.get("boa.ast.dir", conf.get("boa.input.dir", "repcache/live")),
 						new Path("ast")
@@ -241,7 +241,7 @@ public class BoaAstIntrinsics {
 				fs = FileSystem.getLocal(conf);
 			} else {
 				p = new Path(
-					"hdfs://boa-njt/",
+					context.getConfiguration().get("fs.default.name", "hdfs://boa-njt/"),
 					new Path(
 						conf.get("boa.comments.dir", conf.get("boa.input.dir", "repcache/live")),
 						new Path("comments")
@@ -265,7 +265,7 @@ public class BoaAstIntrinsics {
 				fs = FileSystem.getLocal(conf);
 			} else {
 				p = new Path(
-					"hdfs://boa-njt/",
+					context.getConfiguration().get("fs.default.name", "hdfs://boa-njt/"),
 					new Path(
 						conf.get("boa.issues.dir", conf.get("boa.input.dir", "repcache/live")),
 						new Path("issues")
