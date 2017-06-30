@@ -52,7 +52,7 @@ public class AnnotationShadow extends BoaShadowType  {
 
     /** {@inheritDoc} */
     @Override
-    public Node lookupCodegen(final String name, final String nodeId, final SymbolTable env) {
+	public Node lookupCodegen(final String name, final Factor node, final SymbolTable env) { 
        
 
         throw new RuntimeException("invalid shadow field: " + name);
@@ -68,11 +68,10 @@ public class AnnotationShadow extends BoaShadowType  {
     public IfStatement getManytoOne(final SymbolTable env ,Block b,String funcName) {
        
         // if(isboollit(${0})) b;
+         final Expression tree = ASTFactory.createIdentifierExpr(boa.compiler.transforms.ShadowTypeEraser.NODE_ID, env, new ExpressionProtoTuple());
 
-        final Expression tree = ASTFactory.createIdentifierExpr(boa.compiler.transforms.ShadowTypeEraser.NODE_ID, env, new ExpressionProtoTuple());
-
-        IfStatement ifstmt = new IfStatement(ASTFactory.createCallExpr(funcName, env, new ExpressionProtoTuple(), tree),b);
-        return ifstmt;
+        return  new IfStatement(ASTFactory.createCallExpr(funcName, env, new ExpressionProtoTuple(), tree),b);
+        
     }
 
      /** {@inheritDoc} */

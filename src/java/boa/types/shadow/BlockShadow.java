@@ -41,20 +41,19 @@ public class BlockShadow extends BoaShadowType  {
      * Construct a {@link BlockShadow}.
      */
     public BlockShadow() {
-        super(new StatementProtoTuple());
+        super( new StatementProtoTuple());
 
       
     }
 
     /** {@inheritDoc} */
     @Override
-    public Node lookupCodegen(final String name, final String nodeId, final SymbolTable env) {
-        final Identifier id = ASTFactory.createIdentifier(nodeId, env);
-        id.type = new StatementProtoTuple();
+	public Node lookupCodegen(final String name, final Factor node, final SymbolTable env) { 
 
         if ("statements".equals(name)) {
-            // ${0}.statements
-            
+            // ${0}.statements TODO
+            //return ASTFactory.createSelector( "statements",  new BoaProtoList(new StatementProtoTuple()), env);
+            return null;
         }
 
      

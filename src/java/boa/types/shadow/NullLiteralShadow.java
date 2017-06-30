@@ -52,9 +52,7 @@ public class NullLiteralShadow extends BoaShadowType  {
 
     /** {@inheritDoc} */
     @Override
-    public Node lookupCodegen(final String name, final String nodeId, final SymbolTable env) {
-        final Identifier id = ASTFactory.createIdentifier(nodeId, env);
-        id.type = new ExpressionProtoTuple();
+	public Node lookupCodegen(final String name, final Factor node, final SymbolTable env) { 
 
        
 
@@ -66,7 +64,7 @@ public class NullLiteralShadow extends BoaShadowType  {
     @Override
     public IfStatement getManytoOne(final SymbolTable env, final Block b) {
         // if (funcName(${0})) b;
-        final Expression tree = ASTFactory.createIdentifierExpr(boa.compiler.transforms.ShadowTypeEraser.NODE_ID, env, new ExpressionProtoTuple());
+         final Expression tree = ASTFactory.createIdentifierExpr(boa.compiler.transforms.ShadowTypeEraser.NODE_ID, env, new ExpressionProtoTuple());
 
         return new IfStatement(ASTFactory.createCallExpr("isnulllit", env, new ExpressionProtoTuple(), tree), b);
     }   

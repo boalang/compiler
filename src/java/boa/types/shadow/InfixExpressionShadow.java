@@ -56,39 +56,28 @@ public class InfixExpressionShadow extends BoaShadowType  {
 
     /** {@inheritDoc} */
     @Override
-    public Node lookupCodegen(final String name, final String nodeId, final SymbolTable env) {
-        final Identifier id = ASTFactory.createIdentifier(nodeId, env);
-        id.type = new ExpressionProtoTuple();
+	public Node lookupCodegen(final String name, final Factor node, final SymbolTable env) { 
 
         if ("left_operand".equals(name)) {
             // ${0}.expressions[0]
 
-            // ${0}.expressions
-            final Expression tree = ASTFactory.createSelector(id, "expressions",new BoaProtoList(new ExpressionProtoTuple()), new ExpressionProtoTuple(), env);
-            // ${0}.expressions[0]
-            ASTFactory.getFactorFromExp(tree).addOp(ASTFactory.createIndex(ASTFactory.createIntLiteral(0), env));
-
-            return tree;
+            return ASTFactory.createFactor("expressions",ASTFactory.createIntLiteral(0),new BoaProtoList(new ExpressionProtoTuple()), new ExpressionProtoTuple(),env);
         }
 
         if ("right_operand".equals(name)) {
             // ${0}.expressions[1]
            
-            // ${0}.expressions
-            final Expression tree = ASTFactory.createSelector(id, "expressions", new BoaProtoList(new ExpressionProtoTuple()), new ExpressionProtoTuple(), env);
-            // ${0}.expressions[1]
-            ASTFactory.getFactorFromExp(tree).addOp(ASTFactory.createIndex(ASTFactory.createIntLiteral(1), env));
+            return ASTFactory.createFactor("expressions",ASTFactory.createIntLiteral(1),new BoaProtoList(new ExpressionProtoTuple()), new ExpressionProtoTuple(),env);
 
-            return tree;
         }
 
         if ("extended_operands".equals(name)) {
         
             // TODO splice(${0}.statements, 1, ...)
            
-            final Expression tree = ASTFactory.createSelector(id, "statements", new BoaProtoList(new ExpressionProtoTuple()), new BoaProtoList(new ExpressionProtoTuple()), env);
+            return ASTFactory.createSelector("statements",  new BoaProtoList(new ExpressionProtoTuple()), env);
 
-            return ASTFactory.createCallExpr("subList", env, new BoaProtoList(new ExpressionProtoTuple()), tree, ASTFactory.createIntLiteral(2), ASTFactory.createIntLiteral(-1));
+            //return ASTFactory.createCallExpr("subList", env, new BoaProtoList(new ExpressionProtoTuple()), tree, ASTFactory.createIntLiteral(2), ASTFactory.createIntLiteral(-1));
            
 
         }
@@ -116,7 +105,7 @@ public class InfixExpressionShadow extends BoaShadowType  {
        
         // if(isboollit(${0})) b;
 
-        final Expression tree = ASTFactory.createIdentifierExpr(boa.compiler.transforms.ShadowTypeEraser.NODE_ID, env, new ExpressionProtoTuple());
+         final Expression tree = ASTFactory.createIdentifierExpr(boa.compiler.transforms.ShadowTypeEraser.NODE_ID, env, new ExpressionProtoTuple());
 
         IfStatement ifstmt = new IfStatement(ASTFactory.createCallExpr("isinfix", env, new ExpressionProtoTuple(), tree),b);
         return ifstmt ;   

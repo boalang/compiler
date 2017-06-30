@@ -435,7 +435,7 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
 
                 // replace the selector
                 //final Expression replacement = (Expression)shadow.lookupCodegen(n.getId().getToken(), id.getToken(), parentExp.env);
-                final Node replacement = shadow.lookupCodegen(n.getId().getToken(), id.getToken(), parentExp.env);
+                final Node replacement = shadow.lookupCodegen(n.getId().getToken(),fact, parentExp.env);
                 if (replacement instanceof Selector) // case 1                  
                 {                                                               
                     for (int i = 0; i < fact.getOps().size(); i++){                                  
@@ -445,7 +445,7 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                         }
                     }                                                           
                  }                                                               
-                if( ((Factor)replacement).getOperand() == null) //case 2           
+                else if( ((Factor)replacement).getOperand() == null) //case 2           
                  {                                                               
                     for (int i = 0; i <fact.getOps().size() ; i++){                                  
                         if (fact.getOps().get(i) == n) {                     
@@ -455,7 +455,7 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                          }                     
                     }                                       
                  }                                                               
-                if(((Factor)replacement).getOperand() != null) //case 3           
+                else if(((Factor)replacement).getOperand() != null) //case 3           
                     {  // TODO                                                        
                         // fact.getParent().setLhs(replacement)                    
                         //  idx = this;                                             

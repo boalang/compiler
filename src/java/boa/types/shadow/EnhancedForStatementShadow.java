@@ -50,27 +50,22 @@ public class EnhancedForStatementShadow extends BoaShadowType  {
 
     /** {@inheritDoc} */
     @Override
-    public Node lookupCodegen(final String name, final String nodeId, final SymbolTable env) {
-        final Identifier id = ASTFactory.createIdentifier(nodeId, env);
-        id.type = new StatementProtoTuple();
+	public Node lookupCodegen(final String name, final Factor node, final SymbolTable env) { 
 
         if ("parameter".equals(name)) {
             // TODO ? ${0}.variable_declaration
-            return ASTFactory.createSelector(id, "variable_declaration", new BoaProtoList(new ExpressionProtoTuple()), new BoaProtoList(new ExpressionProtoTuple()), env);
+            return ASTFactory.createSelector( "variable_declaration", new BoaProtoList(new ExpressionProtoTuple()), env);
         }
 
         if ("expression".equals(name)) {
             // ${0}.expression
-            return ASTFactory.createSelector(id, "expression", new ExpressionProtoTuple(), new ExpressionProtoTuple(), env);
+            return ASTFactory.createSelector( "expression", new ExpressionProtoTuple(), env);
         }
 
         if ("body".equals(name)) {
-            // ${0}.statements
-            final Expression tree = ASTFactory.createSelector(id, "statements", new BoaProtoList(new StatementProtoTuple()), new StatementProtoTuple(), env);
             // ${0}.statements[0]
-            ASTFactory.getFactorFromExp(tree).addOp(ASTFactory.createIndex(ASTFactory.createIntLiteral(0), env));
+            return ASTFactory.createFactor("statements",ASTFactory.createIntLiteral(0),new BoaProtoList(new ExpressionProtoTuple()), new ExpressionProtoTuple(),env);
 
-            return tree;
         }
 
         throw new RuntimeException("invalid shadow field: " + name);

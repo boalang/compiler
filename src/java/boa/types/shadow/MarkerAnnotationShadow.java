@@ -53,7 +53,7 @@ public class MarkerAnnotationShadow extends AnnotationShadow  {
 
     /** {@inheritDoc} */
     @Override
-    public Node lookupCodegen(final String name, final String nodeId, final SymbolTable env) {
+	public Node lookupCodegen(final String name, final Factor node, final SymbolTable env) { 
        
         throw new RuntimeException("invalid shadow field: " + name);
     }

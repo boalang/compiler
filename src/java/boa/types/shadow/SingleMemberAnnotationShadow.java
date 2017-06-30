@@ -54,32 +54,28 @@ public class SingleMemberAnnotationShadow extends AnnotationShadow  {
 
     /** {@inheritDoc} */
     @Override
-    public Node lookupCodegen(final String name, final String nodeId, final SymbolTable env) {
-        final Identifier id = ASTFactory.createIdentifier(nodeId, env);
-        id.type = new ExpressionProtoTuple();
+	public Node lookupCodegen(final String name, final Factor node, final SymbolTable env) { 
 
         if ("value".equals(name)) {
             // ${0}.annotation.annotation_values[0]
 
-
             final Selector s1 = new Selector(ASTFactory.createIdentifier("annotation", env));
             final Selector s2 = new Selector(ASTFactory.createIdentifier("annotation_values", env));
-            final Factor f = new Factor(id).addOp(s1);
+            final Factor f = new Factor(null).addOp(s1);
             f.addOp(s2);
-            final Expression tree = ASTFactory.createFactorExpr(f);
-
+            
             s1.env=s2.env = f.env = env;
 
             s1.type = new ExpressionProtoTuple();
             s2.type = new ExpressionProtoTuple();
-            f.type = tree.type = new ExpressionProtoTuple();
+            f.type  = new ExpressionProtoTuple();
 
 
             // ${0}.annotation.annotation_values[0]
-            ASTFactory.getFactorFromExp(tree).addOp(ASTFactory.createIndex(ASTFactory.createIntLiteral(0), env));
+           f.addOp(ASTFactory.createIndex(ASTFactory.createIntLiteral(0), env));
 
 
-            return tree;     
+            return f;     
         }
 
         

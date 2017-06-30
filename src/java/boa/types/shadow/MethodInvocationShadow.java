@@ -53,29 +53,22 @@ public class MethodInvocationShadow extends BoaShadowType  {
 
     /** {@inheritDoc} */
     @Override
-    public Node lookupCodegen(final String name, final String nodeId, final SymbolTable env) {
-        final Identifier id = ASTFactory.createIdentifier(nodeId, env);
-        id.type = new ExpressionProtoTuple();
+	public Node lookupCodegen(final String name, final Factor node, final SymbolTable env) { 
 
         if ("expression".equals(name)) {
             // ${0}.expressions[0]
 
-            // ${0}.expressions
-            final Expression tree = ASTFactory.createSelector(id, "expressions",new BoaProtoList(new ExpressionProtoTuple()), new ExpressionProtoTuple(), env);
-            // ${0}.expressions[0]
-            ASTFactory.getFactorFromExp(tree).addOp(ASTFactory.createIndex(ASTFactory.createIntLiteral(0), env));
-
-            return tree;
+            return ASTFactory.createFactor("expressions",ASTFactory.createIntLiteral(0),new BoaProtoList(new ExpressionProtoTuple()), new ExpressionProtoTuple(),env);
         }
 
         if ("arguments".equals(name)) {
             
            
             // ${0}.method_args
-            final Expression tree = ASTFactory.createSelector(id, "method_args", new BoaProtoList(new ExpressionProtoTuple()), new ExpressionProtoTuple(), env);
+            return ASTFactory.createSelector("method_args", new BoaProtoList(new ExpressionProtoTuple()), env);
             
 
-            return tree;
+            
         }
 
         if ("type_infer".equals(name)) {
@@ -86,7 +79,7 @@ public class MethodInvocationShadow extends BoaShadowType  {
 
         if ("name".equals(name)) {
             // ${0}.method
-            return ASTFactory.createSelector(id, "method", new BoaString(), new BoaString(), env);
+            return ASTFactory.createSelector( "method", new BoaString(),  env);
         }
 
         throw new RuntimeException("invalid shadow field: " + name);

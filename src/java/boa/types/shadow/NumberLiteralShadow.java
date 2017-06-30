@@ -31,6 +31,8 @@ import boa.types.proto.enums.ExpressionKindProtoMap;
 import boa.types.proto.ExpressionProtoTuple;
 import boa.types.proto.StatementProtoTuple;
 
+import boa.compiler.ast.statements.IfStatement;
+import boa.compiler.ast.statements.Block;
 /**
  * A shadow type for NumberLiteral.
  * 
@@ -50,19 +52,26 @@ public class NumberLiteralShadow extends BoaShadowType  {
 
     /** {@inheritDoc} */
     @Override
-    public Node lookupCodegen(final String name, final String nodeId, final SymbolTable env) {
-        final Identifier id = ASTFactory.createIdentifier(nodeId, env);
-        id.type = new ExpressionProtoTuple();
+	public Node lookupCodegen(final String name, final Factor node, final SymbolTable env) { 
 
         if ("token".equals(name)) {
             // ${0}.literal
 
-            return ASTFactory.createSelector(id, "literal", new BoaString(), new BoaString(), env);     
+            return ASTFactory.createSelector( "literal", new BoaString(), env);     
         }
 
 
         throw new RuntimeException("invalid shadow field: " + name);
     }
+
+    /** {@inheritDoc} */
+    @Override
+    public IfStatement getManytoOne(final SymbolTable env, final Block b) {
+        // if (funcName(${0})) b;
+         final Expression tree = ASTFactory.createIdentifierExpr(boa.compiler.transforms.ShadowTypeEraser.NODE_ID, env, new ExpressionProtoTuple());
+
+        return new IfStatement(ASTFactory.createCallExpr("isnumlit", env, new ExpressionProtoTuple(), tree), b);
+    }   
 
     /** {@inheritDoc} */
     @Override

@@ -156,6 +156,26 @@ public class ASTFactory {
 		return tree;
 	}
 
+	public static Selector createSelector(final String selector, final BoaType selectorType, final SymbolTable env) {
+		final Selector s = new Selector(ASTFactory.createIdentifier(selector, env));
+		s.env  = env;
+		s.type = selectorType;
+		
+		return s;
+	}
+
+	public static Factor createFactor(final String selector,final Expression idx  ,final BoaType selectorType, final BoaType factorType, final SymbolTable env) {
+		
+		final Selector s = new Selector(ASTFactory.createIdentifier(selector, env));
+		final Factor f = new Factor(null).addOp(s);
+		f.addOp(ASTFactory.createIndex(idx,env));		
+		s.env = f.env = env;
+		s.type = selectorType;
+		f.type  = factorType;
+
+		return f;
+	}
+
 	public static Index createIndex(final Expression idx, final SymbolTable env) {
 		final Index i = new Index(idx);
 		i.env = env;

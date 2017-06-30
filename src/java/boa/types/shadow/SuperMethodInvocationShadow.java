@@ -53,9 +53,7 @@ public class SuperMethodInvocationShadow extends BoaShadowType  {
 
     /** {@inheritDoc} */
     @Override
-    public Node lookupCodegen(final String name, final String nodeId, final SymbolTable env) {
-        final Identifier id = ASTFactory.createIdentifier(nodeId, env);
-        id.type = new ExpressionProtoTuple();
+	public Node lookupCodegen(final String name, final Factor node, final SymbolTable env) { 
         if ("qualifier".equals(name)) {
             // TODO
             return null;
@@ -63,13 +61,7 @@ public class SuperMethodInvocationShadow extends BoaShadowType  {
 
         if ("arguments".equals(name)) {
             // ${0}.expressions[1]
-           
-            // ${0}.expressions
-            final Expression tree = ASTFactory.createSelector(id, "expressions", new ExpressionProtoTuple(), new ExpressionProtoTuple(), env);
-            // ${0}.expressions[1]
-            ASTFactory.getFactorFromExp(tree).addOp(ASTFactory.createIndex(ASTFactory.createIntLiteral(1), env));
-
-            return tree;
+            return ASTFactory.createFactor("expressions",ASTFactory.createIntLiteral(1),new BoaProtoList(new ExpressionProtoTuple()), new ExpressionProtoTuple(),env);
         }
 
         if ("type_infer".equals(name)) {
@@ -80,7 +72,7 @@ public class SuperMethodInvocationShadow extends BoaShadowType  {
 
         if ("name".equals(name)) {
             // ${0}.method
-            return ASTFactory.createSelector(id, "method", new BoaString(), new BoaString(), env);
+            return ASTFactory.createSelector( "method", new BoaString(),  env);
         }
 
         throw new RuntimeException("invalid shadow field: " + name);

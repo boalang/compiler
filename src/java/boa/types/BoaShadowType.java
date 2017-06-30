@@ -92,7 +92,7 @@ public abstract class BoaShadowType extends BoaTuple {
      * @param env      the current SymbolTable environment
      * @return a replacement AST for the attribute selector
      */
-    public abstract Node lookupCodegen(final String attrName, final String nodeId, final SymbolTable env);
+    public abstract Node lookupCodegen(final String attrName, final Factor nodeId, final SymbolTable env);
 
     /**
      * Returns an {@link boa.compiler.ast.expressions.Expression} representing

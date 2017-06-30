@@ -50,13 +50,11 @@ public class AnonymousClassDeclarationShadow extends BoaShadowType  {
 
     /** {@inheritDoc} */
     @Override
-    public Node lookupCodegen(final String name, final String nodeId, final SymbolTable env) {
-        final Identifier id = ASTFactory.createIdentifier(nodeId, env);
-        id.type = new DeclarationProtoTuple();
+	public Node lookupCodegen(final String name, final Factor node, final SymbolTable env) { 
 
        if ("body_declarations".equals(name)) {
             // ${0}.methods
-            return ASTFactory.createSelector(id, "methods", new BoaProtoList(new DeclarationProtoTuple()), new DeclarationProtoTuple(), env);
+            return ASTFactory.createSelector("methods", new BoaProtoList(new DeclarationProtoTuple()), env);
         }
 
 

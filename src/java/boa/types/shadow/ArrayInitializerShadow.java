@@ -49,13 +49,11 @@ public class ArrayInitializerShadow extends BoaShadowType  {
 
     /** {@inheritDoc} */
     @Override
-    public Node lookupCodegen(final String name, final String nodeId, final SymbolTable env) {
-        final Identifier id = ASTFactory.createIdentifier(nodeId, env);
-        id.type = new ExpressionProtoTuple();
+	public Node lookupCodegen(final String name, final Factor node, final SymbolTable env) { 
 
         if ("expressions".equals(name)) {
             // ${0}.expressions
-            return ASTFactory.createSelector(id, "expressions",new BoaProtoList( new ExpressionProtoTuple()), new BoaProtoList( new ExpressionProtoTuple()), env);
+            return ASTFactory.createSelector( "expressions",new BoaProtoList( new ExpressionProtoTuple()), env);
             
             
         }

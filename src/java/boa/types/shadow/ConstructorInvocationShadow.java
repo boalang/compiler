@@ -50,27 +50,24 @@ public class ConstructorInvocationShadow extends BoaShadowType  {
 
     /** {@inheritDoc} */
     @Override
-    public Node lookupCodegen(final String name, final String nodeId, final SymbolTable env) {
-        final Identifier id = ASTFactory.createIdentifier(nodeId, env);
-        id.type = new StatementProtoTuple();
+	public Node lookupCodegen(final String name, final Factor node, final SymbolTable env) { 
 
         if ("arguments".equals(name)) {
             // TODO ${0}.expression.method_args
             
-
             final Selector s1 = new Selector(ASTFactory.createIdentifier("expression", env));
             final Selector s2 = new Selector(ASTFactory.createIdentifier("method_args", env));
-            final Factor f = new Factor(id).addOp(s1);
+            final Factor f = new Factor(null).addOp(s1);
             f.addOp(s2);
-            final Expression tree = ASTFactory.createFactorExpr(f);
+            
 
             s1.env=s2.env = f.env = env;
 
             s1.type = new ExpressionProtoTuple();
             s2.type = new ExpressionProtoTuple();
-            f.type = tree.type = new BoaProtoList(new ExpressionProtoTuple());
+            f.type = new BoaProtoList(new ExpressionProtoTuple());
 
-            return tree;
+            return f;
 
 
         }

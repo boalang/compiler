@@ -54,20 +54,18 @@ public class StringLiteralShadow extends BoaShadowType  {
 
     /** {@inheritDoc} */
     @Override
-    public Node lookupCodegen(final String name, final String nodeId, final SymbolTable env) {
-        final Identifier id = ASTFactory.createIdentifier(nodeId, env);
-        id.type = new ExpressionProtoTuple();
+	public Node lookupCodegen(final String name, final Factor node, final SymbolTable env) { 
 
         if ("escaped_value".equals(name)) {
             // ${0}.literal
 
-            return ASTFactory.createSelector(id, "literal", new BoaString(), new BoaString(), env);     
+            return ASTFactory.createSelector("literal",  new BoaString(), env);     
         }
 
         if ("literal_value".equals(name)) {
             // TODO 
 
-            return ASTFactory.createSelector(id, "literal", new BoaString(), new BoaString(), env);     
+            return ASTFactory.createSelector( "literal",  new BoaString(), env);     
         }
 
 

@@ -53,16 +53,14 @@ public class TryStatementShadow extends BoaShadowType  {
 
     /** {@inheritDoc} */
     @Override
-    public Node lookupCodegen(final String name, final String nodeId, final SymbolTable env) {
-        final Identifier id = ASTFactory.createIdentifier(nodeId, env);
-        id.type = new StatementProtoTuple();
+	public Node lookupCodegen(final String name, final Factor node, final SymbolTable env) { 
 
         if ("catchclauses".equals(name)) {
             // TODO splice(${0}.statements, 1, ...)
            
-            final Expression tree = ASTFactory.createSelector(id, "statements", new BoaProtoList(new StatementProtoTuple()), new BoaProtoList(new StatementProtoTuple()), env);
+            return ASTFactory.createSelector( "statements", new BoaProtoList(new StatementProtoTuple()),  env);
 
-            return ASTFactory.createCallExpr("subList", env, new BoaProtoList(new StatementProtoTuple()), tree, ASTFactory.createIntLiteral( 1), ASTFactory.createIntLiteral(-1));
+            // TODO return ASTFactory.createCallExpr("subList", env, new BoaProtoList(new StatementProtoTuple()), tree, ASTFactory.createIntLiteral( 1), ASTFactory.createIntLiteral(-1));
             }
 
         if ("finallyblock".equals(name)) {
@@ -72,16 +70,15 @@ public class TryStatementShadow extends BoaShadowType  {
 
         if ("body".equals(name)) {
             // ${0}.statements
-            final Expression tree = ASTFactory.createSelector(id, "statements", new BoaProtoList(new StatementProtoTuple()), new StatementProtoTuple(), env);
+            return ASTFactory.createSelector( "statements", new BoaProtoList(new StatementProtoTuple()),  env);
             
-            return tree;
         }
 
         if ("resources".equals(name)) {
             // ${0}.initializations
-            final Expression tree = ASTFactory.createSelector(id, "initializations",  new BoaProtoList(new ExpressionProtoTuple()),  new BoaProtoList(new ExpressionProtoTuple()), env);
+            return ASTFactory.createSelector("initializations",  new BoaProtoList(new ExpressionProtoTuple()),   env);
             
-            return tree;
+            
         }
 
 

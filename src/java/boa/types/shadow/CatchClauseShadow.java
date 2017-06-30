@@ -56,19 +56,16 @@ public class CatchClauseShadow extends BoaShadowType  {
 
     /** {@inheritDoc} */
     @Override
-    public Node lookupCodegen(final String name, final String nodeId, final SymbolTable env) {
-        final Identifier id = ASTFactory.createIdentifier(nodeId, env);
-        id.type = new StatementProtoTuple();
+	public Node lookupCodegen(final String name, final Factor node, final SymbolTable env) { 
 
         if ("exception".equals(name)) {
             
            // ${0}.variable_declaration.initializer
-            
             final Selector s1 = new Selector(ASTFactory.createIdentifier("variable_declaration", env));
             final Selector s2 = new Selector(ASTFactory.createIdentifier("initializer", env));
-            final Factor f = new Factor(id).addOp(s1);
+            final Factor f = new Factor(null).addOp(s1);
             f.addOp(s2);
-            final Expression tree = ASTFactory.createFactorExpr(f);
+            
 
             s1.env = s2.env  = f.env = env;
 
@@ -77,21 +74,20 @@ public class CatchClauseShadow extends BoaShadowType  {
             s1.type = new BoaProtoList(new VariableProtoTuple());
             s2.type = new BoaProtoList(new VariableProtoTuple());
            
-            f.type = tree.type = new VariableProtoTuple();
+            f.type  = new VariableProtoTuple();
 
-            return tree;
+            return f;
 
         }
 
         if ("variable_type".equals(name)) {
             
            // ${0}.variable_declaration.initializer
-            
             final Selector s1 = new Selector(ASTFactory.createIdentifier("variable_declaration", env));
             final Selector s2 = new Selector(ASTFactory.createIdentifier("variable_type", env));
-            final Factor f = new Factor(id).addOp(s1);
+            final Factor f = new Factor(null).addOp(s1);
             f.addOp(s2);
-            final Expression tree = ASTFactory.createFactorExpr(f);
+            
 
             s1.env = s2.env  = f.env = env;
 
@@ -100,9 +96,9 @@ public class CatchClauseShadow extends BoaShadowType  {
             s1.type = new BoaProtoList(new VariableProtoTuple());
             s2.type = new BoaProtoList(new TypeProtoTuple());
            
-            f.type = tree.type = new TypeProtoTuple();
+            f.type  = new TypeProtoTuple();
 
-            return tree;
+            return f;
 
         }
 
@@ -110,9 +106,9 @@ public class CatchClauseShadow extends BoaShadowType  {
 
         if ("body".equals(name)) {
             // ${0}.statements
-            final Expression tree = ASTFactory.createSelector(id, "statements", new BoaProtoList(new StatementProtoTuple()), new StatementProtoTuple(), env);
+            return ASTFactory.createSelector( "statements", new BoaProtoList(new StatementProtoTuple()), env);
             
-            return tree;
+            
         }
 
 

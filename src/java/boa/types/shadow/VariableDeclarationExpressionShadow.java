@@ -55,20 +55,16 @@ public class VariableDeclarationExpressionShadow extends BoaShadowType  {
 
     /** {@inheritDoc} */
     @Override
-    public Node lookupCodegen(final String name, final String nodeId, final SymbolTable env) {
-        final Identifier id = ASTFactory.createIdentifier(nodeId, env);
-        id.type = new ExpressionProtoTuple();
+	public Node lookupCodegen(final String name, final Factor node, final SymbolTable env) { 
 
       
         if ("fragments".equals(name)) {
             // ${0}. $0.expression.variable_decls
-            
-            final Selector s1 = new Selector(ASTFactory.createIdentifier("expression", env));
+             final Selector s1 = new Selector(ASTFactory.createIdentifier("expression", env));
             final Selector s2 = new Selector(ASTFactory.createIdentifier("variable_decls", env));
-            final Factor f = new Factor(id).addOp(s1);
+            final Factor f = new Factor(null).addOp(s1);
             f.addOp(s2);
-            final Expression tree = ASTFactory.createFactorExpr(f);
-
+            
             s1.env = s2.env  = f.env = env;
 
            // s1.type = new ExpressionProtoTuple();
@@ -76,25 +72,23 @@ public class VariableDeclarationExpressionShadow extends BoaShadowType  {
             s1.type = new BoaProtoList(new VariableProtoTuple());
             s2.type = new BoaProtoList(new VariableProtoTuple());
            
-            f.type = tree.type = new BoaProtoList(new VariableProtoTuple());
+            f.type  = new BoaProtoList(new VariableProtoTuple());
 
-            return tree;
+            return f;
 
 
         }                            
                       
         if ("modifiers".equals(name)) {
             // ${0}.expression.variable_decls[0].modifiers 
-            
             final Selector s1 = new Selector(ASTFactory.createIdentifier("expression", env));
             final Selector s2 = new Selector(ASTFactory.createIdentifier("variable_decls", env));
             final Selector s3 = new Selector(ASTFactory.createIdentifier("modifiers", env));
-            final Factor f = new Factor(id).addOp(s1);
+            final Factor f = new Factor(null).addOp(s1);
             f.addOp(s2);
             f.addOp(ASTFactory.createIndex(ASTFactory.createIntLiteral(0), env));
             f.addOp(s3);
-            final Expression tree = ASTFactory.createFactorExpr(f);
-
+            
             s1.env = s2.env = s3.env = f.env = env;
 
            // s1.type = new ExpressionProtoTuple();
@@ -104,31 +98,30 @@ public class VariableDeclarationExpressionShadow extends BoaShadowType  {
             s2.type = new BoaProtoList(new ModifierProtoTuple());
             s3.type = new BoaProtoList(new ModifierProtoTuple());
             
-            f.type = tree.type = new BoaProtoList(new ModifierProtoTuple());
+            f.type =  new BoaProtoList(new ModifierProtoTuple());
 
-            return tree;
+            return f;
         }
            
         if ("type".equals(name)) {
             // ${0}.$0.expression.variable_decls[0].variable_type
            
-
             final Selector s1 = new Selector(ASTFactory.createIdentifier("expression", env));
             final Selector s2 = new Selector(ASTFactory.createIdentifier("variable_decls", env));
             final Selector s3 = new Selector(ASTFactory.createIdentifier("variable_type", env));
-            final Factor f = new Factor(id).addOp(s1);
+            final Factor f = new Factor(null).addOp(s1);
             f.addOp(s2);
             f.addOp(ASTFactory.createIndex(ASTFactory.createIntLiteral(0), env));
             f.addOp(s3);
-            final Expression tree = ASTFactory.createFactorExpr(f);
-
+            
             s1.env = s2.env = s3.env = f.env = env;
 
             s1.type = new TypeProtoTuple();
             s2.type = new TypeProtoTuple();
             s3.type = new TypeProtoTuple();
             
-            f.type = tree.type = new TypeProtoTuple();
+            f.type = new TypeProtoTuple();
+            return f;
 
         }
 

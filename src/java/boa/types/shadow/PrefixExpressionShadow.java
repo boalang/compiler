@@ -53,19 +53,11 @@ public class PrefixExpressionShadow extends BoaShadowType  {
 
     /** {@inheritDoc} */
     @Override
-    public Node lookupCodegen(final String name, final String nodeId, final SymbolTable env) {
-        final Identifier id = ASTFactory.createIdentifier(nodeId, env);
-        id.type = new ExpressionProtoTuple();
+	public Node lookupCodegen(final String name, final Factor node, final SymbolTable env) { 
 
         if ("operand".equals(name)) {
             // ${0}.expressions[0]
-
-            // ${0}.expressions
-            final Expression tree = ASTFactory.createSelector(id, "expressions",new BoaProtoList(new ExpressionProtoTuple()), new ExpressionProtoTuple(), env);
-            // ${0}.expressions[0]
-            ASTFactory.getFactorFromExp(tree).addOp(ASTFactory.createIndex(ASTFactory.createIntLiteral(0), env));
-
-            return tree;
+            return ASTFactory.createFactor("expressions",ASTFactory.createIntLiteral(0),new BoaProtoList(new ExpressionProtoTuple()), new ExpressionProtoTuple(),env);
         }
 
 
@@ -83,8 +75,8 @@ public class PrefixExpressionShadow extends BoaShadowType  {
     public IfStatement getManytoOne(final SymbolTable env ,Block b) {
        
         // if(isboollit(${0})) b;
-
         final Expression tree = ASTFactory.createIdentifierExpr(boa.compiler.transforms.ShadowTypeEraser.NODE_ID, env, new ExpressionProtoTuple());
+
 
         IfStatement ifstmt = new IfStatement(ASTFactory.createCallExpr("isprefix", env, new ExpressionProtoTuple(), tree),b);
         return ifstmt ;   

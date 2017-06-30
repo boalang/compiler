@@ -49,13 +49,11 @@ public class ExpressionStatementShadow extends BoaShadowType  {
 
     /** {@inheritDoc} */
     @Override
-    public Node lookupCodegen(final String name, final String nodeId, final SymbolTable env) {
-        final Identifier id = ASTFactory.createIdentifier(nodeId, env);
-        id.type = new StatementProtoTuple();
+	public Node lookupCodegen(final String name, final Factor node, final SymbolTable env) { 
 
         if ("expression".equals(name)) {
             // ${0}.expression
-            return ASTFactory.createSelector(id, "expression", new ExpressionProtoTuple(), new ExpressionProtoTuple(), env);
+            return ASTFactory.createSelector( "expression", new ExpressionProtoTuple(), env);
         }
 
         throw new RuntimeException("invalid shadow field: " + name);

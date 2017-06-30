@@ -52,12 +52,10 @@ public class TypeDeclarationStatementShadow extends BoaShadowType  {
 
     /** {@inheritDoc} */
     @Override
-    public Node lookupCodegen(final String name, final String nodeId, final SymbolTable env) {
-        final Identifier id = ASTFactory.createIdentifier(nodeId, env);
-        id.type = new StatementProtoTuple();
+	public Node lookupCodegen(final String name, final Factor node, final SymbolTable env) { 
         if ("declaration".equals(name)) {
             // TODO ${0}.type_declaration ?
-            return ASTFactory.createSelector(id, "type_declaration",  new DeclarationProtoTuple(),  new DeclarationProtoTuple(), env);
+            return ASTFactory.createSelector( "type_declaration",    new DeclarationProtoTuple(), env);
         }
 
 
