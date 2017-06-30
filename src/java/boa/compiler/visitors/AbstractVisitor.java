@@ -16,6 +16,8 @@
  */
 package boa.compiler.visitors;
 
+import java.util.List;
+
 import boa.compiler.ast.*;
 import boa.compiler.ast.expressions.*;
 import boa.compiler.ast.literals.*;
@@ -36,6 +38,20 @@ import boa.compiler.ast.types.*;
 public abstract class AbstractVisitor<ReturnTypeT, ArgTypeT> {
 	protected void initialize(final ArgTypeT arg) { }
 
+    protected <T extends Node> void visitList(final List<T> l, final ArgTypeT arg) {
+		int len = l.size();
+		for (int i = 0; i < l.size(); i++) {
+			l.get(i).accept(this, arg);
+			// if nodes were added/removed before the current node, dont visit them
+			// and be sure to start after the last visited node's index
+            // which may be before or after i
+			if (len != l.size()) {
+				i += (l.size() - len);
+				len = l.size();
+			}
+		}
+    }
+
 	public ReturnTypeT start(final Node n, final ArgTypeT arg) {
 		initialize(arg);
 		return n.accept(this, arg);
@@ -46,22 +62,12 @@ public abstract class AbstractVisitor<ReturnTypeT, ArgTypeT> {
 	}
 
 	public ReturnTypeT visit(final Program n, final ArgTypeT arg) {
-		int len = n.getStatementsSize();
-		for (int i = 0; i < n.getStatementsSize(); i++) {
-			n.getStatement(i).accept(this, arg);
-			// if a node was added, dont visit it and
-			// dont re-visit the node we were just at
-			if (len != n.getStatementsSize()) {
-				i += (n.getStatementsSize() - len);
-				len = n.getStatementsSize();
-			}
-		}
+        visitList(n.getStatements(), arg);
 		return null;
 	}
 
 	public ReturnTypeT visit(final Call n, final ArgTypeT arg) {
-		for (final Expression e : n.getArgs())
-			e.accept(this, arg);
+        visitList(n.getArgs(), arg);
 		return null;
 	}
 
@@ -86,24 +92,20 @@ public abstract class AbstractVisitor<ReturnTypeT, ArgTypeT> {
 	}
 
 	public ReturnTypeT visit(final Composite n, final ArgTypeT arg) {
-		for (final Pair p : n.getPairs())
-			p.accept(this, arg);
-		for (final Expression e : n.getExprs())
-			e.accept(this, arg);
+        visitList(n.getPairs(), arg);
+        visitList(n.getExprs(), arg);
 		return null;
 	}
 
 	public ReturnTypeT visit(final Conjunction n, final ArgTypeT arg) {
 		n.getLhs().accept(this, arg);
-		for (final Comparison c : n.getRhs())
-			c.accept(this, arg);
+        visitList(n.getRhs(), arg);
 		return null;
 	}
 
 	public ReturnTypeT visit(final Factor n, final ArgTypeT arg) {
 		n.getOperand().accept(this, arg);
-		for (final Node o : n.getOps())
-			o.accept(this, arg);
+        visitList(n.getOps(), arg);
 		return null;
 	}
 
@@ -131,8 +133,7 @@ public abstract class AbstractVisitor<ReturnTypeT, ArgTypeT> {
 
 	public ReturnTypeT visit(final Term n, final ArgTypeT arg) {
 		n.getLhs().accept(this, arg);
-		for (final Factor f : n.getRhs())
-			f.accept(this, arg);
+        visitList(n.getRhs(), arg);
 		return null;
 	}
 
@@ -151,16 +152,7 @@ public abstract class AbstractVisitor<ReturnTypeT, ArgTypeT> {
 	}
 
 	public ReturnTypeT visit(final Block n, final ArgTypeT arg) {
-		int len = n.getStatementsSize();
-		for (int i = 0; i < n.getStatementsSize(); i++) {
-			n.getStatement(i).accept(this, arg);
-			// if a node was added, dont visit it and
-			// dont re-visit the node we were just at
-			if (len != n.getStatementsSize()) {
-				i += (n.getStatementsSize() - len);
-				len = n.getStatementsSize();
-			}
-		}
+        visitList(n.getStatements(), arg);
 		return null;
 	}
 
@@ -180,8 +172,7 @@ public abstract class AbstractVisitor<ReturnTypeT, ArgTypeT> {
 
 	public ReturnTypeT visit(final EmitStatement n, final ArgTypeT arg) {
 		n.getId().accept(this, arg);
-		for (final Expression e : n.getIndices())
-			e.accept(this, arg);
+        visitList(n.getIndices(), arg);
 		n.getValue().accept(this, arg);
 		if (n.hasWeight())
 			n.getWeight().accept(this, arg);
@@ -249,16 +240,14 @@ public abstract class AbstractVisitor<ReturnTypeT, ArgTypeT> {
 	}
 
 	public ReturnTypeT visit(final SwitchCase n, final ArgTypeT arg) {
-		for (final Expression e : n.getCases())
-			e.accept(this, arg);
+        visitList(n.getCases(), arg);
 		n.getBody().accept(this, arg);
 		return null;
 	}
 
 	public ReturnTypeT visit(final SwitchStatement n, final ArgTypeT arg) {
 		n.getCondition().accept(this, arg);
-		for (final SwitchCase sc : n.getCases())
-			sc.accept(this, arg);
+        visitList(n.getCases(), arg);
 		n.getDefault().accept(this, arg);
 		return null;
 	}
@@ -275,8 +264,7 @@ public abstract class AbstractVisitor<ReturnTypeT, ArgTypeT> {
 	public ReturnTypeT visit(final VisitStatement n, final ArgTypeT arg) {
 		if (n.hasComponent())
 			n.getComponent().accept(this, arg);
-		for (final Identifier id : n.getIdList())
-			id.accept(this, arg);
+        visitList(n.getIdList(), arg);
 		n.getBody().accept(this, arg);
 		return null;
 	}
@@ -284,12 +272,10 @@ public abstract class AbstractVisitor<ReturnTypeT, ArgTypeT> {
 	public ReturnTypeT visit(final TraverseStatement n, final ArgTypeT arg) {
 		if (n.hasComponent())
 			n.getComponent().accept(this, arg);
-		for (final Identifier id : n.getIdList())
-			id.accept(this, arg);
+        visitList(n.getIdList(), arg);
 		if (n.hasCondition())
 			n.getCondition().accept(this, arg);
-		for (final IfStatement ifStatement : n.getIfStatements())
-			ifStatement.accept(this, arg);
+        visitList(n.getIfStatements(), arg);
 		if(n.getReturnType()!=null) {
 			n.getReturnType().accept(this, arg);
 		}
@@ -301,8 +287,7 @@ public abstract class AbstractVisitor<ReturnTypeT, ArgTypeT> {
 	public ReturnTypeT visit(final FixPStatement n, final ArgTypeT arg) {
 		n.getParam1().accept(this, arg);
 		n.getParam2().accept(this, arg);
-		for (final Identifier id : n.getIdList())
-			id.accept(this, arg);
+        visitList(n.getIdList(), arg);
 		if (n.hasCondition())
 			n.getCondition().accept(this, arg);
 		if(n.getReturnType()!=null) {
@@ -324,8 +309,7 @@ public abstract class AbstractVisitor<ReturnTypeT, ArgTypeT> {
 	//
 	public ReturnTypeT visit(final Expression n, final ArgTypeT arg) {
 		n.getLhs().accept(this, arg);
-		for (final Conjunction c : n.getRhs())
-			c.accept(this, arg);
+        visitList(n.getRhs(), arg);
 		return null;
 	}
 
@@ -342,8 +326,7 @@ public abstract class AbstractVisitor<ReturnTypeT, ArgTypeT> {
 
 	public ReturnTypeT visit(final SimpleExpr n, final ArgTypeT arg) {
 		n.getLhs().accept(this, arg);
-		for (final Term t : n.getRhs())
-			t.accept(this, arg);
+        visitList(n.getRhs(), arg);
 		return null;
 	}
 
@@ -403,8 +386,7 @@ public abstract class AbstractVisitor<ReturnTypeT, ArgTypeT> {
 	}
 
 	public ReturnTypeT visit(final FunctionType n, final ArgTypeT arg) {
-		for (final Component c : n.getArgs())
-			c.accept(this, arg);
+        visitList(n.getArgs(), arg);
 		if (n.hasType())
 			n.getType().accept(this, arg);
 		return null;
@@ -418,10 +400,8 @@ public abstract class AbstractVisitor<ReturnTypeT, ArgTypeT> {
 
 	public ReturnTypeT visit(final OutputType n, final ArgTypeT arg) {
 		n.getId().accept(this, arg);
-		for (final Expression e : n.getArgs())
-			e.accept(this, arg);
-		for (final Component c : n.getIndices())
-			c.accept(this, arg);
+        visitList(n.getArgs(), arg);
+        visitList(n.getIndices(), arg);
 		n.getType().accept(this, arg);
 		if (n.hasWeight())
 			n.getWeight().accept(this, arg);
@@ -439,14 +419,12 @@ public abstract class AbstractVisitor<ReturnTypeT, ArgTypeT> {
 	}
 
 	public ReturnTypeT visit(final TupleType n, final ArgTypeT arg) {
-		for (final Component c : n.getMembers())
-			c.accept(this, arg);
+        visitList(n.getMembers(), arg);
 		return null;
 	}
 
 	public ReturnTypeT visit(final EnumType n, final ArgTypeT arg) {
-		for (final EnumBodyDeclaration c : n.getMembers())
-			c.accept(this, arg);
+        visitList(n.getMembers(), arg);
 		return null;
 	}
 
@@ -455,7 +433,7 @@ public abstract class AbstractVisitor<ReturnTypeT, ArgTypeT> {
 	}
 
 	public ReturnTypeT visit(final TraversalType n, final ArgTypeT arg) {
-		if(n.getIndex()!=null)
+		if (n.getIndex() != null)
 			n.getIndex().accept(this, arg);
 		return null;
 	}
