@@ -28,6 +28,9 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.*;
 import org.eclipse.wst.jsdt.core.JavaScriptCore;
 import org.eclipse.wst.jsdt.core.dom.JavaScriptUnit;
+import org.mozilla.javascript.CompilerEnvirons;
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.ast.AstRoot;
 
 import boa.types.Ast.ASTRoot;
 import boa.types.Code.Revision;
@@ -152,7 +155,7 @@ public abstract class AbstractCommit {
 		final ChangedFile.Builder fb = ChangedFile.newBuilder();
 		fb.setName(path);
 		fb.setKind(FileKind.OTHER);
-		
+
 		final String lowerPath = path.toLowerCase();
 		if (lowerPath.endsWith(".txt"))
 			fb.setKind(FileKind.TEXT);
@@ -162,70 +165,107 @@ public abstract class AbstractCommit {
 			fb.setKind(FileKind.BINARY);
 		else if (lowerPath.endsWith(".java") && parse) {
 			final String content = getFileContents(path);
-			
+
 			fb.setKind(FileKind.SOURCE_JAVA_JLS2);
-			if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_4, AST.JLS2, false, astWriter, revKey + keyDelim + path)) {
+			if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_4, AST.JLS2, false, astWriter,
+					revKey + keyDelim + path)) {
 				if (debug)
 					System.err.println("Found JLS2 parse error in: revision " + id + ": file " + path);
 
 				fb.setKind(FileKind.SOURCE_JAVA_JLS3);
-				if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_5, AST.JLS3, false, astWriter, revKey + keyDelim + path)) {
+				if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_5, AST.JLS3, false, astWriter,
+						revKey + keyDelim + path)) {
 					if (debug)
 						System.err.println("Found JLS3 parse error in: revision " + id + ": file " + path);
 
 					fb.setKind(FileKind.SOURCE_JAVA_JLS4);
-					if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_7, AST.JLS4, false, astWriter, revKey + keyDelim + path)) {
+					if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_7, AST.JLS4, false, astWriter,
+							revKey + keyDelim + path)) {
 						if (debug)
 							System.err.println("Found JLS4 parse error in: revision " + id + ": file " + path);
 
 						fb.setKind(FileKind.SOURCE_JAVA_JLS8);
-						if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_8, AST.JLS8, false, astWriter, revKey + keyDelim + path)) {
+						if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_8, AST.JLS8, false, astWriter,
+								revKey + keyDelim + path)) {
 							if (debug)
 								System.err.println("Found JLS8 parse error in: revision " + id + ": file " + path);
 
 							fb.setKind(FileKind.SOURCE_JAVA_ERROR);
 							try {
-								astWriter.append(new Text(revKey + keyDelim + fb.getName()), new BytesWritable(ASTRoot.newBuilder().build().toByteArray()));
+								astWriter.append(new Text(revKey + keyDelim + fb.getName()),
+										new BytesWritable(ASTRoot.newBuilder().build().toByteArray()));
 							} catch (IOException e) {
 								e.printStackTrace();
 							}
-						} else
-							if (debug)
-								System.err.println("Accepted JLS8: revision " + id + ": file " + path);
-					} else
-						if (debug)
-							System.err.println("Accepted JLS4: revision " + id + ": file " + path);
-				} else
-					if (debug)
-						System.err.println("Accepted JLS3: revision " + id + ": file " + path);
-			} else
-				if (debug)
-					System.err.println("Accepted JLS2: revision " + id + ": file " + path);
-		}else if(lowerPath.endsWith(".js") && parse){
+						} else if (debug)
+							System.err.println("Accepted JLS8: revision " + id + ": file " + path);
+					} else if (debug)
+						System.err.println("Accepted JLS4: revision " + id + ": file " + path);
+				} else if (debug)
+					System.err.println("Accepted JLS3: revision " + id + ": file " + path);
+			} else if (debug)
+				System.err.println("Accepted JLS2: revision " + id + ": file " + path);
+		} else if (lowerPath.endsWith(".js") && parse) {
 			final String content = getFileContents(path);
 
-			fb.setKind(FileKind.SOURCE_JS_ES3);
-			if (!parseJavaScriptFile(path, fb, content, JavaScriptCore.VERSION_1_3, org.eclipse.wst.jsdt.core.dom.AST.JLS2, false, astWriter, revKey + keyDelim + path)) {
+			fb.setKind(FileKind.SOURCE_JS_ES1);
+			if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_1, false, astWriter,
+					revKey + keyDelim + path)) {
 				if (debug)
 					System.err.println("Found ES3 parse error in: revision " + id + ": file " + path);
-
-				fb.setKind(FileKind.SOURCE_JS_ES4);
-				if (!parseJavaScriptFile(path, fb, content, JavaScriptCore.VERSION_1_4, org.eclipse.wst.jsdt.core.dom.AST.JLS3, false, astWriter, revKey + keyDelim + path)) {
+				fb.setKind(FileKind.SOURCE_JS_ES2);
+				if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_2, false, astWriter,
+						revKey + keyDelim + path)) {
 					if (debug)
-						System.err.println("Found ES4 parse error in: revision " + id + ": file " + path);
-
-							fb.setKind(FileKind.SOURCE_JS_ERROR);
-							try {
-								astWriter.append(new Text(revKey + keyDelim + fb.getName()), new BytesWritable(ASTRoot.newBuilder().build().toByteArray()));
-							} catch (IOException e) {
-								e.printStackTrace();
-							}
-				} else
-					if (debug)
-						System.err.println("Accepted ES4: revision " + id + ": file " + path);
-			} else
-				if (debug)
-					System.err.println("Accepted ES3: revision " + id + ": file " + path);
+						System.err.println("Found ES3 parse error in: revision " + id + ": file " + path);
+					fb.setKind(FileKind.SOURCE_JS_ES3);
+					if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_3, false, astWriter,
+							revKey + keyDelim + path)) {
+						if (debug)
+							System.err.println("Found ES3 parse error in: revision " + id + ": file " + path);
+						fb.setKind(FileKind.SOURCE_JS_ES5);
+						if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_5, false, astWriter,
+								revKey + keyDelim + path)) {
+							if (debug)
+								System.err.println("Found ES4 parse error in: revision " + id + ": file " + path);
+							fb.setKind(FileKind.SOURCE_JS_ES6);
+							if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_6, false, astWriter,
+									revKey + keyDelim + path)) {
+								if (debug)
+									System.err.println("Found ES4 parse error in: revision " + id + ": file " + path);
+								fb.setKind(FileKind.SOURCE_JS_ES7);
+								if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_7, false, astWriter,
+										revKey + keyDelim + path)) {
+									if (debug)
+										System.err
+												.println("Found ES3 parse error in: revision " + id + ": file " + path);
+									fb.setKind(FileKind.SOURCE_JS_ES8);
+									if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_8, false, astWriter,
+											revKey + keyDelim + path)) {
+										if (debug)
+											System.err.println(
+													"Found ES4 parse error in: revision " + id + ": file " + path);
+										fb.setKind(FileKind.SOURCE_JS_ERROR);
+										try {
+											astWriter.append(new Text(revKey + keyDelim + fb.getName()),
+													new BytesWritable(ASTRoot.newBuilder().build().toByteArray()));
+										} catch (IOException e) {
+											e.printStackTrace();
+										}
+									} else if (debug)
+										System.err.println("Accepted ES8: revision " + id + ": file " + path);
+								} else if (debug)
+									System.err.println("Accepted ES7: revision " + id + ": file " + path);
+							} else if (debug)
+								System.err.println("Accepted ES6: revision " + id + ": file " + path);
+						} else if (debug)
+							System.err.println("Accepted ES5: revision " + id + ": file " + path);
+					} else if (debug)
+						System.err.println("Accepted ES3: revision " + id + ": file " + path);
+				} else if (debug)
+					System.err.println("Accepted ES2: revision " + id + ": file " + path);
+			} else if (debug)
+				System.err.println("Accepted ES1: revision " + id + ": file " + path);
 		}
 		fb.setKey(revKey);
 
@@ -233,30 +273,23 @@ public abstract class AbstractCommit {
 	}
 
 	private boolean parseJavaScriptFile(final String path,
-			final ChangedFile.Builder fb, final String content,
-			final String compliance, final int astLevel,
+			final ChangedFile.Builder fb, final String content, final int astLevel,
 			final boolean storeOnError, Writer astWriter, String key) {
 		try {
 			//System.out.println("parsing=" + (++count) + "\t" + path);
-			final org.eclipse.wst.jsdt.core.dom.ASTParser parser = org.eclipse.wst.jsdt.core.dom.ASTParser
-					.newParser(astLevel);
-			parser.setKind(org.eclipse.wst.jsdt.core.dom.ASTParser.K_COMPILATION_UNIT);
-			parser.setResolveBindings(true);
-			parser.setSource(content.toCharArray());
+			CompilerEnvirons cp = new CompilerEnvirons();
+			cp.setLanguageVersion(astLevel);
+			final org.mozilla.javascript.Parser parser = new org.mozilla.javascript.Parser(cp);
 
-			final Map options = JavaScriptCore.getOptions();
-			JavaScriptCore.setComplianceOptions(compliance, options);
-			parser.setCompilerOptions(options);
-
-			JavaScriptUnit cu;
+			AstRoot cu;
 			try{
-				cu = (JavaScriptUnit) parser.createAST(null);
+				cu =  parser.parse(content, null, 0);
 			}catch(java.lang.IllegalArgumentException ex){
 				return false;
 			}
 
 			final JavaScriptErrorCheckVisitor errorCheck = new JavaScriptErrorCheckVisitor();
-			cu.accept(errorCheck);
+			cu.visit(errorCheck);
 
 			if (!errorCheck.hasError || storeOnError) {
 				final ASTRoot.Builder ast = ASTRoot.newBuilder();

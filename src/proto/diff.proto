@@ -69,10 +69,20 @@ message ChangedFile {
 		
 		/** The file represents a JavaScript source file that had a parse error */
 		SOURCE_JS_ERROR = 300;
+		/** The file represents a JavaScript source file that parsed without error as ES1 */
+		SOURCE_JS_ES1 = 301;
+		/** The file represents a JavaScript source file that parsed without error as ES2 */
+		SOURCE_JS_ES2 = 302;
 		/** The file represents a JavaScript source file that parsed without error as ES3 */
-		SOURCE_JS_ES3 = 301;
-		/** The file represents a JavaScript source file that parsed without error as ES4 */
-		SOURCE_JS_ES4 = 302;
+		SOURCE_JS_ES3 = 303;
+		/** The file represents a JavaScript source file that parsed without error as ES5 */
+		SOURCE_JS_ES5 = 304;
+		/** The file represents a JavaScript source file that parsed without error as ES6 */
+		SOURCE_JS_ES6 = 305;
+		/** The file represents a JavaScript source file that parsed without error as ES7 */
+		SOURCE_JS_ES7 = 306;
+		/** The file represents a JavaScript source file that parsed without error as ES8 */
+		SOURCE_JS_ES8 = 307;
 		/** @exclude */
 		JS_ERROR = 300;
 	}
