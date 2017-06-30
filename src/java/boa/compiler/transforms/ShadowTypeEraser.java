@@ -394,32 +394,25 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
 
     protected class SubtreeEraser extends AbstractVisitorNoArgNoRet {
         private boolean flag = false;
-        private List<Node> ops = new ArrayList<Node>();
+        
 
         private final Deque<Boolean>    flagStack       = new ArrayDeque<Boolean>();
-        private final Deque<List<Node>> opsStack        = new ArrayDeque<List<Node>>();
-        private final Deque<Expression> expressionStack = new ArrayDeque<Expression>();
+        
 
-        // track nearest Expression node
-         @Override
-        public void visit(final Expression n) {
-            expressionStack.push(n);
-            super.visit(n);
-            expressionStack.pop();
-        }
+      
 
         @Override
         public void visit(final Factor n) {
             flagStack.push(flag);
-            opsStack.push(ops);
+            
 
             flag = false;
-            ops = n.getOps();
+            
 
             super.visit(n);
 
             flag = flagStack.pop();
-            ops = opsStack.pop();
+            
         }
 
         // replacing shadow type selectors
@@ -428,10 +421,11 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
             super.visit(n);
 
             final Factor fact = (Factor)n.getParent();
+            
 
             if (!flag && fact.getOperand().type instanceof BoaShadowType) {
-                final Expression parentExp = expressionStack.peek();
-
+               
+                Expression parentExp = new Expression();
                 // avoid replacing past the first selector
                 flag = true;
 
@@ -440,21 +434,52 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                 final BoaShadowType shadow = (BoaShadowType)fact.getOperand().type;
 
                 // replace the selector
-                final Expression replacement = (Expression)shadow.lookupCodegen(n.getId().getToken(), id.getToken(), parentExp.env);
-                final ParenExpression paren = new ParenExpression(replacement);
-                final Factor newFact = new Factor(paren);
-                final Expression newExp = ASTFactory.createFactorExpr(newFact);
+                //final Expression replacement = (Expression)shadow.lookupCodegen(n.getId().getToken(), id.getToken(), parentExp.env);
+                final Node replacement = shadow.lookupCodegen(n.getId().getToken(), id.getToken(), parentExp.env);
+                if (replacement instanceof Selector) // case 1                  
+                {                                                               
+                    for (int i = 0; i < fact.getOps().size(); i++){                                  
+                        if (fact.getOps().get(i) == n) {                     
+                            fact.getOps().set(i, (Selector)replacement);         
+                            break;                                              
+                        }
+                    }                                                           
+                 }                                                               
+                if( ((Factor)replacement).getOperand() == null) //case 2           
+                 {                                                               
+                    for (int i = 0; i <fact.getOps().size() ; i++){                                  
+                        if (fact.getOps().get(i) == n) {                     
+                            fact.getOps().set(i, ((Factor)replacement).getOp(0)) ;
+                            fact.getOps().add(i + 1, ((Factor)replacement).getOp(1));
+                            break;                                              
+                         }                     
+                    }                                       
+                 }                                                               
+                if(((Factor)replacement).getOperand() != null) //case 3           
+                    {  // TODO                                                        
+                        // fact.getParent().setLhs(replacement)                    
+                        //  idx = this;                                             
+                        //  for (int i = idx + 1; . .; i++)                         
+                        //      replacement.addOp(fact.getOps().get(i))             
+                        // 
+                    }
 
-                newFact.env = parentExp.env;
-                paren.type = replacement.type;
-                newExp.type = paren.type;
+               //  final ParenExpression paren = new ParenExpression(replacement);
+               // final Factor newFact = new Factor(paren);
+               //final Expression newExp = ASTFactory.createFactorExpr(newFact);
 
-                for (int i = 1; i < ops.size(); i++) {
-                    newFact.addOp(ops.get(i));
-                    newExp.type = ops.get(i).type;
-                }
+                //newFact.env = parentExp.env;
+                //paren.type = replacement.type;
+                //newExp.type = paren.type;
+
+                //for (int i = 1; i <fact.getOps().size(); i++) {
+                 //   newFact.addOp(fact.getOps().get(i));
+                  //  newExp.type = fact.getOps().get(i).type;
+                //}
                 
-                parentExp.replaceExpression(parentExp, newExp);
+                
+
+                
 
             }
         }
