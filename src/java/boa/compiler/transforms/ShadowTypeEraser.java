@@ -85,6 +85,7 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
         super.start(n);
 
         // second step to transform all the sub trees
+        new SelectorTransformer().start(n);
         new SubtreeEraser().start(n);
     }
 
@@ -391,7 +392,7 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
         }
     }
 
-    protected class SubtreeEraser extends AbstractVisitorNoArgNoRet {
+    protected class SelectorTransformer extends AbstractVisitorNoArgNoRet {
         private boolean flag = false;
         private final Deque<Boolean> flagStack = new ArrayDeque<Boolean>();
 
@@ -449,6 +450,17 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                     newExp.type = fact.getOps().get(i).type;
                 }
                 */
+            }
+        }
+    }
+
+    protected class SubtreeEraser extends AbstractVisitorNoArgNoRet {
+        @Override
+        public void visit(final Identifier n) {
+            super.visit(n);
+
+            if (n.type instanceof BoaShadowType) {
+                n.type = ((BoaShadowType)n.type).shadowedType();
             }
         }
 
