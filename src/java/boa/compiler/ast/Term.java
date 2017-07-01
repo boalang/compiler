@@ -37,6 +37,10 @@ public class Term extends Node {
 		return lhs;
 	}
 
+	public void setLhs(Factor lhs) {
+		this.lhs = lhs;
+	}
+
 	public List<String> getOps() {
 		return ops;
 	}

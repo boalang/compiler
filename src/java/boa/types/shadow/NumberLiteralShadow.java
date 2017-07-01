@@ -70,7 +70,7 @@ public class NumberLiteralShadow extends BoaShadowType  {
         // if (funcName(${0})) b;
          final Expression tree = ASTFactory.createIdentifierExpr(boa.compiler.transforms.ShadowTypeEraser.NODE_ID, env, new ExpressionProtoTuple());
 
-        return new IfStatement(ASTFactory.createCallExpr("isnumlit", env, new ExpressionProtoTuple(), tree), b);
+        return new IfStatement(ASTFactory.createCallExpr("isnumberlit", env, new ExpressionProtoTuple(), tree), b);
     }   
 
     /** {@inheritDoc} */

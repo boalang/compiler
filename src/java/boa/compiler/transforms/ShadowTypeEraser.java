@@ -420,10 +420,17 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                 // get shadow type used
                 final BoaShadowType shadow = (BoaShadowType)fact.getOperand().type;
 
-                // replace the selector
-                final Node replacement = shadow.lookupCodegen(n.getId().getToken(), fact, n.env);
                 final int idx = fact.getOps().indexOf(n);
+                final Factor newFact = new Factor(fact.getOperand());
+                for(int i = 0;i<idx-1;i++){
+                    newFact.addOp(fact.getOps().get(i));
+                }
 
+
+
+                // replace the selector
+                final Node replacement = shadow.lookupCodegen(n.getId().getToken(), newFact, n.env);
+                
                 if (replacement instanceof Selector) {
                     fact.getOps().set(idx, replacement);
                 } else if (((Factor)replacement).getOperand() == null) {
@@ -431,9 +438,10 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                     fact.getOps().add(idx + 1, ((Factor)replacement).getOp(1));
                 } else {
                     // TODO
-                    //fact.getParent().setLhs(replacement)
-                    //for (int i = idx + 1; . .; i++)
-                    //    replacement.addOp(fact.getOps().get(i))
+                    Term trm = (Term)(fact.getParent());
+                    trm.setLhs((Factor)replacement);
+                    for (int i = idx + 1; i<fact.getOps().size(); i++)
+                        ((Factor)replacement).addOp(fact.getOps().get(i));
                 }
 
                 /*

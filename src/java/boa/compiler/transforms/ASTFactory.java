@@ -176,6 +176,27 @@ public class ASTFactory {
 		return f;
 	}
 
+	public static Factor createCallFactor(final Factor oldFact,final String name, final SymbolTable env, final BoaType retType, final Expression... args) {
+		final Factor f = new Factor(ASTFactory.createIdentifier(name, env));
+		f.env = env;
+
+
+		final Call c = new Call();
+		for (final Expression e : args)
+			c.addArg(e);
+		c.env = env;
+
+		for(int i = 0; i<oldFact.getOps().size(); i++){
+			f.addOp(oldFact.getOps().get(i));
+		}
+
+		f.addOp(c);
+		f.type = retType;
+		return f;
+	}
+
+
+
 	public static Index createIndex(final Expression idx, final SymbolTable env) {
 		final Index i = new Index(idx);
 		i.env = env;
