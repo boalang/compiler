@@ -282,7 +282,6 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                                 final Block toCombine = new Block();
                                 final List<SwitchCase> toRemove = new LinkedList<SwitchCase>();
 
-                                
                                 final Selector test = (Selector)styKind.getLhs().getLhs().getLhs().getLhs().getLhs().getOp(0);
                                 final Identifier testi = test.getId();
                                 // for each switch case see if the kind expression matches
@@ -309,7 +308,7 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
 
                                             toCombine.addStatement(((BoaShadowType)visit.getComponent().type).getManytoOne(n.env, b));
                                         }
-                                    }   
+                                    }
 
                                     if (!flg) {
                                         final Block manyToOneBlock = new Block();
@@ -321,7 +320,7 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
 
                                 // add cases to a map so that we can resolve their origin type (eg . infix vs prefix)
                                 manytomanyMap.put(testi.getToken(), (BoaShadowType)visit.getComponent().type);
-                               
+
                                 if (toCombine.getStatementsSize() > 0 && flg) {
                                     listExp.add(styKind);
                                     switchS.getCases().removeAll(toRemove);
@@ -354,7 +353,7 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                 final List<SwitchCase> listOfCases = switchS.getCases();
                 for (final SwitchCase scase : listOfCases) {
                     if (!lastStatementIsStop(scase.getBody())) {
-                        scase.getBody().addStatement(new BreakStatement());   
+                        scase.getBody().addStatement(new BreakStatement());
                     }
                 }
 
@@ -394,25 +393,16 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
 
     protected class SubtreeEraser extends AbstractVisitorNoArgNoRet {
         private boolean flag = false;
-        
-
-        private final Deque<Boolean>    flagStack       = new ArrayDeque<Boolean>();
-        
-
-      
+        private final Deque<Boolean> flagStack = new ArrayDeque<Boolean>();
 
         @Override
         public void visit(final Factor n) {
             flagStack.push(flag);
-            
-
             flag = false;
-            
 
             super.visit(n);
 
             flag = flagStack.pop();
-            
         }
 
         // replacing shadow type selectors
@@ -421,66 +411,44 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
             super.visit(n);
 
             final Factor fact = (Factor)n.getParent();
-            
 
             if (!flag && fact.getOperand().type instanceof BoaShadowType) {
-               
-                Expression parentExp = new Expression();
                 // avoid replacing past the first selector
                 flag = true;
 
                 // get shadow type used
-                final Identifier id = (Identifier)fact.getOperand();
                 final BoaShadowType shadow = (BoaShadowType)fact.getOperand().type;
 
                 // replace the selector
-                //final Expression replacement = (Expression)shadow.lookupCodegen(n.getId().getToken(), id.getToken(), parentExp.env);
-                final Node replacement = shadow.lookupCodegen(n.getId().getToken(),fact, parentExp.env);
-                if (replacement instanceof Selector) // case 1                  
-                {                                                               
-                    for (int i = 0; i < fact.getOps().size(); i++){                                  
-                        if (fact.getOps().get(i) == n) {                     
-                            fact.getOps().set(i, (Selector)replacement);         
-                            break;                                              
-                        }
-                    }                                                           
-                 }                                                               
-                else if( ((Factor)replacement).getOperand() == null) //case 2           
-                 {                                                               
-                    for (int i = 0; i <fact.getOps().size() ; i++){                                  
-                        if (fact.getOps().get(i) == n) {                     
-                            fact.getOps().set(i, ((Factor)replacement).getOp(0)) ;
-                            fact.getOps().add(i + 1, ((Factor)replacement).getOp(1));
-                            break;                                              
-                         }                     
-                    }                                       
-                 }                                                               
-                else if(((Factor)replacement).getOperand() != null) //case 3           
-                    {  // TODO                                                        
-                        // fact.getParent().setLhs(replacement)                    
-                        //  idx = this;                                             
-                        //  for (int i = idx + 1; . .; i++)                         
-                        //      replacement.addOp(fact.getOps().get(i))             
-                        // 
-                    }
+                final Node replacement = shadow.lookupCodegen(n.getId().getToken(), fact, n.env);
+                final int idx = fact.getOps().indexOf(n);
 
-               //  final ParenExpression paren = new ParenExpression(replacement);
-               // final Factor newFact = new Factor(paren);
-               //final Expression newExp = ASTFactory.createFactorExpr(newFact);
+                if (replacement instanceof Selector) {
+                    fact.getOps().set(idx, replacement);
+                } else if (((Factor)replacement).getOperand() == null) {
+                    fact.getOps().set(idx, ((Factor)replacement).getOp(0));
+                    fact.getOps().add(idx + 1, ((Factor)replacement).getOp(1));
+                } else {
+                    // TODO
+                    //fact.getParent().setLhs(replacement)
+                    //for (int i = idx + 1; . .; i++)
+                    //    replacement.addOp(fact.getOps().get(i))
+                }
 
-                //newFact.env = parentExp.env;
-                //paren.type = replacement.type;
-                //newExp.type = paren.type;
+                /*
+                final ParenExpression paren = new ParenExpression(replacement);
+                final Factor newFact = new Factor(paren);
+                final Expression newExp = ASTFactory.createFactorExpr(newFact);
 
-                //for (int i = 1; i <fact.getOps().size(); i++) {
-                 //   newFact.addOp(fact.getOps().get(i));
-                  //  newExp.type = fact.getOps().get(i).type;
-                //}
-                
-                
+                newFact.env = parentExp.env;
+                paren.type = replacement.type;
+                newExp.type = paren.type;
 
-                
-
+                for (int i = 1; i <fact.getOps().size(); i++) {
+                    newFact.addOp(fact.getOps().get(i));
+                    newExp.type = fact.getOps().get(i).type;
+                }
+                */
             }
         }
 

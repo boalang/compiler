@@ -1,6 +1,7 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2017, Hridesh Rajan, Robert Dyer,
+ *                 Iowa State University of Science and Technology
+ *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +27,7 @@ import boa.compiler.ast.types.*;
 
 /**
  * An abstract visitor class that passes no arguments during the visit and returns nothing.
- * 
+ *
  * @author rdyer
  * @author ankuraga
  * @author rramu
@@ -34,19 +35,19 @@ import boa.compiler.ast.types.*;
 public abstract class AbstractVisitorNoArgNoRet {
 	protected void initialize() { }
 
-    protected <T extends Node> void visitList(final List<T> l) {
+	protected <T extends Node> void visitList(final List<T> l) {
 		int len = l.size();
 		for (int i = 0; i < l.size(); i++) {
 			l.get(i).accept(this);
 			// if nodes were added/removed before the current node, dont visit them
 			// and be sure to start after the last visited node's index
-            // which may be before or after i
+			// which may be before or after i
 			if (len != l.size()) {
 				i += (l.size() - len);
 				len = l.size();
 			}
 		}
-    }
+	}
 
 	public void start(final Node n) {
 		initialize();
@@ -58,11 +59,11 @@ public abstract class AbstractVisitorNoArgNoRet {
 	}
 
 	public void visit(final Program n) {
-        visitList(n.getStatements());
+		visitList(n.getStatements());
 	}
 
 	public void visit(final Call n) {
-        visitList(n.getArgs());
+		visitList(n.getArgs());
 	}
 
 	public void visit(final Comparison n) {
@@ -83,18 +84,18 @@ public abstract class AbstractVisitorNoArgNoRet {
 	}
 
 	public void visit(final Composite n) {
-        visitList(n.getPairs());
-        visitList(n.getExprs());
+		visitList(n.getPairs());
+		visitList(n.getExprs());
 	}
 
 	public void visit(final Conjunction n) {
 		n.getLhs().accept(this);
-        visitList(n.getRhs());
+		visitList(n.getRhs());
 	}
 
 	public void visit(final Factor n) {
 		n.getOperand().accept(this);
-        visitList(n.getOps());
+		visitList(n.getOps());
 	}
 
 	public void visit(final Identifier n) {
@@ -117,7 +118,7 @@ public abstract class AbstractVisitorNoArgNoRet {
 
 	public void visit(final Term n) {
 		n.getLhs().accept(this);
-        visitList(n.getRhs());
+		visitList(n.getRhs());
 	}
 
 	public void visit(final UnaryFactor n) {
@@ -133,7 +134,7 @@ public abstract class AbstractVisitorNoArgNoRet {
 	}
 
 	public void visit(final Block n) {
-        visitList(n.getStatements());
+		visitList(n.getStatements());
 	}
 
 	public void visit(final BreakStatement n) {
@@ -149,7 +150,7 @@ public abstract class AbstractVisitorNoArgNoRet {
 
 	public void visit(final EmitStatement n) {
 		n.getId().accept(this);
-        visitList(n.getIndices());
+		visitList(n.getIndices());
 		n.getValue().accept(this);
 		if (n.hasWeight())
 			n.getWeight().accept(this);
@@ -207,13 +208,13 @@ public abstract class AbstractVisitorNoArgNoRet {
 	}
 
 	public void visit(final SwitchCase n) {
-        visitList(n.getCases());
+		visitList(n.getCases());
 		n.getBody().accept(this);
 	}
 
 	public void visit(final SwitchStatement n) {
 		n.getCondition().accept(this);
-        visitList(n.getCases());
+		visitList(n.getCases());
 		n.getDefault().accept(this);
 	}
 
@@ -228,20 +229,20 @@ public abstract class AbstractVisitorNoArgNoRet {
 	public void visit(final VisitStatement n) {
 		if (n.hasComponent())
 			n.getComponent().accept(this);
-        visitList(n.getIdList());
+		visitList(n.getIdList());
 		n.getBody().accept(this);
 	}
 
 	public void visit(final TraverseStatement n) {
 		if (n.hasComponent())
 			n.getComponent().accept(this);
-        visitList(n.getIdList());
+		visitList(n.getIdList());
 		if (n.hasCondition())
 			n.getCondition().accept(this);
 		if(n.getReturnType()!=null) {
 			n.getReturnType().accept(this);
 		}
-        visitList(n.getIfStatements());
+		visitList(n.getIfStatements());
 		if(n.hasBody())
 		n.getBody().accept(this);
 	}
@@ -249,7 +250,7 @@ public abstract class AbstractVisitorNoArgNoRet {
 	public void visit(final FixPStatement n) {
 		n.getParam1().accept(this);
 		n.getParam2().accept(this);
-        visitList(n.getIdList());
+		visitList(n.getIdList());
 		if (n.hasCondition())
 			n.getCondition().accept(this);
 		if(n.getReturnType()!=null) {
@@ -269,7 +270,7 @@ public abstract class AbstractVisitorNoArgNoRet {
 	//
 	public void visit(final Expression n) {
 		n.getLhs().accept(this);
-        visitList(n.getRhs());
+		visitList(n.getRhs());
 	}
 
 	public void visit(final FunctionExpression n) {
@@ -283,7 +284,7 @@ public abstract class AbstractVisitorNoArgNoRet {
 
 	public void visit(final SimpleExpr n) {
 		n.getLhs().accept(this);
-        visitList(n.getRhs());
+		visitList(n.getRhs());
 	}
 
 	public void visit(final VisitorExpression n) {
@@ -332,7 +333,7 @@ public abstract class AbstractVisitorNoArgNoRet {
 	}
 
 	public void visit(final FunctionType n) {
-        visitList(n.getArgs());
+		visitList(n.getArgs());
 		if (n.hasType())
 			n.getType().accept(this);
 	}
@@ -344,8 +345,8 @@ public abstract class AbstractVisitorNoArgNoRet {
 
 	public void visit(final OutputType n) {
 		n.getId().accept(this);
-        visitList(n.getArgs());
-        visitList(n.getIndices());
+		visitList(n.getArgs());
+		visitList(n.getIndices());
 		n.getType().accept(this);
 		if (n.hasWeight())
 			n.getWeight().accept(this);
@@ -360,11 +361,11 @@ public abstract class AbstractVisitorNoArgNoRet {
 	}
 
 	public void visit(final TupleType n) {
-        visitList(n.getMembers());
+		visitList(n.getMembers());
 	}
 
 	public void visit(final EnumType n) {
-        visitList(n.getMembers());
+		visitList(n.getMembers());
 	}
 
 	public void visit(final VisitorType n) {
