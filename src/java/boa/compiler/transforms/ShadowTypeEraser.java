@@ -412,7 +412,9 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                 final int idx = fact.getOps().indexOf(n);
                 final Factor newFact = fact.clone();
                 if (idx > 0)
-                    fact.getOps().subList(idx, fact.getOps().size()).clear();
+                    newFact.getOps().subList(idx, fact.getOps().size()).clear();
+                else
+                    newFact.getOps().clear();
 
                 // replace the selector
                 final Node replacement = shadow.lookupCodegen(n.getId().getToken(), newFact, n.env);
