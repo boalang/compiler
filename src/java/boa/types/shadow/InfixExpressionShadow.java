@@ -74,7 +74,6 @@ public class InfixExpressionShadow extends BoaShadowType  {
         if ("extended_operands".equals(name)) {
         
             // ${0}.expressions
-            
             node.addOp(ASTFactory.createSelector("expressions", new BoaProtoList(new ExpressionProtoTuple()), env));
             final Expression tree = ASTFactory.createFactorExpr(node);
             tree.type =  new BoaProtoList(new ExpressionProtoTuple());

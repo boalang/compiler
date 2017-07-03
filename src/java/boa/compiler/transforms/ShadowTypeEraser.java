@@ -30,6 +30,7 @@ import boa.compiler.ast.Node;
 import boa.compiler.ast.Selector;
 import boa.compiler.ast.Term;
 import boa.compiler.ast.expressions.Expression;
+import boa.compiler.ast.expressions.ParenExpression;
 import boa.compiler.ast.expressions.VisitorExpression;
 import boa.compiler.ast.statements.Block;
 import boa.compiler.ast.statements.BreakStatement;
@@ -43,6 +44,7 @@ import boa.compiler.ast.statements.VisitStatement;
 import boa.compiler.visitors.AbstractVisitorNoArgNoRet;
 import boa.types.BoaProtoTuple;
 import boa.types.BoaShadowType;
+
 
 /**
  * Converts a tree using shadow types into a tree without shadow types.
@@ -425,11 +427,17 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                     fact.getOps().set(idx, ((Factor)replacement).getOp(0));
                     fact.getOps().add(idx + 1, ((Factor)replacement).getOp(1));
                 } else {
-                    // TODO
+                    // FIXME : 
                     final Term trm = (Term)(fact.getParent());
-                    trm.setLhs((Factor)replacement);
+                    final ParenExpression paren = new ParenExpression(ASTFactory.createFactorExpr((Factor)replacement));
+                    paren.type = replacement.type;
+                    final Factor parenFact = new Factor(paren);
+                    parenFact.type = replacement.type;
+                    parenFact.env = replacement.env;
+                    
+                    trm.setLhs(parenFact);
                     for (int i = idx + 1; i < fact.getOps().size(); i++)
-                        ((Factor)replacement).addOp(fact.getOps().get(i));
+                        (parenFact).addOp(fact.getOps().get(i));
                 }
 
                 /*
