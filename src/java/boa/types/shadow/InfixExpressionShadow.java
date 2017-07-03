@@ -74,11 +74,15 @@ public class InfixExpressionShadow extends BoaShadowType  {
         if ("extended_operands".equals(name)) {
         
             // ${0}.expressions
+            
             node.addOp(ASTFactory.createSelector("expressions", new BoaProtoList(new ExpressionProtoTuple()), env));
+            final Expression tree = ASTFactory.createFactorExpr(node);
+            tree.type =  new BoaProtoList(new ExpressionProtoTuple());
+            tree.env = env;
 
             
             // splice(${0}.expressions, 1, ...)
-			return ASTFactory.createCallFactor("subList", env, new BoaProtoList(new ExpressionProtoTuple()), ASTFactory.createFactorExpr(node), ASTFactory.createIntLiteral(2), ASTFactory.createIntLiteral(-1));
+			return ASTFactory.createCallFactor("subList", env, new BoaProtoList(new ExpressionProtoTuple()), tree, ASTFactory.createIntLiteral(2), ASTFactory.createIntLiteral(-1));
             
 
 

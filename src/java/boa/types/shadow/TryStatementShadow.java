@@ -59,10 +59,12 @@ public class TryStatementShadow extends BoaShadowType  {
            
             // ${0}.statements
             node.addOp(ASTFactory.createSelector("statements", new BoaProtoList(new StatementProtoTuple()), env));
-
+             final Expression tree = ASTFactory.createFactorExpr(node);
+            tree.type = new BoaProtoList(new StatementProtoTuple());
+            tree.env = env;
             
             // splice(${0}.statements, 1, ...)
-			return ASTFactory.createCallFactor("subList", env, new BoaProtoList(new StatementProtoTuple()), ASTFactory.createFactorExpr(node), ASTFactory.createIntLiteral(2), ASTFactory.createIntLiteral(-1));
+			return ASTFactory.createCallFactor("subList", env, new BoaProtoList(new StatementProtoTuple()), tree, ASTFactory.createIntLiteral(2), ASTFactory.createIntLiteral(-1));
 
             }
 
