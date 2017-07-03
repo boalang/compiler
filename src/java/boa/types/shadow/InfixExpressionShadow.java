@@ -51,7 +51,7 @@ public class InfixExpressionShadow extends BoaShadowType  {
         addShadow("left_operand", new ExpressionProtoTuple());
         addShadow("right_operand", new ExpressionProtoTuple());
         addShadow("extended_operands", new BoaProtoList(new ExpressionProtoTuple()));
-        addShadow("operator", new TypeProtoTuple());
+        addShadow("operator", new ExpressionKindProtoMap());
     }
 
     /** {@inheritDoc} */
@@ -86,8 +86,8 @@ public class InfixExpressionShadow extends BoaShadowType  {
         }
 
         if ("operator".equals(name)) {
-            // TODO : InFix Operator
-            return null;
+			// ${0}.kind
+			return ASTFactory.createSelector("kind", new ExpressionKindProtoMap(), env);
         }
        
 
