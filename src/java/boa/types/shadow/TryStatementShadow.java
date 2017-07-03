@@ -56,13 +56,13 @@ public class TryStatementShadow extends BoaShadowType  {
 	public Node lookupCodegen(final String name, final Factor node, final SymbolTable env) { 
 
         if ("catchclauses".equals(name)) {
-            // TODO splice(${0}.statements, 1, ...)
            
             // ${0}.statements
-            Expression tree =  ASTFactory.createSelector((Identifier)node.getOperand(), "statements", new BoaProtoList(new StatementProtoTuple()),new BoaProtoList(new StatementProtoTuple()), env);
+            node.addOp(ASTFactory.createSelector("statements", new BoaProtoList(new StatementProtoTuple()), env));
 
             
-            return ASTFactory.createCallFactor(node,"subList", env, new BoaProtoList(new StatementProtoTuple()), tree, ASTFactory.createIntLiteral(2), ASTFactory.createIntLiteral(-1));
+            // splice(${0}.statements, 1, ...)
+			return ASTFactory.createCallFactor("subList", env, new BoaProtoList(new StatementProtoTuple()), ASTFactory.createFactorExpr(node), ASTFactory.createIntLiteral(2), ASTFactory.createIntLiteral(-1));
 
             }
 

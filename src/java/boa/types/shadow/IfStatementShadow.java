@@ -64,10 +64,13 @@ public class IfStatementShadow extends BoaShadowType  {
 
 		if ("else_statement".equals(name)) {
 			// ${0}.statements
-			Expression tree =  ASTFactory.createSelector((Identifier)node.getOperand(), "statements", new BoaProtoList(new StatementProtoTuple()),new BoaProtoList(new StatementProtoTuple()), env);
+            node.addOp(ASTFactory.createSelector("statements", new BoaProtoList(new StatementProtoTuple()), env));
+            final Expression tree = ASTFactory.createFactorExpr(node);
+            tree.type = new BoaProtoList(new StatementProtoTuple());
+            tree.env = env;
 
 			// (${0}.statements.size() <= 1 ? (boa.types.Ast.Statement)null : ${0}.statements[1])
-			return ASTFactory.createCallFactor(node,"safeget", env, new StatementProtoTuple(), tree, ASTFactory.createIntLiteral(1), ASTFactory.createStringLiteral("boa.types.Ast.Statement"));
+			return ASTFactory.createCallFactor("safeget", env, new StatementProtoTuple(), tree, ASTFactory.createIntLiteral(1), ASTFactory.createStringLiteral("boa.types.Ast.Statement"));
 		}
 
 		throw new RuntimeException("invalid shadow field: " + name);
