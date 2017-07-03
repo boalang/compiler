@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, Hridesh Rajan, Robert Dyer
+ * Copyright 2017, Hridesh Rajan, Robert Dyer, Kaushik Nimmala
  *                 Iowa State University of Science and Technology
  *                 and Bowling Green State University
  *
@@ -42,6 +42,7 @@ import boa.types.BoaType;
  * A helper class for creating new AST trees.
  *
  * @author rdyer
+ * @author kaushin
  */
 public class ASTFactory {
 	public static VarDeclStatement createVarDecl(final String name, final AbstractType type, final BoaType t, final SymbolTable env) {
@@ -160,15 +161,14 @@ public class ASTFactory {
 		final Selector s = new Selector(ASTFactory.createIdentifier(selector, env));
 		s.env  = env;
 		s.type = selectorType;
-		
+
 		return s;
 	}
 
-	public static Factor createFactor(final String selector,final Expression idx  ,final BoaType selectorType, final BoaType factorType, final SymbolTable env) {
-		
+	public static Factor createFactor(final String selector, final Expression idx, final BoaType selectorType, final BoaType factorType, final SymbolTable env) {
 		final Selector s = new Selector(ASTFactory.createIdentifier(selector, env));
 		final Factor f = new Factor(null).addOp(s);
-		f.addOp(ASTFactory.createIndex(idx,env));		
+		f.addOp(ASTFactory.createIndex(idx,env));
 		s.env = f.env = env;
 		s.type = selectorType;
 		f.type  = factorType;
@@ -176,17 +176,16 @@ public class ASTFactory {
 		return f;
 	}
 
-	public static Factor createCallFactor(final Factor oldFact,final String name, final SymbolTable env, final BoaType retType, final Expression... args) {
+	public static Factor createCallFactor(final Factor oldFact, final String name, final SymbolTable env, final BoaType retType, final Expression... args) {
 		final Factor f = new Factor(ASTFactory.createIdentifier(name, env));
 		f.env = env;
-
 
 		final Call c = new Call();
 		for (final Expression e : args)
 			c.addArg(e);
 		c.env = env;
 
-		for(int i = 0; i<oldFact.getOps().size(); i++){
+		for (int i = 0; i < oldFact.getOps().size(); i++) {
 			f.addOp(oldFact.getOps().get(i));
 		}
 
@@ -195,15 +194,9 @@ public class ASTFactory {
 		return f;
 	}
 
-
-
 	public static Index createIndex(final Expression idx, final SymbolTable env) {
 		final Index i = new Index(idx);
 		i.env = env;
 		return i;
-	}
-
-	public static Factor getFactorFromExp(final Expression exp) {
-		return exp.getLhs().getLhs().getLhs().getLhs().getLhs();
 	}
 }

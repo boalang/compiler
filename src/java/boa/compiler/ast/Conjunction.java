@@ -106,6 +106,8 @@ public class Conjunction extends Node {
 
 	public Conjunction clone() {
 		final Conjunction c = new Conjunction(lhs.clone());
+		for (final String s : ops)
+			c.addOp(s);
 		for (final Comparison c2 : rhs)
 			c.addRhs(c2.clone());
 		copyFieldsTo(c);

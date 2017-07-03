@@ -1,6 +1,7 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2017, Hridesh Rajan, Robert Dyer,
+ *                 Iowa State University of Science and Technology
+ *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +25,7 @@ import boa.compiler.visitors.AbstractVisitorNoArgNoRet;
 import boa.compiler.visitors.AbstractVisitorNoReturn;
 
 /**
- * 
+ *
  * @author rdyer
  * @author hridesh
  */
@@ -37,7 +38,7 @@ public class Term extends Node {
 		return lhs;
 	}
 
-	public void setLhs(Factor lhs) {
+	public void setLhs(final Factor lhs) {
 		this.lhs = lhs;
 	}
 
@@ -74,7 +75,7 @@ public class Term extends Node {
 		rhs.add(f);
 	}
 
-	public Term (final Factor lhs) {
+	public Term(final Factor lhs) {
 		if (lhs != null)
 			lhs.setParent(this);
 		this.lhs = lhs;
