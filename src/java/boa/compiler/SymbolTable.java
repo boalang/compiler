@@ -53,6 +53,8 @@ public class SymbolTable {
 	private Stack<BoaType> operandType = new Stack<BoaType>();
 	private boolean needsBoxing;
 	private Stack<Boolean> isVisitor = new Stack<Boolean>();
+	private Stack<Boolean> inLoop = new Stack<Boolean>();
+	private Stack<Boolean> inSwitch = new Stack<Boolean>();
 	private boolean isTraverse = false;
 	private boolean shadowing = false;
 
@@ -396,6 +398,8 @@ public class SymbolTable {
 		st.functions = new FunctionTrie(this.functions);
 		st.locals = new HashMap<String, BoaType>(this.locals);
 		st.isVisitor = this.isVisitor;
+		st.inLoop = this.inLoop;
+		st.inSwitch = this.inSwitch;
 		st.shadowing = this.shadowing;
 
 		return st;
@@ -722,6 +726,30 @@ public class SymbolTable {
 
 	public boolean getIsVisitor() {
 		return this.isVisitor.peek();
+	}
+
+	public void setInSwitch() {
+		this.inSwitch.push(true);
+	}
+
+	public void unsetInSwitch() {
+		this.inSwitch.pop();
+	}
+
+	public boolean getInSwitch() {
+		return !this.inSwitch.empty();
+	}
+
+	public void setInLoop() {
+		this.inLoop.push(true);
+	}
+
+	public void unsetInLoop() {
+		this.inLoop.pop();
+	}
+
+	public boolean getInLoop() {
+		return !this.inLoop.empty();
 	}
 
 	public void setShadowing(final boolean shadowing) {

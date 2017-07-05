@@ -636,12 +636,16 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	@Override
 	public void visit(final BreakStatement n, final SymbolTable env) {
 		n.env = env;
+        if (!env.getInLoop() && !env.getInSwitch())
+			throw new TypeCheckException(n, "'break' only allowed inside loops or switch cases");
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final ContinueStatement n, final SymbolTable env) {
 		n.env = env;
+        if (!env.getInLoop())
+			throw new TypeCheckException(n, "'continue' only allowed inside loops");
 	}
 
 	/** {@inheritDoc} */
@@ -658,7 +662,9 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		n.env = st;
 
 		n.getCondition().accept(this, st);
+        n.env.setInLoop();
 		n.getBody().accept(this, st);
+        n.env.unsetInLoop();
 	}
 
 	/** {@inheritDoc} */
@@ -769,10 +775,12 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			e.accept(this, st);
 		}
 
+        n.env.setInLoop();
 		if (n instanceof IfAllStatement)
 			b.accept(this, env);
 		else
 			b.accept(this, st);
+        n.env.unsetInLoop();
 
 		return e;
 	}
@@ -799,7 +807,9 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		if (n.hasUpdate())
 			n.getUpdate().accept(this, st);
 
+        n.env.setInLoop();
 		n.getBody().accept(this, st);
+        n.env.unsetInLoop();
 	}
 
 	/** {@inheritDoc} */
@@ -864,7 +874,9 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		for (final Expression e : n.getCases())
 			e.accept(this, env);
 
+        n.env.setInSwitch();
 		n.getBody().accept(this, env);
+        n.env.setInSwitch();
 	}
 
 	/** {@inheritDoc} */
@@ -1115,7 +1127,9 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		n.env = st;
 
 		n.getCondition().accept(this, st);
+        n.env.setInLoop();
 		n.getBody().accept(this, st);
+        n.env.unsetInLoop();
 	}
 
 	//
