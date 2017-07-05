@@ -44,6 +44,7 @@ public class SwitchStatementShadow extends BoaShadowType  {
         super(new StatementProtoTuple());
 
         addShadow("expression", new ExpressionProtoTuple());
+        addShadow("body", new BoaProtoList(new StatementProtoTuple()));
     }
 
     /** {@inheritDoc} */
@@ -53,6 +54,11 @@ public class SwitchStatementShadow extends BoaShadowType  {
        if ("expression".equals(name)) {
             // ${0}.expression
             return ASTFactory.createSelector("expression",new ExpressionProtoTuple(), env);
+        }
+        if ("body".equals(name)) {
+            // ${0}.statements
+            return ASTFactory.createSelector( "statements", new BoaProtoList(new StatementProtoTuple()),  env);
+            
         }
 
         throw new RuntimeException("invalid shadow field: " + name);
