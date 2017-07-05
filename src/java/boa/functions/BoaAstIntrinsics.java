@@ -35,6 +35,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import boa.datagen.DefaultProperties;
 import boa.types.Ast.*;
 import boa.types.Ast.Expression.ExpressionKind;
+import boa.types.Ast.Statement.StatementKind;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
@@ -217,8 +218,7 @@ public class BoaAstIntrinsics {
 				p = new Path(DefaultProperties.localDataPath);
 				fs = FileSystem.getLocal(conf);
 			} else {
-				p = new Path(
-					"hdfs://boa-njt/",
+                p = new Path(context.getConfiguration().get("fs.default.name", "hdfs://boa-njt/"),
 					new Path(
 						conf.get("boa.ast.dir", conf.get("boa.input.dir", "repcache/live")),
 						new Path("ast")
@@ -241,8 +241,7 @@ public class BoaAstIntrinsics {
 				p = new Path(DefaultProperties.localCommentPath);
 				fs = FileSystem.getLocal(conf);
 			} else {
-				p = new Path(
-					"hdfs://boa-njt/",
+                p = new Path(context.getConfiguration().get("fs.default.name", "hdfs://boa-njt/"),
 					new Path(
 						conf.get("boa.comments.dir", conf.get("boa.input.dir", "repcache/live")),
 						new Path("comments")
@@ -265,8 +264,7 @@ public class BoaAstIntrinsics {
 				p = new Path(DefaultProperties.localIssuePath);
 				fs = FileSystem.getLocal(conf);
 			} else {
-				p = new Path(
-					"hdfs://boa-njt/",
+                p = new Path(context.getConfiguration().get("fs.default.name", "hdfs://boa-njt/"),
 					new Path(
 						conf.get("boa.issues.dir", conf.get("boa.input.dir", "repcache/live")),
 						new Path("issues")
@@ -708,6 +706,18 @@ public class BoaAstIntrinsics {
 	@FunctionSpec(name = "isliteral", returnType = "bool", formalParameters = { "Expression", "string" })
 	public static boolean isLiteral(final Expression e, final String lit) throws Exception {
 		return e.getKind() == ExpressionKind.LITERAL && e.hasLiteral() && e.getLiteral().equals(lit);
+	}
+
+	@FunctionSpec(name = "isnormalfor", returnType = "bool", formalParameters = { "Statement" })
+	public static boolean isNormalFor(final Statement s) throws Exception {
+		if (s.getKind() != StatementKind.FOR) return false;
+		return !s.hasVariableDeclaration();
+	}
+
+	@FunctionSpec(name = "isenhancedfor", returnType = "bool", formalParameters = { "Statement" })
+	public static boolean isEnhancedFor(final Statement s) throws Exception {
+		if (s.getKind() != StatementKind.FOR) return false;
+		return !s.hasVariableDeclaration();
 	}
 
 	//////////////////////////////
