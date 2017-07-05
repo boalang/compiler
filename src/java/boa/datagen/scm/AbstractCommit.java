@@ -26,8 +26,6 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.SequenceFile.Writer;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.*;
-import org.eclipse.wst.jsdt.core.JavaScriptCore;
-import org.eclipse.wst.jsdt.core.dom.JavaScriptUnit;
 import org.mozilla.javascript.CompilerEnvirons;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ast.AstRoot;
