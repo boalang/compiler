@@ -253,8 +253,11 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                                 for (final SwitchCase sCase : switchS.getCases()) {
                                     final Selector s = (Selector)(sCase.getCase(0).getLhs().getLhs().getLhs().getLhs().getLhs().getOp(0));
                                     final Identifier i = s.getId();
-
-                                    if (visit.getComponent().type.toString().toLowerCase().equals(i.getToken().toLowerCase())) {
+                                    
+                                    final Selector visitSelec = (Selector)((BoaShadowType)visit.getComponent().type).getKindExpression(n.env).getLhs().getLhs().getLhs().getLhs().getLhs().getOp(0);
+                                    final Identifier visitIden = visitSelec.getId();
+                                    
+                                    if (visitIden.getToken().toLowerCase().equals(i.getToken().toLowerCase())) {
                                         flg = true;
                                         sCase.getBody().addStatement(((BoaShadowType)visit.getComponent().type).getManytoOne(n.env, b));
                                     }
@@ -427,14 +430,14 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                     fact.getOps().set(idx, ((Factor)replacement).getOp(0));
                     fact.getOps().add(idx + 1, ((Factor)replacement).getOp(1));
                 } else {
-                    // FIXME : 
+                    // FIXME : factor ops messing up
                     final Term trm = (Term)(fact.getParent());
                     final ParenExpression paren = new ParenExpression(ASTFactory.createFactorExpr((Factor)replacement));
                     paren.type = replacement.type;
                     final Factor parenFact = new Factor(paren);
                     parenFact.type = replacement.type;
                     parenFact.env = replacement.env;
-                    
+
                     trm.setLhs(parenFact);
                     for (int i = idx + 1; i < fact.getOps().size(); i++)
                         (parenFact).addOp(fact.getOps().get(i));
