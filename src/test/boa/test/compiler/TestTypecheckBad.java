@@ -130,4 +130,9 @@ public class TestTypecheckBad extends BaseTest {
 	public void multVisits() throws IOException {
 		typecheck(load(badDir + "mult-visits.boa"), "The type 'Statement' already has a 'before' visit statement");
 	}
+
+	@Test
+	public void badBreak() throws IOException {
+		typecheck(load(badDir + "bad-break.boa"), "'break' only allowed inside loops or switch cases");
+	}
 }
