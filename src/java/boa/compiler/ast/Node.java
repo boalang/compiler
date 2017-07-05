@@ -1,6 +1,7 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2017, Hridesh Rajan, Robert Dyer, 
+ *                 Iowa State University of Science and Technology
+ *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +17,10 @@
  */
 package boa.compiler.ast;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
+
 import boa.compiler.SymbolTable;
 import boa.compiler.ast.expressions.Expression;
 import boa.compiler.ast.statements.Statement;
@@ -23,6 +28,7 @@ import boa.compiler.ast.statements.Block;
 import boa.compiler.visitors.AbstractVisitor;
 import boa.compiler.visitors.AbstractVisitorNoArgNoRet;
 import boa.compiler.visitors.AbstractVisitorNoReturn;
+import boa.compiler.visitors.PrettyPrintVisitor;
 import boa.types.BoaType;
 
 /**
@@ -98,5 +104,12 @@ public abstract class Node {
 
 	public void replaceExpression(final Expression oldExp, final Expression newExp) {
 		parent.replaceExpression(oldExp, newExp);
+	}
+
+	public String toString() {
+		final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		final PrintStream ps = new PrintStream(baos);
+		this.accept(new PrettyPrintVisitor(ps));
+		return new String(baos.toByteArray(), StandardCharsets.UTF_8);
 	}
 }

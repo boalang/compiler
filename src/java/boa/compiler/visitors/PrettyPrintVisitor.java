@@ -17,6 +17,8 @@
  */
 package boa.compiler.visitors;
 
+import java.io.PrintStream;
+
 import boa.compiler.ast.*;
 import boa.compiler.ast.expressions.*;
 import boa.compiler.ast.literals.*;
@@ -30,10 +32,19 @@ import boa.compiler.ast.types.*;
  */
 public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 	private int indent = 0;
+	final private PrintStream strm;
+
+	public PrettyPrintVisitor() {
+		this(System.out);
+	}
+
+	public PrettyPrintVisitor(final PrintStream strm) {
+		this.strm = strm;
+	}
 
 	private void indent() {
 		for (int i = 0; i < indent; i++)
-			System.out.print("    ");
+			strm.print("    ");
 	}
 
 	// dont actually indent blocks
@@ -58,14 +69,14 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Call n) {
-		System.out.print("(");
+		strm.print("(");
 		boolean seen = false;
 		for (final Expression e : n.getArgs()) {
-			if (seen) System.out.print(", ");
+			if (seen) strm.print(", ");
 			else seen = true;
 			e.accept(this);
 		}
-		System.out.print(")");
+		strm.print(")");
 	}
 
 	/** {@inheritDoc} */
@@ -73,7 +84,7 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 	public void visit(final Comparison n) {
 		n.getLhs().accept(this);
 		if (n.hasOp()) {
-			System.out.print(" " + n.getOp() + " ");
+			strm.print(" " + n.getOp() + " ");
 			n.getRhs().accept(this);
 		}
 	}
@@ -83,7 +94,7 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 	public void visit(final Component n) {
 		if (n.hasIdentifier()) {
 			n.getIdentifier().accept(this);
-			System.out.print(": ");
+			strm.print(": ");
 		}
 		n.getType().accept(this);
 	}
@@ -91,22 +102,22 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Composite n) {
-		System.out.print("{ ");
+		strm.print("{ ");
 		if (n.isEmpty())
-			System.out.print(": ");
+			strm.print(": ");
 		boolean seen = false;
 		for (final Pair p : n.getPairs()) {
-			if (seen) System.out.print(", ");
+			if (seen) strm.print(", ");
 			else seen = true;
 			p.accept(this);
 		}
 		seen = false;
 		for (final Expression e : n.getExprs()) {
-			if (seen) System.out.print(", ");
+			if (seen) strm.print(", ");
 			else seen = true;
 			e.accept(this);
 		}
-		System.out.print("}");
+		strm.print("}");
 	}
 
 	/** {@inheritDoc} */
@@ -114,7 +125,7 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 	public void visit(final Conjunction n) {
 		n.getLhs().accept(this);
 		for (int i = 0; i < n.getOpsSize(); i++) {
-			System.out.print(" " + n.getOp(i) + " ");
+			strm.print(" " + n.getOp(i) + " ");
 			n.getRhs(i).accept(this);
 		}
 	}
@@ -130,33 +141,33 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Identifier n) {
-		System.out.print(n.getToken());
+		strm.print(n.getToken());
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Index n) {
-		System.out.print("[");
+		strm.print("[");
 		n.getStart().accept(this);
 		if (n.hasEnd()) {
-			System.out.print(" : ");
+			strm.print(" : ");
 			n.getEnd().accept(this);
 		}
-		System.out.print("]");
+		strm.print("]");
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Pair n) {
 		n.getExpr1().accept(this);
-		System.out.print(" : ");
+		strm.print(" : ");
 		n.getExpr2().accept(this);
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Selector n) {
-		System.out.print(".");
+		strm.print(".");
 		n.getId().accept(this);
 	}
 
@@ -165,7 +176,7 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 	public void visit(final Term n) {
 		n.getLhs().accept(this);
 		for (int i = 0; i < n.getOpsSize(); i++) {
-			System.out.print(" " + n.getOp(i) + " ");
+			strm.print(" " + n.getOp(i) + " ");
 			n.getRhs(i).accept(this);
 		}
 	}
@@ -173,7 +184,7 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final UnaryFactor n) {
-		System.out.print(n.getOp());
+		strm.print(n.getOp());
 		n.getFactor().accept(this);
 	}
 
@@ -185,46 +196,46 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 	public void visit(final AssignmentStatement n) {
 		indent();
 		n.getLhs().accept(this);
-		System.out.print(" = ");
+		strm.print(" = ");
 		n.getRhs().accept(this);
-		System.out.println(";");
+		strm.println(";");
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Block n) {
-		System.out.println("{");
+		strm.println("{");
 		indent++;
 		super.visit(n);
 		indent--;
 		indent();
-		System.out.println("}");
+		strm.println("}");
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final BreakStatement n) {
 		indent();
-		System.out.println("break;");
+		strm.println("break;");
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final ContinueStatement n) {
 		indent();
-		System.out.println("continue;");
+		strm.println("continue;");
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final DoStatement n) {
 		indent();
-		System.out.println("do");
+		strm.println("do");
 		n.getBody().accept(this);
 		indent();
-		System.out.print("while (");
+		strm.print("while (");
 		n.getCondition().accept(this);
-		System.out.println(");");
+		strm.println(");");
 	}
 
 	/** {@inheritDoc} */
@@ -234,28 +245,28 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 		n.getId().accept(this);
 		if (n.getIndicesSize() > 0)
 			for (final Expression e : n.getIndices()) {
-				System.out.print("[");
+				strm.print("[");
 				e.accept(this);
-				System.out.print("]");
+				strm.print("]");
 			}
-		System.out.print(" << ");
+		strm.print(" << ");
 		n.getValue().accept(this);
 		if (n.hasWeight()) {
-			System.out.print(" weight ");
+			strm.print(" weight ");
 			n.getWeight().accept(this);
 		}
-		System.out.println(";");
+		strm.println(";");
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final ExistsStatement n) {
 		indent();
-		System.out.print("exists (");
+		strm.print("exists (");
 		n.getVar().accept(this);
-		System.out.print("; ");
+		strm.print("; ");
 		n.getCondition().accept(this);
-		System.out.print(") ");
+		strm.print(") ");
 		indentBlock(n.getBody());
 		n.getBody().accept(this);
 		outdentBlock(n.getBody());
@@ -266,18 +277,18 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 	public void visit(final ExprStatement n) {
 		indent();
 		n.getExpr().accept(this);
-		System.out.println(";");
+		strm.println(";");
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final ForeachStatement n) {
 		indent();
-		System.out.print("foreach (");
+		strm.print("foreach (");
 		n.getVar().accept(this);
-		System.out.print("; ");
+		strm.print("; ");
 		n.getCondition().accept(this);
-		System.out.print(") ");
+		strm.print(") ");
 		indentBlock(n.getBody());
 		n.getBody().accept(this);
 		outdentBlock(n.getBody());
@@ -287,15 +298,15 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 	@Override
 	public void visit(final ForStatement n) {
 		indent();
-		System.out.print("for (");
+		strm.print("for (");
 		if (n.hasInit()) n.getInit().accept(this);
-		else System.out.print(";");
-		System.out.print(" ");
+		else strm.print(";");
+		strm.print(" ");
 		if (n.hasCondition()) n.getCondition().accept(this);
-		else System.out.print(";");
-		System.out.print(" ");
+		else strm.print(";");
+		strm.print(" ");
 		if (n.hasUpdate()) n.getUpdate().accept(this);
-		System.out.print(") ");
+		strm.print(") ");
 		indentBlock(n.getBody());
 		n.getBody().accept(this);
 		outdentBlock(n.getBody());
@@ -305,11 +316,11 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 	@Override
 	public void visit(final IfAllStatement n) {
 		indent();
-		System.out.print("ifall (");
+		strm.print("ifall (");
 		n.getVar().accept(this);
-		System.out.print("; ");
+		strm.print("; ");
 		n.getCondition().accept(this);
-		System.out.print(") ");
+		strm.print(") ");
 		indentBlock(n.getBody());
 		n.getBody().accept(this);
 		outdentBlock(n.getBody());
@@ -319,15 +330,15 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 	@Override
 	public void visit(final IfStatement n) {
 		indent();
-		System.out.print("if (");
+		strm.print("if (");
 		n.getCondition().accept(this);
-		System.out.print(") ");
+		strm.print(") ");
 		indentBlock(n.getBody());
 		n.getBody().accept(this);
 		if (n.hasElse()) {
 			outdentBlock(n.getBody());
 			indent();
-			System.out.println("else ");
+			strm.println("else ");
 			indentBlock(n.getElse());
 			n.getElse().accept(this);
 			outdentBlock(n.getElse());
@@ -341,27 +352,27 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 	public void visit(final PostfixStatement n) {
 		indent();
 		n.getExpr().accept(this);
-		System.out.print(n.getOp());
-		System.out.println(";");
+		strm.print(n.getOp());
+		strm.println(";");
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final ReturnStatement n) {
 		indent();
-		System.out.print("return");
+		strm.print("return");
 		if (n.hasExpr()) {
-			System.out.print(" ");
+			strm.print(" ");
 			n.getExpr().accept(this);
 		}
-		System.out.println(";");
+		strm.println(";");
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final StopStatement n) {
 		indent();
-		System.out.println("stop;");
+		strm.println("stop;");
 	}
 
 	/** {@inheritDoc} */
@@ -369,16 +380,16 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 	public void visit(final SwitchCase n) {
 		indent();
 		if (n.isDefault())
-			System.out.print("default: ");
+			strm.print("default: ");
 		else {
 			boolean seen = false;
-			System.out.print("case ");
+			strm.print("case ");
 			for (final Expression e : n.getCases()) {
-				if (seen) System.out.print(", ");
+				if (seen) strm.print(", ");
 				else seen = true;
 				e.accept(this);
 			}
-			System.out.print(": ");
+			strm.print(": ");
 		}
 		indentBlock(n.getBody());
 		n.getBody().accept(this);
@@ -389,65 +400,65 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 	@Override
 	public void visit(final SwitchStatement n) {
 		indent();
-		System.out.print("switch (");
+		strm.print("switch (");
 		n.getCondition().accept(this);
-		System.out.println(") {");
+		strm.println(") {");
 		indent++;
 		for (final SwitchCase sc : n.getCases())
 			sc.accept(this);
 		n.getDefault().accept(this);
 		indent--;
 		indent();
-		System.out.println("}");
+		strm.println("}");
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final TypeDecl n) {
 		indent();
-		System.out.print("type ");
+		strm.print("type ");
 		n.getId().accept(this);
-		System.out.print(" =");
+		strm.print(" =");
 		n.getType().accept(this);
-		System.out.println(";");
+		strm.println(";");
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final VarDeclStatement n) {
 		indent();
-		if (n.isStatic()) System.out.print("static ");
+		if (n.isStatic()) strm.print("static ");
 		n.getId().accept(this);
 		if (n.hasType()) {
-			System.out.print(": ");
+			strm.print(": ");
 			n.getType().accept(this);
 			if (n.hasInitializer())
-				System.out.print(" = ");
+				strm.print(" = ");
 		} else {
-			System.out.print(" := ");
+			strm.print(" := ");
 		}
 		if (n.hasInitializer())
 			n.getInitializer().accept(this);
-		System.out.println(";");
+		strm.println(";");
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final VisitStatement n) {
 		indent();
-		if (n.isBefore()) System.out.print("before ");
-		else System.out.print("after ");
-		if (n.hasWildcard()) System.out.print("_");
+		if (n.isBefore()) strm.print("before ");
+		else strm.print("after ");
+		if (n.hasWildcard()) strm.print("_");
 		else if (n.hasComponent()) n.getComponent().accept(this);
 		else {
 			boolean seen = false;
 			for (final Identifier id : n.getIdList()) {
-				if (seen) System.out.print(", ");
+				if (seen) strm.print(", ");
 				else seen = true;
 				id.accept(this);
 			}
 		}
-		System.out.print(" -> ");
+		strm.print(" -> ");
 		n.getBody().accept(this);
 	}
 
@@ -455,9 +466,9 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 	@Override
 	public void visit(final WhileStatement n) {
 		indent();
-		System.out.print("while (");
+		strm.print("while (");
 		n.getCondition().accept(this);
-		System.out.println(")");
+		strm.println(")");
 		n.getBody().accept(this);
 	}
 
@@ -469,7 +480,7 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 	public void visit(final Expression n) {
 		n.getLhs().accept(this);
 		for (int i = 0; i < n.getRhsSize(); i++) {
-			System.out.print(" || ");
+			strm.print(" || ");
 			n.getRhs(i).accept(this);
 		}
 	}
@@ -477,9 +488,9 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final ParenExpression n) {
-		System.out.print("(");
+		strm.print("(");
 		n.getExpression().accept(this);
-		System.out.print(")");
+		strm.print(")");
 	}
 
 	/** {@inheritDoc} */
@@ -487,7 +498,7 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 	public void visit(final SimpleExpr n) {
 		n.getLhs().accept(this);
 		for (int i = 0; i < n.getOpsSize(); i++) {
-			System.out.print(" " + n.getOp(i) + " ");
+			strm.print(" " + n.getOp(i) + " ");
 			n.getRhs(i).accept(this);
 		}
 	}
@@ -498,63 +509,63 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final ArrayType n) {
-		System.out.print("array of ");
+		strm.print("array of ");
 		n.getValue().accept(this);
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final FunctionType n) {
-		System.out.print("function (");
+		strm.print("function (");
 		boolean seen = false;
 		for (final Component c : n.getArgs()) {
-			if (seen) System.out.print(", ");
+			if (seen) strm.print(", ");
 			else seen = true;
 			c.accept(this);
 		}
-		System.out.print(")");
+		strm.print(")");
 		if (n.hasType()) {
-			System.out.print(" : ");
+			strm.print(" : ");
 			n.getType().accept(this);
 		}
-		System.out.println();
+		strm.println();
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final MapType n) {
-		System.out.print("map[");
+		strm.print("map[");
 		n.getIndex().accept(this);
-		System.out.print("] of ");
+		strm.print("] of ");
 		n.getValue().accept(this);
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final OutputType n) {
-		System.out.print("output ");
+		strm.print("output ");
 		n.getId().accept(this);
 		if (n.getArgsSize() > 0) {
-			System.out.print("(");
+			strm.print("(");
 			boolean seen = false;
 			for (final Expression e : n.getArgs()) {
-				if (seen) System.out.print(", ");
+				if (seen) strm.print(", ");
 				else seen = true;
 				e.accept(this);
 			}
-			System.out.print(")");
+			strm.print(")");
 		}
 		if (n.getIndicesSize() > 0) {
 			for (final Component c : n.getIndices()) {
-				System.out.print("[");
+				strm.print("[");
 				c.accept(this);
-				System.out.print("]");
+				strm.print("]");
 			}
 		}
-		System.out.print(" of ");
+		strm.print(" of ");
 		n.getType().accept(this);
 		if (n.hasWeight()) {
-			System.out.print("weight ");
+			strm.print("weight ");
 			n.getWeight().accept(this);
 		}
 	}
@@ -562,34 +573,34 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final StackType n) {
-		System.out.print("stack of ");
+		strm.print("stack of ");
 		n.getValue().accept(this);
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final SetType n) {
-		System.out.print("set of ");
+		strm.print("set of ");
 		n.getValue().accept(this);
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final TupleType n) {
-		System.out.print("{ ");
+		strm.print("{ ");
 		boolean seen = false;
 		for (final Component c : n.getMembers()) {
-			if (seen) System.out.print(", ");
+			if (seen) strm.print(", ");
 			else seen = true;
 			c.accept(this);
 		}
-		System.out.print(" }");
+		strm.print(" }");
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final VisitorType n) {
-		System.out.print("visitor ");
+		strm.print("visitor ");
 	}
 
 	//
@@ -598,30 +609,30 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final CharLiteral n) {
-		System.out.print(n.getLiteral());
+		strm.print(n.getLiteral());
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final FloatLiteral n) {
-		System.out.print(n.getLiteral());
+		strm.print(n.getLiteral());
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final IntegerLiteral n) {
-		System.out.print(n.getLiteral());
+		strm.print(n.getLiteral());
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final StringLiteral n) {
-		System.out.print(n.getLiteral());
+		strm.print(n.getLiteral());
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final TimeLiteral n) {
-		System.out.print(n.getLiteral());
+		strm.print(n.getLiteral());
 	}
 }
