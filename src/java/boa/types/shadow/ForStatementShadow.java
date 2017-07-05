@@ -30,6 +30,9 @@ import boa.types.proto.enums.StatementKindProtoMap;
 import boa.types.proto.ExpressionProtoTuple;
 import boa.types.proto.StatementProtoTuple;
 
+import boa.compiler.ast.statements.IfStatement;
+import boa.compiler.ast.statements.Block;
+
 /**
  * A shadow type for ForStatement.
  * 
@@ -76,6 +79,17 @@ public class ForStatementShadow extends BoaShadowType  {
 
 		throw new RuntimeException("invalid shadow field: " + name);
 	}
+
+	 /** {@inheritDoc} */
+    @Override
+    public IfStatement getManytoOne(final SymbolTable env, final Block b) {
+        // if (funcName(${0})) b;
+         final Expression tree = ASTFactory.createIdentifierExpr(boa.compiler.transforms.ShadowTypeEraser.NODE_ID, env, new StatementProtoTuple());
+
+        return new IfStatement(ASTFactory.createCallExpr("isnormalfor", env, new StatementProtoTuple(), tree), b);
+    }
+
+
 
 	/** {@inheritDoc} */
 	@Override
