@@ -57,20 +57,6 @@ public class GitCommit extends AbstractCommit {
 	/** {@inheritDoc} */
 	protected String getFileContents(final String path) {
 		try {
-			/*ObjectId fileid = null;
-			revwalk.reset();
-			tw.reset();
-			try {
-				tw.addTree(revwalk.lookupCommit(ObjectId.fromString(id)).getTree());
-				tw.setRecursive(true);
-
-				while (tw.next())
-					if (!tw.isSubtree() && path.equals(tw.getPathString()))
-						fileid = tw.getObjectId(0);
-			} catch (final IOException e) {
-				if (debug)
-					System.err.println("Git Error getting contents for '" + path + "' at revision " + id + ": " + e.getMessage());
-			}*/
 			ObjectId fileid = filePathGitObjectIds.get(path);
 			if (fileid == null) return "";
 
@@ -98,9 +84,8 @@ public class GitCommit extends AbstractCommit {
 	 * @return the index the file occurs in fileChanges
 	 */
 	protected int getFileIndex(final String path) {
-		if (!fileNameIndices.containsKey(path))
-			return -1;
-		return fileNameIndices.get(path);
+		Integer index = fileNameIndices.get(path);
+		return index;
 	}
 
 	public void getChangeFiles(Map<String, Integer> revisionMap, RevCommit rc) {
