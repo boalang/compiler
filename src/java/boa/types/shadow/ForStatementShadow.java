@@ -83,7 +83,7 @@ public class ForStatementShadow extends BoaShadowType  {
 	 /** {@inheritDoc} */
     @Override
     public IfStatement getManytoOne(final SymbolTable env, final Block b) {
-        // if (funcName(${0})) b;
+        // if (isnormalfor(${0})) b;
          final Expression tree = ASTFactory.createIdentifierExpr(boa.compiler.transforms.ShadowTypeEraser.NODE_ID, env, new StatementProtoTuple());
 
         return new IfStatement(ASTFactory.createCallExpr("isnormalfor", env, new StatementProtoTuple(), tree), b);
