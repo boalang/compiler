@@ -125,6 +125,13 @@ public abstract class AbstractCommit {
 
 	@SuppressWarnings("deprecation")
 	private Builder processChangeFile(final ChangedFile.Builder fb, boolean parse, Writer astWriter) {
+		long len = -1;
+		try {
+			len = astWriter.getLength();
+		} catch (IOException e1) {
+			if (debug)
+				System.err.println("Error getting length of sequence file writer!!!");
+		}
 		String path = fb.getName();
 		fb.setKind(FileKind.OTHER);
 
@@ -160,7 +167,7 @@ public abstract class AbstractCommit {
 
 							fb.setKind(FileKind.SOURCE_JAVA_ERROR);
 							try {
-								astWriter.append(new LongWritable(astWriter.getLength()), new BytesWritable(ASTRoot.newBuilder().build().toByteArray()));
+								astWriter.append(new LongWritable(len), new BytesWritable(ASTRoot.newBuilder().build().toByteArray()));
 							} catch (IOException e) {
 								e.printStackTrace();
 							}
@@ -207,7 +214,7 @@ public abstract class AbstractCommit {
 													"Found ES4 parse error in: revision " + id + ": file " + path);
 										fb.setKind(FileKind.SOURCE_JS_ERROR);
 										try {
-											astWriter.append(new LongWritable(astWriter.getLength()), new BytesWritable(ASTRoot.newBuilder().build().toByteArray()));
+											astWriter.append(new LongWritable(len), new BytesWritable(ASTRoot.newBuilder().build().toByteArray()));
 										} catch (IOException e) {
 											e.printStackTrace();
 										}
@@ -227,7 +234,10 @@ public abstract class AbstractCommit {
 				System.err.println("Accepted ES1: revision " + id + ": file " + path);
 		}
 		try {
-			fb.setKey(astWriter.getLength());
+			if (astWriter.getLength() == len + 1)
+				fb.setKey(len);
+			else
+				fb.setKey(-1);
 		} catch (IOException e) {
 			if (debug)
 				System.err.println("Error getting length of sequence file writer!!!");
