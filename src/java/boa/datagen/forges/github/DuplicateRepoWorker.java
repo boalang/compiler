@@ -89,6 +89,7 @@ public class DuplicateRepoWorker implements Runnable {
 				counter++;
 				fileToWriteJson = new File(outPath + "/" + Thread.currentThread().getId() + "-page" + counter + ".json");
 			}
+			FileIO.writeFileContents(fileToWriteJson, cleared.toString());
 		}
 	}
 
@@ -101,6 +102,8 @@ public class DuplicateRepoWorker implements Runnable {
 				counter++;
 				fileToWriteJson = new File(outPath + "/" + Thread.currentThread().getId() + "-page" + counter + ".json");
 			}
+			FileIO.writeFileContents(fileToWriteJson, cleared.toString());
+			counter++;
 			cleared = new JsonArray();
 		}
 	}
