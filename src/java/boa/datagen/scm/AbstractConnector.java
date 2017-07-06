@@ -39,18 +39,6 @@ public abstract class AbstractConnector implements AutoCloseable {
 	public abstract String getLastCommitId();
 	public abstract void setLastSeenCommitId(final String id);
 
-	public List<Revision> getCommits(final boolean parse) {
-		if (revisions == null) {
-			revisions = new ArrayList<AbstractCommit>();
-			setRevisions();
-		}
-		final List<Revision> revs = new ArrayList<Revision>();
-		for (final AbstractCommit rev : revisions)
-			revs.add(rev.asProtobuf(parse));
-
-		return revs;
-	}
-
 	protected abstract void setRevisions();
 
 	abstract void getTags();
@@ -69,15 +57,14 @@ public abstract class AbstractConnector implements AutoCloseable {
 	public List<Integer> getTagIndices() {
 		return tagIndices;
 	}
-	public List<Revision> getCommits(final boolean parse, final Writer astWriter, final String repoKey, final String keyDelim) {
+	public List<Revision> getCommits(final boolean parse, final Writer astWriter) {
 		if (revisions == null) {
 			revisions = new ArrayList<AbstractCommit>();
 			setRevisions();
 		}
 		final List<Revision> revs = new ArrayList<Revision>();
-		int i = 0;
 		for (final AbstractCommit rev : revisions)
-			revs.add(rev.asProtobuf(parse, astWriter, repoKey + keyDelim + (++i), keyDelim));
+			revs.add(rev.asProtobuf(parse, astWriter));
 
 		return revs;
 	}

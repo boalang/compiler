@@ -74,9 +74,9 @@ public final class Diff {
     com.google.protobuf.ByteString
         getNameBytes();
 
-    // required string key = 4;
+    // required uint64 key = 4;
     /**
-     * <code>required string key = 4;</code>
+     * <code>required uint64 key = 4;</code>
      *
      * <pre>
      ** @exclude 
@@ -84,22 +84,13 @@ public final class Diff {
      */
     boolean hasKey();
     /**
-     * <code>required string key = 4;</code>
+     * <code>required uint64 key = 4;</code>
      *
      * <pre>
      ** @exclude 
      * </pre>
      */
-    java.lang.String getKey();
-    /**
-     * <code>required string key = 4;</code>
-     *
-     * <pre>
-     ** @exclude 
-     * </pre>
-     */
-    com.google.protobuf.ByteString
-        getKeyBytes();
+    long getKey();
 
     // optional .boa.types.ASTRoot ast = 5;
     /**
@@ -313,9 +304,9 @@ public final class Diff {
               name_ = input.readBytes();
               break;
             }
-            case 34: {
+            case 32: {
               bitField0_ |= 0x00000008;
-              key_ = input.readBytes();
+              key_ = input.readUInt64();
               break;
             }
             case 42: {
@@ -1224,11 +1215,11 @@ public final class Diff {
       }
     }
 
-    // required string key = 4;
+    // required uint64 key = 4;
     public static final int KEY_FIELD_NUMBER = 4;
-    private java.lang.Object key_;
+    private long key_;
     /**
-     * <code>required string key = 4;</code>
+     * <code>required uint64 key = 4;</code>
      *
      * <pre>
      ** @exclude 
@@ -1238,45 +1229,14 @@ public final class Diff {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
-     * <code>required string key = 4;</code>
+     * <code>required uint64 key = 4;</code>
      *
      * <pre>
      ** @exclude 
      * </pre>
      */
-    public java.lang.String getKey() {
-      java.lang.Object ref = key_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          key_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>required string key = 4;</code>
-     *
-     * <pre>
-     ** @exclude 
-     * </pre>
-     */
-    public com.google.protobuf.ByteString
-        getKeyBytes() {
-      java.lang.Object ref = key_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        key_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
+    public long getKey() {
+      return key_;
     }
 
     // optional .boa.types.ASTRoot ast = 5;
@@ -1455,7 +1415,7 @@ public final class Diff {
       change_ = boa.types.Shared.ChangeKind.ADDED;
       kind_ = boa.types.Diff.ChangedFile.FileKind.OTHER;
       name_ = "";
-      key_ = "";
+      key_ = 0L;
       ast_ = boa.types.Ast.ASTRoot.getDefaultInstance();
       comments_ = boa.types.Ast.CommentsRoot.getDefaultInstance();
       changes_ = java.util.Collections.emptyList();
@@ -1512,7 +1472,7 @@ public final class Diff {
         output.writeBytes(3, getNameBytes());
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeBytes(4, getKeyBytes());
+        output.writeUInt64(4, key_);
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         output.writeMessage(5, ast_);
@@ -1552,7 +1512,7 @@ public final class Diff {
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(4, getKeyBytes());
+          .computeUInt64Size(4, key_);
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
@@ -1717,7 +1677,7 @@ public final class Diff {
         bitField0_ = (bitField0_ & ~0x00000002);
         name_ = "";
         bitField0_ = (bitField0_ & ~0x00000004);
-        key_ = "";
+        key_ = 0L;
         bitField0_ = (bitField0_ & ~0x00000008);
         if (astBuilder_ == null) {
           ast_ = boa.types.Ast.ASTRoot.getDefaultInstance();
@@ -1840,9 +1800,7 @@ public final class Diff {
           onChanged();
         }
         if (other.hasKey()) {
-          bitField0_ |= 0x00000008;
-          key_ = other.key_;
-          onChanged();
+          setKey(other.getKey());
         }
         if (other.hasAst()) {
           mergeAst(other.getAst());
@@ -2137,10 +2095,10 @@ public final class Diff {
         return this;
       }
 
-      // required string key = 4;
-      private java.lang.Object key_ = "";
+      // required uint64 key = 4;
+      private long key_ ;
       /**
-       * <code>required string key = 4;</code>
+       * <code>required uint64 key = 4;</code>
        *
        * <pre>
        ** @exclude 
@@ -2150,62 +2108,30 @@ public final class Diff {
         return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       /**
-       * <code>required string key = 4;</code>
+       * <code>required uint64 key = 4;</code>
        *
        * <pre>
        ** @exclude 
        * </pre>
        */
-      public java.lang.String getKey() {
-        java.lang.Object ref = key_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          key_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
+      public long getKey() {
+        return key_;
       }
       /**
-       * <code>required string key = 4;</code>
+       * <code>required uint64 key = 4;</code>
        *
        * <pre>
        ** @exclude 
        * </pre>
        */
-      public com.google.protobuf.ByteString
-          getKeyBytes() {
-        java.lang.Object ref = key_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          key_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>required string key = 4;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
-       */
-      public Builder setKey(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000008;
+      public Builder setKey(long value) {
+        bitField0_ |= 0x00000008;
         key_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required string key = 4;</code>
+       * <code>required uint64 key = 4;</code>
        *
        * <pre>
        ** @exclude 
@@ -2213,24 +2139,7 @@ public final class Diff {
        */
       public Builder clearKey() {
         bitField0_ = (bitField0_ & ~0x00000008);
-        key_ = getDefaultInstance().getKey();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string key = 4;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
-       */
-      public Builder setKeyBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000008;
-        key_ = value;
+        key_ = 0L;
         onChanged();
         return this;
       }
@@ -2858,7 +2767,7 @@ public final class Diff {
       "st.proto\"\365\006\n\013ChangedFile\022%\n\006change\030\001 \002(\016" +
       "2\025.boa.types.ChangeKind\022-\n\004kind\030\002 \002(\0162\037." +
       "boa.types.ChangedFile.FileKind\022\014\n\004name\030\003" +
-      " \002(\t\022\013\n\003key\030\004 \002(\t\022\037\n\003ast\030\005 \001(\0132\022.boa.typ" +
+      " \002(\t\022\013\n\003key\030\004 \002(\004\022\037\n\003ast\030\005 \001(\0132\022.boa.typ" +
       "es.ASTRoot\022)\n\010comments\030\006 \001(\0132\027.boa.types" +
       ".CommentsRoot\022&\n\007changes\030\007 \003(\0162\025.boa.typ" +
       "es.ChangeKind\022\031\n\021previous_versions\030\010 \003(\005" +

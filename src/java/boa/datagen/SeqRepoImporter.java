@@ -32,6 +32,7 @@ import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.BytesWritable;
+import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.Text;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -59,8 +60,6 @@ import boa.datagen.util.Properties;
  */
 public class SeqRepoImporter {
 	private final static boolean debug = Properties.getBoolean("debug", DefaultProperties.DEBUG);
-
-	private final static String keyDelim = Properties.getProperty("hbase.delimiter", DefaultProperties.HBASE_DELIMITER);
 
 	private static File jsonCacheDir = new File(Properties.getProperty("gh.json.cache.path", DefaultProperties.GH_JSON_CACHE_PATH));
 	private final static File gitRootPath = new File(
@@ -199,7 +198,7 @@ public class SeqRepoImporter {
 					projectWriter = SequenceFile.createWriter(fileSystem, conf,
 							new Path(base + "/projects" + suffix), Text.class, BytesWritable.class);
 					astWriter = SequenceFile.createWriter(fileSystem, conf,
-							new Path(base + "/ast" + suffix), Text.class, BytesWritable.class);
+							new Path(base + "/ast" + suffix), LongWritable.class, BytesWritable.class);
 					break;
 				} catch (Throwable t) {
 					t.printStackTrace();
@@ -329,8 +328,7 @@ public class SeqRepoImporter {
 			try {
 				conn = new GitConnector(gitDir.getAbsolutePath());
 				final CodeRepository.Builder repoBuilder = CodeRepository.newBuilder(repo);
-				final String repoKey = "g:" + project.getId() + keyDelim + repo.getKind().getNumber();
-				for (final Revision rev : conn.getCommits(true, astWriter, repoKey, keyDelim)) {
+				for (final Revision rev : conn.getCommits(true, astWriter)) {
 					  if (debug) System.out.println("Storing '" + name + "' revision: " + rev.getId());
 					// build new rev w/ no namespaces
 					final Revision.Builder revBuilder = Revision.newBuilder(rev);

@@ -7,6 +7,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.BytesWritable;
+import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.Text;
 
@@ -23,7 +24,6 @@ public class LocalGitSequenceGenerator {
 	private static SequenceFile.Writer projectWriter, astWriter;
 	private static Configuration conf = null;
 	private static FileSystem fileSystem = null;
-	private final static String keyDelim = "!!";
 
 	public LocalGitSequenceGenerator() {
 		// TODO Auto-generated constructor stub
@@ -49,7 +49,7 @@ public class LocalGitSequenceGenerator {
 						new Path(outputPath+"/projects.seq"), Text.class,
 						BytesWritable.class);
 				astWriter = SequenceFile.createWriter(fileSystem, conf,
-						new Path(outputPath+"/ast.seq"), Text.class, BytesWritable.class);
+						new Path(outputPath+"/ast.seq"), LongWritable.class, BytesWritable.class);
 				break;
 			} catch (Throwable t) {
 				t.printStackTrace();
@@ -95,8 +95,7 @@ public class LocalGitSequenceGenerator {
 			final CodeRepository.Builder repoBuilder = CodeRepository.newBuilder();
 			repoBuilder.setUrl(path);
 			repoBuilder.setKind(RepositoryKind.GIT);
-			final String repoKey = "g:" + path + keyDelim + path;
-			for (final Revision rev : conn.getCommits(true, astWriter, repoKey, keyDelim)) {
+			for (final Revision rev : conn.getCommits(true, astWriter)) {
 				final Revision.Builder revBuilder = Revision.newBuilder(rev);
 				repoBuilder.addRevisions(revBuilder);
 			}

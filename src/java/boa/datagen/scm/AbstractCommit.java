@@ -22,6 +22,7 @@ import java.io.*;
 import java.util.*;
 
 import org.apache.hadoop.io.BytesWritable;
+import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.SequenceFile.Writer;
 import org.eclipse.jdt.core.JavaCore;
@@ -94,7 +95,7 @@ public abstract class AbstractCommit {
 
 	protected abstract String getFileContents(final String path);
 
-	public Revision asProtobuf(final boolean parse, final Writer astWriter, final String revKey, final String keyDelim) {
+	public Revision asProtobuf(final boolean parse, final Writer astWriter) {
 		final Revision.Builder revision = Revision.newBuilder();
 		revision.setId(id);
 
@@ -116,8 +117,7 @@ public abstract class AbstractCommit {
 			revision.setLog("");
 		
 		for (ChangedFile.Builder cfb : changedFiles) {
-			processChangeFile(cfb, parse, astWriter, revKey, keyDelim);
-			//fb.setKey("");
+			processChangeFile(cfb, parse, astWriter);
 			revision.addFiles(cfb.build());
 		}
 
@@ -125,7 +125,7 @@ public abstract class AbstractCommit {
 	}
 
 	@SuppressWarnings("deprecation")
-	private Builder processChangeFile(final ChangedFile.Builder fb, boolean parse, Writer astWriter, String revKey, String keyDelim) {
+	private Builder processChangeFile(final ChangedFile.Builder fb, boolean parse, Writer astWriter) {
 		String path = fb.getName();
 		fb.setKind(FileKind.OTHER);
 
@@ -140,33 +140,28 @@ public abstract class AbstractCommit {
 			final String content = getFileContents(path);
 
 			fb.setKind(FileKind.SOURCE_JAVA_JLS2);
-			if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_4, AST.JLS2, false, astWriter,
-					revKey + keyDelim + path)) {
+			if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_4, AST.JLS2, false, astWriter)) {
 				if (debug)
 					System.err.println("Found JLS2 parse error in: revision " + id + ": file " + path);
 
 				fb.setKind(FileKind.SOURCE_JAVA_JLS3);
-				if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_5, AST.JLS3, false, astWriter,
-						revKey + keyDelim + path)) {
+				if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_5, AST.JLS3, false, astWriter)) {
 					if (debug)
 						System.err.println("Found JLS3 parse error in: revision " + id + ": file " + path);
 
 					fb.setKind(FileKind.SOURCE_JAVA_JLS4);
-					if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_7, AST.JLS4, false, astWriter,
-							revKey + keyDelim + path)) {
+					if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_7, AST.JLS4, false, astWriter)) {
 						if (debug)
 							System.err.println("Found JLS4 parse error in: revision " + id + ": file " + path);
 
 						fb.setKind(FileKind.SOURCE_JAVA_JLS8);
-						if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_8, AST.JLS8, false, astWriter,
-								revKey + keyDelim + path)) {
+						if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_8, AST.JLS8, false, astWriter)) {
 							if (debug)
 								System.err.println("Found JLS8 parse error in: revision " + id + ": file " + path);
 
 							fb.setKind(FileKind.SOURCE_JAVA_ERROR);
 							try {
-								astWriter.append(new Text(revKey + keyDelim + fb.getName()),
-										new BytesWritable(ASTRoot.newBuilder().build().toByteArray()));
+								astWriter.append(new LongWritable(astWriter.getLength()), new BytesWritable(ASTRoot.newBuilder().build().toByteArray()));
 							} catch (IOException e) {
 								e.printStackTrace();
 							}
@@ -182,46 +177,38 @@ public abstract class AbstractCommit {
 			final String content = getFileContents(path);
 
 			fb.setKind(FileKind.SOURCE_JS_ES1);
-			if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_1, false, astWriter,
-					revKey + keyDelim + path)) {
+			if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_1, false, astWriter)) {
 				if (debug)
 					System.err.println("Found ES3 parse error in: revision " + id + ": file " + path);
 				fb.setKind(FileKind.SOURCE_JS_ES2);
-				if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_2, false, astWriter,
-						revKey + keyDelim + path)) {
+				if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_2, false, astWriter)) {
 					if (debug)
 						System.err.println("Found ES3 parse error in: revision " + id + ": file " + path);
 					fb.setKind(FileKind.SOURCE_JS_ES3);
-					if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_3, false, astWriter,
-							revKey + keyDelim + path)) {
+					if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_3, false, astWriter)) {
 						if (debug)
 							System.err.println("Found ES3 parse error in: revision " + id + ": file " + path);
 						fb.setKind(FileKind.SOURCE_JS_ES5);
-						if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_5, false, astWriter,
-								revKey + keyDelim + path)) {
+						if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_5, false, astWriter)) {
 							if (debug)
 								System.err.println("Found ES4 parse error in: revision " + id + ": file " + path);
 							fb.setKind(FileKind.SOURCE_JS_ES6);
-							if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_6, false, astWriter,
-									revKey + keyDelim + path)) {
+							if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_6, false, astWriter)) {
 								if (debug)
 									System.err.println("Found ES4 parse error in: revision " + id + ": file " + path);
 								fb.setKind(FileKind.SOURCE_JS_ES7);
-								if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_7, false, astWriter,
-										revKey + keyDelim + path)) {
+								if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_7, false, astWriter)) {
 									if (debug)
 										System.err
 												.println("Found ES3 parse error in: revision " + id + ": file " + path);
 									fb.setKind(FileKind.SOURCE_JS_ES8);
-									if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_8, false, astWriter,
-											revKey + keyDelim + path)) {
+									if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_8, false, astWriter)) {
 										if (debug)
 											System.err.println(
 													"Found ES4 parse error in: revision " + id + ": file " + path);
 										fb.setKind(FileKind.SOURCE_JS_ERROR);
 										try {
-											astWriter.append(new Text(revKey + keyDelim + fb.getName()),
-													new BytesWritable(ASTRoot.newBuilder().build().toByteArray()));
+											astWriter.append(new LongWritable(astWriter.getLength()), new BytesWritable(ASTRoot.newBuilder().build().toByteArray()));
 										} catch (IOException e) {
 											e.printStackTrace();
 										}
@@ -240,14 +227,19 @@ public abstract class AbstractCommit {
 			} else if (debug)
 				System.err.println("Accepted ES1: revision " + id + ": file " + path);
 		}
-		fb.setKey(revKey);
+		try {
+			fb.setKey(astWriter.getLength());
+		} catch (IOException e) {
+			if (debug)
+				System.err.println("Error getting length of sequence file writer!!!");
+		}
 
 		return fb;
 	}
 
 	private boolean parseJavaScriptFile(final String path,
 			final ChangedFile.Builder fb, final String content, final int astLevel,
-			final boolean storeOnError, Writer astWriter, String key) {
+			final boolean storeOnError, Writer astWriter) {
 		try {
 			//System.out.println("parsing=" + (++count) + "\t" + path);
 			CompilerEnvirons cp = new CompilerEnvirons();
@@ -289,8 +281,7 @@ public abstract class AbstractCommit {
 				if (astWriter != null) {
 					try {
 					//	System.out.println("writing=" + count + "\t" + path);
-						astWriter.append(new Text(key), new BytesWritable(ast
-								.build().toByteArray()));
+						astWriter.append(new LongWritable(astWriter.getLength()), new BytesWritable(ast.build().toByteArray()));
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -306,36 +297,6 @@ public abstract class AbstractCommit {
 		}
 	}
 
-	public Revision asProtobuf(final boolean parse) {
-		final Revision.Builder revision = Revision.newBuilder();
-		revision.setId(id);
-
-		if (this.author != null) {
-			final Person author = Person.newBuilder(this.author).build();
-			revision.setAuthor(author);
-		}
-		final Person committer = Person.newBuilder(this.committer).build();
-		revision.setCommitter(committer);
-
-		long time = -1;
-		if (date != null)
-			time = date.getTime() * 1000;
-		revision.setCommitDate(time);
-
-		if (message != null)
-			revision.setLog(message);
-		else
-			revision.setLog("");
-		
-		for (ChangedFile.Builder cfb : changedFiles) {
-			processChangeFile(cfb, parse);
-			//fb.setKey("");
-			revision.addFiles(cfb.build());
-		}
-
-		return revision.build();
-	}
-
 	public Map<String,String> getLOC() {
 		final Map<String,String> l = new HashMap<String,String>();
 		
@@ -346,61 +307,7 @@ public abstract class AbstractCommit {
 		return l;
 	}
 
-	@SuppressWarnings("deprecation")
-	protected ChangedFile.Builder processChangeFile(final ChangedFile.Builder fb, final boolean attemptParse) {
-		String path = fb.getName();
-		fb.setKind(FileKind.OTHER);
-		
-		final String lowerPath = path.toLowerCase();
-		if (lowerPath.endsWith(".txt"))
-			fb.setKind(FileKind.TEXT);
-		else if (lowerPath.endsWith(".xml"))
-			fb.setKind(FileKind.XML);
-		else if (lowerPath.endsWith(".jar") || lowerPath.endsWith(".class"))
-			fb.setKind(FileKind.BINARY);
-		else if (lowerPath.endsWith(".java") && attemptParse) {
-			final String content = getFileContents(path);
-
-			fb.setKind(FileKind.SOURCE_JAVA_JLS2);
-			if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_4, AST.JLS2, false, null, null)) {
-				if (debug)
-					System.err.println("Found JLS2 parse error in: revision " + id + ": file " + path);
-
-				fb.setKind(FileKind.SOURCE_JAVA_JLS3);
-				if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_5, AST.JLS3, false, null, null)) {
-					if (debug)
-						System.err.println("Found JLS3 parse error in: revision " + id + ": file " + path);
-
-					fb.setKind(FileKind.SOURCE_JAVA_JLS4);
-					if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_7, AST.JLS4, false, null, null)) {
-						if (debug)
-							System.err.println("Found JLS4 parse error in: revision " + id + ": file " + path);
-
-						fb.setKind(FileKind.SOURCE_JAVA_JLS8);
-						if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_8, AST.JLS8, false, null, null)) {
-							if (debug)
-								System.err.println("Found JLS8 parse error in: revision " + id + ": file " + path);
-
-							//fb.setContent(content);
-							fb.setKind(FileKind.SOURCE_JAVA_ERROR);
-						} else
-							if (debug)
-								System.err.println("Accepted JLS8: revision " + id + ": file " + path);
-					} else
-						if (debug)
-							System.err.println("Accepted JLS4: revision " + id + ": file " + path);
-				} else
-					if (debug)
-						System.err.println("Accepted JLS3: revision " + id + ": file " + path);
-			} else
-				if (debug)
-					System.err.println("Accepted JLS2: revision " + id + ": file " + path);
-		}
-
-		return fb;
-	}
-
-	private boolean parseJavaFile(final String path, final ChangedFile.Builder fb, final String content, final String compliance, final int astLevel, final boolean storeOnError, Writer astWriter, String key) {
+	private boolean parseJavaFile(final String path, final ChangedFile.Builder fb, final String content, final String compliance, final int astLevel, final boolean storeOnError, Writer astWriter) {
 		try {
 			final ASTParser parser = ASTParser.newParser(astLevel);
 			parser.setKind(ASTParser.K_COMPILATION_UNIT);
@@ -441,7 +348,7 @@ public abstract class AbstractCommit {
 				
 				if (astWriter != null) {
 					try {
-						astWriter.append(new Text(key), new BytesWritable(ast.build().toByteArray()));
+						astWriter.append(new LongWritable(astWriter.getLength()), new BytesWritable(ast.build().toByteArray()));
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
