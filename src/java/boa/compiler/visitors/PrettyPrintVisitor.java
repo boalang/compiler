@@ -338,7 +338,7 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 		if (n.hasElse()) {
 			outdentBlock(n.getBody());
 			indent();
-			strm.println("else ");
+			strm.print("else ");
 			indentBlock(n.getElse());
 			n.getElse().accept(this);
 			outdentBlock(n.getElse());
@@ -483,6 +483,15 @@ public class PrettyPrintVisitor extends AbstractVisitorNoArgNoRet {
 			strm.print(" || ");
 			n.getRhs(i).accept(this);
 		}
+	}
+
+	/** {@inheritDoc} */
+	@Override
+	public void visit(final FunctionExpression n) {
+		n.getType().accept(this);
+		indentBlock(n.getBody());
+		n.getBody().accept(this);
+		outdentBlock(n.getBody());
 	}
 
 	/** {@inheritDoc} */
