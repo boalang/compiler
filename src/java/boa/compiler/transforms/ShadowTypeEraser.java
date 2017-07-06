@@ -309,7 +309,7 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                                         final Block manyToOneBlock = new Block();
                                         listExp.add(styKind);
                                         manyToOneBlock.addStatement(((BoaShadowType)visit.getComponent().type).getManytoOne(n.env, b));
-                                        switchS.addCase(new SwitchCase(false, manyToOneBlock.clone(), listExp));
+                                        switchS.addCase(new SwitchCase(false, manyToOneBlock, listExp));
                                     }
                                 }
 
@@ -331,12 +331,10 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                     }
                 }
 
+                // add wildcard to default
                 if (defaultSc.getBody().getStatementsSize() == 0 && wildcardBlock != null) {
-                    // add wildcard to default
-                    if (wildcardBlock != null) {
-                        for (final Statement s : wildcardBlock.getStatements()) {
-                            defaultSc.getBody().addStatement(s.clone());
-                        }
+                    for (final Statement s : wildcardBlock.getStatements()) {
+                        defaultSc.getBody().addStatement(s.clone());
                     }
                 }
 
@@ -349,6 +347,21 @@ public class ShadowTypeEraser extends AbstractVisitorNoArgNoRet {
                 for (final SwitchCase scase : listOfCases) {
                     if (!lastStatementIsStop(scase.getBody())) {
                         scase.getBody().addStatement(new BreakStatement());
+                    }
+                }
+
+                // merge duplicate cases
+                // FIXME using strings here for identity seems a bit overkill, hashCode's would be best
+                final Map<String, SwitchCase> caseBodies = new HashMap<String, SwitchCase>();
+                for (int i = listOfCases.size() - 1; i >= 0; i--) {
+                    final SwitchCase c = listOfCases.get(i);
+                    final String body = c.getBody().toString();
+                    if (caseBodies.containsKey(body)) {
+                        for (int j = 0; j < c.getCasesSize(); j++)
+                            caseBodies.get(body).addCase(c.getCase(j).clone());
+                        listOfCases.remove(i);
+                    } else {
+                        caseBodies.put(body, c);
                     }
                 }
 
