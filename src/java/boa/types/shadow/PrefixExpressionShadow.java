@@ -49,6 +49,7 @@ public class PrefixExpressionShadow extends BoaShadowType  {
         super(new ExpressionProtoTuple());
 
         addShadow("operand", new ExpressionProtoTuple());
+        addShadow("operator", new ExpressionKindProtoMap());
     }
 
     /** {@inheritDoc} */
@@ -60,6 +61,10 @@ public class PrefixExpressionShadow extends BoaShadowType  {
             return ASTFactory.createFactor("expressions",ASTFactory.createIntLiteral(0),new BoaProtoList(new ExpressionProtoTuple()), new ExpressionProtoTuple(),env);
         }
 
+        if ("operator".equals(name)) {
+            // ${0}.kind
+            return ASTFactory.createSelector("kind", new ExpressionKindProtoMap(), env);
+        }
 
         throw new RuntimeException("invalid shadow field: " + name);
     }

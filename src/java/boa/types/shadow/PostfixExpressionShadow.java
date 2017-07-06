@@ -49,7 +49,7 @@ public class PostfixExpressionShadow extends BoaShadowType  {
         super(new ExpressionProtoTuple());
 
         addShadow("operand", new ExpressionProtoTuple());
-        addShadow("operator", new TypeProtoTuple());
+        addShadow("operator", new ExpressionKindProtoMap());
     }
 
     /** {@inheritDoc} */
@@ -62,9 +62,9 @@ public class PostfixExpressionShadow extends BoaShadowType  {
         }
 
 
-        if ("operator".equals(name)) {
-            // TODO : InFix Operator
-            return null;
+         if ("operator".equals(name)) {
+            // ${0}.kind
+            return ASTFactory.createSelector("kind", new ExpressionKindProtoMap(), env);
         }
        
 
