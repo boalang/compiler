@@ -717,7 +717,7 @@ public class BoaAstIntrinsics {
 	@FunctionSpec(name = "isenhancedfor", returnType = "bool", formalParameters = { "Statement" })
 	public static boolean isEnhancedFor(final Statement s) throws Exception {
 		if (s.getKind() != StatementKind.FOR) return false;
-		return !s.hasVariableDeclaration();
+		return s.hasVariableDeclaration();
 	}
 
 	//////////////////////////////
