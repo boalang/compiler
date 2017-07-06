@@ -54,6 +54,8 @@ public abstract class AbstractCommit {
 	protected AbstractCommit(AbstractConnector cnn) {
 		this.connector = cnn;
 	}
+
+	protected Map<String, Integer> fileNameIndices;
 	
 	protected String id = null;
 	public void setId(final String id) { this.id = id; }
@@ -81,25 +83,12 @@ public abstract class AbstractCommit {
 
 	protected Date date;
 	public void setDate(final Date date) { this.date = date; }
-
-	private Map<String, String> changedPaths = new HashMap<String, String>();
-	public void setChangedPaths(final Map<String, String> changedPaths) { this.changedPaths = changedPaths; }
-
-	private Map<String, String> addedPaths = new HashMap<String, String>();
-	public void setAddedPaths(final Map<String, String> addedPaths) { this.addedPaths = addedPaths; }
-
-	private Map<String, String> removedPaths = new HashMap<String, String>();
-	public void setRemovedPaths(final Map<String, String> removedPaths) { this.removedPaths = removedPaths; }
-
+	
+	protected List<ChangedFile.Builder> changedFiles = new ArrayList<ChangedFile.Builder>();
+	
 	protected int[] parentIndices;
 
-	protected void setParentIndices(final int[] parentList) {
-		parentIndices = parentList;
-	}
-
-	protected int[] getParentIndices() { 
-		return parentIndices;
-	}
+	protected List<Integer> childrenIndices = new LinkedList<Integer>();
 	
 	protected static final ByteArrayOutputStream buffer = new ByteArrayOutputStream(4096);
 
@@ -125,33 +114,19 @@ public abstract class AbstractCommit {
 			revision.setLog(message);
 		else
 			revision.setLog("");
-
-		for (final String path : changedPaths.keySet()) {
-			final ChangedFile.Builder fb = processChangeFile(path, parse, astWriter, revKey, keyDelim);
-			fb.setChange(ChangeKind.MODIFIED);
+		
+		for (ChangedFile.Builder cfb : changedFiles) {
+			processChangeFile(cfb, parse, astWriter, revKey, keyDelim);
 			//fb.setKey("");
-			revision.addFiles(fb.build());
-		}
-		for (final String path : addedPaths.keySet()) {
-			final ChangedFile.Builder fb = processChangeFile(path, parse, astWriter, revKey, keyDelim);
-			fb.setChange(ChangeKind.ADDED);
-			//fb.setKey("");
-			revision.addFiles(fb.build());
-		}
-		for (final String path : removedPaths.keySet()) {
-			final ChangedFile.Builder fb = processChangeFile(path, false, null, revKey, keyDelim);
-			fb.setChange(ChangeKind.DELETED);
-			//fb.setKey("");
-			revision.addFiles(fb.build());
+			revision.addFiles(cfb.build());
 		}
 
 		return revision.build();
 	}
 
 	@SuppressWarnings("deprecation")
-	private Builder processChangeFile(String path, boolean parse, Writer astWriter, String revKey, String keyDelim) {
-		final ChangedFile.Builder fb = ChangedFile.newBuilder();
-		fb.setName(path);
+	private Builder processChangeFile(final ChangedFile.Builder fb, boolean parse, Writer astWriter, String revKey, String keyDelim) {
+		String path = fb.getName();
 		fb.setKind(FileKind.OTHER);
 
 		final String lowerPath = path.toLowerCase();
@@ -351,24 +326,11 @@ public abstract class AbstractCommit {
 			revision.setLog(message);
 		else
 			revision.setLog("");
-
-		for (final String path : changedPaths.keySet()) {
-			final ChangedFile.Builder fb = processChangeFile(path, parse);
-			fb.setChange(ChangeKind.MODIFIED);
-			fb.setKey("");
-			revision.addFiles(fb.build());
-		}
-		for (final String path : addedPaths.keySet()) {
-			final ChangedFile.Builder fb = processChangeFile(path, parse);
-			fb.setChange(ChangeKind.ADDED);
-			fb.setKey("");
-			revision.addFiles(fb.build());
-		}
-		for (final String path : removedPaths.keySet()) {
-			final ChangedFile.Builder fb = processChangeFile(path, false);
-			fb.setChange(ChangeKind.DELETED);
-			fb.setKey("");
-			revision.addFiles(fb.build());
+		
+		for (ChangedFile.Builder cfb : changedFiles) {
+			processChangeFile(cfb, parse);
+			//fb.setKey("");
+			revision.addFiles(cfb.build());
 		}
 
 		return revision.build();
@@ -376,19 +338,17 @@ public abstract class AbstractCommit {
 
 	public Map<String,String> getLOC() {
 		final Map<String,String> l = new HashMap<String,String>();
-
-		for (final String path : changedPaths.keySet())
-			l.put(path, processLOC(path));
-		for (final String path : addedPaths.keySet())
-			l.put(path, processLOC(path));
+		
+		for (final ChangedFile.Builder cf : changedFiles)
+			if (cf.getChange() != ChangeKind.DELETED)
+				l.put(cf.getName(), processLOC(cf.getName()));
 
 		return l;
 	}
 
 	@SuppressWarnings("deprecation")
-	protected ChangedFile.Builder processChangeFile(final String path, final boolean attemptParse) {
-		final ChangedFile.Builder fb = ChangedFile.newBuilder();
-		fb.setName(path);
+	protected ChangedFile.Builder processChangeFile(final ChangedFile.Builder fb, final boolean attemptParse) {
+		String path = fb.getName();
 		fb.setKind(FileKind.OTHER);
 		
 		final String lowerPath = path.toLowerCase();
@@ -536,5 +496,19 @@ public abstract class AbstractCommit {
 		}
 
 		return loc;
+	}
+
+	public List<int[]> getFiles(int index, String path) {
+		List<int[]> l = new ArrayList<int[]>();
+		for (int i = 0; i < changedFiles.size(); i++) {
+			ChangedFile.Builder cfb = changedFiles.get(i);
+			if (cfb.getName().equals(path) && cfb.getChange() != ChangeKind.DELETED) {
+				l.add(new int[]{i, index});
+				return l;
+			}
+		}
+		for (int parentId : parentIndices)
+			l.addAll(connector.revisions.get(parentId).getFiles(parentId, path));
+		return l;
 	}
 }

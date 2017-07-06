@@ -113,7 +113,7 @@ public class GitConnector extends AbstractConnector {
 				gc.setDate(new Date(((long) rc.getCommitTime()) * 1000));
 				gc.setMessage(rc.getFullMessage());
 				
-				gc.getChangeFiles(this.revisionMap, rc);
+				gc.getChangeFiles(rc);
 				
 				revisionMap.put(gc.id, revisions.size());
 				revisions.add(gc);

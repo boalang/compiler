@@ -103,5 +103,5 @@ message ChangedFile {
 	/** @exclude The indices of the corresponding parent commits in the list of all commits */
 	repeated int32 previous_versions = 8;
 	/** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits */
-	repeated int32 previous_index = 9;
+	repeated int32 previous_indices = 9;
 }
