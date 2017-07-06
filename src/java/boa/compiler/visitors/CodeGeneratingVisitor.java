@@ -421,8 +421,8 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		protected Factor firstFactor;
 		protected Node lastFactor;
 
-		protected Map<Node, Node> lastFactors = new HashMap<Node, Node>();
-		protected final Set<Node> indexees = new HashSet<Node>();
+		protected Map<Factor, Node> lastFactors = new HashMap<Factor, Node>();
+		protected final Set<Factor> indexees = new HashSet<Factor>();
 
 		/** {@inheritDoc} */
 		@Override
@@ -433,11 +433,11 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			lastFactor = null;
 		}
 
-		public Map<Node, Node> getFactors() {
+		public Map<Factor, Node> getFactors() {
 			return lastFactors;
 		}
 
-		public Set<Node> getIndexees() {
+		public Set<Factor> getIndexees() {
 			return indexees;
 		}
 
@@ -449,6 +449,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			lastFactor = n.getOperand();
 
 			for (final Node f : n.getOps()) {
+				firstFactor = n;
 				f.accept(this, arg);
 				lastFactor = f;
 			}
@@ -750,10 +751,10 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			visit(n.getExprs());
 
 			if (t instanceof BoaArray && ((BoaArray)t).getType() instanceof BoaEnum) {
-                st.add("type", "Object[] ");
+				st.add("type", "Object[] ");
 			} else {
-                st.add("type", t.toJavaType());
-            }
+				st.add("type", t.toJavaType());
+			}
 
 			st.add("exprlist", code.removeLast());
 		}
@@ -1154,13 +1155,13 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		st.add("index", id);
 
 		this.indexeeFinder.start(e, id);
-		final Set<Node> indexees = this.indexeeFinder.getIndexees();
+		final Set<Factor> indexees = this.indexeeFinder.getIndexees();
 
 		if (indexees.size() > 0) {
-			final List<Node> array = new ArrayList<Node>(indexees);
+			final List<Factor> array = new ArrayList<Factor>(indexees);
 			String src = "";
 			for (int i = 0; i < array.size(); i++) {
-				final Factor indexee = (Factor)array.get(i);
+				final Factor indexee = array.get(i);
 
 				this.skipIndex = id;
 				indexee.accept(this);
