@@ -78,17 +78,7 @@ public class GitCommit extends AbstractCommit {
 		return "";
 	}
 
-	/**
-	 *
-	 * @param path Name of file to search for
-	 * @return the index the file occurs in fileChanges
-	 */
-	protected int getFileIndex(final String path) {
-		Integer index = fileNameIndices.get(path);
-		return index;
-	}
-
-	public void getChangeFiles(RevCommit rc) {
+	void getChangeFiles(RevCommit rc) {
 		if (rc.getParentCount() == 0) {
 			TreeWalk tw = new TreeWalk(repository);
 			tw.reset();
@@ -187,7 +177,7 @@ public class GitCommit extends AbstractCommit {
 		df.close();
 	}
 
-	public void getChangeFile(final RevCommit parent, final DiffEntry diff, final ChangeKind kind) {
+	private void getChangeFile(final RevCommit parent, final DiffEntry diff, final ChangeKind kind) {
 		String path = diff.getNewPath();
 		ChangedFile.Builder cfb = getChangeFile(path);
 		if (cfb.getChange() == null)
@@ -204,7 +194,7 @@ public class GitCommit extends AbstractCommit {
 		filePathGitObjectIds.put(path, diff.getNewId().toObjectId());
 	}
 
-	public ChangedFile.Builder getChangeFile(String path) {
+	private ChangedFile.Builder getChangeFile(String path) {
 		ChangedFile.Builder cfb = null;
 		Integer index = fileNameIndices.get(path);
 		if (index == null) {

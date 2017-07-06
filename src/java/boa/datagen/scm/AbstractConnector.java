@@ -53,9 +53,9 @@ public abstract class AbstractConnector implements AutoCloseable {
 
 	protected abstract void setRevisions();
 
-	public abstract void getTags();
+	abstract void getTags();
 
-	public abstract void getBranches();
+	abstract void getBranches();
 
 	public List<String> getBranchNames() {
 		return branchNames;

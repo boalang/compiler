@@ -131,7 +131,7 @@ public class GitConnector extends AbstractConnector {
 	}
 
 	@Override
-	public void getTags() {
+	void getTags() {
 		try {
 			for (final Ref ref : git.tagList().call()) {
 				tagNames.add(ref.getName());
@@ -144,7 +144,7 @@ public class GitConnector extends AbstractConnector {
 	}
 
 	@Override
-	public void getBranches() {
+	void getBranches() {
 		try {
 			for (final Ref ref : git.branchList().setListMode(ListMode.REMOTE).call()) {
 				branchNames.add(ref.getName());
