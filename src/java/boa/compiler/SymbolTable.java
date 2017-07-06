@@ -218,7 +218,7 @@ public class SymbolTable {
 		// helper for shadow type codegen
 		for (final BoaType t : dslTupleTypes) {
 			globalFunctions.addFunction("safeget", new BoaFunction(t, new BoaType[] { new BoaProtoList(t), new BoaInt(), new BoaString() }, "(${0}.size() <= ${1} ? (${2})null : ${0}.get((int)${1}))"));
-			globalFunctions.addFunction("subList", new BoaFunction(t, new BoaType[] { new BoaProtoList(t), new BoaInt(), new BoaInt() }, "${0}.subList((int)${1}, (int)(${0}.size()+((int)${2})))"));
+			globalFunctions.addFunction("subList", new BoaFunction(t, new BoaType[] { new BoaProtoList(t), new BoaInt(), new BoaInt() }, "${0}.subList((int)${1}, (int)(${0}.size()))"));
         }
 
 		// FIXME rdyer - def(protolist[i]) should generate "i < protolist.size()"
