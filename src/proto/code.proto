@@ -43,6 +43,8 @@ message CodeRepository {
 	repeated int32 tags = 6;
 	/** @exclude The names of all tags */
 	repeated string tag_names = 7;
+	/** @exclude The offset of the head commit */
+	required int32 head = 8;
 }
 
 /** A single revision inside a CodeRepository */

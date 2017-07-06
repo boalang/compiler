@@ -36,9 +36,8 @@ public abstract class AbstractConnector implements AutoCloseable {
 
 	protected Map<String, Integer> revisionMap;
 
-	public abstract String getLastCommitId();
-	public abstract void setLastSeenCommitId(final String id);
-
+	public abstract int getHeadCommitOffset();
+	
 	protected abstract void setRevisions();
 
 	abstract void getTags();

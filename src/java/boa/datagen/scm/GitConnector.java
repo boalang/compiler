@@ -46,7 +46,7 @@ public class GitConnector extends AbstractConnector {
 	private Git git;
 	private RevWalk revwalk;
 
-	private String lastCommitId = null;
+	private int headCommitOffset = -1;
 
 	public GitConnector(final String path) {
 		try {
@@ -69,24 +69,8 @@ public class GitConnector extends AbstractConnector {
 	}
 
 	@Override
-	public String getLastCommitId() {
-		if (lastCommitId == null) {
-			revwalk.reset();
-
-			try {
-				revwalk.markStart(revwalk.parseCommit(repository.resolve(Constants.HEAD)));
-				revwalk.sort(RevSort.COMMIT_TIME_DESC);
-				lastCommitId = revwalk.next().getId().toString();
-			} catch (final Exception e) {
-				if (debug)
-					System.err.println("Git Error getting last commit for " + path + ". " + e.getMessage());
-			}
-		}
-		return lastCommitId;
-	}
-
-	@Override
-	public void setLastSeenCommitId(final String id) {
+	public int getHeadCommitOffset() {
+		return this.headCommitOffset;
 	}
 
 	@Override
@@ -94,7 +78,8 @@ public class GitConnector extends AbstractConnector {
 		RevWalk temprevwalk = new RevWalk(repository);
 		try {
 			revwalk.reset();
-			revwalk.markStart(revwalk.parseCommit(repository.resolve(Constants.HEAD)));
+			RevCommit head = revwalk.parseCommit(repository.resolve(Constants.HEAD));
+			revwalk.markStart(head);
 			revwalk.sort(RevSort.TOPO, true);
 			revwalk.sort(RevSort.COMMIT_TIME_DESC, true);
 			revwalk.sort(RevSort.REVERSE, true);
@@ -119,6 +104,7 @@ public class GitConnector extends AbstractConnector {
 				revisions.add(gc);
 			}
 			
+			this.headCommitOffset = revisionMap.get(head.getName());
 			getBranches();
 			getTags();
 		} catch (final IOException e) {

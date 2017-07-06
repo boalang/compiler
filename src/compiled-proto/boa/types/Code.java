@@ -224,6 +224,24 @@ public final class Code {
      */
     com.google.protobuf.ByteString
         getTagNamesBytes(int index);
+
+    // required int32 head = 8;
+    /**
+     * <code>required int32 head = 8;</code>
+     *
+     * <pre>
+     ** @exclude The offset of the head commit 
+     * </pre>
+     */
+    boolean hasHead();
+    /**
+     * <code>required int32 head = 8;</code>
+     *
+     * <pre>
+     ** @exclude The offset of the head commit 
+     * </pre>
+     */
+    int getHead();
   }
   /**
    * Protobuf type {@code boa.types.CodeRepository}
@@ -360,6 +378,11 @@ public final class Code {
                 mutable_bitField0_ |= 0x00000040;
               }
               tagNames_.add(input.readBytes());
+              break;
+            }
+            case 64: {
+              bitField0_ |= 0x00000004;
+              head_ = input.readInt32();
               break;
             }
           }
@@ -934,6 +957,30 @@ public final class Code {
       return tagNames_.getByteString(index);
     }
 
+    // required int32 head = 8;
+    public static final int HEAD_FIELD_NUMBER = 8;
+    private int head_;
+    /**
+     * <code>required int32 head = 8;</code>
+     *
+     * <pre>
+     ** @exclude The offset of the head commit 
+     * </pre>
+     */
+    public boolean hasHead() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>required int32 head = 8;</code>
+     *
+     * <pre>
+     ** @exclude The offset of the head commit 
+     * </pre>
+     */
+    public int getHead() {
+      return head_;
+    }
+
     private void initFields() {
       url_ = "";
       kind_ = boa.types.Code.CodeRepository.RepositoryKind.OTHER;
@@ -942,6 +989,7 @@ public final class Code {
       branchNames_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       tags_ = java.util.Collections.emptyList();
       tagNames_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      head_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -953,6 +1001,10 @@ public final class Code {
         return false;
       }
       if (!hasKind()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasHead()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -989,6 +1041,9 @@ public final class Code {
       }
       for (int i = 0; i < tagNames_.size(); i++) {
         output.writeBytes(7, tagNames_.getByteString(i));
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeInt32(8, head_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -1046,6 +1101,10 @@ public final class Code {
         }
         size += dataSize;
         size += 1 * getTagNamesList().size();
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(8, head_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1186,6 +1245,8 @@ public final class Code {
         bitField0_ = (bitField0_ & ~0x00000020);
         tagNames_ = com.google.protobuf.LazyStringArrayList.EMPTY;
         bitField0_ = (bitField0_ & ~0x00000040);
+        head_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000080);
         return this;
       }
 
@@ -1253,6 +1314,10 @@ public final class Code {
           bitField0_ = (bitField0_ & ~0x00000040);
         }
         result.tagNames_ = tagNames_;
+        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.head_ = head_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -1343,6 +1408,9 @@ public final class Code {
           }
           onChanged();
         }
+        if (other.hasHead()) {
+          setHead(other.getHead());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -1353,6 +1421,10 @@ public final class Code {
           return false;
         }
         if (!hasKind()) {
+          
+          return false;
+        }
+        if (!hasHead()) {
           
           return false;
         }
@@ -2288,6 +2360,55 @@ public final class Code {
   }
   ensureTagNamesIsMutable();
         tagNames_.add(value);
+        onChanged();
+        return this;
+      }
+
+      // required int32 head = 8;
+      private int head_ ;
+      /**
+       * <code>required int32 head = 8;</code>
+       *
+       * <pre>
+       ** @exclude The offset of the head commit 
+       * </pre>
+       */
+      public boolean hasHead() {
+        return ((bitField0_ & 0x00000080) == 0x00000080);
+      }
+      /**
+       * <code>required int32 head = 8;</code>
+       *
+       * <pre>
+       ** @exclude The offset of the head commit 
+       * </pre>
+       */
+      public int getHead() {
+        return head_;
+      }
+      /**
+       * <code>required int32 head = 8;</code>
+       *
+       * <pre>
+       ** @exclude The offset of the head commit 
+       * </pre>
+       */
+      public Builder setHead(int value) {
+        bitField0_ |= 0x00000080;
+        head_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required int32 head = 8;</code>
+       *
+       * <pre>
+       ** @exclude The offset of the head commit 
+       * </pre>
+       */
+      public Builder clearHead() {
+        bitField0_ = (bitField0_ & ~0x00000080);
+        head_ = 0;
         onChanged();
         return this;
       }
@@ -4627,20 +4748,20 @@ public final class Code {
   static {
     java.lang.String[] descriptorData = {
       "\n\ncode.proto\022\tboa.types\032\ndiff.proto\032\014sha" +
-      "red.proto\"\276\002\n\016CodeRepository\022\013\n\003url\030\001 \002(" +
+      "red.proto\"\314\002\n\016CodeRepository\022\013\n\003url\030\001 \002(" +
       "\t\0226\n\004kind\030\002 \002(\0162(.boa.types.CodeReposito" +
       "ry.RepositoryKind\022&\n\trevisions\030\003 \003(\0132\023.b" +
       "oa.types.Revision\022\020\n\010branches\030\004 \003(\005\022\024\n\014b" +
       "ranch_names\030\005 \003(\t\022\014\n\004tags\030\006 \003(\005\022\021\n\ttag_n" +
-      "ames\030\007 \003(\t\"v\n\016RepositoryKind\022\t\n\005OTHER\020\000\022" +
-      "\007\n\003SVN\020\001\022\016\n\nSUBVERSION\020\001\022\007\n\003CVS\020\002\022\007\n\003GIT" +
-      "\020\003\022\006\n\002HG\020\004\022\r\n\tMERCURIAL\020\004\022\007\n\003BZR\020\005\022\n\n\006BA" +
-      "ZAAR\020\005\032\002\020\001\"\313\001\n\010Revision\022\n\n\002id\030\001 \002(\t\022!\n\006a",
-      "uthor\030\002 \001(\0132\021.boa.types.Person\022$\n\tcommit" +
-      "ter\030\003 \002(\0132\021.boa.types.Person\022\023\n\013commit_d" +
-      "ate\030\004 \002(\004\022\013\n\003log\030\005 \002(\t\022%\n\005files\030\006 \003(\0132\026." +
-      "boa.types.ChangedFile\022\017\n\007parents\030\007 \003(\005\022\020" +
-      "\n\010children\030\010 \003(\005B\002H\001"
+      "ames\030\007 \003(\t\022\014\n\004head\030\010 \002(\005\"v\n\016RepositoryKi" +
+      "nd\022\t\n\005OTHER\020\000\022\007\n\003SVN\020\001\022\016\n\nSUBVERSION\020\001\022\007" +
+      "\n\003CVS\020\002\022\007\n\003GIT\020\003\022\006\n\002HG\020\004\022\r\n\tMERCURIAL\020\004\022" +
+      "\007\n\003BZR\020\005\022\n\n\006BAZAAR\020\005\032\002\020\001\"\313\001\n\010Revision\022\n\n",
+      "\002id\030\001 \002(\t\022!\n\006author\030\002 \001(\0132\021.boa.types.Pe" +
+      "rson\022$\n\tcommitter\030\003 \002(\0132\021.boa.types.Pers" +
+      "on\022\023\n\013commit_date\030\004 \002(\004\022\013\n\003log\030\005 \002(\t\022%\n\005" +
+      "files\030\006 \003(\0132\026.boa.types.ChangedFile\022\017\n\007p" +
+      "arents\030\007 \003(\005\022\020\n\010children\030\010 \003(\005B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -4652,7 +4773,7 @@ public final class Code {
           internal_static_boa_types_CodeRepository_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_CodeRepository_descriptor,
-              new java.lang.String[] { "Url", "Kind", "Revisions", "Branches", "BranchNames", "Tags", "TagNames", });
+              new java.lang.String[] { "Url", "Kind", "Revisions", "Branches", "BranchNames", "Tags", "TagNames", "Head", });
           internal_static_boa_types_Revision_descriptor =
             getDescriptor().getMessageTypes().get(1);
           internal_static_boa_types_Revision_fieldAccessorTable = new

@@ -99,6 +99,8 @@ public class LocalGitSequenceGenerator {
 				final Revision.Builder revBuilder = Revision.newBuilder(rev);
 				repoBuilder.addRevisions(revBuilder);
 			}
+			if (repoBuilder.getRevisionsCount() > 0)
+				repoBuilder.setHead(conn.getHeadCommitOffset());
 			repoBuilder.addAllBranches(conn.getBranchIndices());
 			repoBuilder.addAllBranchNames(conn.getBranchNames());
 			repoBuilder.addAllTags(conn.getTagIndices());
