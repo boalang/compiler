@@ -205,31 +205,31 @@ public final class Diff {
      */
     int getPreviousVersions(int index);
 
-    // repeated int32 previous_index = 9;
+    // repeated int32 previous_indices = 9;
     /**
-     * <code>repeated int32 previous_index = 9;</code>
+     * <code>repeated int32 previous_indices = 9;</code>
      *
      * <pre>
      ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
      * </pre>
      */
-    java.util.List<java.lang.Integer> getPreviousIndexList();
+    java.util.List<java.lang.Integer> getPreviousIndicesList();
     /**
-     * <code>repeated int32 previous_index = 9;</code>
+     * <code>repeated int32 previous_indices = 9;</code>
      *
      * <pre>
      ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
      * </pre>
      */
-    int getPreviousIndexCount();
+    int getPreviousIndicesCount();
     /**
-     * <code>repeated int32 previous_index = 9;</code>
+     * <code>repeated int32 previous_indices = 9;</code>
      *
      * <pre>
      ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
      * </pre>
      */
-    int getPreviousIndex(int index);
+    int getPreviousIndices(int index);
   }
   /**
    * Protobuf type {@code boa.types.ChangedFile}
@@ -400,21 +400,21 @@ public final class Diff {
             }
             case 72: {
               if (!((mutable_bitField0_ & 0x00000100) == 0x00000100)) {
-                previousIndex_ = new java.util.ArrayList<java.lang.Integer>();
+                previousIndices_ = new java.util.ArrayList<java.lang.Integer>();
                 mutable_bitField0_ |= 0x00000100;
               }
-              previousIndex_.add(input.readInt32());
+              previousIndices_.add(input.readInt32());
               break;
             }
             case 74: {
               int length = input.readRawVarint32();
               int limit = input.pushLimit(length);
               if (!((mutable_bitField0_ & 0x00000100) == 0x00000100) && input.getBytesUntilLimit() > 0) {
-                previousIndex_ = new java.util.ArrayList<java.lang.Integer>();
+                previousIndices_ = new java.util.ArrayList<java.lang.Integer>();
                 mutable_bitField0_ |= 0x00000100;
               }
               while (input.getBytesUntilLimit() > 0) {
-                previousIndex_.add(input.readInt32());
+                previousIndices_.add(input.readInt32());
               }
               input.popLimit(limit);
               break;
@@ -434,7 +434,7 @@ public final class Diff {
           previousVersions_ = java.util.Collections.unmodifiableList(previousVersions_);
         }
         if (((mutable_bitField0_ & 0x00000100) == 0x00000100)) {
-          previousIndex_ = java.util.Collections.unmodifiableList(previousIndex_);
+          previousIndices_ = java.util.Collections.unmodifiableList(previousIndices_);
         }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -1416,39 +1416,39 @@ public final class Diff {
       return previousVersions_.get(index);
     }
 
-    // repeated int32 previous_index = 9;
-    public static final int PREVIOUS_INDEX_FIELD_NUMBER = 9;
-    private java.util.List<java.lang.Integer> previousIndex_;
+    // repeated int32 previous_indices = 9;
+    public static final int PREVIOUS_INDICES_FIELD_NUMBER = 9;
+    private java.util.List<java.lang.Integer> previousIndices_;
     /**
-     * <code>repeated int32 previous_index = 9;</code>
+     * <code>repeated int32 previous_indices = 9;</code>
      *
      * <pre>
      ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
      * </pre>
      */
     public java.util.List<java.lang.Integer>
-        getPreviousIndexList() {
-      return previousIndex_;
+        getPreviousIndicesList() {
+      return previousIndices_;
     }
     /**
-     * <code>repeated int32 previous_index = 9;</code>
+     * <code>repeated int32 previous_indices = 9;</code>
      *
      * <pre>
      ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
      * </pre>
      */
-    public int getPreviousIndexCount() {
-      return previousIndex_.size();
+    public int getPreviousIndicesCount() {
+      return previousIndices_.size();
     }
     /**
-     * <code>repeated int32 previous_index = 9;</code>
+     * <code>repeated int32 previous_indices = 9;</code>
      *
      * <pre>
      ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
      * </pre>
      */
-    public int getPreviousIndex(int index) {
-      return previousIndex_.get(index);
+    public int getPreviousIndices(int index) {
+      return previousIndices_.get(index);
     }
 
     private void initFields() {
@@ -1460,7 +1460,7 @@ public final class Diff {
       comments_ = boa.types.Ast.CommentsRoot.getDefaultInstance();
       changes_ = java.util.Collections.emptyList();
       previousVersions_ = java.util.Collections.emptyList();
-      previousIndex_ = java.util.Collections.emptyList();
+      previousIndices_ = java.util.Collections.emptyList();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -1526,8 +1526,8 @@ public final class Diff {
       for (int i = 0; i < previousVersions_.size(); i++) {
         output.writeInt32(8, previousVersions_.get(i));
       }
-      for (int i = 0; i < previousIndex_.size(); i++) {
-        output.writeInt32(9, previousIndex_.get(i));
+      for (int i = 0; i < previousIndices_.size(); i++) {
+        output.writeInt32(9, previousIndices_.get(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -1582,12 +1582,12 @@ public final class Diff {
       }
       {
         int dataSize = 0;
-        for (int i = 0; i < previousIndex_.size(); i++) {
+        for (int i = 0; i < previousIndices_.size(); i++) {
           dataSize += com.google.protobuf.CodedOutputStream
-            .computeInt32SizeNoTag(previousIndex_.get(i));
+            .computeInt32SizeNoTag(previousIndices_.get(i));
         }
         size += dataSize;
-        size += 1 * getPreviousIndexList().size();
+        size += 1 * getPreviousIndicesList().size();
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1735,7 +1735,7 @@ public final class Diff {
         bitField0_ = (bitField0_ & ~0x00000040);
         previousVersions_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000080);
-        previousIndex_ = java.util.Collections.emptyList();
+        previousIndices_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000100);
         return this;
       }
@@ -1808,10 +1808,10 @@ public final class Diff {
         }
         result.previousVersions_ = previousVersions_;
         if (((bitField0_ & 0x00000100) == 0x00000100)) {
-          previousIndex_ = java.util.Collections.unmodifiableList(previousIndex_);
+          previousIndices_ = java.util.Collections.unmodifiableList(previousIndices_);
           bitField0_ = (bitField0_ & ~0x00000100);
         }
-        result.previousIndex_ = previousIndex_;
+        result.previousIndices_ = previousIndices_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -1870,13 +1870,13 @@ public final class Diff {
           }
           onChanged();
         }
-        if (!other.previousIndex_.isEmpty()) {
-          if (previousIndex_.isEmpty()) {
-            previousIndex_ = other.previousIndex_;
+        if (!other.previousIndices_.isEmpty()) {
+          if (previousIndices_.isEmpty()) {
+            previousIndices_ = other.previousIndices_;
             bitField0_ = (bitField0_ & ~0x00000100);
           } else {
-            ensurePreviousIndexIsMutable();
-            previousIndex_.addAll(other.previousIndex_);
+            ensurePreviousIndicesIsMutable();
+            previousIndices_.addAll(other.previousIndices_);
           }
           onChanged();
         }
@@ -2735,95 +2735,95 @@ public final class Diff {
         return this;
       }
 
-      // repeated int32 previous_index = 9;
-      private java.util.List<java.lang.Integer> previousIndex_ = java.util.Collections.emptyList();
-      private void ensurePreviousIndexIsMutable() {
+      // repeated int32 previous_indices = 9;
+      private java.util.List<java.lang.Integer> previousIndices_ = java.util.Collections.emptyList();
+      private void ensurePreviousIndicesIsMutable() {
         if (!((bitField0_ & 0x00000100) == 0x00000100)) {
-          previousIndex_ = new java.util.ArrayList<java.lang.Integer>(previousIndex_);
+          previousIndices_ = new java.util.ArrayList<java.lang.Integer>(previousIndices_);
           bitField0_ |= 0x00000100;
          }
       }
       /**
-       * <code>repeated int32 previous_index = 9;</code>
+       * <code>repeated int32 previous_indices = 9;</code>
        *
        * <pre>
        ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
        * </pre>
        */
       public java.util.List<java.lang.Integer>
-          getPreviousIndexList() {
-        return java.util.Collections.unmodifiableList(previousIndex_);
+          getPreviousIndicesList() {
+        return java.util.Collections.unmodifiableList(previousIndices_);
       }
       /**
-       * <code>repeated int32 previous_index = 9;</code>
+       * <code>repeated int32 previous_indices = 9;</code>
        *
        * <pre>
        ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
        * </pre>
        */
-      public int getPreviousIndexCount() {
-        return previousIndex_.size();
+      public int getPreviousIndicesCount() {
+        return previousIndices_.size();
       }
       /**
-       * <code>repeated int32 previous_index = 9;</code>
+       * <code>repeated int32 previous_indices = 9;</code>
        *
        * <pre>
        ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
        * </pre>
        */
-      public int getPreviousIndex(int index) {
-        return previousIndex_.get(index);
+      public int getPreviousIndices(int index) {
+        return previousIndices_.get(index);
       }
       /**
-       * <code>repeated int32 previous_index = 9;</code>
+       * <code>repeated int32 previous_indices = 9;</code>
        *
        * <pre>
        ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
        * </pre>
        */
-      public Builder setPreviousIndex(
+      public Builder setPreviousIndices(
           int index, int value) {
-        ensurePreviousIndexIsMutable();
-        previousIndex_.set(index, value);
+        ensurePreviousIndicesIsMutable();
+        previousIndices_.set(index, value);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int32 previous_index = 9;</code>
+       * <code>repeated int32 previous_indices = 9;</code>
        *
        * <pre>
        ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
        * </pre>
        */
-      public Builder addPreviousIndex(int value) {
-        ensurePreviousIndexIsMutable();
-        previousIndex_.add(value);
+      public Builder addPreviousIndices(int value) {
+        ensurePreviousIndicesIsMutable();
+        previousIndices_.add(value);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int32 previous_index = 9;</code>
+       * <code>repeated int32 previous_indices = 9;</code>
        *
        * <pre>
        ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
        * </pre>
        */
-      public Builder addAllPreviousIndex(
+      public Builder addAllPreviousIndices(
           java.lang.Iterable<? extends java.lang.Integer> values) {
-        ensurePreviousIndexIsMutable();
-        super.addAll(values, previousIndex_);
+        ensurePreviousIndicesIsMutable();
+        super.addAll(values, previousIndices_);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int32 previous_index = 9;</code>
+       * <code>repeated int32 previous_indices = 9;</code>
        *
        * <pre>
        ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
        * </pre>
        */
-      public Builder clearPreviousIndex() {
-        previousIndex_ = java.util.Collections.emptyList();
+      public Builder clearPreviousIndices() {
+        previousIndices_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000100);
         onChanged();
         return this;
@@ -2855,29 +2855,29 @@ public final class Diff {
   static {
     java.lang.String[] descriptorData = {
       "\n\ndiff.proto\022\tboa.types\032\014shared.proto\032\ta" +
-      "st.proto\"\363\006\n\013ChangedFile\022%\n\006change\030\001 \002(\016" +
+      "st.proto\"\365\006\n\013ChangedFile\022%\n\006change\030\001 \002(\016" +
       "2\025.boa.types.ChangeKind\022-\n\004kind\030\002 \002(\0162\037." +
       "boa.types.ChangedFile.FileKind\022\014\n\004name\030\003" +
       " \002(\t\022\013\n\003key\030\004 \002(\t\022\037\n\003ast\030\005 \001(\0132\022.boa.typ" +
       "es.ASTRoot\022)\n\010comments\030\006 \001(\0132\027.boa.types" +
       ".CommentsRoot\022&\n\007changes\030\007 \003(\0162\025.boa.typ" +
       "es.ChangeKind\022\031\n\021previous_versions\030\010 \003(\005" +
-      "\022\026\n\016previous_index\030\t \003(\005\"\313\004\n\010FileKind\022\t\n" +
-      "\005OTHER\020\000\022\n\n\006BINARY\020\001\022\010\n\004TEXT\020\002\022\007\n\003XML\020\003\022",
-      "\025\n\021SOURCE_JAVA_ERROR\020d\022\024\n\020SOURCE_JAVA_JL" +
-      "S2\020e\022\024\n\020SOURCE_JAVA_JLS3\020f\022\024\n\020SOURCE_JAV" +
-      "A_JLS4\020g\022\024\n\020SOURCE_JAVA_JLS8\020h\022\016\n\nJAVA_E" +
-      "RROR\020d\022\010\n\004JLS2\020e\022\010\n\004JLS3\020f\022\010\n\004JLS4\020g\022\010\n\004" +
-      "JLS8\020h\022\024\n\017SOURCE_CS_ERROR\020\310\001\022\022\n\rSOURCE_C" +
-      "S_CS1\020\311\001\022\022\n\rSOURCE_CS_CS2\020\312\001\022\022\n\rSOURCE_C" +
-      "S_CS3\020\313\001\022\022\n\rSOURCE_CS_CS4\020\314\001\022\022\n\rSOURCE_C" +
-      "S_CS5\020\315\001\022\r\n\010CS_ERROR\020\310\001\022\010\n\003CS1\020\311\001\022\010\n\003CS2" +
-      "\020\312\001\022\010\n\003CS3\020\313\001\022\010\n\003CS4\020\314\001\022\010\n\003CS5\020\315\001\022\024\n\017SOU" +
-      "RCE_JS_ERROR\020\254\002\022\022\n\rSOURCE_JS_ES1\020\255\002\022\022\n\rS",
-      "OURCE_JS_ES2\020\256\002\022\022\n\rSOURCE_JS_ES3\020\257\002\022\022\n\rS" +
-      "OURCE_JS_ES5\020\260\002\022\022\n\rSOURCE_JS_ES6\020\261\002\022\022\n\rS" +
-      "OURCE_JS_ES7\020\262\002\022\022\n\rSOURCE_JS_ES8\020\263\002\022\r\n\010J" +
-      "S_ERROR\020\254\002\032\002\020\001B\002H\001"
+      "\022\030\n\020previous_indices\030\t \003(\005\"\313\004\n\010FileKind\022" +
+      "\t\n\005OTHER\020\000\022\n\n\006BINARY\020\001\022\010\n\004TEXT\020\002\022\007\n\003XML\020",
+      "\003\022\025\n\021SOURCE_JAVA_ERROR\020d\022\024\n\020SOURCE_JAVA_" +
+      "JLS2\020e\022\024\n\020SOURCE_JAVA_JLS3\020f\022\024\n\020SOURCE_J" +
+      "AVA_JLS4\020g\022\024\n\020SOURCE_JAVA_JLS8\020h\022\016\n\nJAVA" +
+      "_ERROR\020d\022\010\n\004JLS2\020e\022\010\n\004JLS3\020f\022\010\n\004JLS4\020g\022\010" +
+      "\n\004JLS8\020h\022\024\n\017SOURCE_CS_ERROR\020\310\001\022\022\n\rSOURCE" +
+      "_CS_CS1\020\311\001\022\022\n\rSOURCE_CS_CS2\020\312\001\022\022\n\rSOURCE" +
+      "_CS_CS3\020\313\001\022\022\n\rSOURCE_CS_CS4\020\314\001\022\022\n\rSOURCE" +
+      "_CS_CS5\020\315\001\022\r\n\010CS_ERROR\020\310\001\022\010\n\003CS1\020\311\001\022\010\n\003C" +
+      "S2\020\312\001\022\010\n\003CS3\020\313\001\022\010\n\003CS4\020\314\001\022\010\n\003CS5\020\315\001\022\024\n\017S" +
+      "OURCE_JS_ERROR\020\254\002\022\022\n\rSOURCE_JS_ES1\020\255\002\022\022\n",
+      "\rSOURCE_JS_ES2\020\256\002\022\022\n\rSOURCE_JS_ES3\020\257\002\022\022\n" +
+      "\rSOURCE_JS_ES5\020\260\002\022\022\n\rSOURCE_JS_ES6\020\261\002\022\022\n" +
+      "\rSOURCE_JS_ES7\020\262\002\022\022\n\rSOURCE_JS_ES8\020\263\002\022\r\n" +
+      "\010JS_ERROR\020\254\002\032\002\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -2889,7 +2889,7 @@ public final class Diff {
           internal_static_boa_types_ChangedFile_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_ChangedFile_descriptor,
-              new java.lang.String[] { "Change", "Kind", "Name", "Key", "Ast", "Comments", "Changes", "PreviousVersions", "PreviousIndex", });
+              new java.lang.String[] { "Change", "Kind", "Name", "Key", "Ast", "Comments", "Changes", "PreviousVersions", "PreviousIndices", });
           return null;
         }
       };

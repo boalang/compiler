@@ -100,6 +100,11 @@ public class LocalGitSequenceGenerator {
 				final Revision.Builder revBuilder = Revision.newBuilder(rev);
 				repoBuilder.addRevisions(revBuilder);
 			}
+			repoBuilder.addAllBranches(conn.getBranchIndices());
+			repoBuilder.addAllBranchNames(conn.getBranchNames());
+			repoBuilder.addAllTags(conn.getTagIndices());
+			repoBuilder.addAllTagNames(conn.getTagNames());
+			
 			projBuilder.addCodeRepositories(repoBuilder);
 		} catch (final Exception e) {
 			e.printStackTrace();

@@ -39,9 +39,9 @@ import javax.tools.ToolProvider;
 import org.stringtemplate.v4.ST;
 
 import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
+import org.apache.commons.cli.PosixParser;
 import org.apache.log4j.Logger;
 
 import org.scannotation.ClasspathUrlFinder;
@@ -383,7 +383,7 @@ public class BoaCompiler extends BoaMain {
 
 		final CommandLine cl;
 		try {
-			cl = new DefaultParser().parse(options, args);
+			cl = new PosixParser().parse(options, args);
 		} catch (final org.apache.commons.cli.ParseException e) {
 			System.err.println(e.getMessage());
 			new HelpFormatter().printHelp("Boa Compiler", options);
@@ -422,7 +422,7 @@ public class BoaCompiler extends BoaMain {
 
 		final CommandLine cl;
 		try {
-			cl = new DefaultParser().parse(options, args);
+			cl = new PosixParser().parse(options, args);
 		} catch (final org.apache.commons.cli.ParseException e) {
             printHelp(options, e.getMessage());
 			return null;

@@ -331,12 +331,15 @@ public class SeqRepoImporter {
 				final CodeRepository.Builder repoBuilder = CodeRepository.newBuilder(repo);
 				final String repoKey = "g:" + project.getId() + keyDelim + repo.getKind().getNumber();
 				for (final Revision rev : conn.getCommits(true, astWriter, repoKey, keyDelim)) {
-					
 					  if (debug) System.out.println("Storing '" + name + "' revision: " + rev.getId());
 					// build new rev w/ no namespaces
 					final Revision.Builder revBuilder = Revision.newBuilder(rev);
 					repoBuilder.addRevisions(revBuilder);
 				}
+				repoBuilder.addAllBranches(conn.getBranchIndices());
+				repoBuilder.addAllBranchNames(conn.getBranchNames());
+				repoBuilder.addAllTags(conn.getTagIndices());
+				repoBuilder.addAllTagNames(conn.getTagNames());
 
 				projBuilder.setCodeRepositories(i, repoBuilder);
 				return projBuilder.build();

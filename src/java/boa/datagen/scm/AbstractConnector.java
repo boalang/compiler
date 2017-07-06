@@ -30,7 +30,11 @@ import boa.types.Code.Revision;
  */
 public abstract class AbstractConnector implements AutoCloseable {
 	protected List<AbstractCommit> revisions = null;
+	protected List<String> branchNames = new ArrayList<String>(), tagNames = new ArrayList<String>();
+	protected List<Integer> branchIndices = new ArrayList<Integer>(), tagIndices = new ArrayList<Integer>();
 	protected HashMap<String, Integer> nameIndices = new HashMap<String, Integer>();
+
+	protected Map<String, Integer> revisionMap;
 
 	public abstract String getLastCommitId();
 	public abstract void setLastSeenCommitId(final String id);
@@ -49,12 +53,22 @@ public abstract class AbstractConnector implements AutoCloseable {
 
 	protected abstract void setRevisions();
 
-	public abstract void getTags(final List<String> names, final List<String> commits);
+	abstract void getTags();
 
-	public abstract void getBranches(final List<String> names, final List<String> commits);
+	abstract void getBranches();
 
-	protected Map<String, Integer> revisionMap;
-
+	public List<String> getBranchNames() {
+		return branchNames;
+	}
+	public List<String> getTagNames() {
+		return tagNames;
+	}
+	public List<Integer> getBranchIndices() {
+		return branchIndices;
+	}
+	public List<Integer> getTagIndices() {
+		return tagIndices;
+	}
 	public List<Revision> getCommits(final boolean parse, final Writer astWriter, final String repoKey, final String keyDelim) {
 		if (revisions == null) {
 			revisions = new ArrayList<AbstractCommit>();

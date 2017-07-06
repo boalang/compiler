@@ -21,7 +21,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.ListBranchCommand.ListMode;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -114,11 +113,14 @@ public class GitConnector extends AbstractConnector {
 				gc.setDate(new Date(((long) rc.getCommitTime()) * 1000));
 				gc.setMessage(rc.getFullMessage());
 				
-				gc.getChangeFiles(this.revisionMap, rc);
+				gc.getChangeFiles(rc);
 				
 				revisionMap.put(gc.id, revisions.size());
 				revisions.add(gc);
 			}
+			
+			getBranches();
+			getTags();
 		} catch (final IOException e) {
 			if (debug)
 				System.err.println("Git Error getting parsing HEAD commit for " + path + ". " + e.getMessage());
@@ -129,11 +131,11 @@ public class GitConnector extends AbstractConnector {
 	}
 
 	@Override
-	public void getTags(final List<String> names, final List<String> commits) {
+	void getTags() {
 		try {
 			for (final Ref ref : git.tagList().call()) {
-				names.add(ref.getName());
-				commits.add(ref.getObjectId().getName());
+				tagNames.add(ref.getName());
+				tagIndices.add(revisionMap.get(ref.getObjectId().getName()));
 			}
 		} catch (final GitAPIException e) {
 			if (debug)
@@ -142,11 +144,11 @@ public class GitConnector extends AbstractConnector {
 	}
 
 	@Override
-	public void getBranches(final List<String> names, final List<String> commits) {
+	void getBranches() {
 		try {
 			for (final Ref ref : git.branchList().setListMode(ListMode.REMOTE).call()) {
-				names.add(ref.getName());
-				commits.add(ref.getObjectId().getName());
+				branchNames.add(ref.getName());
+				branchIndices.add(revisionMap.get(ref.getObjectId().getName()));
 			}
 		} catch (final GitAPIException e) {
 			if (debug)
