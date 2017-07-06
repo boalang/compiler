@@ -166,11 +166,11 @@ public abstract class AbstractCommit {
 								System.err.println("Found JLS8 parse error in: revision " + id + ": file " + path);
 
 							fb.setKind(FileKind.SOURCE_JAVA_ERROR);
-							try {
-								astWriter.append(new LongWritable(len), new BytesWritable(ASTRoot.newBuilder().build().toByteArray()));
-							} catch (IOException e) {
-								e.printStackTrace();
-							}
+//							try {
+//								astWriter.append(new LongWritable(len), new BytesWritable(ASTRoot.newBuilder().build().toByteArray()));
+//							} catch (IOException e) {
+//								e.printStackTrace();
+//							}
 						} else if (debug)
 							System.err.println("Accepted JLS8: revision " + id + ": file " + path);
 					} else if (debug)
@@ -213,11 +213,11 @@ public abstract class AbstractCommit {
 											System.err.println(
 													"Found ES4 parse error in: revision " + id + ": file " + path);
 										fb.setKind(FileKind.SOURCE_JS_ERROR);
-										try {
-											astWriter.append(new LongWritable(len), new BytesWritable(ASTRoot.newBuilder().build().toByteArray()));
-										} catch (IOException e) {
-											e.printStackTrace();
-										}
+//										try {
+//											astWriter.append(new LongWritable(len), new BytesWritable(ASTRoot.newBuilder().build().toByteArray()));
+//										} catch (IOException e) {
+//											e.printStackTrace();
+//										}
 									} else if (debug)
 										System.err.println("Accepted ES8: revision " + id + ": file " + path);
 								} else if (debug)
