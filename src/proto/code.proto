@@ -45,6 +45,8 @@ message CodeRepository {
 	repeated string tag_names = 7;
 	/** @exclude The offset of the head commit */
 	required int32 head = 8;
+	/** @exclude The snapshot at the head commit */
+	repeated ChangedFile head_snapshot = 9;
 }
 
 /** A single revision inside a CodeRepository */

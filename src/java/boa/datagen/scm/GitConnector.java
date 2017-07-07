@@ -19,8 +19,11 @@ package boa.datagen.scm;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.ListBranchCommand.ListMode;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -32,6 +35,7 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevSort;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
+import boa.types.Diff.ChangedFile;
 
 /**
  * @author rdyer
@@ -45,8 +49,6 @@ public class GitConnector extends AbstractConnector {
 	private Repository repository;
 	private Git git;
 	private RevWalk revwalk;
-
-	private int headCommitOffset = -1;
 
 	public GitConnector(final String path) {
 		try {
@@ -71,6 +73,18 @@ public class GitConnector extends AbstractConnector {
 	@Override
 	public int getHeadCommitOffset() {
 		return this.headCommitOffset;
+	}
+	
+	@Override
+	public List<ChangedFile> buildHeadSnapshot() {
+		List<ChangedFile> snapshot = getSnapshot(headCommitOffset);
+		
+		return snapshot;
+	}
+
+	private List<ChangedFile> getSnapshot(int commitOffset) {
+		List<ChangedFile> snapshot = new ArrayList<ChangedFile>();
+		return snapshot;
 	}
 
 	@Override
@@ -104,7 +118,7 @@ public class GitConnector extends AbstractConnector {
 				revisions.add(gc);
 			}
 			
-			this.headCommitOffset = revisionMap.get(head.getName());
+			headCommitOffset = revisionMap.get(head.getName());
 			getBranches();
 			getTags();
 		} catch (final IOException e) {
