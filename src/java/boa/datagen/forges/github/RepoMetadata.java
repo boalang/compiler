@@ -349,6 +349,7 @@ public class RepoMetadata {
 			CodeRepository.Builder cr = CodeRepository.newBuilder();
 			cr.setUrl(gitRepository);
 			cr.setKind(RepositoryKind.GIT);
+			cr.setHead(-1);
 			project.addCodeRepositories(cr.build());
 		}
 		Project prj = project.build();
