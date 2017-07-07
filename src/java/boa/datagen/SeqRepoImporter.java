@@ -288,12 +288,7 @@ public class SeqRepoImporter {
 			final Project.Builder projBuilder = Project.newBuilder(project);
 
 			final String name = project.getName();
-			File gitDir = null;
-			if(BoaGenerator.localCloning){
-				String path = gitRootPath.getAbsolutePath();
-				gitDir = new File(path);
-			}else	
-				gitDir = new File(gitRootPath + "/" + name);
+			File gitDir = new File(gitRootPath + "/" + name);
 
 			// make sure the given directory exists else create a new one
 			if (!gitDir.exists()) {
