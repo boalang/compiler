@@ -53,7 +53,7 @@ public class TestTypecheckBad extends BaseTest {
 
 	@Test
 	public void reDeclVar() throws IOException {
-		typecheck(load(badDir + "re-decl-var.boa"), "variable 'f' already declared as 'function[]: any'");
+		typecheck(load(badDir + "re-decl-var.boa"), "variable 'f' already declared as 'function(): any'");
 	}
 
 	@Test
@@ -68,7 +68,7 @@ public class TestTypecheckBad extends BaseTest {
 
 	@Test
 	public void methodCallWrongType() throws IOException {
-		typecheck(load(badDir + "method-call-wrong-type.boa"), "no such function push([stack of int, stack of int])");
+		typecheck(load(badDir + "method-call-wrong-type.boa"), "no such function push(stack of int, stack of int)");
 	}
 
 	//@Test
@@ -83,7 +83,7 @@ public class TestTypecheckBad extends BaseTest {
 
 	@Test
 	public void currentBadType() throws IOException {
-		typecheck(load(badDir + "current-badtype.boa"), "no such function current([int])");
+		typecheck(load(badDir + "current-badtype.boa"), "no such function current(int)");
 	}
 
 	@Test
