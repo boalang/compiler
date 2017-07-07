@@ -34,14 +34,14 @@ public abstract class AbstractConnector implements AutoCloseable {
 	protected List<String> branchNames = new ArrayList<String>(), tagNames = new ArrayList<String>();
 	protected List<Integer> branchIndices = new ArrayList<Integer>(), tagIndices = new ArrayList<Integer>();
 	protected HashMap<String, Integer> nameIndices = new HashMap<String, Integer>();
-	protected Map<String, Integer> revisionMap;
+	protected Map<String, Integer> revisionMap = new HashMap<String, Integer>();
 	protected int headCommitOffset = -1;
 
 	public abstract int getHeadCommitOffset();
 	
 	public abstract List<ChangedFile> buildHeadSnapshot();
 	
-	protected abstract void setRevisions();
+	public abstract void setRevisions();
 
 	abstract void getTags();
 

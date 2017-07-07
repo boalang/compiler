@@ -22,7 +22,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.ListBranchCommand.ListMode;
@@ -88,17 +90,20 @@ public class GitConnector extends AbstractConnector {
 	}
 
 	@Override
-	protected void setRevisions() {
+	public void setRevisions() {
 		RevWalk temprevwalk = new RevWalk(repository);
 		try {
 			revwalk.reset();
-			RevCommit head = revwalk.parseCommit(repository.resolve(Constants.HEAD));
-			revwalk.markStart(head);
+			Set<RevCommit> heads = getHeads();
+			revwalk.markStart(heads);
 			revwalk.sort(RevSort.TOPO, true);
 			revwalk.sort(RevSort.COMMIT_TIME_DESC, true);
 			revwalk.sort(RevSort.REVERSE, true);
 			
-			revisions.clear();
+			if (revisions == null)
+				revisions = new ArrayList<AbstractCommit>(); 
+			else
+				revisions.clear();
 			revisionMap = new HashMap<String, Integer>();
 			
 			for (final RevCommit rc: revwalk) {
@@ -118,6 +123,7 @@ public class GitConnector extends AbstractConnector {
 				revisions.add(gc);
 			}
 			
+			RevCommit head = revwalk.parseCommit(repository.resolve(Constants.HEAD));
 			headCommitOffset = revisionMap.get(head.getName());
 			getBranches();
 			getTags();
@@ -130,8 +136,24 @@ public class GitConnector extends AbstractConnector {
 		}
 	}
 
+	private Set<RevCommit> getHeads() {
+		Set<RevCommit> heads = new HashSet<RevCommit>();
+		try {
+			for (final Ref ref : git.branchList().call()) {
+				heads.add(revwalk.parseCommit(repository.resolve(ref.getName())));
+			}
+		} catch (final GitAPIException e) {
+			if (debug)
+				System.err.println("Git Error reading heads: " + e.getMessage());
+		}catch (final IOException e) {
+			if (debug)
+				System.err.println("Git Error reading heads: " + e.getMessage());
+		}
+		return heads;
+	}
+
 	@Override
-	void getTags() {
+	public void getTags() {
 		try {
 			for (final Ref ref : git.tagList().call()) {
 				tagNames.add(ref.getName());
@@ -144,9 +166,9 @@ public class GitConnector extends AbstractConnector {
 	}
 
 	@Override
-	void getBranches() {
+	public void getBranches() {
 		try {
-			for (final Ref ref : git.branchList().setListMode(ListMode.REMOTE).call()) {
+			for (final Ref ref : git.branchList().call()) {
 				branchNames.add(ref.getName());
 				branchIndices.add(revisionMap.get(ref.getObjectId().getName()));
 			}
