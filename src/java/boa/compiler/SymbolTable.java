@@ -642,7 +642,7 @@ public class SymbolTable {
 		if (function == null)
 			function = this.functions.getFunction(id, formalParameters);
 		if (function == null)
-			throw new RuntimeException("no such function " + id + "(" + Arrays.toString(formalParameters) + ")");
+			throw new RuntimeException("no such function " + id + "(" + Arrays.toString(formalParameters).replaceAll("\\[|\\]", "") + ")");
 		return function;
 	}
 

@@ -251,7 +251,7 @@ public class BoaFunction extends BoaType {
 	/** {@inheritDoc} */
 	@Override
 	public String toString() {
-		return "function" + Arrays.toString(this.formalParameters) + ": " + this.type.toString();
+		return "function" + Arrays.toString(this.formalParameters).replaceAll("\\[", "(").replaceAll("\\]", ")") + ": " + this.type.toString();
 	}
 
 	/** {@inheritDoc} */

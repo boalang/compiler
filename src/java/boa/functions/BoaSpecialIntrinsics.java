@@ -56,7 +56,7 @@ public class BoaSpecialIntrinsics {
 	 * 
 	 * @return True iff <em>condition</em> is true
 	 */
-	@FunctionSpec(name = "assert", formalParameters = { "bool", "string" })
+	@FunctionSpec(name = "assert", returnType = "any", formalParameters = { "bool", "string" })
 	public static void azzert(final boolean condition, final String message) {
 		if (!condition)
 			throw new RuntimeException("assertion failed: " + message);
@@ -72,7 +72,7 @@ public class BoaSpecialIntrinsics {
 	 * 
 	 * @return True iff <em>condition</em> is true
 	 */
-	@FunctionSpec(name = "assert", formalParameters = { "bool" })
+	@FunctionSpec(name = "assert", returnType = "any", formalParameters = { "bool" })
 	public static void azzert(final boolean condition) {
 		if (!condition)
 			throw new RuntimeException("assertion failed");
