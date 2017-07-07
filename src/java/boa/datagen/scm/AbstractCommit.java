@@ -325,7 +325,7 @@ public abstract class AbstractCommit {
 			parser.setResolveBindings(true);
 			parser.setSource(content.toCharArray());
 
-			final Map options = JavaCore.getOptions();
+			final Map<?, ?> options = JavaCore.getOptions();
 			JavaCore.setComplianceOptions(compliance, options);
 			parser.setCompilerOptions(options);
 

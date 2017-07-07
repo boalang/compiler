@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.ListBranchCommand.ListMode;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.PersonIdent;
