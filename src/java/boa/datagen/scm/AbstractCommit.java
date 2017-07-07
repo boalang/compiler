@@ -55,7 +55,7 @@ public abstract class AbstractCommit {
 		this.connector = cnn;
 	}
 
-	protected Map<String, Integer> fileNameIndices;
+	protected Map<String, Integer> fileNameIndices = new HashMap<String, Integer>();
 	
 	protected String id = null;
 	public void setId(final String id) { this.id = id; }
