@@ -26,14 +26,14 @@ public class RepositoryCloner {
 	public static void clone(String[] args)
 			throws IOException, InvalidRemoteException, TransportException, GitAPIException {
 		// prepare a new folder for the cloned repository
-		String localpaths = args[1];
+		String localPath = args[1];
 		String url = args[0];
 		REMOTE_URL = url;
-		File localPath = new File(localpaths + "/.git");
+		File localGitDir = new File(localPath + "/.git");
 		// then clone
 		Git result = null;
 		try {
-			result = Git.cloneRepository().setURI(REMOTE_URL).setBare(true).setDirectory(localPath).call();
+			result = Git.cloneRepository().setURI(REMOTE_URL).setBare(true).setDirectory(localGitDir).call();
 			// Note: the call() returns an opened repository already which needs
 			// to be closed to avoid file handle leaks!
 			// workaround for
