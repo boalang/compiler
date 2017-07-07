@@ -8,9 +8,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Map.Entry;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
@@ -56,7 +58,7 @@ public class RepoMetadata {
 														// "2014-02-03T19:33:59Z",
 	private static final String GIT_DESCRIPTION = "description";
 	private static final String GIT_OS = "os";
-	private static final String GIT_PROGRAMMING_LANGUAGES = "language";
+	private static final String GIT_PROGRAMMING_LANGUAGES = "language_list";
 	private static final String GIT_DATABASES = null;
 	private static final String GIT_LICENSES = null;
 	private static final String GIT_TOPICS = null;
@@ -79,7 +81,6 @@ public class RepoMetadata {
 	 * "network_count": 448, "subscribers_count": 60
 	 */
 
-	private File metadataFile;
 
 	public String id;
 	public String name;
@@ -90,6 +91,7 @@ public class RepoMetadata {
 	private String description;
 	private String os;
 	private String[] programmingLanguages;
+	private int[] programmingLanguagesLOC;
 	private String databases;
 	private String licenses;
 	private String topics;
@@ -104,44 +106,8 @@ public class RepoMetadata {
 
 	private String fork;
 
-	public RepoMetadata(File file) {
-		this.metadataFile = file;
-	}
-
 	public RepoMetadata(JsonObject jsonProject) {
 		build(jsonProject);
-	}
-
-	public boolean build() {
-		String jsonTxt = "";
-		try {
-			BufferedInputStream in = new BufferedInputStream(new FileInputStream(metadataFile));
-			byte[] bytes = new byte[(int) metadataFile.length()];
-			in.read(bytes);
-			in.close();
-			jsonTxt = new String(bytes);
-		} catch (Exception e) {
-			System.err.println("Error reading file " + metadataFile.getAbsolutePath());
-			return false;
-		}
-		if (jsonTxt.isEmpty()) {
-			System.err.println("File is empty " + metadataFile.getAbsolutePath());
-			return false;
-		}
-		// System.out.println(jsonTxt);
-
-		JsonObject json = null;
-		try {
-			Gson parser = new Gson();
-			json = parser.fromJson(jsonTxt, JsonObject.class);
-		} catch (JsonSyntaxException e) {
-		}
-		if (json == null) {
-			System.err.println("Error parsing file " + metadataFile.getAbsolutePath());
-			return false;
-		}
-		build(json);
-		return true;
 	}
 
 	public void build(JsonObject jsonProject) {
@@ -171,9 +137,16 @@ public class RepoMetadata {
 		 * project.addOperatingSystems(jsonOSes.getString(i)); } }
 		 */
 		if (jsonProject.has(GIT_PROGRAMMING_LANGUAGES)) {
-			buildProgrammingLanguages(metadataFile, id);
-			if (this.programmingLanguages == null || this.programmingLanguages.length == 0)
-				this.programmingLanguages = new String[] { jsonProject.get(GIT_PROGRAMMING_LANGUAGES).getAsString() };
+			JsonObject langList = jsonProject.get(GIT_PROGRAMMING_LANGUAGES).getAsJsonObject();
+			int size = langList.entrySet().size();
+			this.programmingLanguages = new String[size];//{ jsonProject.get(GIT_PROGRAMMING_LANGUAGES).getAsString() };
+			this.programmingLanguagesLOC = new int[size];
+			int i = 0;
+			for (Entry<String, JsonElement> entry : langList.entrySet()) {
+				programmingLanguagesLOC[i]  = entry.getValue().getAsInt();
+			    programmingLanguages[i] = entry.getKey();
+			    i++;
+			}
 		}
 		/*
 		 * if (jsonProject.has("databases")) { JSONArray jsonDBs =
@@ -270,42 +243,6 @@ public class RepoMetadata {
 			e.printStackTrace();
 		}
 		return -1;
-	}
-
-	private void buildProgrammingLanguages(File metadataFile, String id) {
-		File file = new File(
-				metadataFile.getParentFile().getParentFile().getAbsolutePath() + "/languages/" + id + ".json");
-		if (file.exists()) {
-			String content = FileIO.readFileContents(file);
-			ArrayList<String> languages = getLanguages(content);
-			if (languages.isEmpty())
-				return;
-			this.programmingLanguages = new String[languages.size()];
-			for (int i = 0; i < this.programmingLanguages.length; i++)
-				this.programmingLanguages[i] = languages.get(i);
-		}
-	}
-
-	private static ArrayList<String> getLanguages(String content) {
-		ArrayList<String> languages = new ArrayList<String>();
-		int status = 0, s = 0;
-		String name = null;
-		for (int i = 0; i < content.length(); i++) {
-			if (status == 0 && content.charAt(i) == '\"') {
-				status = 1;
-				s = i + 1;
-			} else if (status == 1 && content.charAt(i) == '\"') {
-				status = 2;
-				name = content.substring(s, i);
-			} else if (status == 2 && content.charAt(i) == ':') {
-				status = 3;
-				s = i + 1;
-			} else if (status == 3 && !Character.isDigit(content.charAt(i))) {
-				status = 0;
-				languages.add(name);
-			}
-		}
-		return languages;
 	}
 
 	public JsonObject toBoaMetaDataJson() {
