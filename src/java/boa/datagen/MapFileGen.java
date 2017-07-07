@@ -22,9 +22,8 @@ import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.BytesWritable;
+import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.MapFile;
-import org.apache.hadoop.io.Text;
-
 import boa.datagen.util.Properties;
 
 /**
@@ -48,7 +47,7 @@ public class MapFileGen {
 		String name = path.getName();
 		if (fs.isFile(path)) {
 			if (path.getName().equals(MapFile.DATA_FILE_NAME)) {
-				MapFile.fix(fs, path.getParent(), Text.class, BytesWritable.class, false, conf);
+				MapFile.fix(fs, path.getParent(), LongWritable.class, BytesWritable.class, false, conf);
 			}
 			else {
 				Path dataFile = new Path(path.getParent(), MapFile.DATA_FILE_NAME);
@@ -56,18 +55,18 @@ public class MapFileGen {
 				Path dir = new Path(path.getParent(), name);
 				fs.mkdirs(dir);
 				fs.rename(dataFile, new Path(dir, dataFile.getName()));
-				MapFile.fix(fs, dir, Text.class, BytesWritable.class, false, conf);
+				MapFile.fix(fs, dir, LongWritable.class, BytesWritable.class, false, conf);
 			}
 		}
 		else {
 			FileStatus[] files = fs.listStatus(path);
 			for (FileStatus file : files) {
 				path = file.getPath();
-				if (fs.isFile(path)) {
+				if (fs.isFile(path) && path.getName().startsWith("ast")) {
 					Path dataFile = new Path(path.getParent(), MapFile.DATA_FILE_NAME);
 					fs.rename(path, dataFile);
-					System.out.println("finxing data file");
-					MapFile.fix(fs, dataFile.getParent(), Text.class, BytesWritable.class, false, conf);
+					System.out.println("fixing data file");
+					MapFile.fix(fs, dataFile.getParent(), LongWritable.class, BytesWritable.class, false, conf);
 					break;
 				}
 			}
