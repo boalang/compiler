@@ -29,11 +29,7 @@ public class RepositoryCloner {
 		String localpaths = args[1];
 		String url = args[0];
 		REMOTE_URL = url;
-		File localPath = new File(localpaths);
-		if (!localPath.exists())
-			localPath.mkdir();
-		else 
-			return;
+		File localPath = new File(localpaths + "/.git");
 		// then clone
 		Git result = null;
 		try {
@@ -44,7 +40,6 @@ public class RepositoryCloner {
 			// https://bugs.eclipse.org/bugs/show_bug.cgi?id=474093
 			result.getRepository().close();
 		} catch (Exception e) {
-			e.printStackTrace();
 		} finally {
 			if (result != null && result.getRepository() != null)
 				result.getRepository().close();
