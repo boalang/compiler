@@ -64,7 +64,8 @@ public abstract class AbstractCommit {
 	public void setAuthor(final String username, final String realname, final String email) {
 		final Person.Builder person = Person.newBuilder();
 		person.setUsername(username);
-		person.setRealName(realname);
+		if (realname != null)
+			person.setRealName(realname);
 		person.setEmail(email);
 		author = person.build();
 	}
@@ -73,7 +74,8 @@ public abstract class AbstractCommit {
 	public void setCommitter(final String username, final String realname, final String email) {
 		final Person.Builder person = Person.newBuilder();
 		person.setUsername(username);
-		person.setRealName(realname);
+		if (realname != null)
+			person.setRealName(realname);
 		person.setEmail(email);
 		committer = person.build();
 	}
