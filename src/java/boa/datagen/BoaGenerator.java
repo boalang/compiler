@@ -111,6 +111,7 @@ public class BoaGenerator {
 		options.addOption("targetUser", "json", true, "username of target repository");
 		options.addOption("targetRepo", "json", true, "name of the target repository");
 		options.addOption("cache", "json", false, "enable if you want to delete the cloned code for user.");
+		options.addOption("debug", "json", false, "enable for debug mode.");
 		options.addOption("help", "help", true, "help");
 	}
 
@@ -153,6 +154,9 @@ public class BoaGenerator {
 			System.err.println("User must specify the path of the repository. Please see --remote and --local options");
 			printHelp(options);
 		}
+		if (cl.hasOption("debug")) {
+			DefaultProperties.DEBUG = true;
+		} 
 	}
 
 	//
