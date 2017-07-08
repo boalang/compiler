@@ -2,6 +2,7 @@ package boa.test.datagen;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -9,6 +10,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.jgit.lib.Constants;
+import org.eclipse.jgit.lib.RepositoryCache;
+import org.eclipse.jgit.util.FS;
 import org.junit.Test;
 
 import boa.datagen.scm.GitConnector;
@@ -17,9 +20,13 @@ import boa.types.Diff.ChangedFile;
 public class TestBuildSnapshot {
 	@Test
 	public void testBuildSnapshot() throws Exception {
-		GitConnector gc = new GitConnector("D:/Projects/Boa-compiler/dataset/repos/candoia/candoia");
-//		GitConnector gc = new GitConnector("D:/Projects/Boa-compiler/dataset/repos/boalang/compiler");
-//		GitConnector gc = new GitConnector("F:\\testrepos\\repos-test\\hoan\\test1");
+		File gitDir = new File("D:/Projects/Boa-compiler/dataset/repos/candoia/candoia");
+//		File gitDir = new File("D:/Projects/Boa-compiler/dataset/repos/boalang/compiler");
+//		File gitDir = new File("F:\\testrepos\\repos-test\\hoan\\test1");
+		if (!gitDir.exists())
+			return;
+		GitConnector gc = new GitConnector(gitDir.getAbsolutePath());
+		//		GitConnector gc = new GitConnector();
 		gc.setRevisions();
 		List<ChangedFile> snapshot1 = gc.buildHeadSnapshot();
 		List<String> snapshot2 = gc.getSnapshot(Constants.HEAD);
