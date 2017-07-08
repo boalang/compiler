@@ -62,7 +62,9 @@ public abstract class AbstractConnector implements AutoCloseable {
 				return i2 - i1;
 			}
 		});
+		Set<Integer> queuedCommitIds = new HashSet<Integer>();
 		pq.offer(commitOffset);
+		queuedCommitIds.add(commitOffset);
 		while (!pq.isEmpty()) {
 			int offset = pq.poll();
 			AbstractCommit commit = revisions.get(offset);
@@ -115,8 +117,12 @@ public abstract class AbstractConnector implements AutoCloseable {
 				}
 			}
 			if (commit.parentIndices != null)
-				for (int p : commit.parentIndices)
-					pq.offer(p);
+				for (int p : commit.parentIndices) {
+					if (!queuedCommitIds.contains(p)) {
+						pq.offer(p);
+						queuedCommitIds.add(p);
+					}
+				}
 		}
 		
 		return snapshot;

@@ -196,24 +196,4 @@ public class GitCommit extends AbstractCommit {
 		}
 		filePathGitObjectIds.put(path, diff.getNewId().toObjectId());
 	}
-
-	private ChangedFile.Builder getChangeFile(String path) {
-		ChangedFile.Builder cfb = null;
-		Integer index = fileNameIndices.get(path);
-		if (index == null) {
-			cfb = ChangedFile.newBuilder();
-			cfb.setKind(FileKind.OTHER);
-			cfb.setKey(-1);
-			fileNameIndices.put(path, changedFiles.size());
-			changedFiles.add(cfb);
-		} else
-			cfb = changedFiles.get(index);
-		return cfb;
-	}
-
-	private List<int[]> getPreviousFiles(String parentId, String path) {
-		int index = connector.revisionMap.get(parentId);
-		AbstractCommit parent = connector.revisions.get(index);
-		return parent.getFiles(index, path);
-	}
 }

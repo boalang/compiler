@@ -38,9 +38,6 @@ import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.treewalk.TreeWalk;
 
-import boa.types.Diff.ChangedFile;
-import boa.types.Shared.ChangeKind;
-
 /**
  * @author rdyer
  * @author josephb
@@ -92,6 +89,8 @@ public class GitConnector extends AbstractConnector {
 			revisionMap = new HashMap<String, Integer>();
 			
 			for (final RevCommit rc: revwalk) {
+				if (debug)
+					System.out.println("Commit " + revisions.size() + ": " + rc.getName());
 				final GitCommit gc = new GitCommit(this, repository, temprevwalk);
 
 				gc.setId(rc.getName());

@@ -14,21 +14,25 @@ import org.eclipse.jgit.lib.RepositoryCache;
 import org.eclipse.jgit.util.FS;
 import org.junit.Test;
 
+import boa.datagen.DefaultProperties;
 import boa.datagen.scm.GitConnector;
 import boa.types.Diff.ChangedFile;
 
 public class TestBuildSnapshot {
 	@Test
 	public void testBuildSnapshot() throws Exception {
-		File gitDir = new File("D:/Projects/Boa-compiler/dataset/repos/candoia/candoia");
-//		File gitDir = new File("D:/Projects/Boa-compiler/dataset/repos/boalang/compiler");
+		DefaultProperties.DEBUG = true;
+		
+//		File gitDir = new File("D:/Projects/Boa-compiler/dataset/repos/candoia/candoia");
+		File gitDir = new File("D:/Projects/Boa-compiler/dataset/repos/boalang/compiler");
 //		File gitDir = new File("F:\\testrepos\\repos-test\\hoan\\test1");
 		if (!gitDir.exists())
 			return;
 		GitConnector gc = new GitConnector(gitDir.getAbsolutePath());
-		//		GitConnector gc = new GitConnector();
 		gc.setRevisions();
+		System.out.println("Finish processing commits");
 		List<ChangedFile> snapshot1 = gc.buildHeadSnapshot();
+		System.out.println("Finish building head snapshot");
 		List<String> snapshot2 = gc.getSnapshot(Constants.HEAD);
 		gc.close();
 		Set<String> s1 = new HashSet<String>(), s2 = new HashSet<String>(snapshot2), s = new HashSet<String>(s2), in2 = new HashSet<String>(s2);
