@@ -15,7 +15,9 @@ message Person {
 /** Describes the kind of change for an artifact or program entity/element */
 enum ChangeKind {
 	option allow_alias = true;
-
+	
+	UNKNOWN = 0;
+	
 	/** The artifact or program entity/element did not already exist and was added */
 	ADDED = 1;
 

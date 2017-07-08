@@ -18,13 +18,19 @@
 package boa.datagen.scm;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Set;
+
 import org.apache.hadoop.io.SequenceFile.Writer;
 
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
+import boa.types.Shared.ChangeKind;
 
 /**
  * @author rdyer
@@ -37,9 +43,84 @@ public abstract class AbstractConnector implements AutoCloseable {
 	protected Map<String, Integer> revisionMap = new HashMap<String, Integer>();
 	protected int headCommitOffset = -1;
 
-	public abstract int getHeadCommitOffset();
+	public int getHeadCommitOffset() {
+		return this.headCommitOffset;
+	}
 	
-	public abstract List<ChangedFile> buildHeadSnapshot();
+	public List<ChangedFile> buildHeadSnapshot() {
+		List<ChangedFile> snapshot = getSnapshot(headCommitOffset);
+		
+		return snapshot;
+	}
+
+	public List<ChangedFile> getSnapshot(int commitOffset) {
+		List<ChangedFile> snapshot = new ArrayList<ChangedFile>();
+		Set<String> adds = new HashSet<String>(), dels = new HashSet<String>(); 
+		PriorityQueue<Integer> pq = new PriorityQueue<Integer>(100, new Comparator<Integer>() {
+			@Override
+			public int compare(Integer i1, Integer i2) {
+				return i2 - i1;
+			}
+		});
+		pq.offer(commitOffset);
+		while (!pq.isEmpty()) {
+			int offset = pq.poll();
+			AbstractCommit commit = revisions.get(offset);
+			for (ChangedFile.Builder cf : commit.changedFiles) {
+				ChangeKind ck = cf.getChange();
+				switch (ck) {
+				case ADDED:
+					if (!adds.contains(cf.getName()) && !dels.contains(cf.getName())) {
+						adds.add(cf.getName());
+						snapshot.add(cf.build());
+					}
+					break;
+				case COPIED:
+					if (!adds.contains(cf.getName()) && !dels.contains(cf.getName())) {
+						adds.add(cf.getName());
+						snapshot.add(cf.build());
+					}
+					break;
+				case DELETED:
+					if (!adds.contains(cf.getName()) && !dels.contains(cf.getName()))
+						dels.add(cf.getName());
+					break;
+				case MERGED:
+					if (!adds.contains(cf.getName()) && !dels.contains(cf.getName()))
+						dels.add(cf.getName());
+					for (int i = 0; i < cf.getPreviousIndicesCount(); i++) {
+						ChangedFile.Builder pcf = revisions.get(cf.getPreviousVersions(i)).changedFiles.get(cf.getPreviousIndices(i));
+						ChangeKind pck = cf.getChanges(i);
+						if (!adds.contains(pcf.getName()) && !dels.contains(pcf.getName()) && (pck == ChangeKind.DELETED || pck == ChangeKind.RENAMED))
+							dels.add(pcf.getName());
+					}
+					break;
+				case RENAMED:
+					if (!adds.contains(cf.getName()) && !dels.contains(cf.getName())) {
+						adds.add(cf.getName());
+						snapshot.add(cf.build());
+					}
+					for (int i = 0; i < cf.getPreviousIndicesCount(); i++) {
+						ChangedFile.Builder pcf = revisions.get(cf.getPreviousVersions(i)).changedFiles.get(cf.getPreviousIndices(i));
+						if (!adds.contains(pcf.getName()) && !dels.contains(pcf.getName()))
+							dels.add(pcf.getName());
+					}
+					break;
+				default:
+					if (!adds.contains(cf.getName()) && !dels.contains(cf.getName())) {
+						adds.add(cf.getName());
+						snapshot.add(cf.build());
+					}
+					break;
+				}
+			}
+			if (commit.parentIndices != null)
+				for (int p : commit.parentIndices)
+					pq.offer(p);
+		}
+		
+		return snapshot;
+	}
 	
 	public abstract void setRevisions();
 
@@ -50,15 +131,19 @@ public abstract class AbstractConnector implements AutoCloseable {
 	public List<String> getBranchNames() {
 		return branchNames;
 	}
+	
 	public List<String> getTagNames() {
 		return tagNames;
 	}
+	
 	public List<Integer> getBranchIndices() {
 		return branchIndices;
 	}
+	
 	public List<Integer> getTagIndices() {
 		return tagIndices;
 	}
+	
 	public List<Revision> getCommits(final boolean parse, final Writer astWriter) {
 		if (revisions == null) {
 			revisions = new ArrayList<AbstractCommit>();

@@ -425,8 +425,10 @@ public abstract class AbstractCommit {
 				return l;
 			}
 		}
-		for (int parentId : parentIndices)
-			l.addAll(connector.revisions.get(parentId).getFiles(parentId, path));
+		if (parentIndices != null)
+			for (int parentId : parentIndices)
+				l.addAll(connector.revisions.get(parentId).getFiles(parentId, path));
 		return l;
 	}
+
 }

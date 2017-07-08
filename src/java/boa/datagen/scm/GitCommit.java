@@ -35,6 +35,7 @@ import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.util.io.NullOutputStream;
 
 import boa.types.Diff.ChangedFile;
+import boa.types.Diff.ChangedFile.FileKind;
 import boa.types.Shared.ChangeKind;
 
 /**
@@ -91,6 +92,8 @@ public class GitCommit extends AbstractCommit {
 						ChangedFile.Builder cfb = ChangedFile.newBuilder();
 						cfb.setChange(ChangeKind.ADDED);
 						cfb.setName(path);
+						cfb.setKind(FileKind.OTHER);
+						cfb.setKey(-1);
 						fileNameIndices.put(path, changedFiles.size());
 						changedFiles.add(cfb);
 					}
@@ -140,7 +143,7 @@ public class GitCommit extends AbstractCommit {
 						String path = diff.getNewPath();
 						ChangedFile.Builder cfb = getChangeFile(path);
 						cfb.setChange(ChangeKind.ADDED);
-						if (cfb.getChange() == null)
+						if (cfb.getChange() == null || cfb.getChange() == ChangeKind.UNKNOWN)
 							cfb.setChange(ChangeKind.ADDED);
 						else if (cfb.getChange() != ChangeKind.ADDED)
 							cfb.setChange(ChangeKind.MERGED);
@@ -180,7 +183,7 @@ public class GitCommit extends AbstractCommit {
 	private void getChangeFile(final RevCommit parent, final DiffEntry diff, final ChangeKind kind) {
 		String path = diff.getNewPath();
 		ChangedFile.Builder cfb = getChangeFile(path);
-		if (cfb.getChange() == null)
+		if (cfb.getChange() == null || cfb.getChange() == ChangeKind.UNKNOWN)
 			cfb.setChange(kind);
 		else if (cfb.getChange() != kind)
 			cfb.setChange(ChangeKind.MERGED);
@@ -199,6 +202,8 @@ public class GitCommit extends AbstractCommit {
 		Integer index = fileNameIndices.get(path);
 		if (index == null) {
 			cfb = ChangedFile.newBuilder();
+			cfb.setKind(FileKind.OTHER);
+			cfb.setKey(-1);
 			fileNameIndices.put(path, changedFiles.size());
 			changedFiles.add(cfb);
 		} else
