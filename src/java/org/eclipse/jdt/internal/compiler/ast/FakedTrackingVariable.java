@@ -776,7 +776,7 @@ public class FakedTrackingVariable extends LocalDeclaration {
 		}
 
 		public IteratorForReporting(List<FakedTrackingVariable> variables, Scope scope, boolean atExit) {
-			this.varSet = new HashSet<>(variables);
+			this.varSet = new HashSet<FakedTrackingVariable>(variables);
 			this.scope = scope;
 			this.atExit = atExit;
 			setUpForStage(Stage.OuterLess);

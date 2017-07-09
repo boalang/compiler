@@ -489,7 +489,7 @@ public class Compiler implements ITypeRequestor, ProblemSeverities {
 				for (CategorizedProblem problem : errors) {
 					if (problem.getCategoryID() == CategorizedProblem.CAT_UNSPECIFIED) {
 						if (this.aptProblems == null) {
-							this.aptProblems = new HashMap<>();
+							this.aptProblems = new HashMap<String, APTProblem[]>();
 						}
 						APTProblem[] problems = this.aptProblems.get(new String(unitDecl.getFileName()));
 						if (problems == null) {

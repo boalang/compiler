@@ -1125,7 +1125,7 @@ public class Util implements SuffixConstants {
 				bootclasspathProperty = System.getProperty("org.apache.harmony.boot.class.path"); //$NON-NLS-1$
 			}
 		}
-		List<String> filePaths = new ArrayList<>();
+		List<String> filePaths = new ArrayList<String>();
 		if ((bootclasspathProperty != null) && (bootclasspathProperty.length() != 0)) {
 			StringTokenizer tokenizer = new StringTokenizer(bootclasspathProperty, File.pathSeparator);
 			while (tokenizer.hasMoreTokens()) {

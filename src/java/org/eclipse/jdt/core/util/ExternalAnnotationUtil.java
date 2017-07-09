@@ -575,7 +575,9 @@ public final class ExternalAnnotationUtil {
 	 */
 	public static String getAnnotatedSignature(String typeName, IFile file, String selector, String originalSignature) {
 		if (file.exists()) {
-			try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getContents()))) {
+			BufferedReader reader = null;
+			try {
+				reader = new BufferedReader(new InputStreamReader(file.getContents()));
 				ExternalAnnotationProvider.assertClassHeader(reader.readLine(), typeName);
 				while (true) {
 					String line = reader.readLine();
@@ -591,8 +593,16 @@ public final class ExternalAnnotationUtil {
 					if (line == null)
 						break;
 				}
-			} catch (IOException | CoreException e) {
+			} catch (IOException e) {
 				return null;
+			} catch (CoreException e) {
+				return null;
+			} finally {
+				if (reader != null) {
+					try {
+						reader.close();
+					} catch (IOException e) {}
+				}
 			}
 		}
 		return null;
