@@ -17,6 +17,7 @@
 
 package boa.datagen.scm;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -27,6 +28,15 @@ import java.util.PriorityQueue;
 import java.util.Set;
 
 import org.apache.hadoop.io.SequenceFile.Writer;
+import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTParser;
+import org.eclipse.jdt.core.dom.ASTRequestor;
+import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
+import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.FileASTRequestor;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
@@ -47,14 +57,67 @@ public abstract class AbstractConnector implements AutoCloseable {
 		return this.headCommitOffset;
 	}
 	
-	public List<ChangedFile> buildHeadSnapshot() {
-		List<ChangedFile> snapshot = getSnapshot(headCommitOffset);
+	public List<ChangedFile> buildHeadSnapshot(String[] languages) {
+		List<ChangedFile> snapshot = new ArrayList<ChangedFile>();
+		List<AbstractCommit> commits = new ArrayList<AbstractCommit>();
+		getSnapshot(headCommitOffset, snapshot, commits);
 		
+		if (languages == null)
+			return snapshot;
+		
+		boolean hasJava = false;
+		for (String lang : languages)
+			if (lang.toLowerCase().equals("java")) {
+				hasJava = true;
+				break;
+			}
+		
+		if (hasJava) {
+			List<String> listPaths = new ArrayList<String>(), listContents = new ArrayList<String>();
+			for (int i = 0; i < snapshot.size(); i++) {
+				ChangedFile cf = snapshot.get(i);
+				if (cf.getName().endsWith(".java") /*&& cf.getKind() != null && cf.getKind().name().startsWith("SOURCE_JAVA_JLS")*/) {
+					String path = cf.getName();
+					listPaths.add(path);
+					listContents.add(commits.get(i).getFileContents(path));
+				}
+			}
+			String[] paths = listPaths.toArray(new String[0]), contents = listContents.toArray(new String[0]);
+			String[] classpaths = null; // TODO
+			final Map<String, CompilationUnit> cus = new HashMap<String, CompilationUnit>();
+			FileASTRequestor r = new FileASTRequestor() {
+				@Override
+				public void acceptAST(String sourceFilePath, CompilationUnit ast) {
+					cus.put(sourceFilePath, ast);
+				}
+			};
+			@SuppressWarnings("rawtypes")
+			Map options = JavaCore.getOptions();
+			options.put(JavaCore.COMPILER_COMPLIANCE, JavaCore.VERSION_1_8);
+			options.put(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, JavaCore.VERSION_1_8);
+			options.put(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_1_8);
+			ASTParser parser = ASTParser.newParser(AST.JLS8);
+			parser.setCompilerOptions(options);
+			parser.setEnvironment(
+					classpaths == null ? new String[0] : classpaths,
+					new String[]{}, 
+					new String[]{}, 
+					true);
+			parser.setResolveBindings(true);
+	//		parser.setBindingsRecovery(true);
+			parser.createASTs(contents, paths, null, new String[0], r, null);
+			for (String path : cus.keySet()) {
+				CompilationUnit cu = cus.get(path);
+				for (int i = 0; i < cu.types().size(); i++) {
+					AbstractTypeDeclaration t = (AbstractTypeDeclaration) cu.types().get(i);
+					System.out.println(t.resolveBinding().getTypeDeclaration().getQualifiedName());
+				}
+			}
+		}
 		return snapshot;
 	}
 
-	public List<ChangedFile> getSnapshot(int commitOffset) {
-		List<ChangedFile> snapshot = new ArrayList<ChangedFile>();
+	public void getSnapshot(int commitOffset, List<ChangedFile> snapshot, List<AbstractCommit> commits) {
 		Set<String> adds = new HashSet<String>(), dels = new HashSet<String>(); 
 		PriorityQueue<Integer> pq = new PriorityQueue<Integer>(100, new Comparator<Integer>() {
 			@Override
@@ -75,12 +138,14 @@ public abstract class AbstractConnector implements AutoCloseable {
 					if (!adds.contains(cf.getName()) && !dels.contains(cf.getName())) {
 						adds.add(cf.getName());
 						snapshot.add(cf.build());
+						commits.add(commit);
 					}
 					break;
 				case COPIED:
 					if (!adds.contains(cf.getName()) && !dels.contains(cf.getName())) {
 						adds.add(cf.getName());
 						snapshot.add(cf.build());
+						commits.add(commit);
 					}
 					break;
 				case DELETED:
@@ -101,6 +166,7 @@ public abstract class AbstractConnector implements AutoCloseable {
 					if (!adds.contains(cf.getName()) && !dels.contains(cf.getName())) {
 						adds.add(cf.getName());
 						snapshot.add(cf.build());
+						commits.add(commit);
 					}
 					for (int i = 0; i < cf.getPreviousIndicesCount(); i++) {
 						ChangedFile.Builder pcf = revisions.get(cf.getPreviousVersions(i)).changedFiles.get(cf.getPreviousIndices(i));
@@ -112,6 +178,7 @@ public abstract class AbstractConnector implements AutoCloseable {
 					if (!adds.contains(cf.getName()) && !dels.contains(cf.getName())) {
 						adds.add(cf.getName());
 						snapshot.add(cf.build());
+						commits.add(commit);
 					}
 					break;
 				}
@@ -124,8 +191,6 @@ public abstract class AbstractConnector implements AutoCloseable {
 					}
 				}
 		}
-		
-		return snapshot;
 	}
 	
 	public abstract void setRevisions();

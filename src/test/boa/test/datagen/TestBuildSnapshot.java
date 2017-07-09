@@ -10,8 +10,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.jgit.lib.Constants;
-import org.eclipse.jgit.lib.RepositoryCache;
-import org.eclipse.jgit.util.FS;
 import org.junit.Test;
 
 import boa.datagen.DefaultProperties;
@@ -23,30 +21,27 @@ public class TestBuildSnapshot {
 	public void testBuildSnapshot() throws Exception {
 		DefaultProperties.DEBUG = true;
 		
-//		File gitDir = new File("D:/Projects/Boa-compiler/dataset/repos/candoia/candoia");
-		File gitDir = new File("D:/Projects/Boa-compiler/dataset/repos/boalang/compiler");
+		File gitDir = new File("D:/Projects/Boa-compiler/dataset/repos/candoia/candoia");
+//		File gitDir = new File("D:/Projects/Boa-compiler/dataset/repos/boalang/compiler");
 //		File gitDir = new File("F:\\testrepos\\repos-test\\hoan\\test1");
 		if (!gitDir.exists())
 			return;
 		GitConnector gc = new GitConnector(gitDir.getAbsolutePath());
 		gc.setRevisions();
 		System.out.println("Finish processing commits");
-		List<ChangedFile> snapshot1 = gc.buildHeadSnapshot();
+		List<ChangedFile> snapshot1 = gc.buildHeadSnapshot(new String[]{"java"});
 		System.out.println("Finish building head snapshot");
 		List<String> snapshot2 = gc.getSnapshot(Constants.HEAD);
 		gc.close();
 		Set<String> s1 = new HashSet<String>(), s2 = new HashSet<String>(snapshot2), s = new HashSet<String>(s2), in2 = new HashSet<String>(s2);
 		for (ChangedFile cf : snapshot1)
 			s1.add(cf.getName());
-		print(s1);
-		System.out.println("==========================================");
-		print(s2);
-		System.out.println("==========================================");
-		s.retainAll(s1);
-		print(s);
-		System.out.println("==========================================");
-		in2.removeAll(s1);
-		print(in2);
+//		print(s1);
+//		print(s2);
+//		s.retainAll(s1);
+//		print(s);
+//		in2.removeAll(s1);
+//		print(in2);
 		System.out.println(s1.size() + " " + s2.size() + " " + s.size() + " " + in2.size());
 		assertEquals(s2,  s1);
 	}
@@ -56,5 +51,6 @@ public class TestBuildSnapshot {
 		Collections.sort(l);
 		for (String f : l)
 			System.out.println(f);
+		System.out.println("==========================================");
 	}
 }
