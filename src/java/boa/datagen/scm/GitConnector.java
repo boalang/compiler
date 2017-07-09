@@ -89,8 +89,6 @@ public class GitConnector extends AbstractConnector {
 			revisionMap = new HashMap<String, Integer>();
 			
 			for (final RevCommit rc: revwalk) {
-				if (debug)
-					System.out.println("Commit " + revisions.size() + ": " + rc.getName());
 				final GitCommit gc = new GitCommit(this, repository, temprevwalk);
 
 				gc.setId(rc.getName());

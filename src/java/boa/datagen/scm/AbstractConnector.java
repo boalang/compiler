@@ -17,7 +17,6 @@
 
 package boa.datagen.scm;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -28,16 +27,12 @@ import java.util.PriorityQueue;
 import java.util.Set;
 
 import org.apache.hadoop.io.SequenceFile.Writer;
-import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
-import org.eclipse.jdt.core.dom.ASTRequestor;
 import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.FileASTRequestor;
-import org.eclipse.jdt.core.dom.TypeDeclaration;
-
 import boa.types.Code.Revision;
 import boa.types.Diff.ChangedFile;
 import boa.types.Shared.ChangeKind;
@@ -110,7 +105,7 @@ public abstract class AbstractConnector implements AutoCloseable {
 				CompilationUnit cu = cus.get(path);
 				for (int i = 0; i < cu.types().size(); i++) {
 					AbstractTypeDeclaration t = (AbstractTypeDeclaration) cu.types().get(i);
-					System.out.println(t.resolveBinding().getTypeDeclaration().getQualifiedName());
+//					System.out.println(t.resolveBinding().getTypeDeclaration().getQualifiedName());
 				}
 			}
 		}
