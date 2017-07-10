@@ -119,7 +119,7 @@ public class Java8Visitor extends Java7Visitor {
 		}
 		for (Object o : node.thrownExceptionTypes()) {
 				boa.types.Ast.Type.Builder tp = boa.types.Ast.Type.newBuilder();
-				tb.setName(typeName((org.eclipse.jdt.core.dom.Type)o));
+				tp.setName(typeName((org.eclipse.jdt.core.dom.Type)o));
 				tp.setKind(boa.types.Ast.TypeKind.CLASS);
 				b.addExceptionTypes(tp.build());
 		}
