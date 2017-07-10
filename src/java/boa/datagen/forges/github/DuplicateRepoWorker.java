@@ -82,16 +82,29 @@ public class DuplicateRepoWorker implements Runnable {
 	}
 	
 	private void writeRemainingRepos() {
-		if (cleared.size() > 0)
-			FileIO.writeFileContents(new File(outPath + "/" + Thread.currentThread().getId() + "-page" + counter + ".json"), cleared.toString());
+		if (cleared.size() > 0){
+			File fileToWriteJson = new File(outPath + "/" + Thread.currentThread().getId() + "-page" + counter + ".json");
+			while (fileToWriteJson.exists()) {
+				System.out.println("file thread-" + Thread.currentThread().getId() + "-page-" + counter + " arleady exist");
+				counter++;
+				fileToWriteJson = new File(outPath + "/" + Thread.currentThread().getId() + "-page" + counter + ".json");
+			}
+			FileIO.writeFileContents(fileToWriteJson, cleared.toString());
+		}
 	}
 
 	private void addRepo(JsonObject repo) {
 		cleared.add(repo);
 		if (cleared.size() >= 100){
-			FileIO.writeFileContents(new File(outPath + "/" + Thread.currentThread().getId() + "-page" + counter + ".json"), cleared.toString());
+			File fileToWriteJson = new File(outPath + "/" + Thread.currentThread().getId() + "-page" + counter + ".json");
+			while (fileToWriteJson.exists()) {
+				System.out.println("file thread-" + Thread.currentThread().getId() + "-page-" + counter + " arleady exist");
+				counter++;
+				fileToWriteJson = new File(outPath + "/" + Thread.currentThread().getId() + "-page" + counter + ".json");
+			}
+			FileIO.writeFileContents(fileToWriteJson, cleared.toString());
+			counter++;
 			cleared = new JsonArray();
-			counter ++;
 		}
 	}
 
