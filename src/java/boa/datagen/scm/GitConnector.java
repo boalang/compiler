@@ -19,10 +19,14 @@ package boa.datagen.scm;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.ListBranchCommand.ListMode;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.PersonIdent;
@@ -32,6 +36,7 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevSort;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
+import org.eclipse.jgit.treewalk.TreeWalk;
 
 /**
  * @author rdyer
@@ -45,8 +50,6 @@ public class GitConnector extends AbstractConnector {
 	private Repository repository;
 	private Git git;
 	private RevWalk revwalk;
-
-	private String lastCommitId = null;
 
 	public GitConnector(final String path) {
 		try {
@@ -69,37 +72,20 @@ public class GitConnector extends AbstractConnector {
 	}
 
 	@Override
-	public String getLastCommitId() {
-		if (lastCommitId == null) {
-			revwalk.reset();
-
-			try {
-				revwalk.markStart(revwalk.parseCommit(repository.resolve(Constants.HEAD)));
-				revwalk.sort(RevSort.COMMIT_TIME_DESC);
-				lastCommitId = revwalk.next().getId().toString();
-			} catch (final Exception e) {
-				if (debug)
-					System.err.println("Git Error getting last commit for " + path + ". " + e.getMessage());
-			}
-		}
-		return lastCommitId;
-	}
-
-	@Override
-	public void setLastSeenCommitId(final String id) {
-	}
-
-	@Override
-	protected void setRevisions() {
+	public void setRevisions() {
 		RevWalk temprevwalk = new RevWalk(repository);
 		try {
 			revwalk.reset();
-			revwalk.markStart(revwalk.parseCommit(repository.resolve(Constants.HEAD)));
+			Set<RevCommit> heads = getHeads();
+			revwalk.markStart(heads);
 			revwalk.sort(RevSort.TOPO, true);
 			revwalk.sort(RevSort.COMMIT_TIME_DESC, true);
 			revwalk.sort(RevSort.REVERSE, true);
 			
-			revisions.clear();
+			if (revisions == null)
+				revisions = new ArrayList<AbstractCommit>(); 
+			else
+				revisions.clear();
 			revisionMap = new HashMap<String, Integer>();
 			
 			for (final RevCommit rc: revwalk) {
@@ -119,6 +105,8 @@ public class GitConnector extends AbstractConnector {
 				revisions.add(gc);
 			}
 			
+			RevCommit head = revwalk.parseCommit(repository.resolve(Constants.HEAD));
+			headCommitOffset = revisionMap.get(head.getName());
 			getBranches();
 			getTags();
 		} catch (final IOException e) {
@@ -130,8 +118,24 @@ public class GitConnector extends AbstractConnector {
 		}
 	}
 
+	private Set<RevCommit> getHeads() {
+		Set<RevCommit> heads = new HashSet<RevCommit>();
+		try {
+			for (final Ref ref : git.branchList().call()) {
+				heads.add(revwalk.parseCommit(repository.resolve(ref.getName())));
+			}
+		} catch (final GitAPIException e) {
+			if (debug)
+				System.err.println("Git Error reading heads: " + e.getMessage());
+		}catch (final IOException e) {
+			if (debug)
+				System.err.println("Git Error reading heads: " + e.getMessage());
+		}
+		return heads;
+	}
+
 	@Override
-	void getTags() {
+	public void getTags() {
 		try {
 			for (final Ref ref : git.tagList().call()) {
 				tagNames.add(ref.getName());
@@ -144,9 +148,9 @@ public class GitConnector extends AbstractConnector {
 	}
 
 	@Override
-	void getBranches() {
+	public void getBranches() {
 		try {
-			for (final Ref ref : git.branchList().setListMode(ListMode.REMOTE).call()) {
+			for (final Ref ref : git.branchList().call()) {
 				branchNames.add(ref.getName());
 				branchIndices.add(revisionMap.get(ref.getObjectId().getName()));
 			}
@@ -154,5 +158,26 @@ public class GitConnector extends AbstractConnector {
 			if (debug)
 				System.err.println("Git Error reading branches: " + e.getMessage());
 		}
+	}
+
+	public List<String> getSnapshot(String commit) {
+		ArrayList<String> snapshot = new ArrayList<String>();
+		TreeWalk tw = new TreeWalk(repository);
+		tw.reset();
+		try {
+			RevCommit rc = revwalk.parseCommit(repository.resolve(commit));
+			tw.addTree(rc.getTree());
+			tw.setRecursive(true);
+			while (tw.next()) {
+				if (!tw.isSubtree()) {
+					String path = tw.getPathString();
+					snapshot.add(path);
+				}
+			}
+		} catch (IOException e) {
+			System.err.println(e.getMessage());
+		}
+		tw.close();
+		return snapshot;
 	}
 }

@@ -93,7 +93,7 @@ message ChangedFile {
 	/** The full name and path of the file */
 	required string name = 3;
 	/** @exclude */
-	required string key = 4;
+	required uint64 key = 4;
 	/** @exclude */
 	optional ASTRoot ast = 5;
 	/** @exclude */

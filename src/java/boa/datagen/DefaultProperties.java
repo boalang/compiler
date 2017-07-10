@@ -21,9 +21,10 @@ package boa.datagen;
  * @author rdyer
  */
 public class DefaultProperties {
-	public static final boolean DEBUG = false;
 	public static final String NUM_THREADS = "1";
 	public static final String MAX_COMMITS = "10000";
+
+	public static boolean DEBUG = false;
 
 	// HBase tables
 	public static final String HBASE_PROJECTS_TABLE = "projects";

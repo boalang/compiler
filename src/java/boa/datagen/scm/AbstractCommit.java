@@ -22,7 +22,7 @@ import java.io.*;
 import java.util.*;
 
 import org.apache.hadoop.io.BytesWritable;
-import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.SequenceFile.Writer;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.*;
@@ -55,16 +55,34 @@ public abstract class AbstractCommit {
 		this.connector = cnn;
 	}
 
-	protected Map<String, Integer> fileNameIndices;
+	protected Map<String, Integer> fileNameIndices = new HashMap<String, Integer>();
+	
+	protected List<ChangedFile.Builder> changedFiles = new ArrayList<ChangedFile.Builder>();
+
+	protected ChangedFile.Builder getChangeFile(String path) {
+		ChangedFile.Builder cfb = null;
+		Integer index = fileNameIndices.get(path);
+		if (index == null) {
+			cfb = ChangedFile.newBuilder();
+			cfb.setKind(FileKind.OTHER);
+			cfb.setKey(-1);
+			fileNameIndices.put(path, changedFiles.size());
+			changedFiles.add(cfb);
+		} else
+			cfb = changedFiles.get(index);
+		return cfb;
+	}
 	
 	protected String id = null;
+	public String getId() { return id; }
 	public void setId(final String id) { this.id = id; }
 
 	protected Person author;
 	public void setAuthor(final String username, final String realname, final String email) {
 		final Person.Builder person = Person.newBuilder();
 		person.setUsername(username);
-		person.setRealName(realname);
+		if (realname != null)
+			person.setRealName(realname);
 		person.setEmail(email);
 		author = person.build();
 	}
@@ -73,7 +91,8 @@ public abstract class AbstractCommit {
 	public void setCommitter(final String username, final String realname, final String email) {
 		final Person.Builder person = Person.newBuilder();
 		person.setUsername(username);
-		person.setRealName(realname);
+		if (realname != null)
+			person.setRealName(realname);
 		person.setEmail(email);
 		committer = person.build();
 	}
@@ -84,8 +103,6 @@ public abstract class AbstractCommit {
 	protected Date date;
 	public void setDate(final Date date) { this.date = date; }
 	
-	protected List<ChangedFile.Builder> changedFiles = new ArrayList<ChangedFile.Builder>();
-	
 	protected int[] parentIndices;
 
 	protected List<Integer> childrenIndices = new LinkedList<Integer>();
@@ -94,7 +111,7 @@ public abstract class AbstractCommit {
 
 	protected abstract String getFileContents(final String path);
 
-	public Revision asProtobuf(final boolean parse, final Writer astWriter, final String revKey, final String keyDelim) {
+	public Revision asProtobuf(final boolean parse, final Writer astWriter) {
 		final Revision.Builder revision = Revision.newBuilder();
 		revision.setId(id);
 
@@ -116,8 +133,7 @@ public abstract class AbstractCommit {
 			revision.setLog("");
 		
 		for (ChangedFile.Builder cfb : changedFiles) {
-			processChangeFile(cfb, parse, astWriter, revKey, keyDelim);
-			//fb.setKey("");
+			processChangeFile(cfb, parse, astWriter);
 			revision.addFiles(cfb.build());
 		}
 
@@ -125,7 +141,14 @@ public abstract class AbstractCommit {
 	}
 
 	@SuppressWarnings("deprecation")
-	private Builder processChangeFile(final ChangedFile.Builder fb, boolean parse, Writer astWriter, String revKey, String keyDelim) {
+	private Builder processChangeFile(final ChangedFile.Builder fb, boolean parse, Writer astWriter) {
+		long len = -1;
+		try {
+			len = astWriter.getLength();
+		} catch (IOException e1) {
+			if (debug)
+				System.err.println("Error getting length of sequence file writer!!!");
+		}
 		String path = fb.getName();
 		fb.setKind(FileKind.OTHER);
 
@@ -140,36 +163,31 @@ public abstract class AbstractCommit {
 			final String content = getFileContents(path);
 
 			fb.setKind(FileKind.SOURCE_JAVA_JLS2);
-			if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_4, AST.JLS2, false, astWriter,
-					revKey + keyDelim + path)) {
+			if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_4, AST.JLS2, false, astWriter)) {
 				if (debug)
 					System.err.println("Found JLS2 parse error in: revision " + id + ": file " + path);
 
 				fb.setKind(FileKind.SOURCE_JAVA_JLS3);
-				if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_5, AST.JLS3, false, astWriter,
-						revKey + keyDelim + path)) {
+				if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_5, AST.JLS3, false, astWriter)) {
 					if (debug)
 						System.err.println("Found JLS3 parse error in: revision " + id + ": file " + path);
 
 					fb.setKind(FileKind.SOURCE_JAVA_JLS4);
-					if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_7, AST.JLS4, false, astWriter,
-							revKey + keyDelim + path)) {
+					if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_7, AST.JLS4, false, astWriter)) {
 						if (debug)
 							System.err.println("Found JLS4 parse error in: revision " + id + ": file " + path);
 
 						fb.setKind(FileKind.SOURCE_JAVA_JLS8);
-						if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_8, AST.JLS8, false, astWriter,
-								revKey + keyDelim + path)) {
+						if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_8, AST.JLS8, false, astWriter)) {
 							if (debug)
 								System.err.println("Found JLS8 parse error in: revision " + id + ": file " + path);
 
 							fb.setKind(FileKind.SOURCE_JAVA_ERROR);
-							try {
-								astWriter.append(new Text(revKey + keyDelim + fb.getName()),
-										new BytesWritable(ASTRoot.newBuilder().build().toByteArray()));
-							} catch (IOException e) {
-								e.printStackTrace();
-							}
+//							try {
+//								astWriter.append(new LongWritable(len), new BytesWritable(ASTRoot.newBuilder().build().toByteArray()));
+//							} catch (IOException e) {
+//								e.printStackTrace();
+//							}
 						} else if (debug)
 							System.err.println("Accepted JLS8: revision " + id + ": file " + path);
 					} else if (debug)
@@ -182,49 +200,41 @@ public abstract class AbstractCommit {
 			final String content = getFileContents(path);
 
 			fb.setKind(FileKind.SOURCE_JS_ES1);
-			if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_1, false, astWriter,
-					revKey + keyDelim + path)) {
+			if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_1, false, astWriter)) {
 				if (debug)
 					System.err.println("Found ES3 parse error in: revision " + id + ": file " + path);
 				fb.setKind(FileKind.SOURCE_JS_ES2);
-				if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_2, false, astWriter,
-						revKey + keyDelim + path)) {
+				if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_2, false, astWriter)) {
 					if (debug)
 						System.err.println("Found ES3 parse error in: revision " + id + ": file " + path);
 					fb.setKind(FileKind.SOURCE_JS_ES3);
-					if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_3, false, astWriter,
-							revKey + keyDelim + path)) {
+					if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_3, false, astWriter)) {
 						if (debug)
 							System.err.println("Found ES3 parse error in: revision " + id + ": file " + path);
 						fb.setKind(FileKind.SOURCE_JS_ES5);
-						if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_5, false, astWriter,
-								revKey + keyDelim + path)) {
+						if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_5, false, astWriter)) {
 							if (debug)
 								System.err.println("Found ES4 parse error in: revision " + id + ": file " + path);
 							fb.setKind(FileKind.SOURCE_JS_ES6);
-							if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_6, false, astWriter,
-									revKey + keyDelim + path)) {
+							if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_6, false, astWriter)) {
 								if (debug)
 									System.err.println("Found ES4 parse error in: revision " + id + ": file " + path);
 								fb.setKind(FileKind.SOURCE_JS_ES7);
-								if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_7, false, astWriter,
-										revKey + keyDelim + path)) {
+								if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_7, false, astWriter)) {
 									if (debug)
 										System.err
 												.println("Found ES3 parse error in: revision " + id + ": file " + path);
 									fb.setKind(FileKind.SOURCE_JS_ES8);
-									if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_8, false, astWriter,
-											revKey + keyDelim + path)) {
+									if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_8, false, astWriter)) {
 										if (debug)
 											System.err.println(
 													"Found ES4 parse error in: revision " + id + ": file " + path);
 										fb.setKind(FileKind.SOURCE_JS_ERROR);
-										try {
-											astWriter.append(new Text(revKey + keyDelim + fb.getName()),
-													new BytesWritable(ASTRoot.newBuilder().build().toByteArray()));
-										} catch (IOException e) {
-											e.printStackTrace();
-										}
+//										try {
+//											astWriter.append(new LongWritable(len), new BytesWritable(ASTRoot.newBuilder().build().toByteArray()));
+//										} catch (IOException e) {
+//											e.printStackTrace();
+//										}
 									} else if (debug)
 										System.err.println("Accepted ES8: revision " + id + ": file " + path);
 								} else if (debug)
@@ -240,14 +250,22 @@ public abstract class AbstractCommit {
 			} else if (debug)
 				System.err.println("Accepted ES1: revision " + id + ": file " + path);
 		}
-		fb.setKey(revKey);
+		try {
+			if (astWriter.getLength() == len + 1)
+				fb.setKey(len);
+			else
+				fb.setKey(-1);
+		} catch (IOException e) {
+			if (debug)
+				System.err.println("Error getting length of sequence file writer!!!");
+		}
 
 		return fb;
 	}
 
 	private boolean parseJavaScriptFile(final String path,
 			final ChangedFile.Builder fb, final String content, final int astLevel,
-			final boolean storeOnError, Writer astWriter, String key) {
+			final boolean storeOnError, Writer astWriter) {
 		try {
 			//System.out.println("parsing=" + (++count) + "\t" + path);
 			CompilerEnvirons cp = new CompilerEnvirons();
@@ -289,8 +307,7 @@ public abstract class AbstractCommit {
 				if (astWriter != null) {
 					try {
 					//	System.out.println("writing=" + count + "\t" + path);
-						astWriter.append(new Text(key), new BytesWritable(ast
-								.build().toByteArray()));
+						astWriter.append(new LongWritable(astWriter.getLength()), new BytesWritable(ast.build().toByteArray()));
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -306,36 +323,6 @@ public abstract class AbstractCommit {
 		}
 	}
 
-	public Revision asProtobuf(final boolean parse) {
-		final Revision.Builder revision = Revision.newBuilder();
-		revision.setId(id);
-
-		if (this.author != null) {
-			final Person author = Person.newBuilder(this.author).build();
-			revision.setAuthor(author);
-		}
-		final Person committer = Person.newBuilder(this.committer).build();
-		revision.setCommitter(committer);
-
-		long time = -1;
-		if (date != null)
-			time = date.getTime() * 1000;
-		revision.setCommitDate(time);
-
-		if (message != null)
-			revision.setLog(message);
-		else
-			revision.setLog("");
-		
-		for (ChangedFile.Builder cfb : changedFiles) {
-			processChangeFile(cfb, parse);
-			//fb.setKey("");
-			revision.addFiles(cfb.build());
-		}
-
-		return revision.build();
-	}
-
 	public Map<String,String> getLOC() {
 		final Map<String,String> l = new HashMap<String,String>();
 		
@@ -346,68 +333,14 @@ public abstract class AbstractCommit {
 		return l;
 	}
 
-	@SuppressWarnings("deprecation")
-	protected ChangedFile.Builder processChangeFile(final ChangedFile.Builder fb, final boolean attemptParse) {
-		String path = fb.getName();
-		fb.setKind(FileKind.OTHER);
-		
-		final String lowerPath = path.toLowerCase();
-		if (lowerPath.endsWith(".txt"))
-			fb.setKind(FileKind.TEXT);
-		else if (lowerPath.endsWith(".xml"))
-			fb.setKind(FileKind.XML);
-		else if (lowerPath.endsWith(".jar") || lowerPath.endsWith(".class"))
-			fb.setKind(FileKind.BINARY);
-		else if (lowerPath.endsWith(".java") && attemptParse) {
-			final String content = getFileContents(path);
-
-			fb.setKind(FileKind.SOURCE_JAVA_JLS2);
-			if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_4, AST.JLS2, false, null, null)) {
-				if (debug)
-					System.err.println("Found JLS2 parse error in: revision " + id + ": file " + path);
-
-				fb.setKind(FileKind.SOURCE_JAVA_JLS3);
-				if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_5, AST.JLS3, false, null, null)) {
-					if (debug)
-						System.err.println("Found JLS3 parse error in: revision " + id + ": file " + path);
-
-					fb.setKind(FileKind.SOURCE_JAVA_JLS4);
-					if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_7, AST.JLS4, false, null, null)) {
-						if (debug)
-							System.err.println("Found JLS4 parse error in: revision " + id + ": file " + path);
-
-						fb.setKind(FileKind.SOURCE_JAVA_JLS8);
-						if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_8, AST.JLS8, false, null, null)) {
-							if (debug)
-								System.err.println("Found JLS8 parse error in: revision " + id + ": file " + path);
-
-							//fb.setContent(content);
-							fb.setKind(FileKind.SOURCE_JAVA_ERROR);
-						} else
-							if (debug)
-								System.err.println("Accepted JLS8: revision " + id + ": file " + path);
-					} else
-						if (debug)
-							System.err.println("Accepted JLS4: revision " + id + ": file " + path);
-				} else
-					if (debug)
-						System.err.println("Accepted JLS3: revision " + id + ": file " + path);
-			} else
-				if (debug)
-					System.err.println("Accepted JLS2: revision " + id + ": file " + path);
-		}
-
-		return fb;
-	}
-
-	private boolean parseJavaFile(final String path, final ChangedFile.Builder fb, final String content, final String compliance, final int astLevel, final boolean storeOnError, Writer astWriter, String key) {
+	private boolean parseJavaFile(final String path, final ChangedFile.Builder fb, final String content, final String compliance, final int astLevel, final boolean storeOnError, Writer astWriter) {
 		try {
 			final ASTParser parser = ASTParser.newParser(astLevel);
 			parser.setKind(ASTParser.K_COMPILATION_UNIT);
 			parser.setResolveBindings(true);
 			parser.setSource(content.toCharArray());
 
-			final Map options = JavaCore.getOptions();
+			final Map<?, ?> options = JavaCore.getOptions();
 			JavaCore.setComplianceOptions(compliance, options);
 			parser.setCompilerOptions(options);
 
@@ -441,7 +374,7 @@ public abstract class AbstractCommit {
 				
 				if (astWriter != null) {
 					try {
-						astWriter.append(new Text(key), new BytesWritable(ast.build().toByteArray()));
+						astWriter.append(new LongWritable(astWriter.getLength()), new BytesWritable(ast.build().toByteArray()));
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -498,17 +431,40 @@ public abstract class AbstractCommit {
 		return loc;
 	}
 
-	public List<int[]> getFiles(int index, String path) {
+	protected List<int[]> getPreviousFiles(String parentName, String path) {
+		int commitId = connector.revisionMap.get(parentName);
+		Set<Integer> queuedCommitIds = new HashSet<Integer>();
 		List<int[]> l = new ArrayList<int[]>();
-		for (int i = 0; i < changedFiles.size(); i++) {
-			ChangedFile.Builder cfb = changedFiles.get(i);
-			if (cfb.getName().equals(path) && cfb.getChange() != ChangeKind.DELETED) {
-				l.add(new int[]{i, index});
-				return l;
+		PriorityQueue<Integer> pq = new PriorityQueue<Integer>(100, new Comparator<Integer>() {
+			@Override
+			public int compare(Integer i1, Integer i2) {
+				return i2 - i1;
+			}
+		});
+		pq.offer(commitId);
+		queuedCommitIds.add(commitId);
+		while (!pq.isEmpty()) {
+			commitId = pq.poll();
+			AbstractCommit commit = connector.revisions.get(commitId);
+			boolean found = false;
+			for (int i = 0; i < commit.changedFiles.size(); i++) {
+				ChangedFile.Builder cfb = commit.changedFiles.get(i);
+				if (cfb.getName().equals(path) && cfb.getChange() != ChangeKind.DELETED) {
+					l.add(new int[]{i, commitId});
+					found = true;
+					break;
+				}
+			}
+			if (!found && commit.parentIndices != null) {
+				for (int parentId : commit.parentIndices) {
+					if (!queuedCommitIds.contains(parentId)) {
+						pq.offer(parentId);
+						queuedCommitIds.add(parentId);
+					}
+				}
 			}
 		}
-		for (int parentId : parentIndices)
-			l.addAll(connector.revisions.get(parentId).getFiles(parentId, path));
 		return l;
 	}
+
 }

@@ -8,18 +8,19 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Map.Entry;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 
 import boa.datagen.util.FileIO;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.CodeRepository.RepositoryKind;
 import boa.types.Toplevel.Project;
 import boa.types.Toplevel.Project.ForgeKind;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONException;
-import net.sf.json.JSONObject;
-import net.sf.json.JSONSerializer;
 
 public class RepoMetadata {
 	private static final String ID = "id";
@@ -57,7 +58,7 @@ public class RepoMetadata {
 														// "2014-02-03T19:33:59Z",
 	private static final String GIT_DESCRIPTION = "description";
 	private static final String GIT_OS = "os";
-	private static final String GIT_PROGRAMMING_LANGUAGES = "language";
+	private static final String GIT_PROGRAMMING_LANGUAGES = "language_list";
 	private static final String GIT_DATABASES = null;
 	private static final String GIT_LICENSES = null;
 	private static final String GIT_TOPICS = null;
@@ -80,7 +81,6 @@ public class RepoMetadata {
 	 * "network_count": 448, "subscribers_count": 60
 	 */
 
-	private File metadataFile;
 
 	public String id;
 	public String name;
@@ -91,6 +91,7 @@ public class RepoMetadata {
 	private String description;
 	private String os;
 	private String[] programmingLanguages;
+	private int[] programmingLanguagesLOC;
 	private String databases;
 	private String licenses;
 	private String topics;
@@ -105,60 +106,30 @@ public class RepoMetadata {
 
 	private String fork;
 
-	public RepoMetadata(File file) {
-		this.metadataFile = file;
+	public RepoMetadata(JsonObject jsonProject) {
+		build(jsonProject);
 	}
 
-	public RepoMetadata() {
-	}
-
-	public boolean build() {
-		String jsonTxt = "";
-		try {
-			BufferedInputStream in = new BufferedInputStream(new FileInputStream(metadataFile));
-			byte[] bytes = new byte[(int) metadataFile.length()];
-			in.read(bytes);
-			in.close();
-			jsonTxt = new String(bytes);
-		} catch (Exception e) {
-			System.err.println("Error reading file " + metadataFile.getAbsolutePath());
-			return false;
-		}
-		if (jsonTxt.isEmpty()) {
-			System.err.println("File is empty " + metadataFile.getAbsolutePath());
-			return false;
-		}
-		// System.out.println(jsonTxt);
-
-		JSONObject json = null;
-		try {
-			json = (JSONObject) JSONSerializer.toJSON(jsonTxt);
-		} catch (JSONException e) {
-		}
-		if (json == null) {
-			System.err.println("Error parsing file " + metadataFile.getAbsolutePath());
-			return false;
-		}
-		JSONObject jsonProject = json;
+	public void build(JsonObject jsonProject) {
 		if (jsonProject.has(GIT_ID))
-			this.id = jsonProject.getString(GIT_ID);
+			this.id = jsonProject.get(GIT_ID).getAsString();
 		if (jsonProject.has(GIT_NAME))
-			this.name = jsonProject.getString(GIT_NAME);
+			this.name = jsonProject.get(GIT_NAME).getAsString();
 		if (jsonProject.has(GIT_SHORT_DESCRIPTION))
-			this.shortDescription = jsonProject.getString(GIT_SHORT_DESCRIPTION);
+			this.shortDescription = jsonProject.get(GIT_SHORT_DESCRIPTION).getAsString();
 		if (jsonProject.has(GIT_HOME_PAGE)) {
-			this.homepage = jsonProject.getString(GIT_HOME_PAGE);
+			this.homepage = jsonProject.get(GIT_HOME_PAGE).getAsString();
 		}
 		if (jsonProject.has(GIT_SUMMARY_PAGE)) {
-			this.summaryPage = jsonProject.getString(GIT_SUMMARY_PAGE);
+			this.summaryPage = jsonProject.get(GIT_SUMMARY_PAGE).getAsString();
 		}
 		if (jsonProject.has(GIT_CREATE)) {
-			String time = jsonProject.getString(GIT_CREATE);
+			String time = jsonProject.get(GIT_CREATE).getAsString();
 			this.created_timestamp = getTimeStamp(time); // project.setCreatedDate(timestamp
 															// * 1000000);
 		}
 		if (jsonProject.has(GIT_DESCRIPTION))
-			this.description = jsonProject.getString(GIT_DESCRIPTION);
+			this.description = jsonProject.get(GIT_DESCRIPTION).getAsString();
 		/*
 		 * if (jsonProject.has("os")) { JSONArray jsonOSes =
 		 * jsonProject.getJSONArray("os"); if (jsonOSes != null &&
@@ -166,9 +137,16 @@ public class RepoMetadata {
 		 * project.addOperatingSystems(jsonOSes.getString(i)); } }
 		 */
 		if (jsonProject.has(GIT_PROGRAMMING_LANGUAGES)) {
-			buildProgrammingLanguages(metadataFile, id);
-			if (this.programmingLanguages == null || this.programmingLanguages.length == 0)
-				this.programmingLanguages = new String[] { jsonProject.getString(GIT_PROGRAMMING_LANGUAGES) };
+			JsonObject langList = jsonProject.get(GIT_PROGRAMMING_LANGUAGES).getAsJsonObject();
+			int size = langList.entrySet().size();
+			this.programmingLanguages = new String[size];//{ jsonProject.get(GIT_PROGRAMMING_LANGUAGES).getAsString() };
+			this.programmingLanguagesLOC = new int[size];
+			int i = 0;
+			for (Entry<String, JsonElement> entry : langList.entrySet()) {
+				programmingLanguagesLOC[i]  = entry.getValue().getAsInt();
+			    programmingLanguages[i] = entry.getKey();
+			    i++;
+			}
 		}
 		/*
 		 * if (jsonProject.has("databases")) { JSONArray jsonDBs =
@@ -252,9 +230,8 @@ public class RepoMetadata {
 		 * project.addAllBugRepositories(bugs); }
 		 */
 		if (jsonProject.has(GIT_GIT_REPO)) {
-			this.gitRepository = jsonProject.getString(GIT_GIT_REPO);
+			this.gitRepository = jsonProject.get(GIT_GIT_REPO).getAsString();
 		}
-		return true;
 	}
 
 	private long getTimeStamp(String time) {
@@ -268,64 +245,28 @@ public class RepoMetadata {
 		return -1;
 	}
 
-	private void buildProgrammingLanguages(File metadataFile, String id) {
-		File file = new File(
-				metadataFile.getParentFile().getParentFile().getAbsolutePath() + "/languages/" + id + ".json");
-		if (file.exists()) {
-			String content = FileIO.readFileContents(file);
-			ArrayList<String> languages = getLanguages(content);
-			if (languages.isEmpty())
-				return;
-			this.programmingLanguages = new String[languages.size()];
-			for (int i = 0; i < this.programmingLanguages.length; i++)
-				this.programmingLanguages[i] = languages.get(i);
-		}
-	}
-
-	private static ArrayList<String> getLanguages(String content) {
-		ArrayList<String> languages = new ArrayList<String>();
-		int status = 0, s = 0;
-		String name = null;
-		for (int i = 0; i < content.length(); i++) {
-			if (status == 0 && content.charAt(i) == '\"') {
-				status = 1;
-				s = i + 1;
-			} else if (status == 1 && content.charAt(i) == '\"') {
-				status = 2;
-				name = content.substring(s, i);
-			} else if (status == 2 && content.charAt(i) == ':') {
-				status = 3;
-				s = i + 1;
-			} else if (status == 3 && !Character.isDigit(content.charAt(i))) {
-				status = 0;
-				languages.add(name);
-			}
-		}
-		return languages;
-	}
-
-	public JSONObject toBoaMetaDataJson() {
-		JSONObject jsonRepo = new JSONObject();
-		jsonRepo.put(ID, id);
-		jsonRepo.put(NAME, name);
-		jsonRepo.put(CREATED_TIMESTAMP, created_timestamp);
-		jsonRepo.put(SUMMARY_PAGE, summaryPage);
-		jsonRepo.put(HOME_PAGE, homepage);
-		jsonRepo.put(DESCRIPTION, description);
+	public JsonObject toBoaMetaDataJson() {
+		JsonObject jsonRepo = new JsonObject();
+		jsonRepo.addProperty(ID, id);
+		jsonRepo.addProperty(NAME, name);
+		jsonRepo.addProperty(CREATED_TIMESTAMP, created_timestamp);
+		jsonRepo.addProperty(SUMMARY_PAGE, summaryPage);
+		jsonRepo.addProperty(HOME_PAGE, homepage);
+		jsonRepo.addProperty(DESCRIPTION, description);
 		if (programmingLanguages != null) {
-			JSONArray langs = new JSONArray();
+			JsonArray langs = new JsonArray();
 			for (String lang : programmingLanguages)
 				langs.add(lang);
-			jsonRepo.put(PROGRAMMING_LANGUAGES, langs);
+			jsonRepo.add(PROGRAMMING_LANGUAGES, langs);
 		}
 		if (gitRepository != null) {
-			JSONObject jsonGit = new JSONObject();
-			jsonGit.put("location", gitRepository);
-			jsonRepo.put(GIT_REPO, jsonGit);
+			JsonObject jsonGit = new JsonObject();
+			jsonGit.addProperty("location", gitRepository);
+			jsonRepo.add(GIT_REPO, jsonGit);
 		}
 
-		JSONObject jo = new JSONObject();
-		jo.put("Project", jsonRepo);
+		JsonObject jo = new JsonObject();
+		jo.add("Project", jsonRepo);
 		return jo;
 	}
 
@@ -349,6 +290,7 @@ public class RepoMetadata {
 			CodeRepository.Builder cr = CodeRepository.newBuilder();
 			cr.setUrl(gitRepository);
 			cr.setKind(RepositoryKind.GIT);
+			cr.setHead(-1);
 			project.addCodeRepositories(cr.build());
 		}
 		Project prj = project.build();

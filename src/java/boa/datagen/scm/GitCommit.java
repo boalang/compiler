@@ -35,6 +35,7 @@ import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.util.io.NullOutputStream;
 
 import boa.types.Diff.ChangedFile;
+import boa.types.Diff.ChangedFile.FileKind;
 import boa.types.Shared.ChangeKind;
 
 /**
@@ -91,6 +92,8 @@ public class GitCommit extends AbstractCommit {
 						ChangedFile.Builder cfb = ChangedFile.newBuilder();
 						cfb.setChange(ChangeKind.ADDED);
 						cfb.setName(path);
+						cfb.setKind(FileKind.OTHER);
+						cfb.setKey(-1);
 						fileNameIndices.put(path, changedFiles.size());
 						changedFiles.add(cfb);
 					}
@@ -121,8 +124,9 @@ public class GitCommit extends AbstractCommit {
 
 		try {
 			final AbstractTreeIterator parentIter = new CanonicalTreeParser(null, repository.newObjectReader(), parent.getTree());
-
-			for (final DiffEntry diff : df.scan(parentIter, new CanonicalTreeParser(null, repository.newObjectReader(), rc.getTree()))) {
+			
+			List<DiffEntry> diffs = df.scan(parentIter, new CanonicalTreeParser(null, repository.newObjectReader(), rc.getTree()));			
+			for (final DiffEntry diff : diffs) {
 				if (diff.getChangeType() == ChangeType.MODIFY) {
 					if (diff.getNewMode().getObjectType() == Constants.OBJ_BLOB) {
 						getChangeFile(parent, diff, ChangeKind.MODIFIED);
@@ -140,7 +144,7 @@ public class GitCommit extends AbstractCommit {
 						String path = diff.getNewPath();
 						ChangedFile.Builder cfb = getChangeFile(path);
 						cfb.setChange(ChangeKind.ADDED);
-						if (cfb.getChange() == null)
+						if (cfb.getChange() == null || cfb.getChange() == ChangeKind.UNKNOWN)
 							cfb.setChange(ChangeKind.ADDED);
 						else if (cfb.getChange() != ChangeKind.ADDED)
 							cfb.setChange(ChangeKind.MERGED);
@@ -153,9 +157,9 @@ public class GitCommit extends AbstractCommit {
 				}
 				else if (diff.getChangeType() == ChangeType.DELETE) {
 					if (diff.getOldMode().getObjectType() == Constants.OBJ_BLOB) {
-						String path = diff.getNewPath();
+						String path = diff.getOldPath();
 						ChangedFile.Builder cfb = getChangeFile(path);
-						if (cfb.getChange() == null)
+						if (cfb.getChange() == null || cfb.getChange() == ChangeKind.UNKNOWN)
 							cfb.setChange(ChangeKind.DELETED);
 						else if (cfb.getChange() != ChangeKind.DELETED)
 							cfb.setChange(ChangeKind.MERGED);
@@ -180,7 +184,7 @@ public class GitCommit extends AbstractCommit {
 	private void getChangeFile(final RevCommit parent, final DiffEntry diff, final ChangeKind kind) {
 		String path = diff.getNewPath();
 		ChangedFile.Builder cfb = getChangeFile(path);
-		if (cfb.getChange() == null)
+		if (cfb.getChange() == null || cfb.getChange() == ChangeKind.UNKNOWN)
 			cfb.setChange(kind);
 		else if (cfb.getChange() != kind)
 			cfb.setChange(ChangeKind.MERGED);
@@ -192,23 +196,5 @@ public class GitCommit extends AbstractCommit {
 			cfb.addPreviousVersions(values[1]);
 		}
 		filePathGitObjectIds.put(path, diff.getNewId().toObjectId());
-	}
-
-	private ChangedFile.Builder getChangeFile(String path) {
-		ChangedFile.Builder cfb = null;
-		Integer index = fileNameIndices.get(path);
-		if (index == null) {
-			cfb = ChangedFile.newBuilder();
-			fileNameIndices.put(path, changedFiles.size());
-			changedFiles.add(cfb);
-		} else
-			cfb = changedFiles.get(index);
-		return cfb;
-	}
-
-	private List<int[]> getPreviousFiles(String parentId, String path) {
-		int index = connector.revisionMap.get(parentId);
-		AbstractCommit parent = connector.revisions.get(index);
-		return parent.getFiles(index, path);
 	}
 }
