@@ -62,8 +62,11 @@ public class MapFileGen {
 			FileStatus[] files = fs.listStatus(path);
 			for (FileStatus file : files) {
 				path = file.getPath();
-				if (fs.isFile(path) && path.getName().startsWith("ast")) {
+				if (fs.isFile(path) && path.getName().startsWith("ast") && path.getName().endsWith(".seq")) {
 					Path dataFile = new Path(path.getParent(), MapFile.DATA_FILE_NAME);
+					Path indexFile = new Path(path.getParent(), MapFile.INDEX_FILE_NAME);
+					while (fs.exists(indexFile))
+						fs.delete(indexFile, false);
 					fs.rename(path, dataFile);
 					System.out.println("fixing data file");
 					MapFile.fix(fs, dataFile.getParent(), LongWritable.class, BytesWritable.class, false, conf);
