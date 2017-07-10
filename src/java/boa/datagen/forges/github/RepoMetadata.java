@@ -117,9 +117,10 @@ public class RepoMetadata {
 			this.name = jsonProject.get(GIT_NAME).getAsString();
 		if (jsonProject.has(GIT_SHORT_DESCRIPTION))
 			this.shortDescription = jsonProject.get(GIT_SHORT_DESCRIPTION).getAsString();
-		if (jsonProject.has(GIT_HOME_PAGE)) {
+		if (jsonProject.has(GIT_HOME_PAGE) && !jsonProject.get(GIT_HOME_PAGE).isJsonNull()) {
 			this.homepage = jsonProject.get(GIT_HOME_PAGE).getAsString();
-		}
+		}else
+			this.homepage = "";
 		if (jsonProject.has(GIT_SUMMARY_PAGE)) {
 			this.summaryPage = jsonProject.get(GIT_SUMMARY_PAGE).getAsString();
 		}
