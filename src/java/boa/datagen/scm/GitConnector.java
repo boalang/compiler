@@ -43,7 +43,6 @@ import org.eclipse.jgit.treewalk.TreeWalk;
  * @author josephb
  */
 public class GitConnector extends AbstractConnector {
-	private static final boolean debug = boa.datagen.util.Properties.getBoolean("debug", boa.datagen.DefaultProperties.DEBUG);
 
 	private String path;
 
