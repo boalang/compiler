@@ -1,8 +1,5 @@
 package boa.datagen.forges.github;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -10,13 +7,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map.Entry;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
-
-import boa.datagen.util.FileIO;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.CodeRepository.RepositoryKind;
 import boa.types.Toplevel.Project;

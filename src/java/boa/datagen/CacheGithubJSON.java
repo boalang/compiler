@@ -7,8 +7,6 @@ import java.util.HashMap;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-
 import boa.datagen.forges.github.RepoMetadata;
 import boa.datagen.util.FileIO;
 import boa.datagen.util.Properties;
@@ -19,7 +17,6 @@ public class CacheGithubJSON {
 	final static String jsonCachePath = Properties.getProperty("gh.json.cache.path", DefaultProperties.GH_JSON_CACHE_PATH);
 	
 	public static void main(String[] args) {
-		final long startTime = System.currentTimeMillis();
 		HashMap<String, byte[]> repos = new HashMap<String, byte[]>();
 		File dir = new File(jsonPath + "/repos");
 		for (File file : dir.listFiles()) {
@@ -41,8 +38,6 @@ public class CacheGithubJSON {
 		File output = new File(jsonCachePath);
 		output.mkdirs();
 		FileIO.writeObjectToFile(repos, jsonCachePath + "/buf-map", false);
-
-		System.out.println("Time: " + (System.currentTimeMillis() - startTime) / 1000);
 	}
 }
 	
