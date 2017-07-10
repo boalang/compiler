@@ -1,8 +1,5 @@
 package boa.datagen.forges.github;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -10,13 +7,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map.Entry;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
-
-import boa.datagen.util.FileIO;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.CodeRepository.RepositoryKind;
 import boa.types.Toplevel.Project;
@@ -117,9 +110,10 @@ public class RepoMetadata {
 			this.name = jsonProject.get(GIT_NAME).getAsString();
 		if (jsonProject.has(GIT_SHORT_DESCRIPTION))
 			this.shortDescription = jsonProject.get(GIT_SHORT_DESCRIPTION).getAsString();
-		if (jsonProject.has(GIT_HOME_PAGE)) {
+		if (jsonProject.has(GIT_HOME_PAGE) && !jsonProject.get(GIT_HOME_PAGE).isJsonNull()) {
 			this.homepage = jsonProject.get(GIT_HOME_PAGE).getAsString();
-		}
+		}else
+			this.homepage = "";
 		if (jsonProject.has(GIT_SUMMARY_PAGE)) {
 			this.summaryPage = jsonProject.get(GIT_SUMMARY_PAGE).getAsString();
 		}

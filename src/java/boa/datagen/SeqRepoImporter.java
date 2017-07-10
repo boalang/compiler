@@ -21,7 +21,6 @@ import java.io.EOFException;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -79,9 +78,7 @@ public class SeqRepoImporter {
 		conf = new Configuration();
 		// currently using the cachejson location as tempCache
 		// conf.set("fs.default.name", "hdfs://boa-njt/");
-		// conf.set("fs.default.name",
-		// Properties.getProperty("gh.json.cache.path",
-		// DefaultProperties.GH_JSON_CACHE_PATH));
+		// conf.set("fs.default.name", Properties.getProperty("gh.json.cache.path", DefaultProperties.GH_JSON_CACHE_PATH));
 		fileSystem = FileSystem.get(conf);
 		base = Properties.getProperty("gh.json.cache.path", DefaultProperties.GH_JSON_CACHE_PATH);
 
@@ -153,23 +150,10 @@ public class SeqRepoImporter {
 				repos.clear();
 			}
 		}
-//		System.out.println("Got cached projects: " + cacheOfProjects.size());
+		if (debug)
+			System.out.println("Got cached projects: " + cacheOfProjects.size());
 	}
-
-	@SuppressWarnings("unused")
-	private static void print(String id, Project p) {
-		System.out.print(id);
-		System.out.print(" " + p.getId());
-		System.out.print(" " + p.getName());
-		System.out.print(" " + p.getHomepageUrl());
-		if (p.getProgrammingLanguagesCount() > 0) {
-			System.out.print(" Programming languages:" + p.getProgrammingLanguagesCount());
-			for (int i = 0; i < p.getProgrammingLanguagesCount(); i++)
-				System.out.print(" " + p.getProgrammingLanguages(i));
-		}
-		System.out.println();
-	}
-
+	
 	public static class ImportTask implements Runnable {
 		private static final int MAX_COUNTER = 10000;
 		private int id;
@@ -182,30 +166,17 @@ public class SeqRepoImporter {
 
 		public void openWriters() {
 			long time = System.currentTimeMillis() / 1000;
-			String hostname = "" + time;
-			for (int i = 0; i < 3; i++) {
-				try {
-					hostname = InetAddress.getLocalHost().getHostName();
-					break;
-				} catch (UnknownHostException e) {
-					e.printStackTrace();
-				}
-			}
-//			String suffix = hostname + "-" + id + "-" + time + ".seq";
-			String suffix = ".seq";
+			String suffix = "-" + id + "-" + time + ".seq";
 			while (true) {
 				try {
-					projectWriter = SequenceFile.createWriter(fileSystem, conf,
-							new Path(base + "/projects" + suffix), Text.class, BytesWritable.class);
-					astWriter = SequenceFile.createWriter(fileSystem, conf,
-							new Path(base + "/ast" + suffix), LongWritable.class, BytesWritable.class);
+					projectWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/projects" + suffix), Text.class, BytesWritable.class);
+					astWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/ast" + suffix), LongWritable.class, BytesWritable.class);
 					break;
 				} catch (Throwable t) {
 					t.printStackTrace();
 					try {
 						Thread.sleep(1000);
-					} catch (InterruptedException e) {
-					}
+					} catch (InterruptedException e) {}
 				}
 			}
 		}
@@ -255,8 +226,7 @@ public class SeqRepoImporter {
 					final String name = cachedProject.getName();
 
 					if (debug)
-						System.out.println("Processing " + pid + " / " + cacheOfProjects.size() + " "
-								+ cachedProject.getId() + " " + name);
+						System.out.println("Processing " + (pid+1) + " / " + cacheOfProjects.size() + " " + cachedProject.getId() + " " + name);
 
 					Project project = storeRepository(cachedProject, 0);
 
@@ -331,7 +301,7 @@ public class SeqRepoImporter {
 				}
 				if (repoBuilder.getRevisionsCount() > 0) {
 					repoBuilder.setHead(conn.getHeadCommitOffset());
-					repoBuilder.addAllHeadSnapshot(conn.buildHeadSnapshot(new String[]{"java"}));
+					repoBuilder.addAllHeadSnapshot(conn.buildHeadSnapshot(new String[]{"java"}, astWriter));
 				}
 				repoBuilder.addAllBranches(conn.getBranchIndices());
 				repoBuilder.addAllBranchNames(conn.getBranchNames());

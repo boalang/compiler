@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.jgit.lib.Constants;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import boa.datagen.DefaultProperties;
@@ -24,7 +25,7 @@ public class TestBuildSnapshot {
 	public void testBuildSnapshot() throws Exception {
 		DefaultProperties.DEBUG = true;
 		
-		String[] repoNames = new String[]{"candoia/candoia", "boalang/compiler"};
+		String[] repoNames = new String[]{"candoia/candoia", "boalang/compiler", "junit-team/junit4"};
 		for (String repoName : repoNames) {
 			System.out.println("Repo: " + repoName);
 			File gitDir = new File("dataset/repos/" + repoName);
@@ -60,7 +61,6 @@ public class TestBuildSnapshot {
 				AbstractCommit commit = gc.getRevisions().get(i);
 				snapshot1 = new ArrayList<ChangedFile>();
 				gc.getSnapshot(i, snapshot1, new ArrayList<AbstractCommit>());
-				System.out.println("Finish building snapshot");
 				snapshot2 = gc.getSnapshot(commit.getId());
 				s1 = new HashSet<String>();
 				s2 = new HashSet<String>(snapshot2);
@@ -79,14 +79,15 @@ public class TestBuildSnapshot {
 					in2.removeAll(s1);
 					print(in2, new ArrayList<ChangedFile>(), commits);
 					System.out.println("Commit " + commit.getId() + ": " + s1.size() + " " + s2.size() + " " + s.size() + " " + in1.size() + " " + in2.size());
-				} else 
-					System.out.println("Commit " + commit.getId() + ": " + s1.size());
+				}/* else 
+					System.out.println("Commit " + commit.getId() + ": " + s1.size());*/
 				assertEquals(s2, s1);
 			}
 			gc.close();
 		}
 	}
 	
+	@Ignore
 	@Test
 	public void testBuildSnapshotWithTypes() throws Exception {
 		DefaultProperties.DEBUG = true;
@@ -99,7 +100,7 @@ public class TestBuildSnapshot {
 		GitConnector gc = new GitConnector(gitDir.getAbsolutePath());
 		gc.setRevisions();
 		System.out.println("Finish processing commits");
-		List<ChangedFile> snapshot1 = gc.buildHeadSnapshot(new String[]{"java"});
+		List<ChangedFile> snapshot1 = gc.buildHeadSnapshot(new String[]{"java"}, null);
 		System.out.println("Finish building head snapshot");
 		List<String> snapshot2 = gc.getSnapshot(Constants.HEAD);
 		gc.close();

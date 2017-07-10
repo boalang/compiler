@@ -999,7 +999,7 @@ public class ASTParser {
 			initializeDefaults();
 		}
 	}
-	public void createASTs(String[] contents, String[] sourceFilePaths, String[] encodings, String[] bindingKeys,
+	public void createASTs(Map<String, String> contents, String[] sourceFilePaths, String[] encodings, String[] bindingKeys,
 			FileASTRequestor requestor, IProgressMonitor monitor) {
 		try {
 			int flags = 0;
