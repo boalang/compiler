@@ -57,7 +57,24 @@ public abstract class AbstractCommit {
 
 	protected Map<String, Integer> fileNameIndices = new HashMap<String, Integer>();
 	
+	protected List<ChangedFile.Builder> changedFiles = new ArrayList<ChangedFile.Builder>();
+
+	protected ChangedFile.Builder getChangeFile(String path) {
+		ChangedFile.Builder cfb = null;
+		Integer index = fileNameIndices.get(path);
+		if (index == null) {
+			cfb = ChangedFile.newBuilder();
+			cfb.setKind(FileKind.OTHER);
+			cfb.setKey(-1);
+			fileNameIndices.put(path, changedFiles.size());
+			changedFiles.add(cfb);
+		} else
+			cfb = changedFiles.get(index);
+		return cfb;
+	}
+	
 	protected String id = null;
+	public String getId() { return id; }
 	public void setId(final String id) { this.id = id; }
 
 	protected Person author;
@@ -85,8 +102,6 @@ public abstract class AbstractCommit {
 
 	protected Date date;
 	public void setDate(final Date date) { this.date = date; }
-	
-	protected List<ChangedFile.Builder> changedFiles = new ArrayList<ChangedFile.Builder>();
 	
 	protected int[] parentIndices;
 
@@ -325,7 +340,7 @@ public abstract class AbstractCommit {
 			parser.setResolveBindings(true);
 			parser.setSource(content.toCharArray());
 
-			final Map options = JavaCore.getOptions();
+			final Map<?, ?> options = JavaCore.getOptions();
 			JavaCore.setComplianceOptions(compliance, options);
 			parser.setCompilerOptions(options);
 
@@ -416,17 +431,40 @@ public abstract class AbstractCommit {
 		return loc;
 	}
 
-	public List<int[]> getFiles(int index, String path) {
+	protected List<int[]> getPreviousFiles(String parentName, String path) {
+		int commitId = connector.revisionMap.get(parentName);
+		Set<Integer> queuedCommitIds = new HashSet<Integer>();
 		List<int[]> l = new ArrayList<int[]>();
-		for (int i = 0; i < changedFiles.size(); i++) {
-			ChangedFile.Builder cfb = changedFiles.get(i);
-			if (cfb.getName().equals(path) && cfb.getChange() != ChangeKind.DELETED) {
-				l.add(new int[]{i, index});
-				return l;
+		PriorityQueue<Integer> pq = new PriorityQueue<Integer>(100, new Comparator<Integer>() {
+			@Override
+			public int compare(Integer i1, Integer i2) {
+				return i2 - i1;
+			}
+		});
+		pq.offer(commitId);
+		queuedCommitIds.add(commitId);
+		while (!pq.isEmpty()) {
+			commitId = pq.poll();
+			AbstractCommit commit = connector.revisions.get(commitId);
+			boolean found = false;
+			for (int i = 0; i < commit.changedFiles.size(); i++) {
+				ChangedFile.Builder cfb = commit.changedFiles.get(i);
+				if (cfb.getName().equals(path) && cfb.getChange() != ChangeKind.DELETED) {
+					l.add(new int[]{i, commitId});
+					found = true;
+					break;
+				}
+			}
+			if (!found && commit.parentIndices != null) {
+				for (int parentId : commit.parentIndices) {
+					if (!queuedCommitIds.contains(parentId)) {
+						pq.offer(parentId);
+						queuedCommitIds.add(parentId);
+					}
+				}
 			}
 		}
-		for (int parentId : parentIndices)
-			l.addAll(connector.revisions.get(parentId).getFiles(parentId, path));
 		return l;
 	}
+
 }

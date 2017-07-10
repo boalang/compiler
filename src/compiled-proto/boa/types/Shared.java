@@ -18,13 +18,17 @@ public final class Shared {
   public enum ChangeKind
       implements com.google.protobuf.ProtocolMessageEnum {
     /**
+     * <code>UNKNOWN = 0;</code>
+     */
+    UNKNOWN(0, 0),
+    /**
      * <code>ADDED = 1;</code>
      *
      * <pre>
      ** The artifact or program entity/element did not already exist and was added 
      * </pre>
      */
-    ADDED(0, 1),
+    ADDED(1, 1),
     /**
      * <code>DELETED = 2;</code>
      *
@@ -32,7 +36,7 @@ public final class Shared {
      ** The artifact or program entity/element was deleted 
      * </pre>
      */
-    DELETED(1, 2),
+    DELETED(2, 2),
     /**
      * <code>MODIFIED = 3;</code>
      *
@@ -40,7 +44,7 @@ public final class Shared {
      ** The artifact or program entity/element already existed and was modified 
      * </pre>
      */
-    MODIFIED(3, 3),
+    MODIFIED(4, 3),
     /**
      * <code>RENAMED = 4;</code>
      *
@@ -48,7 +52,7 @@ public final class Shared {
      ** The label of the artifact or program entity/element was renamed 
      * </pre>
      */
-    RENAMED(5, 4),
+    RENAMED(6, 4),
     /**
      * <code>COPIED = 5;</code>
      *
@@ -56,7 +60,7 @@ public final class Shared {
      ** The artifact or program entity/element was copied from another one 
      * </pre>
      */
-    COPIED(7, 5),
+    COPIED(8, 5),
     /**
      * <code>MERGED = 6;</code>
      *
@@ -64,7 +68,7 @@ public final class Shared {
      ** The artifact or program entity/element was merged 
      * </pre>
      */
-    MERGED(8, 6),
+    MERGED(9, 6),
     /**
      * <code>UNCHANGED = 7;</code>
      *
@@ -72,7 +76,7 @@ public final class Shared {
      ** The artifact or program entity/element was unchanged 
      * </pre>
      */
-    UNCHANGED(9, 7),
+    UNCHANGED(10, 7),
     ;
 
     /**
@@ -99,6 +103,10 @@ public final class Shared {
      * </pre>
      */
     public static final ChangeKind MOVED = RENAMED;
+    /**
+     * <code>UNKNOWN = 0;</code>
+     */
+    public static final int UNKNOWN_VALUE = 0;
     /**
      * <code>ADDED = 1;</code>
      *
@@ -185,6 +193,7 @@ public final class Shared {
 
     public static ChangeKind valueOf(int value) {
       switch (value) {
+        case 0: return UNKNOWN;
         case 1: return ADDED;
         case 2: return DELETED;
         case 3: return MODIFIED;
@@ -222,7 +231,7 @@ public final class Shared {
     }
 
     private static final ChangeKind[] VALUES = {
-      ADDED, DELETED, REMOVED, MODIFIED, CHANGED, RENAMED, MOVED, COPIED, MERGED, UNCHANGED, 
+      UNKNOWN, ADDED, DELETED, REMOVED, MODIFIED, CHANGED, RENAMED, MOVED, COPIED, MERGED, UNCHANGED, 
     };
 
     public static ChangeKind valueOf(
@@ -1204,10 +1213,11 @@ public final class Shared {
     java.lang.String[] descriptorData = {
       "\n\014shared.proto\022\tboa.types\"<\n\006Person\022\020\n\010u" +
       "sername\030\001 \002(\t\022\021\n\treal_name\030\002 \001(\t\022\r\n\005emai" +
-      "l\030\003 \001(\t*\217\001\n\nChangeKind\022\t\n\005ADDED\020\001\022\013\n\007DEL" +
-      "ETED\020\002\022\013\n\007REMOVED\020\002\022\014\n\010MODIFIED\020\003\022\013\n\007CHA" +
-      "NGED\020\003\022\013\n\007RENAMED\020\004\022\t\n\005MOVED\020\004\022\n\n\006COPIED" +
-      "\020\005\022\n\n\006MERGED\020\006\022\r\n\tUNCHANGED\020\007\032\002\020\001B\002H\001"
+      "l\030\003 \001(\t*\234\001\n\nChangeKind\022\013\n\007UNKNOWN\020\000\022\t\n\005A" +
+      "DDED\020\001\022\013\n\007DELETED\020\002\022\013\n\007REMOVED\020\002\022\014\n\010MODI" +
+      "FIED\020\003\022\013\n\007CHANGED\020\003\022\013\n\007RENAMED\020\004\022\t\n\005MOVE" +
+      "D\020\004\022\n\n\006COPIED\020\005\022\n\n\006MERGED\020\006\022\r\n\tUNCHANGED" +
+      "\020\007\032\002\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

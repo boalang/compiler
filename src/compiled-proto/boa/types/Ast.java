@@ -1463,8 +1463,8 @@ public final class Ast {
       namespaces_ = java.util.Collections.emptyList();
       imports_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       names_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
-      labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -1669,9 +1669,9 @@ public final class Ast {
         bitField0_ = (bitField0_ & ~0x00000002);
         names_ = com.google.protobuf.LazyStringArrayList.EMPTY;
         bitField0_ = (bitField0_ & ~0x00000004);
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00000008);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00000010);
         return this;
       }
@@ -2402,7 +2402,7 @@ public final class Ast {
       }
 
       // optional .boa.types.ChangeKind structural_change_kind = 4;
-      private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       /**
        * <code>optional .boa.types.ChangeKind structural_change_kind = 4;</code>
        *
@@ -2448,13 +2448,13 @@ public final class Ast {
        */
       public Builder clearStructuralChangeKind() {
         bitField0_ = (bitField0_ & ~0x00000008);
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         onChanged();
         return this;
       }
 
       // optional .boa.types.ChangeKind label_change_kind = 5;
-      private boa.types.Shared.ChangeKind labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      private boa.types.Shared.ChangeKind labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       /**
        * <code>optional .boa.types.ChangeKind label_change_kind = 5;</code>
        *
@@ -2500,7 +2500,7 @@ public final class Ast {
        */
       public Builder clearLabelChangeKind() {
         bitField0_ = (bitField0_ & ~0x00000010);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         onChanged();
         return this;
       }
@@ -3374,8 +3374,8 @@ public final class Ast {
       statements_ = java.util.Collections.emptyList();
       methods_ = java.util.Collections.emptyList();
       expressions_ = java.util.Collections.emptyList();
-      structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
-      labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -3645,9 +3645,9 @@ public final class Ast {
         } else {
           expressionsBuilder_.clear();
         }
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00000040);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00000080);
         return this;
       }
@@ -5611,7 +5611,7 @@ public final class Ast {
       }
 
       // optional .boa.types.ChangeKind structural_change_kind = 7;
-      private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       /**
        * <code>optional .boa.types.ChangeKind structural_change_kind = 7;</code>
        *
@@ -5657,13 +5657,13 @@ public final class Ast {
        */
       public Builder clearStructuralChangeKind() {
         bitField0_ = (bitField0_ & ~0x00000040);
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         onChanged();
         return this;
       }
 
       // optional .boa.types.ChangeKind label_change_kind = 8;
-      private boa.types.Shared.ChangeKind labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      private boa.types.Shared.ChangeKind labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       /**
        * <code>optional .boa.types.ChangeKind label_change_kind = 8;</code>
        *
@@ -5709,7 +5709,7 @@ public final class Ast {
        */
       public Builder clearLabelChangeKind() {
         bitField0_ = (bitField0_ & ~0x00000080);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         onChanged();
         return this;
       }
@@ -6863,8 +6863,8 @@ public final class Ast {
       fields_ = java.util.Collections.emptyList();
       nestedDeclarations_ = java.util.Collections.emptyList();
       comments_ = java.util.Collections.emptyList();
-      structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
-      labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -7187,9 +7187,9 @@ public final class Ast {
         } else {
           commentsBuilder_.clear();
         }
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00000200);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00000400);
         return this;
       }
@@ -9922,7 +9922,7 @@ public final class Ast {
       }
 
       // optional .boa.types.ChangeKind structural_change_kind = 10;
-      private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       /**
        * <code>optional .boa.types.ChangeKind structural_change_kind = 10;</code>
        *
@@ -9968,13 +9968,13 @@ public final class Ast {
        */
       public Builder clearStructuralChangeKind() {
         bitField0_ = (bitField0_ & ~0x00000200);
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         onChanged();
         return this;
       }
 
       // optional .boa.types.ChangeKind label_change_kind = 11;
-      private boa.types.Shared.ChangeKind labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      private boa.types.Shared.ChangeKind labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       /**
        * <code>optional .boa.types.ChangeKind label_change_kind = 11;</code>
        *
@@ -10020,7 +10020,7 @@ public final class Ast {
        */
       public Builder clearLabelChangeKind() {
         bitField0_ = (bitField0_ & ~0x00000400);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         onChanged();
         return this;
       }
@@ -10471,8 +10471,8 @@ public final class Ast {
       name_ = "";
       kind_ = boa.types.Ast.TypeKind.OTHER;
       id_ = "";
-      structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
-      labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -10664,9 +10664,9 @@ public final class Ast {
         bitField0_ = (bitField0_ & ~0x00000002);
         id_ = "";
         bitField0_ = (bitField0_ & ~0x00000004);
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00000008);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00000010);
         return this;
       }
@@ -11035,7 +11035,7 @@ public final class Ast {
       }
 
       // optional .boa.types.ChangeKind structural_change_kind = 5;
-      private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       /**
        * <code>optional .boa.types.ChangeKind structural_change_kind = 5;</code>
        *
@@ -11081,13 +11081,13 @@ public final class Ast {
        */
       public Builder clearStructuralChangeKind() {
         bitField0_ = (bitField0_ & ~0x00000008);
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         onChanged();
         return this;
       }
 
       // optional .boa.types.ChangeKind label_change_kind = 6;
-      private boa.types.Shared.ChangeKind labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      private boa.types.Shared.ChangeKind labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       /**
        * <code>optional .boa.types.ChangeKind label_change_kind = 6;</code>
        *
@@ -11133,7 +11133,7 @@ public final class Ast {
        */
       public Builder clearLabelChangeKind() {
         bitField0_ = (bitField0_ & ~0x00000010);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         onChanged();
         return this;
       }
@@ -12224,8 +12224,8 @@ public final class Ast {
       exceptionTypes_ = java.util.Collections.emptyList();
       statements_ = java.util.Collections.emptyList();
       comments_ = java.util.Collections.emptyList();
-      structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
-      labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -12533,9 +12533,9 @@ public final class Ast {
         } else {
           commentsBuilder_.clear();
         }
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00000100);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00000200);
         return this;
       }
@@ -15074,7 +15074,7 @@ public final class Ast {
       }
 
       // optional .boa.types.ChangeKind structural_change_kind = 9;
-      private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       /**
        * <code>optional .boa.types.ChangeKind structural_change_kind = 9;</code>
        *
@@ -15120,13 +15120,13 @@ public final class Ast {
        */
       public Builder clearStructuralChangeKind() {
         bitField0_ = (bitField0_ & ~0x00000100);
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         onChanged();
         return this;
       }
 
       // optional .boa.types.ChangeKind label_change_kind = 10;
-      private boa.types.Shared.ChangeKind labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      private boa.types.Shared.ChangeKind labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       /**
        * <code>optional .boa.types.ChangeKind label_change_kind = 10;</code>
        *
@@ -15172,7 +15172,7 @@ public final class Ast {
        */
       public Builder clearLabelChangeKind() {
         bitField0_ = (bitField0_ & ~0x00000200);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         onChanged();
         return this;
       }
@@ -15855,8 +15855,8 @@ public final class Ast {
       modifiers_ = java.util.Collections.emptyList();
       initializer_ = boa.types.Ast.Expression.getDefaultInstance();
       comments_ = java.util.Collections.emptyList();
-      structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
-      labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -16108,9 +16108,9 @@ public final class Ast {
         } else {
           commentsBuilder_.clear();
         }
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00000020);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00000040);
         return this;
       }
@@ -17357,7 +17357,7 @@ public final class Ast {
       }
 
       // optional .boa.types.ChangeKind structural_change_kind = 6;
-      private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       /**
        * <code>optional .boa.types.ChangeKind structural_change_kind = 6;</code>
        *
@@ -17403,13 +17403,13 @@ public final class Ast {
        */
       public Builder clearStructuralChangeKind() {
         bitField0_ = (bitField0_ & ~0x00000020);
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         onChanged();
         return this;
       }
 
       // optional .boa.types.ChangeKind label_change_kind = 7;
-      private boa.types.Shared.ChangeKind labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      private boa.types.Shared.ChangeKind labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       /**
        * <code>optional .boa.types.ChangeKind label_change_kind = 7;</code>
        *
@@ -17455,7 +17455,7 @@ public final class Ast {
        */
       public Builder clearLabelChangeKind() {
         bitField0_ = (bitField0_ & ~0x00000040);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         onChanged();
         return this;
       }
@@ -18552,8 +18552,8 @@ public final class Ast {
       variableDeclaration_ = boa.types.Ast.Variable.getDefaultInstance();
       typeDeclaration_ = boa.types.Ast.Declaration.getDefaultInstance();
       expression_ = boa.types.Ast.Expression.getDefaultInstance();
-      structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
-      labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -18883,9 +18883,9 @@ public final class Ast {
           expressionBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000100);
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00000200);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00000400);
         return this;
       }
@@ -20768,7 +20768,7 @@ public final class Ast {
       }
 
       // optional .boa.types.ChangeKind structural_change_kind = 10;
-      private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       /**
        * <code>optional .boa.types.ChangeKind structural_change_kind = 10;</code>
        *
@@ -20814,13 +20814,13 @@ public final class Ast {
        */
       public Builder clearStructuralChangeKind() {
         bitField0_ = (bitField0_ & ~0x00000200);
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         onChanged();
         return this;
       }
 
       // optional .boa.types.ChangeKind label_change_kind = 11;
-      private boa.types.Shared.ChangeKind labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      private boa.types.Shared.ChangeKind labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       /**
        * <code>optional .boa.types.ChangeKind label_change_kind = 11;</code>
        *
@@ -20866,7 +20866,7 @@ public final class Ast {
        */
       public Builder clearLabelChangeKind() {
         bitField0_ = (bitField0_ & ~0x00000400);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         onChanged();
         return this;
       }
@@ -22506,8 +22506,8 @@ public final class Ast {
       annotation_ = boa.types.Ast.Modifier.getDefaultInstance();
       lambda_ = boa.types.Ast.Method.getDefaultInstance();
       noParens_ = false;
-      structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
-      labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -22882,9 +22882,9 @@ public final class Ast {
         bitField0_ = (bitField0_ & ~0x00001000);
         noParens_ = false;
         bitField0_ = (bitField0_ & ~0x00002000);
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00004000);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00008000);
         return this;
       }
@@ -25076,7 +25076,7 @@ public final class Ast {
       }
 
       // optional .boa.types.ChangeKind structural_change_kind = 15;
-      private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       /**
        * <code>optional .boa.types.ChangeKind structural_change_kind = 15;</code>
        *
@@ -25122,13 +25122,13 @@ public final class Ast {
        */
       public Builder clearStructuralChangeKind() {
         bitField0_ = (bitField0_ & ~0x00004000);
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         onChanged();
         return this;
       }
 
       // optional .boa.types.ChangeKind label_change_kind = 16;
-      private boa.types.Shared.ChangeKind labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      private boa.types.Shared.ChangeKind labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       /**
        * <code>optional .boa.types.ChangeKind label_change_kind = 16;</code>
        *
@@ -25174,7 +25174,7 @@ public final class Ast {
        */
       public Builder clearLabelChangeKind() {
         bitField0_ = (bitField0_ & ~0x00008000);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         onChanged();
         return this;
       }
@@ -26261,8 +26261,8 @@ public final class Ast {
       annotationMembers_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       annotationValues_ = java.util.Collections.emptyList();
       other_ = "";
-      structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
-      labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -26493,9 +26493,9 @@ public final class Ast {
         }
         other_ = "";
         bitField0_ = (bitField0_ & ~0x00000020);
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00000040);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00000080);
         return this;
       }
@@ -27417,7 +27417,7 @@ public final class Ast {
       }
 
       // optional .boa.types.ChangeKind structural_change_kind = 7;
-      private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       /**
        * <code>optional .boa.types.ChangeKind structural_change_kind = 7;</code>
        *
@@ -27463,13 +27463,13 @@ public final class Ast {
        */
       public Builder clearStructuralChangeKind() {
         bitField0_ = (bitField0_ & ~0x00000040);
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         onChanged();
         return this;
       }
 
       // optional .boa.types.ChangeKind label_change_kind = 8;
-      private boa.types.Shared.ChangeKind labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      private boa.types.Shared.ChangeKind labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       /**
        * <code>optional .boa.types.ChangeKind label_change_kind = 8;</code>
        *
@@ -27515,7 +27515,7 @@ public final class Ast {
        */
       public Builder clearLabelChangeKind() {
         bitField0_ = (bitField0_ & ~0x00000080);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         onChanged();
         return this;
       }
@@ -28019,8 +28019,8 @@ public final class Ast {
       kind_ = boa.types.Ast.Comment.CommentKind.OTHER;
       value_ = "";
       position_ = boa.types.Ast.PositionInfo.getDefaultInstance();
-      structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
-      labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -28225,9 +28225,9 @@ public final class Ast {
           positionBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000004);
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00000008);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00000010);
         return this;
       }
@@ -28585,7 +28585,7 @@ public final class Ast {
       }
 
       // optional .boa.types.ChangeKind structural_change_kind = 4;
-      private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       /**
        * <code>optional .boa.types.ChangeKind structural_change_kind = 4;</code>
        *
@@ -28631,13 +28631,13 @@ public final class Ast {
        */
       public Builder clearStructuralChangeKind() {
         bitField0_ = (bitField0_ & ~0x00000008);
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         onChanged();
         return this;
       }
 
       // optional .boa.types.ChangeKind label_change_kind = 5;
-      private boa.types.Shared.ChangeKind labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      private boa.types.Shared.ChangeKind labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       /**
        * <code>optional .boa.types.ChangeKind label_change_kind = 5;</code>
        *
@@ -28683,7 +28683,7 @@ public final class Ast {
        */
       public Builder clearLabelChangeKind() {
         bitField0_ = (bitField0_ & ~0x00000010);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         onChanged();
         return this;
       }

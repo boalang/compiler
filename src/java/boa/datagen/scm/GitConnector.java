@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.ListBranchCommand.ListMode;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Constants;
 import org.eclipse.jgit.lib.PersonIdent;
@@ -37,7 +36,7 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevSort;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
-import boa.types.Diff.ChangedFile;
+import org.eclipse.jgit.treewalk.TreeWalk;
 
 /**
  * @author rdyer
@@ -70,23 +69,6 @@ public class GitConnector extends AbstractConnector {
 	public void close() {
 		revwalk.close();
 		repository.close();
-	}
-
-	@Override
-	public int getHeadCommitOffset() {
-		return this.headCommitOffset;
-	}
-	
-	@Override
-	public List<ChangedFile> buildHeadSnapshot() {
-		List<ChangedFile> snapshot = getSnapshot(headCommitOffset);
-		
-		return snapshot;
-	}
-
-	private List<ChangedFile> getSnapshot(int commitOffset) {
-		List<ChangedFile> snapshot = new ArrayList<ChangedFile>();
-		return snapshot;
 	}
 
 	@Override
@@ -176,5 +158,26 @@ public class GitConnector extends AbstractConnector {
 			if (debug)
 				System.err.println("Git Error reading branches: " + e.getMessage());
 		}
+	}
+
+	public List<String> getSnapshot(String commit) {
+		ArrayList<String> snapshot = new ArrayList<String>();
+		TreeWalk tw = new TreeWalk(repository);
+		tw.reset();
+		try {
+			RevCommit rc = revwalk.parseCommit(repository.resolve(commit));
+			tw.addTree(rc.getTree());
+			tw.setRecursive(true);
+			while (tw.next()) {
+				if (!tw.isSubtree()) {
+					String path = tw.getPathString();
+					snapshot.add(path);
+				}
+			}
+		} catch (IOException e) {
+			System.err.println(e.getMessage());
+		}
+		tw.close();
+		return snapshot;
 	}
 }

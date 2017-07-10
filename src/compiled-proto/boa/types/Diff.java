@@ -1412,7 +1412,7 @@ public final class Diff {
     }
 
     private void initFields() {
-      change_ = boa.types.Shared.ChangeKind.ADDED;
+      change_ = boa.types.Shared.ChangeKind.UNKNOWN;
       kind_ = boa.types.Diff.ChangedFile.FileKind.OTHER;
       name_ = "";
       key_ = 0L;
@@ -1671,7 +1671,7 @@ public final class Diff {
 
       public Builder clear() {
         super.clear();
-        change_ = boa.types.Shared.ChangeKind.ADDED;
+        change_ = boa.types.Shared.ChangeKind.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00000001);
         kind_ = boa.types.Diff.ChangedFile.FileKind.OTHER;
         bitField0_ = (bitField0_ & ~0x00000002);
@@ -1894,7 +1894,7 @@ public final class Diff {
       private int bitField0_;
 
       // required .boa.types.ChangeKind change = 1;
-      private boa.types.Shared.ChangeKind change_ = boa.types.Shared.ChangeKind.ADDED;
+      private boa.types.Shared.ChangeKind change_ = boa.types.Shared.ChangeKind.UNKNOWN;
       /**
        * <code>required .boa.types.ChangeKind change = 1;</code>
        *
@@ -1940,7 +1940,7 @@ public final class Diff {
        */
       public Builder clearChange() {
         bitField0_ = (bitField0_ & ~0x00000001);
-        change_ = boa.types.Shared.ChangeKind.ADDED;
+        change_ = boa.types.Shared.ChangeKind.UNKNOWN;
         onChanged();
         return this;
       }
