@@ -13,7 +13,7 @@
 
 	<!-- CheckStyle path -->
 	<taskdef resource="com/puppycrawl/tools/checkstyle/ant/checkstyle-ant-task.properties"
-		classpath="lib/checkstyle-6.19-all.jar"/>
+		classpath="lib/checkstyle-6.19.jar"/>
 
 	<!-- debug properties -->
 	<property name="debug.enabled" value="on" />
