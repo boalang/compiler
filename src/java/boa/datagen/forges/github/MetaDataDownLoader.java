@@ -22,11 +22,11 @@ public class MetaDataDownLoader {
 		this.repoNameDir = input;
 		this.langNameDir = output;
 		this.tokenFile = tokenFile;
-		File outputDir = new File(output + "/java");
+		File outputDir = new File(output);
 		if (!outputDir.exists()) {
 			outputDir.mkdirs();
 		} else {
-			addNames(output + "/java");
+			addNames(output);
 		}
 	}
 	
@@ -36,7 +36,7 @@ public class MetaDataDownLoader {
 		if (args.length < 3) {
 			throw new IllegalArgumentException();
 		}
-		GitHubRepoMetaDataDownloader master = new GitHubRepoMetaDataDownloader(args[0], args[1], args[2]);
+		MetaDataDownLoader master = new MetaDataDownLoader(args[0], args[1], args[2]);
 		System.out.println(master.repoNameDir);
 		master.orchastrate(new File(master.repoNameDir).listFiles().length);
 	}

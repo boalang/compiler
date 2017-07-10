@@ -46,20 +46,12 @@ public class MetaDataDownloadWorker implements Runnable {
 			MetadataCacher mc = null;
 			int size = repos.size();
 			for (int j = 0; j < size; j++) {
-				JsonObject rep = repos.get(j).getAsJsonObject();
-				JsonObject repo = new JsonObject();
-				String name = rep.get("full_name").getAsString();
+				JsonObject repo = repos.get(j).getAsJsonObject();
+				String name = repo.get("full_name").getAsString();
 				if (names.contains(name)) {
 					names.remove(name);
 					continue;
 				}
-				repo.addProperty("id", rep.get("id").getAsInt());
-				repo.addProperty("full_name", name);
-				String shortName = rep.get("name").getAsString();
-				repo.addProperty("name", shortName);
-				JsonObject langlist = rep.get("language_list").getAsJsonObject();
-				repo.add("language_list", langlist);
-				repo.addProperty("description", rep.get("description").getAsString());
 				String repourl = this.repo_url_header + name;
 				if (tok.getNumberOfRemainingLimit() <= 0) {
 					tok = this.tokens.getNextAuthenticToken("https://api.github.com/repositories");
@@ -70,11 +62,14 @@ public class MetaDataDownloadWorker implements Runnable {
 					mc.getResponse();
 					String pageContent = mc.getContent();
 					JsonObject repository = parser.fromJson(pageContent, JsonElement.class).getAsJsonObject();
+					String shortName = repository.get("name").getAsString();
+					repo.addProperty("name", shortName);
 					int stars = repository.get("stargazers_count").getAsInt();
 					repo.addProperty("stargazers_count", stars);
 					int forks = repository.get("forks_count").getAsInt();
 					repo.addProperty("forks_count", forks);
 					String created = repository.get("created_at").getAsString();
+					repo.remove("created_at");
 					repo.addProperty("created_at", created);
 					String homepage = "";
 					if (!repository.get("homepage").isJsonNull())
@@ -110,11 +105,11 @@ public class MetaDataDownloadWorker implements Runnable {
 		File fileToWriteJson = null;
 		this.javarepos.add(repo);
 		if (this.javarepos.size() % RECORDS_PER_FILE == 0) {
-			fileToWriteJson = new File(output + "Thread-" + Thread.currentThread().getId() + "-page-" + Counter + ".json");
+			fileToWriteJson = new File(output + "/Thread-" + Thread.currentThread().getId() + "-page-" + Counter + ".json");
 			while (fileToWriteJson.exists()) {
 				System.out.println("file thread-" + Thread.currentThread().getId() + "-page-" + Counter + " arleady exist");
 				Counter++;
-				fileToWriteJson = new File(output + "Thread-" + Thread.currentThread().getId() + "-page-" + Counter + ".json");
+				fileToWriteJson = new File(output + "/Thread-" + Thread.currentThread().getId() + "-page-" + Counter + ".json");
 			}
 			FileIO.writeFileContents(fileToWriteJson, this.javarepos.toString());
 			System.out.println(Thread.currentThread().getId() + " " + Counter++);
@@ -125,13 +120,13 @@ public class MetaDataDownloadWorker implements Runnable {
 	public void writeRemainingRepos(String output) {
 		File fileToWriteJson = null;
 		if (this.javarepos.size() > 0) {
-			fileToWriteJson = new File(output + "/java/Thread-" + Thread.currentThread().getId() + "-page-" + Counter + ".json");
+			fileToWriteJson = new File(output + "/Thread-" + Thread.currentThread().getId() + "-page-" + Counter + ".json");
 			while (fileToWriteJson.exists()) {
 				Counter++;
-				fileToWriteJson = new File(output + "/java/Thread-" + Thread.currentThread().getId() + "-page-" + Counter + ".json");
+				fileToWriteJson = new File(output + "/Thread-" + Thread.currentThread().getId() + "-page-" + Counter + ".json");
 			}
 			FileIO.writeFileContents(fileToWriteJson, this.javarepos.toString());
-			System.out.println(Thread.currentThread().getId() + " java " + Counter++);
+			System.out.println(Thread.currentThread().getId() + " " + Counter++);
 		}
 	}
 
