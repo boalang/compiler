@@ -51,6 +51,7 @@ import boa.datagen.util.JavaErrorCheckVisitor;
  */
 public abstract class AbstractCommit {
 	protected static final boolean debug = Properties.getBoolean("debug", DefaultProperties.DEBUG);
+	protected static final boolean debugparse = Properties.getBoolean("debugparse", DefaultProperties.DEBUGPARSE);
 	
 	protected AbstractConnector connector;
 	protected AbstractCommit(AbstractConnector cnn) {
@@ -170,22 +171,22 @@ public abstract class AbstractCommit {
 
 			fb.setKind(FileKind.SOURCE_JAVA_JLS2);
 			if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_4, AST.JLS2, false, astWriter)) {
-				if (debug)
+				if (debugparse)
 					System.err.println("Found JLS2 parse error in: revision " + id + ": file " + path);
 
 				fb.setKind(FileKind.SOURCE_JAVA_JLS3);
 				if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_5, AST.JLS3, false, astWriter)) {
-					if (debug)
+					if (debugparse)
 						System.err.println("Found JLS3 parse error in: revision " + id + ": file " + path);
 
 					fb.setKind(FileKind.SOURCE_JAVA_JLS4);
 					if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_7, AST.JLS4, false, astWriter)) {
-						if (debug)
+						if (debugparse)
 							System.err.println("Found JLS4 parse error in: revision " + id + ": file " + path);
 
 						fb.setKind(FileKind.SOURCE_JAVA_JLS8);
 						if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_8, AST.JLS8, false, astWriter)) {
-							if (debug)
+							if (debugparse)
 								System.err.println("Found JLS8 parse error in: revision " + id + ": file " + path);
 
 							fb.setKind(FileKind.SOURCE_JAVA_ERROR);
@@ -194,45 +195,45 @@ public abstract class AbstractCommit {
 //							} catch (IOException e) {
 //								e.printStackTrace();
 //							}
-						} else if (debug)
+						} else if (debugparse)
 							System.err.println("Accepted JLS8: revision " + id + ": file " + path);
-					} else if (debug)
+					} else if (debugparse)
 						System.err.println("Accepted JLS4: revision " + id + ": file " + path);
-				} else if (debug)
+				} else if (debugparse)
 					System.err.println("Accepted JLS3: revision " + id + ": file " + path);
-			} else if (debug)
+			} else if (debugparse)
 				System.err.println("Accepted JLS2: revision " + id + ": file " + path);
 		} else if (lowerPath.endsWith(".js") && parse) {
 			final String content = getFileContents(path);
 
 			fb.setKind(FileKind.SOURCE_JS_ES1);
 			if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_1, false, astWriter)) {
-				if (debug)
+				if (debugparse)
 					System.err.println("Found ES3 parse error in: revision " + id + ": file " + path);
 				fb.setKind(FileKind.SOURCE_JS_ES2);
 				if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_2, false, astWriter)) {
-					if (debug)
+					if (debugparse)
 						System.err.println("Found ES3 parse error in: revision " + id + ": file " + path);
 					fb.setKind(FileKind.SOURCE_JS_ES3);
 					if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_3, false, astWriter)) {
-						if (debug)
+						if (debugparse)
 							System.err.println("Found ES3 parse error in: revision " + id + ": file " + path);
 						fb.setKind(FileKind.SOURCE_JS_ES5);
 						if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_5, false, astWriter)) {
-							if (debug)
+							if (debugparse)
 								System.err.println("Found ES4 parse error in: revision " + id + ": file " + path);
 							fb.setKind(FileKind.SOURCE_JS_ES6);
 							if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_6, false, astWriter)) {
-								if (debug)
+								if (debugparse)
 									System.err.println("Found ES4 parse error in: revision " + id + ": file " + path);
 								fb.setKind(FileKind.SOURCE_JS_ES7);
 								if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_7, false, astWriter)) {
-									if (debug)
+									if (debugparse)
 										System.err
 												.println("Found ES3 parse error in: revision " + id + ": file " + path);
 									fb.setKind(FileKind.SOURCE_JS_ES8);
 									if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_8, false, astWriter)) {
-										if (debug)
+										if (debugparse)
 											System.err.println(
 													"Found ES4 parse error in: revision " + id + ": file " + path);
 										fb.setKind(FileKind.SOURCE_JS_ERROR);
@@ -241,19 +242,19 @@ public abstract class AbstractCommit {
 //										} catch (IOException e) {
 //											e.printStackTrace();
 //										}
-									} else if (debug)
+									} else if (debugparse)
 										System.err.println("Accepted ES8: revision " + id + ": file " + path);
-								} else if (debug)
+								} else if (debugparse)
 									System.err.println("Accepted ES7: revision " + id + ": file " + path);
-							} else if (debug)
+							} else if (debugparse)
 								System.err.println("Accepted ES6: revision " + id + ": file " + path);
-						} else if (debug)
+						} else if (debugparse)
 							System.err.println("Accepted ES5: revision " + id + ": file " + path);
-					} else if (debug)
+					} else if (debugparse)
 						System.err.println("Accepted ES3: revision " + id + ": file " + path);
-				} else if (debug)
+				} else if (debugparse)
 					System.err.println("Accepted ES2: revision " + id + ": file " + path);
-			} else if (debug)
+			} else if (debugparse)
 				System.err.println("Accepted ES1: revision " + id + ": file " + path);
 		}
 		try {

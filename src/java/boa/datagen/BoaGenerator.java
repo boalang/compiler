@@ -112,6 +112,7 @@ public class BoaGenerator {
 		options.addOption("targetRepo", "json", true, "name of the target repository");
 		options.addOption("cache", "json", false, "enable if you want to delete the cloned code for user.");
 		options.addOption("debug", "json", false, "enable for debug mode.");
+		options.addOption("debugparse", "json", false, "enable for debug mode when parsing source files.");
 		options.addOption("help", "help", true, "help");
 	}
 
