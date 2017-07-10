@@ -61,7 +61,6 @@ public class TestBuildSnapshot {
 				AbstractCommit commit = gc.getRevisions().get(i);
 				snapshot1 = new ArrayList<ChangedFile>();
 				gc.getSnapshot(i, snapshot1, new ArrayList<AbstractCommit>());
-				System.out.println("Finish building snapshot");
 				snapshot2 = gc.getSnapshot(commit.getId());
 				s1 = new HashSet<String>();
 				s2 = new HashSet<String>(snapshot2);
