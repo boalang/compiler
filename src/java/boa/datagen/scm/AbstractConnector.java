@@ -154,10 +154,12 @@ public abstract class AbstractConnector implements AutoCloseable {
 						commits.add(commit);
 					}
 					for (int i = 0; i < cf.getPreviousIndicesCount(); i++) {
-						ChangedFile.Builder pcf = revisions.get(cf.getPreviousVersions(i)).changedFiles.get(cf.getPreviousIndices(i));
-						ChangeKind pck = cf.getChanges(i);
-						if (!adds.contains(pcf.getName()) && !dels.contains(pcf.getName()) && (pck == ChangeKind.DELETED || pck == ChangeKind.RENAMED))
-							dels.add(pcf.getName());
+						if (cf.getChanges(i) != ChangeKind.ADDED) {
+							ChangedFile.Builder pcf = revisions.get(cf.getPreviousVersions(i)).changedFiles.get(cf.getPreviousIndices(i));
+							ChangeKind pck = cf.getChanges(i);
+							if (!adds.contains(pcf.getName()) && !dels.contains(pcf.getName()) && (pck == ChangeKind.DELETED || pck == ChangeKind.RENAMED))
+								dels.add(pcf.getName());
+						}
 					}
 					break;
 				case RENAMED:
