@@ -70,6 +70,8 @@ public class MapFileGen {
 					fs.rename(path, dataFile);
 					System.out.println("fixing data file");
 					MapFile.fix(fs, dataFile.getParent(), LongWritable.class, BytesWritable.class, false, conf);
+					while (!fs.delete(new Path(file.getPath().getParent(), "." + MapFile.DATA_FILE_NAME + ".crc"), false));
+					while (!fs.delete(new Path(file.getPath().getParent(), "." + MapFile.INDEX_FILE_NAME + ".crc"), false));
 					break;
 				}
 			}
