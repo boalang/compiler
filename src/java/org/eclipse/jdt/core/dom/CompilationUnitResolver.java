@@ -166,6 +166,7 @@ class CompilationUnitResolver extends Compiler {
 	/*
 	 * Add additional source types
 	 */
+	@Override
 	public void accept(ISourceType[] sourceTypes, PackageBinding packageBinding, AccessRestriction accessRestriction) {
 		// Need to reparse the entire source of the compilation unit so as to get source positions
 		// (case of processing a source that was not known by beginToCompile (e.g. when asking to createBinding))
@@ -173,6 +174,7 @@ class CompilationUnitResolver extends Compiler {
 		accept((org.eclipse.jdt.internal.compiler.env.ICompilationUnit) sourceType.getHandle().getCompilationUnit(), accessRestriction);
 	}
 	
+	@Override
 	public synchronized void accept(org.eclipse.jdt.internal.compiler.env.ICompilationUnit sourceUnit, AccessRestriction accessRestriction) {
 		super.accept(sourceUnit, accessRestriction);
 	}
@@ -315,12 +317,15 @@ class CompilationUnitResolver extends Compiler {
 
 		// passes the initial set of files to the batch oracle (to avoid finding more than once the same units when case insensitive match)
 		return new IErrorHandlingPolicy() {
+			@Override
 			public boolean stopOnFirstError() {
 				return false;
 			}
+			@Override
 			public boolean proceedOnErrors() {
 				return false; // stop if there are some errors
 			}
+			@Override
 			public boolean ignoreAllErrors() {
 				return false;
 			}
@@ -332,6 +337,7 @@ class CompilationUnitResolver extends Compiler {
 	 */
 	protected static ICompilerRequestor getRequestor() {
 		return new ICompilerRequestor() {
+			@Override
 			public void acceptResult(CompilationResult compilationResult) {
 				// do nothing
 			}
@@ -341,9 +347,11 @@ class CompilationUnitResolver extends Compiler {
 	/* (non-Javadoc)
 	 * @see org.eclipse.jdt.internal.compiler.Compiler#initializeParser()
 	 */
+	@Override
 	public void initializeParser() {
 		this.parser = new CommentRecorderParser(this.problemReporter, false);
 	}
+	@Override
 	public void process(CompilationUnitDeclaration unit, int i) {
 		// don't resolve a second time the same unit (this would create the same binding twice)
 		char[] fileName = unit.compilationResult.getFileName();
@@ -353,6 +361,7 @@ class CompilationUnitResolver extends Compiler {
 	/*
 	 * Compiler crash recovery in case of unexpected runtime exceptions
 	 */
+	@Override
 	protected void handleInternalException(
 			Throwable internalException,
 			CompilationUnitDeclaration unit,
@@ -366,6 +375,7 @@ class CompilationUnitResolver extends Compiler {
 	/*
 	 * Compiler recovery in case of internal AbortCompilation event
 	 */
+	@Override
 	protected void handleInternalException(
 			AbortCompilation abortException,
 			CompilationUnitDeclaration unit) {
@@ -488,7 +498,7 @@ class CompilationUnitResolver extends Compiler {
 		}
 	}
 	public static void parse(
-			String[] sourceContents,
+			Map<String, String> sourceContents,
 			String[] sourceUnits,
 			String[] encodings,
 			FileASTRequestor astRequestor,
@@ -508,7 +518,7 @@ class CompilationUnitResolver extends Compiler {
 			int unitLength = sourceUnits.length;
 			if (monitor != null) monitor.beginTask("", unitLength); //$NON-NLS-1$
 			for (int i = 0; i < unitLength; i++) {
-				char[] contents = sourceContents[i].toCharArray();
+				char[] contents = sourceContents.get(sourceUnits[i]).toCharArray();
 				String encoding = encodings != null ? encodings[i] : null;
 				if (contents == null) {
 					// go to the next unit
@@ -713,7 +723,7 @@ class CompilationUnitResolver extends Compiler {
 			}
 		}
 	public static void resolve(
-			String[] sourceContents,
+			Map<String, String> sourceContents,
 			String[] sourceUnits,
 			String[] encodings,
 			String[] bindingKeys,
@@ -892,6 +902,7 @@ class CompilationUnitResolver extends Compiler {
 
 		class Requestor extends ASTRequestor {
 			IBinding[] bindings = new IBinding[length];
+			@Override
 			public void acceptAST(ICompilationUnit source, CompilationUnit ast) {
 				// TODO (jerome) optimize to visit the AST only once
 				IntArrayList intList = (IntArrayList) sourceElementPositions.get(source);
@@ -907,6 +918,7 @@ class CompilationUnitResolver extends Compiler {
 					this.bindings[index] = finder.foundBinding;
 				}
 			}
+			@Override
 			public void acceptBinding(String bindingKey, IBinding binding) {
 				int index = binaryElementPositions.get(bindingKey);
 				this.bindings[index] = binding;
@@ -1209,7 +1221,7 @@ class CompilationUnitResolver extends Compiler {
 	}
 
 	private void resolve(
-			String[] sourceContents,
+			Map<String, String> sourceContents,
 			String[] sourceCompilationUnits,
 			String[] encodings,
 			String[] bindingKeys,
@@ -1227,9 +1239,9 @@ class CompilationUnitResolver extends Compiler {
 			org.eclipse.jdt.internal.compiler.env.ICompilationUnit[] sourceUnits = new org.eclipse.jdt.internal.compiler.env.ICompilationUnit[length];
 			int count = 0;
 			for (int i = 0; i < length; i++) {
-				char[] contents = sourceContents[i].toCharArray();
 				String encoding = encodings != null ? encodings[i] : null;
 				String sourceUnitPath = sourceCompilationUnits[i];
+				char[] contents = sourceContents.get(sourceUnitPath).toCharArray();
 				if (contents == null) {
 					// go to the next unit
 					continue;
@@ -1486,6 +1498,7 @@ class CompilationUnitResolver extends Compiler {
 	/*
 	 * Internal API used to resolve a given compilation unit. Can run a subset of the compilation process
 	 */
+	@Override
 	public CompilationUnitDeclaration resolve(
 			org.eclipse.jdt.internal.compiler.env.ICompilationUnit sourceUnit,
 			boolean verifyMethods,
@@ -1517,6 +1530,7 @@ class CompilationUnitResolver extends Compiler {
 	/*
 	 * Internal API used to resolve a given compilation unit. Can run a subset of the compilation process
 	 */
+	@Override
 	public CompilationUnitDeclaration resolve(
 			CompilationUnitDeclaration unit,
 			org.eclipse.jdt.internal.compiler.env.ICompilationUnit sourceUnit,
