@@ -59,23 +59,15 @@ public class GitCommit extends AbstractCommit {
 	@Override
 	/** {@inheritDoc} */
 	protected String getFileContents(final String path) {
+		ObjectId fileid = filePathGitObjectIds.get(path);
 		try {
-			ObjectId fileid = filePathGitObjectIds.get(path);
-
-			try {
-				buffer.reset();
-				buffer.write(repository.open(fileid, Constants.OBJ_BLOB).getCachedBytes());
-			} catch (final IOException e) {
-				if (debug)
-					System.err.println("Git Error getting contents for '" + path + "' at revision " + id + ": " + e.getMessage());
-			}
-			return buffer.toString();
-		} catch (final Exception e) {
+			buffer.reset();
+			buffer.write(repository.open(fileid, Constants.OBJ_BLOB).getCachedBytes());
+		} catch (final IOException e) {
 			if (debug)
 				System.err.println("Git Error getting contents for '" + path + "' at revision " + id + ": " + e.getMessage());
-			e.printStackTrace();
 		}
-		return "";
+		return buffer.toString();
 	}
 
 	void getChangeFiles(RevCommit rc) {
@@ -95,6 +87,7 @@ public class GitCommit extends AbstractCommit {
 						cfb.setKey(-1);
 						fileNameIndices.put(path, changedFiles.size());
 						changedFiles.add(cfb);
+						filePathGitObjectIds.put(path, tw.getObjectId(0));
 					}
 				}
 			} catch (IOException e) {
