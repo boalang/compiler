@@ -34,11 +34,9 @@ import org.apache.hadoop.io.SequenceFile.Writer;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
-import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.FileASTRequestor;
 
-import boa.datagen.util.Java7Visitor;
 import boa.datagen.util.Java8Visitor;
 import boa.types.Ast.ASTRoot;
 import boa.types.Code.Revision;
@@ -49,6 +47,8 @@ import boa.types.Shared.ChangeKind;
  * @author rdyer
  */
 public abstract class AbstractConnector implements AutoCloseable {
+	protected static final boolean debug = boa.datagen.util.Properties.getBoolean("debug", boa.datagen.DefaultProperties.DEBUG);
+	
 	protected List<AbstractCommit> revisions = null;
 	protected List<String> branchNames = new ArrayList<String>(), tagNames = new ArrayList<String>();
 	protected List<Integer> branchIndices = new ArrayList<Integer>(), tagIndices = new ArrayList<Integer>();
@@ -60,9 +60,9 @@ public abstract class AbstractConnector implements AutoCloseable {
 		return this.headCommitOffset;
 	}
 	
-	public List<ChangedFile> buildHeadSnapshot(String[] languages, final SequenceFile.Writer astWriter) {
+	public List<ChangedFile> buildHeadSnapshot(final String[] languages, final SequenceFile.Writer astWriter) {
 		final List<ChangedFile> snapshot = new ArrayList<ChangedFile>();
-		List<AbstractCommit> commits = new ArrayList<AbstractCommit>();
+		final Map<String, AbstractCommit> commits = new HashMap<String, AbstractCommit>();
 		getSnapshot(headCommitOffset, snapshot, commits);
 		
 		if (languages == null)
@@ -77,25 +77,24 @@ public abstract class AbstractConnector implements AutoCloseable {
 		
 		if (hasJava) {
 			final Map<String, ChangedFile> changedFiles = new HashMap<String, ChangedFile>();
-			List<String> listPaths = new ArrayList<String>();
 			final Map<String, String> fileContents = new HashMap<String, String>();
 			int i = 0;
 			while (i < snapshot.size()) {
 				ChangedFile cf = snapshot.get(i);
 				if (cf.getName().endsWith(".java") && cf.getKind() != null && cf.getKind().name().startsWith("SOURCE_JAVA_JLS")) {
 					String path = cf.getName();
-					listPaths.add(path);
-					fileContents.put(path, commits.get(i).getFileContents(path));
+					fileContents.put(path, commits.get(path).getFileContents(path));
 					changedFiles.put(path, cf);
 					snapshot.remove(i);
 				} else
 					i++;
 			}
-			String[] paths = listPaths.toArray(new String[0]);
-			String[] classpaths = null; // TODO
-			FileASTRequestor r = new FileASTRequestor() {
+			final String[] paths = changedFiles.keySet().toArray(new String[0]);
+			final String[] classpaths = null; // TODO
+			final FileASTRequestor r = new FileASTRequestor() {
 				@Override
 				public void acceptAST(String sourceFilePath, CompilationUnit cu) {
+					sourceFilePath = sourceFilePath.replace('\\', '/');
 					ChangedFile cf = changedFiles.get(sourceFilePath);
 					ChangedFile.Builder fb = ChangedFile.newBuilder(cf);
 					long len = -1;
@@ -106,7 +105,7 @@ public abstract class AbstractConnector implements AutoCloseable {
 					}
 					
 					String content = fileContents.get(sourceFilePath);
-					final Java7Visitor visitor = new Java8Visitor(content, new HashMap<String, Integer>());
+					final Java8Visitor visitor = new Java8Visitor(content, new HashMap<String, Integer>());
 					final ASTRoot.Builder ast = ASTRoot.newBuilder();
 					try {
 						ast.addNamespaces(visitor.getNamespaces(cu));
@@ -158,7 +157,7 @@ public abstract class AbstractConnector implements AutoCloseable {
 		return snapshot;
 	}
 
-	public void getSnapshot(int commitOffset, List<ChangedFile> snapshot, List<AbstractCommit> commits) {
+	public void getSnapshot(int commitOffset, List<ChangedFile> snapshot, Map<String, AbstractCommit> commits) {
 		Set<String> adds = new HashSet<String>(), dels = new HashSet<String>(); 
 		PriorityQueue<Integer> pq = new PriorityQueue<Integer>(100, new Comparator<Integer>() {
 			@Override
@@ -179,14 +178,14 @@ public abstract class AbstractConnector implements AutoCloseable {
 					if (!adds.contains(cf.getName()) && !dels.contains(cf.getName())) {
 						adds.add(cf.getName());
 						snapshot.add(cf.build());
-						commits.add(commit);
+						commits.put(cf.getName(), commit);
 					}
 					break;
 				case COPIED:
 					if (!adds.contains(cf.getName()) && !dels.contains(cf.getName())) {
 						adds.add(cf.getName());
 						snapshot.add(cf.build());
-						commits.add(commit);
+						commits.put(cf.getName(), commit);
 					}
 					break;
 				case DELETED:
@@ -197,7 +196,7 @@ public abstract class AbstractConnector implements AutoCloseable {
 					if (!adds.contains(cf.getName()) && !dels.contains(cf.getName())) {
 						adds.add(cf.getName());
 						snapshot.add(cf.build());
-						commits.add(commit);
+						commits.put(cf.getName(), commit);
 					}
 					for (int i = 0; i < cf.getPreviousIndicesCount(); i++) {
 						if (cf.getChanges(i) != ChangeKind.ADDED) {
@@ -212,7 +211,7 @@ public abstract class AbstractConnector implements AutoCloseable {
 					if (!adds.contains(cf.getName()) && !dels.contains(cf.getName())) {
 						adds.add(cf.getName());
 						snapshot.add(cf.build());
-						commits.add(commit);
+						commits.put(cf.getName(), commit);
 					}
 					for (int i = 0; i < cf.getPreviousIndicesCount(); i++) {
 						ChangedFile.Builder pcf = revisions.get(cf.getPreviousVersions(i)).changedFiles.get(cf.getPreviousIndices(i));
@@ -224,7 +223,7 @@ public abstract class AbstractConnector implements AutoCloseable {
 					if (!adds.contains(cf.getName()) && !dels.contains(cf.getName())) {
 						adds.add(cf.getName());
 						snapshot.add(cf.build());
-						commits.add(commit);
+						commits.put(cf.getName(), commit);
 					}
 					break;
 				}

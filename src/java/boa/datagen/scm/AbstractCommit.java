@@ -37,9 +37,11 @@ import boa.types.Diff.ChangedFile.Builder;
 import boa.types.Diff.ChangedFile.FileKind;
 import boa.types.Shared.ChangeKind;
 import boa.types.Shared.Person;
+import boa.datagen.DefaultProperties;
 import boa.datagen.util.FileIO;
 import boa.datagen.util.JavaScriptErrorCheckVisitor;
 import boa.datagen.util.JavaScriptVisitor;
+import boa.datagen.util.Properties;
 import boa.datagen.util.Java7Visitor;
 import boa.datagen.util.Java8Visitor;
 import boa.datagen.util.JavaErrorCheckVisitor;
@@ -48,7 +50,7 @@ import boa.datagen.util.JavaErrorCheckVisitor;
  * @author rdyer
  */
 public abstract class AbstractCommit {
-	protected static final boolean debug = false; //util.Properties.getBoolean("debug", main.DefaultProperties.DEBUG);
+	protected static final boolean debug = Properties.getBoolean("debug", DefaultProperties.DEBUG);
 	
 	protected AbstractConnector connector;
 	protected AbstractCommit(AbstractConnector cnn) {

@@ -43,7 +43,6 @@ import org.eclipse.jgit.treewalk.TreeWalk;
  * @author josephb
  */
 public class GitConnector extends AbstractConnector {
-	private static final boolean debug = boa.datagen.util.Properties.getBoolean("debug", boa.datagen.DefaultProperties.DEBUG);
 
 	private String path;
 
@@ -138,8 +137,11 @@ public class GitConnector extends AbstractConnector {
 	public void getTags() {
 		try {
 			for (final Ref ref : git.tagList().call()) {
+				Integer index = revisionMap.get(ref.getObjectId().getName());
+				if (index == null)
+					continue; // TODO JGit returns wrong commit id
 				tagNames.add(ref.getName());
-				tagIndices.add(revisionMap.get(ref.getObjectId().getName()));
+				tagIndices.add(index);
 			}
 		} catch (final GitAPIException e) {
 			if (debug)
@@ -151,8 +153,9 @@ public class GitConnector extends AbstractConnector {
 	public void getBranches() {
 		try {
 			for (final Ref ref : git.branchList().call()) {
+				Integer index = revisionMap.get(ref.getObjectId().getName());
 				branchNames.add(ref.getName());
-				branchIndices.add(revisionMap.get(ref.getObjectId().getName()));
+				branchIndices.add(index);
 			}
 		} catch (final GitAPIException e) {
 			if (debug)

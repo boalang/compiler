@@ -5,8 +5,10 @@ import static org.junit.Assert.assertEquals;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.jgit.lib.Constants;
@@ -34,7 +36,7 @@ public class TestBuildSnapshot {
 			gc.setRevisions();
 			System.out.println("Finish processing commits");
 			List<ChangedFile> snapshot1 = new ArrayList<ChangedFile>();
-			List<AbstractCommit> commits = new ArrayList<AbstractCommit>();
+			Map<String, AbstractCommit> commits = new HashMap<String, AbstractCommit>();
 			gc.getSnapshot(gc.getHeadCommitOffset(), snapshot1, commits);
 			System.out.println("Finish building head snapshot");
 			List<String> snapshot2 = gc.getSnapshot(Constants.HEAD);
@@ -60,7 +62,7 @@ public class TestBuildSnapshot {
 			for (int i = gc.getRevisions().size()-1; i >= 0; i--) {
 				AbstractCommit commit = gc.getRevisions().get(i);
 				snapshot1 = new ArrayList<ChangedFile>();
-				gc.getSnapshot(i, snapshot1, new ArrayList<AbstractCommit>());
+				gc.getSnapshot(i, snapshot1, new HashMap<String, AbstractCommit>());
 				snapshot2 = gc.getSnapshot(commit.getId());
 				s1 = new HashSet<String>();
 				s2 = new HashSet<String>(snapshot2);
@@ -117,18 +119,11 @@ public class TestBuildSnapshot {
 		assertEquals(s2,  s1);
 	}
 
-	public void print(Set<String> s, List<ChangedFile> snapshot, List<AbstractCommit> commits) {
+	public void print(Set<String> s, List<ChangedFile> snapshot, Map<String, AbstractCommit> commits) {
 		List<String> l = new ArrayList<String>(s);
 		Collections.sort(l);
 		for (String f : l)
-			System.out.println(f + " " + commits.get(indexOf(snapshot, f)).getId());
+			System.out.println(f + " " + commits.get(f).getId());
 		System.out.println("==========================================");
-	}
-
-	private int indexOf(List<ChangedFile> snapshot, String name) {
-		for (int i = 0; i < snapshot.size(); i++)
-			if (snapshot.get(i).getName().equals(name))
-				return i;
-		return -1;
 	}
 }

@@ -61,7 +61,6 @@ public class GitCommit extends AbstractCommit {
 	protected String getFileContents(final String path) {
 		try {
 			ObjectId fileid = filePathGitObjectIds.get(path);
-			if (fileid == null) return "";
 
 			try {
 				buffer.reset();
