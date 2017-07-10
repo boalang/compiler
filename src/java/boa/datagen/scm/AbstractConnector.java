@@ -38,7 +38,6 @@ import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.FileASTRequestor;
 
-import boa.datagen.util.Java7Visitor;
 import boa.datagen.util.Java8Visitor;
 import boa.types.Ast.ASTRoot;
 import boa.types.Code.Revision;
@@ -60,9 +59,9 @@ public abstract class AbstractConnector implements AutoCloseable {
 		return this.headCommitOffset;
 	}
 	
-	public List<ChangedFile> buildHeadSnapshot(String[] languages, final SequenceFile.Writer astWriter) {
+	public List<ChangedFile> buildHeadSnapshot(final String[] languages, final SequenceFile.Writer astWriter) {
 		final List<ChangedFile> snapshot = new ArrayList<ChangedFile>();
-		List<AbstractCommit> commits = new ArrayList<AbstractCommit>();
+		final List<AbstractCommit> commits = new ArrayList<AbstractCommit>();
 		getSnapshot(headCommitOffset, snapshot, commits);
 		
 		if (languages == null)
@@ -77,26 +76,27 @@ public abstract class AbstractConnector implements AutoCloseable {
 		
 		if (hasJava) {
 			final Map<String, ChangedFile> changedFiles = new HashMap<String, ChangedFile>();
-			List<String> listPaths = new ArrayList<String>();
 			final Map<String, String> fileContents = new HashMap<String, String>();
 			int i = 0;
 			while (i < snapshot.size()) {
 				ChangedFile cf = snapshot.get(i);
 				if (cf.getName().endsWith(".java") && cf.getKind() != null && cf.getKind().name().startsWith("SOURCE_JAVA_JLS")) {
 					String path = cf.getName();
-					listPaths.add(path);
 					fileContents.put(path, commits.get(i).getFileContents(path));
 					changedFiles.put(path, cf);
 					snapshot.remove(i);
 				} else
 					i++;
 			}
-			String[] paths = listPaths.toArray(new String[0]);
-			String[] classpaths = null; // TODO
-			FileASTRequestor r = new FileASTRequestor() {
+			final String[] paths = changedFiles.keySet().toArray(new String[0]);
+			final String[] classpaths = null; // TODO
+			final FileASTRequestor r = new FileASTRequestor() {
 				@Override
 				public void acceptAST(String sourceFilePath, CompilationUnit cu) {
+					sourceFilePath = sourceFilePath.replace('\\', '/');
 					ChangedFile cf = changedFiles.get(sourceFilePath);
+					if (cf == null)
+						cf = changedFiles.get(sourceFilePath);
 					ChangedFile.Builder fb = ChangedFile.newBuilder(cf);
 					long len = -1;
 					if (astWriter != null) {
@@ -106,7 +106,7 @@ public abstract class AbstractConnector implements AutoCloseable {
 					}
 					
 					String content = fileContents.get(sourceFilePath);
-					final Java7Visitor visitor = new Java8Visitor(content, new HashMap<String, Integer>());
+					final Java8Visitor visitor = new Java8Visitor(content, new HashMap<String, Integer>());
 					final ASTRoot.Builder ast = ASTRoot.newBuilder();
 					try {
 						ast.addNamespaces(visitor.getNamespaces(cu));
