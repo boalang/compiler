@@ -39,9 +39,7 @@ public class MapFileGen {
 			System.out.println("Missing path to sequence file. Please specify it in the properties file.");
 			return;
 		}
-		String base = "hdfs://boa-njt/";
 		Configuration conf = new Configuration();
-//		conf.set("fs.default.name", base);
 		FileSystem fs = FileSystem.get(conf);
 		Path path = new Path(SEQ_FILE_PATH);
 		String name = path.getName();
@@ -70,8 +68,8 @@ public class MapFileGen {
 					fs.rename(path, dataFile);
 					System.out.println("fixing data file");
 					MapFile.fix(fs, dataFile.getParent(), LongWritable.class, BytesWritable.class, false, conf);
-					while (!fs.delete(new Path(file.getPath().getParent(), "." + MapFile.DATA_FILE_NAME + ".crc"), false));
-					while (!fs.delete(new Path(file.getPath().getParent(), "." + MapFile.INDEX_FILE_NAME + ".crc"), false));
+					fs.delete(new Path(file.getPath().getParent(), "." + MapFile.DATA_FILE_NAME + ".crc"), false);
+					fs.delete(new Path(file.getPath().getParent(), "." + MapFile.INDEX_FILE_NAME + ".crc"), false);
 					break;
 				}
 			}

@@ -87,7 +87,7 @@ public class SeqRepoImporter {
 
 		Thread [] workers = new Thread[poolSize];
 		for (int i = 0; i < poolSize; i++){
-			workers[i] =new Thread(new ImportTask(i));
+			workers[i] = new Thread(new ImportTask(i));
 			workers[i].start();
 		}
 		
@@ -158,6 +158,7 @@ public class SeqRepoImporter {
 		private static final int MAX_COUNTER = 10000;
 		private int id;
 		private int counter = 0;
+		private String suffix;
 		SequenceFile.Writer projectWriter, astWriter;
 
 		public ImportTask(int id) throws IOException {
@@ -166,7 +167,7 @@ public class SeqRepoImporter {
 
 		public void openWriters() {
 			long time = System.currentTimeMillis() / 1000;
-			String suffix = "-" + id + "-" + time + ".seq";
+			suffix = "-" + id + "-" + time + ".seq";
 			while (true) {
 				try {
 					projectWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/projects" + suffix), Text.class, BytesWritable.class);
@@ -190,6 +191,8 @@ public class SeqRepoImporter {
 						Thread.sleep(1000);
 					} catch (InterruptedException e) {
 					}
+					fileSystem.delete(new Path(new Path(base), "." + "projects" + suffix + ".crc"), false);
+					fileSystem.delete(new Path(new Path(base), "." + "ast" + suffix + ".crc"), false);
 					break;
 				} catch (Throwable t) {
 					t.printStackTrace();
