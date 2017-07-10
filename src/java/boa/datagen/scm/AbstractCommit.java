@@ -74,6 +74,7 @@ public abstract class AbstractCommit {
 	}
 	
 	protected String id = null;
+	public String getId() { return id; }
 	public void setId(final String id) { this.id = id; }
 
 	protected Person author;

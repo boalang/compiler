@@ -124,8 +124,9 @@ public class GitCommit extends AbstractCommit {
 
 		try {
 			final AbstractTreeIterator parentIter = new CanonicalTreeParser(null, repository.newObjectReader(), parent.getTree());
-
-			for (final DiffEntry diff : df.scan(parentIter, new CanonicalTreeParser(null, repository.newObjectReader(), rc.getTree()))) {
+			
+			List<DiffEntry> diffs = df.scan(parentIter, new CanonicalTreeParser(null, repository.newObjectReader(), rc.getTree()));			
+			for (final DiffEntry diff : diffs) {
 				if (diff.getChangeType() == ChangeType.MODIFY) {
 					if (diff.getNewMode().getObjectType() == Constants.OBJ_BLOB) {
 						getChangeFile(parent, diff, ChangeKind.MODIFIED);
@@ -156,9 +157,9 @@ public class GitCommit extends AbstractCommit {
 				}
 				else if (diff.getChangeType() == ChangeType.DELETE) {
 					if (diff.getOldMode().getObjectType() == Constants.OBJ_BLOB) {
-						String path = diff.getNewPath();
+						String path = diff.getOldPath();
 						ChangedFile.Builder cfb = getChangeFile(path);
-						if (cfb.getChange() == null)
+						if (cfb.getChange() == null || cfb.getChange() == ChangeKind.UNKNOWN)
 							cfb.setChange(ChangeKind.DELETED);
 						else if (cfb.getChange() != ChangeKind.DELETED)
 							cfb.setChange(ChangeKind.MERGED);

@@ -148,8 +148,11 @@ public abstract class AbstractConnector implements AutoCloseable {
 						dels.add(cf.getName());
 					break;
 				case MERGED:
-					if (!adds.contains(cf.getName()) && !dels.contains(cf.getName()))
-						dels.add(cf.getName());
+					if (!adds.contains(cf.getName()) && !dels.contains(cf.getName())) {
+						adds.add(cf.getName());
+						snapshot.add(cf.build());
+						commits.add(commit);
+					}
 					for (int i = 0; i < cf.getPreviousIndicesCount(); i++) {
 						ChangedFile.Builder pcf = revisions.get(cf.getPreviousVersions(i)).changedFiles.get(cf.getPreviousIndices(i));
 						ChangeKind pck = cf.getChanges(i);
@@ -189,6 +192,10 @@ public abstract class AbstractConnector implements AutoCloseable {
 	}
 	
 	public abstract void setRevisions();
+
+	public List<AbstractCommit> getRevisions() {
+		return revisions;
+	}
 
 	abstract void getTags();
 
