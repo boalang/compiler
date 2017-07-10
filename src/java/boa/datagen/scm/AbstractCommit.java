@@ -135,7 +135,11 @@ public abstract class AbstractCommit {
 			revision.setLog("");
 		
 		for (ChangedFile.Builder cfb : changedFiles) {
-			processChangeFile(cfb, parse, astWriter);
+			if (cfb.getChange() == ChangeKind.DELETED || cfb.getChange() == ChangeKind.UNKNOWN) {
+				cfb.setKey(-1);
+				cfb.setKind(connector.revisions.get(cfb.getPreviousVersions(0)).changedFiles.get(cfb.getPreviousIndices(0)).getKind());
+			} else
+				processChangeFile(cfb, parse, astWriter);
 			revision.addFiles(cfb.build());
 		}
 
