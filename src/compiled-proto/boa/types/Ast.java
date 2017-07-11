@@ -1112,6 +1112,24 @@ public final class Ast {
      * </pre>
      */
     boa.types.Shared.ChangeKind getLabelChangeKind();
+
+    // optional int32 mapped_node_key = 6;
+    /**
+     * <code>optional int32 mapped_node_key = 6;</code>
+     *
+     * <pre>
+     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     * </pre>
+     */
+    boolean hasMappedNodeKey();
+    /**
+     * <code>optional int32 mapped_node_key = 6;</code>
+     *
+     * <pre>
+     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     * </pre>
+     */
+    int getMappedNodeKey();
   }
   /**
    * Protobuf type {@code boa.types.ASTRoot}
@@ -1212,6 +1230,11 @@ public final class Ast {
                 bitField0_ |= 0x00000002;
                 labelChangeKind_ = value;
               }
+              break;
+            }
+            case 48: {
+              bitField0_ |= 0x00000004;
+              mappedNodeKey_ = input.readInt32();
               break;
             }
           }
@@ -1459,12 +1482,37 @@ public final class Ast {
       return labelChangeKind_;
     }
 
+    // optional int32 mapped_node_key = 6;
+    public static final int MAPPED_NODE_KEY_FIELD_NUMBER = 6;
+    private int mappedNodeKey_;
+    /**
+     * <code>optional int32 mapped_node_key = 6;</code>
+     *
+     * <pre>
+     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     * </pre>
+     */
+    public boolean hasMappedNodeKey() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>optional int32 mapped_node_key = 6;</code>
+     *
+     * <pre>
+     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     * </pre>
+     */
+    public int getMappedNodeKey() {
+      return mappedNodeKey_;
+    }
+
     private void initFields() {
       namespaces_ = java.util.Collections.emptyList();
       imports_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       names_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      mappedNodeKey_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -1498,6 +1546,9 @@ public final class Ast {
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         output.writeEnum(5, labelChangeKind_.getNumber());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeInt32(6, mappedNodeKey_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -1537,6 +1588,10 @@ public final class Ast {
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(5, labelChangeKind_.getNumber());
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(6, mappedNodeKey_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1673,6 +1728,8 @@ public final class Ast {
         bitField0_ = (bitField0_ & ~0x00000008);
         labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00000010);
+        mappedNodeKey_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000020);
         return this;
       }
 
@@ -1730,6 +1787,10 @@ public final class Ast {
           to_bitField0_ |= 0x00000002;
         }
         result.labelChangeKind_ = labelChangeKind_;
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.mappedNodeKey_ = mappedNodeKey_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -1797,6 +1858,9 @@ public final class Ast {
         }
         if (other.hasLabelChangeKind()) {
           setLabelChangeKind(other.getLabelChangeKind());
+        }
+        if (other.hasMappedNodeKey()) {
+          setMappedNodeKey(other.getMappedNodeKey());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -2505,6 +2569,55 @@ public final class Ast {
         return this;
       }
 
+      // optional int32 mapped_node_key = 6;
+      private int mappedNodeKey_ ;
+      /**
+       * <code>optional int32 mapped_node_key = 6;</code>
+       *
+       * <pre>
+       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       * </pre>
+       */
+      public boolean hasMappedNodeKey() {
+        return ((bitField0_ & 0x00000020) == 0x00000020);
+      }
+      /**
+       * <code>optional int32 mapped_node_key = 6;</code>
+       *
+       * <pre>
+       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       * </pre>
+       */
+      public int getMappedNodeKey() {
+        return mappedNodeKey_;
+      }
+      /**
+       * <code>optional int32 mapped_node_key = 6;</code>
+       *
+       * <pre>
+       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       * </pre>
+       */
+      public Builder setMappedNodeKey(int value) {
+        bitField0_ |= 0x00000020;
+        mappedNodeKey_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 mapped_node_key = 6;</code>
+       *
+       * <pre>
+       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       * </pre>
+       */
+      public Builder clearMappedNodeKey() {
+        bitField0_ = (bitField0_ & ~0x00000020);
+        mappedNodeKey_ = 0;
+        onChanged();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:boa.types.ASTRoot)
     }
 
@@ -2806,6 +2919,24 @@ public final class Ast {
      * </pre>
      */
     boa.types.Shared.ChangeKind getLabelChangeKind();
+
+    // optional int32 mapped_node_key = 9;
+    /**
+     * <code>optional int32 mapped_node_key = 9;</code>
+     *
+     * <pre>
+     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     * </pre>
+     */
+    boolean hasMappedNodeKey();
+    /**
+     * <code>optional int32 mapped_node_key = 9;</code>
+     *
+     * <pre>
+     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     * </pre>
+     */
+    int getMappedNodeKey();
   }
   /**
    * Protobuf type {@code boa.types.Namespace}
@@ -2927,6 +3058,11 @@ public final class Ast {
                 bitField0_ |= 0x00000004;
                 labelChangeKind_ = value;
               }
+              break;
+            }
+            case 72: {
+              bitField0_ |= 0x00000008;
+              mappedNodeKey_ = input.readInt32();
               break;
             }
           }
@@ -3367,6 +3503,30 @@ public final class Ast {
       return labelChangeKind_;
     }
 
+    // optional int32 mapped_node_key = 9;
+    public static final int MAPPED_NODE_KEY_FIELD_NUMBER = 9;
+    private int mappedNodeKey_;
+    /**
+     * <code>optional int32 mapped_node_key = 9;</code>
+     *
+     * <pre>
+     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     * </pre>
+     */
+    public boolean hasMappedNodeKey() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>optional int32 mapped_node_key = 9;</code>
+     *
+     * <pre>
+     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     * </pre>
+     */
+    public int getMappedNodeKey() {
+      return mappedNodeKey_;
+    }
+
     private void initFields() {
       name_ = "";
       modifiers_ = java.util.Collections.emptyList();
@@ -3376,6 +3536,7 @@ public final class Ast {
       expressions_ = java.util.Collections.emptyList();
       structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      mappedNodeKey_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -3447,6 +3608,9 @@ public final class Ast {
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeEnum(8, labelChangeKind_.getNumber());
       }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeInt32(9, mappedNodeKey_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -3487,6 +3651,10 @@ public final class Ast {
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(8, labelChangeKind_.getNumber());
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(9, mappedNodeKey_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -3649,6 +3817,8 @@ public final class Ast {
         bitField0_ = (bitField0_ & ~0x00000040);
         labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00000080);
+        mappedNodeKey_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000100);
         return this;
       }
 
@@ -3734,6 +3904,10 @@ public final class Ast {
           to_bitField0_ |= 0x00000004;
         }
         result.labelChangeKind_ = labelChangeKind_;
+        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.mappedNodeKey_ = mappedNodeKey_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -3890,6 +4064,9 @@ public final class Ast {
         }
         if (other.hasLabelChangeKind()) {
           setLabelChangeKind(other.getLabelChangeKind());
+        }
+        if (other.hasMappedNodeKey()) {
+          setMappedNodeKey(other.getMappedNodeKey());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -5714,6 +5891,55 @@ public final class Ast {
         return this;
       }
 
+      // optional int32 mapped_node_key = 9;
+      private int mappedNodeKey_ ;
+      /**
+       * <code>optional int32 mapped_node_key = 9;</code>
+       *
+       * <pre>
+       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       * </pre>
+       */
+      public boolean hasMappedNodeKey() {
+        return ((bitField0_ & 0x00000100) == 0x00000100);
+      }
+      /**
+       * <code>optional int32 mapped_node_key = 9;</code>
+       *
+       * <pre>
+       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       * </pre>
+       */
+      public int getMappedNodeKey() {
+        return mappedNodeKey_;
+      }
+      /**
+       * <code>optional int32 mapped_node_key = 9;</code>
+       *
+       * <pre>
+       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       * </pre>
+       */
+      public Builder setMappedNodeKey(int value) {
+        bitField0_ |= 0x00000100;
+        mappedNodeKey_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 mapped_node_key = 9;</code>
+       *
+       * <pre>
+       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       * </pre>
+       */
+      public Builder clearMappedNodeKey() {
+        bitField0_ = (bitField0_ & ~0x00000100);
+        mappedNodeKey_ = 0;
+        onChanged();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:boa.types.Namespace)
     }
 
@@ -6123,6 +6349,24 @@ public final class Ast {
      * </pre>
      */
     boa.types.Shared.ChangeKind getLabelChangeKind();
+
+    // optional int32 mapped_node_key = 12;
+    /**
+     * <code>optional int32 mapped_node_key = 12;</code>
+     *
+     * <pre>
+     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     * </pre>
+     */
+    boolean hasMappedNodeKey();
+    /**
+     * <code>optional int32 mapped_node_key = 12;</code>
+     *
+     * <pre>
+     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     * </pre>
+     */
+    int getMappedNodeKey();
   }
   /**
    * Protobuf type {@code boa.types.Declaration}
@@ -6271,6 +6515,11 @@ public final class Ast {
                 bitField0_ |= 0x00000008;
                 labelChangeKind_ = value;
               }
+              break;
+            }
+            case 96: {
+              bitField0_ |= 0x00000010;
+              mappedNodeKey_ = input.readInt32();
               break;
             }
           }
@@ -6853,6 +7102,30 @@ public final class Ast {
       return labelChangeKind_;
     }
 
+    // optional int32 mapped_node_key = 12;
+    public static final int MAPPED_NODE_KEY_FIELD_NUMBER = 12;
+    private int mappedNodeKey_;
+    /**
+     * <code>optional int32 mapped_node_key = 12;</code>
+     *
+     * <pre>
+     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     * </pre>
+     */
+    public boolean hasMappedNodeKey() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    /**
+     * <code>optional int32 mapped_node_key = 12;</code>
+     *
+     * <pre>
+     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     * </pre>
+     */
+    public int getMappedNodeKey() {
+      return mappedNodeKey_;
+    }
+
     private void initFields() {
       name_ = "";
       kind_ = boa.types.Ast.TypeKind.OTHER;
@@ -6865,6 +7138,7 @@ public final class Ast {
       comments_ = java.util.Collections.emptyList();
       structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      mappedNodeKey_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -6961,6 +7235,9 @@ public final class Ast {
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         output.writeEnum(11, labelChangeKind_.getNumber());
       }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeInt32(12, mappedNodeKey_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -7013,6 +7290,10 @@ public final class Ast {
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(11, labelChangeKind_.getNumber());
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(12, mappedNodeKey_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -7191,6 +7472,8 @@ public final class Ast {
         bitField0_ = (bitField0_ & ~0x00000200);
         labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00000400);
+        mappedNodeKey_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000800);
         return this;
       }
 
@@ -7298,6 +7581,10 @@ public final class Ast {
           to_bitField0_ |= 0x00000008;
         }
         result.labelChangeKind_ = labelChangeKind_;
+        if (((from_bitField0_ & 0x00000800) == 0x00000800)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        result.mappedNodeKey_ = mappedNodeKey_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -7509,6 +7796,9 @@ public final class Ast {
         }
         if (other.hasLabelChangeKind()) {
           setLabelChangeKind(other.getLabelChangeKind());
+        }
+        if (other.hasMappedNodeKey()) {
+          setMappedNodeKey(other.getMappedNodeKey());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -10025,6 +10315,55 @@ public final class Ast {
         return this;
       }
 
+      // optional int32 mapped_node_key = 12;
+      private int mappedNodeKey_ ;
+      /**
+       * <code>optional int32 mapped_node_key = 12;</code>
+       *
+       * <pre>
+       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       * </pre>
+       */
+      public boolean hasMappedNodeKey() {
+        return ((bitField0_ & 0x00000800) == 0x00000800);
+      }
+      /**
+       * <code>optional int32 mapped_node_key = 12;</code>
+       *
+       * <pre>
+       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       * </pre>
+       */
+      public int getMappedNodeKey() {
+        return mappedNodeKey_;
+      }
+      /**
+       * <code>optional int32 mapped_node_key = 12;</code>
+       *
+       * <pre>
+       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       * </pre>
+       */
+      public Builder setMappedNodeKey(int value) {
+        bitField0_ |= 0x00000800;
+        mappedNodeKey_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 mapped_node_key = 12;</code>
+       *
+       * <pre>
+       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       * </pre>
+       */
+      public Builder clearMappedNodeKey() {
+        bitField0_ = (bitField0_ & ~0x00000800);
+        mappedNodeKey_ = 0;
+        onChanged();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:boa.types.Declaration)
     }
 
@@ -10146,6 +10485,24 @@ public final class Ast {
      * </pre>
      */
     boa.types.Shared.ChangeKind getLabelChangeKind();
+
+    // optional int32 mapped_node_key = 7;
+    /**
+     * <code>optional int32 mapped_node_key = 7;</code>
+     *
+     * <pre>
+     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     * </pre>
+     */
+    boolean hasMappedNodeKey();
+    /**
+     * <code>optional int32 mapped_node_key = 7;</code>
+     *
+     * <pre>
+     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     * </pre>
+     */
+    int getMappedNodeKey();
   }
   /**
    * Protobuf type {@code boa.types.Type}
@@ -10243,6 +10600,11 @@ public final class Ast {
                 bitField0_ |= 0x00000010;
                 labelChangeKind_ = value;
               }
+              break;
+            }
+            case 56: {
+              bitField0_ |= 0x00000020;
+              mappedNodeKey_ = input.readInt32();
               break;
             }
           }
@@ -10467,12 +10829,37 @@ public final class Ast {
       return labelChangeKind_;
     }
 
+    // optional int32 mapped_node_key = 7;
+    public static final int MAPPED_NODE_KEY_FIELD_NUMBER = 7;
+    private int mappedNodeKey_;
+    /**
+     * <code>optional int32 mapped_node_key = 7;</code>
+     *
+     * <pre>
+     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     * </pre>
+     */
+    public boolean hasMappedNodeKey() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    /**
+     * <code>optional int32 mapped_node_key = 7;</code>
+     *
+     * <pre>
+     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     * </pre>
+     */
+    public int getMappedNodeKey() {
+      return mappedNodeKey_;
+    }
+
     private void initFields() {
       name_ = "";
       kind_ = boa.types.Ast.TypeKind.OTHER;
       id_ = "";
       structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      mappedNodeKey_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -10509,6 +10896,9 @@ public final class Ast {
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         output.writeEnum(6, labelChangeKind_.getNumber());
       }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        output.writeInt32(7, mappedNodeKey_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -10537,6 +10927,10 @@ public final class Ast {
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(6, labelChangeKind_.getNumber());
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(7, mappedNodeKey_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -10668,6 +11062,8 @@ public final class Ast {
         bitField0_ = (bitField0_ & ~0x00000008);
         labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00000010);
+        mappedNodeKey_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000020);
         return this;
       }
 
@@ -10716,6 +11112,10 @@ public final class Ast {
           to_bitField0_ |= 0x00000010;
         }
         result.labelChangeKind_ = labelChangeKind_;
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+          to_bitField0_ |= 0x00000020;
+        }
+        result.mappedNodeKey_ = mappedNodeKey_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -10750,6 +11150,9 @@ public final class Ast {
         }
         if (other.hasLabelChangeKind()) {
           setLabelChangeKind(other.getLabelChangeKind());
+        }
+        if (other.hasMappedNodeKey()) {
+          setMappedNodeKey(other.getMappedNodeKey());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -11134,6 +11537,55 @@ public final class Ast {
       public Builder clearLabelChangeKind() {
         bitField0_ = (bitField0_ & ~0x00000010);
         labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 mapped_node_key = 7;
+      private int mappedNodeKey_ ;
+      /**
+       * <code>optional int32 mapped_node_key = 7;</code>
+       *
+       * <pre>
+       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       * </pre>
+       */
+      public boolean hasMappedNodeKey() {
+        return ((bitField0_ & 0x00000020) == 0x00000020);
+      }
+      /**
+       * <code>optional int32 mapped_node_key = 7;</code>
+       *
+       * <pre>
+       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       * </pre>
+       */
+      public int getMappedNodeKey() {
+        return mappedNodeKey_;
+      }
+      /**
+       * <code>optional int32 mapped_node_key = 7;</code>
+       *
+       * <pre>
+       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       * </pre>
+       */
+      public Builder setMappedNodeKey(int value) {
+        bitField0_ |= 0x00000020;
+        mappedNodeKey_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 mapped_node_key = 7;</code>
+       *
+       * <pre>
+       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       * </pre>
+       */
+      public Builder clearMappedNodeKey() {
+        bitField0_ = (bitField0_ & ~0x00000020);
+        mappedNodeKey_ = 0;
         onChanged();
         return this;
       }
@@ -11525,6 +11977,24 @@ public final class Ast {
      * </pre>
      */
     boa.types.Shared.ChangeKind getLabelChangeKind();
+
+    // optional int32 mapped_node_key = 11;
+    /**
+     * <code>optional int32 mapped_node_key = 11;</code>
+     *
+     * <pre>
+     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     * </pre>
+     */
+    boolean hasMappedNodeKey();
+    /**
+     * <code>optional int32 mapped_node_key = 11;</code>
+     *
+     * <pre>
+     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     * </pre>
+     */
+    int getMappedNodeKey();
   }
   /**
    * Protobuf type {@code boa.types.Method}
@@ -11667,6 +12137,11 @@ public final class Ast {
                 bitField0_ |= 0x00000008;
                 labelChangeKind_ = value;
               }
+              break;
+            }
+            case 88: {
+              bitField0_ |= 0x00000010;
+              mappedNodeKey_ = input.readInt32();
               break;
             }
           }
@@ -12215,6 +12690,30 @@ public final class Ast {
       return labelChangeKind_;
     }
 
+    // optional int32 mapped_node_key = 11;
+    public static final int MAPPED_NODE_KEY_FIELD_NUMBER = 11;
+    private int mappedNodeKey_;
+    /**
+     * <code>optional int32 mapped_node_key = 11;</code>
+     *
+     * <pre>
+     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     * </pre>
+     */
+    public boolean hasMappedNodeKey() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    /**
+     * <code>optional int32 mapped_node_key = 11;</code>
+     *
+     * <pre>
+     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     * </pre>
+     */
+    public int getMappedNodeKey() {
+      return mappedNodeKey_;
+    }
+
     private void initFields() {
       name_ = "";
       modifiers_ = java.util.Collections.emptyList();
@@ -12226,6 +12725,7 @@ public final class Ast {
       comments_ = java.util.Collections.emptyList();
       structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      mappedNodeKey_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -12313,6 +12813,9 @@ public final class Ast {
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         output.writeEnum(10, labelChangeKind_.getNumber());
       }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeInt32(11, mappedNodeKey_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -12361,6 +12864,10 @@ public final class Ast {
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(10, labelChangeKind_.getNumber());
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(11, mappedNodeKey_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -12537,6 +13044,8 @@ public final class Ast {
         bitField0_ = (bitField0_ & ~0x00000100);
         labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00000200);
+        mappedNodeKey_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000400);
         return this;
       }
 
@@ -12639,6 +13148,10 @@ public final class Ast {
           to_bitField0_ |= 0x00000008;
         }
         result.labelChangeKind_ = labelChangeKind_;
+        if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        result.mappedNodeKey_ = mappedNodeKey_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -12824,6 +13337,9 @@ public final class Ast {
         }
         if (other.hasLabelChangeKind()) {
           setLabelChangeKind(other.getLabelChangeKind());
+        }
+        if (other.hasMappedNodeKey()) {
+          setMappedNodeKey(other.getMappedNodeKey());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -15177,6 +15693,55 @@ public final class Ast {
         return this;
       }
 
+      // optional int32 mapped_node_key = 11;
+      private int mappedNodeKey_ ;
+      /**
+       * <code>optional int32 mapped_node_key = 11;</code>
+       *
+       * <pre>
+       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       * </pre>
+       */
+      public boolean hasMappedNodeKey() {
+        return ((bitField0_ & 0x00000400) == 0x00000400);
+      }
+      /**
+       * <code>optional int32 mapped_node_key = 11;</code>
+       *
+       * <pre>
+       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       * </pre>
+       */
+      public int getMappedNodeKey() {
+        return mappedNodeKey_;
+      }
+      /**
+       * <code>optional int32 mapped_node_key = 11;</code>
+       *
+       * <pre>
+       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       * </pre>
+       */
+      public Builder setMappedNodeKey(int value) {
+        bitField0_ |= 0x00000400;
+        mappedNodeKey_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 mapped_node_key = 11;</code>
+       *
+       * <pre>
+       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       * </pre>
+       */
+      public Builder clearMappedNodeKey() {
+        bitField0_ = (bitField0_ & ~0x00000400);
+        mappedNodeKey_ = 0;
+        onChanged();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:boa.types.Method)
     }
 
@@ -15395,6 +15960,24 @@ public final class Ast {
      * </pre>
      */
     boa.types.Shared.ChangeKind getLabelChangeKind();
+
+    // optional int32 mapped_node_key = 8;
+    /**
+     * <code>optional int32 mapped_node_key = 8;</code>
+     *
+     * <pre>
+     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     * </pre>
+     */
+    boolean hasMappedNodeKey();
+    /**
+     * <code>optional int32 mapped_node_key = 8;</code>
+     *
+     * <pre>
+     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     * </pre>
+     */
+    int getMappedNodeKey();
   }
   /**
    * Protobuf type {@code boa.types.Variable}
@@ -15518,6 +16101,11 @@ public final class Ast {
                 bitField0_ |= 0x00000010;
                 labelChangeKind_ = value;
               }
+              break;
+            }
+            case 64: {
+              bitField0_ |= 0x00000020;
+              mappedNodeKey_ = input.readInt32();
               break;
             }
           }
@@ -15849,6 +16437,30 @@ public final class Ast {
       return labelChangeKind_;
     }
 
+    // optional int32 mapped_node_key = 8;
+    public static final int MAPPED_NODE_KEY_FIELD_NUMBER = 8;
+    private int mappedNodeKey_;
+    /**
+     * <code>optional int32 mapped_node_key = 8;</code>
+     *
+     * <pre>
+     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     * </pre>
+     */
+    public boolean hasMappedNodeKey() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    /**
+     * <code>optional int32 mapped_node_key = 8;</code>
+     *
+     * <pre>
+     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     * </pre>
+     */
+    public int getMappedNodeKey() {
+      return mappedNodeKey_;
+    }
+
     private void initFields() {
       name_ = "";
       variableType_ = boa.types.Ast.Type.getDefaultInstance();
@@ -15857,6 +16469,7 @@ public final class Ast {
       comments_ = java.util.Collections.emptyList();
       structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      mappedNodeKey_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -15921,6 +16534,9 @@ public final class Ast {
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         output.writeEnum(7, labelChangeKind_.getNumber());
       }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        output.writeInt32(8, mappedNodeKey_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -15957,6 +16573,10 @@ public final class Ast {
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(7, labelChangeKind_.getNumber());
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(8, mappedNodeKey_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -16112,6 +16732,8 @@ public final class Ast {
         bitField0_ = (bitField0_ & ~0x00000020);
         labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00000040);
+        mappedNodeKey_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000080);
         return this;
       }
 
@@ -16186,6 +16808,10 @@ public final class Ast {
           to_bitField0_ |= 0x00000010;
         }
         result.labelChangeKind_ = labelChangeKind_;
+        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
+          to_bitField0_ |= 0x00000020;
+        }
+        result.mappedNodeKey_ = mappedNodeKey_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -16270,6 +16896,9 @@ public final class Ast {
         }
         if (other.hasLabelChangeKind()) {
           setLabelChangeKind(other.getLabelChangeKind());
+        }
+        if (other.hasMappedNodeKey()) {
+          setMappedNodeKey(other.getMappedNodeKey());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -17460,6 +18089,55 @@ public final class Ast {
         return this;
       }
 
+      // optional int32 mapped_node_key = 8;
+      private int mappedNodeKey_ ;
+      /**
+       * <code>optional int32 mapped_node_key = 8;</code>
+       *
+       * <pre>
+       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       * </pre>
+       */
+      public boolean hasMappedNodeKey() {
+        return ((bitField0_ & 0x00000080) == 0x00000080);
+      }
+      /**
+       * <code>optional int32 mapped_node_key = 8;</code>
+       *
+       * <pre>
+       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       * </pre>
+       */
+      public int getMappedNodeKey() {
+        return mappedNodeKey_;
+      }
+      /**
+       * <code>optional int32 mapped_node_key = 8;</code>
+       *
+       * <pre>
+       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       * </pre>
+       */
+      public Builder setMappedNodeKey(int value) {
+        bitField0_ |= 0x00000080;
+        mappedNodeKey_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 mapped_node_key = 8;</code>
+       *
+       * <pre>
+       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       * </pre>
+       */
+      public Builder clearMappedNodeKey() {
+        bitField0_ = (bitField0_ & ~0x00000080);
+        mappedNodeKey_ = 0;
+        onChanged();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:boa.types.Variable)
     }
 
@@ -17703,6 +18381,24 @@ public final class Ast {
      * </pre>
      */
     boa.types.Shared.ChangeKind getLabelChangeKind();
+
+    // optional int32 mapped_node_key = 12;
+    /**
+     * <code>optional int32 mapped_node_key = 12;</code>
+     *
+     * <pre>
+     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     * </pre>
+     */
+    boolean hasMappedNodeKey();
+    /**
+     * <code>optional int32 mapped_node_key = 12;</code>
+     *
+     * <pre>
+     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     * </pre>
+     */
+    int getMappedNodeKey();
   }
   /**
    * Protobuf type {@code boa.types.Statement}
@@ -17874,6 +18570,11 @@ public final class Ast {
                 bitField0_ |= 0x00000040;
                 labelChangeKind_ = value;
               }
+              break;
+            }
+            case 96: {
+              bitField0_ |= 0x00000080;
+              mappedNodeKey_ = input.readInt32();
               break;
             }
           }
@@ -18551,6 +19252,30 @@ public final class Ast {
       return labelChangeKind_;
     }
 
+    // optional int32 mapped_node_key = 12;
+    public static final int MAPPED_NODE_KEY_FIELD_NUMBER = 12;
+    private int mappedNodeKey_;
+    /**
+     * <code>optional int32 mapped_node_key = 12;</code>
+     *
+     * <pre>
+     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     * </pre>
+     */
+    public boolean hasMappedNodeKey() {
+      return ((bitField0_ & 0x00000080) == 0x00000080);
+    }
+    /**
+     * <code>optional int32 mapped_node_key = 12;</code>
+     *
+     * <pre>
+     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     * </pre>
+     */
+    public int getMappedNodeKey() {
+      return mappedNodeKey_;
+    }
+
     private void initFields() {
       kind_ = boa.types.Ast.Statement.StatementKind.OTHER;
       comments_ = java.util.Collections.emptyList();
@@ -18563,6 +19288,7 @@ public final class Ast {
       expression_ = boa.types.Ast.Expression.getDefaultInstance();
       structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      mappedNodeKey_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -18661,6 +19387,9 @@ public final class Ast {
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
         output.writeEnum(11, labelChangeKind_.getNumber());
       }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        output.writeInt32(12, mappedNodeKey_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -18713,6 +19442,10 @@ public final class Ast {
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(11, labelChangeKind_.getNumber());
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(12, mappedNodeKey_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -18896,6 +19629,8 @@ public final class Ast {
         bitField0_ = (bitField0_ & ~0x00000200);
         labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00000400);
+        mappedNodeKey_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000800);
         return this;
       }
 
@@ -19004,6 +19739,10 @@ public final class Ast {
           to_bitField0_ |= 0x00000040;
         }
         result.labelChangeKind_ = labelChangeKind_;
+        if (((from_bitField0_ & 0x00000800) == 0x00000800)) {
+          to_bitField0_ |= 0x00000080;
+        }
+        result.mappedNodeKey_ = mappedNodeKey_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -19144,6 +19883,9 @@ public final class Ast {
         }
         if (other.hasLabelChangeKind()) {
           setLabelChangeKind(other.getLabelChangeKind());
+        }
+        if (other.hasMappedNodeKey()) {
+          setMappedNodeKey(other.getMappedNodeKey());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -20880,6 +21622,55 @@ public final class Ast {
         return this;
       }
 
+      // optional int32 mapped_node_key = 12;
+      private int mappedNodeKey_ ;
+      /**
+       * <code>optional int32 mapped_node_key = 12;</code>
+       *
+       * <pre>
+       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       * </pre>
+       */
+      public boolean hasMappedNodeKey() {
+        return ((bitField0_ & 0x00000800) == 0x00000800);
+      }
+      /**
+       * <code>optional int32 mapped_node_key = 12;</code>
+       *
+       * <pre>
+       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       * </pre>
+       */
+      public int getMappedNodeKey() {
+        return mappedNodeKey_;
+      }
+      /**
+       * <code>optional int32 mapped_node_key = 12;</code>
+       *
+       * <pre>
+       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       * </pre>
+       */
+      public Builder setMappedNodeKey(int value) {
+        bitField0_ |= 0x00000800;
+        mappedNodeKey_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 mapped_node_key = 12;</code>
+       *
+       * <pre>
+       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       * </pre>
+       */
+      public Builder clearMappedNodeKey() {
+        bitField0_ = (bitField0_ & ~0x00000800);
+        mappedNodeKey_ = 0;
+        onChanged();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:boa.types.Statement)
     }
 
@@ -21188,6 +21979,24 @@ public final class Ast {
      * </pre>
      */
     boa.types.Shared.ChangeKind getLabelChangeKind();
+
+    // optional int32 mapped_node_key = 17;
+    /**
+     * <code>optional int32 mapped_node_key = 17;</code>
+     *
+     * <pre>
+     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     * </pre>
+     */
+    boolean hasMappedNodeKey();
+    /**
+     * <code>optional int32 mapped_node_key = 17;</code>
+     *
+     * <pre>
+     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     * </pre>
+     */
+    int getMappedNodeKey();
   }
   /**
    * Protobuf type {@code boa.types.Expression}
@@ -21384,6 +22193,11 @@ public final class Ast {
                 bitField0_ |= 0x00000800;
                 labelChangeKind_ = value;
               }
+              break;
+            }
+            case 136: {
+              bitField0_ |= 0x00001000;
+              mappedNodeKey_ = input.readInt32();
               break;
             }
           }
@@ -22500,6 +23314,30 @@ public final class Ast {
       return labelChangeKind_;
     }
 
+    // optional int32 mapped_node_key = 17;
+    public static final int MAPPED_NODE_KEY_FIELD_NUMBER = 17;
+    private int mappedNodeKey_;
+    /**
+     * <code>optional int32 mapped_node_key = 17;</code>
+     *
+     * <pre>
+     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     * </pre>
+     */
+    public boolean hasMappedNodeKey() {
+      return ((bitField0_ & 0x00001000) == 0x00001000);
+    }
+    /**
+     * <code>optional int32 mapped_node_key = 17;</code>
+     *
+     * <pre>
+     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     * </pre>
+     */
+    public int getMappedNodeKey() {
+      return mappedNodeKey_;
+    }
+
     private void initFields() {
       kind_ = boa.types.Ast.Expression.ExpressionKind.OTHER;
       expressions_ = java.util.Collections.emptyList();
@@ -22517,6 +23355,7 @@ public final class Ast {
       noParens_ = false;
       structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      mappedNodeKey_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -22630,6 +23469,9 @@ public final class Ast {
       if (((bitField0_ & 0x00000800) == 0x00000800)) {
         output.writeEnum(16, labelChangeKind_.getNumber());
       }
+      if (((bitField0_ & 0x00001000) == 0x00001000)) {
+        output.writeInt32(17, mappedNodeKey_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -22702,6 +23544,10 @@ public final class Ast {
       if (((bitField0_ & 0x00000800) == 0x00000800)) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(16, labelChangeKind_.getNumber());
+      }
+      if (((bitField0_ & 0x00001000) == 0x00001000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(17, mappedNodeKey_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -22895,6 +23741,8 @@ public final class Ast {
         bitField0_ = (bitField0_ & ~0x00004000);
         labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00008000);
+        mappedNodeKey_ = 0;
+        bitField0_ = (bitField0_ & ~0x00010000);
         return this;
       }
 
@@ -23023,6 +23871,10 @@ public final class Ast {
           to_bitField0_ |= 0x00000800;
         }
         result.labelChangeKind_ = labelChangeKind_;
+        if (((from_bitField0_ & 0x00010000) == 0x00010000)) {
+          to_bitField0_ |= 0x00001000;
+        }
+        result.mappedNodeKey_ = mappedNodeKey_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -23184,6 +24036,9 @@ public final class Ast {
         }
         if (other.hasLabelChangeKind()) {
           setLabelChangeKind(other.getLabelChangeKind());
+        }
+        if (other.hasMappedNodeKey()) {
+          setMappedNodeKey(other.getMappedNodeKey());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -25188,6 +26043,55 @@ public final class Ast {
         return this;
       }
 
+      // optional int32 mapped_node_key = 17;
+      private int mappedNodeKey_ ;
+      /**
+       * <code>optional int32 mapped_node_key = 17;</code>
+       *
+       * <pre>
+       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       * </pre>
+       */
+      public boolean hasMappedNodeKey() {
+        return ((bitField0_ & 0x00010000) == 0x00010000);
+      }
+      /**
+       * <code>optional int32 mapped_node_key = 17;</code>
+       *
+       * <pre>
+       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       * </pre>
+       */
+      public int getMappedNodeKey() {
+        return mappedNodeKey_;
+      }
+      /**
+       * <code>optional int32 mapped_node_key = 17;</code>
+       *
+       * <pre>
+       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       * </pre>
+       */
+      public Builder setMappedNodeKey(int value) {
+        bitField0_ |= 0x00010000;
+        mappedNodeKey_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 mapped_node_key = 17;</code>
+       *
+       * <pre>
+       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       * </pre>
+       */
+      public Builder clearMappedNodeKey() {
+        bitField0_ = (bitField0_ & ~0x00010000);
+        mappedNodeKey_ = 0;
+        onChanged();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:boa.types.Expression)
     }
 
@@ -25408,6 +26312,24 @@ public final class Ast {
      * </pre>
      */
     boa.types.Shared.ChangeKind getLabelChangeKind();
+
+    // optional int32 mapped_node_key = 9;
+    /**
+     * <code>optional int32 mapped_node_key = 9;</code>
+     *
+     * <pre>
+     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     * </pre>
+     */
+    boolean hasMappedNodeKey();
+    /**
+     * <code>optional int32 mapped_node_key = 9;</code>
+     *
+     * <pre>
+     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     * </pre>
+     */
+    int getMappedNodeKey();
   }
   /**
    * Protobuf type {@code boa.types.Modifier}
@@ -25532,6 +26454,11 @@ public final class Ast {
                 bitField0_ |= 0x00000020;
                 labelChangeKind_ = value;
               }
+              break;
+            }
+            case 72: {
+              bitField0_ |= 0x00000040;
+              mappedNodeKey_ = input.readInt32();
               break;
             }
           }
@@ -26263,6 +27190,30 @@ public final class Ast {
       return labelChangeKind_;
     }
 
+    // optional int32 mapped_node_key = 9;
+    public static final int MAPPED_NODE_KEY_FIELD_NUMBER = 9;
+    private int mappedNodeKey_;
+    /**
+     * <code>optional int32 mapped_node_key = 9;</code>
+     *
+     * <pre>
+     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     * </pre>
+     */
+    public boolean hasMappedNodeKey() {
+      return ((bitField0_ & 0x00000040) == 0x00000040);
+    }
+    /**
+     * <code>optional int32 mapped_node_key = 9;</code>
+     *
+     * <pre>
+     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     * </pre>
+     */
+    public int getMappedNodeKey() {
+      return mappedNodeKey_;
+    }
+
     private void initFields() {
       kind_ = boa.types.Ast.Modifier.ModifierKind.OTHER;
       visibility_ = boa.types.Ast.Modifier.Visibility.PUBLIC;
@@ -26272,6 +27223,7 @@ public final class Ast {
       other_ = "";
       structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      mappedNodeKey_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -26319,6 +27271,9 @@ public final class Ast {
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         output.writeEnum(8, labelChangeKind_.getNumber());
       }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        output.writeInt32(9, mappedNodeKey_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -26364,6 +27319,10 @@ public final class Ast {
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(8, labelChangeKind_.getNumber());
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(9, mappedNodeKey_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -26506,6 +27465,8 @@ public final class Ast {
         bitField0_ = (bitField0_ & ~0x00000040);
         labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00000080);
+        mappedNodeKey_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000100);
         return this;
       }
 
@@ -26573,6 +27534,10 @@ public final class Ast {
           to_bitField0_ |= 0x00000020;
         }
         result.labelChangeKind_ = labelChangeKind_;
+        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
+          to_bitField0_ |= 0x00000040;
+        }
+        result.mappedNodeKey_ = mappedNodeKey_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -26646,6 +27611,9 @@ public final class Ast {
         }
         if (other.hasLabelChangeKind()) {
           setLabelChangeKind(other.getLabelChangeKind());
+        }
+        if (other.hasMappedNodeKey()) {
+          setMappedNodeKey(other.getMappedNodeKey());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -27529,6 +28497,55 @@ public final class Ast {
         return this;
       }
 
+      // optional int32 mapped_node_key = 9;
+      private int mappedNodeKey_ ;
+      /**
+       * <code>optional int32 mapped_node_key = 9;</code>
+       *
+       * <pre>
+       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       * </pre>
+       */
+      public boolean hasMappedNodeKey() {
+        return ((bitField0_ & 0x00000100) == 0x00000100);
+      }
+      /**
+       * <code>optional int32 mapped_node_key = 9;</code>
+       *
+       * <pre>
+       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       * </pre>
+       */
+      public int getMappedNodeKey() {
+        return mappedNodeKey_;
+      }
+      /**
+       * <code>optional int32 mapped_node_key = 9;</code>
+       *
+       * <pre>
+       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       * </pre>
+       */
+      public Builder setMappedNodeKey(int value) {
+        bitField0_ |= 0x00000100;
+        mappedNodeKey_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 mapped_node_key = 9;</code>
+       *
+       * <pre>
+       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       * </pre>
+       */
+      public Builder clearMappedNodeKey() {
+        bitField0_ = (bitField0_ & ~0x00000100);
+        mappedNodeKey_ = 0;
+        onChanged();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:boa.types.Modifier)
     }
 
@@ -27617,6 +28634,24 @@ public final class Ast {
      * </pre>
      */
     boa.types.Shared.ChangeKind getLabelChangeKind();
+
+    // optional int32 mapped_node_key = 6;
+    /**
+     * <code>optional int32 mapped_node_key = 6;</code>
+     *
+     * <pre>
+     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     * </pre>
+     */
+    boolean hasMappedNodeKey();
+    /**
+     * <code>optional int32 mapped_node_key = 6;</code>
+     *
+     * <pre>
+     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     * </pre>
+     */
+    int getMappedNodeKey();
   }
   /**
    * Protobuf type {@code boa.types.Comment}
@@ -27722,6 +28757,11 @@ public final class Ast {
                 bitField0_ |= 0x00000010;
                 labelChangeKind_ = value;
               }
+              break;
+            }
+            case 48: {
+              bitField0_ |= 0x00000020;
+              mappedNodeKey_ = input.readInt32();
               break;
             }
           }
@@ -28024,12 +29064,37 @@ public final class Ast {
       return labelChangeKind_;
     }
 
+    // optional int32 mapped_node_key = 6;
+    public static final int MAPPED_NODE_KEY_FIELD_NUMBER = 6;
+    private int mappedNodeKey_;
+    /**
+     * <code>optional int32 mapped_node_key = 6;</code>
+     *
+     * <pre>
+     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     * </pre>
+     */
+    public boolean hasMappedNodeKey() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    /**
+     * <code>optional int32 mapped_node_key = 6;</code>
+     *
+     * <pre>
+     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     * </pre>
+     */
+    public int getMappedNodeKey() {
+      return mappedNodeKey_;
+    }
+
     private void initFields() {
       kind_ = boa.types.Ast.Comment.CommentKind.OTHER;
       value_ = "";
       position_ = boa.types.Ast.PositionInfo.getDefaultInstance();
       structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      mappedNodeKey_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -28074,6 +29139,9 @@ public final class Ast {
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         output.writeEnum(5, labelChangeKind_.getNumber());
       }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        output.writeInt32(6, mappedNodeKey_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -28102,6 +29170,10 @@ public final class Ast {
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(5, labelChangeKind_.getNumber());
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(6, mappedNodeKey_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -28238,6 +29310,8 @@ public final class Ast {
         bitField0_ = (bitField0_ & ~0x00000008);
         labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00000010);
+        mappedNodeKey_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000020);
         return this;
       }
 
@@ -28290,6 +29364,10 @@ public final class Ast {
           to_bitField0_ |= 0x00000010;
         }
         result.labelChangeKind_ = labelChangeKind_;
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+          to_bitField0_ |= 0x00000020;
+        }
+        result.mappedNodeKey_ = mappedNodeKey_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -28322,6 +29400,9 @@ public final class Ast {
         }
         if (other.hasLabelChangeKind()) {
           setLabelChangeKind(other.getLabelChangeKind());
+        }
+        if (other.hasMappedNodeKey()) {
+          setMappedNodeKey(other.getMappedNodeKey());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -28693,6 +29774,55 @@ public final class Ast {
       public Builder clearLabelChangeKind() {
         bitField0_ = (bitField0_ & ~0x00000010);
         labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 mapped_node_key = 6;
+      private int mappedNodeKey_ ;
+      /**
+       * <code>optional int32 mapped_node_key = 6;</code>
+       *
+       * <pre>
+       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       * </pre>
+       */
+      public boolean hasMappedNodeKey() {
+        return ((bitField0_ & 0x00000020) == 0x00000020);
+      }
+      /**
+       * <code>optional int32 mapped_node_key = 6;</code>
+       *
+       * <pre>
+       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       * </pre>
+       */
+      public int getMappedNodeKey() {
+        return mappedNodeKey_;
+      }
+      /**
+       * <code>optional int32 mapped_node_key = 6;</code>
+       *
+       * <pre>
+       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       * </pre>
+       */
+      public Builder setMappedNodeKey(int value) {
+        bitField0_ |= 0x00000020;
+        mappedNodeKey_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 mapped_node_key = 6;</code>
+       *
+       * <pre>
+       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       * </pre>
+       */
+      public Builder clearMappedNodeKey() {
+        bitField0_ = (bitField0_ & ~0x00000020);
+        mappedNodeKey_ = 0;
         onChanged();
         return this;
       }
@@ -29636,138 +30766,144 @@ public final class Ast {
     java.lang.String[] descriptorData = {
       "\n\tast.proto\022\tboa.types\032\014shared.proto\"4\n\014" +
       "CommentsRoot\022$\n\010comments\030\001 \003(\0132\022.boa.typ" +
-      "es.Comment\"\274\001\n\007ASTRoot\022(\n\nnamespaces\030\001 \003" +
+      "es.Comment\"\325\001\n\007ASTRoot\022(\n\nnamespaces\030\001 \003" +
       "(\0132\024.boa.types.Namespace\022\017\n\007imports\030\002 \003(" +
       "\t\022\r\n\005names\030\003 \003(\t\0225\n\026structural_change_ki" +
       "nd\030\004 \001(\0162\025.boa.types.ChangeKind\0220\n\021label" +
       "_change_kind\030\005 \001(\0162\025.boa.types.ChangeKin" +
-      "d\"\322\002\n\tNamespace\022\014\n\004name\030\001 \002(\t\022&\n\tmodifie" +
-      "rs\030\002 \003(\0132\023.boa.types.Modifier\022,\n\014declara" +
-      "tions\030\003 \003(\0132\026.boa.types.Declaration\022(\n\ns",
-      "tatements\030\004 \003(\0132\024.boa.types.Statement\022\"\n" +
-      "\007methods\030\005 \003(\0132\021.boa.types.Method\022*\n\013exp" +
-      "ressions\030\006 \003(\0132\025.boa.types.Expression\0225\n" +
-      "\026structural_change_kind\030\007 \001(\0162\025.boa.type" +
-      "s.ChangeKind\0220\n\021label_change_kind\030\010 \001(\0162" +
-      "\025.boa.types.ChangeKind\"\302\003\n\013Declaration\022\014" +
-      "\n\004name\030\001 \002(\t\022!\n\004kind\030\002 \002(\0162\023.boa.types.T" +
-      "ypeKind\022&\n\tmodifiers\030\003 \003(\0132\023.boa.types.M" +
-      "odifier\022+\n\022generic_parameters\030\004 \003(\0132\017.bo" +
-      "a.types.Type\022 \n\007parents\030\005 \003(\0132\017.boa.type",
-      "s.Type\022\"\n\007methods\030\006 \003(\0132\021.boa.types.Meth" +
-      "od\022#\n\006fields\030\007 \003(\0132\023.boa.types.Variable\022" +
-      "3\n\023nested_declarations\030\010 \003(\0132\026.boa.types" +
-      ".Declaration\022$\n\010comments\030\t \003(\0132\022.boa.typ" +
-      "es.Comment\0225\n\026structural_change_kind\030\n \001" +
-      "(\0162\025.boa.types.ChangeKind\0220\n\021label_chang" +
-      "e_kind\030\013 \001(\0162\025.boa.types.ChangeKind\"\254\001\n\004" +
-      "Type\022\014\n\004name\030\001 \002(\t\022!\n\004kind\030\002 \002(\0162\023.boa.t" +
-      "ypes.TypeKind\022\n\n\002id\030\004 \001(\t\0225\n\026structural_" +
-      "change_kind\030\005 \001(\0162\025.boa.types.ChangeKind",
-      "\0220\n\021label_change_kind\030\006 \001(\0162\025.boa.types." +
-      "ChangeKind\"\234\003\n\006Method\022\014\n\004name\030\001 \001(\t\022&\n\tm" +
-      "odifiers\030\002 \003(\0132\023.boa.types.Modifier\022$\n\013r" +
-      "eturn_type\030\003 \002(\0132\017.boa.types.Type\022+\n\022gen" +
-      "eric_parameters\030\004 \003(\0132\017.boa.types.Type\022&" +
-      "\n\targuments\030\005 \003(\0132\023.boa.types.Variable\022(" +
-      "\n\017exception_types\030\006 \003(\0132\017.boa.types.Type" +
-      "\022(\n\nstatements\030\007 \003(\0132\024.boa.types.Stateme" +
-      "nt\022$\n\010comments\030\010 \003(\0132\022.boa.types.Comment" +
-      "\0225\n\026structural_change_kind\030\t \001(\0162\025.boa.t",
-      "ypes.ChangeKind\0220\n\021label_change_kind\030\n \001" +
-      "(\0162\025.boa.types.ChangeKind\"\243\002\n\010Variable\022\014" +
-      "\n\004name\030\001 \002(\t\022&\n\rvariable_type\030\002 \002(\0132\017.bo" +
-      "a.types.Type\022&\n\tmodifiers\030\003 \003(\0132\023.boa.ty" +
-      "pes.Modifier\022*\n\013initializer\030\004 \001(\0132\025.boa." +
-      "types.Expression\022$\n\010comments\030\005 \003(\0132\022.boa" +
-      ".types.Comment\0225\n\026structural_change_kind" +
-      "\030\006 \001(\0162\025.boa.types.ChangeKind\0220\n\021label_c" +
-      "hange_kind\030\007 \001(\0162\025.boa.types.ChangeKind\"" +
-      "\245\006\n\tStatement\0220\n\004kind\030\001 \002(\0162\".boa.types.",
-      "Statement.StatementKind\022$\n\010comments\030\002 \003(" +
-      "\0132\022.boa.types.Comment\022(\n\nstatements\030\003 \003(" +
-      "\0132\024.boa.types.Statement\022.\n\017initializatio" +
-      "ns\030\004 \003(\0132\025.boa.types.Expression\022(\n\tcondi" +
-      "tion\030\005 \001(\0132\025.boa.types.Expression\022&\n\007upd" +
-      "ates\030\006 \003(\0132\025.boa.types.Expression\0221\n\024var" +
-      "iable_declaration\030\007 \001(\0132\023.boa.types.Vari" +
-      "able\0220\n\020type_declaration\030\010 \001(\0132\026.boa.typ" +
-      "es.Declaration\022)\n\nexpression\030\t \001(\0132\025.boa" +
-      ".types.Expression\0225\n\026structural_change_k",
-      "ind\030\n \001(\0162\025.boa.types.ChangeKind\0220\n\021labe" +
-      "l_change_kind\030\013 \001(\0162\025.boa.types.ChangeKi" +
-      "nd\"\232\002\n\rStatementKind\022\t\n\005OTHER\020\000\022\t\n\005BLOCK" +
-      "\020\001\022\014\n\010TYPEDECL\020\002\022\016\n\nEXPRESSION\020\003\022\010\n\004EXPR" +
-      "\020\003\022\020\n\014SYNCHRONIZED\020\004\022\010\n\004SYNC\020\004\022\n\n\006RETURN" +
-      "\020\005\022\007\n\003FOR\020\006\022\006\n\002DO\020\007\022\t\n\005WHILE\020\010\022\006\n\002IF\020\t\022\n" +
-      "\n\006ASSERT\020\n\022\t\n\005BREAK\020\013\022\014\n\010CONTINUE\020\014\022\t\n\005L" +
-      "ABEL\020\r\022\n\n\006SWITCH\020\016\022\010\n\004CASE\020\017\022\007\n\003TRY\020\020\022\t\n" +
-      "\005THROW\020\021\022\t\n\005CATCH\020\022\022\t\n\005EMPTY\020\023\022\013\n\007FINALL" +
-      "Y\020\024\032\002\020\001\"\354\n\n\nExpression\0222\n\004kind\030\001 \002(\0162$.b",
-      "oa.types.Expression.ExpressionKind\022*\n\013ex" +
-      "pressions\030\002 \003(\0132\025.boa.types.Expression\022+" +
-      "\n\016variable_decls\030\003 \003(\0132\023.boa.types.Varia" +
-      "ble\022!\n\010new_type\030\004 \001(\0132\017.boa.types.Type\022+" +
-      "\n\022generic_parameters\030\005 \003(\0132\017.boa.types.T" +
-      "ype\022\022\n\nis_postfix\030\006 \001(\010\022\017\n\007literal\030\007 \001(\t" +
-      "\022\020\n\010variable\030\010 \001(\t\022\016\n\006method\030\t \001(\t\022*\n\013me" +
-      "thod_args\030\n \003(\0132\025.boa.types.Expression\0220" +
-      "\n\020anon_declaration\030\013 \001(\0132\026.boa.types.Dec" +
-      "laration\022\'\n\nannotation\030\014 \001(\0132\023.boa.types",
-      ".Modifier\022!\n\006lambda\030\r \001(\0132\021.boa.types.Me" +
-      "thod\022\021\n\tno_parens\030\016 \001(\010\0225\n\026structural_ch" +
-      "ange_kind\030\017 \001(\0162\025.boa.types.ChangeKind\0220" +
-      "\n\021label_change_kind\030\020 \001(\0162\025.boa.types.Ch" +
-      "angeKind\"\223\006\n\016ExpressionKind\022\t\n\005OTHER\020\000\022\013" +
+      "d\022\027\n\017mapped_node_key\030\006 \001(\005\"\353\002\n\tNamespace" +
+      "\022\014\n\004name\030\001 \002(\t\022&\n\tmodifiers\030\002 \003(\0132\023.boa." +
+      "types.Modifier\022,\n\014declarations\030\003 \003(\0132\026.b",
+      "oa.types.Declaration\022(\n\nstatements\030\004 \003(\013" +
+      "2\024.boa.types.Statement\022\"\n\007methods\030\005 \003(\0132" +
+      "\021.boa.types.Method\022*\n\013expressions\030\006 \003(\0132" +
+      "\025.boa.types.Expression\0225\n\026structural_cha" +
+      "nge_kind\030\007 \001(\0162\025.boa.types.ChangeKind\0220\n" +
+      "\021label_change_kind\030\010 \001(\0162\025.boa.types.Cha" +
+      "ngeKind\022\027\n\017mapped_node_key\030\t \001(\005\"\333\003\n\013Dec" +
+      "laration\022\014\n\004name\030\001 \002(\t\022!\n\004kind\030\002 \002(\0162\023.b" +
+      "oa.types.TypeKind\022&\n\tmodifiers\030\003 \003(\0132\023.b" +
+      "oa.types.Modifier\022+\n\022generic_parameters\030",
+      "\004 \003(\0132\017.boa.types.Type\022 \n\007parents\030\005 \003(\0132" +
+      "\017.boa.types.Type\022\"\n\007methods\030\006 \003(\0132\021.boa." +
+      "types.Method\022#\n\006fields\030\007 \003(\0132\023.boa.types" +
+      ".Variable\0223\n\023nested_declarations\030\010 \003(\0132\026" +
+      ".boa.types.Declaration\022$\n\010comments\030\t \003(\013" +
+      "2\022.boa.types.Comment\0225\n\026structural_chang" +
+      "e_kind\030\n \001(\0162\025.boa.types.ChangeKind\0220\n\021l" +
+      "abel_change_kind\030\013 \001(\0162\025.boa.types.Chang" +
+      "eKind\022\027\n\017mapped_node_key\030\014 \001(\005\"\305\001\n\004Type\022" +
+      "\014\n\004name\030\001 \002(\t\022!\n\004kind\030\002 \002(\0162\023.boa.types.",
+      "TypeKind\022\n\n\002id\030\004 \001(\t\0225\n\026structural_chang" +
+      "e_kind\030\005 \001(\0162\025.boa.types.ChangeKind\0220\n\021l" +
+      "abel_change_kind\030\006 \001(\0162\025.boa.types.Chang" +
+      "eKind\022\027\n\017mapped_node_key\030\007 \001(\005\"\265\003\n\006Metho" +
+      "d\022\014\n\004name\030\001 \001(\t\022&\n\tmodifiers\030\002 \003(\0132\023.boa" +
+      ".types.Modifier\022$\n\013return_type\030\003 \002(\0132\017.b" +
+      "oa.types.Type\022+\n\022generic_parameters\030\004 \003(" +
+      "\0132\017.boa.types.Type\022&\n\targuments\030\005 \003(\0132\023." +
+      "boa.types.Variable\022(\n\017exception_types\030\006 " +
+      "\003(\0132\017.boa.types.Type\022(\n\nstatements\030\007 \003(\013",
+      "2\024.boa.types.Statement\022$\n\010comments\030\010 \003(\013" +
+      "2\022.boa.types.Comment\0225\n\026structural_chang" +
+      "e_kind\030\t \001(\0162\025.boa.types.ChangeKind\0220\n\021l" +
+      "abel_change_kind\030\n \001(\0162\025.boa.types.Chang" +
+      "eKind\022\027\n\017mapped_node_key\030\013 \001(\005\"\274\002\n\010Varia" +
+      "ble\022\014\n\004name\030\001 \002(\t\022&\n\rvariable_type\030\002 \002(\013" +
+      "2\017.boa.types.Type\022&\n\tmodifiers\030\003 \003(\0132\023.b" +
+      "oa.types.Modifier\022*\n\013initializer\030\004 \001(\0132\025" +
+      ".boa.types.Expression\022$\n\010comments\030\005 \003(\0132" +
+      "\022.boa.types.Comment\0225\n\026structural_change",
+      "_kind\030\006 \001(\0162\025.boa.types.ChangeKind\0220\n\021la" +
+      "bel_change_kind\030\007 \001(\0162\025.boa.types.Change" +
+      "Kind\022\027\n\017mapped_node_key\030\010 \001(\005\"\276\006\n\tStatem" +
+      "ent\0220\n\004kind\030\001 \002(\0162\".boa.types.Statement." +
+      "StatementKind\022$\n\010comments\030\002 \003(\0132\022.boa.ty" +
+      "pes.Comment\022(\n\nstatements\030\003 \003(\0132\024.boa.ty" +
+      "pes.Statement\022.\n\017initializations\030\004 \003(\0132\025" +
+      ".boa.types.Expression\022(\n\tcondition\030\005 \001(\013" +
+      "2\025.boa.types.Expression\022&\n\007updates\030\006 \003(\013" +
+      "2\025.boa.types.Expression\0221\n\024variable_decl",
+      "aration\030\007 \001(\0132\023.boa.types.Variable\0220\n\020ty" +
+      "pe_declaration\030\010 \001(\0132\026.boa.types.Declara" +
+      "tion\022)\n\nexpression\030\t \001(\0132\025.boa.types.Exp" +
+      "ression\0225\n\026structural_change_kind\030\n \001(\0162" +
+      "\025.boa.types.ChangeKind\0220\n\021label_change_k" +
+      "ind\030\013 \001(\0162\025.boa.types.ChangeKind\022\027\n\017mapp" +
+      "ed_node_key\030\014 \001(\005\"\232\002\n\rStatementKind\022\t\n\005O" +
+      "THER\020\000\022\t\n\005BLOCK\020\001\022\014\n\010TYPEDECL\020\002\022\016\n\nEXPRE" +
+      "SSION\020\003\022\010\n\004EXPR\020\003\022\020\n\014SYNCHRONIZED\020\004\022\010\n\004S" +
+      "YNC\020\004\022\n\n\006RETURN\020\005\022\007\n\003FOR\020\006\022\006\n\002DO\020\007\022\t\n\005WH",
+      "ILE\020\010\022\006\n\002IF\020\t\022\n\n\006ASSERT\020\n\022\t\n\005BREAK\020\013\022\014\n\010" +
+      "CONTINUE\020\014\022\t\n\005LABEL\020\r\022\n\n\006SWITCH\020\016\022\010\n\004CAS" +
+      "E\020\017\022\007\n\003TRY\020\020\022\t\n\005THROW\020\021\022\t\n\005CATCH\020\022\022\t\n\005EM" +
+      "PTY\020\023\022\013\n\007FINALLY\020\024\032\002\020\001\"\205\013\n\nExpression\0222\n" +
+      "\004kind\030\001 \002(\0162$.boa.types.Expression.Expre" +
+      "ssionKind\022*\n\013expressions\030\002 \003(\0132\025.boa.typ" +
+      "es.Expression\022+\n\016variable_decls\030\003 \003(\0132\023." +
+      "boa.types.Variable\022!\n\010new_type\030\004 \001(\0132\017.b" +
+      "oa.types.Type\022+\n\022generic_parameters\030\005 \003(" +
+      "\0132\017.boa.types.Type\022\022\n\nis_postfix\030\006 \001(\010\022\017",
+      "\n\007literal\030\007 \001(\t\022\020\n\010variable\030\010 \001(\t\022\016\n\006met" +
+      "hod\030\t \001(\t\022*\n\013method_args\030\n \003(\0132\025.boa.typ" +
+      "es.Expression\0220\n\020anon_declaration\030\013 \001(\0132" +
+      "\026.boa.types.Declaration\022\'\n\nannotation\030\014 " +
+      "\001(\0132\023.boa.types.Modifier\022!\n\006lambda\030\r \001(\013" +
+      "2\021.boa.types.Method\022\021\n\tno_parens\030\016 \001(\010\0225" +
+      "\n\026structural_change_kind\030\017 \001(\0162\025.boa.typ" +
+      "es.ChangeKind\0220\n\021label_change_kind\030\020 \001(\016" +
+      "2\025.boa.types.ChangeKind\022\027\n\017mapped_node_k" +
+      "ey\030\021 \001(\005\"\223\006\n\016ExpressionKind\022\t\n\005OTHER\020\000\022\013",
       "\n\007LITERAL\020\001\022\r\n\tVARACCESS\020\002\022\013\n\007VARDECL\020\003\022" +
       "\016\n\nMETHODCALL\020\004\022\010\n\004CAST\020\005\022\016\n\nARRAYINDEX\020" +
       "\006\022\r\n\tARRAYINIT\020\007\022\017\n\013TYPECOMPARE\020\010\022\007\n\003NEW" +
       "\020\t\022\014\n\010NEWARRAY\020\n\022\n\n\006OP_ADD\020\013\022\n\n\006OP_SUB\020\014" +
-      "\022\013\n\007OP_MULT\020\r\022\n\n\006OP_DIV\020\016\022\n\n\006OP_MOD\020\017\022\n\n",
+      "\022\013\n\007OP_MULT\020\r\022\n\n\006OP_DIV\020\016\022\n\n\006OP_MOD\020\017\022\n\n" +
       "\006OP_INC\020\020\022\n\n\006OP_DEC\020\021\022\016\n\nBIT_LSHIFT\020\022\022\016\n" +
       "\nBIT_RSHIFT\020\023\022\026\n\022BIT_UNSIGNEDRSHIFT\020\024\022\013\n" +
       "\007BIT_AND\020\025\022\n\n\006BIT_OR\020\026\022\013\n\007BIT_NOT\020\027\022\013\n\007B" +
       "IT_XOR\020\030\022\017\n\013LOGICAL_NOT\020\031\022\017\n\013LOGICAL_AND" +
-      "\020\032\022\016\n\nLOGICAL_OR\020\033\022\006\n\002EQ\020\034\022\007\n\003NEQ\020\035\022\006\n\002L" +
+      "\020\032\022\016\n\nLOGICAL_OR\020\033\022\006\n\002EQ\020\034\022\007\n\003NEQ\020\035\022\006\n\002L",
       "T\020\036\022\006\n\002GT\020\037\022\010\n\004LTEQ\020 \022\010\n\004GTEQ\020!\022\017\n\013CONDI" +
       "TIONAL\020\"\022\020\n\014NULLCOALESCE\020#\022\n\n\006ASSIGN\020$\022\016" +
       "\n\nASSIGN_ADD\020%\022\016\n\nASSIGN_SUB\020&\022\017\n\013ASSIGN" +
       "_MULT\020\'\022\016\n\nASSIGN_DIV\020(\022\016\n\nASSIGN_MOD\020)\022" +
-      "\021\n\rASSIGN_BITXOR\020*\022\021\n\rASSIGN_BITAND\020+\022\020\n",
+      "\021\n\rASSIGN_BITXOR\020*\022\021\n\rASSIGN_BITAND\020+\022\020\n" +
       "\014ASSIGN_BITOR\020,\022\021\n\rASSIGN_LSHIFT\020-\022\021\n\rAS" +
       "SIGN_RSHIFT\020.\022\031\n\025ASSIGN_UNSIGNEDRSHIFT\020/" +
       "\022\016\n\nANNOTATION\0200\022\t\n\005PAREN\0201\022\024\n\020METHOD_RE" +
-      "FERENCE\0202\022\n\n\006LAMBDA\0203\022\017\n\013ANON_METHOD\0204\"\260" +
-      "\004\n\010Modifier\022.\n\004kind\030\001 \002(\0162 .boa.types.Mo" +
+      "FERENCE\0202\022\n\n\006LAMBDA\0203\022\017\n\013ANON_METHOD\0204\"\311" +
+      "\004\n\010Modifier\022.\n\004kind\030\001 \002(\0162 .boa.types.Mo",
       "difier.ModifierKind\0222\n\nvisibility\030\002 \001(\0162" +
       "\036.boa.types.Modifier.Visibility\022\027\n\017annot" +
       "ation_name\030\003 \001(\t\022\032\n\022annotation_members\030\004" +
       " \003(\t\0220\n\021annotation_values\030\005 \003(\0132\025.boa.ty" +
-      "pes.Expression\022\r\n\005other\030\006 \001(\t\0225\n\026structu",
+      "pes.Expression\022\r\n\005other\030\006 \001(\t\0225\n\026structu" +
       "ral_change_kind\030\007 \001(\0162\025.boa.types.Change" +
       "Kind\0220\n\021label_change_kind\030\010 \001(\0162\025.boa.ty" +
-      "pes.ChangeKind\"~\n\014ModifierKind\022\t\n\005OTHER\020" +
-      "\000\022\016\n\nVISIBILITY\020\001\022\016\n\nANNOTATION\020\002\022\t\n\005FIN" +
-      "AL\020\003\022\n\n\006STATIC\020\004\022\020\n\014SYNCHRONIZED\020\005\022\010\n\004SY" +
-      "NC\020\005\022\014\n\010ABSTRACT\020\006\032\002\020\001\"a\n\nVisibility\022\n\n\006" +
-      "PUBLIC\020\001\022\013\n\007PRIVATE\020\002\022\r\n\tPROTECTED\020\003\022\r\n\t" +
-      "NAMESPACE\020\004\022\013\n\007PACKAGE\020\004\022\013\n\007DEFAULT\020\004\032\002\020" +
-      "\001\"\306\002\n\007Comment\022,\n\004kind\030\001 \002(\0162\036.boa.types." +
-      "Comment.CommentKind\022\r\n\005value\030\002 \002(\t\022)\n\010po",
-      "sition\030\003 \002(\0132\027.boa.types.PositionInfo\0225\n" +
-      "\026structural_change_kind\030\004 \001(\0162\025.boa.type" +
-      "s.ChangeKind\0220\n\021label_change_kind\030\005 \001(\0162" +
-      "\025.boa.types.ChangeKind\"j\n\013CommentKind\022\t\n" +
-      "\005OTHER\020\000\022\010\n\004LINE\020\001\022\t\n\005BLOCK\020\002\022\007\n\003DOC\020\003\022\021" +
-      "\n\rDOCUMENTATION\020\003\022\010\n\004SPEC\020\004\022\021\n\rSPECIFICA" +
-      "TION\020\004\032\002\020\001\"{\n\014PositionInfo\022\021\n\tstart_pos\030" +
-      "\001 \002(\005\022\016\n\006length\030\002 \002(\005\022\022\n\nstart_line\030\003 \002(" +
-      "\005\022\021\n\tstart_col\030\004 \002(\005\022\020\n\010end_line\030\005 \002(\005\022\017" +
-      "\n\007end_col\030\006 \002(\005*\236\001\n\010TypeKind\022\t\n\005OTHER\020\000\022",
-      "\t\n\005CLASS\020\001\022\r\n\tINTERFACE\020\002\022\r\n\tANONYMOUS\020\003" +
-      "\022\010\n\004ANON\020\003\022\n\n\006STRUCT\020\004\022\010\n\004ENUM\020\005\022\017\n\013ENUM" +
-      "ERATION\020\005\022\016\n\nANNOTATION\020\006\022\014\n\010DELEGATE\020\007\022" +
-      "\013\n\007GENERIC\020\010\032\002\020\001B\002H\001"
+      "pes.ChangeKind\022\027\n\017mapped_node_key\030\t \001(\005\"" +
+      "~\n\014ModifierKind\022\t\n\005OTHER\020\000\022\016\n\nVISIBILITY" +
+      "\020\001\022\016\n\nANNOTATION\020\002\022\t\n\005FINAL\020\003\022\n\n\006STATIC\020",
+      "\004\022\020\n\014SYNCHRONIZED\020\005\022\010\n\004SYNC\020\005\022\014\n\010ABSTRAC" +
+      "T\020\006\032\002\020\001\"a\n\nVisibility\022\n\n\006PUBLIC\020\001\022\013\n\007PRI" +
+      "VATE\020\002\022\r\n\tPROTECTED\020\003\022\r\n\tNAMESPACE\020\004\022\013\n\007" +
+      "PACKAGE\020\004\022\013\n\007DEFAULT\020\004\032\002\020\001\"\337\002\n\007Comment\022," +
+      "\n\004kind\030\001 \002(\0162\036.boa.types.Comment.Comment" +
+      "Kind\022\r\n\005value\030\002 \002(\t\022)\n\010position\030\003 \002(\0132\027." +
+      "boa.types.PositionInfo\0225\n\026structural_cha" +
+      "nge_kind\030\004 \001(\0162\025.boa.types.ChangeKind\0220\n" +
+      "\021label_change_kind\030\005 \001(\0162\025.boa.types.Cha" +
+      "ngeKind\022\027\n\017mapped_node_key\030\006 \001(\005\"j\n\013Comm",
+      "entKind\022\t\n\005OTHER\020\000\022\010\n\004LINE\020\001\022\t\n\005BLOCK\020\002\022" +
+      "\007\n\003DOC\020\003\022\021\n\rDOCUMENTATION\020\003\022\010\n\004SPEC\020\004\022\021\n" +
+      "\rSPECIFICATION\020\004\032\002\020\001\"{\n\014PositionInfo\022\021\n\t" +
+      "start_pos\030\001 \002(\005\022\016\n\006length\030\002 \002(\005\022\022\n\nstart" +
+      "_line\030\003 \002(\005\022\021\n\tstart_col\030\004 \002(\005\022\020\n\010end_li" +
+      "ne\030\005 \002(\005\022\017\n\007end_col\030\006 \002(\005*\236\001\n\010TypeKind\022\t" +
+      "\n\005OTHER\020\000\022\t\n\005CLASS\020\001\022\r\n\tINTERFACE\020\002\022\r\n\tA" +
+      "NONYMOUS\020\003\022\010\n\004ANON\020\003\022\n\n\006STRUCT\020\004\022\010\n\004ENUM" +
+      "\020\005\022\017\n\013ENUMERATION\020\005\022\016\n\nANNOTATION\020\006\022\014\n\010D" +
+      "ELEGATE\020\007\022\013\n\007GENERIC\020\010\032\002\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -29785,61 +30921,61 @@ public final class Ast {
           internal_static_boa_types_ASTRoot_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_ASTRoot_descriptor,
-              new java.lang.String[] { "Namespaces", "Imports", "Names", "StructuralChangeKind", "LabelChangeKind", });
+              new java.lang.String[] { "Namespaces", "Imports", "Names", "StructuralChangeKind", "LabelChangeKind", "MappedNodeKey", });
           internal_static_boa_types_Namespace_descriptor =
             getDescriptor().getMessageTypes().get(2);
           internal_static_boa_types_Namespace_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Namespace_descriptor,
-              new java.lang.String[] { "Name", "Modifiers", "Declarations", "Statements", "Methods", "Expressions", "StructuralChangeKind", "LabelChangeKind", });
+              new java.lang.String[] { "Name", "Modifiers", "Declarations", "Statements", "Methods", "Expressions", "StructuralChangeKind", "LabelChangeKind", "MappedNodeKey", });
           internal_static_boa_types_Declaration_descriptor =
             getDescriptor().getMessageTypes().get(3);
           internal_static_boa_types_Declaration_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Declaration_descriptor,
-              new java.lang.String[] { "Name", "Kind", "Modifiers", "GenericParameters", "Parents", "Methods", "Fields", "NestedDeclarations", "Comments", "StructuralChangeKind", "LabelChangeKind", });
+              new java.lang.String[] { "Name", "Kind", "Modifiers", "GenericParameters", "Parents", "Methods", "Fields", "NestedDeclarations", "Comments", "StructuralChangeKind", "LabelChangeKind", "MappedNodeKey", });
           internal_static_boa_types_Type_descriptor =
             getDescriptor().getMessageTypes().get(4);
           internal_static_boa_types_Type_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Type_descriptor,
-              new java.lang.String[] { "Name", "Kind", "Id", "StructuralChangeKind", "LabelChangeKind", });
+              new java.lang.String[] { "Name", "Kind", "Id", "StructuralChangeKind", "LabelChangeKind", "MappedNodeKey", });
           internal_static_boa_types_Method_descriptor =
             getDescriptor().getMessageTypes().get(5);
           internal_static_boa_types_Method_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Method_descriptor,
-              new java.lang.String[] { "Name", "Modifiers", "ReturnType", "GenericParameters", "Arguments", "ExceptionTypes", "Statements", "Comments", "StructuralChangeKind", "LabelChangeKind", });
+              new java.lang.String[] { "Name", "Modifiers", "ReturnType", "GenericParameters", "Arguments", "ExceptionTypes", "Statements", "Comments", "StructuralChangeKind", "LabelChangeKind", "MappedNodeKey", });
           internal_static_boa_types_Variable_descriptor =
             getDescriptor().getMessageTypes().get(6);
           internal_static_boa_types_Variable_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Variable_descriptor,
-              new java.lang.String[] { "Name", "VariableType", "Modifiers", "Initializer", "Comments", "StructuralChangeKind", "LabelChangeKind", });
+              new java.lang.String[] { "Name", "VariableType", "Modifiers", "Initializer", "Comments", "StructuralChangeKind", "LabelChangeKind", "MappedNodeKey", });
           internal_static_boa_types_Statement_descriptor =
             getDescriptor().getMessageTypes().get(7);
           internal_static_boa_types_Statement_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Statement_descriptor,
-              new java.lang.String[] { "Kind", "Comments", "Statements", "Initializations", "Condition", "Updates", "VariableDeclaration", "TypeDeclaration", "Expression", "StructuralChangeKind", "LabelChangeKind", });
+              new java.lang.String[] { "Kind", "Comments", "Statements", "Initializations", "Condition", "Updates", "VariableDeclaration", "TypeDeclaration", "Expression", "StructuralChangeKind", "LabelChangeKind", "MappedNodeKey", });
           internal_static_boa_types_Expression_descriptor =
             getDescriptor().getMessageTypes().get(8);
           internal_static_boa_types_Expression_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Expression_descriptor,
-              new java.lang.String[] { "Kind", "Expressions", "VariableDecls", "NewType", "GenericParameters", "IsPostfix", "Literal", "Variable", "Method", "MethodArgs", "AnonDeclaration", "Annotation", "Lambda", "NoParens", "StructuralChangeKind", "LabelChangeKind", });
+              new java.lang.String[] { "Kind", "Expressions", "VariableDecls", "NewType", "GenericParameters", "IsPostfix", "Literal", "Variable", "Method", "MethodArgs", "AnonDeclaration", "Annotation", "Lambda", "NoParens", "StructuralChangeKind", "LabelChangeKind", "MappedNodeKey", });
           internal_static_boa_types_Modifier_descriptor =
             getDescriptor().getMessageTypes().get(9);
           internal_static_boa_types_Modifier_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Modifier_descriptor,
-              new java.lang.String[] { "Kind", "Visibility", "AnnotationName", "AnnotationMembers", "AnnotationValues", "Other", "StructuralChangeKind", "LabelChangeKind", });
+              new java.lang.String[] { "Kind", "Visibility", "AnnotationName", "AnnotationMembers", "AnnotationValues", "Other", "StructuralChangeKind", "LabelChangeKind", "MappedNodeKey", });
           internal_static_boa_types_Comment_descriptor =
             getDescriptor().getMessageTypes().get(10);
           internal_static_boa_types_Comment_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Comment_descriptor,
-              new java.lang.String[] { "Kind", "Value", "Position", "StructuralChangeKind", "LabelChangeKind", });
+              new java.lang.String[] { "Kind", "Value", "Position", "StructuralChangeKind", "LabelChangeKind", "MappedNodeKey", });
           internal_static_boa_types_PositionInfo_descriptor =
             getDescriptor().getMessageTypes().get(11);
           internal_static_boa_types_PositionInfo_fieldAccessorTable = new

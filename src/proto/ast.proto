@@ -21,6 +21,8 @@ message ASTRoot {
 	optional ChangeKind structural_change_kind = 4;
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
 	optional ChangeKind label_change_kind = 5;
+	/** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order */
+	optional int32 mapped_node_key = 6;
 }
 
 /** A namespace (aka, package) in a source file */
@@ -41,6 +43,8 @@ message Namespace {
 	optional ChangeKind structural_change_kind = 7;
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
 	optional ChangeKind label_change_kind = 8;
+	/** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order */
+	optional int32 mapped_node_key = 9;
 }
 
 /** A type declaration, such as a class or interface */
@@ -67,6 +71,8 @@ message Declaration {
 	optional ChangeKind structural_change_kind = 10;
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
 	optional ChangeKind label_change_kind = 11;
+	/** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order */
+	optional int32 mapped_node_key = 12;
 }
 
 /** The kinds of types in an AST */
@@ -108,6 +114,8 @@ message Type {
 	optional ChangeKind structural_change_kind = 5;
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
 	optional ChangeKind label_change_kind = 6;
+	/** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order */
+	optional int32 mapped_node_key = 7;
 }
 
 /** A method declaration */
@@ -136,6 +144,8 @@ message Method {
 	optional ChangeKind structural_change_kind = 9;
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
 	optional ChangeKind label_change_kind = 10;
+	/** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order */
+	optional int32 mapped_node_key = 11;
 }
 
 /** A variable declaration - can be a field, local, parameter, etc */
@@ -154,6 +164,8 @@ message Variable {
 	optional ChangeKind structural_change_kind = 6;
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
 	optional ChangeKind label_change_kind = 7;
+	/** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order */
+	optional int32 mapped_node_key = 8;
 }
 
 /** A single statement */
@@ -203,6 +215,8 @@ message Statement {
 	optional ChangeKind structural_change_kind = 10;
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
 	optional ChangeKind label_change_kind = 11;
+	/** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order */
+	optional int32 mapped_node_key = 12;
 }
 
 /** A single expression */
@@ -288,6 +302,8 @@ message Expression {
 	optional ChangeKind structural_change_kind = 15;
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
 	optional ChangeKind label_change_kind = 16;
+	/** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order */
+	optional int32 mapped_node_key = 17;
 }
 
 /** A single modifier */
@@ -344,6 +360,8 @@ message Modifier {
 	optional ChangeKind structural_change_kind = 7;
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
 	optional ChangeKind label_change_kind = 8;
+	/** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order */
+	optional int32 mapped_node_key = 9;
 }
 
 /** @exclude */
@@ -366,6 +384,8 @@ message Comment {
 	optional ChangeKind structural_change_kind = 4;
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
 	optional ChangeKind label_change_kind = 5;
+	/** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order */
+	optional int32 mapped_node_key = 6;
 }
 
 /** @exclude */
