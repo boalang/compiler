@@ -69,7 +69,7 @@ public class Forker {
 	
 	public void rename(String name, String originalOwner){
 		String url = urlHeader + username + "/" + name;
-		String newName = "{\"name\": " + "\"" + originalOwner + "_" + name + "\"}";
+		String newName = "{\"name\": " + "\"" + originalOwner + "___" + name + "\"}";
 		String[] command = {"curl" ,  "-u" , username +":" +  password , "-X" , "PATCH", "-d" , newName  , url };
 		ProcessBuilder process = new ProcessBuilder(command);
 		try {
