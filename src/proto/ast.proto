@@ -22,7 +22,13 @@ message ASTRoot {
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
 	optional ChangeKind label_change_kind = 5;
 	/** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order */
-	optional int32 mapped_node_key = 6;
+	optional int32 mapped_node = 6;
+	/** the index of the file (in the list of files in the snapshot) containing the type binding information */
+	optional int32 type_binding_file = 7;
+	/** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) */
+	optional int32 type_binding_node = 8;
+	/** */
+	optional int32 key = 9;
 }
 
 /** A namespace (aka, package) in a source file */
@@ -44,7 +50,13 @@ message Namespace {
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
 	optional ChangeKind label_change_kind = 8;
 	/** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order */
-	optional int32 mapped_node_key = 9;
+	optional int32 mapped_node = 9;
+	/** the index of the file (in the list of files in the snapshot) containing the type binding information */
+	optional int32 type_binding_file = 10;
+	/** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) */
+	optional int32 type_binding_node = 11;
+	/** */
+	optional int32 key = 12;
 }
 
 /** A type declaration, such as a class or interface */
@@ -72,7 +84,13 @@ message Declaration {
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
 	optional ChangeKind label_change_kind = 11;
 	/** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order */
-	optional int32 mapped_node_key = 12;
+	optional int32 mapped_node = 12;
+	/** the index of the file (in the list of files in the snapshot) containing the type binding information */
+	optional int32 type_binding_file = 13;
+	/** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) */
+	optional int32 type_binding_node = 14;
+	/** */
+	optional int32 key = 15;
 }
 
 /** The kinds of types in an AST */
@@ -115,7 +133,13 @@ message Type {
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
 	optional ChangeKind label_change_kind = 6;
 	/** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order */
-	optional int32 mapped_node_key = 7;
+	optional int32 mapped_node = 7;
+	/** the index of the file (in the list of files in the snapshot) containing the type binding information */
+	optional int32 type_binding_file = 8;
+	/** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) */
+	optional int32 type_binding_node = 9;
+	/** */
+	optional int32 key = 10;
 }
 
 /** A method declaration */
@@ -145,7 +169,13 @@ message Method {
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
 	optional ChangeKind label_change_kind = 10;
 	/** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order */
-	optional int32 mapped_node_key = 11;
+	optional int32 mapped_node = 11;
+	/** the index of the file (in the list of files in the snapshot) containing the type binding information */
+	optional int32 type_binding_file = 12;
+	/** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) */
+	optional int32 type_binding_node = 13;
+	/** */
+	optional int32 key = 14;
 }
 
 /** A variable declaration - can be a field, local, parameter, etc */
@@ -165,7 +195,13 @@ message Variable {
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
 	optional ChangeKind label_change_kind = 7;
 	/** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order */
-	optional int32 mapped_node_key = 8;
+	optional int32 mapped_node = 8;
+	/** the index of the file (in the list of files in the snapshot) containing the type binding information */
+	optional int32 type_binding_file = 9;
+	/** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) */
+	optional int32 type_binding_node = 10;
+	/** */
+	optional int32 key = 11;
 }
 
 /** A single statement */
@@ -216,7 +252,13 @@ message Statement {
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
 	optional ChangeKind label_change_kind = 11;
 	/** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order */
-	optional int32 mapped_node_key = 12;
+	optional int32 mapped_node = 12;
+	/** the index of the file (in the list of files in the snapshot) containing the type binding information */
+	optional int32 type_binding_file = 13;
+	/** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) */
+	optional int32 type_binding_node = 14;
+	/** */
+	optional int32 key = 15;
 }
 
 /** A single expression */
@@ -303,7 +345,13 @@ message Expression {
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
 	optional ChangeKind label_change_kind = 16;
 	/** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order */
-	optional int32 mapped_node_key = 17;
+	optional int32 mapped_node = 17;
+	/** the index of the file (in the list of files in the snapshot) containing the type binding information */
+	optional int32 type_binding_file = 18;
+	/** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) */
+	optional int32 type_binding_node = 19;
+	/** */
+	optional int32 key = 20;
 }
 
 /** A single modifier */
@@ -361,7 +409,9 @@ message Modifier {
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
 	optional ChangeKind label_change_kind = 8;
 	/** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order */
-	optional int32 mapped_node_key = 9;
+	optional int32 mapped_node = 9;
+	/** */
+	optional int32 key = 10;
 }
 
 /** @exclude */
@@ -385,7 +435,9 @@ message Comment {
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
 	optional ChangeKind label_change_kind = 5;
 	/** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order */
-	optional int32 mapped_node_key = 6;
+	optional int32 mapped_node = 6;
+	/** */
+	optional int32 key = 7;
 }
 
 /** @exclude */
