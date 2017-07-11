@@ -949,8 +949,10 @@ public class Java7Visitor extends ASTVisitor {
 		node.getBody().accept(this);
 		for (Object c : node.catchClauses())
 			((CatchClause)c).accept(this);
-		if (node.getFinally() != null)
+		if (node.getFinally() != null) {
+			visitFinally(node.getFinally());
 			node.getFinally().accept(this);
+		}
 		for (boa.types.Ast.Statement s : statements.pop())
 			b.addStatements(s);
 		if (node.resources() != null)
@@ -960,6 +962,19 @@ public class Java7Visitor extends ASTVisitor {
 			}
 		list.add(b.build());
 		return false;
+	}
+
+	private void visitFinally(Block blkFinally) {
+		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+		List<boa.types.Ast.Statement> list = statements.peek();
+		b.setKind(boa.types.Ast.Statement.StatementKind.FINALLY);
+		for (Object s : blkFinally.statements()) {
+			statements.push(new ArrayList<boa.types.Ast.Statement>());
+			((org.eclipse.jdt.core.dom.Statement)s).accept(this);
+			for (boa.types.Ast.Statement st : statements.pop())
+				b.addStatements(st);
+		}
+		list.add(b.build());
 	}
 
 	@Override
