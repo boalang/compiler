@@ -29,6 +29,12 @@ public class ForkerWorker implements Runnable{
 				while (sc.hasNextLine()){
 					String fullName = sc.nextLine();
 					forker.fork(fullName);
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					String[] names = fullName.split("/");
 					forker.rename(names[1], names[0]);
 					System.out.println("forked " + fullName);
