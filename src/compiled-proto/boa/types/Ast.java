@@ -1118,7 +1118,7 @@ public final class Ast {
      * <code>optional int32 mapped_node = 6;</code>
      *
      * <pre>
-     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
     boolean hasMappedNode();
@@ -1126,50 +1126,14 @@ public final class Ast {
      * <code>optional int32 mapped_node = 6;</code>
      *
      * <pre>
-     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
     int getMappedNode();
 
-    // optional int32 type_binding_file = 7;
+    // optional int32 key = 7;
     /**
-     * <code>optional int32 type_binding_file = 7;</code>
-     *
-     * <pre>
-     ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-     * </pre>
-     */
-    boolean hasTypeBindingFile();
-    /**
-     * <code>optional int32 type_binding_file = 7;</code>
-     *
-     * <pre>
-     ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-     * </pre>
-     */
-    int getTypeBindingFile();
-
-    // optional int32 type_binding_node = 8;
-    /**
-     * <code>optional int32 type_binding_node = 8;</code>
-     *
-     * <pre>
-     ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-     * </pre>
-     */
-    boolean hasTypeBindingNode();
-    /**
-     * <code>optional int32 type_binding_node = 8;</code>
-     *
-     * <pre>
-     ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-     * </pre>
-     */
-    int getTypeBindingNode();
-
-    // optional int32 key = 9;
-    /**
-     * <code>optional int32 key = 9;</code>
+     * <code>optional int32 key = 7;</code>
      *
      * <pre>
      ** 
@@ -1177,7 +1141,7 @@ public final class Ast {
      */
     boolean hasKey();
     /**
-     * <code>optional int32 key = 9;</code>
+     * <code>optional int32 key = 7;</code>
      *
      * <pre>
      ** 
@@ -1293,16 +1257,6 @@ public final class Ast {
             }
             case 56: {
               bitField0_ |= 0x00000008;
-              typeBindingFile_ = input.readInt32();
-              break;
-            }
-            case 64: {
-              bitField0_ |= 0x00000010;
-              typeBindingNode_ = input.readInt32();
-              break;
-            }
-            case 72: {
-              bitField0_ |= 0x00000020;
               key_ = input.readInt32();
               break;
             }
@@ -1558,7 +1512,7 @@ public final class Ast {
      * <code>optional int32 mapped_node = 6;</code>
      *
      * <pre>
-     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
     public boolean hasMappedNode() {
@@ -1568,76 +1522,28 @@ public final class Ast {
      * <code>optional int32 mapped_node = 6;</code>
      *
      * <pre>
-     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
     public int getMappedNode() {
       return mappedNode_;
     }
 
-    // optional int32 type_binding_file = 7;
-    public static final int TYPE_BINDING_FILE_FIELD_NUMBER = 7;
-    private int typeBindingFile_;
-    /**
-     * <code>optional int32 type_binding_file = 7;</code>
-     *
-     * <pre>
-     ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-     * </pre>
-     */
-    public boolean hasTypeBindingFile() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
-    }
-    /**
-     * <code>optional int32 type_binding_file = 7;</code>
-     *
-     * <pre>
-     ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-     * </pre>
-     */
-    public int getTypeBindingFile() {
-      return typeBindingFile_;
-    }
-
-    // optional int32 type_binding_node = 8;
-    public static final int TYPE_BINDING_NODE_FIELD_NUMBER = 8;
-    private int typeBindingNode_;
-    /**
-     * <code>optional int32 type_binding_node = 8;</code>
-     *
-     * <pre>
-     ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-     * </pre>
-     */
-    public boolean hasTypeBindingNode() {
-      return ((bitField0_ & 0x00000010) == 0x00000010);
-    }
-    /**
-     * <code>optional int32 type_binding_node = 8;</code>
-     *
-     * <pre>
-     ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-     * </pre>
-     */
-    public int getTypeBindingNode() {
-      return typeBindingNode_;
-    }
-
-    // optional int32 key = 9;
-    public static final int KEY_FIELD_NUMBER = 9;
+    // optional int32 key = 7;
+    public static final int KEY_FIELD_NUMBER = 7;
     private int key_;
     /**
-     * <code>optional int32 key = 9;</code>
+     * <code>optional int32 key = 7;</code>
      *
      * <pre>
      ** 
      * </pre>
      */
     public boolean hasKey() {
-      return ((bitField0_ & 0x00000020) == 0x00000020);
+      return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
-     * <code>optional int32 key = 9;</code>
+     * <code>optional int32 key = 7;</code>
      *
      * <pre>
      ** 
@@ -1654,8 +1560,6 @@ public final class Ast {
       structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       mappedNode_ = 0;
-      typeBindingFile_ = 0;
-      typeBindingNode_ = 0;
       key_ = 0;
     }
     private byte memoizedIsInitialized = -1;
@@ -1695,13 +1599,7 @@ public final class Ast {
         output.writeInt32(6, mappedNode_);
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeInt32(7, typeBindingFile_);
-      }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeInt32(8, typeBindingNode_);
-      }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        output.writeInt32(9, key_);
+        output.writeInt32(7, key_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -1748,15 +1646,7 @@ public final class Ast {
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(7, typeBindingFile_);
-      }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(8, typeBindingNode_);
-      }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(9, key_);
+          .computeInt32Size(7, key_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1895,12 +1785,8 @@ public final class Ast {
         bitField0_ = (bitField0_ & ~0x00000010);
         mappedNode_ = 0;
         bitField0_ = (bitField0_ & ~0x00000020);
-        typeBindingFile_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000040);
-        typeBindingNode_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000080);
         key_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000100);
+        bitField0_ = (bitField0_ & ~0x00000040);
         return this;
       }
 
@@ -1964,14 +1850,6 @@ public final class Ast {
         result.mappedNode_ = mappedNode_;
         if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
           to_bitField0_ |= 0x00000008;
-        }
-        result.typeBindingFile_ = typeBindingFile_;
-        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
-          to_bitField0_ |= 0x00000010;
-        }
-        result.typeBindingNode_ = typeBindingNode_;
-        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
-          to_bitField0_ |= 0x00000020;
         }
         result.key_ = key_;
         result.bitField0_ = to_bitField0_;
@@ -2044,12 +1922,6 @@ public final class Ast {
         }
         if (other.hasMappedNode()) {
           setMappedNode(other.getMappedNode());
-        }
-        if (other.hasTypeBindingFile()) {
-          setTypeBindingFile(other.getTypeBindingFile());
-        }
-        if (other.hasTypeBindingNode()) {
-          setTypeBindingNode(other.getTypeBindingNode());
         }
         if (other.hasKey()) {
           setKey(other.getKey());
@@ -2767,7 +2639,7 @@ public final class Ast {
        * <code>optional int32 mapped_node = 6;</code>
        *
        * <pre>
-       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
       public boolean hasMappedNode() {
@@ -2777,7 +2649,7 @@ public final class Ast {
        * <code>optional int32 mapped_node = 6;</code>
        *
        * <pre>
-       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
       public int getMappedNode() {
@@ -2787,7 +2659,7 @@ public final class Ast {
        * <code>optional int32 mapped_node = 6;</code>
        *
        * <pre>
-       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
       public Builder setMappedNode(int value) {
@@ -2800,7 +2672,7 @@ public final class Ast {
        * <code>optional int32 mapped_node = 6;</code>
        *
        * <pre>
-       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
       public Builder clearMappedNode() {
@@ -2810,118 +2682,20 @@ public final class Ast {
         return this;
       }
 
-      // optional int32 type_binding_file = 7;
-      private int typeBindingFile_ ;
-      /**
-       * <code>optional int32 type_binding_file = 7;</code>
-       *
-       * <pre>
-       ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-       * </pre>
-       */
-      public boolean hasTypeBindingFile() {
-        return ((bitField0_ & 0x00000040) == 0x00000040);
-      }
-      /**
-       * <code>optional int32 type_binding_file = 7;</code>
-       *
-       * <pre>
-       ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-       * </pre>
-       */
-      public int getTypeBindingFile() {
-        return typeBindingFile_;
-      }
-      /**
-       * <code>optional int32 type_binding_file = 7;</code>
-       *
-       * <pre>
-       ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-       * </pre>
-       */
-      public Builder setTypeBindingFile(int value) {
-        bitField0_ |= 0x00000040;
-        typeBindingFile_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 type_binding_file = 7;</code>
-       *
-       * <pre>
-       ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-       * </pre>
-       */
-      public Builder clearTypeBindingFile() {
-        bitField0_ = (bitField0_ & ~0x00000040);
-        typeBindingFile_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 type_binding_node = 8;
-      private int typeBindingNode_ ;
-      /**
-       * <code>optional int32 type_binding_node = 8;</code>
-       *
-       * <pre>
-       ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-       * </pre>
-       */
-      public boolean hasTypeBindingNode() {
-        return ((bitField0_ & 0x00000080) == 0x00000080);
-      }
-      /**
-       * <code>optional int32 type_binding_node = 8;</code>
-       *
-       * <pre>
-       ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-       * </pre>
-       */
-      public int getTypeBindingNode() {
-        return typeBindingNode_;
-      }
-      /**
-       * <code>optional int32 type_binding_node = 8;</code>
-       *
-       * <pre>
-       ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-       * </pre>
-       */
-      public Builder setTypeBindingNode(int value) {
-        bitField0_ |= 0x00000080;
-        typeBindingNode_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 type_binding_node = 8;</code>
-       *
-       * <pre>
-       ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-       * </pre>
-       */
-      public Builder clearTypeBindingNode() {
-        bitField0_ = (bitField0_ & ~0x00000080);
-        typeBindingNode_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 key = 9;
+      // optional int32 key = 7;
       private int key_ ;
       /**
-       * <code>optional int32 key = 9;</code>
+       * <code>optional int32 key = 7;</code>
        *
        * <pre>
        ** 
        * </pre>
        */
       public boolean hasKey() {
-        return ((bitField0_ & 0x00000100) == 0x00000100);
+        return ((bitField0_ & 0x00000040) == 0x00000040);
       }
       /**
-       * <code>optional int32 key = 9;</code>
+       * <code>optional int32 key = 7;</code>
        *
        * <pre>
        ** 
@@ -2931,27 +2705,27 @@ public final class Ast {
         return key_;
       }
       /**
-       * <code>optional int32 key = 9;</code>
+       * <code>optional int32 key = 7;</code>
        *
        * <pre>
        ** 
        * </pre>
        */
       public Builder setKey(int value) {
-        bitField0_ |= 0x00000100;
+        bitField0_ |= 0x00000040;
         key_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional int32 key = 9;</code>
+       * <code>optional int32 key = 7;</code>
        *
        * <pre>
        ** 
        * </pre>
        */
       public Builder clearKey() {
-        bitField0_ = (bitField0_ & ~0x00000100);
+        bitField0_ = (bitField0_ & ~0x00000040);
         key_ = 0;
         onChanged();
         return this;
@@ -3264,7 +3038,7 @@ public final class Ast {
      * <code>optional int32 mapped_node = 9;</code>
      *
      * <pre>
-     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
     boolean hasMappedNode();
@@ -3272,50 +3046,14 @@ public final class Ast {
      * <code>optional int32 mapped_node = 9;</code>
      *
      * <pre>
-     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
     int getMappedNode();
 
-    // optional int32 type_binding_file = 10;
+    // optional int32 key = 10;
     /**
-     * <code>optional int32 type_binding_file = 10;</code>
-     *
-     * <pre>
-     ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-     * </pre>
-     */
-    boolean hasTypeBindingFile();
-    /**
-     * <code>optional int32 type_binding_file = 10;</code>
-     *
-     * <pre>
-     ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-     * </pre>
-     */
-    int getTypeBindingFile();
-
-    // optional int32 type_binding_node = 11;
-    /**
-     * <code>optional int32 type_binding_node = 11;</code>
-     *
-     * <pre>
-     ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-     * </pre>
-     */
-    boolean hasTypeBindingNode();
-    /**
-     * <code>optional int32 type_binding_node = 11;</code>
-     *
-     * <pre>
-     ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-     * </pre>
-     */
-    int getTypeBindingNode();
-
-    // optional int32 key = 12;
-    /**
-     * <code>optional int32 key = 12;</code>
+     * <code>optional int32 key = 10;</code>
      *
      * <pre>
      ** 
@@ -3323,7 +3061,7 @@ public final class Ast {
      */
     boolean hasKey();
     /**
-     * <code>optional int32 key = 12;</code>
+     * <code>optional int32 key = 10;</code>
      *
      * <pre>
      ** 
@@ -3460,16 +3198,6 @@ public final class Ast {
             }
             case 80: {
               bitField0_ |= 0x00000010;
-              typeBindingFile_ = input.readInt32();
-              break;
-            }
-            case 88: {
-              bitField0_ |= 0x00000020;
-              typeBindingNode_ = input.readInt32();
-              break;
-            }
-            case 96: {
-              bitField0_ |= 0x00000040;
               key_ = input.readInt32();
               break;
             }
@@ -3918,7 +3646,7 @@ public final class Ast {
      * <code>optional int32 mapped_node = 9;</code>
      *
      * <pre>
-     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
     public boolean hasMappedNode() {
@@ -3928,76 +3656,28 @@ public final class Ast {
      * <code>optional int32 mapped_node = 9;</code>
      *
      * <pre>
-     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
     public int getMappedNode() {
       return mappedNode_;
     }
 
-    // optional int32 type_binding_file = 10;
-    public static final int TYPE_BINDING_FILE_FIELD_NUMBER = 10;
-    private int typeBindingFile_;
-    /**
-     * <code>optional int32 type_binding_file = 10;</code>
-     *
-     * <pre>
-     ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-     * </pre>
-     */
-    public boolean hasTypeBindingFile() {
-      return ((bitField0_ & 0x00000010) == 0x00000010);
-    }
-    /**
-     * <code>optional int32 type_binding_file = 10;</code>
-     *
-     * <pre>
-     ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-     * </pre>
-     */
-    public int getTypeBindingFile() {
-      return typeBindingFile_;
-    }
-
-    // optional int32 type_binding_node = 11;
-    public static final int TYPE_BINDING_NODE_FIELD_NUMBER = 11;
-    private int typeBindingNode_;
-    /**
-     * <code>optional int32 type_binding_node = 11;</code>
-     *
-     * <pre>
-     ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-     * </pre>
-     */
-    public boolean hasTypeBindingNode() {
-      return ((bitField0_ & 0x00000020) == 0x00000020);
-    }
-    /**
-     * <code>optional int32 type_binding_node = 11;</code>
-     *
-     * <pre>
-     ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-     * </pre>
-     */
-    public int getTypeBindingNode() {
-      return typeBindingNode_;
-    }
-
-    // optional int32 key = 12;
-    public static final int KEY_FIELD_NUMBER = 12;
+    // optional int32 key = 10;
+    public static final int KEY_FIELD_NUMBER = 10;
     private int key_;
     /**
-     * <code>optional int32 key = 12;</code>
+     * <code>optional int32 key = 10;</code>
      *
      * <pre>
      ** 
      * </pre>
      */
     public boolean hasKey() {
-      return ((bitField0_ & 0x00000040) == 0x00000040);
+      return ((bitField0_ & 0x00000010) == 0x00000010);
     }
     /**
-     * <code>optional int32 key = 12;</code>
+     * <code>optional int32 key = 10;</code>
      *
      * <pre>
      ** 
@@ -4017,8 +3697,6 @@ public final class Ast {
       structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       mappedNode_ = 0;
-      typeBindingFile_ = 0;
-      typeBindingNode_ = 0;
       key_ = 0;
     }
     private byte memoizedIsInitialized = -1;
@@ -4095,13 +3773,7 @@ public final class Ast {
         output.writeInt32(9, mappedNode_);
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeInt32(10, typeBindingFile_);
-      }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        output.writeInt32(11, typeBindingNode_);
-      }
-      if (((bitField0_ & 0x00000040) == 0x00000040)) {
-        output.writeInt32(12, key_);
+        output.writeInt32(10, key_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -4150,15 +3822,7 @@ public final class Ast {
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(10, typeBindingFile_);
-      }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(11, typeBindingNode_);
-      }
-      if (((bitField0_ & 0x00000040) == 0x00000040)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(12, key_);
+          .computeInt32Size(10, key_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -4323,12 +3987,8 @@ public final class Ast {
         bitField0_ = (bitField0_ & ~0x00000080);
         mappedNode_ = 0;
         bitField0_ = (bitField0_ & ~0x00000100);
-        typeBindingFile_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000200);
-        typeBindingNode_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000400);
         key_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000800);
+        bitField0_ = (bitField0_ & ~0x00000200);
         return this;
       }
 
@@ -4420,14 +4080,6 @@ public final class Ast {
         result.mappedNode_ = mappedNode_;
         if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
           to_bitField0_ |= 0x00000010;
-        }
-        result.typeBindingFile_ = typeBindingFile_;
-        if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
-          to_bitField0_ |= 0x00000020;
-        }
-        result.typeBindingNode_ = typeBindingNode_;
-        if (((from_bitField0_ & 0x00000800) == 0x00000800)) {
-          to_bitField0_ |= 0x00000040;
         }
         result.key_ = key_;
         result.bitField0_ = to_bitField0_;
@@ -4589,12 +4241,6 @@ public final class Ast {
         }
         if (other.hasMappedNode()) {
           setMappedNode(other.getMappedNode());
-        }
-        if (other.hasTypeBindingFile()) {
-          setTypeBindingFile(other.getTypeBindingFile());
-        }
-        if (other.hasTypeBindingNode()) {
-          setTypeBindingNode(other.getTypeBindingNode());
         }
         if (other.hasKey()) {
           setKey(other.getKey());
@@ -6428,7 +6074,7 @@ public final class Ast {
        * <code>optional int32 mapped_node = 9;</code>
        *
        * <pre>
-       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
       public boolean hasMappedNode() {
@@ -6438,7 +6084,7 @@ public final class Ast {
        * <code>optional int32 mapped_node = 9;</code>
        *
        * <pre>
-       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
       public int getMappedNode() {
@@ -6448,7 +6094,7 @@ public final class Ast {
        * <code>optional int32 mapped_node = 9;</code>
        *
        * <pre>
-       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
       public Builder setMappedNode(int value) {
@@ -6461,7 +6107,7 @@ public final class Ast {
        * <code>optional int32 mapped_node = 9;</code>
        *
        * <pre>
-       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
       public Builder clearMappedNode() {
@@ -6471,118 +6117,20 @@ public final class Ast {
         return this;
       }
 
-      // optional int32 type_binding_file = 10;
-      private int typeBindingFile_ ;
-      /**
-       * <code>optional int32 type_binding_file = 10;</code>
-       *
-       * <pre>
-       ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-       * </pre>
-       */
-      public boolean hasTypeBindingFile() {
-        return ((bitField0_ & 0x00000200) == 0x00000200);
-      }
-      /**
-       * <code>optional int32 type_binding_file = 10;</code>
-       *
-       * <pre>
-       ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-       * </pre>
-       */
-      public int getTypeBindingFile() {
-        return typeBindingFile_;
-      }
-      /**
-       * <code>optional int32 type_binding_file = 10;</code>
-       *
-       * <pre>
-       ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-       * </pre>
-       */
-      public Builder setTypeBindingFile(int value) {
-        bitField0_ |= 0x00000200;
-        typeBindingFile_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 type_binding_file = 10;</code>
-       *
-       * <pre>
-       ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-       * </pre>
-       */
-      public Builder clearTypeBindingFile() {
-        bitField0_ = (bitField0_ & ~0x00000200);
-        typeBindingFile_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 type_binding_node = 11;
-      private int typeBindingNode_ ;
-      /**
-       * <code>optional int32 type_binding_node = 11;</code>
-       *
-       * <pre>
-       ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-       * </pre>
-       */
-      public boolean hasTypeBindingNode() {
-        return ((bitField0_ & 0x00000400) == 0x00000400);
-      }
-      /**
-       * <code>optional int32 type_binding_node = 11;</code>
-       *
-       * <pre>
-       ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-       * </pre>
-       */
-      public int getTypeBindingNode() {
-        return typeBindingNode_;
-      }
-      /**
-       * <code>optional int32 type_binding_node = 11;</code>
-       *
-       * <pre>
-       ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-       * </pre>
-       */
-      public Builder setTypeBindingNode(int value) {
-        bitField0_ |= 0x00000400;
-        typeBindingNode_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 type_binding_node = 11;</code>
-       *
-       * <pre>
-       ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-       * </pre>
-       */
-      public Builder clearTypeBindingNode() {
-        bitField0_ = (bitField0_ & ~0x00000400);
-        typeBindingNode_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 key = 12;
+      // optional int32 key = 10;
       private int key_ ;
       /**
-       * <code>optional int32 key = 12;</code>
+       * <code>optional int32 key = 10;</code>
        *
        * <pre>
        ** 
        * </pre>
        */
       public boolean hasKey() {
-        return ((bitField0_ & 0x00000800) == 0x00000800);
+        return ((bitField0_ & 0x00000200) == 0x00000200);
       }
       /**
-       * <code>optional int32 key = 12;</code>
+       * <code>optional int32 key = 10;</code>
        *
        * <pre>
        ** 
@@ -6592,27 +6140,27 @@ public final class Ast {
         return key_;
       }
       /**
-       * <code>optional int32 key = 12;</code>
+       * <code>optional int32 key = 10;</code>
        *
        * <pre>
        ** 
        * </pre>
        */
       public Builder setKey(int value) {
-        bitField0_ |= 0x00000800;
+        bitField0_ |= 0x00000200;
         key_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional int32 key = 12;</code>
+       * <code>optional int32 key = 10;</code>
        *
        * <pre>
        ** 
        * </pre>
        */
       public Builder clearKey() {
-        bitField0_ = (bitField0_ & ~0x00000800);
+        bitField0_ = (bitField0_ & ~0x00000200);
         key_ = 0;
         onChanged();
         return this;
@@ -7033,7 +6581,7 @@ public final class Ast {
      * <code>optional int32 mapped_node = 12;</code>
      *
      * <pre>
-     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
     boolean hasMappedNode();
@@ -7041,50 +6589,14 @@ public final class Ast {
      * <code>optional int32 mapped_node = 12;</code>
      *
      * <pre>
-     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
     int getMappedNode();
 
-    // optional int32 type_binding_file = 13;
+    // optional int32 key = 13;
     /**
-     * <code>optional int32 type_binding_file = 13;</code>
-     *
-     * <pre>
-     ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-     * </pre>
-     */
-    boolean hasTypeBindingFile();
-    /**
-     * <code>optional int32 type_binding_file = 13;</code>
-     *
-     * <pre>
-     ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-     * </pre>
-     */
-    int getTypeBindingFile();
-
-    // optional int32 type_binding_node = 14;
-    /**
-     * <code>optional int32 type_binding_node = 14;</code>
-     *
-     * <pre>
-     ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-     * </pre>
-     */
-    boolean hasTypeBindingNode();
-    /**
-     * <code>optional int32 type_binding_node = 14;</code>
-     *
-     * <pre>
-     ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-     * </pre>
-     */
-    int getTypeBindingNode();
-
-    // optional int32 key = 15;
-    /**
-     * <code>optional int32 key = 15;</code>
+     * <code>optional int32 key = 13;</code>
      *
      * <pre>
      ** 
@@ -7092,13 +6604,58 @@ public final class Ast {
      */
     boolean hasKey();
     /**
-     * <code>optional int32 key = 15;</code>
+     * <code>optional int32 key = 13;</code>
      *
      * <pre>
      ** 
      * </pre>
      */
     int getKey();
+
+    // optional string fully_qualified_name = 14;
+    /**
+     * <code>optional string fully_qualified_name = 14;</code>
+     *
+     * <pre>
+     ** The fully qualified name of this type/interface 
+     * </pre>
+     */
+    boolean hasFullyQualifiedName();
+    /**
+     * <code>optional string fully_qualified_name = 14;</code>
+     *
+     * <pre>
+     ** The fully qualified name of this type/interface 
+     * </pre>
+     */
+    java.lang.String getFullyQualifiedName();
+    /**
+     * <code>optional string fully_qualified_name = 14;</code>
+     *
+     * <pre>
+     ** The fully qualified name of this type/interface 
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getFullyQualifiedNameBytes();
+
+    // optional int32 declaring_class = 15;
+    /**
+     * <code>optional int32 declaring_class = 15;</code>
+     *
+     * <pre>
+     ** the key of the declaring class in the same AST 
+     * </pre>
+     */
+    boolean hasDeclaringClass();
+    /**
+     * <code>optional int32 declaring_class = 15;</code>
+     *
+     * <pre>
+     ** the key of the declaring class in the same AST 
+     * </pre>
+     */
+    int getDeclaringClass();
   }
   /**
    * Protobuf type {@code boa.types.Declaration}
@@ -7256,17 +6813,17 @@ public final class Ast {
             }
             case 104: {
               bitField0_ |= 0x00000020;
-              typeBindingFile_ = input.readInt32();
+              key_ = input.readInt32();
               break;
             }
-            case 112: {
+            case 114: {
               bitField0_ |= 0x00000040;
-              typeBindingNode_ = input.readInt32();
+              fullyQualifiedName_ = input.readBytes();
               break;
             }
             case 120: {
               bitField0_ |= 0x00000080;
-              key_ = input.readInt32();
+              declaringClass_ = input.readInt32();
               break;
             }
           }
@@ -7856,7 +7413,7 @@ public final class Ast {
      * <code>optional int32 mapped_node = 12;</code>
      *
      * <pre>
-     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
     public boolean hasMappedNode() {
@@ -7866,76 +7423,28 @@ public final class Ast {
      * <code>optional int32 mapped_node = 12;</code>
      *
      * <pre>
-     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
     public int getMappedNode() {
       return mappedNode_;
     }
 
-    // optional int32 type_binding_file = 13;
-    public static final int TYPE_BINDING_FILE_FIELD_NUMBER = 13;
-    private int typeBindingFile_;
-    /**
-     * <code>optional int32 type_binding_file = 13;</code>
-     *
-     * <pre>
-     ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-     * </pre>
-     */
-    public boolean hasTypeBindingFile() {
-      return ((bitField0_ & 0x00000020) == 0x00000020);
-    }
-    /**
-     * <code>optional int32 type_binding_file = 13;</code>
-     *
-     * <pre>
-     ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-     * </pre>
-     */
-    public int getTypeBindingFile() {
-      return typeBindingFile_;
-    }
-
-    // optional int32 type_binding_node = 14;
-    public static final int TYPE_BINDING_NODE_FIELD_NUMBER = 14;
-    private int typeBindingNode_;
-    /**
-     * <code>optional int32 type_binding_node = 14;</code>
-     *
-     * <pre>
-     ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-     * </pre>
-     */
-    public boolean hasTypeBindingNode() {
-      return ((bitField0_ & 0x00000040) == 0x00000040);
-    }
-    /**
-     * <code>optional int32 type_binding_node = 14;</code>
-     *
-     * <pre>
-     ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-     * </pre>
-     */
-    public int getTypeBindingNode() {
-      return typeBindingNode_;
-    }
-
-    // optional int32 key = 15;
-    public static final int KEY_FIELD_NUMBER = 15;
+    // optional int32 key = 13;
+    public static final int KEY_FIELD_NUMBER = 13;
     private int key_;
     /**
-     * <code>optional int32 key = 15;</code>
+     * <code>optional int32 key = 13;</code>
      *
      * <pre>
      ** 
      * </pre>
      */
     public boolean hasKey() {
-      return ((bitField0_ & 0x00000080) == 0x00000080);
+      return ((bitField0_ & 0x00000020) == 0x00000020);
     }
     /**
-     * <code>optional int32 key = 15;</code>
+     * <code>optional int32 key = 13;</code>
      *
      * <pre>
      ** 
@@ -7943,6 +7452,85 @@ public final class Ast {
      */
     public int getKey() {
       return key_;
+    }
+
+    // optional string fully_qualified_name = 14;
+    public static final int FULLY_QUALIFIED_NAME_FIELD_NUMBER = 14;
+    private java.lang.Object fullyQualifiedName_;
+    /**
+     * <code>optional string fully_qualified_name = 14;</code>
+     *
+     * <pre>
+     ** The fully qualified name of this type/interface 
+     * </pre>
+     */
+    public boolean hasFullyQualifiedName() {
+      return ((bitField0_ & 0x00000040) == 0x00000040);
+    }
+    /**
+     * <code>optional string fully_qualified_name = 14;</code>
+     *
+     * <pre>
+     ** The fully qualified name of this type/interface 
+     * </pre>
+     */
+    public java.lang.String getFullyQualifiedName() {
+      java.lang.Object ref = fullyQualifiedName_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          fullyQualifiedName_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string fully_qualified_name = 14;</code>
+     *
+     * <pre>
+     ** The fully qualified name of this type/interface 
+     * </pre>
+     */
+    public com.google.protobuf.ByteString
+        getFullyQualifiedNameBytes() {
+      java.lang.Object ref = fullyQualifiedName_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        fullyQualifiedName_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    // optional int32 declaring_class = 15;
+    public static final int DECLARING_CLASS_FIELD_NUMBER = 15;
+    private int declaringClass_;
+    /**
+     * <code>optional int32 declaring_class = 15;</code>
+     *
+     * <pre>
+     ** the key of the declaring class in the same AST 
+     * </pre>
+     */
+    public boolean hasDeclaringClass() {
+      return ((bitField0_ & 0x00000080) == 0x00000080);
+    }
+    /**
+     * <code>optional int32 declaring_class = 15;</code>
+     *
+     * <pre>
+     ** the key of the declaring class in the same AST 
+     * </pre>
+     */
+    public int getDeclaringClass() {
+      return declaringClass_;
     }
 
     private void initFields() {
@@ -7958,9 +7546,9 @@ public final class Ast {
       structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       mappedNode_ = 0;
-      typeBindingFile_ = 0;
-      typeBindingNode_ = 0;
       key_ = 0;
+      fullyQualifiedName_ = "";
+      declaringClass_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -8061,13 +7649,13 @@ public final class Ast {
         output.writeInt32(12, mappedNode_);
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        output.writeInt32(13, typeBindingFile_);
+        output.writeInt32(13, key_);
       }
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
-        output.writeInt32(14, typeBindingNode_);
+        output.writeBytes(14, getFullyQualifiedNameBytes());
       }
       if (((bitField0_ & 0x00000080) == 0x00000080)) {
-        output.writeInt32(15, key_);
+        output.writeInt32(15, declaringClass_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -8128,15 +7716,15 @@ public final class Ast {
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(13, typeBindingFile_);
+          .computeInt32Size(13, key_);
       }
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(14, typeBindingNode_);
+          .computeBytesSize(14, getFullyQualifiedNameBytes());
       }
       if (((bitField0_ & 0x00000080) == 0x00000080)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(15, key_);
+          .computeInt32Size(15, declaringClass_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -8317,11 +7905,11 @@ public final class Ast {
         bitField0_ = (bitField0_ & ~0x00000400);
         mappedNode_ = 0;
         bitField0_ = (bitField0_ & ~0x00000800);
-        typeBindingFile_ = 0;
-        bitField0_ = (bitField0_ & ~0x00001000);
-        typeBindingNode_ = 0;
-        bitField0_ = (bitField0_ & ~0x00002000);
         key_ = 0;
+        bitField0_ = (bitField0_ & ~0x00001000);
+        fullyQualifiedName_ = "";
+        bitField0_ = (bitField0_ & ~0x00002000);
+        declaringClass_ = 0;
         bitField0_ = (bitField0_ & ~0x00004000);
         return this;
       }
@@ -8437,15 +8025,15 @@ public final class Ast {
         if (((from_bitField0_ & 0x00001000) == 0x00001000)) {
           to_bitField0_ |= 0x00000020;
         }
-        result.typeBindingFile_ = typeBindingFile_;
+        result.key_ = key_;
         if (((from_bitField0_ & 0x00002000) == 0x00002000)) {
           to_bitField0_ |= 0x00000040;
         }
-        result.typeBindingNode_ = typeBindingNode_;
+        result.fullyQualifiedName_ = fullyQualifiedName_;
         if (((from_bitField0_ & 0x00004000) == 0x00004000)) {
           to_bitField0_ |= 0x00000080;
         }
-        result.key_ = key_;
+        result.declaringClass_ = declaringClass_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -8661,14 +8249,16 @@ public final class Ast {
         if (other.hasMappedNode()) {
           setMappedNode(other.getMappedNode());
         }
-        if (other.hasTypeBindingFile()) {
-          setTypeBindingFile(other.getTypeBindingFile());
-        }
-        if (other.hasTypeBindingNode()) {
-          setTypeBindingNode(other.getTypeBindingNode());
-        }
         if (other.hasKey()) {
           setKey(other.getKey());
+        }
+        if (other.hasFullyQualifiedName()) {
+          bitField0_ |= 0x00002000;
+          fullyQualifiedName_ = other.fullyQualifiedName_;
+          onChanged();
+        }
+        if (other.hasDeclaringClass()) {
+          setDeclaringClass(other.getDeclaringClass());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -11191,7 +10781,7 @@ public final class Ast {
        * <code>optional int32 mapped_node = 12;</code>
        *
        * <pre>
-       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
       public boolean hasMappedNode() {
@@ -11201,7 +10791,7 @@ public final class Ast {
        * <code>optional int32 mapped_node = 12;</code>
        *
        * <pre>
-       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
       public int getMappedNode() {
@@ -11211,7 +10801,7 @@ public final class Ast {
        * <code>optional int32 mapped_node = 12;</code>
        *
        * <pre>
-       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
       public Builder setMappedNode(int value) {
@@ -11224,7 +10814,7 @@ public final class Ast {
        * <code>optional int32 mapped_node = 12;</code>
        *
        * <pre>
-       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
       public Builder clearMappedNode() {
@@ -11234,118 +10824,20 @@ public final class Ast {
         return this;
       }
 
-      // optional int32 type_binding_file = 13;
-      private int typeBindingFile_ ;
-      /**
-       * <code>optional int32 type_binding_file = 13;</code>
-       *
-       * <pre>
-       ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-       * </pre>
-       */
-      public boolean hasTypeBindingFile() {
-        return ((bitField0_ & 0x00001000) == 0x00001000);
-      }
-      /**
-       * <code>optional int32 type_binding_file = 13;</code>
-       *
-       * <pre>
-       ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-       * </pre>
-       */
-      public int getTypeBindingFile() {
-        return typeBindingFile_;
-      }
-      /**
-       * <code>optional int32 type_binding_file = 13;</code>
-       *
-       * <pre>
-       ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-       * </pre>
-       */
-      public Builder setTypeBindingFile(int value) {
-        bitField0_ |= 0x00001000;
-        typeBindingFile_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 type_binding_file = 13;</code>
-       *
-       * <pre>
-       ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-       * </pre>
-       */
-      public Builder clearTypeBindingFile() {
-        bitField0_ = (bitField0_ & ~0x00001000);
-        typeBindingFile_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 type_binding_node = 14;
-      private int typeBindingNode_ ;
-      /**
-       * <code>optional int32 type_binding_node = 14;</code>
-       *
-       * <pre>
-       ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-       * </pre>
-       */
-      public boolean hasTypeBindingNode() {
-        return ((bitField0_ & 0x00002000) == 0x00002000);
-      }
-      /**
-       * <code>optional int32 type_binding_node = 14;</code>
-       *
-       * <pre>
-       ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-       * </pre>
-       */
-      public int getTypeBindingNode() {
-        return typeBindingNode_;
-      }
-      /**
-       * <code>optional int32 type_binding_node = 14;</code>
-       *
-       * <pre>
-       ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-       * </pre>
-       */
-      public Builder setTypeBindingNode(int value) {
-        bitField0_ |= 0x00002000;
-        typeBindingNode_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 type_binding_node = 14;</code>
-       *
-       * <pre>
-       ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-       * </pre>
-       */
-      public Builder clearTypeBindingNode() {
-        bitField0_ = (bitField0_ & ~0x00002000);
-        typeBindingNode_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 key = 15;
+      // optional int32 key = 13;
       private int key_ ;
       /**
-       * <code>optional int32 key = 15;</code>
+       * <code>optional int32 key = 13;</code>
        *
        * <pre>
        ** 
        * </pre>
        */
       public boolean hasKey() {
-        return ((bitField0_ & 0x00004000) == 0x00004000);
+        return ((bitField0_ & 0x00001000) == 0x00001000);
       }
       /**
-       * <code>optional int32 key = 15;</code>
+       * <code>optional int32 key = 13;</code>
        *
        * <pre>
        ** 
@@ -11355,28 +10847,175 @@ public final class Ast {
         return key_;
       }
       /**
-       * <code>optional int32 key = 15;</code>
+       * <code>optional int32 key = 13;</code>
        *
        * <pre>
        ** 
        * </pre>
        */
       public Builder setKey(int value) {
-        bitField0_ |= 0x00004000;
+        bitField0_ |= 0x00001000;
         key_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional int32 key = 15;</code>
+       * <code>optional int32 key = 13;</code>
        *
        * <pre>
        ** 
        * </pre>
        */
       public Builder clearKey() {
-        bitField0_ = (bitField0_ & ~0x00004000);
+        bitField0_ = (bitField0_ & ~0x00001000);
         key_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional string fully_qualified_name = 14;
+      private java.lang.Object fullyQualifiedName_ = "";
+      /**
+       * <code>optional string fully_qualified_name = 14;</code>
+       *
+       * <pre>
+       ** The fully qualified name of this type/interface 
+       * </pre>
+       */
+      public boolean hasFullyQualifiedName() {
+        return ((bitField0_ & 0x00002000) == 0x00002000);
+      }
+      /**
+       * <code>optional string fully_qualified_name = 14;</code>
+       *
+       * <pre>
+       ** The fully qualified name of this type/interface 
+       * </pre>
+       */
+      public java.lang.String getFullyQualifiedName() {
+        java.lang.Object ref = fullyQualifiedName_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          fullyQualifiedName_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string fully_qualified_name = 14;</code>
+       *
+       * <pre>
+       ** The fully qualified name of this type/interface 
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getFullyQualifiedNameBytes() {
+        java.lang.Object ref = fullyQualifiedName_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          fullyQualifiedName_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string fully_qualified_name = 14;</code>
+       *
+       * <pre>
+       ** The fully qualified name of this type/interface 
+       * </pre>
+       */
+      public Builder setFullyQualifiedName(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00002000;
+        fullyQualifiedName_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string fully_qualified_name = 14;</code>
+       *
+       * <pre>
+       ** The fully qualified name of this type/interface 
+       * </pre>
+       */
+      public Builder clearFullyQualifiedName() {
+        bitField0_ = (bitField0_ & ~0x00002000);
+        fullyQualifiedName_ = getDefaultInstance().getFullyQualifiedName();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string fully_qualified_name = 14;</code>
+       *
+       * <pre>
+       ** The fully qualified name of this type/interface 
+       * </pre>
+       */
+      public Builder setFullyQualifiedNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00002000;
+        fullyQualifiedName_ = value;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 declaring_class = 15;
+      private int declaringClass_ ;
+      /**
+       * <code>optional int32 declaring_class = 15;</code>
+       *
+       * <pre>
+       ** the key of the declaring class in the same AST 
+       * </pre>
+       */
+      public boolean hasDeclaringClass() {
+        return ((bitField0_ & 0x00004000) == 0x00004000);
+      }
+      /**
+       * <code>optional int32 declaring_class = 15;</code>
+       *
+       * <pre>
+       ** the key of the declaring class in the same AST 
+       * </pre>
+       */
+      public int getDeclaringClass() {
+        return declaringClass_;
+      }
+      /**
+       * <code>optional int32 declaring_class = 15;</code>
+       *
+       * <pre>
+       ** the key of the declaring class in the same AST 
+       * </pre>
+       */
+      public Builder setDeclaringClass(int value) {
+        bitField0_ |= 0x00004000;
+        declaringClass_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 declaring_class = 15;</code>
+       *
+       * <pre>
+       ** the key of the declaring class in the same AST 
+       * </pre>
+       */
+      public Builder clearDeclaringClass() {
+        bitField0_ = (bitField0_ & ~0x00004000);
+        declaringClass_ = 0;
         onChanged();
         return this;
       }
@@ -11422,9 +11061,36 @@ public final class Ast {
     com.google.protobuf.ByteString
         getNameBytes();
 
-    // required .boa.types.TypeKind kind = 2;
+    // optional string fully_qualified_name = 2;
     /**
-     * <code>required .boa.types.TypeKind kind = 2;</code>
+     * <code>optional string fully_qualified_name = 2;</code>
+     *
+     * <pre>
+     ** The fully qualified name of this type/interface 
+     * </pre>
+     */
+    boolean hasFullyQualifiedName();
+    /**
+     * <code>optional string fully_qualified_name = 2;</code>
+     *
+     * <pre>
+     ** The fully qualified name of this type/interface 
+     * </pre>
+     */
+    java.lang.String getFullyQualifiedName();
+    /**
+     * <code>optional string fully_qualified_name = 2;</code>
+     *
+     * <pre>
+     ** The fully qualified name of this type/interface 
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getFullyQualifiedNameBytes();
+
+    // required .boa.types.TypeKind kind = 3;
+    /**
+     * <code>required .boa.types.TypeKind kind = 3;</code>
      *
      * <pre>
      ** The kind of the type 
@@ -11432,7 +11098,7 @@ public final class Ast {
      */
     boolean hasKind();
     /**
-     * <code>required .boa.types.TypeKind kind = 2;</code>
+     * <code>required .boa.types.TypeKind kind = 3;</code>
      *
      * <pre>
      ** The kind of the type 
@@ -11508,7 +11174,7 @@ public final class Ast {
      * <code>optional int32 mapped_node = 7;</code>
      *
      * <pre>
-     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
     boolean hasMappedNode();
@@ -11516,46 +11182,46 @@ public final class Ast {
      * <code>optional int32 mapped_node = 7;</code>
      *
      * <pre>
-     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
     int getMappedNode();
 
-    // optional int32 type_binding_file = 8;
+    // optional int32 declaration_file = 8;
     /**
-     * <code>optional int32 type_binding_file = 8;</code>
+     * <code>optional int32 declaration_file = 8;</code>
      *
      * <pre>
-     ** the index of the file (in the list of files in the snapshot) containing the type binding information 
+     ** the index of the file (in the list of files in the snapshot) containing the declaration of this type 
      * </pre>
      */
-    boolean hasTypeBindingFile();
+    boolean hasDeclarationFile();
     /**
-     * <code>optional int32 type_binding_file = 8;</code>
+     * <code>optional int32 declaration_file = 8;</code>
      *
      * <pre>
-     ** the index of the file (in the list of files in the snapshot) containing the type binding information 
+     ** the index of the file (in the list of files in the snapshot) containing the declaration of this type 
      * </pre>
      */
-    int getTypeBindingFile();
+    int getDeclarationFile();
 
-    // optional int32 type_binding_node = 9;
+    // optional int32 declaration = 9;
     /**
-     * <code>optional int32 type_binding_node = 9;</code>
+     * <code>optional int32 declaration = 9;</code>
      *
      * <pre>
-     ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
+     ** the key of the node containing the declaration of this type in the AST of the file 
      * </pre>
      */
-    boolean hasTypeBindingNode();
+    boolean hasDeclaration();
     /**
-     * <code>optional int32 type_binding_node = 9;</code>
+     * <code>optional int32 declaration = 9;</code>
      *
      * <pre>
-     ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
+     ** the key of the node containing the declaration of this type in the AST of the file 
      * </pre>
      */
-    int getTypeBindingNode();
+    int getDeclaration();
 
     // optional int32 key = 10;
     /**
@@ -11635,19 +11301,24 @@ public final class Ast {
               name_ = input.readBytes();
               break;
             }
-            case 16: {
+            case 18: {
+              bitField0_ |= 0x00000002;
+              fullyQualifiedName_ = input.readBytes();
+              break;
+            }
+            case 24: {
               int rawValue = input.readEnum();
               boa.types.Ast.TypeKind value = boa.types.Ast.TypeKind.valueOf(rawValue);
               if (value == null) {
-                unknownFields.mergeVarintField(2, rawValue);
+                unknownFields.mergeVarintField(3, rawValue);
               } else {
-                bitField0_ |= 0x00000002;
+                bitField0_ |= 0x00000004;
                 kind_ = value;
               }
               break;
             }
             case 34: {
-              bitField0_ |= 0x00000004;
+              bitField0_ |= 0x00000008;
               id_ = input.readBytes();
               break;
             }
@@ -11657,7 +11328,7 @@ public final class Ast {
               if (value == null) {
                 unknownFields.mergeVarintField(5, rawValue);
               } else {
-                bitField0_ |= 0x00000008;
+                bitField0_ |= 0x00000010;
                 structuralChangeKind_ = value;
               }
               break;
@@ -11668,28 +11339,28 @@ public final class Ast {
               if (value == null) {
                 unknownFields.mergeVarintField(6, rawValue);
               } else {
-                bitField0_ |= 0x00000010;
+                bitField0_ |= 0x00000020;
                 labelChangeKind_ = value;
               }
               break;
             }
             case 56: {
-              bitField0_ |= 0x00000020;
+              bitField0_ |= 0x00000040;
               mappedNode_ = input.readInt32();
               break;
             }
             case 64: {
-              bitField0_ |= 0x00000040;
-              typeBindingFile_ = input.readInt32();
+              bitField0_ |= 0x00000080;
+              declarationFile_ = input.readInt32();
               break;
             }
             case 72: {
-              bitField0_ |= 0x00000080;
-              typeBindingNode_ = input.readInt32();
+              bitField0_ |= 0x00000100;
+              declaration_ = input.readInt32();
               break;
             }
             case 80: {
-              bitField0_ |= 0x00000100;
+              bitField0_ |= 0x00000200;
               key_ = input.readInt32();
               break;
             }
@@ -11788,21 +11459,76 @@ public final class Ast {
       }
     }
 
-    // required .boa.types.TypeKind kind = 2;
-    public static final int KIND_FIELD_NUMBER = 2;
+    // optional string fully_qualified_name = 2;
+    public static final int FULLY_QUALIFIED_NAME_FIELD_NUMBER = 2;
+    private java.lang.Object fullyQualifiedName_;
+    /**
+     * <code>optional string fully_qualified_name = 2;</code>
+     *
+     * <pre>
+     ** The fully qualified name of this type/interface 
+     * </pre>
+     */
+    public boolean hasFullyQualifiedName() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>optional string fully_qualified_name = 2;</code>
+     *
+     * <pre>
+     ** The fully qualified name of this type/interface 
+     * </pre>
+     */
+    public java.lang.String getFullyQualifiedName() {
+      java.lang.Object ref = fullyQualifiedName_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          fullyQualifiedName_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string fully_qualified_name = 2;</code>
+     *
+     * <pre>
+     ** The fully qualified name of this type/interface 
+     * </pre>
+     */
+    public com.google.protobuf.ByteString
+        getFullyQualifiedNameBytes() {
+      java.lang.Object ref = fullyQualifiedName_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        fullyQualifiedName_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    // required .boa.types.TypeKind kind = 3;
+    public static final int KIND_FIELD_NUMBER = 3;
     private boa.types.Ast.TypeKind kind_;
     /**
-     * <code>required .boa.types.TypeKind kind = 2;</code>
+     * <code>required .boa.types.TypeKind kind = 3;</code>
      *
      * <pre>
      ** The kind of the type 
      * </pre>
      */
     public boolean hasKind() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
+      return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
-     * <code>required .boa.types.TypeKind kind = 2;</code>
+     * <code>required .boa.types.TypeKind kind = 3;</code>
      *
      * <pre>
      ** The kind of the type 
@@ -11823,7 +11549,7 @@ public final class Ast {
      * </pre>
      */
     public boolean hasId() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
+      return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
      * <code>optional string id = 4;</code>
@@ -11878,7 +11604,7 @@ public final class Ast {
      * </pre>
      */
     public boolean hasStructuralChangeKind() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
+      return ((bitField0_ & 0x00000010) == 0x00000010);
     }
     /**
      * <code>optional .boa.types.ChangeKind structural_change_kind = 5;</code>
@@ -11902,7 +11628,7 @@ public final class Ast {
      * </pre>
      */
     public boolean hasLabelChangeKind() {
-      return ((bitField0_ & 0x00000010) == 0x00000010);
+      return ((bitField0_ & 0x00000020) == 0x00000020);
     }
     /**
      * <code>optional .boa.types.ChangeKind label_change_kind = 6;</code>
@@ -11922,69 +11648,69 @@ public final class Ast {
      * <code>optional int32 mapped_node = 7;</code>
      *
      * <pre>
-     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
     public boolean hasMappedNode() {
-      return ((bitField0_ & 0x00000020) == 0x00000020);
+      return ((bitField0_ & 0x00000040) == 0x00000040);
     }
     /**
      * <code>optional int32 mapped_node = 7;</code>
      *
      * <pre>
-     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
     public int getMappedNode() {
       return mappedNode_;
     }
 
-    // optional int32 type_binding_file = 8;
-    public static final int TYPE_BINDING_FILE_FIELD_NUMBER = 8;
-    private int typeBindingFile_;
+    // optional int32 declaration_file = 8;
+    public static final int DECLARATION_FILE_FIELD_NUMBER = 8;
+    private int declarationFile_;
     /**
-     * <code>optional int32 type_binding_file = 8;</code>
+     * <code>optional int32 declaration_file = 8;</code>
      *
      * <pre>
-     ** the index of the file (in the list of files in the snapshot) containing the type binding information 
+     ** the index of the file (in the list of files in the snapshot) containing the declaration of this type 
      * </pre>
      */
-    public boolean hasTypeBindingFile() {
-      return ((bitField0_ & 0x00000040) == 0x00000040);
-    }
-    /**
-     * <code>optional int32 type_binding_file = 8;</code>
-     *
-     * <pre>
-     ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-     * </pre>
-     */
-    public int getTypeBindingFile() {
-      return typeBindingFile_;
-    }
-
-    // optional int32 type_binding_node = 9;
-    public static final int TYPE_BINDING_NODE_FIELD_NUMBER = 9;
-    private int typeBindingNode_;
-    /**
-     * <code>optional int32 type_binding_node = 9;</code>
-     *
-     * <pre>
-     ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-     * </pre>
-     */
-    public boolean hasTypeBindingNode() {
+    public boolean hasDeclarationFile() {
       return ((bitField0_ & 0x00000080) == 0x00000080);
     }
     /**
-     * <code>optional int32 type_binding_node = 9;</code>
+     * <code>optional int32 declaration_file = 8;</code>
      *
      * <pre>
-     ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
+     ** the index of the file (in the list of files in the snapshot) containing the declaration of this type 
      * </pre>
      */
-    public int getTypeBindingNode() {
-      return typeBindingNode_;
+    public int getDeclarationFile() {
+      return declarationFile_;
+    }
+
+    // optional int32 declaration = 9;
+    public static final int DECLARATION_FIELD_NUMBER = 9;
+    private int declaration_;
+    /**
+     * <code>optional int32 declaration = 9;</code>
+     *
+     * <pre>
+     ** the key of the node containing the declaration of this type in the AST of the file 
+     * </pre>
+     */
+    public boolean hasDeclaration() {
+      return ((bitField0_ & 0x00000100) == 0x00000100);
+    }
+    /**
+     * <code>optional int32 declaration = 9;</code>
+     *
+     * <pre>
+     ** the key of the node containing the declaration of this type in the AST of the file 
+     * </pre>
+     */
+    public int getDeclaration() {
+      return declaration_;
     }
 
     // optional int32 key = 10;
@@ -11998,7 +11724,7 @@ public final class Ast {
      * </pre>
      */
     public boolean hasKey() {
-      return ((bitField0_ & 0x00000100) == 0x00000100);
+      return ((bitField0_ & 0x00000200) == 0x00000200);
     }
     /**
      * <code>optional int32 key = 10;</code>
@@ -12013,13 +11739,14 @@ public final class Ast {
 
     private void initFields() {
       name_ = "";
+      fullyQualifiedName_ = "";
       kind_ = boa.types.Ast.TypeKind.OTHER;
       id_ = "";
       structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       mappedNode_ = 0;
-      typeBindingFile_ = 0;
-      typeBindingNode_ = 0;
+      declarationFile_ = 0;
+      declaration_ = 0;
       key_ = 0;
     }
     private byte memoizedIsInitialized = -1;
@@ -12046,27 +11773,30 @@ public final class Ast {
         output.writeBytes(1, getNameBytes());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeEnum(2, kind_.getNumber());
+        output.writeBytes(2, getFullyQualifiedNameBytes());
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeBytes(4, getIdBytes());
+        output.writeEnum(3, kind_.getNumber());
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeEnum(5, structuralChangeKind_.getNumber());
+        output.writeBytes(4, getIdBytes());
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeEnum(6, labelChangeKind_.getNumber());
+        output.writeEnum(5, structuralChangeKind_.getNumber());
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        output.writeInt32(7, mappedNode_);
+        output.writeEnum(6, labelChangeKind_.getNumber());
       }
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
-        output.writeInt32(8, typeBindingFile_);
+        output.writeInt32(7, mappedNode_);
       }
       if (((bitField0_ & 0x00000080) == 0x00000080)) {
-        output.writeInt32(9, typeBindingNode_);
+        output.writeInt32(8, declarationFile_);
       }
       if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        output.writeInt32(9, declaration_);
+      }
+      if (((bitField0_ & 0x00000200) == 0x00000200)) {
         output.writeInt32(10, key_);
       }
       getUnknownFields().writeTo(output);
@@ -12084,33 +11814,37 @@ public final class Ast {
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(2, kind_.getNumber());
+          .computeBytesSize(2, getFullyQualifiedNameBytes());
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(4, getIdBytes());
+          .computeEnumSize(3, kind_.getNumber());
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(5, structuralChangeKind_.getNumber());
+          .computeBytesSize(4, getIdBytes());
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(6, labelChangeKind_.getNumber());
+          .computeEnumSize(5, structuralChangeKind_.getNumber());
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(7, mappedNode_);
+          .computeEnumSize(6, labelChangeKind_.getNumber());
       }
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(8, typeBindingFile_);
+          .computeInt32Size(7, mappedNode_);
       }
       if (((bitField0_ & 0x00000080) == 0x00000080)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(9, typeBindingNode_);
+          .computeInt32Size(8, declarationFile_);
       }
       if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(9, declaration_);
+      }
+      if (((bitField0_ & 0x00000200) == 0x00000200)) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(10, key_);
       }
@@ -12236,22 +11970,24 @@ public final class Ast {
         super.clear();
         name_ = "";
         bitField0_ = (bitField0_ & ~0x00000001);
-        kind_ = boa.types.Ast.TypeKind.OTHER;
+        fullyQualifiedName_ = "";
         bitField0_ = (bitField0_ & ~0x00000002);
-        id_ = "";
+        kind_ = boa.types.Ast.TypeKind.OTHER;
         bitField0_ = (bitField0_ & ~0x00000004);
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+        id_ = "";
         bitField0_ = (bitField0_ & ~0x00000008);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+        structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00000010);
-        mappedNode_ = 0;
+        labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00000020);
-        typeBindingFile_ = 0;
+        mappedNode_ = 0;
         bitField0_ = (bitField0_ & ~0x00000040);
-        typeBindingNode_ = 0;
+        declarationFile_ = 0;
         bitField0_ = (bitField0_ & ~0x00000080);
-        key_ = 0;
+        declaration_ = 0;
         bitField0_ = (bitField0_ & ~0x00000100);
+        key_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000200);
         return this;
       }
 
@@ -12287,33 +12023,37 @@ public final class Ast {
         if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
           to_bitField0_ |= 0x00000002;
         }
-        result.kind_ = kind_;
+        result.fullyQualifiedName_ = fullyQualifiedName_;
         if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
           to_bitField0_ |= 0x00000004;
         }
-        result.id_ = id_;
+        result.kind_ = kind_;
         if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
           to_bitField0_ |= 0x00000008;
         }
-        result.structuralChangeKind_ = structuralChangeKind_;
+        result.id_ = id_;
         if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
           to_bitField0_ |= 0x00000010;
         }
-        result.labelChangeKind_ = labelChangeKind_;
+        result.structuralChangeKind_ = structuralChangeKind_;
         if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
           to_bitField0_ |= 0x00000020;
         }
-        result.mappedNode_ = mappedNode_;
+        result.labelChangeKind_ = labelChangeKind_;
         if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
           to_bitField0_ |= 0x00000040;
         }
-        result.typeBindingFile_ = typeBindingFile_;
+        result.mappedNode_ = mappedNode_;
         if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
           to_bitField0_ |= 0x00000080;
         }
-        result.typeBindingNode_ = typeBindingNode_;
+        result.declarationFile_ = declarationFile_;
         if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
           to_bitField0_ |= 0x00000100;
+        }
+        result.declaration_ = declaration_;
+        if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
+          to_bitField0_ |= 0x00000200;
         }
         result.key_ = key_;
         result.bitField0_ = to_bitField0_;
@@ -12337,11 +12077,16 @@ public final class Ast {
           name_ = other.name_;
           onChanged();
         }
+        if (other.hasFullyQualifiedName()) {
+          bitField0_ |= 0x00000002;
+          fullyQualifiedName_ = other.fullyQualifiedName_;
+          onChanged();
+        }
         if (other.hasKind()) {
           setKind(other.getKind());
         }
         if (other.hasId()) {
-          bitField0_ |= 0x00000004;
+          bitField0_ |= 0x00000008;
           id_ = other.id_;
           onChanged();
         }
@@ -12354,11 +12099,11 @@ public final class Ast {
         if (other.hasMappedNode()) {
           setMappedNode(other.getMappedNode());
         }
-        if (other.hasTypeBindingFile()) {
-          setTypeBindingFile(other.getTypeBindingFile());
+        if (other.hasDeclarationFile()) {
+          setDeclarationFile(other.getDeclarationFile());
         }
-        if (other.hasTypeBindingNode()) {
-          setTypeBindingNode(other.getTypeBindingNode());
+        if (other.hasDeclaration()) {
+          setDeclaration(other.getDeclaration());
         }
         if (other.hasKey()) {
           setKey(other.getKey());
@@ -12496,20 +12241,118 @@ public final class Ast {
         return this;
       }
 
-      // required .boa.types.TypeKind kind = 2;
+      // optional string fully_qualified_name = 2;
+      private java.lang.Object fullyQualifiedName_ = "";
+      /**
+       * <code>optional string fully_qualified_name = 2;</code>
+       *
+       * <pre>
+       ** The fully qualified name of this type/interface 
+       * </pre>
+       */
+      public boolean hasFullyQualifiedName() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>optional string fully_qualified_name = 2;</code>
+       *
+       * <pre>
+       ** The fully qualified name of this type/interface 
+       * </pre>
+       */
+      public java.lang.String getFullyQualifiedName() {
+        java.lang.Object ref = fullyQualifiedName_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          fullyQualifiedName_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string fully_qualified_name = 2;</code>
+       *
+       * <pre>
+       ** The fully qualified name of this type/interface 
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getFullyQualifiedNameBytes() {
+        java.lang.Object ref = fullyQualifiedName_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          fullyQualifiedName_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string fully_qualified_name = 2;</code>
+       *
+       * <pre>
+       ** The fully qualified name of this type/interface 
+       * </pre>
+       */
+      public Builder setFullyQualifiedName(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        fullyQualifiedName_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string fully_qualified_name = 2;</code>
+       *
+       * <pre>
+       ** The fully qualified name of this type/interface 
+       * </pre>
+       */
+      public Builder clearFullyQualifiedName() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        fullyQualifiedName_ = getDefaultInstance().getFullyQualifiedName();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string fully_qualified_name = 2;</code>
+       *
+       * <pre>
+       ** The fully qualified name of this type/interface 
+       * </pre>
+       */
+      public Builder setFullyQualifiedNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        fullyQualifiedName_ = value;
+        onChanged();
+        return this;
+      }
+
+      // required .boa.types.TypeKind kind = 3;
       private boa.types.Ast.TypeKind kind_ = boa.types.Ast.TypeKind.OTHER;
       /**
-       * <code>required .boa.types.TypeKind kind = 2;</code>
+       * <code>required .boa.types.TypeKind kind = 3;</code>
        *
        * <pre>
        ** The kind of the type 
        * </pre>
        */
       public boolean hasKind() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
+        return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
-       * <code>required .boa.types.TypeKind kind = 2;</code>
+       * <code>required .boa.types.TypeKind kind = 3;</code>
        *
        * <pre>
        ** The kind of the type 
@@ -12519,7 +12362,7 @@ public final class Ast {
         return kind_;
       }
       /**
-       * <code>required .boa.types.TypeKind kind = 2;</code>
+       * <code>required .boa.types.TypeKind kind = 3;</code>
        *
        * <pre>
        ** The kind of the type 
@@ -12529,20 +12372,20 @@ public final class Ast {
         if (value == null) {
           throw new NullPointerException();
         }
-        bitField0_ |= 0x00000002;
+        bitField0_ |= 0x00000004;
         kind_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required .boa.types.TypeKind kind = 2;</code>
+       * <code>required .boa.types.TypeKind kind = 3;</code>
        *
        * <pre>
        ** The kind of the type 
        * </pre>
        */
       public Builder clearKind() {
-        bitField0_ = (bitField0_ & ~0x00000002);
+        bitField0_ = (bitField0_ & ~0x00000004);
         kind_ = boa.types.Ast.TypeKind.OTHER;
         onChanged();
         return this;
@@ -12558,7 +12401,7 @@ public final class Ast {
        * </pre>
        */
       public boolean hasId() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
+        return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       /**
        * <code>optional string id = 4;</code>
@@ -12610,7 +12453,7 @@ public final class Ast {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000004;
+  bitField0_ |= 0x00000008;
         id_ = value;
         onChanged();
         return this;
@@ -12623,7 +12466,7 @@ public final class Ast {
        * </pre>
        */
       public Builder clearId() {
-        bitField0_ = (bitField0_ & ~0x00000004);
+        bitField0_ = (bitField0_ & ~0x00000008);
         id_ = getDefaultInstance().getId();
         onChanged();
         return this;
@@ -12640,7 +12483,7 @@ public final class Ast {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000004;
+  bitField0_ |= 0x00000008;
         id_ = value;
         onChanged();
         return this;
@@ -12656,7 +12499,7 @@ public final class Ast {
        * </pre>
        */
       public boolean hasStructuralChangeKind() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
+        return ((bitField0_ & 0x00000010) == 0x00000010);
       }
       /**
        * <code>optional .boa.types.ChangeKind structural_change_kind = 5;</code>
@@ -12679,7 +12522,7 @@ public final class Ast {
         if (value == null) {
           throw new NullPointerException();
         }
-        bitField0_ |= 0x00000008;
+        bitField0_ |= 0x00000010;
         structuralChangeKind_ = value;
         onChanged();
         return this;
@@ -12692,7 +12535,7 @@ public final class Ast {
        * </pre>
        */
       public Builder clearStructuralChangeKind() {
-        bitField0_ = (bitField0_ & ~0x00000008);
+        bitField0_ = (bitField0_ & ~0x00000010);
         structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         onChanged();
         return this;
@@ -12708,7 +12551,7 @@ public final class Ast {
        * </pre>
        */
       public boolean hasLabelChangeKind() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
+        return ((bitField0_ & 0x00000020) == 0x00000020);
       }
       /**
        * <code>optional .boa.types.ChangeKind label_change_kind = 6;</code>
@@ -12731,7 +12574,7 @@ public final class Ast {
         if (value == null) {
           throw new NullPointerException();
         }
-        bitField0_ |= 0x00000010;
+        bitField0_ |= 0x00000020;
         labelChangeKind_ = value;
         onChanged();
         return this;
@@ -12744,7 +12587,7 @@ public final class Ast {
        * </pre>
        */
       public Builder clearLabelChangeKind() {
-        bitField0_ = (bitField0_ & ~0x00000010);
+        bitField0_ = (bitField0_ & ~0x00000020);
         labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         onChanged();
         return this;
@@ -12756,17 +12599,17 @@ public final class Ast {
        * <code>optional int32 mapped_node = 7;</code>
        *
        * <pre>
-       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
       public boolean hasMappedNode() {
-        return ((bitField0_ & 0x00000020) == 0x00000020);
+        return ((bitField0_ & 0x00000040) == 0x00000040);
       }
       /**
        * <code>optional int32 mapped_node = 7;</code>
        *
        * <pre>
-       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
       public int getMappedNode() {
@@ -12776,11 +12619,11 @@ public final class Ast {
        * <code>optional int32 mapped_node = 7;</code>
        *
        * <pre>
-       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
       public Builder setMappedNode(int value) {
-        bitField0_ |= 0x00000020;
+        bitField0_ |= 0x00000040;
         mappedNode_ = value;
         onChanged();
         return this;
@@ -12789,110 +12632,110 @@ public final class Ast {
        * <code>optional int32 mapped_node = 7;</code>
        *
        * <pre>
-       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
       public Builder clearMappedNode() {
-        bitField0_ = (bitField0_ & ~0x00000020);
+        bitField0_ = (bitField0_ & ~0x00000040);
         mappedNode_ = 0;
         onChanged();
         return this;
       }
 
-      // optional int32 type_binding_file = 8;
-      private int typeBindingFile_ ;
+      // optional int32 declaration_file = 8;
+      private int declarationFile_ ;
       /**
-       * <code>optional int32 type_binding_file = 8;</code>
+       * <code>optional int32 declaration_file = 8;</code>
        *
        * <pre>
-       ** the index of the file (in the list of files in the snapshot) containing the type binding information 
+       ** the index of the file (in the list of files in the snapshot) containing the declaration of this type 
        * </pre>
        */
-      public boolean hasTypeBindingFile() {
-        return ((bitField0_ & 0x00000040) == 0x00000040);
+      public boolean hasDeclarationFile() {
+        return ((bitField0_ & 0x00000080) == 0x00000080);
       }
       /**
-       * <code>optional int32 type_binding_file = 8;</code>
+       * <code>optional int32 declaration_file = 8;</code>
        *
        * <pre>
-       ** the index of the file (in the list of files in the snapshot) containing the type binding information 
+       ** the index of the file (in the list of files in the snapshot) containing the declaration of this type 
        * </pre>
        */
-      public int getTypeBindingFile() {
-        return typeBindingFile_;
+      public int getDeclarationFile() {
+        return declarationFile_;
       }
       /**
-       * <code>optional int32 type_binding_file = 8;</code>
+       * <code>optional int32 declaration_file = 8;</code>
        *
        * <pre>
-       ** the index of the file (in the list of files in the snapshot) containing the type binding information 
+       ** the index of the file (in the list of files in the snapshot) containing the declaration of this type 
        * </pre>
        */
-      public Builder setTypeBindingFile(int value) {
-        bitField0_ |= 0x00000040;
-        typeBindingFile_ = value;
+      public Builder setDeclarationFile(int value) {
+        bitField0_ |= 0x00000080;
+        declarationFile_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional int32 type_binding_file = 8;</code>
+       * <code>optional int32 declaration_file = 8;</code>
        *
        * <pre>
-       ** the index of the file (in the list of files in the snapshot) containing the type binding information 
+       ** the index of the file (in the list of files in the snapshot) containing the declaration of this type 
        * </pre>
        */
-      public Builder clearTypeBindingFile() {
-        bitField0_ = (bitField0_ & ~0x00000040);
-        typeBindingFile_ = 0;
+      public Builder clearDeclarationFile() {
+        bitField0_ = (bitField0_ & ~0x00000080);
+        declarationFile_ = 0;
         onChanged();
         return this;
       }
 
-      // optional int32 type_binding_node = 9;
-      private int typeBindingNode_ ;
+      // optional int32 declaration = 9;
+      private int declaration_ ;
       /**
-       * <code>optional int32 type_binding_node = 9;</code>
+       * <code>optional int32 declaration = 9;</code>
        *
        * <pre>
-       ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
+       ** the key of the node containing the declaration of this type in the AST of the file 
        * </pre>
        */
-      public boolean hasTypeBindingNode() {
-        return ((bitField0_ & 0x00000080) == 0x00000080);
+      public boolean hasDeclaration() {
+        return ((bitField0_ & 0x00000100) == 0x00000100);
       }
       /**
-       * <code>optional int32 type_binding_node = 9;</code>
+       * <code>optional int32 declaration = 9;</code>
        *
        * <pre>
-       ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
+       ** the key of the node containing the declaration of this type in the AST of the file 
        * </pre>
        */
-      public int getTypeBindingNode() {
-        return typeBindingNode_;
+      public int getDeclaration() {
+        return declaration_;
       }
       /**
-       * <code>optional int32 type_binding_node = 9;</code>
+       * <code>optional int32 declaration = 9;</code>
        *
        * <pre>
-       ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
+       ** the key of the node containing the declaration of this type in the AST of the file 
        * </pre>
        */
-      public Builder setTypeBindingNode(int value) {
-        bitField0_ |= 0x00000080;
-        typeBindingNode_ = value;
+      public Builder setDeclaration(int value) {
+        bitField0_ |= 0x00000100;
+        declaration_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional int32 type_binding_node = 9;</code>
+       * <code>optional int32 declaration = 9;</code>
        *
        * <pre>
-       ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
+       ** the key of the node containing the declaration of this type in the AST of the file 
        * </pre>
        */
-      public Builder clearTypeBindingNode() {
-        bitField0_ = (bitField0_ & ~0x00000080);
-        typeBindingNode_ = 0;
+      public Builder clearDeclaration() {
+        bitField0_ = (bitField0_ & ~0x00000100);
+        declaration_ = 0;
         onChanged();
         return this;
       }
@@ -12907,7 +12750,7 @@ public final class Ast {
        * </pre>
        */
       public boolean hasKey() {
-        return ((bitField0_ & 0x00000100) == 0x00000100);
+        return ((bitField0_ & 0x00000200) == 0x00000200);
       }
       /**
        * <code>optional int32 key = 10;</code>
@@ -12927,7 +12770,7 @@ public final class Ast {
        * </pre>
        */
       public Builder setKey(int value) {
-        bitField0_ |= 0x00000100;
+        bitField0_ |= 0x00000200;
         key_ = value;
         onChanged();
         return this;
@@ -12940,7 +12783,7 @@ public final class Ast {
        * </pre>
        */
       public Builder clearKey() {
-        bitField0_ = (bitField0_ & ~0x00000100);
+        bitField0_ = (bitField0_ & ~0x00000200);
         key_ = 0;
         onChanged();
         return this;
@@ -12965,7 +12808,7 @@ public final class Ast {
      * <code>optional string name = 1;</code>
      *
      * <pre>
-     ** The name of the method 
+     ** The name of the method. The fully qualified name can be constructed on the fly via its declaring class, name and arguments  
      * </pre>
      */
     boolean hasName();
@@ -12973,7 +12816,7 @@ public final class Ast {
      * <code>optional string name = 1;</code>
      *
      * <pre>
-     ** The name of the method 
+     ** The name of the method. The fully qualified name can be constructed on the fly via its declaring class, name and arguments  
      * </pre>
      */
     java.lang.String getName();
@@ -12981,7 +12824,7 @@ public final class Ast {
      * <code>optional string name = 1;</code>
      *
      * <pre>
-     ** The name of the method 
+     ** The name of the method. The fully qualified name can be constructed on the fly via its declaring class, name and arguments  
      * </pre>
      */
     com.google.protobuf.ByteString
@@ -13339,7 +13182,7 @@ public final class Ast {
      * <code>optional int32 mapped_node = 11;</code>
      *
      * <pre>
-     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
     boolean hasMappedNode();
@@ -13347,50 +13190,14 @@ public final class Ast {
      * <code>optional int32 mapped_node = 11;</code>
      *
      * <pre>
-     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
     int getMappedNode();
 
-    // optional int32 type_binding_file = 12;
+    // optional int32 key = 12;
     /**
-     * <code>optional int32 type_binding_file = 12;</code>
-     *
-     * <pre>
-     ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-     * </pre>
-     */
-    boolean hasTypeBindingFile();
-    /**
-     * <code>optional int32 type_binding_file = 12;</code>
-     *
-     * <pre>
-     ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-     * </pre>
-     */
-    int getTypeBindingFile();
-
-    // optional int32 type_binding_node = 13;
-    /**
-     * <code>optional int32 type_binding_node = 13;</code>
-     *
-     * <pre>
-     ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-     * </pre>
-     */
-    boolean hasTypeBindingNode();
-    /**
-     * <code>optional int32 type_binding_node = 13;</code>
-     *
-     * <pre>
-     ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-     * </pre>
-     */
-    int getTypeBindingNode();
-
-    // optional int32 key = 14;
-    /**
-     * <code>optional int32 key = 14;</code>
+     * <code>optional int32 key = 12;</code>
      *
      * <pre>
      ** 
@@ -13398,13 +13205,31 @@ public final class Ast {
      */
     boolean hasKey();
     /**
-     * <code>optional int32 key = 14;</code>
+     * <code>optional int32 key = 12;</code>
      *
      * <pre>
      ** 
      * </pre>
      */
     int getKey();
+
+    // optional int32 declaring_type = 13;
+    /**
+     * <code>optional int32 declaring_type = 13;</code>
+     *
+     * <pre>
+     ** The key of the type declaration declaring this method in the same AST 
+     * </pre>
+     */
+    boolean hasDeclaringType();
+    /**
+     * <code>optional int32 declaring_type = 13;</code>
+     *
+     * <pre>
+     ** The key of the type declaration declaring this method in the same AST 
+     * </pre>
+     */
+    int getDeclaringType();
   }
   /**
    * Protobuf type {@code boa.types.Method}
@@ -13556,17 +13381,12 @@ public final class Ast {
             }
             case 96: {
               bitField0_ |= 0x00000020;
-              typeBindingFile_ = input.readInt32();
+              key_ = input.readInt32();
               break;
             }
             case 104: {
               bitField0_ |= 0x00000040;
-              typeBindingNode_ = input.readInt32();
-              break;
-            }
-            case 112: {
-              bitField0_ |= 0x00000080;
-              key_ = input.readInt32();
+              declaringType_ = input.readInt32();
               break;
             }
           }
@@ -13634,7 +13454,7 @@ public final class Ast {
      * <code>optional string name = 1;</code>
      *
      * <pre>
-     ** The name of the method 
+     ** The name of the method. The fully qualified name can be constructed on the fly via its declaring class, name and arguments  
      * </pre>
      */
     public boolean hasName() {
@@ -13644,7 +13464,7 @@ public final class Ast {
      * <code>optional string name = 1;</code>
      *
      * <pre>
-     ** The name of the method 
+     ** The name of the method. The fully qualified name can be constructed on the fly via its declaring class, name and arguments  
      * </pre>
      */
     public java.lang.String getName() {
@@ -13665,7 +13485,7 @@ public final class Ast {
      * <code>optional string name = 1;</code>
      *
      * <pre>
-     ** The name of the method 
+     ** The name of the method. The fully qualified name can be constructed on the fly via its declaring class, name and arguments  
      * </pre>
      */
     public com.google.protobuf.ByteString
@@ -14122,7 +13942,7 @@ public final class Ast {
      * <code>optional int32 mapped_node = 11;</code>
      *
      * <pre>
-     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
     public boolean hasMappedNode() {
@@ -14132,76 +13952,28 @@ public final class Ast {
      * <code>optional int32 mapped_node = 11;</code>
      *
      * <pre>
-     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
     public int getMappedNode() {
       return mappedNode_;
     }
 
-    // optional int32 type_binding_file = 12;
-    public static final int TYPE_BINDING_FILE_FIELD_NUMBER = 12;
-    private int typeBindingFile_;
-    /**
-     * <code>optional int32 type_binding_file = 12;</code>
-     *
-     * <pre>
-     ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-     * </pre>
-     */
-    public boolean hasTypeBindingFile() {
-      return ((bitField0_ & 0x00000020) == 0x00000020);
-    }
-    /**
-     * <code>optional int32 type_binding_file = 12;</code>
-     *
-     * <pre>
-     ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-     * </pre>
-     */
-    public int getTypeBindingFile() {
-      return typeBindingFile_;
-    }
-
-    // optional int32 type_binding_node = 13;
-    public static final int TYPE_BINDING_NODE_FIELD_NUMBER = 13;
-    private int typeBindingNode_;
-    /**
-     * <code>optional int32 type_binding_node = 13;</code>
-     *
-     * <pre>
-     ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-     * </pre>
-     */
-    public boolean hasTypeBindingNode() {
-      return ((bitField0_ & 0x00000040) == 0x00000040);
-    }
-    /**
-     * <code>optional int32 type_binding_node = 13;</code>
-     *
-     * <pre>
-     ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-     * </pre>
-     */
-    public int getTypeBindingNode() {
-      return typeBindingNode_;
-    }
-
-    // optional int32 key = 14;
-    public static final int KEY_FIELD_NUMBER = 14;
+    // optional int32 key = 12;
+    public static final int KEY_FIELD_NUMBER = 12;
     private int key_;
     /**
-     * <code>optional int32 key = 14;</code>
+     * <code>optional int32 key = 12;</code>
      *
      * <pre>
      ** 
      * </pre>
      */
     public boolean hasKey() {
-      return ((bitField0_ & 0x00000080) == 0x00000080);
+      return ((bitField0_ & 0x00000020) == 0x00000020);
     }
     /**
-     * <code>optional int32 key = 14;</code>
+     * <code>optional int32 key = 12;</code>
      *
      * <pre>
      ** 
@@ -14209,6 +13981,30 @@ public final class Ast {
      */
     public int getKey() {
       return key_;
+    }
+
+    // optional int32 declaring_type = 13;
+    public static final int DECLARING_TYPE_FIELD_NUMBER = 13;
+    private int declaringType_;
+    /**
+     * <code>optional int32 declaring_type = 13;</code>
+     *
+     * <pre>
+     ** The key of the type declaration declaring this method in the same AST 
+     * </pre>
+     */
+    public boolean hasDeclaringType() {
+      return ((bitField0_ & 0x00000040) == 0x00000040);
+    }
+    /**
+     * <code>optional int32 declaring_type = 13;</code>
+     *
+     * <pre>
+     ** The key of the type declaration declaring this method in the same AST 
+     * </pre>
+     */
+    public int getDeclaringType() {
+      return declaringType_;
     }
 
     private void initFields() {
@@ -14223,9 +14019,8 @@ public final class Ast {
       structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       mappedNode_ = 0;
-      typeBindingFile_ = 0;
-      typeBindingNode_ = 0;
       key_ = 0;
+      declaringType_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -14317,13 +14112,10 @@ public final class Ast {
         output.writeInt32(11, mappedNode_);
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        output.writeInt32(12, typeBindingFile_);
+        output.writeInt32(12, key_);
       }
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
-        output.writeInt32(13, typeBindingNode_);
-      }
-      if (((bitField0_ & 0x00000080) == 0x00000080)) {
-        output.writeInt32(14, key_);
+        output.writeInt32(13, declaringType_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -14380,15 +14172,11 @@ public final class Ast {
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(12, typeBindingFile_);
+          .computeInt32Size(12, key_);
       }
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(13, typeBindingNode_);
-      }
-      if (((bitField0_ & 0x00000080) == 0x00000080)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(14, key_);
+          .computeInt32Size(13, declaringType_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -14567,12 +14355,10 @@ public final class Ast {
         bitField0_ = (bitField0_ & ~0x00000200);
         mappedNode_ = 0;
         bitField0_ = (bitField0_ & ~0x00000400);
-        typeBindingFile_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000800);
-        typeBindingNode_ = 0;
-        bitField0_ = (bitField0_ & ~0x00001000);
         key_ = 0;
-        bitField0_ = (bitField0_ & ~0x00002000);
+        bitField0_ = (bitField0_ & ~0x00000800);
+        declaringType_ = 0;
+        bitField0_ = (bitField0_ & ~0x00001000);
         return this;
       }
 
@@ -14682,15 +14468,11 @@ public final class Ast {
         if (((from_bitField0_ & 0x00000800) == 0x00000800)) {
           to_bitField0_ |= 0x00000020;
         }
-        result.typeBindingFile_ = typeBindingFile_;
+        result.key_ = key_;
         if (((from_bitField0_ & 0x00001000) == 0x00001000)) {
           to_bitField0_ |= 0x00000040;
         }
-        result.typeBindingNode_ = typeBindingNode_;
-        if (((from_bitField0_ & 0x00002000) == 0x00002000)) {
-          to_bitField0_ |= 0x00000080;
-        }
-        result.key_ = key_;
+        result.declaringType_ = declaringType_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -14880,14 +14662,11 @@ public final class Ast {
         if (other.hasMappedNode()) {
           setMappedNode(other.getMappedNode());
         }
-        if (other.hasTypeBindingFile()) {
-          setTypeBindingFile(other.getTypeBindingFile());
-        }
-        if (other.hasTypeBindingNode()) {
-          setTypeBindingNode(other.getTypeBindingNode());
-        }
         if (other.hasKey()) {
           setKey(other.getKey());
+        }
+        if (other.hasDeclaringType()) {
+          setDeclaringType(other.getDeclaringType());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -14966,7 +14745,7 @@ public final class Ast {
        * <code>optional string name = 1;</code>
        *
        * <pre>
-       ** The name of the method 
+       ** The name of the method. The fully qualified name can be constructed on the fly via its declaring class, name and arguments  
        * </pre>
        */
       public boolean hasName() {
@@ -14976,7 +14755,7 @@ public final class Ast {
        * <code>optional string name = 1;</code>
        *
        * <pre>
-       ** The name of the method 
+       ** The name of the method. The fully qualified name can be constructed on the fly via its declaring class, name and arguments  
        * </pre>
        */
       public java.lang.String getName() {
@@ -14994,7 +14773,7 @@ public final class Ast {
        * <code>optional string name = 1;</code>
        *
        * <pre>
-       ** The name of the method 
+       ** The name of the method. The fully qualified name can be constructed on the fly via its declaring class, name and arguments  
        * </pre>
        */
       public com.google.protobuf.ByteString
@@ -15014,7 +14793,7 @@ public final class Ast {
        * <code>optional string name = 1;</code>
        *
        * <pre>
-       ** The name of the method 
+       ** The name of the method. The fully qualified name can be constructed on the fly via its declaring class, name and arguments  
        * </pre>
        */
       public Builder setName(
@@ -15031,7 +14810,7 @@ public final class Ast {
        * <code>optional string name = 1;</code>
        *
        * <pre>
-       ** The name of the method 
+       ** The name of the method. The fully qualified name can be constructed on the fly via its declaring class, name and arguments  
        * </pre>
        */
       public Builder clearName() {
@@ -15044,7 +14823,7 @@ public final class Ast {
        * <code>optional string name = 1;</code>
        *
        * <pre>
-       ** The name of the method 
+       ** The name of the method. The fully qualified name can be constructed on the fly via its declaring class, name and arguments  
        * </pre>
        */
       public Builder setNameBytes(
@@ -17247,7 +17026,7 @@ public final class Ast {
        * <code>optional int32 mapped_node = 11;</code>
        *
        * <pre>
-       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
       public boolean hasMappedNode() {
@@ -17257,7 +17036,7 @@ public final class Ast {
        * <code>optional int32 mapped_node = 11;</code>
        *
        * <pre>
-       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
       public int getMappedNode() {
@@ -17267,7 +17046,7 @@ public final class Ast {
        * <code>optional int32 mapped_node = 11;</code>
        *
        * <pre>
-       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
       public Builder setMappedNode(int value) {
@@ -17280,7 +17059,7 @@ public final class Ast {
        * <code>optional int32 mapped_node = 11;</code>
        *
        * <pre>
-       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
       public Builder clearMappedNode() {
@@ -17290,118 +17069,20 @@ public final class Ast {
         return this;
       }
 
-      // optional int32 type_binding_file = 12;
-      private int typeBindingFile_ ;
-      /**
-       * <code>optional int32 type_binding_file = 12;</code>
-       *
-       * <pre>
-       ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-       * </pre>
-       */
-      public boolean hasTypeBindingFile() {
-        return ((bitField0_ & 0x00000800) == 0x00000800);
-      }
-      /**
-       * <code>optional int32 type_binding_file = 12;</code>
-       *
-       * <pre>
-       ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-       * </pre>
-       */
-      public int getTypeBindingFile() {
-        return typeBindingFile_;
-      }
-      /**
-       * <code>optional int32 type_binding_file = 12;</code>
-       *
-       * <pre>
-       ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-       * </pre>
-       */
-      public Builder setTypeBindingFile(int value) {
-        bitField0_ |= 0x00000800;
-        typeBindingFile_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 type_binding_file = 12;</code>
-       *
-       * <pre>
-       ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-       * </pre>
-       */
-      public Builder clearTypeBindingFile() {
-        bitField0_ = (bitField0_ & ~0x00000800);
-        typeBindingFile_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 type_binding_node = 13;
-      private int typeBindingNode_ ;
-      /**
-       * <code>optional int32 type_binding_node = 13;</code>
-       *
-       * <pre>
-       ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-       * </pre>
-       */
-      public boolean hasTypeBindingNode() {
-        return ((bitField0_ & 0x00001000) == 0x00001000);
-      }
-      /**
-       * <code>optional int32 type_binding_node = 13;</code>
-       *
-       * <pre>
-       ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-       * </pre>
-       */
-      public int getTypeBindingNode() {
-        return typeBindingNode_;
-      }
-      /**
-       * <code>optional int32 type_binding_node = 13;</code>
-       *
-       * <pre>
-       ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-       * </pre>
-       */
-      public Builder setTypeBindingNode(int value) {
-        bitField0_ |= 0x00001000;
-        typeBindingNode_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 type_binding_node = 13;</code>
-       *
-       * <pre>
-       ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-       * </pre>
-       */
-      public Builder clearTypeBindingNode() {
-        bitField0_ = (bitField0_ & ~0x00001000);
-        typeBindingNode_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 key = 14;
+      // optional int32 key = 12;
       private int key_ ;
       /**
-       * <code>optional int32 key = 14;</code>
+       * <code>optional int32 key = 12;</code>
        *
        * <pre>
        ** 
        * </pre>
        */
       public boolean hasKey() {
-        return ((bitField0_ & 0x00002000) == 0x00002000);
+        return ((bitField0_ & 0x00000800) == 0x00000800);
       }
       /**
-       * <code>optional int32 key = 14;</code>
+       * <code>optional int32 key = 12;</code>
        *
        * <pre>
        ** 
@@ -17411,28 +17092,77 @@ public final class Ast {
         return key_;
       }
       /**
-       * <code>optional int32 key = 14;</code>
+       * <code>optional int32 key = 12;</code>
        *
        * <pre>
        ** 
        * </pre>
        */
       public Builder setKey(int value) {
-        bitField0_ |= 0x00002000;
+        bitField0_ |= 0x00000800;
         key_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional int32 key = 14;</code>
+       * <code>optional int32 key = 12;</code>
        *
        * <pre>
        ** 
        * </pre>
        */
       public Builder clearKey() {
-        bitField0_ = (bitField0_ & ~0x00002000);
+        bitField0_ = (bitField0_ & ~0x00000800);
         key_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 declaring_type = 13;
+      private int declaringType_ ;
+      /**
+       * <code>optional int32 declaring_type = 13;</code>
+       *
+       * <pre>
+       ** The key of the type declaration declaring this method in the same AST 
+       * </pre>
+       */
+      public boolean hasDeclaringType() {
+        return ((bitField0_ & 0x00001000) == 0x00001000);
+      }
+      /**
+       * <code>optional int32 declaring_type = 13;</code>
+       *
+       * <pre>
+       ** The key of the type declaration declaring this method in the same AST 
+       * </pre>
+       */
+      public int getDeclaringType() {
+        return declaringType_;
+      }
+      /**
+       * <code>optional int32 declaring_type = 13;</code>
+       *
+       * <pre>
+       ** The key of the type declaration declaring this method in the same AST 
+       * </pre>
+       */
+      public Builder setDeclaringType(int value) {
+        bitField0_ |= 0x00001000;
+        declaringType_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 declaring_type = 13;</code>
+       *
+       * <pre>
+       ** The key of the type declaration declaring this method in the same AST 
+       * </pre>
+       */
+      public Builder clearDeclaringType() {
+        bitField0_ = (bitField0_ & ~0x00001000);
+        declaringType_ = 0;
         onChanged();
         return this;
       }
@@ -17661,7 +17391,7 @@ public final class Ast {
      * <code>optional int32 mapped_node = 8;</code>
      *
      * <pre>
-     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
     boolean hasMappedNode();
@@ -17669,50 +17399,14 @@ public final class Ast {
      * <code>optional int32 mapped_node = 8;</code>
      *
      * <pre>
-     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
     int getMappedNode();
 
-    // optional int32 type_binding_file = 9;
+    // optional int32 key = 9;
     /**
-     * <code>optional int32 type_binding_file = 9;</code>
-     *
-     * <pre>
-     ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-     * </pre>
-     */
-    boolean hasTypeBindingFile();
-    /**
-     * <code>optional int32 type_binding_file = 9;</code>
-     *
-     * <pre>
-     ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-     * </pre>
-     */
-    int getTypeBindingFile();
-
-    // optional int32 type_binding_node = 10;
-    /**
-     * <code>optional int32 type_binding_node = 10;</code>
-     *
-     * <pre>
-     ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-     * </pre>
-     */
-    boolean hasTypeBindingNode();
-    /**
-     * <code>optional int32 type_binding_node = 10;</code>
-     *
-     * <pre>
-     ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-     * </pre>
-     */
-    int getTypeBindingNode();
-
-    // optional int32 key = 11;
-    /**
-     * <code>optional int32 key = 11;</code>
+     * <code>optional int32 key = 9;</code>
      *
      * <pre>
      ** 
@@ -17720,13 +17414,31 @@ public final class Ast {
      */
     boolean hasKey();
     /**
-     * <code>optional int32 key = 11;</code>
+     * <code>optional int32 key = 9;</code>
      *
      * <pre>
      ** 
      * </pre>
      */
     int getKey();
+
+    // optional int32 declaration = 10;
+    /**
+     * <code>optional int32 declaration = 10;</code>
+     *
+     * <pre>
+     ** the key of the node containing the type declaration (in the same AST) declaring this field. null if this is a local variable 
+     * </pre>
+     */
+    boolean hasDeclaration();
+    /**
+     * <code>optional int32 declaration = 10;</code>
+     *
+     * <pre>
+     ** the key of the node containing the type declaration (in the same AST) declaring this field. null if this is a local variable 
+     * </pre>
+     */
+    int getDeclaration();
   }
   /**
    * Protobuf type {@code boa.types.Variable}
@@ -17859,17 +17571,12 @@ public final class Ast {
             }
             case 72: {
               bitField0_ |= 0x00000040;
-              typeBindingFile_ = input.readInt32();
+              key_ = input.readInt32();
               break;
             }
             case 80: {
               bitField0_ |= 0x00000080;
-              typeBindingNode_ = input.readInt32();
-              break;
-            }
-            case 88: {
-              bitField0_ |= 0x00000100;
-              key_ = input.readInt32();
+              declaration_ = input.readInt32();
               break;
             }
           }
@@ -18208,7 +17915,7 @@ public final class Ast {
      * <code>optional int32 mapped_node = 8;</code>
      *
      * <pre>
-     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
     public boolean hasMappedNode() {
@@ -18218,76 +17925,28 @@ public final class Ast {
      * <code>optional int32 mapped_node = 8;</code>
      *
      * <pre>
-     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
     public int getMappedNode() {
       return mappedNode_;
     }
 
-    // optional int32 type_binding_file = 9;
-    public static final int TYPE_BINDING_FILE_FIELD_NUMBER = 9;
-    private int typeBindingFile_;
-    /**
-     * <code>optional int32 type_binding_file = 9;</code>
-     *
-     * <pre>
-     ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-     * </pre>
-     */
-    public boolean hasTypeBindingFile() {
-      return ((bitField0_ & 0x00000040) == 0x00000040);
-    }
-    /**
-     * <code>optional int32 type_binding_file = 9;</code>
-     *
-     * <pre>
-     ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-     * </pre>
-     */
-    public int getTypeBindingFile() {
-      return typeBindingFile_;
-    }
-
-    // optional int32 type_binding_node = 10;
-    public static final int TYPE_BINDING_NODE_FIELD_NUMBER = 10;
-    private int typeBindingNode_;
-    /**
-     * <code>optional int32 type_binding_node = 10;</code>
-     *
-     * <pre>
-     ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-     * </pre>
-     */
-    public boolean hasTypeBindingNode() {
-      return ((bitField0_ & 0x00000080) == 0x00000080);
-    }
-    /**
-     * <code>optional int32 type_binding_node = 10;</code>
-     *
-     * <pre>
-     ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-     * </pre>
-     */
-    public int getTypeBindingNode() {
-      return typeBindingNode_;
-    }
-
-    // optional int32 key = 11;
-    public static final int KEY_FIELD_NUMBER = 11;
+    // optional int32 key = 9;
+    public static final int KEY_FIELD_NUMBER = 9;
     private int key_;
     /**
-     * <code>optional int32 key = 11;</code>
+     * <code>optional int32 key = 9;</code>
      *
      * <pre>
      ** 
      * </pre>
      */
     public boolean hasKey() {
-      return ((bitField0_ & 0x00000100) == 0x00000100);
+      return ((bitField0_ & 0x00000040) == 0x00000040);
     }
     /**
-     * <code>optional int32 key = 11;</code>
+     * <code>optional int32 key = 9;</code>
      *
      * <pre>
      ** 
@@ -18295,6 +17954,30 @@ public final class Ast {
      */
     public int getKey() {
       return key_;
+    }
+
+    // optional int32 declaration = 10;
+    public static final int DECLARATION_FIELD_NUMBER = 10;
+    private int declaration_;
+    /**
+     * <code>optional int32 declaration = 10;</code>
+     *
+     * <pre>
+     ** the key of the node containing the type declaration (in the same AST) declaring this field. null if this is a local variable 
+     * </pre>
+     */
+    public boolean hasDeclaration() {
+      return ((bitField0_ & 0x00000080) == 0x00000080);
+    }
+    /**
+     * <code>optional int32 declaration = 10;</code>
+     *
+     * <pre>
+     ** the key of the node containing the type declaration (in the same AST) declaring this field. null if this is a local variable 
+     * </pre>
+     */
+    public int getDeclaration() {
+      return declaration_;
     }
 
     private void initFields() {
@@ -18306,9 +17989,8 @@ public final class Ast {
       structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       mappedNode_ = 0;
-      typeBindingFile_ = 0;
-      typeBindingNode_ = 0;
       key_ = 0;
+      declaration_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -18377,13 +18059,10 @@ public final class Ast {
         output.writeInt32(8, mappedNode_);
       }
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
-        output.writeInt32(9, typeBindingFile_);
+        output.writeInt32(9, key_);
       }
       if (((bitField0_ & 0x00000080) == 0x00000080)) {
-        output.writeInt32(10, typeBindingNode_);
-      }
-      if (((bitField0_ & 0x00000100) == 0x00000100)) {
-        output.writeInt32(11, key_);
+        output.writeInt32(10, declaration_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -18428,15 +18107,11 @@ public final class Ast {
       }
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(9, typeBindingFile_);
+          .computeInt32Size(9, key_);
       }
       if (((bitField0_ & 0x00000080) == 0x00000080)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(10, typeBindingNode_);
-      }
-      if (((bitField0_ & 0x00000100) == 0x00000100)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(11, key_);
+          .computeInt32Size(10, declaration_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -18594,12 +18269,10 @@ public final class Ast {
         bitField0_ = (bitField0_ & ~0x00000040);
         mappedNode_ = 0;
         bitField0_ = (bitField0_ & ~0x00000080);
-        typeBindingFile_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000100);
-        typeBindingNode_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000200);
         key_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000400);
+        bitField0_ = (bitField0_ & ~0x00000100);
+        declaration_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000200);
         return this;
       }
 
@@ -18681,15 +18354,11 @@ public final class Ast {
         if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
           to_bitField0_ |= 0x00000040;
         }
-        result.typeBindingFile_ = typeBindingFile_;
+        result.key_ = key_;
         if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
           to_bitField0_ |= 0x00000080;
         }
-        result.typeBindingNode_ = typeBindingNode_;
-        if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
-          to_bitField0_ |= 0x00000100;
-        }
-        result.key_ = key_;
+        result.declaration_ = declaration_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -18778,14 +18447,11 @@ public final class Ast {
         if (other.hasMappedNode()) {
           setMappedNode(other.getMappedNode());
         }
-        if (other.hasTypeBindingFile()) {
-          setTypeBindingFile(other.getTypeBindingFile());
-        }
-        if (other.hasTypeBindingNode()) {
-          setTypeBindingNode(other.getTypeBindingNode());
-        }
         if (other.hasKey()) {
           setKey(other.getKey());
+        }
+        if (other.hasDeclaration()) {
+          setDeclaration(other.getDeclaration());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -19982,7 +19648,7 @@ public final class Ast {
        * <code>optional int32 mapped_node = 8;</code>
        *
        * <pre>
-       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
       public boolean hasMappedNode() {
@@ -19992,7 +19658,7 @@ public final class Ast {
        * <code>optional int32 mapped_node = 8;</code>
        *
        * <pre>
-       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
       public int getMappedNode() {
@@ -20002,7 +19668,7 @@ public final class Ast {
        * <code>optional int32 mapped_node = 8;</code>
        *
        * <pre>
-       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
       public Builder setMappedNode(int value) {
@@ -20015,7 +19681,7 @@ public final class Ast {
        * <code>optional int32 mapped_node = 8;</code>
        *
        * <pre>
-       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
       public Builder clearMappedNode() {
@@ -20025,118 +19691,20 @@ public final class Ast {
         return this;
       }
 
-      // optional int32 type_binding_file = 9;
-      private int typeBindingFile_ ;
-      /**
-       * <code>optional int32 type_binding_file = 9;</code>
-       *
-       * <pre>
-       ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-       * </pre>
-       */
-      public boolean hasTypeBindingFile() {
-        return ((bitField0_ & 0x00000100) == 0x00000100);
-      }
-      /**
-       * <code>optional int32 type_binding_file = 9;</code>
-       *
-       * <pre>
-       ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-       * </pre>
-       */
-      public int getTypeBindingFile() {
-        return typeBindingFile_;
-      }
-      /**
-       * <code>optional int32 type_binding_file = 9;</code>
-       *
-       * <pre>
-       ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-       * </pre>
-       */
-      public Builder setTypeBindingFile(int value) {
-        bitField0_ |= 0x00000100;
-        typeBindingFile_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 type_binding_file = 9;</code>
-       *
-       * <pre>
-       ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-       * </pre>
-       */
-      public Builder clearTypeBindingFile() {
-        bitField0_ = (bitField0_ & ~0x00000100);
-        typeBindingFile_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 type_binding_node = 10;
-      private int typeBindingNode_ ;
-      /**
-       * <code>optional int32 type_binding_node = 10;</code>
-       *
-       * <pre>
-       ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-       * </pre>
-       */
-      public boolean hasTypeBindingNode() {
-        return ((bitField0_ & 0x00000200) == 0x00000200);
-      }
-      /**
-       * <code>optional int32 type_binding_node = 10;</code>
-       *
-       * <pre>
-       ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-       * </pre>
-       */
-      public int getTypeBindingNode() {
-        return typeBindingNode_;
-      }
-      /**
-       * <code>optional int32 type_binding_node = 10;</code>
-       *
-       * <pre>
-       ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-       * </pre>
-       */
-      public Builder setTypeBindingNode(int value) {
-        bitField0_ |= 0x00000200;
-        typeBindingNode_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 type_binding_node = 10;</code>
-       *
-       * <pre>
-       ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-       * </pre>
-       */
-      public Builder clearTypeBindingNode() {
-        bitField0_ = (bitField0_ & ~0x00000200);
-        typeBindingNode_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 key = 11;
+      // optional int32 key = 9;
       private int key_ ;
       /**
-       * <code>optional int32 key = 11;</code>
+       * <code>optional int32 key = 9;</code>
        *
        * <pre>
        ** 
        * </pre>
        */
       public boolean hasKey() {
-        return ((bitField0_ & 0x00000400) == 0x00000400);
+        return ((bitField0_ & 0x00000100) == 0x00000100);
       }
       /**
-       * <code>optional int32 key = 11;</code>
+       * <code>optional int32 key = 9;</code>
        *
        * <pre>
        ** 
@@ -20146,28 +19714,77 @@ public final class Ast {
         return key_;
       }
       /**
-       * <code>optional int32 key = 11;</code>
+       * <code>optional int32 key = 9;</code>
        *
        * <pre>
        ** 
        * </pre>
        */
       public Builder setKey(int value) {
-        bitField0_ |= 0x00000400;
+        bitField0_ |= 0x00000100;
         key_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional int32 key = 11;</code>
+       * <code>optional int32 key = 9;</code>
        *
        * <pre>
        ** 
        * </pre>
        */
       public Builder clearKey() {
-        bitField0_ = (bitField0_ & ~0x00000400);
+        bitField0_ = (bitField0_ & ~0x00000100);
         key_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 declaration = 10;
+      private int declaration_ ;
+      /**
+       * <code>optional int32 declaration = 10;</code>
+       *
+       * <pre>
+       ** the key of the node containing the type declaration (in the same AST) declaring this field. null if this is a local variable 
+       * </pre>
+       */
+      public boolean hasDeclaration() {
+        return ((bitField0_ & 0x00000200) == 0x00000200);
+      }
+      /**
+       * <code>optional int32 declaration = 10;</code>
+       *
+       * <pre>
+       ** the key of the node containing the type declaration (in the same AST) declaring this field. null if this is a local variable 
+       * </pre>
+       */
+      public int getDeclaration() {
+        return declaration_;
+      }
+      /**
+       * <code>optional int32 declaration = 10;</code>
+       *
+       * <pre>
+       ** the key of the node containing the type declaration (in the same AST) declaring this field. null if this is a local variable 
+       * </pre>
+       */
+      public Builder setDeclaration(int value) {
+        bitField0_ |= 0x00000200;
+        declaration_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 declaration = 10;</code>
+       *
+       * <pre>
+       ** the key of the node containing the type declaration (in the same AST) declaring this field. null if this is a local variable 
+       * </pre>
+       */
+      public Builder clearDeclaration() {
+        bitField0_ = (bitField0_ & ~0x00000200);
+        declaration_ = 0;
         onChanged();
         return this;
       }
@@ -20421,7 +20038,7 @@ public final class Ast {
      * <code>optional int32 mapped_node = 12;</code>
      *
      * <pre>
-     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
     boolean hasMappedNode();
@@ -20429,50 +20046,14 @@ public final class Ast {
      * <code>optional int32 mapped_node = 12;</code>
      *
      * <pre>
-     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
     int getMappedNode();
 
-    // optional int32 type_binding_file = 13;
+    // optional int32 key = 13;
     /**
-     * <code>optional int32 type_binding_file = 13;</code>
-     *
-     * <pre>
-     ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-     * </pre>
-     */
-    boolean hasTypeBindingFile();
-    /**
-     * <code>optional int32 type_binding_file = 13;</code>
-     *
-     * <pre>
-     ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-     * </pre>
-     */
-    int getTypeBindingFile();
-
-    // optional int32 type_binding_node = 14;
-    /**
-     * <code>optional int32 type_binding_node = 14;</code>
-     *
-     * <pre>
-     ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-     * </pre>
-     */
-    boolean hasTypeBindingNode();
-    /**
-     * <code>optional int32 type_binding_node = 14;</code>
-     *
-     * <pre>
-     ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-     * </pre>
-     */
-    int getTypeBindingNode();
-
-    // optional int32 key = 15;
-    /**
-     * <code>optional int32 key = 15;</code>
+     * <code>optional int32 key = 13;</code>
      *
      * <pre>
      ** 
@@ -20480,7 +20061,7 @@ public final class Ast {
      */
     boolean hasKey();
     /**
-     * <code>optional int32 key = 15;</code>
+     * <code>optional int32 key = 13;</code>
      *
      * <pre>
      ** 
@@ -20667,16 +20248,6 @@ public final class Ast {
             }
             case 104: {
               bitField0_ |= 0x00000100;
-              typeBindingFile_ = input.readInt32();
-              break;
-            }
-            case 112: {
-              bitField0_ |= 0x00000200;
-              typeBindingNode_ = input.readInt32();
-              break;
-            }
-            case 120: {
-              bitField0_ |= 0x00000400;
               key_ = input.readInt32();
               break;
             }
@@ -21362,7 +20933,7 @@ public final class Ast {
      * <code>optional int32 mapped_node = 12;</code>
      *
      * <pre>
-     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
     public boolean hasMappedNode() {
@@ -21372,76 +20943,28 @@ public final class Ast {
      * <code>optional int32 mapped_node = 12;</code>
      *
      * <pre>
-     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
     public int getMappedNode() {
       return mappedNode_;
     }
 
-    // optional int32 type_binding_file = 13;
-    public static final int TYPE_BINDING_FILE_FIELD_NUMBER = 13;
-    private int typeBindingFile_;
-    /**
-     * <code>optional int32 type_binding_file = 13;</code>
-     *
-     * <pre>
-     ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-     * </pre>
-     */
-    public boolean hasTypeBindingFile() {
-      return ((bitField0_ & 0x00000100) == 0x00000100);
-    }
-    /**
-     * <code>optional int32 type_binding_file = 13;</code>
-     *
-     * <pre>
-     ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-     * </pre>
-     */
-    public int getTypeBindingFile() {
-      return typeBindingFile_;
-    }
-
-    // optional int32 type_binding_node = 14;
-    public static final int TYPE_BINDING_NODE_FIELD_NUMBER = 14;
-    private int typeBindingNode_;
-    /**
-     * <code>optional int32 type_binding_node = 14;</code>
-     *
-     * <pre>
-     ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-     * </pre>
-     */
-    public boolean hasTypeBindingNode() {
-      return ((bitField0_ & 0x00000200) == 0x00000200);
-    }
-    /**
-     * <code>optional int32 type_binding_node = 14;</code>
-     *
-     * <pre>
-     ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-     * </pre>
-     */
-    public int getTypeBindingNode() {
-      return typeBindingNode_;
-    }
-
-    // optional int32 key = 15;
-    public static final int KEY_FIELD_NUMBER = 15;
+    // optional int32 key = 13;
+    public static final int KEY_FIELD_NUMBER = 13;
     private int key_;
     /**
-     * <code>optional int32 key = 15;</code>
+     * <code>optional int32 key = 13;</code>
      *
      * <pre>
      ** 
      * </pre>
      */
     public boolean hasKey() {
-      return ((bitField0_ & 0x00000400) == 0x00000400);
+      return ((bitField0_ & 0x00000100) == 0x00000100);
     }
     /**
-     * <code>optional int32 key = 15;</code>
+     * <code>optional int32 key = 13;</code>
      *
      * <pre>
      ** 
@@ -21464,8 +20987,6 @@ public final class Ast {
       structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       mappedNode_ = 0;
-      typeBindingFile_ = 0;
-      typeBindingNode_ = 0;
       key_ = 0;
     }
     private byte memoizedIsInitialized = -1;
@@ -21569,13 +21090,7 @@ public final class Ast {
         output.writeInt32(12, mappedNode_);
       }
       if (((bitField0_ & 0x00000100) == 0x00000100)) {
-        output.writeInt32(13, typeBindingFile_);
-      }
-      if (((bitField0_ & 0x00000200) == 0x00000200)) {
-        output.writeInt32(14, typeBindingNode_);
-      }
-      if (((bitField0_ & 0x00000400) == 0x00000400)) {
-        output.writeInt32(15, key_);
+        output.writeInt32(13, key_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -21636,15 +21151,7 @@ public final class Ast {
       }
       if (((bitField0_ & 0x00000100) == 0x00000100)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(13, typeBindingFile_);
-      }
-      if (((bitField0_ & 0x00000200) == 0x00000200)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(14, typeBindingNode_);
-      }
-      if (((bitField0_ & 0x00000400) == 0x00000400)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(15, key_);
+          .computeInt32Size(13, key_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -21830,12 +21337,8 @@ public final class Ast {
         bitField0_ = (bitField0_ & ~0x00000400);
         mappedNode_ = 0;
         bitField0_ = (bitField0_ & ~0x00000800);
-        typeBindingFile_ = 0;
-        bitField0_ = (bitField0_ & ~0x00001000);
-        typeBindingNode_ = 0;
-        bitField0_ = (bitField0_ & ~0x00002000);
         key_ = 0;
-        bitField0_ = (bitField0_ & ~0x00004000);
+        bitField0_ = (bitField0_ & ~0x00001000);
         return this;
       }
 
@@ -21950,14 +21453,6 @@ public final class Ast {
         result.mappedNode_ = mappedNode_;
         if (((from_bitField0_ & 0x00001000) == 0x00001000)) {
           to_bitField0_ |= 0x00000100;
-        }
-        result.typeBindingFile_ = typeBindingFile_;
-        if (((from_bitField0_ & 0x00002000) == 0x00002000)) {
-          to_bitField0_ |= 0x00000200;
-        }
-        result.typeBindingNode_ = typeBindingNode_;
-        if (((from_bitField0_ & 0x00004000) == 0x00004000)) {
-          to_bitField0_ |= 0x00000400;
         }
         result.key_ = key_;
         result.bitField0_ = to_bitField0_;
@@ -22103,12 +21598,6 @@ public final class Ast {
         }
         if (other.hasMappedNode()) {
           setMappedNode(other.getMappedNode());
-        }
-        if (other.hasTypeBindingFile()) {
-          setTypeBindingFile(other.getTypeBindingFile());
-        }
-        if (other.hasTypeBindingNode()) {
-          setTypeBindingNode(other.getTypeBindingNode());
         }
         if (other.hasKey()) {
           setKey(other.getKey());
@@ -23854,7 +23343,7 @@ public final class Ast {
        * <code>optional int32 mapped_node = 12;</code>
        *
        * <pre>
-       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
       public boolean hasMappedNode() {
@@ -23864,7 +23353,7 @@ public final class Ast {
        * <code>optional int32 mapped_node = 12;</code>
        *
        * <pre>
-       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
       public int getMappedNode() {
@@ -23874,7 +23363,7 @@ public final class Ast {
        * <code>optional int32 mapped_node = 12;</code>
        *
        * <pre>
-       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
       public Builder setMappedNode(int value) {
@@ -23887,7 +23376,7 @@ public final class Ast {
        * <code>optional int32 mapped_node = 12;</code>
        *
        * <pre>
-       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
       public Builder clearMappedNode() {
@@ -23897,118 +23386,20 @@ public final class Ast {
         return this;
       }
 
-      // optional int32 type_binding_file = 13;
-      private int typeBindingFile_ ;
-      /**
-       * <code>optional int32 type_binding_file = 13;</code>
-       *
-       * <pre>
-       ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-       * </pre>
-       */
-      public boolean hasTypeBindingFile() {
-        return ((bitField0_ & 0x00001000) == 0x00001000);
-      }
-      /**
-       * <code>optional int32 type_binding_file = 13;</code>
-       *
-       * <pre>
-       ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-       * </pre>
-       */
-      public int getTypeBindingFile() {
-        return typeBindingFile_;
-      }
-      /**
-       * <code>optional int32 type_binding_file = 13;</code>
-       *
-       * <pre>
-       ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-       * </pre>
-       */
-      public Builder setTypeBindingFile(int value) {
-        bitField0_ |= 0x00001000;
-        typeBindingFile_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 type_binding_file = 13;</code>
-       *
-       * <pre>
-       ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-       * </pre>
-       */
-      public Builder clearTypeBindingFile() {
-        bitField0_ = (bitField0_ & ~0x00001000);
-        typeBindingFile_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 type_binding_node = 14;
-      private int typeBindingNode_ ;
-      /**
-       * <code>optional int32 type_binding_node = 14;</code>
-       *
-       * <pre>
-       ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-       * </pre>
-       */
-      public boolean hasTypeBindingNode() {
-        return ((bitField0_ & 0x00002000) == 0x00002000);
-      }
-      /**
-       * <code>optional int32 type_binding_node = 14;</code>
-       *
-       * <pre>
-       ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-       * </pre>
-       */
-      public int getTypeBindingNode() {
-        return typeBindingNode_;
-      }
-      /**
-       * <code>optional int32 type_binding_node = 14;</code>
-       *
-       * <pre>
-       ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-       * </pre>
-       */
-      public Builder setTypeBindingNode(int value) {
-        bitField0_ |= 0x00002000;
-        typeBindingNode_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 type_binding_node = 14;</code>
-       *
-       * <pre>
-       ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-       * </pre>
-       */
-      public Builder clearTypeBindingNode() {
-        bitField0_ = (bitField0_ & ~0x00002000);
-        typeBindingNode_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 key = 15;
+      // optional int32 key = 13;
       private int key_ ;
       /**
-       * <code>optional int32 key = 15;</code>
+       * <code>optional int32 key = 13;</code>
        *
        * <pre>
        ** 
        * </pre>
        */
       public boolean hasKey() {
-        return ((bitField0_ & 0x00004000) == 0x00004000);
+        return ((bitField0_ & 0x00001000) == 0x00001000);
       }
       /**
-       * <code>optional int32 key = 15;</code>
+       * <code>optional int32 key = 13;</code>
        *
        * <pre>
        ** 
@@ -24018,27 +23409,27 @@ public final class Ast {
         return key_;
       }
       /**
-       * <code>optional int32 key = 15;</code>
+       * <code>optional int32 key = 13;</code>
        *
        * <pre>
        ** 
        * </pre>
        */
       public Builder setKey(int value) {
-        bitField0_ |= 0x00004000;
+        bitField0_ |= 0x00001000;
         key_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional int32 key = 15;</code>
+       * <code>optional int32 key = 13;</code>
        *
        * <pre>
        ** 
        * </pre>
        */
       public Builder clearKey() {
-        bitField0_ = (bitField0_ & ~0x00004000);
+        bitField0_ = (bitField0_ & ~0x00001000);
         key_ = 0;
         onChanged();
         return this;
@@ -24358,7 +23749,7 @@ public final class Ast {
      * <code>optional int32 mapped_node = 17;</code>
      *
      * <pre>
-     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
     boolean hasMappedNode();
@@ -24366,50 +23757,14 @@ public final class Ast {
      * <code>optional int32 mapped_node = 17;</code>
      *
      * <pre>
-     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
     int getMappedNode();
 
-    // optional int32 type_binding_file = 18;
+    // optional int32 key = 18;
     /**
-     * <code>optional int32 type_binding_file = 18;</code>
-     *
-     * <pre>
-     ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-     * </pre>
-     */
-    boolean hasTypeBindingFile();
-    /**
-     * <code>optional int32 type_binding_file = 18;</code>
-     *
-     * <pre>
-     ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-     * </pre>
-     */
-    int getTypeBindingFile();
-
-    // optional int32 type_binding_node = 19;
-    /**
-     * <code>optional int32 type_binding_node = 19;</code>
-     *
-     * <pre>
-     ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-     * </pre>
-     */
-    boolean hasTypeBindingNode();
-    /**
-     * <code>optional int32 type_binding_node = 19;</code>
-     *
-     * <pre>
-     ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-     * </pre>
-     */
-    int getTypeBindingNode();
-
-    // optional int32 key = 20;
-    /**
-     * <code>optional int32 key = 20;</code>
+     * <code>optional int32 key = 18;</code>
      *
      * <pre>
      ** 
@@ -24417,13 +23772,65 @@ public final class Ast {
      */
     boolean hasKey();
     /**
-     * <code>optional int32 key = 20;</code>
+     * <code>optional int32 key = 18;</code>
      *
      * <pre>
      ** 
      * </pre>
      */
     int getKey();
+
+    // optional .boa.types.Type declaring_type = 19;
+    /**
+     * <code>optional .boa.types.Type declaring_type = 19;</code>
+     *
+     * <pre>
+     ** The type declaring this method call or field access 
+     * </pre>
+     */
+    boolean hasDeclaringType();
+    /**
+     * <code>optional .boa.types.Type declaring_type = 19;</code>
+     *
+     * <pre>
+     ** The type declaring this method call or field access 
+     * </pre>
+     */
+    boa.types.Ast.Type getDeclaringType();
+    /**
+     * <code>optional .boa.types.Type declaring_type = 19;</code>
+     *
+     * <pre>
+     ** The type declaring this method call or field access 
+     * </pre>
+     */
+    boa.types.Ast.TypeOrBuilder getDeclaringTypeOrBuilder();
+
+    // optional .boa.types.Type return_type = 20;
+    /**
+     * <code>optional .boa.types.Type return_type = 20;</code>
+     *
+     * <pre>
+     ** Type of the return value 
+     * </pre>
+     */
+    boolean hasReturnType();
+    /**
+     * <code>optional .boa.types.Type return_type = 20;</code>
+     *
+     * <pre>
+     ** Type of the return value 
+     * </pre>
+     */
+    boa.types.Ast.Type getReturnType();
+    /**
+     * <code>optional .boa.types.Type return_type = 20;</code>
+     *
+     * <pre>
+     ** Type of the return value 
+     * </pre>
+     */
+    boa.types.Ast.TypeOrBuilder getReturnTypeOrBuilder();
   }
   /**
    * Protobuf type {@code boa.types.Expression}
@@ -24629,17 +24036,33 @@ public final class Ast {
             }
             case 144: {
               bitField0_ |= 0x00002000;
-              typeBindingFile_ = input.readInt32();
-              break;
-            }
-            case 152: {
-              bitField0_ |= 0x00004000;
-              typeBindingNode_ = input.readInt32();
-              break;
-            }
-            case 160: {
-              bitField0_ |= 0x00008000;
               key_ = input.readInt32();
+              break;
+            }
+            case 154: {
+              boa.types.Ast.Type.Builder subBuilder = null;
+              if (((bitField0_ & 0x00004000) == 0x00004000)) {
+                subBuilder = declaringType_.toBuilder();
+              }
+              declaringType_ = input.readMessage(boa.types.Ast.Type.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(declaringType_);
+                declaringType_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00004000;
+              break;
+            }
+            case 162: {
+              boa.types.Ast.Type.Builder subBuilder = null;
+              if (((bitField0_ & 0x00008000) == 0x00008000)) {
+                subBuilder = returnType_.toBuilder();
+              }
+              returnType_ = input.readMessage(boa.types.Ast.Type.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(returnType_);
+                returnType_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00008000;
               break;
             }
           }
@@ -25763,7 +25186,7 @@ public final class Ast {
      * <code>optional int32 mapped_node = 17;</code>
      *
      * <pre>
-     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
     public boolean hasMappedNode() {
@@ -25773,76 +25196,28 @@ public final class Ast {
      * <code>optional int32 mapped_node = 17;</code>
      *
      * <pre>
-     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
     public int getMappedNode() {
       return mappedNode_;
     }
 
-    // optional int32 type_binding_file = 18;
-    public static final int TYPE_BINDING_FILE_FIELD_NUMBER = 18;
-    private int typeBindingFile_;
-    /**
-     * <code>optional int32 type_binding_file = 18;</code>
-     *
-     * <pre>
-     ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-     * </pre>
-     */
-    public boolean hasTypeBindingFile() {
-      return ((bitField0_ & 0x00002000) == 0x00002000);
-    }
-    /**
-     * <code>optional int32 type_binding_file = 18;</code>
-     *
-     * <pre>
-     ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-     * </pre>
-     */
-    public int getTypeBindingFile() {
-      return typeBindingFile_;
-    }
-
-    // optional int32 type_binding_node = 19;
-    public static final int TYPE_BINDING_NODE_FIELD_NUMBER = 19;
-    private int typeBindingNode_;
-    /**
-     * <code>optional int32 type_binding_node = 19;</code>
-     *
-     * <pre>
-     ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-     * </pre>
-     */
-    public boolean hasTypeBindingNode() {
-      return ((bitField0_ & 0x00004000) == 0x00004000);
-    }
-    /**
-     * <code>optional int32 type_binding_node = 19;</code>
-     *
-     * <pre>
-     ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-     * </pre>
-     */
-    public int getTypeBindingNode() {
-      return typeBindingNode_;
-    }
-
-    // optional int32 key = 20;
-    public static final int KEY_FIELD_NUMBER = 20;
+    // optional int32 key = 18;
+    public static final int KEY_FIELD_NUMBER = 18;
     private int key_;
     /**
-     * <code>optional int32 key = 20;</code>
+     * <code>optional int32 key = 18;</code>
      *
      * <pre>
      ** 
      * </pre>
      */
     public boolean hasKey() {
-      return ((bitField0_ & 0x00008000) == 0x00008000);
+      return ((bitField0_ & 0x00002000) == 0x00002000);
     }
     /**
-     * <code>optional int32 key = 20;</code>
+     * <code>optional int32 key = 18;</code>
      *
      * <pre>
      ** 
@@ -25850,6 +25225,74 @@ public final class Ast {
      */
     public int getKey() {
       return key_;
+    }
+
+    // optional .boa.types.Type declaring_type = 19;
+    public static final int DECLARING_TYPE_FIELD_NUMBER = 19;
+    private boa.types.Ast.Type declaringType_;
+    /**
+     * <code>optional .boa.types.Type declaring_type = 19;</code>
+     *
+     * <pre>
+     ** The type declaring this method call or field access 
+     * </pre>
+     */
+    public boolean hasDeclaringType() {
+      return ((bitField0_ & 0x00004000) == 0x00004000);
+    }
+    /**
+     * <code>optional .boa.types.Type declaring_type = 19;</code>
+     *
+     * <pre>
+     ** The type declaring this method call or field access 
+     * </pre>
+     */
+    public boa.types.Ast.Type getDeclaringType() {
+      return declaringType_;
+    }
+    /**
+     * <code>optional .boa.types.Type declaring_type = 19;</code>
+     *
+     * <pre>
+     ** The type declaring this method call or field access 
+     * </pre>
+     */
+    public boa.types.Ast.TypeOrBuilder getDeclaringTypeOrBuilder() {
+      return declaringType_;
+    }
+
+    // optional .boa.types.Type return_type = 20;
+    public static final int RETURN_TYPE_FIELD_NUMBER = 20;
+    private boa.types.Ast.Type returnType_;
+    /**
+     * <code>optional .boa.types.Type return_type = 20;</code>
+     *
+     * <pre>
+     ** Type of the return value 
+     * </pre>
+     */
+    public boolean hasReturnType() {
+      return ((bitField0_ & 0x00008000) == 0x00008000);
+    }
+    /**
+     * <code>optional .boa.types.Type return_type = 20;</code>
+     *
+     * <pre>
+     ** Type of the return value 
+     * </pre>
+     */
+    public boa.types.Ast.Type getReturnType() {
+      return returnType_;
+    }
+    /**
+     * <code>optional .boa.types.Type return_type = 20;</code>
+     *
+     * <pre>
+     ** Type of the return value 
+     * </pre>
+     */
+    public boa.types.Ast.TypeOrBuilder getReturnTypeOrBuilder() {
+      return returnType_;
     }
 
     private void initFields() {
@@ -25870,9 +25313,9 @@ public final class Ast {
       structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       mappedNode_ = 0;
-      typeBindingFile_ = 0;
-      typeBindingNode_ = 0;
       key_ = 0;
+      declaringType_ = boa.types.Ast.Type.getDefaultInstance();
+      returnType_ = boa.types.Ast.Type.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -25927,6 +25370,18 @@ public final class Ast {
       }
       if (hasLambda()) {
         if (!getLambda().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      if (hasDeclaringType()) {
+        if (!getDeclaringType().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      if (hasReturnType()) {
+        if (!getReturnType().isInitialized()) {
           memoizedIsInitialized = 0;
           return false;
         }
@@ -25990,13 +25445,13 @@ public final class Ast {
         output.writeInt32(17, mappedNode_);
       }
       if (((bitField0_ & 0x00002000) == 0x00002000)) {
-        output.writeInt32(18, typeBindingFile_);
+        output.writeInt32(18, key_);
       }
       if (((bitField0_ & 0x00004000) == 0x00004000)) {
-        output.writeInt32(19, typeBindingNode_);
+        output.writeMessage(19, declaringType_);
       }
       if (((bitField0_ & 0x00008000) == 0x00008000)) {
-        output.writeInt32(20, key_);
+        output.writeMessage(20, returnType_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -26077,15 +25532,15 @@ public final class Ast {
       }
       if (((bitField0_ & 0x00002000) == 0x00002000)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(18, typeBindingFile_);
+          .computeInt32Size(18, key_);
       }
       if (((bitField0_ & 0x00004000) == 0x00004000)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(19, typeBindingNode_);
+          .computeMessageSize(19, declaringType_);
       }
       if (((bitField0_ & 0x00008000) == 0x00008000)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(20, key_);
+          .computeMessageSize(20, returnType_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -26207,6 +25662,8 @@ public final class Ast {
           getAnonDeclarationFieldBuilder();
           getAnnotationFieldBuilder();
           getLambdaFieldBuilder();
+          getDeclaringTypeFieldBuilder();
+          getReturnTypeFieldBuilder();
         }
       }
       private static Builder create() {
@@ -26281,11 +25738,19 @@ public final class Ast {
         bitField0_ = (bitField0_ & ~0x00008000);
         mappedNode_ = 0;
         bitField0_ = (bitField0_ & ~0x00010000);
-        typeBindingFile_ = 0;
-        bitField0_ = (bitField0_ & ~0x00020000);
-        typeBindingNode_ = 0;
-        bitField0_ = (bitField0_ & ~0x00040000);
         key_ = 0;
+        bitField0_ = (bitField0_ & ~0x00020000);
+        if (declaringTypeBuilder_ == null) {
+          declaringType_ = boa.types.Ast.Type.getDefaultInstance();
+        } else {
+          declaringTypeBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00040000);
+        if (returnTypeBuilder_ == null) {
+          returnType_ = boa.types.Ast.Type.getDefaultInstance();
+        } else {
+          returnTypeBuilder_.clear();
+        }
         bitField0_ = (bitField0_ & ~0x00080000);
         return this;
       }
@@ -26422,15 +25887,23 @@ public final class Ast {
         if (((from_bitField0_ & 0x00020000) == 0x00020000)) {
           to_bitField0_ |= 0x00002000;
         }
-        result.typeBindingFile_ = typeBindingFile_;
+        result.key_ = key_;
         if (((from_bitField0_ & 0x00040000) == 0x00040000)) {
           to_bitField0_ |= 0x00004000;
         }
-        result.typeBindingNode_ = typeBindingNode_;
+        if (declaringTypeBuilder_ == null) {
+          result.declaringType_ = declaringType_;
+        } else {
+          result.declaringType_ = declaringTypeBuilder_.build();
+        }
         if (((from_bitField0_ & 0x00080000) == 0x00080000)) {
           to_bitField0_ |= 0x00008000;
         }
-        result.key_ = key_;
+        if (returnTypeBuilder_ == null) {
+          result.returnType_ = returnType_;
+        } else {
+          result.returnType_ = returnTypeBuilder_.build();
+        }
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -26596,14 +26069,14 @@ public final class Ast {
         if (other.hasMappedNode()) {
           setMappedNode(other.getMappedNode());
         }
-        if (other.hasTypeBindingFile()) {
-          setTypeBindingFile(other.getTypeBindingFile());
-        }
-        if (other.hasTypeBindingNode()) {
-          setTypeBindingNode(other.getTypeBindingNode());
-        }
         if (other.hasKey()) {
           setKey(other.getKey());
+        }
+        if (other.hasDeclaringType()) {
+          mergeDeclaringType(other.getDeclaringType());
+        }
+        if (other.hasReturnType()) {
+          mergeReturnType(other.getReturnType());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -26658,6 +26131,18 @@ public final class Ast {
         }
         if (hasLambda()) {
           if (!getLambda().isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasDeclaringType()) {
+          if (!getDeclaringType().isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasReturnType()) {
+          if (!getReturnType().isInitialized()) {
             
             return false;
           }
@@ -28614,7 +28099,7 @@ public final class Ast {
        * <code>optional int32 mapped_node = 17;</code>
        *
        * <pre>
-       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
       public boolean hasMappedNode() {
@@ -28624,7 +28109,7 @@ public final class Ast {
        * <code>optional int32 mapped_node = 17;</code>
        *
        * <pre>
-       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
       public int getMappedNode() {
@@ -28634,7 +28119,7 @@ public final class Ast {
        * <code>optional int32 mapped_node = 17;</code>
        *
        * <pre>
-       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
       public Builder setMappedNode(int value) {
@@ -28647,7 +28132,7 @@ public final class Ast {
        * <code>optional int32 mapped_node = 17;</code>
        *
        * <pre>
-       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
       public Builder clearMappedNode() {
@@ -28657,118 +28142,20 @@ public final class Ast {
         return this;
       }
 
-      // optional int32 type_binding_file = 18;
-      private int typeBindingFile_ ;
-      /**
-       * <code>optional int32 type_binding_file = 18;</code>
-       *
-       * <pre>
-       ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-       * </pre>
-       */
-      public boolean hasTypeBindingFile() {
-        return ((bitField0_ & 0x00020000) == 0x00020000);
-      }
-      /**
-       * <code>optional int32 type_binding_file = 18;</code>
-       *
-       * <pre>
-       ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-       * </pre>
-       */
-      public int getTypeBindingFile() {
-        return typeBindingFile_;
-      }
-      /**
-       * <code>optional int32 type_binding_file = 18;</code>
-       *
-       * <pre>
-       ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-       * </pre>
-       */
-      public Builder setTypeBindingFile(int value) {
-        bitField0_ |= 0x00020000;
-        typeBindingFile_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 type_binding_file = 18;</code>
-       *
-       * <pre>
-       ** the index of the file (in the list of files in the snapshot) containing the type binding information 
-       * </pre>
-       */
-      public Builder clearTypeBindingFile() {
-        bitField0_ = (bitField0_ & ~0x00020000);
-        typeBindingFile_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 type_binding_node = 19;
-      private int typeBindingNode_ ;
-      /**
-       * <code>optional int32 type_binding_node = 19;</code>
-       *
-       * <pre>
-       ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-       * </pre>
-       */
-      public boolean hasTypeBindingNode() {
-        return ((bitField0_ & 0x00040000) == 0x00040000);
-      }
-      /**
-       * <code>optional int32 type_binding_node = 19;</code>
-       *
-       * <pre>
-       ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-       * </pre>
-       */
-      public int getTypeBindingNode() {
-        return typeBindingNode_;
-      }
-      /**
-       * <code>optional int32 type_binding_node = 19;</code>
-       *
-       * <pre>
-       ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-       * </pre>
-       */
-      public Builder setTypeBindingNode(int value) {
-        bitField0_ |= 0x00040000;
-        typeBindingNode_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 type_binding_node = 19;</code>
-       *
-       * <pre>
-       ** the key of the node containing the type binding information in the AST of the file (when traversing the AST in DFS order) 
-       * </pre>
-       */
-      public Builder clearTypeBindingNode() {
-        bitField0_ = (bitField0_ & ~0x00040000);
-        typeBindingNode_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 key = 20;
+      // optional int32 key = 18;
       private int key_ ;
       /**
-       * <code>optional int32 key = 20;</code>
+       * <code>optional int32 key = 18;</code>
        *
        * <pre>
        ** 
        * </pre>
        */
       public boolean hasKey() {
-        return ((bitField0_ & 0x00080000) == 0x00080000);
+        return ((bitField0_ & 0x00020000) == 0x00020000);
       }
       /**
-       * <code>optional int32 key = 20;</code>
+       * <code>optional int32 key = 18;</code>
        *
        * <pre>
        ** 
@@ -28778,30 +28165,336 @@ public final class Ast {
         return key_;
       }
       /**
-       * <code>optional int32 key = 20;</code>
+       * <code>optional int32 key = 18;</code>
        *
        * <pre>
        ** 
        * </pre>
        */
       public Builder setKey(int value) {
-        bitField0_ |= 0x00080000;
+        bitField0_ |= 0x00020000;
         key_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional int32 key = 20;</code>
+       * <code>optional int32 key = 18;</code>
        *
        * <pre>
        ** 
        * </pre>
        */
       public Builder clearKey() {
-        bitField0_ = (bitField0_ & ~0x00080000);
+        bitField0_ = (bitField0_ & ~0x00020000);
         key_ = 0;
         onChanged();
         return this;
+      }
+
+      // optional .boa.types.Type declaring_type = 19;
+      private boa.types.Ast.Type declaringType_ = boa.types.Ast.Type.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Type, boa.types.Ast.Type.Builder, boa.types.Ast.TypeOrBuilder> declaringTypeBuilder_;
+      /**
+       * <code>optional .boa.types.Type declaring_type = 19;</code>
+       *
+       * <pre>
+       ** The type declaring this method call or field access 
+       * </pre>
+       */
+      public boolean hasDeclaringType() {
+        return ((bitField0_ & 0x00040000) == 0x00040000);
+      }
+      /**
+       * <code>optional .boa.types.Type declaring_type = 19;</code>
+       *
+       * <pre>
+       ** The type declaring this method call or field access 
+       * </pre>
+       */
+      public boa.types.Ast.Type getDeclaringType() {
+        if (declaringTypeBuilder_ == null) {
+          return declaringType_;
+        } else {
+          return declaringTypeBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .boa.types.Type declaring_type = 19;</code>
+       *
+       * <pre>
+       ** The type declaring this method call or field access 
+       * </pre>
+       */
+      public Builder setDeclaringType(boa.types.Ast.Type value) {
+        if (declaringTypeBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          declaringType_ = value;
+          onChanged();
+        } else {
+          declaringTypeBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00040000;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Type declaring_type = 19;</code>
+       *
+       * <pre>
+       ** The type declaring this method call or field access 
+       * </pre>
+       */
+      public Builder setDeclaringType(
+          boa.types.Ast.Type.Builder builderForValue) {
+        if (declaringTypeBuilder_ == null) {
+          declaringType_ = builderForValue.build();
+          onChanged();
+        } else {
+          declaringTypeBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00040000;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Type declaring_type = 19;</code>
+       *
+       * <pre>
+       ** The type declaring this method call or field access 
+       * </pre>
+       */
+      public Builder mergeDeclaringType(boa.types.Ast.Type value) {
+        if (declaringTypeBuilder_ == null) {
+          if (((bitField0_ & 0x00040000) == 0x00040000) &&
+              declaringType_ != boa.types.Ast.Type.getDefaultInstance()) {
+            declaringType_ =
+              boa.types.Ast.Type.newBuilder(declaringType_).mergeFrom(value).buildPartial();
+          } else {
+            declaringType_ = value;
+          }
+          onChanged();
+        } else {
+          declaringTypeBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00040000;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Type declaring_type = 19;</code>
+       *
+       * <pre>
+       ** The type declaring this method call or field access 
+       * </pre>
+       */
+      public Builder clearDeclaringType() {
+        if (declaringTypeBuilder_ == null) {
+          declaringType_ = boa.types.Ast.Type.getDefaultInstance();
+          onChanged();
+        } else {
+          declaringTypeBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00040000);
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Type declaring_type = 19;</code>
+       *
+       * <pre>
+       ** The type declaring this method call or field access 
+       * </pre>
+       */
+      public boa.types.Ast.Type.Builder getDeclaringTypeBuilder() {
+        bitField0_ |= 0x00040000;
+        onChanged();
+        return getDeclaringTypeFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .boa.types.Type declaring_type = 19;</code>
+       *
+       * <pre>
+       ** The type declaring this method call or field access 
+       * </pre>
+       */
+      public boa.types.Ast.TypeOrBuilder getDeclaringTypeOrBuilder() {
+        if (declaringTypeBuilder_ != null) {
+          return declaringTypeBuilder_.getMessageOrBuilder();
+        } else {
+          return declaringType_;
+        }
+      }
+      /**
+       * <code>optional .boa.types.Type declaring_type = 19;</code>
+       *
+       * <pre>
+       ** The type declaring this method call or field access 
+       * </pre>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Type, boa.types.Ast.Type.Builder, boa.types.Ast.TypeOrBuilder> 
+          getDeclaringTypeFieldBuilder() {
+        if (declaringTypeBuilder_ == null) {
+          declaringTypeBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              boa.types.Ast.Type, boa.types.Ast.Type.Builder, boa.types.Ast.TypeOrBuilder>(
+                  declaringType_,
+                  getParentForChildren(),
+                  isClean());
+          declaringType_ = null;
+        }
+        return declaringTypeBuilder_;
+      }
+
+      // optional .boa.types.Type return_type = 20;
+      private boa.types.Ast.Type returnType_ = boa.types.Ast.Type.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Type, boa.types.Ast.Type.Builder, boa.types.Ast.TypeOrBuilder> returnTypeBuilder_;
+      /**
+       * <code>optional .boa.types.Type return_type = 20;</code>
+       *
+       * <pre>
+       ** Type of the return value 
+       * </pre>
+       */
+      public boolean hasReturnType() {
+        return ((bitField0_ & 0x00080000) == 0x00080000);
+      }
+      /**
+       * <code>optional .boa.types.Type return_type = 20;</code>
+       *
+       * <pre>
+       ** Type of the return value 
+       * </pre>
+       */
+      public boa.types.Ast.Type getReturnType() {
+        if (returnTypeBuilder_ == null) {
+          return returnType_;
+        } else {
+          return returnTypeBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .boa.types.Type return_type = 20;</code>
+       *
+       * <pre>
+       ** Type of the return value 
+       * </pre>
+       */
+      public Builder setReturnType(boa.types.Ast.Type value) {
+        if (returnTypeBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          returnType_ = value;
+          onChanged();
+        } else {
+          returnTypeBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00080000;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Type return_type = 20;</code>
+       *
+       * <pre>
+       ** Type of the return value 
+       * </pre>
+       */
+      public Builder setReturnType(
+          boa.types.Ast.Type.Builder builderForValue) {
+        if (returnTypeBuilder_ == null) {
+          returnType_ = builderForValue.build();
+          onChanged();
+        } else {
+          returnTypeBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00080000;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Type return_type = 20;</code>
+       *
+       * <pre>
+       ** Type of the return value 
+       * </pre>
+       */
+      public Builder mergeReturnType(boa.types.Ast.Type value) {
+        if (returnTypeBuilder_ == null) {
+          if (((bitField0_ & 0x00080000) == 0x00080000) &&
+              returnType_ != boa.types.Ast.Type.getDefaultInstance()) {
+            returnType_ =
+              boa.types.Ast.Type.newBuilder(returnType_).mergeFrom(value).buildPartial();
+          } else {
+            returnType_ = value;
+          }
+          onChanged();
+        } else {
+          returnTypeBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00080000;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Type return_type = 20;</code>
+       *
+       * <pre>
+       ** Type of the return value 
+       * </pre>
+       */
+      public Builder clearReturnType() {
+        if (returnTypeBuilder_ == null) {
+          returnType_ = boa.types.Ast.Type.getDefaultInstance();
+          onChanged();
+        } else {
+          returnTypeBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00080000);
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Type return_type = 20;</code>
+       *
+       * <pre>
+       ** Type of the return value 
+       * </pre>
+       */
+      public boa.types.Ast.Type.Builder getReturnTypeBuilder() {
+        bitField0_ |= 0x00080000;
+        onChanged();
+        return getReturnTypeFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .boa.types.Type return_type = 20;</code>
+       *
+       * <pre>
+       ** Type of the return value 
+       * </pre>
+       */
+      public boa.types.Ast.TypeOrBuilder getReturnTypeOrBuilder() {
+        if (returnTypeBuilder_ != null) {
+          return returnTypeBuilder_.getMessageOrBuilder();
+        } else {
+          return returnType_;
+        }
+      }
+      /**
+       * <code>optional .boa.types.Type return_type = 20;</code>
+       *
+       * <pre>
+       ** Type of the return value 
+       * </pre>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Type, boa.types.Ast.Type.Builder, boa.types.Ast.TypeOrBuilder> 
+          getReturnTypeFieldBuilder() {
+        if (returnTypeBuilder_ == null) {
+          returnTypeBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              boa.types.Ast.Type, boa.types.Ast.Type.Builder, boa.types.Ast.TypeOrBuilder>(
+                  returnType_,
+                  getParentForChildren(),
+                  isClean());
+          returnType_ = null;
+        }
+        return returnTypeBuilder_;
       }
 
       // @@protoc_insertion_point(builder_scope:boa.types.Expression)
@@ -29030,7 +28723,7 @@ public final class Ast {
      * <code>optional int32 mapped_node = 9;</code>
      *
      * <pre>
-     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
     boolean hasMappedNode();
@@ -29038,7 +28731,7 @@ public final class Ast {
      * <code>optional int32 mapped_node = 9;</code>
      *
      * <pre>
-     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
     int getMappedNode();
@@ -29932,7 +29625,7 @@ public final class Ast {
      * <code>optional int32 mapped_node = 9;</code>
      *
      * <pre>
-     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
     public boolean hasMappedNode() {
@@ -29942,7 +29635,7 @@ public final class Ast {
      * <code>optional int32 mapped_node = 9;</code>
      *
      * <pre>
-     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
     public int getMappedNode() {
@@ -31279,7 +30972,7 @@ public final class Ast {
        * <code>optional int32 mapped_node = 9;</code>
        *
        * <pre>
-       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
       public boolean hasMappedNode() {
@@ -31289,7 +30982,7 @@ public final class Ast {
        * <code>optional int32 mapped_node = 9;</code>
        *
        * <pre>
-       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
       public int getMappedNode() {
@@ -31299,7 +30992,7 @@ public final class Ast {
        * <code>optional int32 mapped_node = 9;</code>
        *
        * <pre>
-       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
       public Builder setMappedNode(int value) {
@@ -31312,7 +31005,7 @@ public final class Ast {
        * <code>optional int32 mapped_node = 9;</code>
        *
        * <pre>
-       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
       public Builder clearMappedNode() {
@@ -31465,7 +31158,7 @@ public final class Ast {
      * <code>optional int32 mapped_node = 6;</code>
      *
      * <pre>
-     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
     boolean hasMappedNode();
@@ -31473,7 +31166,7 @@ public final class Ast {
      * <code>optional int32 mapped_node = 6;</code>
      *
      * <pre>
-     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
     int getMappedNode();
@@ -31919,7 +31612,7 @@ public final class Ast {
      * <code>optional int32 mapped_node = 6;</code>
      *
      * <pre>
-     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
     public boolean hasMappedNode() {
@@ -31929,7 +31622,7 @@ public final class Ast {
      * <code>optional int32 mapped_node = 6;</code>
      *
      * <pre>
-     ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
     public int getMappedNode() {
@@ -32673,7 +32366,7 @@ public final class Ast {
        * <code>optional int32 mapped_node = 6;</code>
        *
        * <pre>
-       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
       public boolean hasMappedNode() {
@@ -32683,7 +32376,7 @@ public final class Ast {
        * <code>optional int32 mapped_node = 6;</code>
        *
        * <pre>
-       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
       public int getMappedNode() {
@@ -32693,7 +32386,7 @@ public final class Ast {
        * <code>optional int32 mapped_node = 6;</code>
        *
        * <pre>
-       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
       public Builder setMappedNode(int value) {
@@ -32706,7 +32399,7 @@ public final class Ast {
        * <code>optional int32 mapped_node = 6;</code>
        *
        * <pre>
-       ** the key of the mapped node in the previous version - the key is the index of the node when traversing the AST in DFS order 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
       public Builder clearMappedNode() {
@@ -33704,157 +33397,153 @@ public final class Ast {
     java.lang.String[] descriptorData = {
       "\n\tast.proto\022\tboa.types\032\014shared.proto\"4\n\014" +
       "CommentsRoot\022$\n\010comments\030\001 \003(\0132\022.boa.typ" +
-      "es.Comment\"\224\002\n\007ASTRoot\022(\n\nnamespaces\030\001 \003" +
+      "es.Comment\"\336\001\n\007ASTRoot\022(\n\nnamespaces\030\001 \003" +
       "(\0132\024.boa.types.Namespace\022\017\n\007imports\030\002 \003(" +
       "\t\022\r\n\005names\030\003 \003(\t\0225\n\026structural_change_ki" +
       "nd\030\004 \001(\0162\025.boa.types.ChangeKind\0220\n\021label" +
       "_change_kind\030\005 \001(\0162\025.boa.types.ChangeKin" +
-      "d\022\023\n\013mapped_node\030\006 \001(\005\022\031\n\021type_binding_f" +
-      "ile\030\007 \001(\005\022\031\n\021type_binding_node\030\010 \001(\005\022\013\n\003" +
-      "key\030\t \001(\005\"\252\003\n\tNamespace\022\014\n\004name\030\001 \002(\t\022&\n",
-      "\tmodifiers\030\002 \003(\0132\023.boa.types.Modifier\022,\n" +
-      "\014declarations\030\003 \003(\0132\026.boa.types.Declarat" +
-      "ion\022(\n\nstatements\030\004 \003(\0132\024.boa.types.Stat" +
-      "ement\022\"\n\007methods\030\005 \003(\0132\021.boa.types.Metho" +
-      "d\022*\n\013expressions\030\006 \003(\0132\025.boa.types.Expre" +
-      "ssion\0225\n\026structural_change_kind\030\007 \001(\0162\025." +
-      "boa.types.ChangeKind\0220\n\021label_change_kin" +
-      "d\030\010 \001(\0162\025.boa.types.ChangeKind\022\023\n\013mapped" +
-      "_node\030\t \001(\005\022\031\n\021type_binding_file\030\n \001(\005\022\031" +
-      "\n\021type_binding_node\030\013 \001(\005\022\013\n\003key\030\014 \001(\005\"\232",
-      "\004\n\013Declaration\022\014\n\004name\030\001 \002(\t\022!\n\004kind\030\002 \002" +
-      "(\0162\023.boa.types.TypeKind\022&\n\tmodifiers\030\003 \003" +
-      "(\0132\023.boa.types.Modifier\022+\n\022generic_param" +
-      "eters\030\004 \003(\0132\017.boa.types.Type\022 \n\007parents\030" +
-      "\005 \003(\0132\017.boa.types.Type\022\"\n\007methods\030\006 \003(\0132" +
-      "\021.boa.types.Method\022#\n\006fields\030\007 \003(\0132\023.boa" +
-      ".types.Variable\0223\n\023nested_declarations\030\010" +
-      " \003(\0132\026.boa.types.Declaration\022$\n\010comments" +
-      "\030\t \003(\0132\022.boa.types.Comment\0225\n\026structural" +
-      "_change_kind\030\n \001(\0162\025.boa.types.ChangeKin",
-      "d\0220\n\021label_change_kind\030\013 \001(\0162\025.boa.types" +
-      ".ChangeKind\022\023\n\013mapped_node\030\014 \001(\005\022\031\n\021type" +
-      "_binding_file\030\r \001(\005\022\031\n\021type_binding_node" +
-      "\030\016 \001(\005\022\013\n\003key\030\017 \001(\005\"\204\002\n\004Type\022\014\n\004name\030\001 \002" +
-      "(\t\022!\n\004kind\030\002 \002(\0162\023.boa.types.TypeKind\022\n\n" +
-      "\002id\030\004 \001(\t\0225\n\026structural_change_kind\030\005 \001(" +
-      "\0162\025.boa.types.ChangeKind\0220\n\021label_change" +
-      "_kind\030\006 \001(\0162\025.boa.types.ChangeKind\022\023\n\013ma" +
-      "pped_node\030\007 \001(\005\022\031\n\021type_binding_file\030\010 \001" +
-      "(\005\022\031\n\021type_binding_node\030\t \001(\005\022\013\n\003key\030\n \001",
-      "(\005\"\364\003\n\006Method\022\014\n\004name\030\001 \001(\t\022&\n\tmodifiers" +
-      "\030\002 \003(\0132\023.boa.types.Modifier\022$\n\013return_ty" +
-      "pe\030\003 \002(\0132\017.boa.types.Type\022+\n\022generic_par" +
-      "ameters\030\004 \003(\0132\017.boa.types.Type\022&\n\targume" +
-      "nts\030\005 \003(\0132\023.boa.types.Variable\022(\n\017except" +
-      "ion_types\030\006 \003(\0132\017.boa.types.Type\022(\n\nstat" +
-      "ements\030\007 \003(\0132\024.boa.types.Statement\022$\n\010co" +
-      "mments\030\010 \003(\0132\022.boa.types.Comment\0225\n\026stru" +
-      "ctural_change_kind\030\t \001(\0162\025.boa.types.Cha" +
-      "ngeKind\0220\n\021label_change_kind\030\n \001(\0162\025.boa",
-      ".types.ChangeKind\022\023\n\013mapped_node\030\013 \001(\005\022\031" +
-      "\n\021type_binding_file\030\014 \001(\005\022\031\n\021type_bindin" +
-      "g_node\030\r \001(\005\022\013\n\003key\030\016 \001(\005\"\373\002\n\010Variable\022\014" +
-      "\n\004name\030\001 \002(\t\022&\n\rvariable_type\030\002 \002(\0132\017.bo" +
-      "a.types.Type\022&\n\tmodifiers\030\003 \003(\0132\023.boa.ty" +
-      "pes.Modifier\022*\n\013initializer\030\004 \001(\0132\025.boa." +
-      "types.Expression\022$\n\010comments\030\005 \003(\0132\022.boa" +
-      ".types.Comment\0225\n\026structural_change_kind" +
-      "\030\006 \001(\0162\025.boa.types.ChangeKind\0220\n\021label_c" +
-      "hange_kind\030\007 \001(\0162\025.boa.types.ChangeKind\022",
-      "\023\n\013mapped_node\030\010 \001(\005\022\031\n\021type_binding_fil" +
-      "e\030\t \001(\005\022\031\n\021type_binding_node\030\n \001(\005\022\013\n\003ke" +
-      "y\030\013 \001(\005\"\375\006\n\tStatement\0220\n\004kind\030\001 \002(\0162\".bo" +
-      "a.types.Statement.StatementKind\022$\n\010comme" +
-      "nts\030\002 \003(\0132\022.boa.types.Comment\022(\n\nstateme" +
-      "nts\030\003 \003(\0132\024.boa.types.Statement\022.\n\017initi" +
-      "alizations\030\004 \003(\0132\025.boa.types.Expression\022" +
-      "(\n\tcondition\030\005 \001(\0132\025.boa.types.Expressio" +
-      "n\022&\n\007updates\030\006 \003(\0132\025.boa.types.Expressio" +
-      "n\0221\n\024variable_declaration\030\007 \001(\0132\023.boa.ty",
-      "pes.Variable\0220\n\020type_declaration\030\010 \001(\0132\026" +
-      ".boa.types.Declaration\022)\n\nexpression\030\t \001" +
-      "(\0132\025.boa.types.Expression\0225\n\026structural_" +
-      "change_kind\030\n \001(\0162\025.boa.types.ChangeKind" +
-      "\0220\n\021label_change_kind\030\013 \001(\0162\025.boa.types." +
-      "ChangeKind\022\023\n\013mapped_node\030\014 \001(\005\022\031\n\021type_" +
-      "binding_file\030\r \001(\005\022\031\n\021type_binding_node\030" +
-      "\016 \001(\005\022\013\n\003key\030\017 \001(\005\"\232\002\n\rStatementKind\022\t\n\005" +
-      "OTHER\020\000\022\t\n\005BLOCK\020\001\022\014\n\010TYPEDECL\020\002\022\016\n\nEXPR" +
-      "ESSION\020\003\022\010\n\004EXPR\020\003\022\020\n\014SYNCHRONIZED\020\004\022\010\n\004",
-      "SYNC\020\004\022\n\n\006RETURN\020\005\022\007\n\003FOR\020\006\022\006\n\002DO\020\007\022\t\n\005W" +
-      "HILE\020\010\022\006\n\002IF\020\t\022\n\n\006ASSERT\020\n\022\t\n\005BREAK\020\013\022\014\n" +
-      "\010CONTINUE\020\014\022\t\n\005LABEL\020\r\022\n\n\006SWITCH\020\016\022\010\n\004CA" +
-      "SE\020\017\022\007\n\003TRY\020\020\022\t\n\005THROW\020\021\022\t\n\005CATCH\020\022\022\t\n\005E" +
-      "MPTY\020\023\022\013\n\007FINALLY\020\024\032\002\020\001\"\304\013\n\nExpression\0222" +
-      "\n\004kind\030\001 \002(\0162$.boa.types.Expression.Expr" +
-      "essionKind\022*\n\013expressions\030\002 \003(\0132\025.boa.ty" +
-      "pes.Expression\022+\n\016variable_decls\030\003 \003(\0132\023" +
-      ".boa.types.Variable\022!\n\010new_type\030\004 \001(\0132\017." +
-      "boa.types.Type\022+\n\022generic_parameters\030\005 \003",
-      "(\0132\017.boa.types.Type\022\022\n\nis_postfix\030\006 \001(\010\022" +
-      "\017\n\007literal\030\007 \001(\t\022\020\n\010variable\030\010 \001(\t\022\016\n\006me" +
-      "thod\030\t \001(\t\022*\n\013method_args\030\n \003(\0132\025.boa.ty" +
-      "pes.Expression\0220\n\020anon_declaration\030\013 \001(\013" +
-      "2\026.boa.types.Declaration\022\'\n\nannotation\030\014" +
-      " \001(\0132\023.boa.types.Modifier\022!\n\006lambda\030\r \001(" +
-      "\0132\021.boa.types.Method\022\021\n\tno_parens\030\016 \001(\010\022" +
-      "5\n\026structural_change_kind\030\017 \001(\0162\025.boa.ty" +
-      "pes.ChangeKind\0220\n\021label_change_kind\030\020 \001(" +
-      "\0162\025.boa.types.ChangeKind\022\023\n\013mapped_node\030",
-      "\021 \001(\005\022\031\n\021type_binding_file\030\022 \001(\005\022\031\n\021type" +
-      "_binding_node\030\023 \001(\005\022\013\n\003key\030\024 \001(\005\"\223\006\n\016Exp" +
-      "ressionKind\022\t\n\005OTHER\020\000\022\013\n\007LITERAL\020\001\022\r\n\tV" +
-      "ARACCESS\020\002\022\013\n\007VARDECL\020\003\022\016\n\nMETHODCALL\020\004\022" +
-      "\010\n\004CAST\020\005\022\016\n\nARRAYINDEX\020\006\022\r\n\tARRAYINIT\020\007" +
-      "\022\017\n\013TYPECOMPARE\020\010\022\007\n\003NEW\020\t\022\014\n\010NEWARRAY\020\n" +
-      "\022\n\n\006OP_ADD\020\013\022\n\n\006OP_SUB\020\014\022\013\n\007OP_MULT\020\r\022\n\n" +
-      "\006OP_DIV\020\016\022\n\n\006OP_MOD\020\017\022\n\n\006OP_INC\020\020\022\n\n\006OP_" +
-      "DEC\020\021\022\016\n\nBIT_LSHIFT\020\022\022\016\n\nBIT_RSHIFT\020\023\022\026\n" +
-      "\022BIT_UNSIGNEDRSHIFT\020\024\022\013\n\007BIT_AND\020\025\022\n\n\006BI",
-      "T_OR\020\026\022\013\n\007BIT_NOT\020\027\022\013\n\007BIT_XOR\020\030\022\017\n\013LOGI" +
-      "CAL_NOT\020\031\022\017\n\013LOGICAL_AND\020\032\022\016\n\nLOGICAL_OR" +
-      "\020\033\022\006\n\002EQ\020\034\022\007\n\003NEQ\020\035\022\006\n\002LT\020\036\022\006\n\002GT\020\037\022\010\n\004L" +
-      "TEQ\020 \022\010\n\004GTEQ\020!\022\017\n\013CONDITIONAL\020\"\022\020\n\014NULL" +
-      "COALESCE\020#\022\n\n\006ASSIGN\020$\022\016\n\nASSIGN_ADD\020%\022\016" +
-      "\n\nASSIGN_SUB\020&\022\017\n\013ASSIGN_MULT\020\'\022\016\n\nASSIG" +
-      "N_DIV\020(\022\016\n\nASSIGN_MOD\020)\022\021\n\rASSIGN_BITXOR" +
-      "\020*\022\021\n\rASSIGN_BITAND\020+\022\020\n\014ASSIGN_BITOR\020,\022" +
-      "\021\n\rASSIGN_LSHIFT\020-\022\021\n\rASSIGN_RSHIFT\020.\022\031\n" +
-      "\025ASSIGN_UNSIGNEDRSHIFT\020/\022\016\n\nANNOTATION\0200",
-      "\022\t\n\005PAREN\0201\022\024\n\020METHOD_REFERENCE\0202\022\n\n\006LAM" +
-      "BDA\0203\022\017\n\013ANON_METHOD\0204\"\322\004\n\010Modifier\022.\n\004k" +
-      "ind\030\001 \002(\0162 .boa.types.Modifier.ModifierK" +
-      "ind\0222\n\nvisibility\030\002 \001(\0162\036.boa.types.Modi" +
-      "fier.Visibility\022\027\n\017annotation_name\030\003 \001(\t" +
-      "\022\032\n\022annotation_members\030\004 \003(\t\0220\n\021annotati" +
-      "on_values\030\005 \003(\0132\025.boa.types.Expression\022\r" +
-      "\n\005other\030\006 \001(\t\0225\n\026structural_change_kind\030" +
-      "\007 \001(\0162\025.boa.types.ChangeKind\0220\n\021label_ch" +
-      "ange_kind\030\010 \001(\0162\025.boa.types.ChangeKind\022\023",
-      "\n\013mapped_node\030\t \001(\005\022\013\n\003key\030\n \001(\005\"~\n\014Modi" +
-      "fierKind\022\t\n\005OTHER\020\000\022\016\n\nVISIBILITY\020\001\022\016\n\nA" +
-      "NNOTATION\020\002\022\t\n\005FINAL\020\003\022\n\n\006STATIC\020\004\022\020\n\014SY" +
-      "NCHRONIZED\020\005\022\010\n\004SYNC\020\005\022\014\n\010ABSTRACT\020\006\032\002\020\001" +
-      "\"a\n\nVisibility\022\n\n\006PUBLIC\020\001\022\013\n\007PRIVATE\020\002\022" +
-      "\r\n\tPROTECTED\020\003\022\r\n\tNAMESPACE\020\004\022\013\n\007PACKAGE" +
-      "\020\004\022\013\n\007DEFAULT\020\004\032\002\020\001\"\350\002\n\007Comment\022,\n\004kind\030" +
-      "\001 \002(\0162\036.boa.types.Comment.CommentKind\022\r\n" +
-      "\005value\030\002 \002(\t\022)\n\010position\030\003 \002(\0132\027.boa.typ" +
-      "es.PositionInfo\0225\n\026structural_change_kin",
-      "d\030\004 \001(\0162\025.boa.types.ChangeKind\0220\n\021label_" +
-      "change_kind\030\005 \001(\0162\025.boa.types.ChangeKind" +
-      "\022\023\n\013mapped_node\030\006 \001(\005\022\013\n\003key\030\007 \001(\005\"j\n\013Co" +
-      "mmentKind\022\t\n\005OTHER\020\000\022\010\n\004LINE\020\001\022\t\n\005BLOCK\020" +
-      "\002\022\007\n\003DOC\020\003\022\021\n\rDOCUMENTATION\020\003\022\010\n\004SPEC\020\004\022" +
-      "\021\n\rSPECIFICATION\020\004\032\002\020\001\"{\n\014PositionInfo\022\021" +
-      "\n\tstart_pos\030\001 \002(\005\022\016\n\006length\030\002 \002(\005\022\022\n\nsta" +
-      "rt_line\030\003 \002(\005\022\021\n\tstart_col\030\004 \002(\005\022\020\n\010end_" +
-      "line\030\005 \002(\005\022\017\n\007end_col\030\006 \002(\005*\236\001\n\010TypeKind" +
-      "\022\t\n\005OTHER\020\000\022\t\n\005CLASS\020\001\022\r\n\tINTERFACE\020\002\022\r\n",
-      "\tANONYMOUS\020\003\022\010\n\004ANON\020\003\022\n\n\006STRUCT\020\004\022\010\n\004EN" +
-      "UM\020\005\022\017\n\013ENUMERATION\020\005\022\016\n\nANNOTATION\020\006\022\014\n" +
-      "\010DELEGATE\020\007\022\013\n\007GENERIC\020\010\032\002\020\001B\002H\001"
+      "d\022\023\n\013mapped_node\030\006 \001(\005\022\013\n\003key\030\007 \001(\005\"\364\002\n\t" +
+      "Namespace\022\014\n\004name\030\001 \002(\t\022&\n\tmodifiers\030\002 \003" +
+      "(\0132\023.boa.types.Modifier\022,\n\014declarations\030",
+      "\003 \003(\0132\026.boa.types.Declaration\022(\n\nstateme" +
+      "nts\030\004 \003(\0132\024.boa.types.Statement\022\"\n\007metho" +
+      "ds\030\005 \003(\0132\021.boa.types.Method\022*\n\013expressio" +
+      "ns\030\006 \003(\0132\025.boa.types.Expression\0225\n\026struc" +
+      "tural_change_kind\030\007 \001(\0162\025.boa.types.Chan" +
+      "geKind\0220\n\021label_change_kind\030\010 \001(\0162\025.boa." +
+      "types.ChangeKind\022\023\n\013mapped_node\030\t \001(\005\022\013\n" +
+      "\003key\030\n \001(\005\"\233\004\n\013Declaration\022\014\n\004name\030\001 \002(\t" +
+      "\022!\n\004kind\030\002 \002(\0162\023.boa.types.TypeKind\022&\n\tm" +
+      "odifiers\030\003 \003(\0132\023.boa.types.Modifier\022+\n\022g",
+      "eneric_parameters\030\004 \003(\0132\017.boa.types.Type" +
+      "\022 \n\007parents\030\005 \003(\0132\017.boa.types.Type\022\"\n\007me" +
+      "thods\030\006 \003(\0132\021.boa.types.Method\022#\n\006fields" +
+      "\030\007 \003(\0132\023.boa.types.Variable\0223\n\023nested_de" +
+      "clarations\030\010 \003(\0132\026.boa.types.Declaration" +
+      "\022$\n\010comments\030\t \003(\0132\022.boa.types.Comment\0225" +
+      "\n\026structural_change_kind\030\n \001(\0162\025.boa.typ" +
+      "es.ChangeKind\0220\n\021label_change_kind\030\013 \001(\016" +
+      "2\025.boa.types.ChangeKind\022\023\n\013mapped_node\030\014" +
+      " \001(\005\022\013\n\003key\030\r \001(\005\022\034\n\024fully_qualified_nam",
+      "e\030\016 \001(\t\022\027\n\017declaring_class\030\017 \001(\005\"\233\002\n\004Typ" +
+      "e\022\014\n\004name\030\001 \002(\t\022\034\n\024fully_qualified_name\030" +
+      "\002 \001(\t\022!\n\004kind\030\003 \002(\0162\023.boa.types.TypeKind" +
+      "\022\n\n\002id\030\004 \001(\t\0225\n\026structural_change_kind\030\005" +
+      " \001(\0162\025.boa.types.ChangeKind\0220\n\021label_cha" +
+      "nge_kind\030\006 \001(\0162\025.boa.types.ChangeKind\022\023\n" +
+      "\013mapped_node\030\007 \001(\005\022\030\n\020declaration_file\030\010" +
+      " \001(\005\022\023\n\013declaration\030\t \001(\005\022\013\n\003key\030\n \001(\005\"\326" +
+      "\003\n\006Method\022\014\n\004name\030\001 \001(\t\022&\n\tmodifiers\030\002 \003" +
+      "(\0132\023.boa.types.Modifier\022$\n\013return_type\030\003",
+      " \002(\0132\017.boa.types.Type\022+\n\022generic_paramet" +
+      "ers\030\004 \003(\0132\017.boa.types.Type\022&\n\targuments\030" +
+      "\005 \003(\0132\023.boa.types.Variable\022(\n\017exception_" +
+      "types\030\006 \003(\0132\017.boa.types.Type\022(\n\nstatemen" +
+      "ts\030\007 \003(\0132\024.boa.types.Statement\022$\n\010commen" +
+      "ts\030\010 \003(\0132\022.boa.types.Comment\0225\n\026structur" +
+      "al_change_kind\030\t \001(\0162\025.boa.types.ChangeK" +
+      "ind\0220\n\021label_change_kind\030\n \001(\0162\025.boa.typ" +
+      "es.ChangeKind\022\023\n\013mapped_node\030\013 \001(\005\022\013\n\003ke" +
+      "y\030\014 \001(\005\022\026\n\016declaring_type\030\r \001(\005\"\332\002\n\010Vari",
+      "able\022\014\n\004name\030\001 \002(\t\022&\n\rvariable_type\030\002 \002(" +
+      "\0132\017.boa.types.Type\022&\n\tmodifiers\030\003 \003(\0132\023." +
+      "boa.types.Modifier\022*\n\013initializer\030\004 \001(\0132" +
+      "\025.boa.types.Expression\022$\n\010comments\030\005 \003(\013" +
+      "2\022.boa.types.Comment\0225\n\026structural_chang" +
+      "e_kind\030\006 \001(\0162\025.boa.types.ChangeKind\0220\n\021l" +
+      "abel_change_kind\030\007 \001(\0162\025.boa.types.Chang" +
+      "eKind\022\023\n\013mapped_node\030\010 \001(\005\022\013\n\003key\030\t \001(\005\022" +
+      "\023\n\013declaration\030\n \001(\005\"\307\006\n\tStatement\0220\n\004ki" +
+      "nd\030\001 \002(\0162\".boa.types.Statement.Statement",
+      "Kind\022$\n\010comments\030\002 \003(\0132\022.boa.types.Comme" +
+      "nt\022(\n\nstatements\030\003 \003(\0132\024.boa.types.State" +
+      "ment\022.\n\017initializations\030\004 \003(\0132\025.boa.type" +
+      "s.Expression\022(\n\tcondition\030\005 \001(\0132\025.boa.ty" +
+      "pes.Expression\022&\n\007updates\030\006 \003(\0132\025.boa.ty" +
+      "pes.Expression\0221\n\024variable_declaration\030\007" +
+      " \001(\0132\023.boa.types.Variable\0220\n\020type_declar" +
+      "ation\030\010 \001(\0132\026.boa.types.Declaration\022)\n\ne" +
+      "xpression\030\t \001(\0132\025.boa.types.Expression\0225" +
+      "\n\026structural_change_kind\030\n \001(\0162\025.boa.typ",
+      "es.ChangeKind\0220\n\021label_change_kind\030\013 \001(\016" +
+      "2\025.boa.types.ChangeKind\022\023\n\013mapped_node\030\014" +
+      " \001(\005\022\013\n\003key\030\r \001(\005\"\232\002\n\rStatementKind\022\t\n\005O" +
+      "THER\020\000\022\t\n\005BLOCK\020\001\022\014\n\010TYPEDECL\020\002\022\016\n\nEXPRE" +
+      "SSION\020\003\022\010\n\004EXPR\020\003\022\020\n\014SYNCHRONIZED\020\004\022\010\n\004S" +
+      "YNC\020\004\022\n\n\006RETURN\020\005\022\007\n\003FOR\020\006\022\006\n\002DO\020\007\022\t\n\005WH" +
+      "ILE\020\010\022\006\n\002IF\020\t\022\n\n\006ASSERT\020\n\022\t\n\005BREAK\020\013\022\014\n\010" +
+      "CONTINUE\020\014\022\t\n\005LABEL\020\r\022\n\n\006SWITCH\020\016\022\010\n\004CAS" +
+      "E\020\017\022\007\n\003TRY\020\020\022\t\n\005THROW\020\021\022\t\n\005CATCH\020\022\022\t\n\005EM" +
+      "PTY\020\023\022\013\n\007FINALLY\020\024\032\002\020\001\"\335\013\n\nExpression\0222\n",
+      "\004kind\030\001 \002(\0162$.boa.types.Expression.Expre" +
+      "ssionKind\022*\n\013expressions\030\002 \003(\0132\025.boa.typ" +
+      "es.Expression\022+\n\016variable_decls\030\003 \003(\0132\023." +
+      "boa.types.Variable\022!\n\010new_type\030\004 \001(\0132\017.b" +
+      "oa.types.Type\022+\n\022generic_parameters\030\005 \003(" +
+      "\0132\017.boa.types.Type\022\022\n\nis_postfix\030\006 \001(\010\022\017" +
+      "\n\007literal\030\007 \001(\t\022\020\n\010variable\030\010 \001(\t\022\016\n\006met" +
+      "hod\030\t \001(\t\022*\n\013method_args\030\n \003(\0132\025.boa.typ" +
+      "es.Expression\0220\n\020anon_declaration\030\013 \001(\0132" +
+      "\026.boa.types.Declaration\022\'\n\nannotation\030\014 ",
+      "\001(\0132\023.boa.types.Modifier\022!\n\006lambda\030\r \001(\013" +
+      "2\021.boa.types.Method\022\021\n\tno_parens\030\016 \001(\010\0225" +
+      "\n\026structural_change_kind\030\017 \001(\0162\025.boa.typ" +
+      "es.ChangeKind\0220\n\021label_change_kind\030\020 \001(\016" +
+      "2\025.boa.types.ChangeKind\022\023\n\013mapped_node\030\021" +
+      " \001(\005\022\013\n\003key\030\022 \001(\005\022\'\n\016declaring_type\030\023 \001(" +
+      "\0132\017.boa.types.Type\022$\n\013return_type\030\024 \001(\0132" +
+      "\017.boa.types.Type\"\223\006\n\016ExpressionKind\022\t\n\005O" +
+      "THER\020\000\022\013\n\007LITERAL\020\001\022\r\n\tVARACCESS\020\002\022\013\n\007VA" +
+      "RDECL\020\003\022\016\n\nMETHODCALL\020\004\022\010\n\004CAST\020\005\022\016\n\nARR",
+      "AYINDEX\020\006\022\r\n\tARRAYINIT\020\007\022\017\n\013TYPECOMPARE\020" +
+      "\010\022\007\n\003NEW\020\t\022\014\n\010NEWARRAY\020\n\022\n\n\006OP_ADD\020\013\022\n\n\006" +
+      "OP_SUB\020\014\022\013\n\007OP_MULT\020\r\022\n\n\006OP_DIV\020\016\022\n\n\006OP_" +
+      "MOD\020\017\022\n\n\006OP_INC\020\020\022\n\n\006OP_DEC\020\021\022\016\n\nBIT_LSH" +
+      "IFT\020\022\022\016\n\nBIT_RSHIFT\020\023\022\026\n\022BIT_UNSIGNEDRSH" +
+      "IFT\020\024\022\013\n\007BIT_AND\020\025\022\n\n\006BIT_OR\020\026\022\013\n\007BIT_NO" +
+      "T\020\027\022\013\n\007BIT_XOR\020\030\022\017\n\013LOGICAL_NOT\020\031\022\017\n\013LOG" +
+      "ICAL_AND\020\032\022\016\n\nLOGICAL_OR\020\033\022\006\n\002EQ\020\034\022\007\n\003NE" +
+      "Q\020\035\022\006\n\002LT\020\036\022\006\n\002GT\020\037\022\010\n\004LTEQ\020 \022\010\n\004GTEQ\020!\022" +
+      "\017\n\013CONDITIONAL\020\"\022\020\n\014NULLCOALESCE\020#\022\n\n\006AS",
+      "SIGN\020$\022\016\n\nASSIGN_ADD\020%\022\016\n\nASSIGN_SUB\020&\022\017" +
+      "\n\013ASSIGN_MULT\020\'\022\016\n\nASSIGN_DIV\020(\022\016\n\nASSIG" +
+      "N_MOD\020)\022\021\n\rASSIGN_BITXOR\020*\022\021\n\rASSIGN_BIT" +
+      "AND\020+\022\020\n\014ASSIGN_BITOR\020,\022\021\n\rASSIGN_LSHIFT" +
+      "\020-\022\021\n\rASSIGN_RSHIFT\020.\022\031\n\025ASSIGN_UNSIGNED" +
+      "RSHIFT\020/\022\016\n\nANNOTATION\0200\022\t\n\005PAREN\0201\022\024\n\020M" +
+      "ETHOD_REFERENCE\0202\022\n\n\006LAMBDA\0203\022\017\n\013ANON_ME" +
+      "THOD\0204\"\322\004\n\010Modifier\022.\n\004kind\030\001 \002(\0162 .boa." +
+      "types.Modifier.ModifierKind\0222\n\nvisibilit" +
+      "y\030\002 \001(\0162\036.boa.types.Modifier.Visibility\022",
+      "\027\n\017annotation_name\030\003 \001(\t\022\032\n\022annotation_m" +
+      "embers\030\004 \003(\t\0220\n\021annotation_values\030\005 \003(\0132" +
+      "\025.boa.types.Expression\022\r\n\005other\030\006 \001(\t\0225\n" +
+      "\026structural_change_kind\030\007 \001(\0162\025.boa.type" +
+      "s.ChangeKind\0220\n\021label_change_kind\030\010 \001(\0162" +
+      "\025.boa.types.ChangeKind\022\023\n\013mapped_node\030\t " +
+      "\001(\005\022\013\n\003key\030\n \001(\005\"~\n\014ModifierKind\022\t\n\005OTHE" +
+      "R\020\000\022\016\n\nVISIBILITY\020\001\022\016\n\nANNOTATION\020\002\022\t\n\005F" +
+      "INAL\020\003\022\n\n\006STATIC\020\004\022\020\n\014SYNCHRONIZED\020\005\022\010\n\004" +
+      "SYNC\020\005\022\014\n\010ABSTRACT\020\006\032\002\020\001\"a\n\nVisibility\022\n",
+      "\n\006PUBLIC\020\001\022\013\n\007PRIVATE\020\002\022\r\n\tPROTECTED\020\003\022\r" +
+      "\n\tNAMESPACE\020\004\022\013\n\007PACKAGE\020\004\022\013\n\007DEFAULT\020\004\032" +
+      "\002\020\001\"\350\002\n\007Comment\022,\n\004kind\030\001 \002(\0162\036.boa.type" +
+      "s.Comment.CommentKind\022\r\n\005value\030\002 \002(\t\022)\n\010" +
+      "position\030\003 \002(\0132\027.boa.types.PositionInfo\022" +
+      "5\n\026structural_change_kind\030\004 \001(\0162\025.boa.ty" +
+      "pes.ChangeKind\0220\n\021label_change_kind\030\005 \001(" +
+      "\0162\025.boa.types.ChangeKind\022\023\n\013mapped_node\030" +
+      "\006 \001(\005\022\013\n\003key\030\007 \001(\005\"j\n\013CommentKind\022\t\n\005OTH" +
+      "ER\020\000\022\010\n\004LINE\020\001\022\t\n\005BLOCK\020\002\022\007\n\003DOC\020\003\022\021\n\rDO",
+      "CUMENTATION\020\003\022\010\n\004SPEC\020\004\022\021\n\rSPECIFICATION" +
+      "\020\004\032\002\020\001\"{\n\014PositionInfo\022\021\n\tstart_pos\030\001 \002(" +
+      "\005\022\016\n\006length\030\002 \002(\005\022\022\n\nstart_line\030\003 \002(\005\022\021\n" +
+      "\tstart_col\030\004 \002(\005\022\020\n\010end_line\030\005 \002(\005\022\017\n\007en" +
+      "d_col\030\006 \002(\005*\236\001\n\010TypeKind\022\t\n\005OTHER\020\000\022\t\n\005C" +
+      "LASS\020\001\022\r\n\tINTERFACE\020\002\022\r\n\tANONYMOUS\020\003\022\010\n\004" +
+      "ANON\020\003\022\n\n\006STRUCT\020\004\022\010\n\004ENUM\020\005\022\017\n\013ENUMERAT" +
+      "ION\020\005\022\016\n\nANNOTATION\020\006\022\014\n\010DELEGATE\020\007\022\013\n\007G" +
+      "ENERIC\020\010\032\002\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -33872,49 +33561,49 @@ public final class Ast {
           internal_static_boa_types_ASTRoot_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_ASTRoot_descriptor,
-              new java.lang.String[] { "Namespaces", "Imports", "Names", "StructuralChangeKind", "LabelChangeKind", "MappedNode", "TypeBindingFile", "TypeBindingNode", "Key", });
+              new java.lang.String[] { "Namespaces", "Imports", "Names", "StructuralChangeKind", "LabelChangeKind", "MappedNode", "Key", });
           internal_static_boa_types_Namespace_descriptor =
             getDescriptor().getMessageTypes().get(2);
           internal_static_boa_types_Namespace_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Namespace_descriptor,
-              new java.lang.String[] { "Name", "Modifiers", "Declarations", "Statements", "Methods", "Expressions", "StructuralChangeKind", "LabelChangeKind", "MappedNode", "TypeBindingFile", "TypeBindingNode", "Key", });
+              new java.lang.String[] { "Name", "Modifiers", "Declarations", "Statements", "Methods", "Expressions", "StructuralChangeKind", "LabelChangeKind", "MappedNode", "Key", });
           internal_static_boa_types_Declaration_descriptor =
             getDescriptor().getMessageTypes().get(3);
           internal_static_boa_types_Declaration_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Declaration_descriptor,
-              new java.lang.String[] { "Name", "Kind", "Modifiers", "GenericParameters", "Parents", "Methods", "Fields", "NestedDeclarations", "Comments", "StructuralChangeKind", "LabelChangeKind", "MappedNode", "TypeBindingFile", "TypeBindingNode", "Key", });
+              new java.lang.String[] { "Name", "Kind", "Modifiers", "GenericParameters", "Parents", "Methods", "Fields", "NestedDeclarations", "Comments", "StructuralChangeKind", "LabelChangeKind", "MappedNode", "Key", "FullyQualifiedName", "DeclaringClass", });
           internal_static_boa_types_Type_descriptor =
             getDescriptor().getMessageTypes().get(4);
           internal_static_boa_types_Type_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Type_descriptor,
-              new java.lang.String[] { "Name", "Kind", "Id", "StructuralChangeKind", "LabelChangeKind", "MappedNode", "TypeBindingFile", "TypeBindingNode", "Key", });
+              new java.lang.String[] { "Name", "FullyQualifiedName", "Kind", "Id", "StructuralChangeKind", "LabelChangeKind", "MappedNode", "DeclarationFile", "Declaration", "Key", });
           internal_static_boa_types_Method_descriptor =
             getDescriptor().getMessageTypes().get(5);
           internal_static_boa_types_Method_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Method_descriptor,
-              new java.lang.String[] { "Name", "Modifiers", "ReturnType", "GenericParameters", "Arguments", "ExceptionTypes", "Statements", "Comments", "StructuralChangeKind", "LabelChangeKind", "MappedNode", "TypeBindingFile", "TypeBindingNode", "Key", });
+              new java.lang.String[] { "Name", "Modifiers", "ReturnType", "GenericParameters", "Arguments", "ExceptionTypes", "Statements", "Comments", "StructuralChangeKind", "LabelChangeKind", "MappedNode", "Key", "DeclaringType", });
           internal_static_boa_types_Variable_descriptor =
             getDescriptor().getMessageTypes().get(6);
           internal_static_boa_types_Variable_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Variable_descriptor,
-              new java.lang.String[] { "Name", "VariableType", "Modifiers", "Initializer", "Comments", "StructuralChangeKind", "LabelChangeKind", "MappedNode", "TypeBindingFile", "TypeBindingNode", "Key", });
+              new java.lang.String[] { "Name", "VariableType", "Modifiers", "Initializer", "Comments", "StructuralChangeKind", "LabelChangeKind", "MappedNode", "Key", "Declaration", });
           internal_static_boa_types_Statement_descriptor =
             getDescriptor().getMessageTypes().get(7);
           internal_static_boa_types_Statement_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Statement_descriptor,
-              new java.lang.String[] { "Kind", "Comments", "Statements", "Initializations", "Condition", "Updates", "VariableDeclaration", "TypeDeclaration", "Expression", "StructuralChangeKind", "LabelChangeKind", "MappedNode", "TypeBindingFile", "TypeBindingNode", "Key", });
+              new java.lang.String[] { "Kind", "Comments", "Statements", "Initializations", "Condition", "Updates", "VariableDeclaration", "TypeDeclaration", "Expression", "StructuralChangeKind", "LabelChangeKind", "MappedNode", "Key", });
           internal_static_boa_types_Expression_descriptor =
             getDescriptor().getMessageTypes().get(8);
           internal_static_boa_types_Expression_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Expression_descriptor,
-              new java.lang.String[] { "Kind", "Expressions", "VariableDecls", "NewType", "GenericParameters", "IsPostfix", "Literal", "Variable", "Method", "MethodArgs", "AnonDeclaration", "Annotation", "Lambda", "NoParens", "StructuralChangeKind", "LabelChangeKind", "MappedNode", "TypeBindingFile", "TypeBindingNode", "Key", });
+              new java.lang.String[] { "Kind", "Expressions", "VariableDecls", "NewType", "GenericParameters", "IsPostfix", "Literal", "Variable", "Method", "MethodArgs", "AnonDeclaration", "Annotation", "Lambda", "NoParens", "StructuralChangeKind", "LabelChangeKind", "MappedNode", "Key", "DeclaringType", "ReturnType", });
           internal_static_boa_types_Modifier_descriptor =
             getDescriptor().getMessageTypes().get(9);
           internal_static_boa_types_Modifier_fieldAccessorTable = new
