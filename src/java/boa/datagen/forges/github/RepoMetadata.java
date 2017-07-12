@@ -232,7 +232,7 @@ public class RepoMetadata {
 		DateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
 		try {
 			Date date = df.parse(time);
-			return date.getTime() * 1000000;
+			return date.getTime() * 1000;
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
