@@ -307,7 +307,6 @@ public class RepoMetadata {
 				project.addAllProgrammingLanguages(langs);
 				project.addAllLoc(langLoc);
 			}
-			
 		}
 		if (gitRepository != null) {
 			CodeRepository.Builder cr = CodeRepository.newBuilder();
@@ -329,12 +328,20 @@ public class RepoMetadata {
 		project.setProjectUrl("no summary");
 		project.setHomepageUrl("no homepage");
 		project.setDescription("no description");
+		project.setForked(false);
+		project.setForks(0);
+		project.setStars(0);
 		if (programmingLanguages != null) {
 			ArrayList<String> langs = new ArrayList<String>();
-			for (String lang : programmingLanguages)
-				langs.add(lang);
-			if (!langs.isEmpty())
+			ArrayList<Integer> langLoc = new ArrayList<Integer>();
+			for (int i = 0; i < programmingLanguages.length; i++){
+				langs.add(programmingLanguages[i]);
+				langLoc.add(programmingLanguagesLOC[i]);
+			}
+			if (!langs.isEmpty()){
 				project.addAllProgrammingLanguages(langs);
+				project.addAllLoc(langLoc);
+			}
 		}
 		if (gitRepository != null) {
 			CodeRepository.Builder cr = CodeRepository.newBuilder();
