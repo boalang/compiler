@@ -67,14 +67,24 @@ public class RepoMetadata {
 	private static final String GIT_STARS = "stargazers_count";
 	private static final String GIT_FORKED = "fork";
 	private static final String GIT_FORKS = "forks_count"; 
-	/*
-	 * other git fields "size": 7954, "stargazers_count": 1856,
-	 * "watchers_count": 1856, "language": "Ruby", "has_issues": true,
-	 * "has_downloads": true, "has_wiki": true, "has_pages": false,
-	 * "forks_count": 448, "mirror_url": null, "open_issues_count": 2, "forks":
-	 * 448, "open_issues": 2, "watchers": 1856, "default_branch": "master",
-	 * "network_count": 448, "subscribers_count": 60
-	 */
+	/* other git fields
+	  "size": 7954,
+	  "stargazers_count": 1856,
+	  "watchers_count": 1856,
+	  "language": "Ruby",
+	  "has_issues": true,
+	  "has_downloads": true,
+	  "has_wiki": true,
+	  "has_pages": false,
+	  "forks_count": 448,
+	  "mirror_url": null,
+	  "open_issues_count": 2,
+	  "forks": 448,
+	  "open_issues": 2,
+	  "watchers": 1856,
+	  "default_branch": "master",
+	  "network_count": 448,
+	  "subscribers_count": 60*/
 
 
 	public String id;
@@ -129,12 +139,14 @@ public class RepoMetadata {
 		}
 		if (jsonProject.has(GIT_DESCRIPTION))
 			this.description = jsonProject.get(GIT_DESCRIPTION).getAsString();
-		/*
-		 * if (jsonProject.has("os")) { JSONArray jsonOSes =
-		 * jsonProject.getJSONArray("os"); if (jsonOSes != null &&
-		 * jsonOSes.isArray()) { for (int i = 0; i < jsonOSes.size(); i++)
-		 * project.addOperatingSystems(jsonOSes.getString(i)); } }
-		 */
+        /*if (jsonProject.has("os")) {
+	    	JSONArray jsonOSes = jsonProject.getJSONArray("os");
+			if (jsonOSes != null && jsonOSes.isArray())
+			{
+				for (int i = 0; i < jsonOSes.size(); i++)
+					project.addOperatingSystems(jsonOSes.getString(i));
+			}
+	    }*/
 		if (jsonProject.has(GIT_PROGRAMMING_LANGUAGES)) {
 			JsonObject langList = jsonProject.get(GIT_PROGRAMMING_LANGUAGES).getAsJsonObject();
 			int size = langList.entrySet().size();
@@ -156,87 +168,138 @@ public class RepoMetadata {
 		if (jsonProject.has(GIT_STARS)){
 			this.stars = jsonProject.get(GIT_STARS).getAsInt();
 		}
-		/*
-		 * if (jsonProject.has("databases")) { JSONArray jsonDBs =
-		 * jsonProject.getJSONArray("databases"); if (jsonDBs.isArray()) for
-		 * (int i = 0; i < jsonDBs.size(); i++) {
-		 * project.addDatabases(jsonDBs.getString(i).trim()) ; } }
-		 */
-		/*
-		 * if (jsonProject.has("licenses")) { ArrayList<String> strLicenses =
-		 * new ArrayList<String>(); JSONArray licenses =
-		 * jsonProject.getJSONArray("licenses"); if (licenses.isArray()) { for
-		 * (int i = 0; i < licenses.size(); i++) { JSONObject license =
-		 * licenses.getJSONObject(i); if (license.has("name"))
-		 * strLicenses.add(license.getString("name")); } } if
-		 * (!strLicenses.isEmpty()) project.addAllLicenses(strLicenses); }
-		 */
-		/*
-		 * if (jsonProject.has("topics")) { ArrayList<String> strTopics = new
-		 * ArrayList<String>(); JSONArray topics =
-		 * jsonProject.getJSONArray("topics"); if (topics.isArray()) { for (int
-		 * i = 0; i < topics.size(); i++) { String topic =
-		 * topics.getString(i).trim().toLowerCase(); strTopics.add(topic); } }
-		 * if (!strTopics.isEmpty()) project.addAllTopics(strTopics); }
-		 */
-		/*
-		 * if (jsonProject.has("audiences")) { JSONArray jsonAudiences =
-		 * jsonProject.getJSONArray("audiences"); if (jsonAudiences.isArray())
-		 * for (int i = 0; i < jsonAudiences.size(); i++) {
-		 * project.addAudiences(jsonAudiences.getString(i).trim()) ; } }
-		 */
-		/*
-		 * if (jsonProject.has("environments")) { JSONArray jsonEnvs =
-		 * jsonProject.getJSONArray("environments"); if (jsonEnvs.isArray()) for
-		 * (int i = 0; i < jsonEnvs.size(); i++) {
-		 * project.addInterfaces(jsonEnvs.getString(i).trim()) ; } }
-		 */
-		/*
-		 * if (jsonProject.has("donation")) { JSONObject jsonDonation =
-		 * jsonProject.getJSONObject("donation"); String status =
-		 * jsonDonation.getString("status"); if (status.equals("Not Accepting"))
-		 * project.setDonations(false); else if (status.equals("Accepting"))
-		 * project.setDonations(true); }
-		 */
-		/*
-		 * if (jsonProject.has("maintainers")) { ArrayList<Person> persons = new
-		 * ArrayList<Person>(); JSONArray maintainers =
-		 * jsonProject.getJSONArray("maintainers"); if (maintainers.isArray()) {
-		 * for (int i = 0; i < maintainers.size(); i++) { JSONObject maintainer
-		 * = maintainers.getJSONObject(i); if (maintainer.has("name")) {
-		 * Person.Builder person = Person.newBuilder();
-		 * person.setRealName(maintainer.getString("name"));
-		 * person.setUsername(maintainer.getString("name"));
-		 * person.setEmail(maintainer.getString("homepage"));
-		 * persons.add(person.build()); } } } if (!persons.isEmpty())
-		 * project.addAllMaintainers(persons); }
-		 */
-		/*
-		 * if (jsonProject.has("developers")) { ArrayList<Person> persons = new
-		 * ArrayList<Person>(); JSONArray developers =
-		 * jsonProject.getJSONArray("developers"); if (developers.isArray()) {
-		 * for (int i = 0; i < developers.size(); i++) { JSONObject developer =
-		 * developers.getJSONObject(i); if (developer.has("name")) {
-		 * Person.Builder person = Person.newBuilder();
-		 * person.setRealName(developer.getString("name"));
-		 * person.setUsername(developer.getString("name"));
-		 * person.setEmail(developer.getString("homepage"));
-		 * persons.add(person.build()); } } } if (!persons.isEmpty())
-		 * project.addAllDevelopers(persons); }
-		 */
-		/*
-		 * if (jsonProject.has("trackers")) { ArrayList<BugRepository> bugs =
-		 * new ArrayList<BugRepository>(); JSONArray trackers =
-		 * jsonProject.getJSONArray("trackers"); if (trackers.isArray()) { for
-		 * (int i = 0; i < trackers.size(); i++) { JSONObject tracker =
-		 * trackers.getJSONObject(i); if (tracker.has("name") &&
-		 * tracker.getString("name").equals("Bugs")) { if
-		 * (tracker.has("location")) { BugRepository.Builder bug =
-		 * BugRepository.newBuilder();
-		 * bug.setUrl(tracker.getString("location")); bugs.add(bug.build()); }
-		 * break; } } } if (!bugs.isEmpty())
-		 * project.addAllBugRepositories(bugs); }
-		 */
+        /*if (jsonProject.has("databases")) {
+	    	JSONArray jsonDBs = jsonProject.getJSONArray("databases");
+	    	if (jsonDBs.isArray())
+		        for (int i = 0; i < jsonDBs.size(); i++)
+		        {
+		        	project.addDatabases(jsonDBs.getString(i).trim())	;
+		        }
+	    }*/
+		/*if (jsonProject.has("licenses"))
+	    {
+	    	ArrayList<String> strLicenses = new ArrayList<String>();
+			JSONArray licenses = jsonProject.getJSONArray("licenses");
+			if (licenses.isArray())
+			{
+		        for (int i = 0; i < licenses.size(); i++)
+		        {
+		        	JSONObject license = licenses.getJSONObject(i);
+		        	if (license.has("name"))
+		        		strLicenses.add(license.getString("name"));
+		        }
+			}
+			if (!strLicenses.isEmpty())
+				project.addAllLicenses(strLicenses);
+	    }*/
+	    /*if (jsonProject.has("topics"))
+	    {
+	    	ArrayList<String> strTopics = new ArrayList<String>();
+			JSONArray topics = jsonProject.getJSONArray("topics");
+			if (topics.isArray())
+			{
+		        for (int i = 0; i < topics.size(); i++)
+		        {
+		        	String topic = topics.getString(i).trim().toLowerCase();
+		        	strTopics.add(topic);
+		        }
+			}
+			if (!strTopics.isEmpty())
+				project.addAllTopics(strTopics);
+	    }*/
+	    /*if (jsonProject.has("audiences")) {
+	    	JSONArray jsonAudiences = jsonProject.getJSONArray("audiences");
+	    	if (jsonAudiences.isArray())
+		        for (int i = 0; i < jsonAudiences.size(); i++)
+		        {
+		        	project.addAudiences(jsonAudiences.getString(i).trim())	;
+		        }
+	    }*/
+	    /*if (jsonProject.has("environments")) {
+	    	JSONArray jsonEnvs = jsonProject.getJSONArray("environments");
+	    	if (jsonEnvs.isArray())
+		        for (int i = 0; i < jsonEnvs.size(); i++)
+		        {
+		        	project.addInterfaces(jsonEnvs.getString(i).trim())	;
+		        }
+	    }*/
+	    /*if (jsonProject.has("donation"))
+	    {
+	    	JSONObject jsonDonation = jsonProject.getJSONObject("donation");
+	    	String status = jsonDonation.getString("status");
+	    	if (status.equals("Not Accepting"))
+	    		project.setDonations(false);
+	    	else if (status.equals("Accepting"))
+	    		project.setDonations(true);
+	    }*/
+		/*if (jsonProject.has("maintainers"))
+	    {
+	    	ArrayList<Person> persons = new ArrayList<Person>();
+			JSONArray maintainers = jsonProject.getJSONArray("maintainers");
+			if (maintainers.isArray())
+			{
+		        for (int i = 0; i < maintainers.size(); i++)
+		        {
+		        	JSONObject maintainer = maintainers.getJSONObject(i);
+		        	if (maintainer.has("name"))
+		        	{
+		        		Person.Builder person = Person.newBuilder();
+		        		person.setRealName(maintainer.getString("name"));
+		        		person.setUsername(maintainer.getString("name"));
+		        		person.setEmail(maintainer.getString("homepage"));
+		        		persons.add(person.build());
+		        	}
+		        }
+			}
+			if (!persons.isEmpty())
+				project.addAllMaintainers(persons);
+	    }*/
+	    /*if (jsonProject.has("developers"))
+	    {
+	    	ArrayList<Person> persons = new ArrayList<Person>();
+			JSONArray developers = jsonProject.getJSONArray("developers");
+			if (developers.isArray())
+			{
+		        for (int i = 0; i < developers.size(); i++)
+		        {
+		        	JSONObject developer = developers.getJSONObject(i);
+		        	if (developer.has("name"))
+		        	{
+		        		Person.Builder person = Person.newBuilder();
+		        		person.setRealName(developer.getString("name"));
+		        		person.setUsername(developer.getString("name"));
+		        		person.setEmail(developer.getString("homepage"));
+		        		persons.add(person.build());
+		        	}
+		        }
+			}
+			if (!persons.isEmpty())
+				project.addAllDevelopers(persons);
+	    }*/
+	    /*if (jsonProject.has("trackers"))
+	    {
+	    	ArrayList<BugRepository> bugs = new ArrayList<BugRepository>();
+			JSONArray trackers = jsonProject.getJSONArray("trackers");
+			if (trackers.isArray())
+			{
+		        for (int i = 0; i < trackers.size(); i++)
+		        {
+		        	JSONObject tracker = trackers.getJSONObject(i);
+		        	if (tracker.has("name") && tracker.getString("name").equals("Bugs"))
+		        	{
+		        		if (tracker.has("location"))
+		        		{
+			        		BugRepository.Builder bug = BugRepository.newBuilder();
+			        		bug.setUrl(tracker.getString("location"));
+			        		bugs.add(bug.build());
+		        		}
+		        		break;
+		        	}
+		        }
+			}
+			if (!bugs.isEmpty())
+				project.addAllBugRepositories(bugs);
+	    }*/
 		if (jsonProject.has(GIT_GIT_REPO)) {
 			this.gitRepository = jsonProject.get(GIT_GIT_REPO).getAsString();
 		}
