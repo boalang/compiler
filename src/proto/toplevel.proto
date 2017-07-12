@@ -75,5 +75,5 @@ message Project {
 	/** The number of times this repository has been starred */
 	optional int32 stars = 24;
 	/** The number of lines of code for each language **/
-	repeated int32 loc = 25;
+	repeated int32 programming_languages_locs = 25;
 }
