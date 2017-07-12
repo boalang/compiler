@@ -36,6 +36,9 @@ public class RepoMetadata {
 	private static final String TRACKERS = "trackers";
 	private static final String SVN_REPO = "SVNRepository";
 	private static final String GIT_REPO = "GitRepository";
+	private static final String FORKED = "forked";
+	private static final String FORKS = "forks";
+	private static final String STARS = "stars";
 
 	private static final String GIT_ID = "id";
 	private static final String GIT_NAME = "full_name";
@@ -63,8 +66,10 @@ public class RepoMetadata {
 	private static final String GIT_TRACKERS = null;
 	private static final String GIT_SVN_REPO = "svn_url";
 	private static final String GIT_GIT_REPO = "clone_url";
-
+	
+	private static final String GIT_STARS = "stargazers_count";
 	private static final String GIT_FORK = "fork";
+	private static final String GIT_FORK_COUNT = "forks_count"; 
 	/*
 	 * other git fields "size": 7954, "stargazers_count": 1856,
 	 * "watchers_count": 1856, "language": "Ruby", "has_issues": true,
@@ -97,8 +102,11 @@ public class RepoMetadata {
 	private String svnRepository;
 	private String gitRepository;
 
-	private String fork;
-
+	private boolean fork;
+	private int forkCount;
+	private int stars;
+	
+	
 	public RepoMetadata(JsonObject jsonProject) {
 		build(jsonProject);
 	}
@@ -141,6 +149,15 @@ public class RepoMetadata {
 			    programmingLanguages[i] = entry.getKey();
 			    i++;
 			}
+		}
+		if (jsonProject.has(GIT_FORK)){
+			this.fork = jsonProject.get(GIT_FORK).getAsBoolean();
+		}
+		if (jsonProject.has(GIT_FORK_COUNT)){
+			this.forkCount = jsonProject.get(GIT_FORK_COUNT).getAsInt();
+		}
+		if (jsonProject.has(GIT_STARS)){
+			this.stars = jsonProject.get(GIT_STARS).getAsInt();
 		}
 		/*
 		 * if (jsonProject.has("databases")) { JSONArray jsonDBs =
@@ -247,10 +264,13 @@ public class RepoMetadata {
 		jsonRepo.addProperty(SUMMARY_PAGE, summaryPage);
 		jsonRepo.addProperty(HOME_PAGE, homepage);
 		jsonRepo.addProperty(DESCRIPTION, description);
+		jsonRepo.addProperty(FORKED, fork);
+		jsonRepo.addProperty(FORKS, forkCount);
+		jsonRepo.addProperty(STARS, stars);
 		if (programmingLanguages != null) {
-			JsonArray langs = new JsonArray();
-			for (String lang : programmingLanguages)
-				langs.add(lang);
+			JsonObject langs = new JsonObject();
+			for (int i = 0; i < programmingLanguages.length; i++)
+				langs.addProperty(programmingLanguages[i], programmingLanguagesLOC[i]);
 			jsonRepo.add(PROGRAMMING_LANGUAGES, langs);
 		}
 		if (gitRepository != null) {
@@ -273,12 +293,21 @@ public class RepoMetadata {
 		project.setProjectUrl(summaryPage);
 		project.setHomepageUrl(homepage);
 		project.setDescription(description);
+		project.setForked(fork);
+		project.setForks(forkCount);
+		project.setStars(stars);
 		if (programmingLanguages != null) {
 			ArrayList<String> langs = new ArrayList<String>();
-			for (String lang : programmingLanguages)
-				langs.add(lang);
-			if (!langs.isEmpty())
+			ArrayList<Integer> langLoc = new ArrayList<Integer>();
+			for (int i = 0; i < programmingLanguages.length; i++){
+				langs.add(programmingLanguages[i]);
+				langLoc.add(programmingLanguagesLOC[i]);
+			}
+			if (!langs.isEmpty()){
 				project.addAllProgrammingLanguages(langs);
+				project.addAllLoc(langLoc);
+			}
+			
 		}
 		if (gitRepository != null) {
 			CodeRepository.Builder cr = CodeRepository.newBuilder();
