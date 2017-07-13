@@ -405,11 +405,11 @@ public class Java7Visitor extends ASTVisitor {
 			}
 			b.addArguments(vb.build());
 		}
-		for (Object o : node.thrownExceptions()) {
-				boa.types.Ast.Type.Builder tp = boa.types.Ast.Type.newBuilder();
-				tp.setName(((Name)o).getFullyQualifiedName());
-				tp.setKind(boa.types.Ast.TypeKind.CLASS);
-				b.addExceptionTypes(tp.build());
+		for (Object o : node.thrownExceptionTypes()) {
+			boa.types.Ast.Type.Builder tp = boa.types.Ast.Type.newBuilder();
+			tp.setName(typeName((org.eclipse.jdt.core.dom.Type) o));
+			tp.setKind(boa.types.Ast.TypeKind.CLASS);
+			b.addExceptionTypes(tp.build());
 		}
 		if (node.getBody() != null) {
 			statements.push(new ArrayList<boa.types.Ast.Statement>());
@@ -1511,7 +1511,11 @@ public class Java7Visitor extends ASTVisitor {
 	}
 
 	protected String typeName(final ArrayType t) {
-		return typeName(t.getComponentType()) + "[]";
+		StringBuilder sb = new StringBuilder();
+		sb.append(typeName(t.getElementType()));
+		for (int i = 0; i < t.getDimensions(); i++)
+			sb.append("[]");
+		return sb.toString();
 	}
 
 	protected String typeName(final ParameterizedType t) {
