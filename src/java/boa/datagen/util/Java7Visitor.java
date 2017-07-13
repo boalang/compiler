@@ -669,8 +669,10 @@ public class Java7Visitor extends ASTVisitor {
 		b.setKind(boa.types.Ast.Statement.StatementKind.EXPRESSION);
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		if (node.resolveConstructorBinding() != null) {
-			eb.setReturnType(buildType(node.resolveConstructorBinding().getReturnType()));
-			eb.setDeclaringType(buildType(node.resolveConstructorBinding().getDeclaringClass()));
+			IMethodBinding mb = node.resolveConstructorBinding();
+			eb.setReturnType(buildType(mb.getReturnType()));
+			if (mb.getDeclaringClass() != null)
+				eb.setDeclaringType(buildType(mb.getDeclaringClass()));
 		}
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.METHODCALL);
 		eb.setMethod("<init>");
@@ -888,8 +890,10 @@ public class Java7Visitor extends ASTVisitor {
 		b.setKind(boa.types.Ast.Statement.StatementKind.EXPRESSION);
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		if (node.resolveConstructorBinding() != null) {
-			eb.setReturnType(buildType(node.resolveConstructorBinding().getReturnType()));
-			eb.setDeclaringType(buildType(node.resolveConstructorBinding().getDeclaringClass()));
+			IMethodBinding mb = node.resolveConstructorBinding();
+			eb.setReturnType(buildType(mb.getReturnType()));
+			if (mb.getDeclaringClass() != null)
+				eb.setDeclaringType(buildType(mb.getDeclaringClass()));
 		}
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.METHODCALL);
 		eb.setMethod("super");
@@ -1258,8 +1262,10 @@ public class Java7Visitor extends ASTVisitor {
 	public boolean visit(FieldAccess node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		if (node.resolveFieldBinding() != null) {
-			b.setReturnType(buildType(node.resolveFieldBinding().getType()));
-			b.setDeclaringType(buildType(node.resolveFieldBinding().getDeclaringClass()));
+			IVariableBinding vb = node.resolveFieldBinding();
+			b.setReturnType(buildType(vb.getType()));
+			if (vb.getDeclaringClass() != null)
+				b.setDeclaringType(buildType(vb.getDeclaringClass()));
 		}
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.VARACCESS);
 		node.getExpression().accept(this);
@@ -1275,7 +1281,8 @@ public class Java7Visitor extends ASTVisitor {
 		if (node.resolveBinding() != null && node.resolveBinding() instanceof IVariableBinding) {
 			IVariableBinding vb = (IVariableBinding) node.resolveBinding();
 			b.setReturnType(buildType(vb.getType()));
-			b.setDeclaringType(buildType(vb.getDeclaringClass()));
+			if (vb.getDeclaringClass() != null)
+				b.setDeclaringType(buildType(vb.getDeclaringClass()));
 		}
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.VARACCESS);
 		b.setVariable(node.getFullyQualifiedName());
@@ -1289,7 +1296,8 @@ public class Java7Visitor extends ASTVisitor {
 		if (node.resolveBinding() != null && node.resolveBinding() instanceof IVariableBinding) {
 			IVariableBinding vb = (IVariableBinding) node.resolveBinding();
 			b.setReturnType(buildType(vb.getType()));
-			b.setDeclaringType(buildType(vb.getDeclaringClass()));
+			if (vb.getDeclaringClass() != null)
+				b.setDeclaringType(buildType(vb.getDeclaringClass()));
 		}
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.VARACCESS);
 		b.setVariable(node.getFullyQualifiedName());
@@ -1369,8 +1377,10 @@ public class Java7Visitor extends ASTVisitor {
 	public boolean visit(MethodInvocation node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		if (node.resolveMethodBinding() != null) {
-			b.setReturnType(buildType(node.resolveMethodBinding().getReturnType()));
-			b.setDeclaringType(buildType(node.resolveMethodBinding().getDeclaringClass()));
+			IMethodBinding mb = node.resolveMethodBinding();
+			b.setReturnType(buildType(mb.getReturnType()));
+			if (mb.getDeclaringClass() != null)
+				b.setDeclaringType(buildType(mb.getDeclaringClass()));
 		}
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.METHODCALL);
 		b.setMethod(node.getName().getFullyQualifiedName());
@@ -1469,8 +1479,10 @@ public class Java7Visitor extends ASTVisitor {
 	public boolean visit(SuperFieldAccess node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		if (node.resolveFieldBinding() != null) {
-			b.setReturnType(buildType(node.resolveFieldBinding().getType()));
-			b.setDeclaringType(buildType(node.resolveFieldBinding().getDeclaringClass()));
+			IVariableBinding vb = node.resolveFieldBinding();
+			b.setReturnType(buildType(vb.getType()));
+			if (vb.getDeclaringClass() != null)
+				b.setDeclaringType(buildType(vb.getDeclaringClass()));
 		}
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.VARACCESS);
 		String name = "super." + node.getName().getFullyQualifiedName();
@@ -1485,8 +1497,10 @@ public class Java7Visitor extends ASTVisitor {
 	public boolean visit(SuperMethodInvocation node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		if (node.resolveMethodBinding() != null) {
-			b.setReturnType(buildType(node.resolveMethodBinding().getReturnType()));
-			b.setDeclaringType(buildType(node.resolveMethodBinding().getDeclaringClass()));
+			IMethodBinding mb = node.resolveMethodBinding();
+			b.setReturnType(buildType(mb.getReturnType()));
+			if (mb.getDeclaringClass() != null)
+				b.setDeclaringType(buildType(mb.getDeclaringClass()));
 		}
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.METHODCALL);
 		String name = "super." + node.getName().getFullyQualifiedName();

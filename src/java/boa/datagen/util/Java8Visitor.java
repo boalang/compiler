@@ -202,8 +202,10 @@ public class Java8Visitor extends Java7Visitor {
 	public boolean visit(CreationReference node) {
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		if (node.resolveMethodBinding() != null) {
-			eb.setReturnType(buildType(node.resolveMethodBinding().getReturnType()));
-			eb.setDeclaringType(buildType(node.resolveMethodBinding().getDeclaringClass()));
+			IMethodBinding mb = node.resolveMethodBinding();
+			eb.setReturnType(buildType(mb.getReturnType()));
+			if (mb.getDeclaringClass() != null)
+				eb.setDeclaringType(buildType(mb.getDeclaringClass()));
 		}
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.METHOD_REFERENCE);
 		
@@ -231,8 +233,10 @@ public class Java8Visitor extends Java7Visitor {
 	public boolean visit(ExpressionMethodReference node) {
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		if (node.resolveMethodBinding() != null) {
-			eb.setReturnType(buildType(node.resolveMethodBinding().getReturnType()));
-			eb.setDeclaringType(buildType(node.resolveMethodBinding().getDeclaringClass()));
+			IMethodBinding mb = node.resolveMethodBinding();
+			eb.setReturnType(buildType(mb.getReturnType()));
+			if (mb.getDeclaringClass() != null)
+				eb.setDeclaringType(buildType(mb.getDeclaringClass()));
 		}
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.METHOD_REFERENCE);
 
@@ -257,8 +261,10 @@ public class Java8Visitor extends Java7Visitor {
 	public boolean visit(SuperMethodReference node) {
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		if (node.resolveMethodBinding() != null) {
-			eb.setReturnType(buildType(node.resolveMethodBinding().getReturnType()));
-			eb.setDeclaringType(buildType(node.resolveMethodBinding().getDeclaringClass()));
+			IMethodBinding mb = node.resolveMethodBinding();
+			eb.setReturnType(buildType(mb.getReturnType()));
+			if (mb.getDeclaringClass() != null)
+				eb.setDeclaringType(buildType(mb.getDeclaringClass()));
 		}
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.METHOD_REFERENCE);
 		
@@ -285,8 +291,10 @@ public class Java8Visitor extends Java7Visitor {
 	public boolean visit(TypeMethodReference node) {
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		if (node.resolveMethodBinding() != null) {
-			eb.setReturnType(buildType(node.resolveMethodBinding().getReturnType()));
-			eb.setDeclaringType(buildType(node.resolveMethodBinding().getDeclaringClass()));
+			IMethodBinding mb = node.resolveMethodBinding();
+			eb.setReturnType(buildType(mb.getReturnType()));
+			if (mb.getDeclaringClass() != null)
+				eb.setDeclaringType(buildType(mb.getDeclaringClass()));
 		}
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.METHOD_REFERENCE);
 		
