@@ -15,13 +15,15 @@
                            "name": "m",
                            "return_type": {
                               "name": "void",
+                              "fully_qualified_name": "void",
                               "kind": "OTHER"
                            },
                            "arguments": [
                               {
                                  "name": "this",
                                  "variable_type": {
-                                    "name": "inner.t",
+                                    "name": "t",
+                                    "fully_qualified_name": "t",
                                     "kind": "OTHER"
                                  }
                               }
@@ -32,9 +34,11 @@
                               }
                            ]
                         }
-                     ]
+                     ],
+                     "fully_qualified_name": "t.inner"
                   }
-               ]
+               ],
+               "fully_qualified_name": "t"
             }
          ]
       }

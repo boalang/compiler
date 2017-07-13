@@ -12,8 +12,28 @@
                   "variable": "String"
                }
             ],
-            "method": "compareToIgnoreCase"
+            "method": "compareToIgnoreCase",
+            "declaring_type": {
+               "name": "String",
+               "fully_qualified_name": "java.lang.String",
+               "kind": "OTHER"
+            },
+            "return_type": {
+               "name": "int",
+               "fully_qualified_name": "int",
+               "kind": "OTHER"
+            }
          }
-      ]
+      ],
+      "declaring_type": {
+         "name": "t",
+         "fully_qualified_name": "t",
+         "kind": "OTHER"
+      },
+      "return_type": {
+         "name": "void",
+         "fully_qualified_name": "void",
+         "kind": "OTHER"
+      }
    }
 }

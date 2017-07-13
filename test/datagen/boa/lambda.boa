@@ -21,6 +21,7 @@
                         "name": "a",
                         "variable_type": {
                            "name": "int",
+                           "fully_qualified_name": "int",
                            "kind": "OTHER"
                         }
                      },
@@ -28,6 +29,7 @@
                         "name": "b",
                         "variable_type": {
                            "name": "int",
+                           "fully_qualified_name": "int",
                            "kind": "OTHER"
                         }
                      }

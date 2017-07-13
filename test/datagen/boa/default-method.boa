@@ -17,6 +17,7 @@
                      ],
                      "return_type": {
                         "name": "String",
+                        "fully_qualified_name": "java.lang.String",
                         "kind": "OTHER"
                      },
                      "statements": [
@@ -25,7 +26,8 @@
                         }
                      ]
                   }
-               ]
+               ],
+               "fully_qualified_name": "I"
             }
          ]
       }
