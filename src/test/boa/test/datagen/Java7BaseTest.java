@@ -90,10 +90,9 @@ public class Java7BaseTest extends BaseTest {
 		fileContents.put("", content);
 		@SuppressWarnings("rawtypes")
 		Map options = JavaCore.getOptions();
-		options.put(JavaCore.COMPILER_COMPLIANCE, JavaCore.VERSION_1_8);
-		options.put(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, JavaCore.VERSION_1_8);
-		options.put(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_1_8);
-		ASTParser parser = ASTParser.newParser(AST.JLS8);
+		options.put(JavaCore.COMPILER_COMPLIANCE, javaVersion);
+		options.put(JavaCore.COMPILER_SOURCE, javaVersion);
+		ASTParser parser = ASTParser.newParser(astLevel);
 		parser.setCompilerOptions(options);
 		parser.setEnvironment(new String[0], new String[]{}, new String[]{}, true);
 		parser.setResolveBindings(true);
