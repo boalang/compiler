@@ -1573,6 +1573,8 @@ public class Java7Visitor extends ASTVisitor {
 
 	protected Type buildType(ITypeBinding itb) {
 		itb = itb.getTypeDeclaration();
+		if (itb.getTypeDeclaration() != null)
+			itb = itb.getTypeDeclaration();
 		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 		tb.setName(itb.getName());
 		if (itb.isInterface())
@@ -1609,15 +1611,21 @@ public class Java7Visitor extends ASTVisitor {
 
 	protected String getFullyQualifiedName(org.eclipse.jdt.core.dom.Type type) {
 		ITypeBinding tb = type.resolveBinding();
-		if (tb != null)
-			return tb.getTypeDeclaration().getQualifiedName();
+		if (tb != null) {
+			if (tb.getTypeDeclaration() != null)
+				tb = tb.getTypeDeclaration();
+			return tb.getQualifiedName();
+		}
 		return "";
 	}
 
 	protected String getFullyQualifiedName(org.eclipse.jdt.core.dom.Expression e) {
 		ITypeBinding tb = e.resolveTypeBinding();
-		if (tb != null)
-			return tb.getTypeDeclaration().getQualifiedName();
+		if (tb != null) {
+			if (tb.getTypeDeclaration() != null)
+				tb = tb.getTypeDeclaration();
+			return tb.getQualifiedName();
+		}
 		return "";
 	}
 
