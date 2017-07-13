@@ -26,6 +26,7 @@ import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.FileASTRequestor;
 
 import static org.junit.Assert.assertEquals;
 
@@ -68,28 +69,37 @@ public class Java7BaseTest extends BaseTest {
     }
 
 	protected static String parseJava(final String content) {
-		final ASTParser parser = ASTParser.newParser(astLevel);
-		parser.setKind(ASTParser.K_COMPILATION_UNIT);
-		parser.setSource(content.toCharArray());
+		final StringBuilder sb = new StringBuilder();
+		final FileASTRequestor r = new FileASTRequestor() {
+			@Override
+			public void acceptAST(String sourceFilePath, CompilationUnit cu) {
+				final ASTRoot.Builder ast = ASTRoot.newBuilder();
+				try {
+					ast.addNamespaces(visitor.getNamespaces(cu));
+					for (final String s : visitor.getImports())
+						ast.addImports(s);
+				} catch (final Exception e) {
+					System.err.println(e);
+					e.printStackTrace();
+				}
 
-		final Map options = JavaCore.getOptions();
-		JavaCore.setComplianceOptions(javaVersion, options);
+				sb.append(JsonFormat.printToString(ast.build()));
+			}
+		};
+		Map<String, String> fileContents = new HashMap<String, String>();
+		fileContents.put("", content);
+		@SuppressWarnings("rawtypes")
+		Map options = JavaCore.getOptions();
+		options.put(JavaCore.COMPILER_COMPLIANCE, JavaCore.VERSION_1_8);
+		options.put(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, JavaCore.VERSION_1_8);
+		options.put(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_1_8);
+		ASTParser parser = ASTParser.newParser(AST.JLS8);
 		parser.setCompilerOptions(options);
-
-		final CompilationUnit cu = (CompilationUnit) parser.createAST(null);
-
-		final ASTRoot.Builder ast = ASTRoot.newBuilder();
-		try {
-			ast.addNamespaces(visitor.getNamespaces(cu));
-			for (final String s : visitor.getImports())
-				ast.addImports(s);
-		} catch (final Exception e) {
-			System.err.println(e);
-			e.printStackTrace();
-			return "";
-		}
-
-		return JsonFormat.printToString(ast.build());
+		parser.setEnvironment(new String[0], new String[]{}, new String[]{}, true);
+		parser.setResolveBindings(true);
+		parser.createASTs(fileContents, new String[]{""}, null, new String[0], r, null);
+		
+		return sb.toString();
 	}
 
 	protected static String getWrapped(final String content) {
