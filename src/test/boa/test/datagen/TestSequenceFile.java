@@ -19,6 +19,8 @@ import org.junit.Test;
 import com.google.protobuf.CodedInputStream;
 
 import boa.types.Ast.ASTRoot;
+import boa.types.Code.CodeRepository;
+import boa.types.Diff.ChangedFile;
 import boa.types.Toplevel.Project;
 
 public class TestSequenceFile {
@@ -30,10 +32,10 @@ public class TestSequenceFile {
 		Writable key = new LongWritable();
 	//	Writable key = new Text();
 		BytesWritable val = new BytesWritable();
-		SequenceFile.Reader r = new SequenceFile.Reader(fileSystem, new Path("/Users/robert2/git/compiler/dataset/data"), conf);
+		SequenceFile.Reader ar = new SequenceFile.Reader(fileSystem, new Path("dataset/data"), conf);
 		//WritableComparable key = (WritableComparable) r.getKeyClass().newInstance();
 		//System.out.println("Key class is: " + key.getClass().getName());
-		while (r.next(key, val)) {
+		while (ar.next(key, val)) {
 		//	System.out.println("key is " + key);
 		//	System.out.println("next ast");
 			byte[] bytes = val.getBytes();
@@ -42,7 +44,7 @@ public class TestSequenceFile {
 			ASTRoot root = ASTRoot.parseFrom(CodedInputStream.newInstance(bytes, 0, val.getLength()));
 			System.out.println(root);
 		}
-		r.close();
+		ar.close();
 	}
 	
 	@Test
@@ -51,8 +53,9 @@ public class TestSequenceFile {
 		FileSystem fileSystem = FileSystem.get(conf);
 		Writable key = new Text();
 		BytesWritable val = new BytesWritable();
-		SequenceFile.Reader r = new SequenceFile.Reader(fileSystem, new Path("/Users/robert2/git/compiler/dataset/projects.seq"), conf);
-		while (r.next(key, val)) {
+		SequenceFile.Reader pr = new SequenceFile.Reader(fileSystem, new Path("dataset/projects.seq"), conf);
+		SequenceFile.Reader ar = new SequenceFile.Reader(fileSystem, new Path("dataset/data"), conf);
+		while (pr.next(key, val)) {
 			byte[] bytes = val.getBytes();
 			Project project = Project.parseFrom(CodedInputStream.newInstance(bytes, 0, val.getLength()));
 			String name = project.getName();
@@ -72,7 +75,21 @@ public class TestSequenceFile {
 			System.out.println(project.getHomepageUrl());
 			System.out.println(project.getProjectUrl());
 			System.out.println(project.getDescription() + "\n");
+			CodeRepository cr = project.getCodeRepositories(0);
+			for (ChangedFile cf : cr.getHeadSnapshotList()) {
+				long astkey = cf.getKey();
+				if (astkey > -1) {
+					ar.seek(astkey);
+					key = new LongWritable();
+					val = new BytesWritable();
+					ar.next(key, val);
+					bytes = val.getBytes();
+					ASTRoot root = ASTRoot.parseFrom(CodedInputStream.newInstance(bytes, 0, val.getLength()));
+					System.out.println(root);
+				}
+			}
 		}
-		r.close();
+		pr.close();
+		ar.close();
 	}
 }

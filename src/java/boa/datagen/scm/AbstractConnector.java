@@ -163,7 +163,7 @@ public abstract class AbstractConnector implements AutoCloseable {
 				} else
 					fb.setAst(ast);
 				try {
-					if (astWriter != null && astWriter.getLength() == len + 1)
+					if (astWriter != null && astWriter.getLength() > len)
 						fb.setKey(len);
 					else
 						fb.setKey(-1);
