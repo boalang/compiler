@@ -59,11 +59,15 @@ public abstract class AbstractConnector implements AutoCloseable {
 	public int getHeadCommitOffset() {
 		return this.headCommitOffset;
 	}
-	
+
 	public List<ChangedFile> buildHeadSnapshot(final String[] languages, final SequenceFile.Writer astWriter) {
+		return buildSnapshot(headCommitOffset, languages, astWriter);
+	}
+	
+	public List<ChangedFile> buildSnapshot(final int commitOffset, final String[] languages, final SequenceFile.Writer astWriter) {
 		final List<ChangedFile> snapshot = new ArrayList<ChangedFile>();
 		final Map<String, AbstractCommit> commits = new HashMap<String, AbstractCommit>();
-		getSnapshot(headCommitOffset, snapshot, commits);
+		getSnapshot(commitOffset, snapshot, commits);
 		
 		if (languages == null)
 			return snapshot;
