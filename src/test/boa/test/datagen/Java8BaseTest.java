@@ -31,7 +31,7 @@ public class Java8BaseTest extends Java7BaseTest {
 	private static void setJava8() {
 		astLevel = AST.JLS8;
 		javaVersion = JavaCore.VERSION_1_8;
-		visitor = new Java8Visitor("", new HashMap<String, Integer>());
+		visitor = new Java8Visitor("");
 	}
 
 	public static void dumpJavaWrapped(final String content) {

@@ -30,11 +30,11 @@ import static boa.datagen.util.JavaASTUtil.getFullyQualifiedName;
  * @author rdyer
  */
 public class Java7Visitor extends ASTVisitor {
-	protected HashMap<String, Integer> nameIndices;
 	
 	protected CompilationUnit root = null;
 	protected PositionInfo.Builder pos = null;
 	protected String src = null;
+	protected Map<String, Integer> declarationFile, declarationNode;
 
 	protected Namespace.Builder b = Namespace.newBuilder();
 	protected List<boa.types.Ast.Comment> comments = new ArrayList<boa.types.Ast.Comment>();
@@ -46,10 +46,15 @@ public class Java7Visitor extends ASTVisitor {
 	protected Stack<List<boa.types.Ast.Method>> methods = new Stack<List<boa.types.Ast.Method>>();
 	protected Stack<List<boa.types.Ast.Statement>> statements = new Stack<List<boa.types.Ast.Statement>>();
 
-	public Java7Visitor(String src, HashMap<String, Integer> nameIndices) {
+	public Java7Visitor(String src) {
 		super();
 		this.src = src;
-		this.nameIndices = nameIndices;
+	}
+
+	public Java7Visitor(String src, Map<String, Integer> declarationFile, Map<String, Integer> declarationNode) {
+		this(src);
+		this.declarationFile = declarationFile;
+		this.declarationNode = declarationNode;
 	}
 
 	public Namespace getNamespaces(CompilationUnit node) {
@@ -159,6 +164,7 @@ public class Java7Visitor extends ASTVisitor {
 		boa.types.Ast.Declaration.Builder b = boa.types.Ast.Declaration.newBuilder();
 		b.setName(node.getName().getIdentifier());
 		b.setFullyQualifiedName(getFullyQualifiedName(node));
+		setDeclaringClass(b, node.resolveBinding());
 		if (node.isInterface())
 			b.setKind(boa.types.Ast.TypeKind.INTERFACE);
 		else
@@ -183,27 +189,21 @@ public class Java7Visitor extends ASTVisitor {
 				name = name + " extends " + bounds;
 			tb.setName(name);
 			tb.setKind(boa.types.Ast.TypeKind.GENERIC);
-			String fqn = getFullyQualifiedName(((TypeParameter) t).getName());
-			if (!fqn.isEmpty())
-				tb.setFullyQualifiedName(fqn);
+			setTypeBinding(tb, ((TypeParameter) t).getName());
 			b.addGenericParameters(tb.build());
 		}
 		if (node.getSuperclassType() != null) {
 			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 			tb.setName(typeName(node.getSuperclassType()));
 			tb.setKind(boa.types.Ast.TypeKind.CLASS);
-			String fqn = getFullyQualifiedName(node.getSuperclassType());
-			if (!fqn.isEmpty())
-				tb.setFullyQualifiedName(fqn);
+			setTypeBinding(tb, node.getSuperclassType());
 			b.addParents(tb.build());
 		}
 		for (Object t : node.superInterfaceTypes()) {
 			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 			tb.setName(typeName((org.eclipse.jdt.core.dom.Type) t));
 			tb.setKind(boa.types.Ast.TypeKind.INTERFACE);
-			String fqn = getFullyQualifiedName((org.eclipse.jdt.core.dom.Type) t);
-			if (!fqn.isEmpty())
-				tb.setFullyQualifiedName(fqn);
+			setTypeBinding(tb, (org.eclipse.jdt.core.dom.Type) t);
 			b.addParents(tb.build());
 		}
 		for (Object d : node.bodyDeclarations()) {
@@ -272,6 +272,7 @@ public class Java7Visitor extends ASTVisitor {
 		b.setName(node.getName().getIdentifier());
 		b.setKind(boa.types.Ast.TypeKind.ENUM);
 		b.setFullyQualifiedName(getFullyQualifiedName(node));
+		setDeclaringClass(b, node.resolveBinding());
 		for (Object c : node.enumConstants()) {
 			// TODO EnumConstantDeclaration
 		}
@@ -279,9 +280,7 @@ public class Java7Visitor extends ASTVisitor {
 			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 			tb.setName(typeName((org.eclipse.jdt.core.dom.Type) t));
 			tb.setKind(boa.types.Ast.TypeKind.INTERFACE);
-			String fqn = getFullyQualifiedName((org.eclipse.jdt.core.dom.Type) t);
-			if (!fqn.isEmpty())
-				tb.setFullyQualifiedName(fqn);
+			setTypeBinding(tb, (org.eclipse.jdt.core.dom.Type) t);
 			b.addParents(tb.build());
 		}
 		for (Object d : node.bodyDeclarations()) {
@@ -317,6 +316,7 @@ public class Java7Visitor extends ASTVisitor {
 		b.setName(node.getName().getFullyQualifiedName());
 		b.setKind(boa.types.Ast.TypeKind.ANNOTATION);
 		b.setFullyQualifiedName(getFullyQualifiedName(node));
+		setDeclaringClass(b, node.resolveBinding());
 		for (Object m : node.modifiers()) {
 			if (((IExtendedModifier)m).isAnnotation())
 				((Annotation)m).accept(this);
@@ -352,6 +352,105 @@ public class Java7Visitor extends ASTVisitor {
 	}
 
 	//////////////////////////////////////////////////////////////
+	// Utilities
+
+	protected void setDeclaringClass(Declaration.Builder db, ITypeBinding binding) {
+		if (declarationNode == null || binding == null)
+			return;
+		ITypeBinding tb = binding.getDeclaringClass();
+		if (tb != null) {
+			if (tb.getTypeDeclaration() != null)
+				tb = tb.getTypeDeclaration();
+			String key = tb.getKey();
+			Integer index = declarationNode.get(key);
+			if (index != null)
+				db.setDeclaringClass(index);
+		}
+	}
+
+	protected void setDeclaringClass(Method.Builder b, IMethodBinding binding) {
+		if (declarationNode == null || binding == null)
+			return;
+		ITypeBinding tb = binding.getDeclaringClass();
+		if (tb == null)
+			return;
+		if (tb.getTypeDeclaration() != null)
+			tb = tb.getTypeDeclaration();
+		String key = tb.getKey();
+		Integer index = declarationNode.get(key);
+		if (index != null)
+			b.setDeclaringType(index);
+	}
+
+	protected void setDeclaringClass(Variable.Builder b, IVariableBinding binding) {
+		if (declarationNode == null || binding == null)
+			return;
+		ITypeBinding tb = binding.getDeclaringClass();
+		if (tb == null)
+			return;
+		if (tb.getTypeDeclaration() != null)
+			tb = tb.getTypeDeclaration();
+		String key = tb.getKey();
+		Integer index = declarationNode.get(key);
+		if (index != null)
+			b.setDeclaringClass(index);
+	}
+
+	protected void setTypeBinding(boa.types.Ast.Type.Builder b, org.eclipse.jdt.core.dom.Type type) {
+		ITypeBinding tb = type.resolveBinding();
+		if (tb != null) {
+			if (tb.getTypeDeclaration() != null)
+				tb = tb.getTypeDeclaration();
+			if (tb.isInterface())
+				b.setKind(boa.types.Ast.TypeKind.INTERFACE);
+			else if (tb.isEnum())
+				b.setKind(boa.types.Ast.TypeKind.ENUM);
+			else if (tb.isAnnotation())
+				b.setKind(boa.types.Ast.TypeKind.ANNOTATION);
+			else if (tb.isAnonymous())
+				b.setKind(boa.types.Ast.TypeKind.ANONYMOUS);
+			else 
+				b.setKind(boa.types.Ast.TypeKind.OTHER);
+			b.setFullyQualifiedName(tb.getQualifiedName());
+			if (declarationFile != null) {
+				String key = tb.getKey();
+				Integer index = declarationFile.get(key);
+				if (index != null) {
+					b.setDeclarationFile(index);
+					b.setDeclaration(declarationNode.get(key));
+				}
+			}
+		}
+	}
+
+	protected void setTypeBinding(boa.types.Ast.Type.Builder b, org.eclipse.jdt.core.dom.Expression e) {
+		ITypeBinding tb = e.resolveTypeBinding();
+		if (tb != null) {
+			if (tb.getTypeDeclaration() != null)
+				tb = tb.getTypeDeclaration();
+			if (tb.isInterface())
+				b.setKind(boa.types.Ast.TypeKind.INTERFACE);
+			else if (tb.isEnum())
+				b.setKind(boa.types.Ast.TypeKind.ENUM);
+			else if (tb.isAnnotation())
+				b.setKind(boa.types.Ast.TypeKind.ANNOTATION);
+			else if (tb.isAnonymous())
+				b.setKind(boa.types.Ast.TypeKind.ANONYMOUS);
+			else 
+				b.setKind(boa.types.Ast.TypeKind.OTHER);
+			b.setFullyQualifiedName(tb.getQualifiedName());
+			if (declarationFile != null) {
+				String key = tb.getKey();
+				Integer index = declarationFile.get(key);
+				if (index != null) {
+					b.setDeclarationFile(index);
+					b.setDeclaration(declarationNode.get(key));
+				}
+			}
+		}
+	}
+
+	//////////////////////////////////////////////////////////////
 	// Field/Method Declarations
 
 	@Override
@@ -376,9 +475,7 @@ public class Java7Visitor extends ASTVisitor {
 				name += "[]";
 			tb.setName(name);
 			tb.setKind(boa.types.Ast.TypeKind.OTHER);
-			String fqn = getFullyQualifiedName(node.getReturnType2());
-			if (!fqn.isEmpty())
-				tb.setFullyQualifiedName(fqn);
+			setTypeBinding(tb, node.getReturnType2());
 			b.setReturnType(tb.build());
 		} else {
 			tb.setName("void");
@@ -399,9 +496,7 @@ public class Java7Visitor extends ASTVisitor {
 				name = name + " extends " + bounds;
 			tp.setName(name);
 			tp.setKind(boa.types.Ast.TypeKind.GENERIC);
-			String fqn = getFullyQualifiedName(((TypeParameter)t).getName());
-			if (!fqn.isEmpty())
-				tp.setFullyQualifiedName(fqn);
+			setTypeBinding(tp, ((TypeParameter)t).getName());
 			b.addGenericParameters(tp.build());
 		}
 		for (Object o : node.parameters()) {
@@ -423,9 +518,7 @@ public class Java7Visitor extends ASTVisitor {
 				name += "...";
 			tp.setName(name);
 			tp.setKind(boa.types.Ast.TypeKind.OTHER);
-			String fqn = getFullyQualifiedName(ex.getType());
-			if (!fqn.isEmpty())
-				tp.setFullyQualifiedName(fqn);
+			setTypeBinding(tp, ex.getType());
 			vb.setVariableType(tp.build());
 			if (ex.getInitializer() != null) {
 				ex.getInitializer().accept(this);
@@ -437,9 +530,7 @@ public class Java7Visitor extends ASTVisitor {
 			boa.types.Ast.Type.Builder tp = boa.types.Ast.Type.newBuilder();
 			tp.setName(typeName((org.eclipse.jdt.core.dom.Type) o));
 			tp.setKind(boa.types.Ast.TypeKind.CLASS);
-			String fqn = getFullyQualifiedName((org.eclipse.jdt.core.dom.Type) o);
-			if (!fqn.isEmpty())
-				tp.setFullyQualifiedName(fqn);
+			setTypeBinding(tp, (org.eclipse.jdt.core.dom.Type) o);
 			b.addExceptionTypes(tp.build());
 		}
 		if (node.getBody() != null) {
@@ -448,6 +539,7 @@ public class Java7Visitor extends ASTVisitor {
 			for (boa.types.Ast.Statement s : statements.pop())
 				b.addStatements(s);
 		}
+		setDeclaringClass(b, node.resolveBinding());
 		list.add(b.build());
 		return false;
 	}
@@ -467,9 +559,7 @@ public class Java7Visitor extends ASTVisitor {
 		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 		tb.setName(typeName(node.getType()));
 		tb.setKind(boa.types.Ast.TypeKind.OTHER);
-		String fqn = getFullyQualifiedName(node.getType());
-		if (!fqn.isEmpty())
-			tb.setFullyQualifiedName(fqn);
+		setTypeBinding(tb, node.getType());
 		b.setReturnType(tb.build());
 		if (node.getDefault() != null) {
 			boa.types.Ast.Statement.Builder sb = boa.types.Ast.Statement.newBuilder();
@@ -478,6 +568,7 @@ public class Java7Visitor extends ASTVisitor {
 			sb.setExpression(expressions.pop());
 			b.addStatements(sb.build());
 		}
+		setDeclaringClass(b, node.resolveBinding());
 		list.add(b.build());
 		return false;
 	}
@@ -502,14 +593,13 @@ public class Java7Visitor extends ASTVisitor {
 				name += "[]";
 			tb.setName(name);
 			tb.setKind(boa.types.Ast.TypeKind.OTHER);
-			String fqn = getFullyQualifiedName(node.getType());
-			if (!fqn.isEmpty())
-				tb.setFullyQualifiedName(fqn);
+			setTypeBinding(tb, node.getType());
 			b.setVariableType(tb.build());
 			if (f.getInitializer() != null) {
 				f.getInitializer().accept(this);
 				b.setInitializer(expressions.pop());
 			}
+			setDeclaringClass(b, f.resolveBinding());
 			list.add(b.build());
 		}
 		return false;
@@ -667,9 +757,7 @@ public class Java7Visitor extends ASTVisitor {
 			name += "[]";
 		tb.setName(name);
 		tb.setKind(boa.types.Ast.TypeKind.OTHER);
-		String fqn = getFullyQualifiedName(ex.getType());
-		if (!fqn.isEmpty())
-			tb.setFullyQualifiedName(fqn);
+		setTypeBinding(tb, ex.getType());
 		vb.setVariableType(tb.build());
 		if (ex.getInitializer() != null) {
 			ex.getInitializer().accept(this);
@@ -707,9 +795,7 @@ public class Java7Visitor extends ASTVisitor {
 			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 			tb.setName(typeName((org.eclipse.jdt.core.dom.Type) t));
 			tb.setKind(boa.types.Ast.TypeKind.GENERIC);
-			String fqn = getFullyQualifiedName((org.eclipse.jdt.core.dom.Type) t);
-			if (!fqn.isEmpty())
-				tb.setFullyQualifiedName(fqn);
+			setTypeBinding(tb, (org.eclipse.jdt.core.dom.Type) t);
 			eb.addGenericParameters(tb.build());
 		}
 		b.setExpression(eb.build());
@@ -777,9 +863,7 @@ public class Java7Visitor extends ASTVisitor {
 			name += "[]";
 		tb.setName(name);
 		tb.setKind(boa.types.Ast.TypeKind.OTHER);
-		String fqn = getFullyQualifiedName(ex.getType());
-		if (!fqn.isEmpty())
-			tb.setFullyQualifiedName(fqn);
+		setTypeBinding(tb, ex.getType());
 		vb.setVariableType(tb.build());
 		if (ex.getInitializer() != null) {
 			ex.getInitializer().accept(this);
@@ -936,10 +1020,7 @@ public class Java7Visitor extends ASTVisitor {
 			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 			tb.setName(typeName((org.eclipse.jdt.core.dom.Type) t));
 			tb.setKind(boa.types.Ast.TypeKind.GENERIC);
-			String fqn = getFullyQualifiedName((org.eclipse.jdt.core.dom.Type) t);
-			if (!fqn.isEmpty())
-				tb.setFullyQualifiedName(fqn);
-			tb.setFullyQualifiedName(getFullyQualifiedName((org.eclipse.jdt.core.dom.Type) t));
+			setTypeBinding(tb, (org.eclipse.jdt.core.dom.Type) t);
 			eb.addGenericParameters(tb.build());
 		}
 		b.setExpression(eb.build());
@@ -1077,9 +1158,7 @@ public class Java7Visitor extends ASTVisitor {
 				name += "[]";
 			tb.setName(name);
 			tb.setKind(boa.types.Ast.TypeKind.OTHER);
-			String fqn = getFullyQualifiedName(node.getType());
-			if (!fqn.isEmpty())
-				tb.setFullyQualifiedName(fqn);
+			setTypeBinding(tb, node.getType());
 			vb.setVariableType(tb.build());
 			if (f.getInitializer() != null) {
 				f.getInitializer().accept(this);
@@ -1135,9 +1214,7 @@ public class Java7Visitor extends ASTVisitor {
 		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 		tb.setName(typeName(node.getType()));
 		tb.setKind(boa.types.Ast.TypeKind.OTHER);
-		String fqn = getFullyQualifiedName(node.getType());
-		if (!fqn.isEmpty())
-			tb.setFullyQualifiedName(fqn);
+		setTypeBinding(tb, node.getType());
 		b.setNewType(tb.build());
 		for (Object e : node.dimensions()) {
 			((org.eclipse.jdt.core.dom.Expression)e).accept(this);
@@ -1227,9 +1304,7 @@ public class Java7Visitor extends ASTVisitor {
 		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 		tb.setName(typeName(node.getType()));
 		tb.setKind(boa.types.Ast.TypeKind.OTHER);
-		String fqn = getFullyQualifiedName(node.getType());
-		if (!fqn.isEmpty())
-			tb.setFullyQualifiedName(fqn);
+		setTypeBinding(tb, node.getType());
 		b.setNewType(tb.build());
 		node.getExpression().accept(this);
 		b.addExpressions(expressions.pop());
@@ -1253,17 +1328,13 @@ public class Java7Visitor extends ASTVisitor {
 		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 		tb.setName(typeName(node.getType()));
 		tb.setKind(boa.types.Ast.TypeKind.CLASS);
-		String fqn = getFullyQualifiedName(node.getType());
-		if (!fqn.isEmpty())
-			tb.setFullyQualifiedName(fqn);
+		setTypeBinding(tb, node.getType());
 		b.setNewType(tb.build());
 		for (Object t : node.typeArguments()) {
 			boa.types.Ast.Type.Builder gtb = boa.types.Ast.Type.newBuilder();
 			gtb.setName(typeName((org.eclipse.jdt.core.dom.Type) t));
 			gtb.setKind(boa.types.Ast.TypeKind.GENERIC);
-			fqn = getFullyQualifiedName((org.eclipse.jdt.core.dom.Type) t);
-			if (!fqn.isEmpty())
-				gtb.setFullyQualifiedName(fqn);
+			setTypeBinding(gtb, (org.eclipse.jdt.core.dom.Type) t);
 			b.addGenericParameters(gtb.build());
 		}
 		if (node.getExpression() != null) {
@@ -1407,9 +1478,7 @@ public class Java7Visitor extends ASTVisitor {
 		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 		tb.setName(typeName(node.getRightOperand()));
 		tb.setKind(boa.types.Ast.TypeKind.OTHER);
-		String fqn = getFullyQualifiedName(node.getRightOperand());
-		if (!fqn.isEmpty())
-			tb.setFullyQualifiedName(fqn);
+		setTypeBinding(tb, node.getRightOperand());
 		b.setNewType(tb.build());
 		expressions.push(b.build());
 		return false;
@@ -1438,9 +1507,7 @@ public class Java7Visitor extends ASTVisitor {
 			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 			tb.setName(typeName((org.eclipse.jdt.core.dom.Type) t));
 			tb.setKind(boa.types.Ast.TypeKind.GENERIC);
-			String fqn = getFullyQualifiedName((org.eclipse.jdt.core.dom.Type) t);
-			if (!fqn.isEmpty())
-				tb.setFullyQualifiedName(fqn);
+			setTypeBinding(tb, (org.eclipse.jdt.core.dom.Type) t);
 			b.addGenericParameters(tb.build());
 		}
 		expressions.push(b.build());
@@ -1559,10 +1626,7 @@ public class Java7Visitor extends ASTVisitor {
 			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 			tb.setName(typeName((org.eclipse.jdt.core.dom.Type) t));
 			tb.setKind(boa.types.Ast.TypeKind.GENERIC);
-			String fqn = getFullyQualifiedName((org.eclipse.jdt.core.dom.Type) t);
-			if (!fqn.isEmpty())
-				tb.setFullyQualifiedName(fqn);
-			tb.setFullyQualifiedName(getFullyQualifiedName((org.eclipse.jdt.core.dom.Type) t));
+			setTypeBinding(tb, (org.eclipse.jdt.core.dom.Type) t);
 			b.addGenericParameters(tb.build());
 		}
 		expressions.push(b.build());
@@ -1617,9 +1681,7 @@ public class Java7Visitor extends ASTVisitor {
 				name += "[]";
 			tb.setName(name);
 			tb.setKind(boa.types.Ast.TypeKind.OTHER);
-			String fqn = getFullyQualifiedName(node.getType());
-			if (!fqn.isEmpty())
-				tb.setFullyQualifiedName(fqn);
+			setTypeBinding(tb, node.getType());
 			b.setVariableType(tb.build());
 			if (f.getInitializer() != null) {
 				f.getInitializer().accept(this);

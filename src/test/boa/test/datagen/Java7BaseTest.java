@@ -43,7 +43,7 @@ public class Java7BaseTest extends BaseTest {
     @SuppressWarnings("deprecation")
 	protected static int astLevel = AST.JLS4;
 	protected static String javaVersion = JavaCore.VERSION_1_7;
-	protected static Java7Visitor visitor = new Java7Visitor("", new HashMap<String, Integer>());
+	protected static Java7Visitor visitor = new Java7Visitor("");
 
 	protected static void dumpJavaWrapped(final String content) {
         dumpJava(getWrapped(content));

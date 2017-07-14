@@ -26,6 +26,7 @@ import org.eclipse.jdt.core.dom.ASTVisitor;
 public class JavaErrorCheckVisitor extends ASTVisitor {
 	public boolean hasError = false;
 
+	@Override
 	public boolean preVisit2(ASTNode node) {
 		if ((node.getFlags() & ASTNode.MALFORMED) != 0)
 			hasError = true;

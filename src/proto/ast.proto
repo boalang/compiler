@@ -191,7 +191,7 @@ message Variable {
 	/** */
 	optional int32 key = 9;
 	/** the key of the node containing the type declaration (in the same AST) declaring this field. null if this is a local variable */
-	optional int32 declaration = 10;
+	optional int32 declaring_class = 10;
 }
 
 /** A single statement */

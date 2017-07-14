@@ -361,9 +361,9 @@ public abstract class AbstractCommit {
 				//final CommentsRoot.Builder comments = CommentsRoot.newBuilder();
 				final Java7Visitor visitor;
 				if (astLevel == AST.JLS8)
-					visitor = new Java8Visitor(content, connector.nameIndices);
+					visitor = new Java8Visitor(content);
 				else
-					visitor = new Java7Visitor(content, connector.nameIndices);
+					visitor = new Java7Visitor(content);
 				try {
 					ast.addNamespaces(visitor.getNamespaces(cu));
 					for (final String s : visitor.getImports())

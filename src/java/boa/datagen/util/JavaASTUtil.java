@@ -10,7 +10,6 @@ import boa.types.Ast.Type;
 public class JavaASTUtil {
 
 	public static Type buildType(ITypeBinding itb) {
-		itb = itb.getTypeDeclaration();
 		if (itb.getTypeDeclaration() != null)
 			itb = itb.getTypeDeclaration();
 		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
@@ -45,26 +44,6 @@ public class JavaASTUtil {
 				return "";
 		}
 		return sb.toString();
-	}
-
-	public static String getFullyQualifiedName(org.eclipse.jdt.core.dom.Type type) {
-		ITypeBinding tb = type.resolveBinding();
-		if (tb != null) {
-			if (tb.getTypeDeclaration() != null)
-				tb = tb.getTypeDeclaration();
-			return tb.getQualifiedName();
-		}
-		return "";
-	}
-
-	public static String getFullyQualifiedName(org.eclipse.jdt.core.dom.Expression e) {
-		ITypeBinding tb = e.resolveTypeBinding();
-		if (tb != null) {
-			if (tb.getTypeDeclaration() != null)
-				tb = tb.getTypeDeclaration();
-			return tb.getQualifiedName();
-		}
-		return "";
 	}
 
 }
