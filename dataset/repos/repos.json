@@ -107,7 +107,14 @@
 			"site_admin": false
 		},
 		"network_count": 18,
-		"subscribers_count": 13
+		"subscribers_count": 13,
+		"language_list": {
+			"Java": 1293265,
+			"GAP": 46795,
+			"Protocol Buffer": 25012,
+			"Batchfile": 694,
+			"Shell": 520
+		}
 	},
 	{
 		"id": 63797567,
@@ -217,7 +224,14 @@
 			"site_admin": false
 		},
 		"network_count": 0,
-		"subscribers_count": 5
+		"subscribers_count": 5,
+		"language_list": {
+			"Java": 1394825,
+			"GAP": 40449,
+			"Protocol Buffer": 11268,
+			"Shell": 402,
+			"Batchfile": 188
+		}
 	},
 	{
 		"id": 106310,"name":"junit4",
@@ -326,6 +340,12 @@
 			"site_admin": false
 		},
 		"network_count": 2392,
-		"subscribers_count": 622
+		"subscribers_count": 622,
+		"language_list": {
+			"Java": 1362481,
+			"HTML": 12637,
+			"JavaScript": 318,
+			"CSS": 78
+		}
 	}
 ]
