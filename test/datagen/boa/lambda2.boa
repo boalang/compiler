@@ -19,6 +19,7 @@
                      "name": "x",
                      "variable_type": {
                         "name": "int",
+                        "fully_qualified_name": "int",
                         "kind": "OTHER"
                      }
                   }

@@ -12,6 +12,16 @@
             },
             "method": "new"
          }
-      ]
+      ],
+      "declaring_type": {
+         "name": "t",
+         "fully_qualified_name": "t",
+         "kind": "OTHER"
+      },
+      "return_type": {
+         "name": "void",
+         "fully_qualified_name": "void",
+         "kind": "OTHER"
+      }
    }
 }
