@@ -131,6 +131,13 @@ public abstract class AbstractConnector implements AutoCloseable {
 				ChangedFile cf = changedFiles.get(sourceFilePath);
 				ChangedFile.Builder fb = ChangedFile.newBuilder(cf);
 				
+				long len = -1;
+				if (astWriter != null) {
+					try {
+						len = astWriter.getLength();
+					} catch (IOException e1) {}
+				}
+				
 				String content = fileContents.get(sourceFilePath);
 				final Java8Visitor visitor = new Java8Visitor(content, declarationFile, declarationNode);
 				final ASTRoot.Builder ast = ASTRoot.newBuilder();
@@ -147,15 +154,22 @@ public abstract class AbstractConnector implements AutoCloseable {
 					e.printStackTrace();
 					continue;
 				}
-				if (astWriter != null) {
+				if (astWriter != null && len > -1) {
 					try {
-						astWriter.append(new LongWritable(snapshot.size()), new BytesWritable(ast.build().toByteArray()));
+						astWriter.append(new LongWritable(len), new BytesWritable(ast.build().toByteArray()));
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
 				} else
 					fb.setAst(ast);
-				
+				try {
+					if (astWriter != null && astWriter.getLength() == len + 1)
+						fb.setKey(len);
+					else
+						fb.setKey(-1);
+				} catch (IOException e) {
+					fb.setKey(-1);
+				}
 				snapshot.add(fb.build());
 			}
 		}
