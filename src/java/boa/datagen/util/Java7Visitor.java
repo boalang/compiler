@@ -165,6 +165,7 @@ public class Java7Visitor extends ASTVisitor {
 		b.setName(node.getName().getIdentifier());
 		b.setFullyQualifiedName(getFullyQualifiedName(node));
 		setDeclaringClass(b, node.resolveBinding());
+		b.setKey((int) node.getProperty("i"));
 		if (node.isInterface())
 			b.setKind(boa.types.Ast.TypeKind.INTERFACE);
 		else
@@ -273,6 +274,7 @@ public class Java7Visitor extends ASTVisitor {
 		b.setKind(boa.types.Ast.TypeKind.ENUM);
 		b.setFullyQualifiedName(getFullyQualifiedName(node));
 		setDeclaringClass(b, node.resolveBinding());
+		b.setKey((int) node.getProperty("i"));
 		for (Object c : node.enumConstants()) {
 			// TODO EnumConstantDeclaration
 		}
@@ -317,6 +319,7 @@ public class Java7Visitor extends ASTVisitor {
 		b.setKind(boa.types.Ast.TypeKind.ANNOTATION);
 		b.setFullyQualifiedName(getFullyQualifiedName(node));
 		setDeclaringClass(b, node.resolveBinding());
+		b.setKey((int) node.getProperty("i"));
 		for (Object m : node.modifiers()) {
 			if (((IExtendedModifier)m).isAnnotation())
 				((Annotation)m).accept(this);
