@@ -364,7 +364,7 @@ public class Java7Visitor extends ASTVisitor {
 			String key = tb.getKey();
 			Integer index = declarationNode.get(key);
 			if (index != null)
-				db.setDeclaringClass(index);
+				db.setDeclaringType(index);
 		}
 	}
 
@@ -393,7 +393,7 @@ public class Java7Visitor extends ASTVisitor {
 		String key = tb.getKey();
 		Integer index = declarationNode.get(key);
 		if (index != null)
-			b.setDeclaringClass(index);
+			b.setDeclaringType(index);
 	}
 
 	protected void setTypeBinding(boa.types.Ast.Type.Builder b, org.eclipse.jdt.core.dom.Type type) {

@@ -82,7 +82,7 @@ message Declaration {
 	/** The fully qualified name of this type/interface */
 	optional string fully_qualified_name = 14;
 	/** the key of the declaring class in the same AST */
-	optional int32 declaring_class = 15;
+	optional int32 declaring_type = 15;
 }
 
 /** The kinds of types in an AST */
@@ -191,7 +191,7 @@ message Variable {
 	/** */
 	optional int32 key = 9;
 	/** the key of the node containing the type declaration (in the same AST) declaring this field. null if this is a local variable */
-	optional int32 declaring_class = 10;
+	optional int32 declaring_type = 10;
 }
 
 /** A single statement */
