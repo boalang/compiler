@@ -17,6 +17,7 @@ import org.apache.hadoop.io.WritableComparable;
 import org.junit.Test;
 
 import com.google.protobuf.CodedInputStream;
+import com.googlecode.protobuf.format.JsonFormat;
 
 import boa.types.Ast.ASTRoot;
 import boa.types.Code.CodeRepository;
@@ -76,13 +77,14 @@ public class TestSequenceFile {
 			System.out.println(project.getProjectUrl());
 			System.out.println(project.getDescription() + "\n");
 			CodeRepository cr = project.getCodeRepositories(0);
+			assertTrue(cr.getHeadSnapshotCount() > 0);
 			for (ChangedFile cf : cr.getHeadSnapshotList()) {
-				long astkey = cf.getKey();
-				if (astkey > -1) {
-					ar.seek(astkey);
-					key = new LongWritable();
+				long astpos = cf.getKey();
+				if (astpos > -1) {
+					ar.seek(astpos);
+					Writable astkey = new LongWritable();
 					val = new BytesWritable();
-					ar.next(key, val);
+					ar.next(astkey, val);
 					bytes = val.getBytes();
 					ASTRoot root = ASTRoot.parseFrom(CodedInputStream.newInstance(bytes, 0, val.getLength()));
 					System.out.println(root);
