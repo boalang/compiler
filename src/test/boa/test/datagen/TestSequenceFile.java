@@ -2,7 +2,6 @@ package boa.test.datagen;
 
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
-import org.hamcrest.*;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -17,15 +16,12 @@ import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
-import org.apache.hadoop.io.WritableComparable;
 import org.junit.Test;
 
 import com.google.protobuf.CodedInputStream;
 import com.google.protobuf.Message;
 import com.google.protobuf.Descriptors.FieldDescriptor;
 import com.google.protobuf.Descriptors.FieldDescriptor.Type;
-import com.googlecode.protobuf.format.JsonFormat;
-
 import boa.datagen.util.ProtoMessageVisitor;
 import boa.types.Ast.ASTRoot;
 import boa.types.Ast.Declaration;
@@ -38,32 +34,11 @@ public class TestSequenceFile {
 	private FileSystem fileSystem;
 	private SequenceFile.Reader pr;
 	private SequenceFile.Reader ar;
-	private Declaration decl = null;
 		
 	public TestSequenceFile() throws IOException {
 		fileSystem = FileSystem.get(conf);
 		pr = new SequenceFile.Reader(fileSystem, new Path("dataset/projects.seq"), conf);
 		ar = new SequenceFile.Reader(fileSystem, new Path("dataset/data"), conf);
-	}
-	
-	@Test
-	public void astPrint() throws IOException{
-		Writable key = new LongWritable();
-	//	Writable key = new Text();
-		BytesWritable val = new BytesWritable();
-		//WritableComparable key = (WritableComparable) r.getKeyClass().newInstance();
-		//System.out.println("Key class is: " + key.getClass().getName());
-		while (ar.next(key, val)) {
-		//	System.out.println("key is " + key);
-		//	System.out.println("next ast");
-			byte[] bytes = val.getBytes();
-		//	System.out.print("Parse after writing to sequence file: ");
-			//System.out.println(ASTRoot.parseFrom(bytes).getImportsList());
-			ASTRoot root = ASTRoot.parseFrom(CodedInputStream.newInstance(bytes, 0, val.getLength()));
-			System.out.println(root);
-		}
-		pr.close();
-		ar.close();
 	}
 	
 	@Test
@@ -112,7 +87,7 @@ public class TestSequenceFile {
 								String fqn = type.getFullyQualifiedName();
 								final int fileId = type.getDeclarationFile(), nodeId = type.getDeclaration();
 								if (fqn != null && !fqn.isEmpty() && fileId > 0) {
-									decl = null;
+									Declaration decl = null;
 									HashMap<Integer, Declaration> declarations = fileNodeDeclaration.get(fileId);
 									if (declarations != null) {
 										decl = declarations.get(nodeId);
@@ -122,17 +97,16 @@ public class TestSequenceFile {
 									}
 									if (decl == null) {
 										ChangedFile dcf = cr.getHeadSnapshot(fileId);
-										decl = getDeclaration(dcf, nodeId);
+										decl = getDeclaration(dcf, nodeId, declarations);
 									}
 									System.out.println(fqn);
 									assertEquals(true, decl != null && fqn.equals(decl.getFullyQualifiedName()));
-									declarations.put(nodeId, decl);
 								}
 							}
 							return true;
 						}
 
-						private Declaration getDeclaration(final ChangedFile cf, final int nodeId) {
+						private Declaration getDeclaration(final ChangedFile cf, final int nodeId, final HashMap<Integer, Declaration> declarations) {
 							long astpos = cf.getKey();
 							if (astpos > -1) {
 								try {
@@ -143,14 +117,21 @@ public class TestSequenceFile {
 									byte[] bytes = val.getBytes();
 									ASTRoot root = ASTRoot.parseFrom(CodedInputStream.newInstance(bytes, 0, val.getLength()));
 									ProtoMessageVisitor v = new ProtoMessageVisitor() {
+										private boolean found = false;
+										
 										@Override
 										public boolean preVisit(Message message) {
-											if (decl != null)
+											if (found)
 												return false;
 											if (message instanceof Declaration) {
-												Declaration type = (Declaration) message;
+												Declaration temp = (Declaration) message;
+												Declaration type = declarations.get(temp.getKey());
+												if (type == null) {
+													type = Declaration.newBuilder(temp).build();
+													declarations.put(type.getKey(), type);
+												}
 												if (type.getKey() == nodeId) {
-													decl = type;
+													found = true;
 													return false;
 												}
 											}
@@ -160,7 +141,7 @@ public class TestSequenceFile {
 									v.visit(root);
 								} catch (IOException e) {}
 							}
-							return decl;
+							return declarations.get(nodeId);
 						}
 					};
 					v.visit(root);
@@ -171,6 +152,7 @@ public class TestSequenceFile {
 		ar.close();
 	}
 
+	@SuppressWarnings("unused")
 	private HashMap<Integer, HashMap<Integer, Declaration>> collectDeclarations(List<ChangedFile> snapshot) throws IOException {
 		HashMap<Integer, HashMap<Integer, Declaration>> fileNodeDeclaration = new HashMap<Integer, HashMap<Integer, Declaration>>();
 		for (int fileIndex = 0; fileIndex < snapshot.size(); fileIndex++) {
