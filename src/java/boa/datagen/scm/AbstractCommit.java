@@ -258,7 +258,7 @@ public abstract class AbstractCommit {
 				System.err.println("Accepted ES1: revision " + id + ": file " + path);
 		}
 		try {
-			if (astWriter.getLength() == len + 1)
+			if (astWriter.getLength() > len)
 				fb.setKey(len);
 			else
 				fb.setKey(-1);
