@@ -311,15 +311,12 @@ public abstract class AbstractCommit {
 					return false;
 				}
 
-				if (astWriter != null) {
-					try {
-					//	System.out.println("writing=" + count + "\t" + path);
-						astWriter.append(new LongWritable(astWriter.getLength()), new BytesWritable(ast.build().toByteArray()));
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				} else
-					fb.setAst(ast);
+				try {
+				//	System.out.println("writing=" + count + "\t" + path);
+					astWriter.append(new LongWritable(astWriter.getLength()), new BytesWritable(ast.build().toByteArray()));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 				// fb.setComments(comments);
 			}
 
@@ -377,15 +374,11 @@ public abstract class AbstractCommit {
 					return false;
 				}
 				
-				if (astWriter != null) {
-					try {
-						astWriter.append(new LongWritable(astWriter.getLength()), new BytesWritable(ast.build().toByteArray()));
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
+				try {
+					astWriter.append(new LongWritable(astWriter.getLength()), new BytesWritable(ast.build().toByteArray()));
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
-				else
-					fb.setAst(ast);
 				//fb.setComments(comments);
 			}
 
