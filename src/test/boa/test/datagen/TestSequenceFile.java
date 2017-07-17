@@ -124,8 +124,7 @@ public class TestSequenceFile {
 										ChangedFile dcf = cr.getHeadSnapshot(fileId);
 										decl = getDeclaration(dcf, nodeId);
 									}
-									if (decl == null || !fqn.equals(decl.getFullyQualifiedName()))
-										System.out.println(fqn);
+									System.out.println(fqn);
 									assertEquals(true, decl != null && fqn.equals(decl.getFullyQualifiedName()));
 									declarations.put(nodeId, decl);
 								}
@@ -150,9 +149,10 @@ public class TestSequenceFile {
 												return false;
 											if (message instanceof Declaration) {
 												Declaration type = (Declaration) message;
-												if (type.getKey() == nodeId)
+												if (type.getKey() == nodeId) {
 													decl = type;
-												return false;
+													return false;
+												}
 											}
 											return true;
 										};
