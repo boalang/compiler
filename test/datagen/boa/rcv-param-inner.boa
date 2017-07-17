@@ -15,7 +15,6 @@
                            "name": "m",
                            "return_type": {
                               "name": "void",
-                              "fully_qualified_name": "void",
                               "kind": "OTHER"
                            },
                            "arguments": [

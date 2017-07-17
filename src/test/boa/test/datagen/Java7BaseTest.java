@@ -128,7 +128,6 @@ public class Java7BaseTest extends BaseTest {
 			"                     \"name\": \"m\",\n" +
 			"                     \"return_type\": {\n" +
 			"                        \"name\": \"void\",\n" +
-			"                        \"fully_qualified_name\": \"void\",\n" +
 			"                        \"kind\": \"OTHER\"\n" +
 			"                     },\n" +
 			"                     \"statements\": [\n" +
