@@ -182,7 +182,7 @@ public abstract class AbstractConnector implements AutoCloseable {
 			String path = paths[i];
 			CompilationUnit cu = cus.get(path);
 			cu.accept(new ASTVisitor() {
-				private int index = 0;
+				private int index = 1;
 				@Override
 				public void preVisit(ASTNode node) {
 					node.setProperty("i", index++);
