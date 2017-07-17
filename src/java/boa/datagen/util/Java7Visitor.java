@@ -416,9 +416,9 @@ public class Java7Visitor extends ASTVisitor {
 				b.setKind(boa.types.Ast.TypeKind.ANONYMOUS);
 			else 
 				b.setKind(boa.types.Ast.TypeKind.OTHER);
-			if (!tb.isPrimitive() && !tb.isArray()) {
+			if (!tb.isPrimitive()) {
 				b.setFullyQualifiedName(tb.getQualifiedName());
-				if (declarationFile != null) {
+				if (declarationFile != null && !tb.isArray()) {
 					String key = tb.getKey();
 					Integer index = declarationFile.get(key);
 					if (index != null) {
@@ -445,9 +445,9 @@ public class Java7Visitor extends ASTVisitor {
 				b.setKind(boa.types.Ast.TypeKind.ANONYMOUS);
 			else 
 				b.setKind(boa.types.Ast.TypeKind.OTHER);
-			if (!tb.isPrimitive() && !tb.isArray()) {
+			if (!tb.isPrimitive()) {
 				b.setFullyQualifiedName(tb.getQualifiedName());
-				if (declarationFile != null) {
+				if (declarationFile != null && !tb.isArray()) {
 					String key = tb.getKey();
 					Integer index = declarationFile.get(key);
 					if (index != null) {
@@ -474,9 +474,9 @@ public class Java7Visitor extends ASTVisitor {
 			tb.setKind(boa.types.Ast.TypeKind.ANONYMOUS);
 		else 
 			tb.setKind(boa.types.Ast.TypeKind.OTHER);
-		if (!itb.isPrimitive() && !itb.isArray()) {
+		if (!itb.isPrimitive()) {
 			tb.setFullyQualifiedName(itb.getQualifiedName());
-			if (declarationFile != null) {
+			if (declarationFile != null && !itb.isArray()) {
 				String key = itb.getKey();
 				Integer index = declarationFile.get(key);
 				if (index != null) {
@@ -518,7 +518,6 @@ public class Java7Visitor extends ASTVisitor {
 		} else {
 			tb.setName("void");
 			tb.setKind(boa.types.Ast.TypeKind.OTHER);
-			tb.setFullyQualifiedName("void");
 			b.setReturnType(tb.build());
 		}
 		for (Object t : node.typeParameters()) {
@@ -990,7 +989,6 @@ public class Java7Visitor extends ASTVisitor {
 		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 		tb.setName("void");
 		tb.setKind(boa.types.Ast.TypeKind.OTHER);
-		tb.setFullyQualifiedName("void");
 		b.setReturnType(tb.build());
 		if (node.getBody() != null) {
 			statements.push(new ArrayList<boa.types.Ast.Statement>());

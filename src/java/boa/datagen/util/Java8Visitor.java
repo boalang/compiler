@@ -67,7 +67,6 @@ public class Java8Visitor extends Java7Visitor {
 		} else {
 			tb.setName("void");
 			tb.setKind(boa.types.Ast.TypeKind.OTHER);
-			tb.setFullyQualifiedName("void");
 			b.setReturnType(tb.build());
 		}
 		for (Object t : node.typeParameters()) {
