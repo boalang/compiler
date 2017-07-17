@@ -23,7 +23,8 @@ import java.util.*;
 import org.eclipse.jdt.core.dom.*;
 
 import boa.types.Ast.*;
-import static boa.datagen.util.JavaASTUtil.buildType;
+import boa.types.Ast.Type;
+
 import static boa.datagen.util.JavaASTUtil.getFullyQualifiedName;
 
 /**
@@ -165,7 +166,9 @@ public class Java7Visitor extends ASTVisitor {
 		b.setName(node.getName().getIdentifier());
 		b.setFullyQualifiedName(getFullyQualifiedName(node));
 		setDeclaringClass(b, node.resolveBinding());
-		b.setKey((int) node.getProperty("i"));
+		Integer key = (Integer) node.getProperty("i");
+		if (key != null)
+			b.setKey((int) key);
 		if (node.isInterface())
 			b.setKind(boa.types.Ast.TypeKind.INTERFACE);
 		else
@@ -274,7 +277,9 @@ public class Java7Visitor extends ASTVisitor {
 		b.setKind(boa.types.Ast.TypeKind.ENUM);
 		b.setFullyQualifiedName(getFullyQualifiedName(node));
 		setDeclaringClass(b, node.resolveBinding());
-		b.setKey((int) node.getProperty("i"));
+		Integer key = (Integer) node.getProperty("i");
+		if (key != null)
+			b.setKey((int) key);
 		for (Object c : node.enumConstants()) {
 			// TODO EnumConstantDeclaration
 		}
@@ -319,7 +324,9 @@ public class Java7Visitor extends ASTVisitor {
 		b.setKind(boa.types.Ast.TypeKind.ANNOTATION);
 		b.setFullyQualifiedName(getFullyQualifiedName(node));
 		setDeclaringClass(b, node.resolveBinding());
-		b.setKey((int) node.getProperty("i"));
+		Integer key = (Integer) node.getProperty("i");
+		if (key != null)
+			b.setKey((int) key);
 		for (Object m : node.modifiers()) {
 			if (((IExtendedModifier)m).isAnnotation())
 				((Annotation)m).accept(this);
@@ -414,13 +421,15 @@ public class Java7Visitor extends ASTVisitor {
 				b.setKind(boa.types.Ast.TypeKind.ANONYMOUS);
 			else 
 				b.setKind(boa.types.Ast.TypeKind.OTHER);
-			b.setFullyQualifiedName(tb.getQualifiedName());
-			if (declarationFile != null) {
-				String key = tb.getKey();
-				Integer index = declarationFile.get(key);
-				if (index != null) {
-					b.setDeclarationFile(index);
-					b.setDeclaration(declarationNode.get(key));
+			if (!tb.isPrimitive() && !tb.isArray()) {
+				b.setFullyQualifiedName(tb.getQualifiedName());
+				if (declarationFile != null) {
+					String key = tb.getKey();
+					Integer index = declarationFile.get(key);
+					if (index != null) {
+						b.setDeclarationFile(index);
+						b.setDeclaration(declarationNode.get(key));
+					}
 				}
 			}
 		}
@@ -441,16 +450,47 @@ public class Java7Visitor extends ASTVisitor {
 				b.setKind(boa.types.Ast.TypeKind.ANONYMOUS);
 			else 
 				b.setKind(boa.types.Ast.TypeKind.OTHER);
-			b.setFullyQualifiedName(tb.getQualifiedName());
-			if (declarationFile != null) {
-				String key = tb.getKey();
-				Integer index = declarationFile.get(key);
-				if (index != null) {
-					b.setDeclarationFile(index);
-					b.setDeclaration(declarationNode.get(key));
+			if (!tb.isPrimitive() && !tb.isArray()) {
+				b.setFullyQualifiedName(tb.getQualifiedName());
+				if (declarationFile != null) {
+					String key = tb.getKey();
+					Integer index = declarationFile.get(key);
+					if (index != null) {
+						b.setDeclarationFile(index);
+						b.setDeclaration(declarationNode.get(key));
+					}
 				}
 			}
 		}
+	}
+
+	protected Type buildType(ITypeBinding itb) {
+		if (itb.getTypeDeclaration() != null)
+			itb = itb.getTypeDeclaration();
+		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
+		tb.setName(itb.getName());
+		if (itb.isInterface())
+			tb.setKind(boa.types.Ast.TypeKind.INTERFACE);
+		else if (itb.isEnum())
+			tb.setKind(boa.types.Ast.TypeKind.ENUM);
+		else if (itb.isAnnotation())
+			tb.setKind(boa.types.Ast.TypeKind.ANNOTATION);
+		else if (itb.isAnonymous())
+			tb.setKind(boa.types.Ast.TypeKind.ANONYMOUS);
+		else 
+			tb.setKind(boa.types.Ast.TypeKind.OTHER);
+		if (!itb.isPrimitive() && !itb.isArray()) {
+			tb.setFullyQualifiedName(itb.getQualifiedName());
+			if (declarationFile != null) {
+				String key = itb.getKey();
+				Integer index = declarationFile.get(key);
+				if (index != null) {
+					tb.setDeclarationFile(index);
+					tb.setDeclaration(declarationNode.get(key));
+				}
+			}
+		}
+		return tb.build();
 	}
 
 	//////////////////////////////////////////////////////////////

@@ -23,7 +23,6 @@ import java.util.*;
 import org.eclipse.jdt.core.dom.*;
 
 import boa.types.Ast.*;
-import static boa.datagen.util.JavaASTUtil.buildType;
 
 /**
  * @author rdyer
