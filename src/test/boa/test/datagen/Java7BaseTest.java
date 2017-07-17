@@ -76,8 +76,6 @@ public class Java7BaseTest extends BaseTest {
 				final ASTRoot.Builder ast = ASTRoot.newBuilder();
 				try {
 					ast.addNamespaces(visitor.getNamespaces(cu));
-					for (final String s : visitor.getImports())
-						ast.addImports(s);
 				} catch (final Exception e) {
 					System.err.println(e);
 					e.printStackTrace();

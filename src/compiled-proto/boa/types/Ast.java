@@ -1005,42 +1005,6 @@ public final class Ast {
     boa.types.Ast.NamespaceOrBuilder getNamespacesOrBuilder(
         int index);
 
-    // repeated string imports = 2;
-    /**
-     * <code>repeated string imports = 2;</code>
-     *
-     * <pre>
-     ** The imported namespaces and types 
-     * </pre>
-     */
-    java.util.List<java.lang.String>
-    getImportsList();
-    /**
-     * <code>repeated string imports = 2;</code>
-     *
-     * <pre>
-     ** The imported namespaces and types 
-     * </pre>
-     */
-    int getImportsCount();
-    /**
-     * <code>repeated string imports = 2;</code>
-     *
-     * <pre>
-     ** The imported namespaces and types 
-     * </pre>
-     */
-    java.lang.String getImports(int index);
-    /**
-     * <code>repeated string imports = 2;</code>
-     *
-     * <pre>
-     ** The imported namespaces and types 
-     * </pre>
-     */
-    com.google.protobuf.ByteString
-        getImportsBytes(int index);
-
     // repeated string names = 3;
     /**
      * <code>repeated string names = 3;</code>
@@ -1212,18 +1176,10 @@ public final class Ast {
               namespaces_.add(input.readMessage(boa.types.Ast.Namespace.PARSER, extensionRegistry));
               break;
             }
-            case 18: {
-              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
-                imports_ = new com.google.protobuf.LazyStringArrayList();
-                mutable_bitField0_ |= 0x00000002;
-              }
-              imports_.add(input.readBytes());
-              break;
-            }
             case 26: {
-              if (!((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
+              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
                 names_ = new com.google.protobuf.LazyStringArrayList();
-                mutable_bitField0_ |= 0x00000004;
+                mutable_bitField0_ |= 0x00000002;
               }
               names_.add(input.readBytes());
               break;
@@ -1272,9 +1228,6 @@ public final class Ast {
           namespaces_ = java.util.Collections.unmodifiableList(namespaces_);
         }
         if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
-          imports_ = new com.google.protobuf.UnmodifiableLazyStringList(imports_);
-        }
-        if (((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
           names_ = new com.google.protobuf.UnmodifiableLazyStringList(names_);
         }
         this.unknownFields = unknownFields.build();
@@ -1363,52 +1316,6 @@ public final class Ast {
     public boa.types.Ast.NamespaceOrBuilder getNamespacesOrBuilder(
         int index) {
       return namespaces_.get(index);
-    }
-
-    // repeated string imports = 2;
-    public static final int IMPORTS_FIELD_NUMBER = 2;
-    private com.google.protobuf.LazyStringList imports_;
-    /**
-     * <code>repeated string imports = 2;</code>
-     *
-     * <pre>
-     ** The imported namespaces and types 
-     * </pre>
-     */
-    public java.util.List<java.lang.String>
-        getImportsList() {
-      return imports_;
-    }
-    /**
-     * <code>repeated string imports = 2;</code>
-     *
-     * <pre>
-     ** The imported namespaces and types 
-     * </pre>
-     */
-    public int getImportsCount() {
-      return imports_.size();
-    }
-    /**
-     * <code>repeated string imports = 2;</code>
-     *
-     * <pre>
-     ** The imported namespaces and types 
-     * </pre>
-     */
-    public java.lang.String getImports(int index) {
-      return imports_.get(index);
-    }
-    /**
-     * <code>repeated string imports = 2;</code>
-     *
-     * <pre>
-     ** The imported namespaces and types 
-     * </pre>
-     */
-    public com.google.protobuf.ByteString
-        getImportsBytes(int index) {
-      return imports_.getByteString(index);
     }
 
     // repeated string names = 3;
@@ -1555,7 +1462,6 @@ public final class Ast {
 
     private void initFields() {
       namespaces_ = java.util.Collections.emptyList();
-      imports_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       names_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
@@ -1582,9 +1488,6 @@ public final class Ast {
       getSerializedSize();
       for (int i = 0; i < namespaces_.size(); i++) {
         output.writeMessage(1, namespaces_.get(i));
-      }
-      for (int i = 0; i < imports_.size(); i++) {
-        output.writeBytes(2, imports_.getByteString(i));
       }
       for (int i = 0; i < names_.size(); i++) {
         output.writeBytes(3, names_.getByteString(i));
@@ -1613,15 +1516,6 @@ public final class Ast {
       for (int i = 0; i < namespaces_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(1, namespaces_.get(i));
-      }
-      {
-        int dataSize = 0;
-        for (int i = 0; i < imports_.size(); i++) {
-          dataSize += com.google.protobuf.CodedOutputStream
-            .computeBytesSizeNoTag(imports_.getByteString(i));
-        }
-        size += dataSize;
-        size += 1 * getImportsList().size();
       }
       {
         int dataSize = 0;
@@ -1775,18 +1669,16 @@ public final class Ast {
         } else {
           namespacesBuilder_.clear();
         }
-        imports_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000002);
         names_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000004);
+        bitField0_ = (bitField0_ & ~0x00000002);
         structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
-        bitField0_ = (bitField0_ & ~0x00000008);
+        bitField0_ = (bitField0_ & ~0x00000004);
         labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
-        bitField0_ = (bitField0_ & ~0x00000010);
+        bitField0_ = (bitField0_ & ~0x00000008);
         mappedNode_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000020);
+        bitField0_ = (bitField0_ & ~0x00000010);
         key_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000040);
+        bitField0_ = (bitField0_ & ~0x00000020);
         return this;
       }
 
@@ -1825,30 +1717,24 @@ public final class Ast {
           result.namespaces_ = namespacesBuilder_.build();
         }
         if (((bitField0_ & 0x00000002) == 0x00000002)) {
-          imports_ = new com.google.protobuf.UnmodifiableLazyStringList(
-              imports_);
-          bitField0_ = (bitField0_ & ~0x00000002);
-        }
-        result.imports_ = imports_;
-        if (((bitField0_ & 0x00000004) == 0x00000004)) {
           names_ = new com.google.protobuf.UnmodifiableLazyStringList(
               names_);
-          bitField0_ = (bitField0_ & ~0x00000004);
+          bitField0_ = (bitField0_ & ~0x00000002);
         }
         result.names_ = names_;
-        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
           to_bitField0_ |= 0x00000001;
         }
         result.structuralChangeKind_ = structuralChangeKind_;
-        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
           to_bitField0_ |= 0x00000002;
         }
         result.labelChangeKind_ = labelChangeKind_;
-        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
           to_bitField0_ |= 0x00000004;
         }
         result.mappedNode_ = mappedNode_;
-        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
           to_bitField0_ |= 0x00000008;
         }
         result.key_ = key_;
@@ -1894,20 +1780,10 @@ public final class Ast {
             }
           }
         }
-        if (!other.imports_.isEmpty()) {
-          if (imports_.isEmpty()) {
-            imports_ = other.imports_;
-            bitField0_ = (bitField0_ & ~0x00000002);
-          } else {
-            ensureImportsIsMutable();
-            imports_.addAll(other.imports_);
-          }
-          onChanged();
-        }
         if (!other.names_.isEmpty()) {
           if (names_.isEmpty()) {
             names_ = other.names_;
-            bitField0_ = (bitField0_ & ~0x00000004);
+            bitField0_ = (bitField0_ & ~0x00000002);
           } else {
             ensureNamesIsMutable();
             names_.addAll(other.names_);
@@ -2271,141 +2147,12 @@ public final class Ast {
         return namespacesBuilder_;
       }
 
-      // repeated string imports = 2;
-      private com.google.protobuf.LazyStringList imports_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      private void ensureImportsIsMutable() {
-        if (!((bitField0_ & 0x00000002) == 0x00000002)) {
-          imports_ = new com.google.protobuf.LazyStringArrayList(imports_);
-          bitField0_ |= 0x00000002;
-         }
-      }
-      /**
-       * <code>repeated string imports = 2;</code>
-       *
-       * <pre>
-       ** The imported namespaces and types 
-       * </pre>
-       */
-      public java.util.List<java.lang.String>
-          getImportsList() {
-        return java.util.Collections.unmodifiableList(imports_);
-      }
-      /**
-       * <code>repeated string imports = 2;</code>
-       *
-       * <pre>
-       ** The imported namespaces and types 
-       * </pre>
-       */
-      public int getImportsCount() {
-        return imports_.size();
-      }
-      /**
-       * <code>repeated string imports = 2;</code>
-       *
-       * <pre>
-       ** The imported namespaces and types 
-       * </pre>
-       */
-      public java.lang.String getImports(int index) {
-        return imports_.get(index);
-      }
-      /**
-       * <code>repeated string imports = 2;</code>
-       *
-       * <pre>
-       ** The imported namespaces and types 
-       * </pre>
-       */
-      public com.google.protobuf.ByteString
-          getImportsBytes(int index) {
-        return imports_.getByteString(index);
-      }
-      /**
-       * <code>repeated string imports = 2;</code>
-       *
-       * <pre>
-       ** The imported namespaces and types 
-       * </pre>
-       */
-      public Builder setImports(
-          int index, java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureImportsIsMutable();
-        imports_.set(index, value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated string imports = 2;</code>
-       *
-       * <pre>
-       ** The imported namespaces and types 
-       * </pre>
-       */
-      public Builder addImports(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureImportsIsMutable();
-        imports_.add(value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated string imports = 2;</code>
-       *
-       * <pre>
-       ** The imported namespaces and types 
-       * </pre>
-       */
-      public Builder addAllImports(
-          java.lang.Iterable<java.lang.String> values) {
-        ensureImportsIsMutable();
-        super.addAll(values, imports_);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated string imports = 2;</code>
-       *
-       * <pre>
-       ** The imported namespaces and types 
-       * </pre>
-       */
-      public Builder clearImports() {
-        imports_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000002);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated string imports = 2;</code>
-       *
-       * <pre>
-       ** The imported namespaces and types 
-       * </pre>
-       */
-      public Builder addImportsBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureImportsIsMutable();
-        imports_.add(value);
-        onChanged();
-        return this;
-      }
-
       // repeated string names = 3;
       private com.google.protobuf.LazyStringList names_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       private void ensureNamesIsMutable() {
-        if (!((bitField0_ & 0x00000004) == 0x00000004)) {
+        if (!((bitField0_ & 0x00000002) == 0x00000002)) {
           names_ = new com.google.protobuf.LazyStringArrayList(names_);
-          bitField0_ |= 0x00000004;
+          bitField0_ |= 0x00000002;
          }
       }
       /**
@@ -2507,7 +2254,7 @@ public final class Ast {
        */
       public Builder clearNames() {
         names_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000004);
+        bitField0_ = (bitField0_ & ~0x00000002);
         onChanged();
         return this;
       }
@@ -2539,7 +2286,7 @@ public final class Ast {
        * </pre>
        */
       public boolean hasStructuralChangeKind() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
+        return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
        * <code>optional .boa.types.ChangeKind structural_change_kind = 4;</code>
@@ -2562,7 +2309,7 @@ public final class Ast {
         if (value == null) {
           throw new NullPointerException();
         }
-        bitField0_ |= 0x00000008;
+        bitField0_ |= 0x00000004;
         structuralChangeKind_ = value;
         onChanged();
         return this;
@@ -2575,7 +2322,7 @@ public final class Ast {
        * </pre>
        */
       public Builder clearStructuralChangeKind() {
-        bitField0_ = (bitField0_ & ~0x00000008);
+        bitField0_ = (bitField0_ & ~0x00000004);
         structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         onChanged();
         return this;
@@ -2591,7 +2338,7 @@ public final class Ast {
        * </pre>
        */
       public boolean hasLabelChangeKind() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
+        return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       /**
        * <code>optional .boa.types.ChangeKind label_change_kind = 5;</code>
@@ -2614,7 +2361,7 @@ public final class Ast {
         if (value == null) {
           throw new NullPointerException();
         }
-        bitField0_ |= 0x00000010;
+        bitField0_ |= 0x00000008;
         labelChangeKind_ = value;
         onChanged();
         return this;
@@ -2627,7 +2374,7 @@ public final class Ast {
        * </pre>
        */
       public Builder clearLabelChangeKind() {
-        bitField0_ = (bitField0_ & ~0x00000010);
+        bitField0_ = (bitField0_ & ~0x00000008);
         labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         onChanged();
         return this;
@@ -2643,7 +2390,7 @@ public final class Ast {
        * </pre>
        */
       public boolean hasMappedNode() {
-        return ((bitField0_ & 0x00000020) == 0x00000020);
+        return ((bitField0_ & 0x00000010) == 0x00000010);
       }
       /**
        * <code>optional int32 mapped_node = 6;</code>
@@ -2663,7 +2410,7 @@ public final class Ast {
        * </pre>
        */
       public Builder setMappedNode(int value) {
-        bitField0_ |= 0x00000020;
+        bitField0_ |= 0x00000010;
         mappedNode_ = value;
         onChanged();
         return this;
@@ -2676,7 +2423,7 @@ public final class Ast {
        * </pre>
        */
       public Builder clearMappedNode() {
-        bitField0_ = (bitField0_ & ~0x00000020);
+        bitField0_ = (bitField0_ & ~0x00000010);
         mappedNode_ = 0;
         onChanged();
         return this;
@@ -2692,7 +2439,7 @@ public final class Ast {
        * </pre>
        */
       public boolean hasKey() {
-        return ((bitField0_ & 0x00000040) == 0x00000040);
+        return ((bitField0_ & 0x00000020) == 0x00000020);
       }
       /**
        * <code>optional int32 key = 7;</code>
@@ -2712,7 +2459,7 @@ public final class Ast {
        * </pre>
        */
       public Builder setKey(int value) {
-        bitField0_ |= 0x00000040;
+        bitField0_ |= 0x00000020;
         key_ = value;
         onChanged();
         return this;
@@ -2725,7 +2472,7 @@ public final class Ast {
        * </pre>
        */
       public Builder clearKey() {
-        bitField0_ = (bitField0_ & ~0x00000040);
+        bitField0_ = (bitField0_ & ~0x00000020);
         key_ = 0;
         onChanged();
         return this;
@@ -3068,6 +2815,87 @@ public final class Ast {
      * </pre>
      */
     int getKey();
+
+    // repeated .boa.types.Namespace namespaces = 11;
+    /**
+     * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+     *
+     * <pre>
+     ** The nested namespaces 
+     * </pre>
+     */
+    java.util.List<boa.types.Ast.Namespace> 
+        getNamespacesList();
+    /**
+     * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+     *
+     * <pre>
+     ** The nested namespaces 
+     * </pre>
+     */
+    boa.types.Ast.Namespace getNamespaces(int index);
+    /**
+     * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+     *
+     * <pre>
+     ** The nested namespaces 
+     * </pre>
+     */
+    int getNamespacesCount();
+    /**
+     * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+     *
+     * <pre>
+     ** The nested namespaces 
+     * </pre>
+     */
+    java.util.List<? extends boa.types.Ast.NamespaceOrBuilder> 
+        getNamespacesOrBuilderList();
+    /**
+     * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+     *
+     * <pre>
+     ** The nested namespaces 
+     * </pre>
+     */
+    boa.types.Ast.NamespaceOrBuilder getNamespacesOrBuilder(
+        int index);
+
+    // repeated string imports = 12;
+    /**
+     * <code>repeated string imports = 12;</code>
+     *
+     * <pre>
+     ** The imported namespaces and types 
+     * </pre>
+     */
+    java.util.List<java.lang.String>
+    getImportsList();
+    /**
+     * <code>repeated string imports = 12;</code>
+     *
+     * <pre>
+     ** The imported namespaces and types 
+     * </pre>
+     */
+    int getImportsCount();
+    /**
+     * <code>repeated string imports = 12;</code>
+     *
+     * <pre>
+     ** The imported namespaces and types 
+     * </pre>
+     */
+    java.lang.String getImports(int index);
+    /**
+     * <code>repeated string imports = 12;</code>
+     *
+     * <pre>
+     ** The imported namespaces and types 
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getImportsBytes(int index);
   }
   /**
    * Protobuf type {@code boa.types.Namespace}
@@ -3201,6 +3029,22 @@ public final class Ast {
               key_ = input.readInt32();
               break;
             }
+            case 90: {
+              if (!((mutable_bitField0_ & 0x00000400) == 0x00000400)) {
+                namespaces_ = new java.util.ArrayList<boa.types.Ast.Namespace>();
+                mutable_bitField0_ |= 0x00000400;
+              }
+              namespaces_.add(input.readMessage(boa.types.Ast.Namespace.PARSER, extensionRegistry));
+              break;
+            }
+            case 98: {
+              if (!((mutable_bitField0_ & 0x00000800) == 0x00000800)) {
+                imports_ = new com.google.protobuf.LazyStringArrayList();
+                mutable_bitField0_ |= 0x00000800;
+              }
+              imports_.add(input.readBytes());
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -3223,6 +3067,12 @@ public final class Ast {
         }
         if (((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
           expressions_ = java.util.Collections.unmodifiableList(expressions_);
+        }
+        if (((mutable_bitField0_ & 0x00000400) == 0x00000400)) {
+          namespaces_ = java.util.Collections.unmodifiableList(namespaces_);
+        }
+        if (((mutable_bitField0_ & 0x00000800) == 0x00000800)) {
+          imports_ = new com.google.protobuf.UnmodifiableLazyStringList(imports_);
         }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -3687,6 +3537,108 @@ public final class Ast {
       return key_;
     }
 
+    // repeated .boa.types.Namespace namespaces = 11;
+    public static final int NAMESPACES_FIELD_NUMBER = 11;
+    private java.util.List<boa.types.Ast.Namespace> namespaces_;
+    /**
+     * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+     *
+     * <pre>
+     ** The nested namespaces 
+     * </pre>
+     */
+    public java.util.List<boa.types.Ast.Namespace> getNamespacesList() {
+      return namespaces_;
+    }
+    /**
+     * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+     *
+     * <pre>
+     ** The nested namespaces 
+     * </pre>
+     */
+    public java.util.List<? extends boa.types.Ast.NamespaceOrBuilder> 
+        getNamespacesOrBuilderList() {
+      return namespaces_;
+    }
+    /**
+     * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+     *
+     * <pre>
+     ** The nested namespaces 
+     * </pre>
+     */
+    public int getNamespacesCount() {
+      return namespaces_.size();
+    }
+    /**
+     * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+     *
+     * <pre>
+     ** The nested namespaces 
+     * </pre>
+     */
+    public boa.types.Ast.Namespace getNamespaces(int index) {
+      return namespaces_.get(index);
+    }
+    /**
+     * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+     *
+     * <pre>
+     ** The nested namespaces 
+     * </pre>
+     */
+    public boa.types.Ast.NamespaceOrBuilder getNamespacesOrBuilder(
+        int index) {
+      return namespaces_.get(index);
+    }
+
+    // repeated string imports = 12;
+    public static final int IMPORTS_FIELD_NUMBER = 12;
+    private com.google.protobuf.LazyStringList imports_;
+    /**
+     * <code>repeated string imports = 12;</code>
+     *
+     * <pre>
+     ** The imported namespaces and types 
+     * </pre>
+     */
+    public java.util.List<java.lang.String>
+        getImportsList() {
+      return imports_;
+    }
+    /**
+     * <code>repeated string imports = 12;</code>
+     *
+     * <pre>
+     ** The imported namespaces and types 
+     * </pre>
+     */
+    public int getImportsCount() {
+      return imports_.size();
+    }
+    /**
+     * <code>repeated string imports = 12;</code>
+     *
+     * <pre>
+     ** The imported namespaces and types 
+     * </pre>
+     */
+    public java.lang.String getImports(int index) {
+      return imports_.get(index);
+    }
+    /**
+     * <code>repeated string imports = 12;</code>
+     *
+     * <pre>
+     ** The imported namespaces and types 
+     * </pre>
+     */
+    public com.google.protobuf.ByteString
+        getImportsBytes(int index) {
+      return imports_.getByteString(index);
+    }
+
     private void initFields() {
       name_ = "";
       modifiers_ = java.util.Collections.emptyList();
@@ -3698,6 +3650,8 @@ public final class Ast {
       labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       mappedNode_ = 0;
       key_ = 0;
+      namespaces_ = java.util.Collections.emptyList();
+      imports_ = com.google.protobuf.LazyStringArrayList.EMPTY;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -3738,6 +3692,12 @@ public final class Ast {
           return false;
         }
       }
+      for (int i = 0; i < getNamespacesCount(); i++) {
+        if (!getNamespaces(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
       memoizedIsInitialized = 1;
       return true;
     }
@@ -3774,6 +3734,12 @@ public final class Ast {
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         output.writeInt32(10, key_);
+      }
+      for (int i = 0; i < namespaces_.size(); i++) {
+        output.writeMessage(11, namespaces_.get(i));
+      }
+      for (int i = 0; i < imports_.size(); i++) {
+        output.writeBytes(12, imports_.getByteString(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -3823,6 +3789,19 @@ public final class Ast {
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(10, key_);
+      }
+      for (int i = 0; i < namespaces_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(11, namespaces_.get(i));
+      }
+      {
+        int dataSize = 0;
+        for (int i = 0; i < imports_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeBytesSizeNoTag(imports_.getByteString(i));
+        }
+        size += dataSize;
+        size += 1 * getImportsList().size();
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -3941,6 +3920,7 @@ public final class Ast {
           getStatementsFieldBuilder();
           getMethodsFieldBuilder();
           getExpressionsFieldBuilder();
+          getNamespacesFieldBuilder();
         }
       }
       private static Builder create() {
@@ -3989,6 +3969,14 @@ public final class Ast {
         bitField0_ = (bitField0_ & ~0x00000100);
         key_ = 0;
         bitField0_ = (bitField0_ & ~0x00000200);
+        if (namespacesBuilder_ == null) {
+          namespaces_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000400);
+        } else {
+          namespacesBuilder_.clear();
+        }
+        imports_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000800);
         return this;
       }
 
@@ -4082,6 +4070,21 @@ public final class Ast {
           to_bitField0_ |= 0x00000010;
         }
         result.key_ = key_;
+        if (namespacesBuilder_ == null) {
+          if (((bitField0_ & 0x00000400) == 0x00000400)) {
+            namespaces_ = java.util.Collections.unmodifiableList(namespaces_);
+            bitField0_ = (bitField0_ & ~0x00000400);
+          }
+          result.namespaces_ = namespaces_;
+        } else {
+          result.namespaces_ = namespacesBuilder_.build();
+        }
+        if (((bitField0_ & 0x00000800) == 0x00000800)) {
+          imports_ = new com.google.protobuf.UnmodifiableLazyStringList(
+              imports_);
+          bitField0_ = (bitField0_ & ~0x00000800);
+        }
+        result.imports_ = imports_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -4245,6 +4248,42 @@ public final class Ast {
         if (other.hasKey()) {
           setKey(other.getKey());
         }
+        if (namespacesBuilder_ == null) {
+          if (!other.namespaces_.isEmpty()) {
+            if (namespaces_.isEmpty()) {
+              namespaces_ = other.namespaces_;
+              bitField0_ = (bitField0_ & ~0x00000400);
+            } else {
+              ensureNamespacesIsMutable();
+              namespaces_.addAll(other.namespaces_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.namespaces_.isEmpty()) {
+            if (namespacesBuilder_.isEmpty()) {
+              namespacesBuilder_.dispose();
+              namespacesBuilder_ = null;
+              namespaces_ = other.namespaces_;
+              bitField0_ = (bitField0_ & ~0x00000400);
+              namespacesBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getNamespacesFieldBuilder() : null;
+            } else {
+              namespacesBuilder_.addAllMessages(other.namespaces_);
+            }
+          }
+        }
+        if (!other.imports_.isEmpty()) {
+          if (imports_.isEmpty()) {
+            imports_ = other.imports_;
+            bitField0_ = (bitField0_ & ~0x00000800);
+          } else {
+            ensureImportsIsMutable();
+            imports_.addAll(other.imports_);
+          }
+          onChanged();
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -4280,6 +4319,12 @@ public final class Ast {
         }
         for (int i = 0; i < getExpressionsCount(); i++) {
           if (!getExpressions(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        for (int i = 0; i < getNamespacesCount(); i++) {
+          if (!getNamespaces(i).isInitialized()) {
             
             return false;
           }
@@ -6162,6 +6207,447 @@ public final class Ast {
       public Builder clearKey() {
         bitField0_ = (bitField0_ & ~0x00000200);
         key_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // repeated .boa.types.Namespace namespaces = 11;
+      private java.util.List<boa.types.Ast.Namespace> namespaces_ =
+        java.util.Collections.emptyList();
+      private void ensureNamespacesIsMutable() {
+        if (!((bitField0_ & 0x00000400) == 0x00000400)) {
+          namespaces_ = new java.util.ArrayList<boa.types.Ast.Namespace>(namespaces_);
+          bitField0_ |= 0x00000400;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Namespace, boa.types.Ast.Namespace.Builder, boa.types.Ast.NamespaceOrBuilder> namespacesBuilder_;
+
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public java.util.List<boa.types.Ast.Namespace> getNamespacesList() {
+        if (namespacesBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(namespaces_);
+        } else {
+          return namespacesBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public int getNamespacesCount() {
+        if (namespacesBuilder_ == null) {
+          return namespaces_.size();
+        } else {
+          return namespacesBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public boa.types.Ast.Namespace getNamespaces(int index) {
+        if (namespacesBuilder_ == null) {
+          return namespaces_.get(index);
+        } else {
+          return namespacesBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public Builder setNamespaces(
+          int index, boa.types.Ast.Namespace value) {
+        if (namespacesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureNamespacesIsMutable();
+          namespaces_.set(index, value);
+          onChanged();
+        } else {
+          namespacesBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public Builder setNamespaces(
+          int index, boa.types.Ast.Namespace.Builder builderForValue) {
+        if (namespacesBuilder_ == null) {
+          ensureNamespacesIsMutable();
+          namespaces_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          namespacesBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public Builder addNamespaces(boa.types.Ast.Namespace value) {
+        if (namespacesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureNamespacesIsMutable();
+          namespaces_.add(value);
+          onChanged();
+        } else {
+          namespacesBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public Builder addNamespaces(
+          int index, boa.types.Ast.Namespace value) {
+        if (namespacesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureNamespacesIsMutable();
+          namespaces_.add(index, value);
+          onChanged();
+        } else {
+          namespacesBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public Builder addNamespaces(
+          boa.types.Ast.Namespace.Builder builderForValue) {
+        if (namespacesBuilder_ == null) {
+          ensureNamespacesIsMutable();
+          namespaces_.add(builderForValue.build());
+          onChanged();
+        } else {
+          namespacesBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public Builder addNamespaces(
+          int index, boa.types.Ast.Namespace.Builder builderForValue) {
+        if (namespacesBuilder_ == null) {
+          ensureNamespacesIsMutable();
+          namespaces_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          namespacesBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public Builder addAllNamespaces(
+          java.lang.Iterable<? extends boa.types.Ast.Namespace> values) {
+        if (namespacesBuilder_ == null) {
+          ensureNamespacesIsMutable();
+          super.addAll(values, namespaces_);
+          onChanged();
+        } else {
+          namespacesBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public Builder clearNamespaces() {
+        if (namespacesBuilder_ == null) {
+          namespaces_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000400);
+          onChanged();
+        } else {
+          namespacesBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public Builder removeNamespaces(int index) {
+        if (namespacesBuilder_ == null) {
+          ensureNamespacesIsMutable();
+          namespaces_.remove(index);
+          onChanged();
+        } else {
+          namespacesBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public boa.types.Ast.Namespace.Builder getNamespacesBuilder(
+          int index) {
+        return getNamespacesFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public boa.types.Ast.NamespaceOrBuilder getNamespacesOrBuilder(
+          int index) {
+        if (namespacesBuilder_ == null) {
+          return namespaces_.get(index);  } else {
+          return namespacesBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public java.util.List<? extends boa.types.Ast.NamespaceOrBuilder> 
+           getNamespacesOrBuilderList() {
+        if (namespacesBuilder_ != null) {
+          return namespacesBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(namespaces_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public boa.types.Ast.Namespace.Builder addNamespacesBuilder() {
+        return getNamespacesFieldBuilder().addBuilder(
+            boa.types.Ast.Namespace.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public boa.types.Ast.Namespace.Builder addNamespacesBuilder(
+          int index) {
+        return getNamespacesFieldBuilder().addBuilder(
+            index, boa.types.Ast.Namespace.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public java.util.List<boa.types.Ast.Namespace.Builder> 
+           getNamespacesBuilderList() {
+        return getNamespacesFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Namespace, boa.types.Ast.Namespace.Builder, boa.types.Ast.NamespaceOrBuilder> 
+          getNamespacesFieldBuilder() {
+        if (namespacesBuilder_ == null) {
+          namespacesBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              boa.types.Ast.Namespace, boa.types.Ast.Namespace.Builder, boa.types.Ast.NamespaceOrBuilder>(
+                  namespaces_,
+                  ((bitField0_ & 0x00000400) == 0x00000400),
+                  getParentForChildren(),
+                  isClean());
+          namespaces_ = null;
+        }
+        return namespacesBuilder_;
+      }
+
+      // repeated string imports = 12;
+      private com.google.protobuf.LazyStringList imports_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      private void ensureImportsIsMutable() {
+        if (!((bitField0_ & 0x00000800) == 0x00000800)) {
+          imports_ = new com.google.protobuf.LazyStringArrayList(imports_);
+          bitField0_ |= 0x00000800;
+         }
+      }
+      /**
+       * <code>repeated string imports = 12;</code>
+       *
+       * <pre>
+       ** The imported namespaces and types 
+       * </pre>
+       */
+      public java.util.List<java.lang.String>
+          getImportsList() {
+        return java.util.Collections.unmodifiableList(imports_);
+      }
+      /**
+       * <code>repeated string imports = 12;</code>
+       *
+       * <pre>
+       ** The imported namespaces and types 
+       * </pre>
+       */
+      public int getImportsCount() {
+        return imports_.size();
+      }
+      /**
+       * <code>repeated string imports = 12;</code>
+       *
+       * <pre>
+       ** The imported namespaces and types 
+       * </pre>
+       */
+      public java.lang.String getImports(int index) {
+        return imports_.get(index);
+      }
+      /**
+       * <code>repeated string imports = 12;</code>
+       *
+       * <pre>
+       ** The imported namespaces and types 
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getImportsBytes(int index) {
+        return imports_.getByteString(index);
+      }
+      /**
+       * <code>repeated string imports = 12;</code>
+       *
+       * <pre>
+       ** The imported namespaces and types 
+       * </pre>
+       */
+      public Builder setImports(
+          int index, java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureImportsIsMutable();
+        imports_.set(index, value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string imports = 12;</code>
+       *
+       * <pre>
+       ** The imported namespaces and types 
+       * </pre>
+       */
+      public Builder addImports(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureImportsIsMutable();
+        imports_.add(value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string imports = 12;</code>
+       *
+       * <pre>
+       ** The imported namespaces and types 
+       * </pre>
+       */
+      public Builder addAllImports(
+          java.lang.Iterable<java.lang.String> values) {
+        ensureImportsIsMutable();
+        super.addAll(values, imports_);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string imports = 12;</code>
+       *
+       * <pre>
+       ** The imported namespaces and types 
+       * </pre>
+       */
+      public Builder clearImports() {
+        imports_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000800);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string imports = 12;</code>
+       *
+       * <pre>
+       ** The imported namespaces and types 
+       * </pre>
+       */
+      public Builder addImportsBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureImportsIsMutable();
+        imports_.add(value);
         onChanged();
         return this;
       }
@@ -33397,153 +33883,154 @@ public final class Ast {
     java.lang.String[] descriptorData = {
       "\n\tast.proto\022\tboa.types\032\014shared.proto\"4\n\014" +
       "CommentsRoot\022$\n\010comments\030\001 \003(\0132\022.boa.typ" +
-      "es.Comment\"\336\001\n\007ASTRoot\022(\n\nnamespaces\030\001 \003" +
-      "(\0132\024.boa.types.Namespace\022\017\n\007imports\030\002 \003(" +
-      "\t\022\r\n\005names\030\003 \003(\t\0225\n\026structural_change_ki" +
-      "nd\030\004 \001(\0162\025.boa.types.ChangeKind\0220\n\021label" +
-      "_change_kind\030\005 \001(\0162\025.boa.types.ChangeKin" +
-      "d\022\023\n\013mapped_node\030\006 \001(\005\022\013\n\003key\030\007 \001(\005\"\364\002\n\t" +
-      "Namespace\022\014\n\004name\030\001 \002(\t\022&\n\tmodifiers\030\002 \003" +
-      "(\0132\023.boa.types.Modifier\022,\n\014declarations\030",
-      "\003 \003(\0132\026.boa.types.Declaration\022(\n\nstateme" +
-      "nts\030\004 \003(\0132\024.boa.types.Statement\022\"\n\007metho" +
-      "ds\030\005 \003(\0132\021.boa.types.Method\022*\n\013expressio" +
-      "ns\030\006 \003(\0132\025.boa.types.Expression\0225\n\026struc" +
-      "tural_change_kind\030\007 \001(\0162\025.boa.types.Chan" +
-      "geKind\0220\n\021label_change_kind\030\010 \001(\0162\025.boa." +
-      "types.ChangeKind\022\023\n\013mapped_node\030\t \001(\005\022\013\n" +
-      "\003key\030\n \001(\005\"\232\004\n\013Declaration\022\014\n\004name\030\001 \002(\t" +
-      "\022!\n\004kind\030\002 \002(\0162\023.boa.types.TypeKind\022&\n\tm" +
-      "odifiers\030\003 \003(\0132\023.boa.types.Modifier\022+\n\022g",
-      "eneric_parameters\030\004 \003(\0132\017.boa.types.Type" +
-      "\022 \n\007parents\030\005 \003(\0132\017.boa.types.Type\022\"\n\007me" +
-      "thods\030\006 \003(\0132\021.boa.types.Method\022#\n\006fields" +
-      "\030\007 \003(\0132\023.boa.types.Variable\0223\n\023nested_de" +
-      "clarations\030\010 \003(\0132\026.boa.types.Declaration" +
-      "\022$\n\010comments\030\t \003(\0132\022.boa.types.Comment\0225" +
-      "\n\026structural_change_kind\030\n \001(\0162\025.boa.typ" +
-      "es.ChangeKind\0220\n\021label_change_kind\030\013 \001(\016" +
-      "2\025.boa.types.ChangeKind\022\023\n\013mapped_node\030\014" +
-      " \001(\005\022\013\n\003key\030\r \001(\005\022\034\n\024fully_qualified_nam",
-      "e\030\016 \001(\t\022\026\n\016declaring_type\030\017 \001(\005\"\233\002\n\004Type" +
-      "\022\014\n\004name\030\001 \002(\t\022\034\n\024fully_qualified_name\030\002" +
-      " \001(\t\022!\n\004kind\030\003 \002(\0162\023.boa.types.TypeKind\022" +
-      "\n\n\002id\030\004 \001(\t\0225\n\026structural_change_kind\030\005 " +
-      "\001(\0162\025.boa.types.ChangeKind\0220\n\021label_chan" +
-      "ge_kind\030\006 \001(\0162\025.boa.types.ChangeKind\022\023\n\013" +
-      "mapped_node\030\007 \001(\005\022\030\n\020declaration_file\030\010 " +
-      "\001(\005\022\023\n\013declaration\030\t \001(\005\022\013\n\003key\030\n \001(\005\"\326\003" +
-      "\n\006Method\022\014\n\004name\030\001 \001(\t\022&\n\tmodifiers\030\002 \003(" +
-      "\0132\023.boa.types.Modifier\022$\n\013return_type\030\003 ",
-      "\002(\0132\017.boa.types.Type\022+\n\022generic_paramete" +
-      "rs\030\004 \003(\0132\017.boa.types.Type\022&\n\targuments\030\005" +
-      " \003(\0132\023.boa.types.Variable\022(\n\017exception_t" +
-      "ypes\030\006 \003(\0132\017.boa.types.Type\022(\n\nstatement" +
-      "s\030\007 \003(\0132\024.boa.types.Statement\022$\n\010comment" +
-      "s\030\010 \003(\0132\022.boa.types.Comment\0225\n\026structura" +
-      "l_change_kind\030\t \001(\0162\025.boa.types.ChangeKi" +
-      "nd\0220\n\021label_change_kind\030\n \001(\0162\025.boa.type" +
-      "s.ChangeKind\022\023\n\013mapped_node\030\013 \001(\005\022\013\n\003key" +
-      "\030\014 \001(\005\022\026\n\016declaring_type\030\r \001(\005\"\335\002\n\010Varia",
-      "ble\022\014\n\004name\030\001 \002(\t\022&\n\rvariable_type\030\002 \002(\013" +
-      "2\017.boa.types.Type\022&\n\tmodifiers\030\003 \003(\0132\023.b" +
-      "oa.types.Modifier\022*\n\013initializer\030\004 \001(\0132\025" +
-      ".boa.types.Expression\022$\n\010comments\030\005 \003(\0132" +
-      "\022.boa.types.Comment\0225\n\026structural_change" +
-      "_kind\030\006 \001(\0162\025.boa.types.ChangeKind\0220\n\021la" +
-      "bel_change_kind\030\007 \001(\0162\025.boa.types.Change" +
-      "Kind\022\023\n\013mapped_node\030\010 \001(\005\022\013\n\003key\030\t \001(\005\022\026" +
-      "\n\016declaring_type\030\n \001(\005\"\307\006\n\tStatement\0220\n\004" +
-      "kind\030\001 \002(\0162\".boa.types.Statement.Stateme",
-      "ntKind\022$\n\010comments\030\002 \003(\0132\022.boa.types.Com" +
-      "ment\022(\n\nstatements\030\003 \003(\0132\024.boa.types.Sta" +
-      "tement\022.\n\017initializations\030\004 \003(\0132\025.boa.ty" +
-      "pes.Expression\022(\n\tcondition\030\005 \001(\0132\025.boa." +
-      "types.Expression\022&\n\007updates\030\006 \003(\0132\025.boa." +
-      "types.Expression\0221\n\024variable_declaration" +
-      "\030\007 \001(\0132\023.boa.types.Variable\0220\n\020type_decl" +
-      "aration\030\010 \001(\0132\026.boa.types.Declaration\022)\n" +
-      "\nexpression\030\t \001(\0132\025.boa.types.Expression" +
-      "\0225\n\026structural_change_kind\030\n \001(\0162\025.boa.t",
-      "ypes.ChangeKind\0220\n\021label_change_kind\030\013 \001" +
-      "(\0162\025.boa.types.ChangeKind\022\023\n\013mapped_node" +
-      "\030\014 \001(\005\022\013\n\003key\030\r \001(\005\"\232\002\n\rStatementKind\022\t\n" +
-      "\005OTHER\020\000\022\t\n\005BLOCK\020\001\022\014\n\010TYPEDECL\020\002\022\016\n\nEXP" +
-      "RESSION\020\003\022\010\n\004EXPR\020\003\022\020\n\014SYNCHRONIZED\020\004\022\010\n" +
-      "\004SYNC\020\004\022\n\n\006RETURN\020\005\022\007\n\003FOR\020\006\022\006\n\002DO\020\007\022\t\n\005" +
-      "WHILE\020\010\022\006\n\002IF\020\t\022\n\n\006ASSERT\020\n\022\t\n\005BREAK\020\013\022\014" +
-      "\n\010CONTINUE\020\014\022\t\n\005LABEL\020\r\022\n\n\006SWITCH\020\016\022\010\n\004C" +
-      "ASE\020\017\022\007\n\003TRY\020\020\022\t\n\005THROW\020\021\022\t\n\005CATCH\020\022\022\t\n\005" +
-      "EMPTY\020\023\022\013\n\007FINALLY\020\024\032\002\020\001\"\335\013\n\nExpression\022",
-      "2\n\004kind\030\001 \002(\0162$.boa.types.Expression.Exp" +
-      "ressionKind\022*\n\013expressions\030\002 \003(\0132\025.boa.t" +
-      "ypes.Expression\022+\n\016variable_decls\030\003 \003(\0132" +
-      "\023.boa.types.Variable\022!\n\010new_type\030\004 \001(\0132\017" +
-      ".boa.types.Type\022+\n\022generic_parameters\030\005 " +
-      "\003(\0132\017.boa.types.Type\022\022\n\nis_postfix\030\006 \001(\010" +
-      "\022\017\n\007literal\030\007 \001(\t\022\020\n\010variable\030\010 \001(\t\022\016\n\006m" +
-      "ethod\030\t \001(\t\022*\n\013method_args\030\n \003(\0132\025.boa.t" +
-      "ypes.Expression\0220\n\020anon_declaration\030\013 \001(" +
-      "\0132\026.boa.types.Declaration\022\'\n\nannotation\030",
-      "\014 \001(\0132\023.boa.types.Modifier\022!\n\006lambda\030\r \001" +
-      "(\0132\021.boa.types.Method\022\021\n\tno_parens\030\016 \001(\010" +
-      "\0225\n\026structural_change_kind\030\017 \001(\0162\025.boa.t" +
-      "ypes.ChangeKind\0220\n\021label_change_kind\030\020 \001" +
-      "(\0162\025.boa.types.ChangeKind\022\023\n\013mapped_node" +
-      "\030\021 \001(\005\022\013\n\003key\030\022 \001(\005\022\'\n\016declaring_type\030\023 " +
-      "\001(\0132\017.boa.types.Type\022$\n\013return_type\030\024 \001(" +
-      "\0132\017.boa.types.Type\"\223\006\n\016ExpressionKind\022\t\n" +
-      "\005OTHER\020\000\022\013\n\007LITERAL\020\001\022\r\n\tVARACCESS\020\002\022\013\n\007" +
-      "VARDECL\020\003\022\016\n\nMETHODCALL\020\004\022\010\n\004CAST\020\005\022\016\n\nA",
-      "RRAYINDEX\020\006\022\r\n\tARRAYINIT\020\007\022\017\n\013TYPECOMPAR" +
-      "E\020\010\022\007\n\003NEW\020\t\022\014\n\010NEWARRAY\020\n\022\n\n\006OP_ADD\020\013\022\n" +
-      "\n\006OP_SUB\020\014\022\013\n\007OP_MULT\020\r\022\n\n\006OP_DIV\020\016\022\n\n\006O" +
-      "P_MOD\020\017\022\n\n\006OP_INC\020\020\022\n\n\006OP_DEC\020\021\022\016\n\nBIT_L" +
-      "SHIFT\020\022\022\016\n\nBIT_RSHIFT\020\023\022\026\n\022BIT_UNSIGNEDR" +
-      "SHIFT\020\024\022\013\n\007BIT_AND\020\025\022\n\n\006BIT_OR\020\026\022\013\n\007BIT_" +
-      "NOT\020\027\022\013\n\007BIT_XOR\020\030\022\017\n\013LOGICAL_NOT\020\031\022\017\n\013L" +
-      "OGICAL_AND\020\032\022\016\n\nLOGICAL_OR\020\033\022\006\n\002EQ\020\034\022\007\n\003" +
-      "NEQ\020\035\022\006\n\002LT\020\036\022\006\n\002GT\020\037\022\010\n\004LTEQ\020 \022\010\n\004GTEQ\020" +
-      "!\022\017\n\013CONDITIONAL\020\"\022\020\n\014NULLCOALESCE\020#\022\n\n\006",
-      "ASSIGN\020$\022\016\n\nASSIGN_ADD\020%\022\016\n\nASSIGN_SUB\020&" +
-      "\022\017\n\013ASSIGN_MULT\020\'\022\016\n\nASSIGN_DIV\020(\022\016\n\nASS" +
-      "IGN_MOD\020)\022\021\n\rASSIGN_BITXOR\020*\022\021\n\rASSIGN_B" +
-      "ITAND\020+\022\020\n\014ASSIGN_BITOR\020,\022\021\n\rASSIGN_LSHI" +
-      "FT\020-\022\021\n\rASSIGN_RSHIFT\020.\022\031\n\025ASSIGN_UNSIGN" +
-      "EDRSHIFT\020/\022\016\n\nANNOTATION\0200\022\t\n\005PAREN\0201\022\024\n" +
-      "\020METHOD_REFERENCE\0202\022\n\n\006LAMBDA\0203\022\017\n\013ANON_" +
-      "METHOD\0204\"\322\004\n\010Modifier\022.\n\004kind\030\001 \002(\0162 .bo" +
-      "a.types.Modifier.ModifierKind\0222\n\nvisibil" +
-      "ity\030\002 \001(\0162\036.boa.types.Modifier.Visibilit",
-      "y\022\027\n\017annotation_name\030\003 \001(\t\022\032\n\022annotation" +
-      "_members\030\004 \003(\t\0220\n\021annotation_values\030\005 \003(" +
-      "\0132\025.boa.types.Expression\022\r\n\005other\030\006 \001(\t\022" +
-      "5\n\026structural_change_kind\030\007 \001(\0162\025.boa.ty" +
-      "pes.ChangeKind\0220\n\021label_change_kind\030\010 \001(" +
+      "es.Comment\"\315\001\n\007ASTRoot\022(\n\nnamespaces\030\001 \003" +
+      "(\0132\024.boa.types.Namespace\022\r\n\005names\030\003 \003(\t\022" +
+      "5\n\026structural_change_kind\030\004 \001(\0162\025.boa.ty" +
+      "pes.ChangeKind\0220\n\021label_change_kind\030\005 \001(" +
       "\0162\025.boa.types.ChangeKind\022\023\n\013mapped_node\030" +
-      "\t \001(\005\022\013\n\003key\030\n \001(\005\"~\n\014ModifierKind\022\t\n\005OT" +
-      "HER\020\000\022\016\n\nVISIBILITY\020\001\022\016\n\nANNOTATION\020\002\022\t\n" +
-      "\005FINAL\020\003\022\n\n\006STATIC\020\004\022\020\n\014SYNCHRONIZED\020\005\022\010" +
-      "\n\004SYNC\020\005\022\014\n\010ABSTRACT\020\006\032\002\020\001\"a\n\nVisibility",
-      "\022\n\n\006PUBLIC\020\001\022\013\n\007PRIVATE\020\002\022\r\n\tPROTECTED\020\003" +
-      "\022\r\n\tNAMESPACE\020\004\022\013\n\007PACKAGE\020\004\022\013\n\007DEFAULT\020" +
-      "\004\032\002\020\001\"\350\002\n\007Comment\022,\n\004kind\030\001 \002(\0162\036.boa.ty" +
-      "pes.Comment.CommentKind\022\r\n\005value\030\002 \002(\t\022)" +
-      "\n\010position\030\003 \002(\0132\027.boa.types.PositionInf" +
-      "o\0225\n\026structural_change_kind\030\004 \001(\0162\025.boa." +
-      "types.ChangeKind\0220\n\021label_change_kind\030\005 " +
+      "\006 \001(\005\022\013\n\003key\030\007 \001(\005\"\257\003\n\tNamespace\022\014\n\004name" +
+      "\030\001 \002(\t\022&\n\tmodifiers\030\002 \003(\0132\023.boa.types.Mo" +
+      "difier\022,\n\014declarations\030\003 \003(\0132\026.boa.types",
+      ".Declaration\022(\n\nstatements\030\004 \003(\0132\024.boa.t" +
+      "ypes.Statement\022\"\n\007methods\030\005 \003(\0132\021.boa.ty" +
+      "pes.Method\022*\n\013expressions\030\006 \003(\0132\025.boa.ty" +
+      "pes.Expression\0225\n\026structural_change_kind" +
+      "\030\007 \001(\0162\025.boa.types.ChangeKind\0220\n\021label_c" +
+      "hange_kind\030\010 \001(\0162\025.boa.types.ChangeKind\022" +
+      "\023\n\013mapped_node\030\t \001(\005\022\013\n\003key\030\n \001(\005\022(\n\nnam" +
+      "espaces\030\013 \003(\0132\024.boa.types.Namespace\022\017\n\007i" +
+      "mports\030\014 \003(\t\"\232\004\n\013Declaration\022\014\n\004name\030\001 \002" +
+      "(\t\022!\n\004kind\030\002 \002(\0162\023.boa.types.TypeKind\022&\n",
+      "\tmodifiers\030\003 \003(\0132\023.boa.types.Modifier\022+\n" +
+      "\022generic_parameters\030\004 \003(\0132\017.boa.types.Ty" +
+      "pe\022 \n\007parents\030\005 \003(\0132\017.boa.types.Type\022\"\n\007" +
+      "methods\030\006 \003(\0132\021.boa.types.Method\022#\n\006fiel" +
+      "ds\030\007 \003(\0132\023.boa.types.Variable\0223\n\023nested_" +
+      "declarations\030\010 \003(\0132\026.boa.types.Declarati" +
+      "on\022$\n\010comments\030\t \003(\0132\022.boa.types.Comment" +
+      "\0225\n\026structural_change_kind\030\n \001(\0162\025.boa.t" +
+      "ypes.ChangeKind\0220\n\021label_change_kind\030\013 \001" +
+      "(\0162\025.boa.types.ChangeKind\022\023\n\013mapped_node",
+      "\030\014 \001(\005\022\013\n\003key\030\r \001(\005\022\034\n\024fully_qualified_n" +
+      "ame\030\016 \001(\t\022\026\n\016declaring_type\030\017 \001(\005\"\233\002\n\004Ty" +
+      "pe\022\014\n\004name\030\001 \002(\t\022\034\n\024fully_qualified_name" +
+      "\030\002 \001(\t\022!\n\004kind\030\003 \002(\0162\023.boa.types.TypeKin" +
+      "d\022\n\n\002id\030\004 \001(\t\0225\n\026structural_change_kind\030" +
+      "\005 \001(\0162\025.boa.types.ChangeKind\0220\n\021label_ch" +
+      "ange_kind\030\006 \001(\0162\025.boa.types.ChangeKind\022\023" +
+      "\n\013mapped_node\030\007 \001(\005\022\030\n\020declaration_file\030" +
+      "\010 \001(\005\022\023\n\013declaration\030\t \001(\005\022\013\n\003key\030\n \001(\005\"" +
+      "\326\003\n\006Method\022\014\n\004name\030\001 \001(\t\022&\n\tmodifiers\030\002 ",
+      "\003(\0132\023.boa.types.Modifier\022$\n\013return_type\030" +
+      "\003 \002(\0132\017.boa.types.Type\022+\n\022generic_parame" +
+      "ters\030\004 \003(\0132\017.boa.types.Type\022&\n\targuments" +
+      "\030\005 \003(\0132\023.boa.types.Variable\022(\n\017exception" +
+      "_types\030\006 \003(\0132\017.boa.types.Type\022(\n\nstateme" +
+      "nts\030\007 \003(\0132\024.boa.types.Statement\022$\n\010comme" +
+      "nts\030\010 \003(\0132\022.boa.types.Comment\0225\n\026structu" +
+      "ral_change_kind\030\t \001(\0162\025.boa.types.Change" +
+      "Kind\0220\n\021label_change_kind\030\n \001(\0162\025.boa.ty" +
+      "pes.ChangeKind\022\023\n\013mapped_node\030\013 \001(\005\022\013\n\003k",
+      "ey\030\014 \001(\005\022\026\n\016declaring_type\030\r \001(\005\"\335\002\n\010Var" +
+      "iable\022\014\n\004name\030\001 \002(\t\022&\n\rvariable_type\030\002 \002" +
+      "(\0132\017.boa.types.Type\022&\n\tmodifiers\030\003 \003(\0132\023" +
+      ".boa.types.Modifier\022*\n\013initializer\030\004 \001(\013" +
+      "2\025.boa.types.Expression\022$\n\010comments\030\005 \003(" +
+      "\0132\022.boa.types.Comment\0225\n\026structural_chan" +
+      "ge_kind\030\006 \001(\0162\025.boa.types.ChangeKind\0220\n\021" +
+      "label_change_kind\030\007 \001(\0162\025.boa.types.Chan" +
+      "geKind\022\023\n\013mapped_node\030\010 \001(\005\022\013\n\003key\030\t \001(\005" +
+      "\022\026\n\016declaring_type\030\n \001(\005\"\307\006\n\tStatement\0220",
+      "\n\004kind\030\001 \002(\0162\".boa.types.Statement.State" +
+      "mentKind\022$\n\010comments\030\002 \003(\0132\022.boa.types.C" +
+      "omment\022(\n\nstatements\030\003 \003(\0132\024.boa.types.S" +
+      "tatement\022.\n\017initializations\030\004 \003(\0132\025.boa." +
+      "types.Expression\022(\n\tcondition\030\005 \001(\0132\025.bo" +
+      "a.types.Expression\022&\n\007updates\030\006 \003(\0132\025.bo" +
+      "a.types.Expression\0221\n\024variable_declarati" +
+      "on\030\007 \001(\0132\023.boa.types.Variable\0220\n\020type_de" +
+      "claration\030\010 \001(\0132\026.boa.types.Declaration\022" +
+      ")\n\nexpression\030\t \001(\0132\025.boa.types.Expressi",
+      "on\0225\n\026structural_change_kind\030\n \001(\0162\025.boa" +
+      ".types.ChangeKind\0220\n\021label_change_kind\030\013" +
+      " \001(\0162\025.boa.types.ChangeKind\022\023\n\013mapped_no" +
+      "de\030\014 \001(\005\022\013\n\003key\030\r \001(\005\"\232\002\n\rStatementKind\022" +
+      "\t\n\005OTHER\020\000\022\t\n\005BLOCK\020\001\022\014\n\010TYPEDECL\020\002\022\016\n\nE" +
+      "XPRESSION\020\003\022\010\n\004EXPR\020\003\022\020\n\014SYNCHRONIZED\020\004\022" +
+      "\010\n\004SYNC\020\004\022\n\n\006RETURN\020\005\022\007\n\003FOR\020\006\022\006\n\002DO\020\007\022\t" +
+      "\n\005WHILE\020\010\022\006\n\002IF\020\t\022\n\n\006ASSERT\020\n\022\t\n\005BREAK\020\013" +
+      "\022\014\n\010CONTINUE\020\014\022\t\n\005LABEL\020\r\022\n\n\006SWITCH\020\016\022\010\n" +
+      "\004CASE\020\017\022\007\n\003TRY\020\020\022\t\n\005THROW\020\021\022\t\n\005CATCH\020\022\022\t",
+      "\n\005EMPTY\020\023\022\013\n\007FINALLY\020\024\032\002\020\001\"\335\013\n\nExpressio" +
+      "n\0222\n\004kind\030\001 \002(\0162$.boa.types.Expression.E" +
+      "xpressionKind\022*\n\013expressions\030\002 \003(\0132\025.boa" +
+      ".types.Expression\022+\n\016variable_decls\030\003 \003(" +
+      "\0132\023.boa.types.Variable\022!\n\010new_type\030\004 \001(\013" +
+      "2\017.boa.types.Type\022+\n\022generic_parameters\030" +
+      "\005 \003(\0132\017.boa.types.Type\022\022\n\nis_postfix\030\006 \001" +
+      "(\010\022\017\n\007literal\030\007 \001(\t\022\020\n\010variable\030\010 \001(\t\022\016\n" +
+      "\006method\030\t \001(\t\022*\n\013method_args\030\n \003(\0132\025.boa" +
+      ".types.Expression\0220\n\020anon_declaration\030\013 ",
+      "\001(\0132\026.boa.types.Declaration\022\'\n\nannotatio" +
+      "n\030\014 \001(\0132\023.boa.types.Modifier\022!\n\006lambda\030\r" +
+      " \001(\0132\021.boa.types.Method\022\021\n\tno_parens\030\016 \001" +
+      "(\010\0225\n\026structural_change_kind\030\017 \001(\0162\025.boa" +
+      ".types.ChangeKind\0220\n\021label_change_kind\030\020" +
+      " \001(\0162\025.boa.types.ChangeKind\022\023\n\013mapped_no" +
+      "de\030\021 \001(\005\022\013\n\003key\030\022 \001(\005\022\'\n\016declaring_type\030" +
+      "\023 \001(\0132\017.boa.types.Type\022$\n\013return_type\030\024 " +
+      "\001(\0132\017.boa.types.Type\"\223\006\n\016ExpressionKind\022" +
+      "\t\n\005OTHER\020\000\022\013\n\007LITERAL\020\001\022\r\n\tVARACCESS\020\002\022\013",
+      "\n\007VARDECL\020\003\022\016\n\nMETHODCALL\020\004\022\010\n\004CAST\020\005\022\016\n" +
+      "\nARRAYINDEX\020\006\022\r\n\tARRAYINIT\020\007\022\017\n\013TYPECOMP" +
+      "ARE\020\010\022\007\n\003NEW\020\t\022\014\n\010NEWARRAY\020\n\022\n\n\006OP_ADD\020\013" +
+      "\022\n\n\006OP_SUB\020\014\022\013\n\007OP_MULT\020\r\022\n\n\006OP_DIV\020\016\022\n\n" +
+      "\006OP_MOD\020\017\022\n\n\006OP_INC\020\020\022\n\n\006OP_DEC\020\021\022\016\n\nBIT" +
+      "_LSHIFT\020\022\022\016\n\nBIT_RSHIFT\020\023\022\026\n\022BIT_UNSIGNE" +
+      "DRSHIFT\020\024\022\013\n\007BIT_AND\020\025\022\n\n\006BIT_OR\020\026\022\013\n\007BI" +
+      "T_NOT\020\027\022\013\n\007BIT_XOR\020\030\022\017\n\013LOGICAL_NOT\020\031\022\017\n" +
+      "\013LOGICAL_AND\020\032\022\016\n\nLOGICAL_OR\020\033\022\006\n\002EQ\020\034\022\007" +
+      "\n\003NEQ\020\035\022\006\n\002LT\020\036\022\006\n\002GT\020\037\022\010\n\004LTEQ\020 \022\010\n\004GTE",
+      "Q\020!\022\017\n\013CONDITIONAL\020\"\022\020\n\014NULLCOALESCE\020#\022\n" +
+      "\n\006ASSIGN\020$\022\016\n\nASSIGN_ADD\020%\022\016\n\nASSIGN_SUB" +
+      "\020&\022\017\n\013ASSIGN_MULT\020\'\022\016\n\nASSIGN_DIV\020(\022\016\n\nA" +
+      "SSIGN_MOD\020)\022\021\n\rASSIGN_BITXOR\020*\022\021\n\rASSIGN" +
+      "_BITAND\020+\022\020\n\014ASSIGN_BITOR\020,\022\021\n\rASSIGN_LS" +
+      "HIFT\020-\022\021\n\rASSIGN_RSHIFT\020.\022\031\n\025ASSIGN_UNSI" +
+      "GNEDRSHIFT\020/\022\016\n\nANNOTATION\0200\022\t\n\005PAREN\0201\022" +
+      "\024\n\020METHOD_REFERENCE\0202\022\n\n\006LAMBDA\0203\022\017\n\013ANO" +
+      "N_METHOD\0204\"\322\004\n\010Modifier\022.\n\004kind\030\001 \002(\0162 ." +
+      "boa.types.Modifier.ModifierKind\0222\n\nvisib",
+      "ility\030\002 \001(\0162\036.boa.types.Modifier.Visibil" +
+      "ity\022\027\n\017annotation_name\030\003 \001(\t\022\032\n\022annotati" +
+      "on_members\030\004 \003(\t\0220\n\021annotation_values\030\005 " +
+      "\003(\0132\025.boa.types.Expression\022\r\n\005other\030\006 \001(" +
+      "\t\0225\n\026structural_change_kind\030\007 \001(\0162\025.boa." +
+      "types.ChangeKind\0220\n\021label_change_kind\030\010 " +
       "\001(\0162\025.boa.types.ChangeKind\022\023\n\013mapped_nod" +
-      "e\030\006 \001(\005\022\013\n\003key\030\007 \001(\005\"j\n\013CommentKind\022\t\n\005O" +
-      "THER\020\000\022\010\n\004LINE\020\001\022\t\n\005BLOCK\020\002\022\007\n\003DOC\020\003\022\021\n\r",
-      "DOCUMENTATION\020\003\022\010\n\004SPEC\020\004\022\021\n\rSPECIFICATI" +
-      "ON\020\004\032\002\020\001\"{\n\014PositionInfo\022\021\n\tstart_pos\030\001 " +
-      "\002(\005\022\016\n\006length\030\002 \002(\005\022\022\n\nstart_line\030\003 \002(\005\022" +
-      "\021\n\tstart_col\030\004 \002(\005\022\020\n\010end_line\030\005 \002(\005\022\017\n\007" +
-      "end_col\030\006 \002(\005*\236\001\n\010TypeKind\022\t\n\005OTHER\020\000\022\t\n" +
-      "\005CLASS\020\001\022\r\n\tINTERFACE\020\002\022\r\n\tANONYMOUS\020\003\022\010" +
-      "\n\004ANON\020\003\022\n\n\006STRUCT\020\004\022\010\n\004ENUM\020\005\022\017\n\013ENUMER" +
-      "ATION\020\005\022\016\n\nANNOTATION\020\006\022\014\n\010DELEGATE\020\007\022\013\n" +
-      "\007GENERIC\020\010\032\002\020\001B\002H\001"
+      "e\030\t \001(\005\022\013\n\003key\030\n \001(\005\"~\n\014ModifierKind\022\t\n\005" +
+      "OTHER\020\000\022\016\n\nVISIBILITY\020\001\022\016\n\nANNOTATION\020\002\022" +
+      "\t\n\005FINAL\020\003\022\n\n\006STATIC\020\004\022\020\n\014SYNCHRONIZED\020\005",
+      "\022\010\n\004SYNC\020\005\022\014\n\010ABSTRACT\020\006\032\002\020\001\"a\n\nVisibili" +
+      "ty\022\n\n\006PUBLIC\020\001\022\013\n\007PRIVATE\020\002\022\r\n\tPROTECTED" +
+      "\020\003\022\r\n\tNAMESPACE\020\004\022\013\n\007PACKAGE\020\004\022\013\n\007DEFAUL" +
+      "T\020\004\032\002\020\001\"\350\002\n\007Comment\022,\n\004kind\030\001 \002(\0162\036.boa." +
+      "types.Comment.CommentKind\022\r\n\005value\030\002 \002(\t" +
+      "\022)\n\010position\030\003 \002(\0132\027.boa.types.PositionI" +
+      "nfo\0225\n\026structural_change_kind\030\004 \001(\0162\025.bo" +
+      "a.types.ChangeKind\0220\n\021label_change_kind\030" +
+      "\005 \001(\0162\025.boa.types.ChangeKind\022\023\n\013mapped_n" +
+      "ode\030\006 \001(\005\022\013\n\003key\030\007 \001(\005\"j\n\013CommentKind\022\t\n",
+      "\005OTHER\020\000\022\010\n\004LINE\020\001\022\t\n\005BLOCK\020\002\022\007\n\003DOC\020\003\022\021" +
+      "\n\rDOCUMENTATION\020\003\022\010\n\004SPEC\020\004\022\021\n\rSPECIFICA" +
+      "TION\020\004\032\002\020\001\"{\n\014PositionInfo\022\021\n\tstart_pos\030" +
+      "\001 \002(\005\022\016\n\006length\030\002 \002(\005\022\022\n\nstart_line\030\003 \002(" +
+      "\005\022\021\n\tstart_col\030\004 \002(\005\022\020\n\010end_line\030\005 \002(\005\022\017" +
+      "\n\007end_col\030\006 \002(\005*\236\001\n\010TypeKind\022\t\n\005OTHER\020\000\022" +
+      "\t\n\005CLASS\020\001\022\r\n\tINTERFACE\020\002\022\r\n\tANONYMOUS\020\003" +
+      "\022\010\n\004ANON\020\003\022\n\n\006STRUCT\020\004\022\010\n\004ENUM\020\005\022\017\n\013ENUM" +
+      "ERATION\020\005\022\016\n\nANNOTATION\020\006\022\014\n\010DELEGATE\020\007\022" +
+      "\013\n\007GENERIC\020\010\032\002\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -33561,13 +34048,13 @@ public final class Ast {
           internal_static_boa_types_ASTRoot_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_ASTRoot_descriptor,
-              new java.lang.String[] { "Namespaces", "Imports", "Names", "StructuralChangeKind", "LabelChangeKind", "MappedNode", "Key", });
+              new java.lang.String[] { "Namespaces", "Names", "StructuralChangeKind", "LabelChangeKind", "MappedNode", "Key", });
           internal_static_boa_types_Namespace_descriptor =
             getDescriptor().getMessageTypes().get(2);
           internal_static_boa_types_Namespace_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Namespace_descriptor,
-              new java.lang.String[] { "Name", "Modifiers", "Declarations", "Statements", "Methods", "Expressions", "StructuralChangeKind", "LabelChangeKind", "MappedNode", "Key", });
+              new java.lang.String[] { "Name", "Modifiers", "Declarations", "Statements", "Methods", "Expressions", "StructuralChangeKind", "LabelChangeKind", "MappedNode", "Key", "Namespaces", "Imports", });
           internal_static_boa_types_Declaration_descriptor =
             getDescriptor().getMessageTypes().get(3);
           internal_static_boa_types_Declaration_fieldAccessorTable = new

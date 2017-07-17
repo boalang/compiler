@@ -13,8 +13,6 @@ message CommentsRoot {
 message ASTRoot {
 	/** The top-level namespaces in the file */
 	repeated Namespace namespaces = 1;
-	/** The imported namespaces and types */
-	repeated string imports = 2;
 	/** @exclude */
 	repeated string names = 3;
 	/** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED */
@@ -49,6 +47,10 @@ message Namespace {
 	optional int32 mapped_node = 9;
 	/** */
 	optional int32 key = 10;
+	/** The nested namespaces */
+	repeated Namespace namespaces = 11;
+	/** The imported namespaces and types */
+	repeated string imports = 12;
 }
 
 /** A type declaration, such as a class or interface */

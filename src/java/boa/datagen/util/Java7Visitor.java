@@ -39,7 +39,6 @@ public class Java7Visitor extends ASTVisitor {
 
 	protected Namespace.Builder b = Namespace.newBuilder();
 	protected List<boa.types.Ast.Comment> comments = new ArrayList<boa.types.Ast.Comment>();
-	protected List<String> imports = new ArrayList<String>();
 	protected Stack<List<boa.types.Ast.Declaration>> declarations = new Stack<List<boa.types.Ast.Declaration>>();
 	protected Stack<boa.types.Ast.Modifier> modifiers = new Stack<boa.types.Ast.Modifier>();
 	protected Stack<boa.types.Ast.Expression> expressions = new Stack<boa.types.Ast.Expression>();
@@ -66,10 +65,6 @@ public class Java7Visitor extends ASTVisitor {
 
 	public List<boa.types.Ast.Comment> getComments() {
 		return comments;
-	}
-
-	public List<String> getImports() {
-		return imports;
 	}
 
 /*
@@ -111,7 +106,7 @@ public class Java7Visitor extends ASTVisitor {
 			imp += id.getName().getFullyQualifiedName();
 			if (id.isOnDemand())
 				imp += ".*";
-			imports.add(imp);
+			b.addImports(imp);
 		}
 		for (Object t : node.types()) {
 			declarations.push(new ArrayList<boa.types.Ast.Declaration>());

@@ -143,8 +143,6 @@ public abstract class AbstractConnector implements AutoCloseable {
 				final ASTRoot.Builder ast = ASTRoot.newBuilder();
 				try {
 					ast.addNamespaces(visitor.getNamespaces(cu));
-					for (final String s : visitor.getImports())
-						ast.addImports(s);
 					/*for (final Comment c : visitor.getComments())
 						comments.addComments(c);*/
 				} catch (final UnsupportedOperationException e) {
