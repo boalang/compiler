@@ -284,6 +284,8 @@ public abstract class AbstractCommit {
 				cu =  parser.parse(content, null, 0);
 			}catch(java.lang.IllegalArgumentException ex){
 				return false;
+			}catch(org.mozilla.javascript.EvaluatorException ex){
+				return false;
 			}
 
 			final JavaScriptErrorCheckVisitor errorCheck = new JavaScriptErrorCheckVisitor();
