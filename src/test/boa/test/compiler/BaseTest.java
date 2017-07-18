@@ -323,13 +323,27 @@ public abstract class BaseTest {
 
 	protected String load(final String fileName) throws IOException {
 		final StringBuilder sb = new StringBuilder();
-		try (final BufferedReader br = new BufferedReader(new FileReader(fileName))) {
+		BufferedReader br = null;
+		FileReader fr = null;
+		try {
+			fr = new FileReader(fileName);
+			br = new BufferedReader(fr);
 			String line;
 			while ((line = br.readLine()) != null) {
 				sb.append(line + "\n");
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				if (br != null)
+					br.close();
+				if (fr != null)
+					fr.close();
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+
 		}
 		return sb.toString();
 	}
