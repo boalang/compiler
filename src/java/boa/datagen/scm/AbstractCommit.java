@@ -38,6 +38,7 @@ import boa.types.Diff.ChangedFile.FileKind;
 import boa.types.Shared.ChangeKind;
 import boa.types.Shared.Person;
 import boa.datagen.DefaultProperties;
+import boa.datagen.treed.TreedMapper;
 import boa.datagen.util.FileIO;
 import boa.datagen.util.JavaScriptErrorCheckVisitor;
 import boa.datagen.util.JavaScriptVisitor;
@@ -343,7 +344,7 @@ public abstract class AbstractCommit {
 		try {
 			final ASTParser parser = ASTParser.newParser(astLevel);
 			parser.setKind(ASTParser.K_COMPILATION_UNIT);
-			parser.setResolveBindings(true);
+//			parser.setResolveBindings(true);
 			parser.setSource(content.toCharArray());
 
 			final Map<?, ?> options = JavaCore.getOptions();
@@ -356,7 +357,19 @@ public abstract class AbstractCommit {
 			cu.accept(errorCheck);
 
 			if (!errorCheck.hasError || storeOnError) {
+				if (fb.getPreviousIndicesCount() == 1) {
+					AbstractCommit previousCommit = this.connector.revisions.get(fb.getPreviousVersions(0));
+					String previousFilePath = previousCommit.changedFiles.get(fb.getPreviousIndices(0)).getName();
+					String previousContent = previousCommit.getFileContents(previousFilePath);
+					parser.setSource(previousContent.toCharArray());
+					final ASTNode preCu = parser.createAST(null);
+					TreedMapper tm = new TreedMapper(preCu, cu);
+					tm.map();
+				}
 				final ASTRoot.Builder ast = ASTRoot.newBuilder();
+				Integer index = (Integer) cu.getProperty(Java7Visitor.PROPERTY_INDEX);
+				if (index != null)
+					ast.setKey(index);
 				//final CommentsRoot.Builder comments = CommentsRoot.newBuilder();
 				final Java7Visitor visitor;
 				if (astLevel == AST.JLS8)
