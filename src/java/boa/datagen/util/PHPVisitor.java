@@ -154,7 +154,7 @@ public class PHPVisitor extends AbstractVisitor {
 				namespaces.push(new ArrayList<boa.types.Ast.Namespace>());
 				((NamespaceDeclaration) s).accept(this);
 				for (boa.types.Ast.Namespace d : namespaces.pop())
-					r.addNamespaces(d); // FIXME
+					nb.addNamespaces(d); 
 			} else if (s instanceof MethodDeclaration) {
 				methods.push(new ArrayList<boa.types.Ast.Method>());
 				((MethodDeclaration) s).accept(this);
@@ -179,7 +179,7 @@ public class PHPVisitor extends AbstractVisitor {
 					id.getExpression().accept(this);// FIXME
 					nb.addExpressions(expressions.pop());
 				}
-				imports.add(imp);
+				nb.addImports(imp);
 			} else {
 				statements.push(new ArrayList<boa.types.Ast.Statement>());
 				((ASTNode) s).accept(this);
