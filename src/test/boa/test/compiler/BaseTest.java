@@ -22,9 +22,11 @@ import static org.junit.Assert.fail;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URL;
@@ -320,16 +322,16 @@ public abstract class BaseTest {
 	//
 
 	protected String load(final String fileName) throws IOException {
-		BufferedInputStream in = null;
-		try {
-			in = new BufferedInputStream(new FileInputStream(fileName));
-			final byte[] bytes = new byte[(int) new File(fileName).length()];
-			in.read(bytes);
-			return new String(bytes);
-		} finally {
-			if (in != null)
-				in.close();
+		final StringBuilder sb = new StringBuilder();
+		try (final BufferedReader br = new BufferedReader(new FileReader(fileName))) {
+			String line;
+			while ((line = br.readLine()) != null) {
+				sb.append(line + "\n");
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
+		return sb.toString();
 	}
 
 	protected final void delete(final File f) throws IOException {
