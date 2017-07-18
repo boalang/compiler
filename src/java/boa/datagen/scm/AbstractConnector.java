@@ -40,6 +40,8 @@ import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.FileASTRequestor;
 import org.eclipse.jdt.core.dom.ITypeBinding;
+
+import boa.datagen.util.Java7Visitor;
 import boa.datagen.util.Java8Visitor;
 import boa.types.Ast.ASTRoot;
 import boa.types.Code.Revision;
@@ -183,7 +185,7 @@ public abstract class AbstractConnector implements AutoCloseable {
 				private int index = 1;
 				@Override
 				public void preVisit(ASTNode node) {
-					node.setProperty("i", index++);
+					node.setProperty(Java7Visitor.PROPERTY_INDEX, index++);
 				}
 				
 				@Override
@@ -196,7 +198,7 @@ public abstract class AbstractConnector implements AutoCloseable {
 								tb = tb.getTypeDeclaration();
 							String key = tb.getKey();
 							declarationFile.put(key, fileIndex);
-							declarationNode.put(key, (Integer) node.getProperty("i"));
+							declarationNode.put(key, (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX));
 						}
 					}
 				}

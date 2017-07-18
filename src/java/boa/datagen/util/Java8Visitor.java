@@ -43,6 +43,9 @@ public class Java8Visitor extends Java7Visitor {
 	public boolean visit(MethodDeclaration node) {
 		List<boa.types.Ast.Method> list = methods.peek();
 		Method.Builder b = Method.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null)
+			b.setKey(index);
 		if (node.isConstructor())
 			b.setName("<init>");
 		else
@@ -63,6 +66,9 @@ public class Java8Visitor extends Java7Visitor {
 			tb.setName(name);
 			tb.setKind(boa.types.Ast.TypeKind.OTHER);
 			setTypeBinding(tb, node.getReturnType2());
+			index = (Integer) node.getReturnType2().getProperty(Java7Visitor.PROPERTY_INDEX);
+			if (index != null)
+				tb.setKey(index);
 			b.setReturnType(tb.build());
 		} else {
 			tb.setName("void");
@@ -83,6 +89,9 @@ public class Java8Visitor extends Java7Visitor {
 			tp.setName(name);
 			tp.setKind(boa.types.Ast.TypeKind.GENERIC);
 			setTypeBinding(tp, ((TypeParameter)t).getName());
+			index = (Integer) ((ASTNode) t).getProperty(Java7Visitor.PROPERTY_INDEX);
+			if (index != null)
+				tp.setKey(index);
 			b.addGenericParameters(tp.build());
 		}
 		if (node.getReceiverType() != null) {
@@ -94,12 +103,18 @@ public class Java8Visitor extends Java7Visitor {
 			tp.setName(name);
 			tp.setKind(boa.types.Ast.TypeKind.OTHER); // FIXME change to receiver? or something?
 			setTypeBinding(tp, node.getReceiverType());
+			index = (Integer) node.getReceiverType().getProperty(Java7Visitor.PROPERTY_INDEX);
+			if (index != null)
+				tp.setKey(index);
 			vb.setVariableType(tp.build());
 			b.addArguments(vb.build());
 		}
 		for (Object o : node.parameters()) {
 			SingleVariableDeclaration ex = (SingleVariableDeclaration)o;
 			Variable.Builder vb = Variable.newBuilder();
+			index = (Integer) ex.getProperty(Java7Visitor.PROPERTY_INDEX);
+			if (index != null)
+				vb.setKey(index);
 			vb.setName(ex.getName().getFullyQualifiedName());
 			for (Object m : ex.modifiers()) {
 				if (((IExtendedModifier)m).isAnnotation())
@@ -118,6 +133,9 @@ public class Java8Visitor extends Java7Visitor {
 			tp.setName(name);
 			tp.setKind(boa.types.Ast.TypeKind.OTHER);
 			setTypeBinding(tp, ex.getType());
+			index = (Integer) ex.getType().getProperty(Java7Visitor.PROPERTY_INDEX);
+			if (index != null)
+				tp.setKey(index);
 			vb.setVariableType(tp.build());
 			if (ex.getInitializer() != null) {
 				ex.getInitializer().accept(this);
@@ -130,6 +148,9 @@ public class Java8Visitor extends Java7Visitor {
 				tp.setName(typeName((org.eclipse.jdt.core.dom.Type) o));
 				tp.setKind(boa.types.Ast.TypeKind.CLASS);
 				setTypeBinding(tp, (org.eclipse.jdt.core.dom.Type) o);
+				index = (Integer) ((ASTNode) o).getProperty(Java7Visitor.PROPERTY_INDEX);
+				if (index != null)
+					tp.setKey(index);
 				b.addExceptionTypes(tp.build());
 		}
 		if (node.getBody() != null) {
@@ -147,6 +168,9 @@ public class Java8Visitor extends Java7Visitor {
 	@Override
 	public boolean visit(LambdaExpression node) {
 		Method.Builder b = Method.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null)
+			b.setKey(index);
 		boa.types.Ast.Type.Builder rt = boa.types.Ast.Type.newBuilder();
 		rt.setName("");
 		rt.setKind(boa.types.Ast.TypeKind.OTHER);
@@ -154,6 +178,9 @@ public class Java8Visitor extends Java7Visitor {
 		for (Object o : node.parameters()) {
 			VariableDeclaration ex = (VariableDeclaration)o;
 			Variable.Builder vb = Variable.newBuilder();
+			index = (Integer) ex.getProperty(Java7Visitor.PROPERTY_INDEX);
+			if (index != null)
+				vb.setKey(index);
 			vb.setName(ex.getName().getFullyQualifiedName());
 			if (o instanceof SingleVariableDeclaration) {
 				SingleVariableDeclaration svd = (SingleVariableDeclaration)o;
@@ -167,6 +194,9 @@ public class Java8Visitor extends Java7Visitor {
 				tp.setName(name);
 				tp.setKind(boa.types.Ast.TypeKind.OTHER);
 				setTypeBinding(tp, svd.getType());
+				index = (Integer) svd.getType().getProperty(Java7Visitor.PROPERTY_INDEX);
+				if (index != null)
+					tp.setKey(index);
 				vb.setVariableType(tp.build());
 			} else {
 				VariableDeclarationFragment vdf = (VariableDeclarationFragment)o;
@@ -193,6 +223,9 @@ public class Java8Visitor extends Java7Visitor {
 		}
 
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
+		index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null)
+			eb.setKey(index);
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.LAMBDA);
 		eb.setLambda(b.build());
         if (!node.hasParentheses())
@@ -205,6 +238,9 @@ public class Java8Visitor extends Java7Visitor {
 	@Override
 	public boolean visit(CreationReference node) {
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null)
+			eb.setKey(index);
 		if (node.resolveMethodBinding() != null) {
 			IMethodBinding mb = node.resolveMethodBinding();
 			eb.setReturnType(buildType(mb.getReturnType()));
@@ -217,6 +253,9 @@ public class Java8Visitor extends Java7Visitor {
 		tb1.setName(typeName(node.getType()));
 		tb1.setKind(boa.types.Ast.TypeKind.OTHER);
 		setTypeBinding(tb1, node.getType());
+		index = (Integer) node.getType().getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null)
+			tb1.setKey(index);
 		eb.setNewType(tb1.build());
 
 		for (Object t : node.typeArguments()) {
@@ -224,6 +263,9 @@ public class Java8Visitor extends Java7Visitor {
 			tb.setName(typeName((org.eclipse.jdt.core.dom.Type) t));
 			tb.setKind(boa.types.Ast.TypeKind.GENERIC);
 			setTypeBinding(tb, (org.eclipse.jdt.core.dom.Type) t);
+			index = (Integer) ((ASTNode) t).getProperty(Java7Visitor.PROPERTY_INDEX);
+			if (index != null)
+				tb.setKey(index);
 			eb.addGenericParameters(tb.build());
 		}
 
@@ -236,6 +278,9 @@ public class Java8Visitor extends Java7Visitor {
 	@Override
 	public boolean visit(ExpressionMethodReference node) {
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null)
+			eb.setKey(index);
 		if (node.resolveMethodBinding() != null) {
 			IMethodBinding mb = node.resolveMethodBinding();
 			eb.setReturnType(buildType(mb.getReturnType()));
@@ -252,6 +297,9 @@ public class Java8Visitor extends Java7Visitor {
 			tb.setName(typeName((org.eclipse.jdt.core.dom.Type) t));
 			tb.setKind(boa.types.Ast.TypeKind.GENERIC);
 			setTypeBinding(tb, (org.eclipse.jdt.core.dom.Type) t);
+			index = (Integer) ((ASTNode) t).getProperty(Java7Visitor.PROPERTY_INDEX);
+			if (index != null)
+				tb.setKey(index);
 			eb.addGenericParameters(tb.build());
 		}
 
@@ -264,6 +312,9 @@ public class Java8Visitor extends Java7Visitor {
 	@Override
 	public boolean visit(SuperMethodReference node) {
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null)
+			eb.setKey(index);
 		if (node.resolveMethodBinding() != null) {
 			IMethodBinding mb = node.resolveMethodBinding();
 			eb.setReturnType(buildType(mb.getReturnType()));
@@ -282,6 +333,9 @@ public class Java8Visitor extends Java7Visitor {
 			tb.setName(typeName((org.eclipse.jdt.core.dom.Type) t));
 			tb.setKind(boa.types.Ast.TypeKind.GENERIC);
 			setTypeBinding(tb, (org.eclipse.jdt.core.dom.Type) t);
+			index = (Integer) ((ASTNode) t).getProperty(Java7Visitor.PROPERTY_INDEX);
+			if (index != null)
+				tb.setKey(index);
 			eb.addGenericParameters(tb.build());
 		}
 
@@ -294,6 +348,9 @@ public class Java8Visitor extends Java7Visitor {
 	@Override
 	public boolean visit(TypeMethodReference node) {
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null)
+			eb.setKey(index);
 		if (node.resolveMethodBinding() != null) {
 			IMethodBinding mb = node.resolveMethodBinding();
 			eb.setReturnType(buildType(mb.getReturnType()));
@@ -306,6 +363,9 @@ public class Java8Visitor extends Java7Visitor {
 		tb1.setName(typeName(node.getType()));
 		tb1.setKind(boa.types.Ast.TypeKind.OTHER);
 		setTypeBinding(tb1, node.getType());
+		index = (Integer) node.getType().getProperty(Java7Visitor.PROPERTY_INDEX);
+		if (index != null)
+			tb1.setKey(index);
 		eb.setNewType(tb1.build());
 
 		for (Object t : node.typeArguments()) {
@@ -313,6 +373,9 @@ public class Java8Visitor extends Java7Visitor {
 			tb.setName(typeName((org.eclipse.jdt.core.dom.Type)t));
 			tb.setKind(boa.types.Ast.TypeKind.GENERIC);
 			setTypeBinding(tb, (org.eclipse.jdt.core.dom.Type) t);
+			index = (Integer) ((ASTNode) t).getProperty(Java7Visitor.PROPERTY_INDEX);
+			if (index != null)
+				tb.setKey(index);
 			eb.addGenericParameters(tb.build());
 		}
 
