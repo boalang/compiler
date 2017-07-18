@@ -949,7 +949,7 @@ public class Java7Visitor extends ASTVisitor {
 			boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 			index = (Integer) node.getLabel().getProperty(Java7Visitor.PROPERTY_INDEX);
 			if (index != null)
-				b.setKey(index);
+				eb.setKey(index);
 			eb.setLiteral(node.getLabel().getFullyQualifiedName());
 			eb.setKind(boa.types.Ast.Expression.ExpressionKind.LITERAL);
 			b.setExpression(eb.build());
