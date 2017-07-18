@@ -12,7 +12,7 @@ import org.eclipse.jdt.core.dom.Modifier.ModifierKeyword;
 import boa.types.Ast.Type;
 
 public class JavaASTUtil {
-	private static final HashMap<ModifierKeyword, Integer> modifierType = new HashMap<>();
+	private static final HashMap<ModifierKeyword, Integer> modifierType = new HashMap<ModifierKeyword, Integer>();
 	
 	static {
 		modifierType.put(ModifierKeyword.ABSTRACT_KEYWORD, 1);
