@@ -66,7 +66,7 @@ public class TestTypeFullyQualifiedName {
 						ar.next(astkey, val);
 						bytes = val.getBytes();
 						ASTRoot root = ASTRoot.parseFrom(CodedInputStream.newInstance(bytes, 0, val.getLength()));
-						System.out.println(root);
+					//	System.out.println(root);
 						ProtoMessageVisitor v = new ProtoMessageVisitor() {
 							@Override
 							public boolean preVisit(Message message) {
@@ -85,7 +85,13 @@ public class TestTypeFullyQualifiedName {
 								}
 								if (message instanceof boa.types.Ast.Expression) {
 									boa.types.Ast.Expression exp = (boa.types.Ast.Expression) message;
-									if (exp.getKind() == boa.types.Ast.Expression.ExpressionKind.VARACCESS) {
+									String varOrMeth = "";
+									if(!exp.getVariable().isEmpty())
+										varOrMeth = exp.getVariable();
+									else if (!exp.getMethod().isEmpty())
+										varOrMeth = exp.getMethod();
+									else if (!exp.getLiteral().isEmpty())
+										varOrMeth = exp.getLiteral();
 										if (!exp.getExpressionsList().isEmpty() && exp.getLiteral().equals("this")) {
 											boa.types.Ast.Expression lit = exp.getExpressions(0);
 											String fqn = lit.getReturnType().getFullyQualifiedName();
@@ -93,94 +99,108 @@ public class TestTypeFullyQualifiedName {
 											assertEquals(true, fqn
 													.equals("boa.datagen.forges.github.GithubLanguageDownloadMaster"));
 											fqn = exp.getDeclaringType().getFullyQualifiedName();
-											System.out.println(exp.getVariable() + " delcaring type is " + fqn);
+											System.out.println(varOrMeth + " delcaring type is " + fqn);
 											assertEquals(true, fqn
 													.equals("boa.datagen.forges.github.GithubLanguageDownloadMaster"));
 											fqn = exp.getReturnType().getFullyQualifiedName();
-											System.out.println(exp.getVariable() + " return type is " + fqn);
+											System.out.println(varOrMeth + " return type is " + fqn);
 											assertEquals(true, fqn.equals("java.lang.String"));
 										} else if (exp.getReturnType() != null) {
 											if (exp.getReturnType().getName().equals("String")) {
 												String fqn = exp.getReturnType().getFullyQualifiedName();
-												System.out.println(exp.getVariable() + " return type is " + fqn);
+												System.out.println(exp.getKind() + " " + varOrMeth + " return type is " + fqn);
 												assertEquals(true, fqn.equals("java.lang.String"));
 											} else if (exp.getReturnType().getName().equals("File")) {
 												String fqn = exp.getReturnType().getFullyQualifiedName();
-												System.out.println(exp.getVariable() + " return type is " + fqn);
+												System.out.println(exp.getKind() + " " + varOrMeth + " return type is " + fqn);
 												assertEquals(true, fqn.equals("java.io.File"));
 											} else if (exp.getReturnType().getName().equals("String[]")) {
 												String fqn = exp.getReturnType().getFullyQualifiedName();
-												System.out.println(exp.getVariable() + " return type is " + fqn);
+												System.out.println(exp.getKind() + " " + varOrMeth + " return type is " + fqn);
 												assertEquals(true, fqn.equals("java.lang.String[]"));
 											} else if (exp.getReturnType().getName().equals("int")) {
-												System.out.println(exp.getVariable() + " return type is " + "int");
+												System.out.println(exp.getKind() + " " + varOrMeth + " return type is " + "int");
 												assertEquals(true,
 														exp.getReturnType().getFullyQualifiedName().isEmpty());
-											} else if (exp.getReturnType().getName().equals("GithubLanguageDownloadMaster")){
+											} else if (exp.getReturnType().getName().equals("boolean")) {
+												System.out.println(exp.getKind() + " " + varOrMeth + " return type is " + "boolean");
+												assertEquals(true,
+														exp.getReturnType().getFullyQualifiedName().isEmpty());
+											} else if (exp.getReturnType().getName().equals("void")) {
+												System.out.println(exp.getKind() + " " + varOrMeth + " return type is " + "void");
+												assertEquals(true,
+														exp.getReturnType().getFullyQualifiedName().isEmpty());
+											}else if (exp.getReturnType().getName().equals("GithubLanguageDownloadMaster")){
 												String fqn = exp.getReturnType().getFullyQualifiedName();
-												System.out.println(exp.getVariable() + " return type is " + fqn);
+												System.out.println(exp.getKind() + " " + varOrMeth + " return type is " + fqn);
 												assertEquals(true, fqn.equals("boa.datagen.forges.github.GithubLanguageDownloadMaster"));
 											} else if (exp.getReturnType().getName().equals("LanguageDownloadWorker")){
 												String fqn = exp.getReturnType().getFullyQualifiedName();
-												System.out.println(exp.getVariable() + " return type is " + fqn);
+												System.out.println(exp.getKind() + " " + varOrMeth + " return type is " + fqn);
 												assertEquals(true, fqn.equals("boa.datagen.forges.github.LanguageDownloadWorker"));
-											}  else if (exp.getDeclaringType().getName().equals("GithubLanguageDownloadMaster")){
-												String fqn = exp.getDeclaringType().getFullyQualifiedName();
-												System.out.println(exp.getVariable() + " declaring type is " + fqn);
-												assertEquals(true, fqn.equals("boa.datagen.forges.github.GithubLanguageDownloadMaster"));
 											} else if (exp.getReturnType().getName().equals("TokenList")){
 												String fqn = exp.getReturnType().getFullyQualifiedName();
-												System.out.println(exp.getVariable() + " return type is " + fqn);
+												System.out.println(exp.getKind() + " " + varOrMeth + " return type is " + fqn);
 												assertEquals(true, fqn.equals("boa.datagen.forges.github.TokenList"));
-											} else if (exp.getVariable().equals("System.out")){
-												String fqn = exp.getDeclaringType().getFullyQualifiedName();
-												System.out.println(exp.getVariable() + " declaring type is " + fqn);
-												assertEquals(true, fqn.equals("java.lang.System"));
-												fqn = exp.getReturnType().getFullyQualifiedName();
-												System.out.println(exp.getVariable() + " return type is " + fqn);
+											} else if (exp.getReturnType().getName().equals("PrintStream")){
+												String fqn = exp.getReturnType().getFullyQualifiedName();
+												System.out.println(exp.getKind() + " " + varOrMeth + " return type is " + fqn);
 												assertEquals(true, fqn.equals("java.io.PrintStream"));
-											}
+											} else if (exp.getDeclaringType().getName().equals("GithubLanguageDownloadMaster")){
+												String fqn = exp.getDeclaringType().getFullyQualifiedName();
+												System.out.println(exp.getKind() + " " + varOrMeth + " declaring type is " + fqn);
+												assertEquals(true, fqn.equals("boa.datagen.forges.github.GithubLanguageDownloadMaster"));
+											}  else if (exp.getDeclaringType().getName().equals("Thread")){
+												String fqn = exp.getDeclaringType().getFullyQualifiedName();
+												System.out.println(exp.getKind() +  " " + exp.getMethod() + " declaring type is " + fqn);
+												assertEquals(true, fqn.equals("java.lang.Thread"));
+											} else if (exp.getDeclaringType().equals("System")){
+												String fqn = exp.getDeclaringType().getFullyQualifiedName();
+												System.out.println(exp.getKind() + " " + varOrMeth + " declaring type is " + fqn);
+												assertEquals(true, fqn.equals("java.lang.System"));
+											} else if (exp.getDeclaringType().getName().equals("PrintStream")){
+												String fqn = exp.getDeclaringType().getFullyQualifiedName();
+												System.out.println(exp.getKind() + " " + varOrMeth + " declaring type is " + fqn);
+												assertEquals(true, fqn.equals("java.io.PrintStream"));
+											}   else if (exp.getDeclaringType().getName().equals("FileIO")){
+												String fqn = exp.getDeclaringType().getFullyQualifiedName();
+												System.out.println(exp.getKind() + " " + varOrMeth + " declaring type is " + fqn);
+												assertEquals(true, fqn.equals("boa.datagen.util.FileIO"));
+											}  
 										}
-									} else if (exp.getKind() == boa.types.Ast.Expression.ExpressionKind.VARDECL) {
 										for (Variable var : exp.getVariableDeclsList()){
 											if (var.getVariableType().getName().equals("LanguageDownloadWorker")){
 												String fqn = var.getVariableType().getFullyQualifiedName();
-												System.out.println(var.getName() + " variable type is " + fqn);
+												System.out.println(exp.getKind() + " " + var.getName() + " variable type is " + fqn);
 												assertEquals(true, fqn.equals("boa.datagen.forges.github.LanguageDownloadWorker"));
 											} else if (var.getVariableType().getName().equals("TokenList")){
 												String fqn = var.getVariableType().getFullyQualifiedName();
-												System.out.println(var.getName() + " variable type is " + fqn);
+												System.out.println(exp.getKind() + " " + var.getName() + " variable type is " + fqn);
 												assertEquals(true, fqn.equals("boa.datagen.forges.github.TokenList"));
 											} else if (var.getVariableType().getName().equals("File")){
 												String fqn = var.getVariableType().getFullyQualifiedName();
-												System.out.println(var.getName() + " variable type is " + fqn);
+												System.out.println(exp.getKind() + " " + var.getName() + " variable type is " + fqn);
 												assertEquals(true, fqn.equals("java.io.File"));
 											} else if (var.getVariableType().getName().equals("File[]")){
 												String fqn = var.getVariableType().getFullyQualifiedName();
-												System.out.println(var.getName() + " variable type is " + fqn);
+												System.out.println(exp.getKind() + " " + var.getName() + " variable type is " + fqn);
 												assertEquals(true, fqn.equals("java.io.File[]"));
 											} else if (var.getVariableType().getName().equals("String")){
 												String fqn = var.getVariableType().getFullyQualifiedName();
-												System.out.println(var.getName() + " variable type is " + fqn);
+												System.out.println(exp.getKind() + " " + var.getName() + " variable type is " + fqn);
 												assertEquals(true, fqn.equals("java.lang.String"));
 											} else if (var.getVariableType().getName().equals("GithubLanguageDownloadMaster")){
 												String fqn = var.getVariableType().getFullyQualifiedName();
-												System.out.println(var.getName() + " variable type is " + fqn);
+												System.out.println(exp.getKind() + " " + var.getName() + " variable type is " + fqn);
 												assertEquals(true, fqn.equals("boa.datagen.forges.github.GithubLanguageDownloadMaster"));
 											}
 										}
+								} else if ( message instanceof boa.types.Ast.Method){
+									boa.types.Ast.Method meth = (boa.types.Ast.Method) message;
+									if (meth.getName().equals("File")){
+										
 									}
 								}
-								/*
-								 * if (message instanceof boa.types.Ast.Type) {
-								 * boa.types.Ast.Type type =
-								 * (boa.types.Ast.Type) message; String fqn =
-								 * type.getFullyQualifiedName(); if (fqn != null
-								 * && !fqn.isEmpty()) {
-								 * System.out.println(type.getName() + " is " +
-								 * type.getKind()); System.out.println(fqn); }
-								 */
-								// }
 								return true;
 							}
 						};
