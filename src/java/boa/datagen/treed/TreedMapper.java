@@ -97,7 +97,7 @@ public class TreedMapper implements TreedConstants {
 			@Override
 			public void preVisit(ASTNode node) {
 				printIndent();
-				int status = (int) node.getProperty(PROPERTY_STATUS);
+				int status = (Integer) node.getProperty(PROPERTY_STATUS);
 				System.out.print(TreedUtils.buildASTLabel(node) + ": " + getStatus(status));
 				ASTNode mn = (ASTNode) node.getProperty(PROPERTY_MAP);
 				if (status > STATUS_UNCHANGED && mn != null)
