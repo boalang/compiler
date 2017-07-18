@@ -232,7 +232,7 @@ public class StringProcessor {
 	 */
 	public static void doLCS(ArrayList<String> sequence1, ArrayList<String> sequence2, int neighborhood, int minNeighborhood, ArrayList<Integer> lcsM, ArrayList<Integer> lcsN)
 	{
-		HashMap<String, Integer> itemIndexes = new HashMap<>();
+		HashMap<String, Integer> itemIndexes = new HashMap<String, Integer>();
 		index(sequence1, itemIndexes);
 		index(sequence2, itemIndexes);
 		ArrayList<Integer> matchesM = new ArrayList<Integer>();
