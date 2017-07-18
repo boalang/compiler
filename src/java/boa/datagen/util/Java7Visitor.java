@@ -434,7 +434,9 @@ public class Java7Visitor extends ASTVisitor {
 		if (tb != null) {
 			if (tb.getTypeDeclaration() != null)
 				tb = tb.getTypeDeclaration();
-			if (tb.isInterface())
+			if (tb.isClass())
+				b.setKind(boa.types.Ast.TypeKind.CLASS);
+			else if (tb.isInterface())
 				b.setKind(boa.types.Ast.TypeKind.INTERFACE);
 			else if (tb.isEnum())
 				b.setKind(boa.types.Ast.TypeKind.ENUM);
@@ -463,7 +465,9 @@ public class Java7Visitor extends ASTVisitor {
 		if (tb != null) {
 			if (tb.getTypeDeclaration() != null)
 				tb = tb.getTypeDeclaration();
-			if (tb.isInterface())
+			if (tb.isClass())
+				b.setKind(boa.types.Ast.TypeKind.CLASS);
+			else if (tb.isInterface())
 				b.setKind(boa.types.Ast.TypeKind.INTERFACE);
 			else if (tb.isEnum())
 				b.setKind(boa.types.Ast.TypeKind.ENUM);
@@ -492,7 +496,9 @@ public class Java7Visitor extends ASTVisitor {
 			itb = itb.getTypeDeclaration();
 		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 		tb.setName(itb.getName());
-		if (itb.isInterface())
+		if (itb.isClass())
+			tb.setKind(boa.types.Ast.TypeKind.CLASS);
+		else if (itb.isInterface())
 			tb.setKind(boa.types.Ast.TypeKind.INTERFACE);
 		else if (itb.isEnum())
 			tb.setKind(boa.types.Ast.TypeKind.ENUM);

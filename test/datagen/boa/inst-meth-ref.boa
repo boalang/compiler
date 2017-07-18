@@ -9,14 +9,19 @@
             "expressions": [
                {
                   "kind": "VARACCESS",
-                  "variable": "String"
+                  "variable": "String",
+                  "return_type": {
+                     "name": "String",
+                     "fully_qualified_name": "java.lang.String",
+                     "kind": "CLASS"
+                  }
                }
             ],
             "method": "compareToIgnoreCase",
             "declaring_type": {
                "name": "String",
                "fully_qualified_name": "java.lang.String",
-               "kind": "OTHER"
+               "kind": "CLASS"
             },
             "return_type": {
                "name": "int",
@@ -27,7 +32,7 @@
       "declaring_type": {
          "name": "t",
          "fully_qualified_name": "t",
-         "kind": "OTHER"
+         "kind": "CLASS"
       },
       "return_type": {
          "name": "void",

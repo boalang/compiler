@@ -23,7 +23,7 @@
                                  "variable_type": {
                                     "name": "t",
                                     "fully_qualified_name": "t",
-                                    "kind": "OTHER"
+                                    "kind": "CLASS"
                                  }
                               }
                            ],

@@ -16,7 +16,7 @@
       "declaring_type": {
          "name": "t",
          "fully_qualified_name": "t",
-         "kind": "OTHER"
+         "kind": "CLASS"
       },
       "return_type": {
          "name": "void",
