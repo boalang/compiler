@@ -23,7 +23,7 @@ import boa.types.Code.CodeRepository;
 import boa.types.Diff.ChangedFile;
 import boa.types.Toplevel.Project;
 
-public class TestSequenceFile {
+public class TestSequenceFile extends Java8BaseTest {
 	private Configuration conf = new Configuration();
 	private FileSystem fileSystem;
 	private SequenceFile.Reader pr;
@@ -91,7 +91,7 @@ public class TestSequenceFile {
 									}
 									if (decl == null) {
 										ChangedFile dcf = cr.getHeadSnapshot(fileId);
-										decl = TestDatagenUtil.getDeclaration(ar, dcf, nodeId, declarations);
+										decl = getDeclaration(ar, dcf, nodeId, declarations);
 									}
 									System.out.println(fqn);
 									assertEquals(true, decl != null && fqn.equals(decl.getFullyQualifiedName()));

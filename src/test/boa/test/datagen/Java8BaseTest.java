@@ -17,8 +17,6 @@
  */
 package boa.test.datagen;
 
-import java.util.*;
-
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 
