@@ -12,7 +12,7 @@ visit(input, visitor {
 		stop;
 	}
 	# look for imports
-	before node: ASTRoot ->
+	before node: Namespace ->
         foreach (j: int; def(node.imports[j])) {
             parts := split(node.imports[j], `\.`);
             s := "";
