@@ -7,9 +7,10 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import org.eclipse.jdt.core.dom.ASTMatcher;
+import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.Assignment;
 import org.eclipse.jdt.core.dom.BreakStatement;
 import org.eclipse.jdt.core.dom.CatchClause;
 import org.eclipse.jdt.core.dom.ClassInstanceCreation;
@@ -18,10 +19,12 @@ import org.eclipse.jdt.core.dom.DoStatement;
 import org.eclipse.jdt.core.dom.EnhancedForStatement;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.ForStatement;
-import org.eclipse.jdt.core.dom.IBinding;
+import org.eclipse.jdt.core.dom.InfixExpression;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.Modifier;
+import org.eclipse.jdt.core.dom.PostfixExpression;
+import org.eclipse.jdt.core.dom.PrefixExpression;
 import org.eclipse.jdt.core.dom.ReturnStatement;
 import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.Statement;
@@ -31,8 +34,8 @@ import org.eclipse.jdt.core.dom.ThrowStatement;
 import org.eclipse.jdt.core.dom.TryStatement;
 import org.eclipse.jdt.core.dom.TypeDeclarationStatement;
 import org.eclipse.jdt.core.dom.WhileStatement;
-
 import boa.datagen.util.JavaASTUtil;
+import boa.types.Shared.ChangeKind;
 
 public class TreedMapper implements TreedConstants {
 	private ASTNode astM, astN;
@@ -41,9 +44,6 @@ public class TreedMapper implements TreedConstants {
 	private HashMap<ASTNode, HashMap<String, Integer>> treeVector = new HashMap<ASTNode, HashMap<String, Integer>>();
 	private HashMap<ASTNode, HashMap<ASTNode, Double>> treeMap = new HashMap<ASTNode, HashMap<ASTNode, Double>>();
 	private HashSet<ASTNode> pivotsM = new HashSet<ASTNode>(), pivotsN = new HashSet<ASTNode>();
-	private HashMap<String, HashMap<String, Integer>> nameMapFrequency = new HashMap<String, HashMap<String, Integer>>();
-	private HashMap<String, Integer> nameFrequency = new HashMap<String, Integer>();
-	private HashMap<String, String> renameMap = new HashMap<String, String>();
 	private int numOfChanges = 0, numOfUnmaps = 0, numOfNonNameUnMaps = 0;
 	
 	public TreedMapper(ASTNode astM, ASTNode astN) {
@@ -97,10 +97,10 @@ public class TreedMapper implements TreedConstants {
 			@Override
 			public void preVisit(ASTNode node) {
 				printIndent();
-				int status = (Integer) node.getProperty(PROPERTY_STATUS);
-				System.out.print(TreedUtils.buildASTLabel(node) + ": " + getStatus(status));
+				ChangeKind status = (ChangeKind) node.getProperty(PROPERTY_STATUS);
+				System.out.print(TreedUtils.buildASTLabel(node) + ": " + status);
 				ASTNode mn = (ASTNode) node.getProperty(PROPERTY_MAP);
-				if (status > STATUS_UNCHANGED && mn != null)
+				if (status != STATUS_UNCHANGED && mn != null)
 					System.out.print(" " + TreedUtils.buildASTLabel(mn));
 				System.out.println();
 				indent++;
@@ -113,80 +113,9 @@ public class TreedMapper implements TreedConstants {
 		});
 	}
 
-	public static String getStatus(int status) {
-		switch (status) {
-		case STATUS_MOVED:
-			return "MOVED";
-		case STATUS_RELABELED:
-			return "RELABELED";
-		case STATUS_UNCHANGED:
-			return "UNCHANGED";
-		case STATUS_UNMAPPED:
-			return "UNMAPPED";
-		}
-		return "NOTHING_ELSE";
-	}
-
 	private void markChanges() {
 		markChanges(astM);
-		detectRenaming();
 		markUnmapped(astN);
-	}
-
-	private void detectRenaming() {
-		HashMap<String, HashSet<String>> imap = new HashMap<String, HashSet<String>>();
-		for (String nameM : nameFrequency.keySet()) {
-			int f = nameFrequency.get(nameM);
-			/*if (f == 1) {
-				if ((int) nodeM.getProperty(PROPERTY_STATUS) == STATUS_MOVED)
-					return false;
-				continue;
-			}*/
-			String mapped = null;
-			HashMap<String, Integer> mapFreq = nameMapFrequency.get(nameM);
-			for (String nameN : mapFreq.keySet()) {
-				if (isSameName(nameM, nameN)) {
-					mapped = nameN;
-					break;
-				}
-				int mf = nameMapFrequency.get(nameM).get(nameN);
-				/*if (mf == 1)
-					continue;*/
-				if (mf > f * MIN_SIM)
-					mapped = nameN;
-			}
-			if (mapped != null) {
-				renameMap.put(nameM, mapped);
-				HashSet<String> s = imap.get(mapped);
-				if (s == null) {
-					s = new HashSet<String>();
-					imap.put(mapped, s);
-				}
-				s.add(nameM);
-			}
-		}
-		for (String nameM : new HashSet<String>(renameMap.keySet())) {
-			String nameN = renameMap.get(nameM);
-			if (isSameName(nameM, nameN)) {
-				renameMap.remove(nameM);
-				continue;
-			}
-			for (String iname : imap.get(nameN))
-				if (isSameName(iname, nameN)) {
-					renameMap.remove(nameM);
-					break;
-				}
-		}
-	}
-
-	private boolean isSameName(String nameM, String nameN) {
-		int indexM = nameM.lastIndexOf('#'), indexN = nameN.lastIndexOf('#');
-		if (indexM == -1 && indexN == -1)
-			return nameM.equals(nameN);
-		if (indexM > -1 && indexN > -1) {
-			return nameM.substring(indexM).equals(nameN.substring(indexN));
-		}
-		return false;
 	}
 
 	private void markUnmapped(ASTNode node) {
@@ -196,16 +125,6 @@ public class TreedMapper implements TreedConstants {
 			numOfUnmaps++;
 			if (!(node instanceof SimpleName))
 				numOfNonNameUnMaps++;
-		} else {
-			if (node instanceof SimpleName) {
-				SimpleName mappedNode = (SimpleName) node.getProperty(PROPERTY_MAP);
-				if (mappedNode != null && !checkNameMap(mappedNode, (SimpleName) node)) {
-					node.setProperty(PROPERTY_MAP, null);
-					node.setProperty(PROPERTY_STATUS, STATUS_UNMAPPED);
-					mappedNode.setProperty(PROPERTY_MAP, null);
-					mappedNode.setProperty(PROPERTY_STATUS, STATUS_UNMAPPED);
-				}
-			}
 		}
 		ArrayList<ASTNode> children = tree.get(node);
 		for (ASTNode child : children)
@@ -224,7 +143,6 @@ public class TreedMapper implements TreedConstants {
 			ASTNode mappedNode = maps.keySet().iterator().next();
 			node.setProperty(PROPERTY_MAP, mappedNode);
 			mappedNode.setProperty(PROPERTY_MAP, node);
-			updateNameMap(node, mappedNode);
 			if (node == astM) {
 				astM.setProperty(PROPERTY_STATUS, STATUS_UNCHANGED);
 				astN.setProperty(PROPERTY_STATUS, STATUS_UNCHANGED);
@@ -300,45 +218,6 @@ public class TreedMapper implements TreedConstants {
 				j--;
 			}
 		}
-	}
-
-	private void updateNameMap(ASTNode nodeM, ASTNode nodeN) {
-		if (nodeM instanceof SimpleName) {
-			String nameM = getNameKey((SimpleName) nodeM), nameN = getNameKey((SimpleName) nodeN);
-			HashMap<String, Integer> mapFreq = nameMapFrequency.get(nameM), imapFreq = nameMapFrequency.get(nameN);
-			if (mapFreq == null) {
-				mapFreq = new HashMap<String, Integer>();
-				nameMapFrequency.put(nameM, mapFreq);
-			}
-			if (imapFreq == null) {
-				imapFreq = new HashMap<String, Integer>();
-				nameMapFrequency.put(nameN, imapFreq);
-			}
-			Integer c = mapFreq.get(nameN);
-			if (c == null)
-				c = 0;
-			c++;
-			mapFreq.put(nameN, c);
-			imapFreq.put(nameN, c);
-			c = nameFrequency.get(nameM);
-			if (c == null)
-				c = 0;
-			nameFrequency.put(nameM, c+1);
-		}
-	}
-
-	private boolean checkNameMap(SimpleName nodeM, SimpleName nodeN) {
-		if (nodeM.getIdentifier().equals(nodeN.getIdentifier()))
-			return true;
-		String nameM = getNameKey(nodeM), nameN = getNameKey(nodeN);
-		return nameN.equals(renameMap.get(nameM));
-	}
-
-	private String getNameKey(SimpleName name) {
-		IBinding b = name.resolveBinding();
-		if (b == null)
-			return name.getIdentifier();
-		return b.getKey();
 	}
 
 	private void mapPivots() {
@@ -479,7 +358,7 @@ public class TreedMapper implements TreedConstants {
 				ASTNode nodeN = lN.get(j);
 				int hN = treeHeight.get(nodeN);
 				HashMap<String, Integer> vN = treeVector.get(nodeN);
-				if (hM == hN && nodeM.getNodeType() == nodeN.getNodeType() && vM.equals(vN) && nodeM.subtreeMatch(new ASTMatcher(false), nodeN)) {
+				if (hM == hN && nodeM.getNodeType() == nodeN.getNodeType() && vM.equals(vN) && subtreeMatch(nodeM, nodeN)) {
 					d[1][j] = d[0][j + 1] + 1;
 					p[i][j] = 'D';
 				} else if (d[0][j] >= d[1][j + 1]) {
@@ -505,6 +384,51 @@ public class TreedMapper implements TreedConstants {
 		}
 	}
 
+	private boolean subtreeMatch(ASTNode nodeM, ASTNode nodeN) {
+		if (!labelMatch(nodeM, nodeN))
+			return false;
+		ArrayList<ASTNode> childrenM = tree.get(nodeM), childrenN = tree.get(nodeN);
+		if (childrenM.size() != childrenN.size())
+			return false;
+		if (childrenM.size() == 0)
+			return nodeM.toString().equals(nodeN.toString());
+		for (int i = 0; i < childrenM.size(); i++) {
+			if (!subtreeMatch(childrenM.get(i), childrenN.get(i)))
+				return false;
+		}
+		return true;
+	}
+
+	private boolean labelMatch(ASTNode nodeM, ASTNode nodeN) {
+		if (nodeM.getNodeType() != nodeN.getNodeType())
+			return false;
+		if (nodeM instanceof Assignment)
+			return labelMatch((Assignment) nodeM, (Assignment) nodeN);
+		if (nodeM instanceof InfixExpression)
+			return labelMatch((InfixExpression) nodeM, (InfixExpression) nodeN);
+		if (nodeM instanceof PostfixExpression)
+			return labelMatch((PostfixExpression) nodeM, (PostfixExpression) nodeN);
+		if (nodeM instanceof PrefixExpression)
+			return labelMatch((PrefixExpression) nodeM, (PrefixExpression) nodeN);
+		return true;
+	}
+
+	private boolean labelMatch(Assignment nodeM, Assignment nodeN) {
+		return nodeM.getOperator().equals(nodeN.getOperator());
+	}
+
+	private boolean labelMatch(InfixExpression nodeM, InfixExpression nodeN) {
+		return nodeM.getOperator().equals(nodeN.getOperator());
+	}
+
+	private boolean labelMatch(PostfixExpression nodeM, PostfixExpression nodeN) {
+		return nodeM.getOperator().equals(nodeN.getOperator());
+	}
+
+	private boolean labelMatch(PrefixExpression nodeM, PrefixExpression nodeN) {
+		return nodeM.getOperator().equals(nodeN.getOperator());
+	}
+	
 	@SuppressWarnings("unused")
 	private void lss(ArrayList<ASTNode> lM, ArrayList<ASTNode> lN, ArrayList<Integer> lcsM, ArrayList<Integer> lcsN, double threshold) {
 		int lenM = lM.size(), lenN = lN.size();
@@ -789,8 +713,14 @@ public class TreedMapper implements TreedConstants {
 						ClassInstanceCreation cicM = (ClassInstanceCreation) nodeM, cicN = (ClassInstanceCreation) nodeN;
 						mappedChildrenM.add(cicM.getExpression());
 						mappedChildrenN.add(cicN.getExpression());
-						mappedChildrenM.add(cicM.getType());
-						mappedChildrenN.add(cicN.getType());
+						if (cicM.getAST().apiLevel() >= AST.JLS3)
+							mappedChildrenM.add(cicM.getType());
+						else
+							mappedChildrenM.add(cicM.getName());
+						if (cicN.getAST().apiLevel() >= AST.JLS3)
+							mappedChildrenN.add(cicN.getType());
+						else
+							mappedChildrenN.add(cicN.getName());
 					} else if (nodeM instanceof MethodInvocation) {
 						MethodInvocation miM = (MethodInvocation) nodeM, miN = (MethodInvocation) nodeN;
 						mappedChildrenM.add(miM.getExpression());

@@ -11,7 +11,6 @@ import org.eclipse.jdt.core.dom.ArrayCreation;
 import org.eclipse.jdt.core.dom.ArrayInitializer;
 import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.InfixExpression;
-import org.eclipse.jdt.core.dom.Javadoc;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.SwitchStatement;
 import org.eclipse.jdt.core.dom.Type;
@@ -71,7 +70,7 @@ public class TreedBuilder extends ASTVisitor implements TreedConstants {
 	
 	@Override
 	public boolean visit(InfixExpression node) {
-		List l = node.extendedOperands();
+		List<?> l = node.extendedOperands();
 		if (l != null && l.size() > 10 - 2)
 			return false;
 		return super.visit(node);
@@ -83,7 +82,7 @@ public class TreedBuilder extends ASTVisitor implements TreedConstants {
 			if (node.getExpression() != null)
 				node.getExpression().accept(this);
 			if (node.typeArguments() != null && !node.typeArguments().isEmpty()) {
-				for (Iterator it = node.typeArguments().iterator(); it.hasNext(); ) {
+				for (Iterator<?> it = node.typeArguments().iterator(); it.hasNext(); ) {
 					Type t = (Type) it.next();
 					t.accept(this);
 				}

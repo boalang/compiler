@@ -45,6 +45,7 @@ import boa.datagen.util.JavaScriptVisitor;
 import boa.datagen.util.Properties;
 import boa.datagen.util.Java7Visitor;
 import boa.datagen.util.Java8Visitor;
+import boa.datagen.util.JavaASTUtil;
 import boa.datagen.util.JavaErrorCheckVisitor;
 
 /**
@@ -342,7 +343,7 @@ public abstract class AbstractCommit {
 
 	private boolean parseJavaFile(final String path, final ChangedFile.Builder fb, final String content, final String compliance, final int astLevel, final boolean storeOnError, Writer astWriter) {
 		try {
-			final ASTParser parser = ASTParser.newParser(astLevel);
+			ASTParser parser = ASTParser.newParser(astLevel);
 			parser.setKind(ASTParser.K_COMPILATION_UNIT);
 //			parser.setResolveBindings(true);
 			parser.setSource(content.toCharArray());
@@ -357,14 +358,19 @@ public abstract class AbstractCommit {
 			cu.accept(errorCheck);
 
 			if (!errorCheck.hasError || storeOnError) {
-				if (fb.getPreviousIndicesCount() == 1) {
+				if (fb.getChange() == ChangeKind.MODIFIED && fb.getPreviousIndicesCount() == 1) {
 					AbstractCommit previousCommit = this.connector.revisions.get(fb.getPreviousVersions(0));
-					String previousFilePath = previousCommit.changedFiles.get(fb.getPreviousIndices(0)).getName();
+					ChangedFile.Builder pcf = previousCommit.changedFiles.get(fb.getPreviousIndices(0));
+					String previousFilePath = pcf.getName();
 					String previousContent = previousCommit.getFileContents(previousFilePath);
-					parser.setSource(previousContent.toCharArray());
-					final ASTNode preCu = parser.createAST(null);
-					TreedMapper tm = new TreedMapper(preCu, cu);
-					tm.map();
+					FileKind fileKind = pcf.getKind();
+					parser = JavaASTUtil.buildParser(fileKind);
+					if (parser != null) {
+						parser.setSource(previousContent.toCharArray());
+						final ASTNode preCu = parser.createAST(null);
+						TreedMapper tm = new TreedMapper(preCu, cu);
+						tm.map();
+					}
 				}
 				final ASTRoot.Builder ast = ASTRoot.newBuilder();
 				Integer index = (Integer) cu.getProperty(Java7Visitor.PROPERTY_INDEX);

@@ -1,5 +1,7 @@
 package boa.datagen.treed;
 
+import boa.types.Shared.ChangeKind;
+
 public interface TreedConstants {
 	static final String PROPERTY_MAP = "m";
 	static final String PROPERTY_STATUS = "s";
@@ -11,8 +13,9 @@ public interface TreedConstants {
 	static final double MIN_SIM_MOVE = 0.75;
 	static final double SIM_SMOOTH = (3*MIN_SIM - 1) /(1 - MIN_SIM);
 
-	static final int STATUS_UNCHANGED = 0;
-	static final int STATUS_RELABELED = 1;
-	static final int STATUS_UNMAPPED = 2;
-	static final int STATUS_MOVED = 3;
+	static final ChangeKind STATUS_UNCHANGED = ChangeKind.UNCHANGED;
+	static final ChangeKind STATUS_MODIFIED = ChangeKind.MODIFIED;
+	static final ChangeKind STATUS_RELABELED = ChangeKind.RENAMED;
+	static final ChangeKind STATUS_UNMAPPED = ChangeKind.UNMAPPED;
+	static final ChangeKind STATUS_MOVED = ChangeKind.MOVED;
 }
