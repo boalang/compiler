@@ -33,10 +33,15 @@ import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.SequenceFile.Writer;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
+import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.AbstractTypeDeclaration;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.FileASTRequestor;
+import org.eclipse.jdt.core.dom.ITypeBinding;
 
+import boa.datagen.util.Java7Visitor;
 import boa.datagen.util.Java8Visitor;
 import boa.types.Ast.ASTRoot;
 import boa.types.Code.Revision;
@@ -59,11 +64,15 @@ public abstract class AbstractConnector implements AutoCloseable {
 	public int getHeadCommitOffset() {
 		return this.headCommitOffset;
 	}
-	
+
 	public List<ChangedFile> buildHeadSnapshot(final String[] languages, final SequenceFile.Writer astWriter) {
+		return buildSnapshot(headCommitOffset, languages, astWriter);
+	}
+	
+	public List<ChangedFile> buildSnapshot(final int commitOffset, final String[] languages, final SequenceFile.Writer astWriter) {
 		final List<ChangedFile> snapshot = new ArrayList<ChangedFile>();
 		final Map<String, AbstractCommit> commits = new HashMap<String, AbstractCommit>();
-		getSnapshot(headCommitOffset, snapshot, commits);
+		getSnapshot(commitOffset, snapshot, commits);
 		
 		if (languages == null)
 			return snapshot;
@@ -91,51 +100,12 @@ public abstract class AbstractConnector implements AutoCloseable {
 			}
 			final String[] paths = changedFiles.keySet().toArray(new String[0]);
 			final String[] classpaths = null; // TODO
+			final Map<String, CompilationUnit> cus = new HashMap<String, CompilationUnit>();
 			final FileASTRequestor r = new FileASTRequestor() {
 				@Override
 				public void acceptAST(String sourceFilePath, CompilationUnit cu) {
 					sourceFilePath = sourceFilePath.replace('\\', '/');
-					ChangedFile cf = changedFiles.get(sourceFilePath);
-					ChangedFile.Builder fb = ChangedFile.newBuilder(cf);
-					long len = -1;
-					if (astWriter != null) {
-						try {
-							len = astWriter.getLength();
-						} catch (IOException e1) {}
-					}
-					
-					String content = fileContents.get(sourceFilePath);
-					final Java8Visitor visitor = new Java8Visitor(content, new HashMap<String, Integer>());
-					final ASTRoot.Builder ast = ASTRoot.newBuilder();
-					try {
-						ast.addNamespaces(visitor.getNamespaces(cu));
-						for (final String s : visitor.getImports())
-							ast.addImports(s);
-						/*for (final Comment c : visitor.getComments())
-							comments.addComments(c);*/
-					} catch (final UnsupportedOperationException e) {
-						return;
-					} catch (final Exception e) {
-						System.err.println("Error visiting " + sourceFilePath + " when parsing head snapshot!!!");
-						e.printStackTrace();
-						return;
-					}
-					if (astWriter != null) {
-						try {
-							astWriter.append(new LongWritable(astWriter.getLength()), new BytesWritable(ast.build().toByteArray()));
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-					} else
-						fb.setAst(ast);
-					
-					try {
-						if (astWriter != null && astWriter.getLength() == len + 1)
-							fb.setKey(len);
-						else
-							fb.setKey(-1);
-					} catch (IOException e) {}
-					snapshot.add(fb.build());
+					cus.put(sourceFilePath, cu);
 				}
 			};
 			@SuppressWarnings("rawtypes")
@@ -153,8 +123,87 @@ public abstract class AbstractConnector implements AutoCloseable {
 			parser.setResolveBindings(true);
 	//		parser.setBindingsRecovery(true);
 			parser.createASTs(fileContents, paths, null, new String[0], r, null);
+
+			final Map<String, Integer> declarationFile = new HashMap<String, Integer>(), declarationNode = new HashMap<String, Integer>();
+			collectDeclarations(paths, cus, snapshot.size(), declarationFile, declarationNode);
+			
+			for (i = 0; i < paths.length; i++) {
+				String sourceFilePath = paths[i];
+				CompilationUnit cu = cus.get(sourceFilePath);
+				ChangedFile cf = changedFiles.get(sourceFilePath);
+				ChangedFile.Builder fb = ChangedFile.newBuilder(cf);
+				
+				long len = -1;
+				if (astWriter != null) {
+					try {
+						len = astWriter.getLength();
+					} catch (IOException e1) {}
+				}
+				
+				String content = fileContents.get(sourceFilePath);
+				final Java8Visitor visitor = new Java8Visitor(content, declarationFile, declarationNode);
+				final ASTRoot.Builder ast = ASTRoot.newBuilder();
+				try {
+					ast.addNamespaces(visitor.getNamespaces(cu));
+					/*for (final Comment c : visitor.getComments())
+						comments.addComments(c);*/
+				} catch (final UnsupportedOperationException e) {
+					continue;
+				} catch (final Exception e) {
+					System.err.println("Error visiting " + sourceFilePath + " when parsing head snapshot!!!");
+					e.printStackTrace();
+					continue;
+				}
+				if (astWriter != null && len > -1) {
+					try {
+						astWriter.append(new LongWritable(len), new BytesWritable(ast.build().toByteArray()));
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				} else
+					fb.setAst(ast);
+				try {
+					if (astWriter != null && astWriter.getLength() > len)
+						fb.setKey(len);
+					else
+						fb.setKey(-1);
+				} catch (IOException e) {
+					fb.setKey(-1);
+				}
+				snapshot.add(fb.build());
+			}
 		}
 		return snapshot;
+	}
+
+	private void collectDeclarations(String[] paths, Map<String, CompilationUnit> cus, int startFileIndex, final Map<String, Integer> declarationFile, final Map<String, Integer> declarationNode) {
+		for (int i = 0; i < paths.length; i++) {
+			final int fileIndex = startFileIndex + i;
+			String path = paths[i];
+			CompilationUnit cu = cus.get(path);
+			cu.accept(new ASTVisitor() {
+				private int index = 1;
+				@Override
+				public void preVisit(ASTNode node) {
+					node.setProperty(Java7Visitor.PROPERTY_INDEX, index++);
+				}
+				
+				@Override
+				public void postVisit(ASTNode node) {
+					if (node instanceof AbstractTypeDeclaration) {
+						AbstractTypeDeclaration t = (AbstractTypeDeclaration) node;
+						ITypeBinding tb = t.resolveBinding();
+						if (tb != null) {
+							if (tb.getTypeDeclaration() != null)
+								tb = tb.getTypeDeclaration();
+							String key = tb.getKey();
+							declarationFile.put(key, fileIndex);
+							declarationNode.put(key, (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX));
+						}
+					}
+				}
+			});
+		}
 	}
 
 	public void getSnapshot(int commitOffset, List<ChangedFile> snapshot, Map<String, AbstractCommit> commits) {

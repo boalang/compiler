@@ -1005,42 +1005,6 @@ public final class Ast {
     boa.types.Ast.NamespaceOrBuilder getNamespacesOrBuilder(
         int index);
 
-    // repeated string imports = 2;
-    /**
-     * <code>repeated string imports = 2;</code>
-     *
-     * <pre>
-     ** The imported namespaces and types 
-     * </pre>
-     */
-    java.util.List<java.lang.String>
-    getImportsList();
-    /**
-     * <code>repeated string imports = 2;</code>
-     *
-     * <pre>
-     ** The imported namespaces and types 
-     * </pre>
-     */
-    int getImportsCount();
-    /**
-     * <code>repeated string imports = 2;</code>
-     *
-     * <pre>
-     ** The imported namespaces and types 
-     * </pre>
-     */
-    java.lang.String getImports(int index);
-    /**
-     * <code>repeated string imports = 2;</code>
-     *
-     * <pre>
-     ** The imported namespaces and types 
-     * </pre>
-     */
-    com.google.protobuf.ByteString
-        getImportsBytes(int index);
-
     // repeated string names = 3;
     /**
      * <code>repeated string names = 3;</code>
@@ -1077,41 +1041,59 @@ public final class Ast {
     com.google.protobuf.ByteString
         getNamesBytes(int index);
 
-    // optional .boa.types.ChangeKind structural_change_kind = 4;
+    // optional .boa.types.ChangeKind change_kind = 4;
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 4;</code>
+     * <code>optional .boa.types.ChangeKind change_kind = 4;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
      * </pre>
      */
-    boolean hasStructuralChangeKind();
+    boolean hasChangeKind();
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 4;</code>
+     * <code>optional .boa.types.ChangeKind change_kind = 4;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
      * </pre>
      */
-    boa.types.Shared.ChangeKind getStructuralChangeKind();
+    boa.types.Shared.ChangeKind getChangeKind();
 
-    // optional .boa.types.ChangeKind label_change_kind = 5;
+    // optional int32 mapped_node = 6;
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 5;</code>
+     * <code>optional int32 mapped_node = 6;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
-    boolean hasLabelChangeKind();
+    boolean hasMappedNode();
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 5;</code>
+     * <code>optional int32 mapped_node = 6;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
-    boa.types.Shared.ChangeKind getLabelChangeKind();
+    int getMappedNode();
+
+    // optional int32 key = 7;
+    /**
+     * <code>optional int32 key = 7;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    boolean hasKey();
+    /**
+     * <code>optional int32 key = 7;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    int getKey();
   }
   /**
    * Protobuf type {@code boa.types.ASTRoot}
@@ -1176,18 +1158,10 @@ public final class Ast {
               namespaces_.add(input.readMessage(boa.types.Ast.Namespace.PARSER, extensionRegistry));
               break;
             }
-            case 18: {
-              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
-                imports_ = new com.google.protobuf.LazyStringArrayList();
-                mutable_bitField0_ |= 0x00000002;
-              }
-              imports_.add(input.readBytes());
-              break;
-            }
             case 26: {
-              if (!((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
+              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
                 names_ = new com.google.protobuf.LazyStringArrayList();
-                mutable_bitField0_ |= 0x00000004;
+                mutable_bitField0_ |= 0x00000002;
               }
               names_.add(input.readBytes());
               break;
@@ -1199,19 +1173,18 @@ public final class Ast {
                 unknownFields.mergeVarintField(4, rawValue);
               } else {
                 bitField0_ |= 0x00000001;
-                structuralChangeKind_ = value;
+                changeKind_ = value;
               }
               break;
             }
-            case 40: {
-              int rawValue = input.readEnum();
-              boa.types.Shared.ChangeKind value = boa.types.Shared.ChangeKind.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(5, rawValue);
-              } else {
-                bitField0_ |= 0x00000002;
-                labelChangeKind_ = value;
-              }
+            case 48: {
+              bitField0_ |= 0x00000002;
+              mappedNode_ = input.readInt32();
+              break;
+            }
+            case 56: {
+              bitField0_ |= 0x00000004;
+              key_ = input.readInt32();
               break;
             }
           }
@@ -1226,9 +1199,6 @@ public final class Ast {
           namespaces_ = java.util.Collections.unmodifiableList(namespaces_);
         }
         if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
-          imports_ = new com.google.protobuf.UnmodifiableLazyStringList(imports_);
-        }
-        if (((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
           names_ = new com.google.protobuf.UnmodifiableLazyStringList(names_);
         }
         this.unknownFields = unknownFields.build();
@@ -1319,52 +1289,6 @@ public final class Ast {
       return namespaces_.get(index);
     }
 
-    // repeated string imports = 2;
-    public static final int IMPORTS_FIELD_NUMBER = 2;
-    private com.google.protobuf.LazyStringList imports_;
-    /**
-     * <code>repeated string imports = 2;</code>
-     *
-     * <pre>
-     ** The imported namespaces and types 
-     * </pre>
-     */
-    public java.util.List<java.lang.String>
-        getImportsList() {
-      return imports_;
-    }
-    /**
-     * <code>repeated string imports = 2;</code>
-     *
-     * <pre>
-     ** The imported namespaces and types 
-     * </pre>
-     */
-    public int getImportsCount() {
-      return imports_.size();
-    }
-    /**
-     * <code>repeated string imports = 2;</code>
-     *
-     * <pre>
-     ** The imported namespaces and types 
-     * </pre>
-     */
-    public java.lang.String getImports(int index) {
-      return imports_.get(index);
-    }
-    /**
-     * <code>repeated string imports = 2;</code>
-     *
-     * <pre>
-     ** The imported namespaces and types 
-     * </pre>
-     */
-    public com.google.protobuf.ByteString
-        getImportsBytes(int index) {
-      return imports_.getByteString(index);
-    }
-
     // repeated string names = 3;
     public static final int NAMES_FIELD_NUMBER = 3;
     private com.google.protobuf.LazyStringList names_;
@@ -1411,60 +1335,84 @@ public final class Ast {
       return names_.getByteString(index);
     }
 
-    // optional .boa.types.ChangeKind structural_change_kind = 4;
-    public static final int STRUCTURAL_CHANGE_KIND_FIELD_NUMBER = 4;
-    private boa.types.Shared.ChangeKind structuralChangeKind_;
+    // optional .boa.types.ChangeKind change_kind = 4;
+    public static final int CHANGE_KIND_FIELD_NUMBER = 4;
+    private boa.types.Shared.ChangeKind changeKind_;
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 4;</code>
+     * <code>optional .boa.types.ChangeKind change_kind = 4;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
      * </pre>
      */
-    public boolean hasStructuralChangeKind() {
+    public boolean hasChangeKind() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 4;</code>
+     * <code>optional .boa.types.ChangeKind change_kind = 4;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
      * </pre>
      */
-    public boa.types.Shared.ChangeKind getStructuralChangeKind() {
-      return structuralChangeKind_;
+    public boa.types.Shared.ChangeKind getChangeKind() {
+      return changeKind_;
     }
 
-    // optional .boa.types.ChangeKind label_change_kind = 5;
-    public static final int LABEL_CHANGE_KIND_FIELD_NUMBER = 5;
-    private boa.types.Shared.ChangeKind labelChangeKind_;
+    // optional int32 mapped_node = 6;
+    public static final int MAPPED_NODE_FIELD_NUMBER = 6;
+    private int mappedNode_;
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 5;</code>
+     * <code>optional int32 mapped_node = 6;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
-    public boolean hasLabelChangeKind() {
+    public boolean hasMappedNode() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 5;</code>
+     * <code>optional int32 mapped_node = 6;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
-    public boa.types.Shared.ChangeKind getLabelChangeKind() {
-      return labelChangeKind_;
+    public int getMappedNode() {
+      return mappedNode_;
+    }
+
+    // optional int32 key = 7;
+    public static final int KEY_FIELD_NUMBER = 7;
+    private int key_;
+    /**
+     * <code>optional int32 key = 7;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    public boolean hasKey() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>optional int32 key = 7;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    public int getKey() {
+      return key_;
     }
 
     private void initFields() {
       namespaces_ = java.util.Collections.emptyList();
-      imports_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       names_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
-      labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      changeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      mappedNode_ = 0;
+      key_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -1487,17 +1435,17 @@ public final class Ast {
       for (int i = 0; i < namespaces_.size(); i++) {
         output.writeMessage(1, namespaces_.get(i));
       }
-      for (int i = 0; i < imports_.size(); i++) {
-        output.writeBytes(2, imports_.getByteString(i));
-      }
       for (int i = 0; i < names_.size(); i++) {
         output.writeBytes(3, names_.getByteString(i));
       }
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeEnum(4, structuralChangeKind_.getNumber());
+        output.writeEnum(4, changeKind_.getNumber());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeEnum(5, labelChangeKind_.getNumber());
+        output.writeInt32(6, mappedNode_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeInt32(7, key_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -1514,15 +1462,6 @@ public final class Ast {
       }
       {
         int dataSize = 0;
-        for (int i = 0; i < imports_.size(); i++) {
-          dataSize += com.google.protobuf.CodedOutputStream
-            .computeBytesSizeNoTag(imports_.getByteString(i));
-        }
-        size += dataSize;
-        size += 1 * getImportsList().size();
-      }
-      {
-        int dataSize = 0;
         for (int i = 0; i < names_.size(); i++) {
           dataSize += com.google.protobuf.CodedOutputStream
             .computeBytesSizeNoTag(names_.getByteString(i));
@@ -1532,11 +1471,15 @@ public final class Ast {
       }
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(4, structuralChangeKind_.getNumber());
+          .computeEnumSize(4, changeKind_.getNumber());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(5, labelChangeKind_.getNumber());
+          .computeInt32Size(6, mappedNode_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(7, key_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1665,13 +1608,13 @@ public final class Ast {
         } else {
           namespacesBuilder_.clear();
         }
-        imports_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000002);
         names_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        changeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00000004);
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+        mappedNode_ = 0;
         bitField0_ = (bitField0_ & ~0x00000008);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+        key_ = 0;
         bitField0_ = (bitField0_ & ~0x00000010);
         return this;
       }
@@ -1711,25 +1654,23 @@ public final class Ast {
           result.namespaces_ = namespacesBuilder_.build();
         }
         if (((bitField0_ & 0x00000002) == 0x00000002)) {
-          imports_ = new com.google.protobuf.UnmodifiableLazyStringList(
-              imports_);
-          bitField0_ = (bitField0_ & ~0x00000002);
-        }
-        result.imports_ = imports_;
-        if (((bitField0_ & 0x00000004) == 0x00000004)) {
           names_ = new com.google.protobuf.UnmodifiableLazyStringList(
               names_);
-          bitField0_ = (bitField0_ & ~0x00000004);
+          bitField0_ = (bitField0_ & ~0x00000002);
         }
         result.names_ = names_;
-        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
           to_bitField0_ |= 0x00000001;
         }
-        result.structuralChangeKind_ = structuralChangeKind_;
-        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+        result.changeKind_ = changeKind_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
           to_bitField0_ |= 0x00000002;
         }
-        result.labelChangeKind_ = labelChangeKind_;
+        result.mappedNode_ = mappedNode_;
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.key_ = key_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -1772,31 +1713,24 @@ public final class Ast {
             }
           }
         }
-        if (!other.imports_.isEmpty()) {
-          if (imports_.isEmpty()) {
-            imports_ = other.imports_;
-            bitField0_ = (bitField0_ & ~0x00000002);
-          } else {
-            ensureImportsIsMutable();
-            imports_.addAll(other.imports_);
-          }
-          onChanged();
-        }
         if (!other.names_.isEmpty()) {
           if (names_.isEmpty()) {
             names_ = other.names_;
-            bitField0_ = (bitField0_ & ~0x00000004);
+            bitField0_ = (bitField0_ & ~0x00000002);
           } else {
             ensureNamesIsMutable();
             names_.addAll(other.names_);
           }
           onChanged();
         }
-        if (other.hasStructuralChangeKind()) {
-          setStructuralChangeKind(other.getStructuralChangeKind());
+        if (other.hasChangeKind()) {
+          setChangeKind(other.getChangeKind());
         }
-        if (other.hasLabelChangeKind()) {
-          setLabelChangeKind(other.getLabelChangeKind());
+        if (other.hasMappedNode()) {
+          setMappedNode(other.getMappedNode());
+        }
+        if (other.hasKey()) {
+          setKey(other.getKey());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -2143,141 +2077,12 @@ public final class Ast {
         return namespacesBuilder_;
       }
 
-      // repeated string imports = 2;
-      private com.google.protobuf.LazyStringList imports_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      private void ensureImportsIsMutable() {
-        if (!((bitField0_ & 0x00000002) == 0x00000002)) {
-          imports_ = new com.google.protobuf.LazyStringArrayList(imports_);
-          bitField0_ |= 0x00000002;
-         }
-      }
-      /**
-       * <code>repeated string imports = 2;</code>
-       *
-       * <pre>
-       ** The imported namespaces and types 
-       * </pre>
-       */
-      public java.util.List<java.lang.String>
-          getImportsList() {
-        return java.util.Collections.unmodifiableList(imports_);
-      }
-      /**
-       * <code>repeated string imports = 2;</code>
-       *
-       * <pre>
-       ** The imported namespaces and types 
-       * </pre>
-       */
-      public int getImportsCount() {
-        return imports_.size();
-      }
-      /**
-       * <code>repeated string imports = 2;</code>
-       *
-       * <pre>
-       ** The imported namespaces and types 
-       * </pre>
-       */
-      public java.lang.String getImports(int index) {
-        return imports_.get(index);
-      }
-      /**
-       * <code>repeated string imports = 2;</code>
-       *
-       * <pre>
-       ** The imported namespaces and types 
-       * </pre>
-       */
-      public com.google.protobuf.ByteString
-          getImportsBytes(int index) {
-        return imports_.getByteString(index);
-      }
-      /**
-       * <code>repeated string imports = 2;</code>
-       *
-       * <pre>
-       ** The imported namespaces and types 
-       * </pre>
-       */
-      public Builder setImports(
-          int index, java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureImportsIsMutable();
-        imports_.set(index, value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated string imports = 2;</code>
-       *
-       * <pre>
-       ** The imported namespaces and types 
-       * </pre>
-       */
-      public Builder addImports(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureImportsIsMutable();
-        imports_.add(value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated string imports = 2;</code>
-       *
-       * <pre>
-       ** The imported namespaces and types 
-       * </pre>
-       */
-      public Builder addAllImports(
-          java.lang.Iterable<java.lang.String> values) {
-        ensureImportsIsMutable();
-        super.addAll(values, imports_);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated string imports = 2;</code>
-       *
-       * <pre>
-       ** The imported namespaces and types 
-       * </pre>
-       */
-      public Builder clearImports() {
-        imports_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000002);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated string imports = 2;</code>
-       *
-       * <pre>
-       ** The imported namespaces and types 
-       * </pre>
-       */
-      public Builder addImportsBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureImportsIsMutable();
-        imports_.add(value);
-        onChanged();
-        return this;
-      }
-
       // repeated string names = 3;
       private com.google.protobuf.LazyStringList names_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       private void ensureNamesIsMutable() {
-        if (!((bitField0_ & 0x00000004) == 0x00000004)) {
+        if (!((bitField0_ & 0x00000002) == 0x00000002)) {
           names_ = new com.google.protobuf.LazyStringArrayList(names_);
-          bitField0_ |= 0x00000004;
+          bitField0_ |= 0x00000002;
          }
       }
       /**
@@ -2379,7 +2184,7 @@ public final class Ast {
        */
       public Builder clearNames() {
         names_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-        bitField0_ = (bitField0_ & ~0x00000004);
+        bitField0_ = (bitField0_ & ~0x00000002);
         onChanged();
         return this;
       }
@@ -2401,106 +2206,152 @@ public final class Ast {
         return this;
       }
 
-      // optional .boa.types.ChangeKind structural_change_kind = 4;
-      private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      // optional .boa.types.ChangeKind change_kind = 4;
+      private boa.types.Shared.ChangeKind changeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 4;</code>
+       * <code>optional .boa.types.ChangeKind change_kind = 4;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
        * </pre>
        */
-      public boolean hasStructuralChangeKind() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
+      public boolean hasChangeKind() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 4;</code>
+       * <code>optional .boa.types.ChangeKind change_kind = 4;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
        * </pre>
        */
-      public boa.types.Shared.ChangeKind getStructuralChangeKind() {
-        return structuralChangeKind_;
+      public boa.types.Shared.ChangeKind getChangeKind() {
+        return changeKind_;
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 4;</code>
+       * <code>optional .boa.types.ChangeKind change_kind = 4;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
        * </pre>
        */
-      public Builder setStructuralChangeKind(boa.types.Shared.ChangeKind value) {
+      public Builder setChangeKind(boa.types.Shared.ChangeKind value) {
         if (value == null) {
           throw new NullPointerException();
         }
-        bitField0_ |= 0x00000008;
-        structuralChangeKind_ = value;
+        bitField0_ |= 0x00000004;
+        changeKind_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 4;</code>
+       * <code>optional .boa.types.ChangeKind change_kind = 4;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
        * </pre>
        */
-      public Builder clearStructuralChangeKind() {
-        bitField0_ = (bitField0_ & ~0x00000008);
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      public Builder clearChangeKind() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        changeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         onChanged();
         return this;
       }
 
-      // optional .boa.types.ChangeKind label_change_kind = 5;
-      private boa.types.Shared.ChangeKind labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      // optional int32 mapped_node = 6;
+      private int mappedNode_ ;
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 5;</code>
+       * <code>optional int32 mapped_node = 6;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
-      public boolean hasLabelChangeKind() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
+      public boolean hasMappedNode() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 5;</code>
+       * <code>optional int32 mapped_node = 6;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
-      public boa.types.Shared.ChangeKind getLabelChangeKind() {
-        return labelChangeKind_;
+      public int getMappedNode() {
+        return mappedNode_;
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 5;</code>
+       * <code>optional int32 mapped_node = 6;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
-      public Builder setLabelChangeKind(boa.types.Shared.ChangeKind value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        bitField0_ |= 0x00000010;
-        labelChangeKind_ = value;
+      public Builder setMappedNode(int value) {
+        bitField0_ |= 0x00000008;
+        mappedNode_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 5;</code>
+       * <code>optional int32 mapped_node = 6;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
-      public Builder clearLabelChangeKind() {
+      public Builder clearMappedNode() {
+        bitField0_ = (bitField0_ & ~0x00000008);
+        mappedNode_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 key = 7;
+      private int key_ ;
+      /**
+       * <code>optional int32 key = 7;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public boolean hasKey() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
+      }
+      /**
+       * <code>optional int32 key = 7;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public int getKey() {
+        return key_;
+      }
+      /**
+       * <code>optional int32 key = 7;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public Builder setKey(int value) {
+        bitField0_ |= 0x00000010;
+        key_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 key = 7;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public Builder clearKey() {
         bitField0_ = (bitField0_ & ~0x00000010);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+        key_ = 0;
         onChanged();
         return this;
       }
@@ -2771,41 +2622,140 @@ public final class Ast {
     boa.types.Ast.ExpressionOrBuilder getExpressionsOrBuilder(
         int index);
 
-    // optional .boa.types.ChangeKind structural_change_kind = 7;
+    // optional .boa.types.ChangeKind change_kind = 7;
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 7;</code>
+     * <code>optional .boa.types.ChangeKind change_kind = 7;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
      * </pre>
      */
-    boolean hasStructuralChangeKind();
+    boolean hasChangeKind();
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 7;</code>
+     * <code>optional .boa.types.ChangeKind change_kind = 7;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
      * </pre>
      */
-    boa.types.Shared.ChangeKind getStructuralChangeKind();
+    boa.types.Shared.ChangeKind getChangeKind();
 
-    // optional .boa.types.ChangeKind label_change_kind = 8;
+    // optional int32 mapped_node = 9;
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 8;</code>
+     * <code>optional int32 mapped_node = 9;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
-    boolean hasLabelChangeKind();
+    boolean hasMappedNode();
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 8;</code>
+     * <code>optional int32 mapped_node = 9;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
-    boa.types.Shared.ChangeKind getLabelChangeKind();
+    int getMappedNode();
+
+    // optional int32 key = 10;
+    /**
+     * <code>optional int32 key = 10;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    boolean hasKey();
+    /**
+     * <code>optional int32 key = 10;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    int getKey();
+
+    // repeated .boa.types.Namespace namespaces = 11;
+    /**
+     * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+     *
+     * <pre>
+     ** The nested namespaces 
+     * </pre>
+     */
+    java.util.List<boa.types.Ast.Namespace> 
+        getNamespacesList();
+    /**
+     * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+     *
+     * <pre>
+     ** The nested namespaces 
+     * </pre>
+     */
+    boa.types.Ast.Namespace getNamespaces(int index);
+    /**
+     * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+     *
+     * <pre>
+     ** The nested namespaces 
+     * </pre>
+     */
+    int getNamespacesCount();
+    /**
+     * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+     *
+     * <pre>
+     ** The nested namespaces 
+     * </pre>
+     */
+    java.util.List<? extends boa.types.Ast.NamespaceOrBuilder> 
+        getNamespacesOrBuilderList();
+    /**
+     * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+     *
+     * <pre>
+     ** The nested namespaces 
+     * </pre>
+     */
+    boa.types.Ast.NamespaceOrBuilder getNamespacesOrBuilder(
+        int index);
+
+    // repeated string imports = 12;
+    /**
+     * <code>repeated string imports = 12;</code>
+     *
+     * <pre>
+     ** The imported namespaces and types 
+     * </pre>
+     */
+    java.util.List<java.lang.String>
+    getImportsList();
+    /**
+     * <code>repeated string imports = 12;</code>
+     *
+     * <pre>
+     ** The imported namespaces and types 
+     * </pre>
+     */
+    int getImportsCount();
+    /**
+     * <code>repeated string imports = 12;</code>
+     *
+     * <pre>
+     ** The imported namespaces and types 
+     * </pre>
+     */
+    java.lang.String getImports(int index);
+    /**
+     * <code>repeated string imports = 12;</code>
+     *
+     * <pre>
+     ** The imported namespaces and types 
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getImportsBytes(int index);
   }
   /**
    * Protobuf type {@code boa.types.Namespace}
@@ -2914,19 +2864,34 @@ public final class Ast {
                 unknownFields.mergeVarintField(7, rawValue);
               } else {
                 bitField0_ |= 0x00000002;
-                structuralChangeKind_ = value;
+                changeKind_ = value;
               }
               break;
             }
-            case 64: {
-              int rawValue = input.readEnum();
-              boa.types.Shared.ChangeKind value = boa.types.Shared.ChangeKind.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(8, rawValue);
-              } else {
-                bitField0_ |= 0x00000004;
-                labelChangeKind_ = value;
+            case 72: {
+              bitField0_ |= 0x00000004;
+              mappedNode_ = input.readInt32();
+              break;
+            }
+            case 80: {
+              bitField0_ |= 0x00000008;
+              key_ = input.readInt32();
+              break;
+            }
+            case 90: {
+              if (!((mutable_bitField0_ & 0x00000200) == 0x00000200)) {
+                namespaces_ = new java.util.ArrayList<boa.types.Ast.Namespace>();
+                mutable_bitField0_ |= 0x00000200;
               }
+              namespaces_.add(input.readMessage(boa.types.Ast.Namespace.PARSER, extensionRegistry));
+              break;
+            }
+            case 98: {
+              if (!((mutable_bitField0_ & 0x00000400) == 0x00000400)) {
+                imports_ = new com.google.protobuf.LazyStringArrayList();
+                mutable_bitField0_ |= 0x00000400;
+              }
+              imports_.add(input.readBytes());
               break;
             }
           }
@@ -2951,6 +2916,12 @@ public final class Ast {
         }
         if (((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
           expressions_ = java.util.Collections.unmodifiableList(expressions_);
+        }
+        if (((mutable_bitField0_ & 0x00000200) == 0x00000200)) {
+          namespaces_ = java.util.Collections.unmodifiableList(namespaces_);
+        }
+        if (((mutable_bitField0_ & 0x00000400) == 0x00000400)) {
+          imports_ = new com.google.protobuf.UnmodifiableLazyStringList(imports_);
         }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -3319,52 +3290,178 @@ public final class Ast {
       return expressions_.get(index);
     }
 
-    // optional .boa.types.ChangeKind structural_change_kind = 7;
-    public static final int STRUCTURAL_CHANGE_KIND_FIELD_NUMBER = 7;
-    private boa.types.Shared.ChangeKind structuralChangeKind_;
+    // optional .boa.types.ChangeKind change_kind = 7;
+    public static final int CHANGE_KIND_FIELD_NUMBER = 7;
+    private boa.types.Shared.ChangeKind changeKind_;
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 7;</code>
+     * <code>optional .boa.types.ChangeKind change_kind = 7;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
      * </pre>
      */
-    public boolean hasStructuralChangeKind() {
+    public boolean hasChangeKind() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 7;</code>
+     * <code>optional .boa.types.ChangeKind change_kind = 7;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
      * </pre>
      */
-    public boa.types.Shared.ChangeKind getStructuralChangeKind() {
-      return structuralChangeKind_;
+    public boa.types.Shared.ChangeKind getChangeKind() {
+      return changeKind_;
     }
 
-    // optional .boa.types.ChangeKind label_change_kind = 8;
-    public static final int LABEL_CHANGE_KIND_FIELD_NUMBER = 8;
-    private boa.types.Shared.ChangeKind labelChangeKind_;
+    // optional int32 mapped_node = 9;
+    public static final int MAPPED_NODE_FIELD_NUMBER = 9;
+    private int mappedNode_;
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 8;</code>
+     * <code>optional int32 mapped_node = 9;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
-    public boolean hasLabelChangeKind() {
+    public boolean hasMappedNode() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 8;</code>
+     * <code>optional int32 mapped_node = 9;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
-    public boa.types.Shared.ChangeKind getLabelChangeKind() {
-      return labelChangeKind_;
+    public int getMappedNode() {
+      return mappedNode_;
+    }
+
+    // optional int32 key = 10;
+    public static final int KEY_FIELD_NUMBER = 10;
+    private int key_;
+    /**
+     * <code>optional int32 key = 10;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    public boolean hasKey() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>optional int32 key = 10;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    public int getKey() {
+      return key_;
+    }
+
+    // repeated .boa.types.Namespace namespaces = 11;
+    public static final int NAMESPACES_FIELD_NUMBER = 11;
+    private java.util.List<boa.types.Ast.Namespace> namespaces_;
+    /**
+     * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+     *
+     * <pre>
+     ** The nested namespaces 
+     * </pre>
+     */
+    public java.util.List<boa.types.Ast.Namespace> getNamespacesList() {
+      return namespaces_;
+    }
+    /**
+     * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+     *
+     * <pre>
+     ** The nested namespaces 
+     * </pre>
+     */
+    public java.util.List<? extends boa.types.Ast.NamespaceOrBuilder> 
+        getNamespacesOrBuilderList() {
+      return namespaces_;
+    }
+    /**
+     * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+     *
+     * <pre>
+     ** The nested namespaces 
+     * </pre>
+     */
+    public int getNamespacesCount() {
+      return namespaces_.size();
+    }
+    /**
+     * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+     *
+     * <pre>
+     ** The nested namespaces 
+     * </pre>
+     */
+    public boa.types.Ast.Namespace getNamespaces(int index) {
+      return namespaces_.get(index);
+    }
+    /**
+     * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+     *
+     * <pre>
+     ** The nested namespaces 
+     * </pre>
+     */
+    public boa.types.Ast.NamespaceOrBuilder getNamespacesOrBuilder(
+        int index) {
+      return namespaces_.get(index);
+    }
+
+    // repeated string imports = 12;
+    public static final int IMPORTS_FIELD_NUMBER = 12;
+    private com.google.protobuf.LazyStringList imports_;
+    /**
+     * <code>repeated string imports = 12;</code>
+     *
+     * <pre>
+     ** The imported namespaces and types 
+     * </pre>
+     */
+    public java.util.List<java.lang.String>
+        getImportsList() {
+      return imports_;
+    }
+    /**
+     * <code>repeated string imports = 12;</code>
+     *
+     * <pre>
+     ** The imported namespaces and types 
+     * </pre>
+     */
+    public int getImportsCount() {
+      return imports_.size();
+    }
+    /**
+     * <code>repeated string imports = 12;</code>
+     *
+     * <pre>
+     ** The imported namespaces and types 
+     * </pre>
+     */
+    public java.lang.String getImports(int index) {
+      return imports_.get(index);
+    }
+    /**
+     * <code>repeated string imports = 12;</code>
+     *
+     * <pre>
+     ** The imported namespaces and types 
+     * </pre>
+     */
+    public com.google.protobuf.ByteString
+        getImportsBytes(int index) {
+      return imports_.getByteString(index);
     }
 
     private void initFields() {
@@ -3374,8 +3471,11 @@ public final class Ast {
       statements_ = java.util.Collections.emptyList();
       methods_ = java.util.Collections.emptyList();
       expressions_ = java.util.Collections.emptyList();
-      structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
-      labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      changeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      mappedNode_ = 0;
+      key_ = 0;
+      namespaces_ = java.util.Collections.emptyList();
+      imports_ = com.google.protobuf.LazyStringArrayList.EMPTY;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -3416,6 +3516,12 @@ public final class Ast {
           return false;
         }
       }
+      for (int i = 0; i < getNamespacesCount(); i++) {
+        if (!getNamespaces(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
       memoizedIsInitialized = 1;
       return true;
     }
@@ -3442,10 +3548,19 @@ public final class Ast {
         output.writeMessage(6, expressions_.get(i));
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeEnum(7, structuralChangeKind_.getNumber());
+        output.writeEnum(7, changeKind_.getNumber());
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeEnum(8, labelChangeKind_.getNumber());
+        output.writeInt32(9, mappedNode_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeInt32(10, key_);
+      }
+      for (int i = 0; i < namespaces_.size(); i++) {
+        output.writeMessage(11, namespaces_.get(i));
+      }
+      for (int i = 0; i < imports_.size(); i++) {
+        output.writeBytes(12, imports_.getByteString(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -3482,11 +3597,28 @@ public final class Ast {
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(7, structuralChangeKind_.getNumber());
+          .computeEnumSize(7, changeKind_.getNumber());
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(8, labelChangeKind_.getNumber());
+          .computeInt32Size(9, mappedNode_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(10, key_);
+      }
+      for (int i = 0; i < namespaces_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(11, namespaces_.get(i));
+      }
+      {
+        int dataSize = 0;
+        for (int i = 0; i < imports_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeBytesSizeNoTag(imports_.getByteString(i));
+        }
+        size += dataSize;
+        size += 1 * getImportsList().size();
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -3605,6 +3737,7 @@ public final class Ast {
           getStatementsFieldBuilder();
           getMethodsFieldBuilder();
           getExpressionsFieldBuilder();
+          getNamespacesFieldBuilder();
         }
       }
       private static Builder create() {
@@ -3645,10 +3778,20 @@ public final class Ast {
         } else {
           expressionsBuilder_.clear();
         }
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+        changeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00000040);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+        mappedNode_ = 0;
         bitField0_ = (bitField0_ & ~0x00000080);
+        key_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000100);
+        if (namespacesBuilder_ == null) {
+          namespaces_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000200);
+        } else {
+          namespacesBuilder_.clear();
+        }
+        imports_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000400);
         return this;
       }
 
@@ -3729,11 +3872,30 @@ public final class Ast {
         if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
           to_bitField0_ |= 0x00000002;
         }
-        result.structuralChangeKind_ = structuralChangeKind_;
+        result.changeKind_ = changeKind_;
         if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
           to_bitField0_ |= 0x00000004;
         }
-        result.labelChangeKind_ = labelChangeKind_;
+        result.mappedNode_ = mappedNode_;
+        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.key_ = key_;
+        if (namespacesBuilder_ == null) {
+          if (((bitField0_ & 0x00000200) == 0x00000200)) {
+            namespaces_ = java.util.Collections.unmodifiableList(namespaces_);
+            bitField0_ = (bitField0_ & ~0x00000200);
+          }
+          result.namespaces_ = namespaces_;
+        } else {
+          result.namespaces_ = namespacesBuilder_.build();
+        }
+        if (((bitField0_ & 0x00000400) == 0x00000400)) {
+          imports_ = new com.google.protobuf.UnmodifiableLazyStringList(
+              imports_);
+          bitField0_ = (bitField0_ & ~0x00000400);
+        }
+        result.imports_ = imports_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -3885,11 +4047,50 @@ public final class Ast {
             }
           }
         }
-        if (other.hasStructuralChangeKind()) {
-          setStructuralChangeKind(other.getStructuralChangeKind());
+        if (other.hasChangeKind()) {
+          setChangeKind(other.getChangeKind());
         }
-        if (other.hasLabelChangeKind()) {
-          setLabelChangeKind(other.getLabelChangeKind());
+        if (other.hasMappedNode()) {
+          setMappedNode(other.getMappedNode());
+        }
+        if (other.hasKey()) {
+          setKey(other.getKey());
+        }
+        if (namespacesBuilder_ == null) {
+          if (!other.namespaces_.isEmpty()) {
+            if (namespaces_.isEmpty()) {
+              namespaces_ = other.namespaces_;
+              bitField0_ = (bitField0_ & ~0x00000200);
+            } else {
+              ensureNamespacesIsMutable();
+              namespaces_.addAll(other.namespaces_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.namespaces_.isEmpty()) {
+            if (namespacesBuilder_.isEmpty()) {
+              namespacesBuilder_.dispose();
+              namespacesBuilder_ = null;
+              namespaces_ = other.namespaces_;
+              bitField0_ = (bitField0_ & ~0x00000200);
+              namespacesBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getNamespacesFieldBuilder() : null;
+            } else {
+              namespacesBuilder_.addAllMessages(other.namespaces_);
+            }
+          }
+        }
+        if (!other.imports_.isEmpty()) {
+          if (imports_.isEmpty()) {
+            imports_ = other.imports_;
+            bitField0_ = (bitField0_ & ~0x00000400);
+          } else {
+            ensureImportsIsMutable();
+            imports_.addAll(other.imports_);
+          }
+          onChanged();
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -3926,6 +4127,12 @@ public final class Ast {
         }
         for (int i = 0; i < getExpressionsCount(); i++) {
           if (!getExpressions(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        for (int i = 0; i < getNamespacesCount(); i++) {
+          if (!getNamespaces(i).isInitialized()) {
             
             return false;
           }
@@ -5610,106 +5817,593 @@ public final class Ast {
         return expressionsBuilder_;
       }
 
-      // optional .boa.types.ChangeKind structural_change_kind = 7;
-      private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      // optional .boa.types.ChangeKind change_kind = 7;
+      private boa.types.Shared.ChangeKind changeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 7;</code>
+       * <code>optional .boa.types.ChangeKind change_kind = 7;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
        * </pre>
        */
-      public boolean hasStructuralChangeKind() {
+      public boolean hasChangeKind() {
         return ((bitField0_ & 0x00000040) == 0x00000040);
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 7;</code>
+       * <code>optional .boa.types.ChangeKind change_kind = 7;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
        * </pre>
        */
-      public boa.types.Shared.ChangeKind getStructuralChangeKind() {
-        return structuralChangeKind_;
+      public boa.types.Shared.ChangeKind getChangeKind() {
+        return changeKind_;
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 7;</code>
+       * <code>optional .boa.types.ChangeKind change_kind = 7;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
        * </pre>
        */
-      public Builder setStructuralChangeKind(boa.types.Shared.ChangeKind value) {
+      public Builder setChangeKind(boa.types.Shared.ChangeKind value) {
         if (value == null) {
           throw new NullPointerException();
         }
         bitField0_ |= 0x00000040;
-        structuralChangeKind_ = value;
+        changeKind_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 7;</code>
+       * <code>optional .boa.types.ChangeKind change_kind = 7;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
        * </pre>
        */
-      public Builder clearStructuralChangeKind() {
+      public Builder clearChangeKind() {
         bitField0_ = (bitField0_ & ~0x00000040);
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+        changeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         onChanged();
         return this;
       }
 
-      // optional .boa.types.ChangeKind label_change_kind = 8;
-      private boa.types.Shared.ChangeKind labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      // optional int32 mapped_node = 9;
+      private int mappedNode_ ;
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 8;</code>
+       * <code>optional int32 mapped_node = 9;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
-      public boolean hasLabelChangeKind() {
+      public boolean hasMappedNode() {
         return ((bitField0_ & 0x00000080) == 0x00000080);
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 8;</code>
+       * <code>optional int32 mapped_node = 9;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
-      public boa.types.Shared.ChangeKind getLabelChangeKind() {
-        return labelChangeKind_;
+      public int getMappedNode() {
+        return mappedNode_;
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 8;</code>
+       * <code>optional int32 mapped_node = 9;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
-      public Builder setLabelChangeKind(boa.types.Shared.ChangeKind value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
+      public Builder setMappedNode(int value) {
         bitField0_ |= 0x00000080;
-        labelChangeKind_ = value;
+        mappedNode_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 8;</code>
+       * <code>optional int32 mapped_node = 9;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
-      public Builder clearLabelChangeKind() {
+      public Builder clearMappedNode() {
         bitField0_ = (bitField0_ & ~0x00000080);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+        mappedNode_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 key = 10;
+      private int key_ ;
+      /**
+       * <code>optional int32 key = 10;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public boolean hasKey() {
+        return ((bitField0_ & 0x00000100) == 0x00000100);
+      }
+      /**
+       * <code>optional int32 key = 10;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public int getKey() {
+        return key_;
+      }
+      /**
+       * <code>optional int32 key = 10;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public Builder setKey(int value) {
+        bitField0_ |= 0x00000100;
+        key_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 key = 10;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public Builder clearKey() {
+        bitField0_ = (bitField0_ & ~0x00000100);
+        key_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // repeated .boa.types.Namespace namespaces = 11;
+      private java.util.List<boa.types.Ast.Namespace> namespaces_ =
+        java.util.Collections.emptyList();
+      private void ensureNamespacesIsMutable() {
+        if (!((bitField0_ & 0x00000200) == 0x00000200)) {
+          namespaces_ = new java.util.ArrayList<boa.types.Ast.Namespace>(namespaces_);
+          bitField0_ |= 0x00000200;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Namespace, boa.types.Ast.Namespace.Builder, boa.types.Ast.NamespaceOrBuilder> namespacesBuilder_;
+
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public java.util.List<boa.types.Ast.Namespace> getNamespacesList() {
+        if (namespacesBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(namespaces_);
+        } else {
+          return namespacesBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public int getNamespacesCount() {
+        if (namespacesBuilder_ == null) {
+          return namespaces_.size();
+        } else {
+          return namespacesBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public boa.types.Ast.Namespace getNamespaces(int index) {
+        if (namespacesBuilder_ == null) {
+          return namespaces_.get(index);
+        } else {
+          return namespacesBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public Builder setNamespaces(
+          int index, boa.types.Ast.Namespace value) {
+        if (namespacesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureNamespacesIsMutable();
+          namespaces_.set(index, value);
+          onChanged();
+        } else {
+          namespacesBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public Builder setNamespaces(
+          int index, boa.types.Ast.Namespace.Builder builderForValue) {
+        if (namespacesBuilder_ == null) {
+          ensureNamespacesIsMutable();
+          namespaces_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          namespacesBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public Builder addNamespaces(boa.types.Ast.Namespace value) {
+        if (namespacesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureNamespacesIsMutable();
+          namespaces_.add(value);
+          onChanged();
+        } else {
+          namespacesBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public Builder addNamespaces(
+          int index, boa.types.Ast.Namespace value) {
+        if (namespacesBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureNamespacesIsMutable();
+          namespaces_.add(index, value);
+          onChanged();
+        } else {
+          namespacesBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public Builder addNamespaces(
+          boa.types.Ast.Namespace.Builder builderForValue) {
+        if (namespacesBuilder_ == null) {
+          ensureNamespacesIsMutable();
+          namespaces_.add(builderForValue.build());
+          onChanged();
+        } else {
+          namespacesBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public Builder addNamespaces(
+          int index, boa.types.Ast.Namespace.Builder builderForValue) {
+        if (namespacesBuilder_ == null) {
+          ensureNamespacesIsMutable();
+          namespaces_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          namespacesBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public Builder addAllNamespaces(
+          java.lang.Iterable<? extends boa.types.Ast.Namespace> values) {
+        if (namespacesBuilder_ == null) {
+          ensureNamespacesIsMutable();
+          super.addAll(values, namespaces_);
+          onChanged();
+        } else {
+          namespacesBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public Builder clearNamespaces() {
+        if (namespacesBuilder_ == null) {
+          namespaces_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000200);
+          onChanged();
+        } else {
+          namespacesBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public Builder removeNamespaces(int index) {
+        if (namespacesBuilder_ == null) {
+          ensureNamespacesIsMutable();
+          namespaces_.remove(index);
+          onChanged();
+        } else {
+          namespacesBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public boa.types.Ast.Namespace.Builder getNamespacesBuilder(
+          int index) {
+        return getNamespacesFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public boa.types.Ast.NamespaceOrBuilder getNamespacesOrBuilder(
+          int index) {
+        if (namespacesBuilder_ == null) {
+          return namespaces_.get(index);  } else {
+          return namespacesBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public java.util.List<? extends boa.types.Ast.NamespaceOrBuilder> 
+           getNamespacesOrBuilderList() {
+        if (namespacesBuilder_ != null) {
+          return namespacesBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(namespaces_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public boa.types.Ast.Namespace.Builder addNamespacesBuilder() {
+        return getNamespacesFieldBuilder().addBuilder(
+            boa.types.Ast.Namespace.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public boa.types.Ast.Namespace.Builder addNamespacesBuilder(
+          int index) {
+        return getNamespacesFieldBuilder().addBuilder(
+            index, boa.types.Ast.Namespace.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Namespace namespaces = 11;</code>
+       *
+       * <pre>
+       ** The nested namespaces 
+       * </pre>
+       */
+      public java.util.List<boa.types.Ast.Namespace.Builder> 
+           getNamespacesBuilderList() {
+        return getNamespacesFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Namespace, boa.types.Ast.Namespace.Builder, boa.types.Ast.NamespaceOrBuilder> 
+          getNamespacesFieldBuilder() {
+        if (namespacesBuilder_ == null) {
+          namespacesBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              boa.types.Ast.Namespace, boa.types.Ast.Namespace.Builder, boa.types.Ast.NamespaceOrBuilder>(
+                  namespaces_,
+                  ((bitField0_ & 0x00000200) == 0x00000200),
+                  getParentForChildren(),
+                  isClean());
+          namespaces_ = null;
+        }
+        return namespacesBuilder_;
+      }
+
+      // repeated string imports = 12;
+      private com.google.protobuf.LazyStringList imports_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      private void ensureImportsIsMutable() {
+        if (!((bitField0_ & 0x00000400) == 0x00000400)) {
+          imports_ = new com.google.protobuf.LazyStringArrayList(imports_);
+          bitField0_ |= 0x00000400;
+         }
+      }
+      /**
+       * <code>repeated string imports = 12;</code>
+       *
+       * <pre>
+       ** The imported namespaces and types 
+       * </pre>
+       */
+      public java.util.List<java.lang.String>
+          getImportsList() {
+        return java.util.Collections.unmodifiableList(imports_);
+      }
+      /**
+       * <code>repeated string imports = 12;</code>
+       *
+       * <pre>
+       ** The imported namespaces and types 
+       * </pre>
+       */
+      public int getImportsCount() {
+        return imports_.size();
+      }
+      /**
+       * <code>repeated string imports = 12;</code>
+       *
+       * <pre>
+       ** The imported namespaces and types 
+       * </pre>
+       */
+      public java.lang.String getImports(int index) {
+        return imports_.get(index);
+      }
+      /**
+       * <code>repeated string imports = 12;</code>
+       *
+       * <pre>
+       ** The imported namespaces and types 
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getImportsBytes(int index) {
+        return imports_.getByteString(index);
+      }
+      /**
+       * <code>repeated string imports = 12;</code>
+       *
+       * <pre>
+       ** The imported namespaces and types 
+       * </pre>
+       */
+      public Builder setImports(
+          int index, java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureImportsIsMutable();
+        imports_.set(index, value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string imports = 12;</code>
+       *
+       * <pre>
+       ** The imported namespaces and types 
+       * </pre>
+       */
+      public Builder addImports(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureImportsIsMutable();
+        imports_.add(value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string imports = 12;</code>
+       *
+       * <pre>
+       ** The imported namespaces and types 
+       * </pre>
+       */
+      public Builder addAllImports(
+          java.lang.Iterable<java.lang.String> values) {
+        ensureImportsIsMutable();
+        super.addAll(values, imports_);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string imports = 12;</code>
+       *
+       * <pre>
+       ** The imported namespaces and types 
+       * </pre>
+       */
+      public Builder clearImports() {
+        imports_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000400);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string imports = 12;</code>
+       *
+       * <pre>
+       ** The imported namespaces and types 
+       * </pre>
+       */
+      public Builder addImportsBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureImportsIsMutable();
+        imports_.add(value);
         onChanged();
         return this;
       }
@@ -6088,41 +6782,104 @@ public final class Ast {
     boa.types.Ast.CommentOrBuilder getCommentsOrBuilder(
         int index);
 
-    // optional .boa.types.ChangeKind structural_change_kind = 10;
+    // optional .boa.types.ChangeKind change_kind = 10;
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 10;</code>
+     * <code>optional .boa.types.ChangeKind change_kind = 10;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
      * </pre>
      */
-    boolean hasStructuralChangeKind();
+    boolean hasChangeKind();
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 10;</code>
+     * <code>optional .boa.types.ChangeKind change_kind = 10;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
      * </pre>
      */
-    boa.types.Shared.ChangeKind getStructuralChangeKind();
+    boa.types.Shared.ChangeKind getChangeKind();
 
-    // optional .boa.types.ChangeKind label_change_kind = 11;
+    // optional int32 mapped_node = 12;
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 11;</code>
+     * <code>optional int32 mapped_node = 12;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
-    boolean hasLabelChangeKind();
+    boolean hasMappedNode();
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 11;</code>
+     * <code>optional int32 mapped_node = 12;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
-    boa.types.Shared.ChangeKind getLabelChangeKind();
+    int getMappedNode();
+
+    // optional int32 key = 13;
+    /**
+     * <code>optional int32 key = 13;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    boolean hasKey();
+    /**
+     * <code>optional int32 key = 13;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    int getKey();
+
+    // optional string fully_qualified_name = 14;
+    /**
+     * <code>optional string fully_qualified_name = 14;</code>
+     *
+     * <pre>
+     ** The fully qualified name of this type/interface 
+     * </pre>
+     */
+    boolean hasFullyQualifiedName();
+    /**
+     * <code>optional string fully_qualified_name = 14;</code>
+     *
+     * <pre>
+     ** The fully qualified name of this type/interface 
+     * </pre>
+     */
+    java.lang.String getFullyQualifiedName();
+    /**
+     * <code>optional string fully_qualified_name = 14;</code>
+     *
+     * <pre>
+     ** The fully qualified name of this type/interface 
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getFullyQualifiedNameBytes();
+
+    // optional int32 declaring_type = 15;
+    /**
+     * <code>optional int32 declaring_type = 15;</code>
+     *
+     * <pre>
+     ** the key of the declaring class in the same AST 
+     * </pre>
+     */
+    boolean hasDeclaringType();
+    /**
+     * <code>optional int32 declaring_type = 15;</code>
+     *
+     * <pre>
+     ** the key of the declaring class in the same AST 
+     * </pre>
+     */
+    int getDeclaringType();
   }
   /**
    * Protobuf type {@code boa.types.Declaration}
@@ -6258,19 +7015,28 @@ public final class Ast {
                 unknownFields.mergeVarintField(10, rawValue);
               } else {
                 bitField0_ |= 0x00000004;
-                structuralChangeKind_ = value;
+                changeKind_ = value;
               }
               break;
             }
-            case 88: {
-              int rawValue = input.readEnum();
-              boa.types.Shared.ChangeKind value = boa.types.Shared.ChangeKind.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(11, rawValue);
-              } else {
-                bitField0_ |= 0x00000008;
-                labelChangeKind_ = value;
-              }
+            case 96: {
+              bitField0_ |= 0x00000008;
+              mappedNode_ = input.readInt32();
+              break;
+            }
+            case 104: {
+              bitField0_ |= 0x00000010;
+              key_ = input.readInt32();
+              break;
+            }
+            case 114: {
+              bitField0_ |= 0x00000020;
+              fullyQualifiedName_ = input.readBytes();
+              break;
+            }
+            case 120: {
+              bitField0_ |= 0x00000040;
+              declaringType_ = input.readInt32();
               break;
             }
           }
@@ -6805,52 +7571,155 @@ public final class Ast {
       return comments_.get(index);
     }
 
-    // optional .boa.types.ChangeKind structural_change_kind = 10;
-    public static final int STRUCTURAL_CHANGE_KIND_FIELD_NUMBER = 10;
-    private boa.types.Shared.ChangeKind structuralChangeKind_;
+    // optional .boa.types.ChangeKind change_kind = 10;
+    public static final int CHANGE_KIND_FIELD_NUMBER = 10;
+    private boa.types.Shared.ChangeKind changeKind_;
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 10;</code>
+     * <code>optional .boa.types.ChangeKind change_kind = 10;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
      * </pre>
      */
-    public boolean hasStructuralChangeKind() {
+    public boolean hasChangeKind() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 10;</code>
+     * <code>optional .boa.types.ChangeKind change_kind = 10;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
      * </pre>
      */
-    public boa.types.Shared.ChangeKind getStructuralChangeKind() {
-      return structuralChangeKind_;
+    public boa.types.Shared.ChangeKind getChangeKind() {
+      return changeKind_;
     }
 
-    // optional .boa.types.ChangeKind label_change_kind = 11;
-    public static final int LABEL_CHANGE_KIND_FIELD_NUMBER = 11;
-    private boa.types.Shared.ChangeKind labelChangeKind_;
+    // optional int32 mapped_node = 12;
+    public static final int MAPPED_NODE_FIELD_NUMBER = 12;
+    private int mappedNode_;
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 11;</code>
+     * <code>optional int32 mapped_node = 12;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
-    public boolean hasLabelChangeKind() {
+    public boolean hasMappedNode() {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 11;</code>
+     * <code>optional int32 mapped_node = 12;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
-    public boa.types.Shared.ChangeKind getLabelChangeKind() {
-      return labelChangeKind_;
+    public int getMappedNode() {
+      return mappedNode_;
+    }
+
+    // optional int32 key = 13;
+    public static final int KEY_FIELD_NUMBER = 13;
+    private int key_;
+    /**
+     * <code>optional int32 key = 13;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    public boolean hasKey() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    /**
+     * <code>optional int32 key = 13;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    public int getKey() {
+      return key_;
+    }
+
+    // optional string fully_qualified_name = 14;
+    public static final int FULLY_QUALIFIED_NAME_FIELD_NUMBER = 14;
+    private java.lang.Object fullyQualifiedName_;
+    /**
+     * <code>optional string fully_qualified_name = 14;</code>
+     *
+     * <pre>
+     ** The fully qualified name of this type/interface 
+     * </pre>
+     */
+    public boolean hasFullyQualifiedName() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    /**
+     * <code>optional string fully_qualified_name = 14;</code>
+     *
+     * <pre>
+     ** The fully qualified name of this type/interface 
+     * </pre>
+     */
+    public java.lang.String getFullyQualifiedName() {
+      java.lang.Object ref = fullyQualifiedName_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          fullyQualifiedName_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string fully_qualified_name = 14;</code>
+     *
+     * <pre>
+     ** The fully qualified name of this type/interface 
+     * </pre>
+     */
+    public com.google.protobuf.ByteString
+        getFullyQualifiedNameBytes() {
+      java.lang.Object ref = fullyQualifiedName_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        fullyQualifiedName_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    // optional int32 declaring_type = 15;
+    public static final int DECLARING_TYPE_FIELD_NUMBER = 15;
+    private int declaringType_;
+    /**
+     * <code>optional int32 declaring_type = 15;</code>
+     *
+     * <pre>
+     ** the key of the declaring class in the same AST 
+     * </pre>
+     */
+    public boolean hasDeclaringType() {
+      return ((bitField0_ & 0x00000040) == 0x00000040);
+    }
+    /**
+     * <code>optional int32 declaring_type = 15;</code>
+     *
+     * <pre>
+     ** the key of the declaring class in the same AST 
+     * </pre>
+     */
+    public int getDeclaringType() {
+      return declaringType_;
     }
 
     private void initFields() {
@@ -6863,8 +7732,11 @@ public final class Ast {
       fields_ = java.util.Collections.emptyList();
       nestedDeclarations_ = java.util.Collections.emptyList();
       comments_ = java.util.Collections.emptyList();
-      structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
-      labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      changeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      mappedNode_ = 0;
+      key_ = 0;
+      fullyQualifiedName_ = "";
+      declaringType_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -6956,10 +7828,19 @@ public final class Ast {
         output.writeMessage(9, comments_.get(i));
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeEnum(10, structuralChangeKind_.getNumber());
+        output.writeEnum(10, changeKind_.getNumber());
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeEnum(11, labelChangeKind_.getNumber());
+        output.writeInt32(12, mappedNode_);
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeInt32(13, key_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        output.writeBytes(14, getFullyQualifiedNameBytes());
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        output.writeInt32(15, declaringType_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -7008,11 +7889,23 @@ public final class Ast {
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(10, structuralChangeKind_.getNumber());
+          .computeEnumSize(10, changeKind_.getNumber());
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(11, labelChangeKind_.getNumber());
+          .computeInt32Size(12, mappedNode_);
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(13, key_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(14, getFullyQualifiedNameBytes());
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(15, declaringType_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -7187,10 +8080,16 @@ public final class Ast {
         } else {
           commentsBuilder_.clear();
         }
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+        changeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00000200);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+        mappedNode_ = 0;
         bitField0_ = (bitField0_ & ~0x00000400);
+        key_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000800);
+        fullyQualifiedName_ = "";
+        bitField0_ = (bitField0_ & ~0x00001000);
+        declaringType_ = 0;
+        bitField0_ = (bitField0_ & ~0x00002000);
         return this;
       }
 
@@ -7293,11 +8192,23 @@ public final class Ast {
         if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
           to_bitField0_ |= 0x00000004;
         }
-        result.structuralChangeKind_ = structuralChangeKind_;
+        result.changeKind_ = changeKind_;
         if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
           to_bitField0_ |= 0x00000008;
         }
-        result.labelChangeKind_ = labelChangeKind_;
+        result.mappedNode_ = mappedNode_;
+        if (((from_bitField0_ & 0x00000800) == 0x00000800)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        result.key_ = key_;
+        if (((from_bitField0_ & 0x00001000) == 0x00001000)) {
+          to_bitField0_ |= 0x00000020;
+        }
+        result.fullyQualifiedName_ = fullyQualifiedName_;
+        if (((from_bitField0_ & 0x00002000) == 0x00002000)) {
+          to_bitField0_ |= 0x00000040;
+        }
+        result.declaringType_ = declaringType_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -7504,11 +8415,22 @@ public final class Ast {
             }
           }
         }
-        if (other.hasStructuralChangeKind()) {
-          setStructuralChangeKind(other.getStructuralChangeKind());
+        if (other.hasChangeKind()) {
+          setChangeKind(other.getChangeKind());
         }
-        if (other.hasLabelChangeKind()) {
-          setLabelChangeKind(other.getLabelChangeKind());
+        if (other.hasMappedNode()) {
+          setMappedNode(other.getMappedNode());
+        }
+        if (other.hasKey()) {
+          setKey(other.getKey());
+        }
+        if (other.hasFullyQualifiedName()) {
+          bitField0_ |= 0x00001000;
+          fullyQualifiedName_ = other.fullyQualifiedName_;
+          onChanged();
+        }
+        if (other.hasDeclaringType()) {
+          setDeclaringType(other.getDeclaringType());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -9921,106 +10843,299 @@ public final class Ast {
         return commentsBuilder_;
       }
 
-      // optional .boa.types.ChangeKind structural_change_kind = 10;
-      private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      // optional .boa.types.ChangeKind change_kind = 10;
+      private boa.types.Shared.ChangeKind changeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 10;</code>
+       * <code>optional .boa.types.ChangeKind change_kind = 10;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
        * </pre>
        */
-      public boolean hasStructuralChangeKind() {
+      public boolean hasChangeKind() {
         return ((bitField0_ & 0x00000200) == 0x00000200);
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 10;</code>
+       * <code>optional .boa.types.ChangeKind change_kind = 10;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
        * </pre>
        */
-      public boa.types.Shared.ChangeKind getStructuralChangeKind() {
-        return structuralChangeKind_;
+      public boa.types.Shared.ChangeKind getChangeKind() {
+        return changeKind_;
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 10;</code>
+       * <code>optional .boa.types.ChangeKind change_kind = 10;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
        * </pre>
        */
-      public Builder setStructuralChangeKind(boa.types.Shared.ChangeKind value) {
+      public Builder setChangeKind(boa.types.Shared.ChangeKind value) {
         if (value == null) {
           throw new NullPointerException();
         }
         bitField0_ |= 0x00000200;
-        structuralChangeKind_ = value;
+        changeKind_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 10;</code>
+       * <code>optional .boa.types.ChangeKind change_kind = 10;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
        * </pre>
        */
-      public Builder clearStructuralChangeKind() {
+      public Builder clearChangeKind() {
         bitField0_ = (bitField0_ & ~0x00000200);
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+        changeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         onChanged();
         return this;
       }
 
-      // optional .boa.types.ChangeKind label_change_kind = 11;
-      private boa.types.Shared.ChangeKind labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      // optional int32 mapped_node = 12;
+      private int mappedNode_ ;
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 11;</code>
+       * <code>optional int32 mapped_node = 12;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
-      public boolean hasLabelChangeKind() {
+      public boolean hasMappedNode() {
         return ((bitField0_ & 0x00000400) == 0x00000400);
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 11;</code>
+       * <code>optional int32 mapped_node = 12;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
-      public boa.types.Shared.ChangeKind getLabelChangeKind() {
-        return labelChangeKind_;
+      public int getMappedNode() {
+        return mappedNode_;
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 11;</code>
+       * <code>optional int32 mapped_node = 12;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
-      public Builder setLabelChangeKind(boa.types.Shared.ChangeKind value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
+      public Builder setMappedNode(int value) {
         bitField0_ |= 0x00000400;
-        labelChangeKind_ = value;
+        mappedNode_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 11;</code>
+       * <code>optional int32 mapped_node = 12;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
-      public Builder clearLabelChangeKind() {
+      public Builder clearMappedNode() {
         bitField0_ = (bitField0_ & ~0x00000400);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+        mappedNode_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 key = 13;
+      private int key_ ;
+      /**
+       * <code>optional int32 key = 13;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public boolean hasKey() {
+        return ((bitField0_ & 0x00000800) == 0x00000800);
+      }
+      /**
+       * <code>optional int32 key = 13;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public int getKey() {
+        return key_;
+      }
+      /**
+       * <code>optional int32 key = 13;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public Builder setKey(int value) {
+        bitField0_ |= 0x00000800;
+        key_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 key = 13;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public Builder clearKey() {
+        bitField0_ = (bitField0_ & ~0x00000800);
+        key_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional string fully_qualified_name = 14;
+      private java.lang.Object fullyQualifiedName_ = "";
+      /**
+       * <code>optional string fully_qualified_name = 14;</code>
+       *
+       * <pre>
+       ** The fully qualified name of this type/interface 
+       * </pre>
+       */
+      public boolean hasFullyQualifiedName() {
+        return ((bitField0_ & 0x00001000) == 0x00001000);
+      }
+      /**
+       * <code>optional string fully_qualified_name = 14;</code>
+       *
+       * <pre>
+       ** The fully qualified name of this type/interface 
+       * </pre>
+       */
+      public java.lang.String getFullyQualifiedName() {
+        java.lang.Object ref = fullyQualifiedName_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          fullyQualifiedName_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string fully_qualified_name = 14;</code>
+       *
+       * <pre>
+       ** The fully qualified name of this type/interface 
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getFullyQualifiedNameBytes() {
+        java.lang.Object ref = fullyQualifiedName_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          fullyQualifiedName_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string fully_qualified_name = 14;</code>
+       *
+       * <pre>
+       ** The fully qualified name of this type/interface 
+       * </pre>
+       */
+      public Builder setFullyQualifiedName(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00001000;
+        fullyQualifiedName_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string fully_qualified_name = 14;</code>
+       *
+       * <pre>
+       ** The fully qualified name of this type/interface 
+       * </pre>
+       */
+      public Builder clearFullyQualifiedName() {
+        bitField0_ = (bitField0_ & ~0x00001000);
+        fullyQualifiedName_ = getDefaultInstance().getFullyQualifiedName();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string fully_qualified_name = 14;</code>
+       *
+       * <pre>
+       ** The fully qualified name of this type/interface 
+       * </pre>
+       */
+      public Builder setFullyQualifiedNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00001000;
+        fullyQualifiedName_ = value;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 declaring_type = 15;
+      private int declaringType_ ;
+      /**
+       * <code>optional int32 declaring_type = 15;</code>
+       *
+       * <pre>
+       ** the key of the declaring class in the same AST 
+       * </pre>
+       */
+      public boolean hasDeclaringType() {
+        return ((bitField0_ & 0x00002000) == 0x00002000);
+      }
+      /**
+       * <code>optional int32 declaring_type = 15;</code>
+       *
+       * <pre>
+       ** the key of the declaring class in the same AST 
+       * </pre>
+       */
+      public int getDeclaringType() {
+        return declaringType_;
+      }
+      /**
+       * <code>optional int32 declaring_type = 15;</code>
+       *
+       * <pre>
+       ** the key of the declaring class in the same AST 
+       * </pre>
+       */
+      public Builder setDeclaringType(int value) {
+        bitField0_ |= 0x00002000;
+        declaringType_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 declaring_type = 15;</code>
+       *
+       * <pre>
+       ** the key of the declaring class in the same AST 
+       * </pre>
+       */
+      public Builder clearDeclaringType() {
+        bitField0_ = (bitField0_ & ~0x00002000);
+        declaringType_ = 0;
         onChanged();
         return this;
       }
@@ -10066,9 +11181,36 @@ public final class Ast {
     com.google.protobuf.ByteString
         getNameBytes();
 
-    // required .boa.types.TypeKind kind = 2;
+    // optional string fully_qualified_name = 2;
     /**
-     * <code>required .boa.types.TypeKind kind = 2;</code>
+     * <code>optional string fully_qualified_name = 2;</code>
+     *
+     * <pre>
+     ** The fully qualified name of this type/interface 
+     * </pre>
+     */
+    boolean hasFullyQualifiedName();
+    /**
+     * <code>optional string fully_qualified_name = 2;</code>
+     *
+     * <pre>
+     ** The fully qualified name of this type/interface 
+     * </pre>
+     */
+    java.lang.String getFullyQualifiedName();
+    /**
+     * <code>optional string fully_qualified_name = 2;</code>
+     *
+     * <pre>
+     ** The fully qualified name of this type/interface 
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getFullyQualifiedNameBytes();
+
+    // required .boa.types.TypeKind kind = 3;
+    /**
+     * <code>required .boa.types.TypeKind kind = 3;</code>
      *
      * <pre>
      ** The kind of the type 
@@ -10076,7 +11218,7 @@ public final class Ast {
      */
     boolean hasKind();
     /**
-     * <code>required .boa.types.TypeKind kind = 2;</code>
+     * <code>required .boa.types.TypeKind kind = 3;</code>
      *
      * <pre>
      ** The kind of the type 
@@ -10111,41 +11253,95 @@ public final class Ast {
     com.google.protobuf.ByteString
         getIdBytes();
 
-    // optional .boa.types.ChangeKind structural_change_kind = 5;
+    // optional .boa.types.ChangeKind change_kind = 5;
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 5;</code>
+     * <code>optional .boa.types.ChangeKind change_kind = 5;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
      * </pre>
      */
-    boolean hasStructuralChangeKind();
+    boolean hasChangeKind();
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 5;</code>
+     * <code>optional .boa.types.ChangeKind change_kind = 5;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
      * </pre>
      */
-    boa.types.Shared.ChangeKind getStructuralChangeKind();
+    boa.types.Shared.ChangeKind getChangeKind();
 
-    // optional .boa.types.ChangeKind label_change_kind = 6;
+    // optional int32 mapped_node = 7;
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 6;</code>
+     * <code>optional int32 mapped_node = 7;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
-    boolean hasLabelChangeKind();
+    boolean hasMappedNode();
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 6;</code>
+     * <code>optional int32 mapped_node = 7;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
-    boa.types.Shared.ChangeKind getLabelChangeKind();
+    int getMappedNode();
+
+    // optional int32 declaration_file = 8;
+    /**
+     * <code>optional int32 declaration_file = 8;</code>
+     *
+     * <pre>
+     ** the index of the file (in the list of files in the snapshot) containing the declaration of this type 
+     * </pre>
+     */
+    boolean hasDeclarationFile();
+    /**
+     * <code>optional int32 declaration_file = 8;</code>
+     *
+     * <pre>
+     ** the index of the file (in the list of files in the snapshot) containing the declaration of this type 
+     * </pre>
+     */
+    int getDeclarationFile();
+
+    // optional int32 declaration = 9;
+    /**
+     * <code>optional int32 declaration = 9;</code>
+     *
+     * <pre>
+     ** the key of the node containing the declaration of this type in the AST of the file 
+     * </pre>
+     */
+    boolean hasDeclaration();
+    /**
+     * <code>optional int32 declaration = 9;</code>
+     *
+     * <pre>
+     ** the key of the node containing the declaration of this type in the AST of the file 
+     * </pre>
+     */
+    int getDeclaration();
+
+    // optional int32 key = 10;
+    /**
+     * <code>optional int32 key = 10;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    boolean hasKey();
+    /**
+     * <code>optional int32 key = 10;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    int getKey();
   }
   /**
    * Protobuf type {@code boa.types.Type}
@@ -10207,19 +11403,24 @@ public final class Ast {
               name_ = input.readBytes();
               break;
             }
-            case 16: {
+            case 18: {
+              bitField0_ |= 0x00000002;
+              fullyQualifiedName_ = input.readBytes();
+              break;
+            }
+            case 24: {
               int rawValue = input.readEnum();
               boa.types.Ast.TypeKind value = boa.types.Ast.TypeKind.valueOf(rawValue);
               if (value == null) {
-                unknownFields.mergeVarintField(2, rawValue);
+                unknownFields.mergeVarintField(3, rawValue);
               } else {
-                bitField0_ |= 0x00000002;
+                bitField0_ |= 0x00000004;
                 kind_ = value;
               }
               break;
             }
             case 34: {
-              bitField0_ |= 0x00000004;
+              bitField0_ |= 0x00000008;
               id_ = input.readBytes();
               break;
             }
@@ -10229,20 +11430,29 @@ public final class Ast {
               if (value == null) {
                 unknownFields.mergeVarintField(5, rawValue);
               } else {
-                bitField0_ |= 0x00000008;
-                structuralChangeKind_ = value;
+                bitField0_ |= 0x00000010;
+                changeKind_ = value;
               }
               break;
             }
-            case 48: {
-              int rawValue = input.readEnum();
-              boa.types.Shared.ChangeKind value = boa.types.Shared.ChangeKind.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(6, rawValue);
-              } else {
-                bitField0_ |= 0x00000010;
-                labelChangeKind_ = value;
-              }
+            case 56: {
+              bitField0_ |= 0x00000020;
+              mappedNode_ = input.readInt32();
+              break;
+            }
+            case 64: {
+              bitField0_ |= 0x00000040;
+              declarationFile_ = input.readInt32();
+              break;
+            }
+            case 72: {
+              bitField0_ |= 0x00000080;
+              declaration_ = input.readInt32();
+              break;
+            }
+            case 80: {
+              bitField0_ |= 0x00000100;
+              key_ = input.readInt32();
               break;
             }
           }
@@ -10340,21 +11550,76 @@ public final class Ast {
       }
     }
 
-    // required .boa.types.TypeKind kind = 2;
-    public static final int KIND_FIELD_NUMBER = 2;
+    // optional string fully_qualified_name = 2;
+    public static final int FULLY_QUALIFIED_NAME_FIELD_NUMBER = 2;
+    private java.lang.Object fullyQualifiedName_;
+    /**
+     * <code>optional string fully_qualified_name = 2;</code>
+     *
+     * <pre>
+     ** The fully qualified name of this type/interface 
+     * </pre>
+     */
+    public boolean hasFullyQualifiedName() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>optional string fully_qualified_name = 2;</code>
+     *
+     * <pre>
+     ** The fully qualified name of this type/interface 
+     * </pre>
+     */
+    public java.lang.String getFullyQualifiedName() {
+      java.lang.Object ref = fullyQualifiedName_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          fullyQualifiedName_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string fully_qualified_name = 2;</code>
+     *
+     * <pre>
+     ** The fully qualified name of this type/interface 
+     * </pre>
+     */
+    public com.google.protobuf.ByteString
+        getFullyQualifiedNameBytes() {
+      java.lang.Object ref = fullyQualifiedName_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        fullyQualifiedName_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    // required .boa.types.TypeKind kind = 3;
+    public static final int KIND_FIELD_NUMBER = 3;
     private boa.types.Ast.TypeKind kind_;
     /**
-     * <code>required .boa.types.TypeKind kind = 2;</code>
+     * <code>required .boa.types.TypeKind kind = 3;</code>
      *
      * <pre>
      ** The kind of the type 
      * </pre>
      */
     public boolean hasKind() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
+      return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
-     * <code>required .boa.types.TypeKind kind = 2;</code>
+     * <code>required .boa.types.TypeKind kind = 3;</code>
      *
      * <pre>
      ** The kind of the type 
@@ -10375,7 +11640,7 @@ public final class Ast {
      * </pre>
      */
     public boolean hasId() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
+      return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
      * <code>optional string id = 4;</code>
@@ -10419,60 +11684,136 @@ public final class Ast {
       }
     }
 
-    // optional .boa.types.ChangeKind structural_change_kind = 5;
-    public static final int STRUCTURAL_CHANGE_KIND_FIELD_NUMBER = 5;
-    private boa.types.Shared.ChangeKind structuralChangeKind_;
+    // optional .boa.types.ChangeKind change_kind = 5;
+    public static final int CHANGE_KIND_FIELD_NUMBER = 5;
+    private boa.types.Shared.ChangeKind changeKind_;
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 5;</code>
+     * <code>optional .boa.types.ChangeKind change_kind = 5;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
      * </pre>
      */
-    public boolean hasStructuralChangeKind() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
-    }
-    /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 5;</code>
-     *
-     * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
-     * </pre>
-     */
-    public boa.types.Shared.ChangeKind getStructuralChangeKind() {
-      return structuralChangeKind_;
-    }
-
-    // optional .boa.types.ChangeKind label_change_kind = 6;
-    public static final int LABEL_CHANGE_KIND_FIELD_NUMBER = 6;
-    private boa.types.Shared.ChangeKind labelChangeKind_;
-    /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 6;</code>
-     *
-     * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
-     * </pre>
-     */
-    public boolean hasLabelChangeKind() {
+    public boolean hasChangeKind() {
       return ((bitField0_ & 0x00000010) == 0x00000010);
     }
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 6;</code>
+     * <code>optional .boa.types.ChangeKind change_kind = 5;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
      * </pre>
      */
-    public boa.types.Shared.ChangeKind getLabelChangeKind() {
-      return labelChangeKind_;
+    public boa.types.Shared.ChangeKind getChangeKind() {
+      return changeKind_;
+    }
+
+    // optional int32 mapped_node = 7;
+    public static final int MAPPED_NODE_FIELD_NUMBER = 7;
+    private int mappedNode_;
+    /**
+     * <code>optional int32 mapped_node = 7;</code>
+     *
+     * <pre>
+     ** the key of the mapped node in the previous version 
+     * </pre>
+     */
+    public boolean hasMappedNode() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    /**
+     * <code>optional int32 mapped_node = 7;</code>
+     *
+     * <pre>
+     ** the key of the mapped node in the previous version 
+     * </pre>
+     */
+    public int getMappedNode() {
+      return mappedNode_;
+    }
+
+    // optional int32 declaration_file = 8;
+    public static final int DECLARATION_FILE_FIELD_NUMBER = 8;
+    private int declarationFile_;
+    /**
+     * <code>optional int32 declaration_file = 8;</code>
+     *
+     * <pre>
+     ** the index of the file (in the list of files in the snapshot) containing the declaration of this type 
+     * </pre>
+     */
+    public boolean hasDeclarationFile() {
+      return ((bitField0_ & 0x00000040) == 0x00000040);
+    }
+    /**
+     * <code>optional int32 declaration_file = 8;</code>
+     *
+     * <pre>
+     ** the index of the file (in the list of files in the snapshot) containing the declaration of this type 
+     * </pre>
+     */
+    public int getDeclarationFile() {
+      return declarationFile_;
+    }
+
+    // optional int32 declaration = 9;
+    public static final int DECLARATION_FIELD_NUMBER = 9;
+    private int declaration_;
+    /**
+     * <code>optional int32 declaration = 9;</code>
+     *
+     * <pre>
+     ** the key of the node containing the declaration of this type in the AST of the file 
+     * </pre>
+     */
+    public boolean hasDeclaration() {
+      return ((bitField0_ & 0x00000080) == 0x00000080);
+    }
+    /**
+     * <code>optional int32 declaration = 9;</code>
+     *
+     * <pre>
+     ** the key of the node containing the declaration of this type in the AST of the file 
+     * </pre>
+     */
+    public int getDeclaration() {
+      return declaration_;
+    }
+
+    // optional int32 key = 10;
+    public static final int KEY_FIELD_NUMBER = 10;
+    private int key_;
+    /**
+     * <code>optional int32 key = 10;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    public boolean hasKey() {
+      return ((bitField0_ & 0x00000100) == 0x00000100);
+    }
+    /**
+     * <code>optional int32 key = 10;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    public int getKey() {
+      return key_;
     }
 
     private void initFields() {
       name_ = "";
+      fullyQualifiedName_ = "";
       kind_ = boa.types.Ast.TypeKind.OTHER;
       id_ = "";
-      structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
-      labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      changeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      mappedNode_ = 0;
+      declarationFile_ = 0;
+      declaration_ = 0;
+      key_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -10498,16 +11839,28 @@ public final class Ast {
         output.writeBytes(1, getNameBytes());
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeEnum(2, kind_.getNumber());
+        output.writeBytes(2, getFullyQualifiedNameBytes());
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeBytes(4, getIdBytes());
+        output.writeEnum(3, kind_.getNumber());
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeEnum(5, structuralChangeKind_.getNumber());
+        output.writeBytes(4, getIdBytes());
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeEnum(6, labelChangeKind_.getNumber());
+        output.writeEnum(5, changeKind_.getNumber());
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        output.writeInt32(7, mappedNode_);
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        output.writeInt32(8, declarationFile_);
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        output.writeInt32(9, declaration_);
+      }
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        output.writeInt32(10, key_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -10524,19 +11877,35 @@ public final class Ast {
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(2, kind_.getNumber());
+          .computeBytesSize(2, getFullyQualifiedNameBytes());
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(4, getIdBytes());
+          .computeEnumSize(3, kind_.getNumber());
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(5, structuralChangeKind_.getNumber());
+          .computeBytesSize(4, getIdBytes());
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(6, labelChangeKind_.getNumber());
+          .computeEnumSize(5, changeKind_.getNumber());
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(7, mappedNode_);
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(8, declarationFile_);
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(9, declaration_);
+      }
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(10, key_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -10660,14 +12029,22 @@ public final class Ast {
         super.clear();
         name_ = "";
         bitField0_ = (bitField0_ & ~0x00000001);
-        kind_ = boa.types.Ast.TypeKind.OTHER;
+        fullyQualifiedName_ = "";
         bitField0_ = (bitField0_ & ~0x00000002);
-        id_ = "";
+        kind_ = boa.types.Ast.TypeKind.OTHER;
         bitField0_ = (bitField0_ & ~0x00000004);
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+        id_ = "";
         bitField0_ = (bitField0_ & ~0x00000008);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+        changeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00000010);
+        mappedNode_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000020);
+        declarationFile_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000040);
+        declaration_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000080);
+        key_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000100);
         return this;
       }
 
@@ -10703,19 +12080,35 @@ public final class Ast {
         if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
           to_bitField0_ |= 0x00000002;
         }
-        result.kind_ = kind_;
+        result.fullyQualifiedName_ = fullyQualifiedName_;
         if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
           to_bitField0_ |= 0x00000004;
         }
-        result.id_ = id_;
+        result.kind_ = kind_;
         if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
           to_bitField0_ |= 0x00000008;
         }
-        result.structuralChangeKind_ = structuralChangeKind_;
+        result.id_ = id_;
         if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
           to_bitField0_ |= 0x00000010;
         }
-        result.labelChangeKind_ = labelChangeKind_;
+        result.changeKind_ = changeKind_;
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+          to_bitField0_ |= 0x00000020;
+        }
+        result.mappedNode_ = mappedNode_;
+        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
+          to_bitField0_ |= 0x00000040;
+        }
+        result.declarationFile_ = declarationFile_;
+        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
+          to_bitField0_ |= 0x00000080;
+        }
+        result.declaration_ = declaration_;
+        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
+          to_bitField0_ |= 0x00000100;
+        }
+        result.key_ = key_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -10737,19 +12130,33 @@ public final class Ast {
           name_ = other.name_;
           onChanged();
         }
+        if (other.hasFullyQualifiedName()) {
+          bitField0_ |= 0x00000002;
+          fullyQualifiedName_ = other.fullyQualifiedName_;
+          onChanged();
+        }
         if (other.hasKind()) {
           setKind(other.getKind());
         }
         if (other.hasId()) {
-          bitField0_ |= 0x00000004;
+          bitField0_ |= 0x00000008;
           id_ = other.id_;
           onChanged();
         }
-        if (other.hasStructuralChangeKind()) {
-          setStructuralChangeKind(other.getStructuralChangeKind());
+        if (other.hasChangeKind()) {
+          setChangeKind(other.getChangeKind());
         }
-        if (other.hasLabelChangeKind()) {
-          setLabelChangeKind(other.getLabelChangeKind());
+        if (other.hasMappedNode()) {
+          setMappedNode(other.getMappedNode());
+        }
+        if (other.hasDeclarationFile()) {
+          setDeclarationFile(other.getDeclarationFile());
+        }
+        if (other.hasDeclaration()) {
+          setDeclaration(other.getDeclaration());
+        }
+        if (other.hasKey()) {
+          setKey(other.getKey());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -10884,20 +12291,118 @@ public final class Ast {
         return this;
       }
 
-      // required .boa.types.TypeKind kind = 2;
+      // optional string fully_qualified_name = 2;
+      private java.lang.Object fullyQualifiedName_ = "";
+      /**
+       * <code>optional string fully_qualified_name = 2;</code>
+       *
+       * <pre>
+       ** The fully qualified name of this type/interface 
+       * </pre>
+       */
+      public boolean hasFullyQualifiedName() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>optional string fully_qualified_name = 2;</code>
+       *
+       * <pre>
+       ** The fully qualified name of this type/interface 
+       * </pre>
+       */
+      public java.lang.String getFullyQualifiedName() {
+        java.lang.Object ref = fullyQualifiedName_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          fullyQualifiedName_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string fully_qualified_name = 2;</code>
+       *
+       * <pre>
+       ** The fully qualified name of this type/interface 
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getFullyQualifiedNameBytes() {
+        java.lang.Object ref = fullyQualifiedName_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          fullyQualifiedName_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string fully_qualified_name = 2;</code>
+       *
+       * <pre>
+       ** The fully qualified name of this type/interface 
+       * </pre>
+       */
+      public Builder setFullyQualifiedName(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        fullyQualifiedName_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string fully_qualified_name = 2;</code>
+       *
+       * <pre>
+       ** The fully qualified name of this type/interface 
+       * </pre>
+       */
+      public Builder clearFullyQualifiedName() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        fullyQualifiedName_ = getDefaultInstance().getFullyQualifiedName();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string fully_qualified_name = 2;</code>
+       *
+       * <pre>
+       ** The fully qualified name of this type/interface 
+       * </pre>
+       */
+      public Builder setFullyQualifiedNameBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+        fullyQualifiedName_ = value;
+        onChanged();
+        return this;
+      }
+
+      // required .boa.types.TypeKind kind = 3;
       private boa.types.Ast.TypeKind kind_ = boa.types.Ast.TypeKind.OTHER;
       /**
-       * <code>required .boa.types.TypeKind kind = 2;</code>
+       * <code>required .boa.types.TypeKind kind = 3;</code>
        *
        * <pre>
        ** The kind of the type 
        * </pre>
        */
       public boolean hasKind() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
+        return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
-       * <code>required .boa.types.TypeKind kind = 2;</code>
+       * <code>required .boa.types.TypeKind kind = 3;</code>
        *
        * <pre>
        ** The kind of the type 
@@ -10907,7 +12412,7 @@ public final class Ast {
         return kind_;
       }
       /**
-       * <code>required .boa.types.TypeKind kind = 2;</code>
+       * <code>required .boa.types.TypeKind kind = 3;</code>
        *
        * <pre>
        ** The kind of the type 
@@ -10917,20 +12422,20 @@ public final class Ast {
         if (value == null) {
           throw new NullPointerException();
         }
-        bitField0_ |= 0x00000002;
+        bitField0_ |= 0x00000004;
         kind_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required .boa.types.TypeKind kind = 2;</code>
+       * <code>required .boa.types.TypeKind kind = 3;</code>
        *
        * <pre>
        ** The kind of the type 
        * </pre>
        */
       public Builder clearKind() {
-        bitField0_ = (bitField0_ & ~0x00000002);
+        bitField0_ = (bitField0_ & ~0x00000004);
         kind_ = boa.types.Ast.TypeKind.OTHER;
         onChanged();
         return this;
@@ -10946,7 +12451,7 @@ public final class Ast {
        * </pre>
        */
       public boolean hasId() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
+        return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       /**
        * <code>optional string id = 4;</code>
@@ -10998,7 +12503,7 @@ public final class Ast {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000004;
+  bitField0_ |= 0x00000008;
         id_ = value;
         onChanged();
         return this;
@@ -11011,7 +12516,7 @@ public final class Ast {
        * </pre>
        */
       public Builder clearId() {
-        bitField0_ = (bitField0_ & ~0x00000004);
+        bitField0_ = (bitField0_ & ~0x00000008);
         id_ = getDefaultInstance().getId();
         onChanged();
         return this;
@@ -11028,112 +12533,256 @@ public final class Ast {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000004;
+  bitField0_ |= 0x00000008;
         id_ = value;
         onChanged();
         return this;
       }
 
-      // optional .boa.types.ChangeKind structural_change_kind = 5;
-      private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      // optional .boa.types.ChangeKind change_kind = 5;
+      private boa.types.Shared.ChangeKind changeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 5;</code>
+       * <code>optional .boa.types.ChangeKind change_kind = 5;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
        * </pre>
        */
-      public boolean hasStructuralChangeKind() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
-      }
-      /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 5;</code>
-       *
-       * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
-       * </pre>
-       */
-      public boa.types.Shared.ChangeKind getStructuralChangeKind() {
-        return structuralChangeKind_;
-      }
-      /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 5;</code>
-       *
-       * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
-       * </pre>
-       */
-      public Builder setStructuralChangeKind(boa.types.Shared.ChangeKind value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        bitField0_ |= 0x00000008;
-        structuralChangeKind_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 5;</code>
-       *
-       * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
-       * </pre>
-       */
-      public Builder clearStructuralChangeKind() {
-        bitField0_ = (bitField0_ & ~0x00000008);
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
-        onChanged();
-        return this;
-      }
-
-      // optional .boa.types.ChangeKind label_change_kind = 6;
-      private boa.types.Shared.ChangeKind labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
-      /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 6;</code>
-       *
-       * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
-       * </pre>
-       */
-      public boolean hasLabelChangeKind() {
+      public boolean hasChangeKind() {
         return ((bitField0_ & 0x00000010) == 0x00000010);
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 6;</code>
+       * <code>optional .boa.types.ChangeKind change_kind = 5;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
        * </pre>
        */
-      public boa.types.Shared.ChangeKind getLabelChangeKind() {
-        return labelChangeKind_;
+      public boa.types.Shared.ChangeKind getChangeKind() {
+        return changeKind_;
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 6;</code>
+       * <code>optional .boa.types.ChangeKind change_kind = 5;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
        * </pre>
        */
-      public Builder setLabelChangeKind(boa.types.Shared.ChangeKind value) {
+      public Builder setChangeKind(boa.types.Shared.ChangeKind value) {
         if (value == null) {
           throw new NullPointerException();
         }
         bitField0_ |= 0x00000010;
-        labelChangeKind_ = value;
+        changeKind_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 6;</code>
+       * <code>optional .boa.types.ChangeKind change_kind = 5;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
        * </pre>
        */
-      public Builder clearLabelChangeKind() {
+      public Builder clearChangeKind() {
         bitField0_ = (bitField0_ & ~0x00000010);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+        changeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 mapped_node = 7;
+      private int mappedNode_ ;
+      /**
+       * <code>optional int32 mapped_node = 7;</code>
+       *
+       * <pre>
+       ** the key of the mapped node in the previous version 
+       * </pre>
+       */
+      public boolean hasMappedNode() {
+        return ((bitField0_ & 0x00000020) == 0x00000020);
+      }
+      /**
+       * <code>optional int32 mapped_node = 7;</code>
+       *
+       * <pre>
+       ** the key of the mapped node in the previous version 
+       * </pre>
+       */
+      public int getMappedNode() {
+        return mappedNode_;
+      }
+      /**
+       * <code>optional int32 mapped_node = 7;</code>
+       *
+       * <pre>
+       ** the key of the mapped node in the previous version 
+       * </pre>
+       */
+      public Builder setMappedNode(int value) {
+        bitField0_ |= 0x00000020;
+        mappedNode_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 mapped_node = 7;</code>
+       *
+       * <pre>
+       ** the key of the mapped node in the previous version 
+       * </pre>
+       */
+      public Builder clearMappedNode() {
+        bitField0_ = (bitField0_ & ~0x00000020);
+        mappedNode_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 declaration_file = 8;
+      private int declarationFile_ ;
+      /**
+       * <code>optional int32 declaration_file = 8;</code>
+       *
+       * <pre>
+       ** the index of the file (in the list of files in the snapshot) containing the declaration of this type 
+       * </pre>
+       */
+      public boolean hasDeclarationFile() {
+        return ((bitField0_ & 0x00000040) == 0x00000040);
+      }
+      /**
+       * <code>optional int32 declaration_file = 8;</code>
+       *
+       * <pre>
+       ** the index of the file (in the list of files in the snapshot) containing the declaration of this type 
+       * </pre>
+       */
+      public int getDeclarationFile() {
+        return declarationFile_;
+      }
+      /**
+       * <code>optional int32 declaration_file = 8;</code>
+       *
+       * <pre>
+       ** the index of the file (in the list of files in the snapshot) containing the declaration of this type 
+       * </pre>
+       */
+      public Builder setDeclarationFile(int value) {
+        bitField0_ |= 0x00000040;
+        declarationFile_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 declaration_file = 8;</code>
+       *
+       * <pre>
+       ** the index of the file (in the list of files in the snapshot) containing the declaration of this type 
+       * </pre>
+       */
+      public Builder clearDeclarationFile() {
+        bitField0_ = (bitField0_ & ~0x00000040);
+        declarationFile_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 declaration = 9;
+      private int declaration_ ;
+      /**
+       * <code>optional int32 declaration = 9;</code>
+       *
+       * <pre>
+       ** the key of the node containing the declaration of this type in the AST of the file 
+       * </pre>
+       */
+      public boolean hasDeclaration() {
+        return ((bitField0_ & 0x00000080) == 0x00000080);
+      }
+      /**
+       * <code>optional int32 declaration = 9;</code>
+       *
+       * <pre>
+       ** the key of the node containing the declaration of this type in the AST of the file 
+       * </pre>
+       */
+      public int getDeclaration() {
+        return declaration_;
+      }
+      /**
+       * <code>optional int32 declaration = 9;</code>
+       *
+       * <pre>
+       ** the key of the node containing the declaration of this type in the AST of the file 
+       * </pre>
+       */
+      public Builder setDeclaration(int value) {
+        bitField0_ |= 0x00000080;
+        declaration_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 declaration = 9;</code>
+       *
+       * <pre>
+       ** the key of the node containing the declaration of this type in the AST of the file 
+       * </pre>
+       */
+      public Builder clearDeclaration() {
+        bitField0_ = (bitField0_ & ~0x00000080);
+        declaration_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 key = 10;
+      private int key_ ;
+      /**
+       * <code>optional int32 key = 10;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public boolean hasKey() {
+        return ((bitField0_ & 0x00000100) == 0x00000100);
+      }
+      /**
+       * <code>optional int32 key = 10;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public int getKey() {
+        return key_;
+      }
+      /**
+       * <code>optional int32 key = 10;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public Builder setKey(int value) {
+        bitField0_ |= 0x00000100;
+        key_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 key = 10;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public Builder clearKey() {
+        bitField0_ = (bitField0_ & ~0x00000100);
+        key_ = 0;
         onChanged();
         return this;
       }
@@ -11157,7 +12806,7 @@ public final class Ast {
      * <code>optional string name = 1;</code>
      *
      * <pre>
-     ** The name of the method 
+     ** The name of the method. The fully qualified name can be constructed on the fly via its declaring class, name and arguments  
      * </pre>
      */
     boolean hasName();
@@ -11165,7 +12814,7 @@ public final class Ast {
      * <code>optional string name = 1;</code>
      *
      * <pre>
-     ** The name of the method 
+     ** The name of the method. The fully qualified name can be constructed on the fly via its declaring class, name and arguments  
      * </pre>
      */
     java.lang.String getName();
@@ -11173,7 +12822,7 @@ public final class Ast {
      * <code>optional string name = 1;</code>
      *
      * <pre>
-     ** The name of the method 
+     ** The name of the method. The fully qualified name can be constructed on the fly via its declaring class, name and arguments  
      * </pre>
      */
     com.google.protobuf.ByteString
@@ -11490,41 +13139,77 @@ public final class Ast {
     boa.types.Ast.CommentOrBuilder getCommentsOrBuilder(
         int index);
 
-    // optional .boa.types.ChangeKind structural_change_kind = 9;
+    // optional .boa.types.ChangeKind change_kind = 9;
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 9;</code>
+     * <code>optional .boa.types.ChangeKind change_kind = 9;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
      * </pre>
      */
-    boolean hasStructuralChangeKind();
+    boolean hasChangeKind();
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 9;</code>
+     * <code>optional .boa.types.ChangeKind change_kind = 9;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
      * </pre>
      */
-    boa.types.Shared.ChangeKind getStructuralChangeKind();
+    boa.types.Shared.ChangeKind getChangeKind();
 
-    // optional .boa.types.ChangeKind label_change_kind = 10;
+    // optional int32 mapped_node = 11;
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 10;</code>
+     * <code>optional int32 mapped_node = 11;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
-    boolean hasLabelChangeKind();
+    boolean hasMappedNode();
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 10;</code>
+     * <code>optional int32 mapped_node = 11;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
-    boa.types.Shared.ChangeKind getLabelChangeKind();
+    int getMappedNode();
+
+    // optional int32 key = 12;
+    /**
+     * <code>optional int32 key = 12;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    boolean hasKey();
+    /**
+     * <code>optional int32 key = 12;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    int getKey();
+
+    // optional int32 declaring_type = 13;
+    /**
+     * <code>optional int32 declaring_type = 13;</code>
+     *
+     * <pre>
+     ** The key of the type declaration declaring this method in the same AST 
+     * </pre>
+     */
+    boolean hasDeclaringType();
+    /**
+     * <code>optional int32 declaring_type = 13;</code>
+     *
+     * <pre>
+     ** The key of the type declaration declaring this method in the same AST 
+     * </pre>
+     */
+    int getDeclaringType();
   }
   /**
    * Protobuf type {@code boa.types.Method}
@@ -11654,19 +13339,23 @@ public final class Ast {
                 unknownFields.mergeVarintField(9, rawValue);
               } else {
                 bitField0_ |= 0x00000004;
-                structuralChangeKind_ = value;
+                changeKind_ = value;
               }
               break;
             }
-            case 80: {
-              int rawValue = input.readEnum();
-              boa.types.Shared.ChangeKind value = boa.types.Shared.ChangeKind.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(10, rawValue);
-              } else {
-                bitField0_ |= 0x00000008;
-                labelChangeKind_ = value;
-              }
+            case 88: {
+              bitField0_ |= 0x00000008;
+              mappedNode_ = input.readInt32();
+              break;
+            }
+            case 96: {
+              bitField0_ |= 0x00000010;
+              key_ = input.readInt32();
+              break;
+            }
+            case 104: {
+              bitField0_ |= 0x00000020;
+              declaringType_ = input.readInt32();
               break;
             }
           }
@@ -11734,7 +13423,7 @@ public final class Ast {
      * <code>optional string name = 1;</code>
      *
      * <pre>
-     ** The name of the method 
+     ** The name of the method. The fully qualified name can be constructed on the fly via its declaring class, name and arguments  
      * </pre>
      */
     public boolean hasName() {
@@ -11744,7 +13433,7 @@ public final class Ast {
      * <code>optional string name = 1;</code>
      *
      * <pre>
-     ** The name of the method 
+     ** The name of the method. The fully qualified name can be constructed on the fly via its declaring class, name and arguments  
      * </pre>
      */
     public java.lang.String getName() {
@@ -11765,7 +13454,7 @@ public final class Ast {
      * <code>optional string name = 1;</code>
      *
      * <pre>
-     ** The name of the method 
+     ** The name of the method. The fully qualified name can be constructed on the fly via its declaring class, name and arguments  
      * </pre>
      */
     public com.google.protobuf.ByteString
@@ -12167,52 +13856,100 @@ public final class Ast {
       return comments_.get(index);
     }
 
-    // optional .boa.types.ChangeKind structural_change_kind = 9;
-    public static final int STRUCTURAL_CHANGE_KIND_FIELD_NUMBER = 9;
-    private boa.types.Shared.ChangeKind structuralChangeKind_;
+    // optional .boa.types.ChangeKind change_kind = 9;
+    public static final int CHANGE_KIND_FIELD_NUMBER = 9;
+    private boa.types.Shared.ChangeKind changeKind_;
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 9;</code>
+     * <code>optional .boa.types.ChangeKind change_kind = 9;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
      * </pre>
      */
-    public boolean hasStructuralChangeKind() {
+    public boolean hasChangeKind() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 9;</code>
+     * <code>optional .boa.types.ChangeKind change_kind = 9;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
      * </pre>
      */
-    public boa.types.Shared.ChangeKind getStructuralChangeKind() {
-      return structuralChangeKind_;
+    public boa.types.Shared.ChangeKind getChangeKind() {
+      return changeKind_;
     }
 
-    // optional .boa.types.ChangeKind label_change_kind = 10;
-    public static final int LABEL_CHANGE_KIND_FIELD_NUMBER = 10;
-    private boa.types.Shared.ChangeKind labelChangeKind_;
+    // optional int32 mapped_node = 11;
+    public static final int MAPPED_NODE_FIELD_NUMBER = 11;
+    private int mappedNode_;
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 10;</code>
+     * <code>optional int32 mapped_node = 11;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
-    public boolean hasLabelChangeKind() {
+    public boolean hasMappedNode() {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 10;</code>
+     * <code>optional int32 mapped_node = 11;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
-    public boa.types.Shared.ChangeKind getLabelChangeKind() {
-      return labelChangeKind_;
+    public int getMappedNode() {
+      return mappedNode_;
+    }
+
+    // optional int32 key = 12;
+    public static final int KEY_FIELD_NUMBER = 12;
+    private int key_;
+    /**
+     * <code>optional int32 key = 12;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    public boolean hasKey() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    /**
+     * <code>optional int32 key = 12;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    public int getKey() {
+      return key_;
+    }
+
+    // optional int32 declaring_type = 13;
+    public static final int DECLARING_TYPE_FIELD_NUMBER = 13;
+    private int declaringType_;
+    /**
+     * <code>optional int32 declaring_type = 13;</code>
+     *
+     * <pre>
+     ** The key of the type declaration declaring this method in the same AST 
+     * </pre>
+     */
+    public boolean hasDeclaringType() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    /**
+     * <code>optional int32 declaring_type = 13;</code>
+     *
+     * <pre>
+     ** The key of the type declaration declaring this method in the same AST 
+     * </pre>
+     */
+    public int getDeclaringType() {
+      return declaringType_;
     }
 
     private void initFields() {
@@ -12224,8 +13961,10 @@ public final class Ast {
       exceptionTypes_ = java.util.Collections.emptyList();
       statements_ = java.util.Collections.emptyList();
       comments_ = java.util.Collections.emptyList();
-      structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
-      labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      changeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      mappedNode_ = 0;
+      key_ = 0;
+      declaringType_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -12308,10 +14047,16 @@ public final class Ast {
         output.writeMessage(8, comments_.get(i));
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeEnum(9, structuralChangeKind_.getNumber());
+        output.writeEnum(9, changeKind_.getNumber());
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeEnum(10, labelChangeKind_.getNumber());
+        output.writeInt32(11, mappedNode_);
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeInt32(12, key_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        output.writeInt32(13, declaringType_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -12356,11 +14101,19 @@ public final class Ast {
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(9, structuralChangeKind_.getNumber());
+          .computeEnumSize(9, changeKind_.getNumber());
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(10, labelChangeKind_.getNumber());
+          .computeInt32Size(11, mappedNode_);
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(12, key_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(13, declaringType_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -12533,10 +14286,14 @@ public final class Ast {
         } else {
           commentsBuilder_.clear();
         }
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+        changeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00000100);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+        mappedNode_ = 0;
         bitField0_ = (bitField0_ & ~0x00000200);
+        key_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000400);
+        declaringType_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000800);
         return this;
       }
 
@@ -12634,11 +14391,19 @@ public final class Ast {
         if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
           to_bitField0_ |= 0x00000004;
         }
-        result.structuralChangeKind_ = structuralChangeKind_;
+        result.changeKind_ = changeKind_;
         if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
           to_bitField0_ |= 0x00000008;
         }
-        result.labelChangeKind_ = labelChangeKind_;
+        result.mappedNode_ = mappedNode_;
+        if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        result.key_ = key_;
+        if (((from_bitField0_ & 0x00000800) == 0x00000800)) {
+          to_bitField0_ |= 0x00000020;
+        }
+        result.declaringType_ = declaringType_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -12819,11 +14584,17 @@ public final class Ast {
             }
           }
         }
-        if (other.hasStructuralChangeKind()) {
-          setStructuralChangeKind(other.getStructuralChangeKind());
+        if (other.hasChangeKind()) {
+          setChangeKind(other.getChangeKind());
         }
-        if (other.hasLabelChangeKind()) {
-          setLabelChangeKind(other.getLabelChangeKind());
+        if (other.hasMappedNode()) {
+          setMappedNode(other.getMappedNode());
+        }
+        if (other.hasKey()) {
+          setKey(other.getKey());
+        }
+        if (other.hasDeclaringType()) {
+          setDeclaringType(other.getDeclaringType());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -12902,7 +14673,7 @@ public final class Ast {
        * <code>optional string name = 1;</code>
        *
        * <pre>
-       ** The name of the method 
+       ** The name of the method. The fully qualified name can be constructed on the fly via its declaring class, name and arguments  
        * </pre>
        */
       public boolean hasName() {
@@ -12912,7 +14683,7 @@ public final class Ast {
        * <code>optional string name = 1;</code>
        *
        * <pre>
-       ** The name of the method 
+       ** The name of the method. The fully qualified name can be constructed on the fly via its declaring class, name and arguments  
        * </pre>
        */
       public java.lang.String getName() {
@@ -12930,7 +14701,7 @@ public final class Ast {
        * <code>optional string name = 1;</code>
        *
        * <pre>
-       ** The name of the method 
+       ** The name of the method. The fully qualified name can be constructed on the fly via its declaring class, name and arguments  
        * </pre>
        */
       public com.google.protobuf.ByteString
@@ -12950,7 +14721,7 @@ public final class Ast {
        * <code>optional string name = 1;</code>
        *
        * <pre>
-       ** The name of the method 
+       ** The name of the method. The fully qualified name can be constructed on the fly via its declaring class, name and arguments  
        * </pre>
        */
       public Builder setName(
@@ -12967,7 +14738,7 @@ public final class Ast {
        * <code>optional string name = 1;</code>
        *
        * <pre>
-       ** The name of the method 
+       ** The name of the method. The fully qualified name can be constructed on the fly via its declaring class, name and arguments  
        * </pre>
        */
       public Builder clearName() {
@@ -12980,7 +14751,7 @@ public final class Ast {
        * <code>optional string name = 1;</code>
        *
        * <pre>
-       ** The name of the method 
+       ** The name of the method. The fully qualified name can be constructed on the fly via its declaring class, name and arguments  
        * </pre>
        */
       public Builder setNameBytes(
@@ -15073,106 +16844,201 @@ public final class Ast {
         return commentsBuilder_;
       }
 
-      // optional .boa.types.ChangeKind structural_change_kind = 9;
-      private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      // optional .boa.types.ChangeKind change_kind = 9;
+      private boa.types.Shared.ChangeKind changeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 9;</code>
+       * <code>optional .boa.types.ChangeKind change_kind = 9;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
        * </pre>
        */
-      public boolean hasStructuralChangeKind() {
+      public boolean hasChangeKind() {
         return ((bitField0_ & 0x00000100) == 0x00000100);
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 9;</code>
+       * <code>optional .boa.types.ChangeKind change_kind = 9;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
        * </pre>
        */
-      public boa.types.Shared.ChangeKind getStructuralChangeKind() {
-        return structuralChangeKind_;
+      public boa.types.Shared.ChangeKind getChangeKind() {
+        return changeKind_;
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 9;</code>
+       * <code>optional .boa.types.ChangeKind change_kind = 9;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
        * </pre>
        */
-      public Builder setStructuralChangeKind(boa.types.Shared.ChangeKind value) {
+      public Builder setChangeKind(boa.types.Shared.ChangeKind value) {
         if (value == null) {
           throw new NullPointerException();
         }
         bitField0_ |= 0x00000100;
-        structuralChangeKind_ = value;
+        changeKind_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 9;</code>
+       * <code>optional .boa.types.ChangeKind change_kind = 9;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
        * </pre>
        */
-      public Builder clearStructuralChangeKind() {
+      public Builder clearChangeKind() {
         bitField0_ = (bitField0_ & ~0x00000100);
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+        changeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         onChanged();
         return this;
       }
 
-      // optional .boa.types.ChangeKind label_change_kind = 10;
-      private boa.types.Shared.ChangeKind labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      // optional int32 mapped_node = 11;
+      private int mappedNode_ ;
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 10;</code>
+       * <code>optional int32 mapped_node = 11;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
-      public boolean hasLabelChangeKind() {
+      public boolean hasMappedNode() {
         return ((bitField0_ & 0x00000200) == 0x00000200);
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 10;</code>
+       * <code>optional int32 mapped_node = 11;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
-      public boa.types.Shared.ChangeKind getLabelChangeKind() {
-        return labelChangeKind_;
+      public int getMappedNode() {
+        return mappedNode_;
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 10;</code>
+       * <code>optional int32 mapped_node = 11;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
-      public Builder setLabelChangeKind(boa.types.Shared.ChangeKind value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
+      public Builder setMappedNode(int value) {
         bitField0_ |= 0x00000200;
-        labelChangeKind_ = value;
+        mappedNode_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 10;</code>
+       * <code>optional int32 mapped_node = 11;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
-      public Builder clearLabelChangeKind() {
+      public Builder clearMappedNode() {
         bitField0_ = (bitField0_ & ~0x00000200);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+        mappedNode_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 key = 12;
+      private int key_ ;
+      /**
+       * <code>optional int32 key = 12;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public boolean hasKey() {
+        return ((bitField0_ & 0x00000400) == 0x00000400);
+      }
+      /**
+       * <code>optional int32 key = 12;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public int getKey() {
+        return key_;
+      }
+      /**
+       * <code>optional int32 key = 12;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public Builder setKey(int value) {
+        bitField0_ |= 0x00000400;
+        key_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 key = 12;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public Builder clearKey() {
+        bitField0_ = (bitField0_ & ~0x00000400);
+        key_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 declaring_type = 13;
+      private int declaringType_ ;
+      /**
+       * <code>optional int32 declaring_type = 13;</code>
+       *
+       * <pre>
+       ** The key of the type declaration declaring this method in the same AST 
+       * </pre>
+       */
+      public boolean hasDeclaringType() {
+        return ((bitField0_ & 0x00000800) == 0x00000800);
+      }
+      /**
+       * <code>optional int32 declaring_type = 13;</code>
+       *
+       * <pre>
+       ** The key of the type declaration declaring this method in the same AST 
+       * </pre>
+       */
+      public int getDeclaringType() {
+        return declaringType_;
+      }
+      /**
+       * <code>optional int32 declaring_type = 13;</code>
+       *
+       * <pre>
+       ** The key of the type declaration declaring this method in the same AST 
+       * </pre>
+       */
+      public Builder setDeclaringType(int value) {
+        bitField0_ |= 0x00000800;
+        declaringType_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 declaring_type = 13;</code>
+       *
+       * <pre>
+       ** The key of the type declaration declaring this method in the same AST 
+       * </pre>
+       */
+      public Builder clearDeclaringType() {
+        bitField0_ = (bitField0_ & ~0x00000800);
+        declaringType_ = 0;
         onChanged();
         return this;
       }
@@ -15360,41 +17226,77 @@ public final class Ast {
     boa.types.Ast.CommentOrBuilder getCommentsOrBuilder(
         int index);
 
-    // optional .boa.types.ChangeKind structural_change_kind = 6;
+    // optional .boa.types.ChangeKind change_kind = 6;
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 6;</code>
+     * <code>optional .boa.types.ChangeKind change_kind = 6;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
      * </pre>
      */
-    boolean hasStructuralChangeKind();
+    boolean hasChangeKind();
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 6;</code>
+     * <code>optional .boa.types.ChangeKind change_kind = 6;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
      * </pre>
      */
-    boa.types.Shared.ChangeKind getStructuralChangeKind();
+    boa.types.Shared.ChangeKind getChangeKind();
 
-    // optional .boa.types.ChangeKind label_change_kind = 7;
+    // optional int32 mapped_node = 8;
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 7;</code>
+     * <code>optional int32 mapped_node = 8;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
-    boolean hasLabelChangeKind();
+    boolean hasMappedNode();
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 7;</code>
+     * <code>optional int32 mapped_node = 8;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
-    boa.types.Shared.ChangeKind getLabelChangeKind();
+    int getMappedNode();
+
+    // optional int32 key = 9;
+    /**
+     * <code>optional int32 key = 9;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    boolean hasKey();
+    /**
+     * <code>optional int32 key = 9;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    int getKey();
+
+    // optional int32 declaring_type = 10;
+    /**
+     * <code>optional int32 declaring_type = 10;</code>
+     *
+     * <pre>
+     ** the key of the node containing the type declaration (in the same AST) declaring this field. null if this is a local variable 
+     * </pre>
+     */
+    boolean hasDeclaringType();
+    /**
+     * <code>optional int32 declaring_type = 10;</code>
+     *
+     * <pre>
+     ** the key of the node containing the type declaration (in the same AST) declaring this field. null if this is a local variable 
+     * </pre>
+     */
+    int getDeclaringType();
   }
   /**
    * Protobuf type {@code boa.types.Variable}
@@ -15505,19 +17407,23 @@ public final class Ast {
                 unknownFields.mergeVarintField(6, rawValue);
               } else {
                 bitField0_ |= 0x00000008;
-                structuralChangeKind_ = value;
+                changeKind_ = value;
               }
               break;
             }
-            case 56: {
-              int rawValue = input.readEnum();
-              boa.types.Shared.ChangeKind value = boa.types.Shared.ChangeKind.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(7, rawValue);
-              } else {
-                bitField0_ |= 0x00000010;
-                labelChangeKind_ = value;
-              }
+            case 64: {
+              bitField0_ |= 0x00000010;
+              mappedNode_ = input.readInt32();
+              break;
+            }
+            case 72: {
+              bitField0_ |= 0x00000020;
+              key_ = input.readInt32();
+              break;
+            }
+            case 80: {
+              bitField0_ |= 0x00000040;
+              declaringType_ = input.readInt32();
               break;
             }
           }
@@ -15801,52 +17707,100 @@ public final class Ast {
       return comments_.get(index);
     }
 
-    // optional .boa.types.ChangeKind structural_change_kind = 6;
-    public static final int STRUCTURAL_CHANGE_KIND_FIELD_NUMBER = 6;
-    private boa.types.Shared.ChangeKind structuralChangeKind_;
+    // optional .boa.types.ChangeKind change_kind = 6;
+    public static final int CHANGE_KIND_FIELD_NUMBER = 6;
+    private boa.types.Shared.ChangeKind changeKind_;
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 6;</code>
+     * <code>optional .boa.types.ChangeKind change_kind = 6;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
      * </pre>
      */
-    public boolean hasStructuralChangeKind() {
+    public boolean hasChangeKind() {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 6;</code>
+     * <code>optional .boa.types.ChangeKind change_kind = 6;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
      * </pre>
      */
-    public boa.types.Shared.ChangeKind getStructuralChangeKind() {
-      return structuralChangeKind_;
+    public boa.types.Shared.ChangeKind getChangeKind() {
+      return changeKind_;
     }
 
-    // optional .boa.types.ChangeKind label_change_kind = 7;
-    public static final int LABEL_CHANGE_KIND_FIELD_NUMBER = 7;
-    private boa.types.Shared.ChangeKind labelChangeKind_;
+    // optional int32 mapped_node = 8;
+    public static final int MAPPED_NODE_FIELD_NUMBER = 8;
+    private int mappedNode_;
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 7;</code>
+     * <code>optional int32 mapped_node = 8;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
-    public boolean hasLabelChangeKind() {
+    public boolean hasMappedNode() {
       return ((bitField0_ & 0x00000010) == 0x00000010);
     }
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 7;</code>
+     * <code>optional int32 mapped_node = 8;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
-    public boa.types.Shared.ChangeKind getLabelChangeKind() {
-      return labelChangeKind_;
+    public int getMappedNode() {
+      return mappedNode_;
+    }
+
+    // optional int32 key = 9;
+    public static final int KEY_FIELD_NUMBER = 9;
+    private int key_;
+    /**
+     * <code>optional int32 key = 9;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    public boolean hasKey() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    /**
+     * <code>optional int32 key = 9;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    public int getKey() {
+      return key_;
+    }
+
+    // optional int32 declaring_type = 10;
+    public static final int DECLARING_TYPE_FIELD_NUMBER = 10;
+    private int declaringType_;
+    /**
+     * <code>optional int32 declaring_type = 10;</code>
+     *
+     * <pre>
+     ** the key of the node containing the type declaration (in the same AST) declaring this field. null if this is a local variable 
+     * </pre>
+     */
+    public boolean hasDeclaringType() {
+      return ((bitField0_ & 0x00000040) == 0x00000040);
+    }
+    /**
+     * <code>optional int32 declaring_type = 10;</code>
+     *
+     * <pre>
+     ** the key of the node containing the type declaration (in the same AST) declaring this field. null if this is a local variable 
+     * </pre>
+     */
+    public int getDeclaringType() {
+      return declaringType_;
     }
 
     private void initFields() {
@@ -15855,8 +17809,10 @@ public final class Ast {
       modifiers_ = java.util.Collections.emptyList();
       initializer_ = boa.types.Ast.Expression.getDefaultInstance();
       comments_ = java.util.Collections.emptyList();
-      structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
-      labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      changeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      mappedNode_ = 0;
+      key_ = 0;
+      declaringType_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -15916,10 +17872,16 @@ public final class Ast {
         output.writeMessage(5, comments_.get(i));
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeEnum(6, structuralChangeKind_.getNumber());
+        output.writeEnum(6, changeKind_.getNumber());
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeEnum(7, labelChangeKind_.getNumber());
+        output.writeInt32(8, mappedNode_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        output.writeInt32(9, key_);
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        output.writeInt32(10, declaringType_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -15952,11 +17914,19 @@ public final class Ast {
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(6, structuralChangeKind_.getNumber());
+          .computeEnumSize(6, changeKind_.getNumber());
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(7, labelChangeKind_.getNumber());
+          .computeInt32Size(8, mappedNode_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(9, key_);
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(10, declaringType_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -16108,10 +18078,14 @@ public final class Ast {
         } else {
           commentsBuilder_.clear();
         }
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+        changeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00000020);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+        mappedNode_ = 0;
         bitField0_ = (bitField0_ & ~0x00000040);
+        key_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000080);
+        declaringType_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000100);
         return this;
       }
 
@@ -16181,11 +18155,19 @@ public final class Ast {
         if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
           to_bitField0_ |= 0x00000008;
         }
-        result.structuralChangeKind_ = structuralChangeKind_;
+        result.changeKind_ = changeKind_;
         if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
           to_bitField0_ |= 0x00000010;
         }
-        result.labelChangeKind_ = labelChangeKind_;
+        result.mappedNode_ = mappedNode_;
+        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
+          to_bitField0_ |= 0x00000020;
+        }
+        result.key_ = key_;
+        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
+          to_bitField0_ |= 0x00000040;
+        }
+        result.declaringType_ = declaringType_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -16265,11 +18247,17 @@ public final class Ast {
             }
           }
         }
-        if (other.hasStructuralChangeKind()) {
-          setStructuralChangeKind(other.getStructuralChangeKind());
+        if (other.hasChangeKind()) {
+          setChangeKind(other.getChangeKind());
         }
-        if (other.hasLabelChangeKind()) {
-          setLabelChangeKind(other.getLabelChangeKind());
+        if (other.hasMappedNode()) {
+          setMappedNode(other.getMappedNode());
+        }
+        if (other.hasKey()) {
+          setKey(other.getKey());
+        }
+        if (other.hasDeclaringType()) {
+          setDeclaringType(other.getDeclaringType());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -17356,106 +19344,201 @@ public final class Ast {
         return commentsBuilder_;
       }
 
-      // optional .boa.types.ChangeKind structural_change_kind = 6;
-      private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      // optional .boa.types.ChangeKind change_kind = 6;
+      private boa.types.Shared.ChangeKind changeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 6;</code>
+       * <code>optional .boa.types.ChangeKind change_kind = 6;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
        * </pre>
        */
-      public boolean hasStructuralChangeKind() {
+      public boolean hasChangeKind() {
         return ((bitField0_ & 0x00000020) == 0x00000020);
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 6;</code>
+       * <code>optional .boa.types.ChangeKind change_kind = 6;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
        * </pre>
        */
-      public boa.types.Shared.ChangeKind getStructuralChangeKind() {
-        return structuralChangeKind_;
+      public boa.types.Shared.ChangeKind getChangeKind() {
+        return changeKind_;
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 6;</code>
+       * <code>optional .boa.types.ChangeKind change_kind = 6;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
        * </pre>
        */
-      public Builder setStructuralChangeKind(boa.types.Shared.ChangeKind value) {
+      public Builder setChangeKind(boa.types.Shared.ChangeKind value) {
         if (value == null) {
           throw new NullPointerException();
         }
         bitField0_ |= 0x00000020;
-        structuralChangeKind_ = value;
+        changeKind_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 6;</code>
+       * <code>optional .boa.types.ChangeKind change_kind = 6;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
        * </pre>
        */
-      public Builder clearStructuralChangeKind() {
+      public Builder clearChangeKind() {
         bitField0_ = (bitField0_ & ~0x00000020);
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+        changeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         onChanged();
         return this;
       }
 
-      // optional .boa.types.ChangeKind label_change_kind = 7;
-      private boa.types.Shared.ChangeKind labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      // optional int32 mapped_node = 8;
+      private int mappedNode_ ;
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 7;</code>
+       * <code>optional int32 mapped_node = 8;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
-      public boolean hasLabelChangeKind() {
+      public boolean hasMappedNode() {
         return ((bitField0_ & 0x00000040) == 0x00000040);
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 7;</code>
+       * <code>optional int32 mapped_node = 8;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
-      public boa.types.Shared.ChangeKind getLabelChangeKind() {
-        return labelChangeKind_;
+      public int getMappedNode() {
+        return mappedNode_;
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 7;</code>
+       * <code>optional int32 mapped_node = 8;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
-      public Builder setLabelChangeKind(boa.types.Shared.ChangeKind value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
+      public Builder setMappedNode(int value) {
         bitField0_ |= 0x00000040;
-        labelChangeKind_ = value;
+        mappedNode_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 7;</code>
+       * <code>optional int32 mapped_node = 8;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
-      public Builder clearLabelChangeKind() {
+      public Builder clearMappedNode() {
         bitField0_ = (bitField0_ & ~0x00000040);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+        mappedNode_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 key = 9;
+      private int key_ ;
+      /**
+       * <code>optional int32 key = 9;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public boolean hasKey() {
+        return ((bitField0_ & 0x00000080) == 0x00000080);
+      }
+      /**
+       * <code>optional int32 key = 9;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public int getKey() {
+        return key_;
+      }
+      /**
+       * <code>optional int32 key = 9;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public Builder setKey(int value) {
+        bitField0_ |= 0x00000080;
+        key_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 key = 9;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public Builder clearKey() {
+        bitField0_ = (bitField0_ & ~0x00000080);
+        key_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 declaring_type = 10;
+      private int declaringType_ ;
+      /**
+       * <code>optional int32 declaring_type = 10;</code>
+       *
+       * <pre>
+       ** the key of the node containing the type declaration (in the same AST) declaring this field. null if this is a local variable 
+       * </pre>
+       */
+      public boolean hasDeclaringType() {
+        return ((bitField0_ & 0x00000100) == 0x00000100);
+      }
+      /**
+       * <code>optional int32 declaring_type = 10;</code>
+       *
+       * <pre>
+       ** the key of the node containing the type declaration (in the same AST) declaring this field. null if this is a local variable 
+       * </pre>
+       */
+      public int getDeclaringType() {
+        return declaringType_;
+      }
+      /**
+       * <code>optional int32 declaring_type = 10;</code>
+       *
+       * <pre>
+       ** the key of the node containing the type declaration (in the same AST) declaring this field. null if this is a local variable 
+       * </pre>
+       */
+      public Builder setDeclaringType(int value) {
+        bitField0_ |= 0x00000100;
+        declaringType_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 declaring_type = 10;</code>
+       *
+       * <pre>
+       ** the key of the node containing the type declaration (in the same AST) declaring this field. null if this is a local variable 
+       * </pre>
+       */
+      public Builder clearDeclaringType() {
+        bitField0_ = (bitField0_ & ~0x00000100);
+        declaringType_ = 0;
         onChanged();
         return this;
       }
@@ -17668,41 +19751,59 @@ public final class Ast {
      */
     boa.types.Ast.ExpressionOrBuilder getExpressionOrBuilder();
 
-    // optional .boa.types.ChangeKind structural_change_kind = 10;
+    // optional .boa.types.ChangeKind change_kind = 10;
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 10;</code>
+     * <code>optional .boa.types.ChangeKind change_kind = 10;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
      * </pre>
      */
-    boolean hasStructuralChangeKind();
+    boolean hasChangeKind();
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 10;</code>
+     * <code>optional .boa.types.ChangeKind change_kind = 10;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
      * </pre>
      */
-    boa.types.Shared.ChangeKind getStructuralChangeKind();
+    boa.types.Shared.ChangeKind getChangeKind();
 
-    // optional .boa.types.ChangeKind label_change_kind = 11;
+    // optional int32 mapped_node = 12;
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 11;</code>
+     * <code>optional int32 mapped_node = 12;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
-    boolean hasLabelChangeKind();
+    boolean hasMappedNode();
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 11;</code>
+     * <code>optional int32 mapped_node = 12;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
-    boa.types.Shared.ChangeKind getLabelChangeKind();
+    int getMappedNode();
+
+    // optional int32 key = 13;
+    /**
+     * <code>optional int32 key = 13;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    boolean hasKey();
+    /**
+     * <code>optional int32 key = 13;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    int getKey();
   }
   /**
    * Protobuf type {@code boa.types.Statement}
@@ -17861,19 +19962,18 @@ public final class Ast {
                 unknownFields.mergeVarintField(10, rawValue);
               } else {
                 bitField0_ |= 0x00000020;
-                structuralChangeKind_ = value;
+                changeKind_ = value;
               }
               break;
             }
-            case 88: {
-              int rawValue = input.readEnum();
-              boa.types.Shared.ChangeKind value = boa.types.Shared.ChangeKind.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(11, rawValue);
-              } else {
-                bitField0_ |= 0x00000040;
-                labelChangeKind_ = value;
-              }
+            case 96: {
+              bitField0_ |= 0x00000040;
+              mappedNode_ = input.readInt32();
+              break;
+            }
+            case 104: {
+              bitField0_ |= 0x00000080;
+              key_ = input.readInt32();
               break;
             }
           }
@@ -18020,6 +20120,10 @@ public final class Ast {
        * <code>EMPTY = 19;</code>
        */
       EMPTY(21, 19),
+      /**
+       * <code>FINALLY = 20;</code>
+       */
+      FINALLY(22, 20),
       ;
 
       /**
@@ -18138,6 +20242,10 @@ public final class Ast {
        * <code>EMPTY = 19;</code>
        */
       public static final int EMPTY_VALUE = 19;
+      /**
+       * <code>FINALLY = 20;</code>
+       */
+      public static final int FINALLY_VALUE = 20;
 
 
       public final int getNumber() { return value; }
@@ -18164,6 +20272,7 @@ public final class Ast {
           case 17: return THROW;
           case 18: return CATCH;
           case 19: return EMPTY;
+          case 20: return FINALLY;
           default: return null;
         }
       }
@@ -18194,7 +20303,7 @@ public final class Ast {
       }
 
       private static final StatementKind[] VALUES = {
-        OTHER, BLOCK, TYPEDECL, EXPRESSION, EXPR, SYNCHRONIZED, SYNC, RETURN, FOR, DO, WHILE, IF, ASSERT, BREAK, CONTINUE, LABEL, SWITCH, CASE, TRY, THROW, CATCH, EMPTY, 
+        OTHER, BLOCK, TYPEDECL, EXPRESSION, EXPR, SYNCHRONIZED, SYNC, RETURN, FOR, DO, WHILE, IF, ASSERT, BREAK, CONTINUE, LABEL, SWITCH, CASE, TRY, THROW, CATCH, EMPTY, FINALLY, 
       };
 
       public static StatementKind valueOf(
@@ -18494,52 +20603,76 @@ public final class Ast {
       return expression_;
     }
 
-    // optional .boa.types.ChangeKind structural_change_kind = 10;
-    public static final int STRUCTURAL_CHANGE_KIND_FIELD_NUMBER = 10;
-    private boa.types.Shared.ChangeKind structuralChangeKind_;
+    // optional .boa.types.ChangeKind change_kind = 10;
+    public static final int CHANGE_KIND_FIELD_NUMBER = 10;
+    private boa.types.Shared.ChangeKind changeKind_;
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 10;</code>
+     * <code>optional .boa.types.ChangeKind change_kind = 10;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
      * </pre>
      */
-    public boolean hasStructuralChangeKind() {
+    public boolean hasChangeKind() {
       return ((bitField0_ & 0x00000020) == 0x00000020);
     }
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 10;</code>
+     * <code>optional .boa.types.ChangeKind change_kind = 10;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
      * </pre>
      */
-    public boa.types.Shared.ChangeKind getStructuralChangeKind() {
-      return structuralChangeKind_;
+    public boa.types.Shared.ChangeKind getChangeKind() {
+      return changeKind_;
     }
 
-    // optional .boa.types.ChangeKind label_change_kind = 11;
-    public static final int LABEL_CHANGE_KIND_FIELD_NUMBER = 11;
-    private boa.types.Shared.ChangeKind labelChangeKind_;
+    // optional int32 mapped_node = 12;
+    public static final int MAPPED_NODE_FIELD_NUMBER = 12;
+    private int mappedNode_;
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 11;</code>
+     * <code>optional int32 mapped_node = 12;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
-    public boolean hasLabelChangeKind() {
+    public boolean hasMappedNode() {
       return ((bitField0_ & 0x00000040) == 0x00000040);
     }
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 11;</code>
+     * <code>optional int32 mapped_node = 12;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
-    public boa.types.Shared.ChangeKind getLabelChangeKind() {
-      return labelChangeKind_;
+    public int getMappedNode() {
+      return mappedNode_;
+    }
+
+    // optional int32 key = 13;
+    public static final int KEY_FIELD_NUMBER = 13;
+    private int key_;
+    /**
+     * <code>optional int32 key = 13;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    public boolean hasKey() {
+      return ((bitField0_ & 0x00000080) == 0x00000080);
+    }
+    /**
+     * <code>optional int32 key = 13;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    public int getKey() {
+      return key_;
     }
 
     private void initFields() {
@@ -18552,8 +20685,9 @@ public final class Ast {
       variableDeclaration_ = boa.types.Ast.Variable.getDefaultInstance();
       typeDeclaration_ = boa.types.Ast.Declaration.getDefaultInstance();
       expression_ = boa.types.Ast.Expression.getDefaultInstance();
-      structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
-      labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      changeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      mappedNode_ = 0;
+      key_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -18647,10 +20781,13 @@ public final class Ast {
         output.writeMessage(9, expression_);
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        output.writeEnum(10, structuralChangeKind_.getNumber());
+        output.writeEnum(10, changeKind_.getNumber());
       }
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
-        output.writeEnum(11, labelChangeKind_.getNumber());
+        output.writeInt32(12, mappedNode_);
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        output.writeInt32(13, key_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -18699,11 +20836,15 @@ public final class Ast {
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(10, structuralChangeKind_.getNumber());
+          .computeEnumSize(10, changeKind_.getNumber());
       }
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(11, labelChangeKind_.getNumber());
+          .computeInt32Size(12, mappedNode_);
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(13, key_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -18883,10 +21024,12 @@ public final class Ast {
           expressionBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000100);
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+        changeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00000200);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+        mappedNode_ = 0;
         bitField0_ = (bitField0_ & ~0x00000400);
+        key_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000800);
         return this;
       }
 
@@ -18990,11 +21133,15 @@ public final class Ast {
         if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
           to_bitField0_ |= 0x00000020;
         }
-        result.structuralChangeKind_ = structuralChangeKind_;
+        result.changeKind_ = changeKind_;
         if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
           to_bitField0_ |= 0x00000040;
         }
-        result.labelChangeKind_ = labelChangeKind_;
+        result.mappedNode_ = mappedNode_;
+        if (((from_bitField0_ & 0x00000800) == 0x00000800)) {
+          to_bitField0_ |= 0x00000080;
+        }
+        result.key_ = key_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -19130,11 +21277,14 @@ public final class Ast {
         if (other.hasExpression()) {
           mergeExpression(other.getExpression());
         }
-        if (other.hasStructuralChangeKind()) {
-          setStructuralChangeKind(other.getStructuralChangeKind());
+        if (other.hasChangeKind()) {
+          setChangeKind(other.getChangeKind());
         }
-        if (other.hasLabelChangeKind()) {
-          setLabelChangeKind(other.getLabelChangeKind());
+        if (other.hasMappedNode()) {
+          setMappedNode(other.getMappedNode());
+        }
+        if (other.hasKey()) {
+          setKey(other.getKey());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -20767,106 +22917,152 @@ public final class Ast {
         return expressionBuilder_;
       }
 
-      // optional .boa.types.ChangeKind structural_change_kind = 10;
-      private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      // optional .boa.types.ChangeKind change_kind = 10;
+      private boa.types.Shared.ChangeKind changeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 10;</code>
+       * <code>optional .boa.types.ChangeKind change_kind = 10;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
        * </pre>
        */
-      public boolean hasStructuralChangeKind() {
+      public boolean hasChangeKind() {
         return ((bitField0_ & 0x00000200) == 0x00000200);
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 10;</code>
+       * <code>optional .boa.types.ChangeKind change_kind = 10;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
        * </pre>
        */
-      public boa.types.Shared.ChangeKind getStructuralChangeKind() {
-        return structuralChangeKind_;
+      public boa.types.Shared.ChangeKind getChangeKind() {
+        return changeKind_;
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 10;</code>
+       * <code>optional .boa.types.ChangeKind change_kind = 10;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
        * </pre>
        */
-      public Builder setStructuralChangeKind(boa.types.Shared.ChangeKind value) {
+      public Builder setChangeKind(boa.types.Shared.ChangeKind value) {
         if (value == null) {
           throw new NullPointerException();
         }
         bitField0_ |= 0x00000200;
-        structuralChangeKind_ = value;
+        changeKind_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 10;</code>
+       * <code>optional .boa.types.ChangeKind change_kind = 10;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
        * </pre>
        */
-      public Builder clearStructuralChangeKind() {
+      public Builder clearChangeKind() {
         bitField0_ = (bitField0_ & ~0x00000200);
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+        changeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         onChanged();
         return this;
       }
 
-      // optional .boa.types.ChangeKind label_change_kind = 11;
-      private boa.types.Shared.ChangeKind labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      // optional int32 mapped_node = 12;
+      private int mappedNode_ ;
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 11;</code>
+       * <code>optional int32 mapped_node = 12;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
-      public boolean hasLabelChangeKind() {
+      public boolean hasMappedNode() {
         return ((bitField0_ & 0x00000400) == 0x00000400);
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 11;</code>
+       * <code>optional int32 mapped_node = 12;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
-      public boa.types.Shared.ChangeKind getLabelChangeKind() {
-        return labelChangeKind_;
+      public int getMappedNode() {
+        return mappedNode_;
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 11;</code>
+       * <code>optional int32 mapped_node = 12;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
-      public Builder setLabelChangeKind(boa.types.Shared.ChangeKind value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
+      public Builder setMappedNode(int value) {
         bitField0_ |= 0x00000400;
-        labelChangeKind_ = value;
+        mappedNode_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 11;</code>
+       * <code>optional int32 mapped_node = 12;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
-      public Builder clearLabelChangeKind() {
+      public Builder clearMappedNode() {
         bitField0_ = (bitField0_ & ~0x00000400);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+        mappedNode_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 key = 13;
+      private int key_ ;
+      /**
+       * <code>optional int32 key = 13;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public boolean hasKey() {
+        return ((bitField0_ & 0x00000800) == 0x00000800);
+      }
+      /**
+       * <code>optional int32 key = 13;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public int getKey() {
+        return key_;
+      }
+      /**
+       * <code>optional int32 key = 13;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public Builder setKey(int value) {
+        bitField0_ |= 0x00000800;
+        key_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 key = 13;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public Builder clearKey() {
+        bitField0_ = (bitField0_ & ~0x00000800);
+        key_ = 0;
         onChanged();
         return this;
       }
@@ -21144,41 +23340,111 @@ public final class Ast {
      */
     boolean getNoParens();
 
-    // optional .boa.types.ChangeKind structural_change_kind = 15;
+    // optional .boa.types.ChangeKind change_kind = 15;
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 15;</code>
+     * <code>optional .boa.types.ChangeKind change_kind = 15;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
      * </pre>
      */
-    boolean hasStructuralChangeKind();
+    boolean hasChangeKind();
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 15;</code>
+     * <code>optional .boa.types.ChangeKind change_kind = 15;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
      * </pre>
      */
-    boa.types.Shared.ChangeKind getStructuralChangeKind();
+    boa.types.Shared.ChangeKind getChangeKind();
 
-    // optional .boa.types.ChangeKind label_change_kind = 16;
+    // optional int32 mapped_node = 17;
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 16;</code>
+     * <code>optional int32 mapped_node = 17;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
-    boolean hasLabelChangeKind();
+    boolean hasMappedNode();
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 16;</code>
+     * <code>optional int32 mapped_node = 17;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
-    boa.types.Shared.ChangeKind getLabelChangeKind();
+    int getMappedNode();
+
+    // optional int32 key = 18;
+    /**
+     * <code>optional int32 key = 18;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    boolean hasKey();
+    /**
+     * <code>optional int32 key = 18;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    int getKey();
+
+    // optional .boa.types.Type declaring_type = 19;
+    /**
+     * <code>optional .boa.types.Type declaring_type = 19;</code>
+     *
+     * <pre>
+     ** The type declaring this method call or field access 
+     * </pre>
+     */
+    boolean hasDeclaringType();
+    /**
+     * <code>optional .boa.types.Type declaring_type = 19;</code>
+     *
+     * <pre>
+     ** The type declaring this method call or field access 
+     * </pre>
+     */
+    boa.types.Ast.Type getDeclaringType();
+    /**
+     * <code>optional .boa.types.Type declaring_type = 19;</code>
+     *
+     * <pre>
+     ** The type declaring this method call or field access 
+     * </pre>
+     */
+    boa.types.Ast.TypeOrBuilder getDeclaringTypeOrBuilder();
+
+    // optional .boa.types.Type return_type = 20;
+    /**
+     * <code>optional .boa.types.Type return_type = 20;</code>
+     *
+     * <pre>
+     ** Type of the return value 
+     * </pre>
+     */
+    boolean hasReturnType();
+    /**
+     * <code>optional .boa.types.Type return_type = 20;</code>
+     *
+     * <pre>
+     ** Type of the return value 
+     * </pre>
+     */
+    boa.types.Ast.Type getReturnType();
+    /**
+     * <code>optional .boa.types.Type return_type = 20;</code>
+     *
+     * <pre>
+     ** Type of the return value 
+     * </pre>
+     */
+    boa.types.Ast.TypeOrBuilder getReturnTypeOrBuilder();
   }
   /**
    * Protobuf type {@code boa.types.Expression}
@@ -21362,19 +23628,44 @@ public final class Ast {
                 unknownFields.mergeVarintField(15, rawValue);
               } else {
                 bitField0_ |= 0x00000400;
-                structuralChangeKind_ = value;
+                changeKind_ = value;
               }
               break;
             }
-            case 128: {
-              int rawValue = input.readEnum();
-              boa.types.Shared.ChangeKind value = boa.types.Shared.ChangeKind.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(16, rawValue);
-              } else {
-                bitField0_ |= 0x00000800;
-                labelChangeKind_ = value;
+            case 136: {
+              bitField0_ |= 0x00000800;
+              mappedNode_ = input.readInt32();
+              break;
+            }
+            case 144: {
+              bitField0_ |= 0x00001000;
+              key_ = input.readInt32();
+              break;
+            }
+            case 154: {
+              boa.types.Ast.Type.Builder subBuilder = null;
+              if (((bitField0_ & 0x00002000) == 0x00002000)) {
+                subBuilder = declaringType_.toBuilder();
               }
+              declaringType_ = input.readMessage(boa.types.Ast.Type.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(declaringType_);
+                declaringType_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00002000;
+              break;
+            }
+            case 162: {
+              boa.types.Ast.Type.Builder subBuilder = null;
+              if (((bitField0_ & 0x00004000) == 0x00004000)) {
+                subBuilder = returnType_.toBuilder();
+              }
+              returnType_ = input.readMessage(boa.types.Ast.Type.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(returnType_);
+                returnType_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00004000;
               break;
             }
           }
@@ -22443,52 +24734,144 @@ public final class Ast {
       return noParens_;
     }
 
-    // optional .boa.types.ChangeKind structural_change_kind = 15;
-    public static final int STRUCTURAL_CHANGE_KIND_FIELD_NUMBER = 15;
-    private boa.types.Shared.ChangeKind structuralChangeKind_;
+    // optional .boa.types.ChangeKind change_kind = 15;
+    public static final int CHANGE_KIND_FIELD_NUMBER = 15;
+    private boa.types.Shared.ChangeKind changeKind_;
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 15;</code>
+     * <code>optional .boa.types.ChangeKind change_kind = 15;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
      * </pre>
      */
-    public boolean hasStructuralChangeKind() {
+    public boolean hasChangeKind() {
       return ((bitField0_ & 0x00000400) == 0x00000400);
     }
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 15;</code>
+     * <code>optional .boa.types.ChangeKind change_kind = 15;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
      * </pre>
      */
-    public boa.types.Shared.ChangeKind getStructuralChangeKind() {
-      return structuralChangeKind_;
+    public boa.types.Shared.ChangeKind getChangeKind() {
+      return changeKind_;
     }
 
-    // optional .boa.types.ChangeKind label_change_kind = 16;
-    public static final int LABEL_CHANGE_KIND_FIELD_NUMBER = 16;
-    private boa.types.Shared.ChangeKind labelChangeKind_;
+    // optional int32 mapped_node = 17;
+    public static final int MAPPED_NODE_FIELD_NUMBER = 17;
+    private int mappedNode_;
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 16;</code>
+     * <code>optional int32 mapped_node = 17;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
-    public boolean hasLabelChangeKind() {
+    public boolean hasMappedNode() {
       return ((bitField0_ & 0x00000800) == 0x00000800);
     }
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 16;</code>
+     * <code>optional int32 mapped_node = 17;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
-    public boa.types.Shared.ChangeKind getLabelChangeKind() {
-      return labelChangeKind_;
+    public int getMappedNode() {
+      return mappedNode_;
+    }
+
+    // optional int32 key = 18;
+    public static final int KEY_FIELD_NUMBER = 18;
+    private int key_;
+    /**
+     * <code>optional int32 key = 18;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    public boolean hasKey() {
+      return ((bitField0_ & 0x00001000) == 0x00001000);
+    }
+    /**
+     * <code>optional int32 key = 18;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    public int getKey() {
+      return key_;
+    }
+
+    // optional .boa.types.Type declaring_type = 19;
+    public static final int DECLARING_TYPE_FIELD_NUMBER = 19;
+    private boa.types.Ast.Type declaringType_;
+    /**
+     * <code>optional .boa.types.Type declaring_type = 19;</code>
+     *
+     * <pre>
+     ** The type declaring this method call or field access 
+     * </pre>
+     */
+    public boolean hasDeclaringType() {
+      return ((bitField0_ & 0x00002000) == 0x00002000);
+    }
+    /**
+     * <code>optional .boa.types.Type declaring_type = 19;</code>
+     *
+     * <pre>
+     ** The type declaring this method call or field access 
+     * </pre>
+     */
+    public boa.types.Ast.Type getDeclaringType() {
+      return declaringType_;
+    }
+    /**
+     * <code>optional .boa.types.Type declaring_type = 19;</code>
+     *
+     * <pre>
+     ** The type declaring this method call or field access 
+     * </pre>
+     */
+    public boa.types.Ast.TypeOrBuilder getDeclaringTypeOrBuilder() {
+      return declaringType_;
+    }
+
+    // optional .boa.types.Type return_type = 20;
+    public static final int RETURN_TYPE_FIELD_NUMBER = 20;
+    private boa.types.Ast.Type returnType_;
+    /**
+     * <code>optional .boa.types.Type return_type = 20;</code>
+     *
+     * <pre>
+     ** Type of the return value 
+     * </pre>
+     */
+    public boolean hasReturnType() {
+      return ((bitField0_ & 0x00004000) == 0x00004000);
+    }
+    /**
+     * <code>optional .boa.types.Type return_type = 20;</code>
+     *
+     * <pre>
+     ** Type of the return value 
+     * </pre>
+     */
+    public boa.types.Ast.Type getReturnType() {
+      return returnType_;
+    }
+    /**
+     * <code>optional .boa.types.Type return_type = 20;</code>
+     *
+     * <pre>
+     ** Type of the return value 
+     * </pre>
+     */
+    public boa.types.Ast.TypeOrBuilder getReturnTypeOrBuilder() {
+      return returnType_;
     }
 
     private void initFields() {
@@ -22506,8 +24889,11 @@ public final class Ast {
       annotation_ = boa.types.Ast.Modifier.getDefaultInstance();
       lambda_ = boa.types.Ast.Method.getDefaultInstance();
       noParens_ = false;
-      structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
-      labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      changeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      mappedNode_ = 0;
+      key_ = 0;
+      declaringType_ = boa.types.Ast.Type.getDefaultInstance();
+      returnType_ = boa.types.Ast.Type.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -22566,6 +24952,18 @@ public final class Ast {
           return false;
         }
       }
+      if (hasDeclaringType()) {
+        if (!getDeclaringType().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      if (hasReturnType()) {
+        if (!getReturnType().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
       memoizedIsInitialized = 1;
       return true;
     }
@@ -22616,10 +25014,19 @@ public final class Ast {
         output.writeBool(14, noParens_);
       }
       if (((bitField0_ & 0x00000400) == 0x00000400)) {
-        output.writeEnum(15, structuralChangeKind_.getNumber());
+        output.writeEnum(15, changeKind_.getNumber());
       }
       if (((bitField0_ & 0x00000800) == 0x00000800)) {
-        output.writeEnum(16, labelChangeKind_.getNumber());
+        output.writeInt32(17, mappedNode_);
+      }
+      if (((bitField0_ & 0x00001000) == 0x00001000)) {
+        output.writeInt32(18, key_);
+      }
+      if (((bitField0_ & 0x00002000) == 0x00002000)) {
+        output.writeMessage(19, declaringType_);
+      }
+      if (((bitField0_ & 0x00004000) == 0x00004000)) {
+        output.writeMessage(20, returnType_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -22688,11 +25095,23 @@ public final class Ast {
       }
       if (((bitField0_ & 0x00000400) == 0x00000400)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(15, structuralChangeKind_.getNumber());
+          .computeEnumSize(15, changeKind_.getNumber());
       }
       if (((bitField0_ & 0x00000800) == 0x00000800)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(16, labelChangeKind_.getNumber());
+          .computeInt32Size(17, mappedNode_);
+      }
+      if (((bitField0_ & 0x00001000) == 0x00001000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(18, key_);
+      }
+      if (((bitField0_ & 0x00002000) == 0x00002000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(19, declaringType_);
+      }
+      if (((bitField0_ & 0x00004000) == 0x00004000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(20, returnType_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -22814,6 +25233,8 @@ public final class Ast {
           getAnonDeclarationFieldBuilder();
           getAnnotationFieldBuilder();
           getLambdaFieldBuilder();
+          getDeclaringTypeFieldBuilder();
+          getReturnTypeFieldBuilder();
         }
       }
       private static Builder create() {
@@ -22882,10 +25303,24 @@ public final class Ast {
         bitField0_ = (bitField0_ & ~0x00001000);
         noParens_ = false;
         bitField0_ = (bitField0_ & ~0x00002000);
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+        changeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00004000);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+        mappedNode_ = 0;
         bitField0_ = (bitField0_ & ~0x00008000);
+        key_ = 0;
+        bitField0_ = (bitField0_ & ~0x00010000);
+        if (declaringTypeBuilder_ == null) {
+          declaringType_ = boa.types.Ast.Type.getDefaultInstance();
+        } else {
+          declaringTypeBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00020000);
+        if (returnTypeBuilder_ == null) {
+          returnType_ = boa.types.Ast.Type.getDefaultInstance();
+        } else {
+          returnTypeBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00040000);
         return this;
       }
 
@@ -23009,11 +25444,31 @@ public final class Ast {
         if (((from_bitField0_ & 0x00004000) == 0x00004000)) {
           to_bitField0_ |= 0x00000400;
         }
-        result.structuralChangeKind_ = structuralChangeKind_;
+        result.changeKind_ = changeKind_;
         if (((from_bitField0_ & 0x00008000) == 0x00008000)) {
           to_bitField0_ |= 0x00000800;
         }
-        result.labelChangeKind_ = labelChangeKind_;
+        result.mappedNode_ = mappedNode_;
+        if (((from_bitField0_ & 0x00010000) == 0x00010000)) {
+          to_bitField0_ |= 0x00001000;
+        }
+        result.key_ = key_;
+        if (((from_bitField0_ & 0x00020000) == 0x00020000)) {
+          to_bitField0_ |= 0x00002000;
+        }
+        if (declaringTypeBuilder_ == null) {
+          result.declaringType_ = declaringType_;
+        } else {
+          result.declaringType_ = declaringTypeBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00040000) == 0x00040000)) {
+          to_bitField0_ |= 0x00004000;
+        }
+        if (returnTypeBuilder_ == null) {
+          result.returnType_ = returnType_;
+        } else {
+          result.returnType_ = returnTypeBuilder_.build();
+        }
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -23170,11 +25625,20 @@ public final class Ast {
         if (other.hasNoParens()) {
           setNoParens(other.getNoParens());
         }
-        if (other.hasStructuralChangeKind()) {
-          setStructuralChangeKind(other.getStructuralChangeKind());
+        if (other.hasChangeKind()) {
+          setChangeKind(other.getChangeKind());
         }
-        if (other.hasLabelChangeKind()) {
-          setLabelChangeKind(other.getLabelChangeKind());
+        if (other.hasMappedNode()) {
+          setMappedNode(other.getMappedNode());
+        }
+        if (other.hasKey()) {
+          setKey(other.getKey());
+        }
+        if (other.hasDeclaringType()) {
+          mergeDeclaringType(other.getDeclaringType());
+        }
+        if (other.hasReturnType()) {
+          mergeReturnType(other.getReturnType());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -23229,6 +25693,18 @@ public final class Ast {
         }
         if (hasLambda()) {
           if (!getLambda().isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasDeclaringType()) {
+          if (!getDeclaringType().isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasReturnType()) {
+          if (!getReturnType().isInitialized()) {
             
             return false;
           }
@@ -25075,108 +27551,460 @@ public final class Ast {
         return this;
       }
 
-      // optional .boa.types.ChangeKind structural_change_kind = 15;
-      private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      // optional .boa.types.ChangeKind change_kind = 15;
+      private boa.types.Shared.ChangeKind changeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 15;</code>
+       * <code>optional .boa.types.ChangeKind change_kind = 15;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
        * </pre>
        */
-      public boolean hasStructuralChangeKind() {
+      public boolean hasChangeKind() {
         return ((bitField0_ & 0x00004000) == 0x00004000);
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 15;</code>
+       * <code>optional .boa.types.ChangeKind change_kind = 15;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
        * </pre>
        */
-      public boa.types.Shared.ChangeKind getStructuralChangeKind() {
-        return structuralChangeKind_;
+      public boa.types.Shared.ChangeKind getChangeKind() {
+        return changeKind_;
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 15;</code>
+       * <code>optional .boa.types.ChangeKind change_kind = 15;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
        * </pre>
        */
-      public Builder setStructuralChangeKind(boa.types.Shared.ChangeKind value) {
+      public Builder setChangeKind(boa.types.Shared.ChangeKind value) {
         if (value == null) {
           throw new NullPointerException();
         }
         bitField0_ |= 0x00004000;
-        structuralChangeKind_ = value;
+        changeKind_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 15;</code>
+       * <code>optional .boa.types.ChangeKind change_kind = 15;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
        * </pre>
        */
-      public Builder clearStructuralChangeKind() {
+      public Builder clearChangeKind() {
         bitField0_ = (bitField0_ & ~0x00004000);
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+        changeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         onChanged();
         return this;
       }
 
-      // optional .boa.types.ChangeKind label_change_kind = 16;
-      private boa.types.Shared.ChangeKind labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      // optional int32 mapped_node = 17;
+      private int mappedNode_ ;
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 16;</code>
+       * <code>optional int32 mapped_node = 17;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
-      public boolean hasLabelChangeKind() {
+      public boolean hasMappedNode() {
         return ((bitField0_ & 0x00008000) == 0x00008000);
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 16;</code>
+       * <code>optional int32 mapped_node = 17;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
-      public boa.types.Shared.ChangeKind getLabelChangeKind() {
-        return labelChangeKind_;
+      public int getMappedNode() {
+        return mappedNode_;
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 16;</code>
+       * <code>optional int32 mapped_node = 17;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
-      public Builder setLabelChangeKind(boa.types.Shared.ChangeKind value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
+      public Builder setMappedNode(int value) {
         bitField0_ |= 0x00008000;
-        labelChangeKind_ = value;
+        mappedNode_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 16;</code>
+       * <code>optional int32 mapped_node = 17;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
-      public Builder clearLabelChangeKind() {
+      public Builder clearMappedNode() {
         bitField0_ = (bitField0_ & ~0x00008000);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+        mappedNode_ = 0;
         onChanged();
         return this;
+      }
+
+      // optional int32 key = 18;
+      private int key_ ;
+      /**
+       * <code>optional int32 key = 18;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public boolean hasKey() {
+        return ((bitField0_ & 0x00010000) == 0x00010000);
+      }
+      /**
+       * <code>optional int32 key = 18;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public int getKey() {
+        return key_;
+      }
+      /**
+       * <code>optional int32 key = 18;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public Builder setKey(int value) {
+        bitField0_ |= 0x00010000;
+        key_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 key = 18;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public Builder clearKey() {
+        bitField0_ = (bitField0_ & ~0x00010000);
+        key_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional .boa.types.Type declaring_type = 19;
+      private boa.types.Ast.Type declaringType_ = boa.types.Ast.Type.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Type, boa.types.Ast.Type.Builder, boa.types.Ast.TypeOrBuilder> declaringTypeBuilder_;
+      /**
+       * <code>optional .boa.types.Type declaring_type = 19;</code>
+       *
+       * <pre>
+       ** The type declaring this method call or field access 
+       * </pre>
+       */
+      public boolean hasDeclaringType() {
+        return ((bitField0_ & 0x00020000) == 0x00020000);
+      }
+      /**
+       * <code>optional .boa.types.Type declaring_type = 19;</code>
+       *
+       * <pre>
+       ** The type declaring this method call or field access 
+       * </pre>
+       */
+      public boa.types.Ast.Type getDeclaringType() {
+        if (declaringTypeBuilder_ == null) {
+          return declaringType_;
+        } else {
+          return declaringTypeBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .boa.types.Type declaring_type = 19;</code>
+       *
+       * <pre>
+       ** The type declaring this method call or field access 
+       * </pre>
+       */
+      public Builder setDeclaringType(boa.types.Ast.Type value) {
+        if (declaringTypeBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          declaringType_ = value;
+          onChanged();
+        } else {
+          declaringTypeBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00020000;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Type declaring_type = 19;</code>
+       *
+       * <pre>
+       ** The type declaring this method call or field access 
+       * </pre>
+       */
+      public Builder setDeclaringType(
+          boa.types.Ast.Type.Builder builderForValue) {
+        if (declaringTypeBuilder_ == null) {
+          declaringType_ = builderForValue.build();
+          onChanged();
+        } else {
+          declaringTypeBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00020000;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Type declaring_type = 19;</code>
+       *
+       * <pre>
+       ** The type declaring this method call or field access 
+       * </pre>
+       */
+      public Builder mergeDeclaringType(boa.types.Ast.Type value) {
+        if (declaringTypeBuilder_ == null) {
+          if (((bitField0_ & 0x00020000) == 0x00020000) &&
+              declaringType_ != boa.types.Ast.Type.getDefaultInstance()) {
+            declaringType_ =
+              boa.types.Ast.Type.newBuilder(declaringType_).mergeFrom(value).buildPartial();
+          } else {
+            declaringType_ = value;
+          }
+          onChanged();
+        } else {
+          declaringTypeBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00020000;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Type declaring_type = 19;</code>
+       *
+       * <pre>
+       ** The type declaring this method call or field access 
+       * </pre>
+       */
+      public Builder clearDeclaringType() {
+        if (declaringTypeBuilder_ == null) {
+          declaringType_ = boa.types.Ast.Type.getDefaultInstance();
+          onChanged();
+        } else {
+          declaringTypeBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00020000);
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Type declaring_type = 19;</code>
+       *
+       * <pre>
+       ** The type declaring this method call or field access 
+       * </pre>
+       */
+      public boa.types.Ast.Type.Builder getDeclaringTypeBuilder() {
+        bitField0_ |= 0x00020000;
+        onChanged();
+        return getDeclaringTypeFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .boa.types.Type declaring_type = 19;</code>
+       *
+       * <pre>
+       ** The type declaring this method call or field access 
+       * </pre>
+       */
+      public boa.types.Ast.TypeOrBuilder getDeclaringTypeOrBuilder() {
+        if (declaringTypeBuilder_ != null) {
+          return declaringTypeBuilder_.getMessageOrBuilder();
+        } else {
+          return declaringType_;
+        }
+      }
+      /**
+       * <code>optional .boa.types.Type declaring_type = 19;</code>
+       *
+       * <pre>
+       ** The type declaring this method call or field access 
+       * </pre>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Type, boa.types.Ast.Type.Builder, boa.types.Ast.TypeOrBuilder> 
+          getDeclaringTypeFieldBuilder() {
+        if (declaringTypeBuilder_ == null) {
+          declaringTypeBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              boa.types.Ast.Type, boa.types.Ast.Type.Builder, boa.types.Ast.TypeOrBuilder>(
+                  declaringType_,
+                  getParentForChildren(),
+                  isClean());
+          declaringType_ = null;
+        }
+        return declaringTypeBuilder_;
+      }
+
+      // optional .boa.types.Type return_type = 20;
+      private boa.types.Ast.Type returnType_ = boa.types.Ast.Type.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Type, boa.types.Ast.Type.Builder, boa.types.Ast.TypeOrBuilder> returnTypeBuilder_;
+      /**
+       * <code>optional .boa.types.Type return_type = 20;</code>
+       *
+       * <pre>
+       ** Type of the return value 
+       * </pre>
+       */
+      public boolean hasReturnType() {
+        return ((bitField0_ & 0x00040000) == 0x00040000);
+      }
+      /**
+       * <code>optional .boa.types.Type return_type = 20;</code>
+       *
+       * <pre>
+       ** Type of the return value 
+       * </pre>
+       */
+      public boa.types.Ast.Type getReturnType() {
+        if (returnTypeBuilder_ == null) {
+          return returnType_;
+        } else {
+          return returnTypeBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .boa.types.Type return_type = 20;</code>
+       *
+       * <pre>
+       ** Type of the return value 
+       * </pre>
+       */
+      public Builder setReturnType(boa.types.Ast.Type value) {
+        if (returnTypeBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          returnType_ = value;
+          onChanged();
+        } else {
+          returnTypeBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00040000;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Type return_type = 20;</code>
+       *
+       * <pre>
+       ** Type of the return value 
+       * </pre>
+       */
+      public Builder setReturnType(
+          boa.types.Ast.Type.Builder builderForValue) {
+        if (returnTypeBuilder_ == null) {
+          returnType_ = builderForValue.build();
+          onChanged();
+        } else {
+          returnTypeBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00040000;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Type return_type = 20;</code>
+       *
+       * <pre>
+       ** Type of the return value 
+       * </pre>
+       */
+      public Builder mergeReturnType(boa.types.Ast.Type value) {
+        if (returnTypeBuilder_ == null) {
+          if (((bitField0_ & 0x00040000) == 0x00040000) &&
+              returnType_ != boa.types.Ast.Type.getDefaultInstance()) {
+            returnType_ =
+              boa.types.Ast.Type.newBuilder(returnType_).mergeFrom(value).buildPartial();
+          } else {
+            returnType_ = value;
+          }
+          onChanged();
+        } else {
+          returnTypeBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00040000;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Type return_type = 20;</code>
+       *
+       * <pre>
+       ** Type of the return value 
+       * </pre>
+       */
+      public Builder clearReturnType() {
+        if (returnTypeBuilder_ == null) {
+          returnType_ = boa.types.Ast.Type.getDefaultInstance();
+          onChanged();
+        } else {
+          returnTypeBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00040000);
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Type return_type = 20;</code>
+       *
+       * <pre>
+       ** Type of the return value 
+       * </pre>
+       */
+      public boa.types.Ast.Type.Builder getReturnTypeBuilder() {
+        bitField0_ |= 0x00040000;
+        onChanged();
+        return getReturnTypeFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .boa.types.Type return_type = 20;</code>
+       *
+       * <pre>
+       ** Type of the return value 
+       * </pre>
+       */
+      public boa.types.Ast.TypeOrBuilder getReturnTypeOrBuilder() {
+        if (returnTypeBuilder_ != null) {
+          return returnTypeBuilder_.getMessageOrBuilder();
+        } else {
+          return returnType_;
+        }
+      }
+      /**
+       * <code>optional .boa.types.Type return_type = 20;</code>
+       *
+       * <pre>
+       ** Type of the return value 
+       * </pre>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Type, boa.types.Ast.Type.Builder, boa.types.Ast.TypeOrBuilder> 
+          getReturnTypeFieldBuilder() {
+        if (returnTypeBuilder_ == null) {
+          returnTypeBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              boa.types.Ast.Type, boa.types.Ast.Type.Builder, boa.types.Ast.TypeOrBuilder>(
+                  returnType_,
+                  getParentForChildren(),
+                  isClean());
+          returnType_ = null;
+        }
+        return returnTypeBuilder_;
       }
 
       // @@protoc_insertion_point(builder_scope:boa.types.Expression)
@@ -25364,41 +28192,59 @@ public final class Ast {
     com.google.protobuf.ByteString
         getOtherBytes();
 
-    // optional .boa.types.ChangeKind structural_change_kind = 7;
+    // optional .boa.types.ChangeKind change_kind = 7;
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 7;</code>
+     * <code>optional .boa.types.ChangeKind change_kind = 7;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
      * </pre>
      */
-    boolean hasStructuralChangeKind();
+    boolean hasChangeKind();
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 7;</code>
+     * <code>optional .boa.types.ChangeKind change_kind = 7;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
      * </pre>
      */
-    boa.types.Shared.ChangeKind getStructuralChangeKind();
+    boa.types.Shared.ChangeKind getChangeKind();
 
-    // optional .boa.types.ChangeKind label_change_kind = 8;
+    // optional int32 mapped_node = 9;
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 8;</code>
+     * <code>optional int32 mapped_node = 9;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
-    boolean hasLabelChangeKind();
+    boolean hasMappedNode();
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 8;</code>
+     * <code>optional int32 mapped_node = 9;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
-    boa.types.Shared.ChangeKind getLabelChangeKind();
+    int getMappedNode();
+
+    // optional int32 key = 10;
+    /**
+     * <code>optional int32 key = 10;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    boolean hasKey();
+    /**
+     * <code>optional int32 key = 10;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    int getKey();
   }
   /**
    * Protobuf type {@code boa.types.Modifier}
@@ -25510,19 +28356,18 @@ public final class Ast {
                 unknownFields.mergeVarintField(7, rawValue);
               } else {
                 bitField0_ |= 0x00000010;
-                structuralChangeKind_ = value;
+                changeKind_ = value;
               }
               break;
             }
-            case 64: {
-              int rawValue = input.readEnum();
-              boa.types.Shared.ChangeKind value = boa.types.Shared.ChangeKind.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(8, rawValue);
-              } else {
-                bitField0_ |= 0x00000020;
-                labelChangeKind_ = value;
-              }
+            case 72: {
+              bitField0_ |= 0x00000020;
+              mappedNode_ = input.readInt32();
+              break;
+            }
+            case 80: {
+              bitField0_ |= 0x00000040;
+              key_ = input.readInt32();
               break;
             }
           }
@@ -26206,52 +29051,76 @@ public final class Ast {
       }
     }
 
-    // optional .boa.types.ChangeKind structural_change_kind = 7;
-    public static final int STRUCTURAL_CHANGE_KIND_FIELD_NUMBER = 7;
-    private boa.types.Shared.ChangeKind structuralChangeKind_;
+    // optional .boa.types.ChangeKind change_kind = 7;
+    public static final int CHANGE_KIND_FIELD_NUMBER = 7;
+    private boa.types.Shared.ChangeKind changeKind_;
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 7;</code>
+     * <code>optional .boa.types.ChangeKind change_kind = 7;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
      * </pre>
      */
-    public boolean hasStructuralChangeKind() {
+    public boolean hasChangeKind() {
       return ((bitField0_ & 0x00000010) == 0x00000010);
     }
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 7;</code>
+     * <code>optional .boa.types.ChangeKind change_kind = 7;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
      * </pre>
      */
-    public boa.types.Shared.ChangeKind getStructuralChangeKind() {
-      return structuralChangeKind_;
+    public boa.types.Shared.ChangeKind getChangeKind() {
+      return changeKind_;
     }
 
-    // optional .boa.types.ChangeKind label_change_kind = 8;
-    public static final int LABEL_CHANGE_KIND_FIELD_NUMBER = 8;
-    private boa.types.Shared.ChangeKind labelChangeKind_;
+    // optional int32 mapped_node = 9;
+    public static final int MAPPED_NODE_FIELD_NUMBER = 9;
+    private int mappedNode_;
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 8;</code>
+     * <code>optional int32 mapped_node = 9;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
-    public boolean hasLabelChangeKind() {
+    public boolean hasMappedNode() {
       return ((bitField0_ & 0x00000020) == 0x00000020);
     }
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 8;</code>
+     * <code>optional int32 mapped_node = 9;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
-    public boa.types.Shared.ChangeKind getLabelChangeKind() {
-      return labelChangeKind_;
+    public int getMappedNode() {
+      return mappedNode_;
+    }
+
+    // optional int32 key = 10;
+    public static final int KEY_FIELD_NUMBER = 10;
+    private int key_;
+    /**
+     * <code>optional int32 key = 10;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    public boolean hasKey() {
+      return ((bitField0_ & 0x00000040) == 0x00000040);
+    }
+    /**
+     * <code>optional int32 key = 10;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    public int getKey() {
+      return key_;
     }
 
     private void initFields() {
@@ -26261,8 +29130,9 @@ public final class Ast {
       annotationMembers_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       annotationValues_ = java.util.Collections.emptyList();
       other_ = "";
-      structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
-      labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      changeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      mappedNode_ = 0;
+      key_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -26305,10 +29175,13 @@ public final class Ast {
         output.writeBytes(6, getOtherBytes());
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeEnum(7, structuralChangeKind_.getNumber());
+        output.writeEnum(7, changeKind_.getNumber());
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        output.writeEnum(8, labelChangeKind_.getNumber());
+        output.writeInt32(9, mappedNode_);
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        output.writeInt32(10, key_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -26350,11 +29223,15 @@ public final class Ast {
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(7, structuralChangeKind_.getNumber());
+          .computeEnumSize(7, changeKind_.getNumber());
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(8, labelChangeKind_.getNumber());
+          .computeInt32Size(9, mappedNode_);
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(10, key_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -26493,10 +29370,12 @@ public final class Ast {
         }
         other_ = "";
         bitField0_ = (bitField0_ & ~0x00000020);
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+        changeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00000040);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+        mappedNode_ = 0;
         bitField0_ = (bitField0_ & ~0x00000080);
+        key_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000100);
         return this;
       }
 
@@ -26559,11 +29438,15 @@ public final class Ast {
         if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
           to_bitField0_ |= 0x00000010;
         }
-        result.structuralChangeKind_ = structuralChangeKind_;
+        result.changeKind_ = changeKind_;
         if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
           to_bitField0_ |= 0x00000020;
         }
-        result.labelChangeKind_ = labelChangeKind_;
+        result.mappedNode_ = mappedNode_;
+        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
+          to_bitField0_ |= 0x00000040;
+        }
+        result.key_ = key_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -26632,11 +29515,14 @@ public final class Ast {
           other_ = other.other_;
           onChanged();
         }
-        if (other.hasStructuralChangeKind()) {
-          setStructuralChangeKind(other.getStructuralChangeKind());
+        if (other.hasChangeKind()) {
+          setChangeKind(other.getChangeKind());
         }
-        if (other.hasLabelChangeKind()) {
-          setLabelChangeKind(other.getLabelChangeKind());
+        if (other.hasMappedNode()) {
+          setMappedNode(other.getMappedNode());
+        }
+        if (other.hasKey()) {
+          setKey(other.getKey());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -27416,106 +30302,152 @@ public final class Ast {
         return this;
       }
 
-      // optional .boa.types.ChangeKind structural_change_kind = 7;
-      private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      // optional .boa.types.ChangeKind change_kind = 7;
+      private boa.types.Shared.ChangeKind changeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 7;</code>
+       * <code>optional .boa.types.ChangeKind change_kind = 7;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
        * </pre>
        */
-      public boolean hasStructuralChangeKind() {
+      public boolean hasChangeKind() {
         return ((bitField0_ & 0x00000040) == 0x00000040);
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 7;</code>
+       * <code>optional .boa.types.ChangeKind change_kind = 7;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
        * </pre>
        */
-      public boa.types.Shared.ChangeKind getStructuralChangeKind() {
-        return structuralChangeKind_;
+      public boa.types.Shared.ChangeKind getChangeKind() {
+        return changeKind_;
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 7;</code>
+       * <code>optional .boa.types.ChangeKind change_kind = 7;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
        * </pre>
        */
-      public Builder setStructuralChangeKind(boa.types.Shared.ChangeKind value) {
+      public Builder setChangeKind(boa.types.Shared.ChangeKind value) {
         if (value == null) {
           throw new NullPointerException();
         }
         bitField0_ |= 0x00000040;
-        structuralChangeKind_ = value;
+        changeKind_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 7;</code>
+       * <code>optional .boa.types.ChangeKind change_kind = 7;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
        * </pre>
        */
-      public Builder clearStructuralChangeKind() {
+      public Builder clearChangeKind() {
         bitField0_ = (bitField0_ & ~0x00000040);
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+        changeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         onChanged();
         return this;
       }
 
-      // optional .boa.types.ChangeKind label_change_kind = 8;
-      private boa.types.Shared.ChangeKind labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      // optional int32 mapped_node = 9;
+      private int mappedNode_ ;
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 8;</code>
+       * <code>optional int32 mapped_node = 9;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
-      public boolean hasLabelChangeKind() {
+      public boolean hasMappedNode() {
         return ((bitField0_ & 0x00000080) == 0x00000080);
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 8;</code>
+       * <code>optional int32 mapped_node = 9;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
-      public boa.types.Shared.ChangeKind getLabelChangeKind() {
-        return labelChangeKind_;
+      public int getMappedNode() {
+        return mappedNode_;
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 8;</code>
+       * <code>optional int32 mapped_node = 9;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
-      public Builder setLabelChangeKind(boa.types.Shared.ChangeKind value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
+      public Builder setMappedNode(int value) {
         bitField0_ |= 0x00000080;
-        labelChangeKind_ = value;
+        mappedNode_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 8;</code>
+       * <code>optional int32 mapped_node = 9;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
-      public Builder clearLabelChangeKind() {
+      public Builder clearMappedNode() {
         bitField0_ = (bitField0_ & ~0x00000080);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+        mappedNode_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 key = 10;
+      private int key_ ;
+      /**
+       * <code>optional int32 key = 10;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public boolean hasKey() {
+        return ((bitField0_ & 0x00000100) == 0x00000100);
+      }
+      /**
+       * <code>optional int32 key = 10;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public int getKey() {
+        return key_;
+      }
+      /**
+       * <code>optional int32 key = 10;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public Builder setKey(int value) {
+        bitField0_ |= 0x00000100;
+        key_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 key = 10;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public Builder clearKey() {
+        bitField0_ = (bitField0_ & ~0x00000100);
+        key_ = 0;
         onChanged();
         return this;
       }
@@ -27573,41 +30505,59 @@ public final class Ast {
      */
     boa.types.Ast.PositionInfoOrBuilder getPositionOrBuilder();
 
-    // optional .boa.types.ChangeKind structural_change_kind = 4;
+    // optional .boa.types.ChangeKind change_kind = 4;
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 4;</code>
+     * <code>optional .boa.types.ChangeKind change_kind = 4;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
      * </pre>
      */
-    boolean hasStructuralChangeKind();
+    boolean hasChangeKind();
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 4;</code>
+     * <code>optional .boa.types.ChangeKind change_kind = 4;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
      * </pre>
      */
-    boa.types.Shared.ChangeKind getStructuralChangeKind();
+    boa.types.Shared.ChangeKind getChangeKind();
 
-    // optional .boa.types.ChangeKind label_change_kind = 5;
+    // optional int32 mapped_node = 6;
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 5;</code>
+     * <code>optional int32 mapped_node = 6;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
-    boolean hasLabelChangeKind();
+    boolean hasMappedNode();
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 5;</code>
+     * <code>optional int32 mapped_node = 6;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
-    boa.types.Shared.ChangeKind getLabelChangeKind();
+    int getMappedNode();
+
+    // optional int32 key = 7;
+    /**
+     * <code>optional int32 key = 7;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    boolean hasKey();
+    /**
+     * <code>optional int32 key = 7;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    int getKey();
   }
   /**
    * Protobuf type {@code boa.types.Comment}
@@ -27700,19 +30650,18 @@ public final class Ast {
                 unknownFields.mergeVarintField(4, rawValue);
               } else {
                 bitField0_ |= 0x00000008;
-                structuralChangeKind_ = value;
+                changeKind_ = value;
               }
               break;
             }
-            case 40: {
-              int rawValue = input.readEnum();
-              boa.types.Shared.ChangeKind value = boa.types.Shared.ChangeKind.valueOf(rawValue);
-              if (value == null) {
-                unknownFields.mergeVarintField(5, rawValue);
-              } else {
-                bitField0_ |= 0x00000010;
-                labelChangeKind_ = value;
-              }
+            case 48: {
+              bitField0_ |= 0x00000010;
+              mappedNode_ = input.readInt32();
+              break;
+            }
+            case 56: {
+              bitField0_ |= 0x00000020;
+              key_ = input.readInt32();
               break;
             }
           }
@@ -27967,60 +30916,85 @@ public final class Ast {
       return position_;
     }
 
-    // optional .boa.types.ChangeKind structural_change_kind = 4;
-    public static final int STRUCTURAL_CHANGE_KIND_FIELD_NUMBER = 4;
-    private boa.types.Shared.ChangeKind structuralChangeKind_;
+    // optional .boa.types.ChangeKind change_kind = 4;
+    public static final int CHANGE_KIND_FIELD_NUMBER = 4;
+    private boa.types.Shared.ChangeKind changeKind_;
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 4;</code>
+     * <code>optional .boa.types.ChangeKind change_kind = 4;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
      * </pre>
      */
-    public boolean hasStructuralChangeKind() {
+    public boolean hasChangeKind() {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
-     * <code>optional .boa.types.ChangeKind structural_change_kind = 4;</code>
+     * <code>optional .boa.types.ChangeKind change_kind = 4;</code>
      *
      * <pre>
-     ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+     ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
      * </pre>
      */
-    public boa.types.Shared.ChangeKind getStructuralChangeKind() {
-      return structuralChangeKind_;
+    public boa.types.Shared.ChangeKind getChangeKind() {
+      return changeKind_;
     }
 
-    // optional .boa.types.ChangeKind label_change_kind = 5;
-    public static final int LABEL_CHANGE_KIND_FIELD_NUMBER = 5;
-    private boa.types.Shared.ChangeKind labelChangeKind_;
+    // optional int32 mapped_node = 6;
+    public static final int MAPPED_NODE_FIELD_NUMBER = 6;
+    private int mappedNode_;
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 5;</code>
+     * <code>optional int32 mapped_node = 6;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
-    public boolean hasLabelChangeKind() {
+    public boolean hasMappedNode() {
       return ((bitField0_ & 0x00000010) == 0x00000010);
     }
     /**
-     * <code>optional .boa.types.ChangeKind label_change_kind = 5;</code>
+     * <code>optional int32 mapped_node = 6;</code>
      *
      * <pre>
-     ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+     ** the key of the mapped node in the previous version 
      * </pre>
      */
-    public boa.types.Shared.ChangeKind getLabelChangeKind() {
-      return labelChangeKind_;
+    public int getMappedNode() {
+      return mappedNode_;
+    }
+
+    // optional int32 key = 7;
+    public static final int KEY_FIELD_NUMBER = 7;
+    private int key_;
+    /**
+     * <code>optional int32 key = 7;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    public boolean hasKey() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    /**
+     * <code>optional int32 key = 7;</code>
+     *
+     * <pre>
+     ** 
+     * </pre>
+     */
+    public int getKey() {
+      return key_;
     }
 
     private void initFields() {
       kind_ = boa.types.Ast.Comment.CommentKind.OTHER;
       value_ = "";
       position_ = boa.types.Ast.PositionInfo.getDefaultInstance();
-      structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
-      labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      changeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      mappedNode_ = 0;
+      key_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -28060,10 +31034,13 @@ public final class Ast {
         output.writeMessage(3, position_);
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeEnum(4, structuralChangeKind_.getNumber());
+        output.writeEnum(4, changeKind_.getNumber());
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeEnum(5, labelChangeKind_.getNumber());
+        output.writeInt32(6, mappedNode_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        output.writeInt32(7, key_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -28088,11 +31065,15 @@ public final class Ast {
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(4, structuralChangeKind_.getNumber());
+          .computeEnumSize(4, changeKind_.getNumber());
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeEnumSize(5, labelChangeKind_.getNumber());
+          .computeInt32Size(6, mappedNode_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(7, key_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -28225,10 +31206,12 @@ public final class Ast {
           positionBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000004);
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+        changeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         bitField0_ = (bitField0_ & ~0x00000008);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+        mappedNode_ = 0;
         bitField0_ = (bitField0_ & ~0x00000010);
+        key_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000020);
         return this;
       }
 
@@ -28276,11 +31259,15 @@ public final class Ast {
         if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
           to_bitField0_ |= 0x00000008;
         }
-        result.structuralChangeKind_ = structuralChangeKind_;
+        result.changeKind_ = changeKind_;
         if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
           to_bitField0_ |= 0x00000010;
         }
-        result.labelChangeKind_ = labelChangeKind_;
+        result.mappedNode_ = mappedNode_;
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+          to_bitField0_ |= 0x00000020;
+        }
+        result.key_ = key_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -28308,11 +31295,14 @@ public final class Ast {
         if (other.hasPosition()) {
           mergePosition(other.getPosition());
         }
-        if (other.hasStructuralChangeKind()) {
-          setStructuralChangeKind(other.getStructuralChangeKind());
+        if (other.hasChangeKind()) {
+          setChangeKind(other.getChangeKind());
         }
-        if (other.hasLabelChangeKind()) {
-          setLabelChangeKind(other.getLabelChangeKind());
+        if (other.hasMappedNode()) {
+          setMappedNode(other.getMappedNode());
+        }
+        if (other.hasKey()) {
+          setKey(other.getKey());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -28584,106 +31574,152 @@ public final class Ast {
         return positionBuilder_;
       }
 
-      // optional .boa.types.ChangeKind structural_change_kind = 4;
-      private boa.types.Shared.ChangeKind structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      // optional .boa.types.ChangeKind change_kind = 4;
+      private boa.types.Shared.ChangeKind changeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 4;</code>
+       * <code>optional .boa.types.ChangeKind change_kind = 4;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
        * </pre>
        */
-      public boolean hasStructuralChangeKind() {
+      public boolean hasChangeKind() {
         return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 4;</code>
+       * <code>optional .boa.types.ChangeKind change_kind = 4;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
        * </pre>
        */
-      public boa.types.Shared.ChangeKind getStructuralChangeKind() {
-        return structuralChangeKind_;
+      public boa.types.Shared.ChangeKind getChangeKind() {
+        return changeKind_;
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 4;</code>
+       * <code>optional .boa.types.ChangeKind change_kind = 4;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
        * </pre>
        */
-      public Builder setStructuralChangeKind(boa.types.Shared.ChangeKind value) {
+      public Builder setChangeKind(boa.types.Shared.ChangeKind value) {
         if (value == null) {
           throw new NullPointerException();
         }
         bitField0_ |= 0x00000008;
-        structuralChangeKind_ = value;
+        changeKind_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional .boa.types.ChangeKind structural_change_kind = 4;</code>
+       * <code>optional .boa.types.ChangeKind change_kind = 4;</code>
        *
        * <pre>
-       ** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED 
+       ** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED 
        * </pre>
        */
-      public Builder clearStructuralChangeKind() {
+      public Builder clearChangeKind() {
         bitField0_ = (bitField0_ & ~0x00000008);
-        structuralChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+        changeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
         onChanged();
         return this;
       }
 
-      // optional .boa.types.ChangeKind label_change_kind = 5;
-      private boa.types.Shared.ChangeKind labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+      // optional int32 mapped_node = 6;
+      private int mappedNode_ ;
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 5;</code>
+       * <code>optional int32 mapped_node = 6;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
-      public boolean hasLabelChangeKind() {
+      public boolean hasMappedNode() {
         return ((bitField0_ & 0x00000010) == 0x00000010);
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 5;</code>
+       * <code>optional int32 mapped_node = 6;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
-      public boa.types.Shared.ChangeKind getLabelChangeKind() {
-        return labelChangeKind_;
+      public int getMappedNode() {
+        return mappedNode_;
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 5;</code>
+       * <code>optional int32 mapped_node = 6;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
-      public Builder setLabelChangeKind(boa.types.Shared.ChangeKind value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
+      public Builder setMappedNode(int value) {
         bitField0_ |= 0x00000010;
-        labelChangeKind_ = value;
+        mappedNode_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional .boa.types.ChangeKind label_change_kind = 5;</code>
+       * <code>optional int32 mapped_node = 6;</code>
        *
        * <pre>
-       ** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED 
+       ** the key of the mapped node in the previous version 
        * </pre>
        */
-      public Builder clearLabelChangeKind() {
+      public Builder clearMappedNode() {
         bitField0_ = (bitField0_ & ~0x00000010);
-        labelChangeKind_ = boa.types.Shared.ChangeKind.UNKNOWN;
+        mappedNode_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 key = 7;
+      private int key_ ;
+      /**
+       * <code>optional int32 key = 7;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public boolean hasKey() {
+        return ((bitField0_ & 0x00000020) == 0x00000020);
+      }
+      /**
+       * <code>optional int32 key = 7;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public int getKey() {
+        return key_;
+      }
+      /**
+       * <code>optional int32 key = 7;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public Builder setKey(int value) {
+        bitField0_ |= 0x00000020;
+        key_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 key = 7;</code>
+       *
+       * <pre>
+       ** 
+       * </pre>
+       */
+      public Builder clearKey() {
+        bitField0_ = (bitField0_ & ~0x00000020);
+        key_ = 0;
         onChanged();
         return this;
       }
@@ -29627,138 +32663,139 @@ public final class Ast {
     java.lang.String[] descriptorData = {
       "\n\tast.proto\022\tboa.types\032\014shared.proto\"4\n\014" +
       "CommentsRoot\022$\n\010comments\030\001 \003(\0132\022.boa.typ" +
-      "es.Comment\"\274\001\n\007ASTRoot\022(\n\nnamespaces\030\001 \003" +
-      "(\0132\024.boa.types.Namespace\022\017\n\007imports\030\002 \003(" +
-      "\t\022\r\n\005names\030\003 \003(\t\0225\n\026structural_change_ki" +
-      "nd\030\004 \001(\0162\025.boa.types.ChangeKind\0220\n\021label" +
-      "_change_kind\030\005 \001(\0162\025.boa.types.ChangeKin" +
-      "d\"\322\002\n\tNamespace\022\014\n\004name\030\001 \002(\t\022&\n\tmodifie" +
-      "rs\030\002 \003(\0132\023.boa.types.Modifier\022,\n\014declara" +
-      "tions\030\003 \003(\0132\026.boa.types.Declaration\022(\n\ns",
-      "tatements\030\004 \003(\0132\024.boa.types.Statement\022\"\n" +
-      "\007methods\030\005 \003(\0132\021.boa.types.Method\022*\n\013exp" +
-      "ressions\030\006 \003(\0132\025.boa.types.Expression\0225\n" +
-      "\026structural_change_kind\030\007 \001(\0162\025.boa.type" +
-      "s.ChangeKind\0220\n\021label_change_kind\030\010 \001(\0162" +
-      "\025.boa.types.ChangeKind\"\302\003\n\013Declaration\022\014" +
-      "\n\004name\030\001 \002(\t\022!\n\004kind\030\002 \002(\0162\023.boa.types.T" +
-      "ypeKind\022&\n\tmodifiers\030\003 \003(\0132\023.boa.types.M" +
-      "odifier\022+\n\022generic_parameters\030\004 \003(\0132\017.bo" +
-      "a.types.Type\022 \n\007parents\030\005 \003(\0132\017.boa.type",
-      "s.Type\022\"\n\007methods\030\006 \003(\0132\021.boa.types.Meth" +
-      "od\022#\n\006fields\030\007 \003(\0132\023.boa.types.Variable\022" +
-      "3\n\023nested_declarations\030\010 \003(\0132\026.boa.types" +
-      ".Declaration\022$\n\010comments\030\t \003(\0132\022.boa.typ" +
-      "es.Comment\0225\n\026structural_change_kind\030\n \001" +
-      "(\0162\025.boa.types.ChangeKind\0220\n\021label_chang" +
-      "e_kind\030\013 \001(\0162\025.boa.types.ChangeKind\"\254\001\n\004" +
-      "Type\022\014\n\004name\030\001 \002(\t\022!\n\004kind\030\002 \002(\0162\023.boa.t" +
-      "ypes.TypeKind\022\n\n\002id\030\004 \001(\t\0225\n\026structural_" +
-      "change_kind\030\005 \001(\0162\025.boa.types.ChangeKind",
-      "\0220\n\021label_change_kind\030\006 \001(\0162\025.boa.types." +
-      "ChangeKind\"\234\003\n\006Method\022\014\n\004name\030\001 \001(\t\022&\n\tm" +
-      "odifiers\030\002 \003(\0132\023.boa.types.Modifier\022$\n\013r" +
-      "eturn_type\030\003 \002(\0132\017.boa.types.Type\022+\n\022gen" +
-      "eric_parameters\030\004 \003(\0132\017.boa.types.Type\022&" +
-      "\n\targuments\030\005 \003(\0132\023.boa.types.Variable\022(" +
-      "\n\017exception_types\030\006 \003(\0132\017.boa.types.Type" +
-      "\022(\n\nstatements\030\007 \003(\0132\024.boa.types.Stateme" +
-      "nt\022$\n\010comments\030\010 \003(\0132\022.boa.types.Comment" +
-      "\0225\n\026structural_change_kind\030\t \001(\0162\025.boa.t",
-      "ypes.ChangeKind\0220\n\021label_change_kind\030\n \001" +
-      "(\0162\025.boa.types.ChangeKind\"\243\002\n\010Variable\022\014" +
-      "\n\004name\030\001 \002(\t\022&\n\rvariable_type\030\002 \002(\0132\017.bo" +
-      "a.types.Type\022&\n\tmodifiers\030\003 \003(\0132\023.boa.ty" +
-      "pes.Modifier\022*\n\013initializer\030\004 \001(\0132\025.boa." +
-      "types.Expression\022$\n\010comments\030\005 \003(\0132\022.boa" +
-      ".types.Comment\0225\n\026structural_change_kind" +
-      "\030\006 \001(\0162\025.boa.types.ChangeKind\0220\n\021label_c" +
-      "hange_kind\030\007 \001(\0162\025.boa.types.ChangeKind\"" +
-      "\230\006\n\tStatement\0220\n\004kind\030\001 \002(\0162\".boa.types.",
-      "Statement.StatementKind\022$\n\010comments\030\002 \003(" +
-      "\0132\022.boa.types.Comment\022(\n\nstatements\030\003 \003(" +
-      "\0132\024.boa.types.Statement\022.\n\017initializatio" +
-      "ns\030\004 \003(\0132\025.boa.types.Expression\022(\n\tcondi" +
-      "tion\030\005 \001(\0132\025.boa.types.Expression\022&\n\007upd" +
-      "ates\030\006 \003(\0132\025.boa.types.Expression\0221\n\024var" +
-      "iable_declaration\030\007 \001(\0132\023.boa.types.Vari" +
-      "able\0220\n\020type_declaration\030\010 \001(\0132\026.boa.typ" +
-      "es.Declaration\022)\n\nexpression\030\t \001(\0132\025.boa" +
-      ".types.Expression\0225\n\026structural_change_k",
-      "ind\030\n \001(\0162\025.boa.types.ChangeKind\0220\n\021labe" +
-      "l_change_kind\030\013 \001(\0162\025.boa.types.ChangeKi" +
-      "nd\"\215\002\n\rStatementKind\022\t\n\005OTHER\020\000\022\t\n\005BLOCK" +
-      "\020\001\022\014\n\010TYPEDECL\020\002\022\016\n\nEXPRESSION\020\003\022\010\n\004EXPR" +
-      "\020\003\022\020\n\014SYNCHRONIZED\020\004\022\010\n\004SYNC\020\004\022\n\n\006RETURN" +
-      "\020\005\022\007\n\003FOR\020\006\022\006\n\002DO\020\007\022\t\n\005WHILE\020\010\022\006\n\002IF\020\t\022\n" +
-      "\n\006ASSERT\020\n\022\t\n\005BREAK\020\013\022\014\n\010CONTINUE\020\014\022\t\n\005L" +
-      "ABEL\020\r\022\n\n\006SWITCH\020\016\022\010\n\004CASE\020\017\022\007\n\003TRY\020\020\022\t\n" +
-      "\005THROW\020\021\022\t\n\005CATCH\020\022\022\t\n\005EMPTY\020\023\032\002\020\001\"\354\n\n\nE" +
-      "xpression\0222\n\004kind\030\001 \002(\0162$.boa.types.Expr",
-      "ession.ExpressionKind\022*\n\013expressions\030\002 \003" +
-      "(\0132\025.boa.types.Expression\022+\n\016variable_de" +
-      "cls\030\003 \003(\0132\023.boa.types.Variable\022!\n\010new_ty" +
-      "pe\030\004 \001(\0132\017.boa.types.Type\022+\n\022generic_par" +
-      "ameters\030\005 \003(\0132\017.boa.types.Type\022\022\n\nis_pos" +
-      "tfix\030\006 \001(\010\022\017\n\007literal\030\007 \001(\t\022\020\n\010variable\030" +
-      "\010 \001(\t\022\016\n\006method\030\t \001(\t\022*\n\013method_args\030\n \003" +
-      "(\0132\025.boa.types.Expression\0220\n\020anon_declar" +
-      "ation\030\013 \001(\0132\026.boa.types.Declaration\022\'\n\na" +
-      "nnotation\030\014 \001(\0132\023.boa.types.Modifier\022!\n\006",
-      "lambda\030\r \001(\0132\021.boa.types.Method\022\021\n\tno_pa" +
-      "rens\030\016 \001(\010\0225\n\026structural_change_kind\030\017 \001" +
-      "(\0162\025.boa.types.ChangeKind\0220\n\021label_chang" +
-      "e_kind\030\020 \001(\0162\025.boa.types.ChangeKind\"\223\006\n\016" +
-      "ExpressionKind\022\t\n\005OTHER\020\000\022\013\n\007LITERAL\020\001\022\r" +
-      "\n\tVARACCESS\020\002\022\013\n\007VARDECL\020\003\022\016\n\nMETHODCALL" +
-      "\020\004\022\010\n\004CAST\020\005\022\016\n\nARRAYINDEX\020\006\022\r\n\tARRAYINI" +
-      "T\020\007\022\017\n\013TYPECOMPARE\020\010\022\007\n\003NEW\020\t\022\014\n\010NEWARRA" +
-      "Y\020\n\022\n\n\006OP_ADD\020\013\022\n\n\006OP_SUB\020\014\022\013\n\007OP_MULT\020\r" +
-      "\022\n\n\006OP_DIV\020\016\022\n\n\006OP_MOD\020\017\022\n\n\006OP_INC\020\020\022\n\n\006",
-      "OP_DEC\020\021\022\016\n\nBIT_LSHIFT\020\022\022\016\n\nBIT_RSHIFT\020\023" +
-      "\022\026\n\022BIT_UNSIGNEDRSHIFT\020\024\022\013\n\007BIT_AND\020\025\022\n\n" +
-      "\006BIT_OR\020\026\022\013\n\007BIT_NOT\020\027\022\013\n\007BIT_XOR\020\030\022\017\n\013L" +
-      "OGICAL_NOT\020\031\022\017\n\013LOGICAL_AND\020\032\022\016\n\nLOGICAL" +
-      "_OR\020\033\022\006\n\002EQ\020\034\022\007\n\003NEQ\020\035\022\006\n\002LT\020\036\022\006\n\002GT\020\037\022\010" +
-      "\n\004LTEQ\020 \022\010\n\004GTEQ\020!\022\017\n\013CONDITIONAL\020\"\022\020\n\014N" +
-      "ULLCOALESCE\020#\022\n\n\006ASSIGN\020$\022\016\n\nASSIGN_ADD\020" +
-      "%\022\016\n\nASSIGN_SUB\020&\022\017\n\013ASSIGN_MULT\020\'\022\016\n\nAS" +
-      "SIGN_DIV\020(\022\016\n\nASSIGN_MOD\020)\022\021\n\rASSIGN_BIT" +
-      "XOR\020*\022\021\n\rASSIGN_BITAND\020+\022\020\n\014ASSIGN_BITOR",
-      "\020,\022\021\n\rASSIGN_LSHIFT\020-\022\021\n\rASSIGN_RSHIFT\020." +
-      "\022\031\n\025ASSIGN_UNSIGNEDRSHIFT\020/\022\016\n\nANNOTATIO" +
-      "N\0200\022\t\n\005PAREN\0201\022\024\n\020METHOD_REFERENCE\0202\022\n\n\006" +
-      "LAMBDA\0203\022\017\n\013ANON_METHOD\0204\"\260\004\n\010Modifier\022." +
-      "\n\004kind\030\001 \002(\0162 .boa.types.Modifier.Modifi" +
-      "erKind\0222\n\nvisibility\030\002 \001(\0162\036.boa.types.M" +
-      "odifier.Visibility\022\027\n\017annotation_name\030\003 " +
-      "\001(\t\022\032\n\022annotation_members\030\004 \003(\t\0220\n\021annot" +
-      "ation_values\030\005 \003(\0132\025.boa.types.Expressio" +
-      "n\022\r\n\005other\030\006 \001(\t\0225\n\026structural_change_ki",
-      "nd\030\007 \001(\0162\025.boa.types.ChangeKind\0220\n\021label" +
-      "_change_kind\030\010 \001(\0162\025.boa.types.ChangeKin" +
-      "d\"~\n\014ModifierKind\022\t\n\005OTHER\020\000\022\016\n\nVISIBILI" +
-      "TY\020\001\022\016\n\nANNOTATION\020\002\022\t\n\005FINAL\020\003\022\n\n\006STATI" +
-      "C\020\004\022\020\n\014SYNCHRONIZED\020\005\022\010\n\004SYNC\020\005\022\014\n\010ABSTR" +
-      "ACT\020\006\032\002\020\001\"a\n\nVisibility\022\n\n\006PUBLIC\020\001\022\013\n\007P" +
-      "RIVATE\020\002\022\r\n\tPROTECTED\020\003\022\r\n\tNAMESPACE\020\004\022\013" +
-      "\n\007PACKAGE\020\004\022\013\n\007DEFAULT\020\004\032\002\020\001\"\306\002\n\007Comment" +
-      "\022,\n\004kind\030\001 \002(\0162\036.boa.types.Comment.Comme" +
-      "ntKind\022\r\n\005value\030\002 \002(\t\022)\n\010position\030\003 \002(\0132",
-      "\027.boa.types.PositionInfo\0225\n\026structural_c" +
-      "hange_kind\030\004 \001(\0162\025.boa.types.ChangeKind\022" +
-      "0\n\021label_change_kind\030\005 \001(\0162\025.boa.types.C" +
-      "hangeKind\"j\n\013CommentKind\022\t\n\005OTHER\020\000\022\010\n\004L" +
-      "INE\020\001\022\t\n\005BLOCK\020\002\022\007\n\003DOC\020\003\022\021\n\rDOCUMENTATI" +
-      "ON\020\003\022\010\n\004SPEC\020\004\022\021\n\rSPECIFICATION\020\004\032\002\020\001\"{\n" +
-      "\014PositionInfo\022\021\n\tstart_pos\030\001 \002(\005\022\016\n\006leng" +
-      "th\030\002 \002(\005\022\022\n\nstart_line\030\003 \002(\005\022\021\n\tstart_co" +
-      "l\030\004 \002(\005\022\020\n\010end_line\030\005 \002(\005\022\017\n\007end_col\030\006 \002" +
-      "(\005*\236\001\n\010TypeKind\022\t\n\005OTHER\020\000\022\t\n\005CLASS\020\001\022\r\n",
-      "\tINTERFACE\020\002\022\r\n\tANONYMOUS\020\003\022\010\n\004ANON\020\003\022\n\n" +
-      "\006STRUCT\020\004\022\010\n\004ENUM\020\005\022\017\n\013ENUMERATION\020\005\022\016\n\n" +
-      "ANNOTATION\020\006\022\014\n\010DELEGATE\020\007\022\013\n\007GENERIC\020\010\032" +
-      "\002\020\001B\002H\001"
+      "es.Comment\"\220\001\n\007ASTRoot\022(\n\nnamespaces\030\001 \003" +
+      "(\0132\024.boa.types.Namespace\022\r\n\005names\030\003 \003(\t\022" +
+      "*\n\013change_kind\030\004 \001(\0162\025.boa.types.ChangeK" +
+      "ind\022\023\n\013mapped_node\030\006 \001(\005\022\013\n\003key\030\007 \001(\005\"\362\002" +
+      "\n\tNamespace\022\014\n\004name\030\001 \002(\t\022&\n\tmodifiers\030\002" +
+      " \003(\0132\023.boa.types.Modifier\022,\n\014declaration" +
+      "s\030\003 \003(\0132\026.boa.types.Declaration\022(\n\nstate" +
+      "ments\030\004 \003(\0132\024.boa.types.Statement\022\"\n\007met",
+      "hods\030\005 \003(\0132\021.boa.types.Method\022*\n\013express" +
+      "ions\030\006 \003(\0132\025.boa.types.Expression\022*\n\013cha" +
+      "nge_kind\030\007 \001(\0162\025.boa.types.ChangeKind\022\023\n" +
+      "\013mapped_node\030\t \001(\005\022\013\n\003key\030\n \001(\005\022(\n\nnames" +
+      "paces\030\013 \003(\0132\024.boa.types.Namespace\022\017\n\007imp" +
+      "orts\030\014 \003(\t\"\335\003\n\013Declaration\022\014\n\004name\030\001 \002(\t" +
+      "\022!\n\004kind\030\002 \002(\0162\023.boa.types.TypeKind\022&\n\tm" +
+      "odifiers\030\003 \003(\0132\023.boa.types.Modifier\022+\n\022g" +
+      "eneric_parameters\030\004 \003(\0132\017.boa.types.Type" +
+      "\022 \n\007parents\030\005 \003(\0132\017.boa.types.Type\022\"\n\007me",
+      "thods\030\006 \003(\0132\021.boa.types.Method\022#\n\006fields" +
+      "\030\007 \003(\0132\023.boa.types.Variable\0223\n\023nested_de" +
+      "clarations\030\010 \003(\0132\026.boa.types.Declaration" +
+      "\022$\n\010comments\030\t \003(\0132\022.boa.types.Comment\022*" +
+      "\n\013change_kind\030\n \001(\0162\025.boa.types.ChangeKi" +
+      "nd\022\023\n\013mapped_node\030\014 \001(\005\022\013\n\003key\030\r \001(\005\022\034\n\024" +
+      "fully_qualified_name\030\016 \001(\t\022\026\n\016declaring_" +
+      "type\030\017 \001(\005\"\336\001\n\004Type\022\014\n\004name\030\001 \002(\t\022\034\n\024ful" +
+      "ly_qualified_name\030\002 \001(\t\022!\n\004kind\030\003 \002(\0162\023." +
+      "boa.types.TypeKind\022\n\n\002id\030\004 \001(\t\022*\n\013change",
+      "_kind\030\005 \001(\0162\025.boa.types.ChangeKind\022\023\n\013ma" +
+      "pped_node\030\007 \001(\005\022\030\n\020declaration_file\030\010 \001(" +
+      "\005\022\023\n\013declaration\030\t \001(\005\022\013\n\003key\030\n \001(\005\"\231\003\n\006" +
+      "Method\022\014\n\004name\030\001 \001(\t\022&\n\tmodifiers\030\002 \003(\0132" +
+      "\023.boa.types.Modifier\022$\n\013return_type\030\003 \002(" +
+      "\0132\017.boa.types.Type\022+\n\022generic_parameters" +
+      "\030\004 \003(\0132\017.boa.types.Type\022&\n\targuments\030\005 \003" +
+      "(\0132\023.boa.types.Variable\022(\n\017exception_typ" +
+      "es\030\006 \003(\0132\017.boa.types.Type\022(\n\nstatements\030" +
+      "\007 \003(\0132\024.boa.types.Statement\022$\n\010comments\030",
+      "\010 \003(\0132\022.boa.types.Comment\022*\n\013change_kind" +
+      "\030\t \001(\0162\025.boa.types.ChangeKind\022\023\n\013mapped_" +
+      "node\030\013 \001(\005\022\013\n\003key\030\014 \001(\005\022\026\n\016declaring_typ" +
+      "e\030\r \001(\005\"\240\002\n\010Variable\022\014\n\004name\030\001 \002(\t\022&\n\rva" +
+      "riable_type\030\002 \002(\0132\017.boa.types.Type\022&\n\tmo" +
+      "difiers\030\003 \003(\0132\023.boa.types.Modifier\022*\n\013in" +
+      "itializer\030\004 \001(\0132\025.boa.types.Expression\022$" +
+      "\n\010comments\030\005 \003(\0132\022.boa.types.Comment\022*\n\013" +
+      "change_kind\030\006 \001(\0162\025.boa.types.ChangeKind" +
+      "\022\023\n\013mapped_node\030\010 \001(\005\022\013\n\003key\030\t \001(\005\022\026\n\016de",
+      "claring_type\030\n \001(\005\"\212\006\n\tStatement\0220\n\004kind" +
+      "\030\001 \002(\0162\".boa.types.Statement.StatementKi" +
+      "nd\022$\n\010comments\030\002 \003(\0132\022.boa.types.Comment" +
+      "\022(\n\nstatements\030\003 \003(\0132\024.boa.types.Stateme" +
+      "nt\022.\n\017initializations\030\004 \003(\0132\025.boa.types." +
+      "Expression\022(\n\tcondition\030\005 \001(\0132\025.boa.type" +
+      "s.Expression\022&\n\007updates\030\006 \003(\0132\025.boa.type" +
+      "s.Expression\0221\n\024variable_declaration\030\007 \001" +
+      "(\0132\023.boa.types.Variable\0220\n\020type_declarat" +
+      "ion\030\010 \001(\0132\026.boa.types.Declaration\022)\n\nexp",
+      "ression\030\t \001(\0132\025.boa.types.Expression\022*\n\013" +
+      "change_kind\030\n \001(\0162\025.boa.types.ChangeKind" +
+      "\022\023\n\013mapped_node\030\014 \001(\005\022\013\n\003key\030\r \001(\005\"\232\002\n\rS" +
+      "tatementKind\022\t\n\005OTHER\020\000\022\t\n\005BLOCK\020\001\022\014\n\010TY" +
+      "PEDECL\020\002\022\016\n\nEXPRESSION\020\003\022\010\n\004EXPR\020\003\022\020\n\014SY" +
+      "NCHRONIZED\020\004\022\010\n\004SYNC\020\004\022\n\n\006RETURN\020\005\022\007\n\003FO" +
+      "R\020\006\022\006\n\002DO\020\007\022\t\n\005WHILE\020\010\022\006\n\002IF\020\t\022\n\n\006ASSERT" +
+      "\020\n\022\t\n\005BREAK\020\013\022\014\n\010CONTINUE\020\014\022\t\n\005LABEL\020\r\022\n" +
+      "\n\006SWITCH\020\016\022\010\n\004CASE\020\017\022\007\n\003TRY\020\020\022\t\n\005THROW\020\021" +
+      "\022\t\n\005CATCH\020\022\022\t\n\005EMPTY\020\023\022\013\n\007FINALLY\020\024\032\002\020\001\"",
+      "\240\013\n\nExpression\0222\n\004kind\030\001 \002(\0162$.boa.types" +
+      ".Expression.ExpressionKind\022*\n\013expression" +
+      "s\030\002 \003(\0132\025.boa.types.Expression\022+\n\016variab" +
+      "le_decls\030\003 \003(\0132\023.boa.types.Variable\022!\n\010n" +
+      "ew_type\030\004 \001(\0132\017.boa.types.Type\022+\n\022generi" +
+      "c_parameters\030\005 \003(\0132\017.boa.types.Type\022\022\n\ni" +
+      "s_postfix\030\006 \001(\010\022\017\n\007literal\030\007 \001(\t\022\020\n\010vari" +
+      "able\030\010 \001(\t\022\016\n\006method\030\t \001(\t\022*\n\013method_arg" +
+      "s\030\n \003(\0132\025.boa.types.Expression\0220\n\020anon_d" +
+      "eclaration\030\013 \001(\0132\026.boa.types.Declaration",
+      "\022\'\n\nannotation\030\014 \001(\0132\023.boa.types.Modifie" +
+      "r\022!\n\006lambda\030\r \001(\0132\021.boa.types.Method\022\021\n\t" +
+      "no_parens\030\016 \001(\010\022*\n\013change_kind\030\017 \001(\0162\025.b" +
+      "oa.types.ChangeKind\022\023\n\013mapped_node\030\021 \001(\005" +
+      "\022\013\n\003key\030\022 \001(\005\022\'\n\016declaring_type\030\023 \001(\0132\017." +
+      "boa.types.Type\022$\n\013return_type\030\024 \001(\0132\017.bo" +
+      "a.types.Type\"\223\006\n\016ExpressionKind\022\t\n\005OTHER" +
+      "\020\000\022\013\n\007LITERAL\020\001\022\r\n\tVARACCESS\020\002\022\013\n\007VARDEC" +
+      "L\020\003\022\016\n\nMETHODCALL\020\004\022\010\n\004CAST\020\005\022\016\n\nARRAYIN" +
+      "DEX\020\006\022\r\n\tARRAYINIT\020\007\022\017\n\013TYPECOMPARE\020\010\022\007\n",
+      "\003NEW\020\t\022\014\n\010NEWARRAY\020\n\022\n\n\006OP_ADD\020\013\022\n\n\006OP_S" +
+      "UB\020\014\022\013\n\007OP_MULT\020\r\022\n\n\006OP_DIV\020\016\022\n\n\006OP_MOD\020" +
+      "\017\022\n\n\006OP_INC\020\020\022\n\n\006OP_DEC\020\021\022\016\n\nBIT_LSHIFT\020" +
+      "\022\022\016\n\nBIT_RSHIFT\020\023\022\026\n\022BIT_UNSIGNEDRSHIFT\020" +
+      "\024\022\013\n\007BIT_AND\020\025\022\n\n\006BIT_OR\020\026\022\013\n\007BIT_NOT\020\027\022" +
+      "\013\n\007BIT_XOR\020\030\022\017\n\013LOGICAL_NOT\020\031\022\017\n\013LOGICAL" +
+      "_AND\020\032\022\016\n\nLOGICAL_OR\020\033\022\006\n\002EQ\020\034\022\007\n\003NEQ\020\035\022" +
+      "\006\n\002LT\020\036\022\006\n\002GT\020\037\022\010\n\004LTEQ\020 \022\010\n\004GTEQ\020!\022\017\n\013C" +
+      "ONDITIONAL\020\"\022\020\n\014NULLCOALESCE\020#\022\n\n\006ASSIGN" +
+      "\020$\022\016\n\nASSIGN_ADD\020%\022\016\n\nASSIGN_SUB\020&\022\017\n\013AS",
+      "SIGN_MULT\020\'\022\016\n\nASSIGN_DIV\020(\022\016\n\nASSIGN_MO" +
+      "D\020)\022\021\n\rASSIGN_BITXOR\020*\022\021\n\rASSIGN_BITAND\020" +
+      "+\022\020\n\014ASSIGN_BITOR\020,\022\021\n\rASSIGN_LSHIFT\020-\022\021" +
+      "\n\rASSIGN_RSHIFT\020.\022\031\n\025ASSIGN_UNSIGNEDRSHI" +
+      "FT\020/\022\016\n\nANNOTATION\0200\022\t\n\005PAREN\0201\022\024\n\020METHO" +
+      "D_REFERENCE\0202\022\n\n\006LAMBDA\0203\022\017\n\013ANON_METHOD" +
+      "\0204\"\225\004\n\010Modifier\022.\n\004kind\030\001 \002(\0162 .boa.type" +
+      "s.Modifier.ModifierKind\0222\n\nvisibility\030\002 " +
+      "\001(\0162\036.boa.types.Modifier.Visibility\022\027\n\017a" +
+      "nnotation_name\030\003 \001(\t\022\032\n\022annotation_membe",
+      "rs\030\004 \003(\t\0220\n\021annotation_values\030\005 \003(\0132\025.bo" +
+      "a.types.Expression\022\r\n\005other\030\006 \001(\t\022*\n\013cha" +
+      "nge_kind\030\007 \001(\0162\025.boa.types.ChangeKind\022\023\n" +
+      "\013mapped_node\030\t \001(\005\022\013\n\003key\030\n \001(\005\"~\n\014Modif" +
+      "ierKind\022\t\n\005OTHER\020\000\022\016\n\nVISIBILITY\020\001\022\016\n\nAN" +
+      "NOTATION\020\002\022\t\n\005FINAL\020\003\022\n\n\006STATIC\020\004\022\020\n\014SYN" +
+      "CHRONIZED\020\005\022\010\n\004SYNC\020\005\022\014\n\010ABSTRACT\020\006\032\002\020\001\"" +
+      "a\n\nVisibility\022\n\n\006PUBLIC\020\001\022\013\n\007PRIVATE\020\002\022\r" +
+      "\n\tPROTECTED\020\003\022\r\n\tNAMESPACE\020\004\022\013\n\007PACKAGE\020" +
+      "\004\022\013\n\007DEFAULT\020\004\032\002\020\001\"\253\002\n\007Comment\022,\n\004kind\030\001",
+      " \002(\0162\036.boa.types.Comment.CommentKind\022\r\n\005" +
+      "value\030\002 \002(\t\022)\n\010position\030\003 \002(\0132\027.boa.type" +
+      "s.PositionInfo\022*\n\013change_kind\030\004 \001(\0162\025.bo" +
+      "a.types.ChangeKind\022\023\n\013mapped_node\030\006 \001(\005\022" +
+      "\013\n\003key\030\007 \001(\005\"j\n\013CommentKind\022\t\n\005OTHER\020\000\022\010" +
+      "\n\004LINE\020\001\022\t\n\005BLOCK\020\002\022\007\n\003DOC\020\003\022\021\n\rDOCUMENT" +
+      "ATION\020\003\022\010\n\004SPEC\020\004\022\021\n\rSPECIFICATION\020\004\032\002\020\001" +
+      "\"{\n\014PositionInfo\022\021\n\tstart_pos\030\001 \002(\005\022\016\n\006l" +
+      "ength\030\002 \002(\005\022\022\n\nstart_line\030\003 \002(\005\022\021\n\tstart" +
+      "_col\030\004 \002(\005\022\020\n\010end_line\030\005 \002(\005\022\017\n\007end_col\030",
+      "\006 \002(\005*\236\001\n\010TypeKind\022\t\n\005OTHER\020\000\022\t\n\005CLASS\020\001" +
+      "\022\r\n\tINTERFACE\020\002\022\r\n\tANONYMOUS\020\003\022\010\n\004ANON\020\003" +
+      "\022\n\n\006STRUCT\020\004\022\010\n\004ENUM\020\005\022\017\n\013ENUMERATION\020\005\022" +
+      "\016\n\nANNOTATION\020\006\022\014\n\010DELEGATE\020\007\022\013\n\007GENERIC" +
+      "\020\010\032\002\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -29776,61 +32813,61 @@ public final class Ast {
           internal_static_boa_types_ASTRoot_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_ASTRoot_descriptor,
-              new java.lang.String[] { "Namespaces", "Imports", "Names", "StructuralChangeKind", "LabelChangeKind", });
+              new java.lang.String[] { "Namespaces", "Names", "ChangeKind", "MappedNode", "Key", });
           internal_static_boa_types_Namespace_descriptor =
             getDescriptor().getMessageTypes().get(2);
           internal_static_boa_types_Namespace_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Namespace_descriptor,
-              new java.lang.String[] { "Name", "Modifiers", "Declarations", "Statements", "Methods", "Expressions", "StructuralChangeKind", "LabelChangeKind", });
+              new java.lang.String[] { "Name", "Modifiers", "Declarations", "Statements", "Methods", "Expressions", "ChangeKind", "MappedNode", "Key", "Namespaces", "Imports", });
           internal_static_boa_types_Declaration_descriptor =
             getDescriptor().getMessageTypes().get(3);
           internal_static_boa_types_Declaration_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Declaration_descriptor,
-              new java.lang.String[] { "Name", "Kind", "Modifiers", "GenericParameters", "Parents", "Methods", "Fields", "NestedDeclarations", "Comments", "StructuralChangeKind", "LabelChangeKind", });
+              new java.lang.String[] { "Name", "Kind", "Modifiers", "GenericParameters", "Parents", "Methods", "Fields", "NestedDeclarations", "Comments", "ChangeKind", "MappedNode", "Key", "FullyQualifiedName", "DeclaringType", });
           internal_static_boa_types_Type_descriptor =
             getDescriptor().getMessageTypes().get(4);
           internal_static_boa_types_Type_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Type_descriptor,
-              new java.lang.String[] { "Name", "Kind", "Id", "StructuralChangeKind", "LabelChangeKind", });
+              new java.lang.String[] { "Name", "FullyQualifiedName", "Kind", "Id", "ChangeKind", "MappedNode", "DeclarationFile", "Declaration", "Key", });
           internal_static_boa_types_Method_descriptor =
             getDescriptor().getMessageTypes().get(5);
           internal_static_boa_types_Method_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Method_descriptor,
-              new java.lang.String[] { "Name", "Modifiers", "ReturnType", "GenericParameters", "Arguments", "ExceptionTypes", "Statements", "Comments", "StructuralChangeKind", "LabelChangeKind", });
+              new java.lang.String[] { "Name", "Modifiers", "ReturnType", "GenericParameters", "Arguments", "ExceptionTypes", "Statements", "Comments", "ChangeKind", "MappedNode", "Key", "DeclaringType", });
           internal_static_boa_types_Variable_descriptor =
             getDescriptor().getMessageTypes().get(6);
           internal_static_boa_types_Variable_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Variable_descriptor,
-              new java.lang.String[] { "Name", "VariableType", "Modifiers", "Initializer", "Comments", "StructuralChangeKind", "LabelChangeKind", });
+              new java.lang.String[] { "Name", "VariableType", "Modifiers", "Initializer", "Comments", "ChangeKind", "MappedNode", "Key", "DeclaringType", });
           internal_static_boa_types_Statement_descriptor =
             getDescriptor().getMessageTypes().get(7);
           internal_static_boa_types_Statement_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Statement_descriptor,
-              new java.lang.String[] { "Kind", "Comments", "Statements", "Initializations", "Condition", "Updates", "VariableDeclaration", "TypeDeclaration", "Expression", "StructuralChangeKind", "LabelChangeKind", });
+              new java.lang.String[] { "Kind", "Comments", "Statements", "Initializations", "Condition", "Updates", "VariableDeclaration", "TypeDeclaration", "Expression", "ChangeKind", "MappedNode", "Key", });
           internal_static_boa_types_Expression_descriptor =
             getDescriptor().getMessageTypes().get(8);
           internal_static_boa_types_Expression_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Expression_descriptor,
-              new java.lang.String[] { "Kind", "Expressions", "VariableDecls", "NewType", "GenericParameters", "IsPostfix", "Literal", "Variable", "Method", "MethodArgs", "AnonDeclaration", "Annotation", "Lambda", "NoParens", "StructuralChangeKind", "LabelChangeKind", });
+              new java.lang.String[] { "Kind", "Expressions", "VariableDecls", "NewType", "GenericParameters", "IsPostfix", "Literal", "Variable", "Method", "MethodArgs", "AnonDeclaration", "Annotation", "Lambda", "NoParens", "ChangeKind", "MappedNode", "Key", "DeclaringType", "ReturnType", });
           internal_static_boa_types_Modifier_descriptor =
             getDescriptor().getMessageTypes().get(9);
           internal_static_boa_types_Modifier_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Modifier_descriptor,
-              new java.lang.String[] { "Kind", "Visibility", "AnnotationName", "AnnotationMembers", "AnnotationValues", "Other", "StructuralChangeKind", "LabelChangeKind", });
+              new java.lang.String[] { "Kind", "Visibility", "AnnotationName", "AnnotationMembers", "AnnotationValues", "Other", "ChangeKind", "MappedNode", "Key", });
           internal_static_boa_types_Comment_descriptor =
             getDescriptor().getMessageTypes().get(10);
           internal_static_boa_types_Comment_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Comment_descriptor,
-              new java.lang.String[] { "Kind", "Value", "Position", "StructuralChangeKind", "LabelChangeKind", });
+              new java.lang.String[] { "Kind", "Value", "Position", "ChangeKind", "MappedNode", "Key", });
           internal_static_boa_types_PositionInfo_descriptor =
             getDescriptor().getMessageTypes().get(11);
           internal_static_boa_types_PositionInfo_fieldAccessorTable = new

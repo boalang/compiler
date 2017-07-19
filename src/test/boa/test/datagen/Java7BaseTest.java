@@ -17,22 +17,35 @@
  */
 package boa.test.datagen;
 
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
+import com.google.protobuf.CodedInputStream;
+import com.google.protobuf.Message;
+import com.google.protobuf.Descriptors.FieldDescriptor;
+import com.google.protobuf.Descriptors.FieldDescriptor.Type;
 import com.googlecode.protobuf.format.JsonFormat;
 
+import org.apache.hadoop.io.BytesWritable;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.SequenceFile;
+import org.apache.hadoop.io.Writable;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.FileASTRequestor;
 
 import static org.junit.Assert.assertEquals;
 
 import boa.types.Ast.ASTRoot;
-
+import boa.types.Ast.Declaration;
+import boa.types.Diff.ChangedFile;
 import boa.datagen.util.Java7Visitor;
-
+import boa.datagen.util.ProtoMessageVisitor;
 import boa.test.compiler.BaseTest;
 
 /*
@@ -42,7 +55,7 @@ public class Java7BaseTest extends BaseTest {
     @SuppressWarnings("deprecation")
 	protected static int astLevel = AST.JLS4;
 	protected static String javaVersion = JavaCore.VERSION_1_7;
-	protected static Java7Visitor visitor = new Java7Visitor("", new HashMap<String, Integer>());
+	protected static Java7Visitor visitor = new Java7Visitor("");
 
 	protected static void dumpJavaWrapped(final String content) {
         dumpJava(getWrapped(content));
@@ -53,7 +66,7 @@ public class Java7BaseTest extends BaseTest {
 		parser.setKind(ASTParser.K_COMPILATION_UNIT);
 		parser.setSource(content.toCharArray());
 
-		final Map options = JavaCore.getOptions();
+		final Map<?, ?> options = JavaCore.getOptions();
 		JavaCore.setComplianceOptions(javaVersion, options);
 		parser.setCompilerOptions(options);
 
@@ -68,28 +81,34 @@ public class Java7BaseTest extends BaseTest {
     }
 
 	protected static String parseJava(final String content) {
-		final ASTParser parser = ASTParser.newParser(astLevel);
-		parser.setKind(ASTParser.K_COMPILATION_UNIT);
-		parser.setSource(content.toCharArray());
+		final StringBuilder sb = new StringBuilder();
+		final FileASTRequestor r = new FileASTRequestor() {
+			@Override
+			public void acceptAST(String sourceFilePath, CompilationUnit cu) {
+				final ASTRoot.Builder ast = ASTRoot.newBuilder();
+				try {
+					ast.addNamespaces(visitor.getNamespaces(cu));
+				} catch (final Exception e) {
+					System.err.println(e);
+					e.printStackTrace();
+				}
 
-		final Map options = JavaCore.getOptions();
-		JavaCore.setComplianceOptions(javaVersion, options);
+				sb.append(JsonFormat.printToString(ast.build()));
+			}
+		};
+		Map<String, String> fileContents = new HashMap<String, String>();
+		fileContents.put("", content);
+		@SuppressWarnings("rawtypes")
+		Map options = JavaCore.getOptions();
+		options.put(JavaCore.COMPILER_COMPLIANCE, javaVersion);
+		options.put(JavaCore.COMPILER_SOURCE, javaVersion);
+		ASTParser parser = ASTParser.newParser(astLevel);
 		parser.setCompilerOptions(options);
-
-		final CompilationUnit cu = (CompilationUnit) parser.createAST(null);
-
-		final ASTRoot.Builder ast = ASTRoot.newBuilder();
-		try {
-			ast.addNamespaces(visitor.getNamespaces(cu));
-			for (final String s : visitor.getImports())
-				ast.addImports(s);
-		} catch (final Exception e) {
-			System.err.println(e);
-			e.printStackTrace();
-			return "";
-		}
-
-		return JsonFormat.printToString(ast.build());
+		parser.setEnvironment(new String[0], new String[]{}, new String[]{}, true);
+		parser.setResolveBindings(true);
+		parser.createASTs(fileContents, new String[]{""}, null, new String[0], r, null);
+		
+		return sb.toString();
 	}
 
 	protected static String getWrapped(final String content) {
@@ -130,7 +149,8 @@ public class Java7BaseTest extends BaseTest {
 			"                        }\n" +
 			"                     ]\n" +
 			"                  }\n" +
-			"               ]\n" +
+			"               ],\n" +
+			"               \"fully_qualified_name\": \"t\"\n" +
 			"            }\n" +
 			"         ]\n" +
 			"      }\n" +
@@ -138,5 +158,85 @@ public class Java7BaseTest extends BaseTest {
 			"}",
 			parseWrapped(java)
 		);
+	}
+
+	protected static Declaration getDeclaration(final SequenceFile.Reader ar, final ChangedFile cf, final int nodeId, final HashMap<Integer, Declaration> declarations) {
+		long astpos = cf.getKey();
+		if (astpos > -1) {
+			try {
+				ar.seek(astpos);
+				Writable astkey = new LongWritable();
+				BytesWritable val = new BytesWritable();
+				ar.next(astkey, val);
+				byte[] bytes = val.getBytes();
+				ASTRoot root = ASTRoot.parseFrom(CodedInputStream.newInstance(bytes, 0, val.getLength()));
+				ProtoMessageVisitor v = new ProtoMessageVisitor() {
+					private boolean found = false;
+					
+					@Override
+					public boolean preVisit(Message message) {
+						if (found)
+							return false;
+						if (message instanceof Declaration) {
+							Declaration temp = (Declaration) message;
+							Declaration type = declarations.get(temp.getKey());
+							if (type == null) {
+								type = Declaration.newBuilder(temp).build();
+								declarations.put(type.getKey(), type);
+							}
+							if (type.getKey() == nodeId) {
+								found = true;
+								return false;
+							}
+						}
+						return true;
+					};
+				};
+				v.visit(root);
+			} catch (IOException e) {}
+		}
+		return declarations.get(nodeId);
+	}
+
+	protected static HashMap<Integer, HashMap<Integer, Declaration>> collectDeclarations(final SequenceFile.Reader ar, List<ChangedFile> snapshot) throws IOException {
+		HashMap<Integer, HashMap<Integer, Declaration>> fileNodeDeclaration = new HashMap<Integer, HashMap<Integer, Declaration>>();
+		for (int fileIndex = 0; fileIndex < snapshot.size(); fileIndex++) {
+			ChangedFile cf = snapshot.get(fileIndex);
+			long astpos = cf.getKey();
+			if (astpos > -1) {
+				ar.seek(astpos);
+				Writable astkey = new LongWritable();
+				BytesWritable val = new BytesWritable();
+				ar.next(astkey, val);
+				byte[] bytes = val.getBytes();
+				ASTRoot root = ASTRoot.parseFrom(CodedInputStream.newInstance(bytes, 0, val.getLength()));
+				HashMap<Integer, Declaration> nodeDeclaration = collectDeclarations(root);
+				fileNodeDeclaration.put(fileIndex, nodeDeclaration);
+			}
+		}
+		return fileNodeDeclaration;
+	}
+
+	protected static HashMap<Integer, Declaration> collectDeclarations(Message message) {
+		HashMap<Integer, Declaration> nodeDeclaration = new HashMap<Integer, Declaration>();
+		if (message instanceof Declaration) {
+			nodeDeclaration.put(((Declaration) message).getKey(), (Declaration) message);
+		}
+		for (Iterator<Map.Entry<FieldDescriptor, Object>> iter = message.getAllFields().entrySet().iterator(); iter.hasNext();) {
+            Map.Entry<FieldDescriptor, Object> field = iter.next();
+            nodeDeclaration.putAll(collectDeclarations(field.getKey(), field.getValue()));
+        }
+		return nodeDeclaration;
+	}
+
+	protected static HashMap<Integer, Declaration> collectDeclarations(FieldDescriptor field, Object value) {
+		HashMap<Integer, Declaration> nodeDeclaration = new HashMap<Integer, Declaration>();
+        if (field.isRepeated()) {
+            // Repeated field. Print each element.
+            for (Iterator<?> iter = ((List<?>) value).iterator(); iter.hasNext();)
+            	if (field.getType() == Type.MESSAGE)
+            		nodeDeclaration.putAll(collectDeclarations((Message) iter.next()));
+        }
+		return nodeDeclaration;
 	}
 }

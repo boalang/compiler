@@ -13,14 +13,14 @@ message CommentsRoot {
 message ASTRoot {
 	/** The top-level namespaces in the file */
 	repeated Namespace namespaces = 1;
-	/** The imported namespaces and types */
-	repeated string imports = 2;
 	/** @exclude */
 	repeated string names = 3;
-	/** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED */
-	optional ChangeKind structural_change_kind = 4;
-	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
-	optional ChangeKind label_change_kind = 5;
+	/** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED */
+	optional ChangeKind change_kind = 4;
+	/** the key of the mapped node in the previous version */
+	optional int32 mapped_node = 6;
+	/** */
+	optional int32 key = 7;
 }
 
 /** A namespace (aka, package) in a source file */
@@ -37,10 +37,16 @@ message Namespace {
 	repeated Method methods = 5;
 	/** Expressions contained in this namespace */
 	repeated Expression expressions = 6;
-	/** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED */
-	optional ChangeKind structural_change_kind = 7;
-	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
-	optional ChangeKind label_change_kind = 8;
+	/** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED */
+	optional ChangeKind change_kind = 7;
+	/** the key of the mapped node in the previous version */
+	optional int32 mapped_node = 9;
+	/** */
+	optional int32 key = 10;
+	/** The nested namespaces */
+	repeated Namespace namespaces = 11;
+	/** The imported namespaces and types */
+	repeated string imports = 12;
 }
 
 /** A type declaration, such as a class or interface */
@@ -63,10 +69,16 @@ message Declaration {
 	repeated Declaration nested_declarations = 8;
 	/** @exclude TODO */
 	repeated Comment comments = 9;
-	/** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED */
-	optional ChangeKind structural_change_kind = 10;
-	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
-	optional ChangeKind label_change_kind = 11;
+	/** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED */
+	optional ChangeKind change_kind = 10;
+	/** the key of the mapped node in the previous version */
+	optional int32 mapped_node = 12;
+	/** */
+	optional int32 key = 13;
+	/** The fully qualified name of this type/interface */
+	optional string fully_qualified_name = 14;
+	/** the key of the declaring class in the same AST */
+	optional int32 declaring_type = 15;
 }
 
 /** The kinds of types in an AST */
@@ -100,19 +112,27 @@ enum TypeKind {
 message Type {
 	/** The name of the type */
 	required string name = 1;
+	/** The fully qualified name of this type/interface */
+	optional string fully_qualified_name = 2;
 	/** The kind of the type */
-	required TypeKind kind = 2;
+	required TypeKind kind = 3;
 	/** @exclude */
 	optional string id = 4;
-	/** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED */
-	optional ChangeKind structural_change_kind = 5;
-	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
-	optional ChangeKind label_change_kind = 6;
+	/** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED */
+	optional ChangeKind change_kind = 5;
+	/** the key of the mapped node in the previous version */
+	optional int32 mapped_node = 7;
+	/** the index of the file (in the list of files in the snapshot) containing the declaration of this type */
+	optional int32 declaration_file = 8;
+	/** the key of the node containing the declaration of this type in the AST of the file */
+	optional int32 declaration = 9;
+	/** */
+	optional int32 key = 10;
 }
 
 /** A method declaration */
 message Method {
-	/** The name of the method */
+	/** The name of the method. The fully qualified name can be constructed on the fly via its declaring class, name and arguments  */
 	optional string name = 1;
 	/** A list of all modifiers on the variable */
 	repeated Modifier modifiers = 2;
@@ -132,10 +152,14 @@ message Method {
 	repeated Statement statements = 7;
 	/** @exclude TODO */
 	repeated Comment comments = 8;
-	/** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED */
-	optional ChangeKind structural_change_kind = 9;
-	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
-	optional ChangeKind label_change_kind = 10;
+	/** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED */
+	optional ChangeKind change_kind = 9;
+	/** the key of the mapped node in the previous version */
+	optional int32 mapped_node = 11;
+	/** */
+	optional int32 key = 12;
+	/** The key of the type declaration declaring this method in the same AST */
+	optional int32 declaring_type = 13;
 }
 
 /** A variable declaration - can be a field, local, parameter, etc */
@@ -150,10 +174,14 @@ message Variable {
 	optional Expression initializer = 4;
 	/** @exclude TODO */
 	repeated Comment comments = 5;
-	/** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED */
-	optional ChangeKind structural_change_kind = 6;
-	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
-	optional ChangeKind label_change_kind = 7;
+	/** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED */
+	optional ChangeKind change_kind = 6;
+	/** the key of the mapped node in the previous version */
+	optional int32 mapped_node = 8;
+	/** */
+	optional int32 key = 9;
+	/** the key of the node containing the type declaration (in the same AST) declaring this field. null if this is a local variable */
+	optional int32 declaring_type = 10;
 }
 
 /** A single statement */
@@ -186,6 +214,7 @@ message Statement {
 		THROW = 17;
 		CATCH = 18;
 		EMPTY = 19;
+		FINALLY = 20;
 	}
 	/** The kind of statement */
 	required StatementKind kind = 1;
@@ -198,10 +227,12 @@ message Statement {
 	optional Variable variable_declaration = 7;
 	optional Declaration type_declaration = 8;
 	optional Expression expression = 9;
-	/** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED */
-	optional ChangeKind structural_change_kind = 10;
-	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
-	optional ChangeKind label_change_kind = 11;
+	/** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED */
+	optional ChangeKind change_kind = 10;
+	/** the key of the mapped node in the previous version */
+	optional int32 mapped_node = 12;
+	/** */
+	optional int32 key = 13;
 }
 
 /** A single expression */
@@ -283,10 +314,16 @@ message Expression {
 	optional Method lambda = 13;
 	/** @exclude */
 	optional bool no_parens = 14;
-	/** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED */
-	optional ChangeKind structural_change_kind = 15;
-	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
-	optional ChangeKind label_change_kind = 16;
+	/** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED */
+	optional ChangeKind change_kind = 15;
+	/** the key of the mapped node in the previous version */
+	optional int32 mapped_node = 17;
+	/** */
+	optional int32 key = 18;
+	/** The type declaring this method call or field access */
+	optional Type declaring_type = 19;
+	/** Type of the return value */
+	optional Type return_type = 20;
 }
 
 /** A single modifier */
@@ -339,10 +376,12 @@ message Modifier {
 	repeated Expression annotation_values = 5;
 	/** If the <code>kind</code> is <code>OTHER</code>, the modifier string from the source code */
 	optional string other = 6;
-	/** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED */
-	optional ChangeKind structural_change_kind = 7;
-	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
-	optional ChangeKind label_change_kind = 8;
+	/** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED */
+	optional ChangeKind change_kind = 7;
+	/** the key of the mapped node in the previous version */
+	optional int32 mapped_node = 9;
+	/** */
+	optional int32 key = 10;
 }
 
 /** @exclude */
@@ -361,10 +400,12 @@ message Comment {
 	required CommentKind kind = 1;
 	required string value = 2;
 	required PositionInfo position = 3;
-	/** Kind of change on the structure: UNCHANGED, ADDED, DELETED/REMOVED, MOVED */
-	optional ChangeKind structural_change_kind = 4;
-	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
-	optional ChangeKind label_change_kind = 5;
+	/** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED */
+	optional ChangeKind change_kind = 4;
+	/** the key of the mapped node in the previous version */
+	optional int32 mapped_node = 6;
+	/** */
+	optional int32 key = 7;
 }
 
 /** @exclude */

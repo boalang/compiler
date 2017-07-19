@@ -33,15 +33,18 @@ enum ChangeKind {
 
 	/** The label of the artifact or program entity/element was renamed */
 	RENAMED = 4;
+	
 	/** The artifact or program entity/element was moved to a different parent */
-	MOVED = 4;
+	MOVED = 5;
 
 	/** The artifact or program entity/element was copied from another one */
-	COPIED = 5;
+	COPIED = 6;
 	
 	/** The artifact or program entity/element was merged */
-	MERGED = 6;
+	MERGED = 7;
 	
 	/** The artifact or program entity/element was unchanged */
-	UNCHANGED = 7;
+	UNCHANGED = 8;
+	
+	UNMAPPED = 9;
 }

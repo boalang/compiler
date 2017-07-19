@@ -61,15 +61,25 @@ public class MapFileGen {
 			for (FileStatus file : files) {
 				path = file.getPath();
 				if (fs.isFile(path) && path.getName().startsWith("ast") && path.getName().endsWith(".seq")) {
+					Path dataCrc = new Path(file.getPath().getParent(), "." + MapFile.DATA_FILE_NAME + ".crc");
+					Path indexCrc = new Path(file.getPath().getParent(), "." + MapFile.INDEX_FILE_NAME + ".crc");
+					while (fs.exists(dataCrc))
+						fs.delete(dataCrc, false);
+					while (fs.exists(indexCrc))
+						fs.delete(indexCrc, false);
 					Path dataFile = new Path(path.getParent(), MapFile.DATA_FILE_NAME);
 					Path indexFile = new Path(path.getParent(), MapFile.INDEX_FILE_NAME);
+					while (fs.exists(dataFile))
+						fs.delete(dataFile, false);
 					while (fs.exists(indexFile))
 						fs.delete(indexFile, false);
 					fs.rename(path, dataFile);
 					System.out.println("fixing data file");
 					MapFile.fix(fs, dataFile.getParent(), LongWritable.class, BytesWritable.class, false, conf);
-					fs.delete(new Path(file.getPath().getParent(), "." + MapFile.DATA_FILE_NAME + ".crc"), false);
-					fs.delete(new Path(file.getPath().getParent(), "." + MapFile.INDEX_FILE_NAME + ".crc"), false);
+					while (fs.exists(dataCrc))
+						fs.delete(dataCrc, false);
+					while (fs.exists(indexCrc))
+						fs.delete(indexCrc, false);
 					break;
 				}
 			}

@@ -28,7 +28,8 @@
                         }
                      ]
                   }
-               ]
+               ],
+               "fully_qualified_name": "t"
             }
          ]
       }

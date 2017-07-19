@@ -24,6 +24,7 @@
 	<path id="project.class.path">
 		<fileset dir="lib">
 			<include name="**/*.jar"/>
+			<exclude name="checkstyle-6.19-all.jar"/>
 		</fileset>
 		<fileset dir="rtlib">
 			<include name="**/*.jar"/>

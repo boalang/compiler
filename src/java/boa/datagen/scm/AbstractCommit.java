@@ -38,12 +38,14 @@ import boa.types.Diff.ChangedFile.FileKind;
 import boa.types.Shared.ChangeKind;
 import boa.types.Shared.Person;
 import boa.datagen.DefaultProperties;
+import boa.datagen.treed.TreedMapper;
 import boa.datagen.util.FileIO;
 import boa.datagen.util.JavaScriptErrorCheckVisitor;
 import boa.datagen.util.JavaScriptVisitor;
 import boa.datagen.util.Properties;
 import boa.datagen.util.Java7Visitor;
 import boa.datagen.util.Java8Visitor;
+import boa.datagen.util.JavaASTUtil;
 import boa.datagen.util.JavaErrorCheckVisitor;
 
 /**
@@ -258,7 +260,7 @@ public abstract class AbstractCommit {
 				System.err.println("Accepted ES1: revision " + id + ": file " + path);
 		}
 		try {
-			if (astWriter.getLength() == len + 1)
+			if (astWriter.getLength() > len)
 				fb.setKey(len);
 			else
 				fb.setKey(-1);
@@ -283,6 +285,8 @@ public abstract class AbstractCommit {
 			try{
 				cu =  parser.parse(content, null, 0);
 			}catch(java.lang.IllegalArgumentException ex){
+				return false;
+			}catch(org.mozilla.javascript.EvaluatorException ex){
 				return false;
 			}
 
@@ -311,15 +315,12 @@ public abstract class AbstractCommit {
 					return false;
 				}
 
-				if (astWriter != null) {
-					try {
-					//	System.out.println("writing=" + count + "\t" + path);
-						astWriter.append(new LongWritable(astWriter.getLength()), new BytesWritable(ast.build().toByteArray()));
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				} else
-					fb.setAst(ast);
+				try {
+				//	System.out.println("writing=" + count + "\t" + path);
+					astWriter.append(new LongWritable(astWriter.getLength()), new BytesWritable(ast.build().toByteArray()));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 				// fb.setComments(comments);
 			}
 
@@ -342,9 +343,9 @@ public abstract class AbstractCommit {
 
 	private boolean parseJavaFile(final String path, final ChangedFile.Builder fb, final String content, final String compliance, final int astLevel, final boolean storeOnError, Writer astWriter) {
 		try {
-			final ASTParser parser = ASTParser.newParser(astLevel);
+			ASTParser parser = ASTParser.newParser(astLevel);
 			parser.setKind(ASTParser.K_COMPILATION_UNIT);
-			parser.setResolveBindings(true);
+//			parser.setResolveBindings(true);
 			parser.setSource(content.toCharArray());
 
 			final Map<?, ?> options = JavaCore.getOptions();
@@ -357,17 +358,32 @@ public abstract class AbstractCommit {
 			cu.accept(errorCheck);
 
 			if (!errorCheck.hasError || storeOnError) {
+				if (fb.getChange() == ChangeKind.MODIFIED && fb.getPreviousIndicesCount() == 1) {
+					AbstractCommit previousCommit = this.connector.revisions.get(fb.getPreviousVersions(0));
+					ChangedFile.Builder pcf = previousCommit.changedFiles.get(fb.getPreviousIndices(0));
+					String previousFilePath = pcf.getName();
+					String previousContent = previousCommit.getFileContents(previousFilePath);
+					FileKind fileKind = pcf.getKind();
+					parser = JavaASTUtil.buildParser(fileKind);
+					if (parser != null) {
+						parser.setSource(previousContent.toCharArray());
+						final ASTNode preCu = parser.createAST(null);
+						TreedMapper tm = new TreedMapper(preCu, cu);
+						tm.map();
+					}
+				}
 				final ASTRoot.Builder ast = ASTRoot.newBuilder();
+				Integer index = (Integer) cu.getProperty(Java7Visitor.PROPERTY_INDEX);
+				if (index != null)
+					ast.setKey(index);
 				//final CommentsRoot.Builder comments = CommentsRoot.newBuilder();
 				final Java7Visitor visitor;
 				if (astLevel == AST.JLS8)
-					visitor = new Java8Visitor(content, connector.nameIndices);
+					visitor = new Java8Visitor(content);
 				else
-					visitor = new Java7Visitor(content, connector.nameIndices);
+					visitor = new Java7Visitor(content);
 				try {
 					ast.addNamespaces(visitor.getNamespaces(cu));
-					for (final String s : visitor.getImports())
-						ast.addImports(s);
 					/*for (final Comment c : visitor.getComments())
 						comments.addComments(c);*/
 				} catch (final UnsupportedOperationException e) {
@@ -379,15 +395,11 @@ public abstract class AbstractCommit {
 					return false;
 				}
 				
-				if (astWriter != null) {
-					try {
-						astWriter.append(new LongWritable(astWriter.getLength()), new BytesWritable(ast.build().toByteArray()));
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
+				try {
+					astWriter.append(new LongWritable(astWriter.getLength()), new BytesWritable(ast.build().toByteArray()));
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
-				else
-					fb.setAst(ast);
 				//fb.setComments(comments);
 			}
 

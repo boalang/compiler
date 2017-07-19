@@ -104,4 +104,6 @@ message ChangedFile {
 	repeated int32 previous_versions = 8;
 	/** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits */
 	repeated int32 previous_indices = 9;
+	/** The key of the mapped AST */
+	optional uint64 mapped_key = 10;
 }

@@ -18,7 +18,7 @@ public class Forker {
 	private String content = "";
 	
 	public static void main(String args[]){
-		int numThreads = 3;
+		int numThreads = 1;
 		int totalFiles = new File(args[0]).listFiles().length;
 		int shareSize = totalFiles/numThreads;
 		int start = 0, end = 0;
@@ -63,13 +63,13 @@ public class Forker {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	//	this.getHttpResponseContent();
-	//	System.out.println(content);
+		this.getHttpResponseContent();
+		System.out.println(content);
 	}
 	
 	public void rename(String name, String originalOwner){
 		String url = urlHeader + username + "/" + name;
-		String newName = "{\"name\": " + "\"" + originalOwner + "_" + name + "\"}";
+		String newName = "{\"name\": " + "\"" + originalOwner + "___" + name + "\"}";
 		String[] command = {"curl" ,  "-u" , username +":" +  password , "-X" , "PATCH", "-d" , newName  , url };
 		ProcessBuilder process = new ProcessBuilder(command);
 		try {

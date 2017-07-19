@@ -40,9 +40,6 @@ public class ASTRootProtoTuple extends BoaProtoTuple {
 
 		names.put("namespaces", counter++);
 		members.add(new BoaProtoList(new NamespaceProtoTuple()));
-
-		names.put("imports", counter++);
-		members.add(new BoaProtoList(new BoaString()));
 	}
 
 	/**

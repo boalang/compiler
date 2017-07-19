@@ -221,6 +221,24 @@ public final class Diff {
      * </pre>
      */
     int getPreviousIndices(int index);
+
+    // optional uint64 mapped_key = 10;
+    /**
+     * <code>optional uint64 mapped_key = 10;</code>
+     *
+     * <pre>
+     ** The key of the mapped AST 
+     * </pre>
+     */
+    boolean hasMappedKey();
+    /**
+     * <code>optional uint64 mapped_key = 10;</code>
+     *
+     * <pre>
+     ** The key of the mapped AST 
+     * </pre>
+     */
+    long getMappedKey();
   }
   /**
    * Protobuf type {@code boa.types.ChangedFile}
@@ -408,6 +426,11 @@ public final class Diff {
                 previousIndices_.add(input.readInt32());
               }
               input.popLimit(limit);
+              break;
+            }
+            case 80: {
+              bitField0_ |= 0x00000040;
+              mappedKey_ = input.readUInt64();
               break;
             }
           }
@@ -1411,6 +1434,30 @@ public final class Diff {
       return previousIndices_.get(index);
     }
 
+    // optional uint64 mapped_key = 10;
+    public static final int MAPPED_KEY_FIELD_NUMBER = 10;
+    private long mappedKey_;
+    /**
+     * <code>optional uint64 mapped_key = 10;</code>
+     *
+     * <pre>
+     ** The key of the mapped AST 
+     * </pre>
+     */
+    public boolean hasMappedKey() {
+      return ((bitField0_ & 0x00000040) == 0x00000040);
+    }
+    /**
+     * <code>optional uint64 mapped_key = 10;</code>
+     *
+     * <pre>
+     ** The key of the mapped AST 
+     * </pre>
+     */
+    public long getMappedKey() {
+      return mappedKey_;
+    }
+
     private void initFields() {
       change_ = boa.types.Shared.ChangeKind.UNKNOWN;
       kind_ = boa.types.Diff.ChangedFile.FileKind.OTHER;
@@ -1421,6 +1468,7 @@ public final class Diff {
       changes_ = java.util.Collections.emptyList();
       previousVersions_ = java.util.Collections.emptyList();
       previousIndices_ = java.util.Collections.emptyList();
+      mappedKey_ = 0L;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -1489,6 +1537,9 @@ public final class Diff {
       for (int i = 0; i < previousIndices_.size(); i++) {
         output.writeInt32(9, previousIndices_.get(i));
       }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        output.writeUInt64(10, mappedKey_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -1548,6 +1599,10 @@ public final class Diff {
         }
         size += dataSize;
         size += 1 * getPreviousIndicesList().size();
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeUInt64Size(10, mappedKey_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1697,6 +1752,8 @@ public final class Diff {
         bitField0_ = (bitField0_ & ~0x00000080);
         previousIndices_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000100);
+        mappedKey_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000200);
         return this;
       }
 
@@ -1772,6 +1829,10 @@ public final class Diff {
           bitField0_ = (bitField0_ & ~0x00000100);
         }
         result.previousIndices_ = previousIndices_;
+        if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
+          to_bitField0_ |= 0x00000040;
+        }
+        result.mappedKey_ = mappedKey_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -1837,6 +1898,9 @@ public final class Diff {
             previousIndices_.addAll(other.previousIndices_);
           }
           onChanged();
+        }
+        if (other.hasMappedKey()) {
+          setMappedKey(other.getMappedKey());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -2738,6 +2802,55 @@ public final class Diff {
         return this;
       }
 
+      // optional uint64 mapped_key = 10;
+      private long mappedKey_ ;
+      /**
+       * <code>optional uint64 mapped_key = 10;</code>
+       *
+       * <pre>
+       ** The key of the mapped AST 
+       * </pre>
+       */
+      public boolean hasMappedKey() {
+        return ((bitField0_ & 0x00000200) == 0x00000200);
+      }
+      /**
+       * <code>optional uint64 mapped_key = 10;</code>
+       *
+       * <pre>
+       ** The key of the mapped AST 
+       * </pre>
+       */
+      public long getMappedKey() {
+        return mappedKey_;
+      }
+      /**
+       * <code>optional uint64 mapped_key = 10;</code>
+       *
+       * <pre>
+       ** The key of the mapped AST 
+       * </pre>
+       */
+      public Builder setMappedKey(long value) {
+        bitField0_ |= 0x00000200;
+        mappedKey_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional uint64 mapped_key = 10;</code>
+       *
+       * <pre>
+       ** The key of the mapped AST 
+       * </pre>
+       */
+      public Builder clearMappedKey() {
+        bitField0_ = (bitField0_ & ~0x00000200);
+        mappedKey_ = 0L;
+        onChanged();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:boa.types.ChangedFile)
     }
 
@@ -2764,29 +2877,29 @@ public final class Diff {
   static {
     java.lang.String[] descriptorData = {
       "\n\ndiff.proto\022\tboa.types\032\014shared.proto\032\ta" +
-      "st.proto\"\365\006\n\013ChangedFile\022%\n\006change\030\001 \002(\016" +
+      "st.proto\"\211\007\n\013ChangedFile\022%\n\006change\030\001 \002(\016" +
       "2\025.boa.types.ChangeKind\022-\n\004kind\030\002 \002(\0162\037." +
       "boa.types.ChangedFile.FileKind\022\014\n\004name\030\003" +
       " \002(\t\022\013\n\003key\030\004 \002(\004\022\037\n\003ast\030\005 \001(\0132\022.boa.typ" +
       "es.ASTRoot\022)\n\010comments\030\006 \001(\0132\027.boa.types" +
       ".CommentsRoot\022&\n\007changes\030\007 \003(\0162\025.boa.typ" +
       "es.ChangeKind\022\031\n\021previous_versions\030\010 \003(\005" +
-      "\022\030\n\020previous_indices\030\t \003(\005\"\313\004\n\010FileKind\022" +
-      "\t\n\005OTHER\020\000\022\n\n\006BINARY\020\001\022\010\n\004TEXT\020\002\022\007\n\003XML\020",
-      "\003\022\025\n\021SOURCE_JAVA_ERROR\020d\022\024\n\020SOURCE_JAVA_" +
-      "JLS2\020e\022\024\n\020SOURCE_JAVA_JLS3\020f\022\024\n\020SOURCE_J" +
-      "AVA_JLS4\020g\022\024\n\020SOURCE_JAVA_JLS8\020h\022\016\n\nJAVA" +
-      "_ERROR\020d\022\010\n\004JLS2\020e\022\010\n\004JLS3\020f\022\010\n\004JLS4\020g\022\010" +
-      "\n\004JLS8\020h\022\024\n\017SOURCE_CS_ERROR\020\310\001\022\022\n\rSOURCE" +
-      "_CS_CS1\020\311\001\022\022\n\rSOURCE_CS_CS2\020\312\001\022\022\n\rSOURCE" +
-      "_CS_CS3\020\313\001\022\022\n\rSOURCE_CS_CS4\020\314\001\022\022\n\rSOURCE" +
-      "_CS_CS5\020\315\001\022\r\n\010CS_ERROR\020\310\001\022\010\n\003CS1\020\311\001\022\010\n\003C" +
-      "S2\020\312\001\022\010\n\003CS3\020\313\001\022\010\n\003CS4\020\314\001\022\010\n\003CS5\020\315\001\022\024\n\017S" +
-      "OURCE_JS_ERROR\020\254\002\022\022\n\rSOURCE_JS_ES1\020\255\002\022\022\n",
-      "\rSOURCE_JS_ES2\020\256\002\022\022\n\rSOURCE_JS_ES3\020\257\002\022\022\n" +
-      "\rSOURCE_JS_ES5\020\260\002\022\022\n\rSOURCE_JS_ES6\020\261\002\022\022\n" +
-      "\rSOURCE_JS_ES7\020\262\002\022\022\n\rSOURCE_JS_ES8\020\263\002\022\r\n" +
-      "\010JS_ERROR\020\254\002\032\002\020\001B\002H\001"
+      "\022\030\n\020previous_indices\030\t \003(\005\022\022\n\nmapped_key" +
+      "\030\n \001(\004\"\313\004\n\010FileKind\022\t\n\005OTHER\020\000\022\n\n\006BINARY",
+      "\020\001\022\010\n\004TEXT\020\002\022\007\n\003XML\020\003\022\025\n\021SOURCE_JAVA_ERR" +
+      "OR\020d\022\024\n\020SOURCE_JAVA_JLS2\020e\022\024\n\020SOURCE_JAV" +
+      "A_JLS3\020f\022\024\n\020SOURCE_JAVA_JLS4\020g\022\024\n\020SOURCE" +
+      "_JAVA_JLS8\020h\022\016\n\nJAVA_ERROR\020d\022\010\n\004JLS2\020e\022\010" +
+      "\n\004JLS3\020f\022\010\n\004JLS4\020g\022\010\n\004JLS8\020h\022\024\n\017SOURCE_C" +
+      "S_ERROR\020\310\001\022\022\n\rSOURCE_CS_CS1\020\311\001\022\022\n\rSOURCE" +
+      "_CS_CS2\020\312\001\022\022\n\rSOURCE_CS_CS3\020\313\001\022\022\n\rSOURCE" +
+      "_CS_CS4\020\314\001\022\022\n\rSOURCE_CS_CS5\020\315\001\022\r\n\010CS_ERR" +
+      "OR\020\310\001\022\010\n\003CS1\020\311\001\022\010\n\003CS2\020\312\001\022\010\n\003CS3\020\313\001\022\010\n\003C" +
+      "S4\020\314\001\022\010\n\003CS5\020\315\001\022\024\n\017SOURCE_JS_ERROR\020\254\002\022\022\n",
+      "\rSOURCE_JS_ES1\020\255\002\022\022\n\rSOURCE_JS_ES2\020\256\002\022\022\n" +
+      "\rSOURCE_JS_ES3\020\257\002\022\022\n\rSOURCE_JS_ES5\020\260\002\022\022\n" +
+      "\rSOURCE_JS_ES6\020\261\002\022\022\n\rSOURCE_JS_ES7\020\262\002\022\022\n" +
+      "\rSOURCE_JS_ES8\020\263\002\022\r\n\010JS_ERROR\020\254\002\032\002\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -2798,7 +2911,7 @@ public final class Diff {
           internal_static_boa_types_ChangedFile_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_ChangedFile_descriptor,
-              new java.lang.String[] { "Change", "Kind", "Name", "Key", "Ast", "Comments", "Changes", "PreviousVersions", "PreviousIndices", });
+              new java.lang.String[] { "Change", "Kind", "Name", "Key", "Ast", "Comments", "Changes", "PreviousVersions", "PreviousIndices", "MappedKey", });
           return null;
         }
       };
