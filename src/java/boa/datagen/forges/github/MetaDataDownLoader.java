@@ -15,7 +15,7 @@ public class MetaDataDownLoader {
 	public final String repoNameDir;
 	public final String langNameDir;
 	public final String tokenFile;
-	public final static int MAX_NUM_THREADS = 10;
+	public final static int MAX_NUM_THREADS = 5;
 	public static THashSet<String> names = new THashSet<String>();
 	
 	public MetaDataDownLoader(String input, String output, String tokenFile) {

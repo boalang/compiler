@@ -14,20 +14,20 @@ public class MetaDataDownloadWorker implements Runnable {
 	private TokenList tokens;
 	private String repository_location;
 	private final String output;
-	JsonArray javarepos;
+	JsonArray reposArray;
 	private final String repo_url_header = "https://api.github.com/repos/";
 	String stateFile = "";
 	int Counter = 1;
 	final static int RECORDS_PER_FILE = 100;
 	final int startFileNumber;
 	final int endFileNumber;
-	THashSet<String> names = GitHubRepoMetaDataDownloader.names;
+	THashSet<String> names = MetaDataDownLoader.names;
 
 	public MetaDataDownloadWorker(String repoPath, String output, TokenList tokenList, int start, int end, int index) {
 		this.output = output;
 		this.tokens = tokenList;
 		this.repository_location = repoPath;
-		this.javarepos = new JsonArray();
+		this.reposArray = new JsonArray();
 		this.startFileNumber = start;
 		this.endFileNumber = end;
 	}
@@ -103,29 +103,29 @@ public class MetaDataDownloadWorker implements Runnable {
 
 	private void addRepo(String output, JsonObject repo) {
 		File fileToWriteJson = null;
-		this.javarepos.add(repo);
-		if (this.javarepos.size() % RECORDS_PER_FILE == 0) {
+		this.reposArray.add(repo);
+		if (this.reposArray.size() % RECORDS_PER_FILE == 0) {
 			fileToWriteJson = new File(output + "/Thread-" + Thread.currentThread().getId() + "-page-" + Counter + ".json");
 			while (fileToWriteJson.exists()) {
 				System.out.println("file thread-" + Thread.currentThread().getId() + "-page-" + Counter + " arleady exist");
 				Counter++;
 				fileToWriteJson = new File(output + "/Thread-" + Thread.currentThread().getId() + "-page-" + Counter + ".json");
 			}
-			FileIO.writeFileContents(fileToWriteJson, this.javarepos.toString());
+			FileIO.writeFileContents(fileToWriteJson, this.reposArray.toString());
 			System.out.println(Thread.currentThread().getId() + " " + Counter++);
-			this.javarepos = new JsonArray();
+			this.reposArray = new JsonArray();
 		}
 	}
 
 	public void writeRemainingRepos(String output) {
 		File fileToWriteJson = null;
-		if (this.javarepos.size() > 0) {
+		if (this.reposArray.size() > 0) {
 			fileToWriteJson = new File(output + "/Thread-" + Thread.currentThread().getId() + "-page-" + Counter + ".json");
 			while (fileToWriteJson.exists()) {
 				Counter++;
 				fileToWriteJson = new File(output + "/Thread-" + Thread.currentThread().getId() + "-page-" + Counter + ".json");
 			}
-			FileIO.writeFileContents(fileToWriteJson, this.javarepos.toString());
+			FileIO.writeFileContents(fileToWriteJson, this.reposArray.toString());
 			System.out.println(Thread.currentThread().getId() + " " + Counter++);
 		}
 	}
