@@ -907,13 +907,10 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(ConstructorInvocation node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
-		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
-		if (index != null)
-			b.setKey(index);
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.EXPRESSION);
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
-		index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
 		if (index != null)
 			eb.setKey(index);
 		if (node.resolveConstructorBinding() != null) {
@@ -1178,13 +1175,10 @@ public class Java7Visitor extends ASTVisitor {
 	@Override
 	public boolean visit(SuperConstructorInvocation node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
-		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
-		if (index != null)
-			b.setKey(index);
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.EXPRESSION);
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
-		index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
+		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
 		if (index != null)
 			eb.setKey(index);
 		if (node.resolveConstructorBinding() != null) {
