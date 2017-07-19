@@ -6,3 +6,4 @@ output/
 /bin/
 /.classpath
 /.project
+src/java/boa/datagen/misc
