@@ -348,7 +348,7 @@ public class TestTypeFullyQualifiedName {
 	}
 
 	@Test
-	public void VarDeclTypeName() throws IOException { //FIXME
+	public void VarDeclTypeName() throws IOException { 
 		Writable key = new Text();
 		BytesWritable val = new BytesWritable();
 		while (pr.next(key, val)) {
@@ -366,7 +366,7 @@ public class TestTypeFullyQualifiedName {
 						ar.next(astkey, val);
 						bytes = val.getBytes();
 						ASTRoot root = ASTRoot.parseFrom(CodedInputStream.newInstance(bytes, 0, val.getLength()));
-					//	System.out.println(root);
+						System.out.println(root);
 						ProtoMessageVisitor v = new ProtoMessageVisitor() {
 							@Override
 							public boolean preVisit(Message message) {
@@ -374,31 +374,31 @@ public class TestTypeFullyQualifiedName {
 									Declaration decl = (Declaration) message;
 									for (Variable var : decl.getFieldsList()) {
 										String name = var.getName();
-										if (var.equals("repoNameDir")) {
+										if (name.equals("repoNameDir")) {
 											System.out.println(var.getName() + " is " + var.getVariableType().getFullyQualifiedName() + " is java.lang.String");
 											assertEquals("java.lang.String", var.getVariableType().getFullyQualifiedName());
 											System.out.println(var.getName() + " declaring is " + decl.getFullyQualifiedName() 
 												+ " is boa.datagen.forges.github.GithubLanguageDownloadMaster");
 											assertEquals("boa.datagen.forges.github.GithubLanguageDownloadMaster", decl.getFullyQualifiedName());
-										} else if (var.equals("langNameDir")) {
+										} else if (name.equals("langNameDir")) {
 											System.out.println(var.getName() + " is " + var.getVariableType().getFullyQualifiedName() + " is java.lang.String");
 											assertEquals("java.lang.String", var.getVariableType().getFullyQualifiedName());
 											System.out.println(var.getName() + " declaring type is " + decl.getFullyQualifiedName()
 													+ " is boa.datagen.forges.github.GithubLanguageDownloadMaster");
 											assertEquals("boa.datagen.forges.github.GithubLanguageDownloadMaster", decl.getFullyQualifiedName());
-										} else if (var.equals("tokenFile")) {
+										} else if (name.equals("tokenFile")) {
 											System.out.println(var.getName() + " is " + var.getVariableType().getFullyQualifiedName() + " is java.lang.String");
 											assertEquals("java.lang.String", var.getVariableType().getFullyQualifiedName());
 											System.out.println(var.getName() + " declaring type is " + decl.getFullyQualifiedName()
 													+ " is boa.datagen.forges.github.GithubLanguageDownloadMaster");
 											assertEquals("boa.datagen.forges.github.GithubLanguageDownloadMaster", decl.getFullyQualifiedName());
-										} else if (var.equals("MAX_NUM_THREADS")) {
+										} else if (name.equals("MAX_NUM_THREADS")) {
 											System.out.println(var.getName() + " is " + var.getVariableType().getName() + " is int");
 											assertEquals("int", var.getVariableType().getName());
 											System.out.println(var.getName() + " declaring type is " + decl.getFullyQualifiedName()
 													+ " is boa.datagen.forges.github.GithubLanguageDownloadMaster");
 											assertEquals("boa.datagen.forges.github.GithubLanguageDownloadMaster", decl.getFullyQualifiedName());
-										} else if (var.equals("names")) {
+										} else if (name.equals("names")) {
 											System.out.println(var.getName() + " is " + var.getVariableType().getFullyQualifiedName() + " is gnu.trove.set.hash.THashSet<String>");
 											// FIXME assertEquals("gnu.trove.set.hash.THashSet<String>", var.getVariableType().getFullyQualifiedName());
 											System.out.println(var.getName() + " declaring type is " + decl.getFullyQualifiedName()
@@ -414,80 +414,80 @@ public class TestTypeFullyQualifiedName {
 									if (exp.getKind().equals(Expression.ExpressionKind.VARDECL)) {
 										for (Variable var : exp.getVariableDeclsList()) {
 											String name = var.getName();
-											if (var.equals("outputDir")) {
+											if (name.equals("outputDir")) {
 												System.out.println(var.getName() + " " + var.getVariableType().getFullyQualifiedName() + " is java.io.File");
 												assertEquals("java.io.File", var.getVariableType().getFullyQualifiedName());
-											} else if (var.equals("repoNameDir")) {
+											} else if (name.equals("repoNameDir")) {
 												System.out.println(var.getName() + " is " + var.getVariableType().getFullyQualifiedName() + " is java.lang.String");
 												assertEquals("java.lang.String", var.getVariableType().getFullyQualifiedName());
 												System.out.println(var.getName() + " declaring is " + var.getVariableType().getFullyQualifiedName()
 													+ " is boa.datagen.forges.github.GithubLanguageDownloadMaster");
 												assertEquals("boa.datagen.forges.github.GithubLanguageDownloadMaster", exp.getDeclaringType().getFullyQualifiedName());
-											} else if (var.equals("langNameDir")) {
+											} else if (name.equals("langNameDir")) {
 												System.out.println(var.getName() + " is " + var.getVariableType().getFullyQualifiedName() + " is java.lang.String");
 												assertEquals("java.lang.String", var.getVariableType().getFullyQualifiedName());
 												System.out.println(var.getName() + " declaring type is " + exp.getDeclaringType().getFullyQualifiedName()
 														+ " is boa.datagen.forges.github.GithubLanguageDownloadMaster");
 												assertEquals("boa.datagen.forges.github.GithubLanguageDownloadMaster", exp.getDeclaringType().getFullyQualifiedName());
-											} else if (var.equals("tokenFile")) {
+											} else if (name.equals("tokenFile")) {
 												System.out.println(var.getName() + " is " + var.getVariableType().getFullyQualifiedName() + " is java.lang.String");
 												assertEquals("java.lang.String", var.getVariableType().getFullyQualifiedName());
 												System.out.println(var.getName() + " declaring type is " + exp.getDeclaringType().getFullyQualifiedName()
 														+ " is boa.datagen.forges.github.GithubLanguageDownloadMaster");
 												assertEquals("boa.datagen.forges.github.GithubLanguageDownloadMaster", exp.getDeclaringType().getFullyQualifiedName());
-											} else if (var.equals("MAX_NUM_THREADS")) {
+											} else if (name.equals("MAX_NUM_THREADS")) {
 												System.out.println(var.getName() + " is " + var.getVariableType().getName() + " is int");
 												assertEquals("int", var.getVariableType().getName());
 												System.out.println(var.getName() + " declaring type is " + exp.getDeclaringType().getFullyQualifiedName()
 														+ " is boa.datagen.forges.github.GithubLanguageDownloadMaster");
 												assertEquals("boa.datagen.forges.github.GithubLanguageDownloadMaster", exp.getDeclaringType().getFullyQualifiedName());
-											} else if (var.equals("names")) {
+											} else if (name.equals("names")) {
 												System.out.println(var.getName() + " is " + var.getVariableType().getFullyQualifiedName() + " is gnu.trove.set.hash.THashSet<String>");
 												// FIXME assertEquals("gnu.trove.set.hash.THashSet<String>", var.getVariableType().getFullyQualifiedName());
 												System.out.println(var.getName() + " declaring type is " + exp.getDeclaringType().getFullyQualifiedName()
 														+ " is boa.datagen.forges.github.GithubLanguageDownloadMaster");
 												assertEquals("boa.datagen.forges.github.GithubLanguageDownloadMaster", exp.getDeclaringType().getFullyQualifiedName());
-											} else if (var.equals("master")) {
+											} else if (name.equals("master")) {
 												System.out.println(var.getName() + " " + var.getVariableType().getFullyQualifiedName()
 														+ " is boa.datagen.forges.github.GithubLanguageDownloadMaster");
 												assertEquals("boa.datagen.forges.github.GithubLanguageDownloadMaster", var.getVariableType().getFullyQualifiedName());
 											} else if (var.equals("start")) {
 												System.out.println(var.getName() + " " + var.getVariableType().getName() + " is int");
 												assertEquals("int", var.getVariableType().getName());
-											} else if (var.equals("end")) {
+											} else if (name.equals("end")) {
 												System.out.println(var.getName() + " " + var.getVariableType().getName() + " is int");
 												assertEquals("int", var.getVariableType().getName());
-											} else if (var.equals("shareSize")) {
+											} else if (name.equals("shareSize")) {
 												System.out.println(var.getName() + " " + var.getVariableType().getName() + " is int");
 												assertEquals("int", var.getVariableType().getName());
-											} else if (var.equals("i")) {
+											} else if (name.equals("i")) {
 												System.out.println(var.getName() + " " + var.getVariableType().getName() + " is int");
 												assertEquals("int", var.getVariableType().getName());
-											} else if (var.equals("tokens")) {
+											} else if (name.equals("tokens")) {
 												System.out.println(var.getName() + " " + var.getVariableType().getFullyQualifiedName()
 														+ " is boa.datagen.forges.github.TokenList");
 												assertEquals("boa.datagen.forges.github.TokenList", var.getVariableType().getFullyQualifiedName());
-											} else if (var.equals("worker")) {
+											} else if (name.equals("worker")) {
 												System.out.println(var.getName() + " " + var.getVariableType().getFullyQualifiedName()
 														+ " is boa.datagen.forges.github.LanguageDownloadWorker");
 												assertEquals("boa.datagen.forges.github.LanguageDownloadWorker", var.getVariableType().getFullyQualifiedName());
-											} else if (var.equals("dir")) {
+											} else if (name.equals("dir")) {
 												System.out.println(var.getName() + " " + var.getVariableType().getFullyQualifiedName() + " is java.io.File");
 												assertEquals("java.io.File", var.getVariableType().getFullyQualifiedName());
-											} else if (var.equals("files")) {
+											} else if (name.equals("files")) {
 												System.out.println(var.getName() + " " + var.getVariableType().getFullyQualifiedName() + " is java.io.File[]");
 												assertEquals("java.io.File[]", var.getVariableType().getFullyQualifiedName());
-											} else if (var.equals("content")) {
+											} else if (name.equals("content")) {
 												System.out.println(var.getName() + " " + var.getVariableType().getFullyQualifiedName() + " is java.lang.String");
 												assertEquals("java.lang.String", var.getVariableType().getFullyQualifiedName());
-											} else if (var.equals("repos")) {
+											} else if (name.equals("repos")) {
 												System.out.println(var.getName() + " " + var.getVariableType().getFullyQualifiedName() + " is com.google.gson");
 												System.out.println(var.getName() + " is " + var.getVariableType().getName());
 												// FIXME assertEquals("com.google.gson", var.getVariableType().getFullyQualifiedName());
-											} else if (var.equals("parser")) {
+											} else if (name.equals("parser")) {
 												System.out.println(var.getName() + " " + var.getVariableType().getFullyQualifiedName() + " is com.google.gson");
 												// FXIME assertEquals("com.google.gson", var.getVariableType().getFullyQualifiedName());
-											} else if (var.equals("repo")) {
+											} else if (name.equals("repo")) {
 												System.out.println(var.getName() + " " + var.getVariableType().getFullyQualifiedName() + " is com.google.gson");
 												// FIXME assertEquals("com.google.gson", var.getVariableType().getFullyQualifiedName());
 											} else {
