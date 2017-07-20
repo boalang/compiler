@@ -820,17 +820,6 @@ public class Java7Visitor extends ASTVisitor {
 		b.setReturnType(tb.build());
 		if (node.getDefault() != null) {
 			boa.types.Ast.Statement.Builder sb = boa.types.Ast.Statement.newBuilder();
-			index = (Integer) node.getDefault().getProperty(Java7Visitor.PROPERTY_INDEX);
-			if (index != null) {
-				sb.setKey(index);
-				ChangeKind status = (ChangeKind) node.getDefault().getProperty(TreedConstants.PROPERTY_STATUS);
-				if (status != null) {
-					sb.setChangeKind(status);
-					ASTNode mappedNode = (ASTNode) node.getDefault().getProperty(TreedConstants.PROPERTY_MAP);
-					if (mappedNode != null)
-						sb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
-				}
-			}
 			sb.setKind(boa.types.Ast.Statement.StatementKind.EXPRESSION);
 			node.getDefault().accept(this);
 			sb.setExpression(expressions.pop());
