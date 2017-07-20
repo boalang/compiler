@@ -423,25 +423,28 @@ public abstract class AbstractCommit {
 					return false;
 				}
 				long len = astWriter.getLength();
-				if (preAst != null) {
-					try {
-						astWriter.append(new LongWritable(astWriter.getLength()), new BytesWritable(preAst.build().toByteArray()));
-					} catch (IOException e) {
-						if (debug)
-							e.printStackTrace();
-					}
-				}
-				if (astWriter.getLength() > len)
-					fb.setMappedKey(len);
-				else
-					fb.setMappedKey(-1);
 				try {
-					astWriter.append(new LongWritable(astWriter.getLength()), new BytesWritable(ast.build().toByteArray()));
+					astWriter.append(new LongWritable(len), new BytesWritable(ast.build().toByteArray()));
 				} catch (IOException e) {
 					if (debug)
 						e.printStackTrace();
+					len = Long.MAX_VALUE;
 				}
 				//fb.setComments(comments);
+				long plen = astWriter.getLength();
+				if (preAst != null && plen > len) {
+					try {
+						astWriter.append(new LongWritable(plen), new BytesWritable(preAst.build().toByteArray()));
+					} catch (IOException e) {
+						if (debug)
+							e.printStackTrace();
+						plen = Long.MAX_VALUE;
+					}
+				}
+				if (preAst != null && astWriter.getLength() > plen)
+					fb.setMappedKey(plen);
+				else
+					fb.setMappedKey(-1);
 			}
 
 			return !errorCheck.hasError;
