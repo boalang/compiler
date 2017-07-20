@@ -381,7 +381,7 @@ public abstract class AbstractCommit {
 							ChangeKind status = (ChangeKind) preCu.getProperty(TreedConstants.PROPERTY_STATUS);
 							if (status != null)
 								preAst.setChangeKind(status);
-							preAst.setMappedNode((int) cu.getProperty(TreedConstants.PROPERTY_INDEX));
+							preAst.setMappedNode((Integer) cu.getProperty(TreedConstants.PROPERTY_INDEX));
 							final Java7Visitor preVisitor;
 							if (preCu.getAST().apiLevel() == AST.JLS8)
 								preVisitor = new Java8Visitor(previousContent);
@@ -401,7 +401,7 @@ public abstract class AbstractCommit {
 						ChangeKind status = (ChangeKind) cu.getProperty(TreedConstants.PROPERTY_STATUS);
 						if (status != null)
 							ast.setChangeKind(status);
-						ast.setMappedNode((int) preCu.getProperty(TreedConstants.PROPERTY_INDEX));
+						ast.setMappedNode((Integer) preCu.getProperty(TreedConstants.PROPERTY_INDEX));
 					}
 				}
 				//final CommentsRoot.Builder comments = CommentsRoot.newBuilder();
