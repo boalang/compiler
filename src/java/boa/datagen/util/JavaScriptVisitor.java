@@ -177,7 +177,23 @@ public class JavaScriptVisitor implements NodeVisitor {
 			vb.setName(Token.typeToName(p.getType()));
 			boa.types.Ast.Type.Builder tp = boa.types.Ast.Type.newBuilder();
 			String name = "";
-			name = ((Name)p).getIdentifier();
+			if ( p instanceof Name)
+				name = ((Name) p).getIdentifier();
+			else if (p instanceof NumberLiteral)
+				name = ((NumberLiteral) p).getValue();
+			else if (p instanceof StringLiteral) 
+				name = ((StringLiteral) p).getValue();
+			else if (p instanceof RegExpLiteral)
+				name = ((RegExpLiteral) p).getValue();
+			else if (p instanceof XmlString)
+				name = ((XmlString) p).getXml();
+			else {
+				p.visit(this);
+				Statement.Builder sb = Statement.newBuilder();
+				sb.setKind(Statement.StatementKind.EXPRESSION);
+				sb.setExpression(expressions.pop()); //FIXME
+				b.addStatements(sb.build());
+			}
 			tp.setName(name);
 			tp.setKind(boa.types.Ast.TypeKind.OTHER);
 			vb.setVariableType(tp.build());
@@ -911,7 +927,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 	public boolean accept(XmlExpression node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.OTHER);
-		node.getExpression();
+		node.getExpression().visit(this);
 		b.addExpressions(expressions.pop());
 		expressions.push(b.build());
 		return false;
@@ -1229,7 +1245,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 			return false;
 		}
 		if (node instanceof XmlExpression){
-			this.accept((XmlString)node);
+			this.accept((XmlExpression)node);
 			return false;
 		}
 		if (node instanceof XmlRef){
