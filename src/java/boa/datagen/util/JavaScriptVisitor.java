@@ -37,6 +37,7 @@ import boa.types.Ast.Type;
 import boa.types.Ast.TypeKind;
 import boa.types.Ast.Variable;
 import boa.types.Ast.VariableOrBuilder;
+import boa.types.Ast.Expression.ExpressionKind;
 
 /**
  * @author rdyer
@@ -165,7 +166,6 @@ public class JavaScriptVisitor implements NodeVisitor {
 	}
 
 	public boolean accept(FunctionNode node) {
-		List<boa.types.Ast.Method> list = methods.peek();
 		Method.Builder b = Method.newBuilder();
 		b.setName(node.getName());
 		Type.Builder tb = Type.newBuilder();
@@ -196,7 +196,13 @@ public class JavaScriptVisitor implements NodeVisitor {
 				b.addStatements(sb.build());
 			}
 		}
-		list.add(b.build());
+		if (node.getFunctionType() == FunctionNode.FUNCTION_EXPRESSION || node.getFunctionType() == FunctionNode.FUNCTION_EXPRESSION_STATEMENT){
+			Expression.Builder eb = Expression.newBuilder();
+			eb.setKind(ExpressionKind.OTHER);//FIXME
+			eb.setLambda(b.build());//FIXME 
+			expressions.push(eb.build());
+		}else
+			methods.peek().add(b.build());
 		return false;
 	}
 
@@ -352,7 +358,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 						b.setLambda(m);
 				} else {
 					target.visit(this);
-					b.addMethodArgs(expressions.pop());
+					b.addExpressions(expressions.pop());
 				}
 			}
 		}
@@ -584,8 +590,8 @@ public class JavaScriptVisitor implements NodeVisitor {
 		tb.setName(node.toSource());// typeName(node.getType()));
 		tb.setKind(boa.types.Ast.TypeKind.OTHER);
 		b.setNewType(tb.build());
-		for (Object e : node.getElements()) {
-			((AstNode) e).visit(this);
+		for (AstNode e : node.getElements()) {
+			e.visit(this);
 			b.addExpressions(expressions.pop());
 		}
 		expressions.push(b.build());
@@ -646,16 +652,8 @@ public class JavaScriptVisitor implements NodeVisitor {
 		node.getLeft().visit(this);
 		b.addExpressions(expressions.pop());
 		if (node.getRight() != null) {
-			AstNode exp = node.getRight();
-			if (exp instanceof FunctionNode) {
-				methods.push(new ArrayList<Method>());
-				exp.visit(this);
-				for (Method m : methods.pop())// FIXME add repeated Method methods to Expression?
-					b.setLambda(m);
-			} else {
-				exp.visit(this);
-				b.addMethodArgs(expressions.pop());
-			}
+			node.getRight().visit(this);
+			b.addExpressions(expressions.pop());
 		}
 		if (node.getOperator() == Token.ASSIGN)
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.ASSIGN);
@@ -786,11 +784,11 @@ public class JavaScriptVisitor implements NodeVisitor {
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.NEW);
 		node.getTarget().visit(this);
 		b.addExpressions(expressions.pop());
-		for (AstNode arg: node.getArguments()){
+		for (AstNode arg : node.getArguments()) {
 			arg.visit(this);
 			b.addMethodArgs(expressions.pop());
 		}
-		if (node.getInitializer() != null){
+		if (node.getInitializer() != null) {
 			node.getInitializer().visit(this);
 			b.addExpressions(expressions.pop());
 		}
@@ -818,16 +816,8 @@ public class JavaScriptVisitor implements NodeVisitor {
 			b.addExpressions(expressions.pop());
 		}
 		if (node.getRight() != null) {
-			AstNode exp = node.getRight();
-			if (exp instanceof FunctionNode) {
-				methods.push(new ArrayList<Method>());
-				exp.visit(this);
-				for (Method m : methods.pop())// FIXME add repeated Method methods to Expression?
-					b.setLambda(m);
-			} else {
-				exp.visit(this);
-				b.addMethodArgs(expressions.pop());
-			}
+			node.getRight().visit(this);
+			b.addExpressions(expressions.pop());
 		}
 		expressions.push(b.build());
 		return false;
@@ -844,16 +834,8 @@ public class JavaScriptVisitor implements NodeVisitor {
 	public boolean accept(ParenthesizedExpression node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.PAREN);
-		AstNode exp = node.getExpression();
-		if (exp instanceof FunctionNode) {
-			methods.push(new ArrayList<Method>());
-			exp.visit(this);
-			for (Method m : methods.pop())// FIXME add repeated Method methods to Expression?
-				b.setLambda(m);
-		} else {
-			exp.visit(this);
-			b.addMethodArgs(expressions.pop());
-		}
+		node.getExpression().visit(this);
+		b.addExpressions(expressions.pop());
 		expressions.push(b.build());
 		return true;
 	}
@@ -943,6 +925,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 			frag.visit(this);
 			b.addExpressions(expressions.pop());
 		}
+		expressions.push(b.build());
 		return false;
 	}
 
@@ -1105,6 +1088,10 @@ public class JavaScriptVisitor implements NodeVisitor {
 			this.accept((ForInLoop)node);
 			return false;
 		}
+		if (node instanceof ForLoop){
+			this.accept((ForLoop)node);
+			return false;
+		}
 		if (node instanceof NewExpression){
 			this.accept((NewExpression)node);
 			return false;
@@ -1222,7 +1209,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 			return false;
 		}
 		if (node instanceof WithStatement){
-			this.accept((WhileLoop) node);
+			this.accept((WithStatement) node);
 			return false;
 		}
 		if (node instanceof XmlElemRef){
@@ -1234,6 +1221,14 @@ public class JavaScriptVisitor implements NodeVisitor {
 			return false;
 		}
 		if (node instanceof XmlString){
+			this.accept((XmlString)node);
+			return false;
+		}
+		if (node instanceof XmlLiteral){
+			this.accept((XmlLiteral)node);
+			return false;
+		}
+		if (node instanceof XmlExpression){
 			this.accept((XmlString)node);
 			return false;
 		}
