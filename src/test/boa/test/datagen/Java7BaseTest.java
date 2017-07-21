@@ -224,7 +224,7 @@ public class Java7BaseTest extends BaseTest {
 				if (found)
 					return false;
 				Object v = getFieldValue(message, "key");
-				if (v != null && (int) v == nodeId) {
+				if (v != null && (Integer) v == nodeId) {
 					m[0] = message;
 					found = true;
 					return false;
