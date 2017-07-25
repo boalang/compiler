@@ -43,8 +43,6 @@ import boa.types.Ast.Expression.ExpressionKind;
  * @author rdyer
  */
 public class JavaScriptVisitor implements NodeVisitor {
-	private int count = 0;
-	private boolean debug = false;
 
 	private HashMap<String, Integer> nameIndices;
 
@@ -113,8 +111,6 @@ public class JavaScriptVisitor implements NodeVisitor {
 				b.addExpressions(expressions.pop());
 			} else {
 				statements.push(new ArrayList<boa.types.Ast.Statement>());
-				if (this.src.contains("debugger;"))
-					debug = true;
 				((AstNode) s).visit(this);
 				for (boa.types.Ast.Statement d : statements.pop())
 					b.addStatements(d);
