@@ -233,6 +233,7 @@ message Statement {
 	optional int32 mapped_node = 12;
 	/** */
 	optional int32 key = 13;
+	repeated Method functions = 14;
 }
 
 /** A single expression */
@@ -324,6 +325,7 @@ message Expression {
 	optional Type declaring_type = 19;
 	/** Type of the return value */
 	optional Type return_type = 20;
+	optional Method function = 21;
 }
 
 /** A single modifier */
