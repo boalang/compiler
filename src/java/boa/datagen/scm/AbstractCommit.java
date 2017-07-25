@@ -21,6 +21,7 @@ package boa.datagen.scm;
 import java.io.*;
 import java.util.*;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.SequenceFile.Writer;
@@ -259,6 +260,15 @@ public abstract class AbstractCommit {
 					System.err.println("Accepted ES2: revision " + id + ": file " + path);
 			} else if (debugparse)
 				System.err.println("Accepted ES1: revision " + id + ": file " + path);
+		} else {
+			final String content = getFileContents(path);
+			if (StringUtils.isAsciiPrintable(content)) {
+				try {
+					astWriter.append(new LongWritable(len), new BytesWritable(content.getBytes()));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		try {
 			if (astWriter.getLength() > len)
