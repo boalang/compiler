@@ -215,6 +215,7 @@ message Statement {
 		CATCH = 18;
 		EMPTY = 19;
 		FINALLY = 20;
+		GENERATOR = 21;		
 	}
 	/** The kind of statement */
 	required StatementKind kind = 1;
@@ -297,6 +298,7 @@ message Expression {
 		LAMBDA = 51;
 		/** @exclude TODO */
 		ANON_METHOD = 52;
+		YIELD = 53;
 	}
 	/** The kind of expression */
 	required ExpressionKind kind = 1;

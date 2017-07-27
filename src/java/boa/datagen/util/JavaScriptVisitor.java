@@ -92,8 +92,6 @@ public class JavaScriptVisitor implements NodeVisitor {
 
 	public boolean accept(AstRoot node) {
 		String pkg = "";
-		if (node.getSourceName() != null)
-			pkg = node.getSourceName(); // getPackage();
 		b.setName(pkg);
 		if (node.getComments() != null) {
 			for (Object c : node.getComments())
@@ -364,6 +362,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 		return false;
 	}
 
+	/*
 	public boolean accept(ErrorNode node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
@@ -371,7 +370,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 		list.add(b.build());
 		return false;
 	}
-
+*/
 	public boolean accept(ForInLoop node) {
 		boa.types.Ast.Statement.Builder s = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
@@ -436,8 +435,12 @@ public class JavaScriptVisitor implements NodeVisitor {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.METHODCALL);
 		if (node.getTarget() != null) {
-			node.getTarget().visit(this);
-			b.addExpressions(expressions.pop());
+			if (node.getTarget() instanceof Name) {
+				b.setMethod(((Name) node.getTarget()).getIdentifier());
+			} else {
+				node.getTarget().visit(this);
+				b.addExpressions(expressions.pop());
+			}
 		}
 		for (AstNode a : node.getArguments()) {
 			a.visit(this);
@@ -576,7 +579,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 	public boolean accept(SwitchCase node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
-		b.setKind(boa.types.Ast.Statement.StatementKind.CASE);
+		b.setKind(boa.types.Ast.Statement.StatementKind.SWITCH);
 		if (node.getExpression() != null) {
 			node.getExpression().visit(this);
 			b.setExpression(expressions.pop());
@@ -698,7 +701,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 
 	public boolean accept(GeneratorExpression node) {
 		Statement.Builder b = boa.types.Ast.Statement.newBuilder();
-		b.setKind(boa.types.Ast.Statement.StatementKind.OTHER);
+		b.setKind(boa.types.Ast.Statement.StatementKind.GENERATOR);
 		List<boa.types.Ast.Statement> list = statements.peek();
 		node.getResult().visit(this);
 		b.addUpdates(expressions.pop());
@@ -744,7 +747,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 
 	public boolean accept(ArrayLiteral node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
-		b.setKind(boa.types.Ast.Expression.ExpressionKind.LITERAL);
+		b.setKind(boa.types.Ast.Expression.ExpressionKind.NEWARRAY);
 		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 		tb.setName("");// typeName(node.getType()));
 		tb.setKind(boa.types.Ast.TypeKind.OTHER);
@@ -795,13 +798,15 @@ public class JavaScriptVisitor implements NodeVisitor {
 
 	public boolean accept(VariableInitializer node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
-		b.setKind(boa.types.Ast.Expression.ExpressionKind.OTHER);
+	//	b.setKind(boa.types.Ast.Expression.ExpressionKind.ASSIGN);//  OTHER);// FIXME
 		node.getTarget().visit(this);
 		b.addExpressions(expressions.pop());
 		if (node.getInitializer() != null) {
 			node.getInitializer().visit(this);
 			b.addExpressions(expressions.pop());
-		}
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.ASSIGN);
+		} else
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.OTHER);
 		expressions.push(b.build());
 		return false;
 	}
@@ -1043,7 +1048,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 
 	public boolean accept(Yield node) {
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
-		eb.setKind(boa.types.Ast.Expression.ExpressionKind.OTHER);
+		eb.setKind(boa.types.Ast.Expression.ExpressionKind.YIELD);
 		if (node.getValue() != null) {
 			node.getValue().visit(this);
 			eb.addExpressions(expressions.pop());
