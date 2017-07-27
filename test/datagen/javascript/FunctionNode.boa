@@ -1,0 +1,48 @@
+namespaces {
+  name: ""
+  methods {
+    name: "myFunction"
+    return_type {
+      name: ""
+      kind: OTHER
+    }
+    statements {
+      kind: BLOCK
+      statements {
+        kind: EXPRESSION
+        expression {
+          kind: ASSIGN
+          expressions {
+            kind: OTHER
+            expressions {
+              kind: METHODCALL
+              expressions {
+                kind: OTHER
+                expressions {
+                  kind: OTHER
+                  variable: "document"
+                }
+                expressions {
+                  kind: OTHER
+                  variable: "getElementById"
+                }
+              }
+              method_args {
+                kind: LITERAL
+                literal: "demo"
+              }
+            }
+            expressions {
+              kind: OTHER
+              variable: "innerHTML"
+            }
+          }
+          expressions {
+            kind: LITERAL
+            literal: "Hello World!"
+          }
+        }
+      }
+    }
+  }
+}

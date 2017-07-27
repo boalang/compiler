@@ -1,0 +1,31 @@
+namespaces {
+  name: ""
+  statements {
+    kind: EXPRESSION
+    expression {
+      kind: VARDECL
+      variable_decls {
+        name: "x"
+        variable_type {
+          name: ""
+          kind: OTHER
+        }
+        initializer {
+          kind: LITERAL
+          literal: "hello"
+        }
+      }
+      variable_decls {
+        name: "y"
+        variable_type {
+          name: ""
+          kind: OTHER
+        }
+        initializer {
+          kind: LITERAL
+          literal: "world!"
+        }
+      }
+    }
+  }
+}
