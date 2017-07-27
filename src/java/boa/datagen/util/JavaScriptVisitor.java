@@ -142,8 +142,22 @@ public class JavaScriptVisitor implements NodeVisitor {
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.VARDECL);
 		for (VariableInitializer f : node.getVariables()) {
-			f.visit(this);
-			eb.addExpressions(expressions.pop());
+				if (f.getTarget() instanceof Name) {
+					Variable.Builder vb = Variable.newBuilder();
+					vb.setName(((Name) f.getTarget()).getIdentifier());
+					Type.Builder tb = Type.newBuilder();
+					tb.setKind(TypeKind.OTHER);
+					tb.setName("");
+					vb.setVariableType(tb.build());
+					if (f.getInitializer() != null){
+						f.getInitializer().visit(this);
+						vb.setInitializer(expressions.pop());
+					}
+					eb.addVariableDecls(vb.build());
+				} else {
+				f.visit(this);
+				eb.addExpressions(expressions.pop());
+			}
 		}
 		if (node.isStatement() && !statements.isEmpty()) {
 			Statement.Builder sb = Statement.newBuilder();
@@ -762,7 +776,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 
 	public boolean accept(ArrayComprehension node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
-		b.setKind(boa.types.Ast.Expression.ExpressionKind.NEWARRAY);
+		b.setKind(boa.types.Ast.Expression.ExpressionKind.COMPREHENSION);
 		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 		tb.setName(Token.typeToName(node.getType()));
 		tb.setKind(boa.types.Ast.TypeKind.OTHER);
@@ -798,15 +812,22 @@ public class JavaScriptVisitor implements NodeVisitor {
 
 	public boolean accept(VariableInitializer node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
-	//	b.setKind(boa.types.Ast.Expression.ExpressionKind.ASSIGN);//  OTHER);// FIXME
+		b.setKind(boa.types.Ast.Expression.ExpressionKind.ASSIGN);
 		node.getTarget().visit(this);
 		b.addExpressions(expressions.pop());
+		if (node.getTarget() instanceof Name) {
+			Variable.Builder vb = Variable.newBuilder();
+			vb.setName(((Name) node.getTarget()).getIdentifier());
+			Type.Builder tb = Type.newBuilder();
+			tb.setKind(TypeKind.OTHER);
+			tb.setName("");
+			vb.setVariableType(tb.build());
+			b.addVariableDecls(vb.build());
+		} 
 		if (node.getInitializer() != null) {
 			node.getInitializer().visit(this);
 			b.addExpressions(expressions.pop());
-			b.setKind(boa.types.Ast.Expression.ExpressionKind.ASSIGN);
-		} else
-			b.setKind(boa.types.Ast.Expression.ExpressionKind.OTHER);
+		} 
 		expressions.push(b.build());
 		return false;
 	}

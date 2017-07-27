@@ -299,6 +299,7 @@ message Expression {
 		/** @exclude TODO */
 		ANON_METHOD = 52;
 		YIELD = 53;
+		COMPREHENSION = 54;
 	}
 	/** The kind of expression */
 	required ExpressionKind kind = 1;
