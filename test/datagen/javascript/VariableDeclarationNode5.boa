@@ -10,20 +10,31 @@ namespaces {
           name: "VAR"
           kind: OTHER
         }
-        initializer {
-          kind: LITERAL
-          literal: "hello"
-        }
       }
+    }
+  }
+  statements {
+    kind: EXPRESSION
+    expression {
+      kind: VARDECL
       variable_decls {
         name: "y"
         variable_type {
-          name: "VAR"
+          name: "LET"
           kind: OTHER
         }
-        initializer {
-          kind: LITERAL
-          literal: "world!"
+      }
+    }
+  }
+  statements {
+    kind: EXPRESSION
+    expression {
+      kind: VARDECL
+      variable_decls {
+        name: "z"
+        variable_type {
+          name: "CONST"
+          kind: OTHER
         }
       }
     }

@@ -7,21 +7,21 @@ namespaces {
       variable_decls {
         name: "x"
         variable_type {
-          name: ""
+          name: "VAR"
           kind: OTHER
         }
       }
       variable_decls {
         name: "y"
         variable_type {
-          name: ""
+          name: "VAR"
           kind: OTHER
         }
       }
       variable_decls {
         name: "z"
         variable_type {
-          name: ""
+          name: "VAR"
           kind: OTHER
         }
       }

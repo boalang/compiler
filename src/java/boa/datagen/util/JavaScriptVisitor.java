@@ -146,8 +146,13 @@ public class JavaScriptVisitor implements NodeVisitor {
 				Variable.Builder vb = Variable.newBuilder();
 				vb.setName(((Name) f.getTarget()).getIdentifier());
 				Type.Builder tb = Type.newBuilder();
+				String type = "VAR";
+				if (node.isLet())
+					type = "LET";
+				else if (node.isConst())
+					type = "CONST";
 				tb.setKind(TypeKind.OTHER);
-				tb.setName("");
+				tb.setName(type);
 				vb.setVariableType(tb.build());
 				if (f.getInitializer() != null) {
 					f.getInitializer().visit(this);
@@ -902,9 +907,8 @@ public class JavaScriptVisitor implements NodeVisitor {
 
 	public boolean accept(PropertyGet node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
-		b.setKind(boa.types.Ast.Expression.ExpressionKind.OTHER);
+		b.setKind(boa.types.Ast.Expression.ExpressionKind.OTHER);// FIXME
 		node.getTarget().visit(this);
-		;
 		b.addExpressions(expressions.pop());
 		node.getProperty().visit(this);
 		b.addExpressions(expressions.pop());
