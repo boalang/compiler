@@ -357,7 +357,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.DO);
 		node.getCondition().visit(this);
-		b.setExpression(expressions.pop());
+		b.setCondition(expressions.pop());
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
 		if (node.getBody() instanceof FunctionNode) {
 			methods.push(new ArrayList<boa.types.Ast.Method>());

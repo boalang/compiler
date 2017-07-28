@@ -18,4 +18,10 @@ public class TestForLoops extends JavaScriptBaseTest{
 		nodeTest( load("test/datagen/javascript/ForLoopNode.boa"), load("test/datagen/javascript/ForLoopNode.js"));
 	}
 	
+	// The loop body returned a ScoopNode
+		@Test
+		public void forLoopBreakTest1() throws IOException{
+			nodeTest( load("test/datagen/javascript/ForLoopWithBreakStatementNode.boa"), load("test/datagen/javascript/ForLoopWithBreakStatementNode.js"));
+		}
+	
 }
