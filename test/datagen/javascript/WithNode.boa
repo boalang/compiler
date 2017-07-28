@@ -1,0 +1,34 @@
+namespaces {
+  name: ""
+  statements {
+    kind: OTHER
+    statements {
+      kind: OTHER
+      statements {
+        kind: EXPRESSION
+        expression {
+          kind: METHODCALL
+          expressions {
+            kind: OTHER
+            expressions {
+              kind: OTHER
+              variable: "console"
+            }
+            expressions {
+              kind: OTHER
+              variable: "log"
+            }
+          }
+          method_args {
+            kind: OTHER
+            variable: "x"
+          }
+        }
+      }
+    }
+    expression {
+      kind: OTHER
+      variable: "o"
+    }
+  }
+}

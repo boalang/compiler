@@ -1,0 +1,38 @@
+namespaces {
+  name: ""
+  statements {
+    kind: FOR
+    statements {
+      kind: OTHER
+      statements {
+        kind: EXPRESSION
+        expression {
+          kind: ASSIGN_ADD
+          expressions {
+            kind: OTHER
+            variable: "text"
+          }
+          expressions {
+            kind: ARRAYINDEX
+            expressions {
+              kind: OTHER
+              variable: "person"
+            }
+            expressions {
+              kind: OTHER
+              variable: "x"
+            }
+          }
+        }
+      }
+    }
+    initializations {
+      kind: OTHER
+      variable: "x"
+    }
+    initializations {
+      kind: OTHER
+      variable: "person"
+    }
+  }
+}
