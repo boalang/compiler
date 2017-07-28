@@ -785,10 +785,6 @@ public class JavaScriptVisitor implements NodeVisitor {
 	public boolean accept(ArrayComprehension node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.COMPREHENSION);
-		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
-		tb.setName(Token.typeToName(node.getType()));
-		tb.setKind(boa.types.Ast.TypeKind.OTHER);
-		b.setNewType(tb.build());
 		node.getResult().visit(this);
 		b.addExpressions(expressions.pop());
 		for (Object l : node.getLoops()) {
