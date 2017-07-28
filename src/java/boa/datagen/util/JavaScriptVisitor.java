@@ -176,10 +176,24 @@ public class JavaScriptVisitor implements NodeVisitor {
 		List<boa.types.Ast.Statement> list = statements.peek();
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.VARDECL);
-		for (Node f : node.getVariables()) {
-			((AstNode) f).visit(this);
-			eb.addExpressions(expressions.pop());
-		}
+		for (VariableInitializer f : node.getVariables().getVariables()){
+			if (f.getTarget() instanceof Name) {
+				Variable.Builder vb = Variable.newBuilder();
+				vb.setName(((Name) f.getTarget()).getIdentifier());
+				Type.Builder tb = Type.newBuilder();
+				tb.setKind(TypeKind.OTHER);
+				tb.setName("");
+				vb.setVariableType(tb.build());
+				if (f.getInitializer() != null) {
+					f.getInitializer().visit(this);
+					vb.setInitializer(expressions.pop());
+				}
+				eb.addVariableDecls(vb.build());
+			} else {
+				f.visit(this);
+				eb.addExpressions(expressions.pop());
+			}
+	}
 		sb.setExpression(eb.build());
 		if (node.getBody() != null) {
 			if (node.getBody() instanceof FunctionNode) {

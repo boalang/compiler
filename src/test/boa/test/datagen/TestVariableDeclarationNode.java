@@ -25,4 +25,9 @@ public class TestVariableDeclarationNode extends JavaScriptBaseTest {
 	public void varaibleDeclTest4() throws IOException{
 		nodeTest( load("test/datagen/javascript/VariableDeclarationNode4.boa"), load("test/datagen/javascript/VariableDeclarationNode4.js"));
 	}
+	
+	@Test
+	public void arrayLiteralTest() throws IOException{
+		nodeTest( load("test/datagen/javascript/arrayLiteralNode.boa"), load("test/datagen/javascript/arrayLiteralNode.js"));
+	}
 }

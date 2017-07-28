@@ -1,0 +1,35 @@
+namespaces {
+  name: ""
+  statements {
+    kind: EXPRESSION
+    expression {
+      kind: VARDECL
+      variable_decls {
+        name: "cars"
+        variable_type {
+          name: ""
+          kind: OTHER
+        }
+        initializer {
+          kind: NEWARRAY
+          expressions {
+            kind: LITERAL
+            literal: "Saab"
+          }
+          expressions {
+            kind: LITERAL
+            literal: "Volvo"
+          }
+          expressions {
+            kind: LITERAL
+            literal: "BMW"
+          }
+          new_type {
+            name: ""
+            kind: OTHER
+          }
+        }
+      }
+    }
+  }
+}
