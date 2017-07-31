@@ -215,7 +215,8 @@ message Statement {
 		CATCH = 18;
 		EMPTY = 19;
 		FINALLY = 20;
-		GENERATOR = 21;		
+		GENERATOR = 21;
+		DEBUGGER = 22;
 	}
 	/** The kind of statement */
 	required StatementKind kind = 1;
@@ -300,6 +301,7 @@ message Expression {
 		ANON_METHOD = 52;
 		YIELD = 53;
 		COMPREHENSION = 54;
+		EMPTY = 55;
 	}
 	/** The kind of expression */
 	required ExpressionKind kind = 1;

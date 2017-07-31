@@ -20164,6 +20164,10 @@ public final class Ast {
        * <code>GENERATOR = 21;</code>
        */
       GENERATOR(23, 21),
+      /**
+       * <code>DEBUGGER = 22;</code>
+       */
+      DEBUGGER(24, 22),
       ;
 
       /**
@@ -20290,6 +20294,10 @@ public final class Ast {
        * <code>GENERATOR = 21;</code>
        */
       public static final int GENERATOR_VALUE = 21;
+      /**
+       * <code>DEBUGGER = 22;</code>
+       */
+      public static final int DEBUGGER_VALUE = 22;
 
 
       public final int getNumber() { return value; }
@@ -20318,6 +20326,7 @@ public final class Ast {
           case 19: return EMPTY;
           case 20: return FINALLY;
           case 21: return GENERATOR;
+          case 22: return DEBUGGER;
           default: return null;
         }
       }
@@ -20348,7 +20357,7 @@ public final class Ast {
       }
 
       private static final StatementKind[] VALUES = {
-        OTHER, BLOCK, TYPEDECL, EXPRESSION, EXPR, SYNCHRONIZED, SYNC, RETURN, FOR, DO, WHILE, IF, ASSERT, BREAK, CONTINUE, LABEL, SWITCH, CASE, TRY, THROW, CATCH, EMPTY, FINALLY, GENERATOR, 
+        OTHER, BLOCK, TYPEDECL, EXPRESSION, EXPR, SYNCHRONIZED, SYNC, RETURN, FOR, DO, WHILE, IF, ASSERT, BREAK, CONTINUE, LABEL, SWITCH, CASE, TRY, THROW, CATCH, EMPTY, FINALLY, GENERATOR, DEBUGGER, 
       };
 
       public static StatementKind valueOf(
@@ -24374,6 +24383,10 @@ public final class Ast {
        * <code>COMPREHENSION = 54;</code>
        */
       COMPREHENSION(54, 54),
+      /**
+       * <code>EMPTY = 55;</code>
+       */
+      EMPTY(55, 55),
       ;
 
       /**
@@ -24612,6 +24625,10 @@ public final class Ast {
        * <code>COMPREHENSION = 54;</code>
        */
       public static final int COMPREHENSION_VALUE = 54;
+      /**
+       * <code>EMPTY = 55;</code>
+       */
+      public static final int EMPTY_VALUE = 55;
 
 
       public final int getNumber() { return value; }
@@ -24673,6 +24690,7 @@ public final class Ast {
           case 52: return ANON_METHOD;
           case 53: return YIELD;
           case 54: return COMPREHENSION;
+          case 55: return EMPTY;
           default: return null;
         }
       }
@@ -33316,7 +33334,7 @@ public final class Ast {
       "\n\010comments\030\005 \003(\0132\022.boa.types.Comment\022*\n\013" +
       "change_kind\030\006 \001(\0162\025.boa.types.ChangeKind" +
       "\022\023\n\013mapped_node\030\010 \001(\005\022\013\n\003key\030\t \001(\005\022\026\n\016de",
-      "claring_type\030\n \001(\005\"\277\006\n\tStatement\0220\n\004kind" +
+      "claring_type\030\n \001(\005\"\315\006\n\tStatement\0220\n\004kind" +
       "\030\001 \002(\0162\".boa.types.Statement.StatementKi" +
       "nd\022$\n\010comments\030\002 \003(\0132\022.boa.types.Comment" +
       "\022(\n\nstatements\030\003 \003(\0132\024.boa.types.Stateme" +
@@ -33329,7 +33347,7 @@ public final class Ast {
       "ression\030\t \001(\0132\025.boa.types.Expression\022*\n\013" +
       "change_kind\030\n \001(\0162\025.boa.types.ChangeKind" +
       "\022\023\n\013mapped_node\030\014 \001(\005\022\013\n\003key\030\r \001(\005\022$\n\tfu" +
-      "nctions\030\016 \003(\0132\021.boa.types.Method\"\251\002\n\rSta" +
+      "nctions\030\016 \003(\0132\021.boa.types.Method\"\267\002\n\rSta" +
       "tementKind\022\t\n\005OTHER\020\000\022\t\n\005BLOCK\020\001\022\014\n\010TYPE" +
       "DECL\020\002\022\016\n\nEXPRESSION\020\003\022\010\n\004EXPR\020\003\022\020\n\014SYNC" +
       "HRONIZED\020\004\022\010\n\004SYNC\020\004\022\n\n\006RETURN\020\005\022\007\n\003FOR\020" +
@@ -33337,73 +33355,73 @@ public final class Ast {
       "\022\t\n\005BREAK\020\013\022\014\n\010CONTINUE\020\014\022\t\n\005LABEL\020\r\022\n\n\006" +
       "SWITCH\020\016\022\010\n\004CASE\020\017\022\007\n\003TRY\020\020\022\t\n\005THROW\020\021\022\t",
       "\n\005CATCH\020\022\022\t\n\005EMPTY\020\023\022\013\n\007FINALLY\020\024\022\r\n\tGEN" +
-      "ERATOR\020\025\032\002\020\001\"\343\013\n\nExpression\0222\n\004kind\030\001 \002(" +
-      "\0162$.boa.types.Expression.ExpressionKind\022" +
-      "*\n\013expressions\030\002 \003(\0132\025.boa.types.Express" +
-      "ion\022+\n\016variable_decls\030\003 \003(\0132\023.boa.types." +
-      "Variable\022!\n\010new_type\030\004 \001(\0132\017.boa.types.T" +
-      "ype\022+\n\022generic_parameters\030\005 \003(\0132\017.boa.ty" +
-      "pes.Type\022\022\n\nis_postfix\030\006 \001(\010\022\017\n\007literal\030" +
-      "\007 \001(\t\022\020\n\010variable\030\010 \001(\t\022\016\n\006method\030\t \001(\t\022" +
-      "*\n\013method_args\030\n \003(\0132\025.boa.types.Express",
-      "ion\0220\n\020anon_declaration\030\013 \001(\0132\026.boa.type" +
-      "s.Declaration\022\'\n\nannotation\030\014 \001(\0132\023.boa." +
-      "types.Modifier\022!\n\006lambda\030\r \001(\0132\021.boa.typ" +
-      "es.Method\022\021\n\tno_parens\030\016 \001(\010\022*\n\013change_k" +
-      "ind\030\017 \001(\0162\025.boa.types.ChangeKind\022\023\n\013mapp" +
-      "ed_node\030\021 \001(\005\022\013\n\003key\030\022 \001(\005\022\'\n\016declaring_" +
-      "type\030\023 \001(\0132\017.boa.types.Type\022$\n\013return_ty" +
-      "pe\030\024 \001(\0132\017.boa.types.Type\022#\n\010function\030\025 " +
-      "\001(\0132\021.boa.types.Method\"\261\006\n\016ExpressionKin" +
-      "d\022\t\n\005OTHER\020\000\022\013\n\007LITERAL\020\001\022\r\n\tVARACCESS\020\002",
-      "\022\013\n\007VARDECL\020\003\022\016\n\nMETHODCALL\020\004\022\010\n\004CAST\020\005\022" +
-      "\016\n\nARRAYINDEX\020\006\022\r\n\tARRAYINIT\020\007\022\017\n\013TYPECO" +
-      "MPARE\020\010\022\007\n\003NEW\020\t\022\014\n\010NEWARRAY\020\n\022\n\n\006OP_ADD" +
-      "\020\013\022\n\n\006OP_SUB\020\014\022\013\n\007OP_MULT\020\r\022\n\n\006OP_DIV\020\016\022" +
-      "\n\n\006OP_MOD\020\017\022\n\n\006OP_INC\020\020\022\n\n\006OP_DEC\020\021\022\016\n\nB" +
-      "IT_LSHIFT\020\022\022\016\n\nBIT_RSHIFT\020\023\022\026\n\022BIT_UNSIG" +
-      "NEDRSHIFT\020\024\022\013\n\007BIT_AND\020\025\022\n\n\006BIT_OR\020\026\022\013\n\007" +
-      "BIT_NOT\020\027\022\013\n\007BIT_XOR\020\030\022\017\n\013LOGICAL_NOT\020\031\022" +
-      "\017\n\013LOGICAL_AND\020\032\022\016\n\nLOGICAL_OR\020\033\022\006\n\002EQ\020\034" +
-      "\022\007\n\003NEQ\020\035\022\006\n\002LT\020\036\022\006\n\002GT\020\037\022\010\n\004LTEQ\020 \022\010\n\004G",
-      "TEQ\020!\022\017\n\013CONDITIONAL\020\"\022\020\n\014NULLCOALESCE\020#" +
-      "\022\n\n\006ASSIGN\020$\022\016\n\nASSIGN_ADD\020%\022\016\n\nASSIGN_S" +
-      "UB\020&\022\017\n\013ASSIGN_MULT\020\'\022\016\n\nASSIGN_DIV\020(\022\016\n" +
-      "\nASSIGN_MOD\020)\022\021\n\rASSIGN_BITXOR\020*\022\021\n\rASSI" +
-      "GN_BITAND\020+\022\020\n\014ASSIGN_BITOR\020,\022\021\n\rASSIGN_" +
-      "LSHIFT\020-\022\021\n\rASSIGN_RSHIFT\020.\022\031\n\025ASSIGN_UN" +
-      "SIGNEDRSHIFT\020/\022\016\n\nANNOTATION\0200\022\t\n\005PAREN\020" +
-      "1\022\024\n\020METHOD_REFERENCE\0202\022\n\n\006LAMBDA\0203\022\017\n\013A" +
-      "NON_METHOD\0204\022\t\n\005YIELD\0205\022\021\n\rCOMPREHENSION" +
-      "\0206\"\225\004\n\010Modifier\022.\n\004kind\030\001 \002(\0162 .boa.type",
-      "s.Modifier.ModifierKind\0222\n\nvisibility\030\002 " +
-      "\001(\0162\036.boa.types.Modifier.Visibility\022\027\n\017a" +
-      "nnotation_name\030\003 \001(\t\022\032\n\022annotation_membe" +
-      "rs\030\004 \003(\t\0220\n\021annotation_values\030\005 \003(\0132\025.bo" +
-      "a.types.Expression\022\r\n\005other\030\006 \001(\t\022*\n\013cha" +
-      "nge_kind\030\007 \001(\0162\025.boa.types.ChangeKind\022\023\n" +
-      "\013mapped_node\030\t \001(\005\022\013\n\003key\030\n \001(\005\"~\n\014Modif" +
-      "ierKind\022\t\n\005OTHER\020\000\022\016\n\nVISIBILITY\020\001\022\016\n\nAN" +
-      "NOTATION\020\002\022\t\n\005FINAL\020\003\022\n\n\006STATIC\020\004\022\020\n\014SYN" +
-      "CHRONIZED\020\005\022\010\n\004SYNC\020\005\022\014\n\010ABSTRACT\020\006\032\002\020\001\"",
-      "a\n\nVisibility\022\n\n\006PUBLIC\020\001\022\013\n\007PRIVATE\020\002\022\r" +
-      "\n\tPROTECTED\020\003\022\r\n\tNAMESPACE\020\004\022\013\n\007PACKAGE\020" +
-      "\004\022\013\n\007DEFAULT\020\004\032\002\020\001\"\253\002\n\007Comment\022,\n\004kind\030\001" +
-      " \002(\0162\036.boa.types.Comment.CommentKind\022\r\n\005" +
-      "value\030\002 \002(\t\022)\n\010position\030\003 \002(\0132\027.boa.type" +
-      "s.PositionInfo\022*\n\013change_kind\030\004 \001(\0162\025.bo" +
-      "a.types.ChangeKind\022\023\n\013mapped_node\030\006 \001(\005\022" +
-      "\013\n\003key\030\007 \001(\005\"j\n\013CommentKind\022\t\n\005OTHER\020\000\022\010" +
-      "\n\004LINE\020\001\022\t\n\005BLOCK\020\002\022\007\n\003DOC\020\003\022\021\n\rDOCUMENT" +
-      "ATION\020\003\022\010\n\004SPEC\020\004\022\021\n\rSPECIFICATION\020\004\032\002\020\001",
-      "\"{\n\014PositionInfo\022\021\n\tstart_pos\030\001 \002(\005\022\016\n\006l" +
-      "ength\030\002 \002(\005\022\022\n\nstart_line\030\003 \002(\005\022\021\n\tstart" +
-      "_col\030\004 \002(\005\022\020\n\010end_line\030\005 \002(\005\022\017\n\007end_col\030" +
-      "\006 \002(\005*\236\001\n\010TypeKind\022\t\n\005OTHER\020\000\022\t\n\005CLASS\020\001" +
-      "\022\r\n\tINTERFACE\020\002\022\r\n\tANONYMOUS\020\003\022\010\n\004ANON\020\003" +
-      "\022\n\n\006STRUCT\020\004\022\010\n\004ENUM\020\005\022\017\n\013ENUMERATION\020\005\022" +
-      "\016\n\nANNOTATION\020\006\022\014\n\010DELEGATE\020\007\022\013\n\007GENERIC" +
-      "\020\010\032\002\020\001B\002H\001"
+      "ERATOR\020\025\022\014\n\010DEBUGGER\020\026\032\002\020\001\"\356\013\n\nExpressio" +
+      "n\0222\n\004kind\030\001 \002(\0162$.boa.types.Expression.E" +
+      "xpressionKind\022*\n\013expressions\030\002 \003(\0132\025.boa" +
+      ".types.Expression\022+\n\016variable_decls\030\003 \003(" +
+      "\0132\023.boa.types.Variable\022!\n\010new_type\030\004 \001(\013" +
+      "2\017.boa.types.Type\022+\n\022generic_parameters\030" +
+      "\005 \003(\0132\017.boa.types.Type\022\022\n\nis_postfix\030\006 \001" +
+      "(\010\022\017\n\007literal\030\007 \001(\t\022\020\n\010variable\030\010 \001(\t\022\016\n" +
+      "\006method\030\t \001(\t\022*\n\013method_args\030\n \003(\0132\025.boa",
+      ".types.Expression\0220\n\020anon_declaration\030\013 " +
+      "\001(\0132\026.boa.types.Declaration\022\'\n\nannotatio" +
+      "n\030\014 \001(\0132\023.boa.types.Modifier\022!\n\006lambda\030\r" +
+      " \001(\0132\021.boa.types.Method\022\021\n\tno_parens\030\016 \001" +
+      "(\010\022*\n\013change_kind\030\017 \001(\0162\025.boa.types.Chan" +
+      "geKind\022\023\n\013mapped_node\030\021 \001(\005\022\013\n\003key\030\022 \001(\005" +
+      "\022\'\n\016declaring_type\030\023 \001(\0132\017.boa.types.Typ" +
+      "e\022$\n\013return_type\030\024 \001(\0132\017.boa.types.Type\022" +
+      "#\n\010function\030\025 \001(\0132\021.boa.types.Method\"\274\006\n" +
+      "\016ExpressionKind\022\t\n\005OTHER\020\000\022\013\n\007LITERAL\020\001\022",
+      "\r\n\tVARACCESS\020\002\022\013\n\007VARDECL\020\003\022\016\n\nMETHODCAL" +
+      "L\020\004\022\010\n\004CAST\020\005\022\016\n\nARRAYINDEX\020\006\022\r\n\tARRAYIN" +
+      "IT\020\007\022\017\n\013TYPECOMPARE\020\010\022\007\n\003NEW\020\t\022\014\n\010NEWARR" +
+      "AY\020\n\022\n\n\006OP_ADD\020\013\022\n\n\006OP_SUB\020\014\022\013\n\007OP_MULT\020" +
+      "\r\022\n\n\006OP_DIV\020\016\022\n\n\006OP_MOD\020\017\022\n\n\006OP_INC\020\020\022\n\n" +
+      "\006OP_DEC\020\021\022\016\n\nBIT_LSHIFT\020\022\022\016\n\nBIT_RSHIFT\020" +
+      "\023\022\026\n\022BIT_UNSIGNEDRSHIFT\020\024\022\013\n\007BIT_AND\020\025\022\n" +
+      "\n\006BIT_OR\020\026\022\013\n\007BIT_NOT\020\027\022\013\n\007BIT_XOR\020\030\022\017\n\013" +
+      "LOGICAL_NOT\020\031\022\017\n\013LOGICAL_AND\020\032\022\016\n\nLOGICA" +
+      "L_OR\020\033\022\006\n\002EQ\020\034\022\007\n\003NEQ\020\035\022\006\n\002LT\020\036\022\006\n\002GT\020\037\022",
+      "\010\n\004LTEQ\020 \022\010\n\004GTEQ\020!\022\017\n\013CONDITIONAL\020\"\022\020\n\014" +
+      "NULLCOALESCE\020#\022\n\n\006ASSIGN\020$\022\016\n\nASSIGN_ADD" +
+      "\020%\022\016\n\nASSIGN_SUB\020&\022\017\n\013ASSIGN_MULT\020\'\022\016\n\nA" +
+      "SSIGN_DIV\020(\022\016\n\nASSIGN_MOD\020)\022\021\n\rASSIGN_BI" +
+      "TXOR\020*\022\021\n\rASSIGN_BITAND\020+\022\020\n\014ASSIGN_BITO" +
+      "R\020,\022\021\n\rASSIGN_LSHIFT\020-\022\021\n\rASSIGN_RSHIFT\020" +
+      ".\022\031\n\025ASSIGN_UNSIGNEDRSHIFT\020/\022\016\n\nANNOTATI" +
+      "ON\0200\022\t\n\005PAREN\0201\022\024\n\020METHOD_REFERENCE\0202\022\n\n" +
+      "\006LAMBDA\0203\022\017\n\013ANON_METHOD\0204\022\t\n\005YIELD\0205\022\021\n" +
+      "\rCOMPREHENSION\0206\022\t\n\005EMPTY\0207\"\225\004\n\010Modifier",
+      "\022.\n\004kind\030\001 \002(\0162 .boa.types.Modifier.Modi" +
+      "fierKind\0222\n\nvisibility\030\002 \001(\0162\036.boa.types" +
+      ".Modifier.Visibility\022\027\n\017annotation_name\030" +
+      "\003 \001(\t\022\032\n\022annotation_members\030\004 \003(\t\0220\n\021ann" +
+      "otation_values\030\005 \003(\0132\025.boa.types.Express" +
+      "ion\022\r\n\005other\030\006 \001(\t\022*\n\013change_kind\030\007 \001(\0162" +
+      "\025.boa.types.ChangeKind\022\023\n\013mapped_node\030\t " +
+      "\001(\005\022\013\n\003key\030\n \001(\005\"~\n\014ModifierKind\022\t\n\005OTHE" +
+      "R\020\000\022\016\n\nVISIBILITY\020\001\022\016\n\nANNOTATION\020\002\022\t\n\005F" +
+      "INAL\020\003\022\n\n\006STATIC\020\004\022\020\n\014SYNCHRONIZED\020\005\022\010\n\004",
+      "SYNC\020\005\022\014\n\010ABSTRACT\020\006\032\002\020\001\"a\n\nVisibility\022\n" +
+      "\n\006PUBLIC\020\001\022\013\n\007PRIVATE\020\002\022\r\n\tPROTECTED\020\003\022\r" +
+      "\n\tNAMESPACE\020\004\022\013\n\007PACKAGE\020\004\022\013\n\007DEFAULT\020\004\032" +
+      "\002\020\001\"\253\002\n\007Comment\022,\n\004kind\030\001 \002(\0162\036.boa.type" +
+      "s.Comment.CommentKind\022\r\n\005value\030\002 \002(\t\022)\n\010" +
+      "position\030\003 \002(\0132\027.boa.types.PositionInfo\022" +
+      "*\n\013change_kind\030\004 \001(\0162\025.boa.types.ChangeK" +
+      "ind\022\023\n\013mapped_node\030\006 \001(\005\022\013\n\003key\030\007 \001(\005\"j\n" +
+      "\013CommentKind\022\t\n\005OTHER\020\000\022\010\n\004LINE\020\001\022\t\n\005BLO" +
+      "CK\020\002\022\007\n\003DOC\020\003\022\021\n\rDOCUMENTATION\020\003\022\010\n\004SPEC",
+      "\020\004\022\021\n\rSPECIFICATION\020\004\032\002\020\001\"{\n\014PositionInf" +
+      "o\022\021\n\tstart_pos\030\001 \002(\005\022\016\n\006length\030\002 \002(\005\022\022\n\n" +
+      "start_line\030\003 \002(\005\022\021\n\tstart_col\030\004 \002(\005\022\020\n\010e" +
+      "nd_line\030\005 \002(\005\022\017\n\007end_col\030\006 \002(\005*\236\001\n\010TypeK" +
+      "ind\022\t\n\005OTHER\020\000\022\t\n\005CLASS\020\001\022\r\n\tINTERFACE\020\002" +
+      "\022\r\n\tANONYMOUS\020\003\022\010\n\004ANON\020\003\022\n\n\006STRUCT\020\004\022\010\n" +
+      "\004ENUM\020\005\022\017\n\013ENUMERATION\020\005\022\016\n\nANNOTATION\020\006" +
+      "\022\014\n\010DELEGATE\020\007\022\013\n\007GENERIC\020\010\032\002\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
