@@ -1,0 +1,24 @@
+namespaces {
+  name: ""
+  statements {
+    kind: EXPRESSION
+    expression {
+      kind: VARDECL
+      variable_decls {
+        name: "el"
+        variable_type {
+          name: "VAR"
+          kind: OTHER
+        }
+        initializer {
+          kind: LITERAL
+          expressions {
+            kind: LITERAL
+            literal: "<foo>bar<baz/></foo>"
+          }
+          literal: "xml"
+        }
+      }
+    }
+  }
+}
