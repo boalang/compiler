@@ -300,10 +300,11 @@ message Expression {
 		/** @exclude TODO */
 		ANON_METHOD = 52;
 		YIELD = 53;
-		COMPREHENSION = 54;
+		ARRAY_COMPREHENSION = 54;
 		EMPTY = 55;
 		SHEQ = 56;
 		SHNEQ = 57;
+		XML_DOTQUERY = 58;
 	}
 	/** The kind of expression */
 	required ExpressionKind kind = 1;

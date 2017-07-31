@@ -718,7 +718,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 
 	public boolean accept(ArrayComprehension node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
-		b.setKind(boa.types.Ast.Expression.ExpressionKind.COMPREHENSION);
+		b.setKind(boa.types.Ast.Expression.ExpressionKind.ARRAY_COMPREHENSION);
 		node.getResult().visit(this);
 		b.addExpressions(expressions.pop());
 		for (Object l : node.getLoops()) {
@@ -844,7 +844,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 
 	public boolean accept(PropertyGet node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
-		b.setKind(boa.types.Ast.Expression.ExpressionKind.OTHER);// FIXME
+		b.setKind(boa.types.Ast.Expression.ExpressionKind.VARACCESS);
 		node.getTarget().visit(this);
 		b.addExpressions(expressions.pop());
 		node.getProperty().visit(this);
@@ -941,6 +941,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 	}
 
 	public boolean accept(ObjectProperty node) {
+		// FIXME
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.OTHER);
 		if (node.getLeft() != null) {
@@ -1031,7 +1032,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 
 	public boolean accept(XmlDotQuery node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
-		b.setKind(boa.types.Ast.Expression.ExpressionKind.OTHER);
+		b.setKind(boa.types.Ast.Expression.ExpressionKind.XML_DOTQUERY);
 		node.getLeft().visit(this);
 		b.addExpressions(expressions.pop());
 		if (node.getRight() != null) {
@@ -1065,7 +1066,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 
 	public boolean accept(XmlMemberGet node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
-		b.setKind(boa.types.Ast.Expression.ExpressionKind.OTHER);
+		b.setKind(boa.types.Ast.Expression.ExpressionKind.OTHER); // FIXME
 		node.getLeft().visit(this);
 		b.addExpressions(expressions.pop());
 		node.getRight().visit(this);
