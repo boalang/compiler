@@ -1,0 +1,15 @@
+namespaces {
+  name: ""
+  statements {
+    kind: TRY
+    statements {
+      kind: OTHER
+    }
+    statements {
+      kind: CATCH
+      statements {
+        kind: BLOCK
+      }
+    }
+  }
+}
