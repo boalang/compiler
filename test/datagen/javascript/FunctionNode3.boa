@@ -7,7 +7,7 @@ namespaces {
       variable_decls {
         name: "x"
         variable_type {
-          name: ""
+          name: "VAR"
           kind: OTHER
         }
         initializer {

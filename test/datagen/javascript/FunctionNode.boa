@@ -18,15 +18,9 @@ namespaces {
               kind: METHODCALL
               expressions {
                 kind: OTHER
-                expressions {
-                  kind: OTHER
-                  variable: "document"
-                }
-                expressions {
-                  kind: OTHER
-                  variable: "getElementById"
-                }
+                variable: "document"
               }
+              method: "getElementById"
               method_args {
                 kind: LITERAL
                 literal: "demo"

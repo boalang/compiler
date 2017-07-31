@@ -19,7 +19,7 @@ namespaces {
               variable: "images"
             }
             expressions {
-              kind: NEWARRAY
+              kind: ARRAYINIT
               expressions {
                 kind: LITERAL
                 literal: "smile.gif"
@@ -35,10 +35,6 @@ namespaces {
               expressions {
                 kind: LITERAL
                 literal: "bomb.gif"
-              }
-              new_type {
-                name: ""
-                kind: OTHER
               }
             }
           }

@@ -4,9 +4,9 @@ namespaces {
     kind: EXPRESSION
     expression {
       kind: NEW
-      expressions {
+      new_type {
+        name: "Car"
         kind: OTHER
-        variable: "Car"
       }
       method_args {
         kind: LITERAL

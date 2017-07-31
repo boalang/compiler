@@ -10,6 +10,13 @@ namespaces {
       statements {
         kind: BLOCK
       }
+      variable_declaration {
+        name: "err"
+        variable_type {
+          name: "LET"
+          kind: OTHER
+        }
+      }
     }
   }
 }
