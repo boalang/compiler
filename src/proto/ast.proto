@@ -302,6 +302,8 @@ message Expression {
 		YIELD = 53;
 		COMPREHENSION = 54;
 		EMPTY = 55;
+		SHEQ = 56;
+		SHNEQ = 57;
 	}
 	/** The kind of expression */
 	required ExpressionKind kind = 1;

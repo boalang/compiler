@@ -103,10 +103,6 @@ public class JavaScriptVisitor implements NodeVisitor {
 				((FunctionNode) s).visit(this);
 				for (boa.types.Ast.Method m : methods.pop())
 					b.addMethods(m);
-			} else if (s instanceof KeywordLiteral || s instanceof StringLiteral || s instanceof RegExpLiteral
-					|| s instanceof NumberLiteral || s instanceof ObjectLiteral) {
-				((AstNode) s).visit(this);
-				b.addExpressions(expressions.pop());
 			} else {
 				statements.push(new ArrayList<boa.types.Ast.Statement>());
 				((AstNode) s).visit(this);
@@ -504,12 +500,6 @@ public class JavaScriptVisitor implements NodeVisitor {
 				node.getElsePart().visit(this);
 				for (boa.types.Ast.Method m : methods.pop())
 					b.addMethods(m);
-				;
-			} else if (node.getElsePart() instanceof KeywordLiteral || node.getElsePart() instanceof StringLiteral
-					|| node.getElsePart() instanceof RegExpLiteral || node.getElsePart() instanceof NumberLiteral
-					|| node.getElsePart() instanceof ObjectLiteral) {
-				node.getElsePart().visit(this);
-				b.addInitializations(expressions.pop());
 			} else {
 				statements.push(new ArrayList<boa.types.Ast.Statement>());
 				node.getElsePart().visit(this);
@@ -900,9 +890,9 @@ public class JavaScriptVisitor implements NodeVisitor {
 		else if (node.getOperator() == Token.BITXOR)
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.BIT_XOR);
 		else if (node.getOperator() == Token.SHEQ)
-			b.setKind(boa.types.Ast.Expression.ExpressionKind.EQ);//FIXME should we differentiate between eq and strictly eq?
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.SHEQ);//FIXME should we differentiate between eq and strictly eq?
 		else if (node.getOperator() == Token.SHNE)
-			b.setKind(boa.types.Ast.Expression.ExpressionKind.NEQ);
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.SHNEQ);
 		else if (node.getOperator() == Token.IN)
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.OTHER);
 		else
@@ -995,6 +985,8 @@ public class JavaScriptVisitor implements NodeVisitor {
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.BIT_NOT);
 		else if (node.getOperator() == Token.NOT)
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.LOGICAL_NOT);
+		else if (node.getOperator() == Token.NEG)
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.OP_SUB);
 		else
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.OTHER);
 		node.getOperand().visit(this);

@@ -24387,6 +24387,14 @@ public final class Ast {
        * <code>EMPTY = 55;</code>
        */
       EMPTY(55, 55),
+      /**
+       * <code>SHEQ = 56;</code>
+       */
+      SHEQ(56, 56),
+      /**
+       * <code>SHNEQ = 57;</code>
+       */
+      SHNEQ(57, 57),
       ;
 
       /**
@@ -24629,6 +24637,14 @@ public final class Ast {
        * <code>EMPTY = 55;</code>
        */
       public static final int EMPTY_VALUE = 55;
+      /**
+       * <code>SHEQ = 56;</code>
+       */
+      public static final int SHEQ_VALUE = 56;
+      /**
+       * <code>SHNEQ = 57;</code>
+       */
+      public static final int SHNEQ_VALUE = 57;
 
 
       public final int getNumber() { return value; }
@@ -24691,6 +24707,8 @@ public final class Ast {
           case 53: return YIELD;
           case 54: return COMPREHENSION;
           case 55: return EMPTY;
+          case 56: return SHEQ;
+          case 57: return SHNEQ;
           default: return null;
         }
       }
@@ -33355,7 +33373,7 @@ public final class Ast {
       "\n\005BREAK\020\013\022\014\n\010CONTINUE\020\014\022\t\n\005LABEL\020\r\022\n\n\006SW" +
       "ITCH\020\016\022\010\n\004CASE\020\017\022\007\n\003TRY\020\020\022\t\n\005THROW\020\021\022\t\n\005",
       "CATCH\020\022\022\t\n\005EMPTY\020\023\022\013\n\007FINALLY\020\024\022\r\n\tGENER" +
-      "ATOR\020\025\022\014\n\010DEBUGGER\020\026\032\002\020\001\"\356\013\n\nExpression\022" +
+      "ATOR\020\025\022\014\n\010DEBUGGER\020\026\032\002\020\001\"\203\014\n\nExpression\022" +
       "2\n\004kind\030\001 \002(\0162$.boa.types.Expression.Exp" +
       "ressionKind\022*\n\013expressions\030\002 \003(\0132\025.boa.t" +
       "ypes.Expression\022+\n\016variable_decls\030\003 \003(\0132" +
@@ -33372,7 +33390,7 @@ public final class Ast {
       "Kind\022\023\n\013mapped_node\030\021 \001(\005\022\013\n\003key\030\022 \001(\005\022\'" +
       "\n\016declaring_type\030\023 \001(\0132\017.boa.types.Type\022" +
       "$\n\013return_type\030\024 \001(\0132\017.boa.types.Type\022#\n" +
-      "\010function\030\025 \001(\0132\021.boa.types.Method\"\274\006\n\016E" +
+      "\010function\030\025 \001(\0132\021.boa.types.Method\"\321\006\n\016E" +
       "xpressionKind\022\t\n\005OTHER\020\000\022\013\n\007LITERAL\020\001\022\r\n",
       "\tVARACCESS\020\002\022\013\n\007VARDECL\020\003\022\016\n\nMETHODCALL\020" +
       "\004\022\010\n\004CAST\020\005\022\016\n\nARRAYINDEX\020\006\022\r\n\tARRAYINIT" +
@@ -33393,35 +33411,36 @@ public final class Ast {
       "\031\n\025ASSIGN_UNSIGNEDRSHIFT\020/\022\016\n\nANNOTATION" +
       "\0200\022\t\n\005PAREN\0201\022\024\n\020METHOD_REFERENCE\0202\022\n\n\006L" +
       "AMBDA\0203\022\017\n\013ANON_METHOD\0204\022\t\n\005YIELD\0205\022\021\n\rC" +
-      "OMPREHENSION\0206\022\t\n\005EMPTY\0207\"\225\004\n\010Modifier\022.",
-      "\n\004kind\030\001 \002(\0162 .boa.types.Modifier.Modifi" +
-      "erKind\0222\n\nvisibility\030\002 \001(\0162\036.boa.types.M" +
-      "odifier.Visibility\022\027\n\017annotation_name\030\003 " +
-      "\001(\t\022\032\n\022annotation_members\030\004 \003(\t\0220\n\021annot" +
-      "ation_values\030\005 \003(\0132\025.boa.types.Expressio" +
-      "n\022\r\n\005other\030\006 \001(\t\022*\n\013change_kind\030\007 \001(\0162\025." +
-      "boa.types.ChangeKind\022\023\n\013mapped_node\030\t \001(" +
-      "\005\022\013\n\003key\030\n \001(\005\"~\n\014ModifierKind\022\t\n\005OTHER\020" +
-      "\000\022\016\n\nVISIBILITY\020\001\022\016\n\nANNOTATION\020\002\022\t\n\005FIN" +
-      "AL\020\003\022\n\n\006STATIC\020\004\022\020\n\014SYNCHRONIZED\020\005\022\010\n\004SY",
-      "NC\020\005\022\014\n\010ABSTRACT\020\006\032\002\020\001\"a\n\nVisibility\022\n\n\006" +
-      "PUBLIC\020\001\022\013\n\007PRIVATE\020\002\022\r\n\tPROTECTED\020\003\022\r\n\t" +
-      "NAMESPACE\020\004\022\013\n\007PACKAGE\020\004\022\013\n\007DEFAULT\020\004\032\002\020" +
-      "\001\"\253\002\n\007Comment\022,\n\004kind\030\001 \002(\0162\036.boa.types." +
-      "Comment.CommentKind\022\r\n\005value\030\002 \002(\t\022)\n\010po" +
-      "sition\030\003 \002(\0132\027.boa.types.PositionInfo\022*\n" +
-      "\013change_kind\030\004 \001(\0162\025.boa.types.ChangeKin" +
-      "d\022\023\n\013mapped_node\030\006 \001(\005\022\013\n\003key\030\007 \001(\005\"j\n\013C" +
-      "ommentKind\022\t\n\005OTHER\020\000\022\010\n\004LINE\020\001\022\t\n\005BLOCK" +
-      "\020\002\022\007\n\003DOC\020\003\022\021\n\rDOCUMENTATION\020\003\022\010\n\004SPEC\020\004",
-      "\022\021\n\rSPECIFICATION\020\004\032\002\020\001\"{\n\014PositionInfo\022" +
-      "\021\n\tstart_pos\030\001 \002(\005\022\016\n\006length\030\002 \002(\005\022\022\n\nst" +
-      "art_line\030\003 \002(\005\022\021\n\tstart_col\030\004 \002(\005\022\020\n\010end" +
-      "_line\030\005 \002(\005\022\017\n\007end_col\030\006 \002(\005*\236\001\n\010TypeKin" +
-      "d\022\t\n\005OTHER\020\000\022\t\n\005CLASS\020\001\022\r\n\tINTERFACE\020\002\022\r" +
-      "\n\tANONYMOUS\020\003\022\010\n\004ANON\020\003\022\n\n\006STRUCT\020\004\022\010\n\004E" +
-      "NUM\020\005\022\017\n\013ENUMERATION\020\005\022\016\n\nANNOTATION\020\006\022\014" +
-      "\n\010DELEGATE\020\007\022\013\n\007GENERIC\020\010\032\002\020\001B\002H\001"
+      "OMPREHENSION\0206\022\t\n\005EMPTY\0207\022\010\n\004SHEQ\0208\022\t\n\005S",
+      "HNEQ\0209\"\225\004\n\010Modifier\022.\n\004kind\030\001 \002(\0162 .boa." +
+      "types.Modifier.ModifierKind\0222\n\nvisibilit" +
+      "y\030\002 \001(\0162\036.boa.types.Modifier.Visibility\022" +
+      "\027\n\017annotation_name\030\003 \001(\t\022\032\n\022annotation_m" +
+      "embers\030\004 \003(\t\0220\n\021annotation_values\030\005 \003(\0132" +
+      "\025.boa.types.Expression\022\r\n\005other\030\006 \001(\t\022*\n" +
+      "\013change_kind\030\007 \001(\0162\025.boa.types.ChangeKin" +
+      "d\022\023\n\013mapped_node\030\t \001(\005\022\013\n\003key\030\n \001(\005\"~\n\014M" +
+      "odifierKind\022\t\n\005OTHER\020\000\022\016\n\nVISIBILITY\020\001\022\016" +
+      "\n\nANNOTATION\020\002\022\t\n\005FINAL\020\003\022\n\n\006STATIC\020\004\022\020\n",
+      "\014SYNCHRONIZED\020\005\022\010\n\004SYNC\020\005\022\014\n\010ABSTRACT\020\006\032" +
+      "\002\020\001\"a\n\nVisibility\022\n\n\006PUBLIC\020\001\022\013\n\007PRIVATE" +
+      "\020\002\022\r\n\tPROTECTED\020\003\022\r\n\tNAMESPACE\020\004\022\013\n\007PACK" +
+      "AGE\020\004\022\013\n\007DEFAULT\020\004\032\002\020\001\"\253\002\n\007Comment\022,\n\004ki" +
+      "nd\030\001 \002(\0162\036.boa.types.Comment.CommentKind" +
+      "\022\r\n\005value\030\002 \002(\t\022)\n\010position\030\003 \002(\0132\027.boa." +
+      "types.PositionInfo\022*\n\013change_kind\030\004 \001(\0162" +
+      "\025.boa.types.ChangeKind\022\023\n\013mapped_node\030\006 " +
+      "\001(\005\022\013\n\003key\030\007 \001(\005\"j\n\013CommentKind\022\t\n\005OTHER" +
+      "\020\000\022\010\n\004LINE\020\001\022\t\n\005BLOCK\020\002\022\007\n\003DOC\020\003\022\021\n\rDOCU",
+      "MENTATION\020\003\022\010\n\004SPEC\020\004\022\021\n\rSPECIFICATION\020\004" +
+      "\032\002\020\001\"{\n\014PositionInfo\022\021\n\tstart_pos\030\001 \002(\005\022" +
+      "\016\n\006length\030\002 \002(\005\022\022\n\nstart_line\030\003 \002(\005\022\021\n\ts" +
+      "tart_col\030\004 \002(\005\022\020\n\010end_line\030\005 \002(\005\022\017\n\007end_" +
+      "col\030\006 \002(\005*\236\001\n\010TypeKind\022\t\n\005OTHER\020\000\022\t\n\005CLA" +
+      "SS\020\001\022\r\n\tINTERFACE\020\002\022\r\n\tANONYMOUS\020\003\022\010\n\004AN" +
+      "ON\020\003\022\n\n\006STRUCT\020\004\022\010\n\004ENUM\020\005\022\017\n\013ENUMERATIO" +
+      "N\020\005\022\016\n\nANNOTATION\020\006\022\014\n\010DELEGATE\020\007\022\013\n\007GEN" +
+      "ERIC\020\010\032\002\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
