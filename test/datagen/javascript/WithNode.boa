@@ -10,15 +10,9 @@ namespaces {
           kind: METHODCALL
           expressions {
             kind: OTHER
-            expressions {
-              kind: OTHER
-              variable: "console"
-            }
-            expressions {
-              kind: OTHER
-              variable: "log"
-            }
+            variable: "console"
           }
+          method: "log"
           method_args {
             kind: OTHER
             variable: "x"

@@ -41,7 +41,7 @@ namespaces {
                 condition {
                   kind: LOGICAL_AND
                   expressions {
-                    kind: EQ
+                    kind: SHEQ
                     expressions {
                       kind: OTHER
                       variable: "i"
@@ -52,7 +52,7 @@ namespaces {
                     }
                   }
                   expressions {
-                    kind: EQ
+                    kind: SHEQ
                     expressions {
                       kind: OTHER
                       variable: "j"

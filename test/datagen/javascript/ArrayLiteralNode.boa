@@ -7,11 +7,11 @@ namespaces {
       variable_decls {
         name: "cars"
         variable_type {
-          name: ""
+          name: "VAR"
           kind: OTHER
         }
         initializer {
-          kind: NEWARRAY
+          kind: ARRAYINIT
           expressions {
             kind: LITERAL
             literal: "Saab"
@@ -23,10 +23,6 @@ namespaces {
           expressions {
             kind: LITERAL
             literal: "BMW"
-          }
-          new_type {
-            name: ""
-            kind: OTHER
           }
         }
       }
