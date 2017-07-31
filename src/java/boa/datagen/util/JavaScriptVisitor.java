@@ -205,13 +205,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 				methods.push(new ArrayList<boa.types.Ast.Method>());
 				node.getBody().visit(this);
 				for (boa.types.Ast.Method m : methods.pop())
-					sb.addFunctions(m);
-				;
-			} else if (node.getBody() instanceof KeywordLiteral || node.getBody() instanceof StringLiteral
-					|| node.getBody() instanceof RegExpLiteral || node.getBody() instanceof NumberLiteral
-					|| node.getBody() instanceof ObjectLiteral) {
-				node.getBody().visit(this);
-				sb.addInitializations(expressions.pop());
+					sb.addMethods(m);
 			} else {
 				statements.push(new ArrayList<boa.types.Ast.Statement>());
 				node.getBody().visit(this);
@@ -292,14 +286,13 @@ public class JavaScriptVisitor implements NodeVisitor {
 				methods.push(new ArrayList<boa.types.Ast.Method>());
 				((AstNode) s).visit(this);
 				for (Method m : methods.pop())
-					b.addFunctions(m);
+					b.addMethods(m);
 			} else {
 				statements.push(new ArrayList<boa.types.Ast.Statement>());
 				((AstNode) s).visit(this);
 				for (boa.types.Ast.Statement st : statements.pop())
 					b.addStatements(st);
 			}
-			s = s.getNext();
 		}
 		list.add(b.build());
 		return false;
@@ -361,13 +354,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 			methods.push(new ArrayList<boa.types.Ast.Method>());
 			node.getBody().visit(this);
 			for (boa.types.Ast.Method m : methods.pop())
-				b.addFunctions(m);
-			;
-		} else if (node.getBody() instanceof KeywordLiteral || node.getBody() instanceof StringLiteral
-				|| node.getBody() instanceof RegExpLiteral || node.getBody() instanceof NumberLiteral
-				|| node.getBody() instanceof ObjectLiteral) {
-			node.getBody().visit(this);
-			b.addInitializations(expressions.pop());
+				b.addMethods(m);
 		} else {
 			node.getBody().visit(this);
 			for (boa.types.Ast.Statement s : statements.pop())
@@ -401,13 +388,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 			methods.push(new ArrayList<boa.types.Ast.Method>());
 			node.getBody().visit(this);
 			for (boa.types.Ast.Method m : methods.pop())
-				s.addFunctions(m);
-			;
-		} else if (node.getBody() instanceof KeywordLiteral || node.getBody() instanceof StringLiteral
-				|| node.getBody() instanceof RegExpLiteral || node.getBody() instanceof NumberLiteral
-				|| node.getBody() instanceof ObjectLiteral) {
-			node.getBody().visit(this);
-			s.addInitializations(expressions.pop());
+				s.addMethods(m);
 		} else {
 			node.getBody().visit(this);
 			for (boa.types.Ast.Statement x : statements.pop())
@@ -436,13 +417,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 			methods.push(new ArrayList<boa.types.Ast.Method>());
 			node.getBody().visit(this);
 			for (boa.types.Ast.Method m : methods.pop())
-				s.addFunctions(m);
-			;
-		} else if (node.getBody() instanceof KeywordLiteral || node.getBody() instanceof StringLiteral
-				|| node.getBody() instanceof RegExpLiteral || node.getBody() instanceof NumberLiteral
-				|| node.getBody() instanceof ObjectLiteral) {
-			node.getBody().visit(this);
-			s.addInitializations(expressions.pop());
+				s.addMethods(m);
 		} else {
 			node.getBody().visit(this);
 			for (boa.types.Ast.Statement x : statements.pop())
@@ -455,14 +430,18 @@ public class JavaScriptVisitor implements NodeVisitor {
 	public boolean accept(FunctionCall node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.METHODCALL);
-		if (node.getTarget() != null) {
-			if (node.getTarget() instanceof Name) {
-				b.setMethod(((Name) node.getTarget()).getIdentifier());
-			} else {
-				node.getTarget().visit(this);
-				b.addExpressions(expressions.pop());
-			}
+		String name = "";
+		if (node.getTarget() instanceof Name) {
+			name = ((Name) node.getTarget()).getIdentifier();
+		} else if (node.getTarget() instanceof PropertyGet) {
+			PropertyGet target = (PropertyGet) node.getTarget();
+			name = target.getRight().getString();
+			target.getLeft().visit(this);
+			b.addExpressions(expressions.pop());
+		} else {
+			throw new RuntimeException("Unsupported target in method/function call!!!");
 		}
+		b.setMethod(name);
 		for (AstNode a : node.getArguments()) {
 			a.visit(this);
 			b.addMethodArgs(expressions.pop());
@@ -491,13 +470,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 			methods.push(new ArrayList<boa.types.Ast.Method>());
 			node.getStatement().visit(this);
 			for (boa.types.Ast.Method m : methods.pop())
-				b.addFunctions(m);
-			;
-		} else if (node.getStatement() instanceof KeywordLiteral || node.getStatement() instanceof StringLiteral
-				|| node.getStatement() instanceof RegExpLiteral || node.getStatement() instanceof NumberLiteral
-				|| node.getStatement() instanceof ObjectLiteral) {
-			node.getStatement().visit(this);
-			b.addInitializations(expressions.pop());
+				b.addMethods(m);
 		} else {
 			statements.push(new ArrayList<boa.types.Ast.Statement>());
 			node.getStatement().visit(this);
@@ -518,13 +491,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 			methods.push(new ArrayList<boa.types.Ast.Method>());
 			node.getThenPart().visit(this);
 			for (boa.types.Ast.Method m : methods.pop())
-				b.addFunctions(m);
-			;
-		} else if (node.getThenPart() instanceof KeywordLiteral || node.getThenPart() instanceof StringLiteral
-				|| node.getThenPart() instanceof RegExpLiteral || node.getThenPart() instanceof NumberLiteral
-				|| node.getThenPart() instanceof ObjectLiteral) {
-			node.getThenPart().visit(this);
-			b.addInitializations(expressions.pop());
+				b.addMethods(m);
 		} else {
 			statements.push(new ArrayList<boa.types.Ast.Statement>());
 			node.getThenPart().visit(this);
@@ -536,7 +503,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 				methods.push(new ArrayList<boa.types.Ast.Method>());
 				node.getElsePart().visit(this);
 				for (boa.types.Ast.Method m : methods.pop())
-					b.addFunctions(m);
+					b.addMethods(m);
 				;
 			} else if (node.getElsePart() instanceof KeywordLiteral || node.getElsePart() instanceof StringLiteral
 					|| node.getElsePart() instanceof RegExpLiteral || node.getElsePart() instanceof NumberLiteral
@@ -567,13 +534,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 			methods.push(new ArrayList<boa.types.Ast.Method>());
 			node.getStatement().visit(this);
 			for (boa.types.Ast.Method m : methods.pop())
-				b.addFunctions(m);
-			;
-		} else if (node.getStatement() instanceof KeywordLiteral || node.getStatement() instanceof StringLiteral
-				|| node.getStatement() instanceof RegExpLiteral || node.getStatement() instanceof NumberLiteral
-				|| node.getStatement() instanceof ObjectLiteral) {
-			node.getStatement().visit(this);
-			b.addInitializations(expressions.pop());
+				b.addMethods(m);
 		} else {
 			statements.push(new ArrayList<boa.types.Ast.Statement>());
 			node.getStatement().visit(this);
@@ -611,12 +572,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 					methods.push(new ArrayList<boa.types.Ast.Method>());
 					s.visit(this);
 					for (boa.types.Ast.Method m : methods.pop())
-						b.addFunctions(m);
-					;
-				} else if (s instanceof KeywordLiteral || s instanceof StringLiteral || s instanceof RegExpLiteral
-						|| s instanceof NumberLiteral || s instanceof ObjectLiteral) {
-					s.visit(this);
-					b.addInitializations(expressions.pop());
+						b.addMethods(m);
 				} else
 					s.visit(this);
 			}
@@ -665,14 +621,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 				methods.push(new ArrayList<boa.types.Ast.Method>());
 				node.getFinallyBlock().visit(this);
 				for (boa.types.Ast.Method m : methods.pop())
-					b.addFunctions(m);
-			} else if (node.getFinallyBlock() instanceof KeywordLiteral
-					|| node.getFinallyBlock() instanceof StringLiteral
-					|| node.getFinallyBlock() instanceof RegExpLiteral
-					|| node.getFinallyBlock() instanceof NumberLiteral
-					|| node.getFinallyBlock() instanceof ObjectLiteral) {
-				node.getFinallyBlock().visit(this);
-				b.addInitializations(expressions.pop());
+					b.addMethods(m);
 			} else {
 				node.getFinallyBlock().visit(this);
 			}
@@ -693,13 +642,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 			methods.push(new ArrayList<boa.types.Ast.Method>());
 			node.getBody().visit(this);
 			for (boa.types.Ast.Method m : methods.pop())
-				b.addFunctions(m);
-			;
-		} else if (node.getBody() instanceof KeywordLiteral || node.getBody() instanceof StringLiteral
-				|| node.getBody() instanceof RegExpLiteral || node.getBody() instanceof NumberLiteral
-				|| node.getBody() instanceof ObjectLiteral) {
-			node.getBody().visit(this);
-			b.addInitializations(expressions.pop());
+				b.addMethods(m);
 		} else {
 			statements.push(new ArrayList<boa.types.Ast.Statement>());
 			node.getBody().visit(this);
@@ -975,8 +918,10 @@ public class JavaScriptVisitor implements NodeVisitor {
 	public boolean accept(NewExpression node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.NEW);
-		node.getTarget().visit(this);
-		b.addExpressions(expressions.pop());
+		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
+		tb.setName(node.getTarget().getString());
+		tb.setKind(boa.types.Ast.TypeKind.OTHER);
+		b.setNewType(tb.build());
 		for (AstNode arg : node.getArguments()) {
 			arg.visit(this);
 			b.addMethodArgs(expressions.pop());
@@ -1176,11 +1121,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 				methods.push(new ArrayList<boa.types.Ast.Method>());
 				((AstNode) s).visit(this);
 				for (Method m : methods.pop())
-					b.addFunctions(m);
-			} else if (s instanceof KeywordLiteral || s instanceof StringLiteral || s instanceof RegExpLiteral
-					|| s instanceof NumberLiteral || s instanceof ObjectLiteral) {
-				((AstNode) s).visit(this);
-				b.addInitializations(expressions.pop());
+					b.addMethods(m);
 			} else {
 				statements.push(new ArrayList<boa.types.Ast.Statement>());
 				((AstNode) s).visit(this);

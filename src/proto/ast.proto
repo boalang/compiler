@@ -235,7 +235,7 @@ message Statement {
 	optional int32 mapped_node = 12;
 	/** */
 	optional int32 key = 13;
-	repeated Method functions = 14;
+	repeated Method methods = 14;
 }
 
 /** A single expression */
