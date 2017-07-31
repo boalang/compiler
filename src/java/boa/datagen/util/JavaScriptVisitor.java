@@ -312,6 +312,10 @@ public class JavaScriptVisitor implements NodeVisitor {
 		b.setKind(boa.types.Ast.Statement.StatementKind.CATCH);
 		Variable.Builder vb = Variable.newBuilder();
 		vb.setName(node.getVarName().getIdentifier());
+		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
+		tb.setName("LET");
+		tb.setKind(boa.types.Ast.TypeKind.OTHER);
+		vb.setVariableType(tb.build());
 		b.setVariableDeclaration(vb.build());
 		if (node.getCatchCondition() != null) {
 			Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
