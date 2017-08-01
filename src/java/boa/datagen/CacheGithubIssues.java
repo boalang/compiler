@@ -13,8 +13,9 @@ import boa.types.Issues.Issue;
 
 public class CacheGithubIssues {
 	final static String jsonPath = Properties.getProperty("gh.json.path", DefaultProperties.GH_JSON_PATH);
-	final static String jsonCachePath = Properties.getProperty("gh.json.cache.path", DefaultProperties.GH_JSON_CACHE_PATH);
-	
+	final static String jsonCachePath = Properties.getProperty("gh.json.cache.path",
+			DefaultProperties.GH_JSON_CACHE_PATH);
+
 	public static void main(String[] args) {
 		HashMap<String, byte[]> repos = new HashMap<String, byte[]>();
 		File dir = new File(jsonPath + "/repos");

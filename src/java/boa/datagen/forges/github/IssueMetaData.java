@@ -68,7 +68,7 @@ public class IssueMetaData {
 	private final String GIT_ASSIGNEES = "assigness";
 	private final String GIT_NUMBER = "number";
 	private final String GIT_LABELS = "labels";
-	
+
 	// storage fields
 	public String id;
 	private String status = "";
@@ -102,15 +102,15 @@ public class IssueMetaData {
 			this.summary = jsonIssue.get(GIT_SUMMARY).getAsString();
 		if (jsonIssue.has(GIT_BLOCKED))
 			this.blocked = jsonIssue.get(GIT_BLOCKED).getAsString();
-		if (jsonIssue.has(GIT_CREATED_AT)){
+		if (jsonIssue.has(GIT_CREATED_AT)) {
 			String time = jsonIssue.get(GIT_CREATED_AT).getAsString();
 			this.created_date = getTimeStamp(time);
 		}
-		if (jsonIssue.has(GIT_COMPLETED_AT)){
+		if (jsonIssue.has(GIT_COMPLETED_AT)) {
 			String time = jsonIssue.get(GIT_COMPLETED_AT).getAsString();
 			this.completed_date = getTimeStamp(time);
 		}
-		if (jsonIssue.has(GIT_MODIFIED_AT)){
+		if (jsonIssue.has(GIT_MODIFIED_AT)) {
 			String time = jsonIssue.get(GIT_MODIFIED_AT).getAsString();
 			this.modified_date = getTimeStamp(time);
 		}
@@ -158,7 +158,7 @@ public class IssueMetaData {
 	public Issue toBoaMetaDataProtobuf() {
 		Issue.Builder ib = Issue.newBuilder();
 		ib.setId(this.id);
-		Person.Builder person = Person.newBuilder(); 
+		Person.Builder person = Person.newBuilder();
 		person.setUsername(this.author);
 		ib.setAuthor(person.build());
 		ib.setNumber(this.number);
@@ -174,14 +174,14 @@ public class IssueMetaData {
 			ib.setPullUrl(this.pullurl);
 		if (this.completed_date > -1)
 			ib.setCompletedDate(this.completed_date);
-		if (!this.assignee.equals("")){
-			person = Person.newBuilder(); 
+		if (!this.assignee.equals("")) {
+			person = Person.newBuilder();
 			person.setUsername(this.assignee);
 			ib.setAssignee(person.build());
-		}	
-		if (this.assignees != null){
+		}
+		if (this.assignees != null) {
 			for (int i = 0; i < this.assignees.length; i++) {
-				person = Person.newBuilder(); 
+				person = Person.newBuilder();
 				person.setUsername(this.assignees[i]);
 				ib.addAssignees(person.build());
 			}
@@ -191,34 +191,34 @@ public class IssueMetaData {
 			ib.setStatus(Issue.IssueStatus.NEW);
 		} else if (this.status.equals("OPEN")) {
 			ib.setStatus(Issue.IssueStatus.OPEN);
-		} else if (this.status.equals("ON_HOLD")){
+		} else if (this.status.equals("ON_HOLD")) {
 			ib.setStatus(Issue.IssueStatus.ON_HOLD);
-		} else if (this.status.equals("RESOLVED")){
+		} else if (this.status.equals("RESOLVED")) {
 			ib.setStatus(Issue.IssueStatus.RESOLVED);
-		} else if (this.status.equals("DUPLICATE")){
+		} else if (this.status.equals("DUPLICATE")) {
 			ib.setStatus(Issue.IssueStatus.DUPLICATE);
-		} else if (this.status.equals("INVALID")){
+		} else if (this.status.equals("INVALID")) {
 			ib.setStatus(Issue.IssueStatus.INVALID);
-		} else if (this.status.equals("WONT_FIX")){
+		} else if (this.status.equals("WONT_FIX")) {
 			ib.setStatus(Issue.IssueStatus.WONT_FIX);
-		} else if (this.status.equals("CLOSED")){
+		} else if (this.status.equals("CLOSED")) {
 			ib.setStatus(Issue.IssueStatus.CLOSED);
-		} else if (this.status.equals("FIXED")){
+		} else if (this.status.equals("FIXED")) {
 			ib.setStatus(Issue.IssueStatus.FIXED);
-		} else if (this.status.equals("NOT_APPLICABLE")){
+		} else if (this.status.equals("NOT_APPLICABLE")) {
 			ib.setStatus(Issue.IssueStatus.NOT_APPLICABLE);
-		} else if (this.status.equals("NOT_REPRODUCIBLE")){
+		} else if (this.status.equals("NOT_REPRODUCIBLE")) {
 			ib.setStatus(Issue.IssueStatus.NOT_REPRODUCIBLE);
-		} else if (this.status.equals("EXTERNAL")){
+		} else if (this.status.equals("EXTERNAL")) {
 			ib.setStatus(Issue.IssueStatus.EXTERNAL);
-		} else if (this.status.equals("ANSWERED")){
+		} else if (this.status.equals("ANSWERED")) {
 			ib.setStatus(Issue.IssueStatus.ANSWERED);
 		} else {
 			ib.setStatus(Issue.IssueStatus.OTHER_STATUS);
 			ib.setOtherStatus(this.status);
 		}
-		// set issue lablels
-		for (int i = 0; i < this.labels.length; i++){
+		// set issue labels
+		for (int i = 0; i < this.labels.length; i++) {
 			String label = this.labels[i];
 			if (label.equals("BUG")) {
 				ib.addLabels(Issue.IssueLabel.BUG);
