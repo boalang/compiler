@@ -35,11 +35,12 @@ public class IssueDownloadWorker implements Runnable {
 			for (int j = 0; j < repos.size(); i++) {
 				JsonObject repo = repos.get(i).getAsJsonObject();
 				String name = repo.get("full_name").getAsString();
+				String id = repo.get("id").getAsString();
 				String[] fullName = name.split("/");
 				String projName = fullName[1];
-				if ((new File(OUT_PATH + "/" + projName +"-issues.json")).exists())
+				if ((new File(OUT_PATH + "/" + id +"-issues.json")).exists())
 					continue;
-				issue.IssueDownloader(name, OUT_PATH, TOKEN_PATH);
+				issue.IssueDownloader(name, id, OUT_PATH, TOKEN_PATH);
 			}
 		}
 	}

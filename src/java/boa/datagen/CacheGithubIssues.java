@@ -37,6 +37,6 @@ public class CacheGithubIssues {
 		}
 		File output = new File(jsonCachePath);
 		output.mkdirs();
-		FileIO.writeObjectToFile(repos, jsonCachePath + "/issue-buf-map", false);
+		FileIO.writeObjectToFile(repos, jsonCachePath + "/issue-buf-map" , false);
 	}
 }

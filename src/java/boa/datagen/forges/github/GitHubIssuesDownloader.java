@@ -35,7 +35,7 @@ public class GitHubIssuesDownloader {
 			worker.run();
 		}
 
-		public void IssueDownloader(String name, String outPath, String tokenPath) {
+		public void IssueDownloader(String name, String id, String outPath, String tokenPath) {
 			JsonArray issuesRepos = new JsonArray();
 			String outDir = outPath;
 			TokenList tokens = new TokenList(tokenPath);
@@ -158,7 +158,7 @@ public class GitHubIssuesDownloader {
 							System.out.println("Authentication Failed!");
 					}
 				}
-				FileIO.writeFileContents(new File(outDir + "/" + projName +"-issues.json"), issuesRepos.toString());
+				FileIO.writeFileContents(new File(outDir + "/" + id +"-issues.json"), issuesRepos.toString());
 			} else {
 				System.out.println("Authentication failed!");
 			}
