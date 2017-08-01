@@ -257,6 +257,7 @@ public class IssueMetaData {
 			cb.setAuthor(person.build());
 			cb.setDescription(comment.get(GIT_DESCRIPTION).getAsString());
 			cb.setDate(getTimeStamp(comment.get(GIT_CREATED_AT).getAsString()));
+			ib.addComments(cb.build());
 		}
 		return ib.build();
 	}

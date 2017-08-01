@@ -12,7 +12,7 @@ import boa.datagen.util.Properties;
 import boa.types.Issues.Issue;
 
 public class CacheGithubIssues {
-	final static String jsonPath = Properties.getProperty("gh.json.path", DefaultProperties.GH_JSON_PATH);
+	final static String jsonPath = Properties.getProperty("gh.issue.path", DefaultProperties.GH_ISSUE_PATH);
 	final static String jsonCachePath = Properties.getProperty("gh.json.cache.path",
 			DefaultProperties.GH_JSON_CACHE_PATH);
 
@@ -37,6 +37,6 @@ public class CacheGithubIssues {
 		}
 		File output = new File(jsonCachePath);
 		output.mkdirs();
-		FileIO.writeObjectToFile(repos, jsonCachePath + "/buf-map", false);
+		FileIO.writeObjectToFile(repos, jsonCachePath + "/issue-buf-map", false);
 	}
 }
