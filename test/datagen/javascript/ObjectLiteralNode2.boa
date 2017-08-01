@@ -1,0 +1,99 @@
+namespaces {
+  name: ""
+  statements {
+    kind: EXPRESSION
+    expression {
+      kind: VARDECL
+      variable_decls {
+        name: "Swapper"
+        variable_type {
+          name: "VAR"
+          kind: OTHER
+        }
+        initializer {
+          kind: LITERAL
+          expressions {
+            kind: OTHER
+            expressions {
+              kind: OTHER
+              variable: "images"
+            }
+            expressions {
+              kind: ARRAYINIT
+              expressions {
+                kind: LITERAL
+                literal: "smile.gif"
+              }
+              expressions {
+                kind: LITERAL
+                literal: "grim.gif"
+              }
+              expressions {
+                kind: LITERAL
+                literal: "frown.gif"
+              }
+              expressions {
+                kind: LITERAL
+                literal: "bomb.gif"
+              }
+            }
+          }
+          expressions {
+            kind: OTHER
+            expressions {
+              kind: OTHER
+              variable: "pos"
+            }
+            expressions {
+              kind: LITERAL
+              expressions {
+                kind: OTHER
+                expressions {
+                  kind: OTHER
+                  variable: "x"
+                }
+                expressions {
+                  kind: LITERAL
+                  literal: "40.0"
+                }
+              }
+              expressions {
+                kind: OTHER
+                expressions {
+                  kind: OTHER
+                  variable: "y"
+                }
+                expressions {
+                  kind: LITERAL
+                  literal: "300.0"
+                }
+              }
+              literal: "object"
+            }
+          }
+          expressions {
+            kind: OTHER
+            expressions {
+              kind: OTHER
+              variable: "onSwap"
+            }
+            expressions {
+              kind: OTHER
+              function {
+                name: ""
+                return_type {
+                  name: ""
+                  kind: OTHER
+                }
+                statements {
+                  kind: BLOCK
+                }
+              }
+            }
+          }
+          literal: "object"
+        }
+      }
+    }
+  }
+}

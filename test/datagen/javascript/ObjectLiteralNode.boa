@@ -1,0 +1,53 @@
+namespaces {
+  name: ""
+  statements {
+    kind: EXPRESSION
+    expression {
+      kind: VARDECL
+      variable_decls {
+        name: "myObject"
+        variable_type {
+          name: "VAR"
+          kind: OTHER
+        }
+        initializer {
+          kind: LITERAL
+          expressions {
+            kind: OTHER
+            expressions {
+              kind: OTHER
+              variable: "sProp"
+            }
+            expressions {
+              kind: LITERAL
+              literal: "some string value"
+            }
+          }
+          expressions {
+            kind: OTHER
+            expressions {
+              kind: OTHER
+              variable: "numProp"
+            }
+            expressions {
+              kind: LITERAL
+              literal: "2.0"
+            }
+          }
+          expressions {
+            kind: OTHER
+            expressions {
+              kind: OTHER
+              variable: "bProp"
+            }
+            expressions {
+              kind: LITERAL
+              literal: "false"
+            }
+          }
+          literal: "object"
+        }
+      }
+    }
+  }
+}

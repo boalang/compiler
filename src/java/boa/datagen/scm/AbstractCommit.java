@@ -21,6 +21,7 @@ package boa.datagen.scm;
 import java.io.*;
 import java.util.*;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.SequenceFile.Writer;
@@ -38,6 +39,7 @@ import boa.types.Diff.ChangedFile.FileKind;
 import boa.types.Shared.ChangeKind;
 import boa.types.Shared.Person;
 import boa.datagen.DefaultProperties;
+import boa.datagen.treed.TreedConstants;
 import boa.datagen.treed.TreedMapper;
 import boa.datagen.util.FileIO;
 import boa.datagen.util.JavaScriptErrorCheckVisitor;
@@ -258,6 +260,15 @@ public abstract class AbstractCommit {
 					System.err.println("Accepted ES2: revision " + id + ": file " + path);
 			} else if (debugparse)
 				System.err.println("Accepted ES1: revision " + id + ": file " + path);
+		} else {
+			final String content = getFileContents(path);
+			if (StringUtils.isAsciiPrintable(content)) {
+				try {
+					astWriter.append(new LongWritable(len), new BytesWritable(content.getBytes()));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		try {
 			if (astWriter.getLength() > len)
@@ -343,7 +354,7 @@ public abstract class AbstractCommit {
 
 	private boolean parseJavaFile(final String path, final ChangedFile.Builder fb, final String content, final String compliance, final int astLevel, final boolean storeOnError, Writer astWriter) {
 		try {
-			ASTParser parser = ASTParser.newParser(astLevel);
+			final ASTParser parser = ASTParser.newParser(astLevel);
 			parser.setKind(ASTParser.K_COMPILATION_UNIT);
 //			parser.setResolveBindings(true);
 			parser.setSource(content.toCharArray());
@@ -358,24 +369,51 @@ public abstract class AbstractCommit {
 			cu.accept(errorCheck);
 
 			if (!errorCheck.hasError || storeOnError) {
+				ASTRoot.Builder preAst = null;
+				CompilationUnit preCu = null;
 				if (fb.getChange() == ChangeKind.MODIFIED && fb.getPreviousIndicesCount() == 1) {
 					AbstractCommit previousCommit = this.connector.revisions.get(fb.getPreviousVersions(0));
 					ChangedFile.Builder pcf = previousCommit.changedFiles.get(fb.getPreviousIndices(0));
 					String previousFilePath = pcf.getName();
 					String previousContent = previousCommit.getFileContents(previousFilePath);
 					FileKind fileKind = pcf.getKind();
-					parser = JavaASTUtil.buildParser(fileKind);
-					if (parser != null) {
-						parser.setSource(previousContent.toCharArray());
-						final ASTNode preCu = parser.createAST(null);
-						TreedMapper tm = new TreedMapper(preCu, cu);
-						tm.map();
+					ASTParser previuousParser = JavaASTUtil.buildParser(fileKind);
+					if (previuousParser != null) {
+						try {
+							previuousParser.setSource(previousContent.toCharArray());
+							preCu = (CompilationUnit) previuousParser.createAST(null);
+							TreedMapper tm = new TreedMapper(preCu, cu);
+							tm.map();
+							preAst = ASTRoot.newBuilder();
+							Integer index = (Integer) preCu.getProperty(Java7Visitor.PROPERTY_INDEX);
+							if (index != null)
+								preAst.setKey(index);
+							ChangeKind status = (ChangeKind) preCu.getProperty(TreedConstants.PROPERTY_STATUS);
+							if (status != null)
+								preAst.setChangeKind(status);
+							preAst.setMappedNode((Integer) cu.getProperty(TreedConstants.PROPERTY_INDEX));
+							final Java7Visitor preVisitor;
+							if (preCu.getAST().apiLevel() == AST.JLS8)
+								preVisitor = new Java8Visitor(previousContent);
+							else
+								preVisitor = new Java7Visitor(previousContent);
+							preAst.addNamespaces(preVisitor.getNamespaces(preCu));
+						} catch (Exception e) {
+							preAst = null;
+						}
 					}
 				}
 				final ASTRoot.Builder ast = ASTRoot.newBuilder();
 				Integer index = (Integer) cu.getProperty(Java7Visitor.PROPERTY_INDEX);
-				if (index != null)
+				if (index != null) {
 					ast.setKey(index);
+					if (preCu != null) {
+						ChangeKind status = (ChangeKind) cu.getProperty(TreedConstants.PROPERTY_STATUS);
+						if (status != null)
+							ast.setChangeKind(status);
+						ast.setMappedNode((Integer) preCu.getProperty(TreedConstants.PROPERTY_INDEX));
+					}
+				}
 				//final CommentsRoot.Builder comments = CommentsRoot.newBuilder();
 				final Java7Visitor visitor;
 				if (astLevel == AST.JLS8)
@@ -394,18 +432,35 @@ public abstract class AbstractCommit {
 					e.printStackTrace();
 					return false;
 				}
-				
+				long len = astWriter.getLength();
 				try {
-					astWriter.append(new LongWritable(astWriter.getLength()), new BytesWritable(ast.build().toByteArray()));
+					astWriter.append(new LongWritable(len), new BytesWritable(ast.build().toByteArray()));
 				} catch (IOException e) {
-					e.printStackTrace();
+					if (debug)
+						e.printStackTrace();
+					len = Long.MAX_VALUE;
 				}
 				//fb.setComments(comments);
+				long plen = astWriter.getLength();
+				if (preAst != null && plen > len) {
+					try {
+						astWriter.append(new LongWritable(plen), new BytesWritable(preAst.build().toByteArray()));
+					} catch (IOException e) {
+						if (debug)
+							e.printStackTrace();
+						plen = Long.MAX_VALUE;
+					}
+				}
+				if (preAst != null && astWriter.getLength() > plen)
+					fb.setMappedKey(plen);
+				else
+					fb.setMappedKey(-1);
 			}
 
 			return !errorCheck.hasError;
 		} catch (final Exception e) {
-			e.printStackTrace();
+			if (debug)
+				e.printStackTrace();
 			return false;
 		}
 	}

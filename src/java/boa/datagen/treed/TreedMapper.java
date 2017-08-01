@@ -78,6 +78,34 @@ public class TreedMapper implements TreedConstants {
 		mapMoving();
 		mapTopDown();
 		markChanges();
+		markUnchanges(astM);
+		
+	}
+
+	private void markUnchanges(ASTNode node) {
+		ArrayList<ASTNode> children = tree.get(node);
+		for (ASTNode child : children)
+			markUnchanges(child);
+		ChangeKind status = (ChangeKind) node.getProperty(PROPERTY_STATUS);
+		if (status == ChangeKind.UNCHANGED) {
+			boolean unchanged = isUnchanged(children);
+			if (unchanged) {
+				ASTNode mappedNode = (ASTNode) node.getProperty(PROPERTY_MAP);
+				unchanged = isUnchanged(tree.get(mappedNode));
+			}
+			if (!unchanged) {
+				ASTNode mappedNode = (ASTNode) node.getProperty(PROPERTY_MAP);
+				node.setProperty(PROPERTY_STATUS, ChangeKind.MODIFIED);
+				mappedNode.setProperty(PROPERTY_STATUS, ChangeKind.MODIFIED);
+			}
+		}
+	}
+
+	private boolean isUnchanged(ArrayList<ASTNode> children) {
+		for (ASTNode child : children)
+			if ((ChangeKind) child.getProperty(PROPERTY_STATUS) != ChangeKind.UNCHANGED)
+				return false;
+		return true;
 	}
 
 	public void printChanges() {
@@ -100,7 +128,7 @@ public class TreedMapper implements TreedConstants {
 				ChangeKind status = (ChangeKind) node.getProperty(PROPERTY_STATUS);
 				System.out.print(TreedUtils.buildASTLabel(node) + ": " + status);
 				ASTNode mn = (ASTNode) node.getProperty(PROPERTY_MAP);
-				if (status != STATUS_UNCHANGED && mn != null)
+				if (status != ChangeKind.UNCHANGED && mn != null)
 					System.out.print(" " + TreedUtils.buildASTLabel(mn));
 				System.out.println();
 				indent++;
@@ -114,13 +142,13 @@ public class TreedMapper implements TreedConstants {
 	}
 
 	private void markChanges() {
-		markChanges(astM);
-		markUnmapped(astN);
+		markAstM(astM);
+		markAstN(astN);
 	}
 
-	private void markUnmapped(ASTNode node) {
+	private void markAstN(ASTNode node) {
 		if (node.getProperty(PROPERTY_STATUS) == null) {
-			node.setProperty(PROPERTY_STATUS, STATUS_UNMAPPED);
+			node.setProperty(PROPERTY_STATUS, ChangeKind.ADDED);
 			numOfChanges++;
 			numOfUnmaps++;
 			if (!(node instanceof SimpleName))
@@ -128,13 +156,13 @@ public class TreedMapper implements TreedConstants {
 		}
 		ArrayList<ASTNode> children = tree.get(node);
 		for (ASTNode child : children)
-			markUnmapped(child);
+			markAstN(child);
 	}
 
-	private void markChanges(ASTNode node) {
+	private void markAstM(ASTNode node) {
 		HashMap<ASTNode, Double> maps = treeMap.get(node);
 		if (maps.isEmpty()) {
-			node.setProperty(PROPERTY_STATUS, STATUS_UNMAPPED);
+			node.setProperty(PROPERTY_STATUS, ChangeKind.DELETED);
 			numOfChanges++;
 			numOfUnmaps++;
 			if (!(node instanceof SimpleName) && !(node instanceof ReturnStatement) && !(node instanceof BreakStatement) && !(node instanceof ContinueStatement))
@@ -144,18 +172,18 @@ public class TreedMapper implements TreedConstants {
 			node.setProperty(PROPERTY_MAP, mappedNode);
 			mappedNode.setProperty(PROPERTY_MAP, node);
 			if (node == astM) {
-				astM.setProperty(PROPERTY_STATUS, STATUS_UNCHANGED);
-				astN.setProperty(PROPERTY_STATUS, STATUS_UNCHANGED);
+				astM.setProperty(PROPERTY_STATUS, ChangeKind.UNCHANGED);
+				astN.setProperty(PROPERTY_STATUS, ChangeKind.UNCHANGED);
 			} else {
 				ASTNode p = node.getParent(), mp = mappedNode.getParent();
 				if (!treeMap.get(p).containsKey(mp)) {
-					node.setProperty(PROPERTY_STATUS, STATUS_MOVED);
-					mappedNode.setProperty(PROPERTY_STATUS, STATUS_MOVED);
+					node.setProperty(PROPERTY_STATUS, ChangeKind.MOVED);
+					mappedNode.setProperty(PROPERTY_STATUS, ChangeKind.MOVED);
 					numOfChanges += 2;
 				} else {
 					if (node.getProperty(PROPERTY_STATUS) == null) {
-						node.setProperty(PROPERTY_STATUS, STATUS_MOVED);
-						mappedNode.setProperty(PROPERTY_STATUS, STATUS_MOVED);
+						node.setProperty(PROPERTY_STATUS, ChangeKind.MOVED);
+						mappedNode.setProperty(PROPERTY_STATUS, ChangeKind.MOVED);
 						numOfChanges += 2;
 					}
 				}
@@ -168,7 +196,7 @@ public class TreedMapper implements TreedConstants {
 		}
 		ArrayList<ASTNode> children = tree.get(node);
 		for (ASTNode child : children)
-			markChanges(child);
+			markAstM(child);
 	}
 
 	private void markChanges(ArrayList<ASTNode> nodes, ArrayList<ASTNode> mappedNodes) {
@@ -202,11 +230,11 @@ public class TreedMapper implements TreedConstants {
 			if (p[i][j] == 'D') {
 				ASTNode node = nodes.get(i-1), node2 = mappedNodes.get(j-1);
 				if (TreedUtils.buildLabelForVector(node) == TreedUtils.buildLabelForVector(node2)) {
-					node.setProperty(PROPERTY_STATUS, STATUS_UNCHANGED);
-					node2.setProperty(PROPERTY_STATUS, STATUS_UNCHANGED);
+					node.setProperty(PROPERTY_STATUS, ChangeKind.UNCHANGED);
+					node2.setProperty(PROPERTY_STATUS, ChangeKind.UNCHANGED);
 				} else {
-					node.setProperty(PROPERTY_STATUS, STATUS_RELABELED);
-					node2.setProperty(PROPERTY_STATUS, STATUS_RELABELED);
+					node.setProperty(PROPERTY_STATUS, ChangeKind.RENAMED);
+					node2.setProperty(PROPERTY_STATUS, ChangeKind.RENAMED);
 					numOfChanges += 2;
 				}
 				i--;
@@ -750,11 +778,11 @@ public class TreedMapper implements TreedConstants {
 									if (sim >= MIN_SIM) {
 										setMap(childM, childN, MIN_SIM);
 										if (TreedUtils.buildASTLabel(childM).equals(TreedUtils.buildASTLabel(childN))) {
-											childM.setProperty(PROPERTY_MAP, STATUS_UNCHANGED);
-											childN.setProperty(PROPERTY_MAP, STATUS_UNCHANGED);
+											childM.setProperty(PROPERTY_MAP, ChangeKind.UNCHANGED);
+											childN.setProperty(PROPERTY_MAP, ChangeKind.UNCHANGED);
 										} else {
-											childM.setProperty(PROPERTY_MAP, STATUS_RELABELED);
-											childN.setProperty(PROPERTY_MAP, STATUS_RELABELED);
+											childM.setProperty(PROPERTY_MAP, ChangeKind.RENAMED);
+											childN.setProperty(PROPERTY_MAP, ChangeKind.RENAMED);
 										}
 									}
 								}

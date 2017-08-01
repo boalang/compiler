@@ -1,0 +1,17 @@
+namespaces {
+  name: ""
+  statements {
+    kind: EXPRESSION
+    expression {
+      kind: ASSIGN_ADD
+      expressions {
+        kind: OTHER
+        variable: "text"
+      }
+      expressions {
+        kind: OTHER
+        variable: "i"
+      }
+    }
+  }
+}

@@ -1,0 +1,17 @@
+namespaces {
+  name: ""
+  statements {
+    kind: EXPRESSION
+    expression {
+      kind: OTHER
+      expressions {
+        kind: OTHER
+        variable: "ns"
+      }
+      expressions {
+        kind: OTHER
+        variable: "expr"
+      }
+    }
+  }
+}

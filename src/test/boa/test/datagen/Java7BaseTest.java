@@ -52,14 +52,14 @@ import boa.test.compiler.BaseTest;
  * @author rdyer
  */
 public class Java7BaseTest extends BaseTest {
-    @SuppressWarnings("deprecation")
+	@SuppressWarnings("deprecation")
 	protected static int astLevel = AST.JLS4;
 	protected static String javaVersion = JavaCore.VERSION_1_7;
 	protected static Java7Visitor visitor = new Java7Visitor("");
 
 	protected static void dumpJavaWrapped(final String content) {
-        dumpJava(getWrapped(content));
-    }
+		dumpJava(getWrapped(content));
+	}
 
 	protected static void dumpJava(final String content) {
 		final ASTParser parser = ASTParser.newParser(astLevel);
@@ -72,13 +72,13 @@ public class Java7BaseTest extends BaseTest {
 
 		final CompilationUnit cu = (CompilationUnit) parser.createAST(null);
 
-        try {
-            final UglyMathCommentsExtractor cex = new UglyMathCommentsExtractor(cu, content);
-            final ASTDumper dumper = new ASTDumper(cex);
-            dumper.dump(cu);
-            cex.close();
-        } catch (final Exception e) {}
-    }
+		try {
+			final UglyMathCommentsExtractor cex = new UglyMathCommentsExtractor(cu, content);
+			final ASTDumper dumper = new ASTDumper(cex);
+			dumper.dump(cu);
+			cex.close();
+		} catch (final Exception e) {}
+	}
 
 	protected static String parseJava(final String content) {
 		final StringBuilder sb = new StringBuilder();
@@ -107,7 +107,7 @@ public class Java7BaseTest extends BaseTest {
 		parser.setEnvironment(new String[0], new String[]{}, new String[]{}, true);
 		parser.setResolveBindings(true);
 		parser.createASTs(fileContents, new String[]{""}, null, new String[0], r, null);
-		
+
 		return sb.toString();
 	}
 
@@ -116,48 +116,48 @@ public class Java7BaseTest extends BaseTest {
 		if (!content.endsWith(";") && !content.endsWith(";\n"))
 			s += ";";
 		s += "\n   }\n}";
-        return s;
+		return s;
 	}
 
 	protected static String parseWrapped(final String content) {
 		return parseJava(getWrapped(content));
-    }
+	}
 
 	public static void testWrapped(final String java, final String expected) {
 		assertEquals(
-			"{\n" +
-			"   \"namespaces\": [\n" +
-			"      {\n" +
-			"         \"name\": \"\",\n" +
-			"         \"declarations\": [\n" +
-			"            {\n" +
-			"               \"name\": \"t\",\n" +
-			"               \"kind\": \"CLASS\",\n" +
-			"               \"methods\": [\n" +
-			"                  {\n" +
-			"                     \"name\": \"m\",\n" +
-			"                     \"return_type\": {\n" +
-			"                        \"name\": \"void\",\n" +
-			"                        \"kind\": \"OTHER\"\n" +
-			"                     },\n" +
-			"                     \"statements\": [\n" +
-			"                        {\n" +
-			"                           \"kind\": \"BLOCK\",\n" +
-			"                           \"statements\": [\n" +
-			"                              " + expected.replaceAll("\n", "\n                              ") + "\n" +
-			"                           ]\n" +
-			"                        }\n" +
-			"                     ]\n" +
-			"                  }\n" +
-			"               ],\n" +
-			"               \"fully_qualified_name\": \"t\"\n" +
-			"            }\n" +
-			"         ]\n" +
-			"      }\n" +
-			"   ]\n" +
-			"}",
-			parseWrapped(java)
-		);
+				"{\n" +
+						"   \"namespaces\": [\n" +
+						"      {\n" +
+						"         \"name\": \"\",\n" +
+						"         \"declarations\": [\n" +
+						"            {\n" +
+						"               \"name\": \"t\",\n" +
+						"               \"kind\": \"CLASS\",\n" +
+						"               \"methods\": [\n" +
+						"                  {\n" +
+						"                     \"name\": \"m\",\n" +
+						"                     \"return_type\": {\n" +
+						"                        \"name\": \"void\",\n" +
+						"                        \"kind\": \"OTHER\"\n" +
+						"                     },\n" +
+						"                     \"statements\": [\n" +
+						"                        {\n" +
+						"                           \"kind\": \"BLOCK\",\n" +
+						"                           \"statements\": [\n" +
+						"                              " + expected.replaceAll("\n", "\n                              ") + "\n" +
+						"                           ]\n" +
+						"                        }\n" +
+						"                     ]\n" +
+						"                  }\n" +
+						"               ],\n" +
+						"               \"fully_qualified_name\": \"t\"\n" +
+						"            }\n" +
+						"         ]\n" +
+						"      }\n" +
+						"   ]\n" +
+						"}",
+						parseWrapped(java)
+				);
 	}
 
 	protected static Declaration getDeclaration(final SequenceFile.Reader ar, final ChangedFile cf, final int nodeId, final HashMap<Integer, Declaration> declarations) {
@@ -172,7 +172,7 @@ public class Java7BaseTest extends BaseTest {
 				ASTRoot root = ASTRoot.parseFrom(CodedInputStream.newInstance(bytes, 0, val.getLength()));
 				ProtoMessageVisitor v = new ProtoMessageVisitor() {
 					private boolean found = false;
-					
+
 					@Override
 					public boolean preVisit(Message message) {
 						if (found)
@@ -196,6 +196,54 @@ public class Java7BaseTest extends BaseTest {
 			} catch (IOException e) {}
 		}
 		return declarations.get(nodeId);
+	}
+
+	protected static Message getMessage(final SequenceFile.Reader ar, final ChangedFile cf, final int nodeId) {
+		long astpos = cf.getKey();
+		if (astpos > -1) {
+			try {
+				ar.seek(astpos);
+				Writable astkey = new LongWritable();
+				BytesWritable val = new BytesWritable();
+				ar.next(astkey, val);
+				byte[] bytes = val.getBytes();
+				ASTRoot root = ASTRoot.parseFrom(CodedInputStream.newInstance(bytes, 0, val.getLength()));
+				return getMessage(root, nodeId);
+			} catch (IOException e) {}
+		}
+		return null;
+	}
+
+	protected static Message getMessage(final Message root, final int nodeId) {
+		final Message[] m = new Message[1];
+		ProtoMessageVisitor v = new ProtoMessageVisitor() {
+			private boolean found = false;
+
+			@Override
+			public boolean preVisit(Message message) {
+				if (found)
+					return false;
+				Object v = getFieldValue(message, "key");
+				if (v != null && (Integer) v == nodeId) {
+					m[0] = message;
+					found = true;
+					return false;
+				}
+				return true;
+			};
+		};
+		v.visit(root);
+		return m[0];
+	}
+
+	protected static Object getFieldValue(Message message, String name) {
+		for (Iterator<Map.Entry<FieldDescriptor, Object>> iter = message.getAllFields().entrySet().iterator(); iter.hasNext();) {
+			Map.Entry<FieldDescriptor, Object> field = iter.next();
+			if (field.getKey().getName().equals(name)) {
+				return field.getValue();
+			}
+		}
+		return null;
 	}
 
 	protected static HashMap<Integer, HashMap<Integer, Declaration>> collectDeclarations(final SequenceFile.Reader ar, List<ChangedFile> snapshot) throws IOException {
@@ -223,20 +271,20 @@ public class Java7BaseTest extends BaseTest {
 			nodeDeclaration.put(((Declaration) message).getKey(), (Declaration) message);
 		}
 		for (Iterator<Map.Entry<FieldDescriptor, Object>> iter = message.getAllFields().entrySet().iterator(); iter.hasNext();) {
-            Map.Entry<FieldDescriptor, Object> field = iter.next();
-            nodeDeclaration.putAll(collectDeclarations(field.getKey(), field.getValue()));
-        }
+			Map.Entry<FieldDescriptor, Object> field = iter.next();
+			nodeDeclaration.putAll(collectDeclarations(field.getKey(), field.getValue()));
+		}
 		return nodeDeclaration;
 	}
 
 	protected static HashMap<Integer, Declaration> collectDeclarations(FieldDescriptor field, Object value) {
 		HashMap<Integer, Declaration> nodeDeclaration = new HashMap<Integer, Declaration>();
-        if (field.isRepeated()) {
-            // Repeated field. Print each element.
-            for (Iterator<?> iter = ((List<?>) value).iterator(); iter.hasNext();)
-            	if (field.getType() == Type.MESSAGE)
-            		nodeDeclaration.putAll(collectDeclarations((Message) iter.next()));
-        }
+		if (field.isRepeated()) {
+			// Repeated field. Print each element.
+			for (Iterator<?> iter = ((List<?>) value).iterator(); iter.hasNext();)
+				if (field.getType() == Type.MESSAGE)
+					nodeDeclaration.putAll(collectDeclarations((Message) iter.next()));
+		}
 		return nodeDeclaration;
 	}
 }

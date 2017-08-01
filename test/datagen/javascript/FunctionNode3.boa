@@ -1,0 +1,57 @@
+namespaces {
+  name: ""
+  statements {
+    kind: EXPRESSION
+    expression {
+      kind: VARDECL
+      variable_decls {
+        name: "x"
+        variable_type {
+          name: "VAR"
+          kind: OTHER
+        }
+        initializer {
+          kind: OTHER
+          function {
+            name: ""
+            return_type {
+              name: ""
+              kind: OTHER
+            }
+            arguments {
+              name: "y"
+              variable_type {
+                name: ""
+                kind: OTHER
+              }
+            }
+            arguments {
+              name: "z"
+              variable_type {
+                name: ""
+                kind: OTHER
+              }
+            }
+            statements {
+              kind: BLOCK
+              statements {
+                kind: RETURN
+                expression {
+                  kind: OP_ADD
+                  expressions {
+                    kind: OTHER
+                    variable: "y"
+                  }
+                  expressions {
+                    kind: OTHER
+                    variable: "z"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

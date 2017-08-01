@@ -215,6 +215,8 @@ message Statement {
 		CATCH = 18;
 		EMPTY = 19;
 		FINALLY = 20;
+		GENERATOR = 21;
+		DEBUGGER = 22;
 	}
 	/** The kind of statement */
 	required StatementKind kind = 1;
@@ -233,6 +235,7 @@ message Statement {
 	optional int32 mapped_node = 12;
 	/** */
 	optional int32 key = 13;
+	repeated Method methods = 14;
 }
 
 /** A single expression */
@@ -296,6 +299,12 @@ message Expression {
 		LAMBDA = 51;
 		/** @exclude TODO */
 		ANON_METHOD = 52;
+		YIELD = 53;
+		ARRAY_COMPREHENSION = 54;
+		EMPTY = 55;
+		SHEQ = 56;
+		SHNEQ = 57;
+		XML_DOTQUERY = 58;
 	}
 	/** The kind of expression */
 	required ExpressionKind kind = 1;
@@ -324,6 +333,7 @@ message Expression {
 	optional Type declaring_type = 19;
 	/** Type of the return value */
 	optional Type return_type = 20;
+	optional Method function = 21;
 }
 
 /** A single modifier */

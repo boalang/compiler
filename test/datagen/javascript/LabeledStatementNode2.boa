@@ -1,0 +1,26 @@
+namespaces {
+  name: ""
+  statements {
+    kind: LABEL
+    statements {
+      kind: LABEL
+      expression {
+        kind: LITERAL
+        literal: "loop1"
+      }
+    }
+    statements {
+      kind: EXPRESSION
+      expression {
+        kind: VARDECL
+        variable_decls {
+          name: "x"
+          variable_type {
+            name: "VAR"
+            kind: OTHER
+          }
+        }
+      }
+    }
+  }
+}

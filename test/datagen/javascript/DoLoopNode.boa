@@ -1,0 +1,52 @@
+namespaces {
+  name: ""
+  statements {
+    kind: DO
+    statements {
+      kind: OTHER
+      statements {
+        kind: EXPRESSION
+        expression {
+          kind: ASSIGN_ADD
+          expressions {
+            kind: OTHER
+            variable: "text"
+          }
+          expressions {
+            kind: OP_ADD
+            expressions {
+              kind: LITERAL
+              literal: "The number is "
+            }
+            expressions {
+              kind: OTHER
+              variable: "i"
+            }
+          }
+        }
+      }
+      statements {
+        kind: EXPRESSION
+        expression {
+          kind: OP_INC
+          expressions {
+            kind: OTHER
+            variable: "i"
+          }
+          is_postfix: true
+        }
+      }
+    }
+    condition {
+      kind: LT
+      expressions {
+        kind: OTHER
+        variable: "i"
+      }
+      expressions {
+        kind: LITERAL
+        literal: "5.0"
+      }
+    }
+  }
+}

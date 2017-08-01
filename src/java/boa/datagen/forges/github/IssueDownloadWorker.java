@@ -25,10 +25,10 @@ public class IssueDownloadWorker implements Runnable {
 		this.to = to;
 	}
 	
-	public void downLoadIssues(int from, int to) {
+	public void downLoadIssues() {
 		File[] files = new File(IN_PATH).listFiles();
 		GitHubIssuesDownloader issue = new GitHubIssuesDownloader();
-		for (int i = from; i < files.length; i++){
+		for (int i = from; i < to; i++){
 			String content = FileIO.readFileContents(files[i]);
 			Gson parser = new Gson();
 			JsonArray repos = parser.fromJson(content, JsonElement.class).getAsJsonArray();
@@ -46,6 +46,6 @@ public class IssueDownloadWorker implements Runnable {
 	
 	@Override
 	public void run() {
-		downLoadIssues(from,to);
+		downLoadIssues();
 	}
 }

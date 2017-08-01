@@ -1,0 +1,133 @@
+namespaces {
+  name: ""
+  statements {
+    kind: LABEL
+    statements {
+      kind: LABEL
+      expression {
+        kind: LITERAL
+        literal: "loop1"
+      }
+    }
+    statements {
+      kind: FOR
+      statements {
+        kind: OTHER
+        statements {
+          kind: LABEL
+          statements {
+            kind: LABEL
+            expression {
+              kind: LITERAL
+              literal: "loop2"
+            }
+          }
+          statements {
+            kind: FOR
+            statements {
+              kind: OTHER
+              statements {
+                kind: IF
+                statements {
+                  kind: OTHER
+                  statements {
+                    kind: CONTINUE
+                    expression {
+                      kind: OTHER
+                      variable: "loop1"
+                    }
+                  }
+                }
+                condition {
+                  kind: LOGICAL_AND
+                  expressions {
+                    kind: SHEQ
+                    expressions {
+                      kind: OTHER
+                      variable: "i"
+                    }
+                    expressions {
+                      kind: LITERAL
+                      literal: "1.0"
+                    }
+                  }
+                  expressions {
+                    kind: SHEQ
+                    expressions {
+                      kind: OTHER
+                      variable: "j"
+                    }
+                    expressions {
+                      kind: LITERAL
+                      literal: "1.0"
+                    }
+                  }
+                }
+              }
+            }
+            initializations {
+              kind: ASSIGN
+              expressions {
+                kind: OTHER
+                variable: "j"
+              }
+              expressions {
+                kind: LITERAL
+                literal: "0.0"
+              }
+            }
+            condition {
+              kind: LT
+              expressions {
+                kind: OTHER
+                variable: "j"
+              }
+              expressions {
+                kind: LITERAL
+                literal: "3.0"
+              }
+            }
+            updates {
+              kind: OP_INC
+              expressions {
+                kind: OTHER
+                variable: "j"
+              }
+              is_postfix: true
+            }
+          }
+        }
+      }
+      initializations {
+        kind: ASSIGN
+        expressions {
+          kind: OTHER
+          variable: "i"
+        }
+        expressions {
+          kind: LITERAL
+          literal: "0.0"
+        }
+      }
+      condition {
+        kind: LT
+        expressions {
+          kind: OTHER
+          variable: "i"
+        }
+        expressions {
+          kind: LITERAL
+          literal: "3.0"
+        }
+      }
+      updates {
+        kind: OP_INC
+        expressions {
+          kind: OTHER
+          variable: "i"
+        }
+        is_postfix: true
+      }
+    }
+  }
+}
