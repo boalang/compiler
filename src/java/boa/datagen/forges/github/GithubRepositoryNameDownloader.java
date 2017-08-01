@@ -88,10 +88,12 @@ public class GithubRepositoryNameDownloader {
 						String homePage = repo.get("homepage").getAsString();
 						String html_url = repo.get("html_url").getAsString();
 						String description = repo.get("description").getAsString();
+						JsonObject owner = repo.get("owner").getAsJsonObject();
 						repo = new JsonObject();
 						repo.addProperty("id", idNum);
 						repo.addProperty("full_name", name);
 						repo.addProperty("name", shortName);
+						repo.add("owner", owner);
 						repo.addProperty("fork", fork);
 						repo.addProperty("homepage", homePage);
 						repo.addProperty("html_url", html_url);
