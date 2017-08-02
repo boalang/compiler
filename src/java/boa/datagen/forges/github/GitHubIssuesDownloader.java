@@ -15,7 +15,7 @@ public class GitHubIssuesDownloader {
 
 		public static void main(String[] args) {
 		//	GitHubIssuesDownloader issue = new GitHubIssuesDownloader();
-		//	issue.IssueDownloader(args[0], args[1], args[2]);
+		//	issue.IssueDownloader(args[0], "1" , args[1], args[2]);
 			int start = 0;
 			int end = 0; 
 			File inDir = new File(args[0]);
@@ -83,12 +83,11 @@ public class GitHubIssuesDownloader {
 								assign2.add(assignie);
 							}
 							JsonArray labels = repo.get("labels").getAsJsonArray();
-							JsonObject milestone = new JsonObject();
+							String milestone = "";
 							if (repo.get("milestone").isJsonNull()) {
 								milestone = null;
 							} else {
-								milestone.addProperty("title", repo.get("milestone").getAsJsonObject().get("title").getAsString());
-								milestone.addProperty("number", repo.get("milestone").getAsJsonObject().get("number").getAsInt());
+								milestone = repo.get("milestone").getAsJsonObject().get("title").getAsString();
 							}
 							JsonArray comments;
 							if (repo.get("comments").getAsInt() <= 0){
@@ -129,7 +128,7 @@ public class GitHubIssuesDownloader {
 							repo.addProperty("updated_at", updated);
 							repo.addProperty("closed_at", closed);
 							repo.add("labels", labels);
-							repo.add("milestone", milestone);
+							repo.addProperty("milestone", milestone);
 							repo.addProperty("body", body);
 							repo.addProperty("pull_request", pullUrl);
 							issuesRepos.add(repo);
