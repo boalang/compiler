@@ -92,55 +92,55 @@ public class IssueMetaData {
 	}
 
 	private void build(JsonObject jsonIssue) {
-		if (jsonIssue.has(GIT_ID))
+		if (jsonIssue.has(GIT_ID) && !jsonIssue.get(GIT_ID).isJsonNull())
 			this.id = jsonIssue.get(GIT_ID).getAsString();
-		if (jsonIssue.has(GIT_SUMMARY))
+		if (jsonIssue.has(GIT_SUMMARY) && !jsonIssue.get(GIT_SUMMARY).isJsonNull())
 			this.summary = jsonIssue.get(GIT_SUMMARY).getAsString();
-		if (jsonIssue.has(GIT_AUTHOR))
+		if (jsonIssue.has(GIT_AUTHOR) && !jsonIssue.get(GIT_AUTHOR).isJsonNull())
 			this.author = jsonIssue.get(GIT_AUTHOR).getAsString();
-		if (jsonIssue.has(GIT_SUMMARY))
+		if (jsonIssue.has(GIT_SUMMARY) && !jsonIssue.get(GIT_SUMMARY).isJsonNull())
 			this.summary = jsonIssue.get(GIT_SUMMARY).getAsString();
-		if (jsonIssue.has(GIT_BLOCKED))
+		if (jsonIssue.has(GIT_BLOCKED) && !jsonIssue.get(GIT_BLOCKED).isJsonNull())
 			this.blocked = jsonIssue.get(GIT_BLOCKED).getAsString();
-		if (jsonIssue.has(GIT_CREATED_AT)) {
+		if (jsonIssue.has(GIT_CREATED_AT) && !jsonIssue.get(GIT_CREATED_AT).isJsonNull()) {
 			String time = jsonIssue.get(GIT_CREATED_AT).getAsString();
 			this.created_date = getTimeStamp(time);
 		}
-		if (jsonIssue.has(GIT_COMPLETED_AT)) {
+		if (jsonIssue.has(GIT_COMPLETED_AT) && !jsonIssue.get(GIT_COMPLETED_AT).isJsonNull()) {
 			String time = jsonIssue.get(GIT_COMPLETED_AT).getAsString();
 			this.completed_date = getTimeStamp(time);
 		}
-		if (jsonIssue.has(GIT_MODIFIED_AT)) {
+		if (jsonIssue.has(GIT_MODIFIED_AT) && !jsonIssue.get(GIT_MODIFIED_AT).isJsonNull()) {
 			String time = jsonIssue.get(GIT_MODIFIED_AT).getAsString();
 			this.modified_date = getTimeStamp(time);
 		}
-		if (jsonIssue.has(GIT_MILESTONE))
+		if (jsonIssue.has(GIT_MILESTONE) && !jsonIssue.get(GIT_MILESTONE).isJsonNull())
 			this.milestone = jsonIssue.get(GIT_MILESTONE).getAsString();
-		if (jsonIssue.has(GIT_NUMBER))
+		if (jsonIssue.has(GIT_NUMBER) && !jsonIssue.get(GIT_NUMBER).isJsonNull())
 			this.number = jsonIssue.get(GIT_NUMBER).getAsInt();
-		if (jsonIssue.has(GIT_STATUS))
+		if (jsonIssue.has(GIT_STATUS) && !jsonIssue.get(GIT_STATUS).isJsonNull())
 			this.status = jsonIssue.get(GIT_STATUS).getAsString();
-		if (jsonIssue.has(GIT_DESCRIPTION))
+		if (jsonIssue.has(GIT_DESCRIPTION) && !jsonIssue.get(GIT_DESCRIPTION).isJsonNull())
 			this.description = jsonIssue.get(GIT_DESCRIPTION).getAsString();
-		if (jsonIssue.has(GIT_PULLURL))
+		if (jsonIssue.has(GIT_PULLURL) && !jsonIssue.get(GIT_PULLURL).isJsonNull())
 			this.pullurl = jsonIssue.get(GIT_PULLURL).getAsString();
-		if (jsonIssue.has(GIT_ASSIGNEE))
+		if (jsonIssue.has(GIT_ASSIGNEE) && !jsonIssue.get(GIT_ASSIGNEE).isJsonNull())
 			this.assignee = jsonIssue.get(GIT_ASSIGNEE).getAsString();
-		if (jsonIssue.has(GIT_ASSIGNEES)) {
+		if (jsonIssue.has(GIT_ASSIGNEES) && !jsonIssue.get(GIT_ASSIGNEES).isJsonNull()) {
 			JsonArray jArray = jsonIssue.get(GIT_ASSIGNEES).getAsJsonArray();
 			assignees = new String[jArray.size()];
 			for (int i = 0; i < jArray.size(); i++) {
 				assignees[i] = jArray.get(i).getAsString();
 			}
 		}
-		if (jsonIssue.has(GIT_LABELS)) {
+		if (jsonIssue.has(GIT_LABELS) && !jsonIssue.get(GIT_LABELS).isJsonNull()) {
 			JsonArray jArray = jsonIssue.get(GIT_LABELS).getAsJsonArray();
 			labels = new String[jArray.size()];
 			for (int i = 0; i < jArray.size(); i++) {
-				labels[i] = jArray.get(i).getAsString();
+				labels[i] = jArray.get(i).getAsJsonObject().get("name").getAsString();
 			}
 		}
-		if (jsonIssue.has(GIT_COMMENTS))
+		if (jsonIssue.has(GIT_COMMENTS) && !jsonIssue.get(GIT_COMMENTS).isJsonNull())
 			this.comments = jsonIssue.get(GIT_COMMENTS).getAsJsonArray();
 	}
 
@@ -248,16 +248,18 @@ public class IssueMetaData {
 			}
 		}
 		// add comments
-		for (int i = 0; i < comments.size(); i++) {
-			Issues.IssueComment.Builder cb = Issues.IssueComment.newBuilder();
-			JsonObject comment = comments.get(i).getAsJsonObject();
-			cb.setId(comment.get(GIT_ID).getAsString());
-			person = Person.newBuilder();
-			person.setUsername(comment.get(GIT_AUTHOR).getAsString());
-			cb.setAuthor(person.build());
-			cb.setDescription(comment.get(GIT_DESCRIPTION).getAsString());
-			cb.setDate(getTimeStamp(comment.get(GIT_CREATED_AT).getAsString()));
-			ib.addComments(cb.build());
+		if (comments != null) {
+			for (int i = 0; i < comments.size(); i++) {
+				Issues.IssueComment.Builder cb = Issues.IssueComment.newBuilder();
+				JsonObject comment = comments.get(i).getAsJsonObject();
+				cb.setId(comment.get(GIT_ID).getAsString());
+				person = Person.newBuilder();
+				person.setUsername(comment.get(GIT_AUTHOR).getAsString());
+				cb.setAuthor(person.build());
+				cb.setDescription(comment.get(GIT_DESCRIPTION).getAsString());
+				cb.setDate(getTimeStamp(comment.get(GIT_CREATED_AT).getAsString()));
+				ib.addComments(cb.build());
+			}
 		}
 		return ib.build();
 	}
