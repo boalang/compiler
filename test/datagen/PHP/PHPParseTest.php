@@ -1,0 +1,3 @@
+<?php
+$txt = "Hello world!";
+?>
