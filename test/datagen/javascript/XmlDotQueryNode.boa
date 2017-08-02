@@ -11,7 +11,7 @@ namespaces {
           kind: OTHER
         }
         initializer {
-          kind: OTHER
+          kind: XML_DOTQUERY
           expressions {
             kind: OTHER
             variable: "foo"
