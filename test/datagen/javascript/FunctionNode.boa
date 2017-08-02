@@ -13,7 +13,7 @@ namespaces {
         expression {
           kind: ASSIGN
           expressions {
-            kind: OTHER
+            kind: VARACCESS
             expressions {
               kind: METHODCALL
               expressions {
