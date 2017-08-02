@@ -3,7 +3,7 @@ namespaces {
   statements {
     kind: EXPRESSION
     expression {
-      kind: OTHER
+      kind: VARACCESS
       expressions {
         kind: OTHER
         variable: "Employee"
