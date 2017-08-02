@@ -17,7 +17,7 @@ public class GithubLanguageDownloadMaster {
 	public final String langNameDir;
 	public final String tokenFile;
 	public final static int MAX_NUM_THREADS = 5;
-	public static THashSet<String> names = new THashSet<String>();
+	public static THashSet<Integer> ids = new THashSet<Integer>();
 
 	public GithubLanguageDownloadMaster(String input, String output, String tokenFile) {
 		this.repoNameDir = input;
@@ -98,7 +98,7 @@ public class GithubLanguageDownloadMaster {
 			repos = parser.fromJson(content, JsonElement.class).getAsJsonArray();
 			for (JsonElement repoE : repos) {
 				repo = repoE.getAsJsonObject();
-				names.add(repo.get("full_name").getAsString());
+				ids.add(repo.get("id").getAsInt());
 			}
 		}
 	}

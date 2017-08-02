@@ -14,23 +14,23 @@ import gnu.trove.set.hash.THashSet;
 
 
 
-public class GitHubRepoMetaDataDownloader {
+public class GitHubReduceByStars {
 	
-	public final String repoNameDir;
-	public final String langNameDir;
+	public final String inPutDir;
+	public final String outPutDir;
 	public final String tokenFile;
-	public final static int MAX_NUM_THREADS = 10;
-	public static THashSet<String> names = new THashSet<String>();
+	public final static int MAX_NUM_THREADS = 5;
+	public static THashSet<Integer> ids = new THashSet<Integer>();
 	
-	public GitHubRepoMetaDataDownloader(String input, String output, String tokenFile) {
-		this.repoNameDir = input;
-		this.langNameDir = output;
+	public GitHubReduceByStars(String input, String output, String tokenFile) {
+		this.inPutDir = input;
+		this.outPutDir = output;
 		this.tokenFile = tokenFile;
-		File outputDir = new File(output + "/java");
+		File outputDir = new File(output + "/scala");
 		if (!outputDir.exists()) {
 			outputDir.mkdirs();
 		} else {
-			addNames(output + "/java");
+			addNames(output + "/scala");
 		}
 	}
 
@@ -38,26 +38,28 @@ public class GitHubRepoMetaDataDownloader {
 		if (args.length < 3) {
 			throw new IllegalArgumentException();
 		}
-		GitHubRepoMetaDataDownloader master = new GitHubRepoMetaDataDownloader(args[0], args[1], args[2]);
-		System.out.println(master.repoNameDir);
-		master.orchastrate(new File(master.repoNameDir).listFiles().length);
+		GitHubReduceByStars master = new GitHubReduceByStars(args[0], args[1], args[2]);
+		System.out.println(master.inPutDir);
+		master.orchastrate(new File(args[0]).listFiles().length);
 	}
 
-	public void orchastrate(int totalFies) {
-		int shareSize = totalFies / MAX_NUM_THREADS;
+	public void orchastrate(int totalFiles) {
+		int shareSize = totalFiles / MAX_NUM_THREADS;
 		int start = 0;
 		int end = 0;
 		int i;
 		TokenList tokens = new TokenList(this.tokenFile);
 		for (i = 0; i < MAX_NUM_THREADS - 1; i++) {
-			start = end;
+			start = end + 1;
 			end = start + shareSize;
-			DataDownloadWorker worker = new DataDownloadWorker(this.repoNameDir, this.langNameDir, tokens, start, end, i);
+			LanguageDownloadWorker worker = new LanguageDownloadWorker(this.inPutDir, this.outPutDir, tokens,
+					start, end, i);
 			new Thread(worker).start();
 		}
-		start = end;
-		end = totalFies;
-		DataDownloadWorker worker = new DataDownloadWorker(this.repoNameDir, this.langNameDir, tokens, start, end, i);
+		start = end + 1;
+		end = totalFiles;
+		LanguageDownloadWorker worker = new LanguageDownloadWorker(this.inPutDir, this.outPutDir, tokens, start,
+				end, i);
 		new Thread(worker).start();
 	}
 
@@ -79,7 +81,7 @@ public class GitHubRepoMetaDataDownloader {
 			repos = parser.fromJson(content, JsonElement.class).getAsJsonArray();
 			for (JsonElement repoE : repos) {
 				repo = repoE.getAsJsonObject();
-				names.add(repo.get("full_name").getAsString());
+				ids.add(repo.get("id").getAsInt());
 			}
 		}
 	}

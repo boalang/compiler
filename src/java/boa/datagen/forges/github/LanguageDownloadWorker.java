@@ -38,7 +38,7 @@ public class LanguageDownloadWorker implements Runnable {
 	final static int RECORDS_PER_FILE = 100;
 	final int startFileNumber;
 	final int endFileNumber;
-	THashSet<String> names = GithubLanguageDownloadMaster.names;
+	THashSet<Integer> ids = GithubLanguageDownloadMaster.ids;
 
 	public LanguageDownloadWorker(String repoPath, String output, TokenList tokenList, int start, int end, int index) {
 		this.output = output;
@@ -70,8 +70,8 @@ public class LanguageDownloadWorker implements Runnable {
 			for (int i = 0; i < size; i++) {
 				JsonObject repo = repos.get(i).getAsJsonObject();
 				String name = repo.get("full_name").getAsString();
-				if (names.contains(name)) {
-					names.remove(name);
+				if (ids.contains(name)) {
+					ids.remove(name);
 					continue;
 				}
 				String langurl = this.language_url_header + name + this.language_url_footer;
