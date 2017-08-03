@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Stack;
 
 import org.eclipse.php.internal.core.compiler.ast.parser.*;
+import org.eclipse.dltk.ast.Modifiers;
 import org.eclipse.php.internal.core.ast.nodes.*;
 import org.eclipse.php.internal.core.ast.visitor.AbstractVisitor;
 
@@ -45,10 +46,10 @@ public class PHPVisitor extends AbstractVisitor {
 		this.src = src;
 	}
 
-	public ASTRoot getRoot(Program node) {
+	public Namespace getNamespace(Program node) {
 		root = node;
 		node.accept(this);
-		return r.build();
+		return b.build();
 	}
 
 	public List<boa.types.Ast.Comment> getComments() {
@@ -96,7 +97,7 @@ public class PHPVisitor extends AbstractVisitor {
 				namespaces.push(new ArrayList<boa.types.Ast.Namespace>());
 				s.accept(this);
 				for (boa.types.Ast.Namespace d : namespaces.pop())
-					r.addNamespaces(d);
+					b.addNamespaces(d);
 				hasNamespace = true;
 			} else if (s instanceof MethodDeclaration) {
 				methods.push(new ArrayList<boa.types.Ast.Method>());
@@ -108,6 +109,11 @@ public class PHPVisitor extends AbstractVisitor {
 				s.accept(this);
 				for (boa.types.Ast.Method m : methods.pop())
 					b.addMethods(m);
+				/*	} else if (s instanceof ConstantDeclaration) {
+				fields.push(new ArrayList<boa.types.Ast.Variable>());
+				((ASTNode) d).accept(this);
+				for (boa.types.Ast.Variable v : fields.pop())
+					b.addFields(v); */ //FIXME Constant Declarations could be under namespcae;
 			} else if (s instanceof TypeDeclaration) {
 				declarations.push(new ArrayList<boa.types.Ast.Declaration>());
 				s.accept(this);
@@ -135,10 +141,7 @@ public class PHPVisitor extends AbstractVisitor {
 					b.addStatements(st);
 			}
 		}
-		if (!hasNamespace) {
-			b.setName("");
-			r.addNamespaces(b.build());
-		}
+		b.setName("");
 		for (Object c : node.comments())
 			((Comment) c).accept(this);
 		if (!expressions.isEmpty())
@@ -179,11 +182,16 @@ public class PHPVisitor extends AbstractVisitor {
 				((MethodDeclaration) s).accept(this);
 				for (boa.types.Ast.Method m : methods.pop())
 					nb.addMethods(m);
+		/*	} else if (s instanceof ConstantDeclaration) {
+				fields.push(new ArrayList<boa.types.Ast.Variable>());
+				((ASTNode) d).accept(this);
+				for (boa.types.Ast.Variable v : fields.pop())
+					nb.addFields(v); */ //FIXME Field Declarations could be under namespcae;
 			} else if (s instanceof FunctionDeclaration) {
 				methods.push(new ArrayList<boa.types.Ast.Method>());
 				((FunctionDeclaration) s).accept(this);
 				for (boa.types.Ast.Method m : methods.pop())
-					b.addMethods(m);
+					nb.addMethods(m);
 			} else if (s instanceof TypeDeclaration) {
 				declarations.push(new ArrayList<boa.types.Ast.Declaration>());
 				((TypeDeclaration) s).accept(this);
@@ -375,60 +383,47 @@ public class PHPVisitor extends AbstractVisitor {
 
 	@Override
 	public boolean visit(ConstantDeclaration node) {
-		boa.types.Ast.Declaration.Builder b = boa.types.Ast.Declaration.newBuilder();
-		b.setKind(boa.types.Ast.TypeKind.OTHER);// VARDECL);
-
-		String mod = node.getModifierString();
-
-		if (mod.contains("private")) {
-			Modifier.Builder mb = Modifier.newBuilder();
-			mb.setKind(Modifier.ModifierKind.VISIBILITY);
-			mb.setVisibility(Modifier.Visibility.PRIVATE);
-			b.addModifiers(mb.build());
-		}
-		if (mod.contains("public")) {
-			Modifier.Builder mb = Modifier.newBuilder();
-			mb.setKind(Modifier.ModifierKind.VISIBILITY);
-			mb.setVisibility(Modifier.Visibility.PUBLIC);
-			b.addModifiers(mb.build());
-		}
-		if (mod.contains("protected")) {
-			Modifier.Builder mb = Modifier.newBuilder();
-			mb.setKind(Modifier.ModifierKind.VISIBILITY);
-			mb.setVisibility(Modifier.Visibility.PROTECTED);
-			b.addModifiers(mb.build());
-		}
-		if (mod.contains("abstract")) {
-			Modifier.Builder mb = Modifier.newBuilder();
-			mb.setKind(Modifier.ModifierKind.ABSTRACT);
-			b.addModifiers(mb.build());
-		}
-		if (mod.contains("static")) {
-			Modifier.Builder mb = Modifier.newBuilder();
-			mb.setKind(Modifier.ModifierKind.FINAL);
-			b.addModifiers(mb.build());
-		}
-		if (mod.contains("final")) {
-			Modifier.Builder mb = Modifier.newBuilder();
-			mb.setKind(Modifier.ModifierKind.FINAL);
-			b.addModifiers(mb.build());
-		}
-
-		Identifier[] variableNames = (Identifier[]) node.names().toArray();
-		org.eclipse.php.internal.core.ast.nodes.Expression[] constantValues = (org.eclipse.php.internal.core.ast.nodes.Expression[]) node
-				.initializers().toArray();
+		List<Variable> list = fields.peek();
+		List<Identifier> variableNames = node.names();
+		List<org.eclipse.php.internal.core.ast.nodes.Expression>constantValues =  node.initializers();
+		int mod = node.getModifier();
 		for (int i = 0; i < node.names().size(); i++) {
 			boa.types.Ast.Variable.Builder vb = boa.types.Ast.Variable.newBuilder();
-			vb.setName(variableNames[i].getName());
-			constantValues[i].accept(this);
+			if ((mod & Modifiers.AccPublic) != 0) {
+				boa.types.Ast.Modifier.Builder mb = boa.types.Ast.Modifier.newBuilder();
+				mb.setKind(boa.types.Ast.Modifier.ModifierKind.VISIBILITY);
+				mb.setVisibility(boa.types.Ast.Modifier.Visibility.PUBLIC);
+				b.addModifiers(mb.build());
+			}
+			if ((mod & Modifiers.AccPrivate) != 0) {
+				boa.types.Ast.Modifier.Builder mb = boa.types.Ast.Modifier.newBuilder();
+				mb.setKind(boa.types.Ast.Modifier.ModifierKind.VISIBILITY);
+				mb.setVisibility(boa.types.Ast.Modifier.Visibility.PRIVATE);
+				b.addModifiers(mb.build());
+			}
+			if ((mod & Modifiers.AccProtected) != 0) {
+				boa.types.Ast.Modifier.Builder mb = boa.types.Ast.Modifier.newBuilder();
+				mb.setKind(boa.types.Ast.Modifier.ModifierKind.VISIBILITY);
+				mb.setVisibility(boa.types.Ast.Modifier.Visibility.PROTECTED);
+				b.addModifiers(mb.build());
+			}
+			if ((mod & Modifiers.AccStatic) != 0) {
+				boa.types.Ast.Modifier.Builder mb = boa.types.Ast.Modifier.newBuilder();
+				mb.setKind(boa.types.Ast.Modifier.ModifierKind.STATIC);
+				b.addModifiers(mb.build());
+			}
+			Modifier.Builder mb = Modifier.newBuilder(); // FIXME const is similiar to final?
+			mb.setKind(Modifier.ModifierKind.FINAL);
+			vb.addModifiers(mb.build());
+			vb.setName(variableNames.get(i).getName());
+			constantValues.get(i).accept(this);
 			vb.setInitializer(expressions.pop());
 			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 			tb.setName("");
 			tb.setKind(boa.types.Ast.TypeKind.OTHER);
 			vb.setVariableType(tb.build());
-			b.addFields(vb.build());
+			list.add(vb.build());
 		}
-		declarations.peek().add(b.build());
 		return false;
 	}
 
@@ -455,14 +450,14 @@ public class PHPVisitor extends AbstractVisitor {
 		}
 		b.setKind(boa.types.Ast.TypeKind.CLASS);
 		// FIXME getSuperClass can return expressions.
-		if (node.getSuperClass() != null && node.getSuperClass() instanceof Identifier){
+		if (node.getSuperClass() != null && node.getSuperClass() instanceof Identifier) {
 			Type.Builder tb = Type.newBuilder();
-			tb.setKind(TypeKind.OTHER);//FIXME
-			tb.setName(((Identifier)node.getSuperClass()).getName());
+			tb.setKind(TypeKind.OTHER);// FIXME
+			tb.setName(((Identifier) node.getSuperClass()).getName());
 			b.addParents(tb.build());
 		}
 		for (Object d : node.getBody().statements()) {
-			if (d instanceof FieldsDeclaration) {
+			if (d instanceof FieldsDeclaration || d instanceof ConstantDeclaration) {
 				fields.push(new ArrayList<boa.types.Ast.Variable>());
 				((ASTNode) d).accept(this);
 				for (boa.types.Ast.Variable v : fields.pop())
@@ -486,6 +481,14 @@ public class PHPVisitor extends AbstractVisitor {
 		node.getClassName().accept(this);
 		b.addExpressions(expressions.pop());
 		tb.setKind(boa.types.Ast.TypeKind.CLASS);
+		String className = "";
+		if (node.getClassName().getName() instanceof Identifier)
+			className = ((Identifier) node.getClassName().getName()).getName();
+		else {
+			node.getClassName().accept(this);
+			b.addExpressions(expressions.pop());
+		}
+		tb.setName(className);
 		b.setNewType(tb.build());
 		for (Object a : node.ctorParams()) {
 			((ASTNode) a).accept(this);
@@ -526,11 +529,11 @@ public class PHPVisitor extends AbstractVisitor {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.CONDITIONAL);
 		node.getCondition().accept(this);
-		b.addExpressions(expressions.pop());
+		b.addExpressions(expressions.pop());// FIXME
 		node.getIfTrue().accept(this);
-		b.addExpressions(expressions.pop());
+		b.addExpressions(expressions.pop());// FIXME
 		node.getIfFalse().accept(this);
-		b.addExpressions(expressions.pop());
+		b.addExpressions(expressions.pop());// FIXME
 		expressions.push(b.build());
 		return false;
 	}
@@ -650,21 +653,48 @@ public class PHPVisitor extends AbstractVisitor {
 
 		org.eclipse.php.internal.core.ast.nodes.Variable[] variableNames = node.getVariableNames();
 		org.eclipse.php.internal.core.ast.nodes.Expression[] initialValues = node.getInitialValues();
+		int mod = node.getModifier();
+		node.getModifierString();
 		for (int i = 0; i < node.getVariableNames().length; i++) {
 			Variable.Builder b = Variable.newBuilder();
 			Type.Builder tb = Type.newBuilder();
 			tb.setKind(TypeKind.OTHER);
 			tb.setName("");
 			b.setVariableType(tb);
+			if ((mod & Modifiers.AccPublic) != 0) {
+				boa.types.Ast.Modifier.Builder mb = boa.types.Ast.Modifier.newBuilder();
+				mb.setKind(boa.types.Ast.Modifier.ModifierKind.VISIBILITY);
+				mb.setVisibility(boa.types.Ast.Modifier.Visibility.PUBLIC);
+				b.addModifiers(mb.build());
+			}
+			if ((mod & Modifiers.AccPrivate) != 0) {
+				boa.types.Ast.Modifier.Builder mb = boa.types.Ast.Modifier.newBuilder();
+				mb.setKind(boa.types.Ast.Modifier.ModifierKind.VISIBILITY);
+				mb.setVisibility(boa.types.Ast.Modifier.Visibility.PRIVATE);
+				b.addModifiers(mb.build());
+			}
+			if ((mod & Modifiers.AccProtected) != 0) {
+				boa.types.Ast.Modifier.Builder mb = boa.types.Ast.Modifier.newBuilder();
+				mb.setKind(boa.types.Ast.Modifier.ModifierKind.VISIBILITY);
+				mb.setVisibility(boa.types.Ast.Modifier.Visibility.PROTECTED);
+				b.addModifiers(mb.build());
+			}
+			if ((mod & Modifiers.AccStatic) != 0) {
+				boa.types.Ast.Modifier.Builder mb = boa.types.Ast.Modifier.newBuilder();
+				mb.setKind(boa.types.Ast.Modifier.ModifierKind.STATIC);
+				b.addModifiers(mb.build());
+			}
 			if (variableNames[i].getName() instanceof Identifier) {
 				b.setName(((Identifier) variableNames[i].getName()).getName());
 			} else {
 				b.setName("");
 				variableNames[i].accept(this);
-			//	b.setNameExpression(expressions.pop()); FIXME
+				// b.setNameExpression(expressions.pop()); FIXME
 			}
-			initialValues[i].accept(this);
-			b.setInitializer(expressions.pop());
+			if (initialValues[i] != null) {
+				initialValues[i].accept(this);
+				b.setInitializer(expressions.pop());
+			}
 			list.add(b.build());
 		}
 		return false;
@@ -702,13 +732,13 @@ public class PHPVisitor extends AbstractVisitor {
 		Type.Builder tb = Type.newBuilder();
 		if (node.getParameterType() != null)
 			if (node.getParameterType() instanceof Identifier)
-			tb.setName(((Identifier) node.getParameterType()).getName());
+				tb.setName(((Identifier) node.getParameterType()).getName());
 			else {
 				tb.setName("");
 				node.getParameterType().accept(this);
-			//	b.setNameExpression(expressions.pop());//FIXME
+				// b.setNameExpression(expressions.pop());//FIXME
 			}
-				
+
 		else
 			tb.setName("");
 		tb.setKind(boa.types.Ast.TypeKind.OTHER);
@@ -842,11 +872,10 @@ public class PHPVisitor extends AbstractVisitor {
 	@Override
 	public boolean visit(IfStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
-
 		node.getCondition().accept(this);
+		b.setCondition(expressions.pop());
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.IF);
-		b.setExpression(expressions.pop());
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
 		node.getTrueStatement().accept(this);
 		for (boa.types.Ast.Statement s : statements.pop())
@@ -874,12 +903,13 @@ public class PHPVisitor extends AbstractVisitor {
 	@Override
 	public boolean visit(Include node) {
 		Expression.Builder eb = Expression.newBuilder();
-		eb.setKind(ExpressionKind.OTHER);//FIXME
+		eb.setKind(ExpressionKind.OTHER);// FIXME
 		Type.Builder tb = Type.newBuilder();
-		tb.setKind(TypeKind.OTHER);//FIXME
+		tb.setKind(TypeKind.OTHER);// FIXME
 		tb.setName(Include.getType(node.getIncludeType()));
-		eb.setNewType(tb.build());//FIXME
-		node.getExpression().accept(this);;
+		eb.setNewType(tb.build());// FIXME
+		node.getExpression().accept(this);
+		;
 		eb.addExpressions(expressions.pop());
 		expressions.push(eb.build());
 		return false;
@@ -1062,37 +1092,37 @@ public class PHPVisitor extends AbstractVisitor {
 	public boolean visit(MethodDeclaration node) {
 		List<boa.types.Ast.Method> list = methods.peek();
 		Method.Builder b = Method.newBuilder();
-		String mod = node.getModifierString();
+		int mod = node.getModifier();
 
-		if (mod.contains("private")) {
+		if ((mod & Modifiers.AccPrivate) != 0) {
 			Modifier.Builder mb = Modifier.newBuilder();
 			mb.setKind(Modifier.ModifierKind.VISIBILITY);
 			mb.setVisibility(Modifier.Visibility.PRIVATE);
 			b.addModifiers(mb.build());
 		}
-		if (mod.contains("public")) {
+		if ((mod & Modifiers.AccPublic) != 0) {
 			Modifier.Builder mb = Modifier.newBuilder();
 			mb.setKind(Modifier.ModifierKind.VISIBILITY);
 			mb.setVisibility(Modifier.Visibility.PUBLIC);
 			b.addModifiers(mb.build());
 		}
-		if (mod.contains("protected")) {
+		if ((mod & Modifiers.AccProtected) != 0) {
 			Modifier.Builder mb = Modifier.newBuilder();
 			mb.setKind(Modifier.ModifierKind.VISIBILITY);
 			mb.setVisibility(Modifier.Visibility.PROTECTED);
 			b.addModifiers(mb.build());
 		}
-		if (mod.contains("abstract")) {
+		if ((mod & Modifiers.AccAbstract) != 0) {
 			Modifier.Builder mb = Modifier.newBuilder();
 			mb.setKind(Modifier.ModifierKind.ABSTRACT);
 			b.addModifiers(mb.build());
 		}
-		if (mod.contains("static")) {
+		if ((mod & Modifiers.AccStatic) != 0) {
 			Modifier.Builder mb = Modifier.newBuilder();
-			mb.setKind(Modifier.ModifierKind.FINAL);
+			mb.setKind(Modifier.ModifierKind.STATIC);
 			b.addModifiers(mb.build());
 		}
-		if (mod.contains("final")) {
+		if ((mod & Modifiers.AccFinal) != 0) {
 			Modifier.Builder mb = Modifier.newBuilder();
 			mb.setKind(Modifier.ModifierKind.FINAL);
 			b.addModifiers(mb.build());
@@ -1215,15 +1245,9 @@ public class PHPVisitor extends AbstractVisitor {
 	public boolean visit(ReflectionVariable node) {
 		Expression.Builder b = Expression.newBuilder();
 		b.setKind(ExpressionKind.VARACCESS);
-		if (node.getName() instanceof Identifier) {
-			Variable.Builder vb = Variable.newBuilder();
-			Type.Builder tb = Type.newBuilder();
-			tb.setKind(TypeKind.OTHER);
-			tb.setName("");
-			vb.setVariableType(tb.build());
-			vb.setName(((Identifier) node.getName()).getName());
-			b.addVariableDecls(vb.build());
-		} else {
+		if (node.getName() instanceof Identifier)
+			b.setVariable(((Identifier) node.getName()).getName());
+		else {
 			node.getName().accept(this);
 			b.addExpressions(expressions.pop());
 		}
