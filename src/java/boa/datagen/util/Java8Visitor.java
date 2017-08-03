@@ -321,8 +321,7 @@ public class Java8Visitor extends Java7Visitor {
         if (!node.hasParentheses())
             eb.setNoParens(true);
 		expressions.push(eb.build());
-		Runnable r2 = () -> System.out.println("Hello world two!");
-		Comparator<String> c = (s1, s2) -> s1.compareTo(s2);
+		
 		return false;
 	}
 	
