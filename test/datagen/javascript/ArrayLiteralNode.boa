@@ -6,9 +6,9 @@ namespaces {
       kind: VARDECL
       variable_decls {
         name: "cars"
-        variable_type {
-          name: "VAR"
-          kind: OTHER
+        modifiers {
+          kind: SCOPE
+          scope: VAR
         }
         initializer {
           kind: ARRAYINIT

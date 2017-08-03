@@ -5,11 +5,11 @@ namespaces {
     expression {
       kind: OTHER
       expressions {
-        kind: OTHER
+        kind: VARACCESS
         variable: "ns"
       }
       expressions {
-        kind: OTHER
+        kind: VARACCESS
         variable: "name"
       }
     }

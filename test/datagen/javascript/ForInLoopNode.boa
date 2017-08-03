@@ -9,17 +9,17 @@ namespaces {
         expression {
           kind: ASSIGN_ADD
           expressions {
-            kind: OTHER
+            kind: VARACCESS
             variable: "text"
           }
           expressions {
             kind: ARRAYINDEX
             expressions {
-              kind: OTHER
+              kind: VARACCESS
               variable: "person"
             }
             expressions {
-              kind: OTHER
+              kind: VARACCESS
               variable: "x"
             }
           }
@@ -27,11 +27,11 @@ namespaces {
       }
     }
     initializations {
-      kind: OTHER
+      kind: VARACCESS
       variable: "x"
     }
     initializations {
-      kind: OTHER
+      kind: VARACCESS
       variable: "person"
     }
   }

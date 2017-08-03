@@ -33,7 +33,7 @@ namespaces {
                   statements {
                     kind: CONTINUE
                     expression {
-                      kind: OTHER
+                      kind: VARACCESS
                       variable: "loop1"
                     }
                   }
@@ -43,7 +43,7 @@ namespaces {
                   expressions {
                     kind: SHEQ
                     expressions {
-                      kind: OTHER
+                      kind: VARACCESS
                       variable: "i"
                     }
                     expressions {
@@ -54,7 +54,7 @@ namespaces {
                   expressions {
                     kind: SHEQ
                     expressions {
-                      kind: OTHER
+                      kind: VARACCESS
                       variable: "j"
                     }
                     expressions {
@@ -68,7 +68,7 @@ namespaces {
             initializations {
               kind: ASSIGN
               expressions {
-                kind: OTHER
+                kind: VARACCESS
                 variable: "j"
               }
               expressions {
@@ -79,7 +79,7 @@ namespaces {
             condition {
               kind: LT
               expressions {
-                kind: OTHER
+                kind: VARACCESS
                 variable: "j"
               }
               expressions {
@@ -90,7 +90,7 @@ namespaces {
             updates {
               kind: OP_INC
               expressions {
-                kind: OTHER
+                kind: VARACCESS
                 variable: "j"
               }
               is_postfix: true
@@ -101,7 +101,7 @@ namespaces {
       initializations {
         kind: ASSIGN
         expressions {
-          kind: OTHER
+          kind: VARACCESS
           variable: "i"
         }
         expressions {
@@ -112,7 +112,7 @@ namespaces {
       condition {
         kind: LT
         expressions {
-          kind: OTHER
+          kind: VARACCESS
           variable: "i"
         }
         expressions {
@@ -123,7 +123,7 @@ namespaces {
       updates {
         kind: OP_INC
         expressions {
-          kind: OTHER
+          kind: VARACCESS
           variable: "i"
         }
         is_postfix: true

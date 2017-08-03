@@ -54,13 +54,7 @@ public class JavaScriptBaseTest extends BaseTest {
 		}
 		JavaScriptVisitor visitor = new JavaScriptVisitor(content);
 		final ASTRoot.Builder ast = ASTRoot.newBuilder();
-		try {
-			ast.addNamespaces(visitor.getNamespaces(cu));
-		} catch (final UnsupportedOperationException e) {
-			return  "Visitor error";
-		} catch (final Exception e) {
-			return "Visitor error";
-		}
+		ast.addNamespaces(visitor.getNamespaces(cu));
 		String boaString = ast.build().toString();
 		return boaString;
 	}

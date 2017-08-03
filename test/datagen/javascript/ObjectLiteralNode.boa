@@ -6,46 +6,96 @@ namespaces {
       kind: VARDECL
       variable_decls {
         name: "myObject"
-        variable_type {
-          name: "VAR"
-          kind: OTHER
+        modifiers {
+          kind: SCOPE
+          scope: VAR
         }
         initializer {
-          kind: LITERAL
-          expressions {
-            kind: OTHER
-            expressions {
-              kind: OTHER
-              variable: "sProp"
-            }
-            expressions {
+          kind: OBJECT_LITERAL
+          variable_decls {
+            name: "sProp"
+            initializer {
               kind: LITERAL
               literal: "some string value"
             }
           }
-          expressions {
-            kind: OTHER
-            expressions {
-              kind: OTHER
-              variable: "numProp"
-            }
-            expressions {
+          variable_decls {
+            name: "numProp"
+            initializer {
               kind: LITERAL
               literal: "2.0"
             }
           }
-          expressions {
-            kind: OTHER
-            expressions {
-              kind: OTHER
-              variable: "bProp"
-            }
-            expressions {
+          variable_decls {
+            name: "bProp"
+            initializer {
               kind: LITERAL
               literal: "false"
             }
           }
-          literal: "object"
+          methods {
+            name: "property"
+            arguments {
+              modifiers {
+                kind: SCOPE
+                scope: LET
+              }
+              computed_name {
+                kind: ARRAYINIT
+                expressions {
+                  kind: VARACCESS
+                  variable: "parameters"
+                }
+              }
+            }
+            statements {
+              kind: BLOCK
+            }
+          }
+          methods {
+            name: "property"
+            modifiers {
+              kind: GETTER
+            }
+            statements {
+              kind: BLOCK
+            }
+          }
+          methods {
+            name: "property"
+            modifiers {
+              kind: SETTER
+            }
+            arguments {
+              name: "value"
+              modifiers {
+                kind: SCOPE
+                scope: LET
+              }
+            }
+            statements {
+              kind: BLOCK
+            }
+          }
+          methods {
+            name: "property"
+            arguments {
+              modifiers {
+                kind: SCOPE
+                scope: LET
+              }
+              computed_name {
+                kind: ARRAYINIT
+                expressions {
+                  kind: VARACCESS
+                  variable: "parameters"
+                }
+              }
+            }
+            statements {
+              kind: BLOCK
+            }
+          }
         }
       }
     }

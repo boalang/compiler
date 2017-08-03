@@ -6,18 +6,18 @@ namespaces {
       kind: VARDECL
       variable_decls {
         name: "x"
-        variable_type {
-          name: "VAR"
-          kind: OTHER
+        modifiers {
+          kind: SCOPE
+          scope: VAR
         }
         initializer {
           kind: XML_DOTQUERY
           expressions {
-            kind: OTHER
+            kind: VARACCESS
             variable: "foo"
           }
           expressions {
-            kind: OTHER
+            kind: VARACCESS
             variable: "bar"
           }
         }
