@@ -1726,10 +1726,8 @@ public class Java7Visitor extends ASTVisitor {
 		node.getBody().accept(this);
 		for (Object c : node.catchClauses())
 			((CatchClause)c).accept(this);
-		if (node.getFinally() != null) {
+		if (node.getFinally() != null)
 			visitFinally(node.getFinally());
-			node.getFinally().accept(this);
-		}
 		for (boa.types.Ast.Statement s : statements.pop())
 			b.addStatements(s);
 		if (node.resources() != null)
