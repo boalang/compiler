@@ -20,6 +20,7 @@ import boa.datagen.forges.github.IssueMetaData;
 import boa.datagen.util.FileIO;
 import boa.datagen.util.Properties;
 import boa.types.Issues.Issue;
+import boa.types.Issues.IssuesRoot;
 
 public class CacheGithubIssues {
 	final static String jsonPath = Properties.getProperty("gh.issue.path", DefaultProperties.GH_ISSUE_PATH);
@@ -29,7 +30,7 @@ public class CacheGithubIssues {
 	private static FileSystem fileSystem;
 	private static String suffix = "";
 	private static SequenceFile.Writer issueWriter;
-
+	
 	public static void main(String[] args) {
 		conf = new Configuration();
 		try {
@@ -47,6 +48,7 @@ public class CacheGithubIssues {
 		for (File file : dir.listFiles()) {
 			if (file.getName().endsWith(".json")) {
 				String[] filePathName = file.getAbsolutePath().split("/");
+				IssuesRoot.Builder b = IssuesRoot.newBuilder();
 				String[] fileName = filePathName[filePathName.length - 1].split("-");
 				String projectId = fileName[0];
 				System.out.println(projectId);
@@ -57,13 +59,13 @@ public class CacheGithubIssues {
 					IssueMetaData repo = new IssueMetaData(repoArray.get(i).getAsJsonObject());
 					if (repo.id != null && repo.summary != null) {
 						Issue protobufRepo = repo.toBoaMetaDataProtobuf();
-						// System.out.println(jRepo.toString());
-						repos.put(repo.id, protobufRepo.toByteArray());
+						b.addIssues(protobufRepo);
+						//repos.put(repo.id, protobufRepo.toByteArray());
 					}
-					System.out.println(repos.size() + ": " + file.getName());
+					//System.out.println(repos.size() + ": " + file.getName());
 				}
 				try {
-					issueWriter.append(new Text(projectId), new BytesWritable(repos.toString().getBytes()));
+					issueWriter.append(new Text(projectId), new BytesWritable(b.build().toByteArray()));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
