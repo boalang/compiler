@@ -253,8 +253,10 @@ public class JavaScriptVisitor implements NodeVisitor {
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.BREAK);
 		if (node.getBreakLabel() != null) {
-			node.getBreakLabel().visit(this);
-			b.setExpression(expressions.pop());
+			boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
+			eb.setKind(ExpressionKind.LITERAL);
+			eb.setLiteral(node.getBreakLabel().getIdentifier());
+			b.setExpression(eb.build());
 		}
 		list.add(b.build());
 		return false;
@@ -290,8 +292,10 @@ public class JavaScriptVisitor implements NodeVisitor {
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.CONTINUE);
 		if (node.getLabel() != null) {
-			node.getLabel().visit(this);
-			b.setExpression(expressions.pop());
+			boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
+			eb.setKind(ExpressionKind.LITERAL);
+			eb.setLiteral(node.getLabel().getIdentifier());
+			b.setExpression(eb.build());
 		}
 		list.add(b.build());
 		return false;
@@ -473,11 +477,12 @@ public class JavaScriptVisitor implements NodeVisitor {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.LABEL);
-		statements.push(new ArrayList<boa.types.Ast.Statement>());
-		for (Label l : node.getLabels()) 
-			l.visit(this);
-		for (boa.types.Ast.Statement s : statements.pop())
-			b.addStatements(s);
+		for (Label l : node.getLabels()) {
+			boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
+			eb.setKind(ExpressionKind.LITERAL);
+			eb.setLiteral(l.getName());
+			b.addExpressions(eb);
+		}
 		if (node.getStatement() instanceof FunctionNode) {
 			methods.push(new ArrayList<boa.types.Ast.Method>());
 			node.getStatement().visit(this);
@@ -508,22 +513,20 @@ public class JavaScriptVisitor implements NodeVisitor {
 	public boolean accept(SwitchCase node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
-		b.setKind(boa.types.Ast.Statement.StatementKind.CASE);
-		if (node.getExpression() != null) {
+		if (node.isDefault())
+			b.setKind(boa.types.Ast.Statement.StatementKind.DEFAULT);
+		else {
+			b.setKind(boa.types.Ast.Statement.StatementKind.CASE);
 			node.getExpression().visit(this);
 			b.setExpression(expressions.pop());
 		}
 		if (node.getStatements() != null) {
+			methods.push(new ArrayList<boa.types.Ast.Method>());
 			statements.push(new ArrayList<boa.types.Ast.Statement>());
-			for (AstNode s : node.getStatements()) {
-				if (s instanceof FunctionNode) {
-					methods.push(new ArrayList<boa.types.Ast.Method>());
-					s.visit(this);
-					for (boa.types.Ast.Method m : methods.pop())
-						b.addMethods(m);
-				} else
-					s.visit(this);
-			}
+			for (AstNode s : node.getStatements())
+				s.visit(this);
+			for (boa.types.Ast.Method m : methods.pop())
+				b.addMethods(m);
 			for (boa.types.Ast.Statement st : statements.pop())
 				b.addStatements(st);
 		}
@@ -602,15 +605,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 	}
 
 	public boolean accept(Label node) {
-		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
-		List<boa.types.Ast.Statement> list = statements.peek();
-		Expression.Builder eb = Expression.newBuilder();
-		eb.setKind(ExpressionKind.LITERAL);
-		eb.setLiteral(node.getName());
-		b.setExpression(eb.build());
-		b.setKind(boa.types.Ast.Statement.StatementKind.LABEL);
-		list.add(b.build());
-		return false;
+		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
 	}
 
 	public boolean accept(GeneratorExpression node) {

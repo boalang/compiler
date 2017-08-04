@@ -221,6 +221,7 @@ message Statement {
 		FINALLY = 20;
 		GENERATOR = 21;
 		DEBUGGER = 22;
+		DEFAULT = 23;
 	}
 	/** The kind of statement */
 	required StatementKind kind = 1;
@@ -233,8 +234,9 @@ message Statement {
 	optional Variable variable_declaration = 7;
 	optional Declaration type_declaration = 8;
 	optional Expression expression = 9;
+	repeated Expression expressions = 10;
 	/** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED */
-	optional ChangeKind change_kind = 10;
+	optional ChangeKind change_kind = 11;
 	/** the key of the mapped node in the previous version */
 	optional int32 mapped_node = 12;
 	/** */

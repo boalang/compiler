@@ -1618,7 +1618,10 @@ public class Java7Visitor extends ASTVisitor {
 			}
 		}
 		List<boa.types.Ast.Statement> list = statements.peek();
-		b.setKind(boa.types.Ast.Statement.StatementKind.CASE);
+		if (node.isDefault())
+			b.setKind(boa.types.Ast.Statement.StatementKind.DEFAULT);
+		else
+			b.setKind(boa.types.Ast.Statement.StatementKind.CASE);
 		if (node.getExpression() != null) {
 			node.getExpression().accept(this);
 			b.setExpression(expressions.pop());
