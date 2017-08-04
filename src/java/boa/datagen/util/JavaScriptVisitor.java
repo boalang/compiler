@@ -144,9 +144,6 @@ public class JavaScriptVisitor implements NodeVisitor {
 	}
 
 	public boolean accept(LetNode node) {
-		Statement.Builder sb = boa.types.Ast.Statement.newBuilder();
-		sb.setKind(boa.types.Ast.Statement.StatementKind.EXPRESSION);
-		List<boa.types.Ast.Statement> list = statements.peek();
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.VARDECL);
 		fields.push(new ArrayList<boa.types.Ast.Variable>());
@@ -154,21 +151,31 @@ public class JavaScriptVisitor implements NodeVisitor {
 			f.visit(this);
 		for (boa.types.Ast.Variable v : fields.pop())
 			eb.addVariableDecls(v);
-		sb.setExpression(eb.build());
-		if (node.getBody() != null) {
-			if (node.getBody() instanceof FunctionNode) {
-				methods.push(new ArrayList<boa.types.Ast.Method>());
-				node.getBody().visit(this);
-				for (boa.types.Ast.Method m : methods.pop())
-					sb.addMethods(m);
-			} else {
-				statements.push(new ArrayList<boa.types.Ast.Statement>());
-				node.getBody().visit(this);
-				for (boa.types.Ast.Statement d : statements.pop())
-					sb.addStatements(d);
+		if (node.getType() == Token.LET) {
+			Statement.Builder sb = boa.types.Ast.Statement.newBuilder();
+			sb.setKind(boa.types.Ast.Statement.StatementKind.EXPRESSION);
+			sb.setExpression(eb.build());
+			if (node.getBody() != null) {
+				if (node.getBody() instanceof FunctionNode) {
+					methods.push(new ArrayList<boa.types.Ast.Method>());
+					node.getBody().visit(this);
+					for (boa.types.Ast.Method m : methods.pop())
+						sb.addMethods(m);
+				} else {
+					statements.push(new ArrayList<boa.types.Ast.Statement>());
+					node.getBody().visit(this);
+					for (boa.types.Ast.Statement d : statements.pop())
+						sb.addStatements(d);
+				}
 			}
+			statements.peek().add(sb.build());
+		} else {
+			if (node.getBody() != null) {
+				node.getBody().visit(this);
+				eb.addExpressions(expressions.pop());
+			}
+			expressions.push(eb.build());
 		}
-		list.add(sb.build());
 		return false;
 	}
 
