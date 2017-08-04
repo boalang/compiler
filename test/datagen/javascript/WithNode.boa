@@ -1,9 +1,9 @@
 namespaces {
   name: ""
   statements {
-    kind: OTHER
+    kind: WITH
     statements {
-      kind: OTHER
+      kind: BLOCK
       statements {
         kind: EXPRESSION
         expression {

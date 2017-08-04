@@ -33,7 +33,7 @@ namespaces {
   statements {
     kind: FOR
     statements {
-      kind: OTHER
+      kind: BLOCK
       statements {
         kind: EXPRESSION
         expression {

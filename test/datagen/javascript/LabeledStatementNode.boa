@@ -5,17 +5,17 @@ namespaces {
     statements {
       kind: FOR
       statements {
-        kind: OTHER
+        kind: BLOCK
         statements {
           kind: LABEL
           statements {
             kind: FOR
             statements {
-              kind: OTHER
+              kind: BLOCK
               statements {
                 kind: IF
                 statements {
-                  kind: OTHER
+                  kind: BLOCK
                   statements {
                     kind: CONTINUE
                     expression {
