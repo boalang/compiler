@@ -29,10 +29,8 @@ public class CacheGithubIssues {
 	private static FileSystem fileSystem;
 	private static String suffix = "";
 	private static SequenceFile.Writer issueWriter;
-	private static String outPath; 
-	
+
 	public static void main(String[] args) {
-		outPath = args[1]; //jsonCachePath
 		conf = new Configuration();
 		try {
 			fileSystem = FileSystem.get(conf);
@@ -40,14 +38,18 @@ public class CacheGithubIssues {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		File output = new File(args[1]); //jsonCachePath);
+		File output = new File(jsonCachePath);
 		if (!output.exists())
 			output.mkdirs();
 		CacheGithubIssues.openWriters();
 		HashMap<String, byte[]> repos = new HashMap<String, byte[]>();
-		File dir = new File(args[0]); //jsonPath + "/issues");
+		File dir = new File(jsonPath + "/issues");
 		for (File file : dir.listFiles()) {
 			if (file.getName().endsWith(".json")) {
+				String[] filePathName = file.getAbsolutePath().split("/");
+				String[] fileName = filePathName[filePathName.length - 1].split("-");
+				String projectId = fileName[0];
+				System.out.println(projectId);
 				String content = FileIO.readFileContents(file);
 				Gson parser = new Gson();
 				JsonArray repoArray = parser.fromJson(content, JsonElement.class).getAsJsonArray();
@@ -57,34 +59,37 @@ public class CacheGithubIssues {
 						Issue protobufRepo = repo.toBoaMetaDataProtobuf();
 						// System.out.println(jRepo.toString());
 						repos.put(repo.id, protobufRepo.toByteArray());
-						try {
-							issueWriter.append(new Text(repo.id), new BytesWritable(protobufRepo.toByteArray()));
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
 					}
 					System.out.println(repos.size() + ": " + file.getName());
+				}
+				try {
+					issueWriter.append(new Text(projectId), new BytesWritable(repos.toString().getBytes()));
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
 			}
 		}
 		CacheGithubIssues.closeWriters();
 	}
+
 	private static void openWriters() {
 		long time = System.currentTimeMillis() / 1000;
 		suffix = "-" + time + ".seq";
 		while (true) {
 			try {
-				issueWriter = SequenceFile.createWriter(fileSystem, conf, new Path(outPath + "/issues" + suffix), Text.class, BytesWritable.class);
+				issueWriter = SequenceFile.createWriter(fileSystem, conf, new Path(jsonCachePath + "/issues" + suffix),
+						Text.class, BytesWritable.class);
 				break;
 			} catch (Throwable t) {
 				t.printStackTrace();
 				try {
 					Thread.sleep(1000);
-				} catch (InterruptedException e) {}
+				} catch (InterruptedException e) {
+				}
 			}
 		}
 	}
-	
+
 	private static void closeWriters() {
 		while (true) {
 			try {
@@ -93,7 +98,7 @@ public class CacheGithubIssues {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
 				}
-				fileSystem.delete(new Path(new Path(outPath), "." + "issues" + suffix + ".crc"), false);
+				fileSystem.delete(new Path(new Path(jsonCachePath), "." + "issues" + suffix + ".crc"), false);
 				break;
 			} catch (Throwable t) {
 				t.printStackTrace();
@@ -106,4 +111,3 @@ public class CacheGithubIssues {
 	}
 
 }
-
