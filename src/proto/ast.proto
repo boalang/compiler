@@ -223,6 +223,7 @@ message Statement {
 		DEFAULT = 22;
 		FOREACH = 23;
 		FORIN = 24;
+		WITH = 25;
 	}
 	/** The kind of statement */
 	required StatementKind kind = 1;
@@ -325,6 +326,8 @@ message Expression {
 		XML_MEMBERREF = 66;
 		XML_DOT = 67;
 		XML_DOTDOT = 68;
+		IN = 69;
+		TYPEOF = 70;
 	}
 	/** The kind of expression */
 	required ExpressionKind kind = 1;

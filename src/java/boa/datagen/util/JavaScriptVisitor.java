@@ -448,7 +448,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 	public boolean accept(WithStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
-		b.setKind(boa.types.Ast.Statement.StatementKind.OTHER);
+		b.setKind(boa.types.Ast.Statement.StatementKind.WITH);
 		node.getExpression().visit(this);
 		b.setExpression(expressions.pop());
 		if (node.getStatement() instanceof FunctionNode) {
@@ -878,11 +878,13 @@ public class JavaScriptVisitor implements NodeVisitor {
 		else if (node.getOperator() == Token.BITXOR)
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.BIT_XOR);
 		else if (node.getOperator() == Token.SHEQ)
-			b.setKind(boa.types.Ast.Expression.ExpressionKind.SHEQ);//FIXME should we differentiate between eq and strictly eq?
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.SHEQ);
 		else if (node.getOperator() == Token.SHNE)
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.SHNEQ);
 		else if (node.getOperator() == Token.IN)
-			b.setKind(boa.types.Ast.Expression.ExpressionKind.OTHER);
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.IN);
+		else if (node.getOperator() == Token.INSTANCEOF)
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.TYPECOMPARE);
 		else
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.OTHER);
 		node.getLeft().visit(this);
@@ -896,10 +898,8 @@ public class JavaScriptVisitor implements NodeVisitor {
 	public boolean accept(NewExpression node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.NEW);
-		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
-		tb.setName(node.getTarget().getString());
-		tb.setKind(boa.types.Ast.TypeKind.OTHER);
-		b.setNewType(tb.build());
+		node.getTarget().visit(this);
+		b.addExpressions(expressions.pop());
 		for (AstNode arg : node.getArguments()) {
 			arg.visit(this);
 			b.addMethodArgs(expressions.pop());
@@ -996,6 +996,10 @@ public class JavaScriptVisitor implements NodeVisitor {
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.LOGICAL_NOT);
 		else if (node.getOperator() == Token.NEG)
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.OP_SUB);
+		else if (node.getOperator() == Token.POS)
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.OP_ADD);
+		else if (node.getOperator() == Token.TYPEOF)
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.TYPEOF);
 		else
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.OTHER);
 		node.getOperand().visit(this);
@@ -1118,7 +1122,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 	public boolean accept(Scope node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
-		b.setKind(boa.types.Ast.Statement.StatementKind.OTHER);// FIXME
+		b.setKind(boa.types.Ast.Statement.StatementKind.BLOCK);
 		for (Node s : node) {
 			if (s instanceof FunctionNode) {
 				methods.push(new ArrayList<boa.types.Ast.Method>());
