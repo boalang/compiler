@@ -424,7 +424,8 @@ public class JavaScriptVisitor implements NodeVisitor {
 			target.getLeft().visit(this);
 			b.addExpressions(expressions.pop());
 		} else {
-			throw new RuntimeException("Unsupported target in method/function call!!!");
+			node.getTarget().visit(this);
+			b.addExpressions(expressions.pop());
 		}
 		b.setMethod(name);
 		for (AstNode a : node.getArguments()) {
