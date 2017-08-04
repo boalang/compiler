@@ -6,19 +6,15 @@ namespaces {
       kind: VARDECL
       variable_decls {
         name: "Swapper"
-        variable_type {
-          name: "VAR"
-          kind: OTHER
+        modifiers {
+          kind: SCOPE
+          scope: VAR
         }
         initializer {
-          kind: LITERAL
-          expressions {
-            kind: OTHER
-            expressions {
-              kind: OTHER
-              variable: "images"
-            }
-            expressions {
+          kind: OBJECT_LITERAL
+          variable_decls {
+            name: "images"
+            initializer {
               kind: ARRAYINIT
               expressions {
                 kind: LITERAL
@@ -38,60 +34,32 @@ namespaces {
               }
             }
           }
-          expressions {
-            kind: OTHER
-            expressions {
-              kind: OTHER
-              variable: "pos"
-            }
-            expressions {
-              kind: LITERAL
-              expressions {
-                kind: OTHER
-                expressions {
-                  kind: OTHER
-                  variable: "x"
-                }
-                expressions {
+          variable_decls {
+            name: "pos"
+            initializer {
+              kind: OBJECT_LITERAL
+              variable_decls {
+                name: "x"
+                initializer {
                   kind: LITERAL
                   literal: "40.0"
                 }
               }
-              expressions {
-                kind: OTHER
-                expressions {
-                  kind: OTHER
-                  variable: "y"
-                }
-                expressions {
+              variable_decls {
+                name: "y"
+                initializer {
                   kind: LITERAL
                   literal: "300.0"
                 }
               }
-              literal: "object"
             }
           }
-          expressions {
-            kind: OTHER
-            expressions {
-              kind: OTHER
-              variable: "onSwap"
-            }
-            expressions {
-              kind: OTHER
-              function {
-                name: ""
-                return_type {
-                  name: ""
-                  kind: OTHER
-                }
-                statements {
-                  kind: BLOCK
-                }
-              }
+          methods {
+            name: "onSwap"
+            statements {
+              kind: BLOCK
             }
           }
-          literal: "object"
         }
       }
     }

@@ -1,7 +1,7 @@
 namespaces {
   name: ""
   statements {
-    kind: FOR
+    kind: FORIN
     statements {
       kind: OTHER
       statements {
@@ -9,29 +9,32 @@ namespaces {
         expression {
           kind: ASSIGN_ADD
           expressions {
-            kind: OTHER
+            kind: VARACCESS
             variable: "text"
           }
           expressions {
             kind: ARRAYINDEX
             expressions {
-              kind: OTHER
+              kind: VARACCESS
               variable: "person"
             }
             expressions {
-              kind: OTHER
+              kind: VARACCESS
               variable: "x"
             }
           }
         }
       }
     }
-    initializations {
-      kind: OTHER
-      variable: "x"
+    variable_declaration {
+      name: "x"
+      modifiers {
+        kind: SCOPE
+        scope: VAR
+      }
     }
-    initializations {
-      kind: OTHER
+    expression {
+      kind: VARACCESS
       variable: "person"
     }
   }

@@ -6,9 +6,9 @@ namespaces {
       kind: VARDECL
       variable_decls {
         name: "x"
-        variable_type {
-          name: "VAR"
-          kind: OTHER
+        modifiers {
+          kind: SCOPE
+          scope: VAR
         }
         initializer {
           kind: LITERAL
@@ -17,9 +17,9 @@ namespaces {
       }
       variable_decls {
         name: "y"
-        variable_type {
-          name: "VAR"
-          kind: OTHER
+        modifiers {
+          kind: SCOPE
+          scope: VAR
         }
         initializer {
           kind: LITERAL

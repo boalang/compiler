@@ -2,10 +2,6 @@ namespaces {
   name: ""
   methods {
     name: "foo"
-    return_type {
-      name: ""
-      kind: OTHER
-    }
     statements {
       kind: BLOCK
       statements {
@@ -14,9 +10,9 @@ namespaces {
           kind: VARDECL
           variable_decls {
             name: "index"
-            variable_type {
-              name: "VAR"
-              kind: OTHER
+            modifiers {
+              kind: SCOPE
+              scope: VAR
             }
             initializer {
               kind: LITERAL
@@ -34,7 +30,7 @@ namespaces {
             expressions {
               kind: OP_INC
               expressions {
-                kind: OTHER
+                kind: VARACCESS
                 variable: "index"
               }
               is_postfix: true
@@ -44,7 +40,7 @@ namespaces {
         condition {
           kind: LTEQ
           expressions {
-            kind: OTHER
+            kind: VARACCESS
             variable: "index"
           }
           expressions {

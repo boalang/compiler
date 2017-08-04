@@ -1301,7 +1301,7 @@ public class Java7Visitor extends ASTVisitor {
 			}
 		}
 		List<boa.types.Ast.Statement> list = statements.peek();
-		b.setKind(boa.types.Ast.Statement.StatementKind.FOR);
+		b.setKind(boa.types.Ast.Statement.StatementKind.FOREACH);
 		SingleVariableDeclaration ex = node.getParameter();
 		Variable.Builder vb = Variable.newBuilder();
 		index = (Integer) ex.getProperty(Java7Visitor.PROPERTY_INDEX);
@@ -1618,7 +1618,10 @@ public class Java7Visitor extends ASTVisitor {
 			}
 		}
 		List<boa.types.Ast.Statement> list = statements.peek();
-		b.setKind(boa.types.Ast.Statement.StatementKind.CASE);
+		if (node.isDefault())
+			b.setKind(boa.types.Ast.Statement.StatementKind.DEFAULT);
+		else
+			b.setKind(boa.types.Ast.Statement.StatementKind.CASE);
 		if (node.getExpression() != null) {
 			node.getExpression().accept(this);
 			b.setExpression(expressions.pop());
@@ -1723,10 +1726,8 @@ public class Java7Visitor extends ASTVisitor {
 		node.getBody().accept(this);
 		for (Object c : node.catchClauses())
 			((CatchClause)c).accept(this);
-		if (node.getFinally() != null) {
+		if (node.getFinally() != null)
 			visitFinally(node.getFinally());
-			node.getFinally().accept(this);
-		}
 		for (boa.types.Ast.Statement s : statements.pop())
 			b.addStatements(s);
 		if (node.resources() != null)

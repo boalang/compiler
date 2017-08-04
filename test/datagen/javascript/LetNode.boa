@@ -9,23 +9,23 @@ namespaces {
       kind: VARDECL
       variable_decls {
         name: "x"
-        variable_type {
-          name: ""
-          kind: OTHER
+        modifiers {
+          kind: SCOPE
+          scope: LET
         }
       }
       variable_decls {
         name: "y"
-        variable_type {
-          name: ""
-          kind: OTHER
+        modifiers {
+          kind: SCOPE
+          scope: LET
         }
       }
       variable_decls {
         name: "z"
-        variable_type {
-          name: ""
-          kind: OTHER
+        modifiers {
+          kind: SCOPE
+          scope: LET
         }
       }
     }

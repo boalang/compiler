@@ -137,7 +137,7 @@ message Method {
 	/** A list of all modifiers on the variable */
 	repeated Modifier modifiers = 2;
 	/** The type returned from the method; if the method returns nothing, this type will be void */
-	required Type return_type = 3;
+	optional Type return_type = 3;
 	/** The list of generic parameters for this method */
 	repeated Type generic_parameters = 4;
 	/** The arguments the method takes */
@@ -160,14 +160,16 @@ message Method {
 	optional int32 key = 12;
 	/** The key of the type declaration declaring this method in the same AST */
 	optional int32 declaring_type = 13;
+	/** */
+	optional Expression computed_name = 14;
 }
 
 /** A variable declaration - can be a field, local, parameter, etc */
 message Variable {
 	/** The name of the variable */
-	required string name = 1;
+	optional string name = 1;
 	/** The type of the variable */
-	required Type variable_type = 2;
+	optional Type variable_type = 2;
 	/** A list of all modifiers on the variable */
 	repeated Modifier modifiers = 3;
 	/** If the variable has an initial assignment, the expression is stored here */
@@ -182,6 +184,8 @@ message Variable {
 	optional int32 key = 9;
 	/** the key of the node containing the type declaration (in the same AST) declaring this field. null if this is a local variable */
 	optional int32 declaring_type = 10;
+	/** */
+	optional Expression computed_name = 11;
 }
 
 /** A single statement */
@@ -217,6 +221,9 @@ message Statement {
 		FINALLY = 20;
 		GENERATOR = 21;
 		DEBUGGER = 22;
+		DEFAULT = 23;
+		FOREACH = 24;
+		FORIN = 25;
 	}
 	/** The kind of statement */
 	required StatementKind kind = 1;
@@ -229,8 +236,9 @@ message Statement {
 	optional Variable variable_declaration = 7;
 	optional Declaration type_declaration = 8;
 	optional Expression expression = 9;
+	repeated Expression expressions = 10;
 	/** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED */
-	optional ChangeKind change_kind = 10;
+	optional ChangeKind change_kind = 11;
 	/** the key of the mapped node in the previous version */
 	optional int32 mapped_node = 12;
 	/** */
@@ -242,6 +250,7 @@ message Statement {
 message Expression {
 	/** The kind of expression */
 	enum ExpressionKind {
+		option allow_alias = true;
 		/** Any other expression */
 		OTHER = 0;
 		LITERAL = 1;
@@ -251,6 +260,8 @@ message Expression {
 		CAST = 5;
 		ARRAYINDEX = 6;
 		ARRAYINIT = 7;
+		/** The same as ARRAYINIT */
+		ARRAYLITERAL = 7;
 		TYPECOMPARE = 8;
 		NEW = 9;
 		NEWARRAY = 10;
@@ -305,6 +316,9 @@ message Expression {
 		SHEQ = 56;
 		SHNEQ = 57;
 		XML_DOTQUERY = 58;
+		OBJECT_LITERAL = 59;
+		METHODDECL = 60;
+		
 	}
 	/** The kind of expression */
 	required ExpressionKind kind = 1;
@@ -333,7 +347,10 @@ message Expression {
 	optional Type declaring_type = 19;
 	/** Type of the return value */
 	optional Type return_type = 20;
-	optional Method function = 21;
+	/** Declared methods/functions */
+	repeated Method methods = 21;
+	/** Inside statements */
+	repeated Statement statements = 22;
 }
 
 /** A single modifier */
@@ -357,6 +374,12 @@ message Modifier {
 		SYNC = 5;
 		/** An abstract modifier */
 		ABSTRACT = 6;
+		/** A scope modifier */
+		SCOPE = 7;
+		/** A modifier for getter */
+		GETTER = 8;
+		/** A modifier for setter */
+		SETTER = 9;
 	}
 	/** A visibility modifier */
 	enum Visibility {
@@ -373,6 +396,16 @@ message Modifier {
 		PACKAGE = 4;
 		/** @exclude */
 		DEFAULT = 4;
+	}
+	/** A scope modifier */
+	enum Scope {
+		option allow_alias = true;
+		/** A global scope modifier for a variable */
+		VAR = 1;
+		/** A block scope modifier for a variable */
+		LET = 2;
+		/** A local scope modifier for a constant */
+		CONST = 3;
 	}
 	/** The kind of modifier */
 	required ModifierKind kind = 1;
@@ -392,6 +425,8 @@ message Modifier {
 	optional int32 mapped_node = 9;
 	/** */
 	optional int32 key = 10;
+	/** */
+	optional Scope scope = 11;
 }
 
 /** @exclude */

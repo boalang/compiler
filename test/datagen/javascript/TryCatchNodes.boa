@@ -12,9 +12,9 @@ namespaces {
       }
       variable_declaration {
         name: "err"
-        variable_type {
-          name: "LET"
-          kind: OTHER
+        modifiers {
+          kind: SCOPE
+          scope: LET
         }
       }
     }

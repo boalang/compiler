@@ -6,9 +6,9 @@ namespaces {
       kind: VARDECL
       variable_decls {
         name: "x"
-        variable_type {
-          name: "VAR"
-          kind: OTHER
+        modifiers {
+          kind: SCOPE
+          scope: VAR
         }
       }
     }
@@ -19,9 +19,9 @@ namespaces {
       kind: VARDECL
       variable_decls {
         name: "y"
-        variable_type {
-          name: "LET"
-          kind: OTHER
+        modifiers {
+          kind: SCOPE
+          scope: LET
         }
       }
     }
@@ -32,9 +32,9 @@ namespaces {
       kind: VARDECL
       variable_decls {
         name: "z"
-        variable_type {
-          name: "CONST"
-          kind: OTHER
+        modifiers {
+          kind: SCOPE
+          scope: CONST
         }
       }
     }

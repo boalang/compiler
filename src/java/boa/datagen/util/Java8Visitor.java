@@ -321,7 +321,7 @@ public class Java8Visitor extends Java7Visitor {
         if (!node.hasParentheses())
             eb.setNoParens(true);
 		expressions.push(eb.build());
-
+		
 		return false;
 	}
 	

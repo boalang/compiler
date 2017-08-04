@@ -2,10 +2,6 @@ namespaces {
   name: ""
   methods {
     name: "myFunction"
-    return_type {
-      name: ""
-      kind: OTHER
-    }
     statements {
       kind: BLOCK
       statements {
@@ -17,7 +13,7 @@ namespaces {
             expressions {
               kind: METHODCALL
               expressions {
-                kind: OTHER
+                kind: VARACCESS
                 variable: "document"
               }
               method: "getElementById"
@@ -27,7 +23,7 @@ namespaces {
               }
             }
             expressions {
-              kind: OTHER
+              kind: VARACCESS
               variable: "innerHTML"
             }
           }

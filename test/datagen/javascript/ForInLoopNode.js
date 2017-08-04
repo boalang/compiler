@@ -1,3 +1,3 @@
-for (x in person) {
+for (var x in person) {
     text += person[x];
 }

@@ -9,19 +9,19 @@ namespaces {
         expression {
           kind: METHODCALL
           expressions {
-            kind: OTHER
+            kind: VARACCESS
             variable: "console"
           }
           method: "log"
           method_args {
-            kind: OTHER
+            kind: VARACCESS
             variable: "x"
           }
         }
       }
     }
     expression {
-      kind: OTHER
+      kind: VARACCESS
       variable: "o"
     }
   }

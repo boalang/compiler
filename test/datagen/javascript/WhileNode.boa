@@ -9,7 +9,7 @@ namespaces {
         expression {
           kind: ASSIGN_ADD
           expressions {
-            kind: OTHER
+            kind: VARACCESS
             variable: "text"
           }
           expressions {
@@ -19,7 +19,7 @@ namespaces {
               literal: "<br>The number is "
             }
             expressions {
-              kind: OTHER
+              kind: VARACCESS
               variable: "i"
             }
           }
@@ -30,7 +30,7 @@ namespaces {
         expression {
           kind: OP_INC
           expressions {
-            kind: OTHER
+            kind: VARACCESS
             variable: "i"
           }
           is_postfix: true
@@ -40,7 +40,7 @@ namespaces {
     condition {
       kind: LT
       expressions {
-        kind: OTHER
+        kind: VARACCESS
         variable: "i"
       }
       expressions {

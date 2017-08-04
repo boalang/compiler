@@ -2,22 +2,18 @@ namespaces {
   name: ""
   methods {
     name: "add"
-    return_type {
-      name: ""
-      kind: OTHER
-    }
     arguments {
       name: "y"
-      variable_type {
-        name: ""
-        kind: OTHER
+      modifiers {
+        kind: SCOPE
+        scope: LET
       }
     }
     arguments {
       name: "z"
-      variable_type {
-        name: ""
-        kind: OTHER
+      modifiers {
+        kind: SCOPE
+        scope: LET
       }
     }
     statements {
@@ -27,11 +23,11 @@ namespaces {
         expression {
           kind: OP_ADD
           expressions {
-            kind: OTHER
+            kind: VARACCESS
             variable: "y"
           }
           expressions {
-            kind: OTHER
+            kind: VARACCESS
             variable: "z"
           }
         }

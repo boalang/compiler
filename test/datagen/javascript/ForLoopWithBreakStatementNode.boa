@@ -6,9 +6,9 @@ namespaces {
       kind: VARDECL
       variable_decls {
         name: "text"
-        variable_type {
-          name: "VAR"
-          kind: OTHER
+        modifiers {
+          kind: SCOPE
+          scope: VAR
         }
         initializer {
           kind: LITERAL
@@ -23,9 +23,9 @@ namespaces {
       kind: VARDECL
       variable_decls {
         name: "i"
-        variable_type {
-          name: "VAR"
-          kind: OTHER
+        modifiers {
+          kind: SCOPE
+          scope: VAR
         }
       }
     }
@@ -39,7 +39,7 @@ namespaces {
         expression {
           kind: ASSIGN_ADD
           expressions {
-            kind: OTHER
+            kind: VARACCESS
             variable: "text"
           }
           expressions {
@@ -51,7 +51,7 @@ namespaces {
                 literal: "The number is "
               }
               expressions {
-                kind: OTHER
+                kind: VARACCESS
                 variable: "i"
               }
             }
@@ -69,7 +69,7 @@ namespaces {
     initializations {
       kind: ASSIGN
       expressions {
-        kind: OTHER
+        kind: VARACCESS
         variable: "i"
       }
       expressions {
@@ -80,7 +80,7 @@ namespaces {
     condition {
       kind: LT
       expressions {
-        kind: OTHER
+        kind: VARACCESS
         variable: "i"
       }
       expressions {
@@ -91,7 +91,7 @@ namespaces {
     updates {
       kind: OP_INC
       expressions {
-        kind: OTHER
+        kind: VARACCESS
         variable: "i"
       }
       is_postfix: true
