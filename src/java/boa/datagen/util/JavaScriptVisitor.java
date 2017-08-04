@@ -563,24 +563,34 @@ public class JavaScriptVisitor implements NodeVisitor {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.TRY);
+		methods.push(new ArrayList<boa.types.Ast.Method>());
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
 		node.getTryBlock().visit(this);
-		for (Object c : node.getCatchClauses())
-			((CatchClause) c).visit(this);
-		if (node.getFinallyBlock() != null) {
-			if (node.getFinallyBlock() instanceof FunctionNode) {
-				methods.push(new ArrayList<boa.types.Ast.Method>());
-				node.getFinallyBlock().visit(this);
-				for (boa.types.Ast.Method m : methods.pop())
-					b.addMethods(m);
-			} else {
-				node.getFinallyBlock().visit(this);
-			}
-		}
+		for (CatchClause c : node.getCatchClauses())
+			c.visit(this);
+		if (node.getFinallyBlock() != null)
+			visitFinally(node.getFinallyBlock());
+		for (boa.types.Ast.Method m : methods.pop())
+			b.addMethods(m);
 		for (boa.types.Ast.Statement s : statements.pop())
 			b.addStatements(s);
 		list.add(b.build());
 		return false;
+	}
+
+	private void visitFinally(AstNode block) {
+		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
+		List<boa.types.Ast.Statement> list = statements.peek();
+		b.setKind(boa.types.Ast.Statement.StatementKind.FINALLY);
+		methods.push(new ArrayList<boa.types.Ast.Method>());
+		statements.push(new ArrayList<boa.types.Ast.Statement>());
+		for (Node node : block)
+			((AstNode) node).visit(this);
+		for (boa.types.Ast.Method m : methods.pop())
+			b.addMethods(m);
+		for (boa.types.Ast.Statement s : statements.pop())
+			b.addStatements(s);
+		list.add(b.build());
 	}
 
 	public boolean accept(WhileLoop node) {
