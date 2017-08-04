@@ -1,7 +1,7 @@
 namespaces {
   name: ""
   statements {
-    kind: FOR
+    kind: FORIN
     statements {
       kind: OTHER
       statements {
@@ -26,11 +26,14 @@ namespaces {
         }
       }
     }
-    initializations {
-      kind: VARACCESS
-      variable: "x"
+    variable_declaration {
+      name: "x"
+      modifiers {
+        kind: SCOPE
+        scope: VAR
+      }
     }
-    initializations {
+    expression {
       kind: VARACCESS
       variable: "person"
     }

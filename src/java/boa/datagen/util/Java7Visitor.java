@@ -1301,7 +1301,7 @@ public class Java7Visitor extends ASTVisitor {
 			}
 		}
 		List<boa.types.Ast.Statement> list = statements.peek();
-		b.setKind(boa.types.Ast.Statement.StatementKind.FOR);
+		b.setKind(boa.types.Ast.Statement.StatementKind.FOREACH);
 		SingleVariableDeclaration ex = node.getParameter();
 		Variable.Builder vb = Variable.newBuilder();
 		index = (Integer) ex.getProperty(Java7Visitor.PROPERTY_INDEX);

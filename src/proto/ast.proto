@@ -222,6 +222,8 @@ message Statement {
 		GENERATOR = 21;
 		DEBUGGER = 22;
 		DEFAULT = 23;
+		FOREACH = 24;
+		FORIN = 25;
 	}
 	/** The kind of statement */
 	required StatementKind kind = 1;
