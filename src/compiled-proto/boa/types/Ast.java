@@ -20709,25 +20709,21 @@ public final class Ast {
        */
       FINALLY(22, 20),
       /**
-       * <code>GENERATOR = 21;</code>
+       * <code>DEBUGGER = 21;</code>
        */
-      GENERATOR(23, 21),
+      DEBUGGER(23, 21),
       /**
-       * <code>DEBUGGER = 22;</code>
+       * <code>DEFAULT = 22;</code>
        */
-      DEBUGGER(24, 22),
+      DEFAULT(24, 22),
       /**
-       * <code>DEFAULT = 23;</code>
+       * <code>FOREACH = 23;</code>
        */
-      DEFAULT(25, 23),
+      FOREACH(25, 23),
       /**
-       * <code>FOREACH = 24;</code>
+       * <code>FORIN = 24;</code>
        */
-      FOREACH(26, 24),
-      /**
-       * <code>FORIN = 25;</code>
-       */
-      FORIN(27, 25),
+      FORIN(26, 24),
       ;
 
       /**
@@ -20851,25 +20847,21 @@ public final class Ast {
        */
       public static final int FINALLY_VALUE = 20;
       /**
-       * <code>GENERATOR = 21;</code>
+       * <code>DEBUGGER = 21;</code>
        */
-      public static final int GENERATOR_VALUE = 21;
+      public static final int DEBUGGER_VALUE = 21;
       /**
-       * <code>DEBUGGER = 22;</code>
+       * <code>DEFAULT = 22;</code>
        */
-      public static final int DEBUGGER_VALUE = 22;
+      public static final int DEFAULT_VALUE = 22;
       /**
-       * <code>DEFAULT = 23;</code>
+       * <code>FOREACH = 23;</code>
        */
-      public static final int DEFAULT_VALUE = 23;
+      public static final int FOREACH_VALUE = 23;
       /**
-       * <code>FOREACH = 24;</code>
+       * <code>FORIN = 24;</code>
        */
-      public static final int FOREACH_VALUE = 24;
-      /**
-       * <code>FORIN = 25;</code>
-       */
-      public static final int FORIN_VALUE = 25;
+      public static final int FORIN_VALUE = 24;
 
 
       public final int getNumber() { return value; }
@@ -20897,11 +20889,10 @@ public final class Ast {
           case 18: return CATCH;
           case 19: return EMPTY;
           case 20: return FINALLY;
-          case 21: return GENERATOR;
-          case 22: return DEBUGGER;
-          case 23: return DEFAULT;
-          case 24: return FOREACH;
-          case 25: return FORIN;
+          case 21: return DEBUGGER;
+          case 22: return DEFAULT;
+          case 23: return FOREACH;
+          case 24: return FORIN;
           default: return null;
         }
       }
@@ -20932,7 +20923,7 @@ public final class Ast {
       }
 
       private static final StatementKind[] VALUES = {
-        OTHER, BLOCK, TYPEDECL, EXPRESSION, EXPR, SYNCHRONIZED, SYNC, RETURN, FOR, DO, WHILE, IF, ASSERT, BREAK, CONTINUE, LABEL, SWITCH, CASE, TRY, THROW, CATCH, EMPTY, FINALLY, GENERATOR, DEBUGGER, DEFAULT, FOREACH, FORIN, 
+        OTHER, BLOCK, TYPEDECL, EXPRESSION, EXPR, SYNCHRONIZED, SYNC, RETURN, FOR, DO, WHILE, IF, ASSERT, BREAK, CONTINUE, LABEL, SWITCH, CASE, TRY, THROW, CATCH, EMPTY, FINALLY, DEBUGGER, DEFAULT, FOREACH, FORIN, 
       };
 
       public static StatementKind valueOf(
@@ -24840,6 +24831,16 @@ public final class Ast {
      */
     boa.types.Ast.StatementOrBuilder getStatementsOrBuilder(
         int index);
+
+    // optional bool is_member_access = 23;
+    /**
+     * <code>optional bool is_member_access = 23;</code>
+     */
+    boolean hasIsMemberAccess();
+    /**
+     * <code>optional bool is_member_access = 23;</code>
+     */
+    boolean getIsMemberAccess();
   }
   /**
    * Protobuf type {@code boa.types.Expression}
@@ -25077,6 +25078,11 @@ public final class Ast {
                 mutable_bitField0_ |= 0x00100000;
               }
               statements_.add(input.readMessage(boa.types.Ast.Statement.PARSER, extensionRegistry));
+              break;
+            }
+            case 184: {
+              bitField0_ |= 0x00008000;
+              isMemberAccess_ = input.readBool();
               break;
             }
           }
@@ -25405,6 +25411,38 @@ public final class Ast {
        * <code>METHODDECL = 60;</code>
        */
       METHODDECL(61, 60),
+      /**
+       * <code>LOOP = 61;</code>
+       */
+      LOOP(62, 61),
+      /**
+       * <code>GENERATOR = 62;</code>
+       */
+      GENERATOR(63, 62),
+      /**
+       * <code>XML_LITERAL = 63;</code>
+       */
+      XML_LITERAL(64, 63),
+      /**
+       * <code>XML_EXPRESSION = 64;</code>
+       */
+      XML_EXPRESSION(65, 64),
+      /**
+       * <code>XML_PROPERTYREF = 65;</code>
+       */
+      XML_PROPERTYREF(66, 65),
+      /**
+       * <code>XML_MEMBERREF = 66;</code>
+       */
+      XML_MEMBERREF(67, 66),
+      /**
+       * <code>XML_DOT = 67;</code>
+       */
+      XML_DOT(68, 67),
+      /**
+       * <code>XML_DOTDOT = 68;</code>
+       */
+      XML_DOTDOT(69, 68),
       ;
 
       /**
@@ -25683,6 +25721,38 @@ public final class Ast {
        * <code>METHODDECL = 60;</code>
        */
       public static final int METHODDECL_VALUE = 60;
+      /**
+       * <code>LOOP = 61;</code>
+       */
+      public static final int LOOP_VALUE = 61;
+      /**
+       * <code>GENERATOR = 62;</code>
+       */
+      public static final int GENERATOR_VALUE = 62;
+      /**
+       * <code>XML_LITERAL = 63;</code>
+       */
+      public static final int XML_LITERAL_VALUE = 63;
+      /**
+       * <code>XML_EXPRESSION = 64;</code>
+       */
+      public static final int XML_EXPRESSION_VALUE = 64;
+      /**
+       * <code>XML_PROPERTYREF = 65;</code>
+       */
+      public static final int XML_PROPERTYREF_VALUE = 65;
+      /**
+       * <code>XML_MEMBERREF = 66;</code>
+       */
+      public static final int XML_MEMBERREF_VALUE = 66;
+      /**
+       * <code>XML_DOT = 67;</code>
+       */
+      public static final int XML_DOT_VALUE = 67;
+      /**
+       * <code>XML_DOTDOT = 68;</code>
+       */
+      public static final int XML_DOTDOT_VALUE = 68;
 
 
       public final int getNumber() { return value; }
@@ -25750,6 +25820,14 @@ public final class Ast {
           case 58: return XML_DOTQUERY;
           case 59: return OBJECT_LITERAL;
           case 60: return METHODDECL;
+          case 61: return LOOP;
+          case 62: return GENERATOR;
+          case 63: return XML_LITERAL;
+          case 64: return XML_EXPRESSION;
+          case 65: return XML_PROPERTYREF;
+          case 66: return XML_MEMBERREF;
+          case 67: return XML_DOT;
+          case 68: return XML_DOTDOT;
           default: return null;
         }
       }
@@ -25780,7 +25858,7 @@ public final class Ast {
       }
 
       private static final ExpressionKind[] VALUES = {
-        OTHER, LITERAL, VARACCESS, VARDECL, METHODCALL, CAST, ARRAYINDEX, ARRAYINIT, ARRAYLITERAL, TYPECOMPARE, NEW, NEWARRAY, OP_ADD, OP_SUB, OP_MULT, OP_DIV, OP_MOD, OP_INC, OP_DEC, BIT_LSHIFT, BIT_RSHIFT, BIT_UNSIGNEDRSHIFT, BIT_AND, BIT_OR, BIT_NOT, BIT_XOR, LOGICAL_NOT, LOGICAL_AND, LOGICAL_OR, EQ, NEQ, LT, GT, LTEQ, GTEQ, CONDITIONAL, NULLCOALESCE, ASSIGN, ASSIGN_ADD, ASSIGN_SUB, ASSIGN_MULT, ASSIGN_DIV, ASSIGN_MOD, ASSIGN_BITXOR, ASSIGN_BITAND, ASSIGN_BITOR, ASSIGN_LSHIFT, ASSIGN_RSHIFT, ASSIGN_UNSIGNEDRSHIFT, ANNOTATION, PAREN, METHOD_REFERENCE, LAMBDA, ANON_METHOD, YIELD, ARRAY_COMPREHENSION, EMPTY, SHEQ, SHNEQ, XML_DOTQUERY, OBJECT_LITERAL, METHODDECL, 
+        OTHER, LITERAL, VARACCESS, VARDECL, METHODCALL, CAST, ARRAYINDEX, ARRAYINIT, ARRAYLITERAL, TYPECOMPARE, NEW, NEWARRAY, OP_ADD, OP_SUB, OP_MULT, OP_DIV, OP_MOD, OP_INC, OP_DEC, BIT_LSHIFT, BIT_RSHIFT, BIT_UNSIGNEDRSHIFT, BIT_AND, BIT_OR, BIT_NOT, BIT_XOR, LOGICAL_NOT, LOGICAL_AND, LOGICAL_OR, EQ, NEQ, LT, GT, LTEQ, GTEQ, CONDITIONAL, NULLCOALESCE, ASSIGN, ASSIGN_ADD, ASSIGN_SUB, ASSIGN_MULT, ASSIGN_DIV, ASSIGN_MOD, ASSIGN_BITXOR, ASSIGN_BITAND, ASSIGN_BITOR, ASSIGN_LSHIFT, ASSIGN_RSHIFT, ASSIGN_UNSIGNEDRSHIFT, ANNOTATION, PAREN, METHOD_REFERENCE, LAMBDA, ANON_METHOD, YIELD, ARRAY_COMPREHENSION, EMPTY, SHEQ, SHNEQ, XML_DOTQUERY, OBJECT_LITERAL, METHODDECL, LOOP, GENERATOR, XML_LITERAL, XML_EXPRESSION, XML_PROPERTYREF, XML_MEMBERREF, XML_DOT, XML_DOTDOT, 
       };
 
       public static ExpressionKind valueOf(
@@ -26493,6 +26571,22 @@ public final class Ast {
       return statements_.get(index);
     }
 
+    // optional bool is_member_access = 23;
+    public static final int IS_MEMBER_ACCESS_FIELD_NUMBER = 23;
+    private boolean isMemberAccess_;
+    /**
+     * <code>optional bool is_member_access = 23;</code>
+     */
+    public boolean hasIsMemberAccess() {
+      return ((bitField0_ & 0x00008000) == 0x00008000);
+    }
+    /**
+     * <code>optional bool is_member_access = 23;</code>
+     */
+    public boolean getIsMemberAccess() {
+      return isMemberAccess_;
+    }
+
     private void initFields() {
       kind_ = boa.types.Ast.Expression.ExpressionKind.OTHER;
       expressions_ = java.util.Collections.emptyList();
@@ -26515,6 +26609,7 @@ public final class Ast {
       returnType_ = boa.types.Ast.Type.getDefaultInstance();
       methods_ = java.util.Collections.emptyList();
       statements_ = java.util.Collections.emptyList();
+      isMemberAccess_ = false;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -26667,6 +26762,9 @@ public final class Ast {
       for (int i = 0; i < statements_.size(); i++) {
         output.writeMessage(22, statements_.get(i));
       }
+      if (((bitField0_ & 0x00008000) == 0x00008000)) {
+        output.writeBool(23, isMemberAccess_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -26759,6 +26857,10 @@ public final class Ast {
       for (int i = 0; i < statements_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(22, statements_.get(i));
+      }
+      if (((bitField0_ & 0x00008000) == 0x00008000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(23, isMemberAccess_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -26982,6 +27084,8 @@ public final class Ast {
         } else {
           statementsBuilder_.clear();
         }
+        isMemberAccess_ = false;
+        bitField0_ = (bitField0_ & ~0x00200000);
         return this;
       }
 
@@ -27148,6 +27252,10 @@ public final class Ast {
         } else {
           result.statements_ = statementsBuilder_.build();
         }
+        if (((from_bitField0_ & 0x00200000) == 0x00200000)) {
+          to_bitField0_ |= 0x00008000;
+        }
+        result.isMemberAccess_ = isMemberAccess_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -27370,6 +27478,9 @@ public final class Ast {
               statementsBuilder_.addAllMessages(other.statements_);
             }
           }
+        }
+        if (other.hasIsMemberAccess()) {
+          setIsMemberAccess(other.getIsMemberAccess());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -30372,6 +30483,39 @@ public final class Ast {
           statements_ = null;
         }
         return statementsBuilder_;
+      }
+
+      // optional bool is_member_access = 23;
+      private boolean isMemberAccess_ ;
+      /**
+       * <code>optional bool is_member_access = 23;</code>
+       */
+      public boolean hasIsMemberAccess() {
+        return ((bitField0_ & 0x00200000) == 0x00200000);
+      }
+      /**
+       * <code>optional bool is_member_access = 23;</code>
+       */
+      public boolean getIsMemberAccess() {
+        return isMemberAccess_;
+      }
+      /**
+       * <code>optional bool is_member_access = 23;</code>
+       */
+      public Builder setIsMemberAccess(boolean value) {
+        bitField0_ |= 0x00200000;
+        isMemberAccess_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional bool is_member_access = 23;</code>
+       */
+      public Builder clearIsMemberAccess() {
+        bitField0_ = (bitField0_ & ~0x00200000);
+        isMemberAccess_ = false;
+        onChanged();
+        return this;
       }
 
       // @@protoc_insertion_point(builder_scope:boa.types.Expression)
@@ -35372,7 +35516,7 @@ public final class Ast {
       "nt\022*\n\013change_kind\030\006 \001(\0162\025.boa.types.Chan",
       "geKind\022\023\n\013mapped_node\030\010 \001(\005\022\013\n\003key\030\t \001(\005" +
       "\022\026\n\016declaring_type\030\n \001(\005\022,\n\rcomputed_nam" +
-      "e\030\013 \001(\0132\025.boa.types.Expression\"\234\007\n\tState" +
+      "e\030\013 \001(\0132\025.boa.types.Expression\"\215\007\n\tState" +
       "ment\0220\n\004kind\030\001 \002(\0162\".boa.types.Statement" +
       ".StatementKind\022$\n\010comments\030\002 \003(\0132\022.boa.t" +
       "ypes.Comment\022(\n\nstatements\030\003 \003(\0132\024.boa.t" +
@@ -35387,88 +35531,92 @@ public final class Ast {
       "s.Expression\022*\n\013change_kind\030\013 \001(\0162\025.boa." +
       "types.ChangeKind\022\023\n\013mapped_node\030\014 \001(\005\022\013\n" +
       "\003key\030\r \001(\005\022\"\n\007methods\030\016 \003(\0132\021.boa.types." +
-      "Method\"\334\002\n\rStatementKind\022\t\n\005OTHER\020\000\022\t\n\005B" +
+      "Method\"\315\002\n\rStatementKind\022\t\n\005OTHER\020\000\022\t\n\005B" +
       "LOCK\020\001\022\014\n\010TYPEDECL\020\002\022\016\n\nEXPRESSION\020\003\022\010\n\004" +
       "EXPR\020\003\022\020\n\014SYNCHRONIZED\020\004\022\010\n\004SYNC\020\004\022\n\n\006RE",
       "TURN\020\005\022\007\n\003FOR\020\006\022\006\n\002DO\020\007\022\t\n\005WHILE\020\010\022\006\n\002IF" +
       "\020\t\022\n\n\006ASSERT\020\n\022\t\n\005BREAK\020\013\022\014\n\010CONTINUE\020\014\022" +
       "\t\n\005LABEL\020\r\022\n\n\006SWITCH\020\016\022\010\n\004CASE\020\017\022\007\n\003TRY\020" +
       "\020\022\t\n\005THROW\020\021\022\t\n\005CATCH\020\022\022\t\n\005EMPTY\020\023\022\013\n\007FI" +
-      "NALLY\020\024\022\r\n\tGENERATOR\020\025\022\014\n\010DEBUGGER\020\026\022\013\n\007" +
-      "DEFAULT\020\027\022\013\n\007FOREACH\020\030\022\t\n\005FORIN\020\031\032\002\020\001\"\376\014" +
-      "\n\nExpression\0222\n\004kind\030\001 \002(\0162$.boa.types.E" +
-      "xpression.ExpressionKind\022*\n\013expressions\030" +
-      "\002 \003(\0132\025.boa.types.Expression\022+\n\016variable" +
-      "_decls\030\003 \003(\0132\023.boa.types.Variable\022!\n\010new",
-      "_type\030\004 \001(\0132\017.boa.types.Type\022+\n\022generic_" +
-      "parameters\030\005 \003(\0132\017.boa.types.Type\022\022\n\nis_" +
-      "postfix\030\006 \001(\010\022\017\n\007literal\030\007 \001(\t\022\020\n\010variab" +
-      "le\030\010 \001(\t\022\016\n\006method\030\t \001(\t\022*\n\013method_args\030" +
-      "\n \003(\0132\025.boa.types.Expression\0220\n\020anon_dec" +
-      "laration\030\013 \001(\0132\026.boa.types.Declaration\022\'" +
-      "\n\nannotation\030\014 \001(\0132\023.boa.types.Modifier\022" +
-      "!\n\006lambda\030\r \001(\0132\021.boa.types.Method\022\021\n\tno" +
-      "_parens\030\016 \001(\010\022*\n\013change_kind\030\017 \001(\0162\025.boa" +
-      ".types.ChangeKind\022\023\n\013mapped_node\030\021 \001(\005\022\013",
-      "\n\003key\030\022 \001(\005\022\'\n\016declaring_type\030\023 \001(\0132\017.bo" +
-      "a.types.Type\022$\n\013return_type\030\024 \001(\0132\017.boa." +
-      "types.Type\022\"\n\007methods\030\025 \003(\0132\021.boa.types." +
-      "Method\022(\n\nstatements\030\026 \003(\0132\024.boa.types.S" +
-      "tatement\"\243\007\n\016ExpressionKind\022\t\n\005OTHER\020\000\022\013" +
-      "\n\007LITERAL\020\001\022\r\n\tVARACCESS\020\002\022\013\n\007VARDECL\020\003\022" +
-      "\016\n\nMETHODCALL\020\004\022\010\n\004CAST\020\005\022\016\n\nARRAYINDEX\020" +
-      "\006\022\r\n\tARRAYINIT\020\007\022\020\n\014ARRAYLITERAL\020\007\022\017\n\013TY" +
-      "PECOMPARE\020\010\022\007\n\003NEW\020\t\022\014\n\010NEWARRAY\020\n\022\n\n\006OP" +
-      "_ADD\020\013\022\n\n\006OP_SUB\020\014\022\013\n\007OP_MULT\020\r\022\n\n\006OP_DI",
-      "V\020\016\022\n\n\006OP_MOD\020\017\022\n\n\006OP_INC\020\020\022\n\n\006OP_DEC\020\021\022" +
-      "\016\n\nBIT_LSHIFT\020\022\022\016\n\nBIT_RSHIFT\020\023\022\026\n\022BIT_U" +
-      "NSIGNEDRSHIFT\020\024\022\013\n\007BIT_AND\020\025\022\n\n\006BIT_OR\020\026" +
-      "\022\013\n\007BIT_NOT\020\027\022\013\n\007BIT_XOR\020\030\022\017\n\013LOGICAL_NO" +
-      "T\020\031\022\017\n\013LOGICAL_AND\020\032\022\016\n\nLOGICAL_OR\020\033\022\006\n\002" +
-      "EQ\020\034\022\007\n\003NEQ\020\035\022\006\n\002LT\020\036\022\006\n\002GT\020\037\022\010\n\004LTEQ\020 \022" +
-      "\010\n\004GTEQ\020!\022\017\n\013CONDITIONAL\020\"\022\020\n\014NULLCOALES" +
-      "CE\020#\022\n\n\006ASSIGN\020$\022\016\n\nASSIGN_ADD\020%\022\016\n\nASSI" +
-      "GN_SUB\020&\022\017\n\013ASSIGN_MULT\020\'\022\016\n\nASSIGN_DIV\020" +
-      "(\022\016\n\nASSIGN_MOD\020)\022\021\n\rASSIGN_BITXOR\020*\022\021\n\r",
-      "ASSIGN_BITAND\020+\022\020\n\014ASSIGN_BITOR\020,\022\021\n\rASS" +
-      "IGN_LSHIFT\020-\022\021\n\rASSIGN_RSHIFT\020.\022\031\n\025ASSIG" +
-      "N_UNSIGNEDRSHIFT\020/\022\016\n\nANNOTATION\0200\022\t\n\005PA" +
-      "REN\0201\022\024\n\020METHOD_REFERENCE\0202\022\n\n\006LAMBDA\0203\022" +
-      "\017\n\013ANON_METHOD\0204\022\t\n\005YIELD\0205\022\027\n\023ARRAY_COM" +
-      "PREHENSION\0206\022\t\n\005EMPTY\0207\022\010\n\004SHEQ\0208\022\t\n\005SHN" +
-      "EQ\0209\022\020\n\014XML_DOTQUERY\020:\022\022\n\016OBJECT_LITERAL" +
-      "\020;\022\016\n\nMETHODDECL\020<\032\002\020\001\"\215\005\n\010Modifier\022.\n\004k" +
-      "ind\030\001 \002(\0162 .boa.types.Modifier.ModifierK" +
-      "ind\0222\n\nvisibility\030\002 \001(\0162\036.boa.types.Modi",
-      "fier.Visibility\022\027\n\017annotation_name\030\003 \001(\t" +
-      "\022\032\n\022annotation_members\030\004 \003(\t\0220\n\021annotati" +
-      "on_values\030\005 \003(\0132\025.boa.types.Expression\022\r" +
-      "\n\005other\030\006 \001(\t\022*\n\013change_kind\030\007 \001(\0162\025.boa" +
-      ".types.ChangeKind\022\023\n\013mapped_node\030\t \001(\005\022\013" +
-      "\n\003key\030\n \001(\005\022(\n\005scope\030\013 \001(\0162\031.boa.types.M" +
-      "odifier.Scope\"\241\001\n\014ModifierKind\022\t\n\005OTHER\020" +
-      "\000\022\016\n\nVISIBILITY\020\001\022\016\n\nANNOTATION\020\002\022\t\n\005FIN" +
-      "AL\020\003\022\n\n\006STATIC\020\004\022\020\n\014SYNCHRONIZED\020\005\022\010\n\004SY" +
-      "NC\020\005\022\014\n\010ABSTRACT\020\006\022\t\n\005SCOPE\020\007\022\n\n\006GETTER\020",
-      "\010\022\n\n\006SETTER\020\t\032\002\020\001\"a\n\nVisibility\022\n\n\006PUBLI" +
-      "C\020\001\022\013\n\007PRIVATE\020\002\022\r\n\tPROTECTED\020\003\022\r\n\tNAMES" +
-      "PACE\020\004\022\013\n\007PACKAGE\020\004\022\013\n\007DEFAULT\020\004\032\002\020\001\"(\n\005" +
-      "Scope\022\007\n\003VAR\020\001\022\007\n\003LET\020\002\022\t\n\005CONST\020\003\032\002\020\001\"\253" +
-      "\002\n\007Comment\022,\n\004kind\030\001 \002(\0162\036.boa.types.Com" +
-      "ment.CommentKind\022\r\n\005value\030\002 \002(\t\022)\n\010posit" +
-      "ion\030\003 \002(\0132\027.boa.types.PositionInfo\022*\n\013ch" +
-      "ange_kind\030\004 \001(\0162\025.boa.types.ChangeKind\022\023" +
-      "\n\013mapped_node\030\006 \001(\005\022\013\n\003key\030\007 \001(\005\"j\n\013Comm" +
-      "entKind\022\t\n\005OTHER\020\000\022\010\n\004LINE\020\001\022\t\n\005BLOCK\020\002\022",
-      "\007\n\003DOC\020\003\022\021\n\rDOCUMENTATION\020\003\022\010\n\004SPEC\020\004\022\021\n" +
-      "\rSPECIFICATION\020\004\032\002\020\001\"{\n\014PositionInfo\022\021\n\t" +
-      "start_pos\030\001 \002(\005\022\016\n\006length\030\002 \002(\005\022\022\n\nstart" +
-      "_line\030\003 \002(\005\022\021\n\tstart_col\030\004 \002(\005\022\020\n\010end_li" +
-      "ne\030\005 \002(\005\022\017\n\007end_col\030\006 \002(\005*\236\001\n\010TypeKind\022\t" +
-      "\n\005OTHER\020\000\022\t\n\005CLASS\020\001\022\r\n\tINTERFACE\020\002\022\r\n\tA" +
-      "NONYMOUS\020\003\022\010\n\004ANON\020\003\022\n\n\006STRUCT\020\004\022\010\n\004ENUM" +
-      "\020\005\022\017\n\013ENUMERATION\020\005\022\016\n\nANNOTATION\020\006\022\014\n\010D" +
-      "ELEGATE\020\007\022\013\n\007GENERIC\020\010\032\002\020\001B\002H\001"
+      "NALLY\020\024\022\014\n\010DEBUGGER\020\025\022\013\n\007DEFAULT\020\026\022\013\n\007FO" +
+      "REACH\020\027\022\t\n\005FORIN\020\030\032\002\020\001\"\233\016\n\nExpression\0222\n" +
+      "\004kind\030\001 \002(\0162$.boa.types.Expression.Expre" +
+      "ssionKind\022*\n\013expressions\030\002 \003(\0132\025.boa.typ" +
+      "es.Expression\022+\n\016variable_decls\030\003 \003(\0132\023." +
+      "boa.types.Variable\022!\n\010new_type\030\004 \001(\0132\017.b",
+      "oa.types.Type\022+\n\022generic_parameters\030\005 \003(" +
+      "\0132\017.boa.types.Type\022\022\n\nis_postfix\030\006 \001(\010\022\017" +
+      "\n\007literal\030\007 \001(\t\022\020\n\010variable\030\010 \001(\t\022\016\n\006met" +
+      "hod\030\t \001(\t\022*\n\013method_args\030\n \003(\0132\025.boa.typ" +
+      "es.Expression\0220\n\020anon_declaration\030\013 \001(\0132" +
+      "\026.boa.types.Declaration\022\'\n\nannotation\030\014 " +
+      "\001(\0132\023.boa.types.Modifier\022!\n\006lambda\030\r \001(\013" +
+      "2\021.boa.types.Method\022\021\n\tno_parens\030\016 \001(\010\022*" +
+      "\n\013change_kind\030\017 \001(\0162\025.boa.types.ChangeKi" +
+      "nd\022\023\n\013mapped_node\030\021 \001(\005\022\013\n\003key\030\022 \001(\005\022\'\n\016",
+      "declaring_type\030\023 \001(\0132\017.boa.types.Type\022$\n" +
+      "\013return_type\030\024 \001(\0132\017.boa.types.Type\022\"\n\007m" +
+      "ethods\030\025 \003(\0132\021.boa.types.Method\022(\n\nstate" +
+      "ments\030\026 \003(\0132\024.boa.types.Statement\022\030\n\020is_" +
+      "member_access\030\027 \001(\010\"\246\010\n\016ExpressionKind\022\t" +
+      "\n\005OTHER\020\000\022\013\n\007LITERAL\020\001\022\r\n\tVARACCESS\020\002\022\013\n" +
+      "\007VARDECL\020\003\022\016\n\nMETHODCALL\020\004\022\010\n\004CAST\020\005\022\016\n\n" +
+      "ARRAYINDEX\020\006\022\r\n\tARRAYINIT\020\007\022\020\n\014ARRAYLITE" +
+      "RAL\020\007\022\017\n\013TYPECOMPARE\020\010\022\007\n\003NEW\020\t\022\014\n\010NEWAR" +
+      "RAY\020\n\022\n\n\006OP_ADD\020\013\022\n\n\006OP_SUB\020\014\022\013\n\007OP_MULT",
+      "\020\r\022\n\n\006OP_DIV\020\016\022\n\n\006OP_MOD\020\017\022\n\n\006OP_INC\020\020\022\n" +
+      "\n\006OP_DEC\020\021\022\016\n\nBIT_LSHIFT\020\022\022\016\n\nBIT_RSHIFT" +
+      "\020\023\022\026\n\022BIT_UNSIGNEDRSHIFT\020\024\022\013\n\007BIT_AND\020\025\022" +
+      "\n\n\006BIT_OR\020\026\022\013\n\007BIT_NOT\020\027\022\013\n\007BIT_XOR\020\030\022\017\n" +
+      "\013LOGICAL_NOT\020\031\022\017\n\013LOGICAL_AND\020\032\022\016\n\nLOGIC" +
+      "AL_OR\020\033\022\006\n\002EQ\020\034\022\007\n\003NEQ\020\035\022\006\n\002LT\020\036\022\006\n\002GT\020\037" +
+      "\022\010\n\004LTEQ\020 \022\010\n\004GTEQ\020!\022\017\n\013CONDITIONAL\020\"\022\020\n" +
+      "\014NULLCOALESCE\020#\022\n\n\006ASSIGN\020$\022\016\n\nASSIGN_AD" +
+      "D\020%\022\016\n\nASSIGN_SUB\020&\022\017\n\013ASSIGN_MULT\020\'\022\016\n\n" +
+      "ASSIGN_DIV\020(\022\016\n\nASSIGN_MOD\020)\022\021\n\rASSIGN_B",
+      "ITXOR\020*\022\021\n\rASSIGN_BITAND\020+\022\020\n\014ASSIGN_BIT" +
+      "OR\020,\022\021\n\rASSIGN_LSHIFT\020-\022\021\n\rASSIGN_RSHIFT" +
+      "\020.\022\031\n\025ASSIGN_UNSIGNEDRSHIFT\020/\022\016\n\nANNOTAT" +
+      "ION\0200\022\t\n\005PAREN\0201\022\024\n\020METHOD_REFERENCE\0202\022\n" +
+      "\n\006LAMBDA\0203\022\017\n\013ANON_METHOD\0204\022\t\n\005YIELD\0205\022\027" +
+      "\n\023ARRAY_COMPREHENSION\0206\022\t\n\005EMPTY\0207\022\010\n\004SH" +
+      "EQ\0208\022\t\n\005SHNEQ\0209\022\020\n\014XML_DOTQUERY\020:\022\022\n\016OBJ" +
+      "ECT_LITERAL\020;\022\016\n\nMETHODDECL\020<\022\010\n\004LOOP\020=\022" +
+      "\r\n\tGENERATOR\020>\022\017\n\013XML_LITERAL\020?\022\022\n\016XML_E" +
+      "XPRESSION\020@\022\023\n\017XML_PROPERTYREF\020A\022\021\n\rXML_",
+      "MEMBERREF\020B\022\013\n\007XML_DOT\020C\022\016\n\nXML_DOTDOT\020D" +
+      "\032\002\020\001\"\215\005\n\010Modifier\022.\n\004kind\030\001 \002(\0162 .boa.ty" +
+      "pes.Modifier.ModifierKind\0222\n\nvisibility\030" +
+      "\002 \001(\0162\036.boa.types.Modifier.Visibility\022\027\n" +
+      "\017annotation_name\030\003 \001(\t\022\032\n\022annotation_mem" +
+      "bers\030\004 \003(\t\0220\n\021annotation_values\030\005 \003(\0132\025." +
+      "boa.types.Expression\022\r\n\005other\030\006 \001(\t\022*\n\013c" +
+      "hange_kind\030\007 \001(\0162\025.boa.types.ChangeKind\022" +
+      "\023\n\013mapped_node\030\t \001(\005\022\013\n\003key\030\n \001(\005\022(\n\005sco" +
+      "pe\030\013 \001(\0162\031.boa.types.Modifier.Scope\"\241\001\n\014",
+      "ModifierKind\022\t\n\005OTHER\020\000\022\016\n\nVISIBILITY\020\001\022" +
+      "\016\n\nANNOTATION\020\002\022\t\n\005FINAL\020\003\022\n\n\006STATIC\020\004\022\020" +
+      "\n\014SYNCHRONIZED\020\005\022\010\n\004SYNC\020\005\022\014\n\010ABSTRACT\020\006" +
+      "\022\t\n\005SCOPE\020\007\022\n\n\006GETTER\020\010\022\n\n\006SETTER\020\t\032\002\020\001\"" +
+      "a\n\nVisibility\022\n\n\006PUBLIC\020\001\022\013\n\007PRIVATE\020\002\022\r" +
+      "\n\tPROTECTED\020\003\022\r\n\tNAMESPACE\020\004\022\013\n\007PACKAGE\020" +
+      "\004\022\013\n\007DEFAULT\020\004\032\002\020\001\"(\n\005Scope\022\007\n\003VAR\020\001\022\007\n\003" +
+      "LET\020\002\022\t\n\005CONST\020\003\032\002\020\001\"\253\002\n\007Comment\022,\n\004kind" +
+      "\030\001 \002(\0162\036.boa.types.Comment.CommentKind\022\r" +
+      "\n\005value\030\002 \002(\t\022)\n\010position\030\003 \002(\0132\027.boa.ty",
+      "pes.PositionInfo\022*\n\013change_kind\030\004 \001(\0162\025." +
+      "boa.types.ChangeKind\022\023\n\013mapped_node\030\006 \001(" +
+      "\005\022\013\n\003key\030\007 \001(\005\"j\n\013CommentKind\022\t\n\005OTHER\020\000" +
+      "\022\010\n\004LINE\020\001\022\t\n\005BLOCK\020\002\022\007\n\003DOC\020\003\022\021\n\rDOCUME" +
+      "NTATION\020\003\022\010\n\004SPEC\020\004\022\021\n\rSPECIFICATION\020\004\032\002" +
+      "\020\001\"{\n\014PositionInfo\022\021\n\tstart_pos\030\001 \002(\005\022\016\n" +
+      "\006length\030\002 \002(\005\022\022\n\nstart_line\030\003 \002(\005\022\021\n\tsta" +
+      "rt_col\030\004 \002(\005\022\020\n\010end_line\030\005 \002(\005\022\017\n\007end_co" +
+      "l\030\006 \002(\005*\236\001\n\010TypeKind\022\t\n\005OTHER\020\000\022\t\n\005CLASS" +
+      "\020\001\022\r\n\tINTERFACE\020\002\022\r\n\tANONYMOUS\020\003\022\010\n\004ANON",
+      "\020\003\022\n\n\006STRUCT\020\004\022\010\n\004ENUM\020\005\022\017\n\013ENUMERATION\020" +
+      "\005\022\016\n\nANNOTATION\020\006\022\014\n\010DELEGATE\020\007\022\013\n\007GENER" +
+      "IC\020\010\032\002\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -35528,7 +35676,7 @@ public final class Ast {
           internal_static_boa_types_Expression_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Expression_descriptor,
-              new java.lang.String[] { "Kind", "Expressions", "VariableDecls", "NewType", "GenericParameters", "IsPostfix", "Literal", "Variable", "Method", "MethodArgs", "AnonDeclaration", "Annotation", "Lambda", "NoParens", "ChangeKind", "MappedNode", "Key", "DeclaringType", "ReturnType", "Methods", "Statements", });
+              new java.lang.String[] { "Kind", "Expressions", "VariableDecls", "NewType", "GenericParameters", "IsPostfix", "Literal", "Variable", "Method", "MethodArgs", "AnonDeclaration", "Annotation", "Lambda", "NoParens", "ChangeKind", "MappedNode", "Key", "DeclaringType", "ReturnType", "Methods", "Statements", "IsMemberAccess", });
           internal_static_boa_types_Modifier_descriptor =
             getDescriptor().getMessageTypes().get(9);
           internal_static_boa_types_Modifier_fieldAccessorTable = new

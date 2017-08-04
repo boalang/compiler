@@ -219,11 +219,10 @@ message Statement {
 		CATCH = 18;
 		EMPTY = 19;
 		FINALLY = 20;
-		GENERATOR = 21;
-		DEBUGGER = 22;
-		DEFAULT = 23;
-		FOREACH = 24;
-		FORIN = 25;
+		DEBUGGER = 21;
+		DEFAULT = 22;
+		FOREACH = 23;
+		FORIN = 24;
 	}
 	/** The kind of statement */
 	required StatementKind kind = 1;
@@ -318,7 +317,14 @@ message Expression {
 		XML_DOTQUERY = 58;
 		OBJECT_LITERAL = 59;
 		METHODDECL = 60;
-		
+		LOOP = 61;
+		GENERATOR = 62;
+		XML_LITERAL = 63;
+		XML_EXPRESSION = 64;
+		XML_PROPERTYREF = 65;
+		XML_MEMBERREF = 66;
+		XML_DOT = 67;
+		XML_DOTDOT = 68;
 	}
 	/** The kind of expression */
 	required ExpressionKind kind = 1;
@@ -351,6 +357,7 @@ message Expression {
 	repeated Method methods = 21;
 	/** Inside statements */
 	repeated Statement statements = 22;
+	optional bool is_member_access = 23;
 }
 
 /** A single modifier */

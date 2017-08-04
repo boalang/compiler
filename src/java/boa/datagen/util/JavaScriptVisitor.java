@@ -100,8 +100,8 @@ public class JavaScriptVisitor implements NodeVisitor {
 					b.addStatements(d);
 			}
 		}
-		if (!(expressions.isEmpty() && methods.isEmpty() && statements.isEmpty()))
-			throw new RuntimeException("stacks not empty");
+		if (!expressions.isEmpty() || !methods.isEmpty() || !statements.isEmpty())
+			throw new RuntimeException("Stack not empty");
 		return false;
 	}
 
@@ -639,34 +639,30 @@ public class JavaScriptVisitor implements NodeVisitor {
 	}
 
 	public boolean accept(GeneratorExpression node) {
-		Statement.Builder b = boa.types.Ast.Statement.newBuilder();
-		b.setKind(boa.types.Ast.Statement.StatementKind.GENERATOR);
-		List<boa.types.Ast.Statement> list = statements.peek();
+		Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+		b.setKind(boa.types.Ast.Expression.ExpressionKind.GENERATOR);
 		node.getResult().visit(this);
-		b.addUpdates(expressions.pop());
-		for (Loop l : node.getLoops()) {
-			statements.push(new ArrayList<boa.types.Ast.Statement>());
+		b.addExpressions(expressions.pop());
+		for (GeneratorExpressionLoop l : node.getLoops()) {
 			l.visit(this);
-			for (boa.types.Ast.Statement d : statements.pop())
-				b.addStatements(d);
+			b.addExpressions(expressions.pop());
 		}
 		if (node.getFilter() != null) {
 			node.getFilter().visit(this);
-			b.addUpdates(expressions.pop());
+			b.addExpressions(expressions.pop());
 		}
-		list.add(b.build());
+		expressions.push(b.build());
 		return false;
 	}
 
 	public boolean accept(GeneratorExpressionLoop node) {
-		Statement.Builder b = boa.types.Ast.Statement.newBuilder();
-		b.setKind(boa.types.Ast.Statement.StatementKind.FOR);
-		List<boa.types.Ast.Statement> list = statements.peek();
+		Expression.Builder b = boa.types.Ast.Expression.newBuilder();
+		b.setKind(boa.types.Ast.Expression.ExpressionKind.LOOP);
 		node.getIterator().visit(this);
-		b.addInitializations(expressions.pop());
-		node.getIteratedObject().visit(this);
-		b.addInitializations(expressions.pop());
-		list.add(b.build());
+		b.addExpressions(expressions.pop());
+		node.getIteratedObject();
+		b.addExpressions(expressions.pop());
+		expressions.push(b.build());
 		return false;
 	}
 
@@ -700,8 +696,8 @@ public class JavaScriptVisitor implements NodeVisitor {
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.ARRAY_COMPREHENSION);
 		node.getResult().visit(this);
 		b.addExpressions(expressions.pop());
-		for (Object l : node.getLoops()) {
-			((AstNode) l).visit(this);
+		for (ArrayComprehensionLoop l : node.getLoops()) {
+			l.visit(this);
 			b.addExpressions(expressions.pop());
 		}
 		if (node.getFilter() != null) {
@@ -713,17 +709,13 @@ public class JavaScriptVisitor implements NodeVisitor {
 	}
 
 	public boolean accept(ArrayComprehensionLoop node) {
-		Statement.Builder s = boa.types.Ast.Statement.newBuilder();
 		Expression.Builder b = boa.types.Ast.Expression.newBuilder();
-		List<boa.types.Ast.Statement> list = statements.peek();
-		s.setKind(boa.types.Ast.Statement.StatementKind.FOR);
-		b.setKind(boa.types.Ast.Expression.ExpressionKind.OTHER);
+		b.setKind(boa.types.Ast.Expression.ExpressionKind.LOOP);
 		node.getIterator().visit(this);
 		b.addExpressions(expressions.pop());
 		node.getIteratedObject();
 		b.addExpressions(expressions.pop());
-		s.setExpression(b.build());
-		list.add(s.build());
+		expressions.push(b.build());
 		return false;
 	}
 
@@ -1040,17 +1032,15 @@ public class JavaScriptVisitor implements NodeVisitor {
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.XML_DOTQUERY);
 		node.getLeft().visit(this);
 		b.addExpressions(expressions.pop());
-		if (node.getRight() != null) {
-			node.getRight().visit(this);
-			b.addExpressions(expressions.pop());
-		}
+		node.getRight().visit(this);
+		b.addExpressions(expressions.pop());
 		expressions.push(b.build());
 		return false;
 	}
 
 	public boolean accept(XmlExpression node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
-		b.setKind(boa.types.Ast.Expression.ExpressionKind.OTHER);
+		b.setKind(boa.types.Ast.Expression.ExpressionKind.XML_EXPRESSION);
 		node.getExpression().visit(this);
 		b.addExpressions(expressions.pop());
 		expressions.push(b.build());
@@ -1059,8 +1049,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 
 	public boolean accept(XmlLiteral node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
-		b.setKind(boa.types.Ast.Expression.ExpressionKind.LITERAL);
-		b.setLiteral("xml");
+		b.setKind(boa.types.Ast.Expression.ExpressionKind.XML_LITERAL);
 		for (XmlFragment frag : node.getFragments()) {
 			frag.visit(this);
 			b.addExpressions(expressions.pop());
@@ -1071,7 +1060,10 @@ public class JavaScriptVisitor implements NodeVisitor {
 
 	public boolean accept(XmlMemberGet node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
-		b.setKind(boa.types.Ast.Expression.ExpressionKind.OTHER); // FIXME
+		if (node.getType() == Token.DOT)
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.XML_DOT);
+		else if (node.getType() == Token.DOTDOT)
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.XML_DOTDOT);
 		node.getLeft().visit(this);
 		b.addExpressions(expressions.pop());
 		node.getRight().visit(this);
@@ -1082,7 +1074,8 @@ public class JavaScriptVisitor implements NodeVisitor {
 
 	public boolean accept(XmlPropRef node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
-		b.setKind(boa.types.Ast.Expression.ExpressionKind.OTHER);
+		b.setKind(boa.types.Ast.Expression.ExpressionKind.XML_PROPERTYREF);
+		b.setIsMemberAccess(node.isAttributeAccess());
 		if (node.getNamespace() != null) {
 			node.getNamespace().visit(this);
 			b.addExpressions(expressions.pop());
@@ -1095,7 +1088,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 
 	public boolean accept(XmlString node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
-		b.setKind(boa.types.Ast.Expression.ExpressionKind.LITERAL);
+		b.setKind(boa.types.Ast.Expression.ExpressionKind.XML_LITERAL);
 		b.setLiteral(node.getXml());
 		expressions.push(b.build());
 		return false;
@@ -1103,7 +1096,8 @@ public class JavaScriptVisitor implements NodeVisitor {
 
 	public boolean accept(XmlElemRef node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
-		b.setKind(boa.types.Ast.Expression.ExpressionKind.OTHER);
+		b.setKind(boa.types.Ast.Expression.ExpressionKind.XML_MEMBERREF);
+		b.setIsMemberAccess(node.isAttributeAccess());
 		if (node.getNamespace() != null) {
 			node.getNamespace().visit(this);
 			b.addExpressions(expressions.pop());

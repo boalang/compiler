@@ -3,7 +3,7 @@ namespaces {
   statements {
     kind: EXPRESSION
     expression {
-      kind: OTHER
+      kind: XML_PROPERTYREF
       expressions {
         kind: VARACCESS
         variable: "ns"
@@ -12,6 +12,7 @@ namespaces {
         kind: VARACCESS
         variable: "name"
       }
+      is_member_access: true
     }
   }
 }

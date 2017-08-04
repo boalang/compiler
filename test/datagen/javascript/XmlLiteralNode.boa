@@ -11,12 +11,11 @@ namespaces {
           scope: VAR
         }
         initializer {
-          kind: LITERAL
+          kind: XML_LITERAL
           expressions {
-            kind: LITERAL
+            kind: XML_LITERAL
             literal: "<foo>bar<baz/></foo>"
           }
-          literal: "xml"
         }
       }
     }
