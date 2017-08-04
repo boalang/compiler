@@ -3,25 +3,11 @@ namespaces {
   statements {
     kind: LABEL
     statements {
-      kind: LABEL
-      expression {
-        kind: LITERAL
-        literal: "loop1"
-      }
-    }
-    statements {
       kind: FOR
       statements {
         kind: OTHER
         statements {
           kind: LABEL
-          statements {
-            kind: LABEL
-            expression {
-              kind: LITERAL
-              literal: "loop2"
-            }
-          }
           statements {
             kind: FOR
             statements {
@@ -33,8 +19,8 @@ namespaces {
                   statements {
                     kind: CONTINUE
                     expression {
-                      kind: VARACCESS
-                      variable: "loop1"
+                      kind: LITERAL
+                      literal: "loop1"
                     }
                   }
                 }
@@ -96,6 +82,10 @@ namespaces {
               is_postfix: true
             }
           }
+          expressions {
+            kind: LITERAL
+            literal: "loop2"
+          }
         }
       }
       initializations {
@@ -128,6 +118,10 @@ namespaces {
         }
         is_postfix: true
       }
+    }
+    expressions {
+      kind: LITERAL
+      literal: "loop1"
     }
   }
 }

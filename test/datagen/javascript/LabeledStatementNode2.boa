@@ -3,13 +3,6 @@ namespaces {
   statements {
     kind: LABEL
     statements {
-      kind: LABEL
-      expression {
-        kind: LITERAL
-        literal: "loop1"
-      }
-    }
-    statements {
       kind: EXPRESSION
       expression {
         kind: VARDECL
@@ -21,6 +14,10 @@ namespaces {
           }
         }
       }
+    }
+    expressions {
+      kind: LITERAL
+      literal: "loop1"
     }
   }
 }
