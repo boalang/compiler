@@ -27,6 +27,9 @@ import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.SequenceFile.Writer;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.*;
+import org.eclipse.php.internal.core.PHPVersion;
+import org.eclipse.php.internal.core.ast.nodes.ASTParser;
+import org.eclipse.php.internal.core.ast.nodes.Program;
 import org.mozilla.javascript.CompilerEnvirons;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ast.AstRoot;
@@ -44,6 +47,8 @@ import boa.datagen.treed.TreedMapper;
 import boa.datagen.util.FileIO;
 import boa.datagen.util.JavaScriptErrorCheckVisitor;
 import boa.datagen.util.JavaScriptVisitor;
+import boa.datagen.util.PHPErrorCheckVisitor;
+import boa.datagen.util.PHPVisitor;
 import boa.datagen.util.Properties;
 import boa.datagen.util.Java7Visitor;
 import boa.datagen.util.Java8Visitor;
@@ -56,14 +61,15 @@ import boa.datagen.util.JavaErrorCheckVisitor;
 public abstract class AbstractCommit {
 	protected static final boolean debug = Properties.getBoolean("debug", DefaultProperties.DEBUG);
 	protected static final boolean debugparse = Properties.getBoolean("debugparse", DefaultProperties.DEBUGPARSE);
-	
+
 	protected AbstractConnector connector;
+
 	protected AbstractCommit(AbstractConnector cnn) {
 		this.connector = cnn;
 	}
 
 	protected Map<String, Integer> fileNameIndices = new HashMap<String, Integer>();
-	
+
 	protected List<ChangedFile.Builder> changedFiles = new ArrayList<ChangedFile.Builder>();
 
 	protected ChangedFile.Builder getChangeFile(String path) {
@@ -79,12 +85,19 @@ public abstract class AbstractCommit {
 			cfb = changedFiles.get(index);
 		return cfb;
 	}
-	
+
 	protected String id = null;
-	public String getId() { return id; }
-	public void setId(final String id) { this.id = id; }
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(final String id) {
+		this.id = id;
+	}
 
 	protected Person author;
+
 	public void setAuthor(final String username, final String realname, final String email) {
 		final Person.Builder person = Person.newBuilder();
 		person.setUsername(username);
@@ -95,6 +108,7 @@ public abstract class AbstractCommit {
 	}
 
 	protected Person committer;
+
 	public void setCommitter(final String username, final String realname, final String email) {
 		final Person.Builder person = Person.newBuilder();
 		person.setUsername(username);
@@ -105,15 +119,21 @@ public abstract class AbstractCommit {
 	}
 
 	protected String message;
-	public void setMessage(final String message) { this.message = message; }
+
+	public void setMessage(final String message) {
+		this.message = message;
+	}
 
 	protected Date date;
-	public void setDate(final Date date) { this.date = date; }
-	
+
+	public void setDate(final Date date) {
+		this.date = date;
+	}
+
 	protected int[] parentIndices;
 
 	protected List<Integer> childrenIndices = new LinkedList<Integer>();
-	
+
 	protected static final ByteArrayOutputStream buffer = new ByteArrayOutputStream(4096);
 
 	protected abstract String getFileContents(final String path);
@@ -138,11 +158,12 @@ public abstract class AbstractCommit {
 			revision.setLog(message);
 		else
 			revision.setLog("");
-		
+
 		for (ChangedFile.Builder cfb : changedFiles) {
 			if (cfb.getChange() == ChangeKind.DELETED || cfb.getChange() == ChangeKind.UNKNOWN) {
 				cfb.setKey(-1);
-				cfb.setKind(connector.revisions.get(cfb.getPreviousVersions(0)).changedFiles.get(cfb.getPreviousIndices(0)).getKind());
+				cfb.setKind(connector.revisions.get(cfb.getPreviousVersions(0)).changedFiles
+						.get(cfb.getPreviousIndices(0)).getKind());
 			} else
 				processChangeFile(cfb, parse, astWriter);
 			revision.addFiles(cfb.build());
@@ -194,11 +215,12 @@ public abstract class AbstractCommit {
 								System.err.println("Found JLS8 parse error in: revision " + id + ": file " + path);
 
 							fb.setKind(FileKind.SOURCE_JAVA_ERROR);
-//							try {
-//								astWriter.append(new LongWritable(len), new BytesWritable(ASTRoot.newBuilder().build().toByteArray()));
-//							} catch (IOException e) {
-//								e.printStackTrace();
-//							}
+							// try {
+							// astWriter.append(new LongWritable(len), new
+							// BytesWritable(ASTRoot.newBuilder().build().toByteArray()));
+							// } catch (IOException e) {
+							// e.printStackTrace();
+							// }
 						} else if (debugparse)
 							System.err.println("Accepted JLS8: revision " + id + ": file " + path);
 					} else if (debugparse)
@@ -236,16 +258,19 @@ public abstract class AbstractCommit {
 										System.err
 												.println("Found ES3 parse error in: revision " + id + ": file " + path);
 									fb.setKind(FileKind.SOURCE_JS_ES8);
-									if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_8, false, astWriter)) {
+									if (!parseJavaScriptFile(path, fb, content, Context.VERSION_1_8, false,
+											astWriter)) {
 										if (debugparse)
 											System.err.println(
 													"Found ES4 parse error in: revision " + id + ": file " + path);
 										fb.setKind(FileKind.SOURCE_JS_ERROR);
-//										try {
-//											astWriter.append(new LongWritable(len), new BytesWritable(ASTRoot.newBuilder().build().toByteArray()));
-//										} catch (IOException e) {
-//											e.printStackTrace();
-//										}
+										// try {
+										// astWriter.append(new
+										// LongWritable(len), new
+										// BytesWritable(ASTRoot.newBuilder().build().toByteArray()));
+										// } catch (IOException e) {
+										// e.printStackTrace();
+										// }
 									} else if (debugparse)
 										System.err.println("Accepted ES8: revision " + id + ": file " + path);
 								} else if (debugparse)
@@ -260,7 +285,63 @@ public abstract class AbstractCommit {
 					System.err.println("Accepted ES2: revision " + id + ": file " + path);
 			} else if (debugparse)
 				System.err.println("Accepted ES1: revision " + id + ": file " + path);
-		} else {
+		} else if (lowerPath.endsWith(".php") && parse){
+			final String content = getFileContents(path);
+
+			fb.setKind(FileKind.SOURCE_PHP5);
+			if (!parsePHPFile(path, fb, content, PHPVersion.PHP5, false, astWriter)) {
+				if (debugparse)
+					System.err.println("Found ES3 parse error in: revision " + id + ": file " + path);
+				fb.setKind(FileKind.SOURCE_PHP5_3);
+				if (!parsePHPFile(path, fb, content, PHPVersion.PHP5_3, false, astWriter)) {
+					if (debugparse)
+						System.err.println("Found ES3 parse error in: revision " + id + ": file " + path);
+					fb.setKind(FileKind.SOURCE_PHP5_4);
+					if (!parsePHPFile(path, fb, content, PHPVersion.PHP5_4, false, astWriter)) {
+						if (debugparse)
+							System.err.println("Found ES3 parse error in: revision " + id + ": file " + path);
+						fb.setKind(FileKind.SOURCE_PHP5_5);
+						if (!parsePHPFile(path, fb, content, PHPVersion.PHP5_5, false, astWriter)) {
+							if (debugparse)
+								System.err.println("Found ES4 parse error in: revision " + id + ": file " + path);
+							fb.setKind(FileKind.SOURCE_PHP5_6);
+							if (!parsePHPFile(path, fb, content, PHPVersion.PHP5_6, false, astWriter)) {
+								if (debugparse)
+									System.err.println("Found ES4 parse error in: revision " + id + ": file " + path);
+								fb.setKind(FileKind.SOURCE_PHP7_0);
+								if (!parsePHPFile(path, fb, content, PHPVersion.PHP7_0, false, astWriter)) {
+									if (debugparse)
+										System.err
+												.println("Found ES3 parse error in: revision " + id + ": file " + path);
+									fb.setKind(FileKind.SOURCE_PHP7_1);
+									if (!parsePHPFile(path, fb, content, PHPVersion.PHP7_1, false,
+											astWriter)) {
+										if (debugparse)
+											System.err.println(
+													"Found ES4 parse error in: revision " + id + ": file " + path);
+										fb.setKind(FileKind.SOURCE_PHP_ERROR);
+										// try {
+										// astWriter.append(new
+										// LongWritable(len), new
+										// BytesWritable(ASTRoot.newBuilder().build().toByteArray()));
+										// } catch (IOException e) {
+										// e.printStackTrace();
+										// }
+									} else if (debugparse)
+										System.err.println("Accepted PHP7_1: revision " + id + ": file " + path);
+								} else if (debugparse)
+									System.err.println("Accepted PHP7_0: revision " + id + ": file " + path);
+							} else if (debugparse)
+								System.err.println("Accepted PHP5_6: revision " + id + ": file " + path);
+						} else if (debugparse)
+							System.err.println("Accepted PHP5_5: revision " + id + ": file " + path);
+					} else if (debugparse)
+						System.err.println("Accepted PHP5_4: revision " + id + ": file " + path);
+				} else if (debugparse)
+					System.err.println("Accepted PHP5_3: revision " + id + ": file " + path);
+			} else if (debugparse)
+				System.err.println("Accepted PHP5: revision " + id + ": file " + path);
+		}else {
 			final String content = getFileContents(path);
 			if (StringUtils.isAsciiPrintable(content)) {
 				try {
@@ -283,21 +364,57 @@ public abstract class AbstractCommit {
 		return fb;
 	}
 
-	private boolean parseJavaScriptFile(final String path,
-			final ChangedFile.Builder fb, final String content, final int astLevel,
-			final boolean storeOnError, Writer astWriter) {
+	private boolean parsePHPFile(final String path, final ChangedFile.Builder fb, final String content,
+			final PHPVersion astLevel, final boolean storeOnError, Writer astWriter) {
+		org.eclipse.php.internal.core.ast.nodes.ASTParser parser = org.eclipse.php.internal.core.ast.nodes.ASTParser.newParser(astLevel);
+		Program cu = null;
 		try {
-			//System.out.println("parsing=" + (++count) + "\t" + path);
+			parser.setSource(content.toCharArray());
+			cu = parser.createAST(null);
+		} catch (Exception e) {
+			if (debug)
+				System.err.println("Error visiting: " + path);
+			// e.printStackTrace();
+			return false;
+		}
+		PHPErrorCheckVisitor errorCheck = new PHPErrorCheckVisitor();
+		if (!errorCheck.hasError || storeOnError) {
+			final ASTRoot.Builder ast = ASTRoot.newBuilder();
+			PHPVisitor visitor = new PHPVisitor(content);
+			try {
+				ast.addNamespaces(visitor.getNamespace(cu));
+			} catch (final UnsupportedOperationException e) {
+				return false;
+			} catch (final Exception e) {
+				if (debug)
+					System.err.println("Error visiting: " + path);
+				 e.printStackTrace();
+				return false;
+			}
+			try {
+				// System.out.println("writing=" + count + "\t" + path);
+				astWriter.append(new LongWritable(astWriter.getLength()), new BytesWritable(ast.build().toByteArray()));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return !errorCheck.hasError;
+	}
+
+	private boolean parseJavaScriptFile(final String path, final ChangedFile.Builder fb, final String content,
+			final int astLevel, final boolean storeOnError, Writer astWriter) {
+		try {
+			// System.out.println("parsing=" + (++count) + "\t" + path);
 			CompilerEnvirons cp = new CompilerEnvirons();
 			cp.setLanguageVersion(astLevel);
 			final org.mozilla.javascript.Parser parser = new org.mozilla.javascript.Parser(cp);
 
 			AstRoot cu;
-			try{
-				cu =  parser.parse(content, null, 0);
-			}catch(java.lang.IllegalArgumentException ex){
+			try {
+				cu = parser.parse(content, null, 0);
+			} catch (java.lang.IllegalArgumentException ex) {
 				return false;
-			}catch(org.mozilla.javascript.EvaluatorException ex){
+			} catch (org.mozilla.javascript.EvaluatorException ex) {
 				return false;
 			}
 
@@ -322,13 +439,14 @@ public abstract class AbstractCommit {
 				} catch (final Exception e) {
 					if (debug)
 						System.err.println("Error visiting: " + path);
-					//e.printStackTrace();
+					// e.printStackTrace();
 					return false;
 				}
 
 				try {
-				//	System.out.println("writing=" + count + "\t" + path);
-					astWriter.append(new LongWritable(astWriter.getLength()), new BytesWritable(ast.build().toByteArray()));
+					// System.out.println("writing=" + count + "\t" + path);
+					astWriter.append(new LongWritable(astWriter.getLength()),
+							new BytesWritable(ast.build().toByteArray()));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -342,9 +460,9 @@ public abstract class AbstractCommit {
 		}
 	}
 
-	public Map<String,String> getLOC() {
-		final Map<String,String> l = new HashMap<String,String>();
-		
+	public Map<String, String> getLOC() {
+		final Map<String, String> l = new HashMap<String, String>();
+
 		for (final ChangedFile.Builder cf : changedFiles)
 			if (cf.getChange() != ChangeKind.DELETED)
 				l.put(cf.getName(), processLOC(cf.getName()));
@@ -352,11 +470,12 @@ public abstract class AbstractCommit {
 		return l;
 	}
 
-	private boolean parseJavaFile(final String path, final ChangedFile.Builder fb, final String content, final String compliance, final int astLevel, final boolean storeOnError, Writer astWriter) {
+	private boolean parseJavaFile(final String path, final ChangedFile.Builder fb, final String content,
+			final String compliance, final int astLevel, final boolean storeOnError, Writer astWriter) {
 		try {
-			final ASTParser parser = ASTParser.newParser(astLevel);
-			parser.setKind(ASTParser.K_COMPILATION_UNIT);
-//			parser.setResolveBindings(true);
+			final org.eclipse.jdt.core.dom.ASTParser parser = org.eclipse.jdt.core.dom.ASTParser.newParser(astLevel);
+			parser.setKind(org.eclipse.jdt.core.dom.ASTParser.K_COMPILATION_UNIT);
+			// parser.setResolveBindings(true);
 			parser.setSource(content.toCharArray());
 
 			final Map<?, ?> options = JavaCore.getOptions();
@@ -377,7 +496,7 @@ public abstract class AbstractCommit {
 					String previousFilePath = pcf.getName();
 					String previousContent = previousCommit.getFileContents(previousFilePath);
 					FileKind fileKind = pcf.getKind();
-					ASTParser previuousParser = JavaASTUtil.buildParser(fileKind);
+					org.eclipse.jdt.core.dom.ASTParser previuousParser = JavaASTUtil.buildParser(fileKind);
 					if (previuousParser != null) {
 						try {
 							previuousParser.setSource(previousContent.toCharArray());
@@ -414,7 +533,8 @@ public abstract class AbstractCommit {
 						ast.setMappedNode((Integer) preCu.getProperty(TreedConstants.PROPERTY_INDEX));
 					}
 				}
-				//final CommentsRoot.Builder comments = CommentsRoot.newBuilder();
+				// final CommentsRoot.Builder comments =
+				// CommentsRoot.newBuilder();
 				final Java7Visitor visitor;
 				if (astLevel == AST.JLS8)
 					visitor = new Java8Visitor(content);
@@ -422,8 +542,10 @@ public abstract class AbstractCommit {
 					visitor = new Java7Visitor(content);
 				try {
 					ast.addNamespaces(visitor.getNamespaces(cu));
-					/*for (final Comment c : visitor.getComments())
-						comments.addComments(c);*/
+					/*
+					 * for (final Comment c : visitor.getComments())
+					 * comments.addComments(c);
+					 */
 				} catch (final UnsupportedOperationException e) {
 					return false;
 				} catch (final Exception e) {
@@ -440,7 +562,7 @@ public abstract class AbstractCommit {
 						e.printStackTrace();
 					len = Long.MAX_VALUE;
 				}
-				//fb.setComments(comments);
+				// fb.setComments(comments);
 				long plen = astWriter.getLength();
 				if (preAst != null && plen > len) {
 					try {
@@ -481,7 +603,8 @@ public abstract class AbstractCommit {
 		FileIO.writeFileContents(tmpFile, content);
 
 		try {
-			final Process proc = Runtime.getRuntime().exec(new String[] {"/home/boa/ohcount/bin/ohcount", "-i", tmpFile.getPath()});
+			final Process proc = Runtime.getRuntime()
+					.exec(new String[] { "/home/boa/ohcount/bin/ohcount", "-i", tmpFile.getPath() });
 
 			final BufferedReader outStream = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 			String line = null;
@@ -524,7 +647,7 @@ public abstract class AbstractCommit {
 			for (int i = 0; i < commit.changedFiles.size(); i++) {
 				ChangedFile.Builder cfb = commit.changedFiles.get(i);
 				if (cfb.getName().equals(path) && cfb.getChange() != ChangeKind.DELETED) {
-					l.add(new int[]{i, commitId});
+					l.add(new int[] { i, commitId });
 					found = true;
 					break;
 				}
