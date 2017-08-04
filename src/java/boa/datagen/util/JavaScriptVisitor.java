@@ -32,6 +32,7 @@ import boa.types.Ast.Namespace;
 import boa.types.Ast.PositionInfo;
 import boa.types.Ast.Statement;
 import boa.types.Ast.Statement.StatementKind;
+import boa.types.Ast.TypeKind;
 import boa.types.Ast.Variable;
 import boa.types.Ast.Expression.ExpressionKind;
 import boa.types.Ast.Modifier.ModifierKind;
@@ -916,8 +917,15 @@ public class JavaScriptVisitor implements NodeVisitor {
 	public boolean accept(NewExpression node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.NEW);
-		node.getTarget().visit(this);
-		b.addExpressions(expressions.pop());
+		if (node.getTarget() instanceof Name) {
+			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
+			tb.setKind(TypeKind.OTHER);
+			tb.setName(node.getTarget().getString());
+			b.setNewType(tb);
+		} else {
+			node.getTarget().visit(this);
+			b.addExpressions(expressions.pop());
+		}
 		for (AstNode arg : node.getArguments()) {
 			arg.visit(this);
 			b.addMethodArgs(expressions.pop());
