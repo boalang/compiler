@@ -9,7 +9,7 @@ namespaces {
         name: "A"
       }
       statements {
-        kind: OTHER
+        kind: EXPRESSION
         expression {
           kind: OTHER
           expressions {
