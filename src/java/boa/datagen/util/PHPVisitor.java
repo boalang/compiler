@@ -96,39 +96,40 @@ public class PHPVisitor extends AbstractVisitor {
 
 	@Override
 	public boolean visit(Program node) {
-		boolean hasNamespace = false;
 		for (ASTNode s : node.statements()) {
 			if (s instanceof NamespaceDeclaration) {
 				namespaces.push(new ArrayList<boa.types.Ast.Namespace>());
 				s.accept(this);
 				for (boa.types.Ast.Namespace d : namespaces.pop())
 					b.addNamespaces(d);
-				hasNamespace = true;
-			} else if (s instanceof MethodDeclaration) {
+				if (!methods.isEmpty())
+					throw new RuntimeException("methods not empty");
+			} else if (s instanceof MethodDeclaration || s instanceof FunctionDeclaration) {
 				methods.push(new ArrayList<boa.types.Ast.Method>());
 				s.accept(this);
 				for (boa.types.Ast.Method m : methods.pop())
 					b.addMethods(m);
-			} else if (s instanceof FunctionDeclaration) {
-				methods.push(new ArrayList<boa.types.Ast.Method>());
-				s.accept(this);
-				for (boa.types.Ast.Method m : methods.pop())
-					b.addMethods(m);
-				/*
-				 * } else if (s instanceof ConstantDeclaration) {
-				 * fields.push(new ArrayList<boa.types.Ast.Variable>());
-				 * ((ASTNode) d).accept(this); for (boa.types.Ast.Variable v :
-				 * fields.pop()) b.addFields(v);
-				 */ // FIXME Constant Declarations could be under namespcae add
-					// Variable to Namespace?;
+				if (!methods.isEmpty())
+					throw new RuntimeException("methods not empty");
+			} else if (s instanceof ConstantDeclaration) {
+				statements.push(new ArrayList<boa.types.Ast.Statement>());
+				wrapFieldsInAStatetment(s);
+				for (boa.types.Ast.Statement st : statements.pop())
+					b.addStatements(st);
+				if (!methods.isEmpty())
+					throw new RuntimeException("methods not empty");
 			} else if (s instanceof TypeDeclaration) {
 				declarations.push(new ArrayList<boa.types.Ast.Declaration>());
 				s.accept(this);
 				for (boa.types.Ast.Declaration d : declarations.pop())
 					b.addDeclarations(d);
+				if (!methods.isEmpty())
+					throw new RuntimeException("methods not empty");
 			} else if (s instanceof org.eclipse.php.internal.core.ast.nodes.Expression) {
 				s.accept(this);
 				b.addExpressions(expressions.pop());
+				if (!methods.isEmpty())
+					throw new RuntimeException("methods not empty");
 			} else if (s instanceof Include) {
 				Include id = ((Include) s);
 				String imp = "";
@@ -144,10 +145,10 @@ public class PHPVisitor extends AbstractVisitor {
 			} else {
 				statements.push(new ArrayList<boa.types.Ast.Statement>());
 				s.accept(this);
-				if (statements.isEmpty())
-					System.out.println("");
 				for (boa.types.Ast.Statement st : statements.pop())
 					b.addStatements(st);
+				if (!methods.isEmpty())
+					throw new RuntimeException("methods not empty");
 			}
 		}
 		b.setName("");
@@ -186,22 +187,16 @@ public class PHPVisitor extends AbstractVisitor {
 				((NamespaceDeclaration) s).accept(this);
 				for (boa.types.Ast.Namespace d : namespaces.pop())
 					nb.addNamespaces(d);
-			} else if (s instanceof MethodDeclaration) {
+			} else if (s instanceof MethodDeclaration || s instanceof FunctionDeclaration) {
 				methods.push(new ArrayList<boa.types.Ast.Method>());
-				((MethodDeclaration) s).accept(this);
+				((ASTNode) s).accept(this);
 				for (boa.types.Ast.Method m : methods.pop())
 					nb.addMethods(m);
-				/*
-				 * } else if (s instanceof ConstantDeclaration) {
-				 * fields.push(new ArrayList<boa.types.Ast.Variable>());
-				 * ((ASTNode) d).accept(this); for (boa.types.Ast.Variable v :
-				 * fields.pop()) nb.addFields(v);
-				 */ // FIXME Constant Declarations could be under namespcae;
-			} else if (s instanceof FunctionDeclaration) {
-				methods.push(new ArrayList<boa.types.Ast.Method>());
-				((FunctionDeclaration) s).accept(this);
-				for (boa.types.Ast.Method m : methods.pop())
-					nb.addMethods(m);
+			} else if (s instanceof ConstantDeclaration) {
+				statements.push(new ArrayList<boa.types.Ast.Statement>());
+				wrapFieldsInAStatetment((ASTNode)s);
+				for (boa.types.Ast.Statement st : statements.pop())
+					nb.addStatements(st);
 			} else if (s instanceof TypeDeclaration) {
 				declarations.push(new ArrayList<boa.types.Ast.Declaration>());
 				((TypeDeclaration) s).accept(this);
@@ -398,18 +393,15 @@ public class PHPVisitor extends AbstractVisitor {
 			name += ((Identifier) ex.getName()).getName();
 		} // FIXME
 		vb.setName(name);
-		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
-		name = ""; // FIXME php Is Dynamically Typed
-		tb.setName(name);
-		tb.setKind(boa.types.Ast.TypeKind.OTHER);
-		vb.setVariableType(tb.build());
 		b.setVariableDeclaration(vb.build());
+		methods.push(new ArrayList<Method>());
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
 		for (Object s : node.getBody().statements())
 			((ASTNode) s).accept(this);
 		for (boa.types.Ast.Statement s : statements.pop())
 			b.addStatements(s);
-		list.add(b.build());
+		for (Method m : methods.pop())
+			b.addMethods(m);
 		list.add(b.build());
 		return false;
 	}
@@ -485,25 +477,35 @@ public class PHPVisitor extends AbstractVisitor {
 		}
 		b.setKind(boa.types.Ast.TypeKind.CLASS);
 		// FIXME getSuperClass can return expressions.
-		if (node.getSuperClass() != null && node.getSuperClass() instanceof Identifier) {
-			Type.Builder tb = Type.newBuilder();
-			tb.setKind(TypeKind.OTHER);// FIXME
-			tb.setName(((Identifier) node.getSuperClass()).getName());
-			b.addParents(tb.build());
-		}
-		for (Object d : node.getBody().statements()) {
-			if (d instanceof FieldsDeclaration || d instanceof ConstantDeclaration) {
-				fields.push(new ArrayList<boa.types.Ast.Variable>());
-				((ASTNode) d).accept(this);
-				for (boa.types.Ast.Variable v : fields.pop())
-					b.addFields(v);
-			} else if (d instanceof MethodDeclaration) {
-				methods.push(new ArrayList<boa.types.Ast.Method>());
-				((MethodDeclaration) d).accept(this);
-				for (boa.types.Ast.Method m : methods.pop())
-					b.addMethods(m);
+		if (node.getSuperClass() != null) {
+			if (node.getSuperClass() instanceof Identifier) {
+				Type.Builder tb = Type.newBuilder();
+				tb.setKind(TypeKind.OTHER);// FIXME
+				tb.setName(((Identifier) node.getSuperClass()).getName());
+				b.addParents(tb.build());
+			} else {
+				node.getSuperClass().accept(this);
+				Variable.Builder vb = Variable.newBuilder();// FIXME
+				Type.Builder tb = Type.newBuilder();
+				tb.setKind(TypeKind.OTHER);
+				tb.setName("Super_Class");
+				vb.setVariableType(tb.build());
+				vb.setComputedName(expressions.pop());
+				b.addFields(vb.build());
 			}
 		}
+		fields.push(new ArrayList<boa.types.Ast.Variable>());
+		methods.push(new ArrayList<boa.types.Ast.Method>());
+		for (Object d : node.getBody().statements()) {
+			if (d instanceof FieldsDeclaration || d instanceof ConstantDeclaration)
+				((ASTNode) d).accept(this);
+			else if (d instanceof MethodDeclaration || d instanceof FunctionDeclaration)
+				((MethodDeclaration) d).accept(this);
+		}
+		for (boa.types.Ast.Variable v : fields.pop())
+			b.addFields(v);
+		for (boa.types.Ast.Method m : methods.pop())
+			b.addMethods(m);
 		declarations.peek().add(b.build());
 		return false;
 	}
@@ -629,11 +631,15 @@ public class PHPVisitor extends AbstractVisitor {
 			node.getCondition().accept(this);
 			b.setExpression(expressions.pop());
 		}
-		statements.push(new ArrayList<boa.types.Ast.Statement>());
+
 		if (node.getBody() != null) {
+			methods.push(new ArrayList<Method>());
+			statements.push(new ArrayList<boa.types.Ast.Statement>());
 			node.getBody().accept(this);
 			for (boa.types.Ast.Statement s : statements.pop())
 				b.addStatements(s);
+			for (Method m : methods.pop())
+				b.addMethods(m);
 		}
 		list.add(b.build());
 		return false;
@@ -760,10 +766,13 @@ public class PHPVisitor extends AbstractVisitor {
 			node.getValue().accept(this);
 			b.addUpdates(expressions.pop());
 		}
+		methods.push(new ArrayList<Method>());
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
 		node.getStatement().accept(this);
 		for (Statement s : statements.pop())
 			b.addStatements(s);
+		for (Method m : methods.pop())
+			b.addMethods(m);
 		list.add(b.build());
 		return false;
 	}
@@ -811,10 +820,13 @@ public class PHPVisitor extends AbstractVisitor {
 			e.accept(this);
 			b.addUpdates(expressions.pop());
 		}
+		methods.push(new ArrayList<Method>());
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
 		node.getBody().accept(this);
-		for (boa.types.Ast.Statement s : statements.pop())
+		for (Statement s : statements.pop())
 			b.addStatements(s);
+		for (Method m : methods.pop())
+			b.addMethods(m);
 		list.add(b.build());
 		return false;
 	}
@@ -904,7 +916,14 @@ public class PHPVisitor extends AbstractVisitor {
 
 	@Override
 	public boolean visit(GotoLabel node) {
-		throw new RuntimeException("visited unused node " + node.getClass());// FIXME
+		Statement.Builder b = Statement.newBuilder();
+		b.setKind(StatementKind.LABEL);
+		Expression.Builder eb = Expression.newBuilder();
+		eb.setKind(ExpressionKind.LITERAL);
+		eb.setLiteral(node.getName().getName());
+		b.setExpression(eb.build());
+		statements.peek().add(b.build());
+		return false;
 	}
 
 	@Override
@@ -936,15 +955,21 @@ public class PHPVisitor extends AbstractVisitor {
 		b.setCondition(expressions.pop());
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.IF);
+		methods.push(new ArrayList<Method>());
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
 		node.getTrueStatement().accept(this);
 		for (boa.types.Ast.Statement s : statements.pop())
 			b.addStatements(s);
+		for (Method m : methods.pop())
+			b.addMethods(m);
 		if (node.getFalseStatement() != null) {
+			methods.push(new ArrayList<Method>());
 			statements.push(new ArrayList<boa.types.Ast.Statement>());
 			node.getFalseStatement().accept(this);
 			for (boa.types.Ast.Statement s : statements.pop())
 				b.addStatements(s);
+			for (Method m : methods.pop())
+				b.addMethods(m);
 		}
 		list.add(b.build());
 		return false;
@@ -1462,10 +1487,13 @@ public class PHPVisitor extends AbstractVisitor {
 			b.setExpression(expressions.pop());
 		}
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
+		methods.push(new ArrayList<Method>());
 		for (org.eclipse.php.internal.core.ast.nodes.Statement s : node.actions())
 			s.accept(this);
 		for (Statement st : statements.pop())
 			b.addStatements(st);
+		for (Method m : methods.pop())
+			b.addMethods(m);
 		list.add(b.build());
 		return false;
 	}
@@ -1479,10 +1507,13 @@ public class PHPVisitor extends AbstractVisitor {
 			node.getExpression().accept(this);
 			b.setExpression(expressions.pop());
 		}
+		methods.push(new ArrayList<Method>());
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
 		node.getBody().accept(this);
 		for (boa.types.Ast.Statement s : statements.pop())
 			b.addStatements(s);
+		for (Method m : methods.pop())
+			b.addMethods(m);
 		list.add(b.build());
 		return false;
 	}
@@ -1504,14 +1535,16 @@ public class PHPVisitor extends AbstractVisitor {
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.TRY);
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
+		methods.push(new ArrayList<Method>());
 		node.getBody().accept(this);
 		for (Object c : node.catchClauses())
 			((CatchClause) c).accept(this);
-		if (node.finallyClause() != null) {
+		if (node.finallyClause() != null)
 			node.finallyClause().accept(this);
-		}
 		for (boa.types.Ast.Statement s : statements.pop())
 			b.addStatements(s);
+		for (Method m : methods.pop())
+			b.addMethods(m);
 		list.add(b.build());
 		return false;
 	}
@@ -1521,10 +1554,13 @@ public class PHPVisitor extends AbstractVisitor {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.FINALLY);
+		methods.push(new ArrayList<Method>());
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
 		node.getBody().accept(this);
 		for (Statement s : statements.pop())
 			b.addStatements(s);
+		for (Method m : methods.pop())
+			b.addMethods(m);
 		list.add(b.build());
 		return false;
 	}
@@ -1608,10 +1644,13 @@ public class PHPVisitor extends AbstractVisitor {
 			node.getCondition().accept(this);
 			b.setExpression(expressions.pop());
 		}
+		methods.push(new ArrayList<Method>());
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
 		node.getBody().accept(this);
 		for (boa.types.Ast.Statement s : statements.pop())
 			b.addStatements(s);
+		for (Method m : methods.pop())
+			b.addMethods(m);
 		list.add(b.build());
 		return false;
 	}
@@ -1667,20 +1706,20 @@ public class PHPVisitor extends AbstractVisitor {
 	@Override
 	public boolean visit(TraitDeclaration node) {
 		boa.types.Ast.Declaration.Builder b = boa.types.Ast.Declaration.newBuilder();
-		b.setName("");
+		b.setName(node.getName().getName());
 		int mod = node.getModifier();
+		Modifier.Builder mb = Modifier.newBuilder();
+		mb.setKind(Modifier.ModifierKind.OTHER);
+		mb.setOther("trait");
+		b.addModifiers(mb.build());
 		if (mod != ClassDeclaration.MODIFIER_NONE) {
-			Modifier.Builder mb = Modifier.newBuilder();
+			 mb = Modifier.newBuilder();
 			switch (mod) {
 			case ClassDeclaration.MODIFIER_ABSTRACT:
 				mb.setKind(Modifier.ModifierKind.ABSTRACT);
 				break;
 			case ClassDeclaration.MODIFIER_FINAL:
 				mb.setKind(Modifier.ModifierKind.FINAL);
-				break;
-			case ClassDeclaration.MODIFIER_TRAIT:
-				mb.setKind(Modifier.ModifierKind.OTHER);
-				mb.setOther("trait");
 				break;
 			}
 			b.addModifiers(mb.build());
@@ -1749,5 +1788,18 @@ public class PHPVisitor extends AbstractVisitor {
 			b.addStatements(s);
 		statements.peek().add(b.build());
 		return false;
+	}
+	
+	private void wrapFieldsInAStatetment(ASTNode node){
+		Statement.Builder b = Statement.newBuilder();
+		Expression.Builder eb = Expression.newBuilder();
+		eb.setKind(ExpressionKind.VARDECL);
+		b.setKind(StatementKind.EXPRESSION);//FIXME
+		fields.push(new ArrayList<Variable>());
+		node.accept(this);
+		for (Variable v : fields.pop())
+			eb.addVariableDecls(v);
+		b.setExpression(eb.build());
+		statements.peek().add(b.build());
 	}
 }
