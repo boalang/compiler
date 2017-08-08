@@ -1105,7 +1105,6 @@ public class PHPVisitor extends AbstractVisitor {
 		Method.Builder b = Method.newBuilder();
 		Expression.Builder eb = Expression.newBuilder();
 		eb.setKind(ExpressionKind.LAMBDA);
-		b.setName("LambdaFunction");
 		fields.push(new ArrayList<Variable>());
 		for (FormalParameter p : node.formalParameters())
 			p.accept(this);
