@@ -496,12 +496,8 @@ public class PHPVisitor extends AbstractVisitor {
 		}
 		fields.push(new ArrayList<boa.types.Ast.Variable>());
 		methods.push(new ArrayList<boa.types.Ast.Method>());
-		for (Object d : node.getBody().statements()) {
-			if (d instanceof FieldsDeclaration || d instanceof ConstantDeclaration)
-				((ASTNode) d).accept(this);
-			else if (d instanceof MethodDeclaration || d instanceof FunctionDeclaration)
-				((MethodDeclaration) d).accept(this);
-		}
+		for (ASTNode d : node.getBody().statements())
+			d.accept(this);
 		for (boa.types.Ast.Variable v : fields.pop())
 			b.addFields(v);
 		for (boa.types.Ast.Method m : methods.pop())
@@ -1775,18 +1771,19 @@ public class PHPVisitor extends AbstractVisitor {
 
 	@Override
 	public boolean visit(TraitUseStatement node) {
-		Statement.Builder b = Statement.newBuilder();
-		b.setKind(StatementKind.OTHER);// FIXME
-		for (NamespaceName n : node.getTraitList()) {
-			n.accept(this);
-			b.addExpressions(expressions.pop());
+		Method.Builder b = Method.newBuilder();
+		b.setName("use");
+		for (NamespaceName n : node.getTraitList()){ 
+			Variable.Builder vb = Variable.newBuilder();
+			vb.setName(n.getName());
+			b.addArguments(vb.build());
 		}
 		statements.push(new ArrayList<Statement>());
 		for (TraitStatement ts : node.getTsList())
 			ts.accept(this);
 		for (Statement s : statements.pop())
 			b.addStatements(s);
-		statements.peek().add(b.build());
+		methods.peek().add(b.build());
 		return false;
 	}
 	
