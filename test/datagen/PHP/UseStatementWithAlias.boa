@@ -1,0 +1,19 @@
+namespaces {
+  name: ""
+  statements {
+    kind: OTHER
+    expressions {
+      kind: OTHER
+      variable_decls {
+        name: "myNamespace"
+      }
+      variable_decls {
+        name: "myNamespace"
+        initializer {
+          kind: OTHER
+          variable: "myName"
+        }
+      }
+    }
+  }
+}
