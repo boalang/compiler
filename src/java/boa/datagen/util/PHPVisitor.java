@@ -102,34 +102,24 @@ public class PHPVisitor extends AbstractVisitor {
 				s.accept(this);
 				for (boa.types.Ast.Namespace d : namespaces.pop())
 					b.addNamespaces(d);
-				if (!methods.isEmpty())
-					throw new RuntimeException("methods not empty");
 			} else if (s instanceof MethodDeclaration || s instanceof FunctionDeclaration) {
 				methods.push(new ArrayList<boa.types.Ast.Method>());
 				s.accept(this);
 				for (boa.types.Ast.Method m : methods.pop())
 					b.addMethods(m);
-				if (!methods.isEmpty())
-					throw new RuntimeException("methods not empty");
 			} else if (s instanceof ConstantDeclaration) {
 				statements.push(new ArrayList<boa.types.Ast.Statement>());
 				wrapFieldsInAStatetment(s);
 				for (boa.types.Ast.Statement st : statements.pop())
 					b.addStatements(st);
-				if (!methods.isEmpty())
-					throw new RuntimeException("methods not empty");
 			} else if (s instanceof TypeDeclaration) {
 				declarations.push(new ArrayList<boa.types.Ast.Declaration>());
 				s.accept(this);
 				for (boa.types.Ast.Declaration d : declarations.pop())
 					b.addDeclarations(d);
-				if (!methods.isEmpty())
-					throw new RuntimeException("methods not empty");
 			} else if (s instanceof org.eclipse.php.internal.core.ast.nodes.Expression) {
 				s.accept(this);
 				b.addExpressions(expressions.pop());
-				if (!methods.isEmpty())
-					throw new RuntimeException("methods not empty");
 			} else if (s instanceof Include) {
 				Include id = ((Include) s);
 				String imp = "";
@@ -147,8 +137,6 @@ public class PHPVisitor extends AbstractVisitor {
 				s.accept(this);
 				for (boa.types.Ast.Statement st : statements.pop())
 					b.addStatements(st);
-				if (!methods.isEmpty())
-					throw new RuntimeException("methods not empty");
 			}
 		}
 		b.setName("");
@@ -1409,9 +1397,9 @@ public class PHPVisitor extends AbstractVisitor {
 		FunctionName fn = node.getMethod().getFunctionName();
 		node.getClassName().accept(this);
 		b.addExpressions(expressions.pop());
-		if (fn.getName() instanceof Identifier)
+		if (fn.getName() instanceof Identifier) 
 			b.setMethod(((Identifier) node.getMethod().getFunctionName().getName()).getName());// FIXME
-		else {
+		else {// FIXME could be a variable with a name that could be Identifier add another check?
 			fn.getName().accept(this);
 			b.addExpressions(expressions.pop());
 		}
@@ -1692,7 +1680,7 @@ public class PHPVisitor extends AbstractVisitor {
 	@Override
 	public boolean visit(TraitAliasStatement node) {
 		Statement.Builder b = Statement.newBuilder();
-		b.setKind(StatementKind.OTHER);// FIXME
+		b.setKind(StatementKind.EXPRESSION);// FIXME
 		node.getAlias().accept(this);
 		b.setExpression(expressions.pop());
 		statements.peek().add(b.build());
@@ -1721,13 +1709,6 @@ public class PHPVisitor extends AbstractVisitor {
 			b.addModifiers(mb.build());
 		}
 		b.setKind(boa.types.Ast.TypeKind.OTHER);// FIXME
-		// FIXME getSuperClass can return expressions.
-		if (node.getSuperClass() != null && node.getSuperClass() instanceof Identifier) {
-			Type.Builder tb = Type.newBuilder();
-			tb.setKind(TypeKind.OTHER);// FIXME
-			tb.setName(((Identifier) node.getSuperClass()).getName());
-			b.addParents(tb.build());
-		}
 		for (Object d : node.getBody().statements()) {
 			if (d instanceof FieldsDeclaration || d instanceof ConstantDeclaration) {
 				fields.push(new ArrayList<boa.types.Ast.Variable>());
@@ -1762,7 +1743,7 @@ public class PHPVisitor extends AbstractVisitor {
 	@Override
 	public boolean visit(TraitPrecedenceStatement node) {
 		Statement.Builder b = Statement.newBuilder();
-		b.setKind(StatementKind.OTHER);// FIXME
+		b.setKind(StatementKind.EXPRESSION);// FIXME
 		node.getPrecedence().accept(this);
 		b.setExpression(expressions.pop());
 		statements.peek().add(b.build());
