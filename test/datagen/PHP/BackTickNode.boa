@@ -1,0 +1,13 @@
+namespaces {
+  name: ""
+  statements {
+    kind: EXPRESSION
+    expression {
+      kind: METHODCALL
+      expressions {
+        kind: LITERAL
+        literal: "ls -al"
+      }
+    }
+  }
+}
