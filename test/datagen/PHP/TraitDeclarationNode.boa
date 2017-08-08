@@ -1,0 +1,39 @@
+namespaces {
+  name: ""
+  declarations {
+    name: "ezcReflectionReturnInfo"
+    kind: OTHER
+    modifiers {
+      kind: OTHER
+      other: "trait"
+    }
+    methods {
+      name: "getReturnType"
+      modifiers {
+        kind: VISIBILITY
+        visibility: PUBLIC
+      }
+      return_type {
+        name: ""
+        kind: OTHER
+      }
+      statements {
+        kind: BLOCK
+      }
+    }
+    methods {
+      name: "getReturnDescription"
+      modifiers {
+        kind: VISIBILITY
+        visibility: PUBLIC
+      }
+      return_type {
+        name: ""
+        kind: OTHER
+      }
+      statements {
+        kind: BLOCK
+      }
+    }
+  }
+}

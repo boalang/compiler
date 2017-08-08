@@ -1,0 +1,25 @@
+namespaces {
+  name: ""
+  declarations {
+    name: ""
+    kind: CLASS
+    methods {
+      name: "use"
+      arguments {
+        name: "A"
+      }
+      statements {
+        kind: OTHER
+        expression {
+          kind: OTHER
+          expressions {
+            kind: METHOD_REFERENCE
+            variable: "A"
+            method: "AsThing"
+          }
+          method: "thing"
+        }
+      }
+    }
+  }
+}

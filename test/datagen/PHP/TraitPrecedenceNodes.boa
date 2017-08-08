@@ -1,0 +1,46 @@
+namespaces {
+  name: ""
+  declarations {
+    name: ""
+    kind: CLASS
+    methods {
+      name: "use"
+      arguments {
+        name: "A"
+      }
+      arguments {
+        name: "B"
+      }
+      statements {
+        kind: EXPRESSION
+        expression {
+          kind: OTHER
+          expressions {
+            kind: OTHER
+            variable: "A"
+          }
+          expressions {
+            kind: METHOD_REFERENCE
+            variable: "B"
+            method: "smallTalk"
+          }
+        }
+      }
+      statements {
+        kind: EXPRESSION
+        expression {
+          kind: OTHER
+          expressions {
+            kind: OTHER
+            variable: "B"
+          }
+          expressions {
+            kind: METHOD_REFERENCE
+            variable: "A"
+            method: "bigTalk"
+          }
+        }
+      }
+    }
+  }
+}

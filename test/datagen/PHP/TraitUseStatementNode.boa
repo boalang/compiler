@@ -1,0 +1,17 @@
+namespaces {
+  name: ""
+  declarations {
+    name: ""
+    kind: CLASS
+    parents {
+      name: "ReflectionFunction"
+      kind: OTHER
+    }
+    methods {
+      name: "use"
+      arguments {
+        name: "ezcReflectionReturnInfo"
+      }
+    }
+  }
+}
