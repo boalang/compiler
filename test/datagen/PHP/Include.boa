@@ -1,0 +1,59 @@
+namespaces {
+  name: ""
+  statements {
+    kind: EXPRESSION
+    expression {
+      kind: OTHER
+      expressions {
+        kind: LITERAL
+        literal: "\'myfile\'"
+      }
+      new_type {
+        name: "include"
+        kind: OTHER
+      }
+    }
+  }
+  statements {
+    kind: EXPRESSION
+    expression {
+      kind: OTHER
+      expressions {
+        kind: LITERAL
+        literal: "\'myfile\'"
+      }
+      new_type {
+        name: "require"
+        kind: OTHER
+      }
+    }
+  }
+  statements {
+    kind: EXPRESSION
+    expression {
+      kind: OTHER
+      expressions {
+        kind: LITERAL
+        literal: "\'myfile\'"
+      }
+      new_type {
+        name: "include_once"
+        kind: OTHER
+      }
+    }
+  }
+  statements {
+    kind: EXPRESSION
+    expression {
+      kind: OTHER
+      expressions {
+        kind: LITERAL
+        literal: "\'myfile\'"
+      }
+      new_type {
+        name: "require_once"
+        kind: OTHER
+      }
+    }
+  }
+}
