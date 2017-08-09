@@ -1,0 +1,42 @@
+namespaces {
+  name: ""
+  statements {
+    kind: FOR
+    statements {
+      kind: BLOCK
+      statements {
+        kind: CONTINUE
+      }
+    }
+    initializations {
+      kind: ASSIGN
+      expressions {
+        kind: VARACCESS
+        variable: "i"
+      }
+      expressions {
+        kind: LITERAL
+        literal: "0.0"
+      }
+    }
+    condition {
+      kind: LT
+      expressions {
+        kind: VARACCESS
+        variable: "i"
+      }
+      expressions {
+        kind: LITERAL
+        literal: "5.0"
+      }
+    }
+    updates {
+      kind: OP_INC
+      expressions {
+        kind: VARACCESS
+        variable: "i"
+      }
+      is_postfix: true
+    }
+  }
+}

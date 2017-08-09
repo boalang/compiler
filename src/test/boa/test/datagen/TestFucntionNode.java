@@ -20,4 +20,10 @@ public class TestFucntionNode extends JavaScriptBaseTest {
 	public void functionTest3() throws IOException {
 		nodeTest(load("test/datagen/javascript/FunctionNode3.boa"), load("test/datagen/javascript/FunctionNode3.js"));
 	}
+
+	@Test
+	public void functionTest4() throws IOException {
+		nodeTest(load("test/datagen/javascript/FunctionCallWtihFunctionNodeAsArgument.boa"),
+				 load("test/datagen/javascript/FunctionCallWtihFunctionNodeAsArgument.js"));
+	}
 }
