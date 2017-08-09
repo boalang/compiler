@@ -17,6 +17,7 @@ import org.junit.Test;
 import com.google.protobuf.CodedInputStream;
 import com.google.protobuf.Message;
 import boa.datagen.util.ProtoMessageVisitor;
+import boa.test.datagen.java.Java8BaseTest;
 import boa.types.Ast.ASTRoot;
 import boa.types.Ast.Declaration;
 import boa.types.Code.CodeRepository;
