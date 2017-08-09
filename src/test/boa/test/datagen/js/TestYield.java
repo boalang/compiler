@@ -1,4 +1,4 @@
-package boa.test.datagen;
+package boa.test.datagen.js;
 
 import java.io.IOException;
 
@@ -10,4 +10,5 @@ public class TestYield extends JavaScriptBaseTest {
 	public void yieldTest1() throws IOException {
 		nodeTest(load("test/datagen/javascript/YieldNode.boa"), load("test/datagen/javascript/YieldNode.js"));
 	}
+
 }

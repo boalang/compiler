@@ -1,4 +1,4 @@
-package boa.test.datagen;
+package boa.test.datagen.js;
 
 
 import java.io.File;

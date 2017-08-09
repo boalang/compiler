@@ -1,4 +1,4 @@
-package boa.test.datagen;
+package boa.test.datagen.php;
 
 import static org.junit.Assert.*;
 
@@ -14,6 +14,7 @@ import org.junit.Test;
 import boa.datagen.util.FileIO;
 import boa.datagen.util.PHPErrorCheckVisitor;
 import boa.datagen.util.PHPVisitor;
+import boa.types.Ast.ASTRoot;
 import boa.types.Ast.Namespace;
 
 public class PHPParseTest {
@@ -26,8 +27,10 @@ public class PHPParseTest {
 		Program ast = parser.createAST(null);
 		PHPVisitor visitor = new PHPVisitor(content);
 		PHPErrorCheckVisitor errorCheck = new PHPErrorCheckVisitor();
+		ast.accept(errorCheck);
 		assertFalse(errorCheck.hasError);
-		Namespace root = visitor.getNamespace(ast);
-		System.out.println(root);
+		final ASTRoot.Builder root = ASTRoot.newBuilder();
+		root.addNamespaces(visitor.getNamespace(ast));
+		System.out.println(root.build().toString());
 	}
 }

@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package boa.test.datagen;
+package boa.test.datagen.java;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -47,6 +47,8 @@ import boa.types.Diff.ChangedFile;
 import boa.datagen.util.Java7Visitor;
 import boa.datagen.util.ProtoMessageVisitor;
 import boa.test.compiler.BaseTest;
+import boa.test.datagen.ASTDumper;
+import boa.test.datagen.UglyMathCommentsExtractor;
 
 /*
  * @author rdyer

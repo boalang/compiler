@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package boa.test.datagen;
+package boa.test.datagen.java;
 
 import java.io.IOException;
 

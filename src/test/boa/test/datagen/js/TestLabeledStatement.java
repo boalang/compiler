@@ -1,4 +1,4 @@
-package boa.test.datagen;
+package boa.test.datagen.js;
 
 import java.io.IOException;
 
@@ -8,12 +8,14 @@ public class TestLabeledStatement extends JavaScriptBaseTest {
 
 	@Test
 	public void labeledStatementTest1() throws IOException {
-		nodeTest(load("test/datagen/javascript/LabeledStatementNode.boa"), load("test/datagen/javascript/LabeledStatementNode.js"));
+		nodeTest(load("test/datagen/javascript/LabeledStatementNode.boa"),
+				load("test/datagen/javascript/LabeledStatementNode.js"));
 	}
-	
+
 	@Test
 	public void labeledStatementTest2() throws IOException {
-		nodeTest(load("test/datagen/javascript/LabeledStatementNode2.boa"), load("test/datagen/javascript/LabeledStatementNode2.js"));
+		nodeTest(load("test/datagen/javascript/LabeledStatementNode2.boa"),
+				load("test/datagen/javascript/LabeledStatementNode2.js"));
 	}
-	
+
 }

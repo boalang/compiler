@@ -1593,7 +1593,7 @@ public class PHPVisitor extends AbstractVisitor {
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.OTHER);// FIXME
 		for (UseStatementPart usp : node.parts()) {
-			usp.accept(this);
+			usp.accept(this); //FIXME add String namespacename and String aliasName to Statements?
 			b.addExpressions(expressions.pop());
 		}
 		list.add(b.build());

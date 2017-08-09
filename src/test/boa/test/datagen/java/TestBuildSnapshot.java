@@ -1,4 +1,4 @@
-package boa.test.datagen;
+package boa.test.datagen.java;
 
 import static org.junit.Assert.assertEquals;
 

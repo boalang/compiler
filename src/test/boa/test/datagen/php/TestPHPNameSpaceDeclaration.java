@@ -1,4 +1,4 @@
-package boa.test.datagen;
+package boa.test.datagen.php;
 
 import java.io.IOException;
 
