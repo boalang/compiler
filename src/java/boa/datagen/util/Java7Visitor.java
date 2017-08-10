@@ -1752,14 +1752,13 @@ public class Java7Visitor extends ASTVisitor {
 					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
 			}
 		}
-		List<boa.types.Ast.Statement> list = statements.peek();
+		final List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.FINALLY);
-		for (Object s : node.statements()) {
-			statements.push(new ArrayList<boa.types.Ast.Statement>());
+		statements.push(new ArrayList<boa.types.Ast.Statement>());
+		for (final Object s : node.statements())
 			((org.eclipse.jdt.core.dom.Statement)s).accept(this);
-			for (boa.types.Ast.Statement st : statements.pop())
-				b.addStatements(st);
-		}
+		for (boa.types.Ast.Statement st : statements.pop())
+			b.addStatements(st);
 		list.add(b.build());
 	}
 
