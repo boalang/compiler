@@ -1,0 +1,21 @@
+title: ""
+elements {
+  tag: "html"
+  kind: BLOCK
+  elements {
+    tag: "head"
+    kind: BLOCK
+  }
+  elements {
+    tag: "body"
+    kind: BLOCK
+    elements {
+      tag: "script"
+      kind: BLOCK
+      atributes {
+        key: "src"
+        value: "myscripts.js"
+      }
+    }
+  }
+}

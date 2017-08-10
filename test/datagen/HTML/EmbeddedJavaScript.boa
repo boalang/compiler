@@ -1,0 +1,122 @@
+title: ""
+elements {
+  tag: "html"
+  kind: BLOCK
+  elements {
+    tag: "head"
+    kind: BLOCK
+  }
+  elements {
+    tag: "body"
+    kind: BLOCK
+    elements {
+      tag: "h2"
+      kind: BLOCK
+      text: "Assigning JavaScript Values"
+    }
+    elements {
+      tag: "p"
+      kind: BLOCK
+      text: "In JavaScript the = operator is used to assign values to variables."
+    }
+    elements {
+      tag: "p"
+      kind: BLOCK
+      atributes {
+        key: "id"
+        value: "demo"
+      }
+    }
+    elements {
+      tag: "script"
+      kind: BLOCK
+      script {
+        name: ""
+        statements {
+          kind: EXPRESSION
+          expression {
+            kind: VARDECL
+            variable_decls {
+              name: "x"
+              modifiers {
+                kind: SCOPE
+                scope: VAR
+              }
+            }
+            variable_decls {
+              name: "y"
+              modifiers {
+                kind: SCOPE
+                scope: VAR
+              }
+            }
+          }
+        }
+        statements {
+          kind: EXPRESSION
+          expression {
+            kind: ASSIGN
+            expressions {
+              kind: VARACCESS
+              variable: "x"
+            }
+            expressions {
+              kind: LITERAL
+              literal: "5.0"
+            }
+          }
+        }
+        statements {
+          kind: EXPRESSION
+          expression {
+            kind: ASSIGN
+            expressions {
+              kind: VARACCESS
+              variable: "y"
+            }
+            expressions {
+              kind: LITERAL
+              literal: "6.0"
+            }
+          }
+        }
+        statements {
+          kind: EXPRESSION
+          expression {
+            kind: ASSIGN
+            expressions {
+              kind: VARACCESS
+              expressions {
+                kind: METHODCALL
+                expressions {
+                  kind: VARACCESS
+                  variable: "document"
+                }
+                method: "getElementById"
+                method_args {
+                  kind: LITERAL
+                  literal: "demo"
+                }
+              }
+              expressions {
+                kind: VARACCESS
+                variable: "innerHTML"
+              }
+            }
+            expressions {
+              kind: OP_ADD
+              expressions {
+                kind: VARACCESS
+                variable: "x"
+              }
+              expressions {
+                kind: VARACCESS
+                variable: "y"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

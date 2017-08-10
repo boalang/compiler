@@ -35440,31 +35440,50 @@ public final class Ast {
     com.google.protobuf.ByteString
         getTitleBytes();
 
-    // required .boa.types.Element body = 2;
+    // repeated .boa.types.Element elements = 2;
     /**
-     * <code>required .boa.types.Element body = 2;</code>
+     * <code>repeated .boa.types.Element elements = 2;</code>
      *
      * <pre>
      *	optional DocType doc_type = 3;
      * </pre>
      */
-    boolean hasBody();
+    java.util.List<boa.types.Ast.Element> 
+        getElementsList();
     /**
-     * <code>required .boa.types.Element body = 2;</code>
+     * <code>repeated .boa.types.Element elements = 2;</code>
      *
      * <pre>
      *	optional DocType doc_type = 3;
      * </pre>
      */
-    boa.types.Ast.Element getBody();
+    boa.types.Ast.Element getElements(int index);
     /**
-     * <code>required .boa.types.Element body = 2;</code>
+     * <code>repeated .boa.types.Element elements = 2;</code>
      *
      * <pre>
      *	optional DocType doc_type = 3;
      * </pre>
      */
-    boa.types.Ast.ElementOrBuilder getBodyOrBuilder();
+    int getElementsCount();
+    /**
+     * <code>repeated .boa.types.Element elements = 2;</code>
+     *
+     * <pre>
+     *	optional DocType doc_type = 3;
+     * </pre>
+     */
+    java.util.List<? extends boa.types.Ast.ElementOrBuilder> 
+        getElementsOrBuilderList();
+    /**
+     * <code>repeated .boa.types.Element elements = 2;</code>
+     *
+     * <pre>
+     *	optional DocType doc_type = 3;
+     * </pre>
+     */
+    boa.types.Ast.ElementOrBuilder getElementsOrBuilder(
+        int index);
   }
   /**
    * Protobuf type {@code boa.types.Document}
@@ -35527,16 +35546,11 @@ public final class Ast {
               break;
             }
             case 18: {
-              boa.types.Ast.Element.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000002) == 0x00000002)) {
-                subBuilder = body_.toBuilder();
+              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+                elements_ = new java.util.ArrayList<boa.types.Ast.Element>();
+                mutable_bitField0_ |= 0x00000002;
               }
-              body_ = input.readMessage(boa.types.Ast.Element.PARSER, extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(body_);
-                body_ = subBuilder.buildPartial();
-              }
-              bitField0_ |= 0x00000002;
+              elements_.add(input.readMessage(boa.types.Ast.Element.PARSER, extensionRegistry));
               break;
             }
           }
@@ -35547,6 +35561,9 @@ public final class Ast {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e.getMessage()).setUnfinishedMessage(this);
       } finally {
+        if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
+          elements_ = java.util.Collections.unmodifiableList(elements_);
+        }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
@@ -35622,56 +35639,76 @@ public final class Ast {
       }
     }
 
-    // required .boa.types.Element body = 2;
-    public static final int BODY_FIELD_NUMBER = 2;
-    private boa.types.Ast.Element body_;
+    // repeated .boa.types.Element elements = 2;
+    public static final int ELEMENTS_FIELD_NUMBER = 2;
+    private java.util.List<boa.types.Ast.Element> elements_;
     /**
-     * <code>required .boa.types.Element body = 2;</code>
+     * <code>repeated .boa.types.Element elements = 2;</code>
      *
      * <pre>
      *	optional DocType doc_type = 3;
      * </pre>
      */
-    public boolean hasBody() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
+    public java.util.List<boa.types.Ast.Element> getElementsList() {
+      return elements_;
     }
     /**
-     * <code>required .boa.types.Element body = 2;</code>
+     * <code>repeated .boa.types.Element elements = 2;</code>
      *
      * <pre>
      *	optional DocType doc_type = 3;
      * </pre>
      */
-    public boa.types.Ast.Element getBody() {
-      return body_;
+    public java.util.List<? extends boa.types.Ast.ElementOrBuilder> 
+        getElementsOrBuilderList() {
+      return elements_;
     }
     /**
-     * <code>required .boa.types.Element body = 2;</code>
+     * <code>repeated .boa.types.Element elements = 2;</code>
      *
      * <pre>
      *	optional DocType doc_type = 3;
      * </pre>
      */
-    public boa.types.Ast.ElementOrBuilder getBodyOrBuilder() {
-      return body_;
+    public int getElementsCount() {
+      return elements_.size();
+    }
+    /**
+     * <code>repeated .boa.types.Element elements = 2;</code>
+     *
+     * <pre>
+     *	optional DocType doc_type = 3;
+     * </pre>
+     */
+    public boa.types.Ast.Element getElements(int index) {
+      return elements_.get(index);
+    }
+    /**
+     * <code>repeated .boa.types.Element elements = 2;</code>
+     *
+     * <pre>
+     *	optional DocType doc_type = 3;
+     * </pre>
+     */
+    public boa.types.Ast.ElementOrBuilder getElementsOrBuilder(
+        int index) {
+      return elements_.get(index);
     }
 
     private void initFields() {
       title_ = "";
-      body_ = boa.types.Ast.Element.getDefaultInstance();
+      elements_ = java.util.Collections.emptyList();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized != -1) return isInitialized == 1;
 
-      if (!hasBody()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!getBody().isInitialized()) {
-        memoizedIsInitialized = 0;
-        return false;
+      for (int i = 0; i < getElementsCount(); i++) {
+        if (!getElements(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
       }
       memoizedIsInitialized = 1;
       return true;
@@ -35683,8 +35720,8 @@ public final class Ast {
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         output.writeBytes(1, getTitleBytes());
       }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeMessage(2, body_);
+      for (int i = 0; i < elements_.size(); i++) {
+        output.writeMessage(2, elements_.get(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -35699,9 +35736,9 @@ public final class Ast {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(1, getTitleBytes());
       }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+      for (int i = 0; i < elements_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(2, body_);
+          .computeMessageSize(2, elements_.get(i));
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -35815,7 +35852,7 @@ public final class Ast {
       }
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-          getBodyFieldBuilder();
+          getElementsFieldBuilder();
         }
       }
       private static Builder create() {
@@ -35826,12 +35863,12 @@ public final class Ast {
         super.clear();
         title_ = "";
         bitField0_ = (bitField0_ & ~0x00000001);
-        if (bodyBuilder_ == null) {
-          body_ = boa.types.Ast.Element.getDefaultInstance();
+        if (elementsBuilder_ == null) {
+          elements_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000002);
         } else {
-          bodyBuilder_.clear();
+          elementsBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000002);
         return this;
       }
 
@@ -35864,13 +35901,14 @@ public final class Ast {
           to_bitField0_ |= 0x00000001;
         }
         result.title_ = title_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        if (bodyBuilder_ == null) {
-          result.body_ = body_;
+        if (elementsBuilder_ == null) {
+          if (((bitField0_ & 0x00000002) == 0x00000002)) {
+            elements_ = java.util.Collections.unmodifiableList(elements_);
+            bitField0_ = (bitField0_ & ~0x00000002);
+          }
+          result.elements_ = elements_;
         } else {
-          result.body_ = bodyBuilder_.build();
+          result.elements_ = elementsBuilder_.build();
         }
         result.bitField0_ = to_bitField0_;
         onBuilt();
@@ -35893,21 +35931,42 @@ public final class Ast {
           title_ = other.title_;
           onChanged();
         }
-        if (other.hasBody()) {
-          mergeBody(other.getBody());
+        if (elementsBuilder_ == null) {
+          if (!other.elements_.isEmpty()) {
+            if (elements_.isEmpty()) {
+              elements_ = other.elements_;
+              bitField0_ = (bitField0_ & ~0x00000002);
+            } else {
+              ensureElementsIsMutable();
+              elements_.addAll(other.elements_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.elements_.isEmpty()) {
+            if (elementsBuilder_.isEmpty()) {
+              elementsBuilder_.dispose();
+              elementsBuilder_ = null;
+              elements_ = other.elements_;
+              bitField0_ = (bitField0_ & ~0x00000002);
+              elementsBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getElementsFieldBuilder() : null;
+            } else {
+              elementsBuilder_.addAllMessages(other.elements_);
+            }
+          }
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
 
       public final boolean isInitialized() {
-        if (!hasBody()) {
-          
-          return false;
-        }
-        if (!getBody().isInitialized()) {
-          
-          return false;
+        for (int i = 0; i < getElementsCount(); i++) {
+          if (!getElements(i).isInitialized()) {
+            
+            return false;
+          }
         }
         return true;
       }
@@ -36005,157 +36064,316 @@ public final class Ast {
         return this;
       }
 
-      // required .boa.types.Element body = 2;
-      private boa.types.Ast.Element body_ = boa.types.Ast.Element.getDefaultInstance();
-      private com.google.protobuf.SingleFieldBuilder<
-          boa.types.Ast.Element, boa.types.Ast.Element.Builder, boa.types.Ast.ElementOrBuilder> bodyBuilder_;
-      /**
-       * <code>required .boa.types.Element body = 2;</code>
-       *
-       * <pre>
-       *	optional DocType doc_type = 3;
-       * </pre>
-       */
-      public boolean hasBody() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
+      // repeated .boa.types.Element elements = 2;
+      private java.util.List<boa.types.Ast.Element> elements_ =
+        java.util.Collections.emptyList();
+      private void ensureElementsIsMutable() {
+        if (!((bitField0_ & 0x00000002) == 0x00000002)) {
+          elements_ = new java.util.ArrayList<boa.types.Ast.Element>(elements_);
+          bitField0_ |= 0x00000002;
+         }
       }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Element, boa.types.Ast.Element.Builder, boa.types.Ast.ElementOrBuilder> elementsBuilder_;
+
       /**
-       * <code>required .boa.types.Element body = 2;</code>
+       * <code>repeated .boa.types.Element elements = 2;</code>
        *
        * <pre>
        *	optional DocType doc_type = 3;
        * </pre>
        */
-      public boa.types.Ast.Element getBody() {
-        if (bodyBuilder_ == null) {
-          return body_;
+      public java.util.List<boa.types.Ast.Element> getElementsList() {
+        if (elementsBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(elements_);
         } else {
-          return bodyBuilder_.getMessage();
+          return elementsBuilder_.getMessageList();
         }
       }
       /**
-       * <code>required .boa.types.Element body = 2;</code>
+       * <code>repeated .boa.types.Element elements = 2;</code>
        *
        * <pre>
        *	optional DocType doc_type = 3;
        * </pre>
        */
-      public Builder setBody(boa.types.Ast.Element value) {
-        if (bodyBuilder_ == null) {
+      public int getElementsCount() {
+        if (elementsBuilder_ == null) {
+          return elements_.size();
+        } else {
+          return elementsBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Element elements = 2;</code>
+       *
+       * <pre>
+       *	optional DocType doc_type = 3;
+       * </pre>
+       */
+      public boa.types.Ast.Element getElements(int index) {
+        if (elementsBuilder_ == null) {
+          return elements_.get(index);
+        } else {
+          return elementsBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Element elements = 2;</code>
+       *
+       * <pre>
+       *	optional DocType doc_type = 3;
+       * </pre>
+       */
+      public Builder setElements(
+          int index, boa.types.Ast.Element value) {
+        if (elementsBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
           }
-          body_ = value;
+          ensureElementsIsMutable();
+          elements_.set(index, value);
           onChanged();
         } else {
-          bodyBuilder_.setMessage(value);
+          elementsBuilder_.setMessage(index, value);
         }
-        bitField0_ |= 0x00000002;
         return this;
       }
       /**
-       * <code>required .boa.types.Element body = 2;</code>
+       * <code>repeated .boa.types.Element elements = 2;</code>
        *
        * <pre>
        *	optional DocType doc_type = 3;
        * </pre>
        */
-      public Builder setBody(
-          boa.types.Ast.Element.Builder builderForValue) {
-        if (bodyBuilder_ == null) {
-          body_ = builderForValue.build();
+      public Builder setElements(
+          int index, boa.types.Ast.Element.Builder builderForValue) {
+        if (elementsBuilder_ == null) {
+          ensureElementsIsMutable();
+          elements_.set(index, builderForValue.build());
           onChanged();
         } else {
-          bodyBuilder_.setMessage(builderForValue.build());
+          elementsBuilder_.setMessage(index, builderForValue.build());
         }
-        bitField0_ |= 0x00000002;
         return this;
       }
       /**
-       * <code>required .boa.types.Element body = 2;</code>
+       * <code>repeated .boa.types.Element elements = 2;</code>
        *
        * <pre>
        *	optional DocType doc_type = 3;
        * </pre>
        */
-      public Builder mergeBody(boa.types.Ast.Element value) {
-        if (bodyBuilder_ == null) {
-          if (((bitField0_ & 0x00000002) == 0x00000002) &&
-              body_ != boa.types.Ast.Element.getDefaultInstance()) {
-            body_ =
-              boa.types.Ast.Element.newBuilder(body_).mergeFrom(value).buildPartial();
-          } else {
-            body_ = value;
+      public Builder addElements(boa.types.Ast.Element value) {
+        if (elementsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
           }
+          ensureElementsIsMutable();
+          elements_.add(value);
           onChanged();
         } else {
-          bodyBuilder_.mergeFrom(value);
+          elementsBuilder_.addMessage(value);
         }
-        bitField0_ |= 0x00000002;
         return this;
       }
       /**
-       * <code>required .boa.types.Element body = 2;</code>
+       * <code>repeated .boa.types.Element elements = 2;</code>
        *
        * <pre>
        *	optional DocType doc_type = 3;
        * </pre>
        */
-      public Builder clearBody() {
-        if (bodyBuilder_ == null) {
-          body_ = boa.types.Ast.Element.getDefaultInstance();
+      public Builder addElements(
+          int index, boa.types.Ast.Element value) {
+        if (elementsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureElementsIsMutable();
+          elements_.add(index, value);
           onChanged();
         } else {
-          bodyBuilder_.clear();
+          elementsBuilder_.addMessage(index, value);
         }
-        bitField0_ = (bitField0_ & ~0x00000002);
         return this;
       }
       /**
-       * <code>required .boa.types.Element body = 2;</code>
+       * <code>repeated .boa.types.Element elements = 2;</code>
        *
        * <pre>
        *	optional DocType doc_type = 3;
        * </pre>
        */
-      public boa.types.Ast.Element.Builder getBodyBuilder() {
-        bitField0_ |= 0x00000002;
-        onChanged();
-        return getBodyFieldBuilder().getBuilder();
+      public Builder addElements(
+          boa.types.Ast.Element.Builder builderForValue) {
+        if (elementsBuilder_ == null) {
+          ensureElementsIsMutable();
+          elements_.add(builderForValue.build());
+          onChanged();
+        } else {
+          elementsBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
       }
       /**
-       * <code>required .boa.types.Element body = 2;</code>
+       * <code>repeated .boa.types.Element elements = 2;</code>
        *
        * <pre>
        *	optional DocType doc_type = 3;
        * </pre>
        */
-      public boa.types.Ast.ElementOrBuilder getBodyOrBuilder() {
-        if (bodyBuilder_ != null) {
-          return bodyBuilder_.getMessageOrBuilder();
+      public Builder addElements(
+          int index, boa.types.Ast.Element.Builder builderForValue) {
+        if (elementsBuilder_ == null) {
+          ensureElementsIsMutable();
+          elements_.add(index, builderForValue.build());
+          onChanged();
         } else {
-          return body_;
+          elementsBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Element elements = 2;</code>
+       *
+       * <pre>
+       *	optional DocType doc_type = 3;
+       * </pre>
+       */
+      public Builder addAllElements(
+          java.lang.Iterable<? extends boa.types.Ast.Element> values) {
+        if (elementsBuilder_ == null) {
+          ensureElementsIsMutable();
+          super.addAll(values, elements_);
+          onChanged();
+        } else {
+          elementsBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Element elements = 2;</code>
+       *
+       * <pre>
+       *	optional DocType doc_type = 3;
+       * </pre>
+       */
+      public Builder clearElements() {
+        if (elementsBuilder_ == null) {
+          elements_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000002);
+          onChanged();
+        } else {
+          elementsBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Element elements = 2;</code>
+       *
+       * <pre>
+       *	optional DocType doc_type = 3;
+       * </pre>
+       */
+      public Builder removeElements(int index) {
+        if (elementsBuilder_ == null) {
+          ensureElementsIsMutable();
+          elements_.remove(index);
+          onChanged();
+        } else {
+          elementsBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Element elements = 2;</code>
+       *
+       * <pre>
+       *	optional DocType doc_type = 3;
+       * </pre>
+       */
+      public boa.types.Ast.Element.Builder getElementsBuilder(
+          int index) {
+        return getElementsFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.Element elements = 2;</code>
+       *
+       * <pre>
+       *	optional DocType doc_type = 3;
+       * </pre>
+       */
+      public boa.types.Ast.ElementOrBuilder getElementsOrBuilder(
+          int index) {
+        if (elementsBuilder_ == null) {
+          return elements_.get(index);  } else {
+          return elementsBuilder_.getMessageOrBuilder(index);
         }
       }
       /**
-       * <code>required .boa.types.Element body = 2;</code>
+       * <code>repeated .boa.types.Element elements = 2;</code>
        *
        * <pre>
        *	optional DocType doc_type = 3;
        * </pre>
        */
-      private com.google.protobuf.SingleFieldBuilder<
+      public java.util.List<? extends boa.types.Ast.ElementOrBuilder> 
+           getElementsOrBuilderList() {
+        if (elementsBuilder_ != null) {
+          return elementsBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(elements_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Element elements = 2;</code>
+       *
+       * <pre>
+       *	optional DocType doc_type = 3;
+       * </pre>
+       */
+      public boa.types.Ast.Element.Builder addElementsBuilder() {
+        return getElementsFieldBuilder().addBuilder(
+            boa.types.Ast.Element.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Element elements = 2;</code>
+       *
+       * <pre>
+       *	optional DocType doc_type = 3;
+       * </pre>
+       */
+      public boa.types.Ast.Element.Builder addElementsBuilder(
+          int index) {
+        return getElementsFieldBuilder().addBuilder(
+            index, boa.types.Ast.Element.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Element elements = 2;</code>
+       *
+       * <pre>
+       *	optional DocType doc_type = 3;
+       * </pre>
+       */
+      public java.util.List<boa.types.Ast.Element.Builder> 
+           getElementsBuilderList() {
+        return getElementsFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
           boa.types.Ast.Element, boa.types.Ast.Element.Builder, boa.types.Ast.ElementOrBuilder> 
-          getBodyFieldBuilder() {
-        if (bodyBuilder_ == null) {
-          bodyBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+          getElementsFieldBuilder() {
+        if (elementsBuilder_ == null) {
+          elementsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
               boa.types.Ast.Element, boa.types.Ast.Element.Builder, boa.types.Ast.ElementOrBuilder>(
-                  body_,
+                  elements_,
+                  ((bitField0_ & 0x00000002) == 0x00000002),
                   getParentForChildren(),
                   isClean());
-          body_ = null;
+          elements_ = null;
         }
-        return bodyBuilder_;
+        return elementsBuilder_;
       }
 
       // @@protoc_insertion_point(builder_scope:boa.types.Document)
@@ -40077,23 +40295,23 @@ public final class Ast {
       "\010\n\004SPEC\020\004\022\021\n\rSPECIFICATION\020\004\032\002\020\001\"{\n\014Posi" +
       "tionInfo\022\021\n\tstart_pos\030\001 \002(\005\022\016\n\006length\030\002 " +
       "\002(\005\022\022\n\nstart_line\030\003 \002(\005\022\021\n\tstart_col\030\004 \002" +
-      "(\005\022\020\n\010end_line\030\005 \002(\005\022\017\n\007end_col\030\006 \002(\005\";\n" +
-      "\010Document\022\r\n\005title\030\001 \001(\t\022 \n\004body\030\002 \002(\0132\022",
-      ".boa.types.Element\"\336\002\n\007Element\022\013\n\003tag\030\001 " +
-      "\002(\t\022,\n\004kind\030\002 \002(\0162\036.boa.types.Element.El" +
-      "ementKind\022$\n\010elements\030\003 \003(\0132\022.boa.types." +
-      "Element\022\014\n\004text\030\004 \003(\t\022\014\n\004data\030\005 \003(\t\022&\n\ta" +
-      "tributes\030\006 \003(\0132\023.boa.types.Atribute\022$\n\006s" +
-      "cript\030\007 \001(\0132\024.boa.types.Namespace\022!\n\003php" +
-      "\030\010 \001(\0132\024.boa.types.Namespace\022%\n\010var_decl" +
-      "\030\t \003(\0132\023.boa.types.Variable\">\n\013ElementKi" +
-      "nd\022\t\n\005OTHER\020\000\022\t\n\005BLOCK\020\001\022\013\n\007IN_LINE\020\002\022\010\n" +
-      "\004FORM\020\003\032\002\020\001\"&\n\010Atribute\022\013\n\003key\030\001 \002(\t\022\r\n\005",
-      "value\030\002 \002(\t*\236\001\n\010TypeKind\022\t\n\005OTHER\020\000\022\t\n\005C" +
-      "LASS\020\001\022\r\n\tINTERFACE\020\002\022\r\n\tANONYMOUS\020\003\022\010\n\004" +
-      "ANON\020\003\022\n\n\006STRUCT\020\004\022\010\n\004ENUM\020\005\022\017\n\013ENUMERAT" +
-      "ION\020\005\022\016\n\nANNOTATION\020\006\022\014\n\010DELEGATE\020\007\022\013\n\007G" +
-      "ENERIC\020\010\032\002\020\001B\002H\001"
+      "(\005\022\020\n\010end_line\030\005 \002(\005\022\017\n\007end_col\030\006 \002(\005\"?\n" +
+      "\010Document\022\r\n\005title\030\001 \001(\t\022$\n\010elements\030\002 \003",
+      "(\0132\022.boa.types.Element\"\336\002\n\007Element\022\013\n\003ta" +
+      "g\030\001 \002(\t\022,\n\004kind\030\002 \002(\0162\036.boa.types.Elemen" +
+      "t.ElementKind\022$\n\010elements\030\003 \003(\0132\022.boa.ty" +
+      "pes.Element\022\014\n\004text\030\004 \003(\t\022\014\n\004data\030\005 \003(\t\022" +
+      "&\n\tatributes\030\006 \003(\0132\023.boa.types.Atribute\022" +
+      "$\n\006script\030\007 \001(\0132\024.boa.types.Namespace\022!\n" +
+      "\003php\030\010 \001(\0132\024.boa.types.Namespace\022%\n\010var_" +
+      "decl\030\t \003(\0132\023.boa.types.Variable\">\n\013Eleme" +
+      "ntKind\022\t\n\005OTHER\020\000\022\t\n\005BLOCK\020\001\022\013\n\007IN_LINE\020" +
+      "\002\022\010\n\004FORM\020\003\032\002\020\001\"&\n\010Atribute\022\013\n\003key\030\001 \002(\t",
+      "\022\r\n\005value\030\002 \002(\t*\236\001\n\010TypeKind\022\t\n\005OTHER\020\000\022" +
+      "\t\n\005CLASS\020\001\022\r\n\tINTERFACE\020\002\022\r\n\tANONYMOUS\020\003" +
+      "\022\010\n\004ANON\020\003\022\n\n\006STRUCT\020\004\022\010\n\004ENUM\020\005\022\017\n\013ENUM" +
+      "ERATION\020\005\022\016\n\nANNOTATION\020\006\022\014\n\010DELEGATE\020\007\022" +
+      "\013\n\007GENERIC\020\010\032\002\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -40177,7 +40395,7 @@ public final class Ast {
           internal_static_boa_types_Document_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Document_descriptor,
-              new java.lang.String[] { "Title", "Body", });
+              new java.lang.String[] { "Title", "Elements", });
           internal_static_boa_types_Element_descriptor =
             getDescriptor().getMessageTypes().get(13);
           internal_static_boa_types_Element_fieldAccessorTable = new

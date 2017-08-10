@@ -32,7 +32,9 @@ import org.eclipse.php.internal.core.ast.nodes.ASTParser;
 import org.eclipse.php.internal.core.ast.nodes.Program;
 import org.jsoup.Connection.KeyVal;
 import org.jsoup.nodes.*;
+import org.jsoup.nodes.Comment;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.mozilla.javascript.CompilerEnvirons;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ast.AstRoot;
@@ -53,9 +55,12 @@ public class HtmlVisitor {
 	public void visit(Document node) {
 		b.setTitle(node.title());
 		elements.push(new ArrayList<boa.types.Ast.Element>());
-		visit(node.body());
+		for (Node n : node.childNodes()){
+			if (n instanceof org.jsoup.nodes.Element)
+				visit((org.jsoup.nodes.Element)n);
+		}
 		for (Ast.Element e : elements.pop())
-			b.setBody(e);
+			b.addElements(e);
 	}
 
 	public void visit(org.jsoup.nodes.Element node) {
@@ -71,26 +76,39 @@ public class HtmlVisitor {
 			b.addAtributes(atributes.pop());
 		}
 		String text = node.ownText();
-		if (!text.equals("")) {
-			b.addText(text);
-		}
+		if (text != "")
+	//		b.addText(text);
 		for (Node n : node.childNodes()) {
 			if (n instanceof org.jsoup.nodes.Element) {
 				elements.push(new ArrayList<Ast.Element>());
 				visit((org.jsoup.nodes.Element) n);
 				for (Ast.Element s : elements.pop())
 					b.addElements(s);
+			} else if (n instanceof Comment) {
+				String comm = ((Comment) n).getData();
+				if (comm.startsWith("?php")){
+					String php = "<";
+					php += comm;
+					php += node.ownText();
+					Ast.Namespace ns = this.parsePHP(php);
+					if (ns != null)
+						b.setPhp(ns); 
+					else
+						b.addData(php);
+				} else {
+			//	b.addText(comm);
+				visit((Comment) n);
+				}
+			}else if (n instanceof TextNode) {
+				String t = ((TextNode) n).text();
+				String check = t.replaceAll(" ", "");
+				if (!check.equals(""))
+					b.addText(t);
 			} else if (n instanceof DataNode) {
 				if (tag.equals("script")) {
 					Ast.Namespace ns = this.parseJs(((DataNode) n).getWholeData());
 					if (ns != null)
-						b.setScript(ns); // FIXME
-					else
-						b.addData(((DataNode) n).getWholeData());
-				} else if (tag.equals("php")) {
-					Ast.Namespace ns = this.parsePHP(((DataNode) n).getWholeData());
-					if (ns != null)
-						b.setScript(ns); // FIXME
+						b.setScript(ns); 
 					else
 						b.addData(((DataNode) n).getWholeData());
 				} else
@@ -187,6 +205,8 @@ public class HtmlVisitor {
 		} catch (Exception e) {
 			return null;
 		}
+		if (ast == null)
+			return null;
 		PHPVisitor visitor = new PHPVisitor(content);
 		PHPErrorCheckVisitor errorCheck = new PHPErrorCheckVisitor();
 		ast.accept(errorCheck);
