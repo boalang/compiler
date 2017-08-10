@@ -472,3 +472,43 @@ message PositionInfo {
 	required int32 end_line = 5;
 	required int32 end_col = 6;
 }
+
+/** A Html Document */
+message Document {
+	optional string title = 1;
+	required Element body = 2;
+//	optional DocType doc_type = 3;
+}
+
+/** A html Element */
+message Element {
+	enum ElementKind {
+		option allow_alias = true;
+		OTHER = 0;
+		BLOCK = 1;
+		IN_LINE = 2;
+		FORM =3;
+	}
+	/** Element's tag */
+	required string tag = 1;
+	/** Element's kind eg. bloack, inline or form */
+	required ElementKind kind = 2;
+	/** The Elements under the Element */
+	repeated Element elements = 3;
+	/** The Element's text */
+	repeated string  text = 4;
+	/** The Element's data eg. scripts, contents of style, etc... */
+	repeated string  data = 5;
+	/** The Element's atributes */
+	repeated Atribute atributes = 6;
+	optional Namespace script = 7;
+	optional Namespace php = 8;  
+	repeated Variable var_decl = 9;
+}
+
+/** Key Value pairs eg. key = "onclick" value = "myFunction()", key = "type" value = "button" */  
+message Atribute {
+	required string key = 1;
+	required string value = 2;
+}
+
