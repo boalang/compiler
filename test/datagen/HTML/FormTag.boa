@@ -1,0 +1,79 @@
+title: ""
+elements {
+  tag: "html"
+  kind: BLOCK
+  elements {
+    tag: "head"
+    kind: BLOCK
+  }
+  elements {
+    tag: "body"
+    kind: BLOCK
+    elements {
+      tag: "form"
+      kind: FORM
+      elements {
+        tag: "input"
+        kind: IN_LINE
+        atributes {
+          key: "type"
+          value: "text"
+        }
+        atributes {
+          key: "name"
+          value: "fname"
+        }
+      }
+      elements {
+        tag: "br"
+        kind: IN_LINE
+      }
+      elements {
+        tag: "input"
+        kind: IN_LINE
+        atributes {
+          key: "type"
+          value: "text"
+        }
+        atributes {
+          key: "name"
+          value: "lname"
+        }
+      }
+      elements {
+        tag: "br"
+        kind: IN_LINE
+      }
+      elements {
+        tag: "input"
+        kind: IN_LINE
+        atributes {
+          key: "type"
+          value: "submit"
+        }
+        atributes {
+          key: "value"
+          value: "Submit"
+        }
+      }
+      text: " First name: "
+      text: " Last name: "
+      atributes {
+        key: "fname"
+        value: ""
+      }
+      atributes {
+        key: "lname"
+        value: ""
+      }
+      atributes {
+        key: "action"
+        value: "/action_page.php"
+      }
+      atributes {
+        key: "method"
+        value: "get"
+      }
+    }
+  }
+}

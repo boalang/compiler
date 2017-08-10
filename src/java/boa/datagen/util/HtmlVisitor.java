@@ -79,7 +79,12 @@ public class HtmlVisitor {
 		if (text != "")
 	//		b.addText(text);
 		for (Node n : node.childNodes()) {
-			if (n instanceof org.jsoup.nodes.Element) {
+			if (n instanceof FormElement){
+				elements.push(new ArrayList<Ast.Element>());
+				visit((FormElement) n);
+				for (Ast.Element s : elements.pop())
+					b.addElements(s);
+			} else if (n instanceof org.jsoup.nodes.Element) {
 				elements.push(new ArrayList<Ast.Element>());
 				visit((org.jsoup.nodes.Element) n);
 				for (Ast.Element s : elements.pop())
@@ -136,14 +141,47 @@ public class HtmlVisitor {
 			b.addAtributes(atributes.pop());
 		}
 		for (Node n : node.childNodes()) {
-			if (n instanceof org.jsoup.nodes.Element) {
+			if (n instanceof FormElement){
+				elements.push(new ArrayList<Ast.Element>());
+				visit((FormElement) n);
+				for (Ast.Element s : elements.pop())
+					b.addElements(s);
+			} else if (n instanceof org.jsoup.nodes.Element) {
 				elements.push(new ArrayList<Ast.Element>());
 				visit((org.jsoup.nodes.Element) n);
-				for (Ast.Element e : elements.pop())
-					b.addElements(e);
-				;
-			} else {
-				visit(n);
+				for (Ast.Element s : elements.pop())
+					b.addElements(s);
+			} else if (n instanceof Comment) {
+				String comm = ((Comment) n).getData();
+				if (comm.startsWith("?php")){
+					String php = "<";
+					php += comm;
+					php += node.ownText();
+					Ast.Namespace ns = this.parsePHP(php);
+					if (ns != null)
+						b.setPhp(ns); 
+					else
+						b.addData(php);
+				} else {
+			//	b.addText(comm);
+				visit((Comment) n);
+				}
+			}else if (n instanceof TextNode) {
+				String t = ((TextNode) n).text();
+				String check = t.replaceAll(" ", "");
+				if (!check.equals(""))
+					b.addText(t);
+			} else if (n instanceof DataNode) {
+				if (tag.equals("script")) {
+					Ast.Namespace ns = this.parseJs(((DataNode) n).getWholeData());
+					if (ns != null)
+						b.setScript(ns); 
+					else
+						b.addData(((DataNode) n).getWholeData());
+				} else
+					b.addData(((DataNode) n).getWholeData());
+			} else if (n instanceof XmlDeclaration) {
+				b.addData(((XmlDeclaration) n).getWholeDeclaration());
 			}
 		}
 		elements.peek().add(b.build());
