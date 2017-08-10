@@ -71,20 +71,26 @@ public class HtmlVisitor {
 			b.setKind(ElementKind.BLOCK);
 		else
 			b.setKind(ElementKind.IN_LINE);
+		
+		if (node instanceof FormElement){
+			b.setKind(ElementKind.FORM);
+			for (KeyVal d : ((FormElement)node).formData()) {
+				Ast.Atribute.Builder ab = Ast.Atribute.newBuilder();
+				ab.setKey(d.key());
+				ab.setValue(d.value());
+				b.addAtributes(ab.build());
+			}
+		}
 		for (Attribute n : node.attributes()) {
 			visit(n);
 			b.addAtributes(atributes.pop());
 		}
+	
 		String text = node.ownText();
 		if (text != "")
 	//		b.addText(text);
 		for (Node n : node.childNodes()) {
-			if (n instanceof FormElement){
-				elements.push(new ArrayList<Ast.Element>());
-				visit((FormElement) n);
-				for (Ast.Element s : elements.pop())
-					b.addElements(s);
-			} else if (n instanceof org.jsoup.nodes.Element) {
+			 if (n instanceof org.jsoup.nodes.Element) {
 				elements.push(new ArrayList<Ast.Element>());
 				visit((org.jsoup.nodes.Element) n);
 				for (Ast.Element s : elements.pop())
@@ -125,67 +131,6 @@ public class HtmlVisitor {
 		elements.peek().add(b.build());
 	}
 
-	public void visit(FormElement node) {
-		Ast.Element.Builder b = Ast.Element.newBuilder();
-		b.setKind(ElementKind.FORM);
-		String tag = node.tagName();
-		b.setTag(tag);
-		for (KeyVal d : node.formData()) {
-			Ast.Atribute.Builder ab = Ast.Atribute.newBuilder();
-			ab.setKey(d.key());
-			ab.setValue(d.value());
-			b.addAtributes(ab.build());
-		}
-		for (Attribute n : node.attributes()) {
-			visit(n);
-			b.addAtributes(atributes.pop());
-		}
-		for (Node n : node.childNodes()) {
-			if (n instanceof FormElement){
-				elements.push(new ArrayList<Ast.Element>());
-				visit((FormElement) n);
-				for (Ast.Element s : elements.pop())
-					b.addElements(s);
-			} else if (n instanceof org.jsoup.nodes.Element) {
-				elements.push(new ArrayList<Ast.Element>());
-				visit((org.jsoup.nodes.Element) n);
-				for (Ast.Element s : elements.pop())
-					b.addElements(s);
-			} else if (n instanceof Comment) {
-				String comm = ((Comment) n).getData();
-				if (comm.startsWith("?php")){
-					String php = "<";
-					php += comm;
-					php += node.ownText();
-					Ast.Namespace ns = this.parsePHP(php);
-					if (ns != null)
-						b.setPhp(ns); 
-					else
-						b.addData(php);
-				} else {
-			//	b.addText(comm);
-				visit((Comment) n);
-				}
-			}else if (n instanceof TextNode) {
-				String t = ((TextNode) n).text();
-				String check = t.replaceAll(" ", "");
-				if (!check.equals(""))
-					b.addText(t);
-			} else if (n instanceof DataNode) {
-				if (tag.equals("script")) {
-					Ast.Namespace ns = this.parseJs(((DataNode) n).getWholeData());
-					if (ns != null)
-						b.setScript(ns); 
-					else
-						b.addData(((DataNode) n).getWholeData());
-				} else
-					b.addData(((DataNode) n).getWholeData());
-			} else if (n instanceof XmlDeclaration) {
-				b.addData(((XmlDeclaration) n).getWholeDeclaration());
-			}
-		}
-		elements.peek().add(b.build());
-	}
 
 	public void visit(org.jsoup.nodes.Comment node) {
 		boa.types.Ast.Comment.Builder b = boa.types.Ast.Comment.newBuilder();
