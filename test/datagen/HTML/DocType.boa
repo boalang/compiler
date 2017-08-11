@@ -9,14 +9,6 @@ elements {
   elements {
     tag: "body"
     kind: BLOCK
-    elements {
-      tag: "script"
-      kind: BLOCK
-      atributes {
-        key: "src"
-        value: "myscripts.js"
-      }
-    }
   }
 }
 doc_type {
@@ -27,11 +19,15 @@ doc_type {
     value: "html"
   }
   atributes {
+    key: "pubSysKey"
+    value: "PUBLIC"
+  }
+  atributes {
     key: "publicId"
-    value: ""
+    value: "-//W3C//DTD HTML 4.01 Transitional//EN"
   }
   atributes {
     key: "systemId"
-    value: ""
+    value: "http://www.w3.org/TR/html4/loose.dtd"
   }
 }

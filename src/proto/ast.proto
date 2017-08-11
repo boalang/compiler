@@ -477,7 +477,7 @@ message PositionInfo {
 message Document {
 	optional string title = 1;
 	repeated Element elements = 2;
-//	optional DocType doc_type = 3;
+	optional Element doc_type = 3;
 }
 
 /** A html Element */
@@ -487,7 +487,8 @@ message Element {
 		OTHER = 0;
 		BLOCK = 1;
 		IN_LINE = 2;
-		FORM =3;
+		FORM = 3;
+		DOC_TYPE = 4;
 	}
 	/** Element's tag */
 	required string tag = 1;

@@ -55,3 +55,19 @@ elements {
     }
   }
 }
+doc_type {
+  tag: "!DOCTYPE"
+  kind: DOC_TYPE
+  atributes {
+    key: "name"
+    value: "html"
+  }
+  atributes {
+    key: "publicId"
+    value: ""
+  }
+  atributes {
+    key: "systemId"
+    value: ""
+  }
+}

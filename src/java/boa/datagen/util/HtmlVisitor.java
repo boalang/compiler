@@ -58,6 +58,12 @@ public class HtmlVisitor {
 		for (Node n : node.childNodes()){
 			if (n instanceof org.jsoup.nodes.Element)
 				visit((org.jsoup.nodes.Element)n);
+			else if (n instanceof DocumentType){
+				elements.push(new ArrayList<boa.types.Ast.Element>());
+				visit((DocumentType) n);
+				for (Ast.Element e : elements.pop())
+					b.setDocType(e);
+			}
 		}
 		for (Ast.Element e : elements.pop())
 			b.addElements(e);
@@ -100,7 +106,7 @@ public class HtmlVisitor {
 				if (comm.startsWith("?php")){
 					String php = "<";
 					php += comm;
-					php += node.ownText();
+					php += node.ownText(); //FIXME works in some situtations not in others
 					Ast.Namespace ns = this.parsePHP(php);
 					if (ns != null)
 						b.setPhp(ns); 
@@ -140,10 +146,14 @@ public class HtmlVisitor {
 	}
 
 	public void visit(DocumentType node) {
-		Expression.Builder b = Expression.newBuilder();
-		b.setKind(ExpressionKind.OTHER);// FIXME
-		DataNode n;
-		// FIXME
+		Ast.Element.Builder b = Ast.Element.newBuilder();
+		b.setKind(ElementKind.DOC_TYPE);// FIXME
+		b.setTag("!DOCTYPE");
+		for (Attribute n : node.attributes()) {
+			visit(n);
+			b.addAtributes(atributes.pop());
+		}
+		elements.peek().add(b.build());
 	}
 
 	public void visit(org.jsoup.nodes.Attribute node) {

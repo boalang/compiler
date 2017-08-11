@@ -35443,47 +35443,41 @@ public final class Ast {
     // repeated .boa.types.Element elements = 2;
     /**
      * <code>repeated .boa.types.Element elements = 2;</code>
-     *
-     * <pre>
-     *	optional DocType doc_type = 3;
-     * </pre>
      */
     java.util.List<boa.types.Ast.Element> 
         getElementsList();
     /**
      * <code>repeated .boa.types.Element elements = 2;</code>
-     *
-     * <pre>
-     *	optional DocType doc_type = 3;
-     * </pre>
      */
     boa.types.Ast.Element getElements(int index);
     /**
      * <code>repeated .boa.types.Element elements = 2;</code>
-     *
-     * <pre>
-     *	optional DocType doc_type = 3;
-     * </pre>
      */
     int getElementsCount();
     /**
      * <code>repeated .boa.types.Element elements = 2;</code>
-     *
-     * <pre>
-     *	optional DocType doc_type = 3;
-     * </pre>
      */
     java.util.List<? extends boa.types.Ast.ElementOrBuilder> 
         getElementsOrBuilderList();
     /**
      * <code>repeated .boa.types.Element elements = 2;</code>
-     *
-     * <pre>
-     *	optional DocType doc_type = 3;
-     * </pre>
      */
     boa.types.Ast.ElementOrBuilder getElementsOrBuilder(
         int index);
+
+    // optional .boa.types.Element doc_type = 3;
+    /**
+     * <code>optional .boa.types.Element doc_type = 3;</code>
+     */
+    boolean hasDocType();
+    /**
+     * <code>optional .boa.types.Element doc_type = 3;</code>
+     */
+    boa.types.Ast.Element getDocType();
+    /**
+     * <code>optional .boa.types.Element doc_type = 3;</code>
+     */
+    boa.types.Ast.ElementOrBuilder getDocTypeOrBuilder();
   }
   /**
    * Protobuf type {@code boa.types.Document}
@@ -35551,6 +35545,19 @@ public final class Ast {
                 mutable_bitField0_ |= 0x00000002;
               }
               elements_.add(input.readMessage(boa.types.Ast.Element.PARSER, extensionRegistry));
+              break;
+            }
+            case 26: {
+              boa.types.Ast.Element.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000002) == 0x00000002)) {
+                subBuilder = docType_.toBuilder();
+              }
+              docType_ = input.readMessage(boa.types.Ast.Element.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(docType_);
+                docType_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000002;
               break;
             }
           }
@@ -35644,20 +35651,12 @@ public final class Ast {
     private java.util.List<boa.types.Ast.Element> elements_;
     /**
      * <code>repeated .boa.types.Element elements = 2;</code>
-     *
-     * <pre>
-     *	optional DocType doc_type = 3;
-     * </pre>
      */
     public java.util.List<boa.types.Ast.Element> getElementsList() {
       return elements_;
     }
     /**
      * <code>repeated .boa.types.Element elements = 2;</code>
-     *
-     * <pre>
-     *	optional DocType doc_type = 3;
-     * </pre>
      */
     public java.util.List<? extends boa.types.Ast.ElementOrBuilder> 
         getElementsOrBuilderList() {
@@ -35665,39 +35664,50 @@ public final class Ast {
     }
     /**
      * <code>repeated .boa.types.Element elements = 2;</code>
-     *
-     * <pre>
-     *	optional DocType doc_type = 3;
-     * </pre>
      */
     public int getElementsCount() {
       return elements_.size();
     }
     /**
      * <code>repeated .boa.types.Element elements = 2;</code>
-     *
-     * <pre>
-     *	optional DocType doc_type = 3;
-     * </pre>
      */
     public boa.types.Ast.Element getElements(int index) {
       return elements_.get(index);
     }
     /**
      * <code>repeated .boa.types.Element elements = 2;</code>
-     *
-     * <pre>
-     *	optional DocType doc_type = 3;
-     * </pre>
      */
     public boa.types.Ast.ElementOrBuilder getElementsOrBuilder(
         int index) {
       return elements_.get(index);
     }
 
+    // optional .boa.types.Element doc_type = 3;
+    public static final int DOC_TYPE_FIELD_NUMBER = 3;
+    private boa.types.Ast.Element docType_;
+    /**
+     * <code>optional .boa.types.Element doc_type = 3;</code>
+     */
+    public boolean hasDocType() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>optional .boa.types.Element doc_type = 3;</code>
+     */
+    public boa.types.Ast.Element getDocType() {
+      return docType_;
+    }
+    /**
+     * <code>optional .boa.types.Element doc_type = 3;</code>
+     */
+    public boa.types.Ast.ElementOrBuilder getDocTypeOrBuilder() {
+      return docType_;
+    }
+
     private void initFields() {
       title_ = "";
       elements_ = java.util.Collections.emptyList();
+      docType_ = boa.types.Ast.Element.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -35706,6 +35716,12 @@ public final class Ast {
 
       for (int i = 0; i < getElementsCount(); i++) {
         if (!getElements(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      if (hasDocType()) {
+        if (!getDocType().isInitialized()) {
           memoizedIsInitialized = 0;
           return false;
         }
@@ -35723,6 +35739,9 @@ public final class Ast {
       for (int i = 0; i < elements_.size(); i++) {
         output.writeMessage(2, elements_.get(i));
       }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeMessage(3, docType_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -35739,6 +35758,10 @@ public final class Ast {
       for (int i = 0; i < elements_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(2, elements_.get(i));
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(3, docType_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -35853,6 +35876,7 @@ public final class Ast {
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
           getElementsFieldBuilder();
+          getDocTypeFieldBuilder();
         }
       }
       private static Builder create() {
@@ -35869,6 +35893,12 @@ public final class Ast {
         } else {
           elementsBuilder_.clear();
         }
+        if (docTypeBuilder_ == null) {
+          docType_ = boa.types.Ast.Element.getDefaultInstance();
+        } else {
+          docTypeBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000004);
         return this;
       }
 
@@ -35909,6 +35939,14 @@ public final class Ast {
           result.elements_ = elements_;
         } else {
           result.elements_ = elementsBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        if (docTypeBuilder_ == null) {
+          result.docType_ = docType_;
+        } else {
+          result.docType_ = docTypeBuilder_.build();
         }
         result.bitField0_ = to_bitField0_;
         onBuilt();
@@ -35957,6 +35995,9 @@ public final class Ast {
             }
           }
         }
+        if (other.hasDocType()) {
+          mergeDocType(other.getDocType());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -35964,6 +36005,12 @@ public final class Ast {
       public final boolean isInitialized() {
         for (int i = 0; i < getElementsCount(); i++) {
           if (!getElements(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasDocType()) {
+          if (!getDocType().isInitialized()) {
             
             return false;
           }
@@ -36079,10 +36126,6 @@ public final class Ast {
 
       /**
        * <code>repeated .boa.types.Element elements = 2;</code>
-       *
-       * <pre>
-       *	optional DocType doc_type = 3;
-       * </pre>
        */
       public java.util.List<boa.types.Ast.Element> getElementsList() {
         if (elementsBuilder_ == null) {
@@ -36093,10 +36136,6 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Element elements = 2;</code>
-       *
-       * <pre>
-       *	optional DocType doc_type = 3;
-       * </pre>
        */
       public int getElementsCount() {
         if (elementsBuilder_ == null) {
@@ -36107,10 +36146,6 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Element elements = 2;</code>
-       *
-       * <pre>
-       *	optional DocType doc_type = 3;
-       * </pre>
        */
       public boa.types.Ast.Element getElements(int index) {
         if (elementsBuilder_ == null) {
@@ -36121,10 +36156,6 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Element elements = 2;</code>
-       *
-       * <pre>
-       *	optional DocType doc_type = 3;
-       * </pre>
        */
       public Builder setElements(
           int index, boa.types.Ast.Element value) {
@@ -36142,10 +36173,6 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Element elements = 2;</code>
-       *
-       * <pre>
-       *	optional DocType doc_type = 3;
-       * </pre>
        */
       public Builder setElements(
           int index, boa.types.Ast.Element.Builder builderForValue) {
@@ -36160,10 +36187,6 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Element elements = 2;</code>
-       *
-       * <pre>
-       *	optional DocType doc_type = 3;
-       * </pre>
        */
       public Builder addElements(boa.types.Ast.Element value) {
         if (elementsBuilder_ == null) {
@@ -36180,10 +36203,6 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Element elements = 2;</code>
-       *
-       * <pre>
-       *	optional DocType doc_type = 3;
-       * </pre>
        */
       public Builder addElements(
           int index, boa.types.Ast.Element value) {
@@ -36201,10 +36220,6 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Element elements = 2;</code>
-       *
-       * <pre>
-       *	optional DocType doc_type = 3;
-       * </pre>
        */
       public Builder addElements(
           boa.types.Ast.Element.Builder builderForValue) {
@@ -36219,10 +36234,6 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Element elements = 2;</code>
-       *
-       * <pre>
-       *	optional DocType doc_type = 3;
-       * </pre>
        */
       public Builder addElements(
           int index, boa.types.Ast.Element.Builder builderForValue) {
@@ -36237,10 +36248,6 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Element elements = 2;</code>
-       *
-       * <pre>
-       *	optional DocType doc_type = 3;
-       * </pre>
        */
       public Builder addAllElements(
           java.lang.Iterable<? extends boa.types.Ast.Element> values) {
@@ -36255,10 +36262,6 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Element elements = 2;</code>
-       *
-       * <pre>
-       *	optional DocType doc_type = 3;
-       * </pre>
        */
       public Builder clearElements() {
         if (elementsBuilder_ == null) {
@@ -36272,10 +36275,6 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Element elements = 2;</code>
-       *
-       * <pre>
-       *	optional DocType doc_type = 3;
-       * </pre>
        */
       public Builder removeElements(int index) {
         if (elementsBuilder_ == null) {
@@ -36289,10 +36288,6 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Element elements = 2;</code>
-       *
-       * <pre>
-       *	optional DocType doc_type = 3;
-       * </pre>
        */
       public boa.types.Ast.Element.Builder getElementsBuilder(
           int index) {
@@ -36300,10 +36295,6 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Element elements = 2;</code>
-       *
-       * <pre>
-       *	optional DocType doc_type = 3;
-       * </pre>
        */
       public boa.types.Ast.ElementOrBuilder getElementsOrBuilder(
           int index) {
@@ -36314,10 +36305,6 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Element elements = 2;</code>
-       *
-       * <pre>
-       *	optional DocType doc_type = 3;
-       * </pre>
        */
       public java.util.List<? extends boa.types.Ast.ElementOrBuilder> 
            getElementsOrBuilderList() {
@@ -36329,10 +36316,6 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Element elements = 2;</code>
-       *
-       * <pre>
-       *	optional DocType doc_type = 3;
-       * </pre>
        */
       public boa.types.Ast.Element.Builder addElementsBuilder() {
         return getElementsFieldBuilder().addBuilder(
@@ -36340,10 +36323,6 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Element elements = 2;</code>
-       *
-       * <pre>
-       *	optional DocType doc_type = 3;
-       * </pre>
        */
       public boa.types.Ast.Element.Builder addElementsBuilder(
           int index) {
@@ -36352,10 +36331,6 @@ public final class Ast {
       }
       /**
        * <code>repeated .boa.types.Element elements = 2;</code>
-       *
-       * <pre>
-       *	optional DocType doc_type = 3;
-       * </pre>
        */
       public java.util.List<boa.types.Ast.Element.Builder> 
            getElementsBuilderList() {
@@ -36374,6 +36349,123 @@ public final class Ast {
           elements_ = null;
         }
         return elementsBuilder_;
+      }
+
+      // optional .boa.types.Element doc_type = 3;
+      private boa.types.Ast.Element docType_ = boa.types.Ast.Element.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Element, boa.types.Ast.Element.Builder, boa.types.Ast.ElementOrBuilder> docTypeBuilder_;
+      /**
+       * <code>optional .boa.types.Element doc_type = 3;</code>
+       */
+      public boolean hasDocType() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>optional .boa.types.Element doc_type = 3;</code>
+       */
+      public boa.types.Ast.Element getDocType() {
+        if (docTypeBuilder_ == null) {
+          return docType_;
+        } else {
+          return docTypeBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .boa.types.Element doc_type = 3;</code>
+       */
+      public Builder setDocType(boa.types.Ast.Element value) {
+        if (docTypeBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          docType_ = value;
+          onChanged();
+        } else {
+          docTypeBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000004;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Element doc_type = 3;</code>
+       */
+      public Builder setDocType(
+          boa.types.Ast.Element.Builder builderForValue) {
+        if (docTypeBuilder_ == null) {
+          docType_ = builderForValue.build();
+          onChanged();
+        } else {
+          docTypeBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000004;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Element doc_type = 3;</code>
+       */
+      public Builder mergeDocType(boa.types.Ast.Element value) {
+        if (docTypeBuilder_ == null) {
+          if (((bitField0_ & 0x00000004) == 0x00000004) &&
+              docType_ != boa.types.Ast.Element.getDefaultInstance()) {
+            docType_ =
+              boa.types.Ast.Element.newBuilder(docType_).mergeFrom(value).buildPartial();
+          } else {
+            docType_ = value;
+          }
+          onChanged();
+        } else {
+          docTypeBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000004;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Element doc_type = 3;</code>
+       */
+      public Builder clearDocType() {
+        if (docTypeBuilder_ == null) {
+          docType_ = boa.types.Ast.Element.getDefaultInstance();
+          onChanged();
+        } else {
+          docTypeBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000004);
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Element doc_type = 3;</code>
+       */
+      public boa.types.Ast.Element.Builder getDocTypeBuilder() {
+        bitField0_ |= 0x00000004;
+        onChanged();
+        return getDocTypeFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .boa.types.Element doc_type = 3;</code>
+       */
+      public boa.types.Ast.ElementOrBuilder getDocTypeOrBuilder() {
+        if (docTypeBuilder_ != null) {
+          return docTypeBuilder_.getMessageOrBuilder();
+        } else {
+          return docType_;
+        }
+      }
+      /**
+       * <code>optional .boa.types.Element doc_type = 3;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Element, boa.types.Ast.Element.Builder, boa.types.Ast.ElementOrBuilder> 
+          getDocTypeFieldBuilder() {
+        if (docTypeBuilder_ == null) {
+          docTypeBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              boa.types.Ast.Element, boa.types.Ast.Element.Builder, boa.types.Ast.ElementOrBuilder>(
+                  docType_,
+                  getParentForChildren(),
+                  isClean());
+          docType_ = null;
+        }
+        return docTypeBuilder_;
       }
 
       // @@protoc_insertion_point(builder_scope:boa.types.Document)
@@ -36862,6 +36954,10 @@ public final class Ast {
        * <code>FORM = 3;</code>
        */
       FORM(3, 3),
+      /**
+       * <code>DOC_TYPE = 4;</code>
+       */
+      DOC_TYPE(4, 4),
       ;
 
       /**
@@ -36880,6 +36976,10 @@ public final class Ast {
        * <code>FORM = 3;</code>
        */
       public static final int FORM_VALUE = 3;
+      /**
+       * <code>DOC_TYPE = 4;</code>
+       */
+      public static final int DOC_TYPE_VALUE = 4;
 
 
       public final int getNumber() { return value; }
@@ -36890,6 +36990,7 @@ public final class Ast {
           case 1: return BLOCK;
           case 2: return IN_LINE;
           case 3: return FORM;
+          case 4: return DOC_TYPE;
           default: return null;
         }
       }
@@ -40295,23 +40396,24 @@ public final class Ast {
       "\010\n\004SPEC\020\004\022\021\n\rSPECIFICATION\020\004\032\002\020\001\"{\n\014Posi" +
       "tionInfo\022\021\n\tstart_pos\030\001 \002(\005\022\016\n\006length\030\002 " +
       "\002(\005\022\022\n\nstart_line\030\003 \002(\005\022\021\n\tstart_col\030\004 \002" +
-      "(\005\022\020\n\010end_line\030\005 \002(\005\022\017\n\007end_col\030\006 \002(\005\"?\n" +
+      "(\005\022\020\n\010end_line\030\005 \002(\005\022\017\n\007end_col\030\006 \002(\005\"e\n" +
       "\010Document\022\r\n\005title\030\001 \001(\t\022$\n\010elements\030\002 \003",
-      "(\0132\022.boa.types.Element\"\336\002\n\007Element\022\013\n\003ta" +
-      "g\030\001 \002(\t\022,\n\004kind\030\002 \002(\0162\036.boa.types.Elemen" +
-      "t.ElementKind\022$\n\010elements\030\003 \003(\0132\022.boa.ty" +
-      "pes.Element\022\014\n\004text\030\004 \003(\t\022\014\n\004data\030\005 \003(\t\022" +
-      "&\n\tatributes\030\006 \003(\0132\023.boa.types.Atribute\022" +
-      "$\n\006script\030\007 \001(\0132\024.boa.types.Namespace\022!\n" +
-      "\003php\030\010 \001(\0132\024.boa.types.Namespace\022%\n\010var_" +
-      "decl\030\t \003(\0132\023.boa.types.Variable\">\n\013Eleme" +
-      "ntKind\022\t\n\005OTHER\020\000\022\t\n\005BLOCK\020\001\022\013\n\007IN_LINE\020" +
-      "\002\022\010\n\004FORM\020\003\032\002\020\001\"&\n\010Atribute\022\013\n\003key\030\001 \002(\t",
-      "\022\r\n\005value\030\002 \002(\t*\236\001\n\010TypeKind\022\t\n\005OTHER\020\000\022" +
-      "\t\n\005CLASS\020\001\022\r\n\tINTERFACE\020\002\022\r\n\tANONYMOUS\020\003" +
-      "\022\010\n\004ANON\020\003\022\n\n\006STRUCT\020\004\022\010\n\004ENUM\020\005\022\017\n\013ENUM" +
-      "ERATION\020\005\022\016\n\nANNOTATION\020\006\022\014\n\010DELEGATE\020\007\022" +
-      "\013\n\007GENERIC\020\010\032\002\020\001B\002H\001"
+      "(\0132\022.boa.types.Element\022$\n\010doc_type\030\003 \001(\013" +
+      "2\022.boa.types.Element\"\354\002\n\007Element\022\013\n\003tag\030" +
+      "\001 \002(\t\022,\n\004kind\030\002 \002(\0162\036.boa.types.Element." +
+      "ElementKind\022$\n\010elements\030\003 \003(\0132\022.boa.type" +
+      "s.Element\022\014\n\004text\030\004 \003(\t\022\014\n\004data\030\005 \003(\t\022&\n" +
+      "\tatributes\030\006 \003(\0132\023.boa.types.Atribute\022$\n" +
+      "\006script\030\007 \001(\0132\024.boa.types.Namespace\022!\n\003p" +
+      "hp\030\010 \001(\0132\024.boa.types.Namespace\022%\n\010var_de" +
+      "cl\030\t \003(\0132\023.boa.types.Variable\"L\n\013Element" +
+      "Kind\022\t\n\005OTHER\020\000\022\t\n\005BLOCK\020\001\022\013\n\007IN_LINE\020\002\022",
+      "\010\n\004FORM\020\003\022\014\n\010DOC_TYPE\020\004\032\002\020\001\"&\n\010Atribute\022" +
+      "\013\n\003key\030\001 \002(\t\022\r\n\005value\030\002 \002(\t*\236\001\n\010TypeKind" +
+      "\022\t\n\005OTHER\020\000\022\t\n\005CLASS\020\001\022\r\n\tINTERFACE\020\002\022\r\n" +
+      "\tANONYMOUS\020\003\022\010\n\004ANON\020\003\022\n\n\006STRUCT\020\004\022\010\n\004EN" +
+      "UM\020\005\022\017\n\013ENUMERATION\020\005\022\016\n\nANNOTATION\020\006\022\014\n" +
+      "\010DELEGATE\020\007\022\013\n\007GENERIC\020\010\032\002\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -40395,7 +40497,7 @@ public final class Ast {
           internal_static_boa_types_Document_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Document_descriptor,
-              new java.lang.String[] { "Title", "Elements", });
+              new java.lang.String[] { "Title", "Elements", "DocType", });
           internal_static_boa_types_Element_descriptor =
             getDescriptor().getMessageTypes().get(13);
           internal_static_boa_types_Element_fieldAccessorTable = new
