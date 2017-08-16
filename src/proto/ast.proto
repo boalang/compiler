@@ -224,6 +224,7 @@ message Statement {
 		FOREACH = 23;
 		FORIN = 24;
 		WITH = 25;
+		SCOPE = 26;
 	}
 	/** The kind of statement */
 	required StatementKind kind = 1;
@@ -328,6 +329,9 @@ message Expression {
 		XML_DOTDOT = 68;
 		IN = 69;
 		TYPEOF = 70;
+		REGEXPLITERAL = 71;
+		DELETE = 72;
+		VOID = 73;
 	}
 	/** The kind of expression */
 	required ExpressionKind kind = 1;

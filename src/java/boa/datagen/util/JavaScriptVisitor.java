@@ -1026,6 +1026,10 @@ public class JavaScriptVisitor implements NodeVisitor {
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.OP_ADD);
 		else if (node.getOperator() == Token.TYPEOF)
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.TYPEOF);
+		else if (node.getOperator() == Token.DELPROP)
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.DELETE);
+		else if (node.getOperator() == Token.VOID)
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.VOID);
 		else
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.OTHER);
 		node.getOperand().visit(this);
@@ -1036,7 +1040,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 
 	public boolean accept(RegExpLiteral node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
-		b.setKind(boa.types.Ast.Expression.ExpressionKind.LITERAL);
+		b.setKind(boa.types.Ast.Expression.ExpressionKind.REGEXPLITERAL);
 		b.setLiteral(node.getValue());
 		expressions.push(b.build());
 		return false;
@@ -1148,7 +1152,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 	public boolean accept(Scope node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
-		b.setKind(boa.types.Ast.Statement.StatementKind.BLOCK);
+		b.setKind(boa.types.Ast.Statement.StatementKind.SCOPE);
 		for (Node s : node) {
 			if (s instanceof FunctionNode) {
 				methods.push(new ArrayList<boa.types.Ast.Method>());
