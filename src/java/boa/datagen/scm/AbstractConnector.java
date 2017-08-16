@@ -53,7 +53,9 @@ import boa.types.Shared.ChangeKind;
  */
 public abstract class AbstractConnector implements AutoCloseable {
 	protected static final boolean debug = boa.datagen.util.Properties.getBoolean("debug", boa.datagen.DefaultProperties.DEBUG);
-	
+
+
+	protected String path;
 	protected List<AbstractCommit> revisions = null;
 	protected List<String> branchNames = new ArrayList<String>(), tagNames = new ArrayList<String>();
 	protected List<Integer> branchIndices = new ArrayList<Integer>(), tagIndices = new ArrayList<Integer>();
@@ -99,7 +101,7 @@ public abstract class AbstractConnector implements AutoCloseable {
 					i++;
 			}
 			final String[] paths = changedFiles.keySet().toArray(new String[0]);
-			final String[] classpaths = null; // TODO
+			final String[] classpaths = buildClassPaths(commitOffset, fileContents, snapshot, commits);
 			final Map<String, CompilationUnit> cus = new HashMap<String, CompilationUnit>();
 			final FileASTRequestor r = new FileASTRequestor() {
 				@Override
@@ -174,6 +176,15 @@ public abstract class AbstractConnector implements AutoCloseable {
 			}
 		}
 		return snapshot;
+	}
+
+	private String[] buildClassPaths(int commitOffset, Map<String, String> fileContents, List<ChangedFile> snapshot, Map<String, AbstractCommit> commits) {
+		for (ChangedFile cf : snapshot) {
+			if (cf.getName().endsWith(".jar")) {
+				AbstractCommit commit = commits.get(cf.getName());
+			}
+		}
+		return null;
 	}
 
 	private void collectDeclarations(String[] paths, Map<String, CompilationUnit> cus, int startFileIndex, final Map<String, Integer> declarationFile, final Map<String, Integer> declarationNode) {
@@ -313,14 +324,14 @@ public abstract class AbstractConnector implements AutoCloseable {
 		return tagIndices;
 	}
 	
-	public List<Revision> getCommits(final boolean parse, final Writer astWriter) {
+	public List<Revision> getCommits(final boolean parse, final Writer astWriter, final Writer contentWriter) {
 		if (revisions == null) {
 			revisions = new ArrayList<AbstractCommit>();
 			setRevisions();
 		}
 		final List<Revision> revs = new ArrayList<Revision>();
 		for (final AbstractCommit rev : revisions)
-			revs.add(rev.asProtobuf(parse, astWriter));
+			revs.add(rev.asProtobuf(parse, astWriter, contentWriter));
 
 		return revs;
 	}

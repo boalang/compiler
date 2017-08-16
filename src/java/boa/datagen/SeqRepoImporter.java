@@ -159,7 +159,7 @@ public class SeqRepoImporter {
 		private int id;
 		private int counter = 0;
 		private String suffix;
-		SequenceFile.Writer projectWriter, astWriter;
+		SequenceFile.Writer projectWriter, astWriter, contentWriter;
 
 		public ImportTask(int id) throws IOException {
 			this.id = id;
@@ -172,6 +172,7 @@ public class SeqRepoImporter {
 				try {
 					projectWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/projects" + suffix), Text.class, BytesWritable.class);
 					astWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/ast" + suffix), LongWritable.class, BytesWritable.class);
+					contentWriter = SequenceFile.createWriter(fileSystem, conf, new Path(base + "/source" + suffix), LongWritable.class, BytesWritable.class);
 					break;
 				} catch (Throwable t) {
 					t.printStackTrace();
@@ -187,6 +188,7 @@ public class SeqRepoImporter {
 				try {
 					projectWriter.close();
 					astWriter.close();
+					contentWriter.close();
 					try {
 						Thread.sleep(1000);
 					} catch (InterruptedException e) {
@@ -296,7 +298,7 @@ public class SeqRepoImporter {
 			try {
 				conn = new GitConnector(gitDir.getAbsolutePath());
 				final CodeRepository.Builder repoBuilder = CodeRepository.newBuilder(repo);
-				for (final Revision rev : conn.getCommits(true, astWriter)) {
+				for (final Revision rev : conn.getCommits(true, astWriter, contentWriter)) {
 					  if (debug) System.out.println("Storing '" + name + "' revision: " + rev.getId());
 					// build new rev w/ no namespaces
 					final Revision.Builder revBuilder = Revision.newBuilder(rev);

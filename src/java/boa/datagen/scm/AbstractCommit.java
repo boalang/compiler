@@ -138,7 +138,7 @@ public abstract class AbstractCommit {
 
 	protected abstract String getFileContents(final String path);
 
-	public Revision asProtobuf(final boolean parse, final Writer astWriter) {
+	public Revision asProtobuf(final boolean parse, final Writer astWriter, final Writer contentWriter) {
 		final Revision.Builder revision = Revision.newBuilder();
 		revision.setId(id);
 
@@ -165,7 +165,7 @@ public abstract class AbstractCommit {
 				cfb.setKind(connector.revisions.get(cfb.getPreviousVersions(0)).changedFiles
 						.get(cfb.getPreviousIndices(0)).getKind());
 			} else
-				processChangeFile(cfb, parse, astWriter);
+				processChangeFile(cfb, parse, astWriter, contentWriter);
 			revision.addFiles(cfb.build());
 		}
 
@@ -173,7 +173,8 @@ public abstract class AbstractCommit {
 	}
 
 	@SuppressWarnings("deprecation")
-	private Builder processChangeFile(final ChangedFile.Builder fb, boolean parse, Writer astWriter) {
+	private Builder processChangeFile(final ChangedFile.Builder fb, boolean parse, final Writer astWriter, final Writer contentWriter) {
+		fb.setKey(-1);
 		long len = -1;
 		try {
 			len = astWriter.getLength();
@@ -341,11 +342,12 @@ public abstract class AbstractCommit {
 					System.err.println("Accepted PHP5_3: revision " + id + ": file " + path);
 			} else if (debugparse)
 				System.err.println("Accepted PHP5: revision " + id + ": file " + path);
-		}else {
+		} else {
 			final String content = getFileContents(path);
 			if (StringUtils.isAsciiPrintable(content)) {
 				try {
-					astWriter.append(new LongWritable(len), new BytesWritable(content.getBytes()));
+					fb.setKey(contentWriter.getLength());
+					contentWriter.append(new LongWritable(contentWriter.getLength()), new BytesWritable(content.getBytes()));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -354,8 +356,6 @@ public abstract class AbstractCommit {
 		try {
 			if (astWriter.getLength() > len)
 				fb.setKey(len);
-			else
-				fb.setKey(-1);
 		} catch (IOException e) {
 			if (debug)
 				System.err.println("Error getting length of sequence file writer!!!");

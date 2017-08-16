@@ -21,7 +21,7 @@ import boa.datagen.scm.GitConnector;
 
 public class LocalGitSequenceGenerator {
 
-	private static SequenceFile.Writer projectWriter, astWriter;
+	private static SequenceFile.Writer projectWriter, astWriter, contentWriter;
 	private static Configuration conf = null;
 	private static FileSystem fileSystem = null;
 
@@ -45,11 +45,9 @@ public class LocalGitSequenceGenerator {
 	private static void openWriters(String outputPath) {
 		while (true) {
 			try {
-				projectWriter = SequenceFile.createWriter(fileSystem, conf,
-						new Path(outputPath+"/projects.seq"), Text.class,
-						BytesWritable.class);
-				astWriter = SequenceFile.createWriter(fileSystem, conf,
-						new Path(outputPath+"/ast.seq"), LongWritable.class, BytesWritable.class);
+				projectWriter = SequenceFile.createWriter(fileSystem, conf, new Path(outputPath + "/projects.seq"), Text.class, BytesWritable.class);
+				astWriter = SequenceFile.createWriter(fileSystem, conf, new Path(outputPath + "/ast.seq"), LongWritable.class, BytesWritable.class);
+				contentWriter = SequenceFile.createWriter(fileSystem, conf, new Path(outputPath + "/sources.seq"), LongWritable.class, BytesWritable.class);
 				break;
 			} catch (Throwable t) {
 				t.printStackTrace();
@@ -66,6 +64,7 @@ public class LocalGitSequenceGenerator {
 			try {
 				projectWriter.close();
 				astWriter.close();
+				contentWriter.close();
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
@@ -95,7 +94,7 @@ public class LocalGitSequenceGenerator {
 			final CodeRepository.Builder repoBuilder = CodeRepository.newBuilder();
 			repoBuilder.setUrl(path);
 			repoBuilder.setKind(RepositoryKind.GIT);
-			for (final Revision rev : conn.getCommits(true, astWriter)) {
+			for (final Revision rev : conn.getCommits(true, astWriter, contentWriter)) {
 				final Revision.Builder revBuilder = Revision.newBuilder(rev);
 				repoBuilder.addRevisions(revBuilder);
 			}
