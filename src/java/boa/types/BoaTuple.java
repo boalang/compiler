@@ -57,8 +57,13 @@ public class BoaTuple extends BoaType {
 	/** {@inheritDoc} */
 	@Override
 	public boolean assigns(final BoaType that) {
+		// if that is a function, check the return type
 		if (that instanceof BoaFunction)
 			return this.assigns(((BoaFunction) that).getType());
+
+		// if that is a component, check the type
+		if (that instanceof BoaName)
+			return this.assigns(((BoaName) that).getType());
 
 		if (that instanceof BoaArray) {
 			BoaType type = ((BoaArray) that).getType();

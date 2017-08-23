@@ -29,9 +29,9 @@ public class BoaScalar extends BoaType {
 		if (that instanceof BoaFunction)
 			return this.assigns(((BoaFunction) that).getType());
 
-		// otherwise, if it's not a scalar, forget it
-		if (!(that instanceof BoaScalar))
-			return false;
+		// if that is a component, check the type
+		if (that instanceof BoaName)
+			return this.assigns(((BoaName) that).getType());
 
 		// check that the classes match
 		return this.getClass().equals(that.getClass());

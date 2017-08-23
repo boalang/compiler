@@ -45,9 +45,13 @@ public class BoaStack extends BoaType {
 	/** {@inheritDoc} */
 	@Override
 	public boolean assigns(final BoaType that) {
-		// if that is a function, check the return value
+		// if that is a function, check the return type
 		if (that instanceof BoaFunction)
 			return this.assigns(((BoaFunction) that).getType());
+
+		// if that is a component, check the type
+		if (that instanceof BoaName)
+			return this.assigns(((BoaName) that).getType());
 
 		// otherwise, if that is not a stack, forget it
 		if (!(that instanceof BoaStack))
