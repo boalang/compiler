@@ -1,9 +1,11 @@
+dist: precise
+sudo: required
 language: boa
 script: ant -Dprotobuf.uptodate=true test checkstyle
 notifications:
   email:
     recipients:
       - hridesh@iastate.edu
-      - rdyer@iastate.edu
+      - rdyer@bgsu.edu
     on_success: change
     on_failure: always
