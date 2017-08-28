@@ -3,7 +3,7 @@ namespaces {
   statements {
     kind: FOR
     statements {
-      kind: BLOCK
+      kind: SCOPE
       statements {
         kind: CONTINUE
       }

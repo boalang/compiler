@@ -4,21 +4,15 @@ namespaces {
     kind: EXPRESSION
     expression {
       kind: LAMBDA
-      lambda {
-        return_type {
+      variable_decls {
+        name: "name"
+        variable_type {
           name: ""
           kind: OTHER
         }
-        arguments {
-          name: "name"
-          variable_type {
-            name: ""
-            kind: OTHER
-          }
-        }
-        statements {
-          kind: BLOCK
-        }
+      }
+      statements {
+        kind: BLOCK
       }
     }
   }

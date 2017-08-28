@@ -3,7 +3,7 @@ namespaces {
   statements {
     kind: TRY
     statements {
-      kind: BLOCK
+      kind: SCOPE
     }
     statements {
       kind: CATCH

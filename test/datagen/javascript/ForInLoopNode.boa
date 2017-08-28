@@ -3,7 +3,7 @@ namespaces {
   statements {
     kind: FORIN
     statements {
-      kind: BLOCK
+      kind: SCOPE
       statements {
         kind: EXPRESSION
         expression {

@@ -44,8 +44,6 @@ import org.eclipse.jgit.treewalk.TreeWalk;
  */
 public class GitConnector extends AbstractConnector {
 
-	private String path;
-
 	private Repository repository;
 	private Git git;
 	private RevWalk revwalk;

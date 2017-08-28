@@ -3,7 +3,7 @@ namespaces {
   statements {
     kind: DO
     statements {
-      kind: BLOCK
+      kind: SCOPE
       statements {
         kind: EXPRESSION
         expression {
