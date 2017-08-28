@@ -1102,36 +1102,23 @@ public class PHPVisitor extends AbstractVisitor {
 
 	@Override
 	public boolean visit(LambdaFunctionDeclaration node) {
-		Method.Builder b = Method.newBuilder();
 		Expression.Builder eb = Expression.newBuilder();
 		eb.setKind(ExpressionKind.LAMBDA);
 		fields.push(new ArrayList<Variable>());
 		for (FormalParameter p : node.formalParameters())
 			p.accept(this);
-		for (org.eclipse.php.internal.core.ast.nodes.Expression p : node.lexicalVariables()) {
-			Statement.Builder sb = Statement.newBuilder();
-			sb.setKind(StatementKind.EXPRESSION);
-			p.accept(this);
-			sb.setExpression(expressions.pop());
-			b.addStatements(sb.build());
-		}
 		for (Variable v : fields.pop())
-			b.addArguments(v);
+			eb.addVariableDecls(v);
+		for (org.eclipse.php.internal.core.ast.nodes.Expression p : node.lexicalVariables()) {
+			p.accept(this);
+			eb.addMethodArgs(expressions.pop());
+		}
 		if (node.getBody() != null) {
 			statements.push(new ArrayList<boa.types.Ast.Statement>());
 			node.getBody().accept(this);
-			for (boa.types.Ast.Statement s : statements.pop()) {
-				b.addStatements(s);
-			}
+			for (boa.types.Ast.Statement s : statements.pop())
+				eb.addStatements(s);
 		}
-		Type.Builder tb = Type.newBuilder();
-		String name = "";
-		if (node.getReturnType() != null)
-			name = node.getReturnType().getName();
-		tb.setKind(boa.types.Ast.TypeKind.OTHER);
-		tb.setName(name);
-		b.setReturnType(tb.build());
-		eb.setLambda(b.build());
 		expressions.push(eb.build());
 		return false;
 	}

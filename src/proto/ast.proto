@@ -346,8 +346,7 @@ message Expression {
 	repeated Expression method_args = 10;
 	optional Declaration anon_declaration = 11;
 	optional Modifier annotation = 12;
-	/** @exclude */
-	optional Method lambda = 13;
+	/** 13 used to be lambda */
 	/** @exclude */
 	optional bool no_parens = 14;
 	/** Kind of change: UNCHANGED, MODIFIED, ADDED, DELETED/REMOVED, MOVED, RENAMED */

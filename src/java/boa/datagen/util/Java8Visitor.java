@@ -225,22 +225,21 @@ public class Java8Visitor extends Java7Visitor {
 	// begin java 8
 	@Override
 	public boolean visit(LambdaExpression node) {
-		Method.Builder b = Method.newBuilder();
+		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		Integer index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
 		if (index != null) {
-			b.setKey(index);
+			eb.setKey(index);
 			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
 			if (status != null) {
-				b.setChangeKind(status);
+				eb.setChangeKind(status);
 				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
 				if (mappedNode != null)
-					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+					eb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
 			}
 		}
-		boa.types.Ast.Type.Builder rt = boa.types.Ast.Type.newBuilder();
-		rt.setName("");
-		rt.setKind(boa.types.Ast.TypeKind.OTHER);
-		b.setReturnType(rt.build());
+		eb.setKind(boa.types.Ast.Expression.ExpressionKind.LAMBDA);
+        if (!node.hasParentheses())
+            eb.setNoParens(true);
 		for (Object o : node.parameters()) {
 			VariableDeclaration ex = (VariableDeclaration)o;
 			Variable.Builder vb = Variable.newBuilder();
@@ -288,38 +287,20 @@ public class Java8Visitor extends Java7Visitor {
 				setTypeBinding(tb, vdf.getName());
 				vb.setVariableType(tb.build());
 			}
-			b.addArguments(vb.build());
+			eb.addVariableDecls(vb.build());
 		}
 		if (node.getBody() != null) {
-			statements.push(new ArrayList<boa.types.Ast.Statement>());
-			node.getBody().accept(this);
 			if (node.getBody() instanceof org.eclipse.jdt.core.dom.Expression) {
+				node.getBody().accept(this);
 				boa.types.Ast.Expression e = expressions.pop();
-				boa.types.Ast.Statement.Builder sb = boa.types.Ast.Statement.newBuilder();
-				sb.setKind(boa.types.Ast.Statement.StatementKind.EXPRESSION);
-				sb.setExpression(e);
-				statements.peek().add(sb.build());
-			}
-			for (boa.types.Ast.Statement s : statements.pop())
-				b.addStatements(s);
-		}
-
-		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
-		index = (Integer) node.getProperty(Java7Visitor.PROPERTY_INDEX);
-		if (index != null) {
-			eb.setKey(index);
-			ChangeKind status = (ChangeKind) node.getProperty(TreedConstants.PROPERTY_STATUS);
-			if (status != null) {
-				eb.setChangeKind(status);
-				ASTNode mappedNode = (ASTNode) node.getProperty(TreedConstants.PROPERTY_MAP);
-				if (mappedNode != null)
-					eb.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
+				eb.addExpressions(e);
+			} else {
+				statements.push(new ArrayList<boa.types.Ast.Statement>());
+				node.getBody().accept(this);
+				for (boa.types.Ast.Statement s : statements.pop())
+					eb.addStatements(s);
 			}
 		}
-		eb.setKind(boa.types.Ast.Expression.ExpressionKind.LAMBDA);
-		eb.setLambda(b.build());
-        if (!node.hasParentheses())
-            eb.setNoParens(true);
 		expressions.push(eb.build());
 		
 		return false;

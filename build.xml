@@ -197,6 +197,7 @@
 				<formatter type="plain" usefile="false" />
 				<fileset dir="build/tests">
 					<include name="boa/test/datagen/Test*.class" />
+					<include name="boa/test/datagen/java/Test*.class" />
 					<exclude name="**/*$*.class" />
 				</fileset>
 			</batchtest>
