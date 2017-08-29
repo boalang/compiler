@@ -38,8 +38,8 @@ import boa.types.Ast.Expression;
 @RunWith(Parameterized.class)
 public class TestNormalForm {
 	@Parameters(name = "{index}][{0}")
-	public static Collection expressions() {
-		return Arrays.asList(new Object[][] {
+	public static Collection<String[]> expressions() {
+		return Arrays.asList(new String[][] {
 			{ "((a < b || !b) || (a < b && a) || !b || !a) && a < b", "a < b", "a < b", "a < b", "a < b" },
 			{ "(!a || b) && a", "a && b", "a && b", "a && b", "a && b" },
 			{ "!(!a)", "!(!a)", "a", "a", "a" },
