@@ -836,8 +836,9 @@ public class BoaAstIntrinsics {
 		            return ppPrefix("-", e);
 	            return ppInfix("-", e.getExpressionsList());
 
-			case LOGICAL_AND:           return "(" + ppInfix("&&",   e.getExpressionsList()) + ")";
-			case LOGICAL_OR:            return "(" + ppInfix("||",   e.getExpressionsList()) + ")";
+			case LOGICAL_AND:           return "(" + ppInfix("&&", e.getExpressionsList()) + ")";
+			case LOGICAL_OR:            return "(" + ppInfix("||", e.getExpressionsList()) + ")";
+
 			case EQ:                    return ppInfix("==",   e.getExpressionsList());
 			case NEQ:                   return ppInfix("!=",   e.getExpressionsList());
 			case LT:                    return ppInfix("<",    e.getExpressionsList());
@@ -866,8 +867,8 @@ public class BoaAstIntrinsics {
 			case ASSIGN_RSHIFT:         return ppInfix(">>=",  e.getExpressionsList());
 			case ASSIGN_UNSIGNEDRSHIFT: return ppInfix(">>>=", e.getExpressionsList());
 
-			case LOGICAL_NOT: return ppPrefix("!",  e);
-			case BIT_NOT:     return ppPrefix("~",  e);
+			case LOGICAL_NOT: return ppPrefix("!", e);
+			case BIT_NOT:     return ppPrefix("~", e);
 
 			case OP_DEC:
 				if (e.getIsPostfix())
