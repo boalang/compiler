@@ -34,6 +34,470 @@ import boa.types.Ast.Expression;
  */
 public class BoaNormalFormIntrinsics {
 	/**
+	 * Returns map of variables which are not arg0, arg1, arg2, ...
+	 */
+	// FIXME would prefer the return type is array instead of map
+	@FunctionSpec(name = "getnoargsvariables", returnType = "map[Expression] of Expression", formalParameters = { "Expression" })
+	public static HashMap<Expression, Expression>  getNoArgsVariables(final Expression e) throws Exception {
+		final HashMap<Expression, Expression> variableMap = new HashMap<Expression, Expression>();
+
+		if (e.getKind() == ExpressionKind.VARACCESS) {
+			final String var = e.getVariable();
+			if (!var.matches("arg\\$[0-9]+") && !"rcv$".equals(var))
+				variableMap.put(e, e);
+		} else {
+			for (final Expression sub : e.getExpressionsList())
+				variableMap.putAll(getNoArgsVariables(sub));
+		}
+
+		return variableMap;
+	}
+
+	/**
+	 * Takes original predicate and array of arguments of api_call as input and
+	 * returns the replaced expression.
+	 */
+	@FunctionSpec(name = "converttosymbolicname", returnType = "Expression", formalParameters = { "Expression", "Expression", "array of Expression"})
+	public static Expression convertToSymbolicName(final Expression e, final Expression reciever, final Expression[] arguments) {
+		final List<Expression> convertedExpression = new ArrayList<Expression>();
+		for (final Expression sub : e.getExpressionsList())
+			convertedExpression.add(convertToSymbolicName(sub, reciever, arguments));
+
+		switch (e.getKind()) {
+			// return the expression
+			case EQ:
+			case NEQ:
+			case GT:
+			case LT:
+			case GTEQ:
+			case LTEQ:
+			case OP_ADD:
+			case OP_SUB:
+			case OP_MULT:
+			case OP_DIV:
+				return createExpression(e.getKind(), convertedExpression.toArray(new Expression[convertedExpression.size()]));
+
+			case PAREN:
+				return convertedExpression.get(0);
+
+			case VARACCESS: //replace with symbolic names
+				if (e.equals(reciever))
+					return createVariable("rcv");
+
+				for (int i = 0; i < arguments.length; i++)
+					if (e.equals(arguments[i]))
+						return createVariable("arg"+Integer.toString(i));
+				return e;
+
+			case METHODCALL:
+			case LITERAL:
+			default:
+				return e;
+		}
+	}
+
+	/**
+	 * Takes "predicate with symbolic_name" and "map" (with Key = variable,
+	 * Value = latest_assignment to variable) as input and returns the replaced
+	 * expression.
+	 */
+	@FunctionSpec(name = "assignlatestvalue", returnType = "Expression", formalParameters = { "Expression", "map[Expression] of Expression"})
+	public static Expression assignLatestValue(final Expression e, final Map<Expression,Expression> replace) {
+		final List<Expression> changedExpression = new ArrayList<Expression>();
+		for (final Expression sub : e.getExpressionsList())
+			changedExpression.add(assignLatestValue(sub, replace));
+
+		switch (e.getKind()) {
+			// return the expression
+			case EQ:
+			case NEQ:
+			case GT:
+			case LT:
+			case GTEQ:
+			case LTEQ:
+			case OP_ADD:
+			case OP_SUB:
+			case OP_MULT:
+			case OP_DIV:
+				return createExpression(e.getKind(), changedExpression.toArray(new Expression[changedExpression.size()]));
+
+			case PAREN:
+				return changedExpression.get(0);
+
+			case VARACCESS: //replace with latest value
+				if (replace.containsKey(e))
+					return replace.get(e);
+				return e;
+
+			case METHODCALL:
+			case LITERAL:
+			default:
+				return e;
+		}
+	}
+
+	// Algorithm: Normalizing expression -> (arg0 + 3 + arg3 -1 <= arg1 + 1 + 5)
+	/* Iteration 1
+	   Reduce step: arg0 + arg3 + 2 <= arg1 + 6
+	   Move step: arg0 + arg3 - arg1 <= 6 - 2 */
+	/* Iteration 2
+	   Reduce step: arg0 + arg3 - arg1 <= 4
+	   Move step: arg0 + arg3 - arg1 <= 4
+	   Move Step == Reduce Step, therefore break*/
+	/* Sort Left side
+	   arg0 - arg1 + arg3 <= 4
+	   return */
+	@FunctionSpec(name = "normalize", returnType = "Expression", formalParameters = { "Expression" })
+	public static Expression Normalize(final Expression e) throws Exception {
+		Expression expRed = e;
+		Expression expMov = e;
+		Expression previous = e;
+
+		for (int i = 0; i < 5; i++){	// maximum iteration allowed = 5. Ideally should not exceed 2
+			expRed = reduce(expMov);	// reduce Expression. reduce is required before move
+			expMov = move(expRed);		// move Variables to the left and literals to the right.
+			if (expMov.equals(previous))
+				break;
+			previous = expMov;
+		}
+
+		return sort(expMov);			// sort the left side of the final expression
+	}
+
+	/**
+	 * Moves variables to the right and literals to the left.
+	 */
+	private static Expression move(final Expression e) throws Exception {
+		ExpressionKind kind = e.getKind();
+
+		switch (kind) {
+			//comparison operators
+			case EQ:
+			case NEQ:
+			case GT:
+			case LT:
+			case GTEQ:
+			case LTEQ: // Side and Signs are represented as booleans
+				// Left = true, Right = false, Positive = true, Negative = false
+				final ArrayList<Object[]> variableList = new ArrayList<Object[]>();
+				final ArrayList<Object[]> literalList = new ArrayList<Object[]>();
+
+				// if both sides are literals return the expression as is. For ex: 2 == 2 OR "Yes" == "Yes"
+				if (e.getExpressions(0).getKind() == ExpressionKind.LITERAL &&
+						e.getExpressions(1).getKind() == ExpressionKind.LITERAL)
+					return e;
+
+				// if string literal is to the left in the comparison then flip the expression and return it
+				if (BoaAstIntrinsics.isStringLit(e.getExpressions(0))) {
+					if (kind != ExpressionKind.EQ && kind != ExpressionKind.NEQ) //reverse the kind (not negate)
+						kind = negateKind(kind);
+					return createExpression(kind, new Expression[] {e.getExpressions(1), e.getExpressions(0)});
+				}
+
+				/* Left and right side of the expression is given as input to the seperate function which returns
+				   a map with the following key-value pairs
+				   [0: Variable List] where Variable List is an ArrayList containing all VARACCESS occurances
+
+				   [1: Literal List] where Literal List is an ArrayList containing all LITERAL occurances
+
+				   [-1: {true}] where -1 signify occurance of a string or illegal expression which can not be changed
+				   for ex: str1 + str2 == "abc"
+				 */
+				final HashMap<Integer, ArrayList<Object[]>> componentMapLeft = seperate(e.getExpressions(0), true, true);  // Call seperate on the left expression
+				if (componentMapLeft.containsKey(-1))
+					return e;
+
+				if (componentMapLeft.containsKey(0))
+					variableList.addAll(componentMapLeft.get(0));
+				if (componentMapLeft.containsKey(1))
+					literalList.addAll(componentMapLeft.get(1));
+
+				final HashMap<Integer, ArrayList<Object[]>> componentMapRight = seperate(e.getExpressions(1), false, true);  // Call seperate on the right expression
+				if (componentMapRight.containsKey(-1))
+					return e;
+
+				if (componentMapRight.containsKey(0))
+					variableList.addAll(componentMapRight.get(0));
+				if (componentMapRight.containsKey(1))
+					literalList.addAll(componentMapRight.get(1));
+
+				if (variableList.isEmpty())
+					return e;
+				final Expression variables = combineLeft(variableList);
+
+				final Expression literals;
+				if (!literalList.isEmpty())
+					literals = combineRight(literalList);
+				else
+					literals = createExpression(ExpressionKind.OP_ADD, new Expression[] {createLiteral("0")});
+
+				return createExpression(kind, new Expression[] {variables, literals});
+			default:
+				// no comparison operator return the expression as is
+				// for example a function call --> if (isString())
+				return e;
+		}
+	}
+
+	/**
+	 * Sorts left and right sides indepently in alphatical order variables are
+	 * placed first followed by literals
+	 */
+	private static Expression sort(final Expression e) throws Exception {
+		ExpressionKind kind = e.getKind();
+
+		switch (kind) {
+			//comparison operators
+			case EQ:
+			case NEQ:
+			case GT:
+			case LT:
+			case GTEQ:
+			case LTEQ:
+				final ArrayList<Object[]> leftList = new ArrayList<Object[]>();
+				final ArrayList<Object[]> leftListLit = new ArrayList<Object[]>();
+				final ArrayList<Object[]> rightList = new ArrayList<Object[]>();
+				final ArrayList<Object[]> rightListLit = new ArrayList<Object[]>();
+
+				/*
+					The left sides of an expression is divided and stored in
+					two lists: one for variables and other for literals
+					Similarly, the right side.  The variable and literal lists
+					are sorted seperately  for each side and then combined to
+					form the respective sides.  The two sides are then combined
+					to form the sorted expression
+				 */
+				final HashMap<Integer, ArrayList<Object[]>> componentMapLeft = seperate(e.getExpressions(0), true, true);
+				if (componentMapLeft.containsKey(-1))
+					return e;
+
+				if (componentMapLeft.containsKey(0))
+					leftList.addAll(componentMapLeft.get(0));
+				if (componentMapLeft.containsKey(1))
+					leftListLit.addAll(componentMapLeft.get(1));
+
+				final HashMap<Integer, ArrayList<Object[]>> componentMapRight = seperate(e.getExpressions(1), false, true);
+				if (componentMapRight.containsKey(-1))
+					return e;
+
+				if (componentMapRight.containsKey(0))
+					rightList.addAll(componentMapRight.get(0));
+				if (componentMapRight.containsKey(1))
+					rightListLit.addAll(componentMapRight.get(1));
+
+				Collections.sort(leftList, new ExpressionArrayComparator());
+				Collections.sort(leftListLit, new ExpressionArrayComparator());
+				Collections.sort(rightList, new ExpressionArrayComparator());
+				Collections.sort(rightListLit, new ExpressionArrayComparator());
+
+				leftList.addAll(leftListLit);
+				rightList.addAll(rightListLit);
+
+				if (leftList.isEmpty() || rightList.isEmpty())
+					return e;
+
+				// we want first component of left side to be positive
+				// if first component is negative, flip all the signs and ExpressonKind
+				if (((leftList.get(0))[2]).equals(false)) {
+				for (int i = 0; i < leftList.size(); i++) {
+						// we want to keep the sign of Literal "0" as positive in all scenarios
+						if (((Expression)((leftList.get(i))[0])).getKind() == ExpressionKind.LITERAL) {
+							if (((Expression)((leftList.get(i))[0])).getLiteral().equals("0"))
+								(leftList.get(i))[2] = true;
+							continue;
+						}
+						if (((leftList.get(i))[2]).equals(false))
+							(leftList.get(i))[2] = true;
+						else
+							(leftList.get(i))[2] = false;
+					}
+
+					for (int i = 0; i < rightList.size(); i++) {
+						if (((Expression)((rightList.get(i))[0])).getKind() == ExpressionKind.LITERAL) {
+							if (((Expression)((rightList.get(i))[0])).getLiteral().equals("0"))
+								(rightList.get(i))[2] = true;
+							continue;
+						}
+						if (((rightList.get(i))[2]).equals(false))
+							(rightList.get(i))[2] = true;
+						else
+							(rightList.get(i))[2] = false;
+					}
+
+					if (kind != ExpressionKind.EQ && kind != ExpressionKind.NEQ) //reverse the kind (not negate)
+						kind = negateKind(kind);
+				}
+
+				return createExpression(kind, new Expression[] {combineLeft(leftList), combineRight(rightList)});
+			default: // no comparison operator
+				// here, first component could be negative
+				final ArrayList<Object[]> variableList = new ArrayList<Object[]>();
+				final ArrayList<Object[]> literalList = new ArrayList<Object[]>();
+
+				final HashMap<Integer, ArrayList<Object[]>> componentMap = seperate(e, true, true);
+
+				if (componentMap.containsKey(-1))
+					return e;
+
+				if (componentMap.containsKey(0))
+					variableList.addAll(componentMap.get(0));
+				if (componentMap.containsKey(1))
+					literalList.addAll(componentMap.get(1));
+
+				if (variableList.isEmpty() && literalList.isEmpty())
+					return e;
+
+				Collections.sort(variableList, new ExpressionArrayComparator());
+				Collections.sort(literalList, new ExpressionArrayComparator());
+
+				variableList.addAll(literalList);
+
+				return combineLeft(variableList);
+		}
+	}
+
+	// helper for sorting array lists
+	private static class ExpressionArrayComparator implements Comparator <Object[]> {
+		public int compare(final Object[] e1, final Object[] e2) {
+			return BoaAstIntrinsics.prettyprint((Expression)e1[0]).compareTo(BoaAstIntrinsics.prettyprint((Expression)e2[0]));
+		}
+	}
+
+	/* Takes expression as input and returns a map with the following key-value pairs
+	   [0: Variable List] where Variable List is an ArrayList containing all VARACCESS occurances
+
+	   [1: Literal List] where Literal List is an ArrayList containing all LITERAL occurances
+
+	   [-1: {true}] where -1 signify occurance of a string or illegal expression which can not be changed
+	   for ex: str1 + str2 == "abc"
+	 */
+	private static HashMap<Integer, ArrayList<Object[]>> seperate(final Expression e, final boolean side, final boolean sign) throws Exception {
+		final HashMap<Integer, ArrayList<Object[]>> componentMap = new HashMap<Integer, ArrayList<Object[]>>();
+		switch (e.getKind()) {
+			case EQ:
+			case NEQ:
+			case GT:
+			case LT:
+			case GTEQ:
+			case LTEQ: // if more than two comparison operator in one expression, then return it as is
+				final ArrayList<Object[]> dummyList = new ArrayList<Object[]>();
+				dummyList.add(new Object[] {true});
+				componentMap.put(-1, dummyList);
+				break;
+			case OP_ADD: // break expression into sub expressions until we reach VARACCES and LITERALS
+				for (int i = 0; i < e.getExpressionsCount(); i++) {
+					final HashMap<Integer, ArrayList<Object[]>> cMap = seperate(e.getExpressions(i), side, true);
+
+					if (cMap.containsKey(0)) {
+						if (componentMap.containsKey(0))
+							componentMap.get(0).addAll(cMap.get(0));
+						else
+							componentMap.put(0, cMap.get(0));
+					}
+
+					if (cMap.containsKey(1)) {
+						if (componentMap.containsKey(1))
+							componentMap.get(1).addAll(cMap.get(1));
+						else
+							componentMap.put(1, cMap.get(1));
+					}
+				}
+				break;
+			case OP_SUB:// break expression into sub expressions
+				for (int i = 0; i < e.getExpressionsCount(); i++) {
+					final HashMap<Integer, ArrayList<Object[]>> cMap;
+
+					if (i == 0 && e.getExpressionsCount() > 1)
+						cMap = seperate(e.getExpressions(i), side, true);
+					else
+						cMap = seperate(e.getExpressions(i), side, false);
+
+					if (cMap.containsKey(0)) {
+						if (componentMap.containsKey(0))
+							componentMap.get(0).addAll(cMap.get(0));
+						else
+							componentMap.put(0, cMap.get(0));
+					}
+
+					if (cMap.containsKey(1)) {
+						if (componentMap.containsKey(1))
+							componentMap.get(1).addAll(cMap.get(1));
+						else
+							componentMap.put(1, cMap.get(1));
+					}
+				}
+				break;
+			case PAREN:
+				componentMap.putAll(seperate(e.getExpressions(0), side, sign));
+			case METHODCALL:
+			case OP_MULT:
+			case OP_DIV:
+			case VARACCESS:
+				final ArrayList<Object[]> variableList = new ArrayList<Object[]>();
+				variableList.add(new Object[] {e, side, sign});
+				componentMap.put(0, variableList);
+				break;
+			case LITERAL:
+				final ArrayList<Object[]> literalList = new ArrayList<Object[]>();
+				if (BoaAstIntrinsics.isStringLit(e)) { // if it is a string expression, we dont to process it
+					literalList.add(new Object[] {true});
+					componentMap.put(-1, literalList);
+				} else {
+					literalList.add(new Object[] {e, side, sign});
+					componentMap.put(1, literalList);
+				}
+				break;
+			default:
+				break;
+		}
+
+		return componentMap;
+	}
+
+	/**
+	 * Combines an expression list based on the rules of left side i.e sign
+	 * needs to be changed if Variable/Literal is from the right side
+	 */
+	private static Expression combineLeft(final ArrayList<Object[]> expList) {
+		Expression e = (Expression)(expList.get(0))[0];
+
+		if ((((expList.get(0))[1]).equals(true) && ((expList.get(0))[2]).equals(false)) ||
+				(((expList.get(0))[1]).equals(false) && ((expList.get(0))[2]).equals(true)))
+			e = createExpression(ExpressionKind.OP_SUB, new Expression[] {e});
+
+		for (int i = 1; i < expList.size(); i++) {
+			if ((((expList.get(i))[1]).equals(true) && ((expList.get(i))[2]).equals(true)) ||
+					(((expList.get(i))[1]).equals(false) && ((expList.get(i))[2]).equals(false)))
+				e = createExpression(ExpressionKind.OP_ADD, new Expression[] {e, (Expression)(expList.get(i))[0]});
+			else
+				e = createExpression(ExpressionKind.OP_SUB, new Expression[] {e, (Expression)(expList.get(i))[0]});
+		}
+
+		return e;
+	}
+
+	/**
+	 * Combines an expression list based on the rules of right side
+	 */
+	private static Expression combineRight(final ArrayList<Object[]> expList) {
+		Expression e = (Expression)(expList.get(0))[0];
+
+		if ((((expList.get(0))[1]).equals(true) && ((expList.get(0))[2]).equals(true)) ||
+				(((expList.get(0))[1]).equals(false) && ((expList.get(0))[2]).equals(false)))
+			e = createExpression(ExpressionKind.OP_SUB, new Expression[] {e});
+
+		for (int i = 1; i < expList.size(); i++) {
+			if ((((expList.get(i))[1]).equals(false) && ((expList.get(i))[2]).equals(true)) ||
+					(((expList.get(i))[1]).equals(true) && ((expList.get(i))[2]).equals(false)))
+				e = createExpression(ExpressionKind.OP_ADD, new Expression[] {e, (Expression)(expList.get(i))[0]});
+			else
+				e = createExpression(ExpressionKind.OP_SUB, new Expression[] {e, (Expression)(expList.get(i))[0]});
+		}
+
+		return e;
+	}
+
+	/**
 	 * Converts a string expression into an AST.
 	 *
 	 * @param s the string to parse/convert
@@ -1073,5 +1537,20 @@ public class BoaNormalFormIntrinsics {
 		b.setLiteral(lit);
 
 		return b.build();
+	}
+
+	/**
+	 * Creates a new variable access expression.
+	 *
+	 * @param var the variable name
+	 * @return a new variable access expression
+	 */
+	private static Expression createVariable(final String var) {
+		final Expression.Builder exp = Expression.newBuilder();
+
+		exp.setKind(ExpressionKind.VARACCESS);
+		exp.setVariable(var);
+
+		return exp.build();
 	}
 }
