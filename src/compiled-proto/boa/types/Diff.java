@@ -158,7 +158,7 @@ public final class Diff {
      * <code>repeated .boa.types.ChangeKind changes = 7;</code>
      *
      * <pre>
-     ** @exclude TODO 
+     ** @exclude The kinds of changes of this this compared to the corresponding parent commits 
      * </pre>
      */
     java.util.List<boa.types.Shared.ChangeKind> getChangesList();
@@ -166,7 +166,7 @@ public final class Diff {
      * <code>repeated .boa.types.ChangeKind changes = 7;</code>
      *
      * <pre>
-     ** @exclude TODO 
+     ** @exclude The kinds of changes of this this compared to the corresponding parent commits 
      * </pre>
      */
     int getChangesCount();
@@ -174,7 +174,7 @@ public final class Diff {
      * <code>repeated .boa.types.ChangeKind changes = 7;</code>
      *
      * <pre>
-     ** @exclude TODO 
+     ** @exclude The kinds of changes of this this compared to the corresponding parent commits 
      * </pre>
      */
     boa.types.Shared.ChangeKind getChanges(int index);
@@ -184,7 +184,7 @@ public final class Diff {
      * <code>repeated int32 previous_versions = 8;</code>
      *
      * <pre>
-     ** @exclude TODO 
+     ** @exclude The indices of the corresponding parent commits in the list of all commits 
      * </pre>
      */
     java.util.List<java.lang.Integer> getPreviousVersionsList();
@@ -192,7 +192,7 @@ public final class Diff {
      * <code>repeated int32 previous_versions = 8;</code>
      *
      * <pre>
-     ** @exclude TODO 
+     ** @exclude The indices of the corresponding parent commits in the list of all commits 
      * </pre>
      */
     int getPreviousVersionsCount();
@@ -200,7 +200,7 @@ public final class Diff {
      * <code>repeated int32 previous_versions = 8;</code>
      *
      * <pre>
-     ** @exclude TODO 
+     ** @exclude The indices of the corresponding parent commits in the list of all commits 
      * </pre>
      */
     int getPreviousVersions(int index);
@@ -210,7 +210,7 @@ public final class Diff {
      * <code>repeated int32 previous_index = 9;</code>
      *
      * <pre>
-     ** @exclude TODO 
+     ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
      * </pre>
      */
     java.util.List<java.lang.Integer> getPreviousIndexList();
@@ -218,7 +218,7 @@ public final class Diff {
      * <code>repeated int32 previous_index = 9;</code>
      *
      * <pre>
-     ** @exclude TODO 
+     ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
      * </pre>
      */
     int getPreviousIndexCount();
@@ -226,7 +226,7 @@ public final class Diff {
      * <code>repeated int32 previous_index = 9;</code>
      *
      * <pre>
-     ** @exclude TODO 
+     ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
      * </pre>
      */
     int getPreviousIndex(int index);
@@ -596,6 +596,30 @@ public final class Diff {
        * </pre>
        */
       SOURCE_CS_CS5(19, 205),
+      /**
+       * <code>SOURCE_JS_ERROR = 300;</code>
+       *
+       * <pre>
+       ** The file represents a JavaScript source file that had a parse error 
+       * </pre>
+       */
+      SOURCE_JS_ERROR(26, 300),
+      /**
+       * <code>SOURCE_JS_ES3 = 301;</code>
+       *
+       * <pre>
+       ** The file represents a JavaScript source file that parsed without error as ES3 
+       * </pre>
+       */
+      SOURCE_JS_ES3(27, 301),
+      /**
+       * <code>SOURCE_JS_ES4 = 302;</code>
+       *
+       * <pre>
+       ** The file represents a JavaScript source file that parsed without error as ES4 
+       * </pre>
+       */
+      SOURCE_JS_ES4(28, 302),
       ;
 
       /**
@@ -686,6 +710,14 @@ public final class Diff {
        * </pre>
        */
       public static final FileKind CS5 = SOURCE_CS_CS5;
+      /**
+       * <code>JS_ERROR = 300;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
+       */
+      public static final FileKind JS_ERROR = SOURCE_JS_ERROR;
       /**
        * <code>OTHER = 0;</code>
        *
@@ -894,6 +926,38 @@ public final class Diff {
        * </pre>
        */
       public static final int CS5_VALUE = 205;
+      /**
+       * <code>SOURCE_JS_ERROR = 300;</code>
+       *
+       * <pre>
+       ** The file represents a JavaScript source file that had a parse error 
+       * </pre>
+       */
+      public static final int SOURCE_JS_ERROR_VALUE = 300;
+      /**
+       * <code>SOURCE_JS_ES3 = 301;</code>
+       *
+       * <pre>
+       ** The file represents a JavaScript source file that parsed without error as ES3 
+       * </pre>
+       */
+      public static final int SOURCE_JS_ES3_VALUE = 301;
+      /**
+       * <code>SOURCE_JS_ES4 = 302;</code>
+       *
+       * <pre>
+       ** The file represents a JavaScript source file that parsed without error as ES4 
+       * </pre>
+       */
+      public static final int SOURCE_JS_ES4_VALUE = 302;
+      /**
+       * <code>JS_ERROR = 300;</code>
+       *
+       * <pre>
+       ** @exclude 
+       * </pre>
+       */
+      public static final int JS_ERROR_VALUE = 300;
 
 
       public final int getNumber() { return value; }
@@ -915,6 +979,9 @@ public final class Diff {
           case 203: return SOURCE_CS_CS3;
           case 204: return SOURCE_CS_CS4;
           case 205: return SOURCE_CS_CS5;
+          case 300: return SOURCE_JS_ERROR;
+          case 301: return SOURCE_JS_ES3;
+          case 302: return SOURCE_JS_ES4;
           default: return null;
         }
       }
@@ -945,7 +1012,7 @@ public final class Diff {
       }
 
       private static final FileKind[] VALUES = {
-        OTHER, BINARY, TEXT, XML, SOURCE_JAVA_ERROR, SOURCE_JAVA_JLS2, SOURCE_JAVA_JLS3, SOURCE_JAVA_JLS4, SOURCE_JAVA_JLS8, JAVA_ERROR, JLS2, JLS3, JLS4, JLS8, SOURCE_CS_ERROR, SOURCE_CS_CS1, SOURCE_CS_CS2, SOURCE_CS_CS3, SOURCE_CS_CS4, SOURCE_CS_CS5, CS_ERROR, CS1, CS2, CS3, CS4, CS5, 
+        OTHER, BINARY, TEXT, XML, SOURCE_JAVA_ERROR, SOURCE_JAVA_JLS2, SOURCE_JAVA_JLS3, SOURCE_JAVA_JLS4, SOURCE_JAVA_JLS8, JAVA_ERROR, JLS2, JLS3, JLS4, JLS8, SOURCE_CS_ERROR, SOURCE_CS_CS1, SOURCE_CS_CS2, SOURCE_CS_CS3, SOURCE_CS_CS4, SOURCE_CS_CS5, CS_ERROR, CS1, CS2, CS3, CS4, CS5, SOURCE_JS_ERROR, SOURCE_JS_ES3, SOURCE_JS_ES4, JS_ERROR, 
       };
 
       public static FileKind valueOf(
@@ -1202,7 +1269,7 @@ public final class Diff {
      * <code>repeated .boa.types.ChangeKind changes = 7;</code>
      *
      * <pre>
-     ** @exclude TODO 
+     ** @exclude The kinds of changes of this this compared to the corresponding parent commits 
      * </pre>
      */
     public java.util.List<boa.types.Shared.ChangeKind> getChangesList() {
@@ -1212,7 +1279,7 @@ public final class Diff {
      * <code>repeated .boa.types.ChangeKind changes = 7;</code>
      *
      * <pre>
-     ** @exclude TODO 
+     ** @exclude The kinds of changes of this this compared to the corresponding parent commits 
      * </pre>
      */
     public int getChangesCount() {
@@ -1222,7 +1289,7 @@ public final class Diff {
      * <code>repeated .boa.types.ChangeKind changes = 7;</code>
      *
      * <pre>
-     ** @exclude TODO 
+     ** @exclude The kinds of changes of this this compared to the corresponding parent commits 
      * </pre>
      */
     public boa.types.Shared.ChangeKind getChanges(int index) {
@@ -1236,7 +1303,7 @@ public final class Diff {
      * <code>repeated int32 previous_versions = 8;</code>
      *
      * <pre>
-     ** @exclude TODO 
+     ** @exclude The indices of the corresponding parent commits in the list of all commits 
      * </pre>
      */
     public java.util.List<java.lang.Integer>
@@ -1247,7 +1314,7 @@ public final class Diff {
      * <code>repeated int32 previous_versions = 8;</code>
      *
      * <pre>
-     ** @exclude TODO 
+     ** @exclude The indices of the corresponding parent commits in the list of all commits 
      * </pre>
      */
     public int getPreviousVersionsCount() {
@@ -1257,7 +1324,7 @@ public final class Diff {
      * <code>repeated int32 previous_versions = 8;</code>
      *
      * <pre>
-     ** @exclude TODO 
+     ** @exclude The indices of the corresponding parent commits in the list of all commits 
      * </pre>
      */
     public int getPreviousVersions(int index) {
@@ -1271,7 +1338,7 @@ public final class Diff {
      * <code>repeated int32 previous_index = 9;</code>
      *
      * <pre>
-     ** @exclude TODO 
+     ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
      * </pre>
      */
     public java.util.List<java.lang.Integer>
@@ -1282,7 +1349,7 @@ public final class Diff {
      * <code>repeated int32 previous_index = 9;</code>
      *
      * <pre>
-     ** @exclude TODO 
+     ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
      * </pre>
      */
     public int getPreviousIndexCount() {
@@ -1292,7 +1359,7 @@ public final class Diff {
      * <code>repeated int32 previous_index = 9;</code>
      *
      * <pre>
-     ** @exclude TODO 
+     ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
      * </pre>
      */
     public int getPreviousIndex(int index) {
@@ -2402,7 +2469,7 @@ public final class Diff {
        * <code>repeated .boa.types.ChangeKind changes = 7;</code>
        *
        * <pre>
-       ** @exclude TODO 
+       ** @exclude The kinds of changes of this this compared to the corresponding parent commits 
        * </pre>
        */
       public java.util.List<boa.types.Shared.ChangeKind> getChangesList() {
@@ -2412,7 +2479,7 @@ public final class Diff {
        * <code>repeated .boa.types.ChangeKind changes = 7;</code>
        *
        * <pre>
-       ** @exclude TODO 
+       ** @exclude The kinds of changes of this this compared to the corresponding parent commits 
        * </pre>
        */
       public int getChangesCount() {
@@ -2422,7 +2489,7 @@ public final class Diff {
        * <code>repeated .boa.types.ChangeKind changes = 7;</code>
        *
        * <pre>
-       ** @exclude TODO 
+       ** @exclude The kinds of changes of this this compared to the corresponding parent commits 
        * </pre>
        */
       public boa.types.Shared.ChangeKind getChanges(int index) {
@@ -2432,7 +2499,7 @@ public final class Diff {
        * <code>repeated .boa.types.ChangeKind changes = 7;</code>
        *
        * <pre>
-       ** @exclude TODO 
+       ** @exclude The kinds of changes of this this compared to the corresponding parent commits 
        * </pre>
        */
       public Builder setChanges(
@@ -2449,7 +2516,7 @@ public final class Diff {
        * <code>repeated .boa.types.ChangeKind changes = 7;</code>
        *
        * <pre>
-       ** @exclude TODO 
+       ** @exclude The kinds of changes of this this compared to the corresponding parent commits 
        * </pre>
        */
       public Builder addChanges(boa.types.Shared.ChangeKind value) {
@@ -2465,7 +2532,7 @@ public final class Diff {
        * <code>repeated .boa.types.ChangeKind changes = 7;</code>
        *
        * <pre>
-       ** @exclude TODO 
+       ** @exclude The kinds of changes of this this compared to the corresponding parent commits 
        * </pre>
        */
       public Builder addAllChanges(
@@ -2479,7 +2546,7 @@ public final class Diff {
        * <code>repeated .boa.types.ChangeKind changes = 7;</code>
        *
        * <pre>
-       ** @exclude TODO 
+       ** @exclude The kinds of changes of this this compared to the corresponding parent commits 
        * </pre>
        */
       public Builder clearChanges() {
@@ -2501,7 +2568,7 @@ public final class Diff {
        * <code>repeated int32 previous_versions = 8;</code>
        *
        * <pre>
-       ** @exclude TODO 
+       ** @exclude The indices of the corresponding parent commits in the list of all commits 
        * </pre>
        */
       public java.util.List<java.lang.Integer>
@@ -2512,7 +2579,7 @@ public final class Diff {
        * <code>repeated int32 previous_versions = 8;</code>
        *
        * <pre>
-       ** @exclude TODO 
+       ** @exclude The indices of the corresponding parent commits in the list of all commits 
        * </pre>
        */
       public int getPreviousVersionsCount() {
@@ -2522,7 +2589,7 @@ public final class Diff {
        * <code>repeated int32 previous_versions = 8;</code>
        *
        * <pre>
-       ** @exclude TODO 
+       ** @exclude The indices of the corresponding parent commits in the list of all commits 
        * </pre>
        */
       public int getPreviousVersions(int index) {
@@ -2532,7 +2599,7 @@ public final class Diff {
        * <code>repeated int32 previous_versions = 8;</code>
        *
        * <pre>
-       ** @exclude TODO 
+       ** @exclude The indices of the corresponding parent commits in the list of all commits 
        * </pre>
        */
       public Builder setPreviousVersions(
@@ -2546,7 +2613,7 @@ public final class Diff {
        * <code>repeated int32 previous_versions = 8;</code>
        *
        * <pre>
-       ** @exclude TODO 
+       ** @exclude The indices of the corresponding parent commits in the list of all commits 
        * </pre>
        */
       public Builder addPreviousVersions(int value) {
@@ -2559,7 +2626,7 @@ public final class Diff {
        * <code>repeated int32 previous_versions = 8;</code>
        *
        * <pre>
-       ** @exclude TODO 
+       ** @exclude The indices of the corresponding parent commits in the list of all commits 
        * </pre>
        */
       public Builder addAllPreviousVersions(
@@ -2573,7 +2640,7 @@ public final class Diff {
        * <code>repeated int32 previous_versions = 8;</code>
        *
        * <pre>
-       ** @exclude TODO 
+       ** @exclude The indices of the corresponding parent commits in the list of all commits 
        * </pre>
        */
       public Builder clearPreviousVersions() {
@@ -2595,7 +2662,7 @@ public final class Diff {
        * <code>repeated int32 previous_index = 9;</code>
        *
        * <pre>
-       ** @exclude TODO 
+       ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
        * </pre>
        */
       public java.util.List<java.lang.Integer>
@@ -2606,7 +2673,7 @@ public final class Diff {
        * <code>repeated int32 previous_index = 9;</code>
        *
        * <pre>
-       ** @exclude TODO 
+       ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
        * </pre>
        */
       public int getPreviousIndexCount() {
@@ -2616,7 +2683,7 @@ public final class Diff {
        * <code>repeated int32 previous_index = 9;</code>
        *
        * <pre>
-       ** @exclude TODO 
+       ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
        * </pre>
        */
       public int getPreviousIndex(int index) {
@@ -2626,7 +2693,7 @@ public final class Diff {
        * <code>repeated int32 previous_index = 9;</code>
        *
        * <pre>
-       ** @exclude TODO 
+       ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
        * </pre>
        */
       public Builder setPreviousIndex(
@@ -2640,7 +2707,7 @@ public final class Diff {
        * <code>repeated int32 previous_index = 9;</code>
        *
        * <pre>
-       ** @exclude TODO 
+       ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
        * </pre>
        */
       public Builder addPreviousIndex(int value) {
@@ -2653,7 +2720,7 @@ public final class Diff {
        * <code>repeated int32 previous_index = 9;</code>
        *
        * <pre>
-       ** @exclude TODO 
+       ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
        * </pre>
        */
       public Builder addAllPreviousIndex(
@@ -2667,7 +2734,7 @@ public final class Diff {
        * <code>repeated int32 previous_index = 9;</code>
        *
        * <pre>
-       ** @exclude TODO 
+       ** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits 
        * </pre>
        */
       public Builder clearPreviousIndex() {
@@ -2703,14 +2770,14 @@ public final class Diff {
   static {
     java.lang.String[] descriptorData = {
       "\n\ndiff.proto\022\tboa.types\032\014shared.proto\032\ta" +
-      "st.proto\"\302\005\n\013ChangedFile\022%\n\006change\030\001 \002(\016" +
+      "st.proto\"\217\006\n\013ChangedFile\022%\n\006change\030\001 \002(\016" +
       "2\025.boa.types.ChangeKind\022-\n\004kind\030\002 \002(\0162\037." +
       "boa.types.ChangedFile.FileKind\022\014\n\004name\030\003" +
       " \002(\t\022\013\n\003key\030\004 \002(\t\022\037\n\003ast\030\005 \001(\0132\022.boa.typ" +
       "es.ASTRoot\022)\n\010comments\030\006 \001(\0132\027.boa.types" +
       ".CommentsRoot\022&\n\007changes\030\007 \003(\0162\025.boa.typ" +
       "es.ChangeKind\022\031\n\021previous_versions\030\010 \003(\005" +
-      "\022\026\n\016previous_index\030\t \003(\005\"\232\003\n\010FileKind\022\t\n" +
+      "\022\026\n\016previous_index\030\t \003(\005\"\347\003\n\010FileKind\022\t\n" +
       "\005OTHER\020\000\022\n\n\006BINARY\020\001\022\010\n\004TEXT\020\002\022\007\n\003XML\020\003\022",
       "\025\n\021SOURCE_JAVA_ERROR\020d\022\024\n\020SOURCE_JAVA_JL" +
       "S2\020e\022\024\n\020SOURCE_JAVA_JLS3\020f\022\024\n\020SOURCE_JAV" +
@@ -2720,8 +2787,9 @@ public final class Diff {
       "S_CS1\020\311\001\022\022\n\rSOURCE_CS_CS2\020\312\001\022\022\n\rSOURCE_C" +
       "S_CS3\020\313\001\022\022\n\rSOURCE_CS_CS4\020\314\001\022\022\n\rSOURCE_C" +
       "S_CS5\020\315\001\022\r\n\010CS_ERROR\020\310\001\022\010\n\003CS1\020\311\001\022\010\n\003CS2" +
-      "\020\312\001\022\010\n\003CS3\020\313\001\022\010\n\003CS4\020\314\001\022\010\n\003CS5\020\315\001\032\002\020\001B\002H" +
-      "\001"
+      "\020\312\001\022\010\n\003CS3\020\313\001\022\010\n\003CS4\020\314\001\022\010\n\003CS5\020\315\001\022\024\n\017SOU" +
+      "RCE_JS_ERROR\020\254\002\022\022\n\rSOURCE_JS_ES3\020\255\002\022\022\n\rS",
+      "OURCE_JS_ES4\020\256\002\022\r\n\010JS_ERROR\020\254\002\032\002\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

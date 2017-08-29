@@ -703,6 +703,60 @@ public final class Toplevel {
      * </pre>
      */
     boa.types.Toplevel.Project.ForgeKind getKind();
+
+    // optional bool forked = 22;
+    /**
+     * <code>optional bool forked = 22;</code>
+     *
+     * <pre>
+     ** Specify if this repository is forked from some other repo 
+     * </pre>
+     */
+    boolean hasForked();
+    /**
+     * <code>optional bool forked = 22;</code>
+     *
+     * <pre>
+     ** Specify if this repository is forked from some other repo 
+     * </pre>
+     */
+    boolean getForked();
+
+    // optional int32 forks = 23;
+    /**
+     * <code>optional int32 forks = 23;</code>
+     *
+     * <pre>
+     ** The number of times this repository has been forked 
+     * </pre>
+     */
+    boolean hasForks();
+    /**
+     * <code>optional int32 forks = 23;</code>
+     *
+     * <pre>
+     ** The number of times this repository has been forked 
+     * </pre>
+     */
+    int getForks();
+
+    // optional int32 stars = 24;
+    /**
+     * <code>optional int32 stars = 24;</code>
+     *
+     * <pre>
+     ** The number of times this repository has been starred 
+     * </pre>
+     */
+    boolean hasStars();
+    /**
+     * <code>optional int32 stars = 24;</code>
+     *
+     * <pre>
+     ** The number of times this repository has been starred 
+     * </pre>
+     */
+    int getStars();
   }
   /**
    * Protobuf type {@code boa.types.Project}
@@ -907,6 +961,21 @@ public final class Toplevel {
                 bitField0_ |= 0x00000080;
                 kind_ = value;
               }
+              break;
+            }
+            case 176: {
+              bitField0_ |= 0x00000100;
+              forked_ = input.readBool();
+              break;
+            }
+            case 184: {
+              bitField0_ |= 0x00000200;
+              forks_ = input.readInt32();
+              break;
+            }
+            case 192: {
+              bitField0_ |= 0x00000400;
+              stars_ = input.readInt32();
               break;
             }
           }
@@ -2160,6 +2229,78 @@ public final class Toplevel {
       return kind_;
     }
 
+    // optional bool forked = 22;
+    public static final int FORKED_FIELD_NUMBER = 22;
+    private boolean forked_;
+    /**
+     * <code>optional bool forked = 22;</code>
+     *
+     * <pre>
+     ** Specify if this repository is forked from some other repo 
+     * </pre>
+     */
+    public boolean hasForked() {
+      return ((bitField0_ & 0x00000100) == 0x00000100);
+    }
+    /**
+     * <code>optional bool forked = 22;</code>
+     *
+     * <pre>
+     ** Specify if this repository is forked from some other repo 
+     * </pre>
+     */
+    public boolean getForked() {
+      return forked_;
+    }
+
+    // optional int32 forks = 23;
+    public static final int FORKS_FIELD_NUMBER = 23;
+    private int forks_;
+    /**
+     * <code>optional int32 forks = 23;</code>
+     *
+     * <pre>
+     ** The number of times this repository has been forked 
+     * </pre>
+     */
+    public boolean hasForks() {
+      return ((bitField0_ & 0x00000200) == 0x00000200);
+    }
+    /**
+     * <code>optional int32 forks = 23;</code>
+     *
+     * <pre>
+     ** The number of times this repository has been forked 
+     * </pre>
+     */
+    public int getForks() {
+      return forks_;
+    }
+
+    // optional int32 stars = 24;
+    public static final int STARS_FIELD_NUMBER = 24;
+    private int stars_;
+    /**
+     * <code>optional int32 stars = 24;</code>
+     *
+     * <pre>
+     ** The number of times this repository has been starred 
+     * </pre>
+     */
+    public boolean hasStars() {
+      return ((bitField0_ & 0x00000400) == 0x00000400);
+    }
+    /**
+     * <code>optional int32 stars = 24;</code>
+     *
+     * <pre>
+     ** The number of times this repository has been starred 
+     * </pre>
+     */
+    public int getStars() {
+      return stars_;
+    }
+
     private void initFields() {
       id_ = "";
       name_ = "";
@@ -2182,6 +2323,9 @@ public final class Toplevel {
       codeRepositories_ = java.util.Collections.emptyList();
       issueRepositories_ = java.util.Collections.emptyList();
       kind_ = boa.types.Toplevel.Project.ForgeKind.OTHER;
+      forked_ = false;
+      forks_ = 0;
+      stars_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -2297,6 +2441,15 @@ public final class Toplevel {
       }
       if (((bitField0_ & 0x00000080) == 0x00000080)) {
         output.writeEnum(21, kind_.getNumber());
+      }
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        output.writeBool(22, forked_);
+      }
+      if (((bitField0_ & 0x00000200) == 0x00000200)) {
+        output.writeInt32(23, forks_);
+      }
+      if (((bitField0_ & 0x00000400) == 0x00000400)) {
+        output.writeInt32(24, stars_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -2435,6 +2588,18 @@ public final class Toplevel {
       if (((bitField0_ & 0x00000080) == 0x00000080)) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(21, kind_.getNumber());
+      }
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(22, forked_);
+      }
+      if (((bitField0_ & 0x00000200) == 0x00000200)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(23, forks_);
+      }
+      if (((bitField0_ & 0x00000400) == 0x00000400)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(24, stars_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -2618,6 +2783,12 @@ public final class Toplevel {
         }
         kind_ = boa.types.Toplevel.Project.ForgeKind.OTHER;
         bitField0_ = (bitField0_ & ~0x00100000);
+        forked_ = false;
+        bitField0_ = (bitField0_ & ~0x00200000);
+        forks_ = 0;
+        bitField0_ = (bitField0_ & ~0x00400000);
+        stars_ = 0;
+        bitField0_ = (bitField0_ & ~0x00800000);
         return this;
       }
 
@@ -2768,6 +2939,18 @@ public final class Toplevel {
           to_bitField0_ |= 0x00000080;
         }
         result.kind_ = kind_;
+        if (((from_bitField0_ & 0x00200000) == 0x00200000)) {
+          to_bitField0_ |= 0x00000100;
+        }
+        result.forked_ = forked_;
+        if (((from_bitField0_ & 0x00400000) == 0x00400000)) {
+          to_bitField0_ |= 0x00000200;
+        }
+        result.forks_ = forks_;
+        if (((from_bitField0_ & 0x00800000) == 0x00800000)) {
+          to_bitField0_ |= 0x00000400;
+        }
+        result.stars_ = stars_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -3011,6 +3194,15 @@ public final class Toplevel {
         }
         if (other.hasKind()) {
           setKind(other.getKind());
+        }
+        if (other.hasForked()) {
+          setForked(other.getForked());
+        }
+        if (other.hasForks()) {
+          setForks(other.getForks());
+        }
+        if (other.hasStars()) {
+          setStars(other.getStars());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -6128,6 +6320,153 @@ public final class Toplevel {
         return this;
       }
 
+      // optional bool forked = 22;
+      private boolean forked_ ;
+      /**
+       * <code>optional bool forked = 22;</code>
+       *
+       * <pre>
+       ** Specify if this repository is forked from some other repo 
+       * </pre>
+       */
+      public boolean hasForked() {
+        return ((bitField0_ & 0x00200000) == 0x00200000);
+      }
+      /**
+       * <code>optional bool forked = 22;</code>
+       *
+       * <pre>
+       ** Specify if this repository is forked from some other repo 
+       * </pre>
+       */
+      public boolean getForked() {
+        return forked_;
+      }
+      /**
+       * <code>optional bool forked = 22;</code>
+       *
+       * <pre>
+       ** Specify if this repository is forked from some other repo 
+       * </pre>
+       */
+      public Builder setForked(boolean value) {
+        bitField0_ |= 0x00200000;
+        forked_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional bool forked = 22;</code>
+       *
+       * <pre>
+       ** Specify if this repository is forked from some other repo 
+       * </pre>
+       */
+      public Builder clearForked() {
+        bitField0_ = (bitField0_ & ~0x00200000);
+        forked_ = false;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 forks = 23;
+      private int forks_ ;
+      /**
+       * <code>optional int32 forks = 23;</code>
+       *
+       * <pre>
+       ** The number of times this repository has been forked 
+       * </pre>
+       */
+      public boolean hasForks() {
+        return ((bitField0_ & 0x00400000) == 0x00400000);
+      }
+      /**
+       * <code>optional int32 forks = 23;</code>
+       *
+       * <pre>
+       ** The number of times this repository has been forked 
+       * </pre>
+       */
+      public int getForks() {
+        return forks_;
+      }
+      /**
+       * <code>optional int32 forks = 23;</code>
+       *
+       * <pre>
+       ** The number of times this repository has been forked 
+       * </pre>
+       */
+      public Builder setForks(int value) {
+        bitField0_ |= 0x00400000;
+        forks_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 forks = 23;</code>
+       *
+       * <pre>
+       ** The number of times this repository has been forked 
+       * </pre>
+       */
+      public Builder clearForks() {
+        bitField0_ = (bitField0_ & ~0x00400000);
+        forks_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 stars = 24;
+      private int stars_ ;
+      /**
+       * <code>optional int32 stars = 24;</code>
+       *
+       * <pre>
+       ** The number of times this repository has been starred 
+       * </pre>
+       */
+      public boolean hasStars() {
+        return ((bitField0_ & 0x00800000) == 0x00800000);
+      }
+      /**
+       * <code>optional int32 stars = 24;</code>
+       *
+       * <pre>
+       ** The number of times this repository has been starred 
+       * </pre>
+       */
+      public int getStars() {
+        return stars_;
+      }
+      /**
+       * <code>optional int32 stars = 24;</code>
+       *
+       * <pre>
+       ** The number of times this repository has been starred 
+       * </pre>
+       */
+      public Builder setStars(int value) {
+        bitField0_ |= 0x00800000;
+        stars_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 stars = 24;</code>
+       *
+       * <pre>
+       ** The number of times this repository has been starred 
+       * </pre>
+       */
+      public Builder clearStars() {
+        bitField0_ = (bitField0_ & ~0x00800000);
+        stars_ = 0;
+        onChanged();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:boa.types.Project)
     }
 
@@ -6154,7 +6493,7 @@ public final class Toplevel {
   static {
     java.lang.String[] descriptorData = {
       "\n\016toplevel.proto\022\tboa.types\032\014shared.prot" +
-      "o\032\ncode.proto\032\014issues.proto\"\224\005\n\007Project\022" +
+      "o\032\ncode.proto\032\014issues.proto\"\302\005\n\007Project\022" +
       "\n\n\002id\030\001 \002(\t\022\014\n\004name\030\002 \002(\t\022\023\n\013project_url" +
       "\030\003 \002(\t\022\024\n\014homepage_url\030\004 \001(\t\022\024\n\014created_" +
       "date\030\005 \001(\004\022\023\n\013description\030\006 \001(\t\022\031\n\021opera" +
@@ -6168,10 +6507,11 @@ public final class Toplevel {
       "\021code_repositories\030\023 \003(\0132\031.boa.types.Cod" +
       "eRepository\0226\n\022issue_repositories\030\024 \003(\0132" +
       "\032.boa.types.IssueRepository\022*\n\004kind\030\025 \002(" +
-      "\0162\034.boa.types.Project.ForgeKind\"a\n\tForge" +
-      "Kind\022\t\n\005OTHER\020\000\022\017\n\013SOURCEFORGE\020\001\022\006\n\002SF\020\001" +
-      "\022\n\n\006GITHUB\020\002\022\006\n\002GH\020\002\022\n\n\006APACHE\020\003\022\014\n\010QUAL" +
-      "ITAS\020\004\032\002\020\001B\002H\001"
+      "\0162\034.boa.types.Project.ForgeKind\022\016\n\006forke" +
+      "d\030\026 \001(\010\022\r\n\005forks\030\027 \001(\005\022\r\n\005stars\030\030 \001(\005\"a\n" +
+      "\tForgeKind\022\t\n\005OTHER\020\000\022\017\n\013SOURCEFORGE\020\001\022\006" +
+      "\n\002SF\020\001\022\n\n\006GITHUB\020\002\022\006\n\002GH\020\002\022\n\n\006APACHE\020\003\022\014" +
+      "\n\010QUALITAS\020\004\032\002\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -6183,7 +6523,7 @@ public final class Toplevel {
           internal_static_boa_types_Project_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Project_descriptor,
-              new java.lang.String[] { "Id", "Name", "ProjectUrl", "HomepageUrl", "CreatedDate", "Description", "OperatingSystems", "ProgrammingLanguages", "Databases", "Licenses", "Interfaces", "Audiences", "Topics", "Status", "Translations", "Donations", "Maintainers", "Developers", "CodeRepositories", "IssueRepositories", "Kind", });
+              new java.lang.String[] { "Id", "Name", "ProjectUrl", "HomepageUrl", "CreatedDate", "Description", "OperatingSystems", "ProgrammingLanguages", "Databases", "Licenses", "Interfaces", "Audiences", "Topics", "Status", "Translations", "Donations", "Maintainers", "Developers", "CodeRepositories", "IssueRepositories", "Kind", "Forked", "Forks", "Stars", });
           return null;
         }
       };

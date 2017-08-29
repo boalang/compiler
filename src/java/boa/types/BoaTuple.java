@@ -17,6 +17,7 @@
  */
 package boa.types;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +33,11 @@ public class BoaTuple extends BoaType {
 	protected final List<BoaType> members;
 	protected final Map<String, Integer> names;
 
+	public BoaTuple() {
+		members = new ArrayList<BoaType>();
+		names = new HashMap<String, Integer>();
+	}
+
 	public BoaTuple(final List<BoaType> members) {
 		this.members = members;
 		this.names = new HashMap<String, Integer>();
@@ -39,10 +45,11 @@ public class BoaTuple extends BoaType {
 			BoaType t = this.members.get(i);
 			if (t instanceof BoaName)
 				this.names.put(((BoaName) t).getId(), i);
+			this.names.put("f" + i, i);
 		}
 	}
 
-	public BoaTuple(final List<BoaType> members, final Map<String, Integer> names) {
+	protected BoaTuple(final List<BoaType> members, final Map<String, Integer> names) {
 		this.members = members;
 		this.names = names;
 	}
@@ -50,8 +57,13 @@ public class BoaTuple extends BoaType {
 	/** {@inheritDoc} */
 	@Override
 	public boolean assigns(final BoaType that) {
+		// if that is a function, check the return type
 		if (that instanceof BoaFunction)
 			return this.assigns(((BoaFunction) that).getType());
+
+		// if that is a component, check the type
+		if (that instanceof BoaName)
+			return this.assigns(((BoaName) that).getType());
 
 		if (that instanceof BoaArray) {
 			BoaType type = ((BoaArray) that).getType();
@@ -118,6 +130,13 @@ public class BoaTuple extends BoaType {
 
 	public int getMemberIndex(final String member) {
 		return this.names.get(member);
+	}
+
+	public String getMemberName(final String member) {
+		final BoaType t = this.members.get(this.names.get(member));
+		if (t instanceof BoaName)
+			return ((BoaName)t).getId();
+		return member;
 	}
 
 	public List<BoaType> getTypes() {

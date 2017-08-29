@@ -66,6 +66,15 @@ message ChangedFile {
 		CS4 = 204;
 		/** @exclude */
 		CS5 = 205;
+		
+		/** The file represents a JavaScript source file that had a parse error */
+		SOURCE_JS_ERROR = 300;
+		/** The file represents a JavaScript source file that parsed without error as ES3 */
+		SOURCE_JS_ES3 = 301;
+		/** The file represents a JavaScript source file that parsed without error as ES4 */
+		SOURCE_JS_ES4 = 302;
+		/** @exclude */
+		JS_ERROR = 300;
 	}
 	/** The kind of change for this file */
 	required ChangeKind change = 1;
@@ -79,10 +88,10 @@ message ChangedFile {
 	optional ASTRoot ast = 5;
 	/** @exclude */
 	optional CommentsRoot comments = 6;
-	/** @exclude TODO */
+	/** @exclude The kinds of changes of this this compared to the corresponding parent commits */
 	repeated ChangeKind changes = 7;
-	/** @exclude TODO */
+	/** @exclude The indices of the corresponding parent commits in the list of all commits */
 	repeated int32 previous_versions = 8;
-	/** @exclude TODO */
+	/** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits */
 	repeated int32 previous_index = 9;
 }

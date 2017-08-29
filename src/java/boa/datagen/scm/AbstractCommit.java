@@ -42,7 +42,6 @@ import boa.datagen.util.JavaScriptVisitor;
 import boa.datagen.util.Java7Visitor;
 import boa.datagen.util.Java8Visitor;
 import boa.datagen.util.JavaErrorCheckVisitor;
-import boa.datagen.util.Properties;
 
 /**
  * @author rdyer
@@ -58,11 +57,23 @@ public abstract class AbstractCommit {
 	protected String id = null;
 	public void setId(final String id) { this.id = id; }
 
-	protected String author;
-	public void setAuthor(final String author) { this.author = author; }
+	protected Person author;
+	public void setAuthor(final String username, final String realname, final String email) {
+		final Person.Builder person = Person.newBuilder();
+		person.setUsername(username);
+		person.setRealName(realname);
+		person.setEmail(email);
+		author = person.build();
+	}
 
-	protected String committer;
-	public void setCommitter(final String committer) { this.committer = committer; }
+	protected Person committer;
+	public void setCommitter(final String username, final String realname, final String email) {
+		final Person.Builder person = Person.newBuilder();
+		person.setUsername(username);
+		person.setRealName(realname);
+		person.setEmail(email);
+		committer = person.build();
+	}
 
 	protected String message;
 	public void setMessage(final String message) { this.message = message; }
@@ -88,20 +99,20 @@ public abstract class AbstractCommit {
 	protected int[] getParentIndices() { 
 		return parentIndices;
 	}
-
+	
 	protected static final ByteArrayOutputStream buffer = new ByteArrayOutputStream(4096);
 
 	protected abstract String getFileContents(final String path);
-
-	protected abstract Person parsePerson(final String s);
 
 	public Revision asProtobuf(final boolean parse, final Writer astWriter, final String revKey, final String keyDelim) {
 		final Revision.Builder revision = Revision.newBuilder();
 		revision.setId(id);
 
-		final Person author = parsePerson(this.author);
-		final Person committer = parsePerson(this.committer);
-		revision.setAuthor(author == null ? committer : author);
+		if (this.author != null) {
+			final Person author = Person.newBuilder(this.author).build();
+			revision.setAuthor(author);
+		}
+		final Person committer = Person.newBuilder(this.committer).build();
 		revision.setCommitter(committer);
 
 		long time = -1;
@@ -151,7 +162,7 @@ public abstract class AbstractCommit {
 			fb.setKind(FileKind.BINARY);
 		else if (lowerPath.endsWith(".java") && parse) {
 			final String content = getFileContents(path);
-
+			
 			fb.setKind(FileKind.SOURCE_JAVA_JLS2);
 			if (!parseJavaFile(path, fb, content, JavaCore.VERSION_1_4, AST.JLS2, false, astWriter, revKey + keyDelim + path)) {
 				if (debug)
@@ -190,6 +201,31 @@ public abstract class AbstractCommit {
 			} else
 				if (debug)
 					System.err.println("Accepted JLS2: revision " + id + ": file " + path);
+		}else if(lowerPath.endsWith(".js") && parse){
+			final String content = getFileContents(path);
+
+			fb.setKind(FileKind.SOURCE_JS_ES3);
+			if (!parseJavaScriptFile(path, fb, content, JavaScriptCore.VERSION_1_3, org.eclipse.wst.jsdt.core.dom.AST.JLS2, false, astWriter, revKey + keyDelim + path)) {
+				if (debug)
+					System.err.println("Found ES3 parse error in: revision " + id + ": file " + path);
+
+				fb.setKind(FileKind.SOURCE_JS_ES4);
+				if (!parseJavaScriptFile(path, fb, content, JavaScriptCore.VERSION_1_4, org.eclipse.wst.jsdt.core.dom.AST.JLS3, false, astWriter, revKey + keyDelim + path)) {
+					if (debug)
+						System.err.println("Found ES4 parse error in: revision " + id + ": file " + path);
+
+							fb.setKind(FileKind.SOURCE_JS_ERROR);
+							try {
+								astWriter.append(new Text(revKey + keyDelim + fb.getName()), new BytesWritable(ASTRoot.newBuilder().build().toByteArray()));
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+				} else
+					if (debug)
+						System.err.println("Accepted ES4: revision " + id + ": file " + path);
+			} else
+				if (debug)
+					System.err.println("Accepted ES3: revision " + id + ": file " + path);
 		}
 		fb.setKey(revKey);
 
@@ -204,12 +240,12 @@ public abstract class AbstractCommit {
 			//System.out.println("parsing=" + (++count) + "\t" + path);
 			final org.eclipse.wst.jsdt.core.dom.ASTParser parser = org.eclipse.wst.jsdt.core.dom.ASTParser
 					.newParser(astLevel);
-			parser.setKind(ASTParser.K_COMPILATION_UNIT);
+			parser.setKind(org.eclipse.wst.jsdt.core.dom.ASTParser.K_COMPILATION_UNIT);
 			parser.setResolveBindings(true);
 			parser.setSource(content.toCharArray());
 
-			final Map options = JavaCore.getOptions();
-			JavaCore.setComplianceOptions(compliance, options);
+			final Map options = JavaScriptCore.getOptions();
+			JavaScriptCore.setComplianceOptions(compliance, options);
 			parser.setCompilerOptions(options);
 
 			JavaScriptUnit cu;
@@ -268,9 +304,11 @@ public abstract class AbstractCommit {
 		final Revision.Builder revision = Revision.newBuilder();
 		revision.setId(id);
 
-		final Person author = parsePerson(this.author);
-		final Person committer = parsePerson(this.committer);
-		revision.setAuthor(author == null ? committer : author);
+		if (this.author != null) {
+			final Person author = Person.newBuilder(this.author).build();
+			revision.setAuthor(author);
+		}
+		final Person committer = Person.newBuilder(this.committer).build();
 		revision.setCommitter(committer);
 
 		long time = -1;

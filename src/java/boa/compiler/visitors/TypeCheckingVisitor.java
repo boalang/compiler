@@ -356,23 +356,22 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	public void visit(final Composite n, final SymbolTable env) {
 		n.env = env;
 
-		if (n.getPairsSize() > 0)
+		if (n.getPairsSize() > 0) {
 			n.type = checkPairs(n.getPairs(), env);
-		else if (n.getExprsSize() > 0) {
-			List<BoaType> types = check(n.getExprs(), env);
+		} else if (n.getExprsSize() > 0) {
+			final List<BoaType> types = check(n.getExprs(), env);
 
-			if(!(checkTupleArray(types) == true)) {
+			if (!(checkTupleArray(types) == true)) {
 				final BoaType t = types.get(0);
-				if (!(t instanceof BoaScalar))
-					if (!(t instanceof BoaTuple))
-						throw new TypeCheckException(n.getExprs(), "non-scalar/non-tuple type '" + t + "' can not be used in arrays");
+				if (!(t instanceof BoaScalar) && !(t instanceof BoaTuple))
+					throw new TypeCheckException(n.getExprs(), "non-scalar/non-tuple type '" + t + "' can not be used in arrays");
 				n.type = new BoaArray(t);
-			}
-			else
+			} else {
 				n.type = new BoaTuple(types);
-		}
-		else
+			}
+		} else {
 			n.type = new BoaMap(new BoaAny(), new BoaAny());
+		}
 	}
 
 	/** {@inheritDoc} */
@@ -1304,8 +1303,16 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final ArrayType n, final SymbolTable env) {
-		n.env = env;
-		n.getValue().accept(this, env);
+		SymbolTable st;
+
+		try {
+			st = env.cloneNonLocals();
+		} catch (final IOException e) {
+			throw new RuntimeException(e.getClass().getSimpleName() + " caught", e);
+		}
+
+		n.env = st;
+		n.getValue().accept(this, st);
 		final BoaType t = n.getValue().type;
 		if (!(t instanceof BoaScalar))
 			if (!(t instanceof BoaTuple))
@@ -1341,23 +1348,39 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final MapType n, final SymbolTable env) {
-		n.env = env;
-		n.getValue().accept(this, env);
-		n.getIndex().accept(this, env);
+		SymbolTable st;
+
+		try {
+			st = env.cloneNonLocals();
+		} catch (final IOException e) {
+			throw new RuntimeException(e.getClass().getSimpleName() + " caught", e);
+		}
+
+		n.env = st;
+		n.getValue().accept(this, st);
+		n.getIndex().accept(this, st);
 		n.type = new BoaMap(n.getValue().type, n.getIndex().type);
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final OutputType n, final SymbolTable env) {
-		n.env = env;
+		SymbolTable st;
+
+		try {
+			st = env.cloneNonLocals();
+		} catch (final IOException e) {
+			throw new RuntimeException(e.getClass().getSimpleName() + " caught", e);
+		}
+
+		n.env = st;
 
 		List<BoaScalar> indexTypes = null;
 		if (n.getIndicesSize() > 0) {
 			indexTypes = new ArrayList<BoaScalar>();
 
 			for (final Component c : n.getIndices()) {
-				c.accept(this, env);
+				c.accept(this, st);
 
 				if (!(c.type instanceof BoaScalar))
 					throw new TypeCheckException(c, "incorrect type '" + c.type + "' for index");
@@ -1366,12 +1389,12 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			}
 		}
 
-		n.getType().accept(this, env);
+		n.getType().accept(this, st);
 		final BoaType type = n.getType().type;
 
 		final AggregatorSpec annotation;
 		try {
-			annotation = env.getAggregators(n.getId().getToken(), type).get(0).getAnnotation(AggregatorSpec.class);
+			annotation = st.getAggregators(n.getId().getToken(), type).get(0).getAnnotation(AggregatorSpec.class);
 		} catch (final RuntimeException e) {
 			throw new TypeCheckException(n, e.getMessage(), e);
 		}
@@ -1382,7 +1405,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 				throw new TypeCheckException(n.getWeight(), "output aggregator '" + n.getId().getToken() + "' does not expect a weight");
 
 			final BoaType aweight = SymbolTable.getType(annotation.weightType());
-			n.getWeight().accept(this, env);
+			n.getWeight().accept(this, st);
 			tweight = (BoaScalar) n.getWeight().type;
 
 			if (!aweight.assigns(tweight))
@@ -1394,6 +1417,8 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			throw new TypeCheckException(n.getArgs(), "output aggregator '" + n.getId().getToken() + "' takes no arguments");
 
 		n.type = new BoaTable(type, indexTypes, tweight, annotation.canOmitWeight());
+
+		n.env = env;
 		env.set(n.getId().getToken(), n.type);
 		n.getId().accept(this, env);
 	}
@@ -1401,16 +1426,32 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final StackType n, final SymbolTable env) {
-		n.env = env;
-		n.getValue().accept(this, env);
+		SymbolTable st;
+
+		try {
+			st = env.cloneNonLocals();
+		} catch (final IOException e) {
+			throw new RuntimeException(e.getClass().getSimpleName() + " caught", e);
+		}
+
+		n.env = st;
+		n.getValue().accept(this, st);
 		n.type = new BoaStack(n.getValue().type);
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final SetType n, final SymbolTable env) {
-		n.env = env;
-		n.getValue().accept(this, env);
+		SymbolTable st;
+
+		try {
+			st = env.cloneNonLocals();
+		} catch (final IOException e) {
+			throw new RuntimeException(e.getClass().getSimpleName() + " caught", e);
+		}
+
+		n.env = st;
+		n.getValue().accept(this, st);
 		n.type = new BoaSet(n.getValue().type);
 	}
 

@@ -360,7 +360,7 @@
 				</patternset>
 			</fileset>
 			<zipfileset excludes="META-INF/" src="rtlib/antlr-runtime-${antlr.version}.jar" />
-			<zipfileset excludes="META-INF/" src="rtlib/commons-cli-1.3.1.jar" />
+			<zipfileset excludes="META-INF/" src="rtlib/commons-cli-1.2.jar" />
 			<zipfileset excludes="META-INF/" src="rtlib/log4j-1.2.15.jar" />
 			<zipfileset excludes="META-INF/" src="rtlib/protobuf-java-2.5.0.jar" />
 			<zipfileset excludes="META-INF/" src="rtlib/scannotation-1.0.3.jar" />
