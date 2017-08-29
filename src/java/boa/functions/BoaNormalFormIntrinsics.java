@@ -190,7 +190,7 @@ public class BoaNormalFormIntrinsics {
 					return -((Long)o).longValue();
 				}
 
-				// bring children up if the child node is an add
+				// bring children up if the child node is a sub
 				for (int i = 0; i < results.size(); i++)
 					if (results.get(i) instanceof Expression && ((Expression)results.get(i)).getKind() == ExpressionKind.OP_SUB) {
 						final Expression subExp = (Expression)results.get(i);
@@ -460,45 +460,45 @@ public class BoaNormalFormIntrinsics {
 				return results.get(0);
 
 			// these have sub-expressions we must reduce
-			case VARACCESS:
-			case OP_INC:
-			case OP_DEC:
-			case LOGICAL_NOT:
-			case LOGICAL_AND:
-			case LOGICAL_OR:
-			case OP_MOD:
+			case ASSIGN:
+			case ASSIGN_ADD:
+			case ASSIGN_BITAND:
+			case ASSIGN_BITOR:
+			case ASSIGN_BITXOR:
+			case ASSIGN_DIV:
+			case ASSIGN_LSHIFT:
+			case ASSIGN_MOD:
+			case ASSIGN_MULT:
+			case ASSIGN_RSHIFT:
+			case ASSIGN_SUB:
+			case ASSIGN_UNSIGNEDRSHIFT:
+			case ARRAYINDEX:
+			case ARRAYINIT:
+			case BIT_AND:
 			case BIT_LSHIFT:
+			case BIT_NOT:
+			case BIT_OR:
 			case BIT_RSHIFT:
 			case BIT_UNSIGNEDRSHIFT:
-			case BIT_AND:
-			case BIT_OR:
-			case BIT_NOT:
 			case BIT_XOR:
 			case CAST:
-/*
-VARDECL
-ARRAYINDEX
-ARRAYINIT
-TYPECOMPARE
-NEW
-NEWARRAY
-CONDITIONAL
-NULLCOALESCE
-ASSIGN
-ASSIGN_ADD
-ASSIGN_SUB
-ASSIGN_MULT
-ASSIGN_DIV
-ASSIGN_MOD
-ASSIGN_BITXOR
-ASSIGN_BITAND
-ASSIGN_BITOR
-ASSIGN_LSHIFT
-ASSIGN_RSHIFT
-ASSIGN_UNSIGNEDRSHIFT
-ANNOTATION
-METHOD_REFERENCE
-LAMBDA
+			case CONDITIONAL:
+			case LOGICAL_AND:
+			case LOGICAL_NOT:
+			case LOGICAL_OR:
+			case NULLCOALESCE:
+			case OP_DEC:
+			case OP_INC:
+			case OP_MOD:
+			case VARACCESS:
+/* TODO handle these expression kinds
+			case ANNOTATION:
+			case LAMBDA:
+			case METHOD_REFERENCE:
+			case NEW:
+			case NEWARRAY:
+			case TYPECOMPARE:
+			case VARDECL:
 */
 			default:
 				if (results.size() == 0)
@@ -512,12 +512,16 @@ LAMBDA
 					b.addExpressions((Expression)o);
 
 				return b.build();
-
-			// for these we do nothing
-				//return e;
 		}
 	}
 
+	/**
+	 * Converts a list of values into an Expression array.
+	 * The values may contain Numbers, which are converted into Expression.
+	 *
+	 * @param arr the list of values to convert
+	 * @return an array of Expression
+	 */
 	private static Expression[] convertArray(final List<Object> arr) {
 		for (int i = 0; i < arr.size(); i++)
 			if (arr.get(i) instanceof Number)
@@ -525,6 +529,15 @@ LAMBDA
 		return arr.toArray(new Expression[arr.size()]);
 	}
 
+	/**
+	 * Divides a number.
+	 * This method is used in place of actual division, only when both parts are doubles.
+	 * If the resulting division results in an integer value, it returns a long.
+	 *
+	 * @param num the numerator
+	 * @param denom the denominator
+	 * @return the result of dividing num by denom
+	 */
 	private static Object div(final double num, final double denom) {
 		final double result = num / denom;
 		if (result == (long)result)
@@ -532,6 +545,12 @@ LAMBDA
 		return result;
 	}
 
+	/**
+	 * Determines if an object is already negative.
+	 *
+	 * @param o the object to test
+	 * @return true if the object is a negative value
+	 */
 	private static boolean isNegative(final Object o) {
 		if (o instanceof Double)
 			return ((Double)o).doubleValue() < 0.0;
@@ -550,6 +569,12 @@ LAMBDA
 		return false;
 	}
 
+	/**
+	 * Negates an Expression/Number.
+	 *
+	 * @param o an object to negate (either an Expression or a Number)
+	 * @return an Expression or a Number representing the negated form of o
+	 */
 	private static Object negate(final Object o) {
 		if (o instanceof Double)
 			return - ((Double)o).doubleValue();
