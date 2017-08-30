@@ -63,6 +63,8 @@ public class DefaultProperties {
 	public static String GH_GIT_PATH = "";
 	public static String GH_ISSUE_PATH = "";
 	public static final String GH_TICKETS_PATH = "tickets";
+	
+	public static String CLASSPATH_ROOT = "/libs";
 
 	public static String localDataPath = null;
 	public static String localIssuePath = null;

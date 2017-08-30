@@ -157,7 +157,10 @@ public class BoaGenerator {
 		}
 		if (cl.hasOption("debug")) {
 			DefaultProperties.DEBUG = true;
-		} 
+		}
+		if (cl.hasOption("libs")) {
+			DefaultProperties.CLASSPATH_ROOT = cl.getOptionValue("libs");
+		}
 	}
 
 	//
