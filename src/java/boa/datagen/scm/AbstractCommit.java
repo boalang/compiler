@@ -61,6 +61,7 @@ import boa.datagen.util.JavaErrorCheckVisitor;
 public abstract class AbstractCommit {
 	protected static final boolean debug = Properties.getBoolean("debug", DefaultProperties.DEBUG);
 	protected static final boolean debugparse = Properties.getBoolean("debugparse", DefaultProperties.DEBUGPARSE);
+	protected static final boolean STORE_ASCII_PRINTABLE_CONTENTS = Properties.getBoolean("ascii", DefaultProperties.STORE_ASCII_PRINTABLE_CONTENTS);
 
 	protected AbstractConnector connector;
 
@@ -346,7 +347,7 @@ public abstract class AbstractCommit {
 				System.err.println("Accepted PHP5: revision " + id + ": file " + path);
 		} else {
 			final String content = getFileContents(path);
-			if (StringUtils.isAsciiPrintable(content)) {
+			if (STORE_ASCII_PRINTABLE_CONTENTS && StringUtils.isAsciiPrintable(content)) {
 				try {
 					fb.setKey(contentWriter.getLength());
 					contentWriter.append(new LongWritable(contentWriter.getLength()), new BytesWritable(content.getBytes()));

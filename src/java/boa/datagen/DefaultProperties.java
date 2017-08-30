@@ -67,6 +67,8 @@ public class DefaultProperties {
 	public static final String GH_TICKETS_PATH = "tickets";
 	
 	public static String CLASSPATH_ROOT = getClasspathRoot();
+	
+	public static boolean STORE_ASCII_PRINTABLE_CONTENTS = true;
 
 	public static String localDataPath = null;
 	public static String localIssuePath = null;
