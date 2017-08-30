@@ -17,7 +17,10 @@
 
 package boa.datagen.scm;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
 import org.eclipse.jgit.diff.DiffEntry;
@@ -34,6 +37,7 @@ import org.eclipse.jgit.treewalk.CanonicalTreeParser;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.util.io.NullOutputStream;
 
+import boa.datagen.util.FileIO;
 import boa.types.Diff.ChangedFile;
 import boa.types.Diff.ChangedFile.FileKind;
 import boa.types.Shared.ChangeKind;
@@ -68,6 +72,29 @@ public class GitCommit extends AbstractCommit {
 				System.err.println("Git Error getting contents for '" + path + "' at revision " + id + ": " + e.getMessage());
 		}
 		return buffer.toString();
+	}
+
+	@Override
+	public String writeFile(final String classpathRoot, String path) {
+		String name = FileIO.getFileName(path);
+		File file = new File(classpathRoot, name);
+		if (!file.exists()) {
+			ObjectId fileid = filePathGitObjectIds.get(path);
+			try {
+				buffer.reset();
+				buffer.write(repository.open(fileid, Constants.OBJ_BLOB).getCachedBytes());
+				OutputStream fos = new FileOutputStream(file);
+				buffer.writeTo(fos);
+				buffer.flush();
+				fos.flush();
+				fos.close();
+			} catch (final IOException e) {
+				if (debug)
+					System.err.println("Git Error write contents of '" + path + "' at revision " + id + ": " + e.getMessage());
+				return null;
+			}
+		}
+		return file.getAbsolutePath();
 	}
 
 	void getChangeFiles(RevCommit rc) {

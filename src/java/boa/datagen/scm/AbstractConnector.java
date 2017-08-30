@@ -53,7 +53,7 @@ import boa.types.Shared.ChangeKind;
  */
 public abstract class AbstractConnector implements AutoCloseable {
 	protected static final boolean debug = boa.datagen.util.Properties.getBoolean("debug", boa.datagen.DefaultProperties.DEBUG);
-
+	protected static final String classpathRoot = boa.datagen.util.Properties.getProperty("libs", boa.datagen.DefaultProperties.CLASSPATH_ROOT);
 
 	protected String path;
 	protected List<AbstractCommit> revisions = null;
@@ -179,12 +179,16 @@ public abstract class AbstractConnector implements AutoCloseable {
 	}
 
 	private String[] buildClassPaths(int commitOffset, Map<String, String> fileContents, List<ChangedFile> snapshot, Map<String, AbstractCommit> commits) {
+		List<String> paths = new ArrayList<String>();
 		for (ChangedFile cf : snapshot) {
 			if (cf.getName().endsWith(".jar")) {
 				AbstractCommit commit = commits.get(cf.getName());
+				String path = commit.writeFile(classpathRoot, cf.getName());
+				if (path != null)
+					paths.add(path);
 			}
 		}
-		return null;
+		return paths.toArray(new String[0]);
 	}
 
 	private void collectDeclarations(String[] paths, Map<String, CompilationUnit> cus, int startFileIndex, final Map<String, Integer> declarationFile, final Map<String, Integer> declarationNode) {

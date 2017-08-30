@@ -85,4 +85,11 @@ public class FileIO {
 		if (!f.delete())
 			throw new IOException("unable to delete file " + f);
 	}
+
+	public static String getFileName(String path) {
+		int index = path.lastIndexOf('/');
+		if (index == -1)
+			index = path.lastIndexOf('\\');
+		return path.substring(index + 1);
+	}
 }

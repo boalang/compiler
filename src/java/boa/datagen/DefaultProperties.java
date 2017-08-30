@@ -17,6 +17,8 @@
 
 package boa.datagen;
 
+import java.io.File;
+
 /**
  * @author rdyer
  */
@@ -64,9 +66,24 @@ public class DefaultProperties {
 	public static String GH_ISSUE_PATH = "";
 	public static final String GH_TICKETS_PATH = "tickets";
 	
-	public static String CLASSPATH_ROOT = "/libs";
+	public static String CLASSPATH_ROOT = getClasspathRoot();
 
 	public static String localDataPath = null;
 	public static String localIssuePath = null;
 	public static String localCommentPath = null;
+	
+	private static String getRoot() {
+		File dir = new File(System.getProperty("user.dir"));
+		while (dir.getParentFile() != null)
+			dir = dir.getParentFile();
+		return dir.getAbsolutePath();
+	}
+
+	private static String getClasspathRoot() {
+		String path = getRoot() + "/libs";
+		File dir = new File(path);
+		if (!dir.exists())
+			dir.mkdirs();
+		return path;
+	}
 }

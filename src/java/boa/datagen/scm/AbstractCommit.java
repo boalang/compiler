@@ -138,6 +138,8 @@ public abstract class AbstractCommit {
 
 	protected abstract String getFileContents(final String path);
 
+	public abstract String writeFile(final String classpathRoot, final String path);
+
 	public Revision asProtobuf(final boolean parse, final Writer astWriter, final Writer contentWriter) {
 		final Revision.Builder revision = Revision.newBuilder();
 		revision.setId(id);
