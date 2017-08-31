@@ -92,9 +92,9 @@ public final class Diff {
      */
     long getKey();
 
-    // optional .boa.types.ASTRoot ast = 5;
+    // required bool ast = 5;
     /**
-     * <code>optional .boa.types.ASTRoot ast = 5;</code>
+     * <code>required bool ast = 5;</code>
      *
      * <pre>
      ** @exclude 
@@ -102,21 +102,13 @@ public final class Diff {
      */
     boolean hasAst();
     /**
-     * <code>optional .boa.types.ASTRoot ast = 5;</code>
+     * <code>required bool ast = 5;</code>
      *
      * <pre>
      ** @exclude 
      * </pre>
      */
-    boa.types.Ast.ASTRoot getAst();
-    /**
-     * <code>optional .boa.types.ASTRoot ast = 5;</code>
-     *
-     * <pre>
-     ** @exclude 
-     * </pre>
-     */
-    boa.types.Ast.ASTRootOrBuilder getAstOrBuilder();
+    boolean getAst();
 
     // optional .boa.types.CommentsRoot comments = 6;
     /**
@@ -327,17 +319,9 @@ public final class Diff {
               key_ = input.readUInt64();
               break;
             }
-            case 42: {
-              boa.types.Ast.ASTRoot.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000010) == 0x00000010)) {
-                subBuilder = ast_.toBuilder();
-              }
-              ast_ = input.readMessage(boa.types.Ast.ASTRoot.PARSER, extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(ast_);
-                ast_ = subBuilder.buildPartial();
-              }
+            case 40: {
               bitField0_ |= 0x00000010;
+              ast_ = input.readBool();
               break;
             }
             case 50: {
@@ -1414,11 +1398,11 @@ public final class Diff {
       return key_;
     }
 
-    // optional .boa.types.ASTRoot ast = 5;
+    // required bool ast = 5;
     public static final int AST_FIELD_NUMBER = 5;
-    private boa.types.Ast.ASTRoot ast_;
+    private boolean ast_;
     /**
-     * <code>optional .boa.types.ASTRoot ast = 5;</code>
+     * <code>required bool ast = 5;</code>
      *
      * <pre>
      ** @exclude 
@@ -1428,23 +1412,13 @@ public final class Diff {
       return ((bitField0_ & 0x00000010) == 0x00000010);
     }
     /**
-     * <code>optional .boa.types.ASTRoot ast = 5;</code>
+     * <code>required bool ast = 5;</code>
      *
      * <pre>
      ** @exclude 
      * </pre>
      */
-    public boa.types.Ast.ASTRoot getAst() {
-      return ast_;
-    }
-    /**
-     * <code>optional .boa.types.ASTRoot ast = 5;</code>
-     *
-     * <pre>
-     ** @exclude 
-     * </pre>
-     */
-    public boa.types.Ast.ASTRootOrBuilder getAstOrBuilder() {
+    public boolean getAst() {
       return ast_;
     }
 
@@ -1615,7 +1589,7 @@ public final class Diff {
       kind_ = boa.types.Diff.ChangedFile.FileKind.OTHER;
       name_ = "";
       key_ = 0L;
-      ast_ = boa.types.Ast.ASTRoot.getDefaultInstance();
+      ast_ = false;
       comments_ = boa.types.Ast.CommentsRoot.getDefaultInstance();
       changes_ = java.util.Collections.emptyList();
       previousVersions_ = java.util.Collections.emptyList();
@@ -1643,11 +1617,9 @@ public final class Diff {
         memoizedIsInitialized = 0;
         return false;
       }
-      if (hasAst()) {
-        if (!getAst().isInitialized()) {
-          memoizedIsInitialized = 0;
-          return false;
-        }
+      if (!hasAst()) {
+        memoizedIsInitialized = 0;
+        return false;
       }
       if (hasComments()) {
         if (!getComments().isInitialized()) {
@@ -1675,7 +1647,7 @@ public final class Diff {
         output.writeUInt64(4, key_);
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeMessage(5, ast_);
+        output.writeBool(5, ast_);
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         output.writeMessage(6, comments_);
@@ -1719,7 +1691,7 @@ public final class Diff {
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(5, ast_);
+          .computeBoolSize(5, ast_);
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         size += com.google.protobuf.CodedOutputStream
@@ -1868,7 +1840,6 @@ public final class Diff {
       }
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-          getAstFieldBuilder();
           getCommentsFieldBuilder();
         }
       }
@@ -1886,11 +1857,7 @@ public final class Diff {
         bitField0_ = (bitField0_ & ~0x00000004);
         key_ = 0L;
         bitField0_ = (bitField0_ & ~0x00000008);
-        if (astBuilder_ == null) {
-          ast_ = boa.types.Ast.ASTRoot.getDefaultInstance();
-        } else {
-          astBuilder_.clear();
-        }
+        ast_ = false;
         bitField0_ = (bitField0_ & ~0x00000010);
         if (commentsBuilder_ == null) {
           comments_ = boa.types.Ast.CommentsRoot.getDefaultInstance();
@@ -1953,11 +1920,7 @@ public final class Diff {
         if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
           to_bitField0_ |= 0x00000010;
         }
-        if (astBuilder_ == null) {
-          result.ast_ = ast_;
-        } else {
-          result.ast_ = astBuilder_.build();
-        }
+        result.ast_ = ast_;
         if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
           to_bitField0_ |= 0x00000020;
         }
@@ -2016,7 +1979,7 @@ public final class Diff {
           setKey(other.getKey());
         }
         if (other.hasAst()) {
-          mergeAst(other.getAst());
+          setAst(other.getAst());
         }
         if (other.hasComments()) {
           mergeComments(other.getComments());
@@ -2075,11 +2038,9 @@ public final class Diff {
           
           return false;
         }
-        if (hasAst()) {
-          if (!getAst().isInitialized()) {
-            
-            return false;
-          }
+        if (!hasAst()) {
+          
+          return false;
         }
         if (hasComments()) {
           if (!getComments().isInitialized()) {
@@ -2360,12 +2321,10 @@ public final class Diff {
         return this;
       }
 
-      // optional .boa.types.ASTRoot ast = 5;
-      private boa.types.Ast.ASTRoot ast_ = boa.types.Ast.ASTRoot.getDefaultInstance();
-      private com.google.protobuf.SingleFieldBuilder<
-          boa.types.Ast.ASTRoot, boa.types.Ast.ASTRoot.Builder, boa.types.Ast.ASTRootOrBuilder> astBuilder_;
+      // required bool ast = 5;
+      private boolean ast_ ;
       /**
-       * <code>optional .boa.types.ASTRoot ast = 5;</code>
+       * <code>required bool ast = 5;</code>
        *
        * <pre>
        ** @exclude 
@@ -2375,142 +2334,40 @@ public final class Diff {
         return ((bitField0_ & 0x00000010) == 0x00000010);
       }
       /**
-       * <code>optional .boa.types.ASTRoot ast = 5;</code>
+       * <code>required bool ast = 5;</code>
        *
        * <pre>
        ** @exclude 
        * </pre>
        */
-      public boa.types.Ast.ASTRoot getAst() {
-        if (astBuilder_ == null) {
-          return ast_;
-        } else {
-          return astBuilder_.getMessage();
-        }
+      public boolean getAst() {
+        return ast_;
       }
       /**
-       * <code>optional .boa.types.ASTRoot ast = 5;</code>
+       * <code>required bool ast = 5;</code>
        *
        * <pre>
        ** @exclude 
        * </pre>
        */
-      public Builder setAst(boa.types.Ast.ASTRoot value) {
-        if (astBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ast_ = value;
-          onChanged();
-        } else {
-          astBuilder_.setMessage(value);
-        }
+      public Builder setAst(boolean value) {
         bitField0_ |= 0x00000010;
+        ast_ = value;
+        onChanged();
         return this;
       }
       /**
-       * <code>optional .boa.types.ASTRoot ast = 5;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
-       */
-      public Builder setAst(
-          boa.types.Ast.ASTRoot.Builder builderForValue) {
-        if (astBuilder_ == null) {
-          ast_ = builderForValue.build();
-          onChanged();
-        } else {
-          astBuilder_.setMessage(builderForValue.build());
-        }
-        bitField0_ |= 0x00000010;
-        return this;
-      }
-      /**
-       * <code>optional .boa.types.ASTRoot ast = 5;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
-       */
-      public Builder mergeAst(boa.types.Ast.ASTRoot value) {
-        if (astBuilder_ == null) {
-          if (((bitField0_ & 0x00000010) == 0x00000010) &&
-              ast_ != boa.types.Ast.ASTRoot.getDefaultInstance()) {
-            ast_ =
-              boa.types.Ast.ASTRoot.newBuilder(ast_).mergeFrom(value).buildPartial();
-          } else {
-            ast_ = value;
-          }
-          onChanged();
-        } else {
-          astBuilder_.mergeFrom(value);
-        }
-        bitField0_ |= 0x00000010;
-        return this;
-      }
-      /**
-       * <code>optional .boa.types.ASTRoot ast = 5;</code>
+       * <code>required bool ast = 5;</code>
        *
        * <pre>
        ** @exclude 
        * </pre>
        */
       public Builder clearAst() {
-        if (astBuilder_ == null) {
-          ast_ = boa.types.Ast.ASTRoot.getDefaultInstance();
-          onChanged();
-        } else {
-          astBuilder_.clear();
-        }
         bitField0_ = (bitField0_ & ~0x00000010);
-        return this;
-      }
-      /**
-       * <code>optional .boa.types.ASTRoot ast = 5;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
-       */
-      public boa.types.Ast.ASTRoot.Builder getAstBuilder() {
-        bitField0_ |= 0x00000010;
+        ast_ = false;
         onChanged();
-        return getAstFieldBuilder().getBuilder();
-      }
-      /**
-       * <code>optional .boa.types.ASTRoot ast = 5;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
-       */
-      public boa.types.Ast.ASTRootOrBuilder getAstOrBuilder() {
-        if (astBuilder_ != null) {
-          return astBuilder_.getMessageOrBuilder();
-        } else {
-          return ast_;
-        }
-      }
-      /**
-       * <code>optional .boa.types.ASTRoot ast = 5;</code>
-       *
-       * <pre>
-       ** @exclude 
-       * </pre>
-       */
-      private com.google.protobuf.SingleFieldBuilder<
-          boa.types.Ast.ASTRoot, boa.types.Ast.ASTRoot.Builder, boa.types.Ast.ASTRootOrBuilder> 
-          getAstFieldBuilder() {
-        if (astBuilder_ == null) {
-          astBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-              boa.types.Ast.ASTRoot, boa.types.Ast.ASTRoot.Builder, boa.types.Ast.ASTRootOrBuilder>(
-                  ast_,
-                  getParentForChildren(),
-                  isClean());
-          ast_ = null;
-        }
-        return astBuilder_;
+        return this;
       }
 
       // optional .boa.types.CommentsRoot comments = 6;
@@ -3029,34 +2886,33 @@ public final class Diff {
   static {
     java.lang.String[] descriptorData = {
       "\n\ndiff.proto\022\tboa.types\032\014shared.proto\032\ta" +
-      "st.proto\"\272\010\n\013ChangedFile\022%\n\006change\030\001 \002(\016" +
+      "st.proto\"\246\010\n\013ChangedFile\022%\n\006change\030\001 \002(\016" +
       "2\025.boa.types.ChangeKind\022-\n\004kind\030\002 \002(\0162\037." +
       "boa.types.ChangedFile.FileKind\022\014\n\004name\030\003" +
-      " \002(\t\022\013\n\003key\030\004 \002(\004\022\037\n\003ast\030\005 \001(\0132\022.boa.typ" +
-      "es.ASTRoot\022)\n\010comments\030\006 \001(\0132\027.boa.types" +
-      ".CommentsRoot\022&\n\007changes\030\007 \003(\0162\025.boa.typ" +
-      "es.ChangeKind\022\031\n\021previous_versions\030\010 \003(\005" +
-      "\022\030\n\020previous_indices\030\t \003(\005\022\022\n\nmapped_key" +
-      "\030\n \001(\004\"\374\005\n\010FileKind\022\t\n\005OTHER\020\000\022\n\n\006BINARY",
-      "\020\001\022\010\n\004TEXT\020\002\022\007\n\003XML\020\003\022\025\n\021SOURCE_JAVA_ERR" +
-      "OR\020d\022\024\n\020SOURCE_JAVA_JLS2\020e\022\024\n\020SOURCE_JAV" +
-      "A_JLS3\020f\022\024\n\020SOURCE_JAVA_JLS4\020g\022\024\n\020SOURCE" +
-      "_JAVA_JLS8\020h\022\016\n\nJAVA_ERROR\020d\022\010\n\004JLS2\020e\022\010" +
-      "\n\004JLS3\020f\022\010\n\004JLS4\020g\022\010\n\004JLS8\020h\022\024\n\017SOURCE_C" +
-      "S_ERROR\020\310\001\022\022\n\rSOURCE_CS_CS1\020\311\001\022\022\n\rSOURCE" +
-      "_CS_CS2\020\312\001\022\022\n\rSOURCE_CS_CS3\020\313\001\022\022\n\rSOURCE" +
-      "_CS_CS4\020\314\001\022\022\n\rSOURCE_CS_CS5\020\315\001\022\r\n\010CS_ERR" +
-      "OR\020\310\001\022\010\n\003CS1\020\311\001\022\010\n\003CS2\020\312\001\022\010\n\003CS3\020\313\001\022\010\n\003C" +
-      "S4\020\314\001\022\010\n\003CS5\020\315\001\022\024\n\017SOURCE_JS_ERROR\020\254\002\022\022\n",
-      "\rSOURCE_JS_ES1\020\255\002\022\022\n\rSOURCE_JS_ES2\020\256\002\022\022\n" +
-      "\rSOURCE_JS_ES3\020\257\002\022\022\n\rSOURCE_JS_ES5\020\260\002\022\022\n" +
-      "\rSOURCE_JS_ES6\020\261\002\022\022\n\rSOURCE_JS_ES7\020\262\002\022\022\n" +
-      "\rSOURCE_JS_ES8\020\263\002\022\r\n\010JS_ERROR\020\254\002\022\025\n\020SOUR" +
-      "CE_PHP_ERROR\020\220\003\022\020\n\013SOURCE_PHP5\020\221\003\022\022\n\rSOU" +
-      "RCE_PHP5_3\020\222\003\022\022\n\rSOURCE_PHP5_4\020\223\003\022\022\n\rSOU" +
-      "RCE_PHP5_5\020\224\003\022\022\n\rSOURCE_PHP5_6\020\225\003\022\022\n\rSOU" +
-      "RCE_PHP7_0\020\226\003\022\022\n\rSOURCE_PHP7_1\020\227\003\022\016\n\tPHP" +
-      "_ERROR\020\220\003\032\002\020\001B\002H\001"
+      " \002(\t\022\013\n\003key\030\004 \002(\004\022\013\n\003ast\030\005 \002(\010\022)\n\010commen" +
+      "ts\030\006 \001(\0132\027.boa.types.CommentsRoot\022&\n\007cha" +
+      "nges\030\007 \003(\0162\025.boa.types.ChangeKind\022\031\n\021pre" +
+      "vious_versions\030\010 \003(\005\022\030\n\020previous_indices" +
+      "\030\t \003(\005\022\022\n\nmapped_key\030\n \001(\004\"\374\005\n\010FileKind\022" +
+      "\t\n\005OTHER\020\000\022\n\n\006BINARY\020\001\022\010\n\004TEXT\020\002\022\007\n\003XML\020",
+      "\003\022\025\n\021SOURCE_JAVA_ERROR\020d\022\024\n\020SOURCE_JAVA_" +
+      "JLS2\020e\022\024\n\020SOURCE_JAVA_JLS3\020f\022\024\n\020SOURCE_J" +
+      "AVA_JLS4\020g\022\024\n\020SOURCE_JAVA_JLS8\020h\022\016\n\nJAVA" +
+      "_ERROR\020d\022\010\n\004JLS2\020e\022\010\n\004JLS3\020f\022\010\n\004JLS4\020g\022\010" +
+      "\n\004JLS8\020h\022\024\n\017SOURCE_CS_ERROR\020\310\001\022\022\n\rSOURCE" +
+      "_CS_CS1\020\311\001\022\022\n\rSOURCE_CS_CS2\020\312\001\022\022\n\rSOURCE" +
+      "_CS_CS3\020\313\001\022\022\n\rSOURCE_CS_CS4\020\314\001\022\022\n\rSOURCE" +
+      "_CS_CS5\020\315\001\022\r\n\010CS_ERROR\020\310\001\022\010\n\003CS1\020\311\001\022\010\n\003C" +
+      "S2\020\312\001\022\010\n\003CS3\020\313\001\022\010\n\003CS4\020\314\001\022\010\n\003CS5\020\315\001\022\024\n\017S" +
+      "OURCE_JS_ERROR\020\254\002\022\022\n\rSOURCE_JS_ES1\020\255\002\022\022\n",
+      "\rSOURCE_JS_ES2\020\256\002\022\022\n\rSOURCE_JS_ES3\020\257\002\022\022\n" +
+      "\rSOURCE_JS_ES5\020\260\002\022\022\n\rSOURCE_JS_ES6\020\261\002\022\022\n" +
+      "\rSOURCE_JS_ES7\020\262\002\022\022\n\rSOURCE_JS_ES8\020\263\002\022\r\n" +
+      "\010JS_ERROR\020\254\002\022\025\n\020SOURCE_PHP_ERROR\020\220\003\022\020\n\013S" +
+      "OURCE_PHP5\020\221\003\022\022\n\rSOURCE_PHP5_3\020\222\003\022\022\n\rSOU" +
+      "RCE_PHP5_4\020\223\003\022\022\n\rSOURCE_PHP5_5\020\224\003\022\022\n\rSOU" +
+      "RCE_PHP5_6\020\225\003\022\022\n\rSOURCE_PHP7_0\020\226\003\022\022\n\rSOU" +
+      "RCE_PHP7_1\020\227\003\022\016\n\tPHP_ERROR\020\220\003\032\002\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

@@ -69,7 +69,7 @@ public class TestDiff extends Java8BaseTest {
 			for (final Revision r : cr.getRevisionsList()) {
 				for (final ChangedFile cf : r.getFilesList()) {
 					long astpos = cf.getKey();
-					if (astpos > -1 && cf.getChange() == ChangeKind.MODIFIED && cf.getPreviousIndicesCount() == 1) {
+					if (cf.getAst() && astpos > -1 && cf.getChange() == ChangeKind.MODIFIED && cf.getPreviousIndicesCount() == 1) {
 						long mappedKey = cf.getMappedKey();
 						if (mappedKey == -1)
 							continue;
@@ -79,7 +79,9 @@ public class TestDiff extends Java8BaseTest {
 						val = new BytesWritable();
 						ar.next(astkey, val);
 						bytes = val.getBytes();
-						ASTRoot root = ASTRoot.parseFrom(CodedInputStream.newInstance(bytes, 0, val.getLength()));
+						CodedInputStream cis = CodedInputStream.newInstance(bytes, 0, val.getLength());
+						cis.setRecursionLimit(Integer.MAX_VALUE);
+						ASTRoot root = ASTRoot.parseFrom(cis);
 						ar.seek(mappedKey);
 						ar.next(astkey, val);
 						bytes = val.getBytes();

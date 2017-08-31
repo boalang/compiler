@@ -80,6 +80,7 @@ public abstract class AbstractCommit {
 			cfb = ChangedFile.newBuilder();
 			cfb.setKind(FileKind.OTHER);
 			cfb.setKey(-1);
+			cfb.setAst(false);
 			fileNameIndices.put(path, changedFiles.size());
 			changedFiles.add(cfb);
 		} else
@@ -177,7 +178,6 @@ public abstract class AbstractCommit {
 
 	@SuppressWarnings("deprecation")
 	private Builder processChangeFile(final ChangedFile.Builder fb, boolean parse, final Writer astWriter, final Writer contentWriter) {
-		fb.setKey(-1);
 		long len = -1;
 		try {
 			len = astWriter.getLength();
@@ -357,8 +357,10 @@ public abstract class AbstractCommit {
 			}
 		}
 		try {
-			if (astWriter.getLength() > len)
+			if (astWriter.getLength() > len) {
 				fb.setKey(len);
+				fb.setAst(true);
+			}
 		} catch (IOException e) {
 			if (debug)
 				System.err.println("Error getting length of sequence file writer!!!");

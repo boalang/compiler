@@ -112,6 +112,7 @@ public class GitCommit extends AbstractCommit {
 						cfb.setName(path);
 						cfb.setKind(FileKind.OTHER);
 						cfb.setKey(-1);
+						cfb.setAst(false);
 						fileNameIndices.put(path, changedFiles.size());
 						changedFiles.add(cfb);
 						filePathGitObjectIds.put(path, tw.getObjectId(0));

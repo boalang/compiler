@@ -114,7 +114,7 @@ message ChangedFile {
 	/** @exclude */
 	required uint64 key = 4;
 	/** @exclude */
-	optional ASTRoot ast = 5;
+	required bool ast = 5;
 	/** @exclude */
 	optional CommentsRoot comments = 6;
 	/** @exclude The kinds of changes of this this compared to the corresponding parent commits */

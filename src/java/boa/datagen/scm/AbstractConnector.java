@@ -134,6 +134,8 @@ public abstract class AbstractConnector implements AutoCloseable {
 				CompilationUnit cu = cus.get(sourceFilePath);
 				ChangedFile cf = changedFiles.get(sourceFilePath);
 				ChangedFile.Builder fb = ChangedFile.newBuilder(cf);
+				fb.setAst(false);
+				fb.setKey(-1);
 				
 				long len = -1;
 				if (astWriter != null) {
@@ -162,16 +164,13 @@ public abstract class AbstractConnector implements AutoCloseable {
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
-				} else
-					fb.setAst(ast);
-				try {
-					if (astWriter != null && astWriter.getLength() > len)
-						fb.setKey(len);
-					else
-						fb.setKey(-1);
-				} catch (IOException e) {
-					fb.setKey(-1);
 				}
+				try {
+					if (astWriter != null && astWriter.getLength() > len) {
+						fb.setKey(len);
+						fb.setAst(true);
+					}
+				} catch (IOException e) {}
 				snapshot.add(fb.build());
 			}
 		}

@@ -164,7 +164,7 @@ public class Java7BaseTest extends BaseTest {
 
 	protected static Declaration getDeclaration(final SequenceFile.Reader ar, final ChangedFile cf, final int nodeId, final HashMap<Integer, Declaration> declarations) {
 		long astpos = cf.getKey();
-		if (astpos > -1) {
+		if (cf.getAst() && astpos > -1) {
 			try {
 				ar.seek(astpos);
 				Writable astkey = new LongWritable();
@@ -202,7 +202,7 @@ public class Java7BaseTest extends BaseTest {
 
 	protected static Message getMessage(final SequenceFile.Reader ar, final ChangedFile cf, final int nodeId) {
 		long astpos = cf.getKey();
-		if (astpos > -1) {
+		if (cf.getAst() && astpos > -1) {
 			try {
 				ar.seek(astpos);
 				Writable astkey = new LongWritable();
@@ -253,6 +253,8 @@ public class Java7BaseTest extends BaseTest {
 		for (int fileIndex = 0; fileIndex < snapshot.size(); fileIndex++) {
 			ChangedFile cf = snapshot.get(fileIndex);
 			long astpos = cf.getKey();
+			if (!cf.getAst())
+				continue;
 			if (astpos > -1) {
 				ar.seek(astpos);
 				Writable astkey = new LongWritable();

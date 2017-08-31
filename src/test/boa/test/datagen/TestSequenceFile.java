@@ -71,13 +71,15 @@ public class TestSequenceFile extends Java8BaseTest {
 			final HashMap<Integer, HashMap<Integer, Declaration>> fileNodeDeclaration = new HashMap<Integer, HashMap<Integer, Declaration>>();
 			for (ChangedFile cf : cr.getHeadSnapshotList()) {
 				long astpos = cf.getKey();
-				if (astpos > -1) {
+				if (cf.getAst() && astpos > -1) {
 					ar.seek(astpos);
 					Writable astkey = new LongWritable();
 					val = new BytesWritable();
 					ar.next(astkey, val);
 					bytes = val.getBytes();
-					ASTRoot root = ASTRoot.parseFrom(CodedInputStream.newInstance(bytes, 0, val.getLength()));
+					CodedInputStream cis = CodedInputStream.newInstance(bytes, 0, val.getLength());
+					cis.setRecursionLimit(Integer.MAX_VALUE);
+					ASTRoot root = ASTRoot.parseFrom(cis);
 //					System.out.println(root);
 					ProtoMessageVisitor v = new ProtoMessageVisitor() {
 						@Override
