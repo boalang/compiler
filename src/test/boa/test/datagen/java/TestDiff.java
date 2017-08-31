@@ -31,12 +31,17 @@ public class TestDiff extends Java8BaseTest {
 		
 	public TestDiff() throws IOException {
 		fileSystem = FileSystem.get(conf);
-		pr = new SequenceFile.Reader(fileSystem, new Path("dataset/projects.seq"), conf);
-		ar = new SequenceFile.Reader(fileSystem, new Path("dataset/data"), conf);
+		Path projectPath = new Path("dataset/projects.seq"), dataPath = new Path("dataset/data");
+		if (fileSystem.exists(projectPath) && fileSystem.exists(dataPath)) {
+			pr = new SequenceFile.Reader(fileSystem, projectPath, conf);
+			ar = new SequenceFile.Reader(fileSystem, dataPath, conf);
+		}
 	}
 	
 	@Test
 	public void testAstDiff() throws IOException {
+		if (pr == null || ar == null)
+			return;
 		Writable key = new Text();
 		BytesWritable val = new BytesWritable();
 		while (pr.next(key, val)) {

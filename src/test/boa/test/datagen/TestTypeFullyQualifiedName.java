@@ -31,12 +31,17 @@ public class TestTypeFullyQualifiedName {
 
 	public TestTypeFullyQualifiedName() throws IOException {
 		fileSystem = FileSystem.get(conf);
-		pr = new SequenceFile.Reader(fileSystem, new Path("dataset/projects.seq"), conf);
-		ar = new SequenceFile.Reader(fileSystem, new Path("dataset/data"), conf);
+		Path projectPath = new Path("dataset/projects.seq"), dataPath = new Path("dataset/data");
+		if (fileSystem.exists(projectPath) && fileSystem.exists(dataPath)) {
+			pr = new SequenceFile.Reader(fileSystem, projectPath, conf);
+			ar = new SequenceFile.Reader(fileSystem, dataPath, conf);
+		}
 	}
 
 	@Test
 	public void projectTypeNameTest() throws IOException {
+		if (pr == null || ar == null)
+			return;
 		Writable key = new Text();
 		BytesWritable val = new BytesWritable();
 		while (pr.next(key, val)) {
@@ -196,6 +201,8 @@ public class TestTypeFullyQualifiedName {
 
 	@Test
 	public void VariableTypeName() throws IOException {
+		if (pr == null || ar == null)
+			return;
 		Writable key = new Text();
 		BytesWritable val = new BytesWritable();
 		while (pr.next(key, val)) {
@@ -348,7 +355,9 @@ public class TestTypeFullyQualifiedName {
 	}
 
 	@Test
-	public void VarDeclTypeName() throws IOException { 
+	public void VarDeclTypeName() throws IOException {
+		if (pr == null || ar == null)
+			return;
 		Writable key = new Text();
 		BytesWritable val = new BytesWritable();
 		while (pr.next(key, val)) {
@@ -508,6 +517,8 @@ public class TestTypeFullyQualifiedName {
 
 	@Test
 	public void methodCallTypeName() throws IOException {
+		if (pr == null || ar == null)
+			return;
 		Writable key = new Text();
 		BytesWritable val = new BytesWritable();
 		while (pr.next(key, val)) {
