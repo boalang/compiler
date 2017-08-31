@@ -492,6 +492,15 @@ message Element {
 		IN_LINE = 2;
 		FORM = 3;
 		DOC_TYPE = 4;
+		/** CSS Rule types */
+		STYLE_SHEET = 5;
+		PAGE_RULE = 6;
+		STYLE_RULE = 7;
+		FONT_FACE_RULE = 8;
+		MEDIA_RULE = 9;
+		MEDIA_QUERY = 10;
+		IMPORT_RULE = 11;
+		
 	}
 	/** Element's tag */
 	required string tag = 1;
@@ -508,6 +517,8 @@ message Element {
 	optional Namespace script = 7;
 	optional Namespace php = 8;  
 	repeated Variable var_decl = 9;
+	/** The Element's title */
+	optional string title = 10;
 }
 
 /** Key Value pairs eg. key = "onclick" value = "myFunction()", key = "type" value = "button" */  
