@@ -36573,6 +36573,33 @@ public final class Ast {
      */
     boa.types.Ast.VariableOrBuilder getVarDeclOrBuilder(
         int index);
+
+    // optional string title = 10;
+    /**
+     * <code>optional string title = 10;</code>
+     *
+     * <pre>
+     ** The Element's title 
+     * </pre>
+     */
+    boolean hasTitle();
+    /**
+     * <code>optional string title = 10;</code>
+     *
+     * <pre>
+     ** The Element's title 
+     * </pre>
+     */
+    java.lang.String getTitle();
+    /**
+     * <code>optional string title = 10;</code>
+     *
+     * <pre>
+     ** The Element's title 
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getTitleBytes();
   }
   /**
    * Protobuf type {@code boa.types.Element}
@@ -36711,6 +36738,11 @@ public final class Ast {
               varDecl_.add(input.readMessage(boa.types.Ast.Variable.PARSER, extensionRegistry));
               break;
             }
+            case 82: {
+              bitField0_ |= 0x00000010;
+              title_ = input.readBytes();
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -36790,6 +36822,38 @@ public final class Ast {
        * <code>DOC_TYPE = 4;</code>
        */
       DOC_TYPE(4, 4),
+      /**
+       * <code>STYLE_SHEET = 5;</code>
+       *
+       * <pre>
+       ** CSS Rule types 
+       * </pre>
+       */
+      STYLE_SHEET(5, 5),
+      /**
+       * <code>PAGE_RULE = 6;</code>
+       */
+      PAGE_RULE(6, 6),
+      /**
+       * <code>STYLE_RULE = 7;</code>
+       */
+      STYLE_RULE(7, 7),
+      /**
+       * <code>FONT_FACE_RULE = 8;</code>
+       */
+      FONT_FACE_RULE(8, 8),
+      /**
+       * <code>MEDIA_RULE = 9;</code>
+       */
+      MEDIA_RULE(9, 9),
+      /**
+       * <code>MEDIA_QUERY = 10;</code>
+       */
+      MEDIA_QUERY(10, 10),
+      /**
+       * <code>IMPORT_RULE = 11;</code>
+       */
+      IMPORT_RULE(11, 11),
       ;
 
       /**
@@ -36812,6 +36876,38 @@ public final class Ast {
        * <code>DOC_TYPE = 4;</code>
        */
       public static final int DOC_TYPE_VALUE = 4;
+      /**
+       * <code>STYLE_SHEET = 5;</code>
+       *
+       * <pre>
+       ** CSS Rule types 
+       * </pre>
+       */
+      public static final int STYLE_SHEET_VALUE = 5;
+      /**
+       * <code>PAGE_RULE = 6;</code>
+       */
+      public static final int PAGE_RULE_VALUE = 6;
+      /**
+       * <code>STYLE_RULE = 7;</code>
+       */
+      public static final int STYLE_RULE_VALUE = 7;
+      /**
+       * <code>FONT_FACE_RULE = 8;</code>
+       */
+      public static final int FONT_FACE_RULE_VALUE = 8;
+      /**
+       * <code>MEDIA_RULE = 9;</code>
+       */
+      public static final int MEDIA_RULE_VALUE = 9;
+      /**
+       * <code>MEDIA_QUERY = 10;</code>
+       */
+      public static final int MEDIA_QUERY_VALUE = 10;
+      /**
+       * <code>IMPORT_RULE = 11;</code>
+       */
+      public static final int IMPORT_RULE_VALUE = 11;
 
 
       public final int getNumber() { return value; }
@@ -36823,6 +36919,13 @@ public final class Ast {
           case 2: return IN_LINE;
           case 3: return FORM;
           case 4: return DOC_TYPE;
+          case 5: return STYLE_SHEET;
+          case 6: return PAGE_RULE;
+          case 7: return STYLE_RULE;
+          case 8: return FONT_FACE_RULE;
+          case 9: return MEDIA_RULE;
+          case 10: return MEDIA_QUERY;
+          case 11: return IMPORT_RULE;
           default: return null;
         }
       }
@@ -37238,6 +37341,61 @@ public final class Ast {
       return varDecl_.get(index);
     }
 
+    // optional string title = 10;
+    public static final int TITLE_FIELD_NUMBER = 10;
+    private java.lang.Object title_;
+    /**
+     * <code>optional string title = 10;</code>
+     *
+     * <pre>
+     ** The Element's title 
+     * </pre>
+     */
+    public boolean hasTitle() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    /**
+     * <code>optional string title = 10;</code>
+     *
+     * <pre>
+     ** The Element's title 
+     * </pre>
+     */
+    public java.lang.String getTitle() {
+      java.lang.Object ref = title_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          title_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string title = 10;</code>
+     *
+     * <pre>
+     ** The Element's title 
+     * </pre>
+     */
+    public com.google.protobuf.ByteString
+        getTitleBytes() {
+      java.lang.Object ref = title_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        title_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private void initFields() {
       tag_ = "";
       kind_ = boa.types.Ast.Element.ElementKind.OTHER;
@@ -37248,6 +37406,7 @@ public final class Ast {
       script_ = boa.types.Ast.Namespace.getDefaultInstance();
       php_ = boa.types.Ast.Namespace.getDefaultInstance();
       varDecl_ = java.util.Collections.emptyList();
+      title_ = "";
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -37326,6 +37485,9 @@ public final class Ast {
       for (int i = 0; i < varDecl_.size(); i++) {
         output.writeMessage(9, varDecl_.get(i));
       }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeBytes(10, getTitleBytes());
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -37380,6 +37542,10 @@ public final class Ast {
       for (int i = 0; i < varDecl_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(9, varDecl_.get(i));
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(10, getTitleBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -37544,6 +37710,8 @@ public final class Ast {
         } else {
           varDeclBuilder_.clear();
         }
+        title_ = "";
+        bitField0_ = (bitField0_ & ~0x00000200);
         return this;
       }
 
@@ -37635,6 +37803,10 @@ public final class Ast {
         } else {
           result.varDecl_ = varDeclBuilder_.build();
         }
+        if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        result.title_ = title_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -37762,6 +37934,11 @@ public final class Ast {
               varDeclBuilder_.addAllMessages(other.varDecl_);
             }
           }
+        }
+        if (other.hasTitle()) {
+          bitField0_ |= 0x00000200;
+          title_ = other.title_;
+          onChanged();
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -39334,6 +39511,104 @@ public final class Ast {
         return varDeclBuilder_;
       }
 
+      // optional string title = 10;
+      private java.lang.Object title_ = "";
+      /**
+       * <code>optional string title = 10;</code>
+       *
+       * <pre>
+       ** The Element's title 
+       * </pre>
+       */
+      public boolean hasTitle() {
+        return ((bitField0_ & 0x00000200) == 0x00000200);
+      }
+      /**
+       * <code>optional string title = 10;</code>
+       *
+       * <pre>
+       ** The Element's title 
+       * </pre>
+       */
+      public java.lang.String getTitle() {
+        java.lang.Object ref = title_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          title_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string title = 10;</code>
+       *
+       * <pre>
+       ** The Element's title 
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getTitleBytes() {
+        java.lang.Object ref = title_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          title_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string title = 10;</code>
+       *
+       * <pre>
+       ** The Element's title 
+       * </pre>
+       */
+      public Builder setTitle(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000200;
+        title_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string title = 10;</code>
+       *
+       * <pre>
+       ** The Element's title 
+       * </pre>
+       */
+      public Builder clearTitle() {
+        bitField0_ = (bitField0_ & ~0x00000200);
+        title_ = getDefaultInstance().getTitle();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string title = 10;</code>
+       *
+       * <pre>
+       ** The Element's title 
+       * </pre>
+       */
+      public Builder setTitleBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000200;
+        title_ = value;
+        onChanged();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:boa.types.Element)
     }
 
@@ -40231,7 +40506,7 @@ public final class Ast {
       "\022\021\n\tstart_col\030\004 \002(\005\022\020\n\010end_line\030\005 \002(\005\022\017\n" +
       "\007end_col\030\006 \002(\005\"e\n\010Document\022\r\n\005title\030\001 \001(",
       "\t\022$\n\010elements\030\002 \003(\0132\022.boa.types.Element\022" +
-      "$\n\010doc_type\030\003 \001(\0132\022.boa.types.Element\"\354\002" +
+      "$\n\010doc_type\030\003 \001(\0132\022.boa.types.Element\"\362\003" +
       "\n\007Element\022\013\n\003tag\030\001 \002(\t\022,\n\004kind\030\002 \002(\0162\036.b" +
       "oa.types.Element.ElementKind\022$\n\010elements" +
       "\030\003 \003(\0132\022.boa.types.Element\022\014\n\004text\030\004 \003(\t" +
@@ -40239,14 +40514,17 @@ public final class Ast {
       "types.Atribute\022$\n\006script\030\007 \001(\0132\024.boa.typ" +
       "es.Namespace\022!\n\003php\030\010 \001(\0132\024.boa.types.Na" +
       "mespace\022%\n\010var_decl\030\t \003(\0132\023.boa.types.Va" +
-      "riable\"L\n\013ElementKind\022\t\n\005OTHER\020\000\022\t\n\005BLOC",
-      "K\020\001\022\013\n\007IN_LINE\020\002\022\010\n\004FORM\020\003\022\014\n\010DOC_TYPE\020\004" +
-      "\032\002\020\001\"&\n\010Atribute\022\013\n\003key\030\001 \002(\t\022\r\n\005value\030\002" +
-      " \002(\t*\236\001\n\010TypeKind\022\t\n\005OTHER\020\000\022\t\n\005CLASS\020\001\022" +
-      "\r\n\tINTERFACE\020\002\022\r\n\tANONYMOUS\020\003\022\010\n\004ANON\020\003\022" +
-      "\n\n\006STRUCT\020\004\022\010\n\004ENUM\020\005\022\017\n\013ENUMERATION\020\005\022\016" +
-      "\n\nANNOTATION\020\006\022\014\n\010DELEGATE\020\007\022\013\n\007GENERIC\020" +
-      "\010\032\002\020\001B\002H\001"
+      "riable\022\r\n\005title\030\n \001(\t\"\302\001\n\013ElementKind\022\t\n",
+      "\005OTHER\020\000\022\t\n\005BLOCK\020\001\022\013\n\007IN_LINE\020\002\022\010\n\004FORM" +
+      "\020\003\022\014\n\010DOC_TYPE\020\004\022\017\n\013STYLE_SHEET\020\005\022\r\n\tPAG" +
+      "E_RULE\020\006\022\016\n\nSTYLE_RULE\020\007\022\022\n\016FONT_FACE_RU" +
+      "LE\020\010\022\016\n\nMEDIA_RULE\020\t\022\017\n\013MEDIA_QUERY\020\n\022\017\n" +
+      "\013IMPORT_RULE\020\013\032\002\020\001\"&\n\010Atribute\022\013\n\003key\030\001 " +
+      "\002(\t\022\r\n\005value\030\002 \002(\t*\236\001\n\010TypeKind\022\t\n\005OTHER" +
+      "\020\000\022\t\n\005CLASS\020\001\022\r\n\tINTERFACE\020\002\022\r\n\tANONYMOU" +
+      "S\020\003\022\010\n\004ANON\020\003\022\n\n\006STRUCT\020\004\022\010\n\004ENUM\020\005\022\017\n\013E" +
+      "NUMERATION\020\005\022\016\n\nANNOTATION\020\006\022\014\n\010DELEGATE" +
+      "\020\007\022\013\n\007GENERIC\020\010\032\002\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -40336,7 +40614,7 @@ public final class Ast {
           internal_static_boa_types_Element_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Element_descriptor,
-              new java.lang.String[] { "Tag", "Kind", "Elements", "Text", "Data", "Atributes", "Script", "Php", "VarDecl", });
+              new java.lang.String[] { "Tag", "Kind", "Elements", "Text", "Data", "Atributes", "Script", "Php", "VarDecl", "Title", });
           internal_static_boa_types_Atribute_descriptor =
             getDescriptor().getMessageTypes().get(14);
           internal_static_boa_types_Atribute_fieldAccessorTable = new
