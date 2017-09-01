@@ -162,7 +162,7 @@ public class GitCommit extends AbstractCommit {
 				e1.printStackTrace();
 			return paths;
 		}
-		PomFile pf = new PomFile(model.getId(), model.getParent() != null ? model.getParent().getId() : null,
+		PomFile pf = new PomFile(path, model.getId(), model.getParent() != null ? model.getParent().getId() : null,
 						model.getProperties(),
 						model.getDependencyManagement() != null ? model.getDependencyManagement().getDependencies() : null,
 						model.getRepositories(),

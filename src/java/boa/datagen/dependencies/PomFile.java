@@ -16,15 +16,16 @@ import org.apache.maven.model.Repository;
 import boa.datagen.util.FileIO;
 
 public class PomFile {
-	private String id;
+	private String id, path;
 	private PomFile parent;
 	HashMap<String, String> properties = new HashMap<String, String>();
 	HashMap<String, String> managedDependencies = new HashMap<String, String>();
 	
-	public PomFile(String id, String parent, 
+	public PomFile(String path, String id, String parent, 
 			Properties properties, List<Dependency> managedDependencies, List<Repository> repos,
 			HashSet<String> globalRepoLinks, HashMap<String, String> globalProperties, HashMap<String, String> globalManagedDependencies,
 			Stack<PomFile> parentPomFiles) {
+		this.path = path;
 		this.id = id;
 		if (!parentPomFiles.isEmpty())
 			this.parent = parentPomFiles.peek();
@@ -63,6 +64,10 @@ public class PomFile {
 					globalRepoLinks.add(url);
 			}
 		}
+	}
+
+	public String getPath() {
+		return path;
 	}
 
 	public Set<String> getDependencies(List<Dependency> dependencies, 

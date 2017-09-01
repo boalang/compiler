@@ -19,6 +19,7 @@ package boa.datagen.scm;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -44,6 +45,7 @@ import org.eclipse.jdt.core.dom.ITypeBinding;
 
 import boa.datagen.dependencies.DependencyMangementUtil;
 import boa.datagen.dependencies.PomFile;
+import boa.datagen.util.FileIO;
 import boa.datagen.util.Java7Visitor;
 import boa.datagen.util.Java8Visitor;
 import boa.types.Ast.ASTRoot;
@@ -195,14 +197,37 @@ public abstract class AbstractConnector implements AutoCloseable {
 		HashMap<String, String> globalProperties = new HashMap<String, String>();
 		HashMap<String, String> globalManagedDependencies = new HashMap<String, String>();
 		Stack<PomFile> parentPomFiles = new Stack<PomFile>();
+		List<ChangedFile> configFiles = new ArrayList<ChangedFile>();
+		final Map<ChangedFile, String> fileDir = new HashMap<ChangedFile, String>();
 		for (ChangedFile cf : snapshot) {
-			if (cf.getName().equals("build.gradle")) {
+			String name = FileIO.getFileName(cf.getName());
+			if (name.equals("build.gradle")) {
 				AbstractCommit commit = commits.get(cf.getName());
 				Set<String> dependencies = commit.getGradleDependencies(classpathRoot, cf.getName());
 				paths.addAll(dependencies);
-			} else if (cf.getName().equals("pom.xml")) {
-				AbstractCommit commit = commits.get(cf.getName());
-				Set<String> dependencies = commit.getPomDependencies(classpathRoot, cf.getName(), globalRepoLinks, globalProperties, globalManagedDependencies, parentPomFiles);
+			} else if (name.equals("pom.xml")) {
+				String dir = cf.getName().substring(0, cf.getName().length() - name.length());
+				fileDir.put(cf, dir);
+				configFiles.add(cf);
+			}
+		}
+		Collections.sort(configFiles, new Comparator<ChangedFile>() {
+			@Override
+			public int compare(ChangedFile f1, ChangedFile f2) {
+				return fileDir.get(f1).compareTo(fileDir.get(f2));
+			}
+		});
+		for (ChangedFile cf : configFiles) {
+			String fileName = cf.getName(), name = FileIO.getFileName(fileName);
+			if (name.equals("pom.xml")) {
+				while (!parentPomFiles.isEmpty()) {
+					PomFile pf = parentPomFiles.peek();
+					if (pf.getPath().length() < fileName.length())
+						break;
+					parentPomFiles.pop();
+				}
+				AbstractCommit commit = commits.get(fileName);
+				Set<String> dependencies = commit.getPomDependencies(classpathRoot, fileName, globalRepoLinks, globalProperties, globalManagedDependencies, parentPomFiles);
 				paths.addAll(dependencies);
 			}
 		}
