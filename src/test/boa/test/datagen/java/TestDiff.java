@@ -71,9 +71,8 @@ public class TestDiff extends Java8BaseTest {
 					long astpos = cf.getKey();
 					if (cf.getAst() && astpos > -1 && cf.getChange() == ChangeKind.MODIFIED && cf.getPreviousIndicesCount() == 1) {
 						long mappedKey = cf.getMappedKey();
-						if (mappedKey == -1)
+						if (mappedKey <= 0)
 							continue;
-						assertNotEquals(0, mappedKey);
 						ar.seek(astpos);
 						Writable astkey = new LongWritable();
 						val = new BytesWritable();

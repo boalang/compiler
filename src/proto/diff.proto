@@ -113,7 +113,7 @@ message ChangedFile {
 	required string name = 3;
 	/** @exclude */
 	required uint64 key = 4;
-	/** @exclude */
+	/** @exclude Indicates if this file has a corresponding parsed AST or not */
 	required bool ast = 5;
 	/** @exclude */
 	optional CommentsRoot comments = 6;
@@ -123,6 +123,6 @@ message ChangedFile {
 	repeated int32 previous_versions = 8;
 	/** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits */
 	repeated int32 previous_indices = 9;
-	/** The key of the mapped AST */
+	/** The key of the mapped AST. A positive value indicates that this file actually has AST diff information with a mapped file in the previous version */
 	optional uint64 mapped_key = 10;
 }

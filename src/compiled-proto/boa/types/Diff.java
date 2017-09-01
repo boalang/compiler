@@ -97,7 +97,7 @@ public final class Diff {
      * <code>required bool ast = 5;</code>
      *
      * <pre>
-     ** @exclude 
+     ** @exclude Indicates if this file has a corresponding parsed AST or not 
      * </pre>
      */
     boolean hasAst();
@@ -105,7 +105,7 @@ public final class Diff {
      * <code>required bool ast = 5;</code>
      *
      * <pre>
-     ** @exclude 
+     ** @exclude Indicates if this file has a corresponding parsed AST or not 
      * </pre>
      */
     boolean getAst();
@@ -219,7 +219,7 @@ public final class Diff {
      * <code>optional uint64 mapped_key = 10;</code>
      *
      * <pre>
-     ** The key of the mapped AST 
+     ** The key of the mapped AST. A positive value indicates that this file actually has AST diff information with a mapped file in the previous version 
      * </pre>
      */
     boolean hasMappedKey();
@@ -227,7 +227,7 @@ public final class Diff {
      * <code>optional uint64 mapped_key = 10;</code>
      *
      * <pre>
-     ** The key of the mapped AST 
+     ** The key of the mapped AST. A positive value indicates that this file actually has AST diff information with a mapped file in the previous version 
      * </pre>
      */
     long getMappedKey();
@@ -1405,7 +1405,7 @@ public final class Diff {
      * <code>required bool ast = 5;</code>
      *
      * <pre>
-     ** @exclude 
+     ** @exclude Indicates if this file has a corresponding parsed AST or not 
      * </pre>
      */
     public boolean hasAst() {
@@ -1415,7 +1415,7 @@ public final class Diff {
      * <code>required bool ast = 5;</code>
      *
      * <pre>
-     ** @exclude 
+     ** @exclude Indicates if this file has a corresponding parsed AST or not 
      * </pre>
      */
     public boolean getAst() {
@@ -1567,7 +1567,7 @@ public final class Diff {
      * <code>optional uint64 mapped_key = 10;</code>
      *
      * <pre>
-     ** The key of the mapped AST 
+     ** The key of the mapped AST. A positive value indicates that this file actually has AST diff information with a mapped file in the previous version 
      * </pre>
      */
     public boolean hasMappedKey() {
@@ -1577,7 +1577,7 @@ public final class Diff {
      * <code>optional uint64 mapped_key = 10;</code>
      *
      * <pre>
-     ** The key of the mapped AST 
+     ** The key of the mapped AST. A positive value indicates that this file actually has AST diff information with a mapped file in the previous version 
      * </pre>
      */
     public long getMappedKey() {
@@ -2327,7 +2327,7 @@ public final class Diff {
        * <code>required bool ast = 5;</code>
        *
        * <pre>
-       ** @exclude 
+       ** @exclude Indicates if this file has a corresponding parsed AST or not 
        * </pre>
        */
       public boolean hasAst() {
@@ -2337,7 +2337,7 @@ public final class Diff {
        * <code>required bool ast = 5;</code>
        *
        * <pre>
-       ** @exclude 
+       ** @exclude Indicates if this file has a corresponding parsed AST or not 
        * </pre>
        */
       public boolean getAst() {
@@ -2347,7 +2347,7 @@ public final class Diff {
        * <code>required bool ast = 5;</code>
        *
        * <pre>
-       ** @exclude 
+       ** @exclude Indicates if this file has a corresponding parsed AST or not 
        * </pre>
        */
       public Builder setAst(boolean value) {
@@ -2360,7 +2360,7 @@ public final class Diff {
        * <code>required bool ast = 5;</code>
        *
        * <pre>
-       ** @exclude 
+       ** @exclude Indicates if this file has a corresponding parsed AST or not 
        * </pre>
        */
       public Builder clearAst() {
@@ -2817,7 +2817,7 @@ public final class Diff {
        * <code>optional uint64 mapped_key = 10;</code>
        *
        * <pre>
-       ** The key of the mapped AST 
+       ** The key of the mapped AST. A positive value indicates that this file actually has AST diff information with a mapped file in the previous version 
        * </pre>
        */
       public boolean hasMappedKey() {
@@ -2827,7 +2827,7 @@ public final class Diff {
        * <code>optional uint64 mapped_key = 10;</code>
        *
        * <pre>
-       ** The key of the mapped AST 
+       ** The key of the mapped AST. A positive value indicates that this file actually has AST diff information with a mapped file in the previous version 
        * </pre>
        */
       public long getMappedKey() {
@@ -2837,7 +2837,7 @@ public final class Diff {
        * <code>optional uint64 mapped_key = 10;</code>
        *
        * <pre>
-       ** The key of the mapped AST 
+       ** The key of the mapped AST. A positive value indicates that this file actually has AST diff information with a mapped file in the previous version 
        * </pre>
        */
       public Builder setMappedKey(long value) {
@@ -2850,7 +2850,7 @@ public final class Diff {
        * <code>optional uint64 mapped_key = 10;</code>
        *
        * <pre>
-       ** The key of the mapped AST 
+       ** The key of the mapped AST. A positive value indicates that this file actually has AST diff information with a mapped file in the previous version 
        * </pre>
        */
       public Builder clearMappedKey() {
