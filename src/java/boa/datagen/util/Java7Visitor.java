@@ -2229,6 +2229,7 @@ public class Java7Visitor extends ASTVisitor {
 				b.setDeclaringType(buildType(vb.getDeclaringClass()));
 		}
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.VARACCESS);
+		b.setIsMemberAccess(true);
 		node.getExpression().accept(this);
 		b.addExpressions(expressions.pop());
 		b.setVariable(node.getName().getFullyQualifiedName());
@@ -2250,13 +2251,16 @@ public class Java7Visitor extends ASTVisitor {
 					b.setMappedNode((Integer) mappedNode.getProperty(TreedConstants.PROPERTY_INDEX));
 			}
 		}
-		if (node.resolveBinding() != null && node.resolveBinding() instanceof IVariableBinding) {
-			IVariableBinding vb = (IVariableBinding) node.resolveBinding();
-			b.setReturnType(buildType(vb.getType()));
-			if (vb.getDeclaringClass() != null)
-				b.setDeclaringType(buildType(vb.getDeclaringClass()));
-		} else if (node.resolveTypeBinding() != null) {
-			b.setReturnType(buildType(node.resolveTypeBinding()));
+		if (node.resolveBinding() != null) {
+			if (node.resolveBinding() instanceof IVariableBinding) {
+				IVariableBinding vb = (IVariableBinding) node.resolveBinding();
+				if (vb.isField())
+					b.setIsMemberAccess(true);
+				b.setReturnType(buildType(vb.getType()));
+				if (vb.getDeclaringClass() != null)
+					b.setDeclaringType(buildType(vb.getDeclaringClass()));
+			} else
+				b.setReturnType(buildType(node.resolveTypeBinding()));
 		}
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.VARACCESS);
 		b.setVariable(node.getFullyQualifiedName());
@@ -2287,6 +2291,7 @@ public class Java7Visitor extends ASTVisitor {
 			b.setReturnType(buildType(node.resolveTypeBinding()));
 		}
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.VARACCESS);
+		b.setIsMemberAccess(true);
 		b.setVariable(node.getFullyQualifiedName());
 		expressions.push(b.build());
 		return false;
@@ -2604,6 +2609,7 @@ public class Java7Visitor extends ASTVisitor {
 				b.setDeclaringType(buildType(vb.getDeclaringClass()));
 		}
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.VARACCESS);
+		b.setIsMemberAccess(true);
 		String name = "super." + node.getName().getFullyQualifiedName();
 		if (node.getQualifier() != null)
 			name = node.getQualifier().getFullyQualifiedName() + "." + name;

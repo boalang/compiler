@@ -242,21 +242,20 @@ public class TestTypeFullyQualifiedName {
 											System.out.println(exp.getReturnType().getFullyQualifiedName() + " is java.lang.String");
 											assertEquals("java.lang.String", exp.getReturnType().getFullyQualifiedName());
 											System.out.println(exp.getDeclaringType().getFullyQualifiedName() + " is boa.datagen.forges.github.GithubLanguageDownloadMaster");
-			//FIXME							assertEquals("boa.datagen.forges.github.GithubLanguageDownloadMaster", exp.getDeclaringType().getFullyQualifiedName());
+											if (exp.getIsMemberAccess())
+												assertEquals("boa.datagen.forges.github.GithubLanguageDownloadMaster", exp.getDeclaringType().getFullyQualifiedName());
 										} else if (var.equals("MAX_NUM_THREADS")) {
 											System.out.println(exp.getReturnType().getName() + " is int");
 											assertEquals("int", exp.getReturnType().getName());
 											System.out.println(exp.getDeclaringType().getFullyQualifiedName() + " is boa.datagen.forges.github.GithubLanguageDownloadMaster");
 											assertEquals("boa.datagen.forges.github.GithubLanguageDownloadMaster", exp.getDeclaringType().getFullyQualifiedName());
 										} else if (var.equals("names")) {
-											System.out.println(exp.getReturnType().getFullyQualifiedName()
-													+ " is gnu.trove.set.hash.THashSet<String>");
-											System.out
-											.println(var + " return type is " + exp.getReturnType().getName());
-											// FIXME assertEquals("gnu.trove.set.hash.THashSet<String>", exp.getReturnType().getFullyQualifiedName());
+											System.out.println(exp.getReturnType().getFullyQualifiedName() + " is gnu.trove.set.hash.THashSet<String>");
+											System.out.println(var + " return type is " + exp.getReturnType().getName());
+											assertEquals("gnu.trove.set.hash.THashSet", exp.getReturnType().getFullyQualifiedName());
 											System.out.println(exp.getDeclaringType().getFullyQualifiedName() + " is boa.datagen.forges.github.GithubLanguageDownloadMaster");
 											System.out.println(var + " declaring type is " + exp.getDeclaringType().getName());
-			//FIXME								assertEquals("boa.datagen.forges.github.GithubLanguageDownloadMaster", exp.getDeclaringType().getFullyQualifiedName());
+											assertEquals("boa.datagen.forges.github.GithubLanguageDownloadMaster", exp.getDeclaringType().getFullyQualifiedName());
 										} else if (var.equals("input")) {
 											System.out.println(exp.getReturnType().getFullyQualifiedName() + " is java.lang.String");
 											assertEquals("java.lang.String", exp.getReturnType().getFullyQualifiedName());
@@ -319,17 +318,17 @@ public class TestTypeFullyQualifiedName {
 											assertEquals("java.lang.String", exp.getReturnType().getFullyQualifiedName());
 										} else if (var.equals("repos")) {
 											System.out.println(exp.getReturnType().getFullyQualifiedName() + " is com.google.gson");
-											 System.out.println(var + "  is " +  exp.getReturnType().getName());
-											// FIXME assertEquals("com.google.gson", exp.getReturnType().getFullyQualifiedName());
+											System.out.println(var + "  is " +  exp.getReturnType().getName());
+											assertEquals("com.google.gson.JsonArray", exp.getReturnType().getFullyQualifiedName());
 										} else if (var.equals("parser")) {
 											System.out.println(exp.getReturnType().getFullyQualifiedName() + " is com.google.gson");
-											// FIXME assertEquals("com.google.gson", exp.getReturnType().getFullyQualifiedName());
+											assertEquals("com.google.gson.Gson", exp.getReturnType().getFullyQualifiedName());
 										} else if (var.equals("repoE")) {
 											System.out.println(exp.getReturnType().getFullyQualifiedName() + " is com.google.gson");
-											// FIXME assertEquals("com.google.gson", exp.getReturnType().getFullyQualifiedName());
+											assertEquals("com.google.gson.JsonElement", exp.getReturnType().getFullyQualifiedName());
 										} else if (var.equals("repo")) {
 											System.out.println(exp.getReturnType().getFullyQualifiedName() + " is com.google.gson");
-											// FXIME assertEquals("com.google.gson", exp.getReturnType().getFullyQualifiedName());
+											assertEquals("com.google.gson.JsonObject", exp.getReturnType().getFullyQualifiedName());
 										} else if (var.equals("FileIO")) {
 											System.out.println(exp.getReturnType().getFullyQualifiedName() + " is boa.datagen.util.FileIO");
 											assertEquals("boa.datagen.util.FileIO", exp.getReturnType().getFullyQualifiedName());
@@ -387,31 +386,31 @@ public class TestTypeFullyQualifiedName {
 											System.out.println(var.getName() + " is " + var.getVariableType().getFullyQualifiedName() + " is java.lang.String");
 											assertEquals("java.lang.String", var.getVariableType().getFullyQualifiedName());
 											System.out.println(var.getName() + " declaring is " + decl.getFullyQualifiedName() 
-												+ " is boa.datagen.forges.github.GithubLanguageDownloadMaster");
+											+ " is boa.datagen.forges.github.GithubLanguageDownloadMaster");
 											assertEquals("boa.datagen.forges.github.GithubLanguageDownloadMaster", decl.getFullyQualifiedName());
 										} else if (name.equals("langNameDir")) {
 											System.out.println(var.getName() + " is " + var.getVariableType().getFullyQualifiedName() + " is java.lang.String");
 											assertEquals("java.lang.String", var.getVariableType().getFullyQualifiedName());
 											System.out.println(var.getName() + " declaring type is " + decl.getFullyQualifiedName()
-													+ " is boa.datagen.forges.github.GithubLanguageDownloadMaster");
+											+ " is boa.datagen.forges.github.GithubLanguageDownloadMaster");
 											assertEquals("boa.datagen.forges.github.GithubLanguageDownloadMaster", decl.getFullyQualifiedName());
 										} else if (name.equals("tokenFile")) {
 											System.out.println(var.getName() + " is " + var.getVariableType().getFullyQualifiedName() + " is java.lang.String");
 											assertEquals("java.lang.String", var.getVariableType().getFullyQualifiedName());
 											System.out.println(var.getName() + " declaring type is " + decl.getFullyQualifiedName()
-													+ " is boa.datagen.forges.github.GithubLanguageDownloadMaster");
+											+ " is boa.datagen.forges.github.GithubLanguageDownloadMaster");
 											assertEquals("boa.datagen.forges.github.GithubLanguageDownloadMaster", decl.getFullyQualifiedName());
 										} else if (name.equals("MAX_NUM_THREADS")) {
 											System.out.println(var.getName() + " is " + var.getVariableType().getName() + " is int");
 											assertEquals("int", var.getVariableType().getName());
 											System.out.println(var.getName() + " declaring type is " + decl.getFullyQualifiedName()
-													+ " is boa.datagen.forges.github.GithubLanguageDownloadMaster");
+											+ " is boa.datagen.forges.github.GithubLanguageDownloadMaster");
 											assertEquals("boa.datagen.forges.github.GithubLanguageDownloadMaster", decl.getFullyQualifiedName());
 										} else if (name.equals("names")) {
 											System.out.println(var.getName() + " is " + var.getVariableType().getFullyQualifiedName() + " is gnu.trove.set.hash.THashSet<String>");
-											// FIXME assertEquals("gnu.trove.set.hash.THashSet<String>", var.getVariableType().getFullyQualifiedName());
+											assertEquals("gnu.trove.set.hash.THashSet", var.getVariableType().getFullyQualifiedName());
 											System.out.println(var.getName() + " declaring type is " + decl.getFullyQualifiedName()
-													+ " is boa.datagen.forges.github.GithubLanguageDownloadMaster");
+											+ " is boa.datagen.forges.github.GithubLanguageDownloadMaster");
 											assertEquals("boa.datagen.forges.github.GithubLanguageDownloadMaster", decl.getFullyQualifiedName());
 										} else {
 											System.out.println("missed " + var.getName() + " is " + var.getVariableType().getFullyQualifiedName());
@@ -430,7 +429,7 @@ public class TestTypeFullyQualifiedName {
 												System.out.println(var.getName() + " is " + var.getVariableType().getFullyQualifiedName() + " is java.lang.String");
 												assertEquals("java.lang.String", var.getVariableType().getFullyQualifiedName());
 												System.out.println(var.getName() + " declaring is " + var.getVariableType().getFullyQualifiedName()
-													+ " is boa.datagen.forges.github.GithubLanguageDownloadMaster");
+														+ " is boa.datagen.forges.github.GithubLanguageDownloadMaster");
 												assertEquals("boa.datagen.forges.github.GithubLanguageDownloadMaster", exp.getDeclaringType().getFullyQualifiedName());
 											} else if (name.equals("langNameDir")) {
 												System.out.println(var.getName() + " is " + var.getVariableType().getFullyQualifiedName() + " is java.lang.String");
@@ -452,7 +451,7 @@ public class TestTypeFullyQualifiedName {
 												assertEquals("boa.datagen.forges.github.GithubLanguageDownloadMaster", exp.getDeclaringType().getFullyQualifiedName());
 											} else if (name.equals("names")) {
 												System.out.println(var.getName() + " is " + var.getVariableType().getFullyQualifiedName() + " is gnu.trove.set.hash.THashSet<String>");
-												// FIXME assertEquals("gnu.trove.set.hash.THashSet<String>", var.getVariableType().getFullyQualifiedName());
+												assertEquals("gnu.trove.set.hash.THashSet", var.getVariableType().getFullyQualifiedName());
 												System.out.println(var.getName() + " declaring type is " + exp.getDeclaringType().getFullyQualifiedName()
 														+ " is boa.datagen.forges.github.GithubLanguageDownloadMaster");
 												assertEquals("boa.datagen.forges.github.GithubLanguageDownloadMaster", exp.getDeclaringType().getFullyQualifiedName());
@@ -492,13 +491,13 @@ public class TestTypeFullyQualifiedName {
 											} else if (name.equals("repos")) {
 												System.out.println(var.getName() + " " + var.getVariableType().getFullyQualifiedName() + " is com.google.gson");
 												System.out.println(var.getName() + " is " + var.getVariableType().getName());
-												// FIXME assertEquals("com.google.gson", var.getVariableType().getFullyQualifiedName());
+												assertEquals("com.google.gson.JsonArray", var.getVariableType().getFullyQualifiedName());
 											} else if (name.equals("parser")) {
 												System.out.println(var.getName() + " " + var.getVariableType().getFullyQualifiedName() + " is com.google.gson");
-												// FXIME assertEquals("com.google.gson", var.getVariableType().getFullyQualifiedName());
+												assertEquals("com.google.gson.Gson", var.getVariableType().getFullyQualifiedName());
 											} else if (name.equals("repo")) {
 												System.out.println(var.getName() + " " + var.getVariableType().getFullyQualifiedName() + " is com.google.gson");
-												// FIXME assertEquals("com.google.gson", var.getVariableType().getFullyQualifiedName());
+												assertEquals("com.google.gson.JsonObject", var.getVariableType().getFullyQualifiedName());
 											} else {
 												System.out.println("missed " + var.getName() + " is " + var.getVariableType().getFullyQualifiedName());
 											}
@@ -581,19 +580,19 @@ public class TestTypeFullyQualifiedName {
 											assertEquals("java.io.PrintStream", exp.getDeclaringType().getFullyQualifiedName());
 										} else if (methName.equals("getAsJsonObject")) {
 											System.out.println(methName + " return type is " + exp.getReturnType().getName());
-											// FIXME assertEquals("com.google.gson.JsonObject", exp.getReturnType().getFullyQualifiedName());
+											assertEquals("com.google.gson.JsonObject", exp.getReturnType().getFullyQualifiedName());
 											System.out.println(methName + " declaring type is " + exp.getDeclaringType().getFullyQualifiedName());
-											// FIXME assertEquals("com.google.gson.JsonElement", exp.getDeclaringType().getFullyQualifiedName());
+											assertEquals("com.google.gson.JsonElement", exp.getDeclaringType().getFullyQualifiedName());
 										} else if (methName.equals("fromJson")) {
 											System.out.println(methName + " return type is " + exp.getReturnType().getName());
-											// FIXME assertEquals("com.google.gson.JsonElement", exp.getReturnType().getFullyQualifiedName());
+											assertEquals("com.google.gson.JsonElement", exp.getReturnType().getFullyQualifiedName());
 											System.out.println(methName + " declaring type is " + exp.getDeclaringType().getFullyQualifiedName());
-											// FIXME assertEquals("com.google.gson.JsonElement", exp.getDeclaringType().getFullyQualifiedName());
+											assertEquals("com.google.gson.Gson", exp.getDeclaringType().getFullyQualifiedName());
 										} else if (methName.equals("getAsJsonArray")) {
 											System.out.println(methName + " return type is " + exp.getReturnType().getName());
-											// FXIME assertEquals("com.google.gson.JsonArray", exp.getReturnType().getFullyQualifiedName());
+											assertEquals("com.google.gson.JsonArray", exp.getReturnType().getFullyQualifiedName());
 											System.out.println(methName + " declaring type is " + exp.getDeclaringType().getFullyQualifiedName());
-											// FIXME assertEquals("com.google.gson.JsonElement", exp.getDeclaringType().getFullyQualifiedName());
+											assertEquals("com.google.gson.JsonElement", exp.getDeclaringType().getFullyQualifiedName());
 										} else if (methName.equals("readFileContents")) {
 											System.out.println(methName + " return type is " + exp.getReturnType().getName());
 											assertEquals("java.lang.String", exp.getReturnType().getFullyQualifiedName());
@@ -606,20 +605,19 @@ public class TestTypeFullyQualifiedName {
 											assertEquals("java.io.File", exp.getDeclaringType().getFullyQualifiedName());
 										} else if (methName.equals("getAsString")) {
 											System.out.println(methName + " return type is " + exp.getReturnType().getName());
-							//FIXME				assertEquals("java.lang.String", exp.getReturnType().getFullyQualifiedName());
+											assertEquals("java.lang.String", exp.getReturnType().getFullyQualifiedName());
 											System.out.println(methName + " declaring type is " + exp.getDeclaringType().getFullyQualifiedName());
-											// FIXME assertEquals("com.google.gson.JsonElement", exp.getDeclaringType().getFullyQualifiedName());
+											assertEquals("com.google.gson.JsonElement", exp.getDeclaringType().getFullyQualifiedName());
 										} else if (methName.equals("get")) {
 											System.out.println(methName + " return type is " + exp.getReturnType().getName());
-											// FIXME assertEquals("com.google.gson.JsonElement", exp.getReturnType().getFullyQualifiedName());
+											assertEquals("com.google.gson.JsonElement", exp.getReturnType().getFullyQualifiedName());
 											System.out.println(methName + " declaring type is " + exp.getDeclaringType().getFullyQualifiedName());
-											// FIXME assertEquals("com.google.gson.JsonObject", exp.getDeclaringType().getFullyQualifiedName());
+											assertEquals("com.google.gson.JsonObject", exp.getDeclaringType().getFullyQualifiedName());
 										} else if (methName.equals("add")) {
 											System.out.println(methName + " return type is " + exp.getReturnType().getName());
-							//FIXME				assertEquals("boolean", exp.getReturnType().getName());
-											System.out.println(methName + " declaring type is "
-													+ exp.getDeclaringType().getFullyQualifiedName());
-											// FIXME assertEquals("gnu.trove.set.hash.THashSet", exp.getDeclaringType().getFullyQualifiedName());
+											assertEquals("boolean", exp.getReturnType().getName());
+											System.out.println(methName + " declaring type is " + exp.getDeclaringType().getFullyQualifiedName());
+											assertEquals("gnu.trove.set.hash.THashSet", exp.getDeclaringType().getFullyQualifiedName());
 										} else
 											System.out.println("missed " + methName + " is " + exp.getReturnType().getFullyQualifiedName());
 									}
