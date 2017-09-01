@@ -192,8 +192,7 @@ public abstract class AbstractConnector implements AutoCloseable {
 					paths.add(path);
 			}
 		}
-		HashSet<String> globalRepoLinks = new HashSet<String>();
-		globalRepoLinks.add("http://central.maven.org/maven2/");
+		HashSet<String> globalRepoLinks = new HashSet<String>(DependencyMangementUtil.repositoryLinks);
 		HashMap<String, String> globalProperties = new HashMap<String, String>();
 		HashMap<String, String> globalManagedDependencies = new HashMap<String, String>();
 		Stack<PomFile> parentPomFiles = new Stack<PomFile>();
