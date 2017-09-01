@@ -42,6 +42,7 @@ import boa.types.Diff.ChangedFile.FileKind;
 import boa.types.Shared.ChangeKind;
 import boa.types.Shared.Person;
 import boa.datagen.DefaultProperties;
+import boa.datagen.dependencies.PomFile;
 import boa.datagen.treed.TreedConstants;
 import boa.datagen.treed.TreedMapper;
 import boa.datagen.util.FileIO;
@@ -141,6 +142,12 @@ public abstract class AbstractCommit {
 	protected abstract String getFileContents(final String path);
 
 	public abstract String writeFile(final String classpathRoot, final String path);
+
+	public abstract Set<String> getGradleDependencies(final String classpathRoot, final String path);
+
+	public abstract Set<String> getPomDependencies(String classpathroot, String name, HashSet<String> globalRepoLinks,
+			HashMap<String, String> globalProperties, HashMap<String, String> globalManagedDependencies,
+			Stack<PomFile> parentPomFiles);
 
 	public Revision asProtobuf(final boolean parse, final Writer astWriter, final Writer contentWriter) {
 		final Revision.Builder revision = Revision.newBuilder();

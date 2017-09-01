@@ -18,6 +18,9 @@
 package boa.datagen.util;
 
 import java.io.*;
+import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
 
 /**
  * @author hoan
@@ -91,5 +94,79 @@ public class FileIO {
 		if (index == -1)
 			index = path.lastIndexOf('\\');
 		return path.substring(index + 1);
+	}
+
+	public static String getFile(String outPath, String prefix, String[] values) throws IOException {
+		String lib = values[1];
+		File dir = new File(outPath);
+		if (dir.exists()) {
+			for (File file : dir.listFiles()) {
+				String name = file.getName();
+				if (name.startsWith(lib) && name.endsWith(".jar"))
+					return new File(dir, name).getAbsolutePath();
+			}
+		}
+		
+		InputStream is = null;
+	    try {
+	    	URL url = new URL(prefix);
+	        is = url.openStream();
+	        BufferedReader br = new BufferedReader(new InputStreamReader(is));
+		    String line, last = null;
+	        while ((line = br.readLine()) != null) {
+	        	line = line.trim();
+	        	if (line.startsWith("<a ")) {
+	        		int index = "<a href=".length();
+	        		char ch = line.charAt(index);
+	        		if (ch == '\'' || ch == '\"')
+	        			index++;
+	        		String v = line;
+        			if (ch == '\'' || ch == '\"')
+        				v = line.substring(index, line.indexOf(ch, index));
+        			else {
+        				int e = line.indexOf(' ', index);
+        				if (e == -1)
+        					e = line.indexOf('>', index);
+        				v = line.substring(index, e);
+        			}
+        			String[] parts = v.split("\\.");
+	        		try {
+	        			Integer.parseInt(parts[0]);
+	        			last = v;
+	        		} catch (Exception e) {
+	        			if (last != null)
+	        				break;
+	        		}
+	        	}
+	        }
+	        if (last != null) {
+	        	if (last.endsWith("/"))
+	        		last = last.substring(0, last.length() - 1);
+				String name = values[1] + "-" + last + ".jar";
+	        	String link = prefix + last;
+				link += "/" + name;
+				return getFile(outPath, name, link);
+	        }
+	    } finally {
+	        try {
+	            if (is != null) is.close();
+	        } catch (IOException ioe) {}
+	    }
+	    return null;
+	}
+
+	public static String getFile(String outPath, String name, String link) throws IOException {
+		File dir = new File(outPath), file = new File(dir, name);
+		if (!file.exists()) {
+			URL url = new URL(link);
+			ReadableByteChannel rbc = Channels.newChannel(url.openStream());
+			if (!dir.exists())
+				dir.mkdirs();
+			FileOutputStream fos = new FileOutputStream(dir.getAbsolutePath() + "/" + name);
+			fos.getChannel().transferFrom(rbc, 0, Integer.MAX_VALUE);
+			fos.flush();
+			fos.close();
+		}
+		return file.getAbsolutePath();
 	}
 }

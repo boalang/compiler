@@ -17,12 +17,20 @@
 
 package boa.datagen.scm;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Scanner;
+import java.util.Set;
+import java.util.Stack;
+import org.apache.maven.model.Model;
+import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffFormatter;
 import org.eclipse.jgit.diff.RawTextComparator;
@@ -37,6 +45,9 @@ import org.eclipse.jgit.treewalk.CanonicalTreeParser;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.util.io.NullOutputStream;
 
+import boa.datagen.dependencies.DependencyMangementUtil;
+import boa.datagen.dependencies.GradleFile;
+import boa.datagen.dependencies.PomFile;
 import boa.datagen.util.FileIO;
 import boa.types.Diff.ChangedFile;
 import boa.types.Diff.ChangedFile.FileKind;
@@ -75,7 +86,7 @@ public class GitCommit extends AbstractCommit {
 	}
 
 	@Override
-	public String writeFile(final String classpathRoot, String path) {
+	public String writeFile(final String classpathRoot, final String path) {
 		String name = FileIO.getFileName(path);
 		File file = new File(classpathRoot, name);
 		if (!file.exists()) {
@@ -95,6 +106,71 @@ public class GitCommit extends AbstractCommit {
 			}
 		}
 		return file.getAbsolutePath();
+	}
+
+	@Override
+	public Set<String> getGradleDependencies(final String classpathRoot, final String path) {
+		Set<String> paths = new HashSet<String>();
+		String content = null;
+		ObjectId fileid = filePathGitObjectIds.get(path);
+		try {
+			buffer.reset();
+			buffer.write(repository.open(fileid, Constants.OBJ_BLOB).getCachedBytes());
+			content = buffer.toString();
+			buffer.flush();
+		} catch (final IOException e) {
+			if (debug)
+				System.err.println("Git Error write contents of '" + path + "' at revision " + id + ": " + e.getMessage());
+			return paths;
+		}
+		if (content == null)
+			return paths;
+		GradleFile gradle = new GradleFile(content);
+		paths = gradle.getDependencies(classpathRoot);
+		return paths;
+	}
+	
+	@Override
+	public Set<String> getPomDependencies(String outPath, String path,
+			HashSet<String> globalRepoLinks, HashMap<String, String> globalProperties, HashMap<String, String> globalManagedDependencies,
+			Stack<PomFile> parentPomFiles) {
+		Set<String> paths = new HashSet<String>();
+		String content = null;
+		ObjectId fileid = filePathGitObjectIds.get(path);
+		try {
+			buffer.reset();
+			buffer.write(repository.open(fileid, Constants.OBJ_BLOB).getCachedBytes());
+			content = buffer.toString();
+			buffer.flush();
+		} catch (final IOException e) {
+			if (debug)
+				System.err.println("Git Error write contents of '" + path + "' at revision " + id + ": " + e.getMessage());
+			return paths;
+		}
+		if (content == null)
+			return paths;
+		MavenXpp3Reader xpp3Reader = new MavenXpp3Reader();
+		Model model = null;
+		try {
+			model = xpp3Reader.read(new ByteArrayInputStream(content.getBytes()));
+		} catch (IOException e1) {
+			if (debug)
+				e1.printStackTrace();
+			return paths;
+		} catch (XmlPullParserException e1) {
+			if (debug)
+				e1.printStackTrace();
+			return paths;
+		}
+		PomFile pf = new PomFile(model.getId(), model.getParent() != null ? model.getParent().getId() : null,
+						model.getProperties(),
+						model.getDependencyManagement() != null ? model.getDependencyManagement().getDependencies() : null,
+						model.getRepositories(),
+						globalRepoLinks, globalProperties, globalManagedDependencies,
+						parentPomFiles);
+		parentPomFiles.push(pf);
+		paths = pf.getDependencies(model.getDependencies(), globalRepoLinks, globalProperties, globalManagedDependencies, outPath);
+		return paths;
 	}
 
 	void getChangeFiles(RevCommit rc) {
@@ -119,7 +195,8 @@ public class GitCommit extends AbstractCommit {
 					}
 				}
 			} catch (IOException e) {
-				System.err.println(e.getMessage());
+				if (debug)
+					System.err.println(e.getMessage());
 			}
 			tw.close();
 		} else {

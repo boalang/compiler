@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Set;
+import java.util.Stack;
 
 import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.LongWritable;
@@ -41,6 +42,8 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.FileASTRequestor;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 
+import boa.datagen.dependencies.DependencyMangementUtil;
+import boa.datagen.dependencies.PomFile;
 import boa.datagen.util.Java7Visitor;
 import boa.datagen.util.Java8Visitor;
 import boa.types.Ast.ASTRoot;
@@ -178,13 +181,29 @@ public abstract class AbstractConnector implements AutoCloseable {
 	}
 
 	private String[] buildClassPaths(int commitOffset, Map<String, String> fileContents, List<ChangedFile> snapshot, Map<String, AbstractCommit> commits) {
-		List<String> paths = new ArrayList<String>();
+		Set<String> paths = new HashSet<String>();
 		for (ChangedFile cf : snapshot) {
 			if (cf.getName().endsWith(".jar")) {
 				AbstractCommit commit = commits.get(cf.getName());
 				String path = commit.writeFile(classpathRoot, cf.getName());
 				if (path != null)
 					paths.add(path);
+			}
+		}
+		HashSet<String> globalRepoLinks = new HashSet<>();
+		globalRepoLinks.add("http://central.maven.org/maven2/");
+		HashMap<String, String> globalProperties = new HashMap<>();
+		HashMap<String, String> globalManagedDependencies = new HashMap<>();
+		Stack<PomFile> parentPomFiles = new Stack<>();
+		for (ChangedFile cf : snapshot) {
+			if (cf.getName().equals("build.gradle")) {
+				AbstractCommit commit = commits.get(cf.getName());
+				Set<String> dependencies = commit.getGradleDependencies(classpathRoot, cf.getName());
+				paths.addAll(dependencies);
+			} else if (cf.getName().equals("pom.xml")) {
+				AbstractCommit commit = commits.get(cf.getName());
+				Set<String> dependencies = commit.getPomDependencies(classpathRoot, cf.getName(), globalRepoLinks, globalProperties, globalManagedDependencies, parentPomFiles);
+				paths.addAll(dependencies);
 			}
 		}
 		return paths.toArray(new String[0]);
