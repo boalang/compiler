@@ -18,8 +18,8 @@ import boa.datagen.util.FileIO;
 public class PomFile {
 	private String id;
 	private PomFile parent;
-	HashMap<String, String> properties = new HashMap<>();
-	HashMap<String, String> managedDependencies = new HashMap<>();
+	HashMap<String, String> properties = new HashMap<String, String>();
+	HashMap<String, String> managedDependencies = new HashMap<String, String>();
 	
 	public PomFile(String id, String parent, 
 			Properties properties, List<Dependency> managedDependencies, List<Repository> repos,

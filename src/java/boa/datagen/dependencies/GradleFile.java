@@ -19,7 +19,7 @@ public class GradleFile {
 		Set<String> paths = new HashSet<String>();
 		Scanner sc = new Scanner(content);
 		boolean inDependencies = false;
-		HashMap<String, String> variableValue = new HashMap<>();
+		HashMap<String, String> variableValue = new HashMap<String, String>();
 		while (sc.hasNextLine()) {
 			String l = sc.nextLine().trim();
 			String line = l;

@@ -190,11 +190,11 @@ public abstract class AbstractConnector implements AutoCloseable {
 					paths.add(path);
 			}
 		}
-		HashSet<String> globalRepoLinks = new HashSet<>();
+		HashSet<String> globalRepoLinks = new HashSet<String>();
 		globalRepoLinks.add("http://central.maven.org/maven2/");
-		HashMap<String, String> globalProperties = new HashMap<>();
-		HashMap<String, String> globalManagedDependencies = new HashMap<>();
-		Stack<PomFile> parentPomFiles = new Stack<>();
+		HashMap<String, String> globalProperties = new HashMap<String, String>();
+		HashMap<String, String> globalManagedDependencies = new HashMap<String, String>();
+		Stack<PomFile> parentPomFiles = new Stack<PomFile>();
 		for (ChangedFile cf : snapshot) {
 			if (cf.getName().equals("build.gradle")) {
 				AbstractCommit commit = commits.get(cf.getName());
