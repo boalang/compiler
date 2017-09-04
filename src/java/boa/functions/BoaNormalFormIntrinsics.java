@@ -82,11 +82,11 @@ public class BoaNormalFormIntrinsics {
 
 			case VARACCESS: //replace with symbolic names
 				if (e.equals(reciever))
-					return createVariable("rcv");
+					return createVariable("rcv$");
 
 				for (int i = 0; i < arguments.length; i++)
 					if (e.equals(arguments[i]))
-						return createVariable("arg"+Integer.toString(i));
+						return createVariable("arg$"+Integer.toString(i));
 				return e;
 
 			case METHODCALL:
