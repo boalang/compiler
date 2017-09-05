@@ -222,6 +222,8 @@ public class TestTypeFullyQualifiedName {
 						ASTRoot root = ASTRoot.parseFrom(CodedInputStream.newInstance(bytes, 0, val.getLength()));
 						// System.out.println(root);
 						ProtoMessageVisitor v = new ProtoMessageVisitor() {
+							private int tokenFileCount = 0;
+							
 							@Override
 							public boolean preVisit(Message message) {
 								if (message instanceof boa.types.Ast.Expression) {
@@ -239,11 +241,14 @@ public class TestTypeFullyQualifiedName {
 											System.out.println(exp.getDeclaringType().getFullyQualifiedName() + " is boa.datagen.forges.github.GithubLanguageDownloadMaster");
 											assertEquals("boa.datagen.forges.github.GithubLanguageDownloadMaster", exp.getDeclaringType().getFullyQualifiedName());
 										} else if (var.equals("tokenFile")) {
+											tokenFileCount++;
 											System.out.println(exp.getReturnType().getFullyQualifiedName() + " is java.lang.String");
 											assertEquals("java.lang.String", exp.getReturnType().getFullyQualifiedName());
 											System.out.println(exp.getDeclaringType().getFullyQualifiedName() + " is boa.datagen.forges.github.GithubLanguageDownloadMaster");
-											if (exp.getIsMemberAccess())
+											if (exp.getIsMemberAccess()) {
 												assertEquals("boa.datagen.forges.github.GithubLanguageDownloadMaster", exp.getDeclaringType().getFullyQualifiedName());
+											} else
+												assertEquals(2, tokenFileCount);
 										} else if (var.equals("MAX_NUM_THREADS")) {
 											System.out.println(exp.getReturnType().getName() + " is int");
 											assertEquals("int", exp.getReturnType().getName());
