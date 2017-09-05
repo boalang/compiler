@@ -34,6 +34,7 @@ public class CssVisitor {
 	private void visit(CSSStyleSheetImpl node) {
 		Element.Builder eb = Element.newBuilder();
 		eb.setKind(Element.ElementKind.STYLE_SHEET);
+		eb.setTag("");//FIXME
 		CSSRuleListImpl l = (CSSRuleListImpl) node.getCssRules();
 		if (node.getTitle() != null)
 			eb.setTitle(node.getTitle());
@@ -63,6 +64,7 @@ public class CssVisitor {
 	private void visit(CSSMediaRuleImpl node) {
 		Element.Builder b = Element.newBuilder();
 		b.setKind(Element.ElementKind.MEDIA_RULE);
+		b.setTag("");//FIXME
 		CSSRuleListImpl l = (CSSRuleListImpl) node.getCssRules();
 		elements.push(new ArrayList<boa.types.Ast.Element>());
 		for (Object o : l.getRules()) {
@@ -90,6 +92,7 @@ public class CssVisitor {
 	private void visit(CSSImportRuleImpl node) {
 		Element.Builder b = Element.newBuilder();
 		b.setKind(Element.ElementKind.IMPORT_RULE);
+		b.setTag("");//FIXME
 		b.addData(node.getHref());
 		MediaListImpl ml = (MediaListImpl) node.getMedia();
 		elements.push(new ArrayList<Element>());
@@ -104,6 +107,7 @@ public class CssVisitor {
 	private void visit(MediaQuery node) {
 		Element.Builder b = Element.newBuilder();
 		b.setKind(Element.ElementKind.MEDIA_QUERY);
+		b.setTag("");//FIXME
 		b.addData(node.getMedia());
 		for (Property p : node.getProperties()) {
 			boa.types.Ast.Atribute.Builder a = boa.types.Ast.Atribute.newBuilder();
@@ -117,6 +121,7 @@ public class CssVisitor {
 	private void visit(CSSStyleRuleImpl node) {
 		Element.Builder b = Element.newBuilder();
 		b.setKind(Element.ElementKind.STYLE_RULE);
+		b.setTag(node.getSelectorText());
 		CSSStyleDeclarationImpl style = (CSSStyleDeclarationImpl) node.getStyle();
 		atributes.push(new ArrayList<boa.types.Ast.Atribute>());
 		visit(style);
@@ -137,6 +142,7 @@ public class CssVisitor {
 	private void visit(CSSPageRuleImpl node) {
 		Element.Builder b = Element.newBuilder();
 		b.setKind(Element.ElementKind.PAGE_RULE);
+		b.setTag("");//FIXME
 		b.addData(node.getSelectorText());
 		CSSStyleDeclarationImpl style = (CSSStyleDeclarationImpl) node.getStyle();
 		atributes.push(new ArrayList<boa.types.Ast.Atribute>());
@@ -149,6 +155,7 @@ public class CssVisitor {
 	private void visit(CSSFontFaceRuleImpl node) {
 		Element.Builder b = Element.newBuilder();
 		b.setKind(Element.ElementKind.FONT_FACE_RULE);
+		b.setTag("");//FIXME
 		CSSStyleDeclarationImpl style = (CSSStyleDeclarationImpl) node.getStyle();
 		atributes.push(new ArrayList<boa.types.Ast.Atribute>());
 		visit(style);
