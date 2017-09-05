@@ -27,7 +27,7 @@ public class CssParseTest {
 		try {
 			com.steadystate.css.dom.CSSStyleSheetImpl sSheet = (CSSStyleSheetImpl) parser.parseStyleSheet(source, null, null);
 			CssVisitor visitor = new CssVisitor();
-			boa.types.Ast.Document document = visitor.getDocument(sSheet);
+			boa.types.Ast.Element document = visitor.getStyleSheet(sSheet);
 			System.out.println(document.toString());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
