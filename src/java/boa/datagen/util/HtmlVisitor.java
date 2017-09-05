@@ -23,6 +23,7 @@ import static org.junit.Assert.assertFalse;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -38,6 +39,9 @@ import org.jsoup.nodes.Element;
 import org.mozilla.javascript.CompilerEnvirons;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.ast.AstRoot;
+import org.w3c.css.sac.InputSource;
+
+import com.steadystate.css.dom.CSSStyleSheetImpl;
 
 public class HtmlVisitor {
 	protected Ast.Document.Builder b = Ast.Document.newBuilder();
@@ -114,7 +118,7 @@ public class HtmlVisitor {
 						b.addData(php);
 				} else {
 			//	b.addText(comm);
-				visit((Comment) n);
+			//	visit((Comment) n);
 				}
 			}else if (n instanceof TextNode) {
 				String t = ((TextNode) n).text();
@@ -122,7 +126,14 @@ public class HtmlVisitor {
 				if (!check.equals(""))
 					b.addText(t);
 			} else if (n instanceof DataNode) {
-				if (tag.equals("script")) {
+				if (tag.equals("style")) {
+					Ast.Element sSheet = parseCss(((DataNode) n).getWholeData());
+					if ( sSheet != null)
+						b.addElements(sSheet);
+					else 
+						b.addData(((DataNode) n).getWholeData());
+				}
+				else if (tag.equals("script")) {
 					Ast.Namespace ns = this.parseJs(((DataNode) n).getWholeData());
 					if (ns != null)
 						b.setScript(ns); 
@@ -137,11 +148,11 @@ public class HtmlVisitor {
 		elements.peek().add(b.build());
 	}
 
-
 	public void visit(org.jsoup.nodes.Comment node) {
 		boa.types.Ast.Comment.Builder b = boa.types.Ast.Comment.newBuilder();
 		b.setKind(CommentKind.OTHER);// FIXME
 		b.setValue(node.getData());
+//		b.setPosition(node.) FIXME
 		comments.add(b.build());
 	}
 
@@ -169,7 +180,7 @@ public class HtmlVisitor {
 
 	private Namespace parseJs(String content) {
 		CompilerEnvirons cp = new CompilerEnvirons();
-		cp.setLanguageVersion(Context.VERSION_1_7);
+		cp.setLanguageVersion(Context.VERSION_ES6);
 		cp.setRecoverFromErrors(false);
 		// cp.setAllowMemberExprAsFunctionName(true);
 		final org.mozilla.javascript.Parser parser = new org.mozilla.javascript.Parser(cp);
@@ -206,5 +217,17 @@ public class HtmlVisitor {
 		if (errorCheck.hasError)
 			return null;
 		return visitor.getNamespace(ast);
+	}
+	
+	private boa.types.Ast.Element parseCss(String wholeData) {
+		com.steadystate.css.parser.CSSOMParser parser = new com.steadystate.css.parser.CSSOMParser();
+		InputSource source = new InputSource(new StringReader(wholeData));
+		try {
+			com.steadystate.css.dom.CSSStyleSheetImpl sSheet = (CSSStyleSheetImpl) parser.parseStyleSheet(source, null, null);
+			CssVisitor visitor = new CssVisitor();
+			return(visitor.getStyleSheet(sSheet));
+		} catch (IOException e) {
+			return null;
+		}
 	}
 }

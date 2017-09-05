@@ -8,7 +8,26 @@ elements {
     elements {
       tag: "style"
       kind: BLOCK
-      data: "\nh1 {color:red;}\np {color:blue;}\n"
+      elements {
+        tag: ""
+        kind: STYLE_SHEET
+        elements {
+          tag: "h1"
+          kind: STYLE_RULE
+          atributes {
+            key: "color"
+            value: "red"
+          }
+        }
+        elements {
+          tag: "p"
+          kind: STYLE_RULE
+          atributes {
+            key: "color"
+            value: "blue"
+          }
+        }
+      }
     }
   }
   elements {

@@ -13,7 +13,7 @@ import boa.types.Ast.Element;
 public class CssVisitor {
 
 	private CSSStyleSheetImpl root;
-	protected Ast.Document.Builder b = Ast.Document.newBuilder();
+	protected Ast.Element.Builder b = Ast.Element.newBuilder();
 	protected List<boa.types.Ast.Comment> comments = new ArrayList<boa.types.Ast.Comment>();
 	protected Stack<List<boa.types.Ast.Element>> elements = new Stack<List<boa.types.Ast.Element>>();
 	protected Stack<List<boa.types.Ast.Atribute>> atributes = new Stack<List<boa.types.Ast.Atribute>>();
@@ -22,22 +22,50 @@ public class CssVisitor {
 
 	}
 
-	public Ast.Document getDocument(com.steadystate.css.dom.CSSStyleSheetImpl node) {
+	public Ast.Element getStyleSheet(com.steadystate.css.dom.CSSStyleSheetImpl node) {
 		this.root = node;
 		elements.push(new ArrayList<Element>());
+		visitRoot();
 		visit(node);
-		for (Element e : elements.pop())
-			b.addElements(e);
 		return b.build();
 	}
 
-	private void visit(CSSStyleSheetImpl node) {
+	private void visitRoot() {
 		Element.Builder eb = Element.newBuilder();
-		eb.setKind(Element.ElementKind.STYLE_SHEET);
-		eb.setTag("");//FIXME
+		b.setKind(Element.ElementKind.STYLE_SHEET);
+		b.setTag("");//FIXME
+		CSSRuleListImpl l = (CSSRuleListImpl) root.getCssRules();
+		if (root.getTitle() != null)
+			eb.setTitle(root.getTitle());
+		elements.push(new ArrayList<boa.types.Ast.Element>());
+		for (Object o : l.getRules()) {
+			if (o instanceof CSSFontFaceRuleImpl)
+				visit((CSSFontFaceRuleImpl) o);
+			else if (o instanceof CSSPageRuleImpl)
+				visit((CSSPageRuleImpl) o);
+			else if (o instanceof CSSStyleRuleImpl)
+				visit((CSSStyleRuleImpl) o);
+			else if (o instanceof CSSImportRuleImpl)
+				visit((CSSImportRuleImpl) o);
+			else if (o instanceof CSSMediaRuleImpl)
+				visit((CSSMediaRuleImpl) o);
+
+		}
+	//	MediaListImpl ml = (MediaListImpl) root.getMedia(); FIXME
+	//	for (int i = 0; i < ml.getLength(); i++) {
+	//		visit(ml.mediaQuery(i));
+	//	}
+		for (boa.types.Ast.Element el : elements.pop())
+			b.addElements(el);
+	}
+
+	private void visit(CSSStyleSheetImpl node) {
+		Element.Builder b = Element.newBuilder();
+		b.setKind(Element.ElementKind.STYLE_SHEET);
+		b.setTag("");//FIXME
 		CSSRuleListImpl l = (CSSRuleListImpl) node.getCssRules();
 		if (node.getTitle() != null)
-			eb.setTitle(node.getTitle());
+			b.setTitle(node.getTitle());
 		elements.push(new ArrayList<boa.types.Ast.Element>());
 		for (Object o : l.getRules()) {
 			if (o instanceof CSSFontFaceRuleImpl)
@@ -57,8 +85,8 @@ public class CssVisitor {
 			visit(ml.mediaQuery(i));
 		}
 		for (boa.types.Ast.Element el : elements.pop())
-			eb.addElements(el);
-		elements.peek().add(eb.build());
+			b.addElements(el);
+		elements.peek().add(b.build());
 	}
 
 	private void visit(CSSMediaRuleImpl node) {
