@@ -7,3 +7,4 @@ output/
 /.classpath
 /.project
 src/java/boa/datagen/misc
+/.settings/
