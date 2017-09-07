@@ -1,16 +1,13 @@
 package boa.datagen.util;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Stack;
 
-import org.eclipse.php.internal.core.compiler.ast.parser.*;
 import org.eclipse.dltk.ast.Modifiers;
 import org.eclipse.php.internal.core.ast.nodes.*;
 import org.eclipse.php.internal.core.ast.visitor.AbstractVisitor;
 
-import boa.types.Ast.ASTRoot;
 import boa.types.Ast.Declaration;
 import boa.types.Ast.Expression;
 import boa.types.Ast.Method;
@@ -29,7 +26,6 @@ public class PHPVisitor extends AbstractVisitor {
 
 	private PositionInfo.Builder pos = null;
 	private String src = null;
-	private HashMap<String, Integer> nameIndices;
 	protected Namespace.Builder b = Namespace.newBuilder();
 	protected List<boa.types.Ast.Comment> comments = new ArrayList<boa.types.Ast.Comment>();
 	protected List<String> imports = new ArrayList<String>();
@@ -50,8 +46,6 @@ public class PHPVisitor extends AbstractVisitor {
 
 	public Namespace getNamespace(Program node) {
 		root = node;
-		if (node == null)
-			System.out.println("");
 		node.accept(this);
 		return b.build();
 	}

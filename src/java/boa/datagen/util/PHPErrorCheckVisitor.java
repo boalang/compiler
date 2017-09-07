@@ -11,7 +11,7 @@ public class PHPErrorCheckVisitor extends ApplyAll{
 
 	@Override
 	protected boolean apply(ASTNode node) {
-		if (node == null || (node instanceof ASTError) || (node.getFlags() & ASTNode.MALFORMED) != 0 || (node.getFlags() & ASTNode.RECOVERED) != 0 || (node instanceof ASTError))
+		if (node == null || (node instanceof ASTError) || (node.getFlags() & ASTNode.MALFORMED) != 0 || (node.getFlags() & ASTNode.RECOVERED) != 0)
 			hasError = true;
 		return !hasError;
 	}
