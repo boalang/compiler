@@ -13,7 +13,7 @@ namespaces {
             variable: "text"
           }
           expressions {
-            kind: ARRAYINDEX
+            kind: ARRAYACCESS
             expressions {
               kind: VARACCESS
               variable: "person"

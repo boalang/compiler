@@ -3,7 +3,7 @@ namespaces {
   statements {
     kind: EXPRESSION
     expression {
-      kind: ARRAYINDEX
+      kind: ARRAYACCESS
       expressions {
         kind: VARACCESS
         variable: "i"

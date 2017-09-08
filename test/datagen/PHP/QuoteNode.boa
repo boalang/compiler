@@ -1,22 +1,26 @@
 namespaces {
   name: ""
   statements {
-    kind: OTHER
-    initializations {
-      kind: LITERAL
-      expressions {
-        kind: VARACCESS
-        variable_decls {
-          name: "$name"
+    kind: EXPRESSION
+    expression {
+      kind: METHODCALL
+      method: "echo"
+      method_args {
+        kind: LITERAL
+        expressions {
+          kind: VARACCESS
+          variable_decls {
+            name: "$name"
+          }
         }
-      }
-      expressions {
-        kind: VARACCESS
-        variable_decls {
-          name: "$age"
+        expressions {
+          kind: VARACCESS
+          variable_decls {
+            name: "$age"
+          }
         }
+        literal: "Hi, my name is  and I am  years old."
       }
-      literal: "Hi, my name is  and I am  years old."
     }
   }
 }
