@@ -1902,7 +1902,7 @@ public class Java7Visitor extends ASTVisitor {
 		if (node.resolveTypeBinding() != null) {
 			b.setReturnType(buildType(node.resolveTypeBinding()));
 		}
-		b.setKind(boa.types.Ast.Expression.ExpressionKind.ARRAYINDEX);
+		b.setKind(boa.types.Ast.Expression.ExpressionKind.ARRAYACCESS);
 		node.getArray().accept(this);
 		b.addExpressions(expressions.pop());
 		node.getIndex().accept(this);

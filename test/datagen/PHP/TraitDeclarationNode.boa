@@ -2,11 +2,7 @@ namespaces {
   name: ""
   declarations {
     name: "ezcReflectionReturnInfo"
-    kind: OTHER
-    modifiers {
-      kind: OTHER
-      other: "trait"
-    }
+    kind: TRAIT
     methods {
       name: "getReturnType"
       modifiers {

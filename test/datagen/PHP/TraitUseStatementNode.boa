@@ -1,11 +1,11 @@
 namespaces {
   name: ""
   declarations {
-    name: ""
+    name: "ezcReflectionFunction"
     kind: CLASS
     parents {
       name: "ReflectionFunction"
-      kind: OTHER
+      kind: CLASS
     }
     methods {
       name: "use"

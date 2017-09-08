@@ -89,6 +89,14 @@ public final class Ast {
      * </pre>
      */
     GENERIC(10, 8),
+    /**
+     * <code>TRAIT = 9;</code>
+     *
+     * <pre>
+     ** A trait in PHP 
+     * </pre>
+     */
+    TRAIT(11, 9),
     ;
 
     /**
@@ -195,6 +203,14 @@ public final class Ast {
      * </pre>
      */
     public static final int GENERIC_VALUE = 8;
+    /**
+     * <code>TRAIT = 9;</code>
+     *
+     * <pre>
+     ** A trait in PHP 
+     * </pre>
+     */
+    public static final int TRAIT_VALUE = 9;
 
 
     public final int getNumber() { return value; }
@@ -210,6 +226,7 @@ public final class Ast {
         case 6: return ANNOTATION;
         case 7: return DELEGATE;
         case 8: return GENERIC;
+        case 9: return TRAIT;
         default: return null;
       }
     }
@@ -240,7 +257,7 @@ public final class Ast {
     }
 
     private static final TypeKind[] VALUES = {
-      OTHER, CLASS, INTERFACE, ANONYMOUS, ANON, STRUCT, ENUM, ENUMERATION, ANNOTATION, DELEGATE, GENERIC, 
+      OTHER, CLASS, INTERFACE, ANONYMOUS, ANON, STRUCT, ENUM, ENUMERATION, ANNOTATION, DELEGATE, GENERIC, TRAIT, 
     };
 
     public static TypeKind valueOf(
@@ -11154,9 +11171,9 @@ public final class Ast {
   public interface TypeOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
-    // required string name = 1;
+    // optional string name = 1;
     /**
-     * <code>required string name = 1;</code>
+     * <code>optional string name = 1;</code>
      *
      * <pre>
      ** The name of the type 
@@ -11164,7 +11181,7 @@ public final class Ast {
      */
     boolean hasName();
     /**
-     * <code>required string name = 1;</code>
+     * <code>optional string name = 1;</code>
      *
      * <pre>
      ** The name of the type 
@@ -11172,7 +11189,7 @@ public final class Ast {
      */
     java.lang.String getName();
     /**
-     * <code>required string name = 1;</code>
+     * <code>optional string name = 1;</code>
      *
      * <pre>
      ** The name of the type 
@@ -11342,6 +11359,20 @@ public final class Ast {
      * </pre>
      */
     int getKey();
+
+    // optional .boa.types.Expression computed_name = 14;
+    /**
+     * <code>optional .boa.types.Expression computed_name = 14;</code>
+     */
+    boolean hasComputedName();
+    /**
+     * <code>optional .boa.types.Expression computed_name = 14;</code>
+     */
+    boa.types.Ast.Expression getComputedName();
+    /**
+     * <code>optional .boa.types.Expression computed_name = 14;</code>
+     */
+    boa.types.Ast.ExpressionOrBuilder getComputedNameOrBuilder();
   }
   /**
    * Protobuf type {@code boa.types.Type}
@@ -11455,6 +11486,19 @@ public final class Ast {
               key_ = input.readInt32();
               break;
             }
+            case 114: {
+              boa.types.Ast.Expression.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000200) == 0x00000200)) {
+                subBuilder = computedName_.toBuilder();
+              }
+              computedName_ = input.readMessage(boa.types.Ast.Expression.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(computedName_);
+                computedName_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000200;
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -11495,11 +11539,11 @@ public final class Ast {
     }
 
     private int bitField0_;
-    // required string name = 1;
+    // optional string name = 1;
     public static final int NAME_FIELD_NUMBER = 1;
     private java.lang.Object name_;
     /**
-     * <code>required string name = 1;</code>
+     * <code>optional string name = 1;</code>
      *
      * <pre>
      ** The name of the type 
@@ -11509,7 +11553,7 @@ public final class Ast {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
-     * <code>required string name = 1;</code>
+     * <code>optional string name = 1;</code>
      *
      * <pre>
      ** The name of the type 
@@ -11530,7 +11574,7 @@ public final class Ast {
       }
     }
     /**
-     * <code>required string name = 1;</code>
+     * <code>optional string name = 1;</code>
      *
      * <pre>
      ** The name of the type 
@@ -11804,6 +11848,28 @@ public final class Ast {
       return key_;
     }
 
+    // optional .boa.types.Expression computed_name = 14;
+    public static final int COMPUTED_NAME_FIELD_NUMBER = 14;
+    private boa.types.Ast.Expression computedName_;
+    /**
+     * <code>optional .boa.types.Expression computed_name = 14;</code>
+     */
+    public boolean hasComputedName() {
+      return ((bitField0_ & 0x00000200) == 0x00000200);
+    }
+    /**
+     * <code>optional .boa.types.Expression computed_name = 14;</code>
+     */
+    public boa.types.Ast.Expression getComputedName() {
+      return computedName_;
+    }
+    /**
+     * <code>optional .boa.types.Expression computed_name = 14;</code>
+     */
+    public boa.types.Ast.ExpressionOrBuilder getComputedNameOrBuilder() {
+      return computedName_;
+    }
+
     private void initFields() {
       name_ = "";
       fullyQualifiedName_ = "";
@@ -11814,19 +11880,22 @@ public final class Ast {
       declarationFile_ = 0;
       declaration_ = 0;
       key_ = 0;
+      computedName_ = boa.types.Ast.Expression.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized != -1) return isInitialized == 1;
 
-      if (!hasName()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
       if (!hasKind()) {
         memoizedIsInitialized = 0;
         return false;
+      }
+      if (hasComputedName()) {
+        if (!getComputedName().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
       }
       memoizedIsInitialized = 1;
       return true;
@@ -11861,6 +11930,9 @@ public final class Ast {
       }
       if (((bitField0_ & 0x00000100) == 0x00000100)) {
         output.writeInt32(10, key_);
+      }
+      if (((bitField0_ & 0x00000200) == 0x00000200)) {
+        output.writeMessage(14, computedName_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -11906,6 +11978,10 @@ public final class Ast {
       if (((bitField0_ & 0x00000100) == 0x00000100)) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(10, key_);
+      }
+      if (((bitField0_ & 0x00000200) == 0x00000200)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(14, computedName_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -12019,6 +12095,7 @@ public final class Ast {
       }
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+          getComputedNameFieldBuilder();
         }
       }
       private static Builder create() {
@@ -12045,6 +12122,12 @@ public final class Ast {
         bitField0_ = (bitField0_ & ~0x00000080);
         key_ = 0;
         bitField0_ = (bitField0_ & ~0x00000100);
+        if (computedNameBuilder_ == null) {
+          computedName_ = boa.types.Ast.Expression.getDefaultInstance();
+        } else {
+          computedNameBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000200);
         return this;
       }
 
@@ -12109,6 +12192,14 @@ public final class Ast {
           to_bitField0_ |= 0x00000100;
         }
         result.key_ = key_;
+        if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
+          to_bitField0_ |= 0x00000200;
+        }
+        if (computedNameBuilder_ == null) {
+          result.computedName_ = computedName_;
+        } else {
+          result.computedName_ = computedNameBuilder_.build();
+        }
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -12158,18 +12249,23 @@ public final class Ast {
         if (other.hasKey()) {
           setKey(other.getKey());
         }
+        if (other.hasComputedName()) {
+          mergeComputedName(other.getComputedName());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
 
       public final boolean isInitialized() {
-        if (!hasName()) {
-          
-          return false;
-        }
         if (!hasKind()) {
           
           return false;
+        }
+        if (hasComputedName()) {
+          if (!getComputedName().isInitialized()) {
+            
+            return false;
+          }
         }
         return true;
       }
@@ -12193,10 +12289,10 @@ public final class Ast {
       }
       private int bitField0_;
 
-      // required string name = 1;
+      // optional string name = 1;
       private java.lang.Object name_ = "";
       /**
-       * <code>required string name = 1;</code>
+       * <code>optional string name = 1;</code>
        *
        * <pre>
        ** The name of the type 
@@ -12206,7 +12302,7 @@ public final class Ast {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
-       * <code>required string name = 1;</code>
+       * <code>optional string name = 1;</code>
        *
        * <pre>
        ** The name of the type 
@@ -12224,7 +12320,7 @@ public final class Ast {
         }
       }
       /**
-       * <code>required string name = 1;</code>
+       * <code>optional string name = 1;</code>
        *
        * <pre>
        ** The name of the type 
@@ -12244,7 +12340,7 @@ public final class Ast {
         }
       }
       /**
-       * <code>required string name = 1;</code>
+       * <code>optional string name = 1;</code>
        *
        * <pre>
        ** The name of the type 
@@ -12261,7 +12357,7 @@ public final class Ast {
         return this;
       }
       /**
-       * <code>required string name = 1;</code>
+       * <code>optional string name = 1;</code>
        *
        * <pre>
        ** The name of the type 
@@ -12274,7 +12370,7 @@ public final class Ast {
         return this;
       }
       /**
-       * <code>required string name = 1;</code>
+       * <code>optional string name = 1;</code>
        *
        * <pre>
        ** The name of the type 
@@ -12785,6 +12881,123 @@ public final class Ast {
         key_ = 0;
         onChanged();
         return this;
+      }
+
+      // optional .boa.types.Expression computed_name = 14;
+      private boa.types.Ast.Expression computedName_ = boa.types.Ast.Expression.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder> computedNameBuilder_;
+      /**
+       * <code>optional .boa.types.Expression computed_name = 14;</code>
+       */
+      public boolean hasComputedName() {
+        return ((bitField0_ & 0x00000200) == 0x00000200);
+      }
+      /**
+       * <code>optional .boa.types.Expression computed_name = 14;</code>
+       */
+      public boa.types.Ast.Expression getComputedName() {
+        if (computedNameBuilder_ == null) {
+          return computedName_;
+        } else {
+          return computedNameBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .boa.types.Expression computed_name = 14;</code>
+       */
+      public Builder setComputedName(boa.types.Ast.Expression value) {
+        if (computedNameBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          computedName_ = value;
+          onChanged();
+        } else {
+          computedNameBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000200;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Expression computed_name = 14;</code>
+       */
+      public Builder setComputedName(
+          boa.types.Ast.Expression.Builder builderForValue) {
+        if (computedNameBuilder_ == null) {
+          computedName_ = builderForValue.build();
+          onChanged();
+        } else {
+          computedNameBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000200;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Expression computed_name = 14;</code>
+       */
+      public Builder mergeComputedName(boa.types.Ast.Expression value) {
+        if (computedNameBuilder_ == null) {
+          if (((bitField0_ & 0x00000200) == 0x00000200) &&
+              computedName_ != boa.types.Ast.Expression.getDefaultInstance()) {
+            computedName_ =
+              boa.types.Ast.Expression.newBuilder(computedName_).mergeFrom(value).buildPartial();
+          } else {
+            computedName_ = value;
+          }
+          onChanged();
+        } else {
+          computedNameBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000200;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Expression computed_name = 14;</code>
+       */
+      public Builder clearComputedName() {
+        if (computedNameBuilder_ == null) {
+          computedName_ = boa.types.Ast.Expression.getDefaultInstance();
+          onChanged();
+        } else {
+          computedNameBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000200);
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.Expression computed_name = 14;</code>
+       */
+      public boa.types.Ast.Expression.Builder getComputedNameBuilder() {
+        bitField0_ |= 0x00000200;
+        onChanged();
+        return getComputedNameFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .boa.types.Expression computed_name = 14;</code>
+       */
+      public boa.types.Ast.ExpressionOrBuilder getComputedNameOrBuilder() {
+        if (computedNameBuilder_ != null) {
+          return computedNameBuilder_.getMessageOrBuilder();
+        } else {
+          return computedName_;
+        }
+      }
+      /**
+       * <code>optional .boa.types.Expression computed_name = 14;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder> 
+          getComputedNameFieldBuilder() {
+        if (computedNameBuilder_ == null) {
+          computedNameBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              boa.types.Ast.Expression, boa.types.Ast.Expression.Builder, boa.types.Ast.ExpressionOrBuilder>(
+                  computedName_,
+                  getParentForChildren(),
+                  isClean());
+          computedName_ = null;
+        }
+        return computedNameBuilder_;
       }
 
       // @@protoc_insertion_point(builder_scope:boa.types.Type)
@@ -17583,6 +17796,16 @@ public final class Ast {
      * </pre>
      */
     boa.types.Ast.ExpressionOrBuilder getComputedNameOrBuilder();
+
+    // optional bool dollar_sign = 12;
+    /**
+     * <code>optional bool dollar_sign = 12;</code>
+     */
+    boolean hasDollarSign();
+    /**
+     * <code>optional bool dollar_sign = 12;</code>
+     */
+    boolean getDollarSign();
   }
   /**
    * Protobuf type {@code boa.types.Variable}
@@ -17723,6 +17946,11 @@ public final class Ast {
                 computedName_ = subBuilder.buildPartial();
               }
               bitField0_ |= 0x00000080;
+              break;
+            }
+            case 96: {
+              bitField0_ |= 0x00000100;
+              dollarSign_ = input.readBool();
               break;
             }
           }
@@ -18136,6 +18364,22 @@ public final class Ast {
       return computedName_;
     }
 
+    // optional bool dollar_sign = 12;
+    public static final int DOLLAR_SIGN_FIELD_NUMBER = 12;
+    private boolean dollarSign_;
+    /**
+     * <code>optional bool dollar_sign = 12;</code>
+     */
+    public boolean hasDollarSign() {
+      return ((bitField0_ & 0x00000100) == 0x00000100);
+    }
+    /**
+     * <code>optional bool dollar_sign = 12;</code>
+     */
+    public boolean getDollarSign() {
+      return dollarSign_;
+    }
+
     private void initFields() {
       name_ = "";
       variableType_ = boa.types.Ast.Type.getDefaultInstance();
@@ -18147,6 +18391,7 @@ public final class Ast {
       key_ = 0;
       declaringType_ = 0;
       computedName_ = boa.types.Ast.Expression.getDefaultInstance();
+      dollarSign_ = false;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -18220,6 +18465,9 @@ public final class Ast {
       if (((bitField0_ & 0x00000080) == 0x00000080)) {
         output.writeMessage(11, computedName_);
       }
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        output.writeBool(12, dollarSign_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -18268,6 +18516,10 @@ public final class Ast {
       if (((bitField0_ & 0x00000080) == 0x00000080)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(11, computedName_);
+      }
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(12, dollarSign_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -18434,6 +18686,8 @@ public final class Ast {
           computedNameBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000200);
+        dollarSign_ = false;
+        bitField0_ = (bitField0_ & ~0x00000400);
         return this;
       }
 
@@ -18524,6 +18778,10 @@ public final class Ast {
         } else {
           result.computedName_ = computedNameBuilder_.build();
         }
+        if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
+          to_bitField0_ |= 0x00000100;
+        }
+        result.dollarSign_ = dollarSign_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -18617,6 +18875,9 @@ public final class Ast {
         }
         if (other.hasComputedName()) {
           mergeComputedName(other.getComputedName());
+        }
+        if (other.hasDollarSign()) {
+          setDollarSign(other.getDollarSign());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -20055,6 +20316,39 @@ public final class Ast {
         return computedNameBuilder_;
       }
 
+      // optional bool dollar_sign = 12;
+      private boolean dollarSign_ ;
+      /**
+       * <code>optional bool dollar_sign = 12;</code>
+       */
+      public boolean hasDollarSign() {
+        return ((bitField0_ & 0x00000400) == 0x00000400);
+      }
+      /**
+       * <code>optional bool dollar_sign = 12;</code>
+       */
+      public boolean getDollarSign() {
+        return dollarSign_;
+      }
+      /**
+       * <code>optional bool dollar_sign = 12;</code>
+       */
+      public Builder setDollarSign(boolean value) {
+        bitField0_ |= 0x00000400;
+        dollarSign_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional bool dollar_sign = 12;</code>
+       */
+      public Builder clearDollarSign() {
+        bitField0_ = (bitField0_ & ~0x00000400);
+        dollarSign_ = false;
+        onChanged();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:boa.types.Variable)
     }
 
@@ -20366,6 +20660,56 @@ public final class Ast {
      */
     boa.types.Ast.MethodOrBuilder getMethodsOrBuilder(
         int index);
+
+    // repeated .boa.types.Variable variable_declarations = 15;
+    /**
+     * <code>repeated .boa.types.Variable variable_declarations = 15;</code>
+     */
+    java.util.List<boa.types.Ast.Variable> 
+        getVariableDeclarationsList();
+    /**
+     * <code>repeated .boa.types.Variable variable_declarations = 15;</code>
+     */
+    boa.types.Ast.Variable getVariableDeclarations(int index);
+    /**
+     * <code>repeated .boa.types.Variable variable_declarations = 15;</code>
+     */
+    int getVariableDeclarationsCount();
+    /**
+     * <code>repeated .boa.types.Variable variable_declarations = 15;</code>
+     */
+    java.util.List<? extends boa.types.Ast.VariableOrBuilder> 
+        getVariableDeclarationsOrBuilderList();
+    /**
+     * <code>repeated .boa.types.Variable variable_declarations = 15;</code>
+     */
+    boa.types.Ast.VariableOrBuilder getVariableDeclarationsOrBuilder(
+        int index);
+
+    // repeated .boa.types.Declaration type_declarations = 16;
+    /**
+     * <code>repeated .boa.types.Declaration type_declarations = 16;</code>
+     */
+    java.util.List<boa.types.Ast.Declaration> 
+        getTypeDeclarationsList();
+    /**
+     * <code>repeated .boa.types.Declaration type_declarations = 16;</code>
+     */
+    boa.types.Ast.Declaration getTypeDeclarations(int index);
+    /**
+     * <code>repeated .boa.types.Declaration type_declarations = 16;</code>
+     */
+    int getTypeDeclarationsCount();
+    /**
+     * <code>repeated .boa.types.Declaration type_declarations = 16;</code>
+     */
+    java.util.List<? extends boa.types.Ast.DeclarationOrBuilder> 
+        getTypeDeclarationsOrBuilderList();
+    /**
+     * <code>repeated .boa.types.Declaration type_declarations = 16;</code>
+     */
+    boa.types.Ast.DeclarationOrBuilder getTypeDeclarationsOrBuilder(
+        int index);
   }
   /**
    * Protobuf type {@code boa.types.Statement}
@@ -20554,6 +20898,22 @@ public final class Ast {
               methods_.add(input.readMessage(boa.types.Ast.Method.PARSER, extensionRegistry));
               break;
             }
+            case 122: {
+              if (!((mutable_bitField0_ & 0x00004000) == 0x00004000)) {
+                variableDeclarations_ = new java.util.ArrayList<boa.types.Ast.Variable>();
+                mutable_bitField0_ |= 0x00004000;
+              }
+              variableDeclarations_.add(input.readMessage(boa.types.Ast.Variable.PARSER, extensionRegistry));
+              break;
+            }
+            case 130: {
+              if (!((mutable_bitField0_ & 0x00008000) == 0x00008000)) {
+                typeDeclarations_ = new java.util.ArrayList<boa.types.Ast.Declaration>();
+                mutable_bitField0_ |= 0x00008000;
+              }
+              typeDeclarations_.add(input.readMessage(boa.types.Ast.Declaration.PARSER, extensionRegistry));
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -20579,6 +20939,12 @@ public final class Ast {
         }
         if (((mutable_bitField0_ & 0x00002000) == 0x00002000)) {
           methods_ = java.util.Collections.unmodifiableList(methods_);
+        }
+        if (((mutable_bitField0_ & 0x00004000) == 0x00004000)) {
+          variableDeclarations_ = java.util.Collections.unmodifiableList(variableDeclarations_);
+        }
+        if (((mutable_bitField0_ & 0x00008000) == 0x00008000)) {
+          typeDeclarations_ = java.util.Collections.unmodifiableList(typeDeclarations_);
         }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -21385,6 +21751,78 @@ public final class Ast {
       return methods_.get(index);
     }
 
+    // repeated .boa.types.Variable variable_declarations = 15;
+    public static final int VARIABLE_DECLARATIONS_FIELD_NUMBER = 15;
+    private java.util.List<boa.types.Ast.Variable> variableDeclarations_;
+    /**
+     * <code>repeated .boa.types.Variable variable_declarations = 15;</code>
+     */
+    public java.util.List<boa.types.Ast.Variable> getVariableDeclarationsList() {
+      return variableDeclarations_;
+    }
+    /**
+     * <code>repeated .boa.types.Variable variable_declarations = 15;</code>
+     */
+    public java.util.List<? extends boa.types.Ast.VariableOrBuilder> 
+        getVariableDeclarationsOrBuilderList() {
+      return variableDeclarations_;
+    }
+    /**
+     * <code>repeated .boa.types.Variable variable_declarations = 15;</code>
+     */
+    public int getVariableDeclarationsCount() {
+      return variableDeclarations_.size();
+    }
+    /**
+     * <code>repeated .boa.types.Variable variable_declarations = 15;</code>
+     */
+    public boa.types.Ast.Variable getVariableDeclarations(int index) {
+      return variableDeclarations_.get(index);
+    }
+    /**
+     * <code>repeated .boa.types.Variable variable_declarations = 15;</code>
+     */
+    public boa.types.Ast.VariableOrBuilder getVariableDeclarationsOrBuilder(
+        int index) {
+      return variableDeclarations_.get(index);
+    }
+
+    // repeated .boa.types.Declaration type_declarations = 16;
+    public static final int TYPE_DECLARATIONS_FIELD_NUMBER = 16;
+    private java.util.List<boa.types.Ast.Declaration> typeDeclarations_;
+    /**
+     * <code>repeated .boa.types.Declaration type_declarations = 16;</code>
+     */
+    public java.util.List<boa.types.Ast.Declaration> getTypeDeclarationsList() {
+      return typeDeclarations_;
+    }
+    /**
+     * <code>repeated .boa.types.Declaration type_declarations = 16;</code>
+     */
+    public java.util.List<? extends boa.types.Ast.DeclarationOrBuilder> 
+        getTypeDeclarationsOrBuilderList() {
+      return typeDeclarations_;
+    }
+    /**
+     * <code>repeated .boa.types.Declaration type_declarations = 16;</code>
+     */
+    public int getTypeDeclarationsCount() {
+      return typeDeclarations_.size();
+    }
+    /**
+     * <code>repeated .boa.types.Declaration type_declarations = 16;</code>
+     */
+    public boa.types.Ast.Declaration getTypeDeclarations(int index) {
+      return typeDeclarations_.get(index);
+    }
+    /**
+     * <code>repeated .boa.types.Declaration type_declarations = 16;</code>
+     */
+    public boa.types.Ast.DeclarationOrBuilder getTypeDeclarationsOrBuilder(
+        int index) {
+      return typeDeclarations_.get(index);
+    }
+
     private void initFields() {
       kind_ = boa.types.Ast.Statement.StatementKind.OTHER;
       comments_ = java.util.Collections.emptyList();
@@ -21400,6 +21838,8 @@ public final class Ast {
       mappedNode_ = 0;
       key_ = 0;
       methods_ = java.util.Collections.emptyList();
+      variableDeclarations_ = java.util.Collections.emptyList();
+      typeDeclarations_ = java.util.Collections.emptyList();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -21470,6 +21910,18 @@ public final class Ast {
           return false;
         }
       }
+      for (int i = 0; i < getVariableDeclarationsCount(); i++) {
+        if (!getVariableDeclarations(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      for (int i = 0; i < getTypeDeclarationsCount(); i++) {
+        if (!getTypeDeclarations(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
       memoizedIsInitialized = 1;
       return true;
     }
@@ -21518,6 +21970,12 @@ public final class Ast {
       }
       for (int i = 0; i < methods_.size(); i++) {
         output.writeMessage(14, methods_.get(i));
+      }
+      for (int i = 0; i < variableDeclarations_.size(); i++) {
+        output.writeMessage(15, variableDeclarations_.get(i));
+      }
+      for (int i = 0; i < typeDeclarations_.size(); i++) {
+        output.writeMessage(16, typeDeclarations_.get(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -21583,6 +22041,14 @@ public final class Ast {
       for (int i = 0; i < methods_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(14, methods_.get(i));
+      }
+      for (int i = 0; i < variableDeclarations_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(15, variableDeclarations_.get(i));
+      }
+      for (int i = 0; i < typeDeclarations_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(16, typeDeclarations_.get(i));
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -21706,6 +22172,8 @@ public final class Ast {
           getExpressionFieldBuilder();
           getExpressionsFieldBuilder();
           getMethodsFieldBuilder();
+          getVariableDeclarationsFieldBuilder();
+          getTypeDeclarationsFieldBuilder();
         }
       }
       private static Builder create() {
@@ -21781,6 +22249,18 @@ public final class Ast {
           bitField0_ = (bitField0_ & ~0x00002000);
         } else {
           methodsBuilder_.clear();
+        }
+        if (variableDeclarationsBuilder_ == null) {
+          variableDeclarations_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00004000);
+        } else {
+          variableDeclarationsBuilder_.clear();
+        }
+        if (typeDeclarationsBuilder_ == null) {
+          typeDeclarations_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00008000);
+        } else {
+          typeDeclarationsBuilder_.clear();
         }
         return this;
       }
@@ -21911,6 +22391,24 @@ public final class Ast {
           result.methods_ = methods_;
         } else {
           result.methods_ = methodsBuilder_.build();
+        }
+        if (variableDeclarationsBuilder_ == null) {
+          if (((bitField0_ & 0x00004000) == 0x00004000)) {
+            variableDeclarations_ = java.util.Collections.unmodifiableList(variableDeclarations_);
+            bitField0_ = (bitField0_ & ~0x00004000);
+          }
+          result.variableDeclarations_ = variableDeclarations_;
+        } else {
+          result.variableDeclarations_ = variableDeclarationsBuilder_.build();
+        }
+        if (typeDeclarationsBuilder_ == null) {
+          if (((bitField0_ & 0x00008000) == 0x00008000)) {
+            typeDeclarations_ = java.util.Collections.unmodifiableList(typeDeclarations_);
+            bitField0_ = (bitField0_ & ~0x00008000);
+          }
+          result.typeDeclarations_ = typeDeclarations_;
+        } else {
+          result.typeDeclarations_ = typeDeclarationsBuilder_.build();
         }
         result.bitField0_ = to_bitField0_;
         onBuilt();
@@ -22108,6 +22606,58 @@ public final class Ast {
             }
           }
         }
+        if (variableDeclarationsBuilder_ == null) {
+          if (!other.variableDeclarations_.isEmpty()) {
+            if (variableDeclarations_.isEmpty()) {
+              variableDeclarations_ = other.variableDeclarations_;
+              bitField0_ = (bitField0_ & ~0x00004000);
+            } else {
+              ensureVariableDeclarationsIsMutable();
+              variableDeclarations_.addAll(other.variableDeclarations_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.variableDeclarations_.isEmpty()) {
+            if (variableDeclarationsBuilder_.isEmpty()) {
+              variableDeclarationsBuilder_.dispose();
+              variableDeclarationsBuilder_ = null;
+              variableDeclarations_ = other.variableDeclarations_;
+              bitField0_ = (bitField0_ & ~0x00004000);
+              variableDeclarationsBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getVariableDeclarationsFieldBuilder() : null;
+            } else {
+              variableDeclarationsBuilder_.addAllMessages(other.variableDeclarations_);
+            }
+          }
+        }
+        if (typeDeclarationsBuilder_ == null) {
+          if (!other.typeDeclarations_.isEmpty()) {
+            if (typeDeclarations_.isEmpty()) {
+              typeDeclarations_ = other.typeDeclarations_;
+              bitField0_ = (bitField0_ & ~0x00008000);
+            } else {
+              ensureTypeDeclarationsIsMutable();
+              typeDeclarations_.addAll(other.typeDeclarations_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.typeDeclarations_.isEmpty()) {
+            if (typeDeclarationsBuilder_.isEmpty()) {
+              typeDeclarationsBuilder_.dispose();
+              typeDeclarationsBuilder_ = null;
+              typeDeclarations_ = other.typeDeclarations_;
+              bitField0_ = (bitField0_ & ~0x00008000);
+              typeDeclarationsBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getTypeDeclarationsFieldBuilder() : null;
+            } else {
+              typeDeclarationsBuilder_.addAllMessages(other.typeDeclarations_);
+            }
+          }
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -22173,6 +22723,18 @@ public final class Ast {
         }
         for (int i = 0; i < getMethodsCount(); i++) {
           if (!getMethods(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        for (int i = 0; i < getVariableDeclarationsCount(); i++) {
+          if (!getVariableDeclarations(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        for (int i = 0; i < getTypeDeclarationsCount(); i++) {
+          if (!getTypeDeclarations(i).isInitialized()) {
             
             return false;
           }
@@ -24381,6 +24943,486 @@ public final class Ast {
         return methodsBuilder_;
       }
 
+      // repeated .boa.types.Variable variable_declarations = 15;
+      private java.util.List<boa.types.Ast.Variable> variableDeclarations_ =
+        java.util.Collections.emptyList();
+      private void ensureVariableDeclarationsIsMutable() {
+        if (!((bitField0_ & 0x00004000) == 0x00004000)) {
+          variableDeclarations_ = new java.util.ArrayList<boa.types.Ast.Variable>(variableDeclarations_);
+          bitField0_ |= 0x00004000;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Variable, boa.types.Ast.Variable.Builder, boa.types.Ast.VariableOrBuilder> variableDeclarationsBuilder_;
+
+      /**
+       * <code>repeated .boa.types.Variable variable_declarations = 15;</code>
+       */
+      public java.util.List<boa.types.Ast.Variable> getVariableDeclarationsList() {
+        if (variableDeclarationsBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(variableDeclarations_);
+        } else {
+          return variableDeclarationsBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Variable variable_declarations = 15;</code>
+       */
+      public int getVariableDeclarationsCount() {
+        if (variableDeclarationsBuilder_ == null) {
+          return variableDeclarations_.size();
+        } else {
+          return variableDeclarationsBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Variable variable_declarations = 15;</code>
+       */
+      public boa.types.Ast.Variable getVariableDeclarations(int index) {
+        if (variableDeclarationsBuilder_ == null) {
+          return variableDeclarations_.get(index);
+        } else {
+          return variableDeclarationsBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Variable variable_declarations = 15;</code>
+       */
+      public Builder setVariableDeclarations(
+          int index, boa.types.Ast.Variable value) {
+        if (variableDeclarationsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureVariableDeclarationsIsMutable();
+          variableDeclarations_.set(index, value);
+          onChanged();
+        } else {
+          variableDeclarationsBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Variable variable_declarations = 15;</code>
+       */
+      public Builder setVariableDeclarations(
+          int index, boa.types.Ast.Variable.Builder builderForValue) {
+        if (variableDeclarationsBuilder_ == null) {
+          ensureVariableDeclarationsIsMutable();
+          variableDeclarations_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          variableDeclarationsBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Variable variable_declarations = 15;</code>
+       */
+      public Builder addVariableDeclarations(boa.types.Ast.Variable value) {
+        if (variableDeclarationsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureVariableDeclarationsIsMutable();
+          variableDeclarations_.add(value);
+          onChanged();
+        } else {
+          variableDeclarationsBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Variable variable_declarations = 15;</code>
+       */
+      public Builder addVariableDeclarations(
+          int index, boa.types.Ast.Variable value) {
+        if (variableDeclarationsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureVariableDeclarationsIsMutable();
+          variableDeclarations_.add(index, value);
+          onChanged();
+        } else {
+          variableDeclarationsBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Variable variable_declarations = 15;</code>
+       */
+      public Builder addVariableDeclarations(
+          boa.types.Ast.Variable.Builder builderForValue) {
+        if (variableDeclarationsBuilder_ == null) {
+          ensureVariableDeclarationsIsMutable();
+          variableDeclarations_.add(builderForValue.build());
+          onChanged();
+        } else {
+          variableDeclarationsBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Variable variable_declarations = 15;</code>
+       */
+      public Builder addVariableDeclarations(
+          int index, boa.types.Ast.Variable.Builder builderForValue) {
+        if (variableDeclarationsBuilder_ == null) {
+          ensureVariableDeclarationsIsMutable();
+          variableDeclarations_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          variableDeclarationsBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Variable variable_declarations = 15;</code>
+       */
+      public Builder addAllVariableDeclarations(
+          java.lang.Iterable<? extends boa.types.Ast.Variable> values) {
+        if (variableDeclarationsBuilder_ == null) {
+          ensureVariableDeclarationsIsMutable();
+          super.addAll(values, variableDeclarations_);
+          onChanged();
+        } else {
+          variableDeclarationsBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Variable variable_declarations = 15;</code>
+       */
+      public Builder clearVariableDeclarations() {
+        if (variableDeclarationsBuilder_ == null) {
+          variableDeclarations_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00004000);
+          onChanged();
+        } else {
+          variableDeclarationsBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Variable variable_declarations = 15;</code>
+       */
+      public Builder removeVariableDeclarations(int index) {
+        if (variableDeclarationsBuilder_ == null) {
+          ensureVariableDeclarationsIsMutable();
+          variableDeclarations_.remove(index);
+          onChanged();
+        } else {
+          variableDeclarationsBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Variable variable_declarations = 15;</code>
+       */
+      public boa.types.Ast.Variable.Builder getVariableDeclarationsBuilder(
+          int index) {
+        return getVariableDeclarationsFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.Variable variable_declarations = 15;</code>
+       */
+      public boa.types.Ast.VariableOrBuilder getVariableDeclarationsOrBuilder(
+          int index) {
+        if (variableDeclarationsBuilder_ == null) {
+          return variableDeclarations_.get(index);  } else {
+          return variableDeclarationsBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Variable variable_declarations = 15;</code>
+       */
+      public java.util.List<? extends boa.types.Ast.VariableOrBuilder> 
+           getVariableDeclarationsOrBuilderList() {
+        if (variableDeclarationsBuilder_ != null) {
+          return variableDeclarationsBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(variableDeclarations_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Variable variable_declarations = 15;</code>
+       */
+      public boa.types.Ast.Variable.Builder addVariableDeclarationsBuilder() {
+        return getVariableDeclarationsFieldBuilder().addBuilder(
+            boa.types.Ast.Variable.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Variable variable_declarations = 15;</code>
+       */
+      public boa.types.Ast.Variable.Builder addVariableDeclarationsBuilder(
+          int index) {
+        return getVariableDeclarationsFieldBuilder().addBuilder(
+            index, boa.types.Ast.Variable.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Variable variable_declarations = 15;</code>
+       */
+      public java.util.List<boa.types.Ast.Variable.Builder> 
+           getVariableDeclarationsBuilderList() {
+        return getVariableDeclarationsFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Variable, boa.types.Ast.Variable.Builder, boa.types.Ast.VariableOrBuilder> 
+          getVariableDeclarationsFieldBuilder() {
+        if (variableDeclarationsBuilder_ == null) {
+          variableDeclarationsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              boa.types.Ast.Variable, boa.types.Ast.Variable.Builder, boa.types.Ast.VariableOrBuilder>(
+                  variableDeclarations_,
+                  ((bitField0_ & 0x00004000) == 0x00004000),
+                  getParentForChildren(),
+                  isClean());
+          variableDeclarations_ = null;
+        }
+        return variableDeclarationsBuilder_;
+      }
+
+      // repeated .boa.types.Declaration type_declarations = 16;
+      private java.util.List<boa.types.Ast.Declaration> typeDeclarations_ =
+        java.util.Collections.emptyList();
+      private void ensureTypeDeclarationsIsMutable() {
+        if (!((bitField0_ & 0x00008000) == 0x00008000)) {
+          typeDeclarations_ = new java.util.ArrayList<boa.types.Ast.Declaration>(typeDeclarations_);
+          bitField0_ |= 0x00008000;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Declaration, boa.types.Ast.Declaration.Builder, boa.types.Ast.DeclarationOrBuilder> typeDeclarationsBuilder_;
+
+      /**
+       * <code>repeated .boa.types.Declaration type_declarations = 16;</code>
+       */
+      public java.util.List<boa.types.Ast.Declaration> getTypeDeclarationsList() {
+        if (typeDeclarationsBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(typeDeclarations_);
+        } else {
+          return typeDeclarationsBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Declaration type_declarations = 16;</code>
+       */
+      public int getTypeDeclarationsCount() {
+        if (typeDeclarationsBuilder_ == null) {
+          return typeDeclarations_.size();
+        } else {
+          return typeDeclarationsBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Declaration type_declarations = 16;</code>
+       */
+      public boa.types.Ast.Declaration getTypeDeclarations(int index) {
+        if (typeDeclarationsBuilder_ == null) {
+          return typeDeclarations_.get(index);
+        } else {
+          return typeDeclarationsBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Declaration type_declarations = 16;</code>
+       */
+      public Builder setTypeDeclarations(
+          int index, boa.types.Ast.Declaration value) {
+        if (typeDeclarationsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureTypeDeclarationsIsMutable();
+          typeDeclarations_.set(index, value);
+          onChanged();
+        } else {
+          typeDeclarationsBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Declaration type_declarations = 16;</code>
+       */
+      public Builder setTypeDeclarations(
+          int index, boa.types.Ast.Declaration.Builder builderForValue) {
+        if (typeDeclarationsBuilder_ == null) {
+          ensureTypeDeclarationsIsMutable();
+          typeDeclarations_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          typeDeclarationsBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Declaration type_declarations = 16;</code>
+       */
+      public Builder addTypeDeclarations(boa.types.Ast.Declaration value) {
+        if (typeDeclarationsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureTypeDeclarationsIsMutable();
+          typeDeclarations_.add(value);
+          onChanged();
+        } else {
+          typeDeclarationsBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Declaration type_declarations = 16;</code>
+       */
+      public Builder addTypeDeclarations(
+          int index, boa.types.Ast.Declaration value) {
+        if (typeDeclarationsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureTypeDeclarationsIsMutable();
+          typeDeclarations_.add(index, value);
+          onChanged();
+        } else {
+          typeDeclarationsBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Declaration type_declarations = 16;</code>
+       */
+      public Builder addTypeDeclarations(
+          boa.types.Ast.Declaration.Builder builderForValue) {
+        if (typeDeclarationsBuilder_ == null) {
+          ensureTypeDeclarationsIsMutable();
+          typeDeclarations_.add(builderForValue.build());
+          onChanged();
+        } else {
+          typeDeclarationsBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Declaration type_declarations = 16;</code>
+       */
+      public Builder addTypeDeclarations(
+          int index, boa.types.Ast.Declaration.Builder builderForValue) {
+        if (typeDeclarationsBuilder_ == null) {
+          ensureTypeDeclarationsIsMutable();
+          typeDeclarations_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          typeDeclarationsBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Declaration type_declarations = 16;</code>
+       */
+      public Builder addAllTypeDeclarations(
+          java.lang.Iterable<? extends boa.types.Ast.Declaration> values) {
+        if (typeDeclarationsBuilder_ == null) {
+          ensureTypeDeclarationsIsMutable();
+          super.addAll(values, typeDeclarations_);
+          onChanged();
+        } else {
+          typeDeclarationsBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Declaration type_declarations = 16;</code>
+       */
+      public Builder clearTypeDeclarations() {
+        if (typeDeclarationsBuilder_ == null) {
+          typeDeclarations_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00008000);
+          onChanged();
+        } else {
+          typeDeclarationsBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Declaration type_declarations = 16;</code>
+       */
+      public Builder removeTypeDeclarations(int index) {
+        if (typeDeclarationsBuilder_ == null) {
+          ensureTypeDeclarationsIsMutable();
+          typeDeclarations_.remove(index);
+          onChanged();
+        } else {
+          typeDeclarationsBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Declaration type_declarations = 16;</code>
+       */
+      public boa.types.Ast.Declaration.Builder getTypeDeclarationsBuilder(
+          int index) {
+        return getTypeDeclarationsFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.Declaration type_declarations = 16;</code>
+       */
+      public boa.types.Ast.DeclarationOrBuilder getTypeDeclarationsOrBuilder(
+          int index) {
+        if (typeDeclarationsBuilder_ == null) {
+          return typeDeclarations_.get(index);  } else {
+          return typeDeclarationsBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Declaration type_declarations = 16;</code>
+       */
+      public java.util.List<? extends boa.types.Ast.DeclarationOrBuilder> 
+           getTypeDeclarationsOrBuilderList() {
+        if (typeDeclarationsBuilder_ != null) {
+          return typeDeclarationsBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(typeDeclarations_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Declaration type_declarations = 16;</code>
+       */
+      public boa.types.Ast.Declaration.Builder addTypeDeclarationsBuilder() {
+        return getTypeDeclarationsFieldBuilder().addBuilder(
+            boa.types.Ast.Declaration.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Declaration type_declarations = 16;</code>
+       */
+      public boa.types.Ast.Declaration.Builder addTypeDeclarationsBuilder(
+          int index) {
+        return getTypeDeclarationsFieldBuilder().addBuilder(
+            index, boa.types.Ast.Declaration.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Declaration type_declarations = 16;</code>
+       */
+      public java.util.List<boa.types.Ast.Declaration.Builder> 
+           getTypeDeclarationsBuilderList() {
+        return getTypeDeclarationsFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Declaration, boa.types.Ast.Declaration.Builder, boa.types.Ast.DeclarationOrBuilder> 
+          getTypeDeclarationsFieldBuilder() {
+        if (typeDeclarationsBuilder_ == null) {
+          typeDeclarationsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              boa.types.Ast.Declaration, boa.types.Ast.Declaration.Builder, boa.types.Ast.DeclarationOrBuilder>(
+                  typeDeclarations_,
+                  ((bitField0_ & 0x00008000) == 0x00008000),
+                  getParentForChildren(),
+                  isClean());
+          typeDeclarations_ = null;
+        }
+        return typeDeclarationsBuilder_;
+      }
+
       // @@protoc_insertion_point(builder_scope:boa.types.Statement)
     }
 
@@ -24845,6 +25887,16 @@ public final class Ast {
      * <code>optional bool is_member_access = 23;</code>
      */
     boolean getIsMemberAccess();
+
+    // optional bool dollar_sign = 24;
+    /**
+     * <code>optional bool dollar_sign = 24;</code>
+     */
+    boolean hasDollarSign();
+    /**
+     * <code>optional bool dollar_sign = 24;</code>
+     */
+    boolean getDollarSign();
   }
   /**
    * Protobuf type {@code boa.types.Expression}
@@ -25076,6 +26128,11 @@ public final class Ast {
               isMemberAccess_ = input.readBool();
               break;
             }
+            case 192: {
+              bitField0_ |= 0x00008000;
+              dollarSign_ = input.readBool();
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -25171,9 +26228,9 @@ public final class Ast {
        */
       CAST(5, 5),
       /**
-       * <code>ARRAYINDEX = 6;</code>
+       * <code>ARRAYACCESS = 6;</code>
        */
-      ARRAYINDEX(6, 6),
+      ARRAYACCESS(6, 6),
       /**
        * <code>ARRAYINIT = 7;</code>
        */
@@ -25454,6 +26511,70 @@ public final class Ast {
        * <code>VOID = 73;</code>
        */
       VOID(74, 73),
+      /**
+       * <code>HASHTABLEACCESS = 74;</code>
+       *
+       * <pre>
+       ** In PHP, its syntax uses curly brackets instead of square ones as in array access. Not used in Java
+       * </pre>
+       */
+      HASHTABLEACCESS(75, 74),
+      /**
+       * <code>ARRAYELEMENT = 75;</code>
+       *
+       * <pre>
+       ** Represents a single element of array. Holds the key and the value both can be any expression. The key can be null 
+       * </pre>
+       */
+      ARRAYELEMENT(76, 75),
+      /**
+       * <code>OP_CONCAT = 76;</code>
+       */
+      OP_CONCAT(77, 76),
+      /**
+       * <code>OP_POW = 77;</code>
+       */
+      OP_POW(78, 77),
+      /**
+       * <code>ASSIGN_CONCAT = 78;</code>
+       */
+      ASSIGN_CONCAT(79, 78),
+      /**
+       * <code>ASSIGN_POW = 79;</code>
+       */
+      ASSIGN_POW(80, 79),
+      /**
+       * <code>BACKTICK = 80;</code>
+       */
+      BACKTICK(81, 80),
+      /**
+       * <code>IDENTICAL = 81;</code>
+       */
+      IDENTICAL(82, 81),
+      /**
+       * <code>NOTIDENTICAL = 82;</code>
+       */
+      NOTIDENTICAL(83, 82),
+      /**
+       * <code>STRING_AND = 83;</code>
+       */
+      STRING_AND(84, 83),
+      /**
+       * <code>STRING_OR = 84;</code>
+       */
+      STRING_OR(85, 84),
+      /**
+       * <code>STRING_XOR = 85;</code>
+       */
+      STRING_XOR(86, 85),
+      /**
+       * <code>OP_THREE_WAY_COMPARE = 86;</code>
+       */
+      OP_THREE_WAY_COMPARE(87, 86),
+      /**
+       * <code>OP_UNPACK = 87;</code>
+       */
+      OP_UNPACK(88, 87),
       ;
 
       /**
@@ -25493,9 +26614,9 @@ public final class Ast {
        */
       public static final int CAST_VALUE = 5;
       /**
-       * <code>ARRAYINDEX = 6;</code>
+       * <code>ARRAYACCESS = 6;</code>
        */
-      public static final int ARRAYINDEX_VALUE = 6;
+      public static final int ARRAYACCESS_VALUE = 6;
       /**
        * <code>ARRAYINIT = 7;</code>
        */
@@ -25784,6 +26905,70 @@ public final class Ast {
        * <code>VOID = 73;</code>
        */
       public static final int VOID_VALUE = 73;
+      /**
+       * <code>HASHTABLEACCESS = 74;</code>
+       *
+       * <pre>
+       ** In PHP, its syntax uses curly brackets instead of square ones as in array access. Not used in Java
+       * </pre>
+       */
+      public static final int HASHTABLEACCESS_VALUE = 74;
+      /**
+       * <code>ARRAYELEMENT = 75;</code>
+       *
+       * <pre>
+       ** Represents a single element of array. Holds the key and the value both can be any expression. The key can be null 
+       * </pre>
+       */
+      public static final int ARRAYELEMENT_VALUE = 75;
+      /**
+       * <code>OP_CONCAT = 76;</code>
+       */
+      public static final int OP_CONCAT_VALUE = 76;
+      /**
+       * <code>OP_POW = 77;</code>
+       */
+      public static final int OP_POW_VALUE = 77;
+      /**
+       * <code>ASSIGN_CONCAT = 78;</code>
+       */
+      public static final int ASSIGN_CONCAT_VALUE = 78;
+      /**
+       * <code>ASSIGN_POW = 79;</code>
+       */
+      public static final int ASSIGN_POW_VALUE = 79;
+      /**
+       * <code>BACKTICK = 80;</code>
+       */
+      public static final int BACKTICK_VALUE = 80;
+      /**
+       * <code>IDENTICAL = 81;</code>
+       */
+      public static final int IDENTICAL_VALUE = 81;
+      /**
+       * <code>NOTIDENTICAL = 82;</code>
+       */
+      public static final int NOTIDENTICAL_VALUE = 82;
+      /**
+       * <code>STRING_AND = 83;</code>
+       */
+      public static final int STRING_AND_VALUE = 83;
+      /**
+       * <code>STRING_OR = 84;</code>
+       */
+      public static final int STRING_OR_VALUE = 84;
+      /**
+       * <code>STRING_XOR = 85;</code>
+       */
+      public static final int STRING_XOR_VALUE = 85;
+      /**
+       * <code>OP_THREE_WAY_COMPARE = 86;</code>
+       */
+      public static final int OP_THREE_WAY_COMPARE_VALUE = 86;
+      /**
+       * <code>OP_UNPACK = 87;</code>
+       */
+      public static final int OP_UNPACK_VALUE = 87;
 
 
       public final int getNumber() { return value; }
@@ -25796,7 +26981,7 @@ public final class Ast {
           case 3: return VARDECL;
           case 4: return METHODCALL;
           case 5: return CAST;
-          case 6: return ARRAYINDEX;
+          case 6: return ARRAYACCESS;
           case 7: return ARRAYINIT;
           case 8: return TYPECOMPARE;
           case 9: return NEW;
@@ -25864,6 +27049,20 @@ public final class Ast {
           case 71: return REGEXPLITERAL;
           case 72: return DELETE;
           case 73: return VOID;
+          case 74: return HASHTABLEACCESS;
+          case 75: return ARRAYELEMENT;
+          case 76: return OP_CONCAT;
+          case 77: return OP_POW;
+          case 78: return ASSIGN_CONCAT;
+          case 79: return ASSIGN_POW;
+          case 80: return BACKTICK;
+          case 81: return IDENTICAL;
+          case 82: return NOTIDENTICAL;
+          case 83: return STRING_AND;
+          case 84: return STRING_OR;
+          case 85: return STRING_XOR;
+          case 86: return OP_THREE_WAY_COMPARE;
+          case 87: return OP_UNPACK;
           default: return null;
         }
       }
@@ -25894,7 +27093,7 @@ public final class Ast {
       }
 
       private static final ExpressionKind[] VALUES = {
-        OTHER, LITERAL, VARACCESS, VARDECL, METHODCALL, CAST, ARRAYINDEX, ARRAYINIT, ARRAYLITERAL, TYPECOMPARE, NEW, NEWARRAY, OP_ADD, OP_SUB, OP_MULT, OP_DIV, OP_MOD, OP_INC, OP_DEC, BIT_LSHIFT, BIT_RSHIFT, BIT_UNSIGNEDRSHIFT, BIT_AND, BIT_OR, BIT_NOT, BIT_XOR, LOGICAL_NOT, LOGICAL_AND, LOGICAL_OR, EQ, NEQ, LT, GT, LTEQ, GTEQ, CONDITIONAL, NULLCOALESCE, ASSIGN, ASSIGN_ADD, ASSIGN_SUB, ASSIGN_MULT, ASSIGN_DIV, ASSIGN_MOD, ASSIGN_BITXOR, ASSIGN_BITAND, ASSIGN_BITOR, ASSIGN_LSHIFT, ASSIGN_RSHIFT, ASSIGN_UNSIGNEDRSHIFT, ANNOTATION, PAREN, METHOD_REFERENCE, LAMBDA, ANON_METHOD, YIELD, ARRAY_COMPREHENSION, EMPTY, SHEQ, SHNEQ, XML_DOTQUERY, OBJECT_LITERAL, METHODDECL, LOOP, GENERATOR, XML_LITERAL, XML_EXPRESSION, XML_PROPERTYREF, XML_MEMBERREF, XML_DOT, XML_DOTDOT, IN, TYPEOF, REGEXPLITERAL, DELETE, VOID, 
+        OTHER, LITERAL, VARACCESS, VARDECL, METHODCALL, CAST, ARRAYACCESS, ARRAYINIT, ARRAYLITERAL, TYPECOMPARE, NEW, NEWARRAY, OP_ADD, OP_SUB, OP_MULT, OP_DIV, OP_MOD, OP_INC, OP_DEC, BIT_LSHIFT, BIT_RSHIFT, BIT_UNSIGNEDRSHIFT, BIT_AND, BIT_OR, BIT_NOT, BIT_XOR, LOGICAL_NOT, LOGICAL_AND, LOGICAL_OR, EQ, NEQ, LT, GT, LTEQ, GTEQ, CONDITIONAL, NULLCOALESCE, ASSIGN, ASSIGN_ADD, ASSIGN_SUB, ASSIGN_MULT, ASSIGN_DIV, ASSIGN_MOD, ASSIGN_BITXOR, ASSIGN_BITAND, ASSIGN_BITOR, ASSIGN_LSHIFT, ASSIGN_RSHIFT, ASSIGN_UNSIGNEDRSHIFT, ANNOTATION, PAREN, METHOD_REFERENCE, LAMBDA, ANON_METHOD, YIELD, ARRAY_COMPREHENSION, EMPTY, SHEQ, SHNEQ, XML_DOTQUERY, OBJECT_LITERAL, METHODDECL, LOOP, GENERATOR, XML_LITERAL, XML_EXPRESSION, XML_PROPERTYREF, XML_MEMBERREF, XML_DOT, XML_DOTDOT, IN, TYPEOF, REGEXPLITERAL, DELETE, VOID, HASHTABLEACCESS, ARRAYELEMENT, OP_CONCAT, OP_POW, ASSIGN_CONCAT, ASSIGN_POW, BACKTICK, IDENTICAL, NOTIDENTICAL, STRING_AND, STRING_OR, STRING_XOR, OP_THREE_WAY_COMPARE, OP_UNPACK, 
       };
 
       public static ExpressionKind valueOf(
@@ -26601,6 +27800,22 @@ public final class Ast {
       return isMemberAccess_;
     }
 
+    // optional bool dollar_sign = 24;
+    public static final int DOLLAR_SIGN_FIELD_NUMBER = 24;
+    private boolean dollarSign_;
+    /**
+     * <code>optional bool dollar_sign = 24;</code>
+     */
+    public boolean hasDollarSign() {
+      return ((bitField0_ & 0x00008000) == 0x00008000);
+    }
+    /**
+     * <code>optional bool dollar_sign = 24;</code>
+     */
+    public boolean getDollarSign() {
+      return dollarSign_;
+    }
+
     private void initFields() {
       kind_ = boa.types.Ast.Expression.ExpressionKind.OTHER;
       expressions_ = java.util.Collections.emptyList();
@@ -26623,6 +27838,7 @@ public final class Ast {
       methods_ = java.util.Collections.emptyList();
       statements_ = java.util.Collections.emptyList();
       isMemberAccess_ = false;
+      dollarSign_ = false;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -26769,6 +27985,9 @@ public final class Ast {
       if (((bitField0_ & 0x00004000) == 0x00004000)) {
         output.writeBool(23, isMemberAccess_);
       }
+      if (((bitField0_ & 0x00008000) == 0x00008000)) {
+        output.writeBool(24, dollarSign_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -26861,6 +28080,10 @@ public final class Ast {
       if (((bitField0_ & 0x00004000) == 0x00004000)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(23, isMemberAccess_);
+      }
+      if (((bitField0_ & 0x00008000) == 0x00008000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(24, dollarSign_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -27079,6 +28302,8 @@ public final class Ast {
         }
         isMemberAccess_ = false;
         bitField0_ = (bitField0_ & ~0x00100000);
+        dollarSign_ = false;
+        bitField0_ = (bitField0_ & ~0x00200000);
         return this;
       }
 
@@ -27241,6 +28466,10 @@ public final class Ast {
           to_bitField0_ |= 0x00004000;
         }
         result.isMemberAccess_ = isMemberAccess_;
+        if (((from_bitField0_ & 0x00200000) == 0x00200000)) {
+          to_bitField0_ |= 0x00008000;
+        }
+        result.dollarSign_ = dollarSign_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -27463,6 +28692,9 @@ public final class Ast {
         }
         if (other.hasIsMemberAccess()) {
           setIsMemberAccess(other.getIsMemberAccess());
+        }
+        if (other.hasDollarSign()) {
+          setDollarSign(other.getDollarSign());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -30373,6 +31605,39 @@ public final class Ast {
       public Builder clearIsMemberAccess() {
         bitField0_ = (bitField0_ & ~0x00100000);
         isMemberAccess_ = false;
+        onChanged();
+        return this;
+      }
+
+      // optional bool dollar_sign = 24;
+      private boolean dollarSign_ ;
+      /**
+       * <code>optional bool dollar_sign = 24;</code>
+       */
+      public boolean hasDollarSign() {
+        return ((bitField0_ & 0x00200000) == 0x00200000);
+      }
+      /**
+       * <code>optional bool dollar_sign = 24;</code>
+       */
+      public boolean getDollarSign() {
+        return dollarSign_;
+      }
+      /**
+       * <code>optional bool dollar_sign = 24;</code>
+       */
+      public Builder setDollarSign(boolean value) {
+        bitField0_ |= 0x00200000;
+        dollarSign_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional bool dollar_sign = 24;</code>
+       */
+      public Builder clearDollarSign() {
+        bitField0_ = (bitField0_ & ~0x00200000);
+        dollarSign_ = false;
         onChanged();
         return this;
       }
@@ -40382,149 +41647,160 @@ public final class Ast {
       "\n\013change_kind\030\n \001(\0162\025.boa.types.ChangeKi" +
       "nd\022\023\n\013mapped_node\030\014 \001(\005\022\013\n\003key\030\r \001(\005\022\034\n\024" +
       "fully_qualified_name\030\016 \001(\t\022\026\n\016declaring_" +
-      "type\030\017 \001(\005\"\336\001\n\004Type\022\014\n\004name\030\001 \002(\t\022\034\n\024ful" +
+      "type\030\017 \001(\005\"\214\002\n\004Type\022\014\n\004name\030\001 \001(\t\022\034\n\024ful" +
       "ly_qualified_name\030\002 \001(\t\022!\n\004kind\030\003 \002(\0162\023." +
       "boa.types.TypeKind\022\n\n\002id\030\004 \001(\t\022*\n\013change",
       "_kind\030\005 \001(\0162\025.boa.types.ChangeKind\022\023\n\013ma" +
       "pped_node\030\007 \001(\005\022\030\n\020declaration_file\030\010 \001(" +
-      "\005\022\023\n\013declaration\030\t \001(\005\022\013\n\003key\030\n \001(\005\"\307\003\n\006" +
-      "Method\022\014\n\004name\030\001 \001(\t\022&\n\tmodifiers\030\002 \003(\0132" +
-      "\023.boa.types.Modifier\022$\n\013return_type\030\003 \001(" +
-      "\0132\017.boa.types.Type\022+\n\022generic_parameters" +
-      "\030\004 \003(\0132\017.boa.types.Type\022&\n\targuments\030\005 \003" +
-      "(\0132\023.boa.types.Variable\022(\n\017exception_typ" +
-      "es\030\006 \003(\0132\017.boa.types.Type\022(\n\nstatements\030" +
-      "\007 \003(\0132\024.boa.types.Statement\022$\n\010comments\030",
-      "\010 \003(\0132\022.boa.types.Comment\022*\n\013change_kind" +
-      "\030\t \001(\0162\025.boa.types.ChangeKind\022\023\n\013mapped_" +
-      "node\030\013 \001(\005\022\013\n\003key\030\014 \001(\005\022\026\n\016declaring_typ" +
-      "e\030\r \001(\005\022,\n\rcomputed_name\030\016 \001(\0132\025.boa.typ" +
-      "es.Expression\"\316\002\n\010Variable\022\014\n\004name\030\001 \001(\t" +
-      "\022&\n\rvariable_type\030\002 \001(\0132\017.boa.types.Type" +
-      "\022&\n\tmodifiers\030\003 \003(\0132\023.boa.types.Modifier" +
-      "\022*\n\013initializer\030\004 \001(\0132\025.boa.types.Expres" +
-      "sion\022$\n\010comments\030\005 \003(\0132\022.boa.types.Comme" +
-      "nt\022*\n\013change_kind\030\006 \001(\0162\025.boa.types.Chan",
-      "geKind\022\023\n\013mapped_node\030\010 \001(\005\022\013\n\003key\030\t \001(\005" +
-      "\022\026\n\016declaring_type\030\n \001(\005\022,\n\rcomputed_nam" +
-      "e\030\013 \001(\0132\025.boa.types.Expression\"\242\007\n\tState" +
-      "ment\0220\n\004kind\030\001 \002(\0162\".boa.types.Statement" +
-      ".StatementKind\022$\n\010comments\030\002 \003(\0132\022.boa.t" +
-      "ypes.Comment\022(\n\nstatements\030\003 \003(\0132\024.boa.t" +
-      "ypes.Statement\022.\n\017initializations\030\004 \003(\0132" +
-      "\025.boa.types.Expression\022(\n\tcondition\030\005 \001(" +
-      "\0132\025.boa.types.Expression\022&\n\007updates\030\006 \003(" +
-      "\0132\025.boa.types.Expression\0221\n\024variable_dec",
-      "laration\030\007 \001(\0132\023.boa.types.Variable\0220\n\020t" +
-      "ype_declaration\030\010 \001(\0132\026.boa.types.Declar" +
-      "ation\022)\n\nexpression\030\t \001(\0132\025.boa.types.Ex" +
-      "pression\022*\n\013expressions\030\n \003(\0132\025.boa.type" +
-      "s.Expression\022*\n\013change_kind\030\013 \001(\0162\025.boa." +
-      "types.ChangeKind\022\023\n\013mapped_node\030\014 \001(\005\022\013\n" +
-      "\003key\030\r \001(\005\022\"\n\007methods\030\016 \003(\0132\021.boa.types." +
-      "Method\"\342\002\n\rStatementKind\022\t\n\005OTHER\020\000\022\t\n\005B" +
-      "LOCK\020\001\022\014\n\010TYPEDECL\020\002\022\016\n\nEXPRESSION\020\003\022\010\n\004" +
-      "EXPR\020\003\022\020\n\014SYNCHRONIZED\020\004\022\010\n\004SYNC\020\004\022\n\n\006RE",
-      "TURN\020\005\022\007\n\003FOR\020\006\022\006\n\002DO\020\007\022\t\n\005WHILE\020\010\022\006\n\002IF" +
-      "\020\t\022\n\n\006ASSERT\020\n\022\t\n\005BREAK\020\013\022\014\n\010CONTINUE\020\014\022" +
-      "\t\n\005LABEL\020\r\022\n\n\006SWITCH\020\016\022\010\n\004CASE\020\017\022\007\n\003TRY\020" +
-      "\020\022\t\n\005THROW\020\021\022\t\n\005CATCH\020\022\022\t\n\005EMPTY\020\023\022\013\n\007FI" +
-      "NALLY\020\024\022\014\n\010DEBUGGER\020\025\022\013\n\007DEFAULT\020\026\022\013\n\007FO" +
-      "REACH\020\027\022\t\n\005FORIN\020\030\022\010\n\004WITH\020\031\022\t\n\005SCOPE\020\032\032" +
-      "\002\020\001\"\265\016\n\nExpression\0222\n\004kind\030\001 \002(\0162$.boa.t" +
-      "ypes.Expression.ExpressionKind\022*\n\013expres" +
-      "sions\030\002 \003(\0132\025.boa.types.Expression\022+\n\016va" +
-      "riable_decls\030\003 \003(\0132\023.boa.types.Variable\022",
-      "!\n\010new_type\030\004 \001(\0132\017.boa.types.Type\022+\n\022ge" +
-      "neric_parameters\030\005 \003(\0132\017.boa.types.Type\022" +
-      "\022\n\nis_postfix\030\006 \001(\010\022\017\n\007literal\030\007 \001(\t\022\020\n\010" +
-      "variable\030\010 \001(\t\022\016\n\006method\030\t \001(\t\022*\n\013method" +
-      "_args\030\n \003(\0132\025.boa.types.Expression\0220\n\020an" +
-      "on_declaration\030\013 \001(\0132\026.boa.types.Declara" +
-      "tion\022\'\n\nannotation\030\014 \001(\0132\023.boa.types.Mod" +
-      "ifier\022\021\n\tno_parens\030\016 \001(\010\022*\n\013change_kind\030" +
-      "\017 \001(\0162\025.boa.types.ChangeKind\022\023\n\013mapped_n" +
-      "ode\030\021 \001(\005\022\013\n\003key\030\022 \001(\005\022\'\n\016declaring_type",
-      "\030\023 \001(\0132\017.boa.types.Type\022$\n\013return_type\030\024" +
-      " \001(\0132\017.boa.types.Type\022\"\n\007methods\030\025 \003(\0132\021" +
-      ".boa.types.Method\022(\n\nstatements\030\026 \003(\0132\024." +
-      "boa.types.Statement\022\030\n\020is_member_access\030" +
-      "\027 \001(\010\"\343\010\n\016ExpressionKind\022\t\n\005OTHER\020\000\022\013\n\007L" +
-      "ITERAL\020\001\022\r\n\tVARACCESS\020\002\022\013\n\007VARDECL\020\003\022\016\n\n" +
-      "METHODCALL\020\004\022\010\n\004CAST\020\005\022\016\n\nARRAYINDEX\020\006\022\r" +
-      "\n\tARRAYINIT\020\007\022\020\n\014ARRAYLITERAL\020\007\022\017\n\013TYPEC" +
-      "OMPARE\020\010\022\007\n\003NEW\020\t\022\014\n\010NEWARRAY\020\n\022\n\n\006OP_AD" +
-      "D\020\013\022\n\n\006OP_SUB\020\014\022\013\n\007OP_MULT\020\r\022\n\n\006OP_DIV\020\016",
-      "\022\n\n\006OP_MOD\020\017\022\n\n\006OP_INC\020\020\022\n\n\006OP_DEC\020\021\022\016\n\n" +
-      "BIT_LSHIFT\020\022\022\016\n\nBIT_RSHIFT\020\023\022\026\n\022BIT_UNSI" +
-      "GNEDRSHIFT\020\024\022\013\n\007BIT_AND\020\025\022\n\n\006BIT_OR\020\026\022\013\n" +
-      "\007BIT_NOT\020\027\022\013\n\007BIT_XOR\020\030\022\017\n\013LOGICAL_NOT\020\031" +
-      "\022\017\n\013LOGICAL_AND\020\032\022\016\n\nLOGICAL_OR\020\033\022\006\n\002EQ\020" +
-      "\034\022\007\n\003NEQ\020\035\022\006\n\002LT\020\036\022\006\n\002GT\020\037\022\010\n\004LTEQ\020 \022\010\n\004" +
-      "GTEQ\020!\022\017\n\013CONDITIONAL\020\"\022\020\n\014NULLCOALESCE\020" +
-      "#\022\n\n\006ASSIGN\020$\022\016\n\nASSIGN_ADD\020%\022\016\n\nASSIGN_" +
-      "SUB\020&\022\017\n\013ASSIGN_MULT\020\'\022\016\n\nASSIGN_DIV\020(\022\016" +
-      "\n\nASSIGN_MOD\020)\022\021\n\rASSIGN_BITXOR\020*\022\021\n\rASS",
-      "IGN_BITAND\020+\022\020\n\014ASSIGN_BITOR\020,\022\021\n\rASSIGN" +
-      "_LSHIFT\020-\022\021\n\rASSIGN_RSHIFT\020.\022\031\n\025ASSIGN_U" +
-      "NSIGNEDRSHIFT\020/\022\016\n\nANNOTATION\0200\022\t\n\005PAREN" +
-      "\0201\022\024\n\020METHOD_REFERENCE\0202\022\n\n\006LAMBDA\0203\022\017\n\013" +
-      "ANON_METHOD\0204\022\t\n\005YIELD\0205\022\027\n\023ARRAY_COMPRE" +
-      "HENSION\0206\022\t\n\005EMPTY\0207\022\010\n\004SHEQ\0208\022\t\n\005SHNEQ\020" +
-      "9\022\020\n\014XML_DOTQUERY\020:\022\022\n\016OBJECT_LITERAL\020;\022" +
-      "\016\n\nMETHODDECL\020<\022\010\n\004LOOP\020=\022\r\n\tGENERATOR\020>" +
-      "\022\017\n\013XML_LITERAL\020?\022\022\n\016XML_EXPRESSION\020@\022\023\n" +
-      "\017XML_PROPERTYREF\020A\022\021\n\rXML_MEMBERREF\020B\022\013\n",
-      "\007XML_DOT\020C\022\016\n\nXML_DOTDOT\020D\022\006\n\002IN\020E\022\n\n\006TY" +
-      "PEOF\020F\022\021\n\rREGEXPLITERAL\020G\022\n\n\006DELETE\020H\022\010\n" +
-      "\004VOID\020I\032\002\020\001\"\215\005\n\010Modifier\022.\n\004kind\030\001 \002(\0162 " +
-      ".boa.types.Modifier.ModifierKind\0222\n\nvisi" +
-      "bility\030\002 \001(\0162\036.boa.types.Modifier.Visibi" +
-      "lity\022\027\n\017annotation_name\030\003 \001(\t\022\032\n\022annotat" +
-      "ion_members\030\004 \003(\t\0220\n\021annotation_values\030\005" +
-      " \003(\0132\025.boa.types.Expression\022\r\n\005other\030\006 \001" +
-      "(\t\022*\n\013change_kind\030\007 \001(\0162\025.boa.types.Chan" +
-      "geKind\022\023\n\013mapped_node\030\t \001(\005\022\013\n\003key\030\n \001(\005",
-      "\022(\n\005scope\030\013 \001(\0162\031.boa.types.Modifier.Sco" +
-      "pe\"\241\001\n\014ModifierKind\022\t\n\005OTHER\020\000\022\016\n\nVISIBI" +
-      "LITY\020\001\022\016\n\nANNOTATION\020\002\022\t\n\005FINAL\020\003\022\n\n\006STA" +
-      "TIC\020\004\022\020\n\014SYNCHRONIZED\020\005\022\010\n\004SYNC\020\005\022\014\n\010ABS" +
-      "TRACT\020\006\022\t\n\005SCOPE\020\007\022\n\n\006GETTER\020\010\022\n\n\006SETTER" +
-      "\020\t\032\002\020\001\"a\n\nVisibility\022\n\n\006PUBLIC\020\001\022\013\n\007PRIV" +
-      "ATE\020\002\022\r\n\tPROTECTED\020\003\022\r\n\tNAMESPACE\020\004\022\013\n\007P" +
-      "ACKAGE\020\004\022\013\n\007DEFAULT\020\004\032\002\020\001\"(\n\005Scope\022\007\n\003VA" +
-      "R\020\001\022\007\n\003LET\020\002\022\t\n\005CONST\020\003\032\002\020\001\"\253\002\n\007Comment\022" +
-      ",\n\004kind\030\001 \002(\0162\036.boa.types.Comment.Commen",
-      "tKind\022\r\n\005value\030\002 \002(\t\022)\n\010position\030\003 \002(\0132\027" +
-      ".boa.types.PositionInfo\022*\n\013change_kind\030\004" +
-      " \001(\0162\025.boa.types.ChangeKind\022\023\n\013mapped_no" +
-      "de\030\006 \001(\005\022\013\n\003key\030\007 \001(\005\"j\n\013CommentKind\022\t\n\005" +
-      "OTHER\020\000\022\010\n\004LINE\020\001\022\t\n\005BLOCK\020\002\022\007\n\003DOC\020\003\022\021\n" +
-      "\rDOCUMENTATION\020\003\022\010\n\004SPEC\020\004\022\021\n\rSPECIFICAT" +
-      "ION\020\004\032\002\020\001\"{\n\014PositionInfo\022\021\n\tstart_pos\030\001" +
-      " \002(\005\022\016\n\006length\030\002 \002(\005\022\022\n\nstart_line\030\003 \002(\005" +
-      "\022\021\n\tstart_col\030\004 \002(\005\022\020\n\010end_line\030\005 \002(\005\022\017\n" +
-      "\007end_col\030\006 \002(\005\"e\n\010Document\022\r\n\005title\030\001 \001(",
-      "\t\022$\n\010elements\030\002 \003(\0132\022.boa.types.Element\022" +
-      "$\n\010doc_type\030\003 \001(\0132\022.boa.types.Element\"\362\003" +
-      "\n\007Element\022\013\n\003tag\030\001 \002(\t\022,\n\004kind\030\002 \002(\0162\036.b" +
-      "oa.types.Element.ElementKind\022$\n\010elements" +
-      "\030\003 \003(\0132\022.boa.types.Element\022\014\n\004text\030\004 \003(\t" +
-      "\022\014\n\004data\030\005 \003(\t\022&\n\tatributes\030\006 \003(\0132\023.boa." +
-      "types.Atribute\022$\n\006script\030\007 \001(\0132\024.boa.typ" +
-      "es.Namespace\022!\n\003php\030\010 \001(\0132\024.boa.types.Na" +
-      "mespace\022%\n\010var_decl\030\t \003(\0132\023.boa.types.Va" +
-      "riable\022\r\n\005title\030\n \001(\t\"\302\001\n\013ElementKind\022\t\n",
-      "\005OTHER\020\000\022\t\n\005BLOCK\020\001\022\013\n\007IN_LINE\020\002\022\010\n\004FORM" +
-      "\020\003\022\014\n\010DOC_TYPE\020\004\022\017\n\013STYLE_SHEET\020\005\022\r\n\tPAG" +
-      "E_RULE\020\006\022\016\n\nSTYLE_RULE\020\007\022\022\n\016FONT_FACE_RU" +
-      "LE\020\010\022\016\n\nMEDIA_RULE\020\t\022\017\n\013MEDIA_QUERY\020\n\022\017\n" +
-      "\013IMPORT_RULE\020\013\032\002\020\001\"&\n\010Atribute\022\013\n\003key\030\001 " +
-      "\002(\t\022\r\n\005value\030\002 \002(\t*\236\001\n\010TypeKind\022\t\n\005OTHER" +
-      "\020\000\022\t\n\005CLASS\020\001\022\r\n\tINTERFACE\020\002\022\r\n\tANONYMOU" +
-      "S\020\003\022\010\n\004ANON\020\003\022\n\n\006STRUCT\020\004\022\010\n\004ENUM\020\005\022\017\n\013E" +
-      "NUMERATION\020\005\022\016\n\nANNOTATION\020\006\022\014\n\010DELEGATE" +
-      "\020\007\022\013\n\007GENERIC\020\010\032\002\020\001B\002H\001"
+      "\005\022\023\n\013declaration\030\t \001(\005\022\013\n\003key\030\n \001(\005\022,\n\rc" +
+      "omputed_name\030\016 \001(\0132\025.boa.types.Expressio" +
+      "n\"\307\003\n\006Method\022\014\n\004name\030\001 \001(\t\022&\n\tmodifiers\030" +
+      "\002 \003(\0132\023.boa.types.Modifier\022$\n\013return_typ" +
+      "e\030\003 \001(\0132\017.boa.types.Type\022+\n\022generic_para" +
+      "meters\030\004 \003(\0132\017.boa.types.Type\022&\n\targumen" +
+      "ts\030\005 \003(\0132\023.boa.types.Variable\022(\n\017excepti" +
+      "on_types\030\006 \003(\0132\017.boa.types.Type\022(\n\nstate",
+      "ments\030\007 \003(\0132\024.boa.types.Statement\022$\n\010com" +
+      "ments\030\010 \003(\0132\022.boa.types.Comment\022*\n\013chang" +
+      "e_kind\030\t \001(\0162\025.boa.types.ChangeKind\022\023\n\013m" +
+      "apped_node\030\013 \001(\005\022\013\n\003key\030\014 \001(\005\022\026\n\016declari" +
+      "ng_type\030\r \001(\005\022,\n\rcomputed_name\030\016 \001(\0132\025.b" +
+      "oa.types.Expression\"\343\002\n\010Variable\022\014\n\004name" +
+      "\030\001 \001(\t\022&\n\rvariable_type\030\002 \001(\0132\017.boa.type" +
+      "s.Type\022&\n\tmodifiers\030\003 \003(\0132\023.boa.types.Mo" +
+      "difier\022*\n\013initializer\030\004 \001(\0132\025.boa.types." +
+      "Expression\022$\n\010comments\030\005 \003(\0132\022.boa.types",
+      ".Comment\022*\n\013change_kind\030\006 \001(\0162\025.boa.type" +
+      "s.ChangeKind\022\023\n\013mapped_node\030\010 \001(\005\022\013\n\003key" +
+      "\030\t \001(\005\022\026\n\016declaring_type\030\n \001(\005\022,\n\rcomput" +
+      "ed_name\030\013 \001(\0132\025.boa.types.Expression\022\023\n\013" +
+      "dollar_sign\030\014 \001(\010\"\211\010\n\tStatement\0220\n\004kind\030" +
+      "\001 \002(\0162\".boa.types.Statement.StatementKin" +
+      "d\022$\n\010comments\030\002 \003(\0132\022.boa.types.Comment\022" +
+      "(\n\nstatements\030\003 \003(\0132\024.boa.types.Statemen" +
+      "t\022.\n\017initializations\030\004 \003(\0132\025.boa.types.E" +
+      "xpression\022(\n\tcondition\030\005 \001(\0132\025.boa.types",
+      ".Expression\022&\n\007updates\030\006 \003(\0132\025.boa.types" +
+      ".Expression\0221\n\024variable_declaration\030\007 \001(" +
+      "\0132\023.boa.types.Variable\0220\n\020type_declarati" +
+      "on\030\010 \001(\0132\026.boa.types.Declaration\022)\n\nexpr" +
+      "ession\030\t \001(\0132\025.boa.types.Expression\022*\n\013e" +
+      "xpressions\030\n \003(\0132\025.boa.types.Expression\022" +
+      "*\n\013change_kind\030\013 \001(\0162\025.boa.types.ChangeK" +
+      "ind\022\023\n\013mapped_node\030\014 \001(\005\022\013\n\003key\030\r \001(\005\022\"\n" +
+      "\007methods\030\016 \003(\0132\021.boa.types.Method\0222\n\025var" +
+      "iable_declarations\030\017 \003(\0132\023.boa.types.Var",
+      "iable\0221\n\021type_declarations\030\020 \003(\0132\026.boa.t" +
+      "ypes.Declaration\"\342\002\n\rStatementKind\022\t\n\005OT" +
+      "HER\020\000\022\t\n\005BLOCK\020\001\022\014\n\010TYPEDECL\020\002\022\016\n\nEXPRES" +
+      "SION\020\003\022\010\n\004EXPR\020\003\022\020\n\014SYNCHRONIZED\020\004\022\010\n\004SY" +
+      "NC\020\004\022\n\n\006RETURN\020\005\022\007\n\003FOR\020\006\022\006\n\002DO\020\007\022\t\n\005WHI" +
+      "LE\020\010\022\006\n\002IF\020\t\022\n\n\006ASSERT\020\n\022\t\n\005BREAK\020\013\022\014\n\010C" +
+      "ONTINUE\020\014\022\t\n\005LABEL\020\r\022\n\n\006SWITCH\020\016\022\010\n\004CASE" +
+      "\020\017\022\007\n\003TRY\020\020\022\t\n\005THROW\020\021\022\t\n\005CATCH\020\022\022\t\n\005EMP" +
+      "TY\020\023\022\013\n\007FINALLY\020\024\022\014\n\010DEBUGGER\020\025\022\013\n\007DEFAU" +
+      "LT\020\026\022\013\n\007FOREACH\020\027\022\t\n\005FORIN\020\030\022\010\n\004WITH\020\031\022\t",
+      "\n\005SCOPE\020\032\032\002\020\001\"\267\020\n\nExpression\0222\n\004kind\030\001 \002" +
+      "(\0162$.boa.types.Expression.ExpressionKind" +
+      "\022*\n\013expressions\030\002 \003(\0132\025.boa.types.Expres" +
+      "sion\022+\n\016variable_decls\030\003 \003(\0132\023.boa.types" +
+      ".Variable\022!\n\010new_type\030\004 \001(\0132\017.boa.types." +
+      "Type\022+\n\022generic_parameters\030\005 \003(\0132\017.boa.t" +
+      "ypes.Type\022\022\n\nis_postfix\030\006 \001(\010\022\017\n\007literal" +
+      "\030\007 \001(\t\022\020\n\010variable\030\010 \001(\t\022\016\n\006method\030\t \001(\t" +
+      "\022*\n\013method_args\030\n \003(\0132\025.boa.types.Expres" +
+      "sion\0220\n\020anon_declaration\030\013 \001(\0132\026.boa.typ",
+      "es.Declaration\022\'\n\nannotation\030\014 \001(\0132\023.boa" +
+      ".types.Modifier\022\021\n\tno_parens\030\016 \001(\010\022*\n\013ch" +
+      "ange_kind\030\017 \001(\0162\025.boa.types.ChangeKind\022\023" +
+      "\n\013mapped_node\030\021 \001(\005\022\013\n\003key\030\022 \001(\005\022\'\n\016decl" +
+      "aring_type\030\023 \001(\0132\017.boa.types.Type\022$\n\013ret" +
+      "urn_type\030\024 \001(\0132\017.boa.types.Type\022\"\n\007metho" +
+      "ds\030\025 \003(\0132\021.boa.types.Method\022(\n\nstatement" +
+      "s\030\026 \003(\0132\024.boa.types.Statement\022\030\n\020is_memb" +
+      "er_access\030\027 \001(\010\022\023\n\013dollar_sign\030\030 \001(\010\"\320\n\n" +
+      "\016ExpressionKind\022\t\n\005OTHER\020\000\022\013\n\007LITERAL\020\001\022",
+      "\r\n\tVARACCESS\020\002\022\013\n\007VARDECL\020\003\022\016\n\nMETHODCAL" +
+      "L\020\004\022\010\n\004CAST\020\005\022\017\n\013ARRAYACCESS\020\006\022\r\n\tARRAYI" +
+      "NIT\020\007\022\020\n\014ARRAYLITERAL\020\007\022\017\n\013TYPECOMPARE\020\010" +
+      "\022\007\n\003NEW\020\t\022\014\n\010NEWARRAY\020\n\022\n\n\006OP_ADD\020\013\022\n\n\006O" +
+      "P_SUB\020\014\022\013\n\007OP_MULT\020\r\022\n\n\006OP_DIV\020\016\022\n\n\006OP_M" +
+      "OD\020\017\022\n\n\006OP_INC\020\020\022\n\n\006OP_DEC\020\021\022\016\n\nBIT_LSHI" +
+      "FT\020\022\022\016\n\nBIT_RSHIFT\020\023\022\026\n\022BIT_UNSIGNEDRSHI" +
+      "FT\020\024\022\013\n\007BIT_AND\020\025\022\n\n\006BIT_OR\020\026\022\013\n\007BIT_NOT" +
+      "\020\027\022\013\n\007BIT_XOR\020\030\022\017\n\013LOGICAL_NOT\020\031\022\017\n\013LOGI" +
+      "CAL_AND\020\032\022\016\n\nLOGICAL_OR\020\033\022\006\n\002EQ\020\034\022\007\n\003NEQ",
+      "\020\035\022\006\n\002LT\020\036\022\006\n\002GT\020\037\022\010\n\004LTEQ\020 \022\010\n\004GTEQ\020!\022\017" +
+      "\n\013CONDITIONAL\020\"\022\020\n\014NULLCOALESCE\020#\022\n\n\006ASS" +
+      "IGN\020$\022\016\n\nASSIGN_ADD\020%\022\016\n\nASSIGN_SUB\020&\022\017\n" +
+      "\013ASSIGN_MULT\020\'\022\016\n\nASSIGN_DIV\020(\022\016\n\nASSIGN" +
+      "_MOD\020)\022\021\n\rASSIGN_BITXOR\020*\022\021\n\rASSIGN_BITA" +
+      "ND\020+\022\020\n\014ASSIGN_BITOR\020,\022\021\n\rASSIGN_LSHIFT\020" +
+      "-\022\021\n\rASSIGN_RSHIFT\020.\022\031\n\025ASSIGN_UNSIGNEDR" +
+      "SHIFT\020/\022\016\n\nANNOTATION\0200\022\t\n\005PAREN\0201\022\024\n\020ME" +
+      "THOD_REFERENCE\0202\022\n\n\006LAMBDA\0203\022\017\n\013ANON_MET" +
+      "HOD\0204\022\t\n\005YIELD\0205\022\027\n\023ARRAY_COMPREHENSION\020",
+      "6\022\t\n\005EMPTY\0207\022\010\n\004SHEQ\0208\022\t\n\005SHNEQ\0209\022\020\n\014XML" +
+      "_DOTQUERY\020:\022\022\n\016OBJECT_LITERAL\020;\022\016\n\nMETHO" +
+      "DDECL\020<\022\010\n\004LOOP\020=\022\r\n\tGENERATOR\020>\022\017\n\013XML_" +
+      "LITERAL\020?\022\022\n\016XML_EXPRESSION\020@\022\023\n\017XML_PRO" +
+      "PERTYREF\020A\022\021\n\rXML_MEMBERREF\020B\022\013\n\007XML_DOT" +
+      "\020C\022\016\n\nXML_DOTDOT\020D\022\006\n\002IN\020E\022\n\n\006TYPEOF\020F\022\021" +
+      "\n\rREGEXPLITERAL\020G\022\n\n\006DELETE\020H\022\010\n\004VOID\020I\022" +
+      "\023\n\017HASHTABLEACCESS\020J\022\020\n\014ARRAYELEMENT\020K\022\r" +
+      "\n\tOP_CONCAT\020L\022\n\n\006OP_POW\020M\022\021\n\rASSIGN_CONC" +
+      "AT\020N\022\016\n\nASSIGN_POW\020O\022\014\n\010BACKTICK\020P\022\r\n\tID",
+      "ENTICAL\020Q\022\020\n\014NOTIDENTICAL\020R\022\016\n\nSTRING_AN" +
+      "D\020S\022\r\n\tSTRING_OR\020T\022\016\n\nSTRING_XOR\020U\022\030\n\024OP" +
+      "_THREE_WAY_COMPARE\020V\022\r\n\tOP_UNPACK\020W\032\002\020\001\"" +
+      "\215\005\n\010Modifier\022.\n\004kind\030\001 \002(\0162 .boa.types.M" +
+      "odifier.ModifierKind\0222\n\nvisibility\030\002 \001(\016" +
+      "2\036.boa.types.Modifier.Visibility\022\027\n\017anno" +
+      "tation_name\030\003 \001(\t\022\032\n\022annotation_members\030" +
+      "\004 \003(\t\0220\n\021annotation_values\030\005 \003(\0132\025.boa.t" +
+      "ypes.Expression\022\r\n\005other\030\006 \001(\t\022*\n\013change" +
+      "_kind\030\007 \001(\0162\025.boa.types.ChangeKind\022\023\n\013ma",
+      "pped_node\030\t \001(\005\022\013\n\003key\030\n \001(\005\022(\n\005scope\030\013 " +
+      "\001(\0162\031.boa.types.Modifier.Scope\"\241\001\n\014Modif" +
+      "ierKind\022\t\n\005OTHER\020\000\022\016\n\nVISIBILITY\020\001\022\016\n\nAN" +
+      "NOTATION\020\002\022\t\n\005FINAL\020\003\022\n\n\006STATIC\020\004\022\020\n\014SYN" +
+      "CHRONIZED\020\005\022\010\n\004SYNC\020\005\022\014\n\010ABSTRACT\020\006\022\t\n\005S" +
+      "COPE\020\007\022\n\n\006GETTER\020\010\022\n\n\006SETTER\020\t\032\002\020\001\"a\n\nVi" +
+      "sibility\022\n\n\006PUBLIC\020\001\022\013\n\007PRIVATE\020\002\022\r\n\tPRO" +
+      "TECTED\020\003\022\r\n\tNAMESPACE\020\004\022\013\n\007PACKAGE\020\004\022\013\n\007" +
+      "DEFAULT\020\004\032\002\020\001\"(\n\005Scope\022\007\n\003VAR\020\001\022\007\n\003LET\020\002" +
+      "\022\t\n\005CONST\020\003\032\002\020\001\"\253\002\n\007Comment\022,\n\004kind\030\001 \002(",
+      "\0162\036.boa.types.Comment.CommentKind\022\r\n\005val" +
+      "ue\030\002 \002(\t\022)\n\010position\030\003 \002(\0132\027.boa.types.P" +
+      "ositionInfo\022*\n\013change_kind\030\004 \001(\0162\025.boa.t" +
+      "ypes.ChangeKind\022\023\n\013mapped_node\030\006 \001(\005\022\013\n\003" +
+      "key\030\007 \001(\005\"j\n\013CommentKind\022\t\n\005OTHER\020\000\022\010\n\004L" +
+      "INE\020\001\022\t\n\005BLOCK\020\002\022\007\n\003DOC\020\003\022\021\n\rDOCUMENTATI" +
+      "ON\020\003\022\010\n\004SPEC\020\004\022\021\n\rSPECIFICATION\020\004\032\002\020\001\"{\n" +
+      "\014PositionInfo\022\021\n\tstart_pos\030\001 \002(\005\022\016\n\006leng" +
+      "th\030\002 \002(\005\022\022\n\nstart_line\030\003 \002(\005\022\021\n\tstart_co" +
+      "l\030\004 \002(\005\022\020\n\010end_line\030\005 \002(\005\022\017\n\007end_col\030\006 \002",
+      "(\005\"e\n\010Document\022\r\n\005title\030\001 \001(\t\022$\n\010element" +
+      "s\030\002 \003(\0132\022.boa.types.Element\022$\n\010doc_type\030" +
+      "\003 \001(\0132\022.boa.types.Element\"\362\003\n\007Element\022\013\n" +
+      "\003tag\030\001 \002(\t\022,\n\004kind\030\002 \002(\0162\036.boa.types.Ele" +
+      "ment.ElementKind\022$\n\010elements\030\003 \003(\0132\022.boa" +
+      ".types.Element\022\014\n\004text\030\004 \003(\t\022\014\n\004data\030\005 \003" +
+      "(\t\022&\n\tatributes\030\006 \003(\0132\023.boa.types.Atribu" +
+      "te\022$\n\006script\030\007 \001(\0132\024.boa.types.Namespace" +
+      "\022!\n\003php\030\010 \001(\0132\024.boa.types.Namespace\022%\n\010v" +
+      "ar_decl\030\t \003(\0132\023.boa.types.Variable\022\r\n\005ti",
+      "tle\030\n \001(\t\"\302\001\n\013ElementKind\022\t\n\005OTHER\020\000\022\t\n\005" +
+      "BLOCK\020\001\022\013\n\007IN_LINE\020\002\022\010\n\004FORM\020\003\022\014\n\010DOC_TY" +
+      "PE\020\004\022\017\n\013STYLE_SHEET\020\005\022\r\n\tPAGE_RULE\020\006\022\016\n\n" +
+      "STYLE_RULE\020\007\022\022\n\016FONT_FACE_RULE\020\010\022\016\n\nMEDI" +
+      "A_RULE\020\t\022\017\n\013MEDIA_QUERY\020\n\022\017\n\013IMPORT_RULE" +
+      "\020\013\032\002\020\001\"&\n\010Atribute\022\013\n\003key\030\001 \002(\t\022\r\n\005value" +
+      "\030\002 \002(\t*\251\001\n\010TypeKind\022\t\n\005OTHER\020\000\022\t\n\005CLASS\020" +
+      "\001\022\r\n\tINTERFACE\020\002\022\r\n\tANONYMOUS\020\003\022\010\n\004ANON\020" +
+      "\003\022\n\n\006STRUCT\020\004\022\010\n\004ENUM\020\005\022\017\n\013ENUMERATION\020\005" +
+      "\022\016\n\nANNOTATION\020\006\022\014\n\010DELEGATE\020\007\022\013\n\007GENERI",
+      "C\020\010\022\t\n\005TRAIT\020\t\032\002\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -40560,7 +41836,7 @@ public final class Ast {
           internal_static_boa_types_Type_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Type_descriptor,
-              new java.lang.String[] { "Name", "FullyQualifiedName", "Kind", "Id", "ChangeKind", "MappedNode", "DeclarationFile", "Declaration", "Key", });
+              new java.lang.String[] { "Name", "FullyQualifiedName", "Kind", "Id", "ChangeKind", "MappedNode", "DeclarationFile", "Declaration", "Key", "ComputedName", });
           internal_static_boa_types_Method_descriptor =
             getDescriptor().getMessageTypes().get(5);
           internal_static_boa_types_Method_fieldAccessorTable = new
@@ -40572,19 +41848,19 @@ public final class Ast {
           internal_static_boa_types_Variable_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Variable_descriptor,
-              new java.lang.String[] { "Name", "VariableType", "Modifiers", "Initializer", "Comments", "ChangeKind", "MappedNode", "Key", "DeclaringType", "ComputedName", });
+              new java.lang.String[] { "Name", "VariableType", "Modifiers", "Initializer", "Comments", "ChangeKind", "MappedNode", "Key", "DeclaringType", "ComputedName", "DollarSign", });
           internal_static_boa_types_Statement_descriptor =
             getDescriptor().getMessageTypes().get(7);
           internal_static_boa_types_Statement_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Statement_descriptor,
-              new java.lang.String[] { "Kind", "Comments", "Statements", "Initializations", "Condition", "Updates", "VariableDeclaration", "TypeDeclaration", "Expression", "Expressions", "ChangeKind", "MappedNode", "Key", "Methods", });
+              new java.lang.String[] { "Kind", "Comments", "Statements", "Initializations", "Condition", "Updates", "VariableDeclaration", "TypeDeclaration", "Expression", "Expressions", "ChangeKind", "MappedNode", "Key", "Methods", "VariableDeclarations", "TypeDeclarations", });
           internal_static_boa_types_Expression_descriptor =
             getDescriptor().getMessageTypes().get(8);
           internal_static_boa_types_Expression_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Expression_descriptor,
-              new java.lang.String[] { "Kind", "Expressions", "VariableDecls", "NewType", "GenericParameters", "IsPostfix", "Literal", "Variable", "Method", "MethodArgs", "AnonDeclaration", "Annotation", "NoParens", "ChangeKind", "MappedNode", "Key", "DeclaringType", "ReturnType", "Methods", "Statements", "IsMemberAccess", });
+              new java.lang.String[] { "Kind", "Expressions", "VariableDecls", "NewType", "GenericParameters", "IsPostfix", "Literal", "Variable", "Method", "MethodArgs", "AnonDeclaration", "Annotation", "NoParens", "ChangeKind", "MappedNode", "Key", "DeclaringType", "ReturnType", "Methods", "Statements", "IsMemberAccess", "DollarSign", });
           internal_static_boa_types_Modifier_descriptor =
             getDescriptor().getMessageTypes().get(9);
           internal_static_boa_types_Modifier_fieldAccessorTable = new

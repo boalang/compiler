@@ -106,12 +106,14 @@ enum TypeKind {
 	DELEGATE = 7;
 	/** A generic type */
 	GENERIC = 8;
+	/** A trait in PHP */
+	TRAIT = 9;
 }
 
 /** A type in an AST */
 message Type {
 	/** The name of the type */
-	required string name = 1;
+	optional string name = 1;
 	/** The fully qualified name of this type/interface */
 	optional string fully_qualified_name = 2;
 	/** The kind of the type */
@@ -128,6 +130,7 @@ message Type {
 	optional int32 declaration = 9;
 	/** */
 	optional int32 key = 10;
+	optional Expression computed_name = 14;
 }
 
 /** A method declaration */
@@ -186,6 +189,7 @@ message Variable {
 	optional int32 declaring_type = 10;
 	/** */
 	optional Expression computed_name = 11;
+	optional bool dollar_sign = 12;
 }
 
 /** A single statement */
@@ -245,6 +249,8 @@ message Statement {
 	/** */
 	optional int32 key = 13;
 	repeated Method methods = 14;
+	repeated Variable variable_declarations = 15;
+	repeated Declaration type_declarations = 16;
 }
 
 /** A single expression */
@@ -259,7 +265,7 @@ message Expression {
 		VARDECL = 3;
 		METHODCALL = 4;
 		CAST = 5;
-		ARRAYINDEX = 6;
+		ARRAYACCESS = 6;
 		ARRAYINIT = 7;
 		/** The same as ARRAYINIT */
 		ARRAYLITERAL = 7;
@@ -332,6 +338,22 @@ message Expression {
 		REGEXPLITERAL = 71;
 		DELETE = 72;
 		VOID = 73;
+		/** In PHP, its syntax uses curly brackets instead of square ones as in array access. Not used in Java*/
+		HASHTABLEACCESS = 74;
+		/** Represents a single element of array. Holds the key and the value both can be any expression. The key can be null */
+		ARRAYELEMENT = 75;
+		OP_CONCAT = 76;
+		OP_POW = 77;
+		ASSIGN_CONCAT = 78;
+		ASSIGN_POW = 79;
+		BACKTICK = 80;
+		IDENTICAL = 81;
+		NOTIDENTICAL = 82;
+		STRING_AND = 83;
+		STRING_OR = 84;
+		STRING_XOR = 85;
+		OP_THREE_WAY_COMPARE = 86;
+		OP_UNPACK = 87;
 	}
 	/** The kind of expression */
 	required ExpressionKind kind = 1;
@@ -364,6 +386,7 @@ message Expression {
 	/** Inside statements */
 	repeated Statement statements = 22;
 	optional bool is_member_access = 23;
+	optional bool dollar_sign = 24;
 }
 
 /** A single modifier */

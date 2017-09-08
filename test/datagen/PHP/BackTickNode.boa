@@ -3,7 +3,7 @@ namespaces {
   statements {
     kind: EXPRESSION
     expression {
-      kind: METHODCALL
+      kind: BACKTICK
       expressions {
         kind: LITERAL
         literal: "ls -al"

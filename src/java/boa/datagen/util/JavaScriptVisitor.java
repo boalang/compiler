@@ -697,7 +697,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 
 	public boolean accept(ElementGet node) {
 		boa.types.Ast.Expression.Builder b = boa.types.Ast.Expression.newBuilder();
-		b.setKind(boa.types.Ast.Expression.ExpressionKind.ARRAYINDEX);
+		b.setKind(boa.types.Ast.Expression.ExpressionKind.ARRAYACCESS);
 		node.getTarget().visit(this);
 		b.addExpressions(expressions.pop());
 		node.getElement().visit(this);

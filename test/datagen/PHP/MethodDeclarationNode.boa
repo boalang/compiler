@@ -1,7 +1,7 @@
 namespaces {
   name: ""
   declarations {
-    name: ""
+    name: "myClass"
     kind: CLASS
     methods {
       name: "myFunction"

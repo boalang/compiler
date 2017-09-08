@@ -1,7 +1,7 @@
 namespaces {
   name: ""
   declarations {
-    name: ""
+    name: "Talker"
     kind: CLASS
     methods {
       name: "use"
