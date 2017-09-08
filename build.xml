@@ -193,16 +193,39 @@
 		<delete file="SecurityAuth.audit" />
 		<fail message="Test failure detected." if="test.failed" />
 	</target>
-	<target name="test-datagen" depends="-compile-tests" description="Run datagen unit tests.">
+	<target name="test-datagen" depends="test-datagen-java,test-datagen-js,test-datagen-php" description="Run datagen unit tests.">
 		<junit fork="yes" haltonfailure="no">
 			<classpath refid="test.class.path" />
 			<batchtest>
 				<formatter type="plain" usefile="false" />
 				<fileset dir="build/tests">
 					<include name="boa/test/datagen/Test*.class" />
+					<exclude name="**/*$*.class" />
+				</fileset>
+			</batchtest>
+		</junit>
+		<delete file="SecurityAuth.audit" />
+	</target>
+	<target name="test-datagen-java" depends="-compile-tests" description="Run Java datagen unit tests.">
+		<junit fork="yes" haltonfailure="no">
+			<classpath refid="test.class.path" />
+			<batchtest>
+				<formatter type="plain" usefile="false" />
+				<fileset dir="build/tests">
 					<include name="boa/test/datagen/java/Test*.class" />
+					<exclude name="**/*$*.class" />
+				</fileset>
+			</batchtest>
+		</junit>
+		<delete file="SecurityAuth.audit" />
+	</target>
+	<target name="test-datagen-js" depends="-compile-tests" description="Run JavaScript datagen unit tests.">
+		<junit fork="yes" haltonfailure="no">
+			<classpath refid="test.class.path" />
+			<batchtest>
+				<formatter type="plain" usefile="false" />
+				<fileset dir="build/tests">
 					<include name="boa/test/datagen/js/Test*.class" />
-					<include name="boa/test/datagen/php/Test*.class" />
 					<exclude name="**/*$*.class" />
 				</fileset>
 			</batchtest>
