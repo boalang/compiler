@@ -369,7 +369,7 @@ public class PHPVisitor extends AbstractVisitor {
 			vb.setComputedName(expressions.pop());
 		}
 		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
-		org.eclipse.php.internal.core.ast.nodes.Expression en = node.getClassName();
+		org.eclipse.php.internal.core.ast.nodes.Expression en = node.getClassNames().get(0);
 		if (en instanceof Identifier)
 			tb.setName(((Identifier) en).getName());
 		else
