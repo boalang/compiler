@@ -6,20 +6,29 @@ namespaces {
       kind: METHODCALL
       method: "echo"
       method_args {
-        kind: LITERAL
+        kind: QUOTE
         expressions {
-          kind: VARACCESS
-          variable_decls {
-            name: "$name"
-          }
+          kind: LITERAL
+          literal: "Hi, my name is "
         }
         expressions {
           kind: VARACCESS
-          variable_decls {
-            name: "$age"
-          }
+          variable: "name"
+          dollar_sign: true
         }
-        literal: "Hi, my name is  and I am  years old."
+        expressions {
+          kind: LITERAL
+          literal: " and I am "
+        }
+        expressions {
+          kind: VARACCESS
+          variable: "age"
+          dollar_sign: true
+        }
+        expressions {
+          kind: LITERAL
+          literal: " years old."
+        }
       }
     }
   }

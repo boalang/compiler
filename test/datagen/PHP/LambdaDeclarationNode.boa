@@ -6,10 +6,6 @@ namespaces {
       kind: LAMBDA
       variable_decls {
         name: "name"
-        variable_type {
-          name: ""
-          kind: OTHER
-        }
       }
       statements {
         kind: BLOCK

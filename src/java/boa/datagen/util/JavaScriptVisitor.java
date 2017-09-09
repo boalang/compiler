@@ -288,7 +288,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 			Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 			node.getCatchCondition().visit(this);
 			eb.addExpressions(expressions.pop());
-			b.setCondition(eb.build());
+			b.addConditions(eb.build());
 		}
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
 		node.getBody().visit(this);
@@ -317,7 +317,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.DO);
 		node.getCondition().visit(this);
-		b.setCondition(expressions.pop());
+		b.addConditions(expressions.pop());
 		if (node.getBody() instanceof FunctionNode) {
 			methods.push(new ArrayList<boa.types.Ast.Method>());
 			((FunctionNode) node.getBody()).setFunctionType(FunctionNode.FUNCTION_STATEMENT);
@@ -400,7 +400,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 		node.getInitializer().visit(this);
 		s.addInitializations(expressions.pop());
 		node.getCondition().visit(this);
-		s.setCondition(expressions.pop());
+		s.addConditions(expressions.pop());
 		node.getIncrement().visit(this);
 		s.addUpdates(expressions.pop());
 		if (node.getBody() instanceof FunctionNode) {
@@ -480,7 +480,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.IF);
 		node.getCondition().visit(this);
-		b.setCondition(expressions.pop());
+		b.addConditions(expressions.pop());
 		if (node.getThenPart() instanceof FunctionNode) {
 			methods.push(new ArrayList<boa.types.Ast.Method>());
 			((FunctionNode) node.getThenPart()).setFunctionType(FunctionNode.FUNCTION_STATEMENT);
@@ -643,7 +643,7 @@ public class JavaScriptVisitor implements NodeVisitor {
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.WHILE);
 		node.getCondition().visit(this);
-		b.setCondition(expressions.pop());
+		b.addConditions(expressions.pop());
 		if (node.getBody() instanceof FunctionNode) {
 			methods.push(new ArrayList<boa.types.Ast.Method>());
 			((FunctionNode) node.getBody()).setFunctionType(FunctionNode.FUNCTION_STATEMENT);

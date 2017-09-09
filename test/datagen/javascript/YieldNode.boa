@@ -37,7 +37,7 @@ namespaces {
             }
           }
         }
-        condition {
+        conditions {
           kind: LTEQ
           expressions {
             kind: VARACCESS

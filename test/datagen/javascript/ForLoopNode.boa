@@ -74,7 +74,7 @@ namespaces {
         literal: "0.0"
       }
     }
-    condition {
+    conditions {
       kind: LT
       expressions {
         kind: VARACCESS

@@ -1009,7 +1009,7 @@ public class Java7Visitor extends ASTVisitor {
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.ASSERT);
 		node.getExpression().accept(this);
-		b.setCondition(expressions.pop());
+		b.addConditions(expressions.pop());
 		if (node.getMessage() != null) {
 			node.getMessage().accept(this);
 			b.setExpression(expressions.pop());
@@ -1257,7 +1257,7 @@ public class Java7Visitor extends ASTVisitor {
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.DO);
 		node.getExpression().accept(this);
-		b.setExpression(expressions.pop());
+		b.addConditions(expressions.pop());
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
 		node.getBody().accept(this);
 		for (boa.types.Ast.Statement s : statements.pop())
@@ -1405,7 +1405,7 @@ public class Java7Visitor extends ASTVisitor {
 		}
 		if (node.getExpression() != null) {
 			node.getExpression().accept(this);
-			b.setExpression(expressions.pop());
+			b.addConditions(expressions.pop());
 		}
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
 		node.getBody().accept(this);
@@ -1432,7 +1432,7 @@ public class Java7Visitor extends ASTVisitor {
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.IF);
 		node.getExpression().accept(this);
-		b.setExpression(expressions.pop());
+		b.addConditions(expressions.pop());
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
 		node.getThenStatement().accept(this);
 		for (boa.types.Ast.Statement s : statements.pop())
@@ -1873,7 +1873,7 @@ public class Java7Visitor extends ASTVisitor {
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.WHILE);
 		node.getExpression().accept(this);
-		b.setExpression(expressions.pop());
+		b.addConditions(expressions.pop());
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
 		node.getBody().accept(this);
 		for (boa.types.Ast.Statement s : statements.pop())

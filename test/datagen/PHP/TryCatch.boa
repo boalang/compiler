@@ -44,16 +44,10 @@ namespaces {
               kind: METHODCALL
               expressions {
                 kind: VARACCESS
-                variable_decls {
-                  name: "$e"
-                }
+                variable: "e"
+                dollar_sign: true
               }
-              expressions {
-                kind: VARACCESS
-                variable_decls {
-                  name: "getMessage"
-                }
-              }
+              method: "getMessage"
             }
             method_args {
               kind: LITERAL

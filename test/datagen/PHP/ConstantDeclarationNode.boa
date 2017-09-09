@@ -6,10 +6,6 @@ namespaces {
       kind: VARDECL
       variable_decls {
         name: "x"
-        variable_type {
-          name: ""
-          kind: OTHER
-        }
         modifiers {
           kind: FINAL
         }

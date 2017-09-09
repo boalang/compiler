@@ -229,6 +229,7 @@ message Statement {
 		FORIN = 24;
 		WITH = 25;
 		SCOPE = 26;
+		DECLARE = 27;
 	}
 	/** The kind of statement */
 	required StatementKind kind = 1;
@@ -236,7 +237,7 @@ message Statement {
 	repeated Comment comments = 2;
 	repeated Statement statements = 3;
 	repeated Expression initializations = 4;
-	optional Expression condition = 5;
+	repeated Expression conditions = 5;
 	repeated Expression updates = 6;
 	optional Variable variable_declaration = 7;
 	optional Declaration type_declaration = 8;
@@ -354,6 +355,7 @@ message Expression {
 		STRING_XOR = 85;
 		OP_THREE_WAY_COMPARE = 86;
 		OP_UNPACK = 87;
+		QUOTE = 88;
 	}
 	/** The kind of expression */
 	required ExpressionKind kind = 1;
@@ -400,8 +402,9 @@ message Modifier {
 		VISIBILITY = 1;
 		/** An annotation modifier */
 		ANNOTATION = 2;
-		/** A final modifier */
+		/** A final or constant modifier */
 		FINAL = 3;
+		CONSTANT = 3;
 		/** A static modifier */
 		STATIC = 4;
 		/** A synchronized modifier */
