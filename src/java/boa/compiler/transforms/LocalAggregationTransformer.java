@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2014, Hridesh Rajan, Robert Dyer,
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -39,13 +39,13 @@ import boa.types.BoaInt;
  * sending output to the output variable.  This is like a combiner step,
  * but performed via rewrites to the Boa program (and thus happens
  * before the combiner).
- * 
+ *
  * @author rdyer
  */
 public class LocalAggregationTransformer extends AbstractVisitorNoArgNoRet {
 	/**
 	 * Finds all output variables using a 'sum' {@link Aggregator}.
-	 * 
+	 *
 	 * @author rdyer
 	 */
 	protected class SumAggregatorFindingVisitor extends AbstractVisitorNoArgNoRet {
@@ -126,6 +126,7 @@ public class LocalAggregationTransformer extends AbstractVisitorNoArgNoRet {
 		n.replaceStatement(n,
 			new AssignmentStatement(
 				new Factor(id.clone()),
+				"=",
 				ASTFactory.createComparison(id, "+", new ParenExpression(n.getValue().clone()))
 			)
 		);

@@ -42,7 +42,7 @@ variableDeclaration
 	: forVariableDeclaration { isSemiColon(); }
 	;
 
-type 
+type
 	: arrayType
 	| mapType
 	| tupleType
@@ -60,7 +60,7 @@ type
 component
 	: (identifier COLON)? type
 	;
-	
+
 enumBodyDeclaration
 	: identifier EQUALS expression
 	;
@@ -141,7 +141,7 @@ emptyStatement
 	;
 
 assignmentStatement
-	: factor EQUALS expression { isSemiColon(); }
+	: factor (EQUALS|PLUSEQ) expression { isSemiColon(); }
 	;
 
 block
@@ -480,6 +480,7 @@ MOD    : '%';
 RSHIFT : '>>';
 NEG    : '~';
 INV    : '!';
+PLUSEQ : '+=';
 
 //
 // other
@@ -498,14 +499,14 @@ RIGHT_ARROW : '->';
 
 IntegerLiteral
 	: DecimalNumeral
-	| HexNumeral 
-	| OctalNumeral 
-	| BinaryNumeral 
+	| HexNumeral
+	| OctalNumeral
+	| BinaryNumeral
 	;
 
 fragment
 DecimalNumeral
-	: NonZeroDigit Digit* 
+	: NonZeroDigit Digit*
 	;
 
 fragment

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2014, Hridesh Rajan, Robert Dyer,
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,12 +23,13 @@ import boa.compiler.visitors.AbstractVisitorNoArgNoRet;
 import boa.compiler.visitors.AbstractVisitorNoReturn;
 
 /**
- * 
+ *
  * @author rdyer
  * @author hridesh
  */
 public class AssignmentStatement extends Statement {
 	protected Factor lhs;
+	protected String op;
 	protected Expression rhs;
 
 	public Factor getLhs() {
@@ -39,12 +40,13 @@ public class AssignmentStatement extends Statement {
 		return rhs;
 	}
 
-	public AssignmentStatement(final Factor lhs, final Expression rhs) {
+	public AssignmentStatement(final Factor lhs, final String op, final Expression rhs) {
 		if (lhs != null)
 			lhs.setParent(this);
 		if (rhs != null)
 			rhs.setParent(this);
 		this.lhs = lhs;
+		this.op = op;
 		this.rhs = rhs;
 	}
 
@@ -67,7 +69,7 @@ public class AssignmentStatement extends Statement {
 	}
 
 	public AssignmentStatement clone() {
-		final AssignmentStatement s = new AssignmentStatement(lhs.clone(), rhs.clone());
+		final AssignmentStatement s = new AssignmentStatement(lhs.clone(), op, rhs.clone());
 		copyFieldsTo(s);
 		return s;
 	}
