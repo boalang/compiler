@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer,
+ * Copyright 2014, Hridesh Rajan, Robert Dyer, Che Shian Hung
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,6 +26,7 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
  *
  * @author rdyer
  * @author hridesh
+ * @author hungc
  */
 public class AssignmentStatement extends Statement {
 	protected Factor lhs;

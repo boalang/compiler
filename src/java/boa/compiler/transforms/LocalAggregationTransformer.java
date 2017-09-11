@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer,
+ * Copyright 2014, Hridesh Rajan, Robert Dyer, Che Shian Hung
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -41,6 +41,7 @@ import boa.types.BoaInt;
  * before the combiner).
  *
  * @author rdyer
+ * @author hungc
  */
 public class LocalAggregationTransformer extends AbstractVisitorNoArgNoRet {
 	/**
