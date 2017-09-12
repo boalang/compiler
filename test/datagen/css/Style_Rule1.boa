@@ -1,0 +1,26 @@
+tag: ""
+kind: STYLE_SHEET
+elements {
+  tag: "div.fixed"
+  kind: STYLE_RULE
+  atributes {
+    key: "position"
+    value: "fixed"
+  }
+  atributes {
+    key: "bottom"
+    value: "0"
+  }
+  atributes {
+    key: "right"
+    value: "0"
+  }
+  atributes {
+    key: "width"
+    value: "300px"
+  }
+  atributes {
+    key: "border"
+    value: "3px solid rgb(115, 173, 33)"
+  }
+}

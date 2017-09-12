@@ -1,0 +1,19 @@
+tag: ""
+kind: STYLE_SHEET
+elements {
+  tag: ""
+  kind: MEDIA_RULE
+  elements {
+    tag: "body"
+    kind: STYLE_RULE
+    atributes {
+      key: "background-color"
+      value: "lightgreen"
+    }
+  }
+  elements {
+    tag: ""
+    kind: MEDIA_QUERY
+    data: "screen"
+  }
+}
