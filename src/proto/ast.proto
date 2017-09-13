@@ -67,6 +67,9 @@ message Declaration {
 	optional ChangeKind structural_change_kind = 10;
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
 	optional ChangeKind label_change_kind = 11;
+	/** For Specs use */
+	optional SpecStatement specs = 12;
+	required string key = 13;
 }
 
 /** The kinds of types in an AST */
@@ -136,6 +139,7 @@ message Method {
 	optional ChangeKind structural_change_kind = 9;
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
 	optional ChangeKind label_change_kind = 10;
+	/** For Specs use */
 }
 
 /** A variable declaration - can be a field, local, parameter, etc */
@@ -154,6 +158,7 @@ message Variable {
 	optional ChangeKind structural_change_kind = 6;
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
 	optional ChangeKind label_change_kind = 7;
+	/** For Specs use */
 }
 
 /** A single statement */
@@ -186,6 +191,34 @@ message Statement {
 		THROW = 17;
 		CATCH = 18;
 		EMPTY = 19;
+		/** For Specs use */
+		SPEC_REQUIRES = 20;
+		SPEC_ENSURES = 21;
+		SPEC_SIGNALS = 22;
+		SPEC_SIGNALS_ONLY = 23;
+		SPEC_ASSIGNABLE = 24;
+		SPEC_MAINTAINING = 25;
+		SPEC_ASSUME = 26;
+		SPEC_SET = 27;
+		SPEC_DIVERGES = 28;
+		SPEC_ACCESSIBLE = 29;
+		SPEC_CAPTURES = 30;
+		SPEC_CALLABLE = 31;
+		SPEC_WHEN = 32;
+		SPEC_DURATION = 33;
+		SPEC_MEASURES = 34;
+		SPEC_IN = 35;
+		SPEC_INVARIANT = 36;
+		SPEC_REPRESENTS = 37;
+		SPEC_INITIALLY = 38;
+		SPEC_TYPE = 39;
+		SPEC_BEHAVIOR = 40;
+		SPEC_BEHAVIOUR = 41;
+		SPEC_NORMAL_BEHAVIOR = 42;
+		SPEC_NORMAL_BEHAVIOUR = 43;
+		SPEC_EXCEPTIONAL_BEHAVIOR = 44;
+		SPEC_EXCEPTIONAL_BEHAVIOUR = 45;
+		SPEC_ASSERT = 46;
 	}
 	/** The kind of statement */
 	required StatementKind kind = 1;
@@ -202,6 +235,7 @@ message Statement {
 	optional ChangeKind structural_change_kind = 10;
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
 	optional ChangeKind label_change_kind = 11;
+	/** For Specs use */
 }
 
 /** A single expression */
@@ -265,6 +299,30 @@ message Expression {
 		LAMBDA = 51;
 		/** @exclude TODO */
 		ANON_METHOD = 52;
+		/** For Specs use */
+		SPEC_RESULT = 53;
+		SPEC_OLD = 54;
+		SPEC_FRESH = 55;
+		SPEC_NONNULLELEMENTS = 56;
+		SPEC_TYPEOF = 57;
+		SPEC_ELEMTYPE = 58;
+		SPEC_TYPE = 59;
+		SPEC_FORALL = 60;
+		SPEC_EXISTS = 61;
+		SPEC_SUBTYPE = 62;
+		SPEC_EQUIVALENCE = 63;
+		SPEC_INEQUIVALENCE = 64;
+		SPEC_FORWARD = 65;
+		SPEC_REVERSE = 66;
+		SPEC_NOTHING = 67;
+		SPEC_EVERYTHING = 68;
+		SPEC_NOTSPECIFIED = 69;
+		NEXT = 70;
+		GLOBALLY = 71;
+		FINALLY = 72;
+		UNTIL = 73;
+		RELEASE = 74;
+		INPLY = 75;
 	}
 	/** The kind of expression */
 	required ExpressionKind kind = 1;
@@ -310,6 +368,20 @@ message Modifier {
 		SYNC = 5;
 		/** An abstract modifier */
 		ABSTRACT = 6;
+		/** An instance in specification modifier */
+		SPEC_INSTANCE = 7;
+		/** A model in specification modifier */
+		SPEC_MODEL = 8;
+		/** A ghost in specification modifier */
+		SPEC_GHOST = 9;
+		/** A helper in specification modifier */
+		SPEC_HELPER = 10;
+		/** A rep in specification modifier */
+		SPEC_REP = 11;
+		/** A peer in specification modifier */
+		SPEC_PEER = 12;
+		/** A pure in specification modifier */
+		SPEC_PURE = 13;
 	}
 	/** A visibility modifier */
 	enum Visibility {
@@ -326,6 +398,10 @@ message Modifier {
 		PACKAGE = 4;
 		/** @exclude */
 		DEFAULT = 4;
+		/** A public modifier in specification*/
+		SPEC_PUBLIC = 5;
+		/** A protected modifier in specification*/		
+		SPEC_PROTECTED = 6;
 	}
 	/** The kind of modifier */
 	required ModifierKind kind = 1;
@@ -344,6 +420,13 @@ message Modifier {
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
 	optional ChangeKind label_change_kind = 8;
 }
+
+/** A single specification case */
+message SpecCase {
+	repeated Modifier modifiers = 1;
+	repeated Statement statements = 2;
+}
+
 
 /** @exclude */
 message Comment {
@@ -375,4 +458,26 @@ message PositionInfo {
 	required int32 start_col = 4;
 	required int32 end_line = 5;
 	required int32 end_col = 6;
+}
+
+/** A single declaration for specification */
+message SpecDeclaration {
+	repeated Modifier modifiers = 1;
+	repeated Statement specs = 2;
+}
+
+/** A single method for specification */
+message SpecMethod {
+	repeated SpecCase case = 1;
+	repeated Modifier modifiers = 2;
+}
+
+/** A single statement for specification */
+message SpecStatement {
+	repeated Statement statements = 1;
+}
+
+/** A single variable for specification */
+message SpecVariable {
+	repeated Modifier modifiers = 1;
 }

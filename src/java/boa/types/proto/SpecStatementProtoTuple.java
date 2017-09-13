@@ -26,65 +26,34 @@ import boa.types.BoaProtoList;
 import boa.types.BoaProtoTuple;
 import boa.types.BoaString;
 import boa.types.BoaType;
-import boa.types.proto.enums.TypeKindProtoMap;
 
 /**
- * A {@link DeclarationProtoTuple}.
+ * A {@link SpecStatementProtoTuple}.
  * 
  * @author rdyer
  * @author jsu
  */
-public class DeclarationProtoTuple extends BoaProtoTuple {
+public class SpecStatementProtoTuple extends BoaProtoTuple {
 	private final static List<BoaType> members = new ArrayList<BoaType>();
 	private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
 	static {
 		int counter = 0;
 
-		names.put("name", counter++);
-		members.add(new BoaString());
-
-		names.put("kind", counter++);
-		members.add(new TypeKindProtoMap());
-
-		names.put("modifiers", counter++);
-		members.add(new BoaProtoList(new ModifierProtoTuple()));
-
-		names.put("generic_parameters", counter++);
-		members.add(new BoaProtoList(new TypeProtoTuple()));
-
-		names.put("parents", counter++);
-		members.add(new BoaProtoList(new TypeProtoTuple()));
-
-		names.put("methods", counter++);
-		members.add(new BoaProtoList(new MethodProtoTuple()));
-
-		names.put("fields", counter++);
-		members.add(new BoaProtoList(new VariableProtoTuple()));
-
-		names.put("nested_declarations", counter++);
-		members.add(new BoaProtoList(new DeclarationProtoTuple()));
-
-		names.put("comments", counter++);
-		members.add(new BoaProtoList(new CommentProtoTuple()));
-		
-		names.put("specs", counter++);
-		members.add(new BoaProtoList(new SpecStatementProtoTuple()));
-		
-		names.put("key", counter++);
-		members.add(new BoaString());
+		names.put("statements", counter++);
+		members.add(new BoaProtoList(new SpecStatementProtoTuple()));       
 	}
 
 	/**
-	 * Construct a {@link DeclarationProtoTuple}.
-	 */
-	public DeclarationProtoTuple() {
+	* Construct a {@link SpecStatementProtoTuple}.
+	*/
+	public SpecStatementProtoTuple() {
 		super(members, names);
 	}
 
 	/** @{inheritDoc} */
 	@Override
 	public String toJavaType() {
-		return "boa.types.Ast.Declaration";
+		return "boa.types.Ast.SpecStatement";
 	}
 }

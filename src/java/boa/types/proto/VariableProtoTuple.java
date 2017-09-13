@@ -1,6 +1,6 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ *                 Iowa State University of Science and Technology
+ *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,7 @@ import boa.types.BoaType;
  * A {@link VariableProtoTuple}.
  * 
  * @author rdyer
+ * @author jsu
  */
 public class VariableProtoTuple extends BoaProtoTuple {
 	private final static List<BoaType> members = new ArrayList<BoaType>();
@@ -52,6 +53,12 @@ public class VariableProtoTuple extends BoaProtoTuple {
 
 		names.put("comments", counter++);
 		members.add(new BoaProtoList(new CommentProtoTuple()));
+		
+		names.put("specs", counter++);
+		members.add(new SpecStatementProtoTuple());
+		
+		names.put("key", counter++);
+		members.add(new BoaString());
 	}
 
 	/**

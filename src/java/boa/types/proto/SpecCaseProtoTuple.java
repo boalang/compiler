@@ -1,7 +1,7 @@
 /*
  * Copyright 2017, Hridesh Rajan, Robert Dyer, Jingyi Su
- *                 Iowa State University of Science and Technology
- *                 and Bowling Green State University
+ *                 Bowling Green State University
+ *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,56 +28,35 @@ import boa.types.BoaString;
 import boa.types.BoaType;
 
 /**
- * A {@link MethodProtoTuple}.
+ * A {@link SpecCaseProtoTuple}.
  * 
  * @author rdyer
  * @author jsu
  */
-public class MethodProtoTuple extends BoaProtoTuple {
+public class SpecCaseProtoTuple extends BoaProtoTuple {
 	private final static List<BoaType> members = new ArrayList<BoaType>();
 	private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
-	static {
-		int counter = 0;
+    static {
+    	int counter = 0;
 
-		names.put("name", counter++);
-		members.add(new BoaString());
+    	names.put("modifiers", counter++);
+    	members.add(new BoaProtoList(new ModifierProtoTuple()));
 
-		names.put("modifiers", counter++);
-		members.add(new BoaProtoList(new ModifierProtoTuple()));
-
-		names.put("return_type", counter++);
-		members.add(new TypeProtoTuple());
-
-		names.put("generic_parameters", counter++);
-		members.add(new BoaProtoList(new TypeProtoTuple()));
-
-		names.put("arguments", counter++);
-		members.add(new BoaProtoList(new VariableProtoTuple()));
-
-		names.put("exception_types", counter++);
-		members.add(new BoaProtoList(new TypeProtoTuple()));
-
-		names.put("statements", counter++);
-		members.add(new BoaProtoList(new StatementProtoTuple()));
-
-		names.put("comments", counter++);
-		members.add(new BoaProtoList(new CommentProtoTuple()));
-		
-		names.put("key", counter++);
-		members.add(new BoaString());
-	}
+    	names.put("statements", counter++);
+    	members.add(new BoaProtoList(new StatementProtoTuple()));
+    }
 
 	/**
-	 * Construct a {@link MethodProtoTuple}.
-	 */
-	public MethodProtoTuple() {
+	* Construct a {@link SpecCaseProtoTuple}.
+	*/
+    public SpecCaseProtoTuple() {
 		super(members, names);
-	}
+    }
 
 	/** @{inheritDoc} */
 	@Override
 	public String toJavaType() {
-		return "boa.types.Ast.Method";
+		return "boa.types.Ast.SpecCase";
 	}
 }

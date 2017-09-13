@@ -117,6 +117,11 @@ public class SymbolTable {
 			new StatementProtoTuple(),
 			new TypeProtoTuple(),
 			new VariableProtoTuple(),
+			new SpecCaseProtoTuple(),
+			new SpecDeclarationProtoTuple(),
+			new SpecMethodProtoTuple(),
+			new SpecStatementProtoTuple(),
+			new SpecVariableProtoTuple(),
 		};
 		final BoaProtoMap[] dslMapTypes = {
 			new CFGNodeTypeProtoMap(),
