@@ -140,6 +140,7 @@ message Method {
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
 	optional ChangeKind label_change_kind = 10;
 	/** For Specs use */
+	required string key = 11;
 }
 
 /** A variable declaration - can be a field, local, parameter, etc */
@@ -159,6 +160,7 @@ message Variable {
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
 	optional ChangeKind label_change_kind = 7;
 	/** For Specs use */
+	required string key = 8;
 }
 
 /** A single statement */
@@ -236,6 +238,8 @@ message Statement {
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
 	optional ChangeKind label_change_kind = 11;
 	/** For Specs use */
+	optional SpecStatement specs = 12;
+	required string key = 13;
 }
 
 /** A single expression */

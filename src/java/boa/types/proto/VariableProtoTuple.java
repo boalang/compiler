@@ -1,4 +1,5 @@
 /*
+ * Copyright 2017, Hridesh Rajan, Robert Dyer, Jingyi Su
  *                 Iowa State University of Science and Technology
  *                 and Bowling Green State University
  *
