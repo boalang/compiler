@@ -986,19 +986,24 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	public void visit(final AssignmentStatement n) {
 		final ST st = stg.getInstanceOf("Assignment");
 
-		if(n.getOp().equals("+=") || n.getOp().equals("-=")){
-			Term t = new Term(n.getLhs().clone());
+		if (n.getOp().equals("+=") || 
+			n.getOp().equals("-=") || 
+			n.getOp().equals("*=") ||
+			n.getOp().equals("/=")){
+			String o = n.getOp().substring(0, 1);
 			SimpleExpr se = n.getRhs().getLhs().getLhs().getLhs();
-			if(n.getOp().equals("+=")){
-			 	se.addOpFront("+");
+			if(o.equals("+") || o.equals("-")){
+				Term t = new Term(n.getLhs().clone());
+			 	se.addOpFront(o);
 			 	se.addRhsFront(se.getLhs());
 			 	se.setLhs(t);
 			}
-			else if(n.getOp().equals("-=")){
-				se.addOpFront("-");
-			 	se.addRhsFront(se.getLhs());
-			 	se.setLhs(t);
-			}	
+			else if(o.equals("*") || o.equals("/")){
+				Factor f = n.getLhs().clone();
+				se.getLhs().addOpFront(o);
+				se.getLhs().addRhsFront(se.getLhs().getLhs());
+				se.getLhs().setLhs(f);
+			}
 		}
 
 		n.getLhs().accept(this);

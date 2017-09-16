@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2014, Hridesh Rajan, Robert Dyer, Che Shian Hung
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,6 +27,7 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
  * 
  * @author rdyer
  * @author hridesh
+ * @author hungc
  */
 public class Term extends Node {
 	protected Factor lhs;
@@ -35,6 +36,11 @@ public class Term extends Node {
 
 	public Factor getLhs() {
 		return lhs;
+	}
+
+	public void setLhs(final Factor f) {
+		f.setParent(this);
+		this.lhs = f;
 	}
 
 	public List<String> getOps() {
@@ -53,6 +59,10 @@ public class Term extends Node {
 		ops.add(s);
 	}
 
+	public void addOpFront(final String s) {
+		ops.add(0, s);
+	}
+
 	public List<Factor> getRhs() {
 		return rhs;
 	}
@@ -68,6 +78,11 @@ public class Term extends Node {
 	public void addRhs(final Factor f) {
 		f.setParent(this);
 		rhs.add(f);
+	}
+
+	public void addRhsFront(final Factor f) {
+		f.setParent(this);
+		rhs.add(0, f);
 	}
 
 	public Term (final Factor lhs) {

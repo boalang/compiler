@@ -141,7 +141,7 @@ emptyStatement
 	;
 
 assignmentStatement
-	: factor (EQUALS|PLUSEQ|MINUSEQ) expression { isSemiColon(); }
+	: factor (EQUALS | PLUSEQ | MINUSEQ | STAREQ | DIVEQ) expression { isSemiColon(); }
 	;
 
 block
@@ -482,6 +482,8 @@ NEG    : '~';
 INV    : '!';
 PLUSEQ : '+=';
 MINUSEQ: '-=';
+STAREQ : '*=';
+DIV    : '/=';
 
 //
 // other
