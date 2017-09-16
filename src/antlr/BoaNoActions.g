@@ -141,7 +141,7 @@ emptyStatement
 	;
 
 assignmentStatement
-	: factor (EQUALS|PLUSEQ) expression { isSemiColon(); }
+	: factor (EQUALS|PLUSEQ|MINUSEQ) expression { isSemiColon(); }
 	;
 
 block
@@ -481,6 +481,7 @@ RSHIFT : '>>';
 NEG    : '~';
 INV    : '!';
 PLUSEQ : '+=';
+MINUSEQ: '-=';
 
 //
 // other

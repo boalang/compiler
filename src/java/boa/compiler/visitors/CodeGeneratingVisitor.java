@@ -1,5 +1,6 @@
 /*
  * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer, Ramanathan Ramu,
+ *				   Che Shian Hung
  *                 Iowa State University of Science and Technology
  *                 and Bowling Green State University
  *
@@ -987,8 +988,17 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		if(n.getOp().equals("+=") || n.getOp().equals("-=")){
 			Term t = new Term(n.getLhs().clone());
-			n.getRhs().getLhs().getLhs().getLhs().addOp("+");
-			n.getRhs().getLhs().getLhs().getLhs().addRhs(t);
+			SimpleExpr se = n.getRhs().getLhs().getLhs().getLhs();
+			if(n.getOp().equals("+=")){
+			 	se.addOpFront("+");
+			 	se.addRhsFront(se.getLhs());
+			 	se.setLhs(t);
+			}
+			else if(n.getOp().equals("-=")){
+				se.addOpFront("-");
+			 	se.addRhsFront(se.getLhs());
+			 	se.setLhs(t);
+			}	
 		}
 
 		n.getLhs().accept(this);
