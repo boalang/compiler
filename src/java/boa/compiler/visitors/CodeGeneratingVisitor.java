@@ -985,6 +985,12 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	public void visit(final AssignmentStatement n) {
 		final ST st = stg.getInstanceOf("Assignment");
 
+		if(n.getOp().equals("+=") || n.getOp().equals("-=")){
+			Term t = new Term(n.getLhs().clone());
+			n.getRhs().getLhs().getLhs().getLhs().addOp("+");
+			n.getRhs().getLhs().getLhs().getLhs().addRhs(t);
+		}
+
 		n.getLhs().accept(this);
 		final String lhs = code.removeLast();
 

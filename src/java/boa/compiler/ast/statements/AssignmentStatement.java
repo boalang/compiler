@@ -37,6 +37,10 @@ public class AssignmentStatement extends Statement {
 		return lhs;
 	}
 
+	public String getOp() {
+		return op;
+	}
+
 	public Expression getRhs() {
 		return rhs;
 	}
