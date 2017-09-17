@@ -11953,6 +11953,33 @@ public final class Ast {
      * </pre>
      */
     boa.types.Shared.ChangeKind getLabelChangeKind();
+
+    // required string key = 11;
+    /**
+     * <code>required string key = 11;</code>
+     *
+     * <pre>
+     ** For Specs use 
+     * </pre>
+     */
+    boolean hasKey();
+    /**
+     * <code>required string key = 11;</code>
+     *
+     * <pre>
+     ** For Specs use 
+     * </pre>
+     */
+    java.lang.String getKey();
+    /**
+     * <code>required string key = 11;</code>
+     *
+     * <pre>
+     ** For Specs use 
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getKeyBytes();
   }
   /**
    * Protobuf type {@code boa.types.Method}
@@ -12095,6 +12122,11 @@ public final class Ast {
                 bitField0_ |= 0x00000008;
                 labelChangeKind_ = value;
               }
+              break;
+            }
+            case 90: {
+              bitField0_ |= 0x00000010;
+              key_ = input.readBytes();
               break;
             }
           }
@@ -12643,6 +12675,61 @@ public final class Ast {
       return labelChangeKind_;
     }
 
+    // required string key = 11;
+    public static final int KEY_FIELD_NUMBER = 11;
+    private java.lang.Object key_;
+    /**
+     * <code>required string key = 11;</code>
+     *
+     * <pre>
+     ** For Specs use 
+     * </pre>
+     */
+    public boolean hasKey() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    /**
+     * <code>required string key = 11;</code>
+     *
+     * <pre>
+     ** For Specs use 
+     * </pre>
+     */
+    public java.lang.String getKey() {
+      java.lang.Object ref = key_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          key_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string key = 11;</code>
+     *
+     * <pre>
+     ** For Specs use 
+     * </pre>
+     */
+    public com.google.protobuf.ByteString
+        getKeyBytes() {
+      java.lang.Object ref = key_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        key_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private void initFields() {
       name_ = "";
       modifiers_ = java.util.Collections.emptyList();
@@ -12654,6 +12741,7 @@ public final class Ast {
       comments_ = java.util.Collections.emptyList();
       structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
       labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      key_ = "";
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -12661,6 +12749,10 @@ public final class Ast {
       if (isInitialized != -1) return isInitialized == 1;
 
       if (!hasReturnType()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasKey()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -12741,6 +12833,9 @@ public final class Ast {
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         output.writeEnum(10, labelChangeKind_.getNumber());
       }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeBytes(11, getKeyBytes());
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -12789,6 +12884,10 @@ public final class Ast {
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(10, labelChangeKind_.getNumber());
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(11, getKeyBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -12965,6 +13064,8 @@ public final class Ast {
         bitField0_ = (bitField0_ & ~0x00000100);
         labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
         bitField0_ = (bitField0_ & ~0x00000200);
+        key_ = "";
+        bitField0_ = (bitField0_ & ~0x00000400);
         return this;
       }
 
@@ -13067,6 +13168,10 @@ public final class Ast {
           to_bitField0_ |= 0x00000008;
         }
         result.labelChangeKind_ = labelChangeKind_;
+        if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        result.key_ = key_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -13253,12 +13358,21 @@ public final class Ast {
         if (other.hasLabelChangeKind()) {
           setLabelChangeKind(other.getLabelChangeKind());
         }
+        if (other.hasKey()) {
+          bitField0_ |= 0x00000400;
+          key_ = other.key_;
+          onChanged();
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
 
       public final boolean isInitialized() {
         if (!hasReturnType()) {
+          
+          return false;
+        }
+        if (!hasKey()) {
           
           return false;
         }
@@ -15605,6 +15719,104 @@ public final class Ast {
         return this;
       }
 
+      // required string key = 11;
+      private java.lang.Object key_ = "";
+      /**
+       * <code>required string key = 11;</code>
+       *
+       * <pre>
+       ** For Specs use 
+       * </pre>
+       */
+      public boolean hasKey() {
+        return ((bitField0_ & 0x00000400) == 0x00000400);
+      }
+      /**
+       * <code>required string key = 11;</code>
+       *
+       * <pre>
+       ** For Specs use 
+       * </pre>
+       */
+      public java.lang.String getKey() {
+        java.lang.Object ref = key_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          key_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>required string key = 11;</code>
+       *
+       * <pre>
+       ** For Specs use 
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getKeyBytes() {
+        java.lang.Object ref = key_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          key_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string key = 11;</code>
+       *
+       * <pre>
+       ** For Specs use 
+       * </pre>
+       */
+      public Builder setKey(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000400;
+        key_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string key = 11;</code>
+       *
+       * <pre>
+       ** For Specs use 
+       * </pre>
+       */
+      public Builder clearKey() {
+        bitField0_ = (bitField0_ & ~0x00000400);
+        key_ = getDefaultInstance().getKey();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string key = 11;</code>
+       *
+       * <pre>
+       ** For Specs use 
+       * </pre>
+       */
+      public Builder setKeyBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000400;
+        key_ = value;
+        onChanged();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:boa.types.Method)
     }
 
@@ -15823,6 +16035,33 @@ public final class Ast {
      * </pre>
      */
     boa.types.Shared.ChangeKind getLabelChangeKind();
+
+    // required string key = 8;
+    /**
+     * <code>required string key = 8;</code>
+     *
+     * <pre>
+     ** For Specs use 
+     * </pre>
+     */
+    boolean hasKey();
+    /**
+     * <code>required string key = 8;</code>
+     *
+     * <pre>
+     ** For Specs use 
+     * </pre>
+     */
+    java.lang.String getKey();
+    /**
+     * <code>required string key = 8;</code>
+     *
+     * <pre>
+     ** For Specs use 
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getKeyBytes();
   }
   /**
    * Protobuf type {@code boa.types.Variable}
@@ -15946,6 +16185,11 @@ public final class Ast {
                 bitField0_ |= 0x00000010;
                 labelChangeKind_ = value;
               }
+              break;
+            }
+            case 66: {
+              bitField0_ |= 0x00000020;
+              key_ = input.readBytes();
               break;
             }
           }
@@ -16277,6 +16521,61 @@ public final class Ast {
       return labelChangeKind_;
     }
 
+    // required string key = 8;
+    public static final int KEY_FIELD_NUMBER = 8;
+    private java.lang.Object key_;
+    /**
+     * <code>required string key = 8;</code>
+     *
+     * <pre>
+     ** For Specs use 
+     * </pre>
+     */
+    public boolean hasKey() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    /**
+     * <code>required string key = 8;</code>
+     *
+     * <pre>
+     ** For Specs use 
+     * </pre>
+     */
+    public java.lang.String getKey() {
+      java.lang.Object ref = key_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          key_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string key = 8;</code>
+     *
+     * <pre>
+     ** For Specs use 
+     * </pre>
+     */
+    public com.google.protobuf.ByteString
+        getKeyBytes() {
+      java.lang.Object ref = key_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        key_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private void initFields() {
       name_ = "";
       variableType_ = boa.types.Ast.Type.getDefaultInstance();
@@ -16285,6 +16584,7 @@ public final class Ast {
       comments_ = java.util.Collections.emptyList();
       structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
       labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      key_ = "";
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -16296,6 +16596,10 @@ public final class Ast {
         return false;
       }
       if (!hasVariableType()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasKey()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -16349,6 +16653,9 @@ public final class Ast {
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         output.writeEnum(7, labelChangeKind_.getNumber());
       }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        output.writeBytes(8, getKeyBytes());
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -16385,6 +16692,10 @@ public final class Ast {
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(7, labelChangeKind_.getNumber());
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(8, getKeyBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -16540,6 +16851,8 @@ public final class Ast {
         bitField0_ = (bitField0_ & ~0x00000020);
         labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
         bitField0_ = (bitField0_ & ~0x00000040);
+        key_ = "";
+        bitField0_ = (bitField0_ & ~0x00000080);
         return this;
       }
 
@@ -16614,6 +16927,10 @@ public final class Ast {
           to_bitField0_ |= 0x00000010;
         }
         result.labelChangeKind_ = labelChangeKind_;
+        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
+          to_bitField0_ |= 0x00000020;
+        }
+        result.key_ = key_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -16699,6 +17016,11 @@ public final class Ast {
         if (other.hasLabelChangeKind()) {
           setLabelChangeKind(other.getLabelChangeKind());
         }
+        if (other.hasKey()) {
+          bitField0_ |= 0x00000080;
+          key_ = other.key_;
+          onChanged();
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -16709,6 +17031,10 @@ public final class Ast {
           return false;
         }
         if (!hasVariableType()) {
+          
+          return false;
+        }
+        if (!hasKey()) {
           
           return false;
         }
@@ -17888,6 +18214,104 @@ public final class Ast {
         return this;
       }
 
+      // required string key = 8;
+      private java.lang.Object key_ = "";
+      /**
+       * <code>required string key = 8;</code>
+       *
+       * <pre>
+       ** For Specs use 
+       * </pre>
+       */
+      public boolean hasKey() {
+        return ((bitField0_ & 0x00000080) == 0x00000080);
+      }
+      /**
+       * <code>required string key = 8;</code>
+       *
+       * <pre>
+       ** For Specs use 
+       * </pre>
+       */
+      public java.lang.String getKey() {
+        java.lang.Object ref = key_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          key_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>required string key = 8;</code>
+       *
+       * <pre>
+       ** For Specs use 
+       * </pre>
+       */
+      public com.google.protobuf.ByteString
+          getKeyBytes() {
+        java.lang.Object ref = key_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          key_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string key = 8;</code>
+       *
+       * <pre>
+       ** For Specs use 
+       * </pre>
+       */
+      public Builder setKey(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000080;
+        key_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string key = 8;</code>
+       *
+       * <pre>
+       ** For Specs use 
+       * </pre>
+       */
+      public Builder clearKey() {
+        bitField0_ = (bitField0_ & ~0x00000080);
+        key_ = getDefaultInstance().getKey();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string key = 8;</code>
+       *
+       * <pre>
+       ** For Specs use 
+       * </pre>
+       */
+      public Builder setKeyBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000080;
+        key_ = value;
+        onChanged();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:boa.types.Variable)
     }
 
@@ -18131,6 +18555,47 @@ public final class Ast {
      * </pre>
      */
     boa.types.Shared.ChangeKind getLabelChangeKind();
+
+    // optional .boa.types.SpecStatement specs = 12;
+    /**
+     * <code>optional .boa.types.SpecStatement specs = 12;</code>
+     *
+     * <pre>
+     ** For Specs use 
+     * </pre>
+     */
+    boolean hasSpecs();
+    /**
+     * <code>optional .boa.types.SpecStatement specs = 12;</code>
+     *
+     * <pre>
+     ** For Specs use 
+     * </pre>
+     */
+    boa.types.Ast.SpecStatement getSpecs();
+    /**
+     * <code>optional .boa.types.SpecStatement specs = 12;</code>
+     *
+     * <pre>
+     ** For Specs use 
+     * </pre>
+     */
+    boa.types.Ast.SpecStatementOrBuilder getSpecsOrBuilder();
+
+    // required string key = 13;
+    /**
+     * <code>required string key = 13;</code>
+     */
+    boolean hasKey();
+    /**
+     * <code>required string key = 13;</code>
+     */
+    java.lang.String getKey();
+    /**
+     * <code>required string key = 13;</code>
+     */
+    com.google.protobuf.ByteString
+        getKeyBytes();
   }
   /**
    * Protobuf type {@code boa.types.Statement}
@@ -18302,6 +18767,24 @@ public final class Ast {
                 bitField0_ |= 0x00000040;
                 labelChangeKind_ = value;
               }
+              break;
+            }
+            case 98: {
+              boa.types.Ast.SpecStatement.Builder subBuilder = null;
+              if (((bitField0_ & 0x00000080) == 0x00000080)) {
+                subBuilder = specs_.toBuilder();
+              }
+              specs_ = input.readMessage(boa.types.Ast.SpecStatement.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(specs_);
+                specs_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00000080;
+              break;
+            }
+            case 106: {
+              bitField0_ |= 0x00000100;
+              key_ = input.readBytes();
               break;
             }
           }
@@ -19221,6 +19704,83 @@ public final class Ast {
       return labelChangeKind_;
     }
 
+    // optional .boa.types.SpecStatement specs = 12;
+    public static final int SPECS_FIELD_NUMBER = 12;
+    private boa.types.Ast.SpecStatement specs_;
+    /**
+     * <code>optional .boa.types.SpecStatement specs = 12;</code>
+     *
+     * <pre>
+     ** For Specs use 
+     * </pre>
+     */
+    public boolean hasSpecs() {
+      return ((bitField0_ & 0x00000080) == 0x00000080);
+    }
+    /**
+     * <code>optional .boa.types.SpecStatement specs = 12;</code>
+     *
+     * <pre>
+     ** For Specs use 
+     * </pre>
+     */
+    public boa.types.Ast.SpecStatement getSpecs() {
+      return specs_;
+    }
+    /**
+     * <code>optional .boa.types.SpecStatement specs = 12;</code>
+     *
+     * <pre>
+     ** For Specs use 
+     * </pre>
+     */
+    public boa.types.Ast.SpecStatementOrBuilder getSpecsOrBuilder() {
+      return specs_;
+    }
+
+    // required string key = 13;
+    public static final int KEY_FIELD_NUMBER = 13;
+    private java.lang.Object key_;
+    /**
+     * <code>required string key = 13;</code>
+     */
+    public boolean hasKey() {
+      return ((bitField0_ & 0x00000100) == 0x00000100);
+    }
+    /**
+     * <code>required string key = 13;</code>
+     */
+    public java.lang.String getKey() {
+      java.lang.Object ref = key_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          key_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>required string key = 13;</code>
+     */
+    public com.google.protobuf.ByteString
+        getKeyBytes() {
+      java.lang.Object ref = key_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        key_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private void initFields() {
       kind_ = boa.types.Ast.Statement.StatementKind.OTHER;
       comments_ = java.util.Collections.emptyList();
@@ -19233,6 +19793,8 @@ public final class Ast {
       expression_ = boa.types.Ast.Expression.getDefaultInstance();
       structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
       labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+      specs_ = boa.types.Ast.SpecStatement.getDefaultInstance();
+      key_ = "";
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -19240,6 +19802,10 @@ public final class Ast {
       if (isInitialized != -1) return isInitialized == 1;
 
       if (!hasKind()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
+      if (!hasKey()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -19291,6 +19857,12 @@ public final class Ast {
           return false;
         }
       }
+      if (hasSpecs()) {
+        if (!getSpecs().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
       memoizedIsInitialized = 1;
       return true;
     }
@@ -19330,6 +19902,12 @@ public final class Ast {
       }
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
         output.writeEnum(11, labelChangeKind_.getNumber());
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        output.writeMessage(12, specs_);
+      }
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        output.writeBytes(13, getKeyBytes());
       }
       getUnknownFields().writeTo(output);
     }
@@ -19383,6 +19961,14 @@ public final class Ast {
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(11, labelChangeKind_.getNumber());
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(12, specs_);
+      }
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(13, getKeyBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -19504,6 +20090,7 @@ public final class Ast {
           getVariableDeclarationFieldBuilder();
           getTypeDeclarationFieldBuilder();
           getExpressionFieldBuilder();
+          getSpecsFieldBuilder();
         }
       }
       private static Builder create() {
@@ -19566,6 +20153,14 @@ public final class Ast {
         bitField0_ = (bitField0_ & ~0x00000200);
         labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
         bitField0_ = (bitField0_ & ~0x00000400);
+        if (specsBuilder_ == null) {
+          specs_ = boa.types.Ast.SpecStatement.getDefaultInstance();
+        } else {
+          specsBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000800);
+        key_ = "";
+        bitField0_ = (bitField0_ & ~0x00001000);
         return this;
       }
 
@@ -19674,6 +20269,18 @@ public final class Ast {
           to_bitField0_ |= 0x00000040;
         }
         result.labelChangeKind_ = labelChangeKind_;
+        if (((from_bitField0_ & 0x00000800) == 0x00000800)) {
+          to_bitField0_ |= 0x00000080;
+        }
+        if (specsBuilder_ == null) {
+          result.specs_ = specs_;
+        } else {
+          result.specs_ = specsBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00001000) == 0x00001000)) {
+          to_bitField0_ |= 0x00000100;
+        }
+        result.key_ = key_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -19815,12 +20422,24 @@ public final class Ast {
         if (other.hasLabelChangeKind()) {
           setLabelChangeKind(other.getLabelChangeKind());
         }
+        if (other.hasSpecs()) {
+          mergeSpecs(other.getSpecs());
+        }
+        if (other.hasKey()) {
+          bitField0_ |= 0x00001000;
+          key_ = other.key_;
+          onChanged();
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
 
       public final boolean isInitialized() {
         if (!hasKind()) {
+          
+          return false;
+        }
+        if (!hasKey()) {
           
           return false;
         }
@@ -19868,6 +20487,12 @@ public final class Ast {
         }
         if (hasExpression()) {
           if (!getExpression().isInitialized()) {
+            
+            return false;
+          }
+        }
+        if (hasSpecs()) {
+          if (!getSpecs().isInitialized()) {
             
             return false;
           }
@@ -21546,6 +22171,233 @@ public final class Ast {
       public Builder clearLabelChangeKind() {
         bitField0_ = (bitField0_ & ~0x00000400);
         labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
+        onChanged();
+        return this;
+      }
+
+      // optional .boa.types.SpecStatement specs = 12;
+      private boa.types.Ast.SpecStatement specs_ = boa.types.Ast.SpecStatement.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.SpecStatement, boa.types.Ast.SpecStatement.Builder, boa.types.Ast.SpecStatementOrBuilder> specsBuilder_;
+      /**
+       * <code>optional .boa.types.SpecStatement specs = 12;</code>
+       *
+       * <pre>
+       ** For Specs use 
+       * </pre>
+       */
+      public boolean hasSpecs() {
+        return ((bitField0_ & 0x00000800) == 0x00000800);
+      }
+      /**
+       * <code>optional .boa.types.SpecStatement specs = 12;</code>
+       *
+       * <pre>
+       ** For Specs use 
+       * </pre>
+       */
+      public boa.types.Ast.SpecStatement getSpecs() {
+        if (specsBuilder_ == null) {
+          return specs_;
+        } else {
+          return specsBuilder_.getMessage();
+        }
+      }
+      /**
+       * <code>optional .boa.types.SpecStatement specs = 12;</code>
+       *
+       * <pre>
+       ** For Specs use 
+       * </pre>
+       */
+      public Builder setSpecs(boa.types.Ast.SpecStatement value) {
+        if (specsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          specs_ = value;
+          onChanged();
+        } else {
+          specsBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x00000800;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.SpecStatement specs = 12;</code>
+       *
+       * <pre>
+       ** For Specs use 
+       * </pre>
+       */
+      public Builder setSpecs(
+          boa.types.Ast.SpecStatement.Builder builderForValue) {
+        if (specsBuilder_ == null) {
+          specs_ = builderForValue.build();
+          onChanged();
+        } else {
+          specsBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x00000800;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.SpecStatement specs = 12;</code>
+       *
+       * <pre>
+       ** For Specs use 
+       * </pre>
+       */
+      public Builder mergeSpecs(boa.types.Ast.SpecStatement value) {
+        if (specsBuilder_ == null) {
+          if (((bitField0_ & 0x00000800) == 0x00000800) &&
+              specs_ != boa.types.Ast.SpecStatement.getDefaultInstance()) {
+            specs_ =
+              boa.types.Ast.SpecStatement.newBuilder(specs_).mergeFrom(value).buildPartial();
+          } else {
+            specs_ = value;
+          }
+          onChanged();
+        } else {
+          specsBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x00000800;
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.SpecStatement specs = 12;</code>
+       *
+       * <pre>
+       ** For Specs use 
+       * </pre>
+       */
+      public Builder clearSpecs() {
+        if (specsBuilder_ == null) {
+          specs_ = boa.types.Ast.SpecStatement.getDefaultInstance();
+          onChanged();
+        } else {
+          specsBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x00000800);
+        return this;
+      }
+      /**
+       * <code>optional .boa.types.SpecStatement specs = 12;</code>
+       *
+       * <pre>
+       ** For Specs use 
+       * </pre>
+       */
+      public boa.types.Ast.SpecStatement.Builder getSpecsBuilder() {
+        bitField0_ |= 0x00000800;
+        onChanged();
+        return getSpecsFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>optional .boa.types.SpecStatement specs = 12;</code>
+       *
+       * <pre>
+       ** For Specs use 
+       * </pre>
+       */
+      public boa.types.Ast.SpecStatementOrBuilder getSpecsOrBuilder() {
+        if (specsBuilder_ != null) {
+          return specsBuilder_.getMessageOrBuilder();
+        } else {
+          return specs_;
+        }
+      }
+      /**
+       * <code>optional .boa.types.SpecStatement specs = 12;</code>
+       *
+       * <pre>
+       ** For Specs use 
+       * </pre>
+       */
+      private com.google.protobuf.SingleFieldBuilder<
+          boa.types.Ast.SpecStatement, boa.types.Ast.SpecStatement.Builder, boa.types.Ast.SpecStatementOrBuilder> 
+          getSpecsFieldBuilder() {
+        if (specsBuilder_ == null) {
+          specsBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              boa.types.Ast.SpecStatement, boa.types.Ast.SpecStatement.Builder, boa.types.Ast.SpecStatementOrBuilder>(
+                  specs_,
+                  getParentForChildren(),
+                  isClean());
+          specs_ = null;
+        }
+        return specsBuilder_;
+      }
+
+      // required string key = 13;
+      private java.lang.Object key_ = "";
+      /**
+       * <code>required string key = 13;</code>
+       */
+      public boolean hasKey() {
+        return ((bitField0_ & 0x00001000) == 0x00001000);
+      }
+      /**
+       * <code>required string key = 13;</code>
+       */
+      public java.lang.String getKey() {
+        java.lang.Object ref = key_;
+        if (!(ref instanceof java.lang.String)) {
+          java.lang.String s = ((com.google.protobuf.ByteString) ref)
+              .toStringUtf8();
+          key_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>required string key = 13;</code>
+       */
+      public com.google.protobuf.ByteString
+          getKeyBytes() {
+        java.lang.Object ref = key_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          key_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>required string key = 13;</code>
+       */
+      public Builder setKey(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00001000;
+        key_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string key = 13;</code>
+       */
+      public Builder clearKey() {
+        bitField0_ = (bitField0_ & ~0x00001000);
+        key_ = getDefaultInstance().getKey();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required string key = 13;</code>
+       */
+      public Builder setKeyBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00001000;
+        key_ = value;
         onChanged();
         return this;
       }
@@ -35321,7 +36173,7 @@ public final class Ast {
       "\030\002 \002(\0162\023.boa.types.TypeKind\022\n\n\002id\030\004 \001(\t\022",
       "5\n\026structural_change_kind\030\005 \001(\0162\025.boa.ty" +
       "pes.ChangeKind\0220\n\021label_change_kind\030\006 \001(" +
-      "\0162\025.boa.types.ChangeKind\"\234\003\n\006Method\022\014\n\004n" +
+      "\0162\025.boa.types.ChangeKind\"\251\003\n\006Method\022\014\n\004n" +
       "ame\030\001 \001(\t\022&\n\tmodifiers\030\002 \003(\0132\023.boa.types" +
       ".Modifier\022$\n\013return_type\030\003 \002(\0132\017.boa.typ" +
       "es.Type\022+\n\022generic_parameters\030\004 \003(\0132\017.bo" +
@@ -35331,34 +36183,36 @@ public final class Ast {
       ".types.Statement\022$\n\010comments\030\010 \003(\0132\022.boa",
       ".types.Comment\0225\n\026structural_change_kind" +
       "\030\t \001(\0162\025.boa.types.ChangeKind\0220\n\021label_c" +
-      "hange_kind\030\n \001(\0162\025.boa.types.ChangeKind\"" +
-      "\243\002\n\010Variable\022\014\n\004name\030\001 \002(\t\022&\n\rvariable_t" +
-      "ype\030\002 \002(\0132\017.boa.types.Type\022&\n\tmodifiers\030" +
-      "\003 \003(\0132\023.boa.types.Modifier\022*\n\013initialize" +
-      "r\030\004 \001(\0132\025.boa.types.Expression\022$\n\010commen" +
-      "ts\030\005 \003(\0132\022.boa.types.Comment\0225\n\026structur" +
-      "al_change_kind\030\006 \001(\0162\025.boa.types.ChangeK" +
-      "ind\0220\n\021label_change_kind\030\007 \001(\0162\025.boa.typ",
-      "es.ChangeKind\"\270\n\n\tStatement\0220\n\004kind\030\001 \002(" +
-      "\0162\".boa.types.Statement.StatementKind\022$\n" +
-      "\010comments\030\002 \003(\0132\022.boa.types.Comment\022(\n\ns" +
-      "tatements\030\003 \003(\0132\024.boa.types.Statement\022.\n" +
-      "\017initializations\030\004 \003(\0132\025.boa.types.Expre" +
-      "ssion\022(\n\tcondition\030\005 \001(\0132\025.boa.types.Exp" +
-      "ression\022&\n\007updates\030\006 \003(\0132\025.boa.types.Exp" +
-      "ression\0221\n\024variable_declaration\030\007 \001(\0132\023." +
-      "boa.types.Variable\0220\n\020type_declaration\030\010" +
-      " \001(\0132\026.boa.types.Declaration\022)\n\nexpressi",
-      "on\030\t \001(\0132\025.boa.types.Expression\0225\n\026struc" +
-      "tural_change_kind\030\n \001(\0162\025.boa.types.Chan" +
-      "geKind\0220\n\021label_change_kind\030\013 \001(\0162\025.boa." +
-      "types.ChangeKind\"\255\006\n\rStatementKind\022\t\n\005OT" +
+      "hange_kind\030\n \001(\0162\025.boa.types.ChangeKind\022" +
+      "\013\n\003key\030\013 \002(\t\"\260\002\n\010Variable\022\014\n\004name\030\001 \002(\t\022" +
+      "&\n\rvariable_type\030\002 \002(\0132\017.boa.types.Type\022" +
+      "&\n\tmodifiers\030\003 \003(\0132\023.boa.types.Modifier\022" +
+      "*\n\013initializer\030\004 \001(\0132\025.boa.types.Express" +
+      "ion\022$\n\010comments\030\005 \003(\0132\022.boa.types.Commen" +
+      "t\0225\n\026structural_change_kind\030\006 \001(\0162\025.boa." +
+      "types.ChangeKind\0220\n\021label_change_kind\030\007 ",
+      "\001(\0162\025.boa.types.ChangeKind\022\013\n\003key\030\010 \002(\t\"" +
+      "\356\n\n\tStatement\0220\n\004kind\030\001 \002(\0162\".boa.types." +
+      "Statement.StatementKind\022$\n\010comments\030\002 \003(" +
+      "\0132\022.boa.types.Comment\022(\n\nstatements\030\003 \003(" +
+      "\0132\024.boa.types.Statement\022.\n\017initializatio" +
+      "ns\030\004 \003(\0132\025.boa.types.Expression\022(\n\tcondi" +
+      "tion\030\005 \001(\0132\025.boa.types.Expression\022&\n\007upd" +
+      "ates\030\006 \003(\0132\025.boa.types.Expression\0221\n\024var" +
+      "iable_declaration\030\007 \001(\0132\023.boa.types.Vari" +
+      "able\0220\n\020type_declaration\030\010 \001(\0132\026.boa.typ",
+      "es.Declaration\022)\n\nexpression\030\t \001(\0132\025.boa" +
+      ".types.Expression\0225\n\026structural_change_k" +
+      "ind\030\n \001(\0162\025.boa.types.ChangeKind\0220\n\021labe" +
+      "l_change_kind\030\013 \001(\0162\025.boa.types.ChangeKi" +
+      "nd\022\'\n\005specs\030\014 \001(\0132\030.boa.types.SpecStatem" +
+      "ent\022\013\n\003key\030\r \002(\t\"\255\006\n\rStatementKind\022\t\n\005OT" +
       "HER\020\000\022\t\n\005BLOCK\020\001\022\014\n\010TYPEDECL\020\002\022\016\n\nEXPRES" +
       "SION\020\003\022\010\n\004EXPR\020\003\022\020\n\014SYNCHRONIZED\020\004\022\010\n\004SY" +
       "NC\020\004\022\n\n\006RETURN\020\005\022\007\n\003FOR\020\006\022\006\n\002DO\020\007\022\t\n\005WHI" +
-      "LE\020\010\022\006\n\002IF\020\t\022\n\n\006ASSERT\020\n\022\t\n\005BREAK\020\013\022\014\n\010C" +
+      "LE\020\010\022\006\n\002IF\020\t\022\n\n\006ASSERT\020\n\022\t\n\005BREAK\020\013\022\014\n\010C",
       "ONTINUE\020\014\022\t\n\005LABEL\020\r\022\n\n\006SWITCH\020\016\022\010\n\004CASE" +
-      "\020\017\022\007\n\003TRY\020\020\022\t\n\005THROW\020\021\022\t\n\005CATCH\020\022\022\t\n\005EMP",
+      "\020\017\022\007\n\003TRY\020\020\022\t\n\005THROW\020\021\022\t\n\005CATCH\020\022\022\t\n\005EMP" +
       "TY\020\023\022\021\n\rSPEC_REQUIRES\020\024\022\020\n\014SPEC_ENSURES\020" +
       "\025\022\020\n\014SPEC_SIGNALS\020\026\022\025\n\021SPEC_SIGNALS_ONLY" +
       "\020\027\022\023\n\017SPEC_ASSIGNABLE\020\030\022\024\n\020SPEC_MAINTAIN" +
@@ -35366,9 +36220,9 @@ public final class Ast {
       "SPEC_DIVERGES\020\034\022\023\n\017SPEC_ACCESSIBLE\020\035\022\021\n\r" +
       "SPEC_CAPTURES\020\036\022\021\n\rSPEC_CALLABLE\020\037\022\r\n\tSP" +
       "EC_WHEN\020 \022\021\n\rSPEC_DURATION\020!\022\021\n\rSPEC_MEA" +
-      "SURES\020\"\022\013\n\007SPEC_IN\020#\022\022\n\016SPEC_INVARIANT\020$" +
+      "SURES\020\"\022\013\n\007SPEC_IN\020#\022\022\n\016SPEC_INVARIANT\020$",
       "\022\023\n\017SPEC_REPRESENTS\020%\022\022\n\016SPEC_INITIALLY\020" +
-      "&\022\r\n\tSPEC_TYPE\020\'\022\021\n\rSPEC_BEHAVIOR\020(\022\022\n\016S",
+      "&\022\r\n\tSPEC_TYPE\020\'\022\021\n\rSPEC_BEHAVIOR\020(\022\022\n\016S" +
       "PEC_BEHAVIOUR\020)\022\030\n\024SPEC_NORMAL_BEHAVIOR\020" +
       "*\022\031\n\025SPEC_NORMAL_BEHAVIOUR\020+\022\035\n\031SPEC_EXC" +
       "EPTIONAL_BEHAVIOR\020,\022\036\n\032SPEC_EXCEPTIONAL_" +
@@ -35376,9 +36230,9 @@ public final class Ast {
       "ression\0222\n\004kind\030\001 \002(\0162$.boa.types.Expres" +
       "sion.ExpressionKind\022*\n\013expressions\030\002 \003(\013" +
       "2\025.boa.types.Expression\022+\n\016variable_decl" +
-      "s\030\003 \003(\0132\023.boa.types.Variable\022!\n\010new_type" +
+      "s\030\003 \003(\0132\023.boa.types.Variable\022!\n\010new_type",
       "\030\004 \001(\0132\017.boa.types.Type\022+\n\022generic_param" +
-      "eters\030\005 \003(\0132\017.boa.types.Type\022\022\n\nis_postf",
+      "eters\030\005 \003(\0132\017.boa.types.Type\022\022\n\nis_postf" +
       "ix\030\006 \001(\010\022\017\n\007literal\030\007 \001(\t\022\020\n\010variable\030\010 " +
       "\001(\t\022\016\n\006method\030\t \001(\t\022*\n\013method_args\030\n \003(\013" +
       "2\025.boa.types.Expression\0220\n\020anon_declarat" +
@@ -35386,9 +36240,9 @@ public final class Ast {
       "otation\030\014 \001(\0132\023.boa.types.Modifier\022!\n\006la" +
       "mbda\030\r \001(\0132\021.boa.types.Method\022\021\n\tno_pare" +
       "ns\030\016 \001(\010\0225\n\026structural_change_kind\030\017 \001(\016" +
-      "2\025.boa.types.ChangeKind\0220\n\021label_change_" +
+      "2\025.boa.types.ChangeKind\0220\n\021label_change_",
       "kind\030\020 \001(\0162\025.boa.types.ChangeKind\"\233\t\n\016Ex" +
-      "pressionKind\022\t\n\005OTHER\020\000\022\013\n\007LITERAL\020\001\022\r\n\t",
+      "pressionKind\022\t\n\005OTHER\020\000\022\013\n\007LITERAL\020\001\022\r\n\t" +
       "VARACCESS\020\002\022\013\n\007VARDECL\020\003\022\016\n\nMETHODCALL\020\004" +
       "\022\010\n\004CAST\020\005\022\016\n\nARRAYINDEX\020\006\022\r\n\tARRAYINIT\020" +
       "\007\022\017\n\013TYPECOMPARE\020\010\022\007\n\003NEW\020\t\022\014\n\010NEWARRAY\020" +
@@ -35396,9 +36250,9 @@ public final class Ast {
       "\n\006OP_DIV\020\016\022\n\n\006OP_MOD\020\017\022\n\n\006OP_INC\020\020\022\n\n\006OP" +
       "_DEC\020\021\022\016\n\nBIT_LSHIFT\020\022\022\016\n\nBIT_RSHIFT\020\023\022\026" +
       "\n\022BIT_UNSIGNEDRSHIFT\020\024\022\013\n\007BIT_AND\020\025\022\n\n\006B" +
-      "IT_OR\020\026\022\013\n\007BIT_NOT\020\027\022\013\n\007BIT_XOR\020\030\022\017\n\013LOG" +
+      "IT_OR\020\026\022\013\n\007BIT_NOT\020\027\022\013\n\007BIT_XOR\020\030\022\017\n\013LOG",
       "ICAL_NOT\020\031\022\017\n\013LOGICAL_AND\020\032\022\016\n\nLOGICAL_O" +
-      "R\020\033\022\006\n\002EQ\020\034\022\007\n\003NEQ\020\035\022\006\n\002LT\020\036\022\006\n\002GT\020\037\022\010\n\004",
+      "R\020\033\022\006\n\002EQ\020\034\022\007\n\003NEQ\020\035\022\006\n\002LT\020\036\022\006\n\002GT\020\037\022\010\n\004" +
       "LTEQ\020 \022\010\n\004GTEQ\020!\022\017\n\013CONDITIONAL\020\"\022\020\n\014NUL" +
       "LCOALESCE\020#\022\n\n\006ASSIGN\020$\022\016\n\nASSIGN_ADD\020%\022" +
       "\016\n\nASSIGN_SUB\020&\022\017\n\013ASSIGN_MULT\020\'\022\016\n\nASSI" +
@@ -35406,9 +36260,9 @@ public final class Ast {
       "R\020*\022\021\n\rASSIGN_BITAND\020+\022\020\n\014ASSIGN_BITOR\020," +
       "\022\021\n\rASSIGN_LSHIFT\020-\022\021\n\rASSIGN_RSHIFT\020.\022\031" +
       "\n\025ASSIGN_UNSIGNEDRSHIFT\020/\022\016\n\nANNOTATION\020" +
-      "0\022\t\n\005PAREN\0201\022\024\n\020METHOD_REFERENCE\0202\022\n\n\006LA" +
+      "0\022\t\n\005PAREN\0201\022\024\n\020METHOD_REFERENCE\0202\022\n\n\006LA",
       "MBDA\0203\022\017\n\013ANON_METHOD\0204\022\017\n\013SPEC_RESULT\0205" +
-      "\022\014\n\010SPEC_OLD\0206\022\016\n\nSPEC_FRESH\0207\022\030\n\024SPEC_N",
+      "\022\014\n\010SPEC_OLD\0206\022\016\n\nSPEC_FRESH\0207\022\030\n\024SPEC_N" +
       "ONNULLELEMENTS\0208\022\017\n\013SPEC_TYPEOF\0209\022\021\n\rSPE" +
       "C_ELEMTYPE\020:\022\r\n\tSPEC_TYPE\020;\022\017\n\013SPEC_FORA" +
       "LL\020<\022\017\n\013SPEC_EXISTS\020=\022\020\n\014SPEC_SUBTYPE\020>\022" +
@@ -35416,9 +36270,9 @@ public final class Ast {
       "NCE\020@\022\020\n\014SPEC_FORWARD\020A\022\020\n\014SPEC_REVERSE\020" +
       "B\022\020\n\014SPEC_NOTHING\020C\022\023\n\017SPEC_EVERYTHING\020D" +
       "\022\025\n\021SPEC_NOTSPECIFIED\020E\022\010\n\004NEXT\020F\022\014\n\010GLO" +
-      "BALLY\020G\022\013\n\007FINALLY\020H\022\t\n\005UNTIL\020I\022\013\n\007RELEA" +
+      "BALLY\020G\022\013\n\007FINALLY\020H\022\t\n\005UNTIL\020I\022\013\n\007RELEA",
       "SE\020J\022\t\n\005INPLY\020K\"\307\005\n\010Modifier\022.\n\004kind\030\001 \002" +
-      "(\0162 .boa.types.Modifier.ModifierKind\0222\n\n",
+      "(\0162 .boa.types.Modifier.ModifierKind\0222\n\n" +
       "visibility\030\002 \001(\0162\036.boa.types.Modifier.Vi" +
       "sibility\022\027\n\017annotation_name\030\003 \001(\t\022\032\n\022ann" +
       "otation_members\030\004 \003(\t\0220\n\021annotation_valu" +
@@ -35426,9 +36280,9 @@ public final class Ast {
       "\030\006 \001(\t\0225\n\026structural_change_kind\030\007 \001(\0162\025" +
       ".boa.types.ChangeKind\0220\n\021label_change_ki" +
       "nd\030\010 \001(\0162\025.boa.types.ChangeKind\"\356\001\n\014Modi" +
-      "fierKind\022\t\n\005OTHER\020\000\022\016\n\nVISIBILITY\020\001\022\016\n\nA" +
+      "fierKind\022\t\n\005OTHER\020\000\022\016\n\nVISIBILITY\020\001\022\016\n\nA",
       "NNOTATION\020\002\022\t\n\005FINAL\020\003\022\n\n\006STATIC\020\004\022\020\n\014SY" +
-      "NCHRONIZED\020\005\022\010\n\004SYNC\020\005\022\014\n\010ABSTRACT\020\006\022\021\n\r",
+      "NCHRONIZED\020\005\022\010\n\004SYNC\020\005\022\014\n\010ABSTRACT\020\006\022\021\n\r" +
       "SPEC_INSTANCE\020\007\022\016\n\nSPEC_MODEL\020\010\022\016\n\nSPEC_" +
       "GHOST\020\t\022\017\n\013SPEC_HELPER\020\n\022\014\n\010SPEC_REP\020\013\022\r" +
       "\n\tSPEC_PEER\020\014\022\r\n\tSPEC_PURE\020\r\032\002\020\001\"\206\001\n\nVis" +
@@ -35436,9 +36290,9 @@ public final class Ast {
       "ECTED\020\003\022\r\n\tNAMESPACE\020\004\022\013\n\007PACKAGE\020\004\022\013\n\007D" +
       "EFAULT\020\004\022\017\n\013SPEC_PUBLIC\020\005\022\022\n\016SPEC_PROTEC" +
       "TED\020\006\032\002\020\001\"\\\n\010SpecCase\022&\n\tmodifiers\030\001 \003(\013" +
-      "2\023.boa.types.Modifier\022(\n\nstatements\030\002 \003(" +
+      "2\023.boa.types.Modifier\022(\n\nstatements\030\002 \003(",
       "\0132\024.boa.types.Statement\"\306\002\n\007Comment\022,\n\004k" +
-      "ind\030\001 \002(\0162\036.boa.types.Comment.CommentKin",
+      "ind\030\001 \002(\0162\036.boa.types.Comment.CommentKin" +
       "d\022\r\n\005value\030\002 \002(\t\022)\n\010position\030\003 \002(\0132\027.boa" +
       ".types.PositionInfo\0225\n\026structural_change" +
       "_kind\030\004 \001(\0162\025.boa.types.ChangeKind\0220\n\021la" +
@@ -35446,9 +36300,9 @@ public final class Ast {
       "Kind\"j\n\013CommentKind\022\t\n\005OTHER\020\000\022\010\n\004LINE\020\001" +
       "\022\t\n\005BLOCK\020\002\022\007\n\003DOC\020\003\022\021\n\rDOCUMENTATION\020\003\022" +
       "\010\n\004SPEC\020\004\022\021\n\rSPECIFICATION\020\004\032\002\020\001\"{\n\014Posi" +
-      "tionInfo\022\021\n\tstart_pos\030\001 \002(\005\022\016\n\006length\030\002 " +
+      "tionInfo\022\021\n\tstart_pos\030\001 \002(\005\022\016\n\006length\030\002 ",
       "\002(\005\022\022\n\nstart_line\030\003 \002(\005\022\021\n\tstart_col\030\004 \002" +
-      "(\005\022\020\n\010end_line\030\005 \002(\005\022\017\n\007end_col\030\006 \002(\005\"^\n",
+      "(\005\022\020\n\010end_line\030\005 \002(\005\022\017\n\007end_col\030\006 \002(\005\"^\n" +
       "\017SpecDeclaration\022&\n\tmodifiers\030\001 \003(\0132\023.bo" +
       "a.types.Modifier\022#\n\005specs\030\002 \003(\0132\024.boa.ty" +
       "pes.Statement\"W\n\nSpecMethod\022!\n\004case\030\001 \003(" +
@@ -35456,9 +36310,9 @@ public final class Ast {
       "\0132\023.boa.types.Modifier\"9\n\rSpecStatement\022" +
       "(\n\nstatements\030\001 \003(\0132\024.boa.types.Statemen" +
       "t\"6\n\014SpecVariable\022&\n\tmodifiers\030\001 \003(\0132\023.b" +
-      "oa.types.Modifier*\236\001\n\010TypeKind\022\t\n\005OTHER\020" +
+      "oa.types.Modifier*\236\001\n\010TypeKind\022\t\n\005OTHER\020",
       "\000\022\t\n\005CLASS\020\001\022\r\n\tINTERFACE\020\002\022\r\n\tANONYMOUS" +
-      "\020\003\022\010\n\004ANON\020\003\022\n\n\006STRUCT\020\004\022\010\n\004ENUM\020\005\022\017\n\013EN",
+      "\020\003\022\010\n\004ANON\020\003\022\n\n\006STRUCT\020\004\022\010\n\004ENUM\020\005\022\017\n\013EN" +
       "UMERATION\020\005\022\016\n\nANNOTATION\020\006\022\014\n\010DELEGATE\020" +
       "\007\022\013\n\007GENERIC\020\010\032\002\020\001B\002H\001"
     };
@@ -35502,19 +36356,19 @@ public final class Ast {
           internal_static_boa_types_Method_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Method_descriptor,
-              new java.lang.String[] { "Name", "Modifiers", "ReturnType", "GenericParameters", "Arguments", "ExceptionTypes", "Statements", "Comments", "StructuralChangeKind", "LabelChangeKind", });
+              new java.lang.String[] { "Name", "Modifiers", "ReturnType", "GenericParameters", "Arguments", "ExceptionTypes", "Statements", "Comments", "StructuralChangeKind", "LabelChangeKind", "Key", });
           internal_static_boa_types_Variable_descriptor =
             getDescriptor().getMessageTypes().get(6);
           internal_static_boa_types_Variable_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Variable_descriptor,
-              new java.lang.String[] { "Name", "VariableType", "Modifiers", "Initializer", "Comments", "StructuralChangeKind", "LabelChangeKind", });
+              new java.lang.String[] { "Name", "VariableType", "Modifiers", "Initializer", "Comments", "StructuralChangeKind", "LabelChangeKind", "Key", });
           internal_static_boa_types_Statement_descriptor =
             getDescriptor().getMessageTypes().get(7);
           internal_static_boa_types_Statement_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Statement_descriptor,
-              new java.lang.String[] { "Kind", "Comments", "Statements", "Initializations", "Condition", "Updates", "VariableDeclaration", "TypeDeclaration", "Expression", "StructuralChangeKind", "LabelChangeKind", });
+              new java.lang.String[] { "Kind", "Comments", "Statements", "Initializations", "Condition", "Updates", "VariableDeclaration", "TypeDeclaration", "Expression", "StructuralChangeKind", "LabelChangeKind", "Specs", "Key", });
           internal_static_boa_types_Expression_descriptor =
             getDescriptor().getMessageTypes().get(8);
           internal_static_boa_types_Expression_fieldAccessorTable = new
