@@ -64,8 +64,6 @@ public class MethodProtoTuple extends BoaProtoTuple {
 		names.put("comments", counter++);
 		members.add(new BoaProtoList(new CommentProtoTuple()));
 		
-		names.put("key", counter++);
-		members.add(new BoaString());
 	}
 
 	/**

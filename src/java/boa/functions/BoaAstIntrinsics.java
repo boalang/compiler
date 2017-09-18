@@ -211,6 +211,9 @@ public class BoaAstIntrinsics {
 	@SuppressWarnings("unchecked")
 	@FunctionSpec(name = "getSpec", returnType = "SpecDeclaration", formalParameters = { "Declaration" })
 	public static SpecDeclaration getSpec(final Declaration f) {
+		
+		if (!f.hasKey())
+			return emptySpecDeclaration;
 		final String rowName = f.getKey() + "!!" + f.getName();
 
 		if (specMap == null)
@@ -240,6 +243,9 @@ public class BoaAstIntrinsics {
 	@SuppressWarnings("unchecked")
 	@FunctionSpec(name = "getSpec", returnType = "SpecMethod", formalParameters = { "Method" })
 	public static SpecMethod getSpec(final Method f) {
+		
+		if (!f.hasKey())
+			return emptySpecMethod;
 		final String rowName = f.getKey() + "!!" + f.getName();
 	
 		if (specMap == null)
@@ -269,6 +275,9 @@ public class BoaAstIntrinsics {
 	@SuppressWarnings("unchecked")
 	@FunctionSpec(name = "getSpec", returnType = "SpecStatement", formalParameters = { "Statement" })
 	public static SpecStatement getSpec(final Statement f) {
+		
+		if (!f.hasKey())
+			return emptySpecStatement;
 		final String rowName = f.getKey();
 	
 		if (specMap == null)
@@ -298,6 +307,9 @@ public class BoaAstIntrinsics {
 	@SuppressWarnings("unchecked")
 	@FunctionSpec(name = "getSpec", returnType = "SpecVariable", formalParameters = { "Variable" })
 	public static SpecVariable getSpec(final Variable f) {
+		
+		if (!f.hasKey())
+			return emptySpecVariable;
 		final String rowName = f.getKey() + "!!" + f.getName();
 	
 		if (specMap == null)

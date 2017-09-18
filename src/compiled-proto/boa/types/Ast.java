@@ -6150,17 +6150,17 @@ public final class Ast {
      */
     boa.types.Ast.SpecStatementOrBuilder getSpecsOrBuilder();
 
-    // required string key = 13;
+    // optional string key = 13;
     /**
-     * <code>required string key = 13;</code>
+     * <code>optional string key = 13;</code>
      */
     boolean hasKey();
     /**
-     * <code>required string key = 13;</code>
+     * <code>optional string key = 13;</code>
      */
     java.lang.String getKey();
     /**
-     * <code>required string key = 13;</code>
+     * <code>optional string key = 13;</code>
      */
     com.google.protobuf.ByteString
         getKeyBytes();
@@ -6946,17 +6946,17 @@ public final class Ast {
       return specs_;
     }
 
-    // required string key = 13;
+    // optional string key = 13;
     public static final int KEY_FIELD_NUMBER = 13;
     private java.lang.Object key_;
     /**
-     * <code>required string key = 13;</code>
+     * <code>optional string key = 13;</code>
      */
     public boolean hasKey() {
       return ((bitField0_ & 0x00000020) == 0x00000020);
     }
     /**
-     * <code>required string key = 13;</code>
+     * <code>optional string key = 13;</code>
      */
     public java.lang.String getKey() {
       java.lang.Object ref = key_;
@@ -6973,7 +6973,7 @@ public final class Ast {
       }
     }
     /**
-     * <code>required string key = 13;</code>
+     * <code>optional string key = 13;</code>
      */
     public com.google.protobuf.ByteString
         getKeyBytes() {
@@ -7014,10 +7014,6 @@ public final class Ast {
         return false;
       }
       if (!hasKind()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasKey()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -7711,10 +7707,6 @@ public final class Ast {
           return false;
         }
         if (!hasKind()) {
-          
-          return false;
-        }
-        if (!hasKey()) {
           
           return false;
         }
@@ -10379,16 +10371,16 @@ public final class Ast {
         return specsBuilder_;
       }
 
-      // required string key = 13;
+      // optional string key = 13;
       private java.lang.Object key_ = "";
       /**
-       * <code>required string key = 13;</code>
+       * <code>optional string key = 13;</code>
        */
       public boolean hasKey() {
         return ((bitField0_ & 0x00001000) == 0x00001000);
       }
       /**
-       * <code>required string key = 13;</code>
+       * <code>optional string key = 13;</code>
        */
       public java.lang.String getKey() {
         java.lang.Object ref = key_;
@@ -10402,7 +10394,7 @@ public final class Ast {
         }
       }
       /**
-       * <code>required string key = 13;</code>
+       * <code>optional string key = 13;</code>
        */
       public com.google.protobuf.ByteString
           getKeyBytes() {
@@ -10418,7 +10410,7 @@ public final class Ast {
         }
       }
       /**
-       * <code>required string key = 13;</code>
+       * <code>optional string key = 13;</code>
        */
       public Builder setKey(
           java.lang.String value) {
@@ -10431,7 +10423,7 @@ public final class Ast {
         return this;
       }
       /**
-       * <code>required string key = 13;</code>
+       * <code>optional string key = 13;</code>
        */
       public Builder clearKey() {
         bitField0_ = (bitField0_ & ~0x00001000);
@@ -10440,7 +10432,7 @@ public final class Ast {
         return this;
       }
       /**
-       * <code>required string key = 13;</code>
+       * <code>optional string key = 13;</code>
        */
       public Builder setKeyBytes(
           com.google.protobuf.ByteString value) {
@@ -11954,9 +11946,9 @@ public final class Ast {
      */
     boa.types.Shared.ChangeKind getLabelChangeKind();
 
-    // required string key = 11;
+    // optional string key = 11;
     /**
-     * <code>required string key = 11;</code>
+     * <code>optional string key = 11;</code>
      *
      * <pre>
      ** For Specs use 
@@ -11964,7 +11956,7 @@ public final class Ast {
      */
     boolean hasKey();
     /**
-     * <code>required string key = 11;</code>
+     * <code>optional string key = 11;</code>
      *
      * <pre>
      ** For Specs use 
@@ -11972,7 +11964,7 @@ public final class Ast {
      */
     java.lang.String getKey();
     /**
-     * <code>required string key = 11;</code>
+     * <code>optional string key = 11;</code>
      *
      * <pre>
      ** For Specs use 
@@ -12675,11 +12667,11 @@ public final class Ast {
       return labelChangeKind_;
     }
 
-    // required string key = 11;
+    // optional string key = 11;
     public static final int KEY_FIELD_NUMBER = 11;
     private java.lang.Object key_;
     /**
-     * <code>required string key = 11;</code>
+     * <code>optional string key = 11;</code>
      *
      * <pre>
      ** For Specs use 
@@ -12689,7 +12681,7 @@ public final class Ast {
       return ((bitField0_ & 0x00000010) == 0x00000010);
     }
     /**
-     * <code>required string key = 11;</code>
+     * <code>optional string key = 11;</code>
      *
      * <pre>
      ** For Specs use 
@@ -12710,7 +12702,7 @@ public final class Ast {
       }
     }
     /**
-     * <code>required string key = 11;</code>
+     * <code>optional string key = 11;</code>
      *
      * <pre>
      ** For Specs use 
@@ -12749,10 +12741,6 @@ public final class Ast {
       if (isInitialized != -1) return isInitialized == 1;
 
       if (!hasReturnType()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasKey()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -13369,10 +13357,6 @@ public final class Ast {
 
       public final boolean isInitialized() {
         if (!hasReturnType()) {
-          
-          return false;
-        }
-        if (!hasKey()) {
           
           return false;
         }
@@ -15719,10 +15703,10 @@ public final class Ast {
         return this;
       }
 
-      // required string key = 11;
+      // optional string key = 11;
       private java.lang.Object key_ = "";
       /**
-       * <code>required string key = 11;</code>
+       * <code>optional string key = 11;</code>
        *
        * <pre>
        ** For Specs use 
@@ -15732,7 +15716,7 @@ public final class Ast {
         return ((bitField0_ & 0x00000400) == 0x00000400);
       }
       /**
-       * <code>required string key = 11;</code>
+       * <code>optional string key = 11;</code>
        *
        * <pre>
        ** For Specs use 
@@ -15750,7 +15734,7 @@ public final class Ast {
         }
       }
       /**
-       * <code>required string key = 11;</code>
+       * <code>optional string key = 11;</code>
        *
        * <pre>
        ** For Specs use 
@@ -15770,7 +15754,7 @@ public final class Ast {
         }
       }
       /**
-       * <code>required string key = 11;</code>
+       * <code>optional string key = 11;</code>
        *
        * <pre>
        ** For Specs use 
@@ -15787,7 +15771,7 @@ public final class Ast {
         return this;
       }
       /**
-       * <code>required string key = 11;</code>
+       * <code>optional string key = 11;</code>
        *
        * <pre>
        ** For Specs use 
@@ -15800,7 +15784,7 @@ public final class Ast {
         return this;
       }
       /**
-       * <code>required string key = 11;</code>
+       * <code>optional string key = 11;</code>
        *
        * <pre>
        ** For Specs use 
@@ -16036,9 +16020,9 @@ public final class Ast {
      */
     boa.types.Shared.ChangeKind getLabelChangeKind();
 
-    // required string key = 8;
+    // optional string key = 8;
     /**
-     * <code>required string key = 8;</code>
+     * <code>optional string key = 8;</code>
      *
      * <pre>
      ** For Specs use 
@@ -16046,7 +16030,7 @@ public final class Ast {
      */
     boolean hasKey();
     /**
-     * <code>required string key = 8;</code>
+     * <code>optional string key = 8;</code>
      *
      * <pre>
      ** For Specs use 
@@ -16054,7 +16038,7 @@ public final class Ast {
      */
     java.lang.String getKey();
     /**
-     * <code>required string key = 8;</code>
+     * <code>optional string key = 8;</code>
      *
      * <pre>
      ** For Specs use 
@@ -16521,11 +16505,11 @@ public final class Ast {
       return labelChangeKind_;
     }
 
-    // required string key = 8;
+    // optional string key = 8;
     public static final int KEY_FIELD_NUMBER = 8;
     private java.lang.Object key_;
     /**
-     * <code>required string key = 8;</code>
+     * <code>optional string key = 8;</code>
      *
      * <pre>
      ** For Specs use 
@@ -16535,7 +16519,7 @@ public final class Ast {
       return ((bitField0_ & 0x00000020) == 0x00000020);
     }
     /**
-     * <code>required string key = 8;</code>
+     * <code>optional string key = 8;</code>
      *
      * <pre>
      ** For Specs use 
@@ -16556,7 +16540,7 @@ public final class Ast {
       }
     }
     /**
-     * <code>required string key = 8;</code>
+     * <code>optional string key = 8;</code>
      *
      * <pre>
      ** For Specs use 
@@ -16596,10 +16580,6 @@ public final class Ast {
         return false;
       }
       if (!hasVariableType()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasKey()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -17031,10 +17011,6 @@ public final class Ast {
           return false;
         }
         if (!hasVariableType()) {
-          
-          return false;
-        }
-        if (!hasKey()) {
           
           return false;
         }
@@ -18214,10 +18190,10 @@ public final class Ast {
         return this;
       }
 
-      // required string key = 8;
+      // optional string key = 8;
       private java.lang.Object key_ = "";
       /**
-       * <code>required string key = 8;</code>
+       * <code>optional string key = 8;</code>
        *
        * <pre>
        ** For Specs use 
@@ -18227,7 +18203,7 @@ public final class Ast {
         return ((bitField0_ & 0x00000080) == 0x00000080);
       }
       /**
-       * <code>required string key = 8;</code>
+       * <code>optional string key = 8;</code>
        *
        * <pre>
        ** For Specs use 
@@ -18245,7 +18221,7 @@ public final class Ast {
         }
       }
       /**
-       * <code>required string key = 8;</code>
+       * <code>optional string key = 8;</code>
        *
        * <pre>
        ** For Specs use 
@@ -18265,7 +18241,7 @@ public final class Ast {
         }
       }
       /**
-       * <code>required string key = 8;</code>
+       * <code>optional string key = 8;</code>
        *
        * <pre>
        ** For Specs use 
@@ -18282,7 +18258,7 @@ public final class Ast {
         return this;
       }
       /**
-       * <code>required string key = 8;</code>
+       * <code>optional string key = 8;</code>
        *
        * <pre>
        ** For Specs use 
@@ -18295,7 +18271,7 @@ public final class Ast {
         return this;
       }
       /**
-       * <code>required string key = 8;</code>
+       * <code>optional string key = 8;</code>
        *
        * <pre>
        ** For Specs use 
@@ -18582,17 +18558,17 @@ public final class Ast {
      */
     boa.types.Ast.SpecStatementOrBuilder getSpecsOrBuilder();
 
-    // required string key = 13;
+    // optional string key = 13;
     /**
-     * <code>required string key = 13;</code>
+     * <code>optional string key = 13;</code>
      */
     boolean hasKey();
     /**
-     * <code>required string key = 13;</code>
+     * <code>optional string key = 13;</code>
      */
     java.lang.String getKey();
     /**
-     * <code>required string key = 13;</code>
+     * <code>optional string key = 13;</code>
      */
     com.google.protobuf.ByteString
         getKeyBytes();
@@ -18932,117 +18908,117 @@ public final class Ast {
        */
       EMPTY(21, 19),
       /**
-       * <code>SPEC_REQUIRES = 20;</code>
+       * <code>SPEC_REQUIRES = 1000;</code>
        *
        * <pre>
        ** For Specs use 
        * </pre>
        */
-      SPEC_REQUIRES(22, 20),
+      SPEC_REQUIRES(22, 1000),
       /**
-       * <code>SPEC_ENSURES = 21;</code>
+       * <code>SPEC_ENSURES = 1001;</code>
        */
-      SPEC_ENSURES(23, 21),
+      SPEC_ENSURES(23, 1001),
       /**
-       * <code>SPEC_SIGNALS = 22;</code>
+       * <code>SPEC_SIGNALS = 1002;</code>
        */
-      SPEC_SIGNALS(24, 22),
+      SPEC_SIGNALS(24, 1002),
       /**
-       * <code>SPEC_SIGNALS_ONLY = 23;</code>
+       * <code>SPEC_SIGNALS_ONLY = 1003;</code>
        */
-      SPEC_SIGNALS_ONLY(25, 23),
+      SPEC_SIGNALS_ONLY(25, 1003),
       /**
-       * <code>SPEC_ASSIGNABLE = 24;</code>
+       * <code>SPEC_ASSIGNABLE = 1004;</code>
        */
-      SPEC_ASSIGNABLE(26, 24),
+      SPEC_ASSIGNABLE(26, 1004),
       /**
-       * <code>SPEC_MAINTAINING = 25;</code>
+       * <code>SPEC_MAINTAINING = 1005;</code>
        */
-      SPEC_MAINTAINING(27, 25),
+      SPEC_MAINTAINING(27, 1005),
       /**
-       * <code>SPEC_ASSUME = 26;</code>
+       * <code>SPEC_ASSUME = 1006;</code>
        */
-      SPEC_ASSUME(28, 26),
+      SPEC_ASSUME(28, 1006),
       /**
-       * <code>SPEC_SET = 27;</code>
+       * <code>SPEC_SET = 1007;</code>
        */
-      SPEC_SET(29, 27),
+      SPEC_SET(29, 1007),
       /**
-       * <code>SPEC_DIVERGES = 28;</code>
+       * <code>SPEC_DIVERGES = 1008;</code>
        */
-      SPEC_DIVERGES(30, 28),
+      SPEC_DIVERGES(30, 1008),
       /**
-       * <code>SPEC_ACCESSIBLE = 29;</code>
+       * <code>SPEC_ACCESSIBLE = 1009;</code>
        */
-      SPEC_ACCESSIBLE(31, 29),
+      SPEC_ACCESSIBLE(31, 1009),
       /**
-       * <code>SPEC_CAPTURES = 30;</code>
+       * <code>SPEC_CAPTURES = 1010;</code>
        */
-      SPEC_CAPTURES(32, 30),
+      SPEC_CAPTURES(32, 1010),
       /**
-       * <code>SPEC_CALLABLE = 31;</code>
+       * <code>SPEC_CALLABLE = 1011;</code>
        */
-      SPEC_CALLABLE(33, 31),
+      SPEC_CALLABLE(33, 1011),
       /**
-       * <code>SPEC_WHEN = 32;</code>
+       * <code>SPEC_WHEN = 1012;</code>
        */
-      SPEC_WHEN(34, 32),
+      SPEC_WHEN(34, 1012),
       /**
-       * <code>SPEC_DURATION = 33;</code>
+       * <code>SPEC_DURATION = 1013;</code>
        */
-      SPEC_DURATION(35, 33),
+      SPEC_DURATION(35, 1013),
       /**
-       * <code>SPEC_MEASURES = 34;</code>
+       * <code>SPEC_MEASURES = 1014;</code>
        */
-      SPEC_MEASURES(36, 34),
+      SPEC_MEASURES(36, 1014),
       /**
-       * <code>SPEC_IN = 35;</code>
+       * <code>SPEC_IN = 1015;</code>
        */
-      SPEC_IN(37, 35),
+      SPEC_IN(37, 1015),
       /**
-       * <code>SPEC_INVARIANT = 36;</code>
+       * <code>SPEC_INVARIANT = 1016;</code>
        */
-      SPEC_INVARIANT(38, 36),
+      SPEC_INVARIANT(38, 1016),
       /**
-       * <code>SPEC_REPRESENTS = 37;</code>
+       * <code>SPEC_REPRESENTS = 1017;</code>
        */
-      SPEC_REPRESENTS(39, 37),
+      SPEC_REPRESENTS(39, 1017),
       /**
-       * <code>SPEC_INITIALLY = 38;</code>
+       * <code>SPEC_INITIALLY = 1018;</code>
        */
-      SPEC_INITIALLY(40, 38),
+      SPEC_INITIALLY(40, 1018),
       /**
-       * <code>SPEC_TYPE = 39;</code>
+       * <code>SPEC_TYPE = 1019;</code>
        */
-      SPEC_TYPE(41, 39),
+      SPEC_TYPE(41, 1019),
       /**
-       * <code>SPEC_BEHAVIOR = 40;</code>
+       * <code>SPEC_BEHAVIOR = 1020;</code>
        */
-      SPEC_BEHAVIOR(42, 40),
+      SPEC_BEHAVIOR(42, 1020),
       /**
-       * <code>SPEC_BEHAVIOUR = 41;</code>
+       * <code>SPEC_BEHAVIOUR = 1021;</code>
        */
-      SPEC_BEHAVIOUR(43, 41),
+      SPEC_BEHAVIOUR(43, 1021),
       /**
-       * <code>SPEC_NORMAL_BEHAVIOR = 42;</code>
+       * <code>SPEC_NORMAL_BEHAVIOR = 1022;</code>
        */
-      SPEC_NORMAL_BEHAVIOR(44, 42),
+      SPEC_NORMAL_BEHAVIOR(44, 1022),
       /**
-       * <code>SPEC_NORMAL_BEHAVIOUR = 43;</code>
+       * <code>SPEC_NORMAL_BEHAVIOUR = 1023;</code>
        */
-      SPEC_NORMAL_BEHAVIOUR(45, 43),
+      SPEC_NORMAL_BEHAVIOUR(45, 1023),
       /**
-       * <code>SPEC_EXCEPTIONAL_BEHAVIOR = 44;</code>
+       * <code>SPEC_EXCEPTIONAL_BEHAVIOR = 1024;</code>
        */
-      SPEC_EXCEPTIONAL_BEHAVIOR(46, 44),
+      SPEC_EXCEPTIONAL_BEHAVIOR(46, 1024),
       /**
-       * <code>SPEC_EXCEPTIONAL_BEHAVIOUR = 45;</code>
+       * <code>SPEC_EXCEPTIONAL_BEHAVIOUR = 1025;</code>
        */
-      SPEC_EXCEPTIONAL_BEHAVIOUR(47, 45),
+      SPEC_EXCEPTIONAL_BEHAVIOUR(47, 1025),
       /**
-       * <code>SPEC_ASSERT = 46;</code>
+       * <code>SPEC_ASSERT = 1026;</code>
        */
-      SPEC_ASSERT(48, 46),
+      SPEC_ASSERT(48, 1026),
       ;
 
       /**
@@ -19162,117 +19138,117 @@ public final class Ast {
        */
       public static final int EMPTY_VALUE = 19;
       /**
-       * <code>SPEC_REQUIRES = 20;</code>
+       * <code>SPEC_REQUIRES = 1000;</code>
        *
        * <pre>
        ** For Specs use 
        * </pre>
        */
-      public static final int SPEC_REQUIRES_VALUE = 20;
+      public static final int SPEC_REQUIRES_VALUE = 1000;
       /**
-       * <code>SPEC_ENSURES = 21;</code>
+       * <code>SPEC_ENSURES = 1001;</code>
        */
-      public static final int SPEC_ENSURES_VALUE = 21;
+      public static final int SPEC_ENSURES_VALUE = 1001;
       /**
-       * <code>SPEC_SIGNALS = 22;</code>
+       * <code>SPEC_SIGNALS = 1002;</code>
        */
-      public static final int SPEC_SIGNALS_VALUE = 22;
+      public static final int SPEC_SIGNALS_VALUE = 1002;
       /**
-       * <code>SPEC_SIGNALS_ONLY = 23;</code>
+       * <code>SPEC_SIGNALS_ONLY = 1003;</code>
        */
-      public static final int SPEC_SIGNALS_ONLY_VALUE = 23;
+      public static final int SPEC_SIGNALS_ONLY_VALUE = 1003;
       /**
-       * <code>SPEC_ASSIGNABLE = 24;</code>
+       * <code>SPEC_ASSIGNABLE = 1004;</code>
        */
-      public static final int SPEC_ASSIGNABLE_VALUE = 24;
+      public static final int SPEC_ASSIGNABLE_VALUE = 1004;
       /**
-       * <code>SPEC_MAINTAINING = 25;</code>
+       * <code>SPEC_MAINTAINING = 1005;</code>
        */
-      public static final int SPEC_MAINTAINING_VALUE = 25;
+      public static final int SPEC_MAINTAINING_VALUE = 1005;
       /**
-       * <code>SPEC_ASSUME = 26;</code>
+       * <code>SPEC_ASSUME = 1006;</code>
        */
-      public static final int SPEC_ASSUME_VALUE = 26;
+      public static final int SPEC_ASSUME_VALUE = 1006;
       /**
-       * <code>SPEC_SET = 27;</code>
+       * <code>SPEC_SET = 1007;</code>
        */
-      public static final int SPEC_SET_VALUE = 27;
+      public static final int SPEC_SET_VALUE = 1007;
       /**
-       * <code>SPEC_DIVERGES = 28;</code>
+       * <code>SPEC_DIVERGES = 1008;</code>
        */
-      public static final int SPEC_DIVERGES_VALUE = 28;
+      public static final int SPEC_DIVERGES_VALUE = 1008;
       /**
-       * <code>SPEC_ACCESSIBLE = 29;</code>
+       * <code>SPEC_ACCESSIBLE = 1009;</code>
        */
-      public static final int SPEC_ACCESSIBLE_VALUE = 29;
+      public static final int SPEC_ACCESSIBLE_VALUE = 1009;
       /**
-       * <code>SPEC_CAPTURES = 30;</code>
+       * <code>SPEC_CAPTURES = 1010;</code>
        */
-      public static final int SPEC_CAPTURES_VALUE = 30;
+      public static final int SPEC_CAPTURES_VALUE = 1010;
       /**
-       * <code>SPEC_CALLABLE = 31;</code>
+       * <code>SPEC_CALLABLE = 1011;</code>
        */
-      public static final int SPEC_CALLABLE_VALUE = 31;
+      public static final int SPEC_CALLABLE_VALUE = 1011;
       /**
-       * <code>SPEC_WHEN = 32;</code>
+       * <code>SPEC_WHEN = 1012;</code>
        */
-      public static final int SPEC_WHEN_VALUE = 32;
+      public static final int SPEC_WHEN_VALUE = 1012;
       /**
-       * <code>SPEC_DURATION = 33;</code>
+       * <code>SPEC_DURATION = 1013;</code>
        */
-      public static final int SPEC_DURATION_VALUE = 33;
+      public static final int SPEC_DURATION_VALUE = 1013;
       /**
-       * <code>SPEC_MEASURES = 34;</code>
+       * <code>SPEC_MEASURES = 1014;</code>
        */
-      public static final int SPEC_MEASURES_VALUE = 34;
+      public static final int SPEC_MEASURES_VALUE = 1014;
       /**
-       * <code>SPEC_IN = 35;</code>
+       * <code>SPEC_IN = 1015;</code>
        */
-      public static final int SPEC_IN_VALUE = 35;
+      public static final int SPEC_IN_VALUE = 1015;
       /**
-       * <code>SPEC_INVARIANT = 36;</code>
+       * <code>SPEC_INVARIANT = 1016;</code>
        */
-      public static final int SPEC_INVARIANT_VALUE = 36;
+      public static final int SPEC_INVARIANT_VALUE = 1016;
       /**
-       * <code>SPEC_REPRESENTS = 37;</code>
+       * <code>SPEC_REPRESENTS = 1017;</code>
        */
-      public static final int SPEC_REPRESENTS_VALUE = 37;
+      public static final int SPEC_REPRESENTS_VALUE = 1017;
       /**
-       * <code>SPEC_INITIALLY = 38;</code>
+       * <code>SPEC_INITIALLY = 1018;</code>
        */
-      public static final int SPEC_INITIALLY_VALUE = 38;
+      public static final int SPEC_INITIALLY_VALUE = 1018;
       /**
-       * <code>SPEC_TYPE = 39;</code>
+       * <code>SPEC_TYPE = 1019;</code>
        */
-      public static final int SPEC_TYPE_VALUE = 39;
+      public static final int SPEC_TYPE_VALUE = 1019;
       /**
-       * <code>SPEC_BEHAVIOR = 40;</code>
+       * <code>SPEC_BEHAVIOR = 1020;</code>
        */
-      public static final int SPEC_BEHAVIOR_VALUE = 40;
+      public static final int SPEC_BEHAVIOR_VALUE = 1020;
       /**
-       * <code>SPEC_BEHAVIOUR = 41;</code>
+       * <code>SPEC_BEHAVIOUR = 1021;</code>
        */
-      public static final int SPEC_BEHAVIOUR_VALUE = 41;
+      public static final int SPEC_BEHAVIOUR_VALUE = 1021;
       /**
-       * <code>SPEC_NORMAL_BEHAVIOR = 42;</code>
+       * <code>SPEC_NORMAL_BEHAVIOR = 1022;</code>
        */
-      public static final int SPEC_NORMAL_BEHAVIOR_VALUE = 42;
+      public static final int SPEC_NORMAL_BEHAVIOR_VALUE = 1022;
       /**
-       * <code>SPEC_NORMAL_BEHAVIOUR = 43;</code>
+       * <code>SPEC_NORMAL_BEHAVIOUR = 1023;</code>
        */
-      public static final int SPEC_NORMAL_BEHAVIOUR_VALUE = 43;
+      public static final int SPEC_NORMAL_BEHAVIOUR_VALUE = 1023;
       /**
-       * <code>SPEC_EXCEPTIONAL_BEHAVIOR = 44;</code>
+       * <code>SPEC_EXCEPTIONAL_BEHAVIOR = 1024;</code>
        */
-      public static final int SPEC_EXCEPTIONAL_BEHAVIOR_VALUE = 44;
+      public static final int SPEC_EXCEPTIONAL_BEHAVIOR_VALUE = 1024;
       /**
-       * <code>SPEC_EXCEPTIONAL_BEHAVIOUR = 45;</code>
+       * <code>SPEC_EXCEPTIONAL_BEHAVIOUR = 1025;</code>
        */
-      public static final int SPEC_EXCEPTIONAL_BEHAVIOUR_VALUE = 45;
+      public static final int SPEC_EXCEPTIONAL_BEHAVIOUR_VALUE = 1025;
       /**
-       * <code>SPEC_ASSERT = 46;</code>
+       * <code>SPEC_ASSERT = 1026;</code>
        */
-      public static final int SPEC_ASSERT_VALUE = 46;
+      public static final int SPEC_ASSERT_VALUE = 1026;
 
 
       public final int getNumber() { return value; }
@@ -19299,33 +19275,33 @@ public final class Ast {
           case 17: return THROW;
           case 18: return CATCH;
           case 19: return EMPTY;
-          case 20: return SPEC_REQUIRES;
-          case 21: return SPEC_ENSURES;
-          case 22: return SPEC_SIGNALS;
-          case 23: return SPEC_SIGNALS_ONLY;
-          case 24: return SPEC_ASSIGNABLE;
-          case 25: return SPEC_MAINTAINING;
-          case 26: return SPEC_ASSUME;
-          case 27: return SPEC_SET;
-          case 28: return SPEC_DIVERGES;
-          case 29: return SPEC_ACCESSIBLE;
-          case 30: return SPEC_CAPTURES;
-          case 31: return SPEC_CALLABLE;
-          case 32: return SPEC_WHEN;
-          case 33: return SPEC_DURATION;
-          case 34: return SPEC_MEASURES;
-          case 35: return SPEC_IN;
-          case 36: return SPEC_INVARIANT;
-          case 37: return SPEC_REPRESENTS;
-          case 38: return SPEC_INITIALLY;
-          case 39: return SPEC_TYPE;
-          case 40: return SPEC_BEHAVIOR;
-          case 41: return SPEC_BEHAVIOUR;
-          case 42: return SPEC_NORMAL_BEHAVIOR;
-          case 43: return SPEC_NORMAL_BEHAVIOUR;
-          case 44: return SPEC_EXCEPTIONAL_BEHAVIOR;
-          case 45: return SPEC_EXCEPTIONAL_BEHAVIOUR;
-          case 46: return SPEC_ASSERT;
+          case 1000: return SPEC_REQUIRES;
+          case 1001: return SPEC_ENSURES;
+          case 1002: return SPEC_SIGNALS;
+          case 1003: return SPEC_SIGNALS_ONLY;
+          case 1004: return SPEC_ASSIGNABLE;
+          case 1005: return SPEC_MAINTAINING;
+          case 1006: return SPEC_ASSUME;
+          case 1007: return SPEC_SET;
+          case 1008: return SPEC_DIVERGES;
+          case 1009: return SPEC_ACCESSIBLE;
+          case 1010: return SPEC_CAPTURES;
+          case 1011: return SPEC_CALLABLE;
+          case 1012: return SPEC_WHEN;
+          case 1013: return SPEC_DURATION;
+          case 1014: return SPEC_MEASURES;
+          case 1015: return SPEC_IN;
+          case 1016: return SPEC_INVARIANT;
+          case 1017: return SPEC_REPRESENTS;
+          case 1018: return SPEC_INITIALLY;
+          case 1019: return SPEC_TYPE;
+          case 1020: return SPEC_BEHAVIOR;
+          case 1021: return SPEC_BEHAVIOUR;
+          case 1022: return SPEC_NORMAL_BEHAVIOR;
+          case 1023: return SPEC_NORMAL_BEHAVIOUR;
+          case 1024: return SPEC_EXCEPTIONAL_BEHAVIOR;
+          case 1025: return SPEC_EXCEPTIONAL_BEHAVIOUR;
+          case 1026: return SPEC_ASSERT;
           default: return null;
         }
       }
@@ -19738,17 +19714,17 @@ public final class Ast {
       return specs_;
     }
 
-    // required string key = 13;
+    // optional string key = 13;
     public static final int KEY_FIELD_NUMBER = 13;
     private java.lang.Object key_;
     /**
-     * <code>required string key = 13;</code>
+     * <code>optional string key = 13;</code>
      */
     public boolean hasKey() {
       return ((bitField0_ & 0x00000100) == 0x00000100);
     }
     /**
-     * <code>required string key = 13;</code>
+     * <code>optional string key = 13;</code>
      */
     public java.lang.String getKey() {
       java.lang.Object ref = key_;
@@ -19765,7 +19741,7 @@ public final class Ast {
       }
     }
     /**
-     * <code>required string key = 13;</code>
+     * <code>optional string key = 13;</code>
      */
     public com.google.protobuf.ByteString
         getKeyBytes() {
@@ -19802,10 +19778,6 @@ public final class Ast {
       if (isInitialized != -1) return isInitialized == 1;
 
       if (!hasKind()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasKey()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -20436,10 +20408,6 @@ public final class Ast {
 
       public final boolean isInitialized() {
         if (!hasKind()) {
-          
-          return false;
-        }
-        if (!hasKey()) {
           
           return false;
         }
@@ -22328,16 +22296,16 @@ public final class Ast {
         return specsBuilder_;
       }
 
-      // required string key = 13;
+      // optional string key = 13;
       private java.lang.Object key_ = "";
       /**
-       * <code>required string key = 13;</code>
+       * <code>optional string key = 13;</code>
        */
       public boolean hasKey() {
         return ((bitField0_ & 0x00001000) == 0x00001000);
       }
       /**
-       * <code>required string key = 13;</code>
+       * <code>optional string key = 13;</code>
        */
       public java.lang.String getKey() {
         java.lang.Object ref = key_;
@@ -22351,7 +22319,7 @@ public final class Ast {
         }
       }
       /**
-       * <code>required string key = 13;</code>
+       * <code>optional string key = 13;</code>
        */
       public com.google.protobuf.ByteString
           getKeyBytes() {
@@ -22367,7 +22335,7 @@ public final class Ast {
         }
       }
       /**
-       * <code>required string key = 13;</code>
+       * <code>optional string key = 13;</code>
        */
       public Builder setKey(
           java.lang.String value) {
@@ -22380,7 +22348,7 @@ public final class Ast {
         return this;
       }
       /**
-       * <code>required string key = 13;</code>
+       * <code>optional string key = 13;</code>
        */
       public Builder clearKey() {
         bitField0_ = (bitField0_ & ~0x00001000);
@@ -22389,7 +22357,7 @@ public final class Ast {
         return this;
       }
       /**
-       * <code>required string key = 13;</code>
+       * <code>optional string key = 13;</code>
        */
       public Builder setKeyBytes(
           com.google.protobuf.ByteString value) {
@@ -23197,101 +23165,101 @@ public final class Ast {
        */
       ANON_METHOD(52, 52),
       /**
-       * <code>SPEC_RESULT = 53;</code>
+       * <code>SPEC_RESULT = 1000;</code>
        *
        * <pre>
        ** For Specs use 
        * </pre>
        */
-      SPEC_RESULT(53, 53),
+      SPEC_RESULT(53, 1000),
       /**
-       * <code>SPEC_OLD = 54;</code>
+       * <code>SPEC_OLD = 1001;</code>
        */
-      SPEC_OLD(54, 54),
+      SPEC_OLD(54, 1001),
       /**
-       * <code>SPEC_FRESH = 55;</code>
+       * <code>SPEC_FRESH = 1002;</code>
        */
-      SPEC_FRESH(55, 55),
+      SPEC_FRESH(55, 1002),
       /**
-       * <code>SPEC_NONNULLELEMENTS = 56;</code>
+       * <code>SPEC_NONNULLELEMENTS = 1003;</code>
        */
-      SPEC_NONNULLELEMENTS(56, 56),
+      SPEC_NONNULLELEMENTS(56, 1003),
       /**
-       * <code>SPEC_TYPEOF = 57;</code>
+       * <code>SPEC_TYPEOF = 1004;</code>
        */
-      SPEC_TYPEOF(57, 57),
+      SPEC_TYPEOF(57, 1004),
       /**
-       * <code>SPEC_ELEMTYPE = 58;</code>
+       * <code>SPEC_ELEMTYPE = 1005;</code>
        */
-      SPEC_ELEMTYPE(58, 58),
+      SPEC_ELEMTYPE(58, 1005),
       /**
-       * <code>SPEC_TYPE = 59;</code>
+       * <code>SPEC_TYPE = 1006;</code>
        */
-      SPEC_TYPE(59, 59),
+      SPEC_TYPE(59, 1006),
       /**
-       * <code>SPEC_FORALL = 60;</code>
+       * <code>SPEC_FORALL = 1007;</code>
        */
-      SPEC_FORALL(60, 60),
+      SPEC_FORALL(60, 1007),
       /**
-       * <code>SPEC_EXISTS = 61;</code>
+       * <code>SPEC_EXISTS = 1008;</code>
        */
-      SPEC_EXISTS(61, 61),
+      SPEC_EXISTS(61, 1008),
       /**
-       * <code>SPEC_SUBTYPE = 62;</code>
+       * <code>SPEC_SUBTYPE = 1009;</code>
        */
-      SPEC_SUBTYPE(62, 62),
+      SPEC_SUBTYPE(62, 1009),
       /**
-       * <code>SPEC_EQUIVALENCE = 63;</code>
+       * <code>SPEC_EQUIVALENCE = 1010;</code>
        */
-      SPEC_EQUIVALENCE(63, 63),
+      SPEC_EQUIVALENCE(63, 1010),
       /**
-       * <code>SPEC_INEQUIVALENCE = 64;</code>
+       * <code>SPEC_INEQUIVALENCE = 1011;</code>
        */
-      SPEC_INEQUIVALENCE(64, 64),
+      SPEC_INEQUIVALENCE(64, 1011),
       /**
-       * <code>SPEC_FORWARD = 65;</code>
+       * <code>SPEC_FORWARD = 1012;</code>
        */
-      SPEC_FORWARD(65, 65),
+      SPEC_FORWARD(65, 1012),
       /**
-       * <code>SPEC_REVERSE = 66;</code>
+       * <code>SPEC_REVERSE = 1013;</code>
        */
-      SPEC_REVERSE(66, 66),
+      SPEC_REVERSE(66, 1013),
       /**
-       * <code>SPEC_NOTHING = 67;</code>
+       * <code>SPEC_NOTHING = 1014;</code>
        */
-      SPEC_NOTHING(67, 67),
+      SPEC_NOTHING(67, 1014),
       /**
-       * <code>SPEC_EVERYTHING = 68;</code>
+       * <code>SPEC_EVERYTHING = 1015;</code>
        */
-      SPEC_EVERYTHING(68, 68),
+      SPEC_EVERYTHING(68, 1015),
       /**
-       * <code>SPEC_NOTSPECIFIED = 69;</code>
+       * <code>SPEC_NOTSPECIFIED = 1016;</code>
        */
-      SPEC_NOTSPECIFIED(69, 69),
+      SPEC_NOTSPECIFIED(69, 1016),
       /**
-       * <code>NEXT = 70;</code>
+       * <code>NEXT = 1017;</code>
        */
-      NEXT(70, 70),
+      NEXT(70, 1017),
       /**
-       * <code>GLOBALLY = 71;</code>
+       * <code>GLOBALLY = 1018;</code>
        */
-      GLOBALLY(71, 71),
+      GLOBALLY(71, 1018),
       /**
-       * <code>FINALLY = 72;</code>
+       * <code>FINALLY = 1019;</code>
        */
-      FINALLY(72, 72),
+      FINALLY(72, 1019),
       /**
-       * <code>UNTIL = 73;</code>
+       * <code>UNTIL = 1020;</code>
        */
-      UNTIL(73, 73),
+      UNTIL(73, 1020),
       /**
-       * <code>RELEASE = 74;</code>
+       * <code>RELEASE = 1021;</code>
        */
-      RELEASE(74, 74),
+      RELEASE(74, 1021),
       /**
-       * <code>INPLY = 75;</code>
+       * <code>INPLY = 1022;</code>
        */
-      INPLY(75, 75),
+      INPLY(75, 1022),
       ;
 
       /**
@@ -23523,101 +23491,101 @@ public final class Ast {
        */
       public static final int ANON_METHOD_VALUE = 52;
       /**
-       * <code>SPEC_RESULT = 53;</code>
+       * <code>SPEC_RESULT = 1000;</code>
        *
        * <pre>
        ** For Specs use 
        * </pre>
        */
-      public static final int SPEC_RESULT_VALUE = 53;
+      public static final int SPEC_RESULT_VALUE = 1000;
       /**
-       * <code>SPEC_OLD = 54;</code>
+       * <code>SPEC_OLD = 1001;</code>
        */
-      public static final int SPEC_OLD_VALUE = 54;
+      public static final int SPEC_OLD_VALUE = 1001;
       /**
-       * <code>SPEC_FRESH = 55;</code>
+       * <code>SPEC_FRESH = 1002;</code>
        */
-      public static final int SPEC_FRESH_VALUE = 55;
+      public static final int SPEC_FRESH_VALUE = 1002;
       /**
-       * <code>SPEC_NONNULLELEMENTS = 56;</code>
+       * <code>SPEC_NONNULLELEMENTS = 1003;</code>
        */
-      public static final int SPEC_NONNULLELEMENTS_VALUE = 56;
+      public static final int SPEC_NONNULLELEMENTS_VALUE = 1003;
       /**
-       * <code>SPEC_TYPEOF = 57;</code>
+       * <code>SPEC_TYPEOF = 1004;</code>
        */
-      public static final int SPEC_TYPEOF_VALUE = 57;
+      public static final int SPEC_TYPEOF_VALUE = 1004;
       /**
-       * <code>SPEC_ELEMTYPE = 58;</code>
+       * <code>SPEC_ELEMTYPE = 1005;</code>
        */
-      public static final int SPEC_ELEMTYPE_VALUE = 58;
+      public static final int SPEC_ELEMTYPE_VALUE = 1005;
       /**
-       * <code>SPEC_TYPE = 59;</code>
+       * <code>SPEC_TYPE = 1006;</code>
        */
-      public static final int SPEC_TYPE_VALUE = 59;
+      public static final int SPEC_TYPE_VALUE = 1006;
       /**
-       * <code>SPEC_FORALL = 60;</code>
+       * <code>SPEC_FORALL = 1007;</code>
        */
-      public static final int SPEC_FORALL_VALUE = 60;
+      public static final int SPEC_FORALL_VALUE = 1007;
       /**
-       * <code>SPEC_EXISTS = 61;</code>
+       * <code>SPEC_EXISTS = 1008;</code>
        */
-      public static final int SPEC_EXISTS_VALUE = 61;
+      public static final int SPEC_EXISTS_VALUE = 1008;
       /**
-       * <code>SPEC_SUBTYPE = 62;</code>
+       * <code>SPEC_SUBTYPE = 1009;</code>
        */
-      public static final int SPEC_SUBTYPE_VALUE = 62;
+      public static final int SPEC_SUBTYPE_VALUE = 1009;
       /**
-       * <code>SPEC_EQUIVALENCE = 63;</code>
+       * <code>SPEC_EQUIVALENCE = 1010;</code>
        */
-      public static final int SPEC_EQUIVALENCE_VALUE = 63;
+      public static final int SPEC_EQUIVALENCE_VALUE = 1010;
       /**
-       * <code>SPEC_INEQUIVALENCE = 64;</code>
+       * <code>SPEC_INEQUIVALENCE = 1011;</code>
        */
-      public static final int SPEC_INEQUIVALENCE_VALUE = 64;
+      public static final int SPEC_INEQUIVALENCE_VALUE = 1011;
       /**
-       * <code>SPEC_FORWARD = 65;</code>
+       * <code>SPEC_FORWARD = 1012;</code>
        */
-      public static final int SPEC_FORWARD_VALUE = 65;
+      public static final int SPEC_FORWARD_VALUE = 1012;
       /**
-       * <code>SPEC_REVERSE = 66;</code>
+       * <code>SPEC_REVERSE = 1013;</code>
        */
-      public static final int SPEC_REVERSE_VALUE = 66;
+      public static final int SPEC_REVERSE_VALUE = 1013;
       /**
-       * <code>SPEC_NOTHING = 67;</code>
+       * <code>SPEC_NOTHING = 1014;</code>
        */
-      public static final int SPEC_NOTHING_VALUE = 67;
+      public static final int SPEC_NOTHING_VALUE = 1014;
       /**
-       * <code>SPEC_EVERYTHING = 68;</code>
+       * <code>SPEC_EVERYTHING = 1015;</code>
        */
-      public static final int SPEC_EVERYTHING_VALUE = 68;
+      public static final int SPEC_EVERYTHING_VALUE = 1015;
       /**
-       * <code>SPEC_NOTSPECIFIED = 69;</code>
+       * <code>SPEC_NOTSPECIFIED = 1016;</code>
        */
-      public static final int SPEC_NOTSPECIFIED_VALUE = 69;
+      public static final int SPEC_NOTSPECIFIED_VALUE = 1016;
       /**
-       * <code>NEXT = 70;</code>
+       * <code>NEXT = 1017;</code>
        */
-      public static final int NEXT_VALUE = 70;
+      public static final int NEXT_VALUE = 1017;
       /**
-       * <code>GLOBALLY = 71;</code>
+       * <code>GLOBALLY = 1018;</code>
        */
-      public static final int GLOBALLY_VALUE = 71;
+      public static final int GLOBALLY_VALUE = 1018;
       /**
-       * <code>FINALLY = 72;</code>
+       * <code>FINALLY = 1019;</code>
        */
-      public static final int FINALLY_VALUE = 72;
+      public static final int FINALLY_VALUE = 1019;
       /**
-       * <code>UNTIL = 73;</code>
+       * <code>UNTIL = 1020;</code>
        */
-      public static final int UNTIL_VALUE = 73;
+      public static final int UNTIL_VALUE = 1020;
       /**
-       * <code>RELEASE = 74;</code>
+       * <code>RELEASE = 1021;</code>
        */
-      public static final int RELEASE_VALUE = 74;
+      public static final int RELEASE_VALUE = 1021;
       /**
-       * <code>INPLY = 75;</code>
+       * <code>INPLY = 1022;</code>
        */
-      public static final int INPLY_VALUE = 75;
+      public static final int INPLY_VALUE = 1022;
 
 
       public final int getNumber() { return value; }
@@ -23677,29 +23645,29 @@ public final class Ast {
           case 50: return METHOD_REFERENCE;
           case 51: return LAMBDA;
           case 52: return ANON_METHOD;
-          case 53: return SPEC_RESULT;
-          case 54: return SPEC_OLD;
-          case 55: return SPEC_FRESH;
-          case 56: return SPEC_NONNULLELEMENTS;
-          case 57: return SPEC_TYPEOF;
-          case 58: return SPEC_ELEMTYPE;
-          case 59: return SPEC_TYPE;
-          case 60: return SPEC_FORALL;
-          case 61: return SPEC_EXISTS;
-          case 62: return SPEC_SUBTYPE;
-          case 63: return SPEC_EQUIVALENCE;
-          case 64: return SPEC_INEQUIVALENCE;
-          case 65: return SPEC_FORWARD;
-          case 66: return SPEC_REVERSE;
-          case 67: return SPEC_NOTHING;
-          case 68: return SPEC_EVERYTHING;
-          case 69: return SPEC_NOTSPECIFIED;
-          case 70: return NEXT;
-          case 71: return GLOBALLY;
-          case 72: return FINALLY;
-          case 73: return UNTIL;
-          case 74: return RELEASE;
-          case 75: return INPLY;
+          case 1000: return SPEC_RESULT;
+          case 1001: return SPEC_OLD;
+          case 1002: return SPEC_FRESH;
+          case 1003: return SPEC_NONNULLELEMENTS;
+          case 1004: return SPEC_TYPEOF;
+          case 1005: return SPEC_ELEMTYPE;
+          case 1006: return SPEC_TYPE;
+          case 1007: return SPEC_FORALL;
+          case 1008: return SPEC_EXISTS;
+          case 1009: return SPEC_SUBTYPE;
+          case 1010: return SPEC_EQUIVALENCE;
+          case 1011: return SPEC_INEQUIVALENCE;
+          case 1012: return SPEC_FORWARD;
+          case 1013: return SPEC_REVERSE;
+          case 1014: return SPEC_NOTHING;
+          case 1015: return SPEC_EVERYTHING;
+          case 1016: return SPEC_NOTSPECIFIED;
+          case 1017: return NEXT;
+          case 1018: return GLOBALLY;
+          case 1019: return FINALLY;
+          case 1020: return UNTIL;
+          case 1021: return RELEASE;
+          case 1022: return INPLY;
           default: return null;
         }
       }
@@ -27382,61 +27350,61 @@ public final class Ast {
        */
       ABSTRACT(7, 6),
       /**
-       * <code>SPEC_INSTANCE = 7;</code>
+       * <code>SPEC_INSTANCE = 1000;</code>
        *
        * <pre>
        ** An instance in specification modifier 
        * </pre>
        */
-      SPEC_INSTANCE(8, 7),
+      SPEC_INSTANCE(8, 1000),
       /**
-       * <code>SPEC_MODEL = 8;</code>
+       * <code>SPEC_MODEL = 1001;</code>
        *
        * <pre>
        ** A model in specification modifier 
        * </pre>
        */
-      SPEC_MODEL(9, 8),
+      SPEC_MODEL(9, 1001),
       /**
-       * <code>SPEC_GHOST = 9;</code>
+       * <code>SPEC_GHOST = 1002;</code>
        *
        * <pre>
        ** A ghost in specification modifier 
        * </pre>
        */
-      SPEC_GHOST(10, 9),
+      SPEC_GHOST(10, 1002),
       /**
-       * <code>SPEC_HELPER = 10;</code>
+       * <code>SPEC_HELPER = 1003;</code>
        *
        * <pre>
        ** A helper in specification modifier 
        * </pre>
        */
-      SPEC_HELPER(11, 10),
+      SPEC_HELPER(11, 1003),
       /**
-       * <code>SPEC_REP = 11;</code>
+       * <code>SPEC_REP = 1004;</code>
        *
        * <pre>
-       ** A rep in specification modifier 
+       ** A represent in specification modifier 
        * </pre>
        */
-      SPEC_REP(12, 11),
+      SPEC_REP(12, 1004),
       /**
-       * <code>SPEC_PEER = 12;</code>
+       * <code>SPEC_PEER = 1005;</code>
        *
        * <pre>
        ** A peer in specification modifier 
        * </pre>
        */
-      SPEC_PEER(13, 12),
+      SPEC_PEER(13, 1005),
       /**
-       * <code>SPEC_PURE = 13;</code>
+       * <code>SPEC_PURE = 1006;</code>
        *
        * <pre>
        ** A pure in specification modifier 
        * </pre>
        */
-      SPEC_PURE(14, 13),
+      SPEC_PURE(14, 1006),
       ;
 
       /**
@@ -27512,61 +27480,61 @@ public final class Ast {
        */
       public static final int ABSTRACT_VALUE = 6;
       /**
-       * <code>SPEC_INSTANCE = 7;</code>
+       * <code>SPEC_INSTANCE = 1000;</code>
        *
        * <pre>
        ** An instance in specification modifier 
        * </pre>
        */
-      public static final int SPEC_INSTANCE_VALUE = 7;
+      public static final int SPEC_INSTANCE_VALUE = 1000;
       /**
-       * <code>SPEC_MODEL = 8;</code>
+       * <code>SPEC_MODEL = 1001;</code>
        *
        * <pre>
        ** A model in specification modifier 
        * </pre>
        */
-      public static final int SPEC_MODEL_VALUE = 8;
+      public static final int SPEC_MODEL_VALUE = 1001;
       /**
-       * <code>SPEC_GHOST = 9;</code>
+       * <code>SPEC_GHOST = 1002;</code>
        *
        * <pre>
        ** A ghost in specification modifier 
        * </pre>
        */
-      public static final int SPEC_GHOST_VALUE = 9;
+      public static final int SPEC_GHOST_VALUE = 1002;
       /**
-       * <code>SPEC_HELPER = 10;</code>
+       * <code>SPEC_HELPER = 1003;</code>
        *
        * <pre>
        ** A helper in specification modifier 
        * </pre>
        */
-      public static final int SPEC_HELPER_VALUE = 10;
+      public static final int SPEC_HELPER_VALUE = 1003;
       /**
-       * <code>SPEC_REP = 11;</code>
+       * <code>SPEC_REP = 1004;</code>
        *
        * <pre>
-       ** A rep in specification modifier 
+       ** A represent in specification modifier 
        * </pre>
        */
-      public static final int SPEC_REP_VALUE = 11;
+      public static final int SPEC_REP_VALUE = 1004;
       /**
-       * <code>SPEC_PEER = 12;</code>
+       * <code>SPEC_PEER = 1005;</code>
        *
        * <pre>
        ** A peer in specification modifier 
        * </pre>
        */
-      public static final int SPEC_PEER_VALUE = 12;
+      public static final int SPEC_PEER_VALUE = 1005;
       /**
-       * <code>SPEC_PURE = 13;</code>
+       * <code>SPEC_PURE = 1006;</code>
        *
        * <pre>
        ** A pure in specification modifier 
        * </pre>
        */
-      public static final int SPEC_PURE_VALUE = 13;
+      public static final int SPEC_PURE_VALUE = 1006;
 
 
       public final int getNumber() { return value; }
@@ -27580,13 +27548,13 @@ public final class Ast {
           case 4: return STATIC;
           case 5: return SYNCHRONIZED;
           case 6: return ABSTRACT;
-          case 7: return SPEC_INSTANCE;
-          case 8: return SPEC_MODEL;
-          case 9: return SPEC_GHOST;
-          case 10: return SPEC_HELPER;
-          case 11: return SPEC_REP;
-          case 12: return SPEC_PEER;
-          case 13: return SPEC_PURE;
+          case 1000: return SPEC_INSTANCE;
+          case 1001: return SPEC_MODEL;
+          case 1002: return SPEC_GHOST;
+          case 1003: return SPEC_HELPER;
+          case 1004: return SPEC_REP;
+          case 1005: return SPEC_PEER;
+          case 1006: return SPEC_PURE;
           default: return null;
         }
       }
@@ -27682,21 +27650,21 @@ public final class Ast {
        */
       NAMESPACE(3, 4),
       /**
-       * <code>SPEC_PUBLIC = 5;</code>
+       * <code>SPEC_PUBLIC = 1000;</code>
        *
        * <pre>
        ** A public modifier in specification
        * </pre>
        */
-      SPEC_PUBLIC(6, 5),
+      SPEC_PUBLIC(6, 1000),
       /**
-       * <code>SPEC_PROTECTED = 6;</code>
+       * <code>SPEC_PROTECTED = 1001;</code>
        *
        * <pre>
        ** A protected modifier in specification
        * </pre>
        */
-      SPEC_PROTECTED(7, 6),
+      SPEC_PROTECTED(7, 1001),
       ;
 
       /**
@@ -27764,21 +27732,21 @@ public final class Ast {
        */
       public static final int DEFAULT_VALUE = 4;
       /**
-       * <code>SPEC_PUBLIC = 5;</code>
+       * <code>SPEC_PUBLIC = 1000;</code>
        *
        * <pre>
        ** A public modifier in specification
        * </pre>
        */
-      public static final int SPEC_PUBLIC_VALUE = 5;
+      public static final int SPEC_PUBLIC_VALUE = 1000;
       /**
-       * <code>SPEC_PROTECTED = 6;</code>
+       * <code>SPEC_PROTECTED = 1001;</code>
        *
        * <pre>
        ** A protected modifier in specification
        * </pre>
        */
-      public static final int SPEC_PROTECTED_VALUE = 6;
+      public static final int SPEC_PROTECTED_VALUE = 1001;
 
 
       public final int getNumber() { return value; }
@@ -27789,8 +27757,8 @@ public final class Ast {
           case 2: return PRIVATE;
           case 3: return PROTECTED;
           case 4: return NAMESPACE;
-          case 5: return SPEC_PUBLIC;
-          case 6: return SPEC_PROTECTED;
+          case 1000: return SPEC_PUBLIC;
+          case 1001: return SPEC_PROTECTED;
           default: return null;
         }
       }
@@ -36169,7 +36137,7 @@ public final class Ast {
       "(\0162\025.boa.types.ChangeKind\0220\n\021label_chang" +
       "e_kind\030\013 \001(\0162\025.boa.types.ChangeKind\022\'\n\005s" +
       "pecs\030\014 \001(\0132\030.boa.types.SpecStatement\022\013\n\003" +
-      "key\030\r \002(\t\"\254\001\n\004Type\022\014\n\004name\030\001 \002(\t\022!\n\004kind" +
+      "key\030\r \001(\t\"\254\001\n\004Type\022\014\n\004name\030\001 \002(\t\022!\n\004kind" +
       "\030\002 \002(\0162\023.boa.types.TypeKind\022\n\n\002id\030\004 \001(\t\022",
       "5\n\026structural_change_kind\030\005 \001(\0162\025.boa.ty" +
       "pes.ChangeKind\0220\n\021label_change_kind\030\006 \001(" +
@@ -36184,15 +36152,15 @@ public final class Ast {
       ".types.Comment\0225\n\026structural_change_kind" +
       "\030\t \001(\0162\025.boa.types.ChangeKind\0220\n\021label_c" +
       "hange_kind\030\n \001(\0162\025.boa.types.ChangeKind\022" +
-      "\013\n\003key\030\013 \002(\t\"\260\002\n\010Variable\022\014\n\004name\030\001 \002(\t\022" +
+      "\013\n\003key\030\013 \001(\t\"\260\002\n\010Variable\022\014\n\004name\030\001 \002(\t\022" +
       "&\n\rvariable_type\030\002 \002(\0132\017.boa.types.Type\022" +
       "&\n\tmodifiers\030\003 \003(\0132\023.boa.types.Modifier\022" +
       "*\n\013initializer\030\004 \001(\0132\025.boa.types.Express" +
       "ion\022$\n\010comments\030\005 \003(\0132\022.boa.types.Commen" +
       "t\0225\n\026structural_change_kind\030\006 \001(\0162\025.boa." +
       "types.ChangeKind\0220\n\021label_change_kind\030\007 ",
-      "\001(\0162\025.boa.types.ChangeKind\022\013\n\003key\030\010 \002(\t\"" +
-      "\356\n\n\tStatement\0220\n\004kind\030\001 \002(\0162\".boa.types." +
+      "\001(\0162\025.boa.types.ChangeKind\022\013\n\003key\030\010 \001(\t\"" +
+      "\211\013\n\tStatement\0220\n\004kind\030\001 \002(\0162\".boa.types." +
       "Statement.StatementKind\022$\n\010comments\030\002 \003(" +
       "\0132\022.boa.types.Comment\022(\n\nstatements\030\003 \003(" +
       "\0132\024.boa.types.Statement\022.\n\017initializatio" +
@@ -36206,115 +36174,117 @@ public final class Ast {
       "ind\030\n \001(\0162\025.boa.types.ChangeKind\0220\n\021labe" +
       "l_change_kind\030\013 \001(\0162\025.boa.types.ChangeKi" +
       "nd\022\'\n\005specs\030\014 \001(\0132\030.boa.types.SpecStatem" +
-      "ent\022\013\n\003key\030\r \002(\t\"\255\006\n\rStatementKind\022\t\n\005OT" +
+      "ent\022\013\n\003key\030\r \001(\t\"\310\006\n\rStatementKind\022\t\n\005OT" +
       "HER\020\000\022\t\n\005BLOCK\020\001\022\014\n\010TYPEDECL\020\002\022\016\n\nEXPRES" +
       "SION\020\003\022\010\n\004EXPR\020\003\022\020\n\014SYNCHRONIZED\020\004\022\010\n\004SY" +
       "NC\020\004\022\n\n\006RETURN\020\005\022\007\n\003FOR\020\006\022\006\n\002DO\020\007\022\t\n\005WHI" +
       "LE\020\010\022\006\n\002IF\020\t\022\n\n\006ASSERT\020\n\022\t\n\005BREAK\020\013\022\014\n\010C",
       "ONTINUE\020\014\022\t\n\005LABEL\020\r\022\n\n\006SWITCH\020\016\022\010\n\004CASE" +
       "\020\017\022\007\n\003TRY\020\020\022\t\n\005THROW\020\021\022\t\n\005CATCH\020\022\022\t\n\005EMP" +
-      "TY\020\023\022\021\n\rSPEC_REQUIRES\020\024\022\020\n\014SPEC_ENSURES\020" +
-      "\025\022\020\n\014SPEC_SIGNALS\020\026\022\025\n\021SPEC_SIGNALS_ONLY" +
-      "\020\027\022\023\n\017SPEC_ASSIGNABLE\020\030\022\024\n\020SPEC_MAINTAIN" +
-      "ING\020\031\022\017\n\013SPEC_ASSUME\020\032\022\014\n\010SPEC_SET\020\033\022\021\n\r" +
-      "SPEC_DIVERGES\020\034\022\023\n\017SPEC_ACCESSIBLE\020\035\022\021\n\r" +
-      "SPEC_CAPTURES\020\036\022\021\n\rSPEC_CALLABLE\020\037\022\r\n\tSP" +
-      "EC_WHEN\020 \022\021\n\rSPEC_DURATION\020!\022\021\n\rSPEC_MEA" +
-      "SURES\020\"\022\013\n\007SPEC_IN\020#\022\022\n\016SPEC_INVARIANT\020$",
-      "\022\023\n\017SPEC_REPRESENTS\020%\022\022\n\016SPEC_INITIALLY\020" +
-      "&\022\r\n\tSPEC_TYPE\020\'\022\021\n\rSPEC_BEHAVIOR\020(\022\022\n\016S" +
-      "PEC_BEHAVIOUR\020)\022\030\n\024SPEC_NORMAL_BEHAVIOR\020" +
-      "*\022\031\n\025SPEC_NORMAL_BEHAVIOUR\020+\022\035\n\031SPEC_EXC" +
-      "EPTIONAL_BEHAVIOR\020,\022\036\n\032SPEC_EXCEPTIONAL_" +
-      "BEHAVIOUR\020-\022\017\n\013SPEC_ASSERT\020.\032\002\020\001\"\364\r\n\nExp" +
-      "ression\0222\n\004kind\030\001 \002(\0162$.boa.types.Expres" +
-      "sion.ExpressionKind\022*\n\013expressions\030\002 \003(\013" +
-      "2\025.boa.types.Expression\022+\n\016variable_decl" +
-      "s\030\003 \003(\0132\023.boa.types.Variable\022!\n\010new_type",
-      "\030\004 \001(\0132\017.boa.types.Type\022+\n\022generic_param" +
-      "eters\030\005 \003(\0132\017.boa.types.Type\022\022\n\nis_postf" +
-      "ix\030\006 \001(\010\022\017\n\007literal\030\007 \001(\t\022\020\n\010variable\030\010 " +
-      "\001(\t\022\016\n\006method\030\t \001(\t\022*\n\013method_args\030\n \003(\013" +
-      "2\025.boa.types.Expression\0220\n\020anon_declarat" +
-      "ion\030\013 \001(\0132\026.boa.types.Declaration\022\'\n\nann" +
-      "otation\030\014 \001(\0132\023.boa.types.Modifier\022!\n\006la" +
-      "mbda\030\r \001(\0132\021.boa.types.Method\022\021\n\tno_pare" +
-      "ns\030\016 \001(\010\0225\n\026structural_change_kind\030\017 \001(\016" +
-      "2\025.boa.types.ChangeKind\0220\n\021label_change_",
-      "kind\030\020 \001(\0162\025.boa.types.ChangeKind\"\233\t\n\016Ex" +
-      "pressionKind\022\t\n\005OTHER\020\000\022\013\n\007LITERAL\020\001\022\r\n\t" +
-      "VARACCESS\020\002\022\013\n\007VARDECL\020\003\022\016\n\nMETHODCALL\020\004" +
-      "\022\010\n\004CAST\020\005\022\016\n\nARRAYINDEX\020\006\022\r\n\tARRAYINIT\020" +
-      "\007\022\017\n\013TYPECOMPARE\020\010\022\007\n\003NEW\020\t\022\014\n\010NEWARRAY\020" +
-      "\n\022\n\n\006OP_ADD\020\013\022\n\n\006OP_SUB\020\014\022\013\n\007OP_MULT\020\r\022\n" +
-      "\n\006OP_DIV\020\016\022\n\n\006OP_MOD\020\017\022\n\n\006OP_INC\020\020\022\n\n\006OP" +
-      "_DEC\020\021\022\016\n\nBIT_LSHIFT\020\022\022\016\n\nBIT_RSHIFT\020\023\022\026" +
-      "\n\022BIT_UNSIGNEDRSHIFT\020\024\022\013\n\007BIT_AND\020\025\022\n\n\006B" +
-      "IT_OR\020\026\022\013\n\007BIT_NOT\020\027\022\013\n\007BIT_XOR\020\030\022\017\n\013LOG",
-      "ICAL_NOT\020\031\022\017\n\013LOGICAL_AND\020\032\022\016\n\nLOGICAL_O" +
-      "R\020\033\022\006\n\002EQ\020\034\022\007\n\003NEQ\020\035\022\006\n\002LT\020\036\022\006\n\002GT\020\037\022\010\n\004" +
-      "LTEQ\020 \022\010\n\004GTEQ\020!\022\017\n\013CONDITIONAL\020\"\022\020\n\014NUL" +
-      "LCOALESCE\020#\022\n\n\006ASSIGN\020$\022\016\n\nASSIGN_ADD\020%\022" +
-      "\016\n\nASSIGN_SUB\020&\022\017\n\013ASSIGN_MULT\020\'\022\016\n\nASSI" +
-      "GN_DIV\020(\022\016\n\nASSIGN_MOD\020)\022\021\n\rASSIGN_BITXO" +
-      "R\020*\022\021\n\rASSIGN_BITAND\020+\022\020\n\014ASSIGN_BITOR\020," +
-      "\022\021\n\rASSIGN_LSHIFT\020-\022\021\n\rASSIGN_RSHIFT\020.\022\031" +
-      "\n\025ASSIGN_UNSIGNEDRSHIFT\020/\022\016\n\nANNOTATION\020" +
-      "0\022\t\n\005PAREN\0201\022\024\n\020METHOD_REFERENCE\0202\022\n\n\006LA",
-      "MBDA\0203\022\017\n\013ANON_METHOD\0204\022\017\n\013SPEC_RESULT\0205" +
-      "\022\014\n\010SPEC_OLD\0206\022\016\n\nSPEC_FRESH\0207\022\030\n\024SPEC_N" +
-      "ONNULLELEMENTS\0208\022\017\n\013SPEC_TYPEOF\0209\022\021\n\rSPE" +
-      "C_ELEMTYPE\020:\022\r\n\tSPEC_TYPE\020;\022\017\n\013SPEC_FORA" +
-      "LL\020<\022\017\n\013SPEC_EXISTS\020=\022\020\n\014SPEC_SUBTYPE\020>\022" +
-      "\024\n\020SPEC_EQUIVALENCE\020?\022\026\n\022SPEC_INEQUIVALE" +
-      "NCE\020@\022\020\n\014SPEC_FORWARD\020A\022\020\n\014SPEC_REVERSE\020" +
-      "B\022\020\n\014SPEC_NOTHING\020C\022\023\n\017SPEC_EVERYTHING\020D" +
-      "\022\025\n\021SPEC_NOTSPECIFIED\020E\022\010\n\004NEXT\020F\022\014\n\010GLO" +
-      "BALLY\020G\022\013\n\007FINALLY\020H\022\t\n\005UNTIL\020I\022\013\n\007RELEA",
-      "SE\020J\022\t\n\005INPLY\020K\"\307\005\n\010Modifier\022.\n\004kind\030\001 \002" +
-      "(\0162 .boa.types.Modifier.ModifierKind\0222\n\n" +
-      "visibility\030\002 \001(\0162\036.boa.types.Modifier.Vi" +
-      "sibility\022\027\n\017annotation_name\030\003 \001(\t\022\032\n\022ann" +
-      "otation_members\030\004 \003(\t\0220\n\021annotation_valu" +
-      "es\030\005 \003(\0132\025.boa.types.Expression\022\r\n\005other" +
-      "\030\006 \001(\t\0225\n\026structural_change_kind\030\007 \001(\0162\025" +
-      ".boa.types.ChangeKind\0220\n\021label_change_ki" +
-      "nd\030\010 \001(\0162\025.boa.types.ChangeKind\"\356\001\n\014Modi" +
-      "fierKind\022\t\n\005OTHER\020\000\022\016\n\nVISIBILITY\020\001\022\016\n\nA",
-      "NNOTATION\020\002\022\t\n\005FINAL\020\003\022\n\n\006STATIC\020\004\022\020\n\014SY" +
-      "NCHRONIZED\020\005\022\010\n\004SYNC\020\005\022\014\n\010ABSTRACT\020\006\022\021\n\r" +
-      "SPEC_INSTANCE\020\007\022\016\n\nSPEC_MODEL\020\010\022\016\n\nSPEC_" +
-      "GHOST\020\t\022\017\n\013SPEC_HELPER\020\n\022\014\n\010SPEC_REP\020\013\022\r" +
-      "\n\tSPEC_PEER\020\014\022\r\n\tSPEC_PURE\020\r\032\002\020\001\"\206\001\n\nVis" +
-      "ibility\022\n\n\006PUBLIC\020\001\022\013\n\007PRIVATE\020\002\022\r\n\tPROT" +
-      "ECTED\020\003\022\r\n\tNAMESPACE\020\004\022\013\n\007PACKAGE\020\004\022\013\n\007D" +
-      "EFAULT\020\004\022\017\n\013SPEC_PUBLIC\020\005\022\022\n\016SPEC_PROTEC" +
-      "TED\020\006\032\002\020\001\"\\\n\010SpecCase\022&\n\tmodifiers\030\001 \003(\013" +
-      "2\023.boa.types.Modifier\022(\n\nstatements\030\002 \003(",
-      "\0132\024.boa.types.Statement\"\306\002\n\007Comment\022,\n\004k" +
-      "ind\030\001 \002(\0162\036.boa.types.Comment.CommentKin" +
-      "d\022\r\n\005value\030\002 \002(\t\022)\n\010position\030\003 \002(\0132\027.boa" +
-      ".types.PositionInfo\0225\n\026structural_change" +
-      "_kind\030\004 \001(\0162\025.boa.types.ChangeKind\0220\n\021la" +
-      "bel_change_kind\030\005 \001(\0162\025.boa.types.Change" +
-      "Kind\"j\n\013CommentKind\022\t\n\005OTHER\020\000\022\010\n\004LINE\020\001" +
-      "\022\t\n\005BLOCK\020\002\022\007\n\003DOC\020\003\022\021\n\rDOCUMENTATION\020\003\022" +
-      "\010\n\004SPEC\020\004\022\021\n\rSPECIFICATION\020\004\032\002\020\001\"{\n\014Posi" +
-      "tionInfo\022\021\n\tstart_pos\030\001 \002(\005\022\016\n\006length\030\002 ",
-      "\002(\005\022\022\n\nstart_line\030\003 \002(\005\022\021\n\tstart_col\030\004 \002" +
-      "(\005\022\020\n\010end_line\030\005 \002(\005\022\017\n\007end_col\030\006 \002(\005\"^\n" +
-      "\017SpecDeclaration\022&\n\tmodifiers\030\001 \003(\0132\023.bo" +
-      "a.types.Modifier\022#\n\005specs\030\002 \003(\0132\024.boa.ty" +
-      "pes.Statement\"W\n\nSpecMethod\022!\n\004case\030\001 \003(" +
-      "\0132\023.boa.types.SpecCase\022&\n\tmodifiers\030\002 \003(" +
-      "\0132\023.boa.types.Modifier\"9\n\rSpecStatement\022" +
-      "(\n\nstatements\030\001 \003(\0132\024.boa.types.Statemen" +
-      "t\"6\n\014SpecVariable\022&\n\tmodifiers\030\001 \003(\0132\023.b" +
-      "oa.types.Modifier*\236\001\n\010TypeKind\022\t\n\005OTHER\020",
-      "\000\022\t\n\005CLASS\020\001\022\r\n\tINTERFACE\020\002\022\r\n\tANONYMOUS" +
-      "\020\003\022\010\n\004ANON\020\003\022\n\n\006STRUCT\020\004\022\010\n\004ENUM\020\005\022\017\n\013EN" +
-      "UMERATION\020\005\022\016\n\nANNOTATION\020\006\022\014\n\010DELEGATE\020" +
-      "\007\022\013\n\007GENERIC\020\010\032\002\020\001B\002H\001"
+      "TY\020\023\022\022\n\rSPEC_REQUIRES\020\350\007\022\021\n\014SPEC_ENSURES" +
+      "\020\351\007\022\021\n\014SPEC_SIGNALS\020\352\007\022\026\n\021SPEC_SIGNALS_O" +
+      "NLY\020\353\007\022\024\n\017SPEC_ASSIGNABLE\020\354\007\022\025\n\020SPEC_MAI" +
+      "NTAINING\020\355\007\022\020\n\013SPEC_ASSUME\020\356\007\022\r\n\010SPEC_SE" +
+      "T\020\357\007\022\022\n\rSPEC_DIVERGES\020\360\007\022\024\n\017SPEC_ACCESSI" +
+      "BLE\020\361\007\022\022\n\rSPEC_CAPTURES\020\362\007\022\022\n\rSPEC_CALLA" +
+      "BLE\020\363\007\022\016\n\tSPEC_WHEN\020\364\007\022\022\n\rSPEC_DURATION\020" +
+      "\365\007\022\022\n\rSPEC_MEASURES\020\366\007\022\014\n\007SPEC_IN\020\367\007\022\023\n\016",
+      "SPEC_INVARIANT\020\370\007\022\024\n\017SPEC_REPRESENTS\020\371\007\022" +
+      "\023\n\016SPEC_INITIALLY\020\372\007\022\016\n\tSPEC_TYPE\020\373\007\022\022\n\r" +
+      "SPEC_BEHAVIOR\020\374\007\022\023\n\016SPEC_BEHAVIOUR\020\375\007\022\031\n" +
+      "\024SPEC_NORMAL_BEHAVIOR\020\376\007\022\032\n\025SPEC_NORMAL_" +
+      "BEHAVIOUR\020\377\007\022\036\n\031SPEC_EXCEPTIONAL_BEHAVIO" +
+      "R\020\200\010\022\037\n\032SPEC_EXCEPTIONAL_BEHAVIOUR\020\201\010\022\020\n" +
+      "\013SPEC_ASSERT\020\202\010\032\002\020\001\"\213\016\n\nExpression\0222\n\004ki" +
+      "nd\030\001 \002(\0162$.boa.types.Expression.Expressi" +
+      "onKind\022*\n\013expressions\030\002 \003(\0132\025.boa.types." +
+      "Expression\022+\n\016variable_decls\030\003 \003(\0132\023.boa",
+      ".types.Variable\022!\n\010new_type\030\004 \001(\0132\017.boa." +
+      "types.Type\022+\n\022generic_parameters\030\005 \003(\0132\017" +
+      ".boa.types.Type\022\022\n\nis_postfix\030\006 \001(\010\022\017\n\007l" +
+      "iteral\030\007 \001(\t\022\020\n\010variable\030\010 \001(\t\022\016\n\006method" +
+      "\030\t \001(\t\022*\n\013method_args\030\n \003(\0132\025.boa.types." +
+      "Expression\0220\n\020anon_declaration\030\013 \001(\0132\026.b" +
+      "oa.types.Declaration\022\'\n\nannotation\030\014 \001(\013" +
+      "2\023.boa.types.Modifier\022!\n\006lambda\030\r \001(\0132\021." +
+      "boa.types.Method\022\021\n\tno_parens\030\016 \001(\010\0225\n\026s" +
+      "tructural_change_kind\030\017 \001(\0162\025.boa.types.",
+      "ChangeKind\0220\n\021label_change_kind\030\020 \001(\0162\025." +
+      "boa.types.ChangeKind\"\262\t\n\016ExpressionKind\022" +
+      "\t\n\005OTHER\020\000\022\013\n\007LITERAL\020\001\022\r\n\tVARACCESS\020\002\022\013" +
+      "\n\007VARDECL\020\003\022\016\n\nMETHODCALL\020\004\022\010\n\004CAST\020\005\022\016\n" +
+      "\nARRAYINDEX\020\006\022\r\n\tARRAYINIT\020\007\022\017\n\013TYPECOMP" +
+      "ARE\020\010\022\007\n\003NEW\020\t\022\014\n\010NEWARRAY\020\n\022\n\n\006OP_ADD\020\013" +
+      "\022\n\n\006OP_SUB\020\014\022\013\n\007OP_MULT\020\r\022\n\n\006OP_DIV\020\016\022\n\n" +
+      "\006OP_MOD\020\017\022\n\n\006OP_INC\020\020\022\n\n\006OP_DEC\020\021\022\016\n\nBIT" +
+      "_LSHIFT\020\022\022\016\n\nBIT_RSHIFT\020\023\022\026\n\022BIT_UNSIGNE" +
+      "DRSHIFT\020\024\022\013\n\007BIT_AND\020\025\022\n\n\006BIT_OR\020\026\022\013\n\007BI",
+      "T_NOT\020\027\022\013\n\007BIT_XOR\020\030\022\017\n\013LOGICAL_NOT\020\031\022\017\n" +
+      "\013LOGICAL_AND\020\032\022\016\n\nLOGICAL_OR\020\033\022\006\n\002EQ\020\034\022\007" +
+      "\n\003NEQ\020\035\022\006\n\002LT\020\036\022\006\n\002GT\020\037\022\010\n\004LTEQ\020 \022\010\n\004GTE" +
+      "Q\020!\022\017\n\013CONDITIONAL\020\"\022\020\n\014NULLCOALESCE\020#\022\n" +
+      "\n\006ASSIGN\020$\022\016\n\nASSIGN_ADD\020%\022\016\n\nASSIGN_SUB" +
+      "\020&\022\017\n\013ASSIGN_MULT\020\'\022\016\n\nASSIGN_DIV\020(\022\016\n\nA" +
+      "SSIGN_MOD\020)\022\021\n\rASSIGN_BITXOR\020*\022\021\n\rASSIGN" +
+      "_BITAND\020+\022\020\n\014ASSIGN_BITOR\020,\022\021\n\rASSIGN_LS" +
+      "HIFT\020-\022\021\n\rASSIGN_RSHIFT\020.\022\031\n\025ASSIGN_UNSI" +
+      "GNEDRSHIFT\020/\022\016\n\nANNOTATION\0200\022\t\n\005PAREN\0201\022",
+      "\024\n\020METHOD_REFERENCE\0202\022\n\n\006LAMBDA\0203\022\017\n\013ANO" +
+      "N_METHOD\0204\022\020\n\013SPEC_RESULT\020\350\007\022\r\n\010SPEC_OLD" +
+      "\020\351\007\022\017\n\nSPEC_FRESH\020\352\007\022\031\n\024SPEC_NONNULLELEM" +
+      "ENTS\020\353\007\022\020\n\013SPEC_TYPEOF\020\354\007\022\022\n\rSPEC_ELEMTY" +
+      "PE\020\355\007\022\016\n\tSPEC_TYPE\020\356\007\022\020\n\013SPEC_FORALL\020\357\007\022" +
+      "\020\n\013SPEC_EXISTS\020\360\007\022\021\n\014SPEC_SUBTYPE\020\361\007\022\025\n\020" +
+      "SPEC_EQUIVALENCE\020\362\007\022\027\n\022SPEC_INEQUIVALENC" +
+      "E\020\363\007\022\021\n\014SPEC_FORWARD\020\364\007\022\021\n\014SPEC_REVERSE\020" +
+      "\365\007\022\021\n\014SPEC_NOTHING\020\366\007\022\024\n\017SPEC_EVERYTHING" +
+      "\020\367\007\022\026\n\021SPEC_NOTSPECIFIED\020\370\007\022\t\n\004NEXT\020\371\007\022\r",
+      "\n\010GLOBALLY\020\372\007\022\014\n\007FINALLY\020\373\007\022\n\n\005UNTIL\020\374\007\022" +
+      "\014\n\007RELEASE\020\375\007\022\n\n\005INPLY\020\376\007\"\320\005\n\010Modifier\022." +
+      "\n\004kind\030\001 \002(\0162 .boa.types.Modifier.Modifi" +
+      "erKind\0222\n\nvisibility\030\002 \001(\0162\036.boa.types.M" +
+      "odifier.Visibility\022\027\n\017annotation_name\030\003 " +
+      "\001(\t\022\032\n\022annotation_members\030\004 \003(\t\0220\n\021annot" +
+      "ation_values\030\005 \003(\0132\025.boa.types.Expressio" +
+      "n\022\r\n\005other\030\006 \001(\t\0225\n\026structural_change_ki" +
+      "nd\030\007 \001(\0162\025.boa.types.ChangeKind\0220\n\021label" +
+      "_change_kind\030\010 \001(\0162\025.boa.types.ChangeKin",
+      "d\"\365\001\n\014ModifierKind\022\t\n\005OTHER\020\000\022\016\n\nVISIBIL" +
+      "ITY\020\001\022\016\n\nANNOTATION\020\002\022\t\n\005FINAL\020\003\022\n\n\006STAT" +
+      "IC\020\004\022\020\n\014SYNCHRONIZED\020\005\022\010\n\004SYNC\020\005\022\014\n\010ABST" +
+      "RACT\020\006\022\022\n\rSPEC_INSTANCE\020\350\007\022\017\n\nSPEC_MODEL" +
+      "\020\351\007\022\017\n\nSPEC_GHOST\020\352\007\022\020\n\013SPEC_HELPER\020\353\007\022\r" +
+      "\n\010SPEC_REP\020\354\007\022\016\n\tSPEC_PEER\020\355\007\022\016\n\tSPEC_PU" +
+      "RE\020\356\007\032\002\020\001\"\210\001\n\nVisibility\022\n\n\006PUBLIC\020\001\022\013\n\007" +
+      "PRIVATE\020\002\022\r\n\tPROTECTED\020\003\022\r\n\tNAMESPACE\020\004\022" +
+      "\013\n\007PACKAGE\020\004\022\013\n\007DEFAULT\020\004\022\020\n\013SPEC_PUBLIC" +
+      "\020\350\007\022\023\n\016SPEC_PROTECTED\020\351\007\032\002\020\001\"\\\n\010SpecCase",
+      "\022&\n\tmodifiers\030\001 \003(\0132\023.boa.types.Modifier" +
+      "\022(\n\nstatements\030\002 \003(\0132\024.boa.types.Stateme" +
+      "nt\"\306\002\n\007Comment\022,\n\004kind\030\001 \002(\0162\036.boa.types" +
+      ".Comment.CommentKind\022\r\n\005value\030\002 \002(\t\022)\n\010p" +
+      "osition\030\003 \002(\0132\027.boa.types.PositionInfo\0225" +
+      "\n\026structural_change_kind\030\004 \001(\0162\025.boa.typ" +
+      "es.ChangeKind\0220\n\021label_change_kind\030\005 \001(\016" +
+      "2\025.boa.types.ChangeKind\"j\n\013CommentKind\022\t" +
+      "\n\005OTHER\020\000\022\010\n\004LINE\020\001\022\t\n\005BLOCK\020\002\022\007\n\003DOC\020\003\022" +
+      "\021\n\rDOCUMENTATION\020\003\022\010\n\004SPEC\020\004\022\021\n\rSPECIFIC",
+      "ATION\020\004\032\002\020\001\"{\n\014PositionInfo\022\021\n\tstart_pos" +
+      "\030\001 \002(\005\022\016\n\006length\030\002 \002(\005\022\022\n\nstart_line\030\003 \002" +
+      "(\005\022\021\n\tstart_col\030\004 \002(\005\022\020\n\010end_line\030\005 \002(\005\022" +
+      "\017\n\007end_col\030\006 \002(\005\"^\n\017SpecDeclaration\022&\n\tm" +
+      "odifiers\030\001 \003(\0132\023.boa.types.Modifier\022#\n\005s" +
+      "pecs\030\002 \003(\0132\024.boa.types.Statement\"W\n\nSpec" +
+      "Method\022!\n\004case\030\001 \003(\0132\023.boa.types.SpecCas" +
+      "e\022&\n\tmodifiers\030\002 \003(\0132\023.boa.types.Modifie" +
+      "r\"9\n\rSpecStatement\022(\n\nstatements\030\001 \003(\0132\024" +
+      ".boa.types.Statement\"6\n\014SpecVariable\022&\n\t",
+      "modifiers\030\001 \003(\0132\023.boa.types.Modifier*\236\001\n" +
+      "\010TypeKind\022\t\n\005OTHER\020\000\022\t\n\005CLASS\020\001\022\r\n\tINTER" +
+      "FACE\020\002\022\r\n\tANONYMOUS\020\003\022\010\n\004ANON\020\003\022\n\n\006STRUC" +
+      "T\020\004\022\010\n\004ENUM\020\005\022\017\n\013ENUMERATION\020\005\022\016\n\nANNOTA" +
+      "TION\020\006\022\014\n\010DELEGATE\020\007\022\013\n\007GENERIC\020\010\032\002\020\001B\002H" +
+      "\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
