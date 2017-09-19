@@ -467,12 +467,12 @@ message PositionInfo {
 /** A single declaration for specification */
 message SpecDeclaration {
 	repeated Modifier modifiers = 1;
-	repeated Statement specs = 2;
+	repeated Statement statements = 2;
 }
 
 /** A single method for specification */
 message SpecMethod {
-	repeated SpecCase case = 1;
+	repeated SpecCase cases = 1;
 	repeated Modifier modifiers = 2;
 }
 
