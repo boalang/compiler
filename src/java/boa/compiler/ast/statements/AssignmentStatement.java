@@ -23,7 +23,7 @@ import boa.compiler.visitors.AbstractVisitorNoArgNoRet;
 import boa.compiler.visitors.AbstractVisitorNoReturn;
 
 /**
- *
+ * 
  * @author rdyer
  * @author hridesh
  * @author hungc
@@ -45,14 +45,18 @@ public class AssignmentStatement extends Statement {
 		return rhs;
 	}
 
-	public AssignmentStatement(final Factor lhs, final String op, final Expression rhs) {
+	public AssignmentStatement(final Factor lhs, final Expression rhs) {
 		if (lhs != null)
 			lhs.setParent(this);
 		if (rhs != null)
 			rhs.setParent(this);
 		this.lhs = lhs;
-		this.op = op;
 		this.rhs = rhs;
+	}
+
+	public AssignmentStatement(final Factor lhs, final String op, final Expression rhs) {
+		this(lhs, rhs);
+		this.op = op;
 	}
 
 	/** {@inheritDoc} */

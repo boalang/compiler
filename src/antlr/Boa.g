@@ -421,7 +421,7 @@ fixpStatement returns [FixPStatement ast]
 	@after { $ast.setPositions($l, $c, getEndLine(), getEndColumn()); }
 	: (LPAREN id1=identifier COMMA id2=identifier COLON t=identifier RPAREN { $ast = new FixPStatement(); $ast.setParam1((Component)new Component($id1.ast, $t.ast).setPositions($id1.ast.beginLine, $id1.ast.beginColumn, $t.ast.endLine, $t.ast.endColumn));$ast.setParam2((Component)new Component($id2.ast, $t.ast).setPositions($id2.ast.beginLine, $id2.ast.beginColumn, $t.ast.endLine, $t.ast.endColumn));} (COLON rt=type {$ast.setReturnType($rt.ast);}) (s=programStatement { $ast.setBody($s.ast); }))
 	;
-
+	
 stopStatement returns [StopStatement ast]
 	locals [int l, int c]
 	@init { $l = getStartLine(); $c = getStartColumn(); }
@@ -775,14 +775,14 @@ RIGHT_ARROW : '->';
 
 IntegerLiteral
 	: DecimalNumeral
-	| HexNumeral
-	| OctalNumeral
-	| BinaryNumeral
+	| HexNumeral 
+	| OctalNumeral 
+	| BinaryNumeral 
 	;
 
 fragment
 DecimalNumeral
-	: NonZeroDigit Digit*
+	: NonZeroDigit Digit* 
 	;
 
 fragment

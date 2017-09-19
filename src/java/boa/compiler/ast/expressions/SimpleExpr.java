@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, Che Shian Hung
+ * Copyright 2014, Hridesh Rajan, Robert Dyer, 
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,7 +29,6 @@ import boa.compiler.visitors.AbstractVisitorNoReturn;
  * 
  * @author rdyer
  * @author hridesh
- * @author hungc
  */
 public class SimpleExpr extends Node {
 	protected Term lhs;
@@ -38,11 +37,6 @@ public class SimpleExpr extends Node {
 
 	public Term getLhs() {
 		return lhs;
-	}
-
-	public void setLhs(final Term lhs) {
-		lhs.setParent(this);
-		this.lhs = lhs;
 	}
 
 	public List<String> getOps() {
@@ -61,10 +55,6 @@ public class SimpleExpr extends Node {
 		ops.add(s);
 	}
 
-	public void addOpFront(final String s){
-		ops.add(0, s);
-	}
-
 	public List<Term> getRhs() {
 		return rhs;
 	}
@@ -80,11 +70,6 @@ public class SimpleExpr extends Node {
 	public void addRhs(final Term t) {
 		t.setParent(this);
 		rhs.add(t);
-	}
-
-	public void addRhsFront(final Term t) {
-		t.setParent(this);
-		rhs.add(0, t);
 	}
 
 	public SimpleExpr (final Term lhs) {

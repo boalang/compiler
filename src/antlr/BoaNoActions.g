@@ -42,7 +42,7 @@ variableDeclaration
 	: forVariableDeclaration { isSemiColon(); }
 	;
 
-type
+type 
 	: arrayType
 	| mapType
 	| tupleType
@@ -506,14 +506,14 @@ RIGHT_ARROW : '->';
 
 IntegerLiteral
 	: DecimalNumeral
-	| HexNumeral
-	| OctalNumeral
-	| BinaryNumeral
+	| HexNumeral 
+	| OctalNumeral 
+	| BinaryNumeral 
 	;
 
 fragment
 DecimalNumeral
-	: NonZeroDigit Digit*
+	: NonZeroDigit Digit* 
 	;
 
 fragment
