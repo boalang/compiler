@@ -335,7 +335,7 @@ public class BoaAstIntrinsics {
 	public static void setup(final Context context) {
 		BoaAstIntrinsics.context = context;
 	}
-	
+
 	private static void openMap() {
 		try {
 			final Configuration conf = context.getConfiguration();
