@@ -32519,29 +32519,29 @@ public final class Ast {
     boa.types.Ast.ModifierOrBuilder getModifiersOrBuilder(
         int index);
 
-    // repeated .boa.types.Statement specs = 2;
+    // repeated .boa.types.Statement statements = 2;
     /**
-     * <code>repeated .boa.types.Statement specs = 2;</code>
+     * <code>repeated .boa.types.Statement statements = 2;</code>
      */
     java.util.List<boa.types.Ast.Statement> 
-        getSpecsList();
+        getStatementsList();
     /**
-     * <code>repeated .boa.types.Statement specs = 2;</code>
+     * <code>repeated .boa.types.Statement statements = 2;</code>
      */
-    boa.types.Ast.Statement getSpecs(int index);
+    boa.types.Ast.Statement getStatements(int index);
     /**
-     * <code>repeated .boa.types.Statement specs = 2;</code>
+     * <code>repeated .boa.types.Statement statements = 2;</code>
      */
-    int getSpecsCount();
+    int getStatementsCount();
     /**
-     * <code>repeated .boa.types.Statement specs = 2;</code>
+     * <code>repeated .boa.types.Statement statements = 2;</code>
      */
     java.util.List<? extends boa.types.Ast.StatementOrBuilder> 
-        getSpecsOrBuilderList();
+        getStatementsOrBuilderList();
     /**
-     * <code>repeated .boa.types.Statement specs = 2;</code>
+     * <code>repeated .boa.types.Statement statements = 2;</code>
      */
-    boa.types.Ast.StatementOrBuilder getSpecsOrBuilder(
+    boa.types.Ast.StatementOrBuilder getStatementsOrBuilder(
         int index);
   }
   /**
@@ -32609,10 +32609,10 @@ public final class Ast {
             }
             case 18: {
               if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
-                specs_ = new java.util.ArrayList<boa.types.Ast.Statement>();
+                statements_ = new java.util.ArrayList<boa.types.Ast.Statement>();
                 mutable_bitField0_ |= 0x00000002;
               }
-              specs_.add(input.readMessage(boa.types.Ast.Statement.PARSER, extensionRegistry));
+              statements_.add(input.readMessage(boa.types.Ast.Statement.PARSER, extensionRegistry));
               break;
             }
           }
@@ -32627,7 +32627,7 @@ public final class Ast {
           modifiers_ = java.util.Collections.unmodifiableList(modifiers_);
         }
         if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
-          specs_ = java.util.Collections.unmodifiableList(specs_);
+          statements_ = java.util.Collections.unmodifiableList(statements_);
         }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -32696,45 +32696,45 @@ public final class Ast {
       return modifiers_.get(index);
     }
 
-    // repeated .boa.types.Statement specs = 2;
-    public static final int SPECS_FIELD_NUMBER = 2;
-    private java.util.List<boa.types.Ast.Statement> specs_;
+    // repeated .boa.types.Statement statements = 2;
+    public static final int STATEMENTS_FIELD_NUMBER = 2;
+    private java.util.List<boa.types.Ast.Statement> statements_;
     /**
-     * <code>repeated .boa.types.Statement specs = 2;</code>
+     * <code>repeated .boa.types.Statement statements = 2;</code>
      */
-    public java.util.List<boa.types.Ast.Statement> getSpecsList() {
-      return specs_;
+    public java.util.List<boa.types.Ast.Statement> getStatementsList() {
+      return statements_;
     }
     /**
-     * <code>repeated .boa.types.Statement specs = 2;</code>
+     * <code>repeated .boa.types.Statement statements = 2;</code>
      */
     public java.util.List<? extends boa.types.Ast.StatementOrBuilder> 
-        getSpecsOrBuilderList() {
-      return specs_;
+        getStatementsOrBuilderList() {
+      return statements_;
     }
     /**
-     * <code>repeated .boa.types.Statement specs = 2;</code>
+     * <code>repeated .boa.types.Statement statements = 2;</code>
      */
-    public int getSpecsCount() {
-      return specs_.size();
+    public int getStatementsCount() {
+      return statements_.size();
     }
     /**
-     * <code>repeated .boa.types.Statement specs = 2;</code>
+     * <code>repeated .boa.types.Statement statements = 2;</code>
      */
-    public boa.types.Ast.Statement getSpecs(int index) {
-      return specs_.get(index);
+    public boa.types.Ast.Statement getStatements(int index) {
+      return statements_.get(index);
     }
     /**
-     * <code>repeated .boa.types.Statement specs = 2;</code>
+     * <code>repeated .boa.types.Statement statements = 2;</code>
      */
-    public boa.types.Ast.StatementOrBuilder getSpecsOrBuilder(
+    public boa.types.Ast.StatementOrBuilder getStatementsOrBuilder(
         int index) {
-      return specs_.get(index);
+      return statements_.get(index);
     }
 
     private void initFields() {
       modifiers_ = java.util.Collections.emptyList();
-      specs_ = java.util.Collections.emptyList();
+      statements_ = java.util.Collections.emptyList();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -32747,8 +32747,8 @@ public final class Ast {
           return false;
         }
       }
-      for (int i = 0; i < getSpecsCount(); i++) {
-        if (!getSpecs(i).isInitialized()) {
+      for (int i = 0; i < getStatementsCount(); i++) {
+        if (!getStatements(i).isInitialized()) {
           memoizedIsInitialized = 0;
           return false;
         }
@@ -32763,8 +32763,8 @@ public final class Ast {
       for (int i = 0; i < modifiers_.size(); i++) {
         output.writeMessage(1, modifiers_.get(i));
       }
-      for (int i = 0; i < specs_.size(); i++) {
-        output.writeMessage(2, specs_.get(i));
+      for (int i = 0; i < statements_.size(); i++) {
+        output.writeMessage(2, statements_.get(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -32779,9 +32779,9 @@ public final class Ast {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(1, modifiers_.get(i));
       }
-      for (int i = 0; i < specs_.size(); i++) {
+      for (int i = 0; i < statements_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(2, specs_.get(i));
+          .computeMessageSize(2, statements_.get(i));
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -32896,7 +32896,7 @@ public final class Ast {
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
           getModifiersFieldBuilder();
-          getSpecsFieldBuilder();
+          getStatementsFieldBuilder();
         }
       }
       private static Builder create() {
@@ -32911,11 +32911,11 @@ public final class Ast {
         } else {
           modifiersBuilder_.clear();
         }
-        if (specsBuilder_ == null) {
-          specs_ = java.util.Collections.emptyList();
+        if (statementsBuilder_ == null) {
+          statements_ = java.util.Collections.emptyList();
           bitField0_ = (bitField0_ & ~0x00000002);
         } else {
-          specsBuilder_.clear();
+          statementsBuilder_.clear();
         }
         return this;
       }
@@ -32953,14 +32953,14 @@ public final class Ast {
         } else {
           result.modifiers_ = modifiersBuilder_.build();
         }
-        if (specsBuilder_ == null) {
+        if (statementsBuilder_ == null) {
           if (((bitField0_ & 0x00000002) == 0x00000002)) {
-            specs_ = java.util.Collections.unmodifiableList(specs_);
+            statements_ = java.util.Collections.unmodifiableList(statements_);
             bitField0_ = (bitField0_ & ~0x00000002);
           }
-          result.specs_ = specs_;
+          result.statements_ = statements_;
         } else {
-          result.specs_ = specsBuilder_.build();
+          result.statements_ = statementsBuilder_.build();
         }
         onBuilt();
         return result;
@@ -33003,29 +33003,29 @@ public final class Ast {
             }
           }
         }
-        if (specsBuilder_ == null) {
-          if (!other.specs_.isEmpty()) {
-            if (specs_.isEmpty()) {
-              specs_ = other.specs_;
+        if (statementsBuilder_ == null) {
+          if (!other.statements_.isEmpty()) {
+            if (statements_.isEmpty()) {
+              statements_ = other.statements_;
               bitField0_ = (bitField0_ & ~0x00000002);
             } else {
-              ensureSpecsIsMutable();
-              specs_.addAll(other.specs_);
+              ensureStatementsIsMutable();
+              statements_.addAll(other.statements_);
             }
             onChanged();
           }
         } else {
-          if (!other.specs_.isEmpty()) {
-            if (specsBuilder_.isEmpty()) {
-              specsBuilder_.dispose();
-              specsBuilder_ = null;
-              specs_ = other.specs_;
+          if (!other.statements_.isEmpty()) {
+            if (statementsBuilder_.isEmpty()) {
+              statementsBuilder_.dispose();
+              statementsBuilder_ = null;
+              statements_ = other.statements_;
               bitField0_ = (bitField0_ & ~0x00000002);
-              specsBuilder_ = 
+              statementsBuilder_ = 
                 com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
-                   getSpecsFieldBuilder() : null;
+                   getStatementsFieldBuilder() : null;
             } else {
-              specsBuilder_.addAllMessages(other.specs_);
+              statementsBuilder_.addAllMessages(other.statements_);
             }
           }
         }
@@ -33040,8 +33040,8 @@ public final class Ast {
             return false;
           }
         }
-        for (int i = 0; i < getSpecsCount(); i++) {
-          if (!getSpecs(i).isInitialized()) {
+        for (int i = 0; i < getStatementsCount(); i++) {
+          if (!getStatements(i).isInitialized()) {
             
             return false;
           }
@@ -33308,244 +33308,244 @@ public final class Ast {
         return modifiersBuilder_;
       }
 
-      // repeated .boa.types.Statement specs = 2;
-      private java.util.List<boa.types.Ast.Statement> specs_ =
+      // repeated .boa.types.Statement statements = 2;
+      private java.util.List<boa.types.Ast.Statement> statements_ =
         java.util.Collections.emptyList();
-      private void ensureSpecsIsMutable() {
+      private void ensureStatementsIsMutable() {
         if (!((bitField0_ & 0x00000002) == 0x00000002)) {
-          specs_ = new java.util.ArrayList<boa.types.Ast.Statement>(specs_);
+          statements_ = new java.util.ArrayList<boa.types.Ast.Statement>(statements_);
           bitField0_ |= 0x00000002;
          }
       }
 
       private com.google.protobuf.RepeatedFieldBuilder<
-          boa.types.Ast.Statement, boa.types.Ast.Statement.Builder, boa.types.Ast.StatementOrBuilder> specsBuilder_;
+          boa.types.Ast.Statement, boa.types.Ast.Statement.Builder, boa.types.Ast.StatementOrBuilder> statementsBuilder_;
 
       /**
-       * <code>repeated .boa.types.Statement specs = 2;</code>
+       * <code>repeated .boa.types.Statement statements = 2;</code>
        */
-      public java.util.List<boa.types.Ast.Statement> getSpecsList() {
-        if (specsBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(specs_);
+      public java.util.List<boa.types.Ast.Statement> getStatementsList() {
+        if (statementsBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(statements_);
         } else {
-          return specsBuilder_.getMessageList();
+          return statementsBuilder_.getMessageList();
         }
       }
       /**
-       * <code>repeated .boa.types.Statement specs = 2;</code>
+       * <code>repeated .boa.types.Statement statements = 2;</code>
        */
-      public int getSpecsCount() {
-        if (specsBuilder_ == null) {
-          return specs_.size();
+      public int getStatementsCount() {
+        if (statementsBuilder_ == null) {
+          return statements_.size();
         } else {
-          return specsBuilder_.getCount();
+          return statementsBuilder_.getCount();
         }
       }
       /**
-       * <code>repeated .boa.types.Statement specs = 2;</code>
+       * <code>repeated .boa.types.Statement statements = 2;</code>
        */
-      public boa.types.Ast.Statement getSpecs(int index) {
-        if (specsBuilder_ == null) {
-          return specs_.get(index);
+      public boa.types.Ast.Statement getStatements(int index) {
+        if (statementsBuilder_ == null) {
+          return statements_.get(index);
         } else {
-          return specsBuilder_.getMessage(index);
+          return statementsBuilder_.getMessage(index);
         }
       }
       /**
-       * <code>repeated .boa.types.Statement specs = 2;</code>
+       * <code>repeated .boa.types.Statement statements = 2;</code>
        */
-      public Builder setSpecs(
+      public Builder setStatements(
           int index, boa.types.Ast.Statement value) {
-        if (specsBuilder_ == null) {
+        if (statementsBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
           }
-          ensureSpecsIsMutable();
-          specs_.set(index, value);
+          ensureStatementsIsMutable();
+          statements_.set(index, value);
           onChanged();
         } else {
-          specsBuilder_.setMessage(index, value);
+          statementsBuilder_.setMessage(index, value);
         }
         return this;
       }
       /**
-       * <code>repeated .boa.types.Statement specs = 2;</code>
+       * <code>repeated .boa.types.Statement statements = 2;</code>
        */
-      public Builder setSpecs(
+      public Builder setStatements(
           int index, boa.types.Ast.Statement.Builder builderForValue) {
-        if (specsBuilder_ == null) {
-          ensureSpecsIsMutable();
-          specs_.set(index, builderForValue.build());
+        if (statementsBuilder_ == null) {
+          ensureStatementsIsMutable();
+          statements_.set(index, builderForValue.build());
           onChanged();
         } else {
-          specsBuilder_.setMessage(index, builderForValue.build());
+          statementsBuilder_.setMessage(index, builderForValue.build());
         }
         return this;
       }
       /**
-       * <code>repeated .boa.types.Statement specs = 2;</code>
+       * <code>repeated .boa.types.Statement statements = 2;</code>
        */
-      public Builder addSpecs(boa.types.Ast.Statement value) {
-        if (specsBuilder_ == null) {
+      public Builder addStatements(boa.types.Ast.Statement value) {
+        if (statementsBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
           }
-          ensureSpecsIsMutable();
-          specs_.add(value);
+          ensureStatementsIsMutable();
+          statements_.add(value);
           onChanged();
         } else {
-          specsBuilder_.addMessage(value);
+          statementsBuilder_.addMessage(value);
         }
         return this;
       }
       /**
-       * <code>repeated .boa.types.Statement specs = 2;</code>
+       * <code>repeated .boa.types.Statement statements = 2;</code>
        */
-      public Builder addSpecs(
+      public Builder addStatements(
           int index, boa.types.Ast.Statement value) {
-        if (specsBuilder_ == null) {
+        if (statementsBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
           }
-          ensureSpecsIsMutable();
-          specs_.add(index, value);
+          ensureStatementsIsMutable();
+          statements_.add(index, value);
           onChanged();
         } else {
-          specsBuilder_.addMessage(index, value);
+          statementsBuilder_.addMessage(index, value);
         }
         return this;
       }
       /**
-       * <code>repeated .boa.types.Statement specs = 2;</code>
+       * <code>repeated .boa.types.Statement statements = 2;</code>
        */
-      public Builder addSpecs(
+      public Builder addStatements(
           boa.types.Ast.Statement.Builder builderForValue) {
-        if (specsBuilder_ == null) {
-          ensureSpecsIsMutable();
-          specs_.add(builderForValue.build());
+        if (statementsBuilder_ == null) {
+          ensureStatementsIsMutable();
+          statements_.add(builderForValue.build());
           onChanged();
         } else {
-          specsBuilder_.addMessage(builderForValue.build());
+          statementsBuilder_.addMessage(builderForValue.build());
         }
         return this;
       }
       /**
-       * <code>repeated .boa.types.Statement specs = 2;</code>
+       * <code>repeated .boa.types.Statement statements = 2;</code>
        */
-      public Builder addSpecs(
+      public Builder addStatements(
           int index, boa.types.Ast.Statement.Builder builderForValue) {
-        if (specsBuilder_ == null) {
-          ensureSpecsIsMutable();
-          specs_.add(index, builderForValue.build());
+        if (statementsBuilder_ == null) {
+          ensureStatementsIsMutable();
+          statements_.add(index, builderForValue.build());
           onChanged();
         } else {
-          specsBuilder_.addMessage(index, builderForValue.build());
+          statementsBuilder_.addMessage(index, builderForValue.build());
         }
         return this;
       }
       /**
-       * <code>repeated .boa.types.Statement specs = 2;</code>
+       * <code>repeated .boa.types.Statement statements = 2;</code>
        */
-      public Builder addAllSpecs(
+      public Builder addAllStatements(
           java.lang.Iterable<? extends boa.types.Ast.Statement> values) {
-        if (specsBuilder_ == null) {
-          ensureSpecsIsMutable();
-          super.addAll(values, specs_);
+        if (statementsBuilder_ == null) {
+          ensureStatementsIsMutable();
+          super.addAll(values, statements_);
           onChanged();
         } else {
-          specsBuilder_.addAllMessages(values);
+          statementsBuilder_.addAllMessages(values);
         }
         return this;
       }
       /**
-       * <code>repeated .boa.types.Statement specs = 2;</code>
+       * <code>repeated .boa.types.Statement statements = 2;</code>
        */
-      public Builder clearSpecs() {
-        if (specsBuilder_ == null) {
-          specs_ = java.util.Collections.emptyList();
+      public Builder clearStatements() {
+        if (statementsBuilder_ == null) {
+          statements_ = java.util.Collections.emptyList();
           bitField0_ = (bitField0_ & ~0x00000002);
           onChanged();
         } else {
-          specsBuilder_.clear();
+          statementsBuilder_.clear();
         }
         return this;
       }
       /**
-       * <code>repeated .boa.types.Statement specs = 2;</code>
+       * <code>repeated .boa.types.Statement statements = 2;</code>
        */
-      public Builder removeSpecs(int index) {
-        if (specsBuilder_ == null) {
-          ensureSpecsIsMutable();
-          specs_.remove(index);
+      public Builder removeStatements(int index) {
+        if (statementsBuilder_ == null) {
+          ensureStatementsIsMutable();
+          statements_.remove(index);
           onChanged();
         } else {
-          specsBuilder_.remove(index);
+          statementsBuilder_.remove(index);
         }
         return this;
       }
       /**
-       * <code>repeated .boa.types.Statement specs = 2;</code>
+       * <code>repeated .boa.types.Statement statements = 2;</code>
        */
-      public boa.types.Ast.Statement.Builder getSpecsBuilder(
+      public boa.types.Ast.Statement.Builder getStatementsBuilder(
           int index) {
-        return getSpecsFieldBuilder().getBuilder(index);
+        return getStatementsFieldBuilder().getBuilder(index);
       }
       /**
-       * <code>repeated .boa.types.Statement specs = 2;</code>
+       * <code>repeated .boa.types.Statement statements = 2;</code>
        */
-      public boa.types.Ast.StatementOrBuilder getSpecsOrBuilder(
+      public boa.types.Ast.StatementOrBuilder getStatementsOrBuilder(
           int index) {
-        if (specsBuilder_ == null) {
-          return specs_.get(index);  } else {
-          return specsBuilder_.getMessageOrBuilder(index);
+        if (statementsBuilder_ == null) {
+          return statements_.get(index);  } else {
+          return statementsBuilder_.getMessageOrBuilder(index);
         }
       }
       /**
-       * <code>repeated .boa.types.Statement specs = 2;</code>
+       * <code>repeated .boa.types.Statement statements = 2;</code>
        */
       public java.util.List<? extends boa.types.Ast.StatementOrBuilder> 
-           getSpecsOrBuilderList() {
-        if (specsBuilder_ != null) {
-          return specsBuilder_.getMessageOrBuilderList();
+           getStatementsOrBuilderList() {
+        if (statementsBuilder_ != null) {
+          return statementsBuilder_.getMessageOrBuilderList();
         } else {
-          return java.util.Collections.unmodifiableList(specs_);
+          return java.util.Collections.unmodifiableList(statements_);
         }
       }
       /**
-       * <code>repeated .boa.types.Statement specs = 2;</code>
+       * <code>repeated .boa.types.Statement statements = 2;</code>
        */
-      public boa.types.Ast.Statement.Builder addSpecsBuilder() {
-        return getSpecsFieldBuilder().addBuilder(
+      public boa.types.Ast.Statement.Builder addStatementsBuilder() {
+        return getStatementsFieldBuilder().addBuilder(
             boa.types.Ast.Statement.getDefaultInstance());
       }
       /**
-       * <code>repeated .boa.types.Statement specs = 2;</code>
+       * <code>repeated .boa.types.Statement statements = 2;</code>
        */
-      public boa.types.Ast.Statement.Builder addSpecsBuilder(
+      public boa.types.Ast.Statement.Builder addStatementsBuilder(
           int index) {
-        return getSpecsFieldBuilder().addBuilder(
+        return getStatementsFieldBuilder().addBuilder(
             index, boa.types.Ast.Statement.getDefaultInstance());
       }
       /**
-       * <code>repeated .boa.types.Statement specs = 2;</code>
+       * <code>repeated .boa.types.Statement statements = 2;</code>
        */
       public java.util.List<boa.types.Ast.Statement.Builder> 
-           getSpecsBuilderList() {
-        return getSpecsFieldBuilder().getBuilderList();
+           getStatementsBuilderList() {
+        return getStatementsFieldBuilder().getBuilderList();
       }
       private com.google.protobuf.RepeatedFieldBuilder<
           boa.types.Ast.Statement, boa.types.Ast.Statement.Builder, boa.types.Ast.StatementOrBuilder> 
-          getSpecsFieldBuilder() {
-        if (specsBuilder_ == null) {
-          specsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+          getStatementsFieldBuilder() {
+        if (statementsBuilder_ == null) {
+          statementsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
               boa.types.Ast.Statement, boa.types.Ast.Statement.Builder, boa.types.Ast.StatementOrBuilder>(
-                  specs_,
+                  statements_,
                   ((bitField0_ & 0x00000002) == 0x00000002),
                   getParentForChildren(),
                   isClean());
-          specs_ = null;
+          statements_ = null;
         }
-        return specsBuilder_;
+        return statementsBuilder_;
       }
 
       // @@protoc_insertion_point(builder_scope:boa.types.SpecDeclaration)
@@ -33562,29 +33562,29 @@ public final class Ast {
   public interface SpecMethodOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
-    // repeated .boa.types.SpecCase case = 1;
+    // repeated .boa.types.SpecCase cases = 1;
     /**
-     * <code>repeated .boa.types.SpecCase case = 1;</code>
+     * <code>repeated .boa.types.SpecCase cases = 1;</code>
      */
     java.util.List<boa.types.Ast.SpecCase> 
-        getCaseList();
+        getCasesList();
     /**
-     * <code>repeated .boa.types.SpecCase case = 1;</code>
+     * <code>repeated .boa.types.SpecCase cases = 1;</code>
      */
-    boa.types.Ast.SpecCase getCase(int index);
+    boa.types.Ast.SpecCase getCases(int index);
     /**
-     * <code>repeated .boa.types.SpecCase case = 1;</code>
+     * <code>repeated .boa.types.SpecCase cases = 1;</code>
      */
-    int getCaseCount();
+    int getCasesCount();
     /**
-     * <code>repeated .boa.types.SpecCase case = 1;</code>
+     * <code>repeated .boa.types.SpecCase cases = 1;</code>
      */
     java.util.List<? extends boa.types.Ast.SpecCaseOrBuilder> 
-        getCaseOrBuilderList();
+        getCasesOrBuilderList();
     /**
-     * <code>repeated .boa.types.SpecCase case = 1;</code>
+     * <code>repeated .boa.types.SpecCase cases = 1;</code>
      */
-    boa.types.Ast.SpecCaseOrBuilder getCaseOrBuilder(
+    boa.types.Ast.SpecCaseOrBuilder getCasesOrBuilder(
         int index);
 
     // repeated .boa.types.Modifier modifiers = 2;
@@ -33669,10 +33669,10 @@ public final class Ast {
             }
             case 10: {
               if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
-                case_ = new java.util.ArrayList<boa.types.Ast.SpecCase>();
+                cases_ = new java.util.ArrayList<boa.types.Ast.SpecCase>();
                 mutable_bitField0_ |= 0x00000001;
               }
-              case_.add(input.readMessage(boa.types.Ast.SpecCase.PARSER, extensionRegistry));
+              cases_.add(input.readMessage(boa.types.Ast.SpecCase.PARSER, extensionRegistry));
               break;
             }
             case 18: {
@@ -33692,7 +33692,7 @@ public final class Ast {
             e.getMessage()).setUnfinishedMessage(this);
       } finally {
         if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
-          case_ = java.util.Collections.unmodifiableList(case_);
+          cases_ = java.util.Collections.unmodifiableList(cases_);
         }
         if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
           modifiers_ = java.util.Collections.unmodifiableList(modifiers_);
@@ -33728,40 +33728,40 @@ public final class Ast {
       return PARSER;
     }
 
-    // repeated .boa.types.SpecCase case = 1;
-    public static final int CASE_FIELD_NUMBER = 1;
-    private java.util.List<boa.types.Ast.SpecCase> case_;
+    // repeated .boa.types.SpecCase cases = 1;
+    public static final int CASES_FIELD_NUMBER = 1;
+    private java.util.List<boa.types.Ast.SpecCase> cases_;
     /**
-     * <code>repeated .boa.types.SpecCase case = 1;</code>
+     * <code>repeated .boa.types.SpecCase cases = 1;</code>
      */
-    public java.util.List<boa.types.Ast.SpecCase> getCaseList() {
-      return case_;
+    public java.util.List<boa.types.Ast.SpecCase> getCasesList() {
+      return cases_;
     }
     /**
-     * <code>repeated .boa.types.SpecCase case = 1;</code>
+     * <code>repeated .boa.types.SpecCase cases = 1;</code>
      */
     public java.util.List<? extends boa.types.Ast.SpecCaseOrBuilder> 
-        getCaseOrBuilderList() {
-      return case_;
+        getCasesOrBuilderList() {
+      return cases_;
     }
     /**
-     * <code>repeated .boa.types.SpecCase case = 1;</code>
+     * <code>repeated .boa.types.SpecCase cases = 1;</code>
      */
-    public int getCaseCount() {
-      return case_.size();
+    public int getCasesCount() {
+      return cases_.size();
     }
     /**
-     * <code>repeated .boa.types.SpecCase case = 1;</code>
+     * <code>repeated .boa.types.SpecCase cases = 1;</code>
      */
-    public boa.types.Ast.SpecCase getCase(int index) {
-      return case_.get(index);
+    public boa.types.Ast.SpecCase getCases(int index) {
+      return cases_.get(index);
     }
     /**
-     * <code>repeated .boa.types.SpecCase case = 1;</code>
+     * <code>repeated .boa.types.SpecCase cases = 1;</code>
      */
-    public boa.types.Ast.SpecCaseOrBuilder getCaseOrBuilder(
+    public boa.types.Ast.SpecCaseOrBuilder getCasesOrBuilder(
         int index) {
-      return case_.get(index);
+      return cases_.get(index);
     }
 
     // repeated .boa.types.Modifier modifiers = 2;
@@ -33801,7 +33801,7 @@ public final class Ast {
     }
 
     private void initFields() {
-      case_ = java.util.Collections.emptyList();
+      cases_ = java.util.Collections.emptyList();
       modifiers_ = java.util.Collections.emptyList();
     }
     private byte memoizedIsInitialized = -1;
@@ -33809,8 +33809,8 @@ public final class Ast {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized != -1) return isInitialized == 1;
 
-      for (int i = 0; i < getCaseCount(); i++) {
-        if (!getCase(i).isInitialized()) {
+      for (int i = 0; i < getCasesCount(); i++) {
+        if (!getCases(i).isInitialized()) {
           memoizedIsInitialized = 0;
           return false;
         }
@@ -33828,8 +33828,8 @@ public final class Ast {
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
       getSerializedSize();
-      for (int i = 0; i < case_.size(); i++) {
-        output.writeMessage(1, case_.get(i));
+      for (int i = 0; i < cases_.size(); i++) {
+        output.writeMessage(1, cases_.get(i));
       }
       for (int i = 0; i < modifiers_.size(); i++) {
         output.writeMessage(2, modifiers_.get(i));
@@ -33843,9 +33843,9 @@ public final class Ast {
       if (size != -1) return size;
 
       size = 0;
-      for (int i = 0; i < case_.size(); i++) {
+      for (int i = 0; i < cases_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(1, case_.get(i));
+          .computeMessageSize(1, cases_.get(i));
       }
       for (int i = 0; i < modifiers_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
@@ -33963,7 +33963,7 @@ public final class Ast {
       }
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-          getCaseFieldBuilder();
+          getCasesFieldBuilder();
           getModifiersFieldBuilder();
         }
       }
@@ -33973,11 +33973,11 @@ public final class Ast {
 
       public Builder clear() {
         super.clear();
-        if (caseBuilder_ == null) {
-          case_ = java.util.Collections.emptyList();
+        if (casesBuilder_ == null) {
+          cases_ = java.util.Collections.emptyList();
           bitField0_ = (bitField0_ & ~0x00000001);
         } else {
-          caseBuilder_.clear();
+          casesBuilder_.clear();
         }
         if (modifiersBuilder_ == null) {
           modifiers_ = java.util.Collections.emptyList();
@@ -34012,14 +34012,14 @@ public final class Ast {
       public boa.types.Ast.SpecMethod buildPartial() {
         boa.types.Ast.SpecMethod result = new boa.types.Ast.SpecMethod(this);
         int from_bitField0_ = bitField0_;
-        if (caseBuilder_ == null) {
+        if (casesBuilder_ == null) {
           if (((bitField0_ & 0x00000001) == 0x00000001)) {
-            case_ = java.util.Collections.unmodifiableList(case_);
+            cases_ = java.util.Collections.unmodifiableList(cases_);
             bitField0_ = (bitField0_ & ~0x00000001);
           }
-          result.case_ = case_;
+          result.cases_ = cases_;
         } else {
-          result.case_ = caseBuilder_.build();
+          result.cases_ = casesBuilder_.build();
         }
         if (modifiersBuilder_ == null) {
           if (((bitField0_ & 0x00000002) == 0x00000002)) {
@@ -34045,29 +34045,29 @@ public final class Ast {
 
       public Builder mergeFrom(boa.types.Ast.SpecMethod other) {
         if (other == boa.types.Ast.SpecMethod.getDefaultInstance()) return this;
-        if (caseBuilder_ == null) {
-          if (!other.case_.isEmpty()) {
-            if (case_.isEmpty()) {
-              case_ = other.case_;
+        if (casesBuilder_ == null) {
+          if (!other.cases_.isEmpty()) {
+            if (cases_.isEmpty()) {
+              cases_ = other.cases_;
               bitField0_ = (bitField0_ & ~0x00000001);
             } else {
-              ensureCaseIsMutable();
-              case_.addAll(other.case_);
+              ensureCasesIsMutable();
+              cases_.addAll(other.cases_);
             }
             onChanged();
           }
         } else {
-          if (!other.case_.isEmpty()) {
-            if (caseBuilder_.isEmpty()) {
-              caseBuilder_.dispose();
-              caseBuilder_ = null;
-              case_ = other.case_;
+          if (!other.cases_.isEmpty()) {
+            if (casesBuilder_.isEmpty()) {
+              casesBuilder_.dispose();
+              casesBuilder_ = null;
+              cases_ = other.cases_;
               bitField0_ = (bitField0_ & ~0x00000001);
-              caseBuilder_ = 
+              casesBuilder_ = 
                 com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
-                   getCaseFieldBuilder() : null;
+                   getCasesFieldBuilder() : null;
             } else {
-              caseBuilder_.addAllMessages(other.case_);
+              casesBuilder_.addAllMessages(other.cases_);
             }
           }
         }
@@ -34102,8 +34102,8 @@ public final class Ast {
       }
 
       public final boolean isInitialized() {
-        for (int i = 0; i < getCaseCount(); i++) {
-          if (!getCase(i).isInitialized()) {
+        for (int i = 0; i < getCasesCount(); i++) {
+          if (!getCases(i).isInitialized()) {
             
             return false;
           }
@@ -34136,244 +34136,244 @@ public final class Ast {
       }
       private int bitField0_;
 
-      // repeated .boa.types.SpecCase case = 1;
-      private java.util.List<boa.types.Ast.SpecCase> case_ =
+      // repeated .boa.types.SpecCase cases = 1;
+      private java.util.List<boa.types.Ast.SpecCase> cases_ =
         java.util.Collections.emptyList();
-      private void ensureCaseIsMutable() {
+      private void ensureCasesIsMutable() {
         if (!((bitField0_ & 0x00000001) == 0x00000001)) {
-          case_ = new java.util.ArrayList<boa.types.Ast.SpecCase>(case_);
+          cases_ = new java.util.ArrayList<boa.types.Ast.SpecCase>(cases_);
           bitField0_ |= 0x00000001;
          }
       }
 
       private com.google.protobuf.RepeatedFieldBuilder<
-          boa.types.Ast.SpecCase, boa.types.Ast.SpecCase.Builder, boa.types.Ast.SpecCaseOrBuilder> caseBuilder_;
+          boa.types.Ast.SpecCase, boa.types.Ast.SpecCase.Builder, boa.types.Ast.SpecCaseOrBuilder> casesBuilder_;
 
       /**
-       * <code>repeated .boa.types.SpecCase case = 1;</code>
+       * <code>repeated .boa.types.SpecCase cases = 1;</code>
        */
-      public java.util.List<boa.types.Ast.SpecCase> getCaseList() {
-        if (caseBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(case_);
+      public java.util.List<boa.types.Ast.SpecCase> getCasesList() {
+        if (casesBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(cases_);
         } else {
-          return caseBuilder_.getMessageList();
+          return casesBuilder_.getMessageList();
         }
       }
       /**
-       * <code>repeated .boa.types.SpecCase case = 1;</code>
+       * <code>repeated .boa.types.SpecCase cases = 1;</code>
        */
-      public int getCaseCount() {
-        if (caseBuilder_ == null) {
-          return case_.size();
+      public int getCasesCount() {
+        if (casesBuilder_ == null) {
+          return cases_.size();
         } else {
-          return caseBuilder_.getCount();
+          return casesBuilder_.getCount();
         }
       }
       /**
-       * <code>repeated .boa.types.SpecCase case = 1;</code>
+       * <code>repeated .boa.types.SpecCase cases = 1;</code>
        */
-      public boa.types.Ast.SpecCase getCase(int index) {
-        if (caseBuilder_ == null) {
-          return case_.get(index);
+      public boa.types.Ast.SpecCase getCases(int index) {
+        if (casesBuilder_ == null) {
+          return cases_.get(index);
         } else {
-          return caseBuilder_.getMessage(index);
+          return casesBuilder_.getMessage(index);
         }
       }
       /**
-       * <code>repeated .boa.types.SpecCase case = 1;</code>
+       * <code>repeated .boa.types.SpecCase cases = 1;</code>
        */
-      public Builder setCase(
+      public Builder setCases(
           int index, boa.types.Ast.SpecCase value) {
-        if (caseBuilder_ == null) {
+        if (casesBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
           }
-          ensureCaseIsMutable();
-          case_.set(index, value);
+          ensureCasesIsMutable();
+          cases_.set(index, value);
           onChanged();
         } else {
-          caseBuilder_.setMessage(index, value);
+          casesBuilder_.setMessage(index, value);
         }
         return this;
       }
       /**
-       * <code>repeated .boa.types.SpecCase case = 1;</code>
+       * <code>repeated .boa.types.SpecCase cases = 1;</code>
        */
-      public Builder setCase(
+      public Builder setCases(
           int index, boa.types.Ast.SpecCase.Builder builderForValue) {
-        if (caseBuilder_ == null) {
-          ensureCaseIsMutable();
-          case_.set(index, builderForValue.build());
+        if (casesBuilder_ == null) {
+          ensureCasesIsMutable();
+          cases_.set(index, builderForValue.build());
           onChanged();
         } else {
-          caseBuilder_.setMessage(index, builderForValue.build());
+          casesBuilder_.setMessage(index, builderForValue.build());
         }
         return this;
       }
       /**
-       * <code>repeated .boa.types.SpecCase case = 1;</code>
+       * <code>repeated .boa.types.SpecCase cases = 1;</code>
        */
-      public Builder addCase(boa.types.Ast.SpecCase value) {
-        if (caseBuilder_ == null) {
+      public Builder addCases(boa.types.Ast.SpecCase value) {
+        if (casesBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
           }
-          ensureCaseIsMutable();
-          case_.add(value);
+          ensureCasesIsMutable();
+          cases_.add(value);
           onChanged();
         } else {
-          caseBuilder_.addMessage(value);
+          casesBuilder_.addMessage(value);
         }
         return this;
       }
       /**
-       * <code>repeated .boa.types.SpecCase case = 1;</code>
+       * <code>repeated .boa.types.SpecCase cases = 1;</code>
        */
-      public Builder addCase(
+      public Builder addCases(
           int index, boa.types.Ast.SpecCase value) {
-        if (caseBuilder_ == null) {
+        if (casesBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
           }
-          ensureCaseIsMutable();
-          case_.add(index, value);
+          ensureCasesIsMutable();
+          cases_.add(index, value);
           onChanged();
         } else {
-          caseBuilder_.addMessage(index, value);
+          casesBuilder_.addMessage(index, value);
         }
         return this;
       }
       /**
-       * <code>repeated .boa.types.SpecCase case = 1;</code>
+       * <code>repeated .boa.types.SpecCase cases = 1;</code>
        */
-      public Builder addCase(
+      public Builder addCases(
           boa.types.Ast.SpecCase.Builder builderForValue) {
-        if (caseBuilder_ == null) {
-          ensureCaseIsMutable();
-          case_.add(builderForValue.build());
+        if (casesBuilder_ == null) {
+          ensureCasesIsMutable();
+          cases_.add(builderForValue.build());
           onChanged();
         } else {
-          caseBuilder_.addMessage(builderForValue.build());
+          casesBuilder_.addMessage(builderForValue.build());
         }
         return this;
       }
       /**
-       * <code>repeated .boa.types.SpecCase case = 1;</code>
+       * <code>repeated .boa.types.SpecCase cases = 1;</code>
        */
-      public Builder addCase(
+      public Builder addCases(
           int index, boa.types.Ast.SpecCase.Builder builderForValue) {
-        if (caseBuilder_ == null) {
-          ensureCaseIsMutable();
-          case_.add(index, builderForValue.build());
+        if (casesBuilder_ == null) {
+          ensureCasesIsMutable();
+          cases_.add(index, builderForValue.build());
           onChanged();
         } else {
-          caseBuilder_.addMessage(index, builderForValue.build());
+          casesBuilder_.addMessage(index, builderForValue.build());
         }
         return this;
       }
       /**
-       * <code>repeated .boa.types.SpecCase case = 1;</code>
+       * <code>repeated .boa.types.SpecCase cases = 1;</code>
        */
-      public Builder addAllCase(
+      public Builder addAllCases(
           java.lang.Iterable<? extends boa.types.Ast.SpecCase> values) {
-        if (caseBuilder_ == null) {
-          ensureCaseIsMutable();
-          super.addAll(values, case_);
+        if (casesBuilder_ == null) {
+          ensureCasesIsMutable();
+          super.addAll(values, cases_);
           onChanged();
         } else {
-          caseBuilder_.addAllMessages(values);
+          casesBuilder_.addAllMessages(values);
         }
         return this;
       }
       /**
-       * <code>repeated .boa.types.SpecCase case = 1;</code>
+       * <code>repeated .boa.types.SpecCase cases = 1;</code>
        */
-      public Builder clearCase() {
-        if (caseBuilder_ == null) {
-          case_ = java.util.Collections.emptyList();
+      public Builder clearCases() {
+        if (casesBuilder_ == null) {
+          cases_ = java.util.Collections.emptyList();
           bitField0_ = (bitField0_ & ~0x00000001);
           onChanged();
         } else {
-          caseBuilder_.clear();
+          casesBuilder_.clear();
         }
         return this;
       }
       /**
-       * <code>repeated .boa.types.SpecCase case = 1;</code>
+       * <code>repeated .boa.types.SpecCase cases = 1;</code>
        */
-      public Builder removeCase(int index) {
-        if (caseBuilder_ == null) {
-          ensureCaseIsMutable();
-          case_.remove(index);
+      public Builder removeCases(int index) {
+        if (casesBuilder_ == null) {
+          ensureCasesIsMutable();
+          cases_.remove(index);
           onChanged();
         } else {
-          caseBuilder_.remove(index);
+          casesBuilder_.remove(index);
         }
         return this;
       }
       /**
-       * <code>repeated .boa.types.SpecCase case = 1;</code>
+       * <code>repeated .boa.types.SpecCase cases = 1;</code>
        */
-      public boa.types.Ast.SpecCase.Builder getCaseBuilder(
+      public boa.types.Ast.SpecCase.Builder getCasesBuilder(
           int index) {
-        return getCaseFieldBuilder().getBuilder(index);
+        return getCasesFieldBuilder().getBuilder(index);
       }
       /**
-       * <code>repeated .boa.types.SpecCase case = 1;</code>
+       * <code>repeated .boa.types.SpecCase cases = 1;</code>
        */
-      public boa.types.Ast.SpecCaseOrBuilder getCaseOrBuilder(
+      public boa.types.Ast.SpecCaseOrBuilder getCasesOrBuilder(
           int index) {
-        if (caseBuilder_ == null) {
-          return case_.get(index);  } else {
-          return caseBuilder_.getMessageOrBuilder(index);
+        if (casesBuilder_ == null) {
+          return cases_.get(index);  } else {
+          return casesBuilder_.getMessageOrBuilder(index);
         }
       }
       /**
-       * <code>repeated .boa.types.SpecCase case = 1;</code>
+       * <code>repeated .boa.types.SpecCase cases = 1;</code>
        */
       public java.util.List<? extends boa.types.Ast.SpecCaseOrBuilder> 
-           getCaseOrBuilderList() {
-        if (caseBuilder_ != null) {
-          return caseBuilder_.getMessageOrBuilderList();
+           getCasesOrBuilderList() {
+        if (casesBuilder_ != null) {
+          return casesBuilder_.getMessageOrBuilderList();
         } else {
-          return java.util.Collections.unmodifiableList(case_);
+          return java.util.Collections.unmodifiableList(cases_);
         }
       }
       /**
-       * <code>repeated .boa.types.SpecCase case = 1;</code>
+       * <code>repeated .boa.types.SpecCase cases = 1;</code>
        */
-      public boa.types.Ast.SpecCase.Builder addCaseBuilder() {
-        return getCaseFieldBuilder().addBuilder(
+      public boa.types.Ast.SpecCase.Builder addCasesBuilder() {
+        return getCasesFieldBuilder().addBuilder(
             boa.types.Ast.SpecCase.getDefaultInstance());
       }
       /**
-       * <code>repeated .boa.types.SpecCase case = 1;</code>
+       * <code>repeated .boa.types.SpecCase cases = 1;</code>
        */
-      public boa.types.Ast.SpecCase.Builder addCaseBuilder(
+      public boa.types.Ast.SpecCase.Builder addCasesBuilder(
           int index) {
-        return getCaseFieldBuilder().addBuilder(
+        return getCasesFieldBuilder().addBuilder(
             index, boa.types.Ast.SpecCase.getDefaultInstance());
       }
       /**
-       * <code>repeated .boa.types.SpecCase case = 1;</code>
+       * <code>repeated .boa.types.SpecCase cases = 1;</code>
        */
       public java.util.List<boa.types.Ast.SpecCase.Builder> 
-           getCaseBuilderList() {
-        return getCaseFieldBuilder().getBuilderList();
+           getCasesBuilderList() {
+        return getCasesFieldBuilder().getBuilderList();
       }
       private com.google.protobuf.RepeatedFieldBuilder<
           boa.types.Ast.SpecCase, boa.types.Ast.SpecCase.Builder, boa.types.Ast.SpecCaseOrBuilder> 
-          getCaseFieldBuilder() {
-        if (caseBuilder_ == null) {
-          caseBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+          getCasesFieldBuilder() {
+        if (casesBuilder_ == null) {
+          casesBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
               boa.types.Ast.SpecCase, boa.types.Ast.SpecCase.Builder, boa.types.Ast.SpecCaseOrBuilder>(
-                  case_,
+                  cases_,
                   ((bitField0_ & 0x00000001) == 0x00000001),
                   getParentForChildren(),
                   isClean());
-          case_ = null;
+          cases_ = null;
         }
-        return caseBuilder_;
+        return casesBuilder_;
       }
 
       // repeated .boa.types.Modifier modifiers = 2;
@@ -36272,19 +36272,19 @@ public final class Ast {
       "ATION\020\004\032\002\020\001\"{\n\014PositionInfo\022\021\n\tstart_pos" +
       "\030\001 \002(\005\022\016\n\006length\030\002 \002(\005\022\022\n\nstart_line\030\003 \002" +
       "(\005\022\021\n\tstart_col\030\004 \002(\005\022\020\n\010end_line\030\005 \002(\005\022" +
-      "\017\n\007end_col\030\006 \002(\005\"^\n\017SpecDeclaration\022&\n\tm" +
-      "odifiers\030\001 \003(\0132\023.boa.types.Modifier\022#\n\005s" +
-      "pecs\030\002 \003(\0132\024.boa.types.Statement\"W\n\nSpec" +
-      "Method\022!\n\004case\030\001 \003(\0132\023.boa.types.SpecCas" +
-      "e\022&\n\tmodifiers\030\002 \003(\0132\023.boa.types.Modifie" +
-      "r\"9\n\rSpecStatement\022(\n\nstatements\030\001 \003(\0132\024" +
-      ".boa.types.Statement\"6\n\014SpecVariable\022&\n\t",
-      "modifiers\030\001 \003(\0132\023.boa.types.Modifier*\236\001\n" +
-      "\010TypeKind\022\t\n\005OTHER\020\000\022\t\n\005CLASS\020\001\022\r\n\tINTER" +
-      "FACE\020\002\022\r\n\tANONYMOUS\020\003\022\010\n\004ANON\020\003\022\n\n\006STRUC" +
-      "T\020\004\022\010\n\004ENUM\020\005\022\017\n\013ENUMERATION\020\005\022\016\n\nANNOTA" +
-      "TION\020\006\022\014\n\010DELEGATE\020\007\022\013\n\007GENERIC\020\010\032\002\020\001B\002H" +
-      "\001"
+      "\017\n\007end_col\030\006 \002(\005\"c\n\017SpecDeclaration\022&\n\tm" +
+      "odifiers\030\001 \003(\0132\023.boa.types.Modifier\022(\n\ns" +
+      "tatements\030\002 \003(\0132\024.boa.types.Statement\"X\n" +
+      "\nSpecMethod\022\"\n\005cases\030\001 \003(\0132\023.boa.types.S" +
+      "pecCase\022&\n\tmodifiers\030\002 \003(\0132\023.boa.types.M" +
+      "odifier\"9\n\rSpecStatement\022(\n\nstatements\030\001" +
+      " \003(\0132\024.boa.types.Statement\"6\n\014SpecVariab",
+      "le\022&\n\tmodifiers\030\001 \003(\0132\023.boa.types.Modifi" +
+      "er*\236\001\n\010TypeKind\022\t\n\005OTHER\020\000\022\t\n\005CLASS\020\001\022\r\n" +
+      "\tINTERFACE\020\002\022\r\n\tANONYMOUS\020\003\022\010\n\004ANON\020\003\022\n\n" +
+      "\006STRUCT\020\004\022\010\n\004ENUM\020\005\022\017\n\013ENUMERATION\020\005\022\016\n\n" +
+      "ANNOTATION\020\006\022\014\n\010DELEGATE\020\007\022\013\n\007GENERIC\020\010\032" +
+      "\002\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -36374,13 +36374,13 @@ public final class Ast {
           internal_static_boa_types_SpecDeclaration_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_SpecDeclaration_descriptor,
-              new java.lang.String[] { "Modifiers", "Specs", });
+              new java.lang.String[] { "Modifiers", "Statements", });
           internal_static_boa_types_SpecMethod_descriptor =
             getDescriptor().getMessageTypes().get(14);
           internal_static_boa_types_SpecMethod_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_SpecMethod_descriptor,
-              new java.lang.String[] { "Case", "Modifiers", });
+              new java.lang.String[] { "Cases", "Modifiers", });
           internal_static_boa_types_SpecStatement_descriptor =
             getDescriptor().getMessageTypes().get(15);
           internal_static_boa_types_SpecStatement_fieldAccessorTable = new

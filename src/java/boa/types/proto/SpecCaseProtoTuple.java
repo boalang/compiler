@@ -37,22 +37,22 @@ public class SpecCaseProtoTuple extends BoaProtoTuple {
 	private final static List<BoaType> members = new ArrayList<BoaType>();
 	private final static Map<String, Integer> names = new HashMap<String, Integer>();
 
-    static {
-    	int counter = 0;
+	static {
+		int counter = 0;
 
-    	names.put("modifiers", counter++);
-    	members.add(new BoaProtoList(new ModifierProtoTuple()));
+		names.put("modifiers", counter++);
+		members.add(new BoaProtoList(new ModifierProtoTuple()));
 
-    	names.put("statements", counter++);
-    	members.add(new BoaProtoList(new StatementProtoTuple()));
-    }
+		names.put("statements", counter++);
+		members.add(new BoaProtoList(new StatementProtoTuple()));
+	}
 
 	/**
 	* Construct a {@link SpecCaseProtoTuple}.
 	*/
-    public SpecCaseProtoTuple() {
+	public SpecCaseProtoTuple() {
 		super(members, names);
-    }
+	}
 
 	/** @{inheritDoc} */
 	@Override

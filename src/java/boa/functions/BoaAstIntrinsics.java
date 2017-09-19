@@ -206,8 +206,6 @@ public class BoaAstIntrinsics {
 		System.err.println("error with issues: " + f.getKey());
 		return emptyIssues;
 	}
-	
-	
 	@SuppressWarnings("unchecked")
 	@FunctionSpec(name = "getSpec", returnType = "SpecDeclaration", formalParameters = { "Declaration" })
 	public static SpecDeclaration getSpec(final Declaration f) {
@@ -239,7 +237,6 @@ public class BoaAstIntrinsics {
 		System.err.println("error with SpecDeclaration: " + rowName);
 		return emptySpecDeclaration;
 	}
-	
 	@SuppressWarnings("unchecked")
 	@FunctionSpec(name = "getSpec", returnType = "SpecMethod", formalParameters = { "Method" })
 	public static SpecMethod getSpec(final Method f) {
@@ -271,7 +268,6 @@ public class BoaAstIntrinsics {
 		System.err.println("error with SpecMethod: " + rowName);
 		return emptySpecMethod;
 	}
-	
 	@SuppressWarnings("unchecked")
 	@FunctionSpec(name = "getSpec", returnType = "SpecStatement", formalParameters = { "Statement" })
 	public static SpecStatement getSpec(final Statement f) {
@@ -302,8 +298,7 @@ public class BoaAstIntrinsics {
 	
 		System.err.println("error with SpecStatement: " + rowName);
 		return emptySpecStatement;
-	}
-		
+	}	
 	@SuppressWarnings("unchecked")
 	@FunctionSpec(name = "getSpec", returnType = "SpecVariable", formalParameters = { "Variable" })
 	public static SpecVariable getSpec(final Variable f) {
@@ -414,13 +409,25 @@ public class BoaAstIntrinsics {
 	}
 	
 	private static void openSpecMap() {
-		final Configuration conf = new Configuration();
+		
 		try {
-			final FileSystem fs = FileSystem.get(conf);
-			final Path p = new Path("hdfs://boa-njt/",
-								new Path(context.getConfiguration().get("boa.spec.dir", context.getConfiguration().get("boa.input.dir", "repcache/live")),
-								new Path("specs")));
-			specMap = new MapFile.Reader(fs, p.toString(), conf);
+			final Configuration conf = context.getConfiguration();
+			final FileSystem fs;
+			final Path p;
+			if (DefaultProperties.localDataPath != null) {
+				p = new Path(DefaultProperties.localIssuePath);
+				fs = FileSystem.getLocal(conf);
+			} else {
+				p = new Path(
+					context.getConfiguration().get("fs.default.name", "hdfs://boa-njt/"),
+					new Path(
+						conf.get("boa.spec.dir", conf.get("boa.input.dir", "repcache/live")),
+						new Path("specs")
+					)
+				);
+				fs = FileSystem.get(conf);
+			}
+			issuesMap = new MapFile.Reader(fs, p.toString(), conf);
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}

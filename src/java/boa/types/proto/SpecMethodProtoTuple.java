@@ -40,7 +40,7 @@ public class SpecMethodProtoTuple extends BoaProtoTuple {
 	static {
 		int counter = 0;
 
-		names.put("case", counter++);
+		names.put("cases", counter++);
 		members.add(new BoaProtoList(new SpecCaseProtoTuple()));
                 
 		names.put("modifiers", counter++);

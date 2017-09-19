@@ -70,7 +70,6 @@ public class StatementProtoTuple extends BoaProtoTuple {
 
 		names.put("specs", counter++);
 		members.add(new SpecStatementProtoTuple());
-
 	}
 
 	/**
