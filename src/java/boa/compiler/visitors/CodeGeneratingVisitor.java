@@ -1,6 +1,5 @@
 /*
- * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer, Ramanathan Ramu,
- *				   Che Shian Hung
+ * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer, Ramanathan Ramu, Che Shian Hung
  *                 Iowa State University of Science and Technology
  *                 and Bowling Green State University
  *

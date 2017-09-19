@@ -60,7 +60,7 @@ type
 component
 	: (identifier COLON)? type
 	;
-
+	
 enumBodyDeclaration
 	: identifier EQUALS expression
 	;
