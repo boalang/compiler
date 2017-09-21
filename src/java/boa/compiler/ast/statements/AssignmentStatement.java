@@ -1,6 +1,7 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, Che Shian Hung
- *                 and Iowa State University of Science and Technology
+ * Copyright 2017, Hridesh Rajan, Robert Dyer, Che Shian Hung
+ *                 Iowa State University of Science and Technology
+ *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,16 +47,16 @@ public class AssignmentStatement extends Statement {
 	}
 
 	public AssignmentStatement(final Factor lhs, final Expression rhs) {
+		this(lhs, "=", rhs);
+	}
+
+	public AssignmentStatement(final Factor lhs, final String op, final Expression rhs) {
 		if (lhs != null)
 			lhs.setParent(this);
 		if (rhs != null)
 			rhs.setParent(this);
 		this.lhs = lhs;
 		this.rhs = rhs;
-	}
-
-	public AssignmentStatement(final Factor lhs, final String op, final Expression rhs) {
-		this(lhs, rhs);
 		this.op = op;
 	}
 

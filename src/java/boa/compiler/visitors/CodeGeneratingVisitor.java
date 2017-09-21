@@ -43,6 +43,7 @@ import boa.types.*;
  * @author rdyer
  * @author ankuraga
  * @author rramu
+ * @author hungc
  */
 public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/**
@@ -1344,6 +1345,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		}
 
 		final ST st = stg.getInstanceOf("Assignment");
+		st.add("operator", "=");
 		st.add("lhs", "___" + n.getId().getToken());
 
 		if (!n.hasInitializer()) {
@@ -1397,7 +1399,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		}
 
 		st.add("rhs", src);
-		st.add("operator", "=");
 
 		code.add(st.render());
 	}
