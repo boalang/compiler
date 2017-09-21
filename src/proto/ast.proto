@@ -68,8 +68,8 @@ message Declaration {
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
 	optional ChangeKind label_change_kind = 11;
 	/** For Specs use */
-	optional SpecStatement specs = 12;
-	optional string key = 13;
+	repeated SpecStatement specs = 1000;
+	optional string key = 1001;
 }
 
 /** The kinds of types in an AST */
@@ -238,8 +238,8 @@ message Statement {
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
 	optional ChangeKind label_change_kind = 11;
 	/** For Specs use */
-	optional SpecStatement specs = 12;
-	optional string key = 13;
+	repeated SpecStatement specs = 1000;
+	optional string key = 1001;
 }
 
 /** A single expression */

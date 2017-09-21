@@ -6124,43 +6124,62 @@ public final class Ast {
      */
     boa.types.Shared.ChangeKind getLabelChangeKind();
 
-    // optional .boa.types.SpecStatement specs = 12;
+    // repeated .boa.types.SpecStatement specs = 1000;
     /**
-     * <code>optional .boa.types.SpecStatement specs = 12;</code>
+     * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
      *
      * <pre>
      ** For Specs use 
      * </pre>
      */
-    boolean hasSpecs();
+    java.util.List<boa.types.Ast.SpecStatement> 
+        getSpecsList();
     /**
-     * <code>optional .boa.types.SpecStatement specs = 12;</code>
+     * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
      *
      * <pre>
      ** For Specs use 
      * </pre>
      */
-    boa.types.Ast.SpecStatement getSpecs();
+    boa.types.Ast.SpecStatement getSpecs(int index);
     /**
-     * <code>optional .boa.types.SpecStatement specs = 12;</code>
+     * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
      *
      * <pre>
      ** For Specs use 
      * </pre>
      */
-    boa.types.Ast.SpecStatementOrBuilder getSpecsOrBuilder();
+    int getSpecsCount();
+    /**
+     * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
+     *
+     * <pre>
+     ** For Specs use 
+     * </pre>
+     */
+    java.util.List<? extends boa.types.Ast.SpecStatementOrBuilder> 
+        getSpecsOrBuilderList();
+    /**
+     * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
+     *
+     * <pre>
+     ** For Specs use 
+     * </pre>
+     */
+    boa.types.Ast.SpecStatementOrBuilder getSpecsOrBuilder(
+        int index);
 
-    // optional string key = 13;
+    // optional string key = 1001;
     /**
-     * <code>optional string key = 13;</code>
+     * <code>optional string key = 1001;</code>
      */
     boolean hasKey();
     /**
-     * <code>optional string key = 13;</code>
+     * <code>optional string key = 1001;</code>
      */
     java.lang.String getKey();
     /**
-     * <code>optional string key = 13;</code>
+     * <code>optional string key = 1001;</code>
      */
     com.google.protobuf.ByteString
         getKeyBytes();
@@ -6314,21 +6333,16 @@ public final class Ast {
               }
               break;
             }
-            case 98: {
-              boa.types.Ast.SpecStatement.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000010) == 0x00000010)) {
-                subBuilder = specs_.toBuilder();
+            case 8002: {
+              if (!((mutable_bitField0_ & 0x00000800) == 0x00000800)) {
+                specs_ = new java.util.ArrayList<boa.types.Ast.SpecStatement>();
+                mutable_bitField0_ |= 0x00000800;
               }
-              specs_ = input.readMessage(boa.types.Ast.SpecStatement.PARSER, extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(specs_);
-                specs_ = subBuilder.buildPartial();
-              }
-              bitField0_ |= 0x00000010;
+              specs_.add(input.readMessage(boa.types.Ast.SpecStatement.PARSER, extensionRegistry));
               break;
             }
-            case 106: {
-              bitField0_ |= 0x00000020;
+            case 8010: {
+              bitField0_ |= 0x00000010;
               key_ = input.readBytes();
               break;
             }
@@ -6360,6 +6374,9 @@ public final class Ast {
         }
         if (((mutable_bitField0_ & 0x00000100) == 0x00000100)) {
           comments_ = java.util.Collections.unmodifiableList(comments_);
+        }
+        if (((mutable_bitField0_ & 0x00000800) == 0x00000800)) {
+          specs_ = java.util.Collections.unmodifiableList(specs_);
         }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -6912,51 +6929,73 @@ public final class Ast {
       return labelChangeKind_;
     }
 
-    // optional .boa.types.SpecStatement specs = 12;
-    public static final int SPECS_FIELD_NUMBER = 12;
-    private boa.types.Ast.SpecStatement specs_;
+    // repeated .boa.types.SpecStatement specs = 1000;
+    public static final int SPECS_FIELD_NUMBER = 1000;
+    private java.util.List<boa.types.Ast.SpecStatement> specs_;
     /**
-     * <code>optional .boa.types.SpecStatement specs = 12;</code>
+     * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
      *
      * <pre>
      ** For Specs use 
      * </pre>
      */
-    public boolean hasSpecs() {
+    public java.util.List<boa.types.Ast.SpecStatement> getSpecsList() {
+      return specs_;
+    }
+    /**
+     * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
+     *
+     * <pre>
+     ** For Specs use 
+     * </pre>
+     */
+    public java.util.List<? extends boa.types.Ast.SpecStatementOrBuilder> 
+        getSpecsOrBuilderList() {
+      return specs_;
+    }
+    /**
+     * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
+     *
+     * <pre>
+     ** For Specs use 
+     * </pre>
+     */
+    public int getSpecsCount() {
+      return specs_.size();
+    }
+    /**
+     * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
+     *
+     * <pre>
+     ** For Specs use 
+     * </pre>
+     */
+    public boa.types.Ast.SpecStatement getSpecs(int index) {
+      return specs_.get(index);
+    }
+    /**
+     * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
+     *
+     * <pre>
+     ** For Specs use 
+     * </pre>
+     */
+    public boa.types.Ast.SpecStatementOrBuilder getSpecsOrBuilder(
+        int index) {
+      return specs_.get(index);
+    }
+
+    // optional string key = 1001;
+    public static final int KEY_FIELD_NUMBER = 1001;
+    private java.lang.Object key_;
+    /**
+     * <code>optional string key = 1001;</code>
+     */
+    public boolean hasKey() {
       return ((bitField0_ & 0x00000010) == 0x00000010);
     }
     /**
-     * <code>optional .boa.types.SpecStatement specs = 12;</code>
-     *
-     * <pre>
-     ** For Specs use 
-     * </pre>
-     */
-    public boa.types.Ast.SpecStatement getSpecs() {
-      return specs_;
-    }
-    /**
-     * <code>optional .boa.types.SpecStatement specs = 12;</code>
-     *
-     * <pre>
-     ** For Specs use 
-     * </pre>
-     */
-    public boa.types.Ast.SpecStatementOrBuilder getSpecsOrBuilder() {
-      return specs_;
-    }
-
-    // optional string key = 13;
-    public static final int KEY_FIELD_NUMBER = 13;
-    private java.lang.Object key_;
-    /**
-     * <code>optional string key = 13;</code>
-     */
-    public boolean hasKey() {
-      return ((bitField0_ & 0x00000020) == 0x00000020);
-    }
-    /**
-     * <code>optional string key = 13;</code>
+     * <code>optional string key = 1001;</code>
      */
     public java.lang.String getKey() {
       java.lang.Object ref = key_;
@@ -6973,7 +7012,7 @@ public final class Ast {
       }
     }
     /**
-     * <code>optional string key = 13;</code>
+     * <code>optional string key = 1001;</code>
      */
     public com.google.protobuf.ByteString
         getKeyBytes() {
@@ -7001,7 +7040,7 @@ public final class Ast {
       comments_ = java.util.Collections.emptyList();
       structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
       labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
-      specs_ = boa.types.Ast.SpecStatement.getDefaultInstance();
+      specs_ = java.util.Collections.emptyList();
       key_ = "";
     }
     private byte memoizedIsInitialized = -1;
@@ -7059,8 +7098,8 @@ public final class Ast {
           return false;
         }
       }
-      if (hasSpecs()) {
-        if (!getSpecs().isInitialized()) {
+      for (int i = 0; i < getSpecsCount(); i++) {
+        if (!getSpecs(i).isInitialized()) {
           memoizedIsInitialized = 0;
           return false;
         }
@@ -7105,11 +7144,11 @@ public final class Ast {
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         output.writeEnum(11, labelChangeKind_.getNumber());
       }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeMessage(12, specs_);
+      for (int i = 0; i < specs_.size(); i++) {
+        output.writeMessage(1000, specs_.get(i));
       }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        output.writeBytes(13, getKeyBytes());
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeBytes(1001, getKeyBytes());
       }
       getUnknownFields().writeTo(output);
     }
@@ -7164,13 +7203,13 @@ public final class Ast {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(11, labelChangeKind_.getNumber());
       }
+      for (int i = 0; i < specs_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(1000, specs_.get(i));
+      }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(12, specs_);
-      }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(13, getKeyBytes());
+          .computeBytesSize(1001, getKeyBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -7351,11 +7390,11 @@ public final class Ast {
         labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
         bitField0_ = (bitField0_ & ~0x00000400);
         if (specsBuilder_ == null) {
-          specs_ = boa.types.Ast.SpecStatement.getDefaultInstance();
+          specs_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000800);
         } else {
           specsBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000800);
         key_ = "";
         bitField0_ = (bitField0_ & ~0x00001000);
         return this;
@@ -7465,16 +7504,17 @@ public final class Ast {
           to_bitField0_ |= 0x00000008;
         }
         result.labelChangeKind_ = labelChangeKind_;
-        if (((from_bitField0_ & 0x00000800) == 0x00000800)) {
-          to_bitField0_ |= 0x00000010;
-        }
         if (specsBuilder_ == null) {
+          if (((bitField0_ & 0x00000800) == 0x00000800)) {
+            specs_ = java.util.Collections.unmodifiableList(specs_);
+            bitField0_ = (bitField0_ & ~0x00000800);
+          }
           result.specs_ = specs_;
         } else {
           result.specs_ = specsBuilder_.build();
         }
         if (((from_bitField0_ & 0x00001000) == 0x00001000)) {
-          to_bitField0_ |= 0x00000020;
+          to_bitField0_ |= 0x00000010;
         }
         result.key_ = key_;
         result.bitField0_ = to_bitField0_;
@@ -7689,8 +7729,31 @@ public final class Ast {
         if (other.hasLabelChangeKind()) {
           setLabelChangeKind(other.getLabelChangeKind());
         }
-        if (other.hasSpecs()) {
-          mergeSpecs(other.getSpecs());
+        if (specsBuilder_ == null) {
+          if (!other.specs_.isEmpty()) {
+            if (specs_.isEmpty()) {
+              specs_ = other.specs_;
+              bitField0_ = (bitField0_ & ~0x00000800);
+            } else {
+              ensureSpecsIsMutable();
+              specs_.addAll(other.specs_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.specs_.isEmpty()) {
+            if (specsBuilder_.isEmpty()) {
+              specsBuilder_.dispose();
+              specsBuilder_ = null;
+              specs_ = other.specs_;
+              bitField0_ = (bitField0_ & ~0x00000800);
+              specsBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getSpecsFieldBuilder() : null;
+            } else {
+              specsBuilder_.addAllMessages(other.specs_);
+            }
+          }
         }
         if (other.hasKey()) {
           bitField0_ |= 0x00001000;
@@ -7752,8 +7815,8 @@ public final class Ast {
             return false;
           }
         }
-        if (hasSpecs()) {
-          if (!getSpecs().isInitialized()) {
+        for (int i = 0; i < getSpecsCount(); i++) {
+          if (!getSpecs(i).isInitialized()) {
             
             return false;
           }
@@ -10218,97 +10281,197 @@ public final class Ast {
         return this;
       }
 
-      // optional .boa.types.SpecStatement specs = 12;
-      private boa.types.Ast.SpecStatement specs_ = boa.types.Ast.SpecStatement.getDefaultInstance();
-      private com.google.protobuf.SingleFieldBuilder<
+      // repeated .boa.types.SpecStatement specs = 1000;
+      private java.util.List<boa.types.Ast.SpecStatement> specs_ =
+        java.util.Collections.emptyList();
+      private void ensureSpecsIsMutable() {
+        if (!((bitField0_ & 0x00000800) == 0x00000800)) {
+          specs_ = new java.util.ArrayList<boa.types.Ast.SpecStatement>(specs_);
+          bitField0_ |= 0x00000800;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
           boa.types.Ast.SpecStatement, boa.types.Ast.SpecStatement.Builder, boa.types.Ast.SpecStatementOrBuilder> specsBuilder_;
+
       /**
-       * <code>optional .boa.types.SpecStatement specs = 12;</code>
+       * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
        *
        * <pre>
        ** For Specs use 
        * </pre>
        */
-      public boolean hasSpecs() {
-        return ((bitField0_ & 0x00000800) == 0x00000800);
-      }
-      /**
-       * <code>optional .boa.types.SpecStatement specs = 12;</code>
-       *
-       * <pre>
-       ** For Specs use 
-       * </pre>
-       */
-      public boa.types.Ast.SpecStatement getSpecs() {
+      public java.util.List<boa.types.Ast.SpecStatement> getSpecsList() {
         if (specsBuilder_ == null) {
-          return specs_;
+          return java.util.Collections.unmodifiableList(specs_);
         } else {
-          return specsBuilder_.getMessage();
+          return specsBuilder_.getMessageList();
         }
       }
       /**
-       * <code>optional .boa.types.SpecStatement specs = 12;</code>
+       * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
        *
        * <pre>
        ** For Specs use 
        * </pre>
        */
-      public Builder setSpecs(boa.types.Ast.SpecStatement value) {
+      public int getSpecsCount() {
         if (specsBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          specs_ = value;
-          onChanged();
+          return specs_.size();
         } else {
-          specsBuilder_.setMessage(value);
+          return specsBuilder_.getCount();
         }
-        bitField0_ |= 0x00000800;
-        return this;
       }
       /**
-       * <code>optional .boa.types.SpecStatement specs = 12;</code>
+       * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
+       *
+       * <pre>
+       ** For Specs use 
+       * </pre>
+       */
+      public boa.types.Ast.SpecStatement getSpecs(int index) {
+        if (specsBuilder_ == null) {
+          return specs_.get(index);
+        } else {
+          return specsBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
        *
        * <pre>
        ** For Specs use 
        * </pre>
        */
       public Builder setSpecs(
-          boa.types.Ast.SpecStatement.Builder builderForValue) {
+          int index, boa.types.Ast.SpecStatement value) {
         if (specsBuilder_ == null) {
-          specs_ = builderForValue.build();
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureSpecsIsMutable();
+          specs_.set(index, value);
           onChanged();
         } else {
-          specsBuilder_.setMessage(builderForValue.build());
+          specsBuilder_.setMessage(index, value);
         }
-        bitField0_ |= 0x00000800;
         return this;
       }
       /**
-       * <code>optional .boa.types.SpecStatement specs = 12;</code>
+       * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
        *
        * <pre>
        ** For Specs use 
        * </pre>
        */
-      public Builder mergeSpecs(boa.types.Ast.SpecStatement value) {
+      public Builder setSpecs(
+          int index, boa.types.Ast.SpecStatement.Builder builderForValue) {
         if (specsBuilder_ == null) {
-          if (((bitField0_ & 0x00000800) == 0x00000800) &&
-              specs_ != boa.types.Ast.SpecStatement.getDefaultInstance()) {
-            specs_ =
-              boa.types.Ast.SpecStatement.newBuilder(specs_).mergeFrom(value).buildPartial();
-          } else {
-            specs_ = value;
-          }
+          ensureSpecsIsMutable();
+          specs_.set(index, builderForValue.build());
           onChanged();
         } else {
-          specsBuilder_.mergeFrom(value);
+          specsBuilder_.setMessage(index, builderForValue.build());
         }
-        bitField0_ |= 0x00000800;
         return this;
       }
       /**
-       * <code>optional .boa.types.SpecStatement specs = 12;</code>
+       * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
+       *
+       * <pre>
+       ** For Specs use 
+       * </pre>
+       */
+      public Builder addSpecs(boa.types.Ast.SpecStatement value) {
+        if (specsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureSpecsIsMutable();
+          specs_.add(value);
+          onChanged();
+        } else {
+          specsBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
+       *
+       * <pre>
+       ** For Specs use 
+       * </pre>
+       */
+      public Builder addSpecs(
+          int index, boa.types.Ast.SpecStatement value) {
+        if (specsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureSpecsIsMutable();
+          specs_.add(index, value);
+          onChanged();
+        } else {
+          specsBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
+       *
+       * <pre>
+       ** For Specs use 
+       * </pre>
+       */
+      public Builder addSpecs(
+          boa.types.Ast.SpecStatement.Builder builderForValue) {
+        if (specsBuilder_ == null) {
+          ensureSpecsIsMutable();
+          specs_.add(builderForValue.build());
+          onChanged();
+        } else {
+          specsBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
+       *
+       * <pre>
+       ** For Specs use 
+       * </pre>
+       */
+      public Builder addSpecs(
+          int index, boa.types.Ast.SpecStatement.Builder builderForValue) {
+        if (specsBuilder_ == null) {
+          ensureSpecsIsMutable();
+          specs_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          specsBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
+       *
+       * <pre>
+       ** For Specs use 
+       * </pre>
+       */
+      public Builder addAllSpecs(
+          java.lang.Iterable<? extends boa.types.Ast.SpecStatement> values) {
+        if (specsBuilder_ == null) {
+          ensureSpecsIsMutable();
+          super.addAll(values, specs_);
+          onChanged();
+        } else {
+          specsBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
        *
        * <pre>
        ** For Specs use 
@@ -10316,54 +10479,113 @@ public final class Ast {
        */
       public Builder clearSpecs() {
         if (specsBuilder_ == null) {
-          specs_ = boa.types.Ast.SpecStatement.getDefaultInstance();
+          specs_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000800);
           onChanged();
         } else {
           specsBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000800);
         return this;
       }
       /**
-       * <code>optional .boa.types.SpecStatement specs = 12;</code>
+       * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
        *
        * <pre>
        ** For Specs use 
        * </pre>
        */
-      public boa.types.Ast.SpecStatement.Builder getSpecsBuilder() {
-        bitField0_ |= 0x00000800;
-        onChanged();
-        return getSpecsFieldBuilder().getBuilder();
+      public Builder removeSpecs(int index) {
+        if (specsBuilder_ == null) {
+          ensureSpecsIsMutable();
+          specs_.remove(index);
+          onChanged();
+        } else {
+          specsBuilder_.remove(index);
+        }
+        return this;
       }
       /**
-       * <code>optional .boa.types.SpecStatement specs = 12;</code>
+       * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
        *
        * <pre>
        ** For Specs use 
        * </pre>
        */
-      public boa.types.Ast.SpecStatementOrBuilder getSpecsOrBuilder() {
-        if (specsBuilder_ != null) {
-          return specsBuilder_.getMessageOrBuilder();
-        } else {
-          return specs_;
+      public boa.types.Ast.SpecStatement.Builder getSpecsBuilder(
+          int index) {
+        return getSpecsFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
+       *
+       * <pre>
+       ** For Specs use 
+       * </pre>
+       */
+      public boa.types.Ast.SpecStatementOrBuilder getSpecsOrBuilder(
+          int index) {
+        if (specsBuilder_ == null) {
+          return specs_.get(index);  } else {
+          return specsBuilder_.getMessageOrBuilder(index);
         }
       }
       /**
-       * <code>optional .boa.types.SpecStatement specs = 12;</code>
+       * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
        *
        * <pre>
        ** For Specs use 
        * </pre>
        */
-      private com.google.protobuf.SingleFieldBuilder<
+      public java.util.List<? extends boa.types.Ast.SpecStatementOrBuilder> 
+           getSpecsOrBuilderList() {
+        if (specsBuilder_ != null) {
+          return specsBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(specs_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
+       *
+       * <pre>
+       ** For Specs use 
+       * </pre>
+       */
+      public boa.types.Ast.SpecStatement.Builder addSpecsBuilder() {
+        return getSpecsFieldBuilder().addBuilder(
+            boa.types.Ast.SpecStatement.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
+       *
+       * <pre>
+       ** For Specs use 
+       * </pre>
+       */
+      public boa.types.Ast.SpecStatement.Builder addSpecsBuilder(
+          int index) {
+        return getSpecsFieldBuilder().addBuilder(
+            index, boa.types.Ast.SpecStatement.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
+       *
+       * <pre>
+       ** For Specs use 
+       * </pre>
+       */
+      public java.util.List<boa.types.Ast.SpecStatement.Builder> 
+           getSpecsBuilderList() {
+        return getSpecsFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
           boa.types.Ast.SpecStatement, boa.types.Ast.SpecStatement.Builder, boa.types.Ast.SpecStatementOrBuilder> 
           getSpecsFieldBuilder() {
         if (specsBuilder_ == null) {
-          specsBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+          specsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
               boa.types.Ast.SpecStatement, boa.types.Ast.SpecStatement.Builder, boa.types.Ast.SpecStatementOrBuilder>(
                   specs_,
+                  ((bitField0_ & 0x00000800) == 0x00000800),
                   getParentForChildren(),
                   isClean());
           specs_ = null;
@@ -10371,16 +10593,16 @@ public final class Ast {
         return specsBuilder_;
       }
 
-      // optional string key = 13;
+      // optional string key = 1001;
       private java.lang.Object key_ = "";
       /**
-       * <code>optional string key = 13;</code>
+       * <code>optional string key = 1001;</code>
        */
       public boolean hasKey() {
         return ((bitField0_ & 0x00001000) == 0x00001000);
       }
       /**
-       * <code>optional string key = 13;</code>
+       * <code>optional string key = 1001;</code>
        */
       public java.lang.String getKey() {
         java.lang.Object ref = key_;
@@ -10394,7 +10616,7 @@ public final class Ast {
         }
       }
       /**
-       * <code>optional string key = 13;</code>
+       * <code>optional string key = 1001;</code>
        */
       public com.google.protobuf.ByteString
           getKeyBytes() {
@@ -10410,7 +10632,7 @@ public final class Ast {
         }
       }
       /**
-       * <code>optional string key = 13;</code>
+       * <code>optional string key = 1001;</code>
        */
       public Builder setKey(
           java.lang.String value) {
@@ -10423,7 +10645,7 @@ public final class Ast {
         return this;
       }
       /**
-       * <code>optional string key = 13;</code>
+       * <code>optional string key = 1001;</code>
        */
       public Builder clearKey() {
         bitField0_ = (bitField0_ & ~0x00001000);
@@ -10432,7 +10654,7 @@ public final class Ast {
         return this;
       }
       /**
-       * <code>optional string key = 13;</code>
+       * <code>optional string key = 1001;</code>
        */
       public Builder setKeyBytes(
           com.google.protobuf.ByteString value) {
@@ -18532,43 +18754,62 @@ public final class Ast {
      */
     boa.types.Shared.ChangeKind getLabelChangeKind();
 
-    // optional .boa.types.SpecStatement specs = 12;
+    // repeated .boa.types.SpecStatement specs = 1000;
     /**
-     * <code>optional .boa.types.SpecStatement specs = 12;</code>
+     * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
      *
      * <pre>
      ** For Specs use 
      * </pre>
      */
-    boolean hasSpecs();
+    java.util.List<boa.types.Ast.SpecStatement> 
+        getSpecsList();
     /**
-     * <code>optional .boa.types.SpecStatement specs = 12;</code>
+     * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
      *
      * <pre>
      ** For Specs use 
      * </pre>
      */
-    boa.types.Ast.SpecStatement getSpecs();
+    boa.types.Ast.SpecStatement getSpecs(int index);
     /**
-     * <code>optional .boa.types.SpecStatement specs = 12;</code>
+     * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
      *
      * <pre>
      ** For Specs use 
      * </pre>
      */
-    boa.types.Ast.SpecStatementOrBuilder getSpecsOrBuilder();
+    int getSpecsCount();
+    /**
+     * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
+     *
+     * <pre>
+     ** For Specs use 
+     * </pre>
+     */
+    java.util.List<? extends boa.types.Ast.SpecStatementOrBuilder> 
+        getSpecsOrBuilderList();
+    /**
+     * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
+     *
+     * <pre>
+     ** For Specs use 
+     * </pre>
+     */
+    boa.types.Ast.SpecStatementOrBuilder getSpecsOrBuilder(
+        int index);
 
-    // optional string key = 13;
+    // optional string key = 1001;
     /**
-     * <code>optional string key = 13;</code>
+     * <code>optional string key = 1001;</code>
      */
     boolean hasKey();
     /**
-     * <code>optional string key = 13;</code>
+     * <code>optional string key = 1001;</code>
      */
     java.lang.String getKey();
     /**
-     * <code>optional string key = 13;</code>
+     * <code>optional string key = 1001;</code>
      */
     com.google.protobuf.ByteString
         getKeyBytes();
@@ -18745,21 +18986,16 @@ public final class Ast {
               }
               break;
             }
-            case 98: {
-              boa.types.Ast.SpecStatement.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000080) == 0x00000080)) {
-                subBuilder = specs_.toBuilder();
+            case 8002: {
+              if (!((mutable_bitField0_ & 0x00000800) == 0x00000800)) {
+                specs_ = new java.util.ArrayList<boa.types.Ast.SpecStatement>();
+                mutable_bitField0_ |= 0x00000800;
               }
-              specs_ = input.readMessage(boa.types.Ast.SpecStatement.PARSER, extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(specs_);
-                specs_ = subBuilder.buildPartial();
-              }
-              bitField0_ |= 0x00000080;
+              specs_.add(input.readMessage(boa.types.Ast.SpecStatement.PARSER, extensionRegistry));
               break;
             }
-            case 106: {
-              bitField0_ |= 0x00000100;
+            case 8010: {
+              bitField0_ |= 0x00000080;
               key_ = input.readBytes();
               break;
             }
@@ -18782,6 +19018,9 @@ public final class Ast {
         }
         if (((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
           updates_ = java.util.Collections.unmodifiableList(updates_);
+        }
+        if (((mutable_bitField0_ & 0x00000800) == 0x00000800)) {
+          specs_ = java.util.Collections.unmodifiableList(specs_);
         }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -19680,51 +19919,73 @@ public final class Ast {
       return labelChangeKind_;
     }
 
-    // optional .boa.types.SpecStatement specs = 12;
-    public static final int SPECS_FIELD_NUMBER = 12;
-    private boa.types.Ast.SpecStatement specs_;
+    // repeated .boa.types.SpecStatement specs = 1000;
+    public static final int SPECS_FIELD_NUMBER = 1000;
+    private java.util.List<boa.types.Ast.SpecStatement> specs_;
     /**
-     * <code>optional .boa.types.SpecStatement specs = 12;</code>
+     * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
      *
      * <pre>
      ** For Specs use 
      * </pre>
      */
-    public boolean hasSpecs() {
+    public java.util.List<boa.types.Ast.SpecStatement> getSpecsList() {
+      return specs_;
+    }
+    /**
+     * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
+     *
+     * <pre>
+     ** For Specs use 
+     * </pre>
+     */
+    public java.util.List<? extends boa.types.Ast.SpecStatementOrBuilder> 
+        getSpecsOrBuilderList() {
+      return specs_;
+    }
+    /**
+     * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
+     *
+     * <pre>
+     ** For Specs use 
+     * </pre>
+     */
+    public int getSpecsCount() {
+      return specs_.size();
+    }
+    /**
+     * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
+     *
+     * <pre>
+     ** For Specs use 
+     * </pre>
+     */
+    public boa.types.Ast.SpecStatement getSpecs(int index) {
+      return specs_.get(index);
+    }
+    /**
+     * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
+     *
+     * <pre>
+     ** For Specs use 
+     * </pre>
+     */
+    public boa.types.Ast.SpecStatementOrBuilder getSpecsOrBuilder(
+        int index) {
+      return specs_.get(index);
+    }
+
+    // optional string key = 1001;
+    public static final int KEY_FIELD_NUMBER = 1001;
+    private java.lang.Object key_;
+    /**
+     * <code>optional string key = 1001;</code>
+     */
+    public boolean hasKey() {
       return ((bitField0_ & 0x00000080) == 0x00000080);
     }
     /**
-     * <code>optional .boa.types.SpecStatement specs = 12;</code>
-     *
-     * <pre>
-     ** For Specs use 
-     * </pre>
-     */
-    public boa.types.Ast.SpecStatement getSpecs() {
-      return specs_;
-    }
-    /**
-     * <code>optional .boa.types.SpecStatement specs = 12;</code>
-     *
-     * <pre>
-     ** For Specs use 
-     * </pre>
-     */
-    public boa.types.Ast.SpecStatementOrBuilder getSpecsOrBuilder() {
-      return specs_;
-    }
-
-    // optional string key = 13;
-    public static final int KEY_FIELD_NUMBER = 13;
-    private java.lang.Object key_;
-    /**
-     * <code>optional string key = 13;</code>
-     */
-    public boolean hasKey() {
-      return ((bitField0_ & 0x00000100) == 0x00000100);
-    }
-    /**
-     * <code>optional string key = 13;</code>
+     * <code>optional string key = 1001;</code>
      */
     public java.lang.String getKey() {
       java.lang.Object ref = key_;
@@ -19741,7 +20002,7 @@ public final class Ast {
       }
     }
     /**
-     * <code>optional string key = 13;</code>
+     * <code>optional string key = 1001;</code>
      */
     public com.google.protobuf.ByteString
         getKeyBytes() {
@@ -19769,7 +20030,7 @@ public final class Ast {
       expression_ = boa.types.Ast.Expression.getDefaultInstance();
       structuralChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
       labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
-      specs_ = boa.types.Ast.SpecStatement.getDefaultInstance();
+      specs_ = java.util.Collections.emptyList();
       key_ = "";
     }
     private byte memoizedIsInitialized = -1;
@@ -19829,8 +20090,8 @@ public final class Ast {
           return false;
         }
       }
-      if (hasSpecs()) {
-        if (!getSpecs().isInitialized()) {
+      for (int i = 0; i < getSpecsCount(); i++) {
+        if (!getSpecs(i).isInitialized()) {
           memoizedIsInitialized = 0;
           return false;
         }
@@ -19875,11 +20136,11 @@ public final class Ast {
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
         output.writeEnum(11, labelChangeKind_.getNumber());
       }
-      if (((bitField0_ & 0x00000080) == 0x00000080)) {
-        output.writeMessage(12, specs_);
+      for (int i = 0; i < specs_.size(); i++) {
+        output.writeMessage(1000, specs_.get(i));
       }
-      if (((bitField0_ & 0x00000100) == 0x00000100)) {
-        output.writeBytes(13, getKeyBytes());
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        output.writeBytes(1001, getKeyBytes());
       }
       getUnknownFields().writeTo(output);
     }
@@ -19934,13 +20195,13 @@ public final class Ast {
         size += com.google.protobuf.CodedOutputStream
           .computeEnumSize(11, labelChangeKind_.getNumber());
       }
+      for (int i = 0; i < specs_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(1000, specs_.get(i));
+      }
       if (((bitField0_ & 0x00000080) == 0x00000080)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(12, specs_);
-      }
-      if (((bitField0_ & 0x00000100) == 0x00000100)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(13, getKeyBytes());
+          .computeBytesSize(1001, getKeyBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -20126,11 +20387,11 @@ public final class Ast {
         labelChangeKind_ = boa.types.Shared.ChangeKind.ADDED;
         bitField0_ = (bitField0_ & ~0x00000400);
         if (specsBuilder_ == null) {
-          specs_ = boa.types.Ast.SpecStatement.getDefaultInstance();
+          specs_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000800);
         } else {
           specsBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000800);
         key_ = "";
         bitField0_ = (bitField0_ & ~0x00001000);
         return this;
@@ -20241,16 +20502,17 @@ public final class Ast {
           to_bitField0_ |= 0x00000040;
         }
         result.labelChangeKind_ = labelChangeKind_;
-        if (((from_bitField0_ & 0x00000800) == 0x00000800)) {
-          to_bitField0_ |= 0x00000080;
-        }
         if (specsBuilder_ == null) {
+          if (((bitField0_ & 0x00000800) == 0x00000800)) {
+            specs_ = java.util.Collections.unmodifiableList(specs_);
+            bitField0_ = (bitField0_ & ~0x00000800);
+          }
           result.specs_ = specs_;
         } else {
           result.specs_ = specsBuilder_.build();
         }
         if (((from_bitField0_ & 0x00001000) == 0x00001000)) {
-          to_bitField0_ |= 0x00000100;
+          to_bitField0_ |= 0x00000080;
         }
         result.key_ = key_;
         result.bitField0_ = to_bitField0_;
@@ -20394,8 +20656,31 @@ public final class Ast {
         if (other.hasLabelChangeKind()) {
           setLabelChangeKind(other.getLabelChangeKind());
         }
-        if (other.hasSpecs()) {
-          mergeSpecs(other.getSpecs());
+        if (specsBuilder_ == null) {
+          if (!other.specs_.isEmpty()) {
+            if (specs_.isEmpty()) {
+              specs_ = other.specs_;
+              bitField0_ = (bitField0_ & ~0x00000800);
+            } else {
+              ensureSpecsIsMutable();
+              specs_.addAll(other.specs_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.specs_.isEmpty()) {
+            if (specsBuilder_.isEmpty()) {
+              specsBuilder_.dispose();
+              specsBuilder_ = null;
+              specs_ = other.specs_;
+              bitField0_ = (bitField0_ & ~0x00000800);
+              specsBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getSpecsFieldBuilder() : null;
+            } else {
+              specsBuilder_.addAllMessages(other.specs_);
+            }
+          }
         }
         if (other.hasKey()) {
           bitField0_ |= 0x00001000;
@@ -20459,8 +20744,8 @@ public final class Ast {
             return false;
           }
         }
-        if (hasSpecs()) {
-          if (!getSpecs().isInitialized()) {
+        for (int i = 0; i < getSpecsCount(); i++) {
+          if (!getSpecs(i).isInitialized()) {
             
             return false;
           }
@@ -22143,97 +22428,197 @@ public final class Ast {
         return this;
       }
 
-      // optional .boa.types.SpecStatement specs = 12;
-      private boa.types.Ast.SpecStatement specs_ = boa.types.Ast.SpecStatement.getDefaultInstance();
-      private com.google.protobuf.SingleFieldBuilder<
+      // repeated .boa.types.SpecStatement specs = 1000;
+      private java.util.List<boa.types.Ast.SpecStatement> specs_ =
+        java.util.Collections.emptyList();
+      private void ensureSpecsIsMutable() {
+        if (!((bitField0_ & 0x00000800) == 0x00000800)) {
+          specs_ = new java.util.ArrayList<boa.types.Ast.SpecStatement>(specs_);
+          bitField0_ |= 0x00000800;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
           boa.types.Ast.SpecStatement, boa.types.Ast.SpecStatement.Builder, boa.types.Ast.SpecStatementOrBuilder> specsBuilder_;
+
       /**
-       * <code>optional .boa.types.SpecStatement specs = 12;</code>
+       * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
        *
        * <pre>
        ** For Specs use 
        * </pre>
        */
-      public boolean hasSpecs() {
-        return ((bitField0_ & 0x00000800) == 0x00000800);
-      }
-      /**
-       * <code>optional .boa.types.SpecStatement specs = 12;</code>
-       *
-       * <pre>
-       ** For Specs use 
-       * </pre>
-       */
-      public boa.types.Ast.SpecStatement getSpecs() {
+      public java.util.List<boa.types.Ast.SpecStatement> getSpecsList() {
         if (specsBuilder_ == null) {
-          return specs_;
+          return java.util.Collections.unmodifiableList(specs_);
         } else {
-          return specsBuilder_.getMessage();
+          return specsBuilder_.getMessageList();
         }
       }
       /**
-       * <code>optional .boa.types.SpecStatement specs = 12;</code>
+       * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
        *
        * <pre>
        ** For Specs use 
        * </pre>
        */
-      public Builder setSpecs(boa.types.Ast.SpecStatement value) {
+      public int getSpecsCount() {
         if (specsBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          specs_ = value;
-          onChanged();
+          return specs_.size();
         } else {
-          specsBuilder_.setMessage(value);
+          return specsBuilder_.getCount();
         }
-        bitField0_ |= 0x00000800;
-        return this;
       }
       /**
-       * <code>optional .boa.types.SpecStatement specs = 12;</code>
+       * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
+       *
+       * <pre>
+       ** For Specs use 
+       * </pre>
+       */
+      public boa.types.Ast.SpecStatement getSpecs(int index) {
+        if (specsBuilder_ == null) {
+          return specs_.get(index);
+        } else {
+          return specsBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
        *
        * <pre>
        ** For Specs use 
        * </pre>
        */
       public Builder setSpecs(
-          boa.types.Ast.SpecStatement.Builder builderForValue) {
+          int index, boa.types.Ast.SpecStatement value) {
         if (specsBuilder_ == null) {
-          specs_ = builderForValue.build();
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureSpecsIsMutable();
+          specs_.set(index, value);
           onChanged();
         } else {
-          specsBuilder_.setMessage(builderForValue.build());
+          specsBuilder_.setMessage(index, value);
         }
-        bitField0_ |= 0x00000800;
         return this;
       }
       /**
-       * <code>optional .boa.types.SpecStatement specs = 12;</code>
+       * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
        *
        * <pre>
        ** For Specs use 
        * </pre>
        */
-      public Builder mergeSpecs(boa.types.Ast.SpecStatement value) {
+      public Builder setSpecs(
+          int index, boa.types.Ast.SpecStatement.Builder builderForValue) {
         if (specsBuilder_ == null) {
-          if (((bitField0_ & 0x00000800) == 0x00000800) &&
-              specs_ != boa.types.Ast.SpecStatement.getDefaultInstance()) {
-            specs_ =
-              boa.types.Ast.SpecStatement.newBuilder(specs_).mergeFrom(value).buildPartial();
-          } else {
-            specs_ = value;
-          }
+          ensureSpecsIsMutable();
+          specs_.set(index, builderForValue.build());
           onChanged();
         } else {
-          specsBuilder_.mergeFrom(value);
+          specsBuilder_.setMessage(index, builderForValue.build());
         }
-        bitField0_ |= 0x00000800;
         return this;
       }
       /**
-       * <code>optional .boa.types.SpecStatement specs = 12;</code>
+       * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
+       *
+       * <pre>
+       ** For Specs use 
+       * </pre>
+       */
+      public Builder addSpecs(boa.types.Ast.SpecStatement value) {
+        if (specsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureSpecsIsMutable();
+          specs_.add(value);
+          onChanged();
+        } else {
+          specsBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
+       *
+       * <pre>
+       ** For Specs use 
+       * </pre>
+       */
+      public Builder addSpecs(
+          int index, boa.types.Ast.SpecStatement value) {
+        if (specsBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureSpecsIsMutable();
+          specs_.add(index, value);
+          onChanged();
+        } else {
+          specsBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
+       *
+       * <pre>
+       ** For Specs use 
+       * </pre>
+       */
+      public Builder addSpecs(
+          boa.types.Ast.SpecStatement.Builder builderForValue) {
+        if (specsBuilder_ == null) {
+          ensureSpecsIsMutable();
+          specs_.add(builderForValue.build());
+          onChanged();
+        } else {
+          specsBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
+       *
+       * <pre>
+       ** For Specs use 
+       * </pre>
+       */
+      public Builder addSpecs(
+          int index, boa.types.Ast.SpecStatement.Builder builderForValue) {
+        if (specsBuilder_ == null) {
+          ensureSpecsIsMutable();
+          specs_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          specsBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
+       *
+       * <pre>
+       ** For Specs use 
+       * </pre>
+       */
+      public Builder addAllSpecs(
+          java.lang.Iterable<? extends boa.types.Ast.SpecStatement> values) {
+        if (specsBuilder_ == null) {
+          ensureSpecsIsMutable();
+          super.addAll(values, specs_);
+          onChanged();
+        } else {
+          specsBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
        *
        * <pre>
        ** For Specs use 
@@ -22241,54 +22626,113 @@ public final class Ast {
        */
       public Builder clearSpecs() {
         if (specsBuilder_ == null) {
-          specs_ = boa.types.Ast.SpecStatement.getDefaultInstance();
+          specs_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000800);
           onChanged();
         } else {
           specsBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000800);
         return this;
       }
       /**
-       * <code>optional .boa.types.SpecStatement specs = 12;</code>
+       * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
        *
        * <pre>
        ** For Specs use 
        * </pre>
        */
-      public boa.types.Ast.SpecStatement.Builder getSpecsBuilder() {
-        bitField0_ |= 0x00000800;
-        onChanged();
-        return getSpecsFieldBuilder().getBuilder();
+      public Builder removeSpecs(int index) {
+        if (specsBuilder_ == null) {
+          ensureSpecsIsMutable();
+          specs_.remove(index);
+          onChanged();
+        } else {
+          specsBuilder_.remove(index);
+        }
+        return this;
       }
       /**
-       * <code>optional .boa.types.SpecStatement specs = 12;</code>
+       * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
        *
        * <pre>
        ** For Specs use 
        * </pre>
        */
-      public boa.types.Ast.SpecStatementOrBuilder getSpecsOrBuilder() {
-        if (specsBuilder_ != null) {
-          return specsBuilder_.getMessageOrBuilder();
-        } else {
-          return specs_;
+      public boa.types.Ast.SpecStatement.Builder getSpecsBuilder(
+          int index) {
+        return getSpecsFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
+       *
+       * <pre>
+       ** For Specs use 
+       * </pre>
+       */
+      public boa.types.Ast.SpecStatementOrBuilder getSpecsOrBuilder(
+          int index) {
+        if (specsBuilder_ == null) {
+          return specs_.get(index);  } else {
+          return specsBuilder_.getMessageOrBuilder(index);
         }
       }
       /**
-       * <code>optional .boa.types.SpecStatement specs = 12;</code>
+       * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
        *
        * <pre>
        ** For Specs use 
        * </pre>
        */
-      private com.google.protobuf.SingleFieldBuilder<
+      public java.util.List<? extends boa.types.Ast.SpecStatementOrBuilder> 
+           getSpecsOrBuilderList() {
+        if (specsBuilder_ != null) {
+          return specsBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(specs_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
+       *
+       * <pre>
+       ** For Specs use 
+       * </pre>
+       */
+      public boa.types.Ast.SpecStatement.Builder addSpecsBuilder() {
+        return getSpecsFieldBuilder().addBuilder(
+            boa.types.Ast.SpecStatement.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
+       *
+       * <pre>
+       ** For Specs use 
+       * </pre>
+       */
+      public boa.types.Ast.SpecStatement.Builder addSpecsBuilder(
+          int index) {
+        return getSpecsFieldBuilder().addBuilder(
+            index, boa.types.Ast.SpecStatement.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.SpecStatement specs = 1000;</code>
+       *
+       * <pre>
+       ** For Specs use 
+       * </pre>
+       */
+      public java.util.List<boa.types.Ast.SpecStatement.Builder> 
+           getSpecsBuilderList() {
+        return getSpecsFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
           boa.types.Ast.SpecStatement, boa.types.Ast.SpecStatement.Builder, boa.types.Ast.SpecStatementOrBuilder> 
           getSpecsFieldBuilder() {
         if (specsBuilder_ == null) {
-          specsBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+          specsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
               boa.types.Ast.SpecStatement, boa.types.Ast.SpecStatement.Builder, boa.types.Ast.SpecStatementOrBuilder>(
                   specs_,
+                  ((bitField0_ & 0x00000800) == 0x00000800),
                   getParentForChildren(),
                   isClean());
           specs_ = null;
@@ -22296,16 +22740,16 @@ public final class Ast {
         return specsBuilder_;
       }
 
-      // optional string key = 13;
+      // optional string key = 1001;
       private java.lang.Object key_ = "";
       /**
-       * <code>optional string key = 13;</code>
+       * <code>optional string key = 1001;</code>
        */
       public boolean hasKey() {
         return ((bitField0_ & 0x00001000) == 0x00001000);
       }
       /**
-       * <code>optional string key = 13;</code>
+       * <code>optional string key = 1001;</code>
        */
       public java.lang.String getKey() {
         java.lang.Object ref = key_;
@@ -22319,7 +22763,7 @@ public final class Ast {
         }
       }
       /**
-       * <code>optional string key = 13;</code>
+       * <code>optional string key = 1001;</code>
        */
       public com.google.protobuf.ByteString
           getKeyBytes() {
@@ -22335,7 +22779,7 @@ public final class Ast {
         }
       }
       /**
-       * <code>optional string key = 13;</code>
+       * <code>optional string key = 1001;</code>
        */
       public Builder setKey(
           java.lang.String value) {
@@ -22348,7 +22792,7 @@ public final class Ast {
         return this;
       }
       /**
-       * <code>optional string key = 13;</code>
+       * <code>optional string key = 1001;</code>
        */
       public Builder clearKey() {
         bitField0_ = (bitField0_ & ~0x00001000);
@@ -22357,7 +22801,7 @@ public final class Ast {
         return this;
       }
       /**
-       * <code>optional string key = 13;</code>
+       * <code>optional string key = 1001;</code>
        */
       public Builder setKeyBytes(
           com.google.protobuf.ByteString value) {
@@ -36124,7 +36568,7 @@ public final class Ast {
       "ressions\030\006 \003(\0132\025.boa.types.Expression\0225\n" +
       "\026structural_change_kind\030\007 \001(\0162\025.boa.type" +
       "s.ChangeKind\0220\n\021label_change_kind\030\010 \001(\0162" +
-      "\025.boa.types.ChangeKind\"\370\003\n\013Declaration\022\014" +
+      "\025.boa.types.ChangeKind\"\372\003\n\013Declaration\022\014" +
       "\n\004name\030\001 \002(\t\022!\n\004kind\030\002 \002(\0162\023.boa.types.T" +
       "ypeKind\022&\n\tmodifiers\030\003 \003(\0132\023.boa.types.M" +
       "odifier\022+\n\022generic_parameters\030\004 \003(\0132\017.bo" +
@@ -36135,156 +36579,156 @@ public final class Ast {
       ".Declaration\022$\n\010comments\030\t \003(\0132\022.boa.typ" +
       "es.Comment\0225\n\026structural_change_kind\030\n \001" +
       "(\0162\025.boa.types.ChangeKind\0220\n\021label_chang" +
-      "e_kind\030\013 \001(\0162\025.boa.types.ChangeKind\022\'\n\005s" +
-      "pecs\030\014 \001(\0132\030.boa.types.SpecStatement\022\013\n\003" +
-      "key\030\r \001(\t\"\254\001\n\004Type\022\014\n\004name\030\001 \002(\t\022!\n\004kind" +
-      "\030\002 \002(\0162\023.boa.types.TypeKind\022\n\n\002id\030\004 \001(\t\022",
-      "5\n\026structural_change_kind\030\005 \001(\0162\025.boa.ty" +
-      "pes.ChangeKind\0220\n\021label_change_kind\030\006 \001(" +
-      "\0162\025.boa.types.ChangeKind\"\251\003\n\006Method\022\014\n\004n" +
-      "ame\030\001 \001(\t\022&\n\tmodifiers\030\002 \003(\0132\023.boa.types" +
-      ".Modifier\022$\n\013return_type\030\003 \002(\0132\017.boa.typ" +
-      "es.Type\022+\n\022generic_parameters\030\004 \003(\0132\017.bo" +
-      "a.types.Type\022&\n\targuments\030\005 \003(\0132\023.boa.ty" +
-      "pes.Variable\022(\n\017exception_types\030\006 \003(\0132\017." +
-      "boa.types.Type\022(\n\nstatements\030\007 \003(\0132\024.boa" +
-      ".types.Statement\022$\n\010comments\030\010 \003(\0132\022.boa",
-      ".types.Comment\0225\n\026structural_change_kind" +
-      "\030\t \001(\0162\025.boa.types.ChangeKind\0220\n\021label_c" +
-      "hange_kind\030\n \001(\0162\025.boa.types.ChangeKind\022" +
-      "\013\n\003key\030\013 \001(\t\"\260\002\n\010Variable\022\014\n\004name\030\001 \002(\t\022" +
-      "&\n\rvariable_type\030\002 \002(\0132\017.boa.types.Type\022" +
-      "&\n\tmodifiers\030\003 \003(\0132\023.boa.types.Modifier\022" +
-      "*\n\013initializer\030\004 \001(\0132\025.boa.types.Express" +
-      "ion\022$\n\010comments\030\005 \003(\0132\022.boa.types.Commen" +
-      "t\0225\n\026structural_change_kind\030\006 \001(\0162\025.boa." +
-      "types.ChangeKind\0220\n\021label_change_kind\030\007 ",
-      "\001(\0162\025.boa.types.ChangeKind\022\013\n\003key\030\010 \001(\t\"" +
-      "\211\013\n\tStatement\0220\n\004kind\030\001 \002(\0162\".boa.types." +
-      "Statement.StatementKind\022$\n\010comments\030\002 \003(" +
-      "\0132\022.boa.types.Comment\022(\n\nstatements\030\003 \003(" +
-      "\0132\024.boa.types.Statement\022.\n\017initializatio" +
-      "ns\030\004 \003(\0132\025.boa.types.Expression\022(\n\tcondi" +
-      "tion\030\005 \001(\0132\025.boa.types.Expression\022&\n\007upd" +
-      "ates\030\006 \003(\0132\025.boa.types.Expression\0221\n\024var" +
-      "iable_declaration\030\007 \001(\0132\023.boa.types.Vari" +
-      "able\0220\n\020type_declaration\030\010 \001(\0132\026.boa.typ",
-      "es.Declaration\022)\n\nexpression\030\t \001(\0132\025.boa" +
-      ".types.Expression\0225\n\026structural_change_k" +
-      "ind\030\n \001(\0162\025.boa.types.ChangeKind\0220\n\021labe" +
-      "l_change_kind\030\013 \001(\0162\025.boa.types.ChangeKi" +
-      "nd\022\'\n\005specs\030\014 \001(\0132\030.boa.types.SpecStatem" +
-      "ent\022\013\n\003key\030\r \001(\t\"\310\006\n\rStatementKind\022\t\n\005OT" +
-      "HER\020\000\022\t\n\005BLOCK\020\001\022\014\n\010TYPEDECL\020\002\022\016\n\nEXPRES" +
-      "SION\020\003\022\010\n\004EXPR\020\003\022\020\n\014SYNCHRONIZED\020\004\022\010\n\004SY" +
-      "NC\020\004\022\n\n\006RETURN\020\005\022\007\n\003FOR\020\006\022\006\n\002DO\020\007\022\t\n\005WHI" +
-      "LE\020\010\022\006\n\002IF\020\t\022\n\n\006ASSERT\020\n\022\t\n\005BREAK\020\013\022\014\n\010C",
-      "ONTINUE\020\014\022\t\n\005LABEL\020\r\022\n\n\006SWITCH\020\016\022\010\n\004CASE" +
-      "\020\017\022\007\n\003TRY\020\020\022\t\n\005THROW\020\021\022\t\n\005CATCH\020\022\022\t\n\005EMP" +
-      "TY\020\023\022\022\n\rSPEC_REQUIRES\020\350\007\022\021\n\014SPEC_ENSURES" +
-      "\020\351\007\022\021\n\014SPEC_SIGNALS\020\352\007\022\026\n\021SPEC_SIGNALS_O" +
-      "NLY\020\353\007\022\024\n\017SPEC_ASSIGNABLE\020\354\007\022\025\n\020SPEC_MAI" +
-      "NTAINING\020\355\007\022\020\n\013SPEC_ASSUME\020\356\007\022\r\n\010SPEC_SE" +
-      "T\020\357\007\022\022\n\rSPEC_DIVERGES\020\360\007\022\024\n\017SPEC_ACCESSI" +
-      "BLE\020\361\007\022\022\n\rSPEC_CAPTURES\020\362\007\022\022\n\rSPEC_CALLA" +
-      "BLE\020\363\007\022\016\n\tSPEC_WHEN\020\364\007\022\022\n\rSPEC_DURATION\020" +
-      "\365\007\022\022\n\rSPEC_MEASURES\020\366\007\022\014\n\007SPEC_IN\020\367\007\022\023\n\016",
-      "SPEC_INVARIANT\020\370\007\022\024\n\017SPEC_REPRESENTS\020\371\007\022" +
-      "\023\n\016SPEC_INITIALLY\020\372\007\022\016\n\tSPEC_TYPE\020\373\007\022\022\n\r" +
-      "SPEC_BEHAVIOR\020\374\007\022\023\n\016SPEC_BEHAVIOUR\020\375\007\022\031\n" +
-      "\024SPEC_NORMAL_BEHAVIOR\020\376\007\022\032\n\025SPEC_NORMAL_" +
-      "BEHAVIOUR\020\377\007\022\036\n\031SPEC_EXCEPTIONAL_BEHAVIO" +
-      "R\020\200\010\022\037\n\032SPEC_EXCEPTIONAL_BEHAVIOUR\020\201\010\022\020\n" +
-      "\013SPEC_ASSERT\020\202\010\032\002\020\001\"\213\016\n\nExpression\0222\n\004ki" +
-      "nd\030\001 \002(\0162$.boa.types.Expression.Expressi" +
-      "onKind\022*\n\013expressions\030\002 \003(\0132\025.boa.types." +
-      "Expression\022+\n\016variable_decls\030\003 \003(\0132\023.boa",
-      ".types.Variable\022!\n\010new_type\030\004 \001(\0132\017.boa." +
-      "types.Type\022+\n\022generic_parameters\030\005 \003(\0132\017" +
-      ".boa.types.Type\022\022\n\nis_postfix\030\006 \001(\010\022\017\n\007l" +
-      "iteral\030\007 \001(\t\022\020\n\010variable\030\010 \001(\t\022\016\n\006method" +
-      "\030\t \001(\t\022*\n\013method_args\030\n \003(\0132\025.boa.types." +
-      "Expression\0220\n\020anon_declaration\030\013 \001(\0132\026.b" +
-      "oa.types.Declaration\022\'\n\nannotation\030\014 \001(\013" +
-      "2\023.boa.types.Modifier\022!\n\006lambda\030\r \001(\0132\021." +
-      "boa.types.Method\022\021\n\tno_parens\030\016 \001(\010\0225\n\026s" +
-      "tructural_change_kind\030\017 \001(\0162\025.boa.types.",
-      "ChangeKind\0220\n\021label_change_kind\030\020 \001(\0162\025." +
-      "boa.types.ChangeKind\"\262\t\n\016ExpressionKind\022" +
-      "\t\n\005OTHER\020\000\022\013\n\007LITERAL\020\001\022\r\n\tVARACCESS\020\002\022\013" +
-      "\n\007VARDECL\020\003\022\016\n\nMETHODCALL\020\004\022\010\n\004CAST\020\005\022\016\n" +
-      "\nARRAYINDEX\020\006\022\r\n\tARRAYINIT\020\007\022\017\n\013TYPECOMP" +
-      "ARE\020\010\022\007\n\003NEW\020\t\022\014\n\010NEWARRAY\020\n\022\n\n\006OP_ADD\020\013" +
-      "\022\n\n\006OP_SUB\020\014\022\013\n\007OP_MULT\020\r\022\n\n\006OP_DIV\020\016\022\n\n" +
-      "\006OP_MOD\020\017\022\n\n\006OP_INC\020\020\022\n\n\006OP_DEC\020\021\022\016\n\nBIT" +
-      "_LSHIFT\020\022\022\016\n\nBIT_RSHIFT\020\023\022\026\n\022BIT_UNSIGNE" +
-      "DRSHIFT\020\024\022\013\n\007BIT_AND\020\025\022\n\n\006BIT_OR\020\026\022\013\n\007BI",
-      "T_NOT\020\027\022\013\n\007BIT_XOR\020\030\022\017\n\013LOGICAL_NOT\020\031\022\017\n" +
-      "\013LOGICAL_AND\020\032\022\016\n\nLOGICAL_OR\020\033\022\006\n\002EQ\020\034\022\007" +
-      "\n\003NEQ\020\035\022\006\n\002LT\020\036\022\006\n\002GT\020\037\022\010\n\004LTEQ\020 \022\010\n\004GTE" +
-      "Q\020!\022\017\n\013CONDITIONAL\020\"\022\020\n\014NULLCOALESCE\020#\022\n" +
-      "\n\006ASSIGN\020$\022\016\n\nASSIGN_ADD\020%\022\016\n\nASSIGN_SUB" +
-      "\020&\022\017\n\013ASSIGN_MULT\020\'\022\016\n\nASSIGN_DIV\020(\022\016\n\nA" +
-      "SSIGN_MOD\020)\022\021\n\rASSIGN_BITXOR\020*\022\021\n\rASSIGN" +
-      "_BITAND\020+\022\020\n\014ASSIGN_BITOR\020,\022\021\n\rASSIGN_LS" +
-      "HIFT\020-\022\021\n\rASSIGN_RSHIFT\020.\022\031\n\025ASSIGN_UNSI" +
-      "GNEDRSHIFT\020/\022\016\n\nANNOTATION\0200\022\t\n\005PAREN\0201\022",
-      "\024\n\020METHOD_REFERENCE\0202\022\n\n\006LAMBDA\0203\022\017\n\013ANO" +
-      "N_METHOD\0204\022\020\n\013SPEC_RESULT\020\350\007\022\r\n\010SPEC_OLD" +
-      "\020\351\007\022\017\n\nSPEC_FRESH\020\352\007\022\031\n\024SPEC_NONNULLELEM" +
-      "ENTS\020\353\007\022\020\n\013SPEC_TYPEOF\020\354\007\022\022\n\rSPEC_ELEMTY" +
-      "PE\020\355\007\022\016\n\tSPEC_TYPE\020\356\007\022\020\n\013SPEC_FORALL\020\357\007\022" +
-      "\020\n\013SPEC_EXISTS\020\360\007\022\021\n\014SPEC_SUBTYPE\020\361\007\022\025\n\020" +
-      "SPEC_EQUIVALENCE\020\362\007\022\027\n\022SPEC_INEQUIVALENC" +
-      "E\020\363\007\022\021\n\014SPEC_FORWARD\020\364\007\022\021\n\014SPEC_REVERSE\020" +
-      "\365\007\022\021\n\014SPEC_NOTHING\020\366\007\022\024\n\017SPEC_EVERYTHING" +
-      "\020\367\007\022\026\n\021SPEC_NOTSPECIFIED\020\370\007\022\t\n\004NEXT\020\371\007\022\r",
-      "\n\010GLOBALLY\020\372\007\022\014\n\007FINALLY\020\373\007\022\n\n\005UNTIL\020\374\007\022" +
-      "\014\n\007RELEASE\020\375\007\022\n\n\005INPLY\020\376\007\"\320\005\n\010Modifier\022." +
-      "\n\004kind\030\001 \002(\0162 .boa.types.Modifier.Modifi" +
-      "erKind\0222\n\nvisibility\030\002 \001(\0162\036.boa.types.M" +
-      "odifier.Visibility\022\027\n\017annotation_name\030\003 " +
-      "\001(\t\022\032\n\022annotation_members\030\004 \003(\t\0220\n\021annot" +
-      "ation_values\030\005 \003(\0132\025.boa.types.Expressio" +
-      "n\022\r\n\005other\030\006 \001(\t\0225\n\026structural_change_ki" +
-      "nd\030\007 \001(\0162\025.boa.types.ChangeKind\0220\n\021label" +
-      "_change_kind\030\010 \001(\0162\025.boa.types.ChangeKin",
-      "d\"\365\001\n\014ModifierKind\022\t\n\005OTHER\020\000\022\016\n\nVISIBIL" +
-      "ITY\020\001\022\016\n\nANNOTATION\020\002\022\t\n\005FINAL\020\003\022\n\n\006STAT" +
-      "IC\020\004\022\020\n\014SYNCHRONIZED\020\005\022\010\n\004SYNC\020\005\022\014\n\010ABST" +
-      "RACT\020\006\022\022\n\rSPEC_INSTANCE\020\350\007\022\017\n\nSPEC_MODEL" +
-      "\020\351\007\022\017\n\nSPEC_GHOST\020\352\007\022\020\n\013SPEC_HELPER\020\353\007\022\r" +
-      "\n\010SPEC_REP\020\354\007\022\016\n\tSPEC_PEER\020\355\007\022\016\n\tSPEC_PU" +
-      "RE\020\356\007\032\002\020\001\"\210\001\n\nVisibility\022\n\n\006PUBLIC\020\001\022\013\n\007" +
-      "PRIVATE\020\002\022\r\n\tPROTECTED\020\003\022\r\n\tNAMESPACE\020\004\022" +
-      "\013\n\007PACKAGE\020\004\022\013\n\007DEFAULT\020\004\022\020\n\013SPEC_PUBLIC" +
-      "\020\350\007\022\023\n\016SPEC_PROTECTED\020\351\007\032\002\020\001\"\\\n\010SpecCase",
-      "\022&\n\tmodifiers\030\001 \003(\0132\023.boa.types.Modifier" +
-      "\022(\n\nstatements\030\002 \003(\0132\024.boa.types.Stateme" +
-      "nt\"\306\002\n\007Comment\022,\n\004kind\030\001 \002(\0162\036.boa.types" +
-      ".Comment.CommentKind\022\r\n\005value\030\002 \002(\t\022)\n\010p" +
-      "osition\030\003 \002(\0132\027.boa.types.PositionInfo\0225" +
-      "\n\026structural_change_kind\030\004 \001(\0162\025.boa.typ" +
-      "es.ChangeKind\0220\n\021label_change_kind\030\005 \001(\016" +
-      "2\025.boa.types.ChangeKind\"j\n\013CommentKind\022\t" +
-      "\n\005OTHER\020\000\022\010\n\004LINE\020\001\022\t\n\005BLOCK\020\002\022\007\n\003DOC\020\003\022" +
-      "\021\n\rDOCUMENTATION\020\003\022\010\n\004SPEC\020\004\022\021\n\rSPECIFIC",
-      "ATION\020\004\032\002\020\001\"{\n\014PositionInfo\022\021\n\tstart_pos" +
-      "\030\001 \002(\005\022\016\n\006length\030\002 \002(\005\022\022\n\nstart_line\030\003 \002" +
-      "(\005\022\021\n\tstart_col\030\004 \002(\005\022\020\n\010end_line\030\005 \002(\005\022" +
-      "\017\n\007end_col\030\006 \002(\005\"c\n\017SpecDeclaration\022&\n\tm" +
-      "odifiers\030\001 \003(\0132\023.boa.types.Modifier\022(\n\ns" +
-      "tatements\030\002 \003(\0132\024.boa.types.Statement\"X\n" +
-      "\nSpecMethod\022\"\n\005cases\030\001 \003(\0132\023.boa.types.S" +
-      "pecCase\022&\n\tmodifiers\030\002 \003(\0132\023.boa.types.M" +
-      "odifier\"9\n\rSpecStatement\022(\n\nstatements\030\001" +
-      " \003(\0132\024.boa.types.Statement\"6\n\014SpecVariab",
-      "le\022&\n\tmodifiers\030\001 \003(\0132\023.boa.types.Modifi" +
-      "er*\236\001\n\010TypeKind\022\t\n\005OTHER\020\000\022\t\n\005CLASS\020\001\022\r\n" +
-      "\tINTERFACE\020\002\022\r\n\tANONYMOUS\020\003\022\010\n\004ANON\020\003\022\n\n" +
-      "\006STRUCT\020\004\022\010\n\004ENUM\020\005\022\017\n\013ENUMERATION\020\005\022\016\n\n" +
-      "ANNOTATION\020\006\022\014\n\010DELEGATE\020\007\022\013\n\007GENERIC\020\010\032" +
-      "\002\020\001B\002H\001"
+      "e_kind\030\013 \001(\0162\025.boa.types.ChangeKind\022(\n\005s" +
+      "pecs\030\350\007 \003(\0132\030.boa.types.SpecStatement\022\014\n" +
+      "\003key\030\351\007 \001(\t\"\254\001\n\004Type\022\014\n\004name\030\001 \002(\t\022!\n\004ki" +
+      "nd\030\002 \002(\0162\023.boa.types.TypeKind\022\n\n\002id\030\004 \001(",
+      "\t\0225\n\026structural_change_kind\030\005 \001(\0162\025.boa." +
+      "types.ChangeKind\0220\n\021label_change_kind\030\006 " +
+      "\001(\0162\025.boa.types.ChangeKind\"\251\003\n\006Method\022\014\n" +
+      "\004name\030\001 \001(\t\022&\n\tmodifiers\030\002 \003(\0132\023.boa.typ" +
+      "es.Modifier\022$\n\013return_type\030\003 \002(\0132\017.boa.t" +
+      "ypes.Type\022+\n\022generic_parameters\030\004 \003(\0132\017." +
+      "boa.types.Type\022&\n\targuments\030\005 \003(\0132\023.boa." +
+      "types.Variable\022(\n\017exception_types\030\006 \003(\0132" +
+      "\017.boa.types.Type\022(\n\nstatements\030\007 \003(\0132\024.b" +
+      "oa.types.Statement\022$\n\010comments\030\010 \003(\0132\022.b",
+      "oa.types.Comment\0225\n\026structural_change_ki" +
+      "nd\030\t \001(\0162\025.boa.types.ChangeKind\0220\n\021label" +
+      "_change_kind\030\n \001(\0162\025.boa.types.ChangeKin" +
+      "d\022\013\n\003key\030\013 \001(\t\"\260\002\n\010Variable\022\014\n\004name\030\001 \002(" +
+      "\t\022&\n\rvariable_type\030\002 \002(\0132\017.boa.types.Typ" +
+      "e\022&\n\tmodifiers\030\003 \003(\0132\023.boa.types.Modifie" +
+      "r\022*\n\013initializer\030\004 \001(\0132\025.boa.types.Expre" +
+      "ssion\022$\n\010comments\030\005 \003(\0132\022.boa.types.Comm" +
+      "ent\0225\n\026structural_change_kind\030\006 \001(\0162\025.bo" +
+      "a.types.ChangeKind\0220\n\021label_change_kind\030",
+      "\007 \001(\0162\025.boa.types.ChangeKind\022\013\n\003key\030\010 \001(" +
+      "\t\"\213\013\n\tStatement\0220\n\004kind\030\001 \002(\0162\".boa.type" +
+      "s.Statement.StatementKind\022$\n\010comments\030\002 " +
+      "\003(\0132\022.boa.types.Comment\022(\n\nstatements\030\003 " +
+      "\003(\0132\024.boa.types.Statement\022.\n\017initializat" +
+      "ions\030\004 \003(\0132\025.boa.types.Expression\022(\n\tcon" +
+      "dition\030\005 \001(\0132\025.boa.types.Expression\022&\n\007u" +
+      "pdates\030\006 \003(\0132\025.boa.types.Expression\0221\n\024v" +
+      "ariable_declaration\030\007 \001(\0132\023.boa.types.Va" +
+      "riable\0220\n\020type_declaration\030\010 \001(\0132\026.boa.t",
+      "ypes.Declaration\022)\n\nexpression\030\t \001(\0132\025.b" +
+      "oa.types.Expression\0225\n\026structural_change" +
+      "_kind\030\n \001(\0162\025.boa.types.ChangeKind\0220\n\021la" +
+      "bel_change_kind\030\013 \001(\0162\025.boa.types.Change" +
+      "Kind\022(\n\005specs\030\350\007 \003(\0132\030.boa.types.SpecSta" +
+      "tement\022\014\n\003key\030\351\007 \001(\t\"\310\006\n\rStatementKind\022\t" +
+      "\n\005OTHER\020\000\022\t\n\005BLOCK\020\001\022\014\n\010TYPEDECL\020\002\022\016\n\nEX" +
+      "PRESSION\020\003\022\010\n\004EXPR\020\003\022\020\n\014SYNCHRONIZED\020\004\022\010" +
+      "\n\004SYNC\020\004\022\n\n\006RETURN\020\005\022\007\n\003FOR\020\006\022\006\n\002DO\020\007\022\t\n" +
+      "\005WHILE\020\010\022\006\n\002IF\020\t\022\n\n\006ASSERT\020\n\022\t\n\005BREAK\020\013\022",
+      "\014\n\010CONTINUE\020\014\022\t\n\005LABEL\020\r\022\n\n\006SWITCH\020\016\022\010\n\004" +
+      "CASE\020\017\022\007\n\003TRY\020\020\022\t\n\005THROW\020\021\022\t\n\005CATCH\020\022\022\t\n" +
+      "\005EMPTY\020\023\022\022\n\rSPEC_REQUIRES\020\350\007\022\021\n\014SPEC_ENS" +
+      "URES\020\351\007\022\021\n\014SPEC_SIGNALS\020\352\007\022\026\n\021SPEC_SIGNA" +
+      "LS_ONLY\020\353\007\022\024\n\017SPEC_ASSIGNABLE\020\354\007\022\025\n\020SPEC" +
+      "_MAINTAINING\020\355\007\022\020\n\013SPEC_ASSUME\020\356\007\022\r\n\010SPE" +
+      "C_SET\020\357\007\022\022\n\rSPEC_DIVERGES\020\360\007\022\024\n\017SPEC_ACC" +
+      "ESSIBLE\020\361\007\022\022\n\rSPEC_CAPTURES\020\362\007\022\022\n\rSPEC_C" +
+      "ALLABLE\020\363\007\022\016\n\tSPEC_WHEN\020\364\007\022\022\n\rSPEC_DURAT" +
+      "ION\020\365\007\022\022\n\rSPEC_MEASURES\020\366\007\022\014\n\007SPEC_IN\020\367\007",
+      "\022\023\n\016SPEC_INVARIANT\020\370\007\022\024\n\017SPEC_REPRESENTS" +
+      "\020\371\007\022\023\n\016SPEC_INITIALLY\020\372\007\022\016\n\tSPEC_TYPE\020\373\007" +
+      "\022\022\n\rSPEC_BEHAVIOR\020\374\007\022\023\n\016SPEC_BEHAVIOUR\020\375" +
+      "\007\022\031\n\024SPEC_NORMAL_BEHAVIOR\020\376\007\022\032\n\025SPEC_NOR" +
+      "MAL_BEHAVIOUR\020\377\007\022\036\n\031SPEC_EXCEPTIONAL_BEH" +
+      "AVIOR\020\200\010\022\037\n\032SPEC_EXCEPTIONAL_BEHAVIOUR\020\201" +
+      "\010\022\020\n\013SPEC_ASSERT\020\202\010\032\002\020\001\"\213\016\n\nExpression\0222" +
+      "\n\004kind\030\001 \002(\0162$.boa.types.Expression.Expr" +
+      "essionKind\022*\n\013expressions\030\002 \003(\0132\025.boa.ty" +
+      "pes.Expression\022+\n\016variable_decls\030\003 \003(\0132\023",
+      ".boa.types.Variable\022!\n\010new_type\030\004 \001(\0132\017." +
+      "boa.types.Type\022+\n\022generic_parameters\030\005 \003" +
+      "(\0132\017.boa.types.Type\022\022\n\nis_postfix\030\006 \001(\010\022" +
+      "\017\n\007literal\030\007 \001(\t\022\020\n\010variable\030\010 \001(\t\022\016\n\006me" +
+      "thod\030\t \001(\t\022*\n\013method_args\030\n \003(\0132\025.boa.ty" +
+      "pes.Expression\0220\n\020anon_declaration\030\013 \001(\013" +
+      "2\026.boa.types.Declaration\022\'\n\nannotation\030\014" +
+      " \001(\0132\023.boa.types.Modifier\022!\n\006lambda\030\r \001(" +
+      "\0132\021.boa.types.Method\022\021\n\tno_parens\030\016 \001(\010\022" +
+      "5\n\026structural_change_kind\030\017 \001(\0162\025.boa.ty",
+      "pes.ChangeKind\0220\n\021label_change_kind\030\020 \001(" +
+      "\0162\025.boa.types.ChangeKind\"\262\t\n\016ExpressionK" +
+      "ind\022\t\n\005OTHER\020\000\022\013\n\007LITERAL\020\001\022\r\n\tVARACCESS" +
+      "\020\002\022\013\n\007VARDECL\020\003\022\016\n\nMETHODCALL\020\004\022\010\n\004CAST\020" +
+      "\005\022\016\n\nARRAYINDEX\020\006\022\r\n\tARRAYINIT\020\007\022\017\n\013TYPE" +
+      "COMPARE\020\010\022\007\n\003NEW\020\t\022\014\n\010NEWARRAY\020\n\022\n\n\006OP_A" +
+      "DD\020\013\022\n\n\006OP_SUB\020\014\022\013\n\007OP_MULT\020\r\022\n\n\006OP_DIV\020" +
+      "\016\022\n\n\006OP_MOD\020\017\022\n\n\006OP_INC\020\020\022\n\n\006OP_DEC\020\021\022\016\n" +
+      "\nBIT_LSHIFT\020\022\022\016\n\nBIT_RSHIFT\020\023\022\026\n\022BIT_UNS" +
+      "IGNEDRSHIFT\020\024\022\013\n\007BIT_AND\020\025\022\n\n\006BIT_OR\020\026\022\013",
+      "\n\007BIT_NOT\020\027\022\013\n\007BIT_XOR\020\030\022\017\n\013LOGICAL_NOT\020" +
+      "\031\022\017\n\013LOGICAL_AND\020\032\022\016\n\nLOGICAL_OR\020\033\022\006\n\002EQ" +
+      "\020\034\022\007\n\003NEQ\020\035\022\006\n\002LT\020\036\022\006\n\002GT\020\037\022\010\n\004LTEQ\020 \022\010\n" +
+      "\004GTEQ\020!\022\017\n\013CONDITIONAL\020\"\022\020\n\014NULLCOALESCE" +
+      "\020#\022\n\n\006ASSIGN\020$\022\016\n\nASSIGN_ADD\020%\022\016\n\nASSIGN" +
+      "_SUB\020&\022\017\n\013ASSIGN_MULT\020\'\022\016\n\nASSIGN_DIV\020(\022" +
+      "\016\n\nASSIGN_MOD\020)\022\021\n\rASSIGN_BITXOR\020*\022\021\n\rAS" +
+      "SIGN_BITAND\020+\022\020\n\014ASSIGN_BITOR\020,\022\021\n\rASSIG" +
+      "N_LSHIFT\020-\022\021\n\rASSIGN_RSHIFT\020.\022\031\n\025ASSIGN_" +
+      "UNSIGNEDRSHIFT\020/\022\016\n\nANNOTATION\0200\022\t\n\005PARE",
+      "N\0201\022\024\n\020METHOD_REFERENCE\0202\022\n\n\006LAMBDA\0203\022\017\n" +
+      "\013ANON_METHOD\0204\022\020\n\013SPEC_RESULT\020\350\007\022\r\n\010SPEC" +
+      "_OLD\020\351\007\022\017\n\nSPEC_FRESH\020\352\007\022\031\n\024SPEC_NONNULL" +
+      "ELEMENTS\020\353\007\022\020\n\013SPEC_TYPEOF\020\354\007\022\022\n\rSPEC_EL" +
+      "EMTYPE\020\355\007\022\016\n\tSPEC_TYPE\020\356\007\022\020\n\013SPEC_FORALL" +
+      "\020\357\007\022\020\n\013SPEC_EXISTS\020\360\007\022\021\n\014SPEC_SUBTYPE\020\361\007" +
+      "\022\025\n\020SPEC_EQUIVALENCE\020\362\007\022\027\n\022SPEC_INEQUIVA" +
+      "LENCE\020\363\007\022\021\n\014SPEC_FORWARD\020\364\007\022\021\n\014SPEC_REVE" +
+      "RSE\020\365\007\022\021\n\014SPEC_NOTHING\020\366\007\022\024\n\017SPEC_EVERYT" +
+      "HING\020\367\007\022\026\n\021SPEC_NOTSPECIFIED\020\370\007\022\t\n\004NEXT\020",
+      "\371\007\022\r\n\010GLOBALLY\020\372\007\022\014\n\007FINALLY\020\373\007\022\n\n\005UNTIL" +
+      "\020\374\007\022\014\n\007RELEASE\020\375\007\022\n\n\005INPLY\020\376\007\"\320\005\n\010Modifi" +
+      "er\022.\n\004kind\030\001 \002(\0162 .boa.types.Modifier.Mo" +
+      "difierKind\0222\n\nvisibility\030\002 \001(\0162\036.boa.typ" +
+      "es.Modifier.Visibility\022\027\n\017annotation_nam" +
+      "e\030\003 \001(\t\022\032\n\022annotation_members\030\004 \003(\t\0220\n\021a" +
+      "nnotation_values\030\005 \003(\0132\025.boa.types.Expre" +
+      "ssion\022\r\n\005other\030\006 \001(\t\0225\n\026structural_chang" +
+      "e_kind\030\007 \001(\0162\025.boa.types.ChangeKind\0220\n\021l" +
+      "abel_change_kind\030\010 \001(\0162\025.boa.types.Chang",
+      "eKind\"\365\001\n\014ModifierKind\022\t\n\005OTHER\020\000\022\016\n\nVIS" +
+      "IBILITY\020\001\022\016\n\nANNOTATION\020\002\022\t\n\005FINAL\020\003\022\n\n\006" +
+      "STATIC\020\004\022\020\n\014SYNCHRONIZED\020\005\022\010\n\004SYNC\020\005\022\014\n\010" +
+      "ABSTRACT\020\006\022\022\n\rSPEC_INSTANCE\020\350\007\022\017\n\nSPEC_M" +
+      "ODEL\020\351\007\022\017\n\nSPEC_GHOST\020\352\007\022\020\n\013SPEC_HELPER\020" +
+      "\353\007\022\r\n\010SPEC_REP\020\354\007\022\016\n\tSPEC_PEER\020\355\007\022\016\n\tSPE" +
+      "C_PURE\020\356\007\032\002\020\001\"\210\001\n\nVisibility\022\n\n\006PUBLIC\020\001" +
+      "\022\013\n\007PRIVATE\020\002\022\r\n\tPROTECTED\020\003\022\r\n\tNAMESPAC" +
+      "E\020\004\022\013\n\007PACKAGE\020\004\022\013\n\007DEFAULT\020\004\022\020\n\013SPEC_PU" +
+      "BLIC\020\350\007\022\023\n\016SPEC_PROTECTED\020\351\007\032\002\020\001\"\\\n\010Spec",
+      "Case\022&\n\tmodifiers\030\001 \003(\0132\023.boa.types.Modi" +
+      "fier\022(\n\nstatements\030\002 \003(\0132\024.boa.types.Sta" +
+      "tement\"\306\002\n\007Comment\022,\n\004kind\030\001 \002(\0162\036.boa.t" +
+      "ypes.Comment.CommentKind\022\r\n\005value\030\002 \002(\t\022" +
+      ")\n\010position\030\003 \002(\0132\027.boa.types.PositionIn" +
+      "fo\0225\n\026structural_change_kind\030\004 \001(\0162\025.boa" +
+      ".types.ChangeKind\0220\n\021label_change_kind\030\005" +
+      " \001(\0162\025.boa.types.ChangeKind\"j\n\013CommentKi" +
+      "nd\022\t\n\005OTHER\020\000\022\010\n\004LINE\020\001\022\t\n\005BLOCK\020\002\022\007\n\003DO" +
+      "C\020\003\022\021\n\rDOCUMENTATION\020\003\022\010\n\004SPEC\020\004\022\021\n\rSPEC",
+      "IFICATION\020\004\032\002\020\001\"{\n\014PositionInfo\022\021\n\tstart" +
+      "_pos\030\001 \002(\005\022\016\n\006length\030\002 \002(\005\022\022\n\nstart_line" +
+      "\030\003 \002(\005\022\021\n\tstart_col\030\004 \002(\005\022\020\n\010end_line\030\005 " +
+      "\002(\005\022\017\n\007end_col\030\006 \002(\005\"c\n\017SpecDeclaration\022" +
+      "&\n\tmodifiers\030\001 \003(\0132\023.boa.types.Modifier\022" +
+      "(\n\nstatements\030\002 \003(\0132\024.boa.types.Statemen" +
+      "t\"X\n\nSpecMethod\022\"\n\005cases\030\001 \003(\0132\023.boa.typ" +
+      "es.SpecCase\022&\n\tmodifiers\030\002 \003(\0132\023.boa.typ" +
+      "es.Modifier\"9\n\rSpecStatement\022(\n\nstatemen" +
+      "ts\030\001 \003(\0132\024.boa.types.Statement\"6\n\014SpecVa",
+      "riable\022&\n\tmodifiers\030\001 \003(\0132\023.boa.types.Mo" +
+      "difier*\236\001\n\010TypeKind\022\t\n\005OTHER\020\000\022\t\n\005CLASS\020" +
+      "\001\022\r\n\tINTERFACE\020\002\022\r\n\tANONYMOUS\020\003\022\010\n\004ANON\020" +
+      "\003\022\n\n\006STRUCT\020\004\022\010\n\004ENUM\020\005\022\017\n\013ENUMERATION\020\005" +
+      "\022\016\n\nANNOTATION\020\006\022\014\n\010DELEGATE\020\007\022\013\n\007GENERI" +
+      "C\020\010\032\002\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
