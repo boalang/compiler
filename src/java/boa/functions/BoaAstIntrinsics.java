@@ -207,8 +207,8 @@ public class BoaAstIntrinsics {
 		return emptyIssues;
 	}
 	@SuppressWarnings("unchecked")
-	@FunctionSpec(name = "getSpec", returnType = "SpecDeclaration", formalParameters = { "Declaration" })
-	public static SpecDeclaration getSpec(final Declaration f) {
+	@FunctionSpec(name = "getspec", returnType = "SpecDeclaration", formalParameters = { "Declaration" })
+	public static SpecDeclaration getspec(final Declaration f) {
 		if (!f.hasKey())
 			return emptySpecDeclaration;
 		final String rowName = f.getKey() + "!!" + f.getName();
@@ -237,8 +237,8 @@ public class BoaAstIntrinsics {
 		return emptySpecDeclaration;
 	}
 	@SuppressWarnings("unchecked")
-	@FunctionSpec(name = "getSpec", returnType = "SpecMethod", formalParameters = { "Method" })
-	public static SpecMethod getSpec(final Method f) {
+	@FunctionSpec(name = "getspec", returnType = "SpecMethod", formalParameters = { "Method" })
+	public static SpecMethod getspec(final Method f) {
 		if (!f.hasKey())
 			return emptySpecMethod;
 		final String rowName = f.getKey() + "!!" + f.getName();
@@ -267,8 +267,8 @@ public class BoaAstIntrinsics {
 		return emptySpecMethod;
 	}
 	@SuppressWarnings("unchecked")
-	@FunctionSpec(name = "getSpec", returnType = "SpecStatement", formalParameters = { "Statement" })
-	public static SpecStatement getSpec(final Statement f) {
+	@FunctionSpec(name = "getspec", returnType = "SpecStatement", formalParameters = { "Statement" })
+	public static SpecStatement getspec(final Statement f) {
 		if (!f.hasKey())
 			return emptySpecStatement;
 		final String rowName = f.getKey();
@@ -297,8 +297,8 @@ public class BoaAstIntrinsics {
 		return emptySpecStatement;
 	}	
 	@SuppressWarnings("unchecked")
-	@FunctionSpec(name = "getSpec", returnType = "SpecVariable", formalParameters = { "Variable" })
-	public static SpecVariable getSpec(final Variable f) {
+	@FunctionSpec(name = "getspec", returnType = "SpecVariable", formalParameters = { "Variable" })
+	public static SpecVariable getspec(final Variable f) {
 		if (!f.hasKey())
 			return emptySpecVariable;
 		final String rowName = f.getKey() + "!!" + f.getName();
