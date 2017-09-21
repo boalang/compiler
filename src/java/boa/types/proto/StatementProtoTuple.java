@@ -26,7 +26,6 @@ import boa.types.BoaProtoList;
 import boa.types.BoaProtoTuple;
 import boa.types.BoaType;
 import boa.types.proto.enums.StatementKindProtoMap;
-import boa.types.BoaString;
 
 /**
  * A {@link StatementProtoTuple}.
