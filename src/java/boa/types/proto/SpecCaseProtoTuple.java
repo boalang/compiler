@@ -1,7 +1,6 @@
 /*
- * Copyright 2017, Hridesh Rajan, Robert Dyer, Jingyi Su
- *                 Bowling Green State University
- *                 and Iowa State University of Science and Technology
+ * Copyright 2017, Robert Dyer, Jingyi Su
+ *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
