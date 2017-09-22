@@ -24,7 +24,6 @@ import boa.types.Diff.ChangedFile;
 import boa.types.Shared.ChangeKind;
 import boa.types.Toplevel.Project;
 
-@Ignore
 public class TestDiff extends Java8BaseTest {
 	private Configuration conf = new Configuration();
 	private FileSystem fileSystem;

@@ -80,6 +80,8 @@ message Declaration {
 	optional string fully_qualified_name = 14;
 	/** the key of the declaring class in the same AST */
 	optional int32 declaring_type = 15;
+	/** Nested statements */
+	repeated Statement statements = 16;
 }
 
 /** The kinds of types in an AST */
@@ -243,6 +245,9 @@ message Statement {
 		USE_NAMESPACE = 33;
 		USE_CONSTANT = 34;
 		USE_FUNCTION = 35;
+		TRAIT_ALIAS = 36;
+		TRAIT_PRECEDENCE = 37;
+		TRAIT_USE = 38;
 	}
 	/** The kind of statement */
 	required StatementKind kind = 1;
@@ -265,6 +270,7 @@ message Statement {
 	repeated Method methods = 14;
 	repeated Variable variable_declarations = 15;
 	repeated Declaration type_declarations = 16;
+	repeated string names = 17;
 }
 
 /** A single expression */
@@ -378,6 +384,9 @@ message Expression {
 		REFERENCE = 95;
 		REFLECTION = 96;
 		CLONE = 97;
+		TRAIT_ALIAS = 98;
+		TRAIT_PRECEDENCE = 99;
+		NAMESPACENAME = 100;
 	}
 	/** The kind of expression */
 	required ExpressionKind kind = 1;
@@ -414,6 +423,7 @@ message Expression {
 	optional Expression computed_method = 25;
 	optional bool is_static = 26;
 	optional bool has_from = 27;
+	optional Method trait = 28;
 }
 
 /** A single modifier */

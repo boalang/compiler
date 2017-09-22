@@ -2,9 +2,6 @@ namespaces {
   name: ""
   statements {
     kind: USE_NAMESPACE
-    expressions {
-      kind: LITERAL
-      literal: "myNamespace"
-    }
+    names: "myNamespace"
   }
 }

@@ -3,22 +3,19 @@ namespaces {
   declarations {
     name: "Talker"
     kind: CLASS
-    methods {
-      name: "use"
-      arguments {
-        name: "A"
-      }
+    statements {
+      kind: TRAIT_USE
       statements {
-        kind: EXPRESSION
+        kind: TRAIT_ALIAS
         expression {
-          kind: OTHER
-          expressions {
-            kind: OTHER
-            variable: "AsThing"
-          }
+          kind: TRAIT_ALIAS
           method: "thing"
+          trait {
+            name: "AsThing"
+          }
         }
       }
+      names: "A"
     }
   }
 }

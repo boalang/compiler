@@ -7,11 +7,9 @@ namespaces {
       name: "ReflectionFunction"
       kind: CLASS
     }
-    methods {
-      name: "use"
-      arguments {
-        name: "ezcReflectionReturnInfo"
-      }
+    statements {
+      kind: TRAIT_USE
+      names: "ezcReflectionReturnInfo"
     }
   }
 }

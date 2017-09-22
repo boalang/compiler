@@ -3,23 +3,26 @@ namespaces {
   declarations {
     name: "Talker"
     kind: CLASS
-    methods {
-      name: "use"
-      arguments {
-        name: "A"
-      }
+    statements {
+      kind: TRAIT_USE
       statements {
-        kind: EXPRESSION
+        kind: TRAIT_ALIAS
         expression {
-          kind: OTHER
-          expressions {
-            kind: METHOD_REFERENCE
-            variable: "A"
-            method: "AsThing"
-          }
+          kind: TRAIT_ALIAS
           method: "thing"
+          trait {
+            computed_name {
+              kind: METHOD_REFERENCE
+              expressions {
+                kind: NAMESPACENAME
+                literal: "A"
+              }
+              method: "AsThing"
+            }
+          }
         }
       }
+      names: "A"
     }
   }
 }

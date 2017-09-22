@@ -3,44 +3,46 @@ namespaces {
   declarations {
     name: "Talker"
     kind: CLASS
-    methods {
-      name: "use"
-      arguments {
-        name: "A"
-      }
-      arguments {
-        name: "B"
-      }
+    statements {
+      kind: TRAIT_USE
       statements {
-        kind: EXPRESSION
+        kind: TRAIT_PRECEDENCE
         expression {
-          kind: OTHER
-          expressions {
-            kind: OTHER
-            variable: "A"
-          }
+          kind: TRAIT_PRECEDENCE
           expressions {
             kind: METHOD_REFERENCE
-            variable: "B"
+            expressions {
+              kind: NAMESPACENAME
+              literal: "B"
+            }
             method: "smallTalk"
           }
+          expressions {
+            kind: NAMESPACENAME
+            literal: "A"
+          }
         }
       }
       statements {
-        kind: EXPRESSION
+        kind: TRAIT_PRECEDENCE
         expression {
-          kind: OTHER
-          expressions {
-            kind: OTHER
-            variable: "B"
-          }
+          kind: TRAIT_PRECEDENCE
           expressions {
             kind: METHOD_REFERENCE
-            variable: "A"
+            expressions {
+              kind: NAMESPACENAME
+              literal: "A"
+            }
             method: "bigTalk"
+          }
+          expressions {
+            kind: NAMESPACENAME
+            literal: "B"
           }
         }
       }
+      names: "A"
+      names: "B"
     }
   }
 }
