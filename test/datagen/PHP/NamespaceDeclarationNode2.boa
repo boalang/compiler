@@ -1,6 +1,3 @@
 namespaces {
-  name: ""
-  namespaces {
-    name: "mine"
-  }
+  name: "mine"
 }

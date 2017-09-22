@@ -5,24 +5,20 @@ namespaces {
     statements {
       kind: BLOCK
       statements {
-        kind: EXPRESSION
-        expression {
-          kind: METHODCALL
-          method: "echo"
-          method_args {
-            kind: OP_CONCAT
-            expressions {
-              kind: METHODCALL
-              method: "inverse"
-              method_args {
-                kind: LITERAL
-                literal: "5"
-              }
-            }
-            expressions {
+        kind: ECHO
+        expressions {
+          kind: OP_CONCAT
+          expressions {
+            kind: METHODCALL
+            method: "inverse"
+            method_args {
               kind: LITERAL
-              literal: "\"\\n\""
+              literal: "5"
             }
+          }
+          expressions {
+            kind: LITERAL
+            literal: "\"\\n\""
           }
         }
       }
@@ -32,27 +28,23 @@ namespaces {
       statements {
         kind: BLOCK
         statements {
-          kind: EXPRESSION
-          expression {
+          kind: ECHO
+          expressions {
+            kind: LITERAL
+            literal: "\'Caught exception: \'"
+          }
+          expressions {
             kind: METHODCALL
-            method: "echo"
-            method_args {
-              kind: LITERAL
-              literal: "\'Caught exception: \'"
+            expressions {
+              kind: VARACCESS
+              variable: "e"
+              dollar_sign: true
             }
-            method_args {
-              kind: METHODCALL
-              expressions {
-                kind: VARACCESS
-                variable: "e"
-                dollar_sign: true
-              }
-              method: "getMessage"
-            }
-            method_args {
-              kind: LITERAL
-              literal: "\"\\n\""
-            }
+            method: "getMessage"
+          }
+          expressions {
+            kind: LITERAL
+            literal: "\"\\n\""
           }
         }
       }
@@ -60,7 +52,7 @@ namespaces {
         name: "e"
         variable_type {
           name: "Exception"
-          kind: OTHER
+          kind: CLASS
         }
         dollar_sign: true
       }
@@ -70,14 +62,10 @@ namespaces {
       statements {
         kind: BLOCK
         statements {
-          kind: EXPRESSION
-          expression {
-            kind: METHODCALL
-            method: "echo"
-            method_args {
-              kind: LITERAL
-              literal: "\"First finally.\\n\""
-            }
+          kind: ECHO
+          expressions {
+            kind: LITERAL
+            literal: "\"First finally.\\n\""
           }
         }
       }

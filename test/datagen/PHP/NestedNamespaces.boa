@@ -1,9 +1,6 @@
 namespaces {
-  name: ""
+  name: "my\\stuff"
   namespaces {
-    name: "my\\stuff"
-    namespaces {
-      name: "nested"
-    }
+    name: "nested"
   }
 }

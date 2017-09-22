@@ -1,7 +1,7 @@
 namespaces {
   name: ""
   statements {
-    kind: OTHER
+    kind: GOTO
     expression {
       kind: LITERAL
       literal: "here"

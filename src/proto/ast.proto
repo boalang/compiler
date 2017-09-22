@@ -47,6 +47,7 @@ message Namespace {
 	repeated Namespace namespaces = 11;
 	/** The imported namespaces and types */
 	repeated string imports = 12;
+	repeated Variable variables = 13;
 }
 
 /** A type declaration, such as a class or interface */
@@ -108,6 +109,10 @@ enum TypeKind {
 	GENERIC = 8;
 	/** A trait in PHP */
 	TRAIT = 9;
+	/** Pritimitve type */
+	PRIMITIVE = 10;
+	/** Array type */
+	ARRAY = 11;
 }
 
 /** A type in an AST */
@@ -230,6 +235,14 @@ message Statement {
 		WITH = 25;
 		SCOPE = 26;
 		DECLARE = 27;
+		GLOBAL = 28;
+		GOTO = 29;
+		INLINE_HTML = 30;
+		STATIC = 31;
+		ECHO = 32;
+		USE_NAMESPACE = 33;
+		USE_CONSTANT = 34;
+		USE_FUNCTION = 35;
 	}
 	/** The kind of statement */
 	required StatementKind kind = 1;
@@ -356,6 +369,15 @@ message Expression {
 		OP_THREE_WAY_COMPARE = 86;
 		OP_UNPACK = 87;
 		QUOTE = 88;
+		IGNORE_ERROR = 89;
+		REQUIRE = 90;
+		REQUIRE_ONCE = 91;
+		INCLUDE = 92;
+		INCLUDE_ONCE = 93;
+		LIST = 94;
+		REFERENCE = 95;
+		REFLECTION = 96;
+		CLONE = 97;
 	}
 	/** The kind of expression */
 	required ExpressionKind kind = 1;
@@ -389,6 +411,9 @@ message Expression {
 	repeated Statement statements = 22;
 	optional bool is_member_access = 23;
 	optional bool dollar_sign = 24;
+	optional Expression computed_method = 25;
+	optional bool is_static = 26;
+	optional bool has_from = 27;
 }
 
 /** A single modifier */

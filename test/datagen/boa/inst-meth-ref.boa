@@ -25,7 +25,7 @@
             },
             "return_type": {
                "name": "int",
-               "kind": "OTHER"
+               "kind": "PRIMITIVE"
             }
          }
       ],
@@ -36,7 +36,7 @@
       },
       "return_type": {
          "name": "void",
-         "kind": "OTHER"
+         "kind": "PRIMITIVE"
       }
    }
 }

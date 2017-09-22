@@ -140,7 +140,7 @@ public class Java7BaseTest extends BaseTest {
 						"                     \"name\": \"m\",\n" +
 						"                     \"return_type\": {\n" +
 						"                        \"name\": \"void\",\n" +
-						"                        \"kind\": \"OTHER\"\n" +
+						"                        \"kind\": \"PRIMITIVE\"\n" +
 						"                     },\n" +
 						"                     \"statements\": [\n" +
 						"                        {\n" +

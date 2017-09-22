@@ -3,56 +3,40 @@ namespaces {
   statements {
     kind: EXPRESSION
     expression {
-      kind: OTHER
+      kind: INCLUDE
       expressions {
         kind: LITERAL
         literal: "\'myfile\'"
-      }
-      new_type {
-        name: "include"
-        kind: OTHER
       }
     }
   }
   statements {
     kind: EXPRESSION
     expression {
-      kind: OTHER
+      kind: REQUIRE
       expressions {
         kind: LITERAL
         literal: "\'myfile\'"
-      }
-      new_type {
-        name: "require"
-        kind: OTHER
       }
     }
   }
   statements {
     kind: EXPRESSION
     expression {
-      kind: OTHER
+      kind: INCLUDE_ONCE
       expressions {
         kind: LITERAL
         literal: "\'myfile\'"
-      }
-      new_type {
-        name: "include_once"
-        kind: OTHER
       }
     }
   }
   statements {
     kind: EXPRESSION
     expression {
-      kind: OTHER
+      kind: REQUIRE_ONCE
       expressions {
         kind: LITERAL
         literal: "\'myfile\'"
-      }
-      new_type {
-        name: "require_once"
-        kind: OTHER
       }
     }
   }

@@ -31,14 +31,14 @@
                      "name": "a",
                      "variable_type": {
                         "name": "int",
-                        "kind": "OTHER"
+                        "kind": "PRIMITIVE"
                      }
                   },
                   {
                      "name": "b",
                      "variable_type": {
                         "name": "int",
-                        "kind": "OTHER"
+                        "kind": "PRIMITIVE"
                      }
                   }
                ]

@@ -1,6 +1,3 @@
 namespaces {
-  name: ""
-  namespaces {
-    name: "my\\stuff"
-  }
+  name: "my\\stuff"
 }

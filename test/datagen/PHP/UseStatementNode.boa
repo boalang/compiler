@@ -1,15 +1,10 @@
 namespaces {
   name: ""
   statements {
-    kind: OTHER
+    kind: USE_NAMESPACE
     expressions {
-      kind: OTHER
-      variable_decls {
-        name: "myNamespace"
-      }
-      variable_decls {
-        name: "myNamespace"
-      }
+      kind: LITERAL
+      literal: "myNamespace"
     }
   }
 }

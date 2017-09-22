@@ -11,6 +11,7 @@ import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.google.protobuf.CodedInputStream;
@@ -23,6 +24,7 @@ import boa.types.Diff.ChangedFile;
 import boa.types.Shared.ChangeKind;
 import boa.types.Toplevel.Project;
 
+@Ignore
 public class TestDiff extends Java8BaseTest {
 	private Configuration conf = new Configuration();
 	private FileSystem fileSystem;

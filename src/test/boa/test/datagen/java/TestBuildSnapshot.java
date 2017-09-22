@@ -21,6 +21,7 @@ import boa.datagen.scm.AbstractCommit;
 import boa.datagen.scm.GitConnector;
 import boa.types.Diff.ChangedFile;
 
+@Ignore
 public class TestBuildSnapshot {
 	
 	@Test

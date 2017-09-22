@@ -15,7 +15,7 @@
                            "name": "m",
                            "return_type": {
                               "name": "void",
-                              "kind": "OTHER"
+                              "kind": "PRIMITIVE"
                            },
                            "arguments": [
                               {

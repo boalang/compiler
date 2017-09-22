@@ -542,6 +542,10 @@ public class Java7Visitor extends ASTVisitor {
 				b.setKind(boa.types.Ast.TypeKind.ANNOTATION);
 			else if (tb.isAnonymous())
 				b.setKind(boa.types.Ast.TypeKind.ANONYMOUS);
+			else if (tb.isPrimitive())
+				b.setKind(boa.types.Ast.TypeKind.PRIMITIVE);
+			else if (tb.isArray())
+				b.setKind(boa.types.Ast.TypeKind.ARRAY);
 			else 
 				b.setKind(boa.types.Ast.TypeKind.OTHER);
 			if (!tb.isPrimitive()) {
@@ -573,6 +577,10 @@ public class Java7Visitor extends ASTVisitor {
 				b.setKind(boa.types.Ast.TypeKind.ANNOTATION);
 			else if (tb.isAnonymous())
 				b.setKind(boa.types.Ast.TypeKind.ANONYMOUS);
+			else if (tb.isPrimitive())
+				b.setKind(boa.types.Ast.TypeKind.PRIMITIVE);
+			else if (tb.isArray())
+				b.setKind(boa.types.Ast.TypeKind.ARRAY);
 			else 
 				b.setKind(boa.types.Ast.TypeKind.OTHER);
 			if (!tb.isPrimitive()) {
@@ -604,6 +612,10 @@ public class Java7Visitor extends ASTVisitor {
 			tb.setKind(boa.types.Ast.TypeKind.ANNOTATION);
 		else if (itb.isAnonymous())
 			tb.setKind(boa.types.Ast.TypeKind.ANONYMOUS);
+		else if (itb.isPrimitive())
+			tb.setKind(boa.types.Ast.TypeKind.PRIMITIVE);
+		else if (itb.isArray())
+			tb.setKind(boa.types.Ast.TypeKind.ARRAY);
 		else 
 			tb.setKind(boa.types.Ast.TypeKind.OTHER);
 		if (!itb.isPrimitive()) {
@@ -671,7 +683,7 @@ public class Java7Visitor extends ASTVisitor {
 			b.setReturnType(tb.build());
 		} else {
 			tb.setName("void");
-			tb.setKind(boa.types.Ast.TypeKind.OTHER);
+			tb.setKind(boa.types.Ast.TypeKind.PRIMITIVE);
 			b.setReturnType(tb.build());
 		}
 		for (Object t : node.typeParameters()) {
@@ -1123,7 +1135,7 @@ public class Java7Visitor extends ASTVisitor {
 		for (int i = 0; i < ex.getExtraDimensions(); i++)
 			name += "[]";
 		tb.setName(name);
-		tb.setKind(boa.types.Ast.TypeKind.OTHER);
+		tb.setKind(boa.types.Ast.TypeKind.CLASS);
 		setTypeBinding(tb, ex.getType());
 		index = (Integer) ex.getType().getProperty(Java7Visitor.PROPERTY_INDEX);
 		if (index != null) {
@@ -1472,7 +1484,7 @@ public class Java7Visitor extends ASTVisitor {
 		}
 		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 		tb.setName("void");
-		tb.setKind(boa.types.Ast.TypeKind.OTHER);
+		tb.setKind(boa.types.Ast.TypeKind.PRIMITIVE);
 		b.setReturnType(tb.build());
 		if (node.getBody() != null) {
 			statements.push(new ArrayList<boa.types.Ast.Statement>());
@@ -1931,7 +1943,7 @@ public class Java7Visitor extends ASTVisitor {
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.NEWARRAY);
 		boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
 		tb.setName(typeName(node.getType()));
-		tb.setKind(boa.types.Ast.TypeKind.OTHER);
+		tb.setKind(boa.types.Ast.TypeKind.ARRAY);
 		setTypeBinding(tb, node.getType());
 		index = (Integer) node.getType().getProperty(Java7Visitor.PROPERTY_INDEX);
 		if (index != null) {
