@@ -1318,8 +1318,12 @@ public class PHPVisitor extends AbstractVisitor {
 	public boolean visit(ReflectionVariable node) {
 		Expression.Builder b = Expression.newBuilder();
 		b.setKind(ExpressionKind.REFLECTION);
-		node.getName().accept(this);
-		b.addExpressions(expressions.pop());
+		if (node.getName() instanceof Identifier)
+			b.setVariable(((Identifier) node.getName()).getName());
+		else {
+			node.getName().accept(this);
+			b.addExpressions(expressions.pop());
+		}
 		expressions.push(b.build());
 		return false;
 	}
