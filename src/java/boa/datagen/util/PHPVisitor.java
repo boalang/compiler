@@ -328,15 +328,26 @@ public class PHPVisitor extends AbstractVisitor {
 		org.eclipse.php.internal.core.ast.nodes.Expression en = node.getClassNames().get(0);
 		if (en instanceof Identifier)
 			tb.setName(((Identifier) en).getName());
-		else
-			tb.setName(src.substring(en.getStart(), en.getEnd()));
+		else {
+			en.accept(this);
+			tb.setComputedName(expressions.pop());
+		}
 		tb.setKind(boa.types.Ast.TypeKind.CLASS);
 		vb.setVariableType(tb.build());
 		b.setVariableDeclaration(vb.build());
+		fields.push(new ArrayList<boa.types.Ast.Variable>());
+		methods.push(new ArrayList<boa.types.Ast.Method>());
+		declarations.push(new ArrayList<boa.types.Ast.Declaration>());
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
 		node.getBody().accept(this);
-		for (boa.types.Ast.Statement s : statements.pop())
-			b.addStatements(s);
+		for (boa.types.Ast.Method m : methods.pop())
+			b.addMethods(m);
+		for (Declaration decl : declarations.pop())
+			b.addTypeDeclarations(decl);
+		for (boa.types.Ast.Statement st : statements.pop())
+			b.addStatements(st);
+		for (boa.types.Ast.Variable v : fields.pop())
+			b.addVariableDeclarations(v);
 		list.add(b.build());
 		return false;
 	}
@@ -740,19 +751,19 @@ public class PHPVisitor extends AbstractVisitor {
 	}
 
 	@Override
-	public boolean visit(ForEachStatement node) { // FIXME
+	public boolean visit(ForEachStatement node) {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.FOREACH);
 		node.getExpression().accept(this);
-		b.addInitializations(expressions.pop());
+		b.addExpressions(expressions.pop());
 		if (node.getKey() != null) {
 			node.getKey().accept(this);
-			b.addInitializations(expressions.pop());
+			b.addExpressions(expressions.pop());
 		}
 		if (node.getValue() != null) {
 			node.getValue().accept(this);
-			b.addUpdates(expressions.pop());
+			b.addExpressions(expressions.pop());
 		}
 		declarations.push(new ArrayList<boa.types.Ast.Declaration>());
 		fields.push(new ArrayList<boa.types.Ast.Variable>());
@@ -1528,23 +1539,14 @@ public class PHPVisitor extends AbstractVisitor {
 		boa.types.Ast.Statement.Builder b = boa.types.Ast.Statement.newBuilder();
 		List<boa.types.Ast.Statement> list = statements.peek();
 		b.setKind(boa.types.Ast.Statement.StatementKind.TRY);
-		declarations.push(new ArrayList<boa.types.Ast.Declaration>());
-		fields.push(new ArrayList<boa.types.Ast.Variable>());
 		statements.push(new ArrayList<boa.types.Ast.Statement>());
-		methods.push(new ArrayList<Method>());
 		node.getBody().accept(this);
 		for (Object c : node.catchClauses())
 			((CatchClause) c).accept(this);
 		if (node.finallyClause() != null)
 			node.finallyClause().accept(this);
-		for (boa.types.Ast.Declaration d : declarations.pop())
-			b.addTypeDeclarations(d);
-		for (boa.types.Ast.Variable v : fields.pop())
-			b.addVariableDeclarations(v);
 		for (boa.types.Ast.Statement s : statements.pop())
 			b.addStatements(s);
-		for (Method m : methods.pop())
-			b.addMethods(m);
 		list.add(b.build());
 		return false;
 	}
@@ -1573,7 +1575,7 @@ public class PHPVisitor extends AbstractVisitor {
 		else if (node.getOperator() == UnaryOperation.OP_PLUS)
 			b.setKind(boa.types.Ast.Expression.ExpressionKind.OP_ADD);
 		else if (node.getOperator() == UnaryOperation.OP_TILDA)
-			b.setKind(boa.types.Ast.Expression.ExpressionKind.BIT_NOT);// FIXME
+			b.setKind(boa.types.Ast.Expression.ExpressionKind.BIT_NOT);
 		else if (node.getOperator() == UnaryOperation.OP_NOT)
 			b.setKind(ExpressionKind.LOGICAL_NOT);
 		node.getExpression().accept(this);
