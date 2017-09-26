@@ -944,7 +944,11 @@ public class PHPVisitor extends AbstractVisitor {
 
 	@Override
 	public boolean visit(Identifier node) {
-		throw new RuntimeException("visited unused node " + node.getClass().getSimpleName());
+		Expression.Builder b = Expression.newBuilder();
+		b.setKind(ExpressionKind.LITERAL);
+		b.setLiteral(node.getName());
+		expressions.push(b.build());
+		return false;
 	}
 
 	@Override
