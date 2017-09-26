@@ -37,7 +37,7 @@ import boa.compiler.ast.Operand;
  * @author anthonyu
  * @author rdyer
  * @author rramu
- * @jsu
+ * @author jsu
  */
 public class SymbolTable {
 	private static HashMap<String, Class<?>> aggregators;

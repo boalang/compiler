@@ -103,6 +103,18 @@ public abstract class BoaAbstractVisitor {
 	protected boolean preVisit(final Person node) throws Exception {
 		return defaultPreVisit();
 	}
+	protected boolean preVisit(final SpecDeclaration node) throws Exception {
+		return defaultPreVisit();
+	}
+	protected boolean preVisit(final SpecMethod node) throws Exception {
+		return defaultPreVisit();
+	}
+	protected boolean preVisit(final SpecStatement node) throws Exception {
+		return defaultPreVisit();
+	}
+	protected boolean preVisit(final SpecVariable node) throws Exception {
+		return defaultPreVisit();
+	}
 
 	/**
 	 * Provides a default action for post-visiting nodes.
@@ -153,6 +165,18 @@ public abstract class BoaAbstractVisitor {
 		defaultPostVisit();
 	}
 	protected void postVisit(final Person node) throws Exception {
+		defaultPostVisit();
+	}
+	protected void postVisit(final SpecDeclaration node) throws Exception {
+		defaultPostVisit();
+	}
+	protected void postVisit(final SpecMethod node) throws Exception {
+		defaultPostVisit();
+	}
+	protected void postVisit(final SpecStatement node) throws Exception {
+		defaultPostVisit();
+	}
+	protected void postVisit(final SpecVariable node) throws Exception {
 		defaultPostVisit();
 	}
 
@@ -400,6 +424,26 @@ public abstract class BoaAbstractVisitor {
 		}
 	}
 	public final void visit(final Person node) throws Exception {
+		if (preVisit(node)) {
+			postVisit(node);
+		}
+	}
+	public final void visit(final SpecDeclaration node) throws Exception {
+		if (preVisit(node)) {
+			postVisit(node);
+		}
+	}
+	public final void visit(final SpecMethod node) throws Exception {
+		if (preVisit(node)) {
+			postVisit(node);
+		}
+	}
+	public final void visit(final SpecStatement node) throws Exception {
+		if (preVisit(node)) {
+			postVisit(node);
+		}
+	}
+	public final void visit(final SpecVariable node) throws Exception {
 		if (preVisit(node)) {
 			postVisit(node);
 		}
