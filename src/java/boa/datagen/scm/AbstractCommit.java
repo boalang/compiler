@@ -383,6 +383,8 @@ public abstract class AbstractCommit {
 		try {
 			parser.setSource(content.toCharArray());
 			cu = parser.createAST(null);
+			if(cu == null)
+				return false;
 		} catch (Exception e) {
 			if (debug)
 				System.err.println("Error visiting: " + path);
@@ -451,7 +453,7 @@ public abstract class AbstractCommit {
 				} catch (final Exception e) {
 					if (debug)
 						System.err.println("Error visiting: " + path);
-					// e.printStackTrace();
+					 e.printStackTrace();
 					return false;
 				}
 

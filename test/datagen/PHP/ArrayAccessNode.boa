@@ -1,0 +1,62 @@
+namespaces {
+  name: ""
+  statements {
+    kind: EXPRESSION
+    expression {
+      kind: ARRAYACCESS
+      expressions {
+        kind: VARACCESS
+        variable: "array"
+        dollar_sign: true
+      }
+      expressions {
+        kind: LITERAL
+        literal: "\"foo\""
+      }
+    }
+  }
+  statements {
+    kind: EXPRESSION
+    expression {
+      kind: ARRAYACCESS
+      expressions {
+        kind: VARACCESS
+        variable: "array"
+        dollar_sign: true
+      }
+      expressions {
+        kind: LITERAL
+        literal: "42"
+      }
+    }
+  }
+  statements {
+    kind: EXPRESSION
+    expression {
+      kind: ARRAYACCESS
+      expressions {
+        kind: ARRAYACCESS
+        expressions {
+          kind: ARRAYACCESS
+          expressions {
+            kind: VARACCESS
+            variable: "array"
+            dollar_sign: true
+          }
+          expressions {
+            kind: LITERAL
+            literal: "\"multi\""
+          }
+        }
+        expressions {
+          kind: LITERAL
+          literal: "\"dimensional\""
+        }
+      }
+      expressions {
+        kind: LITERAL
+        literal: "\"array\""
+      }
+    }
+  }
+}
