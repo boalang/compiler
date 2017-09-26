@@ -37,6 +37,7 @@ import boa.types.Toplevel.Project;
  * By default, all <code>postVisit()</code> methods call {@link #defaultPostVisit()}.
  * 
  * @author rdyer
+ * @author jsu
  */
 public abstract class BoaAbstractVisitor {
 	/**
