@@ -35,10 +35,8 @@ import boa.compiler.ast.expressions.*;
 import boa.compiler.ast.literals.*;
 import boa.compiler.ast.statements.*;
 import boa.compiler.ast.types.*;
-import boa.types.*;
-
 import boa.compiler.transforms.VariableCountingTransformer;
-
+import boa.types.*;
 /**
  *
  * @author anthonyu
@@ -534,8 +532,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		tupleDeclarator = new TupleDeclaratorCodeGeneratingVisitor();
 		enumDeclarator = new EnumDeclaratorCodeGeneratingVisitor();
 	}
-
-
 
 	/** {@inheritDoc} */
 	@Override
