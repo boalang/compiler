@@ -1,0 +1,13 @@
+o: output collection of int;
+a: array of int = {2};
+
+foreach (i: int; a[i]) {
+  v := a[i];
+  o << v;
+}
+
+foreach (i: int; a[i]) {
+  v := a[i];
+  v = v + 1;
+  o << v;
+}
