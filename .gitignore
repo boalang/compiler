@@ -8,3 +8,4 @@ output/
 /.project
 src/java/boa/datagen/misc
 /.settings/
+/junitvmwatcher*.properties
