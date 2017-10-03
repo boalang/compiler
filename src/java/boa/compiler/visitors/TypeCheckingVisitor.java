@@ -41,6 +41,8 @@ import boa.types.*;
  */
 public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	BoaType lastRetType;
+	Integer counter = 0;
+	HashMap<String, String> newName = new HashMap<String, String>();
 
 	/**
 	 * This verifies visitors have at most 1 before/after for a type.
@@ -480,7 +482,9 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	@Override
 	public void visit(final Identifier n, final SymbolTable env) {
 		n.env = env;
-
+		if(newName.containsKey(n.getToken()) && env.hasLocal(newName.get(n.getToken()))){
+			n.setToken(newName.get(n.getToken()));
+		}
 		if (env.hasType(n.getToken()))
 			n.type = SymbolTable.getType(n.getToken());
 		else
@@ -899,6 +903,17 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	public void visit(final VarDeclStatement n, final SymbolTable env) {
 		n.env = env;
 
+		if(n.hasInitializer()){
+		if(!(n.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand() instanceof FunctionExpression)){
+
+			String oldId = n.getId().getToken();
+			String newId = oldId + Integer.toString(counter);
+			n.getId().setToken(newId);
+			counter++;
+				newName.put(oldId, newId);
+			}
+		}
+		
 		final String id = n.getId().getToken();
 
 		if (env.hasGlobal(id))
@@ -965,7 +980,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			lhs = rhs;
 		}
 
-		if (!(rhs instanceof BoaFunction))
+		if(!(rhs instanceof BoaFunction))
 			env.set(id, lhs);
 		n.type = lhs;
 		n.getId().accept(this, env);

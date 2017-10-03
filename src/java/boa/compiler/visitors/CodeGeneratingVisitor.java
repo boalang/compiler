@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer, Ramanathan Ramu, Che Shian Hung
+ * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer, Ramanathan Ramu
  *                 Iowa State University of Science and Technology
  *                 and Bowling Green State University
  *
@@ -35,7 +35,6 @@ import boa.compiler.ast.expressions.*;
 import boa.compiler.ast.literals.*;
 import boa.compiler.ast.statements.*;
 import boa.compiler.ast.types.*;
-import boa.compiler.transforms.VariableCountingTransformer;
 import boa.types.*;
 /**
  *
@@ -43,7 +42,6 @@ import boa.types.*;
  * @author rdyer
  * @author ankuraga
  * @author rramu
- * @author hungc
  */
 public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/**
@@ -506,7 +504,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	protected final IdentifierFindingVisitor idFinder = new IdentifierFindingVisitor();
 	protected final IndexeeFindingVisitor indexeeFinder = new IndexeeFindingVisitor();
 	protected final CallFindingVisitor callFinder = new CallFindingVisitor();
-	protected final VariableCountingTransformer varCount = new VariableCountingTransformer();
 	protected final VarDeclCodeGeneratingVisitor varDecl;
 	protected final StaticInitializationCodeGeneratingVisitor staticInitialization;
 	protected final FunctionDeclaratorCodeGeneratingVisitor functionDeclarator;
@@ -537,7 +534,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	@Override
 	public void visit(final Program n) {
 		final ST st = stg.getInstanceOf("Job");
-		varCount.start(n);
 
 		st.add("name", this.name);
 

@@ -1,13 +1,20 @@
 o: output collection of int;
 a: array of int = {2};
 
+v := function(i: int) : int{
+	return i + 1;
+};
+
 foreach (i: int; a[i]) {
   v := a[i];
-  o << v;
+  foreach (j: int; a[j]){
+  	v := a[i];
+  	v = v(v);
+  	o << v;
+  } 
 }
 
 foreach (i: int; a[i]) {
   v := a[i];
-  v = v + 1;
   o << v;
 }
