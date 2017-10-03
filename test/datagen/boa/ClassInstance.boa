@@ -1,0 +1,22 @@
+{
+   "kind": "EXPRESSION",
+   "expression": {
+      "kind": "VARDECL",
+      "variable_decls": [
+         {
+            "name": "x",
+            "variable_type": {
+               "name": "Person",
+               "kind": "OTHER"
+            },
+            "initializer": {
+               "kind": "NEW",
+               "new_type": {
+                  "name": "Person",
+                  "kind": "CLASS"
+               }
+            }
+         }
+      ]
+   }
+}
