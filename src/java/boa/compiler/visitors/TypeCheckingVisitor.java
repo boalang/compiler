@@ -41,7 +41,7 @@ import boa.types.*;
  */
 public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	BoaType lastRetType;
-	Integer counter = 0;
+	Integer newNameCounter = 0;
 	HashMap<String, String> newName = new HashMap<String, String>();
 
 	/**
@@ -908,9 +908,9 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		if(!(n.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand() instanceof FunctionExpression)){
 
 			String oldId = n.getId().getToken();
-			String newId = oldId + Integer.toString(counter);
+			String newId = oldId + Integer.toString(newNameCounter);
 			n.getId().setToken(newId);
-			counter++;
+			newNameCounter++;
 				newName.put(oldId, newId);
 			}
 		}

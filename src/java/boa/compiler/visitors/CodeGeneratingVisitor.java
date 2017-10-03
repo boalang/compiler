@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer, Ramanathan Ramu
+ * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer, Ramanathan Ramu,
  *                 Iowa State University of Science and Technology
  *                 and Bowling Green State University
  *
@@ -36,6 +36,7 @@ import boa.compiler.ast.literals.*;
 import boa.compiler.ast.statements.*;
 import boa.compiler.ast.types.*;
 import boa.types.*;
+
 /**
  *
  * @author anthonyu
