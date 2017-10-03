@@ -482,6 +482,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	@Override
 	public void visit(final Identifier n, final SymbolTable env) {
 		n.env = env;
+
 		if(newName.containsKey(n.getToken()) && env.hasLocal(newName.get(n.getToken()))){
 			n.setToken(newName.get(n.getToken()));
 		}
@@ -980,7 +981,7 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 			lhs = rhs;
 		}
 
-		if(!(rhs instanceof BoaFunction))
+		if (!(rhs instanceof BoaFunction))
 			env.set(id, lhs);
 		n.type = lhs;
 		n.getId().accept(this, env);
