@@ -105,6 +105,9 @@ public abstract class BoaAbstractVisitor {
 	protected boolean preVisit(final Person node) throws Exception {
 		return defaultPreVisit();
 	}
+	protected boolean preVisit(final SpecCase node) throws Exception {
+		return defaultPreVisit();
+	}
 	protected boolean preVisit(final SpecDeclaration node) throws Exception {
 		return defaultPreVisit();
 	}
@@ -167,6 +170,9 @@ public abstract class BoaAbstractVisitor {
 		defaultPostVisit();
 	}
 	protected void postVisit(final Person node) throws Exception {
+		defaultPostVisit();
+	}
+	protected void postVisit(final SpecCase node) throws Exception {
 		defaultPostVisit();
 	}
 	protected void postVisit(final SpecDeclaration node) throws Exception {
@@ -292,6 +298,11 @@ public abstract class BoaAbstractVisitor {
 			for (int i = 0; i < nestedSize; i++)
 				visit(nestedList.get(i));
 
+			final List<SpecStatement> specsList = node.getSpecsList();
+			final int specsSize = specsList.size();
+			for (int i = 0; i < specsSize; i++)
+				visit(specsList.get(i));
+
 			postVisit(node);
 		}
 	}
@@ -376,6 +387,11 @@ public abstract class BoaAbstractVisitor {
 			if (node.hasExpression())
 				visit(node.getExpression());
 
+			final List<SpecStatement> specsList = node.getSpecsList();
+			final int specsSize = specsList.size();
+			for (int i = 0; i < specsSize; i++)
+				visit(specsList.get(i));
+
 			postVisit(node);
 		}
 	}
@@ -430,23 +446,68 @@ public abstract class BoaAbstractVisitor {
 			postVisit(node);
 		}
 	}
+	public final void visit(final SpecCase node) throws Exception {
+		if (preVisit(node)) {
+			final List<Modifier> modifiersList = node.getModifiersList();
+			final int modifiersSize = modifiersList.size();
+			for (int i = 0; i < modifiersSize; i++)
+				visit(modifiersList.get(i));
+
+			final List<Statement> statementsList = node.getStatementsList();
+			final int statementsSize = statementsList.size();
+			for (int i = 0; i < statementsSize; i++)
+				visit(statementsList.get(i));
+
+			postVisit(node);
+		}
+    }
 	public final void visit(final SpecDeclaration node) throws Exception {
 		if (preVisit(node)) {
+			final List<Modifier> modifiersList = node.getModifiersList();
+			final int modifiersSize = modifiersList.size();
+			for (int i = 0; i < modifiersSize; i++)
+				visit(modifiersList.get(i));
+
+			final List<Statement> statementsList = node.getStatementsList();
+			final int statementsSize = statementsList.size();
+			for (int i = 0; i < statementsSize; i++)
+				visit(statementsList.get(i));
+
 			postVisit(node);
 		}
 	}
 	public final void visit(final SpecMethod node) throws Exception {
 		if (preVisit(node)) {
+			final List<SpecCase> casesList = node.getCasesList();
+			final int casesSize = casesList.size();
+			for (int i = 0; i < casesSize; i++)
+				visit(casesList.get(i));
+
+			final List<Modifier> modifiersList = node.getModifiersList();
+			final int modifiersSize = modifiersList.size();
+			for (int i = 0; i < modifiersSize; i++)
+				visit(modifiersList.get(i));
+
 			postVisit(node);
 		}
 	}
 	public final void visit(final SpecStatement node) throws Exception {
 		if (preVisit(node)) {
+			final List<Statement> statementsList = node.getStatementsList();
+			final int statementsSize = statementsList.size();
+			for (int i = 0; i < statementsSize; i++)
+				visit(statementsList.get(i));
+
 			postVisit(node);
 		}
 	}
 	public final void visit(final SpecVariable node) throws Exception {
 		if (preVisit(node)) {
+			final List<Modifier> modifiersList = node.getModifiersList();
+			final int modifiersSize = modifiersList.size();
+			for (int i = 0; i < modifiersSize; i++)
+				visit(modifiersList.get(i));
+
 			postVisit(node);
 		}
 	}
