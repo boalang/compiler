@@ -71,10 +71,6 @@ public class BoaAstIntrinsics {
 	private static final ASTRoot emptyAst = ASTRoot.newBuilder().build();
 	private static final CommentsRoot emptyComments = CommentsRoot.newBuilder().build();
 	private static final IssuesRoot emptyIssues = IssuesRoot.newBuilder().build();
-	private static final SpecDeclaration emptySpecDeclaration = SpecDeclaration.newBuilder().build();
-	private static final SpecMethod emptySpecMethod = SpecMethod.newBuilder().build();
-	private static final SpecStatement emptySpecStatement = SpecStatement.newBuilder().build();
-	private static final SpecVariable emptySpecVariable = SpecVariable.newBuilder().build();
 
 	/**
 	 * Given a ChangedFile, return the AST for that file at that revision.
@@ -209,8 +205,8 @@ public class BoaAstIntrinsics {
 	@SuppressWarnings("unchecked")
 	@FunctionSpec(name = "getspec", returnType = "SpecDeclaration", formalParameters = { "Declaration" })
 	public static SpecDeclaration getspec(final Declaration f) {
-		if (!f.hasKey())
-			return emptySpecDeclaration;
+		if (f == null || !f.hasKey())
+			return null;
 		final String rowName = f.getKey() + "!!" + f.getName();
 
 		if (specMap == null)
@@ -234,13 +230,13 @@ public class BoaAstIntrinsics {
 		}
 	
 		System.err.println("error with SpecDeclaration: " + rowName);
-		return emptySpecDeclaration;
+		return null;
 	}
 	@SuppressWarnings("unchecked")
 	@FunctionSpec(name = "getspec", returnType = "SpecMethod", formalParameters = { "Method" })
 	public static SpecMethod getspec(final Method f) {
-		if (!f.hasKey())
-			return emptySpecMethod;
+		if (f == null || !f.hasKey())
+			return null;
 		final String rowName = f.getKey() + "!!" + f.getName();
 	
 		if (specMap == null)
@@ -264,13 +260,13 @@ public class BoaAstIntrinsics {
 		}
 	
 		System.err.println("error with SpecMethod: " + rowName);
-		return emptySpecMethod;
+		return null;
 	}
 	@SuppressWarnings("unchecked")
 	@FunctionSpec(name = "getspec", returnType = "SpecStatement", formalParameters = { "Statement" })
 	public static SpecStatement getspec(final Statement f) {
-		if (!f.hasKey())
-			return emptySpecStatement;
+		if (f == null || !f.hasKey())
+			return null;
 		final String rowName = f.getKey();
 	
 		if (specMap == null)
@@ -294,13 +290,13 @@ public class BoaAstIntrinsics {
 		}
 	
 		System.err.println("error with SpecStatement: " + rowName);
-		return emptySpecStatement;
+		return null;
 	}	
 	@SuppressWarnings("unchecked")
 	@FunctionSpec(name = "getspec", returnType = "SpecVariable", formalParameters = { "Variable" })
 	public static SpecVariable getspec(final Variable f) {
-		if (!f.hasKey())
-			return emptySpecVariable;
+		if (f == null || !f.hasKey())
+			return null;
 		final String rowName = f.getKey() + "!!" + f.getName();
 	
 		if (specMap == null)
@@ -324,7 +320,7 @@ public class BoaAstIntrinsics {
 		}
 	
 		System.err.println("error with SpecVariable: " + rowName);
-		return emptySpecVariable;
+		return null;
 	}
 
 	@SuppressWarnings("rawtypes")

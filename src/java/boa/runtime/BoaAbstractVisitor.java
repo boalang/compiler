@@ -189,6 +189,7 @@ public abstract class BoaAbstractVisitor {
 	}
 
 	public final void visit(final Project node) throws Exception {
+		if (node == null) return;
 		if (preVisit(node)) {
 			final List<CodeRepository> reposList = node.getCodeRepositoriesList();
 			final int reposSize = reposList.size();
@@ -209,6 +210,7 @@ public abstract class BoaAbstractVisitor {
 		}
 	}
 	public final void visit(final CodeRepository node) throws Exception {
+		if (node == null) return;
 		if (preVisit(node)) {
 			final List<Revision> revisionsList = node.getRevisionsList();
 			final int revisionsSize = revisionsList.size();
@@ -219,6 +221,7 @@ public abstract class BoaAbstractVisitor {
 		}
 	}
 	public final void visit(final Revision node) throws Exception {
+		if (node == null) return;
 		if (preVisit(node)) {
 			final List<ChangedFile> filesList = node.getFilesList();
 			final int filesSize = filesList.size();
@@ -235,6 +238,7 @@ public abstract class BoaAbstractVisitor {
 		}
 	}
 	public final void visit(final ChangedFile node) throws Exception {
+		if (node == null) return;
 		if (preVisit(node)) {
 			visit(BoaAstIntrinsics.getast(node));
 
@@ -242,6 +246,7 @@ public abstract class BoaAbstractVisitor {
 		}
 	}
 	public final void visit(final ASTRoot node) throws Exception {
+		if (node == null) return;
 		if (preVisit(node)) {
 			final List<Namespace> namespacesList = node.getNamespacesList();
 			final int namespacesSize = namespacesList.size();
@@ -252,6 +257,7 @@ public abstract class BoaAbstractVisitor {
 		}
 	}
 	public final void visit(final Namespace node) throws Exception {
+		if (node == null) return;
 		if (preVisit(node)) {
 			final List<Declaration> declarationsList = node.getDeclarationsList();
 			final int declarationsSize = declarationsList.size();
@@ -267,6 +273,7 @@ public abstract class BoaAbstractVisitor {
 		}
 	}
 	public final void visit(final Declaration node) throws Exception {
+		if (node == null) return;
 		if (preVisit(node)) {
 			final List<Modifier> modifiersList = node.getModifiersList();
 			final int modifiersSize = modifiersList.size();
@@ -307,11 +314,13 @@ public abstract class BoaAbstractVisitor {
 		}
 	}
 	public final void visit(final Type node) throws Exception {
+		if (node == null) return;
 		if (preVisit(node)) {
 			postVisit(node);
 		}
 	}
 	public final void visit(final Method node) throws Exception {
+		if (node == null) return;
 		if (preVisit(node)) {
 			visit(node.getReturnType());
 
@@ -344,6 +353,7 @@ public abstract class BoaAbstractVisitor {
 		}
 	}
 	public final void visit(final Variable node) throws Exception {
+		if (node == null) return;
 		if (preVisit(node)) {
 			visit(node.getVariableType());
 
@@ -359,6 +369,7 @@ public abstract class BoaAbstractVisitor {
 		}
 	}
 	public final void visit(final Statement node) throws Exception {
+		if (node == null) return;
 		if (preVisit(node)) {
 			final List<Statement> statementsList = node.getStatementsList();
 			final int statementsSize = statementsList.size();
@@ -396,6 +407,7 @@ public abstract class BoaAbstractVisitor {
 		}
 	}
 	public final void visit(final Expression node) throws Exception {
+		if (node == null) return;
 		if (preVisit(node)) {
 			final List<Expression> expressionsList = node.getExpressionsList();
 			final int expressionsSize = expressionsList.size();
@@ -427,6 +439,7 @@ public abstract class BoaAbstractVisitor {
 		}
 	}
 	public final void visit(final Modifier node) throws Exception {
+		if (node == null) return;
 		if (preVisit(node)) {
 			final List<Expression> annotationValuesList = node.getAnnotationValuesList();
 			final int annotationValuesSize = annotationValuesList.size();
@@ -437,16 +450,19 @@ public abstract class BoaAbstractVisitor {
 		}
 	}
 	public final void visit(final Comment node) throws Exception {
+		if (node == null) return;
 		if (preVisit(node)) {
 			postVisit(node);
 		}
 	}
 	public final void visit(final Person node) throws Exception {
+		if (node == null) return;
 		if (preVisit(node)) {
 			postVisit(node);
 		}
 	}
 	public final void visit(final SpecCase node) throws Exception {
+		if (node == null) return;
 		if (preVisit(node)) {
 			final List<Modifier> modifiersList = node.getModifiersList();
 			final int modifiersSize = modifiersList.size();
@@ -460,8 +476,9 @@ public abstract class BoaAbstractVisitor {
 
 			postVisit(node);
 		}
-    }
+	}
 	public final void visit(final SpecDeclaration node) throws Exception {
+		if (node == null) return;
 		if (preVisit(node)) {
 			final List<Modifier> modifiersList = node.getModifiersList();
 			final int modifiersSize = modifiersList.size();
@@ -477,6 +494,7 @@ public abstract class BoaAbstractVisitor {
 		}
 	}
 	public final void visit(final SpecMethod node) throws Exception {
+		if (node == null) return;
 		if (preVisit(node)) {
 			final List<SpecCase> casesList = node.getCasesList();
 			final int casesSize = casesList.size();
@@ -492,6 +510,7 @@ public abstract class BoaAbstractVisitor {
 		}
 	}
 	public final void visit(final SpecStatement node) throws Exception {
+		if (node == null) return;
 		if (preVisit(node)) {
 			final List<Statement> statementsList = node.getStatementsList();
 			final int statementsSize = statementsList.size();
@@ -502,6 +521,7 @@ public abstract class BoaAbstractVisitor {
 		}
 	}
 	public final void visit(final SpecVariable node) throws Exception {
+		if (node == null) return;
 		if (preVisit(node)) {
 			final List<Modifier> modifiersList = node.getModifiersList();
 			final int modifiersSize = modifiersList.size();
