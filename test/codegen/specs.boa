@@ -4,10 +4,13 @@ findMethods := visitor {
     before n: Method -> COUNTS << 1;
 };
 
+d: Declaration;
+visit(getspec(d), findMethods);
+
 visit(input, visitor {
     # invariants etc
-    before n: Declaration ->  if (def(getspec(n))) visit(getspec(n), findMethods);
+    before n: Declaration -> visit(getspec(n), findMethods);
     # assume etc
     # pre/post on methods
-    before n: Method -> if (def(getspec(n))) visit(getspec(n), findMethods);
+    before n: Method -> visit(getspec(n), findMethods);
 });
