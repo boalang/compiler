@@ -12,9 +12,10 @@ foreach (i: int; a[i]) {
   		v := a[i];
   		v = v + 1;
   		{
-  			v := 4;
+  			v := 5;
   			o << v;
   		}
+  		v = v(v);
   		o << v;	
   	}	
   	o << v;
