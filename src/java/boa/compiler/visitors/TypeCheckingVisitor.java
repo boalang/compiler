@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer, Che Shian Hung, 
  *                 Iowa State University of Science and Technology
  *                 and Bowling Green State University
  *
@@ -38,6 +38,7 @@ import boa.types.*;
  * @author rdyer
  * @author ankuraga
  * @author rramu
+ * @author hungc
  */
 public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	BoaType lastRetType;
@@ -485,6 +486,16 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 
 		if(newName.containsKey(n.getToken()) && env.hasLocal(newName.get(n.getToken()))){
 			n.setToken(newName.get(n.getToken()));
+		}
+		else if(newName.containsKey(n.getToken())){
+			Integer c = newNameCounter - 1;
+			while (c > 0){
+				if(env.hasLocal(n.getToken() + Integer.toString(c))){
+					n.setToken(n.getToken() + Integer.toString(c));
+					break;
+				}
+				c--;
+			}
 		}
 		if (env.hasType(n.getToken()))
 			n.type = SymbolTable.getType(n.getToken());

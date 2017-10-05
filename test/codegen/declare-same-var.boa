@@ -6,15 +6,22 @@ v := function(i: int) : int{
 };
 
 foreach (i: int; a[i]) {
-  v := a[i];
-  foreach (j: int; a[j]){
   	v := a[i];
-  	v = v(v);
+  	v = 0;
+  	foreach (j: int; a[j]){
+  		v := a[i];
+  		v = v + 1;
+  		{
+  			v := 4;
+  			o << v;
+  		}
+  		o << v;	
+  	}	
   	o << v;
-  } 
 }
 
+
 foreach (i: int; a[i]) {
-  v := a[i];
-  o << v;
+ 	v := a[i];
+  	o << v;
 }
