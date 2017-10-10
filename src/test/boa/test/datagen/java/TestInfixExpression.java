@@ -126,4 +126,36 @@ public class TestInfixExpression extends Java8BaseTest {
 		);
 	}
 	
+	@Test
+	public void infixExpressionRightShiftSigned() throws IOException {
+		testWrapped(
+			load("test/datagen/java/InfixExpressionRightShiftSigned.java").trim(),
+			load("test/datagen/boa/InfixExpressionRightShiftSigned.boa").trim()
+		);
+	}
+	
+	@Test
+	public void infixExpressionRightShiftUnsigned() throws IOException {
+		testWrapped(
+			load("test/datagen/java/InfixExpressionRightShiftUnsigned.java").trim(),
+			load("test/datagen/boa/InfixExpressionRightShiftUnsigned.boa").trim()
+		);
+	}
+	
+	@Test
+	public void infixExpressionTimes() throws IOException {
+		testWrapped(
+			load("test/datagen/java/InfixExpressionTimes.java").trim(),
+			load("test/datagen/boa/InfixExpressionTimes.boa").trim()
+		);
+	}
+	
+	@Test
+	public void infixExpressionXor() throws IOException {
+		testWrapped(
+			load("test/datagen/java/InfixExpressionXor.java").trim(),
+			load("test/datagen/boa/InfixExpressionXor.boa").trim()
+		);
+	}
+	
 }
