@@ -2622,10 +2622,14 @@ public class Java7Visitor extends ASTVisitor {
 		}
 		b.setKind(boa.types.Ast.Expression.ExpressionKind.VARACCESS);
 		b.setIsMemberAccess(true);
-		String name = "super." + node.getName().getFullyQualifiedName();
+		String name = "super";
 		if (node.getQualifier() != null)
 			name = node.getQualifier().getFullyQualifiedName() + "." + name;
-		b.setVariable(name);
+		boa.types.Ast.Expression.Builder qb = boa.types.Ast.Expression.newBuilder();
+		qb.setKind(boa.types.Ast.Expression.ExpressionKind.LITERAL);
+		qb.setLiteral(name);
+		b.addExpressions(qb);
+		b.setVariable(node.getName().getFullyQualifiedName());
 		expressions.push(b.build());
 		return false;
 	}
