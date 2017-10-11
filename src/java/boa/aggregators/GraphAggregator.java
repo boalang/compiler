@@ -40,7 +40,7 @@ public abstract class GraphAggregator extends Aggregator {
 	public void start(final EmitKey key) {
 		super.start(key);
 
-		this.neighbors = new HashSet<String>();
+		this.neighbors = new LinkedHashSet<String>();
 		this.weights = new HashMap<String,String>();
 	}
 

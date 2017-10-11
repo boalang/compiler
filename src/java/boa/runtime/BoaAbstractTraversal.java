@@ -271,7 +271,7 @@ public abstract class BoaAbstractTraversal<T1> {
 						prevOutputMapObj = new java.util.HashMap<Integer,T1>(outputMapObj);
 						traverse(cfg, direction, kind);
 						fixpFlag=true;
-						java.util.HashSet<CFGNode> nl=cfg.getNodes();
+						java.util.LinkedHashSet<CFGNode> nl=cfg.getNodes();
 						for (CFGNode node : nl) {
 							boolean curFlag=outputMapObj.containsKey(node.getId());
 							if (curFlag) {

@@ -40,8 +40,8 @@ public class BoaGraphIntrinsics {
 	}
 
 	@FunctionSpec(name = "get_nodes_with_definition", returnType = "set of string", formalParameters = { "CFGNode" })
-	public static HashSet<String> getNodesWithDefinition(final CFGNode node) {
-		final HashSet<String> vardef = new HashSet<String>();
+	public static LinkedHashSet<String> getNodesWithDefinition(final CFGNode node) {
+		final LinkedHashSet<String> vardef = new LinkedHashSet<String>();
 		if (node.getExpression() != null) {
 			if (node.getExpression().getKind() == ExpressionKind.VARDECL || node.getExpression().getKind() == ExpressionKind.ASSIGN) {
 				vardef.add(String.valueOf(node.getId()));
@@ -51,8 +51,8 @@ public class BoaGraphIntrinsics {
 	}
 
 	@FunctionSpec(name = "get_variable_killed", returnType = "set of string", formalParameters = {"CFG", "CFGNode" })
-	public static HashSet<String> getVariableKilled(final boa.types.Control.CFG cfg, final CFGNode node) {
-		final HashSet<String> varkilled = new HashSet<String>();
+	public static LinkedHashSet<String> getVariableKilled(final boa.types.Control.CFG cfg, final CFGNode node) {
+		final LinkedHashSet<String> varkilled = new LinkedHashSet<String>();
 		String vardef = "";
 
 		if (node.getExpression() != null) {
@@ -86,8 +86,8 @@ public class BoaGraphIntrinsics {
 	}
 
 	@FunctionSpec(name = "get_variable_def", returnType = "set of string", formalParameters = { "CFGNode" })
-	public static HashSet<String> getVariableDef(final CFGNode node) {
-		final HashSet<String> vardef = new HashSet<String>();
+	public static LinkedHashSet<String> getVariableDef(final CFGNode node) {
+		final LinkedHashSet<String> vardef = new LinkedHashSet<String>();
 		if (node.getExpression() != null) {
 			if (node.getExpression().getKind() == ExpressionKind.VARDECL) {
 				vardef.add(node.getExpression().getVariableDeclsList().get(0).getName());
@@ -100,15 +100,15 @@ public class BoaGraphIntrinsics {
 	}
 
 	@FunctionSpec(name = "get_variable_used", returnType = "set of string", formalParameters = { "CFGNode" })
-	public static HashSet<String> getVariableUsed(final CFGNode node) {
-		final HashSet<String> varused = new HashSet<String>();
+	public static LinkedHashSet<String> getVariableUsed(final CFGNode node) {
+		final LinkedHashSet<String> varused = new LinkedHashSet<String>();
 		if (node.getExpression() != null) {
 			traverseExpr(varused,node.getExpression());
 		}
 		return varused;
 	}
 
-	public static void traverseExpr(final HashSet<String> varused, final Expression expr) {
+	public static void traverseExpr(final LinkedHashSet<String> varused, final Expression expr) {
 		if (expr.getVariable() != null) {
 			varused.add(expr.getVariable());
 		}
@@ -123,7 +123,7 @@ public class BoaGraphIntrinsics {
 		}
 	}
 
-	public static void traverseVarDecls(final HashSet<String> varused, final Variable vardecls) {
+	public static void traverseVarDecls(final LinkedHashSet<String> varused, final Variable vardecls) {
 		if (vardecls.getInitializer() != null) {
 			traverseExpr(varused, vardecls.getInitializer());
 		}

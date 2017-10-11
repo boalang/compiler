@@ -17,7 +17,7 @@
 package boa.aggregators;
 
 import java.io.IOException;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 
 import boa.io.EmitKey;
 
@@ -28,7 +28,7 @@ import boa.io.EmitKey;
  */
 @AggregatorSpec(name = "set", canCombine = true)
 public class SetAggregator extends Aggregator {
-	private HashSet<String> set;
+	private LinkedHashSet<String> set;
 	private final long max;
 
 	/**
@@ -60,7 +60,7 @@ public class SetAggregator extends Aggregator {
 		super.start(key);
 
 		// the set of data to be collected
-		this.set = new HashSet<String>();
+		this.set = new LinkedHashSet<String>();
 	}
 
 	/** {@inheritDoc} */

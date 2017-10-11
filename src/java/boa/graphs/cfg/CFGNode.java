@@ -17,7 +17,7 @@
 package boa.graphs.cfg;
 
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 
 import boa.types.Ast.Expression;
 import boa.types.Ast.Statement;
@@ -41,7 +41,7 @@ public class CFGNode implements Comparable<CFGNode> {
 	private int objectNameId;
 	private int classNameId;
 	private int numOfParameters = 0;
-	private HashSet<Integer> parameters;
+	private LinkedHashSet<Integer> parameters;
 	private int kind = TYPE_OTHER;
 	private String pid;
 	private Statement stmt;
@@ -52,13 +52,13 @@ public class CFGNode implements Comparable<CFGNode> {
 	public static HashMap<String, Integer> idOfLabel = new HashMap<String, Integer>();
 	public static HashMap<Integer, String> labelOfID = new HashMap<Integer, String>();
 
-	public HashSet<CFGEdge> inEdges = new HashSet<CFGEdge>();
-	public HashSet<CFGEdge> outEdges = new HashSet<CFGEdge>();
+	public LinkedHashSet<CFGEdge> inEdges = new LinkedHashSet<CFGEdge>();
+	public LinkedHashSet<CFGEdge> outEdges = new LinkedHashSet<CFGEdge>();
 
 	public java.util.ArrayList<CFGNode> predecessors = new java.util.ArrayList<CFGNode>();
 	public java.util.ArrayList<CFGNode> successors = new java.util.ArrayList<CFGNode>();
 
-	public HashSet<String> useVariables = new HashSet<String>();
+	public LinkedHashSet<String> useVariables = new LinkedHashSet<String>();
 	public String defVariables;
 	
 	@Override
@@ -84,7 +84,7 @@ public class CFGNode implements Comparable<CFGNode> {
 	}
 
 	public CFGNode(String methodName, int kind, String className,
-			String objectName, int numOfParameters, HashSet<Integer> datas) {
+			String objectName, int numOfParameters, LinkedHashSet<Integer> datas) {
 		this.id = ++numOfNodes;
 		this.methodId = convertLabel(methodName);
 		this.kind = kind;
@@ -96,7 +96,7 @@ public class CFGNode implements Comparable<CFGNode> {
 		}
 
 		this.objectNameId = convertLabel(objectName);
-		this.parameters = new HashSet<Integer>(datas);
+		this.parameters = new LinkedHashSet<Integer>(datas);
 		this.numOfParameters = numOfParameters;
 	}
 
@@ -114,8 +114,8 @@ public class CFGNode implements Comparable<CFGNode> {
 		return this.stmt;
 	}
 
-	public HashSet<String> getDefUse() {
-		HashSet<String> defUse = new HashSet<String>(useVariables);
+	public LinkedHashSet<String> getDefUse() {
+		LinkedHashSet<String> defUse = new LinkedHashSet<String>(useVariables);
 		defUse.add(defVariables);
 		return defUse;
 	}
@@ -182,15 +182,15 @@ public class CFGNode implements Comparable<CFGNode> {
 		return numOfParameters;
 	}
 
-	public void setParameters(HashSet<Integer> parameters) {
+	public void setParameters(LinkedHashSet<Integer> parameters) {
 		this.parameters = parameters;
 	}
 
-	public HashSet<Integer> getParameters() {
+	public LinkedHashSet<Integer> getParameters() {
 		return parameters;
 	}
 
-	public void setUseVariables(HashSet<String> useVariables) {
+	public void setUseVariables(LinkedHashSet<String> useVariables) {
 		this.useVariables = useVariables;
 	}
 
@@ -214,7 +214,7 @@ public class CFGNode implements Comparable<CFGNode> {
 		return labelOfID.get(classNameId);
 	}
 
-	public HashSet<String> getUseVariables() {
+	public LinkedHashSet<String> getUseVariables() {
 		return useVariables;
 	}
 
@@ -230,11 +230,11 @@ public class CFGNode implements Comparable<CFGNode> {
 		return false;
 	}
 
-	public HashSet<CFGEdge> getInEdges() {
+	public LinkedHashSet<CFGEdge> getInEdges() {
 		return inEdges;
 	}
 
-	public HashSet<CFGEdge> getOutEdges() {
+	public LinkedHashSet<CFGEdge> getOutEdges() {
 		return outEdges;
 	}
 
@@ -255,7 +255,7 @@ public class CFGNode implements Comparable<CFGNode> {
 	}
 
 	public java.util.ArrayList<CFGNode> getInNodes() {
-		HashSet<CFGNode> nodes = new HashSet<CFGNode>();
+		LinkedHashSet<CFGNode> nodes = new LinkedHashSet<CFGNode>();
 		for (CFGEdge e : inEdges)
 			nodes.add(e.getSrc());
 		java.util.ArrayList<CFGNode> pred = new java.util.ArrayList<CFGNode>(nodes);
@@ -264,7 +264,7 @@ public class CFGNode implements Comparable<CFGNode> {
 	}
 
 	public java.util.ArrayList<CFGNode> getOutNodes() {
-		HashSet<CFGNode> nodes = new HashSet<CFGNode>();
+		LinkedHashSet<CFGNode> nodes = new LinkedHashSet<CFGNode>();
 		for (CFGEdge e : outEdges)
 			nodes.add(e.getDest());
 		java.util.ArrayList<CFGNode> succ = new java.util.ArrayList<CFGNode>(nodes);
@@ -377,8 +377,8 @@ public class CFGNode implements Comparable<CFGNode> {
 		return defVar;
 	}
 
-	public HashSet<String> processUse() {
-		HashSet<String> useVar= new HashSet<String>();
+	public LinkedHashSet<String> processUse() {
+		LinkedHashSet<String> useVar= new LinkedHashSet<String>();
 		if(this.expr!=null) {
 			if(this.expr.getKind().toString().equals("ASSIGN")) {
 				traverseExpr(useVar, this.rhs);
@@ -390,7 +390,7 @@ public class CFGNode implements Comparable<CFGNode> {
 		return useVar;
 	}
 
-	public static void traverseExpr(HashSet<String> useVar, final boa.types.Ast.Expression expr) {		
+	public static void traverseExpr(LinkedHashSet<String> useVar, final boa.types.Ast.Expression expr) {		
 		if(expr.hasVariable()) {
 			if(expr.getExpressionsList().size()!=0) {
 				useVar.add("this");
@@ -416,7 +416,7 @@ public class CFGNode implements Comparable<CFGNode> {
 		}
 	}
 
-	public static void traverseVarDecls(HashSet<String> useVar, final boa.types.Ast.Variable vardecls) {		
+	public static void traverseVarDecls(LinkedHashSet<String> useVar, final boa.types.Ast.Variable vardecls) {		
 		if(vardecls.hasInitializer()) {
 			traverseExpr(useVar, vardecls.getInitializer());			
 		}
