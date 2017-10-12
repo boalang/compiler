@@ -4,15 +4,20 @@
       "kind": "CONDITIONAL",
       "expressions": [
          {
-            "kind": "GT",
+            "kind": "PAREN",
             "expressions": [
                {
-                  "kind": "VARACCESS",
-                  "variable": "a"
-               },
-               {
-                  "kind": "VARACCESS",
-                  "variable": "b"
+                  "kind": "GT",
+                  "expressions": [
+                     {
+                        "kind": "VARACCESS",
+                        "variable": "a"
+                     },
+                     {
+                        "kind": "VARACCESS",
+                        "variable": "b"
+                     }
+                  ]
                }
             ]
          },
