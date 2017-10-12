@@ -17,6 +17,7 @@
 package boa.aggregators;
 
 import java.io.IOException;
+import java.util.Set;
 import java.util.LinkedHashSet;
 
 import boa.io.EmitKey;
@@ -28,7 +29,7 @@ import boa.io.EmitKey;
  */
 @AggregatorSpec(name = "set", canCombine = true)
 public class SetAggregator extends Aggregator {
-	private LinkedHashSet<String> set;
+	private Set<String> set;
 	private final long max;
 
 	/**
