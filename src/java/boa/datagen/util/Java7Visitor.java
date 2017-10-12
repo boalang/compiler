@@ -2520,7 +2520,7 @@ public class Java7Visitor extends ASTVisitor {
 		node.getExpression().accept(this);
 		b.addExpressions(expressions.pop());
 		expressions.push(b.build());
-		return true;
+		return false;
 	}
 
 	@Override
