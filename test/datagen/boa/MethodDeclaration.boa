@@ -1,0 +1,40 @@
+{
+   "namespaces": [
+      {
+         "name": "",
+         "declarations": [
+            {
+               "name": "MethodDeclaration",
+               "kind": "CLASS",
+               "modifiers": [
+                  {
+                     "kind": "VISIBILITY",
+                     "visibility": "PUBLIC"
+                  }
+               ],
+               "methods": [
+                  {
+                     "name": "method",
+                     "modifiers": [
+                        {
+                           "kind": "VISIBILITY",
+                           "visibility": "PUBLIC"
+                        }
+                     ],
+                     "return_type": {
+                        "name": "void",
+                        "kind": "PRIMITIVE"
+                     },
+                     "statements": [
+                        {
+                           "kind": "BLOCK"
+                        }
+                     ]
+                  }
+               ],
+               "fully_qualified_name": "MethodDeclaration"
+            }
+         ]
+      }
+   ]
+}

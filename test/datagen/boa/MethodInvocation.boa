@@ -1,0 +1,13 @@
+{
+   "kind": "EXPRESSION",
+   "expression": {
+      "kind": "METHODCALL",
+      "expressions": [
+         {
+            "kind": "VARACCESS",
+            "variable": "x"
+         }
+      ],
+      "method": "myMethod"
+   }
+}
