@@ -1,0 +1,3 @@
+@MyAnnotation
+public class MarkerAnnotation {
+}
