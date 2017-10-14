@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2017, Hridesh Rajan, Robert Dyer, Ramanathan Ramu
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -107,11 +107,11 @@ public class InformationAnalysis extends AbstractVisitorNoArgNoRet {
 		}
 	}
 
-	public void start(CFGBuildingVisitor cfgBuilder, HashSet<Identifier> getValueNodesAlias, HashSet<Identifier> totalGetValueNodes) {
+	public void start(final CFGBuildingVisitor cfgBuilder, final HashSet<Identifier> getValueNodesAlias, final HashSet<Identifier> totalGetValueNodes) {
 		this.getValueNodesAlias = getValueNodesAlias;
 		this.totalGetValueNodes = totalGetValueNodes;
-		java.util.HashMap<Integer,String> nodeVisitStatus = new java.util.HashMap<Integer,String>();
-		for(Node subnode : cfgBuilder.order) {
+		final java.util.HashMap<Integer, String> nodeVisitStatus = new java.util.HashMap<Integer, String>();
+		for (final Node subnode : cfgBuilder.order) {
 			nodeVisitStatus.put(subnode.nodeId, "unvisited");
 		}
 		nodeVisitStatus.put(cfgBuilder.currentStartNodes.get(0).nodeId, "visited");
@@ -123,70 +123,69 @@ public class InformationAnalysis extends AbstractVisitorNoArgNoRet {
 			this.idFinder.start(n.env.getOperand());
 			final String funcName = this.idFinder.getNames().toArray()[0].toString();
 
-			if(funcName.equals("union")) {
+			if (funcName.equals("union")) {
 				unionFound = true;
 				visit(n.getArgs());
-				if(satisfiedNodes == 3) {
+				if (satisfiedNodes == 3) {
 					mergeOperation.add("union");
-				}
-				else if(satisfiedNodes > 1 && satisfiedNodes < 3)
+				} else if(satisfiedNodes > 1 && satisfiedNodes < 3) {
 					genFlag = true;
+				}
 
 				unionFound = false;
 			}
-			if(funcName.equals("intersect")) {
+			if (funcName.equals("intersect")) {
 				intersectionFound = true;
 				visit(n.getArgs());
-					if(satisfiedNodes == 3) {
+					if (satisfiedNodes == 3) {
 						mergeOperation.add("intersection");
 					}
-					else if(satisfiedNodes > 1 && satisfiedNodes < 3) {
+					else if (satisfiedNodes > 1 && satisfiedNodes < 3) {
 						killFlag = true;
 					}
 
 				intersectionFound = false;
 			}
 			satisfiedNodes = 0;
-			if(funcName.equals("add") || funcName.equals("union")) {
+			if (funcName.equals("add") || funcName.equals("union")) {
 				addFound = true;
 				visit(n.getArgs());
 				addFound = false;
-			}
-			if(funcName.equals("remove") || funcName.equals("difference")) {
+			} else if (funcName.equals("remove") || funcName.equals("difference")) {
 				removeFound = true;
 				visit(n.getArgs());
 				removeFound = false;
 			}
-		}
-		catch(Exception e) {
+		} catch (final Exception e) {
+			// do nothing
 		}
 	}
 
 	public void visit(final Identifier n) {
-		if(unionFound && argFlag) {	
-			for(Identifier getValueNodeAlias : getValueNodesAlias) {
-				if(getValueNodeAlias.getToken().equals(n.getToken())) {
+		if (unionFound && argFlag) {	
+			for (final Identifier getValueNodeAlias : getValueNodesAlias) {
+				if (getValueNodeAlias.getToken().equals(n.getToken())) {
 					satisfiedNodes++;
 					break;
 				}		
 			}
-			for(Identifier getValueNodeAlias : totalGetValueNodes) {
-				if(getValueNodeAlias.getToken().equals(n.getToken())) {
+			for (final Identifier getValueNodeAlias : totalGetValueNodes) {
+				if (getValueNodeAlias.getToken().equals(n.getToken())) {
 					satisfiedNodes++;
 					break;
 				}		
 			}
 			argFlag = false;
 		}
-		if(intersectionFound && argFlag) {
-			for(Identifier getValueNodeAlias : getValueNodesAlias) {
-				if(getValueNodeAlias.getToken().equals(n.getToken())) {
+		if (intersectionFound && argFlag) {
+			for (final Identifier getValueNodeAlias : getValueNodesAlias) {
+				if (getValueNodeAlias.getToken().equals(n.getToken())) {
 					satisfiedNodes++;
 					break;
 				}		
 			}
-			for(Identifier getValueNodeAlias : totalGetValueNodes) {
-				if(getValueNodeAlias.getToken().equals(n.getToken())) {
+			for (final Identifier getValueNodeAlias : totalGetValueNodes) {
+				if (getValueNodeAlias.getToken().equals(n.getToken())) {
 					satisfiedNodes++;
 					break;
 				}		
@@ -194,18 +193,18 @@ public class InformationAnalysis extends AbstractVisitorNoArgNoRet {
 			argFlag = false;
 		}
 
-		if(addFound && argFlag) {
-			for(Identifier getValueNodeAlias : getValueNodesAlias) {
-				if(getValueNodeAlias.getToken().equals(n.getToken())) {
+		if (addFound && argFlag) {
+			for (final Identifier getValueNodeAlias : getValueNodesAlias) {
+				if (getValueNodeAlias.getToken().equals(n.getToken())) {
 					genFlag = true;
 					break;
 				}		
 			}
 			argFlag = false;
 		}
-		if(removeFound && argFlag) {
-			for(Identifier getValueNodeAlias : getValueNodesAlias) {
-				if(getValueNodeAlias.getToken().equals(n.getToken())) {
+		if (removeFound && argFlag) {
+			for (final Identifier getValueNodeAlias : getValueNodesAlias) {
+				if (getValueNodeAlias.getToken().equals(n.getToken())) {
 					killFlag = true;
 					break;
 				}		

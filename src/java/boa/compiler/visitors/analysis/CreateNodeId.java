@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2017, Hridesh Rajan, Robert Dyer, Ramanathan Ramu
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,22 +27,22 @@ import boa.compiler.visitors.*;
 public class CreateNodeId extends AbstractVisitorNoArgNoRet {
 	int id = 0;
 
-	public final void createNodeIds(final Node node, java.util.HashMap<Node,String> nodeVisitStatus) {
-		nodeVisitStatus.put(node,"visited");
+	public final void createNodeIds(final Node node, final java.util.HashMap<Node, String> nodeVisitStatus) {
+		nodeVisitStatus.put(node, "visited");
 		node.nodeId = ++id;
-		for (Node succ : node.successors) {
+		for (final Node succ : node.successors) {
 		    if (nodeVisitStatus.get(succ).equals("unvisited")) {
-			createNodeIds(succ, nodeVisitStatus);
+				createNodeIds(succ, nodeVisitStatus);
 		    }
 		}
 	}
 
-	public void start(CFGBuildingVisitor cfgBuilder) {
-		java.util.HashMap<Node,String> nodeVisitStatus1 = new java.util.HashMap<Node,String>();
-		for(Node subnode : cfgBuilder.order) {
-			nodeVisitStatus1.put(subnode, "unvisited");
+	public void start(final CFGBuildingVisitor cfgBuilder) {
+		final java.util.HashMap<Node,String> nodeVisitStatus = new java.util.HashMap<Node,String>();
+		for (final Node subnode : cfgBuilder.order) {
+			nodeVisitStatus.put(subnode, "unvisited");
 		}
-		nodeVisitStatus1.put(cfgBuilder.currentStartNodes.get(0), "visited");
-		createNodeIds(cfgBuilder.currentStartNodes.get(0), nodeVisitStatus1);
-	}	
+		nodeVisitStatus.put(cfgBuilder.currentStartNodes.get(0), "visited");
+		createNodeIds(cfgBuilder.currentStartNodes.get(0), nodeVisitStatus);
+	}
 }

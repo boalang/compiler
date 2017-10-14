@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2017, Hridesh Rajan, Robert Dyer, Ramanathan Ramu
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -11,7 +11,7 @@
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
+ * See the License for the specif ic language governing permissions and
  * limitations under the License.
  */
 package boa.compiler.visitors.analysis;
@@ -101,7 +101,7 @@ public class LocalMayAliasAnalysis extends AbstractVisitorNoArgNoRet {
 	public HashSet<Identifier> start(CFGBuildingVisitor cfgBuilder, Identifier id) {
 		aliastSet.add(id);
 		java.util.HashMap<Integer,String> nodeVisitStatus = new java.util.HashMap<Integer,String>();
-		for(Node subnode : cfgBuilder.order) {
+		for (final Node subnode : cfgBuilder.order) {
 			nodeVisitStatus.put(subnode.nodeId, "unvisited");
 		}
 		nodeVisitStatus.put(cfgBuilder.currentStartNodes.get(0).nodeId, "visited");
@@ -113,21 +113,21 @@ public class LocalMayAliasAnalysis extends AbstractVisitorNoArgNoRet {
 	public void visit(final AssignmentStatement n) {
 		Factor lhs = n.getLhs();
 		lastDefVariable = (Identifier)n.getLhs().getOperand();
-		if(n.getRhs().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand() instanceof Identifier && n.getRhs().getLhs().getLhs().getLhs().getLhs().getLhs().getOpsSize()==0) {
+		if (n.getRhs().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand() instanceof Identifier && n.getRhs().getLhs().getLhs().getLhs().getLhs().getLhs().getOpsSize() == 0) {
 			boolean flag = false;
-			for(Identifier alias : aliastSet) {
-				if(((Identifier)n.getRhs().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand()).getToken().equals(alias.getToken())) {
-					if(n.getRhs().getRhsSize()==0) {
+			for (final Identifier alias : aliastSet) {
+				if (((Identifier)n.getRhs().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand()).getToken().equals(alias.getToken())) {
+					if (n.getRhs().getRhsSize() == 0) {
 						flag = true;
 						break;
-					}	
+					}
 				}
 			}
-			if(flag) {
+			if (flag) {
 				aliastSet.add(lastDefVariable);
 			}
 		} else {
-		n.getRhs().accept(this);
+			n.getRhs().accept(this);
 		}
 	}
 
@@ -139,22 +139,22 @@ public class LocalMayAliasAnalysis extends AbstractVisitorNoArgNoRet {
 
 	public void visit(final VarDeclStatement n) {
 		lastDefVariable = n.getId();
-		if(n.hasInitializer()) {
-			if(n.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand() instanceof Identifier && n.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs().getOpsSize()==0) {
+		if (n.hasInitializer()) {
+			if (n.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand() instanceof Identifier && n.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs().getOpsSize() == 0) {
 				boolean flag = false;
-				for(Identifier alias : aliastSet) {
-					if(((Identifier)n.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand()).getToken().equals(alias.getToken())) {
-						if(n.getInitializer().getRhsSize()==0) {
+				for (final Identifier alias : aliastSet) {
+					if (((Identifier)n.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand()).getToken().equals(alias.getToken())) {
+						if (n.getInitializer().getRhsSize() == 0) {
 							flag = true;
 							break;
-						}	
+						}
 					}
 				}
-				if(flag) {
+				if (flag) {
 					aliastSet.add(lastDefVariable);
 				}
 			} else {
-			n.getInitializer().accept(this);
+				n.getInitializer().accept(this);
 			}
 		}
 	}
@@ -164,33 +164,33 @@ public class LocalMayAliasAnalysis extends AbstractVisitorNoArgNoRet {
 			this.idFinder.start(n.env.getOperand());
 			final String funcName = this.idFinder.getNames().toArray()[0].toString();
 			final BoaFunction f = n.env.getFunction(funcName, check(n));
-			if(funcName.equals("clone")) {
+			if (funcName.equals("clone")) {
 				cloneFound = true;
 				visit(n.getArgs());
 				cloneFound = false;
 			}
-		}
-		catch(Exception e) {
+		} catch (final Exception e) {
+			// do nothing
 		}
 	}
 
 	public void visit(final Identifier n) {
 		try {
-			if(cloneFound) {
+			if (cloneFound) {
 				boolean flag = false;
-				for(Identifier alias : aliastSet) {
-					if(n.getToken().equals(alias.getToken())) {
+				for (final Identifier alias : aliastSet) {
+					if (n.getToken().equals(alias.getToken())) {
 						flag = true;
 						break;
 					}
 				}
-				if(flag) {
+				if (flag) {
 					aliastSet.add(lastDefVariable);
 				}
 			}
 			cloneFound = false;
-		}
-		catch(Exception e) {
+		} catch (final Exception e) {
+			// do nothing
 		}
 	}
 

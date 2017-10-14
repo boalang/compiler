@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2017, Hridesh Rajan, Robert Dyer, Ramanathan Ramu
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -114,51 +114,51 @@ public class LoopSensitivityAnalysis extends AbstractVisitorNoArgNoRet {
 	public void start(CFGBuildingVisitor cfgBuilder, HashSet<Identifier> aliastSet) {
 		this.aliastSet = aliastSet;
 		this.cfgBuilder = cfgBuilder;
-		java.util.HashMap<Integer,String> nodeVisitStatus = new java.util.HashMap<Integer,String>();
-		for(Node subnode : cfgBuilder.order) {
+		final java.util.HashMap<Integer,String> nodeVisitStatus = new java.util.HashMap<Integer,String>();
+		for (final Node subnode : cfgBuilder.order) {
 			nodeVisitStatus.put(subnode.nodeId, "unvisited");
 		}
 		nodeVisitStatus.put(cfgBuilder.currentStartNodes.get(0).nodeId, "visited");
 		dfs(cfgBuilder.currentStartNodes.get(0), nodeVisitStatus);
 
-		for(Identifier getValueNode : getValueNodes) {
-			LocalMayAliasAnalysis localMayAliasAnalysis = new LocalMayAliasAnalysis();
-			HashSet<Identifier> tmpAliastSet = localMayAliasAnalysis.start(this.cfgBuilder, getValueNode);
+		for (final Identifier getValueNode : getValueNodes) {
+			final LocalMayAliasAnalysis localMayAliasAnalysis = new LocalMayAliasAnalysis();
+			final HashSet<Identifier> tmpAliastSet = localMayAliasAnalysis.start(this.cfgBuilder, getValueNode);
 			getValueNodesAlias.addAll(tmpAliastSet);
 		}
-		InformationAnalysis informationAnalysis = new InformationAnalysis();
+		final InformationAnalysis informationAnalysis = new InformationAnalysis();
 		informationAnalysis.start(this.cfgBuilder, getValueNodesAlias, totalGetValueNodes);
 
-		if(informationAnalysis.mergeOperation.contains("union") && informationAnalysis.genFlag) {
+		if (informationAnalysis.mergeOperation.contains("union") && informationAnalysis.genFlag) {
 			loopSensitive = true;
 		}
-		if(informationAnalysis.mergeOperation.contains("intersection") && informationAnalysis.killFlag) {
+		if (informationAnalysis.mergeOperation.contains("intersection") && informationAnalysis.killFlag) {
 			loopSensitive = true;
 		}
 	}
 
 	public void visit(final Call n) {
 		try {
-		this.idFinder.start(n.env.getOperand());
-		final String funcName = this.idFinder.getNames().toArray()[0].toString();
-		final BoaFunction f = n.env.getFunction(funcName, check(n));
-		if(funcName.equals("getvalue")) {
-			if(n.getArgsSize()==1) {
-				getValueFound = true;
-				visit(n.getArgs());
-				getValueFound = false;
+			this.idFinder.start(n.env.getOperand());
+			final String funcName = this.idFinder.getNames().toArray()[0].toString();
+			final BoaFunction f = n.env.getFunction(funcName, check(n));
+			if (funcName.equals("getvalue")) {
+				if (n.getArgsSize()==1) {
+					getValueFound = true;
+					visit(n.getArgs());
+					getValueFound = false;
+				}
 			}
-		}
-		}
-		catch(Exception e) {
+		} catch (final Exception e) {
+			// do nothing
 		}
 	}
 
 	public void visit(final Identifier n) {
-		if(getValueFound) {
-			for(Identifier alias : aliastSet) {
-				if(alias.getToken().equals(n.getToken())) {
-					if(isRhs) {
+		if (getValueFound) {
+			for (final Identifier alias : aliastSet) {
+				if (alias.getToken().equals(n.getToken())) {
+					if (isRhs) {
 						getValueNodes.add(lastDeclVariable);
 					}
 				}

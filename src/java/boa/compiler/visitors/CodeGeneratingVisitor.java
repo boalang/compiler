@@ -1528,8 +1528,8 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		}
 
 		final CFGBuildingVisitor cfgBuilder = new CFGBuildingVisitor();
-        n.accept(cfgBuilder);
-		CreateNodeId createNodeId = new CreateNodeId();
+		n.accept(cfgBuilder);
+		final CreateNodeId createNodeId = new CreateNodeId();
 		createNodeId.start(cfgBuilder);
 
 		final LocalMayAliasAnalysis localMayAliasAnalysis = new LocalMayAliasAnalysis();

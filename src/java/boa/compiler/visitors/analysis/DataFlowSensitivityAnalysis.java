@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2017, Hridesh Rajan, Robert Dyer, Ramanathan Ramu
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -103,17 +103,17 @@ public class DataFlowSensitivityAnalysis extends AbstractVisitorNoArgNoRet {
 		return flowSensitive;
 	}
 
-	public void start(CFGBuildingVisitor cfgBuilder, HashSet<Identifier> aliastSet) {
-		java.util.HashMap<Integer,String> nodeVisitStatus = new java.util.HashMap<Integer,String>();
-		for(Node subnode : cfgBuilder.order) {
+	public void start(final CFGBuildingVisitor cfgBuilder, final HashSet<Identifier> aliastSet) {
+		final java.util.HashMap<Integer, String> nodeVisitStatus = new java.util.HashMap<Integer, String>();
+		for (final Node subnode : cfgBuilder.order) {
 			nodeVisitStatus.put(subnode.nodeId, "unvisited");
 		}
 		nodeVisitStatus.put(cfgBuilder.currentStartNodes.get(0).nodeId, "visited");
 		dfs(cfgBuilder.currentStartNodes.get(0), nodeVisitStatus);
 
-		for(Identifier getValueNode : getValueNodes) {
-			for(Identifier alias : aliastSet) {
-				if(!alias.getToken().equals(getValueNode.getToken())) {
+		for (final Identifier getValueNode : getValueNodes) {
+			for (final Identifier alias : aliastSet) {
+				if (!alias.getToken().equals(getValueNode.getToken())) {
 					flowSensitive = true;
 				}
 			}
@@ -122,23 +122,23 @@ public class DataFlowSensitivityAnalysis extends AbstractVisitorNoArgNoRet {
 
 	public void visit(final Call n) {
 		try {
-		this.idFinder.start(n.env.getOperand());
-		final String funcName = this.idFinder.getNames().toArray()[0].toString();
-		final BoaFunction f = n.env.getFunction(funcName, check(n));
-		if(funcName.equals("getvalue")) {
-			if(n.getArgsSize()==1) {
-				getValueFound = true;
-				visit(n.getArgs());
-				getValueFound = false;
+			this.idFinder.start(n.env.getOperand());
+			final String funcName = this.idFinder.getNames().toArray()[0].toString();
+			final BoaFunction f = n.env.getFunction(funcName, check(n));
+			if (funcName.equals("getvalue")) {
+				if (n.getArgsSize() == 1) {
+					getValueFound = true;
+					visit(n.getArgs());
+					getValueFound = false;
+				}
 			}
-		}
-		}
-		catch(Exception e) {
+		} catch (final Exception e) {
+			// do nothing
 		}
 	}
 
 	public void visit(final Identifier n) {
-		if(getValueFound && argFlag) {
+		if (getValueFound && argFlag) {
 			getValueNodes.add((Identifier)n);
 		}
 		argFlag = false;
