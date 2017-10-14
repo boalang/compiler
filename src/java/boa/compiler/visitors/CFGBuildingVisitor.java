@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2016, Hridesh Rajan, Robert Dyer,
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -91,50 +91,15 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 
 	public List<Node> order;
 
-	/*public CFGBuildingVisitor() {
-	}
-
-	public CFGBuildingVisitor(CFGBuildingVisitor c) {
-		this.id = c.id;
-		this.currentStartNodes = new ArrayList<Node>(c.currentStartNodes.size());
-		if(c.currentStartNodes !=null)
-		for(Node n : c.currentStartNodes) {
-			this.currentStartNodes.add(n.clone());
-		}
-		this.currentEndNodes = new ArrayList<Node>(c.currentEndNodes.size());
-		if(c.currentEndNodes !=null)
-		for(Node n : c.currentEndNodes) {
-			this.currentEndNodes.add(n.clone());
-		}
-		this.currentExitNodes = new ArrayList<Node>(c.currentExitNodes.size());
-		if(c.currentExitNodes !=null)
-		for(Node n : c.currentExitNodes) {
-			this.currentExitNodes.add(n.clone());
-		}
-		this.emptyList = new ArrayList<Node>(c.emptyList.size());
-		if(c.emptyList !=null)
-		for(Node n : c.emptyList) {
-			this.emptyList.add(n.clone());
-		}
-		this.order = new ArrayList<Node>(c.order.size());
-		if(c.order !=null)
-		for(Node n : c.order) {
-			this.order.add(n.clone());
-		}
-		//this.currentEndNodes = c.currentEndNodes.clone();
-		//this.currentExitNodes = c.currentExitNodes.clone();
-		//this.emptyList = c.emptyList.clone();
-		//this.order = c.order.clone();
-	}
-*/
 	public Node getNodeById(int id) {
-		for(Node node : order) {
-			if(node.nodeId == id) {
+		for (Node node : order) {
+			if (node.nodeId == id) {
 				return node;
 			}
 		}
 		return null;
 	}
+
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Block n) {
@@ -197,7 +162,6 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 		bodyExcEndNodes = resolveContinues(n, tempContinueNodes, bodyExcEndNodes);
 
 		cond.accept(this);
-		// finalEndNodes.addAll(bodyEndNodes);
 		finalEndNodes.addAll(tempBreakNodes);
 		finalEndNodes.addAll(currentEndNodes);
 		finalExcEndNodes.addAll(bodyExcEndNodes);
@@ -212,7 +176,6 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 		// connect the nodes
 		connectStartNodesToEndNodesOf(cond, body);
 		connectStartNodesToEndNodesOf(body, cond);
-		// connectStartNodesToContinuesOf(tree, body);
 		for (Node jct1 : tempContinueNodes) {
 			jct1.successors.addAll(currentStartNodes);
 			for (Node jct2 : currentStartNodes) {
@@ -247,7 +210,6 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 		bodyExcEndNodes = resolveContinues(n, tempContinueNodes, bodyExcEndNodes);
 
 		List<Node> finalExitNodes = new ArrayList<Node>();
-		// finalEndNodes.addAll(bodyEndNodes);
 		finalEndNodes.addAll(condEndNodes);
 		finalExitNodes.addAll(bodyExcEndNodes);
 		finalExitNodes.addAll(condExcEndNodes);
@@ -261,7 +223,6 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 		// connect the nodes
 		connectStartNodesToEndNodesOf(cond, body);
 		connectStartNodesToEndNodesOf(body, cond);
-		// connectStartNodesToContinuesOf(tree, body);
 		for (Node jct1 : tempContinueNodes) {
 			jct1.successors.addAll(condStartNodes);
 			for (Node jct2 : condStartNodes) {
@@ -436,12 +397,9 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 
 		List<Node> bodyExcEndNodes = currentExitNodes;
 
-		// this.currentStartNodes = currentStartNodes;
 		List<Node> temp_start = new ArrayList<Node>(1);
 		temp_start.add(n);
 		this.currentStartNodes = temp_start;
-		// currentEndNodes = new ArrayList<JCTree>(currentEndNodes);
-		// currentEndNodes.add(tree);
 
 		// for breaks;
 		List<Node> tempBreakNodes = new ArrayList<Node>();
@@ -453,7 +411,6 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 
 		currentExitNodes = bodyExcEndNodes;
 
-		// addNode(tree);
 		n.startNodes = currentStartNodes;
 		n.endNodes = currentEndNodes;
 		n.exitNodes = currentExitNodes;
@@ -465,7 +422,6 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 
 		// connect the nodes
 		connectToStartNodesOf(n, expr);
-		// connectToEndNodesOf(expr, tree);
 
 		connectStartNodesToEndNodesOf(body, expr);
 
@@ -478,7 +434,7 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 			}
 		}
 	}
-	
+
 	/* used by visitSwitch and visitCase only, which visit the single node then
 	 * the subsequent list. */
 	public void switchAndCase(Node single, List<? extends Node> list) {
@@ -501,8 +457,6 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 		Block body = n.getBody();
 
 		if (cases.size() > 0) {
-			//Expression pat = cases.get(0);
-			//pat.accept(this);
 			visitStatements(cases);
 			Node pat = visitList(cases);
 			List<Node> currentStartNodes = this.currentStartNodes;
@@ -525,7 +479,7 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 
 		// fill the start/end/exit nodes
 		selector.accept(this);
-		
+
 		if (n.getDefault() != null)
 			cases.add(n.getDefault());
 
@@ -622,7 +576,6 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 	@Override
 	public void visit(final BreakStatement n) {
 		// fill the start/end/exit nodes
-		// singleton(tree);
 		currentEndNodes = emptyList;
 		currentExitNodes = new ArrayList<Node>(1);
 		currentExitNodes.add(n);
@@ -636,7 +589,6 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 	@Override
 	public void visit(final ContinueStatement n) {
 		// fill the start/end/exit nodes
-		//singleton(n);
 		currentEndNodes = emptyList;
 		currentExitNodes = new ArrayList<Node>(1);
 		currentExitNodes.add(n);
@@ -676,16 +628,9 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 	public void visit(final Call n) {
 		List<Expression> args = n.getArgs();
 
-		// fill the start/end/exit nodes
-		//n.getParent().accept(this);
-
-		//List<Node> startNodes = currentStartNodes;
-
 		if (!args.isEmpty()) {
 			visitStatements(args);
 		}
-
-		//currentStartNodes = startNodes;
 
 		currentEndNodes = new ArrayList<Node>(1);
 		currentEndNodes.add(n);
@@ -695,11 +640,8 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 		// connect the nodes
 		if (!args.isEmpty()) {
 			Node lastArg = visitList(args);
-			//connectStartNodesToEndNodesOf(args.get(0), n);
 			connectToEndNodesOf(lastArg, n);
-		} /*else {
-			connectToEndNodesOf(meth, n);
-		}*/
+		}
 	}
 
 	/** {@inheritDoc} */
@@ -790,9 +732,9 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 	@Override
 	public void visit(final FixPExpression n) {
 		Block body = n.getBody();
-		
+
 		body.accept(this);
-		
+
 		currentEndNodes = new ArrayList<Node>(1);
 		currentEndNodes.add(n);
 
@@ -806,25 +748,25 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 	@Override
 	public void visit(final TraversalExpression n) {
 		Block body = n.getBody();
-		
+
 		body.accept(this);
-		
+
 		currentEndNodes = new ArrayList<Node>(1);
 		currentEndNodes.add(n);
 
 		addNode(n);
 
 		// connect the nodes
-		connectToEndNodesOf(body, n);	
+		connectToEndNodesOf(body, n);
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final VisitorExpression n) {
 		Block body = n.getBody();
-		
+
 		body.accept(this);
-		
+
 		currentEndNodes = new ArrayList<Node>(1);
 		currentEndNodes.add(n);
 
@@ -838,9 +780,9 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 	@Override
 	public void visit(final SimpleExpr n) {
 		Term lhs = n.getLhs();
-		
+
 		lhs.accept(this);
-		
+
 		if (n.getRhsSize() > 0) {
 			Term rhs = n.getRhs(0);
 			List<Node> currentStartNodes = this.currentStartNodes;
@@ -870,9 +812,9 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 	@Override
 	public void visit(final ParenExpression n) {
 		Expression body = n.getExpression();
-		
+
 		body.accept(this);
-		
+
 		currentEndNodes = new ArrayList<Node>(1);
 		currentEndNodes.add(n);
 
@@ -886,9 +828,9 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 	@Override
 	public void visit(final FunctionExpression n) {
 		Block body = n.getBody();
-		
+
 		body.accept(this);
-		
+
 		currentEndNodes = new ArrayList<Node>(1);
 		currentEndNodes.add(n);
 
@@ -902,11 +844,11 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 	@Override
 	public void visit(final Expression n) {
 		Conjunction lhs = n.getLhs();
-		
+
 		// fill the start/end/exit nodes
 		lhs.accept(this);
-		
-		if(n.getRhsSize() > 0) {
+
+		if (n.getRhsSize() > 0) {
 			Conjunction rhs = n.getRhs(0);
 			List<Node> currentStartNodes = this.currentStartNodes;
 			rhs.accept(this);
@@ -944,29 +886,10 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 		this.order = new ArrayList<Node>();
 		n.getBody().accept(this);
 	}
-	
+
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final VisitStatement n) {
-		// this.order = new ArrayList<Node>();
-		/*
-		 * Block body = n.getBody(); body.accept(this);
-		 */
-
-		// addNode(n);
-		// connectToEndNodesOf(body, n);
-		/*
-		 * Block body = n.getBody();
-		 * 
-		 * body.accept(this);
-		 * 
-		 * currentEndNodes = new ArrayList<Node>(1); currentEndNodes.add(n);
-		 * 
-		 * addNode(n);
-		 * 
-		 * // connect the nodes connectToEndNodesOf(body, n);
-		 */
-
 		Component lhs = n.getComponent();
 
 		// fill the start/end/exit nodes
@@ -993,22 +916,15 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 	public void visit(final StopStatement n) {
 		// fill the start/end/exit nodes
 		singleton(n);
-		/*currentEndNodes = emptyList;
-		currentExitNodes = new ArrayList<Node>(1);
-		currentExitNodes.add(n);
-
-		currentStartNodes = new ArrayList<Node>(1);
-		currentStartNodes.add(n);
-		addNode(n);*/
 	}
 
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final PostfixStatement n) {
 		Expression body = n.getExpr();
-		
+
 		body.accept(this);
-		
+
 		currentEndNodes = new ArrayList<Node>(1);
 		currentEndNodes.add(n);
 
@@ -1025,7 +941,7 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 		List<Component> init = new ArrayList<Component>(); init.add(initS);
 		Expression cond = n.getCondition();
 		Block thenpart = n.getBody();
-		
+
 		List<Node> finalEndNodes = new ArrayList<Node>();
 
 		visitStatements(init);
@@ -1036,14 +952,13 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 		currentStartNodes = this.currentStartNodes;
 		List<Node> currentEndNodes = this.currentEndNodes;
 
-		//List<Node> finalEndNodes = new ArrayList<Node>();
 		List<Node> finalExcEndNodes = new ArrayList<Node>();
 
 		thenpart.accept(this);
 		finalEndNodes.addAll(this.currentEndNodes);
 		finalExcEndNodes.addAll(currentExitNodes);
 		finalEndNodes.addAll(currentEndNodes);
-		
+
 		this.currentStartNodes = currentStartNodes;
 		this.currentEndNodes = finalEndNodes;
 		this.currentExitNodes = finalExcEndNodes;
@@ -1066,7 +981,7 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 		List<Component> init = new ArrayList<Component>(); init.add(initS);
 		Expression cond = n.getCondition();
 		Block thenpart = n.getBody();
-		
+
 		List<Node> finalEndNodes = new ArrayList<Node>();
 
 		visitStatements(init);
@@ -1077,14 +992,13 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 		currentStartNodes = this.currentStartNodes;
 		List<Node> currentEndNodes = this.currentEndNodes;
 
-		//List<Node> finalEndNodes = new ArrayList<Node>();
 		List<Node> finalExcEndNodes = new ArrayList<Node>();
 
 		thenpart.accept(this);
 		finalEndNodes.addAll(this.currentEndNodes);
 		finalExcEndNodes.addAll(currentExitNodes);
 		finalEndNodes.addAll(currentEndNodes);
-		
+
 		this.currentStartNodes = currentStartNodes;
 		this.currentEndNodes = finalEndNodes;
 		this.currentExitNodes = finalExcEndNodes;
@@ -1104,9 +1018,9 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 	@Override
 	public void visit(final ExprStatement n) {
 		Expression body = n.getExpr();
-		
+
 		body.accept(this);
-		
+
 		currentEndNodes = new ArrayList<Node>(1);
 		currentEndNodes.add(n);
 
@@ -1119,7 +1033,6 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final EmitStatement n) {
-		
 	}
 
 	/** {@inheritDoc} */
@@ -1182,13 +1095,13 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 	public void visit(final Component n) {
 		Identifier i = n.getIdentifier();
 		i.accept(this);
-		
+
 		currentEndNodes = new ArrayList<Node>(1);
 		currentEndNodes.add(n);
 		currentExitNodes = emptyList;
 
 		addNode(n);
-		
+
 		// connect the nodes
 		connectToEndNodesOf(i, n);
 	}
@@ -1294,13 +1207,13 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 	public void visit(final UnaryFactor n) {
 		Factor f = n.getFactor();
 		f.accept(this);
-		
+
 		currentEndNodes = new ArrayList<Node>(1);
 		currentEndNodes.add(n);
 		currentExitNodes = emptyList;
 
 		addNode(n);
-		
+
 		// connect the nodes
 		connectToEndNodesOf(f, n);
 	}
@@ -1309,7 +1222,6 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 	@Override
 	public void visit(final Identifier n) {
 		singleton(n);
-		//addNode(n);
 	}
 
 	/** {@inheritDoc} */
@@ -1349,15 +1261,15 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 	@Override
 	public void visit(final Selector n) {
 		Identifier selected = n.getId();
-		
+
 		selected.accept(this);
-		
+
 		currentEndNodes = new ArrayList<Node>(1);
 		currentEndNodes.add(n);
 		currentExitNodes = emptyList;
 
 		addNode(n);
-		
+
 		// connect the nodes
 		connectToEndNodesOf(selected, n);
 	}
@@ -1407,7 +1319,7 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 		}
 
 		addNode(node);
-		
+
 		currentStartNodes = new ArrayList<Node>(1);
 		currentStartNodes.add(node);
 	}
@@ -1433,7 +1345,7 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 
 	private Node visitList(List<? extends Node> nodes) {
 		Node last = null;
-		Iterator<Node> nodesIter = (Iterator<Node>) nodes.iterator();
+		Iterator<? extends Node> nodesIter = (Iterator<? extends Node>) nodes.iterator();
 
 		if (nodes.size() > 0) {
 			last = nodesIter.next();
@@ -1476,7 +1388,7 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 
 	private void visitStatements(List<? extends Node> statements) {
 		ArrayList<Node> finalExcEndNodes = new ArrayList<Node>();
-		Iterator<Node> nodesIter = (Iterator<Node>) statements.iterator();
+		Iterator<? extends Node> nodesIter = (Iterator<? extends Node>) statements.iterator();
 		Node head = nodesIter.next();
 		if (head != null) {
 			head.accept(this);
@@ -1497,35 +1409,21 @@ public class CFGBuildingVisitor extends AbstractVisitorNoArgNoRet {
 
 	private static List<Node> resolveBreaks(Node target, List<Node> endNodes, List<Node> nodes) {
 		List<Node> remaining = new ArrayList<Node>();
-		//remaining = nodes;
 		for (Node node : nodes) {
 			if (node instanceof BreakStatement) {
 				endNodes.add(node);
 			}
 		}
-		/*
-		 * for (Node tree : nodes) { boolean found = false; if (tree instanceof
-		 * BreakStatement) { BreakStatement jcb = (BreakStatement)tree; if
-		 * (jcb.target == target) { endNodes.add(tree); found = true; } } if
-		 * (!found) { remaining.add(tree); } }
-		 */
 		return remaining;
 	}
 
 	private static List<Node> resolveContinues(Node target, List<Node> endNodes, List<Node> nodes) {
 		List<Node> remaining = new ArrayList<Node>();
-		//remaining = nodes;
 		for (Node node : nodes) {
 			if (node instanceof ContinueStatement) {
 				endNodes.add(node);
 			}
 		}
-		/*
-		 * for (Node tree : nodes) { boolean found = false; if (tree instanceof
-		 * BreakStatement) { BreakStatement jcb = (BreakStatement)tree; if
-		 * (jcb.target == target) { endNodes.add(tree); found = true; } } if
-		 * (!found) { remaining.add(tree); } }
-		 */
 		return remaining;
 	}
 }
