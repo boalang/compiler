@@ -41,14 +41,14 @@ import boa.compiler.visitors.*;
 /**
  * @author rramu
  */
-public class LocalMayAliasAnalysis extends AbstractVisitorNoArg {
+public class LocalMayAliasAnalysis extends AbstractVisitorNoArgNoRet {
 	HashSet<Identifier> aliastSet = new HashSet<Identifier>();
 	Identifier lastDefVariable;
 	boolean cloneFound = false;
 	protected final IdentifierFindingVisitor idFinder = new IdentifierFindingVisitor();
 	protected final CallFindingVisitor callFinder = new CallFindingVisitor();
 
-	protected class CallFindingVisitor extends AbstractVisitorNoArg {
+	protected class CallFindingVisitor extends AbstractVisitorNoArgNoRet {
 		protected boolean isCall;
 
 		public boolean isCall() {
@@ -78,7 +78,7 @@ public class LocalMayAliasAnalysis extends AbstractVisitorNoArg {
 		}
 	}
 
-	protected class IdentifierFindingVisitor extends AbstractVisitorNoArg {
+	protected class IdentifierFindingVisitor extends AbstractVisitorNoArgNoRet {
 		protected final Set<String> names = new HashSet<String>();
 
 		public Set<String> getNames() {

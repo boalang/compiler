@@ -42,7 +42,7 @@ import boa.compiler.visitors.*;
 /**
  * @author rramu
  */
-public class ReachingDefinitionGen extends AbstractVisitorNoArg {
+public class ReachingDefinitionGen extends AbstractVisitorNoArgNoRet {
 	ArrayList<String> variablesMonitored = new ArrayList<String>();
 	boolean inReturnStatement = false;
 	HashMap<Node,HashSet<String>> killVariable = new HashMap<Node,HashSet<String>>();

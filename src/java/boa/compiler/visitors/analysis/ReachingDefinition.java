@@ -39,7 +39,7 @@ import boa.compiler.visitors.*;
 /**
  * @author rramu
  */
-public class ReachingDefinition extends AbstractVisitorNoArg {
+public class ReachingDefinition extends AbstractVisitorNoArgNoRet {
 	ArrayList<String> variablesMonitored = new ArrayList<String>();
 	boolean inReturnStatement = false;
 

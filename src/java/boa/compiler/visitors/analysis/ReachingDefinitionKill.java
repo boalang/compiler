@@ -41,7 +41,7 @@ import boa.compiler.visitors.*;
 /**
  * @author rramu
  */
-public class ReachingDefinitionKill extends AbstractVisitorNoArg {
+public class ReachingDefinitionKill extends AbstractVisitorNoArgNoRet {
 	HashMap<Integer,HashSet<Integer>> kill = new HashMap<Integer,HashSet<Integer>>();
 	HashMap<String,HashSet<Integer>> defs = new HashMap<String,HashSet<Integer>>();
 	boolean killFlag = false;

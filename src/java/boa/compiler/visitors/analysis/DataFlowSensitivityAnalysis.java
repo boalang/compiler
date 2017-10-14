@@ -40,7 +40,7 @@ import boa.compiler.visitors.*;
 /**
  * @author rramu
  */
-public class DataFlowSensitivityAnalysis extends AbstractVisitorNoArg {
+public class DataFlowSensitivityAnalysis extends AbstractVisitorNoArgNoRet {
 	public boolean getValueFound = false;
 	public HashSet<Identifier> getValueNodes = new HashSet<Identifier>();
 	boolean flowSensitive = false;
@@ -49,7 +49,7 @@ public class DataFlowSensitivityAnalysis extends AbstractVisitorNoArg {
 	protected final IdentifierFindingVisitor idFinder = new IdentifierFindingVisitor();
 	protected final CallFindingVisitor callFinder = new CallFindingVisitor();
 
-	protected class CallFindingVisitor extends AbstractVisitorNoArg {
+	protected class CallFindingVisitor extends AbstractVisitorNoArgNoRet {
 		protected boolean isCall;
 
 		public boolean isCall() {
@@ -79,7 +79,7 @@ public class DataFlowSensitivityAnalysis extends AbstractVisitorNoArg {
 		}
 	}
 
-	protected class IdentifierFindingVisitor extends AbstractVisitorNoArg {
+	protected class IdentifierFindingVisitor extends AbstractVisitorNoArgNoRet {
 		protected final Set<String> names = new HashSet<String>();
 
 		public Set<String> getNames() {

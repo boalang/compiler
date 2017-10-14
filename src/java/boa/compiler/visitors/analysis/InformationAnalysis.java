@@ -40,7 +40,7 @@ import boa.compiler.visitors.*;
 /**
  * @author rramu
  */
-public class InformationAnalysis extends AbstractVisitorNoArg {
+public class InformationAnalysis extends AbstractVisitorNoArgNoRet {
 	public CFGBuildingVisitor cfgBuilder;
 	public boolean unionFound = false;
 	public boolean intersectionFound = false;
@@ -57,7 +57,7 @@ public class InformationAnalysis extends AbstractVisitorNoArg {
 	HashSet<String> mergeOperation = new HashSet<String>(); 
 	int satisfiedNodes = 0;
 
-	protected class CallFindingVisitor extends AbstractVisitorNoArg {
+	protected class CallFindingVisitor extends AbstractVisitorNoArgNoRet {
 		protected boolean isCall;
 
 		public boolean isCall() {
@@ -87,7 +87,7 @@ public class InformationAnalysis extends AbstractVisitorNoArg {
 		}
 	}
 
-	protected class IdentifierFindingVisitor extends AbstractVisitorNoArg {
+	protected class IdentifierFindingVisitor extends AbstractVisitorNoArgNoRet {
 		protected final Set<String> names = new HashSet<String>();
 
 		public Set<String> getNames() {

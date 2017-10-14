@@ -24,7 +24,7 @@ import boa.compiler.visitors.*;
 /**
  * @author rramu
  */
-public class CreateNodeId extends AbstractVisitorNoArg {
+public class CreateNodeId extends AbstractVisitorNoArgNoRet {
 	int id = 0;
 
 	public final void createNodeIds(final Node node, java.util.HashMap<Node,String> nodeVisitStatus) {

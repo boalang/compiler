@@ -42,7 +42,7 @@ import boa.compiler.visitors.*;
 /**
  * @author rramu
  */
-public class LoopSensitivityAnalysis extends AbstractVisitorNoArg {
+public class LoopSensitivityAnalysis extends AbstractVisitorNoArgNoRet {
 	public CFGBuildingVisitor cfgBuilder;
 	public boolean getValueFound = false;
 	public HashSet<Identifier> getValueNodes = new HashSet<Identifier>();
@@ -57,7 +57,7 @@ public class LoopSensitivityAnalysis extends AbstractVisitorNoArg {
 	public Identifier lastDeclVariable;
 	boolean isRhs = false;
 
-	protected class CallFindingVisitor extends AbstractVisitorNoArg {
+	protected class CallFindingVisitor extends AbstractVisitorNoArgNoRet {
 		protected boolean isCall;
 
 		public boolean isCall() {
@@ -87,7 +87,7 @@ public class LoopSensitivityAnalysis extends AbstractVisitorNoArg {
 		}
 	}
 
-	protected class IdentifierFindingVisitor extends AbstractVisitorNoArg {
+	protected class IdentifierFindingVisitor extends AbstractVisitorNoArgNoRet {
 		protected final Set<String> names = new HashSet<String>();
 
 		public Set<String> getNames() {

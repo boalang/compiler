@@ -697,9 +697,7 @@ public class CFG {
 
 		graph.mergeSeq(control);
 		CFG branch = traverse(control, root.getStatements(0));
-		for (Iterator it = root.getUpdatesList().iterator(); it
-				.hasNext();) {
-			Expression e = (Expression) it.next();
+        for (final Expression e : root.getUpdatesList()) {
 			branch.mergeSeq(traverse(cfgNode, e));
 		}
 		graph.mergeABranch(branch, control, "T");
