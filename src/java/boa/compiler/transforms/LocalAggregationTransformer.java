@@ -20,15 +20,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import boa.aggregators.Aggregator;
-import boa.compiler.ast.Comparison;
-import boa.compiler.ast.Conjunction;
 import boa.compiler.ast.Factor;
 import boa.compiler.ast.Identifier;
 import boa.compiler.ast.Program;
-import boa.compiler.ast.Term;
-import boa.compiler.ast.expressions.Expression;
 import boa.compiler.ast.expressions.ParenExpression;
-import boa.compiler.ast.expressions.SimpleExpr;
 import boa.compiler.ast.literals.IntegerLiteral;
 import boa.compiler.ast.statements.AssignmentStatement;
 import boa.compiler.ast.statements.Block;
@@ -36,7 +31,7 @@ import boa.compiler.ast.statements.EmitStatement;
 import boa.compiler.ast.statements.IfStatement;
 import boa.compiler.ast.statements.VarDeclStatement;
 import boa.compiler.ast.types.OutputType;
-import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.compiler.visitors.AbstractVisitorNoArgNoRet;
 import boa.types.BoaInt;
 
 /**
@@ -47,13 +42,13 @@ import boa.types.BoaInt;
  * 
  * @author rdyer
  */
-public class LocalAggregationTransformer extends AbstractVisitorNoArg {
+public class LocalAggregationTransformer extends AbstractVisitorNoArgNoRet {
 	/**
 	 * Finds all output variables using a 'sum' {@link Aggregator}.
 	 * 
 	 * @author rdyer
 	 */
-	protected class SumAggregatorFindingVisitor extends AbstractVisitorNoArg {
+	protected class SumAggregatorFindingVisitor extends AbstractVisitorNoArgNoRet {
 		private final List<String> vars = new ArrayList<String>();
 
 		public List<String> getVars() {

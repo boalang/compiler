@@ -22,10 +22,8 @@ import java.util.List;
 import java.util.Map;
 
 import boa.types.BoaProtoTuple;
-import boa.types.BoaString;
 import boa.types.BoaType;
 import boa.types.proto.enums.CFGEdgeLabelProtoMap;
-import boa.types.proto.enums.FileKindProtoMap;
 
 /**
  * A {@link CFGEdgeProtoTuple}.

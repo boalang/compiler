@@ -18,7 +18,7 @@ package boa.compiler.ast;
 
 import boa.compiler.ast.types.AbstractType;
 import boa.compiler.visitors.AbstractVisitor;
-import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.compiler.visitors.AbstractVisitorNoArgNoRet;
 import boa.compiler.visitors.AbstractVisitorNoReturn;
 
 /**
@@ -55,7 +55,7 @@ public class Identifier extends AbstractType {
 
 	/** {@inheritDoc} */
 	@Override
-	public void accept(final AbstractVisitorNoArg v) {
+	public void accept(final AbstractVisitorNoArgNoRet v) {
 		v.visit(this);
 	}
 

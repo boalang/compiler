@@ -5,47 +5,93 @@ import "ast.proto";
 
 option optimize_for = SPEED;
 
+/** A file committed in a Revision */
 message ChangedFile {
+	/** Describes the kind of the file */
 	enum FileKind {
 		option allow_alias = true;
+		/** The file's type was unknown */
 		OTHER = 0;
 
+		/** The file represents a binary file */
 		BINARY = 1;
 
+		/** The file represents a text file */
 		TEXT = 2;
+		/** The file represents an XML file */
 		XML = 3;
 
+		/** The file represents a Java source file that had a parse error */
 		SOURCE_JAVA_ERROR = 100;
+		/** The file represents a Java source file that parsed without error as JLS2 */
 		SOURCE_JAVA_JLS2 = 101;
+		/** The file represents a Java source file that parsed without error as JLS3 */
 		SOURCE_JAVA_JLS3 = 102;
+		/** The file represents a Java source file that parsed without error as JLS4 */
 		SOURCE_JAVA_JLS4 = 103;
+		/** The file represents a Java source file that parsed without error as JLS8 */
 		SOURCE_JAVA_JLS8 = 104;
+		/** @exclude */
 		JAVA_ERROR = 100;
+		/** @exclude */
 		JLS2 = 101;
+		/** @exclude */
 		JLS3 = 102;
+		/** @exclude */
 		JLS4 = 103;
+		/** @exclude */
 		JLS8 = 104;
 
+		/** @exclude TODO */
 		SOURCE_CS_ERROR = 200;
+		/** @exclude TODO */
 		SOURCE_CS_CS1 = 201;
+		/** @exclude TODO */
 		SOURCE_CS_CS2 = 202;
+		/** @exclude TODO */
 		SOURCE_CS_CS3 = 203;
+		/** @exclude TODO */
 		SOURCE_CS_CS4 = 204;
+		/** @exclude TODO */
 		SOURCE_CS_CS5 = 205;
+		/** @exclude */
 		CS_ERROR = 200;
+		/** @exclude */
 		CS1 = 201;
+		/** @exclude */
 		CS2 = 202;
+		/** @exclude */
 		CS3 = 203;
+		/** @exclude */
 		CS4 = 204;
+		/** @exclude */
 		CS5 = 205;
+		
+		/** The file represents a JavaScript source file that had a parse error */
+		SOURCE_JS_ERROR = 300;
+		/** The file represents a JavaScript source file that parsed without error as ES3 */
+		SOURCE_JS_ES3 = 301;
+		/** The file represents a JavaScript source file that parsed without error as ES4 */
+		SOURCE_JS_ES4 = 302;
+		/** @exclude */
+		JS_ERROR = 300;
 	}
+	/** The kind of change for this file */
 	required ChangeKind change = 1;
+	/** The kind of file */
 	required FileKind kind = 2;
+	/** The full name and path of the file */
 	required string name = 3;
+	/** @exclude */
 	required string key = 4;
+	/** @exclude */
 	optional ASTRoot ast = 5;
+	/** @exclude */
 	optional CommentsRoot comments = 6;
+	/** @exclude The kinds of changes of this this compared to the corresponding parent commits */
 	repeated ChangeKind changes = 7;
+	/** @exclude The indices of the corresponding parent commits in the list of all commits */
 	repeated int32 previous_versions = 8;
+	/** @exclude The indices of the previous files in the list of changed files of the corresponding parent commits */
 	repeated int32 previous_index = 9;
 }

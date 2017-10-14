@@ -1,6 +1,7 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2017, Hridesh Rajan, Robert Dyer, 
+ *                 Iowa State University of Science and Technology
+ *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,8 +61,12 @@ public class BoaProtoMap extends BoaMap {
 
 	/** {@inheritDoc} */
 	@Override
-	public boolean compares(BoaType obj) {
-		return this.getClass() == obj.getClass();
+	public boolean compares(BoaType that) {
+		// if that is a function, check the return type
+		if (that instanceof BoaFunction)
+			return this.compares(((BoaFunction) that).getType());
+
+		return this.getClass() == that.getClass();
 	}
 
 	/** {@inheritDoc} */
@@ -73,6 +78,8 @@ public class BoaProtoMap extends BoaMap {
 	/** {@inheritDoc} */
 	@Override
 	public String toString() {
+		if (getEnumClass() == null)
+			return "BoaProtoMap";
 		final String s = getEnumClass().getName();
 		return s.substring(s.lastIndexOf("$") + 1);
 	}

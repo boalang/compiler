@@ -18,7 +18,6 @@ package boa.graphs.cfg;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -423,8 +422,9 @@ public class CFG {
 			bNode.setAstNode(root);
 			graph.mergeSeq(bNode);
 			return graph;
+        default:
+			return graph;
 		}
-		return graph;
 	}
 
 	private CFG traverse(CFGNode cfgNode, Statement root) {
@@ -547,12 +547,6 @@ public class CFG {
 
 	private CFG traverse_call(CFGNode cfgNode, Expression root) {
 		CFG graph = new CFG();
-		String type_str;
-		if (root.getExpressionsCount() == 0) {
-			type_str = class_name;
-		} else {
-			type_str = "<>";
-		}
 		CFGNode aNode = null;
 		aNode = new CFGNode(root.getMethod(), CFGNode.TYPE_METHOD, class_name,
 				"this", root.getExpressionsCount());
@@ -682,9 +676,7 @@ public class CFG {
 	private CFG traverse_for(CFGNode cfgNode, Statement root) {
 		this.isLoopPresent = true;
 		CFG graph = new CFG();
-		for (Iterator it = root.getInitializationsList().iterator(); it
-				.hasNext();) {
-			Expression e = (Expression) it.next();
+		for (final Expression e : root.getInitializationsList()) {
 			graph.mergeSeq(traverse(cfgNode, e));
 		}
 		if (root.getInitializationsCount() == 0) { // enhanced for
@@ -984,9 +976,8 @@ public class CFG {
 		int size = nodes.size();
 		Builder b = boa.types.Control.CFG.newBuilder();
 
-		for (Iterator<CFGNode> nodesIter = nodes.iterator(); nodesIter
-				.hasNext();) {
-			b.addNodes(nodesIter.next().newBuilder());
+		for (final CFGNode n : nodes) {
+			b.addNodes(n.newBuilder());
 		}
 
 		CFGNode[] sortedNodes = sortNodes();

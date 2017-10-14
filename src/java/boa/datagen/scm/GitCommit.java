@@ -20,9 +20,6 @@ package boa.datagen.scm;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffFormatter;
 import org.eclipse.jgit.diff.RawTextComparator;
@@ -35,9 +32,8 @@ import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.treewalk.AbstractTreeIterator;
 import org.eclipse.jgit.treewalk.CanonicalTreeParser;
 import org.eclipse.jgit.treewalk.EmptyTreeIterator;
+import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.util.io.NullOutputStream;
-
-import boa.types.Shared.Person;
 
 /**
  * Concrete implementation of a commit for Git.
@@ -51,10 +47,10 @@ public class GitCommit extends AbstractCommit {
 	private RevWalk revwalk;
 	private HashMap<String, ObjectId> filePathGitObjectIds = new HashMap<String, ObjectId>();
 
-	public GitCommit(final Repository repository, GitConnector cnn) {
+	public GitCommit(final GitConnector cnn, final Repository repository, final RevWalk revwalk) {
 		super(cnn);
 		this.repository = repository;
-		this.revwalk = new RevWalk(repository);
+		this.revwalk = revwalk;
 	}
 
 	@Override
@@ -94,33 +90,7 @@ public class GitCommit extends AbstractCommit {
 		return "";
 	}
 
-	@SuppressWarnings("unused")
-	private final static Matcher m = Pattern.compile("([^<]+)\\s+<([^>]+)>").matcher("");
-
-	@Override
-	/** {@inheritDoc} */
-	protected Person parsePerson(final String s) {
-		/*m.reset(s);
-
-		if (m.find()) {
-			final Person.Builder person = Person.newBuilder();
-			person.setUsername(m.group(1));
-			person.setRealName(m.group(1));
-			person.setEmail(m.group(2));
-			return person.build();
-		}*/
-		if (s != null) {
-			final Person.Builder person = Person.newBuilder();
-			person.setUsername(s);
-			person.setRealName(s);
-			person.setEmail(s);
-			return person.build();
-		}
-
-		return null;
-	}
-
-	protected Map<String, Integer> changedFileMap;
+	protected Map<String, Integer> fileNameIndices;
 
 	/**
 	 *
@@ -128,18 +98,32 @@ public class GitCommit extends AbstractCommit {
 	 * @return the index the file occurs in fileChanges
 	 */
 	protected int getFileIndex(final String path) {
-		if (!changedFileMap.containsKey(path))
+		if (!fileNameIndices.containsKey(path))
 			return -1;
-		return changedFileMap.get(path);
+		return fileNameIndices.get(path);
 	}
 
 	public void getChangeFiles(Map<String, Integer> revisionMap, RevCommit rc) {
 		HashMap<String, String> rChangedPaths = new HashMap<String, String>();
 		HashMap<String, String> rRemovedPaths = new HashMap<String, String>();
 		HashMap<String, String> rAddedPaths = new HashMap<String, String>();
-		if (rc.getParentCount() == 0)
-			getChangeFiles(null, rc, rChangedPaths, rRemovedPaths, rAddedPaths);
-		else {
+		if (rc.getParentCount() == 0) {
+			TreeWalk tw = new TreeWalk(repository);
+			tw.reset();
+			try {
+				tw.addTree(rc.getTree());
+				tw.setRecursive(true);
+				while (tw.next()) {
+					if (!tw.isSubtree()) {
+						String path = tw.getPathString();
+						rAddedPaths.put(path, null);
+					}
+				}
+			} catch (IOException e) {
+				System.err.println(e.getMessage());
+			}
+			tw.close();
+		} else {
 			int[] parentList = new int[rc.getParentCount()];
 			for (int i = 0; i < rc.getParentCount(); i++) {
 				try {
@@ -179,14 +163,17 @@ public class GitCommit extends AbstractCommit {
 				parentIter = new CanonicalTreeParser(null, repository.newObjectReader(), parent.getTree());
 
 			for (final DiffEntry diff : df.scan(parentIter, new CanonicalTreeParser(null, repository.newObjectReader(), rc.getTree()))) {
-				if (diff.getChangeType() == ChangeType.MODIFY || diff.getChangeType() == ChangeType.COPY || diff.getChangeType() == ChangeType.RENAME) {
+				if (diff.getChangeType() == ChangeType.MODIFY) {
 					if (diff.getOldMode().getObjectType() == Constants.OBJ_BLOB && diff.getNewMode().getObjectType() == Constants.OBJ_BLOB) {
 						String path = diff.getNewPath();
 						rChangedPaths.put(path, diff.getOldPath());
 						filePathGitObjectIds.put(path, diff.getNewId().toObjectId());
 					}
-				}
-				else if (diff.getChangeType() == ChangeType.ADD) {
+				} else if (diff.getChangeType() == ChangeType.RENAME) {
+					
+				} else if (diff.getChangeType() == ChangeType.COPY) {
+					
+				} else if (diff.getChangeType() == ChangeType.ADD) {
 					if (diff.getNewMode().getObjectType() == Constants.OBJ_BLOB) {
 						String path = diff.getNewPath();
 						rAddedPaths.put(path, null);

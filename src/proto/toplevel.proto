@@ -6,35 +6,72 @@ import "issues.proto";
 
 option optimize_for = SPEED;
 
+/** Top-level type, represents a single project on the forge */
 message Project {
+	/** Unique identifier for the project */
 	required string id = 1;
+	/** The name of the project */
 	required string name = 2;
+	/** A URL to the project's page on the forge */
 	required string project_url = 3;
+	/** A URL to the project's homepage */
 	optional string homepage_url = 4;
+	/** The time the project was created */
 	optional uint64 created_date = 5;
+	/** A description of the project */
 	optional string description = 6;
+	/** A list of all OSes supported by the project */
 	repeated string operating_systems = 7;
+	/** A list of all programming languages used by the project */
 	repeated string programming_languages = 8;
+	/** A list of all databases used by the project */
 	repeated string databases = 9;
+	/** A list of all licenses used by the project */
 	repeated string licenses = 10;
+	/** A list of all interfaces supported by the project */
 	repeated string interfaces = 11;
+	/** A list of the target audiences for the project */
 	repeated string audiences = 12;
+	/** A list of self-categorized topics the project belongs to */
 	repeated string topics = 13;
+	/** @exclude TODO */
 	repeated string status = 14;
+	/** @exclude TODO */
 	repeated string translations = 15;
+	/** If true, this project explicitly states it accepts donations */
 	optional bool donations = 16;
+	/** A list of all people currently maintaining the project */
 	repeated Person maintainers = 17;
+	/** A list of all software developers currently on the project */
 	repeated Person developers = 18;
+	/** A list of all code repositories associated with this project */
 	repeated CodeRepository code_repositories = 19;
+	/** @exclude A list of all issue repositories associated with this project */
 	repeated IssueRepository issue_repositories = 20;
+	/** Describes the kind of forge */
 	enum ForgeKind {
 		option allow_alias = true;
+		/** Any other kind of forge */
 		OTHER = 0;
-		SF = 1;
+		/** SourceForge.net */
 		SOURCEFORGE = 1;
+		/** @exclude */
+		SF = 1;
+		/** GitHub.com */
 		GITHUB = 2;
+		/** @exclude */
+		GH = 2;
+		/** Apache */
 		APACHE = 3;
+		/** Qualitas Corpus */
 		QUALITAS = 4;
 	}
+	/** @exclude The kind of forge this project resides in */
 	required ForgeKind kind = 21;
+	/** Specify if this repository is forked from some other repo */
+	optional bool forked = 22;
+	/** The number of times this repository has been forked */
+	optional int32 forks = 23;
+	/** The number of times this repository has been starred */
+	optional int32 stars = 24;
 }

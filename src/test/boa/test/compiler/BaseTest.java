@@ -252,8 +252,11 @@ public abstract class BaseTest {
 
 		final List<String> jobnames = new ArrayList<String>();
 		final List<String> jobs = new ArrayList<String>();
+		final List<Integer> seeds = new ArrayList<Integer>();
 
 		final StartContext ctx = typecheck(input);
+		// use the whole input string to seed the RNG
+		seeds.add(input.hashCode());
 		final Start p = ctx.ast;
 
 		try {
@@ -275,6 +278,7 @@ public abstract class BaseTest {
 			st.add("combineTables", CodeGeneratingVisitor.combineAggregatorStrings);
 			st.add("reduceTables", CodeGeneratingVisitor.reduceAggregatorStrings);
 			st.add("splitsize", 64 * 1024 * 1024);
+			st.add("seeds", seeds);
 
 			final BufferedOutputStream o = new BufferedOutputStream(new FileOutputStream(outputFile));
 			try {

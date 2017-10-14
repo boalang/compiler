@@ -18,7 +18,7 @@ package boa.compiler.ast.literals;
 
 import boa.compiler.ast.Operand;
 import boa.compiler.visitors.AbstractVisitor;
-import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.compiler.visitors.AbstractVisitorNoArgNoRet;
 import boa.compiler.visitors.AbstractVisitorNoReturn;
 
 /**
@@ -51,7 +51,7 @@ public class IntegerLiteral extends Operand implements ILiteral {
 
 	/** {@inheritDoc} */
 	@Override
-	public void accept(final AbstractVisitorNoArg v) {
+	public void accept(final AbstractVisitorNoArgNoRet v) {
 		v.visit(this);
 	}
 

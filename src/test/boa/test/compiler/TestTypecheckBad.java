@@ -66,7 +66,7 @@ public class TestTypecheckBad extends BaseTest {
 		typecheck(load(badDir + "method-no-call.boa"), "expected a call to function 'f'");
 	}
 
-	//@Test
+	@Test
 	public void methodCallWrongType() throws IOException {
 		typecheck(load(badDir + "method-call-wrong-type.boa"), "no such function push([stack of int, stack of int])");
 	}
@@ -99,5 +99,25 @@ public class TestTypecheckBad extends BaseTest {
 	@Test
 	public void complexArray3() throws IOException {
 		typecheck(load(badDir + "complex-arrays3.boa"), "non-scalar/non-tuple type 'map[string] of int' can not be used in arrays");
+	}
+
+	@Test
+	public void afterReturn() throws IOException {
+		typecheck(load(badDir + "after-return.boa"), "return statement not allowed inside visitors");
+	}
+
+	@Test
+	public void beforeReturn() throws IOException {
+		typecheck(load(badDir + "before-return.boa"), "return statement not allowed inside visitors");
+	}
+
+	@Test
+	public void nestedReturn() throws IOException {
+		typecheck(load(badDir + "nested-return.boa"), "return statement not allowed inside visitors");
+	}
+
+	@Test
+	public void assignFuncNoRet() throws IOException {
+		typecheck(load(badDir + "assign-func-no-ret.boa"), "functions without a return type can not be used as initializers");
 	}
 }

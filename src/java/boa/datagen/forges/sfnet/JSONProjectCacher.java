@@ -180,17 +180,19 @@ public class JSONProjectCacher {
 					if (tracker.has("location")) {
 						IssueRepository.Builder bug = IssueRepository.newBuilder();
 						bug.setUrl(tracker.getString("location"));
-						bug.setKind(IssueRepository.IssueKind.OTHER);
-						if (tracker.has("name")) {
-							if (tracker.getString("name").equals("Bugs"))
-								bug.setKind(IssueRepository.IssueKind.BUGS);
-							else if (tracker.getString("name").equals("Feature Requests"))
-								bug.setKind(IssueRepository.IssueKind.FEATURES);
-							else if (tracker.getString("name").equals("Support Requests"))
-								bug.setKind(IssueRepository.IssueKind.SUPPORT);
-							else if (tracker.getString("name").equals("Patches"))
-								bug.setKind(IssueRepository.IssueKind.PATCHES);
-						}
+//						bug.setKind(IssueRepository.IssueKind.OTHER);
+//						if (tracker.has("name")) {
+//							if (tracker.getString("name").equals("Bugs"))
+//								bug.setKind(IssueRepository.IssueKind.BUGS);
+//							else if (tracker.getString("name").equals("Feature Requests"))
+//								bug.setKind(IssueRepository.IssueKind.FEATURES);
+//							else if (tracker.getString("name").equals("Support Requests"))
+//								bug.setKind(IssueRepository.IssueKind.SUPPORT);
+//							else if (tracker.getString("name").equals("Patches"))
+//								bug.setKind(IssueRepository.IssueKind.PATCHES);
+//						}
+						if (tracker.has("name"))
+							bug.setName(tracker.getString("name"));
 						project.addIssueRepositories(bug.build());
 					}
 				}

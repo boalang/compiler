@@ -21,11 +21,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import boa.types.BoaProtoList;
 import boa.types.BoaProtoTuple;
 import boa.types.BoaString;
 import boa.types.BoaType;
-import boa.types.proto.enums.IssueKindProtoMap;
+import boa.types.proto.enums.IssueLabelProtoMap;
 
 /**
  * A {@link BoaProtoTuple}.
@@ -42,8 +41,8 @@ public class IssueRepositoryProtoTuple extends BoaProtoTuple {
 		names.put("url", counter++);
 		members.add(new BoaString());
 
-		names.put("kind", counter++);
-		members.add(new IssueKindProtoMap());
+		names.put("name", counter++);
+		members.add(new BoaString());
 	}
 
 	/**

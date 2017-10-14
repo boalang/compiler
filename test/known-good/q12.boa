@@ -1,0 +1,36 @@
+StaticMethodsTotal: output sum of int;
+StaticMethodsMax: output maximum(1) of string weight int;
+StaticMethodsMin: output minimum(1) of string weight int;
+StaticMethodsMean: output mean of int;
+
+p: Project = input;
+
+static_meth_cur_val := 0;
+static_meth_s: stack of int;
+
+q12 := visitor {
+	before node: CodeRepository -> {
+		snapshot := getsnapshot(node, "SOURCE_JAVA_JLS");
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+	before node: Declaration ->
+		if (node.kind == TypeKind.CLASS || node.kind == TypeKind.ANONYMOUS) {
+			push(static_meth_s, static_meth_cur_val);
+			static_meth_cur_val = 0;
+		} else
+			stop;
+	after node: Declaration -> {
+		StaticMethodsTotal << static_meth_cur_val;
+		StaticMethodsMax << p.id weight static_meth_cur_val;
+		StaticMethodsMin << p.id weight static_meth_cur_val;
+		StaticMethodsMean << static_meth_cur_val;
+		static_meth_cur_val = pop(static_meth_s);
+	}
+	before node: Method ->
+		if (has_modifier(node, ModifierKind.STATIC) && node.name != "main")
+			static_meth_cur_val++;
+};
+
+visit(p, q12);

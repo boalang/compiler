@@ -1,6 +1,7 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2017, Hridesh Rajan, Robert Dyer,
+ *                 Iowa State University of Science and Technology
+ *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +32,7 @@ import org.apache.hadoop.mapreduce.Mapper.Context;
 import com.google.protobuf.CodedInputStream;
 import com.google.protobuf.InvalidProtocolBufferException;
 
+import boa.datagen.DefaultProperties;
 import boa.types.Ast.*;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
@@ -43,7 +45,7 @@ import boa.types.Toplevel.Project;
 
 /**
  * Boa functions for working with ASTs.
- * 
+ *
  * @author rdyer
  */
 public class BoaAstIntrinsics {
@@ -51,7 +53,7 @@ public class BoaAstIntrinsics {
 	private static Context context;
 	private static MapFile.Reader map, commentsMap, issuesMap;
 
-	public static enum AST_COUNTER {
+	public static enum ASTCOUNTER {
 		GETS_ATTEMPTED,
 		GETS_SUCCEED,
 		GETS_FAILED,
@@ -71,7 +73,7 @@ public class BoaAstIntrinsics {
 
 	/**
 	 * Given a ChangedFile, return the AST for that file at that revision.
-	 * 
+	 *
 	 * @param f the ChangedFile to get a snapshot of the AST for
 	 * @return the AST, or an empty AST on any sort of error
 	 */
@@ -87,7 +89,7 @@ public class BoaAstIntrinsics {
 				&& kind != ChangedFile.FileKind.SOURCE_JAVA_JLS8)
 			return emptyAst;
 
-		context.getCounter(AST_COUNTER.GETS_ATTEMPTED).increment(1);
+		context.getCounter(ASTCOUNTER.GETS_ATTEMPTED).increment(1);
 
 		final String rowName = f.getKey() + "!!" + f.getName();
 
@@ -97,37 +99,37 @@ public class BoaAstIntrinsics {
 		try {
 			final BytesWritable value = new BytesWritable();
 			if (map.get(new Text(rowName), value) == null) {
-				context.getCounter(AST_COUNTER.GETS_FAIL_MISSING).increment(1);
+				context.getCounter(ASTCOUNTER.GETS_FAIL_MISSING).increment(1);
 			} else {
 				final CodedInputStream _stream = CodedInputStream.newInstance(value.getBytes(), 0, value.getLength());
 				// defaults to 64, really big ASTs require more
 				_stream.setRecursionLimit(Integer.MAX_VALUE);
 				final ASTRoot root = ASTRoot.parseFrom(_stream);
-				context.getCounter(AST_COUNTER.GETS_SUCCEED).increment(1);
+				context.getCounter(ASTCOUNTER.GETS_SUCCEED).increment(1);
 				return root;
 			}
 		} catch (final InvalidProtocolBufferException e) {
 			e.printStackTrace();
-			context.getCounter(AST_COUNTER.GETS_FAIL_BADPROTOBUF).increment(1);
+			context.getCounter(ASTCOUNTER.GETS_FAIL_BADPROTOBUF).increment(1);
 		} catch (final IOException e) {
 			e.printStackTrace();
-			context.getCounter(AST_COUNTER.GETS_FAIL_MISSING).increment(1);
+			context.getCounter(ASTCOUNTER.GETS_FAIL_MISSING).increment(1);
 		} catch (final RuntimeException e) {
 			e.printStackTrace();
-			context.getCounter(AST_COUNTER.GETS_FAIL_MISSING).increment(1);
+			context.getCounter(ASTCOUNTER.GETS_FAIL_MISSING).increment(1);
 		} catch (final Error e) {
 			e.printStackTrace();
-			context.getCounter(AST_COUNTER.GETS_FAIL_BADPROTOBUF).increment(1);
+			context.getCounter(ASTCOUNTER.GETS_FAIL_BADPROTOBUF).increment(1);
 		}
 
 		System.err.println("error with ast: " + rowName);
-		context.getCounter(AST_COUNTER.GETS_FAILED).increment(1);
+		context.getCounter(ASTCOUNTER.GETS_FAILED).increment(1);
 		return emptyAst;
 	}
 
 	/**
 	 * Given a ChangedFile, return the comments for that file at that revision.
-	 * 
+	 *
 	 * @param f the ChangedFile to get a snapshot of the comments for
 	 * @return the comments list, or an empty list on any sort of error
 	 */
@@ -170,7 +172,7 @@ public class BoaAstIntrinsics {
 
 	/**
 	 * Given an IssueRepository, return the issues.
-	 * 
+	 *
 	 * @param f the IssueRepository to get issues for
 	 * @return the issues list, or an empty list on any sort of error
 	 */
@@ -206,12 +208,23 @@ public class BoaAstIntrinsics {
 	}
 
 	private static void openMap() {
-		final Configuration conf = new Configuration();
 		try {
-			final FileSystem fs = FileSystem.get(conf);
-			final Path p = new Path("hdfs://boa-njt/",
-								new Path(context.getConfiguration().get("boa.ast.dir", context.getConfiguration().get("boa.input.dir", "repcache/live")),
-								new Path("ast")));
+			final Configuration conf = context.getConfiguration();
+			final FileSystem fs;
+			final Path p;
+			if (DefaultProperties.localDataPath != null) {
+				p = new Path(DefaultProperties.localDataPath);
+				fs = FileSystem.getLocal(conf);
+			} else {
+				p = new Path(
+					context.getConfiguration().get("fs.default.name", "hdfs://boa-njt/"),
+					new Path(
+						conf.get("boa.ast.dir", conf.get("boa.input.dir", "repcache/live")),
+						new Path("ast")
+					)
+				);
+				fs = FileSystem.get(conf);
+			}
 			map = new MapFile.Reader(fs, p.toString(), conf);
 		} catch (final Exception e) {
 			e.printStackTrace();
@@ -219,12 +232,23 @@ public class BoaAstIntrinsics {
 	}
 
 	private static void openCommentMap() {
-		final Configuration conf = new Configuration();
 		try {
-			final FileSystem fs = FileSystem.get(conf);
-			final Path p = new Path("hdfs://boa-njt/",
-								new Path(context.getConfiguration().get("boa.comments.dir", context.getConfiguration().get("boa.input.dir", "repcache/live")),
-								new Path("comments")));
+			final Configuration conf = context.getConfiguration();
+			final FileSystem fs;
+			final Path p;
+			if (DefaultProperties.localDataPath != null) {
+				p = new Path(DefaultProperties.localCommentPath);
+				fs = FileSystem.getLocal(conf);
+			} else {
+				p = new Path(
+					context.getConfiguration().get("fs.default.name", "hdfs://boa-njt/"),
+					new Path(
+						conf.get("boa.comments.dir", conf.get("boa.input.dir", "repcache/live")),
+						new Path("comments")
+					)
+				);
+				fs = FileSystem.get(conf);
+			}
 			commentsMap = new MapFile.Reader(fs, p.toString(), conf);
 		} catch (final Exception e) {
 			e.printStackTrace();
@@ -232,12 +256,23 @@ public class BoaAstIntrinsics {
 	}
 
 	private static void openIssuesMap() {
-		final Configuration conf = new Configuration();
 		try {
-			final FileSystem fs = FileSystem.get(conf);
-			final Path p = new Path("hdfs://boa-njt/",
-								new Path(context.getConfiguration().get("boa.issues.dir", context.getConfiguration().get("boa.input.dir", "repcache/live")),
-								new Path("issues")));
+			final Configuration conf = context.getConfiguration();
+			final FileSystem fs;
+			final Path p;
+			if (DefaultProperties.localDataPath != null) {
+				p = new Path(DefaultProperties.localIssuePath);
+				fs = FileSystem.getLocal(conf);
+			} else {
+				p = new Path(
+					context.getConfiguration().get("fs.default.name", "hdfs://boa-njt/"),
+					new Path(
+						conf.get("boa.issues.dir", conf.get("boa.input.dir", "repcache/live")),
+						new Path("issues")
+					)
+				);
+				fs = FileSystem.get(conf);
+			}
 			issuesMap = new MapFile.Reader(fs, p.toString(), conf);
 		} catch (final Exception e) {
 			e.printStackTrace();
@@ -295,7 +330,7 @@ public class BoaAstIntrinsics {
 
 		/*
 		 * Remove qualifiers from anywhere in the string...
-		 * 
+		 *
 		 * SomeType                               =>  SomeType
 		 * foo.SomeType                           =>  SomeType
 		 * foo.bar.SomeType                       =>  SomeType
@@ -353,7 +388,7 @@ public class BoaAstIntrinsics {
 	};
 
 	/**
-	 * 
+	 *
 	 */
 	public static class SnapshotVisitor extends BoaCollectingVisitor<String, ChangedFile> {
 		private long timestamp;
@@ -421,6 +456,158 @@ public class BoaAstIntrinsics {
 		return getSnapshot(cr, Long.MAX_VALUE, new String[0]);
 	}
 
+	///////////////////////////////
+	// Literal testing functions */
+	///////////////////////////////
+
+	/**
+	 * Returns <code>true</code> if the expression <code>e</code> is of kind
+	 * <code>LITERAL</code> and is an integer literal.
+	 *
+	 * The test is a simplified grammar, based on the one from:
+	 * https://docs.oracle.com/javase/specs/jls/se8/html/jls-3.html#jls-3.10
+	 *
+	 * DecimalNumeral:
+	 * 	[0-9] [lL]?
+	 * 	[1-9] [0-9] ([0-9_]* [0-9])? [lL]?
+	 * 	[1-9] [_]+ [0-9] ([0-9_]* [0-9])? [lL]?
+	 *
+	 * HexNumeral:
+	 * 	0 [xX] [0-9a-fA-F] ([0-9a-fA-F_]* [0-9a-fA-F])? [lL]?
+	 *
+	 * OctalNumeral:
+	 * 	0 [_]* [0-7] ([0-7_]* [0-7])? [lL]?
+	 *
+	 * BinaryNumeral:
+	 * 	0 [bB] [01] ([01_]* [01])? [lL]?
+	 *
+	 * If any of these match, it returns <code>true</code>.  Otherwise it
+	 * returns <code>false</code>.
+	 *
+	 * @param e the expression to test
+	 * @return true if the expression is an integer literal, otherwise false
+	 */
+	@FunctionSpec(name = "isintlit", returnType = "bool", formalParameters = { "Expression" })
+	public static boolean isIntLit(final Expression e) throws Exception {
+		if (e.getKind() != Expression.ExpressionKind.LITERAL) return false;
+		if (!e.hasLiteral()) return false;
+		if (e.getLiteral().matches("^[0-9][lL]?$")) return true;
+		if (e.getLiteral().matches("^[1-9][0-9]([0-9_]*[0-9])?[lL]?$")) return true;
+		if (e.getLiteral().matches("^[1-9][_]+[0-9]([0-9_]*[0-9])?[lL]?$")) return true;
+		if (e.getLiteral().matches("^0[xX][0-9a-fA-F]([0-9a-fA-F_]*[0-9a-fA-F])?[lL]?$")) return true;
+		if (e.getLiteral().matches("^0[_]*[0-7]([0-7_]*[0-7])?[lL]?$")) return true;
+		return e.getLiteral().matches("^0[bB][01]([01_]*[01])?[lL]?$");
+	}
+
+	/**
+	 * Returns <code>true</code> if the expression <code>e</code> is of kind
+	 * <code>LITERAL</code> and is a float literal.
+	 *
+	 * The test is a simplified grammar, based on the one from:
+	 * https://docs.oracle.com/javase/specs/jls/se8/html/jls-3.html#jls-3.10
+	 *
+	 * DecimalFloatingPointLiteral:
+	 *  [0-9] ([0-9_]* [0-9])? \\. ([0-9] ([0-9_]* [0-9])?)? ([eE] [+-]? [0-9] ([0-9_]* [0-9])?)? [fFdD]?
+	 *  \\. [0-9] ([0-9_]* [0-9])? ([eE] [+-]? [0-9] ([0-9_]* [0-9])?)? [fFdD]?
+	 *  [0-9] ([0-9_]* [0-9])? [eE] [+-]? [0-9] ([0-9_]* [0-9])? [fFdD]?
+	 *  [0-9] ([0-9_]* [0-9])? ([eE] [+-]? [0-9] ([0-9_]* [0-9])?)? [fFdD]
+	 *
+	 * HexadecimalFloatingPointLiteral:
+	 *  0 [Xx] [0-9a-fA-F] ([0-9a-fA-F_]* [0-9a-fA-F])? \\.? [pP] [+-]? [0-9] ([0-9_]* [0-9])? [fFdD]?
+	 *  0 [Xx] ([0-9a-fA-F] ([0-9a-fA-F_]* [0-9a-fA-F])?)? \\. [0-9a-fA-F] ([0-9a-fA-F_]* [0-9a-fA-F])? [pP] [+-]? [0-9] ([0-9_]* [0-9])? [fFdD]?
+	 *
+	 * @param e the expression to test
+	 * @return true if the expression is a char literal, otherwise false
+	 */
+	@FunctionSpec(name = "isfloatlit", returnType = "bool", formalParameters = { "Expression" })
+	public static boolean isFloatLit(final Expression e) throws Exception {
+		if (e.getKind() != Expression.ExpressionKind.LITERAL) return false;
+		if (!e.hasLiteral()) return false;
+		if (e.getLiteral().matches("^[0-9]([0-9_]*[0-9])?\\.([0-9]([0-9_]*[0-9])?)?([eE][+-]?[0-9]([0-9_]*[0-9])?)?[fFdD]?$")) return true;
+		if (e.getLiteral().matches("^\\.[0-9]([0-9_]*[0-9])?([eE][+-]?[0-9]([0-9_]*[0-9])?)?[fFdD]?$")) return true;
+		if (e.getLiteral().matches("^[0-9]([0-9_]*[0-9])?[eE][+-]?[0-9]([0-9_]*[0-9])?[fFdD]?$")) return true;
+		if (e.getLiteral().matches("^[0-9]([0-9_]*[0-9])?([eE][+-]?[0-9]([0-9_]*[0-9])?)?[fFdD]$")) return true;
+		if (e.getLiteral().matches("^0[Xx][0-9a-fA-F]([0-9a-fA-F_]*[0-9a-fA-F])?\\.?[pP][+-]?[0-9]([0-9_]*[0-9])?[fFdD]?$")) return true;
+		return e.getLiteral().matches("^0[Xx]([0-9a-fA-F]([0-9a-fA-F_]*[0-9a-fA-F])?)?\\.[0-9a-fA-F]([0-9a-fA-F_]*[0-9a-fA-F])?[pP][+-]?[0-9]([0-9_]*[0-9])?[fFdD]?$");
+	}
+
+	/**
+	 * Returns <code>true</code> if the expression <code>e</code> is of kind
+	 * <code>LITERAL</code> and is a char literal.
+	 *
+	 * @param e the expression to test
+	 * @return true if the expression is a char literal, otherwise false
+	 */
+	@FunctionSpec(name = "ischarlit", returnType = "bool", formalParameters = { "Expression" })
+	public static boolean isCharLit(final Expression e) throws Exception {
+		if (e.getKind() != Expression.ExpressionKind.LITERAL) return false;
+		if (!e.hasLiteral()) return false;
+		return e.getLiteral().startsWith("'");
+	}
+
+	/**
+	 * Returns <code>true</code> if the expression <code>e</code> is of kind
+	 * <code>LITERAL</code> and is a string literal.
+	 *
+	 * @param e the expression to test
+	 * @return true if the expression is a string literal, otherwise false
+	 */
+	@FunctionSpec(name = "isstringlit", returnType = "bool", formalParameters = { "Expression" })
+	public static boolean isStringLit(final Expression e) throws Exception {
+		if (e.getKind() != Expression.ExpressionKind.LITERAL) return false;
+		if (!e.hasLiteral()) return false;
+		return e.getLiteral().startsWith("\"");
+	}
+
+	/**
+	 * Returns <code>true</code> if the expression <code>e</code> is of kind
+	 * <code>LITERAL</code> and is a type literal.
+	 *
+	 * @param e the expression to test
+	 * @return true if the expression is a type literal, otherwise false
+	 */
+	@FunctionSpec(name = "istypelit", returnType = "bool", formalParameters = { "Expression" })
+	public static boolean isTypeLit(final Expression e) throws Exception {
+		if (e.getKind() != Expression.ExpressionKind.LITERAL) return false;
+		if (!e.hasLiteral()) return false;
+		return e.getLiteral().endsWith(".class");
+	}
+
+	/**
+	 * Returns <code>true</code> if the expression <code>e</code> is of kind
+	 * <code>LITERAL</code> and is a bool literal.
+	 *
+	 * @param e the expression to test
+	 * @return true if the expression is a bool literal, otherwise false
+	 */
+	@FunctionSpec(name = "isboollit", returnType = "bool", formalParameters = { "Expression" })
+	public static boolean isBoolLit(final Expression e) throws Exception {
+		if (e.getKind() != Expression.ExpressionKind.LITERAL) return false;
+		if (!e.hasLiteral()) return false;
+		return e.getLiteral().equals("true") || e.getLiteral().equals("false");
+	}
+
+	/**
+	 * Returns <code>true</code> if the expression <code>e</code> is of kind
+	 * <code>LITERAL</code> and is a null literal.
+	 *
+	 * @param e the expression to test
+	 * @return true if the expression is a null literal, otherwise false
+	 */
+	@FunctionSpec(name = "isnulllit", returnType = "bool", formalParameters = { "Expression" })
+	public static boolean isNullLit(final Expression e) throws Exception {
+		if (e.getKind() != Expression.ExpressionKind.LITERAL) return false;
+		if (!e.hasLiteral()) return false;
+		return e.getLiteral().equals("null");
+	}
+
+	/**
+	 * Returns <code>true</code> if the expression <code>e</code> is of kind
+	 * <code>LITERAL</code> and the literal matches the string <code>lit</code>.
+	 *
+	 * @param e the expression to test
+	 * @return true if the expression is a string literal, otherwise false
+	 */
 	@FunctionSpec(name = "isliteral", returnType = "bool", formalParameters = { "Expression", "string" })
 	public static boolean isLiteral(final Expression e, final String lit) throws Exception {
 		return e.getKind() == Expression.ExpressionKind.LITERAL && e.hasLiteral() && e.getLiteral().equals(lit);
@@ -463,7 +650,7 @@ public class BoaAstIntrinsics {
 			} catch (final StackOverflowError e) {
 				System.err.println("STACK ERR: " + node.getName() + " -> " + BoaAstIntrinsics.type_name(node.getName()).trim());
 			}
-			*/ 
+			*/
 			return true;
 		}
 	}
@@ -532,6 +719,7 @@ public class BoaAstIntrinsics {
 			case '.':
 			case '\t':
 				lastStart = i + 1;
+				break;
 			default:
 				break;
 			}

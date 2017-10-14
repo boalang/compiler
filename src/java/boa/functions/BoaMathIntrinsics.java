@@ -28,12 +28,12 @@ import java.util.Random;
  * @author anthonyu
  */
 public class BoaMathIntrinsics {
-	private static Random random = new Random();
+	public static Random random = new Random();
 
 	/**
-	 * Return a random floating point number x in the range 0.0 < x < 1.0.
+	 * Return a random floating point number x in the range 0.0 &lt; x &lt; 1.0.
 	 * 
-	 * @return A random floating point number x in the range 0.0 < x < 1.0
+	 * @return A random floating point number x in the range 0.0 &lt; x &lt; 1.0
 	 */
 	@FunctionSpec(name = "rand", returnType = "float")
 	public static double rand() {
@@ -41,18 +41,18 @@ public class BoaMathIntrinsics {
 	}
 
 	/**
-	 * Return a random integer x in the range 0 <= x < n.
+	 * Return a random integer x in the range 0 &lt;= x &lt; n.
 	 * 
 	 * @param a
 	 *            A int representing one greater than the maximum value desired
 	 * 
-	 * @return A random integer x in the range 0 <= x < n
+	 * @return A random integer x in the range 0 &lt;= x &lt; n
 	 * 
 	 * @throws IllegalArgumentException
 	 *             When n < 1
 	 */
 	@FunctionSpec(name = "nrand", returnType = "int", formalParameters = { "int" })
-	public static long nRand(final long n) {
+	public static long nrand(final long n) {
 		if (n < 1)
 			throw new IllegalArgumentException("n must be greater than zero");
 

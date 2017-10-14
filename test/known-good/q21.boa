@@ -1,0 +1,36 @@
+StaticFieldTotal: output sum of int;
+StaticFieldMax: output maximum(1) of string weight int;
+StaticFieldMin: output minimum(1) of string weight int;
+StaticFieldMean: output mean of int;
+
+p: Project = input;
+
+stat_cur_val := 0;
+stat_s: stack of int;
+
+q21 := visitor {
+	before node: CodeRepository -> {
+		snapshot := getsnapshot(node, "SOURCE_JAVA_JLS");
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+	before node: Declaration ->
+		if (node.kind == TypeKind.CLASS || node.kind == TypeKind.ANONYMOUS) {
+			push(stat_s, stat_cur_val);
+			stat_cur_val = 0;
+			foreach (i: int; def(node.fields[i]))
+				exists (j: int; node.fields[i].modifiers[j].kind == ModifierKind.STATIC)
+					stat_cur_val++;
+		} else
+			stop;
+	after node: Declaration -> {
+		StaticFieldTotal << stat_cur_val;
+		StaticFieldMax << p.id weight stat_cur_val;
+		StaticFieldMin << p.id weight stat_cur_val;
+		StaticFieldMean << stat_cur_val;
+		stat_cur_val = pop(stat_s);
+	}
+};
+
+visit(p, q21);

@@ -7,8 +7,8 @@
          {
             "kind": "METHOD_REFERENCE",
             "new_type": {
-               "kind": "OTHER",
-               "name": 1
+               "name": "Item",
+               "kind": "OTHER"
             },
             "method": "new"
          }

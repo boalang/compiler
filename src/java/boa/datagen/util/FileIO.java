@@ -66,6 +66,16 @@ public class FileIO {
 			e.printStackTrace();
 		}
 	}
+	
+	public static void writeFileContents(File file, String s, boolean append) {
+		try {
+			BufferedWriter out = new BufferedWriter(new FileWriter(file, append));
+			out.write(s);
+			out.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	public static final void delete(final File f) throws IOException {
 		if (f.isDirectory())

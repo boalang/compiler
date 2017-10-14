@@ -1,3 +1,4 @@
+checkstyle
 clean
 clean-dist
 clean-parser
@@ -7,6 +8,7 @@ clean-tests
 compile
 compile-parser
 compile-protobuf
+dump-java
 java-to-boa
 package
 package-compiler
@@ -14,8 +16,10 @@ package-runtime
 test
 test-codegen
 test-datagen
+test-functions
 test-inhattr
 test-knowngood
 test-lexer
 test-parser
+test-traversal
 test-typecheck

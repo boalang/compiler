@@ -1,0 +1,53 @@
+TransientTotal: output sum of int;
+TransientMax: output maximum(1) of string weight int;
+TransientMin: output minimum(1) of string weight int;
+TransientMean: output mean of int;
+VolatileTotal: output sum of int;
+VolatileMax: output maximum(1) of string weight int;
+VolatileMin: output minimum(1) of string weight int;
+VolatileMean: output mean of int;
+
+p: Project = input;
+
+trans_count := 0;
+volt_count := 0;
+trans_s: stack of int;
+volt_s: stack of int;
+
+q20 := visitor {
+	before node: CodeRepository -> {
+		snapshot := getsnapshot(node, "SOURCE_JAVA_JLS");
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+	before node: Declaration -> {
+		if (node.kind == TypeKind.CLASS || node.kind == TypeKind.ANONYMOUS) {
+			push(trans_s, trans_count);
+			push(volt_s, volt_count);
+			trans_count = 0;
+			volt_count = 0;
+			foreach (i: int; def(node.fields[i]))
+				foreach (j: int; node.fields[i].modifiers[j].kind == ModifierKind.OTHER)
+					if (node.fields[i].modifiers[j].other == "volatile")
+						volt_count++;
+					else if (node.fields[i].modifiers[j].other == "transient")
+						trans_count++;
+		} else
+			stop;
+	}
+	after node: Declaration -> {
+		TransientTotal << trans_count;
+		TransientMax << p.id weight trans_count;
+		TransientMin << p.id weight trans_count;
+		TransientMean << trans_count;
+		VolatileTotal << volt_count;
+		VolatileMax << p.id weight volt_count;
+		VolatileMin << p.id weight volt_count;
+		VolatileMean << volt_count;
+		trans_count = pop(trans_s);
+		volt_count = pop(volt_s);
+	}
+};
+
+visit(p, q20);

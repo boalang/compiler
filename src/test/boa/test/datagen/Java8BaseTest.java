@@ -34,6 +34,16 @@ public class Java8BaseTest extends Java7BaseTest {
 		visitor = new Java8Visitor("", new HashMap<String, Integer>());
 	}
 
+	public static void dumpJavaWrapped(final String content) {
+		setJava8();
+		Java7BaseTest.dumpJavaWrapped(content);
+    }
+
+	public static void dumpJava(final String content) {
+		setJava8();
+		Java7BaseTest.dumpJava(content);
+	}
+
 	public static String parseJava(final String content) {
 		setJava8();
 		return Java7BaseTest.parseJava(content);

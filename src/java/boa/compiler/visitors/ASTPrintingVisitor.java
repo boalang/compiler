@@ -29,7 +29,7 @@ import boa.compiler.ast.types.*;
  * @author nbhide
  * @author rdyer
  */
-public class ASTPrintingVisitor extends AbstractVisitorNoArg {
+public class ASTPrintingVisitor extends AbstractVisitorNoArgNoRet {
 	private int indent = 0;
 
 	private void indent() {

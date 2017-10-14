@@ -6,30 +6,29 @@
          {
             "name": "subtraction",
             "variable_type": {
-               "kind": "OTHER",
-               "name": 1
+               "name": "MathOperation",
+               "kind": "OTHER"
             },
             "initializer": {
                "kind": "LAMBDA",
                "lambda": {
-                  "name": "",
                   "return_type": {
-                     "kind": "OTHER",
-                     "name": 2
+                     "name": "",
+                     "kind": "OTHER"
                   },
                   "arguments": [
                      {
                         "name": "a",
                         "variable_type": {
-                           "kind": "OTHER",
-                           "name": 2
+                           "name": "",
+                           "kind": "OTHER"
                         }
                      },
                      {
                         "name": "b",
                         "variable_type": {
-                           "kind": "OTHER",
-                           "name": 2
+                           "name": "",
+                           "kind": "OTHER"
                         }
                      }
                   ],

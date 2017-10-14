@@ -24,13 +24,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import boa.compiler.ast.types.AbstractType;
 import boa.compiler.ast.Call;
-import boa.compiler.ast.Comparison;
 import boa.compiler.ast.Component;
-import boa.compiler.ast.Conjunction;
 import boa.compiler.ast.expressions.Expression;
-import boa.compiler.ast.expressions.SimpleExpr;
 import boa.compiler.ast.expressions.VisitorExpression;
 import boa.compiler.ast.Factor;
 import boa.compiler.ast.Identifier;
@@ -40,10 +36,9 @@ import boa.compiler.ast.statements.ExprStatement;
 import boa.compiler.ast.statements.Statement;
 import boa.compiler.ast.statements.VarDeclStatement;
 import boa.compiler.ast.statements.VisitStatement;
-import boa.compiler.ast.Term;
 import boa.compiler.ast.types.StackType;
 import boa.compiler.SymbolTable;
-import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.compiler.visitors.AbstractVisitorNoArgNoRet;
 import boa.compiler.visitors.VisitClassifier;
 import boa.types.BoaTuple;
 import boa.types.BoaStack;
@@ -69,7 +64,7 @@ import boa.types.BoaStack;
  * @author rdyer
  * @author nbhide
  */
-public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
+public class InheritedAttributeTransformer extends AbstractVisitorNoArgNoRet {
 	private final static String stackPrefix = "_inhattr_";
 	private static int stackCounter = 0;
 
@@ -78,7 +73,7 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 	/**
 	 * Creates a list of all the {@link VisitorExpression}s in the Boa AST.
 	 */
-	private class FindVisitorExpressions extends AbstractVisitorNoArg {
+	private class FindVisitorExpressions extends AbstractVisitorNoArgNoRet {
 		protected final List<VisitorExpression> visitors = new ArrayList<VisitorExpression>();
 
 		/** @{inheritDoc} */
@@ -103,7 +98,7 @@ public class InheritedAttributeTransformer extends AbstractVisitorNoArg {
 	 * Generates a set of all distinct types T in calls current(T) and also a
 	 * mapping from each type T found to a list of all uses in current(T).
 	 */
-	private class FindCurrentForVisitors extends AbstractVisitorNoArg{
+	private class FindCurrentForVisitors extends AbstractVisitorNoArgNoRet{
 		protected final Set<BoaTuple> currents = new HashSet<BoaTuple>();
 		protected final Map<BoaTuple,List<Factor>> factorMap = new HashMap<BoaTuple,List<Factor>>();
 

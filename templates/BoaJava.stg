@@ -1,18 +1,19 @@
 identifierMap ::= [
-		"true" : "true",
-		"false" : "false",
-		"PI" : "Math.PI",
-		"Inf" : "Double.POSITIVE_INFINITY",
-		"inf" : "Double.POSITIVE_INFINITY",
-		"NaN" : "Double.NaN",
-		"nan" : "Double.NaN",
-		"SECOND" : "(1000 * 1000)",
-		"SEC" : "(1000 * 1000)",
-		"MINUTE" : "(60 * 1000 * 1000)",
-		"MIN" : "(60 * 1000 * 1000)",
-		"HOUR" : "(60 * 60 * 1000 * 1000)",
-		"HR" : "(60 * 60 * 1000 * 1000)",
-		"input" : "_input"
+		"Xtrue" : "true",
+		"Xfalse" : "false",
+		"XPI" : "Math.PI",
+		"XInf" : "Double.POSITIVE_INFINITY",
+		"Xinf" : "Double.POSITIVE_INFINITY",
+		"XNaN" : "Double.NaN",
+		"Xnan" : "Double.NaN",
+		"XSECOND" : "(1000 * 1000)",
+		"XSEC" : "(1000 * 1000)",
+		"XMINUTE" : "(60 * 1000 * 1000)",
+		"XMIN" : "(60 * 1000 * 1000)",
+		"XHOUR" : "(60 * 60 * 1000 * 1000)",
+		"XHR" : "(60 * 60 * 1000 * 1000)",
+		"Xinput" : "_input",
+		default : {___<id>}
 ]
 		
 VarDecl(isstatic, type, id) ::= "<if(isstatic)>static <endif><type> ___<id>;<\n>"
@@ -77,7 +78,7 @@ Index(map, operand, index, slice) ::= "<if(map)><operand>.get(<index>)<elseif(sl
 Call(call, operand, parameters) ::= "<if(call)><call><else><operand>(<parameters>)<endif>"
 Composite(type, exprlist) ::= "new <type> {<\n><exprlist><\n>}"
 Pair(map, key, value) ::= "put(<key>, <value>);"
-Identifier(id) ::= "<if(identifierMap.(id))><identifierMap.(id)><else>___<id><endif>"
+Identifier(id) ::= << <identifierMap.(["X", id])> >>
 Assignment(lhs, rhs) ::= "<lhs> = <rhs>;<\n>"
 Break() ::= "break;<\n>"
 Continue() ::= "continue;<\n>"

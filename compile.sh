@@ -1,5 +1,9 @@
 #!/bin/bash
 
-BASEDIR=$(dirname "$0")
+if [ "$#" -lt 1 ]; then
+    echo "Usage: $0 file.boa [options]"
+    $(dirname "$0")/boa.sh -c
+    exit -1
+fi
 
-java -cp .:$BASEDIR/dist/boa-compiler.jar:$BASEDIR/lib/hadoop-core-1.0.4.jar:$BASEDIR/lib/commons-lang-2.4.jar:$BASEDIR/lib/commons-math-2.1.jar boa.BoaMain -c -i $*
+$(dirname "$0")/boa.sh -c -i $*

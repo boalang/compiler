@@ -1,6 +1,7 @@
 /*
- * Copyright 2014, Anthony Urso, Hridesh Rajan, Robert Dyer, 
- *                 and Iowa State University of Science and Technology
+ * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ *                 Iowa State University of Science and Technology
+ *                 and Bowling Green State University
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +17,7 @@
  */
 package boa.types;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,12 +27,16 @@ import java.util.Map;
  * arbitrary type.
  * 
  * @author anthonyu
+ * @author rdyer
  */
 public class BoaTuple extends BoaType {
 	protected final List<BoaType> members;
 	protected final Map<String, Integer> names;
 
-	private static final Map<String, String> tupleNames = new HashMap<String, String>();
+	public BoaTuple() {
+		members = new ArrayList<BoaType>();
+		names = new HashMap<String, Integer>();
+	}
 
 	public BoaTuple(final List<BoaType> members) {
 		this.members = members;
@@ -39,10 +45,11 @@ public class BoaTuple extends BoaType {
 			BoaType t = this.members.get(i);
 			if (t instanceof BoaName)
 				this.names.put(((BoaName) t).getId(), i);
+			this.names.put("f" + i, i);
 		}
 	}
 
-	public BoaTuple(final List<BoaType> members, final Map<String, Integer> names) {
+	protected BoaTuple(final List<BoaType> members, final Map<String, Integer> names) {
 		this.members = members;
 		this.names = names;
 	}
@@ -50,8 +57,13 @@ public class BoaTuple extends BoaType {
 	/** {@inheritDoc} */
 	@Override
 	public boolean assigns(final BoaType that) {
+		// if that is a function, check the return type
 		if (that instanceof BoaFunction)
 			return this.assigns(((BoaFunction) that).getType());
+
+		// if that is a component, check the type
+		if (that instanceof BoaName)
+			return this.assigns(((BoaName) that).getType());
 
 		if (that instanceof BoaArray) {
 			BoaType type = ((BoaArray) that).getType();
@@ -120,6 +132,13 @@ public class BoaTuple extends BoaType {
 		return this.names.get(member);
 	}
 
+	public String getMemberName(final String member) {
+		final BoaType t = this.members.get(this.names.get(member));
+		if (t instanceof BoaName)
+			return ((BoaName)t).getId();
+		return member;
+	}
+
 	public List<BoaType> getTypes() {
 		return this.members;
 	}
@@ -127,20 +146,11 @@ public class BoaTuple extends BoaType {
 	@Override
 	public String toJavaType() {
 		String s = "";
+
 		for (final BoaType t : this.members)
 			s += "_" + cleanType(t.toJavaType());
-		// use numbers for each unique type, to avoid generating really long filenames
-		if (!tupleNames.containsKey(s))
-			tupleNames.put(s, "BoaTup_" + tupleNames.size());
 
-		return tupleNames.get(s);
-	}
-
-	private String cleanType(String s) {
-		final String s2 = s.replace('<', '_').replace('>', '_').replaceAll(",\\s+", "_").replaceAll("\\[\\]", "Array");
-		if (!s2.contains("."))
-			return s2;
-		return s2.substring(s2.lastIndexOf(".") + 1);
+		return shortenedType(s, "BoaTup");
 	}
 
 	private int hash = 0;

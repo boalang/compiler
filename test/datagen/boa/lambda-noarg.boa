@@ -6,16 +6,15 @@
          {
             "name": "x",
             "variable_type": {
-               "kind": "OTHER",
-               "name": 1
+               "name": "int",
+               "kind": "OTHER"
             },
             "initializer": {
                "kind": "LAMBDA",
                "lambda": {
-                  "name": "",
                   "return_type": {
-                     "kind": "OTHER",
-                     "name": 2
+                     "name": "",
+                     "kind": "OTHER"
                   },
                   "statements": [
                      {

@@ -23,7 +23,7 @@ import boa.compiler.ast.Node;
 import boa.compiler.ast.Selector;
 import boa.compiler.ast.statements.VarDeclStatement;
 import boa.compiler.ast.statements.VisitStatement;
-import boa.compiler.visitors.AbstractVisitorNoArg;
+import boa.compiler.visitors.AbstractVisitorNoArgNoRet;
 
 /**
  * Finds and renames all variables in the tree, including their declarations
@@ -32,7 +32,7 @@ import boa.compiler.visitors.AbstractVisitorNoArg;
  * 
  * @author rdyer
  */
-public class VariableRenameTransformer extends AbstractVisitorNoArg {
+public class VariableRenameTransformer extends AbstractVisitorNoArgNoRet {
 	protected String prefix = "_";
 	protected final String visitArgName = "_n";
 

@@ -1,0 +1,248 @@
+Max: output maximum(1)[string] of string weight int;
+
+p: Project = input;
+
+cur_file: ChangedFile;
+
+out := function (name: string, count: int, countZero: bool) {
+	if (countZero || count > 0)
+		Max[name] << format("%s - %s", p.id, string(cur_file)) weight count;
+};
+
+has_file := false;
+
+count_locals := false;
+
+tot_files := 0;
+abs_files := 0;
+stat_files := 0;
+q3_cur_val := 0;
+nest_files := 0;
+q9_cur_val := 0;
+q10_cur_val := 0;
+q12_cur_val := 0;
+q13_cur_val := 0;
+interface_files := 0;
+q15_cur_val := 0;
+q16_cur_val := 0;
+q17_cur_val := 0;
+q18_cur_val := 0;
+q19_cur_val := 0;
+q20a_cur_val := 0;
+q20b_cur_val := 0;
+q21_cur_val := 0;
+q22_cur_val := 0;
+q23_cur_val := 0;
+q25_cur_val := 0;
+q26_cur_val := 0;
+q27_cur_val := 0;
+q28_cur_val := 0;
+finally := 0;
+
+q3_s: stack of int;
+q4_s := 0;
+q9_s: stack of int;
+q10_s: stack of int;
+q12_s: stack of int;
+q13_s: stack of int;
+q15_s: stack of int;
+q16_s: stack of int;
+q17_s: stack of int;
+q18_s: stack of int;
+q19_s: stack of int;
+q20a_s: stack of int;
+q20b_s: stack of int;
+q21_s: stack of int;
+q22_s: stack of int;
+q23_s: stack of int;
+q25_s: stack of int;
+q26_s: stack of int;
+q27_s: stack of int;
+q28_s: stack of int;
+
+q_all := visitor {
+	before node: CodeRepository -> {
+		snapshot := getsnapshot(node, "SOURCE_JAVA_JLS");
+		foreach (i: int; def(snapshot[i]))
+			visit(snapshot[i]);
+		stop;
+	}
+	before node: ChangedFile ->
+		if (match(`^/branches/`, node.name))
+			stop;
+		else {
+			has_file = true;
+			cur_file = node;
+		}
+	before node: Declaration -> {
+		if (node.kind == TypeKind.CLASS) {
+			if (has_modifier(node, ModifierKind.ABSTRACT))
+				abs_files++;
+			if (has_modifier(node, ModifierKind.STATIC))
+				stat_files++;
+			if (q4_s > 0)
+				nest_files++;
+			q4_s++;
+		} else if (node.kind == TypeKind.ANONYMOUS) {
+			q3_cur_val++;
+		} else if (node.kind == TypeKind.INTERFACE) {
+			interface_files++;
+			push(q13_s, q13_cur_val);
+			q13_cur_val = 0;
+		}
+		if (node.kind == TypeKind.CLASS || node.kind == TypeKind.ANONYMOUS) {
+			tot_files++;
+			push(q10_s, q10_cur_val);
+			q10_cur_val = 0;
+			push(q12_s, q12_cur_val);
+			q12_cur_val = 0;
+			push(q15_s, q15_cur_val);
+			q15_cur_val = 0;
+			push(q16_s, q16_cur_val);
+			q16_cur_val = 0;
+			push(q17_s, q17_cur_val);
+			q17_cur_val = 0;
+			push(q19_s, q19_cur_val);
+			q19_cur_val = len(node.fields);
+			push(q20a_s, q20a_cur_val);
+			push(q20b_s, q20b_cur_val);
+			q20a_cur_val = 0;
+			q20b_cur_val = 0;
+			push(q21_s, q21_cur_val);
+			q21_cur_val = 0;
+			push(q22_s, q22_cur_val);
+			q22_cur_val = 0;
+			foreach (i: int; def(node.fields[i])) {
+				foreach (j: int; node.fields[i].modifiers[j].kind == ModifierKind.OTHER)
+					if (node.fields[i].modifiers[j].other == "transient")
+						q20a_cur_val++;
+					else if (node.fields[i].modifiers[j].other == "volatile")
+						q20b_cur_val++;
+				exists (j: int; node.fields[i].modifiers[j].kind == ModifierKind.STATIC)
+					q21_cur_val++;
+				if (node.fields[i].variable_type.name == "String")
+					q22_cur_val++;
+			}
+		}
+	}
+	after node: Declaration -> {
+		if (node.kind == TypeKind.CLASS || node.kind == TypeKind.ANONYMOUS) {
+			if (node.kind == TypeKind.CLASS)
+				q4_s--;
+			out("Methods", q10_cur_val, false);
+			q10_cur_val = pop(q10_s);
+			out("StaticMethods", q12_cur_val, true);
+			q12_cur_val = pop(q12_s);
+			out("VoidMethods", q15_cur_val, false);
+			q15_cur_val = pop(q15_s);
+			out("NonVoidMethods", q16_cur_val, false);
+			q16_cur_val = pop(q16_s);
+			out("ArrayMethods", q17_cur_val, false);
+			q17_cur_val = pop(q17_s);
+			out("Field", q19_cur_val, true);
+			q19_cur_val = pop(q19_s);
+			out("Transient", q20a_cur_val, true);
+			q20a_cur_val = pop(q20a_s);
+			out("Volatile", q20b_cur_val, true);
+			q20b_cur_val = pop(q20b_s);
+			out("StaticField", q21_cur_val, true);
+			q21_cur_val = pop(q21_s);
+			out("StringField", q22_cur_val, true);
+			q22_cur_val = pop(q22_s);
+		} else if (node.kind == TypeKind.INTERFACE) {
+			out("InterfaceMethods", q13_cur_val, false);
+			q13_cur_val = pop(q13_s);
+		}
+	}
+	before node: Method -> {
+		push(q3_s, q3_cur_val);
+		q3_cur_val = 0;
+		push(q9_s, q9_cur_val);
+		q9_cur_val = 0;
+		q10_cur_val++;
+		if (has_modifier(node, ModifierKind.STATIC) && node.name != "main")
+			q12_cur_val++;
+		q13_cur_val++;
+		out("Arity", len(node.arguments), false);
+		if (node.return_type.name == "void")
+			q15_cur_val++;
+		else
+			q16_cur_val++;
+		if (match(`\[\]$`, node.return_type.name))
+			q17_cur_val++;
+		push(q18_s, q18_cur_val);
+		q18_cur_val = 0;
+		push(q23_s, q23_cur_val);
+		q23_cur_val = 0;
+		push(q25_s, q25_cur_val);
+		q25_cur_val = 0;
+		push(q26_s, q26_cur_val);
+		q26_cur_val = 0;
+		push(q28_s, q28_cur_val);
+		q28_cur_val = 0;
+		count_locals = true;
+		foreach (i: int; def(node.statements[i]))
+			visit(node.statements[i]);
+		count_locals = false;
+		out("Locals", q28_cur_val, true);
+		q28_cur_val = pop(q28_s);
+	}
+	after node: Method -> {
+		out("AnonymousClass", q3_cur_val, true);
+		q3_cur_val = pop(q3_s);
+		out("Assert", q9_cur_val, true);
+		q9_cur_val = pop(q9_s);
+		out("This", q18_cur_val, true);
+		q18_cur_val = pop(q18_s);
+		out("Condition", q23_cur_val, true);
+		q23_cur_val = pop(q23_s);
+		out("Try", q25_cur_val, true);
+		q25_cur_val = pop(q25_s);
+		out("Throws", q26_cur_val, true);
+		q26_cur_val = pop(q26_s);
+	}
+	before node: Statement ->
+		if (node.kind == StatementKind.ASSERT)
+			q9_cur_val++;
+		else if (node.kind == StatementKind.IF || node.kind == StatementKind.FOR ||
+				node.kind == StatementKind.SWITCH || node.kind == StatementKind.DO ||
+				node.kind == StatementKind.WHILE)
+			q23_cur_val++;
+		else if (node.kind == StatementKind.TRY) {
+			q25_cur_val++;
+			if (len(node.statements) > 1) {
+				s := node.statements[len(node.statements) - 1];
+				if (s.kind != StatementKind.CATCH)
+					finally++;
+			}
+		} else if (node.kind == StatementKind.THROW) {
+			q26_cur_val++;
+			q27_cur_val++;
+		} else if (node.kind == StatementKind.CATCH) {
+			push(q27_s, q27_cur_val);
+			q27_cur_val = 0;
+		}
+	after node: Statement ->
+		if (node.kind == StatementKind.CATCH) {
+			out("ReThrows", q27_cur_val, true);
+			q27_cur_val = pop(q27_s);
+		}
+	before node: Expression ->
+		if (node.kind == ExpressionKind.LITERAL &&
+				(node.literal == "this" || match(`\.this$`, node.literal)))
+			q18_cur_val++;
+	before node: Variable ->
+		if (count_locals)
+			q28_cur_val++;
+};
+
+visit(p, q_all);
+
+if (has_file) {
+	out("Classes", tot_files, false);
+	out("StaticClass", stat_files, true);
+	out("Nested", nest_files, true);
+	out("AbstractClass", abs_files, false);
+	out("Interfaces", interface_files, true);
+	out("Finally", finally, true);
+}

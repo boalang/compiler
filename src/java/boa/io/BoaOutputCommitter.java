@@ -69,10 +69,7 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 			switch (event.getTaskStatus()) {
 				case SUCCEEDED:
 					break;
-				case FAILED:
-				case KILLED:
-				case OBSOLETE:
-				case TIPFAILED:
+                default:
 					diag += "Diagnostics for: " + event.getTaskTrackerHttp() + "\n";
 					for (final String s : job.getTaskDiagnostics(event.getTaskAttemptId()))
 						diag += s + "\n";
@@ -162,7 +159,7 @@ public class BoaOutputCommitter extends FileOutputCommitter {
 						hasWebResult = true;
 
 						try {
-							ps = con.prepareStatement("UPDATE boa_output SET web_result=? WHERE id=" + jobId);
+							ps = con.prepareStatement("UPDATE boa_output SET web_result=?, hash=MD5(web_result) WHERE id=" + jobId);
 							int webSize = 64 * 1024 - 1;
 							ps.setString(1, new String(b, 0, numBytes < webSize ? numBytes : webSize));
 							ps.executeUpdate();

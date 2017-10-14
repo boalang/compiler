@@ -39,7 +39,6 @@ public class Java8Visitor extends Java7Visitor {
 	public boolean visit(MethodDeclaration node) {
 		List<boa.types.Ast.Method> list = methods.peek();
 		Method.Builder b = Method.newBuilder();
-//		b.setPosition(pos.build());
 		if (node.isConstructor())
 			b.setName("<init>");
 		else
@@ -57,11 +56,11 @@ public class Java8Visitor extends Java7Visitor {
 			// FIXME JLS8: Deprecated getExtraDimensions() and added extraDimensions()
 			for (int i = 0; i < node.getExtraDimensions(); i++)
 				name += "[]";
-			tb.setName(getIndex(name));
+			tb.setName(name);
 			tb.setKind(boa.types.Ast.TypeKind.OTHER);
 			b.setReturnType(tb.build());
 		} else {
-			tb.setName(getIndex("void"));
+			tb.setName("void");
 			tb.setKind(boa.types.Ast.TypeKind.OTHER);
 			b.setReturnType(tb.build());
 		}
@@ -76,18 +75,17 @@ public class Java8Visitor extends Java7Visitor {
 			}
 			if (bounds.length() > 0)
 				name = name + " extends " + bounds;
-			tp.setName(getIndex(name));
+			tp.setName(name);
 			tp.setKind(boa.types.Ast.TypeKind.GENERIC);
 			b.addGenericParameters(tp.build());
 		}
 		if (node.getReceiverType() != null) {
 			Variable.Builder vb = Variable.newBuilder();
-//			vb.setPosition(pos.build()); // FIXME
 			vb.setName("this");
 			boa.types.Ast.Type.Builder tp = boa.types.Ast.Type.newBuilder();
 			String name = typeName(node.getReceiverType());
 			if (node.getReceiverQualifier() != null) name = node.getReceiverQualifier().getFullyQualifiedName() + "." + name;
-			tp.setName(getIndex(name));
+			tp.setName(name);
 			tp.setKind(boa.types.Ast.TypeKind.OTHER); // FIXME change to receiver? or something?
 			vb.setVariableType(tp.build());
 			b.addArguments(vb.build());
@@ -95,7 +93,6 @@ public class Java8Visitor extends Java7Visitor {
 		for (Object o : node.parameters()) {
 			SingleVariableDeclaration ex = (SingleVariableDeclaration)o;
 			Variable.Builder vb = Variable.newBuilder();
-//			vb.setPosition(pos.build()); // FIXME
 			vb.setName(ex.getName().getFullyQualifiedName());
 			for (Object m : ex.modifiers()) {
 				if (((IExtendedModifier)m).isAnnotation())
@@ -111,7 +108,7 @@ public class Java8Visitor extends Java7Visitor {
 				name += "[]";
 			if (ex.isVarargs())
 				name += "...";
-			tp.setName(getIndex(name));
+			tp.setName(name);
 			tp.setKind(boa.types.Ast.TypeKind.OTHER);
 			vb.setVariableType(tp.build());
 			if (ex.getInitializer() != null) {
@@ -122,7 +119,7 @@ public class Java8Visitor extends Java7Visitor {
 		}
 		for (Object o : node.thrownExceptionTypes()) {
 				boa.types.Ast.Type.Builder tp = boa.types.Ast.Type.newBuilder();
-				tb.setName(getIndex(typeName((org.eclipse.jdt.core.dom.Type)o)));
+				tb.setName(typeName((org.eclipse.jdt.core.dom.Type)o));
 				tp.setKind(boa.types.Ast.TypeKind.CLASS);
 				b.addExceptionTypes(tp.build());
 		}
@@ -140,9 +137,8 @@ public class Java8Visitor extends Java7Visitor {
 	@Override
 	public boolean visit(LambdaExpression node) {
 		Method.Builder b = Method.newBuilder();
-		b.setName("");
 		boa.types.Ast.Type.Builder rt = boa.types.Ast.Type.newBuilder();
-		rt.setName(getIndex(""));
+		rt.setName("");
 		rt.setKind(boa.types.Ast.TypeKind.OTHER);
 		b.setReturnType(rt.build());
 		for (Object o : node.parameters()) {
@@ -158,13 +154,13 @@ public class Java8Visitor extends Java7Visitor {
 					name += "[]";
 				if (svd.isVarargs())
 					name += "...";
-				tp.setName(getIndex(name));
+				tp.setName(name);
 				tp.setKind(boa.types.Ast.TypeKind.OTHER);
 				vb.setVariableType(tp.build());
 			} else {
 				VariableDeclarationFragment vdf = (VariableDeclarationFragment)o;
 				boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
-				tb.setName(getIndex(""));
+				tb.setName("");
 				tb.setKind(boa.types.Ast.TypeKind.OTHER);
 				vb.setVariableType(tb.build());
 			}
@@ -183,10 +179,14 @@ public class Java8Visitor extends Java7Visitor {
 			for (boa.types.Ast.Statement s : statements.pop())
 				b.addStatements(s);
 		}
+
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.LAMBDA);
 		eb.setLambda(b.build());
+        if (!node.hasParentheses())
+            eb.setNoParens(true);
 		expressions.push(eb.build());
+
 		return false;
 	}
 	
@@ -196,20 +196,20 @@ public class Java8Visitor extends Java7Visitor {
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.METHOD_REFERENCE);
 		
 		boa.types.Ast.Type.Builder tb1 = boa.types.Ast.Type.newBuilder();
-		tb1.setName(getIndex(typeName(node.getType())));
+		tb1.setName(typeName(node.getType()));
 		tb1.setKind(boa.types.Ast.TypeKind.OTHER);
 		eb.setNewType(tb1.build());
 
 		for (Object t : node.typeArguments()) {
 			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
-			tb.setName(getIndex(typeName((org.eclipse.jdt.core.dom.Type)t)));
+			tb.setName(typeName((org.eclipse.jdt.core.dom.Type)t));
 			tb.setKind(boa.types.Ast.TypeKind.GENERIC);
 			eb.addGenericParameters(tb.build());
 		}
 
 		eb.setMethod("new");
-		
 		expressions.push(eb.build());
+
 		return false;
 	}
 	
@@ -217,18 +217,18 @@ public class Java8Visitor extends Java7Visitor {
 	public boolean visit(ExpressionMethodReference node) {
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.METHOD_REFERENCE);
+
 		node.getExpression().accept(this);
 		eb.addExpressions(expressions.pop());
 
 		for (Object t : node.typeArguments()) {
 			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
-			tb.setName(getIndex(typeName((org.eclipse.jdt.core.dom.Type)t)));
+			tb.setName(typeName((org.eclipse.jdt.core.dom.Type)t));
 			tb.setKind(boa.types.Ast.TypeKind.GENERIC);
 			eb.addGenericParameters(tb.build());
 		}
 
 		eb.setMethod(node.getName().getIdentifier());
-		
 		expressions.push(eb.build());
 
 		return false;
@@ -246,7 +246,7 @@ public class Java8Visitor extends Java7Visitor {
 		
 		for (Object t : node.typeArguments()) {
 			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
-			tb.setName(getIndex(typeName((org.eclipse.jdt.core.dom.Type)t)));
+			tb.setName(typeName((org.eclipse.jdt.core.dom.Type)t));
 			tb.setKind(boa.types.Ast.TypeKind.GENERIC);
 			eb.addGenericParameters(tb.build());
 		}
@@ -262,14 +262,19 @@ public class Java8Visitor extends Java7Visitor {
 		boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 		eb.setKind(boa.types.Ast.Expression.ExpressionKind.METHOD_REFERENCE);
 		
+		boa.types.Ast.Type.Builder tb1 = boa.types.Ast.Type.newBuilder();
+		tb1.setName(typeName(node.getType()));
+		tb1.setKind(boa.types.Ast.TypeKind.OTHER);
+		eb.setNewType(tb1.build());
+
 		for (Object t : node.typeArguments()) {
 			boa.types.Ast.Type.Builder tb = boa.types.Ast.Type.newBuilder();
-			tb.setName(getIndex(typeName((org.eclipse.jdt.core.dom.Type)t)));
+			tb.setName(typeName((org.eclipse.jdt.core.dom.Type)t));
 			tb.setKind(boa.types.Ast.TypeKind.GENERIC);
 			eb.addGenericParameters(tb.build());
 		}
 
-		eb.setMethod(getIndex(typeName(node.getType()))+"::"+node.getName().getIdentifier());
+		eb.setMethod(node.getName().getIdentifier());
 		expressions.push(eb.build());
 
 		return false;
