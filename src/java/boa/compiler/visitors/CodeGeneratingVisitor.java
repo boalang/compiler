@@ -50,11 +50,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	 *
 	 * @author anthonyu
 	 */
-	String identifier="";
-	String traversalNodeIdentifier="";
-	LocalMayAliasAnalysis localMayAliasAnalysis = new LocalMayAliasAnalysis();
-	DataFlowSensitivityAnalysis dataFlowSensitivityAnalysis = new DataFlowSensitivityAnalysis();
-	LoopSensitivityAnalysis loopSensitivityAnalysis = new LoopSensitivityAnalysis();
+	String identifier = "";
 	boolean flowSensitive = false;
 	boolean loopSensitive = false;
 	HashMap<String, Boolean> traversalMap = new HashMap<String, Boolean>();
@@ -627,8 +623,8 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				parts.add(code.removeLast());
 			}
 
-			if(funcName.equals("traverse")) {
-				if(parts.get(2).equals("boa.types.Graph.Traversal.TraversalKind.HYBRID") && !traversalMap.get(parts.get(3)))
+			if (funcName.equals("traverse") && parts.size() > 3) {
+				if (parts.get(2).equals("boa.types.Graph.Traversal.TraversalKind.HYBRID") && !traversalMap.get(parts.get(3).trim()))
 					parts.set(2, "boa.types.Graph.Traversal.TraversalKind.RANDOM");
 			}
 
@@ -1501,24 +1497,25 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		final BoaFunction funcType = ((BoaFunction) n.type);
 		final List<String> body = new ArrayList<String>();
 		String types = "";
-		traversalNodeIdentifier="";
+		String traversalNodeIdentifier = "";
 		Identifier traversalId = null;
 
 		if (n.hasWildcard()) {
 			st.add("name", "defaultPreTraverse");
 		} else if (n.hasComponent()) {
 			final Component c = n.getComponent();
-			traversalNodeIdentifier = "___"+c.getIdentifier().getToken();
+			traversalNodeIdentifier = "___" + c.getIdentifier().getToken();
 			traversalId = c.getIdentifier();
 			n.env.set(traversalNodeIdentifier, c.getType().type);
 			types = c.getType().type.toJavaType();
 
 			st.add("name", "preTraverse");
 		}
+
 		if (!(funcType.getType() instanceof BoaAny))
 			st.add("ret", funcType.getType().toBoxedJavaType());
 
-		if(n.hasBody()) {
+		if (n.hasBody()) {
 			if (n.getBody() instanceof Block) {
 				for (final Node b : ((Block)n.getBody()).getStatements()) {
 					b.accept(this);
@@ -1530,19 +1527,20 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			}
 		}
 
-		CFGBuildingVisitor cfgBuilder = new CFGBuildingVisitor();
-	        n.accept(cfgBuilder);
+		final CFGBuildingVisitor cfgBuilder = new CFGBuildingVisitor();
+        n.accept(cfgBuilder);
 		CreateNodeId createNodeId = new CreateNodeId();
 		createNodeId.start(cfgBuilder);
 
-		localMayAliasAnalysis = new LocalMayAliasAnalysis();
-		HashSet<Identifier> aliastSet = localMayAliasAnalysis.start(cfgBuilder, traversalId);
+		final LocalMayAliasAnalysis localMayAliasAnalysis = new LocalMayAliasAnalysis();
+		final HashSet<Identifier> aliastSet = localMayAliasAnalysis.start(cfgBuilder, traversalId);
 		
-		dataFlowSensitivityAnalysis = new DataFlowSensitivityAnalysis();
+		final DataFlowSensitivityAnalysis dataFlowSensitivityAnalysis = new DataFlowSensitivityAnalysis();
 		dataFlowSensitivityAnalysis.start(cfgBuilder, aliastSet);
 		flowSensitive = dataFlowSensitivityAnalysis.isFlowSensitive();
-		if(flowSensitive) {
-			loopSensitivityAnalysis = new LoopSensitivityAnalysis();
+
+		if (flowSensitive) {
+			final LoopSensitivityAnalysis loopSensitivityAnalysis = new LoopSensitivityAnalysis();
 			loopSensitivityAnalysis.start(cfgBuilder, aliastSet);
 			loopSensitive = loopSensitivityAnalysis.isLoopSensitive();
 		}
@@ -1712,7 +1710,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 
 		final List<String> body = new ArrayList<String>();
 		for (final Node node : n.getBody().getStatements()) {
-			if(node instanceof TraverseStatement) {
+			if (node instanceof TraverseStatement) {
 				if (!(((BoaFunction) node.type).getType() instanceof BoaAny)) {
 					st.add("T", ((BoaFunction) node.type).getType().toBoxedJavaType());
 				}
