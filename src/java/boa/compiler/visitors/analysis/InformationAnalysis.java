@@ -163,32 +163,6 @@ public class InformationAnalysis extends AbstractVisitorNoArgNoRet {
 		}
 	}
 
-	protected List<BoaType> check(final Call c) {
-		if (c.getArgsSize() > 0)
-			return this.check(c.getArgs());
-
-		return new ArrayList<BoaType>();
-	}
-
-	protected List<BoaType> check(final List<Expression> el) {
-		final List<BoaType> types = new ArrayList<BoaType>();
-
-		for (final Expression e : el) {
-			// special case of a function call, use its return type instead of function type
-			if (e.type instanceof BoaFunction) {
-				callFinder.start(e);
-				if (callFinder.isCall()) {
-					types.add(((BoaFunction) e.type).getType());
-					continue;
-				}
-			}
-
-			types.add(e.type);
-		}
-
-		return types;
-	}
-
 	public void visit(final Factor n) {
 		if (n.getOpsSize() > 0) {
 			n.env.setOperand(n.getOperand());

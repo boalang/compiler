@@ -74,7 +74,6 @@ public class DataFlowSensitivityAnalysis extends AbstractVisitorNoArgNoRet {
 		try {
 			this.idFinder.start(n.env.getOperand());
 			final String funcName = this.idFinder.getNames().toArray()[0].toString();
-			final BoaFunction f = n.env.getFunction(funcName, check(n));
 			if (funcName.equals("getvalue")) {
 				if (n.getArgsSize() == 1) {
 					getValueFound = true;
@@ -92,31 +91,6 @@ public class DataFlowSensitivityAnalysis extends AbstractVisitorNoArgNoRet {
 			getValueNodes.add((Identifier)n);
 		}
 		argFlag = false;
-	}
-
-	protected List<BoaType> check(final Call c) {
-		if (c.getArgsSize() > 0)
-			return this.check(c.getArgs());
-
-		return new ArrayList<BoaType>();
-	}
-
-	protected List<BoaType> check(final List<Expression> el) {
-		final List<BoaType> types = new ArrayList<BoaType>();
-
-		for (final Expression e : el) {
-			if (e.type instanceof BoaFunction) {
-				callFinder.start(e);
-				if (callFinder.isCall()) {
-					types.add(((BoaFunction) e.type).getType());
-					continue;
-				}
-			}
-
-			types.add(e.type);
-		}
-
-		return types;
 	}
 
 	public void visit(final Factor n) {

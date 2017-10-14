@@ -91,7 +91,6 @@ public class LoopSensitivityAnalysis extends AbstractVisitorNoArgNoRet {
 		try {
 			this.idFinder.start(n.env.getOperand());
 			final String funcName = this.idFinder.getNames().toArray()[0].toString();
-			final BoaFunction f = n.env.getFunction(funcName, check(n));
 			if (funcName.equals("getvalue")) {
 				if (n.getArgsSize()==1) {
 					getValueFound = true;
@@ -131,32 +130,6 @@ public class LoopSensitivityAnalysis extends AbstractVisitorNoArgNoRet {
 		isRhs = true;
 		n.getRhs().accept(this);
 		isRhs = false;
-	}
-
-	protected List<BoaType> check(final Call c) {
-		if (c.getArgsSize() > 0)
-			return this.check(c.getArgs());
-
-		return new ArrayList<BoaType>();
-	}
-
-	protected List<BoaType> check(final List<Expression> el) {
-		final List<BoaType> types = new ArrayList<BoaType>();
-
-		for (final Expression e : el) {
-			// special case of a function call, use its return type instead of function type
-			if (e.type instanceof BoaFunction) {
-				callFinder.start(e);
-				if (callFinder.isCall()) {
-					types.add(((BoaFunction) e.type).getType());
-					continue;
-				}
-			}
-
-			types.add(e.type);
-		}
-
-		return types;
 	}
 
 	public void visit(final Factor n) {
