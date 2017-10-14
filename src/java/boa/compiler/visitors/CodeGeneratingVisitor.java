@@ -397,30 +397,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	 *
 	 * @author rdyer
 	 */
-	protected class IdentifierFindingVisitor extends AbstractVisitorNoArgNoRet {
-		protected final Set<String> names = new HashSet<String>();
-
-		public Set<String> getNames() {
-			return names;
-		}
-
-		/** {@inheritDoc} */
-		@Override
-		protected void initialize() {
-			names.clear();
-		}
-
-		/** {@inheritDoc} */
-		@Override
-		public void visit(final Identifier n) {
-			names.add(n.getToken());
-		}
-	}
-
-	/**
-	 *
-	 * @author rdyer
-	 */
 	protected class IndexeeFindingVisitor extends AbstractVisitorNoReturn<String> {
 		protected Factor firstFactor;
 		protected Node lastFactor;
@@ -469,42 +445,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			}
 		}
 	}
-
-	/**
-	 * Finds if the expression is a Call.
-	 *
-	 * @author rdyer
-	 */
-	protected class CallFindingVisitor extends AbstractVisitorNoArgNoRet {
-		protected boolean isCall;
-
-		public boolean isCall() {
-			return isCall;
-		}
-
-		/** {@inheritDoc} */
-		@Override
-		public void initialize() {
-			super.initialize();
-			isCall = false;
-		}
-
-		/** {@inheritDoc} */
-		@Override
-		public void visit(final Factor n) {
-			for (final Node node : n.getOps()) {
-				isCall = false;
-				node.accept(this);
-			}
-		}
-
-		/** {@inheritDoc} */
-		@Override
-		public void visit(final Call n) {
-			isCall = true;
-		}
-	}
-
 
 	protected final IdentifierFindingVisitor idFinder = new IdentifierFindingVisitor();
 	protected final IndexeeFindingVisitor indexeeFinder = new IndexeeFindingVisitor();

@@ -57,56 +57,6 @@ public class LoopSensitivityAnalysis extends AbstractVisitorNoArgNoRet {
 	public Identifier lastDeclVariable;
 	boolean isRhs = false;
 
-	protected class CallFindingVisitor extends AbstractVisitorNoArgNoRet {
-		protected boolean isCall;
-
-		public boolean isCall() {
-			return isCall;
-		}
-
-		/** {@inheritDoc} */
-		@Override
-		public void initialize() {
-			super.initialize();
-			isCall = false;
-		}
-
-		/** {@inheritDoc} */
-		@Override
-		public void visit(final Factor n) {
-			for (final Node node : n.getOps()) {
-				isCall = false;
-				node.accept(this);
-			}
-		}
-
-		/** {@inheritDoc} */
-		@Override
-		public void visit(final Call n) {
-			isCall = true;
-		}
-	}
-
-	protected class IdentifierFindingVisitor extends AbstractVisitorNoArgNoRet {
-		protected final Set<String> names = new HashSet<String>();
-
-		public Set<String> getNames() {
-			return names;
-		}
-
-		/** {@inheritDoc} */
-		@Override
-		protected void initialize() {
-			names.clear();
-		}
-
-		/** {@inheritDoc} */
-		@Override
-		public void visit(final Identifier n) {
-			names.add(n.getToken());
-		}
-	}
-
 	public boolean isLoopSensitive() {
 		return loopSensitive;
 	}
