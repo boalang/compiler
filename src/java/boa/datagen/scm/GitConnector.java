@@ -24,6 +24,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.jgit.api.Git;
@@ -67,6 +68,32 @@ public class GitConnector extends AbstractConnector {
 		revwalk.close();
 		repository.close();
 	}
+	
+	public Map<String, Integer> countChangedFiles() {
+		Map<String, Integer> counts = new HashMap<String, Integer>();
+		RevWalk temprevwalk = new RevWalk(repository);
+		try {
+			revwalk.reset();
+			Set<RevCommit> heads = getHeads();
+			revwalk.markStart(heads);
+			revwalk.sort(RevSort.TOPO, true);
+			revwalk.sort(RevSort.COMMIT_TIME_DESC, true);
+			revwalk.sort(RevSort.REVERSE, true);
+			for (final RevCommit rc: revwalk) {
+				final GitCommit gc = new GitCommit(this, repository, temprevwalk);
+				System.out.println(rc.getName());
+				int count = gc.countChangedFiles(rc);
+				counts.put(rc.getName(), count);
+			}
+		} catch (final IOException e) {
+			if (debug)
+				System.err.println("Git Error getting parsing HEAD commit for " + path + ". " + e.getMessage());
+		} finally {
+			temprevwalk.dispose();
+			temprevwalk.close();
+		}
+		return counts;
+	}
 
 	@Override
 	public void setRevisions() {
@@ -87,7 +114,7 @@ public class GitConnector extends AbstractConnector {
 			
 			for (final RevCommit rc: revwalk) {
 				final GitCommit gc = new GitCommit(this, repository, temprevwalk);
-
+				
 				gc.setId(rc.getName());
 				PersonIdent author = rc.getAuthorIdent(), committer = rc.getCommitterIdent();
 				if (author != null)

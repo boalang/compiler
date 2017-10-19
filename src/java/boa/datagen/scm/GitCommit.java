@@ -294,4 +294,46 @@ public class GitCommit extends AbstractCommit {
 		}
 		filePathGitObjectIds.put(path, diff.getNewId().toObjectId());
 	}
+
+	public int countChangedFiles(RevCommit rc) {
+		int count = 0;
+		if (rc.getParentCount() == 0) {
+			TreeWalk tw = new TreeWalk(repository);
+			tw.reset();
+			try {
+				tw.addTree(rc.getTree());
+				tw.setRecursive(true);
+				while (tw.next()) {
+					if (!tw.isSubtree()) {
+						count++;
+					}
+				}
+			} catch (IOException e) {
+				if (debug)
+					System.err.println(e.getMessage());
+			}
+			tw.close();
+		} else {
+			parentIndices = new int[rc.getParentCount()];
+			for (int i = 0; i < rc.getParentCount(); i++) {
+				final DiffFormatter df = new DiffFormatter(NullOutputStream.INSTANCE);
+				df.setRepository(repository);
+				df.setDiffComparator(RawTextComparator.DEFAULT);
+				df.setDetectRenames(true);
+
+				try {
+					RevCommit parent = revwalk.parseCommit(rc.getParent(i).getId());
+					final AbstractTreeIterator parentIter = new CanonicalTreeParser(null, repository.newObjectReader(), parent.getTree());
+					List<DiffEntry> diffs = df.scan(parentIter, new CanonicalTreeParser(null, repository.newObjectReader(), rc.getTree()));
+					if (diffs.size() > count)
+						count = diffs.size();
+				} catch (final IOException e) {
+					if (debug)
+						System.err.println("Git Error getting commit diffs: " + e.getMessage());
+				}
+				df.close();
+			}
+		}
+		return count;
+	}
 }
