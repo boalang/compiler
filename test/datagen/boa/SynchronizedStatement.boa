@@ -1,0 +1,10 @@
+{
+   "kind": "SYNCHRONIZED",
+   "expression": {
+      "kind": "VARACCESS",
+      "variable": "y"
+   }
+},
+{
+   "kind": "EMPTY"
+}
