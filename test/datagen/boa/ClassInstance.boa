@@ -14,7 +14,13 @@
                "new_type": {
                   "name": "Person",
                   "kind": "CLASS"
-               }
+               },
+               "method_args": [
+                  {
+                     "kind": "VARACCESS",
+                     "variable": "name"
+                  }
+               ]
             }
          }
       ]

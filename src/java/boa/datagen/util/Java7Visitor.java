@@ -2183,7 +2183,7 @@ public class Java7Visitor extends ASTVisitor {
 		}
 		for (Object a : node.arguments()) {
 			((org.eclipse.jdt.core.dom.Expression)a).accept(this);
-			b.addExpressions(expressions.pop());
+			b.addMethodArgs(expressions.pop());
 		}
 		if (node.getAnonymousClassDeclaration() != null) {
 			declarations.push(new ArrayList<boa.types.Ast.Declaration>());
