@@ -939,8 +939,164 @@ public class BoaAstIntrinsics {
 
 		String s = "";
 
-		// TODO
-		return s;
+		switch (stmt.getKind()) {
+			case EMPTY:
+				return ";";
+
+			case BLOCK:
+				s += "{\n";
+				indent++;
+				for (int i = 0; i < stmt.getStatementsCount(); i++)
+					s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
+				indent--;
+				s += indent() + "}";
+				return s;
+
+			case RETURN:
+				s += "return";
+				if (stmt.hasExpression())
+					s += " " + prettyprint(stmt.getExpression());
+				s += ";";
+				return s;
+			case BREAK:
+				s += "break";
+				if (stmt.hasExpression())
+					s += " " + prettyprint(stmt.getExpression());
+				s += ";";
+				return s;
+			case CONTINUE:
+				s += "continue";
+				if (stmt.hasExpression())
+					s += " " + prettyprint(stmt.getExpression());
+				s += ";";
+				return s;
+
+			case ASSERT:
+				s += "assert ";
+				s += prettyprint(stmt.getCondition());
+				if (stmt.hasExpression())
+					s += " " + prettyprint(stmt.getExpression());
+				s += ";";
+				return s;
+
+			case LABEL:
+				return prettyprint(stmt.getExpression()) + ": " + prettyprint(stmt.getStatements(0));
+
+			case CASE:
+				if (stmt.hasExpression())
+					return "case " + prettyprint(stmt.getExpression()) + ":";
+				return "default:";
+
+			case EXPRESSION:
+				return prettyprint(stmt.getExpression()) + ";";
+
+			case TYPEDECL:
+				return prettyprint(stmt.getTypeDeclaration());
+
+			case SYNCHRONIZED:
+				s += "synchronized () {\n";
+				indent++;
+				for (int i = 0; i < stmt.getStatementsCount(); i++)
+					s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
+				indent--;
+				s += "}";
+				return s;
+
+			case CATCH:
+				s += "catch (";
+				s += prettyprint(stmt.getVariableDeclaration());
+				s += ") {\n";
+				indent++;
+				for (int i = 0; i < stmt.getStatementsCount(); i++)
+					s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
+				indent--;
+				s += "}";
+				return s;
+
+			case TRY:
+				s += "try";
+				if (stmt.getInitializationsCount() > 0) {
+					s += "(";
+					for (int i = 0; i < stmt.getInitializationsCount(); i++) {
+						if (i > 0)
+							s += ", ";
+						s += prettyprint(stmt.getInitializations(i));
+					}
+					s += ")";
+				}
+				s += " ";
+				for (int i = 0; i < stmt.getStatementsCount(); i++)
+					s += prettyprint(stmt.getStatements(i)) + "\n";
+				return s;
+
+			case FOR:
+				s += "for (";
+				if (stmt.hasVariableDeclaration()) {
+					s += prettyprint(stmt.getVariableDeclaration()) + " : " + prettyprint(stmt.getExpression());
+				} else {
+					for (int i = 0; i < stmt.getInitializationsCount(); i++) {
+						if (i > 0)
+							s += ", ";
+						s += prettyprint(stmt.getInitializations(i));
+					}
+					s += "; " + prettyprint(stmt.getExpression()) + "; ";
+					for (int i = 0; i < stmt.getUpdatesCount(); i++) {
+						if (i > 0)
+							s += ", ";
+						s += prettyprint(stmt.getUpdates(i));
+					}
+				}
+				s += ")\n";
+				indent++;
+				s += indent() + prettyprint(stmt.getStatements(0)) + "\n";
+				indent--;
+				return s;
+
+			case DO:
+				s += "do\n";
+				indent++;
+				for (int i = 0; i < stmt.getStatementsCount(); i++)
+					s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
+				indent--;
+				s += indent() + "while (" + prettyprint(stmt.getExpression()) + ");";
+				return s;
+
+			case WHILE:
+				s += "while (" + prettyprint(stmt.getExpression()) + ") {\n";
+				indent++;
+				for (int i = 0; i < stmt.getStatementsCount(); i++)
+					s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
+				indent--;
+				s += indent() + "}";
+				return s;
+
+			case IF:
+				s += "if (" + prettyprint(stmt.getExpression()) + ")";
+				indent++;
+				s += indent() + prettyprint(stmt.getStatements(0)) + "\n";
+				indent--;
+				if (stmt.getStatementsCount() > 1) {
+					s += indent() + "else";
+					indent++;
+					s += indent() + prettyprint(stmt.getStatements(1)) + "\n";
+					indent--;
+				}
+				return s;
+
+			case SWITCH:
+				s += "switch (" + prettyprint(stmt.getExpression()) + ") {";
+				indent++;
+				for (int i = 0; i < stmt.getStatementsCount(); i++)
+					s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
+				indent--;
+				s += "}";
+				return s;
+
+			case THROW:
+				return "throw " + prettyprint(stmt.getExpression()) + ";";
+
+			default: return s;
+		}
 	}
 
 	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "Expression" })
