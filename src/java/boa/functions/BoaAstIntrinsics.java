@@ -754,6 +754,8 @@ public class BoaAstIntrinsics {
 
 	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "ASTRoot" })
 	public static String prettyprint(final ASTRoot r) {
+		if (r == null) return "";
+
 		String s = "";
 
 		for (final String i : r.getImportsList())
@@ -766,6 +768,8 @@ public class BoaAstIntrinsics {
 
 	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "Namespace" })
 	public static String prettyprint(final Namespace n) {
+		if (n == null) return "";
+
 		String s = indent();
 
 		if (n.getName().length() > 0) {
@@ -782,6 +786,8 @@ public class BoaAstIntrinsics {
 
 	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "Declaration" })
 	public static String prettyprint(final Declaration d) {
+		if (d == null) return "";
+
 		String s = "";
 
         // TODO
@@ -790,11 +796,14 @@ public class BoaAstIntrinsics {
 
 	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "Type" })
 	public static String prettyprint(final Type t) {
+		if (t == null) return "";
+
 		return t.getName();
 	}
 
 	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "Method" })
 	public static String prettyprint(final Method m) {
+		if (m == null) return "";
 		String s = "";
 
 		// TODO
@@ -803,6 +812,8 @@ public class BoaAstIntrinsics {
 
 	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "Variable" })
 	public static String prettyprint(final Variable v) {
+		if (v == null) return "";
+
 		String s = prettyprint(v.getModifiersList()) + prettyprint(v.getVariableType()) + " " + v.getName();
 
 		if (v.hasInitializer())
@@ -822,6 +833,8 @@ public class BoaAstIntrinsics {
 
 	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "Statement" })
 	public static String prettyprint(final Statement stmt) {
+		if (stmt == null) return "";
+
 		String s = "";
 
 		// TODO
@@ -830,6 +843,8 @@ public class BoaAstIntrinsics {
 
 	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "Expression" })
 	public static String prettyprint(final Expression e) {
+		if (e == null) return "";
+
 		String s = "";
 
 		switch (e.getKind()) {
@@ -839,8 +854,8 @@ public class BoaAstIntrinsics {
 				return ppInfix("+", e.getExpressionsList());
 			case OP_SUB:
 				if (e.getExpressionsCount() == 1)
-		            return ppPrefix("-", e);
-	            return ppInfix("-", e.getExpressionsList());
+					return ppPrefix("-", e);
+				return ppInfix("-", e.getExpressionsList());
 
 			case LOGICAL_AND:           return "(" + ppInfix("&&", e.getExpressionsList()) + ")";
 			case LOGICAL_OR:            return "(" + ppInfix("||", e.getExpressionsList()) + ")";
@@ -896,18 +911,95 @@ public class BoaAstIntrinsics {
 			case CONDITIONAL: return prettyprint(e.getExpressions(0)) + " ? " + prettyprint(e.getExpressions(0)) + " : " + prettyprint(e.getExpressions(2));
 			case NULLCOALESCE: return prettyprint(e.getExpressions(0)) + " ?? " + prettyprint(e.getExpressions(1));
 
-			// TODO
-			case VARDECL:
 			case METHODCALL:
-			case ARRAYINDEX:
-			case ARRAYINIT:
+				for (int i = 0; i < e.getExpressionsCount(); i++)
+					s += prettyprint(e.getExpressions(i)) + ".";
+				if (e.getGenericParametersCount() > 0) {
+					s += "<";
+					for (int i = 0; i < e.getGenericParametersCount(); i++) {
+						if (i > 0)
+							s += ", ";
+						s += prettyprint(e.getGenericParameters(i));
+					}
+					s += ">";
+				}
+				s += e.getMethod() + "(";
+				for (int i = 0; i < e.getMethodArgsCount(); i++) {
+					if (i > 0)
+						s += ", ";
+					s += prettyprint(e.getMethodArgs(i));
+				}
+				s += ")";
+				return s;
+
 			case TYPECOMPARE:
-			case NEW:
+				return prettyprint(e.getExpressions(0)) + " instanceof " + prettyprint(e.getNewType());
+
 			case NEWARRAY:
+				s += "new ";
+				s += prettyprint(e.getNewType());
+				for (int i = 0; i < e.getExpressionsCount(); i++)
+					s += prettyprint(e.getExpressions(i));
+				return s;
+
+			case NEW:
+				s += "new ";
+				s += prettyprint(e.getNewType());
+				if (e.getGenericParametersCount() > 0) {
+					s += "<";
+					for (int i = 0; i < e.getGenericParametersCount(); i++) {
+						if (i > 0)
+							s += ", ";
+						s += prettyprint(e.getGenericParameters(i));
+					}
+					s += ">";
+				}
+				s += "(";
+				for (int i = 0; i < e.getExpressionsCount(); i++) {
+					if (i > 0)
+						s += ", ";
+					s += prettyprint(e.getExpressions(i));
+				}
+				s += ")";
+				if (e.hasAnonDeclaration())
+					s += prettyprint(e.getAnonDeclaration());
+				return s;
+
+			case ARRAYINDEX:
+				return prettyprint(e.getExpressions(0)) + "[" + prettyprint(e.getExpressions(1)) + "]";
+
+			case ARRAYINIT:
+				s += "{";
+				for (int i = 0; i < e.getExpressionsCount(); i++) {
+					if (i > 0)
+						s += ", ";
+					s += prettyprint(e.getExpressions(i));
+				}
+				s += "}";
+				return s;
+
+			// TODO verify this case
 			case ANNOTATION:
+				return prettyprint(e.getAnnotation());
+
+			// TODO verify this case
+			case VARDECL:
+				for (int i = 0; i < e.getVariableDecls(0).getModifiersCount(); i++)
+					s += prettyprint(e.getVariableDecls(0).getModifiers(i)) + " ";
+				s += prettyprint(e.getVariableDecls(0).getVariableType()) + " ";
+				for (int i = 0; i < e.getVariableDeclsCount(); i++) {
+					if (i > 0)
+						s += ", ";
+					s += e.getVariableDecls(i).getName();
+					if (e.getVariableDecls(i).hasInitializer())
+						s += " = " + prettyprint(e.getVariableDecls(i).getInitializer());
+				}
+				return s;
+
+			// TODO
 			case METHOD_REFERENCE:
+			// TODO
 			case LAMBDA:
-			case ANON_METHOD:
 			default: return s;
 		}
 	}
@@ -936,6 +1028,8 @@ public class BoaAstIntrinsics {
 
 	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "Modifier" })
 	public static String prettyprint(final Modifier m) {
+		if (m == null) return "";
+
 		String s = "";
 
 		switch (m.getKind()) {
