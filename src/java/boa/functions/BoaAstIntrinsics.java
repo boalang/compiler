@@ -788,11 +788,80 @@ public class BoaAstIntrinsics {
 	public static String prettyprint(final Declaration d) {
 		if (d == null) return "";
 
-		String s = "";
+		String s = indent() + prettyprint(d.getModifiersList()) + " ";
 
-        // TODO
-        return s;
-    }
+		switch (d.getKind()) {
+			case INTERFACE:
+				s += "interface " + d.getName();
+				if (d.getGenericParametersCount() > 0) {
+					s += "<";
+					for (int i = 0; i < d.getGenericParametersCount(); i++) {
+						if (i != 0) s += ", ";
+						s += prettyprint(d.getGenericParameters(i));
+					}
+					s += ">";
+				}
+				if (d.getParentsCount() > 0) {
+					s += " extends ";
+					for (int i = 0; i < d.getParentsCount(); i++) {
+						if (i != 0) s += ", ";
+						s += prettyprint(d.getParents(i));
+					}
+				}
+				s += " {\n";
+				break;
+			case ANONYMOUS:
+				// TODO verify
+				break;
+			case ENUM:
+				// TODO verify
+				s += "enum " + d.getName();
+				break;
+			case ANNOTATION:
+				// TODO verify
+				s += "@interface ";
+			case CLASS:
+				s += "class " + d.getName();
+				if (d.getGenericParametersCount() > 0) {
+					s += "<";
+					for (int i = 0; i < d.getGenericParametersCount(); i++) {
+						if (i != 0) s += ", ";
+						s += prettyprint(d.getGenericParameters(i));
+					}
+					s += ">";
+				}
+				if (d.getParentsCount() > 0) {
+					int i = 0;
+					if (d.getParents(i).getKind() == TypeKind.CLASS)
+						s += " extends " + prettyprint(d.getParents(i++));
+					if (i < d.getParentsCount()) {
+						s += " implements ";
+						for (int j = i; i < d.getParentsCount(); i++) {
+							if (i != j) s += ", ";
+							s += prettyprint(d.getParents(i));
+						}
+					}
+				}
+				break;
+		}
+
+		s += " {\n";
+
+		indent++;
+
+		for (final Variable v : d.getFieldsList())
+			s += prettyprint(v);
+		for (final Method m : d.getMethodsList())
+			s += prettyprint(m);
+		for (final Declaration d2 : d.getNestedDeclarationsList())
+			s += prettyprint(d2);
+
+		indent--;
+
+		s += indent() + "}\n";
+
+		return s;
+	}
 
 	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "Type" })
 	public static String prettyprint(final Type t) {
