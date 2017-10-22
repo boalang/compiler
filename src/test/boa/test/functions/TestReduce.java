@@ -17,7 +17,7 @@
 package boa.test.functions;
 
 import static org.junit.Assert.assertEquals;
-import static boa.functions.BoaNormalFormIntrinsics.parseexpression;
+import static boa.functions.BoaAstIntrinsics.parseexpression;
 
 import java.util.Arrays;
 import java.util.Collection;
