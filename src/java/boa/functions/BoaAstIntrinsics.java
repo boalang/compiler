@@ -804,9 +804,42 @@ public class BoaAstIntrinsics {
 	@FunctionSpec(name = "prettyprint", returnType = "string", formalParameters = { "Method" })
 	public static String prettyprint(final Method m) {
 		if (m == null) return "";
-		String s = "";
+		String s = indent();
 
-		// TODO
+		for (int i = 0; i < m.getModifiersCount(); i++)
+			s += prettyprint(m.getModifiers(i)) + " ";
+
+		if (m.getGenericParametersCount() > 0) {
+			s += "<";
+			for (int i = 0; i < m.getGenericParametersCount(); i++) {
+				if (i > 0)
+					s += ", ";
+				s += prettyprint(m.getGenericParameters(i));
+			}
+			s += "> ";
+		}
+
+		s += prettyprint(m.getReturnType()) + " " + m.getName() + "(";
+		for (int i = 0; i < m.getArgumentsCount(); i++) {
+			if (i > 0)
+				s += ", ";
+			s += prettyprint(m.getArguments(i));
+		}
+		s += ") ";
+
+		if (m.getExceptionTypesCount() > 0) {
+			s += "throws ";
+			for (int i = 0; i < m.getExceptionTypesCount(); i++)
+				s += prettyprint(m.getExceptionTypes(i)) + " ";
+		}
+
+		s += "{\n";
+		indent++;
+		for (int i = 0; i < m.getStatementsCount(); i++)
+			s += indent() + prettyprint(m.getStatements(i)) + "\n";
+		indent--;
+		s += "}\n";
+
 		return s;
 	}
 
