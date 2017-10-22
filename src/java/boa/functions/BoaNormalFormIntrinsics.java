@@ -18,12 +18,7 @@ package boa.functions;
 
 import java.util.*;
 
-import org.eclipse.jdt.core.dom.AST;
-import org.eclipse.jdt.core.dom.ASTParser;
-import org.eclipse.jdt.core.JavaCore;
-
 import boa.types.Ast.Expression.ExpressionKind;
-import boa.datagen.util.Java8Visitor;
 import boa.types.Ast.Expression;
 
 /**
@@ -495,33 +490,6 @@ public class BoaNormalFormIntrinsics {
 		}
 
 		return e;
-	}
-
-	/**
-	 * Converts a string expression into an AST.
-	 *
-	 * @param s the string to parse/convert
-	 * @return the AST representation of the string
-	 */
-	@FunctionSpec(name = "parseexpression", returnType = "Expression", formalParameters = { "string" })
-	public static Expression parseexpression(final String s) {
-		final ASTParser parser = ASTParser.newParser(AST.JLS8);
-		parser.setKind(ASTParser.K_EXPRESSION);
-		parser.setSource(s.toCharArray());
-
-		@SuppressWarnings("rawtypes")
-		final Map options = JavaCore.getOptions();
-		JavaCore.setComplianceOptions(JavaCore.VERSION_1_8, options);
-		parser.setCompilerOptions(options);
-
-		try {
-			final org.eclipse.jdt.core.dom.Expression e = (org.eclipse.jdt.core.dom.Expression) parser.createAST(null);
-			final Java8Visitor visitor = new Java8Visitor(s, null);
-			e.accept(visitor);
-			return visitor.getExpression();
-		} catch (final Exception e) {
-			return null;
-		}
 	}
 
 	/**

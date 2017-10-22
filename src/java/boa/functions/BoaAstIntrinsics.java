@@ -20,6 +20,7 @@ package boa.functions;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 
 import org.apache.hadoop.conf.Configuration;
@@ -30,10 +31,15 @@ import org.apache.hadoop.io.MapFile;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper.Context;
 
+import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTParser;
+import org.eclipse.jdt.core.JavaCore;
+
 import com.google.protobuf.CodedInputStream;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 import boa.datagen.DefaultProperties;
+import boa.datagen.util.Java8Visitor;
 import boa.types.Ast.*;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
@@ -960,6 +966,33 @@ public class BoaAstIntrinsics {
 			case ABSTRACT:     return "abstract";
 
 			default: return s;
+		}
+	}
+
+	/**
+	 * Converts a string expression into an AST.
+	 *
+	 * @param s the string to parse/convert
+	 * @return the AST representation of the string
+	 */
+	@FunctionSpec(name = "parseexpression", returnType = "Expression", formalParameters = { "string" })
+	public static Expression parseexpression(final String s) {
+		final ASTParser parser = ASTParser.newParser(AST.JLS8);
+		parser.setKind(ASTParser.K_EXPRESSION);
+		parser.setSource(s.toCharArray());
+
+		@SuppressWarnings("rawtypes")
+		final Map options = JavaCore.getOptions();
+		JavaCore.setComplianceOptions(JavaCore.VERSION_1_8, options);
+		parser.setCompilerOptions(options);
+
+		try {
+			final org.eclipse.jdt.core.dom.Expression e = (org.eclipse.jdt.core.dom.Expression) parser.createAST(null);
+			final Java8Visitor visitor = new Java8Visitor(s, null);
+			e.accept(visitor);
+			return visitor.getExpression();
+		} catch (final Exception e) {
+			return null;
 		}
 	}
 }
