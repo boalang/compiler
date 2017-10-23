@@ -70,8 +70,14 @@ public class BoaNormalFormIntrinsics {
 			case OP_SUB:
 			case OP_MULT:
 			case OP_DIV:
+			case OP_DEC:
+			case OP_INC:
+			case OP_MOD:
 			case PAREN:
 			case METHODCALL:
+			case LOGICAL_AND:
+			case LOGICAL_OR:
+			case LOGICAL_NOT:
 				return createExpression(e.getKind(), convertedExpression.toArray(new Expression[convertedExpression.size()]));
 
 			case VARACCESS: //replace with symbolic names
