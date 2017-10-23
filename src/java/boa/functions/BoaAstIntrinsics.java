@@ -812,14 +812,11 @@ public class BoaAstIntrinsics {
 				s += " {\n";
 				break;
 			case ANONYMOUS:
-				// TODO verify
 				break;
 			case ENUM:
-				// TODO verify
 				s += "enum " + d.getName();
 				break;
 			case ANNOTATION:
-				// TODO verify
 				s += "@interface ";
 			case CLASS:
 				s += "class " + d.getName();
@@ -851,7 +848,7 @@ public class BoaAstIntrinsics {
 		indent++;
 
 		for (final Variable v : d.getFieldsList())
-			s += prettyprint(v);
+			s += indent() + prettyprint(v) + ";\n";
 		for (final Method m : d.getMethodsList())
 			s += prettyprint(m);
 		for (final Declaration d2 : d.getNestedDeclarationsList())
@@ -903,12 +900,9 @@ public class BoaAstIntrinsics {
 				s += prettyprint(m.getExceptionTypes(i)) + " ";
 		}
 
-		s += "{\n";
-		indent++;
+		s += "\n";
 		for (int i = 0; i < m.getStatementsCount(); i++)
 			s += indent() + prettyprint(m.getStatements(i)) + "\n";
-		indent--;
-		s += "}\n";
 
 		return s;
 	}
@@ -1004,14 +998,14 @@ public class BoaAstIntrinsics {
 				return s;
 
 			case CATCH:
-				s += "catch (";
+				s += indent() + "catch (";
 				s += prettyprint(stmt.getVariableDeclaration());
 				s += ") {\n";
 				indent++;
 				for (int i = 0; i < stmt.getStatementsCount(); i++)
 					s += indent() + prettyprint(stmt.getStatements(i)) + "\n";
 				indent--;
-				s += "}";
+				s += indent() + "}";
 				return s;
 
 			case TRY:
@@ -1072,12 +1066,12 @@ public class BoaAstIntrinsics {
 				return s;
 
 			case IF:
-				s += "if (" + prettyprint(stmt.getExpression()) + ")";
+				s += "if (" + prettyprint(stmt.getExpression()) + ")\n";
 				indent++;
 				s += indent() + prettyprint(stmt.getStatements(0)) + "\n";
 				indent--;
 				if (stmt.getStatementsCount() > 1) {
-					s += indent() + "else";
+					s += indent() + "else\n";
 					indent++;
 					s += indent() + prettyprint(stmt.getStatements(1)) + "\n";
 					indent--;
@@ -1237,11 +1231,9 @@ public class BoaAstIntrinsics {
 				s += "}";
 				return s;
 
-			// TODO verify this case
 			case ANNOTATION:
 				return prettyprint(e.getAnnotation());
 
-			// TODO verify this case
 			case VARDECL:
 				for (int i = 0; i < e.getVariableDecls(0).getModifiersCount(); i++)
 					s += prettyprint(e.getVariableDecls(0).getModifiers(i)) + " ";
