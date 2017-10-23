@@ -40,6 +40,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 
 import boa.datagen.DefaultProperties;
 import boa.datagen.util.Java8Visitor;
+import boa.datagen.util.JavaErrorCheckVisitor;
 import boa.types.Ast.*;
 import boa.types.Code.CodeRepository;
 import boa.types.Code.Revision;
@@ -1346,6 +1347,7 @@ public class BoaAstIntrinsics {
 		} catch (final Exception e) {
 			// do nothing
 		}
+
 		final Expression.Builder eb = Expression.newBuilder();
 		eb.setKind(Expression.ExpressionKind.OTHER);
 		return eb.build();
@@ -1371,11 +1373,15 @@ public class BoaAstIntrinsics {
 		final ASTRoot.Builder ast = ASTRoot.newBuilder();
 		try {
 			final org.eclipse.jdt.core.dom.CompilationUnit cu = (org.eclipse.jdt.core.dom.CompilationUnit) parser.createAST(null);
-			final Java8Visitor visitor = new Java8Visitor(s, null);
-			cu.accept(visitor);
-			ast.addNamespaces(visitor.getNamespaces(cu));
-			for (final String i : visitor.getImports())
-				ast.addImports(i);
+			final JavaErrorCheckVisitor errorCheck = new JavaErrorCheckVisitor();
+			cu.accept(errorCheck);
+
+			if (!errorCheck.hasError) {
+				final Java8Visitor visitor = new Java8Visitor(s, null);
+				ast.addNamespaces(visitor.getNamespaces(cu));
+				for (final String i : visitor.getImports())
+					ast.addImports(i);
+			}
 		} catch (final Exception e) {
 			// do nothing
 		}
