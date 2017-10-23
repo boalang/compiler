@@ -70,10 +70,9 @@ public class BoaNormalFormIntrinsics {
 			case OP_SUB:
 			case OP_MULT:
 			case OP_DIV:
-				return createExpression(e.getKind(), convertedExpression.toArray(new Expression[convertedExpression.size()]));
-
 			case PAREN:
-				return convertedExpression.get(0);
+			case METHODCALL:
+				return createExpression(e.getKind(), convertedExpression.toArray(new Expression[convertedExpression.size()]));
 
 			case VARACCESS: //replace with symbolic names
 				if (e.equals(reciever))
@@ -84,7 +83,6 @@ public class BoaNormalFormIntrinsics {
 						return createVariable("arg$"+Integer.toString(i));
 				return e;
 
-			case METHODCALL:
 			case LITERAL:
 			default:
 				return e;
