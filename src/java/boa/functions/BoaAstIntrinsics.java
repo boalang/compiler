@@ -759,10 +759,25 @@ public class BoaAstIntrinsics {
 
 		String s = "";
 
+		// FIXME temporary fix for Java, so package is printed before imports
+		if (r.getNamespacesCount() == 1) {
+			final Namespace n = r.getNamespaces(0);
+			if (n.getName().length() > 0) {
+				if (n.getModifiersCount() > 0)
+					s += prettyprint(n.getModifiersList()) + " ";
+				s += "package " + n.getName() + ";\n";
+			}
+		}
+
 		for (final String i : r.getImportsList())
 			s += indent() + "import " + i + "\n";
-		for (final Namespace n : r.getNamespacesList())
-			s += prettyprint(n);
+		// FIXME temporary fix for Java, so package is printed before imports
+		if (r.getNamespacesCount() == 1)
+			for (final Declaration d : r.getNamespaces(0).getDeclarationsList())
+				s += prettyprint(d);
+		else
+			for (final Namespace n : r.getNamespacesList())
+				s += prettyprint(n);
 
 		return s;
 	}
