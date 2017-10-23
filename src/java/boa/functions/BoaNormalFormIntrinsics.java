@@ -990,15 +990,32 @@ public class BoaNormalFormIntrinsics {
 			return ((Long)o).longValue() < 0L;
 
 		final Expression e = (Expression)o;
-		if (e.getKind() == ExpressionKind.OP_SUB && e.getExpressionsCount() == 1)
-			return true;
+		switch (e.getKind()) {
+			case OP_SUB:
+				return e.getExpressionsCount() == 1;
+			case OP_MULT:
+				for (int i = 0; i < e.getExpressionsCount(); i++)
+					if (isNegative(e.getExpressions(i)))
+						return true;
+				return false;
+			case PAREN:
+				return isNegative(e.getExpressions(0));
+			default:
+				return false;
+		}
+	}
 
-		if (e.getKind() == ExpressionKind.OP_MULT)
-			for (int i = 0; i < e.getExpressionsCount(); i++)
-				if (isNegative(e.getExpressions(i)))
-					return true;
-
-		return false;
+	/**
+	 * Similar to negate(), but ensures the returned value is always an Expression.
+	 *
+	 * @param o an object to negate (either an Expression or a Number)
+	 * @return an Expression representing the negated form of o
+	 */
+	private static Expression negateExpression(final Object o) {
+		final Object neg = negate(o);
+		if (neg instanceof Expression)
+			return (Expression)neg;
+		return createLiteral("" + neg);
 	}
 
 	/**
@@ -1014,20 +1031,40 @@ public class BoaNormalFormIntrinsics {
 			return - ((Long)o).longValue();
 
 		final Expression e = (Expression)o;
-		if (e.getKind() == ExpressionKind.OP_SUB && e.getExpressionsCount() == 1)
-			return e.getExpressions(0);
+		final Expression.Builder b = Expression.newBuilder(e);
 
-		if (e.getKind() == ExpressionKind.OP_MULT)
-			for (int i = 0; i < e.getExpressionsCount(); i++)
-				if (isNegative(e.getExpressions(i))) {
-					final Expression.Builder b = Expression.newBuilder(e);
-					final Object neg = negate(e.getExpressions(i));
-					if (neg instanceof Expression)
-						b.setExpressions(i, (Expression)neg);
-					else
-						b.setExpressions(i, createLiteral("" + neg));
-					return b.build();
-				}
+		switch (e.getKind()) {
+			case OP_SUB:
+				if (e.getExpressionsCount() == 1)
+					return e.getExpressions(0);
+
+				b.setKind(ExpressionKind.OP_ADD);
+				b.setExpressions(0, negateExpression(e.getExpressions(0)));
+				return b.build();
+
+			case OP_ADD:
+				if (e.getExpressionsCount() == 1)
+					return createExpression(ExpressionKind.OP_SUB, e.getExpressions(0));
+
+				b.setKind(ExpressionKind.OP_SUB);
+				b.setExpressions(0, negateExpression(e.getExpressions(0)));
+				return b.build();
+
+			case OP_MULT:
+				// find first negative term - if none, use the first term
+				int i = 0;
+				for (; i < e.getExpressionsCount() && !isNegative(e.getExpressions(i)); i++)
+					;
+				if (i == e.getExpressionsCount())
+					i = 0;
+
+				// negate the term
+				b.setExpressions(i, negateExpression(e.getExpressions(i)));
+				return b.build();
+
+			default:
+				break;
+		}
 
 		return createExpression(ExpressionKind.OP_SUB, e);
 	}
