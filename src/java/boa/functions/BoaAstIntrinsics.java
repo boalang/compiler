@@ -1347,4 +1347,36 @@ public class BoaAstIntrinsics {
 			return null;
 		}
 	}
+
+	/**
+	 * Converts a string into an AST.
+	 *
+	 * @param s the string to parse/convert
+	 * @return the AST representation of the string
+	 */
+	@FunctionSpec(name = "parse", returnType = "ASTRoot", formalParameters = { "string" })
+	public static ASTRoot parse(final String s) {
+		final ASTParser parser = ASTParser.newParser(AST.JLS8);
+		parser.setKind(ASTParser.K_COMPILATION_UNIT);
+		parser.setSource(s.toCharArray());
+
+		@SuppressWarnings("rawtypes")
+		final Map options = JavaCore.getOptions();
+		JavaCore.setComplianceOptions(JavaCore.VERSION_1_8, options);
+		parser.setCompilerOptions(options);
+
+		final ASTRoot.Builder ast = ASTRoot.newBuilder();
+		try {
+			final org.eclipse.jdt.core.dom.CompilationUnit cu = (org.eclipse.jdt.core.dom.CompilationUnit) parser.createAST(null);
+			final Java8Visitor visitor = new Java8Visitor(s, null);
+			cu.accept(visitor);
+			ast.addNamespaces(visitor.getNamespaces(cu));
+			for (final String i : visitor.getImports())
+				ast.addImports(i);
+		} catch (final Exception e) {
+			// do nothing
+		}
+
+		return ast.build();
+	}
 }
