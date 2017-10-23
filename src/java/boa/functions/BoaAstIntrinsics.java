@@ -1344,8 +1344,11 @@ public class BoaAstIntrinsics {
 			e.accept(visitor);
 			return visitor.getExpression();
 		} catch (final Exception e) {
-			return null;
+			// do nothing
 		}
+		final Expression.Builder eb = Expression.newBuilder();
+		eb.setKind(Expression.ExpressionKind.OTHER);
+		return eb.build();
 	}
 
 	/**
