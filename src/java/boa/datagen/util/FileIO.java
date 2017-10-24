@@ -21,6 +21,7 @@ import java.io.*;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
+import java.util.Scanner;
 
 /**
  * @author hoan
@@ -168,5 +169,14 @@ public class FileIO {
 			fos.close();
 		}
 		return file.getAbsolutePath();
+	}
+	
+	public static String normalizeEOL(String source) {
+		StringBuilder sb = new StringBuilder();
+		Scanner sc = new Scanner(source);
+		while (sc.hasNextLine())
+			sb.append(sc.nextLine() + "\n");
+		sc.close();
+		return sb.toString();
 	}
 }

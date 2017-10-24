@@ -44,6 +44,7 @@ import static org.junit.Assert.assertEquals;
 import boa.types.Ast.ASTRoot;
 import boa.types.Ast.Declaration;
 import boa.types.Diff.ChangedFile;
+import boa.datagen.util.FileIO;
 import boa.datagen.util.Java7Visitor;
 import boa.datagen.util.ProtoMessageVisitor;
 import boa.test.compiler.BaseTest;
@@ -110,7 +111,7 @@ public class Java7BaseTest extends BaseTest {
 		parser.setResolveBindings(true);
 		parser.createASTs(fileContents, new String[]{""}, null, new String[0], r, null);
 
-		return sb.toString();
+		return FileIO.normalizeEOL(sb.toString());
 	}
 
 	protected static String getWrapped(final String content) {
@@ -158,7 +159,7 @@ public class Java7BaseTest extends BaseTest {
 						"      }\n" +
 						"   ]\n" +
 						"}",
-						parseWrapped(java)
+						parseWrapped(java).trim()
 				);
 	}
 
