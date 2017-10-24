@@ -20,9 +20,7 @@ import java.util.*;
 
 import boa.types.Ast.Expression.ExpressionKind;
 import boa.types.Ast.Expression;
-
-import static boa.functions.BoaAstIntrinsics.parseexpression;
-import static boa.functions.BoaAstIntrinsics.prettyprint;
+import static boa.functions.BoaAstIntrinsics.*;
 
 /**
  * Boa functions for converting Expressions into various normal forms.
