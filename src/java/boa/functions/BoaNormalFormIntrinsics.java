@@ -21,6 +21,9 @@ import java.util.*;
 import boa.types.Ast.Expression.ExpressionKind;
 import boa.types.Ast.Expression;
 
+import static boa.functions.BoaAstIntrinsics.parseexpression;
+import static boa.functions.BoaAstIntrinsics.prettyprint;
+
 /**
  * Boa functions for converting Expressions into various normal forms.
  *
@@ -74,19 +77,23 @@ public class BoaNormalFormIntrinsics {
 			case OP_INC:
 			case OP_MOD:
 			case PAREN:
-			case METHODCALL:
 			case LOGICAL_AND:
 			case LOGICAL_OR:
 			case LOGICAL_NOT:
 				return createExpression(e.getKind(), convertedExpression.toArray(new Expression[convertedExpression.size()]));
 
+			case METHODCALL:
+				String var = prettyprint(convertedExpression.get(0));
+				return parseexpression(var + "." + e.getMethod() + "()");
+
 			case VARACCESS: //replace with symbolic names
 				if (e.equals(reciever))
 					return createVariable("rcv$");
 
-				for (int i = 0; i < arguments.length; i++)
+				for (int i = 0; i < arguments.length; i++) {
 					if (e.equals(arguments[i]))
-						return createVariable("arg$"+Integer.toString(i));
+						return createVariable("arg$" + Integer.toString(i));
+				}
 				return e;
 
 			case LITERAL:
@@ -358,7 +365,7 @@ public class BoaNormalFormIntrinsics {
 	// helper for sorting array lists
 	private static class ExpressionArrayComparator implements Comparator <Object[]> {
 		public int compare(final Object[] e1, final Object[] e2) {
-			return BoaAstIntrinsics.prettyprint((Expression)e1[0]).compareTo(BoaAstIntrinsics.prettyprint((Expression)e2[0]));
+			return prettyprint((Expression)e1[0]).compareTo(prettyprint((Expression)e2[0]));
 		}
 	}
 
@@ -1081,7 +1088,7 @@ public class BoaNormalFormIntrinsics {
 	 */
 	public static class ExpressionComparator implements Comparator<Expression> {
 		public int compare(final Expression e1, final Expression e2) {
-			return BoaAstIntrinsics.prettyprint(e1).compareTo(BoaAstIntrinsics.prettyprint(e2));
+			return prettyprint(e1).compareTo(prettyprint(e2));
 		}
 	}
 
