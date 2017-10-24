@@ -387,7 +387,8 @@ characterLiteral
 	;
 
 stringLiteral
-	: StringLiteral
+	: MultilineStringLiteral
+	| StringLiteral
 	| RegexLiteral
 	;
 
@@ -562,6 +563,10 @@ RegexLiteral
 fragment
 RegexCharacter
 	: ~[`\n\r]
+	;
+
+MultilineStringLiteral
+	: '"""' (StringCharacter | [\n\r])* '"""'
 	;
 
 StringLiteral
