@@ -79,30 +79,37 @@ public abstract class BoaAbstractTraversal<T1> {
 	}
 
 	public final void dfsForward(final CFGNode node, java.util.HashMap<Integer, String> nodeVisitStatus) throws Exception {
-		try {
-			traverse(node, false);
-			nodeVisitStatus.put(node.getId(), "visited");
-			for (final CFGNode succ : node.getSuccessorsList()) {
-				if (nodeVisitStatus.get(succ.getId()).equals("unvisited")) {
-					dfsForward(succ, nodeVisitStatus);
+		final Stack<CFGNode> s = new Stack<CFGNode>();
+		s.push(node);
+		while (!s.isEmpty()) {
+			final CFGNode n = s.pop();
+			if ("unvisited".equals(nodeVisitStatus.get(n.getId()))) {
+				traverse(n, false);
+				nodeVisitStatus.put(n.getId(), "visited");
+				for (int i = n.getSuccessorsList().size() - 1; i >= 0; i--) {
+					s.push(n.getSuccessorsList().get(i));
 				}
 			}
-		} catch (final java.lang.StackOverflowError e) {
-			return;
 		}
 	}
 
 	public final void dfsBackward(final CFGNode node, java.util.HashMap<Integer, String> nodeVisitStatus) throws Exception {
-		traverse(node, false);
-		nodeVisitStatus.put(node.getId(), "visited");
-		for (final CFGNode pred : node.getPredecessorsList()) {
-			if (nodeVisitStatus.get(pred.getId()).equals("unvisited")) {
-				dfsBackward(pred, nodeVisitStatus);
+		final Stack<CFGNode> s = new Stack<CFGNode>();
+		s.push(node);
+		while (!s.isEmpty()) {
+			final CFGNode n = s.pop();
+			if ("unvisited".equals(nodeVisitStatus.get(n.getId()))) {
+				traverse(n, false);
+				nodeVisitStatus.put(n.getId(), "visited");
+				for (int i = n.getPredecessorsList().size() - 1; i >= 0; i--) {
+					s.push(n.getPredecessorsList().get(i));
+				}
 			}
 		}
 	}
 
 	public final void postorderBackward(final CFGNode node, java.util.HashMap<Integer, String> nodeVisitStatus) throws Exception {
+		// FIXME remove recursion
 		nodeVisitStatus.put(node.getId(), "visited");
 		for (final CFGNode succ : node.getSuccessorsList()) {
 			if (nodeVisitStatus.get(succ.getId()).equals("unvisited")) {
@@ -113,6 +120,7 @@ public abstract class BoaAbstractTraversal<T1> {
 	}
 
 	public final void postorderForward(final CFGNode node, java.util.HashMap<Integer, String> nodeVisitStatus) throws Exception {
+		// FIXME remove recursion
 		nodeVisitStatus.put(node.getId(), "visited");
 		for (final CFGNode pred : node.getPredecessorsList()) {
 			if (nodeVisitStatus.get(pred.getId()).equals("unvisited")) {
@@ -123,6 +131,7 @@ public abstract class BoaAbstractTraversal<T1> {
 	}
 
 	public final void populateWithPostorder(final CFGNode node, java.util.HashMap<Integer, String> nodeVisitStatus, Queue<CFGNode> queue) throws Exception {
+		// FIXME remove recursion
 		nodeVisitStatus.put(node.getId(), "visited");
 		for (final CFGNode succ : node.getSuccessorsList()) {
 			if (nodeVisitStatus.get(succ.getId()).equals("unvisited")) {
@@ -133,6 +142,7 @@ public abstract class BoaAbstractTraversal<T1> {
 	}
 
 	public final void populateWithReversePostorder(final CFGNode node, java.util.HashMap<Integer, String> nodeVisitStatus, Stack<CFGNode> stack) throws Exception {
+		// FIXME remove recursion
 		nodeVisitStatus.put(node.getId(), "visited");
 		for (final CFGNode succ : node.getSuccessorsList()) {
 			if (nodeVisitStatus.get(succ.getId()).equals("unvisited")) {
@@ -148,6 +158,7 @@ public abstract class BoaAbstractTraversal<T1> {
 			final CFGNode node = stack.pop();
 			traverse(node, true);
 			nodeCount++;
+			// FIXME why is this here?
 			if (nodeCount > 3500) {
 				return;
 			}
