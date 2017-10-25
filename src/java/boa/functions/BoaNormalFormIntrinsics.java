@@ -606,7 +606,14 @@ public class BoaNormalFormIntrinsics {
 			case LT:
 			case GTEQ:
 			case LTEQ:
-				return createExpression(e.getKind(), results.toArray(new Expression[results.size()]));
+				Expression[] results1 = new Expression[results.size()] ;
+				for(int i = 0; i < results.size(); i++) {
+					if (results.get(i) instanceof Long || results.get(i) instanceof Double)
+						results1[i] = createLiteral(results.get(i).toString());
+					else
+						results1[i] = (Expression)results.get(i);
+				}
+				return createExpression(e.getKind(), results1);
 
 			case OP_ADD:
 				// handle cases like '+x' or '+3'
