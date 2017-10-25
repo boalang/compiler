@@ -73,18 +73,25 @@ public class BoaNormalFormIntrinsics {
 			case OP_SUB:
 			case OP_MULT:
 			case OP_DIV:
-			case OP_DEC:
-			case OP_INC:
 			case OP_MOD:
 			case PAREN:
 			case LOGICAL_AND:
 			case LOGICAL_OR:
 			case LOGICAL_NOT:
+			case ASSIGN:
+			case NEW:
 				return createExpression(e.getKind(), convertedExpression.toArray(new Expression[convertedExpression.size()]));
 
+			case OP_DEC:
+			case OP_INC:
+			case ARRAYINDEX:
 			case METHODCALL:
-				String var = prettyprint(convertedExpression.get(0));
-				return parseexpression(var + "." + e.getMethod() + "()");
+				final Expression.Builder b;
+				b = Expression.newBuilder(e);
+				for(int i = 0; i < convertedExpression.size(); i++) {
+					b.setExpressions(i, convertedExpression.get(i));
+				}
+				return b.build();
 
 			case VARACCESS: //replace with symbolic names
 				if (e.equals(reciever))
@@ -95,6 +102,31 @@ public class BoaNormalFormIntrinsics {
 						return createVariable("arg$" + Integer.toString(i));
 				}
 				return e;
+
+            //Handle them as per need
+			case NEWARRAY:
+			case ARRAYINIT:
+			case ASSIGN_ADD:
+			case ASSIGN_BITAND:
+			case ASSIGN_BITOR:
+			case ASSIGN_BITXOR:
+			case ASSIGN_DIV:
+			case ASSIGN_LSHIFT:
+			case ASSIGN_MOD:
+			case ASSIGN_MULT:
+			case ASSIGN_RSHIFT:
+			case ASSIGN_SUB:
+			case ASSIGN_UNSIGNEDRSHIFT:
+			case BIT_AND:
+			case BIT_LSHIFT:
+			case BIT_NOT:
+			case BIT_OR:
+			case BIT_RSHIFT:
+			case BIT_UNSIGNEDRSHIFT:
+			case BIT_XOR:
+			case CAST:
+			case CONDITIONAL:
+			case NULLCOALESCE:
 
 			case LITERAL:
 			default:
@@ -125,15 +157,47 @@ public class BoaNormalFormIntrinsics {
 			case OP_SUB:
 			case OP_MULT:
 			case OP_DIV:
-				return createExpression(e.getKind(), changedExpression.toArray(new Expression[changedExpression.size()]));
-
+			case OP_MOD:
 			case PAREN:
-				return changedExpression.get(0);
+			case LOGICAL_AND:
+			case LOGICAL_OR:
+			case LOGICAL_NOT:
+			case ASSIGN:
+			case NEW:
+				return createExpression(e.getKind(), changedExpression.toArray(new Expression[changedExpression.size()]));
 
 			case VARACCESS: //replace with latest value
 				if (replace.containsKey(e))
 					return replace.get(e);
 				return e;
+
+			//Handle them as per need
+			case NEWARRAY:
+			case ARRAYINIT:
+			case ASSIGN_ADD:
+			case ASSIGN_BITAND:
+			case ASSIGN_BITOR:
+			case ASSIGN_BITXOR:
+			case ASSIGN_DIV:
+			case ASSIGN_LSHIFT:
+			case ASSIGN_MOD:
+			case ASSIGN_MULT:
+			case ASSIGN_RSHIFT:
+			case ASSIGN_SUB:
+			case ASSIGN_UNSIGNEDRSHIFT:
+			case BIT_AND:
+			case BIT_LSHIFT:
+			case BIT_NOT:
+			case BIT_OR:
+			case BIT_RSHIFT:
+			case BIT_UNSIGNEDRSHIFT:
+			case BIT_XOR:
+			case CAST:
+			case CONDITIONAL:
+			case NULLCOALESCE:
+			case OP_DEC:
+			case OP_INC:
+			case ARRAYINDEX:
 
 			case METHODCALL:
 			case LITERAL:
@@ -305,8 +369,8 @@ public class BoaNormalFormIntrinsics {
 				// we want first component of left side to be positive
 				// if first component is negative, flip all the signs and ExpressonKind
 				if (((leftList.get(0))[2]).equals(false)) {
-				for (int i = 0; i < leftList.size(); i++) {
-						// we want to keep the sign of Literal "0" as positive in all scenarios
+					for (int i = 0; i < leftList.size(); i++) {
+							// we want to keep the sign of Literal "0" as positive in all scenarios
 						if (((Expression)((leftList.get(i))[0])).getKind() == ExpressionKind.LITERAL) {
 							if (((Expression)((leftList.get(i))[0])).getLiteral().equals("0"))
 								(leftList.get(i))[2] = true;
@@ -369,7 +433,7 @@ public class BoaNormalFormIntrinsics {
 		}
 	}
 
-	/* Takes expression as input and returns a map with the following key-value pairs
+	/** Takes expression as input and returns a map with the following key-value pairs
 	   [0: Variable List] where Variable List is an ArrayList containing all VARACCESS occurances
 
 	   [1: Literal List] where Literal List is an ArrayList containing all LITERAL occurances
@@ -581,7 +645,7 @@ public class BoaNormalFormIntrinsics {
 				}
 
 				if (dval != 0.0)
-				// after merging, add the one that remains to results
+					// after merging, add the one that remains to results
 					results2.add(0, dval);
 				else
 					results2.add(0, ival);
@@ -1292,7 +1356,7 @@ public class BoaNormalFormIntrinsics {
 				// identity
 				// a || false = a
 				if      (e.getKind() == ExpressionKind.LOGICAL_OR)  while (exps.remove(falseLit)) ;
-				// a && true  = a
+					// a && true  = a
 				else if (e.getKind() == ExpressionKind.LOGICAL_AND) while (exps.remove(trueLit)) ;
 
 				// elimination
