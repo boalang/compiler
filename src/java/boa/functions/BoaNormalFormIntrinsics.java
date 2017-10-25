@@ -93,7 +93,8 @@ public class BoaNormalFormIntrinsics {
 				}
 				return b.build();
 
-			case VARACCESS: //replace with symbolic names
+			case VARACCESS:
+				//replace with symbolic names
 				if (e.equals(reciever))
 					return createVariable("rcv$");
 
@@ -103,7 +104,7 @@ public class BoaNormalFormIntrinsics {
 				}
 				return e;
 
-            //Handle them as per need
+			//TODO: Handle them as per need
 			case NEWARRAY:
 			case ARRAYINIT:
 			case ASSIGN_ADD:
@@ -166,12 +167,13 @@ public class BoaNormalFormIntrinsics {
 			case NEW:
 				return createExpression(e.getKind(), changedExpression.toArray(new Expression[changedExpression.size()]));
 
-			case VARACCESS: //replace with latest value
+			case VARACCESS:
+				//replace with latest value
 				if (replace.containsKey(e))
 					return replace.get(e);
 				return e;
 
-			//Handle them as per need
+			//TODO: Handle them as per need
 			case NEWARRAY:
 			case ARRAYINIT:
 			case ASSIGN_ADD:
@@ -206,17 +208,19 @@ public class BoaNormalFormIntrinsics {
 		}
 	}
 
-	// Algorithm: Normalizing expression -> (arg0 + 3 + arg3 -1 <= arg1 + 1 + 5)
-	/* Iteration 1
+	/**
+	 *  Algorithm: Normalizing expression -> (arg0 + 3 + arg3 -1 <= arg1 + 1 + 5)
+	 * Iteration 1
 	   Reduce step: arg0 + arg3 + 2 <= arg1 + 6
-	   Move step: arg0 + arg3 - arg1 <= 6 - 2 */
-	/* Iteration 2
+	   Move step: arg0 + arg3 - arg1 <= 6 - 2
+	 * Iteration 2
 	   Reduce step: arg0 + arg3 - arg1 <= 4
 	   Move step: arg0 + arg3 - arg1 <= 4
-	   Move Step == Reduce Step, therefore break*/
-	/* Sort Left side
+	   Move Step == Reduce Step, therefore break
+	 * Sort Left side
 	   arg0 - arg1 + arg3 <= 4
-	   return */
+	   return
+	 */
 	@FunctionSpec(name = "normalize", returnType = "Expression", formalParameters = { "Expression" })
 	public static Expression Normalize(final Expression e) throws Exception {
 		Expression expRed = e;
@@ -247,7 +251,8 @@ public class BoaNormalFormIntrinsics {
 			case GT:
 			case LT:
 			case GTEQ:
-			case LTEQ: // Side and Signs are represented as booleans
+			case LTEQ:
+				// Side and Signs are represented as booleans
 				// Left = true, Right = false, Positive = true, Negative = false
 				final ArrayList<Object[]> variableList = new ArrayList<Object[]>();
 				final ArrayList<Object[]> literalList = new ArrayList<Object[]>();
@@ -264,13 +269,12 @@ public class BoaNormalFormIntrinsics {
 					return createExpression(kind, new Expression[] {e.getExpressions(1), e.getExpressions(0)});
 				}
 
-				/* Left and right side of the expression is given as input to the seperate function which returns
+				/*
+				   Left and right side of the expression is given as input to the seperate function which returns
 				   a map with the following key-value pairs
 				   [0: Variable List] where Variable List is an ArrayList containing all VARACCESS occurances
-
 				   [1: Literal List] where Literal List is an ArrayList containing all LITERAL occurances
-
-				   [-1: {true}] where -1 signify occurance of a string or illegal expression which can not be changed
+                   [-1: {true}] where -1 signify occurance of a string or illegal expression which can not be changed
 				   for ex: str1 + str2 == "abc"
 				 */
 				final HashMap<Integer, ArrayList<Object[]>> componentMapLeft = seperate(e.getExpressions(0), true, true);  // Call seperate on the left expression
@@ -330,12 +334,12 @@ public class BoaNormalFormIntrinsics {
 				final ArrayList<Object[]> rightListLit = new ArrayList<Object[]>();
 
 				/*
-					The left sides of an expression is divided and stored in
-					two lists: one for variables and other for literals
-					Similarly, the right side.  The variable and literal lists
-					are sorted seperately  for each side and then combined to
-					form the respective sides.  The two sides are then combined
-					to form the sorted expression
+				   The left sides of an expression is divided and stored in
+				   two lists: one for variables and other for literals
+				   Similarly, the right side.  The variable and literal lists
+				   are sorted seperately  for each side and then combined to
+				   form the respective sides.  The two sides are then combined
+				   to form the sorted expression
 				 */
 				final HashMap<Integer, ArrayList<Object[]>> componentMapLeft = seperate(e.getExpressions(0), true, true);
 				if (componentMapLeft.containsKey(-1))
@@ -399,7 +403,8 @@ public class BoaNormalFormIntrinsics {
 				}
 
 				return createExpression(kind, new Expression[] {combineLeft(leftList), combineRight(rightList)});
-			default: // no comparison operator
+			default:
+				// no comparison operator
 				// here, first component could be negative
 				final ArrayList<Object[]> variableList = new ArrayList<Object[]>();
 				final ArrayList<Object[]> literalList = new ArrayList<Object[]>();
@@ -433,7 +438,8 @@ public class BoaNormalFormIntrinsics {
 		}
 	}
 
-	/** Takes expression as input and returns a map with the following key-value pairs
+	/**
+	 * Takes expression as input and returns a map with the following key-value pairs
 	   [0: Variable List] where Variable List is an ArrayList containing all VARACCESS occurances
 
 	   [1: Literal List] where Literal List is an ArrayList containing all LITERAL occurances
@@ -449,12 +455,14 @@ public class BoaNormalFormIntrinsics {
 			case GT:
 			case LT:
 			case GTEQ:
-			case LTEQ: // if more than two comparison operator in one expression, then return it as is
+			case LTEQ:
+				// if more than two comparison operator in one expression, then return it as is
 				final ArrayList<Object[]> dummyList = new ArrayList<Object[]>();
 				dummyList.add(new Object[] {true});
 				componentMap.put(-1, dummyList);
 				break;
-			case OP_ADD: // break expression into sub expressions until we reach VARACCES and LITERALS
+			case OP_ADD:
+				// break expression into sub expressions until we reach VARACCES and LITERALS
 				for (int i = 0; i < e.getExpressionsCount(); i++) {
 					final HashMap<Integer, ArrayList<Object[]>> cMap = seperate(e.getExpressions(i), side, true);
 
@@ -473,7 +481,8 @@ public class BoaNormalFormIntrinsics {
 					}
 				}
 				break;
-			case OP_SUB:// break expression into sub expressions
+			case OP_SUB:
+				// break expression into sub expressions
 				for (int i = 0; i < e.getExpressionsCount(); i++) {
 					final HashMap<Integer, ArrayList<Object[]>> cMap;
 
