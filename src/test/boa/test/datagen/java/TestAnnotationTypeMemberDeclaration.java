@@ -10,11 +10,9 @@ public class TestAnnotationTypeMemberDeclaration extends Java8BaseTest {
 
 	@Test
 	public void annotationTypeMemberDeclaration() throws IOException {
-		assertEquals(
-			load("test/datagen/boa/AnnotationTypeMemberDeclaration.boa").trim(),
-			parseJava(load("test/datagen/java/AnnotationTypeMemberDeclaration.java")).trim()
+		testWrappedAnnotation(
+			load("test/datagen/java/AnnotationTypeMemberDeclaration.java").trim(),
+			load("test/datagen/boa/AnnotationTypeMemberDeclaration.boa").trim()
 		);
-		
 	}
-	
 }

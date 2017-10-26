@@ -1,24 +1,10 @@
-{
-   "namespaces": [
-      {
-         "name": "",
-         "declarations": [
-            {
-               "name": "ClassPreamble",
-               "kind": "ANNOTATION",
-               "methods": [
-                  {
-                     "name": "author",
-                     "return_type": {
-                        "name": "String",
-                        "fully_qualified_name": "java.lang.String",
-                        "kind": "CLASS"
-                     }
-                  }
-               ],
-               "fully_qualified_name": "ClassPreamble"
-            }
-         ]
+"methods": [
+   {
+      "name": "author",
+      "return_type": {
+         "name": "String",
+         "fully_qualified_name": "java.lang.String",
+         "kind": "CLASS"
       }
-   ]
-}
+   }
+],
