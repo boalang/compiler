@@ -1,6 +1,4 @@
-dist: precise
-sudo: required
-language: boa
+language: java
 script: ant -Dprotobuf.uptodate=true test checkstyle
 notifications:
   email:
