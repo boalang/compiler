@@ -1,1 +1,3 @@
-String author();
+@interface ClassPreamble {
+	 String author();
+}

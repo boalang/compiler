@@ -122,14 +122,6 @@ public class Java7BaseTest extends BaseTest {
 		return s;
 	}
 
-	protected static String getWrappedAnnotation(final String content) {
-		String s = "@interface ClassPreamble {\n      " + content.replaceAll("\n", "\n      ");
-		if (!content.endsWith(";") && !content.endsWith(";\n"))
-			s += ";";
-		s += "\n   }";
-		return s;
-	}
-	
 	protected static String parseWrapped(final String content) {
 		return parseJava(getWrapped(content));
 	}
@@ -171,27 +163,6 @@ public class Java7BaseTest extends BaseTest {
 				);
 	}
 
-	public static void testWrappedAnnotation(final String java, final String expected) {
-		assertEquals(
-				"{\n" +
-				"   \"namespaces\": [\n"+
-				"      {\n"+
-				"         \"name\": \"\",\n"+
-				"         \"declarations\": [\n"+
-				"            {\n"+
-				"               \"name\": \"ClassPreamble\",\n"+
-				"               \"kind\": \"ANNOTATION\",\n"+
-				"               " + expected.replaceAll("\n", "\n               ") + "\n" +
-				"               \"fully_qualified_name\": \"ClassPreamble\"\n"+
-				"            }\n"+
-				"         ]\n"+
-				"      }\n"+
-				"   ]\n"+
-				"}",
-				parseJava(getWrappedAnnotation(java)).trim()
-				);
-	}
-	
 	protected static Declaration getDeclaration(final SequenceFile.Reader ar, final ChangedFile cf, final int nodeId, final HashMap<Integer, Declaration> declarations) {
 		long astpos = cf.getKey();
 		if (cf.getAst() && astpos > -1) {
