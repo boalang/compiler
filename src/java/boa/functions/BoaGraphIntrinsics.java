@@ -128,4 +128,41 @@ public class BoaGraphIntrinsics {
 			traverseExpr(varused, vardecls.getInitializer());
 		}
 	}
+
+	public static String cfgToDot(final CFG cfg) {
+		final StringBuilder str = new StringBuilder();
+		str.append("digraph G {\n");
+
+		final boa.runtime.BoaAbstractTraversal printGraph = new boa.runtime.BoaAbstractTraversal<Object>() {
+			protected Object preTraverse(final boa.graphs.cfg.CFGNode node) throws Exception {
+				final java.util.List<boa.graphs.cfg.CFGNode> succs = node .getSuccessorsList();
+				for (long i = 0; i < succs .size(); i++) {
+					if ((succs.get((int)(i)) != null)) {
+						str.append("\t" + node.getId() + " -> " + succs.get((int)(i)).getId() + "\n");
+					}
+				}
+				return null;
+			}
+
+			@Override
+			public void traverse(final boa.graphs.cfg.CFGNode node, boolean flag) throws Exception {
+				if (flag) {
+					currentResult = preTraverse(node);
+					outputMapObj.put(node.getId(), currentResult);
+				} else {
+					outputMapObj.put(node.getId(), preTraverse(node));
+				}
+			}
+		};
+
+		try {
+			printGraph.traverse(cfg, boa.types.Graph.Traversal.TraversalDirection.FORWARD, boa.types.Graph.Traversal.TraversalKind.DFS);
+		} catch (final Exception e) {
+			// do nothing
+		}
+
+		str.append("}");
+
+		return str.toString();
+	}
 }

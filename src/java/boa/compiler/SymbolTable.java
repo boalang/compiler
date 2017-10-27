@@ -211,6 +211,9 @@ public class SymbolTable {
 		globalFunctions.addFunction("difference", new BoaFunction(new BoaSet(new BoaTypeVar("V")), new BoaType[] { new BoaSet(new BoaTypeVar("V")), new BoaSet(new BoaTypeVar("V")) }, "boa.functions.BoaIntrinsics.set_difference(${0}, ${1})"));
 		globalFunctions.addFunction("symdiff", new BoaFunction(new BoaSet(new BoaTypeVar("V")), new BoaType[] { new BoaSet(new BoaTypeVar("V")), new BoaSet(new BoaTypeVar("V")) }, "boa.functions.BoaIntrinsics.set_symdiff(${0}, ${1})"));
 
+		// CFG to dotviz
+		globalFunctions.addFunction("dot", new BoaFunction(new BoaString(), new BoaType[] { new CFGProtoTuple() }, "boa.functions.BoaGraphIntrinsics.cfgToDot(${0})"));
+
 		// casts from enums to string
 		globalFunctions.addFunction("string", new BoaFunction(new BoaString(), new BoaType[] { new BoaProtoMap() }, "${0}.name()"));
 
