@@ -133,7 +133,7 @@ public class BoaGraphIntrinsics {
 		final StringBuilder str = new StringBuilder();
 		str.append("digraph G {\n");
 
-		final boa.runtime.BoaAbstractTraversal printGraph = new boa.runtime.BoaAbstractTraversal<Object>() {
+		final boa.runtime.BoaAbstractTraversal printGraph = new boa.runtime.BoaAbstractTraversal<Object>(false, false) {
 			protected Object preTraverse(final boa.graphs.cfg.CFGNode node) throws Exception {
 				final java.util.List<boa.graphs.cfg.CFGNode> succs = node .getSuccessorsList();
 				for (long i = 0; i < succs .size(); i++) {
