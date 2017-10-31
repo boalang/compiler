@@ -314,14 +314,14 @@ public class CFG {
 
 	public void astToCFG() {
 		if (md.getStatementsCount() > 0) {
-			final CFGNode startNode = new CFGNode("START", CFGNode.TYPE_ENTRY,
-					"START", "START");
+			final CFGNode startNode = new CFGNode("ENTRY", CFGNode.TYPE_ENTRY,
+					"ENTRY", "ENTRY");
 			mergeSeq(startNode);
 			mergeSeq(traverse(startNode, md.getStatementsList().get(0)));
 			if (getNodes().size() >= CFG.minSize) {
 				adjustReturnNodes();
-				final CFGNode endNode = new CFGNode("END", CFGNode.TYPE_ENTRY, "END",
-						"END");
+				final CFGNode endNode = new CFGNode("EXIT", CFGNode.TYPE_ENTRY, "EXIT",
+						"EXIT");
 				endFlag = true;
 				mergeSeq(endNode);
 				endFlag = false;
