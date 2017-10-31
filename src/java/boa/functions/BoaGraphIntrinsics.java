@@ -129,17 +129,54 @@ public class BoaGraphIntrinsics {
 		}
 	}
 
+	private static String dotEscape(final String s) {
+		final String escaped = s.replaceAll("\\\\", "\\\\\\\\").replaceAll("\"", "\\\\\"").replaceAll("\n", "\\\\l").replaceAll("\r", "\\\\l");
+		if (escaped.indexOf("\\l") != -1 && !escaped.endsWith("\\l"))
+			return escaped + "\\l";
+		return escaped;
+	}
+
+	@FunctionSpec(name = "dot", returnType = "string", formalParameters = { "CFG" })
 	public static String cfgToDot(final CFG cfg) {
 		final StringBuilder str = new StringBuilder();
 		str.append("digraph G {\n");
 
+		for (final boa.graphs.cfg.CFGNode n : cfg.getNodes()) {
+			final String shape;
+			switch (n.getKind()) {
+				case CONTROL:
+					shape = "shape=diamond";
+					break;
+				case METHOD:
+					shape = "shape=parallelogram";
+					break;
+				case OTHER:
+					shape = "shape=box";
+					break;
+				case ENTRY:
+				default:
+					shape = "shape=ellipse";
+					break;
+			}
+
+			if (n.hasStmt())
+				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getStmt())) + "\"]\n");
+			else if (n.hasExpr())
+				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + dotEscape(boa.functions.BoaAstIntrinsics.prettyprint(n.getExpr())) + "\"]\n");
+			else if (n.getKind() == boa.types.Control.CFGNode.CFGNodeType.ENTRY)
+				str.append("\t" + n.getId() + "[" + shape + ",label=\"" + n.getName() + "\"]\n");
+			else
+				str.append("\t" + n.getId() + "[" + shape + "]\n");
+		}
+
 		final boa.runtime.BoaAbstractTraversal printGraph = new boa.runtime.BoaAbstractTraversal<Object>(false, false) {
 			protected Object preTraverse(final boa.graphs.cfg.CFGNode node) throws Exception {
-				final java.util.List<boa.graphs.cfg.CFGNode> succs = node .getSuccessorsList();
-				for (long i = 0; i < succs .size(); i++) {
-					if ((succs.get((int)(i)) != null)) {
-						str.append("\t" + node.getId() + " -> " + succs.get((int)(i)).getId() + "\n");
-					}
+				final java.util.Set<boa.graphs.cfg.CFGEdge> edges = node.getOutEdges();
+				for (final boa.graphs.cfg.CFGEdge e : node.getOutEdges()) {
+					str.append("\t" + node.getId() + " -> " + e.getDest().getId());
+					if (!(e.label() == null || e.label().equals(".") || e.label().equals("")))
+						str.append(" [label=\"" + dotEscape(e.label()) + "\"]");
+					str.append("\n");
 				}
 				return null;
 			}
