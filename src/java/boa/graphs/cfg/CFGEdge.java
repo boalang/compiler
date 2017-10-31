@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2016, Hridesh Rajan, Robert Dyer, Ganesha Upadhyaya
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,8 +18,8 @@ package boa.graphs.cfg;
 
 /**
  * Control flow graph builder edge
- * @author ganeshau
  *
+ * @author ganeshau
  */
 public class CFGEdge {
 	public static long numOfEdges = 0;
@@ -29,7 +29,7 @@ public class CFGEdge {
 	private CFGNode dest;
 	private String label = ".";
 
-	public CFGEdge(CFGNode src, CFGNode dest) {
+	public CFGEdge(final CFGNode src, final CFGNode dest) {
 		this.id = ++numOfEdges;
 		this.src = src;
 		this.dest = dest;
@@ -47,7 +47,7 @@ public class CFGEdge {
 		}
 	}
 
-	public CFGEdge(CFGNode src, CFGNode dest, String label) {
+	public CFGEdge(final CFGNode src, final CFGNode dest, final String label) {
 		this(src, dest);
 		this.label = label;
 	}
@@ -56,10 +56,10 @@ public class CFGEdge {
 		return src;
 	}
 
-	public void setSrc(CFGNode node) {
+	public void setSrc(final CFGNode node) {
 		if (dest.getInNodes().contains(node)) {
 			delete();
-			CFGEdge e = (CFGEdge) dest.getInEdge(node);
+			final CFGEdge e = (CFGEdge) dest.getInEdge(node);
 			e.setLabel(".");
 		} else {
 			this.src = node;
@@ -71,10 +71,10 @@ public class CFGEdge {
 		return dest;
 	}
 
-	public void setDest(CFGNode node) {
+	public void setDest(final CFGNode node) {
 		if (src.getOutNodes().contains(node)) {
 			delete();
-			CFGEdge e = (CFGEdge) src.getOutEdge(node);
+			final CFGEdge e = (CFGEdge) src.getOutEdge(node);
 			e.setLabel(".");
 		} else {
 			this.dest = node;
@@ -86,7 +86,7 @@ public class CFGEdge {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(final long id) {
 		this.id = id;
 	}
 
@@ -94,7 +94,7 @@ public class CFGEdge {
 		return label;
 	}
 
-	public void setLabel(String label) {
+	public void setLabel(final String label) {
 		this.label = label;
 	}
 
@@ -103,7 +103,7 @@ public class CFGEdge {
 		this.dest.getInEdges().remove(this);
 	}
 
-	public CFGEdge(long id, CFGNode src, CFGNode dest) {
+	public CFGEdge(final long id, final CFGNode src, final CFGNode dest) {
 		this.id = id;
 		this.src = src;
 		this.dest = dest;
@@ -121,7 +121,7 @@ public class CFGEdge {
 		}
 	}
 
-	public CFGEdge(long id, CFGNode src, CFGNode dest, String label) {
+	public CFGEdge(final long id, final CFGNode src, final CFGNode dest, final String label) {
 		this(id, src, dest);
 		this.label = label;
 	}

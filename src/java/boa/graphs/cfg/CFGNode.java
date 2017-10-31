@@ -1,5 +1,5 @@
 /*
- * Copyright 2014, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2016, Hridesh Rajan, Robert Dyer, Ganesha Upadhyaya
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,8 +26,8 @@ import boa.types.Control.CFGNode.CFGNodeType;
 
 /**
  * Control flow graph builder node
- * @author ganeshau
  *
+ * @author ganeshau
  */
 public class CFGNode implements Comparable<CFGNode> {
 	public static final int TYPE_METHOD = 1;
@@ -46,7 +46,7 @@ public class CFGNode implements Comparable<CFGNode> {
 	private String pid;
 	private Statement stmt;
 	private Expression expr;
-	
+
 	private Expression rhs;
 
 	public static HashMap<String, Integer> idOfLabel = new HashMap<String, Integer>();
@@ -60,22 +60,21 @@ public class CFGNode implements Comparable<CFGNode> {
 
 	public HashSet<String> useVariables = new HashSet<String>();
 	public String defVariables;
-	
+
 	@Override
-	public int compareTo(CFGNode node) {
+	public int compareTo(final CFGNode node) {
 		return node.id - id;
 	}
 
 	public CFGNode() {
-		// TODO Auto-generated constructor stub
 		this.id = ++numOfNodes;
 	}
 
-	public CFGNode(CFGNode tmp) {
+	public CFGNode(final CFGNode tmp) {
 	}
 
-	public CFGNode(String methodName, int kind, String className,
-			String objectName) {
+	public CFGNode(final String methodName, final int kind, final String className,
+			final String objectName) {
 		this.id = ++numOfNodes;
 		this.methodId = convertLabel(methodName);
 		this.kind = kind;
@@ -83,8 +82,8 @@ public class CFGNode implements Comparable<CFGNode> {
 		this.objectNameId = convertLabel(objectName);
 	}
 
-	public CFGNode(String methodName, int kind, String className,
-			String objectName, int numOfParameters, HashSet<Integer> datas) {
+	public CFGNode(final String methodName, final int kind, final String className,
+			final String objectName, final int numOfParameters, final HashSet<Integer> datas) {
 		this.id = ++numOfNodes;
 		this.methodId = convertLabel(methodName);
 		this.kind = kind;
@@ -100,8 +99,8 @@ public class CFGNode implements Comparable<CFGNode> {
 		this.numOfParameters = numOfParameters;
 	}
 
-	public CFGNode(String methodName, int kind, String className,
-			String objectName, int numOfParameters) {
+	public CFGNode(final String methodName, final int kind, final String className,
+			final String objectName, final int numOfParameters) {
 		this.id = ++numOfNodes;
 		this.methodId = convertLabel(methodName);
 		this.kind = kind;
@@ -115,20 +114,20 @@ public class CFGNode implements Comparable<CFGNode> {
 	}
 
 	public HashSet<String> getDefUse() {
-		HashSet<String> defUse = new HashSet<String>(useVariables);
+		final HashSet<String> defUse = new HashSet<String>(useVariables);
 		defUse.add(defVariables);
 		return defUse;
 	}
 
 	public boolean hasStmt() {
-		if(this.stmt!=null) {
+		if (this.stmt != null) {
 			return true;
 		}
 		return false;
 	}
 
 	public boolean hasDefVariables() {
-		if(this.defVariables!=null) {
+		if (this.defVariables != null) {
 			return true;
 		}
 		return false;
@@ -142,32 +141,32 @@ public class CFGNode implements Comparable<CFGNode> {
 		return this.rhs;
 	}
 
-	public void setRhs(Expression rhs) {
+	public void setRhs(final Expression rhs) {
 		this.rhs = rhs;
 	}
 
 	public boolean hasExpr() {
-		if(this.expr!=null) {
+		if (this.expr != null) {
 			return true;
 		}
 		return false;
 	}
 
 	public boolean hasRhs() {
-		if(this.rhs!=null) {
+		if (this.rhs != null) {
 			return true;
 		}
 		return false;
 	}
 
-	public static int convertLabel(String label) {
+	public static int convertLabel(final String label) {
 		if (CFGNode.idOfLabel.get(label) == null) {
-			int index = CFGNode.idOfLabel.size() + 1;
+			final int index = CFGNode.idOfLabel.size() + 1;
 			CFGNode.idOfLabel.put(label, index);
 			CFGNode.labelOfID.put(index, label);
 			return index;
-		} else
-			return CFGNode.idOfLabel.get(label);
+		}
+        return CFGNode.idOfLabel.get(label);
 	}
 
 	public int getId() {
@@ -182,7 +181,7 @@ public class CFGNode implements Comparable<CFGNode> {
 		return numOfParameters;
 	}
 
-	public void setParameters(HashSet<Integer> parameters) {
+	public void setParameters(final HashSet<Integer> parameters) {
 		this.parameters = parameters;
 	}
 
@@ -190,11 +189,11 @@ public class CFGNode implements Comparable<CFGNode> {
 		return parameters;
 	}
 
-	public void setUseVariables(HashSet<String> useVariables) {
+	public void setUseVariables(final HashSet<String> useVariables) {
 		this.useVariables = useVariables;
 	}
 
-	public void setDefVariables(String defVariables) {
+	public void setDefVariables(final String defVariables) {
 		this.defVariables = defVariables;
 	}
 
@@ -223,7 +222,7 @@ public class CFGNode implements Comparable<CFGNode> {
 	}
 
 	public boolean hasFalseBranch() {
-		for (CFGEdge e : this.outEdges) {
+		for (final CFGEdge e : this.outEdges) {
 			if (e.label().equals("F"))
 				return true;
 		}
@@ -246,33 +245,29 @@ public class CFGNode implements Comparable<CFGNode> {
 		return successors;
 	}
 
-	public void setPredecessors(java.util.ArrayList<CFGNode> predecessors) {
+	public void setPredecessors(final java.util.ArrayList<CFGNode> predecessors) {
 		this.predecessors = predecessors;
 	}
 
-	public void setSuccessors(java.util.ArrayList<CFGNode> successors) {
+	public void setSuccessors(final java.util.ArrayList<CFGNode> successors) {
 		this.successors = successors;
 	}
 
 	public java.util.ArrayList<CFGNode> getInNodes() {
-		HashSet<CFGNode> nodes = new HashSet<CFGNode>();
-		for (CFGEdge e : inEdges)
+		final HashSet<CFGNode> nodes = new HashSet<CFGNode>();
+		for (final CFGEdge e : inEdges)
 			nodes.add(e.getSrc());
-		java.util.ArrayList<CFGNode> pred = new java.util.ArrayList<CFGNode>(nodes);
-		//Collections.sort(pred);
-		return pred;
+		return new java.util.ArrayList<CFGNode>(nodes);
 	}
 
 	public java.util.ArrayList<CFGNode> getOutNodes() {
-		HashSet<CFGNode> nodes = new HashSet<CFGNode>();
-		for (CFGEdge e : outEdges)
+		final HashSet<CFGNode> nodes = new HashSet<CFGNode>();
+		for (final CFGEdge e : outEdges)
 			nodes.add(e.getDest());
-		java.util.ArrayList<CFGNode> succ = new java.util.ArrayList<CFGNode>(nodes);
-		//Collections.sort(succ);
-		return succ;
+		return new java.util.ArrayList<CFGNode>(nodes);
 	}
 
-	public CFGEdge getOutEdge(CFGNode node) {
+	public CFGEdge getOutEdge(final CFGNode node) {
 		for (CFGEdge e : this.outEdges) {
 			if (e.getDest() == node)
 				return e;
@@ -280,8 +275,8 @@ public class CFGNode implements Comparable<CFGNode> {
 		return null;
 	}
 
-	public CFGEdge getInEdge(CFGNode node) {
-		for (CFGEdge e : this.inEdges) {
+	public CFGEdge getInEdge(final CFGNode node) {
+		for (final CFGEdge e : this.inEdges) {
 			if (e.getSrc() == node)
 				return e;
 		}
@@ -296,23 +291,23 @@ public class CFGNode implements Comparable<CFGNode> {
 		return CFGNode.labelOfID.get(methodId);
 	}
 
-	public void setPid(String pid) {
+	public void setPid(final String pid) {
 		this.pid = pid;
 	}
 
-	public void addInEdge(CFGEdge edge) {
+	public void addInEdge(final CFGEdge edge) {
 		inEdges.add(edge);
 	}
 
-	public void addOutEdge(CFGEdge edge) {
+	public void addOutEdge(final CFGEdge edge) {
 		outEdges.add(edge);
 	}
 
-	public void setAstNode(Statement stmt) {
+	public void setAstNode(final Statement stmt) {
 		this.stmt = stmt;
 	}
 
-	public void setAstNode(Expression expr) {
+	public void setAstNode(final Expression expr) {
 		this.expr = expr;
 	}
 
@@ -328,7 +323,7 @@ public class CFGNode implements Comparable<CFGNode> {
 	}
 
 	public Builder newBuilder() {
-		Builder b = boa.types.Control.CFGNode.newBuilder();
+		final Builder b = boa.types.Control.CFGNode.newBuilder();
 		b.setId(id);
 		b.setKind(getKind());
 		if (this.stmt != null)
@@ -353,23 +348,21 @@ public class CFGNode implements Comparable<CFGNode> {
 	}
 
 	public String processDef() {
-		String defVar="";
-		if(this.expr!=null) {
-			if(this.expr.getKind().toString().equals("VARDECL")) {
-				String[] strComponents = this.expr.getVariableDeclsList().get(0).getName().split("\\.");
-				if(strComponents.length > 1) {
+		String defVar = "";
+		if (this.expr != null) {
+			if (this.expr.getKind().toString().equals("VARDECL")) {
+				final String[] strComponents = this.expr.getVariableDeclsList().get(0).getName().split("\\.");
+				if (strComponents.length > 1) {
 					defVar = strComponents[strComponents.length - 2];
-				}
-				else {
+				} else {
 					defVar = strComponents[0];
 				}
 			}
-			if(this.expr.getKind().toString().equals("ASSIGN")) {
-				String[] strComponents = this.expr.getExpressionsList().get(0).getVariable().split("\\.");
-				if(strComponents.length > 1) {
+			if (this.expr.getKind().toString().equals("ASSIGN")) {
+				final String[] strComponents = this.expr.getExpressionsList().get(0).getVariable().split("\\.");
+				if (strComponents.length > 1) {
 					defVar = strComponents[strComponents.length - 2];
-				}
-				else {
+				} else {
 					defVar = strComponents[0];
 				}
 			}
@@ -378,51 +371,49 @@ public class CFGNode implements Comparable<CFGNode> {
 	}
 
 	public HashSet<String> processUse() {
-		HashSet<String> useVar= new HashSet<String>();
-		if(this.expr!=null) {
-			if(this.expr.getKind().toString().equals("ASSIGN")) {
+		final HashSet<String> useVar = new HashSet<String>();
+		if (this.expr != null) {
+			if (this.expr.getKind().toString().equals("ASSIGN")) {
 				traverseExpr(useVar, this.rhs);
-			}
-			else {
+			} else {
 				traverseExpr(useVar, this.expr);
 			}
 		}
 		return useVar;
 	}
 
-	public static void traverseExpr(HashSet<String> useVar, final boa.types.Ast.Expression expr) {		
-		if(expr.hasVariable()) {
-			if(expr.getExpressionsList().size()!=0) {
+	public static void traverseExpr(final HashSet<String> useVar, final boa.types.Ast.Expression expr) {
+		if (expr.hasVariable()) {
+			if (expr.getExpressionsList().size()!=0) {
 				useVar.add("this");
 			}
 			else {
-				String[] strComponents = expr.getVariable().split("\\.");
-				if(strComponents.length > 1) {
+				final String[] strComponents = expr.getVariable().split("\\.");
+				if (strComponents.length > 1) {
 					useVar.add(strComponents[strComponents.length - 2]);
-				}
-				else {
+				} else {
 					useVar.add(strComponents[0]);
-				}	
-			}		
+				}
+			}
 		}
-		for(boa.types.Ast.Expression exprs:expr.getExpressionsList()) {
+		for (final boa.types.Ast.Expression exprs : expr.getExpressionsList()) {
 			traverseExpr(useVar, exprs);
 		}
-		for(boa.types.Ast.Variable vardecls:expr.getVariableDeclsList()) {
+		for (final boa.types.Ast.Variable vardecls : expr.getVariableDeclsList()) {
 			traverseVarDecls(useVar, vardecls);
 		}
-		for(boa.types.Ast.Expression methodexpr:expr.getMethodArgsList()) {
+		for (final boa.types.Ast.Expression methodexpr : expr.getMethodArgsList()) {
 			traverseExpr(useVar, methodexpr);
 		}
 	}
 
-	public static void traverseVarDecls(HashSet<String> useVar, final boa.types.Ast.Variable vardecls) {		
-		if(vardecls.hasInitializer()) {
-			traverseExpr(useVar, vardecls.getInitializer());			
+	public static void traverseVarDecls(final HashSet<String> useVar, final boa.types.Ast.Variable vardecls) {
+		if (vardecls.hasInitializer()) {
+			traverseExpr(useVar, vardecls.getInitializer());
 		}
 	}
 
 	public String toString() {
-		return ""+getId();
+		return "" + getId();
 	}
 }
