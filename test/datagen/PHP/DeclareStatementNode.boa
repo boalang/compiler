@@ -1,0 +1,13 @@
+namespaces {
+  name: ""
+  statements {
+    kind: DECLARE
+    variable_declarations {
+      name: "ticks"
+      initializer {
+        kind: LITERAL
+        literal: "1"
+      }
+    }
+  }
+}

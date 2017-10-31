@@ -13,6 +13,12 @@ public class TestPHPFunctionDeclaration extends PHPBaseTest {
 	}
 	
 	@Test
+	public void testFunctionDeclarationWithFormalParamater() throws IOException, Exception{
+		nodeTest(load("test/datagen/PHP/FormalParamaterNode.boa"),
+				load("test/datagen/PHP/FormalParamaterNode.php"));
+	}
+	
+	@Test
 	public void testLambdaDeclaration() throws IOException, Exception{
 		nodeTest(load("test/datagen/PHP/LambdaDeclarationNode.boa"),
 				load("test/datagen/PHP/LambdaDeclarationNode.php"));
