@@ -1,0 +1,17 @@
+namespaces {
+  name: ""
+  statements {
+    kind: EXPRESSION
+    expression {
+      kind: OP_THREE_WAY_COMPARE
+      expressions {
+        kind: LITERAL
+        literal: "x"
+      }
+      expressions {
+        kind: LITERAL
+        literal: "y"
+      }
+    }
+  }
+}
