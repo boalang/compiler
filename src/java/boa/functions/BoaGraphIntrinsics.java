@@ -1,5 +1,6 @@
 /*
- * Copyright 2017, Hridesh Rajan, Ganesha Upadhyaya, Ramanathan Ramu
+ * Copyright 2017, Hridesh Rajan, Ganesha Upadhyaya, Ramanathan Ramu, Robert Dyer, Che Shian Hung
+ *                 Bowling Green State University
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,6 +31,8 @@ import boa.types.Control.CFGNode;
  *
  * @author ganeshau
  * @author rramu
+ * @author rdyer
+ * @author hungc
  */
 public class BoaGraphIntrinsics {
 	@FunctionSpec(name = "getcfg", returnType = "CFG", formalParameters = { "Method" })
