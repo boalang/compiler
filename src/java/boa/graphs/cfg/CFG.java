@@ -1,5 +1,5 @@
 /*
- * Copyright 2016, Hridesh Rajan, Robert Dyer, Ganesha Upadhyaya
+ * Copyright 2017, Hridesh Rajan, Ganesha Upadhyaya
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
