@@ -32,7 +32,11 @@ import static boa.functions.BoaAstIntrinsics.prettyprint;
  */
 public class BoaNormalFormIntrinsics {
 	/**
-	 * Returns map of variables which are not arg0, arg1, arg2, ...
+	 * Gives list of non-argument(not preesent in api call) variables present in a predicate expression
+	 *
+	 * @param e the expression in symbolic form
+	 * @return  map of variables which are not arg0, arg1, arg2, ...
+	 * @throws Exception
 	 */
 	// FIXME would prefer the return type is array instead of map
 	@FunctionSpec(name = "getnoargsvariables", returnType = "map[Expression] of Expression", formalParameters = { "Expression" })
@@ -52,8 +56,12 @@ public class BoaNormalFormIntrinsics {
 	}
 
 	/**
-	 * Takes original predicate and array of arguments of api_call as input and
-	 * returns the replaced expression.
+	 * Replaces api arguments present in an expression with symbolic names
+	 *
+	 * @param e predicate expression
+	 * @param reciever api reciever
+	 * @param arguments api arguments
+	 * @return the expression in symbolic form
 	 */
 	@FunctionSpec(name = "converttosymbolicname", returnType = "Expression", formalParameters = { "Expression", "Expression", "array of Expression"})
 	public static Expression convertToSymbolicName(final Expression e, final Expression reciever, final Expression[] arguments) {
@@ -136,9 +144,11 @@ public class BoaNormalFormIntrinsics {
 	}
 
 	/**
-	 * Takes "predicate with symbolic_name" and "map" (with Key = variable,
-	 * Value = latest_assignment to variable) as input and returns the replaced
-	 * expression.
+	 * Assign literal values to non-argument variables in a precondition expression
+	 *
+	 * @param e the predicate expression with symbolic_name
+	 * @param replace the array of literal values of non-argument variables
+	 * @return the replaced expression
 	 */
 	@FunctionSpec(name = "assignlatestvalue", returnType = "Expression", formalParameters = { "Expression", "map[Expression] of Expression"})
 	public static Expression assignLatestValue(final Expression e, final Map<Expression,Expression> replace) {
@@ -208,22 +218,28 @@ public class BoaNormalFormIntrinsics {
 		}
 	}
 
+	 // Algorithm: Normalizing expression -> (arg0 + 3 + arg3 -1 <= arg1 + 1 + 5)
+	 // Iteration 1
+	 // Reduce step: arg0 + arg3 + 2 <= arg1 + 6
+	 // Move step: arg0 + arg3 - arg1 <= 6 - 2
+	 // Iteration 2
+	 // Reduce step: arg0 + arg3 - arg1 <= 4
+	 // Move step: arg0 + arg3 - arg1 <= 4
+	 // Move Step == Reduce Step, therefore break
+	 // Sort Left side
+	 // arg0 - arg1 + arg3 <= 4
+	 // return
+
 	/**
-	 *  Algorithm: Normalizing expression -> (arg0 + 3 + arg3 -1 <= arg1 + 1 + 5)
-	 * Iteration 1
-	   Reduce step: arg0 + arg3 + 2 <= arg1 + 6
-	   Move step: arg0 + arg3 - arg1 <= 6 - 2
-	 * Iteration 2
-	   Reduce step: arg0 + arg3 - arg1 <= 4
-	   Move step: arg0 + arg3 - arg1 <= 4
-	   Move Step == Reduce Step, therefore break
-	 * Sort Left side
-	   arg0 - arg1 + arg3 <= 4
-	   return
+	 * Normalizes a  given expression according to the above algorithm
+	 *
+	 * @param e the expression to be normalized
+	 * @return the normalized expresssion
+	 * @throws Exception
 	 */
 	@FunctionSpec(name = "normalize", returnType = "Expression", formalParameters = { "Expression" })
-	public static Expression Normalize(final Expression e) throws Exception {
-		Expression expRed = e;
+	public static Expression normalize(final Expression e) throws Exception {
+		Expression expRed;
 		Expression expMov = e;
 		Expression previous = e;
 
@@ -239,9 +255,13 @@ public class BoaNormalFormIntrinsics {
 	}
 
 	/**
-	 * Moves variables to the right and literals to the left.
+	 * Rearranges the expression with variables first, followed by literals
+	 *
+	 * @param e
+	 * @return moved expression
+	 * @throws Exception
 	 */
-	private static Expression move(final Expression e) throws Exception {
+	public static Expression move(final Expression e) throws Exception {
 		ExpressionKind kind = e.getKind();
 
 		switch (kind) {
@@ -252,7 +272,7 @@ public class BoaNormalFormIntrinsics {
 			case LT:
 			case GTEQ:
 			case LTEQ:
-				// Side and Signs are represented as booleans
+				// Side and Signs are represented as booleans for optimization
 				// Left = true, Right = false, Positive = true, Negative = false
 				final ArrayList<Object[]> variableList = new ArrayList<Object[]>();
 				final ArrayList<Object[]> literalList = new ArrayList<Object[]>();
@@ -264,19 +284,11 @@ public class BoaNormalFormIntrinsics {
 
 				// if string literal is to the left in the comparison then flip the expression and return it
 				if (BoaAstIntrinsics.isStringLit(e.getExpressions(0))) {
-					if (kind != ExpressionKind.EQ && kind != ExpressionKind.NEQ) //reverse the kind (not negate)
-						kind = negateKind(kind);
+					if (kind != ExpressionKind.EQ && kind != ExpressionKind.NEQ)
+						kind = reverseKind(kind);
 					return createExpression(kind, new Expression[] {e.getExpressions(1), e.getExpressions(0)});
 				}
 
-				/*
-				   Left and right side of the expression is given as input to the seperate function which returns
-				   a map with the following key-value pairs
-				   [0: Variable List] where Variable List is an ArrayList containing all VARACCESS occurances
-				   [1: Literal List] where Literal List is an ArrayList containing all LITERAL occurances
-                   [-1: {true}] where -1 signify occurance of a string or illegal expression which can not be changed
-				   for ex: str1 + str2 == "abc"
-				 */
 				final HashMap<Integer, ArrayList<Object[]>> componentMapLeft = seperate(e.getExpressions(0), true, true);  // Call seperate on the left expression
 				if (componentMapLeft.containsKey(-1))
 					return e;
@@ -308,16 +320,20 @@ public class BoaNormalFormIntrinsics {
 				return createExpression(kind, new Expression[] {variables, literals});
 			default:
 				// no comparison operator return the expression as is
-				// for example a function call --> if (isString())
+				// for example a function call: "if (isString())"
 				return e;
 		}
 	}
 
 	/**
-	 * Sorts left and right sides indepently in alphatical order variables are
-	 * placed first followed by literals
+	 * Sorts the expression in alphabetical order with variables first, followed by literals
+	 *
+	 * @param e
+	 * @return sorted expression
+	 * @throws Exception
 	 */
-	private static Expression sort(final Expression e) throws Exception {
+	@FunctionSpec(name = "sort", returnType = "Expression", formalParameters = { "Expression" })
+	public static Expression sort(final Expression e) throws Exception {
 		ExpressionKind kind = e.getKind();
 
 		switch (kind) {
@@ -334,12 +350,11 @@ public class BoaNormalFormIntrinsics {
 				final ArrayList<Object[]> rightListLit = new ArrayList<Object[]>();
 
 				/*
-				   The left sides of an expression is divided and stored in
+				   Each side of an expression is divided and stored in
 				   two lists: one for variables and other for literals
-				   Similarly, the right side.  The variable and literal lists
-				   are sorted seperately  for each side and then combined to
-				   form the respective sides.  The two sides are then combined
-				   to form the sorted expression
+				   The variable and literal lists are sorted seperately
+				   for each side and then combined to form the respective sides.
+				   The two sides are then combined to form the final sorted expression.
 				 */
 				final HashMap<Integer, ArrayList<Object[]>> componentMapLeft = seperate(e.getExpressions(0), true, true);
 				if (componentMapLeft.containsKey(-1))
@@ -374,12 +389,6 @@ public class BoaNormalFormIntrinsics {
 				// if first component is negative, flip all the signs and ExpressonKind
 				if (((leftList.get(0))[2]).equals(false)) {
 					for (int i = 0; i < leftList.size(); i++) {
-							// we want to keep the sign of Literal "0" as positive in all scenarios
-						if (((Expression)((leftList.get(i))[0])).getKind() == ExpressionKind.LITERAL) {
-							if (((Expression)((leftList.get(i))[0])).getLiteral().equals("0"))
-								(leftList.get(i))[2] = true;
-							continue;
-						}
 						if (((leftList.get(i))[2]).equals(false))
 							(leftList.get(i))[2] = true;
 						else
@@ -387,22 +396,18 @@ public class BoaNormalFormIntrinsics {
 					}
 
 					for (int i = 0; i < rightList.size(); i++) {
-						if (((Expression)((rightList.get(i))[0])).getKind() == ExpressionKind.LITERAL) {
-							if (((Expression)((rightList.get(i))[0])).getLiteral().equals("0"))
-								(rightList.get(i))[2] = true;
-							continue;
-						}
 						if (((rightList.get(i))[2]).equals(false))
 							(rightList.get(i))[2] = true;
 						else
 							(rightList.get(i))[2] = false;
 					}
 
-					if (kind != ExpressionKind.EQ && kind != ExpressionKind.NEQ) //reverse the kind (not negate)
-						kind = negateKind(kind);
+					if (kind != ExpressionKind.EQ && kind != ExpressionKind.NEQ)
+						kind = reverseKind(kind);
 				}
 
 				return createExpression(kind, new Expression[] {combineLeft(leftList), combineRight(rightList)});
+
 			default:
 				// no comparison operator
 				// here, first component could be negative
@@ -431,7 +436,7 @@ public class BoaNormalFormIntrinsics {
 		}
 	}
 
-	// helper for sorting array lists
+	// Helper for sorting array lists
 	private static class ExpressionArrayComparator implements Comparator <Object[]> {
 		public int compare(final Object[] e1, final Object[] e2) {
 			return prettyprint((Expression)e1[0]).compareTo(prettyprint((Expression)e2[0]));
@@ -439,13 +444,17 @@ public class BoaNormalFormIntrinsics {
 	}
 
 	/**
-	 * Takes expression as input and returns a map with the following key-value pairs
-	   [0: Variable List] where Variable List is an ArrayList containing all VARACCESS occurances
-
-	   [1: Literal List] where Literal List is an ArrayList containing all LITERAL occurances
-
-	   [-1: {true}] where -1 signify occurance of a string or illegal expression which can not be changed
-	   for ex: str1 + str2 == "abc"
+	 * Coverts an expression into lists of atomic expressions(VRACCESS and LITERAL)
+	 * and return them in a map
+	 *
+	 * @param e the expression to be seperated
+	 * @param side the side of the expression(left or right)
+	 * @param sign the sign of the expression(positive or negative)
+	 * @return the map of atomic expression(variable list and literal list)
+	 *         [0: Variable List] where Variable List is an ArrayList containing all VARACCESS occurances
+	 *         [1: Literal List] where Literal List is an ArrayList containing all LITERAL occurances
+	 *         [-1: {true}] where -1 signify occurance of a string or illegal expression which can not be changed
+	 * @throws Exception
 	 */
 	private static HashMap<Integer, ArrayList<Object[]>> seperate(final Expression e, final boolean side, final boolean sign) throws Exception {
 		final HashMap<Integer, ArrayList<Object[]>> componentMap = new HashMap<Integer, ArrayList<Object[]>>();
@@ -461,6 +470,7 @@ public class BoaNormalFormIntrinsics {
 				dummyList.add(new Object[] {true});
 				componentMap.put(-1, dummyList);
 				break;
+
 			case OP_ADD:
 				// break expression into sub expressions until we reach VARACCES and LITERALS
 				for (int i = 0; i < e.getExpressionsCount(); i++) {
@@ -481,6 +491,7 @@ public class BoaNormalFormIntrinsics {
 					}
 				}
 				break;
+
 			case OP_SUB:
 				// break expression into sub expressions
 				for (int i = 0; i < e.getExpressionsCount(); i++) {
@@ -506,8 +517,10 @@ public class BoaNormalFormIntrinsics {
 					}
 				}
 				break;
+
 			case PAREN:
 				componentMap.putAll(seperate(e.getExpressions(0), side, sign));
+
 			case METHODCALL:
 			case OP_MULT:
 			case OP_DIV:
@@ -516,9 +529,10 @@ public class BoaNormalFormIntrinsics {
 				variableList.add(new Object[] {e, side, sign});
 				componentMap.put(0, variableList);
 				break;
+
 			case LITERAL:
 				final ArrayList<Object[]> literalList = new ArrayList<Object[]>();
-				if (BoaAstIntrinsics.isStringLit(e)) { // if it is a string expression, we dont to process it
+				if (BoaAstIntrinsics.isStringLit(e)) { // if it is a string expression, we don't wantto process it
 					literalList.add(new Object[] {true});
 					componentMap.put(-1, literalList);
 				} else {
@@ -526,6 +540,7 @@ public class BoaNormalFormIntrinsics {
 					componentMap.put(1, literalList);
 				}
 				break;
+
 			default:
 				break;
 		}
@@ -534,19 +549,25 @@ public class BoaNormalFormIntrinsics {
 	}
 
 	/**
-	 * Combines an expression list based on the rules of left side i.e sign
-	 * needs to be changed if Variable/Literal is from the right side
+	 * Combines an expression list based on the combine rules for the left side.
+	 * The sign of the variable/literal is changed if they are from the right side
+	 *
+	 * @param expList the expression list of variable and literals
+	 * @return the combined expression
 	 */
 	private static Expression combineLeft(final ArrayList<Object[]> expList) {
 		Expression e = (Expression)(expList.get(0))[0];
 
-		if ((((expList.get(0))[1]).equals(true) && ((expList.get(0))[2]).equals(false)) ||
-				(((expList.get(0))[1]).equals(false) && ((expList.get(0))[2]).equals(true)))
-			e = createExpression(ExpressionKind.OP_SUB, new Expression[] {e});
+		if(!(e.getKind() == ExpressionKind.LITERAL && e.getLiteral().equals("0"))) {
+			if ((((expList.get(0))[1]).equals(true) && ((expList.get(0))[2]).equals(false)) ||
+					(((expList.get(0))[1]).equals(false) && ((expList.get(0))[2]).equals(true)))
+				e = createExpression(ExpressionKind.OP_SUB, new Expression[]{e});
+		}
 
 		for (int i = 1; i < expList.size(); i++) {
 			if ((((expList.get(i))[1]).equals(true) && ((expList.get(i))[2]).equals(true)) ||
-					(((expList.get(i))[1]).equals(false) && ((expList.get(i))[2]).equals(false)))
+					(((expList.get(i))[1]).equals(false) && ((expList.get(i))[2]).equals(false)) ||
+					((Expression)(expList.get(i))[0]).getKind() == ExpressionKind.LITERAL && ((Expression)(expList.get(i))[0]).getLiteral().equals("0"))
 				e = createExpression(ExpressionKind.OP_ADD, new Expression[] {e, (Expression)(expList.get(i))[0]});
 			else
 				e = createExpression(ExpressionKind.OP_SUB, new Expression[] {e, (Expression)(expList.get(i))[0]});
@@ -556,24 +577,52 @@ public class BoaNormalFormIntrinsics {
 	}
 
 	/**
-	 * Combines an expression list based on the rules of right side
+	 * Combines an expression list based on the combine rules for the righ side.
+	 * The sign of the variable/literal is changed if they are from the left side
+	 *
+	 * @param expList the expression list of variable and literals
+	 * @return the combined expression
 	 */
 	private static Expression combineRight(final ArrayList<Object[]> expList) {
 		Expression e = (Expression)(expList.get(0))[0];
 
-		if ((((expList.get(0))[1]).equals(true) && ((expList.get(0))[2]).equals(true)) ||
-				(((expList.get(0))[1]).equals(false) && ((expList.get(0))[2]).equals(false)))
-			e = createExpression(ExpressionKind.OP_SUB, new Expression[] {e});
+		 if (!e.getLiteral().equals("0")) {
+			 if ((((expList.get(0))[1]).equals(true) && ((expList.get(0))[2]).equals(true)) ||
+					 (((expList.get(0))[1]).equals(false) && ((expList.get(0))[2]).equals(false)))
+				 e = createExpression(ExpressionKind.OP_SUB, new Expression[]{e});
+		 }
 
 		for (int i = 1; i < expList.size(); i++) {
 			if ((((expList.get(i))[1]).equals(false) && ((expList.get(i))[2]).equals(true)) ||
-					(((expList.get(i))[1]).equals(true) && ((expList.get(i))[2]).equals(false)))
+					(((expList.get(i))[1]).equals(true) && ((expList.get(i))[2]).equals(false)) ||
+					     ((Expression)(expList.get(i))[0]).getLiteral().equals("0"))
 				e = createExpression(ExpressionKind.OP_ADD, new Expression[] {e, (Expression)(expList.get(i))[0]});
 			else
 				e = createExpression(ExpressionKind.OP_SUB, new Expression[] {e, (Expression)(expList.get(i))[0]});
 		}
 
 		return e;
+	}
+
+	/**
+	 * Gives the reverse of the provided expression kind
+	 *
+	 * @param kind the ExpressionKind to reverse
+	 * @return reversed kind
+	 */
+	private static ExpressionKind reverseKind(final ExpressionKind kind) {
+		switch (kind) {
+			case GT:   return ExpressionKind.LT;
+			case LT: return ExpressionKind.GT;
+
+			case LTEQ:   return ExpressionKind.GTEQ;
+			case GTEQ: return ExpressionKind.LTEQ;
+
+			case EQ:   return ExpressionKind.EQ;
+			case NEQ:  return ExpressionKind.NEQ;
+
+			default: throw new RuntimeException("invalid ExpressionKind: " + kind);
+		}
 	}
 
 	/**
