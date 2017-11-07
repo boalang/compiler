@@ -64,8 +64,8 @@ public class TestNormalize {
                 {"arg0 * 3 <= 3", "3 * arg0 <= 3"},
                 {"arg0 / 3 <= 3", "arg0 / 3 <= 3"},
                 {"-arg0 + 1 > arg1", "arg0 + arg1 < 1"},
-                {"arg1 * arg 0 > 5", "arg1 * arg0 > 5"},   //Issue wih parseexpression
-                {"arg1 / arg 0 > 5", "arg1 / arg0 > 5"},   //Issue wih parseexpression
+                {"arg1 * arg0 > 5", "arg1 * arg0 > 5"},
+                {"arg1 / arg0 > 5", "arg1 / arg0 > 5"},  
                 {"-arg0 + arg2 <= arg1", "arg0 + arg1 - arg2 >= 0"},
                 {"-arg0 + arg2 <= -length()", "arg0 - arg2 - length() >= 0"},
 
