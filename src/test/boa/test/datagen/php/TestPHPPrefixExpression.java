@@ -8,8 +8,8 @@ public class TestPHPPrefixExpression extends PHPBaseTest {
 
 	@Test
 	public void testPrefixExpression() throws IOException, Exception{
-		nodeTest(load("test/datagen/PHP/PrefixExpressionUnpack.boa"),
-				load("test/datagen/PHP/PrefixExpressionUnpack.php"));
+		nodeTest(load("test/datagen/PHP/PreFixExpressionUnpack.boa"),
+				load("test/datagen/PHP/PreFixExpressionUnpack.php"));
 	}
 	
 }
