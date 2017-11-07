@@ -21,7 +21,6 @@ import java.util.*;
 import boa.types.Ast.Expression.ExpressionKind;
 import boa.types.Ast.Expression;
 
-import static boa.functions.BoaAstIntrinsics.parseexpression;
 import static boa.functions.BoaAstIntrinsics.prettyprint;
 
 /**
@@ -144,7 +143,7 @@ public class BoaNormalFormIntrinsics {
 	}
 
 	/**
-	 * Assign literal values to non-argument variables in a precondition expression
+	 * Assigns literal values to non-argument variables in a precondition expression
 	 *
 	 * @param e the predicate expression with symbolic_name
 	 * @param replace the array of literal values of non-argument variables
@@ -231,7 +230,7 @@ public class BoaNormalFormIntrinsics {
 	 // return
 
 	/**
-	 * Normalizes a  given expression according to the above algorithm
+	 * Normalizes a given expression according to the above algorithm
 	 *
 	 * @param e the expression to be normalized
 	 * @return the normalized expresssion
@@ -255,7 +254,7 @@ public class BoaNormalFormIntrinsics {
 	}
 
 	/**
-	 * Rearranges the expression with variables first, followed by literals
+	 * Rearranges a given expression with variables first, followed by literals
 	 *
 	 * @param e
 	 * @return moved expression
@@ -285,7 +284,7 @@ public class BoaNormalFormIntrinsics {
 				// if string literal is to the left in the comparison then flip the expression and return it
 				if (BoaAstIntrinsics.isStringLit(e.getExpressions(0))) {
 					if (kind != ExpressionKind.EQ && kind != ExpressionKind.NEQ)
-						kind = reverseKind(kind);
+						kind = flipKind(kind);
 					return createExpression(kind, new Expression[] {e.getExpressions(1), e.getExpressions(0)});
 				}
 
@@ -326,7 +325,7 @@ public class BoaNormalFormIntrinsics {
 	}
 
 	/**
-	 * Sorts the expression in alphabetical order with variables first, followed by literals
+	 * Sorts a given expression in alphabetical order with variables first, followed by literals
 	 *
 	 * @param e
 	 * @return sorted expression
@@ -403,7 +402,7 @@ public class BoaNormalFormIntrinsics {
 					}
 
 					if (kind != ExpressionKind.EQ && kind != ExpressionKind.NEQ)
-						kind = reverseKind(kind);
+						kind = flipKind(kind);
 				}
 
 				return createExpression(kind, new Expression[] {combineLeft(leftList), combineRight(rightList)});
@@ -444,7 +443,7 @@ public class BoaNormalFormIntrinsics {
 	}
 
 	/**
-	 * Coverts an expression into lists of atomic expressions(VRACCESS and LITERAL)
+	 * Coverts a given expression into lists of atomic expressions(VRACCESS and LITERAL)
 	 * and return them in a map
 	 *
 	 * @param e the expression to be seperated
@@ -605,12 +604,12 @@ public class BoaNormalFormIntrinsics {
 	}
 
 	/**
-	 * Gives the reverse of the provided expression kind
+	 * Flips the ExpressionKind(operator)
 	 *
-	 * @param kind the ExpressionKind to reverse
-	 * @return reversed kind
+	 * @param kind the ExpressionKind
+	 * @return flipped kind
 	 */
-	private static ExpressionKind reverseKind(final ExpressionKind kind) {
+	private static ExpressionKind flipKind(final ExpressionKind kind) {
 		switch (kind) {
 			case GT:   return ExpressionKind.LT;
 			case LT: return ExpressionKind.GT;
