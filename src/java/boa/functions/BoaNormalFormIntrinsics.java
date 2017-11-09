@@ -559,6 +559,7 @@ public class BoaNormalFormIntrinsics {
 
 			case PAREN:
 				componentMap.putAll(seperate(e.getExpressions(0), side, sign));
+				break;
 
 			case LITERAL:
 				final ArrayList<Object[]> literalList = new ArrayList<Object[]>();
