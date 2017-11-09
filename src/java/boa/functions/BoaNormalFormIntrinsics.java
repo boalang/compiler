@@ -520,15 +520,6 @@ public class BoaNormalFormIntrinsics {
 			case PAREN:
 				componentMap.putAll(seperate(e.getExpressions(0), side, sign));
 
-			case METHODCALL:
-			case OP_MULT:
-			case OP_DIV:
-			case VARACCESS:
-				final ArrayList<Object[]> variableList = new ArrayList<Object[]>();
-				variableList.add(new Object[] {e, side, sign});
-				componentMap.put(0, variableList);
-				break;
-
 			case LITERAL:
 				final ArrayList<Object[]> literalList = new ArrayList<Object[]>();
 				if (BoaAstIntrinsics.isStringLit(e)) { // if it is a string expression, we don't wantto process it
@@ -540,7 +531,14 @@ public class BoaNormalFormIntrinsics {
 				}
 				break;
 
+			case METHODCALL:
+			case OP_MULT:
+			case OP_DIV:
+			case VARACCESS:
 			default:
+				final ArrayList<Object[]> variableList = new ArrayList<Object[]>();
+				variableList.add(new Object[] {e, side, sign});
+				componentMap.put(0, variableList);
 				break;
 		}
 
@@ -1079,9 +1077,12 @@ public class BoaNormalFormIntrinsics {
 				b = Expression.newBuilder(e);
 
 				b.clearExpressions();
-				for (final Object o : results)
-					b.addExpressions((Expression)o);
-
+				for (final Object o : results) {
+					if (o instanceof Long || o instanceof Double)
+						b.addExpressions(createLiteral(o.toString()));
+					else
+						b.addExpressions((Expression) o);
+				}
 				return b.build();
 		}
 	}
