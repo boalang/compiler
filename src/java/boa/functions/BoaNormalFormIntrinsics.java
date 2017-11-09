@@ -538,7 +538,7 @@ public class BoaNormalFormIntrinsics {
 				for(Map.Entry<Integer, ArrayList<Object[]>> entry: componentMap.entrySet()) {
 					for(Object[] o: entry.getValue()) {
 						l.add((Expression)o[0]);
-						if ((boolean) o[2] == false)
+						if (o[2].equals(false))
 							signCount++;
 					}
 				}
