@@ -291,7 +291,6 @@ public class BoaNormalFormIntrinsics {
 				final HashMap<Integer, ArrayList<Object[]>> componentMapLeft = seperate(e.getExpressions(0), true, true);  // Call seperate on the left expression
 				if (componentMapLeft.containsKey(-1))
 					return e;
-
 				if (componentMapLeft.containsKey(0))
 					variableList.addAll(componentMapLeft.get(0));
 				if (componentMapLeft.containsKey(1))
@@ -300,7 +299,6 @@ public class BoaNormalFormIntrinsics {
 				final HashMap<Integer, ArrayList<Object[]>> componentMapRight = seperate(e.getExpressions(1), false, true);  // Call seperate on the right expression
 				if (componentMapRight.containsKey(-1))
 					return e;
-
 				if (componentMapRight.containsKey(0))
 					variableList.addAll(componentMapRight.get(0));
 				if (componentMapRight.containsKey(1))
@@ -358,7 +356,6 @@ public class BoaNormalFormIntrinsics {
 				final HashMap<Integer, ArrayList<Object[]>> componentMapLeft = seperate(e.getExpressions(0), true, true);
 				if (componentMapLeft.containsKey(-1))
 					return e;
-
 				if (componentMapLeft.containsKey(0))
 					leftList.addAll(componentMapLeft.get(0));
 				if (componentMapLeft.containsKey(1))
@@ -367,7 +364,6 @@ public class BoaNormalFormIntrinsics {
 				final HashMap<Integer, ArrayList<Object[]>> componentMapRight = seperate(e.getExpressions(1), false, true);
 				if (componentMapRight.containsKey(-1))
 					return e;
-
 				if (componentMapRight.containsKey(0))
 					rightList.addAll(componentMapRight.get(0));
 				if (componentMapRight.containsKey(1))
@@ -450,7 +446,7 @@ public class BoaNormalFormIntrinsics {
 	 * @param side the side of the expression(left or right)
 	 * @param sign the sign of the expression(positive or negative)
 	 * @return the map of atomic expression(variable list and literal list)
-	 *         [0: Variable List] where Variable List is an ArrayList containing all VARACCESS occurances
+	 *         [0: Variable List] where Variable List is an ArrayList containing all VARACCESS occurances or MULT/DIV expressions
 	 *         [1: Literal List] where Literal List is an ArrayList containing all LITERAL occurances
 	 *         [-1: {true}] where -1 signify occurance of a string or illegal expression which can not be changed
 	 * @throws Exception
@@ -471,7 +467,7 @@ public class BoaNormalFormIntrinsics {
 				break;
 
 			case OP_ADD:
-				// break expression into sub expressions until we reach VARACCES and LITERALS
+				// break expression into sub expressions
 				for (int i = 0; i < e.getExpressionsCount(); i++) {
 					final HashMap<Integer, ArrayList<Object[]>> cMap = seperate(e.getExpressions(i), side, true);
 
@@ -517,6 +513,50 @@ public class BoaNormalFormIntrinsics {
 				}
 				break;
 
+			case OP_MULT:
+			case OP_DIV:
+				for (int i = 0; i < e.getExpressionsCount(); i++) {
+					final HashMap<Integer, ArrayList<Object[]>> cMap = seperate(e.getExpressions(i), side, true);
+
+					if (cMap.containsKey(0)) {
+						if (componentMap.containsKey(0))
+							componentMap.get(0).addAll(cMap.get(0));
+						else
+							componentMap.put(0, cMap.get(0));
+					}
+
+					if (cMap.containsKey(1)) {
+						if (componentMap.containsKey(1))
+							componentMap.get(1).addAll(cMap.get(1));
+						else
+							componentMap.put(1, cMap.get(1));
+					}
+				}
+
+				int signCount = 0;
+				ArrayList<Expression> l = new ArrayList<>();
+				for(Map.Entry<Integer, ArrayList<Object[]>> entry: componentMap.entrySet()) {
+					for(Object[] o: entry.getValue()) {
+						l.add((Expression)o[0]);
+						if ((boolean) o[2] == false)
+							signCount++;
+					}
+				}
+
+				componentMap.clear();
+				final ArrayList<Object[]> mList = new ArrayList<Object[]>();
+				Expression e1 = createExpression(e.getKind(), l.toArray(new Expression[l.size()]));
+
+				if(signCount == 0)
+					mList.add(new Object[] {e, side, sign});
+				else if(signCount % 2 == 1)
+					mList.add(new Object[] {e1, side, !sign});
+				else
+					mList.add(new Object[] {e1, side, sign});
+
+				componentMap.put(0, mList);
+				break;
+
 			case PAREN:
 				componentMap.putAll(seperate(e.getExpressions(0), side, sign));
 
@@ -532,8 +572,6 @@ public class BoaNormalFormIntrinsics {
 				break;
 
 			case METHODCALL:
-			case OP_MULT:
-			case OP_DIV:
 			case VARACCESS:
 			default:
 				final ArrayList<Object[]> variableList = new ArrayList<Object[]>();
