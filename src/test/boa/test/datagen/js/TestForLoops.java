@@ -8,12 +8,20 @@ public class TestForLoops extends JavaScriptBaseTest {
 
 	@Test
 	public void forInLoopTest1() throws IOException {
-		nodeTest(load("test/datagen/javascript/ForInLoopNode.boa"), load("test/datagen/javascript/ForInLoopNode.js"));
+		nodeTest(load("test/datagen/javascript/ForInLoopNode.boa"),
+				load("test/datagen/javascript/ForInLoopNode.js"));
+	}
+	
+	@Test
+	public void forEachLoopTest1() throws IOException {
+		nodeTest(load("test/datagen/javascript/ForEachNode.boa"), 
+				load("test/datagen/javascript/ForEachNode.js"));
 	}
 
 	@Test
 	public void forLoopTest1() throws IOException {
-		nodeTest(load("test/datagen/javascript/ForLoopNode.boa"), load("test/datagen/javascript/ForLoopNode.js"));
+		nodeTest(load("test/datagen/javascript/ForLoopNode.boa"),
+				load("test/datagen/javascript/ForLoopNode.js"));
 	}
 
 	@Test
