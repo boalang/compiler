@@ -452,7 +452,7 @@ public class BoaNormalFormIntrinsics {
 	 * @throws Exception
 	 */
 	private static HashMap<Integer, ArrayList<Object[]>> seperate(final Expression e, final boolean side, final boolean sign) throws Exception {
-		final HashMap<Integer, ArrayList<Object[]>> componentMap = new HashMap<Integer, ArrayList<Object[]>>();
+		final HashMap<Integer, ArrayList<Object[]>> componentMap = new LinkedHashMap<Integer, ArrayList<Object[]>>();
 		switch (e.getKind()) {
 			case EQ:
 			case NEQ:
