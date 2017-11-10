@@ -543,9 +543,12 @@ public class BoaNormalFormIntrinsics {
 					}
 				}
 
+				if (e.getKind() == ExpressionKind.OP_MULT)
+				    Collections.sort(l, new ExpressionComparator());
+				Expression e1 = createExpression(e.getKind(), l.toArray(new Expression[l.size()]));
+
 				componentMap.clear();
 				final ArrayList<Object[]> mList = new ArrayList<Object[]>();
-				Expression e1 = createExpression(e.getKind(), l.toArray(new Expression[l.size()]));
 
 				if(signCount == 0)
 					mList.add(new Object[] {e, side, sign});
