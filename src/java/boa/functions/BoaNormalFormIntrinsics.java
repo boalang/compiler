@@ -550,9 +550,7 @@ public class BoaNormalFormIntrinsics {
 				componentMap.clear();
 				final ArrayList<Object[]> mList = new ArrayList<Object[]>();
 
-				if(signCount == 0)
-					mList.add(new Object[] {e, side, sign});
-				else if(signCount % 2 == 1)
+				if(signCount % 2 == 1)
 					mList.add(new Object[] {e1, side, !sign});
 				else
 					mList.add(new Object[] {e1, side, sign});
