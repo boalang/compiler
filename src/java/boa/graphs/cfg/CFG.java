@@ -314,6 +314,7 @@ public class CFG {
 
 	public void astToCFG() {
 		if (md.getStatementsCount() > 0) {
+			CFGNode.numOfNodes = -1;
 			final CFGNode startNode = new CFGNode("ENTRY", CFGNode.TYPE_ENTRY,
 					"ENTRY", "ENTRY");
 			mergeSeq(startNode);
@@ -913,7 +914,6 @@ public class CFG {
 			for (final CFGNode node : nodes) {
 				results[node.getId()] = node;
 			}
-			CFGNode.numOfNodes = -1;
 			return results;
 		} catch (final Exception e) {
 			e.printStackTrace();
@@ -928,7 +928,6 @@ public class CFG {
 			for (final CFGNode node : cfg.getNodes()) {
 				results[node.getId()] = node;
 			}
-			CFGNode.numOfNodes = -1;
 			return results;
 		} catch (final Exception e) {
 			e.printStackTrace();
