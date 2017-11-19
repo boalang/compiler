@@ -141,8 +141,24 @@ public class BoaGraphIntrinsics {
 
 	@FunctionSpec(name = "dot", returnType = "string", formalParameters = { "CFG" })
 	public static String cfgToDot(final CFG cfg) {
+		return cfgToDot(cfg, "");
+	}
+
+	@FunctionSpec(name = "dot", returnType = "string", formalParameters = { "CFG", "bool" })
+	public static String cfgToDot(final CFG cfg, final boolean showMethod) {
+		if (showMethod)
+			return cfgToDot(cfg, boa.functions.BoaAstIntrinsics.prettyprint(cfg.getMd()));
+		return cfgToDot(cfg, "");
+	}
+
+	@FunctionSpec(name = "dot", returnType = "string", formalParameters = { "CFG", "string" })
+	public static String cfgToDot(final CFG cfg, final String label) {
 		final StringBuilder str = new StringBuilder();
-		str.append("digraph G {\n");
+		str.append("digraph {\n");
+		if (label.length() > 0) {
+			str.append("\tlabelloc=\"t\"\n");
+			str.append("\tlabel=\"" + dotEscape(label) + "\"\n");
+		}
 
 		for (final boa.graphs.cfg.CFGNode n : cfg.getNodes()) {
 			final String shape;
