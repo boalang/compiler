@@ -475,6 +475,8 @@ public class PHPVisitor extends AbstractVisitor {
 				mb.setKind(Modifier.ModifierKind.FINAL);
 				b.addModifiers(mb.build());
 				break;
+			default:
+				break;
 			}
 		}
 		b.setKind(boa.types.Ast.TypeKind.CLASS);
@@ -1721,6 +1723,8 @@ public class PHPVisitor extends AbstractVisitor {
 				mb = Modifier.newBuilder();
 				mb.setKind(Modifier.ModifierKind.FINAL);
 				b.addModifiers(mb.build());
+				break;
+			default:
 				break;
 			}
 		}

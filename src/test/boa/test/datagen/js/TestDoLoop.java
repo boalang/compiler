@@ -8,7 +8,7 @@ public class TestDoLoop extends JavaScriptBaseTest {
 
 	// The loop body returned a ScoopNode
 	@Test
-	public void DoLoopTest1() throws IOException {
+	public void doLoopTest1() throws IOException {
 		nodeTest(load("test/datagen/javascript/DoLoopNode.boa"), load("test/datagen/javascript/DoLoopNode.js"));
 	}
 

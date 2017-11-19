@@ -7,7 +7,7 @@ import org.junit.Test;
 public class TestTryCatch extends JavaScriptBaseTest {
 
 	@Test
-	public void TryCatchTest1() throws IOException {
+	public void tryCatchTest1() throws IOException {
 		nodeTest(load("test/datagen/javascript/TryCatchNodes.boa"), load("test/datagen/javascript/TryCatchNodes.js"));
 	}
 

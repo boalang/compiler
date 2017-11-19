@@ -200,7 +200,7 @@ public class TestTypeFullyQualifiedName {
 	}
 
 	@Test
-	public void VariableTypeName() throws IOException {
+	public void variableTypeName() throws IOException {
 		if (pr == null || ar == null)
 			return;
 		Writable key = new Text();
@@ -359,7 +359,7 @@ public class TestTypeFullyQualifiedName {
 	}
 
 	@Test
-	public void VarDeclTypeName() throws IOException {
+	public void varDeclTypeName() throws IOException {
 		if (pr == null || ar == null)
 			return;
 		Writable key = new Text();

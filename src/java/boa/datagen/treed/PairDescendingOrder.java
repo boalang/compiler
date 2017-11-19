@@ -13,7 +13,7 @@ public class PairDescendingOrder implements Comparator<Pair>
 	 * @param p1 first String to compare
 	 * @param p2 second String to compare
 	 *
-	 * @return +1 if p1<p2, 0 if p1==p2, -1 if p1>p2
+	 * @return +1 if p1 &lt; p2, 0 if p1 == p2, -1 if p1 &gt; p2
 	 */
 	@Override
 	public final int compare(Pair p1, Pair p2)

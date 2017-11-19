@@ -40,7 +40,7 @@ public class IssueDownloadWorker implements Runnable {
 				String projName = fullName[1];
 				if ((new File(OUT_PATH + "/" + id +"-issues.json")).exists())
 					continue;
-				issue.IssueDownloader(name, id, OUT_PATH, TOKEN_PATH);
+				issue.issueDownloader(name, id, OUT_PATH, TOKEN_PATH);
 			}
 		}
 	}

@@ -47,7 +47,7 @@ public class TestAssignment extends Java8BaseTest {
 	}
 	
 	@Test
-	public void lShiftAssignment() throws IOException {
+	public void leftShiftAssignment() throws IOException {
 		testWrapped(
 			load("test/datagen/java/LeftShiftAssignment.java").trim(),
 			load("test/datagen/boa/LeftShiftAssignment.boa").trim()
@@ -79,7 +79,7 @@ public class TestAssignment extends Java8BaseTest {
 	}
 	
 	@Test
-	public void rShiftAssignment() throws IOException {
+	public void rightShiftAssignment() throws IOException {
 		testWrapped(
 			load("test/datagen/java/RightShiftSignedAssignment.java").trim(),
 			load("test/datagen/boa/RightShiftSignedAssignment.boa").trim()
@@ -87,7 +87,7 @@ public class TestAssignment extends Java8BaseTest {
 	}
 	
 	@Test
-	public void UnsignedRShiftAssignment() throws IOException {
+	public void unsignedRShiftAssignment() throws IOException {
 		testWrapped(
 			load("test/datagen/java/RightShiftUnsignedAssignment.java").trim(),
 			load("test/datagen/boa/RightShiftUnsignedAssignment.boa").trim()
@@ -95,7 +95,7 @@ public class TestAssignment extends Java8BaseTest {
 	}
 	
 	@Test
-	public void TimesAssignment() throws IOException {
+	public void timesAssignment() throws IOException {
 		testWrapped(
 			load("test/datagen/java/TimesAssignment.java").trim(),
 			load("test/datagen/boa/TimesAssignment.boa").trim()

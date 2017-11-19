@@ -17,75 +17,75 @@ public class Forker {
 	private String urlFooter = "/forks";
 	private String content = "";
 	
-	public static void main(String args[]){
-		int numThreads = 1;
-		int totalFiles = new File(args[0]).listFiles().length;
-		int shareSize = totalFiles/numThreads;
+	public static void main(final String[] args){
+		final int numThreads = 1;
+		final int totalFiles = new File(args[0]).listFiles().length;
+		final int shareSize = totalFiles/numThreads;
 		int start = 0, end = 0;
 		
 		for (int i = 0; i < numThreads -1; i++){
 			start = end;
 			end = start + shareSize;
-			ForkerWorker worker = new ForkerWorker(args[0], args[1], args[2], start, end);
+			final ForkerWorker worker = new ForkerWorker(args[0], args[1], args[2], start, end);
 			new Thread(worker).start();
 		}
 		start = end;
 		end = totalFiles;
-		ForkerWorker worker = new ForkerWorker(args[0], args[1], args[2], start, end);
+		final ForkerWorker worker = new ForkerWorker(args[0], args[1], args[2], start, end);
 		new Thread(worker).start();
 	}
 	
 	
-	public Forker(String username, String password) {
+	public Forker(final String username, final String password) {
 		this.username = username;
 		this.password = password;
 	}
 	
-	public void fork(String name){
-		String url = urlHeader + name + urlFooter;
+	public void fork(final String name){
+		final String url = urlHeader + name + urlFooter;
 		try {
 			connection  = (HttpURLConnection) new URL(url).openConnection();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 		try {
 			connection.setRequestMethod("POST");
-		} catch (ProtocolException e) {
+		} catch (final ProtocolException e) {
 			e.printStackTrace();
 		}
 		connection.setDoOutput(true);
 		connection.setDoInput(true);
-		String authenStr = username + ":" + password;
-		String encodedAuthenStr = Base64.encode(authenStr.getBytes());
+		final String authenStr = username + ":" + password;
+		final String encodedAuthenStr = Base64.encode(authenStr.getBytes());
 		this.connection.setRequestProperty("Authorization", "Basic " + encodedAuthenStr);
 		try {
 			connection.connect();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			e.printStackTrace();
 		}
 		this.getHttpResponseContent();
 		System.out.println(content);
 	}
 	
-	public void rename(String name, String originalOwner){
-		String url = urlHeader + username + "/" + name;
-		String newName = "{\"name\": " + "\"" + originalOwner + "___" + name + "\"}";
-		String[] command = {"curl" ,  "-u" , username +":" +  password , "-X" , "PATCH", "-d" , newName  , url };
-		ProcessBuilder process = new ProcessBuilder(command);
+	public void rename(final String name, final String originalOwner){
+		final String url = urlHeader + username + "/" + name;
+		final String newName = "{\"name\": " + "\"" + originalOwner + "___" + name + "\"}";
+		final String[] command = {"curl" ,  "-u" , username +":" +  password , "-X" , "PATCH", "-d" , newName  , url };
+		final ProcessBuilder process = new ProcessBuilder(command);
 		try {
 			process.start();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			System.out.print("error");
 			e.printStackTrace();
 		}
 	}
 	
 	private void getHttpResponseContent() {
-		StringBuilder sb = new StringBuilder();
+		final StringBuilder sb = new StringBuilder();
 		try {
-			InputStream response = connection.getInputStream();
-			BufferedInputStream in = new BufferedInputStream(response);
-			byte[] bytes = new byte[10000];
+			final InputStream response = connection.getInputStream();
+			final BufferedInputStream in = new BufferedInputStream(response);
+			final byte[] bytes = new byte[10000];
 			int len = in.read(bytes);
 			while (len != -1)
 			{
@@ -100,7 +100,7 @@ public class Forker {
 			//System.out.println(sb.toString());
 			this.content = sb.toString();
 			return;
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			//e.printStackTrace();
 			System.out.println(e.getMessage());
 		}

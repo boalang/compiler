@@ -15,7 +15,7 @@ public class GitHubIssuesDownloader {
 
 		public static void main(String[] args) {
 		//	GitHubIssuesDownloader issue = new GitHubIssuesDownloader();
-		//	issue.IssueDownloader(args[0], "1" , args[1], args[2]);
+		//	issue.issueDownloader(args[0], "1" , args[1], args[2]);
 			int start = 0;
 			int end = 0; 
 			File inDir = new File(args[0]);
@@ -35,7 +35,7 @@ public class GitHubIssuesDownloader {
 			worker.run();
 		}
 
-		public void IssueDownloader(String name, String id, String outPath, String tokenPath) {
+		public void issueDownloader(String name, String id, String outPath, String tokenPath) {
 			JsonArray issuesRepos = new JsonArray();
 			String outDir = outPath;
 			TokenList tokens = new TokenList(tokenPath);
