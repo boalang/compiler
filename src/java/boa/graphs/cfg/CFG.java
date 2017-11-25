@@ -170,11 +170,6 @@ public class CFG {
 	}
 
 	public void createNewEdge(final CFGNode node, final CFGNode anoNode) {
-		if (node.getClassName() == null) {
-			new CFGEdge(node, anoNode);
-			return;
-		}
-
 		new CFGEdge(node, anoNode);
 	}
 
