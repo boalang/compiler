@@ -1,5 +1,6 @@
 /*
- * Copyright 2017, Hridesh Rajan, Ganesha Upadhyaya
+ * Copyright 2017, Hridesh Rajan, Ganesha Upadhyaya, Robert Dyer
+ *                 Bowling Green State University
  *                 and Iowa State University of Science and Technology
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,46 +31,43 @@ import boa.types.Ast.Type;
 import boa.types.Ast.Variable;
 import boa.types.Control.CFG.Builder;
 import boa.types.Control.CFGEdge.CFGEdgeLabel;
+import boa.types.Control.CFGNode.CFGNodeType;
 
 /**
  * Control flow graph builder.
  *
  * @author ganeshau
+ * @author rdyer
  */
 public class CFG {
-	public static final int minSize = -1;
-
 	public Method md;
 	public String class_name;
-	static boolean endFlag = false;
-	static boolean switchFlag=false;
+
 	protected HashSet<CFGNode> nodes = new HashSet<CFGNode>();
+	private CFGNode entryNode;
+	private CFGNode exitNode;
+
 	private HashSet<CFGNode> outs = new HashSet<CFGNode>();
 	private HashSet<CFGNode> ins = new HashSet<CFGNode>();
 	private HashSet<CFGNode> breaks = new HashSet<CFGNode>();
 	private HashSet<CFGNode> returns = new HashSet<CFGNode>();
-	private CFGNode entryNode ;
-	private CFGNode exitNode ;
+
 	private boolean isLoopPresent = false;
 	private boolean isBranchPresent = false;
-	private CFGNode[] orderedNodes;
+
 	int count = 0;
 
 	public CFG(final Method method) {
-		this.md = method;
-		this.class_name = "this";
+        this(method, "this");
 	}
 
 	public CFG(final Method method, final String cls_name) {
 		this.md = method;
 		this.class_name = cls_name;
+		astToCFG();
 	}
 
 	public CFG() {
-	}
-	
-	public CFGNode[] getOrderedNodes() {
-		return orderedNodes;
 	}
 
 	public Method getMd() {
@@ -263,7 +261,7 @@ public class CFG {
 	}
 
 	public void addBreakNode(final String identifier) {
-		final CFGNode node = new CFGNode(identifier, CFGNode.TYPE_OTHER, "<GOTO>",
+		final CFGNode node = new CFGNode(identifier, CFGNodeType.OTHER, "<GOTO>",
 				identifier);
 		this.mergeSeq(node);
 		this.outs.remove(node);
@@ -277,7 +275,7 @@ public class CFG {
 	}
 
 	public void addReturnNode() {
-		final CFGNode node = new CFGNode("END[return]", CFGNode.TYPE_OTHER, "END[return]", "END[return]");
+		final CFGNode node = new CFGNode("END[return]", CFGNodeType.OTHER, "END[return]", "END[return]");
 		this.mergeSeq(node);
 		this.outs.remove(node);
 		this.returns.add(node);
@@ -307,22 +305,20 @@ public class CFG {
 		return this.nodes.isEmpty();
 	}
 
-	public void astToCFG() {
+	private void astToCFG() {
 		if (md.getStatementsCount() > 0) {
 			CFGNode.numOfNodes = -1;
-			final CFGNode startNode = new CFGNode("ENTRY", CFGNode.TYPE_ENTRY,
+			final CFGNode startNode = new CFGNode("ENTRY", CFGNodeType.ENTRY,
 					"ENTRY", "ENTRY");
 			mergeSeq(startNode);
 			mergeSeq(traverse(startNode, md.getStatementsList().get(0)));
-			if (getNodes().size() >= CFG.minSize) {
-				adjustReturnNodes();
-				final CFGNode endNode = new CFGNode("EXIT", CFGNode.TYPE_ENTRY, "EXIT",
-						"EXIT");
-				endFlag = true;
-				mergeSeq(endNode);
-				endFlag = false;
-				this.exitNode = endNode;
-			}
+
+            adjustReturnNodes();
+            final CFGNode endNode = new CFGNode("EXIT", CFGNodeType.ENTRY, "EXIT",
+                    "EXIT");
+            mergeSeq(endNode);
+            this.exitNode = endNode;
+
 			this.entryNode = startNode;
 			for (final CFGNode node : this.nodes) {
 				if (node.hasExpr()) {
@@ -345,10 +341,10 @@ public class CFG {
 
 	private CFG traverse(final CFGNode cfgNode, final Expression root) {
 		final CFG graph = new CFG();
-		switch (root.getKind().getNumber()) {
-		case ExpressionKind.CONDITIONAL_VALUE:
+		switch (root.getKind()) {
+		case CONDITIONAL:
 			return traverse_conditional(cfgNode, root);
-		case ExpressionKind.METHODCALL_VALUE:
+		case METHODCALL:
 			if (root.getMethod().equals("<init>"))
 				return traverse_init(cfgNode, root);
 			else if (root.getMethod().equals("super"))
@@ -357,54 +353,54 @@ public class CFG {
 				return traverse_super(cfgNode, root);
 			else
 				return traverse_call(cfgNode, root);
-		case ExpressionKind.NEW_VALUE:
+		case NEW:
 			return traverse_instance(cfgNode, root);
-		case ExpressionKind.NEQ_VALUE:
-		case ExpressionKind.EQ_VALUE:
-		case ExpressionKind.GT_VALUE:
-		case ExpressionKind.GTEQ_VALUE:
-		case ExpressionKind.LITERAL_VALUE:
-		case ExpressionKind.LOGICAL_AND_VALUE:
-		case ExpressionKind.LOGICAL_NOT_VALUE:
-		case ExpressionKind.LOGICAL_OR_VALUE:
-		case ExpressionKind.LT_VALUE:
-		case ExpressionKind.LTEQ_VALUE:
-		case ExpressionKind.ANNOTATION_VALUE:
-		case ExpressionKind.ARRAYINDEX_VALUE:
-		case ExpressionKind.ARRAYINIT_VALUE:
-		case ExpressionKind.ASSIGN_ADD_VALUE:
-		case ExpressionKind.ASSIGN_BITAND_VALUE:
-		case ExpressionKind.ASSIGN_BITOR_VALUE:
-		case ExpressionKind.ASSIGN_BITXOR_VALUE:
-		case ExpressionKind.ASSIGN_DIV_VALUE:
-		case ExpressionKind.ASSIGN_LSHIFT_VALUE:
-		case ExpressionKind.ASSIGN_MOD_VALUE:
-		case ExpressionKind.ASSIGN_MULT_VALUE:
-		case ExpressionKind.ASSIGN_RSHIFT_VALUE:
-		case ExpressionKind.ASSIGN_SUB_VALUE:
-		case ExpressionKind.ASSIGN_UNSIGNEDRSHIFT_VALUE:
-		case ExpressionKind.ASSIGN_VALUE:
-		case ExpressionKind.BIT_AND_VALUE:
-		case ExpressionKind.BIT_LSHIFT_VALUE:
-		case ExpressionKind.BIT_NOT_VALUE:
-		case ExpressionKind.BIT_OR_VALUE:
-		case ExpressionKind.BIT_RSHIFT_VALUE:
-		case ExpressionKind.BIT_UNSIGNEDRSHIFT_VALUE:
-		case ExpressionKind.BIT_XOR_VALUE:
-		case ExpressionKind.CAST_VALUE:
-		case ExpressionKind.NEWARRAY_VALUE:
-		case ExpressionKind.NULLCOALESCE_VALUE:
-		case ExpressionKind.OP_ADD_VALUE:
-		case ExpressionKind.OP_DEC_VALUE:
-		case ExpressionKind.OP_DIV_VALUE:
-		case ExpressionKind.OP_INC_VALUE:
-		case ExpressionKind.OP_MOD_VALUE:
-		case ExpressionKind.OP_MULT_VALUE:
-		case ExpressionKind.OP_SUB_VALUE:
-		case ExpressionKind.OTHER_VALUE:
-		case ExpressionKind.TYPECOMPARE_VALUE:
-		case ExpressionKind.VARACCESS_VALUE:
-		case ExpressionKind.VARDECL_VALUE:
+		case NEQ:
+		case EQ:
+		case GT:
+		case GTEQ:
+		case LITERAL:
+		case LOGICAL_AND:
+		case LOGICAL_NOT:
+		case LOGICAL_OR:
+		case LT:
+		case LTEQ:
+		case ANNOTATION:
+		case ARRAYINDEX:
+		case ARRAYINIT:
+		case ASSIGN_ADD:
+		case ASSIGN_BITAND:
+		case ASSIGN_BITOR:
+		case ASSIGN_BITXOR:
+		case ASSIGN_DIV:
+		case ASSIGN_LSHIFT:
+		case ASSIGN_MOD:
+		case ASSIGN_MULT:
+		case ASSIGN_RSHIFT:
+		case ASSIGN_SUB:
+		case ASSIGN_UNSIGNEDRSHIFT:
+		case ASSIGN:
+		case BIT_AND:
+		case BIT_LSHIFT:
+		case BIT_NOT:
+		case BIT_OR:
+		case BIT_RSHIFT:
+		case BIT_UNSIGNEDRSHIFT:
+		case BIT_XOR:
+		case CAST:
+		case NEWARRAY:
+		case NULLCOALESCE:
+		case OP_ADD:
+		case OP_DEC:
+		case OP_DIV:
+		case OP_INC:
+		case OP_MOD:
+		case OP_MULT:
+		case OP_SUB:
+		case OTHER:
+		case TYPECOMPARE:
+		case VARACCESS:
+		case VARDECL:
 			/*
 			 * final List<Expression> expressionsList =
 			 * root.getExpressionsList(); final int expressionsSize =
@@ -412,68 +408,63 @@ public class CFG {
 			 * { graph.mergeSeq(traverse(cfgNode, expressionsList.get(i))); }
 			 */
 			final CFGNode bNode = new CFGNode(root.getKind().name(),
-					CFGNode.TYPE_OTHER, "", root.getKind().name());
+					CFGNodeType.OTHER, "", root.getKind().name());
 			bNode.setAstNode(root);
 			graph.mergeSeq(bNode);
 			return graph;
-        default:
+		default:
 			return graph;
 		}
 	}
 
 	private CFG traverse(final CFGNode cfgNode, final Statement root) {
 		final CFG graph = new CFG();
-		switch (root.getKind().getNumber()) {
-		case StatementKind.BLOCK_VALUE:
+		switch (root.getKind()) {
+		case BLOCK:
 			final List<Statement> statementsList = root.getStatementsList();
 			final int statementsSize = statementsList.size();
 			for (int i = 0; i < statementsSize; i++)
 				graph.mergeSeq(traverse(cfgNode, statementsList.get(i)));
 			break;
-		case StatementKind.EXPRESSION_VALUE:
+		case EXPRESSION:
 			return traverse(cfgNode, root.getExpression());
-		case StatementKind.SYNCHRONIZED_VALUE:
+		case SYNCHRONIZED:
 			return traverse_sync(cfgNode, root);
-		case StatementKind.RETURN_VALUE:
+		case RETURN:
 			return traverse_return(cfgNode, root);
-		case StatementKind.FOR_VALUE:
+		case FOR:
 			return traverse_for (cfgNode, root);
-		case StatementKind.DO_VALUE:
+		case DO:
 			return traverse_do(cfgNode, root);
-		case StatementKind.WHILE_VALUE:
+		case WHILE:
 			return traverse_while(cfgNode, root);
-		case StatementKind.IF_VALUE:
+		case IF:
 			return traverse_if (cfgNode, root);
-		case StatementKind.BREAK_VALUE:
+		case BREAK:
 			return traverse_break(cfgNode, root);
-		case StatementKind.CASE_VALUE:
+		case CASE:
 			return traverse_case(cfgNode, root);
-		case StatementKind.CONTINUE_VALUE:
+		case CONTINUE:
 			return traverse_continue(cfgNode, root);
-		case StatementKind.LABEL_VALUE:
+		case LABEL:
 			return traverse_labeled(cfgNode, root);
-		case StatementKind.SWITCH_VALUE:
+		case SWITCH:
 			return traverse_switch(cfgNode, root);
-			/*
-			 * case StatementKind.CASE_VALUE: return traverse_;
-			 */
-		case StatementKind.TRY_VALUE:
+		case TRY:
 			return traverse_try(cfgNode, root);
-		case StatementKind.THROW_VALUE:
+		case THROW:
 			return traverse_throw(cfgNode, root);
-		case StatementKind.CATCH_VALUE:
+		case CATCH:
 			return traverse_catch(cfgNode, root);
-			/*
-			 * case StatementKind.EMPTY_VALUE: break;
-			 */
-		case StatementKind.ASSERT_VALUE:
-		case StatementKind.TYPEDECL_VALUE:
-		case StatementKind.OTHER_VALUE:
+		case ASSERT:
+		case TYPEDECL:
+		case OTHER:
 			final CFGNode aNode = new CFGNode(root.getKind().name(),
-					CFGNode.TYPE_OTHER, "", root.getKind().name());
+					CFGNodeType.OTHER, "", root.getKind().name());
 			aNode.setAstNode(root);
 			graph.mergeSeq(aNode);
 			return graph;
+        case EMPTY:
 		default:
 			break;
 		}
@@ -498,16 +489,16 @@ public class CFG {
 			nObjectname = "anonymous";
 		}
 
-		Type curr_type = null;
-		String type_str = "";
+		final String type_str;
 		if (root.getVariableDeclsCount() > 0) {
-			curr_type = root.getVariableDecls(0).getVariableType();
-			type_str = String.valueOf(curr_type.getName());
+			type_str = String.valueOf(root.getVariableDecls(0).getVariableType().getName());
 		} else if (root.getNewType() != null) {
 			type_str = String.valueOf(root.getNewType().getName());
+		} else {
+			type_str = "";
 		}
 
-		final CFGNode aNode = new CFGNode("$new$", CFGNode.TYPE_METHOD, type_str,
+		final CFGNode aNode = new CFGNode("$new$", CFGNodeType.METHOD, type_str,
 				nObjectname, root.getExpressionsCount());
 		aNode.setAstNode(root);
 		aNode.setPid((cfgNode == null) ? "." : cfgNode.getPid()
@@ -518,7 +509,7 @@ public class CFG {
 
 	private CFG traverse_clinit(final CFGNode cfgNode, final Expression root) {
 		final CFG graph = new CFG();
-		final CFGNode aNode = new CFGNode("<init>", CFGNode.TYPE_METHOD, class_name,
+		final CFGNode aNode = new CFGNode("<init>", CFGNodeType.METHOD, class_name,
 				"super", root.getExpressionsCount());
 		aNode.setAstNode(root);
 		aNode.setPid((cfgNode == null) ? "." : cfgNode.getPid()
@@ -529,7 +520,7 @@ public class CFG {
 
 	private CFG traverse_init(final CFGNode cfgNode, final Expression root) {
 		final CFG graph = new CFG();
-		final CFGNode aNode = new CFGNode("<init>", CFGNode.TYPE_METHOD, class_name,
+		final CFGNode aNode = new CFGNode("<init>", CFGNodeType.METHOD, class_name,
 				"this", root.getExpressionsCount());
 		aNode.setAstNode(root);
 		aNode.setPid((cfgNode == null) ? "." : cfgNode.getPid()
@@ -541,7 +532,7 @@ public class CFG {
 	private CFG traverse_call(final CFGNode cfgNode, final Expression root) {
 		final CFG graph = new CFG();
 		CFGNode aNode = null;
-		aNode = new CFGNode(root.getMethod(), CFGNode.TYPE_METHOD, class_name,
+		aNode = new CFGNode(root.getMethod(), CFGNodeType.METHOD, class_name,
 				"this", root.getExpressionsCount());
 		aNode.setAstNode(root);
 		aNode.setPid((cfgNode == null) ? "." : cfgNode.getPid()
@@ -554,7 +545,7 @@ public class CFG {
 		final CFG graph = new CFG();
 		CFGNode aNode = null;
 		final Expression mcall = root;
-		aNode = new CFGNode(mcall.getMethod(), CFGNode.TYPE_METHOD, class_name,
+		aNode = new CFGNode(mcall.getMethod(), CFGNodeType.METHOD, class_name,
 				"super", mcall.getExpressionsCount());
 		aNode.setAstNode(root);
 		aNode.setPid((cfgNode == null) ? "." : cfgNode.getPid()
@@ -570,7 +561,7 @@ public class CFG {
 		 * assumption node 0 is conditional node
 		 */
 
-		final CFGNode branch = new CFGNode("IF", CFGNode.TYPE_CONTROL, "IF", "IF");
+		final CFGNode branch = new CFGNode("IF", CFGNodeType.CONTROL, "IF", "IF");
 		branch.setAstNode(root.getExpression());
 		branch.setPid((cfgNode == null) ? "." : cfgNode.getPid()
 				+ cfgNode.getId() + ".");
@@ -595,7 +586,7 @@ public class CFG {
 		this.isBranchPresent = true;
 		final CFG graph = new CFG();
 
-		final CFGNode branch = new CFGNode("IF", CFGNode.TYPE_CONTROL, "IF", "IF");
+		final CFGNode branch = new CFGNode("IF", CFGNodeType.CONTROL, "IF", "IF");
 		branch.setAstNode(root);
 		branch.setPid((cfgNode == null) ? "." : cfgNode.getPid()
 				+ cfgNode.getId() + ".");
@@ -621,7 +612,7 @@ public class CFG {
 		this.isBranchPresent = true;
 		final CFG graph = new CFG();
 		final CFGNode node = new CFGNode(root.getExpression().toString(),
-				CFGNode.TYPE_CONTROL, "SWITCH", "SWITCH");
+				CFGNodeType.CONTROL, "SWITCH", "SWITCH");
 		node.setAstNode(root.getExpression());
 		node.setPid((cfgNode == null) ? "." : cfgNode.getPid()
 				+ cfgNode.getId() + ".");
@@ -660,7 +651,7 @@ public class CFG {
 			else
 				graph.mergeABranch(subgraph, node);
 		}
-		if (sc != null && (sc.getExpression() == null) && !subgraph.isEmpty()) 
+		if (sc != null && (sc.getExpression() == null) && !subgraph.isEmpty())
 			graph.getOuts().remove(node);
 		graph.adjustBreakNodes("");
 		return graph;
@@ -674,7 +665,7 @@ public class CFG {
 		}
 		if (root.getInitializationsCount() == 0) { // enhanced for
 			if (root.hasVariableDeclaration()) {
-				final CFGNode bNode = new CFGNode("VARDECL", CFGNode.TYPE_OTHER, "", "VARDECL");
+				final CFGNode bNode = new CFGNode("VARDECL", CFGNodeType.OTHER, "", "VARDECL");
 				final boa.types.Ast.Expression.Builder eb = boa.types.Ast.Expression.newBuilder();
 				eb.setKind(boa.types.Ast.Expression.ExpressionKind.VARDECL);
 				eb.addVariableDecls(root.getVariableDeclaration());
@@ -683,14 +674,14 @@ public class CFG {
 			}
 		}
 
-		final CFGNode control = new CFGNode("FOR", CFGNode.TYPE_CONTROL, "FOR", "FOR");
+		final CFGNode control = new CFGNode("FOR", CFGNodeType.CONTROL, "FOR", "FOR");
 		control.setAstNode(root.getExpression());
 		control.setPid((cfgNode == null) ? "." : cfgNode.getPid()
 				+ cfgNode.getId() + ".");
 
 		graph.mergeSeq(control);
 		final CFG branch = traverse(control, root.getStatements(0));
-        for (final Expression e : root.getUpdatesList()) {
+		for (final Expression e : root.getUpdatesList()) {
 			branch.mergeSeq(traverse(cfgNode, e));
 		}
 		graph.mergeABranch(branch, control, "T");
@@ -707,7 +698,7 @@ public class CFG {
 	private CFG traverse_while(final CFGNode cfgNode, final Statement root) {
 		this.isLoopPresent = true;
 		final CFG graph = new CFG();
-		final CFGNode control = new CFGNode("WHILE", CFGNode.TYPE_CONTROL, "WHILE",
+		final CFGNode control = new CFGNode("WHILE", CFGNodeType.CONTROL, "WHILE",
 				"WHILE");
 		control.setAstNode(root.getExpression());
 		control.setPid((cfgNode == null) ? "." : cfgNode.getPid()
@@ -730,7 +721,7 @@ public class CFG {
 		this.isLoopPresent = true;
 		final CFG graph = new CFG();
 
-		final CFGNode control = new CFGNode("DO", CFGNode.TYPE_CONTROL, "DO", "DO");
+		final CFGNode control = new CFGNode("DO", CFGNodeType.CONTROL, "DO", "DO");
 		control.setAstNode(root.getExpression());
 		control.setPid((cfgNode == null) ? "." : cfgNode.getPid()
 				+ cfgNode.getId() + ".");
@@ -761,7 +752,7 @@ public class CFG {
 		} else {
 			label = root.getKind().name();
 		}
-		final CFGNode node = new CFGNode(label, CFGNode.TYPE_OTHER, "Case", label);
+		final CFGNode node = new CFGNode(label, CFGNodeType.OTHER, "Case", label);
 		node.setAstNode(root);
 		graph.addBreakNode(node);
 		graph.getOuts().add(node);
@@ -776,7 +767,7 @@ public class CFG {
 		} else {
 			label = root.getKind().name();
 		}
-		final CFGNode node = new CFGNode(label, CFGNode.TYPE_OTHER, "<GOTO>", label);
+		final CFGNode node = new CFGNode(label, CFGNodeType.OTHER, "<GOTO>", label);
 		node.setAstNode(root);
 		graph.addBreakNode(node);
 		graph.getOuts().add(node);
@@ -791,7 +782,7 @@ public class CFG {
 		} else {
 			label = root.getKind().name();
 		}
-		final CFGNode node = new CFGNode(label, CFGNode.TYPE_OTHER, "<GOTO>", label);
+		final CFGNode node = new CFGNode(label, CFGNodeType.OTHER, "<GOTO>", label);
 		node.setAstNode(root);
 		graph.addBreakNode(node);
 		return graph;
@@ -800,10 +791,11 @@ public class CFG {
 	private CFG traverse_throw(final CFGNode cfgNode, final Statement root) {
 		this.isBranchPresent = true;
 		final CFG graph = new CFG();
+        // FIXME what if its "throw new m(a(), x());"?
 		/*if (root.getExpression() != null)
 			graph.mergeSeq(traverse(cfgNode, root.getExpression()));
 		*/
-		final CFGNode node = new CFGNode("END[throw]", CFGNode.TYPE_OTHER, "END[throw]",
+		final CFGNode node = new CFGNode("END[throw]", CFGNodeType.OTHER, "END[throw]",
 				"END[throw]");
 		node.setAstNode(root);
 		graph.addReturnNode(node);
@@ -812,10 +804,11 @@ public class CFG {
 
 	private CFG traverse_return(final CFGNode cfgNode, final Statement root) {
 		final CFG graph = new CFG();
+        // FIXME what if its "return m();"?
 		/*if (root.getExpression() != null)
 			graph.mergeSeq(traverse(cfgNode, root.getExpression()));
 		*/
-		final CFGNode node = new CFGNode("END[return]", CFGNode.TYPE_OTHER, "END[return]",
+		final CFGNode node = new CFGNode("END[return]", CFGNodeType.OTHER, "END[return]",
 				"END[return]");
 		node.setAstNode(root);
 		graph.addReturnNode(node);
@@ -824,7 +817,7 @@ public class CFG {
 
 	private CFG traverse_try(final CFGNode cfgNode, final Statement root) {
 		final CFG graph = new CFG();
-		final CFGNode branch = new CFGNode("TRY", CFGNode.TYPE_CONTROL, "TRY", "TRY");
+		final CFGNode branch = new CFGNode("TRY", CFGNodeType.CONTROL, "TRY", "TRY");
 		branch.setAstNode(root);
 		branch.setPid((cfgNode == null) ? "." : cfgNode.getPid()
 				+ cfgNode.getId() + ".");
@@ -845,7 +838,7 @@ public class CFG {
 			}
 		}
 		graph.getOuts().remove(branch);
-		if (finallyBlock != null) {         
+		if (finallyBlock != null) {
 			graph.adjustReturnNodes();
 			graph.mergeSeq(traverse(cfgNode, finallyBlock));
 		}
@@ -854,7 +847,7 @@ public class CFG {
 
 	private CFG traverse_catch(final CFGNode cfgNode, final Statement root) {
 		final CFG graph = new CFG();
-		final CFGNode aNode = new CFGNode("CATCH", CFGNode.TYPE_OTHER, "CATCH",
+		final CFGNode aNode = new CFGNode("CATCH", CFGNodeType.OTHER, "CATCH",
 				"CATCH");
 		aNode.setAstNode(root);
 		graph.mergeSeq(aNode);
@@ -875,12 +868,12 @@ public class CFG {
 		return graph;
 	}
 
-	public final void postorder(final CFGNode node, final java.util.HashMap<Integer,String> nodeVisitStatus, final CFGNode[] results) throws Exception {
-		nodeVisitStatus.put(node.getId(),"visited");
+	public final void postorder(final CFGNode node, final java.util.Set<Integer> visitedNodes, final CFGNode[] results) throws Exception {
+		visitedNodes.add(node.getId());
 		for (final CFGNode succ : node.getSuccessorsList()) {
-		    if (nodeVisitStatus.get(succ.getId()).equals("unvisited")) {
-				postorder(succ, nodeVisitStatus, results);
-		    }
+			if (!visitedNodes.contains(succ.getId())) {
+				postorder(succ, visitedNodes, results);
+			}
 		}
 		results[count] = node;
 		count++;
@@ -889,26 +882,8 @@ public class CFG {
 	public CFGNode[] order() {
 		try {
 			final CFGNode[] results = new CFGNode[nodes.size()];
-			final java.util.HashMap<Integer,String> nodeVisitStatus=new java.util.HashMap<Integer,String>();
-			final CFGNode[] nl = sortNodes();
-			for (int i = 0; i < nl.length; i++) {
-				nodeVisitStatus.put(nl[i].getId(),"unvisited");
-			}
-			postorder(this.getEntryNode(), nodeVisitStatus, results);
-			return results;
-		} catch (final Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
-	public CFGNode[] sortNodes() {
-		try {
-			final CFGNode[] results = new CFGNode[nodes.size()];
-			
-			for (final CFGNode node : nodes) {
-				results[node.getId()] = node;
-			}
+			final java.util.Set<Integer> visitedNodes = new java.util.HashSet<Integer>();
+			postorder(this.getEntryNode(), visitedNodes, results);
 			return results;
 		} catch (final Exception e) {
 			e.printStackTrace();
@@ -916,11 +891,11 @@ public class CFG {
 		return null;
 	}
 
-	public CFGNode[] sortNodes(final CFG cfg) {
+	public CFGNode[] sortNodes() {
 		try {
-			final CFGNode[] results = new CFGNode[cfg.getNodes().size()];
-			
-			for (final CFGNode node : cfg.getNodes()) {
+			final CFGNode[] results = new CFGNode[nodes.size()];
+
+			for (final CFGNode node : nodes) {
 				results[node.getId()] = node;
 			}
 			return results;

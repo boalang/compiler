@@ -50,13 +50,9 @@ public class LocalMayAliasAnalysis extends AbstractVisitorNoArgNoRet {
 
 	public HashSet<Identifier> start(CFGBuildingVisitor cfgBuilder, Identifier id) {
 		aliastSet.add(id);
-		java.util.HashMap<Integer,String> nodeVisitStatus = new java.util.HashMap<Integer,String>();
-		for (final Node subnode : cfgBuilder.order) {
-			nodeVisitStatus.put(subnode.nodeId, "unvisited");
-		}
-		nodeVisitStatus.put(cfgBuilder.currentStartNodes.get(0).nodeId, "visited");
-		dfs(cfgBuilder.currentStartNodes.get(0), nodeVisitStatus);
-		//System.out.println("aliaset "+aliastSet);
+		final java.util.Set<Integer> visitedNodes = new java.util.HashSet<Integer>();
+		visitedNodes.add(cfgBuilder.currentStartNodes.get(0).nodeId);
+		dfs(cfgBuilder.currentStartNodes.get(0), visitedNodes);
 		return aliastSet;
 	}
 

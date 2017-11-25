@@ -27,22 +27,19 @@ import boa.compiler.visitors.*;
 public class CreateNodeId extends AbstractVisitorNoArgNoRet {
 	int id = 0;
 
-	public final void createNodeIds(final Node node, final java.util.HashMap<Node, String> nodeVisitStatus) {
-		nodeVisitStatus.put(node, "visited");
+	public final void createNodeIds(final Node node, final java.util.Set<Node> visitedNodes) {
+		visitedNodes.add(node);
 		node.nodeId = ++id;
 		for (final Node succ : node.successors) {
-		    if (nodeVisitStatus.get(succ).equals("unvisited")) {
-				createNodeIds(succ, nodeVisitStatus);
-		    }
+			if (!visitedNodes.contains(succ)) {
+				createNodeIds(succ, visitedNodes);
+			}
 		}
 	}
 
 	public void start(final CFGBuildingVisitor cfgBuilder) {
-		final java.util.HashMap<Node,String> nodeVisitStatus = new java.util.HashMap<Node,String>();
-		for (final Node subnode : cfgBuilder.order) {
-			nodeVisitStatus.put(subnode, "unvisited");
-		}
-		nodeVisitStatus.put(cfgBuilder.currentStartNodes.get(0), "visited");
-		createNodeIds(cfgBuilder.currentStartNodes.get(0), nodeVisitStatus);
+		final java.util.Set<Node> visitedNodes = new java.util.HashSet<Node>();
+		visitedNodes.add(cfgBuilder.currentStartNodes.get(0));
+		createNodeIds(cfgBuilder.currentStartNodes.get(0), visitedNodes);
 	}
 }

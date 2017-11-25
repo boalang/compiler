@@ -16,6 +16,8 @@
  */
 package boa.graphs.cfg;
 
+import boa.types.Control.CFGNode.CFGNodeType;
+
 /**
  * Control flow graph builder edge
  *
@@ -37,7 +39,7 @@ public class CFGEdge {
 		this.src.addOutEdge(this);
 		this.dest.addInEdge(this);
 
-		if (this.src.getNodeKind() == CFGNode.TYPE_CONTROL) {
+		if (this.src.getKind() == CFGNodeType.CONTROL) {
 			if (this.src.hasFalseBranch()) {
 				this.label = "T";
 			} else {

@@ -30,10 +30,6 @@ import boa.types.Control.CFGNode.CFGNodeType;
  * @author ganeshau
  */
 public class CFGNode implements Comparable<CFGNode> {
-	public static final int TYPE_METHOD = 1;
-	public static final int TYPE_CONTROL = 2;
-	public static final int TYPE_ENTRY = 3;
-	public static final int TYPE_OTHER = 4;
 	public static int numOfNodes = -1;
 
 	private int id;
@@ -42,7 +38,7 @@ public class CFGNode implements Comparable<CFGNode> {
 	private int classNameId;
 	private int numOfParameters = 0;
 	private HashSet<Integer> parameters;
-	private int kind = TYPE_OTHER;
+	private CFGNodeType kind = CFGNodeType.OTHER;
 	private String pid;
 	private Statement stmt;
 	private Expression expr;
@@ -73,7 +69,7 @@ public class CFGNode implements Comparable<CFGNode> {
 	public CFGNode(final CFGNode tmp) {
 	}
 
-	public CFGNode(final String methodName, final int kind, final String className,
+	public CFGNode(final String methodName, final CFGNodeType kind, final String className,
 			final String objectName) {
 		this.id = ++numOfNodes;
 		this.methodId = convertLabel(methodName);
@@ -82,7 +78,7 @@ public class CFGNode implements Comparable<CFGNode> {
 		this.objectNameId = convertLabel(objectName);
 	}
 
-	public CFGNode(final String methodName, final int kind, final String className,
+	public CFGNode(final String methodName, final CFGNodeType kind, final String className,
 			final String objectName, final int numOfParameters, final HashSet<Integer> datas) {
 		this.id = ++numOfNodes;
 		this.methodId = convertLabel(methodName);
@@ -99,7 +95,7 @@ public class CFGNode implements Comparable<CFGNode> {
 		this.numOfParameters = numOfParameters;
 	}
 
-	public CFGNode(final String methodName, final int kind, final String className,
+	public CFGNode(final String methodName, final CFGNodeType kind, final String className,
 			final String objectName, final int numOfParameters) {
 		this.id = ++numOfNodes;
 		this.methodId = convertLabel(methodName);
@@ -159,10 +155,6 @@ public class CFGNode implements Comparable<CFGNode> {
 
 	public int getId() {
 		return this.id;
-	}
-
-	public int getNodeKind() {
-		return this.kind;
 	}
 
 	public int getNumOfParameters() {
@@ -313,7 +305,7 @@ public class CFGNode implements Comparable<CFGNode> {
 	public Builder newBuilder() {
 		final Builder b = boa.types.Control.CFGNode.newBuilder();
 		b.setId(this.id);
-		b.setKind(getKind());
+		b.setKind(this.kind);
 		if (this.stmt != null)
 			b.setStatement(this.stmt);
 		else if (this.expr != null)
@@ -322,17 +314,7 @@ public class CFGNode implements Comparable<CFGNode> {
 	}
 
 	public CFGNodeType getKind() {
-		switch (this.kind) {
-		case TYPE_METHOD:
-			return CFGNodeType.METHOD;
-		case TYPE_CONTROL:
-			return CFGNodeType.CONTROL;
-		case TYPE_ENTRY:
-			return CFGNodeType.ENTRY;
-		case TYPE_OTHER:
-		default:
-			return CFGNodeType.OTHER;
-		}
+        return this.kind;
 	}
 
 	public String processDef() {

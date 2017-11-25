@@ -30,12 +30,12 @@ import boa.compiler.ast.types.*;
  * @author rramu
  */
 public abstract class AbstractVisitorNoArgNoRet {
-	public void dfs(final Node node, final java.util.HashMap<Integer,String> nodeVisitStatus) {
-		nodeVisitStatus.put(node.nodeId,"visited");
+	public void dfs(final Node node, final java.util.Set<Integer> visitedNodes) {
+		visitedNodes.add(node.nodeId);
 		node.accept(this);
 		for (final Node succ : node.successors) {
-		    if (nodeVisitStatus.get(succ.nodeId).equals("unvisited")) {
-				dfs(succ, nodeVisitStatus);
+		    if (!visitedNodes.contains(succ.nodeId)) {
+				dfs(succ, visitedNodes);
 		    }
 		}
 	}

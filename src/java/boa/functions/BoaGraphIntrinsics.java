@@ -37,9 +37,7 @@ import boa.types.Control.CFGNode;
 public class BoaGraphIntrinsics {
 	@FunctionSpec(name = "getcfg", returnType = "CFG", formalParameters = { "Method" })
 	public static CFG getcfg(final Method method) {
-		final CFG cfg = new CFG(method);
-		cfg.astToCFG();
-		return cfg;
+		return new CFG(method);
 	}
 
 	@FunctionSpec(name = "get_nodes_with_definition", returnType = "set of string", formalParameters = { "CFGNode" })

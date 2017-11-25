@@ -54,12 +54,9 @@ public class DataFlowSensitivityAnalysis extends AbstractVisitorNoArgNoRet {
 	}
 
 	public void start(final CFGBuildingVisitor cfgBuilder, final HashSet<Identifier> aliastSet) {
-		final java.util.HashMap<Integer, String> nodeVisitStatus = new java.util.HashMap<Integer, String>();
-		for (final Node subnode : cfgBuilder.order) {
-			nodeVisitStatus.put(subnode.nodeId, "unvisited");
-		}
-		nodeVisitStatus.put(cfgBuilder.currentStartNodes.get(0).nodeId, "visited");
-		dfs(cfgBuilder.currentStartNodes.get(0), nodeVisitStatus);
+		final java.util.Set<Integer> visitedNodes = new java.util.HashSet<Integer>();
+		visitedNodes.add(cfgBuilder.currentStartNodes.get(0).nodeId);
+		dfs(cfgBuilder.currentStartNodes.get(0), visitedNodes);
 
 		for (final Identifier getValueNode : getValueNodes) {
 			for (final Identifier alias : aliastSet) {
