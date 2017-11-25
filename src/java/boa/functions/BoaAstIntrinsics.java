@@ -832,7 +832,29 @@ public class BoaAstIntrinsics {
 				s += "enum " + d.getName();
 				break;
 			case ANNOTATION:
-				s += "@interface ";
+				s += "@interface class " + d.getName();
+				if (d.getGenericParametersCount() > 0) {
+					s += "<";
+					for (int i = 0; i < d.getGenericParametersCount(); i++) {
+						if (i != 0) s += ", ";
+						s += prettyprint(d.getGenericParameters(i));
+					}
+					s += ">";
+				}
+				if (d.getParentsCount() > 0) {
+					int i = 0;
+					if (d.getParents(i).getKind() == TypeKind.CLASS)
+						s += " extends " + prettyprint(d.getParents(i++));
+					if (i < d.getParentsCount()) {
+						s += " implements ";
+						for (int j = i; i < d.getParentsCount(); i++) {
+							if (i != j) s += ", ";
+							s += prettyprint(d.getParents(i));
+						}
+					}
+				}
+				break;
+			default:
 			case CLASS:
 				s += "class " + d.getName();
 				if (d.getGenericParametersCount() > 0) {

@@ -432,7 +432,7 @@ public class BoaNormalFormIntrinsics {
 	}
 
 	// Helper for sorting array lists
-	private static class ExpressionArrayComparator implements Comparator <Object[]> {
+	private static class ExpressionArrayComparator implements Comparator<Object[]> {
 		public int compare(final Object[] e1, final Object[] e2) {
 			return prettyprint((Expression)e1[0]).compareTo(prettyprint((Expression)e2[0]));
 		}
@@ -1270,7 +1270,7 @@ public class BoaNormalFormIntrinsics {
 	 * @return the negated normal form of e, simplified
 	 */
 	@FunctionSpec(name = "nnf", returnType = "Expression", formalParameters = { "Expression" })
-	public static Expression NNF(final Expression e) {
+	public static Expression nnf(final Expression e) {
 		return simplify(internalNNF(e));
 	}
 
@@ -1584,7 +1584,7 @@ public class BoaNormalFormIntrinsics {
 	 * @return the conjunctive normal form of e, simplified
 	 */
 	@FunctionSpec(name = "cnf", returnType = "Expression", formalParameters = { "Expression" })
-	public static Expression CNF(final Expression e) {
+	public static Expression cnf(final Expression e) {
 		// push the ORs down into ANDs
 		// (B ⋀ C) ⋁ A -> (B ⋁ A) ⋀ (C ⋁ A)
 		// A ⋁ (B ⋀ C) -> (A ⋁ B) ⋀ (A ⋁ C)
@@ -1598,7 +1598,7 @@ public class BoaNormalFormIntrinsics {
 	 * @return the disjunctive normal form of e, simplified
 	 */
 	@FunctionSpec(name = "dnf", returnType = "Expression", formalParameters = { "Expression" })
-	public static Expression DNF(final Expression e) {
+	public static Expression dnf(final Expression e) {
 		// push the ANDs down into ORs
 		// (B v C) ^ A -> (B ^ A) v (C ^ A)
 		// A ^ (B v C) -> (A ^ B) v (A ^ C)
