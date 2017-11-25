@@ -76,16 +76,16 @@ public class TestNormalForm {
 
 	@Test
 	public void testNNF() throws Exception {
-		assertEquals(nnf, BoaNormalFormIntrinsics.NNF(e));
+		assertEquals(nnf, BoaNormalFormIntrinsics.nnf(e));
 	}
 
 	@Test
 	public void testCNF() throws Exception {
-		assertEquals(cnf, BoaNormalFormIntrinsics.CNF(e));
+		assertEquals(cnf, BoaNormalFormIntrinsics.cnf(e));
 	}
 
 	@Test
 	public void testDNF() throws Exception {
-		assertEquals(dnf, BoaNormalFormIntrinsics.DNF(e));
+		assertEquals(dnf, BoaNormalFormIntrinsics.dnf(e));
 	}
 }
