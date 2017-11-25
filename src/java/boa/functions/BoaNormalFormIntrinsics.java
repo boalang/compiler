@@ -1588,7 +1588,7 @@ public class BoaNormalFormIntrinsics {
 		// push the ORs down into ANDs
 		// (B ⋀ C) ⋁ A -> (B ⋁ A) ⋀ (C ⋁ A)
 		// A ⋁ (B ⋀ C) -> (A ⋁ B) ⋀ (A ⋁ C)
-		return simplify(normalform(NNF(e), ExpressionKind.LOGICAL_OR, ExpressionKind.LOGICAL_AND));
+		return simplify(normalform(nnf(e), ExpressionKind.LOGICAL_OR, ExpressionKind.LOGICAL_AND));
 	}
 
 	/**
@@ -1602,7 +1602,7 @@ public class BoaNormalFormIntrinsics {
 		// push the ANDs down into ORs
 		// (B v C) ^ A -> (B ^ A) v (C ^ A)
 		// A ^ (B v C) -> (A ^ B) v (A ^ C)
-		return simplify(normalform(NNF(e), ExpressionKind.LOGICAL_AND, ExpressionKind.LOGICAL_OR));
+		return simplify(normalform(nnf(e), ExpressionKind.LOGICAL_AND, ExpressionKind.LOGICAL_OR));
 	}
 
 	/**
