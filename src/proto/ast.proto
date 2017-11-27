@@ -67,6 +67,9 @@ message Declaration {
 	optional ChangeKind structural_change_kind = 10;
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
 	optional ChangeKind label_change_kind = 11;
+	/** For Specs use */
+	repeated SpecStatement specs = 1000;
+	optional string key = 1001;
 }
 
 /** The kinds of types in an AST */
@@ -136,6 +139,8 @@ message Method {
 	optional ChangeKind structural_change_kind = 9;
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
 	optional ChangeKind label_change_kind = 10;
+	/** For Specs use */
+	optional string key = 11;
 }
 
 /** A variable declaration - can be a field, local, parameter, etc */
@@ -154,6 +159,8 @@ message Variable {
 	optional ChangeKind structural_change_kind = 6;
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
 	optional ChangeKind label_change_kind = 7;
+	/** For Specs use */
+	optional string key = 8;
 }
 
 /** A single statement */
@@ -186,6 +193,34 @@ message Statement {
 		THROW = 17;
 		CATCH = 18;
 		EMPTY = 19;
+		/** For Specs use */
+		SPEC_REQUIRES = 1000;
+		SPEC_ENSURES = 1001;
+		SPEC_SIGNALS = 1002;
+		SPEC_SIGNALS_ONLY = 1003;
+		SPEC_ASSIGNABLE = 1004;
+		SPEC_MAINTAINING = 1005;
+		SPEC_ASSUME = 1006;
+		SPEC_SET = 1007;
+		SPEC_DIVERGES = 1008;
+		SPEC_ACCESSIBLE = 1009;
+		SPEC_CAPTURES = 1010;
+		SPEC_CALLABLE = 1011;
+		SPEC_WHEN = 1012;
+		SPEC_DURATION = 1013;
+		SPEC_MEASURES = 1014;
+		SPEC_IN = 1015;
+		SPEC_INVARIANT = 1016;
+		SPEC_REPRESENTS = 1017;
+		SPEC_INITIALLY = 1018;
+		SPEC_TYPE = 1019;
+		SPEC_BEHAVIOR = 1020;
+		SPEC_BEHAVIOUR = 1021;
+		SPEC_NORMAL_BEHAVIOR = 1022;
+		SPEC_NORMAL_BEHAVIOUR = 1023;
+		SPEC_EXCEPTIONAL_BEHAVIOR = 1024;
+		SPEC_EXCEPTIONAL_BEHAVIOUR = 1025;
+		SPEC_ASSERT = 1026;
 	}
 	/** The kind of statement */
 	required StatementKind kind = 1;
@@ -202,6 +237,9 @@ message Statement {
 	optional ChangeKind structural_change_kind = 10;
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
 	optional ChangeKind label_change_kind = 11;
+	/** For Specs use */
+	repeated SpecStatement specs = 1000;
+	optional string key = 1001;
 }
 
 /** A single expression */
@@ -265,6 +303,30 @@ message Expression {
 		LAMBDA = 51;
 		/** @exclude TODO */
 		ANON_METHOD = 52;
+		/** For Specs use */
+		SPEC_RESULT = 1000;
+		SPEC_OLD = 1001;
+		SPEC_FRESH = 1002;
+		SPEC_NONNULLELEMENTS = 1003;
+		SPEC_TYPEOF = 1004;
+		SPEC_ELEMTYPE = 1005;
+		SPEC_TYPE = 1006;
+		SPEC_FORALL = 1007;
+		SPEC_EXISTS = 1008;
+		SPEC_SUBTYPE = 1009;
+		SPEC_EQUIVALENCE = 1010;
+		SPEC_INEQUIVALENCE = 1011;
+		SPEC_FORWARD = 1012;
+		SPEC_REVERSE = 1013;
+		SPEC_NOTHING = 1014;
+		SPEC_EVERYTHING = 1015;
+		SPEC_NOTSPECIFIED = 1016;
+		NEXT = 1017;
+		GLOBALLY = 1018;
+		FINALLY = 1019;
+		UNTIL = 1020;
+		RELEASE = 1021;
+		INPLY = 1022;
 	}
 	/** The kind of expression */
 	required ExpressionKind kind = 1;
@@ -310,6 +372,20 @@ message Modifier {
 		SYNC = 5;
 		/** An abstract modifier */
 		ABSTRACT = 6;
+		/** An instance in specification modifier */
+		SPEC_INSTANCE = 1000;
+		/** A model in specification modifier */
+		SPEC_MODEL = 1001;
+		/** A ghost in specification modifier */
+		SPEC_GHOST = 1002;
+		/** A helper in specification modifier */
+		SPEC_HELPER = 1003;
+		/** A represent in specification modifier */
+		SPEC_REP = 1004;
+		/** A peer in specification modifier */
+		SPEC_PEER = 1005;
+		/** A pure in specification modifier */
+		SPEC_PURE = 1006;
 	}
 	/** A visibility modifier */
 	enum Visibility {
@@ -326,6 +402,10 @@ message Modifier {
 		PACKAGE = 4;
 		/** @exclude */
 		DEFAULT = 4;
+		/** A public modifier in specification*/
+		SPEC_PUBLIC = 1000;
+		/** A protected modifier in specification*/		
+		SPEC_PROTECTED = 1001;
 	}
 	/** The kind of modifier */
 	required ModifierKind kind = 1;
@@ -344,6 +424,13 @@ message Modifier {
 	/** Kind of change on the label: UNCHANGED, ADDED, DELETED/REMOVED, RENAMED */
 	optional ChangeKind label_change_kind = 8;
 }
+
+/** A single specification case */
+message SpecCase {
+	repeated Modifier modifiers = 1;
+	repeated Statement statements = 2;
+}
+
 
 /** @exclude */
 message Comment {
@@ -375,4 +462,26 @@ message PositionInfo {
 	required int32 start_col = 4;
 	required int32 end_line = 5;
 	required int32 end_col = 6;
+}
+
+/** A single declaration for specification */
+message SpecDeclaration {
+	repeated Modifier modifiers = 1;
+	repeated Statement statements = 2;
+}
+
+/** A single method for specification */
+message SpecMethod {
+	repeated SpecCase cases = 1;
+	repeated Modifier modifiers = 2;
+}
+
+/** A single statement for specification */
+message SpecStatement {
+	repeated Statement statements = 1;
+}
+
+/** A single variable for specification */
+message SpecVariable {
+	repeated Modifier modifiers = 1;
 }

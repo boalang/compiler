@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, Hridesh Rajan, Robert Dyer,
+ * Copyright 2017, Hridesh Rajan, Robert Dyer, Jingyi Su
  *                 Iowa State University of Science and Technology
  *                 and Bowling Green State University
  *
@@ -47,11 +47,12 @@ import boa.types.Toplevel.Project;
  * Boa functions for working with ASTs.
  *
  * @author rdyer
+ * @author jsu
  */
 public class BoaAstIntrinsics {
 	@SuppressWarnings("rawtypes")
 	private static Context context;
-	private static MapFile.Reader map, commentsMap, issuesMap;
+	private static MapFile.Reader map, commentsMap, issuesMap, specMap;
 
 	public static enum ASTCOUNTER {
 		GETS_ATTEMPTED,
@@ -201,6 +202,126 @@ public class BoaAstIntrinsics {
 		System.err.println("error with issues: " + f.getKey());
 		return emptyIssues;
 	}
+	@SuppressWarnings("unchecked")
+	@FunctionSpec(name = "getspec", returnType = "SpecDeclaration", formalParameters = { "Declaration" })
+	public static SpecDeclaration getspec(final Declaration f) {
+		if (f == null || !f.hasKey())
+			return null;
+		final String rowName = f.getKey() + "!!" + f.getName();
+
+		if (specMap == null)
+			openSpecMap();
+	
+		try {
+			final BytesWritable value = new BytesWritable();
+			if (specMap.get(new Text(rowName), value) == null) {
+				final CodedInputStream _stream = CodedInputStream.newInstance(value.getBytes(), 0, value.getLength());
+				final SpecDeclaration specdeclaration = SpecDeclaration.parseFrom(_stream);
+				return specdeclaration;
+			}
+		} catch (final InvalidProtocolBufferException e) {
+			e.printStackTrace();
+		} catch (final IOException e) {
+			e.printStackTrace();
+		} catch (final RuntimeException e) {
+			e.printStackTrace();
+		} catch (final Error e) {
+			e.printStackTrace();
+		}
+	
+		System.err.println("error with SpecDeclaration: " + rowName);
+		return null;
+	}
+	@SuppressWarnings("unchecked")
+	@FunctionSpec(name = "getspec", returnType = "SpecMethod", formalParameters = { "Method" })
+	public static SpecMethod getspec(final Method f) {
+		if (f == null || !f.hasKey())
+			return null;
+		final String rowName = f.getKey() + "!!" + f.getName();
+	
+		if (specMap == null)
+			openSpecMap();
+	
+		try {
+			final BytesWritable value = new BytesWritable();
+			if (specMap.get(new Text(rowName), value) == null) {
+				final CodedInputStream _stream = CodedInputStream.newInstance(value.getBytes(), 0, value.getLength());
+				final SpecMethod specmethod = SpecMethod.parseFrom(_stream);
+				return specmethod;
+			}
+		} catch (final InvalidProtocolBufferException e) {
+			e.printStackTrace();
+		} catch (final IOException e) {
+			e.printStackTrace();
+		} catch (final RuntimeException e) {
+			e.printStackTrace();
+		} catch (final Error e) {
+			e.printStackTrace();
+		}
+	
+		System.err.println("error with SpecMethod: " + rowName);
+		return null;
+	}
+	@SuppressWarnings("unchecked")
+	@FunctionSpec(name = "getspec", returnType = "SpecStatement", formalParameters = { "Statement" })
+	public static SpecStatement getspec(final Statement f) {
+		if (f == null || !f.hasKey())
+			return null;
+		final String rowName = f.getKey();
+	
+		if (specMap == null)
+			openSpecMap();
+	
+		try {
+			final BytesWritable value = new BytesWritable();
+			if (specMap.get(new Text(rowName), value) == null) {
+				final CodedInputStream _stream = CodedInputStream.newInstance(value.getBytes(), 0, value.getLength());
+				final SpecStatement specstatement = SpecStatement.parseFrom(_stream);
+				return specstatement;
+			}
+		} catch (final InvalidProtocolBufferException e) {
+			e.printStackTrace();
+		} catch (final IOException e) {
+			e.printStackTrace();
+		} catch (final RuntimeException e) {
+			e.printStackTrace();
+		} catch (final Error e) {
+			e.printStackTrace();
+		}
+	
+		System.err.println("error with SpecStatement: " + rowName);
+		return null;
+	}	
+	@SuppressWarnings("unchecked")
+	@FunctionSpec(name = "getspec", returnType = "SpecVariable", formalParameters = { "Variable" })
+	public static SpecVariable getspec(final Variable f) {
+		if (f == null || !f.hasKey())
+			return null;
+		final String rowName = f.getKey() + "!!" + f.getName();
+	
+		if (specMap == null)
+			openSpecMap();
+	
+		try {
+			final BytesWritable value = new BytesWritable();
+			if (specMap.get(new Text(rowName), value) == null) {
+				final CodedInputStream _stream = CodedInputStream.newInstance(value.getBytes(), 0, value.getLength());
+				final SpecVariable specvariable = SpecVariable.parseFrom(_stream);
+				return specvariable;
+			}
+		} catch (final InvalidProtocolBufferException e) {
+			e.printStackTrace();
+		} catch (final IOException e) {
+			e.printStackTrace();
+		} catch (final RuntimeException e) {
+			e.printStackTrace();
+		} catch (final Error e) {
+			e.printStackTrace();
+		}
+	
+		System.err.println("error with SpecVariable: " + rowName);
+		return null;
+	}
 
 	@SuppressWarnings("rawtypes")
 	public static void setup(final Context context) {
@@ -278,12 +399,38 @@ public class BoaAstIntrinsics {
 			e.printStackTrace();
 		}
 	}
+	
+	private static void openSpecMap() {
+		
+		try {
+			final Configuration conf = context.getConfiguration();
+			final FileSystem fs;
+			final Path p;
+			if (DefaultProperties.localDataPath != null) {
+				p = new Path(DefaultProperties.localIssuePath);
+				fs = FileSystem.getLocal(conf);
+			} else {
+				p = new Path(
+					context.getConfiguration().get("fs.default.name", "hdfs://boa-njt/"),
+					new Path(
+						conf.get("boa.spec.dir", conf.get("boa.input.dir", "repcache/live")),
+						new Path("specs")
+					)
+				);
+				fs = FileSystem.get(conf);
+			}
+			issuesMap = new MapFile.Reader(fs, p.toString(), conf);
+		} catch (final Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	@SuppressWarnings("rawtypes")
 	public static void cleanup(final Context context) {
 		closeMap();
 		closeCommentMap();
 		closeIssuesMap();
+		closeSpecMap();
 	}
 
 	private static void closeMap() {
@@ -314,6 +461,16 @@ public class BoaAstIntrinsics {
 				e.printStackTrace();
 			}
 		issuesMap = null;
+	}
+	
+	private static void closeSpecMap() {
+		if (specMap != null)
+			try {
+				specMap.close();
+			} catch (final IOException e) {
+				e.printStackTrace();
+			}
+		specMap = null;
 	}
 
 	@FunctionSpec(name = "type_name", returnType = "string", formalParameters = { "string" })

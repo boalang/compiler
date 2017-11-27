@@ -1,5 +1,5 @@
 /*
- * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer, 
+ * Copyright 2017, Anthony Urso, Hridesh Rajan, Robert Dyer, Jingyi Su
  *                 Iowa State University of Science and Technology
  *                 and Bowling Green State University
  *
@@ -37,6 +37,7 @@ import boa.compiler.ast.Operand;
  * @author anthonyu
  * @author rdyer
  * @author rramu
+ * @author jsu
  */
 public class SymbolTable {
 	private static HashMap<String, Class<?>> aggregators;
@@ -117,6 +118,11 @@ public class SymbolTable {
 			new StatementProtoTuple(),
 			new TypeProtoTuple(),
 			new VariableProtoTuple(),
+			new SpecCaseProtoTuple(),
+			new SpecDeclarationProtoTuple(),
+			new SpecMethodProtoTuple(),
+			new SpecStatementProtoTuple(),
+			new SpecVariableProtoTuple(),
 		};
 		final BoaProtoMap[] dslMapTypes = {
 			new CFGNodeTypeProtoMap(),
