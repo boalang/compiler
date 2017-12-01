@@ -21,7 +21,7 @@ package boa.types;
  */
 public class BoaName extends BoaScalar {
 	private final BoaType type;
-	private final String id;
+	private String id;
 
 	public BoaName(final BoaType type, final String id) {
 		this.type = type;
@@ -38,6 +38,10 @@ public class BoaName extends BoaScalar {
 
 	public String getId() {
 		return this.id;
+	}
+
+	public void setId(final String id) {
+		this.id = id;
 	}
 
 	/** {@inheritDoc} */

@@ -51,6 +51,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	 */
 	String identifier="";
 	String traversalNodeIdentifier="";
+	HashMap<String, Integer> newName = new HashMap<String, Integer>();
 
 	protected class AggregatorDescription {
 		protected String aggregator;
@@ -229,7 +230,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			final List<String> types = new ArrayList<String>();
 
 			for (final Component c : params) {
-				args.add(c.getIdentifier().getToken());
+				args.add("___" + c.getIdentifier().getToken());
 				types.add(c.getType().type.toJavaType());
 			}
 
@@ -568,17 +569,18 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		final ST st = stg.getInstanceOf("Job");
 
 		st.add("name", this.name);
+		newName.clear();
 
 		this.varDecl.start(n);
 		this.functionDeclarator.start(n);
 		this.tupleDeclarator.start(n);
 		this.enumDeclarator.start(n);
 
+		st.add("staticDeclarations", this.varDecl.getCode());
+		if (!TypeCheckingVisitor.functionNames.equals(""))
+			st.add("staticDeclarations", TypeCheckingVisitor.functionNames);
 		if (this.functionDeclarator.hasCode())
-			st.add("staticDeclarations", this.varDecl.getCode() + "\n" + this.functionDeclarator.getCode());
-		else
-			st.add("staticDeclarations", this.varDecl.getCode());
-
+			st.add("staticDeclarations", "\n" + this.functionDeclarator.getCode());
 		if (this.tupleDeclarator.hasCode())
 			st.add("staticDeclarations", "\n" + this.tupleDeclarator.getCode());
 		if (this.enumDeclarator.hasCode())
@@ -865,13 +867,17 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/** {@inheritDoc} */
 	@Override
 	public void visit(final Identifier n) {
-		final String id = n.getToken();
+		String id = n.getToken();
 		if (n.env.hasType(id)) {
 			if (n.env.getNeedsBoxing())
 				code.add(SymbolTable.getType(id).toBoxedJavaType());
 			else
 				code.add(SymbolTable.getType(id).toJavaType());
 			return;
+		}
+
+		if(newName.containsKey(id)){
+			id = id + "_f" + Integer.toString(newName.get(id));
 		}
 
 		// otherwise return the identifier template
@@ -1606,13 +1612,26 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		final BoaType[] params = funcType.getFormalParameters();
 		final List<String> args = new ArrayList<String>();
 		final List<String> types = new ArrayList<String>();
+		final List<String> newArgs = new ArrayList<String>();
 
+		String toAdd = "{\n";
 		for (final BoaType c : params) {
 			if (!(c instanceof BoaName))
 				continue;
 			args.add(((BoaName)c).getId());
 			types.add(((BoaName)c).getType().toJavaType());
+
+			if(newName.containsKey(((BoaName)c).getId())){
+				newName.put(((BoaName)c).getId(), newName.get(((BoaName)c).getId()) + 1);
+			}
+			else {
+				newName.put(((BoaName)c).getId(), 1);
+			}
+
+			newArgs.add("___" + ((BoaName)c).getId());
+			toAdd = toAdd + "\t" + "___" + ((BoaName)c).getId() + "_f" + Integer.toString(newName.get(((BoaName)c).getId())) + " = ______" + ((BoaName)c).getId() + ";\n";
 		}
+		toAdd += "\n";
 
 		this.varDecl.start(n);
 		st.add("staticDeclarations", this.varDecl.getCode());
@@ -1622,11 +1641,18 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			st.add("ret", "void");
 		else
 			st.add("ret", funcType.getType().toBoxedJavaType());
-		st.add("args", args);
+		st.add("args", newArgs);
 		st.add("types", types);
-
 		n.getBody().accept(this);
-		st.add("body", code.removeLast());
+		for (final BoaType c : params) {
+			if (!(c instanceof BoaName))
+				continue;
+			newName.put(((BoaName)c).getId(), newName.get(((BoaName)c).getId()) - 1);
+			if(newName.get(((BoaName)c).getId()) == 0)
+				newName.remove(((BoaName)c).getId());
+		}
+		String body = toAdd + code.removeLast().substring(2);
+		st.add("body", body);
 
 		code.add(st.render());
 	}

@@ -1,0 +1,35 @@
+o: output collection of int;
+
+i := 1;
+
+f := function(i: int): int {
+    i = 3;
+
+    h := function(i: int): int {
+    	i = i + 1;
+
+    	a := function(){
+    		i = i + 1;
+    	};
+
+    	a();
+
+    	return i;
+    };
+
+    g := function(j: int){
+    	j = i + 1;
+    };
+
+    k := function(){
+    	i = i + 1;
+    };
+
+    i = h(i);
+    g(i);
+    k();
+
+    return i + 1;
+};
+
+o << f(1);
