@@ -43,6 +43,7 @@ import boa.types.*;
  * @author rdyer
  * @author ankuraga
  * @author rramu
+ * @author hungc
  */
 public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	/**
@@ -1643,6 +1644,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			st.add("ret", funcType.getType().toBoxedJavaType());
 		st.add("args", newArgs);
 		st.add("types", types);
+
 		n.getBody().accept(this);
 		for (final BoaType c : params) {
 			if (!(c instanceof BoaName))

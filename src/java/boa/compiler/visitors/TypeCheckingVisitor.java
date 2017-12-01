@@ -38,6 +38,7 @@ import boa.types.*;
  * @author rdyer
  * @author ankuraga
  * @author rramu
+ * @author hungc
  */
 public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	BoaType lastRetType;
