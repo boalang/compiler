@@ -92,13 +92,22 @@ public class BoaNormalFormIntrinsics {
 			case OP_DEC:
 			case OP_INC:
 			case ARRAYINDEX:
-			case METHODCALL:
-				final Expression.Builder b;
-				b = Expression.newBuilder(e);
+				final Expression.Builder b = Expression.newBuilder(e);
 				for(int i = 0; i < convertedExpression.size(); i++) {
 					b.setExpressions(i, convertedExpression.get(i));
 				}
 				return b.build();
+
+			case METHODCALL:
+				final Expression.Builder bm = Expression.newBuilder(e);
+                for(int i = 0; i < convertedExpression.size(); i++) {
+                    bm.setExpressions(i, convertedExpression.get(i));
+                }
+				for(int i = 0; i < e.getMethodArgsList().size(); i++){
+				    Expression mArgs = convertToSymbolicName(e.getMethodArgs(i), reciever, arguments);
+                    bm.setMethodArgs(i, mArgs);
+                }
+				return bm.build();
 
 			case VARACCESS:
 				//replace with symbolic names
