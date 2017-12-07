@@ -16,7 +16,7 @@ public class CssVisitor {
 	protected Ast.Element.Builder b = Ast.Element.newBuilder();
 	protected List<boa.types.Ast.Comment> comments = new ArrayList<boa.types.Ast.Comment>();
 	protected Stack<List<boa.types.Ast.Element>> elements = new Stack<List<boa.types.Ast.Element>>();
-	protected Stack<List<boa.types.Ast.Atribute>> atributes = new Stack<List<boa.types.Ast.Atribute>>();
+	protected Stack<List<boa.types.Ast.Attribute>> attributes = new Stack<List<boa.types.Ast.Attribute>>();
 
 	public CssVisitor() {
 
@@ -138,10 +138,10 @@ public class CssVisitor {
 		b.setTag("");//FIXME
 		b.addData(node.getMedia());
 		for (Property p : node.getProperties()) {
-			boa.types.Ast.Atribute.Builder a = boa.types.Ast.Atribute.newBuilder();
+			boa.types.Ast.Attribute.Builder a = boa.types.Ast.Attribute.newBuilder();
 			a.setKey(p.getName());
 			a.setValue(p.getValue().getCssText());
-			b.addAtributes(a.build());
+			b.addAttributes(a.build());
 		}
 		elements.peek().add(b.build());
 	}
@@ -151,19 +151,19 @@ public class CssVisitor {
 		b.setKind(Element.ElementKind.STYLE_RULE);
 		b.setTag(node.getSelectorText());
 		CSSStyleDeclarationImpl style = (CSSStyleDeclarationImpl) node.getStyle();
-		atributes.push(new ArrayList<boa.types.Ast.Atribute>());
+		attributes.push(new ArrayList<boa.types.Ast.Attribute>());
 		visit(style);
-		for (boa.types.Ast.Atribute a : atributes.pop())
-			b.addAtributes(a);
+		for (boa.types.Ast.Attribute a : attributes.pop())
+			b.addAttributes(a);
 		elements.peek().add(b.build());
 	}
 
 	private void visit(CSSStyleDeclarationImpl node) {
 		for (Property p : node.getProperties()) {
-			boa.types.Ast.Atribute.Builder a = boa.types.Ast.Atribute.newBuilder();
+			boa.types.Ast.Attribute.Builder a = boa.types.Ast.Attribute.newBuilder();
 			a.setKey(p.getName());
 			a.setValue(p.getValue().getCssText());
-			atributes.peek().add(a.build());
+			attributes.peek().add(a.build());
 		}
 	}
 
@@ -173,10 +173,10 @@ public class CssVisitor {
 		b.setTag("");//FIXME
 		b.addData(node.getSelectorText());
 		CSSStyleDeclarationImpl style = (CSSStyleDeclarationImpl) node.getStyle();
-		atributes.push(new ArrayList<boa.types.Ast.Atribute>());
+		attributes.push(new ArrayList<boa.types.Ast.Attribute>());
 		visit(style);
-		for (boa.types.Ast.Atribute a : atributes.pop())
-			b.addAtributes(a);
+		for (boa.types.Ast.Attribute a : attributes.pop())
+			b.addAttributes(a);
 		elements.peek().add(b.build());
 	}
 
@@ -185,10 +185,10 @@ public class CssVisitor {
 		b.setKind(Element.ElementKind.FONT_FACE_RULE);
 		b.setTag("");//FIXME
 		CSSStyleDeclarationImpl style = (CSSStyleDeclarationImpl) node.getStyle();
-		atributes.push(new ArrayList<boa.types.Ast.Atribute>());
+		attributes.push(new ArrayList<boa.types.Ast.Attribute>());
 		visit(style);
-		for (boa.types.Ast.Atribute a : atributes.pop())
-			b.addAtributes(a);
+		for (boa.types.Ast.Attribute a : attributes.pop())
+			b.addAttributes(a);
 		elements.peek().add(b.build());
 	}
 

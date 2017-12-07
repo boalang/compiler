@@ -33,6 +33,7 @@ import org.eclipse.php.internal.core.ast.nodes.ASTParser;
 import org.eclipse.php.internal.core.ast.nodes.Program;
 import org.jsoup.Connection.KeyVal;
 import org.jsoup.nodes.*;
+import org.jsoup.nodes.Attribute;
 import org.jsoup.nodes.Comment;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -47,7 +48,7 @@ public class HtmlVisitor {
 	protected Ast.Document.Builder b = Ast.Document.newBuilder();
 	protected Document root;
 	protected List<boa.types.Ast.Comment> comments = new ArrayList<boa.types.Ast.Comment>();
-	protected Stack<boa.types.Ast.Atribute> atributes = new Stack<boa.types.Ast.Atribute>();
+	protected Stack<boa.types.Ast.Attribute> attributes = new Stack<boa.types.Ast.Attribute>();
 	protected Stack<List<boa.types.Ast.Element>> elements = new Stack<List<boa.types.Ast.Element>>();
 
 	public Ast.Document getDocument(Document node) {
@@ -85,15 +86,15 @@ public class HtmlVisitor {
 		if (node instanceof FormElement){
 			b.setKind(ElementKind.FORM);
 			for (KeyVal d : ((FormElement)node).formData()) {
-				Ast.Atribute.Builder ab = Ast.Atribute.newBuilder();
+				Ast.Attribute.Builder ab = Ast.Attribute.newBuilder();
 				ab.setKey(d.key());
 				ab.setValue(d.value());
-				b.addAtributes(ab.build());
+				b.addAttributes(ab.build());
 			}
 		}
 		for (Attribute n : node.attributes()) {
 			visit(n);
-			b.addAtributes(atributes.pop());
+			b.addAttributes(attributes.pop());
 		}
 	
 		String text = node.ownText();
@@ -158,20 +159,20 @@ public class HtmlVisitor {
 
 	public void visit(DocumentType node) {
 		Ast.Element.Builder b = Ast.Element.newBuilder();
-		b.setKind(ElementKind.DOC_TYPE);// FIXME
+		b.setKind(ElementKind.DOC_TYPE);
 		b.setTag("!DOCTYPE");
 		for (Attribute n : node.attributes()) {
 			visit(n);
-			b.addAtributes(atributes.pop());
+			b.addAttributes(attributes.pop());
 		}
 		elements.peek().add(b.build());
 	}
 
 	public void visit(org.jsoup.nodes.Attribute node) {
-		Ast.Atribute.Builder b = Ast.Atribute.newBuilder();
+		Ast.Attribute.Builder b = Ast.Attribute.newBuilder();
 		b.setKey(node.getKey());
 		b.setValue(node.getValue());
-		atributes.push(b.build());
+		attributes.push(b.build());
 	}
 
 	public void visit(Node node) {

@@ -38627,6 +38627,31 @@ public final class Ast {
      * <code>optional .boa.types.Element doc_type = 3;</code>
      */
     boa.types.Ast.ElementOrBuilder getDocTypeOrBuilder();
+
+    // repeated .boa.types.Attribute processing_instruction = 11;
+    /**
+     * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+     */
+    java.util.List<boa.types.Ast.Attribute> 
+        getProcessingInstructionList();
+    /**
+     * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+     */
+    boa.types.Ast.Attribute getProcessingInstruction(int index);
+    /**
+     * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+     */
+    int getProcessingInstructionCount();
+    /**
+     * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+     */
+    java.util.List<? extends boa.types.Ast.AttributeOrBuilder> 
+        getProcessingInstructionOrBuilderList();
+    /**
+     * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+     */
+    boa.types.Ast.AttributeOrBuilder getProcessingInstructionOrBuilder(
+        int index);
   }
   /**
    * Protobuf type {@code boa.types.Document}
@@ -38709,6 +38734,14 @@ public final class Ast {
               bitField0_ |= 0x00000002;
               break;
             }
+            case 90: {
+              if (!((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
+                processingInstruction_ = new java.util.ArrayList<boa.types.Ast.Attribute>();
+                mutable_bitField0_ |= 0x00000008;
+              }
+              processingInstruction_.add(input.readMessage(boa.types.Ast.Attribute.PARSER, extensionRegistry));
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -38719,6 +38752,9 @@ public final class Ast {
       } finally {
         if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
           elements_ = java.util.Collections.unmodifiableList(elements_);
+        }
+        if (((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
+          processingInstruction_ = java.util.Collections.unmodifiableList(processingInstruction_);
         }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -38853,10 +38889,47 @@ public final class Ast {
       return docType_;
     }
 
+    // repeated .boa.types.Attribute processing_instruction = 11;
+    public static final int PROCESSING_INSTRUCTION_FIELD_NUMBER = 11;
+    private java.util.List<boa.types.Ast.Attribute> processingInstruction_;
+    /**
+     * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+     */
+    public java.util.List<boa.types.Ast.Attribute> getProcessingInstructionList() {
+      return processingInstruction_;
+    }
+    /**
+     * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+     */
+    public java.util.List<? extends boa.types.Ast.AttributeOrBuilder> 
+        getProcessingInstructionOrBuilderList() {
+      return processingInstruction_;
+    }
+    /**
+     * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+     */
+    public int getProcessingInstructionCount() {
+      return processingInstruction_.size();
+    }
+    /**
+     * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+     */
+    public boa.types.Ast.Attribute getProcessingInstruction(int index) {
+      return processingInstruction_.get(index);
+    }
+    /**
+     * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+     */
+    public boa.types.Ast.AttributeOrBuilder getProcessingInstructionOrBuilder(
+        int index) {
+      return processingInstruction_.get(index);
+    }
+
     private void initFields() {
       title_ = "";
       elements_ = java.util.Collections.emptyList();
       docType_ = boa.types.Ast.Element.getDefaultInstance();
+      processingInstruction_ = java.util.Collections.emptyList();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -38871,6 +38944,12 @@ public final class Ast {
       }
       if (hasDocType()) {
         if (!getDocType().isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      for (int i = 0; i < getProcessingInstructionCount(); i++) {
+        if (!getProcessingInstruction(i).isInitialized()) {
           memoizedIsInitialized = 0;
           return false;
         }
@@ -38890,6 +38969,9 @@ public final class Ast {
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         output.writeMessage(3, docType_);
+      }
+      for (int i = 0; i < processingInstruction_.size(); i++) {
+        output.writeMessage(11, processingInstruction_.get(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -38911,6 +38993,10 @@ public final class Ast {
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(3, docType_);
+      }
+      for (int i = 0; i < processingInstruction_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(11, processingInstruction_.get(i));
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -39026,6 +39112,7 @@ public final class Ast {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
           getElementsFieldBuilder();
           getDocTypeFieldBuilder();
+          getProcessingInstructionFieldBuilder();
         }
       }
       private static Builder create() {
@@ -39048,6 +39135,12 @@ public final class Ast {
           docTypeBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000004);
+        if (processingInstructionBuilder_ == null) {
+          processingInstruction_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000008);
+        } else {
+          processingInstructionBuilder_.clear();
+        }
         return this;
       }
 
@@ -39096,6 +39189,15 @@ public final class Ast {
           result.docType_ = docType_;
         } else {
           result.docType_ = docTypeBuilder_.build();
+        }
+        if (processingInstructionBuilder_ == null) {
+          if (((bitField0_ & 0x00000008) == 0x00000008)) {
+            processingInstruction_ = java.util.Collections.unmodifiableList(processingInstruction_);
+            bitField0_ = (bitField0_ & ~0x00000008);
+          }
+          result.processingInstruction_ = processingInstruction_;
+        } else {
+          result.processingInstruction_ = processingInstructionBuilder_.build();
         }
         result.bitField0_ = to_bitField0_;
         onBuilt();
@@ -39147,6 +39249,32 @@ public final class Ast {
         if (other.hasDocType()) {
           mergeDocType(other.getDocType());
         }
+        if (processingInstructionBuilder_ == null) {
+          if (!other.processingInstruction_.isEmpty()) {
+            if (processingInstruction_.isEmpty()) {
+              processingInstruction_ = other.processingInstruction_;
+              bitField0_ = (bitField0_ & ~0x00000008);
+            } else {
+              ensureProcessingInstructionIsMutable();
+              processingInstruction_.addAll(other.processingInstruction_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.processingInstruction_.isEmpty()) {
+            if (processingInstructionBuilder_.isEmpty()) {
+              processingInstructionBuilder_.dispose();
+              processingInstructionBuilder_ = null;
+              processingInstruction_ = other.processingInstruction_;
+              bitField0_ = (bitField0_ & ~0x00000008);
+              processingInstructionBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getProcessingInstructionFieldBuilder() : null;
+            } else {
+              processingInstructionBuilder_.addAllMessages(other.processingInstruction_);
+            }
+          }
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -39160,6 +39288,12 @@ public final class Ast {
         }
         if (hasDocType()) {
           if (!getDocType().isInitialized()) {
+            
+            return false;
+          }
+        }
+        for (int i = 0; i < getProcessingInstructionCount(); i++) {
+          if (!getProcessingInstruction(i).isInitialized()) {
             
             return false;
           }
@@ -39617,6 +39751,246 @@ public final class Ast {
         return docTypeBuilder_;
       }
 
+      // repeated .boa.types.Attribute processing_instruction = 11;
+      private java.util.List<boa.types.Ast.Attribute> processingInstruction_ =
+        java.util.Collections.emptyList();
+      private void ensureProcessingInstructionIsMutable() {
+        if (!((bitField0_ & 0x00000008) == 0x00000008)) {
+          processingInstruction_ = new java.util.ArrayList<boa.types.Ast.Attribute>(processingInstruction_);
+          bitField0_ |= 0x00000008;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Attribute, boa.types.Ast.Attribute.Builder, boa.types.Ast.AttributeOrBuilder> processingInstructionBuilder_;
+
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public java.util.List<boa.types.Ast.Attribute> getProcessingInstructionList() {
+        if (processingInstructionBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(processingInstruction_);
+        } else {
+          return processingInstructionBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public int getProcessingInstructionCount() {
+        if (processingInstructionBuilder_ == null) {
+          return processingInstruction_.size();
+        } else {
+          return processingInstructionBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public boa.types.Ast.Attribute getProcessingInstruction(int index) {
+        if (processingInstructionBuilder_ == null) {
+          return processingInstruction_.get(index);
+        } else {
+          return processingInstructionBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public Builder setProcessingInstruction(
+          int index, boa.types.Ast.Attribute value) {
+        if (processingInstructionBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureProcessingInstructionIsMutable();
+          processingInstruction_.set(index, value);
+          onChanged();
+        } else {
+          processingInstructionBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public Builder setProcessingInstruction(
+          int index, boa.types.Ast.Attribute.Builder builderForValue) {
+        if (processingInstructionBuilder_ == null) {
+          ensureProcessingInstructionIsMutable();
+          processingInstruction_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          processingInstructionBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public Builder addProcessingInstruction(boa.types.Ast.Attribute value) {
+        if (processingInstructionBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureProcessingInstructionIsMutable();
+          processingInstruction_.add(value);
+          onChanged();
+        } else {
+          processingInstructionBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public Builder addProcessingInstruction(
+          int index, boa.types.Ast.Attribute value) {
+        if (processingInstructionBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureProcessingInstructionIsMutable();
+          processingInstruction_.add(index, value);
+          onChanged();
+        } else {
+          processingInstructionBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public Builder addProcessingInstruction(
+          boa.types.Ast.Attribute.Builder builderForValue) {
+        if (processingInstructionBuilder_ == null) {
+          ensureProcessingInstructionIsMutable();
+          processingInstruction_.add(builderForValue.build());
+          onChanged();
+        } else {
+          processingInstructionBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public Builder addProcessingInstruction(
+          int index, boa.types.Ast.Attribute.Builder builderForValue) {
+        if (processingInstructionBuilder_ == null) {
+          ensureProcessingInstructionIsMutable();
+          processingInstruction_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          processingInstructionBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public Builder addAllProcessingInstruction(
+          java.lang.Iterable<? extends boa.types.Ast.Attribute> values) {
+        if (processingInstructionBuilder_ == null) {
+          ensureProcessingInstructionIsMutable();
+          super.addAll(values, processingInstruction_);
+          onChanged();
+        } else {
+          processingInstructionBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public Builder clearProcessingInstruction() {
+        if (processingInstructionBuilder_ == null) {
+          processingInstruction_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000008);
+          onChanged();
+        } else {
+          processingInstructionBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public Builder removeProcessingInstruction(int index) {
+        if (processingInstructionBuilder_ == null) {
+          ensureProcessingInstructionIsMutable();
+          processingInstruction_.remove(index);
+          onChanged();
+        } else {
+          processingInstructionBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public boa.types.Ast.Attribute.Builder getProcessingInstructionBuilder(
+          int index) {
+        return getProcessingInstructionFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public boa.types.Ast.AttributeOrBuilder getProcessingInstructionOrBuilder(
+          int index) {
+        if (processingInstructionBuilder_ == null) {
+          return processingInstruction_.get(index);  } else {
+          return processingInstructionBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public java.util.List<? extends boa.types.Ast.AttributeOrBuilder> 
+           getProcessingInstructionOrBuilderList() {
+        if (processingInstructionBuilder_ != null) {
+          return processingInstructionBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(processingInstruction_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public boa.types.Ast.Attribute.Builder addProcessingInstructionBuilder() {
+        return getProcessingInstructionFieldBuilder().addBuilder(
+            boa.types.Ast.Attribute.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public boa.types.Ast.Attribute.Builder addProcessingInstructionBuilder(
+          int index) {
+        return getProcessingInstructionFieldBuilder().addBuilder(
+            index, boa.types.Ast.Attribute.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public java.util.List<boa.types.Ast.Attribute.Builder> 
+           getProcessingInstructionBuilderList() {
+        return getProcessingInstructionFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Attribute, boa.types.Ast.Attribute.Builder, boa.types.Ast.AttributeOrBuilder> 
+          getProcessingInstructionFieldBuilder() {
+        if (processingInstructionBuilder_ == null) {
+          processingInstructionBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              boa.types.Ast.Attribute, boa.types.Ast.Attribute.Builder, boa.types.Ast.AttributeOrBuilder>(
+                  processingInstruction_,
+                  ((bitField0_ & 0x00000008) == 0x00000008),
+                  getParentForChildren(),
+                  isClean());
+          processingInstruction_ = null;
+        }
+        return processingInstructionBuilder_;
+      }
+
       // @@protoc_insertion_point(builder_scope:boa.types.Document)
     }
 
@@ -39793,49 +40167,49 @@ public final class Ast {
     com.google.protobuf.ByteString
         getDataBytes(int index);
 
-    // repeated .boa.types.Atribute atributes = 6;
+    // repeated .boa.types.Attribute attributes = 6;
     /**
-     * <code>repeated .boa.types.Atribute atributes = 6;</code>
+     * <code>repeated .boa.types.Attribute attributes = 6;</code>
      *
      * <pre>
-     ** The Element's atributes 
+     ** The Element's attributes 
      * </pre>
      */
-    java.util.List<boa.types.Ast.Atribute> 
-        getAtributesList();
+    java.util.List<boa.types.Ast.Attribute> 
+        getAttributesList();
     /**
-     * <code>repeated .boa.types.Atribute atributes = 6;</code>
+     * <code>repeated .boa.types.Attribute attributes = 6;</code>
      *
      * <pre>
-     ** The Element's atributes 
+     ** The Element's attributes 
      * </pre>
      */
-    boa.types.Ast.Atribute getAtributes(int index);
+    boa.types.Ast.Attribute getAttributes(int index);
     /**
-     * <code>repeated .boa.types.Atribute atributes = 6;</code>
+     * <code>repeated .boa.types.Attribute attributes = 6;</code>
      *
      * <pre>
-     ** The Element's atributes 
+     ** The Element's attributes 
      * </pre>
      */
-    int getAtributesCount();
+    int getAttributesCount();
     /**
-     * <code>repeated .boa.types.Atribute atributes = 6;</code>
+     * <code>repeated .boa.types.Attribute attributes = 6;</code>
      *
      * <pre>
-     ** The Element's atributes 
+     ** The Element's attributes 
      * </pre>
      */
-    java.util.List<? extends boa.types.Ast.AtributeOrBuilder> 
-        getAtributesOrBuilderList();
+    java.util.List<? extends boa.types.Ast.AttributeOrBuilder> 
+        getAttributesOrBuilderList();
     /**
-     * <code>repeated .boa.types.Atribute atributes = 6;</code>
+     * <code>repeated .boa.types.Attribute attributes = 6;</code>
      *
      * <pre>
-     ** The Element's atributes 
+     ** The Element's attributes 
      * </pre>
      */
-    boa.types.Ast.AtributeOrBuilder getAtributesOrBuilder(
+    boa.types.Ast.AttributeOrBuilder getAttributesOrBuilder(
         int index);
 
     // optional .boa.types.Namespace script = 7;
@@ -39917,6 +40291,31 @@ public final class Ast {
      */
     com.google.protobuf.ByteString
         getTitleBytes();
+
+    // repeated .boa.types.Attribute processing_instruction = 11;
+    /**
+     * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+     */
+    java.util.List<boa.types.Ast.Attribute> 
+        getProcessingInstructionList();
+    /**
+     * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+     */
+    boa.types.Ast.Attribute getProcessingInstruction(int index);
+    /**
+     * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+     */
+    int getProcessingInstructionCount();
+    /**
+     * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+     */
+    java.util.List<? extends boa.types.Ast.AttributeOrBuilder> 
+        getProcessingInstructionOrBuilderList();
+    /**
+     * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+     */
+    boa.types.Ast.AttributeOrBuilder getProcessingInstructionOrBuilder(
+        int index);
   }
   /**
    * Protobuf type {@code boa.types.Element}
@@ -40015,10 +40414,10 @@ public final class Ast {
             }
             case 50: {
               if (!((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
-                atributes_ = new java.util.ArrayList<boa.types.Ast.Atribute>();
+                attributes_ = new java.util.ArrayList<boa.types.Ast.Attribute>();
                 mutable_bitField0_ |= 0x00000020;
               }
-              atributes_.add(input.readMessage(boa.types.Ast.Atribute.PARSER, extensionRegistry));
+              attributes_.add(input.readMessage(boa.types.Ast.Attribute.PARSER, extensionRegistry));
               break;
             }
             case 58: {
@@ -40060,6 +40459,14 @@ public final class Ast {
               title_ = input.readBytes();
               break;
             }
+            case 90: {
+              if (!((mutable_bitField0_ & 0x00000400) == 0x00000400)) {
+                processingInstruction_ = new java.util.ArrayList<boa.types.Ast.Attribute>();
+                mutable_bitField0_ |= 0x00000400;
+              }
+              processingInstruction_.add(input.readMessage(boa.types.Ast.Attribute.PARSER, extensionRegistry));
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -40078,10 +40485,13 @@ public final class Ast {
           data_ = new com.google.protobuf.UnmodifiableLazyStringList(data_);
         }
         if (((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
-          atributes_ = java.util.Collections.unmodifiableList(atributes_);
+          attributes_ = java.util.Collections.unmodifiableList(attributes_);
         }
         if (((mutable_bitField0_ & 0x00000100) == 0x00000100)) {
           varDecl_ = java.util.Collections.unmodifiableList(varDecl_);
+        }
+        if (((mutable_bitField0_ & 0x00000400) == 0x00000400)) {
+          processingInstruction_ = java.util.Collections.unmodifiableList(processingInstruction_);
         }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -40171,6 +40581,10 @@ public final class Ast {
        * <code>IMPORT_RULE = 11;</code>
        */
       IMPORT_RULE(11, 11),
+      /**
+       * <code>XML_ELEMENT = 12;</code>
+       */
+      XML_ELEMENT(12, 12),
       ;
 
       /**
@@ -40225,6 +40639,10 @@ public final class Ast {
        * <code>IMPORT_RULE = 11;</code>
        */
       public static final int IMPORT_RULE_VALUE = 11;
+      /**
+       * <code>XML_ELEMENT = 12;</code>
+       */
+      public static final int XML_ELEMENT_VALUE = 12;
 
 
       public final int getNumber() { return value; }
@@ -40243,6 +40661,7 @@ public final class Ast {
           case 9: return MEDIA_RULE;
           case 10: return MEDIA_QUERY;
           case 11: return IMPORT_RULE;
+          case 12: return XML_ELEMENT;
           default: return null;
         }
       }
@@ -40522,60 +40941,60 @@ public final class Ast {
       return data_.getByteString(index);
     }
 
-    // repeated .boa.types.Atribute atributes = 6;
-    public static final int ATRIBUTES_FIELD_NUMBER = 6;
-    private java.util.List<boa.types.Ast.Atribute> atributes_;
+    // repeated .boa.types.Attribute attributes = 6;
+    public static final int ATTRIBUTES_FIELD_NUMBER = 6;
+    private java.util.List<boa.types.Ast.Attribute> attributes_;
     /**
-     * <code>repeated .boa.types.Atribute atributes = 6;</code>
+     * <code>repeated .boa.types.Attribute attributes = 6;</code>
      *
      * <pre>
-     ** The Element's atributes 
+     ** The Element's attributes 
      * </pre>
      */
-    public java.util.List<boa.types.Ast.Atribute> getAtributesList() {
-      return atributes_;
+    public java.util.List<boa.types.Ast.Attribute> getAttributesList() {
+      return attributes_;
     }
     /**
-     * <code>repeated .boa.types.Atribute atributes = 6;</code>
+     * <code>repeated .boa.types.Attribute attributes = 6;</code>
      *
      * <pre>
-     ** The Element's atributes 
+     ** The Element's attributes 
      * </pre>
      */
-    public java.util.List<? extends boa.types.Ast.AtributeOrBuilder> 
-        getAtributesOrBuilderList() {
-      return atributes_;
+    public java.util.List<? extends boa.types.Ast.AttributeOrBuilder> 
+        getAttributesOrBuilderList() {
+      return attributes_;
     }
     /**
-     * <code>repeated .boa.types.Atribute atributes = 6;</code>
+     * <code>repeated .boa.types.Attribute attributes = 6;</code>
      *
      * <pre>
-     ** The Element's atributes 
+     ** The Element's attributes 
      * </pre>
      */
-    public int getAtributesCount() {
-      return atributes_.size();
+    public int getAttributesCount() {
+      return attributes_.size();
     }
     /**
-     * <code>repeated .boa.types.Atribute atributes = 6;</code>
+     * <code>repeated .boa.types.Attribute attributes = 6;</code>
      *
      * <pre>
-     ** The Element's atributes 
+     ** The Element's attributes 
      * </pre>
      */
-    public boa.types.Ast.Atribute getAtributes(int index) {
-      return atributes_.get(index);
+    public boa.types.Ast.Attribute getAttributes(int index) {
+      return attributes_.get(index);
     }
     /**
-     * <code>repeated .boa.types.Atribute atributes = 6;</code>
+     * <code>repeated .boa.types.Attribute attributes = 6;</code>
      *
      * <pre>
-     ** The Element's atributes 
+     ** The Element's attributes 
      * </pre>
      */
-    public boa.types.Ast.AtributeOrBuilder getAtributesOrBuilder(
+    public boa.types.Ast.AttributeOrBuilder getAttributesOrBuilder(
         int index) {
-      return atributes_.get(index);
+      return attributes_.get(index);
     }
 
     // optional .boa.types.Namespace script = 7;
@@ -40713,17 +41132,54 @@ public final class Ast {
       }
     }
 
+    // repeated .boa.types.Attribute processing_instruction = 11;
+    public static final int PROCESSING_INSTRUCTION_FIELD_NUMBER = 11;
+    private java.util.List<boa.types.Ast.Attribute> processingInstruction_;
+    /**
+     * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+     */
+    public java.util.List<boa.types.Ast.Attribute> getProcessingInstructionList() {
+      return processingInstruction_;
+    }
+    /**
+     * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+     */
+    public java.util.List<? extends boa.types.Ast.AttributeOrBuilder> 
+        getProcessingInstructionOrBuilderList() {
+      return processingInstruction_;
+    }
+    /**
+     * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+     */
+    public int getProcessingInstructionCount() {
+      return processingInstruction_.size();
+    }
+    /**
+     * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+     */
+    public boa.types.Ast.Attribute getProcessingInstruction(int index) {
+      return processingInstruction_.get(index);
+    }
+    /**
+     * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+     */
+    public boa.types.Ast.AttributeOrBuilder getProcessingInstructionOrBuilder(
+        int index) {
+      return processingInstruction_.get(index);
+    }
+
     private void initFields() {
       tag_ = "";
       kind_ = boa.types.Ast.Element.ElementKind.OTHER;
       elements_ = java.util.Collections.emptyList();
       text_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       data_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      atributes_ = java.util.Collections.emptyList();
+      attributes_ = java.util.Collections.emptyList();
       script_ = boa.types.Ast.Namespace.getDefaultInstance();
       php_ = boa.types.Ast.Namespace.getDefaultInstance();
       varDecl_ = java.util.Collections.emptyList();
       title_ = "";
+      processingInstruction_ = java.util.Collections.emptyList();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -40744,8 +41200,8 @@ public final class Ast {
           return false;
         }
       }
-      for (int i = 0; i < getAtributesCount(); i++) {
-        if (!getAtributes(i).isInitialized()) {
+      for (int i = 0; i < getAttributesCount(); i++) {
+        if (!getAttributes(i).isInitialized()) {
           memoizedIsInitialized = 0;
           return false;
         }
@@ -40764,6 +41220,12 @@ public final class Ast {
       }
       for (int i = 0; i < getVarDeclCount(); i++) {
         if (!getVarDecl(i).isInitialized()) {
+          memoizedIsInitialized = 0;
+          return false;
+        }
+      }
+      for (int i = 0; i < getProcessingInstructionCount(); i++) {
+        if (!getProcessingInstruction(i).isInitialized()) {
           memoizedIsInitialized = 0;
           return false;
         }
@@ -40790,8 +41252,8 @@ public final class Ast {
       for (int i = 0; i < data_.size(); i++) {
         output.writeBytes(5, data_.getByteString(i));
       }
-      for (int i = 0; i < atributes_.size(); i++) {
-        output.writeMessage(6, atributes_.get(i));
+      for (int i = 0; i < attributes_.size(); i++) {
+        output.writeMessage(6, attributes_.get(i));
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeMessage(7, script_);
@@ -40804,6 +41266,9 @@ public final class Ast {
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         output.writeBytes(10, getTitleBytes());
+      }
+      for (int i = 0; i < processingInstruction_.size(); i++) {
+        output.writeMessage(11, processingInstruction_.get(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -40844,9 +41309,9 @@ public final class Ast {
         size += dataSize;
         size += 1 * getDataList().size();
       }
-      for (int i = 0; i < atributes_.size(); i++) {
+      for (int i = 0; i < attributes_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(6, atributes_.get(i));
+          .computeMessageSize(6, attributes_.get(i));
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
@@ -40863,6 +41328,10 @@ public final class Ast {
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(10, getTitleBytes());
+      }
+      for (int i = 0; i < processingInstruction_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(11, processingInstruction_.get(i));
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -40977,10 +41446,11 @@ public final class Ast {
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
           getElementsFieldBuilder();
-          getAtributesFieldBuilder();
+          getAttributesFieldBuilder();
           getScriptFieldBuilder();
           getPhpFieldBuilder();
           getVarDeclFieldBuilder();
+          getProcessingInstructionFieldBuilder();
         }
       }
       private static Builder create() {
@@ -41003,11 +41473,11 @@ public final class Ast {
         bitField0_ = (bitField0_ & ~0x00000008);
         data_ = com.google.protobuf.LazyStringArrayList.EMPTY;
         bitField0_ = (bitField0_ & ~0x00000010);
-        if (atributesBuilder_ == null) {
-          atributes_ = java.util.Collections.emptyList();
+        if (attributesBuilder_ == null) {
+          attributes_ = java.util.Collections.emptyList();
           bitField0_ = (bitField0_ & ~0x00000020);
         } else {
-          atributesBuilder_.clear();
+          attributesBuilder_.clear();
         }
         if (scriptBuilder_ == null) {
           script_ = boa.types.Ast.Namespace.getDefaultInstance();
@@ -41029,6 +41499,12 @@ public final class Ast {
         }
         title_ = "";
         bitField0_ = (bitField0_ & ~0x00000200);
+        if (processingInstructionBuilder_ == null) {
+          processingInstruction_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000400);
+        } else {
+          processingInstructionBuilder_.clear();
+        }
         return this;
       }
 
@@ -41086,14 +41562,14 @@ public final class Ast {
           bitField0_ = (bitField0_ & ~0x00000010);
         }
         result.data_ = data_;
-        if (atributesBuilder_ == null) {
+        if (attributesBuilder_ == null) {
           if (((bitField0_ & 0x00000020) == 0x00000020)) {
-            atributes_ = java.util.Collections.unmodifiableList(atributes_);
+            attributes_ = java.util.Collections.unmodifiableList(attributes_);
             bitField0_ = (bitField0_ & ~0x00000020);
           }
-          result.atributes_ = atributes_;
+          result.attributes_ = attributes_;
         } else {
-          result.atributes_ = atributesBuilder_.build();
+          result.attributes_ = attributesBuilder_.build();
         }
         if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
           to_bitField0_ |= 0x00000004;
@@ -41124,6 +41600,15 @@ public final class Ast {
           to_bitField0_ |= 0x00000010;
         }
         result.title_ = title_;
+        if (processingInstructionBuilder_ == null) {
+          if (((bitField0_ & 0x00000400) == 0x00000400)) {
+            processingInstruction_ = java.util.Collections.unmodifiableList(processingInstruction_);
+            bitField0_ = (bitField0_ & ~0x00000400);
+          }
+          result.processingInstruction_ = processingInstruction_;
+        } else {
+          result.processingInstruction_ = processingInstructionBuilder_.build();
+        }
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -41194,29 +41679,29 @@ public final class Ast {
           }
           onChanged();
         }
-        if (atributesBuilder_ == null) {
-          if (!other.atributes_.isEmpty()) {
-            if (atributes_.isEmpty()) {
-              atributes_ = other.atributes_;
+        if (attributesBuilder_ == null) {
+          if (!other.attributes_.isEmpty()) {
+            if (attributes_.isEmpty()) {
+              attributes_ = other.attributes_;
               bitField0_ = (bitField0_ & ~0x00000020);
             } else {
-              ensureAtributesIsMutable();
-              atributes_.addAll(other.atributes_);
+              ensureAttributesIsMutable();
+              attributes_.addAll(other.attributes_);
             }
             onChanged();
           }
         } else {
-          if (!other.atributes_.isEmpty()) {
-            if (atributesBuilder_.isEmpty()) {
-              atributesBuilder_.dispose();
-              atributesBuilder_ = null;
-              atributes_ = other.atributes_;
+          if (!other.attributes_.isEmpty()) {
+            if (attributesBuilder_.isEmpty()) {
+              attributesBuilder_.dispose();
+              attributesBuilder_ = null;
+              attributes_ = other.attributes_;
               bitField0_ = (bitField0_ & ~0x00000020);
-              atributesBuilder_ = 
+              attributesBuilder_ = 
                 com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
-                   getAtributesFieldBuilder() : null;
+                   getAttributesFieldBuilder() : null;
             } else {
-              atributesBuilder_.addAllMessages(other.atributes_);
+              attributesBuilder_.addAllMessages(other.attributes_);
             }
           }
         }
@@ -41257,6 +41742,32 @@ public final class Ast {
           title_ = other.title_;
           onChanged();
         }
+        if (processingInstructionBuilder_ == null) {
+          if (!other.processingInstruction_.isEmpty()) {
+            if (processingInstruction_.isEmpty()) {
+              processingInstruction_ = other.processingInstruction_;
+              bitField0_ = (bitField0_ & ~0x00000400);
+            } else {
+              ensureProcessingInstructionIsMutable();
+              processingInstruction_.addAll(other.processingInstruction_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.processingInstruction_.isEmpty()) {
+            if (processingInstructionBuilder_.isEmpty()) {
+              processingInstructionBuilder_.dispose();
+              processingInstructionBuilder_ = null;
+              processingInstruction_ = other.processingInstruction_;
+              bitField0_ = (bitField0_ & ~0x00000400);
+              processingInstructionBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getProcessingInstructionFieldBuilder() : null;
+            } else {
+              processingInstructionBuilder_.addAllMessages(other.processingInstruction_);
+            }
+          }
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -41276,8 +41787,8 @@ public final class Ast {
             return false;
           }
         }
-        for (int i = 0; i < getAtributesCount(); i++) {
-          if (!getAtributes(i).isInitialized()) {
+        for (int i = 0; i < getAttributesCount(); i++) {
+          if (!getAttributes(i).isInitialized()) {
             
             return false;
           }
@@ -41296,6 +41807,12 @@ public final class Ast {
         }
         for (int i = 0; i < getVarDeclCount(); i++) {
           if (!getVarDecl(i).isInitialized()) {
+            
+            return false;
+          }
+        }
+        for (int i = 0; i < getProcessingInstructionCount(); i++) {
+          if (!getProcessingInstruction(i).isInitialized()) {
             
             return false;
           }
@@ -42042,316 +42559,316 @@ public final class Ast {
         return this;
       }
 
-      // repeated .boa.types.Atribute atributes = 6;
-      private java.util.List<boa.types.Ast.Atribute> atributes_ =
+      // repeated .boa.types.Attribute attributes = 6;
+      private java.util.List<boa.types.Ast.Attribute> attributes_ =
         java.util.Collections.emptyList();
-      private void ensureAtributesIsMutable() {
+      private void ensureAttributesIsMutable() {
         if (!((bitField0_ & 0x00000020) == 0x00000020)) {
-          atributes_ = new java.util.ArrayList<boa.types.Ast.Atribute>(atributes_);
+          attributes_ = new java.util.ArrayList<boa.types.Ast.Attribute>(attributes_);
           bitField0_ |= 0x00000020;
          }
       }
 
       private com.google.protobuf.RepeatedFieldBuilder<
-          boa.types.Ast.Atribute, boa.types.Ast.Atribute.Builder, boa.types.Ast.AtributeOrBuilder> atributesBuilder_;
+          boa.types.Ast.Attribute, boa.types.Ast.Attribute.Builder, boa.types.Ast.AttributeOrBuilder> attributesBuilder_;
 
       /**
-       * <code>repeated .boa.types.Atribute atributes = 6;</code>
+       * <code>repeated .boa.types.Attribute attributes = 6;</code>
        *
        * <pre>
-       ** The Element's atributes 
+       ** The Element's attributes 
        * </pre>
        */
-      public java.util.List<boa.types.Ast.Atribute> getAtributesList() {
-        if (atributesBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(atributes_);
+      public java.util.List<boa.types.Ast.Attribute> getAttributesList() {
+        if (attributesBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(attributes_);
         } else {
-          return atributesBuilder_.getMessageList();
+          return attributesBuilder_.getMessageList();
         }
       }
       /**
-       * <code>repeated .boa.types.Atribute atributes = 6;</code>
+       * <code>repeated .boa.types.Attribute attributes = 6;</code>
        *
        * <pre>
-       ** The Element's atributes 
+       ** The Element's attributes 
        * </pre>
        */
-      public int getAtributesCount() {
-        if (atributesBuilder_ == null) {
-          return atributes_.size();
+      public int getAttributesCount() {
+        if (attributesBuilder_ == null) {
+          return attributes_.size();
         } else {
-          return atributesBuilder_.getCount();
+          return attributesBuilder_.getCount();
         }
       }
       /**
-       * <code>repeated .boa.types.Atribute atributes = 6;</code>
+       * <code>repeated .boa.types.Attribute attributes = 6;</code>
        *
        * <pre>
-       ** The Element's atributes 
+       ** The Element's attributes 
        * </pre>
        */
-      public boa.types.Ast.Atribute getAtributes(int index) {
-        if (atributesBuilder_ == null) {
-          return atributes_.get(index);
+      public boa.types.Ast.Attribute getAttributes(int index) {
+        if (attributesBuilder_ == null) {
+          return attributes_.get(index);
         } else {
-          return atributesBuilder_.getMessage(index);
+          return attributesBuilder_.getMessage(index);
         }
       }
       /**
-       * <code>repeated .boa.types.Atribute atributes = 6;</code>
+       * <code>repeated .boa.types.Attribute attributes = 6;</code>
        *
        * <pre>
-       ** The Element's atributes 
+       ** The Element's attributes 
        * </pre>
        */
-      public Builder setAtributes(
-          int index, boa.types.Ast.Atribute value) {
-        if (atributesBuilder_ == null) {
+      public Builder setAttributes(
+          int index, boa.types.Ast.Attribute value) {
+        if (attributesBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
           }
-          ensureAtributesIsMutable();
-          atributes_.set(index, value);
+          ensureAttributesIsMutable();
+          attributes_.set(index, value);
           onChanged();
         } else {
-          atributesBuilder_.setMessage(index, value);
+          attributesBuilder_.setMessage(index, value);
         }
         return this;
       }
       /**
-       * <code>repeated .boa.types.Atribute atributes = 6;</code>
+       * <code>repeated .boa.types.Attribute attributes = 6;</code>
        *
        * <pre>
-       ** The Element's atributes 
+       ** The Element's attributes 
        * </pre>
        */
-      public Builder setAtributes(
-          int index, boa.types.Ast.Atribute.Builder builderForValue) {
-        if (atributesBuilder_ == null) {
-          ensureAtributesIsMutable();
-          atributes_.set(index, builderForValue.build());
+      public Builder setAttributes(
+          int index, boa.types.Ast.Attribute.Builder builderForValue) {
+        if (attributesBuilder_ == null) {
+          ensureAttributesIsMutable();
+          attributes_.set(index, builderForValue.build());
           onChanged();
         } else {
-          atributesBuilder_.setMessage(index, builderForValue.build());
+          attributesBuilder_.setMessage(index, builderForValue.build());
         }
         return this;
       }
       /**
-       * <code>repeated .boa.types.Atribute atributes = 6;</code>
+       * <code>repeated .boa.types.Attribute attributes = 6;</code>
        *
        * <pre>
-       ** The Element's atributes 
+       ** The Element's attributes 
        * </pre>
        */
-      public Builder addAtributes(boa.types.Ast.Atribute value) {
-        if (atributesBuilder_ == null) {
+      public Builder addAttributes(boa.types.Ast.Attribute value) {
+        if (attributesBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
           }
-          ensureAtributesIsMutable();
-          atributes_.add(value);
+          ensureAttributesIsMutable();
+          attributes_.add(value);
           onChanged();
         } else {
-          atributesBuilder_.addMessage(value);
+          attributesBuilder_.addMessage(value);
         }
         return this;
       }
       /**
-       * <code>repeated .boa.types.Atribute atributes = 6;</code>
+       * <code>repeated .boa.types.Attribute attributes = 6;</code>
        *
        * <pre>
-       ** The Element's atributes 
+       ** The Element's attributes 
        * </pre>
        */
-      public Builder addAtributes(
-          int index, boa.types.Ast.Atribute value) {
-        if (atributesBuilder_ == null) {
+      public Builder addAttributes(
+          int index, boa.types.Ast.Attribute value) {
+        if (attributesBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
           }
-          ensureAtributesIsMutable();
-          atributes_.add(index, value);
+          ensureAttributesIsMutable();
+          attributes_.add(index, value);
           onChanged();
         } else {
-          atributesBuilder_.addMessage(index, value);
+          attributesBuilder_.addMessage(index, value);
         }
         return this;
       }
       /**
-       * <code>repeated .boa.types.Atribute atributes = 6;</code>
+       * <code>repeated .boa.types.Attribute attributes = 6;</code>
        *
        * <pre>
-       ** The Element's atributes 
+       ** The Element's attributes 
        * </pre>
        */
-      public Builder addAtributes(
-          boa.types.Ast.Atribute.Builder builderForValue) {
-        if (atributesBuilder_ == null) {
-          ensureAtributesIsMutable();
-          atributes_.add(builderForValue.build());
+      public Builder addAttributes(
+          boa.types.Ast.Attribute.Builder builderForValue) {
+        if (attributesBuilder_ == null) {
+          ensureAttributesIsMutable();
+          attributes_.add(builderForValue.build());
           onChanged();
         } else {
-          atributesBuilder_.addMessage(builderForValue.build());
+          attributesBuilder_.addMessage(builderForValue.build());
         }
         return this;
       }
       /**
-       * <code>repeated .boa.types.Atribute atributes = 6;</code>
+       * <code>repeated .boa.types.Attribute attributes = 6;</code>
        *
        * <pre>
-       ** The Element's atributes 
+       ** The Element's attributes 
        * </pre>
        */
-      public Builder addAtributes(
-          int index, boa.types.Ast.Atribute.Builder builderForValue) {
-        if (atributesBuilder_ == null) {
-          ensureAtributesIsMutable();
-          atributes_.add(index, builderForValue.build());
+      public Builder addAttributes(
+          int index, boa.types.Ast.Attribute.Builder builderForValue) {
+        if (attributesBuilder_ == null) {
+          ensureAttributesIsMutable();
+          attributes_.add(index, builderForValue.build());
           onChanged();
         } else {
-          atributesBuilder_.addMessage(index, builderForValue.build());
+          attributesBuilder_.addMessage(index, builderForValue.build());
         }
         return this;
       }
       /**
-       * <code>repeated .boa.types.Atribute atributes = 6;</code>
+       * <code>repeated .boa.types.Attribute attributes = 6;</code>
        *
        * <pre>
-       ** The Element's atributes 
+       ** The Element's attributes 
        * </pre>
        */
-      public Builder addAllAtributes(
-          java.lang.Iterable<? extends boa.types.Ast.Atribute> values) {
-        if (atributesBuilder_ == null) {
-          ensureAtributesIsMutable();
-          super.addAll(values, atributes_);
+      public Builder addAllAttributes(
+          java.lang.Iterable<? extends boa.types.Ast.Attribute> values) {
+        if (attributesBuilder_ == null) {
+          ensureAttributesIsMutable();
+          super.addAll(values, attributes_);
           onChanged();
         } else {
-          atributesBuilder_.addAllMessages(values);
+          attributesBuilder_.addAllMessages(values);
         }
         return this;
       }
       /**
-       * <code>repeated .boa.types.Atribute atributes = 6;</code>
+       * <code>repeated .boa.types.Attribute attributes = 6;</code>
        *
        * <pre>
-       ** The Element's atributes 
+       ** The Element's attributes 
        * </pre>
        */
-      public Builder clearAtributes() {
-        if (atributesBuilder_ == null) {
-          atributes_ = java.util.Collections.emptyList();
+      public Builder clearAttributes() {
+        if (attributesBuilder_ == null) {
+          attributes_ = java.util.Collections.emptyList();
           bitField0_ = (bitField0_ & ~0x00000020);
           onChanged();
         } else {
-          atributesBuilder_.clear();
+          attributesBuilder_.clear();
         }
         return this;
       }
       /**
-       * <code>repeated .boa.types.Atribute atributes = 6;</code>
+       * <code>repeated .boa.types.Attribute attributes = 6;</code>
        *
        * <pre>
-       ** The Element's atributes 
+       ** The Element's attributes 
        * </pre>
        */
-      public Builder removeAtributes(int index) {
-        if (atributesBuilder_ == null) {
-          ensureAtributesIsMutable();
-          atributes_.remove(index);
+      public Builder removeAttributes(int index) {
+        if (attributesBuilder_ == null) {
+          ensureAttributesIsMutable();
+          attributes_.remove(index);
           onChanged();
         } else {
-          atributesBuilder_.remove(index);
+          attributesBuilder_.remove(index);
         }
         return this;
       }
       /**
-       * <code>repeated .boa.types.Atribute atributes = 6;</code>
+       * <code>repeated .boa.types.Attribute attributes = 6;</code>
        *
        * <pre>
-       ** The Element's atributes 
+       ** The Element's attributes 
        * </pre>
        */
-      public boa.types.Ast.Atribute.Builder getAtributesBuilder(
+      public boa.types.Ast.Attribute.Builder getAttributesBuilder(
           int index) {
-        return getAtributesFieldBuilder().getBuilder(index);
+        return getAttributesFieldBuilder().getBuilder(index);
       }
       /**
-       * <code>repeated .boa.types.Atribute atributes = 6;</code>
+       * <code>repeated .boa.types.Attribute attributes = 6;</code>
        *
        * <pre>
-       ** The Element's atributes 
+       ** The Element's attributes 
        * </pre>
        */
-      public boa.types.Ast.AtributeOrBuilder getAtributesOrBuilder(
+      public boa.types.Ast.AttributeOrBuilder getAttributesOrBuilder(
           int index) {
-        if (atributesBuilder_ == null) {
-          return atributes_.get(index);  } else {
-          return atributesBuilder_.getMessageOrBuilder(index);
+        if (attributesBuilder_ == null) {
+          return attributes_.get(index);  } else {
+          return attributesBuilder_.getMessageOrBuilder(index);
         }
       }
       /**
-       * <code>repeated .boa.types.Atribute atributes = 6;</code>
+       * <code>repeated .boa.types.Attribute attributes = 6;</code>
        *
        * <pre>
-       ** The Element's atributes 
+       ** The Element's attributes 
        * </pre>
        */
-      public java.util.List<? extends boa.types.Ast.AtributeOrBuilder> 
-           getAtributesOrBuilderList() {
-        if (atributesBuilder_ != null) {
-          return atributesBuilder_.getMessageOrBuilderList();
+      public java.util.List<? extends boa.types.Ast.AttributeOrBuilder> 
+           getAttributesOrBuilderList() {
+        if (attributesBuilder_ != null) {
+          return attributesBuilder_.getMessageOrBuilderList();
         } else {
-          return java.util.Collections.unmodifiableList(atributes_);
+          return java.util.Collections.unmodifiableList(attributes_);
         }
       }
       /**
-       * <code>repeated .boa.types.Atribute atributes = 6;</code>
+       * <code>repeated .boa.types.Attribute attributes = 6;</code>
        *
        * <pre>
-       ** The Element's atributes 
+       ** The Element's attributes 
        * </pre>
        */
-      public boa.types.Ast.Atribute.Builder addAtributesBuilder() {
-        return getAtributesFieldBuilder().addBuilder(
-            boa.types.Ast.Atribute.getDefaultInstance());
+      public boa.types.Ast.Attribute.Builder addAttributesBuilder() {
+        return getAttributesFieldBuilder().addBuilder(
+            boa.types.Ast.Attribute.getDefaultInstance());
       }
       /**
-       * <code>repeated .boa.types.Atribute atributes = 6;</code>
+       * <code>repeated .boa.types.Attribute attributes = 6;</code>
        *
        * <pre>
-       ** The Element's atributes 
+       ** The Element's attributes 
        * </pre>
        */
-      public boa.types.Ast.Atribute.Builder addAtributesBuilder(
+      public boa.types.Ast.Attribute.Builder addAttributesBuilder(
           int index) {
-        return getAtributesFieldBuilder().addBuilder(
-            index, boa.types.Ast.Atribute.getDefaultInstance());
+        return getAttributesFieldBuilder().addBuilder(
+            index, boa.types.Ast.Attribute.getDefaultInstance());
       }
       /**
-       * <code>repeated .boa.types.Atribute atributes = 6;</code>
+       * <code>repeated .boa.types.Attribute attributes = 6;</code>
        *
        * <pre>
-       ** The Element's atributes 
+       ** The Element's attributes 
        * </pre>
        */
-      public java.util.List<boa.types.Ast.Atribute.Builder> 
-           getAtributesBuilderList() {
-        return getAtributesFieldBuilder().getBuilderList();
+      public java.util.List<boa.types.Ast.Attribute.Builder> 
+           getAttributesBuilderList() {
+        return getAttributesFieldBuilder().getBuilderList();
       }
       private com.google.protobuf.RepeatedFieldBuilder<
-          boa.types.Ast.Atribute, boa.types.Ast.Atribute.Builder, boa.types.Ast.AtributeOrBuilder> 
-          getAtributesFieldBuilder() {
-        if (atributesBuilder_ == null) {
-          atributesBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              boa.types.Ast.Atribute, boa.types.Ast.Atribute.Builder, boa.types.Ast.AtributeOrBuilder>(
-                  atributes_,
+          boa.types.Ast.Attribute, boa.types.Ast.Attribute.Builder, boa.types.Ast.AttributeOrBuilder> 
+          getAttributesFieldBuilder() {
+        if (attributesBuilder_ == null) {
+          attributesBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              boa.types.Ast.Attribute, boa.types.Ast.Attribute.Builder, boa.types.Ast.AttributeOrBuilder>(
+                  attributes_,
                   ((bitField0_ & 0x00000020) == 0x00000020),
                   getParentForChildren(),
                   isClean());
-          atributes_ = null;
+          attributes_ = null;
         }
-        return atributesBuilder_;
+        return attributesBuilder_;
       }
 
       // optional .boa.types.Namespace script = 7;
@@ -42926,6 +43443,246 @@ public final class Ast {
         return this;
       }
 
+      // repeated .boa.types.Attribute processing_instruction = 11;
+      private java.util.List<boa.types.Ast.Attribute> processingInstruction_ =
+        java.util.Collections.emptyList();
+      private void ensureProcessingInstructionIsMutable() {
+        if (!((bitField0_ & 0x00000400) == 0x00000400)) {
+          processingInstruction_ = new java.util.ArrayList<boa.types.Ast.Attribute>(processingInstruction_);
+          bitField0_ |= 0x00000400;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Attribute, boa.types.Ast.Attribute.Builder, boa.types.Ast.AttributeOrBuilder> processingInstructionBuilder_;
+
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public java.util.List<boa.types.Ast.Attribute> getProcessingInstructionList() {
+        if (processingInstructionBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(processingInstruction_);
+        } else {
+          return processingInstructionBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public int getProcessingInstructionCount() {
+        if (processingInstructionBuilder_ == null) {
+          return processingInstruction_.size();
+        } else {
+          return processingInstructionBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public boa.types.Ast.Attribute getProcessingInstruction(int index) {
+        if (processingInstructionBuilder_ == null) {
+          return processingInstruction_.get(index);
+        } else {
+          return processingInstructionBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public Builder setProcessingInstruction(
+          int index, boa.types.Ast.Attribute value) {
+        if (processingInstructionBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureProcessingInstructionIsMutable();
+          processingInstruction_.set(index, value);
+          onChanged();
+        } else {
+          processingInstructionBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public Builder setProcessingInstruction(
+          int index, boa.types.Ast.Attribute.Builder builderForValue) {
+        if (processingInstructionBuilder_ == null) {
+          ensureProcessingInstructionIsMutable();
+          processingInstruction_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          processingInstructionBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public Builder addProcessingInstruction(boa.types.Ast.Attribute value) {
+        if (processingInstructionBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureProcessingInstructionIsMutable();
+          processingInstruction_.add(value);
+          onChanged();
+        } else {
+          processingInstructionBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public Builder addProcessingInstruction(
+          int index, boa.types.Ast.Attribute value) {
+        if (processingInstructionBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureProcessingInstructionIsMutable();
+          processingInstruction_.add(index, value);
+          onChanged();
+        } else {
+          processingInstructionBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public Builder addProcessingInstruction(
+          boa.types.Ast.Attribute.Builder builderForValue) {
+        if (processingInstructionBuilder_ == null) {
+          ensureProcessingInstructionIsMutable();
+          processingInstruction_.add(builderForValue.build());
+          onChanged();
+        } else {
+          processingInstructionBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public Builder addProcessingInstruction(
+          int index, boa.types.Ast.Attribute.Builder builderForValue) {
+        if (processingInstructionBuilder_ == null) {
+          ensureProcessingInstructionIsMutable();
+          processingInstruction_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          processingInstructionBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public Builder addAllProcessingInstruction(
+          java.lang.Iterable<? extends boa.types.Ast.Attribute> values) {
+        if (processingInstructionBuilder_ == null) {
+          ensureProcessingInstructionIsMutable();
+          super.addAll(values, processingInstruction_);
+          onChanged();
+        } else {
+          processingInstructionBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public Builder clearProcessingInstruction() {
+        if (processingInstructionBuilder_ == null) {
+          processingInstruction_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000400);
+          onChanged();
+        } else {
+          processingInstructionBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public Builder removeProcessingInstruction(int index) {
+        if (processingInstructionBuilder_ == null) {
+          ensureProcessingInstructionIsMutable();
+          processingInstruction_.remove(index);
+          onChanged();
+        } else {
+          processingInstructionBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public boa.types.Ast.Attribute.Builder getProcessingInstructionBuilder(
+          int index) {
+        return getProcessingInstructionFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public boa.types.Ast.AttributeOrBuilder getProcessingInstructionOrBuilder(
+          int index) {
+        if (processingInstructionBuilder_ == null) {
+          return processingInstruction_.get(index);  } else {
+          return processingInstructionBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public java.util.List<? extends boa.types.Ast.AttributeOrBuilder> 
+           getProcessingInstructionOrBuilderList() {
+        if (processingInstructionBuilder_ != null) {
+          return processingInstructionBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(processingInstruction_);
+        }
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public boa.types.Ast.Attribute.Builder addProcessingInstructionBuilder() {
+        return getProcessingInstructionFieldBuilder().addBuilder(
+            boa.types.Ast.Attribute.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public boa.types.Ast.Attribute.Builder addProcessingInstructionBuilder(
+          int index) {
+        return getProcessingInstructionFieldBuilder().addBuilder(
+            index, boa.types.Ast.Attribute.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .boa.types.Attribute processing_instruction = 11;</code>
+       */
+      public java.util.List<boa.types.Ast.Attribute.Builder> 
+           getProcessingInstructionBuilderList() {
+        return getProcessingInstructionFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          boa.types.Ast.Attribute, boa.types.Ast.Attribute.Builder, boa.types.Ast.AttributeOrBuilder> 
+          getProcessingInstructionFieldBuilder() {
+        if (processingInstructionBuilder_ == null) {
+          processingInstructionBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              boa.types.Ast.Attribute, boa.types.Ast.Attribute.Builder, boa.types.Ast.AttributeOrBuilder>(
+                  processingInstruction_,
+                  ((bitField0_ & 0x00000400) == 0x00000400),
+                  getParentForChildren(),
+                  isClean());
+          processingInstruction_ = null;
+        }
+        return processingInstructionBuilder_;
+      }
+
       // @@protoc_insertion_point(builder_scope:boa.types.Element)
     }
 
@@ -42937,7 +43694,7 @@ public final class Ast {
     // @@protoc_insertion_point(class_scope:boa.types.Element)
   }
 
-  public interface AtributeOrBuilder
+  public interface AttributeOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
     // required string key = 1;
@@ -42971,28 +43728,28 @@ public final class Ast {
         getValueBytes();
   }
   /**
-   * Protobuf type {@code boa.types.Atribute}
+   * Protobuf type {@code boa.types.Attribute}
    *
    * <pre>
    ** Key Value pairs eg. key = "onclick" value = "myFunction()", key = "type" value = "button" 
    * </pre>
    */
-  public static final class Atribute extends
+  public static final class Attribute extends
       com.google.protobuf.GeneratedMessage
-      implements AtributeOrBuilder {
-    // Use Atribute.newBuilder() to construct.
-    private Atribute(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      implements AttributeOrBuilder {
+    // Use Attribute.newBuilder() to construct.
+    private Attribute(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
       this.unknownFields = builder.getUnknownFields();
     }
-    private Atribute(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+    private Attribute(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
 
-    private static final Atribute defaultInstance;
-    public static Atribute getDefaultInstance() {
+    private static final Attribute defaultInstance;
+    public static Attribute getDefaultInstance() {
       return defaultInstance;
     }
 
-    public Atribute getDefaultInstanceForType() {
+    public Attribute getDefaultInstanceForType() {
       return defaultInstance;
     }
 
@@ -43002,7 +43759,7 @@ public final class Ast {
         getUnknownFields() {
       return this.unknownFields;
     }
-    private Atribute(
+    private Attribute(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -43049,28 +43806,28 @@ public final class Ast {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return boa.types.Ast.internal_static_boa_types_Atribute_descriptor;
+      return boa.types.Ast.internal_static_boa_types_Attribute_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return boa.types.Ast.internal_static_boa_types_Atribute_fieldAccessorTable
+      return boa.types.Ast.internal_static_boa_types_Attribute_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              boa.types.Ast.Atribute.class, boa.types.Ast.Atribute.Builder.class);
+              boa.types.Ast.Attribute.class, boa.types.Ast.Attribute.Builder.class);
     }
 
-    public static com.google.protobuf.Parser<Atribute> PARSER =
-        new com.google.protobuf.AbstractParser<Atribute>() {
-      public Atribute parsePartialFrom(
+    public static com.google.protobuf.Parser<Attribute> PARSER =
+        new com.google.protobuf.AbstractParser<Attribute>() {
+      public Attribute parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new Atribute(input, extensionRegistry);
+        return new Attribute(input, extensionRegistry);
       }
     };
 
     @java.lang.Override
-    public com.google.protobuf.Parser<Atribute> getParserForType() {
+    public com.google.protobuf.Parser<Attribute> getParserForType() {
       return PARSER;
     }
 
@@ -43220,53 +43977,53 @@ public final class Ast {
       return super.writeReplace();
     }
 
-    public static boa.types.Ast.Atribute parseFrom(
+    public static boa.types.Ast.Attribute parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static boa.types.Ast.Atribute parseFrom(
+    public static boa.types.Ast.Attribute parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static boa.types.Ast.Atribute parseFrom(byte[] data)
+    public static boa.types.Ast.Attribute parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static boa.types.Ast.Atribute parseFrom(
+    public static boa.types.Ast.Attribute parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static boa.types.Ast.Atribute parseFrom(java.io.InputStream input)
+    public static boa.types.Ast.Attribute parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
-    public static boa.types.Ast.Atribute parseFrom(
+    public static boa.types.Ast.Attribute parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return PARSER.parseFrom(input, extensionRegistry);
     }
-    public static boa.types.Ast.Atribute parseDelimitedFrom(java.io.InputStream input)
+    public static boa.types.Ast.Attribute parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input);
     }
-    public static boa.types.Ast.Atribute parseDelimitedFrom(
+    public static boa.types.Ast.Attribute parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input, extensionRegistry);
     }
-    public static boa.types.Ast.Atribute parseFrom(
+    public static boa.types.Ast.Attribute parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
-    public static boa.types.Ast.Atribute parseFrom(
+    public static boa.types.Ast.Attribute parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -43275,7 +44032,7 @@ public final class Ast {
 
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(boa.types.Ast.Atribute prototype) {
+    public static Builder newBuilder(boa.types.Ast.Attribute prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
@@ -43287,7 +44044,7 @@ public final class Ast {
       return builder;
     }
     /**
-     * Protobuf type {@code boa.types.Atribute}
+     * Protobuf type {@code boa.types.Attribute}
      *
      * <pre>
      ** Key Value pairs eg. key = "onclick" value = "myFunction()", key = "type" value = "button" 
@@ -43295,20 +44052,20 @@ public final class Ast {
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements boa.types.Ast.AtributeOrBuilder {
+       implements boa.types.Ast.AttributeOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return boa.types.Ast.internal_static_boa_types_Atribute_descriptor;
+        return boa.types.Ast.internal_static_boa_types_Attribute_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return boa.types.Ast.internal_static_boa_types_Atribute_fieldAccessorTable
+        return boa.types.Ast.internal_static_boa_types_Attribute_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                boa.types.Ast.Atribute.class, boa.types.Ast.Atribute.Builder.class);
+                boa.types.Ast.Attribute.class, boa.types.Ast.Attribute.Builder.class);
       }
 
-      // Construct using boa.types.Ast.Atribute.newBuilder()
+      // Construct using boa.types.Ast.Attribute.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -43341,23 +44098,23 @@ public final class Ast {
 
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return boa.types.Ast.internal_static_boa_types_Atribute_descriptor;
+        return boa.types.Ast.internal_static_boa_types_Attribute_descriptor;
       }
 
-      public boa.types.Ast.Atribute getDefaultInstanceForType() {
-        return boa.types.Ast.Atribute.getDefaultInstance();
+      public boa.types.Ast.Attribute getDefaultInstanceForType() {
+        return boa.types.Ast.Attribute.getDefaultInstance();
       }
 
-      public boa.types.Ast.Atribute build() {
-        boa.types.Ast.Atribute result = buildPartial();
+      public boa.types.Ast.Attribute build() {
+        boa.types.Ast.Attribute result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public boa.types.Ast.Atribute buildPartial() {
-        boa.types.Ast.Atribute result = new boa.types.Ast.Atribute(this);
+      public boa.types.Ast.Attribute buildPartial() {
+        boa.types.Ast.Attribute result = new boa.types.Ast.Attribute(this);
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
@@ -43374,16 +44131,16 @@ public final class Ast {
       }
 
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof boa.types.Ast.Atribute) {
-          return mergeFrom((boa.types.Ast.Atribute)other);
+        if (other instanceof boa.types.Ast.Attribute) {
+          return mergeFrom((boa.types.Ast.Attribute)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(boa.types.Ast.Atribute other) {
-        if (other == boa.types.Ast.Atribute.getDefaultInstance()) return this;
+      public Builder mergeFrom(boa.types.Ast.Attribute other) {
+        if (other == boa.types.Ast.Attribute.getDefaultInstance()) return this;
         if (other.hasKey()) {
           bitField0_ |= 0x00000001;
           key_ = other.key_;
@@ -43414,11 +44171,11 @@ public final class Ast {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        boa.types.Ast.Atribute parsedMessage = null;
+        boa.types.Ast.Attribute parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (boa.types.Ast.Atribute) e.getUnfinishedMessage();
+          parsedMessage = (boa.types.Ast.Attribute) e.getUnfinishedMessage();
           throw e;
         } finally {
           if (parsedMessage != null) {
@@ -43577,15 +44334,15 @@ public final class Ast {
         return this;
       }
 
-      // @@protoc_insertion_point(builder_scope:boa.types.Atribute)
+      // @@protoc_insertion_point(builder_scope:boa.types.Attribute)
     }
 
     static {
-      defaultInstance = new Atribute(true);
+      defaultInstance = new Attribute(true);
       defaultInstance.initFields();
     }
 
-    // @@protoc_insertion_point(class_scope:boa.types.Atribute)
+    // @@protoc_insertion_point(class_scope:boa.types.Attribute)
   }
 
   private static com.google.protobuf.Descriptors.Descriptor
@@ -43659,10 +44416,10 @@ public final class Ast {
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_boa_types_Element_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_boa_types_Atribute_descriptor;
+    internal_static_boa_types_Attribute_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_boa_types_Atribute_fieldAccessorTable;
+      internal_static_boa_types_Attribute_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -43847,28 +44604,31 @@ public final class Ast {
       "CATION\020\004\032\002\020\001\"{\n\014PositionInfo\022\021\n\tstart_po" +
       "s\030\001 \002(\005\022\016\n\006length\030\002 \002(\005\022\022\n\nstart_line\030\003 " +
       "\002(\005\022\021\n\tstart_col\030\004 \002(\005\022\020\n\010end_line\030\005 \002(\005" +
-      "\022\017\n\007end_col\030\006 \002(\005\"e\n\010Document\022\r\n\005title\030\001" +
-      " \001(\t\022$\n\010elements\030\002 \003(\0132\022.boa.types.Eleme" +
-      "nt\022$\n\010doc_type\030\003 \001(\0132\022.boa.types.Element" +
-      "\"\362\003\n\007Element\022\013\n\003tag\030\001 \002(\t\022,\n\004kind\030\002 \002(\0162" +
-      "\036.boa.types.Element.ElementKind\022$\n\010eleme",
-      "nts\030\003 \003(\0132\022.boa.types.Element\022\014\n\004text\030\004 " +
-      "\003(\t\022\014\n\004data\030\005 \003(\t\022&\n\tatributes\030\006 \003(\0132\023.b" +
-      "oa.types.Atribute\022$\n\006script\030\007 \001(\0132\024.boa." +
-      "types.Namespace\022!\n\003php\030\010 \001(\0132\024.boa.types" +
-      ".Namespace\022%\n\010var_decl\030\t \003(\0132\023.boa.types" +
-      ".Variable\022\r\n\005title\030\n \001(\t\"\302\001\n\013ElementKind" +
-      "\022\t\n\005OTHER\020\000\022\t\n\005BLOCK\020\001\022\013\n\007IN_LINE\020\002\022\010\n\004F" +
-      "ORM\020\003\022\014\n\010DOC_TYPE\020\004\022\017\n\013STYLE_SHEET\020\005\022\r\n\t" +
-      "PAGE_RULE\020\006\022\016\n\nSTYLE_RULE\020\007\022\022\n\016FONT_FACE" +
-      "_RULE\020\010\022\016\n\nMEDIA_RULE\020\t\022\017\n\013MEDIA_QUERY\020\n",
-      "\022\017\n\013IMPORT_RULE\020\013\032\002\020\001\"&\n\010Atribute\022\013\n\003key" +
-      "\030\001 \002(\t\022\r\n\005value\030\002 \002(\t*\303\001\n\010TypeKind\022\t\n\005OT" +
-      "HER\020\000\022\t\n\005CLASS\020\001\022\r\n\tINTERFACE\020\002\022\r\n\tANONY" +
-      "MOUS\020\003\022\010\n\004ANON\020\003\022\n\n\006STRUCT\020\004\022\010\n\004ENUM\020\005\022\017" +
-      "\n\013ENUMERATION\020\005\022\016\n\nANNOTATION\020\006\022\014\n\010DELEG" +
-      "ATE\020\007\022\013\n\007GENERIC\020\010\022\t\n\005TRAIT\020\t\022\r\n\tPRIMITI" +
-      "VE\020\n\022\t\n\005ARRAY\020\013\032\002\020\001B\002H\001"
+      "\022\017\n\007end_col\030\006 \002(\005\"\233\001\n\010Document\022\r\n\005title\030" +
+      "\001 \001(\t\022$\n\010elements\030\002 \003(\0132\022.boa.types.Elem" +
+      "ent\022$\n\010doc_type\030\003 \001(\0132\022.boa.types.Elemen" +
+      "t\0224\n\026processing_instruction\030\013 \003(\0132\024.boa." +
+      "types.Attribute\"\273\004\n\007Element\022\013\n\003tag\030\001 \002(\t",
+      "\022,\n\004kind\030\002 \002(\0162\036.boa.types.Element.Eleme" +
+      "ntKind\022$\n\010elements\030\003 \003(\0132\022.boa.types.Ele" +
+      "ment\022\014\n\004text\030\004 \003(\t\022\014\n\004data\030\005 \003(\t\022(\n\nattr" +
+      "ibutes\030\006 \003(\0132\024.boa.types.Attribute\022$\n\006sc" +
+      "ript\030\007 \001(\0132\024.boa.types.Namespace\022!\n\003php\030" +
+      "\010 \001(\0132\024.boa.types.Namespace\022%\n\010var_decl\030" +
+      "\t \003(\0132\023.boa.types.Variable\022\r\n\005title\030\n \001(" +
+      "\t\0224\n\026processing_instruction\030\013 \003(\0132\024.boa." +
+      "types.Attribute\"\323\001\n\013ElementKind\022\t\n\005OTHER" +
+      "\020\000\022\t\n\005BLOCK\020\001\022\013\n\007IN_LINE\020\002\022\010\n\004FORM\020\003\022\014\n\010",
+      "DOC_TYPE\020\004\022\017\n\013STYLE_SHEET\020\005\022\r\n\tPAGE_RULE" +
+      "\020\006\022\016\n\nSTYLE_RULE\020\007\022\022\n\016FONT_FACE_RULE\020\010\022\016" +
+      "\n\nMEDIA_RULE\020\t\022\017\n\013MEDIA_QUERY\020\n\022\017\n\013IMPOR" +
+      "T_RULE\020\013\022\017\n\013XML_ELEMENT\020\014\032\002\020\001\"\'\n\tAttribu" +
+      "te\022\013\n\003key\030\001 \002(\t\022\r\n\005value\030\002 \002(\t*\303\001\n\010TypeK" +
+      "ind\022\t\n\005OTHER\020\000\022\t\n\005CLASS\020\001\022\r\n\tINTERFACE\020\002" +
+      "\022\r\n\tANONYMOUS\020\003\022\010\n\004ANON\020\003\022\n\n\006STRUCT\020\004\022\010\n" +
+      "\004ENUM\020\005\022\017\n\013ENUMERATION\020\005\022\016\n\nANNOTATION\020\006" +
+      "\022\014\n\010DELEGATE\020\007\022\013\n\007GENERIC\020\010\022\t\n\005TRAIT\020\t\022\r" +
+      "\n\tPRIMITIVE\020\n\022\t\n\005ARRAY\020\013\032\002\020\001B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -43952,18 +44712,18 @@ public final class Ast {
           internal_static_boa_types_Document_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Document_descriptor,
-              new java.lang.String[] { "Title", "Elements", "DocType", });
+              new java.lang.String[] { "Title", "Elements", "DocType", "ProcessingInstruction", });
           internal_static_boa_types_Element_descriptor =
             getDescriptor().getMessageTypes().get(13);
           internal_static_boa_types_Element_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_boa_types_Element_descriptor,
-              new java.lang.String[] { "Tag", "Kind", "Elements", "Text", "Data", "Atributes", "Script", "Php", "VarDecl", "Title", });
-          internal_static_boa_types_Atribute_descriptor =
+              new java.lang.String[] { "Tag", "Kind", "Elements", "Text", "Data", "Attributes", "Script", "Php", "VarDecl", "Title", "ProcessingInstruction", });
+          internal_static_boa_types_Attribute_descriptor =
             getDescriptor().getMessageTypes().get(14);
-          internal_static_boa_types_Atribute_fieldAccessorTable = new
+          internal_static_boa_types_Attribute_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_boa_types_Atribute_descriptor,
+              internal_static_boa_types_Attribute_descriptor,
               new java.lang.String[] { "Key", "Value", });
           return null;
         }

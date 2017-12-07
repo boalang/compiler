@@ -542,6 +542,7 @@ message Document {
 	optional string title = 1;
 	repeated Element elements = 2;
 	optional Element doc_type = 3;
+	repeated Attribute processing_instruction = 11;
 }
 
 /** A html Element */
@@ -561,7 +562,7 @@ message Element {
 		MEDIA_RULE = 9;
 		MEDIA_QUERY = 10;
 		IMPORT_RULE = 11;
-		
+		XML_ELEMENT = 12;
 	}
 	/** Element's tag */
 	required string tag = 1;
@@ -573,17 +574,18 @@ message Element {
 	repeated string  text = 4;
 	/** The Element's data eg. scripts, contents of style, etc... */
 	repeated string  data = 5;
-	/** The Element's atributes */
-	repeated Atribute atributes = 6;
+	/** The Element's attributes */
+	repeated Attribute attributes = 6;
 	optional Namespace script = 7;
 	optional Namespace php = 8;  
 	repeated Variable var_decl = 9;
 	/** The Element's title */
 	optional string title = 10;
+	repeated Attribute processing_instruction = 11;
 }
 
 /** Key Value pairs eg. key = "onclick" value = "myFunction()", key = "type" value = "button" */  
-message Atribute {
+message Attribute {
 	required string key = 1;
 	required string value = 2;
 }
