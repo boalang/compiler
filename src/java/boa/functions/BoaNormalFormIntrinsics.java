@@ -76,18 +76,27 @@ public class BoaNormalFormIntrinsics {
 			case LT:
 			case GTEQ:
 			case LTEQ:
-			case OP_ADD:
-			case OP_SUB:
-			case OP_MULT:
-			case OP_DIV:
-			case OP_MOD:
-			case PAREN:
 			case LOGICAL_AND:
 			case LOGICAL_OR:
 			case LOGICAL_NOT:
+            case PAREN:
 			case ASSIGN:
 			case NEW:
 				return createExpression(e.getKind(), convertedExpression.toArray(new Expression[convertedExpression.size()]));
+
+            case OP_ADD:
+            case OP_SUB:
+            case OP_MULT:
+            case OP_DIV:
+            case OP_MOD:
+                if (e.equals(reciever))
+                    return createVariable("rcv$");
+
+                for (int i = 0; i < arguments.length; i++) {
+                    if (e.equals(arguments[i]))
+                        return createVariable("arg$" + Integer.toString(i));
+                }
+                return createExpression(e.getKind(), convertedExpression.toArray(new Expression[convertedExpression.size()]));
 
 			case OP_DEC:
 			case OP_INC:
