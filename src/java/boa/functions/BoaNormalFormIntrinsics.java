@@ -536,7 +536,7 @@ public class BoaNormalFormIntrinsics {
 			    List<Object[]> l = seperateNumDenom(e, 0);
 			    List<Expression> num= new ArrayList<Expression>();
                 List<Expression> den = new ArrayList<Expression>();
-			    l.sort(new ExpressionArrayComparator());
+			    Collections.sort(l, new ExpressionArrayComparator());
                 int signCount = 0;
 			    for(Object[] o: l){
 			        if(((Expression)o[0]).getKind() == ExpressionKind.OP_SUB){
