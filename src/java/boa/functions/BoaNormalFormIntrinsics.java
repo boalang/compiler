@@ -533,48 +533,42 @@ public class BoaNormalFormIntrinsics {
 
 			case OP_MULT:
 			case OP_DIV:
-				for (int i = 0; i < e.getExpressionsCount(); i++) {
-					final HashMap<Integer, ArrayList<Object[]>> cMap = seperate(e.getExpressions(i), side, true);
-
-					if (cMap.containsKey(0)) {
-						if (componentMap.containsKey(0))
-							componentMap.get(0).addAll(cMap.get(0));
-						else
-							componentMap.put(0, cMap.get(0));
-					}
-
-					if (cMap.containsKey(1)) {
-						if (componentMap.containsKey(1))
-							componentMap.get(1).addAll(cMap.get(1));
-						else
-							componentMap.put(1, cMap.get(1));
-					}
-				}
-
-				int signCount = 0;
-				ArrayList<Expression> l = new ArrayList<Expression>();
-				for(Map.Entry<Integer, ArrayList<Object[]>> entry: componentMap.entrySet()) {
-					for(Object[] o: entry.getValue()) {
-						l.add((Expression)o[0]);
-						if (o[2].equals(false))
+			    List<Object[]> l = seperateNumDenom(e, 0);
+			    List<Expression> num= new ArrayList<Expression>();
+                List<Expression> den = new ArrayList<Expression>();
+			    l.sort(new ExpressionArrayComparator());
+                int signCount = 0;
+			    for(Object[] o: l){
+			        if(((Expression)o[0]).getKind() == ExpressionKind.OP_SUB){
+			        	if(((Expression)o[0]).getExpressionsCount() == 1 ) {
 							signCount++;
-					}
-				}
+							o[0] = ((Expression) o[0]).getExpressions(0);
+						}
 
-				if (e.getKind() == ExpressionKind.OP_MULT)
-				    Collections.sort(l, new ExpressionComparator());
-				Expression e1 = createExpression(e.getKind(), l.toArray(new Expression[l.size()]));
+                    }
+                    //if((Byte)o[1] == 0)
+                    if(o[1].equals(0))
+                        num.add((Expression) o[0]);
+                    else
+                        den.add((Expression) o[0]);
+                }
+                Expression sortExpr;
+                Expression numerator = createExpression(ExpressionKind.OP_MULT, num.toArray(new Expression[num.size()]));
 
-				componentMap.clear();
-				final ArrayList<Object[]> mList = new ArrayList<Object[]>();
+                if(den.size() != 0) {
+                    Expression denominator = createExpression(ExpressionKind.OP_MULT, den.toArray(new Expression[den.size()]));
+                    sortExpr = createExpression(ExpressionKind.OP_DIV, numerator, denominator);
+                }
+                else
+                    sortExpr = numerator;
 
-				if(signCount % 2 == 1)
-					mList.add(new Object[] {e1, side, !sign});
-				else
-					mList.add(new Object[] {e1, side, sign});
+                if(signCount % 2 == 1)
+                    sortExpr = createExpression(ExpressionKind.OP_SUB, sortExpr);
 
-				componentMap.put(0, mList);
-				break;
+                final ArrayList<Object[]> vList = new ArrayList<Object[]>();
+                vList.add(new Object[] {sortExpr, side, sign});
+                componentMap.put(0, vList);
+                break;
 
 			case PAREN:
 				componentMap.putAll(seperate(e.getExpressions(0), side, sign));
@@ -602,6 +596,45 @@ public class BoaNormalFormIntrinsics {
 
 		return componentMap;
 	}
+
+	/**
+	 * Breaks a Div/Mult expression into numerator and denominator
+	 * @param expr
+	 * @param type numerator: 0, denominator: 1
+	 * @return Returns a list containing numerators and denominators
+	 * @throws Exception
+	 */
+	private static List<Object[]> seperateNumDenom(Expression expr, int type) throws Exception {
+        final List<Object[]> result = new ArrayList<Object[]>();
+
+        switch (expr.getKind()){
+            case OP_MULT:
+                for(Expression e: expr.getExpressionsList())
+                    result.addAll(seperateNumDenom(e, type));
+                break;
+
+            case OP_DIV:
+                for(int i = 0; i < expr.getExpressionsCount(); i++) {
+                    if(i % 2 == 0)
+                        result.addAll(seperateNumDenom(expr.getExpressions(i), 0));
+                    else
+                        result.addAll(seperateNumDenom(expr.getExpressions(i), 1));
+                }
+                break;
+
+            case OP_ADD:
+            case OP_SUB:
+            case PAREN:
+                Object[] oo = {normalize(expr), type};
+                result.add(oo);
+                break;
+
+            default:
+                Object[] o = {expr, type};
+                result.add(o);
+        }
+        return  result;
+    }
 
 	/**
 	 * Combines an expression list based on the combine rules for the left side.
