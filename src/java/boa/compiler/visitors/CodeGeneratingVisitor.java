@@ -52,6 +52,8 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 	 */
 	String identifier="";
 	String traversalNodeIdentifier="";
+	String funcAssignParameter="";
+	HashSet<String> funcAssignSet = new HashSet<String>();
 	HashMap<String, Integer> newName = new HashMap<String, Integer>();
 
 	protected class AggregatorDescription {
@@ -570,18 +572,20 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		final ST st = stg.getInstanceOf("Job");
 
 		st.add("name", this.name);
+		funcAssignSet.clear();
 		newName.clear();
+		funcAssignParameter = "";
 
 		this.varDecl.start(n);
 		this.functionDeclarator.start(n);
 		this.tupleDeclarator.start(n);
 		this.enumDeclarator.start(n);
 
-		st.add("staticDeclarations", this.varDecl.getCode());
-		if (!TypeCheckingVisitor.functionNames.equals(""))
-			st.add("staticDeclarations", TypeCheckingVisitor.functionNames);
 		if (this.functionDeclarator.hasCode())
-			st.add("staticDeclarations", "\n" + this.functionDeclarator.getCode());
+			st.add("staticDeclarations", this.varDecl.getCode() + "\n" + this.functionDeclarator.getCode());
+ 		else
+ 			st.add("staticDeclarations", this.varDecl.getCode());
+
 		if (this.tupleDeclarator.hasCode())
 			st.add("staticDeclarations", "\n" + this.tupleDeclarator.getCode());
 		if (this.enumDeclarator.hasCode())
@@ -599,6 +603,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 				statements.add(statement);
 		}
 		st.add("statements", statements);
+		st.add("staticDeclarations", funcAssignParameter);
 
 		if (this.aggregators.size() == 0)
 			throw new TypeCheckException(n, "No output variables were declared - must declare at least one output variable");
@@ -1613,7 +1618,6 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 		final BoaType[] params = funcType.getFormalParameters();
 		final List<String> args = new ArrayList<String>();
 		final List<String> types = new ArrayList<String>();
-		final List<String> newArgs = new ArrayList<String>();
 
 		String toAdd = "{\n";
 		for (final BoaType c : params) {
@@ -1628,9 +1632,12 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			else {
 				newName.put(((BoaName)c).getId(), 1);
 			}
-
-			newArgs.add("___" + ((BoaName)c).getId());
-			toAdd = toAdd + "\t" + "___" + ((BoaName)c).getId() + "_f" + Integer.toString(newName.get(((BoaName)c).getId())) + " = ______" + ((BoaName)c).getId() + ";\n";
+			String newParameterName = "___" + ((BoaName)c).getId() + "_f" + Integer.toString(newName.get(((BoaName)c).getId()));
+			if(!funcAssignSet.contains(newParameterName)){
+				funcAssignParameter += ((BoaName)c).getType().toJavaType() + " " + newParameterName + ";\n";
+				funcAssignSet.add(newParameterName);
+			}
+			toAdd = toAdd + "\t" + "___" + ((BoaName)c).getId() + "_f" + Integer.toString(newName.get(((BoaName)c).getId())) + " = ___" + ((BoaName)c).getId() + ";\n";
 		}
 		toAdd += "\n";
 
@@ -1642,7 +1649,7 @@ public class CodeGeneratingVisitor extends AbstractCodeGeneratingVisitor {
 			st.add("ret", "void");
 		else
 			st.add("ret", funcType.getType().toBoxedJavaType());
-		st.add("args", newArgs);
+		st.add("args", args);
 		st.add("types", types);
 
 		n.getBody().accept(this);

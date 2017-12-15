@@ -38,14 +38,9 @@ import boa.types.*;
  * @author rdyer
  * @author ankuraga
  * @author rramu
- * @author hungc
  */
 public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	BoaType lastRetType;
-	Integer newNameCounter = 0;
-	static String functionNames = "";
-	HashMap<String, String> newName = new HashMap<String, String>();
-	HashMap<String, Integer> newFunctionName = new HashMap<String, Integer>();
 
 	/**
 	 * This verifies visitors have at most 1 before/after for a type.
@@ -282,11 +277,6 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	public void visit(final Program n, final SymbolTable env) {
 		SymbolTable st;
 
-		newNameCounter = 0;
-		functionNames = "";
-		newName.clear();
-		newFunctionName.clear();
-
 		try {
 			st = env.cloneNonLocals();
 		} catch (final IOException e) {
@@ -491,19 +481,6 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	public void visit(final Identifier n, final SymbolTable env) {
 		n.env = env;
 
-		if(newName.containsKey(n.getToken()) && env.hasLocal(newName.get(n.getToken()))){
-			n.setToken(newName.get(n.getToken()));
-		}
-		else if(newName.containsKey(n.getToken())){
-			Integer c = newNameCounter - 1;
-			while (c > 0){
-				if(env.hasLocal(n.getToken() + Integer.toString(c))){
-					n.setToken(n.getToken() + Integer.toString(c));
-					break;
-				}
-				c--;
-			}
-		}
 		if (env.hasType(n.getToken()))
 			n.type = SymbolTable.getType(n.getToken());
 		else
@@ -921,15 +898,6 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 	@Override
 	public void visit(final VarDeclStatement n, final SymbolTable env) {
 		n.env = env;
-		if(n.hasInitializer()){
-			if(!(n.getInitializer().getLhs().getLhs().getLhs().getLhs().getLhs().getOperand() instanceof FunctionExpression)){
-				String oldId = n.getId().getToken();
-				String newId = oldId + Integer.toString(newNameCounter);
-				n.getId().setToken(newId);
-				newNameCounter++;
-				newName.put(oldId, newId);
-			}
-		}
 
 		final String id = n.getId().getToken();
 
@@ -1171,22 +1139,6 @@ public class TypeCheckingVisitor extends AbstractVisitorNoReturn<SymbolTable> {
 		}
 
 		n.env = st;
-
-		if (n.getType().type instanceof BoaFunction){
-			final BoaType[] params = ((BoaFunction) n.getType().type).getFormalParameters();
-			for (final BoaType c : params) {
-				if (!(c instanceof BoaName))
-					continue;
-				if(newFunctionName.containsKey(((BoaName)c).getId())){
-						newFunctionName.put(((BoaName)c).getId(), newFunctionName.get(((BoaName)c).getId()) + 1);
-				}
-				else {
-					newFunctionName.put(((BoaName)c).getId(), 1);
-				}
-				String newId = ((BoaName)c).getId() + "_f" + Integer.toString(newFunctionName.get(((BoaName)c).getId()));
-				functionNames += ((BoaName)c).getType().toJavaType() + " ___" + newId + ";\n";
-			}
-		}
 
 		n.getType().accept(this, st);
 		if (!(n.getType().type instanceof BoaFunction))
