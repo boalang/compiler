@@ -544,7 +544,7 @@ public class BoaNormalFormIntrinsics {
 
 			case OP_MULT:
 			case OP_DIV:
-				List<Object[]> l = seperateNumDenom(e, 0);
+				List<Object[]> l = seperateNumDenom(e, 'n');
 				List<Expression> num= new ArrayList<Expression>();
 				List<Expression> den = new ArrayList<Expression>();
 				Collections.sort(l, new ExpressionArrayComparator());
@@ -558,7 +558,7 @@ public class BoaNormalFormIntrinsics {
 
 					}
 					//if((Byte)o[1] == 0)
-					if(o[1].equals(0))
+					if(o[1].equals('n'))
 						num.add((Expression) o[0]);
 					else
 						den.add((Expression) o[0]);
@@ -615,7 +615,7 @@ public class BoaNormalFormIntrinsics {
 	 * @return Returns a list containing numerators and denominators
 	 * @throws Exception
 	 */
-	private static List<Object[]> seperateNumDenom(Expression expr, int type) throws Exception {
+	private static List<Object[]> seperateNumDenom(Expression expr, char type) throws Exception {
 		final List<Object[]> result = new ArrayList<Object[]>();
 
 		switch (expr.getKind()){
@@ -627,9 +627,9 @@ public class BoaNormalFormIntrinsics {
 			case OP_DIV:
 				for(int i = 0; i < expr.getExpressionsCount(); i++) {
 					if(i % 2 == 0)
-						result.addAll(seperateNumDenom(expr.getExpressions(i), 0));
+						result.addAll(seperateNumDenom(expr.getExpressions(i), 'n'));
 					else
-						result.addAll(seperateNumDenom(expr.getExpressions(i), 1));
+						result.addAll(seperateNumDenom(expr.getExpressions(i), 'd'));
 				}
 				break;
 
