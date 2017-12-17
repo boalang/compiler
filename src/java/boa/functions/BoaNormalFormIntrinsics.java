@@ -724,19 +724,19 @@ public class BoaNormalFormIntrinsics {
 		}
 	}
 
-    /**
-     * Temporary method to convert map to array
-     * @param m map of Expression
-     * @return array of Expression 
-     */
-    @FunctionSpec(name = "converttoarray", returnType = "array of Expression", formalParameters = { "map[int] of Expression" })
-	public static Expression[] convertToArray(Map<Integer, Expression> m){
-	    Expression[] a = new Expression[m.size()];
-	    for(int i = 0; i < m.size(); i++){
-	        a[i] = m.get(i);
-        }
-        return a;
-    }
+	/**
+	 * Temporary method to convert map to array
+	 * @param m map of Expression
+	 * @return array of Expression
+	 */
+	@FunctionSpec(name = "converttoarray", returnType = "array of Expression", formalParameters = { "map[int] of Expression" })
+	public static Expression[] convertToArray(Map<Long, Expression> m){
+		Expression[] a = new Expression[m.size()];
+		for(int i = 0; i < m.size(); i++){
+			a[i] = m.get((long)i);
+		}
+		return a;
+	}
 
 	/**
 	 * Attempts to reduce an expression, simplifying wherever possible.
